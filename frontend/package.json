@@ -1,7 +1,26 @@
 {
-  "name": "huishoudboekje-3.0",
-  "version": "0.1.0",
+  "name": "huishoudboekje",
+  "version": "0.0.0",
+  "versionName": "Haven",
+  "author": {
+    "name": "Koen Brouwer",
+    "email": "koen.brouwer@vng.nl"
+  },
   "private": true,
+  "homepage": "https://gitlab.com/commonground/huishoudboekje/app-new",
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/commonground/huishoudboekje/app-new"
+  },
+  "bugs": {
+    "url": "https://gitlab.com/commonground/huishoudboekje/app-new/-/issues"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
@@ -12,14 +31,13 @@
     "@types/react-dom": "^16.9.8",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "typescript": "^3.7.5"
   },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+  "devDependencies": {
+    "@types/react-router-dom": "^5.1.5",
+    "node-sass": "^4.14.1"
   },
   "eslintConfig": {
     "extends": "react-app"
