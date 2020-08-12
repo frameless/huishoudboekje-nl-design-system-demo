@@ -7,7 +7,6 @@
     "email": "koen.brouwer@vng.nl"
   },
   "private": true,
-  "homepage": "https://gitlab.com/commonground/huishoudboekje/app-new",
   "repository": {
     "type": "git",
     "url": "https://gitlab.com/commonground/huishoudboekje/app-new"

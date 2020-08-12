@@ -1,0 +1,48 @@
+# Some clarification on terminology:
+# BE = Backend (The API)
+# FE = Frontend (The UI)
+# (BE|FE)-(D|T|A|P)
+#
+# We use a DTAP setup (Develop, Test, Acceptance, Production)
+# where FE-D runs locally but talks BE-T. FE-T, FE-A and FE-P are talking to to BE-T, BE-A and BE-P respectively.
+# Hence we only need a pipeline for T, A and P, not for D.
+
+services:
+  - docker:19.03.12-dind
+
+stages:
+  - build
+#  - deploy
+
+.build:
+  script:
+    - export DOCKER_CONFIG=/tmp/docker-config-$CI_JOB_ID
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker build -t $CI_REGISTRY_IMAGE/$APP_NAME:$CI_COMMIT_SHORT_SHA ./$DIRECTORY
+    - docker push $CI_REGISTRY_IMAGE/$APP_NAME:$CI_COMMIT_SHORT_SHA
+
+# Build Frontend
+build-frontend:
+  stage: build
+  image: docker
+  variables:
+    APP_NAME: frontend
+    DIRECTORY: frontend
+  extends: .build
+  only:
+    - /^feature\/.*$/
+    - acceptance
+    - develop
+
+# Build Backend
+build-backend:
+  stage: build
+  image: docker
+  variables:
+    APP_NAME: backend
+    DIRECTORY: backend
+  extends: .build
+  only:
+    - /^feature\/.*$/
+    - acceptance
+    - develop

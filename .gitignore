@@ -1,9 +1,7 @@
 node_modules
 build
+builds
 dist
-
-frontend/.env*
-!frontend/.env.sample
 
 .DS_Store
 npm-debug.log*
