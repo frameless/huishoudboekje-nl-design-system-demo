@@ -22,6 +22,6 @@ stages:
   - deploy
 
 include:
-  - '/.gitlab/ci/test.yml'
+#  - '/.gitlab/ci/test.yml'
   - '/.gitlab/ci/build.yml'
   - '/.gitlab/ci/review.yml'
