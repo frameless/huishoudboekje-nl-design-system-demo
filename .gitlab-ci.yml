@@ -10,39 +10,17 @@
 services:
   - docker:19.03.12-dind
 
+variables:
+  IMAGE_PREFIX: "$CI_REGISTRY/$CI_PROJECT_PATH"
+  IMAGE_TAG: $CI_COMMIT_SHA
+  KUBECTL_CONTEXT: delta.k8s.nlx.io
+  REVIEW_BASE_DOMAIN: nlx.reviews
+  REVIEW_NAMESPACE: "hhb-$CI_ENVIRONMENT_SLUG"
+
 stages:
   - build
-#  - deploy
+  - deploy
 
-.build:
-  script:
-    - export DOCKER_CONFIG=/tmp/docker-config-$CI_JOB_ID
-    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-    - docker build -t $CI_REGISTRY_IMAGE/$APP_NAME:$CI_COMMIT_SHORT_SHA ./$DIRECTORY
-    - docker push $CI_REGISTRY_IMAGE/$APP_NAME:$CI_COMMIT_SHORT_SHA
-
-# Build Frontend
-build-frontend:
-  stage: build
-  image: docker
-  variables:
-    APP_NAME: frontend
-    DIRECTORY: frontend
-  extends: .build
-  only:
-    - /^feature\/.*$/
-    - acceptance
-    - develop
-
-# Build Backend
-build-backend:
-  stage: build
-  image: docker
-  variables:
-    APP_NAME: backend
-    DIRECTORY: backend
-  extends: .build
-  only:
-    - /^feature\/.*$/
-    - acceptance
-    - develop
+include:
+  - '/.gitlab/ci/build.yml'
+  - '/.gitlab/ci/review.yml'
