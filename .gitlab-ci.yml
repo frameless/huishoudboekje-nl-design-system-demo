@@ -13,14 +13,15 @@ services:
 variables:
   IMAGE_PREFIX: "$CI_REGISTRY/$CI_PROJECT_PATH"
   IMAGE_TAG: $CI_COMMIT_SHA
-  KUBECTL_CONTEXT: delta.k8s.nlx.io
   REVIEW_BASE_DOMAIN: nlx.reviews
   REVIEW_NAMESPACE: "hhb-$CI_ENVIRONMENT_SLUG"
 
 stages:
+  - test
   - build
   - deploy
 
 include:
+  - '/.gitlab/ci/test.yml'
   - '/.gitlab/ci/build.yml'
   - '/.gitlab/ci/review.yml'
