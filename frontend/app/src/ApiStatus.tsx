@@ -12,11 +12,9 @@ const ApiStatus = () => {
 	useEffect(() => {
 		setTimeout(() => {
 			fetch("/api/health")
-				.then((data) => data.json())
+				.then(response => response.text())
 				.then((data) => {
-					console.log("data", data);
-
-					if (data.body === "alive") {
+					if (data === "alive") {
 						setApiStatus(ApiStatusType.ALIVE);
 					} else {
 						setApiStatus(ApiStatusType.DEAD);

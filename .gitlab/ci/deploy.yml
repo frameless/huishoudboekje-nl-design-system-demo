@@ -1,0 +1,120 @@
+# Deploy template for review
+.deploy-review:
+  stage: deploy
+  image: registry.gitlab.com/commonground/core/review-app-deployer:latest
+  variables:
+    KUBECONFIG: /secrets/kubeconfig/review.conf
+  environment:
+    name: $CI_COMMIT_REF_NAME
+    url: https://hhb-$CI_ENVIRONMENT_SLUG.$REVIEW_BASE_DOMAIN/
+    on_stop: destroy
+  script:
+    - |
+      helm upgrade --install --create-namespace hhb-$CI_ENVIRONMENT_SLUG-frontend ./frontend/helm \
+      --namespace hhb-$CI_ENVIRONMENT_SLUG \
+      --set "ingress.enabled=true" \
+      --set "ingress.hosts[0].host=hhb-$CI_ENVIRONMENT_SLUG.$REVIEW_BASE_DOMAIN" \
+      --set "ingress.hosts[0].paths[0]=/" \
+      --set "image.tag=$IMAGE_TAG"
+    - |
+      helm upgrade --install --create-namespace hhb-$CI_ENVIRONMENT_SLUG-backend ./backend/helm \
+      --namespace hhb-$CI_ENVIRONMENT_SLUG \
+      --set "ingress.enabled=true" \
+      --set "ingress.hosts[0].host=hhb-$CI_ENVIRONMENT_SLUG.$REVIEW_BASE_DOMAIN" \
+      --set "ingress.hosts[0].paths[0]=/api/" \
+      --set "image.tag=$IMAGE_TAG"
+  only:
+    - branches@commonground/huishoudboekje/app-new
+  tags:
+    - cg
+    - docker
+
+# Deploy template for app
+.deploy-app:
+  stage: deploy
+  image: registry.gitlab.com/commonground/core/review-app-deployer:latest
+  variables:
+    KUBECONFIG: /secrets/kubeconfig/review.conf
+  environment:
+    name: $CI_COMMIT_REF_NAME
+    url: https://$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN/
+    on_stop: destroy
+  script:
+    - |
+      helm upgrade --install --create-namespace $REVIEW_NAMESPACE-frontend ./frontend/helm \
+      --namespace $REVIEW_NAMESPACE \
+      --set "ingress.enabled=true" \
+      --set "ingress.hosts[0].host=$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN" \
+      --set "ingress.hosts[0].paths[0]=/" \
+      --set "image.tag=$IMAGE_TAG"
+    - |
+      helm upgrade --install --create-namespace $REVIEW_NAMESPACE-backend ./backend/helm \
+      --namespace $REVIEW_NAMESPACE \
+      --set "ingress.enabled=true" \
+      --set "ingress.hosts[0].host=$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN" \
+      --set "ingress.hosts[0].paths[0]=/api/" \
+      --set "image.tag=$IMAGE_TAG"
+  only:
+    - branches@commonground/huishoudboekje/app-new
+  tags:
+    - cg
+    - docker
+
+# Deploy (Review)
+deploy-review:
+  variables:
+    KUBECONFIG: /secrets/kubeconfig/review.conf
+  extends: .deploy-review
+  except:
+    - master
+    - develop
+    - acceptance
+
+# Deploy (TEST)
+deploy-test:
+  variables:
+    KUBECONFIG: /secrets/kubeconfig/review.conf
+    REVIEW_NAMESPACE: "hhb-test"
+  extends: .deploy-app
+  only:
+    - develop
+
+# Deploy (ACC)
+deploy-acc:
+  variables:
+    KUBECONFIG: /secrets/kubeconfig/review.conf
+    REVIEW_NAMESPACE: "hhb-acc"
+  extends: .deploy-app
+  only:
+    - acceptance
+
+# Deploy (PROD/DEMO)
+deploy-proddemo:
+  variables:
+    KUBECONFIG: /secrets/kubeconfig/review.conf
+    REVIEW_NAMESPACE: "hhb-demo"
+  extends: .deploy-app
+  only:
+    - master
+
+# Shut down app
+destroy:
+  stage: deploy
+  image: registry.gitlab.com/commonground/core/review-app-deployer:latest
+  variables:
+    GIT_STRATEGY: none
+    KUBECONFIG: /secrets/kubeconfig/review.conf
+  script:
+    - helm uninstall $REVIEW_NAMESPACE --namespace $REVIEW_NAMESPACE
+    - kubectl delete namespace $REVIEW_NAMESPACE
+  when: manual
+  environment:
+    name: $CI_COMMIT_REF_NAME
+    action: stop
+  except:
+    - master
+    - develop
+    - acceptance
+  tags:
+    - cg
+    - docker
