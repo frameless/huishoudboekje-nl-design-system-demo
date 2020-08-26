@@ -1,0 +1,27 @@
+# Some clarification on terminology:
+# BE = Backend (The API)
+# FE = Frontend (The UI)
+# (BE|FE)-(D|T|A|P)
+#
+# We use a DTAP setup (Develop, Test, Acceptance, Production)
+# where FE-D runs locally but talks BE-T. FE-T, FE-A and FE-P are talking to to BE-T, BE-A and BE-P respectively.
+# Hence we only need a pipeline for T, A and P, not for D.
+
+services:
+  - docker:19.03.12-dind
+
+variables:
+  IMAGE_PREFIX: "$CI_REGISTRY/$CI_PROJECT_PATH"
+  IMAGE_TAG: $CI_COMMIT_SHA
+  REVIEW_BASE_DOMAIN: nlx.reviews
+  REVIEW_NAMESPACE: "hhb-$CI_ENVIRONMENT_SLUG"
+
+stages:
+  - test
+  - build
+  - deploy
+
+include:
+#  - '/.gitlab/ci/test.yml'
+  - '/.gitlab/ci/build.yml'
+  - '/.gitlab/ci/deploy.yml'

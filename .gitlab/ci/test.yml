@@ -1,0 +1,27 @@
+# Test Frontend
+test-frontend:
+  stage: test
+  image: node:latest
+  variables:
+    APP_NAME: frontend
+    DIRECTORY: frontend
+  only:
+    - branches@commonground/huishoudboekje/app-new
+  script:
+    - cd ./frontend/app
+    - npm i npm@latest -g
+    - npm ci --silent
+    - npm run test
+
+# Test Backend
+#test-backend:
+#  stage: build
+#  image: docker
+#  variables:
+#    APP_NAME: backend
+#    DIRECTORY: backend
+#  only:
+#    - branches@commonground/huishoudboekje/app-new
+#  script:
+#    - npm ci --silent
+#    - npm run test
