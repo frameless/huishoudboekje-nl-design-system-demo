@@ -1,11 +1,11 @@
 const { createProxyMiddleware } = require("http-proxy-middleware");
 
 module.exports = function (app) {
+	const proxyApiUrl = process.env.PROXY || "https://hhb-acc.nlx.reviews";
 	app.use(
 		"/api",
 		createProxyMiddleware({
-			target: process.env.PROXY || "https://api.staging.huishoudboekje010.nl",
-			headers: { "X-Forwarded-Port": process.env.PORT || "3000" },
+			target: proxyApiUrl,
 			changeOrigin: true,
 		}),
 	);
