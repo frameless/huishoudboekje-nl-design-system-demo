@@ -1,6 +1,6 @@
 {
   "home": {
     "running-in-mode": "Deze applicatie draait in modus {{mode}}.",
-    "hello-intro": "Om te beginnen, verander <link>src/App.js</link> en sla op om te herladen."
+    "hello-intro": "Om te beginnen, verander <0>src/App.js</0> en sla op om te herladen."
   }
 }
