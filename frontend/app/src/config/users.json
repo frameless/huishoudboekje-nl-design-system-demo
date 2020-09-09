@@ -1,9 +1,9 @@
 [
   {
-    "email": "henk@gemeente.nl",
+    "email": "henk.poortvliet@sloothuizen.nl",
     "password": "demo",
     "firstName": "Henk",
-    "lastName": "de Graaf",
+    "lastName": "Poortvliet",
     "role": "ADMIN"
   }
 ]

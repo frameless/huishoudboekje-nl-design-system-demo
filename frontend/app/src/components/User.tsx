@@ -36,7 +36,7 @@ const User = () => {
 			{currentUser ? (
 				<Stack direction={"row"} spacing={5} alignItems={"center"}>
 					<Text>{t("welcomeMessage", {name: currentUser.firstName})}</Text>
-					<Button onClick={logout}>
+					<Button onClick={logout} variantColor={"secondary"}>
 						<Icon name={"lock"} mr={3}/>
 						{t("login.logout")}
 					</Button>
@@ -46,7 +46,7 @@ const User = () => {
 					<Stack spacing={5}>
 						<Input {...mail.bind} placeholder={t("mail")} />
 						<Input {...password.bind} type="password" placeholder={t("password")} />
-						<Button type={"submit"}>Inloggen</Button>
+						<Button variantColor={"primary"} type={"submit"}>Inloggen</Button>
 					</Stack>
 				</form>
 			)}
