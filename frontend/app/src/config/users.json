@@ -1,0 +1,9 @@
+[
+  {
+    "email": "henk@gemeente.nl",
+    "password": "demo",
+    "firstName": "Henk",
+    "lastName": "de Graaf",
+    "role": "ADMIN"
+  }
+]

@@ -5,6 +5,7 @@ import ApiStatus from "./components/ApiStatus";
 import { useTranslate } from "./config/i18n";
 import { Trans } from "react-i18next";
 import { Box, Button, Stack, Text, useColorMode } from "@chakra-ui/core";
+import User from "./components/User";
 
 const App = () => {
 	const { t } = useTranslate();
@@ -24,6 +25,10 @@ const App = () => {
 	return (
 		<Box h={"100vh"} w={"100%"} id={"box"}>
 			<Stack height={"100%"} spacing={5} display={"flex"} justifyContent={"center"} alignItems={"center"} {...styles[colorMode]}>
+				<Box>
+					<User />
+				</Box>
+
 				<img src={logo} className="App-logo" alt="logo"/>
 				<Text>
 					{t("home.running-in-mode", {
