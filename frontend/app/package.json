@@ -15,10 +15,12 @@
     "url": "https://gitlab.com/commonground/huishoudboekje/app-new/-/issues"
   },
   "scripts": {
+    "prestart": "./prestart.sh",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "theme": "./setTheme.sh"
   },
   "dependencies": {
     "@chakra-ui/core": "^0.8.0",

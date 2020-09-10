@@ -36,7 +36,7 @@ const User = () => {
 			{currentUser ? (
 				<Stack direction={"row"} spacing={5} alignItems={"center"}>
 					<Text>{t("welcomeMessage", {name: currentUser.firstName})}</Text>
-					<Button onClick={logout} variantColor={"secondary"}>
+					<Button onClick={logout} variantColor={"primary"} variant={"outline"}>
 						<Icon name={"lock"} mr={3}/>
 						{t("login.logout")}
 					</Button>
