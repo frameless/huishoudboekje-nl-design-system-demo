@@ -1,16 +1,16 @@
 import React from "react";
 import ApiStatus from "./components/ApiStatus";
-import {useTranslate} from "./config/i18n";
-import {Box, Stack, Text} from "@chakra-ui/core";
+import { useTranslate } from "./config/i18n";
+import { Box, Flex, Stack, Text } from "@chakra-ui/core";
 import User from "./components/User";
 import Logo from "./components/Logo";
 
 const App = () => {
-	const {t} = useTranslate();
+	const { t } = useTranslate();
 
 	return (
-		<Box h={"100vh"} w={"100%"} id={"box"}>
-			<Stack height={"100%"} spacing={10} display={"flex"} justifyContent={"center"} alignItems={"center"}>
+		<Flex h={"auto"} minHeight={"100vh"} w={"100%"} justifyContent={"center"} alignItems={"center"}>
+			<Stack spacing={10} minHeight={500} alignItems={"center"}>
 				<Logo w={600}/>
 				<Box>
 					<User/>
@@ -24,7 +24,7 @@ const App = () => {
 
 				<ApiStatus/>
 			</Stack>
-		</Box>
+		</Flex>
 	);
 };
 
