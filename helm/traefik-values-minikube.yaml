@@ -1,0 +1,18 @@
+globalArguments: []
+
+additionalArguments:
+  - "--accessLog"
+  - "--api.insecure"
+
+ports:
+  traefik:
+    hostPort: 9000
+    expose: true
+  web:
+    hostPort: 80
+    expose: true
+  websecure:
+    hostPort: 443
+
+service:
+  type: NodePort

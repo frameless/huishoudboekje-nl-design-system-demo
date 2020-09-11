@@ -1,0 +1,10 @@
+
+ingress:
+  enabled: true
+  annotations: {}
+  hosts:
+    - host: hhb.minikube
+      paths:
+        - "/api/"
+  tls: []
+
