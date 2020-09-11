@@ -47,7 +47,6 @@
   "devDependencies": {
     "@types/react-router-dom": "^5.1.5",
     "@typescript-eslint/parser": "^4.0.1",
-    "node-sass": "^4.14.1",
     "prettier": "^2.0.5"
   },
   "eslintConfig": {

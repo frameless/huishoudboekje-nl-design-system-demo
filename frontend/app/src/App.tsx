@@ -1,5 +1,4 @@
 import React from "react";
-import "./App.scss";
 import ApiStatus from "./components/ApiStatus";
 import {useTranslate} from "./config/i18n";
 import {Box, Stack, Text} from "@chakra-ui/core";
