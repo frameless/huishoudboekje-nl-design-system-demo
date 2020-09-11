@@ -10,7 +10,7 @@
     on_stop: destroy
   script:
     - |
-      (cd frontend/helm; ln -s ../theme.sloothuizen ./theme )
+      (cd frontend/helm; ln -s ../theme/sloothuizen ./theme )
       helm upgrade --install --create-namespace hhb-$CI_ENVIRONMENT_SLUG-frontend ./frontend/helm \
       --namespace hhb-$CI_ENVIRONMENT_SLUG \
       --set "ingress.enabled=true" \
