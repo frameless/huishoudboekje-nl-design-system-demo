@@ -15,8 +15,8 @@ const User = () => {
 	const onSubmit = (e) => {
 		e.preventDefault();
 
+		// Todo: wrap this in an authService.ts once we start implementing actual IAM
 		const user = users.find(u => u.email === mail.value && u.password === password.value);
-		console.log(user);
 		if (!user) {
 			toast({
 				description: t("login.invalidCredentialsError"),
