@@ -1,3 +1,5 @@
+frontend/helm/theme
+
 node_modules
 build
 builds

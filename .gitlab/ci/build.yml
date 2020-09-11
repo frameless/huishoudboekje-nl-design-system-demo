@@ -1,4 +1,7 @@
 .build:
+  tags:
+    - cg
+    - shell
   script:
     - export DOCKER_CONFIG=/tmp/docker-config-$CI_JOB_ID
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
@@ -8,7 +11,6 @@
 # Build Frontend
 build-frontend:
   stage: build
-  image: docker
   variables:
     APP_NAME: frontend
     DIRECTORY: frontend
@@ -19,7 +21,6 @@ build-frontend:
 # Build Backend
 build-backend:
   stage: build
-  image: docker
   variables:
     APP_NAME: backend
     DIRECTORY: backend

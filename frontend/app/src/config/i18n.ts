@@ -12,8 +12,6 @@ Object.keys(languages).forEach((lang) => {
 	resources[lang] = { translation: languages[lang] };
 });
 
-console.log(resources);
-
 i18Next.use(initReactI18next).init({
 	resources,
 	lng: "nl",

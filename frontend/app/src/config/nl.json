@@ -1,6 +1,12 @@
 {
   "home": {
-    "running-in-mode": "Deze applicatie draait in modus {{mode}}.",
-    "hello-intro": "Om te beginnen, verander <0>src/App.js</0> en sla op om te herladen."
+    "running-in-mode": "Deze applicatie draait in {{mode}} modus."
+  },
+  "mail": "E-mailadres",
+  "password": "Wachtwoord",
+  "welcomeMessage": "Welkom, {{name}}!",
+  "login": {
+    "invalidCredentialsError": "Onjuiste combinatie e-mailadres en wachtwoord.",
+    "logout": "Uitloggen"
   }
 }

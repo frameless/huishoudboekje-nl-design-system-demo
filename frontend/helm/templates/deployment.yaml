@@ -47,6 +47,15 @@ spec:
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: theme-volume
+              mountPath: /usr/share/nginx/html/theme
+      volumes:
+        - name: theme-volume
+          configMap:
+            # Provide the name of the ConfigMap containing the files you want
+            # to add to the container
+            name: {{ printf "%s-theme" (include "huishoudboekje-frontend.fullname" .) }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
