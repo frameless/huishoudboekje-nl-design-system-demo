@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Flex, Stack } from "@chakra-ui/core";
 import User from "./components/User";
 import Logo from "./components/Logo";
-import useIsMobile from "./utils/useIsMobile";
+import {useIsMobile} from "react-grapple";
 
 const App = () => {
 	const isMobile = useIsMobile();
