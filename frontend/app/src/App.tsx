@@ -1,26 +1,45 @@
 import React from "react";
 import {Box, Flex, Stack} from "@chakra-ui/core";
 import User from "./components/User";
-import Logo from "./components/Logo";
+import {useSession} from "./utils/hooks";
+import LoginPage from "./components/LoginPage";
+import {observer} from "mobx-react";
+import Sidebar from "./components/Sidebar";
+import users from "./config/users.json";
 import {useIsMobile} from "react-grapple";
+import {BrowserRouter as Router, Redirect, Route} from "react-router-dom";
 
 const App = () => {
 	const isMobile = useIsMobile();
+	const session = useSession();
+
+	useEffect(() => {
+		session.setUser(users[0]);
+	}, [session])
 
 	return (
-		<Flex h={"auto"} minHeight={"100vh"} minWidth={"100%"} w={"auto"} bg={isMobile ? "white" : "gray.100"}>
-			<Stack width={"100%"} direction={isMobile ? "column" : "row"} justifyContent={"center"} alignItems={"center"} spacing={30}>
-				<Stack bg={"grey.800"} height={isMobile ? "auto" : "100%"} alignItems={"flex-end"} justifyContent={"center"} width={isMobile ? "100%" : "50%"} p={5}>
-					<Logo width={"100%"} maxWidth={isMobile ? "100%" : 500} />
-				</Stack>
-				<Stack bg={"white"} height={isMobile ? "auto" : "100%"} justifyContent={"center"} width={isMobile ? "100%" : "50%"} p={5}>
-					<Box maxWidth={300} alignSelf={isMobile ? "center" : "flex-start"}>
-						<User />
-					</Box>
-				</Stack>
-			</Stack>
-		</Flex>
+		<Router>
+			<Route path={"/login"} component={LoginPage} />
+			<Route path={"/"} component={() => {
+				if (!session.user) {
+					return <Redirect to={"/login"} />
+				} else {
+					return (
+						<Flex h={"auto"} minHeight={"100vh"} minWidth={"100%"} w={"auto"} bg={isMobile ? "white" : "gray.100"}>
+							<Stack width={"100%"} direction={isMobile ? "column" : "row"} justifyContent={"flex-start"} alignItems={"flex-start"} spacing={30}>
+
+								<Sidebar />
+								<Box alignSelf={isMobile ? "center" : "flex-start"} p={5}>
+									<User />
+								</Box>
+
+							</Stack>
+						</Flex>
+					)
+				}
+			}} />
+		</Router>
 	);
 };
 
-export default App;
+export default observer(App);
