@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState} from "react";
 import {Button, Icon, Input, Stack, Text, useToast} from "@chakra-ui/core";
 import {useInput} from "react-grapple";
 import {useTranslate} from "../config/i18n";
@@ -22,7 +22,7 @@ const User = () => {
 				description: t("login.invalidCredentialsError"),
 				status: "error",
 				position: "top",
-			})
+			});
 			return;
 		}
 
