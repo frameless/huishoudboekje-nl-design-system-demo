@@ -1,28 +1,20 @@
 {
-  "env": {
-    "browser": true,
-    "es2020": true
-  },
   "extends": [
     "eslint:recommended",
-    "plugin:react/recommended",
-    "plugin:@typescript-eslint/recommended"
+    "react-app"
   ],
-  "parser": "@typescript-eslint/parser",
-  "parserOptions": {
-    "ecmaFeatures": {
-      "jsx": true
-    },
-    "ecmaVersion": 2020,
-    "sourceType": "module"
-  },
   "plugins": [
-    "react",
-    "@typescript-eslint"
+    "react"
   ],
   "rules": {
+    "@typescript-eslint/no-use-before-define": [
+      "off"
+    ],
+    "react/prop-types": [
+      "off"
+    ],
     "indent": [
-      "error",
+      "warn",
       "tab"
     ],
     "linebreak-style": [
@@ -33,9 +25,22 @@
       "warn",
       "double"
     ],
-    "semi": [
+    "no-trailing-spaces": [
+      "warn"
+    ],
+    "eol-last": [
       "warn",
-      "always"
+      "never"
     ]
-  }
+  },
+  "ignorePatterns": [
+    "node_modules"
+  ],
+  "overrides": [
+    {
+      "files": [
+        "**/*.ts?(x)"
+      ]
+    }
+  ]
 }
