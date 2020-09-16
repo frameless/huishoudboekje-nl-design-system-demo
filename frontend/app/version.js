@@ -8,7 +8,7 @@ const rawVersion = `${version} ${versionName}`;
 const file = resolve(__dirname, "src", "version.ts");
 const data = `// IMPORTANT: THIS FILE IS AUTO GENERATED! DO NOT MANUALLY EDIT OR CHECK IN!
 /* eslint-disable */
-const VERSION = ${JSON.stringify({version: rawVersion})};
+const VERSION = "${rawVersion}";
 export default VERSION;
 /* eslint-enable */`;
 writeFileSync(file, data, {encoding: "utf-8"});
