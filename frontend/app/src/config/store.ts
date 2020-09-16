@@ -1,22 +1,21 @@
-import {SnapshotIn, types} from "mobx-state-tree";
+import {types} from "mobx-state-tree";
 
-const User = types.model({
+const User = types.model("User", {
 	email: types.string,
 	firstName: types.string,
 	lastName: types.string,
 	role: types.string,
-});
+}).views(self => ({
+	get fullName() {
+		return `${self.firstName} ${self.lastName}`;
+	}
+}));
 
 const Session = types.model({
-	user: types.union(User, types.literal(null))
+	user: types.maybeNull(User)
 }).actions(self => ({
-	setUser: (user: SnapshotIn<typeof User> | null) => {
-		self.user = user
-	},
-	reset: () => {
-		console.log("RESET");
-		self.user = null;
-	}
+	setUser: (user) => self.user = user,
+	reset: () => self.user = null
 }));
 
 const RootStore = types.model({
@@ -24,9 +23,7 @@ const RootStore = types.model({
 });
 
 const Store = RootStore.create({
-	session: {
-		user: null
-	}
+	session: {}
 });
 
 export default Store;

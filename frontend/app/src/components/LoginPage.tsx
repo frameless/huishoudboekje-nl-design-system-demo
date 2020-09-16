@@ -1,11 +1,10 @@
-/* eslint-disable @typescript-eslint/no-use-before-define */
-import React from 'react';
+import React from "react";
 import {Box, Flex, Stack} from "@chakra-ui/core";
 import Logo from "./Logo";
 import User from "./User";
 import {useIsMobile} from "react-grapple";
 import {useSession} from "../utils/hooks";
-import {Redirect} from 'react-router-dom';
+import {Redirect} from "react-router-dom";
 
 const LoginPage = () => {
 	const session = useSession();
