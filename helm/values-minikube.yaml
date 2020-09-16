@@ -1,0 +1,40 @@
+dex:
+  config:
+    storage:
+      type: sqlite3
+      config:
+        file: ":memory:"
+    logger:
+      level: info
+    issuer: http://dex.hhb.minikube
+    staticClients:
+      - id: huishoudboekje
+        name: Huishoudboekje Schaalbaar
+        secret: ZwwcL2zjQyJUBnFPVoOb
+        redirectURIs:
+          - http://hhb.minikube/oidc/callback
+          - http://hhb.minikube/oidc_callback
+    enablePasswordDB: true
+    staticPasswords:
+      - username: applicatiebeheer
+        userID: 363283b9-07bb-4247-bfe4-977a1e221cc4
+        hash: $2y$12$nkKzi45TIHcUF7LjFAty5.GNj/CQ98RS2e5LB3NqkYPHcuPzJwXc6  # ab_01
+        name: Applicatiebeheer Gebruiker
+        email: ab@sloothuizen.gemeente
+    oauth2:
+      skipApprovalScreen: false
+  ingress:
+    enabled: true
+    hosts:
+      - dex.hhb.minikube
+  ports:
+    web:
+      servicePort: 80
+  grpc: false
+  certs:
+    web:
+      create: false
+    grpc:
+      create: false
+  rbac:
+    create: false

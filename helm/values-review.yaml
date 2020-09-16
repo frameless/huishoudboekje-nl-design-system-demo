@@ -1,0 +1,44 @@
+dex:
+  config:
+    storage:
+      type: sqlite3
+      config:
+        file: ":memory:"
+    logger:
+      level: info
+    issuer: https://dex-hhb.nlx.reviews
+    staticClients:
+      - id: huishoudboekje
+        name: Huishoudboekje Schaalbaar
+        secret: ZwwcL2zjQyJUBnFPVoOb
+        redirectURIs:
+          - https://hhb.nlx.reviews/oidc_callback
+    enablePasswordDB: true
+    staticPasswords:
+      - username: functioneelbeheer
+        userID: 363283b9-07bb-4247-bfe4-977a1e221cc4
+        hash: $2a$10$jiRV49WoshH/7WBrzxgV4OUSZWVkzdrwQf5q.iZkp/g4aXEOk60s. # demo_fb
+        name: Functioneelbeheer Gebruiker
+        email: functioneelbeheer@sloothuizen.nl
+      - username: medewerker
+        userID: 2902e9be-b8f6-4629-aa66-93a1cf63e3ae
+        hash: $2a$10$2Z20eZ9wIsmfaNtPQSP.i.1gjnznlHjKSzWBi4tZwD.iTvFAJb.sS # demo_mw
+        name: Medewerker
+        email: medewerker@sloothuizen.nl
+    oauth2:
+      skipApprovalScreen: false
+  ingress:
+    enabled: true
+    hosts:
+      - "dex-hhb.nlx.reviews"
+  ports:
+    web:
+      servicePort: 80
+  grpc: false
+  certs:
+    web:
+      create: false
+    grpc:
+      create: false
+  rbac:
+    create: false
