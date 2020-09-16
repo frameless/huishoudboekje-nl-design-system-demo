@@ -6,9 +6,8 @@ FROM node:lts-alpine as builder
 RUN mkdir -p /app
 WORKDIR /app
 
-COPY ./app/package*.json ./
-RUN npm ci --no-progress --color=false --quiet
 COPY ./app /app
+RUN npm ci --no-progress --color=false --quiet --unsafe-perm
 RUN npm run build
 
 # Set up production environment using nginx
