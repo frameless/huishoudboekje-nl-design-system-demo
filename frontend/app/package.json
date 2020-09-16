@@ -15,6 +15,7 @@
     "url": "https://gitlab.com/commonground/huishoudboekje/app-new/-/issues"
   },
   "scripts": {
+    "postinstall": "node version.js",
     "prestart": "./prestart.sh",
     "start": "react-scripts start",
     "build": "react-scripts build",

@@ -2,3 +2,4 @@
 !.env.sample
 build
 public/theme
+src/version.ts
