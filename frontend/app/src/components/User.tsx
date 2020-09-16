@@ -1,36 +1,34 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {Button, Icon, Input, Stack, Text, useToast} from "@chakra-ui/core";
 import {useInput} from "react-grapple";
+import {observer} from "mobx-react";
+import useFetch from "use-http";
 import {useTranslate} from "../config/i18n";
 import users from "../config/users.json";
 import {useSession} from "../utils/hooks";
-import {observer} from "mobx-react";
 
 const User = () => {
 	const {t} = useTranslate();
-	const mail = useInput();
-	const password = useInput();
+	// const mail = useInput();
+	// const password = useInput();
 	const toast = useToast();
 	const session = useSession();
+	const { get, response } = useFetch({ data: [] });
 
-	const onSubmit = (e) => {
-		e.preventDefault();
+	useEffect(() => {
+		const loadUser = async () => {
+			const user = await get("/api/me");
+			if (response.ok) {
+				session.setUser(user);
+			}
+		};
+		loadUser();
+	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-		// Todo: wrap this in an authService.ts once we start implementing actual IAM
-		const user = users.find(u => u.email === mail.value && u.password === password.value);
-		if (!user) {
-			toast({
-				description: t("login.invalidCredentialsError"),
-				status: "error",
-				position: "top",
-			});
-			return;
-		}
-
-		session.setUser(user);
+	const logout = async () => {
+		await get("/api/logout");
+		session.reset();
 	};
-
-	const logout = () => session.reset();
 
 	return session.user ? (
 		<Stack direction={"row"} spacing={5} alignItems={"center"}>
@@ -41,10 +39,8 @@ const User = () => {
 			</Button>
 		</Stack>
 	) : (
-		<form onSubmit={onSubmit}>
+		<form action="/api/login?page=/">
 			<Stack spacing={5}>
-				<Input {...mail.bind} placeholder={t("mail")} />
-				<Input {...password.bind} type="password" placeholder={t("password")} />
 				<Button variantColor={"primary"} type={"submit"}>Inloggen</Button>
 			</Stack>
 		</form>
