@@ -15,6 +15,7 @@ spec:
     metadata:
     {{- with .Values.podAnnotations }}
       annotations:
+        imageHash: {{- .Values.image.hash }}
         {{- toYaml . | nindent 8 }}
     {{- end }}
       labels:
@@ -33,20 +34,35 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: PREFIX
+              value: /api
+            - name: OIDC_CLIENT_SECRETS
+              value: /opt/etc/oidc/client-secrets.json
           ports:
             - name: http
-              containerPort: 3000
+              containerPort: 8000
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /
+              path: /api/health
               port: http
           readinessProbe:
             httpGet:
-              path: /
+              path: /api/health
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: oidc-volume
+              mountPath: /opt/app
+      volumes:
+        - name: oidc-volume
+          secret:
+            secretName: {{ printf "%s-oidc" (include "helm.fullname" .) }}
+            items:
+              - key: client-secrets.json
+                path: client-secrets.json
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -59,3 +75,26 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ printf "%s-oidc" (include "helm.fullname" .) }}
+  labels:
+  {{- include "helm.labels" . | nindent 4 }}
+stringData:
+  client-secrets.json: |
+    {
+      "web": {
+        "mark": true,
+        "auth_uri": "{{ .Values.oidc.authorizationEndpoint }}",
+        "client_id": "{{ .Values.oidc.clientId }}",
+        "client_secret": "{{ .Values.oidc.clientSecret }}",
+        "issuer": "{{ .Values.oidc.issuer }}",
+        "redirect_uris": [
+            "{{ .Values.oidc.redirectUri}}"
+        ],
+        "token_uri": "{{.Values.oidc.tokenUri}}",
+        "token_introspection_uri": "{{.Values.oidc.tokenInfoUri}}"
+      }
+    }

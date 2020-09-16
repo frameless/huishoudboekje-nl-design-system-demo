@@ -1,12 +1,21 @@
-FROM node:lts-alpine
+# The build-stage image:
+FROM continuumio/miniconda3:4.8.2 AS build
 
-RUN mkdir -p /app
-WORKDIR /app
+ARG PORT=8000
+SHELL ["/bin/bash", "--login", "-c"]
 
-COPY ./app/package*.json ./
-RUN npm ci --no-progress --color=false --quiet
-COPY ./app /app
+ENV APP=/opt/app
+RUN mkdir -p $APP
+WORKDIR $APP
+# Install the package as normal:
+COPY environment.yaml .
 
-EXPOSE 3000
+RUN conda env create --verbose -f environment.yaml
+RUN conda init bash && \
+    echo "conda activate hhb-schaalbaar" >> ~/.bashrc
 
-CMD ["npm", "run", "start"]
+
+COPY ./app .
+
+EXPOSE $PORT
+CMD ["bash", "--login", "-c", "gunicorn --workers=2 --threads=4 --bind=0.0.0.0:${PORT} --worker-class=gthread main:app"]

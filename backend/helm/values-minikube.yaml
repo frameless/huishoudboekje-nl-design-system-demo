@@ -8,3 +8,11 @@ ingress:
         - "/api/"
   tls: []
 
+oidc:
+  issuer: http://dex.hhb.minikube
+  client: huishoudboekje
+  secret: ZwwcL2zjQyJUBnFPVoOb
+  authorizationEndpoint: http://dex.hhb.minikube/auth
+  redirectUri: http://hhb.minikube/api/oidc_callback
+  tokenUri: http://dex.hhb.minikube/token
+  tokenInfoUri: http://dex.hhb.minikube/tokenInfo
