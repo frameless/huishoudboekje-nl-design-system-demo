@@ -9,14 +9,16 @@ PHONY: build-images deploy deploy-frontend deploy-backend
 build-images: frontend-image~ backend-image~
 
 %-image~: %
-	docker build -t registry.gitlab.com/commonground/huishoudboekje/app-new/$<:${DOCKER_TAG} ./$<
-	touch $@
+	$(eval IMAGE := registry.gitlab.com/commonground/huishoudboekje/app-new/$<:${DOCKER_TAG})
+	docker build -t $(IMAGE) ./$<
+	docker images --no-trunc --quiet $(IMAGE) > $@
 
 deploy: deploy-backend deploy-frontend
 
 deploy-%: %-image~
-	$(eval N := $(subst deploy-,,$@))
-	helm upgrade --install --create-namespace --namespace ${HELM_NAMESPACE} hhb-$(N) ./$(N)/helm -f ./$(N)/helm/values-minikube.yaml
+	$(eval NAME := $(subst deploy-,,$@))
+	echo $< $(shell cat < $<)
+	helm upgrade --install --create-namespace --namespace ${HELM_NAMESPACE} hhb-$(NAME) ./$(NAME)/helm -f ./$(NAME)/helm/values-minikube.yaml --set-string image.hash=$(shell cat $<)
 
 deploy-frontend: frontend/helm/theme
 
