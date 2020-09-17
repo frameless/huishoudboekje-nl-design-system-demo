@@ -6,13 +6,14 @@ import {useIsMobile} from "react-grapple";
 import {useSession} from "../utils/hooks";
 import {Redirect} from "react-router-dom";
 import Routes from "../config/routes";
+import {observer} from "mobx-react";
 
 const LoginPage = () => {
 	const session = useSession();
 	const isMobile = useIsMobile();
 
 	if (session.user) {
-		return <Redirect to={Routes.Home} />;
+		return <Redirect to={Routes.Home} />
 	}
 
 	return (
@@ -31,4 +32,4 @@ const LoginPage = () => {
 	);
 };
 
-export default LoginPage;
+export default observer(LoginPage);
