@@ -107,7 +107,6 @@ destroy:
     GIT_STRATEGY: none
     KUBECONFIG: /secrets/kubeconfig/review.conf
   script:
-    - helm uninstall $REVIEW_NAMESPACE --namespace $REVIEW_NAMESPACE
     - kubectl delete namespace $REVIEW_NAMESPACE
   when: manual
   environment:
