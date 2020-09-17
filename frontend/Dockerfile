@@ -8,6 +8,7 @@ WORKDIR /app
 
 COPY ./app /app
 RUN npm ci --no-progress --color=false --quiet --unsafe-perm
+VOLUME /app/public/theme
 RUN npm run build
 
 # Set up production environment using nginx

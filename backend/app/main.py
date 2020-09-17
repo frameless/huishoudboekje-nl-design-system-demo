@@ -1,13 +1,10 @@
 #!/usr/bin/env python
-import inspect
-import json
 import logging
 import os
-import pprint
 import secrets
 
 import itsdangerous
-from flask import Flask, url_for, jsonify, g, Response, redirect, request
+from flask import Flask, jsonify, Response, redirect
 from flask_oidc import OpenIDConnect
 
 
@@ -20,8 +17,6 @@ class ReverseProxied(object):
         self.server = server
 
     def __call__(self, environ, start_response):
-        logging.debug(pprint.pformat(environ))
-        logging.debug(pprint.pformat(self))
         script_name = environ.get('HTTP_X_SCRIPT_NAME', '') or self.script_name
         if script_name:
             environ['SCRIPT_NAME'] = script_name
@@ -58,36 +53,32 @@ class PrefixMiddleware(object):
 # TODO extract
 logging.basicConfig(level=logging.DEBUG)
 app = Flask(__name__)
-app.config.update({
+secretKey = os.getenv('SECRET_KEY', secrets.token_urlsafe(16))
+app.config.from_mapping({
+    'SECRET_KEY': secretKey,
     'SESSION_COOKIE_NAME': 'flask_session',
-    'TESTING': True,
-    'DEBUG': True,
-    'OIDC_CLIENT_SECRETS': os.environ.get('OIDC_CLIENT_SECRETS', './client_secrets.json'),
-    # 'OIDC_CALLBACK_ROUTE': '/oidc_callback',
-    'OVERWRITE_REDIRECT_URI': 'http://localhost:3000/api/oidc_callback',
+    'OIDC_CLIENT_SECRETS': os.getenv('OIDC_CLIENT_SECRETS', './client_secrets.json'),
+    'OVERWRITE_REDIRECT_URI': os.getenv('OIDC_REDIRECT_URI', 'http://localhost:3000/api/oidc_callback'),
     'OIDC_SCOPES': ['openid', 'email', 'groups', 'profile'],
     # 'OIDC_CLOCK_SKEW': 360,  #
-    'OIDC_ID_TOKEN_COOKIE_SECURE': os.environ.get('OIDC_ID_TOKEN_COOKIE_SECURE', False),
-    'SECRET_KEY': os.environ.get('SECRET', secrets.token_urlsafe(16))
+    'OIDC_ID_TOKEN_COOKIE_SECURE': os.getenv('OIDC_ID_TOKEN_COOKIE_SECURE', False),
 })
 if 'PREFIX' in os.environ:
-    app.wsgi_app = ReverseProxied(app.wsgi_app, script_name=os.environ.get('PREFIX'))
+    prefix = os.environ.get('PREFIX')
+    app.config.from_mapping({
+        'SESSION_COOKIE_PATH': prefix,
+    })
+    app.wsgi_app = ReverseProxied(app.wsgi_app, script_name=prefix)
 
 oidc_overrides = {}
 oidc = OpenIDConnect(app, **oidc_overrides)
 
 
-# @app.route('/')
-# def hello_world():
-#     app.logger.info('url_for(.)=%s', url_for(inspect.stack()[0][3]))
-#     return 'Hello, World!'
-
-
-# TODO only neeede when SECRET_KEY is generated
+# TODO only needed when SECRET_KEY is generated
 @app.errorhandler(itsdangerous.exc.BadSignature)
 def handle_bad_signature(e):
     oidc.logout()
-    return redirect(url_for("login"), code=302)
+    return jsonify(message='Not logged in'), 401
 
 
 @app.route('/health')
@@ -98,7 +89,6 @@ def health():
 @app.route('/me')
 def me():
     if oidc.user_loggedin:
-
         return jsonify(email=oidc.user_getfield('email'), groups=oidc.user_getinfo('groups'))
     else:
         return jsonify(message='Not logged in'), 401
@@ -113,20 +103,6 @@ def login():
 @app.route('/')
 def hello_world():
     return redirect('/', code=301)
-
-
-@app.route('/private')
-@oidc.require_login
-def hello_me():
-    info = oidc.user_getinfo(['email', 'openid'])
-    return ('Hello, %s (%s)! <a href="/">Return</a>' %
-            (info.get('email'), info.get('openid_id')))
-
-
-@app.route('/api')
-@oidc.accept_token(True, ['openid'])
-def hello_api():
-    return json.dumps({'hello': 'Welcome %s' % g.oidc_token_info['sub']})
 
 
 @app.route('/logout')

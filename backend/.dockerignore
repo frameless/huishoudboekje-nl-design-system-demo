@@ -1,4 +1,4 @@
 **/node_modules
 **/__pycache__
-app/client-secrets.json
+app/client_secrets.json
 

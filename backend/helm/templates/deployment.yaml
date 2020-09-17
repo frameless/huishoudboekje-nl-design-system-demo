@@ -13,11 +13,13 @@ spec:
       {{- include "helm.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-    {{- with .Values.podAnnotations }}
       annotations:
-        imageHash: {{- .Values.image.hash }}
+        {{- if eq .Values.image.tag "dev" }}
+        dev: {{ randAlphaNum 24 | b64enc | quote}}
+        {{- end }}
+        {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
-    {{- end }}
+        {{- end }}
       labels:
         {{- include "helm.selectorLabels" . | nindent 8 }}
     spec:
@@ -38,7 +40,14 @@ spec:
             - name: PREFIX
               value: /api
             - name: OIDC_CLIENT_SECRETS
-              value: /opt/etc/oidc/client-secrets.json
+              value: /opt/etc/oidc/client_secrets.json
+            - name: OIDC_REDIRECT_URI
+              value: "{{ .Values.oidc.redirectUri}}"
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ printf "%s-secrets" (include "helm.fullname" .) }}
+                  key: SECRET_KEY
           ports:
             - name: http
               containerPort: 8000
@@ -55,14 +64,14 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
             - name: oidc-volume
-              mountPath: /opt/app
+              mountPath: /opt/etc/oidc
       volumes:
         - name: oidc-volume
           secret:
             secretName: {{ printf "%s-oidc" (include "helm.fullname" .) }}
             items:
-              - key: client-secrets.json
-                path: client-secrets.json
+              - key: client_secrets.json
+                path: client_secrets.json
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -83,7 +92,7 @@ metadata:
   labels:
   {{- include "helm.labels" . | nindent 4 }}
 stringData:
-  client-secrets.json: |
+  client_secrets.json: |
     {
       "web": {
         "mark": true,
@@ -95,6 +104,17 @@ stringData:
             "{{ .Values.oidc.redirectUri}}"
         ],
         "token_uri": "{{.Values.oidc.tokenUri}}",
-        "token_introspection_uri": "{{.Values.oidc.tokenInfoUri}}"
+        "token_introspection_uri": "{{.Values.oidc.tokeninfoUri}}",
+        "userinfo_uri": "{{.Values.oidc.userinfoUri}}"
       }
     }
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ printf "%s-secrets" (include "helm.fullname" .) }}
+  labels:
+  {{- include "helm.labels" . | nindent 4 }}
+data:
+  SECRET_KEY: {{ default (randAlphaNum 24) .Values.secretKey | b64enc | quote }}

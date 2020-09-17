@@ -17,6 +17,7 @@
       helm dependency build ./helm
       helm upgrade --install --create-namespace hhb-$CI_ENVIRONMENT_SLUG-dex ./helm \
       --namespace hhb-$CI_ENVIRONMENT_SLUG \
+      -f ./helm/values-review.yaml \
       --set "dex.ingress.hosts[0]=dex-hhb-$CI_ENVIRONMENT_SLUG.$REVIEW_BASE_DOMAIN" \
       --set "dex.config.issuer=https://dex-hhb-$CI_ENVIRONMENT_SLUG.$REVIEW_BASE_DOMAIN" \
       --set "dex.config.staticClients[0].redirectURIs[0]=https://hhb-$CI_ENVIRONMENT_SLUG.$REVIEW_BASE_DOMAIN/api/oidc_callback"
@@ -35,12 +36,12 @@
       --set "ingress.hosts[0].host=hhb-$CI_ENVIRONMENT_SLUG.$REVIEW_BASE_DOMAIN" \
       --set "ingress.hosts[0].paths[0]=/api/" \
       --set "oidc.issuer=https://dex-hhb-$CI_ENVIRONMENT_SLUG.$REVIEW_BASE_DOMAIN" \
-      --set "oidc.client=huishoudboekje" \
-      --set "oidc.secret=ZwwcL2zjQyJUBnFPVoOb" \
+      --set "oidc.clientSecret=ZwwcL2zjQyJUBnFPVoOb" \
       --set "oidc.authorizationEndpoint=https://dex-hhb-$CI_ENVIRONMENT_SLUG.$REVIEW_BASE_DOMAIN/auth" \
       --set "oidc.redirectUri=https://hhb-$CI_ENVIRONMENT_SLUG.$REVIEW_BASE_DOMAIN/api/oidc_callback" \
       --set "oidc.tokenUri=https://dex-hhb-$CI_ENVIRONMENT_SLUG.$REVIEW_BASE_DOMAIN/token" \
-      --set "oidc.tokenInfoUri=https://dex-hhb-$CI_ENVIRONMENT_SLUG.$REVIEW_BASE_DOMAIN/tokenInfo" \
+      --set "oidc.tokeninfoUri=https://dex-hhb-$CI_ENVIRONMENT_SLUG.$REVIEW_BASE_DOMAIN/tokeninfo" \
+      --set "oidc.userinfoUri=https://dex-hhb-$CI_ENVIRONMENT_SLUG.$REVIEW_BASE_DOMAIN/userinfo" \
       --set "image.tag=$IMAGE_TAG"
   only:
     - branches@commonground/huishoudboekje/app-new

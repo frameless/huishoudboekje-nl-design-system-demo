@@ -12,15 +12,19 @@ dex:
         name: Huishoudboekje Schaalbaar
         secret: ZwwcL2zjQyJUBnFPVoOb
         redirectURIs:
-          - http://hhb.minikube/oidc/callback
-          - http://hhb.minikube/oidc_callback
+          - http://hhb.minikube/api/oidc_callback
     enablePasswordDB: true
     staticPasswords:
-      - username: applicatiebeheer
+      - username: functioneelbeheer
         userID: 363283b9-07bb-4247-bfe4-977a1e221cc4
-        hash: $2y$12$nkKzi45TIHcUF7LjFAty5.GNj/CQ98RS2e5LB3NqkYPHcuPzJwXc6  # ab_01
-        name: Applicatiebeheer Gebruiker
-        email: ab@sloothuizen.gemeente
+        hash: $2y$12$IS6zl9Wm8ZdcdtfSKYSO3.ItOEu1DvFjsH9w.9jGa3o78cvI2xj2m # demo_fb
+        name: Functioneelbeheer Gebruiker
+        email: functioneelbeheer@sloothuizen.nl
+      - username: medewerker
+        userID: 2902e9be-b8f6-4629-aa66-93a1cf63e3ae
+        hash: $2y$12$GLqS4E0M/t5g6c6B/DsPlOM8rJMhIEAvYgw1eJeBbMya5uSXzZbrK # demo_med
+        name: Medewerker
+        email: medewerker@sloothuizen.nl
     oauth2:
       skipApprovalScreen: false
   ingress:
