@@ -5,13 +5,14 @@ import User from "./User";
 import {useIsMobile} from "react-grapple";
 import {useSession} from "../utils/hooks";
 import {Redirect} from "react-router-dom";
+import Routes from "../config/routes";
 
 const LoginPage = () => {
 	const session = useSession();
 	const isMobile = useIsMobile();
 
 	if (session.user) {
-		return <Redirect to={"/"} />;
+		return <Redirect to={Routes.Home} />;
 	}
 
 	return (

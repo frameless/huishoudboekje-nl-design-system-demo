@@ -4,9 +4,13 @@
   },
   "mail": "E-mailadres",
   "password": "Wachtwoord",
-  "welcomeMessage": "Welkom, {{name}}!",
   "login": {
     "invalidCredentialsError": "Onjuiste combinatie e-mailadres en wachtwoord.",
     "logout": "Uitloggen"
-  }
+  },
+  "dashboard": "Dashboard",
+  "balances": "Huishoudboekjes",
+  "organizations": "Organisaties",
+  "banking": "Bankzaken",
+  "settings": "Instellingen"
 }

@@ -9,6 +9,8 @@ import {BrowserRouter as Router, Redirect, Route} from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import UserStatus from "./components/UserStatus";
 import {GrLock} from "react-icons/all";
+import users from "./config/users.json";
+import Routes from "./config/routes";
 
 const App = () => {
 	const isMobile = useIsMobile();
@@ -16,8 +18,8 @@ const App = () => {
 
 	return (
 		<Router>
-			<Route path={"/login"} component={LoginPage} />
-			<Route path={"/"}>{
+			<Route path={Routes.Login} component={LoginPage} />
+			<Route path={Routes.Home}>{
 				session.user ? (
 					<Flex h={"auto"} minHeight={"100vh"} minWidth={"100%"} w={"auto"} bg={"gray.100"}>
 						<Stack width={"100%"} direction={isMobile ? "column" : "row"} justifyContent={"flex-start"} alignItems={"flex-start"} spacing={30}>
@@ -26,9 +28,9 @@ const App = () => {
 							</SidebarContainer>
 							<Box height={"100%"} minHeight={"100vh"} width={"100%"} p={5}>
 
-								<Stack spacing={10} direction={"row"} justifyContent={"flex-end"} pb={5}>
+								<Stack spacing={10} direction={"row"} justifyContent={"flex-end"} alignItems={"center"} pb={5}>
 									<UserStatus name={session.user.fullName} role={session.user.role} />
-									<IconButton size={"sm"} icon={GrLock} variant={"outline"} variantColor={"black"} aria-label={"Uitloggen"} onClick={() => session.reset()} />
+									<IconButton size={"sm"} icon={GrLock} variant={"outline"} variantColor={"red"} aria-label={"Uitloggen"} onClick={() => session.reset()} />
 								</Stack>
 
 								<Router>
@@ -44,7 +46,7 @@ const App = () => {
 						</Stack>
 					</Flex>
 				) : (
-					<Redirect to={"/login"} />
+					<Redirect to={Routes.Login} />
 				)
 			}</Route>
 		</Router>
