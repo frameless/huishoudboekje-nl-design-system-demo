@@ -8,6 +8,19 @@ storage:
 web:
   http: 0.0.0.0:6556
 
+oauth2:
+  # use ["code", "token", "id_token"] to enable implicit flow for web-only clients
+  #   responseTypes: [ "code" ] # also allowed are "token" and "id_token"
+  # By default, Dex will ask for approval to share data with application
+  # (approval for sharing data from connected IdP to Dex is separate process on IdP)
+  skipApprovalScreen: false
+  # If only one authentication method is enabled, the default behavior is to
+  # go directly to it. For connected IdPs, this redirects the browser away
+  # from application to upstream provider such as the Google login page
+  alwaysShowLoginScreen: false
+  # Uncommend the passwordConnector to use a specific connector for password grants
+  #   passwordConnector: local
+
 staticClients:
 - id: huishoudboekje
   redirectURIs:
@@ -18,13 +31,8 @@ staticClients:
 enablePasswordDB: true
 
 staticPasswords:
-- username: functioneelbeheer
+- username: henk.poortvliet@sloothuizen.nl
   userID: 363283b9-07bb-4247-bfe4-977a1e221cc4
-  hash: $2y$12$IS6zl9Wm8ZdcdtfSKYSO3.ItOEu1DvFjsH9w.9jGa3o78cvI2xj2m # demo_fb
-  name: Functioneelbeheer Gebruiker
-  email: functioneelbeheer@sloothuizen.nl
-- username: medewerker
-  userID: 2902e9be-b8f6-4629-aa66-93a1cf63e3ae
-  hash: $2y$12$GLqS4E0M/t5g6c6B/DsPlOM8rJMhIEAvYgw1eJeBbMya5uSXzZbrK # demo_med
-  name: Medewerker
-  email: medewerker@sloothuizen.nl
+  hash: $2y$12$xWWlTptiMyPJbuPo7WwBgefl/sj3vz8iNJn5fPwVWQcBcZh1HsC.W # demo
+  name: Henk Poortvliet
+  email: henk.poortvliet@sloothuizen.nl

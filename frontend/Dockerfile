@@ -3,11 +3,12 @@ FROM node:lts-alpine as builder
 
 #ENV CI=true
 
-RUN mkdir -p /app
 WORKDIR /app
 
-COPY ./app /app
+COPY ./app/package*.json ./app/version.js ./
 RUN npm ci --no-progress --color=false --quiet --unsafe-perm
+
+COPY ./app /app
 VOLUME /app/public/theme
 RUN npm run build
 

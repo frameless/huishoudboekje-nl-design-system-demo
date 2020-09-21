@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
-import {Button, Icon, Input, Stack, Text, useToast} from "@chakra-ui/core";
-import {useInput} from "react-grapple";
+import {Button, Icon, Stack, Text, useToast} from "@chakra-ui/core";
 import {observer} from "mobx-react";
 import useFetch from "use-http";
 import {useTranslate} from "../config/i18n";
@@ -9,8 +8,6 @@ import {useSession} from "../utils/hooks";
 
 const User = () => {
 	const {t} = useTranslate();
-	// const mail = useInput();
-	// const password = useInput();
 	const toast = useToast();
 	const session = useSession();
 	const { get, response } = useFetch({ data: [] });
@@ -19,15 +16,26 @@ const User = () => {
 		const loadUser = async () => {
 			const user = await get("/api/me");
 			if (response.ok) {
-				session.setUser(user);
+				const dbuser = users.find(u => u.email === user.email);
+				if (!dbuser) {
+					toast({
+						description: t("login.invalidCredentialsError"),
+						status: "error",
+						position: "top",
+					});
+					logout()
+					return;
+				}
+
+				session.setUser(dbuser);
 			}
 		};
 		loadUser();
 	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 	const logout = async () => {
-		await get("/api/logout");
 		session.reset();
+		await get("/api/logout");
 	};
 
 	return session.user ? (
