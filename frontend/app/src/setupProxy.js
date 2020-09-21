@@ -7,6 +7,7 @@ module.exports = function (app) {
 		createProxyMiddleware({
 			target: proxyApiUrl,
 			changeOrigin: true,
+			xfwd: true,
 		}),
 	);
 };

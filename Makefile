@@ -2,23 +2,24 @@
 DOCKER_TAG=dev
 HELM_NAMESPACE=hhb
 
-.PHONY: all
-all: deploy
+.PHONY: all dex backend frontend
+all: dex backend frontend
 
-PHONY: build-images deploy deploy-frontend deploy-backend
-build-images: frontend-image~ backend-image~
+backend frontend:
+	@echo build $@
+	$(eval IMAGE := registry.gitlab.com/commonground/huishoudboekje/app-new/$@:${DOCKER_TAG})
+	docker build -t $(IMAGE) ./$@
+	helm upgrade --install --create-namespace --namespace ${HELM_NAMESPACE} hhb-$@ ./$@/helm -f ./$@/helm/values-minikube.yaml
 
-%-image~: %
-	docker build -t registry.gitlab.com/commonground/huishoudboekje/app-new/$<:${DOCKER_TAG} ./$<
-	touch $@
+frontend: frontend/helm/theme
 
-deploy: deploy-backend deploy-frontend
-
-deploy-%: %-image~
-	$(eval N := $(subst deploy-,,$@))
-	helm upgrade --install --create-namespace --namespace ${HELM_NAMESPACE} hhb-$(N) ./$(N)/helm -f ./$(N)/helm/values-minikube.yaml
-
-deploy-frontend: frontend/helm/theme
+dex:
+	#helm repo add stable "https://kubernetes-charts.storage.googleapis.com"
+	#helm dependency update ./helm
+	#helm dependency build ./helm
+	helm upgrade --install --create-namespace hhb-dex ./helm --namespace ${HELM_NAMESPACE} -f ./helm/values-minikube.yaml
+	#kubectl --namespace ${HELM_NAMESPACE} patch deployment hhb-${@} -p \
+	#  "{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"date\":\"`date +'%s'`\"}}}}}"
 
 frontend/helm/theme: frontend/theme/sloothuizen
 	(cd frontend/helm; ln -s ../theme/sloothuizen theme)

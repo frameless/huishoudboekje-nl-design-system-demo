@@ -1,10 +1,13 @@
 const pkg = require("./package.json");
 const {resolve, relative} = require("path");
-const {writeFileSync} = require("fs");
+const {writeFileSync, existsSync, mkdirSync} = require("fs");
 
 const {version, versionName} = pkg;
 const rawVersion = `${version} ${versionName}`;
 
+if (!existsSync(resolve(__dirname, "src"))) {
+	mkdirSync(resolve(__dirname, "src"))
+}
 const file = resolve(__dirname, "src", "version.ts");
 const data = `// IMPORTANT: THIS FILE IS AUTO GENERATED! DO NOT MANUALLY EDIT OR CHECK IN!
 /* eslint-disable */

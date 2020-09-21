@@ -21,7 +21,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "theme": "./setTheme.sh"
+    "theme": "./setTheme.sh",
+    "lint": "eslint src"
   },
   "dependencies": {
     "@chakra-ui/core": "^0.8.0",
@@ -47,7 +48,8 @@
     "react-icons": "^3.11.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
-    "typescript": "^3.7.5"
+    "typescript": "^3.7.5",
+    "use-http": "^1.0.13"
   },
   "devDependencies": {
     "@types/react-router-dom": "^5.1.5",

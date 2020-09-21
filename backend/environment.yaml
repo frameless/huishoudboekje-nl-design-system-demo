@@ -1,0 +1,10 @@
+name: hhb-schaalbaar
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - flask=1.1.2=py_0
+  - flask-oidc=1.4.0=py_1
+  - pip=20.2.2=py37_0
+  - python=3.7.9
+  - gunicorn=20.0.4=py37_0

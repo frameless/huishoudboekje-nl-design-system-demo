@@ -1,0 +1,11 @@
+apiVersion: v2
+name: huishoudboekje
+description: Metachart for the Huishoudboekje Schaalbaar application
+type: application
+version: 0.1.0
+appVersion: 1.16.0
+
+dependencies:
+  - name: dex
+    version: 2.13.0
+    repository: "@stable"

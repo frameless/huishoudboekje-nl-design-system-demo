@@ -1,0 +1,39 @@
+dex:
+  config:
+    storage:
+      type: sqlite3
+      config:
+        file: ":memory:"
+    logger:
+      level: info
+    issuer: http://dex.hhb.minikube
+    staticClients:
+      - id: huishoudboekje
+        name: Huishoudboekje Schaalbaar
+        secret: ZwwcL2zjQyJUBnFPVoOb
+        redirectURIs:
+          - http://hhb.minikube/api/oidc_callback
+    enablePasswordDB: true
+    staticPasswords:
+      - username: henk.poortvliet@sloothuizen.nl
+        userID: 363283b9-07bb-4247-bfe4-977a1e221cc4
+        hash: $2y$12$xWWlTptiMyPJbuPo7WwBgefl/sj3vz8iNJn5fPwVWQcBcZh1HsC.W # demo
+        name: Henk Poortvliet
+        email: henk.poortvliet@sloothuizen.nl
+    oauth2:
+      skipApprovalScreen: true
+  ingress:
+    enabled: true
+    hosts:
+      - dex.hhb.minikube
+  ports:
+    web:
+      servicePort: 80
+  grpc: false
+  certs:
+    web:
+      create: false
+    grpc:
+      create: false
+  rbac:
+    create: false

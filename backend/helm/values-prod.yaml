@@ -4,13 +4,12 @@
 
 replicaCount: 1
 
-secretKey: ""
-
 image:
   repository: registry.gitlab.com/commonground/huishoudboekje/app-new/backend
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: dev
+  hash: local
 
 imagePullSecrets: []
 nameOverride: ""
@@ -79,13 +78,3 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
-
-oidc:
-  clientId: huishoudboekje
-  clientSecret: ""
-  issuer: http://idp
-  authorizationEndpoint: http://idp/auth
-  redirectUri: http://chart-example.com/api/oidc_callback
-  tokenUri: http://idp/token
-  tokeninfoUri: http://idp/tokeninfo
-  userinfoUri: http://idp/userinfo
