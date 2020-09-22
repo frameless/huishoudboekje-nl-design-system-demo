@@ -1,54 +1,3 @@
-# Deploy template for review
-.deploy-review:
-  stage: deploy
-  image: registry.gitlab.com/commonground/core/review-app-deployer:latest
-  variables:
-    KUBECONFIG: /secrets/kubeconfig/review.conf
-  environment:
-    name: $CI_COMMIT_REF_NAME
-    url: https://hhb-$CI_ENVIRONMENT_SLUG.$REVIEW_BASE_DOMAIN/
-    on_stop: destroy
-  script:
-    - |
-      helm repo add stable "https://kubernetes-charts.storage.googleapis.com"
-      helm repo update
-    - |
-      helm dependency update ./helm
-      helm dependency build ./helm
-      helm upgrade --install --create-namespace hhb-$CI_ENVIRONMENT_SLUG-dex ./helm \
-      --namespace hhb-$CI_ENVIRONMENT_SLUG \
-      -f ./helm/values-review.yaml \
-      --set "dex.ingress.hosts[0]=dex-hhb-$CI_ENVIRONMENT_SLUG.$REVIEW_BASE_DOMAIN" \
-      --set "dex.config.issuer=https://dex-hhb-$CI_ENVIRONMENT_SLUG.$REVIEW_BASE_DOMAIN" \
-      --set "dex.config.staticClients[0].redirectURIs[0]=https://hhb-$CI_ENVIRONMENT_SLUG.$REVIEW_BASE_DOMAIN/api/oidc_callback"
-    - |
-      (cd frontend/helm; ln -s ../theme/sloothuizen ./theme )
-      helm upgrade --install --create-namespace hhb-$CI_ENVIRONMENT_SLUG-frontend ./frontend/helm \
-      --namespace hhb-$CI_ENVIRONMENT_SLUG \
-      --set "ingress.enabled=true" \
-      --set "ingress.hosts[0].host=hhb-$CI_ENVIRONMENT_SLUG.$REVIEW_BASE_DOMAIN" \
-      --set "ingress.hosts[0].paths[0]=/" \
-      --set "image.tag=$IMAGE_TAG"
-    - |
-      helm upgrade --install --create-namespace hhb-$CI_ENVIRONMENT_SLUG-backend ./backend/helm \
-      --namespace hhb-$CI_ENVIRONMENT_SLUG \
-      --set "ingress.enabled=true" \
-      --set "ingress.hosts[0].host=hhb-$CI_ENVIRONMENT_SLUG.$REVIEW_BASE_DOMAIN" \
-      --set "ingress.hosts[0].paths[0]=/api/" \
-      --set "oidc.issuer=https://dex-hhb-$CI_ENVIRONMENT_SLUG.$REVIEW_BASE_DOMAIN" \
-      --set "oidc.clientSecret=ZwwcL2zjQyJUBnFPVoOb" \
-      --set "oidc.authorizationEndpoint=https://dex-hhb-$CI_ENVIRONMENT_SLUG.$REVIEW_BASE_DOMAIN/auth" \
-      --set "oidc.redirectUri=https://hhb-$CI_ENVIRONMENT_SLUG.$REVIEW_BASE_DOMAIN/api/oidc_callback" \
-      --set "oidc.tokenUri=https://dex-hhb-$CI_ENVIRONMENT_SLUG.$REVIEW_BASE_DOMAIN/token" \
-      --set "oidc.tokeninfoUri=https://dex-hhb-$CI_ENVIRONMENT_SLUG.$REVIEW_BASE_DOMAIN/tokeninfo" \
-      --set "oidc.userinfoUri=https://dex-hhb-$CI_ENVIRONMENT_SLUG.$REVIEW_BASE_DOMAIN/userinfo" \
-      --set "image.tag=$IMAGE_TAG"
-  only:
-    - branches@commonground/huishoudboekje/app-new
-  tags:
-    - cg
-    - docker
-
 # Deploy template for app
 .deploy-app:
   stage: deploy
@@ -60,6 +9,18 @@
     url: https://$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN/
     on_stop: destroy
   script:
+    - |
+      helm repo add stable "https://kubernetes-charts.storage.googleapis.com"
+      helm repo update
+    - |
+      helm dependency update ./helm
+      helm dependency build ./helm
+      helm upgrade --install --create-namespace $REVIEW_NAMESPACE-dex ./helm \
+      --namespace $REVIEW_NAMESPACE \
+      -f ./helm/values-review.yaml \
+      --set "dex.ingress.hosts[0]=dex-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN" \
+      --set "dex.config.issuer=https://dex-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN" \
+      --set "dex.config.staticClients[0].redirectURIs[0]=https://$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN/api/oidc_callback"
     - |
       (cd frontend/helm; ln -s ../theme/sloothuizen ./theme )
       helm upgrade --install --create-namespace $REVIEW_NAMESPACE-frontend ./frontend/helm \
@@ -74,6 +35,13 @@
       --set "ingress.enabled=true" \
       --set "ingress.hosts[0].host=$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN" \
       --set "ingress.hosts[0].paths[0]=/api/" \
+      --set "oidc.issuer=https://dex-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN" \
+      --set "oidc.clientSecret=ZwwcL2zjQyJUBnFPVoOb" \
+      --set "oidc.authorizationEndpoint=https://dex-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN/auth" \
+      --set "oidc.redirectUri=https://$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN/api/oidc_callback" \
+      --set "oidc.tokenUri=https://dex-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN/token" \
+      --set "oidc.tokeninfoUri=https://dex-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN/tokeninfo" \
+      --set "oidc.userinfoUri=https://dex-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN/userinfo" \
       --set "image.tag=$IMAGE_TAG"
   only:
     - branches@commonground/huishoudboekje/app-new
@@ -85,7 +53,12 @@
 deploy-review:
   variables:
     KUBECONFIG: /secrets/kubeconfig/review.conf
-  extends: .deploy-review
+    REVIEW_NAMESPACE: "hhb-${CI_ENVIRONMENT_SLUG}"
+  extends: .deploy-app
+  environment:
+    name: $CI_COMMIT_REF_NAME
+    url: https://hhb-${CI_ENVIRONMENT_SLUG}.${REVIEW_BASE_DOMAIN}/
+    on_stop: destroy
   except:
     - master
     - develop
