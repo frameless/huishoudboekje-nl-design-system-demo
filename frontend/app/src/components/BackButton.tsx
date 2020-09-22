@@ -9,7 +9,7 @@ const BackButton: React.FC<{ to: string }> = ({to}) => {
 	const {t} = useTranslation();
 
 	return (
-		<Button variant={"link"} fontSize={"sm"} mb={5} onClick={() => push(to)}>
+		<Button variant={"link"} variantColor={"gray"} fontSize={"sm"} mb={5} onClick={() => push(to)}>
 			<Icon as={MdArrowBack} size={"16px"} mr={2} />
 			{t("back")}
 		</Button>
