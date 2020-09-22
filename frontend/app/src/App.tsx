@@ -10,6 +10,8 @@ import Sidebar from "./components/Sidebar";
 import UserStatus from "./components/UserStatus";
 import {GrLock} from "react-icons/all";
 import Routes from "./config/routes";
+import Citizens from "./components/Citizens";
+import users from "./config/users.json";
 
 const App = () => {
 	const isMobile = useIsMobile();
@@ -37,7 +39,7 @@ const App = () => {
 
 									<Router>
 										{/*<Route path={"/"} component={Dashboard} />*/}
-										{/*<Route path={"/deelnemers"} component={Deelnemers} />*/}
+										<Route path={Routes.Citizens} component={Citizens} />
 										{/*<Route path={"/ketenpartners"} component={Ketenpartners} />*/}
 										{/*<Route path={"/bankzaken"} component={Bankzaken} />*/}
 										{/*<Route path={"/instellingen"} component={Settings} />*/}
