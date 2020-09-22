@@ -11,11 +11,11 @@ const Sidebar = (props) => {
 	return (
 		<Stack spacing={10} p={5} alignSelf={"center"} {...props}>
 			<Stack spacing={5}>
-				<SidebarLink href={Routes.Dashboard} icon={GrDashboard}>{t("dashboard")}</SidebarLink>
-				<SidebarLink href={Routes.Home} icon={GrUser}>{t("balances")}</SidebarLink>
-				<SidebarLink href={Routes.Home} icon={GrLink}>{t("organizations")}</SidebarLink>
-				<SidebarLink href={Routes.Home} icon={GrBasket}>{t("banking")}</SidebarLink>
-				<SidebarLink href={Routes.Settings} icon={GrSettingsOption}>{t("settings")}</SidebarLink>
+				<SidebarLink disabled href={Routes.Dashboard} icon={GrDashboard}>{t("dashboard")}</SidebarLink>
+				<SidebarLink disabled href={Routes.Home} icon={GrUser}>{t("balances")}</SidebarLink>
+				<SidebarLink disabled href={Routes.Home} icon={GrLink}>{t("organizations")}</SidebarLink>
+				<SidebarLink disabled href={Routes.Home} icon={GrBasket}>{t("banking")}</SidebarLink>
+				<SidebarLink disabled href={Routes.Settings} icon={GrSettingsOption}>{t("settings")}</SidebarLink>
 			</Stack>
 		</Stack>
 	);
