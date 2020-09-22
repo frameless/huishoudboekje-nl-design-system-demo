@@ -4,6 +4,9 @@ const Routes = {
 	Dashboard: "/dashboard",
 	Citizens: "/citizens",
 	Citizen: (citizenId: number) => "/citizens/" + citizenId,
+	Balances: "/balances",
+	Organizations: "/organizations",
+	Banking: "/banking",
 	Settings: "/settings"
 };
 

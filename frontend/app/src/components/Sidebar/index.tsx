@@ -1,23 +1,21 @@
 import React from "react";
-import {Stack} from "@chakra-ui/core";
+import {BoxProps, Stack} from "@chakra-ui/core";
 import SidebarLink from "./SidebarLink";
-import {GrBasket, GrDashboard, GrLink, GrSettingsOption, GrUser} from "react-icons/all";
+import {MdAccountBalance, MdCreditCard, MdDashboard, MdPerson, MdSettings, MdShoppingCart} from "react-icons/all";
 import {useTranslate} from "../../config/i18n";
 import Routes from "../../config/routes";
 
-const Sidebar = (props) => {
+const Sidebar: React.FC<BoxProps> = (props) => {
 	const {t} = useTranslate();
 
 	return (
 		<Stack spacing={10} p={5} alignSelf={"center"} {...props}>
-			<Stack spacing={5}>
-				<SidebarLink disabled href={Routes.Dashboard} icon={GrDashboard}>{t("dashboard")}</SidebarLink>
-				<SidebarLink href={Routes.Citizens} icon={GrUser}>{t("citizens")}</SidebarLink>
-				<SidebarLink disabled href={Routes.Home} icon={GrUser}>{t("balances")}</SidebarLink>
-				<SidebarLink disabled href={Routes.Home} icon={GrLink}>{t("organizations")}</SidebarLink>
-				<SidebarLink disabled href={Routes.Home} icon={GrBasket}>{t("banking")}</SidebarLink>
-				<SidebarLink disabled href={Routes.Settings} icon={GrSettingsOption}>{t("settings")}</SidebarLink>
-			</Stack>
+			<SidebarLink exactMatch href={Routes.Dashboard} icon={MdDashboard}>{t("dashboard")}</SidebarLink>
+			<SidebarLink href={Routes.Citizens} icon={MdPerson}>{t("citizens")}</SidebarLink>
+			<SidebarLink href={Routes.Balances} icon={MdShoppingCart}>{t("balances")}</SidebarLink>
+			<SidebarLink href={Routes.Organizations} icon={MdAccountBalance}>{t("organizations")}</SidebarLink>
+			<SidebarLink href={Routes.Banking} icon={MdCreditCard}>{t("banking")}</SidebarLink>
+			<SidebarLink exactMatch href={Routes.Settings} icon={MdSettings}>{t("settings")}</SidebarLink>
 		</Stack>
 	);
 };
