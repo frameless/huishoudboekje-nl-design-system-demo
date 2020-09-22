@@ -1,19 +1,24 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {Box, Flex, Stack} from "@chakra-ui/core";
 import Logo from "./Logo";
 import User from "./User";
 import {useIsMobile} from "react-grapple";
 import {useSession} from "../utils/hooks";
+import {observer} from "mobx-react";
 import {Redirect} from "react-router-dom";
 import Routes from "../config/routes";
-import {observer} from "mobx-react";
 
 const LoginPage = () => {
 	const session = useSession();
 	const isMobile = useIsMobile();
 
+	useEffect(() => {
+		return () => session.setReferer(undefined);
+	}, [session]);
+
 	if (session.user) {
-		return <Redirect to={Routes.Home} />
+		const referer = session.referer && session.referer !== Routes.Login ? session.referer : Routes.Home;
+		return <Redirect to={referer} />
 	}
 
 	return (
