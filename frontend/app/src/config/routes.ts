@@ -3,6 +3,7 @@ const Routes = {
 	Login: "/login",
 	Dashboard: "/dashboard",
 	Citizens: "/citizens",
+	Citizen: (citizenId: number) => "/citizens/" + citizenId,
 	Settings: "/settings"
 };
 

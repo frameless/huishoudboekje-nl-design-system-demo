@@ -1,14 +1,14 @@
 {
-  "home": {
-    "running-in-mode": "Deze applicatie draait in {{mode}} modus."
-  },
+  "back": "Terug",
   "mail": "E-mailadres",
   "password": "Wachtwoord",
   "login": {
     "invalidCredentialsError": "Onjuiste combinatie e-mailadres en wachtwoord.",
     "logout": "Uitloggen"
   },
+  "home": "Home",
   "dashboard": "Dashboard",
+  "citizens": "Burgers",
   "balances": "Huishoudboekjes",
   "organizations": "Organisaties",
   "banking": "Bankzaken",

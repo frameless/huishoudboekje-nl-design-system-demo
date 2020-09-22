@@ -1,24 +1,29 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {Box, Flex, IconButton, Stack} from "@chakra-ui/core";
-import {useSession} from "./utils/hooks";
+import {useSampleData, useSession} from "./utils/hooks";
 import LoginPage from "./components/LoginPage";
 import {observer} from "mobx-react";
 import SidebarContainer from "./components/Sidebar/SidebarContainer";
 import {useIsMobile} from "react-grapple";
-import {BrowserRouter as Router, Redirect, Route, Switch, useLocation} from "react-router-dom";
+import {Redirect, Route, Switch, useLocation} from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import UserStatus from "./components/UserStatus";
 import {GrLock} from "react-icons/all";
 import Routes from "./config/routes";
 import Citizens from "./components/Citizens";
-import users from "./config/users.json";
 import PageNotFound from "./components/PageNotFound";
 
 const App = () => {
 	const isMobile = useIsMobile();
 	const session = useSession();
 	const location = useLocation();
-	if(!session.user){
+	const users = useSampleData().users;
+
+	useEffect(() => {
+		session.setUser(users[0]);
+	}, [session, users]);
+
+	if (!session.user) {
 		session.setReferer(location.pathname);
 	}
 
