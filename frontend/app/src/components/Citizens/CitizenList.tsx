@@ -8,7 +8,9 @@ import {searchFields} from "../../utils/things";
 
 const CitizenList = () => {
 	const {t} = useTranslation();
-	const search = useInput<string>();
+	const search = useInput<string>({
+		placeholder: t("search-placeholder")
+	});
 
 	// Todo: make this a graphQL query and maybe pagination once this list becomes too long (50+ items)
 	const allCitizens = useSampleData().citizens;
@@ -24,7 +26,7 @@ const CitizenList = () => {
 				<Heading size={"lg"}>{t("citizens")}</Heading>
 				<InputGroup>
 					<InputLeftElement><Icon name="search" color="gray.300" /></InputLeftElement>
-					<Input type={"text"} placeholder={t("zoeken")} {...search.bind} />
+					<Input type={"text"} {...search.bind} />
 				</InputGroup>
 			</Stack>
 
