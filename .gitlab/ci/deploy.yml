@@ -13,36 +13,27 @@
       helm repo add stable "https://kubernetes-charts.storage.googleapis.com"
       helm repo update
     - |
-      helm dependency update ./helm
-      helm dependency build ./helm
-      helm upgrade --install --create-namespace $REVIEW_NAMESPACE-dex ./helm \
-      --namespace $REVIEW_NAMESPACE \
-      -f ./helm/values-review.yaml \
-      --set "dex.ingress.hosts[0]=dex-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN" \
-      --set "dex.config.issuer=https://dex-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN" \
-      --set "dex.config.staticClients[0].redirectURIs[0]=https://$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN/api/oidc_callback"
-    - |
-      (cd frontend/helm; ln -s ../theme/sloothuizen ./theme )
-      helm upgrade --install --create-namespace $REVIEW_NAMESPACE-frontend ./frontend/helm \
-      --namespace $REVIEW_NAMESPACE \
-      --set "ingress.enabled=true" \
-      --set "ingress.hosts[0].host=$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN" \
-      --set "ingress.hosts[0].paths[0]=/" \
-      --set "image.tag=$IMAGE_TAG"
-    - |
-      helm upgrade --install --create-namespace $REVIEW_NAMESPACE-backend ./backend/helm \
-      --namespace $REVIEW_NAMESPACE \
-      --set "ingress.enabled=true" \
-      --set "ingress.hosts[0].host=$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN" \
-      --set "ingress.hosts[0].paths[0]=/api/" \
-      --set "oidc.issuer=https://dex-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN" \
-      --set "oidc.clientSecret=ZwwcL2zjQyJUBnFPVoOb" \
-      --set "oidc.authorizationEndpoint=https://dex-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN/auth" \
-      --set "oidc.redirectUri=https://$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN/api/oidc_callback" \
-      --set "oidc.tokenUri=https://dex-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN/token" \
-      --set "oidc.tokeninfoUri=https://dex-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN/tokeninfo" \
-      --set "oidc.userinfoUri=https://dex-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN/userinfo" \
-      --set "image.tag=$IMAGE_TAG"
+      helm dependency build ./helm/charts/huishoudboekje
+      (cd helm/charts/medewerker-frontend; ln -s ../../../frontend/theme/sloothuizen theme)
+      helm upgrade --install --create-namespace \
+        --namespace $REVIEW_NAMESPACE \
+        $REVIEW_NAMESPACE \
+        ./helm/charts/huishoudboekje --values ./helm/charts/huishoudboekje/values-review.yaml
+        --set "medewerker-frontend.ingress.hosts[0].host=$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN" \
+        --set "medewerker-frontend.image.tag=$IMAGE_TAG" \
+        --set "medewerker-backend.ingress.hosts[0].host=$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN" \
+        --set "medewerker-backend.oidc.issuer=https://dex-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN" \
+        --set "medewerker-backend.oidc.clientSecret=ZwwcL2zjQyJUBnFPVoOb" \
+        --set "medewerker-backend.oidc.authorizationEndpoint=https://dex-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN/auth" \
+        --set "medewerker-backend.oidc.redirectUri=https://$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN/api/oidc_callback" \
+        --set "medewerker-backend.oidc.tokenUri=https://dex-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN/token" \
+        --set "medewerker-backend.oidc.tokeninfoUri=https://dex-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN/tokeninfo" \
+        --set "medewerker-backend.oidc.userinfoUri=https://dex-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN/userinfo" \
+        --set "medewerker-backend.image.tag=$IMAGE_TAG" \
+        --set "dex.ingress.hosts[0]=dex-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN" \
+        --set "dex.config.issuer=https://dex-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN" \
+        --set "dex.config.staticClients[0].redirectURIs[0]=https://$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN/api/oidc_callback" \
+        $([[ "$REVIEW_NAMESPACE" == "hhb-test" ]] && echo '--set "dex.config.staticClients[0].redirectURIs[1]=https://localhost:3000/api/oidc_callback"')
   only:
     - branches@commonground/huishoudboekje/app-new
   tags:

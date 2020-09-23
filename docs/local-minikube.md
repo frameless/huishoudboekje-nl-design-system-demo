@@ -50,8 +50,7 @@ Once minikube is running, install Traefik as ingress controller for web and rest
 helm repo add traefik https://containous.github.io/traefik-helm-chart
 helm repo update
 
-kubectl create namespace traefik
-helm install traefik traefik/traefik --namespace traefik --values helm/traefik-values-minikube.yaml
+helm install traefik traefik/traefik --namespace traefik --create-namespace --values helm/traefik-values-minikube.yaml
 ```
 
 When Traefik is running, you can build and start all the HHB components by executing:
