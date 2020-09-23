@@ -2,14 +2,17 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+global:
+  imageRegistry: ""
+  imageTag: ""
+
 replicaCount: 1
 
 image:
   repository: registry.gitlab.com/commonground/huishoudboekje/app-new/frontend
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: dev
-  hash: local
+  tag: ""
 
 imagePullSecrets: []
 nameOverride: ""

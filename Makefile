@@ -6,8 +6,8 @@ REGISTRY_PREFIX="registry.gitlab.com/commonground/huishoudboekje/app-new"
 all: huishoudboekje
 
 huishoudboekje: backend frontend
-	helm dependency build ./helm/charts/$@
-	helm upgrade --install --create-namespace --namespace $@ $@ ./helm/charts/$@ --values ./helm/charts/$@/values-minikube.yaml
+	helm dependency build ./helm/charts/huishoudboekje-review
+	helm upgrade --install --create-namespace --namespace huishoudboekje huishoudboekje ./helm/charts/huishoudboekje-review --set global.imageTag=$(DOCKER_TAG)
 
 backend frontend:
 	$(eval IMAGE := $(REGISTRY_PREFIX)/$@:$(DOCKER_TAG))

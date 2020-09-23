@@ -12,16 +12,17 @@
     - |
       helm repo add stable "https://kubernetes-charts.storage.googleapis.com"
       helm repo update
+    - helm dependency build helm/charts/huishoudboekje-review
+    - (cd helm/charts/medewerker-frontend; ln -s ../../../frontend/theme/sloothuizen theme)
     - |
-      helm dependency build ./helm/charts/huishoudboekje
-      (cd helm/charts/medewerker-frontend; ln -s ../../../frontend/theme/sloothuizen theme)
-      helm upgrade --install --create-namespace \
+      helm upgrade --debug --install --create-namespace "huishoudboekje" ./helm/charts/huishoudboekje-review \
         --namespace $REVIEW_NAMESPACE \
-        $REVIEW_NAMESPACE \
-        ./helm/charts/huishoudboekje --values ./helm/charts/huishoudboekje/values-review.yaml
+        --values ./helm/charts/huishoudboekje-review/values.yaml \
+        --set "global.imageTag=$IMAGE_TAG" \
         --set "medewerker-frontend.ingress.hosts[0].host=$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN" \
-        --set "medewerker-frontend.image.tag=$IMAGE_TAG" \
+        --set "medewerker-frontend.ingress.hosts[0].paths[0]=/" \
         --set "medewerker-backend.ingress.hosts[0].host=$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN" \
+        --set "medewerker-backend.ingress.hosts[0].paths[0]=/api/" \
         --set "medewerker-backend.oidc.issuer=https://dex-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN" \
         --set "medewerker-backend.oidc.clientSecret=ZwwcL2zjQyJUBnFPVoOb" \
         --set "medewerker-backend.oidc.authorizationEndpoint=https://dex-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN/auth" \
@@ -29,11 +30,11 @@
         --set "medewerker-backend.oidc.tokenUri=https://dex-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN/token" \
         --set "medewerker-backend.oidc.tokeninfoUri=https://dex-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN/tokeninfo" \
         --set "medewerker-backend.oidc.userinfoUri=https://dex-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN/userinfo" \
-        --set "medewerker-backend.image.tag=$IMAGE_TAG" \
         --set "dex.ingress.hosts[0]=dex-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN" \
         --set "dex.config.issuer=https://dex-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN" \
-        --set "dex.config.staticClients[0].redirectURIs[0]=https://$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN/api/oidc_callback" \
-        $([[ "$REVIEW_NAMESPACE" == "hhb-test" ]] && echo '--set "dex.config.staticClients[0].redirectURIs[1]=https://localhost:3000/api/oidc_callback"')
+        --set "dex.config.staticClients[0].secret=ZwwcL2zjQyJUBnFPVoOb" \
+        --set "dex.config.staticClients[0].redirectURIs[0]=https://$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN/api/oidc_callback"
+#        $([[ "$REVIEW_NAMESPACE" == "hhb-test" ]] && echo '-- --set "dex.config.staticClients[0].redirectURIs[1]=https://localhost:3000/api/oidc_callback"')
   only:
     - branches@commonground/huishoudboekje/app-new
   tags:

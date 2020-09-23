@@ -7,13 +7,14 @@ dex:
         file: ":memory:"
     logger:
       level: info
-    issuer: https://dex-hhb.nlx.reviews
+    issuer: http://dex.hhb.minikube
     staticClients:
       - id: huishoudboekje
         name: Huishoudboekje Schaalbaar
         secret: ZwwcL2zjQyJUBnFPVoOb
         redirectURIs:
-          - https://hhb.nlx.reviews/oidc_callback
+          - http://hhb.minikube/api/oidc_callback
+          - https://localhost:3000/api/oidc_callback
     enablePasswordDB: true
     staticPasswords:
       - username: henk.poortvliet@sloothuizen.nl
@@ -26,7 +27,7 @@ dex:
   ingress:
     enabled: true
     hosts:
-      - "dex-hhb.nlx.reviews"
+      - dex.hhb.minikube
   ports:
     web:
       servicePort: 80
