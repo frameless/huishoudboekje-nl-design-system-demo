@@ -12,7 +12,7 @@ const NotificationBadge = ({children}) => {
 	);
 }
 
-const CitizenCard: React.FC<BoxProps & { citizen }> = ({citizen, ...props}) => {
+const CitizenCard: React.FC<BoxProps & { citizen, showBadge?: boolean }> = ({citizen, showBadge = false, ...props}) => {
 	const name = `${citizen.firstName} ${citizen.lastName}`;
 	const {push} = useHistory();
 
@@ -21,7 +21,7 @@ const CitizenCard: React.FC<BoxProps & { citizen }> = ({citizen, ...props}) => {
 		       onClick={() => push(Routes.Citizen(citizen.id))} {...props}>
 			<Stack direction={"row"} spacing={5} alignItems={"center"}>
 				<Avatar name={name}>
-					{citizen.notifications && (
+					{showBadge && citizen.notifications && (
 						<NotificationBadge>{citizen.notifications}</NotificationBadge>
 					)}
 				</Avatar>
