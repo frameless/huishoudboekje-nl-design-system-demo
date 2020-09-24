@@ -1,15 +1,16 @@
 import React, {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {useSampleData} from "../../utils/hooks";
-import {Button, Heading, Icon, Input, InputGroup, InputLeftElement, SimpleGrid, Stack} from "@chakra-ui/core";
+import {Button, Heading, Icon, IconButton, Input, InputGroup, InputLeftElement, SimpleGrid, Stack} from "@chakra-ui/core";
 import CitizenCard from "./CitizenCard";
-import {useInput} from "react-grapple";
+import {useInput, useIsMobile} from "react-grapple";
 import {searchFields} from "../../utils/things";
 import Routes from "../../config/routes";
-import { useHistory } from "react-router-dom";
+import {useHistory} from "react-router-dom";
 
 const CitizenList = () => {
 	const {t} = useTranslation();
+	const isMobile = useIsMobile(650);
 	const {push} = useHistory();
 	const search = useInput<string>({
 		placeholder: t("search-placeholder")
@@ -32,7 +33,11 @@ const CitizenList = () => {
 						<InputLeftElement><Icon name="search" color={"gray.300"} /></InputLeftElement>
 						<Input type={"text"} {...search.bind} />
 					</InputGroup>
-					<Button variantColor={"primary"} variant={"solid"} leftIcon={"add"} onClick={() => push(Routes.CitizenNew)}>{t("add-citizen-button-label")}</Button>
+					{isMobile ? (
+						<IconButton variantColor={"primary"} variant={"solid"} aria-label={t("add-citizen-button-label")} icon={"add"} onClick={() => push(Routes.CitizenNew)} />
+					) : (
+						<Button variantColor={"primary"} variant={"solid"} leftIcon={"add"} onClick={() => push(Routes.CitizenNew)}>{t("add-citizen-button-label")}</Button>
+					)}
 				</Stack>
 			</Stack>
 
