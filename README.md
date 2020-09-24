@@ -8,8 +8,7 @@ TODO: Add functional description
 
 ## Installation
 
-TODO: Installation instructions for end users (municipalities)
-(i.e. helm chart usage instructions to install on Haven)
+To install Huishoudboekje follow instructions on [Installation](docs/installation.md)
 
 ## Architecture
 
