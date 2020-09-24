@@ -120,116 +120,115 @@ const CreateCitizen = () => {
 
 		<Stack spacing={5}>
 			<Stack direction={"row"} spacing={5} justifyContent={"space-between"} alignItems={"center"}>
-				<Heading size={"lg"}>{t("forms.citizens.title")}</Heading>
+				<Stack>
+					<Heading size={"lg"}>{t("forms.citizens.title")}</Heading>
+				</Stack>
 			</Stack>
 
-			<Box>
-				<form onSubmit={onSubmit}>
-					<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
-
-						<Stack direction={isMobile ? "column" : "row"} spacing={2}>
-							<FormLeft>
-								<Heading size={"md"}>{t("personal")}</Heading>
-								<FormHelperText id="personal-helperText">{t("forms.citizens.personal-helperText")}</FormHelperText>
-							</FormLeft>
-							<FormRight>
-								<Stack spacing={1}>
-									<FormLabel htmlFor={"bsn"}>{t("bsn")}</FormLabel>
-									<Input isInvalid={isInvalid(bsn)} {...bsn.bind} id="bsn" />
+			<Box as={"form"} onSubmit={onSubmit}>
+				<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
+					<Stack direction={isMobile ? "column" : "row"} spacing={2}>
+						<FormLeft>
+							<Heading size={"md"}>{t("personal")}</Heading>
+							<FormHelperText id="personal-helperText">{t("forms.citizens.personal-helperText")}</FormHelperText>
+						</FormLeft>
+						<FormRight>
+							<Stack spacing={1}>
+								<FormLabel htmlFor={"bsn"}>{t("bsn")}</FormLabel>
+								<Input isInvalid={isInvalid(bsn)} {...bsn.bind} id="bsn" />
+							</Stack>
+							<Stack spacing={2} direction={isMobile ? "column" : "row"}>
+								<Stack spacing={1} flex={1}>
+									<FormLabel htmlFor={"initials"}>{t("initials")}</FormLabel>
+									<Input isInvalid={isInvalid(initials)} {...initials.bind} id="initials" />
 								</Stack>
-								<Stack spacing={2} direction={isMobile ? "column" : "row"}>
-									<Stack spacing={1} flex={1}>
-										<FormLabel htmlFor={"initials"}>{t("initials")}</FormLabel>
-										<Input isInvalid={isInvalid(initials)} {...initials.bind} id="initials" />
-									</Stack>
-									<Stack spacing={1} flex={3}>
-										<FormLabel htmlFor={"firstName"}>{t("firstName")}</FormLabel>
-										<Input isInvalid={isInvalid(firstName)} {...firstName.bind} id="firstName" />
-									</Stack>
-									<Stack spacing={1} flex={3}>
-										<FormLabel htmlFor={"lastName"}>{t("lastName")}</FormLabel>
-										<Input isInvalid={isInvalid(lastName)} {...lastName.bind} id="lastName" />
-									</Stack>
+								<Stack spacing={1} flex={3}>
+									<FormLabel htmlFor={"firstName"}>{t("firstName")}</FormLabel>
+									<Input isInvalid={isInvalid(firstName)} {...firstName.bind} id="firstName" />
 								</Stack>
-								<Stack spacing={1}>
-									<FormLabel htmlFor={"dateOfBirth"}>{t("dateOfBirth")}</FormLabel>
-									<Tooltip label={t("forms.dateOfBirth-tooltip")} aria-label={t("dateOfBirth")} hasArrow placement={isMobile ? "top" : "left"}>
-										<Input isInvalid={isInvalid(dateOfBirth)} {...dateOfBirth.bind} id="dateOfBirth" />
-									</Tooltip>
+								<Stack spacing={1} flex={3}>
+									<FormLabel htmlFor={"lastName"}>{t("lastName")}</FormLabel>
+									<Input isInvalid={isInvalid(lastName)} {...lastName.bind} id="lastName" />
 								</Stack>
-							</FormRight>
-						</Stack>
-
-						<Divider />
-
-						<Stack direction={isMobile ? "column" : "row"} spacing={2}>
-							<FormLeft>
-								<Heading size={"md"}>{t("contact")}</Heading>
-								<FormHelperText>{t("forms.citizens.contact-helperText")}</FormHelperText>
-							</FormLeft>
-							<FormRight>
-								<Stack spacing={2} direction={isMobile ? "column" : "row"}>
-									<Stack spacing={1} flex={2}>
-										<FormLabel htmlFor={"street"}>{t("street")}</FormLabel>
-										<Input isInvalid={isInvalid(street)} {...street.bind} id="street" />
-									</Stack>
-									<Stack spacing={1} flex={1}>
-										<FormLabel htmlFor={"houseNumber"}>{t("houseNumber")}</FormLabel>
-										<Input isInvalid={isInvalid(houseNumber)} {...houseNumber.bind} id="houseNumber" />
-									</Stack>
-								</Stack>
-								<Stack spacing={2} direction={isMobile ? "column" : "row"}>
-									<Stack spacing={1} flex={1}>
-										<FormLabel htmlFor={"zipcode"}>{t("zipcode")}</FormLabel>
-										<Tooltip label={t("forms.zipcode-tooltip")} aria-label={t("zipcode")} hasArrow placement={isMobile ? "top" : "left"}>
-											<Input isInvalid={isInvalid(zipcode)} {...zipcode.bind} id="zipcode" />
-										</Tooltip>
-									</Stack>
-									<Stack spacing={1} flex={2}>
-										<FormLabel htmlFor={"city"}>{t("city")}</FormLabel>
-										<Input isInvalid={isInvalid(city)} {...city.bind} id="city" />
-									</Stack>
-								</Stack>
-								<Stack spacing={1}>
-									<FormLabel htmlFor={"phoneNumber"}>{t("phoneNumber")}</FormLabel>
-									<Tooltip label={t("forms.phoneNumber-tooltip")} aria-label={t("phoneNumber")} hasArrow placement={isMobile ? "top" : "left"}>
-										<Input isInvalid={isInvalid(phoneNumber)} {...phoneNumber.bind} id="phoneNumber" />
-									</Tooltip>
-								</Stack>
-								<Stack spacing={1}>
-									<FormLabel htmlFor={"mail"}>{t("mail")}</FormLabel>
-									<Input isInvalid={isInvalid(mail)} {...mail.bind} id="mail" aria-describedby="mail-helper-text" />
-								</Stack>
-							</FormRight>
-						</Stack>
-
-						<Divider />
-
-						<Stack direction={isMobile ? "column" : "row"} spacing={2}>
-							<FormLeft>
-								<Heading size={"md"}>{t("banking")}</Heading>
-								<FormHelperText id="banking-helperText">{t("forms.citizens.banking-helperText")}</FormHelperText>
-							</FormLeft>
-							<FormRight>
-								<Stack spacing={1}>
-									<FormLabel htmlFor={"iban"}>{t("iban")}</FormLabel>
-									<Input isInvalid={isInvalid(iban)} {...iban.bind} id="iban" />
-								</Stack>
-							</FormRight>
-						</Stack>
-
-						<Divider />
-
-						<Stack direction={isMobile ? "column" : "row"} spacing={2}>
-							<FormLeft />
-							<FormRight>
-								<Stack direction={"row"} spacing={1} justifyContent={"flex-end"}>
-									<Button isLoading={isPending} type={"submit"} variantColor={"primary"} onClick={onSubmit}>{t("save")}</Button>
-								</Stack>
-							</FormRight>
-						</Stack>
+							</Stack>
+							<Stack spacing={1}>
+								<FormLabel htmlFor={"dateOfBirth"}>{t("dateOfBirth")}</FormLabel>
+								<Tooltip label={t("forms.dateOfBirth-tooltip")} aria-label={t("dateOfBirth")} hasArrow placement={isMobile ? "top" : "left"}>
+									<Input isInvalid={isInvalid(dateOfBirth)} {...dateOfBirth.bind} id="dateOfBirth" />
+								</Tooltip>
+							</Stack>
+						</FormRight>
 					</Stack>
-				</form>
+
+					<Divider />
+
+					<Stack direction={isMobile ? "column" : "row"} spacing={2}>
+						<FormLeft>
+							<Heading size={"md"}>{t("contact")}</Heading>
+							<FormHelperText>{t("forms.citizens.contact-helperText")}</FormHelperText>
+						</FormLeft>
+						<FormRight>
+							<Stack spacing={2} direction={isMobile ? "column" : "row"}>
+								<Stack spacing={1} flex={2}>
+									<FormLabel htmlFor={"street"}>{t("street")}</FormLabel>
+									<Input isInvalid={isInvalid(street)} {...street.bind} id="street" />
+								</Stack>
+								<Stack spacing={1} flex={1}>
+									<FormLabel htmlFor={"houseNumber"}>{t("houseNumber")}</FormLabel>
+									<Input isInvalid={isInvalid(houseNumber)} {...houseNumber.bind} id="houseNumber" />
+								</Stack>
+							</Stack>
+							<Stack spacing={2} direction={isMobile ? "column" : "row"}>
+								<Stack spacing={1} flex={1}>
+									<FormLabel htmlFor={"zipcode"}>{t("zipcode")}</FormLabel>
+									<Tooltip label={t("forms.zipcode-tooltip")} aria-label={t("zipcode")} hasArrow placement={isMobile ? "top" : "left"}>
+										<Input isInvalid={isInvalid(zipcode)} {...zipcode.bind} id="zipcode" />
+									</Tooltip>
+								</Stack>
+								<Stack spacing={1} flex={2}>
+									<FormLabel htmlFor={"city"}>{t("city")}</FormLabel>
+									<Input isInvalid={isInvalid(city)} {...city.bind} id="city" />
+								</Stack>
+							</Stack>
+							<Stack spacing={1}>
+								<FormLabel htmlFor={"phoneNumber"}>{t("phoneNumber")}</FormLabel>
+								<Tooltip label={t("forms.phoneNumber-tooltip")} aria-label={t("phoneNumber")} hasArrow placement={isMobile ? "top" : "left"}>
+									<Input isInvalid={isInvalid(phoneNumber)} {...phoneNumber.bind} id="phoneNumber" />
+								</Tooltip>
+							</Stack>
+							<Stack spacing={1}>
+								<FormLabel htmlFor={"mail"}>{t("mail")}</FormLabel>
+								<Input isInvalid={isInvalid(mail)} {...mail.bind} id="mail" aria-describedby="mail-helper-text" />
+							</Stack>
+						</FormRight>
+					</Stack>
+
+					<Divider />
+
+					<Stack direction={isMobile ? "column" : "row"} spacing={2}>
+						<FormLeft>
+							<Heading size={"md"}>{t("banking")}</Heading>
+							<FormHelperText id="banking-helperText">{t("forms.citizens.banking-helperText")}</FormHelperText>
+						</FormLeft>
+						<FormRight>
+							<Stack spacing={1}>
+								<FormLabel htmlFor={"iban"}>{t("iban")}</FormLabel>
+								<Input isInvalid={isInvalid(iban)} {...iban.bind} id="iban" />
+							</Stack>
+						</FormRight>
+					</Stack>
+
+					<Divider />
+
+					<Stack direction={isMobile ? "column" : "row"} spacing={2}>
+						<FormLeft />
+						<FormRight>
+							<Stack direction={"row"} spacing={1} justifyContent={"flex-end"}>
+								<Button isLoading={isPending} type={"submit"} variantColor={"primary"} onClick={onSubmit}>{t("save")}</Button>
+							</Stack>
+						</FormRight>
+					</Stack>
+				</Stack>
 			</Box>
 		</Stack>
 	</>);
