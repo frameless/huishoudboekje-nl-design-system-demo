@@ -10,7 +10,10 @@
     "gender": "MALE",
     "phoneNumber": 302065137,
     "mail": "nanko.meijerman@example.com",
-    "balance": -43.59686785607151
+    "balance": -43.59686785607151,
+    "bsn": 123456789,
+    "initials": "N.",
+    "dateOfBirth": "10-03-1989"
   },
   {
     "id": 2,
@@ -24,7 +27,9 @@
     "phoneNumber": 502130310,
     "mail": "co.goosen@example.com",
     "balance": 17.717310991724865,
-    "notifications": 2
+    "bsn": 123456789,
+    "initials": "C.",
+    "dateOfBirth": "10-12-1976"
   },
   {
     "id": 3,
@@ -37,7 +42,10 @@
     "gender": "MALE",
     "phoneNumber": 888609376,
     "mail": "jan-douwe.rossmark@example.com",
-    "balance": -28.66806233270134
+    "balance": -28.66806233270134,
+    "bsn": 123456789,
+    "initials": "J.D.",
+    "dateOfBirth": "02-08-1977"
   },
   {
     "id": 4,
@@ -50,7 +58,10 @@
     "gender": "MALE",
     "phoneNumber": 135524598,
     "mail": "eelco.van heek@example.com",
-    "balance": -68.48760972863008
+    "balance": -68.48760972863008,
+    "bsn": 123456789,
+    "initials": "E.",
+    "dateOfBirth": "27-01-1959"
   },
   {
     "id": 5,
@@ -63,7 +74,10 @@
     "gender": "MALE",
     "phoneNumber": 891096773,
     "mail": "jurian.van der ree@example.com",
-    "balance": -77.77045298675883
+    "balance": -77.77045298675883,
+    "bsn": 123456789,
+    "initials": "J.",
+    "dateOfBirth": "24-01-1963"
   },
   {
     "id": 6,
@@ -76,7 +90,10 @@
     "gender": "MALE",
     "phoneNumber": 396205986,
     "mail": "stefan.stiphout@example.com",
-    "balance": -45.890287038810975
+    "balance": -45.890287038810975,
+    "bsn": 123456789,
+    "initials": "S.",
+    "dateOfBirth": "28-11-1962"
   },
   {
     "id": 7,
@@ -89,7 +106,10 @@
     "gender": "MALE",
     "phoneNumber": 673192286,
     "mail": "henk.veldsink@example.com",
-    "balance": 74.85776667725945
+    "balance": 74.85776667725945,
+    "bsn": 123456789,
+    "initials": "H.",
+    "dateOfBirth": "04-09-1940"
   },
   {
     "id": 8,
@@ -102,7 +122,10 @@
     "gender": "MALE",
     "phoneNumber": 179450257,
     "mail": "nanko.lengton@example.com",
-    "balance": 97.38825998331804
+    "balance": 97.38825998331804,
+    "bsn": 123456789,
+    "initials": "N.",
+    "dateOfBirth": "22-08-1960"
   },
   {
     "id": 9,
@@ -115,7 +138,10 @@
     "gender": "MALE",
     "phoneNumber": 835853579,
     "mail": "huibert.winkel@example.com",
-    "balance": 63.83469447265939
+    "balance": 63.83469447265939,
+    "bsn": 123456789,
+    "initials": "H.S.",
+    "dateOfBirth": "30-11-1959"
   },
   {
     "id": 10,
@@ -128,7 +154,10 @@
     "gender": "MALE",
     "phoneNumber": 938885508,
     "mail": "rik.holsappel@example.com",
-    "balance": 0.3819947763988196
+    "balance": 0.3819947763988196,
+    "bsn": 123456789,
+    "initials": "R.L.T.",
+    "dateOfBirth": "28-09-1945"
   },
   {
     "id": 11,
@@ -141,7 +170,10 @@
     "gender": "FEMALE",
     "phoneNumber": 737012981,
     "mail": "fien.de jager@example.com",
-    "balance": 7.373354840320134
+    "balance": 7.373354840320134,
+    "bsn": 123456789,
+    "initials": "F.S.",
+    "dateOfBirth": "26-10-1945"
   },
   {
     "id": 12,
@@ -154,7 +186,10 @@
     "gender": "FEMALE",
     "phoneNumber": 984308767,
     "mail": "marjolein.seckel@example.com",
-    "balance": 87.66818511920435
+    "balance": 87.66818511920435,
+    "bsn": 123456789,
+    "initials": "M.K.",
+    "dateOfBirth": "21-06-1984"
   },
   {
     "id": 13,
@@ -167,7 +202,10 @@
     "gender": "FEMALE",
     "phoneNumber": 548014387,
     "mail": "mirre.borsje@example.com",
-    "balance": 22.553471173664374
+    "balance": 22.553471173664374,
+    "bsn": 123456789,
+    "initials": "M.",
+    "dateOfBirth": "21-02-1945"
   },
   {
     "id": 14,
@@ -180,7 +218,10 @@
     "gender": "FEMALE",
     "phoneNumber": 889126381,
     "mail": "jacolien.wessink@example.com",
-    "balance": 48.098397832133614
+    "balance": 48.098397832133614,
+    "bsn": 123456789,
+    "initials": "J.E.",
+    "dateOfBirth": "06-11-1966"
   },
   {
     "id": 15,
@@ -193,7 +234,10 @@
     "gender": "FEMALE",
     "phoneNumber": 755175343,
     "mail": "gerrieke.kotterman@example.com",
-    "balance": 91.49592480119748
+    "balance": 91.49592480119748,
+    "bsn": 123456789,
+    "initials": "G.F.",
+    "dateOfBirth": "09-04-1989"
   },
   {
     "id": 16,
@@ -206,7 +250,10 @@
     "gender": "FEMALE",
     "phoneNumber": 678212736,
     "mail": "lotte.boerman@example.com",
-    "balance": -48.518900344275636
+    "balance": -48.518900344275636,
+    "bsn": 123456789,
+    "initials": "L.O.",
+    "dateOfBirth": "28-03-1967"
   },
   {
     "id": 17,
@@ -219,7 +266,10 @@
     "gender": "FEMALE",
     "phoneNumber": 136772239,
     "mail": "ottelien.leenstra@example.com",
-    "balance": 14.912878845795309
+    "balance": 14.912878845795309,
+    "bsn": 123456789,
+    "initials": "O.T.R.",
+    "dateOfBirth": "01-04-1975"
   },
   {
     "id": 18,
@@ -232,7 +282,10 @@
     "gender": "FEMALE",
     "phoneNumber": 441369921,
     "mail": "godelieve.everts@example.com",
-    "balance": 27.34181677497407
+    "balance": 27.34181677497407,
+    "bsn": 123456789,
+    "initials": "G.D.L.",
+    "dateOfBirth": "28-11-1986"
   },
   {
     "id": 19,
@@ -245,7 +298,10 @@
     "gender": "FEMALE",
     "phoneNumber": 997612996,
     "mail": "catootje.koppelman@example.com",
-    "balance": 21.021067874864684
+    "balance": 21.021067874864684,
+    "bsn": 123456789,
+    "initials": "C.",
+    "dateOfBirth": "15-01-1995"
   },
   {
     "id": 20,
@@ -258,6 +314,9 @@
     "gender": "FEMALE",
     "phoneNumber": 119151520,
     "mail": "madelien.holsmans@example.com",
-    "balance": 72.5188266771073
+    "balance": 72.5188266771073,
+    "bsn": 123456789,
+    "initials": "M.",
+    "dateOfBirth": "14-01-1995"
   }
 ]
