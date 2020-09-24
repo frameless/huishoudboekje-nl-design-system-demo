@@ -1,5 +1,3 @@
-
-
 ## Vereisten
 
 Huishoudboekje is gemaakt om op met Helm op een Kubernetes cluster geïnstalleerd te worden.
@@ -22,7 +20,7 @@ DOMAIN="<huishoudboekje.sloothuizen.nl>"
 OIDC_SERVER="<https://adfs.sloothuizen.nl/oidc>"
 OIDC_SECRET="<random string>"
 IMAGE_TAG=latest
-wget -O huishoudboekje.tgz https://gitlab.com/commonground/huishoudboekje/app-new/-/jobs/artifacts/master/download?job=build-helm
+wget -O huishoudboekje.tgz https://gitlab.com/commonground/huishoudboekje/app-new/-/jobs/artifacts/master/browse?job=build-helm
 tar zxf huishoudboekje.tgz
  
 cp "$LOGO_SVG" huishoudboekje/charts/medewerker-frontend/theme/logo.svg
