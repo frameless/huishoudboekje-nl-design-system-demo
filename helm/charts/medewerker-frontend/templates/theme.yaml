@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-theme" (include "medewerker-frontend.fullname" .) }}
+  labels:
+  {{- include "medewerker-frontend.labels" . | nindent 4 }}
+data:
+  {{- (.Files.Glob "theme/*").AsConfig | nindent 2 }}

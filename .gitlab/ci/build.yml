@@ -27,3 +27,27 @@ build-backend:
   extends: .build
   only:
     - branches@commonground/huishoudboekje/app-new
+
+build-helm:
+  tags:
+    - cg
+    - docker
+  stage: build
+  image:
+    name: alpine/helm:latest
+    entrypoint: [""]
+  before_script:
+    - helm repo add stable "https://kubernetes-charts.storage.googleapis.com"
+    - helm repo update
+  script:
+    - helm dependency build helm/charts/huishoudboekje
+    - mkdir -p helm/charts/huishoudboekje/charts/medewerker-frontend/theme
+    - cp -r frontend/theme/sloothuizen/ helm/charts/huishoudboekje/charts/medewerker-frontend/theme
+    - helm package -d huishoudboekje helm/charts/huishoudboekje
+  artifacts:
+    name: huishoudboekje
+    expose_as: 'Huishoudboekje Helm Repository'
+    paths:
+      - "huishoudboekje/"
+    expire_in: 1 week
+
