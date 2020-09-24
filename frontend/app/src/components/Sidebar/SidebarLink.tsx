@@ -11,11 +11,12 @@ const SidebarLink = ({icon, href, children, exactMatch = false, ...props}) => {
 
 	// We use the mapped color from the Chakra theme because IconContext requires "regular" colors and thus can't handle "primary.700".
 	// Todo: maybe create a hook that handles translation of colors.
-	const color = isActive ? theme.colors["primary"][700] : "black";
+	const linkColor = isActive ? theme.colors["primary"][700] : theme.colors["gray"][500];
+	const iconColor = isActive ? theme.colors["primary"][700] : theme.colors["gray"][400];
 
 	const LinkIcon: React.FC<BoxProps> = (props) => {
 		return (
-			<IconContext.Provider value={{style: {color}}}>
+			<IconContext.Provider value={{style: {color: iconColor}}}>
 				<Box {...props}>
 					{icon()}
 				</Box>
@@ -28,7 +29,7 @@ const SidebarLink = ({icon, href, children, exactMatch = false, ...props}) => {
 			<Button justifyContent={"flex-start"} onClick={() => push(href)} variant={"link"} {...props}>
 				<Flex alignItems={"center"}>
 					<LinkIcon mr={5} fontSize={"24px"} />
-					<Text color={color}>{children}</Text>
+					<Text color={linkColor}>{children}</Text>
 				</Flex>
 			</Button>
 		</IconContext.Provider>

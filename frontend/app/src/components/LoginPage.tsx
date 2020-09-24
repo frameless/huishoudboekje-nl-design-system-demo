@@ -7,10 +7,11 @@ import {useSession} from "../utils/hooks";
 import {observer} from "mobx-react";
 import {Redirect} from "react-router-dom";
 import Routes from "../config/routes";
+import {MOBILE_BREAKPOINT} from "../utils/things";
 
 const LoginPage = () => {
 	const session = useSession();
-	const isMobile = useIsMobile();
+	const isMobile = useIsMobile(MOBILE_BREAKPOINT);
 
 	useEffect(() => {
 		return () => session.setReferer(undefined);

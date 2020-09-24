@@ -4,9 +4,10 @@ import {Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, Drawe
 import {useIsMobile} from "react-grapple";
 import {GiHamburgerMenu} from "react-icons/all";
 import SidebarFooter from "./SidebarFooter";
+import {TABLET_BREAKPOINT} from "../../utils/things";
 
 const SidebarContainer = ({children}) => {
-	const isMobile = useIsMobile();
+	const isMobile = useIsMobile(TABLET_BREAKPOINT);
 	const {isOpen, onOpen, onClose} = useDisclosure();
 	const sidebarButtonRef = useRef();
 

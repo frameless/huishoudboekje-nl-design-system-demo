@@ -1,13 +1,16 @@
 import React, {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {useSampleData} from "../../utils/hooks";
-import {Heading, Icon, Input, InputGroup, InputLeftElement, SimpleGrid, Stack} from "@chakra-ui/core";
+import {Button, Heading, Icon, Input, InputGroup, InputLeftElement, SimpleGrid, Stack} from "@chakra-ui/core";
 import CitizenCard from "./CitizenCard";
 import {useInput} from "react-grapple";
 import {searchFields} from "../../utils/things";
+import Routes from "../../config/routes";
+import { useHistory } from "react-router-dom";
 
 const CitizenList = () => {
 	const {t} = useTranslation();
+	const {push} = useHistory();
 	const search = useInput<string>({
 		placeholder: t("search-placeholder")
 	});
@@ -24,10 +27,13 @@ const CitizenList = () => {
 		<Stack spacing={5}>
 			<Stack direction={"row"} spacing={5} justifyContent={"space-between"} alignItems={"center"}>
 				<Heading size={"lg"}>{t("citizens")}</Heading>
-				<InputGroup>
-					<InputLeftElement><Icon name="search" color="gray.300" /></InputLeftElement>
-					<Input type={"text"} {...search.bind} />
-				</InputGroup>
+				<Stack direction={"row"} spacing={5}>
+					<InputGroup>
+						<InputLeftElement><Icon name="search" color={"gray.300"} /></InputLeftElement>
+						<Input type={"text"} {...search.bind} />
+					</InputGroup>
+					<Button variantColor={"primary"} variant={"solid"} leftIcon={"add"} onClick={() => push(Routes.CitizenNew)}>{t("add-citizen-button-label")}</Button>
+				</Stack>
 			</Stack>
 
 			<SimpleGrid maxWidth={"100%"} columns={4} minChildWidth={350} spacing={5}>

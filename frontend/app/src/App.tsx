@@ -12,9 +12,10 @@ import {GrLock} from "react-icons/all";
 import Routes from "./config/routes";
 import Citizens from "./components/Citizens";
 import PageNotFound from "./components/PageNotFound";
+import {TABLET_BREAKPOINT} from "./utils/things";
 
 const App = () => {
-	const isMobile = useIsMobile();
+	const isMobile = useIsMobile(TABLET_BREAKPOINT);
 	const session = useSession();
 	const location = useLocation();
 	const users = useSampleData().users;
