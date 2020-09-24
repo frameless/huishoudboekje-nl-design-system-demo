@@ -14,10 +14,10 @@ const Date = /^(\d{2})-(\d{2})-(\d{4})$/;
 
 export const Regex = {ZipcodeNL, PhoneNumberNL, MobilePhoneNL, IbanNL, BsnNL, Date};
 
-export const fakeAsyncCall = (duration = 2000) => {
-	return new Promise(resolve => {
+export function fakeAsyncCall<T>(result: T | boolean = true, duration = 2000): Promise<T> {
+	return new Promise<T>(resolve => {
 		setTimeout(() => {
-			resolve(true)
+			resolve(result as T);
 		}, 2000);
 	});
 }
