@@ -23,7 +23,8 @@
     "gender": "MALE",
     "phoneNumber": 502130310,
     "mail": "co.goosen@example.com",
-    "balance": 17.717310991724865
+    "balance": 17.717310991724865,
+    "notifications": 2
   },
   {
     "id": 3,

@@ -1,8 +1,7 @@
 /** Todo: mutation createCitizen() */
+import {fakeAsyncCall} from "../utils/things";
+
 export const CreateCitizenMutation = async () => {
-	return new Promise(resolve => {
-		setTimeout(() => {
-			resolve(true)
-		}, 3000);
-	});
+	// Todo, make this a GraphQL mutation
+	return fakeAsyncCall();
 }

@@ -1,15 +1,14 @@
 import React, {useEffect} from "react";
 import {useTranslation} from "react-i18next";
 import {Box, Button, Divider, FormHelperText, FormLabel, Heading, Input, Stack, Tooltip, useToast} from "@chakra-ui/core";
-import {useInput, useIsMobile, Validators} from "react-grapple";
+import {useInput, useIsMobile, useToggle, Validators} from "react-grapple";
 import BackButton from "../BackButton";
 import Routes from "../../config/routes";
-import {BSN_NL_REGEX, IBAN_NL_REGEX, MOBILE_BREAKPOINT, MOBILE_NL_REGEX, PHONE_NL_REGEX, ZIPCODE_NL_REGEX} from "../../utils/things";
+import {MOBILE_BREAKPOINT, Regex} from "../../utils/things";
 import {useAsync} from "react-async"
 import {CreateCitizenMutation} from "../../services/citizens";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
 
-// Todo: geboortedatum toevoegen
 // Todo: add more detailed error message per field?
 const CreateCitizen = () => {
 	const {t} = useTranslation();
@@ -17,9 +16,11 @@ const CreateCitizen = () => {
 	const isMobile = useIsMobile(MOBILE_BREAKPOINT);
 	const toast = useToast();
 
+	const [isSubmitted, toggleSubmitted] = useToggle();
+
 	const bsn = useInput<string>({
 		defaultValue: "",
-		validate: [Validators.required, (v) => new RegExp(BSN_NL_REGEX).test(v)],
+		validate: [Validators.required, (v) => new RegExp(Regex.BsnNL).test(v)],
 		placeholder: "123456789"
 	});
 	const initials = useInput<string>({
@@ -36,7 +37,7 @@ const CreateCitizen = () => {
 	});
 	const dateOfBirth = useInput<string>({
 		defaultValue: "",
-		validate: [Validators.required],
+		validate: [Validators.required, (v) => new RegExp(Regex.Date).test(v)],
 		placeholder: "24-09-1960"
 	});
 	const mail = useInput<string>({
@@ -53,7 +54,7 @@ const CreateCitizen = () => {
 	});
 	const zipcode = useInput<string>({
 		defaultValue: "",
-		validate: [Validators.required, (v) => new RegExp(ZIPCODE_NL_REGEX).test(v)],
+		validate: [Validators.required, (v) => new RegExp(Regex.ZipcodeNL).test(v)],
 		placeholder: "1234AB"
 	});
 	const city = useInput<string>({
@@ -62,18 +63,19 @@ const CreateCitizen = () => {
 	});
 	const phoneNumber = useInput<string>({
 		defaultValue: "",
-		validate: [Validators.required, (v) => new RegExp(PHONE_NL_REGEX).test(v) || new RegExp(MOBILE_NL_REGEX).test(v)],
+		validate: [Validators.required, (v) => new RegExp(Regex.PhoneNumberNL).test(v) || new RegExp(Regex.MobilePhoneNL).test(v)],
 		placeholder: "0612345678"
 	});
 	const iban = useInput<string>({
 		defaultValue: "",
-		validate: [Validators.required, (v) => new RegExp(IBAN_NL_REGEX).test(v)]
+		validate: [Validators.required, (v) => new RegExp(Regex.IbanNL).test(v)]
 	});
 
-	const {data, error, isPending, run} = useAsync({deferFn: CreateCitizenMutation});
+	const {data, error, isPending, run, cancel} = useAsync({deferFn: CreateCitizenMutation});
 
 	const onSubmit = (e) => {
 		e.preventDefault();
+		toggleSubmitted(true);
 
 		const isFormValid = Object.values({firstName, lastName, mail, street, zipcode, city, phoneNumber, iban}).every(f => f.isValid);
 		if (!isFormValid) {
@@ -89,27 +91,29 @@ const CreateCitizen = () => {
 	};
 
 	useEffect(() => {
-		if (!isPending) {
-			if (error) {
-				toast({
-					status: "error",
-					title: error.name + ": " + error.message,
-					position: "top"
-				});
-			}
-
-			if (data) {
-				toast({
-					status: "success",
-					title: t("forms.citizens.successMessage"),
-					position: "top"
-				});
-				// Todo: redirect to citizen detail page
-			}
+		if (!isPending && error) {
+			toast({
+				status: "error",
+				title: error.name + ": " + error.message,
+				position: "top"
+			});
 		}
-	}, [data, error, isPending, t, toast]);
 
-	const isInvalid = (input) => input.value.length > 0 && !input.isValid;
+		if (!isPending && data) {
+			toast({
+				status: "success",
+				title: t("forms.citizens.successMessage"),
+				position: "top"
+			});
+			// Todo: redirect to citizen detail page
+		}
+
+		return () => {
+			cancel();
+		}
+	}, [cancel, data, error, isPending, t, toast]);
+
+	const isInvalid = (input) => isSubmitted && !input.isValid;
 
 	return (<>
 		<BackButton to={Routes.Citizens} />
@@ -149,7 +153,7 @@ const CreateCitizen = () => {
 								</Stack>
 								<Stack spacing={1}>
 									<FormLabel htmlFor={"dateOfBirth"}>{t("dateOfBirth")}</FormLabel>
-									<Tooltip label={t("forms.dateOfBirth-tooltip")} aria-label={t("dateOfBirth")} hasArrow placement={"left"}>
+									<Tooltip label={t("forms.dateOfBirth-tooltip")} aria-label={t("dateOfBirth")} hasArrow placement={isMobile ? "top" : "left"}>
 										<Input isInvalid={isInvalid(dateOfBirth)} {...dateOfBirth.bind} id="dateOfBirth" />
 									</Tooltip>
 								</Stack>
@@ -177,7 +181,7 @@ const CreateCitizen = () => {
 								<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 									<Stack spacing={1} flex={1}>
 										<FormLabel htmlFor={"zipcode"}>{t("zipcode")}</FormLabel>
-										<Tooltip label={t("forms.zipcode-tooltip")} aria-label={t("zipcode")} hasArrow placement={"left"}>
+										<Tooltip label={t("forms.zipcode-tooltip")} aria-label={t("zipcode")} hasArrow placement={isMobile ? "top" : "left"}>
 											<Input isInvalid={isInvalid(zipcode)} {...zipcode.bind} id="zipcode" />
 										</Tooltip>
 									</Stack>
@@ -188,7 +192,7 @@ const CreateCitizen = () => {
 								</Stack>
 								<Stack spacing={1}>
 									<FormLabel htmlFor={"phoneNumber"}>{t("phoneNumber")}</FormLabel>
-									<Tooltip label={t("forms.phoneNumber-tooltip")} aria-label={t("phoneNumber")} hasArrow placement={"left"}>
+									<Tooltip label={t("forms.phoneNumber-tooltip")} aria-label={t("phoneNumber")} hasArrow placement={isMobile ? "top" : "left"}>
 										<Input isInvalid={isInvalid(phoneNumber)} {...phoneNumber.bind} id="phoneNumber" />
 									</Tooltip>
 								</Stack>
