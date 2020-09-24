@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
-import {useSampleData} from "../../utils/hooks";
-import {Button, Heading, Icon, IconButton, Input, InputGroup, InputLeftElement, SimpleGrid, Stack} from "@chakra-ui/core";
+import {Box, Button, Heading, Icon, IconButton, Input, InputGroup, InputLeftElement, SimpleGrid, Stack, Text} from "@chakra-ui/core";
 import CitizenCard from "./CitizenCard";
 import {useInput, useIsMobile} from "react-grapple";
 import {searchFields} from "../../utils/things";
 import Routes from "../../config/routes";
 import {useHistory} from "react-router-dom";
+import {ReactComponent as Empty} from "../../assets/images/illustration-empty.svg";
+import {sampleData} from "../../config/sampleData/sampleData";
 
 const CitizenList = () => {
 	const {t} = useTranslation();
@@ -17,11 +18,22 @@ const CitizenList = () => {
 	});
 
 	// Todo: make this a graphQL query and maybe pagination once this list becomes too long (50+ items)
-	const allCitizens = useSampleData().citizens;
+	const allCitizens = sampleData.citizens;
 	const [citizens, setCitizens] = useState(allCitizens);
 
 	useEffect(() => {
-		setCitizens(allCitizens.filter(c => searchFields(search.value, [c.firstName, c.lastName])));
+		let mounted = true;
+
+		console.log(search.value);
+
+		if (mounted) {
+			setCitizens(allCitizens.filter(c => searchFields(search.value, [c.firstName, c.lastName])));
+		}
+
+		return () => {
+			mounted = false
+		};
+
 	}, [allCitizens, search.value]);
 
 	return (
@@ -42,7 +54,15 @@ const CitizenList = () => {
 			</Stack>
 
 			<SimpleGrid maxWidth={"100%"} columns={4} minChildWidth={350} spacing={5}>
-				{citizens && citizens.map(c => <CitizenCard key={c.id} citizen={c} cursor={"pointer"} />)}
+				{citizens.length === 0 && (
+					<Stack justifyContent={"center"} alignItems={"center"} bg={"white"} p={20} spacing={10}>
+						<Box as={Empty} maxWidth={400} height={"auto"} />
+						<Text fontSize={"sm"}>Voeg burgers toe door te klikken op de knop "Burger toevoegen"</Text>
+						<Button size={"sm"} variantColor={"primary"} variant={"solid"} leftIcon={"add"}
+						        onClick={() => push(Routes.CitizenNew)}>{t("add-citizen-button-label")}</Button>
+					</Stack>
+				)}
+				{citizens.length > 0 && citizens.map(c => <CitizenCard key={c.id} citizen={c} cursor={"pointer"} />)}
 			</SimpleGrid>
 		</Stack>
 	)

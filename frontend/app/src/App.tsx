@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import {Box, Flex, IconButton, Stack} from "@chakra-ui/core";
-import {useSampleData, useSession} from "./utils/hooks";
+import {useSession} from "./utils/hooks";
 import LoginPage from "./components/LoginPage";
 import {observer} from "mobx-react";
 import SidebarContainer from "./components/Sidebar/SidebarContainer";
@@ -13,12 +13,13 @@ import Routes from "./config/routes";
 import Citizens from "./components/Citizens";
 import PageNotFound from "./components/PageNotFound";
 import {TABLET_BREAKPOINT} from "./utils/things";
+import {sampleData} from "./config/sampleData/sampleData";
 
 const App = () => {
 	const isMobile = useIsMobile(TABLET_BREAKPOINT);
 	const session = useSession();
 	const location = useLocation();
-	const users = useSampleData().users;
+	const users = sampleData.users;
 
 	useEffect(() => {
 		session.setUser(users[0]);
