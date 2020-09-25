@@ -13,9 +13,12 @@
   "dateOfBirth": "Geboortedatum",
   "initials": "Initialen",
   "forms": {
+    "bsn-tooltip": "Het burgerservicenummer bestaat uit 9 getallen en staat op het identificatiebewijs.",
     "zipcode-tooltip": "Invoer zonder spaties. Voorbeeld: 1234AB",
     "dateOfBirth-tooltip": "Invoer dd-mm-jjjj. Voorbeeld: 24-09-1960",
     "phoneNumber-tooltip": "Invoer zonder spaties en streepjes. Voorbeeld: 0612345678",
+    "iban-placeholder": "NL20BANK0001234567",
+    "iban-tooltip": "Invoer zonder spaties. Voorbeeld: NL20BANK0001234567",
     "citizens": {
       "title": "Burger toevoegen",
       "personal-helperText": "Vul de persoonlijke gegevens van de burger in.",

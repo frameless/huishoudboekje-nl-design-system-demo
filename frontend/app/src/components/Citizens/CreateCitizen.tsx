@@ -68,7 +68,8 @@ const CreateCitizen = () => {
 	});
 	const iban = useInput<string>({
 		defaultValue: "",
-		validate: [Validators.required, (v) => new RegExp(Regex.IbanNL).test(v)]
+		validate: [Validators.required, (v) => new RegExp(Regex.IbanNL).test(v)],
+		placeholder: t("forms.iban-placeholder")
 	});
 
 	const {data, error, isPending, run, cancel} = useAsync({deferFn: CreateCitizenMutation});
@@ -135,7 +136,9 @@ const CreateCitizen = () => {
 						<FormRight>
 							<Stack spacing={1}>
 								<FormLabel htmlFor={"bsn"}>{t("bsn")}</FormLabel>
-								<Input isInvalid={isInvalid(bsn)} {...bsn.bind} id="bsn" />
+								<Tooltip label={t("forms.bsn-tooltip")} aria-label={t("bsn")} hasArrow placement={isMobile ? "top" : "left"}>
+									<Input isInvalid={isInvalid(bsn)} {...bsn.bind} id="bsn" />
+								</Tooltip>
 							</Stack>
 							<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 								<Stack spacing={1} flex={1}>
@@ -213,7 +216,9 @@ const CreateCitizen = () => {
 						<FormRight>
 							<Stack spacing={1}>
 								<FormLabel htmlFor={"iban"}>{t("iban")}</FormLabel>
-								<Input isInvalid={isInvalid(iban)} {...iban.bind} id="iban" />
+								<Tooltip label={t("forms.iban-tooltip")} aria-label={t("iban")} hasArrow placement={isMobile ? "top" : "left"}>
+									<Input isInvalid={isInvalid(iban)} {...iban.bind} id="iban" />
+								</Tooltip>
 							</Stack>
 						</FormRight>
 					</Stack>
