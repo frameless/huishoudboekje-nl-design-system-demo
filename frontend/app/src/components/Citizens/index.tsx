@@ -8,7 +8,7 @@ import CreateCitizen from "./CreateCitizen";
 const Citizens = () => (<>
 	<Route exact path={Routes.Citizens} component={CitizenList} />
 	<Route path={Routes.Citizens + "/:id(\\d+)"} component={CitizenDetail} />
-	<Route path={Routes.Citizens + "/new"} exact component={CreateCitizen} />
+	<Route path={Routes.CitizenNew} exact component={CreateCitizen} />
 </>);
 
 export default Citizens;
