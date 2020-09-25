@@ -11,5 +11,5 @@ export const CreateCitizenMutation = async () => {
 export const GetCitizensQuery = async (): Promise<ICitizen[]> => {
 	// Todo: make this a GraphQL query
 	const citizens: ICitizen[] = sampleData.citizens;
-	return fakeAsyncCall<ICitizen[]>(citizens, 1000);
+	return fakeAsyncCall<ICitizen[]>(citizens, 500);
 }

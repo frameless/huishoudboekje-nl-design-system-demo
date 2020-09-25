@@ -18,6 +18,6 @@ export function fakeAsyncCall<T>(result: T | boolean = true, duration = 2000): P
 	return new Promise<T>(resolve => {
 		setTimeout(() => {
 			resolve(result as T);
-		}, 2000);
+		}, duration);
 	});
 }
