@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
-import {Box, Button, Heading, Icon, IconButton, Input, InputGroup, InputLeftElement, SimpleGrid, Spinner, Stack, Text} from "@chakra-ui/core";
+import {Box, Button, Heading, Icon, Input, InputGroup, InputLeftElement, SimpleGrid, Spinner, Stack, Text} from "@chakra-ui/core";
 import CitizenCard from "./CitizenCard";
 import {useInput, useIsMobile} from "react-grapple";
 import {searchFields} from "../../utils/things";
@@ -51,22 +51,20 @@ const CitizenList = () => {
 	const noSearchResults = !isPending && search.value.length > 0 && citizens.length === 0;
 	const resultsFound = !isPending && citizens.length > 0;
 	const showSearch = !isPending && !noData;
+	const noActiveSearch = citizens.length === allCitizens?.length;
 
 	return (
 		<Stack spacing={5}>
 			<Stack direction={"row"} spacing={5} justifyContent={"space-between"} alignItems={"center"}>
-				<Heading size={"lg"}>{t("citizens")}</Heading>
+				<Stack direction={"row"} spacing={5} alignItems={"center"}>
+					<Heading size={"lg"}>{t("citizens")}</Heading>
+				</Stack>
 				<Stack direction={"row"} spacing={5}>
 					{showSearch && (
 						<InputGroup>
 							<InputLeftElement><Icon name="search" color={"gray.300"} /></InputLeftElement>
 							<Input type={"text"} {...search.bind} />
 						</InputGroup>
-					)}
-					{isMobile ? (
-						<IconButton variantColor={"primary"} variant={"solid"} aria-label={t("add-citizen-button-label")} icon={"add"} onClick={() => push(Routes.CitizenNew)} />
-					) : (
-						<Button variantColor={"primary"} variant={"solid"} leftIcon={"add"} onClick={() => push(Routes.CitizenNew)}>{t("add-citizen-button-label")}</Button>
 					)}
 				</Stack>
 			</Stack>
@@ -85,7 +83,11 @@ const CitizenList = () => {
 				</Stack>
 			)}
 			{resultsFound && (
-				<SimpleGrid maxWidth={"100%"} columns={4} minChildWidth={350} spacing={5}>
+				<SimpleGrid maxWidth={"100%"} columns={4} minChildWidth={200} spacing={5}>
+					{noActiveSearch && (
+						<Button variantColor={"primary"} borderStyle={"dashed"} variant={"outline"} leftIcon={"add"} onClick={() => push(Routes.CitizenNew)}
+						        h={"100%"} p={5}>{t("add-citizen-button-label")}</Button>)
+					}
 					{citizens.map(c => <CitizenCard key={c.id} citizen={c} cursor={"pointer"} />)}
 				</SimpleGrid>
 			)}
