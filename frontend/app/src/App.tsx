@@ -5,19 +5,22 @@ import LoginPage from "./components/LoginPage";
 import {observer} from "mobx-react";
 import SidebarContainer from "./components/Sidebar/SidebarContainer";
 import {useIsMobile} from "react-grapple";
-import {Redirect, Route, Switch, useLocation} from "react-router-dom";
+import {Redirect, Route, Switch, useHistory, useLocation} from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import UserStatus from "./components/UserStatus";
-import {GrLock} from "react-icons/all";
+import {FaCog, FaLock} from "react-icons/all";
 import Routes from "./config/routes";
 import Citizens from "./components/Citizens";
 import PageNotFound from "./components/PageNotFound";
 import {TABLET_BREAKPOINT} from "./utils/things";
+import {useTranslation} from "react-i18next";
 
 const App = () => {
+	const {t} = useTranslation();
 	const isMobile = useIsMobile(TABLET_BREAKPOINT);
 	const session = useSession();
 	const location = useLocation();
+	const {push} = useHistory();
 
 	if (!session.user) {
 		session.setReferer(location.pathname);
@@ -39,7 +42,12 @@ const App = () => {
 
 								<Stack spacing={10} direction={"row"} justifyContent={"flex-end"} alignItems={"center"} pb={5}>
 									<UserStatus name={session.user.fullName} role={session.user.role} />
-									<IconButton size={"sm"} icon={GrLock} variant={"outline"} variantColor={"red"} aria-label={"Uitloggen"} onClick={() => session.reset()} />
+									<Stack direction={"row"} spacing={2}>
+										<IconButton size={"md"} icon={FaCog} color={"gray.400"} _hover={{color: "primary.700"}} variant={"ghost"} aria-label={t("settings")}
+										            title={t("settings")} onClick={() => push(Routes.Settings)} />
+										<IconButton size={"md"} icon={FaLock} color={"gray.400"} _hover={{color: "primary.700"}} variant={"ghost"} aria-label={t("logout")}
+										            title={t("logout")} onClick={() => session.reset()} />
+									</Stack>
 								</Stack>
 
 								<Switch>

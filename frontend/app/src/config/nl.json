@@ -34,9 +34,9 @@
   "iban": "IBAN",
   "lastName": "Achternaam",
   "login": {
-    "invalidCredentialsError": "Onjuiste combinatie e-mailadres en wachtwoord.",
-    "logout": "Uitloggen"
+    "invalidCredentialsError": "Onjuiste combinatie e-mailadres en wachtwoord."
   },
+  "logout": "Uitloggen",
   "mail": "E-mailadres",
   "organizations": "Organisaties",
   "password": "Wachtwoord",
