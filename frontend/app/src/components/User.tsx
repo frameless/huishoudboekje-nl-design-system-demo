@@ -3,7 +3,7 @@ import {Button, Icon, Stack, Text, useToast} from "@chakra-ui/core";
 import {observer} from "mobx-react";
 import useFetch from "use-http";
 import {useTranslate} from "../config/i18n";
-import users from "../config/users.json";
+import users from "../config/sampleData/users.json";
 import {useSession} from "../utils/hooks";
 
 const User = () => {

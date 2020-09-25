@@ -25,6 +25,10 @@
       "warn",
       "double"
     ],
+    "no-mixed-spaces-and-tabs": [
+      "warn",
+      "smart-tabs"
+    ],
     "no-trailing-spaces": [
       "warn"
     ],
