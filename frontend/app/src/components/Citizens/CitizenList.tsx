@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
-import {Box, Button, Heading, Icon, Input, InputGroup, InputLeftElement, SimpleGrid, Spinner, Stack, Text} from "@chakra-ui/core";
+import {Box, Button, Heading, Icon, IconButton, Input, InputGroup, InputLeftElement, InputRightElement, SimpleGrid, Spinner, Stack, Text} from "@chakra-ui/core";
 import CitizenCard from "./CitizenCard";
-import {useInput, useIsMobile} from "react-grapple";
+import {useInput} from "react-grapple";
 import {searchFields} from "../../utils/things";
 import Routes from "../../config/routes";
 import {useHistory} from "react-router-dom";
@@ -12,7 +12,6 @@ import {GetCitizensQuery} from "../../services/citizens";
 
 const CitizenList = () => {
 	const {t} = useTranslation();
-	const isMobile = useIsMobile(650);
 	const {push} = useHistory();
 	const search = useInput<string>({
 		placeholder: t("search-placeholder")
@@ -53,6 +52,11 @@ const CitizenList = () => {
 	const showSearch = !isPending && !noData;
 	const noActiveSearch = citizens.length === allCitizens?.length;
 
+	const onKeyDownOnSearchField = (e) => {
+		if (e.key === "Escape") {
+			search.clear();
+		}
+	};
 	return (
 		<Stack spacing={5}>
 			<Stack direction={"row"} spacing={5} justifyContent={"space-between"} alignItems={"center"}>
@@ -63,7 +67,12 @@ const CitizenList = () => {
 					{showSearch && (
 						<InputGroup>
 							<InputLeftElement><Icon name="search" color={"gray.300"} /></InputLeftElement>
-							<Input type={"text"} {...search.bind} />
+							<Input type={"text"} {...search.bind} onKeyDown={onKeyDownOnSearchField} />
+							{search.value.length > 0 && (
+								<InputRightElement>
+									<IconButton onClick={() => search.clear()} size={"xs"} variant={"link"} icon={"close"} aria-label={""} color={"gray.300"} />
+								</InputRightElement>
+							)}
 						</InputGroup>
 					)}
 				</Stack>
