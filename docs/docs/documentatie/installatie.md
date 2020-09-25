@@ -1,11 +1,20 @@
+---
+id: installatie
+title: Installatie
+---
+
 ## Vereisten
 Huishoudboekje kan je met Helm op een Kubernetes cluster installeren.
 Productie-implementaties kunnen met behulp van [Haven](https://haven.commonground.nl).
 Voor beproevingen kan dat met elk kubernetes cluster of lokaal met [minikube](./local-development).
 
 ## Voorbereiding
-- Certificaten
-- Kubectl setup
+- Installeer [Helm](https://helm.sh/)
+- Download het installatie pakket op https://gitlab.com/commonground/huishoudboekje/app-new/-/jobs/artifacts/master/browse/huishoudboekje?job=build-helm
+- Zet het logo bestand klaar in SVG formaat
+- Bepaal op welke hostnaam huishoudboekje bereikbaar moet worden
+- Haal de gegevens op voor de OpenID Connect koppeling met b.v. ADFS
+- Bepaal de huidige versie tag van Huishoudboekje, deze staat rechtsbovenaan op https://gitlab.com/commonground/huishoudboekje/app-new/-/tree/master
 
 ### Huisstijl
 Zorg voor een logo (SVG-bestand). Dit is het logo dat in het Huishoudboekje zichtbaar zal zijn. 
@@ -19,7 +28,7 @@ DOMAIN="<huishoudboekje.sloothuizen.nl>"
 OIDC_SERVER="<https://adfs.sloothuizen.nl/oidc>"
 OIDC_SECRET="<random string>"
 IMAGE_TAG=latest
-wget -O huishoudboekje.tgz https://gitlab.com/commonground/huishoudboekje/app-new/-/jobs/artifacts/master/browse/huishoudboekje?job=build-helm
+
 tar zxf huishoudboekje.tgz
  
 cp "$LOGO_SVG" huishoudboekje/charts/medewerker-frontend/theme/logo.svg

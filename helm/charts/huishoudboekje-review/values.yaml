@@ -27,7 +27,7 @@ dex:
   ingress:
     enabled: true
     hosts:
-      - dex.hhb.minikube
+      - "dex.hhb.minikube"
   ports:
     web:
       servicePort: 80
@@ -39,3 +39,18 @@ dex:
       create: false
   rbac:
     create: false
+
+docs:
+  ingress:
+    enabled: true
+    hosts:
+      - "docs.hhb.minikube"
+
+review-page:
+  ingress:
+    enabled: true
+    hosts:
+      - "review.hhb.minikube"
+  config:
+    frontend: "hhb.minikube"
+    docs: "docs.hhb.minikube"

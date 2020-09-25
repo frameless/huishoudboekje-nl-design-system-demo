@@ -13,6 +13,7 @@ variables:
   IMAGE_TAG: $CI_COMMIT_SHA
   REVIEW_BASE_DOMAIN: nlx.reviews
   REVIEW_NAMESPACE: "hhb-$CI_ENVIRONMENT_SLUG"
+  KUBECONFIG: /secrets/kubeconfig/review.conf
 
 stages:
   - test
