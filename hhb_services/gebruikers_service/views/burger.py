@@ -1,18 +1,20 @@
+""" MethodView for /burger/ path """
+
 from flask.views import MethodView
 from flask import request
-from hhb_models.gebruiker import Gebruiker
 from hhb_models.burger import Burger
-from gebruikers_service.database import db
+from hhb_services.database import db
 
 class BurgerView(MethodView):
+    """ Methods for /burger/ path """
 
     def get(self):
-        """ List all known burgers """
+        """ Return a list all known burgers """
         burgers = Burger.query.all()
         return {"data": [b.to_dict() for b in burgers]} 
 
     def post(self):
-        """ Add a new Burger """
+        """ Create and return a new Burger """
         if not request.json:
             return "Missing user data", 400
         burger = Burger()

@@ -12,6 +12,3 @@ from hhb_models import *
 # This app is not actually run as flask service
 # it functions as a manager app for databas migrations
 # and global Flask config sttings
-
-if __name__ == '__main__':
-    app.run()

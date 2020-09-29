@@ -1,7 +1,12 @@
 import os
 from flask import Flask
-from gebruikers_service.database import db
-from gebruikers_service.views import GebruikerView, GebruikerDetailView, BurgerView, BurgerDetailView
+from hhb_services.database import db
+from gebruikers_service.views import (
+    GebruikerView, 
+    GebruikerDetailView, 
+    BurgerView, 
+    BurgerDetailView
+)
 
 app = Flask(__name__)
 app.config.from_object(os.environ['APP_SETTINGS'])

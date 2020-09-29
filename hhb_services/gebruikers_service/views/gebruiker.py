@@ -1,17 +1,20 @@
+""" MethodView for /gebruiker/ path """
+
 from flask.views import MethodView
 from flask import request
 from hhb_models.gebruiker import Gebruiker
-from gebruikers_service.database import db
+from hhb_services.database import db
 
 class GebruikerView(MethodView):
+    """ Methods for /gebruiker/ path """
 
     def get(self):
-        """ Get a list of all Gebruikers """
+        """ Return a list of all Gebruikers """
         gebruikers = Gebruiker.query.all()
-        return {"data": [g.to_dict() for g in gebruikers]} 
+        return {"data": [g.to_dict() for g in gebruikers]}
 
     def post(self):
-        """ Add a new Gebruiker """
+        """ Create and return a new Gebruiker """
         if not request.json:
             return "Missing user data", 400
         gebruiker = Gebruiker()
