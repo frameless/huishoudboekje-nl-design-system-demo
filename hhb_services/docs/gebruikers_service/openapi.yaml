@@ -5,6 +5,8 @@ info:
   description: API voor het beheren van gebruikers van het HHB
   
 paths:
+
+  # Gebruiker views
   /gebruiker:
     get:
       description: Geeft alle gebruikers van het HHB 
@@ -60,6 +62,8 @@ paths:
           description: Unauthorized
         '5XX':
           description: Unexpected error.
+
+  # Gebruiker detail views
   /gebruiker/{gebruiker_id}:
     parameters:
       - name: gebruiker_id
@@ -140,6 +144,241 @@ paths:
           description: Unexpected error.
     delete:
       description: Verwijder gebruiker uit het HHB
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: header
+          name: If-Match
+          schema:
+            type: string
+          required: true
+        - name: gebruiker_id
+          in: path
+          required: true
+          description: Gebruiker id
+          schema:
+            type : integer
+            example: 42
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized          
+        '404':
+          description: Not Found
+        '5XX':
+          description: Unexpected error.
+
+  # Burger views
+  /gebruiker/{gebruiker_id}/burger:
+    parameters:
+      - name: gebruiker_id
+        in: path
+        required: true
+        description: Gebruiker id
+        schema:
+          type : integer
+          example: 42
+    get:
+      description: Geeft burger voor specifieke gebruiker in het HHB
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: OK
+          headers:
+            ETag:
+              schema:
+                type: string
+              description: Entity tag
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Burger'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+        '5XX':
+          description: Unexpected error.
+    post:
+      description: Update burger gegevens voor specifieke gebruiker in het HHB
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: If-Match
+          in: header
+          required: true
+          schema:
+            type: string
+            example: "348797893434789789"
+        - name: voornamen
+          required: true
+          in: query
+          schema:
+            type: string
+            example: "Henk"
+        - name: voorletters
+          required: true
+          in: query
+          schema:
+            type: string
+            example: "H."        
+        - name: voorvoegsel
+          required: false
+          in: query
+          schema:
+            type: string
+            example: "van"           
+        - name: geslachtsnaam
+          required: true
+          in: query
+          schema:
+            type: string
+            example: "Poortman"
+        - name: straatnaam
+          required: true
+          in: query
+          schema:
+            type: string
+            example: "Schoolstraat"
+        - name: huisnummer
+          required: true
+          in: query
+          schema:
+            type: integer
+            example: 1337
+        - name: huisletter
+          required: false
+          in: query
+          schema:
+            type: string
+            example: "a"
+        - name: huistoevoeging
+          required: false
+          in: query
+          schema:
+            type: string
+            example: "bis"
+        - name: postcode
+          required: true
+          in: query
+          schema:
+            type: string
+            example: "1234AB"
+        - name: woonplaatsnaam
+          required: true
+          in: query
+          schema:
+            type: string
+            example: "Sloothuizen"
+      responses:
+        '200': 
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Burger'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized  
+        '404':
+          description: Not Found
+        '5XX':
+          description: Unexpected error.          
+    patch:
+      description: Update burger gegevens voor specifieke gebruiker in het HHB
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: If-Match
+          in: header
+          required: true
+          schema:
+            type: string
+            example: "348797893434789789"
+        - name: voornamen
+          required: false
+          in: query
+          schema:
+            type: string
+            example: "Henk"
+        - name: voorletters
+          required: false
+          in: query
+          schema:
+            type: string
+            example: "H."        
+        - name: voorvoegsel
+          required: false
+          in: query
+          schema:
+            type: string
+            example: "van"           
+        - name: geslachtsnaam
+          required: false
+          in: query
+          schema:
+            type: string
+            example: "Poortman"
+        - name: straatnaam
+          required: false
+          in: query
+          schema:
+            type: string
+            example: "Schoolstraat"
+        - name: huisnummer
+          required: false
+          in: query
+          schema:
+            type: integer
+            example: 1337
+        - name: huisletter
+          required: false
+          in: query
+          schema:
+            type: string
+            example: "a"
+        - name: huistoevoeging
+          required: false
+          in: query
+          schema:
+            type: string
+            example: "bis"
+        - name: postcode
+          required: false
+          in: query
+          schema:
+            type: string
+            example: "1234AB"
+        - name: woonplaatsnaam
+          required: false
+          in: query
+          schema:
+            type: string
+            example: "Sloothuizen"
+      responses:
+        '200': 
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Burger'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized  
+        '404':
+          description: Not Found
+        '5XX':
+          description: Unexpected error.
+    delete:
+      description: Verwijder burger van specifieke gebruiker in het HHB
       security:
         - BearerAuth: []
       parameters:

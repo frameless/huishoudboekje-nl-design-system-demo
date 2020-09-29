@@ -1,6 +1,8 @@
 import enum
+from flask import abort, make_response
 from sqlalchemy import Column, Integer, String, Sequence, Date
 from sqlalchemy.orm import relationship
+from sqlalchemy.orm.exc import NoResultFound
 from hhb_services.app import db
 
 class Gebruiker(db.Model):
@@ -36,3 +38,15 @@ class Gebruiker(db.Model):
 
     def __repr__(self):
         return f"<Gebruiker(id='{self.id}')>"
+
+def get_gebruiker(gebruiker_id: int) -> Gebruiker:
+    """ Get Gebruiker object based on id """
+    try:
+        int(gebruiker_id)
+    except ValueError:
+        abort(make_response({"error": "The supplied gebruiker_id is not a number."}, 400))
+
+    try:
+        return db.session.query(Gebruiker).filter_by(id=gebruiker_id).one()
+    except NoResultFound:
+        abort(make_response({"error": "The requested resource could not be found."}, 404))

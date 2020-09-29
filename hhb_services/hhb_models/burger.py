@@ -6,7 +6,6 @@ class Burger(db.Model):
     __tablename__ = 'burgers'
 
     id = Column(Integer, Sequence('burgers_id_seq'), primary_key=True)
-    burgerservicenummer = Column(String)
 
     gebruiker_id = Column(Integer, ForeignKey('gebruikers.id'))
     gebruiker = relationship("Gebruiker", back_populates="burger")
@@ -27,7 +26,6 @@ class Burger(db.Model):
 
     def to_dict(self):
         return {
-            "id": self.id,
             "gebruiker_id": self.gebruiker_id,
             "voornamen": self.voornamen,
             "voorletters": self.voorletters,

@@ -1,10 +1,9 @@
+""" MethodView for /gebruiker/<gebruiker_id> path """
 from flask.views import MethodView
 from flask import request
-from flask import abort
 from flask_inputs import Inputs
 from flask_inputs.validators import JsonSchema
-from sqlalchemy.orm.exc import NoResultFound
-from hhb_models.gebruiker import Gebruiker
+from hhb_models.gebruiker import get_gebruiker
 from hhb_services.database import db
 
 edit_gebruiker_schema = {
@@ -25,40 +24,30 @@ edit_gebruiker_schema = {
 }
 
 class EditGebruikerInputs(Inputs):
+    """ JSON validator for updating a Gebruiker """
     json = [JsonSchema(schema=edit_gebruiker_schema)]
 
 class GebruikerDetailView(MethodView):
+    """ Methods for /gebruiker/<gebruiker_id> path """
 
-    def get(self, gebruiker_id):
+    def get(self, gebruiker_id: int):
         """ Get the current Gebruiker """
-        return {"data": self.get_gebruiker(gebruiker_id).to_dic}
+        return {"data": get_gebruiker(gebruiker_id).to_dict()}
 
-    def patch(self, gebruiker_id):
+    def patch(self, gebruiker_id: int):
         """ Update the current Gebruiker """
         inputs = EditGebruikerInputs(request)
         if not inputs.validate():
-            return {"errors": inputs.errors}, 400
+            return {"error": inputs.errors}, 400
 
-        gebruiker = self.get_gebruiker(gebruiker_id)
+        gebruiker = get_gebruiker(gebruiker_id)
         for key, value in request.json.items():
             setattr(gebruiker, key, value)
         db.session.commit()
         return {"data": gebruiker.to_dict()}, 200
 
-    def delete(self, gebruiker_id):
+    def delete(self, gebruiker_id: int):
         """ Delete the current Gebruiker """
-        db.session.delete(self.get_gebruiker(gebruiker_id))
+        db.session.delete(get_gebruiker(gebruiker_id))
         db.session.commit()
         return {}, 204
-
-    def get_gebruiker(self, gebruiker_id):
-        """ Get Gebruiker object based on id """
-        try:
-            int(gebruiker_id)
-        except ValueError:
-            abort(400)
-
-        try:
-            return db.session.query(Gebruiker).filter_by(id=gebruiker_id).one()
-        except NoResultFound:
-            abort(404)

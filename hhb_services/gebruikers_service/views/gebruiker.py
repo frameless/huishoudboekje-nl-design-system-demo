@@ -1,5 +1,4 @@
 """ MethodView for /gebruiker/ path """
-
 from flask.views import MethodView
 from flask import request
 from flask_inputs import Inputs
@@ -25,6 +24,7 @@ new_gebruiker_schema = {
 }
 
 class NewGebruikerInputs(Inputs):
+    """ JSON validator for creating a new Gebruiker """
     json = [JsonSchema(schema=new_gebruiker_schema)]
 
 class GebruikerView(MethodView):
@@ -41,7 +41,7 @@ class GebruikerView(MethodView):
         if not inputs.validate():
             print(inputs.errors)
             return {"errors": inputs.errors}, 400
-            
+
         gebruiker = Gebruiker()
         for key, value in request.json.items():
             setattr(gebruiker, key, value)
