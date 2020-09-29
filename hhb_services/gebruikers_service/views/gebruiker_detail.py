@@ -43,7 +43,7 @@ class GebruikerDetailView(MethodView):
         for key, value in request.json.items():
             setattr(gebruiker, key, value)
         db.session.commit()
-        return {"data": gebruiker.to_dict()}, 202
+        return {"data": gebruiker.to_dict()}, 200
 
     def delete(self, gebruiker_id):
         """ Delete the current Gebruiker """
@@ -53,6 +53,11 @@ class GebruikerDetailView(MethodView):
 
     def get_gebruiker(self, gebruiker_id):
         """ Get Gebruiker object based on id """
+        try:
+            int(gebruiker_id)
+        except ValueError:
+            abort(400)
+
         try:
             return db.session.query(Gebruiker).filter_by(id=gebruiker_id).one()
         except NoResultFound:

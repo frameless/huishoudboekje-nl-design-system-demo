@@ -18,7 +18,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Gebruiker_Kort'
+                  $ref: '#/components/schemas/Gebruiker'
         '401':
           description: Unauthorized
         '5XX':
@@ -28,73 +28,25 @@ paths:
       security:
         - BearerAuth: []
       parameters:
-        - name: burgerservicenummer
-          in: query
+        - name: telefoonnummer
           required: true
-          schema:
-            type: string
-            example: 0123456789
-        - name: kenmerk
-          in: query
-          schema:
-            type: string
-            example: 324f44f
-        - name: initialen
-          in: query
-          schema:
-            type: string
-            example: H. F. G.
-        - name: voornaam
-          in: query
-          schema:
-            type: string
-            example: Henk
-        - name: achternaam
-          in: query
-          schema:
-            type: string
-            example: Poortvliet
-        - name: toevoeging
-          in: query
-          schema:
-            type: string
-            example: van
-        - name: telefoon
           in: query
           schema:
             type: string
             example: +31612345678
         - name: email
+          required: true
           in: query
           schema:
             type: string
             example: henk.poortvliet@sloothuizen.nl
-        - name: adres
-          in: query
-          schema:
-            type: string
-            example: Schoolstraat 1
-        - name: postcode
-          in: query
-          schema:
-            type: string
-            example: 1234AB
-        - name: stad
-          in: query
-          schema:
-            type: string
-            example: Sloothuizen
-        - name: geboorte_datum
+        - name: geboortedatum
+          required: true
           in: query
           schema:
             type: string
             format: date
             example: "1980-05-24"
-        - name: geslacht
-          in: query
-          schema:
-            type: string
-            example: Man
       responses:
         '201':
           description: Created
@@ -108,25 +60,19 @@ paths:
           description: Unauthorized
         '5XX':
           description: Unexpected error.
-  /gebruiker/{burgerservicenummer}:
+  /gebruiker/{gebruiker_id}:
     parameters:
-      - name: burgerservicenummer
+      - name: gebruiker_id
         in: path
         required: true
         description: Gebruiker id
         schema:
           type : integer
+          example: 42
     get:
       description: Geeft specifieke gebruiker uit het HHB
       security:
         - BearerAuth: []
-      parameters:
-        - name: burgerservicenummer
-          in: path
-          required: true
-          schema:
-            type: string
-            example: 0123456789
       responses:
         '200':
           description: OK
@@ -158,73 +104,25 @@ paths:
           schema:
             type: string
             example: "348797893434789789"
-        - name: burgerservicenummer
-          in: path
-          required: true
-          schema:
-            type: string
-            example: 0123456789
-        - name: kenmerk
-          in: query
-          schema:
-            type: string
-            example: 324f44f
-        - name: initialen
-          in: query
-          schema:
-            type: string
-            example: H. F. G.
-        - name: voornaam
-          in: query
-          schema:
-            type: string
-            example: Henk
-        - name: achternaam
-          in: query
-          schema:
-            type: string
-            example: Poortvliet
-        - name: toevoeging
-          in: query
-          schema:
-            type: string
-            example: van
-        - name: telefoon
+        - name: telefoonnummer
+          required: false
           in: query
           schema:
             type: string
             example: +31612345678
         - name: email
+          required: false
           in: query
           schema:
             type: string
             example: henk.poortvliet@sloothuizen.nl
-        - name: adres
-          in: query
-          schema:
-            type: string
-            example: Schoolstraat 1
-        - name: postcode
-          in: query
-          schema:
-            type: string
-            example: 1234AB
-        - name: stad
-          in: query
-          schema:
-            type: string
-            example: Sloothuizen
-        - name: geboorte_datum
+        - name: geboortedatum
+          required: false
           in: query
           schema:
             type: string
             format: date
             example: "1980-05-24"
-        - name: geslacht
-          in: query
-          schema:
-            type: string
-            example: Man
       responses:
         '200': 
           description: OK
@@ -250,12 +148,13 @@ paths:
           schema:
             type: string
           required: true
-        - name: burgerservicenummer
+        - name: gebruiker_id
           in: path
           required: true
+          description: Gebruiker id
           schema:
-            type: string
-            example: 0123456789
+            type : integer
+            example: 42
       responses:
         '204':
           description: No Content
@@ -274,58 +173,26 @@ components:
       type: http
       scheme: bearer
   schemas:
-    Gebruiker_Kort:
-      type: object
-      properties:
-        burgerservicenummer:
-          type: integer
-          example: 0123456789
-        kenmerk:
-          type: string
-          example: 324f44f
-        aanschrijfwijze:
-          type: string
-          example: H. F. G. van Poortvliet
     Gebruiker:
       type: object
       properties:
-        burgerservicenummer:
-          type: string
-          example: 0123456789
-        kenmerk:
-          type: string
-          example: 324f44f
-        initialen:
-          type: string
-          example: H. F. G.
-        voornaam:
-          type: string
-          example: Henk
-        achternaam:
-          type: string
-          example: Poortvliet
-        toevoeging:
-          type: string
-          example: van
-        telefoon:
+        id:
+          type: integer
+          example: 23
+        telefoonnummer:
           type: string
           example: "+31612345678"
         email:
           type: string
           example: henk.poortvliet@sloothuizen.nl
-        adres:
-          type: string
-          example: Schoolstraat 1
-        postcode:
-          type: string
-          example: 1234AB
-        stad:
-          type: string
-          example: Sloothuizen
-        geboorte_datum:
+        geboortedatum:
           type: string
           format: date
           example: "1980-05-24"
-        geslacht:
-          type: string
-          example: Man
+    Burger:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1337
+
