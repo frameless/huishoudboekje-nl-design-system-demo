@@ -7,6 +7,9 @@
     url: https://$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN/
     on_stop: destroy-app
   script:
+    - helm uninstall --namespace $REVIEW_NAMESPACE $REVIEW_NAMESPACE-frontend || true
+    - helm uninstall --namespace $REVIEW_NAMESPACE $REVIEW_NAMESPACE-backend || true
+    - helm uninstall --namespace $REVIEW_NAMESPACE $REVIEW_NAMESPACE-dex || true
     - |
       helm repo add stable "https://kubernetes-charts.storage.googleapis.com"
       helm repo update
@@ -47,9 +50,8 @@
   variables:
     DOCS_HOST: docs-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN
   script:
-    - env | sort
     - |
-      helm upgrade --install --create-namespace "huishoudboekje" ./helm/charts/docs \
+      helm upgrade --install --create-namespace "huishoudboekje-docs" ./helm/charts/docs \
         --namespace $REVIEW_NAMESPACE \
         --values ./helm/charts/docs/values.yaml \
         --set "global.imageTag=$IMAGE_TAG" \
