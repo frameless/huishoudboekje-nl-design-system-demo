@@ -1,0 +1,4 @@
+from gebruikers_service.views.gebruiker import GebruikerView
+from gebruikers_service.views.gebruiker_detail import GebruikerDetailView
+from gebruikers_service.views.burger import BurgerView
+from gebruikers_service.views.burger_detail import BurgerDetailView
