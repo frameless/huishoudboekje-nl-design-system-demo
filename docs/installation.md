@@ -1,19 +1,18 @@
 ## Vereisten
-
-Huishoudboekje is gemaakt om op met Helm op een Kubernetes cluster geïnstalleerd te worden.
-Voor productie implementaties kan met behulp van [Haven](https://haven.commonground.nl).
-Voor beproevingen kan dat met elk kubernetes cluster of lokaal mbv [minikube](./local-development)
-
+Huishoudboekje kan je met Helm op een Kubernetes cluster installeren.
+Productie-implementaties kunnen met behulp van [Haven](https://haven.commonground.nl).
+Voor beproevingen kan dat met elk kubernetes cluster of lokaal met [minikube](./local-development).
 
 ## Voorbereiding
-
 - Certificaten
-- Logo (SVG bestand)
 - Kubectl setup
 
+### Huisstijl
+Zorg voor een logo (SVG-bestand). Dit is het logo dat in het Huishoudboekje zichtbaar zal zijn. 
+Daarnaast is het nodig om een `theme.js` bestand te maken, waarin je twee kleuren uit de huisstijl van jouw gemeente kunt 
+definiëren. Zie het [thema van de fictieve gemeente Sloothuizen](../frontend/theme/sloothuizen/theme.js) voor een voorbeeld.
 
 ## Installatie
-
 ```shell script
 LOGO_SVG="<logo.svg>"
 DOMAIN="<huishoudboekje.sloothuizen.nl>"
