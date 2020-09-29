@@ -1,3 +1,8 @@
+---
+id: local-development
+title: Local Development
+---
+
 ## Requirements
 - Anaconda
 - Docker

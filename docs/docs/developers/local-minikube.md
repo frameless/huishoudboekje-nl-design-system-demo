@@ -1,3 +1,8 @@
+---
+id: minikube
+title: Minikube
+---
+
 # Running the complete stack using Minikube
 
 ## 0. Prerequisites

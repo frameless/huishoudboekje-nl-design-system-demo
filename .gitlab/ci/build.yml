@@ -28,6 +28,16 @@ build-backend:
   only:
     - branches@commonground/huishoudboekje/app-new
 
+# Build Docs
+build-docs:
+  stage: build
+  variables:
+    APP_NAME: docs
+    DIRECTORY: docs
+  extends: .build
+  only:
+    - branches@commonground/huishoudboekje/app-new
+
 build-helm:
   tags:
     - cg

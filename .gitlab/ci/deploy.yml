@@ -2,12 +2,10 @@
 .deploy-app:
   stage: deploy
   image: registry.gitlab.com/commonground/core/review-app-deployer:latest
-  variables:
-    KUBECONFIG: /secrets/kubeconfig/review.conf
   environment:
     name: $CI_COMMIT_REF_NAME
     url: https://$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN/
-    on_stop: destroy
+    on_stop: destroy-app
   script:
     - |
       helm repo add stable "https://kubernetes-charts.storage.googleapis.com"
@@ -15,42 +13,79 @@
     - helm dependency build helm/charts/huishoudboekje-review
     - (cd helm/charts/medewerker-frontend; ln -s ../../../frontend/theme/sloothuizen theme)
     - |
-      helm upgrade --debug --install --create-namespace "huishoudboekje" ./helm/charts/huishoudboekje-review \
+      export OIDC_HOST="dex-sloothuizen-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN"
+      export HHB_HOST="$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN"
+    - |
+      helm upgrade --install --create-namespace "huishoudboekje" ./helm/charts/huishoudboekje-review \
         --namespace $REVIEW_NAMESPACE \
         --values ./helm/charts/huishoudboekje-review/values.yaml \
         --set "global.imageTag=$IMAGE_TAG" \
-        --set "medewerker-frontend.ingress.hosts[0].host=$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN" \
+        --set "medewerker-frontend.ingress.hosts[0].host=$HHB_HOST" \
         --set "medewerker-frontend.ingress.hosts[0].paths[0]=/" \
-        --set "medewerker-backend.ingress.hosts[0].host=$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN" \
+        --set "medewerker-backend.ingress.hosts[0].host=$HHB_HOST" \
         --set "medewerker-backend.ingress.hosts[0].paths[0]=/api/" \
-        --set "medewerker-backend.oidc.issuer=https://dex-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN" \
+        --set "medewerker-backend.oidc.issuer=https://$OIDC_HOST" \
         --set "medewerker-backend.oidc.clientSecret=ZwwcL2zjQyJUBnFPVoOb" \
-        --set "medewerker-backend.oidc.authorizationEndpoint=https://dex-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN/auth" \
-        --set "medewerker-backend.oidc.redirectUri=https://$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN/api/oidc_callback" \
-        --set "medewerker-backend.oidc.tokenUri=https://dex-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN/token" \
-        --set "medewerker-backend.oidc.tokeninfoUri=https://dex-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN/tokeninfo" \
-        --set "medewerker-backend.oidc.userinfoUri=https://dex-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN/userinfo" \
-        --set "dex.ingress.hosts[0]=dex-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN" \
-        --set "dex.config.issuer=https://dex-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN" \
+        --set "medewerker-backend.oidc.authorizationEndpoint=https://$OIDC_HOST/auth" \
+        --set "medewerker-backend.oidc.redirectUri=https://$HHB_HOST/api/oidc_callback" \
+        --set "medewerker-backend.oidc.tokenUri=https://$OIDC_HOST/token" \
+        --set "medewerker-backend.oidc.tokeninfoUri=https://$OIDC_HOST/tokeninfo" \
+        --set "medewerker-backend.oidc.userinfoUri=https://$OIDC_HOST/userinfo" \
+        --set "dex.ingress.hosts[0]=$OIDC_HOST" \
+        --set "dex.config.issuer=https://$OIDC_HOST" \
         --set "dex.config.staticClients[0].secret=ZwwcL2zjQyJUBnFPVoOb" \
-        --set "dex.config.staticClients[0].redirectURIs[0]=https://$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN/api/oidc_callback"
-#        $([[ "$REVIEW_NAMESPACE" == "hhb-test" ]] && echo '-- --set "dex.config.staticClients[0].redirectURIs[1]=https://localhost:3000/api/oidc_callback"')
+        --set "dex.config.staticClients[0].redirectURIs[0]=https://$HHB_HOST/api/oidc_callback"
   only:
     - branches@commonground/huishoudboekje/app-new
   tags:
     - cg
     - docker
 
+.deploy-docs:
+  stage: deploy
+  image: registry.gitlab.com/commonground/core/review-app-deployer:latest
+  variables:
+    DOCS_HOST: docs-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN
+  script:
+    - env | sort
+    - |
+      helm upgrade --install --create-namespace "huishoudboekje" ./helm/charts/docs \
+        --namespace $REVIEW_NAMESPACE \
+        --values ./helm/charts/docs/values.yaml \
+        --set "global.imageTag=$IMAGE_TAG" \
+        --set "ingress.hosts[0]=$DOCS_HOST"
+    - echo "DOCS_URL=https://${DOCS_HOST}" > docs.env
+  artifacts:
+    reports:
+      dotenv: docs.env
+  environment:
+    name: docs-${CI_COMMIT_REF_NAME}
+    url: ${DOCS_URL}
+    on_stop: destroy-docs
+  only:
+    - branches@commonground/huishoudboekje/app-new
+  tags:
+    - cg
+    - docker
+
+.test:
+  variables:
+    REVIEW_NAMESPACE: "hhb-test"
+
+.acc:
+  variables:
+    REVIEW_NAMESPACE: "hhb-acc"
+
+.proddemo:
+  variables:
+    REVIEW_NAMESPACE: "hhb-demo"
+
 # Deploy (Review)
 deploy-review:
-  variables:
-    KUBECONFIG: /secrets/kubeconfig/review.conf
-    REVIEW_NAMESPACE: "hhb-${CI_ENVIRONMENT_SLUG}"
-  extends: .deploy-app
   environment:
-    name: $CI_COMMIT_REF_NAME
     url: https://hhb-${CI_ENVIRONMENT_SLUG}.${REVIEW_BASE_DOMAIN}/
-    on_stop: destroy
+  extends:
+    - .deploy-app
   except:
     - master
     - develop
@@ -58,33 +93,66 @@ deploy-review:
 
 # Deploy (TEST)
 deploy-test:
-  variables:
-    KUBECONFIG: /secrets/kubeconfig/review.conf
-    REVIEW_NAMESPACE: "hhb-test"
-  extends: .deploy-app
+  extends:
+    - .test
+    - .deploy-app
   only:
     - develop
 
 # Deploy (ACC)
 deploy-acc:
-  variables:
-    KUBECONFIG: /secrets/kubeconfig/review.conf
-    REVIEW_NAMESPACE: "hhb-acc"
-  extends: .deploy-app
+  extends:
+    - .acc
+    - .deploy-app
   only:
     - acceptance
 
 # Deploy (PROD/DEMO)
 deploy-proddemo:
+  extends:
+    - .proddemo
+    - .deploy-app
+  only:
+    - master
+
+
+# Deploy Docs (Review)
+docs-deploy-review:
   variables:
-    KUBECONFIG: /secrets/kubeconfig/review.conf
-    REVIEW_NAMESPACE: "hhb-demo"
-  extends: .deploy-app
+    DOCS_HOST: docs-hhb-${CI_ENVIRONMENT_SLUG}.$REVIEW_BASE_DOMAIN
+  extends:
+    - .deploy-docs
+  except:
+    - master
+    - develop
+    - acceptance
+
+# Deploy (TEST)
+docs-deploy-test:
+  extends:
+    - .test
+    - .deploy-docs
+  only:
+    - develop
+
+# Deploy (ACC)
+docs-deploy-acc:
+  extends:
+    - .acc
+    - .deploy-docs
+  only:
+    - acceptance
+
+# Deploy (PROD/DEMO)
+docs-deploy-proddemo:
+  extends:
+    - .proddemo
+    - .deploy-docs
   only:
     - master
 
 # Shut down app
-destroy:
+.destroy:
   stage: deploy
   image: registry.gitlab.com/commonground/core/review-app-deployer:latest
   variables:
@@ -94,12 +162,25 @@ destroy:
     - kubectl delete namespace $REVIEW_NAMESPACE
   when: manual
   environment:
-    name: $CI_COMMIT_REF_NAME
     action: stop
+  tags:
+    - cg
+    - docker
+
+destroy-app:
+  extends: .destroy
+  environment:
+    name: $CI_COMMIT_REF_NAME
   except:
     - master
     - develop
     - acceptance
-  tags:
-    - cg
-    - docker
+
+destroy-docs:
+  extends: .destroy
+  environment:
+    name: docs-${CI_COMMIT_REF_NAME}
+  except:
+    - master
+    - develop
+    - acceptance
