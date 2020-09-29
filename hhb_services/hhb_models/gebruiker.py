@@ -11,26 +11,28 @@ class Gebruiker(db.Model):
     burger = relationship("Burger", uselist=False, back_populates="gebruiker")
 
     # Gebruiker fields
-    burgerservicenummeer = Column(String)
-    telefoon = Column(String)
+    telefoonnummer = Column(String)
     email = Column(String)
     geboortedatum = Column(Date)
 
     def to_dict(self):
-
-        geboortedatum = ""
-        try:
-            geboortedatum = self.geboortedatum.isoformat()
-        except AttributeError:
-            pass
-
-        return {
+        return_data = {
             "id": self.id,
-            "burgerservicenummeer": self.burgerservicenummeer,
-            "telefoon": self.telefoon,
+            "telefoonnummer": self.telefoonnummer,
             "email": self.email,
-            "geboortedatum": geboortedatum
         }
 
+        try:
+            return_data["geboortedatum"] = self.geboortedatum.isoformat()
+        except AttributeError:
+            return_data["geboortedatum"] = ""
+
+        if self.burger:
+            return_data["burger_id"] = self.burger.id
+        else:
+            return_data["burger_id"] = None
+
+        return return_data
+
     def __repr__(self):
-        return f"<Gebruiker(id='{self.id}'>"
+        return f"<Gebruiker(id='{self.id}')>"

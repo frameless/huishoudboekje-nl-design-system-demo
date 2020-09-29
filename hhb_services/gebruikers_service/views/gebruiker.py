@@ -2,8 +2,30 @@
 
 from flask.views import MethodView
 from flask import request
+from flask_inputs import Inputs
+from flask_inputs.validators import JsonSchema
 from hhb_models.gebruiker import Gebruiker
 from hhb_services.database import db
+
+new_gebruiker_schema = {
+   "type": "object",
+   "properties": {
+       "telefoonnummer": {
+           "type": "string",
+       },
+       "email": {
+           "type": "string",
+       },
+       "geboortedatum": {
+           "type": "string",
+           "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+       }
+   },
+   "required": ["telefoonnummer", "email", "geboortedatum"]
+}
+
+class NewGebruikerInputs(Inputs):
+    json = [JsonSchema(schema=new_gebruiker_schema)]
 
 class GebruikerView(MethodView):
     """ Methods for /gebruiker/ path """
@@ -15,12 +37,14 @@ class GebruikerView(MethodView):
 
     def post(self):
         """ Create and return a new Gebruiker """
-        if not request.json:
-            return "Missing user data", 400
+        inputs = NewGebruikerInputs(request)
+        if not inputs.validate():
+            print(inputs.errors)
+            return {"errors": inputs.errors}, 400
+            
         gebruiker = Gebruiker()
-        gebruiker.telefoon = request.json["telefoonnummer"]
-        gebruiker.email = request.json["email"]
-        gebruiker.geboortedatum = request.json["geboortedatum"]
+        for key, value in request.json.items():
+            setattr(gebruiker, key, value)
         db.session.add(gebruiker)
         db.session.commit()
         return {"data": gebruiker.to_dict()}, 201

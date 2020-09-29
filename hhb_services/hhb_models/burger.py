@@ -28,7 +28,7 @@ class Burger(db.Model):
     def to_dict(self):
         return {
             "id": self.id,
-            "burgerservicenummer": self.burgerservicenummer,
+            "gebruiker_id": self.gebruiker_id,
             "voornamen": self.voornamen,
             "voorletters": self.voorletters,
             "voorvoegsel": self.voorvoegsel,
@@ -42,4 +42,4 @@ class Burger(db.Model):
         }
 
     def __repr__(self):
-        return f"<Burger(id='{self.id}'>"
+        return f"<Burger(id='{self.id})'>"
