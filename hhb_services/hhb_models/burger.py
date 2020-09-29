@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, String, Sequence, Date
+from sqlalchemy import Column, Integer, String, Sequence, Date, ForeignKey
+from sqlalchemy.orm import relationship
 from hhb_services.app import db
 
 class Burger(db.Model):
@@ -6,6 +7,9 @@ class Burger(db.Model):
 
     id = Column(Integer, Sequence('burgers_id_seq'), primary_key=True)
     burgerservicenummer = Column(String)
+
+    gebruiker_id = Column(Integer, ForeignKey('gebruikers.id'))
+    gebruiker = relationship("Gebruiker", back_populates="burger")
 
     # Name fields
     voornamen = Column(String)
