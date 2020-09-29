@@ -1,5 +1,4 @@
 ## Requirements
-
 - Anaconda
 - Docker
 - Node/NPM
@@ -9,8 +8,7 @@
 docker-compose -f ./docker-compose.dev.yaml up -d
 ```
 
-### Medewerkers Proces Component
-
+### Proces Component (Medewerkers)
 ```shell script
 cd backend
 conda env create -f /path/to/environment.yml
@@ -19,8 +17,7 @@ export OIDC_REDIRECT_URI=http://localhost:3000/api/oidc_callback
 ./main.py
 ```
 
-### Medewerkers Component
-
+### Applicatie Component (Medewerkers)
 ```shell script
 cd frontend/app
 npm install
