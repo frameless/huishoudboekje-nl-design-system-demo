@@ -1,6 +1,8 @@
 import React from "react";
 import {Avatar, BoxProps, Flex, Stack, Text} from "@chakra-ui/core";
 import {useIsMobile} from "react-grapple";
+import {useHistory} from "react-router-dom";
+import Routes from "../../config/routes";
 
 const NotificationBadge = ({children}) => {
 	const size = "1.4em";
@@ -14,16 +16,16 @@ const NotificationBadge = ({children}) => {
 
 const CitizenCard: React.FC<BoxProps & { citizen, showBadge?: boolean }> = ({citizen, showBadge = false, ...props}) => {
 	const name = `${citizen.firstName} ${citizen.lastName}`;
-	// const {push} = useHistory();
+	const {push} = useHistory();
 	const isMobile = useIsMobile(450);
 
 	const onClick = () => {
-		// push(Routes.Citizen(citizen.id))
+		push(Routes.Citizen(citizen.id))
 	};
 
 	return (
-		<Stack direction={"row"} width={"100%"} justifyContent={isMobile ? "flex-start" : "center"} alignItems={"center"} bg={"white"} borderRadius={10} p={5}
-		       onClick={onClick} {...props}>
+		<Stack direction={"row"} width={"100%"} justifyContent={isMobile ? "flex-start" : "center"} alignItems={"center"} bg={"white"} borderRadius={10} p={5} cursor={"pointer"}
+		       onClick={onClick} userSelect={"none"}>
 			<Stack direction={isMobile ? "row" : "column"} spacing={5} alignItems={"center"}>
 				<Avatar name={name}>
 					{showBadge && citizen.notifications && (
