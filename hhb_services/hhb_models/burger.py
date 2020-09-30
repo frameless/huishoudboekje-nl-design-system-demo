@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Sequence, Date, ForeignKey
 from sqlalchemy.orm import relationship
-from hhb_services.app import db
+from hhb_services.database import db
 
 class Burger(db.Model):
     __tablename__ = 'burgers'

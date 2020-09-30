@@ -1,9 +1,9 @@
 import enum
-from flask import abort, make_response
 from sqlalchemy import Column, Integer, String, Sequence, Date
 from sqlalchemy.orm import relationship
+from flask import abort, make_response
 from sqlalchemy.orm.exc import NoResultFound
-from hhb_services.app import db
+from hhb_services.database import db
 
 class Gebruiker(db.Model):
     __tablename__ = 'gebruikers'

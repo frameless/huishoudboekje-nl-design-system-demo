@@ -7,7 +7,7 @@ info:
 paths:
 
   # Gebruiker views
-  /gebruiker:
+  /gebruikers:
     get:
       description: Geeft alle gebruikers van het HHB 
       security:
@@ -64,7 +64,7 @@ paths:
           description: Unexpected error.
 
   # Gebruiker detail views
-  /gebruiker/{gebruiker_id}:
+  /gebruikers/{gebruiker_id}:
     parameters:
       - name: gebruiker_id
         in: path
@@ -172,7 +172,7 @@ paths:
           description: Unexpected error.
 
   # Burger views
-  /gebruiker/{gebruiker_id}/burger:
+  /gebruikers/{gebruiker_id}/burger:
     parameters:
       - name: gebruiker_id
         in: path
@@ -431,7 +431,33 @@ components:
     Burger:
       type: object
       properties:
-        id:
+        voornamen:
+          type: string
+          example: "Henk"
+        voorletters:
+          type: string
+          example: "H."        
+        voorvoegsel:
+          type: string
+          example: "van"           
+        geslachtsnaam:
+          type: string
+          example: "Poortman"
+        straatnaam:
+          type: string
+          example: "Schoolstraat"
+        huisnummer:
           type: integer
           example: 1337
-
+        huisletter:
+          type: string
+          example: "a"
+        huistoevoeging:
+          type: string
+          example: "bis"
+        postcode:
+          type: string
+          example: "1234AB"
+        woonplaatsnaam:
+          type: string
+          example: "Sloothuizen"

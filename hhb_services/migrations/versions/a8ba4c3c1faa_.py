@@ -30,3 +30,4 @@ def downgrade():
     op.add_column('gebruikers', sa.Column('burgerservicenummeer', sa.VARCHAR(), autoincrement=False, nullable=True))
     op.drop_column('gebruikers', 'telefoonnummer')
     # ### end Alembic commands ###
+    pass

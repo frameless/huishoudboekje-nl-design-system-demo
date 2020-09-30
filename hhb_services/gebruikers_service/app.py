@@ -1,33 +1,35 @@
 """ Main app for gebruikers_service """
 import os
 from flask import Flask
-from hhb_services.database import db
 from gebruikers_service.views import (
     GebruikerView,
     GebruikerDetailView,
     BurgerView
 )
-
-app = Flask(__name__)
-app.config.from_object(os.environ['APP_SETTINGS'])
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db.init_app(app)
-
+from hhb_services import database
+db = database.db
 from hhb_models import *
 
-# Views
-app.add_url_rule(
-    '/gebruiker/',
-    view_func=GebruikerView.as_view('gebruiker_view')
-)
-app.add_url_rule(
-    '/gebruiker/<gebruiker_id>',
-    view_func=GebruikerDetailView.as_view('gebruiker_detail_view')
-)
-app.add_url_rule(
-    '/gebruiker/<gebruiker_id>/burger/',
-    view_func=BurgerView.as_view('burger_view')
-)
+def create_app(test_config=None):
+    app = Flask(__name__)
+    if test_config:
+        app.config.from_object(test_config)
+    else:
+        app.config.from_object(os.environ['APP_SETTINGS'])
 
-if __name__ == '__main__':
-    app.run()
+    db.init_app(app)
+
+    # Views
+    app.add_url_rule(
+        '/gebruikers/',
+        view_func=GebruikerView.as_view('gebruiker_view')
+    )
+    app.add_url_rule(
+        '/gebruikers/<gebruiker_id>',
+        view_func=GebruikerDetailView.as_view('gebruiker_detail_view')
+    )
+    app.add_url_rule(
+        '/gebruikers/<gebruiker_id>/burger/',
+        view_func=BurgerView.as_view('burger_view')
+    )
+    return app
