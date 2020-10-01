@@ -26,7 +26,7 @@ new_burger_schema = {
             "type": "string",
         },
         "huisnummer": {
-            "type": "int",
+            "type": "integer",
         },
         "huisletter": {
             "type": "string",
@@ -52,7 +52,7 @@ new_burger_schema = {
     ]
 }
 
-edit_burger_schema = new_burger_schema
+edit_burger_schema = new_burger_schema.copy()
 edit_burger_schema["required"] = []
 
 class NewBurgerInputs(Inputs):
@@ -70,18 +70,18 @@ class BurgerView(MethodView):
         """ Return a Burger for current Gebruiker """
         gebruiker = get_gebruiker(gebruiker_id)
         if not gebruiker.burger:
-            return {"error": "The current Gebruiker does not have a Burger"}, 404
+            return {"errors": ["The current Gebruiker does not have a Burger"]}, 404
         return {"data": gebruiker.burger.to_dict()}, 200
 
     def post(self, gebruiker_id):
         """ Create and return a new Burger for the current Gebruiker """
         gebruiker = get_gebruiker(gebruiker_id)
         if gebruiker.burger:
-            return {"error": "The current Gebruiker already has a Burger"}, 409
+            return {"errors": ["The current Gebruiker already has a Burger"]}, 409
 
         inputs = NewBurgerInputs(request)
         if not inputs.validate():
-            return {"error": inputs.errors}, 400
+            return {"errors": inputs.errors}, 400
 
         burger = Burger()
         burger.gebruiker = gebruiker
@@ -95,11 +95,11 @@ class BurgerView(MethodView):
         """ Create and return a new Burger for the current Gebruiker """
         gebruiker = get_gebruiker(gebruiker_id)
         if not gebruiker.burger:
-            return {"error": "The current Gebruiker does not have a Burger"}, 404
+            return {"errors": ["The current Gebruiker does not have a Burger"]}, 404
 
         inputs = EditBurgerInputs(request)
         if not inputs.validate():
-            return {"error": inputs.errors}, 400
+            return {"errors": inputs.errors}, 400
 
         for key, value in request.json.items():
             setattr(gebruiker.burger, key, value)

@@ -21,15 +21,18 @@ def create_app(test_config=None):
 
     # Views
     app.add_url_rule(
-        '/gebruikers/',
-        view_func=GebruikerView.as_view('gebruiker_view')
+        '/gebruikers',
+        view_func=GebruikerView.as_view('gebruiker_view'),
+        strict_slashes=False
     )
     app.add_url_rule(
         '/gebruikers/<gebruiker_id>',
-        view_func=GebruikerDetailView.as_view('gebruiker_detail_view')
+        view_func=GebruikerDetailView.as_view('gebruiker_detail_view'),
+        strict_slashes=False
     )
     app.add_url_rule(
-        '/gebruikers/<gebruiker_id>/burger/',
-        view_func=BurgerView.as_view('burger_view')
+        '/gebruikers/<gebruiker_id>/burger',
+        view_func=BurgerView.as_view('burger_view'),
+        strict_slashes=False
     )
     return app

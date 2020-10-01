@@ -38,7 +38,7 @@ class GebruikerDetailView(MethodView):
         """ Update the current Gebruiker """
         inputs = EditGebruikerInputs(request)
         if not inputs.validate():
-            return {"error": inputs.errors}, 400
+            return {"errors": inputs.errors}, 400
 
         gebruiker = get_gebruiker(gebruiker_id)
         for key, value in request.json.items():

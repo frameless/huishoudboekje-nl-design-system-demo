@@ -1,31 +1,34 @@
-import pytest
-#from hhb_models import Gebruiker
+""" Test GET /gebruikers """
+from datetime import date
+from hhb_models import Gebruiker, Burger
 
 def test_gebruikers_get_empty_db(app):
-    """Start with a blank database."""
-    response = app.test_client().get('/gebruikers/')
+    """ Test gebruikers call with empty database. """
+    response = app.test_client().get('/gebruikers')
+    assert response.status_code == 200
     assert {'data': []} == response.json
 
-def test_gebruikers_get_single_gebruiker(app):
-    """Start with a blank database."""
+def test_gebruikers_get_single_gebruiker(app, session):
+    """ Test gebruikers call with a single gebruiker in database. """
+    gebruiker = Gebruiker(
+        email="a@b.c",
+        telefoonnummer="0612345678",
+    )
+    burger = Burger(
+        gebruiker=gebruiker,
+    )
+    session.add(gebruiker)
+    session.add(burger)
+    session.flush()
     client = app.test_client()
-    response = client.post('/gebruikers/', data='{"email": "a@b.c", "telefoonnummer": "1234", "geboortedatum": "2020-01-01"}', content_type='application/json')
-    print("--")
-    print(response.json)
-    print("--")
-    response = client.get('/gebruikers/')
-    print(response.json)
-    print("--")
-    assert "a@b.c" == response.json["data"][0]["email"]
-
-def test_gebruikers_get_single_gebruiker_tmp(app):
-    """Start with a blank database."""
-    client = app.test_client()
-    response = client.post('/gebruikers/', data='{"email": "c@b.a", "telefoonnummer": "1234", "geboortedatum": "2020-01-01"}', content_type='application/json')
-    print("--")
-    print(response.json)
-    print("--")
-    response = client.get('/gebruikers/')
-    print(response.json)
-    print("--")
-    assert "c@b.a" == response.json["data"][0]["email"]
+    response = client.get('/gebruikers')
+    assert response.status_code == 200
+    assert response.json["data"] == [
+        {
+            "id": 1,
+            "burger_id": 1,
+            "email": "a@b.c",
+            "telefoonnummer": "0612345678",
+            "geboortedatum": ""
+        }
+    ]

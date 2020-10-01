@@ -1,3 +1,4 @@
-from gebruikers_service.views.gebruiker import GebruikerView
-from gebruikers_service.views.gebruiker_detail import GebruikerDetailView
-from gebruikers_service.views.burger import BurgerView
+""" gebruikers_service views module """
+from gebruikers_service.views.gebruikers import GebruikerView
+from gebruikers_service.views.gebruikers_detail import GebruikerDetailView
+from gebruikers_service.views.burgers import BurgerView

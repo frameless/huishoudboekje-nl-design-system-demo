@@ -36,17 +36,14 @@ class Gebruiker(db.Model):
 
         return return_data
 
-    def __repr__(self):
-        return f"<Gebruiker(id='{self.id}')>"
-
 def get_gebruiker(gebruiker_id: int) -> Gebruiker:
     """ Get Gebruiker object based on id """
     try:
         int(gebruiker_id)
     except ValueError:
-        abort(make_response({"error": "The supplied gebruiker_id is not a number."}, 400))
+        abort(make_response({"errors": ["The supplied gebruiker_id is not a number."]}, 400))
 
     try:
         return db.session.query(Gebruiker).filter_by(id=gebruiker_id).one()
     except NoResultFound:
-        abort(make_response({"error": "The requested resource could not be found."}, 404))
+        abort(make_response({"errors": ["The requested resource could not be found."]}, 404))

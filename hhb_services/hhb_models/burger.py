@@ -38,6 +38,3 @@ class Burger(db.Model):
             "postcode": self.postcode,
             "woonplaatsnaam": self.woonplaatsnaam
         }
-
-    def __repr__(self):
-        return f"<Burger(id='{self.id})'>"

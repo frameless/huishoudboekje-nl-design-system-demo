@@ -11,6 +11,8 @@ yarn-debug.log*
 yarn-error.log*
 
 .idea
+.coverage
+coverage_html
 
 __pycache__
 *.egg-info
