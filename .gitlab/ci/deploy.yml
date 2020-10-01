@@ -7,28 +7,34 @@
     url: https://$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN/
     on_stop: destroy-app
   script:
-    - helm uninstall --namespace $REVIEW_NAMESPACE $REVIEW_NAMESPACE-frontend || true
-    - helm uninstall --namespace $REVIEW_NAMESPACE $REVIEW_NAMESPACE-backend || true
-    - helm uninstall --namespace $REVIEW_NAMESPACE $REVIEW_NAMESPACE-dex || true
     - |
       helm repo add stable "https://kubernetes-charts.storage.googleapis.com"
+      helm repo add zalando-operator "https://raw.githubusercontent.com/zalando/postgres-operator/master/charts/postgres-operator"
+      helm repo add zalando-operator-ui "https://raw.githubusercontent.com/zalando/postgres-operator/master/charts/postgres-operator-ui"
       helm repo update
+    - |
+      helm upgrade --install --create-namespace --namespace $REVIEW_NAMESPACE postgres-operator zalando-operator/postgres-operator \
+        --debug \
+      	--values helm/postgres-operator.yaml \
+        --set podServiceAccount.name=${REVIEW_NAMESPACE}-postgres-pod
     - helm dependency build helm/charts/huishoudboekje-review
     - (cd helm/charts/medewerker-frontend; ln -s ../../../frontend/theme/sloothuizen theme)
     - |
       export OIDC_HOST="dex-sloothuizen-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN"
+      export OIDC_SECRET="ZwwcL2zjQyJUBnFPVoOb"
       export HHB_HOST="$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN"
     - |
-      helm upgrade --install --create-namespace "huishoudboekje" ./helm/charts/huishoudboekje-review \
+      helm upgrade --install --create-namespace "huishoudboekje" helm/charts/huishoudboekje-review \
+        --debug \
         --namespace $REVIEW_NAMESPACE \
-        --values ./helm/charts/huishoudboekje-review/values.yaml \
+        --values helm/charts/huishoudboekje-review/values.yaml \
         --set "global.imageTag=$IMAGE_TAG" \
         --set "medewerker-frontend.ingress.hosts[0].host=$HHB_HOST" \
         --set "medewerker-frontend.ingress.hosts[0].paths[0]=/" \
         --set "medewerker-backend.ingress.hosts[0].host=$HHB_HOST" \
         --set "medewerker-backend.ingress.hosts[0].paths[0]=/api/" \
         --set "medewerker-backend.oidc.issuer=https://$OIDC_HOST" \
-        --set "medewerker-backend.oidc.clientSecret=ZwwcL2zjQyJUBnFPVoOb" \
+        --set "medewerker-backend.oidc.clientSecret=${OIDC_SECRET}" \
         --set "medewerker-backend.oidc.authorizationEndpoint=https://$OIDC_HOST/auth" \
         --set "medewerker-backend.oidc.redirectUri=https://$HHB_HOST/api/oidc_callback" \
         --set "medewerker-backend.oidc.tokenUri=https://$OIDC_HOST/token" \
@@ -36,8 +42,21 @@
         --set "medewerker-backend.oidc.userinfoUri=https://$OIDC_HOST/userinfo" \
         --set "dex.ingress.hosts[0]=$OIDC_HOST" \
         --set "dex.config.issuer=https://$OIDC_HOST" \
-        --set "dex.config.staticClients[0].secret=ZwwcL2zjQyJUBnFPVoOb" \
+        --set "dex.config.staticClients[0].secret=${OIDC_SECRET}" \
         --set "dex.config.staticClients[0].redirectURIs[0]=https://$HHB_HOST/api/oidc_callback"
+    - |
+      FAILED=true
+      for i in $(seq 1 8); do
+        if helm test --logs --namespace $REVIEW_NAMESPACE huishoudboekje; then
+          FAILED=false
+          break
+        else
+          sleep 6
+        fi
+      done
+      if $FAILED; then
+        exit 1
+      fi
   only:
     - branches@commonground/huishoudboekje/app-new
   tags:

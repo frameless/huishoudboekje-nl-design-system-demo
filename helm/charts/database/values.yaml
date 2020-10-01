@@ -1,0 +1,25 @@
+# Default values for database.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+global:
+  minikube: false
+nameOverride: "huishoudboekje"
+fullnameOverride: ""
+
+postgresql:
+  volumeSize: 1Gi
+  replicaCount: 1
+  version: "12"
+
+databases:
+  - gebruikers
+  - organisaties
+  - afspraken
+
+traefik:
+  enabled: false
+  minikube:
+    host: postgres.hhb.minikube
+  port: 5432
+  entrypoint: "postgresql"

@@ -9,4 +9,4 @@ Huishoudboekje moet op een [Haven](httsp://haven.commonground.nl) compliant clus
 
 # Voorbereiding
 
-Met de voorbereiding van een installatie kan alvast worden begonnen met behulp van [Minikube](../developers/local-minikube.md)
+Met de voorbereiding van een installatie kan alvast worden begonnen met behulp van [Minikube](../developers/minikube.md)

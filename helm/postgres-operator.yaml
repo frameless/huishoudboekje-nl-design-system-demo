@@ -1,0 +1,2 @@
+configKubernetes:
+  watched_namespace: ""

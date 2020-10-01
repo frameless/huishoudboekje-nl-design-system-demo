@@ -1,2 +1,16 @@
 dex:
   enabled: false
+
+postgres-operator:
+  configKubernetes:
+    watched_namespace: ""
+
+database:
+  enabled: true
+
+  nameOverride: "huishoudboekje"
+
+  databases:
+    - gebruikers
+    - organisaties
+    - afspraken

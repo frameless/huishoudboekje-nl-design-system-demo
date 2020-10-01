@@ -46,11 +46,12 @@ docs:
     hosts:
       - "docs.hhb.minikube"
 
-review-page:
-  ingress:
-    enabled: true
-    hosts:
-      - "review.hhb.minikube"
-  config:
-    frontend: "hhb.minikube"
-    docs: "docs.hhb.minikube"
+database:
+  enabled: true
+
+  nameOverride: "huishoudboekje"
+
+  databases:
+    - gebruikers
+    - organisaties
+    - afspraken

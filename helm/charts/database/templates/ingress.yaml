@@ -1,0 +1,40 @@
+{{- if .Values.traefik.enabled -}}
+{{- $fullName := include "database.fullname" . -}}
+{{- if .Capabilities.APIVersions.Has "traefik.containo.us/v1alpha1" -}}
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRouteTCP
+metadata:
+  name: {{ $fullName }}
+  labels:
+    {{- include "database.labels" . | nindent 4 }}
+spec:
+  entryPoints:
+    - {{ .Values.traefik.entrypoint | quote }}
+  routes:
+    - match: HostSNI(`*`)
+      services:
+        - name: {{ include "database.databasename" . }}
+          port: {{ .Values.traefik.port }}
+{{- if .Values.global.minikube }}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ $fullName }}
+  labels:
+  {{- include "database.labels" . | nindent 4 }}
+spec:
+  rules:
+    - host: {{ .Values.traefik.minikube.host | quote }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "database.databasename" . }}
+                port:
+                  number: 5432
+{{- end -}}
+{{- end -}}
+{{- end -}}

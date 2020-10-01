@@ -3,6 +3,7 @@ globalArguments: []
 additionalArguments:
   - "--accessLog"
   - "--api.insecure"
+  - "--entryPoints.postgresql.address=:5432/tcp"
 
 ports:
   traefik:
@@ -13,6 +14,10 @@ ports:
     expose: true
   websecure:
     hostPort: 443
+  postgresql:
+    port: 5432
+    hostPort: 5432
+    expose: true
 
 service:
   type: NodePort

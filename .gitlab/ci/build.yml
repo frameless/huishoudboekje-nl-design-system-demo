@@ -48,6 +48,8 @@ build-helm:
     entrypoint: [""]
   before_script:
     - helm repo add stable "https://kubernetes-charts.storage.googleapis.com"
+    - helm repo add zalando-operator "https://raw.githubusercontent.com/zalando/postgres-operator/master/charts/postgres-operator"
+    - helm repo add zalando-operator-ui "https://raw.githubusercontent.com/zalando/postgres-operator/master/charts/postgres-operator-ui"
     - helm repo update
   script:
     - helm dependency build helm/charts/huishoudboekje
