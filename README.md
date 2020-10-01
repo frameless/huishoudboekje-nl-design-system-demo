@@ -3,7 +3,7 @@ The scalable version of Huishoudboekje the software, usable for all Dutch munici
 Huishoudboekje is developed based on the vision of [Common Ground](https://commonground.nl).
 
 ## Installation
-To install Huishoudboekje follow [installation instructions](docs/installation.md)
+To install Huishoudboekje follow [installation instructions](docs/docs/documentatie/installatie.md)
 
 ## Technical Stack
 Huishoudboekje uses the following technical stack
@@ -14,4 +14,4 @@ Huishoudboekje uses the following technical stack
 Huishoudboekje consists of several independent software components, packages as Docker containers.
 
 ## Development
-To run the full Huishoudboekje stack on a local development stack, see [Development setup](docs/local-minikube.md)
+To run the full Huishoudboekje stack on a local development stack, see [Development setup](docs/docs/developers/local-minikube.md)
