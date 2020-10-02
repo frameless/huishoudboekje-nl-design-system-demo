@@ -31,7 +31,7 @@ new_burger_schema = {
         "huisletter": {
             "type": "string",
         },
-        "huistoevoeging": {
+        "huisnummertoevoeging": {
             "type": "string",
         },
         "postcode": {
