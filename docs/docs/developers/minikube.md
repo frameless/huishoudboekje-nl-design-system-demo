@@ -20,7 +20,7 @@ Read the [minikube README](https://github.com/kubernetes/minikube) for more info
 ### Configure the vm driver for minikube:
 
 - for Linux: `minikube config set vm-driver kvm2`
-- for MacOs: `minikube config set vm-driver hyperkit`
+- for macOS: `minikube config set vm-driver hyperkit`
 
 For developers, it's advised to setup minikube with 4 cores, 8GB RAM and at least 100G storage.
 e.g.: `minikube start --cpus 4 --memory 8192 --disk-size=100G`
@@ -33,7 +33,7 @@ e.g.: `minikube start --cpus 4 --memory 8192 --disk-size=100G`
 minikube addons enable ingress-dns
 ```
 
-On MacOS, create a resolver file for Minikube:
+On macOS, create a resolver file for Minikube:
 
 ```bash
 sudo mkdir -p /etc/resolver
