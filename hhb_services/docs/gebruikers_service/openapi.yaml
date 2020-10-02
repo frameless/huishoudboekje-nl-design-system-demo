@@ -1,0 +1,390 @@
+openapi: 3.0.0
+info:
+  version: 0.1.0
+  title: HHB Gebruiker Service
+  description: API voor het beheren van gebruikers van het HHB
+  
+paths:
+
+  # Gebruiker views
+  /gebruikers:
+    get:
+      description: Geeft alle gebruikers van het HHB 
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Gebruiker'
+        '5XX':
+          description: Unexpected error.
+    post:
+      description: Voeg nieuw gebruiker toe aan het HHB
+      parameters:
+        - name: telefoonnummer
+          required: true
+          in: query
+          schema:
+            type: string
+            example: +31612345678
+        - name: email
+          required: true
+          in: query
+          schema:
+            type: string
+            example: henk.poortvliet@sloothuizen.nl
+        - name: geboortedatum
+          required: true
+          in: query
+          schema:
+            type: string
+            format: date
+            example: "1980-05-24"
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gebruiker'
+        '400':
+          description: Bad Request
+        '5XX':
+          description: Unexpected error.
+
+  # Gebruiker detail views
+  /gebruikers/{gebruiker_id}:
+    parameters:
+      - name: gebruiker_id
+        in: path
+        required: true
+        description: Gebruiker id
+        schema:
+          type : integer
+          example: 42
+    get:
+      description: Geeft specifieke gebruiker uit het HHB
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gebruiker'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+        '5XX':
+          description: Unexpected error.
+    patch:
+      description: Update gebruiker gegevens in het HHB
+      parameters:
+        - name: telefoonnummer
+          required: false
+          in: query
+          schema:
+            type: string
+            example: +31612345678
+        - name: email
+          required: false
+          in: query
+          schema:
+            type: string
+            example: henk.poortvliet@sloothuizen.nl
+        - name: geboortedatum
+          required: false
+          in: query
+          schema:
+            type: string
+            format: date
+            example: "1980-05-24"
+      responses:
+        '200': 
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gebruiker'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+        '5XX':
+          description: Unexpected error.
+    delete:
+      description: Verwijder gebruiker uit het HHB
+      parameters:
+        - name: gebruiker_id
+          in: path
+          required: true
+          description: Gebruiker id
+          schema:
+            type : integer
+            example: 42
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+        '5XX':
+          description: Unexpected error.
+
+  # Burger views
+  /gebruikers/{gebruiker_id}/burger:
+    parameters:
+      - name: gebruiker_id
+        in: path
+        required: true
+        description: Gebruiker id
+        schema:
+          type : integer
+          example: 42
+    get:
+      description: Geeft burger voor specifieke gebruiker in het HHB
+      responses:
+        '200':
+          description: OK
+          headers:
+            ETag:
+              schema:
+                type: string
+              description: Entity tag
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Burger'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+        '5XX':
+          description: Unexpected error.
+    post:
+      description: Update burger gegevens voor specifieke gebruiker in het HHB
+      parameters:
+        - name: voornamen
+          required: true
+          in: query
+          schema:
+            type: string
+            example: "Henk"
+        - name: voorletters
+          required: true
+          in: query
+          schema:
+            type: string
+            example: "H."        
+        - name: voorvoegsel
+          required: false
+          in: query
+          schema:
+            type: string
+            example: "van"           
+        - name: geslachtsnaam
+          required: true
+          in: query
+          schema:
+            type: string
+            example: "Poortman"
+        - name: straatnaam
+          required: true
+          in: query
+          schema:
+            type: string
+            example: "Schoolstraat"
+        - name: huisnummer
+          required: true
+          in: query
+          schema:
+            type: integer
+            example: 1337
+        - name: huisletter
+          required: false
+          in: query
+          schema:
+            type: string
+            example: "a"
+        - name: huistoevoeging
+          required: false
+          in: query
+          schema:
+            type: string
+            example: "bis"
+        - name: postcode
+          required: true
+          in: query
+          schema:
+            type: string
+            example: "1234AB"
+        - name: woonplaatsnaam
+          required: true
+          in: query
+          schema:
+            type: string
+            example: "Sloothuizen"
+      responses:
+        '200': 
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Burger'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+        '5XX':
+          description: Unexpected error.          
+    patch:
+      description: Update burger gegevens voor specifieke gebruiker in het HHB
+      parameters:
+        - name: voornamen
+          required: false
+          in: query
+          schema:
+            type: string
+            example: "Henk"
+        - name: voorletters
+          required: false
+          in: query
+          schema:
+            type: string
+            example: "H."        
+        - name: voorvoegsel
+          required: false
+          in: query
+          schema:
+            type: string
+            example: "van"           
+        - name: geslachtsnaam
+          required: false
+          in: query
+          schema:
+            type: string
+            example: "Poortman"
+        - name: straatnaam
+          required: false
+          in: query
+          schema:
+            type: string
+            example: "Schoolstraat"
+        - name: huisnummer
+          required: false
+          in: query
+          schema:
+            type: integer
+            example: 1337
+        - name: huisletter
+          required: false
+          in: query
+          schema:
+            type: string
+            example: "a"
+        - name: huistoevoeging
+          required: false
+          in: query
+          schema:
+            type: string
+            example: "bis"
+        - name: postcode
+          required: false
+          in: query
+          schema:
+            type: string
+            example: "1234AB"
+        - name: woonplaatsnaam
+          required: false
+          in: query
+          schema:
+            type: string
+            example: "Sloothuizen"
+      responses:
+        '200': 
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Burger'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+        '5XX':
+          description: Unexpected error.
+    delete:
+      description: Verwijder burger van specifieke gebruiker in het HHB
+      parameters:
+        - name: gebruiker_id
+          in: path
+          required: true
+          description: Gebruiker id
+          schema:
+            type : integer
+            example: 42
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+        '5XX':
+          description: Unexpected error.
+
+components:
+  schemas:
+    Gebruiker:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 23
+        telefoonnummer:
+          type: string
+          example: "+31612345678"
+        email:
+          type: string
+          example: henk.poortvliet@sloothuizen.nl
+        geboortedatum:
+          type: string
+          format: date
+          example: "1980-05-24"
+    Burger:
+      type: object
+      properties:
+        voornamen:
+          type: string
+          example: "Henk"
+        voorletters:
+          type: string
+          example: "H."        
+        voorvoegsel:
+          type: string
+          example: "van"           
+        geslachtsnaam:
+          type: string
+          example: "Poortman"
+        straatnaam:
+          type: string
+          example: "Schoolstraat"
+        huisnummer:
+          type: integer
+          example: 1337
+        huisletter:
+          type: string
+          example: "a"
+        huistoevoeging:
+          type: string
+          example: "bis"
+        postcode:
+          type: string
+          example: "1234AB"
+        woonplaatsnaam:
+          type: string
+          example: "Sloothuizen"
