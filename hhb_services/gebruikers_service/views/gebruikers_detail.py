@@ -5,7 +5,7 @@ from flask_inputs import Inputs
 from flask_inputs.validators import JsonSchema
 from hhb_models.gebruiker import get_gebruiker
 from hhb_services.database import db
-from gebruikers_service.views.gebruikers import gebruiker_schema
+from .gebruikers import gebruiker_schema
 
 class EditGebruikerInputs(Inputs):
     """ JSON validator for updating a Gebruiker """
