@@ -5,27 +5,11 @@ from flask_inputs import Inputs
 from flask_inputs.validators import JsonSchema
 from hhb_models.gebruiker import get_gebruiker
 from hhb_services.database import db
-
-edit_gebruiker_schema = {
-   "type": "object",
-   "properties": {
-       "telefoonnummer": {
-           "type": "string",
-       },
-       "email": {
-           "type": "string",
-       },
-       "geboortedatum": {
-           "type": "string",
-           "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
-       }
-   },
-   "required": []
-}
+from gebruikers_service.views.gebruikers import gebruiker_schema
 
 class EditGebruikerInputs(Inputs):
     """ JSON validator for updating a Gebruiker """
-    json = [JsonSchema(schema=edit_gebruiker_schema)]
+    json = [JsonSchema(schema=gebruiker_schema)]
 
 class GebruikerDetailView(MethodView):
     """ Methods for /gebruiker/<gebruiker_id> path """

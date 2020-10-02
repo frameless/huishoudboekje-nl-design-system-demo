@@ -6,7 +6,7 @@ from flask_inputs.validators import JsonSchema
 from hhb_models.gebruiker import Gebruiker
 from hhb_services.database import db
 
-new_gebruiker_schema = {
+gebruiker_schema = {
    "type": "object",
    "properties": {
        "telefoonnummer": {
@@ -25,7 +25,7 @@ new_gebruiker_schema = {
 
 class NewGebruikerInputs(Inputs):
     """ JSON validator for creating a new Gebruiker """
-    json = [JsonSchema(schema=new_gebruiker_schema)]
+    json = [JsonSchema(schema=gebruiker_schema)]
 
 class GebruikerView(MethodView):
     """ Methods for /gebruiker/ path """
