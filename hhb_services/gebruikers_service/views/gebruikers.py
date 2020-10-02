@@ -20,7 +20,7 @@ new_gebruiker_schema = {
            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
        }
    },
-   "required": ["telefoonnummer", "email", "geboortedatum"]
+   "required": []
 }
 
 class NewGebruikerInputs(Inputs):
