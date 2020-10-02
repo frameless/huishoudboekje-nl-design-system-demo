@@ -1,3 +1,4 @@
+{{- if false -}}
 apiVersion: v1
 kind: Pod
 metadata:
@@ -13,3 +14,4 @@ spec:
       command: ['wget']
       args: ['{{ include "medewerker-backend.fullname" . }}:{{ .Values.service.port }}']
   restartPolicy: Never
+{{- end -}}

@@ -20,7 +20,7 @@ Read the [minikube README](https://github.com/kubernetes/minikube) for more info
 ### Configure the vm driver for minikube:
 
 - for Linux: `minikube config set vm-driver kvm2`
-- for Mac: `minikube config set vm-driver hyperkit`
+- for macOS: `minikube config set vm-driver hyperkit`
 
 For developers, it's advised to setup minikube with 4 cores, 8GB RAM and at least 100G storage.
 e.g.: `minikube start --cpus 4 --memory 8192 --disk-size=100G`
@@ -33,25 +33,27 @@ e.g.: `minikube start --cpus 4 --memory 8192 --disk-size=100G`
 minikube addons enable ingress-dns
 ```
 
-On MacOS, create a resolver file for Minikube:
+On macOS, create a resolver file for Minikube:
 
 ```bash
 sudo mkdir -p /etc/resolver
-sudo touch /etc/resolver/minikube
 ```
 
 And add the following content to `/etc/resolver/minikube`:
 
-```nameserver $(minikube ip)
+```shell script
+sudo tee /etc/resolver/minikube <<EOF
+nameserver $(minikube ip)
 search_order 1
 timeout 5
+EOF
 ```
 
 ## 3. Configure docker env in shell
 
 To let the docker commands make use of Minikube execute the following before proceeding or add it to your shell profile:
 
-```bash
+```shell script
 eval $(minikube docker-env)
 ```
 
@@ -59,22 +61,28 @@ eval $(minikube docker-env)
 
 Once minikube is running, install Traefik as ingress controller for web and rest-api requests.
 
-```bash
+```shell script
 helm repo add traefik https://containous.github.io/traefik-helm-chart
 helm repo update
 
 helm install traefik traefik/traefik --namespace traefik --create-namespace --values helm/traefik-values-minikube.yaml
 ```
 
-##. 5. Build and install Huishoudboekje components
+## 5. Build and install Huishoudboekje components
 
 When Traefik is running, you can build and start all the HHB components by executing the make command in the Huishoudboekje repository root:
 
-```bash
+```shell script
 make
 ```
 
-##. 6. You may now test the following sites:
+
+## 6. You may now test the following sites:
 
 - http://traefik.minikube:9000/                     Webinterface showing the status of the traefik ingress controller
 - http://hhb.minikube/                              Huishoudboekje frontend
+
+Other connection options can be discovered using
+```shell script
+helm status --namespace huishoudboekje huishoudboekje
+```

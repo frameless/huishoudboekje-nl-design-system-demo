@@ -8,10 +8,25 @@ To install Huishoudboekje follow [installation instructions](docs/docs/documenta
 ## Technical Stack
 Huishoudboekje uses the following technical stack
 - React (CRA)
+- Python Flask
 - Docker
 
 ### Components
 Huishoudboekje consists of several independent software components, packages as Docker containers.
 
 ## Development
-To run the full Huishoudboekje stack on a local development stack, see [Development setup](docs/docs/developers/local-minikube.md)
+
+Local development is easy and is described [here](docs/docs/developers/local-development.md)
+
+### Minikube
+To run the full Huishoudboekje stack on a local kubernetes development stack using [minikube](docs/docs/developers/minikube.md)
+
+#### Database
+
+All data for our own services is stored in a single database that is managed by the [zalando postgres operator](https://postgres-operator.readthedocs.io/en/latest/)
+ 
+Every service receives it's own user and database to keep the data separated.\
+The credentials are stored in secrets and can be mounted to build the connection.
+
+In the installation instructions and review apps the operator is deployed to every namespace to be independent of
+cluster level configuration. The parameters that are passed to it make this possible. 

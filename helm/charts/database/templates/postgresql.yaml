@@ -1,0 +1,24 @@
+apiVersion: "acid.zalan.do/v1"
+kind: postgresql
+metadata:
+  name: {{ include "database.databasename" . | quote }}
+  labels:
+  {{- include "database.labels" . | nindent 4 }}
+spec:
+  volume:
+    size: {{ .Values.postgresql.volumeSize }}
+  numberOfInstances: {{ .Values.postgresql.replicaCount }}
+  postgresql:
+    version: {{ .Values.postgresql.version | quote }}
+  teamId: {{ include "database.name" .  | quote }}
+  users:
+    {{ include "database.name" . }}:  # database owner
+      - superuser
+      - createdb
+    {{- range $database := .Values.databases }}
+    {{ $database }}: []   # role for application {{ $database }}
+    {{- end }}
+  databases: # dbname: owner
+    {{- range $database := .Values.databases }}
+    {{ $database }}: {{ $database | quote }}
+    {{- end }}
