@@ -14,4 +14,4 @@ of
      
 ### Packages toevoegen
 
-Dependencies moeten gedefineerd worden in het setup.py bestand.
+Dependencies moeten gedefinieerd worden in `setup.py`.
