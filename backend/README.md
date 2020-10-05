@@ -1,5 +1,5 @@
 
-# hhb_backend
+# HuishoudBoekje Backend
 Laag 4 in het Common Ground-lagenmodel. GraphQL-backendserver
 
 ## Installatie
