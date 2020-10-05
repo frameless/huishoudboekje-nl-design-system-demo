@@ -4,9 +4,10 @@ import os
 import secrets
 
 import itsdangerous
-from flask import Flask, jsonify, Response, redirect
+from flask import Flask, jsonify, Response, redirect, render_template
 from flask_oidc import OpenIDConnect
-
+from flask_graphql import GraphQLView
+from hhb_backend.graphql import schema
 
 class ReverseProxied(object):
 
@@ -102,8 +103,17 @@ def login():
 
 @app.route('/')
 def hello_world():
-    return redirect('/', code=301)
+    return {}, 200
 
+app.add_url_rule('/graphql', view_func=GraphQLView.as_view(
+    'graphql',
+    schema=schema,
+    graphiql=True,
+))
+
+@app.route('/graphql/help')
+def voyager():
+    return render_template('voyager.html')
 
 @app.route('/logout')
 def logout():

@@ -1,13 +1,17 @@
 
+# hhb_backend
+Laag 4 in het common ground algen model. GraphQL backend server
 
-## The environment
-```shell script
-    conda env create -f /path/to/environment.yml
+## Instalatie
+Normale instalatie
 
-    conda env update -f /path/to/environment.yml
-```
-    
-### Adding packages
+```python3 setup.py install```
 
-Packages are prefered from the conda channels but pip is also supported. 
-Make sure when adding packages with `pip` that the executable from the conda environment is used.
+Development instalatie
+```pip install -e .```
+of
+```pip install -r requirements.txt```
+     
+### Packages toevoegen
+
+Dependencies moeten gedefineerd worden in het setup.py bestand.

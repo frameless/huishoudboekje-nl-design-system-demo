@@ -1,12 +1,15 @@
-FROM continuumio/miniconda3:4.8.2 AS build
-# Build Conda virtual environment
+FROM python:3.8-slim-buster AS build
+
+# set the working directory in the container
 WORKDIR /opt/app
-COPY environment.yaml .
 
-RUN conda env create --quiet --name venv --file environment.yaml && \
-    conda init bash && \
-    echo "conda activate venv" >> ~/.bashrc
+# copy the content of the local src directory to the working directory
+COPY ./ ./     
 
+# install the package
+RUN python3 setup.py install
+
+# Set gunicorn settings
 ARG PORT=8000
 ARG WORKERS=2
 ARG THREADS=4
@@ -17,9 +20,5 @@ ENV PORT="${PORT}" \
 EXPOSE ${PORT}
 
 # Runtime envrionment
-COPY docker/start.sh .
-CMD ["bash", "--login", "-c", "exec ./start.sh"]
+CMD ["bash", "--login", "-c", "exec ./docker/start.sh"]
 SHELL ["/bin/bash", "--login", "-c"]
-
-# Install the app
-COPY ./app .

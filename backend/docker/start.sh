@@ -9,4 +9,4 @@ exec gunicorn \
   --log-level=info \
   --capture-output \
   --worker-class=gthread \
-  main:app
+  hhb_backend.app:app
