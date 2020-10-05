@@ -2,7 +2,7 @@
 # hhb_backend
 Laag 4 in het Common Ground-lagenmodel. GraphQL-backendserver
 
-## Instalatie
+## Installatie
 Normale installatie
 
 ```python3 setup.py install```
