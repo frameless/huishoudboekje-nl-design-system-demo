@@ -63,6 +63,7 @@ app.config.from_mapping({
     'OIDC_SCOPES': ['openid', 'email', 'groups', 'profile'],
     # 'OIDC_CLOCK_SKEW': 360,  #
     'OIDC_ID_TOKEN_COOKIE_SECURE': os.getenv('OIDC_ID_TOKEN_COOKIE_SECURE', False),
+    'HHB_SERVICES_URL': os.getenv('HHB_SERVICES_URL', "http://localhost:5000")
 })
 if 'PREFIX' in os.environ:
     prefix = os.environ.get('PREFIX')
@@ -104,7 +105,14 @@ app.add_url_rule('/graphql', view_func=GraphQLView.as_view(
     'graphql',
     schema=schema,
     graphiql=True,
-))
+), strict_slashes=False)
+
+# Optional, for adding batch query support (used in Apollo-Client)
+app.add_url_rule('/graphql/batch', view_func=GraphQLView.as_view(
+    'graphql_batch',
+    schema=schema,
+    batch=True
+), strict_slashes=False)
 
 @app.route('/graphql/help')
 def voyager():
