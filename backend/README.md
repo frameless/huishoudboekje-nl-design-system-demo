@@ -3,7 +3,7 @@
 Laag 4 in het Common Ground-lagenmodel. GraphQL-backendserver
 
 ## Instalatie
-Normale instalatie
+Normale installatie
 
 ```python3 setup.py install```
 
