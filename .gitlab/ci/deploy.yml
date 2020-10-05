@@ -16,8 +16,8 @@
       helm upgrade --install --create-namespace --namespace $REVIEW_NAMESPACE postgres-operator zalando-operator/postgres-operator \
         --debug \
       	--values helm/postgres-operator.yaml \
-        --set podServiceAccount.name=${REVIEW_NAMESPACE}-postgres-pod
-        # --set serviceAccount.name=${REVIEW_NAMESPACE}-postgres-operator
+        --set podServiceAccount.name=${REVIEW_NAMESPACE}-postgres-pod \
+        --set serviceAccount.name=${REVIEW_NAMESPACE}-postgres-operator
     - helm dependency build helm/charts/huishoudboekje-review
     - (cd helm/charts/medewerker-frontend; ln -s ../../../frontend/theme/sloothuizen theme)
     - |
