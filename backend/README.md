@@ -7,7 +7,7 @@ Normale installatie
 
 ```python3 setup.py install```
 
-Development instalatie
+Installatie
 ```pip install -e .```
 of
 ```pip install -r requirements.txt```
