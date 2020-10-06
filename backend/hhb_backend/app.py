@@ -63,7 +63,6 @@ app.config.from_mapping({
     'OIDC_SCOPES': ['openid', 'email', 'groups', 'profile'],
     # 'OIDC_CLOCK_SKEW': 360,  #
     'OIDC_ID_TOKEN_COOKIE_SECURE': os.getenv('OIDC_ID_TOKEN_COOKIE_SECURE', False),
-    'HHB_SERVICES_URL': os.getenv('HHB_SERVICES_URL', "http://localhost:5000")
 })
 if 'PREFIX' in os.environ:
     prefix = os.environ.get('PREFIX')
