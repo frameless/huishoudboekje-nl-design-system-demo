@@ -100,11 +100,6 @@ def me():
 def login():
     return redirect('/', code=302)
 
-
-@app.route('/')
-def hello_world():
-    return {}, 200
-
 app.add_url_rule('/graphql', view_func=GraphQLView.as_view(
     'graphql',
     schema=schema,

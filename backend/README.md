@@ -1,26 +1,26 @@
 
 # HuishoudBoekje Backend
-Laag 4 in het Common Ground-lagenmodel. GraphQL-backendserver
+Layer 4 in the Common Ground-layermodel. GraphQL-backendserver
 
-## Installatie
-Normale installatie
+## Instalation
+Normal instalation
 
 ```
 python3 setup.py install
 ```
 
-Development instalatie
+Development instalation
 ```
 pip install -e .
 ```
-of
+or
 ```
 pip install -r requirements.txt
 ```
      
-### Packages toevoegen
+### Adding Packages
 
-Dependencies moeten gedefinieerd worden in `setup.py`.
+Dependencies have to be defined in `setup.py`.
 
 ## Run with docker
 
