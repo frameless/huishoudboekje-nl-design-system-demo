@@ -6,9 +6,7 @@ setup(
     packages=['hhb_backend'],
     scripts=[],
     url='',
-    license='LICENSE.txt',
     description='HuishoudBoekje GraphQL backend',
-    long_description=open('README.md').read(),
     install_requires=[
         'Flask>=1.1.2',
         'graphql-core<3,>=2.1',

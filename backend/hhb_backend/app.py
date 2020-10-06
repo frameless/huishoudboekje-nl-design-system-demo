@@ -58,7 +58,7 @@ secretKey = os.getenv('SECRET_KEY', secrets.token_urlsafe(16))
 app.config.from_mapping({
     'SECRET_KEY': secretKey,
     'SESSION_COOKIE_NAME': 'flask_session',
-    'OIDC_CLIENT_SECRETS': os.getenv('OIDC_CLIENT_SECRETS', './client_secrets.json'),
+    'OIDC_CLIENT_SECRETS': os.getenv('OIDC_CLIENT_SECRETS', './etc/client_secrets.json'),
     'OVERWRITE_REDIRECT_URI': os.getenv('OIDC_REDIRECT_URI', 'http://localhost:3000/api/oidc_callback'),
     'OIDC_SCOPES': ['openid', 'email', 'groups', 'profile'],
     # 'OIDC_CLOCK_SKEW': 360,  #

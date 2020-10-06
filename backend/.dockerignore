@@ -1,4 +1,7 @@
 **/node_modules
 **/__pycache__
 
-client_secrets.json
+etc/
+README.md
+Dockerfile
+.idea
