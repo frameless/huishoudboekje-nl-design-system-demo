@@ -28,7 +28,7 @@ huishoudboekje-test: huishoudboekje
 	helm test --logs --namespace $(NAMESPACE) $<
 
 .PHONY: huishoudboekje
-	huishoudboekje: helm/charts/huishoudboekje-review backend frontend
+huishoudboekje: helm/charts/huishoudboekje-review backend frontend
 	helm upgrade --install --create-namespace --namespace ${NAMESPACE} \
 		postgres-oprator zalando-operator/postgres-operator \
 		--values helm/postgres-operator.yaml \
@@ -46,6 +46,7 @@ helm/charts/%: helm/charts/%/Chart.lock
 %/Chart.lock: %/Chart.yaml
 	helm dependency update $(@D)
 
+.PHONY: backend frontend
 backend frontend:
 	$(eval IMAGE := $(REGISTRY_PREFIX)/$@:$(DOCKER_TAG))
 	docker build -t $(IMAGE) ./$@

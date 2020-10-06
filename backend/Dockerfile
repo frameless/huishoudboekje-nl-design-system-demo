@@ -1,25 +1,36 @@
-FROM continuumio/miniconda3:4.8.2 AS build
-# Build Conda virtual environment
-WORKDIR /opt/app
-COPY environment.yaml .
+FROM python:3.8-slim-buster AS build
 
-RUN conda env create --quiet --name venv --file environment.yaml && \
-    conda init bash && \
-    echo "conda activate venv" >> ~/.bashrc
+# set the working directory in the container
+RUN useradd --home-dir /app --create-home --shell /bin/bash app
+USER app
+WORKDIR /app
 
-ARG PORT=8000
-ARG WORKERS=2
-ARG THREADS=4
+# install the dependencies only for fast rebuilds
+COPY setup.py ./
+RUN mkdir -p /app/hhb_backend/ && python3 setup.py install --user --prefix=''
 
-ENV PORT="${PORT}" \
-    WORKERS="${WORKERS}" \
-    THREADS="${THREADS}"
-EXPOSE ${PORT}
+# copy the content of the local src directory to the working directory
+COPY ./ ./
+# install the package
+RUN python3 setup.py install --user --prefix=''
+
+# Set gunicorn settings
+ENV GUNICORN_PORT="8000" \
+    GUNICORN_WORKERS="2" \
+    GUNICORN_THREADS="4" \
+    GUNICORN_LOGLEVEL="info" \
+    PYTHONDONTWRITEBYTECODE="1" \
+    PYTHONUNBUFFERED="1" \
+    PATH="/app/.local/bin:${PATH}" \
+    APP_NAME="hhb_backend.app:app"
 
 # Runtime envrionment
-COPY docker/start.sh .
-CMD ["bash", "--login", "-c", "exec ./start.sh"]
-SHELL ["/bin/bash", "--login", "-c"]
-
-# Install the app
-COPY ./app .
+CMD ["bash", "-c", "exec gunicorn \
+  --workers=${GUNICORN_WORKERS} \
+  --threads=${GUNICORN_THREADS} \
+  --bind=0.0.0.0:${GUNICORN_PORT} \
+  --log-level=${GUNICORN_LOGLEVEL} \
+  --capture-output \
+  --worker-class=gthread \
+  --worker-tmp-dir /dev/shm \
+  ${APP_NAME}"]

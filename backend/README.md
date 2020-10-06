@@ -1,13 +1,29 @@
 
+# HuishoudBoekje Backend
+Layer 4 in the Common Ground-layermodel. GraphQL-backendserver
 
-## The environment
-```shell script
-    conda env create -f /path/to/environment.yml
+## Instalation
+Normal instalation
 
-    conda env update -f /path/to/environment.yml
 ```
-    
-### Adding packages
+python3 setup.py install
+```
 
-Packages are prefered from the conda channels but pip is also supported. 
-Make sure when adding packages with `pip` that the executable from the conda environment is used.
+Development instalation
+```
+pip install -e .
+```
+or
+```
+pip install -r requirements.txt
+```
+     
+### Adding Packages
+
+Dependencies have to be defined in `setup.py`.
+
+## Run with docker
+
+```shell script
+docker run --rm -it -v `pwd`/etc:/app/etc registry.gitlab.com/commonground/huishoudboekje/app-new/backend:dev
+```
