@@ -1,5 +1,5 @@
 import graphene
-from .testobject import TestMutation
+from .gebruikers_mutations import CreateGebruiker
 
 class RootMutation(graphene.ObjectType):
-    test_mutation = TestMutation.Field()
+    create_gebruiker = CreateGebruiker.Field()
