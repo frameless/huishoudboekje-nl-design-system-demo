@@ -55,3 +55,6 @@ database:
     - gebruikers
     - organisaties
     - afspraken
+
+medewerker-backend:
+  serviceChartPrefix: huishoudboekje

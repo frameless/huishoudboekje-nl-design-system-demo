@@ -14,7 +14,7 @@ spec:
   template:
     metadata:
       annotations:
-        {{- if eq .Values.image.tag "dev" }}
+        {{- if eq (include "medewerker-frontend.imageTag" .) "dev" }}
         dev: {{ randAlphaNum 24 | b64enc | quote}}
         {{- end }}
         {{- with .Values.podAnnotations }}
@@ -34,7 +34,7 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Values.global.imageTag | default .Chart.AppVersion }}"
+          image: "{{ .Values.image.repository }}:{{ include "medewerker-frontend.imageTag" . }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
