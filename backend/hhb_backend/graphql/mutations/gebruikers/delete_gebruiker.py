@@ -28,11 +28,11 @@ class DeleteGebruiker(graphene.Mutation):
         delete_burger_response = requests.delete(
             os.path.join(settings.HHB_SERVICES_URL, f"gebruikers/{gebruiker_id}/burger")
         )
-        if delete_burger_response.status_code != 204:
-            print(delete_burger_response.json()) # print error message to screen for now
+        if delete_burger_response.status_code not in [204, 404]:
+            print(delete_burger_response.status_code)
             return DeleteGebruiker(ok=False)
         gebruiker_response = requests.patch(
-            os.path.join(settings.HHB_SERVICES_URL, f"gebruikers/{gebruiker_id}/burger"), 
+            os.path.join(settings.HHB_SERVICES_URL, f"gebruikers/{gebruiker_id}/"), 
             data=json.dumps(gebruiker_data),
             headers={'Content-type': 'application/json'}
         )

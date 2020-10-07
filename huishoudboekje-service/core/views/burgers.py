@@ -99,6 +99,8 @@ class BurgerView(MethodView):
 
     def delete(self, gebruiker_id):
         """ Delete the Burger for the current Gebruiker """
-        db.session.delete(get_gebruiker(gebruiker_id).burger)
-        db.session.commit()
+        gebruiker = get_gebruiker(gebruiker_id)
+        if gebruiker.burger:
+            db.session.delete(gebruiker.burger)
+            db.session.commit()
         return {}, 204

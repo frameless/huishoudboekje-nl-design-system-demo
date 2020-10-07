@@ -26,7 +26,10 @@ class GebruikerDetailView(MethodView):
 
         gebruiker = get_gebruiker(gebruiker_id)
         for key, value in request.json.items():
-            setattr(gebruiker, key, value)
+            if value == "":
+                setattr(gebruiker, key, None)
+            else:
+                setattr(gebruiker, key, value)
         db.session.commit()
         return {"data": gebruiker.to_dict()}, 200
 
