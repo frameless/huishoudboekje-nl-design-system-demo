@@ -36,12 +36,16 @@ class CreateGebruiker(graphene.Mutation):
             data=json.dumps(gebruiker_data),
             headers={'Content-type': 'application/json'}
         )
+        if gebruiker_response.status_code != 201:
+            print(gebruiker_response.json()) # print error message to screen for now
+            return CreateGebruiker(gebruiker=None, ok=False)
         gebruiker_id = gebruiker_response.json()["data"]["id"]
         burger_response = requests.post(
             os.path.join(settings.HHB_SERVICES_URL, f"gebruikers/{gebruiker_id}/burger"), 
             data=json.dumps(kwargs),
             headers={'Content-type': 'application/json'}
         )
-        ok = True
-        return CreateGebruiker(gebruiker=gebruiker_response.json()["data"], ok=ok)
-
+        if burger_response.status_code != 201:
+            print(burger_response.json()) # print error message to screen for now
+            return CreateGebruiker(gebruiker=gebruiker_response.json()["data"], ok=False)
+        return CreateGebruiker(gebruiker=gebruiker_response.json()["data"], ok=True)

@@ -14,4 +14,6 @@ class Gebruiker(graphene.ObjectType):
 
     def resolve_burger(root, info):
         response = requests.get(os.path.join(settings.HHB_SERVICES_URL, f"gebruikers/{root.get('id')}/burger"))
+        if response.status_code != 200:
+            return None
         return response.json()["data"]
