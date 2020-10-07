@@ -4,7 +4,7 @@ REGISTRY_PREFIX := registry.gitlab.com/commonground/huishoudboekje/app-new
 CHART_DEPENDENCIES := $(shell find helm -name 'Chart.yaml' | xargs grep -l 'dependencies:')
 NAMESPACE := huishoudboekje
 RELEASE := huishoudboekje
-MODULES := backend frontend gebruikers_service
+MODULES := backend frontend huishoudboekje-service
 
 # Main target to build and deploy Huishoudboekje locally
 .PHONY: all

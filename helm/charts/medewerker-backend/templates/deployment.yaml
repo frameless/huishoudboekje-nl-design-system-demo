@@ -43,8 +43,8 @@ spec:
               value: /opt/etc/oidc/client_secrets.json
             - name: OIDC_REDIRECT_URI
               value: "{{ .Values.oidc.redirectUri}}"
-            - name: GEBRUIKERS_SERVICE_URL
-              value: {{ include "medewerker-backend.gebruikersServiceName" .}}
+            - name: HHB_SERVICE_URL
+              value: {{ include "medewerker-backend.huishoudboekjeServiceName" .}}
             - name: SECRET_KEY
               valueFrom:
                 secretKeyRef:
