@@ -1,76 +1,107 @@
 import {Box, Button, Divider, FormHelperText, FormLabel, Heading, Input, Spinner, Stack, Tooltip} from "@chakra-ui/core";
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import {useAsync} from "react-async";
-import {useIsMobile} from "react-grapple";
+import {useInput, useIsMobile, Validators} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {useParams} from "react-router-dom";
 import Routes from "../../config/routes";
 import {GetCitizenByIdQuery} from "../../services/citizens";
 import BackButton from "../BackButton";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
+import {Regex} from "../../utils/things";
 
 const CitizenDetail = () => {
 	const isMobile = useIsMobile();
 	const {t} = useTranslation();
 	const {id} = useParams();
-	const [formData, setFormData] = useState<{ [key: string]: any }>({
-		bsn: undefined,
-		initials: undefined,
-		firstName: undefined,
-		lastName: undefined,
-		dateOfBirth: undefined,
-		mail: undefined,
-		street: undefined,
-		houseNumber: undefined,
-		zipcode: undefined,
-		city: undefined,
-		phoneNumber: undefined,
-		iban: undefined,
+
+	const bsn = useInput<string>({
+		defaultValue: "",
+		validate: [Validators.required, (v) => new RegExp(Regex.BsnNL).test(v)],
+		placeholder: "123456789"
 	});
+	const initials = useInput<string>({
+		defaultValue: "",
+		validate: [Validators.required]
+	});
+	const firstName = useInput<string>({
+		defaultValue: "",
+		validate: [Validators.required]
+	});
+	const lastName = useInput<string>({
+		defaultValue: "",
+		validate: [Validators.required]
+	});
+	const dateOfBirth = useInput<string>({
+		defaultValue: "",
+		validate: [Validators.required, (v) => new RegExp(Regex.Date).test(v)],
+		placeholder: "24-09-1960"
+	});
+	const mail = useInput<string>({
+		defaultValue: "",
+		validate: [Validators.required, Validators.email]
+	});
+	const street = useInput<string>({
+		defaultValue: "",
+		validate: [Validators.required]
+	});
+	const houseNumber = useInput<string>({
+		defaultValue: "",
+		validate: [Validators.required]
+	});
+	const zipcode = useInput<string>({
+		defaultValue: "",
+		validate: [Validators.required, (v) => new RegExp(Regex.ZipcodeNL).test(v)],
+		placeholder: "1234AB"
+	});
+	const city = useInput<string>({
+		defaultValue: "",
+		validate: [Validators.required]
+	});
+	const phoneNumber = useInput<string>({
+		defaultValue: "",
+		validate: [(v) => new RegExp(Regex.PhoneNumberNL).test(v) || new RegExp(Regex.MobilePhoneNL).test(v)],
+		placeholder: "0612345678"
+	});
+	const iban = useInput<string>({
+		defaultValue: "",
+		validate: [Validators.required, (v) => new RegExp(Regex.IbanNL).test(v)],
+		placeholder: t("forms.iban-placeholder")
+	});
+
 	const {data, isPending, cancel} = useAsync({
 		promiseFn: GetCitizenByIdQuery,
 		id: parseInt(id),
 	});
 
-	const onChange = (e) => {
-		e.persist();
-		setFormData(fd => ({...fd, [e.target.name]: e.target.value}))
-	};
-
-	const onSubmit = () => {
+	const onSubmit = (e) => {
+		e.preventDefault();
 		console.log("SUBMIT");
-	}
-
-	const isValid = (field, value) => {
-		return false;
 	}
 
 	useEffect(() => {
 		let mounted = true;
 
 		if (mounted && data) {
-			setTimeout(() => {
-				setFormData({
-					bsn: data.bsn,
-					initials: data.initials,
-					firstName: data.firstName,
-					lastName: data.lastName,
-					dateOfBirth: data.dateOfBirth,
-					mail: data.mail,
-					street: data.street,
-					houseNumber: data.houseNumber,
-					zipcode: data.zipcode,
-					city: data.city,
-					phoneNumber: data.phoneNumber,
-					iban: data.iban,
-				});
-			}, 2000);
+			bsn.setValue(data.bsn.toString());
+			initials.setValue(data.initials);
+			firstName.setValue(data.firstName);
+			lastName.setValue(data.lastName);
+			dateOfBirth.setValue(data.dateOfBirth);
+			mail.setValue(data.mail);
+			street.setValue(data.street);
+			houseNumber.setValue(data.houseNumber);
+			zipcode.setValue(data.zipcode);
+			city.setValue(data.city);
+			phoneNumber.setValue(data.phoneNumber);
+			iban.setValue(data.iban);
 		}
 
 		return () => {
 			mounted = false;
 			cancel();
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [data, isPending, cancel]);
 
 	return (<>
@@ -96,27 +127,27 @@ const CitizenDetail = () => {
 								<Stack spacing={1}>
 									<FormLabel htmlFor={"bsn"}>{t("bsn")}</FormLabel>
 									<Tooltip label={t("forms.bsn-tooltip")} aria-label={t("bsn")} hasArrow placement={isMobile ? "top" : "left"}>
-										<Input type="number" value={formData.bsn || ""} onChange={onChange} name="bsn" />
+										<Input isInvalid={!bsn.isValid} {...bsn.bind} />
 									</Tooltip>
 								</Stack>
 								<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 									<Stack spacing={1} flex={1}>
 										<FormLabel htmlFor={"initials"}>{t("initials")}</FormLabel>
-										<Input type="text" value={formData.initials || ""} onChange={onChange} name="initials" />
+										<Input isInvalid={!initials.isValid} {...initials.bind} />
 									</Stack>
 									<Stack spacing={1} flex={3}>
 										<FormLabel htmlFor={"firstName"}>{t("firstName")}</FormLabel>
-										<Input value={formData.firstName || ""} onChange={onChange} name="firstName" />
+										<Input isInvalid={!firstName.isValid} {...firstName.bind} />
 									</Stack>
 									<Stack spacing={1} flex={3}>
 										<FormLabel htmlFor={"lastName"}>{t("lastName")}</FormLabel>
-										<Input value={formData.lastName || ""} onChange={onChange} name="lastName" />
+										<Input isInvalid={!lastName.isValid} {...lastName.bind} />
 									</Stack>
 								</Stack>
 								<Stack spacing={1}>
 									<FormLabel htmlFor={"dateOfBirth"}>{t("dateOfBirth")}</FormLabel>
 									<Tooltip label={t("forms.dateOfBirth-tooltip")} aria-label={t("dateOfBirth")} hasArrow placement={isMobile ? "top" : "left"}>
-										<Input value={formData.dateOfBirth || ""} onChange={onChange} name="dateOfBirth" />
+										<Input isInvalid={!dateOfBirth.isValid} {...dateOfBirth.bind} />
 									</Tooltip>
 								</Stack>
 							</FormRight>
@@ -133,34 +164,34 @@ const CitizenDetail = () => {
 								<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 									<Stack spacing={1} flex={2}>
 										<FormLabel htmlFor={"street"}>{t("street")}</FormLabel>
-										<Input value={formData.street || ""} onChange={onChange} name="street" />
+										<Input isInvalid={!street.isValid} {...street.bind} />
 									</Stack>
 									<Stack spacing={1} flex={1}>
 										<FormLabel htmlFor={"houseNumber"}>{t("houseNumber")}</FormLabel>
-										<Input value={formData.houseNumber || ""} onChange={onChange} name="houseNumber" />
+										<Input isInvalid={!houseNumber.isValid} {...houseNumber.bind} />
 									</Stack>
 								</Stack>
 								<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 									<Stack spacing={1} flex={1}>
 										<FormLabel htmlFor={"zipcode"}>{t("zipcode")}</FormLabel>
 										<Tooltip label={t("forms.zipcode-tooltip")} aria-label={t("zipcode")} hasArrow placement={isMobile ? "top" : "left"}>
-											<Input value={formData.zipcode || ""} onChange={onChange} name="zipcode" />
+											<Input isInvalid={!zipcode.isValid} {...zipcode.bind} />
 										</Tooltip>
 									</Stack>
 									<Stack spacing={1} flex={2}>
 										<FormLabel htmlFor={"city"}>{t("city")}</FormLabel>
-										<Input value={formData.city || ""} onChange={onChange} name="city" />
+										<Input isInvalid={!city.isValid} {...city.bind} />
 									</Stack>
 								</Stack>
 								<Stack spacing={1}>
 									<FormLabel htmlFor={"phoneNumber"}>{t("phoneNumber")}</FormLabel>
 									<Tooltip label={t("forms.phoneNumber-tooltip")} aria-label={t("phoneNumber")} hasArrow placement={isMobile ? "top" : "left"}>
-										<Input value={formData.phoneNumber || ""} onChange={onChange} name="phoneNumber" />
+										<Input isInvalid={!phoneNumber.isValid} {...phoneNumber.bind} />
 									</Tooltip>
 								</Stack>
 								<Stack spacing={1}>
 									<FormLabel htmlFor={"mail"}>{t("mail")}</FormLabel>
-									<Input value={formData.mail || ""} onChange={onChange} name="mail" aria-describedby="mail-helper-text" />
+									<Input isInvalid={!mail.isValid} {...mail.bind} aria-describedby="mail-helper-text" />
 								</Stack>
 							</FormRight>
 						</Stack>
@@ -176,7 +207,7 @@ const CitizenDetail = () => {
 								<Stack spacing={1}>
 									<FormLabel htmlFor={"iban"}>{t("iban")}</FormLabel>
 									<Tooltip label={t("forms.iban-tooltip")} aria-label={t("iban")} hasArrow placement={isMobile ? "top" : "left"}>
-										<Input id="iban" value={formData.iban || ""} onChange={onChange} name="iban" />
+										<Input id="iban" {...iban.bind} />
 									</Tooltip>
 								</Stack>
 							</FormRight>
