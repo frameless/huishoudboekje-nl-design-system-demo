@@ -14,7 +14,7 @@ spec:
   template:
     metadata:
       annotations:
-        {{- if eq .Values.image.tag "dev" }}
+        {{- if eq (include "medewerker-backend.imageTag" .) "dev" }}
         dev: {{ randAlphaNum 24 | b64enc | quote}}
         {{- end }}
         {{- with .Values.podAnnotations }}
@@ -34,7 +34,7 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Values.global.imageTag | default .Chart.AppVersion }}"
+          image: "{{ .Values.image.repository }}:{{ include "medewerker-backend.imageTag" . }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: PREFIX
@@ -43,6 +43,8 @@ spec:
               value: /opt/etc/oidc/client_secrets.json
             - name: OIDC_REDIRECT_URI
               value: "{{ .Values.oidc.redirectUri}}"
+            - name: HHB_SERVICE_URL
+              value: {{ include "medewerker-backend.huishoudboekjeServiceName" .}}
             - name: SECRET_KEY
               valueFrom:
                 secretKeyRef:

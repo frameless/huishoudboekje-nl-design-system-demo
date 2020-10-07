@@ -6,12 +6,16 @@ global:
   imageRegistry: ""
   imageTag: ""
 
+database:
+  service: "database"
+  name: "huishoudboekjeservice"
+
 replicaCount: 1
 
 secretKey: ""
 
 image:
-  repository: registry.gitlab.com/commonground/huishoudboekje/app-new/backend
+  repository: registry.gitlab.com/commonground/huishoudboekje/app-new/huishoudboekje-service
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
@@ -19,7 +23,6 @@ image:
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
-serviceChartPrefix: ""
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -51,9 +54,9 @@ ingress:
   enabled: true
   annotations: {}
   hosts:
-    - host: hhb.minikube
+    - host: huishoudboekje-service.hhb.minikube
       paths:
-        - "/api/"
+        - "/"
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
@@ -83,13 +86,3 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
-
-oidc:
-  clientId: huishoudboekje
-  clientSecret: ZwwcL2zjQyJUBnFPVoOb
-  issuer: http://dex.hhb.minikube
-  authorizationEndpoint: http://dex.hhb.minikube/auth
-  redirectUri: http://hhb.minikube/api/oidc_callback
-  tokenUri: http://dex.hhb.minikube/token
-  tokeninfoUri: http://dex.hhb.minikube/tokeninfo
-  userinfoUri: http://dex.hhb.minikube/userinfo

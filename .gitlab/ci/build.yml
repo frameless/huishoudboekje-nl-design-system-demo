@@ -28,6 +28,16 @@ build-backend:
   only:
     - branches@commonground/huishoudboekje/app-new
 
+# Build Huishoudboekje Service
+build-huishoudboekje-service:
+  stage: build
+  variables:
+    APP_NAME: huishoudboekje-service
+    DIRECTORY: huishoudboekje-service
+  extends: .build
+  only:
+    - branches@commonground/huishoudboekje/app-new
+
 # Build Docs
 build-docs:
   stage: build

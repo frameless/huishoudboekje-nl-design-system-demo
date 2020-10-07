@@ -17,12 +17,17 @@ spec:
           port: {{ .Values.traefik.port }}
 {{- if .Values.global.minikube }}
 ---
-apiVersion: networking.k8s.io/v1
+{{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
+apiVersion: networking.k8s.io/v1beta1
+{{- else -}}
+apiVersion: extensions/v1beta1
+{{- end }}
 kind: Ingress
 metadata:
   name: {{ $fullName }}
   labels:
-  {{- include "database.labels" . | nindent 4 }}
+    {{- include "database.labels" . | nindent 4 }}
+    type: postgres
 spec:
   rules:
     - host: {{ .Values.traefik.minikube.host | quote }}
@@ -31,10 +36,8 @@ spec:
           - path: /
             pathType: Prefix
             backend:
-              service:
-                name: {{ include "database.databasename" . }}
-                port:
-                  number: 5432
+              serviceName: {{ include "database.databasename" . }}
+              servicePort: 5432
 {{- end -}}
 {{- end -}}
 {{- end -}}

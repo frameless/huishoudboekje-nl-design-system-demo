@@ -6,6 +6,13 @@ Expand the name of the chart.
 {{- end }}
 
 {{/*
+Expand the tag for the container image.
+*/}}
+{{- define "medewerker-backend.imageTag" -}}
+{{- .Values.image.tag | default .Values.global.imageTag | default .Chart.AppVersion -}}
+{{- end }}
+
+{{/*
 Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
@@ -59,4 +66,14 @@ Create the name of the service account to use
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
+{{- end }}
+
+{{/*
+Create the name of the service account to use
+*/}}
+{{- define "medewerker-backend.huishoudboekjeServiceName" -}}
+{{- if .Values.serviceChartPrefix -}}
+{{ printf "%s-" .Values.serviceChartPrefix -}}
+{{- end -}}
+huishoudboekje-service.{{ .Release.Namespace }}.svc.cluster.local
 {{- end }}

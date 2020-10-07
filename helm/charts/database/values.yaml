@@ -13,9 +13,7 @@ postgresql:
   version: "12"
 
 databases:
-  - gebruikers
-  - organisaties
-  - afspraken
+  - huishoudboekje_service
 
 traefik:
   enabled: false
