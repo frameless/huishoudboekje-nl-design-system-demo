@@ -1,10 +1,10 @@
+""" GraphQL mutation for deleting a Gebruiker/Burger """
 import os
+import json
 import graphene
 import requests
-import json
 from graphql import GraphQLError
 from hhb_backend.graphql import settings
-from hhb_backend.graphql.models.gebruiker import Gebruiker
 
 class DeleteGebruiker(graphene.Mutation):
     class Arguments:
@@ -15,6 +15,12 @@ class DeleteGebruiker(graphene.Mutation):
     ok = graphene.Boolean()
 
     def mutate(root, info, gebruiker_id, force):
+        """ Delete current gebruiker
+
+        force:  if set to true the gebruiker reccord will be deleted,
+                otherwise only the burger is deleted
+                and the gebruikers fields are cleared
+        """
         if force:
             delete_response = requests.delete(
                 os.path.join(settings.HHB_SERVICES_URL, f"gebruikers/{gebruiker_id}")

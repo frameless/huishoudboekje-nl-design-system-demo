@@ -1,3 +1,4 @@
+""" GraphQL mutation for updating a Gebruiker/Burger """
 import os
 import graphene
 import requests
@@ -28,6 +29,7 @@ class UpdateGebruiker(graphene.Mutation):
     gebruiker = graphene.Field(lambda: Gebruiker)
 
     def mutate(root, info, gebruiker_id, **kwargs):
+        """ Update the current Gebruiker/Burger """
         gebruiker_data = {}
         if "email" in kwargs:
             gebruiker_data["email"] = kwargs.pop("email")

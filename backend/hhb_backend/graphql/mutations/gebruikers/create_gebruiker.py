@@ -1,7 +1,8 @@
+""" GraphQL mutation for creating a new Gebruiker/Burger """
 import os
+import json
 import graphene
 import requests
-import json
 from graphql import GraphQLError
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.models.gebruiker import Gebruiker
@@ -27,6 +28,7 @@ class CreateGebruiker(graphene.Mutation):
     gebruiker = graphene.Field(lambda: Gebruiker)
 
     def mutate(root, info, **kwargs):
+        """ Create the new Gebruiker/Burger """
         gebruiker_data = {
             "email": kwargs.pop("email"),
             "geboortedatum": kwargs.pop("geboortedatum"),

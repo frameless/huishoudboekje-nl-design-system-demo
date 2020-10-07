@@ -1,3 +1,4 @@
+""" GraphQL Gebruikers query """
 import os
 import graphene
 import requests

@@ -1,7 +1,8 @@
+""" Burger model as used in GraphQL queries """
 import graphene
-from datetime import datetime
 
 class Burger(graphene.ObjectType):
+    """ GraphQL Burger model """
     achternaam = graphene.String()
     huisnummer = graphene.String()
     postcode = graphene.String()

@@ -1,3 +1,4 @@
+""" GraphQL schema module """
 from graphene import Schema
 from .queries import RootQuery
 from .mutations import RootMutation
