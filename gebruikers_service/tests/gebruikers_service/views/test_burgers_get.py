@@ -13,12 +13,9 @@ def test_burgers_get_success(app, session):
         gebruiker=gebruiker,
         voornamen="Henk",
         voorletters="H.",
-        voorvoegsel="van",
-        geslachtsnaam="Poortvliet",
+        achternaam="Poortvliet",
         straatnaam="Schoolstraat",
-        huisnummer=1,
-        huisletter="a",
-        huistoevoeging="bis",
+        huisnummer="1a",
         postcode="1234AB",
         woonplaatsnaam="Sloothuizen"
     )
@@ -30,15 +27,12 @@ def test_burgers_get_success(app, session):
     assert response.status_code == 200
     assert response.json["data"] == {
         'gebruiker_id': 1,
-        'geslachtsnaam': 'Poortvliet',
-        'huisletter': 'a',
-        'huisnummer': 1,
-        'huistoevoeging': 'bis',
+        'achternaam': 'Poortvliet',
+        'huisnummer': "1a",
         'postcode': '1234AB',
         'straatnaam': 'Schoolstraat',
         'voorletters': 'H.',
         'voornamen': 'Henk',
-        'voorvoegsel': 'van',
         'woonplaatsnaam': 'Sloothuizen'
     }
 

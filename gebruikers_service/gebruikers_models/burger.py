@@ -13,14 +13,11 @@ class Burger(db.Model):
     # Name fields
     voornamen = Column(String)
     voorletters = Column(String)
-    voorvoegsel = Column(String)
-    geslachtsnaam = Column(String)
+    achternaam = Column(String)
 
     # Adress fields
     straatnaam = Column(String)
-    huisnummer = Column(Integer)
-    huisletter = Column(String)
-    huistoevoeging = Column(String)
+    huisnummer = Column(String)
     postcode = Column(String)
     woonplaatsnaam = Column(String)
 
@@ -29,12 +26,9 @@ class Burger(db.Model):
             "gebruiker_id": self.gebruiker_id,
             "voornamen": self.voornamen,
             "voorletters": self.voorletters,
-            "voorvoegsel": self.voorvoegsel,
-            "geslachtsnaam": self.geslachtsnaam,
+            "achternaam": self.achternaam,
             "straatnaam": self.straatnaam,
             "huisnummer": self.huisnummer,
-            "huisletter": self.huisletter,
-            "huistoevoeging": self.huistoevoeging,
             "postcode": self.postcode,
             "woonplaatsnaam": self.woonplaatsnaam
         }

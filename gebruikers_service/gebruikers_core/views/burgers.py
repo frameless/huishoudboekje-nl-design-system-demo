@@ -16,22 +16,13 @@ new_burger_schema = {
         "voorletters": {
             "type": "string",
         },
-        "voorvoegsel": {
-            "type": "string",
-        },
-        "geslachtsnaam": {
+        "achternaam": {
             "type": "string",
         },
         "straatnaam": {
             "type": "string",
         },
         "huisnummer": {
-            "type": "integer",
-        },
-        "huisletter": {
-            "type": "string",
-        },
-        "huisnummertoevoeging": {
             "type": "string",
         },
         "postcode": {
@@ -44,7 +35,7 @@ new_burger_schema = {
     "required": [
         "voornamen",
         "voorletters",
-        "geslachtsnaam",
+        "achternaam",
         "straatnaam",
         "huisnummer",
         "postcode",

@@ -14,12 +14,9 @@ def test_burgers_patch_success(app, session):
         gebruiker=gebruiker,
         voornamen="Henk",
         voorletters="H.",
-        voorvoegsel="van",
-        geslachtsnaam="Poortvliet",
+        achternaam="Poortvliet",
         straatnaam="Schoolstraat",
-        huisnummer=1,
-        huisletter="a",
-        huistoevoeging="bis",
+        huisnummer="1a",
         postcode="1234AB",
         woonplaatsnaam="Sloothuizen"
     )
@@ -27,15 +24,12 @@ def test_burgers_patch_success(app, session):
     session.add(burger)
     session.flush()
     edit_burger = {
-        'geslachtsnaam': 'Poortvliet_edited',
-        'huisletter': 'a_edited',
-        'huisnummer': 1337,
-        'huistoevoeging': 'bis_edited',
+        'achternaam': 'Poortvliet_edited',
+        'huisnummer': '1337',
         'postcode': '1234AB_edited',
         'straatnaam': 'Schoolstraat_edited',
         'voorletters': 'H._edited',
         'voornamen': 'Henk_edited',
-        'voorvoegsel': 'van_edited',
         'woonplaatsnaam': 'Sloothuizen_edited'
     }
     client = app.test_client()
@@ -44,15 +38,12 @@ def test_burgers_patch_success(app, session):
     assert response.status_code == 200
     assert response.json["data"] == {
         'gebruiker_id': 1,
-        'geslachtsnaam': 'Poortvliet_edited',
-        'huisletter': 'a_edited',
-        'huisnummer': 1337,
-        'huistoevoeging': 'bis_edited',
+        'achternaam': 'Poortvliet_edited',
+        'huisnummer': '1337',
         'postcode': '1234AB_edited',
         'straatnaam': 'Schoolstraat_edited',
         'voorletters': 'H._edited',
         'voornamen': 'Henk_edited',
-        'voorvoegsel': 'van_edited',
         'woonplaatsnaam': 'Sloothuizen_edited'
     }
 
@@ -66,15 +57,12 @@ def test_burgers_patch_no_burger(app, session):
     session.add(gebruiker)
     session.flush()
     edit_burger = {
-        'geslachtsnaam': 'Poortvliet_edited',
-        'huisletter': 'a_edited',
-        'huisnummer': 1337,
-        'huistoevoeging': 'bis_edited',
+        'achternaam': 'Poortvliet_edited',
+        'huisnummer': '1337',
         'postcode': '1234AB_edited',
         'straatnaam': 'Schoolstraat_edited',
         'voorletters': 'H._edited',
         'voornamen': 'Henk_edited',
-        'voorvoegsel': 'van_edited',
         'woonplaatsnaam': 'Sloothuizen_edited'
     }
     client = app.test_client()
@@ -94,12 +82,9 @@ def test_burgers_patch_json_validation(app, session):
         gebruiker=gebruiker,
         voornamen="Henk",
         voorletters="H.",
-        voorvoegsel="van",
-        geslachtsnaam="Poortvliet",
+        achternaam="Poortvliet",
         straatnaam="Schoolstraat",
-        huisnummer=1,
-        huisletter="a",
-        huistoevoeging="bis",
+        huisnummer="1a",
         postcode="1234AB",
         woonplaatsnaam="Sloothuizen"
     )
@@ -107,7 +92,7 @@ def test_burgers_patch_json_validation(app, session):
     session.add(burger)
     session.flush()
     edit_burger = {
-        'geslachtsnaam': 1337
+        'achternaam': 1337
     }
     client = app.test_client()
     response = client.patch('/gebruikers/1/burger',

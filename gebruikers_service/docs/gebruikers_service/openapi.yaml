@@ -180,13 +180,7 @@ paths:
           schema:
             type: string
             example: "H."        
-        - name: voorvoegsel
-          required: false
-          in: query
-          schema:
-            type: string
-            example: "van"           
-        - name: geslachtsnaam
+        - name: achternaam
           required: true
           in: query
           schema:
@@ -202,20 +196,8 @@ paths:
           required: true
           in: query
           schema:
-            type: integer
-            example: 1337
-        - name: huisletter
-          required: false
-          in: query
-          schema:
             type: string
-            example: "a"
-        - name: huistoevoeging
-          required: false
-          in: query
-          schema:
-            type: string
-            example: "bis"
+            example: "1a"
         - name: postcode
           required: true
           in: query
@@ -256,13 +238,7 @@ paths:
           schema:
             type: string
             example: "H."        
-        - name: voorvoegsel
-          required: false
-          in: query
-          schema:
-            type: string
-            example: "van"           
-        - name: geslachtsnaam
+        - name: achternaam
           required: false
           in: query
           schema:
@@ -280,18 +256,6 @@ paths:
           schema:
             type: integer
             example: 1337
-        - name: huisletter
-          required: false
-          in: query
-          schema:
-            type: string
-            example: "a"
-        - name: huistoevoeging
-          required: false
-          in: query
-          schema:
-            type: string
-            example: "bis"
         - name: postcode
           required: false
           in: query
@@ -364,24 +328,15 @@ components:
         voorletters:
           type: string
           example: "H."        
-        voorvoegsel:
-          type: string
-          example: "van"           
-        geslachtsnaam:
+        achternaam:
           type: string
           example: "Poortman"
         straatnaam:
           type: string
           example: "Schoolstraat"
         huisnummer:
-          type: integer
-          example: 1337
-        huisletter:
           type: string
-          example: "a"
-        huistoevoeging:
-          type: string
-          example: "bis"
+          example: "1a"
         postcode:
           type: string
           example: "1234AB"

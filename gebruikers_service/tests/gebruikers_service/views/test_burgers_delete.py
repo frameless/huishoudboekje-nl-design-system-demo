@@ -13,12 +13,9 @@ def test_burgers_delete_success(app, session):
         gebruiker=gebruiker,
         voornamen="Henk",
         voorletters="H.",
-        voorvoegsel="van",
-        geslachtsnaam="Poortvliet",
+        achternaam="Poortvliet",
         straatnaam="Schoolstraat",
-        huisnummer=1,
-        huisletter="a",
-        huistoevoeging="bis",
+        huisnummer="1a",
         postcode="1234AB",
         woonplaatsnaam="Sloothuizen"
     )
