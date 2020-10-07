@@ -1,4 +1,4 @@
-import {Box, Button, Divider, FormHelperText, FormLabel, Heading, Input, Spinner, Stack, Tooltip} from "@chakra-ui/core";
+import {Box, Button, Divider, FormHelperText, FormLabel, Heading, Input, Spinner, Stack, Tooltip, useToast} from "@chakra-ui/core";
 import React, {useEffect} from "react";
 import {useAsync} from "react-async";
 import {useInput, useIsMobile, Validators} from "react-grapple";
@@ -14,6 +14,7 @@ const CitizenDetail = () => {
 	const isMobile = useIsMobile();
 	const {t} = useTranslation();
 	const {id} = useParams();
+	const toast = useToast();
 
 	const bsn = useInput<string>({
 		defaultValue: "",
@@ -76,7 +77,12 @@ const CitizenDetail = () => {
 
 	const onSubmit = (e) => {
 		e.preventDefault();
-		console.log("SUBMIT");
+		toast({
+			position: "top",
+			status: "error",
+			variant: "solid",
+			description: t("generalError")
+		})
 	}
 
 	useEffect(() => {

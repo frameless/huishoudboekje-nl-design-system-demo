@@ -46,5 +46,7 @@
   "search-placeholder": "Zoeken...",
   "settings": "Instellingen",
   "user": "Gebruiker",
-  "zipcode": "Postcode"
+  "zipcode": "Postcode",
+
+  "generalError": "Er ging iets mis. Probeer het later nog eens."
 }
