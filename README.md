@@ -12,7 +12,11 @@ Huishoudboekje uses the following technical stack
 - Docker
 
 ### Components
-Huishoudboekje consists of several independent software components, packages as Docker containers.
+Huishoudboekje consists of several independent software components, packages as Docker containers.\
+These are:
+- [Medewerker Frontend](frontend/)
+- [Medewerker Backend](backend/)
+- [Huishoudboekje Service](huishoudboekje-service/)
 
 ## Development
 
