@@ -2,6 +2,7 @@ import os
 import graphene
 import requests
 import json
+from graphql import GraphQLError
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.models.gebruiker import Gebruiker
 
@@ -37,8 +38,8 @@ class CreateGebruiker(graphene.Mutation):
             headers={'Content-type': 'application/json'}
         )
         if gebruiker_response.status_code != 201:
-            print(gebruiker_response.json()) # print error message to screen for now
-            return CreateGebruiker(gebruiker=None, ok=False)
+            raise GraphQLError(f"Upstream API responded: {gebruiker_response.json()}")
+
         gebruiker_id = gebruiker_response.json()["data"]["id"]
         burger_response = requests.post(
             os.path.join(settings.HHB_SERVICES_URL, f"gebruikers/{gebruiker_id}/burger"), 
@@ -46,6 +47,6 @@ class CreateGebruiker(graphene.Mutation):
             headers={'Content-type': 'application/json'}
         )
         if burger_response.status_code != 201:
-            print(burger_response.json()) # print error message to screen for now
-            return CreateGebruiker(gebruiker=gebruiker_response.json()["data"], ok=False)
+            raise GraphQLError(f"Upstream API responded: {burger_response.json()}")
+
         return CreateGebruiker(gebruiker=gebruiker_response.json()["data"], ok=True)

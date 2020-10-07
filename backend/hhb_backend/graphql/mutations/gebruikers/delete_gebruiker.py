@@ -2,6 +2,7 @@ import os
 import graphene
 import requests
 import json
+from graphql import GraphQLError
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.models.gebruiker import Gebruiker
 
@@ -20,8 +21,7 @@ class DeleteGebruiker(graphene.Mutation):
             )
             if delete_response.status_code == 204:
                 return DeleteGebruiker(ok=True)
-            print(delete_response.json()) # print error message to screen for now
-            return DeleteGebruiker(ok=False)
+            raise GraphQLError(f"Upstream API responded: {delete_response.json()}")
 
 
         gebruiker_data = {"email": "", "geboortedatum": "", "telefoonnummer": ""}
@@ -29,14 +29,14 @@ class DeleteGebruiker(graphene.Mutation):
             os.path.join(settings.HHB_SERVICES_URL, f"gebruikers/{gebruiker_id}/burger")
         )
         if delete_burger_response.status_code not in [204, 404]:
-            print(delete_burger_response.status_code)
-            return DeleteGebruiker(ok=False)
+            raise GraphQLError(f"Upstream API responded: {delete_burger_response.json()}")
+
         gebruiker_response = requests.patch(
             os.path.join(settings.HHB_SERVICES_URL, f"gebruikers/{gebruiker_id}/"), 
             data=json.dumps(gebruiker_data),
             headers={'Content-type': 'application/json'}
         )
         if gebruiker_response.status_code != 200:
-            print(gebruiker_response.json()) # print error message to screen for now
-            return DeleteGebruiker(ok=False)
+            raise GraphQLError(f"Upstream API responded: {gebruiker_response.json()}")
+
         return DeleteGebruiker(ok=True)
