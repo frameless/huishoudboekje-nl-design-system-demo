@@ -1,0 +1,52 @@
+# This file was generated based on ".graphqlconfig". Do not edit manually.
+
+schema {
+    query: RootQuery
+    mutation: RootMutation
+}
+
+"GraphQL Burger model "
+type Burger {
+    achternaam: String
+    huisnummer: String
+    postcode: String
+    straatnaam: String
+    voorletters: String
+    voornamen: String
+    woonplaatsnaam: String
+}
+
+type CreateGebruiker {
+    gebruiker: Gebruiker
+    ok: Boolean
+}
+
+type DeleteGebruiker {
+    ok: Boolean
+}
+
+"GraphQL Gebruiker model "
+type Gebruiker {
+    burger: Burger
+    email: String
+    geboortedatum: String
+    id: Int
+    telefoonnummer: String
+}
+
+"The root of all mutations "
+type RootMutation {
+    createGebruiker(achternaam: String, email: String, geboortedatum: String, huisnummer: String, postcode: String, straatnaam: String, telefoonnummer: String, voorletters: String, voornamen: String, woonplaatsnaam: String): CreateGebruiker
+    deleteGebruiker(force: Boolean = false, gebruikerId: Int!): DeleteGebruiker
+    updateGebruiker(achternaam: String, email: String, geboortedatum: String, gebruikerId: Int!, huisnummer: String, postcode: String, straatnaam: String, telefoonnummer: String, voorletters: String, voornamen: String, woonplaatsnaam: String): UpdateGebruiker
+}
+
+"The root of all queries "
+type RootQuery {
+    gebruikers: [Gebruiker]
+}
+
+type UpdateGebruiker {
+    gebruiker: Gebruiker
+    ok: Boolean
+}
