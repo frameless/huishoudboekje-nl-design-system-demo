@@ -14,6 +14,7 @@ class UpdateGebruiker(graphene.Mutation):
         email = graphene.String()
         geboortedatum = graphene.String()
         telefoonnummer = graphene.String()
+        ibannummer = graphene.String()
 
         # burger arguments
         achternaam = graphene.String()
@@ -37,6 +38,8 @@ class UpdateGebruiker(graphene.Mutation):
             gebruiker_data["geboortedatum"] = kwargs.pop("geboortedatum")
         if "telefoonnummer" in kwargs:
             gebruiker_data["telefoonnummer"] = kwargs.pop("telefoonnummer")
+        if "ibannummer" in kwargs:
+            gebruiker_data["ibannummer"] = kwargs.pop("ibannummer")
         gebruiker_response = requests.patch(
             os.path.join(settings.HHB_SERVICES_URL, f"gebruikers/{gebruiker_id}"),
             data=json.dumps(gebruiker_data),
@@ -44,14 +47,15 @@ class UpdateGebruiker(graphene.Mutation):
         )
         if gebruiker_response.status_code != 200:
             raise GraphQLError(f"Upstream API responded: {gebruiker_response.json()}")
-
-        burger_response = requests.patch(
-            os.path.join(settings.HHB_SERVICES_URL, f"gebruikers/{gebruiker_id}/burger"), 
-            data=json.dumps(kwargs),
-            headers={'Content-type': 'application/json'}
-        )
-        if burger_response.status_code != 200:
-            raise GraphQLError(f"Upstream API responded: {burger_response.json()}")
+        
+        if kwargs:
+            burger_response = requests.post(
+                os.path.join(settings.HHB_SERVICES_URL, f"gebruikers/{gebruiker_id}/burger"), 
+                data=json.dumps(kwargs),
+                headers={'Content-type': 'application/json'}
+            )
+            if burger_response.status_code != 200:
+                raise GraphQLError(f"Upstream API responded: {burger_response.json()}")
 
         return UpdateGebruiker(gebruiker=gebruiker_response.json()["data"], ok=True)
 

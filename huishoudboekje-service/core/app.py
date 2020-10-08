@@ -6,7 +6,7 @@ from core.views import (
     GebruikerDetailView,
     BurgerView
 )
-from database import database, config
+from core import database, config
 db = database.db
 from models import *
 

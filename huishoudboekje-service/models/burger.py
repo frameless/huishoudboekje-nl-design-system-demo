@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Sequence, ForeignKey
 from sqlalchemy.orm import relationship
-from database.database import db
+from core.database import db
 
 class Burger(db.Model):
     __tablename__ = 'burgers'

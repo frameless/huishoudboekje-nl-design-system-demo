@@ -45,6 +45,6 @@ export HHB_SECRET="local-secret"
 
 export HHB_DATABASE_URL="postgresql://hhb_user:hhb_pass@localhost/hhb"
 
-export APP_SETTINGS="database.config.DevelopmentConfig"
+export APP_SETTINGS="core.config.DevelopmentConfig"
 ```
 

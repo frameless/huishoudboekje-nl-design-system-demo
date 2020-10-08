@@ -13,6 +13,7 @@ class CreateGebruiker(graphene.Mutation):
         email = graphene.String()
         geboortedatum = graphene.String()
         telefoonnummer = graphene.String()
+        ibannummer = graphene.String()
 
         # burger arguments
         achternaam = graphene.String()
@@ -33,6 +34,7 @@ class CreateGebruiker(graphene.Mutation):
             "email": kwargs.pop("email"),
             "geboortedatum": kwargs.pop("geboortedatum"),
             "telefoonnummer": kwargs.pop("telefoonnummer"),
+            "ibannummer": kwargs.pop("ibannummer"),
         }
         gebruiker_response = requests.post(
             os.path.join(settings.HHB_SERVICES_URL, "gebruikers/"), 

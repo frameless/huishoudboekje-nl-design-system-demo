@@ -4,7 +4,7 @@ from flask import request
 from flask_inputs import Inputs
 from flask_inputs.validators import JsonSchema
 from models.gebruiker import get_gebruiker
-from database.database import db
+from core.database import db
 from .gebruikers import gebruiker_schema
 
 class EditGebruikerInputs(Inputs):

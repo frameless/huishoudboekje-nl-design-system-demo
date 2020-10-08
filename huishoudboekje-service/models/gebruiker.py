@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String, Sequence, Date
 from sqlalchemy.orm import relationship
 from flask import abort, make_response
 from sqlalchemy.orm.exc import NoResultFound
-from database.database import db
+from core.database import db
 
 class Gebruiker(db.Model):
     __tablename__ = 'gebruikers'
@@ -12,15 +12,19 @@ class Gebruiker(db.Model):
     burger = relationship("Burger", uselist=False, back_populates="gebruiker")
 
     # Gebruiker fields
+    weergave_naam = Column(String)
     telefoonnummer = Column(String)
     email = Column(String)
     geboortedatum = Column(Date)
+    ibannummer = Column(String)
 
     def to_dict(self):
         return_data = {
             "id": self.id,
+            "weergave_naam": self.weergave_naam,
             "telefoonnummer": self.telefoonnummer,
             "email": self.email,
+            "ibannummer": self.ibannummer,
         }
 
         try:

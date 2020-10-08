@@ -166,46 +166,39 @@ paths:
         '5XX':
           description: Unexpected error.
     post:
-      description: Update burger gegevens voor specifieke gebruiker in het Huishoudboekje
+      description: Maak of update burger gegevens voor specifieke gebruiker in het Huishoudboekje
       parameters:
         - name: voornamen
-          required: true
           in: query
           schema:
             type: string
             example: "Henk"
         - name: voorletters
-          required: true
           in: query
           schema:
             type: string
             example: "H."        
         - name: achternaam
-          required: true
           in: query
           schema:
             type: string
             example: "Poortman"
         - name: straatnaam
-          required: true
           in: query
           schema:
             type: string
             example: "Schoolstraat"
         - name: huisnummer
-          required: true
           in: query
           schema:
             type: string
             example: "1a"
         - name: postcode
-          required: true
           in: query
           schema:
             type: string
             example: "1234AB"
         - name: woonplaatsnaam
-          required: true
           in: query
           schema:
             type: string
@@ -223,64 +216,6 @@ paths:
           description: Not Found
         '5XX':
           description: Unexpected error.          
-    patch:
-      description: Update burger gegevens voor specifieke gebruiker in het Huishoudboekje
-      parameters:
-        - name: voornamen
-          required: false
-          in: query
-          schema:
-            type: string
-            example: "Henk"
-        - name: voorletters
-          required: false
-          in: query
-          schema:
-            type: string
-            example: "H."        
-        - name: achternaam
-          required: false
-          in: query
-          schema:
-            type: string
-            example: "Poortman"
-        - name: straatnaam
-          required: false
-          in: query
-          schema:
-            type: string
-            example: "Schoolstraat"
-        - name: huisnummer
-          required: false
-          in: query
-          schema:
-            type: integer
-            example: 1337
-        - name: postcode
-          required: false
-          in: query
-          schema:
-            type: string
-            example: "1234AB"
-        - name: woonplaatsnaam
-          required: false
-          in: query
-          schema:
-            type: string
-            example: "Sloothuizen"
-      responses:
-        '200': 
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Burger'
-        '400':
-          description: Bad Request
-        '404':
-          description: Not Found
-        '5XX':
-          description: Unexpected error.
     delete:
       description: Verwijder burger van specifieke gebruiker in het Huishoudboekje
       parameters:

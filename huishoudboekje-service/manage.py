@@ -2,8 +2,9 @@ import os
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 
-from database.app import app
-from database.database import db
+from core.app import create_app
+app = create_app()
+from core.database import db
 
 
 app.config.from_object(os.environ['APP_SETTINGS'])
