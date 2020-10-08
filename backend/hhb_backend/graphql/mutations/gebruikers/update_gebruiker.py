@@ -40,14 +40,8 @@ class UpdateGebruiker(graphene.Mutation):
             gebruiker_data["telefoonnummer"] = kwargs.pop("telefoonnummer")
         if "ibannummer" in kwargs:
             gebruiker_data["ibannummer"] = kwargs.pop("ibannummer")
-        gebruiker_response = requests.patch(
-            os.path.join(settings.HHB_SERVICES_URL, f"gebruikers/{gebruiker_id}"),
-            data=json.dumps(gebruiker_data),
-            headers={'Content-type': 'application/json'}
-        )
-        if gebruiker_response.status_code != 200:
-            raise GraphQLError(f"Upstream API responded: {gebruiker_response.json()}")
         
+        # Update Burger first to ensure the returned gebruiker has an updated weergave_naam
         if kwargs:
             burger_response = requests.post(
                 os.path.join(settings.HHB_SERVICES_URL, f"gebruikers/{gebruiker_id}/burger"), 
@@ -56,6 +50,14 @@ class UpdateGebruiker(graphene.Mutation):
             )
             if burger_response.status_code != 200:
                 raise GraphQLError(f"Upstream API responded: {burger_response.json()}")
+
+        gebruiker_response = requests.patch(
+            os.path.join(settings.HHB_SERVICES_URL, f"gebruikers/{gebruiker_id}"),
+            data=json.dumps(gebruiker_data),
+            headers={'Content-type': 'application/json'}
+        )
+        if gebruiker_response.status_code != 200:
+            raise GraphQLError(f"Upstream API responded: {gebruiker_response.json()}")
 
         return UpdateGebruiker(gebruiker=gebruiker_response.json()["data"], ok=True)
 
