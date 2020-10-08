@@ -100,7 +100,7 @@ def me():
 def login():
     return redirect('/', code=302)
 
-app.add_url_rule('/graphql', view_func=GraphQLView.as_view(
+app.add_url_rule('/graphql', view_func=oidc.require_login(GraphQLView.as_view(
     'graphql',
     schema=schema,
     graphiql=True,
@@ -111,16 +111,24 @@ app.add_url_rule('/graphql/batch', view_func=GraphQLView.as_view(
     'graphql_batch',
     schema=schema,
     batch=True
-), strict_slashes=False)
+), strict_slashes=False), strict_slashes=False)
+
+# Optional, for adding batch query support (used in Apollo-Client)
+app.add_url_rule('/graphql/batch', view_func=oidc.require_login(GraphQLView.as_view(
+    'graphql_batch',
+    schema=schema,
+    batch=True
+)), strict_slashes=False)
 
 @app.route('/graphql/help')
+@oidc.require_login
 def voyager():
     return render_template('voyager.html')
 
 @app.route('/logout')
 def logout():
     oidc.logout()
-    return 'Hi, you have been logged out! <a href="/">Return</a>'
+    return Response()
 
 
 if __name__ == '__main__':

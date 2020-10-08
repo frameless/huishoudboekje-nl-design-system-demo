@@ -14,7 +14,7 @@ dex:
         secret: ZwwcL2zjQyJUBnFPVoOb
         redirectURIs:
           - http://hhb.minikube/api/oidc_callback
-          - https://localhost:3000/api/oidc_callback
+          - http://localhost:3000/api/oidc_callback
     enablePasswordDB: true
     staticPasswords:
       - username: henk.poortvliet@sloothuizen.nl
