@@ -32,8 +32,16 @@ class GebruikerView(MethodView):
 
     def get(self):
         """ Return a list of all Gebruikers """
-        gebruikers = Gebruiker.query.all()
-        return {"data": [g.to_dict() for g in gebruikers]}
+        filter_ids = request.args.get('filter_ids')
+        gebruikers = Gebruiker.query
+        if filter_ids:
+            try:
+                gebruikers = gebruikers.filter(Gebruiker.id.in_([int(id) for id in filter_ids.split(",")]))
+            except ValueError:
+                print("=----")
+                print(filter_ids)
+                return {"errors": ["Input for filter_ids is not correct"]}, 400
+        return {"data": [g.to_dict() for g in gebruikers.all()]}
 
     def post(self):
         """ Create and return a new Gebruiker """

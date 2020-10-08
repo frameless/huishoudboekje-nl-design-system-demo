@@ -32,5 +32,5 @@ def test_gebruikers_post_input_json_validation_invalid_geboortedatum(app):
         data=json.dumps(gebruiker_data), content_type='application/json')
     assert response.status_code == 400
     assert response.json["errors"][0] == (
-        "'01-01-2020' does not match '^[0-9]{4}-[0-9]{2}-[0-9]{2}$'"
+        "'01-01-2020' does not match '^(?:[0-9]{4}-[0-9]{2}-[0-9]{2}|)$'"
     )

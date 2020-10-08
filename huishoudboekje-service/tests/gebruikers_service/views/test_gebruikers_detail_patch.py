@@ -48,5 +48,5 @@ def test_gebruikers_detail_patch_invalid_json(app, session):
         data=json.dumps(edited_gebruiker), content_type='application/json')
     assert response.status_code == 400
     assert response.json["errors"][0] == (
-        "'02-05-2010' does not match '^[0-9]{4}-[0-9]{2}-[0-9]{2}$'"
+        "'02-05-2010' does not match '^(?:[0-9]{4}-[0-9]{2}-[0-9]{2}|)$'"
     )

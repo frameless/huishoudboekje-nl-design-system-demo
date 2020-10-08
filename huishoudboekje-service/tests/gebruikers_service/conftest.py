@@ -1,32 +1,4 @@
 # # """ Fixtures for core testing """
-# import pytest
-# from testing.postgresql import Postgresql
-# from core.app import create_app
-# from core.app import db
-# from database.config import TestingConfig
-
-# @pytest.yield_fixture(scope="session")
-# def database():
-#     print("Creating postgres database")
-#     with Postgresql() as postgresql:
-#         print(f"Creating postgres database at {postgresql.url()}")
-#         yield postgresql
-
-# @pytest.yield_fixture(scope="session")
-# def gebruikers_app(database):
-#     app = create_app(TestingConfig)
-#     app.config['SQLALCHEMY_DATABASE_URI'] = database.url()
-#     with app.app_context():
-#         yield app
-
-# @pytest.yield_fixture(scope='function')
-# def gebruikers_app_client(gebruikers_app):
-#     db.app = gebruikers_app
-#     db.create_all()
-#     yield gebruikers_app.test_client()
-#     db.drop_all()
-
-# module conftest.py
 import pytest
 
 from core.app import create_app

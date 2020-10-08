@@ -1,5 +1,5 @@
 coverage:
-	pytest --cov=core --cov=database --cov=models tests
+	pytest --cov=huishoudboekje-service --cov=models tests
 
 html_coverage: coverage
 	coverage html -d coverage_html
