@@ -39,4 +39,4 @@ def create_app(config_name=os.getenv('APP_SETTINGS', 'core.config.DevelopmentCon
     return app
 
 if __name__ == '__main__':
-    create_app(config.DevelopmentConfig).run()
+    create_app().run()

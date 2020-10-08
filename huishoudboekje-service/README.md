@@ -2,13 +2,24 @@
 
 This service contains the functionality needed to access data that belongs to the Huishoudboekje processes.
  
-## Project Layout
-
 ## Setup
 
-```shell script
-pip install -r requirements.txt
-```
+- Python environment
+    ```shell script
+    pip install -r requirements.txt
+    ```
+
+- Postgres
+  > for macOS you can use [Postgres.app](https://postgresapp.com/)
+    ```
+    PATH=/Applications/Postgres.app/Contents/Versions/13/bin:$PATH
+    createuser --echo --login --host localhost --username postgres huishoudboekjeservice
+    createdb --echo --owner huishoudboekjeservice --host localhost --username postgres huishoudboekjeservice
+    psql --host localhost --username postgres --dbname postgres --command "ALTER USER huishoudboekjeservice WITH ENCRYPTED PASSWORD 'huishoudboekjeservice';"
+    ```
+
+## Project Layout
+
 ### Layer 1 (database)
 
 #### models
@@ -27,6 +38,7 @@ python manage.py db migrate
 
 ##### Apply migrations on database
 ```shell script
+export HHB_DATABASE_URL="postgresql://huishoudboekjeservice:huishoudboekjeservice@localhost/huishoudboekjeservice"
 python manage.py db upgrade
 ```
 ### Layer 2 (services)
@@ -34,17 +46,16 @@ python manage.py db upgrade
 #### core
 [API documentation](docs/openapi.yaml)
 
+Prerequisites:
+
 ```shell script
 export FLASK_APP="core.app"
-flask run
-```
-
-##### ENV Settings
-```.env
+export FLASK_RUN_PORT="5001"
+export FLASK_ENV="development"
 export HHB_SECRET="local-secret"
-
-export HHB_DATABASE_URL="postgresql://hhb_user:hhb_pass@localhost/hhb"
-
+export HHB_DATABASE_URL="postgresql://huishoudboekjeservice:huishoudboekjeservice@localhost/huishoudboekjeservice"
 export APP_SETTINGS="core.config.DevelopmentConfig"
+
+flask run
 ```
 
