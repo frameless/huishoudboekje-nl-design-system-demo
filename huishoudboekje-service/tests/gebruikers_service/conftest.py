@@ -7,7 +7,7 @@ from sqlalchemy import event
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import close_all_sessions
 from testing.postgresql import Postgresql
-from database.config import TestingConfig
+from core.config import TestingConfig
 
 @pytest.yield_fixture(scope="session")
 def app(request):

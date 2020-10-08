@@ -20,7 +20,9 @@ def test_gebruikers_detail_get_success(app, session):
         "burger_id": None,
         "email": "a@b.c",
         "telefoonnummer": "0612345678",
-        "geboortedatum": "2020-01-01"
+        "geboortedatum": "2020-01-01",
+        "ibannummer": None,
+        "weergave_naam": None,        
     }
 
 @pytest.mark.parametrize("gebruiker, statuscode, message", [

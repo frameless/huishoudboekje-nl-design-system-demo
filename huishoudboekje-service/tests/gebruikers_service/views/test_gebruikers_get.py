@@ -29,6 +29,8 @@ def test_gebruikers_get_single_gebruiker(app, session):
             "burger_id": 1,
             "email": "a@b.c",
             "telefoonnummer": "0612345678",
-            "geboortedatum": ""
+            "geboortedatum": "",
+            "ibannummer": None,
+            "weergave_naam": None,
         }
     ]

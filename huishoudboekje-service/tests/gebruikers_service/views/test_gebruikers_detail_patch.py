@@ -26,7 +26,9 @@ def test_gebruikers_detail_patch_success(app, session):
         "burger_id": None,
         "email": "c@b.a",
         "telefoonnummer": "0123456789",
-        "geboortedatum": "2010-10-02"
+        "geboortedatum": "2010-10-02",
+        "ibannummer": None,
+        "weergave_naam": None,
     }
 
 def test_gebruikers_detail_patch_invalid_json(app, session):

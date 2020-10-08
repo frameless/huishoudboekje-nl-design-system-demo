@@ -18,7 +18,9 @@ def test_gebruikers_post_success(app):
             "burger_id": None,
             "email": "a@b.c",
             "telefoonnummer": "0612345678",
-            "geboortedatum": "2020-01-01"
+            "geboortedatum": "2020-01-01",
+            'ibannummer': None,
+            'weergave_naam': None,
         }
 
 def test_gebruikers_post_input_json_validation_invalid_geboortedatum(app):
