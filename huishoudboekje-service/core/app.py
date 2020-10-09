@@ -10,7 +10,7 @@ from core import database, config
 db = database.db
 from models import *
 
-def create_app(config_name=os.getenv('APP_SETTINGS', 'database.config.DevelopmentConfig')):
+def create_app(config_name=os.getenv('APP_SETTINGS', 'core.config.DevelopmentConfig')):
     app = Flask(__name__)
     app.config.from_object(config_name)
 
