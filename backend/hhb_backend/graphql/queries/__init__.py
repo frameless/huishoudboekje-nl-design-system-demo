@@ -1,10 +1,14 @@
 """ GraphQL schema queries module """
 import graphene
-from .gebruiker import GebruikersQuery
+from .gebruiker import GebruikersQuery, GebruikerQuery
 
 class RootQuery(graphene.ObjectType):
     """ The root of all queries """
-    gebruikers_query = graphene.Field(GebruikersQuery)
+    gebruiker = GebruikerQuery.return_type
+    gebruikers = GebruikersQuery.return_type
 
-    def resolve_gebruikers_query(parent, info):
-        return GebruikersQuery()
+    def resolve_gebruiker(root, info, **kwargs):
+        return GebruikerQuery().resolver(root, info, **kwargs)
+
+    def resolve_gebruikers(root, info, **kwargs):
+        return GebruikersQuery().resolver(root, info, **kwargs)
