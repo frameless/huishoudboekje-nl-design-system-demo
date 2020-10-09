@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name='huishoudboekje-service',
     version='0.1.0',
-    packages=['models', 'database', 'core'],
+    packages=['models', 'core'],
     scripts=[],
     url='',
     license='',
