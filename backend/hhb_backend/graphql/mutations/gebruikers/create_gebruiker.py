@@ -30,12 +30,16 @@ class CreateGebruiker(graphene.Mutation):
 
     def mutate(root, info, **kwargs):
         """ Create the new Gebruiker/Burger """
-        gebruiker_data = {
-            "email": kwargs.pop("email"),
-            "geboortedatum": kwargs.pop("geboortedatum"),
-            "telefoonnummer": kwargs.pop("telefoonnummer"),
-            "iban": kwargs.pop("iban"),
-        }
+        gebruiker_data = {}
+        if "email" in kwargs:
+            gebruiker_data["email"] = kwargs.pop("email")
+        if "geboortedatum" in kwargs:
+            gebruiker_data["geboortedatum"] = kwargs.pop("geboortedatum")
+        if "telefoonnummer" in kwargs:
+            gebruiker_data["telefoonnummer"] = kwargs.pop("telefoonnummer")
+        if "iban" in kwargs:
+            gebruiker_data["iban"] = kwargs.pop("iban")
+
         gebruiker_response = requests.post(
             os.path.join(settings.HHB_SERVICES_URL, "gebruikers/"), 
             data=json.dumps(gebruiker_data),
@@ -50,7 +54,7 @@ class CreateGebruiker(graphene.Mutation):
             data=json.dumps(kwargs),
             headers={'Content-type': 'application/json'}
         )
-        if burger_response.status_code != 201:
+        if burger_response.status_code != 200:
             raise GraphQLError(f"Upstream API responded: {burger_response.json()}")
 
         return CreateGebruiker(gebruiker=gebruiker_response.json()["data"], ok=True)
