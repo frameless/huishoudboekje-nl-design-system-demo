@@ -14,7 +14,7 @@ class Gebruiker(graphene.ObjectType):
     geboortedatum = graphene.String()
     burger = graphene.Field(Burger)
     weergave_naam = graphene.String()
-    ibannummer = graphene.String()
+    iban = graphene.String()
 
     def resolve_burger(root, info):
         """ Get Burger when requested """

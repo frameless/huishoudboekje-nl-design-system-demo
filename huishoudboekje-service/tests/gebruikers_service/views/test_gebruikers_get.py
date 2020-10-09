@@ -30,7 +30,7 @@ def test_gebruikers_get_single_gebruiker(app, session):
             "email": "a@b.c",
             "telefoonnummer": "0612345678",
             "geboortedatum": "",
-            "ibannummer": None,
+            "iban": None,
             "weergave_naam": None,
         }
     ]

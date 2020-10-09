@@ -21,7 +21,7 @@ def test_gebruikers_detail_get_success(app, session):
         "email": "a@b.c",
         "telefoonnummer": "0612345678",
         "geboortedatum": "2020-01-01",
-        "ibannummer": None,
+        "iban": None,
         "weergave_naam": None,        
     }
 

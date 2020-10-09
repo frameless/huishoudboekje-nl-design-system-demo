@@ -19,7 +19,7 @@ def test_gebruikers_post_success(app):
             "email": "a@b.c",
             "telefoonnummer": "0612345678",
             "geboortedatum": "2020-01-01",
-            'ibannummer': None,
+            'iban': None,
             'weergave_naam': None,
         }
 

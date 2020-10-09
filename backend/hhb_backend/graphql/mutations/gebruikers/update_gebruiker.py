@@ -14,7 +14,7 @@ class UpdateGebruiker(graphene.Mutation):
         email = graphene.String()
         geboortedatum = graphene.String()
         telefoonnummer = graphene.String()
-        ibannummer = graphene.String()
+        iban = graphene.String()
 
         # burger arguments
         achternaam = graphene.String()
@@ -38,8 +38,8 @@ class UpdateGebruiker(graphene.Mutation):
             gebruiker_data["geboortedatum"] = kwargs.pop("geboortedatum")
         if "telefoonnummer" in kwargs:
             gebruiker_data["telefoonnummer"] = kwargs.pop("telefoonnummer")
-        if "ibannummer" in kwargs:
-            gebruiker_data["ibannummer"] = kwargs.pop("ibannummer")
+        if "iban" in kwargs:
+            gebruiker_data["iban"] = kwargs.pop("iban")
         
         # Update Burger first to ensure the returned gebruiker has an updated weergave_naam
         if kwargs:

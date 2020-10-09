@@ -16,7 +16,7 @@ class Gebruiker(db.Model):
     telefoonnummer = Column(String)
     email = Column(String)
     geboortedatum = Column(Date)
-    ibannummer = Column(String)
+    iban = Column(String)
 
     def to_dict(self):
         return_data = {
@@ -24,7 +24,7 @@ class Gebruiker(db.Model):
             "weergave_naam": self.weergave_naam,
             "telefoonnummer": self.telefoonnummer,
             "email": self.email,
-            "ibannummer": self.ibannummer,
+            "iban": self.iban,
         }
 
         try:
