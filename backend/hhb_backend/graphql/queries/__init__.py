@@ -8,7 +8,7 @@ class RootQuery(graphene.ObjectType):
     gebruikers = GebruikersQuery.return_type
 
     def resolve_gebruiker(root, info, **kwargs):
-        return GebruikerQuery().resolver(root, info, **kwargs)
+        return GebruikerQuery.resolver(root, info, **kwargs)
 
     def resolve_gebruikers(root, info, **kwargs):
-        return GebruikersQuery().resolver(root, info, **kwargs)
+        return GebruikersQuery.resolver(root, info, **kwargs)
