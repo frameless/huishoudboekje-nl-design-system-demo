@@ -44,7 +44,7 @@ spec:
             - name: OIDC_REDIRECT_URI
               value: "{{ .Values.oidc.redirectUri}}"
             - name: HHB_SERVICE_URL
-              value: {{ include "medewerker-backend.huishoudboekjeServiceName" .}}
+              value: {{ printf "http://%s" (include "medewerker-backend.huishoudboekjeServiceName" .) }}
             - name: SECRET_KEY
               valueFrom:
                 secretKeyRef:

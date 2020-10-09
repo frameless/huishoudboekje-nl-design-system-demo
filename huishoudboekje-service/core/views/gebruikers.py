@@ -4,7 +4,7 @@ from flask import request
 from flask_inputs import Inputs
 from flask_inputs.validators import JsonSchema
 from models.gebruiker import Gebruiker
-from database.database import db
+from core.database import db
 
 gebruiker_schema = {
    "type": "object",
@@ -17,7 +17,10 @@ gebruiker_schema = {
        },
        "geboortedatum": {
            "type": "string",
-           "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+           "pattern": "^(?:[0-9]{4}-[0-9]{2}-[0-9]{2}|)$"
+       },
+       "iban": {
+           "type": "string",
        }
    },
    "required": []
@@ -32,8 +35,14 @@ class GebruikerView(MethodView):
 
     def get(self):
         """ Return a list of all Gebruikers """
-        gebruikers = Gebruiker.query.all()
-        return {"data": [g.to_dict() for g in gebruikers]}
+        filter_ids = request.args.get('filter_ids')
+        gebruikers = Gebruiker.query
+        if filter_ids:
+            try:
+                gebruikers = gebruikers.filter(Gebruiker.id.in_([int(id) for id in filter_ids.split(",")]))
+            except ValueError:
+                return {"errors": ["Input for filter_ids is not correct"]}, 400
+        return {"data": [g.to_dict() for g in gebruikers.all()]}
 
     def post(self):
         """ Create and return a new Gebruiker """

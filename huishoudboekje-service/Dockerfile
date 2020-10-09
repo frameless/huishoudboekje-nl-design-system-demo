@@ -24,7 +24,7 @@ ENV GUNICORN_PORT="8000" \
     PYTHONUNBUFFERED="1" \
     PATH="/app/.local/bin:${PATH}" \
     APP_NAME="wsgi:app" \
-    APP_SETTINGS="database.config.ProductionConfig"
+    APP_SETTINGS="core.config.ProductionConfig"
 
 # Runtime envrionment
 CMD ["bash", "-c", "exec gunicorn \
