@@ -4,7 +4,7 @@ import {Box, Button, Divider, Flex, FormHelperText, FormLabel, Heading, Input, S
 import {useInput, useIsMobile, useNumberInput, useToggle, Validators} from "react-grapple";
 import BackButton from "../BackButton";
 import Routes from "../../config/routes";
-import {MOBILE_BREAKPOINT, Months, Regex} from "../../utils/things";
+import {isDev, MOBILE_BREAKPOINT, Months, Regex} from "../../utils/things";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
 import {useMutation} from "@apollo/client";
 import {sampleData} from "../../config/sampleData/sampleData";
@@ -12,7 +12,7 @@ import {useHistory} from "react-router-dom";
 import {CreateGebruikerMutation} from "../../services/graphql/mutations";
 
 // Todo: add more detailed error message per field?
-const CreateCitizen = () => {
+const CreateBurger = () => {
 	const {t} = useTranslation();
 	const {push} = useHistory();
 	const isMobile = useIsMobile(MOBILE_BREAKPOINT);
@@ -168,7 +168,7 @@ const CreateCitizen = () => {
 				</Stack>
 			</Stack>
 
-			{process.env.NODE_ENV === "development" && (
+			{isDev && (
 				<Flex justifyContent={"center"}>
 					<Button maxWidth={350} variantColor={"yellow"} variant={"outline"} onClick={() => prePopulateForm()}>Formulier snel invullen met testdata</Button>
 				</Flex>
@@ -209,9 +209,10 @@ const CreateCitizen = () => {
 										<Input isInvalid={isInvalid(dateOfBirth.day)} {...dateOfBirth.day.bind} id="dateOfBirth.day" />
 									</Box>
 									<Box flex={1}>
-										<Select isInvalid={isInvalid(dateOfBirth.month)} {...dateOfBirth.month.bind} id="dateOfBirth.month" value={parseInt(dateOfBirth.month.value.toString()).toString()}>
+										<Select isInvalid={isInvalid(dateOfBirth.month)} {...dateOfBirth.month.bind} id="dateOfBirth.month"
+										        value={parseInt(dateOfBirth.month.value.toString()).toString()}>
 											{Months.map((m, i) => (
-												<option key={i} value={i}>{t(`months.${i + 1}`)}</option>
+												<option key={i} value={i}>{t("months." + m)}</option>
 											))}
 										</Select>
 									</Box>
@@ -299,4 +300,4 @@ const CreateCitizen = () => {
 	</>);
 };
 
-export default CreateCitizen;
+export default CreateBurger;

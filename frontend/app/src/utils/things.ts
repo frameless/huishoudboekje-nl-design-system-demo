@@ -21,3 +21,5 @@ const Date = /^(\d{2})-(\d{2})-(\d{4})$/;
 export const Regex = {ZipcodeNL, PhoneNumberNL, MobilePhoneNL, IbanNL, BsnNL, Date};
 
 export const Months = ["jan", "feb", "mrt", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
+
+export const isDev = process.env.NODE_ENV === "development";

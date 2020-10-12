@@ -2,16 +2,17 @@ import {Box, Button, Divider, FormHelperText, FormLabel, Heading, Input, Select,
 import React, {useEffect} from "react";
 import {useInput, useIsMobile, useNumberInput, Validators} from "react-grapple";
 import {useTranslation} from "react-i18next";
-import {useParams} from "react-router-dom";
+import {useParams, Redirect} from "react-router-dom";
 import Routes from "../../config/routes";
 import BackButton from "../BackButton";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
-import {Months, Regex} from "../../utils/things";
-import {useQuery} from "@apollo/client";
+import {isDev, Months, Regex} from "../../utils/things";
+import {useMutation, useQuery} from "@apollo/client";
 import {IGebruiker} from "../../models";
 import {GetOneGebruikerQuery} from "../../services/graphql/queries";
+import {DeleteGebruikerMutation} from "../../services/graphql/mutations";
 
-const CitizenDetail = () => {
+const BurgerDetail = () => {
 	const isMobile = useIsMobile();
 	const {t} = useTranslation();
 	const {id} = useParams();
@@ -74,9 +75,12 @@ const CitizenDetail = () => {
 		placeholder: t("forms.iban-placeholder")
 	});
 
-	const {data, loading} = useQuery<{ gebruiker: IGebruiker }>(GetOneGebruikerQuery, {
+	const {data, loading, error} = useQuery<{ gebruiker: IGebruiker }>(GetOneGebruikerQuery, {
 		variables: {id}
 	});
+
+	const [softDeleteMutation] = useMutation(DeleteGebruikerMutation, {variables: {force: false, id}});
+	const [hardDeleteMutation] = useMutation(DeleteGebruikerMutation, {variables: {force: true, id}});
 
 	// Todo: API call
 	const onSubmit = (e) => {
@@ -96,20 +100,22 @@ const CitizenDetail = () => {
 		if (mounted && data) {
 			const {gebruiker} = data;
 
-			// bsn.setValue(gebruiker.bsn.toString());
-			initials.setValue(gebruiker.burger?.voorletters || "");
-			firstName.setValue(gebruiker.burger?.voornamen || "");
-			lastName.setValue(gebruiker.burger?.achternaam || "");
-			dateOfBirth.day.setValue(new Date(gebruiker.geboortedatum).getDate());
-			dateOfBirth.month.setValue(new Date(gebruiker.geboortedatum).getMonth() + 1);
-			dateOfBirth.year.setValue(new Date(gebruiker.geboortedatum).getFullYear());
-			mail.setValue(gebruiker.email);
-			street.setValue(gebruiker.burger?.straatnaam || "");
-			houseNumber.setValue(gebruiker.burger?.huisnummer || "");
-			zipcode.setValue(gebruiker.burger?.postcode || "");
-			city.setValue(gebruiker.burger?.woonplaatsnaam || "");
-			phoneNumber.setValue(gebruiker.telefoonnummer);
-			iban.setValue(gebruiker.iban);
+			if (gebruiker.burger) {
+				// bsn.setValue(gebruiker.bsn.toString());
+				initials.setValue(gebruiker.burger?.voorletters || "");
+				firstName.setValue(gebruiker.burger?.voornamen || "");
+				lastName.setValue(gebruiker.burger?.achternaam || "");
+				dateOfBirth.day.setValue(new Date(gebruiker.geboortedatum).getDate());
+				dateOfBirth.month.setValue(new Date(gebruiker.geboortedatum).getMonth() + 1);
+				dateOfBirth.year.setValue(new Date(gebruiker.geboortedatum).getFullYear());
+				mail.setValue(gebruiker.email);
+				street.setValue(gebruiker.burger?.straatnaam || "");
+				houseNumber.setValue(gebruiker.burger?.huisnummer || "");
+				zipcode.setValue(gebruiker.burger?.postcode || "");
+				city.setValue(gebruiker.burger?.woonplaatsnaam || "");
+				phoneNumber.setValue(gebruiker.telefoonnummer);
+				iban.setValue(gebruiker.iban);
+			}
 		}
 
 		return () => {
@@ -126,9 +132,29 @@ const CitizenDetail = () => {
 				<Spinner />
 			</Stack>
 		)}
-		{!loading && data && (
+		{!loading && error && (
+			<Redirect to={Routes.NotFound} />
+		)}
+		{!loading && !error && data && (
 			<Stack spacing={5}>
 				<Heading size={"lg"}>{data.gebruiker.burger?.voornamen} {data.gebruiker.burger?.achternaam}</Heading>
+
+				{isDev && (
+					<Stack direction={"row"} justifyContent={"center"} spacing={5}>
+						<Button maxWidth={350} variantColor={"yellow"} variant={"outline"} onClick={() => {
+							softDeleteMutation().then(result => toast({
+								title: "User soft deleted",
+								description: JSON.stringify(result, null, 2)
+							}))
+						}}>Soft delete</Button>
+						<Button maxWidth={350} variantColor={"red"} variant={"outline"} onClick={() => {
+							hardDeleteMutation().then(result => toast({
+								title: "User hard deleted",
+								description: JSON.stringify(result, null, 2)
+							}))
+						}}>Hard delete</Button>
+					</Stack>
+				)}
 
 				<Box as={"form"} onSubmit={onSubmit}>
 					<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
@@ -165,7 +191,8 @@ const CitizenDetail = () => {
 											<Input isInvalid={!dateOfBirth.day.isValid} {...dateOfBirth.day.bind} id="dateOfBirth.day" />
 										</Box>
 										<Box flex={1}>
-											<Select isInvalid={!dateOfBirth.month.isValid} {...dateOfBirth.month.bind} id="dateOfBirth.month" value={parseInt(dateOfBirth.month.value.toString()).toString()}>
+											<Select isInvalid={!dateOfBirth.month.isValid} {...dateOfBirth.month.bind} id="dateOfBirth.month"
+											        value={parseInt(dateOfBirth.month.value.toString()).toString()}>
 												{Months.map((m, i) => (
 													<option key={i} value={i}>{t("months." + m)}</option>
 												))}
@@ -257,4 +284,4 @@ const CitizenDetail = () => {
 	</>);
 };
 
-export default CitizenDetail;
+export default BurgerDetail;

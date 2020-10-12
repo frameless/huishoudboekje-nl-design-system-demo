@@ -10,8 +10,10 @@ import {ReactComponent as Empty} from "../../assets/images/illustration-empty.sv
 import GebruikerCard from "./GebruikerCard";
 import {IGebruiker} from "../../models";
 import {GetAllGebruikersQuery} from "../../services/graphql/queries";
+import NoBurgersFound from "./NoBurgersFound";
+import NoSearchResults from "./NoSearchResults";
 
-const CitizenList = () => {
+const BurgerList = () => {
 	const {t} = useTranslation();
 	const {push} = useHistory();
 	const toast = useToast();
@@ -19,7 +21,13 @@ const CitizenList = () => {
 		placeholder: t("search-placeholder")
 	});
 
-	const {data, loading, error} = useQuery<{ gebruikers: IGebruiker[] }>(GetAllGebruikersQuery);
+	const {data, loading, error} = useQuery<{ gebruikers: IGebruiker[] }>(GetAllGebruikersQuery, {
+		variables: {
+			showInactive: true
+		},
+		// This forces a refetch when we're routed back to this page after a mutation.
+		fetchPolicy: "no-cache"
+	});
 	const [filteredBurgers, setFilteredBurgers] = useState<IGebruiker[]>([]);
 
 	useEffect(() => {
@@ -43,7 +51,7 @@ const CitizenList = () => {
 	}, [data, search.value]);
 
 	useEffect(() => {
-		if(error){
+		if (error) {
 			console.error(error);
 		}
 	}, [error]);
@@ -88,17 +96,12 @@ const CitizenList = () => {
 			{!loading && !error && (<>
 				{filteredBurgers.length === 0 && (<>
 					{search.value.trim().length === 0 ? (
-						<Stack justifyContent={"center"} alignItems={"center"} bg={"white"} p={20} spacing={10}>
-							<Box as={Empty} maxWidth={[200, 300, 400]} height={"auto"} />
-							<Text fontSize={"sm"}>Voeg burgers toe door te klikken op de knop "Burger toevoegen"</Text>
-							<Button size={"sm"} variantColor={"primary"} variant={"solid"} leftIcon={"add"}
-							        onClick={() => push(Routes.CitizenNew)}>{t("add-citizen-button-label")}</Button>
-						</Stack>
+						<NoBurgersFound />
 					) : (
-						<Stack justifyContent={"center"} alignItems={"center"} bg={"white"} p={20} spacing={10}>
-							<Box as={Empty} maxWidth={[200, 300, 400]} height={"auto"} />
-							<Text fontSize={"sm"}>{t("burgers.errors.noSearchResults")}</Text>
-						</Stack>
+						<NoSearchResults onSearchReset={() => {
+							search.clear();
+							search.ref.current!.focus();
+						}} />
 					)}
 				</>)}
 				{filteredBurgers.length > 0 && (
@@ -115,4 +118,4 @@ const CitizenList = () => {
 	)
 };
 
-export default CitizenList;
+export default BurgerList;

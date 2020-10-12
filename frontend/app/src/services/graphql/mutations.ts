@@ -36,3 +36,11 @@ export const CreateGebruikerMutation = gql`
     }
     ${GebruikerFragment}
 `;
+
+export const DeleteGebruikerMutation = gql`
+    mutation deleteGebruiker($id: Int!, $force: Boolean = false){
+        deleteGebruiker(id: $id, force: $force) {
+            ok
+        }
+    }
+`;
