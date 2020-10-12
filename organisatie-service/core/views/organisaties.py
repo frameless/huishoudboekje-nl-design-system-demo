@@ -63,7 +63,7 @@ class OrganisatieView(MethodView):
         for key, value in request.json.items():
             setattr(organisatie, key, value)
         db.session.commit()
-        return {"data": organisatie.to_dict()}, 201
+        return {"data": organisatie.to_dict()}, 202
 
     def delete(self):
         """ Delete the current Gebruiker """
