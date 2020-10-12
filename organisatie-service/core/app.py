@@ -1,7 +1,7 @@
 """ Main app for core """
 import os
 from flask import Flask, Response
-# import views
+from core.views.organisaties import OrganisatieView
 from core import database, config
 db = database.db
 from models import *
@@ -18,6 +18,11 @@ def create_app(config_name=os.getenv('APP_SETTINGS', 'core.config.DevelopmentCon
 
     # Views
     # ...
+    app.add_url_rule(
+        '/organisaties',
+        view_func=OrganisatieView.as_view('organisatie_view'),
+        strict_slashes=False
+    )
 
     return app
 
