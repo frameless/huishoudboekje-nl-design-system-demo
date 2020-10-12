@@ -1,6 +1,6 @@
-# Huishoudboekje Service
+# Organisatie Service
 
-This service contains the functionality needed to access data that belongs to the Huishoudboekje processes.
+This service contains the functionality needed to access data that belongs to the Organisatie processes.
  
 ## Setup
 
@@ -14,7 +14,7 @@ This service contains the functionality needed to access data that belongs to th
     ```
     PATH=/Applications/Postgres.app/Contents/Versions/13/bin:$PATH
     createuser --echo --login --host localhost --username postgres huishoudboekjeservice
-    createdb --echo --owner huishoudboekjeservice --host localhost --username postgres huishoudboekjeservice
+    createdb --echo --owner huishoudboekjeservice --host localhost --username postgres organisaties
     psql --host localhost --username postgres --dbname postgres --command "ALTER USER huishoudboekjeservice WITH ENCRYPTED PASSWORD 'huishoudboekjeservice';"
     ```
 
@@ -23,7 +23,7 @@ This service contains the functionality needed to access data that belongs to th
 ### Layer 1 (database)
 
 #### models
-Contains ORM models for Huishoudboekje Service
+Contains ORM models for Organisatie Service
 
 #### migrations
 Database migration schema
@@ -35,7 +35,7 @@ python manage.py db migrate
 
 ##### Apply migrations on database
 ```shell script
-export HHB_DATABASE_URL="postgresql://huishoudboekjeservice:huishoudboekjeservice@localhost/huishoudboekjeservice"
+export ORGANISATIE_DATABASE_URL="postgresql://huishoudboekjeservice:huishoudboekjeservice@localhost/huishoudboekjeservice"
 python manage.py db upgrade
 ```
 ### Layer 2 (services)
@@ -47,10 +47,10 @@ Prerequisites:
 
 ```shell script
 export FLASK_APP="core.app"
-export FLASK_RUN_PORT="5001"
+export FLASK_RUN_PORT="8001"
 export FLASK_ENV="development"
 export HHB_SECRET="local-secret"
-export HHB_DATABASE_URL="postgresql://huishoudboekjeservice:huishoudboekjeservice@localhost/huishoudboekjeservice"
+export ORGANISATIE_DATABASE_URL="postgresql://huishoudboekjeservice:huishoudboekjeservice@localhost/huishoudboekjeservice"
 export APP_SETTINGS="core.config.DevelopmentConfig"
 
 flask run
