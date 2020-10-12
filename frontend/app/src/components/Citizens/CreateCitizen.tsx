@@ -1,28 +1,30 @@
-import React, {useEffect} from "react";
+import React from "react";
 import {useTranslation} from "react-i18next";
-import {Box, Button, Divider, FormHelperText, FormLabel, Heading, Input, Stack, Tooltip, useToast} from "@chakra-ui/core";
-import {useInput, useIsMobile, useToggle, Validators} from "react-grapple";
+import {Box, Button, Divider, Flex, FormHelperText, FormLabel, Heading, Input, Stack, Tooltip, useToast} from "@chakra-ui/core";
+import {useInput, useIsMobile, useNumberInput, useToggle, Validators} from "react-grapple";
 import BackButton from "../BackButton";
 import Routes from "../../config/routes";
 import {MOBILE_BREAKPOINT, Regex} from "../../utils/things";
-import {useAsync} from "react-async"
-import {CreateCitizenMutation} from "../../services/citizens";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
+import {useMutation} from "@apollo/client";
+import {CreateGebruikerMutation} from "../../services/graphql";
+import {sampleData} from "../../config/sampleData/sampleData";
+import {useHistory} from "react-router-dom";
 
 // Todo: add more detailed error message per field?
 const CreateCitizen = () => {
 	const {t} = useTranslation();
-	// const {push} = useHistory(); // Todo redirect to page after successful submit
+	const {push} = useHistory();
 	const isMobile = useIsMobile(MOBILE_BREAKPOINT);
 	const toast = useToast();
 
 	const [isSubmitted, toggleSubmitted] = useToggle();
 
-	const bsn = useInput<string>({
-		defaultValue: "",
-		validate: [Validators.required, (v) => new RegExp(Regex.BsnNL).test(v)],
-		placeholder: "123456789"
-	});
+	// const bsn = useInput<string>({
+	// 	defaultValue: "",
+	// 	validate: [Validators.required, (v) => new RegExp(Regex.BsnNL).test(v)],
+	// 	placeholder: "123456789"
+	// });
 	const initials = useInput<string>({
 		defaultValue: "",
 		validate: [Validators.required]
@@ -35,15 +37,24 @@ const CreateCitizen = () => {
 		defaultValue: "",
 		validate: [Validators.required]
 	});
-	const dateOfBirth = useInput<string>({
-		defaultValue: "",
-		validate: [Validators.required, (v) => new RegExp(Regex.Date).test(v)],
-		placeholder: "24-09-1960"
-	});
-	const mail = useInput<string>({
-		defaultValue: "",
-		validate: [Validators.required, Validators.email]
-	});
+	const dateOfBirth = {
+		day: useNumberInput({
+			validate: [(v) => new RegExp(/^[0-9]{2}$/).test(v.toString())],
+			placeholder: t("forms.dateOfBirth.day"),
+			min: 1,
+			max: 31,
+		}),
+		month: useNumberInput({
+			validate: [(v) => new RegExp(/^[0-9]{1,2}$/).test(v.toString())],
+			placeholder: t("forms.dateOfBirth.month"),
+			min: 1, max: 12
+		}),
+		year: useNumberInput({
+			validate: [(v) => new RegExp(/^[0-9]{4}$/).test(v.toString())],
+			placeholder: t("forms.dateOfBirth.year"),
+			max: (new Date()).getFullYear(), // No future births.
+		})
+	}
 	const street = useInput<string>({
 		defaultValue: "",
 		validate: [Validators.required]
@@ -66,13 +77,36 @@ const CreateCitizen = () => {
 		validate: [Validators.required, (v) => new RegExp(Regex.PhoneNumberNL).test(v) || new RegExp(Regex.MobilePhoneNL).test(v)],
 		placeholder: "0612345678"
 	});
+	const mail = useInput<string>({
+		defaultValue: "",
+		validate: [Validators.required, Validators.email]
+	});
 	const iban = useInput<string>({
 		defaultValue: "",
 		validate: [Validators.required, (v) => new RegExp(Regex.IbanNL).test(v)],
 		placeholder: t("forms.iban-placeholder")
 	});
 
-	const {data, error, isPending, run, cancel} = useAsync({deferFn: CreateCitizenMutation});
+	const [createGebruiker, {loading}] = useMutation(CreateGebruikerMutation);
+
+	// TODO: remove this before commit
+	const prePopulateForm = () => {
+		const c = sampleData.citizens[0];
+
+		initials.setValue(c.initials);
+		firstName.setValue(c.firstName);
+		lastName.setValue(c.lastName);
+		dateOfBirth.day.setValue(c.dateOfBirth.split("-")[0]);
+		dateOfBirth.month.setValue(c.dateOfBirth.split("-")[1]);
+		dateOfBirth.year.setValue(c.dateOfBirth.split("-")[2]);
+		street.setValue(c.street);
+		houseNumber.setValue(c.houseNumber);
+		zipcode.setValue(c.zipcode);
+		city.setValue(c.city);
+		phoneNumber.setValue(c.phoneNumber.toString());
+		mail.setValue(c.mail);
+		iban.setValue(c.iban);
+	}
 
 	const onSubmit = (e) => {
 		e.preventDefault();
@@ -88,31 +122,35 @@ const CreateCitizen = () => {
 			return;
 		}
 
-		run();
-	};
-
-	useEffect(() => {
-		if (!isPending && error) {
-			toast({
-				status: "error",
-				title: error.name + ": " + error.message,
-				position: "top"
-			});
-		}
-
-		if (!isPending && data) {
+		createGebruiker({
+			variables: {
+				voorletters: initials.value,
+				voornamen: firstName.value,
+				achternaam: lastName.value,
+				geboortedatum: [dateOfBirth.year, dateOfBirth.month, dateOfBirth.day].map(d => d.value).join("-"),
+				straatnaam: street.value,
+				huisnummer: houseNumber.value,
+				postcode: zipcode.value,
+				woonplaatsnaam: city.value,
+				telefoonnummer: phoneNumber.value,
+				email: mail.value,
+				iban: iban.value,
+			}
+		}).then(result => {
 			toast({
 				status: "success",
 				title: t("forms.citizens.successMessage"),
-				position: "top"
+				position: "top",
 			});
-			// Todo: redirect to citizen detail page
-		}
 
-		return () => {
-			cancel();
-		}
-	}, [cancel, data, error, isPending, t, toast]);
+			const {id} = result.data.createGebruiker.gebruiker;
+			if (id) {
+				push(Routes.Citizen(id));
+			}
+		}).catch(err => {
+			console.log("Error:", err);
+		});
+	};
 
 	const isInvalid = (input) => isSubmitted && !input.isValid;
 
@@ -126,6 +164,12 @@ const CreateCitizen = () => {
 				</Stack>
 			</Stack>
 
+			{process.env.NODE_ENV === "development" && (
+				<Flex justifyContent={"center"}>
+					<Button maxWidth={350} variantColor={"yellow"} variant={"outline"} onClick={() => prePopulateForm()}>Formulier snel invullen met testdata</Button>
+				</Flex>
+			)}
+
 			<Box as={"form"} onSubmit={onSubmit}>
 				<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
 					<Stack direction={isMobile ? "column" : "row"} spacing={2}>
@@ -134,12 +178,12 @@ const CreateCitizen = () => {
 							<FormHelperText id="personal-helperText">{t("forms.citizens.personal-helperText")}</FormHelperText>
 						</FormLeft>
 						<FormRight>
-							<Stack spacing={1}>
-								<FormLabel htmlFor={"bsn"}>{t("bsn")}</FormLabel>
-								<Tooltip label={t("forms.bsn-tooltip")} aria-label={t("bsn")} hasArrow placement={isMobile ? "top" : "left"}>
-									<Input isInvalid={isInvalid(bsn)} {...bsn.bind} id="bsn" />
-								</Tooltip>
-							</Stack>
+							{/*<Stack spacing={1}>*/}
+							{/*	<FormLabel htmlFor={"bsn"}>{t("bsn")}</FormLabel>*/}
+							{/*	<Tooltip label={t("forms.bsn-tooltip")} aria-label={t("bsn")} hasArrow placement={isMobile ? "top" : "left"}>*/}
+							{/*		<Input isInvalid={isInvalid(bsn)} {...bsn.bind} id="bsn" />*/}
+							{/*	</Tooltip>*/}
+							{/*</Stack>*/}
 							<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 								<Stack spacing={1} flex={1}>
 									<FormLabel htmlFor={"initials"}>{t("initials")}</FormLabel>
@@ -156,9 +200,17 @@ const CreateCitizen = () => {
 							</Stack>
 							<Stack spacing={1}>
 								<FormLabel htmlFor={"dateOfBirth"}>{t("dateOfBirth")}</FormLabel>
-								<Tooltip label={t("forms.dateOfBirth-tooltip")} aria-label={t("dateOfBirth")} hasArrow placement={isMobile ? "top" : "left"}>
-									<Input isInvalid={isInvalid(dateOfBirth)} {...dateOfBirth.bind} id="dateOfBirth" />
-								</Tooltip>
+								<Stack direction={"row"} maxW="100%">
+									<Box flex={1}>
+										<Input isInvalid={isInvalid(dateOfBirth.day)} {...dateOfBirth.day.bind} id="dateOfBirth.day" />
+									</Box>
+									<Box flex={1}>
+										<Input isInvalid={isInvalid(dateOfBirth.month)} {...dateOfBirth.month.bind} id="dateOfBirth.month" />
+									</Box>
+									<Box flex={2}>
+										<Input isInvalid={isInvalid(dateOfBirth.year)} {...dateOfBirth.year.bind} id="dateOfBirth.year" />
+									</Box>
+								</Stack>
 							</Stack>
 						</FormRight>
 					</Stack>
@@ -229,7 +281,7 @@ const CreateCitizen = () => {
 						<FormLeft />
 						<FormRight>
 							<Stack direction={"row"} spacing={1} justifyContent={"flex-end"}>
-								<Button isLoading={isPending} type={"submit"} variantColor={"primary"} onClick={onSubmit}>{t("save")}</Button>
+								<Button isLoading={loading} type={"submit"} variantColor={"primary"} onClick={onSubmit}>{t("save")}</Button>
 							</Stack>
 						</FormRight>
 					</Stack>

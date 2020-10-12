@@ -30,20 +30,23 @@ type Gebruiker {
     burger: Burger
     email: String
     geboortedatum: String
+    iban: String
     id: Int
     telefoonnummer: String
+    weergaveNaam: String
 }
 
 "The root of all mutations "
 type RootMutation {
-    createGebruiker(achternaam: String, email: String, geboortedatum: String, huisnummer: String, postcode: String, straatnaam: String, telefoonnummer: String, voorletters: String, voornamen: String, woonplaatsnaam: String): CreateGebruiker
+    createGebruiker(achternaam: String, email: String, geboortedatum: String, huisnummer: String, iban: String, postcode: String, straatnaam: String, telefoonnummer: String, voorletters: String, voornamen: String, woonplaatsnaam: String): CreateGebruiker
     deleteGebruiker(force: Boolean = false, gebruikerId: Int!): DeleteGebruiker
-    updateGebruiker(achternaam: String, email: String, geboortedatum: String, gebruikerId: Int!, huisnummer: String, postcode: String, straatnaam: String, telefoonnummer: String, voorletters: String, voornamen: String, woonplaatsnaam: String): UpdateGebruiker
+    updateGebruiker(achternaam: String, email: String, geboortedatum: String, gebruikerId: Int!, huisnummer: String, iban: String, postcode: String, straatnaam: String, telefoonnummer: String, voorletters: String, voornamen: String, woonplaatsnaam: String): UpdateGebruiker
 }
 
 "The root of all queries "
 type RootQuery {
-    gebruikers: [Gebruiker]
+    gebruiker(id: Int!): Gebruiker
+    gebruikers(ids: [Int] = []): [Gebruiker]
 }
 
 type UpdateGebruiker {

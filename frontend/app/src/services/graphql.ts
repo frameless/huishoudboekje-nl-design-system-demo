@@ -11,49 +11,64 @@ const BurgerFragment = gql`
             voornamen
             woonplaatsnaam
         }
-    }`
+    }
+`;
 
-export const GetGebruikersQuery = gql`
-    query {
-        gebruikers {
-            id
-            telefoonnummer
-            email
-            geboortedatum
-            ...Burger
-        }
+const GebruikerFragment = gql`
+    fragment Gebruiker on Gebruiker {
+        id
+        weergaveNaam
+        email
+        geboortedatum
+        telefoonnummer
+        iban
+        ...Burger
     }
     ${BurgerFragment}
-`
+`;
 
-// export const CreateGebruikerMutation = gql`
-//     mutation createGebruiker(
-//         $achternaam: String
-//         $email: String
-//         $geboortedatum: String
-//         $huisnummer: String
-//         $postcode: String
-//         $straatnaam: String
-//         $telefoonnummer: String
-//         $voorletters: String
-//         $voornamen: String
-//         $woonplaatsnaam: String
-//     ) {
-//         createGebruiker(
-//             achternaam: $achternaam
-//             email: $email
-//             geboortedatum: $geboortedatum
-//             huisnummer: $huisnummer
-//             postcode: $postcode
-//             straatnaam: $straatnaam
-//             telefoonnummer: $telefoonnummer
-//             voorletters: $voorletters
-//             voornamen: $voornamen
-//             woonplaatsnaam: $woonplaatsnaam
-//         ){
-//             ok
-//             gebruiker {
-//                 id
-//             }
-//         }
-//     }`
+// Todo: check if this works (because DB was empty when testing)
+export const GetAllGebruikersQuery = gql`
+    query getAllGebruikers {
+        gebruikers {
+            ...Gebruiker
+        }
+    }
+    ${GebruikerFragment}
+`;
+
+export const CreateGebruikerMutation = gql`
+    mutation createGebruiker(
+        $voorletters: String
+        $voornamen: String
+        $achternaam: String
+        $geboortedatum: String
+        $straatnaam: String
+        $huisnummer: String
+        $postcode: String
+        $woonplaatsnaam: String
+        $telefoonnummer: String
+        $email: String
+        $iban: String
+    ) {
+        createGebruiker(
+            voorletters: $voorletters
+            voornamen: $voornamen
+            achternaam: $achternaam
+            geboortedatum: $geboortedatum
+            straatnaam: $straatnaam
+            huisnummer: $huisnummer
+            postcode: $postcode
+            woonplaatsnaam: $woonplaatsnaam
+            telefoonnummer: $telefoonnummer
+            email: $email
+            iban: $iban
+        ){
+            ok
+            gebruiker {
+                ...Gebruiker
+            }
+        }
+    }
+    ${GebruikerFragment}
+`

@@ -1,16 +1,16 @@
 import React from "react";
 import {Box, BoxProps, Heading, Spinner, Stack} from "@chakra-ui/core";
 import {useQuery} from "@apollo/client";
-import {GetGebruikersQuery} from "../services/graphql";
+import {GetAllGebruikersQuery} from "../services/graphql";
 import {print} from "graphql";
 
 const GetGebruikers: React.FC<BoxProps> = (props) => {
-	const {data, loading, error} = useQuery(GetGebruikersQuery);
+	const {data, loading, error} = useQuery(GetAllGebruikersQuery);
 
 	return (
 		<Stack spacing={5} p={10} bg={"white"} {...props}>
 			<Heading size="md">Query getGebruikers</Heading>
-			<Box as="pre" p={2} bg={"gray.800"} color={"gray.300"}>{print(GetGebruikersQuery)}</Box>
+			<Box as="pre" p={2} bg={"gray.800"} color={"gray.300"}>{print(GetAllGebruikersQuery)}</Box>
 
 			<Heading size="md">Result</Heading>
 			{loading && <Spinner />}

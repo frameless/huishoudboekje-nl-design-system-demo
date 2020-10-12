@@ -1,4 +1,11 @@
 {
+  "burgers": {
+    "errors": {
+      "noSearchResults": "Geen burgers gevonden. Gebruik een andere zoekterm.",
+      "serverError": "Er is een onbekende fout opgetreden. Probeer het later nog een keer."
+    }
+  },
+
   "add-citizen-button-label": "Toevoegen",
   "street": "Straatnaam",
   "houseNumber": "Huisnummer",
@@ -15,7 +22,11 @@
   "forms": {
     "bsn-tooltip": "Het burgerservicenummer bestaat uit 9 getallen en staat op het identificatiebewijs.",
     "zipcode-tooltip": "Invoer zonder spaties. Voorbeeld: 1234AB",
-    "dateOfBirth-tooltip": "Invoer dd-mm-jjjj. Voorbeeld: 24-09-1960",
+    "dateOfBirth": {
+      "day":  "dd",
+      "month": "mm",
+      "year": "jjjj"
+    },
     "phoneNumber-tooltip": "Invoer zonder spaties en streepjes. Voorbeeld: 0612345678",
     "iban-placeholder": "NL20BANK0001234567",
     "iban-tooltip": "Invoer zonder spaties. Voorbeeld: NL20BANK0001234567",
@@ -47,6 +58,8 @@
   "settings": "Instellingen",
   "user": "Gebruiker",
   "zipcode": "Postcode",
-
-  "generalError": "Er ging iets mis. Probeer het later nog eens."
+  "genericError": {
+    "title": "Fout.",
+    "description": "Er ging iets mis. Probeer het later nog eens."
+  }
 }

@@ -17,6 +17,10 @@
       "warn",
       "tab"
     ],
+    "brace-style": [
+      "warn",
+      "stroustrup"
+    ],
     "linebreak-style": [
       "warn",
       "unix"

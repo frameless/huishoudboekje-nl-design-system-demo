@@ -1,62 +1,59 @@
 import React, {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
-import {Box, Button, Heading, Icon, IconButton, Input, InputGroup, InputLeftElement, InputRightElement, SimpleGrid, Spinner, Stack, Text} from "@chakra-ui/core";
-import CitizenCard from "./CitizenCard";
 import {useInput} from "react-grapple";
-import {searchFields} from "../../utils/things";
-import Routes from "../../config/routes";
 import {useHistory} from "react-router-dom";
+import {useQuery} from "@apollo/client";
+import {GetAllGebruikersQuery} from "../../services/graphql";
+import {searchFields} from "../../utils/things";
+import {Box, Button, Heading, Icon, IconButton, Input, InputGroup, InputLeftElement, InputRightElement, SimpleGrid, Spinner, Stack, Text, useToast} from "@chakra-ui/core";
+import Routes from "../../config/routes";
 import {ReactComponent as Empty} from "../../assets/images/illustration-empty.svg";
-import {useAsync} from "react-async";
-import {GetCitizensQuery} from "../../services/citizens";
+import GebruikerCard from "./GebruikerCard";
+import {IGebruiker} from "../../models";
 
 const CitizenList = () => {
 	const {t} = useTranslation();
 	const {push} = useHistory();
+	const toast = useToast();
 	const search = useInput<string>({
 		placeholder: t("search-placeholder")
 	});
 
-	// Todo: make this a graphQL query and maybe pagination once this list becomes too long (50+ items)
-	const {data: allCitizens, isPending} = useAsync({promiseFn: GetCitizensQuery});
-	const [citizens, setCitizens] = useState(allCitizens || []);
+	const {data, loading, error} = useQuery<{ gebruikers: IGebruiker[] }>(GetAllGebruikersQuery);
+	const [filteredBurgers, setFilteredBurgers] = useState<IGebruiker[]>([]);
+
+	useEffect(() => {
+		if (data) {
+			if (data.gebruikers) {
+				setFilteredBurgers(data.gebruikers);
+			}
+		}
+	}, [data, error, t, toast])
 
 	useEffect(() => {
 		let mounted = true;
 
-		if (mounted && !isPending && allCitizens) {
-			setCitizens(allCitizens);
+		if (mounted && data && data.gebruikers) {
+			setFilteredBurgers(data.gebruikers.filter(b => searchFields(search.value, [b.burger.achternaam, b.burger.voornamen])));
 		}
 
 		return () => {
 			mounted = false
 		};
-	}, [allCitizens, isPending]);
+	}, [data, search.value]);
 
 	useEffect(() => {
-		let mounted = true;
-
-		if (mounted && allCitizens) {
-			setCitizens(allCitizens.filter(c => searchFields(search.value, [c.firstName, c.lastName])));
+		if(error){
+			console.error(error);
 		}
-
-		return () => {
-			mounted = false
-		};
-	}, [allCitizens, search.value]);
-
-	const isLoading = isPending;
-	const noData = !isPending && (!allCitizens || allCitizens.length === 0);
-	const noSearchResults = !isPending && search.value.length > 0 && citizens.length === 0;
-	const resultsFound = !isPending && citizens.length > 0;
-	const showSearch = !isPending && !noData;
-	const noActiveSearch = citizens.length === allCitizens?.length;
+	}, [error]);
 
 	const onKeyDownOnSearchField = (e) => {
 		if (e.key === "Escape") {
 			search.clear();
 		}
 	};
+
 	return (
 		<Stack spacing={5}>
 			<Stack direction={"row"} spacing={5} justifyContent={"space-between"} alignItems={"center"}>
@@ -64,48 +61,56 @@ const CitizenList = () => {
 					<Heading size={"lg"}>{t("citizens")}</Heading>
 				</Stack>
 				<Stack direction={"row"} spacing={5}>
-					{showSearch && (
-						<InputGroup>
-							<InputLeftElement><Icon name="search" color={"gray.300"} /></InputLeftElement>
-							<Input type={"text"} {...search.bind} onKeyDown={onKeyDownOnSearchField} />
-							{search.value.length > 0 && (
-								<InputRightElement>
-									<IconButton onClick={() => search.clear()} size={"xs"} variant={"link"} icon={"close"} aria-label={""} color={"gray.300"} />
-								</InputRightElement>
-							)}
-						</InputGroup>
-					)}
+					<InputGroup>
+						<InputLeftElement><Icon name="search" color={"gray.300"} /></InputLeftElement>
+						<Input type={"text"} {...search.bind} onKeyDown={onKeyDownOnSearchField} />
+						{search.value.length > 0 && (
+							<InputRightElement>
+								<IconButton onClick={() => search.clear()} size={"xs"} variant={"link"} icon={"close"} aria-label={""} color={"gray.300"} children={null} />
+							</InputRightElement>
+						)}
+					</InputGroup>
 				</Stack>
 			</Stack>
 
-			{isLoading && ( // Waiting for data to arrive
+
+			{loading && ( // Waiting for data to arrive
 				<Stack justifyContent={"center"} alignItems={"center"} bg={"white"} p={20} spacing={10}>
 					<Spinner />
 				</Stack>
 			)}
-			{noData && ( // Waiting over, but no results found
+			{!loading && error && (
 				<Stack justifyContent={"center"} alignItems={"center"} bg={"white"} p={20} spacing={10}>
 					<Box as={Empty} maxWidth={[200, 300, 400]} height={"auto"} />
-					<Text fontSize={"sm"}>Voeg burgers toe door te klikken op de knop "Burger toevoegen"</Text>
-					<Button size={"sm"} variantColor={"primary"} variant={"solid"} leftIcon={"add"}
-					        onClick={() => push(Routes.CitizenNew)}>{t("add-citizen-button-label")}</Button>
+					<Text fontSize={"sm"}>{t("burgers.errors.serverError")}</Text>
 				</Stack>
 			)}
-			{resultsFound && (
-				<SimpleGrid maxWidth={"100%"} columns={4} minChildWidth={200} spacing={5}>
-					{noActiveSearch && (
-						<Button variantColor={"primary"} borderStyle={"dashed"} variant={"outline"} leftIcon={"add"} onClick={() => push(Routes.CitizenNew)}
-						        h={"100%"} p={5}>{t("add-citizen-button-label")}</Button>)
-					}
-					{citizens.map(c => <CitizenCard key={c.id} citizen={c} cursor={"pointer"} />)}
-				</SimpleGrid>
-			)}
-			{noSearchResults && (
-				<Stack justifyContent={"center"} alignItems={"center"} bg={"white"} p={20} spacing={10}>
-					<Box as={Empty} maxWidth={[200, 300, 400]} height={"auto"} />
-					<Text fontSize={"sm"}>Geen burgers gevonden. Gebruik een andere zoekterm.</Text>
-				</Stack>
-			)}
+			{!loading && !error && (<>
+				{filteredBurgers.length === 0 && (<>
+					{search.value.trim().length === 0 ? (
+						<Stack justifyContent={"center"} alignItems={"center"} bg={"white"} p={20} spacing={10}>
+							<Box as={Empty} maxWidth={[200, 300, 400]} height={"auto"} />
+							<Text fontSize={"sm"}>Voeg burgers toe door te klikken op de knop "Burger toevoegen"</Text>
+							<Button size={"sm"} variantColor={"primary"} variant={"solid"} leftIcon={"add"}
+							        onClick={() => push(Routes.CitizenNew)}>{t("add-citizen-button-label")}</Button>
+						</Stack>
+					) : (
+						<Stack justifyContent={"center"} alignItems={"center"} bg={"white"} p={20} spacing={10}>
+							<Box as={Empty} maxWidth={[200, 300, 400]} height={"auto"} />
+							<Text fontSize={"sm"}>{t("burgers.errors.noSearchResults")}</Text>
+						</Stack>
+					)}
+				</>)}
+				{filteredBurgers.length > 0 && (
+					<SimpleGrid maxWidth={"100%"} columns={4} minChildWidth={200} spacing={5}>
+						{search.value.trim().length === 0 && (
+							<Button variantColor={"primary"} borderStyle={"dashed"} variant={"outline"} leftIcon={"add"} onClick={() => push(Routes.CitizenNew)}
+							        h={"100%"} p={5}>{t("add-citizen-button-label")}</Button>)
+						}
+						{filteredBurgers.map(g => <GebruikerCard key={g.id} gebruiker={g} cursor={"pointer"} />)}
+					</SimpleGrid>
+				)}
+			</>)}
 		</Stack>
 	)
 };
