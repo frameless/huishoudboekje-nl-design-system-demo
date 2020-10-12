@@ -1,4 +1,4 @@
-import {Box, Button, Divider, FormHelperText, FormLabel, Heading, Input, Spinner, Stack, Tooltip, useToast} from "@chakra-ui/core";
+import {Box, Button, Divider, FormHelperText, FormLabel, Heading, Input, Select, Spinner, Stack, Tooltip, useToast} from "@chakra-ui/core";
 import React, {useEffect} from "react";
 import {useInput, useIsMobile, useNumberInput, Validators} from "react-grapple";
 import {useTranslation} from "react-i18next";
@@ -6,10 +6,10 @@ import {useParams} from "react-router-dom";
 import Routes from "../../config/routes";
 import BackButton from "../BackButton";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
-import {Regex} from "../../utils/things";
+import {Months, Regex} from "../../utils/things";
 import {useQuery} from "@apollo/client";
-import {GetOneGebruikerQuery} from "../../services/graphql";
 import {IGebruiker} from "../../models";
+import {GetOneGebruikerQuery} from "../../services/graphql/queries";
 
 const CitizenDetail = () => {
 	const isMobile = useIsMobile();
@@ -33,7 +33,7 @@ const CitizenDetail = () => {
 	});
 	const dateOfBirth = {
 		day: useNumberInput({
-			validate: [(v) => new RegExp(/^[0-9]{2}$/).test(v.toString())],
+			validate: [(v) => new RegExp(/^[0-9]{1,2}$/).test(v.toString())],
 			placeholder: t("forms.dateOfBirth.day"),
 			min: 1,
 			max: 31,
@@ -165,7 +165,11 @@ const CitizenDetail = () => {
 											<Input isInvalid={!dateOfBirth.day.isValid} {...dateOfBirth.day.bind} id="dateOfBirth.day" />
 										</Box>
 										<Box flex={1}>
-											<Input isInvalid={!dateOfBirth.month.isValid} {...dateOfBirth.month.bind} id="dateOfBirth.month" />
+											<Select isInvalid={!dateOfBirth.month.isValid} {...dateOfBirth.month.bind} id="dateOfBirth.month" value={parseInt(dateOfBirth.month.value.toString()).toString()}>
+												{Months.map((m, i) => (
+													<option key={i} value={i}>{t("months." + m)}</option>
+												))}
+											</Select>
 										</Box>
 										<Box flex={2}>
 											<Input isInvalid={!dateOfBirth.year.isValid} {...dateOfBirth.year.bind} id="dateOfBirth.year" />

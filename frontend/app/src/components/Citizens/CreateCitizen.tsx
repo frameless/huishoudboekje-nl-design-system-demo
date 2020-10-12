@@ -1,15 +1,15 @@
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {Box, Button, Divider, Flex, FormHelperText, FormLabel, Heading, Input, Stack, Tooltip, useToast} from "@chakra-ui/core";
+import {Box, Button, Divider, Flex, FormHelperText, FormLabel, Heading, Input, Select, Stack, Tooltip, useToast} from "@chakra-ui/core";
 import {useInput, useIsMobile, useNumberInput, useToggle, Validators} from "react-grapple";
 import BackButton from "../BackButton";
 import Routes from "../../config/routes";
-import {MOBILE_BREAKPOINT, Regex} from "../../utils/things";
+import {MOBILE_BREAKPOINT, Months, Regex} from "../../utils/things";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
 import {useMutation} from "@apollo/client";
-import {CreateGebruikerMutation} from "../../services/graphql";
 import {sampleData} from "../../config/sampleData/sampleData";
 import {useHistory} from "react-router-dom";
+import {CreateGebruikerMutation} from "../../services/graphql/mutations";
 
 // Todo: add more detailed error message per field?
 const CreateCitizen = () => {
@@ -39,7 +39,7 @@ const CreateCitizen = () => {
 	});
 	const dateOfBirth = {
 		day: useNumberInput({
-			validate: [(v) => new RegExp(/^[0-9]{2}$/).test(v.toString())],
+			validate: [(v) => new RegExp(/^[0-9]{1,2}$/).test(v.toString())],
 			placeholder: t("forms.dateOfBirth.day"),
 			min: 1,
 			max: 31,
@@ -91,7 +91,7 @@ const CreateCitizen = () => {
 
 	// TODO: remove this before commit
 	const prePopulateForm = () => {
-		const c = sampleData.citizens[(Math.ceil(Math.random() * sampleData.citizens.length))];
+		const c = sampleData.citizens[(Math.floor(Math.random() * sampleData.citizens.length))];
 
 		initials.setValue(c.initials);
 		firstName.setValue(c.firstName);
@@ -127,7 +127,11 @@ const CreateCitizen = () => {
 				voorletters: initials.value,
 				voornamen: firstName.value,
 				achternaam: lastName.value,
-				geboortedatum: [dateOfBirth.year, dateOfBirth.month, dateOfBirth.day].map(d => d.value).join("-"),
+				geboortedatum: [
+					dateOfBirth.year.value,
+					("0" + dateOfBirth.month.value).substr(-2, 2),
+					("0" + dateOfBirth.day.value).substr(-2, 2),
+				].join("-"),
 				straatnaam: street.value,
 				huisnummer: houseNumber.value,
 				postcode: zipcode.value,
@@ -205,7 +209,11 @@ const CreateCitizen = () => {
 										<Input isInvalid={isInvalid(dateOfBirth.day)} {...dateOfBirth.day.bind} id="dateOfBirth.day" />
 									</Box>
 									<Box flex={1}>
-										<Input isInvalid={isInvalid(dateOfBirth.month)} {...dateOfBirth.month.bind} id="dateOfBirth.month" />
+										<Select isInvalid={isInvalid(dateOfBirth.month)} {...dateOfBirth.month.bind} id="dateOfBirth.month" value={parseInt(dateOfBirth.month.value.toString()).toString()}>
+											{Months.map((m, i) => (
+												<option key={i} value={i}>{t(`months.${i + 1}`)}</option>
+											))}
+										</Select>
 									</Box>
 									<Box flex={2}>
 										<Input isInvalid={isInvalid(dateOfBirth.year)} {...dateOfBirth.year.bind} id="dateOfBirth.year" />

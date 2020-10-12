@@ -1,8 +1,8 @@
 import React from "react";
 import {Box, BoxProps, Heading, Spinner, Stack} from "@chakra-ui/core";
 import {useQuery} from "@apollo/client";
-import {GetAllGebruikersQuery} from "../services/graphql";
 import {print} from "graphql";
+import {GetAllGebruikersQuery} from "../services/graphql/queries";
 
 const GetGebruikers: React.FC<BoxProps> = (props) => {
 	const {data, loading, error} = useQuery(GetAllGebruikersQuery);

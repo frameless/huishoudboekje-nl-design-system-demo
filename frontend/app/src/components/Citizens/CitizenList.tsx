@@ -3,13 +3,13 @@ import {useTranslation} from "react-i18next";
 import {useInput} from "react-grapple";
 import {useHistory} from "react-router-dom";
 import {useQuery} from "@apollo/client";
-import {GetAllGebruikersQuery} from "../../services/graphql";
 import {searchFields} from "../../utils/things";
 import {Box, Button, Heading, Icon, IconButton, Input, InputGroup, InputLeftElement, InputRightElement, SimpleGrid, Spinner, Stack, Text, useToast} from "@chakra-ui/core";
 import Routes from "../../config/routes";
 import {ReactComponent as Empty} from "../../assets/images/illustration-empty.svg";
 import GebruikerCard from "./GebruikerCard";
 import {IGebruiker} from "../../models";
+import {GetAllGebruikersQuery} from "../../services/graphql/queries";
 
 const CitizenList = () => {
 	const {t} = useTranslation();

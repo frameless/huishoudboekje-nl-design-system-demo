@@ -1,49 +1,5 @@
 import {gql} from "@apollo/client";
-
-const BurgerFragment = gql`
-    fragment Burger on Gebruiker {
-        burger {
-            achternaam
-            huisnummer
-            postcode
-            straatnaam
-            voorletters
-            voornamen
-            woonplaatsnaam
-        }
-    }
-`;
-
-const GebruikerFragment = gql`
-    fragment Gebruiker on Gebruiker {
-        id
-        weergaveNaam
-        email
-        geboortedatum
-        telefoonnummer
-        iban
-        ...Burger
-    }
-    ${BurgerFragment}
-`;
-
-export const GetAllGebruikersQuery = gql`
-    query getAllGebruikers {
-        gebruikers {
-            ...Gebruiker
-        }
-    }
-    ${GebruikerFragment}
-`;
-
-export const GetOneGebruikerQuery = gql`
-    query getOneGebruikers($id: Int!) {
-        gebruiker(id: $id) {
-            ...Gebruiker
-        }
-    }
-    ${GebruikerFragment}
-`;
+import {GebruikerFragment} from "./fragments";
 
 export const CreateGebruikerMutation = gql`
     mutation createGebruiker(
@@ -79,4 +35,4 @@ export const CreateGebruikerMutation = gql`
         }
     }
     ${GebruikerFragment}
-`
+`;

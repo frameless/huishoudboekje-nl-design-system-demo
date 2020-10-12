@@ -20,10 +20,4 @@ const Date = /^(\d{2})-(\d{2})-(\d{4})$/;
 
 export const Regex = {ZipcodeNL, PhoneNumberNL, MobilePhoneNL, IbanNL, BsnNL, Date};
 
-export function fakeAsyncCall<T>(result: T | boolean = true, duration = 2000): Promise<T> {
-	return new Promise<T>(resolve => {
-		setTimeout(() => {
-			resolve(result as T);
-		}, duration);
-	});
-}
+export const Months = ["jan", "feb", "mrt", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
