@@ -1,14 +1,15 @@
 import {Box, Button, Divider, FormHelperText, FormLabel, Heading, Input, Spinner, Stack, Tooltip, useToast} from "@chakra-ui/core";
 import React, {useEffect} from "react";
-import {useAsync} from "react-async";
-import {useInput, useIsMobile, Validators} from "react-grapple";
+import {useInput, useIsMobile, useNumberInput, Validators} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {useParams} from "react-router-dom";
 import Routes from "../../config/routes";
-import {GetCitizenByIdQuery} from "../../services/citizens";
 import BackButton from "../BackButton";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
 import {Regex} from "../../utils/things";
+import {useQuery} from "@apollo/client";
+import {GetOneGebruikerQuery} from "../../services/graphql";
+import {IGebruiker} from "../../models";
 
 const CitizenDetail = () => {
 	const isMobile = useIsMobile();
@@ -16,111 +17,118 @@ const CitizenDetail = () => {
 	const {id} = useParams();
 	const toast = useToast();
 
-	const bsn = useInput<string>({
-		defaultValue: "",
-		validate: [Validators.required, (v) => new RegExp(Regex.BsnNL).test(v)],
-		placeholder: "123456789"
-	});
+	// const bsn = useInput<string>({
+	//
+	// 	validate: [Validators.required, (v) => new RegExp(Regex.BsnNL).test(v)],
+	// 	placeholder: "123456789"
+	// });
 	const initials = useInput<string>({
-		defaultValue: "",
 		validate: [Validators.required]
 	});
 	const firstName = useInput<string>({
-		defaultValue: "",
 		validate: [Validators.required]
 	});
 	const lastName = useInput<string>({
-		defaultValue: "",
 		validate: [Validators.required]
 	});
-	const dateOfBirth = useInput<string>({
-		defaultValue: "",
-		validate: [Validators.required, (v) => new RegExp(Regex.Date).test(v)],
-		placeholder: "24-09-1960"
-	});
+	const dateOfBirth = {
+		day: useNumberInput({
+			validate: [(v) => new RegExp(/^[0-9]{2}$/).test(v.toString())],
+			placeholder: t("forms.dateOfBirth.day"),
+			min: 1,
+			max: 31,
+		}),
+		month: useNumberInput({
+			validate: [(v) => new RegExp(/^[0-9]{1,2}$/).test(v.toString())],
+			placeholder: t("forms.dateOfBirth.month"),
+			min: 1, max: 12
+		}),
+		year: useNumberInput({
+			validate: [(v) => new RegExp(/^[0-9]{4}$/).test(v.toString())],
+			placeholder: t("forms.dateOfBirth.year"),
+			max: (new Date()).getFullYear(), // No future births.
+		})
+	};
 	const mail = useInput<string>({
-		defaultValue: "",
 		validate: [Validators.required, Validators.email]
 	});
 	const street = useInput<string>({
-		defaultValue: "",
 		validate: [Validators.required]
 	});
 	const houseNumber = useInput<string>({
-		defaultValue: "",
 		validate: [Validators.required]
 	});
 	const zipcode = useInput<string>({
-		defaultValue: "",
 		validate: [Validators.required, (v) => new RegExp(Regex.ZipcodeNL).test(v)],
 		placeholder: "1234AB"
 	});
 	const city = useInput<string>({
-		defaultValue: "",
 		validate: [Validators.required]
 	});
 	const phoneNumber = useInput<string>({
-		defaultValue: "",
 		validate: [(v) => new RegExp(Regex.PhoneNumberNL).test(v) || new RegExp(Regex.MobilePhoneNL).test(v)],
 		placeholder: "0612345678"
 	});
 	const iban = useInput<string>({
-		defaultValue: "",
 		validate: [Validators.required, (v) => new RegExp(Regex.IbanNL).test(v)],
 		placeholder: t("forms.iban-placeholder")
 	});
 
-	const {data, isPending, cancel} = useAsync({
-		promiseFn: GetCitizenByIdQuery,
-		id: parseInt(id),
+	const {data, loading} = useQuery<{ gebruiker: IGebruiker }>(GetOneGebruikerQuery, {
+		variables: {id}
 	});
 
+	// Todo: API call
 	const onSubmit = (e) => {
 		e.preventDefault();
 		toast({
 			position: "top",
 			status: "error",
 			variant: "solid",
-			description: t("generalError")
-		})
-	}
+			description: t("genericError.description"),
+			title: t("genericError.title")
+		});
+	};
 
 	useEffect(() => {
 		let mounted = true;
 
 		if (mounted && data) {
-			bsn.setValue(data.bsn.toString());
-			initials.setValue(data.initials);
-			firstName.setValue(data.firstName);
-			lastName.setValue(data.lastName);
-			dateOfBirth.setValue(data.dateOfBirth);
-			mail.setValue(data.mail);
-			street.setValue(data.street);
-			houseNumber.setValue(data.houseNumber);
-			zipcode.setValue(data.zipcode);
-			city.setValue(data.city);
-			phoneNumber.setValue(data.phoneNumber);
-			iban.setValue(data.iban);
+			const {gebruiker} = data;
+
+			// bsn.setValue(gebruiker.bsn.toString());
+			initials.setValue(gebruiker.burger?.voorletters || "");
+			firstName.setValue(gebruiker.burger?.voornamen || "");
+			lastName.setValue(gebruiker.burger?.achternaam || "");
+			dateOfBirth.day.setValue(new Date(gebruiker.geboortedatum).getDate());
+			dateOfBirth.month.setValue(new Date(gebruiker.geboortedatum).getMonth() + 1);
+			dateOfBirth.year.setValue(new Date(gebruiker.geboortedatum).getFullYear());
+			mail.setValue(gebruiker.email);
+			street.setValue(gebruiker.burger?.straatnaam || "");
+			houseNumber.setValue(gebruiker.burger?.huisnummer || "");
+			zipcode.setValue(gebruiker.burger?.postcode || "");
+			city.setValue(gebruiker.burger?.woonplaatsnaam || "");
+			phoneNumber.setValue(gebruiker.telefoonnummer);
+			iban.setValue(gebruiker.iban);
 		}
 
 		return () => {
 			mounted = false;
-			cancel();
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [data, isPending, cancel]);
+	}, [data, loading]);
 
 	return (<>
 		<BackButton to={Routes.Citizens} />
 
-		{isPending && (
+		{loading && (
 			<Stack spacing={5} alignItems={"center"} justifyContent={"center"} my={10}>
 				<Spinner />
 			</Stack>
 		)}
-		{!isPending && data && (
+		{!loading && data && (
 			<Stack spacing={5}>
-				<Heading size={"lg"}>{data.firstName} {data.lastName}</Heading>
+				<Heading size={"lg"}>{data.gebruiker.burger?.voornamen} {data.gebruiker.burger?.achternaam}</Heading>
 
 				<Box as={"form"} onSubmit={onSubmit}>
 					<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
@@ -130,12 +138,12 @@ const CitizenDetail = () => {
 								<FormHelperText id="personal-helperText">{t("forms.citizens.personal-helperText")}</FormHelperText>
 							</FormLeft>
 							<FormRight>
-								<Stack spacing={1}>
-									<FormLabel htmlFor={"bsn"}>{t("bsn")}</FormLabel>
-									<Tooltip label={t("forms.bsn-tooltip")} aria-label={t("bsn")} hasArrow placement={isMobile ? "top" : "left"}>
-										<Input isInvalid={!bsn.isValid} {...bsn.bind} />
-									</Tooltip>
-								</Stack>
+								{/*<Stack spacing={1}>*/}
+								{/*	<FormLabel htmlFor={"bsn"}>{t("bsn")}</FormLabel>*/}
+								{/*	<Tooltip label={t("forms.bsn-tooltip")} aria-label={t("bsn")} hasArrow placement={isMobile ? "top" : "left"}>*/}
+								{/*		<Input isInvalid={!bsn.isValid} {...bsn.bind} />*/}
+								{/*	</Tooltip>*/}
+								{/*</Stack>*/}
 								<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 									<Stack spacing={1} flex={1}>
 										<FormLabel htmlFor={"initials"}>{t("initials")}</FormLabel>
@@ -152,10 +160,19 @@ const CitizenDetail = () => {
 								</Stack>
 								<Stack spacing={1}>
 									<FormLabel htmlFor={"dateOfBirth"}>{t("dateOfBirth")}</FormLabel>
-									<Tooltip label={t("forms.dateOfBirth-tooltip")} aria-label={t("dateOfBirth")} hasArrow placement={isMobile ? "top" : "left"}>
-										<Input isInvalid={!dateOfBirth.isValid} {...dateOfBirth.bind} />
-									</Tooltip>
+									<Stack direction={"row"} maxW="100%">
+										<Box flex={1}>
+											<Input isInvalid={!dateOfBirth.day.isValid} {...dateOfBirth.day.bind} id="dateOfBirth.day" />
+										</Box>
+										<Box flex={1}>
+											<Input isInvalid={!dateOfBirth.month.isValid} {...dateOfBirth.month.bind} id="dateOfBirth.month" />
+										</Box>
+										<Box flex={2}>
+											<Input isInvalid={!dateOfBirth.year.isValid} {...dateOfBirth.year.bind} id="dateOfBirth.year" />
+										</Box>
+									</Stack>
 								</Stack>
+
 							</FormRight>
 						</Stack>
 
@@ -225,7 +242,7 @@ const CitizenDetail = () => {
 							<FormLeft />
 							<FormRight>
 								<Stack direction={"row"} spacing={1} justifyContent={"flex-end"}>
-									<Button isLoading={isPending} type={"submit"} variantColor={"primary"} onClick={onSubmit}>{t("save")}</Button>
+									<Button isLoading={loading} type={"submit"} variantColor={"primary"} onClick={onSubmit}>{t("save")}</Button>
 								</Stack>
 							</FormRight>
 						</Stack>

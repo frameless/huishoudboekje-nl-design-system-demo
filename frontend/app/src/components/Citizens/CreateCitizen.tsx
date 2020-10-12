@@ -91,7 +91,7 @@ const CreateCitizen = () => {
 
 	// TODO: remove this before commit
 	const prePopulateForm = () => {
-		const c = sampleData.citizens[0];
+		const c = sampleData.citizens[(Math.ceil(Math.random() * sampleData.citizens.length))];
 
 		initials.setValue(c.initials);
 		firstName.setValue(c.firstName);

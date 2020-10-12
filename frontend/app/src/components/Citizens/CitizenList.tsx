@@ -34,7 +34,7 @@ const CitizenList = () => {
 		let mounted = true;
 
 		if (mounted && data && data.gebruikers) {
-			setFilteredBurgers(data.gebruikers.filter(b => searchFields(search.value, [b.burger.achternaam, b.burger.voornamen])));
+			setFilteredBurgers(data.gebruikers.filter(b => searchFields(search.value, [b.burger?.achternaam || "", b.burger?.voornamen || ""])));
 		}
 
 		return () => {

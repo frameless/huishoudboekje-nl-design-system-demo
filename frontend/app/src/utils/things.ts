@@ -1,5 +1,11 @@
-export const searchFields = (term: string, fields: string[]) => {
-	return fields.map(f => f.toLowerCase()).some(s => s.includes(term.toLowerCase()));
+export const searchFields = (term: string, fields: string[]): boolean => {
+	const _fields = fields.filter(f => f);
+
+	if(_fields.length === 0){
+		return false;
+	}
+
+	return _fields.map(f => f.toLowerCase()).some(s => s.includes(term.toLowerCase()));
 };
 
 export const MOBILE_BREAKPOINT = 650;

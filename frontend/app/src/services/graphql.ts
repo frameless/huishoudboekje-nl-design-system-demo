@@ -27,10 +27,18 @@ const GebruikerFragment = gql`
     ${BurgerFragment}
 `;
 
-// Todo: check if this works (because DB was empty when testing)
 export const GetAllGebruikersQuery = gql`
     query getAllGebruikers {
         gebruikers {
+            ...Gebruiker
+        }
+    }
+    ${GebruikerFragment}
+`;
+
+export const GetOneGebruikerQuery = gql`
+    query getOneGebruikers($id: Int!) {
+        gebruiker(id: $id) {
             ...Gebruiker
         }
     }

@@ -1,17 +1,20 @@
-export interface ICitizen {
+export type IGebruiker = {
+	__typename: "Gebruiker",
 	id: number,
+	telefoonnummer: string,
+	email: string,
+	geboortedatum: string,
 	iban: string,
-	firstName: string,
-	lastName: string,
-	street: string,
-	houseNumber: string,
-	zipcode: string,
-	city: string,
-	gender: string,
-	phoneNumber: string,
-	mail: string,
-	balance: string,
-	bsn: number,
-	initials: string,
-	dateOfBirth: string
+	burger: IBurger,
+}
+
+export type IBurger = {
+	__typename: "Burger",
+	achternaam: string,
+	huisnummer: string,
+	postcode: string,
+	straatnaam: string,
+	voorletters: string,
+	voornamen: string,
+	woonplaatsnaam: string
 }
