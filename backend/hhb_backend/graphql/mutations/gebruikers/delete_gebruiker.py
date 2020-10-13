@@ -14,12 +14,7 @@ class DeleteGebruiker(graphene.Mutation):
     ok = graphene.Boolean()
 
     def mutate(root, info, id):
-        """ Delete current gebruiker
-
-        force:  if set to true the gebruiker reccord will be deleted,
-                otherwise only the burger is deleted
-                and the gebruikers fields are cleared
-        """
+        """ Delete current gebruiker """
 
         delete_response = requests.delete(
             os.path.join(settings.HHB_SERVICES_URL, f"gebruikers/{id}")
