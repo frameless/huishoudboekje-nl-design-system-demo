@@ -14,7 +14,6 @@ import Citizens from "./components/Citizens";
 import PageNotFound from "./components/PageNotFound";
 import {TABLET_BREAKPOINT} from "./utils/things";
 import {useTranslation} from "react-i18next";
-import GraphQLTestPage from "./components/GraphQLTestPage";
 
 const App = () => {
 	const {t} = useTranslation();
@@ -56,7 +55,7 @@ const App = () => {
 									{/*<Route path={"/ketenpartners"} component={Ketenpartners} />*/}
 									{/*<Route path={"/bankzaken"} component={Bankzaken} />*/}
 									{/*<Route path={"/instellingen"} component={Settings} />*/}
-									{process.env.NODE_ENV === "development" && <Route path={"/g"} component={GraphQLTestPage}/>}
+									<Route exact path={Routes.NotFound} component={PageNotFound} />
 									<Route component={PageNotFound} />
 								</Switch>
 
