@@ -22,9 +22,6 @@ const BurgerList = () => {
 	});
 
 	const {data, loading, error} = useQuery<{ gebruikers: IGebruiker[] }>(GetAllGebruikersQuery, {
-		variables: {
-			showInactive: true
-		},
 		// This forces a refetch when we're routed back to this page after a mutation.
 		fetchPolicy: "no-cache"
 	});
@@ -62,13 +59,15 @@ const BurgerList = () => {
 		}
 	};
 
+	const showSearch = (!loading && data && !error && data.gebruikers.length > 0);
+
 	return (
 		<Stack spacing={5}>
 			<Stack direction={"row"} spacing={5} justifyContent={"space-between"} alignItems={"center"}>
 				<Stack direction={"row"} spacing={5} alignItems={"center"}>
 					<Heading size={"lg"}>{t("citizens")}</Heading>
 				</Stack>
-				<Stack direction={"row"} spacing={5}>
+				{showSearch && <Stack direction={"row"} spacing={5}>
 					<InputGroup>
 						<InputLeftElement><Icon name="search" color={"gray.300"} /></InputLeftElement>
 						<Input type={"text"} {...search.bind} onKeyDown={onKeyDownOnSearchField} />
@@ -78,7 +77,7 @@ const BurgerList = () => {
 							</InputRightElement>
 						)}
 					</InputGroup>
-				</Stack>
+				</Stack>}
 			</Stack>
 
 

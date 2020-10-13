@@ -39,14 +39,14 @@ type Gebruiker {
 "The root of all mutations "
 type RootMutation {
     createGebruiker(achternaam: String, email: String, geboortedatum: String, huisnummer: String, iban: String, postcode: String, straatnaam: String, telefoonnummer: String, voorletters: String, voornamen: String, woonplaatsnaam: String): CreateGebruiker
-    deleteGebruiker(force: Boolean = false, id: Int!): DeleteGebruiker
+    deleteGebruiker(id: Int!): DeleteGebruiker
     updateGebruiker(achternaam: String, email: String, geboortedatum: String, huisnummer: String, iban: String, id: Int!, postcode: String, straatnaam: String, telefoonnummer: String, voorletters: String, voornamen: String, woonplaatsnaam: String): UpdateGebruiker
 }
 
 "The root of all queries "
 type RootQuery {
     gebruiker(id: Int!): Gebruiker
-    gebruikers(ids: [Int] = [], showInactive: Boolean = false): [Gebruiker]
+    gebruikers(ids: [Int] = []): [Gebruiker]
 }
 
 type UpdateGebruiker {

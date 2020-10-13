@@ -6,6 +6,7 @@ export type IGebruiker = {
 	geboortedatum: string,
 	iban: string,
 	burger: IBurger,
+	weergaveNaam: string,
 }
 
 export type IBurger = {

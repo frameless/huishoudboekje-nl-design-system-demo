@@ -1,5 +1,15 @@
 {
+  "actions": {
+    "cancel": "Annuleren",
+    "delete": "Verwijderen",
+    "edit": "Wijzigen"
+  },
+  "clearSearch": "Zoekopdracht wissen",
   "burgers": {
+    "deleteTitle": "Burger verwijderen",
+    "deleteQuestion": "Weet u zeker dat u {{name}} definitief wil verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
+    "deleteConfirmMessage": "Deze gebruiker is verwijderd.",
+    "backToOverview": "Terug naar het overzicht",
     "errors": {
       "noSearchResults": "Geen burgers gevonden. Gebruik een andere zoekterm.",
       "serverError": "Er is een onbekende fout opgetreden. Probeer het later nog een keer."

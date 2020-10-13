@@ -38,8 +38,8 @@ export const CreateGebruikerMutation = gql`
 `;
 
 export const DeleteGebruikerMutation = gql`
-    mutation deleteGebruiker($id: Int!, $force: Boolean = false){
-        deleteGebruiker(id: $id, force: $force) {
+    mutation deleteGebruiker($id: Int!){
+        deleteGebruiker(id: $id) {
             ok
         }
     }

@@ -1,25 +1,54 @@
-import {Box, Button, Divider, FormHelperText, FormLabel, Heading, Input, Select, Spinner, Stack, Tooltip, useToast} from "@chakra-ui/core";
-import React, {useEffect} from "react";
-import {useInput, useIsMobile, useNumberInput, Validators} from "react-grapple";
+import {
+	AlertDialog,
+	AlertDialogBody,
+	AlertDialogContent,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogOverlay,
+	Box,
+	Button,
+	Divider,
+	FormHelperText,
+	FormLabel,
+	Heading,
+	IconButton,
+	Input,
+	Menu,
+	MenuButton,
+	MenuItem,
+	MenuList,
+	Select,
+	Spinner,
+	Stack,
+	Text,
+	Tooltip,
+	useToast
+} from "@chakra-ui/core";
+import React, {useEffect, useRef} from "react";
+import {useInput, useIsMobile, useNumberInput, useToggle, Validators} from "react-grapple";
 import {useTranslation} from "react-i18next";
-import {useParams, Redirect} from "react-router-dom";
+import {Redirect, useHistory, useParams} from "react-router-dom";
 import Routes from "../../config/routes";
 import BackButton from "../BackButton";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
-import {isDev, Months, Regex} from "../../utils/things";
+import {Months, Regex} from "../../utils/things";
 import {useMutation, useQuery} from "@apollo/client";
 import {IGebruiker} from "../../models";
 import {GetOneGebruikerQuery} from "../../services/graphql/queries";
 import {DeleteGebruikerMutation} from "../../services/graphql/mutations";
+import {ReactComponent as Deleted} from "../../assets/images/illustration-deleted.svg";
 
 const BurgerDetail = () => {
 	const isMobile = useIsMobile();
 	const {t} = useTranslation();
 	const {id} = useParams();
 	const toast = useToast();
+	const [deleteDialogOpen, toggleDeleteDialog] = useToggle(false);
+	const [isDeleted, toggleDeleted] = useToggle(false);
+	const cancelDeleteRef = useRef(null);
+	const {push} = useHistory();
 
 	// const bsn = useInput<string>({
-	//
 	// 	validate: [Validators.required, (v) => new RegExp(Regex.BsnNL).test(v)],
 	// 	placeholder: "123456789"
 	// });
@@ -79,8 +108,7 @@ const BurgerDetail = () => {
 		variables: {id}
 	});
 
-	const [softDeleteMutation] = useMutation(DeleteGebruikerMutation, {variables: {force: false, id}});
-	const [hardDeleteMutation] = useMutation(DeleteGebruikerMutation, {variables: {force: true, id}});
+	const [deleteMutation, {loading: deleteLoading}] = useMutation(DeleteGebruikerMutation, {variables: {id}});
 
 	// Todo: API call
 	const onSubmit = (e) => {
@@ -124,6 +152,20 @@ const BurgerDetail = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [data, loading]);
 
+	const onClickBackButton = () => push(Routes.Citizens);
+	const onCloseDeleteDialog = () => toggleDeleteDialog(false);
+	const onConfirmDeleteDialog = () => {
+		deleteMutation().then(() => {
+			onCloseDeleteDialog();
+			toast({
+				title: t("burgers.deleteConfirmMessage"),
+				position: "top",
+				status: "success",
+			});
+			toggleDeleted(true);
+		})
+	};
+
 	return (<>
 		<BackButton to={Routes.Citizens} />
 
@@ -135,26 +177,37 @@ const BurgerDetail = () => {
 		{!loading && error && (
 			<Redirect to={Routes.NotFound} />
 		)}
-		{!loading && !error && data && (
+		{!loading && !error && data && isDeleted && (
+			<Stack justifyContent={"center"} alignItems={"center"} bg={"white"} p={20} spacing={10}>
+				<Box as={Deleted} maxWidth={[200, 300, 400]} height={"auto"} />
+				<Text fontSize={"sm"}>{t("burgers.deleteConfirmMessage")}</Text>
+				<Button variantColor="primary" onClick={onClickBackButton}>{t("burgers.backToOverview")}</Button>
+			</Stack>
+		)}
+		{!loading && !error && data && !isDeleted && (
 			<Stack spacing={5}>
-				<Heading size={"lg"}>{data.gebruiker.burger?.voornamen} {data.gebruiker.burger?.achternaam}</Heading>
+				<Stack direction={"row"} justifyContent={"flex-start"} alignItems={"center"} spacing={3}>
+					<Heading size={"lg"}>{data.gebruiker.burger?.voornamen} {data.gebruiker.burger?.achternaam}</Heading>
 
-				{isDev && (
-					<Stack direction={"row"} justifyContent={"center"} spacing={5}>
-						<Button maxWidth={350} variantColor={"yellow"} variant={"outline"} onClick={() => {
-							softDeleteMutation().then(result => toast({
-								title: "User soft deleted",
-								description: JSON.stringify(result, null, 2)
-							}))
-						}}>Soft delete</Button>
-						<Button maxWidth={350} variantColor={"red"} variant={"outline"} onClick={() => {
-							hardDeleteMutation().then(result => toast({
-								title: "User hard deleted",
-								description: JSON.stringify(result, null, 2)
-							}))
-						}}>Hard delete</Button>
-					</Stack>
-				)}
+					<AlertDialog isOpen={deleteDialogOpen} leastDestructiveRef={cancelDeleteRef} onClose={onCloseDeleteDialog}>
+						<AlertDialogOverlay />
+						<AlertDialogContent>
+							<AlertDialogHeader fontSize="lg" fontWeight="bold">{t("burgers.deleteTitle")}</AlertDialogHeader>
+							<AlertDialogBody>{t("burgers.deleteQuestion", {name: `${data.gebruiker.weergaveNaam}`})}</AlertDialogBody>
+							<AlertDialogFooter>
+								<Button ref={cancelDeleteRef} onClick={onCloseDeleteDialog}>{t("actions.cancel")}</Button>
+								<Button isLoading={deleteLoading} variantColor="red" onClick={onConfirmDeleteDialog} ml={3}>{t("actions.delete")}</Button>
+							</AlertDialogFooter>
+						</AlertDialogContent>
+					</AlertDialog>
+
+					<Menu>
+						<IconButton as={MenuButton} icon="chevron-down" variant={"solid"} aria-label="Open menu" />
+						<MenuList>
+							<MenuItem onClick={() => toggleDeleteDialog(true)}>{t("actions.delete")}</MenuItem>
+						</MenuList>
+					</Menu>
+				</Stack>
 
 				<Box as={"form"} onSubmit={onSubmit}>
 					<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
