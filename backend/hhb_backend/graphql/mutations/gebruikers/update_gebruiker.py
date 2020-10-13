@@ -10,7 +10,7 @@ from hhb_backend.graphql.models.gebruiker import Gebruiker
 class UpdateGebruiker(graphene.Mutation):
     class Arguments:
         # gebruiker arguments
-        gebruiker_id = graphene.Int(required=True)
+        id = graphene.Int(required=True)
         email = graphene.String()
         geboortedatum = graphene.String()
         telefoonnummer = graphene.String()
@@ -29,7 +29,7 @@ class UpdateGebruiker(graphene.Mutation):
     ok = graphene.Boolean()
     gebruiker = graphene.Field(lambda: Gebruiker)
 
-    def mutate(root, info, gebruiker_id, **kwargs):
+    def mutate(root, info, id, **kwargs):
         """ Update the current Gebruiker/Burger """
         gebruiker_data = {}
         if "email" in kwargs:
@@ -44,7 +44,7 @@ class UpdateGebruiker(graphene.Mutation):
         # Update Burger first to ensure the returned gebruiker has an updated weergave_naam
         if kwargs:
             burger_response = requests.post(
-                os.path.join(settings.HHB_SERVICES_URL, f"gebruikers/{gebruiker_id}/burger"), 
+                os.path.join(settings.HHB_SERVICES_URL, f"gebruikers/{id}/burger"),
                 data=json.dumps(kwargs),
                 headers={'Content-type': 'application/json'}
             )
@@ -52,7 +52,7 @@ class UpdateGebruiker(graphene.Mutation):
                 raise GraphQLError(f"Upstream API responded: {burger_response.json()}")
 
         gebruiker_response = requests.patch(
-            os.path.join(settings.HHB_SERVICES_URL, f"gebruikers/{gebruiker_id}"),
+            os.path.join(settings.HHB_SERVICES_URL, f"gebruikers/{id}"),
             data=json.dumps(gebruiker_data),
             headers={'Content-type': 'application/json'}
         )
