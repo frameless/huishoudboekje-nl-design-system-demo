@@ -9,7 +9,7 @@ class Organisatie(db.Model):
 
     id = Column(Integer, Sequence('organisatie_id_seq'), primary_key=True)
     weergave_naam = Column(String)
-    kvk_nummer = Column(Integer)
+    kvk_nummer = Column(Integer, unique=True)
 
     def to_dict(self):
         return {

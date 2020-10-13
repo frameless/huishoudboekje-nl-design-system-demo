@@ -5,6 +5,50 @@ info:
   description: API voor het beheren van data van het Huishoudboekje
   
 paths:
+  /organisaties:
+    get:
+      description: Geeft organisaties binnen het Huishoudboekje
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+    post:
+      description: Voegt nieuwe organisatie toe aan het Huishoudboekje
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+ 
+  /organisaties/{organisatie_id}:
+    get:
+      description: Geeft specifieke organisatie uit het Huishoudboekje
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+    post:
+      description: Update organisatie in het Huishoudboekje
+      responses:
+        '202':
+          description: Accepted
+        '400':
+          description: Bad Request        
+        '404':
+          description: Not Found
+    delete:
+      description: Delete organisatie in het Huishoudboekje
+      responses:
+        '202':
+          description: Accepted
+        '400':
+          description: Bad Request        
+        '404':
+          description: Not Found
 
   # Gebruiker views
   /gebruikers:
