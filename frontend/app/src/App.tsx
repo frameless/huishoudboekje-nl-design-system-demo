@@ -10,7 +10,7 @@ import Sidebar from "./components/Sidebar";
 import UserStatus from "./components/UserStatus";
 import {FaCog, FaLock} from "react-icons/all";
 import Routes from "./config/routes";
-import Citizens from "./components/Citizens";
+import Citizens from "./components/Burgers";
 import PageNotFound from "./components/PageNotFound";
 import {TABLET_BREAKPOINT} from "./utils/things";
 import {useTranslation} from "react-i18next";
