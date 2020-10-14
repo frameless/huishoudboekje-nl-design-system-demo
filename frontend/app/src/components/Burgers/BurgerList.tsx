@@ -4,7 +4,7 @@ import {useInput} from "react-grapple";
 import {useHistory} from "react-router-dom";
 import {useQuery} from "@apollo/client";
 import {searchFields} from "../../utils/things";
-import {Box, Button, Heading, Icon, IconButton, Input, InputGroup, InputLeftElement, InputRightElement, SimpleGrid, Spinner, Stack, Text, useToast} from "@chakra-ui/core";
+import {Box, Button, Grid, Heading, Icon, IconButton, Input, InputGroup, InputLeftElement, InputRightElement, Spinner, Stack, Text, useToast} from "@chakra-ui/core";
 import Routes from "../../config/routes";
 import {ReactComponent as Empty} from "../../assets/images/illustration-empty.svg";
 import GebruikerCard from "./GebruikerCard";
@@ -103,7 +103,7 @@ const BurgerList = () => {
 					)}
 				</>)}
 				{filteredBurgers.length > 0 && (
-					<SimpleGrid maxWidth={"100%"} columns={4} minChildWidth={200} spacing={5}>
+					<Grid maxWidth={"100%"} gridTemplateColumns={["repeat(1, 1fr)", "repeat(2, 1fr)", "repeat(3, 1fr)", "repeat(4, 1fr)", "repeat(6, 1fr)"]} gap={5}>
 						{search.value.trim().length === 0 && (
 							<Box>
 								<Button variantColor={"primary"} borderStyle={"dashed"} variant={"outline"} leftIcon={"add"}
@@ -112,7 +112,7 @@ const BurgerList = () => {
 							</Box>
 						)}
 						{filteredBurgers.map(g => <GebruikerCard key={g.id} gebruiker={g} cursor={"pointer"} />)}
-					</SimpleGrid>
+					</Grid>
 				)}
 			</>)}
 		</Stack>
