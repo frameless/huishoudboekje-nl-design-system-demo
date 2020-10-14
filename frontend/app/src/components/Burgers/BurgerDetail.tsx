@@ -212,7 +212,7 @@ const BurgerDetail = () => {
 		deleteMutation().then(() => {
 			onCloseDeleteDialog();
 			toast({
-				title: t("burgers.deleteConfirmMessage"),
+				title: t("burgers.deleteConfirmMessage", { name: `${data?.gebruiker.burger.voornamen} ${data?.gebruiker.burger.achternaam}`}),
 				position: "top",
 				status: "success",
 			});
@@ -234,7 +234,7 @@ const BurgerDetail = () => {
 		{!loading && !error && data && isDeleted && (
 			<Stack justifyContent={"center"} alignItems={"center"} bg={"white"} p={20} spacing={10}>
 				<Box as={Deleted} maxWidth={[200, 300, 400]} height={"auto"} />
-				<Text fontSize={"sm"}>{t("burgers.deleteConfirmMessage")}</Text>
+				<Text fontSize={"sm"}>{t("burgers.deleteConfirmMessage", { name: `${data.gebruiker.burger.voornamen} ${data.gebruiker.burger.achternaam}`})}</Text>
 				<Button variantColor="primary" onClick={onClickBackButton}>{t("burgers.backToOverview")}</Button>
 			</Stack>
 		)}
@@ -247,6 +247,7 @@ const BurgerDetail = () => {
 						<AlertDialogOverlay />
 						<AlertDialogContent>
 							<AlertDialogHeader fontSize="lg" fontWeight="bold">{t("burgers.deleteTitle")}</AlertDialogHeader>
+							{ /* Todo: specify which data gets deleted (14-10-2020) */ }
 							<AlertDialogBody>{t("burgers.deleteQuestion", {name: `${data.gebruiker.weergaveNaam}`})}</AlertDialogBody>
 							<AlertDialogFooter>
 								<Button ref={cancelDeleteRef} onClick={onCloseDeleteDialog}>{t("actions.cancel")}</Button>

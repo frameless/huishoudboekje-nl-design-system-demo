@@ -8,7 +8,7 @@
   "burgers": {
     "deleteTitle": "Burger verwijderen",
     "deleteQuestion": "Weet u zeker dat u de gegevens van {{name}} definitief wil verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
-    "deleteConfirmMessage": "Deze gebruiker is verwijderd.",
+    "deleteConfirmMessage": "Gegevens van {{name}} zijn verwijderd.",
     "backToOverview": "Terug naar het overzicht",
     "errors": {
       "noSearchResults": "Geen burgers gevonden. Gebruik een andere zoekterm.",
