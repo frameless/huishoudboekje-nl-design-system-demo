@@ -24,8 +24,8 @@ const SidebarContainer = ({children}) => {
 					<DrawerOverlay />
 					<DrawerContent bg={"gray.100"}>
 						<DrawerCloseButton />
-						<DrawerHeader justifyContent={"center"}>
-							<Logo />
+						<DrawerHeader>
+							<Logo as={Flex} maxWidth={350} marginX={"auto"} />
 						</DrawerHeader>
 
 						<DrawerBody p={0} overflowY={"auto"}>
