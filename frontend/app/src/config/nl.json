@@ -60,7 +60,8 @@
       "contact-helperText": "Vul de contactgegevens van de burger in.",
       "banking-helperText": "Neem het IBAN van de betaalpas van de burger over.",
       "invalidFormMessage": "Er is een fout opgetreden. Controleer de ingevulde gegevens en probeer het opnieuw.",
-      "successMessage": "Nieuwe burger opgeslagen!"
+      "createSuccessMessage": "Nieuwe burger succesvol opgeslagen.",
+      "updateSuccessMessage": "Gegevens succesvol gewijzigd."
     }
   },
   "contact": "Contact",

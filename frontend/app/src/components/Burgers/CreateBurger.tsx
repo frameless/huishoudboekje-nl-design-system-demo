@@ -89,7 +89,6 @@ const CreateBurger = () => {
 
 	const [createGebruiker, {loading}] = useMutation(CreateGebruikerMutation);
 
-	// TODO: remove this before commit
 	const prePopulateForm = () => {
 		const c = sampleData.citizens[(Math.floor(Math.random() * sampleData.citizens.length))];
 
@@ -143,7 +142,7 @@ const CreateBurger = () => {
 		}).then(result => {
 			toast({
 				status: "success",
-				title: t("forms.citizens.successMessage"),
+				title: t("forms.citizens.createSuccessMessage"),
 				position: "top",
 			});
 
@@ -153,6 +152,13 @@ const CreateBurger = () => {
 			}
 		}).catch(err => {
 			console.log("Error:", err);
+			toast({
+				position: "top",
+				status: "error",
+				variant: "solid",
+				description: t("genericError.description"),
+				title: t("genericError.title")
+			});
 		});
 	};
 

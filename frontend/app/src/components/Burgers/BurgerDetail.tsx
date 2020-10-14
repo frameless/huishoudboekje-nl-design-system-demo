@@ -35,7 +35,7 @@ import {Months, Regex} from "../../utils/things";
 import {useMutation, useQuery} from "@apollo/client";
 import {IGebruiker} from "../../models";
 import {GetOneGebruikerQuery} from "../../services/graphql/queries";
-import {DeleteGebruikerMutation} from "../../services/graphql/mutations";
+import {DeleteGebruikerMutation, UpdateGebruikerMutation} from "../../services/graphql/mutations";
 import {ReactComponent as Deleted} from "../../assets/images/illustration-deleted.svg";
 
 const BurgerDetail = () => {
@@ -109,17 +109,56 @@ const BurgerDetail = () => {
 	});
 
 	const [deleteMutation, {loading: deleteLoading}] = useMutation(DeleteGebruikerMutation, {variables: {id}});
+	const [updateMutation, {loading: updateLoading}] = useMutation(UpdateGebruikerMutation);
 
-	// Todo: API call
 	const onSubmit = (e) => {
 		e.preventDefault();
-		toast({
-			position: "top",
-			status: "error",
-			variant: "solid",
-			description: t("genericError.description"),
-			title: t("genericError.title")
-		});
+
+		const isFormValid = Object.values({firstName, lastName, mail, street, zipcode, city, phoneNumber, iban}).every(f => f.isValid);
+		if (!isFormValid) {
+			toast({
+				status: "error",
+				title: t("forms.citizens.invalidFormMessage"),
+				position: "top",
+			});
+			return;
+		}
+
+		updateMutation({
+			variables: {
+				id,
+				voorletters: initials.value,
+				voornamen: firstName.value,
+				achternaam: lastName.value,
+				geboortedatum: [
+					dateOfBirth.year.value,
+					("0" + dateOfBirth.month.value).substr(-2, 2),
+					("0" + dateOfBirth.day.value).substr(-2, 2),
+				].join("-"),
+				straatnaam: street.value,
+				huisnummer: houseNumber.value,
+				postcode: zipcode.value,
+				woonplaatsnaam: city.value,
+				telefoonnummer: phoneNumber.value,
+				email: mail.value,
+				iban: iban.value,
+			}
+		}).then(() => {
+			toast({
+				status: "success",
+				title: t("forms.citizens.updateSuccessMessage"),
+				position: "top",
+			});
+		}).catch(err => {
+			console.error(err);
+			toast({
+				position: "top",
+				status: "error",
+				variant: "solid",
+				description: t("genericError.description"),
+				title: t("genericError.title")
+			});
+		})
 	};
 
 	useEffect(() => {
@@ -326,7 +365,7 @@ const BurgerDetail = () => {
 							<FormLeft />
 							<FormRight>
 								<Stack direction={"row"} spacing={1} justifyContent={"flex-end"}>
-									<Button isLoading={loading} type={"submit"} variantColor={"primary"} onClick={onSubmit}>{t("save")}</Button>
+									<Button isLoading={loading || updateLoading} type={"submit"} variantColor={"primary"} onClick={onSubmit}>{t("save")}</Button>
 								</Stack>
 							</FormRight>
 						</Stack>
