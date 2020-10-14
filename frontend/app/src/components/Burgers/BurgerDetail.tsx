@@ -275,31 +275,31 @@ const BurgerDetail = () => {
 								{/*<Stack spacing={1}>*/}
 								{/*	<FormLabel htmlFor={"bsn"}>{t("bsn")}</FormLabel>*/}
 								{/*	<Tooltip label={t("forms.bsn-tooltip")} aria-label={t("bsn")} hasArrow placement={isMobile ? "top" : "left"}>*/}
-								{/*		<Input isInvalid={!bsn.isValid} {...bsn.bind} />*/}
+								{/*		<Input isInvalid={bsn.dirty && !bsn.isValid} {...bsn.bind} />*/}
 								{/*	</Tooltip>*/}
 								{/*</Stack>*/}
 								<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 									<Stack spacing={1} flex={1}>
 										<FormLabel htmlFor={"initials"}>{t("initials")}</FormLabel>
-										<Input isInvalid={!initials.isValid} {...initials.bind} />
+										<Input isInvalid={initials.dirty && !initials.isValid} {...initials.bind} />
 									</Stack>
 									<Stack spacing={1} flex={3}>
 										<FormLabel htmlFor={"firstName"}>{t("firstName")}</FormLabel>
-										<Input isInvalid={!firstName.isValid} {...firstName.bind} />
+										<Input isInvalid={firstName.dirty && !firstName.isValid} {...firstName.bind} />
 									</Stack>
 									<Stack spacing={1} flex={3}>
 										<FormLabel htmlFor={"lastName"}>{t("lastName")}</FormLabel>
-										<Input isInvalid={!lastName.isValid} {...lastName.bind} />
+										<Input isInvalid={lastName.dirty && !lastName.isValid} {...lastName.bind} />
 									</Stack>
 								</Stack>
 								<Stack spacing={1}>
 									<FormLabel htmlFor={"dateOfBirth"}>{t("dateOfBirth")}</FormLabel>
 									<Stack direction={"row"} maxW="100%">
 										<Box flex={1}>
-											<Input isInvalid={!dateOfBirth.day.isValid} {...dateOfBirth.day.bind} id="dateOfBirth.day" />
+											<Input isInvalid={dateOfBirth.day.dirty && !dateOfBirth.day.isValid} {...dateOfBirth.day.bind} id="dateOfBirth.day" />
 										</Box>
 										<Box flex={1}>
-											<Select isInvalid={!dateOfBirth.month.isValid} {...dateOfBirth.month.bind} id="dateOfBirth.month"
+											<Select isInvalid={dateOfBirth.month.dirty && !dateOfBirth.month.isValid} {...dateOfBirth.month.bind} id="dateOfBirth.month"
 											        value={parseInt(dateOfBirth.month.value.toString()).toString()}>
 												{Months.map((m, i) => (
 													<option key={i} value={i}>{t("months." + m)}</option>
@@ -307,7 +307,7 @@ const BurgerDetail = () => {
 											</Select>
 										</Box>
 										<Box flex={2}>
-											<Input isInvalid={!dateOfBirth.year.isValid} {...dateOfBirth.year.bind} id="dateOfBirth.year" />
+											<Input isInvalid={dateOfBirth.year.dirty && !dateOfBirth.year.isValid} {...dateOfBirth.year.bind} id="dateOfBirth.year" />
 										</Box>
 									</Stack>
 								</Stack>
@@ -326,34 +326,34 @@ const BurgerDetail = () => {
 								<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 									<Stack spacing={1} flex={2}>
 										<FormLabel htmlFor={"street"}>{t("street")}</FormLabel>
-										<Input isInvalid={!street.isValid} {...street.bind} />
+										<Input isInvalid={street.dirty && !street.isValid} {...street.bind} />
 									</Stack>
 									<Stack spacing={1} flex={1}>
 										<FormLabel htmlFor={"houseNumber"}>{t("houseNumber")}</FormLabel>
-										<Input isInvalid={!houseNumber.isValid} {...houseNumber.bind} />
+										<Input isInvalid={houseNumber.dirty && !houseNumber.isValid} {...houseNumber.bind} />
 									</Stack>
 								</Stack>
 								<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 									<Stack spacing={1} flex={1}>
 										<FormLabel htmlFor={"zipcode"}>{t("zipcode")}</FormLabel>
 										<Tooltip label={t("forms.zipcode-tooltip")} aria-label={t("zipcode")} hasArrow placement={isMobile ? "top" : "left"}>
-											<Input isInvalid={!zipcode.isValid} {...zipcode.bind} />
+											<Input isInvalid={zipcode.dirty && !zipcode.isValid} {...zipcode.bind} />
 										</Tooltip>
 									</Stack>
 									<Stack spacing={1} flex={2}>
 										<FormLabel htmlFor={"city"}>{t("city")}</FormLabel>
-										<Input isInvalid={!city.isValid} {...city.bind} />
+										<Input isInvalid={city.dirty && !city.isValid} {...city.bind} />
 									</Stack>
 								</Stack>
 								<Stack spacing={1}>
 									<FormLabel htmlFor={"phoneNumber"}>{t("phoneNumber")}</FormLabel>
 									<Tooltip label={t("forms.phoneNumber-tooltip")} aria-label={t("phoneNumber")} hasArrow placement={isMobile ? "top" : "left"}>
-										<Input isInvalid={!phoneNumber.isValid} {...phoneNumber.bind} />
+										<Input isInvalid={phoneNumber.dirty && !phoneNumber.isValid} {...phoneNumber.bind} />
 									</Tooltip>
 								</Stack>
 								<Stack spacing={1}>
 									<FormLabel htmlFor={"mail"}>{t("mail")}</FormLabel>
-									<Input isInvalid={!mail.isValid} {...mail.bind} aria-describedby="mail-helper-text" />
+									<Input isInvalid={mail.dirty && !mail.isValid} {...mail.bind} aria-describedby="mail-helper-text" />
 								</Stack>
 							</FormRight>
 						</Stack>

@@ -47,7 +47,7 @@
     "react": "^16.13.1",
     "react-async": "^10.0.1",
     "react-dom": "^16.13.1",
-    "react-grapple": "^1.4.2",
+    "react-grapple": "^1.5.0",
     "react-i18next": "^11.7.3",
     "react-icons": "^3.11.0",
     "react-router-dom": "^5.2.0",
