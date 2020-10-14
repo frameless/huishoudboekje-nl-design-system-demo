@@ -1,4 +1,34 @@
 {
+  "actions": {
+    "cancel": "Annuleren",
+    "delete": "Verwijderen",
+    "edit": "Wijzigen"
+  },
+  "clearSearch": "Zoekopdracht wissen",
+  "burgers": {
+    "deleteTitle": "Burger verwijderen",
+    "deleteQuestion": "Weet u zeker dat u de gegevens van {{name}} definitief wil verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
+    "deleteConfirmMessage": "Gegevens van {{name}} zijn verwijderd.",
+    "backToOverview": "Terug naar het overzicht",
+    "errors": {
+      "noSearchResults": "Geen burgers gevonden. Gebruik een andere zoekterm.",
+      "serverError": "Er is een onbekende fout opgetreden. Probeer het later nog een keer."
+    }
+  },
+  "months": {
+    "jan": "januari",
+    "feb": "februari",
+    "mrt": "maart",
+    "apr": "april",
+    "may": "mei",
+    "jun": "juni",
+    "jul": "juli",
+    "aug": "augustus",
+    "sep": "september",
+    "oct": "oktober",
+    "nov": "november",
+    "dec": "december"
+  },
   "add-citizen-button-label": "Toevoegen",
   "street": "Straatnaam",
   "houseNumber": "Huisnummer",
@@ -12,10 +42,15 @@
   "bsn": "Burgerservicenummer (BSN)",
   "dateOfBirth": "Geboortedatum",
   "initials": "Initialen",
+  "bankAccountHolder": "Naam rekeninghouder",
   "forms": {
     "bsn-tooltip": "Het burgerservicenummer bestaat uit 9 getallen en staat op het identificatiebewijs.",
     "zipcode-tooltip": "Invoer zonder spaties. Voorbeeld: 1234AB",
-    "dateOfBirth-tooltip": "Invoer dd-mm-jjjj. Voorbeeld: 24-09-1960",
+    "dateOfBirth": {
+      "day": "dd",
+      "month": "mm",
+      "year": "jjjj"
+    },
     "phoneNumber-tooltip": "Invoer zonder spaties en streepjes. Voorbeeld: 0612345678",
     "iban-placeholder": "NL20BANK0001234567",
     "iban-tooltip": "Invoer zonder spaties. Voorbeeld: NL20BANK0001234567",
@@ -26,7 +61,8 @@
       "contact-helperText": "Vul de contactgegevens van de burger in.",
       "banking-helperText": "Neem het IBAN van de betaalpas van de burger over.",
       "invalidFormMessage": "Er is een fout opgetreden. Controleer de ingevulde gegevens en probeer het opnieuw.",
-      "successMessage": "Nieuwe burger opgeslagen!"
+      "createSuccessMessage": "Nieuwe burger succesvol opgeslagen.",
+      "updateSuccessMessage": "Gegevens succesvol gewijzigd."
     }
   },
   "contact": "Contact",
@@ -46,5 +82,9 @@
   "search-placeholder": "Zoeken...",
   "settings": "Instellingen",
   "user": "Gebruiker",
-  "zipcode": "Postcode"
+  "zipcode": "Postcode",
+  "genericError": {
+    "title": "Fout.",
+    "description": "Er ging iets mis. Probeer het later nog eens."
+  }
 }

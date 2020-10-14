@@ -1,3 +1,5 @@
+import {isDev} from "../utils/things";
+
 export enum Names {
 	login = "inloggen",
 	dashboard = "dashboard",
@@ -5,7 +7,8 @@ export enum Names {
 	balances = "huishoudboekjes",
 	organizations = "organisaties",
 	banking = "bank",
-	settings = "instellingen"
+	settings = "instellingen",
+	notFound = "404"
 }
 
 const Routes = {
@@ -19,6 +22,9 @@ const Routes = {
 	Organizations: `/${Names.organizations}`,
 	Banking: `/${Names.banking}`,
 	Settings: `/${Names.settings}`,
+	NotFound: `/${Names.notFound}`,
+
+	...(isDev && {GraphiQL: "/api/graphql"})
 };
 
 export default Routes;

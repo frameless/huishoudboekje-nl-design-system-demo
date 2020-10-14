@@ -1,5 +1,13 @@
-export const searchFields = (term: string, fields: string[]) => {
-	return fields.map(f => f.toLowerCase()).some(s => s.includes(term.toLowerCase()));
+import {createContext} from "react";
+
+export const searchFields = (term: string, fields: string[]): boolean => {
+	const _fields = fields.filter(f => f);
+
+	if (_fields.length === 0) {
+		return false;
+	}
+
+	return _fields.map(f => f.toLowerCase()).some(s => s.includes(term.toLowerCase()));
 };
 
 export const MOBILE_BREAKPOINT = 650;
@@ -14,10 +22,10 @@ const Date = /^(\d{2})-(\d{2})-(\d{4})$/;
 
 export const Regex = {ZipcodeNL, PhoneNumberNL, MobilePhoneNL, IbanNL, BsnNL, Date};
 
-export function fakeAsyncCall<T>(result: T | boolean = true, duration = 2000): Promise<T> {
-	return new Promise<T>(resolve => {
-		setTimeout(() => {
-			resolve(result as T);
-		}, duration);
-	});
-}
+export const Months = ["jan", "feb", "mrt", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
+
+export const isDev = process.env.NODE_ENV === "development";
+
+export const DrawerContext = createContext<{ onClose: () => void }>({
+	onClose: () => {}
+});

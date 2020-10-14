@@ -1,28 +1,30 @@
-import React, {useEffect} from "react";
+import React from "react";
 import {useTranslation} from "react-i18next";
-import {Box, Button, Divider, FormHelperText, FormLabel, Heading, Input, Stack, Tooltip, useToast} from "@chakra-ui/core";
-import {useInput, useIsMobile, useToggle, Validators} from "react-grapple";
+import {Box, Button, Divider, Flex, FormHelperText, FormLabel, Heading, Input, Select, Stack, Tooltip, useToast} from "@chakra-ui/core";
+import {useInput, useIsMobile, useNumberInput, useToggle, Validators} from "react-grapple";
 import BackButton from "../BackButton";
 import Routes from "../../config/routes";
-import {MOBILE_BREAKPOINT, Regex} from "../../utils/things";
-import {useAsync} from "react-async"
-import {CreateCitizenMutation} from "../../services/citizens";
+import {isDev, MOBILE_BREAKPOINT, Months, Regex} from "../../utils/things";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
+import {useMutation} from "@apollo/client";
+import {sampleData} from "../../config/sampleData/sampleData";
+import {useHistory} from "react-router-dom";
+import {CreateGebruikerMutation} from "../../services/graphql/mutations";
 
 // Todo: add more detailed error message per field?
-const CreateCitizen = () => {
+const CreateBurger = () => {
 	const {t} = useTranslation();
-	// const {push} = useHistory(); // Todo redirect to page after successful submit
+	const {push} = useHistory();
 	const isMobile = useIsMobile(MOBILE_BREAKPOINT);
 	const toast = useToast();
 
 	const [isSubmitted, toggleSubmitted] = useToggle();
 
-	const bsn = useInput<string>({
-		defaultValue: "",
-		validate: [Validators.required, (v) => new RegExp(Regex.BsnNL).test(v)],
-		placeholder: "123456789"
-	});
+	// const bsn = useInput<string>({
+	// 	defaultValue: "",
+	// 	validate: [Validators.required, (v) => new RegExp(Regex.BsnNL).test(v)],
+	// 	placeholder: "123456789"
+	// });
 	const initials = useInput<string>({
 		defaultValue: "",
 		validate: [Validators.required]
@@ -35,15 +37,24 @@ const CreateCitizen = () => {
 		defaultValue: "",
 		validate: [Validators.required]
 	});
-	const dateOfBirth = useInput<string>({
-		defaultValue: "",
-		validate: [Validators.required, (v) => new RegExp(Regex.Date).test(v)],
-		placeholder: "24-09-1960"
-	});
-	const mail = useInput<string>({
-		defaultValue: "",
-		validate: [Validators.required, Validators.email]
-	});
+	const dateOfBirth = {
+		day: useNumberInput({
+			validate: [(v) => new RegExp(/^[0-9]{1,2}$/).test(v.toString())],
+			placeholder: t("forms.dateOfBirth.day"),
+			min: 1,
+			max: 31,
+		}),
+		month: useNumberInput({
+			validate: [(v) => new RegExp(/^[0-9]{1,2}$/).test(v.toString())],
+			placeholder: t("forms.dateOfBirth.month"),
+			min: 1, max: 12
+		}),
+		year: useNumberInput({
+			validate: [(v) => new RegExp(/^[0-9]{4}$/).test(v.toString())],
+			placeholder: t("forms.dateOfBirth.year"),
+			max: (new Date()).getFullYear(), // No future births.
+		})
+	}
 	const street = useInput<string>({
 		defaultValue: "",
 		validate: [Validators.required]
@@ -66,19 +77,49 @@ const CreateCitizen = () => {
 		validate: [Validators.required, (v) => new RegExp(Regex.PhoneNumberNL).test(v) || new RegExp(Regex.MobilePhoneNL).test(v)],
 		placeholder: "0612345678"
 	});
-	const iban = useInput<string>({
+	const mail = useInput<string>({
 		defaultValue: "",
-		validate: [Validators.required, (v) => new RegExp(Regex.IbanNL).test(v)],
-		placeholder: t("forms.iban-placeholder")
+		validate: [Validators.required, Validators.email]
 	});
 
-	const {data, error, isPending, run, cancel} = useAsync({deferFn: CreateCitizenMutation});
+	const [createGebruiker, {loading}] = useMutation(CreateGebruikerMutation);
+
+	const prePopulateForm = () => {
+		const c = sampleData.citizens[(Math.floor(Math.random() * sampleData.citizens.length))];
+
+		initials.setValue(c.initials);
+		firstName.setValue(c.firstName);
+		lastName.setValue(c.lastName);
+		dateOfBirth.day.setValue(c.dateOfBirth.split("-")[0]);
+		dateOfBirth.month.setValue(c.dateOfBirth.split("-")[1]);
+		dateOfBirth.year.setValue(c.dateOfBirth.split("-")[2]);
+		street.setValue(c.street);
+		houseNumber.setValue(c.houseNumber);
+		zipcode.setValue(c.zipcode);
+		city.setValue(c.city);
+		phoneNumber.setValue(c.phoneNumber.toString());
+		mail.setValue(c.mail);
+	}
 
 	const onSubmit = (e) => {
 		e.preventDefault();
 		toggleSubmitted(true);
 
-		const isFormValid = Object.values({firstName, lastName, mail, street, zipcode, city, phoneNumber, iban}).every(f => f.isValid);
+		const isFormValid = [
+			initials,
+			firstName,
+			lastName,
+			dateOfBirth.day,
+			dateOfBirth.month,
+			dateOfBirth.year,
+			street,
+			houseNumber,
+			zipcode,
+			city,
+			phoneNumber,
+			mail,
+		].every(f => f.isValid);
+
 		if (!isFormValid) {
 			toast({
 				status: "error",
@@ -88,31 +129,45 @@ const CreateCitizen = () => {
 			return;
 		}
 
-		run();
-	};
-
-	useEffect(() => {
-		if (!isPending && error) {
-			toast({
-				status: "error",
-				title: error.name + ": " + error.message,
-				position: "top"
-			});
-		}
-
-		if (!isPending && data) {
+		createGebruiker({
+			variables: {
+				voorletters: initials.value,
+				voornamen: firstName.value,
+				achternaam: lastName.value,
+				geboortedatum: [
+					dateOfBirth.year.value,
+					("0" + dateOfBirth.month.value).substr(-2, 2),
+					("0" + dateOfBirth.day.value).substr(-2, 2),
+				].join("-"),
+				straatnaam: street.value,
+				huisnummer: houseNumber.value,
+				postcode: zipcode.value,
+				woonplaatsnaam: city.value,
+				telefoonnummer: phoneNumber.value,
+				email: mail.value,
+			}
+		}).then(result => {
 			toast({
 				status: "success",
-				title: t("forms.citizens.successMessage"),
-				position: "top"
+				title: t("forms.citizens.createSuccessMessage"),
+				position: "top",
 			});
-			// Todo: redirect to citizen detail page
-		}
 
-		return () => {
-			cancel();
-		}
-	}, [cancel, data, error, isPending, t, toast]);
+			const {id} = result.data.createGebruiker.gebruiker;
+			if (id) {
+				push(Routes.Citizen(id));
+			}
+		}).catch(err => {
+			console.log("Error:", err);
+			toast({
+				position: "top",
+				status: "error",
+				variant: "solid",
+				description: t("genericError.description"),
+				title: t("genericError.title")
+			});
+		});
+	};
 
 	const isInvalid = (input) => isSubmitted && !input.isValid;
 
@@ -126,6 +181,12 @@ const CreateCitizen = () => {
 				</Stack>
 			</Stack>
 
+			{isDev && (
+				<Flex justifyContent={"center"}>
+					<Button maxWidth={350} variantColor={"yellow"} variant={"outline"} onClick={() => prePopulateForm()}>Formulier snel invullen met testdata</Button>
+				</Flex>
+			)}
+
 			<Box as={"form"} onSubmit={onSubmit}>
 				<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
 					<Stack direction={isMobile ? "column" : "row"} spacing={2}>
@@ -134,12 +195,12 @@ const CreateCitizen = () => {
 							<FormHelperText id="personal-helperText">{t("forms.citizens.personal-helperText")}</FormHelperText>
 						</FormLeft>
 						<FormRight>
-							<Stack spacing={1}>
-								<FormLabel htmlFor={"bsn"}>{t("bsn")}</FormLabel>
-								<Tooltip label={t("forms.bsn-tooltip")} aria-label={t("bsn")} hasArrow placement={isMobile ? "top" : "left"}>
-									<Input isInvalid={isInvalid(bsn)} {...bsn.bind} id="bsn" />
-								</Tooltip>
-							</Stack>
+							{/*<Stack spacing={1}>*/}
+							{/*	<FormLabel htmlFor={"bsn"}>{t("bsn")}</FormLabel>*/}
+							{/*	<Tooltip label={t("forms.bsn-tooltip")} aria-label={t("bsn")} hasArrow placement={isMobile ? "top" : "left"}>*/}
+							{/*		<Input isInvalid={isInvalid(bsn)} {...bsn.bind} id="bsn" />*/}
+							{/*	</Tooltip>*/}
+							{/*</Stack>*/}
 							<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 								<Stack spacing={1} flex={1}>
 									<FormLabel htmlFor={"initials"}>{t("initials")}</FormLabel>
@@ -156,9 +217,22 @@ const CreateCitizen = () => {
 							</Stack>
 							<Stack spacing={1}>
 								<FormLabel htmlFor={"dateOfBirth"}>{t("dateOfBirth")}</FormLabel>
-								<Tooltip label={t("forms.dateOfBirth-tooltip")} aria-label={t("dateOfBirth")} hasArrow placement={isMobile ? "top" : "left"}>
-									<Input isInvalid={isInvalid(dateOfBirth)} {...dateOfBirth.bind} id="dateOfBirth" />
-								</Tooltip>
+								<Stack direction={"row"} maxW="100%">
+									<Box flex={1}>
+										<Input isInvalid={isInvalid(dateOfBirth.day)} {...dateOfBirth.day.bind} id="dateOfBirth.day" />
+									</Box>
+									<Box flex={2}>
+										<Select isInvalid={isInvalid(dateOfBirth.month)} {...dateOfBirth.month.bind} id="dateOfBirth.month"
+										        value={parseInt(dateOfBirth.month.value.toString()).toString()}>
+											{Months.map((m, i) => (
+												<option key={i} value={i + 1}>{t("months." + m)}</option>
+											))}
+										</Select>
+									</Box>
+									<Box flex={1}>
+										<Input isInvalid={isInvalid(dateOfBirth.year)} {...dateOfBirth.year.bind} id="dateOfBirth.year" />
+									</Box>
+								</Stack>
 							</Stack>
 						</FormRight>
 					</Stack>
@@ -209,27 +283,10 @@ const CreateCitizen = () => {
 					<Divider />
 
 					<Stack direction={isMobile ? "column" : "row"} spacing={2}>
-						<FormLeft>
-							<Heading size={"md"}>{t("banking")}</Heading>
-							<FormHelperText id="banking-helperText">{t("forms.citizens.banking-helperText")}</FormHelperText>
-						</FormLeft>
-						<FormRight>
-							<Stack spacing={1}>
-								<FormLabel htmlFor={"iban"}>{t("iban")}</FormLabel>
-								<Tooltip label={t("forms.iban-tooltip")} aria-label={t("iban")} hasArrow placement={isMobile ? "top" : "left"}>
-									<Input isInvalid={isInvalid(iban)} {...iban.bind} id="iban" />
-								</Tooltip>
-							</Stack>
-						</FormRight>
-					</Stack>
-
-					<Divider />
-
-					<Stack direction={isMobile ? "column" : "row"} spacing={2}>
 						<FormLeft />
 						<FormRight>
 							<Stack direction={"row"} spacing={1} justifyContent={"flex-end"}>
-								<Button isLoading={isPending} type={"submit"} variantColor={"primary"} onClick={onSubmit}>{t("save")}</Button>
+								<Button isLoading={loading} type={"submit"} variantColor={"primary"} onClick={onSubmit}>{t("save")}</Button>
 							</Stack>
 						</FormRight>
 					</Stack>
@@ -239,4 +296,4 @@ const CreateCitizen = () => {
 	</>);
 };
 
-export default CreateCitizen;
+export default CreateBurger;
