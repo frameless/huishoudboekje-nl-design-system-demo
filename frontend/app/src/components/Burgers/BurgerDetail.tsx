@@ -298,7 +298,7 @@ const BurgerDetail = () => {
 										<Box flex={1}>
 											<Input isInvalid={dateOfBirth.day.dirty && !dateOfBirth.day.isValid} {...dateOfBirth.day.bind} id="dateOfBirth.day" />
 										</Box>
-										<Box flex={1}>
+										<Box flex={2}>
 											<Select isInvalid={dateOfBirth.month.dirty && !dateOfBirth.month.isValid} {...dateOfBirth.month.bind} id="dateOfBirth.month"
 											        value={parseInt(dateOfBirth.month.value.toString()).toString()}>
 												{Months.map((m, i) => (
@@ -306,7 +306,7 @@ const BurgerDetail = () => {
 												))}
 											</Select>
 										</Box>
-										<Box flex={2}>
+										<Box flex={1}>
 											<Input isInvalid={dateOfBirth.year.dirty && !dateOfBirth.year.isValid} {...dateOfBirth.year.bind} id="dateOfBirth.year" />
 										</Box>
 									</Stack>

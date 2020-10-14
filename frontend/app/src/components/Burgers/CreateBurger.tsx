@@ -221,7 +221,7 @@ const CreateBurger = () => {
 									<Box flex={1}>
 										<Input isInvalid={isInvalid(dateOfBirth.day)} {...dateOfBirth.day.bind} id="dateOfBirth.day" />
 									</Box>
-									<Box flex={1}>
+									<Box flex={2}>
 										<Select isInvalid={isInvalid(dateOfBirth.month)} {...dateOfBirth.month.bind} id="dateOfBirth.month"
 										        value={parseInt(dateOfBirth.month.value.toString()).toString()}>
 											{Months.map((m, i) => (
@@ -229,7 +229,7 @@ const CreateBurger = () => {
 											))}
 										</Select>
 									</Box>
-									<Box flex={2}>
+									<Box flex={1}>
 										<Input isInvalid={isInvalid(dateOfBirth.year)} {...dateOfBirth.year.bind} id="dateOfBirth.year" />
 									</Box>
 								</Stack>
