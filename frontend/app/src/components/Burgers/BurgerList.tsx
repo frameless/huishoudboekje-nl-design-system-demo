@@ -80,7 +80,6 @@ const BurgerList = () => {
 				</Stack>}
 			</Stack>
 
-
 			{loading && ( // Waiting for data to arrive
 				<Stack justifyContent={"center"} alignItems={"center"} bg={"white"} p={20} spacing={10}>
 					<Spinner />
@@ -106,9 +105,12 @@ const BurgerList = () => {
 				{filteredBurgers.length > 0 && (
 					<SimpleGrid maxWidth={"100%"} columns={4} minChildWidth={200} spacing={5}>
 						{search.value.trim().length === 0 && (
-							<Button variantColor={"primary"} borderStyle={"dashed"} variant={"outline"} leftIcon={"add"} onClick={() => push(Routes.CitizenNew)}
-							        h={"100%"} p={5}>{t("add-citizen-button-label")}</Button>)
-						}
+							<Box>
+								<Button variantColor={"primary"} borderStyle={"dashed"} variant={"outline"} leftIcon={"add"}
+								        w="100%" h="100%" onClick={() => push(Routes.CitizenNew)}
+								        p={5}>{t("add-citizen-button-label")}</Button>
+							</Box>
+						)}
 						{filteredBurgers.map(g => <GebruikerCard key={g.id} gebruiker={g} cursor={"pointer"} />)}
 					</SimpleGrid>
 				)}
