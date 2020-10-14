@@ -3,7 +3,7 @@
   stage: deploy
   image: registry.gitlab.com/commonground/core/review-app-deployer:latest
   environment:
-    name: $CI_COMMIT_REF_NAME
+    name: $CI_COMMIT_REF_SLUG
     url: https://$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN/
     on_stop: destroy-app
   script:
@@ -58,6 +58,7 @@
       if $FAILED; then
         exit 1
       fi
+    - echo "Take a look at https://${REVIEW_NAMESPACE}.${REVIEW_BASE_DOMAIN}/"
   only:
     - branches@commonground/huishoudboekje/app-new
   tags:
@@ -81,7 +82,7 @@
     reports:
       dotenv: docs.env
   environment:
-    name: docs-${CI_COMMIT_REF_NAME}
+    name: docs-${CI_COMMIT_REF_SLUG}
     url: ${DOCS_URL}
     on_stop: destroy-docs
   only:
@@ -192,7 +193,7 @@ docs-deploy-proddemo:
 destroy-app:
   extends: .destroy
   environment:
-    name: $CI_COMMIT_REF_NAME
+    name: $CI_COMMIT_REF_SLUG
   except:
     - master
     - develop
@@ -201,7 +202,7 @@ destroy-app:
 destroy-docs:
   extends: .destroy
   environment:
-    name: docs-${CI_COMMIT_REF_NAME}
+    name: docs-${CI_COMMIT_REF_SLUG}
   except:
     - master
     - develop
