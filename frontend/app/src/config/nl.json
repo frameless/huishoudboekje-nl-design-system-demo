@@ -7,7 +7,7 @@
   "clearSearch": "Zoekopdracht wissen",
   "burgers": {
     "deleteTitle": "Burger verwijderen",
-    "deleteQuestion": "Weet u zeker dat u {{name}} definitief wil verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
+    "deleteQuestion": "Weet u zeker dat u de gegevens van {{name}} definitief wil verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
     "deleteConfirmMessage": "Deze gebruiker is verwijderd.",
     "backToOverview": "Terug naar het overzicht",
     "errors": {
