@@ -1,5 +1,5 @@
-import React from "react";
-import {Box, Flex, Menu, MenuButton, MenuItem, MenuList, PseudoBox, Stack, Text} from "@chakra-ui/core";
+import React, {useEffect} from "react";
+import {Box, Flex, IconButton, Menu, MenuButton, MenuItem, MenuList, PseudoBox, Stack, Text} from "@chakra-ui/core";
 import {useSession} from "./utils/hooks";
 import LoginPage from "./components/LoginPage";
 import {observer} from "mobx-react";
@@ -12,8 +12,9 @@ import {FaCog, FaLock} from "react-icons/all";
 import Routes from "./config/routes";
 import Citizens from "./components/Burgers";
 import PageNotFound from "./components/PageNotFound";
-import {TABLET_BREAKPOINT} from "./utils/things";
+import {isDev, TABLET_BREAKPOINT} from "./utils/things";
 import {useTranslation} from "react-i18next";
+import {sampleData} from "./config/sampleData/sampleData";
 
 const App = () => {
 	const {t} = useTranslation();
@@ -29,6 +30,13 @@ const App = () => {
 	const onClickLogoutButton = () => {
 		session.reset();
 	};
+
+	useEffect(() => {
+		// As long as logging in via Dex on localhost doesn't work, we just use the first user in sampleData and auto-login with that.
+		if (isDev) {
+			session.setUser(sampleData.users[0]);
+		}
+	}, [session]);
 
 	return (
 		<Switch>
@@ -47,13 +55,16 @@ const App = () => {
 								<Stack spacing={10} direction={"row"} justifyContent={"flex-end"} alignItems={"center"} pb={5}>
 									<Menu>
 										<MenuButton as={Box}>
-											<UserStatus name={session.user.fullName} role={session.user.role} />
+											<Stack direction={"row"} spacing={5} alignItems={"center"}>
+												<UserStatus name={session.user.fullName} role={session.user.role} />
+												<IconButton icon="chevron-down" variant={"solid"} aria-label="Open menu" />
+											</Stack>
 										</MenuButton>
-										<MenuList>
-											<MenuItem onClick={() => push(Routes.Settings)}>
+										<MenuList zIndex={3}>
+											{false && <MenuItem onClick={() => push(Routes.Settings)}>
 												<PseudoBox size={"16px"} as={FaCog} color={"gray.400"} _hover={{color: "primary.700"}} aria-label={t("settings")} mr={3} />
 												<Text>{t("settings")}</Text>
-											</MenuItem>
+											</MenuItem>}
 											<MenuItem onClick={onClickLogoutButton}>
 												<PseudoBox size={"16px"} as={FaLock} color={"gray.400"} _hover={{color: "primary.700"}} aria-label={t("logout")} mr={3} />
 												<Text>{t("logout")}</Text>
