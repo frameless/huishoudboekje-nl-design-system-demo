@@ -13,7 +13,6 @@ export const CreateGebruikerMutation = gql`
         $woonplaatsnaam: String
         $telefoonnummer: String
         $email: String
-        $iban: String
     ) {
         createGebruiker(
             voorletters: $voorletters
@@ -26,7 +25,6 @@ export const CreateGebruikerMutation = gql`
             woonplaatsnaam: $woonplaatsnaam
             telefoonnummer: $telefoonnummer
             email: $email
-            iban: $iban
         ){
             ok
             gebruiker {
@@ -50,7 +48,6 @@ export const UpdateGebruikerMutation = gql`
         $woonplaatsnaam: String
         $telefoonnummer: String
         $email: String
-        $iban: String
     ){
         updateGebruiker(
             id: $id
@@ -64,7 +61,6 @@ export const UpdateGebruikerMutation = gql`
             woonplaatsnaam: $woonplaatsnaam
             telefoonnummer: $telefoonnummer
             email: $email
-            iban: $iban
         ){
             ok
             gebruiker {

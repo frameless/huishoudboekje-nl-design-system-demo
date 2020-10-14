@@ -42,6 +42,7 @@
   "bsn": "Burgerservicenummer (BSN)",
   "dateOfBirth": "Geboortedatum",
   "initials": "Initialen",
+  "bankAccountHolder": "Naam rekeninghouder",
   "forms": {
     "bsn-tooltip": "Het burgerservicenummer bestaat uit 9 getallen en staat op het identificatiebewijs.",
     "zipcode-tooltip": "Invoer zonder spaties. Voorbeeld: 1234AB",

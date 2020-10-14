@@ -81,11 +81,6 @@ const CreateBurger = () => {
 		defaultValue: "",
 		validate: [Validators.required, Validators.email]
 	});
-	const iban = useInput<string>({
-		defaultValue: "",
-		validate: [Validators.required, (v) => new RegExp(Regex.IbanNL).test(v)],
-		placeholder: t("forms.iban-placeholder")
-	});
 
 	const [createGebruiker, {loading}] = useMutation(CreateGebruikerMutation);
 
@@ -104,14 +99,27 @@ const CreateBurger = () => {
 		city.setValue(c.city);
 		phoneNumber.setValue(c.phoneNumber.toString());
 		mail.setValue(c.mail);
-		iban.setValue(c.iban);
 	}
 
 	const onSubmit = (e) => {
 		e.preventDefault();
 		toggleSubmitted(true);
 
-		const isFormValid = Object.values({firstName, lastName, mail, street, zipcode, city, phoneNumber, iban}).every(f => f.isValid);
+		const isFormValid = [
+			initials,
+			firstName,
+			lastName,
+			dateOfBirth.day,
+			dateOfBirth.month,
+			dateOfBirth.year,
+			street,
+			houseNumber,
+			zipcode,
+			city,
+			phoneNumber,
+			mail,
+		].every(f => f.isValid);
+
 		if (!isFormValid) {
 			toast({
 				status: "error",
@@ -137,7 +145,6 @@ const CreateBurger = () => {
 				woonplaatsnaam: city.value,
 				telefoonnummer: phoneNumber.value,
 				email: mail.value,
-				iban: iban.value,
 			}
 		}).then(result => {
 			toast({
@@ -269,23 +276,6 @@ const CreateBurger = () => {
 							<Stack spacing={1}>
 								<FormLabel htmlFor={"mail"}>{t("mail")}</FormLabel>
 								<Input isInvalid={isInvalid(mail)} {...mail.bind} id="mail" aria-describedby="mail-helper-text" />
-							</Stack>
-						</FormRight>
-					</Stack>
-
-					<Divider />
-
-					<Stack direction={isMobile ? "column" : "row"} spacing={2}>
-						<FormLeft>
-							<Heading size={"md"}>{t("banking")}</Heading>
-							<FormHelperText id="banking-helperText">{t("forms.citizens.banking-helperText")}</FormHelperText>
-						</FormLeft>
-						<FormRight>
-							<Stack spacing={1}>
-								<FormLabel htmlFor={"iban"}>{t("iban")}</FormLabel>
-								<Tooltip label={t("forms.iban-tooltip")} aria-label={t("iban")} hasArrow placement={isMobile ? "top" : "left"}>
-									<Input isInvalid={isInvalid(iban)} {...iban.bind} id="iban" />
-								</Tooltip>
 							</Stack>
 						</FormRight>
 					</Stack>

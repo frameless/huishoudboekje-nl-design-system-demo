@@ -4,7 +4,6 @@ export type IGebruiker = {
 	telefoonnummer: string,
 	email: string,
 	geboortedatum: string,
-	iban: string,
 	burger: IBurger,
 	weergaveNaam: string,
 }

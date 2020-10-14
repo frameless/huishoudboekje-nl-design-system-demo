@@ -99,10 +99,13 @@ const BurgerDetail = () => {
 		validate: [(v) => new RegExp(Regex.PhoneNumberNL).test(v) || new RegExp(Regex.MobilePhoneNL).test(v)],
 		placeholder: "0612345678"
 	});
-	const iban = useInput<string>({
-		validate: [Validators.required, (v) => new RegExp(Regex.IbanNL).test(v)],
-		placeholder: t("forms.iban-placeholder")
-	});
+	// const iban = useInput<string>({
+	// 	validate: [Validators.required, (v) => IbanCheck.isValid(v)],
+	// 	placeholder: t("forms.iban-placeholder")
+	// });
+	// const bankAccountHolder = useInput<string>({
+	// 	validate: [Validators.required],
+	// });
 
 	const {data, loading, error} = useQuery<{ gebruiker: IGebruiker }>(GetOneGebruikerQuery, {
 		variables: {id}
@@ -111,10 +114,55 @@ const BurgerDetail = () => {
 	const [deleteMutation, {loading: deleteLoading}] = useMutation(DeleteGebruikerMutation, {variables: {id}});
 	const [updateMutation, {loading: updateLoading}] = useMutation(UpdateGebruikerMutation);
 
+	useEffect(() => {
+		let mounted = true;
+
+		if (mounted && data) {
+			const {gebruiker} = data;
+
+			if (gebruiker.burger) {
+				// bsn.setValue(gebruiker.bsn.toString() || "");
+				initials.setValue(gebruiker.burger?.voorletters || "");
+				firstName.setValue(gebruiker.burger?.voornamen || "");
+				lastName.setValue(gebruiker.burger?.achternaam || "");
+				dateOfBirth.day.setValue(new Date(gebruiker.geboortedatum).getDate());
+				dateOfBirth.month.setValue(new Date(gebruiker.geboortedatum).getMonth() + 1);
+				dateOfBirth.year.setValue(new Date(gebruiker.geboortedatum).getFullYear());
+				mail.setValue(gebruiker.email || "");
+				street.setValue(gebruiker.burger?.straatnaam || "");
+				houseNumber.setValue(gebruiker.burger?.huisnummer || "");
+				zipcode.setValue(gebruiker.burger?.postcode || "");
+				city.setValue(gebruiker.burger?.woonplaatsnaam || "");
+				phoneNumber.setValue(gebruiker.telefoonnummer || "");
+				// iban.setValue(gebruiker.iban || "");
+				// bankAccountHolder.setValue(gebruiker.rekeninghouder || "");
+			}
+		}
+
+		return () => {
+			mounted = false;
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [data, loading]);
+
+	const onClickBackButton = () => push(Routes.Citizens);
 	const onSubmit = (e) => {
 		e.preventDefault();
 
-		const isFormValid = Object.values({firstName, lastName, mail, street, zipcode, city, phoneNumber, iban}).every(f => f.isValid);
+		const isFormValid = [
+			initials,
+			firstName,
+			lastName,
+			dateOfBirth.day,
+			dateOfBirth.month,
+			dateOfBirth.year,
+			street,
+			houseNumber,
+			zipcode,
+			city,
+			phoneNumber,
+			mail,
+		].every(f => f.isValid);
 		if (!isFormValid) {
 			toast({
 				status: "error",
@@ -141,7 +189,6 @@ const BurgerDetail = () => {
 				woonplaatsnaam: city.value,
 				telefoonnummer: phoneNumber.value,
 				email: mail.value,
-				iban: iban.value,
 			}
 		}).then(() => {
 			toast({
@@ -160,38 +207,6 @@ const BurgerDetail = () => {
 			});
 		})
 	};
-
-	useEffect(() => {
-		let mounted = true;
-
-		if (mounted && data) {
-			const {gebruiker} = data;
-
-			if (gebruiker.burger) {
-				// bsn.setValue(gebruiker.bsn.toString());
-				initials.setValue(gebruiker.burger?.voorletters || "");
-				firstName.setValue(gebruiker.burger?.voornamen || "");
-				lastName.setValue(gebruiker.burger?.achternaam || "");
-				dateOfBirth.day.setValue(new Date(gebruiker.geboortedatum).getDate());
-				dateOfBirth.month.setValue(new Date(gebruiker.geboortedatum).getMonth() + 1);
-				dateOfBirth.year.setValue(new Date(gebruiker.geboortedatum).getFullYear());
-				mail.setValue(gebruiker.email);
-				street.setValue(gebruiker.burger?.straatnaam || "");
-				houseNumber.setValue(gebruiker.burger?.huisnummer || "");
-				zipcode.setValue(gebruiker.burger?.postcode || "");
-				city.setValue(gebruiker.burger?.woonplaatsnaam || "");
-				phoneNumber.setValue(gebruiker.telefoonnummer);
-				iban.setValue(gebruiker.iban);
-			}
-		}
-
-		return () => {
-			mounted = false;
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [data, loading]);
-
-	const onClickBackButton = () => push(Routes.Citizens);
 	const onCloseDeleteDialog = () => toggleDeleteDialog(false);
 	const onConfirmDeleteDialog = () => {
 		deleteMutation().then(() => {
@@ -338,23 +353,6 @@ const BurgerDetail = () => {
 								<Stack spacing={1}>
 									<FormLabel htmlFor={"mail"}>{t("mail")}</FormLabel>
 									<Input isInvalid={!mail.isValid} {...mail.bind} aria-describedby="mail-helper-text" />
-								</Stack>
-							</FormRight>
-						</Stack>
-
-						<Divider />
-
-						<Stack direction={isMobile ? "column" : "row"} spacing={2}>
-							<FormLeft>
-								<Heading size={"md"}>{t("banking")}</Heading>
-								<FormHelperText id="banking-helperText">{t("forms.citizens.banking-helperText")}</FormHelperText>
-							</FormLeft>
-							<FormRight>
-								<Stack spacing={1}>
-									<FormLabel htmlFor={"iban"}>{t("iban")}</FormLabel>
-									<Tooltip label={t("forms.iban-tooltip")} aria-label={t("iban")} hasArrow placement={isMobile ? "top" : "left"}>
-										<Input id="iban" {...iban.bind} />
-									</Tooltip>
 								</Stack>
 							</FormRight>
 						</Stack>
