@@ -225,7 +225,7 @@ const CreateBurger = () => {
 										<Select isInvalid={isInvalid(dateOfBirth.month)} {...dateOfBirth.month.bind} id="dateOfBirth.month"
 										        value={parseInt(dateOfBirth.month.value.toString()).toString()}>
 											{Months.map((m, i) => (
-												<option key={i} value={i}>{t("months." + m)}</option>
+												<option key={i} value={i + 1}>{t("months." + m)}</option>
 											))}
 										</Select>
 									</Box>
