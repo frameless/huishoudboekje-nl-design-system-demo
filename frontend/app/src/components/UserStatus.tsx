@@ -1,14 +1,14 @@
 import React from "react";
-import {Avatar, Box, BoxProps, Stack, Text} from "@chakra-ui/core";
+import {Avatar, BoxProps, Stack, Text} from "@chakra-ui/core";
 
 const UserStatus: React.FC<BoxProps & { name: string, role: string }> = ({name, role, ...props}) => {
 	return (
 		<Stack spacing={5} direction={"row"} alignItems={"center"} {...props}>
 			<Avatar name={name} bg={"secondary.100"} />
-			<Box>
+			<Stack alignItems={"flex-start"} spacing={0}>
 				<Text fontWeight="bold">{name}</Text>
 				<Text fontSize="sm">{role}</Text>
-			</Box>
+			</Stack>
 		</Stack>
 	);
 };

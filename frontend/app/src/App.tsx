@@ -1,5 +1,5 @@
 import React from "react";
-import {Box, Flex, IconButton, Stack} from "@chakra-ui/core";
+import {Box, Flex, Menu, MenuButton, MenuItem, MenuList, PseudoBox, Stack, Text} from "@chakra-ui/core";
 import {useSession} from "./utils/hooks";
 import LoginPage from "./components/LoginPage";
 import {observer} from "mobx-react";
@@ -26,6 +26,10 @@ const App = () => {
 		session.setReferer(location.pathname);
 	}
 
+	const onClickLogoutButton = () => {
+		session.reset();
+	};
+
 	return (
 		<Switch>
 			<Route path={Routes.Login} component={LoginPage} />
@@ -38,16 +42,24 @@ const App = () => {
 							<SidebarContainer>
 								<Sidebar />
 							</SidebarContainer>
-							<Box height={"100%"} minHeight={"100vh"} width={"100%"} p={5}>
 
+							<Box height={"100%"} minHeight={"100vh"} width={"100%"} p={5}>
 								<Stack spacing={10} direction={"row"} justifyContent={"flex-end"} alignItems={"center"} pb={5}>
-									<UserStatus name={session.user.fullName} role={session.user.role} />
-									<Stack direction={"row"} spacing={2}>
-										<IconButton size={"md"} icon={FaCog} color={"gray.400"} _hover={{color: "primary.700"}} variant={"ghost"} aria-label={t("settings")}
-										            title={t("settings")} onClick={() => push(Routes.Settings)} />
-										<IconButton size={"md"} icon={FaLock} color={"gray.400"} _hover={{color: "primary.700"}} variant={"ghost"} aria-label={t("logout")}
-										            title={t("logout")} onClick={() => session.reset()} />
-									</Stack>
+									<Menu>
+										<MenuButton as={Box}>
+											<UserStatus name={session.user.fullName} role={session.user.role} />
+										</MenuButton>
+										<MenuList>
+											<MenuItem onClick={() => push(Routes.Settings)}>
+												<PseudoBox size={"16px"} as={FaCog} color={"gray.400"} _hover={{color: "primary.700"}} aria-label={t("settings")} mr={3} />
+												<Text>{t("settings")}</Text>
+											</MenuItem>
+											<MenuItem onClick={onClickLogoutButton}>
+												<PseudoBox size={"16px"} as={FaLock} color={"gray.400"} _hover={{color: "primary.700"}} aria-label={t("logout")} mr={3} />
+												<Text>{t("logout")}</Text>
+											</MenuItem>
+										</MenuList>
+									</Menu>
 								</Stack>
 
 								<Switch>
@@ -58,7 +70,6 @@ const App = () => {
 									<Route exact path={Routes.NotFound} component={PageNotFound} />
 									<Route component={PageNotFound} />
 								</Switch>
-
 							</Box>
 						</Stack>
 					</Flex>
