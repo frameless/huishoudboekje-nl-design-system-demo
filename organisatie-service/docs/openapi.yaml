@@ -11,7 +11,7 @@ paths:
     get:
       description: Geeft organisaties met optioneel een filter op kvk nummers
       parameters:
-        - name: filter_ids
+        - name: filter_kvks
           in: query
           schema:
             type: string
@@ -30,7 +30,7 @@ paths:
         '5XX':
           description: Unexpected error.
     post:
-      description: Voeg nieuw organisatie toe op update een bestaande organisatie
+      description: Voeg nieuw organisatie toe
       parameters:
         - name: kvk_nummer
           required: true
@@ -72,6 +72,28 @@ paths:
                 $ref: '#/components/schemas/Organisatie'
         '400':
           description: Bad Request
+        '5XX':
+          description: Unexpected error.
+
+  /organisaties/<kvk_nummer/:
+    get:
+      description: Data van enkele organisatie
+      responses:
+        '200':
+          description: Accepted
+        '404':
+          description: Not Found
+        '5XX':
+          description: Unexpected error.
+    post:
+      description: Update een bestaande organisatie
+      responses:
+        '202':
+          description: Accepted
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
         '5XX':
           description: Unexpected error.
     delete:

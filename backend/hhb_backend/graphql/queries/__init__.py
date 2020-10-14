@@ -1,6 +1,6 @@
 """ GraphQL schema queries module """
 import graphene
-from .gebruiker import GebruikersQuery, GebruikerQuery
+from .gebruikers import GebruikersQuery, GebruikerQuery
 
 class RootQuery(graphene.ObjectType):
     """ The root of all queries """

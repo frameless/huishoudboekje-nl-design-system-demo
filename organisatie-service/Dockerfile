@@ -16,7 +16,7 @@ COPY --chown=app:app ./ ./
 RUN python3 setup.py install --user --prefix=''
 
 # Set gunicorn settings
-ENV GUNICORN_PORT="8001" \
+ENV GUNICORN_PORT="8000" \
     GUNICORN_WORKERS="2" \
     GUNICORN_THREADS="4" \
     GUNICORN_LOGLEVEL="info" \

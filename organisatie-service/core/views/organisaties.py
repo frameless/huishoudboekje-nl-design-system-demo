@@ -3,15 +3,13 @@ from flask.views import MethodView
 from flask import request
 from flask_inputs import Inputs
 from flask_inputs.validators import JsonSchema
+from sqlalchemy.orm.exc import NoResultFound
 from models.organisatie import Organisatie
 from core.database import db
 
 organisatie_schema = {
    "type": "object",
    "properties": {
-       "kvk_nummer": {
-           "type": "integer",
-       },
        "naam": {
            "type": "string",
        },
@@ -28,7 +26,7 @@ organisatie_schema = {
             "type": "string",
         }
    },
-   "required": ["kvk_nummer"]
+   "required": []
 }
 
 class OrganisatieInputs(Inputs):
@@ -36,44 +34,60 @@ class OrganisatieInputs(Inputs):
     json = [JsonSchema(schema=organisatie_schema)]
 
 class OrganisatieView(MethodView):
-    """ Methods for /gebruiker/ path """
+    """ Methods for /organisaties/ path """
 
-    def get(self):
+    def get(self, kvk_nummer=None):
         """ Return a list of all Organisaties """
-        filter_ids = request.args.get('filter_ids')
-        organisaties = Organisatie.query
-        if filter_ids:
+        if kvk_nummer:
+            # /organisaties/<kvk_nummer>/
             try:
-                organisaties = organisaties.filter(Organisatie.kvk_nummer.in_([int(id) for id in filter_ids.split(",")]))
+                organisatie = Organisatie.query.filter(Organisatie.kvk_nummer==kvk_nummer).one()
+            except NoResultFound:
+                return {"errors": ["Organisatie not found."]}, 404
+            return {"data": organisatie.to_dict()}, 200
+
+        # /organisaties/
+        filter_kvks = request.args.get('filter_kvks')
+        organisaties = Organisatie.query
+        if filter_kvks:
+            try:
+                organisaties = organisaties.filter(
+                    Organisatie.kvk_nummer.in_([int(kvkn) for kvkn in filter_kvks.split(",")])
+                )
             except ValueError:
-                return {"errors": ["Input for filter_ids is not correct"]}, 400
+                return {"errors": ["Input for filter_kvks is not correct"]}, 400
         return {"data": [o.to_dict() for o in organisaties.all()]}
 
-    def post(self):
-        """ Create or Update function for Organisaties """
+    def post(self, kvk_nummer=None):
+        """ Create or update an Organisatie """
         inputs = OrganisatieInputs(request)
         if not inputs.validate():
-            print(inputs.errors)
             return {"errors": inputs.errors}, 400
 
-        organisatie = Organisatie.query.filter(Organisatie.kvk_nummer==request.json["kvk_nummer"]).one_or_none()
-        if not organisatie:
+        if kvk_nummer:
+            try:
+                organisatie = Organisatie.query.filter(Organisatie.kvk_nummer==kvk_nummer).one()
+            except NoResultFound:
+                return {"errors": ["Organisatie not found."]}, 404
+            response_code = 202
+        else:
             organisatie = Organisatie()
             db.session.add(organisatie)
+            response_code = 201
+
         for key, value in request.json.items():
             setattr(organisatie, key, value)
         db.session.commit()
-        return {"data": organisatie.to_dict()}, 202
+        return {"data": organisatie.to_dict()}, response_code
 
-    def delete(self):
-        """ Delete the current Gebruiker """
-        inputs = OrganisatieInputs(request)
-        if not inputs.validate():
-            print(inputs.errors)
-            return {"errors": inputs.errors}, 400
-        delete_organisatie = Organisatie.query.filter(Organisatie.kvk_nummer==request.json["kvk_nummer"]).one_or_none()
-        if not delete_organisatie:
+    def delete(self, kvk_nummer=None):
+        """ Delete an Organisatie """
+        if not kvk_nummer:
+            return {"errors": ["Delete method requires an kvk_nummer"]}, 400
+        try:
+            organisatie = Organisatie.query.filter(Organisatie.kvk_nummer==kvk_nummer).one()
+        except NoResultFound:
             return {"errors": ["Organisatie not found."]}, 404
-        db.session.delete(delete_organisatie)
+        db.session.delete(organisatie)
         db.session.commit()
-        return {}, 204
+        return {}, 202

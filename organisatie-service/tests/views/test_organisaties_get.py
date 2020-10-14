@@ -1,41 +1,41 @@
-""" Test GET /organisaties """
-from datetime import date
+""" Test GET /organisaties/(<organisatie_id>/) """
+from models.organisatie import Organisatie
 
-def test_organisaties_get_empty_db(client):
-    """ Test organisaties GET call with empty database. """
-    response = client.get('/organisaties')
+def test_organisaties_get_success_all(client, organisatie_factory):
+    """ Test /organisaties/ path """
+    organisatie1 = organisatie_factory.createOrganisatie(kvk_nummer=1)
+    organisatie2 = organisatie_factory.createOrganisatie(kvk_nummer=2)
+    response = client.get(f'/organisaties/')
     assert response.status_code == 200
-    assert {'data': []} == response.json
+    assert response.json["data"] == [organisatie1.to_dict(), organisatie2.to_dict()]
 
-def test_organisaties_get_with_data(client, dbsession, organisatie_factory):
-    """ Test organisaties GET call with data """
-    organisatie1 = organisatie_factory.createOrganisatie(kvk_nummer=1, naam="A")
-    organisatie2 = organisatie_factory.createOrganisatie(kvk_nummer=2, naam="B")
-    organisatie3 = organisatie_factory.createOrganisatie(kvk_nummer=3, naam="C")
-    response = client.get('/organisaties')
+def test_organisaties_get_with_kvk_nummer(client, organisatie_factory):
+    """ Test /organisaties/<kvk_nummer>/ path """
+    organisatie1 = organisatie_factory.createOrganisatie(kvk_nummer=1)
+    organisatie2 = organisatie_factory.createOrganisatie(kvk_nummer=2)
+    response = client.get(f'/organisaties/{organisatie1.kvk_nummer}/')
     assert response.status_code == 200
-    assert response.json["data"][0]["kvk_nummer"] == 1
-    assert response.json["data"][0]["naam"] == "A"
-    assert response.json["data"][1]["kvk_nummer"] == 2
-    assert response.json["data"][1]["naam"] == "B"
-    assert response.json["data"][2]["kvk_nummer"] == 3
-    assert response.json["data"][2]["naam"] == "C"
-
-def test_organisaties_get_with_data_and_filters(client, dbsession, organisatie_factory):
-    """ Test organisaties GET call with data and filter_ids """
-    organisatie1 = organisatie_factory.createOrganisatie(kvk_nummer=1, naam="A")
-    organisatie2 = organisatie_factory.createOrganisatie(kvk_nummer=2, naam="B")
-    organisatie3 = organisatie_factory.createOrganisatie(kvk_nummer=3, naam="C")
-    response = client.get('/organisaties?filter_ids=2,3')
+    assert response.json["data"] == organisatie1.to_dict()
+    response = client.get(f'/organisaties/{organisatie2.kvk_nummer}/')
     assert response.status_code == 200
-    assert response.json["data"][0]["kvk_nummer"] == 2
-    assert response.json["data"][0]["naam"] == "B"
-    assert response.json["data"][1]["kvk_nummer"] == 3
-    assert response.json["data"][1]["naam"] == "C"
+    assert response.json["data"] == organisatie2.to_dict()
+    response = client.get(f'/organisaties/1337/')
+    assert response.status_code == 404
+    assert response.json["errors"] == ["Organisatie not found."]
 
-def test_organisaties_get_with_incorrect_filters(client, dbsession, organisatie_factory):
-    """ Test organisaties GET call with incorrect filters """
-    response = client.get('/organisaties?filter_ids=2,3,noint')
+def test_organisaties_get_filter_kvks(client, organisatie_factory):
+    """ Test filter_kvks on organisaties """
+    organisatie1 = organisatie_factory.createOrganisatie(kvk_nummer=1)
+    organisatie2 = organisatie_factory.createOrganisatie(kvk_nummer=2)
+    response = client.get(f'/organisaties/?filter_kvks={organisatie1.kvk_nummer}')
+    assert response.status_code == 200
+    assert response.json["data"] == [organisatie1.to_dict()]
+    response = client.get(f'/organisaties/?filter_kvks={organisatie1.kvk_nummer},{organisatie2.kvk_nummer}')
+    assert response.status_code == 200
+    assert response.json["data"] == [organisatie1.to_dict(), organisatie2.to_dict()]
+    response = client.get('/organisaties/?filter_kvks=1337')
+    assert response.status_code == 200
+    assert response.json["data"] == []
+    response = client.get('/organisaties/?filter_kvks=pietje')
     assert response.status_code == 400
-    assert response.json["errors"] == ['Input for filter_ids is not correct']
-    
+    assert response.json["errors"] == ["Input for filter_kvks is not correct"]
