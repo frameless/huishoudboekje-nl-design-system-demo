@@ -1,7 +1,9 @@
+import {createContext} from "react";
+
 export const searchFields = (term: string, fields: string[]): boolean => {
 	const _fields = fields.filter(f => f);
 
-	if(_fields.length === 0){
+	if (_fields.length === 0) {
 		return false;
 	}
 
@@ -23,3 +25,7 @@ export const Regex = {ZipcodeNL, PhoneNumberNL, MobilePhoneNL, IbanNL, BsnNL, Da
 export const Months = ["jan", "feb", "mrt", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
 
 export const isDev = process.env.NODE_ENV === "development";
+
+export const DrawerContext = createContext<{ onClose: () => void }>({
+	onClose: () => {}
+});

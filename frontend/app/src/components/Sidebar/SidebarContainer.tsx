@@ -4,7 +4,7 @@ import {Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, Drawe
 import {useIsMobile} from "react-grapple";
 import {GiHamburgerMenu} from "react-icons/all";
 import SidebarFooter from "./SidebarFooter";
-import {TABLET_BREAKPOINT} from "../../utils/things";
+import {DrawerContext, TABLET_BREAKPOINT} from "../../utils/things";
 
 const SidebarContainer = ({children}) => {
 	const isMobile = useIsMobile(TABLET_BREAKPOINT);
@@ -18,25 +18,28 @@ const SidebarContainer = ({children}) => {
 					<GiHamburgerMenu />
 				</Button>
 			</Flex>
-			<Drawer isOpen={isOpen} placement="left" onClose={onClose} size={"full"}>
-				<DrawerOverlay />
-				<DrawerContent bg={"gray.100"}>
-					<DrawerCloseButton />
-					<DrawerHeader justifyContent={"center"}>
-						<Logo />
-					</DrawerHeader>
 
-					<DrawerBody p={0} overflowY={"auto"}>
-						{children}
-					</DrawerBody>
+			<DrawerContext.Provider value={{ onClose }}>
+				<Drawer isOpen={isOpen} placement="left" onClose={onClose} size={"full"}>
+					<DrawerOverlay />
+					<DrawerContent bg={"gray.100"}>
+						<DrawerCloseButton />
+						<DrawerHeader justifyContent={"center"}>
+							<Logo />
+						</DrawerHeader>
 
-					<DrawerFooter justifyContent={"center"}>
-						<Box>
-							<SidebarFooter />
-						</Box>
-					</DrawerFooter>
-				</DrawerContent>
-			</Drawer>
+						<DrawerBody p={0} overflowY={"auto"}>
+							{children}
+						</DrawerBody>
+
+						<DrawerFooter justifyContent={"center"}>
+							<Box>
+								<SidebarFooter />
+							</Box>
+						</DrawerFooter>
+					</DrawerContent>
+				</Drawer>
+			</DrawerContext.Provider>
 		</>
 	) : (
 		<Stack maxWidth={320} width={"100%"} bg={"gray.100"} justifyContent={"space-between"}>
