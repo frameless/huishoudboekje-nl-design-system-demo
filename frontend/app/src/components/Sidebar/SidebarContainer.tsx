@@ -13,11 +13,11 @@ const SidebarContainer = ({children}) => {
 
 	return isMobile ? (
 		<>
-			<Flex justifyContent={"flex-end"} width={"auto"}>
+			<Box width={"auto"} position={"absolute"} top={5} left={2}>
 				<Button ref={sidebarButtonRef} onClick={onOpen}>
 					<GiHamburgerMenu />
 				</Button>
-			</Flex>
+			</Box>
 
 			<DrawerContext.Provider value={{onClose}}>
 				<Drawer isOpen={isOpen} placement="left" onClose={onClose} size={"md"}>
