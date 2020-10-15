@@ -4,6 +4,7 @@ from flask import request
 from flask_inputs import Inputs
 from flask_inputs.validators import JsonSchema
 from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.exc import IntegrityError
 from models.organisatie import Organisatie
 from core.database import db
 
@@ -77,7 +78,10 @@ class OrganisatieView(MethodView):
 
         for key, value in request.json.items():
             setattr(organisatie, key, value)
-        db.session.commit()
+        try:
+            db.session.commit()
+        except IntegrityError:
+            return {"errors":["kvk_number already excists"]}, 409
         return {"data": organisatie.to_dict()}, response_code
 
     def delete(self, organisatie_id=None):

@@ -7,7 +7,7 @@ from core.database import db
 class Organisatie(db.Model):
     __tablename__ = 'organisaties'
 
-    id = Column(Integer, Sequence('organisatie_id_seq'), primary_key=True)
+    id = Column(Integer, Sequence('organisaties_id_seq'), primary_key=True)
     weergave_naam = Column(String)
     kvk_nummer = Column(Integer, unique=True)
 

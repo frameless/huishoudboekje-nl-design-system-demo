@@ -14,6 +14,9 @@ class OrganisatieKvK(graphene.ObjectType):
     postcode = graphene.String()
     plaatsnaam = graphene.String()
 
+    def resolve_nummer(root, info):
+        return root.get("kvk_nummer")
+
 class Organisatie(graphene.ObjectType):
     """ GraphQL Gebruiker model """
     id = graphene.Int()
@@ -23,8 +26,11 @@ class Organisatie(graphene.ObjectType):
 
     def resolve_kvk_details(root, info):
         """ Get Burger when requested """
-        response = requests.get(os.path.join(settings.ORGANISATIE_SERVICES_URL, f"{root.get('kvk_nummer')}/burger"))
+        response = requests.get(
+            os.path.join(settings.ORGANISATIE_SERVICES_URL, f"organisaties/{root.get('kvk_nummer')}")
+        )
         if response.status_code == 200:
+            print(response.json()["data"])
             return response.json()["data"]
         elif response.status_code == 404:
             return None

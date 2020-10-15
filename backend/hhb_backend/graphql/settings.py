@@ -1,3 +1,4 @@
 import os
 
-HHB_SERVICES_URL = os.getenv('HHB_SERVICE_URL', "http://localhost:5000")
+HHB_SERVICES_URL = os.getenv('HHB_SERVICE_URL', "http://localhost:8000")
+ORGANISATIE_SERVICES_URL = os.getenv('ORGANISATIE_SERVICE_URL', "http://localhost:8001")
