@@ -1,13 +1,22 @@
 # # """ Fixtures for core testing """
 import pytest
+from sqlalchemy import event
+from sqlalchemy.orm.session import close_all_sessions
+from testing.postgresql import Postgresql
 
 from core.app import create_app
 from core.app import db as _db
-from sqlalchemy import event
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.orm.session import close_all_sessions
-from testing.postgresql import Postgresql
 from core.config import TestingConfig
+from tests.gebruikers_service.gebruikerfactory import GebruikerFactory
+
+
+@pytest.yield_fixture(scope="session")
+def client(app, request):
+    """
+    Returns session-wide test client
+    """
+    yield app.test_client()
+
 
 @pytest.yield_fixture(scope="session")
 def app(request):
@@ -64,4 +73,11 @@ def session(app, db, request):
         # This instruction rollsback any commit that were executed in the tests.
         txn.rollback()
         conn.close()
-    
+
+
+@pytest.fixture(scope="function")
+def gebruiker_factory(session, request):
+    """
+    creates an instance of the OrganisatieFactory with function scope dbsession
+    """
+    return GebruikerFactory(session)

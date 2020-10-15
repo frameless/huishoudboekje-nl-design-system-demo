@@ -17,7 +17,6 @@ def test_gebruikers_detail_get_success(app, session):
     assert response.status_code == 200
     assert response.json["data"] == {
         "id": 1,
-        "burger_id": None,
         "email": "a@b.c",
         "telefoonnummer": "0612345678",
         "geboortedatum": "2020-01-01",

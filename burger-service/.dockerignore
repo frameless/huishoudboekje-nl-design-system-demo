@@ -1,9 +1,0 @@
-**/node_modules
-**/__pycache__
-*.egg-info
-
-docs/
-README.md
-test_requirements.txt
-build
-dist
