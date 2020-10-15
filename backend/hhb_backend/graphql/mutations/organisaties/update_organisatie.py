@@ -1,4 +1,4 @@
-""" GraphQL mutation for updating a Gebruiker/Burger """
+""" GraphQL mutation for updating a Organisatie """
 import os
 import graphene
 import requests
@@ -23,7 +23,7 @@ class UpdateOrganisatie(graphene.Mutation):
     organisatie = graphene.Field(lambda: Organisatie)
 
     def mutate(root, info, id, **kwargs):
-        """ Update the current Gebruiker/Burger """
+        """ Update the current Organisatie """
         hhb_service_data = {}
         if "weergave_naam" in kwargs:
             hhb_service_data["weergave_naam"] = kwargs.pop("weergave_naam")

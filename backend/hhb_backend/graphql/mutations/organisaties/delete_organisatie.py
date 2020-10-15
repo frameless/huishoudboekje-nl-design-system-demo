@@ -1,4 +1,4 @@
-""" GraphQL mutation for deleting a Gebruiker/Burger """
+""" GraphQL mutation for deleting a Organisatie """
 import os
 import json
 import graphene
@@ -14,7 +14,7 @@ class DeleteOrganisatie(graphene.Mutation):
     ok = graphene.Boolean()
 
     def mutate(root, info, id):
-        """ Delete current gebruiker """
+        """ Delete current organisatie """
         kvk_nummer_response = requests.get(
             f"{settings.HHB_SERVICES_URL}/organisaties/{id}"
         )

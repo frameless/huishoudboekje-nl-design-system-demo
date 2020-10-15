@@ -1,4 +1,4 @@
-""" GraphQL mutation for creating a new Gebruiker/Burger """
+""" GraphQL mutation for creating a new Organisatie """
 import os
 import json
 import graphene
@@ -23,7 +23,7 @@ class CreateOrganisatie(graphene.Mutation):
     organisatie = graphene.Field(lambda: Organisatie)
 
     def mutate(root, info, **kwargs):
-        """ Create the new Gebruiker/Burger """
+        """ Create the new Organisatie """
         hhb_service_data = {
             "kvk_nummer": kwargs["kvk_nummer"],
             "weergave_naam": kwargs.pop("weergave_naam")
