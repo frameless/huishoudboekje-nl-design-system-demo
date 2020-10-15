@@ -81,12 +81,12 @@ const BurgerList = () => {
 			</Stack>
 
 			{loading && ( // Waiting for data to arrive
-				<Stack justifyContent={"center"} alignItems={"center"} bg={"white"} p={20} spacing={10}>
+				<Stack justifyContent={"center"} alignItems={"center"} bg={"white"} borderRadius={5} p={20} spacing={10}>
 					<Spinner />
 				</Stack>
 			)}
 			{!loading && error && (
-				<Stack justifyContent={"center"} alignItems={"center"} bg={"white"} p={20} spacing={10}>
+				<Stack justifyContent={"center"} alignItems={"center"} bg={"white"} borderRadius={5} p={20} spacing={10}>
 					<Box as={Empty} maxWidth={[200, 300, 400]} height={"auto"} />
 					<Text fontSize={"sm"}>{t("burgers.errors.serverError")}</Text>
 				</Stack>
@@ -107,7 +107,7 @@ const BurgerList = () => {
 						{search.value.trim().length === 0 && (
 							<Box>
 								<Button variantColor={"blue"} borderStyle={"dashed"} variant={"outline"} leftIcon={"add"}
-								        w="100%" h="100%" onClick={() => push(Routes.CitizenNew)}
+								        w="100%" h="100%" onClick={() => push(Routes.CitizenNew)} borderRadius={5}
 								        p={5}>{t("add-citizen-button-label")}</Button>
 							</Box>
 						)}

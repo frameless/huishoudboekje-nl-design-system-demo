@@ -10,7 +10,7 @@ const NoBurgersFound = () => {
 	const {t} = useTranslation();
 
 	return (
-		<Stack justifyContent={"center"} alignItems={"center"} bg={"white"} p={20} spacing={10}>
+		<Stack justifyContent={"center"} alignItems={"center"} bg={"white"} borderRadius={5} p={20} spacing={10}>
 			<Box as={Empty} maxWidth={[200, 300, 400]} height={"auto"} />
 			<Text fontSize={"sm"}>Voeg burgers toe door te klikken op de knop "Burger toevoegen"</Text>
 			<Button size={"sm"} variantColor={"primary"} variant={"solid"} leftIcon={"add"}
