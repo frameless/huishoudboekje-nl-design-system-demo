@@ -1,7 +1,7 @@
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {Box, Button, Divider, Flex, FormHelperText, FormLabel, Heading, Input, Select, Stack, Tooltip, useToast} from "@chakra-ui/core";
-import {useInput, useIsMobile, useNumberInput, useToggle, Validators} from "react-grapple";
+import {useInput, useIsMobile, useNumberInput, Validators} from "react-grapple";
 import BackButton from "../BackButton";
 import Routes from "../../config/routes";
 import {isDev, MOBILE_BREAKPOINT, Months, Regex} from "../../utils/things";
@@ -17,8 +17,6 @@ const CreateBurger = () => {
 	const {push} = useHistory();
 	const isMobile = useIsMobile(MOBILE_BREAKPOINT);
 	const toast = useToast();
-
-	const [isSubmitted, toggleSubmitted] = useToggle();
 
 	// const bsn = useInput<string>({
 	// 	defaultValue: "",
@@ -103,7 +101,6 @@ const CreateBurger = () => {
 
 	const onSubmit = (e) => {
 		e.preventDefault();
-		toggleSubmitted(true);
 
 		const isFormValid = [
 			initials,
@@ -169,7 +166,7 @@ const CreateBurger = () => {
 		});
 	};
 
-	const isInvalid = (input) => isSubmitted && !input.isValid;
+	const isInvalid = (input) => input.dirty && !input.isValid;
 
 	return (<>
 		<BackButton to={Routes.Citizens} />
