@@ -106,7 +106,7 @@ const BurgerList = () => {
 					<Grid maxWidth={"100%"} gridTemplateColumns={["repeat(1, 1fr)", "repeat(2, 1fr)", "repeat(3, 1fr)", "repeat(4, 1fr)", "repeat(6, 1fr)"]} gap={5}>
 						{search.value.trim().length === 0 && (
 							<Box>
-								<Button variantColor={"primary"} borderStyle={"dashed"} variant={"outline"} leftIcon={"add"}
+								<Button variantColor={"blue"} borderStyle={"dashed"} variant={"outline"} leftIcon={"add"}
 								        w="100%" h="100%" onClick={() => push(Routes.CitizenNew)}
 								        p={5}>{t("add-citizen-button-label")}</Button>
 							</Box>
