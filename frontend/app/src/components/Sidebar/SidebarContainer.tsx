@@ -19,10 +19,10 @@ const SidebarContainer = ({children}) => {
 				</Button>
 			</Flex>
 
-			<DrawerContext.Provider value={{ onClose }}>
-				<Drawer isOpen={isOpen} placement="left" onClose={onClose} size={"full"}>
+			<DrawerContext.Provider value={{onClose}}>
+				<Drawer isOpen={isOpen} placement="left" onClose={onClose} size={"md"}>
 					<DrawerOverlay />
-					<DrawerContent bg={"gray.100"}>
+					<DrawerContent>
 						<DrawerCloseButton />
 						<DrawerHeader>
 							<Logo as={Flex} maxWidth={350} marginX={"auto"} />
@@ -42,13 +42,13 @@ const SidebarContainer = ({children}) => {
 			</DrawerContext.Provider>
 		</>
 	) : (
-		<Stack maxWidth={320} width={"100%"} bg={"gray.100"} justifyContent={"space-between"}>
-			<Stack width={"100%"} overflowY={"auto"}>
+		<Stack maxWidth={300} minHeight="100vh" height={"100%"} width={"100%"} bg={"white"} justifyContent={"space-between"}>
+			<Stack width={"100%"} spacing={2}>
 				<Logo />
 				{children}
 			</Stack>
 
-			<Box alignSelf={"center"} p={3}>
+			<Box alignSelf={"center"} p={2}>
 				<SidebarFooter />
 			</Box>
 		</Stack>
