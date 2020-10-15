@@ -42,13 +42,18 @@ const SidebarContainer = ({children}) => {
 			</DrawerContext.Provider>
 		</>
 	) : (
-		<Stack maxWidth={300} minHeight="100vh" height={"100%"} width={"100%"} bg={"white"} justifyContent={"space-between"}>
-			<Stack width={"100%"} spacing={2}>
-				<Logo />
-				{children}
-			</Stack>
+		<Stack justifyContent={"space-between"} p={5} maxWidth={320} minHeight="100vh" height={"100%"} width={"100%"}>
+			<Box>
+				<Logo mb={5} />
 
-			<Box alignSelf={"center"} p={2}>
+				<Stack bg={"white"} width={"100%"} justifyContent={"space-between"} borderRadius={"5px"}>
+					<Stack width={"100%"} spacing={2}>
+						{children}
+					</Stack>
+				</Stack>
+			</Box>
+
+			<Box alignSelf={"center"} p={5}>
 				<SidebarFooter />
 			</Box>
 		</Stack>

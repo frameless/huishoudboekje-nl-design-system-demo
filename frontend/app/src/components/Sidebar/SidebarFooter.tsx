@@ -1,12 +1,12 @@
 import React from "react";
-import {Heading} from "@chakra-ui/core";
+import {Box, Heading} from "@chakra-ui/core";
 import VersionTag from "../VersionTag";
 
 const SidebarFooter = () => (
-	<>
-		<Heading size={"sm"} color={"gray.500"}>Huishoudboekje</Heading>
-		<VersionTag color={"gray.500"} />
-	</>
+	<Box textAlign={"center"}>
+		<Heading size={"sm"} color={"gray.400"}>Huishoudboekje</Heading>
+		<VersionTag color={"gray.400"} />
+	</Box>
 );
 
 export default SidebarFooter;
