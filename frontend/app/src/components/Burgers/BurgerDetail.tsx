@@ -36,7 +36,7 @@ import {useMutation, useQuery} from "@apollo/client";
 import {IGebruiker} from "../../models";
 import {GetOneGebruikerQuery} from "../../services/graphql/queries";
 import {DeleteGebruikerMutation, UpdateGebruikerMutation} from "../../services/graphql/mutations";
-import {ReactComponent as Deleted} from "../../assets/images/illustration-deleted.svg";
+import DeletedIllustration from "../Illustrations/DeletedIllustration";
 
 const BurgerDetail = () => {
 	const isMobile = useIsMobile();
@@ -233,7 +233,7 @@ const BurgerDetail = () => {
 		)}
 		{!loading && !error && data && isDeleted && (
 			<Stack justifyContent={"center"} alignItems={"center"} bg={"white"} p={20} spacing={10}>
-				<Box as={Deleted} maxWidth={[200, 300, 400]} height={"auto"} />
+				<Box as={DeletedIllustration} maxWidth={[200, 300, 400]} height={"auto"} />
 				<Text fontSize={"sm"}>{t("messages.burgers.deleteConfirmMessage", { name: `${data.gebruiker.burger.voornamen} ${data.gebruiker.burger.achternaam}`})}</Text>
 				<Button variantColor="primary" onClick={onClickBackButton}>{t("buttons.burgers.backToList")}</Button>
 			</Stack>
