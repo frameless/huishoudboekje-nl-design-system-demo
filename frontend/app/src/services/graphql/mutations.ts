@@ -1,5 +1,5 @@
 import {gql} from "@apollo/client";
-import {GebruikerFragment} from "./fragments";
+import {GebruikerFragment, OrganisatieFragment} from "./fragments";
 
 export const CreateGebruikerMutation = gql`
     mutation createGebruiker(
@@ -74,6 +74,72 @@ export const UpdateGebruikerMutation = gql`
 export const DeleteGebruikerMutation = gql`
     mutation deleteGebruiker($id: Int!){
         deleteGebruiker(id: $id) {
+            ok
+        }
+    }
+`;
+
+export const CreateOrganizationMutation = gql`
+    mutation createOrganization(
+        $huisnummer: String
+        $kvkNummer: Int!
+        $naam: String
+        $plaatsnaam: String
+        $postcode: String
+        $straatnaam: String
+        $weergaveNaam: String!
+    ){
+        createOrganisatie(
+            huisnummer: $huisnummer
+            kvkNummer: $kvkNummer
+            naam: $naam
+            plaatsnaam: $plaatsnaam
+            postcode: $postcode
+            straatnaam: $straatnaam
+            weergaveNaam: $weergaveNaam
+        ){
+            ok
+            organisatie {
+                ...Organisatie
+            }
+        }
+    }
+    ${OrganisatieFragment}
+`;
+
+export const UpdateOrganizationMutation = gql`
+    mutation updateOrganization(
+        $id: Int!
+        $huisnummer: String
+#       $kvkNummer: Int!
+        $naam: String
+        $plaatsnaam: String
+        $postcode: String
+        $straatnaam: String
+        $weergaveNaam: String!
+    ) {
+        updateOrganisatie(
+            id: $id
+            huisnummer: $huisnummer
+#           kvkNummer: $kvkNummer       # Todo: Can't update kvkNummer?
+            naam: $naam
+            plaatsnaam: $plaatsnaam
+            postcode: $postcode
+            straatnaam: $straatnaam
+            weergaveNaam: $weergaveNaam
+        ){
+            ok
+            organisatie {
+                ...Organisatie
+            }
+        }
+    }
+    ${OrganisatieFragment}
+`;
+
+export const DeleteOrganizationMutation = gql`
+    mutation deleteOrganization($id: Int!){
+        deleteOrganisatie(id: $id){
             ok
         }
     }

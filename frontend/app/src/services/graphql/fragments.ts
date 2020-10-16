@@ -16,3 +16,26 @@ export const GebruikerFragment = gql`
         iban
     }
 `;
+
+export const OrganisatieKvkDetailsFragment = gql`
+    fragment Kvk on Organisatie {
+        kvkDetails {
+            huisnummer
+            naam
+            nummer
+            plaatsnaam
+            postcode
+            straatnaam
+        }
+    }
+`;
+
+export const OrganisatieFragment = gql`
+    fragment Organisatie on Organisatie {
+        id
+        kvkNummer
+        weergaveNaam
+        # ...Kvk
+    }
+    ${OrganisatieKvkDetailsFragment}
+`;

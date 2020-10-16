@@ -20,6 +20,8 @@ const Routes = {
 	CitizenNew: `/${Names.citizens}/toevoegen`,
 	Balances: `/${Names.balances}`,
 	Organizations: `/${Names.organizations}`,
+	Organization: (organizationId: number) => `/${Names.organizations}/${organizationId}`,
+	OrganizationNew: `/${Names.organizations}/toevoegen`,
 	Banking: `/${Names.banking}`,
 	Settings: `/${Names.settings}`,
 	NotFound: `/${Names.notFound}`,
