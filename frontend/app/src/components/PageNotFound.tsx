@@ -1,11 +1,11 @@
 import React from "react";
 import {Box, Button, Heading, Icon, Stack, Text} from "@chakra-ui/core";
-import {ReactComponent as NotFound} from "../assets/images/illustration-notfound.svg";
 import {useHistory} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import {useIsMobile} from "react-grapple";
 import Routes from "../config/routes";
 import {MdArrowBack} from "react-icons/all";
+import NotFoundIllustration from "./Illustrations/NotFoundIllustration";
 
 const PageNotFound = () => {
 	const isMobile = useIsMobile();
@@ -29,7 +29,7 @@ const PageNotFound = () => {
 					</Button>
 				</Stack>
 			</Stack>
-			<Box as={NotFound} maxWidth={[200, 300, 300]} height={"auto"} />
+			<Box as={NotFoundIllustration} maxWidth={[200, 300, 300]} height={"auto"} />
 		</Stack>
 	);
 };
