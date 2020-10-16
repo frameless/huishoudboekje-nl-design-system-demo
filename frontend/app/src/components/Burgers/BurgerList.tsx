@@ -6,12 +6,12 @@ import {useQuery} from "@apollo/client";
 import {searchFields} from "../../utils/things";
 import {Box, Button, Grid, Heading, Icon, IconButton, Input, InputGroup, InputLeftElement, InputRightElement, Spinner, Stack, Text, useToast} from "@chakra-ui/core";
 import Routes from "../../config/routes";
-import {ReactComponent as Empty} from "../../assets/images/illustration-empty.svg";
 import GebruikerCard from "./GebruikerCard";
 import {IGebruiker} from "../../models";
 import {GetAllGebruikersQuery} from "../../services/graphql/queries";
 import NoBurgersFound from "./NoBurgersFound";
 import NoBurgerSearchResults from "./NoBurgerSearchResults";
+import EmptyIllustration from "../Illustrations/EmptyIllustration";
 
 const BurgerList = () => {
 	const {t} = useTranslation();
@@ -87,7 +87,7 @@ const BurgerList = () => {
 			)}
 			{!loading && error && (
 				<Stack justifyContent={"center"} alignItems={"center"} bg={"white"} borderRadius={5} p={20} spacing={10}>
-					<Box as={Empty} maxWidth={[200, 300, 400]} height={"auto"} />
+					<Box as={EmptyIllustration} maxWidth={[200, 300, 400]} height={"auto"} />
 					<Text fontSize={"sm"}>{t("messages.genericError.description")}</Text>
 				</Stack>
 			)}
