@@ -5,10 +5,10 @@ import LoginPage from "./components/LoginPage";
 import {observer} from "mobx-react";
 import SidebarContainer from "./components/Sidebar/SidebarContainer";
 import {useIsMobile} from "react-grapple";
-import {Redirect, Route, Switch, useHistory, useLocation} from "react-router-dom";
+import {Redirect, Route, Switch, useLocation} from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import UserStatus from "./components/UserStatus";
-import {FaCog, FaLock} from "react-icons/all";
+import {FaLock} from "react-icons/all";
 import Routes from "./config/routes";
 import Citizens from "./components/Burgers";
 import PageNotFound from "./components/PageNotFound";
@@ -21,7 +21,6 @@ const App = () => {
 	const isMobile = useIsMobile(TABLET_BREAKPOINT);
 	const session = useSession();
 	const location = useLocation();
-	const {push} = useHistory();
 
 	if (!session.user) {
 		session.setReferer(location.pathname);

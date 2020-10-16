@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import {Button, Icon, Stack, Text, useToast} from "@chakra-ui/core";
+import React, {useEffect} from "react";
+import {Button, Stack, useToast} from "@chakra-ui/core";
 import {observer} from "mobx-react";
 import useFetch from "use-http";
 import {useTranslate} from "../config/i18n";
@@ -10,7 +10,7 @@ const User = () => {
 	const {t} = useTranslate();
 	const toast = useToast();
 	const session = useSession();
-	const { get, response } = useFetch({ data: [] });
+	const {get, response} = useFetch({data: []});
 
 	useEffect(() => {
 		const loadUser = async () => {
