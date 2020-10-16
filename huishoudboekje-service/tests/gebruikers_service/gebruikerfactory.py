@@ -1,4 +1,6 @@
 """ Factories to generate objects within a test scope """
+from datetime import date
+
 from models.gebruiker import Gebruiker
 
 
@@ -12,6 +14,7 @@ class GebruikerFactory():
             self,
             telefoonnummer: str = "0612345678",
             email: str = "a@a.com",
+            geboortedatum: date = date(2010, 10, 2),
             iban: str = "GB33BUKB20201555555555",
             voornamen: str = "Bert",
             voorletters: str = "B",
@@ -24,6 +27,7 @@ class GebruikerFactory():
         gebruiker = Gebruiker(
             telefoonnummer=telefoonnummer,
             email=email,
+            geboortedatum=geboortedatum,
             iban=iban,
             voornamen=voornamen,
             voorletters=voorletters,

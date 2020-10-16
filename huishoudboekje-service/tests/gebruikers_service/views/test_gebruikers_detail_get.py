@@ -1,28 +1,15 @@
 """ Test GET /gebruikers/<gebruikers_id> """
-from datetime import date
-from models import Gebruiker
+
 import pytest
 
-def test_gebruikers_detail_get_success(app, session):
+
+def test_gebruikers_detail_get_success(client, gebruiker_factory):
     """ Test a succesfull GET on gebruikers_detail """
-    gebruiker = Gebruiker(
-        email="a@b.c",
-        telefoonnummer="0612345678",
-        geboortedatum=date(2020, 1, 1)
-    )
-    session.add(gebruiker)
-    session.flush()
-    client = app.test_client()
+    gebruiker = gebruiker_factory.createGebruiker()
     response = client.get('/gebruikers/1')
     assert response.status_code == 200
-    assert response.json["data"] == {
-        "id": 1,
-        "email": "a@b.c",
-        "telefoonnummer": "0612345678",
-        "geboortedatum": "2020-01-01",
-        "iban": None,
-        "weergave_naam": None,        
-    }
+    assert response.json["data"] == gebruiker.to_dict()
+
 
 @pytest.mark.parametrize("gebruiker, statuscode, message", [
     ("1337", 404, "The requested resource could not be found."),
