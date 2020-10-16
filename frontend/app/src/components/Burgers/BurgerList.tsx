@@ -11,14 +11,14 @@ import GebruikerCard from "./GebruikerCard";
 import {IGebruiker} from "../../models";
 import {GetAllGebruikersQuery} from "../../services/graphql/queries";
 import NoBurgersFound from "./NoBurgersFound";
-import NoSearchResults from "./NoSearchResults";
+import NoBurgerSearchResults from "./NoBurgerSearchResults";
 
 const BurgerList = () => {
 	const {t} = useTranslation();
 	const {push} = useHistory();
 	const toast = useToast();
 	const search = useInput<string>({
-		placeholder: t("search-placeholder")
+		placeholder: t("forms.search.fields.search")
 	});
 
 	const {data, loading, error} = useQuery<{ gebruikers: IGebruiker[] }>(GetAllGebruikersQuery, {
@@ -65,7 +65,7 @@ const BurgerList = () => {
 		<Stack spacing={5}>
 			<Stack direction={"row"} spacing={5} justifyContent={"space-between"} alignItems={"center"}>
 				<Stack direction={"row"} spacing={5} alignItems={"center"}>
-					<Heading size={"lg"}>{t("citizens")}</Heading>
+					<Heading size={"lg"}>{t("burgers.burgers")}</Heading>
 				</Stack>
 				{showSearch && <Stack direction={"row"} spacing={5}>
 					<InputGroup>
@@ -88,7 +88,7 @@ const BurgerList = () => {
 			{!loading && error && (
 				<Stack justifyContent={"center"} alignItems={"center"} bg={"white"} borderRadius={5} p={20} spacing={10}>
 					<Box as={Empty} maxWidth={[200, 300, 400]} height={"auto"} />
-					<Text fontSize={"sm"}>{t("burgers.errors.serverError")}</Text>
+					<Text fontSize={"sm"}>{t("messages.genericError.description")}</Text>
 				</Stack>
 			)}
 			{!loading && !error && (<>
@@ -96,7 +96,7 @@ const BurgerList = () => {
 					{search.value.trim().length === 0 ? (
 						<NoBurgersFound />
 					) : (
-						<NoSearchResults onSearchReset={() => {
+						<NoBurgerSearchResults onSearchReset={() => {
 							search.clear();
 							search.ref.current!.focus();
 						}} />
@@ -108,7 +108,7 @@ const BurgerList = () => {
 							<Box>
 								<Button variantColor={"blue"} borderStyle={"dashed"} variant={"outline"} leftIcon={"add"}
 								        w="100%" h="100%" onClick={() => push(Routes.CitizenNew)} borderRadius={5}
-								        p={5}>{t("add-citizen-button-label")}</Button>
+								        p={5}>{t("buttons.burgers.createNew")}</Button>
 							</Box>
 						)}
 						{filteredBurgers.map(g => <GebruikerCard key={g.id} gebruiker={g} cursor={"pointer"} />)}

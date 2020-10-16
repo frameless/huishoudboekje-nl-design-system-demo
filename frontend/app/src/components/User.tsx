@@ -19,7 +19,7 @@ const User = () => {
 				const dbuser = users.find(u => u.email === user.email);
 				if (!dbuser) {
 					toast({
-						description: t("login.invalidCredentialsError"),
+						description: t("errors.login.invalidCredentialsError"),
 						status: "error",
 						position: "top",
 					});
@@ -38,21 +38,14 @@ const User = () => {
 		await get("/api/logout");
 	};
 
-	return session.user ? (
-		<Stack direction={"row"} spacing={5} alignItems={"center"}>
-			<Text>{t("welcomeMessage", {name: session.user.firstName})}</Text>
-			<Button onClick={logout} variantColor={"primary"} variant={"outline"}>
-				<Icon name={"lock"} mr={3} />
-				{t("login.logout")}
-			</Button>
-		</Stack>
-	) : (
+	// Todo: this should always render the form. Not the welcome message
+	return !session.user ? (
 		<form action="/api/login?page=/">
 			<Stack spacing={5}>
-				<Button variantColor={"primary"} type={"submit"}>Inloggen</Button>
+				<Button variantColor={"primary"} type={"submit"}>{t("actions.login")}</Button>
 			</Stack>
 		</form>
-	);
+	) : null;
 };
 
 export default observer(User);

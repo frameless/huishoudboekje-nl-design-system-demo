@@ -61,13 +61,9 @@ const App = () => {
 											</Stack>
 										</MenuButton>
 										<MenuList zIndex={3}>
-											{false && <MenuItem onClick={() => push(Routes.Settings)}>
-												<PseudoBox size={"16px"} as={FaCog} color={"gray.400"} _hover={{color: "primary.700"}} aria-label={t("settings")} mr={3} />
-												<Text>{t("settings")}</Text>
-											</MenuItem>}
 											<MenuItem onClick={onClickLogoutButton}>
-												<PseudoBox size={"16px"} as={FaLock} color={"gray.400"} _hover={{color: "primary.700"}} aria-label={t("logout")} mr={3} />
-												<Text>{t("logout")}</Text>
+												<PseudoBox size={"16px"} as={FaLock} color={"gray.400"} _hover={{color: "primary.700"}} aria-label={t("actions.logout")} mr={3} />
+												<Text>{t("actions.logout")}</Text>
 											</MenuItem>
 										</MenuList>
 									</Menu>
