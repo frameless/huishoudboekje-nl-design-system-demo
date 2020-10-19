@@ -5,10 +5,10 @@ import LoginPage from "./components/LoginPage";
 import {observer} from "mobx-react";
 import SidebarContainer from "./components/Sidebar/SidebarContainer";
 import {useIsMobile} from "react-grapple";
-import {Redirect, Route, Switch, useHistory, useLocation} from "react-router-dom";
+import {Redirect, Route, Switch, useLocation} from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import UserStatus from "./components/UserStatus";
-import {FaCog, FaLock} from "react-icons/all";
+import {FaLock} from "react-icons/all";
 import Routes from "./config/routes";
 import Citizens from "./components/Burgers";
 import PageNotFound from "./components/PageNotFound";
@@ -21,7 +21,6 @@ const App = () => {
 	const isMobile = useIsMobile(TABLET_BREAKPOINT);
 	const session = useSession();
 	const location = useLocation();
-	const {push} = useHistory();
 
 	if (!session.user) {
 		session.setReferer(location.pathname);
@@ -61,13 +60,9 @@ const App = () => {
 											</Stack>
 										</MenuButton>
 										<MenuList zIndex={3}>
-											{false && <MenuItem onClick={() => push(Routes.Settings)}>
-												<PseudoBox size={"16px"} as={FaCog} color={"gray.400"} _hover={{color: "primary.700"}} aria-label={t("settings")} mr={3} />
-												<Text>{t("settings")}</Text>
-											</MenuItem>}
 											<MenuItem onClick={onClickLogoutButton}>
-												<PseudoBox size={"16px"} as={FaLock} color={"gray.400"} _hover={{color: "primary.700"}} aria-label={t("logout")} mr={3} />
-												<Text>{t("logout")}</Text>
+												<PseudoBox size={"16px"} as={FaLock} color={"gray.400"} _hover={{color: "primary.700"}} aria-label={t("actions.logout")} mr={3} />
+												<Text>{t("actions.logout")}</Text>
 											</MenuItem>
 										</MenuList>
 									</Menu>

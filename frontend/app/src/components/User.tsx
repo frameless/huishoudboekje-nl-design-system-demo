@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import {Button, Icon, Stack, Text, useToast} from "@chakra-ui/core";
+import React, {useEffect} from "react";
+import {Button, Stack, useToast} from "@chakra-ui/core";
 import {observer} from "mobx-react";
 import useFetch from "use-http";
 import {useTranslate} from "../config/i18n";
@@ -10,7 +10,7 @@ const User = () => {
 	const {t} = useTranslate();
 	const toast = useToast();
 	const session = useSession();
-	const { get, response } = useFetch({ data: [] });
+	const {get, response} = useFetch({data: []});
 
 	useEffect(() => {
 		const loadUser = async () => {
@@ -19,7 +19,7 @@ const User = () => {
 				const dbuser = users.find(u => u.email === user.email);
 				if (!dbuser) {
 					toast({
-						description: t("login.invalidCredentialsError"),
+						description: t("errors.login.invalidCredentialsError"),
 						status: "error",
 						position: "top",
 					});
@@ -38,21 +38,14 @@ const User = () => {
 		await get("/api/logout");
 	};
 
-	return session.user ? (
-		<Stack direction={"row"} spacing={5} alignItems={"center"}>
-			<Text>{t("welcomeMessage", {name: session.user.firstName})}</Text>
-			<Button onClick={logout} variantColor={"primary"} variant={"outline"}>
-				<Icon name={"lock"} mr={3} />
-				{t("login.logout")}
-			</Button>
-		</Stack>
-	) : (
+	// Todo: this should always render the form. Not the welcome message
+	return !session.user ? (
 		<form action="/api/login?page=/">
 			<Stack spacing={5}>
-				<Button variantColor={"primary"} type={"submit"}>Inloggen</Button>
+				<Button variantColor={"primary"} type={"submit"}>{t("actions.login")}</Button>
 			</Stack>
 		</form>
-	);
+	) : null;
 };
 
 export default observer(User);

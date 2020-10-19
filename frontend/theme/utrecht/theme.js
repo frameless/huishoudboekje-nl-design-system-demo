@@ -28,7 +28,7 @@ window.branding = {
 	colors: {
 		primary,
 		secondary,
-		blue: primary,
+		red: primary,
 		yellow: secondary,
 	},
 };

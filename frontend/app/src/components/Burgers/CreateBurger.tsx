@@ -1,7 +1,7 @@
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {Box, Button, Divider, Flex, FormHelperText, FormLabel, Heading, Input, Select, Stack, Tooltip, useToast} from "@chakra-ui/core";
-import {useInput, useIsMobile, useNumberInput, useToggle, Validators} from "react-grapple";
+import {useInput, useIsMobile, useNumberInput, Validators} from "react-grapple";
 import BackButton from "../BackButton";
 import Routes from "../../config/routes";
 import {isDev, MOBILE_BREAKPOINT, Months, Regex} from "../../utils/things";
@@ -17,8 +17,6 @@ const CreateBurger = () => {
 	const {push} = useHistory();
 	const isMobile = useIsMobile(MOBILE_BREAKPOINT);
 	const toast = useToast();
-
-	const [isSubmitted, toggleSubmitted] = useToggle();
 
 	// const bsn = useInput<string>({
 	// 	defaultValue: "",
@@ -40,18 +38,18 @@ const CreateBurger = () => {
 	const dateOfBirth = {
 		day: useNumberInput({
 			validate: [(v) => new RegExp(/^[0-9]{1,2}$/).test(v.toString())],
-			placeholder: t("forms.dateOfBirth.day"),
+			placeholder: t("forms.burgers.fields.dateOfBirthDay"),
 			min: 1,
 			max: 31,
 		}),
 		month: useNumberInput({
 			validate: [(v) => new RegExp(/^[0-9]{1,2}$/).test(v.toString())],
-			placeholder: t("forms.dateOfBirth.month"),
+			placeholder: t("forms.burgers.fields.dateOfBirthMonth"),
 			min: 1, max: 12
 		}),
 		year: useNumberInput({
 			validate: [(v) => new RegExp(/^[0-9]{4}$/).test(v.toString())],
-			placeholder: t("forms.dateOfBirth.year"),
+			placeholder: t("forms.burgers.fields.dateOfBirthYear"),
 			max: (new Date()).getFullYear(), // No future births.
 		})
 	}
@@ -103,7 +101,6 @@ const CreateBurger = () => {
 
 	const onSubmit = (e) => {
 		e.preventDefault();
-		toggleSubmitted(true);
 
 		const isFormValid = [
 			initials,
@@ -123,7 +120,7 @@ const CreateBurger = () => {
 		if (!isFormValid) {
 			toast({
 				status: "error",
-				title: t("forms.citizens.invalidFormMessage"),
+				title: t("messages.burgers.invalidFormMessage"),
 				position: "top",
 			});
 			return;
@@ -149,7 +146,7 @@ const CreateBurger = () => {
 		}).then(result => {
 			toast({
 				status: "success",
-				title: t("forms.citizens.createSuccessMessage"),
+				title: t("messages.burgers.createSuccessMessage"),
 				position: "top",
 			});
 
@@ -163,13 +160,13 @@ const CreateBurger = () => {
 				position: "top",
 				status: "error",
 				variant: "solid",
-				description: t("genericError.description"),
-				title: t("genericError.title")
+				description: t("messages.genericError.description"),
+				title: t("messages.genericError.title")
 			});
 		});
 	};
 
-	const isInvalid = (input) => isSubmitted && !input.isValid;
+	const isInvalid = (input) => input.dirty && !input.isValid;
 
 	return (<>
 		<BackButton to={Routes.Citizens} />
@@ -177,7 +174,7 @@ const CreateBurger = () => {
 		<Stack spacing={5}>
 			<Stack direction={"row"} spacing={5} justifyContent={"space-between"} alignItems={"center"}>
 				<Stack>
-					<Heading size={"lg"}>{t("forms.citizens.title")}</Heading>
+					<Heading size={"lg"}>{t("forms.burgers.title")}</Heading>
 				</Stack>
 			</Stack>
 
@@ -191,32 +188,32 @@ const CreateBurger = () => {
 				<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
 					<Stack direction={isMobile ? "column" : "row"} spacing={2}>
 						<FormLeft>
-							<Heading size={"md"}>{t("personal")}</Heading>
-							<FormHelperText id="personal-helperText">{t("forms.citizens.personal-helperText")}</FormHelperText>
+							<Heading size={"md"}>{t("forms.burgers.sections.personal.title")}</Heading>
+							<FormHelperText id="personal-helperText">{t("forms.burgers.sections.personal.helperText")}</FormHelperText>
 						</FormLeft>
 						<FormRight>
 							{/*<Stack spacing={1}>*/}
-							{/*	<FormLabel htmlFor={"bsn"}>{t("bsn")}</FormLabel>*/}
-							{/*	<Tooltip label={t("forms.bsn-tooltip")} aria-label={t("bsn")} hasArrow placement={isMobile ? "top" : "left"}>*/}
+							{/*	<FormLabel htmlFor={"bsn"}>{TRANSLATE}</FormLabel>*/}
+							{/*	<Tooltip label={TRANSLATE} aria-label={TRANSLATE} hasArrow placement={isMobile ? "top" : "left"}>*/}
 							{/*		<Input isInvalid={isInvalid(bsn)} {...bsn.bind} id="bsn" />*/}
 							{/*	</Tooltip>*/}
 							{/*</Stack>*/}
 							<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 								<Stack spacing={1} flex={1}>
-									<FormLabel htmlFor={"initials"}>{t("initials")}</FormLabel>
+									<FormLabel htmlFor={"initials"}>{t("forms.burgers.fields.initials")}</FormLabel>
 									<Input isInvalid={isInvalid(initials)} {...initials.bind} id="initials" />
 								</Stack>
 								<Stack spacing={1} flex={3}>
-									<FormLabel htmlFor={"firstName"}>{t("firstName")}</FormLabel>
+									<FormLabel htmlFor={"firstName"}>{t("forms.burgers.fields.firstName")}</FormLabel>
 									<Input isInvalid={isInvalid(firstName)} {...firstName.bind} id="firstName" />
 								</Stack>
 								<Stack spacing={1} flex={3}>
-									<FormLabel htmlFor={"lastName"}>{t("lastName")}</FormLabel>
+									<FormLabel htmlFor={"lastName"}>{t("forms.burgers.fields.lastName")}</FormLabel>
 									<Input isInvalid={isInvalid(lastName)} {...lastName.bind} id="lastName" />
 								</Stack>
 							</Stack>
 							<Stack spacing={1}>
-								<FormLabel htmlFor={"dateOfBirth"}>{t("dateOfBirth")}</FormLabel>
+								<FormLabel htmlFor={"dateOfBirth"}>{t("forms.burgers.fields.dateOfBirth")}</FormLabel>
 								<Stack direction={"row"} maxW="100%">
 									<Box flex={1}>
 										<Input isInvalid={isInvalid(dateOfBirth.day)} {...dateOfBirth.day.bind} id="dateOfBirth.day" />
@@ -241,41 +238,41 @@ const CreateBurger = () => {
 
 					<Stack direction={isMobile ? "column" : "row"} spacing={2}>
 						<FormLeft>
-							<Heading size={"md"}>{t("contact")}</Heading>
-							<FormHelperText>{t("forms.citizens.contact-helperText")}</FormHelperText>
+							<Heading size={"md"}>{t("forms.burgers.sections.contact.title")}</Heading>
+							<FormHelperText>{t("forms.burgers.sections.contact.helperText")}</FormHelperText>
 						</FormLeft>
 						<FormRight>
 							<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 								<Stack spacing={1} flex={2}>
-									<FormLabel htmlFor={"street"}>{t("street")}</FormLabel>
+									<FormLabel htmlFor={"street"}>{t("forms.burgers.fields.street")}</FormLabel>
 									<Input isInvalid={isInvalid(street)} {...street.bind} id="street" />
 								</Stack>
 								<Stack spacing={1} flex={1}>
-									<FormLabel htmlFor={"houseNumber"}>{t("houseNumber")}</FormLabel>
+									<FormLabel htmlFor={"houseNumber"}>{t("forms.burgers.fields.houseNumber")}</FormLabel>
 									<Input isInvalid={isInvalid(houseNumber)} {...houseNumber.bind} id="houseNumber" />
 								</Stack>
 							</Stack>
 							<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 								<Stack spacing={1} flex={1}>
-									<FormLabel htmlFor={"zipcode"}>{t("zipcode")}</FormLabel>
-									<Tooltip label={t("forms.zipcode-tooltip")} aria-label={t("zipcode")} hasArrow placement={isMobile ? "top" : "left"}>
+									<FormLabel htmlFor={"zipcode"}>{t("forms.burgers.fields.zipcode")}</FormLabel>
+									<Tooltip label={t("forms.burgers.tooltips.zipcode")} aria-label={t("forms.burgers.tooltips.zipcode")} hasArrow placement={isMobile ? "top" : "left"}>
 										<Input isInvalid={isInvalid(zipcode)} {...zipcode.bind} id="zipcode" />
 									</Tooltip>
 								</Stack>
 								<Stack spacing={1} flex={2}>
-									<FormLabel htmlFor={"city"}>{t("city")}</FormLabel>
+									<FormLabel htmlFor={"city"}>{t("forms.burgers.fields.city")}</FormLabel>
 									<Input isInvalid={isInvalid(city)} {...city.bind} id="city" />
 								</Stack>
 							</Stack>
 							<Stack spacing={1}>
-								<FormLabel htmlFor={"phoneNumber"}>{t("phoneNumber")}</FormLabel>
-								<Tooltip label={t("forms.phoneNumber-tooltip")} aria-label={t("phoneNumber")} hasArrow placement={isMobile ? "top" : "left"}>
+								<FormLabel htmlFor={"phoneNumber"}>{t("forms.burgers.fields.phoneNumber")}</FormLabel>
+								<Tooltip label={t("forms.burgers.tooltips.phoneNumber")} aria-label={t("forms.burgers.fields.phoneNumber")} hasArrow placement={isMobile ? "top" : "left"}>
 									<Input isInvalid={isInvalid(phoneNumber)} {...phoneNumber.bind} id="phoneNumber" />
 								</Tooltip>
 							</Stack>
 							<Stack spacing={1}>
-								<FormLabel htmlFor={"mail"}>{t("mail")}</FormLabel>
-								<Input isInvalid={isInvalid(mail)} {...mail.bind} id="mail" aria-describedby="mail-helper-text" />
+								<FormLabel htmlFor={"mail"}>{t("forms.burgers.fields.mail")}</FormLabel>
+								<Input isInvalid={isInvalid(mail)} {...mail.bind} id="mail" />
 							</Stack>
 						</FormRight>
 					</Stack>
@@ -286,7 +283,7 @@ const CreateBurger = () => {
 						<FormLeft />
 						<FormRight>
 							<Stack direction={"row"} spacing={1} justifyContent={"flex-end"}>
-								<Button isLoading={loading} type={"submit"} variantColor={"primary"} onClick={onSubmit}>{t("save")}</Button>
+								<Button isLoading={loading} type={"submit"} variantColor={"primary"} onClick={onSubmit}>{t("actions.save")}</Button>
 							</Stack>
 						</FormRight>
 					</Stack>

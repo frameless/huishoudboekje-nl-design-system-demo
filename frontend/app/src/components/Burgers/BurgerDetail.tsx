@@ -36,7 +36,7 @@ import {useMutation, useQuery} from "@apollo/client";
 import {IGebruiker} from "../../models";
 import {GetOneGebruikerQuery} from "../../services/graphql/queries";
 import {DeleteGebruikerMutation, UpdateGebruikerMutation} from "../../services/graphql/mutations";
-import {ReactComponent as Deleted} from "../../assets/images/illustration-deleted.svg";
+import DeletedIllustration from "../Illustrations/DeletedIllustration";
 
 const BurgerDetail = () => {
 	const isMobile = useIsMobile();
@@ -64,18 +64,18 @@ const BurgerDetail = () => {
 	const dateOfBirth = {
 		day: useNumberInput({
 			validate: [(v) => new RegExp(/^[0-9]{1,2}$/).test(v.toString())],
-			placeholder: t("forms.dateOfBirth.day"),
+			placeholder: t("forms.burgers.fields.dateOfBirthDay"),
 			min: 1,
 			max: 31,
 		}),
 		month: useNumberInput({
 			validate: [(v) => new RegExp(/^[0-9]{1,2}$/).test(v.toString())],
-			placeholder: t("forms.dateOfBirth.month"),
+			placeholder: t("forms.burgers.fields.dateOfBirthMonth"),
 			min: 1, max: 12
 		}),
 		year: useNumberInput({
 			validate: [(v) => new RegExp(/^[0-9]{4}$/).test(v.toString())],
-			placeholder: t("forms.dateOfBirth.year"),
+			placeholder: t("forms.burgers.fields.dateOfBirthYear"),
 			max: (new Date()).getFullYear(), // No future births.
 		})
 	};
@@ -101,7 +101,7 @@ const BurgerDetail = () => {
 	});
 	// const iban = useInput<string>({
 	// 	validate: [Validators.required, (v) => IbanCheck.isValid(v)],
-	// 	placeholder: t("forms.iban-placeholder")
+	// 	placeholder: !!TRANSLATE!!
 	// });
 	// const bankAccountHolder = useInput<string>({
 	// 	validate: [Validators.required],
@@ -166,7 +166,7 @@ const BurgerDetail = () => {
 		if (!isFormValid) {
 			toast({
 				status: "error",
-				title: t("forms.citizens.invalidFormMessage"),
+				title: t("messages.burgers.invalidFormMessage"),
 				position: "top",
 			});
 			return;
@@ -193,7 +193,7 @@ const BurgerDetail = () => {
 		}).then(() => {
 			toast({
 				status: "success",
-				title: t("forms.citizens.updateSuccessMessage"),
+				title: t("messages.burgers.updateSuccessMessage"),
 				position: "top",
 			});
 		}).catch(err => {
@@ -202,8 +202,8 @@ const BurgerDetail = () => {
 				position: "top",
 				status: "error",
 				variant: "solid",
-				description: t("genericError.description"),
-				title: t("genericError.title")
+				description: t("messages.generic.description"),
+				title: t("messages.generic.title")
 			});
 		})
 	};
@@ -212,7 +212,7 @@ const BurgerDetail = () => {
 		deleteMutation().then(() => {
 			onCloseDeleteDialog();
 			toast({
-				title: t("burgers.deleteConfirmMessage", { name: `${data?.gebruiker.burger.voornamen} ${data?.gebruiker.burger.achternaam}`}),
+				title: t("messages.burgers.deleteConfirmMessage", { name: `${data?.gebruiker.burger.voornamen} ${data?.gebruiker.burger.achternaam}`}),
 				position: "top",
 				status: "success",
 			});
@@ -233,9 +233,9 @@ const BurgerDetail = () => {
 		)}
 		{!loading && !error && data && isDeleted && (
 			<Stack justifyContent={"center"} alignItems={"center"} bg={"white"} p={20} spacing={10}>
-				<Box as={Deleted} maxWidth={[200, 300, 400]} height={"auto"} />
-				<Text fontSize={"sm"}>{t("burgers.deleteConfirmMessage", { name: `${data.gebruiker.burger.voornamen} ${data.gebruiker.burger.achternaam}`})}</Text>
-				<Button variantColor="primary" onClick={onClickBackButton}>{t("burgers.backToOverview")}</Button>
+				<Box as={DeletedIllustration} maxWidth={[200, 300, 400]} height={"auto"} />
+				<Text fontSize={"sm"}>{t("messages.burgers.deleteConfirmMessage", { name: `${data.gebruiker.burger.voornamen} ${data.gebruiker.burger.achternaam}`})}</Text>
+				<Button variantColor="primary" onClick={onClickBackButton}>{t("buttons.burgers.backToList")}</Button>
 			</Stack>
 		)}
 		{!loading && !error && data && !isDeleted && (
@@ -246,9 +246,9 @@ const BurgerDetail = () => {
 					<AlertDialog isOpen={deleteDialogOpen} leastDestructiveRef={cancelDeleteRef} onClose={onCloseDeleteDialog}>
 						<AlertDialogOverlay />
 						<AlertDialogContent>
-							<AlertDialogHeader fontSize="lg" fontWeight="bold">{t("burgers.deleteTitle")}</AlertDialogHeader>
+							<AlertDialogHeader fontSize="lg" fontWeight="bold">{t("messages.burgers.deleteTitle")}</AlertDialogHeader>
 							{ /* Todo: specify which data gets deleted (14-10-2020) */ }
-							<AlertDialogBody>{t("burgers.deleteQuestion", {name: `${data.gebruiker.weergaveNaam}`})}</AlertDialogBody>
+							<AlertDialogBody>{t("messages.burgers.deleteQuestion", {name: `${data.gebruiker.weergaveNaam}`})}</AlertDialogBody>
 							<AlertDialogFooter>
 								<Button ref={cancelDeleteRef} onClick={onCloseDeleteDialog}>{t("actions.cancel")}</Button>
 								<Button isLoading={deleteLoading} variantColor="red" onClick={onConfirmDeleteDialog} ml={3}>{t("actions.delete")}</Button>
@@ -268,32 +268,32 @@ const BurgerDetail = () => {
 					<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
 						<Stack direction={isMobile ? "column" : "row"} spacing={2}>
 							<FormLeft>
-								<Heading size={"md"}>{t("personal")}</Heading>
-								<FormHelperText id="personal-helperText">{t("forms.citizens.personal-helperText")}</FormHelperText>
+								<Heading size={"md"}>{t("forms.burgers.sections.personal.title")}</Heading>
+								<FormHelperText id="personal-helperText">{t("forms.burgers.sections.personal.helperText")}</FormHelperText>
 							</FormLeft>
 							<FormRight>
 								{/*<Stack spacing={1}>*/}
-								{/*	<FormLabel htmlFor={"bsn"}>{t("bsn")}</FormLabel>*/}
-								{/*	<Tooltip label={t("forms.bsn-tooltip")} aria-label={t("bsn")} hasArrow placement={isMobile ? "top" : "left"}>*/}
+								{/*	<FormLabel htmlFor={"bsn"}>{TRANSLATE}</FormLabel>*/}
+								{/*	<Tooltip label={TRANSLATE} aria-label={TRANSLATE} hasArrow placement={isMobile ? "top" : "left"}>*/}
 								{/*		<Input isInvalid={bsn.dirty && !bsn.isValid} {...bsn.bind} />*/}
 								{/*	</Tooltip>*/}
 								{/*</Stack>*/}
 								<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 									<Stack spacing={1} flex={1}>
-										<FormLabel htmlFor={"initials"}>{t("initials")}</FormLabel>
+										<FormLabel htmlFor={"initials"}>{t("forms.burgers.fields.initials")}</FormLabel>
 										<Input isInvalid={initials.dirty && !initials.isValid} {...initials.bind} />
 									</Stack>
 									<Stack spacing={1} flex={3}>
-										<FormLabel htmlFor={"firstName"}>{t("firstName")}</FormLabel>
+										<FormLabel htmlFor={"firstName"}>{t("forms.burgers.fields.firstName")}</FormLabel>
 										<Input isInvalid={firstName.dirty && !firstName.isValid} {...firstName.bind} />
 									</Stack>
 									<Stack spacing={1} flex={3}>
-										<FormLabel htmlFor={"lastName"}>{t("lastName")}</FormLabel>
+										<FormLabel htmlFor={"lastName"}>{t("forms.burgers.fields.lastName")}</FormLabel>
 										<Input isInvalid={lastName.dirty && !lastName.isValid} {...lastName.bind} />
 									</Stack>
 								</Stack>
 								<Stack spacing={1}>
-									<FormLabel htmlFor={"dateOfBirth"}>{t("dateOfBirth")}</FormLabel>
+									<FormLabel htmlFor={"dateOfBirth"}>{t("forms.burgers.fields.dateOfBirth")}</FormLabel>
 									<Stack direction={"row"} maxW="100%">
 										<Box flex={1}>
 											<Input isInvalid={dateOfBirth.day.dirty && !dateOfBirth.day.isValid} {...dateOfBirth.day.bind} id="dateOfBirth.day" />
@@ -319,41 +319,41 @@ const BurgerDetail = () => {
 
 						<Stack direction={isMobile ? "column" : "row"} spacing={2}>
 							<FormLeft>
-								<Heading size={"md"}>{t("contact")}</Heading>
-								<FormHelperText>{t("forms.citizens.contact-helperText")}</FormHelperText>
+								<Heading size={"md"}>{t("forms.burgers.sections.contact.title")}</Heading>
+								<FormHelperText>{t("forms.burgers.sections.contact.helperText")}</FormHelperText>
 							</FormLeft>
 							<FormRight>
 								<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 									<Stack spacing={1} flex={2}>
-										<FormLabel htmlFor={"street"}>{t("street")}</FormLabel>
+										<FormLabel htmlFor={"street"}>{t("forms.burgers.fields.street")}</FormLabel>
 										<Input isInvalid={street.dirty && !street.isValid} {...street.bind} />
 									</Stack>
 									<Stack spacing={1} flex={1}>
-										<FormLabel htmlFor={"houseNumber"}>{t("houseNumber")}</FormLabel>
+										<FormLabel htmlFor={"houseNumber"}>{t("forms.burgers.fields.houseNumber")}</FormLabel>
 										<Input isInvalid={houseNumber.dirty && !houseNumber.isValid} {...houseNumber.bind} />
 									</Stack>
 								</Stack>
 								<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 									<Stack spacing={1} flex={1}>
-										<FormLabel htmlFor={"zipcode"}>{t("zipcode")}</FormLabel>
-										<Tooltip label={t("forms.zipcode-tooltip")} aria-label={t("zipcode")} hasArrow placement={isMobile ? "top" : "left"}>
+										<FormLabel htmlFor={"zipcode"}>{t("forms.burgers.fields.zipcode")}</FormLabel>
+										<Tooltip label={t("forms.burgers.tooltips.zipcode")} aria-label={t("forms.burgers.fields.zipcode")} hasArrow placement={isMobile ? "top" : "left"}>
 											<Input isInvalid={zipcode.dirty && !zipcode.isValid} {...zipcode.bind} />
 										</Tooltip>
 									</Stack>
 									<Stack spacing={1} flex={2}>
-										<FormLabel htmlFor={"city"}>{t("city")}</FormLabel>
+										<FormLabel htmlFor={"city"}>{t("forms.burgers.fields.city")}</FormLabel>
 										<Input isInvalid={city.dirty && !city.isValid} {...city.bind} />
 									</Stack>
 								</Stack>
 								<Stack spacing={1}>
-									<FormLabel htmlFor={"phoneNumber"}>{t("phoneNumber")}</FormLabel>
-									<Tooltip label={t("forms.phoneNumber-tooltip")} aria-label={t("phoneNumber")} hasArrow placement={isMobile ? "top" : "left"}>
+									<FormLabel htmlFor={"phoneNumber"}>{t("forms.burgers.fields.phoneNumber")}</FormLabel>
+									<Tooltip label={t("forms.burgers.tooltips.phoneNumber")} aria-label={t("forms.burgers.tooltips.phoneNumber")} hasArrow placement={isMobile ? "top" : "left"}>
 										<Input isInvalid={phoneNumber.dirty && !phoneNumber.isValid} {...phoneNumber.bind} />
 									</Tooltip>
 								</Stack>
 								<Stack spacing={1}>
-									<FormLabel htmlFor={"mail"}>{t("mail")}</FormLabel>
-									<Input isInvalid={mail.dirty && !mail.isValid} {...mail.bind} aria-describedby="mail-helper-text" />
+									<FormLabel htmlFor={"mail"}>{t("forms.burgers.fields.mail")}</FormLabel>
+									<Input isInvalid={mail.dirty && !mail.isValid} {...mail.bind} />
 								</Stack>
 							</FormRight>
 						</Stack>
@@ -364,7 +364,7 @@ const BurgerDetail = () => {
 							<FormLeft />
 							<FormRight>
 								<Stack direction={"row"} spacing={1} justifyContent={"flex-end"}>
-									<Button isLoading={loading || updateLoading} type={"submit"} variantColor={"primary"} onClick={onSubmit}>{t("save")}</Button>
+									<Button isLoading={loading || updateLoading} type={"submit"} variantColor={"primary"} onClick={onSubmit}>{t("actions.save")}</Button>
 								</Stack>
 							</FormRight>
 						</Stack>

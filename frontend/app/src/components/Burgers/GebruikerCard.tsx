@@ -25,7 +25,7 @@ const GebruikerCard: React.FC<BoxProps & { gebruiker: IGebruiker, showBadge?: bo
 	};
 
 	return (
-		<Stack direction={"row"} width={"100%"} justifyContent={isMobile ? "flex-start" : "center"} alignItems={"center"} bg={"white"} borderRadius={10} p={5} cursor={"pointer"}
+		<Stack direction={"row"} width={"100%"} justifyContent={isMobile ? "flex-start" : "center"} alignItems={"center"} bg={"white"} borderRadius={5} p={5} cursor={"pointer"}
 		       onClick={onClick} userSelect={"none"}>
 			<Stack direction={isMobile ? "row" : "column"} spacing={5} alignItems={"center"}>
 				<Avatar name={name}>

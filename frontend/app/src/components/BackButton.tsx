@@ -4,14 +4,14 @@ import {MdArrowBack} from "react-icons/all";
 import {useTranslation} from "react-i18next";
 import {useHistory} from "react-router-dom";
 
-const BackButton: React.FC<{ to: string }> = ({to}) => {
+const BackButton: React.FC<{ to: string, label?: string }> = ({to, label}) => {
 	const {push} = useHistory();
 	const {t} = useTranslation();
 
 	return (
 		<Button variant={"link"} variantColor={"gray"} fontSize={"sm"} mb={5} onClick={() => push(to)}>
 			<Icon as={MdArrowBack} size={"16px"} mr={2} />
-			{t("back")}
+			{label || t("actions.back")}
 		</Button>
 	);
 };

@@ -6,19 +6,19 @@ import {useQuery} from "@apollo/client";
 import {searchFields} from "../../utils/things";
 import {Box, Button, Grid, Heading, Icon, IconButton, Input, InputGroup, InputLeftElement, InputRightElement, Spinner, Stack, Text, useToast} from "@chakra-ui/core";
 import Routes from "../../config/routes";
-import {ReactComponent as Empty} from "../../assets/images/illustration-empty.svg";
 import GebruikerCard from "./GebruikerCard";
 import {IGebruiker} from "../../models";
 import {GetAllGebruikersQuery} from "../../services/graphql/queries";
 import NoBurgersFound from "./NoBurgersFound";
-import NoSearchResults from "./NoSearchResults";
+import NoBurgerSearchResults from "./NoBurgerSearchResults";
+import EmptyIllustration from "../Illustrations/EmptyIllustration";
 
 const BurgerList = () => {
 	const {t} = useTranslation();
 	const {push} = useHistory();
 	const toast = useToast();
 	const search = useInput<string>({
-		placeholder: t("search-placeholder")
+		placeholder: t("forms.search.fields.search")
 	});
 
 	const {data, loading, error} = useQuery<{ gebruikers: IGebruiker[] }>(GetAllGebruikersQuery, {
@@ -65,7 +65,7 @@ const BurgerList = () => {
 		<Stack spacing={5}>
 			<Stack direction={"row"} spacing={5} justifyContent={"space-between"} alignItems={"center"}>
 				<Stack direction={"row"} spacing={5} alignItems={"center"}>
-					<Heading size={"lg"}>{t("citizens")}</Heading>
+					<Heading size={"lg"}>{t("burgers.burgers")}</Heading>
 				</Stack>
 				{showSearch && <Stack direction={"row"} spacing={5}>
 					<InputGroup>
@@ -81,14 +81,14 @@ const BurgerList = () => {
 			</Stack>
 
 			{loading && ( // Waiting for data to arrive
-				<Stack justifyContent={"center"} alignItems={"center"} bg={"white"} p={20} spacing={10}>
+				<Stack justifyContent={"center"} alignItems={"center"} bg={"white"} borderRadius={5} p={20} spacing={10}>
 					<Spinner />
 				</Stack>
 			)}
 			{!loading && error && (
-				<Stack justifyContent={"center"} alignItems={"center"} bg={"white"} p={20} spacing={10}>
-					<Box as={Empty} maxWidth={[200, 300, 400]} height={"auto"} />
-					<Text fontSize={"sm"}>{t("burgers.errors.serverError")}</Text>
+				<Stack justifyContent={"center"} alignItems={"center"} bg={"white"} borderRadius={5} p={20} spacing={10}>
+					<Box as={EmptyIllustration} maxWidth={[200, 300, 400]} height={"auto"} />
+					<Text fontSize={"sm"}>{t("messages.genericError.description")}</Text>
 				</Stack>
 			)}
 			{!loading && !error && (<>
@@ -96,7 +96,7 @@ const BurgerList = () => {
 					{search.value.trim().length === 0 ? (
 						<NoBurgersFound />
 					) : (
-						<NoSearchResults onSearchReset={() => {
+						<NoBurgerSearchResults onSearchReset={() => {
 							search.clear();
 							search.ref.current!.focus();
 						}} />
@@ -106,9 +106,9 @@ const BurgerList = () => {
 					<Grid maxWidth={"100%"} gridTemplateColumns={["repeat(1, 1fr)", "repeat(2, 1fr)", "repeat(3, 1fr)", "repeat(4, 1fr)", "repeat(6, 1fr)"]} gap={5}>
 						{search.value.trim().length === 0 && (
 							<Box>
-								<Button variantColor={"primary"} borderStyle={"dashed"} variant={"outline"} leftIcon={"add"}
-								        w="100%" h="100%" onClick={() => push(Routes.CitizenNew)}
-								        p={5}>{t("add-citizen-button-label")}</Button>
+								<Button variantColor={"blue"} borderStyle={"dashed"} variant={"outline"} leftIcon={"add"}
+								        w="100%" h="100%" onClick={() => push(Routes.CitizenNew)} borderRadius={5}
+								        p={5}>{t("buttons.burgers.createNew")}</Button>
 							</Box>
 						)}
 						{filteredBurgers.map(g => <GebruikerCard key={g.id} gebruiker={g} cursor={"pointer"} />)}
