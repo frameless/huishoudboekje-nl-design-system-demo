@@ -35,7 +35,7 @@ export const OrganisatieFragment = gql`
         id
         kvkNummer
         weergaveNaam
-        # ...Kvk
+        ...Kvk
     }
     ${OrganisatieKvkDetailsFragment}
 `;
