@@ -40,7 +40,7 @@ gebruiker_schema = {
         "postcode": {
             "type": "string",
         },
-        "woonplaatsnaam": {
+        "plaatsnaam": {
             "type": "string",
         }
     },

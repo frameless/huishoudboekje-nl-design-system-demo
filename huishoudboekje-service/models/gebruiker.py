@@ -17,10 +17,9 @@ class Gebruiker(db.Model):
     straatnaam = Column(String)
     huisnummer = Column(String)
     postcode = Column(String)
-    woonplaatsnaam = Column(String)
+    plaatsnaam = Column(String)
 
     # Gebruiker fields
-    weergave_naam = Column(String)
     telefoonnummer = Column(String)
     email = Column(String)
     geboortedatum = Column(Date)
@@ -29,7 +28,6 @@ class Gebruiker(db.Model):
     def to_dict(self):
         return_data = {
             "id": self.id,
-            "weergave_naam": self.weergave_naam,
             "telefoonnummer": self.telefoonnummer,
             "email": self.email,
             "iban": self.iban,
@@ -39,7 +37,7 @@ class Gebruiker(db.Model):
             "straatnaam": self.straatnaam,
             "huisnummer": self.huisnummer,
             "postcode": self.postcode,
-            "woonplaatsnaam": self.woonplaatsnaam
+            "plaatsnaam": self.plaatsnaam
         }
 
         try:
