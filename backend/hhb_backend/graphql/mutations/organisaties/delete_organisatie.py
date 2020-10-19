@@ -8,7 +8,7 @@ from hhb_backend.graphql import settings
 
 class DeleteOrganisatie(graphene.Mutation):
     class Arguments:
-        # gebruiker arguments
+        # organisatie arguments
         id = graphene.Int(required=True)
 
     ok = graphene.Boolean()
