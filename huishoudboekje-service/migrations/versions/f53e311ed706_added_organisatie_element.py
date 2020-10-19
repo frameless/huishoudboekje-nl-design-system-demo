@@ -21,7 +21,7 @@ def upgrade():
     op.create_table('organisaties',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('weergave_naam', sa.String(), nullable=True),
-    sa.Column('kvk_nummer', sa.Integer(), nullable=True),
+    sa.Column('kvk_nummer', sa.String(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('kvk_nummer')
     )

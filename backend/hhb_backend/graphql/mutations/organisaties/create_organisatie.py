@@ -10,7 +10,7 @@ from hhb_backend.graphql.models.organisatie import Organisatie
 class CreateOrganisatie(graphene.Mutation):
     class Arguments:
         # hhb_service elements (required)
-        kvk_nummer = graphene.Int(required=True)
+        kvk_nummer = graphene.String(required=True)
         weergave_naam = graphene.String(required=True)
         # org_service elements (optional)
         naam = graphene.String()
