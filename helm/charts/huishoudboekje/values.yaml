@@ -19,3 +19,8 @@ huishoudboekje-service:
   database:
     service: huishoudboekje-database
     name: huishoudboekjeservice
+
+organisatie-service:
+  database:
+    service: organisatie-database
+    name: organisatieservice
