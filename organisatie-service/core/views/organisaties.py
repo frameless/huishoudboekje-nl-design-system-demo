@@ -44,20 +44,15 @@ class OrganisatieView(MethodView):
                 organisatie = Organisatie.query.filter(Organisatie.kvk_nummer==kvk_nummer).one()
             except NoResultFound:
                 return {"errors": ["Organisatie not found."]}, 404
-            except ValueError:
-                return {"errors": ["kvk_nummer is not a number."]}, 400
             return {"data": organisatie.to_dict()}, 200
 
         # /organisaties/
         filter_kvks = request.args.get('filter_kvks')
         organisaties = Organisatie.query
         if filter_kvks:
-            try:
-                organisaties = organisaties.filter(
-                    Organisatie.kvk_nummer.in_([int(kvkn) for kvkn in filter_kvks.split(",")])
-                )
-            except ValueError:
-                return {"errors": ["Input for filter_kvks is not correct"]}, 400
+            organisaties = organisaties.filter(
+                Organisatie.kvk_nummer.in_([kvkn for kvkn in filter_kvks.split(",")])
+            )
         return {"data": [o.to_dict() for o in organisaties.all()]}
 
     def post(self, kvk_nummer=None):
@@ -71,8 +66,6 @@ class OrganisatieView(MethodView):
                 organisatie = Organisatie.query.filter(Organisatie.kvk_nummer==kvk_nummer).one()
             except NoResultFound:
                 return {"errors": ["Organisatie not found."]}, 404
-            except ValueError:
-                return {"errors": ["kvk_nummer is not a number."]}, 400
             response_code = 202
         else:
             organisatie = Organisatie()
@@ -92,8 +85,6 @@ class OrganisatieView(MethodView):
             organisatie = Organisatie.query.filter(Organisatie.kvk_nummer==kvk_nummer).one()
         except NoResultFound:
             return {"errors": ["Organisatie not found."]}, 404
-        except ValueError:
-            return {"errors": ["kvk_nummer is not a number."]}, 400
         db.session.delete(organisatie)
         db.session.commit()
         return {}, 202

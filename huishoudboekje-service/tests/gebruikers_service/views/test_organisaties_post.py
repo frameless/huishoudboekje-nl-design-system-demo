@@ -6,7 +6,7 @@ def test_organisaties_post_new_organisation(client, session):
     """ Test /organisaties/ path """
     assert session.query(Organisatie).count() == 0
     organisatie_dict = {
-        "kvk_nummer": 1,
+        "kvk_nummer": "1",
         "weergave_naam": "testbedrijf"
     }
     response = client.post(
@@ -23,7 +23,7 @@ def test_organisaties_post_update_organisatie(client, session, organisatie_facto
     """ Test /organisaties/<organisatie_id> path """
     organisation = organisatie_factory.createOrganisatie(kvk_nummer=1, weergave_naam="Test Bedrijf")
     update_dict = {
-        "kvk_nummer": 2,
+        "kvk_nummer": "2",
         "weergave_naam": "testbedrijf"
     }
     response = client.post(
@@ -43,7 +43,7 @@ def test_organisaties_post_update_organisatie(client, session, organisatie_facto
 
 def test_organisaties_post_bad_requests(client):
     """ Test /organisaties/ path bad request """
-    bad_data1 = {"kvk_nummer": "NaN"}
+    bad_data1 = {"kvk_nummer": 12345}
     response = client.post(
         f'/organisaties/',
         data=json.dumps(bad_data1),

@@ -8,7 +8,7 @@ class OrganisatieFactory():
 
     def createOrganisatie(
         self,
-        kvk_nummer: int = 12345,
+        kvk_nummer: int = "12345",
         naam: str = "Test Organisatie",
         straatnaam: str = "Schoolstraat",
         huisnummer: str = "1",

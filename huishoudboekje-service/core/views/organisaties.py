@@ -53,7 +53,7 @@ class OrganisatieView(MethodView):
             try:
                 organisaties = organisaties.filter(
                     # cast all kvk_numbers to ints and then add leading 0's
-                    Organisatie.kvk_nummer.in_([str(int(kvkn)).zfill(8) for kvkn in filter_kvks.split(",")])
+                    Organisatie.kvk_nummer.in_([kvkn for kvkn in filter_kvks.split(",")])
                 )
             except ValueError:
                 return {"errors": ["Input for filter_kvks is not correct"]}, 400

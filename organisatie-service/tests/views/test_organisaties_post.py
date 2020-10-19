@@ -6,7 +6,7 @@ def test_organisaties_post_new_organisation(client, dbsession):
     """ Test /organisaties/ path """
     assert dbsession.query(Organisatie).count() == 0
     organisatie_dict = {
-        "kvk_nummer": 1,
+        "kvk_nummer": "1",
         "naam": "testbedrijf"
     }
     response = client.post(
@@ -21,7 +21,7 @@ def test_organisaties_post_new_organisation(client, dbsession):
 
 def test_organisaties_post_update_organisatie(client, organisatie_factory):
     """ Test /organisaties/<organisatie_id> path """
-    organisation = organisatie_factory.createOrganisatie(kvk_nummer=1)
+    organisation = organisatie_factory.createOrganisatie(kvk_nummer="1")
     update_dict = {
         "naam": "testbedrijf"
     }
