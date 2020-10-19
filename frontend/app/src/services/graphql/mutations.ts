@@ -82,7 +82,7 @@ export const DeleteGebruikerMutation = gql`
 export const CreateOrganizationMutation = gql`
     mutation createOrganization(
         $huisnummer: String
-        $kvkNummer: Int!
+        $kvkNummer: String!
         $naam: String
         $plaatsnaam: String
         $postcode: String
@@ -111,17 +111,17 @@ export const UpdateOrganizationMutation = gql`
     mutation updateOrganization(
         $id: Int!
         $huisnummer: String
-#       $kvkNummer: Int!
+        $kvkNummer: String
         $naam: String
         $plaatsnaam: String
         $postcode: String
         $straatnaam: String
-        $weergaveNaam: String!
+        $weergaveNaam: String
     ) {
         updateOrganisatie(
             id: $id
             huisnummer: $huisnummer
-#           kvkNummer: $kvkNummer       # Todo: Can't update kvkNummer?
+            kvkNummer: $kvkNummer
             naam: $naam
             plaatsnaam: $plaatsnaam
             postcode: $postcode

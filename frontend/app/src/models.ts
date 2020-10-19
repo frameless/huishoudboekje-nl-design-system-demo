@@ -1,6 +1,5 @@
 export type IGebruiker = {
 	__typename: "Gebruiker",
-<<<<<<< HEAD
 	id: number
 	email: string
 	telefoonnummer: string
@@ -13,24 +12,6 @@ export type IGebruiker = {
 	postcode: string
 	plaatsnaam: string
 	iban: string
-=======
-	id: number,
-	telefoonnummer: string,
-	email: string,
-	geboortedatum: string,
-	burger: IBurger,
-	weergaveNaam: string,
-}
-
-export type IBurger = {
-	__typename: "Burger",
-	achternaam: string,
-	huisnummer: string,
-	postcode: string,
-	straatnaam: string,
-	voorletters: string,
-	voornamen: string,
-	woonplaatsnaam: string
 }
 
 export type IOrganisatie = {
@@ -48,5 +29,4 @@ export type IKvK = {
 	plaatsnaam: string,
 	postcode: string,
 	straatnaam: string,
->>>>>>> 99a5f43... Added organizations overview page and create page.
 }
