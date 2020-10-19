@@ -12,7 +12,7 @@ organisatie_schema = {
     "type": "object",
     "properties": {
         "kvk_nummer": {
-            "type": "string",
+            "type": "integer",
         },
         "weergave_naam": {
             "type": "string",

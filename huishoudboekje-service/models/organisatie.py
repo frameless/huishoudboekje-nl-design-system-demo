@@ -15,5 +15,6 @@ class Organisatie(db.Model):
         return {
             "id": self.id,
             "weergave_naam": self.weergave_naam,
-            "kvk_nummer": self.kvk_nummer
+            "kvk_nummer": str(self.kvk_nummer).zfill(8)
         }
+    
