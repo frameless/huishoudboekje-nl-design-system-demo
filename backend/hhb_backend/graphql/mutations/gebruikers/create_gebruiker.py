@@ -24,7 +24,7 @@ class CreateGebruiker(graphene.Mutation):
         straatnaam = graphene.String()
         voorletters = graphene.String()
         voornamen = graphene.String()
-        woonplaatsnaam = graphene.String()
+        plaatsnaam = graphene.String()
 
     ok = graphene.Boolean()
     gebruiker = graphene.Field(lambda: Gebruiker)
