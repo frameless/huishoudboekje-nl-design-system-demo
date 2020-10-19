@@ -41,9 +41,11 @@ class OrganisatieView(MethodView):
         if kvk_nummer:
             # /organisaties/<kvk_nummer>/
             try:
-                organisatie = Organisatie.query.filter(Organisatie.kvk_nummer==kvk_nummer).one()
+                organisatie = Organisatie.query.filter(Organisatie.kvk_nummer==int(kvk_nummer)).one()
             except NoResultFound:
                 return {"errors": ["Organisatie not found."]}, 404
+            except ValueError:
+                return {"errors": ["kvk_nummer is not a number."]}, 400
             return {"data": organisatie.to_dict()}, 200
 
         # /organisaties/
@@ -66,9 +68,11 @@ class OrganisatieView(MethodView):
 
         if kvk_nummer:
             try:
-                organisatie = Organisatie.query.filter(Organisatie.kvk_nummer==kvk_nummer).one()
+                organisatie = Organisatie.query.filter(Organisatie.kvk_nummer==int(kvk_nummer)).one()
             except NoResultFound:
                 return {"errors": ["Organisatie not found."]}, 404
+            except ValueError:
+                return {"errors": ["kvk_nummer is not a number."]}, 400
             response_code = 202
         else:
             organisatie = Organisatie()
@@ -85,9 +89,11 @@ class OrganisatieView(MethodView):
         if not kvk_nummer:
             return {"errors": ["Delete method requires an kvk_nummer"]}, 400
         try:
-            organisatie = Organisatie.query.filter(Organisatie.kvk_nummer==kvk_nummer).one()
+            organisatie = Organisatie.query.filter(Organisatie.kvk_nummer==int(kvk_nummer)).one()
         except NoResultFound:
             return {"errors": ["Organisatie not found."]}, 404
+        except ValueError:
+            return {"errors": ["kvk_nummer is not a number."]}, 400
         db.session.delete(organisatie)
         db.session.commit()
         return {}, 202

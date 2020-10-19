@@ -25,7 +25,7 @@ class Organisatie(graphene.ObjectType):
     kvk_details = graphene.Field(OrganisatieKvK)
 
     def resolve_kvk_details(root, info):
-        """ Get Burger when requested """
+        """ Get KvK Details when requested """
         response = requests.get(
             os.path.join(settings.ORGANISATIE_SERVICES_URL, f"organisaties/{root.get('kvk_nummer')}")
         )
