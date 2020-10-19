@@ -1,4 +1,4 @@
-""" Gebruiker model as used in GraphQL queries """
+""" Organisatie model as used in GraphQL queries """
 import os
 import graphene
 import requests
@@ -7,7 +7,7 @@ from hhb_backend.graphql import settings
 from .burger import Burger
 
 class OrganisatieKvK(graphene.ObjectType):
-    nummer = graphene.Int()
+    nummer = graphene.String()
     naam = graphene.String()
     straatnaam = graphene.String()
     huisnummer = graphene.String()
@@ -18,10 +18,10 @@ class OrganisatieKvK(graphene.ObjectType):
         return root.get("kvk_nummer")
 
 class Organisatie(graphene.ObjectType):
-    """ GraphQL Gebruiker model """
+    """ GraphQL Organisatie model """
     id = graphene.Int()
     weergave_naam = graphene.String()
-    kvk_nummer = graphene.Int()
+    kvk_nummer = graphene.String()
     kvk_details = graphene.Field(OrganisatieKvK)
 
     def resolve_kvk_details(root, info):

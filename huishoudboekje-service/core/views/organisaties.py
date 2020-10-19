@@ -12,7 +12,7 @@ organisatie_schema = {
     "type": "object",
     "properties": {
         "kvk_nummer": {
-            "type": "integer",
+            "type": "string",
         },
         "weergave_naam": {
             "type": "string",
@@ -52,7 +52,8 @@ class OrganisatieView(MethodView):
         if filter_kvks:
             try:
                 organisaties = organisaties.filter(
-                    Organisatie.kvk_nummer.in_([int(kvkn) for kvkn in filter_kvks.split(",")])
+                    # cast all kvk_numbers to ints and then add leading 0's
+                    Organisatie.kvk_nummer.in_([str(int(kvkn)).zfill(8) for kvkn in filter_kvks.split(",")])
                 )
             except ValueError:
                 return {"errors": ["Input for filter_kvks is not correct"]}, 400

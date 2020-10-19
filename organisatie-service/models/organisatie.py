@@ -14,7 +14,7 @@ class Organisatie(db.Model):
 
     def to_dict(self):
         return {
-            "kvk_nummer": self.kvk_nummer,
+            "kvk_nummer": str(self.kvk_nummer).zfill(8),
             "naam": self.naam,
             "straatnaam": self.straatnaam,
             "huisnummer": self.huisnummer,
