@@ -36,7 +36,7 @@ export type IBurger = {
 export type IOrganisatie = {
 	__typename: "Organisatie",
 	id: number,
-	kvkNummer: number,
+	kvkNummer: string,
 	weergaveNaam: string,
 	kvkDetails: IKvK,
 }
