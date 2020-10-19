@@ -11,8 +11,8 @@ database:
   nameOverride: "huishoudboekje"
 
   databases:
-    - huishoudboekje_service
-    - organisaties
+    - huishoudboekjeservice
+    - organisatieservice
     - afspraken
 
 huishoudboekje-service:
@@ -22,5 +22,5 @@ huishoudboekje-service:
 
 organisatie-service:
   database:
-    service: organisatie-database
+    service: huishoudboekje-database
     name: organisatieservice
