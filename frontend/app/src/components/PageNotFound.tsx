@@ -29,7 +29,7 @@ const PageNotFound = () => {
 					</Button>
 				</Stack>
 			</Stack>
-			<Box as={NotFoundIllustration} maxWidth={[200, 300, 300]} height={"auto"} />
+			{!isMobile && <Box as={NotFoundIllustration} maxWidth={[200, 300, 300]} height={"auto"} />}
 		</Stack>
 	);
 };
