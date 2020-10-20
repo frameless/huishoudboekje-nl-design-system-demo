@@ -4,7 +4,6 @@ import graphene
 import requests
 from graphql import GraphQLError
 from hhb_backend.graphql import settings
-from .burger import Burger
 
 class OrganisatieKvK(graphene.ObjectType):
     nummer = graphene.String()
