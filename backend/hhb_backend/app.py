@@ -2,53 +2,16 @@
 import logging
 import os
 import secrets
-
 import itsdangerous
 from flask import Flask, jsonify, Response, redirect, render_template
 from flask_oidc import OpenIDConnect
 from flask_graphql import GraphQLView
+
+from hhb_backend.custom_oidc import CustomOidc
 from hhb_backend.graphql import schema
+from urllib.parse import urlparse
 
-class ReverseProxied(object):
-
-    def __init__(self, app, script_name=None, scheme=None, server=None):
-        self.app = app
-        self.script_name = script_name
-        self.scheme = scheme
-        self.server = server
-
-    def __call__(self, environ, start_response):
-        script_name = environ.get('HTTP_X_SCRIPT_NAME', '') or self.script_name
-        if script_name:
-            environ['SCRIPT_NAME'] = script_name
-            path_info = environ['PATH_INFO']
-            if path_info.startswith(script_name):
-                environ['PATH_INFO'] = path_info[len(script_name):]
-        scheme = environ.get('HTTP_X_SCHEME', '') or self.scheme
-        if scheme:
-            environ['wsgi.url_scheme'] = scheme
-        host = environ.get('HTTP_X_FORWARDED_HOST', '') or self.server
-        if host:
-            environ['HTTP_HOST'] = host
-        return self.app(environ, start_response)
-
-
-# TODO extract to file
-class PrefixMiddleware(object):
-
-    def __init__(self, app, prefix=''):
-        self.app = app
-        self.prefix = prefix
-
-    def __call__(self, environ, start_response):
-
-        if environ['PATH_INFO'].startswith(self.prefix):
-            environ['PATH_INFO'] = environ['PATH_INFO'][len(self.prefix):]
-            environ['SCRIPT_NAME'] = self.prefix
-            return self.app(environ, start_response)
-        else:
-            start_response('404', [('Content-Type', 'text/plain')])
-            return ["Not found".encode()]
+from hhb_backend.reverse_proxy import ReverseProxied
 
 
 # TODO extract
@@ -59,9 +22,7 @@ app.config.from_mapping({
     'SECRET_KEY': secretKey,
     'SESSION_COOKIE_NAME': 'flask_session',
     'OIDC_CLIENT_SECRETS': os.getenv('OIDC_CLIENT_SECRETS', './etc/client_secrets.json'),
-    'OVERWRITE_REDIRECT_URI': os.getenv('OIDC_REDIRECT_URI', 'http://localhost:3000/api/oidc_callback'),
     'OIDC_SCOPES': ['openid', 'email', 'groups', 'profile'],
-    # 'OIDC_CLOCK_SKEW': 360,  #
     'OIDC_ID_TOKEN_COOKIE_SECURE': os.getenv('OIDC_ID_TOKEN_COOKIE_SECURE', False),
 })
 if 'PREFIX' in os.environ:
@@ -73,6 +34,10 @@ if 'PREFIX' in os.environ:
 
 oidc_overrides = {}
 oidc = OpenIDConnect(app, **oidc_overrides)
+
+customOidc = oidc
+if 'OVERWITE_REDIRECT_URI_MAP' in os.environ:
+    customOidc = CustomOidc(oidc=oidc, flask_app=app, prefixes=os.environ.get('OVERWITE_REDIRECT_URI_MAP'))
 
 
 # TODO only needed when SECRET_KEY is generated
@@ -95,12 +60,21 @@ def me():
         return jsonify(message='Not logged in'), 401
 
 
+@app.route('/custom_oidc_callback')
+@oidc.custom_callback
+def oidc_redirect(url):
+    parseResult = urlparse(url)
+    newUrl = "%s://%s" % (parseResult.scheme, parseResult.netloc)
+    logging.info("oidc_redirect url=%s" % (newUrl))
+    return redirect(newUrl)
+
+
 @app.route('/login')
-@oidc.require_login
+@customOidc.require_login
 def login():
     return redirect('/', code=302)
 
-app.add_url_rule('/graphql', view_func=oidc.require_login(GraphQLView.as_view(
+app.add_url_rule('/graphql', view_func=customOidc.require_login(GraphQLView.as_view(
     'graphql',
     schema=schema,
     graphiql=True,
@@ -114,14 +88,14 @@ app.add_url_rule('/graphql/batch', view_func=GraphQLView.as_view(
 ), strict_slashes=False), strict_slashes=False)
 
 # Optional, for adding batch query support (used in Apollo-Client)
-app.add_url_rule('/graphql/batch', view_func=oidc.require_login(GraphQLView.as_view(
+app.add_url_rule('/graphql/batch', view_func=customOidc.require_login(GraphQLView.as_view(
     'graphql_batch',
     schema=schema,
     batch=True
 )), strict_slashes=False)
 
 @app.route('/graphql/help')
-@oidc.require_login
+@customOidc.require_login
 def voyager():
     return render_template('voyager.html')
 

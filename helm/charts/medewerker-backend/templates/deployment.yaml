@@ -41,8 +41,9 @@ spec:
               value: /api
             - name: OIDC_CLIENT_SECRETS
               value: /opt/etc/oidc/client_secrets.json
-            - name: OIDC_REDIRECT_URI
-              value: "{{ .Values.oidc.redirectUri}}"
+            - name: OVERWITE_REDIRECT_URI_MAP
+              value: |-
+                {{ .Values.oidc.redirectUris | toJson }}
             - name: HHB_SERVICE_URL
               value: {{ printf "http://%s" (include "medewerker-backend.huishoudboekjeServiceName" .) }}
             - name: ORGANISATIE_SERVICE_URL
@@ -104,9 +105,7 @@ stringData:
         "client_id": "{{ .Values.oidc.clientId }}",
         "client_secret": "{{ .Values.oidc.clientSecret }}",
         "issuer": "{{ .Values.oidc.issuer }}",
-        "redirect_uris": [
-            "{{ .Values.oidc.redirectUri}}"
-        ],
+        "redirect_uris": {{ .Values.oidc.redirectUris | values | toJson }},
         "token_uri": "{{.Values.oidc.tokenUri}}",
         "token_introspection_uri": "{{.Values.oidc.tokeninfoUri}}",
         "userinfo_uri": "{{.Values.oidc.userinfoUri}}"

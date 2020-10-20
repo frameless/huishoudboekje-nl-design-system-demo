@@ -6,11 +6,11 @@ USER app
 WORKDIR /app
 
 # install the dependencies only for fast rebuilds
-COPY setup.py ./
+COPY --chown=app:app setup.py ./
 RUN mkdir -p /app/hhb_backend/ && python3 setup.py install --user --prefix=''
 
 # copy the content of the local src directory to the working directory
-COPY ./ ./
+COPY --chown=app:app ./ ./
 # install the package
 RUN python3 setup.py install --user --prefix=''
 
