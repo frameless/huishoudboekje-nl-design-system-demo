@@ -8,7 +8,7 @@ from core.app import create_app
 from core.app import db as _db
 from core.config import TestingConfig
 from tests.gebruikers_service.gebruikerfactory import GebruikerFactory
-
+from .factories import OrganisatieFactory
 
 @pytest.yield_fixture(scope="session")
 def client(app, request):
@@ -81,3 +81,10 @@ def gebruiker_factory(session, request):
     creates an instance of the OrganisatieFactory with function scope dbsession
     """
     return GebruikerFactory(session)
+    
+@pytest.fixture(scope="function")
+def organisatie_factory(session, request):
+    """
+    creates an instance of the OrganisatieFactory with function scope dbsession
+    """
+    return OrganisatieFactory(session)
