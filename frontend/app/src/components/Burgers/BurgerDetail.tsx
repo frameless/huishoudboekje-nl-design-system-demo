@@ -202,8 +202,8 @@ const BurgerDetail = () => {
 				position: "top",
 				status: "error",
 				variant: "solid",
-				description: t("messages.generic.description"),
-				title: t("messages.generic.title")
+				description: t("messages.genericError.description"),
+				title: t("messages.genericError.title")
 			});
 		})
 	};

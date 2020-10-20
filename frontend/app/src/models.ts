@@ -13,3 +13,20 @@ export type IGebruiker = {
 	plaatsnaam: string
 	iban: string
 }
+
+export type IOrganisatie = {
+	__typename: "Organisatie",
+	id: number,
+	kvkNummer: string,
+	weergaveNaam: string,
+	kvkDetails: IKvK,
+}
+
+export type IKvK = {
+	huisnummer: string,
+	naam: string,
+	nummer: number,
+	plaatsnaam: string,
+	postcode: string,
+	straatnaam: string,
+}

@@ -15,6 +15,7 @@ import PageNotFound from "./components/PageNotFound";
 import {isDev, TABLET_BREAKPOINT} from "./utils/things";
 import {useTranslation} from "react-i18next";
 import {sampleData} from "./config/sampleData/sampleData";
+import Organizations from "./components/Organizations";
 
 const App = () => {
 	const {t} = useTranslation();
@@ -70,9 +71,9 @@ const App = () => {
 
 								<Switch>
 									<Route path={Routes.Citizens} component={Citizens} />
-									{/*<Route path={"/ketenpartners"} component={Ketenpartners} />*/}
-									{/*<Route path={"/bankzaken"} component={Bankzaken} />*/}
-									{/*<Route path={"/instellingen"} component={Settings} />*/}
+									<Route path={Routes.Organizations} component={Organizations} />
+									{/*<Route path={ROUTEPATH} component={BANK_COMPONENT} />*/}
+									{/*<Route path={ROUTEPATH} component={SETTINGS_COMPONENT} />*/}
 									<Route exact path={Routes.NotFound} component={PageNotFound} />
 									<Route component={PageNotFound} />
 								</Switch>

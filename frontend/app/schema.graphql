@@ -10,7 +10,16 @@ type CreateGebruiker {
     ok: Boolean
 }
 
+type CreateOrganisatie {
+    ok: Boolean
+    organisatie: Organisatie
+}
+
 type DeleteGebruiker {
+    ok: Boolean
+}
+
+type DeleteOrganisatie {
     ok: Boolean
 }
 
@@ -30,20 +39,47 @@ type Gebruiker {
     voornamen: String
 }
 
+"GraphQL Organisatie model "
+type Organisatie {
+    id: Int
+    kvkDetails: OrganisatieKvK
+    kvkNummer: String
+    weergaveNaam: String
+}
+
+type OrganisatieKvK {
+    huisnummer: String
+    naam: String
+    nummer: String
+    plaatsnaam: String
+    postcode: String
+    straatnaam: String
+}
+
 "The root of all mutations "
 type RootMutation {
     createGebruiker(achternaam: String, email: String, geboortedatum: String, huisnummer: String, iban: String, plaatsnaam: String, postcode: String, straatnaam: String, telefoonnummer: String, voorletters: String, voornamen: String): CreateGebruiker
+    createOrganisatie(huisnummer: String, kvkNummer: String!, naam: String, plaatsnaam: String, postcode: String, straatnaam: String, weergaveNaam: String!): CreateOrganisatie
     deleteGebruiker(id: Int!): DeleteGebruiker
+    deleteOrganisatie(id: Int!): DeleteOrganisatie
     updateGebruiker(achternaam: String, email: String, geboortedatum: String, huisnummer: String, iban: String, id: Int!, plaatsnaam: String, postcode: String, straatnaam: String, telefoonnummer: String, voorletters: String, voornamen: String): UpdateGebruiker
+    updateOrganisatie(huisnummer: String, id: Int!, kvkNummer: String, naam: String, plaatsnaam: String, postcode: String, straatnaam: String, weergaveNaam: String): UpdateOrganisatie
 }
 
 "The root of all queries "
 type RootQuery {
     gebruiker(id: Int!): Gebruiker
     gebruikers(ids: [Int] = []): [Gebruiker]
+    organisatie(id: Int!): Organisatie
+    organisaties(ids: [Int] = []): [Organisatie]
 }
 
 type UpdateGebruiker {
     gebruiker: Gebruiker
     ok: Boolean
+}
+
+type UpdateOrganisatie {
+    ok: Boolean
+    organisatie: Organisatie
 }
