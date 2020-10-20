@@ -10,7 +10,7 @@ export const CreateGebruikerMutation = gql`
         $straatnaam: String
         $huisnummer: String
         $postcode: String
-        $woonplaatsnaam: String
+        $plaatsnaam: String
         $telefoonnummer: String
         $email: String
     ) {
@@ -22,7 +22,7 @@ export const CreateGebruikerMutation = gql`
             straatnaam: $straatnaam
             huisnummer: $huisnummer
             postcode: $postcode
-            woonplaatsnaam: $woonplaatsnaam
+            plaatsnaam: $plaatsnaam
             telefoonnummer: $telefoonnummer
             email: $email
         ){
@@ -45,7 +45,7 @@ export const UpdateGebruikerMutation = gql`
         $straatnaam: String
         $huisnummer: String
         $postcode: String
-        $woonplaatsnaam: String
+        $plaatsnaam: String
         $telefoonnummer: String
         $email: String
     ){
@@ -58,7 +58,7 @@ export const UpdateGebruikerMutation = gql`
             straatnaam: $straatnaam
             huisnummer: $huisnummer
             postcode: $postcode
-            woonplaatsnaam: $woonplaatsnaam
+            plaatsnaam: $plaatsnaam
             telefoonnummer: $telefoonnummer
             email: $email
         ){

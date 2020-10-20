@@ -99,7 +99,7 @@ const BurgerDetail = () => {
 		validate: [(v) => new RegExp(Regex.PhoneNumberNL).test(v) || new RegExp(Regex.MobilePhoneNL).test(v)],
 		placeholder: "0612345678"
 	});
-	// const iban = useInput<string>({
+	// const iban = useInput({
 	// 	validate: [Validators.required, (v) => IbanCheck.isValid(v)],
 	// 	placeholder: !!TRANSLATE!!
 	// });
@@ -120,19 +120,19 @@ const BurgerDetail = () => {
 		if (mounted && data) {
 			const {gebruiker} = data;
 
-			if (gebruiker.burger) {
+			if (gebruiker) {
 				// bsn.setValue(gebruiker.bsn.toString() || "");
-				initials.setValue(gebruiker.burger?.voorletters || "");
-				firstName.setValue(gebruiker.burger?.voornamen || "");
-				lastName.setValue(gebruiker.burger?.achternaam || "");
+				initials.setValue(gebruiker.voorletters || "");
+				firstName.setValue(gebruiker.voornamen || "");
+				lastName.setValue(gebruiker.achternaam || "");
 				dateOfBirth.day.setValue(new Date(gebruiker.geboortedatum).getDate());
 				dateOfBirth.month.setValue(new Date(gebruiker.geboortedatum).getMonth() + 1);
 				dateOfBirth.year.setValue(new Date(gebruiker.geboortedatum).getFullYear());
 				mail.setValue(gebruiker.email || "");
-				street.setValue(gebruiker.burger?.straatnaam || "");
-				houseNumber.setValue(gebruiker.burger?.huisnummer || "");
-				zipcode.setValue(gebruiker.burger?.postcode || "");
-				city.setValue(gebruiker.burger?.woonplaatsnaam || "");
+				street.setValue(gebruiker.straatnaam || "");
+				houseNumber.setValue(gebruiker.huisnummer || "");
+				zipcode.setValue(gebruiker.postcode || "");
+				city.setValue(gebruiker.plaatsnaam || "");
 				phoneNumber.setValue(gebruiker.telefoonnummer || "");
 				// iban.setValue(gebruiker.iban || "");
 				// bankAccountHolder.setValue(gebruiker.rekeninghouder || "");
@@ -186,7 +186,7 @@ const BurgerDetail = () => {
 				straatnaam: street.value,
 				huisnummer: houseNumber.value,
 				postcode: zipcode.value,
-				woonplaatsnaam: city.value,
+				plaatsnaam: city.value,
 				telefoonnummer: phoneNumber.value,
 				email: mail.value,
 			}
@@ -212,7 +212,7 @@ const BurgerDetail = () => {
 		deleteMutation().then(() => {
 			onCloseDeleteDialog();
 			toast({
-				title: t("messages.burgers.deleteConfirmMessage", { name: `${data?.gebruiker.burger.voornamen} ${data?.gebruiker.burger.achternaam}`}),
+				title: t("messages.burgers.deleteConfirmMessage", { name: `${data?.gebruiker.voornamen} ${data?.gebruiker.achternaam}`}),
 				position: "top",
 				status: "success",
 			});
@@ -234,21 +234,21 @@ const BurgerDetail = () => {
 		{!loading && !error && data && isDeleted && (
 			<Stack justifyContent={"center"} alignItems={"center"} bg={"white"} p={20} spacing={10}>
 				<Box as={DeletedIllustration} maxWidth={[200, 300, 400]} height={"auto"} />
-				<Text fontSize={"sm"}>{t("messages.burgers.deleteConfirmMessage", { name: `${data.gebruiker.burger.voornamen} ${data.gebruiker.burger.achternaam}`})}</Text>
+				<Text fontSize={"sm"}>{t("messages.burgers.deleteConfirmMessage", { name: `${data.gebruiker.voornamen} ${data.gebruiker.achternaam}`})}</Text>
 				<Button variantColor="primary" onClick={onClickBackButton}>{t("buttons.burgers.backToList")}</Button>
 			</Stack>
 		)}
 		{!loading && !error && data && !isDeleted && (
 			<Stack spacing={5}>
 				<Stack direction={"row"} justifyContent={"flex-start"} alignItems={"center"} spacing={3}>
-					<Heading size={"lg"}>{data.gebruiker.burger?.voornamen} {data.gebruiker.burger?.achternaam}</Heading>
+					<Heading size={"lg"}>{data.gebruiker.voornamen} {data.gebruiker.achternaam}</Heading>
 
 					<AlertDialog isOpen={deleteDialogOpen} leastDestructiveRef={cancelDeleteRef} onClose={onCloseDeleteDialog}>
 						<AlertDialogOverlay />
 						<AlertDialogContent>
 							<AlertDialogHeader fontSize="lg" fontWeight="bold">{t("messages.burgers.deleteTitle")}</AlertDialogHeader>
 							{ /* Todo: specify which data gets deleted (14-10-2020) */ }
-							<AlertDialogBody>{t("messages.burgers.deleteQuestion", {name: `${data.gebruiker.weergaveNaam}`})}</AlertDialogBody>
+							<AlertDialogBody>{t("messages.burgers.deleteQuestion", {name: `${data.gebruiker.voornamen} ${data.gebruiker.achternaam}`})}</AlertDialogBody>
 							<AlertDialogFooter>
 								<Button ref={cancelDeleteRef} onClick={onCloseDeleteDialog}>{t("actions.cancel")}</Button>
 								<Button isLoading={deleteLoading} variantColor="red" onClick={onConfirmDeleteDialog} ml={3}>{t("actions.delete")}</Button>

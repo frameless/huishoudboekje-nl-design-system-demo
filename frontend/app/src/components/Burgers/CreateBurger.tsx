@@ -139,7 +139,7 @@ const CreateBurger = () => {
 				straatnaam: street.value,
 				huisnummer: houseNumber.value,
 				postcode: zipcode.value,
-				woonplaatsnaam: city.value,
+				plaatsnaam: city.value,
 				telefoonnummer: phoneNumber.value,
 				email: mail.value,
 			}
