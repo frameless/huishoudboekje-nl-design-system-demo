@@ -7,28 +7,51 @@ from models.gebruiker import Gebruiker
 from core.database import db
 
 gebruiker_schema = {
-   "type": "object",
-   "properties": {
-       "telefoonnummer": {
-           "type": "string",
-       },
-       "email": {
-           "type": "string",
-       },
-       "geboortedatum": {
-           "type": "string",
-           "pattern": "^(?:[0-9]{4}-[0-9]{2}-[0-9]{2}|)$"
-       },
-       "iban": {
-           "type": "string",
-       }
-   },
-   "required": []
+    "type": "object",
+    "properties": {
+        "telefoonnummer": {
+            "type": "string",
+        },
+        "email": {
+            "type": "string",
+        },
+        "geboortedatum": {
+            "type": "string",
+            "pattern": "^(?:[0-9]{4}-[0-9]{2}-[0-9]{2}|)$"
+        },
+        "iban": {
+            "type": "string",
+        },
+        "voornamen": {
+            "type": "string",
+        },
+        "voorletters": {
+            "type": "string",
+        },
+        "achternaam": {
+            "type": "string",
+        },
+        "straatnaam": {
+            "type": "string",
+        },
+        "huisnummer": {
+            "type": "string",
+        },
+        "postcode": {
+            "type": "string",
+        },
+        "plaatsnaam": {
+            "type": "string",
+        }
+    },
+    "required": []
 }
+
 
 class NewGebruikerInputs(Inputs):
     """ JSON validator for creating a new Gebruiker """
     json = [JsonSchema(schema=gebruiker_schema)]
+
 
 class GebruikerView(MethodView):
     """ Methods for /gebruiker/ path """

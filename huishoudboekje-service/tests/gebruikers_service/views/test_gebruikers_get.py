@@ -1,6 +1,6 @@
 """ Test GET /gebruikers """
-from datetime import date
-from models import Gebruiker, Burger
+from models import Gebruiker
+
 
 def test_gebruikers_get_empty_db(app):
     """ Test gebruikers call with empty database. """
@@ -8,29 +8,9 @@ def test_gebruikers_get_empty_db(app):
     assert response.status_code == 200
     assert {'data': []} == response.json
 
-def test_gebruikers_get_single_gebruiker(app, session):
+def test_gebruikers_get_single_gebruiker(client, gebruiker_factory):
     """ Test gebruikers call with a single gebruiker in database. """
-    gebruiker = Gebruiker(
-        email="a@b.c",
-        telefoonnummer="0612345678",
-    )
-    burger = Burger(
-        gebruiker=gebruiker,
-    )
-    session.add(gebruiker)
-    session.add(burger)
-    session.flush()
-    client = app.test_client()
+    gebruiker = gebruiker_factory.createGebruiker()
     response = client.get('/gebruikers')
     assert response.status_code == 200
-    assert response.json["data"] == [
-        {
-            "id": 1,
-            "burger_id": 1,
-            "email": "a@b.c",
-            "telefoonnummer": "0612345678",
-            "geboortedatum": "",
-            "iban": None,
-            "weergave_naam": None,
-        }
-    ]
+    assert response.json["data"] == [gebruiker.to_dict()]

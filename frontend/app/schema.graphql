@@ -5,17 +5,6 @@ schema {
     mutation: RootMutation
 }
 
-"GraphQL Burger model "
-type Burger {
-    achternaam: String
-    huisnummer: String
-    postcode: String
-    straatnaam: String
-    voorletters: String
-    voornamen: String
-    woonplaatsnaam: String
-}
-
 type CreateGebruiker {
     gebruiker: Gebruiker
     ok: Boolean
@@ -27,20 +16,25 @@ type DeleteGebruiker {
 
 "GraphQL Gebruiker model "
 type Gebruiker {
-    burger: Burger
+    achternaam: String
     email: String
     geboortedatum: String
+    huisnummer: String
     iban: String
     id: Int
+    plaatsnaam: String
+    postcode: String
+    straatnaam: String
     telefoonnummer: String
-    weergaveNaam: String
+    voorletters: String
+    voornamen: String
 }
 
 "The root of all mutations "
 type RootMutation {
-    createGebruiker(achternaam: String, email: String, geboortedatum: String, huisnummer: String, iban: String, postcode: String, straatnaam: String, telefoonnummer: String, voorletters: String, voornamen: String, woonplaatsnaam: String): CreateGebruiker
+    createGebruiker(achternaam: String, email: String, geboortedatum: String, huisnummer: String, iban: String, plaatsnaam: String, postcode: String, straatnaam: String, telefoonnummer: String, voorletters: String, voornamen: String): CreateGebruiker
     deleteGebruiker(id: Int!): DeleteGebruiker
-    updateGebruiker(achternaam: String, email: String, geboortedatum: String, huisnummer: String, iban: String, id: Int!, postcode: String, straatnaam: String, telefoonnummer: String, voorletters: String, voornamen: String, woonplaatsnaam: String): UpdateGebruiker
+    updateGebruiker(achternaam: String, email: String, geboortedatum: String, huisnummer: String, iban: String, id: Int!, plaatsnaam: String, postcode: String, straatnaam: String, telefoonnummer: String, voorletters: String, voornamen: String): UpdateGebruiker
 }
 
 "The root of all queries "

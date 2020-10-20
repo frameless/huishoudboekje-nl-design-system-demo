@@ -16,7 +16,7 @@ import {IGebruiker} from "../../models";
 // }
 
 const GebruikerCard: React.FC<BoxProps & { gebruiker: IGebruiker, showBadge?: boolean }> = ({gebruiker, showBadge = false, ...props}) => {
-	const name = `${gebruiker.burger.voornamen} ${gebruiker.burger.achternaam}`;
+	const name = `${gebruiker.voornamen} ${gebruiker.achternaam}`;
 	const {push} = useHistory();
 	const isMobile = useIsMobile(450);
 

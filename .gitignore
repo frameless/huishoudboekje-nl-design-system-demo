@@ -21,3 +21,4 @@ __pycache__
 helm/repo
 helm/**/*.tgz
 helm/charts/**/theme
+environment.env

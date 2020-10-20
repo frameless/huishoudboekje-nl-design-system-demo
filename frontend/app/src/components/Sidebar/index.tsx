@@ -17,13 +17,15 @@ const Sidebar: React.FC<BoxProps> = (props) => {
 			<SidebarLink href={Routes.Balances} icon={RiShoppingCart2Line}>{t("balances.balances")}</SidebarLink>
 			<SidebarLink href={Routes.Banking} icon={MdCreditCard}>{t("banking.banking")}</SidebarLink>
 
-			{isDev && (<>
-				<Divider />
+			{isDev && (
 				<Stack spacing={5}>
-					<Heading size={"xs"}>Developer menu</Heading>
-					<SidebarLink as="a" cursor="pointer" href={Routes.GraphiQL} onClick={() => window.open("/api/graphql")} icon={GrGraphQl}>GraphiQL</SidebarLink>
+					<Divider />
+					<Stack spacing={5}>
+						<Heading size={"xs"}>Developer menu</Heading>
+						<SidebarLink as="a" cursor="pointer" href={Routes.GraphiQL} onClick={() => window.open(Routes.GraphiQL)} icon={GrGraphQl}>GraphiQL</SidebarLink>
+					</Stack>
 				</Stack>
-			</>)}
+			)}
 		</Stack>
 	);
 };

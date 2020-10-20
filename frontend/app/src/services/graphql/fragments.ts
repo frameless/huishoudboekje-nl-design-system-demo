@@ -1,28 +1,18 @@
 import {gql} from "@apollo/client";
 
-export const BurgerFragment = gql`
-    fragment Burger on Gebruiker {
-        burger {
-            achternaam
-            huisnummer
-            postcode
-            straatnaam
-            voorletters
-            voornamen
-            woonplaatsnaam
-        }
-    }
-`;
-
 export const GebruikerFragment = gql`
     fragment Gebruiker on Gebruiker {
         id
-        weergaveNaam
         email
-        geboortedatum
         telefoonnummer
+        voorletters
+        voornamen
+        achternaam
+        geboortedatum
+        straatnaam
+        huisnummer
+        postcode
+        plaatsnaam
         iban
-        ...Burger
     }
-    ${BurgerFragment}
 `;

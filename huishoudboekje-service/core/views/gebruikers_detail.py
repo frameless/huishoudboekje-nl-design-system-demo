@@ -1,15 +1,18 @@
 """ MethodView for /gebruiker/<gebruiker_id> path """
-from flask.views import MethodView
 from flask import request
+from flask.views import MethodView
 from flask_inputs import Inputs
 from flask_inputs.validators import JsonSchema
-from models.gebruiker import get_gebruiker
+
 from core.database import db
+from models.gebruiker import get_gebruiker
 from .gebruikers import gebruiker_schema
+
 
 class EditGebruikerInputs(Inputs):
     """ JSON validator for updating a Gebruiker """
     json = [JsonSchema(schema=gebruiker_schema)]
+
 
 class GebruikerDetailView(MethodView):
     """ Methods for /gebruiker/<gebruiker_id> path """
