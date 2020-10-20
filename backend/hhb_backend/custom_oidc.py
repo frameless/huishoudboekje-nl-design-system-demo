@@ -12,6 +12,7 @@ class CustomOidc(object):
   "http://hhb.minikube:3000": "http://hhb.minikube:3001/api/custom_oidc_callback"
 }
 """):
+        self.oidc = oidc
         self.flask_app = flask_app
         self.prefixes = json.loads(prefixes)
 
