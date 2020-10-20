@@ -46,7 +46,8 @@
         --set "dex.ingress.hosts[0]=$OIDC_HOST" \
         --set "dex.config.issuer=https://$OIDC_HOST" \
         --set "dex.config.staticClients[0].secret=${OIDC_SECRET}" \
-        --set "dex.config.staticClients[0].redirectURIs[0]=https://$HHB_HOST/api/oidc_callback"
+        --set "dex.config.staticClients[0].redirectURIs[0]=https://$HHB_HOST/api/custom_oidc_callback" \
+        --set "dex.config.staticClients[0].redirectURIs[1]=http://localhost:3000/api/custom_oidc_callback"
     - |
       FAILED=true
       for i in $(seq 1 8); do
