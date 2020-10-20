@@ -38,6 +38,16 @@ build-huishoudboekje-service:
   only:
     - branches@commonground/huishoudboekje/app-new
 
+# Build Organisatie Service
+build-organisatie-service:
+  stage: build
+  variables:
+    APP_NAME: organisatie-service
+    DIRECTORY: organisatie-service
+  extends: .build
+  only:
+    - branches@commonground/huishoudboekje/app-new
+
 # Build Docs
 build-docs:
   stage: build

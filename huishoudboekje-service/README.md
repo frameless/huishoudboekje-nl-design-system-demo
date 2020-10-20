@@ -28,9 +28,6 @@ Contains ORM models for Huishoudboekje Service
 #### migrations
 Database migration schema
 
-#### database
-Non functional Flask app, functions as a manager app for database migrations
-
 ##### Create new migration
 ```shell script
 python manage.py db migrate
@@ -50,7 +47,7 @@ Prerequisites:
 
 ```shell script
 export FLASK_APP="core.app"
-export FLASK_RUN_PORT="5001"
+export FLASK_RUN_PORT="8000"
 export FLASK_ENV="development"
 export HHB_SECRET="local-secret"
 export HHB_DATABASE_URL="postgresql://huishoudboekjeservice:huishoudboekjeservice@localhost/huishoudboekjeservice"

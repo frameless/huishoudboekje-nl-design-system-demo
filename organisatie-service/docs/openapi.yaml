@@ -1,0 +1,140 @@
+openapi: 3.0.0
+info:
+  version: 0.1.0
+  title: Organisatie Service
+  description: API voor het beheren van data van het organisatie NAW gegevens
+  
+paths:
+
+  # Organisatie views
+  /organisaties:
+    get:
+      description: Geeft organisaties met optioneel een filter op kvk nummers
+      parameters:
+        - name: filter_kvks
+          in: query
+          schema:
+            type: string
+            example: "123,456,789"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Organisatie'
+        '400':
+          description: Bad Request
+        '5XX':
+          description: Unexpected error.
+    post:
+      description: Voeg nieuw organisatie toe
+      parameters:
+        - name: kvk_nummer
+          required: true
+          in: query
+          schema:
+            type: integer
+            example: 12345
+        - name: naam
+          in: query
+          schema:
+            type: string
+            example: "Test Bedrijf"
+        - name: straatnaam
+          in: query
+          schema:
+            type: string
+            example: "Schoolstraat"
+        - name: huisnummer
+          in: query
+          schema:
+            type: string
+            example: "1"
+        - name: postcode
+          in: query
+          schema:
+            type: string
+            example: "1234AB"
+        - name: plaatsnaam
+          in: query
+          schema:
+            type: string
+            example: "Sloothuizen"
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organisatie'
+        '400':
+          description: Bad Request
+        '5XX':
+          description: Unexpected error.
+
+  /organisaties/<kvk_nummer/:
+    get:
+      description: Data van enkele organisatie
+      responses:
+        '200':
+          description: Accepted
+        '404':
+          description: Not Found
+        '5XX':
+          description: Unexpected error.
+    post:
+      description: Update een bestaande organisatie
+      responses:
+        '202':
+          description: Accepted
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+        '5XX':
+          description: Unexpected error.
+    delete:
+      description: Verwijder organisatie uit organisatie service
+      parameters:
+        - name: kvk_nummer
+          required: true
+          in: query
+          schema:
+            type: integer
+            example: 12345
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+        '5XX':
+          description: Unexpected error.
+
+components:
+  schemas:
+    Organisatie:
+      type: object
+      properties:
+        naam:
+          type: string
+          example: "Test Organisatie"
+        kvk_nummer:
+          type: integer
+          example: 12345        
+        straatnaam:
+          type: string
+          example: "Schoolstraat"
+        huisnummer:
+          type: string
+          example: "1a"
+        postcode:
+          type: string
+          example: "1234AB"
+        plaatsnaam:
+          type: string
+          example: "Sloothuizen"

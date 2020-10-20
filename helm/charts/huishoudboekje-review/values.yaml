@@ -53,6 +53,7 @@ database:
 
   databases:
     - huishoudboekjeservice
+    - organisatieservice
 
 medewerker-backend:
   serviceChartPrefix: huishoudboekje
@@ -61,3 +62,8 @@ huishoudboekje-service:
   database:
     service: huishoudboekje-database
     name: huishoudboekjeservice
+
+organisatie-service:
+  database:
+    service: huishoudboekje-database
+    name: organisatieservice

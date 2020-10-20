@@ -11,11 +11,16 @@ database:
   nameOverride: "huishoudboekje"
 
   databases:
-    - huishoudboekje_service
-    - organisaties
+    - huishoudboekjeservice
+    - organisatieservice
     - afspraken
 
 huishoudboekje-service:
   database:
     service: huishoudboekje-database
     name: huishoudboekjeservice
+
+organisatie-service:
+  database:
+    service: huishoudboekje-database
+    name: organisatieservice
