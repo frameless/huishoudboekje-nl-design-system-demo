@@ -43,7 +43,13 @@ spec:
               value: /opt/etc/oidc/client_secrets.json
             - name: OVERWITE_REDIRECT_URI_MAP
               value: |-
-                {{ .Values.oidc.redirectUris | toJson }}
+                {{- $result := dict -}}
+                {{- range $item := .Values.oidc.redirectUris -}}
+                {{- $key := get $item "prefix" -}}
+                {{- $value := get $item "callback" -}}
+                {{- $result = set $result $key $value -}}
+                {{- end }}
+                {{- toPrettyJson $result | nindent 16 }}
             - name: HHB_SERVICE_URL
               value: {{ printf "http://%s" (include "medewerker-backend.huishoudboekjeServiceName" .) }}
             - name: ORGANISATIE_SERVICE_URL
@@ -90,6 +96,14 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
 ---
+{{- define "redirectUris" -}}
+  {{- $result := list -}}
+  {{- range $item := . -}}
+  {{- $value := get $item "callback" -}}
+  {{- $result = append $result $value -}}
+  {{- end }}
+  {{- toJson $result -}}
+{{- end -}}
 apiVersion: v1
 kind: Secret
 metadata:
@@ -105,7 +119,13 @@ stringData:
         "client_id": "{{ .Values.oidc.clientId }}",
         "client_secret": "{{ .Values.oidc.clientSecret }}",
         "issuer": "{{ .Values.oidc.issuer }}",
-        "redirect_uris": {{ .Values.oidc.redirectUris | values | toJson }},
+        "redirect_uris":
+          {{- $result := list -}}
+          {{- range $item := .Values.oidc.redirectUris -}}
+          {{- $value := get $item "callback" -}}
+          {{- $result = append $result $value -}}
+          {{- end -}}
+          {{- toPrettyJson $result | nindent 10 -}},
         "token_uri": "{{.Values.oidc.tokenUri}}",
         "token_introspection_uri": "{{.Values.oidc.tokeninfoUri}}",
         "userinfo_uri": "{{.Values.oidc.userinfoUri}}"

@@ -36,7 +36,10 @@
         --set "medewerker-backend.oidc.issuer=https://$OIDC_HOST" \
         --set "medewerker-backend.oidc.clientSecret=${OIDC_SECRET}" \
         --set "medewerker-backend.oidc.authorizationEndpoint=https://$OIDC_HOST/auth" \
-        --set "medewerker-backend.oidc.redirectUris[0]=https://$HHB_HOST/api/custom_oidc_callback" \
+        --set "medewerker-backend.oidc.redirectUris[0].prefix=http://localhost:3000" \
+        --set "medewerker-backend.oidc.redirectUris[0].callback=http://localhost:3000/api/custom_oidc_callback" \
+        --set "medewerker-backend.oidc.redirectUris[1].prefix=https://$HHB_HOST" \
+        --set "medewerker-backend.oidc.redirectUris[1].callback=https://$HHB_HOST/api/custom_oidc_callback" \
         --set "medewerker-backend.oidc.tokenUri=https://$OIDC_HOST/token" \
         --set "medewerker-backend.oidc.tokeninfoUri=https://$OIDC_HOST/tokeninfo" \
         --set "medewerker-backend.oidc.userinfoUri=https://$OIDC_HOST/userinfo" \

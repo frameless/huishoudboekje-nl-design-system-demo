@@ -59,8 +59,10 @@ medewerker-backend:
   serviceChartPrefix: huishoudboekje
   oidc:
     redirectUris:
-      "http://hhb.minikube": http://hhb.minikube/api/custom_oidc_callback
-      "http://localhost:3000": http://localhost:3000/api/custom_oidc_callback
+      - prefix: http://localhost:3000
+        callback: http://localhost:3000/api/custom_oidc_callback
+      - prefix: http://hhb.minikube
+        callback: http://hhb.minikube/api/custom_oidc_callback
 
 
 huishoudboekje-service:
