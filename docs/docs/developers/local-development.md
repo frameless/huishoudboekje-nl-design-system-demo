@@ -18,7 +18,7 @@ docker-compose -f ./docker-compose.dev.yaml up -d
 cd backend
 conda env create -f /path/to/environment.yml
 cd app
-export OIDC_REDIRECT_URI=http://localhost:3000/api/oidc_callback
+export OIDC_REDIRECT_URI=http://localhost:3000/api/custom_oidc_callback
 ./main.py
 ```
 
