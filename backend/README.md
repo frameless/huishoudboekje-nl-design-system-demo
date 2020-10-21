@@ -32,8 +32,7 @@ export FLASK_ENV="development"
 export FLASK_RUN_PORT="5000"
 export APP_SETTINGS="hhb_backend.config.DevelopmentConfig"
 export PREFIX=/api
-export OIDC_CLIENT_SECRETS=etc/hhb-test.client_secrets.json
-export OIDC_REDIRECT_URI="http://localhost:3000/api/oidc_callback"
+export OIDC_REDIRECT_URI="http://localhost:3000/api/custom_oidc_callback"
 export HHB_SERVICE_URL=http://localhost:8000
 export ORGANISATIE_SERVICE_URL=http://localhost:8001
 

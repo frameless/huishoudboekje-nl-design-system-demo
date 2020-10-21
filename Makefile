@@ -4,7 +4,7 @@ REGISTRY_PREFIX := registry.gitlab.com/commonground/huishoudboekje/app-new
 CHART_DEPENDENCIES := $(shell find helm -name 'Chart.yaml' | xargs grep -l 'dependencies:')
 NAMESPACE := huishoudboekje
 RELEASE := huishoudboekje
-MODULES := backend frontend huishoudboekje-service
+MODULES := backend frontend huishoudboekje-service organisatie-service
 
 # Main target to build and deploy Huishoudboekje locally
 .PHONY: all
@@ -41,7 +41,6 @@ postgres-operator: helm/postgres-operator.yaml helm-init
 huishoudboekje: helm/charts/huishoudboekje-review helm-init postgres-operator $(MODULES)
 	helm upgrade --install --create-namespace --namespace $@ \
 		$@ $< \
-		--debug \
 		--set database.traefik.enabled=true \
 		--set global.minikube=true \
 		--set global.imageTag=$(DOCKER_TAG) \
