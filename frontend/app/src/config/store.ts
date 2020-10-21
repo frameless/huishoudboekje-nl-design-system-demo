@@ -13,10 +13,8 @@ const User = types.model("User", {
 
 const Session = types.model({
 	user: types.maybeNull(User),
-	referer: types.maybeNull(types.string),
 }).actions(self => ({
 	setUser: (user) => self.user = user,
-	setReferer: (referer) => self.referer = referer,
 	reset: () => self.user = null
 }));
 

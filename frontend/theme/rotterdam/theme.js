@@ -1,3 +1,5 @@
+const tenantName = "Gemeente Rotterdam";
+
 const primary = {
 	50: "#e2fdec",
 	100: "#bdf2cf",
@@ -25,6 +27,7 @@ const secondary = {
 };
 
 window.branding = {
+	tenantName,
 	colors: {
 		primary,
 		secondary,

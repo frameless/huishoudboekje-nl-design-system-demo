@@ -1,3 +1,5 @@
+const tenantName = "Gemeente Utrecht";
+
 const primary = {
 	50: "#ffe1e1",
 	100: "#ffb1b1",
@@ -25,6 +27,7 @@ const secondary = {
 };
 
 window.branding = {
+	tenantName,
 	colors: {
 		primary,
 		secondary,

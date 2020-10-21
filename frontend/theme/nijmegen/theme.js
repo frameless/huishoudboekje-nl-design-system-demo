@@ -1,3 +1,5 @@
+const tenantName = "Gemeente Nijmegen";
+
 const primary = {
 	50: "#ffe2f1",
 	100: "#ffb1cf",
@@ -25,6 +27,7 @@ const secondary = {
 };
 
 window.branding = {
+	tenantName,
 	colors: {
 		primary,
 		secondary,

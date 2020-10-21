@@ -5,7 +5,7 @@ if (!window["branding"]) {
 	throw new Error("Couldn't find tenant theme.");
 }
 
-const colors = window["branding"].colors;
+const {colors, tenantName} = window["branding"];
 
 const theme = {
 	...chakraTheme,
@@ -13,6 +13,7 @@ const theme = {
 		...chakraTheme.colors,
 		...colors,
 	},
+	tenantName,
 };
 
 export default theme;
