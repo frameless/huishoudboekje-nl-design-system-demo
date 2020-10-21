@@ -96,14 +96,6 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
 ---
-{{- define "redirectUris" -}}
-  {{- $result := list -}}
-  {{- range $item := . -}}
-  {{- $value := get $item "callback" -}}
-  {{- $result = append $result $value -}}
-  {{- end }}
-  {{- toJson $result -}}
-{{- end -}}
 apiVersion: v1
 kind: Secret
 metadata:

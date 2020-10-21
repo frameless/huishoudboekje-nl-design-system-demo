@@ -29,12 +29,10 @@ class CustomOidc(object):
                 if 'HTTP_REFERER' in request.environ:
                     referer = request.environ.get('HTTP_REFERER')
                     for key, value in self.prefixes.items():
-                        # logging.info("%s -> %s" % (key, value))
                         if referer.startswith(key):
-                            logging.info("OidcRedirectRouter.require_login OVERWRITE_REDIRECT_URI -> %s" % (value))
+                            logging.debug("OidcRedirectRouter.require_login OVERWRITE_REDIRECT_URI -> %s" % (value))
                             self.flask_app.config['OVERWRITE_REDIRECT_URI'] = value
                             destination = "%s%s" % (key, request.environ.get('RAW_URI'))
-                logging.info("OidcRedirectRouter.require_login destination=%s" % (destination))
 
                 return self.oidc.redirect_to_auth_server(request.url, destination)
             return view_func(*args, **kwargs)

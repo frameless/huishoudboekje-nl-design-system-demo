@@ -32,10 +32,8 @@ export FLASK_ENV="development"
 export FLASK_RUN_PORT="5000"
 export APP_SETTINGS="hhb_backend.config.DevelopmentConfig"
 export PREFIX=/api
-export OIDC_REDIRECT_URI="http://localhost:3000/api/custom_oidc_callback"
 export HHB_SERVICE_URL=http://localhost:8000
 export ORGANISATIE_SERVICE_URL=http://localhost:8001
-
 
 flask run
 ```

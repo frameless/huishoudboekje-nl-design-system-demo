@@ -44,10 +44,10 @@ huishoudboekje: helm/charts/huishoudboekje-review helm-init postgres-operator $(
 		--set database.traefik.enabled=true \
 		--set global.minikube=true \
 		--set global.imageTag=$(DOCKER_TAG) \
-    	--set "medewerker-backend.oidc.redirectUris[0].prefix=http://localhost:3000" \
-    	--set "medewerker-backend.oidc.redirectUris[0].callback=http://localhost:3000/api/custom_oidc_callback" \
-    	--set "medewerker-backend.oidc.redirectUris[1].prefix=http://hhhb.minikube" \
-    	--set "medewerker-backend.oidc.redirectUris[1].callback=http://hhhb.minikube/api/custom_oidc_callback" \
+		--set "medewerker-backend.oidc.redirectUris[0].prefix=http://localhost:3000" \
+		--set "medewerker-backend.oidc.redirectUris[0].callback=http://localhost:3000/api/custom_oidc_callback" \
+		--set "medewerker-backend.oidc.redirectUris[1].prefix=http://hhhb.minikube" \
+		--set "medewerker-backend.oidc.redirectUris[1].callback=http://hhhb.minikube/api/custom_oidc_callback" \
 		--render-subchart-notes
 
 helm/charts/%: helm/charts/%/Chart.lock
