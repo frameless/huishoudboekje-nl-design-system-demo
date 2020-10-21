@@ -31,13 +31,6 @@ const App = () => {
 		session.reset();
 	};
 
-	useEffect(() => {
-		// As long as logging in via Dex on localhost doesn't work, we just use the first user in sampleData and auto-login with that.
-		if (isDev) {
-			session.setUser(sampleData.users[0]);
-		}
-	}, [session]);
-
 	return (
 		<Switch>
 			<Route path={Routes.Login} component={LoginPage} />
