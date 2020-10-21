@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer, String, Sequence, Date
 from flask import abort, make_response
+from sqlalchemy.orm import relationship
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.orm import relationship
 from core.database import db
@@ -27,6 +28,7 @@ class Gebruiker(db.Model):
     iban = Column(String)
 
     # Relations from other models
+    rekeningen = relationship("Rekening", back_populates="rekening")
     afspraken = relationship("Afspraak")
 
     def to_dict(self):
