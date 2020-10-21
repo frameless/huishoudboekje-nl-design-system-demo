@@ -41,8 +41,15 @@ spec:
               value: /api
             - name: OIDC_CLIENT_SECRETS
               value: /opt/etc/oidc/client_secrets.json
-            - name: OIDC_REDIRECT_URI
-              value: "{{ .Values.oidc.redirectUri}}"
+            - name: OVERWITE_REDIRECT_URI_MAP
+              value: |-
+                {{- $result := dict -}}
+                {{- range $item := .Values.oidc.redirectUris -}}
+                {{- $key := get $item "prefix" -}}
+                {{- $value := get $item "callback" -}}
+                {{- $result = set $result $key $value -}}
+                {{- end }}
+                {{- toPrettyJson $result | nindent 16 }}
             - name: HHB_SERVICE_URL
               value: {{ printf "http://%s" (include "medewerker-backend.huishoudboekjeServiceName" .) }}
             - name: ORGANISATIE_SERVICE_URL
@@ -104,9 +111,13 @@ stringData:
         "client_id": "{{ .Values.oidc.clientId }}",
         "client_secret": "{{ .Values.oidc.clientSecret }}",
         "issuer": "{{ .Values.oidc.issuer }}",
-        "redirect_uris": [
-            "{{ .Values.oidc.redirectUri}}"
-        ],
+        "redirect_uris":
+          {{- $result := list -}}
+          {{- range $item := .Values.oidc.redirectUris -}}
+          {{- $value := get $item "callback" -}}
+          {{- $result = append $result $value -}}
+          {{- end -}}
+          {{- toPrettyJson $result | nindent 10 -}},
         "token_uri": "{{.Values.oidc.tokenUri}}",
         "token_introspection_uri": "{{.Values.oidc.tokeninfoUri}}",
         "userinfo_uri": "{{.Values.oidc.userinfoUri}}"
