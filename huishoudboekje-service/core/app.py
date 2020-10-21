@@ -5,7 +5,8 @@ from core.views import (
     GebruikerView,
     GebruikerDetailView,
     OrganisatieView,
-    AfspraakView
+    AfspraakView,
+    RekeningView
 )
 from core import database, config
 db = database.db
