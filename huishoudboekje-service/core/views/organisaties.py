@@ -82,7 +82,7 @@ class OrganisatieView(MethodView):
         try:
             db.session.commit()
         except IntegrityError:
-            return {"errors":["kvk_number already excists"]}, 409
+            return {"errors":["kvk_number already exists"]}, 409
         return {"data": organisatie.to_dict()}, response_code
 
     def delete(self, organisatie_id=None):
