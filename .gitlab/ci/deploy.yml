@@ -185,7 +185,6 @@ docs-deploy-proddemo:
     GIT_STRATEGY: none
     KUBECONFIG: /secrets/kubeconfig/review.conf
   script:
-    - helm uninstall --namespace $REVIEW_NAMESPACE postgres-operator
     - kubectl delete namespace $REVIEW_NAMESPACE
   when: manual
   environment:
@@ -198,6 +197,8 @@ destroy-app:
   extends: .destroy
   environment:
     name: $CI_COMMIT_REF_SLUG
+  before_script:
+    - helm uninstall --namespace $REVIEW_NAMESPACE postgres-operator
   except:
     - master
     - develop
