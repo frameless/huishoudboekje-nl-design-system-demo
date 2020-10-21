@@ -1,0 +1,28 @@
+[
+  {
+    "id": 21,
+    "weergaveNaam": "Kok B.V.",
+    "kvkNummer": "47133406",
+    "kvkDetails": {
+      "naam": "Kok B.V.",
+      "nummer": "47133406",
+      "straatnaam": "Thijsweg",
+      "huisnummer": "86",
+      "postcode": "1463LJ",
+      "plaatsnaam": "Vos aan de Rijn"
+    }
+  },
+  {
+    "id": 22,
+    "weergaveNaam": "Dam V.O.F.",
+    "kvkNummer": "39955234",
+    "kvkDetails": {
+      "naam": "Dam V.O.F.",
+      "nummer": "39955234",
+      "straatnaam": "Lottelaan",
+      "huisnummer": "70",
+      "postcode": "9174XJ",
+      "plaatsnaam": "GrootEmmaveen"
+    }
+  }
+]

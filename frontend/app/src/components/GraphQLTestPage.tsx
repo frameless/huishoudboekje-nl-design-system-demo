@@ -19,7 +19,7 @@ const GetGebruikers: React.FC<BoxProps> = (props) => {
 			)}
 			{!loading && error && (
 				<Box overflowX={"hidden"}>
-					<pre>{JSON.stringify(error, null, 2)}</pre>
+					<pre className="result">{JSON.stringify(error, null, 2)}</pre>
 				</Box>
 			)}
 		</Stack>
