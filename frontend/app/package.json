@@ -52,8 +52,7 @@
     "react-icons": "^3.11.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
-    "typescript": "^3.7.5",
-    "use-http": "^1.0.15"
+    "typescript": "^3.7.5"
   },
   "devDependencies": {
     "@types/react-router-dom": "^5.1.6",

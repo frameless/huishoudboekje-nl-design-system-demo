@@ -1,3 +1,6 @@
+// This is the name of your application. It will appear in the application in various messages.
+const tenantName = "Gemeente Sloothuizen";
+
 const primary = {
 	50: "#e7e4ff",
 	100: "#b7b3ff",
@@ -25,6 +28,7 @@ const secondary = {
 };
 
 window.branding = {
+	tenantName,
 	colors: {
 		primary,
 		secondary,

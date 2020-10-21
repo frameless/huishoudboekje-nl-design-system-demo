@@ -29,6 +29,8 @@
       "description": "Er is een onbekende fout opgetreden. Probeer het later nog eens."
     },
     "login": {
+      "welcome": "Welkom bij het Huishoudboekje van {{tenantName}}.",
+      "clickHereToContinue": "Klik hieronder op inloggen om te beginnen.",
       "invalidCredentialsError": "Onjuiste combinatie e-mailadres en wachtwoord."
     },
     "burgers": {
