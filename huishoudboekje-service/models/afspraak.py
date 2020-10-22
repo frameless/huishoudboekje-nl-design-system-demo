@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Sequence, Date, Boolean, ForeignKey
+from sqlalchemy import Column, Integer, String, Sequence, Date, Boolean, ForeignKey, Float
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm.exc import NoResultFound
 from flask import abort, make_response
@@ -17,7 +17,7 @@ class Afspraak(db.Model):
     interval = Column(String)
     #tegen_rekening_id = Column(Integer, ForeignKey('rekeningen.id'))
     #tegen_rekening = relationship("Rekening", back_populates="afspraken")
-    bedrag = Column(String)
+    bedrag = Column(Float)
     credit = Column(Boolean)
     kenmerk = Column(String)
     actief = Column(Boolean)

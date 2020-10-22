@@ -26,7 +26,7 @@ def upgrade():
     sa.Column('eind_datum', sa.Date(), nullable=True),
     sa.Column('aantal_betalingen', sa.Integer(), nullable=True),
     sa.Column('interval', sa.String(), nullable=True),
-    sa.Column('bedrag', sa.String(), nullable=True),
+    sa.Column('bedrag', sa.Float(), nullable=True),
     sa.Column('credit', sa.Boolean(), nullable=True),
     sa.Column('kenmerk', sa.String(), nullable=True),
     sa.Column('actief', sa.Boolean(), nullable=True),

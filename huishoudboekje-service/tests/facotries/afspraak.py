@@ -17,7 +17,7 @@ class AfspraakFactory():
         start_datum: date = date(2020, 10, 1),
         eind_datum: date = date(2020, 10, 1),
         aantal_betalingen: int = 5,
-        interval: str = "",
+        interval: str = "P1Y2M10DT2H30M",
         #tegen_rekening=None,
         bedrag: float = 13.37,
         credit: bool = True,

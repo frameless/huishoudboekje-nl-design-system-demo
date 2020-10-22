@@ -19,10 +19,12 @@ afspraak_schema = {
             "type": "string",
         },
         "start_datum": {
-            "type": "date",
+            "type": "string",
+            "pattern": "^(?:[0-9]{4}-[0-9]{2}-[0-9]{2}|)$"
         },
         "eind_datum": {
-            "type": "date",
+            "type": "string",
+            "pattern": "^(?:[0-9]{4}-[0-9]{2}-[0-9]{2}|)$"
         },
         "aantal_betalingen": {
             "type": "integer",
@@ -31,16 +33,16 @@ afspraak_schema = {
             "type": "string",
         },
         "bedrag": {
-            "type": "float",
+            "type": "number",
         },
         "credit": {
-            "type": "bool",
+            "type": "boolean",
         },
         "kenmerk": {
             "type": "string",
         },
         "actief": {
-            "type": "bool",
+            "type": "boolean",
         },
     },
     "required": []
