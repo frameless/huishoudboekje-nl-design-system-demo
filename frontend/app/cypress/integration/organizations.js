@@ -3,43 +3,43 @@ import Routes from "../../src/config/routes";
 
 const sampleOrganizations = require("../fixtures/organizations.json");
 
-beforeEach(() => {
-	cy.task("getSchema").then(schema => {
-		cy.server();
-		cy.route2("GET", "/api/me", {
-			body: {
-				ok: true,
-			}
-		}).as("DexStub");
-		cy.mockGraphql({
-			schema,
-		});
-		cy.mockGraphqlOps({
-			delay: 1000,
-			operations: {
-				getAllOrganisaties: {
-					organisaties: sampleOrganizations,
-				},
-				getOneOrganisatie: {
-					organisatie: sampleOrganizations[0],
-				},
-				createOrganisatie: (props) => ({
-					ok: true,
-					organisatie: props
-				}),
-				updateOrganisatie: (props) => ({
-					ok: true,
-					organisatie: props
-				}),
-				deleteOrganisatie: {
+describe("Organizations CRUD", () => {
+	beforeEach(() => {
+		cy.task("getSchema").then(schema => {
+			cy.server();
+			cy.route2("GET", "/api/me", {
+				body: {
 					ok: true,
 				}
-			}
+			}).as("DexStub");
+			cy.mockGraphql({
+				schema,
+			});
+			cy.mockGraphqlOps({
+				delay: 1000,
+				operations: {
+					getAllOrganisaties: {
+						organisaties: sampleOrganizations,
+					},
+					getOneOrganisatie: {
+						organisatie: sampleOrganizations[0],
+					},
+					createOrganisatie: (props) => ({
+						ok: true,
+						organisatie: props
+					}),
+					updateOrganisatie: (props) => ({
+						ok: true,
+						organisatie: props
+					}),
+					deleteOrganisatie: {
+						ok: true,
+					}
+				}
+			});
 		});
 	});
-});
 
-describe("Organizations CRUD", () => {
 	it("Lists organizations", () => {
 		// Go to organizations list page
 		cy.visit(Routes.Organizations);

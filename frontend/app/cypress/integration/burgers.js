@@ -3,43 +3,44 @@ import Routes from "../../src/config/routes";
 
 const sampleBurgers = require("../fixtures/burgers.json");
 
-beforeEach(() => {
-	cy.task("getSchema").then(schema => {
-		cy.server();
-		cy.route2("GET", "/api/me", {
-			body: {
-				ok: true,
-			}
-		}).as("DexStub");
-		cy.mockGraphql({
-			schema,
-		});
-		cy.mockGraphqlOps({
-			delay: 1000,
-			operations: {
-				getAllGebruikers: {
-					gebruikers: sampleBurgers,
-				},
-				getOneGebruiker: {
-					gebruiker: sampleBurgers[0],
-				},
-				createGebruiker: (props) => ({
-					ok: true,
-					gebruiker: props
-				}),
-				updateGebruiker: (props) => ({
-					ok: true,
-					gebruiker: props
-				}),
-				deleteGebruiker: {
-					ok: true,
-				}
-			}
-		});
-	});
-});
 
 describe("Burgers CRUD", () => {
+	beforeEach(() => {
+		cy.task("getSchema").then(schema => {
+			cy.server();
+			cy.route2("GET", "/api/me", {
+				body: {
+					ok: true,
+				}
+			}).as("DexStub");
+			cy.mockGraphql({
+				schema,
+			});
+			cy.mockGraphqlOps({
+				delay: 1000,
+				operations: {
+					getAllGebruikers: {
+						gebruikers: sampleBurgers,
+					},
+					getOneGebruiker: {
+						gebruiker: sampleBurgers[0],
+					},
+					createGebruiker: (props) => ({
+						ok: true,
+						gebruiker: props
+					}),
+					updateGebruiker: (props) => ({
+						ok: true,
+						gebruiker: props
+					}),
+					deleteGebruiker: {
+						ok: true,
+					}
+				}
+			});
+		});
+	});
+
 	it("Lists burgers", () => {
 		// Go to burgers list page
 		cy.visit(Routes.Citizens);
