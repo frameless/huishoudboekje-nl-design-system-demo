@@ -1,4 +1,4 @@
-""" MethodView for /gebruiker/<gebruiker_id>/burger/ path """
+""" MethodView for /organisaties/<organisatie_id>/ path """
 from flask.views import MethodView
 from flask import request
 from flask_inputs import Inputs

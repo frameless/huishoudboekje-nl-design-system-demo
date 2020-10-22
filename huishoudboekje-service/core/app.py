@@ -4,7 +4,8 @@ from flask import Flask, Response
 from core.views import (
     GebruikerView,
     GebruikerDetailView,
-    OrganisatieView
+    OrganisatieView,
+    AfspraakView
 )
 from core import database, config
 db = database.db
@@ -39,6 +40,16 @@ def create_app(config_name=os.getenv('APP_SETTINGS', 'core.config.DevelopmentCon
     app.add_url_rule(
         '/organisaties/<organisatie_id>',
         view_func=OrganisatieView.as_view('organisatie_detail_view'),
+        strict_slashes=False
+    )
+    app.add_url_rule(
+        '/afspraken',
+        view_func=AfspraakView.as_view('afspraak_view'),
+        strict_slashes=False
+    )
+    app.add_url_rule(
+        '/afspraken/<afspraak_id>',
+        view_func=AfspraakView.as_view('afspraak_detail_view'),
         strict_slashes=False
     )
     return app

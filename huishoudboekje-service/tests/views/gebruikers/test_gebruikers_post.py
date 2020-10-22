@@ -23,8 +23,7 @@ def test_gebruikers_post_success(app):
                                      'telefoonnummer': '0612345678',
                                      'voorletters': None,
                                      'voornamen': None,
-                                     'weergave_naam': None,
-                                     'woonplaatsnaam': None}
+                                     'plaatsnaam': None}
 
 
 def test_gebruikers_post_input_json_validation_invalid_geboortedatum(app):

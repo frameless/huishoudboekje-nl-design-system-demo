@@ -1,4 +1,5 @@
 """ Factories to generate objects within a test scope """
+import pytest
 from models.organisatie import Organisatie
 
 class OrganisatieFactory():
@@ -18,3 +19,10 @@ class OrganisatieFactory():
         self.dbsession.add(organisatie)
         self.dbsession.flush()
         return organisatie
+
+@pytest.fixture(scope="function")
+def organisatie_factory(session, request):
+    """
+    creates an instance of the OrganisatieFactory with function scope dbsession
+    """
+    return OrganisatieFactory(session)
