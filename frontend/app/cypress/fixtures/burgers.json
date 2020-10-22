@@ -1,0 +1,30 @@
+[
+  {
+    "id": 38,
+    "telefoonnummer": "0650213031",
+    "email": "co.goosen@example.com",
+    "geboortedatum": "1976-12-10",
+    "iban": null,
+    "achternaam": "Goosen",
+    "huisnummer": "85",
+    "postcode": "3636KF",
+    "straatnaam": "Zakkenheuvel",
+    "voorletters": "C.",
+    "voornamen": "Co",
+    "plaatsnaam": "Tussenwater"
+  },
+  {
+    "id": 39,
+    "telefoonnummer": "0667821736",
+    "email": "lotte.boerman@example.com",
+    "geboortedatum": "1967-03-28",
+    "iban": null,
+    "achternaam": "Boerman",
+    "huisnummer": "65",
+    "postcode": "1344EH",
+    "straatnaam": "Haganlaan",
+    "voorletters": "L.O.",
+    "voornamen": "Lotte",
+    "plaatsnaam": "Sloothuizen"
+  }
+]
