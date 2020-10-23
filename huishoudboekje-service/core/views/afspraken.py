@@ -1,59 +1,55 @@
 """ MethodView for /afspraken/<afspraak_id>/ path """
-from flask.views import MethodView
-from flask import request, abort, make_response
 from flask_inputs import Inputs
 from flask_inputs.validators import JsonSchema
-from sqlalchemy.orm.exc import NoResultFound
-from sqlalchemy.exc import IntegrityError
 from models.afspraak import Afspraak
-from core.database import db
 from core.utils import row2dict
+from core.views.hhb_view import HHBView
 
-afspraak_schema = {
-    "type": "object",
-    "properties": {
-        "gebruiker_id": {
-            "type": "integer",
-        },
-        "beschijving": {
-            "type": "string",
-        },
-        "start_datum": {
-            "type": "string",
-            "pattern": "^(?:[0-9]{4}-[0-9]{2}-[0-9]{2}|)$"
-        },
-        "eind_datum": {
-            "type": "string",
-            "pattern": "^(?:[0-9]{4}-[0-9]{2}-[0-9]{2}|)$"
-        },
-        "aantal_betalingen": {
-            "type": "integer",
-        },
-        "interval": {
-            "type": "string",
-        },
-        "bedrag": {
-            "type": "number",
-        },
-        "credit": {
-            "type": "boolean",
-        },
-        "kenmerk": {
-            "type": "string",
-        },
-        "actief": {
-            "type": "boolean",
-        },
-    },
-    "required": []
-}
-
-class AfspraakInputs(Inputs):
+class InputValidator(Inputs):
     """ JSON validator for creating and editing a Afspraak """
-    json = [JsonSchema(schema=afspraak_schema)]
+    json = [JsonSchema(schema={
+        "type": "object",
+        "properties": {
+            "gebruiker_id": {
+                "type": "integer",
+            },
+            "beschijving": {
+                "type": "string",
+            },
+            "start_datum": {
+                "type": "string",
+                "pattern": "^(?:[0-9]{4}-[0-9]{2}-[0-9]{2}|)$"
+            },
+            "eind_datum": {
+                "type": "string",
+                "pattern": "^(?:[0-9]{4}-[0-9]{2}-[0-9]{2}|)$"
+            },
+            "aantal_betalingen": {
+                "type": "integer",
+            },
+            "interval": {
+                "type": "string",
+            },
+            "bedrag": {
+                "type": "number",
+            },
+            "credit": {
+                "type": "boolean",
+            },
+            "kenmerk": {
+                "type": "string",
+            },
+            "actief": {
+                "type": "boolean",
+            },
+        },
+        "required": []
+    })]
 
-class AfspraakView(MethodView):
+class AfspraakView(HHBView):
     """ Methods for /afspraken/ path """
+
+    hhb_model = Afspraak
 
     def get(self, afspraak_id=None):
         """ GET /afspraken/(<int:afspraak_id>?(columns=..,..,..)&(filter_ids=..,..,..))
@@ -70,38 +66,12 @@ class AfspraakView(MethodView):
             400 {"errors": ["Input for filter_ids is not correct, '...' is not a number."]}
             400 {"errors": ["Input for columns is not correct, '...' is not a column."]}
         """
-        afspraak_query = Afspraak.query
-
-        # Filter on columns
-        columns = request.args.get('columns')
-        if columns:
-            column_filter = []
-            for column_name in columns.split(","):
-                if column_name not in Afspraak.__table__.columns.keys():
-                    return {"errors": [f"Input for columns is not correct, '{column_name}' is not a column."]}, 400
-                column_filter.append(Afspraak.__table__.columns[column_name])
-            afspraak_query = afspraak_query.with_entities(*column_filter)
-
-        # Filter on ids
-        filter_ids = request.args.get('filter_ids')
-        if filter_ids:
-            ids = []
-            for raw_id in filter_ids.split(","):
-                try:
-                    ids.append(int(raw_id))
-                except ValueError:
-                    return {"errors": [f"Input for filter_ids is not correct, '{raw_id}' is not a number."]}, 400
-            afspraak_query = afspraak_query.filter(Afspraak.id.in_(ids))
-
-        # Perform query and return the data
+        self.initialize_query()
+        self.add_filter_columns()
+        self.add_filter_filter_ids()
         if afspraak_id:
-            afspraak = afspraak_query.filter(Afspraak.id==afspraak_id).one_or_none()
-            if not afspraak:
-                return {"errors": ["Afspraak not found."]}, 404
-            return {"data": row2dict(afspraak)}, 200
-        return {"data": [row2dict(afspraak) for afspraak in afspraak_query.all()]}, 200
-        
-
+            return self.get_result_single(afspraak_id)
+        return self.get_result_multiple()
 
     def post(self, afspraak_id=None):
         """ POST /afspraken/(<int:afspraak_id>)
@@ -115,31 +85,10 @@ class AfspraakView(MethodView):
             404 {"errors": ["Afspraak not found."]}
             409 {"errors": [<database integrity error>]}
         """
-        # Validate input data
-        inputs = AfspraakInputs(request)
-        if not inputs.validate():
-            return {"errors": inputs.errors}, 400
-
-        # Create or Update
-        if afspraak_id:
-            # Update an Afspraak
-            afspraak = GetAfspraak(afspraak_id)
-            response_code = 202
-        else:
-            # Create an Afspraak
-            afspraak = Afspraak()
-            db.session.add(afspraak)
-            response_code = 201
-
-        # Add data to object
-        for key, value in request.json.items():
-            setattr(afspraak, key, value)
-
-        # Create or update the object in the database
-        try:
-            db.session.commit()
-        except IntegrityError as error:
-            return {"errors": [str(error)]}, 409
+        self.input_validate(InputValidator)
+        afspraak, response_code = self.get_or_create_object(afspraak_id)
+        afspraak = self.update_object_data_using_request(afspraak)
+        self.commit_database_changes()
         return {"data": row2dict(afspraak)}, response_code
 
     def delete(self, afspraak_id=None):
@@ -154,14 +103,9 @@ class AfspraakView(MethodView):
         """
         if not afspraak_id:
             return {"errors": ["Method not allowed"]}, 405
-        afspraak = GetAfspraak(afspraak_id)
-        db.session.delete(afspraak)
-        db.session.commit()
+        afspraak = self.get_object_or_404(afspraak_id)
+        self.delete_object(afspraak)
+        self.commit_database_changes()
         return {}, 202
 
-def GetAfspraak(afspraak_id: int):
-    """ Query database for a single Afspraak based on afspraak_id """
-    try:
-        return Afspraak.query.filter(Afspraak.id==afspraak_id).one()
-    except NoResultFound:
-        abort(make_response({"errors": ["Afspraak not found."]}, 404))
+

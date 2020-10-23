@@ -38,7 +38,7 @@ def test_organisaties_get_filter_ids(client, organisatie_factory):
     assert response.json["data"] == []
     response = client.get('/organisaties/?filter_ids=pietje')
     assert response.status_code == 400
-    assert response.json["errors"] == ["Input for filter_ids is not correct"]
+    assert response.json["errors"] == ["Input for filter_ids is not correct, 'pietje' is not a number."]
 
 def test_organisaties_get_filter_kvks(client, organisatie_factory):
     """ Test filter_kvks on organisaties """
