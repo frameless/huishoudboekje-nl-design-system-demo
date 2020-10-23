@@ -15,10 +15,10 @@ class Rekening(db.Model):
     rekeninghouder = Column(String, nullable=False)
 
     gebruiker_id = Column(Integer, ForeignKey('gebruikers.id'))
-    gebruiker = relationship("Gebruiker", back_populates="rekening")
+    gebruiker = relationship("Gebruiker", back_populates="rekeningen")
 
     organisatie_id = Column(Integer, ForeignKey('organisaties.id'))
-    organisatie = relationship("Organisatie", back_populates="rekening")
+    organisatie = relationship("Organisatie", back_populates="rekeningen")
 
     def to_dict(self):
         return {

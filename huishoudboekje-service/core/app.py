@@ -58,6 +58,11 @@ def create_app(config_name=os.getenv('APP_SETTINGS', 'core.config.DevelopmentCon
         view_func=RekeningView.as_view('rekening_view'),
         strict_slashes=False
     )
+    app.add_url_rule(
+        '/rekeningen/<rekening_id>',
+        view_func=RekeningView.as_view('rekening_detail_view'),
+        strict_slashes=False
+    )
     return app
 
 if __name__ == '__main__':
