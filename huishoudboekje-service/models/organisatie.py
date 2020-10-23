@@ -11,7 +11,7 @@ class Organisatie(db.Model):
     weergave_naam = Column(String)
     kvk_nummer = Column(String, unique=True)
 
-    rekeningen = relationship("Rekening", back_populates="organisatie")
+    rekeningen = relationship("RekeningOrganisatie", back_populates="organisatie")
 
     def to_dict(self):
         return {

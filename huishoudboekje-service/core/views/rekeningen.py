@@ -69,7 +69,7 @@ class RekeningView(MethodView):
         return {"data": [o.to_dict() for o in rekeningen.all()]}
 
     def post(self, rekening_id=None):
-        """ Create or update an Organisatie """
+        """ Create or update an Rekening """
         inputs = RekeningInputs(request)
         if not inputs.validate():
             return {"errors": inputs.errors}, 400

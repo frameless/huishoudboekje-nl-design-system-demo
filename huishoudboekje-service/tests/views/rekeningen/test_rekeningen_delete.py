@@ -2,10 +2,9 @@
 from models.rekening import Rekening
 
 
-def test_rekeningen_delete_success(client, session, rekening_factory, organisatie_factory):
+def test_rekeningen_delete_success(client, session, rekening_factory):
     """ Test a succesfull DELETE on rekeningen """
-    organisatie = organisatie_factory.createOrganisatie()
-    rekening = rekening_factory.create_organisatie_rekening(organisatie=organisatie)
+    rekening = rekening_factory.create_rekening()
     assert session.query(Rekening).count() == 1
     response = client.delete(f'/rekeningen/{rekening.id}')
     assert response.status_code == 202

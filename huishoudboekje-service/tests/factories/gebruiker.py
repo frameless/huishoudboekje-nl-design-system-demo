@@ -1,7 +1,10 @@
 """ Factories to generate objects within a test scope """
-import pytest
 from datetime import date
+
+import pytest
+
 from models.gebruiker import Gebruiker
+
 
 class GebruikerFactory():
     """ Factory for Gebruiker objects """
@@ -39,6 +42,7 @@ class GebruikerFactory():
         self.dbsession.add(gebruiker)
         self.dbsession.flush()
         return gebruiker
+
 
 @pytest.fixture(scope="function")
 def gebruiker_factory(session, request):

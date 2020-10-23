@@ -3,28 +3,7 @@ import json
 from models.rekening import Rekening
 
 
-def test_rekeningen_post_new_rekening(client, session, gebruiker_factory):
-    """ Test /rekeningen/ path """
-    gebruiker1 = gebruiker_factory.createGebruiker()
-    assert session.query(Rekening).count() == 0
-    rekening_dict = {
-        "iban": "GB33BUKB20201555555555",
-        "rekeninghouder": "C. Lown",
-        "gebruiker_id": 1,
-        "organisatie_id": None
-    }
-    response = client.post(
-        '/rekeningen/',
-        data=json.dumps(rekening_dict),
-        content_type='application/json'
-    )
-    assert response.status_code == 201
-    rekening_dict["id"] = 1
-    assert response.json["data"] == rekening_dict
-    assert session.query(Rekening).count() == 1
-
-
-def test_rekeningen_post_incorrect_rekening(client, session):
+def test_rekeningen_post_new_rekening(client, session):
     """ Test /rekeningen/ path """
     assert session.query(Rekening).count() == 0
     rekening_dict = {
@@ -36,14 +15,17 @@ def test_rekeningen_post_incorrect_rekening(client, session):
         data=json.dumps(rekening_dict),
         content_type='application/json'
     )
-    assert response.status_code == 409
-    assert response.json["errors"] == ['new row for relation "rekening" violates check constraint "rekening_check"']
+    assert response.status_code == 201
+    rekening_dict["id"] = 1
+    rekening_dict["gebruikers"] = []
+    rekening_dict["organisaties"] = []
+    assert response.json["data"] == rekening_dict
+    assert session.query(Rekening).count() == 1
 
 
-def test_rekeningen_post_update_rekening(client, session, rekening_factory, gebruiker_factory):
+def test_rekeningen_post_update_rekening(client, session, rekening_factory):
     """ Test /rekeningen/<rekening_id> path """
-    gebruiker1 = gebruiker_factory.createGebruiker()
-    rekening = rekening_factory.create_gebruiker_rekening(gebruiker=gebruiker1)
+    rekening = rekening_factory.create_rekening()
     update_dict = {
         "rekeninghouder": "S. Jansen"
     }
