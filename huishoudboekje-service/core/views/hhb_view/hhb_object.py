@@ -20,7 +20,6 @@ class HHBObject():
         else:
             self.hhb_object = self.hhb_model()
             db.session.add(self.hhb_object)
-            db.session.flush()
             response_code = 201
         return response_code
 
@@ -33,6 +32,8 @@ class HHBObject():
 
     def update_using_request_data(self):
         """ Add data to object based on request input """
+        print("updating data")
+        print(request.json)
         for key, value in request.json.items():
             setattr(self.hhb_object, key, value)
 

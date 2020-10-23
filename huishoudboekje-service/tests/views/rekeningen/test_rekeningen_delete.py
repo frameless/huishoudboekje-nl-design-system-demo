@@ -14,7 +14,7 @@ def test_rekeningen_delete_success(client, session, rekening_factory):
 def test_rekeningen_delete_bad_request(client):
     """ Test 400 error for DELETE on rekeningen """
     response = client.delete('/rekeningen/')
-    assert response.status_code == 400
+    assert response.status_code == 405
 
 
 def test_rekeningen_delete_rekening_not_found(client):

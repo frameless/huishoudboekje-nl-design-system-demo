@@ -17,8 +17,6 @@ def test_rekeningen_post_new_rekening(client, session):
     )
     assert response.status_code == 201
     rekening_dict["id"] = 1
-    rekening_dict["gebruikers"] = []
-    rekening_dict["organisaties"] = []
     assert response.json["data"] == rekening_dict
     assert session.query(Rekening).count() == 1
 

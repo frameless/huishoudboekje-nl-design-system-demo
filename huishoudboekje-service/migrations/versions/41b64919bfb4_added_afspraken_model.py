@@ -11,7 +11,7 @@ import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
 revision = '41b64919bfb4'
-down_revision = 'f53e311ed706'
+down_revision = '22ed5017fa8a'
 branch_labels = None
 depends_on = None
 
@@ -26,11 +26,13 @@ def upgrade():
     sa.Column('eind_datum', sa.Date(), nullable=True),
     sa.Column('aantal_betalingen', sa.Integer(), nullable=True),
     sa.Column('interval', sa.String(), nullable=True),
+    sa.Column('tegen_rekening_id', sa.Integer(), nullable=True),
     sa.Column('bedrag', sa.Float(), nullable=True),
     sa.Column('credit', sa.Boolean(), nullable=True),
     sa.Column('kenmerk', sa.String(), nullable=True),
     sa.Column('actief', sa.Boolean(), nullable=True),
     sa.ForeignKeyConstraint(['gebruiker_id'], ['gebruikers.id'], ),
+    sa.ForeignKeyConstraint(['tegen_rekening_id'], ['rekeningen.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
 

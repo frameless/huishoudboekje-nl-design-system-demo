@@ -26,6 +26,7 @@ def test_afspraken_post_new_afspraak(client, session):
     assert response.status_code == 201
     afspraak_dict["id"] = 1
     afspraak_dict["gebruiker_id"] = None
+    afspraak_dict["tegen_rekening_id"] = None
     assert response.json["data"] == afspraak_dict
     assert session.query(Afspraak).count() == 1
 

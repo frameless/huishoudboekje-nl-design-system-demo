@@ -82,9 +82,13 @@ class HHBView(MethodView):
             404 {"errors": ["Organisatie not found."]}
             409 {"errors": [<database integrity error>]}
         """
+        print("============")
+        print("POST")
         object_id = self.get_id_from_kwargs(**kwargs)
+        print(object_id)
         self.input_validate()
         response_code = self.hhb_object.get_or_create(object_id)
+        print("strating data update")
         self.hhb_object.update_using_request_data()
         self.hhb_object.commit_changes()
         return {"data": self.hhb_object.json}, response_code
