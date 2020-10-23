@@ -10,7 +10,6 @@ class HHBObject():
 
     def __init__(self, hhb_model):
         self.hhb_model = hhb_model
-        print(type(self.hhb_model))
         self.hhb_query = self.hhb_model.query
 
     def get_or_create(self, object_id: int):
@@ -51,4 +50,5 @@ class HHBObject():
 
     @property
     def json(self):
+        """ Convert object to json dict """
         return row2dict(self.hhb_object)

@@ -6,8 +6,6 @@ class HHBQuery():
     query = None
 
     def __init__(self, hhb_model):
-        print("=========================")
-        print(hhb_model)
         self.hhb_model = hhb_model
         self.query = self.hhb_model.query
 
@@ -18,7 +16,10 @@ class HHBQuery():
             column_filter = []
             for column_name in columns.split(","):
                 if column_name not in self.hhb_model.__table__.columns.keys():
-                    abort(make_response({"errors": [f"Input for columns is not correct, '{column_name}' is not a column."]}, 400))
+                    abort(make_response(
+                        {"errors": [
+                            f"Input for columns is not correct, '{column_name}' is not a column."
+                        ]}, 400))
                 column_filter.append(self.hhb_model.__table__.columns[column_name])
             self.query = self.query.with_entities(*column_filter)
 
@@ -32,7 +33,10 @@ class HHBQuery():
                 try:
                     ids.append(int(raw_id))
                 except ValueError:
-                    abort(make_response({"errors": [f"Input for filter_ids is not correct, '{raw_id}' is not a number."]}, 400))
+                    abort(make_response(
+                        {"errors": [
+                            f"Input for filter_ids is not correct, '{raw_id}' is not a number."
+                        ]}, 400))
             self.query = self.query.filter(self.hhb_model.id.in_(ids))
 
     def get_result_single(self, row_id):
