@@ -1,14 +1,16 @@
 import React from "react";
-import {Route} from "react-router-dom";
+import {Route, Switch} from "react-router-dom";
 import Routes from "../../config/routes";
 import BurgerList from "./BurgerList";
 import CreateBurger from "./CreateBurger";
 import BurgerDetail from "./BurgerDetail";
 
-const Citizens = () => (<>
-	<Route exact path={Routes.Citizens} component={BurgerList} />
-	<Route path={Routes.Citizens + "/:id(\\d+)"} component={BurgerDetail} />
-	<Route path={Routes.CitizenNew} exact component={CreateBurger} />
-</>);
+const Burgers = () => (
+	<Switch>
+		<Route exact path={Routes.Burgers} component={BurgerList} />
+		<Route path={Routes.Burgers + "/:id(\\d+)"} component={BurgerDetail} />
+		<Route path={Routes.CreateBurger} exact component={CreateBurger} />
+	</Switch>
+);
 
-export default Citizens;
+export default Burgers;

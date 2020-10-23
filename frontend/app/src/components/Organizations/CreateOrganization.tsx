@@ -53,7 +53,7 @@ const CreateOrganization = () => {
 	const [createOrganization, {loading}] = useMutation(CreateOrganizationMutation);
 
 	const prePopulateForm = () => {
-		const c = sampleData.organizations[Math.floor(Math.random() * sampleData.organizations.length)];
+		const c = sampleData.organisaties[Math.floor(Math.random() * sampleData.organisaties.length)];
 
 		kvkNumber.setValue(c.kvkNumber.toString());
 		companyName.setValue(c.companyName);
@@ -106,7 +106,7 @@ const CreateOrganization = () => {
 
 			const {id} = result.data.createOrganisatie.organisatie;
 			if (id) {
-				push(Routes.Organization(id));
+				push(Routes.Organisatie(id));
 			}
 		}).catch(err => {
 			console.log("Error:", err);

@@ -14,7 +14,7 @@ const NoOrganizationsFound = () => {
 			<Box as={EmptyIllustration} maxWidth={[200, 300, 400]} height={"auto"} />
 			<Text fontSize={"sm"}>{t("messages.organizations.addHint", {buttonLabel: t("buttons.organizations.createNew")})}</Text>
 			<Button size={"sm"} variantColor={"primary"} variant={"solid"} leftIcon={"add"}
-			        onClick={() => push(Routes.OrganizationNew)}>{t("buttons.organizations.createNew")}</Button>
+			        onClick={() => push(Routes.CreateOrganization)}>{t("buttons.organizations.createNew")}</Button>
 		</Stack>
 	);
 };

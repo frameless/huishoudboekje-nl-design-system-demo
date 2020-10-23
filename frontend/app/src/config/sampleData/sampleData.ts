@@ -1,4 +1,4 @@
 export const sampleData = {
-	citizens: require("./citizens.json"),
-	organizations: require("./organizations.json"),
+	burgers: require("./burgers.json"),
+	organisaties: require("./organisaties.json"),
 };

@@ -14,7 +14,7 @@ const NoBurgersFound = () => {
 			<Box as={EmptyIllustration} maxWidth={[200, 300, 400]} height={"auto"} />
 			<Text fontSize={"sm"}>{t("messages.burgers.addHint", { buttonLabel: t("buttons.burgers.createNew")})}</Text>
 			<Button size={"sm"} variantColor={"primary"} variant={"solid"} leftIcon={"add"}
-			        onClick={() => push(Routes.CitizenNew)}>{t("buttons.burgers.createNew")}</Button>
+			        onClick={() => push(Routes.CreateBurger)}>{t("buttons.burgers.createNew")}</Button>
 		</Stack>
 	);
 };

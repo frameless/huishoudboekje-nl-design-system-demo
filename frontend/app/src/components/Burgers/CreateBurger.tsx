@@ -83,7 +83,7 @@ const CreateBurger = () => {
 	const [createGebruiker, {loading}] = useMutation(CreateGebruikerMutation);
 
 	const prePopulateForm = () => {
-		const c = sampleData.citizens[(Math.floor(Math.random() * sampleData.citizens.length))];
+		const c = sampleData.burgers[(Math.floor(Math.random() * sampleData.burgers.length))];
 
 		initials.setValue(c.initials);
 		firstName.setValue(c.firstName);
@@ -152,7 +152,7 @@ const CreateBurger = () => {
 
 			const {id} = result.data.createGebruiker.gebruiker;
 			if (id) {
-				push(Routes.Citizen(id));
+				push(Routes.Burger(id));
 			}
 		}).catch(err => {
 			console.log("Error:", err);
@@ -169,7 +169,7 @@ const CreateBurger = () => {
 	const isInvalid = (input) => input.dirty && !input.isValid;
 
 	return (<>
-		<BackButton to={Routes.Citizens} />
+		<BackButton to={Routes.Burgers} />
 
 		<Stack spacing={5}>
 			<Stack direction={"row"} spacing={5} justifyContent={"space-between"} alignItems={"center"}>

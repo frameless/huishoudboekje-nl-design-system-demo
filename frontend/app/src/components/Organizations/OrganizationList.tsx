@@ -108,7 +108,7 @@ const OrganizationList = () => {
 						{search.value.trim().length === 0 && (
 							<Box>
 								<Button variantColor={"blue"} borderStyle={"dashed"} variant={"outline"} leftIcon={"add"}
-								        w="100%" h="100%" onClick={() => push(Routes.OrganizationNew)} borderRadius={5}
+								        w="100%" h="100%" onClick={() => push(Routes.CreateOrganization)} borderRadius={5}
 								        p={5}>{t("buttons.organizations.createNew")}</Button>
 							</Box>
 						)}
