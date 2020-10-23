@@ -89,8 +89,8 @@ class RekeningView(MethodView):
             setattr(rekening, key, value)
         try:
             db.session.commit()
-        except IntegrityError:
-            return {"errors": ["iban already exists"]}, 409
+        except IntegrityError as error:
+            return {"errors": [error.orig.diag.message_primary]}, 409
         return {"data": rekening.to_dict()}, response_code
 
     def delete(self, rekening_id=None):
