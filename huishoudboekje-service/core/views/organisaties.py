@@ -43,13 +43,14 @@ class OrganisatieView(HHBView):
             400 {"errors": ["Input for filter_kvks is not correct, '...' is not a number."]}
             400 {"errors": ["Input for columns is not correct, '...' is not a column."]}
         """
-        self.initialize_query()
-        self.add_filter_columns()
-        self.add_filter_filter_ids()
+        self.hhb_query.add_filter_columns()
+        self.hhb_query.add_filter_ids()
+        ## 
         self.add_filter_filter_kvks()
+        ##
         if organisatie_id:
-            return self.get_result_single(organisatie_id)
-        return self.get_result_multiple()
+            return self.hhb_query.get_result_single(organisatie_id)
+        return self.hhb_query.get_result_multiple()
 
     def add_filter_filter_kvks(self):
         """ Add filter_ids filter based on the kvk of the organisatie model """
@@ -61,7 +62,7 @@ class OrganisatieView(HHBView):
                     ids.append(int(raw_id))
                 except ValueError:
                     abort(make_response({"errors": [f"Input for filter_kvks is not correct, '{raw_id}' is not a number."]}, 400))
-            self.query = self.query.filter(self.hhb_model.id.in_(ids))
+            self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.id.in_(ids))
 
     def post(self, organisatie_id=None):
         """ POST /organisaties/(<int:organisatie_id>)
@@ -76,10 +77,10 @@ class OrganisatieView(HHBView):
             409 {"errors": [<database integrity error>]}
         """
         self.input_validate(InputValidator)
-        organisatie, response_code = self.get_or_create_object(organisatie_id)
-        organisatie = self.update_object_data_using_request(organisatie)
-        self.commit_database_changes()
-        return {"data": row2dict(organisatie)}, response_code
+        response_code = self.hhb_object.get_or_create(organisatie_id)
+        self.hhb_object.update_using_request_data()
+        self.hhb_object.commit_changes()
+        return {"data": self.hhb_object.json}, response_code
 
     def delete(self, organisatie_id=None):
         """ POST /organisaties/<int:organisatie_id>
@@ -93,7 +94,7 @@ class OrganisatieView(HHBView):
         """
         if not organisatie_id:
             return {"errors": ["Method not allowed"]}, 405
-        organisatie = self.get_object_or_404(organisatie_id)
-        self.delete_object(organisatie)
-        self.commit_database_changes()
+        self.hhb_object.get_or_404(organisatie_id)
+        self.hhb_object.delete()
+        self.hhb_object.commit_changes()
         return {}, 202

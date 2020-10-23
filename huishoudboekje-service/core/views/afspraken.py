@@ -2,7 +2,6 @@
 from flask_inputs import Inputs
 from flask_inputs.validators import JsonSchema
 from models.afspraak import Afspraak
-from core.utils import row2dict
 from core.views.hhb_view import HHBView
 
 class InputValidator(Inputs):
@@ -66,12 +65,11 @@ class AfspraakView(HHBView):
             400 {"errors": ["Input for filter_ids is not correct, '...' is not a number."]}
             400 {"errors": ["Input for columns is not correct, '...' is not a column."]}
         """
-        self.initialize_query()
-        self.add_filter_columns()
-        self.add_filter_filter_ids()
+        self.hhb_query.add_filter_columns()
+        self.hhb_query.add_filter_ids()
         if afspraak_id:
-            return self.get_result_single(afspraak_id)
-        return self.get_result_multiple()
+            return self.hhb_query.get_result_single(afspraak_id)
+        return self.hhb_query.get_result_multiple()
 
     def post(self, afspraak_id=None):
         """ POST /afspraken/(<int:afspraak_id>)
@@ -86,10 +84,10 @@ class AfspraakView(HHBView):
             409 {"errors": [<database integrity error>]}
         """
         self.input_validate(InputValidator)
-        afspraak, response_code = self.get_or_create_object(afspraak_id)
-        afspraak = self.update_object_data_using_request(afspraak)
-        self.commit_database_changes()
-        return {"data": row2dict(afspraak)}, response_code
+        response_code = self.hhb_object.get_or_create(afspraak_id)
+        self.hhb_object.update_using_request_data()
+        self.hhb_object.commit_changes()
+        return {"data": self.hhb_object.json}, response_code
 
     def delete(self, afspraak_id=None):
         """ POST /afspraken/<int:afspraak_id>
@@ -103,9 +101,9 @@ class AfspraakView(HHBView):
         """
         if not afspraak_id:
             return {"errors": ["Method not allowed"]}, 405
-        afspraak = self.get_object_or_404(afspraak_id)
-        self.delete_object(afspraak)
-        self.commit_database_changes()
+        self.hhb_object.get_or_404(afspraak_id)
+        self.hhb_object.delete()
+        self.hhb_object.commit_changes()
         return {}, 202
 
 
