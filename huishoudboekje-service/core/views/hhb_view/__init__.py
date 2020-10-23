@@ -1,5 +1,6 @@
 from flask.views import MethodView
 from flask import request, abort, make_response
+from flask_inputs import Inputs
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
 from flask_inputs.validators import JsonSchema
