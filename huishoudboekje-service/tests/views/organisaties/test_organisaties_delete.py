@@ -12,7 +12,7 @@ def test_organisaties_delete_success(client, session, organisatie_factory):
 def test_organisaties_delete_bad_request(client):
     """ Test 400 error for DELETE on organisaties """
     response = client.delete('/organisaties/')
-    assert response.status_code == 400
+    assert response.status_code == 405
     
 def test_organisaties_delete_organisatie_not_found(client):
     """ Test 404 error for DELETE on organisaties """

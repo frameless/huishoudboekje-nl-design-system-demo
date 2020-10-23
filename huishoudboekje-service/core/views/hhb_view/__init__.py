@@ -24,7 +24,7 @@ class HHBView(MethodView):
     def __init__(self):
         self.hhb_query = HHBQuery(self.hhb_model)
         self.hhb_object = HHBObject(self.hhb_model)
-        self.validator = InputValidator()
+        self.validator = InputValidator
         self.validator.json = [JsonSchema(schema=self.validation_data)]
 
     def input_validate(self):
@@ -37,7 +37,7 @@ class HHBView(MethodView):
         if len(kwargs) == 0:
             return None
         elif len(kwargs) == 1:
-            return kwargs[kwargs.keys()[0]]
+            return kwargs[list(kwargs.keys())[0]]
         else:
             abort(make_response({"errors": "Recieved too many parameters."}, 400))
 
