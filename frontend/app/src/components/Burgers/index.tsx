@@ -8,7 +8,7 @@ import BurgerDetail from "./BurgerDetail";
 const Burgers = () => (
 	<Switch>
 		<Route exact path={Routes.Burgers} component={BurgerList} />
-		<Route path={Routes.Burgers + "/:id(\\d+)"} component={BurgerDetail} />
+		<Route path={Routes.Burgers + "/:id"} component={BurgerDetail} />
 		<Route path={Routes.CreateBurger} exact component={CreateBurger} />
 	</Switch>
 );
