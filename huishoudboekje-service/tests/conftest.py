@@ -7,7 +7,7 @@ from testing.postgresql import Postgresql
 from core.app import create_app
 from core.app import db as _db
 from core.config import TestingConfig
-from .facotries import *
+from .factories import *
 
 @pytest.yield_fixture(scope="session")
 def client(app, request):
