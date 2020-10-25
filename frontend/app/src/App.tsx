@@ -9,7 +9,7 @@ import Sidebar from "./components/Sidebar";
 import UserStatus from "./components/UserStatus";
 import {FaLock} from "react-icons/all";
 import Routes from "./config/routes";
-import Citizens from "./components/Burgers";
+import Burgers from "./components/Burgers";
 import PageNotFound from "./components/PageNotFound";
 import {TABLET_BREAKPOINT} from "./utils/things";
 import {useTranslation} from "react-i18next";
@@ -110,7 +110,7 @@ const App = () => {
 							</Stack>
 
 							<Switch>
-								<Route path={Routes.Citizens} component={Citizens} />
+								<Route path={Routes.Burgers} component={Burgers} />
 								<Route path={Routes.Organizations} component={Organizations} />
 								{/*<Route path={ROUTEPATH} component={BANK_COMPONENT} />*/}
 								{/*<Route path={ROUTEPATH} component={SETTINGS_COMPONENT} />*/}

@@ -1,6 +1,6 @@
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {Box, Button, Divider, Flex, FormHelperText, FormLabel, Heading, Input, Select, Stack, Tooltip, useToast} from "@chakra-ui/core";
+import {Box, Button, Divider, FormHelperText, FormLabel, Heading, Input, Select, Stack, Tooltip, useToast} from "@chakra-ui/core";
 import {useInput, useIsMobile, useNumberInput, Validators} from "react-grapple";
 import BackButton from "../BackButton";
 import Routes from "../../config/routes";
@@ -83,7 +83,7 @@ const CreateBurger = () => {
 	const [createGebruiker, {loading}] = useMutation(CreateGebruikerMutation);
 
 	const prePopulateForm = () => {
-		const c = sampleData.citizens[(Math.floor(Math.random() * sampleData.citizens.length))];
+		const c = sampleData.burgers[(Math.floor(Math.random() * sampleData.burgers.length))];
 
 		initials.setValue(c.initials);
 		firstName.setValue(c.firstName);
@@ -152,7 +152,7 @@ const CreateBurger = () => {
 
 			const {id} = result.data.createGebruiker.gebruiker;
 			if (id) {
-				push(Routes.Citizen(id));
+				push(Routes.Burger(id));
 			}
 		}).catch(err => {
 			console.log("Error:", err);
@@ -169,19 +169,13 @@ const CreateBurger = () => {
 	const isInvalid = (input) => input.dirty && !input.isValid;
 
 	return (<>
-		<BackButton to={Routes.Citizens} />
+		<BackButton to={Routes.Burgers} />
 
 		<Stack spacing={5}>
-			<Stack direction={"row"} spacing={5} justifyContent={"space-between"} alignItems={"center"}>
-				<Stack>
-					<Heading size={"lg"}>{t("forms.burgers.title")}</Heading>
-				</Stack>
-			</Stack>
+			<Heading size={"lg"}>{t("forms.burgers.title")}</Heading>
 
 			{isDev && (
-				<Flex justifyContent={"center"}>
-					<Button maxWidth={350} variantColor={"yellow"} variant={"outline"} onClick={() => prePopulateForm()}>Formulier snel invullen met testdata</Button>
-				</Flex>
+				<Button maxWidth={350} variantColor={"yellow"} variant={"outline"} onClick={() => prePopulateForm()}>Formulier snel invullen met testdata</Button>
 			)}
 
 			<Box as={"form"} onSubmit={onSubmit}>
@@ -255,7 +249,8 @@ const CreateBurger = () => {
 							<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 								<Stack spacing={1} flex={1}>
 									<FormLabel htmlFor={"zipcode"}>{t("forms.burgers.fields.zipcode")}</FormLabel>
-									<Tooltip label={t("forms.burgers.tooltips.zipcode")} aria-label={t("forms.burgers.tooltips.zipcode")} hasArrow placement={isMobile ? "top" : "left"}>
+									<Tooltip label={t("forms.burgers.tooltips.zipcode")} aria-label={t("forms.burgers.tooltips.zipcode")} hasArrow
+									         placement={isMobile ? "top" : "left"}>
 										<Input isInvalid={isInvalid(zipcode)} {...zipcode.bind} id="zipcode" />
 									</Tooltip>
 								</Stack>
@@ -266,7 +261,8 @@ const CreateBurger = () => {
 							</Stack>
 							<Stack spacing={1}>
 								<FormLabel htmlFor={"phoneNumber"}>{t("forms.burgers.fields.phoneNumber")}</FormLabel>
-								<Tooltip label={t("forms.burgers.tooltips.phoneNumber")} aria-label={t("forms.burgers.fields.phoneNumber")} hasArrow placement={isMobile ? "top" : "left"}>
+								<Tooltip label={t("forms.burgers.tooltips.phoneNumber")} aria-label={t("forms.burgers.fields.phoneNumber")} hasArrow
+								         placement={isMobile ? "top" : "left"}>
 									<Input isInvalid={isInvalid(phoneNumber)} {...phoneNumber.bind} id="phoneNumber" />
 								</Tooltip>
 							</Stack>

@@ -1,6 +1,6 @@
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {Box, Button, Divider, Flex, FormHelperText, FormLabel, Heading, Input, Stack, Tooltip, useToast} from "@chakra-ui/core";
+import {Box, Button, Divider, FormHelperText, FormLabel, Heading, Input, Stack, Tooltip, useToast} from "@chakra-ui/core";
 import {useInput, useIsMobile, useToggle, Validators} from "react-grapple";
 import BackButton from "../BackButton";
 import Routes from "../../config/routes";
@@ -53,7 +53,7 @@ const CreateOrganization = () => {
 	const [createOrganization, {loading}] = useMutation(CreateOrganizationMutation);
 
 	const prePopulateForm = () => {
-		const c = sampleData.organizations[Math.floor(Math.random() * sampleData.organizations.length)];
+		const c = sampleData.organisaties[Math.floor(Math.random() * sampleData.organisaties.length)];
 
 		kvkNumber.setValue(c.kvkNumber.toString());
 		companyName.setValue(c.companyName);
@@ -126,16 +126,10 @@ const CreateOrganization = () => {
 		<BackButton to={Routes.Organizations} />
 
 		<Stack spacing={5}>
-			<Stack direction={"row"} spacing={5} justifyContent={"space-between"} alignItems={"center"}>
-				<Stack>
-					<Heading size={"lg"}>{t("forms.organizations.title")}</Heading>
-				</Stack>
-			</Stack>
+			<Heading size={"lg"}>{t("forms.organizations.title")}</Heading>
 
 			{isDev && (
-				<Flex justifyContent={"center"}>
-					<Button maxWidth={350} variantColor={"yellow"} variant={"outline"} onClick={() => prePopulateForm()}>Formulier snel invullen met testdata</Button>
-				</Flex>
+				<Button maxWidth={350} variantColor={"yellow"} variant={"outline"} onClick={() => prePopulateForm()}>Formulier snel invullen met testdata</Button>
 			)}
 
 			<Box as={"form"} onSubmit={onSubmit}>
@@ -149,7 +143,8 @@ const CreateOrganization = () => {
 							<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 								<Stack spacing={1} flex={1}>
 									<FormLabel htmlFor={"kvkNumber"}>{t("forms.organizations.fields.kvkNumber")}</FormLabel>
-									<Tooltip label={t("forms.organizations.tooltips.kvkNumber")} aria-label={t("forms.organizations.fields.kvkNumber")} hasArrow placement={isMobile ? "top" : "left"}>
+									<Tooltip label={t("forms.organizations.tooltips.kvkNumber")} aria-label={t("forms.organizations.fields.kvkNumber")} hasArrow
+									         placement={isMobile ? "top" : "left"}>
 										<Input isInvalid={isInvalid(kvkNumber)} {...kvkNumber.bind} id="kvkNumber" />
 									</Tooltip>
 								</Stack>
@@ -188,7 +183,8 @@ const CreateOrganization = () => {
 							<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 								<Stack spacing={1} flex={1}>
 									<FormLabel htmlFor={"zipcode"}>{t("forms.organizations.fields.zipcode")}</FormLabel>
-									<Tooltip label={t("forms.organizations.tooltips.zipcode")} aria-label={t("forms.organizations.fields.zipcode")} hasArrow placement={isMobile ? "top" : "left"}>
+									<Tooltip label={t("forms.organizations.tooltips.zipcode")} aria-label={t("forms.organizations.fields.zipcode")} hasArrow
+									         placement={isMobile ? "top" : "left"}>
 										<Input isInvalid={isInvalid(zipcode)} {...zipcode.bind} id="zipcode" />
 									</Tooltip>
 								</Stack>
