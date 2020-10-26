@@ -67,4 +67,9 @@ class UpdateOrganisatie(graphene.Mutation):
             if hhb_service_response.status_code != 202:
                 raise GraphQLError(f"Upstream API responded: {hhb_service_response.json()}")
 
+        # TODO:
+        # - remove gebruiker_rekening that are not connected anymore
+        # - add new rekeningen
+        # - add gebruiker_rekening that are now connected
+
         return UpdateOrganisatie(organisatie=hhb_service_response.json()["data"], ok=True)

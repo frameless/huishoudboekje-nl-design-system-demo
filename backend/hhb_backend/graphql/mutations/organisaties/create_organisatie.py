@@ -51,4 +51,9 @@ class CreateOrganisatie(graphene.Mutation):
         if org_service_response.status_code != 201:
             raise GraphQLError(f"Upstream API responded: {org_service_response.json()}")
 
+        # TODO:
+        # - lookup existing rekeningen
+        # - add new rekeningen
+        # - add gebruiker_rekening that are now connected
+
         return CreateOrganisatie(organisatie=hhb_service_response.json()["data"], ok=True)
