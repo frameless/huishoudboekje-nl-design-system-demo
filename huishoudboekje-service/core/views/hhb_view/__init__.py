@@ -10,7 +10,7 @@ from core.views.hhb_view.hhb_object import HHBObject
 from core.views.hhb_view.hhb_query import HHBQuery
 
 class InputValidator(Inputs):
-    """ JSON validator for creating and editing a Afspraak """
+    """ JSON validator for creating and editing a object """
     json = [JsonSchema(schema={})]
 
 class HHBView(MethodView):
@@ -26,6 +26,7 @@ class HHBView(MethodView):
         self.hhb_object = HHBObject(self.hhb_model)
         self.validator = InputValidator
         self.validator.json = [JsonSchema(schema=self.validation_data)]
+        self.db = db
 
     def input_validate(self):
         """ Validate input data """
@@ -33,13 +34,12 @@ class HHBView(MethodView):
         if not inputs.validate():
             abort(make_response({"errors": inputs.errors}, 400))
 
-    def get_id_from_kwargs(self, **kwargs):
-        if len(kwargs) == 0:
-            return None
-        elif len(kwargs) == 1:
-            return kwargs[list(kwargs.keys())[0]]
-        else:
-            abort(make_response({"errors": "Recieved too many parameters."}, 400))
+    def get_object_id_from_kwargs(self, **kwargs):
+        if "object_id" in kwargs:
+            try:
+                return int(kwargs["object_id"])
+            except ValueError:
+                abort(make_response({"errors": [f"Supplied id '{kwargs[list(kwargs.keys())[0]]}' is not an integer."]}, 400))
 
     def get(self, **kwargs):
         """ GET /<view_path>/(<int:object_id>)?(columns=..,..,..)&(filter_ids=..,..,..))
@@ -57,7 +57,7 @@ class HHBView(MethodView):
             400 {"errors": ["Input for filter_ids is not correct, '...' is not a number."]}
             400 {"errors": ["Input for columns is not correct, '...' is not a column."]}
         """
-        object_id = self.get_id_from_kwargs(**kwargs)
+        object_id = self.get_object_id_from_kwargs(**kwargs)
         self.hhb_query.add_filter_columns()
         self.hhb_query.add_filter_ids()
         self.extend_get(**kwargs)
@@ -82,13 +82,9 @@ class HHBView(MethodView):
             404 {"errors": ["Organisatie not found."]}
             409 {"errors": [<database integrity error>]}
         """
-        print("============")
-        print("POST")
-        object_id = self.get_id_from_kwargs(**kwargs)
-        print(object_id)
+        object_id = self.get_object_id_from_kwargs(**kwargs)
         self.input_validate()
         response_code = self.hhb_object.get_or_create(object_id)
-        print("strating data update")
         self.hhb_object.update_using_request_data()
         self.hhb_object.commit_changes()
         return {"data": self.hhb_object.json}, response_code
@@ -104,7 +100,7 @@ class HHBView(MethodView):
             405 {"errors": ["Method not allowed"]}
             404 {"errors": ["Object not found."]}
         """
-        object_id = self.get_id_from_kwargs(**kwargs)
+        object_id = self.get_object_id_from_kwargs(**kwargs)
         if not object_id:
             return {"errors": ["Method not allowed"]}, 405
         self.hhb_object.get_or_404(object_id)

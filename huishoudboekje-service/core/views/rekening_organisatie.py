@@ -3,12 +3,12 @@ from flask import request, abort, make_response
 from sqlalchemy.orm.exc import FlushError
 from core.utils import row2dict
 from core.views.hhb_view import HHBView
-from models import RekeningGebruiker, Gebruiker, Rekening
+from models import RekeningOrganisatie, Organisatie, Rekening
 
-class RekeningGebruikerView(HHBView):
+class RekeningOrganisatieView(HHBView):
     """ Methods for /gebruikers/<gebruiker_id>/rekeningen path """
 
-    hhb_model = Gebruiker
+    hhb_model = Organisatie
     validation_data = {
         "type": "object",
         "properties": {
@@ -20,7 +20,7 @@ class RekeningGebruikerView(HHBView):
     }
 
     def get(self, **kwargs):
-        """ GET /gebruikers/<gebruiker_id>/rekeningen
+        """ GET /organisaties/<organisatie_id>/rekeningen
 
         returns
         """
@@ -34,30 +34,30 @@ class RekeningGebruikerView(HHBView):
         self.input_validate()
         object_id = self.get_object_id_from_kwargs(**kwargs)
         self.hhb_object.get_or_404(object_id)
-        gebruiker_id = self.hhb_object.hhb_object.id
+        organisatie_id = self.hhb_object.hhb_object.id
         rekening_id = request.json["rekening_id"]
-        relation = RekeningGebruiker(
-            gebruiker_id=gebruiker_id,
+        relation = RekeningOrganisatie(
+            organisatie_id=organisatie_id,
             rekening_id=rekening_id
         )
         self.db.session.add(relation)
         try:
             self.hhb_object.commit_changes()
         except FlushError:
-            return {"errors": ["Gebruiker / Rekening relation already exsists."]}, 409
+            return {"errors": ["Organisatie / Rekening relation already exsists."]}, 409
         return {}, 201
 
     def delete(self, **kwargs):
         self.input_validate()
         object_id = self.get_object_id_from_kwargs(**kwargs)
         self.hhb_object.get_or_404(object_id)
-        gebruiker_id = self.hhb_object.hhb_object.id
+        organisatie_id = self.hhb_object.hhb_object.id
         rekening_id = request.json["rekening_id"]
-        rekening_gebruiker_relation = RekeningGebruiker.query.filter(
-                RekeningGebruiker.gebruiker_id == gebruiker_id
-            ).filter(RekeningGebruiker.rekening_id == rekening_id).one_or_none()
-        if not rekening_gebruiker_relation:
-            abort(make_response({"errors": [f"Rekening / Gebruiker relation not found."]}, 404))
-        self.db.session.delete(rekening_gebruiker_relation)
+        rekening_organisatie_relation = RekeningOrganisatie.query.filter(
+                RekeningOrganisatie.organisatie_id == organisatie_id
+            ).filter(RekeningOrganisatie.rekening_id == rekening_id).one_or_none()
+        if not rekening_organisatie_relation:
+            abort(make_response({"errors": [f"Rekening / Organisatie relation not found."]}, 404))
+        self.db.session.delete(rekening_organisatie_relation)
         self.hhb_object.commit_changes()
         return {}, 202

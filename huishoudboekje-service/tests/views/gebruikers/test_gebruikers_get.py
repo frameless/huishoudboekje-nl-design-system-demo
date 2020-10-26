@@ -1,6 +1,6 @@
 """ Test GET /gebruikers """
 from models import Gebruiker
-
+from core.utils import row2dict
 
 def test_gebruikers_get_empty_db(app):
     """ Test gebruikers call with empty database. """
@@ -13,4 +13,4 @@ def test_gebruikers_get_single_gebruiker(client, gebruiker_factory):
     gebruiker = gebruiker_factory.createGebruiker()
     response = client.get('/gebruikers')
     assert response.status_code == 200
-    assert response.json["data"] == [gebruiker.to_dict()]
+    assert response.json["data"] == [row2dict(gebruiker)]

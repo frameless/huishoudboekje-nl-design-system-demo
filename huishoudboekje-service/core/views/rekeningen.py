@@ -1,11 +1,5 @@
+""" Rekening View """
 from flask import request
-from flask.views import MethodView
-from flask_inputs import Inputs
-from flask_inputs.validators import JsonSchema
-from sqlalchemy.exc import IntegrityError
-from sqlalchemy.orm.exc import NoResultFound
-
-from core.database import db
 from models.rekening import Rekening
 from core.views.hhb_view import HHBView
 
