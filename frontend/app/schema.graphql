@@ -29,10 +29,11 @@ type Gebruiker {
     email: String
     geboortedatum: String
     huisnummer: String
-    iban: String
+    iban: String @deprecated(reason : "Please use 'rekeningen'")
     id: Int
     plaatsnaam: String
     postcode: String
+    rekeningen: [Rekening]
     straatnaam: String
     telefoonnummer: String
     voorletters: String
@@ -44,6 +45,7 @@ type Organisatie {
     id: Int
     kvkDetails: OrganisatieKvK
     kvkNummer: String
+    rekeningen: [Rekening]
     weergaveNaam: String
 }
 
@@ -56,14 +58,20 @@ type OrganisatieKvK {
     straatnaam: String
 }
 
+"GraphQL Rekening model"
+type Rekening {
+    iban: String
+    rekeninghouder: String
+}
+
 "The root of all mutations "
 type RootMutation {
-    createGebruiker(achternaam: String, email: String, geboortedatum: String, huisnummer: String, iban: String, plaatsnaam: String, postcode: String, straatnaam: String, telefoonnummer: String, voorletters: String, voornamen: String): CreateGebruiker
-    createOrganisatie(huisnummer: String, kvkNummer: String!, naam: String, plaatsnaam: String, postcode: String, straatnaam: String, weergaveNaam: String!): CreateOrganisatie
+    createGebruiker(achternaam: String, email: String, geboortedatum: String, huisnummer: String, plaatsnaam: String, postcode: String, rekeningen: [RekeningInput], straatnaam: String, telefoonnummer: String, voorletters: String, voornamen: String): CreateGebruiker
+    createOrganisatie(huisnummer: String, kvkNummer: String!, naam: String, plaatsnaam: String, postcode: String, rekeningen: [RekeningInput], straatnaam: String, weergaveNaam: String!): CreateOrganisatie
     deleteGebruiker(id: Int!): DeleteGebruiker
     deleteOrganisatie(id: Int!): DeleteOrganisatie
-    updateGebruiker(achternaam: String, email: String, geboortedatum: String, huisnummer: String, iban: String, id: Int!, plaatsnaam: String, postcode: String, straatnaam: String, telefoonnummer: String, voorletters: String, voornamen: String): UpdateGebruiker
-    updateOrganisatie(huisnummer: String, id: Int!, kvkNummer: String, naam: String, plaatsnaam: String, postcode: String, straatnaam: String, weergaveNaam: String): UpdateOrganisatie
+    updateGebruiker(achternaam: String, email: String, geboortedatum: String, huisnummer: String, id: Int!, plaatsnaam: String, postcode: String, rekeningen: [RekeningInput], straatnaam: String, telefoonnummer: String, voorletters: String, voornamen: String): UpdateGebruiker
+    updateOrganisatie(huisnummer: String, id: Int!, kvkNummer: String, naam: String, plaatsnaam: String, postcode: String, rekeningen: [RekeningInput], straatnaam: String, weergaveNaam: String): UpdateOrganisatie
 }
 
 "The root of all queries "
@@ -82,4 +90,9 @@ type UpdateGebruiker {
 type UpdateOrganisatie {
     ok: Boolean
     organisatie: Organisatie
+}
+
+input RekeningInput {
+    iban: String
+    rekeninghouder: String
 }

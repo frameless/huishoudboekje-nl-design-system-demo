@@ -4,6 +4,8 @@ import graphene
 import requests
 from graphql import GraphQLError
 from hhb_backend.graphql import settings
+from hhb_backend.graphql.models.rekening import Rekening
+
 
 class OrganisatieKvK(graphene.ObjectType):
     nummer = graphene.String()
@@ -20,6 +22,7 @@ class Organisatie(graphene.ObjectType):
     """ GraphQL Organisatie model """
     id = graphene.Int()
     weergave_naam = graphene.String()
+    rekeningen = graphene.List(Rekening)
     kvk_nummer = graphene.String()
     kvk_details = graphene.Field(OrganisatieKvK)
 

@@ -6,12 +6,16 @@ import requests
 from graphql import GraphQLError
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.models.organisatie import Organisatie
+from hhb_backend.graphql.mutations.rekening_input import RekeningInput
+
 
 class CreateOrganisatie(graphene.Mutation):
     class Arguments:
         # hhb_service elements (required)
         kvk_nummer = graphene.String(required=True)
         weergave_naam = graphene.String(required=True)
+        rekeningen = graphene.List(RekeningInput)
+
         # org_service elements (optional)
         naam = graphene.String()
         straatnaam = graphene.String()
@@ -24,6 +28,9 @@ class CreateOrganisatie(graphene.Mutation):
 
     def mutate(root, info, **kwargs):
         """ Create the new Organisatie """
+
+        rekeningen = kwargs.pop("rekeningen")
+
         hhb_service_data = {
             "kvk_nummer": kwargs["kvk_nummer"],
             "weergave_naam": kwargs.pop("weergave_naam")

@@ -1,12 +1,12 @@
 """ GraphQL mutation for creating a new Gebruiker/Burger """
 import json
-import os
 
 import graphene
 import requests
 from graphql import GraphQLError
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.models.gebruiker import Gebruiker
+from hhb_backend.graphql.mutations.rekening_input import RekeningInput
 
 
 class CreateGebruiker(graphene.Mutation):
@@ -15,7 +15,7 @@ class CreateGebruiker(graphene.Mutation):
         email = graphene.String()
         geboortedatum = graphene.String()
         telefoonnummer = graphene.String()
-        iban = graphene.String()
+        rekeningen = graphene.List(RekeningInput)
 
         # burger arguments
         achternaam = graphene.String()
@@ -31,6 +31,7 @@ class CreateGebruiker(graphene.Mutation):
 
     def mutate(root, info, **kwargs):
         """ Create the new Gebruiker/Burger """
+        rekeningen = kwargs.pop("rekeningen")
         gebruiker_response = requests.post(
             f"{settings.HHB_SERVICES_URL}/gebruikers/",
             data=json.dumps(kwargs),
@@ -38,5 +39,10 @@ class CreateGebruiker(graphene.Mutation):
         )
         if gebruiker_response.status_code != 201:
             raise GraphQLError(f"Upstream API responded: {gebruiker_response.json()}")
+
+        # TODO:
+        # - lookup existing rekeningen
+        # - add new rekeningen
+        # - add gebruiker_rekening that are now connected
 
         return CreateGebruiker(gebruiker=gebruiker_response.json()["data"], ok=True)
