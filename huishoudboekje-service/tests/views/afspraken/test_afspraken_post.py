@@ -13,7 +13,7 @@ def test_afspraken_post_new_afspraak(client, session):
         "eind_datum":date(2020, 10, 1).isoformat(),
         "aantal_betalingen":5,
         "interval":"P1Y2M10DT2H30M",
-        "bedrag":13.37,
+        "bedrag":1337,
         "credit":True,
         "kenmerk":"ABC1234",
         "actief":True
@@ -34,7 +34,7 @@ def test_afspraken_post_update_afspraak(client, session, afspraak_factory):
     """ Test /afspraken/<afspraak_id> path """
     afspraak = afspraak_factory.createAfspraak(bedrag=1.1, beschijving="Test Afspraak")
     update_dict = {
-        "bedrag": 2.2,
+        "bedrag": 220,
         "beschijving": "Test Afspraak edited"
     }
     response = client.post(

@@ -17,7 +17,7 @@ class Afspraak(db.Model):
     interval = Column(String)
     tegen_rekening_id = Column(Integer, ForeignKey('rekeningen.id'))
     tegen_rekening = relationship("Rekening", back_populates="afspraken")
-    bedrag = Column(Float)
+    bedrag = Column(Integer)
     credit = Column(Boolean)
     kenmerk = Column(String)
     actief = Column(Boolean)
