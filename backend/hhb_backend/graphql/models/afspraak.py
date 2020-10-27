@@ -11,8 +11,8 @@ class Afspraak(graphene.ObjectType):
     id = graphene.Int()
     gebruiker = graphene.Field(lambda: gebruiker.Gebruiker)
     beschrijving = graphene.String()
-    start_datum = graphene.String()  # TODO use Date scalar
-    eind_datum = graphene.String()  # TODO use Date scalar
+    start_datum = graphene.Date()
+    eind_datum = graphene.Date()
     aantal_betalingen = graphene.Int()
     interval = graphene.String()  # TODO use interval scalar
     tegen_rekening = graphene.Field(lambda: rekening.Rekening)

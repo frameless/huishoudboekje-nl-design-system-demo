@@ -14,8 +14,8 @@ class AfspraakInput(graphene.InputObjectType):
     id = graphene.Int()
     gebruiker_id = graphene.Int()
     beschrijving = graphene.String()
-    start_datum = graphene.String()  # TODO use Date scalar
-    eind_datum = graphene.String()  # TODO use Date scalar
+    start_datum = graphene.Date()
+    eind_datum = graphene.Date()
     aantal_betalingen = graphene.Int()
     interval = graphene.String()  # TODO use interval scalar
     tegen_rekening_id = graphene.Int()
