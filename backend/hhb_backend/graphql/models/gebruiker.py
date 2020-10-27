@@ -1,6 +1,13 @@
 """ Gebruiker model as used in GraphQL queries """
+import os
+
 import graphene
-from hhb_backend.graphql.models.rekening import Rekening
+import requests
+
+from hhb_backend.graphql import settings
+import hhb_backend.graphql.models.afspraak as afspraak
+import hhb_backend.graphql.models.rekening as rekening
+
 
 class Gebruiker(graphene.ObjectType):
     """ GraphQL Gebruiker model """
@@ -16,10 +23,45 @@ class Gebruiker(graphene.ObjectType):
     voorletters = graphene.String()
     voornamen = graphene.String()
     plaatsnaam = graphene.String()
-    rekeningen = graphene.List(Rekening)
+    rekeningen = graphene.List(lambda: rekening.Rekening)
+    afspraken = graphene.List(lambda: afspraak.Afspraak)
 
     def resolve_iban(root, info):
-        firstRekening = next(iter(root.get('rekeningen')), None)
-        if firstRekening is not None:
-            return firstRekening.get('iban')
+        rekeningen = Gebruiker.resolve_rekeningen(root, info)
+        if rekeningen:
+            return rekeningen[0].get('iban')
         return None
+
+    def resolve_rekeningen(root, info):
+        """ Get rekeningen when requested """
+
+        return [
+            {
+                "iban": "1",
+                "rekeninghouder": "a",
+            },
+            {
+                "iban": "2",
+                "rekeninghouder": "a en/of b",
+            }
+        ]
+
+    def resolve_afspraken(root, info):
+        """ Get afspraken when requested """
+
+        return [
+            {
+                "id": 1,
+                "gebruiker_id": root.get('id'),
+                "beschrijving": "Beschrijving",
+                "start_datum": "2020-10-01",
+                "eind_datum": None,
+                "aantal_betalingen": 1,
+                "interval": None,
+                "tegen_rekening_id": 1,
+                "bedrag": "1000.00",
+                "credit": False,
+                "kenmerk": "Kenmerk",
+                "actief": True,
+            }
+        ]

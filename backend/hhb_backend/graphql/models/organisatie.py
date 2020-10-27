@@ -4,7 +4,8 @@ import graphene
 import requests
 from graphql import GraphQLError
 from hhb_backend.graphql import settings
-from hhb_backend.graphql.models.rekening import Rekening
+import hhb_backend.graphql.models.afspraak as afspraak
+import hhb_backend.graphql.models.rekening as rekening
 
 
 class OrganisatieKvK(graphene.ObjectType):
@@ -18,11 +19,13 @@ class OrganisatieKvK(graphene.ObjectType):
     def resolve_nummer(root, info):
         return root.get("kvk_nummer")
 
+
 class Organisatie(graphene.ObjectType):
     """ GraphQL Organisatie model """
     id = graphene.Int()
     weergave_naam = graphene.String()
-    rekeningen = graphene.List(Rekening)
+    rekeningen = graphene.List(lambda: rekening.Rekening)
+    afspraken = graphene.List(lambda: afspraak.Afspraak)
     kvk_nummer = graphene.String()
     kvk_details = graphene.Field(OrganisatieKvK)
 
@@ -38,4 +41,31 @@ class Organisatie(graphene.ObjectType):
             return None
         else:
             raise GraphQLError(f"Upstream API responded: {response.json()}")
-        
+
+    def resolve_rekeningen(root, info):
+        return [
+            {
+                "iban": "12",
+                "rekeninghouder": "A",
+            }
+        ]
+
+    def resolve_afspraken(root, info):
+        """ Get afspraken when requested """
+
+        return [
+            {
+                "id": 1,
+                "gebruiker_id": 1,
+                "beschrijving": "Beschrijving",
+                "start_datum": "2020-10-01",
+                "eind_datum": None,
+                "aantal_betalingen": 1,
+                "interval": None,
+                "tegen_rekening_id": 12,
+                "bedrag": "1000.00",
+                "credit": False,
+                "kenmerk": "Kenmerk",
+                "actief": True,
+            }
+        ]

@@ -3,11 +3,11 @@ import graphene
 import requests
 from graphql import GraphQLError
 from hhb_backend.graphql import settings
-from hhb_backend.graphql.models.gebruiker import Gebruiker
+import hhb_backend.graphql.models.gebruiker as gebruiker
 
 
 class GebruikerQuery():
-    return_type = graphene.Field(Gebruiker, id=graphene.Int(required=True))
+    return_type = graphene.Field(gebruiker.Gebruiker, id=graphene.Int(required=True))
 
     @staticmethod
     def resolver(root, info, **kwargs):
@@ -18,7 +18,7 @@ class GebruikerQuery():
 
 
 class GebruikersQuery():
-    return_type = graphene.List(Gebruiker, ids=graphene.List(graphene.Int, default_value=[]))
+    return_type = graphene.List(gebruiker.Gebruiker, ids=graphene.List(graphene.Int, default_value=[]))
 
     @staticmethod
     def resolver(root, info, **kwargs):
