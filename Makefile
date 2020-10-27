@@ -20,7 +20,7 @@ chart-dependencies: $(CHART_DEPENDENCIES:.yaml=.lock)
 
 .PHONY: helm-init
 helm-init:
-	helm repo add stable "https://kubernetes-charts.storage.googleapis.com"
+	helm repo add stable "https://charts.helm.sh/stable"
 	helm repo add zalando-operator "https://raw.githubusercontent.com/zalando/postgres-operator/master/charts/postgres-operator"
 	#helm repo add zalando-operator-ui "https://raw.githubusercontent.com/zalando/postgres-operator/master/charts/postgres-operator-ui"
 	helm repo update
