@@ -65,11 +65,13 @@
       "sections": {
         "personal": {
           "title": "Persoonlijk",
-          "helperText": "Vul de persoonlijke gegevens van de burger in."
+          "helperText": "Vul de persoonlijke gegevens van de burger in.",
+          "detailText": "Persoonlijke gegevens van de burger."
         },
         "contact": {
           "title": "Contact",
-          "helperText": "Vul de contactgegevens van de burger in."
+          "helperText": "Vul de contactgegevens van de burger in.",
+          "detailText": "Contactgegevens van de burger."
         }
       },
       "fields": {

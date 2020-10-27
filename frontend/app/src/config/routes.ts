@@ -1,4 +1,4 @@
-import {isDev} from "../utils/things";
+import { isDev } from "../utils/things";
 
 export enum Names {
 	login = "inloggen",
@@ -11,12 +11,19 @@ export enum Names {
 	notFound = "404"
 }
 
+export enum Subpage {
+	edit = "bewerken",
+	add = "toevoegen",
+}
+
 const Routes = {
 	Home: "/",
 	Login: `/${Names.login}`,
 	Burgers: `/${Names.burgers}`,
-	Burger: (id: number) => `/${Names.burgers}/${id}`,
-	CreateBurger: `/${Names.burgers}/toevoegen`,
+	Burger: (id?: number, subpage?: Subpage) => `/${Names.burgers}${id ? `/${id}`: ""}${subpage ? `/${subpage}`:""}`,
+	BurgerDetail: `/${Names.burgers}/:id(\\d+)`,
+	BurgerEdit: `/${Names.burgers}/:id(\\d+)/bewerken`,
+	BurgerNew: `/${Names.burgers}/toevoegen`,
 	Organizations: `/${Names.organizations}`,
 	Organization: (organizationId: number) => `/${Names.organizations}/${organizationId}`,
 	CreateOrganization: `/${Names.organizations}/toevoegen`,
@@ -27,7 +34,7 @@ const Routes = {
 	Settings: `/${Names.settings}`,
 	NotFound: `/${Names.notFound}`,
 
-	...(isDev && {GraphiQL: "/api/graphql"})
+	...(isDev && { GraphiQL: "/api/graphql" }),
 };
 
 export default Routes;
