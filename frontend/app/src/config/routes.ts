@@ -14,8 +14,9 @@ export enum Names {
 
 export enum Subpage {
 	edit = "bewerken",
-	add = "toevoegen",
 }
+
+const ADD = "toevoegen";
 
 const Routes = {
 	Home: "/",
@@ -25,11 +26,12 @@ const Routes = {
 	BurgerDetail: `/${Names.burgers}/:id(\\d+)`,
 	BurgerEdit: `/${Names.burgers}/:id(\\d+)/bewerken`,
 	BurgerNew: `/${Names.burgers}/toevoegen`,
+	Agreement: (burgerId: number, id: number, subpage?: Subpage) => `/${Names.burgers}/${burgerId}/${Names.agreements}/${id}${subpage ? `/${subpage}`:""}`,
+	AgreementNew: (burgerId: number) => `/${Names.burgers}/${burgerId}/${Names.agreements}/toevoegen`,
 	Organizations: `/${Names.organizations}`,
 	Organization: (organizationId: number) => `/${Names.organizations}/${organizationId}`,
 	CreateOrganization: `/${Names.organizations}/toevoegen`,
 	OrganizationNew: `/${Names.organizations}/toevoegen`,
-	AgreementsNew: `/${Names.agreements}/toevoegen`,
 
 	Dashboard: `/${Names.dashboard}`,
 	Balances: `/${Names.balances}`,

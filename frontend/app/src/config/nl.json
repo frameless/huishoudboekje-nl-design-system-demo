@@ -5,6 +5,7 @@
     "save": "Opslaan",
     "cancel": "Annuleren",
     "delete": "Verwijderen",
+    "add": "Toevoegen",
     "edit": "Wijzigen",
     "login": "Inloggen",
     "logout": "Uitloggen",
@@ -17,6 +18,10 @@
     "burgers": {
       "createNew": "Toevoegen",
       "backToList": "Terug naar overzicht"
+    },
+    "agreements": {
+      "createNew": "Toevoegen",
+      "showInactive": "Toon incactieve afspraken"
     },
     "organizations": {
       "createNew": "Toevoegen",
@@ -42,6 +47,9 @@
       "deleteQuestion": "Weet u zeker dat u de gegevens van {{name}} definitief wil verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
       "noSearchResults": "Geen burgers gevonden. Gebruik een andere zoekterm.",
       "addHint": "Voeg burgers toe door te klikken op de knop {{ buttonLabel }}."
+    },
+    "afspraken": {
+      "addHint": "Voeg afspraken toe door te klikken op de knop {{ buttonLabel }}."
     },
     "organizations": {
       "invalidFormMessage": "Er is een fout opgetreden. Controleer de ingevulde gegevens en probeer het opnieuw.",
@@ -111,7 +119,7 @@
         "amount": "Bedrag",
         "credit": "Credit",
         "debit": "Debet",
-        "reference": "kenmerk",
+        "reference": "Kenmerk",
         "active": "Actief",
         "user": "Gebruiker"
       }

@@ -1,31 +1,55 @@
 import {
-	Accordion, AccordionHeader, AccordionIcon, AccordionItem, AccordionPanel,
+	Accordion,
+	AccordionHeader,
+	AccordionIcon,
+	AccordionItem,
+	AccordionPanel,
 	Box,
+	BoxProps,
+	Button,
 	Divider,
 	Heading,
-	IconButton,
-	Menu,
-	MenuButton,
-	MenuItem,
-	MenuList,
 	Spinner,
 	Stack,
 	Text,
 } from "@chakra-ui/core";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useIsMobile } from "react-grapple";
 import { useTranslation } from "react-i18next";
 import { Redirect, useHistory, useParams } from "react-router-dom";
 import Routes, { Subpage } from "../../config/routes";
 import BackButton from "../BackButton";
 import { useQuery } from "@apollo/client";
-import { IGebruiker } from "../../models";
+import { IAfspraak, IGebruiker } from "../../models";
 import { GetOneGebruikerQuery } from "../../services/graphql/queries";
 import theme from "../../config/theme";
 import { FormLeft, FormRight } from "../Forms/FormLeftRight";
+import EmptyIllustration from "../Illustrations/EmptyIllustration";
 
 const Label: React.FunctionComponent = ({ children }) =>
 	<Text fontSize={"sm"} color={theme.colors.gray["500"]}>{children}</Text>;
+
+const Group: React.FC<BoxProps> = ({children, ...props}) => {
+	const isMobile = useIsMobile();
+	return (
+		<Stack spacing={2} direction={isMobile ? "column" : "row"}>{children}</Stack>
+	);
+};
+
+const NoAfsprakenFound = () => {
+	const {push} = useHistory();
+	const {t} = useTranslation();
+	const { id } = useParams();
+
+	return (
+		<Stack justifyContent={"center"} alignItems={"center"} bg={"white"} borderRadius={5} p={20} spacing={10}>
+			<Box as={EmptyIllustration} maxWidth={[200, 300, 400]} height={"auto"} />
+			<Text fontSize={"sm"}>{t("messages.afspraken.addHint", { buttonLabel: t("buttons.agreements.createNew")})}</Text>
+			<Button size={"sm"} variantColor={"primary"} variant={"solid"} leftIcon={"add"}
+				onClick={() => push(Routes.AgreementNew(id))}>{t("buttons.agreements.createNew")}</Button>
+		</Stack>
+	);
+};
 
 const BurgerDetail = () => {
 	const isMobile = useIsMobile();
@@ -145,8 +169,24 @@ const BurgerDetail = () => {
 			toggleDeleted(true);
 		})
 	};
-	const onClickBackButton = () => push(Routes.Citizens);
-	const onClickEditButton = () => push(Routes.Citizen(id, Subpage.edit));
+	const [showInactive, setShowInactive] = useState(false)
+	const [afspraken, setAfspraken] = useState<IAfspraak[] | undefined>( undefined)
+
+	useEffect(() => {
+		if (data) {
+			setAfspraken(
+				data.gebruiker.afspraken
+					.filter(afspraak => {
+						if (!showInactive) {
+							return afspraak.actief
+						}
+						return true
+					}))
+		}
+	}, [data, showInactive])
+	const onClickBackButton = () => push(Routes.Burgers);
+	const onClickEditButton = () => push(Routes.Burger(id, Subpage.edit));
+	const onClickAddAfspraakButton = () => push(Routes.AgreementNew(id));
 
 	return (<>
 		<BackButton to={Routes.Burgers} />
@@ -165,19 +205,22 @@ const BurgerDetail = () => {
 			<Stack spacing={5}>
 				<Stack direction={"row"} justifyContent={"flex-start"} alignItems={"center"} spacing={3}>
 					<Heading size={"lg"}>{data.gebruiker.voornamen} {data.gebruiker.achternaam}</Heading>
-
-
-					<Menu>
-						<IconButton as={MenuButton} icon="chevron-down" variant={"solid"} aria-label="Open menu" />
-						<MenuList>
-							<MenuItem onClick={onClickEditButton}>{t("actions.edit")}</MenuItem>
-						</MenuList>
-					</Menu>
 				</Stack>
 
 				<Box>
 					<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
-						<Stack direction={isMobile ? "column" : "row"} spacing={2}>
+						<Group>
+							<FormLeft />
+							<FormRight>
+								<Stack direction={"row"} spacing={1} justifyContent={"flex-end"}>
+									<Button  variantColor={"primary"} onClick={onClickEditButton}>{t("actions.edit")}</Button>
+								</Stack>
+							</FormRight>
+						</Group>
+
+						<Divider />
+
+						<Group>
 							<FormLeft >
 								<Heading display={"box"} size={"md"}>{t("forms.burgers.sections.personal.title")}</Heading>
 								<Label>{t("forms.burgers.sections.personal.detailText")}</Label>
@@ -203,11 +246,11 @@ const BurgerDetail = () => {
 								</Stack>
 
 							</FormRight>
-						</Stack>
+						</Group>
 
 						<Divider />
 
-						<Stack direction={isMobile ? "column" : "row"} spacing={2}>
+						<Group>
 							<FormLeft>
 								<Heading display={"box"}  size={"md"}>{t("forms.burgers.sections.contact.title")}</Heading>
 								<Label>{t("forms.burgers.sections.contact.detailText")}</Label>
@@ -244,76 +287,91 @@ const BurgerDetail = () => {
 									</Stack>
 								</Stack>
 							</FormRight>
-						</Stack>
+						</Group>
+					</Stack>
+				</Box>
 
-						<Divider />
+				<Box>
+					<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
+						{afspraken && afspraken.length > 0 ? <>
+							<Group>
 
-						<Stack direction={isMobile ? "column" : "row"} spacing={2}>
-							<FormLeft>
-								<Heading display={"box"}  size={"md"}>{t("forms.burgers.sections.agreements.title")}</Heading>
-								<Label>{t("forms.burgers.sections.agreements.detailText")}</Label>
-							</FormLeft>
-							<FormRight>
-								<Accordion allowMultiple>
-									{data.gebruiker.afspraken.map(afspraak =>
-										<AccordionItem>
-											<AccordionHeader>
-												<Text>{afspraak.beschrijving} ({afspraak.tegenRekening.rekeninghouder})</Text>
-												<AccordionIcon/>
-											</AccordionHeader>
-											<AccordionPanel>
-												<Stack flex={2} flexGrow={1}>
-													<Stack spacing={2} direction={isMobile ? "column" : "row"}>
-														<Stack spacing={1} flex={2}>
-															<Label>{t("forms.agreements.fields.description")}</Label>
-															<Text>{afspraak.beschrijving}</Text>
+								<FormLeft />
+								<FormRight>
+									<Stack direction={"row"} spacing={1} justifyContent={"flex-end"}>
+										{/* TODO add filter checkbox */}
+										<Button  variantColor={"primary"} onClick={onClickAddAfspraakButton}>{t("actions.add")}</Button>
+									</Stack>
+								</FormRight>
+							</Group>
+
+							<Divider />
+
+							<Group>
+								<FormLeft>
+									<Heading display={"box"}  size={"md"}>{t("forms.burgers.sections.agreements.title")}</Heading>
+									<Label>{t("forms.burgers.sections.agreements.detailText")}</Label>
+								</FormLeft>
+								<FormRight>
+									<Accordion allowMultiple>
+										{afspraken.map(afspraak =>
+											<AccordionItem>
+												<AccordionHeader>
+													<Text>{afspraak.beschrijving} - {afspraak.tegenRekening.rekeninghouder}</Text>
+													<AccordionIcon/>
+												</AccordionHeader>
+												<AccordionPanel>
+													<Stack flex={2} flexGrow={1}>
+														<Stack spacing={2} direction={isMobile ? "column" : "row"}>
+															<Stack spacing={1} flex={2}>
+																<Label>{t("forms.agreements.fields.description")}</Label>
+																<Text>{afspraak.beschrijving}</Text>
+															</Stack>
+															<Stack spacing={1} flex={1}>
+																<Label>{t("forms.agreements.fields.startDate")}</Label>
+																<Text>{afspraak.startDatum}</Text>
+															</Stack>
+															<Stack spacing={1} flex={1}>
+																<Label>{t("forms.agreements.fields.endDate")}</Label>
+																<Text>{afspraak.eindDatum}</Text>
+															</Stack>
 														</Stack>
-														<Stack spacing={1} flex={1}>
-															<Label>{t("forms.agreements.fields.startDate")}</Label>
-															<Text>{afspraak.startDatum}</Text>
-														</Stack>
-														<Stack spacing={1} flex={1}>
-															<Label>{t("forms.agreements.fields.endDate")}</Label>
-															<Text>{afspraak.eindDatum}</Text>
-														</Stack>
-													</Stack>
-													<Stack spacing={2} direction={isMobile ? "column" : "row"}>
-														<Stack spacing={1} flex={1}>
-															<Label>{t("forms.agreements.fields.amount")}</Label>
-															<Text>€{afspraak.bedrag} {t(`forms.agreements.fields.${afspraak.credit?"credit":"debit"}`)}</Text>
-														</Stack>
-														<Stack spacing={1} flex={1}>
-															<Label>{t("forms.agreements.fields.noOfPayments")}</Label>
-															<Text>{afspraak.aantalBetalingen}</Text>
-														</Stack>
-														{/*
+														<Stack spacing={2} direction={isMobile ? "column" : "row"}>
+															<Stack spacing={1} flex={1}>
+																<Label>{t("forms.agreements.fields.amount")}</Label>
+																<Text>€{afspraak.bedrag} {t(`forms.agreements.fields.${afspraak.credit?"credit":"debit"}`)}</Text>
+															</Stack>
+															<Stack spacing={1} flex={1}>
+																<Label>{t("forms.agreements.fields.noOfPayments")}</Label>
+																<Text>{afspraak.aantalBetalingen}</Text>
+															</Stack>
+															{/*
 														<Stack spacing={1} flex={1}>
 															<Label>{t("forms.agreements.fields.interval")}</Label>
 															<Text>{afspraak.interval}</Text>
 														</Stack>
 														*/}
-													</Stack>
-													<Stack spacing={2} direction={isMobile ? "column" : "row"}>
-														<Stack spacing={1} flex={1}>
-															<Label>{t("forms.agreements.fields.contraAccount")}</Label>
-															<Text>{afspraak.tegenRekening.iban} {afspraak.tegenRekening.rekeninghouder}</Text>
 														</Stack>
-														<Stack spacing={1} flex={1}>
-															<Label>{t("forms.agreements.fields.reference")}</Label>
-															<Text>{afspraak.kenmerk}</Text>
+														<Stack spacing={2} direction={isMobile ? "column" : "row"}>
+															<Stack spacing={1} flex={1}>
+																<Label>{t("forms.agreements.fields.contraAccount")}</Label>
+																<Text>{afspraak.tegenRekening.iban} {afspraak.tegenRekening.rekeninghouder}</Text>
+															</Stack>
+															<Stack spacing={1} flex={1}>
+																<Label>{t("forms.agreements.fields.reference")}</Label>
+																<Text>{afspraak.kenmerk}</Text>
+															</Stack>
 														</Stack>
+
 													</Stack>
 
-												</Stack>
-
-											</AccordionPanel>
-										</AccordionItem>
-									)}
-								</Accordion>
-							</FormRight>
-						</Stack>
-						{/* TODO use accordion*/}
-						{/* TODO add afspraken*/}
+												</AccordionPanel>
+											</AccordionItem>
+										)}
+									</Accordion>
+								</FormRight>
+							</Group>
+						</>: <NoAfsprakenFound/>}
 					</Stack>
 				</Box>
 			</Stack>

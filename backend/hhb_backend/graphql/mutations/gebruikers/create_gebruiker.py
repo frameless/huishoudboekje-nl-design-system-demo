@@ -32,7 +32,7 @@ class CreateGebruiker(graphene.Mutation):
     def mutate(root, info, **kwargs):
         """ Create the new Gebruiker/Burger """
         if "rekeningen" in kwargs:
-            rekeningen = kwargs.pop("rekeningen")
+            rekeningen = kwargs.pop("rekeningen", None)
         gebruiker_response = requests.post(
             f"{settings.HHB_SERVICES_URL}/gebruikers/",
             data=json.dumps(kwargs),

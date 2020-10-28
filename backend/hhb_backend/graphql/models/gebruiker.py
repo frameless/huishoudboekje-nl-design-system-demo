@@ -49,13 +49,12 @@ class Gebruiker(graphene.ObjectType):
 
     def resolve_afspraken(root, info):
         """ Get afspraken when requested """
-
         return [
             {
                 "id": 1,
                 "gebruiker_id": root.get('id'),
                 "beschrijving": "Beschrijving",
-                "start_datum": date.fromisoformat("2020-10-01"),
+                "start_datum": None,
                 "eind_datum": None,
                 "aantal_betalingen": 1,
                 "interval": None,
