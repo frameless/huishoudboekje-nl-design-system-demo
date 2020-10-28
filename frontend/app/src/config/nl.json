@@ -21,7 +21,7 @@
     },
     "agreements": {
       "createNew": "Toevoegen",
-      "showInactive": "Toon incactieve afspraken"
+      "showInactive": "Toon inactieve afspraken"
     },
     "organizations": {
       "createNew": "Toevoegen",
@@ -48,7 +48,8 @@
       "noSearchResults": "Geen burgers gevonden. Gebruik een andere zoekterm.",
       "addHint": "Voeg burgers toe door te klikken op de knop {{ buttonLabel }}."
     },
-    "afspraken": {
+    "agreements": {
+      "noSearchResults": "Geen afspraken gevonden.",
       "addHint": "Voeg afspraken toe door te klikken op de knop {{ buttonLabel }}."
     },
     "organizations": {

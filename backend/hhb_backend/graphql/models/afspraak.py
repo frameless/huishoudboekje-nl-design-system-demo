@@ -3,6 +3,7 @@ import graphene
 
 import hhb_backend.graphql.models.gebruiker as gebruiker
 import hhb_backend.graphql.models.rekening as rekening
+from hhb_backend.graphql.models import organisatie
 from hhb_backend.graphql.scalars.bedrag import Bedrag
 from hhb_backend.utils import convert_hhb_interval_to_dict
 
@@ -32,6 +33,7 @@ class Afspraak(graphene.ObjectType):
     credit = graphene.Boolean()
     kenmerk = graphene.String()
     actief = graphene.Boolean()
+    organisatie = graphene.Field(lambda: organisatie.Organisatie)
 
     def resolve_gebruiker(root, info):
         """ Get gebruiker when requested """
@@ -45,6 +47,14 @@ class Afspraak(graphene.ObjectType):
         return {
             "iban": "12",
             "rekeninghouder": "A",
+        }
+
+    def resolve_organisatie(root, info):
+        """ Get organisatie from the tegen_rekening"""
+
+        return {
+            "id": 1,
+            "weergave_naam": "A"
         }
 
     def resolve_interval(root, info):

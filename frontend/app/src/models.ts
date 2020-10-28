@@ -11,28 +11,12 @@ export type IGebruiker = {
 	huisnummer: string
 	postcode: string
 	plaatsnaam: string
-	rekeningen: [IRekening]
-	afspraken: [IAfspraak]
+	rekeningen: IRekening[]
+	afspraken: IAfspraak[]
 }
 
-// __typename: "Afspraak"
-export type IAfspraak = {
-	id: number
-	gebruiker: IGebruiker
-	beschrijving: string
-	startDatum: Date
-	eindDatum: Date
-	aantalBetalingen: number
-	interval: string  // TODO use interval
-	tegenRekening: IRekening
-	bedrag: string
-	credit: boolean
-	kenmerk: string
-	actief: boolean
-}
-
-// __typename: "Rekening"
 export type IRekening = {
+	__typename: "Rekening"
 	iban: string
 	rekeninghouder: string
 }
@@ -52,4 +36,21 @@ export type IKvK = {
 	plaatsnaam: string,
 	postcode: string,
 	straatnaam: string,
+}
+
+export type IAfspraak = {
+	__typename: "Afspraak"
+	id: number
+	gebruiker: IGebruiker
+	beschrijving: string
+	startDatum: Date
+	eindDatum: Date
+	aantalBetalingen: number
+	interval: string  // TODO use interval
+	tegenRekening: IRekening
+	organisatie: IOrganisatie
+	bedrag: string
+	credit: boolean
+	kenmerk: string
+	actief: boolean
 }

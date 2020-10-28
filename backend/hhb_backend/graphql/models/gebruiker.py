@@ -62,6 +62,6 @@ class Gebruiker(graphene.ObjectType):
                 "bedrag": "1000.00",
                 "credit": False,
                 "kenmerk": "Kenmerk",
-                "actief": True,
+                "actief": False,
             },
         ]

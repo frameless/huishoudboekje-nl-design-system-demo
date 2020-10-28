@@ -22,6 +22,7 @@ type Afspraak {
     id: Int
     interval: Interval
     kenmerk: String
+    organisatie: Organisatie
     startDatum: Date
     tegenRekening: Rekening
 }

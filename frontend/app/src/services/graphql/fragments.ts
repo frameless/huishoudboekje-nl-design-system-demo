@@ -26,6 +26,10 @@ export const AfspraakFragment = gql`
         credit
         kenmerk
         actief
+		organisatie {
+			id
+			weergaveNaam
+		}
     }
 	${RekeningFragment}
 `
