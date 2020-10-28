@@ -14,6 +14,7 @@ setup(
         'flask-oidc>=1.4.0',
         'gunicorn>=20.0.4',
         'graphene>=2,<3',
-        'requests>=2.24.0'
+        'requests>=2.24.0',
+        'Flask-Cors>=3.0.9',
     ],
 )
