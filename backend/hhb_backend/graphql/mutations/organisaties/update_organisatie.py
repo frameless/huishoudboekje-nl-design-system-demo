@@ -15,7 +15,6 @@ class UpdateOrganisatie(graphene.Mutation):
         id = graphene.Int(required=True)
         weergave_naam = graphene.String()
         kvk_nummer = graphene.String()
-        rekeningen = graphene.List(RekeningInput)
 
         # org_service elements
         naam = graphene.String()
@@ -29,9 +28,6 @@ class UpdateOrganisatie(graphene.Mutation):
 
     def mutate(root, info, id, **kwargs):
         """ Update the current Organisatie """
-
-        rekeningen = kwargs.pop("rekeningen")
-
         # First update weergavenaam and get original kvk_number
         hhb_service_data = {}
         if "weergave_naam" in kwargs:
@@ -66,10 +62,5 @@ class UpdateOrganisatie(graphene.Mutation):
             )
             if hhb_service_response.status_code != 202:
                 raise GraphQLError(f"Upstream API responded: {hhb_service_response.json()}")
-
-        # TODO:
-        # - remove gebruiker_rekening that are not connected anymore
-        # - add new rekeningen
-        # - add gebruiker_rekening that are now connected
 
         return UpdateOrganisatie(organisatie=hhb_service_response.json()["data"], ok=True)

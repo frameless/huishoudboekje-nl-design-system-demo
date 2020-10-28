@@ -14,7 +14,6 @@ class CreateOrganisatie(graphene.Mutation):
         # hhb_service elements (required)
         kvk_nummer = graphene.String(required=True)
         weergave_naam = graphene.String(required=True)
-        rekeningen = graphene.List(RekeningInput)
 
         # org_service elements (optional)
         naam = graphene.String()
@@ -28,15 +27,12 @@ class CreateOrganisatie(graphene.Mutation):
 
     def mutate(root, info, **kwargs):
         """ Create the new Organisatie """
-
-        rekeningen = kwargs.pop("rekeningen", None)
-
         hhb_service_data = {
             "kvk_nummer": kwargs["kvk_nummer"],
             "weergave_naam": kwargs.pop("weergave_naam")
         }
         hhb_service_response = requests.post(
-            os.path.join(settings.HHB_SERVICES_URL, "organisaties/"), 
+            f"{settings.HHB_SERVICES_URL}/organisaties/",
             data=json.dumps(hhb_service_data),
             headers={'Content-type': 'application/json'}
         )
@@ -44,16 +40,11 @@ class CreateOrganisatie(graphene.Mutation):
             raise GraphQLError(f"Upstream API responded: {hhb_service_response.json()}")
 
         org_service_response = requests.post(
-            os.path.join(settings.ORGANISATIE_SERVICES_URL, f"organisaties/"), 
+            f"{settings.HHB_SERVICES_URL}/organisaties/",
             data=json.dumps(kwargs),
             headers={'Content-type': 'application/json'}
         )
         if org_service_response.status_code != 201:
             raise GraphQLError(f"Upstream API responded: {org_service_response.json()}")
-
-        # TODO:
-        # - lookup existing rekeningen
-        # - add new rekeningen
-        # - add gebruiker_rekening that are now connected
 
         return CreateOrganisatie(organisatie=hhb_service_response.json()["data"], ok=True)
