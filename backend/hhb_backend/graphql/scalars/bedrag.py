@@ -1,6 +1,6 @@
-import decimal
 from graphene.types import Scalar
 from graphql.language import ast
+from decimal import Decimal
 import re
 
 class Bedrag(Scalar):
@@ -10,15 +10,13 @@ class Bedrag(Scalar):
 
     @staticmethod
     def serialize(value):
-        return str(decimal.Decimal(value) / 100)
+        return str(Decimal(value) / 100)
 
     @staticmethod
     def parse_literal(node):
         if isinstance(node, ast.StringValue):
-            return parse_value(
-                node.value)
+            return Bedrag.parse_value(node.value)
 
     @staticmethod
     def parse_value(value):
-        if Bedrag.VALID_BEDRAG(value):
-            return int(decimal.Decimal(value) * 100)
+        return int(Decimal(value) * 100)

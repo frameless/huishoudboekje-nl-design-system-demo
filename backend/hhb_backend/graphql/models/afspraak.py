@@ -4,8 +4,20 @@ import graphene
 import hhb_backend.graphql.models.gebruiker as gebruiker
 import hhb_backend.graphql.models.rekening as rekening
 from hhb_backend.graphql.scalars.bedrag import Bedrag
+from hhb_backend.utils import convert_hhb_interval_to_dict
 
+class Interval(graphene.ObjectType):
+    jaren = graphene.Int()
+    maanden = graphene.Int()
+    weken = graphene.Int()
+    dagen = graphene.Int()
 
+class IntervalInput(graphene.InputObjectType):
+    jaren = graphene.Int()
+    maanden = graphene.Int()
+    weken = graphene.Int()
+    dagen = graphene.Int()
+    
 class Afspraak(graphene.ObjectType):
     """ GraphQL Afspraak model """
     id = graphene.Int()
@@ -14,7 +26,7 @@ class Afspraak(graphene.ObjectType):
     start_datum = graphene.Date()
     eind_datum = graphene.Date()
     aantal_betalingen = graphene.Int()
-    interval = graphene.String()  # TODO use interval scalar
+    interval = graphene.Field(Interval)
     tegen_rekening = graphene.Field(lambda: rekening.Rekening)
     bedrag = graphene.Field(Bedrag)
     credit = graphene.Boolean()
@@ -34,3 +46,6 @@ class Afspraak(graphene.ObjectType):
             "iban": "12",
             "rekeninghouder": "A",
         }
+
+    def resolve_interval(root, info):
+        return convert_hhb_interval_to_dict(root.get("interval"))
