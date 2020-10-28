@@ -1,4 +1,5 @@
 import {
+	Accordion, AccordionHeader, AccordionIcon, AccordionItem, AccordionPanel,
 	Box,
 	Divider,
 	Heading,
@@ -21,6 +22,7 @@ import { useQuery } from "@apollo/client";
 import { IGebruiker } from "../../models";
 import { GetOneGebruikerQuery } from "../../services/graphql/queries";
 import theme from "../../config/theme";
+import { FormLeft, FormRight } from "../Forms/FormLeftRight";
 
 const Label: React.FunctionComponent = ({ children }) =>
 	<Text fontSize={"sm"} color={theme.colors.gray["500"]}>{children}</Text>;
@@ -174,11 +176,11 @@ const BurgerDetail = () => {
 				<Box>
 					<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
 						<Stack direction={isMobile ? "column" : "row"} spacing={2}>
-							<Stack flex={1}>
+							<FormLeft >
 								<Heading display={"box"} size={"md"}>{t("forms.burgers.sections.personal.title")}</Heading>
 								<Label>{t("forms.burgers.sections.personal.detailText")}</Label>
-							</Stack>
-							<Stack flex={2} flexGrow={1}>
+							</FormLeft>
+							<FormRight>
 								<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 									<Stack spacing={1} flex={1}>
 										<Label>{t("forms.burgers.fields.initials")}</Label>
@@ -198,18 +200,17 @@ const BurgerDetail = () => {
 									<Text>{data.gebruiker.geboortedatum}</Text>
 								</Stack>
 
-							</Stack>
+							</FormRight>
 						</Stack>
 
 						<Divider />
 
 						<Stack direction={isMobile ? "column" : "row"} spacing={2}>
-							<Stack flex={1}>
+							<FormLeft>
 								<Heading display={"box"}  size={"md"}>{t("forms.burgers.sections.contact.title")}</Heading>
 								<Label>{t("forms.burgers.sections.contact.detailText")}</Label>
-								{/*	</FormLeft>*/}
-							</Stack>
-							<Stack flex={2}>
+							</FormLeft>
+							<FormRight>
 								<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 									<Stack spacing={1} flex={2}>
 										<Label>{t("forms.burgers.fields.street")}</Label>
@@ -240,7 +241,74 @@ const BurgerDetail = () => {
 										<Text>{data.gebruiker.email}</Text>
 									</Stack>
 								</Stack>
-							</Stack>
+							</FormRight>
+						</Stack>
+
+						<Divider />
+
+						<Stack direction={isMobile ? "column" : "row"} spacing={2}>
+							<FormLeft>
+								<Heading display={"box"}  size={"md"}>{t("forms.burgers.sections.agreements.title")}</Heading>
+								<Label>{t("forms.burgers.sections.agreements.detailText")}</Label>
+							</FormLeft>
+							<FormRight>
+								<Accordion allowMultiple>
+									{data.gebruiker.afspraken.map(afspraak =>
+										<AccordionItem>
+											<AccordionHeader>
+												<Text>{afspraak.beschrijving} ({afspraak.tegenRekening.rekeninghouder})</Text>
+												<AccordionIcon/>
+											</AccordionHeader>
+											<AccordionPanel>
+												<Stack flex={2} flexGrow={1}>
+													<Stack spacing={2} direction={isMobile ? "column" : "row"}>
+														<Stack spacing={1} flex={2}>
+															<Label>{t("forms.agreements.fields.description")}</Label>
+															<Text>{afspraak.beschrijving}</Text>
+														</Stack>
+														<Stack spacing={1} flex={1}>
+															<Label>{t("forms.agreements.fields.startDate")}</Label>
+															<Text>{afspraak.startDatum}</Text>
+														</Stack>
+														<Stack spacing={1} flex={1}>
+															<Label>{t("forms.agreements.fields.endDate")}</Label>
+															<Text>{afspraak.eindDatum}</Text>
+														</Stack>
+													</Stack>
+													<Stack spacing={2} direction={isMobile ? "column" : "row"}>
+														<Stack spacing={1} flex={1}>
+															<Label>{t("forms.agreements.fields.amount")}</Label>
+															<Text>€{afspraak.bedrag} {t(`forms.agreements.fields.${afspraak.credit?"credit":"debit"}`)}</Text>
+														</Stack>
+														<Stack spacing={1} flex={1}>
+															<Label>{t("forms.agreements.fields.noOfPayments")}</Label>
+															<Text>{afspraak.aantalBetalingen}</Text>
+														</Stack>
+														{/*
+														<Stack spacing={1} flex={1}>
+															<Label>{t("forms.agreements.fields.interval")}</Label>
+															<Text>{afspraak.interval}</Text>
+														</Stack>
+														*/}
+													</Stack>
+													<Stack spacing={2} direction={isMobile ? "column" : "row"}>
+														<Stack spacing={1} flex={1}>
+															<Label>{t("forms.agreements.fields.contraAccount")}</Label>
+															<Text>{afspraak.tegenRekening.iban} {afspraak.tegenRekening.rekeninghouder}</Text>
+														</Stack>
+														<Stack spacing={1} flex={1}>
+															<Label>{t("forms.agreements.fields.reference")}</Label>
+															<Text>{afspraak.kenmerk}</Text>
+														</Stack>
+													</Stack>
+
+												</Stack>
+
+											</AccordionPanel>
+										</AccordionItem>
+									)}
+								</Accordion>
+							</FormRight>
 						</Stack>
 						{/* TODO use accordion*/}
 						{/* TODO add afspraken*/}

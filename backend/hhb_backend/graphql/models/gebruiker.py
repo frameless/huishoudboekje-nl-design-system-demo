@@ -1,5 +1,6 @@
 """ Gebruiker model as used in GraphQL queries """
 import os
+from datetime import date
 
 import graphene
 import requests
@@ -54,7 +55,7 @@ class Gebruiker(graphene.ObjectType):
                 "id": 1,
                 "gebruiker_id": root.get('id'),
                 "beschrijving": "Beschrijving",
-                "start_datum": "2020-10-01",
+                "start_datum": date.fromisoformat("2020-10-01"),
                 "eind_datum": None,
                 "aantal_betalingen": 1,
                 "interval": None,
@@ -63,5 +64,5 @@ class Gebruiker(graphene.ObjectType):
                 "credit": False,
                 "kenmerk": "Kenmerk",
                 "actief": True,
-            }
+            },
         ]

@@ -72,6 +72,10 @@
           "title": "Contact",
           "helperText": "Vul de contactgegevens van de burger in.",
           "detailText": "Contactgegevens van de burger."
+        },
+        "agreements": {
+          "title": "Afspraken",
+          "detailText": "Afspraken van de burger."
         }
       },
       "fields": {
@@ -92,6 +96,21 @@
       "tooltips": {
         "zipcode": "Invoer zonder spaties. Voorbeeld: 1234AB",
         "phoneNumber": "Invoer zonder spaties en streepjes. Voorbeeld: 0612345678"
+      }
+    },
+    "agreements": {
+      "fields": {
+        "description": "Beschrijving,",
+        "startDate": "Start datum",
+        "endDate": "Eind datum",
+        "noOfPayments": "Aantal betalingen",
+        "interval": "Interval",
+        "contraAccount": "Tegen rekening",
+        "amount": "Bedrag",
+        "credit": "Credit",
+        "debit": "Debet",
+        "reference": "kenmerk",
+        "active": "Actief"
       }
     },
     "organizations": {

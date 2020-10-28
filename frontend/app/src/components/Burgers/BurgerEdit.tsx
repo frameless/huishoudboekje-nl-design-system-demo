@@ -1,3 +1,4 @@
+import React, {useEffect, useRef} from "react";
 import {
 	AlertDialog,
 	AlertDialogBody,
@@ -24,7 +25,6 @@ import {
 	Tooltip,
 	useToast
 } from "@chakra-ui/core";
-import React, {useEffect, useRef} from "react";
 import {useInput, useIsMobile, useNumberInput, useToggle, Validators} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {Redirect, useHistory, useParams} from "react-router-dom";

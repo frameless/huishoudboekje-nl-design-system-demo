@@ -11,7 +11,30 @@ export type IGebruiker = {
 	huisnummer: string
 	postcode: string
 	plaatsnaam: string
+	rekeningen: [IRekening]
+	afspraken: [IAfspraak]
+}
+
+// __typename: "Afspraak"
+export type IAfspraak = {
+	id: number
+	gebruiker: IGebruiker
+	beschrijving: string
+	startDatum: Date
+	eindDatum: Date
+	aantalBetalingen: number
+	interval: string  // TODO use interval
+	tegenRekening: IRekening
+	bedrag: string
+	credit: boolean
+	kenmerk: string
+	actief: boolean
+}
+
+// __typename: "Rekening"
+export type IRekening = {
 	iban: string
+	rekeninghouder: string
 }
 
 export type IOrganisatie = {
