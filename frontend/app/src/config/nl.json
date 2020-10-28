@@ -99,6 +99,7 @@
       }
     },
     "agreements": {
+      "title": "Afspraken",
       "fields": {
         "description": "Beschrijving,",
         "startDate": "Start datum",
@@ -116,27 +117,27 @@
     "organizations": {
       "title": "Organisaties",
       "sections": {
-        "organizational": {
-          "title": "Organisatie",
-          "helperText": "Vul de gegevens van de organisatie in."
+        "pt1": {
+          "title": "Part 1",
+          "helperText": "I'm helping"
         },
-        "contact": {
-          "title": "Contact",
-          "helperText": "Vul de contactgegevens van de organisatie in."
+        "pt2": {
+          "title": "Part 2",
+          "helperText": "I'm also helping"
         }
       },
       "fields": {
-        "kvkNumber": "KvK-nummer",
-        "companyName": "Bedrijfsnaam",
-        "displayName": "Weergavenaam",
-        "street": "Straatnaam",
-        "houseNumber": "Huisnummer",
-        "zipcode": "Postcode",
-        "city": "Plaatsnaam"
+        "gebruiker": 1,
+        "beschrijving": "Beschrijving",
+        "start_datum": "Eind datum",
+        "eind_datum": "Start datum",
+        "aantal_betalingen": "Aantal betalingen",
+        "interval": "Interval",
+        "tegen_rekening": "Tegen rekening",
+        "bedrag": "Bedrag",
+        "kenmerk": "Kenmerk"
       },
       "tooltips": {
-        "kvkNumber": "Het KvK-nummer bestaat uit acht cijfers. Voorbeeld: 27348329",
-        "zipcode": "Invoer zonder spaties. Voorbeeld: 1234AB"
       }
     }
   },

@@ -151,6 +151,8 @@ const BurgerDetail = () => {
 	return (<>
 		<BackButton to={Routes.Burgers} />
 
+		<BackButton to={Routes.AgreementsNew} />
+
 		{loading && (
 			<Stack spacing={5} alignItems={"center"} justifyContent={"center"} my={10}>
 				<Spinner />

@@ -79,3 +79,25 @@ export const OrganisatieFragment = gql`
 	${RekeningFragment}
     ${OrganisatieKvkDetailsFragment}
 `;
+
+export const AfspraakFragment = gql`
+    fragment Afspraak on Afspraak {
+        id
+        gebruiker
+        beschrijving
+        start_datum
+        eind_datum
+        aantal_betalingen
+        interval {
+            jaren
+            maanden
+            weken
+            dagen
+        },
+        tegen_rekening
+        bedrag
+        credit
+        kenmerk
+        actief
+    }
+`;

@@ -1,0 +1,16 @@
+[
+    {
+        "id": 1,
+        "gebruiker": 1,
+        "beschrijving": "Test afspraak",
+        "start_datum": "20-01-01",
+        "eind_datum": "20-10-01",
+        "aantal_betalingen": 10,
+        "interval": {"maanden": 1},
+        "tegen_rekening": 1,
+        "bedrag": "13.37",
+        "credit": true,
+        "kenmerk": "1234AB",
+        "actief": true
+    }
+]

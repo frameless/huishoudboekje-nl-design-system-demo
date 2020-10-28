@@ -45,6 +45,14 @@ export type IOrganisatie = {
 	kvkDetails: IKvK,
 }
 
+export type IAfspraak = {
+	__typename: "Organisatie",
+	id: number,
+	kvkNummer: string,
+	weergaveNaam: string,
+	kvkDetails: IKvK,
+}
+
 export type IKvK = {
 	huisnummer: string,
 	naam: string,

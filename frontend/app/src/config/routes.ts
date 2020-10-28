@@ -8,7 +8,8 @@ export enum Names {
 	organizations = "organisaties",
 	banking = "bank",
 	settings = "instellingen",
-	notFound = "404"
+	notFound = "404",
+	agreements = "afspraken"
 }
 
 export enum Subpage {
@@ -27,6 +28,8 @@ const Routes = {
 	Organizations: `/${Names.organizations}`,
 	Organization: (organizationId: number) => `/${Names.organizations}/${organizationId}`,
 	CreateOrganization: `/${Names.organizations}/toevoegen`,
+	OrganizationNew: `/${Names.organizations}/toevoegen`,
+	AgreementsNew: `/${Names.agreements}/toevoegen`,
 
 	Dashboard: `/${Names.dashboard}`,
 	Balances: `/${Names.balances}`,
