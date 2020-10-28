@@ -4,9 +4,9 @@ import json
 import graphene
 import requests
 from graphql import GraphQLError
+
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.models.gebruiker import Gebruiker
-from hhb_backend.graphql.mutations.rekening_input import RekeningInput
 
 
 class UpdateGebruiker(graphene.Mutation):
@@ -16,7 +16,6 @@ class UpdateGebruiker(graphene.Mutation):
         email = graphene.String()
         geboortedatum = graphene.String()
         telefoonnummer = graphene.String()
-        rekeningen = graphene.List(RekeningInput)
 
         # burger arguments
         achternaam = graphene.String()
@@ -33,8 +32,6 @@ class UpdateGebruiker(graphene.Mutation):
     def mutate(root, info, id, **kwargs):
         """ Update the current Gebruiker/Burger """
 
-        rekeningen = kwargs.pop("rekeningen")
-
         gebruiker_response = requests.patch(
             f"{settings.HHB_SERVICES_URL}/gebruikers/{id}",
             data=json.dumps(kwargs),
@@ -42,10 +39,5 @@ class UpdateGebruiker(graphene.Mutation):
         )
         if gebruiker_response.status_code != 200:
             raise GraphQLError(f"Upstream API responded: {gebruiker_response.json()}")
-
-        # TODO:
-        # - remove gebruiker_rekening that are not connected anymore
-        # - add new rekeningen
-        # - add gebruiker_rekening that are now connected
 
         return UpdateGebruiker(gebruiker=gebruiker_response.json()["data"], ok=True)
