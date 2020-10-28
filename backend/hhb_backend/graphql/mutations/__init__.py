@@ -9,6 +9,8 @@ from .organisaties.delete_organisatie import DeleteOrganisatie
 from .afspraken.add_afspraak import AddAfspraak
 from .afspraken.update_afspraak import UpdateAfspraak
 from .afspraken.delete_afspraak import DeleteAfspraak
+from .rekeningen.create_rekening import CreateRekening
+
 
 class RootMutation(graphene.ObjectType):
     """ The root of all mutations """
@@ -21,3 +23,4 @@ class RootMutation(graphene.ObjectType):
     createOrganisatie = CreateOrganisatie.Field()
     updateOrganisatie = UpdateOrganisatie.Field()
     deleteOrganisatie = DeleteOrganisatie.Field()
+    createRekening = CreateRekening.Field()
