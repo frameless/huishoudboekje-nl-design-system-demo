@@ -20,3 +20,5 @@ export const NoAfsprakenFound = () => {
 		</Stack>
 	);
 };
+
+export default NoAfsprakenFound;

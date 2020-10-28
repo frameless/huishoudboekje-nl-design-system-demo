@@ -26,7 +26,8 @@ import { IAfspraak, IGebruiker } from "../../models";
 import { GetOneGebruikerQuery } from "../../services/graphql/queries";
 import theme from "../../config/theme";
 import { FormLeft, FormRight } from "../Forms/FormLeftRight";
-import { NoAfsprakenFound } from "./NoAfsprakenFound";
+import NoAfsprakenFound from "./NoAfsprakenFound";
+import NoAfsprakenSearchResults from "./NoAfsprakenSearchResults";
 
 const Label: React.FunctionComponent = ({ children }) =>
 	<Text fontSize={"sm"} color={theme.colors.gray["500"]}>{children}</Text>;
@@ -34,7 +35,7 @@ const Label: React.FunctionComponent = ({ children }) =>
 const Group: React.FC<BoxProps> = ({children, ...props}) => {
 	const isMobile = useIsMobile();
 	return (
-		<Stack spacing={2} direction={isMobile ? "column" : "row"}>{children}</Stack>
+		<Stack spacing={2} mb={1} direction={isMobile ? "column" : "row"}>{children}</Stack>
 	);
 };
 
@@ -213,7 +214,7 @@ const BurgerDetail = () => {
 								<Label>{t("forms.burgers.sections.personal.detailText")}</Label>
 							</FormLeft>
 							<FormRight>
-								<Group>
+								<Group mb={5}>
 									<Stack spacing={1} flex={1}>
 										<Label>{t("forms.burgers.fields.initials")}</Label>
 										<Text>{data.gebruiker.voorletters}</Text>
@@ -227,10 +228,12 @@ const BurgerDetail = () => {
 										<Text>{data.gebruiker.achternaam}</Text>
 									</Stack>
 								</Group>
-								<Stack spacing={1}>
-									<Label>{t("forms.burgers.fields.dateOfBirth")}</Label>
-									<Text>{data.gebruiker.geboortedatum}</Text>
-								</Stack>
+								<Group>
+									<Stack spacing={1}>
+										<Label>{t("forms.burgers.fields.dateOfBirth")}</Label>
+										<Text>{data.gebruiker.geboortedatum}</Text>
+									</Stack>
+								</Group>
 
 							</FormRight>
 						</Group>
@@ -307,10 +310,12 @@ const BurgerDetail = () => {
 										<Label>{t("forms.burgers.sections.agreements.detailText")}</Label>
 									</FormLeft>
 									<FormRight>
-										<Accordion allowMultiple>
 
-											{afspraken ?
-												afspraken.map((afspraak, i) =>
+										{afspraken?.length === 0 ?
+											<NoAfsprakenSearchResults />
+											:
+											<Accordion allowMultiple>
+												{afspraken?.map((afspraak, i) =>
 													<AccordionItem key={i}>
 														<AccordionHeader>
 															<Text>{afspraak.beschrijving} - {afspraak.organisatie.weergaveNaam}</Text>
@@ -362,10 +367,9 @@ const BurgerDetail = () => {
 
 														</AccordionPanel>
 													</AccordionItem>,
-												) :
-												<NoAfsprakenFound />
-											}
-										</Accordion>
+												)}
+											</Accordion>
+										}
 									</FormRight>
 								</Group>
 							</>

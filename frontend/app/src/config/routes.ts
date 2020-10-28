@@ -9,7 +9,6 @@ export enum Names {
 	banking = "bank",
 	settings = "instellingen",
 	notFound = "404",
-	agreements = "afspraken"
 }
 
 export enum Subpage {
