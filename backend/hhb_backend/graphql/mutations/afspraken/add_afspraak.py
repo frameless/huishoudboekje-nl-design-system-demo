@@ -35,7 +35,7 @@ class AddAfspraak(graphene.Mutation):
             kwargs["interval"] = iso_interval
         post_response = requests.post(
             f"{settings.HHB_SERVICES_URL}/afspraken/",
-            data=json.dumps(kwargs),
+            data=json.dumps(kwargs, default=str),
             headers={'Content-type': 'application/json'}
         )
         if post_response.status_code != 201:

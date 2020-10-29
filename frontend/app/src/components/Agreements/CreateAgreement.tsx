@@ -22,7 +22,7 @@ import {FormLeft, FormRight} from "../Forms/FormLeftRight";
 import { useMutation, useQuery } from "@apollo/client";
 import {sampleData} from "../../config/sampleData/sampleData";
 import { Redirect, useHistory, useParams } from "react-router-dom";
-import {CreateAgreementMutation} from "../../services/graphql/mutations";
+import {AddAgreementMutation} from "../../services/graphql/mutations";
 import { IGebruiker } from "../../models";
 import { GetOneGebruikerQuery, NewAfspraakQuery } from "../../services/graphql/queries";
 
@@ -38,8 +38,6 @@ const CreateAgreement = () => {
 	const gebruiker = useQuery<{ gebruiker: IGebruiker }>(NewAfspraakQuery, {
 		variables: { citizenId },
 	});
-
-	console.log({citizenId});
 
 	const beschrijving = useInput({
 		defaultValue: "",
@@ -103,14 +101,13 @@ const CreateAgreement = () => {
 		validate: [Validators.required]
 	});
 
-	const [createAgreement, {loading}] = useMutation(CreateAgreementMutation);
+	const [addAgreement, {loading}] = useMutation(AddAgreementMutation);
 
 	const prePopulateForm = () => {
 		const c = sampleData.agreements[0];
 
 		const startDatum: Date = new Date(c.start_datum)
 		const eindDatum: Date = new Date(c.eind_datum)
-		console.log({startDatumMonth: startDatum.getMonth(), eindDatumMonth: eindDatum.getMonth()});
 		beschrijving.setValue(c.beschrijving);
 		startDate.day.setValue(startDatum.getDate());
 		startDate.month.setValue(startDatum.getMonth() + 1);
@@ -152,20 +149,14 @@ const CreateAgreement = () => {
 			return;
 		}
 
-		createAgreement({
+		const startDatum = new Date(Date.UTC(startDate.year.value, startDate.month.value - 1, startDate.day.value));
+		const eindDatum = new Date(Date.UTC(endDate.year.value, endDate.month.value - 1, endDate.day.value));
+		addAgreement({
 			variables: {
 				gebruiker: citizenId,
 				beschrijving: beschrijving.value,
-				start_datum: [
-					startDate.year.value,
-					("0" + startDate.month.value).substr(-2, 2),
-					("0" + startDate.day.value).substr(-2, 2),
-				].join("-"),
-				eind_datum: [
-					endDate.year.value,
-					("0" + endDate.month.value).substr(-2, 2),
-					("0" + endDate.day.value).substr(-2, 2),
-				].join("-"),
+				start_datum: startDatum.toISOString().substring(0,10),
+				eind_datum: eindDatum.toISOString().substring(0,10),
 				interval: interval.value,
 				tegen_rekening: tegen_rekening.value,
 				bedrag: bedrag.value,
