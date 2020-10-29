@@ -112,7 +112,8 @@ const App = () => {
 
 							<Switch>
 								<Route path={Routes.Burgers} component={Burgers} />
-								<Route path={Routes.AgreementsNew} component={Agreements} />
+								<Route path={Routes.AgreementNew()} component={Agreements} />
+								<Route path={Routes.Agreements} component={Agreements} />
 								<Route path={Routes.Organizations} component={Organizations} />
 								{/*<Route path={ROUTEPATH} component={BANK_COMPONENT} />*/}
 								{/*<Route path={ROUTEPATH} component={SETTINGS_COMPONENT} />*/}

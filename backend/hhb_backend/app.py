@@ -5,7 +5,6 @@ import secrets
 import itsdangerous
 from flask import Flask, jsonify, Response, redirect, render_template
 from flask_oidc import OpenIDConnect
-from flask_cors import CORS
 from flask_graphql import GraphQLView
 
 from hhb_backend.custom_oidc import CustomOidc
@@ -79,7 +78,6 @@ def login():
 graph_ql_view = GraphQLView.as_view('graphql', schema=schema, graphiql=True, )
 graph_ql_batch_view = GraphQLView.as_view('graphql_batch', schema=schema, batch=True)
 if app.config['ENV'] == 'development':
-    cors = CORS(app, resources={r"/graphql*": {"origins": "*"}})
     app.add_url_rule('/graphql', view_func=graph_ql_view, strict_slashes=False)
 
     # Optional, for adding batch query support (used in Apollo-Client)

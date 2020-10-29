@@ -109,7 +109,7 @@
     },
     "agreements": {
       "title": "Afspraak",
-      "subtitle": "lorem ipsum",
+      "subtitle": "Vul de gegevens van de afspraak in.",
       "fields": {
         "description": "Beschrijving",
         "startDate": "Start datum",

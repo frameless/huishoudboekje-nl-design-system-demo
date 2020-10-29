@@ -18,7 +18,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { useIsMobile } from "react-grapple";
 import { useTranslation } from "react-i18next";
-import { Redirect, useHistory, useParams } from "react-router-dom";
+import { Redirect, Route, useHistory, useParams } from "react-router-dom";
 import Routes, { Subpage } from "../../config/routes";
 import BackButton from "../BackButton";
 import { useQuery } from "@apollo/client";
@@ -28,6 +28,7 @@ import theme from "../../config/theme";
 import { FormLeft, FormRight } from "../Forms/FormLeftRight";
 import NoAfsprakenFound from "./NoAfsprakenFound";
 import NoAfsprakenSearchResults from "./NoAfsprakenSearchResults";
+import CreateAgreement from "../Agreements/CreateAgreement";
 
 const Label: React.FunctionComponent = ({ children }) =>
 	<Text fontSize={"sm"} color={theme.colors.gray["500"]}>{children}</Text>;
@@ -178,8 +179,6 @@ const BurgerDetail = () => {
 
 	return (<>
 		<BackButton to={Routes.Burgers} />
-
-		<BackButton to={Routes.AgreementsNew} />
 
 		{loading && (
 			<Stack spacing={5} alignItems={"center"} justifyContent={"center"} my={10}>

@@ -19,6 +19,16 @@ export const GetOneGebruikerQuery = gql`
     ${GebruikerFragment}
 `;
 
+export const NewAfspraakQuery = gql`
+    query newAfspraak($citizenId: Int!) {
+        gebruiker(id: $citizenId) {
+            voornamen
+            achternaam
+        }
+    }
+    ${GebruikerFragment}
+`;
+
 export const GetAllOrganisatiesQuery = gql`
     query getAllOrganisaties {
         organisaties{
