@@ -99,9 +99,10 @@
       }
     },
     "agreements": {
-      "title": "Afspraken",
+      "title": "Afspraak",
+      "subtitle": "lorem ipsum",
       "fields": {
-        "description": "Beschrijving,",
+        "description": "Beschrijving",
         "startDate": "Start datum",
         "endDate": "Eind datum",
         "noOfPayments": "Aantal betalingen",
@@ -111,33 +112,34 @@
         "credit": "Credit",
         "debit": "Debet",
         "reference": "kenmerk",
-        "active": "Actief"
+        "active": "Actief",
+        "user": "Gebruiker"
       }
     },
     "organizations": {
       "title": "Organisaties",
       "sections": {
-        "pt1": {
-          "title": "Part 1",
-          "helperText": "I'm helping"
+        "organizational": {
+          "title": "Organisatie",
+          "helperText": "Vul de gegevens van de organisatie in."
         },
-        "pt2": {
-          "title": "Part 2",
-          "helperText": "I'm also helping"
+        "contact": {
+          "title": "Contact",
+          "helperText": "Vul de contactgegevens van de organisatie in."
         }
       },
       "fields": {
-        "gebruiker": 1,
-        "beschrijving": "Beschrijving",
-        "start_datum": "Eind datum",
-        "eind_datum": "Start datum",
-        "aantal_betalingen": "Aantal betalingen",
-        "interval": "Interval",
-        "tegen_rekening": "Tegen rekening",
-        "bedrag": "Bedrag",
-        "kenmerk": "Kenmerk"
+        "kvkNumber": "KvK-nummer",
+        "companyName": "Bedrijfsnaam",
+        "displayName": "Weergavenaam",
+        "street": "Straatnaam",
+        "houseNumber": "Huisnummer",
+        "zipcode": "Postcode",
+        "city": "Plaatsnaam"
       },
       "tooltips": {
+        "kvkNumber": "Het KvK-nummer bestaat uit acht cijfers. Voorbeeld: 27348329",
+        "zipcode": "Invoer zonder spaties. Voorbeeld: 1234AB"
       }
     }
   },
