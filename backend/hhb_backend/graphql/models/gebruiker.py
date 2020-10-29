@@ -4,6 +4,7 @@ from datetime import date
 
 import graphene
 import requests
+from graphql import GraphQLError
 
 from hhb_backend.graphql import settings
 import hhb_backend.graphql.models.afspraak as afspraak
@@ -47,3 +48,11 @@ class Gebruiker(graphene.ObjectType):
             }
         ]
 
+    def resolve_afspraken(root, info):
+        data = root.get('afspraken')
+        if data == None:
+            afspraken_response = requests.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_gebruikers={root.get('id')}")
+            if afspraken_response.status_code != 200:
+                raise GraphQLError(f"Upstream API responded: {afspraken_response.json()}")
+            data = afspraken_response.json()["data"]
+        return data

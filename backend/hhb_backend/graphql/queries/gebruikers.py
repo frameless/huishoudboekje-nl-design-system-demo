@@ -17,12 +17,13 @@ class GebruikerQuery():
 
         gebruiker_json = gebruiker_response.json()["data"]
 
-        # Todo: check if afspraken is requested before getting the data
-        afspraken_response = requests.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_gebruikers={gebruiker_json['id']}")
-        if afspraken_response.status_code != 200:
-            raise GraphQLError(f"Upstream API responded: {afspraken_response.json()}")
+        if "afspraken" in info.context.json["query"]:
+            print("Runningin afspraken query")
+            afspraken_response = requests.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_gebruikers={gebruiker_json['id']}")
+            if afspraken_response.status_code != 200:
+                raise GraphQLError(f"Upstream API responded: {afspraken_response.json()}")
 
-        gebruiker_json["afspraken"] = afspraken_response.json()["data"]
+            gebruiker_json["afspraken"] = afspraken_response.json()["data"]
 
         return gebruiker_json
 
@@ -43,11 +44,12 @@ class GebruikersQuery():
 
         gebruiker_ids = [g["id"] for g in gebruikers_json]
 
-        # Todo: check if afspraken is requested before getting the data
-        afspraken_response = requests.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_gebruikers={','.join([str(g) for g in gebruiker_ids])}")
-        if afspraken_response.status_code != 200:
-            raise GraphQLError(f"Upstream API responded: {afspraken_response.json()}")
-        
-        for gebruiker in gebruikers_json:
-            gebruiker["afspraken"] = [a for a in afspraken_response.json()["data"] if a["gebruiker_id"] == gebruiker["id"]]
+        if "afspraken" in info.context.json["query"]:
+            afspraken_response = requests.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_gebruikers={','.join([str(g) for g in gebruiker_ids])}")
+            if afspraken_response.status_code != 200:
+                raise GraphQLError(f"Upstream API responded: {afspraken_response.json()}")
+            
+            for gebruiker in gebruikers_json:
+                gebruiker["afspraken"] = [a for a in afspraken_response.json()["data"] if a["gebruiker_id"] == gebruiker["id"]]
+                
         return gebruikers_json
