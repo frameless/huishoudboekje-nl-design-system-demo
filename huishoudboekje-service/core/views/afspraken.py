@@ -1,4 +1,5 @@
-""" MethodView for /afspraken/<afspraak_id>/ path """
+""" MethodView for /afspraken/(<afspraak_id>)/ path """
+from flask import request, abort, make_response
 from models.afspraak import Afspraak
 from core.views.hhb_view import HHBView
 
@@ -12,7 +13,7 @@ class AfspraakView(HHBView):
             "gebruiker_id": {
                 "type": "integer",
             },
-            "beschijving": {
+            "beschrijving": {
                 "type": "string",
             },
             "start_datum": {
@@ -44,3 +45,19 @@ class AfspraakView(HHBView):
         },
         "required": []
     }
+
+    def extend_get(self, **kwargs):
+        """ Extend the get function with a filer on kvk nummers """
+        self.add_filter_filter_gebruiker()
+
+    def add_filter_filter_gebruiker(self):
+        """ Add filter_gebruiker filter based on the kvk of the organisatie model """
+        filter_ids = request.args.get('filter_gebruikers')
+        if filter_ids:
+            ids = []
+            for raw_id in filter_ids.split(","):
+                try:
+                    ids.append(int(raw_id))
+                except ValueError:
+                    abort(make_response({"errors": [f"Input for filter_gebruikers is not correct, '{raw_id}' is not a number."]}, 400))
+            self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.gebruiker_id.in_(ids))

@@ -54,7 +54,24 @@ def test_afspraak_filter_ids(client, afspraak_factory):
     assert response.status_code == 200
     assert response.json["data"] == [row2dict(afspraak2)]
 
-def test_afspraak_filter_invalid_id(client, afspraak_factory):
+def test_afspraak_filter_invalid_id(client):
     response = client.get(f'/afspraken/?filter_ids=NaN')
     assert response.status_code == 400
     assert response.json["errors"][0] == "Input for filter_ids is not correct, 'NaN' is not a number."
+
+def test_afspraak_get_filter_gebruikers(client, afspraak_factory, gebruiker_factory):
+    gebruiker1 = gebruiker_factory.createGebruiker()
+    gebruiker2 = gebruiker_factory.createGebruiker()
+    afspraak1 = afspraak_factory.createAfspraak(gebruiker=gebruiker1)
+    afspraak2 = afspraak_factory.createAfspraak(gebruiker=gebruiker1)
+    afspraak3 = afspraak_factory.createAfspraak(gebruiker=gebruiker2)
+    response = client.get(f'/afspraken/?filter_gebruikers={gebruiker1.id}')
+    assert response.json["data"] == [row2dict(afspraak1), row2dict(afspraak2)]
+    response = client.get(f'/afspraken/?filter_gebruikers={gebruiker2.id}')
+    assert response.json["data"] == [row2dict(afspraak3)]
+    response = client.get(f'/afspraken/?filter_gebruikers={gebruiker1.id},{gebruiker2.id}')
+    assert response.json["data"] == [row2dict(afspraak1), row2dict(afspraak2), row2dict(afspraak3)]
+    response = client.get(f'/afspraken/?filter_gebruikers=1337')
+    assert response.json["data"] == []
+    response = client.get(f'/afspraken/?filter_gebruikers=a')
+    assert response.json["errors"][0] == "Input for filter_gebruikers is not correct, 'a' is not a number."

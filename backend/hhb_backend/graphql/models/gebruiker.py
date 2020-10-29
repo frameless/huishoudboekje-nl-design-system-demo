@@ -47,21 +47,3 @@ class Gebruiker(graphene.ObjectType):
             }
         ]
 
-    def resolve_afspraken(root, info):
-        """ Get afspraken when requested """
-        return [
-            {
-                "id": 1,
-                "gebruiker_id": root.get('id'),
-                "beschrijving": "Beschrijving",
-                "start_datum": None,
-                "eind_datum": None,
-                "aantal_betalingen": 1,
-                "interval": None,
-                "tegen_rekening_id": 1,
-                "bedrag": "1000.00",
-                "credit": False,
-                "kenmerk": "Kenmerk",
-                "actief": False,
-            },
-        ]

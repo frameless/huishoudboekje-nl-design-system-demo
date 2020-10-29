@@ -10,7 +10,7 @@ class Afspraak(db.Model):
     id = Column(Integer, Sequence('afspraken_id_seq'), primary_key=True)
     gebruiker_id = Column(Integer, ForeignKey('gebruikers.id'))
     gebruiker = relationship("Gebruiker", back_populates="afspraken")
-    beschijving = Column(String)
+    beschrijving = Column(String)
     start_datum = Column(Date)
     eind_datum = Column(Date)
     aantal_betalingen = Column(Integer)
