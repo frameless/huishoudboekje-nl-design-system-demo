@@ -1,4 +1,6 @@
 """ Afspraak model as used in GraphQL queries """
+from datetime import date
+
 import graphene
 
 import hhb_backend.graphql.models.gebruiker as gebruiker
@@ -57,5 +59,17 @@ class Afspraak(graphene.ObjectType):
             "weergave_naam": "A"
         }
 
+    def resolve_start_datum(root, info):
+        value = root.get('start_datum')
+        if value:
+            return date.fromisoformat(value)
+
+    def resolve_eind_datum(root, info):
+        value = root.get('eind_datum')
+        if value:
+            return date.fromisoformat(value)
+
     def resolve_interval(root, info):
-        return convert_hhb_interval_to_dict(root.get("interval"))
+        value = root.get('interval')
+        if value:
+            return convert_hhb_interval_to_dict(value)

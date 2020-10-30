@@ -29,7 +29,7 @@ class CreateOrganisatie(graphene.Mutation):
     def mutate(root, info, **kwargs):
         """ Create the new Organisatie """
 
-        rekeningen = kwargs.pop("rekeningen")
+        rekeningen = kwargs.pop("rekeningen", None)
 
         hhb_service_data = {
             "kvk_nummer": kwargs["kvk_nummer"],

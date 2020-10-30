@@ -32,7 +32,10 @@ class AddAfspraak(graphene.Mutation):
         """ Create the new Gebruiker/Burger """
         if "interval" in kwargs:
             iso_interval = convert_hhb_interval_to_iso(kwargs["interval"])
-            kwargs["interval"] = iso_interval
+            if iso_interval:
+                kwargs["interval"] = iso_interval
+            else:
+                kwargs.pop('interval')
         post_response = requests.post(
             f"{settings.HHB_SERVICES_URL}/afspraken/",
             data=json.dumps(kwargs, default=str),

@@ -161,6 +161,7 @@ const CreateAgreement = () => {
 				tegen_rekening: tegen_rekening.value,
 				bedrag: bedrag.value,
 				kenmerk: kenmerk.value,
+				actief: true,
 			}
 		}).then(result => {
 			toast({
@@ -168,12 +169,7 @@ const CreateAgreement = () => {
 				title: t("messages.organizations.createSuccessMessage"),
 				position: "top",
 			});
-
-			const {id} = result.data.createAfspraak.afspraak;
-			if (id) {
-				// todo: need afspraak detail page
-				//push(Routes.Afspraak(id));
-			}
+			push(Routes.Citizen(citizenId))
 		}).catch(err => {
 			console.log("Error:", err);
 			toast({

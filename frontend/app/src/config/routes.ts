@@ -16,8 +16,6 @@ export enum Subpage {
 	edit = "bewerken",
 }
 
-const ADD = "toevoegen";
-
 const Routes = {
 	Home: "/",
 	Login: `/${Names.login}`,
