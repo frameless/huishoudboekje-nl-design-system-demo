@@ -38,18 +38,18 @@ const CreateBurger = () => {
 	const dateOfBirth = {
 		day: useNumberInput({
 			validate: [(v) => new RegExp(/^[0-9]{1,2}$/).test(v.toString())],
-			placeholder: t("forms.burgers.fields.dateOfBirthDay"),
+			placeholder: t("forms.common.fields.dateDay"),
 			min: 1,
 			max: 31,
 		}),
 		month: useNumberInput({
 			validate: [(v) => new RegExp(/^[0-9]{1,2}$/).test(v.toString())],
-			placeholder: t("forms.burgers.fields.dateOfBirthMonth"),
+			placeholder: t("forms.common.fields.dateMonth"),
 			min: 1, max: 12
 		}),
 		year: useNumberInput({
 			validate: [(v) => new RegExp(/^[0-9]{4}$/).test(v.toString())],
-			placeholder: t("forms.burgers.fields.dateOfBirthYear"),
+			placeholder: t("forms.common.fields.dateYear"),
 			max: (new Date()).getFullYear(), // No future births.
 		})
 	}
@@ -207,7 +207,7 @@ const CreateBurger = () => {
 								</Stack>
 							</Stack>
 							<Stack spacing={1}>
-								<FormLabel htmlFor={"dateOfBirth"}>{t("forms.burgers.fields.dateOfBirth")}</FormLabel>
+								<FormLabel htmlFor={"dateOfBirth"}>{t("forms.common.fields.date")}</FormLabel>
 								<Stack direction={"row"} maxW="100%">
 									<Box flex={1}>
 										<Input isInvalid={isInvalid(dateOfBirth.day)} {...dateOfBirth.day.bind} id="dateOfBirth.day" />

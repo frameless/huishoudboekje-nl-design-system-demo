@@ -33,7 +33,6 @@ const CreateAgreement = () => {
 	const {push} = useHistory();
 	const isMobile = useIsMobile(MOBILE_BREAKPOINT);
 	const toast = useToast();
-	const [isSubmitted, toggleSubmitted] = useToggle(false);
 
 	const gebruiker = useQuery<{ gebruiker: IGebruiker }>(NewAfspraakQuery, {
 		variables: { citizenId },
@@ -46,36 +45,36 @@ const CreateAgreement = () => {
 	const startDate = {
 		day: useNumberInput({
 			validate: [(v) => new RegExp(/^[0-9]{1,2}$/).test(v.toString())],
-			placeholder: t("forms.burgers.fields.dateOfBirthDay"),
+			placeholder: t("forms.common.fields.dateDay"),
 			min: 1,
 			max: 31,
 		}),
 		month: useNumberInput({
 			validate: [(v) => new RegExp(/^[0-9]{1,2}$/).test(v.toString())],
-			placeholder: t("forms.burgers.fields.dateOfBirthMonth"),
+			placeholder: t("forms.common.fields.dateMonth"),
 			min: 1, max: 12
 		}),
 		year: useNumberInput({
 			validate: [(v) => new RegExp(/^[0-9]{4}$/).test(v.toString())],
-			placeholder: t("forms.burgers.fields.dateOfBirthYear"),
+			placeholder: t("forms.common.fields.dateYear"),
 			max: (new Date()).getFullYear(), // No future births.
 		})
 	}
 	const endDate = {
 		day: useNumberInput({
 			validate: [(v) => new RegExp(/^[0-9]{1,2}$/).test(v.toString())],
-			placeholder: t("forms.burgers.fields.dateOfBirthDay"),
+			placeholder: t("forms.common.fields.dateDay"),
 			min: 1,
 			max: 31,
 		}),
 		month: useNumberInput({
 			validate: [(v) => new RegExp(/^[0-9]{1,2}$/).test(v.toString())],
-			placeholder: t("forms.burgers.fields.dateOfBirthMonth"),
+			placeholder: t("forms.common.fields.dateMonth"),
 			min: 1, max: 12
 		}),
 		year: useNumberInput({
 			validate: [(v) => new RegExp(/^[0-9]{4}$/).test(v.toString())],
-			placeholder: t("forms.burgers.fields.dateOfBirthYear"),
+			placeholder: t("forms.common.fields.dateYear"),
 			max: (new Date()).getFullYear(), // No future births.
 		})
 	}
@@ -124,7 +123,6 @@ const CreateAgreement = () => {
 
 	const onSubmit = (e) => {
 		e.preventDefault();
-		toggleSubmitted(true);
 
 		const isFormValid = [
 			beschrijving,
@@ -171,7 +169,6 @@ const CreateAgreement = () => {
 			});
 			push(Routes.Citizen(citizenId))
 		}).catch(err => {
-			console.log("Error:", err);
 			toast({
 				position: "top",
 				status: "error",

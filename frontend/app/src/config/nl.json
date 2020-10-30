@@ -64,6 +64,13 @@
     }
   },
   "forms": {
+    "common": {
+      "fields": {
+      "dateDay": "Dag",
+      "dateMonth": "Maand",
+      "dateYear": "Jaar"
+      }
+    },
     "search": {
       "fields": {
         "search": "Zoeken"
@@ -92,9 +99,6 @@
         "firstName": "Voornamen",
         "lastName": "Achternaam",
         "dateOfBirth": "Geboortedatum",
-        "dateOfBirthDay": "Dag",
-        "dateOfBirthMonth": "Maand",
-        "dateOfBirthYear": "Jaar",
         "street": "Straatnaam",
         "houseNumber": "Huisnummer",
         "zipcode": "Postcode",

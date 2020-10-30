@@ -26,7 +26,6 @@ export const NewAfspraakQuery = gql`
             achternaam
         }
     }
-    ${GebruikerFragment}
 `;
 
 export const GetAllOrganisatiesQuery = gql`
