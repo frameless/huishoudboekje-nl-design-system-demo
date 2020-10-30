@@ -30,16 +30,14 @@ class RootQuery(graphene.ObjectType):
     def resolve_organisaties(root, info, **kwargs):
         return OrganisatiesQuery.resolver(root, info, **kwargs)
 
-<<<<<<< HEAD
     def resolve_afspraak(root, info, **kwargs):
         return AfspraakQuery.resolver(root, info, **kwargs)
 
     def resolve_afspraken(root, info, **kwargs):
         return AfsprakenQuery.resolver(root, info, **kwargs)
-=======
+
     def resolve_rekeningengebruiker(root, info, **kwargs):
         return RekeningenGebruikerQuery.resolver(root, info, **kwargs)
 
     def resolve_rekeningenorganisatie(root, info, **kwargs):
         return RekeningenOrganisatieQuery.resolver(root, info, **kwargs)
->>>>>>> 17d6e7d... Queries added
