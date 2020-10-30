@@ -1,0 +1,9 @@
+openapi: 3.0.0
+info:
+  version: 0.1.0
+  title: Transactie Service
+  description: API voor het beheren van data van bank transacties
+
+paths:
+
+    # TODO
