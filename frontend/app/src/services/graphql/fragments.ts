@@ -1,10 +1,10 @@
 import {gql} from "@apollo/client";
 
 export const RekeningFragment = gql`
-	fragment Rekening on Rekening {
-		iban
-		rekeninghouder
-	}
+    fragment Rekening on Rekening {
+        iban
+        rekeninghouder
+    }
 `
 export const AfspraakFragment = gql`
     fragment Afspraak on Afspraak {
@@ -20,18 +20,18 @@ export const AfspraakFragment = gql`
             jaren
         }
         tegenRekening {
-			...Rekening
-		}
+            ...Rekening
+        }
         bedrag
         credit
         kenmerk
         actief
-		organisatie {
-			id
-			weergaveNaam
-		}
+        organisatie {
+            id
+            weergaveNaam
+        }
     }
-	${RekeningFragment}
+    ${RekeningFragment}
 `
 
 export const GebruikerFragment = gql`
@@ -48,11 +48,11 @@ export const GebruikerFragment = gql`
         postcode
         plaatsnaam
         rekeningen {
-			...Rekening
+            ...Rekening
         }
         afspraken {
-			...Afspraak
-		}
+            ...Afspraak
+        }
     }
     ${AfspraakFragment}
     ${RekeningFragment}
@@ -76,11 +76,11 @@ export const OrganisatieFragment = gql`
         id
         kvkNummer
         weergaveNaam
-		rekeningen {
-			...Rekening
-		}
+        rekeningen {
+            ...Rekening
+        }
         ...Kvk
     }
-	${RekeningFragment}
+    ${RekeningFragment}
     ${OrganisatieKvkDetailsFragment}
 `;

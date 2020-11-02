@@ -15,22 +15,21 @@ import {
 	Switch,
 	Text,
 } from "@chakra-ui/core";
-import React, { useEffect, useState } from "react";
-import { useIsMobile } from "react-grapple";
-import { useTranslation } from "react-i18next";
-import { Redirect, Route, useHistory, useParams } from "react-router-dom";
-import Routes, { Subpage } from "../../config/routes";
+import React, {useEffect, useState} from "react";
+import {useIsMobile} from "react-grapple";
+import {useTranslation} from "react-i18next";
+import {Redirect, useHistory, useParams} from "react-router-dom";
+import Routes, {Subpage} from "../../config/routes";
 import BackButton from "../BackButton";
-import { useQuery } from "@apollo/client";
-import { IAfspraak, IGebruiker } from "../../models";
-import { GetOneGebruikerQuery } from "../../services/graphql/queries";
+import {useQuery} from "@apollo/client";
+import {IAfspraak, IGebruiker} from "../../models";
+import {GetOneGebruikerQuery} from "../../services/graphql/queries";
 import theme from "../../config/theme";
-import { FormLeft, FormRight } from "../Forms/FormLeftRight";
+import {FormLeft, FormRight} from "../Forms/FormLeftRight";
 import NoAfsprakenFound from "./NoAfsprakenFound";
 import NoAfsprakenSearchResults from "./NoAfsprakenSearchResults";
-import CreateAgreement from "../Agreements/CreateAgreement";
 
-const Label: React.FunctionComponent = ({ children }) =>
+const Label: React.FunctionComponent = ({children}) =>
 	<Text fontSize={"sm"} color={theme.colors.gray["500"]}>{children}</Text>;
 
 const Group: React.FC<BoxProps> = ({children, ...props}) => {
@@ -41,15 +40,15 @@ const Group: React.FC<BoxProps> = ({children, ...props}) => {
 };
 
 const BurgerDetail = () => {
-	const { t } = useTranslation();
-	const { id } = useParams();
-	const { push } = useHistory();
+	const {t} = useTranslation();
+	const {id} = useParams();
+	const {push} = useHistory();
 
 	const [showInactive, setShowInactive] = useState(false)
-	const [afspraken, setAfspraken] = useState<IAfspraak[] | undefined>( undefined)
+	const [afspraken, setAfspraken] = useState<IAfspraak[] | undefined>(undefined)
 
-	const { data, loading, error } = useQuery<{ gebruiker: IGebruiker }>(GetOneGebruikerQuery, {
-		variables: { id },
+	const {data, loading, error} = useQuery<{ gebruiker: IGebruiker }>(GetOneGebruikerQuery, {
+		variables: {id},
 	});
 
 	useEffect(() => {
@@ -92,7 +91,7 @@ const BurgerDetail = () => {
 							<FormLeft />
 							<FormRight>
 								<Stack direction={"row"} spacing={1} justifyContent={"flex-end"}>
-									<Button  variantColor={"primary"} onClick={onClickEditButton}>{t("actions.edit")}</Button>
+									<Button variantColor={"primary"} onClick={onClickEditButton}>{t("actions.edit")}</Button>
 								</Stack>
 							</FormRight>
 						</Group>
@@ -100,7 +99,7 @@ const BurgerDetail = () => {
 						<Divider />
 
 						<Group>
-							<FormLeft >
+							<FormLeft>
 								<Heading display={"box"} size={"md"}>{t("forms.burgers.sections.personal.title")}</Heading>
 								<Label>{t("forms.burgers.sections.personal.detailText")}</Label>
 							</FormLeft>
@@ -133,7 +132,7 @@ const BurgerDetail = () => {
 
 						<Group>
 							<FormLeft>
-								<Heading display={"box"}  size={"md"}>{t("forms.burgers.sections.contact.title")}</Heading>
+								<Heading display={"box"} size={"md"}>{t("forms.burgers.sections.contact.title")}</Heading>
 								<Label>{t("forms.burgers.sections.contact.detailText")}</Label>
 							</FormLeft>
 							<FormRight>
@@ -184,10 +183,10 @@ const BurgerDetail = () => {
 										<Stack direction={"row"} spacing={5} justifyContent={"flex-end"}>
 											<Stack isInline={true} alignItems={"center"} spacing={1}>
 												<FormLabel htmlFor="show-inactive-agreements">{t("buttons.agreements.showInactive")}</FormLabel>
-												<Switch id="show-inactive-agreements" onChange={onClickShowInactive}/>
+												<Switch id="show-inactive-agreements" onChange={onClickShowInactive} />
 											</Stack>
 											<Button variantColor={"primary"}
-												onClick={onClickAddAfspraakButton}>{t("actions.add")}</Button>
+											        onClick={onClickAddAfspraakButton}>{t("actions.add")}</Button>
 										</Stack>
 									</FormRight>
 								</Group>
@@ -197,7 +196,7 @@ const BurgerDetail = () => {
 								<Group>
 									<FormLeft>
 										<Heading display={"box"}
-											 size={"md"}>{t("forms.burgers.sections.agreements.title")}</Heading>
+										         size={"md"}>{t("forms.burgers.sections.agreements.title")}</Heading>
 										<Label>{t("forms.burgers.sections.agreements.detailText")}</Label>
 									</FormLeft>
 									<FormRight>

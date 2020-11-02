@@ -6,7 +6,7 @@ FROM node:lts-alpine as builder
 WORKDIR /app
 
 COPY ./app/package*.json ./app/version.js ./
-RUN npm ci --no-progress --color=false --quiet --unsafe-perm
+RUN npm ci --unsafe-perm
 
 COPY ./app /app
 VOLUME /app/public/theme
