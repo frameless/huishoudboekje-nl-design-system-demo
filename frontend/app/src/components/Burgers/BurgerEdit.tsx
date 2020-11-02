@@ -145,7 +145,7 @@ const BurgerEdit = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [data, loading]);
 
-	const onClickBackButton = () => push(Routes.Citizen(id));
+	const onClickBackButton = () => push(Routes.Burger(id));
 	const onSubmit = (e) => {
 		e.preventDefault();
 
@@ -221,7 +221,7 @@ const BurgerEdit = () => {
 	};
 
 	return (<>
-		<BackButton to={Routes.Citizen(id)} />
+		<BackButton to={Routes.Burger(id)} />
 
 		{loading && (
 			<Stack spacing={5} alignItems={"center"} justifyContent={"center"} my={10}>

@@ -7,7 +7,7 @@ import OrganizationDetail from "./OrganizationDetail";
 
 const Organizations = () => (<Switch>
 	<Route exact path={Routes.Organizations} component={OrganizationList} />
-	<Route path={Routes.Organizations + "/:id"} component={OrganizationDetail} />
+	<Route path={Routes.Organizations + "/:id(\\d+)"} component={OrganizationDetail} />
 	<Route path={Routes.CreateOrganization} exact component={CreateOrganization} />
 </Switch>);
 

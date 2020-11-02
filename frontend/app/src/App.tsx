@@ -10,7 +10,6 @@ import UserStatus from "./components/UserStatus";
 import {FaLock} from "react-icons/all";
 import Routes from "./config/routes";
 import Burgers from "./components/Burgers";
-import Agreements from "./components/Agreements";
 import PageNotFound from "./components/PageNotFound";
 import {TABLET_BREAKPOINT} from "./utils/things";
 import {useTranslation} from "react-i18next";
@@ -112,8 +111,6 @@ const App = () => {
 
 							<Switch>
 								<Route path={Routes.Burgers} component={Burgers} />
-								<Route path={Routes.AgreementNew()} component={Agreements} />
-								<Route path={Routes.Agreements} component={Agreements} />
 								<Route path={Routes.Organizations} component={Organizations} />
 								{/*<Route path={ROUTEPATH} component={BANK_COMPONENT} />*/}
 								{/*<Route path={ROUTEPATH} component={SETTINGS_COMPONENT} />*/}

@@ -1,41 +1,28 @@
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {
-	Box,
-	Button,
-	Divider,
-	Flex,
-	FormHelperText,
-	FormLabel,
-	Heading,
-	Input,
-	Select,
-	Spinner,
-	Stack,
-	useToast,
-} from "@chakra-ui/core";
-import {useInput, useIsMobile, useToggle, useNumberInput, Validators} from "react-grapple";
+import {Box, Button, Divider, Flex, FormHelperText, FormLabel, Heading, Input, Select, Spinner, Stack, useToast,} from "@chakra-ui/core";
+import {useInput, useIsMobile, useNumberInput, Validators} from "react-grapple";
 import BackButton from "../BackButton";
 import Routes from "../../config/routes";
-import {isDev, MOBILE_BREAKPOINT, Months, Regex} from "../../utils/things";
+import {isDev, MOBILE_BREAKPOINT, Months} from "../../utils/things";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
-import { useMutation, useQuery } from "@apollo/client";
+import {useMutation, useQuery} from "@apollo/client";
 import {sampleData} from "../../config/sampleData/sampleData";
-import { Redirect, useHistory, useParams } from "react-router-dom";
+import {Redirect, useHistory, useParams} from "react-router-dom";
 import {AddAgreementMutation} from "../../services/graphql/mutations";
-import { IGebruiker } from "../../models";
-import { GetOneGebruikerQuery, NewAfspraakQuery } from "../../services/graphql/queries";
+import {IGebruiker} from "../../models";
+import {NewAfspraakQuery} from "../../services/graphql/queries";
 
 // Todo: add more detailed error message per field?
 const CreateAgreement = () => {
 	const {t} = useTranslation();
-	const { citizenId } = useParams();
+	const {burgerId} = useParams();
 	const {push} = useHistory();
 	const isMobile = useIsMobile(MOBILE_BREAKPOINT);
 	const toast = useToast();
 
 	const gebruiker = useQuery<{ gebruiker: IGebruiker }>(NewAfspraakQuery, {
-		variables: { citizenId },
+		variables: {citizenId: burgerId},
 	});
 
 	const beschrijving = useInput({
@@ -151,10 +138,10 @@ const CreateAgreement = () => {
 		const eindDatum = new Date(Date.UTC(endDate.year.value, endDate.month.value - 1, endDate.day.value));
 		addAgreement({
 			variables: {
-				gebruiker: citizenId,
+				gebruiker: burgerId,
 				beschrijving: beschrijving.value,
-				start_datum: startDatum.toISOString().substring(0,10),
-				eind_datum: eindDatum.toISOString().substring(0,10),
+				start_datum: startDatum.toISOString().substring(0, 10),
+				eind_datum: eindDatum.toISOString().substring(0, 10),
 				interval: interval.value,
 				tegen_rekening: tegen_rekening.value,
 				bedrag: bedrag.value,
@@ -167,7 +154,7 @@ const CreateAgreement = () => {
 				title: t("messages.organizations.createSuccessMessage"),
 				position: "top",
 			});
-			push(Routes.Citizen(citizenId))
+			push(Routes.Burger(burgerId))
 		}).catch(err => {
 			toast({
 				position: "top",
@@ -182,7 +169,7 @@ const CreateAgreement = () => {
 	const isInvalid = (input) => input.dirty && !input.isValid;
 
 	return (<>
-		<BackButton to={Routes.Citizen(citizenId)} />
+		<BackButton to={Routes.Burger(burgerId)} />
 		{gebruiker.loading && (
 			<Stack spacing={5} alignItems={"center"} justifyContent={"center"} my={10}>
 				<Spinner />
@@ -227,7 +214,7 @@ const CreateAgreement = () => {
 										</Box>
 										<Box flex={2}>
 											<Select isInvalid={isInvalid(startDate.month)} {...startDate.month.bind} id="startDate.month"
-										        value={startDate.month.value.toString()}>
+											        value={startDate.month.value.toString()}>
 												{Months.map((m, i) => (
 													<option key={i} value={i + 1}>{t("months." + m)}</option>
 												))}
@@ -246,7 +233,7 @@ const CreateAgreement = () => {
 										</Box>
 										<Box flex={2}>
 											<Select isInvalid={isInvalid(endDate.month)} {...endDate.month.bind} id="eind_datum.month"
-										        value={endDate.month.value.toString()}>
+											        value={endDate.month.value.toString()}>
 												{Months.map((m, i) => (
 													<option key={i} value={i + 1}>{t("months." + m)}</option>
 												))}

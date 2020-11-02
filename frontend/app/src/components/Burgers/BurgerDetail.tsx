@@ -45,120 +45,12 @@ const BurgerDetail = () => {
 	const { id } = useParams();
 	const { push } = useHistory();
 
+	const [showInactive, setShowInactive] = useState(false)
+	const [afspraken, setAfspraken] = useState<IAfspraak[] | undefined>( undefined)
+
 	const { data, loading, error } = useQuery<{ gebruiker: IGebruiker }>(GetOneGebruikerQuery, {
 		variables: { id },
 	});
-
-	const [deleteMutation, {loading: deleteLoading}] = useMutation(DeleteGebruikerMutation, {variables: {id}});
-	const [updateMutation, {loading: updateLoading}] = useMutation(UpdateGebruikerMutation);
-
-	useEffect(() => {
-		let mounted = true;
-
-		if (mounted && data) {
-			const {gebruiker} = data;
-
-			if (gebruiker) {
-				// bsn.setValue(gebruiker.bsn.toString() || "");
-				initials.setValue(gebruiker.voorletters || "");
-				firstName.setValue(gebruiker.voornamen || "");
-				lastName.setValue(gebruiker.achternaam || "");
-				dateOfBirth.day.setValue(new Date(gebruiker.geboortedatum).getDate());
-				dateOfBirth.month.setValue(new Date(gebruiker.geboortedatum).getMonth() + 1);
-				dateOfBirth.year.setValue(new Date(gebruiker.geboortedatum).getFullYear());
-				mail.setValue(gebruiker.email || "");
-				street.setValue(gebruiker.straatnaam || "");
-				houseNumber.setValue(gebruiker.huisnummer || "");
-				zipcode.setValue(gebruiker.postcode || "");
-				city.setValue(gebruiker.plaatsnaam || "");
-				phoneNumber.setValue(gebruiker.telefoonnummer || "");
-				// iban.setValue(gebruiker.iban || "");
-				// bankAccountHolder.setValue(gebruiker.rekeninghouder || "");
-			}
-		}
-
-		return () => {
-			mounted = false;
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [data, loading]);
-
-	const onClickBackButton = () => push(Routes.Burgers);
-	const onSubmit = (e) => {
-		e.preventDefault();
-
-		const isFormValid = [
-			initials,
-			firstName,
-			lastName,
-			dateOfBirth.day,
-			dateOfBirth.month,
-			dateOfBirth.year,
-			street,
-			houseNumber,
-			zipcode,
-			city,
-			phoneNumber,
-			mail,
-		].every(f => f.isValid);
-		if (!isFormValid) {
-			toast({
-				status: "error",
-				title: t("messages.burgers.invalidFormMessage"),
-				position: "top",
-			});
-			return;
-		}
-
-		updateMutation({
-			variables: {
-				id,
-				voorletters: initials.value,
-				voornamen: firstName.value,
-				achternaam: lastName.value,
-				geboortedatum: [
-					dateOfBirth.year.value,
-					("0" + dateOfBirth.month.value).substr(-2, 2),
-					("0" + dateOfBirth.day.value).substr(-2, 2),
-				].join("-"),
-				straatnaam: street.value,
-				huisnummer: houseNumber.value,
-				postcode: zipcode.value,
-				plaatsnaam: city.value,
-				telefoonnummer: phoneNumber.value,
-				email: mail.value,
-			}
-		}).then(() => {
-			toast({
-				status: "success",
-				title: t("messages.burgers.updateSuccessMessage"),
-				position: "top",
-			});
-		}).catch(err => {
-			console.error(err);
-			toast({
-				position: "top",
-				status: "error",
-				variant: "solid",
-				description: t("messages.genericError.description"),
-				title: t("messages.genericError.title")
-			});
-		})
-	};
-	const onCloseDeleteDialog = () => toggleDeleteDialog(false);
-	const onConfirmDeleteDialog = () => {
-		deleteMutation().then(() => {
-			onCloseDeleteDialog();
-			toast({
-				title: t("messages.burgers.deleteConfirmMessage", { name: `${data?.gebruiker.voornamen} ${data?.gebruiker.achternaam}`}),
-				position: "top",
-				status: "success",
-			});
-			toggleDeleted(true);
-		})
-	};
-	const [showInactive, setShowInactive] = useState(false)
-	const [afspraken, setAfspraken] = useState<IAfspraak[] | undefined>( undefined)
 
 	useEffect(() => {
 		if (data) {
@@ -172,7 +64,7 @@ const BurgerDetail = () => {
 					}))
 		}
 	}, [data, showInactive])
-	const onClickBackButton = () => push(Routes.Burgers);
+
 	const onClickEditButton = () => push(Routes.Burger(id, Subpage.edit));
 	const onClickAddAfspraakButton = () => push(Routes.AgreementNew(id));
 	const onClickShowInactive = (e: React.FormEvent<HTMLInputElement>) => setShowInactive(e.currentTarget.checked);

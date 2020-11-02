@@ -207,7 +207,7 @@ const CreateBurger = () => {
 								</Stack>
 							</Stack>
 							<Stack spacing={1}>
-								<FormLabel htmlFor={"dateOfBirth"}>{t("forms.common.fields.date")}</FormLabel>
+								<FormLabel htmlFor={"dateOfBirth"}>{t("forms.burgers.fields.dateOfBirth")}</FormLabel>
 								<Stack direction={"row"} maxW="100%">
 									<Box flex={1}>
 										<Input isInvalid={isInvalid(dateOfBirth.day)} {...dateOfBirth.day.bind} id="dateOfBirth.day" />

@@ -66,9 +66,9 @@
   "forms": {
     "common": {
       "fields": {
-      "dateDay": "Dag",
-      "dateMonth": "Maand",
-      "dateYear": "Jaar"
+        "dateDay": "Dag",
+        "dateMonth": "Maand",
+        "dateYear": "Jaar"
       }
     },
     "search": {
