@@ -15,11 +15,11 @@ class RootQuery(graphene.ObjectType):
     afspraak = AfspraakQuery.return_type
     afspraken = AfsprakenQuery.return_type
 
-    def resolve_gebruiker(root, info, **kwargs):
-        return GebruikerQuery.resolver(root, info, **kwargs)
+    async def resolve_gebruiker(root, info, **kwargs):
+        return await GebruikerQuery.resolver(root, info, **kwargs)
 
-    def resolve_gebruikers(root, info, **kwargs):
-        return GebruikersQuery.resolver(root, info, **kwargs)
+    async def resolve_gebruikers(root, info, **kwargs):
+        return await GebruikersQuery.resolver(root, info, **kwargs)
 
     def resolve_organisatie(root, info, **kwargs):
         return OrganisatieQuery.resolver(root, info, **kwargs)

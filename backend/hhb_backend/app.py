@@ -3,7 +3,7 @@ import logging
 import os
 import secrets
 import itsdangerous
-from flask import Flask, jsonify, Response, redirect, render_template
+from flask import Flask, jsonify, Response, redirect, render_template, request
 from flask_oidc import OpenIDConnect
 from flask_graphql import GraphQLView
 
@@ -11,8 +11,14 @@ from hhb_backend.custom_oidc import CustomOidc
 from hhb_backend.graphql import schema
 from urllib.parse import urlparse
 
-from hhb_backend.reverse_proxy import ReverseProxied
+from graphql.execution.executors.asyncio import AsyncioExecutor
+import asyncio
 
+from hhb_backend.reverse_proxy import ReverseProxied
+from hhb_backend.graphql.dataloaders import HHBDataLoader
+
+loop = asyncio.new_event_loop()
+asyncio.set_event_loop(loop)
 
 # TODO extract
 logging.basicConfig(level=logging.DEBUG)
@@ -75,7 +81,7 @@ def login():
     return redirect('/', code=302)
 
 
-graph_ql_view = GraphQLView.as_view('graphql', schema=schema, graphiql=True, )
+graph_ql_view = GraphQLView.as_view('graphql', schema=schema, graphiql=True, executor=AsyncioExecutor(loop=loop))
 graph_ql_batch_view = GraphQLView.as_view('graphql_batch', schema=schema, batch=True)
 if app.config['ENV'] == 'development':
     app.add_url_rule('/graphql', view_func=graph_ql_view, strict_slashes=False)
@@ -102,6 +108,14 @@ else:
 def logout():
     oidc.logout()
     return Response()
+
+
+@app.before_request
+def add_dataloaders():
+    print("---------")
+    print("Add dataloaders")
+    global loop
+    request.dataloader = HHBDataLoader(loop=loop)
 
 
 if __name__ == '__main__':
