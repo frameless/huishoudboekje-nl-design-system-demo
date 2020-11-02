@@ -1,6 +1,7 @@
 """ GraphQL Gebruikers query """
 import graphene
 import requests
+from flask import request
 from graphql import GraphQLError
 from hhb_backend.graphql import settings
 import hhb_backend.graphql.models.gebruiker as gebruiker
@@ -33,23 +34,26 @@ class GebruikersQuery():
 
     @staticmethod
     def resolver(root, info, **kwargs):
-        filter_query = ""
+        print("=========== resolving gebruikers ")
+        print(request)
+        print(request.dataloaders)
+        return []
         if kwargs["ids"]:
-            filter_query = "?filter_ids=" + ",".join([str(id) for id in kwargs['ids']])
-        gebruikers_response = requests.get(f"{settings.HHB_SERVICES_URL}/gebruikers/{filter_query}")
-        if gebruikers_response.status_code != 200:
-            raise GraphQLError(f"Upstream API responded: {gebruikers_response.json}")
+            gebruikers = gebruiker_loader.load_many(kwargs["ids"])
+        else:
+            gebruikers_response = requests.get(f"{settings.HHB_SERVICES_URL}/gebruikers/")
+            if gebruikers_response.status_code != 200:
+                raise GraphQLError(f"Upstream API responded: {gebruikers_response.json}")
+            gebruikers = gebruikers_response.json()["data"]
 
-        gebruikers_json = gebruikers_response.json()["data"]
-
-        gebruiker_ids = [g["id"] for g in gebruikers_json]
+        gebruiker_ids = [g["id"] for g in gebruikers]
 
         if "afspraken" in info.context.json["query"]:
             afspraken_response = requests.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_gebruikers={','.join([str(g) for g in gebruiker_ids])}")
             if afspraken_response.status_code != 200:
                 raise GraphQLError(f"Upstream API responded: {afspraken_response.json()}")
             
-            for gebruiker in gebruikers_json:
-                gebruiker["afspraken"] = [a for a in afspraken_response.json()["data"] if a["gebruiker_id"] == gebruiker["id"]]
+            for g in gebruikers:
+                g["afspraken"] = [a for a in afspraken_response.json()["data"] if a["gebruiker_id"] == g["id"]]
                 
-        return gebruikers_json
+        return gebruikers

@@ -15,5 +15,6 @@ setup(
         'gunicorn>=20.0.4',
         'graphene>=2,<3',
         'requests>=2.24.0',
+        'aiodataloader>=0.2.0',
     ],
 )
