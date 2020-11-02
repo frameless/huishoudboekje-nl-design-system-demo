@@ -40,7 +40,7 @@ class CreateOrganisatie(graphene.Mutation):
             raise GraphQLError(f"Upstream API responded: {hhb_service_response.json()}")
 
         org_service_response = requests.post(
-            f"{settings.HHB_SERVICES_URL}/organisaties/",
+            f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/",
             data=json.dumps(kwargs),
             headers={'Content-type': 'application/json'}
         )
