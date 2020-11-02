@@ -6,7 +6,6 @@ import requests
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.models.afspraak import Afspraak, IntervalInput
 import hhb_backend.graphql.models.gebruiker as gebruiker
-from hhb_backend.graphql.mutations.rekening_input import RekeningInput
 from hhb_backend.graphql.scalars.bedrag import Bedrag
 from hhb_backend.utils import convert_hhb_interval_to_iso
 import json

@@ -6,7 +6,6 @@ import requests
 from graphql import GraphQLError
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.models.organisatie import Organisatie
-from hhb_backend.graphql.mutations.rekening_input import RekeningInput
 
 
 class CreateOrganisatie(graphene.Mutation):

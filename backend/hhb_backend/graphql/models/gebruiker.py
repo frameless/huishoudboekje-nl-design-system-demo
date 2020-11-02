@@ -36,17 +36,10 @@ class Gebruiker(graphene.ObjectType):
 
     def resolve_rekeningen(root, info):
         """ Get rekeningen when requested """
-
-        return [
-            {
-                "iban": "1",
-                "rekeninghouder": "a",
-            },
-            {
-                "iban": "2",
-                "rekeninghouder": "a en/of b",
-            }
-        ]
+        response = requests.get(f"{settings.HHB_SERVICES_URL}/gebruikers/{root.get('id')}/rekeningen")
+        if response.status_code != 200:
+            raise GraphQLError(f"Upstream API responded: {response.json()}")
+        return response.json()["data"]
 
     def resolve_afspraken(root, info):
         data = root.get('afspraken')

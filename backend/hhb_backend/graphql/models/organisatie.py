@@ -25,7 +25,6 @@ class Organisatie(graphene.ObjectType):
     id = graphene.Int()
     weergave_naam = graphene.String()
     rekeningen = graphene.List(lambda: rekening.Rekening)
-    afspraken = graphene.List(lambda: afspraak.Afspraak)
     kvk_nummer = graphene.String()
     kvk_details = graphene.Field(OrganisatieKvK)
 
@@ -43,29 +42,7 @@ class Organisatie(graphene.ObjectType):
             raise GraphQLError(f"Upstream API responded: {response.json()}")
 
     def resolve_rekeningen(root, info):
-        return [
-            {
-                "iban": "12",
-                "rekeninghouder": "A",
-            }
-        ]
-
-    def resolve_afspraken(root, info):
-        """ Get afspraken when requested """
-
-        return [
-            {
-                "id": 1,
-                "gebruiker_id": 1,
-                "beschrijving": "Beschrijving",
-                "start_datum": "2020-10-01",
-                "eind_datum": None,
-                "aantal_betalingen": 1,
-                "interval": None,
-                "tegen_rekening_id": 12,
-                "bedrag": "1000.00",
-                "credit": False,
-                "kenmerk": "Kenmerk",
-                "actief": True,
-            }
-        ]
+        response = requests.get(f"{settings.HHB_SERVICES_URL}/organisaties/{root.get('id')}/rekeningen")
+        if response.status_code != 200:
+            raise GraphQLError(f"Upstream API responded: {response.json()}")
+        return response.json()["data"]
