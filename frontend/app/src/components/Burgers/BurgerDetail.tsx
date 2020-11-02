@@ -19,7 +19,7 @@ import React, {useEffect, useState} from "react";
 import {useIsMobile} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {Redirect, useHistory, useParams} from "react-router-dom";
-import Routes, {Subpage} from "../../config/routes";
+import Routes from "../../config/routes";
 import BackButton from "../BackButton";
 import {useQuery} from "@apollo/client";
 import {IAfspraak, IGebruiker} from "../../models";
@@ -64,8 +64,8 @@ const BurgerDetail = () => {
 		}
 	}, [data, showInactive])
 
-	const onClickEditButton = () => push(Routes.Burger(id, Subpage.edit));
-	const onClickAddAfspraakButton = () => push(Routes.AgreementNew(id));
+	const onClickEditButton = () => push(Routes.EditBurger(id));
+	const onClickAddAfspraakButton = () => push(Routes.CreateBurgerAgreement(id));
 	const onClickShowInactive = (e: React.FormEvent<HTMLInputElement>) => setShowInactive(e.currentTarget.checked);
 
 	return (<>
