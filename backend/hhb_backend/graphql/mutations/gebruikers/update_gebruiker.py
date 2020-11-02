@@ -32,12 +32,12 @@ class UpdateGebruiker(graphene.Mutation):
     def mutate(root, info, id, **kwargs):
         """ Update the current Gebruiker/Burger """
 
-        gebruiker_response = requests.patch(
+        gebruiker_response = requests.post(
             f"{settings.HHB_SERVICES_URL}/gebruikers/{id}",
             data=json.dumps(kwargs),
             headers={'Content-type': 'application/json'}
         )
-        if gebruiker_response.status_code != 200:
+        if gebruiker_response.status_code != 202:
             raise GraphQLError(f"Upstream API responded: {gebruiker_response.json()}")
 
         return UpdateGebruiker(gebruiker=gebruiker_response.json()["data"], ok=True)
