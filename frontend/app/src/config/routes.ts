@@ -1,40 +1,49 @@
-import { isDev } from "../utils/things";
+import {isDev} from "../utils/things";
 
-export enum Names {
+export enum RouteNames {
 	login = "inloggen",
 	dashboard = "dashboard",
 	burgers = "burgers",
-	balances = "huishoudboekjes",
 	agreements = "afspraken",
 	organizations = "organisaties",
+	notFound = "404",
+
+	// Sub routes
+	add = "toevoegen",
+	edit = "bewerken",
+
+	// Not in use yet
+	balances = "huishoudboekjes",
 	banking = "bank",
 	settings = "instellingen",
-	notFound = "404",
-}
-
-export enum Subpage {
-	edit = "bewerken",
 }
 
 const Routes = {
 	Home: "/",
-	Login: `/${Names.login}`,
-	Burgers: `/${Names.burgers}`,
-	Burger: (id?: number, subpage?: Subpage) => `/${Names.burgers}${id ? `/${id}`: ""}${subpage ? `/${subpage}`:""}`,
-	BurgerNew: `/${Names.burgers}/toevoegen`,
-	AgreementNew: (burgerId: number) => `/${Names.burgers}/${burgerId}/${Names.agreements}/toevoegen`,
-	Dashboard: `/${Names.dashboard}`,
-	Agreements: `/${Names.burgers}/:burgerId(\\d+)/${Names.agreements}`,
-	Balances: `/${Names.balances}`,
-	Organizations: `/${Names.organizations}`,
-	Organization: (organizationId: number) => `/${Names.organizations}/${organizationId}`,
-	CreateOrganization: `/${Names.organizations}/toevoegen`,
-	OrganizationNew: `/${Names.organizations}/toevoegen`,
-	Banking: `/${Names.banking}`,
-	Settings: `/${Names.settings}`,
-	NotFound: `/${Names.notFound}`,
+	Dashboard: `/${RouteNames.dashboard}`,
+	Login: `/${RouteNames.login}`,
 
-	...(isDev && { GraphiQL: "/api/graphql" }),
+	Burgers: `/${RouteNames.burgers}`,
+	Burger: (id?: number) => `/${RouteNames.burgers}/${id || ":id(\\d+)"}`,
+	CreateBurger: `/${RouteNames.burgers}/${RouteNames.add}`,
+	EditBurger: (id: number) => `/${RouteNames.burgers}/${id}/${RouteNames.edit}`,
+
+	BurgerAgreements: (id?: number) => `/${RouteNames.burgers}/${id || ":burgerId(\\d+)"}/${RouteNames.agreements}`,
+	CreateBurgerAgreement: (burgerId: number) => `/${RouteNames.burgers}/${burgerId}/${RouteNames.agreements}/${RouteNames.add}`,
+
+	Organizations: `/${RouteNames.organizations}`,
+	Organization: (id?: number) => `/${RouteNames.organizations}/${id || ":id(\\d+)"}`,
+	CreateOrganization: `/${RouteNames.organizations}/${RouteNames.add}`,
+
+	NotFound: `/${RouteNames.notFound}`,
+
+	// Dev things
+	...(isDev && {GraphiQL: "/api/graphql"}),
+
+	// Not in use yet
+	Balances: `/${RouteNames.balances}`,
+	Banking: `/${RouteNames.banking}`,
+	Settings: `/${RouteNames.settings}`,
 };
 
 export default Routes;

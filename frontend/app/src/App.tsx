@@ -30,7 +30,6 @@ const App = () => {
 	const onClickLoginButton = () => {
 		/* Save the current user's page so that we can quickly navigate back after login. */
 		localStorage.setItem("hhb-referer", location.pathname);
-
 		window.location.href = "/api/login";
 	};
 

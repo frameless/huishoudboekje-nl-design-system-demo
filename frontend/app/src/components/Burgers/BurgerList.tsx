@@ -79,7 +79,7 @@ const BurgerList = () => {
 			return (
 				<DeadEndPage message={t("messages.burgers.addHint", {buttonLabel: t("buttons.burgers.createNew")})}>
 					<Button size={"sm"} variantColor={"primary"} variant={"solid"} leftIcon={"add"}
-					        onClick={() => push(Routes.BurgerNew)}>{t("buttons.burgers.createNew")}</Button>
+					        onClick={() => push(Routes.CreateBurger)}>{t("buttons.burgers.createNew")}</Button>
 				</DeadEndPage>
 			);
 		}

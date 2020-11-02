@@ -16,7 +16,7 @@ export const NoAfsprakenFound = () => {
 			<Text
 				fontSize={"sm"}>{t("messages.agreements.addHint", { buttonLabel: t("buttons.agreements.createNew") })}</Text>
 			<Button size={"sm"} variantColor={"primary"} variant={"solid"} leftIcon={"add"}
-				onClick={() => push(Routes.AgreementNew(id))}>{t("buttons.agreements.createNew")}</Button>
+				onClick={() => push(Routes.CreateBurgerAgreement(id))}>{t("buttons.agreements.createNew")}</Button>
 		</Stack>
 	);
 };
