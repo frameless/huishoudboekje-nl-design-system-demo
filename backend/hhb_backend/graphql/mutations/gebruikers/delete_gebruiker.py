@@ -18,6 +18,6 @@ class DeleteGebruiker(graphene.Mutation):
         """ Delete current gebruiker """
 
         delete_response = requests.delete(f"{settings.HHB_SERVICES_URL}/gebruikers/{id}")
-        if delete_response.status_code != 204:
+        if delete_response.status_code != 202:
             raise GraphQLError(f"Upstream API responded: {delete_response.json()}")
         return DeleteGebruiker(ok=True)
