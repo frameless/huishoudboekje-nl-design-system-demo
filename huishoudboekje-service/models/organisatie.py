@@ -1,8 +1,8 @@
-from sqlalchemy import Column, Integer, String, Sequence, Date
+from sqlalchemy import Column, Integer, String, Sequence
 from sqlalchemy.orm import relationship
-from flask import abort, make_response
-from sqlalchemy.orm.exc import NoResultFound
+
 from core.database import db
+
 
 class Organisatie(db.Model):
     __tablename__ = 'organisaties'
@@ -11,10 +11,11 @@ class Organisatie(db.Model):
     weergave_naam = Column(String)
     kvk_nummer = Column(String, unique=True)
 
+    rekeningen = relationship("RekeningOrganisatie", back_populates="organisatie")
+
     def to_dict(self):
         return {
             "id": self.id,
             "weergave_naam": self.weergave_naam,
             "kvk_nummer": self.kvk_nummer
         }
-    

@@ -1,5 +1,5 @@
 import {gql} from "@apollo/client";
-import {GebruikerFragment, OrganisatieFragment} from "./fragments";
+import {GebruikerFragment, OrganisatieFragment, AfspraakFragment} from "./fragments";
 
 export const GetAllGebruikersQuery = gql`
     query getAllGebruikers {
@@ -19,6 +19,15 @@ export const GetOneGebruikerQuery = gql`
     ${GebruikerFragment}
 `;
 
+export const NewAfspraakQuery = gql`
+    query newAfspraak($citizenId: Int!) {
+        gebruiker(id: $citizenId) {
+            voornamen
+            achternaam
+        }
+    }
+`;
+
 export const GetAllOrganisatiesQuery = gql`
     query getAllOrganisaties {
         organisaties{
@@ -36,4 +45,22 @@ export const GetOneOrganisatieQuery = gql`
         }
     }
     ${OrganisatieFragment}
+`;
+
+export const GetAllAfsprakenQuery = gql`
+    query getAllAfspraken {
+        afspraken{
+            ...Afspraak
+        }
+    }
+    ${AfspraakFragment}
+`;
+
+export const GetOneAfspraakQuery = gql`
+    query getOneAfspraak($id: Int!) {
+        afspraak(id: $id){
+            ...Afspraak
+        }
+    }
+    ${AfspraakFragment}
 `;

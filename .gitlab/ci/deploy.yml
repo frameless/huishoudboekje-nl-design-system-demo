@@ -8,7 +8,7 @@
     on_stop: destroy-app
   script:
     - |
-      helm repo add stable "https://kubernetes-charts.storage.googleapis.com"
+      helm repo add stable "https://charts.helm.sh/stable"
       helm repo add zalando-operator "https://raw.githubusercontent.com/zalando/postgres-operator/master/charts/postgres-operator"
       helm repo update
     - |

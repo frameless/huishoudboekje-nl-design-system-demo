@@ -9,6 +9,8 @@ from sqlalchemy.orm.session import close_all_sessions
 from testing.postgresql import Postgresql
 from core.config import TestingConfig
 from tests.factories import OrganisatieFactory
+from .rekening import RekeningFactory
+
 
 @pytest.yield_fixture(scope="session")
 def client(app, request):
@@ -73,9 +75,19 @@ def dbsession(app, db, request):
         txn.rollback()
         conn.close()
 
+
+
 @pytest.fixture(scope="function")
 def organisatie_factory(dbsession, request):
     """
     creates an instance of the OrganisatieFactory with function scope dbsession
     """
     return OrganisatieFactory(dbsession)
+
+
+@pytest.fixture(scope="function")
+def rekening_factory(session, request):
+    """
+    creates an instance of the RekeningFactory with function scope dbsession
+    """
+    return RekeningFactory(session)

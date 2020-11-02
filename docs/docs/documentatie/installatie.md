@@ -30,7 +30,7 @@ OIDC_SECRET="<random string>"
 IMAGE_TAG=latest
 NAMESPACE=huishoudboekje
 
-helm repo add stable "https://kubernetes-charts.storage.googleapis.com"
+helm repo add stable "https://charts.helm.sh/stable"
 helm repo add zalando-operator "https://raw.githubusercontent.com/zalando/postgres-operator/master/charts/postgres-operator"
 helm repo update
 

@@ -5,6 +5,7 @@
     "save": "Opslaan",
     "cancel": "Annuleren",
     "delete": "Verwijderen",
+    "add": "Toevoegen",
     "edit": "Wijzigen",
     "login": "Inloggen",
     "logout": "Uitloggen",
@@ -17,6 +18,10 @@
     "burgers": {
       "createNew": "Toevoegen",
       "backToList": "Terug naar overzicht"
+    },
+    "agreements": {
+      "createNew": "Toevoegen",
+      "showInactive": "Toon inactieve afspraken"
     },
     "organizations": {
       "createNew": "Toevoegen",
@@ -43,6 +48,10 @@
       "noSearchResults": "Geen burgers gevonden. Gebruik een andere zoekterm.",
       "addHint": "Voeg burgers toe door te klikken op de knop {{ buttonLabel }}."
     },
+    "agreements": {
+      "noSearchResults": "Geen afspraken gevonden.",
+      "addHint": "Voeg afspraken toe door te klikken op de knop {{ buttonLabel }}."
+    },
     "organizations": {
       "invalidFormMessage": "Er is een fout opgetreden. Controleer de ingevulde gegevens en probeer het opnieuw.",
       "createSuccessMessage": "Nieuwe organisatie succesvol opgeslagen.",
@@ -55,6 +64,13 @@
     }
   },
   "forms": {
+    "common": {
+      "fields": {
+        "dateDay": "Dag",
+        "dateMonth": "Maand",
+        "dateYear": "Jaar"
+      }
+    },
     "search": {
       "fields": {
         "search": "Zoeken"
@@ -65,11 +81,17 @@
       "sections": {
         "personal": {
           "title": "Persoonlijk",
-          "helperText": "Vul de persoonlijke gegevens van de burger in."
+          "helperText": "Vul de persoonlijke gegevens van de burger in.",
+          "detailText": "Persoonlijke gegevens van de burger."
         },
         "contact": {
           "title": "Contact",
-          "helperText": "Vul de contactgegevens van de burger in."
+          "helperText": "Vul de contactgegevens van de burger in.",
+          "detailText": "Contactgegevens van de burger."
+        },
+        "agreements": {
+          "title": "Afspraken",
+          "detailText": "Afspraken van de burger."
         }
       },
       "fields": {
@@ -77,9 +99,6 @@
         "firstName": "Voornamen",
         "lastName": "Achternaam",
         "dateOfBirth": "Geboortedatum",
-        "dateOfBirthDay": "Dag",
-        "dateOfBirthMonth": "Maand",
-        "dateOfBirthYear": "Jaar",
         "street": "Straatnaam",
         "houseNumber": "Huisnummer",
         "zipcode": "Postcode",
@@ -90,6 +109,24 @@
       "tooltips": {
         "zipcode": "Invoer zonder spaties. Voorbeeld: 1234AB",
         "phoneNumber": "Invoer zonder spaties en streepjes. Voorbeeld: 0612345678"
+      }
+    },
+    "agreements": {
+      "title": "Afspraak",
+      "subtitle": "Vul de gegevens van de afspraak in.",
+      "fields": {
+        "description": "Beschrijving",
+        "startDate": "Start datum",
+        "endDate": "Eind datum",
+        "noOfPayments": "Aantal betalingen",
+        "interval": "Interval",
+        "contraAccount": "Tegen rekening",
+        "amount": "Bedrag",
+        "credit": "Credit",
+        "debit": "Debet",
+        "reference": "Kenmerk",
+        "active": "Actief",
+        "user": "Gebruiker"
       }
     },
     "organizations": {

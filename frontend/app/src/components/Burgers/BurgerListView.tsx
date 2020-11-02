@@ -17,7 +17,7 @@ const BurgerListView: React.FC<BoxProps & { burgers: IGebruiker[], showAddButton
 			{showAddButton && (
 				<Box>
 					<Button variantColor={"blue"} borderStyle={"dashed"} variant={"outline"} leftIcon={"add"}
-					        w="100%" h="100%" onClick={() => push(Routes.CreateBurger)} borderRadius={5}
+					        w="100%" h="100%" onClick={() => push(Routes.BurgerNew)} borderRadius={5}
 					        p={5}>{t("buttons.burgers.createNew")}</Button>
 				</Box>
 			)}

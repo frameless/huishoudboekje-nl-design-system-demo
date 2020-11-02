@@ -5,6 +5,28 @@ schema {
     mutation: RootMutation
 }
 
+type AddAfspraak {
+    afspraak: Afspraak
+    ok: Boolean
+}
+
+"GraphQL Afspraak model "
+type Afspraak {
+    aantalBetalingen: Int
+    actief: Boolean
+    bedrag: Bedrag
+    beschrijving: String
+    credit: Boolean
+    eindDatum: Date
+    gebruiker: Gebruiker
+    id: Int
+    interval: Interval
+    kenmerk: String
+    organisatie: Organisatie
+    startDatum: Date
+    tegenRekening: Rekening
+}
+
 type CreateGebruiker {
     gebruiker: Gebruiker
     ok: Boolean
@@ -13,6 +35,10 @@ type CreateGebruiker {
 type CreateOrganisatie {
     ok: Boolean
     organisatie: Organisatie
+}
+
+type DeleteAfspraak {
+    ok: Boolean
 }
 
 type DeleteGebruiker {
@@ -26,24 +52,35 @@ type DeleteOrganisatie {
 "GraphQL Gebruiker model "
 type Gebruiker {
     achternaam: String
+    afspraken: [Afspraak]
     email: String
     geboortedatum: String
     huisnummer: String
-    iban: String
+    iban: String @deprecated(reason : "Please use 'rekeningen'")
     id: Int
     plaatsnaam: String
     postcode: String
+    rekeningen: [Rekening]
     straatnaam: String
     telefoonnummer: String
     voorletters: String
     voornamen: String
 }
 
+type Interval {
+    dagen: Int
+    jaren: Int
+    maanden: Int
+    weken: Int
+}
+
 "GraphQL Organisatie model "
 type Organisatie {
+    afspraken: [Afspraak]
     id: Int
     kvkDetails: OrganisatieKvK
     kvkNummer: String
+    rekeningen: [Rekening]
     weergaveNaam: String
 }
 
@@ -56,22 +93,38 @@ type OrganisatieKvK {
     straatnaam: String
 }
 
+"GraphQL Rekening model"
+type Rekening {
+    iban: String
+    rekeninghouder: String
+}
+
 "The root of all mutations "
 type RootMutation {
-    createGebruiker(achternaam: String, email: String, geboortedatum: String, huisnummer: String, iban: String, plaatsnaam: String, postcode: String, straatnaam: String, telefoonnummer: String, voorletters: String, voornamen: String): CreateGebruiker
-    createOrganisatie(huisnummer: String, kvkNummer: String!, naam: String, plaatsnaam: String, postcode: String, straatnaam: String, weergaveNaam: String!): CreateOrganisatie
+    addAfspraak(aantalBetalingen: Int, actief: Boolean, bedrag: Bedrag, beschrijving: String, credit: Boolean, eindDatum: Date, gebruikerId: Int, interval: IntervalInput, kenmerk: String, startDatum: Date, tegenRekeningId: Int): AddAfspraak
+    createGebruiker(achternaam: String, email: String, geboortedatum: String, huisnummer: String, plaatsnaam: String, postcode: String, rekeningen: [RekeningInput], straatnaam: String, telefoonnummer: String, voorletters: String, voornamen: String): CreateGebruiker
+    createOrganisatie(huisnummer: String, kvkNummer: String!, naam: String, plaatsnaam: String, postcode: String, rekeningen: [RekeningInput], straatnaam: String, weergaveNaam: String!): CreateOrganisatie
+    deleteAfspraak(id: Int!): DeleteAfspraak
     deleteGebruiker(id: Int!): DeleteGebruiker
     deleteOrganisatie(id: Int!): DeleteOrganisatie
-    updateGebruiker(achternaam: String, email: String, geboortedatum: String, huisnummer: String, iban: String, id: Int!, plaatsnaam: String, postcode: String, straatnaam: String, telefoonnummer: String, voorletters: String, voornamen: String): UpdateGebruiker
-    updateOrganisatie(huisnummer: String, id: Int!, kvkNummer: String, naam: String, plaatsnaam: String, postcode: String, straatnaam: String, weergaveNaam: String): UpdateOrganisatie
+    updateAfspraak(aantalBetalingen: Int, actief: Boolean, bedrag: Bedrag, beschrijving: String, credit: Boolean, eindDatum: Date, gebruikerId: Int, id: Int!, interval: IntervalInput, kenmerk: String, startDatum: Date, tegenRekeningId: Int): UpdateAfspraak
+    updateGebruiker(achternaam: String, email: String, geboortedatum: String, huisnummer: String, id: Int!, plaatsnaam: String, postcode: String, rekeningen: [RekeningInput], straatnaam: String, telefoonnummer: String, voorletters: String, voornamen: String): UpdateGebruiker
+    updateOrganisatie(huisnummer: String, id: Int!, kvkNummer: String, naam: String, plaatsnaam: String, postcode: String, rekeningen: [RekeningInput], straatnaam: String, weergaveNaam: String): UpdateOrganisatie
 }
 
 "The root of all queries "
 type RootQuery {
+    afspraak(id: Int!): Afspraak
+    afspraken(ids: [Int] = []): [Afspraak]
     gebruiker(id: Int!): Gebruiker
     gebruikers(ids: [Int] = []): [Gebruiker]
     organisatie(id: Int!): Organisatie
     organisaties(ids: [Int] = []): [Organisatie]
+}
+
+type UpdateAfspraak {
+    afspraak: Afspraak
+    ok: Boolean
 }
 
 type UpdateGebruiker {
@@ -83,3 +136,26 @@ type UpdateOrganisatie {
     ok: Boolean
     organisatie: Organisatie
 }
+
+input IntervalInput {
+    dagen: Int
+    jaren: Int
+    maanden: Int
+    weken: Int
+}
+
+input RekeningInput {
+    iban: String
+    rekeninghouder: String
+}
+
+
+"""
+The `Date` scalar type represents a Date
+value as specified by
+[iso8601](https://en.wikipedia.org/wiki/ISO_8601).
+"""
+scalar Date
+
+"Decimaal Scalar Description"
+scalar Bedrag

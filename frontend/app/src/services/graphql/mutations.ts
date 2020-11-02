@@ -1,5 +1,5 @@
 import {gql} from "@apollo/client";
-import {GebruikerFragment, OrganisatieFragment} from "./fragments";
+import {GebruikerFragment, OrganisatieFragment, AfspraakFragment} from "./fragments";
 
 export const CreateGebruikerMutation = gql`
     mutation createGebruiker(
@@ -143,4 +143,48 @@ export const DeleteOrganizationMutation = gql`
             ok
         }
     }
+`;
+
+export const AddAgreementMutation = gql`
+    mutation addAgreement(
+        $gebruiker: Int
+        $beschrijving: String
+        $start_datum: Date
+        $eind_datum: Date
+        $aantal_betalingen: Int
+        $jaren: Int
+        $maanden: Int
+        $weken: Int
+        $dagen: Int
+        $tegen_rekening: Int
+        $bedrag: Bedrag
+        $credit: Boolean
+        $kenmerk: String
+        $actief: Boolean
+    ){
+        addAfspraak(
+            gebruikerId: $gebruiker
+            beschrijving: $beschrijving
+            startDatum: $start_datum
+            eindDatum: $eind_datum
+            aantalBetalingen: $aantal_betalingen
+            interval: {
+                jaren: $jaren
+                maanden: $maanden
+                weken: $weken
+                dagen: $dagen
+            },
+            tegenRekeningId: $tegen_rekening
+            bedrag: $bedrag
+            credit: $credit
+            kenmerk: $kenmerk
+            actief: $actief
+        ){
+            ok
+            afspraak {
+                ...Afspraak
+            }
+        }
+    }
+    ${AfspraakFragment}
 `;

@@ -6,12 +6,15 @@ import requests
 from graphql import GraphQLError
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.models.organisatie import Organisatie
+from hhb_backend.graphql.mutations.rekening_input import RekeningInput
+
 
 class CreateOrganisatie(graphene.Mutation):
     class Arguments:
         # hhb_service elements (required)
         kvk_nummer = graphene.String(required=True)
         weergave_naam = graphene.String(required=True)
+
         # org_service elements (optional)
         naam = graphene.String()
         straatnaam = graphene.String()
@@ -29,7 +32,7 @@ class CreateOrganisatie(graphene.Mutation):
             "weergave_naam": kwargs.pop("weergave_naam")
         }
         hhb_service_response = requests.post(
-            os.path.join(settings.HHB_SERVICES_URL, "organisaties/"), 
+            f"{settings.HHB_SERVICES_URL}/organisaties/",
             data=json.dumps(hhb_service_data),
             headers={'Content-type': 'application/json'}
         )
@@ -37,7 +40,7 @@ class CreateOrganisatie(graphene.Mutation):
             raise GraphQLError(f"Upstream API responded: {hhb_service_response.json()}")
 
         org_service_response = requests.post(
-            os.path.join(settings.ORGANISATIE_SERVICES_URL, f"organisaties/"), 
+            f"{settings.HHB_SERVICES_URL}/organisaties/",
             data=json.dumps(kwargs),
             headers={'Content-type': 'application/json'}
         )

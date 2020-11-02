@@ -11,7 +11,7 @@ class OrganisatieQuery():
 
     @staticmethod
     def resolver(root, info, **kwargs):
-        response = requests.get(os.path.join(settings.HHB_SERVICES_URL, f"organisaties/{kwargs['id']}"))
+        response = requests.get(f"{settings.HHB_SERVICES_URL}/organisaties/{kwargs['id']}")
         if response.status_code != 200:
             raise GraphQLError(f"Upstream API responded: {response.json()}")
         return response.json()["data"]
@@ -24,10 +24,7 @@ class OrganisatiesQuery():
         filter_query = ""
         if "ids" in kwargs:
             filter_query = "?filter_ids=" + ",".join([str(id) for id in kwargs['ids']])
-        response = requests.get(os.path.join(
-            settings.HHB_SERVICES_URL,
-            f"organisaties/{filter_query}")
-        )
+        response = requests.get(f"{settings.HHB_SERVICES_URL}/organisaties/{filter_query}")
         if response.status_code != 200:
             raise GraphQLError(f"Upstream API responded: {response.json()}")
         return response.json()["data"]

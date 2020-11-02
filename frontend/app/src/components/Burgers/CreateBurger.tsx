@@ -38,18 +38,18 @@ const CreateBurger = () => {
 	const dateOfBirth = {
 		day: useNumberInput({
 			validate: [(v) => new RegExp(/^[0-9]{1,2}$/).test(v.toString())],
-			placeholder: t("forms.burgers.fields.dateOfBirthDay"),
+			placeholder: t("forms.common.fields.dateDay"),
 			min: 1,
 			max: 31,
 		}),
 		month: useNumberInput({
 			validate: [(v) => new RegExp(/^[0-9]{1,2}$/).test(v.toString())],
-			placeholder: t("forms.burgers.fields.dateOfBirthMonth"),
+			placeholder: t("forms.common.fields.dateMonth"),
 			min: 1, max: 12
 		}),
 		year: useNumberInput({
 			validate: [(v) => new RegExp(/^[0-9]{4}$/).test(v.toString())],
-			placeholder: t("forms.burgers.fields.dateOfBirthYear"),
+			placeholder: t("forms.common.fields.dateYear"),
 			max: (new Date()).getFullYear(), // No future births.
 		})
 	}

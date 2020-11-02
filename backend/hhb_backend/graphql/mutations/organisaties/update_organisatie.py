@@ -6,6 +6,8 @@ import json
 from graphql import GraphQLError
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.models.organisatie import Organisatie
+from hhb_backend.graphql.mutations.rekening_input import RekeningInput
+
 
 class UpdateOrganisatie(graphene.Mutation):
     class Arguments:
@@ -13,6 +15,7 @@ class UpdateOrganisatie(graphene.Mutation):
         id = graphene.Int(required=True)
         weergave_naam = graphene.String()
         kvk_nummer = graphene.String()
+
         # org_service elements
         naam = graphene.String()
         straatnaam = graphene.String()
@@ -25,7 +28,6 @@ class UpdateOrganisatie(graphene.Mutation):
 
     def mutate(root, info, id, **kwargs):
         """ Update the current Organisatie """
-
         # First update weergavenaam and get original kvk_number
         hhb_service_data = {}
         if "weergave_naam" in kwargs:

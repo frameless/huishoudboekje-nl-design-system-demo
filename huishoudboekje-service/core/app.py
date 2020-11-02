@@ -3,8 +3,11 @@ import os
 from flask import Flask, Response
 from core.views import (
     GebruikerView,
-    GebruikerDetailView,
-    OrganisatieView
+    OrganisatieView,
+    AfspraakView,
+    RekeningView,
+    RekeningGebruikerView,
+    RekeningOrganisatieView
 )
 from core import database, config
 db = database.db
@@ -21,26 +24,24 @@ def create_app(config_name=os.getenv('APP_SETTINGS', 'core.config.DevelopmentCon
         return Response()
 
     # Views
-    app.add_url_rule(
-        '/gebruikers',
-        view_func=GebruikerView.as_view('gebruiker_view'),
-        strict_slashes=False
-    )
-    app.add_url_rule(
-        '/gebruikers/<gebruiker_id>',
-        view_func=GebruikerDetailView.as_view('gebruiker_detail_view'),
-        strict_slashes=False
-    )
-    app.add_url_rule(
-        '/organisaties',
-        view_func=OrganisatieView.as_view('organisatie_view'),
-        strict_slashes=False
-    )
-    app.add_url_rule(
-        '/organisaties/<organisatie_id>',
-        view_func=OrganisatieView.as_view('organisatie_detail_view'),
-        strict_slashes=False
-    )
+    routes = [
+        {"path": "/gebruikers", "view": GebruikerView, "name": "gebruiker_view"},
+        {"path": "/gebruikers/<object_id>", "view": GebruikerView, "name": "gebruiker_detail_view"},
+        {"path": "/gebruikers/<object_id>/rekeningen", "view": RekeningGebruikerView, "name": "gebruiker_rekeningen_view"},
+        {"path": "/organisaties", "view": OrganisatieView, "name": "organisatie_view"},
+        {"path": "/organisaties/<object_id>", "view": OrganisatieView, "name": "organisatie_detail_view"},
+        {"path": "/organisaties/<object_id>/rekeningen", "view": RekeningOrganisatieView, "name": "organisatie_rekeningen_view"},
+        {"path": "/afspraken", "view": AfspraakView, "name": "afspraak_view"},
+        {"path": "/afspraken/<object_id>", "view": AfspraakView, "name": "afspraak_detail_view"},
+        {"path": "/rekeningen", "view": RekeningView, "name": "rekening_view"},
+        {"path": "/rekeningen/<object_id>", "view": RekeningView, "name": "rekening_detail_view"},
+    ]
+    for route in routes:
+        app.add_url_rule(
+            route["path"],
+            view_func=route["view"].as_view(route["name"]),
+            strict_slashes=False
+        )
     return app
 
 if __name__ == '__main__':

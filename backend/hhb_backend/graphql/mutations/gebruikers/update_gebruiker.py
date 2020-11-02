@@ -4,6 +4,7 @@ import json
 import graphene
 import requests
 from graphql import GraphQLError
+
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.models.gebruiker import Gebruiker
 
@@ -15,7 +16,6 @@ class UpdateGebruiker(graphene.Mutation):
         email = graphene.String()
         geboortedatum = graphene.String()
         telefoonnummer = graphene.String()
-        iban = graphene.String()
 
         # burger arguments
         achternaam = graphene.String()
@@ -31,6 +31,7 @@ class UpdateGebruiker(graphene.Mutation):
 
     def mutate(root, info, id, **kwargs):
         """ Update the current Gebruiker/Burger """
+
         gebruiker_response = requests.patch(
             f"{settings.HHB_SERVICES_URL}/gebruikers/{id}",
             data=json.dumps(kwargs),
