@@ -8,7 +8,6 @@ class RekeningenByIdLoader(SingleDataLoader):
 class RekeningenByGebruikerLoader(ListDataLoader):
     """ Load rekeningen list for gebruiker ids """
     model = "rekeningen"
-    service = settings.HHB_SERVICES_URL
     filter_item = "filter_gebruikers"
     index = "gebruikers"
     is_list = True
@@ -16,7 +15,6 @@ class RekeningenByGebruikerLoader(ListDataLoader):
 class RekeningenByOrganisatieLoader(ListDataLoader):
     """ Load rekeningen list for organisatie ids """
     model = "rekeningen"
-    service = settings.HHB_SERVICES_URL
     filter_item = "filter_organisaties"
     index = "organisaties"
     is_list = True
