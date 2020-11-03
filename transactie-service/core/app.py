@@ -4,7 +4,7 @@ from flask import Flask, Response
 from core import database, config
 
 db = database.db
-from models import *
+from models import customer_statement_message
 
 
 def create_app(config_name=os.getenv('APP_SETTINGS', 'core.config.DevelopmentConfig')):
