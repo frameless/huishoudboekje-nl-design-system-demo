@@ -114,6 +114,7 @@ type RootMutation {
     deleteRekening(gebruikerId: Int, id: Int!, organisatieId: Int): DeleteRekening
     updateAfspraak(aantalBetalingen: Int, actief: Boolean, bedrag: Bedrag, beschrijving: String, credit: Boolean, eindDatum: Date, gebruikerId: Int, id: Int!, interval: IntervalInput, kenmerk: String, startDatum: Date, tegenRekeningId: Int): UpdateAfspraak
     updateGebruiker(achternaam: String, email: String, geboortedatum: String, huisnummer: String, id: Int!, plaatsnaam: String, postcode: String, straatnaam: String, telefoonnummer: String, voorletters: String, voornamen: String): UpdateGebruiker
+    updateGebruikerRekeningen(gebruikerId: Int, rekeningen: [RekeningInput]): UpdateGebruikerRekeningen
     updateOrganisatie(huisnummer: String, id: Int!, kvkNummer: String, naam: String, plaatsnaam: String, postcode: String, straatnaam: String, weergaveNaam: String): UpdateOrganisatie
     updateRekening(iban: String, id: Int!, rekeninghouder: String): UpdateRekening
 }
@@ -126,7 +127,6 @@ type RootQuery {
     gebruikers(ids: [Int] = []): [Gebruiker]
     organisatie(id: Int!): Organisatie
     organisaties(ids: [Int] = []): [Organisatie]
-    rekeningenorganisatie(id: Int!): [Rekening]
 }
 
 type UpdateAfspraak {
@@ -137,6 +137,11 @@ type UpdateAfspraak {
 type UpdateGebruiker {
     gebruiker: Gebruiker
     ok: Boolean
+}
+
+type UpdateGebruikerRekeningen {
+    ok: Boolean
+    rekeningen: [Rekening]
 }
 
 type UpdateOrganisatie {
@@ -152,7 +157,7 @@ type UpdateRekening {
 input CreateGebruikerInput {
     achternaam: String
     email: String
-    geboortedatum: String
+    geboortedatum: Date
     huisnummer: String
     plaatsnaam: String
     postcode: String
@@ -172,6 +177,7 @@ input IntervalInput {
 
 input RekeningInput {
     iban: String
+    id: Int
     rekeninghouder: String
 }
 

@@ -170,3 +170,22 @@ export const AddAgreementMutation = gql`
     }
     ${AfspraakFragment}
 `;
+
+export const UpdateGebruikerRekeningenMutation = gql`
+	mutation updateGebruikerRekeningen(
+		$gebruikerId: Int
+		$rekeningen: [RekeningInput]
+	){
+        updateGebruikerRekeningen(
+			gebruikerId: $gebruikerId
+			rekeningen: $rekeningen
+		){
+			ok
+			rekeningen {
+				id
+				iban
+				rekeninghouder
+			}
+		}
+	}
+`

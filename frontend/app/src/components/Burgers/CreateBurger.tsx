@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {useTranslation} from "react-i18next";
 import {Box, Button, Divider, FormHelperText, FormLabel, Heading, Input, Select, Stack, Tooltip, useToast} from "@chakra-ui/core";
 import {useInput, useIsMobile, useNumberInput, Validators} from "react-grapple";
@@ -10,6 +10,8 @@ import {useMutation} from "@apollo/client";
 import {sampleData} from "../../config/sampleData/sampleData";
 import {useHistory} from "react-router-dom";
 import {CreateGebruikerMutation} from "../../services/graphql/mutations";
+import RekeningenList from "../Rekeningen/RekeningenList";
+import { IRekening } from "../../models";
 
 // Todo: add more detailed error message per field?
 const CreateBurger = () => {
@@ -17,7 +19,7 @@ const CreateBurger = () => {
 	const {push} = useHistory();
 	const isMobile = useIsMobile(MOBILE_BREAKPOINT);
 	const toast = useToast();
-
+	const [rekeningen, setRekeningen] = useState<IRekening[]>([])
 	// const bsn = useInput<string>({
 	// 	defaultValue: "",
 	// 	validate: [Validators.required, (v) => new RegExp(Regex.BsnNL).test(v)],
@@ -141,6 +143,7 @@ const CreateBurger = () => {
 					plaatsnaam: city.value,
 					telefoonnummer: phoneNumber.value,
 					email: mail.value,
+					rekeningen,
 				}
 			}
 		}).then(result => {
@@ -167,6 +170,10 @@ const CreateBurger = () => {
 	};
 
 	const isInvalid = (input) => input.dirty && !input.isValid;
+
+	const onChangeRekeningen = (newRekeningen)=> {
+		setRekeningen(newRekeningen)
+	};
 
 	return (<>
 		<BackButton to={Routes.Burgers} />
@@ -271,6 +278,12 @@ const CreateBurger = () => {
 								<Input isInvalid={isInvalid(mail)} {...mail.bind} id="mail" />
 							</Stack>
 						</FormRight>
+					</Stack>
+
+					<Divider />
+
+					<Stack direction={isMobile ? "column" : "row"} spacing={2}>
+						<RekeningenList rekeningen={rekeningen} onChange={onChangeRekeningen} placeholderRekeninghouder={`${firstName.value} ${lastName.value}`.trim()}/>
 					</Stack>
 
 					<Divider />

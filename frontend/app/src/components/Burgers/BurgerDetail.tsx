@@ -13,30 +13,33 @@ import {
 	Stack,
 	Switch,
 	Text,
+	useToast,
 } from "@chakra-ui/core";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Redirect, useHistory, useParams } from "react-router-dom";
 import Routes from "../../config/routes";
 import BackButton from "../BackButton";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { IAfspraak, IGebruiker } from "../../models";
 import { GetOneGebruikerQuery } from "../../services/graphql/queries";
 import { FormLeft, FormRight, Group, Label } from "../Forms/FormLeftRight";
 import NoAfsprakenFound from "./NoAfsprakenFound";
 import NoAfsprakenSearchResults from "./NoAfsprakenSearchResults";
 import RekeningenList from "../Rekeningen/RekeningenList";
+import { UpdateGebruikerRekeningenMutation, } from "../../services/graphql/mutations";
 
 const BurgerDetail = () => {
 	const {t} = useTranslation();
 	const {id} = useParams();
 	const {push} = useHistory();
+	const toast = useToast();
 
 	const [showInactive, setShowInactive] = useState(false)
 	const [afspraken, setAfspraken] = useState<IAfspraak[] | undefined>(undefined)
 
-	const {data, loading, error} = useQuery<{ gebruiker: IGebruiker }>(GetOneGebruikerQuery, {
-		variables: {id},
+	const { data, loading, error, refetch } = useQuery<{ gebruiker: IGebruiker }>(GetOneGebruikerQuery, {
+		variables: { id },
 	});
 
 	useEffect(() => {
@@ -56,6 +59,34 @@ const BurgerDetail = () => {
 	const onClickAddAfspraakButton = () => push(Routes.CreateBurgerAgreement(id));
 	const onClickShowInactive = (e: React.FormEvent<HTMLInputElement>) => setShowInactive(e.currentTarget.checked);
 
+	const [updateGebruikerRekening] = useMutation(UpdateGebruikerRekeningenMutation);
+
+	const onChangeRekeningen = async (rekeningen) => {
+		console.log("onChangeRekeningen", rekeningen);
+		try {
+			await updateGebruikerRekening({
+				variables: {
+					gebruikerId: data?.gebruiker.id,
+					rekeningen: rekeningen.map(({ id, iban, rekeninghouder }) => ({ id, iban, rekeninghouder })),
+				},
+			});
+			toast({
+				status: "success",
+				title: t("messages.organizations.createSuccessMessage"),
+				position: "top",
+			});
+			refetch();
+		}
+		catch (e) {
+			toast({
+				position: "top",
+				status: "error",
+				variant: "solid",
+				title: t("messages.genericError.title"),
+				description: t("messages.genericError.description"),
+			});
+		}
+	};
 	return (<>
 		<BackButton to={Routes.Burgers} />
 
@@ -161,7 +192,10 @@ const BurgerDetail = () => {
 
 				<Box>
 					<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
-						<RekeningenList rekeningen={data.gebruiker.rekeningen} />
+						<RekeningenList
+							rekeningen={data.gebruiker.rekeningen}
+							onChange={onChangeRekeningen}
+							placeholderRekeninghouder={`${data.gebruiker.voornamen} ${data.gebruiker.achternaam}`.trim()} />
 					</Stack>
 				</Box>
 
@@ -190,7 +224,7 @@ const BurgerDetail = () => {
 								<Group>
 									<FormLeft>
 										<Heading display={"box"}
-										         size={"md"}>{t("forms.burgers.sections.agreements.title")}</Heading>
+												 size={"md"}>{t("forms.burgers.sections.agreements.title")}</Heading>
 										<Label>{t("forms.burgers.sections.agreements.detailText")}</Label>
 									</FormLeft>
 									<FormRight>
