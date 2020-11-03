@@ -35,7 +35,6 @@ class Afspraak(graphene.ObjectType):
     credit = graphene.Boolean()
     kenmerk = graphene.String()
     actief = graphene.Boolean()
-    organisatie = graphene.Field(lambda: organisatie.Organisatie)
 
     async def resolve_gebruiker(root, info):
         """ Get gebruiker when requested """
@@ -46,14 +45,6 @@ class Afspraak(graphene.ObjectType):
         """ Get tegen_rekening when requested """
         if root.get('tegen_rekening_id'):
             return await request.dataloader.rekeningen_by_id.load(root.get('tegen_rekening_id'))
-
-    def resolve_organisatie(root, info):
-        """ Get organisatie from the tegen_rekening"""
-
-        return {
-            "id": 1,
-            "weergave_naam": "A"
-        }
 
     def resolve_start_datum(root, info):
         value = root.get('start_datum')

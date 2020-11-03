@@ -65,8 +65,6 @@ class HHBQuery():
         for row in self.query.all():
             result_dict = row2dict(row)
             for relation in self._exposed_many_relations:
-                print("type:")
-                print(relation)
                 result_dict[relation["relation"]] = [getattr(item, relation["relation_property"]) for item in getattr(row, relation["relation"])]
             for relation in self._exposed_one_relations:
                 result_dict[relation["relation"]] = getattr(getattr(row, relation["relation"]), relation["relation_property"])

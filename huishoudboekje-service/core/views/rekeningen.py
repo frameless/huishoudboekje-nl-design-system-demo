@@ -71,3 +71,4 @@ class RekeningView(HHBView):
     def add_relations(self, **kwargs):
         self.hhb_query.expose_many_relation("gebruikers", "gebruiker_id")
         self.hhb_query.expose_many_relation("organisaties", "organisatie_id")
+        self.hhb_query.expose_many_relation("afspraken", "id")
