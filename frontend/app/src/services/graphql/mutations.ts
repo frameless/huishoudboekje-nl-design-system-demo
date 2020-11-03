@@ -3,28 +3,10 @@ import {GebruikerFragment, OrganisatieFragment, AfspraakFragment} from "./fragme
 
 export const CreateGebruikerMutation = gql`
     mutation createGebruiker(
-        $voorletters: String
-        $voornamen: String
-        $achternaam: String
-        $geboortedatum: String
-        $straatnaam: String
-        $huisnummer: String
-        $postcode: String
-        $plaatsnaam: String
-        $telefoonnummer: String
-        $email: String
+        $input: CreateGebruikerInput
     ) {
         createGebruiker(
-            voorletters: $voorletters
-            voornamen: $voornamen
-            achternaam: $achternaam
-            geboortedatum: $geboortedatum
-            straatnaam: $straatnaam
-            huisnummer: $huisnummer
-            postcode: $postcode
-            plaatsnaam: $plaatsnaam
-            telefoonnummer: $telefoonnummer
-            email: $email
+            input: $input
         ){
             ok
             gebruiker {

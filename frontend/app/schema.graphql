@@ -49,6 +49,10 @@ type DeleteOrganisatie {
     ok: Boolean
 }
 
+type DeleteRekening {
+    ok: Boolean
+}
+
 "GraphQL Gebruiker model "
 type Gebruiker {
     achternaam: String
@@ -76,7 +80,6 @@ type Interval {
 
 "GraphQL Organisatie model "
 type Organisatie {
-    afspraken: [Afspraak]
     id: Int
     kvkDetails: OrganisatieKvK
     kvkNummer: String
@@ -96,20 +99,23 @@ type OrganisatieKvK {
 "GraphQL Rekening model"
 type Rekening {
     iban: String
+    id: Int
     rekeninghouder: String
 }
 
 "The root of all mutations "
 type RootMutation {
     addAfspraak(aantalBetalingen: Int, actief: Boolean, bedrag: Bedrag, beschrijving: String, credit: Boolean, eindDatum: Date, gebruikerId: Int, interval: IntervalInput, kenmerk: String, startDatum: Date, tegenRekeningId: Int): AddAfspraak
-    createGebruiker(achternaam: String, email: String, geboortedatum: String, huisnummer: String, plaatsnaam: String, postcode: String, rekeningen: [RekeningInput], straatnaam: String, telefoonnummer: String, voorletters: String, voornamen: String): CreateGebruiker
-    createOrganisatie(huisnummer: String, kvkNummer: String!, naam: String, plaatsnaam: String, postcode: String, rekeningen: [RekeningInput], straatnaam: String, weergaveNaam: String!): CreateOrganisatie
+    createGebruiker(input: CreateGebruikerInput): CreateGebruiker
+    createOrganisatie(huisnummer: String, kvkNummer: String!, naam: String, plaatsnaam: String, postcode: String, straatnaam: String, weergaveNaam: String!): CreateOrganisatie
     deleteAfspraak(id: Int!): DeleteAfspraak
     deleteGebruiker(id: Int!): DeleteGebruiker
     deleteOrganisatie(id: Int!): DeleteOrganisatie
+    deleteRekening(gebruikerId: Int, id: Int!, organisatieId: Int): DeleteRekening
     updateAfspraak(aantalBetalingen: Int, actief: Boolean, bedrag: Bedrag, beschrijving: String, credit: Boolean, eindDatum: Date, gebruikerId: Int, id: Int!, interval: IntervalInput, kenmerk: String, startDatum: Date, tegenRekeningId: Int): UpdateAfspraak
-    updateGebruiker(achternaam: String, email: String, geboortedatum: String, huisnummer: String, id: Int!, plaatsnaam: String, postcode: String, rekeningen: [RekeningInput], straatnaam: String, telefoonnummer: String, voorletters: String, voornamen: String): UpdateGebruiker
-    updateOrganisatie(huisnummer: String, id: Int!, kvkNummer: String, naam: String, plaatsnaam: String, postcode: String, rekeningen: [RekeningInput], straatnaam: String, weergaveNaam: String): UpdateOrganisatie
+    updateGebruiker(achternaam: String, email: String, geboortedatum: String, huisnummer: String, id: Int!, plaatsnaam: String, postcode: String, straatnaam: String, telefoonnummer: String, voorletters: String, voornamen: String): UpdateGebruiker
+    updateOrganisatie(huisnummer: String, id: Int!, kvkNummer: String, naam: String, plaatsnaam: String, postcode: String, straatnaam: String, weergaveNaam: String): UpdateOrganisatie
+    updateRekening(iban: String, id: Int!, rekeninghouder: String): UpdateRekening
 }
 
 "The root of all queries "
@@ -120,6 +126,7 @@ type RootQuery {
     gebruikers(ids: [Int] = []): [Gebruiker]
     organisatie(id: Int!): Organisatie
     organisaties(ids: [Int] = []): [Organisatie]
+    rekeningenorganisatie(id: Int!): [Rekening]
 }
 
 type UpdateAfspraak {
@@ -135,6 +142,25 @@ type UpdateGebruiker {
 type UpdateOrganisatie {
     ok: Boolean
     organisatie: Organisatie
+}
+
+type UpdateRekening {
+    ok: Boolean
+    rekening: Rekening
+}
+
+input CreateGebruikerInput {
+    achternaam: String
+    email: String
+    geboortedatum: String
+    huisnummer: String
+    plaatsnaam: String
+    postcode: String
+    rekeningen: [RekeningInput]
+    straatnaam: String
+    telefoonnummer: String
+    voorletters: String
+    voornamen: String
 }
 
 input IntervalInput {

@@ -17,6 +17,7 @@ export type IGebruiker = {
 
 export type IRekening = {
 	__typename: "Rekening"
+	id: number
 	iban: string
 	rekeninghouder: string
 }

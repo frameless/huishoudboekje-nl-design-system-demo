@@ -84,13 +84,14 @@ const CreateBurger = () => {
 
 	const prePopulateForm = () => {
 		const c = sampleData.burgers[(Math.floor(Math.random() * sampleData.burgers.length))];
+		const geboorteDatum: Date = new Date(c.dateOfBirth)
 
 		initials.setValue(c.initials);
 		firstName.setValue(c.firstName);
 		lastName.setValue(c.lastName);
-		dateOfBirth.day.setValue(c.dateOfBirth.split("-")[0]);
-		dateOfBirth.month.setValue(c.dateOfBirth.split("-")[1]);
-		dateOfBirth.year.setValue(c.dateOfBirth.split("-")[2]);
+		dateOfBirth.day.setValue(geboorteDatum.getDate());
+		dateOfBirth.month.setValue(geboorteDatum.getMonth() + 1);
+		dateOfBirth.year.setValue(geboorteDatum.getFullYear());
 		street.setValue(c.street);
 		houseNumber.setValue(c.houseNumber);
 		zipcode.setValue(c.zipcode);
@@ -126,22 +127,21 @@ const CreateBurger = () => {
 			return;
 		}
 
+		const geboorteDatum = new Date(Date.UTC(dateOfBirth.year.value, dateOfBirth.month.value - 1, dateOfBirth.day.value));
 		createGebruiker({
 			variables: {
-				voorletters: initials.value,
-				voornamen: firstName.value,
-				achternaam: lastName.value,
-				geboortedatum: [
-					dateOfBirth.year.value,
-					("0" + dateOfBirth.month.value).substr(-2, 2),
-					("0" + dateOfBirth.day.value).substr(-2, 2),
-				].join("-"),
-				straatnaam: street.value,
-				huisnummer: houseNumber.value,
-				postcode: zipcode.value,
-				plaatsnaam: city.value,
-				telefoonnummer: phoneNumber.value,
-				email: mail.value,
+				input: {
+					voorletters: initials.value,
+					voornamen: firstName.value,
+					achternaam: lastName.value,
+					geboortedatum: geboorteDatum.toISOString().substring(0, 10),
+					straatnaam: street.value,
+					huisnummer: houseNumber.value,
+					postcode: zipcode.value,
+					plaatsnaam: city.value,
+					telefoonnummer: phoneNumber.value,
+					email: mail.value,
+				}
 			}
 		}).then(result => {
 			toast({

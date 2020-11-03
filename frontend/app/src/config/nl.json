@@ -15,6 +15,9 @@
     "dashboard": "Dashboard"
   },
   "buttons": {
+    "common": {
+      "createNew": "Toevoegen"
+    },
     "burgers": {
       "createNew": "Toevoegen",
       "backToList": "Terug naar overzicht"
@@ -61,6 +64,9 @@
       "deleteQuestion": "Weet u zeker dat u de gegevens van {{name}} definitief wil verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
       "noSearchResults": "Geen organisaties gevonden. Gebruik een andere zoekterm.",
       "addHint": "Voeg organisaties toe door te klikken op de knop {{ buttonLabel }}."
+    },
+    "rekeningen": {
+      "addHint": "Voeg rekeningen toe door te klikken op de knop {{ buttonLabel }}."
     }
   },
   "forms": {
@@ -88,6 +94,10 @@
           "title": "Contact",
           "helperText": "Vul de contactgegevens van de burger in.",
           "detailText": "Contactgegevens van de burger."
+        },
+        "rekeningen": {
+          "title": "Rekeningen",
+          "detailText": "Rekeningen van de burger."
         },
         "agreements": {
           "title": "Afspraken",
@@ -153,6 +163,12 @@
       "tooltips": {
         "kvkNumber": "Het KvK-nummer bestaat uit acht cijfers. Voorbeeld: 27348329",
         "zipcode": "Invoer zonder spaties. Voorbeeld: 1234AB"
+      }
+    },
+    "rekeningen": {
+      "fields": {
+        "accountHolder": "",
+        "iban": ""
       }
     }
   },

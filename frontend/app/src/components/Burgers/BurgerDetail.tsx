@@ -5,7 +5,6 @@ import {
 	AccordionItem,
 	AccordionPanel,
 	Box,
-	BoxProps,
 	Button,
 	Divider,
 	FormLabel,
@@ -15,29 +14,18 @@ import {
 	Switch,
 	Text,
 } from "@chakra-ui/core";
-import React, {useEffect, useState} from "react";
-import {useIsMobile} from "react-grapple";
-import {useTranslation} from "react-i18next";
-import {Redirect, useHistory, useParams} from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { Redirect, useHistory, useParams } from "react-router-dom";
 import Routes from "../../config/routes";
 import BackButton from "../BackButton";
-import {useQuery} from "@apollo/client";
-import {IAfspraak, IGebruiker} from "../../models";
-import {GetOneGebruikerQuery} from "../../services/graphql/queries";
-import theme from "../../config/theme";
-import {FormLeft, FormRight} from "../Forms/FormLeftRight";
+import { useQuery } from "@apollo/client";
+import { IAfspraak, IGebruiker } from "../../models";
+import { GetOneGebruikerQuery } from "../../services/graphql/queries";
+import { FormLeft, FormRight, Group, Label } from "../Forms/FormLeftRight";
 import NoAfsprakenFound from "./NoAfsprakenFound";
 import NoAfsprakenSearchResults from "./NoAfsprakenSearchResults";
-
-const Label: React.FunctionComponent = ({children}) =>
-	<Text fontSize={"sm"} color={theme.colors.gray["500"]}>{children}</Text>;
-
-const Group: React.FC<BoxProps> = ({children, ...props}) => {
-	const isMobile = useIsMobile();
-	return (
-		<Stack spacing={2} mb={1} direction={isMobile ? "column" : "row"}>{children}</Stack>
-	);
-};
+import RekeningenList from "../Rekeningen/RekeningenList";
 
 const BurgerDetail = () => {
 	const {t} = useTranslation();
@@ -173,6 +161,12 @@ const BurgerDetail = () => {
 
 				<Box>
 					<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
+						<RekeningenList rekeningen={data.gebruiker.rekeningen} />
+					</Stack>
+				</Box>
+
+				<Box>
+					<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
 						{data.gebruiker.afspraken.length === 0 ?
 							<NoAfsprakenFound /> :
 							<>
@@ -266,6 +260,7 @@ const BurgerDetail = () => {
 						}
 					</Stack>
 				</Box>
+
 			</Stack>
 		)}
 	</>);
