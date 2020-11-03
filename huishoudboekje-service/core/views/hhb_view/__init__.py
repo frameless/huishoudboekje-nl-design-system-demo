@@ -28,6 +28,14 @@ class HHBView(MethodView):
         self.validator.json = [JsonSchema(schema=self.validation_data)]
         self.db = db
 
+    @property
+    def query(self):
+        return self.hhb_query.query
+
+    @property
+    def object(self):
+        return self.hhb_object.hhb_object
+
     def input_validate(self):
         """ Validate input data """
         inputs = self.validator(request)

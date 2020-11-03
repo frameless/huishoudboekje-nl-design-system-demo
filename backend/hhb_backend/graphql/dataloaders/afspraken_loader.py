@@ -7,3 +7,8 @@ class AfsprakenByGebruikerLoader(ListDataLoader):
     model = "afspraken"
     filter_item = "filter_gebruikers"
     index = "gebruiker_id"
+
+class AfsprakenByGebruikerLoader(ListDataLoader):
+    model = "afspraken"
+    filter_item = "filter_organisaties"
+    index = "organisatie_id"

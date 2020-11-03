@@ -61,3 +61,15 @@ class AfspraakView(HHBView):
                 except ValueError:
                     abort(make_response({"errors": [f"Input for filter_gebruikers is not correct, '{raw_id}' is not a number."]}, 400))
             self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.gebruiker_id.in_(ids))
+
+    def add_filter_filter_organisaties(self):
+        """ Add filter_organisaties filter based on the id of the organisatie model """
+        filter_organisaties = request.args.get('filter_organisaties')
+        if filter_organisaties:
+            ids = []
+            for raw_id in filter_organisaties.split(","):
+                try:
+                    ids.append(int(raw_id))
+                except ValueError:
+                    abort(make_response({"errors": [f"Input for filter_organisaties is not correct, '{raw_id}' is not a number."]}, 400))
+            self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.gebruiker_id.in_(ids))

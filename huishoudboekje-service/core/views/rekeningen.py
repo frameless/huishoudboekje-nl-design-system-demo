@@ -28,6 +28,7 @@ class RekeningView(HHBView):
         self.add_filter_organisaties()
         self.add_filter_ibans()
         self.add_filter_rekeninghouders()
+        self.add_relations()
         
     def add_filter_gebruikers(self):
         filter_gebruikers = request.args.get('filter_gebruikers')
@@ -67,21 +68,6 @@ class RekeningView(HHBView):
             except ValueError:
                 return {"errors": ["Input for filter_rekeninghouders is not correct"]}, 400
 
-    def get(self, **kwargs):
-        object_id = self.get_object_id_from_kwargs(**kwargs)
-        self.hhb_query.add_filter_columns()
-        self.hhb_query.add_filter_ids()
-        self.extend_get(**kwargs)
-        if object_id:
-            return self.hhb_query.get_result_single(object_id)
-        return self.get_result_multiple()
-
-    def get_result_multiple(self):
-        """ Get multiple results from the current query """
-        result_list = []
-        for row in self.hhb_query.query.all():
-            result_dict = row2dict(row)
-            result_dict["gebruikers"] = [item.gebruiker_id for item in row.gebruikers]
-            result_dict["organisaties"] = [item.organisatie_id for item in row.organisaties]
-            result_list.append(result_dict)
-        return {"data": result_list}, 200
+    def add_relations(self, **kwargs):
+        self.hhb_query.expose_many_relation("gebruikers", "gebruiker_id")
+        self.hhb_query.expose_many_relation("organisaties", "organisatie_id")

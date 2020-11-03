@@ -6,8 +6,16 @@ class HHBQuery():
     query = None
 
     def __init__(self, hhb_model):
+        self._exposed_many_relations = []
+        self._exposed_one_relations = []
         self.hhb_model = hhb_model
         self.query = self.hhb_model.query
+
+    def expose_one_relation(self, relation, relation_property):
+        self._exposed_one_relations.append({"relation": relation, "relation_property": relation_property})
+
+    def expose_many_relation(self, relation, relation_property):
+        self._exposed_many_relations.append({"relation": relation, "relation_property": relation_property})
 
     def add_filter_columns(self):
         """ Add column filters to query """
@@ -44,8 +52,23 @@ class HHBQuery():
         row = self.query.filter(self.hhb_model.id==row_id).one_or_none()
         if not row:
             return {"errors": [f"{self.hhb_model.__name__} not found."]}, 404
-        return {"data": row2dict(row)}, 200
+        result_dict = row2dict(row)
+        for relation in self._exposed_many_relations:
+            result_dict[relation["relation"]] = [item.getattr(relation["relation_property"]) for item in row.getattr(relation["relation"])]
+        for relation in self._exposed_one_relations:
+                result_dict[relation["relation"]] = row.getattr(relation["relation"]).getattr(relation["relation_property"])
+        return {"data": result_dict}, 200
 
     def get_result_multiple(self):
         """ Get multiple results from the current query """
-        return {"data": [row2dict(row) for row in self.query.all()]}, 200
+        result_list = []
+        for row in self.query.all():
+            result_dict = row2dict(row)
+            for relation in self._exposed_many_relations:
+                print("type:")
+                print(relation)
+                result_dict[relation["relation"]] = [getattr(item, relation["relation_property"]) for item in getattr(row, relation["relation"])]
+            for relation in self._exposed_one_relations:
+                result_dict[relation["relation"]] = getattr(getattr(row, relation["relation"]), relation["relation_property"])
+            result_list.append(result_dict)
+        return {"data": result_list}, 200
