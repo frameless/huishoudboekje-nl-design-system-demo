@@ -112,8 +112,7 @@ def logout():
 
 @app.before_request
 def add_dataloaders():
-    print("---------")
-    print("Add dataloaders")
+    print("=============== REQUEST SCOPE ===========")
     global loop
     request.dataloader = HHBDataLoader(loop=loop)
 

@@ -21,14 +21,14 @@ class RootQuery(graphene.ObjectType):
     async def resolve_gebruikers(root, info, **kwargs):
         return await GebruikersQuery.resolver(root, info, **kwargs)
 
-    def resolve_organisatie(root, info, **kwargs):
-        return OrganisatieQuery.resolver(root, info, **kwargs)
+    async def resolve_organisatie(root, info, **kwargs):
+        return await OrganisatieQuery.resolver(root, info, **kwargs)
 
-    def resolve_organisaties(root, info, **kwargs):
-        return OrganisatiesQuery.resolver(root, info, **kwargs)
+    async def resolve_organisaties(root, info, **kwargs):
+        return await OrganisatiesQuery.resolver(root, info, **kwargs)
 
-    def resolve_afspraak(root, info, **kwargs):
-        return AfspraakQuery.resolver(root, info, **kwargs)
+    async def resolve_afspraak(root, info, **kwargs):
+        return await AfspraakQuery.resolver(root, info, **kwargs)
 
-    def resolve_afspraken(root, info, **kwargs):
-        return AfsprakenQuery.resolver(root, info, **kwargs)
+    async def resolve_afspraken(root, info, **kwargs):
+        return await AfsprakenQuery.resolver(root, info, **kwargs)

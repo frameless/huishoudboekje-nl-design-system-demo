@@ -25,6 +25,6 @@ class GebruikersQuery():
         else:
             gebruikers_response = requests.get(f"{settings.HHB_SERVICES_URL}/gebruikers/")
             if gebruikers_response.status_code != 200:
-                raise GraphQLError(f"Upstream API responded: {gebruikers_response.json}")
+                raise GraphQLError(f"Upstream API responded: {gebruikers_response.json()}")
             gebruikers = gebruikers_response.json()["data"]
         return gebruikers

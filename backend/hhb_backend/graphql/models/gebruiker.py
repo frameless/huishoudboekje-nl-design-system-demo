@@ -1,12 +1,7 @@
 """ Gebruiker model as used in GraphQL queries """
-import os
-from datetime import date
-
 import graphene
-import requests
-from graphql import GraphQLError
+from flask import request
 
-from hhb_backend.graphql import settings
 import hhb_backend.graphql.models.afspraak as afspraak
 import hhb_backend.graphql.models.rekening as rekening
 
@@ -34,18 +29,9 @@ class Gebruiker(graphene.ObjectType):
             return rekeningen[0].get('iban')
         return None
 
-    def resolve_rekeningen(root, info):
+    async def resolve_rekeningen(root, info):
         """ Get rekeningen when requested """
-        response = requests.get(f"{settings.HHB_SERVICES_URL}/gebruikers/{root.get('id')}/rekeningen")
-        if response.status_code != 200:
-            raise GraphQLError(f"Upstream API responded: {response.json()}")
-        return response.json()["data"]
+        return await request.dataloader.rekeningen_by_gebruiker.load(root.get('id')) or []
 
-    def resolve_afspraken(root, info):
-        data = root.get('afspraken')
-        if data == None:
-            afspraken_response = requests.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_gebruikers={root.get('id')}")
-            if afspraken_response.status_code != 200:
-                raise GraphQLError(f"Upstream API responded: {afspraken_response.json()}")
-            data = afspraken_response.json()["data"]
-        return data
+    async def resolve_afspraken(root, info):
+        return await request.dataloader.afspraken_by_gebruiker.load(root.get('id')) or []

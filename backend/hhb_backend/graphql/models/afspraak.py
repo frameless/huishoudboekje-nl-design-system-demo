@@ -2,7 +2,7 @@
 from datetime import date
 
 import graphene
-
+from flask import request
 import hhb_backend.graphql.models.gebruiker as gebruiker
 import hhb_backend.graphql.models.rekening as rekening
 from hhb_backend.graphql.models import organisatie
@@ -37,19 +37,15 @@ class Afspraak(graphene.ObjectType):
     actief = graphene.Boolean()
     organisatie = graphene.Field(lambda: organisatie.Organisatie)
 
-    def resolve_gebruiker(root, info):
+    async def resolve_gebruiker(root, info):
         """ Get gebruiker when requested """
-        return {
-            "id": 1,
-            "achternaam": "a",
-        }
+        if root.get('gebruiker_id'):
+            return await request.dataloader.gebruikers_by_id.load(root.get('gebruiker_id'))
 
-    def resolve_tegen_rekening(root, info):
+    async def resolve_tegen_rekening(root, info):
         """ Get tegen_rekening when requested """
-        return {
-            "iban": "12",
-            "rekeninghouder": "A",
-        }
+        if root.get('tegen_rekening_id'):
+            return await request.dataloader.rekeningen_by_id.load(root.get('tegen_rekening_id'))
 
     def resolve_organisatie(root, info):
         """ Get organisatie from the tegen_rekening"""
