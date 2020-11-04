@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import {useTranslation} from "react-i18next";
 import {Box, Button, Divider, FormHelperText, FormLabel, Heading, Input, Select, Stack, Tooltip, useToast} from "@chakra-ui/core";
 import {useInput, useIsMobile, useNumberInput, Validators} from "react-grapple";
@@ -10,7 +10,6 @@ import {useMutation} from "@apollo/client";
 import {sampleData} from "../../config/sampleData/sampleData";
 import {useHistory} from "react-router-dom";
 import {CreateGebruikerMutation} from "../../services/graphql/mutations";
-import {IRekening} from "../../models";
 
 // Todo: add more detailed error message per field?
 const CreateBurger = () => {
@@ -18,7 +17,6 @@ const CreateBurger = () => {
 	const {push} = useHistory();
 	const isMobile = useIsMobile(MOBILE_BREAKPOINT);
 	const toast = useToast();
-	const [rekeningen, setRekeningen] = useState<IRekening[]>([])
 
 	const initials = useInput<string>({
 		defaultValue: "",
@@ -137,7 +135,7 @@ const CreateBurger = () => {
 					plaatsnaam: city.value,
 					telefoonnummer: phoneNumber.value,
 					email: mail.value,
-					rekeningen,
+					// rekeningen,
 				}
 			}
 		}).then(result => {

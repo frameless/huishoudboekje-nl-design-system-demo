@@ -35,7 +35,7 @@ import {IAfspraak, IGebruiker} from "../../models";
 import {GetOneGebruikerQuery} from "../../services/graphql/queries";
 import {FormLeft, FormRight, Label} from "../Forms/FormLeftRight";
 import RekeningList from "../Rekeningen/RekeningList";
-import {DeleteGebruikerMutation, UpdateGebruikerRekeningenMutation,} from "../../services/graphql/mutations";
+import {DeleteGebruikerMutation,} from "../../services/graphql/mutations";
 import {useIsMobile, useToggle} from "react-grapple";
 import DeadEndPage from "../DeadEndPage";
 import RekeningForm from "../Rekeningen/RekeningForm";
@@ -69,7 +69,7 @@ const BurgerDetail = () => {
 		})
 	};
 
-	const {data, loading, error, refetch} = useQuery<{ gebruiker: IGebruiker }>(GetOneGebruikerQuery, {
+	const {data, loading, error} = useQuery<{ gebruiker: IGebruiker }>(GetOneGebruikerQuery, {
 		variables: {id},
 	});
 
@@ -89,34 +89,6 @@ const BurgerDetail = () => {
 	const onClickEditButton = () => push(Routes.EditBurger(id));
 	const onClickAddAfspraakButton = () => push(Routes.CreateBurgerAgreement(id));
 	const onClickShowInactive = (e: React.FormEvent<HTMLInputElement>) => setShowInactive(e.currentTarget.checked);
-
-	const [updateGebruikerRekening] = useMutation(UpdateGebruikerRekeningenMutation);
-
-	const onChangeRekeningen = async (rekeningen) => {
-		try {
-			await updateGebruikerRekening({
-				variables: {
-					gebruikerId: data?.gebruiker.id,
-					rekeningen: rekeningen.map(({id, iban, rekeninghouder}) => ({id, iban, rekeninghouder})),
-				},
-			});
-			toast({
-				status: "success",
-				title: t("messages.rekeningen.createSuccessMessage"),
-				position: "top",
-			});
-			await refetch();
-		}
-		catch (e) {
-			toast({
-				position: "top",
-				status: "error",
-				variant: "solid",
-				title: t("messages.genericError.title"),
-				description: t("messages.genericError.description"),
-			});
-		}
-	};
 
 	const renderPageContent = () => {
 		if (loading) {
@@ -254,7 +226,9 @@ const BurgerDetail = () => {
 								<RekeningForm rekening={{
 									rekeninghouder: `${data.gebruiker.voorletters} ${data.gebruiker.achternaam}`
 								}} onSave={() => {
+									// Todo: createGebruikerRekeningMutation
 								}} onCancel={() => {
+									// Todo: toggleRekeningForm(false)
 								}} />
 							</FormRight>
 						</Stack>
