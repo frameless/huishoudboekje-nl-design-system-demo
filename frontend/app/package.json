@@ -39,7 +39,7 @@
     "graphql": "^15.3.0",
     "http-proxy-middleware": "^1.0.6",
     "i18next": "^19.8.2",
-    "ibantools": "^3.1.0",
+    "ibantools": "^3.2.0",
     "mobx": "^5.15.7",
     "mobx-react": "^6.3.1",
     "mobx-state-tree": "^3.17.2",
