@@ -9,7 +9,8 @@ import {
 	AlertDialogContent,
 	AlertDialogFooter,
 	AlertDialogHeader,
-	AlertDialogOverlay, Box,
+	AlertDialogOverlay,
+	Box,
 	Button,
 	Divider,
 	FormLabel,
@@ -225,7 +226,7 @@ const BurgerDetail = () => {
 							<FormRight justifyContent={"center"}>
 								<RekeningList rekeningen={data.gebruiker.rekeningen} gebruiker={data.gebruiker} />
 								{showCreateRekeningForm ? (<>
-									<Divider/>
+									<Divider />
 									<RekeningForm rekening={{
 										rekeninghouder: `${data.gebruiker.voorletters} ${data.gebruiker.achternaam}`
 									}} onSave={() => {
