@@ -23,6 +23,6 @@ class CustomerStatementMessage(db.Model):
     # Tag 62f
     closing_balance = Column(Integer)
     # Tag 64
-    closing_available_funds = Column(String)
+    closing_available_funds = Column(Integer)
     # Tag 65
-    forward_available_balance = Column(String)
+    forward_available_balance = Column(Integer)

@@ -1,8 +1,8 @@
 """added customer statement message table
 
-Revision ID: 49855b822d91
+Revision ID: 52dd4e1665ec
 Revises: 
-Create Date: 2020-11-03 16:48:46.874234
+Create Date: 2020-11-04 14:10:31.253171
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '49855b822d91'
+revision = '52dd4e1665ec'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -28,8 +28,8 @@ def upgrade():
     sa.Column('sequence_number', sa.String(), nullable=True),
     sa.Column('opening_balance', sa.Integer(), nullable=True),
     sa.Column('closing_balance', sa.Integer(), nullable=True),
-    sa.Column('closing_available_funds', sa.String(), nullable=True),
-    sa.Column('forward_available_balance', sa.String(), nullable=True),
+    sa.Column('closing_available_funds', sa.Integer(), nullable=True),
+    sa.Column('forward_available_balance', sa.Integer(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###
