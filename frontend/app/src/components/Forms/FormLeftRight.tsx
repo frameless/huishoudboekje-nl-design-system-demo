@@ -16,6 +16,6 @@ export const Label: React.FunctionComponent = ({ children }) =>
 export const Group: React.FC<BoxProps> = ({ children, ...props }) => {
 	const isMobile = useIsMobile();
 	return (
-		<Stack spacing={2} mb={1} direction={isMobile ? "column" : "row"}>{children}</Stack>
+		<Stack spacing={2} mb={1} direction={isMobile ? "column" : "row"} {...props}>{children}</Stack>
 	);
 };

@@ -194,7 +194,7 @@ const BurgerDetail = () => {
 						<RekeningenList
 							rekeningen={data.gebruiker.rekeningen}
 							onChange={onChangeRekeningen}
-							placeholderRekeninghouder={`${data.gebruiker.voornamen} ${data.gebruiker.achternaam}`.trim()} />
+							defaultRekeninghouder={`${data.gebruiker.voornamen} ${data.gebruiker.achternaam}`.trim()} />
 					</Stack>
 				</Box>
 

@@ -283,7 +283,7 @@ const CreateBurger = () => {
 					<Divider />
 
 					<Stack direction={isMobile ? "column" : "row"} spacing={2}>
-						<RekeningenList rekeningen={rekeningen} onChange={onChangeRekeningen} placeholderRekeninghouder={`${firstName.value} ${lastName.value}`.trim()}/>
+						<RekeningenList width={"100%"} rekeningen={rekeningen} onChange={onChangeRekeningen} defaultRekeninghouder={`${firstName.value} ${lastName.value}`.trim()}/>
 					</Stack>
 
 					<Divider />

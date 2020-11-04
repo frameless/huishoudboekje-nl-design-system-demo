@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
+	BoxProps,
 	Button,
 	FormLabel,
 	Heading,
@@ -10,9 +11,8 @@ import {
 	StatGroup, StatHelpText,
 	StatLabel,
 	StatNumber,
-	Switch,
 } from "@chakra-ui/core";
-import { electronicFormatIBAN, extractIBAN, friendlyFormatIBAN, isValidBBAN, isValidIBAN } from "ibantools";
+import { electronicFormatIBAN, extractIBAN, friendlyFormatIBAN } from "ibantools";
 
 import { IRekening } from "../../models";
 import NoItemsFound from "../Forms/NoItemsFound";
@@ -60,11 +60,11 @@ const RekeningEdit = ({ rekening, onSave }: { rekening: IRekening, onSave: (reke
 	);
 };
 
-const RekeningenList = ({ rekeningen, onChange, placeholderRekeninghouder }: { rekeningen: IRekening[], onChange: (rekeningen: IRekening[]) => void, placeholderRekeninghouder?: string }) => {
+const RekeningenList: React.FC<BoxProps & { rekeningen: IRekening[], onChange: (rekeningen: IRekening[]) => void, defaultRekeninghouder?: string }> = ({ rekeningen, onChange, defaultRekeninghouder, ...props }) => {
 	const { t } = useTranslation();
 	const [newRekening, setNewRekening] = useState<IRekening>();
 	const onClickAddRekening = (e) => {
-		setNewRekening({rekeninghouder: placeholderRekeninghouder} as IRekening);
+		setNewRekening({rekeninghouder: defaultRekeninghouder} as IRekening);
 	};
 
 	const onSaveNew = (rekening: IRekening) => {
@@ -73,12 +73,12 @@ const RekeningenList = ({ rekeningen, onChange, placeholderRekeninghouder }: { r
 	};
 	const noRekeningenFound = rekeningen.length === 0 && !newRekening;
 	return (
-		<Group>
+		<Group {...props}>
 			<FormLeft>
 				<Heading display={"box"} size={"md"}>{t("forms.burgers.sections.rekeningen.title")}</Heading>
 				<Label>{t("forms.burgers.sections.rekeningen.detailText")}</Label>
 			</FormLeft>
-			<FormRight>
+			<FormRight width={"100%"}>
 				{noRekeningenFound && <NoItemsFound
 					onClick={onClickAddRekening}
 					buttonLabel={t("buttons.common.createNew")}
@@ -90,7 +90,7 @@ const RekeningenList = ({ rekeningen, onChange, placeholderRekeninghouder }: { r
 						<FormLeft />
 						<FormRight>
 							<Stack direction={"row"} spacing={5} justifyContent={"flex-end"}>
-								<Button variantColor={"primary"}
+								<Button variantColor={"primary"} isDisabled={!!newRekening}
 									onClick={onClickAddRekening}>{t("actions.add")}</Button>
 							</Stack>
 						</FormRight>
