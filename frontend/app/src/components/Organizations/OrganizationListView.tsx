@@ -16,7 +16,7 @@ const OrganizationListView: React.FC<BoxProps & { organizations: IOrganisatie[],
 				<Box>
 					<Button variantColor={"blue"} borderStyle={"dashed"} variant={"outline"} leftIcon={"add"}
 					        w="100%" h="100%" onClick={() => push(Routes.CreateOrganization)} borderRadius={5}
-					        p={5}>{t("buttons.organizations.createNew")}</Button>
+					        p={5}>{t("actions.add")}</Button>
 				</Box>
 			)}
 			{organizations.map((o, i) => (

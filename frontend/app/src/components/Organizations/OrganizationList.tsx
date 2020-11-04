@@ -78,9 +78,9 @@ const OrganizationList = () => {
 
 		if (data?.organisaties.length === 0) {
 			return (
-				<DeadEndPage message={t("messages.organizations.addHint", {buttonLabel: t("buttons.organizations.createNew")})}>
+				<DeadEndPage message={t("messages.organizations.addHint", {buttonLabel: t("actions.add")})}>
 					<Button size={"sm"} variantColor={"primary"} variant={"solid"} leftIcon={"add"}
-					        onClick={() => push(Routes.CreateOrganization)}>{t("buttons.organizations.createNew")}</Button>
+					        onClick={() => push(Routes.CreateOrganization)}>{t("actions.add")}</Button>
 				</DeadEndPage>
 			);
 		}

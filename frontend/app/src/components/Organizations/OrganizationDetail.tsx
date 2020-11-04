@@ -187,7 +187,7 @@ const OrganizationDetail = () => {
 			<Stack justifyContent={"center"} alignItems={"center"} bg={"white"} p={20} spacing={10}>
 				<Box as={DeletedIllustration} maxWidth={[200, 300, 400]} height={"auto"} />
 				<Text fontSize={"sm"}>{t("messages.organizations.deleteConfirmMessage", {name: data.organisatie.weergaveNaam})}</Text>
-				<Button variantColor="primary" onClick={onClickBackButton}>{t("buttons.organizations.backToList")}</Button>
+				<Button variantColor="primary" onClick={onClickBackButton}>{t("actions.backToList")}</Button>
 			</Stack>
 		)}
 		{!loading && !error && data && !isDeleted && (

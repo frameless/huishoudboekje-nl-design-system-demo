@@ -2,6 +2,7 @@
   "actions": {
     "back": "Terug",
     "backToHome": "Terug naar de hoofdpagina",
+    "backToList": "Terug naar overzicht",
     "save": "Opslaan",
     "cancel": "Annuleren",
     "delete": "Verwijderen",
@@ -15,20 +16,8 @@
     "dashboard": "Dashboard"
   },
   "buttons": {
-    "common": {
-      "createNew": "Toevoegen"
-    },
-    "burgers": {
-      "createNew": "Toevoegen",
-      "backToList": "Terug naar overzicht"
-    },
     "agreements": {
-      "createNew": "Toevoegen",
       "showInactive": "Toon inactieve afspraken"
-    },
-    "organizations": {
-      "createNew": "Toevoegen",
-      "backToList": "Terug naar overzicht"
     }
   },
   "messages": {
@@ -67,7 +56,8 @@
     },
     "rekeningen": {
       "addHint": "Voeg rekeningen toe door te klikken op de knop {{ buttonLabel }}.",
-      "createSuccessMessage": "Nieuwe rekening succesvol opgeslagen."
+      "createSuccessMessage": "Nieuwe rekening succesvol opgeslagen.",
+      "deleteSuccess": "Rekening is verwijderd."
     }
   },
   "forms": {
@@ -168,8 +158,8 @@
     },
     "rekeningen": {
       "fields": {
-        "accountHolder": "",
-        "iban": ""
+        "accountHolder": "Rekeninghouder",
+        "iban": "IBAN"
       }
     }
   },

@@ -136,7 +136,7 @@ const BurgerDetail = () => {
 			if (isDeleted) {
 				return (
 					<DeadEndPage message={t("messages.burgers.deleteConfirmMessage", {name: `${data.gebruiker.voornamen} ${data.gebruiker.achternaam}`})}>
-						<Button variantColor={"primary"} onClick={() => push(Routes.Burgers)}>{t("buttons.burgers.backToList")}</Button>
+						<Button variantColor={"primary"} onClick={() => push(Routes.Burgers)}>{t("actions.backToList")}</Button>
 					</DeadEndPage>
 				)
 			}
@@ -251,9 +251,9 @@ const BurgerDetail = () => {
 
 					<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
 						{data.gebruiker.afspraken.length === 0 ? (
-							<DeadEndPage message={t("messages.agreements.addHint", {buttonLabel: t("buttons.common.createNew")})}>
+							<DeadEndPage message={t("messages.agreements.addHint", {buttonLabel: t("actions.add")})} illustration={false}>
 								<Button onClick={() => push(Routes.CreateBurgerAgreement(id))} size={"sm"} variantColor={"primary"} variant={"solid"}
-								        leftIcon={"add"}>{t("buttons.common.createNew")}</Button>
+								        leftIcon={"add"}>{t("actions.add")}</Button>
 							</DeadEndPage>
 						) : (<>
 							<Stack spacing={2} mb={1} direction={isMobile ? "column" : "row"}>

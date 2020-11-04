@@ -77,9 +77,9 @@ const BurgerList = () => {
 
 		if (data?.gebruikers.length === 0) {
 			return (
-				<DeadEndPage message={t("messages.burgers.addHint", {buttonLabel: t("buttons.burgers.createNew")})}>
+				<DeadEndPage message={t("messages.burgers.addHint", {buttonLabel: t("actions.add")})}>
 					<Button size={"sm"} variantColor={"primary"} variant={"solid"} leftIcon={"add"}
-					        onClick={() => push(Routes.CreateBurger)}>{t("buttons.burgers.createNew")}</Button>
+					        onClick={() => push(Routes.CreateBurger)}>{t("actions.add")}</Button>
 				</DeadEndPage>
 			);
 		}
