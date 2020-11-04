@@ -66,7 +66,7 @@ class OrganisatieView(MethodView):
                 organisatie = Organisatie.query.filter(Organisatie.kvk_nummer==kvk_nummer).one()
             except NoResultFound:
                 return {"errors": ["Organisatie not found."]}, 404
-            response_code = 202
+            response_code = 200
         else:
             organisatie = Organisatie()
             db.session.add(organisatie)
@@ -87,4 +87,4 @@ class OrganisatieView(MethodView):
             return {"errors": ["Organisatie not found."]}, 404
         db.session.delete(organisatie)
         db.session.commit()
-        return {}, 202
+        return {}, 204

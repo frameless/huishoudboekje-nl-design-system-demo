@@ -84,8 +84,8 @@ class HHBView(MethodView):
             object_json: data
 
         returns
+            200 {"data": <object_json>}
             201 {"data": <object_json>}
-            202 {"data": <object_json>}
             400 {"errors": [<input data error message>]}
             404 {"errors": ["Organisatie not found."]}
             409 {"errors": [<database integrity error>]}
@@ -104,7 +104,7 @@ class HHBView(MethodView):
             object_id: required path parameter
 
         returns
-            202 {}
+            204 {}
             405 {"errors": ["Method not allowed"]}
             404 {"errors": ["Object not found."]}
         """
@@ -114,4 +114,4 @@ class HHBView(MethodView):
         self.hhb_object.get_or_404(object_id)
         self.hhb_object.delete()
         self.hhb_object.commit_changes()
-        return {}, 202
+        return {}, 204

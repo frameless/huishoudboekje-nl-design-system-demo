@@ -39,7 +39,7 @@ class DeleteRekening(graphene.Mutation):
         delete_response = requests.delete(url, data=json.dumps({"rekening_id": id}),
                                           headers={'Content-type': 'application/json'})
 
-        if delete_response.status_code != 202:
+        if delete_response.status_code != 204:
             raise GraphQLError(f"Upstream API responded: {delete_response.json()}")
 
         return DeleteRekening(ok=True)

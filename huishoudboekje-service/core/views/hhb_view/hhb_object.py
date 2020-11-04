@@ -16,7 +16,7 @@ class HHBObject():
         """ Get or create an object of the current hhb model """
         if object_id:
             self.get_or_404(object_id)
-            response_code = 202
+            response_code = 200
         else:
             self.hhb_object = self.hhb_model()
             db.session.add(self.hhb_object)

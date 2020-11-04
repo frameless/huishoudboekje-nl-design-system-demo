@@ -25,13 +25,13 @@ class DeleteOrganisatie(graphene.Mutation):
         delete_response_hhb = requests.delete(
             os.path.join(settings.HHB_SERVICES_URL, f"organisaties/{id}")
         )
-        if delete_response_hhb.status_code != 202:
+        if delete_response_hhb.status_code != 204:
             raise GraphQLError(f"Upstream API responded: {delete_response_hhb.json()}")
 
         delete_response_org = requests.delete(
             os.path.join(settings.ORGANISATIE_SERVICES_URL, f"organisaties/{kvk_nummer}")
         )
-        if delete_response_org.status_code not in [202, 404]:
+        if delete_response_org.status_code not in [204, 404]:
             raise GraphQLError(f"Upstream API responded: {delete_response_hhb.json()}")
         return DeleteOrganisatie(ok=True)
 
