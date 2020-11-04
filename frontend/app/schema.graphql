@@ -5,11 +5,6 @@ schema {
     mutation: RootMutation
 }
 
-type AddAfspraak {
-    afspraak: Afspraak
-    ok: Boolean
-}
-
 "GraphQL Afspraak model "
 type Afspraak {
     aantalBetalingen: Int
@@ -25,6 +20,11 @@ type Afspraak {
     organisatie: Organisatie
     startDatum: Date
     tegenRekening: Rekening
+}
+
+type CreateAfspraak {
+    afspraak: Afspraak
+    ok: Boolean
 }
 
 type CreateGebruiker {
@@ -105,7 +105,7 @@ type Rekening {
 
 "The root of all mutations "
 type RootMutation {
-    addAfspraak(aantalBetalingen: Int, actief: Boolean, bedrag: Bedrag, beschrijving: String, credit: Boolean, eindDatum: Date, gebruikerId: Int, interval: IntervalInput, kenmerk: String, startDatum: Date, tegenRekeningId: Int): AddAfspraak
+    createAfspraak(aantalBetalingen: Int, actief: Boolean, bedrag: Bedrag, beschrijving: String, credit: Boolean, eindDatum: Date, gebruikerId: Int, interval: IntervalInput, kenmerk: String, startDatum: Date, tegenRekeningId: Int): CreateAfspraak
     createGebruiker(input: CreateGebruikerInput): CreateGebruiker
     createOrganisatie(huisnummer: String, kvkNummer: String!, naam: String, plaatsnaam: String, postcode: String, straatnaam: String, weergaveNaam: String!): CreateOrganisatie
     deleteAfspraak(id: Int!): DeleteAfspraak

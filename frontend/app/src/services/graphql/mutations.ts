@@ -144,7 +144,7 @@ export const AddAgreementMutation = gql`
         $kenmerk: String
         $actief: Boolean
     ){
-        addAfspraak(
+        createAfspraak(
             gebruikerId: $gebruiker
             beschrijving: $beschrijving
             startDatum: $start_datum

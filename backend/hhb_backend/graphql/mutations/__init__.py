@@ -6,7 +6,7 @@ from .gebruikers.update_gebruiker import UpdateGebruiker
 from .organisaties.create_organisatie import CreateOrganisatie
 from .organisaties.update_organisatie import UpdateOrganisatie
 from .organisaties.delete_organisatie import DeleteOrganisatie
-from .afspraken.add_afspraak import AddAfspraak
+from .afspraken.create_afspraak import CreateAfspraak
 from .afspraken.update_afspraak import UpdateAfspraak
 from .afspraken.delete_afspraak import DeleteAfspraak
 from .rekeningen.delete_rekening import DeleteRekening
@@ -18,7 +18,7 @@ class RootMutation(graphene.ObjectType):
     createGebruiker = CreateGebruiker.Field()
     deleteGebruiker = DeleteGebruiker.Field()
     updateGebruiker = UpdateGebruiker.Field()
-    addAfspraak = AddAfspraak.Field()
+    createAfspraak = CreateAfspraak.Field()
     updateAfspraak = UpdateAfspraak.Field()
     deleteAfspraak = DeleteAfspraak.Field()
     createOrganisatie = CreateOrganisatie.Field()

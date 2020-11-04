@@ -5,12 +5,11 @@ from graphql import GraphQLError
 import requests
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.models.afspraak import Afspraak, IntervalInput
-import hhb_backend.graphql.models.gebruiker as gebruiker
 from hhb_backend.graphql.scalars.bedrag import Bedrag
 from hhb_backend.utils import convert_hhb_interval_to_iso
 import json
 
-class AddAfspraak(graphene.Mutation):
+class CreateAfspraak(graphene.Mutation):
     class Arguments:
         gebruiker_id = graphene.Int()
         beschrijving = graphene.String()
@@ -42,4 +41,4 @@ class AddAfspraak(graphene.Mutation):
         )
         if post_response.status_code != 201:
             raise GraphQLError(f"Upstream API responded: {post_response.json()}")
-        return AddAfspraak(afspraak=post_response.json()["data"], ok=True)
+        return CreateAfspraak(afspraak=post_response.json()["data"], ok=True)
