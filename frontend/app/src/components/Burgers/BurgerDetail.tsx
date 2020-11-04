@@ -226,7 +226,7 @@ const BurgerDetail = () => {
 							<FormRight justifyContent={"center"}>
 								<RekeningList rekeningen={data.gebruiker.rekeningen} gebruiker={data.gebruiker} />
 								{showCreateRekeningForm ? (<>
-									<Divider />
+									{data.gebruiker.rekeningen.length > 0 && <Divider />}
 									<RekeningForm rekening={{
 										rekeninghouder: `${data.gebruiker.voorletters} ${data.gebruiker.achternaam}`
 									}} onSave={() => {
