@@ -48,6 +48,16 @@ build-organisatie-service:
   only:
     - branches@commonground/huishoudboekje/app-new
 
+# Build Transactie Service
+build-transactie-service:
+  stage: build
+  variables:
+    APP_NAME: transactie-service
+    DIRECTORY: transactie-service
+  extends: .build
+  only:
+    - branches@commonground/huishoudboekje/app-new
+
 # Build Docs
 build-docs:
   stage: build
