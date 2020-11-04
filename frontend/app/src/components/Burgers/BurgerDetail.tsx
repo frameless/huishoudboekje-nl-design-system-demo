@@ -62,7 +62,6 @@ const BurgerDetail = () => {
 	const [updateGebruikerRekening] = useMutation(UpdateGebruikerRekeningenMutation);
 
 	const onChangeRekeningen = async (rekeningen) => {
-		console.log("onChangeRekeningen", rekeningen);
 		try {
 			await updateGebruikerRekening({
 				variables: {

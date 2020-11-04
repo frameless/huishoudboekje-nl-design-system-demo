@@ -62,7 +62,6 @@ const RekeningEdit = ({ rekening, onSave }: { rekening: IRekening, onSave: (reke
 
 const RekeningenList = ({ rekeningen, onChange, placeholderRekeninghouder }: { rekeningen: IRekening[], onChange: (rekeningen: IRekening[]) => void, placeholderRekeninghouder?: string }) => {
 	const { t } = useTranslation();
-	console.log("RekeningenList", rekeningen);
 	const [newRekening, setNewRekening] = useState<IRekening>();
 	const onClickAddRekening = (e) => {
 		setNewRekening({rekeninghouder: placeholderRekeninghouder} as IRekening);
