@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from "react";
+import React, {useEffect} from "react";
 import {Box, Button, Flex, Heading, IconButton, Menu, MenuButton, MenuItem, MenuList, PseudoBox, Spinner, Stack, Text, useTheme, useToast} from "@chakra-ui/core";
 import {useSession} from "./utils/hooks";
 import {observer} from "mobx-react";
@@ -21,8 +21,7 @@ const App = () => {
 	const isMobile = useIsMobile(TABLET_BREAKPOINT);
 	const session = useSession();
 	const location = useLocation();
-	const [isLoading, _toggleLoading] = useToggle(true);
-	const toggleLoading = useCallback(_toggleLoading, []);
+	const [isLoading, toggleLoading] = useToggle(true);
 	const toast = useToast();
 	const theme = useTheme();
 	const {push} = useHistory();
