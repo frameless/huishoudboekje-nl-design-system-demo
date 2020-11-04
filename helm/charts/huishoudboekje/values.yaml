@@ -13,7 +13,7 @@ database:
   databases:
     - huishoudboekjeservice
     - organisatieservice
-    - afspraken
+    - transactieservice
 
 huishoudboekje-service:
   database:
@@ -24,3 +24,8 @@ organisatie-service:
   database:
     service: huishoudboekje-database
     name: organisatieservice
+
+transactie-service:
+  database:
+    service: huishoudboekje-database
+    name: transactieservice

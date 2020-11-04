@@ -74,3 +74,8 @@ organisatie-service:
   database:
     service: huishoudboekje-database
     name: organisatieservice
+
+transactie-service:
+  database:
+    service: huishoudboekje-database
+    name: transactieservice

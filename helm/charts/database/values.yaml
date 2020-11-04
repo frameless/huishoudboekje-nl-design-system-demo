@@ -15,6 +15,7 @@ postgresql:
 databases:
   - huishoudboekje_service
   - organisatie_service
+  - transactie_service
 
 traefik:
   enabled: false
