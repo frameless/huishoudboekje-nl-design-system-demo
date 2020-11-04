@@ -40,6 +40,7 @@ import {CreateGebruikerRekeningMutation, DeleteGebruikerMutation,} from "../../s
 import {useIsMobile, useToggle} from "react-grapple";
 import DeadEndPage from "../DeadEndPage";
 import RekeningForm from "../Rekeningen/RekeningForm";
+import moment from "moment";
 
 const BurgerDetail = () => {
 	const {t} = useTranslation();
@@ -167,9 +168,13 @@ const BurgerDetail = () => {
 									</Stack>
 								</Stack>
 								<Stack spacing={2} mb={1} direction={isMobile ? "column" : "row"}>
-									<Stack spacing={1}>
+									<Stack spacing={1} flex={1}>
 										<Label>{t("forms.burgers.fields.dateOfBirth")}</Label>
 										<Text>{data.gebruiker.geboortedatum}</Text>
+									</Stack>
+									<Stack spacing={1} flex={1}>
+										<Label>{t("forms.burgers.fields.age")}</Label>
+										<Text>{moment().diff(moment(data.gebruiker.geboortedatum), "year")}</Text>
 									</Stack>
 								</Stack>
 
@@ -185,31 +190,31 @@ const BurgerDetail = () => {
 							</FormLeft>
 							<FormRight>
 								<Stack spacing={2} mb={1} direction={isMobile ? "column" : "row"}>
-									<Stack spacing={1} flex={2}>
+									<Stack spacing={1} flex={1}>
 										<Label>{t("forms.burgers.fields.street")}</Label>
 										<Text>{data.gebruiker.straatnaam}</Text>
 									</Stack>
-									<Stack spacing={1} flex={2}>
+									<Stack spacing={1} flex={1}>
 										<Label>{t("forms.burgers.fields.houseNumber")}</Label>
 										<Text>{data.gebruiker.huisnummer}</Text>
 									</Stack>
 								</Stack>
 								<Stack spacing={2} mb={1} direction={isMobile ? "column" : "row"}>
-									<Stack spacing={1} flex={2}>
+									<Stack spacing={1} flex={1}>
 										<Label>{t("forms.burgers.fields.zipcode")}</Label>
 										<Text>{data.gebruiker.postcode}</Text>
 									</Stack>
-									<Stack spacing={1} flex={2}>
+									<Stack spacing={1} flex={1}>
 										<Label>{t("forms.burgers.fields.city")}</Label>
 										<Text>{data.gebruiker.plaatsnaam}</Text>
 									</Stack>
 								</Stack>
 								<Stack spacing={2} mb={1} direction={isMobile ? "column" : "row"}>
-									<Stack spacing={1} flex={2}>
+									<Stack spacing={1} flex={1}>
 										<Label>{t("forms.burgers.fields.phoneNumber")}</Label>
 										<Text>{data.gebruiker.telefoonnummer}</Text>
 									</Stack>
-									<Stack spacing={1} flex={2}>
+									<Stack spacing={1} flex={1}>
 										<Label>{t("forms.burgers.fields.mail")}</Label>
 										<Text>{data.gebruiker.email}</Text>
 									</Stack>

@@ -102,6 +102,7 @@
         "firstName": "Voornamen",
         "lastName": "Achternaam",
         "dateOfBirth": "Geboortedatum",
+        "age": "Leeftijd",
         "street": "Straatnaam",
         "houseNumber": "Huisnummer",
         "zipcode": "Postcode",
