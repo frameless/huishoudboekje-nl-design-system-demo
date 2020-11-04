@@ -17,7 +17,7 @@ class Rekening(graphene.ObjectType):
     async def resolve_gebruikers(root, info):
         """ Get gebruikers when requested """
         if root.get('gebruikers'):
-            return await request.dataloader.rekeningen_by_id.load_many(root.get('gebruikers')) or []
+            return await request.dataloader.gebruikers_by_id.load_many(root.get('gebruikers')) or []
 
     async def resolve_organisaties(root, info):
         """ Get organisaties when requested """
