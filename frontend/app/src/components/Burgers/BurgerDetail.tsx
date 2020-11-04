@@ -9,7 +9,7 @@ import {
 	AlertDialogContent,
 	AlertDialogFooter,
 	AlertDialogHeader,
-	AlertDialogOverlay,
+	AlertDialogOverlay, Box,
 	Button,
 	Divider,
 	FormLabel,
@@ -53,6 +53,7 @@ const BurgerDetail = () => {
 	const cancelDeleteRef = useRef(null);
 	const [deleteDialogOpen, toggleDeleteDialog] = useToggle(false);
 	const [isDeleted, toggleDeleted] = useToggle(false);
+	const [showCreateRekeningForm, toggleCreateRekeningForm] = useToggle(false);
 
 	const [deleteMutation, {loading: deleteLoading}] = useMutation(DeleteGebruikerMutation, {variables: {id}});
 
@@ -223,13 +224,20 @@ const BurgerDetail = () => {
 							</FormLeft>
 							<FormRight justifyContent={"center"}>
 								<RekeningList rekeningen={data.gebruiker.rekeningen} gebruiker={data.gebruiker} />
-								<RekeningForm rekening={{
-									rekeninghouder: `${data.gebruiker.voorletters} ${data.gebruiker.achternaam}`
-								}} onSave={() => {
-									// Todo: createGebruikerRekeningMutation
-								}} onCancel={() => {
-									// Todo: toggleRekeningForm(false)
-								}} />
+								{showCreateRekeningForm ? (<>
+									<Divider/>
+									<RekeningForm rekening={{
+										rekeninghouder: `${data.gebruiker.voorletters} ${data.gebruiker.achternaam}`
+									}} onSave={() => {
+										// Todo: createGebruikerRekeningMutation
+									}} onCancel={() => {
+										toggleCreateRekeningForm(false)
+									}} />
+								</>) : (
+									<Box>
+										<Button leftIcon={"add"} variantColor={"primary"} size={"sm"} onClick={() => toggleCreateRekeningForm(true)}>{t("actions.add")}</Button>
+									</Box>
+								)}
 							</FormRight>
 						</Stack>
 					</Stack>
@@ -250,8 +258,7 @@ const BurgerDetail = () => {
 											<FormLabel htmlFor="show-inactive-agreements">{t("buttons.agreements.showInactive")}</FormLabel>
 											<Switch id="show-inactive-agreements" onChange={onClickShowInactive} />
 										</Stack>
-										<Button variantColor={"primary"}
-											        onClick={onClickAddAfspraakButton}>{t("actions.add")}</Button>
+										<Button variantColor={"primary"} onClick={onClickAddAfspraakButton}>{t("actions.add")}</Button>
 									</Stack>
 								</FormRight>
 							</Stack>
