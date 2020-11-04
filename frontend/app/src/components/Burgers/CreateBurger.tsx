@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {Box, Button, Divider, FormHelperText, FormLabel, Heading, Input, Select, Stack, Tooltip, useToast} from "@chakra-ui/core";
 import {useInput, useIsMobile, useNumberInput, Validators} from "react-grapple";
@@ -10,8 +10,7 @@ import {useMutation} from "@apollo/client";
 import {sampleData} from "../../config/sampleData/sampleData";
 import {useHistory} from "react-router-dom";
 import {CreateGebruikerMutation} from "../../services/graphql/mutations";
-import RekeningenList from "../Rekeningen/RekeningenList";
-import { IRekening } from "../../models";
+import {IRekening} from "../../models";
 
 // Todo: add more detailed error message per field?
 const CreateBurger = () => {
@@ -166,9 +165,9 @@ const CreateBurger = () => {
 
 	const isInvalid = (input) => input.dirty && !input.isValid;
 
-	const onChangeRekeningen = (newRekeningen)=> {
-		setRekeningen(newRekeningen)
-	};
+	// const onChangeRekeningen = (newRekeningen) => {
+	// 	setRekeningen(newRekeningen)
+	// };
 
 	return (<>
 		<BackButton to={Routes.Burgers} />
@@ -271,9 +270,10 @@ const CreateBurger = () => {
 
 					<Divider />
 
-					<Stack direction={isMobile ? "column" : "row"} spacing={2}>
-						<RekeningenList width={"100%"} rekeningen={rekeningen} onChange={onChangeRekeningen} defaultRekeninghouder={`${firstName.value} ${lastName.value}`.trim()}/>
-					</Stack>
+					{/* Todo: Directly add rekeningen when creating new Burger */}
+					{/*<Stack direction={isMobile ? "column" : "row"} spacing={2}>*/}
+					{/*	<RekeningenList width={"100%"} gebruiker={burger} onChange={onChangeRekeningen} defaultRekeninghouder={`${firstName.value} ${lastName.value}`.trim()}/>*/}
+					{/*</Stack>*/}
 
 					<Divider />
 

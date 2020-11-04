@@ -1,5 +1,5 @@
 import {gql} from "@apollo/client";
-import {GebruikerFragment, OrganisatieFragment, AfspraakFragment} from "./fragments";
+import {AfspraakFragment, GebruikerFragment, OrganisatieFragment} from "./fragments";
 
 export const CreateGebruikerMutation = gql`
     mutation createGebruiker(
@@ -172,20 +172,31 @@ export const AddAgreementMutation = gql`
 `;
 
 export const UpdateGebruikerRekeningenMutation = gql`
-	mutation updateGebruikerRekeningen(
-		$gebruikerId: Int
-		$rekeningen: [RekeningInput]
-	){
+    mutation updateGebruikerRekeningen(
+        $gebruikerId: Int
+        $rekeningen: [RekeningInput]
+    ){
         updateGebruikerRekeningen(
-			gebruikerId: $gebruikerId
-			rekeningen: $rekeningen
-		){
-			ok
-			rekeningen {
-				id
-				iban
-				rekeninghouder
-			}
-		}
-	}
-`
+            gebruikerId: $gebruikerId
+            rekeningen: $rekeningen
+        ){
+            ok
+            rekeningen {
+                id
+                iban
+                rekeninghouder
+            }
+        }
+    }
+`;
+
+export const DeleteGebruikerRekeningMutation = gql`
+    mutation deleteGebruikerRekening(
+        $id: Int!
+        $gebruikerId: Int!
+    ){
+        deleteGebruikerRekening(id: $id, gebruikerId: $gebruikerId){
+            ok
+        }
+    }
+`;

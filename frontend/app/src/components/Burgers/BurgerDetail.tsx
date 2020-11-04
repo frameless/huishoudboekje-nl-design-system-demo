@@ -34,10 +34,11 @@ import {useMutation, useQuery} from "@apollo/client";
 import {IAfspraak, IGebruiker} from "../../models";
 import {GetOneGebruikerQuery} from "../../services/graphql/queries";
 import {FormLeft, FormRight, Label} from "../Forms/FormLeftRight";
-import RekeningenList from "../Rekeningen/RekeningenList";
+import RekeningList from "../Rekeningen/RekeningList";
 import {DeleteGebruikerMutation, UpdateGebruikerRekeningenMutation,} from "../../services/graphql/mutations";
 import {useIsMobile, useToggle} from "react-grapple";
 import DeadEndPage from "../DeadEndPage";
+import RekeningForm from "../Rekeningen/RekeningForm";
 
 const BurgerDetail = () => {
 	const {t} = useTranslation();
@@ -243,10 +244,20 @@ const BurgerDetail = () => {
 					</Stack>
 
 					<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
-						<RekeningenList
-							rekeningen={data.gebruiker.rekeningen}
-							onChange={onChangeRekeningen}
-							defaultRekeninghouder={`${data.gebruiker.voornamen} ${data.gebruiker.achternaam}`.trim()} />
+						<Stack spacing={2} mb={1} direction={isMobile ? "column" : "row"}>
+							<FormLeft>
+								<Heading display={"box"} size={"md"}>{t("forms.burgers.sections.rekeningen.title")}</Heading>
+								<Label>{t("forms.burgers.sections.rekeningen.detailText")}</Label>
+							</FormLeft>
+							<FormRight justifyContent={"center"}>
+								<RekeningList rekeningen={data.gebruiker.rekeningen} gebruiker={data.gebruiker} />
+								<RekeningForm rekening={{
+									rekeninghouder: `${data.gebruiker.voorletters} ${data.gebruiker.achternaam}`
+								}} onSave={() => {
+								}} onCancel={() => {
+								}} />
+							</FormRight>
+						</Stack>
 					</Stack>
 
 					<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>

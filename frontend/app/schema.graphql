@@ -17,7 +17,6 @@ type Afspraak {
     id: Int
     interval: Interval
     kenmerk: String
-    organisatie: Organisatie
     startDatum: Date
     tegenRekening: Rekening
 }
@@ -98,8 +97,11 @@ type OrganisatieKvK {
 
 "GraphQL Rekening model"
 type Rekening {
+    afspraken: [Afspraak]
+    gebruikers: [Gebruiker]
     iban: String
     id: Int
+    organisaties: [Organisatie]
     rekeninghouder: String
 }
 
@@ -127,6 +129,8 @@ type RootQuery {
     gebruikers(ids: [Int] = []): [Gebruiker]
     organisatie(id: Int!): Organisatie
     organisaties(ids: [Int] = []): [Organisatie]
+    rekening(id: Int!): Rekening
+    rekeningen(ids: [Int] = []): [Rekening]
 }
 
 type UpdateAfspraak {

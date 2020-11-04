@@ -20,6 +20,13 @@ export type IRekening = {
 	id: number
 	iban: string
 	rekeninghouder: string
+	gebruikers: IGebruiker[],
+	organisaties: IOrganisatie[]
+}
+export type IRekeningInput = {
+	id?: number
+	iban: string
+	rekeninghouder: string
 }
 
 export type IOrganisatie = {
