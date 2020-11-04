@@ -11,7 +11,7 @@ from .afspraken.update_afspraak import UpdateAfspraak
 from .afspraken.delete_afspraak import DeleteAfspraak
 from .rekeningen.delete_rekening import DeleteRekening
 from .rekeningen.update_rekening import UpdateRekening
-from .rekeningen.add_gebruiker_rekening import UpdateGebruikerRekeningen
+from .rekeningen.update_gebruiker_rekening import UpdateGebruikerRekeningen
 
 class RootMutation(graphene.ObjectType):
     """ The root of all mutations """
