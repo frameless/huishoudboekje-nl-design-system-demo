@@ -1,31 +1,6 @@
-import React, {useEffect, useRef} from "react";
-import {
-	AlertDialog,
-	AlertDialogBody,
-	AlertDialogContent,
-	AlertDialogFooter,
-	AlertDialogHeader,
-	AlertDialogOverlay,
-	Box,
-	Button,
-	Divider,
-	FormHelperText,
-	FormLabel,
-	Heading,
-	IconButton,
-	Input,
-	Menu,
-	MenuButton,
-	MenuItem,
-	MenuList,
-	Select,
-	Spinner,
-	Stack,
-	Text,
-	Tooltip,
-	useToast
-} from "@chakra-ui/core";
-import {useInput, useIsMobile, useNumberInput, useToggle, Validators} from "react-grapple";
+import React, {useEffect} from "react";
+import {Box, Button, Divider, FormHelperText, FormLabel, Heading, Input, Select, Spinner, Stack, Tooltip, useToast} from "@chakra-ui/core";
+import {useInput, useIsMobile, useNumberInput, Validators} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {Redirect, useHistory, useParams} from "react-router-dom";
 import Routes from "../../config/routes";
@@ -35,17 +10,13 @@ import {Months, Regex} from "../../utils/things";
 import {useMutation, useQuery} from "@apollo/client";
 import {IGebruiker} from "../../models";
 import {GetOneGebruikerQuery} from "../../services/graphql/queries";
-import {DeleteGebruikerMutation, UpdateGebruikerMutation} from "../../services/graphql/mutations";
-import DeletedIllustration from "../Illustrations/DeletedIllustration";
+import {UpdateGebruikerMutation} from "../../services/graphql/mutations";
 
 const BurgerEdit = () => {
 	const isMobile = useIsMobile();
 	const {t} = useTranslation();
 	const {id} = useParams();
 	const toast = useToast();
-	const [deleteDialogOpen, toggleDeleteDialog] = useToggle(false);
-	const [isDeleted, toggleDeleted] = useToggle(false);
-	const cancelDeleteRef = useRef(null);
 	const {push} = useHistory();
 
 	// const bsn = useInput<string>({
@@ -111,7 +82,6 @@ const BurgerEdit = () => {
 		variables: {id}
 	});
 
-	const [deleteMutation, {loading: deleteLoading}] = useMutation(DeleteGebruikerMutation, {variables: {id}});
 	const [updateMutation, {loading: updateLoading}] = useMutation(UpdateGebruikerMutation);
 
 	useEffect(() => {
@@ -145,7 +115,6 @@ const BurgerEdit = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [data, loading]);
 
-	const onClickBackButton = () => push(Routes.Burger(id));
 	const onSubmit = (e) => {
 		e.preventDefault();
 
@@ -207,18 +176,6 @@ const BurgerEdit = () => {
 			});
 		})
 	};
-	const onCloseDeleteDialog = () => toggleDeleteDialog(false);
-	const onConfirmDeleteDialog = () => {
-		deleteMutation().then(() => {
-			onCloseDeleteDialog();
-			toast({
-				title: t("messages.burgers.deleteConfirmMessage", { name: `${data?.gebruiker.voornamen} ${data?.gebruiker.achternaam}`}),
-				position: "top",
-				status: "success",
-			});
-			toggleDeleted(true);
-		})
-	};
 
 	return (<>
 		<BackButton to={Routes.Burger(id)} />
@@ -231,37 +188,10 @@ const BurgerEdit = () => {
 		{!loading && error && (
 			<Redirect to={Routes.NotFound} />
 		)}
-		{!loading && !error && data && isDeleted && (
-			<Stack justifyContent={"center"} alignItems={"center"} bg={"white"} p={20} spacing={10}>
-				<Box as={DeletedIllustration} maxWidth={[200, 300, 400]} height={"auto"} />
-				<Text fontSize={"sm"}>{t("messages.burgers.deleteConfirmMessage", { name: `${data.gebruiker.voornamen} ${data.gebruiker.achternaam}`})}</Text>
-				<Button variantColor="primary" onClick={onClickBackButton}>{t("buttons.burgers.backToList")}</Button>
-			</Stack>
-		)}
-		{!loading && !error && data && !isDeleted && (
+		{!loading && !error && data && (
 			<Stack spacing={5}>
 				<Stack direction={"row"} justifyContent={"flex-start"} alignItems={"center"} spacing={3}>
 					<Heading size={"lg"}>{data.gebruiker.voornamen} {data.gebruiker.achternaam}</Heading>
-
-					<AlertDialog isOpen={deleteDialogOpen} leastDestructiveRef={cancelDeleteRef} onClose={onCloseDeleteDialog}>
-						<AlertDialogOverlay />
-						<AlertDialogContent>
-							<AlertDialogHeader fontSize="lg" fontWeight="bold">{t("messages.burgers.deleteTitle")}</AlertDialogHeader>
-							{ /* Todo: specify which data gets deleted (14-10-2020) */ }
-							<AlertDialogBody>{t("messages.burgers.deleteQuestion", {name: `${data.gebruiker.voornamen} ${data.gebruiker.achternaam}`})}</AlertDialogBody>
-							<AlertDialogFooter>
-								<Button ref={cancelDeleteRef} onClick={onCloseDeleteDialog}>{t("actions.cancel")}</Button>
-								<Button isLoading={deleteLoading} variantColor="red" onClick={onConfirmDeleteDialog} ml={3}>{t("actions.delete")}</Button>
-							</AlertDialogFooter>
-						</AlertDialogContent>
-					</AlertDialog>
-
-					<Menu>
-						<IconButton as={MenuButton} icon="chevron-down" variant={"solid"} aria-label="Open menu" />
-						<MenuList>
-							<MenuItem onClick={() => toggleDeleteDialog(true)}>{t("actions.delete")}</MenuItem>
-						</MenuList>
-					</Menu>
 				</Stack>
 
 				<Box as={"form"} onSubmit={onSubmit}>
@@ -336,7 +266,8 @@ const BurgerEdit = () => {
 								<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 									<Stack spacing={1} flex={1}>
 										<FormLabel htmlFor={"zipcode"}>{t("forms.burgers.fields.zipcode")}</FormLabel>
-										<Tooltip label={t("forms.burgers.tooltips.zipcode")} aria-label={t("forms.burgers.fields.zipcode")} hasArrow placement={isMobile ? "top" : "left"}>
+										<Tooltip label={t("forms.burgers.tooltips.zipcode")} aria-label={t("forms.burgers.fields.zipcode")} hasArrow
+										         placement={isMobile ? "top" : "left"}>
 											<Input isInvalid={zipcode.dirty && !zipcode.isValid} {...zipcode.bind} />
 										</Tooltip>
 									</Stack>
@@ -347,7 +278,8 @@ const BurgerEdit = () => {
 								</Stack>
 								<Stack spacing={1}>
 									<FormLabel htmlFor={"phoneNumber"}>{t("forms.burgers.fields.phoneNumber")}</FormLabel>
-									<Tooltip label={t("forms.burgers.tooltips.phoneNumber")} aria-label={t("forms.burgers.tooltips.phoneNumber")} hasArrow placement={isMobile ? "top" : "left"}>
+									<Tooltip label={t("forms.burgers.tooltips.phoneNumber")} aria-label={t("forms.burgers.tooltips.phoneNumber")} hasArrow
+									         placement={isMobile ? "top" : "left"}>
 										<Input isInvalid={phoneNumber.dirty && !phoneNumber.isValid} {...phoneNumber.bind} />
 									</Tooltip>
 								</Stack>
