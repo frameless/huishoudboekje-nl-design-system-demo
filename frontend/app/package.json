@@ -49,7 +49,7 @@
     "react-i18next": "^11.7.3",
     "react-icons": "^3.11.0",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.1",
+    "react-scripts": "^4.0.0",
     "typescript": "^4.0.5"
   },
   "devDependencies": {
@@ -61,5 +61,8 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
-  ]
+  ],
+  "resolutions": {
+    "body-scroll-lock": "3.0.3"
+  }
 }
