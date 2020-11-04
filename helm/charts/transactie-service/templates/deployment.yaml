@@ -52,7 +52,7 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.database.name }}.{{ .Values.database.service }}.credentials.postgresql.acid.zalan.do
                   key: username
-            - name: transactie_DATABASE_URL
+            - name: TRANSACTIE_DATABASE_URL
               value: "postgresql://$(PGUSER):$(PGPASSWORD)@{{ .Values.database.service }}/{{ .Values.database.name }}"
           ports:
             - name: http
@@ -90,7 +90,7 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.database.name }}.{{ .Values.database.service }}.credentials.postgresql.acid.zalan.do
                   key: username
-            - name: transactie_DATABASE_URL
+            - name: TRANSACTIE_DATABASE_URL
               value: "postgresql://$(PGUSER):$(PGPASSWORD)@{{ .Values.database.service }}/{{ .Values.database.name }}"
           command: ["python"]
           args: ["manage.py", "db", "upgrade"]
