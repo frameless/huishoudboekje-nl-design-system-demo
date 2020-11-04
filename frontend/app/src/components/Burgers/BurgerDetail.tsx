@@ -120,7 +120,7 @@ const BurgerDetail = () => {
 	};
 
 	const renderPageContent = () => {
-		if(loading){
+		if (loading) {
 			return (
 				<Stack spacing={5} alignItems={"center"} justifyContent={"center"} my={10}>
 					<Spinner />
@@ -128,14 +128,14 @@ const BurgerDetail = () => {
 			);
 		}
 
-		if(error){
+		if (error) {
 			return (
 				<Redirect to={Routes.NotFound} />
 			)
 		}
 
-		if(data){
-			if(isDeleted){
+		if (data) {
+			if (isDeleted) {
 				return (
 					<DeadEndPage message={t("messages.burgers.deleteConfirmMessage", {name: `${data.gebruiker.voornamen} ${data.gebruiker.achternaam}`})}>
 						<Button variantColor={"primary"} onClick={() => push(Routes.Burgers)}>{t("buttons.burgers.backToList")}</Button>
@@ -143,7 +143,7 @@ const BurgerDetail = () => {
 				)
 			}
 
-			return(
+			return (
 				<Stack spacing={5}>
 					<Stack direction={"row"} justifyContent={"flex-start"} alignItems={"center"} spacing={3}>
 						<Heading size={"lg"}>{data.gebruiker.voornamen} {data.gebruiker.achternaam}</Heading>
@@ -164,6 +164,7 @@ const BurgerDetail = () => {
 						<Menu>
 							<IconButton as={MenuButton} icon="chevron-down" variant={"solid"} aria-label="Open menu" />
 							<MenuList>
+								<MenuItem onClick={onClickEditButton}>{t("actions.edit")}</MenuItem>
 								<MenuItem onClick={() => toggleDeleteDialog(true)}>{t("actions.delete")}</MenuItem>
 							</MenuList>
 						</Menu>
@@ -171,17 +172,6 @@ const BurgerDetail = () => {
 
 					<Box>
 						<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
-							<Group>
-								<FormLeft />
-								<FormRight>
-									<Stack direction={"row"} spacing={1} justifyContent={"flex-end"}>
-										<Button variantColor={"primary"} onClick={onClickEditButton}>{t("actions.edit")}</Button>
-									</Stack>
-								</FormRight>
-							</Group>
-
-							<Divider />
-
 							<Group>
 								<FormLeft>
 									<Heading display={"box"} size={"md"}>{t("forms.burgers.sections.personal.title")}</Heading>
