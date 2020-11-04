@@ -54,6 +54,7 @@ database:
   databases:
     - huishoudboekjeservice
     - organisatieservice
+    - transactieservice
 
 medewerker-backend:
   serviceChartPrefix: huishoudboekje
