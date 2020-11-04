@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 import {Box, Button, Divider, FormHelperText, FormLabel, Heading, Input, Select, Spinner, Stack, Tooltip, useToast} from "@chakra-ui/core";
 import {useInput, useIsMobile, useNumberInput, Validators} from "react-grapple";
 import {useTranslation} from "react-i18next";
-import {Redirect, useHistory, useParams} from "react-router-dom";
+import {Redirect, useParams} from "react-router-dom";
 import Routes from "../../config/routes";
 import BackButton from "../BackButton";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
@@ -17,7 +17,6 @@ const BurgerEdit = () => {
 	const {t} = useTranslation();
 	const {id} = useParams();
 	const toast = useToast();
-	const {push} = useHistory();
 
 	// const bsn = useInput<string>({
 	// 	validate: [Validators.required, (v) => new RegExp(Regex.BsnNL).test(v)],

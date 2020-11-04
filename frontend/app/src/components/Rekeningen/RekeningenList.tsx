@@ -1,26 +1,15 @@
-import React, { useState } from "react";
-import { useTranslation } from "react-i18next";
-import {
-	BoxProps,
-	Button,
-	FormLabel,
-	Heading,
-	Input,
-	Stack,
-	Stat,
-	StatGroup, StatHelpText,
-	StatLabel,
-	StatNumber,
-} from "@chakra-ui/core";
-import { electronicFormatIBAN, extractIBAN, friendlyFormatIBAN } from "ibantools";
+import React, {useState} from "react";
+import {useTranslation} from "react-i18next";
+import {BoxProps, Button, FormLabel, Heading, Input, Stack, Stat, StatGroup, StatHelpText, StatLabel, StatNumber,} from "@chakra-ui/core";
+import {electronicFormatIBAN, extractIBAN, friendlyFormatIBAN} from "ibantools";
 
-import { IRekening } from "../../models";
-import NoItemsFound from "../Forms/NoItemsFound";
-import { FormLeft, FormRight, Group, Label } from "../Forms/FormLeftRight";
-import { useInput, Validators } from "react-grapple";
+import {IRekening} from "../../models";
+import {FormLeft, FormRight, Label} from "../Forms/FormLeftRight";
+import {useInput, useIsMobile, Validators} from "react-grapple";
+import DeadEndPage from "../DeadEndPage";
 
-const RekeningEdit = ({ rekening, onSave }: { rekening: IRekening, onSave: (rekening: IRekening) => void }) => {
-	const { t } = useTranslation();
+const RekeningEdit = ({rekening, onSave}: { rekening: IRekening, onSave: (rekening: IRekening) => void }) => {
+	const {t} = useTranslation();
 	const rekeninghouder = useInput({
 		defaultValue: rekening.rekeninghouder || "",
 		validate: [Validators.required],
@@ -36,7 +25,7 @@ const RekeningEdit = ({ rekening, onSave }: { rekening: IRekening, onSave: (reke
 	const isInvalid = (input) => input.dirty && !input.isValid;
 
 	const onSubmit = (e) => {
-		onSave({ ...rekening, rekeninghouder: rekeninghouder.value, iban: iban.value });
+		onSave({...rekening, rekeninghouder: rekeninghouder.value, iban: iban.value});
 	};
 
 	return (
@@ -60,8 +49,9 @@ const RekeningEdit = ({ rekening, onSave }: { rekening: IRekening, onSave: (reke
 	);
 };
 
-const RekeningenList: React.FC<BoxProps & { rekeningen: IRekening[], onChange: (rekeningen: IRekening[]) => void, defaultRekeninghouder?: string }> = ({ rekeningen, onChange, defaultRekeninghouder, ...props }) => {
-	const { t } = useTranslation();
+const RekeningenList: React.FC<BoxProps & { rekeningen: IRekening[], onChange: (rekeningen: IRekening[]) => void, defaultRekeninghouder?: string }> = ({rekeningen, onChange, defaultRekeninghouder, ...props}) => {
+	const {t} = useTranslation();
+	const isMobile = useIsMobile();
 	const [newRekening, setNewRekening] = useState<IRekening>();
 	const onClickAddRekening = (e) => {
 		setNewRekening({rekeninghouder: defaultRekeninghouder} as IRekening);
@@ -73,20 +63,20 @@ const RekeningenList: React.FC<BoxProps & { rekeningen: IRekening[], onChange: (
 	};
 	const noRekeningenFound = rekeningen.length === 0 && !newRekening;
 	return (
-		<Group {...props}>
+		<Stack spacing={2} mb={1} direction={isMobile ? "column" : "row"} {...props}>
 			<FormLeft>
 				<Heading display={"box"} size={"md"}>{t("forms.burgers.sections.rekeningen.title")}</Heading>
 				<Label>{t("forms.burgers.sections.rekeningen.detailText")}</Label>
 			</FormLeft>
 			<FormRight width={"100%"}>
-				{noRekeningenFound && <NoItemsFound
-					onClick={onClickAddRekening}
-					buttonLabel={t("buttons.common.createNew")}
-					hint={t("messages.rekeningen.addHint", { buttonLabel: t("buttons.common.createNew") })}
-				/>}
+				{noRekeningenFound && (
+					<DeadEndPage message={t("messages.rekeningen.addHint", {buttonLabel: t("actions.add")})}>
+						<Button variantColor={"primary"} onClick={onClickAddRekening}>{t("buttons.common.createNew")}</Button>
+					</DeadEndPage>
+				)}
 
 				{!noRekeningenFound && <>
-					<Group>
+					<Stack spacing={2} mb={1} direction={isMobile ? "column" : "row"}>
 						<FormLeft />
 						<FormRight>
 							<Stack direction={"row"} spacing={5} justifyContent={"flex-end"}>
@@ -94,7 +84,7 @@ const RekeningenList: React.FC<BoxProps & { rekeningen: IRekening[], onChange: (
 									onClick={onClickAddRekening}>{t("actions.add")}</Button>
 							</Stack>
 						</FormRight>
-					</Group>
+					</Stack>
 					<StatGroup>
 						{rekeningen.map((rekening, i) =>
 							<Stat key={i}>
@@ -106,7 +96,7 @@ const RekeningenList: React.FC<BoxProps & { rekeningen: IRekening[], onChange: (
 					</StatGroup>
 				</>}
 			</FormRight>
-		</Group>
+		</Stack>
 	);
 };
 

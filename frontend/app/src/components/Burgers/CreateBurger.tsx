@@ -20,11 +20,7 @@ const CreateBurger = () => {
 	const isMobile = useIsMobile(MOBILE_BREAKPOINT);
 	const toast = useToast();
 	const [rekeningen, setRekeningen] = useState<IRekening[]>([])
-	// const bsn = useInput<string>({
-	// 	defaultValue: "",
-	// 	validate: [Validators.required, (v) => new RegExp(Regex.BsnNL).test(v)],
-	// 	placeholder: "123456789"
-	// });
+
 	const initials = useInput<string>({
 		defaultValue: "",
 		validate: [Validators.required]
@@ -86,14 +82,13 @@ const CreateBurger = () => {
 
 	const prePopulateForm = () => {
 		const c = sampleData.burgers[(Math.floor(Math.random() * sampleData.burgers.length))];
-		const geboorteDatum: Date = new Date(c.dateOfBirth)
 
 		initials.setValue(c.initials);
 		firstName.setValue(c.firstName);
 		lastName.setValue(c.lastName);
-		dateOfBirth.day.setValue(geboorteDatum.getDate());
-		dateOfBirth.month.setValue(geboorteDatum.getMonth() + 1);
-		dateOfBirth.year.setValue(geboorteDatum.getFullYear());
+		dateOfBirth.day.setValue(c.dateOfBirth.split("-")[0]);
+		dateOfBirth.month.setValue(c.dateOfBirth.split("-")[1]);
+		dateOfBirth.year.setValue(c.dateOfBirth.split("-")[2]);
 		street.setValue(c.street);
 		houseNumber.setValue(c.houseNumber);
 		zipcode.setValue(c.zipcode);
@@ -193,22 +188,16 @@ const CreateBurger = () => {
 							<FormHelperText id="personal-helperText">{t("forms.burgers.sections.personal.helperText")}</FormHelperText>
 						</FormLeft>
 						<FormRight>
-							{/*<Stack spacing={1}>*/}
-							{/*	<FormLabel htmlFor={"bsn"}>{TRANSLATE}</FormLabel>*/}
-							{/*	<Tooltip label={TRANSLATE} aria-label={TRANSLATE} hasArrow placement={isMobile ? "top" : "left"}>*/}
-							{/*		<Input isInvalid={isInvalid(bsn)} {...bsn.bind} id="bsn" />*/}
-							{/*	</Tooltip>*/}
-							{/*</Stack>*/}
 							<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 								<Stack spacing={1} flex={1}>
 									<FormLabel htmlFor={"initials"}>{t("forms.burgers.fields.initials")}</FormLabel>
 									<Input isInvalid={isInvalid(initials)} {...initials.bind} id="initials" />
 								</Stack>
-								<Stack spacing={1} flex={3}>
+								<Stack spacing={1} flex={2}>
 									<FormLabel htmlFor={"firstName"}>{t("forms.burgers.fields.firstName")}</FormLabel>
 									<Input isInvalid={isInvalid(firstName)} {...firstName.bind} id="firstName" />
 								</Stack>
-								<Stack spacing={1} flex={3}>
+								<Stack spacing={1} flex={2}>
 									<FormLabel htmlFor={"lastName"}>{t("forms.burgers.fields.lastName")}</FormLabel>
 									<Input isInvalid={isInvalid(lastName)} {...lastName.bind} id="lastName" />
 								</Stack>
