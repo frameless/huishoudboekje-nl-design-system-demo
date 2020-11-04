@@ -71,7 +71,7 @@ const BurgerDetail = () => {
 			});
 			toast({
 				status: "success",
-				title: t("messages.organizations.createSuccessMessage"),
+				title: t("messages.rekeningen.createSuccessMessage"),
 				position: "top",
 			});
 			refetch();
