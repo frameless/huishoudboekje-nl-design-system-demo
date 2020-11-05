@@ -32,7 +32,7 @@ def test_afspraken_post_new_afspraak(client, session):
 
 def test_afspraken_post_update_afspraak(client, session, afspraak_factory):
     """ Test /afspraken/<afspraak_id> path """
-    afspraak = afspraak_factory.createAfspraak(bedrag=1.1, beschijving="Test Afspraak")
+    afspraak = afspraak_factory.createAfspraak(bedrag=1.1, beschrijving="Test Afspraak")
     update_dict = {
         "bedrag": 220,
         "beschrijving": "Test Afspraak edited"
