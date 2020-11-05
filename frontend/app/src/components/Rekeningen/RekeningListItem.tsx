@@ -9,13 +9,12 @@ type RekeningListItemProps = Omit<ButtonProps, "children">;
 const RekeningListItem: React.FC<RekeningListItemProps & { rekening: IRekening, onDelete?: VoidFunction }> = ({rekening, onDelete, ...props}) => {
 	const {t} = useTranslation();
 	const [deleteDialogOpen, toggleDeleteDialog] = useToggle(false);
-	const [loading, toggleLoading] = useToggle(false);
 	const cancelDeleteRef = useRef(null);
 
 	const onConfirmDeleteDialog = () => {
-		toggleLoading(true);
 		if (onDelete) {
 			onDelete();
+			toggleDeleteDialog(false);
 		}
 	}
 	const onCloseDeleteDialog = () => toggleDeleteDialog(false);
@@ -29,7 +28,7 @@ const RekeningListItem: React.FC<RekeningListItemProps & { rekening: IRekening, 
 					<AlertDialogBody>{t("messages.rekeningen.deleteQuestion", {iban: rekening.iban, accountHolder: rekening.rekeninghouder})}</AlertDialogBody>
 					<AlertDialogFooter>
 						<Button ref={cancelDeleteRef} onClick={onCloseDeleteDialog}>{t("actions.cancel")}</Button>
-						<Button isLoading={loading} variantColor="red" onClick={onConfirmDeleteDialog} ml={3}>{t("actions.delete")}</Button>
+						<Button variantColor="red" onClick={onConfirmDeleteDialog} ml={3}>{t("actions.delete")}</Button>
 					</AlertDialogFooter>
 				</AlertDialogContent>
 			</AlertDialog>
