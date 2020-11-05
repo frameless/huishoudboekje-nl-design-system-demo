@@ -2,6 +2,7 @@ from .gebruiker_loader import GebruikersByIdLoader
 from .organisatie_loader import OrganisatieByIdLoader, KvKDetailsLoader
 from .afspraken_loader import AfsprakenByIdLoader, AfsprakenByGebruikerLoader
 from .rekeningen_loader import RekeningenByIdLoader, RekeningenByGebruikerLoader, RekeningenByOrganisatieLoader
+from .csm_loader import CSMByIdLoader
 
 class HHBDataLoader:
     """ Main Dataloader class for HHB """
@@ -22,3 +23,6 @@ class HHBDataLoader:
         self.rekeningen_by_id = RekeningenByIdLoader(loop=loop)
         self.rekeningen_by_gebruiker = RekeningenByGebruikerLoader(loop=loop)
         self.rekeningen_by_organisatie = RekeningenByOrganisatieLoader(loop=loop)
+
+        # Customer Statement Messages
+        self.csms_by_id = CSMsByIdLoader(loop=loop)
