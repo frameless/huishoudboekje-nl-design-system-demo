@@ -12,6 +12,8 @@ from .afspraken.delete_afspraak import DeleteAfspraak
 from .rekeningen.update_rekening import UpdateRekening
 from .rekeningen.create_gebruiker_rekening import CreateGebruikerRekening
 from .rekeningen.delete_gebruiker_rekening import DeleteGebruikerRekening
+from .rekeningen.create_organisatie_rekening import CreateOrganisatieRekening
+from .rekeningen.delete_organisatie_rekening import DeleteOrganisatieRekening
 from .customer_statement_messages.delete_customer_statement_message import DeleteCustomerStatementMessage
 
 class RootMutation(graphene.ObjectType):
@@ -26,6 +28,8 @@ class RootMutation(graphene.ObjectType):
     updateOrganisatie = UpdateOrganisatie.Field()
     deleteOrganisatie = DeleteOrganisatie.Field()
     createGebruikerRekening = CreateGebruikerRekening.Field()
-    updateRekening = UpdateRekening.Field()
     deleteGebruikerRekening = DeleteGebruikerRekening.Field()
+    createOrganisatieRekening = CreateOrganisatieRekening.Field()
+    deleteOrganisatieRekening = DeleteOrganisatieRekening.Field()
+    updateRekening = UpdateRekening.Field()
     deleteCustomerStatementMessage = DeleteCustomerStatementMessage.Field()

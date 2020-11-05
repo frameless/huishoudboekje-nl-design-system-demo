@@ -7,8 +7,8 @@ from graphql import GraphQLError
 
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.models.gebruiker import Gebruiker
-import hhb_backend.graphql.mutations.rekening_input as rekening_input
-from hhb_backend.graphql.mutations.rekeningen.create_gebruiker_rekening import create_gebruiker_rekening
+import hhb_backend.graphql.mutations.rekeningen.rekening_input as rekening_input
+from hhb_backend.graphql.mutations.rekeningen.utils import create_gebruiker_rekening
 
 
 class CreateGebruikerInput(graphene.InputObjectType):
@@ -47,11 +47,9 @@ class CreateGebruiker(graphene.Mutation):
         if gebruiker_response.status_code != 201:
             raise GraphQLError(f"Upstream API responded: {gebruiker_response.json()}")
 
-        gebruiker = gebruiker_response.json()["data"]
+        result = gebruiker_response.json()["data"]
 
         if rekeningen:
-            gebruiker['rekeningen'] = []
-            for rekening in rekeningen:
-                gebruiker['rekeningen'].append(create_gebruiker_rekening(gebruiker['id'], rekening))
+            result['rekeningen'] = [create_gebruiker_rekening(result['id'], rekening) for rekening in rekeningen]
 
-        return CreateGebruiker(gebruiker=gebruiker, ok=True)
+        return CreateGebruiker(gebruiker=result, ok=True)

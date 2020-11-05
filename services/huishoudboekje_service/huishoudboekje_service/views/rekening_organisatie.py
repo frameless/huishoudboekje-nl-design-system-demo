@@ -1,4 +1,4 @@
-""" MethodView for /gebruikers/<gebruiker_id>/rekeningen path """
+""" MethodView for /organisaties/<organisatie_id>/rekeningen path """
 from flask import request, abort, make_response
 from sqlalchemy.orm.exc import FlushError
 from core_service.utils import row2dict
@@ -6,7 +6,7 @@ from core_service.views.hhb_view import HHBView
 from models import RekeningOrganisatie, Organisatie, Rekening
 
 class RekeningOrganisatieView(HHBView):
-    """ Methods for /gebruikers/<gebruiker_id>/rekeningen path """
+    """ Methods for /organisaties/<organisatie_id>/rekeningen path """
 
     hhb_model = Organisatie
     validation_data = {
@@ -30,7 +30,7 @@ class RekeningOrganisatieView(HHBView):
         return {"data": rekeningen}, 200
 
     def post(self, **kwargs):
-        """ Add a rekening to a gebruiker """
+        """ Add a rekening to a organisatie """
         self.input_validate()
         object_id = self.get_object_id_from_kwargs(**kwargs)
         self.hhb_object.get_or_404(object_id)

@@ -7,7 +7,7 @@ from graphql import GraphQLError
 from hhb_backend.graphql import settings
 
 import hhb_backend.graphql.models.rekening as rekening
-import hhb_backend.graphql.mutations.rekening_input as rekening_input
+import hhb_backend.graphql.mutations.rekeningen.rekening_input as rekening_input
 
 
 class UpdateRekening(graphene.Mutation):

@@ -1,12 +1,12 @@
-""" GraphQL mutation for deleting a Rekening """
+""" GraphQL mutation for deleting a Rekening from a Gebruiker """
 import json
-import os
 
 import graphene
 import requests
 from graphql import GraphQLError
 
 from hhb_backend.graphql import settings
+from hhb_backend.graphql.mutations.rekeningen.utils import cleanup_rekening_when_orphaned
 
 
 class DeleteGebruikerRekening(graphene.Mutation):
@@ -26,10 +26,6 @@ class DeleteGebruikerRekening(graphene.Mutation):
         if delete_response.status_code != 202:
             raise GraphQLError(f"Upstream API responded: {delete_response.json()}")
 
-        rekening_response = requests.get(f"{settings.HHB_SERVICES_URL}/rekeningen/{id}", headers={'Content-type': 'application/json'})
-        if rekening_response == 200:
-            rekening = rekening_response.json()['data']
-            if not rekening['afspraken'] and not rekening['gebruikers'] and not rekening['organisaties']:
-                requests.delete(f"{settings.HHB_SERVICES_URL}/rekeningen/{id}")
+        cleanup_rekening_when_orphaned(id)
 
         return DeleteGebruikerRekening(ok=True)
