@@ -120,17 +120,20 @@
       "subtitle": "Vul de gegevens van de afspraak in.",
       "fields": {
         "description": "Beschrijving",
-        "startDate": "Start datum",
-        "endDate": "Eind datum",
-        "noOfPayments": "Aantal betalingen",
-        "interval": "Interval",
-        "contraAccount": "Tegen rekening",
+        "startDate": "Startdatum",
+        "endDate": "Einddatum",
+        "nPayments": "Aantal betalingen",
+        "interval": "Herhaling",
+        "intervalYears": "Jaren",
+        "intervalMonths": "Maanden",
+        "intervalWeeks": "Weken",
+        "intervalDays": "Dagen",
+        "beneficiaryAccount": "Tegenrekening",
         "amount": "Bedrag",
         "credit": "Credit",
         "debit": "Debet",
         "reference": "Kenmerk",
-        "active": "Actief",
-        "user": "Gebruiker"
+        "active": "Actief"
       }
     },
     "organizations": {
@@ -178,6 +181,10 @@
   },
   "organizations": {
     "organizations": "Organisaties"
+  },
+  "agreements": {
+    "incoming": "Inkomsten",
+    "outgoing": "Uitgaven"
   },
   "balances": {
     "balances": "Huishoudboekjes"

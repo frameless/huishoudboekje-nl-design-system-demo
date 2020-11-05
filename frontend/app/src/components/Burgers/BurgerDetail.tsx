@@ -1,9 +1,4 @@
 import {
-	Accordion,
-	AccordionHeader,
-	AccordionIcon,
-	AccordionItem,
-	AccordionPanel,
 	AlertDialog,
 	AlertDialogBody,
 	AlertDialogContent,
@@ -12,9 +7,10 @@ import {
 	AlertDialogOverlay,
 	Box,
 	Button,
-	Divider,
+	Divider, Flex,
 	FormLabel,
 	Heading,
+	Icon,
 	IconButton,
 	Menu,
 	MenuButton,
@@ -23,7 +19,11 @@ import {
 	Spinner,
 	Stack,
 	Switch,
-	Text,
+	Tab,
+	TabList,
+	TabPanel,
+	TabPanels,
+	Tabs,
 	useToast,
 } from "@chakra-ui/core";
 import React, {useEffect, useRef, useState} from "react";
@@ -49,8 +49,13 @@ const BurgerDetail = () => {
 	const toast = useToast();
 	const isMobile = useIsMobile();
 
-	const [showInactive, setShowInactive] = useState(false)
-	const [afspraken, setAfspraken] = useState<IAfspraak[] | undefined>(undefined)
+	const [tabIndex, setTabIndex] = useState(0);
+	const onChangeTabs = (tabIdx) => {
+		setTabIndex(tabIdx);
+	};
+
+	const [showInactive, setShowInactive] = useState(false);
+	const [filteredAfspraken, setFilteredAfspraken] = useState<IAfspraak[]>([]);
 
 	const cancelDeleteRef = useRef(null);
 	const [deleteDialogOpen, toggleDeleteDialog] = useToggle(false);
@@ -74,6 +79,7 @@ const BurgerDetail = () => {
 	};
 
 	const {data, loading, refetch} = useQuery<{ gebruiker: IGebruiker }>(GetOneGebruikerQuery, {
+		fetchPolicy: "no-cache",
 		variables: {id},
 	});
 
@@ -82,7 +88,7 @@ const BurgerDetail = () => {
 
 		if (mounted) {
 			if (data && data.gebruiker) {
-				setAfspraken(data.gebruiker.afspraken.filter(a => !showInactive ? a.actief : true));
+				setFilteredAfspraken(data.gebruiker.afspraken.filter(a => !showInactive ? a.actief : true));
 			}
 		}
 
@@ -180,102 +186,53 @@ const BurgerDetail = () => {
 						</Stack>
 					</Stack>
 
+					{/* Afspraken */}
 					<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
-						{data.gebruiker.afspraken.length === 0 ? (
-							<DeadEndPage message={t("messages.agreements.addHint", {buttonLabel: t("actions.add")})} illustration={false}>
-								<Button onClick={() => push(Routes.CreateBurgerAgreement(id))} size={"sm"} variantColor={"primary"} variant={"solid"}
-								        leftIcon={"add"}>{t("actions.add")}</Button>
-							</DeadEndPage>
-						) : (<>
-							<Stack spacing={2} mb={1} direction={isMobile ? "column" : "row"}>
+						<Stack spacing={2} mb={1} direction={isMobile ? "column" : "row"}>
+							<FormLeft>
+								<Stack>
+									<Box>
+										<Heading size={"md"}>{t("forms.burgers.sections.agreements.title")}</Heading>
+										<Label>{t("forms.burgers.sections.agreements.detailText")}</Label>
+									</Box>
+								</Stack>
+							</FormLeft>
+							<FormRight>
+								<Stack direction={isMobile ? "column" : "row"} spacing={5}>
+									<Button leftIcon={"add"} variantColor={"primary"} size={"sm"} onClick={onClickAddAfspraakButton}>{t("actions.add")}</Button>
 
-								<FormLeft />
-								<FormRight>
-									<Stack direction={"row"} spacing={5} justifyContent={"flex-end"}>
-										<Stack isInline={true} alignItems={"center"} spacing={1}>
-											<FormLabel htmlFor="show-inactive-agreements">{t("buttons.agreements.showInactive")}</FormLabel>
+									{data.gebruiker.afspraken.length > 0 && (
+										<Stack isInline={true} alignItems={"center"} spacing={3}>
 											<Switch id="show-inactive-agreements" onChange={onClickShowInactive} />
+											<FormLabel htmlFor="show-inactive-agreements">{t("buttons.agreements.showInactive")}</FormLabel>
 										</Stack>
-										<Button variantColor={"primary"} onClick={onClickAddAfspraakButton}>{t("actions.add")}</Button>
-									</Stack>
-								</FormRight>
-							</Stack>
+									)}
+								</Stack>
 
-							<Divider />
-
-							<Stack spacing={2} mb={1} direction={isMobile ? "column" : "row"}>
-								<FormLeft>
-									<Heading display={"box"}
-										         size={"md"}>{t("forms.burgers.sections.agreements.title")}</Heading>
-									<Label>{t("forms.burgers.sections.agreements.detailText")}</Label>
-								</FormLeft>
-								<FormRight>
-
-									{afspraken?.length === 0 ?
-										(
-											<DeadEndPage message={t("messages.agreements.noSearchResults", {buttonLabel: t("actions.add")})} />
-										)
-										:
-										<Accordion allowMultiple>
-											{afspraken?.map((afspraak, i) =>
-												<AccordionItem key={i}>
-													<AccordionHeader>
-														<Text>{afspraak.beschrijving} - {afspraak.organisatie.weergaveNaam}</Text>
-														<AccordionIcon />
-													</AccordionHeader>
-													<AccordionPanel>
-														<Stack flex={2} flexGrow={1}>
-															<Stack spacing={2} mb={1} direction={isMobile ? "column" : "row"}>
-																<Stack spacing={1} flex={2}>
-																	<Label>{t("forms.agreements.fields.description")}</Label>
-																	<Text>{afspraak.beschrijving}</Text>
-																</Stack>
-																<Stack spacing={1} flex={1}>
-																	<Label>{t("forms.agreements.fields.startDate")}</Label>
-																	<Text>{afspraak.startDatum}</Text>
-																</Stack>
-																<Stack spacing={1} flex={1}>
-																	<Label>{t("forms.agreements.fields.endDate")}</Label>
-																	<Text>{afspraak.eindDatum}</Text>
-																</Stack>
-															</Stack>
-															<Stack spacing={2} mb={1} direction={isMobile ? "column" : "row"}>
-																<Stack spacing={1} flex={1}>
-																	<Label>{t("forms.agreements.fields.amount")}</Label>
-																	<Text>€{afspraak.bedrag} {t(`forms.agreements.fields.${afspraak.credit ? "credit" : "debit"}`)}</Text>
-																</Stack>
-																<Stack spacing={1} flex={1}>
-																	<Label>{t("forms.agreements.fields.noOfPayments")}</Label>
-																	<Text>{afspraak.aantalBetalingen}</Text>
-																</Stack>
-																{/*
-														<Stack spacing={1} flex={1}>
-															<Label>{t("forms.agreements.fields.interval")}</Label>
-															<Text>{afspraak.interval}</Text>
-														</Stack>
-														*/}
-															</Stack>
-															<Stack spacing={2} mb={1} direction={isMobile ? "column" : "row"}>
-																<Stack spacing={1} flex={1}>
-																	<Label>{t("forms.agreements.fields.contraAccount")}</Label>
-																	<Text>{afspraak.tegenRekening.iban} {afspraak.tegenRekening.rekeninghouder}</Text>
-																</Stack>
-																<Stack spacing={1} flex={1}>
-																	<Label>{t("forms.agreements.fields.reference")}</Label>
-																	<Text>{afspraak.kenmerk}</Text>
-																</Stack>
-															</Stack>
-														</Stack>
-
-													</AccordionPanel>
-												</AccordionItem>,
-											)}
-										</Accordion>
-									}
-								</FormRight>
-							</Stack>
-						</>
-						)}
+								<Tabs index={tabIndex} onChange={onChangeTabs} variant={"enclosed"}>
+									<TabList>
+										<Tab>{t("agreements.incoming")} <Icon ml={3} name={"triangle-up"} color={"green.400"} size={"12px"} /> </Tab>
+										<Tab>{t("agreements.outgoing")} <Icon ml={3} name={"triangle-down"} color={"red.400"} size={"12px"} /> </Tab>
+									</TabList>
+									<TabPanels>
+										<TabPanel id="tab_incoming">
+											{filteredAfspraken.filter(a => a.credit).map(a => (
+												<Stack direction={"row"} spacing={2}>
+													<pre className="debug">{JSON.stringify(a, null, 2)}</pre>
+												</Stack>
+											))}
+										</TabPanel>
+										<TabPanel id="tab_outgoing">
+											{filteredAfspraken.filter(a => !a.credit).map(a => (
+												<Stack direction={"row"} spacing={2}>
+													<pre className="debug">{JSON.stringify(a, null, 2)}</pre>
+												</Stack>
+											))}
+										</TabPanel>
+									</TabPanels>
+								</Tabs>
+							</FormRight>
+						</Stack>
 					</Stack>
 				</Stack>
 			);

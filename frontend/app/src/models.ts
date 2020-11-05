@@ -46,19 +46,25 @@ export type IKvK = {
 	straatnaam: string,
 }
 
+export type IInterval = {
+	jaren: number
+	maanden: number
+	weken: number
+	dagen: number
+}
+
 export type IAfspraak = {
 	__typename: "Afspraak"
 	id: number
-	gebruiker: IGebruiker
-	beschrijving: string
-	startDatum: Date
-	eindDatum: Date
 	aantalBetalingen: number
-	interval: string  // TODO use interval
-	tegenRekening: IRekening
-	organisatie: IOrganisatie
-	bedrag: string
-	credit: boolean
-	kenmerk: string
 	actief: boolean
+	bedrag: number
+	beschrijving: string
+	credit: boolean
+	eindDatum: Date
+	gebruiker: IGebruiker
+	interval: IInterval
+	kenmerk: string
+	startDatum: Date
+	tegenRekening: IRekening
 }
