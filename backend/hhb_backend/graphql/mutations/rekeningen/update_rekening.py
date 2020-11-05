@@ -5,26 +5,45 @@ import graphene
 import requests
 from graphql import GraphQLError
 from hhb_backend.graphql import settings
-from hhb_backend.graphql.models.rekening import Rekening
+
+import hhb_backend.graphql.models.rekening as rekening
+import hhb_backend.graphql.mutations.rekening_input as rekening_input
 
 
 class UpdateRekening(graphene.Mutation):
     class Arguments:
         id = graphene.Int(required=True)
-        iban = graphene.String()
-        rekeninghouder = graphene.String()
+        rekening = graphene.Argument(lambda: rekening_input.RekeningInput, required=True)
 
     ok = graphene.Boolean()
-    rekening = graphene.Field(lambda: Rekening)
+    rekening = graphene.List(rekening.Rekening)
 
-    def mutate(root, info, id, **kwargs):
-        """ Update the rekening """
+    @staticmethod
+    def mutate(root, info, **kwargs):
+        """ Create the new Rekening """
+        id = kwargs.pop('id')
+        rekening = kwargs.pop('rekening')
+
+        existing_rekeningen_response = requests.get(
+            f"{settings.HHB_SERVICES_URL}/rekeningen/{id}",
+            headers={'Content-type': 'application/json'}
+        )
+        if existing_rekeningen_response.status_code != 200:
+            raise GraphQLError(f"Upstream API responded: {existing_rekeningen_response.json()}")
+        existing_rekening = next(existing_rekeningen_response.json()['data'], None)
+
+        if existing_rekening is None:
+            raise GraphQLError(f"Rekening does not exist")
+
+        if existing_rekening['iban'] != rekening["iban"]:
+            raise GraphQLError(f"Rekening has different iban")
+
         response = requests.post(
             f"{settings.HHB_SERVICES_URL}/rekeningen/{id}",
-            data=json.dumps(kwargs),
+            data=json.dumps(rekening),
             headers={'Content-type': 'application/json'}
         )
         if response.status_code != 202:
             raise GraphQLError(f"Upstream API responded: {response.json()}")
 
-        return UpdateRekening(rekening=response.json()["data"], ok=True)
+        return UpdateRekening(ok=True, rekening=response.json()["data"])

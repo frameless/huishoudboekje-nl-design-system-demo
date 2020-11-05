@@ -8,7 +8,7 @@ from graphql import GraphQLError
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.models.gebruiker import Gebruiker
 import hhb_backend.graphql.mutations.rekening_input as rekening_input
-from hhb_backend.graphql.mutations.rekeningen.update_gebruiker_rekening import update_gebruiker_rekeningen
+from hhb_backend.graphql.mutations.rekeningen.create_gebruiker_rekening import create_gebruiker_rekening
 
 
 class CreateGebruikerInput(graphene.InputObjectType):
@@ -50,6 +50,8 @@ class CreateGebruiker(graphene.Mutation):
         gebruiker = gebruiker_response.json()["data"]
 
         if rekeningen:
-            gebruiker['rekeningen'] = update_gebruiker_rekeningen(gebruiker['id'], rekeningen)
+            gebruiker['rekeningen'] = []
+            for rekening in rekeningen:
+                gebruiker['rekeningen'].append(create_gebruiker_rekening(gebruiker['id'], rekening))
 
         return CreateGebruiker(gebruiker=gebruiker, ok=True)
