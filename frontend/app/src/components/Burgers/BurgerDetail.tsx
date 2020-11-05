@@ -40,7 +40,7 @@ import {CreateGebruikerRekeningMutation, DeleteGebruikerMutation,} from "../../s
 import {useIsMobile, useToggle} from "react-grapple";
 import DeadEndPage from "../DeadEndPage";
 import RekeningForm from "../Rekeningen/RekeningForm";
-import moment from "moment";
+import BurgerDetailProfileView from "./BurgerDetailProfileView";
 
 const BurgerDetail = () => {
 	const {t} = useTranslation();
@@ -145,85 +145,9 @@ const BurgerDetail = () => {
 						</Menu>
 					</Stack>
 
-					<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
-						<Stack spacing={2} direction={isMobile ? "column" : "row"}>
-							<FormLeft>
-								<Heading display={"box"} size={"md"}>{t("forms.burgers.sections.personal.title")}</Heading>
-								<Label>{t("forms.burgers.sections.personal.detailText")}</Label>
-							</FormLeft>
-							<FormRight>
-								<Stack spacing={2} mb={1} direction={isMobile ? "column" : "row"}>
-									<Stack direction={isMobile ? "column" : "row"} spacing={1} flex={1}>
-										<Stack spacing={1} flex={1}>
-											<Label>{t("forms.burgers.fields.initials")}</Label>
-											<Text>{data.gebruiker.voorletters}</Text>
-										</Stack>
-										<Stack spacing={1} flex={1}>
-											<Label>{t("forms.burgers.fields.firstName")}</Label>
-											<Text>{data.gebruiker.voornamen}</Text>
-										</Stack>
-									</Stack>
-									<Stack spacing={1} flex={1}>
-										<Label>{t("forms.burgers.fields.lastName")}</Label>
-										<Text>{data.gebruiker.achternaam}</Text>
-									</Stack>
-								</Stack>
-								<Stack spacing={2} mb={1} direction={isMobile ? "column" : "row"}>
-									<Stack spacing={1} flex={1}>
-										<Label>{t("forms.burgers.fields.dateOfBirth")}</Label>
-										<Text>{data.gebruiker.geboortedatum}</Text>
-									</Stack>
-									<Stack spacing={1} flex={1}>
-										<Label>{t("forms.burgers.fields.age")}</Label>
-										<Text>{moment().diff(moment(data.gebruiker.geboortedatum), "year")}</Text>
-									</Stack>
-								</Stack>
+					<BurgerDetailProfileView gebruiker={data.gebruiker} />
 
-							</FormRight>
-						</Stack>
-
-						<Divider />
-
-						<Stack spacing={2} direction={isMobile ? "column" : "row"}>
-							<FormLeft>
-								<Heading display={"box"} size={"md"}>{t("forms.burgers.sections.contact.title")}</Heading>
-								<Label>{t("forms.burgers.sections.contact.detailText")}</Label>
-							</FormLeft>
-							<FormRight>
-								<Stack spacing={2} mb={1} direction={isMobile ? "column" : "row"}>
-									<Stack spacing={1} flex={1}>
-										<Label>{t("forms.burgers.fields.street")}</Label>
-										<Text>{data.gebruiker.straatnaam}</Text>
-									</Stack>
-									<Stack spacing={1} flex={1}>
-										<Label>{t("forms.burgers.fields.houseNumber")}</Label>
-										<Text>{data.gebruiker.huisnummer}</Text>
-									</Stack>
-								</Stack>
-								<Stack spacing={2} mb={1} direction={isMobile ? "column" : "row"}>
-									<Stack spacing={1} flex={1}>
-										<Label>{t("forms.burgers.fields.zipcode")}</Label>
-										<Text>{data.gebruiker.postcode}</Text>
-									</Stack>
-									<Stack spacing={1} flex={1}>
-										<Label>{t("forms.burgers.fields.city")}</Label>
-										<Text>{data.gebruiker.plaatsnaam}</Text>
-									</Stack>
-								</Stack>
-								<Stack spacing={2} mb={1} direction={isMobile ? "column" : "row"}>
-									<Stack spacing={1} flex={1}>
-										<Label>{t("forms.burgers.fields.phoneNumber")}</Label>
-										<Text>{data.gebruiker.telefoonnummer}</Text>
-									</Stack>
-									<Stack spacing={1} flex={1}>
-										<Label>{t("forms.burgers.fields.mail")}</Label>
-										<Text>{data.gebruiker.email}</Text>
-									</Stack>
-								</Stack>
-							</FormRight>
-						</Stack>
-					</Stack>
-
+					{/* Rekeningen */}
 					<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
 						<Stack spacing={2} mb={1} direction={isMobile ? "column" : "row"}>
 							<FormLeft>
@@ -353,7 +277,6 @@ const BurgerDetail = () => {
 						</>
 						)}
 					</Stack>
-
 				</Stack>
 			);
 		}
