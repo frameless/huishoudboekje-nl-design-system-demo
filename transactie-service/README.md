@@ -47,7 +47,7 @@ Prerequisites:
 
 ```shell script
 export FLASK_APP="core.app"
-export FLASK_RUN_PORT="8001"
+export FLASK_RUN_PORT="8002"
 export FLASK_ENV="development"
 export HHB_SECRET="local-secret"
 export TRANSACTIE_DATABASE_URL="postgresql://transactieservice:transactieservice@localhost/transactieservice"
