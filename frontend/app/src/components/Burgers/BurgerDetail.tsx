@@ -73,20 +73,21 @@ const BurgerDetail = () => {
 		})
 	};
 
-	const {data, loading, error, refetch} = useQuery<{ gebruiker: IGebruiker }>(GetOneGebruikerQuery, {
+	const {data, loading, refetch} = useQuery<{ gebruiker: IGebruiker }>(GetOneGebruikerQuery, {
 		variables: {id},
 	});
 
 	useEffect(() => {
-		if (data) {
-			setAfspraken(
-				data.gebruiker.afspraken
-					.filter(afspraak => {
-						if (!showInactive) {
-							return afspraak.actief
-						}
-						return true
-					}))
+		let mounted = true;
+
+		if (mounted) {
+			if (data && data.gebruiker) {
+				setAfspraken(data.gebruiker.afspraken.filter(a => !showInactive ? a.actief : true));
+			}
+		}
+
+		return () => {
+			mounted = false;
 		}
 	}, [data, showInactive])
 
@@ -103,13 +104,13 @@ const BurgerDetail = () => {
 			);
 		}
 
-		if (error) {
-			return (
-				<Redirect to={Routes.NotFound} />
-			)
-		}
-
 		if (data) {
+			if (!data.gebruiker) {
+				return (
+					<Redirect to={Routes.NotFound} />
+				)
+			}
+
 			if (isDeleted) {
 				return (
 					<DeadEndPage message={t("messages.burgers.deleteConfirmMessage", {name: `${data.gebruiker.voornamen} ${data.gebruiker.achternaam}`})}>
