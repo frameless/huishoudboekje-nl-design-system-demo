@@ -2,7 +2,7 @@ from .gebruiker_loader import GebruikersByIdLoader
 from .organisatie_loader import OrganisatieByIdLoader, KvKDetailsLoader
 from .afspraken_loader import AfsprakenByIdLoader, AfsprakenByGebruikerLoader
 from .rekeningen_loader import RekeningenByIdLoader, RekeningenByGebruikerLoader, RekeningenByOrganisatieLoader
-from .csm_loader import CSMByIdLoader
+from .csm_loader import CSMsByIdLoader
 
 class HHBDataLoader:
     """ Main Dataloader class for HHB """

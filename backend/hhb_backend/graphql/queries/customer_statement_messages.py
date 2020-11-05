@@ -22,7 +22,7 @@ class CustomerStatementMessagesQuery():
         if kwargs["ids"]:
             customer_satement_messages = await request.dataloader.csms_by_id.load_many(kwargs["ids"])
         else:
-            response = requests.get(f"{settings.TRANSACTIE_SERVICES_URL}/customersatementmessages/")
+            response = requests.get(f"{settings.TRANSACTIE_SERVICES_URL}/customerstatementmessages/")
             if response.status_code != 200:
                 raise GraphQLError(f"Upstream API responded: {response.json()}")
             customer_satement_messages = response.json()["data"]
