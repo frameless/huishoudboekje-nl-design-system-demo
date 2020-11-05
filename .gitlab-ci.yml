@@ -16,11 +16,11 @@ variables:
   KUBECONFIG: /secrets/kubeconfig/review.conf
 
 stages:
-  - test
   - build
+  - test
   - deploy
 
 include:
-#  - '/.gitlab/ci/test.yml'
+  - '/.gitlab/ci/test.yml'
   - '/.gitlab/ci/build.yml'
   - '/.gitlab/ci/deploy.yml'
