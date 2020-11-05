@@ -30,7 +30,7 @@ class AfspraakFactory():
             self.dbsession.flush()
         afspraak = Afspraak(
             gebruiker=gebruiker,
-            beschijving=beschijving,
+            beschrijving=beschijving,
             start_datum=start_datum,
             eind_datum=eind_datum,
             aantal_betalingen=aantal_betalingen,

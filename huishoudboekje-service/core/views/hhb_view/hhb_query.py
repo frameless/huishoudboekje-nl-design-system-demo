@@ -54,9 +54,9 @@ class HHBQuery():
             return {"errors": [f"{self.hhb_model.__name__} not found."]}, 404
         result_dict = row2dict(row)
         for relation in self._exposed_many_relations:
-            result_dict[relation["relation"]] = [item.getattr(relation["relation_property"]) for item in row.getattr(relation["relation"])]
+            result_dict[relation["relation"]] = [getattr(item, relation["relation_property"]) for item in getattr(row, relation["relation"])]
         for relation in self._exposed_one_relations:
-                result_dict[relation["relation"]] = row.getattr(relation["relation"]).getattr(relation["relation_property"])
+                result_dict[relation["relation"]] = getattr(getattr(row, relation["relation"]), relation["relation_property"])
         return {"data": result_dict}, 200
 
     def get_result_multiple(self):
