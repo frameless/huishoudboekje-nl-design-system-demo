@@ -33,10 +33,10 @@ class UpdateAfspraak(graphene.Mutation):
             iso_interval = convert_hhb_interval_to_iso(kwargs["interval"])
             kwargs["interval"] = iso_interval
         post_response = requests.post(
-            f"{settings.HHB_SERVICES_URL}/afspraken/",
+            f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}",
             data=json.dumps(kwargs),
             headers={'Content-type': 'application/json'}
         )
-        if post_response.status_code != 201:
+        if not post_response.ok:
             raise GraphQLError(f"Upstream API responded: {post_response.json()}")
         return UpdateAfspraak(afspraak=post_response.json()["data"], ok=True)
