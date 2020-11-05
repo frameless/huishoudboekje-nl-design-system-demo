@@ -12,6 +12,7 @@ from .afspraken.delete_afspraak import DeleteAfspraak
 from .rekeningen.update_rekening import UpdateRekening
 from .rekeningen.create_gebruiker_rekening import CreateGebruikerRekening
 from .rekeningen.delete_gebruiker_rekening import DeleteGebruikerRekening
+from .customer_statement_messages.delete_customer_statement_message import DeleteCustomerStatementMessage
 
 class RootMutation(graphene.ObjectType):
     """ The root of all mutations """
@@ -27,3 +28,4 @@ class RootMutation(graphene.ObjectType):
     createGebruikerRekening = CreateGebruikerRekening.Field()
     updateRekening = UpdateRekening.Field()
     deleteGebruikerRekening = DeleteGebruikerRekening.Field()
+    deleteCustomerStatementMessage = DeleteCustomerStatementMessage.Field()
