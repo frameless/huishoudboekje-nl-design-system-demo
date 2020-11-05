@@ -38,11 +38,11 @@
       "deleteTitle": "Burger verwijderen",
       "deleteQuestion": "Weet u zeker dat u de gegevens van {{name}} definitief wil verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
       "noSearchResults": "Geen burgers gevonden. Gebruik een andere zoekterm.",
-      "addHint": "Voeg burgers toe door te klikken op de knop {{ buttonLabel }}."
+      "addHint": "Voeg burgers toe door te klikken op de knop {{buttonLabel}}."
     },
     "agreements": {
       "noSearchResults": "Geen afspraken gevonden.",
-      "addHint": "Voeg afspraken toe door te klikken op de knop {{ buttonLabel }}."
+      "addHint": "Voeg afspraken toe door te klikken op de knop {{buttonLabel}}."
     },
     "organizations": {
       "invalidFormMessage": "Er is een fout opgetreden. Controleer de ingevulde gegevens en probeer het opnieuw.",
@@ -52,11 +52,13 @@
       "deleteTitle": "Organisatie verwijderen",
       "deleteQuestion": "Weet u zeker dat u de gegevens van {{name}} definitief wil verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
       "noSearchResults": "Geen organisaties gevonden. Gebruik een andere zoekterm.",
-      "addHint": "Voeg organisaties toe door te klikken op de knop {{ buttonLabel }}."
+      "addHint": "Voeg organisaties toe door te klikken op de knop {{buttonLabel}}."
     },
     "rekeningen": {
-      "addHint": "Voeg rekeningen toe door te klikken op de knop {{ buttonLabel }}.",
+      "addHint": "Voeg rekeningen toe door te klikken op de knop {{buttonLabel}}.",
       "createSuccessMessage": "Nieuwe rekening succesvol opgeslagen.",
+      "deleteTitle": "Rekening verwijderen.",
+      "deleteQuestion": "Weet u zeker dat u rekening {{iban}} op naam van {{accountHolder}} wil verwijderen? Deze actie kan ongedaan worden gemaakt.",
       "deleteSuccess": "Rekening is verwijderd."
     }
   },

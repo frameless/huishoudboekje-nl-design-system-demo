@@ -8,7 +8,7 @@ import {Button, FormLabel, Input, SimpleGrid, Stack} from "@chakra-ui/core";
 
 const RekeningForm: React.FC<{
 	rekening?: Partial<IRekening>,
-	onSave: (rekening: IRekeningInput) => void,
+	onSave: (rekening: IRekeningInput, resetForm: VoidFunction) => void,
 	onCancel: VoidFunction,
 }> = ({rekening, onSave, onCancel}) => {
 	const isMobile = useIsMobile(TABLET_BREAKPOINT);
@@ -29,6 +29,9 @@ const RekeningForm: React.FC<{
 			...(rekening || {}),
 			rekeninghouder: rekeninghouder.value,
 			iban: iban.value
+		}, () => {
+			rekeninghouder.reset();
+			iban.reset();
 		});
 	};
 

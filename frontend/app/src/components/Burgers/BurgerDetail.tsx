@@ -36,7 +36,7 @@ import {IAfspraak, IGebruiker} from "../../models";
 import {GetOneGebruikerQuery} from "../../services/graphql/queries";
 import {FormLeft, FormRight, Label} from "../Forms/FormLeftRight";
 import RekeningList from "../Rekeningen/RekeningList";
-import {DeleteGebruikerMutation,} from "../../services/graphql/mutations";
+import {CreateGebruikerRekeningMutation, DeleteGebruikerMutation,} from "../../services/graphql/mutations";
 import {useIsMobile, useToggle} from "react-grapple";
 import DeadEndPage from "../DeadEndPage";
 import RekeningForm from "../Rekeningen/RekeningForm";
@@ -57,6 +57,7 @@ const BurgerDetail = () => {
 	const [showCreateRekeningForm, toggleCreateRekeningForm] = useToggle(false);
 
 	const [deleteMutation, {loading: deleteLoading}] = useMutation(DeleteGebruikerMutation, {variables: {id}});
+	const [createGebruikerRekeningMutation] = useMutation(CreateGebruikerRekeningMutation);
 
 	const onCloseDeleteDialog = () => toggleDeleteDialog(false);
 	const onConfirmDeleteDialog = () => {
@@ -71,7 +72,7 @@ const BurgerDetail = () => {
 		})
 	};
 
-	const {data, loading, error} = useQuery<{ gebruiker: IGebruiker }>(GetOneGebruikerQuery, {
+	const {data, loading, error, refetch} = useQuery<{ gebruiker: IGebruiker }>(GetOneGebruikerQuery, {
 		variables: {id},
 	});
 
@@ -224,13 +225,19 @@ const BurgerDetail = () => {
 								<Label>{t("forms.burgers.sections.rekeningen.detailText")}</Label>
 							</FormLeft>
 							<FormRight justifyContent={"center"}>
-								<RekeningList rekeningen={data.gebruiker.rekeningen} gebruiker={data.gebruiker} />
+								<RekeningList rekeningen={data.gebruiker.rekeningen} gebruiker={data.gebruiker} onChange={() => refetch()} />
 								{showCreateRekeningForm ? (<>
 									{data.gebruiker.rekeningen.length > 0 && <Divider />}
 									<RekeningForm rekening={{
 										rekeninghouder: `${data.gebruiker.voorletters} ${data.gebruiker.achternaam}`
-									}} onSave={() => {
-										// Todo: createGebruikerRekeningMutation
+									}} onSave={(rekening, resetForm) => {
+										createGebruikerRekeningMutation({
+											variables: {gebruikerId: id, rekening}
+										}).then(() => {
+											resetForm();
+											toggleCreateRekeningForm(false);
+											refetch();
+										});
 									}} onCancel={() => {
 										toggleCreateRekeningForm(false)
 									}} />
