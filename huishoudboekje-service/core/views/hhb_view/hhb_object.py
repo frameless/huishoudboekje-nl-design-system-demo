@@ -32,8 +32,6 @@ class HHBObject():
 
     def update_using_request_data(self):
         """ Add data to object based on request input """
-        print("updating data")
-        print(request.json)
         for key, value in request.json.items():
             setattr(self.hhb_object, key, value)
 
@@ -42,7 +40,7 @@ class HHBObject():
         try:
             db.session.commit()
         except IntegrityError as error:
-            abort(make_response({"errors": [str(error)]}), 409)
+            abort(make_response({"errors": [str(error.orig).strip().split("DETAIL:  ")[1]]}, 409))
 
     def delete(self):
         """ Delete the selected object """
