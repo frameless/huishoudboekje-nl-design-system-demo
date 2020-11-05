@@ -21,7 +21,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "theme": "./setTheme.sh"
+    "theme": "./setTheme.sh",
+    "lint": "eslint src"
   },
   "dependencies": {
     "@apollo/client": "^3.2.5",
