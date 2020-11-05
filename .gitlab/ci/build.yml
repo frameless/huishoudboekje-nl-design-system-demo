@@ -1,14 +1,19 @@
 .build:
+  stage: build
+  needs: []
   tags:
     - cg
     - shell
   script:
+    - echo ${DIRECTORY:=$APP_NAME}
     - export DOCKER_CONFIG=/tmp/docker-config-$CI_JOB_ID
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
     - docker build -t $CI_REGISTRY_IMAGE/$APP_NAME:$IMAGE_TAG ./$DIRECTORY
     - docker push $CI_REGISTRY_IMAGE/$APP_NAME:$IMAGE_TAG
 
 .build-service:
+  stage: build
+  needs: []
   tags:
     - cg
     - shell
@@ -16,42 +21,32 @@
     - export DOCKER_CONFIG=/tmp/docker-config-$CI_JOB_ID
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
     - docker build -t $CI_REGISTRY_IMAGE/$APP_NAME:$IMAGE_TAG -f ./$DIRECTORY/$APP_DIRECTORY/Dockerfile ./$DIRECTORY
-    - docker push $CI_REGISTRY_IMAGE/$APP_NAME:$IMAGE_TAG 
+    - docker push $CI_REGISTRY_IMAGE/$APP_NAME:$IMAGE_TAG
 
-# Build Frontend
 build-frontend:
-  stage: build
   variables:
     APP_NAME: frontend
-    DIRECTORY: frontend
   extends: .build
   only:
     - branches@commonground/huishoudboekje/app-new
 
-# Build Backend
 build-backend:
-  stage: build
   variables:
     APP_NAME: backend
-    DIRECTORY: backend
   extends: .build
   only:
     - branches@commonground/huishoudboekje/app-new
 
-# Build Huishoudboekje Service
 build-huishoudboekje-service:
-  stage: build
   variables:
     APP_NAME: huishoudboekje-service
     APP_DIRECTORY: huishoudboekje_service
-    DIRECTORY: services 
+    DIRECTORY: services
   extends: .build-service
   only:
     - branches@commonground/huishoudboekje/app-new
 
-# Build Organisatie Service
 build-organisatie-service:
-  stage: build
   variables:
     APP_NAME: organisatie-service
     APP_DIRECTORY: organisatie_service
@@ -60,9 +55,7 @@ build-organisatie-service:
   only:
     - branches@commonground/huishoudboekje/app-new
 
-# Build Transactie Service
-build-transactie-service:
-  stage: build
+build-bank-transactie-service:
   variables:
     APP_NAME: bank-transactie-service
     APP_DIRECTORY: bank_transactie_service
@@ -71,21 +64,19 @@ build-transactie-service:
   only:
     - branches@commonground/huishoudboekje/app-new
 
-# Build Docs
 build-docs:
-  stage: build
   variables:
     APP_NAME: docs
-    DIRECTORY: docs
   extends: .build
   only:
     - branches@commonground/huishoudboekje/app-new
 
 build-helm:
+  stage: build
+  needs: []
   tags:
     - cg
     - docker
-  stage: build
   image:
     name: alpine/helm:latest
     entrypoint: [""]
@@ -104,4 +95,5 @@ build-helm:
     paths:
       - "huishoudboekje/"
     expire_in: 1 week
-
+  only:
+    - branches@commonground/huishoudboekje/app-new
