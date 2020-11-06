@@ -7,6 +7,7 @@ from urllib.parse import urlparse
 import itsdangerous
 from flask import Flask, jsonify, redirect, make_response, session
 from flask_oidc import OpenIDConnect
+from graphene_file_upload.flask import FileUploadGraphQLView
 
 import hhb_backend.graphql.blueprint as graphql_blueprint
 from hhb_backend.custom_oidc import CustomOidc
@@ -72,6 +73,22 @@ def create_app(config_name=os.getenv('APP_SETTINGS', None) or 'hhb_backend.confi
             pass
 
     app.register_blueprint(graphql, url_prefix='/graphql')
+    app.add_url_rule(
+        '/graphql_upload',
+        view_func=FileUploadGraphQLView.as_view(
+            'graphql_upload',
+            graphiql=True,
+            schema=schema,
+        )
+    )
+    app.add_url_rule(
+        '/graphql_upload',
+        view_func=FileUploadGraphQLView.as_view(
+            'graphql_upload',
+            graphiql=True,
+            schema=schema,
+        )
+    )
 
     @app.route('/logout')
     def logout():
