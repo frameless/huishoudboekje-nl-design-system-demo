@@ -7,7 +7,7 @@ def test_csm_delete_success(client, dbsession, csm_factory):
     csm = csm_factory.create_customer_statement_message()
     assert dbsession.query(CustomerStatementMessage).count() == 1
     response = client.delete(f'/customerstatementmessages/{csm.id}')
-    assert response.status_code == 202
+    assert response.status_code == 204
     assert dbsession.query(CustomerStatementMessage).count() == 0
 
 

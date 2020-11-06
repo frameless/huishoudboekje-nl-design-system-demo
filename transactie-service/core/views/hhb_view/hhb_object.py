@@ -16,7 +16,7 @@ class HHBObject():
         """ Get or create an object of the current hhb model """
         if object_id:
             self.get_or_404(object_id)
-            response_code = 202
+            response_code = 200
         else:
             self.hhb_object = self.hhb_model()
             db.session.add(self.hhb_object)
@@ -32,8 +32,6 @@ class HHBObject():
 
     def update_using_request_data(self):
         """ Add data to object based on request input """
-        print("updating data")
-        print(request.json)
         for key, value in request.json.items():
             setattr(self.hhb_object, key, value)
 
@@ -42,7 +40,7 @@ class HHBObject():
         try:
             db.session.commit()
         except IntegrityError as error:
-            abort(make_response({"errors": [str(error)]}), 409)
+            abort(make_response({"errors": [str(error)]}, 409))
 
     def delete(self):
         """ Delete the selected object """

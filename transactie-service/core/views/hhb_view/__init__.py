@@ -109,4 +109,4 @@ class HHBView(MethodView):
         self.hhb_object.get_or_404(object_id)
         self.hhb_object.delete()
         self.hhb_object.commit_changes()
-        return {}, 202
+        return {}, 204
