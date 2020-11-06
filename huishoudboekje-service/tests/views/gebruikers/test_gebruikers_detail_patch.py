@@ -12,7 +12,7 @@ def test_gebruikers_detail_patch_success(client, gebruiker_factory):
     edited_gebruiker.geboortedatum = date(1990, 1, 1)
     response = client.post('/gebruikers/1',
                             data=json.dumps(row2dict(edited_gebruiker)), content_type='application/json')
-    assert response.status_code == 202
+    assert response.status_code == 200
     assert response.json["data"] == row2dict(edited_gebruiker)
 
 

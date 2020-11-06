@@ -42,7 +42,7 @@ def test_afspraken_post_update_afspraak(client, session, afspraak_factory):
         data=json.dumps(update_dict),
         content_type='application/json'
     )
-    assert response.status_code == 202
+    assert response.status_code == 200
     assert response.json["data"]["bedrag"] == update_dict["bedrag"] == afspraak.bedrag
     assert response.json["data"]["beschrijving"] == update_dict["beschrijving"] == afspraak.beschrijving
     response = client.post(

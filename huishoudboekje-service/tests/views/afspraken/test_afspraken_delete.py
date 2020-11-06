@@ -6,7 +6,7 @@ def test_afspraken_delete_success(client, session, afspraak_factory):
     afspraak = afspraak_factory.createAfspraak()
     assert session.query(Afspraak).count() == 1
     response = client.delete(f'/afspraken/{afspraak.id}')
-    assert response.status_code == 202
+    assert response.status_code == 204
     assert session.query(Afspraak).count() == 0
 
 def test_afspraken_delete_method_not_allowed(client):

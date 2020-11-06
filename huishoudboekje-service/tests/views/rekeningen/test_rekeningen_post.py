@@ -32,7 +32,7 @@ def test_rekeningen_post_update_rekening(client, session, rekening_factory):
         data=json.dumps(update_dict),
         content_type='application/json'
     )
-    assert response.status_code == 202
+    assert response.status_code == 200
     update_dict["id"] = rekening.id
     assert response.json["data"]["rekeninghouder"] == update_dict["rekeninghouder"]
     response = client.post(

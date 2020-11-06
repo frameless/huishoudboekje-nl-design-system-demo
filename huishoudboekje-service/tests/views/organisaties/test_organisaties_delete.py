@@ -6,7 +6,7 @@ def test_organisaties_delete_success(client, session, organisatie_factory):
     organisatie = organisatie_factory.createOrganisatie()
     assert session.query(Organisatie).count() == 1
     response = client.delete(f'/organisaties/{organisatie.id}')
-    assert response.status_code == 202
+    assert response.status_code == 204
     assert session.query(Organisatie).count() == 0
 
 def test_organisaties_delete_bad_request(client):
