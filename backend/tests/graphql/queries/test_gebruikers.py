@@ -16,7 +16,7 @@ def test_gebruikers_success(client):
 
 def test_gebruiker_success(client):
     with requests_mock.Mocker() as rm:
-        rm.get(f"{settings.HHB_SERVICES_URL}/gebruikers/1", json={'data': {'email': 'a@b.c'}})
+        rm.get(f"{settings.HHB_SERVICES_URL}/gebruikers/", json={'data': [{'id': 1, 'email': 'a@b.c'}]})
         response = client.post(
             "/graphql",
             data='{"query": "{ gebruiker(id:1) { email }}"}',
