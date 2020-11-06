@@ -37,7 +37,7 @@ class UpdateOrganisatie(graphene.Mutation):
             data=json.dumps(hhb_service_data),
             headers={'Content-type': 'application/json'}
         )
-        if hhb_service_response.status_code != 202:
+        if hhb_service_response.status_code != 200:
             raise GraphQLError(f"Upstream API responded: {hhb_service_response.json()}")
         else:
             orgineel_kvk_nummer = hhb_service_response.json()["data"]["kvk_nummer"]
@@ -49,7 +49,7 @@ class UpdateOrganisatie(graphene.Mutation):
                 data=json.dumps(kwargs),
                 headers={'Content-type': 'application/json'}
             )
-            if org_service_response.status_code != 202:
+            if org_service_response.status_code != 200:
                 raise GraphQLError(f"Upstream API responded: {org_service_response.json()}")
 
         # Update kvk_nummer in huishoudboekje
@@ -59,7 +59,7 @@ class UpdateOrganisatie(graphene.Mutation):
                 data=json.dumps({"kvk_nummer": kwargs["kvk_nummer"]}),
                 headers={'Content-type': 'application/json'}
             )
-            if hhb_service_response.status_code != 202:
+            if hhb_service_response.status_code != 200:
                 raise GraphQLError(f"Upstream API responded: {hhb_service_response.json()}")
 
         return UpdateOrganisatie(organisatie=hhb_service_response.json()["data"], ok=True)

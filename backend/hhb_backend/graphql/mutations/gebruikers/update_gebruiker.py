@@ -37,7 +37,7 @@ class UpdateGebruiker(graphene.Mutation):
             data=json.dumps(kwargs),
             headers={'Content-type': 'application/json'}
         )
-        if gebruiker_response.status_code != 202:
+        if gebruiker_response.status_code != 200:
             raise GraphQLError(f"Upstream API responded: {gebruiker_response.json()}")
 
         return UpdateGebruiker(gebruiker=gebruiker_response.json()["data"], ok=True)

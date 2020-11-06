@@ -7,7 +7,7 @@ def test_rekeningen_delete_success(client, session, rekening_factory):
     rekening = rekening_factory.create_rekening()
     assert session.query(Rekening).count() == 1
     response = client.delete(f'/rekeningen/{rekening.id}')
-    assert response.status_code == 202
+    assert response.status_code == 204
     assert session.query(Rekening).count() == 0
 
 

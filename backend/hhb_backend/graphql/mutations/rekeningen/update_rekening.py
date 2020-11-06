@@ -43,7 +43,7 @@ class UpdateRekening(graphene.Mutation):
             data=json.dumps(rekening),
             headers={'Content-type': 'application/json'}
         )
-        if response.status_code != 202:
+        if response.status_code != 200:
             raise GraphQLError(f"Upstream API responded: {response.json()}")
 
         return UpdateRekening(ok=True, rekening=response.json()["data"])

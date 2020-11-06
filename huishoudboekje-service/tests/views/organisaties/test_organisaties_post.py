@@ -31,7 +31,7 @@ def test_organisaties_post_update_organisatie(client, session, organisatie_facto
         data=json.dumps(update_dict),
         content_type='application/json'
     )
-    assert response.status_code == 202
+    assert response.status_code == 200
     update_dict["id"] = organisation.id
     assert response.json["data"] == update_dict == organisation.to_dict()
     response = client.post(
