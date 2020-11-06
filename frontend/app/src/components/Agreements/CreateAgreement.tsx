@@ -1,10 +1,27 @@
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {Box, Button, Divider, Flex, FormHelperText, FormLabel, Heading, Input, Select, Spinner, Stack, useToast,} from "@chakra-ui/core";
-import {useInput, useIsMobile, useNumberInput, Validators} from "react-grapple";
+import {
+	Box,
+	Button,
+	Divider,
+	Flex,
+	FormHelperText,
+	FormLabel,
+	Heading,
+	Input,
+	InputGroup,
+	InputLeftAddon,
+	InputLeftElement,
+	Select,
+	Spinner,
+	Stack,
+	Switch,
+	useToast,
+} from "@chakra-ui/core";
+import {useInput, useIsMobile, useNumberInput, useToggle, Validators} from "react-grapple";
 import BackButton from "../BackButton";
 import Routes from "../../config/routes";
-import {isDev, MOBILE_BREAKPOINT, Months} from "../../utils/things";
+import {isDev, MOBILE_BREAKPOINT} from "../../utils/things";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
 import {useMutation, useQuery} from "@apollo/client";
 import {sampleData} from "../../config/sampleData/sampleData";
@@ -29,6 +46,19 @@ const CreateAgreement = () => {
 		defaultValue: "",
 		validate: [Validators.required]
 	});
+	const tegenrekening = useNumberInput();
+	const bedrag = useInput({
+		defaultValue: "",
+		validate: [Validators.required, (v) => {
+			console.log(v);
+			return new RegExp(/^(\d+)(,\d{2})?$/).test(v)
+		}]
+	});
+	const kenmerk = useInput({
+		defaultValue: "",
+		validate: [Validators.required]
+	});
+	const [isRecurring, toggleRecurring] = useToggle(true);
 	const startDate = {
 		day: useNumberInput({
 			validate: [(v) => new RegExp(/^[0-9]{1,2}$/).test(v.toString())],
@@ -67,27 +97,11 @@ const CreateAgreement = () => {
 		defaultValue: "",
 		validate: [Validators.required, (v) => new RegExp(/^[0-9]+$/).test(v)]
 	});
-	const intervalYears = useNumberInput({
-		min: 0
-	});
-	const intervalMonths = useNumberInput({
-		min: 0
-	});
-	const intervalWeeks = useNumberInput({
-		min: 0
-	});
-	const intervalDays = useNumberInput({
-		min: 0
-	});
-	const tegenrekening = useNumberInput();
-	const bedrag = useInput({
-		defaultValue: "",
-		validate: [Validators.required]
-	});
-	const kenmerk = useInput({
-		defaultValue: "",
-		validate: [Validators.required]
-	});
+	const intervalType = useInput<"day" | "week" | "month" | "year">({
+		defaultValue: "month",
+		validate: [(v) => ["day", "week", "month", "year"].includes(v)]
+	})
+	const intervalNumber = useInput();
 
 	const [createAfspraak, {loading}] = useMutation(CreateAfspraakMutation);
 
@@ -104,14 +118,8 @@ const CreateAgreement = () => {
 		endDate.month.setValue(eindDatum.getMonth() + 1);
 		endDate.year.setValue(eindDatum.getFullYear());
 		nBetalingen.setValue(c.nBetalingen.toString());
-
-		intervalYears.setValue(c.interval.years);
-		intervalMonths.setValue(c.interval.months);
-		intervalWeeks.setValue(c.interval.weeks);
-		intervalDays.setValue(c.interval.days);
-
 		tegenrekening.setValue(c.tegenRekening.toString());
-		bedrag.setValue(c.bedrag);
+		bedrag.setValue("" + c.bedrag);
 		kenmerk.setValue(c.kenmerk);
 	}
 
@@ -126,10 +134,7 @@ const CreateAgreement = () => {
 			endDate.day,
 			endDate.month,
 			endDate.year,
-			intervalYears,
-			intervalMonths,
-			intervalWeeks,
-			intervalDays,
+
 			tegenrekening,
 			bedrag,
 			kenmerk,
@@ -157,10 +162,10 @@ const CreateAgreement = () => {
 				eindDatum: eindDatum.toISOString().substring(0, 10),
 				gebruikerId: burgerId,
 				interval: {
-					jaren: intervalYears.value,
-					maanden: intervalMonths.value,
-					weken: intervalWeeks.value,
-					dagen: intervalDays.value,
+					jaren: 0,
+					maanden: 0,
+					weken: 0,
+					dagen: 0,
 				},
 				kenmerk: kenmerk.value,
 				tegenRekeningId: tegenrekening.value
@@ -211,83 +216,16 @@ const CreateAgreement = () => {
 
 				<Box as={"form"} onSubmit={onSubmit}>
 					<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
-						<Stack direction={isMobile ? "column" : "row"} spacing={2}>
+						<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 							<FormLeft>
-								<Heading size={"md"}>{t("forms.agreements.title")}</Heading>
-								<FormHelperText id="personal-helperText">{t("forms.agreements.subtitle")}</FormHelperText>
+								<Heading size={"md"}>{t("forms.agreements.sections.main.title")}</Heading>
+								<FormHelperText id="personal-helperText">{t("forms.agreements.sections.main.helperText")}</FormHelperText>
 							</FormLeft>
 							<FormRight>
 								<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 									<Stack spacing={1} flex={2}>
 										<FormLabel htmlFor={"beschrijving"}>{t("forms.agreements.fields.description")}</FormLabel>
 										<Input isInvalid={isInvalid(beschrijving)} {...beschrijving.bind} id="beschrijving" />
-									</Stack>
-								</Stack>
-								<Stack spacing={1}>
-									<FormLabel htmlFor={"startDate"}>{t("forms.agreements.fields.startDate")}</FormLabel>
-									<Stack direction={"row"} maxW="100%">
-										<Box flex={1}>
-											<Input isInvalid={isInvalid(startDate.day)} {...startDate.day.bind} id="startDate.day" />
-										</Box>
-										<Box flex={2}>
-											<Select isInvalid={isInvalid(startDate.month)} {...startDate.month.bind} id="startDate.month"
-											        value={startDate.month.value.toString()}>
-												{Months.map((m, i) => (
-													<option key={i} value={i + 1}>{t("months." + m)}</option>
-												))}
-											</Select>
-										</Box>
-										<Box flex={1}>
-											<Input isInvalid={isInvalid(startDate.year)} {...startDate.year.bind} id="start_datum.year" />
-										</Box>
-									</Stack>
-								</Stack>
-								<Stack spacing={1}>
-									<FormLabel htmlFor={"eind_datum"}>{t("forms.agreements.fields.endDate")}</FormLabel>
-									<Stack direction={"row"} maxW="100%">
-										<Box flex={1}>
-											<Input isInvalid={isInvalid(endDate.day)} {...endDate.day.bind} id="eind_datum.day" />
-										</Box>
-										<Box flex={2}>
-											<Select isInvalid={isInvalid(endDate.month)} {...endDate.month.bind} id="eind_datum.month"
-											        value={endDate.month.value.toString()}>
-												{Months.map((m, i) => (
-													<option key={i} value={i + 1}>{t("months." + m)}</option>
-												))}
-											</Select>
-										</Box>
-										<Box flex={1}>
-											<Input isInvalid={isInvalid(endDate.year)} {...endDate.year.bind} id="eind_datum.year" />
-										</Box>
-									</Stack>
-								</Stack>
-								<Stack spacing={2} direction={isMobile ? "column" : "row"}>
-									<Stack spacing={1} flex={2}>
-										<FormLabel htmlFor={"nPayments"}>{t("forms.agreements.fields.nPayments")}</FormLabel>
-										<Input isInvalid={isInvalid(nBetalingen)} {...nBetalingen.bind} id="nPayments" />
-									</Stack>
-								</Stack>
-								<Stack spacing={2} direction={isMobile ? "column" : "row"}>
-									<Stack spacing={1} flex={2}>
-										<FormLabel htmlFor={"interval"}>{t("forms.agreements.fields.interval")}</FormLabel>
-										<Stack direction={isMobile ? "column" : "row"} spacing={1}>
-											<Stack flex={1}>
-												<FormLabel htmlFor={"intervalYears"}>{t("forms.agreements.fields.intervalYears")}</FormLabel>
-												<Input isInvalid={isInvalid(intervalYears)} {...intervalYears.bind} id="intervalYears" />
-											</Stack>
-											<Stack flex={1}>
-												<FormLabel htmlFor={"intervalMonths"}>{t("forms.agreements.fields.intervalMonths")}</FormLabel>
-												<Input isInvalid={isInvalid(intervalMonths)} {...intervalMonths.bind} id="intervalMonths" />
-											</Stack>
-											<Stack flex={1}>
-												<FormLabel htmlFor={"intervalWeeks"}>{t("forms.agreements.fields.intervalWeeks")}</FormLabel>
-												<Input isInvalid={isInvalid(intervalWeeks)} {...intervalWeeks.bind} id="intervalWeeks" />
-											</Stack>
-											<Stack flex={1}>
-												<FormLabel htmlFor={"intervalDays"}>{t("forms.agreements.fields.intervalDays")}</FormLabel>
-												<Input isInvalid={isInvalid(intervalDays)} {...intervalDays.bind} id="intervalDays" />
-											</Stack>
-										</Stack>
 									</Stack>
 								</Stack>
 								<Stack spacing={2} direction={isMobile ? "column" : "row"}>
@@ -299,7 +237,10 @@ const CreateAgreement = () => {
 								<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 									<Stack spacing={1} flex={2}>
 										<FormLabel htmlFor={"bedrag"}>{t("forms.agreements.fields.amount")}</FormLabel>
-										<Input isInvalid={isInvalid(bedrag)} {...bedrag.bind} id="bedrag" />
+										<InputGroup>
+											<InputLeftAddon>&euro;</InputLeftAddon>
+											<Input type={"number"} isInvalid={isInvalid(bedrag)} {...bedrag.bind} id="bedrag" />
+										</InputGroup>
 									</Stack>
 								</Stack>
 								<Stack spacing={2} direction={isMobile ? "column" : "row"}>
@@ -308,6 +249,78 @@ const CreateAgreement = () => {
 										<Input isInvalid={isInvalid(kenmerk)} {...kenmerk.bind} id="kenmerk" />
 									</Stack>
 								</Stack>
+							</FormRight>
+						</Stack>
+
+						<Divider />
+
+						<Stack spacing={2} direction={isMobile ? "column" : "row"}>
+							<FormLeft>
+								<Heading size={"md"}>{t("forms.agreements.sections.planning.title")}</Heading>
+								<FormHelperText id="personal-helperText">{t("forms.agreements.sections.planning.helperText")}</FormHelperText>
+							</FormLeft>
+							<FormRight>
+								<Stack spacing={1}>
+									<Stack isInline={true} alignItems={"center"} spacing={3}>
+										<Switch isChecked={isRecurring} onChange={() => toggleRecurring()} />
+										<FormLabel htmlFor={"nPayments"}>{t("forms.agreements.fields.isRecurring")}</FormLabel>
+									</Stack>
+								</Stack>
+
+								{isRecurring ? (
+									<Stack spacing={2} direction={isMobile ? "column" : "row"}>
+										<Stack spacing={1} flex={1}>
+											<FormLabel htmlFor={"startDate"}>{t("forms.agreements.fields.startDate")}</FormLabel>
+											<Stack direction={"row"} justifyContent={"flex-start"} spacing={1} maxWidth={isMobile ? "100%" : 280} width={"100%"}>
+												<Box><Input isInvalid={isInvalid(startDate.day)} {...startDate.day.bind} id="startDate.day" /></Box>
+												<Box><Input isInvalid={isInvalid(startDate.month)} {...startDate.month.bind} id="startDate.month" /></Box>
+												<Box><Input isInvalid={isInvalid(startDate.year)} {...startDate.year.bind} id="startDate.year" /></Box>
+											</Stack>
+										</Stack>
+										<Stack spacing={1} flex={1}>
+											<FormLabel htmlFor={"eind_datum"}>{t("forms.agreements.fields.endDate")}</FormLabel>
+											<Stack direction={"row"} justifyContent={"flex-start"} spacing={1} maxWidth={isMobile ? "100%" : 280} width={"100%"}>
+												<Box flex={1}><Input isInvalid={isInvalid(endDate.day)} {...endDate.day.bind} id="endDate.day" /></Box>
+												<Box flex={1}><Input isInvalid={isInvalid(endDate.month)} {...endDate.month.bind} id="endDate.month" /></Box>
+												<Box flex={1}><Input isInvalid={isInvalid(endDate.year)} {...endDate.year.bind} id="endDate.year" /></Box>
+											</Stack>
+										</Stack>
+									</Stack>
+								) : (
+									<Stack spacing={2} direction={isMobile ? "column" : "row"}>
+										<Stack spacing={1} flex={1}>
+											<FormLabel htmlFor={"date"}>{t("forms.common.fields.date")}</FormLabel>
+											<Stack direction={"row"} justifyContent={"flex-start"} spacing={1} maxWidth={250} width={"100%"}>
+												<Box flex={1}><Input isInvalid={isInvalid(startDate.day)} {...startDate.day.bind} id="startDate.day" /></Box>
+												<Box flex={1}><Input isInvalid={isInvalid(startDate.month)} {...startDate.month.bind} id="startDate.month" /></Box>
+												<Box flex={1}><Input isInvalid={isInvalid(startDate.year)} {...startDate.year.bind} id="startDate.year" /></Box>
+											</Stack>
+										</Stack>
+									</Stack>
+								)}
+								{/*{isRecurring && (*/}
+								{/*	<Stack spacing={1}>*/}
+								{/*		<FormLabel htmlFor={"nPayments"}>{t("forms.agreements.fields.nPayments")}</FormLabel>*/}
+								{/*		<Input isInvalid={isInvalid(nBetalingen)} {...nBetalingen.bind} id="nPayments" />*/}
+								{/*	</Stack>*/}
+								{/*)}*/}
+								{isRecurring && (
+									<Stack spacing={2} direction={isMobile ? "column" : "row"}>
+										<Stack spacing={1}>
+											<FormLabel htmlFor={"interval"}>{t("forms.agreements.fields.interval")}</FormLabel>
+											<Stack direction={"row"} alignItems={"center"}>
+												<FormLabel>{t("interval.every")}</FormLabel>
+												<Input type={"number"} min={1} {...intervalNumber.bind} width={100} />
+												<Select {...intervalType.bind} id="interval" value={intervalType.value}>
+													<option value={"days"}>{parseInt(intervalNumber.value) === 1 ? t("interval.day") : t("interval.days")}</option>
+													<option value={"weeks"}>{parseInt(intervalNumber.value) === 1 ? t("interval.week") : t("interval.weeks")}</option>
+													<option value={"months"}>{parseInt(intervalNumber.value) === 1 ? t("interval.month") : t("interval.months")}</option>
+													<option value={"years"}>{parseInt(intervalNumber.value) === 1 ? t("interval.year") : t("interval.years")}</option>
+												</Select>
+											</Stack>
+										</Stack>
+									</Stack>
+								)}
 							</FormRight>
 						</Stack>
 

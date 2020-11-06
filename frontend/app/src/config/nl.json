@@ -65,6 +65,7 @@
   "forms": {
     "common": {
       "fields": {
+        "date": "Datum",
         "dateDay": "Dag",
         "dateMonth": "Maand",
         "dateYear": "Jaar"
@@ -116,23 +117,32 @@
       }
     },
     "agreements": {
-      "title": "Afspraak",
-      "subtitle": "Vul de gegevens van de afspraak in.",
+      "sections": {
+        "main": {
+          "title": "Afspraak",
+          "helperText": "Vul de algemene gegevens van de nieuwe afspraak in."
+        },
+        "planning": {
+          "title": "Planning",
+          "helperText": "Bepaal om wat voor afspraak het gaat."
+        }
+      },
       "fields": {
         "description": "Beschrijving",
+        "beneficiaryAccount": "Tegenrekening",
+        "amount": "Bedrag",
+        "reference": "Kenmerk",
+        "isRecurring": "Terugkerende afspraak",
         "startDate": "Startdatum",
         "endDate": "Einddatum",
+        "credit": "Credit",
+        "debit": "Debet",
         "nPayments": "Aantal betalingen",
         "interval": "Herhaling",
         "intervalYears": "Jaren",
         "intervalMonths": "Maanden",
         "intervalWeeks": "Weken",
         "intervalDays": "Dagen",
-        "beneficiaryAccount": "Tegenrekening",
-        "amount": "Bedrag",
-        "credit": "Credit",
-        "debit": "Debet",
-        "reference": "Kenmerk",
         "active": "Actief"
       }
     },
@@ -205,5 +215,16 @@
     "oct": "oktober",
     "nov": "november",
     "dec": "december"
+  },
+  "interval": {
+    "every": "Elk(e)",
+    "day": "dag",
+    "days": "dagen",
+    "week": "week",
+    "weeks": "weken",
+    "month": "maand",
+    "months": "maanden",
+    "year": "jaar",
+    "years": "jaren"
   }
 }
