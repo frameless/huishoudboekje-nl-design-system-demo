@@ -53,6 +53,13 @@ build-python-postgres:
       cobertura: ${APP_NAME}/coverage.xml
 
 
+Backend Test:
+  extends: .Service Test
+  variables:
+    APP_NAME: backend
+  only:
+    - branches@commonground/huishoudboekje/app-new
+
 Huishoudboekje Service Test:
   extends: .Service Test
   variables:
