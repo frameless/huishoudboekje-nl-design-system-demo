@@ -28,7 +28,7 @@ import {sampleData} from "../../config/sampleData/sampleData";
 import {Redirect, useHistory, useParams} from "react-router-dom";
 import {CreateAfspraakMutation} from "../../services/graphql/mutations";
 import {GetAllOrganisatiesQuery, GetOneGebruikerQuery} from "../../services/graphql/queries";
-import {AfspraakType, IGebruiker, IntervalType, IOrganisatie} from "../../models";
+import {AfspraakPeriod, AfspraakType, IGebruiker, IntervalType, IOrganisatie} from "../../models";
 import {UseInput} from "react-grapple/dist/hooks/useInput";
 import moment from "moment";
 
@@ -51,7 +51,7 @@ const CreateAgreement = () => {
 		defaultValue: "",
 		validate: [Validators.required]
 	});
-	const organizationId = useInput<number>();
+	const beneficiaryId = useInput<number>();
 	const amount = useNumberInput({
 		min: 0,
 		step: .01,
@@ -86,7 +86,9 @@ const CreateAgreement = () => {
 		defaultValue: "month",
 		validate: [(v) => ["day", "week", "month", "year"].includes(v)]
 	})
-	const intervalNumber = useNumberInput();
+	const intervalNumber = useNumberInput({
+		min: 0,
+	});
 
 	const [createAfspraak, {loading}] = useMutation(CreateAfspraakMutation);
 
@@ -95,10 +97,10 @@ const CreateAgreement = () => {
 
 		setAfspraakType(c.type);
 		description.setValue(c.omschrijving);
-		organizationId.setValue(c.organisatie.id);
+		beneficiaryId.setValue(c.organisatie.id);
 		amount.setValue(c.bedrag);
 		searchTerm.setValue(c.kenmerk);
-		toggleRecurring(c.type === "periodic");
+		toggleRecurring(c.type === AfspraakPeriod.Periodic);
 		intervalType.setValue("month");
 		intervalNumber.setValue(3);
 		startDate.day.setValue(c.startDatum.split("-")[2]);
@@ -113,7 +115,7 @@ const CreateAgreement = () => {
 
 		const fields: UseInput<any>[] = [
 			description,
-			organizationId,
+			beneficiaryId,
 			amount,
 			searchTerm,
 			startDate.day,
@@ -149,7 +151,7 @@ const CreateAgreement = () => {
 				credit: afspraakType === AfspraakType.Income,
 				beschrijving: description.value,
 				// Todo: Should we really connect to an organization like this? (09-11-2020)
-				tegenRekeningId: orgsData?.organisaties.find(o => o.id === organizationId.value)?.rekeningen[0]?.id,
+				tegenRekeningId: orgsData?.organisaties.find(o => o.id === beneficiaryId.value)?.rekeningen[0]?.id,
 				bedrag: amount.value,
 				kenmerk: searchTerm.value,
 				startDatum: moment(startDatum).format("YYYY-MM-DD"),
@@ -239,11 +241,21 @@ const CreateAgreement = () => {
 									</Stack>
 									<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 										<Stack spacing={1} flex={1}>
-											<FormLabel htmlFor={"organizationId"}>{t("organizations.organization")}</FormLabel>
-											{orgsLoading ? (<Spinner />) : (<Select {...organizationId.bind} id="organizationId" value={organizationId.value}>
-												{orgsData?.organisaties.map(o => (
-													<option key={o.id} value={o.id}>{o.weergaveNaam}</option>
+											<FormLabel htmlFor={"beneficiaryId"}>{t("forms.agreements.fields.beneficiary")}</FormLabel>
+											{orgsLoading ? (<Spinner />) : (<Select {...beneficiaryId.bind} id="beneficiaryId" value={beneficiaryId.value}>
+												<option disabled selected>{t("forms.agreements.fields.beneficiaryChoose")}</option>
+												{orgsData?.organisaties.filter(o => o.rekeningen.length > 0).map(o => (
+													<optgroup label={o.weergaveNaam}>
+														{o.rekeningen.map(r => (
+															<option key={r.id} value={r.id}>{r.rekeninghouder} ({r.iban})</option>
+														))}
+													</optgroup>
 												))}
+												<optgroup label={gebruikerData.gebruiker.voornamen + " " + gebruikerData.gebruiker.achternaam}>
+													{gebruikerData.gebruiker.rekeningen.map(r => (
+														<option key={r.id} value={r.id}>{r.rekeninghouder} ({r.iban})</option>
+													))}
+												</optgroup>
 											</Select>)}
 										</Stack>
 									</Stack>
@@ -275,11 +287,13 @@ const CreateAgreement = () => {
 									<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 										<Stack spacing={1} flex={1}>
 											<FormLabel htmlFor={"beschrijving"}>{t("forms.agreements.fields.isRecurring")}</FormLabel>
-											<RadioButtonGroup isInline onChange={(val) => toggleRecurring(val === "periodic")} value={isRecurring ? "periodic" : "once"}
+											<RadioButtonGroup isInline onChange={(val) => toggleRecurring(val === AfspraakPeriod.Periodic)}
+											                  value={isRecurring ? AfspraakPeriod.Periodic : AfspraakPeriod.Once}
 											                  defaultValue={"once"} spacing={0}>
-												<CustomRadioButton size={"sm"} roundedRight={0} value={"once"}>{t("forms.agreements.fields.isRecurring_once")}</CustomRadioButton>
+												<CustomRadioButton size={"sm"} roundedRight={0}
+												                   value={AfspraakPeriod.Once}>{t("forms.agreements.fields.isRecurring_once")}</CustomRadioButton>
 												<CustomRadioButton size={"sm"} roundedLeft={0}
-												                   value={"periodic"}>{t("forms.agreements.fields.isRecurring_periodic")}</CustomRadioButton>
+												                   value={AfspraakPeriod.Periodic}>{t("forms.agreements.fields.isRecurring_periodic")}</CustomRadioButton>
 											</RadioButtonGroup>
 										</Stack>
 									</Stack>
@@ -317,7 +331,7 @@ const CreateAgreement = () => {
 									</Stack>
 
 									{isRecurring && (
-										<Stack direction={isMobile ? "column" : "row"} spacing={1}>
+										<Stack direction={isMobile ? "column" : "row"} spacing={1} mt={2}>
 											<Stack isInline={true} alignItems={"center"} spacing={3}>
 												<Switch isChecked={isContinuous} onChange={() => toggleContinuous()} id={"isContinuous"} />
 												<FormLabel htmlFor={"isContinuous"}>{t("forms.agreements.fields.continuous")}</FormLabel>

@@ -42,6 +42,13 @@
     ],
     "no-empty": [
       "warn"
+    ],
+    "react/self-closing-comp": [
+      "warn",
+      {
+        "component": true,
+        "html": false
+      }
     ]
   },
   "ignorePatterns": [

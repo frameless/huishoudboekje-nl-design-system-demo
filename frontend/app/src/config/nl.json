@@ -131,6 +131,7 @@
         "type": "Soort",
         "description": "Omschrijving",
         "beneficiary": "Begunstigde",
+        "beneficiaryChoose": "Kies een begunstigde",
         "amount": "Bedrag",
         "searchTerm": "Zoekterm",
         "continuous": "Doorlopend",

@@ -2,6 +2,10 @@ export enum AfspraakType {
 	Expense = "expense",
 	Income = "income"
 }
+export enum AfspraakPeriod {
+	Periodic = "periodic",
+	Once = "once"
+}
 export type IntervalType = "day" | "week" | "month" | "year";
 
 export type IGebruiker = {
@@ -67,6 +71,7 @@ export type IAfspraak = {
 	credit: boolean
 	omschrijving: string
 	organisatie: IOrganisatie,
+	tegenrekening: IRekening,
 	bedrag: number,
 	kenmerk: string
 	type: "periodic" | "once",

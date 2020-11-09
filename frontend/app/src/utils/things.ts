@@ -49,3 +49,6 @@ export const createInterval = (intervalType: "day" | "week" | "month" | "year", 
 
 	return interval;
 };
+
+export const numberFormat = new Intl.NumberFormat("nl-NL");
+export const dateFormat = new Intl.DateTimeFormat("nl-NL");

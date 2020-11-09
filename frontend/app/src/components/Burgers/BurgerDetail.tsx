@@ -41,6 +41,7 @@ import {useIsMobile, useToggle} from "react-grapple";
 import DeadEndPage from "../DeadEndPage";
 import RekeningForm from "../Rekeningen/RekeningForm";
 import BurgerDetailProfileView from "./BurgerDetailProfileView";
+import AfspraakItem from "../Agreements/AfpraakItem";
 
 const BurgerDetail = () => {
 	const {t} = useTranslation();
@@ -216,18 +217,10 @@ const BurgerDetail = () => {
 									</TabList>
 									<TabPanels>
 										<TabPanel id="tab_incoming">
-											{filteredAfspraken.filter(a => a.credit).map((a, i) => (
-												<Stack key={i} direction={"row"} spacing={2}>
-													<pre className="debug">{JSON.stringify(a, null, 2)}</pre>
-												</Stack>
-											))}
+											{filteredAfspraken.filter(a => a.credit).map((a, i) => <AfspraakItem key={i} afspraak={a} />)}
 										</TabPanel>
 										<TabPanel id="tab_outgoing">
-											{filteredAfspraken.filter(a => !a.credit).map((a, i) => (
-												<Stack key={i} direction={"row"} spacing={2}>
-													<pre className="debug">{JSON.stringify(a, null, 2)}</pre>
-												</Stack>
-											))}
+											{filteredAfspraken.filter(a => !a.credit).map((a, i) => <AfspraakItem key={i} afspraak={a} />)}
 										</TabPanel>
 									</TabPanels>
 								</Tabs>
