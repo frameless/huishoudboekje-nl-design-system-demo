@@ -1,6 +1,30 @@
-coverage:
-	pytest --cov=huishoudboekje_service --cov=models tests
+MODULES=core models
+export HHB_SECRET ?= test
+export HHB_DATABASE_URL ?=
 
-html_coverage: coverage
-	coverage html -d coverage_html
-	open coverage_html/index.html
+.PHONY: all
+all: coverage
+
+.PHONY: prepare
+prepare: ../../backend/requirements.txt test_requirements.txt
+	pip install $(patsubst %,-r %,$^)
+
+.PHONY: coverage
+coverage: htmlcov coverage.xml
+
+.coverage: ../../huishoudboekje-service/tests $(MODULES)
+	pytest $(patsubst %,--cov=%,$(MODULES)) $<
+
+htmlcov: ../../backend/.coverage
+	coverage html -d $@
+
+coverage.xml: ../../backend/.coverage
+	coverage xml -o $@
+
+.PHONY: open_html
+open_html: htmlcov
+	open $</index.html
+
+.PHONY: clean
+clean:
+	rm -rf .coverage htmlcov coverage.xml
