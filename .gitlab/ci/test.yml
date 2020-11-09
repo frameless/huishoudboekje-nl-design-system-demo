@@ -32,7 +32,7 @@ build-python-postgres:
   only:
     - branches@commonground/huishoudboekje/app-new
 
-Huishoudboekje Service Test:
+.Service Test:
   stage: test
   needs:
     - build-python-postgres
@@ -42,16 +42,27 @@ Huishoudboekje Service Test:
   image:
     name: $CI_REGISTRY_IMAGE/$PYTHON_POSTGRES:$IMAGE_TAG
   script:
-    - cd huishoudboekje-service
-    - make install
-    - make
+    - make -C ${APP_NAME} prepare
+    - make -C ${APP_NAME} all
   coverage: '/TOTAL.+ ([0-9]{1,3}%)/'
   artifacts:
     expire_in: 1 week
     paths:
-      - huishoudboekje-service/htmlcov
-    expose_as: 'huishoudboekje-service coverage'
+      - ${APP_NAME}/htmlcov
     reports:
-      cobertura: huishoudboekje-service/coverage.xml
+      cobertura: ${APP_NAME}/coverage.xml
+
+
+Huishoudboekje Service Test:
+  extends: .Service Test
+  variables:
+    APP_NAME: huishoudboekje-service
+  only:
+    - branches@commonground/huishoudboekje/app-new
+
+Organisatie Service Test:
+  extends: .Service Test
+  variables:
+    APP_NAME: organisatie-service
   only:
     - branches@commonground/huishoudboekje/app-new
