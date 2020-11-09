@@ -42,7 +42,7 @@ build-python-postgres:
   image:
     name: $CI_REGISTRY_IMAGE/$PYTHON_POSTGRES:$IMAGE_TAG
   script:
-    - make -C ${APP_NAME} prepare
+    - make -C ${APP_NAME} requirements
     - make -C ${APP_NAME} all
   coverage: '/TOTAL.+ ([0-9]{1,3}%)/'
   artifacts:

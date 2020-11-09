@@ -5,14 +5,23 @@ export HHB_DATABASE_URL ?=
 .PHONY: all
 all: coverage
 
+<<<<<<< HEAD:services/huishoudboekje_service/Makefile
 .PHONY: prepare
 prepare: ../../backend/requirements.txt test_requirements.txt
+=======
+.PHONY: requirements
+requirements: requirements.txt test_requirements.txt
+>>>>>>> adjust makefiles:huishoudboekje-service/Makefile
 	pip install $(patsubst %,-r %,$^)
 
 .PHONY: coverage
 coverage: htmlcov coverage.xml
 
+<<<<<<< HEAD:services/huishoudboekje_service/Makefile
 .coverage: ../../huishoudboekje-service/tests $(MODULES)
+=======
+.coverage: tests $(foreach MODULE,tests $(MODULES),$(shell find $(MODULE) -type f))
+>>>>>>> adjust makefiles:huishoudboekje-service/Makefile
 	pytest $(patsubst %,--cov=%,$(MODULES)) $<
 
 htmlcov: ../../backend/.coverage

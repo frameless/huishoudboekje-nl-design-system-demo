@@ -9,8 +9,8 @@ TESTS = tests
 .PHONY: all
 all: coverage
 
-.PHONY: prepare
-prepare: requirements.txt test_requirements.txt
+.PHONY: requirements
+requirements: requirements.txt test_requirements.txt
 	pip install $(patsubst %,-r %,$^)
 
 .PHONY: coverage
