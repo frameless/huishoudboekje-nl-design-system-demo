@@ -7,7 +7,7 @@ import {
 	AlertDialogOverlay,
 	Box,
 	Button,
-	Divider, Flex,
+	Divider,
 	FormLabel,
 	Heading,
 	Icon,
@@ -216,15 +216,15 @@ const BurgerDetail = () => {
 									</TabList>
 									<TabPanels>
 										<TabPanel id="tab_incoming">
-											{filteredAfspraken.filter(a => a.credit).map(a => (
-												<Stack direction={"row"} spacing={2}>
+											{filteredAfspraken.filter(a => a.credit).map((a, i) => (
+												<Stack key={i} direction={"row"} spacing={2}>
 													<pre className="debug">{JSON.stringify(a, null, 2)}</pre>
 												</Stack>
 											))}
 										</TabPanel>
 										<TabPanel id="tab_outgoing">
-											{filteredAfspraken.filter(a => !a.credit).map(a => (
-												<Stack direction={"row"} spacing={2}>
+											{filteredAfspraken.filter(a => !a.credit).map((a, i) => (
+												<Stack key={i} direction={"row"} spacing={2}>
 													<pre className="debug">{JSON.stringify(a, null, 2)}</pre>
 												</Stack>
 											))}

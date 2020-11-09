@@ -29,3 +29,23 @@ export const isDev = process.env.NODE_ENV === "development";
 export const DrawerContext = createContext<{ onClose: () => void }>({
 	onClose: () => {}
 });
+
+export const createInterval = (intervalType: "day" | "week" | "month" | "year", intervalCount: number) => {
+	const intervalTypeConversion = {
+		"day": "dagen",
+		"week": "weken",
+		"month": "maanden",
+		"year": "jaren",
+	};
+
+	const interval = {
+		jaren: 0,
+		maanden: 0,
+		weken: 0,
+		dagen: 0,
+	}
+
+	interval[intervalTypeConversion[intervalType]] = intervalCount;
+
+	return interval;
+};

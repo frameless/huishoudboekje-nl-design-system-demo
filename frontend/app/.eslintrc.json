@@ -39,6 +39,9 @@
     "eol-last": [
       "warn",
       "never"
+    ],
+    "no-empty": [
+      "warn"
     ]
   },
   "ignorePatterns": [

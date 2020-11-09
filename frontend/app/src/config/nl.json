@@ -117,22 +117,27 @@
       }
     },
     "agreements": {
-      "sections": {
-        "main": {
+      "sections": [
+        {
           "title": "Afspraak",
           "helperText": "Vul de algemene gegevens van de nieuwe afspraak in."
         },
-        "planning": {
-          "title": "Planning",
+        {
+          "title": "Periode",
           "helperText": "Bepaal om wat voor afspraak het gaat."
         }
-      },
+      ],
       "fields": {
-        "description": "Beschrijving",
-        "beneficiaryAccount": "Tegenrekening",
+        "type": "Soort",
+        "description": "Omschrijving",
+        "beneficiary": "Begunstigde",
         "amount": "Bedrag",
-        "reference": "Kenmerk",
-        "isRecurring": "Terugkerende afspraak",
+        "searchTerm": "Zoekterm",
+        "continuous": "Doorlopend",
+        "nTimes": "Aantal keer",
+        "isRecurring": "Soort",
+        "isRecurring_once": "Eenmalig",
+        "isRecurring_periodic": "Periodiek",
         "startDate": "Startdatum",
         "endDate": "Einddatum",
         "credit": "Credit",
@@ -143,7 +148,9 @@
         "intervalMonths": "Maanden",
         "intervalWeeks": "Weken",
         "intervalDays": "Dagen",
-        "active": "Actief"
+        "active": "Actief",
+        "expenses": "Uitgaven",
+        "income": "Inkomsten"
       }
     },
     "organizations": {
@@ -190,6 +197,7 @@
     "burgers": "Burgers"
   },
   "organizations": {
+    "organization": "Organisatie",
     "organizations": "Organisaties"
   },
   "agreements": {

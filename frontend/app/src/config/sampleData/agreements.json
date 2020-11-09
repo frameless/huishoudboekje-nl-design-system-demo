@@ -2,20 +2,23 @@
   {
     "id": 1,
     "gebruiker": 1,
-    "beschrijving": "Testafspraak",
-    "startDatum": "2020-11-01",
-    "eindDatum": "2021-10-31",
-    "nBetalingen": 10,
+    "credit": false,
+    "omschrijving": "Wegenbelasting",
+    "organisatie": {
+      "id": 1
+    },
+    "bedrag": 129,
+    "kenmerk": "215886412180000007",
+    "type": "periodic",
     "interval": {
       "years": 0,
-      "months": 0,
-      "weeks": 4,
+      "months": 3,
+      "weeks": 0,
       "days": 0
     },
-    "tegenRekening": 1,
-    "bedrag": 13.37,
-    "credit": true,
-    "kenmerk": "1337-fooBarB@Z",
+    "startDatum": "2020-10-01",
+    "isContinuous": false,
+    "nBetalingen": 10,
     "actief": true
   }
 ]
