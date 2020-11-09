@@ -66,3 +66,10 @@ Organisatie Service Test:
     APP_NAME: organisatie-service
   only:
     - branches@commonground/huishoudboekje/app-new
+
+Transactie Service Test:
+  extends: .Service Test
+  variables:
+    APP_NAME: organisatie-service
+  only:
+    - branches@commonground/huishoudboekje/app-new
