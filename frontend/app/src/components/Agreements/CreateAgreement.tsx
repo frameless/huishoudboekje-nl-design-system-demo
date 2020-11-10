@@ -10,7 +10,6 @@ import {
 	Input,
 	InputGroup,
 	InputLeftElement,
-	Text,
 	RadioButtonGroup,
 	RadioProps,
 	Select,
@@ -39,6 +38,7 @@ const CreateAgreement = () => {
 	const {push} = useHistory();
 	const isMobile = useIsMobile(MOBILE_BREAKPOINT);
 	const toast = useToast();
+	const [isSubmitted, setSubmitted] = useState<boolean>(false);
 
 	const {data: gebruikerData, loading: gebruikerLoading, error: gebruikerError} = useQuery<{ gebruiker: IGebruiker }>(GetOneGebruikerQuery, {
 		variables: {
@@ -53,7 +53,7 @@ const CreateAgreement = () => {
 		validate: [Validators.required]
 	});
 	const beneficiaryAccountId = useInput<number>({
-		validate: [(v) => v !== undefined]
+		validate: [(v) => v !== undefined && v.toString() !== ""]
 	});
 	const amount = useNumberInput({
 		min: 0,
@@ -117,6 +117,7 @@ const CreateAgreement = () => {
 
 	const onSubmit = (e) => {
 		e.preventDefault();
+		setSubmitted(true);
 
 		const fields: UseInput<any>[] = [
 			description,
@@ -182,7 +183,7 @@ const CreateAgreement = () => {
 		});
 	};
 
-	const isInvalid = (input) => input.dirty && !input.isValid;
+	const isInvalid = (input) => (input.dirty || isSubmitted) && !input.isValid;
 
 	const renderPageContent = () => {
 		if (gebruikerLoading) {
