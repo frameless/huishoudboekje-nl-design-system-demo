@@ -28,6 +28,12 @@ test-frontend:
     - docker
   image:
     name: $CI_REGISTRY_IMAGE/$PYTHON_POSTGRES:$IMAGE_TAG
+  variables:
+    PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  cache:
+    key: "${CI_COMMIT_REF_SLUG}__${CI_JOB_NAME}"
+    paths:
+      - ${PIP_CACHE_DIR}
   script:
     - make -C ${DIRECTORY} requirements
     - make -C ${DIRECTORY} all
@@ -40,28 +46,28 @@ test-frontend:
       cobertura: ${DIRECTORY}/coverage.xml
 
 
-Backend Test:
+backend-test:
   extends: .Service Test
   variables:
     DIRECTORY: backend
   only:
     - branches@commonground/huishoudboekje/app-new
 
-Huishoudboekje Service Test:
+huishoudboekje-service-test:
   extends: .Service Test
   variables:
     DIRECTORY: services/huishoudboekje_service
   only:
     - branches@commonground/huishoudboekje/app-new
 
-Organisatie Service Test:
+organisatie-service-test:
   extends: .Service Test
   variables:
     DIRECTORY: services/organisatie_service
   only:
     - branches@commonground/huishoudboekje/app-new
 
-Bank Transactie Service Test:
+bank-transactie-service-test:
   extends: .Service Test
   variables:
     DIRECTORY: services/bank_transactie_service
