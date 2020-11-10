@@ -57,6 +57,7 @@ const CreateAgreement = () => {
 	const amount = useNumberInput({
 		min: 0,
 		step: .01,
+		validate: [v => new RegExp(/^([0-9]+)((,|\.)[0-9]{2})?$/).test(v.toString())]
 	});
 	const searchTerm = useInput({
 		defaultValue: "",
