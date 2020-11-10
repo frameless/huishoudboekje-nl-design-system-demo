@@ -13,7 +13,6 @@ class Config(object):
     SESSION_COOKIE_NAME = "flask_session"
     SESSION_COOKIE_PATH = os.getenv('PREFIX', None)
     SECRET_KEY = os.getenv('SECRET_KEY', None)
-    AUTO_LOGOUT = False if os.getenv('SECRET_KEY', None) else True
     OIDC_CLIENT_SECRETS = os.getenv('OIDC_CLIENT_SECRETS', './etc/client_secrets.json')
     OIDC_SCOPES = ['openid', 'email', 'groups', 'profile']
     OIDC_ID_TOKEN_COOKIE_SECURE = os.getenv('OIDC_ID_TOKEN_COOKIE_SECURE', False)

@@ -30,11 +30,10 @@ def create_app(config_name=os.getenv('APP_SETTINGS', None) or 'hhb_backend.confi
     if app.config['OVERWITE_REDIRECT_URI_MAP']:
         custom_oidc = CustomOidc(oidc=oidc, flask_app=app, prefixes=app.config['OVERWITE_REDIRECT_URI_MAP'])
 
-    if app.config['AUTO_LOGOUT']:
-        @app.errorhandler(itsdangerous.exc.BadSignature)
-        def handle_bad_signature():
-            oidc.logout()
-            return jsonify(message='Not logged in'), 401
+    @app.errorhandler(itsdangerous.exc.BadSignature)
+    def handle_bad_signature(e):
+        oidc.logout()
+        return jsonify(message='Not logged in'), 401
 
     @app.route('/health')
     def health():
