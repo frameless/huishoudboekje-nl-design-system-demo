@@ -11,29 +11,41 @@ class Config(object):
     GRAPHQL_AUTH_ENABLED = True
     PREFIX = os.environ.get('PREFIX', None)
     SESSION_COOKIE_NAME = "flask_session"
-    SESSION_COOKIE_PATH = os.getenv('PREFIX', None)
+    SESSION_COOKIE_PATH = os.getenv('PREFIX', '/')
+    SESSION_COOKIE_SECURE = True
+    SESSION_COOKIE_HTTPONLY = True
+    SESSION_COOKIE_SAMESITE = 'Lax'
     SECRET_KEY = os.getenv('SECRET_KEY', None)
     OIDC_CLIENT_SECRETS = os.getenv('OIDC_CLIENT_SECRETS', './etc/client_secrets.json')
     OIDC_SCOPES = ['openid', 'email', 'groups', 'profile']
-    OIDC_ID_TOKEN_COOKIE_SECURE = os.getenv('OIDC_ID_TOKEN_COOKIE_SECURE', False)
+    OIDC_ID_TOKEN_COOKIE_SECURE = True
+    OIDC_ID_TOKEN_COOKIE_PATH = os.getenv('PREFIX', '/')
     OVERWITE_REDIRECT_URI_MAP = os.getenv('OVERWITE_REDIRECT_URI_MAP', None)
 
 
 class ProductionConfig(Config):
-    OIDC_ID_TOKEN_COOKIE_SECURE = os.getenv('OIDC_ID_TOKEN_COOKIE_SECURE', True)
     SECRET_KEY = os.getenv('SECRET_KEY')
+    SESSION_COOKIE_SECURE = True
+    OIDC_ID_TOKEN_COOKIE_SECURE = True
 
 
 class StagingConfig(Config):
     GRAPHQL_AUTH_ENABLED = False
+    SESSION_COOKIE_SECURE = True
+    OIDC_ID_TOKEN_COOKIE_SECURE = True
 
 
-class DevelopmentConfig(StagingConfig):
-    DEVELOPMENT = True
+class LocalConfig(StagingConfig):
+    SESSION_COOKIE_SECURE = False
+    OIDC_ID_TOKEN_COOKIE_SECURE = False
+
+
+class DevelopmentConfig(LocalConfig):
     DEBUG = True
+    DEVELOPMENT = True
     SECRET_KEY = os.getenv('SECRET_KEY', None) or secrets.token_urlsafe(16)
 
 
-class TestingConfig(StagingConfig):
-    TESTING = True
+class TestingConfig(LocalConfig):
     SECRET_KEY = "testing-secret"
+    TESTING = True
