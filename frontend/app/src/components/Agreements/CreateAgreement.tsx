@@ -51,7 +51,9 @@ const CreateAgreement = () => {
 		defaultValue: "",
 		validate: [Validators.required]
 	});
-	const beneficiaryId = useInput<number>();
+	const beneficiaryAccountId = useInput<number>({
+		validate: [(v) => v !== undefined]
+	});
 	const amount = useNumberInput({
 		min: 0,
 		step: .01,
@@ -97,7 +99,7 @@ const CreateAgreement = () => {
 
 		setAfspraakType(c.type);
 		description.setValue(c.omschrijving);
-		beneficiaryId.setValue(c.organisatie.id);
+		beneficiaryAccountId.setValue(c.organisatie.id);
 		amount.setValue(c.bedrag);
 		searchTerm.setValue(c.kenmerk);
 		toggleRecurring(c.type === AfspraakPeriod.Periodic);
@@ -115,7 +117,7 @@ const CreateAgreement = () => {
 
 		const fields: UseInput<any>[] = [
 			description,
-			beneficiaryId,
+			beneficiaryAccountId,
 			amount,
 			searchTerm,
 			startDate.day,
@@ -150,8 +152,7 @@ const CreateAgreement = () => {
 				gebruikerId: gebruikerData?.gebruiker.id,
 				credit: afspraakType === AfspraakType.Income,
 				beschrijving: description.value,
-				// Todo: Should we really connect to an organization like this? (09-11-2020)
-				tegenRekeningId: orgsData?.organisaties.find(o => o.id === beneficiaryId.value)?.rekeningen[0]?.id,
+				tegenRekeningId: beneficiaryAccountId.value,
 				bedrag: amount.value,
 				kenmerk: searchTerm.value,
 				startDatum: moment(startDatum).format("YYYY-MM-DD"),
@@ -171,6 +172,7 @@ const CreateAgreement = () => {
 			});
 			push(Routes.Burger(burgerId))
 		}).catch(err => {
+			console.log(err);
 			toast({
 				position: "top",
 				status: "error",
@@ -241,11 +243,11 @@ const CreateAgreement = () => {
 									</Stack>
 									<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 										<Stack spacing={1} flex={1}>
-											<FormLabel htmlFor={"beneficiaryId"}>{t("forms.agreements.fields.beneficiary")}</FormLabel>
-											{orgsLoading ? (<Spinner />) : (<Select {...beneficiaryId.bind} id="beneficiaryId" value={beneficiaryId.value}>
-												<option disabled selected>{t("forms.agreements.fields.beneficiaryChoose")}</option>
+											<FormLabel htmlFor={"beneficiaryAccountId"}>{t("forms.agreements.fields.beneficiary")}</FormLabel>
+											{orgsLoading ? (<Spinner />) : (<Select {...beneficiaryAccountId.bind} isInvalid={isInvalid(beneficiaryAccountId)} id="beneficiaryId" value={beneficiaryAccountId.value}>
+												<option>{t("forms.agreements.fields.beneficiaryChoose")}</option>
 												{orgsData?.organisaties.filter(o => o.rekeningen.length > 0).map(o => (
-													<optgroup label={o.weergaveNaam}>
+													<optgroup label={o.weergaveNaam} key={o.id}>
 														{o.rekeningen.map(r => (
 															<option key={r.id} value={r.id}>{r.rekeninghouder} ({r.iban})</option>
 														))}
@@ -305,10 +307,10 @@ const CreateAgreement = () => {
 													<FormLabel htmlFor={"interval"}>{t("interval.every")}</FormLabel>
 													<Input type={"number"} min={1} {...intervalNumber.bind} width={100} id={"interval"} />
 													<Select {...intervalType.bind} id="interval" value={intervalType.value}>
-														<option value={"days"}>{intervalNumber.value === 1 ? t("interval.day") : t("interval.days")}</option>
-														<option value={"weeks"}>{intervalNumber.value === 1 ? t("interval.week") : t("interval.weeks")}</option>
-														<option value={"months"}>{intervalNumber.value === 1 ? t("interval.month") : t("interval.months")}</option>
-														<option value={"years"}>{intervalNumber.value === 1 ? t("interval.year") : t("interval.years")}</option>
+														<option value={"day"}>{intervalNumber.value === 1 ? t("interval.day") : t("interval.days")}</option>
+														<option value={"week"}>{intervalNumber.value === 1 ? t("interval.week") : t("interval.weeks")}</option>
+														<option value={"month"}>{intervalNumber.value === 1 ? t("interval.month") : t("interval.months")}</option>
+														<option value={"year"}>{intervalNumber.value === 1 ? t("interval.year") : t("interval.years")}</option>
 													</Select>
 												</Stack>
 											</Stack>

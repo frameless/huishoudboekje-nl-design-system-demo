@@ -72,13 +72,15 @@ export const CreateOrganizationMutation = gql`
         $weergaveNaam: String!
     ){
         createOrganisatie(
-            huisnummer: $huisnummer
-            kvkNummer: $kvkNummer
-            naam: $naam
-            plaatsnaam: $plaatsnaam
-            postcode: $postcode
-            straatnaam: $straatnaam
-            weergaveNaam: $weergaveNaam
+            input: {
+                huisnummer: $huisnummer
+                kvkNummer: $kvkNummer
+                naam: $naam
+                plaatsnaam: $plaatsnaam
+                postcode: $postcode
+                straatnaam: $straatnaam
+                weergaveNaam: $weergaveNaam
+            }
         ){
             ok
             organisatie {

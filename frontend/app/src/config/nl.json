@@ -42,7 +42,8 @@
     },
     "agreements": {
       "noSearchResults": "Geen afspraken gevonden.",
-      "addHint": "Voeg afspraken toe door te klikken op de knop {{buttonLabel}}."
+      "addHint": "Voeg afspraken toe door te klikken op de knop {{buttonLabel}}.",
+      "createSuccessMessage": "Nieuwe afspraak succesvol opgeslagen."
     },
     "organizations": {
       "invalidFormMessage": "Er is een fout opgetreden. Controleer de ingevulde gegevens en probeer het opnieuw.",

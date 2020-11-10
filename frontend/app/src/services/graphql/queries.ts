@@ -11,7 +11,7 @@ export const GetAllGebruikersQuery = gql`
 `;
 
 export const GetOneGebruikerQuery = gql`
-    query getOneGebruikers($id: Int!) {
+    query getOneGebruiker($id: Int!) {
         gebruiker(id: $id) {
             ...Gebruiker
         }
