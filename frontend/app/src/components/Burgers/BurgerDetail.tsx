@@ -88,8 +88,6 @@ const BurgerDetail = () => {
 
 		if (mounted) {
 			if (data && data.gebruiker) {
-				console.log("Filtered");
-
 				let _filteredAfspraken = data.gebruiker.afspraken;
 				// if (!showInactive) {
 				// 	_filteredAfspraken = data.gebruiker.afspraken.filter(a => !showInactive ? a.actief : true);
@@ -205,6 +203,23 @@ const BurgerDetail = () => {
 								</Stack>
 							</FormLeft>
 							<FormRight>
+								{filteredAfspraken.length > 0 && (
+									<Tabs index={tabIndex} onChange={onChangeTabs} variant={"enclosed"}>
+										<TabList>
+											<Tab>{t("agreements.incoming")} <Icon ml={3} name={"triangle-up"} color={"green.400"} size={"12px"} /> </Tab>
+											<Tab>{t("agreements.outgoing")} <Icon ml={3} name={"triangle-down"} color={"red.400"} size={"12px"} /> </Tab>
+										</TabList>
+										<TabPanels>
+											<TabPanel id="tab_incoming">
+												{filteredAfspraken.filter(a => a.credit).map((a, i) => <AfspraakItem py={2} key={i} afspraak={a} refetch={refetch} />)}
+											</TabPanel>
+											<TabPanel id="tab_outgoing">
+												{filteredAfspraken.filter(a => !a.credit).map((a, i) => <AfspraakItem py={2} key={i} afspraak={a} refetch={refetch} />)}
+											</TabPanel>
+										</TabPanels>
+									</Tabs>
+								)}
+
 								<Stack direction={isMobile ? "column" : "row"} spacing={5}>
 									<Button leftIcon={"add"} variantColor={"primary"} size={"sm"} onClick={onClickAddAfspraakButton}>{t("actions.add")}</Button>
 
@@ -215,21 +230,6 @@ const BurgerDetail = () => {
 									{/*	</Stack>*/}
 									{/*)}*/}
 								</Stack>
-
-								<Tabs index={tabIndex} onChange={onChangeTabs} variant={"enclosed"}>
-									<TabList>
-										<Tab>{t("agreements.incoming")} <Icon ml={3} name={"triangle-up"} color={"green.400"} size={"12px"} /> </Tab>
-										<Tab>{t("agreements.outgoing")} <Icon ml={3} name={"triangle-down"} color={"red.400"} size={"12px"} /> </Tab>
-									</TabList>
-									<TabPanels>
-										<TabPanel id="tab_incoming">
-											{filteredAfspraken.filter(a => a.credit).map((a, i) => <AfspraakItem py={2} key={i} afspraak={a} refetch={refetch} />)}
-										</TabPanel>
-										<TabPanel id="tab_outgoing">
-											{filteredAfspraken.filter(a => !a.credit).map((a, i) => <AfspraakItem py={2} key={i} afspraak={a} refetch={refetch} />)}
-										</TabPanel>
-									</TabPanels>
-								</Tabs>
 							</FormRight>
 						</Stack>
 					</Stack>
