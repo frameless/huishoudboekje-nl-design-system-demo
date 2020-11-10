@@ -41,6 +41,7 @@
       "addHint": "Voeg burgers toe door te klikken op de knop {{buttonLabel}}."
     },
     "agreements": {
+      "invalidFormMessage": "Er is een fout opgetreden. Controleer de ingevulde gegevens en probeer het opnieuw.",
       "noSearchResults": "Geen afspraken gevonden.",
       "addHint": "Voeg afspraken toe door te klikken op de knop {{buttonLabel}}.",
       "createSuccessMessage": "Nieuwe afspraak succesvol opgeslagen."
@@ -228,8 +229,7 @@
   },
   "interval": {
     "once": "Eenmalig",
-    "every": "Elk",
-    "every_plural": "Elke",
+    "every": "Elk(e)",
     "every-day": "Elke dag",
     "every-day_plural": "Elke {{count}} dagen",
     "every-week": "Elke week",
@@ -245,7 +245,7 @@
     "month": "maand",
     "month_plural": "maanden",
     "year": "jaar",
-    "year_plural": "jaren"
+    "year_plural": "jaar"
   },
   "unknown": "Onbekend",
   "active": "Actief",

@@ -10,6 +10,7 @@ import {
 	Input,
 	InputGroup,
 	InputLeftElement,
+	Text,
 	RadioButtonGroup,
 	RadioProps,
 	Select,
@@ -89,8 +90,9 @@ const CreateAgreement = () => {
 		defaultValue: "month",
 		validate: [(v) => ["day", "week", "month", "year"].includes(v)]
 	})
-	const intervalNumber = useNumberInput({
-		min: 0,
+	const intervalNumber = useInput({
+		defaultValue: "",
+		validate: [v => !isNaN(parseInt(v))]
 	});
 
 	const [createAfspraak, {loading}] = useMutation(CreateAfspraakMutation);
@@ -105,7 +107,7 @@ const CreateAgreement = () => {
 		searchTerm.setValue(c.kenmerk);
 		toggleRecurring(c.type === AfspraakPeriod.Periodic);
 		intervalType.setValue("month");
-		intervalNumber.setValue(3);
+		intervalNumber.setValue("3");
 		startDate.day.setValue(c.startDatum.split("-")[2]);
 		startDate.month.setValue(c.startDatum.split("-")[1]);
 		startDate.year.setValue(c.startDatum.split("-")[0]);
@@ -305,10 +307,10 @@ const CreateAgreement = () => {
 													<FormLabel htmlFor={"interval"}>{t("interval.every")}</FormLabel>
 													<Input type={"number"} min={1} {...intervalNumber.bind} width={100} id={"interval"} />
 													<Select {...intervalType.bind} id="interval" value={intervalType.value}>
-														<option value={"day"}>{intervalNumber.value === 1 ? t("interval.day") : t("interval.days")}</option>
-														<option value={"week"}>{intervalNumber.value === 1 ? t("interval.week") : t("interval.weeks")}</option>
-														<option value={"month"}>{intervalNumber.value === 1 ? t("interval.month") : t("interval.months")}</option>
-														<option value={"year"}>{intervalNumber.value === 1 ? t("interval.year") : t("interval.years")}</option>
+														<option value={"day"}>{t("interval.day", {count: parseInt(intervalNumber.value as unknown as string)})}</option>
+														<option value={"week"}>{t("interval.week", {count: parseInt(intervalNumber.value as unknown as string)})}</option>
+														<option value={"month"}>{t("interval.month", {count: parseInt(intervalNumber.value as unknown as string)})}</option>
+														<option value={"year"}>{t("interval.year", {count: parseInt(intervalNumber.value as unknown as string)})}</option>
 													</Select>
 												</Stack>
 											</Stack>
