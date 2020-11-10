@@ -8,6 +8,16 @@
     - docker build -t $CI_REGISTRY_IMAGE/$APP_NAME:$IMAGE_TAG ./$DIRECTORY
     - docker push $CI_REGISTRY_IMAGE/$APP_NAME:$IMAGE_TAG
 
+.build-service:
+  tags:
+    - cg
+    - shell
+  script:
+    - export DOCKER_CONFIG=/tmp/docker-config-$CI_JOB_ID
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker build -t $CI_REGISTRY_IMAGE/$APP_NAME:$IMAGE_TAG -f ./$DIRECTORY/$APP_DIRECTORY/Dockerfile ./$DIRECTORY
+    - docker push $CI_REGISTRY_IMAGE/$APP_NAME:$IMAGE_TAG 
+
 # Build Frontend
 build-frontend:
   stage: build
@@ -33,8 +43,9 @@ build-huishoudboekje-service:
   stage: build
   variables:
     APP_NAME: huishoudboekje-service
-    DIRECTORY: huishoudboekje-service
-  extends: .build
+    APP_DIRECTORY: huishoudboekje_service
+    DIRECTORY: services 
+  extends: .build-service
   only:
     - branches@commonground/huishoudboekje/app-new
 
@@ -43,8 +54,9 @@ build-organisatie-service:
   stage: build
   variables:
     APP_NAME: organisatie-service
-    DIRECTORY: organisatie-service
-  extends: .build
+    APP_DIRECTORY: organisatie_service
+    DIRECTORY: services
+  extends: .build-service
   only:
     - branches@commonground/huishoudboekje/app-new
 
@@ -52,9 +64,10 @@ build-organisatie-service:
 build-transactie-service:
   stage: build
   variables:
-    APP_NAME: transactie-service
-    DIRECTORY: transactie-service
-  extends: .build
+    APP_NAME: bank-transactie-service
+    APP_DIRECTORY: bank_transactie_service
+    DIRECTORY: services
+  extends: .build-service
   only:
     - branches@commonground/huishoudboekje/app-new
 
