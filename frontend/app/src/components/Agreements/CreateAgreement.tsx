@@ -133,12 +133,14 @@ const CreateAgreement = () => {
 			fields.push(intervalType);
 			fields.push(intervalNumber);
 
-			if (isContinuous) {
+			if (!isContinuous) {
 				fields.push(nTimes);
 			}
 		}
 
 		const formValid = fields.every(f => f.isValid);
+
+		console.log(fields.map(v => [v.value, v.isValid]));
 
 		if (!formValid) {
 			toast({
@@ -161,7 +163,7 @@ const CreateAgreement = () => {
 				kenmerk: searchTerm.value,
 				startDatum: moment(startDatum).format("YYYY-MM-DD"),
 				interval: isRecurring && Interval.create(intervalType.value, intervalNumber.value),
-				aantalBetalingen: !isContinuous && nTimes.value,
+				aantalBetalingen: !isContinuous ? nTimes.value : null,
 				actief: true,
 			}
 		}).then(result => {
