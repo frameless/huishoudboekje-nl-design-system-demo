@@ -39,6 +39,7 @@
         --set "medewerker-frontend.ingress.hosts[0].paths[0]=/" \
         --set "medewerker-backend.ingress.hosts[0].host=$HHB_HOST" \
         --set "medewerker-backend.ingress.hosts[0].paths[0]=/api/" \
+        --set "medewerker-backend.appSettings=${APP_SETTINGS:-hhb_backend.config.ProductionConfig}" \
         --set "medewerker-backend.oidc.issuer=https://$OIDC_HOST" \
         --set "medewerker-backend.oidc.clientSecret=${OIDC_SECRET}" \
         --set "medewerker-backend.oidc.authorizationEndpoint=https://$OIDC_HOST/auth" \
@@ -105,6 +106,7 @@
 .test:
   variables:
     REVIEW_NAMESPACE: "hhb-test"
+    APP_SETTINGS: "hhb_backend.config.StagingConfig"
 
 .acc:
   variables:
@@ -118,6 +120,8 @@
 deploy-review:
   environment:
     url: https://hhb-${CI_ENVIRONMENT_SLUG}.${REVIEW_BASE_DOMAIN}/
+  variables:
+    APP_SETTINGS: "hhb_backend.config.StagingConfig"
   extends:
     - .deploy-app
   except:

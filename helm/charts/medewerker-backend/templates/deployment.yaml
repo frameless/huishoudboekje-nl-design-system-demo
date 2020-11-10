@@ -39,6 +39,8 @@ spec:
           env:
             - name: PREFIX
               value: /api
+            - name: APP_SETTINGS
+              value: {{ .Values.appSettings }}
             - name: OIDC_CLIENT_SECRETS
               value: /opt/etc/oidc/client_secrets.json
             - name: OVERWITE_REDIRECT_URI_MAP
