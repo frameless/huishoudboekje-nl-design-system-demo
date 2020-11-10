@@ -83,25 +83,25 @@ def login():
 
 graph_ql_view = GraphQLView.as_view('graphql', schema=schema, graphiql=True, executor=AsyncioExecutor(loop=loop))
 graph_ql_batch_view = GraphQLView.as_view('graphql_batch', schema=schema, batch=True)
-if app.config['ENV'] == 'development':
-    app.add_url_rule('/graphql', view_func=graph_ql_view, strict_slashes=False)
+# if app.config['ENV'] == 'development':
+app.add_url_rule('/graphql', view_func=graph_ql_view, strict_slashes=False)
 
-    # Optional, for adding batch query support (used in Apollo-Client)
-    app.add_url_rule('/graphql/batch', view_func=graph_ql_batch_view, strict_slashes=False)
+# Optional, for adding batch query support (used in Apollo-Client)
+app.add_url_rule('/graphql/batch', view_func=graph_ql_batch_view, strict_slashes=False)
 
-    @app.route('/graphql/help')
-    def voyager():
-        return render_template('voyager.html')
-else:
-    app.add_url_rule('/graphql', view_func=customOidc.require_login(graph_ql_view), strict_slashes=False)
-
-    # Optional, for adding batch query support (used in Apollo-Client)
-    app.add_url_rule('/graphql/batch', view_func=customOidc.require_login(graph_ql_batch_view), strict_slashes=False)
-
-    @app.route('/graphql/help')
-    @customOidc.require_login
-    def voyager():
-        return render_template('voyager.html')
+@app.route('/graphql/help')
+def voyager():
+    return render_template('voyager.html')
+# else:
+#     app.add_url_rule('/graphql', view_func=customOidc.require_login(graph_ql_view), strict_slashes=False)
+#
+#     # Optional, for adding batch query support (used in Apollo-Client)
+#     app.add_url_rule('/graphql/batch', view_func=customOidc.require_login(graph_ql_batch_view), strict_slashes=False)
+#
+#     @app.route('/graphql/help')
+#     @customOidc.require_login
+#     def voyager():
+#         return render_template('voyager.html')
 
 
 @app.route('/logout')
