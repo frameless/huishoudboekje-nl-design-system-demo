@@ -14,6 +14,12 @@ export const GetOneGebruikerQuery = gql`
     query getOneGebruiker($id: Int!) {
         gebruiker(id: $id) {
             ...Gebruiker
+            afspraken{
+                ...Afspraak
+                gebruiker {
+                    id
+                }
+            }
         }
     }
     ${GebruikerFragment}

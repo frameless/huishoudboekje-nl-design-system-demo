@@ -8,7 +8,6 @@ import {
 	Box,
 	Button,
 	Divider,
-	FormLabel,
 	Heading,
 	Icon,
 	IconButton,
@@ -18,7 +17,6 @@ import {
 	MenuList,
 	Spinner,
 	Stack,
-	Switch,
 	Tab,
 	TabList,
 	TabPanel,
@@ -55,7 +53,7 @@ const BurgerDetail = () => {
 		setTabIndex(tabIdx);
 	};
 
-	const [showInactive, setShowInactive] = useState(false);
+	const [showInactive, setShowInactive] = useState(true);
 	const [filteredAfspraken, setFilteredAfspraken] = useState<IAfspraak[]>([]);
 
 	const cancelDeleteRef = useRef(null);
@@ -82,6 +80,7 @@ const BurgerDetail = () => {
 	const {data, loading, refetch} = useQuery<{ gebruiker: IGebruiker }>(GetOneGebruikerQuery, {
 		fetchPolicy: "no-cache",
 		variables: {id},
+		notifyOnNetworkStatusChange: true,
 	});
 
 	useEffect(() => {
@@ -89,18 +88,25 @@ const BurgerDetail = () => {
 
 		if (mounted) {
 			if (data && data.gebruiker) {
-				setFilteredAfspraken(data.gebruiker.afspraken.filter(a => !showInactive ? a.actief : true));
+				console.log("Filtered");
+
+				let _filteredAfspraken = data.gebruiker.afspraken;
+				// if (!showInactive) {
+				// 	_filteredAfspraken = data.gebruiker.afspraken.filter(a => !showInactive ? a.actief : true);
+				// }
+
+				setFilteredAfspraken(_filteredAfspraken);
 			}
 		}
 
 		return () => {
 			mounted = false;
 		}
-	}, [data, showInactive])
+	}, [data, showInactive]);
 
 	const onClickEditButton = () => push(Routes.EditBurger(id));
 	const onClickAddAfspraakButton = () => push(Routes.CreateBurgerAgreement(id));
-	const onClickShowInactive = (e: React.FormEvent<HTMLInputElement>) => setShowInactive(e.currentTarget.checked);
+	const onClickShowInactive = (e) => setShowInactive(e.currentTarget.checked);
 
 	const renderPageContent = () => {
 		if (loading) {
@@ -202,12 +208,12 @@ const BurgerDetail = () => {
 								<Stack direction={isMobile ? "column" : "row"} spacing={5}>
 									<Button leftIcon={"add"} variantColor={"primary"} size={"sm"} onClick={onClickAddAfspraakButton}>{t("actions.add")}</Button>
 
-									{data.gebruiker.afspraken.length > 0 && (
-										<Stack isInline={true} alignItems={"center"} spacing={3}>
-											<Switch id="show-inactive-agreements" onChange={onClickShowInactive} />
-											<FormLabel htmlFor="show-inactive-agreements">{t("buttons.agreements.showInactive")}</FormLabel>
-										</Stack>
-									)}
+									{/*{data.gebruiker.afspraken.length > 0 && (*/}
+									{/*	<Stack isInline={true} alignItems={"center"} spacing={3}>*/}
+									{/*		<Switch id="show-inactive-agreements" onChange={onClickShowInactive} />*/}
+									{/*		<FormLabel htmlFor="show-inactive-agreements">{t("buttons.agreements.showInactive")}</FormLabel>*/}
+									{/*	</Stack>*/}
+									{/*)}*/}
 								</Stack>
 
 								<Tabs index={tabIndex} onChange={onChangeTabs} variant={"enclosed"}>
@@ -217,10 +223,10 @@ const BurgerDetail = () => {
 									</TabList>
 									<TabPanels>
 										<TabPanel id="tab_incoming">
-											{filteredAfspraken.filter(a => a.credit).map((a, i) => <AfspraakItem key={i} afspraak={a} />)}
+											{filteredAfspraken.filter(a => a.credit).map((a, i) => <AfspraakItem py={2} key={i} afspraak={a} refetch={refetch} />)}
 										</TabPanel>
 										<TabPanel id="tab_outgoing">
-											{filteredAfspraken.filter(a => !a.credit).map((a, i) => <AfspraakItem key={i} afspraak={a} />)}
+											{filteredAfspraken.filter(a => !a.credit).map((a, i) => <AfspraakItem py={2} key={i} afspraak={a} refetch={refetch} />)}
 										</TabPanel>
 									</TabPanels>
 								</Tabs>

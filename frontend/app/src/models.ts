@@ -69,7 +69,7 @@ export type IAfspraak = {
 	id: number
 	gebruiker: IGebruiker
 	credit: boolean
-	omschrijving: string
+	beschrijving: string
 	organisatie: IOrganisatie,
 	tegenrekening: IRekening,
 	bedrag: number,

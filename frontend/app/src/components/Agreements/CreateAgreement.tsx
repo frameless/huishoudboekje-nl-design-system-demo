@@ -21,7 +21,7 @@ import {
 import {useInput, useIsMobile, useNumberInput, useToggle, Validators} from "react-grapple";
 import BackButton from "../BackButton";
 import Routes from "../../config/routes";
-import {createInterval, isDev, MOBILE_BREAKPOINT} from "../../utils/things";
+import {Interval, isDev, MOBILE_BREAKPOINT} from "../../utils/things";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
 import {useMutation, useQuery} from "@apollo/client";
 import {sampleData} from "../../config/sampleData/sampleData";
@@ -156,7 +156,7 @@ const CreateAgreement = () => {
 				bedrag: amount.value,
 				kenmerk: searchTerm.value,
 				startDatum: moment(startDatum).format("YYYY-MM-DD"),
-				interval: isRecurring && createInterval(intervalType.value, intervalNumber.value),
+				interval: isRecurring && Interval.create(intervalType.value, intervalNumber.value),
 				aantalBetalingen: !isContinuous && nTimes.value,
 				actief: true,
 			}

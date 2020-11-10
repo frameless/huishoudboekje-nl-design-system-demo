@@ -165,6 +165,26 @@ export const CreateAfspraakMutation = gql`
     ${AfspraakFragment}
 `;
 
+export const ToggleAfspraakActiefMutation = gql`
+    mutation toggleAfspraakMutation(
+        $id: Int!
+        $gebruikerId: Int!
+        $actief: Boolean!
+    ){
+        updateAfspraak(
+            id: $id
+            gebruikerId: $gebruikerId,
+            actief: $actief
+        ){
+            ok
+            afspraak{
+                ...Afspraak
+            }
+        }
+    }
+    ${AfspraakFragment}
+`;
+
 export const CreateGebruikerRekeningMutation = gql`
     mutation createGebruikerRekening(
         $gebruikerId: Int!

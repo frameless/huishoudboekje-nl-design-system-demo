@@ -227,14 +227,27 @@
     "dec": "december"
   },
   "interval": {
-    "every": "Elk(e)",
+    "once": "Eenmalig",
+    "every": "Elk",
+    "every_plural": "Elke",
+    "every-day": "Elke dag",
+    "every-day_plural": "Elke {{count}} dagen",
+    "every-week": "Elke week",
+    "every-week_plural": "Elke {{count}} weken",
+    "every-month": "Elke maand",
+    "every-month_plural": "Elke {{count}} maanden",
+    "every-year": "Elk jaar",
+    "every-year_plural": "Elke {{count}} jaar",
     "day": "dag",
-    "days": "dagen",
+    "day_plural": "dagen",
     "week": "week",
-    "weeks": "weken",
+    "week_plural": "weken",
     "month": "maand",
-    "months": "maanden",
+    "month_plural": "maanden",
     "year": "jaar",
-    "years": "jaren"
-  }
+    "year_plural": "jaren"
+  },
+  "unknown": "Onbekend",
+  "active": "Actief",
+  "inactive": "Inactief"
 }
