@@ -30,7 +30,7 @@ export const DrawerContext = createContext<{ onClose: () => void }>({
 	onClose: () => {}
 });
 
-export const createInterval = (intervalType: "day" | "week" | "month" | "year", intervalCount: number) => {
+export const createInterval = (intervalType: "day" | "week" | "month" | "year", intervalCount: any) => {
 	const intervalTypeConversion = {
 		"day": "dagen",
 		"week": "weken",
@@ -45,7 +45,7 @@ export const createInterval = (intervalType: "day" | "week" | "month" | "year", 
 		dagen: 0,
 	}
 
-	interval[intervalTypeConversion[intervalType]] = intervalCount;
+	interval[intervalTypeConversion[intervalType]] = parseInt(intervalCount);
 
 	return interval;
 };

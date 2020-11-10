@@ -156,12 +156,8 @@ const CreateAgreement = () => {
 				bedrag: amount.value,
 				kenmerk: searchTerm.value,
 				startDatum: moment(startDatum).format("YYYY-MM-DD"),
-				...isRecurring && {
-					interval: createInterval(intervalType.value, intervalNumber.value),
-					...!isContinuous && {
-						aantalBetalingen: nTimes.value,
-					}
-				},
+				interval: isRecurring && createInterval(intervalType.value, intervalNumber.value),
+				aantalBetalingen: !isContinuous && nTimes.value,
 				actief: true,
 			}
 		}).then(result => {
@@ -244,7 +240,8 @@ const CreateAgreement = () => {
 									<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 										<Stack spacing={1} flex={1}>
 											<FormLabel htmlFor={"beneficiaryAccountId"}>{t("forms.agreements.fields.beneficiary")}</FormLabel>
-											{orgsLoading ? (<Spinner />) : (<Select {...beneficiaryAccountId.bind} isInvalid={isInvalid(beneficiaryAccountId)} id="beneficiaryId" value={beneficiaryAccountId.value}>
+											{orgsLoading ? (<Spinner />) : (<Select {...beneficiaryAccountId.bind} isInvalid={isInvalid(beneficiaryAccountId)} id="beneficiaryId"
+											                                        value={beneficiaryAccountId.value}>
 												<option>{t("forms.agreements.fields.beneficiaryChoose")}</option>
 												{orgsData?.organisaties.filter(o => o.rekeningen.length > 0).map(o => (
 													<optgroup label={o.weergaveNaam} key={o.id}>
