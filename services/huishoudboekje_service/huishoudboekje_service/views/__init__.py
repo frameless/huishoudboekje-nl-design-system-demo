@@ -1,0 +1,7 @@
+""" huishoudboekje_service views module """
+from huishoudboekje_service.views.gebruikers import GebruikerView
+from huishoudboekje_service.views.organisaties import OrganisatieView
+from huishoudboekje_service.views.afspraken import AfspraakView
+from huishoudboekje_service.views.rekeningen import RekeningView
+from huishoudboekje_service.views.rekening_gebruiker import RekeningGebruikerView
+from huishoudboekje_service.views.rekening_organisatie import RekeningOrganisatieView

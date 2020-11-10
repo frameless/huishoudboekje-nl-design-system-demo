@@ -16,7 +16,7 @@ Huishoudboekje consists of several independent software components, packages as 
 These are:
 - [Medewerker Frontend](frontend/)
 - [Medewerker Backend](backend/)
-- [Huishoudboekje Service](huishoudboekje-service/)
+- [Huishoudboekje Services](services/)
 
 ## Development
 

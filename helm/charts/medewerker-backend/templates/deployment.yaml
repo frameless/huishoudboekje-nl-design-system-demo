@@ -55,7 +55,7 @@ spec:
             - name: ORGANISATIE_SERVICE_URL
               value: {{ printf "http://%s" (include "medewerker-backend.organisatieServiceName" .) }}
             - name: TRANSACTIE_SERVICE_URL
-              value: {{ printf "http://%s" (include "medewerker-backend.transactieServiceName" .) }}          
+              value: {{ printf "http://%s" (include "medewerker-backend.bankTransactieServiceName" .) }}          
             - name: SECRET_KEY
               valueFrom:
                 secretKeyRef:

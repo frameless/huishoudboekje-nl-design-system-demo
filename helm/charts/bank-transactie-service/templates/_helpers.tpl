@@ -1,14 +1,14 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "medewerker-backend.name" -}}
+{{- define "bank-transactie-service.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Expand the tag for the container image.
 */}}
-{{- define "medewerker-backend.imageTag" -}}
+{{- define "bank-transactie-service.imageTag" -}}
 {{- .Values.image.tag | default .Values.global.imageTag | default .Chart.AppVersion -}}
 {{- end }}
 
@@ -17,7 +17,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "medewerker-backend.fullname" -}}
+{{- define "bank-transactie-service.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -33,16 +33,16 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "medewerker-backend.chart" -}}
+{{- define "bank-transactie-service.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "medewerker-backend.labels" -}}
-helm.sh/chart: {{ include "medewerker-backend.chart" . }}
-{{ include "medewerker-backend.selectorLabels" . }}
+{{- define "bank-transactie-service.labels" -}}
+helm.sh/chart: {{ include "bank-transactie-service.chart" . }}
+{{ include "bank-transactie-service.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -52,48 +52,18 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "medewerker-backend.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "medewerker-backend.name" . }}
+{{- define "bank-transactie-service.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "bank-transactie-service.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "medewerker-backend.serviceAccountName" -}}
+{{- define "bank-transactie-service.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-{{- default (include "medewerker-backend.fullname" .) .Values.serviceAccount.name }}
+{{- default (include "bank-transactie-service.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
-{{- end }}
-
-{{/*
-Create the name of the service account to use
-*/}}
-{{- define "medewerker-backend.huishoudboekjeServiceName" -}}
-{{- if .Values.serviceChartPrefix -}}
-{{ printf "%s-" .Values.serviceChartPrefix -}}
-{{- end -}}
-huishoudboekje-service.{{ .Release.Namespace }}.svc.cluster.local
-{{- end }}
-
-{{/*
-Create the name of the service account to use
-*/}}
-{{- define "medewerker-backend.organisatieServiceName" -}}
-{{- if .Values.serviceChartPrefix -}}
-{{ printf "%s-" .Values.serviceChartPrefix -}}
-{{- end -}}
-organisatie-service.{{ .Release.Namespace }}.svc.cluster.local
-{{- end }}
-
-{{/*
-Create the name of the service account to use
-*/}}
-{{- define "medewerker-backend.bankTransactieServiceName" -}}
-{{- if .Values.serviceChartPrefix -}}
-{{ printf "%s-" .Values.serviceChartPrefix -}}
-{{- end -}}
-bank-transactie-service.{{ .Release.Namespace }}.svc.cluster.local
 {{- end }}
