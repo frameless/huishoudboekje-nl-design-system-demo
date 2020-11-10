@@ -376,8 +376,11 @@ const CreateAgreement = () => {
 	</>);
 };
 
-const CustomRadioButton: React.FC<RadioProps> = React.forwardRef(({isChecked, isDisabled, value, children, ...props}) => (
-	<Button aria-checked={isChecked} variantColor={isChecked ? "primary" : "gray"} isDisabled={isDisabled} {...props}>{children}</Button>
-));
+const CustomRadioButton: React.FC<RadioProps> = React.forwardRef((props, ref) => {
+	const {isChecked, isDisabled, value, children, ...rest} = props;
+	return (
+		<Button aria-checked={isChecked} ref={ref} variantColor={isChecked ? "primary" : "gray"} isDisabled={isDisabled} {...rest}>{children}</Button>
+	);
+});
 
 export default CreateAgreement;
