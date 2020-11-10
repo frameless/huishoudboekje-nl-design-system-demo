@@ -1,3 +1,6 @@
+# This template requires the following:
+#   variables:
+#      APP_NAME: <the name of the application/directory>
 .build:
   stage: build
   needs: []
@@ -5,23 +8,20 @@
     - cg
     - shell
   script:
-    - echo ${DIRECTORY:=$APP_NAME}
+    - docker build -t $CI_REGISTRY_IMAGE/$APP_NAME:$IMAGE_TAG ./$APP_NAME
+  after_script:
     - export DOCKER_CONFIG=/tmp/docker-config-$CI_JOB_ID
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-    - docker build -t $CI_REGISTRY_IMAGE/$APP_NAME:$IMAGE_TAG ./$DIRECTORY
     - docker push $CI_REGISTRY_IMAGE/$APP_NAME:$IMAGE_TAG
 
-.build-service:
-  stage: build
-  needs: []
-  tags:
-    - cg
-    - shell
+build-python-postgres:
+  extends: .build
+  variables:
+    APP_NAME: python-postgres
   script:
-    - export DOCKER_CONFIG=/tmp/docker-config-$CI_JOB_ID
-    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-    - docker build -t $CI_REGISTRY_IMAGE/$APP_NAME:$IMAGE_TAG -f ./$DIRECTORY/$APP_DIRECTORY/Dockerfile ./$DIRECTORY
-    - docker push $CI_REGISTRY_IMAGE/$APP_NAME:$IMAGE_TAG
+    - docker build -t $CI_REGISTRY_IMAGE/$APP_NAME:$IMAGE_TAG - < test.dockerfile
+  only:
+    - branches@commonground/huishoudboekje/app-new
 
 build-frontend:
   variables:
@@ -37,11 +37,19 @@ build-backend:
   only:
     - branches@commonground/huishoudboekje/app-new
 
+# This template requires the following:
+#   variables:
+#      APP_NAME: <the name of the application>
+#      APP_DIRECTORY: <the directory in services that contains the application>
+.build-service:
+  extends: .build
+  script:
+    - docker build -t $CI_REGISTRY_IMAGE/$APP_NAME:$IMAGE_TAG -f ./services/$APP_DIRECTORY/Dockerfile ./services
+
 build-huishoudboekje-service:
   variables:
     APP_NAME: huishoudboekje-service
     APP_DIRECTORY: huishoudboekje_service
-    DIRECTORY: services
   extends: .build-service
   only:
     - branches@commonground/huishoudboekje/app-new
@@ -50,7 +58,6 @@ build-organisatie-service:
   variables:
     APP_NAME: organisatie-service
     APP_DIRECTORY: organisatie_service
-    DIRECTORY: services
   extends: .build-service
   only:
     - branches@commonground/huishoudboekje/app-new
@@ -59,7 +66,6 @@ build-bank-transactie-service:
   variables:
     APP_NAME: bank-transactie-service
     APP_DIRECTORY: bank_transactie_service
-    DIRECTORY: services
   extends: .build-service
   only:
     - branches@commonground/huishoudboekje/app-new

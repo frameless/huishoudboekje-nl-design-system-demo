@@ -6,7 +6,7 @@
     - build-backend
     - build-huishoudboekje-service
     - build-organisatie-service
-    - build-transactie-service
+    - build-bank-transactie-service
   image: registry.gitlab.com/commonground/core/review-app-deployer:latest
   environment:
     name: $CI_COMMIT_REF_SLUG

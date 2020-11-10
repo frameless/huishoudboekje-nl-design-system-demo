@@ -1,39 +1,35 @@
-MODULES=core models
+MODULES := huishoudboekje_service models
 export HHB_SECRET ?= test
 export HHB_DATABASE_URL ?=
+
+COVERAGE_FILE := .coverage
+COVERAGE_HTML := htmlcov
+COVERAGE_XML := coverage.xml
+TESTS = tests
 
 .PHONY: all
 all: coverage
 
-<<<<<<< HEAD:services/huishoudboekje_service/Makefile
-.PHONY: prepare
-prepare: ../../backend/requirements.txt test_requirements.txt
-=======
 .PHONY: requirements
 requirements: requirements.txt test_requirements.txt
->>>>>>> adjust makefiles:huishoudboekje-service/Makefile
 	pip install $(patsubst %,-r %,$^)
 
 .PHONY: coverage
-coverage: htmlcov coverage.xml
+coverage: $(COVERAGE_FILE) $(COVERAGE_HTML) $(COVERAGE_XML)
 
-<<<<<<< HEAD:services/huishoudboekje_service/Makefile
-.coverage: ../../huishoudboekje-service/tests $(MODULES)
-=======
-.coverage: tests $(foreach MODULE,tests $(MODULES),$(shell find $(MODULE) -type f))
->>>>>>> adjust makefiles:huishoudboekje-service/Makefile
+$(COVERAGE_FILE): $(TESTS) $(MODULES)
 	pytest $(patsubst %,--cov=%,$(MODULES)) $<
 
-htmlcov: ../../backend/.coverage
+$(COVERAGE_HTML): $(COVERAGE_FILE)
 	coverage html -d $@
 
-coverage.xml: ../../backend/.coverage
+$(COVERAGE_XML): $(COVERAGE_FILE)
 	coverage xml -o $@
 
 .PHONY: open_html
-open_html: htmlcov
+open_html: $(COVERAGE_HTML)
 	open $</index.html
 
 .PHONY: clean
 clean:
-	rm -rf .coverage htmlcov coverage.xml
+	rm -rf $(COVERAGE_FILE) $(COVERAGE_HTML) $(COVERAGE_XML)

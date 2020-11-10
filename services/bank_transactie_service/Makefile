@@ -6,6 +6,7 @@ COVERAGE_FILE := .coverage
 COVERAGE_HTML := htmlcov
 COVERAGE_XML := coverage.xml
 TESTS = tests
+
 .PHONY: all
 all: coverage
 

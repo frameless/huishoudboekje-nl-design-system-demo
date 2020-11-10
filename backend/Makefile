@@ -1,7 +1,9 @@
-MODULES=hhb_backend
-export HHB_SECRET ?= test
-export ORGANISATIE_DATABASE_URL ?=
-export FLASK_ENV=development # To disable auth on /api/graphql
+MODULES := hhb_backend
+
+COVERAGE_FILE := .coverage
+COVERAGE_HTML := htmlcov
+COVERAGE_XML := coverage.xml
+TESTS = tests
 
 .PHONY: all
 all: coverage
@@ -11,21 +13,21 @@ requirements: requirements.txt test_requirements.txt
 	pip install $(patsubst %,-r %,$^)
 
 .PHONY: coverage
-coverage: htmlcov coverage.xml
+coverage: $(COVERAGE_FILE) $(COVERAGE_HTML) $(COVERAGE_XML)
 
-.coverage: tests $(foreach MODULE,tests $(MODULES),$(shell find $(MODULE) -type f))
+$(COVERAGE_FILE): $(TESTS) $(MODULES)
 	pytest $(patsubst %,--cov=%,$(MODULES)) $<
 
-htmlcov: .coverage
+$(COVERAGE_HTML): $(COVERAGE_FILE)
 	coverage html -d $@
 
-coverage.xml: .coverage
+$(COVERAGE_XML): $(COVERAGE_FILE)
 	coverage xml -o $@
 
 .PHONY: open_html
-open_html: htmlcov
+open_html: $(COVERAGE_HTML)
 	open $</index.html
 
 .PHONY: clean
 clean:
-	rm -rf .coverage htmlcov coverage.xml
+	rm -rf $(COVERAGE_FILE) $(COVERAGE_HTML) $(COVERAGE_XML)
