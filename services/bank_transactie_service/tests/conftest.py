@@ -7,7 +7,7 @@ from testing.postgresql import Postgresql
 from bank_transactie_service.app import create_app
 from bank_transactie_service.app import db as _db
 from bank_transactie_service.config import TestingConfig
-from tests.factories import CustomerStatementMessageFactory
+from tests.factories import CustomerStatementMessageFactory, BankTransactionFactory
 
 
 @pytest.yield_fixture(scope="session")
@@ -81,3 +81,11 @@ def csm_factory(dbsession, request):
     creates an instance of the CustomerStatementMessageFactory with function scope dbsession
     """
     return CustomerStatementMessageFactory(dbsession)
+
+
+@pytest.fixture(scope="function")
+def bank_transaction_factory(dbsession, request, csm_factory):
+    """
+    creates an instance of the BankTransactionFactory with function scope dbsession
+    """
+    return BankTransactionFactory(dbsession, csm_factory)
