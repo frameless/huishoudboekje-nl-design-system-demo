@@ -253,7 +253,7 @@ const BurgerDetail = () => {
 							</FormLeft>
 							<FormRight>
 								{filteredAfspraken.length > 0 && (
-									<Tabs index={tabIndex} onChange={onChangeTabs} variant={"enclosed"}>
+									<Tabs index={tabIndex} onChange={onChangeTabs} variant={"line"}>
 										<TabList>
 											<Tab>{t("agreements.incoming")} <Icon ml={3} name={"triangle-up"} color={"green.400"} size={"12px"} /> </Tab>
 											<Tab>{t("agreements.outgoing")} <Icon ml={3} name={"triangle-down"} color={"red.400"} size={"12px"} /> </Tab>
