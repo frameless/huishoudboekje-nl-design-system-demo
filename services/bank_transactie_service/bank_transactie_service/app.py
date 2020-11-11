@@ -4,9 +4,10 @@ from flask import Flask, Response
 from core_service import database
 from bank_transactie_service import config
 from bank_transactie_service.views.customer_statement_message import CustomerStatementMessageView
+from bank_transactie_service.views.bank_transaction import BankTransactionView
 
 db = database.db
-from models import customer_statement_message
+from models import *
 
 
 def create_app(config_name=os.getenv('APP_SETTINGS', 'bank_transactie_service.config.DevelopmentConfig')):
@@ -25,6 +26,10 @@ def create_app(config_name=os.getenv('APP_SETTINGS', 'bank_transactie_service.co
          "name": "customer_statement_message_view"},
         {"path": "/customerstatementmessages/<object_id>", "view": CustomerStatementMessageView,
          "name": "customer_statement_message_detail_view"},
+        {"path": "/banktransaction", "view": BankTransactionView,
+         "name": "banktransaction_view"},
+        {"path": "/banktransaction/<object_id>", "view": BankTransactionView,
+         "name": "banktransaction_detail_view"},
     ]
     for route in routes:
         app.add_url_rule(
