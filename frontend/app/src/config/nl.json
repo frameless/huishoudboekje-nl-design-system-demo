@@ -10,7 +10,9 @@
     "edit": "Wijzigen",
     "login": "Inloggen",
     "logout": "Uitloggen",
-    "clearSearch": "Zoekopdracht wissen"
+    "clearSearch": "Zoekopdracht wissen",
+    "activate": "Activeer",
+    "deactivate": "Deactiveer"
   },
   "sidebar": {
     "dashboard": "Dashboard"

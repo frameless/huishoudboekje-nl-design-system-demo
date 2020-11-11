@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {Badge, Box, BoxProps, IconButton, Stack} from "@chakra-ui/core";
+import {Badge, Box, BoxProps, Button, IconButton, Stack} from "@chakra-ui/core";
 import {useIsMobile} from "react-grapple";
 import {IAfspraak} from "../../models";
 import {currencyFormat, Interval} from "../../utils/things";
@@ -44,14 +44,18 @@ const AfspraakItem: React.FC<BoxProps & { afspraak: IAfspraak, onToggleActive?: 
 	};
 
 	return (
-		<Stack direction={isMobile ? "column" : "row"} {...props}>
+		<Stack direction={isMobile ? "column" : "row"} alignItems={"center"} {...props}>
 			<Box flex={1}>{a.organisatie?.weergaveNaam || (a.gebruiker && (a.gebruiker.voorletters + " " + a.gebruiker.achternaam)) || t("unknown")}</Box>
 			<Box flex={1}>{a.beschrijving}</Box>
 			<Box flex={1} textAlign={"right"}>{currencyFormat.format(a.bedrag)}</Box>
 			<Box flex={1}>{intervalString()}</Box>
-			<Stack spacing={2} isInline alignItems={"center"}>
-				<Badge fontSize={"10px"} bg={a.actief ? "green.200" : "gray.200"} {...onToggleActive && {cursor: "pointer"}}
-				       onClick={onClickToggle}>{a.actief ? t("active") : t("inactive")}</Badge>
+			<Stack width={100} spacing={2} isInline justifyContent={"center"}>
+				{onToggleActive ? (
+					<Button size={"xs"} variantColor={a.actief ? "green" : "gray"} {...onToggleActive && {cursor: "pointer"}}
+					        onClick={onClickToggle}>{a.actief ? t("actions.deactivate") : t("actions.activate")}</Button>
+				) : (
+					<Badge fontSize={"10px"} bg={a.actief ? "green.200" : "gray.200"}>{a.actief ? t("active") : t("inactive")}</Badge>
+				)}
 			</Stack>
 			<Box width={75}>
 				{/*<IconButton variant={"ghost"} size={"sm"} icon={"edit"} aria-label={t("actions.edit")} onClick={onClickEditButton} />*/}
