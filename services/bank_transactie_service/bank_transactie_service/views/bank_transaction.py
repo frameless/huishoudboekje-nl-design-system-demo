@@ -24,11 +24,11 @@ class BankTransactionView(HHBView):
     }
 
     def extend_get(self, **kwargs):
-        """ Extend the get function with a filer on kvk nummers """
+        """ Extend the get function with a filter on csm id's """
         self.add_filter_filter_customer_statement_message()
 
     def add_filter_filter_customer_statement_message(self):
-        """ Add filter_gebruiker filter based on the kvk of the organisatie model """
+        """ Add filter_csms filter """
         filter_csms = request.args.get('filter_csms')
         if filter_csms:
             csms = []
