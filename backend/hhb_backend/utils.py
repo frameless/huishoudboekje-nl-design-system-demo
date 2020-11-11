@@ -12,7 +12,6 @@ def convert_hhb_interval_to_iso(graphql_format: dict):
 
 def convert_hhb_interval_to_dict(iso_format: str):
     if iso_format:
-        print("if")
         p = re.compile(r'P(\d+)Y(\d+)M(\d+)W(\d+)D').findall(iso_format)
         if p:
             return {
