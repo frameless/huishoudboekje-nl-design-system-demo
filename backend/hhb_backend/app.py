@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import logging
 import os
+from pprint import pformat
 from urllib.parse import urlparse
 
 import itsdangerous
@@ -18,6 +19,7 @@ def create_app(config_name=os.getenv('APP_SETTINGS', None) or 'hhb_backend.confi
     app = Flask(__name__)
     app.config.from_object(config_name)
 
+    logging.debug(f"{pformat(app.config)}")
     logging.info(f"Starting {__name__} with {config_name}")
 
     if app.config['PREFIX']:
@@ -28,6 +30,7 @@ def create_app(config_name=os.getenv('APP_SETTINGS', None) or 'hhb_backend.confi
 
     custom_oidc = oidc
     if app.config['OVERWITE_REDIRECT_URI_MAP']:
+        logging.info(f"Loading custom OVERWITE_REDIRECT_URI_MAP: {app.config['OVERWITE_REDIRECT_URI_MAP']}")
         custom_oidc = CustomOidc(oidc=oidc, flask_app=app, prefixes=app.config['OVERWITE_REDIRECT_URI_MAP'])
 
     @app.errorhandler(itsdangerous.exc.BadSignature)
