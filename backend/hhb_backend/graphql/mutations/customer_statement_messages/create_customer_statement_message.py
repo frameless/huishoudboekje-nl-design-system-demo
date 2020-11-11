@@ -67,7 +67,21 @@ class CreateCustomerStatementMessage(graphene.Mutation):
         if post_response.status_code != 201:
             raise GraphQLError(f"Upstream API responded: {post_response.json()}")
 
-        # Add banktransactions
-        # Post banktransactions
+        csm_id = post_response.json()["data"]["id"]
+
+        for t in csm_file.transactions:
+            transactionModel = {}
+            transactionModel["customer_statement_message_id"] = csm_id
+            transactionModel["information_to_account_owner"] = t.data["transaction_details"]
+            transactionModel["statement_line"] = t.data["date"].strftime("%y%m%d") + t.data["status"] + str(
+                t.data["amount"].amount) + t.data["id"] + \
+                                                 t.data["customer_reference"] + t.data["extra_details"]
+            bank_transaction_response = requests.post(
+                f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/",
+                data=json.dumps(transactionModel),
+                headers={'Content-type': 'application/json'}
+            )
+            if bank_transaction_response.status_code != 201:
+                raise GraphQLError(f"Upstream API responded: {bank_transaction_response.json()}")
 
         return CreateCustomerStatementMessage(customerStatementMessage=post_response.json()["data"], ok=True)

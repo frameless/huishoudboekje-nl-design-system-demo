@@ -33,7 +33,7 @@ def test_create_csm_with_ing_file(client):
         assert request.json()["forward_available_balance"] == 56435
         assert request.json()["opening_balance"] == 66223
         assert request.json()["transaction_reference_number"] == "P140220000000001"
-        return MockResponse({'data': [{'id': 1}]}, 201)
+        return MockResponse({'data': {'id': 1}}, 201)
 
     adapter.add_matcher(test_matcher)
 
@@ -56,7 +56,7 @@ def test_create_csm_with_abn_file(client):
         assert request.json()["sequence_number"] == "1"
         assert request.json()["opening_balance"] == 513861
         assert request.json()["closing_balance"] == 563862
-        return MockResponse({'data': [{'id': 1}]}, 201)
+        return MockResponse({'data': {'id': 1}}, 201)
 
     adapter.add_matcher(test_matcher)
 
@@ -79,7 +79,7 @@ def test_create_csm_with_bng_file(client):
         assert request.json()["sequence_number"] == "1"
         assert request.json()["opening_balance"] == -2000000
         assert request.json()["closing_balance"] == 17060000
-        return MockResponse({'data': [{'id': 1}]}, 201)
+        return MockResponse({'data': {'id': 1}}, 201)
 
     adapter.add_matcher(test_matcher)
 
