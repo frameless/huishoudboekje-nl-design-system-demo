@@ -42,6 +42,9 @@ class AfspraakView(HHBView):
             "actief": {
                 "type": "boolean",
             },
+            "organisatie_id": {
+                "type": "integer",
+            },
         },
         "required": []
     }
@@ -49,6 +52,7 @@ class AfspraakView(HHBView):
     def extend_get(self, **kwargs):
         """ Extend the get function with a filer on kvk nummers """
         self.add_filter_filter_gebruiker()
+        self.add_filter_filter_organisaties()
 
     def add_filter_filter_gebruiker(self):
         """ Add filter_gebruiker filter based on the kvk of the organisatie model """
@@ -72,4 +76,4 @@ class AfspraakView(HHBView):
                     ids.append(int(raw_id))
                 except ValueError:
                     abort(make_response({"errors": [f"Input for filter_organisaties is not correct, '{raw_id}' is not a number."]}, 400))
-            self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.gebruiker_id.in_(ids))
+            self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.organisatie_id.in_(ids))

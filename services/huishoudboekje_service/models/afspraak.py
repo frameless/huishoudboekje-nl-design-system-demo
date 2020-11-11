@@ -21,3 +21,5 @@ class Afspraak(db.Model):
     credit = Column(Boolean)
     kenmerk = Column(String)
     actief = Column(Boolean)
+    organisatie_id = Column(Integer, ForeignKey('organisaties.id'))
+    organisatie = relationship("Organisatie", back_populates="afspraken")

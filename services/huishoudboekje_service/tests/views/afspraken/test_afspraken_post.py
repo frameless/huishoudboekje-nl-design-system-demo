@@ -16,7 +16,7 @@ def test_afspraken_post_new_afspraak(client, session):
         "bedrag":1337,
         "credit":True,
         "kenmerk":"ABC1234",
-        "actief":True
+        "actief":True,
     }
     response = client.post(
         '/afspraken/',
@@ -27,6 +27,7 @@ def test_afspraken_post_new_afspraak(client, session):
     afspraak_dict["id"] = 1
     afspraak_dict["gebruiker_id"] = None
     afspraak_dict["tegen_rekening_id"] = None
+    afspraak_dict["organisatie_id"] = None
     assert response.json["data"] == afspraak_dict
     assert session.query(Afspraak).count() == 1
 

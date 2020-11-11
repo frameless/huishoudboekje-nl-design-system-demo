@@ -24,6 +24,7 @@ class Organisatie(graphene.ObjectType):
     rekeningen = graphene.List(lambda: rekening.Rekening)
     kvk_nummer = graphene.String()
     kvk_details = graphene.Field(OrganisatieKvK)
+    afspraken =  graphene.List(lambda: afspraak.Afspraak)
 
     async def resolve_kvk_details(root, info):
         """ Get KvK Details when requested """
@@ -31,3 +32,6 @@ class Organisatie(graphene.ObjectType):
 
     async def resolve_rekeningen(root, info):
         return await request.dataloader.rekeningen_by_organisatie.load(root.get('id')) or []
+
+    async def resolve_afspraken(root, info):
+        return await request.dataloader.afspraken_by_id.load_many(root.get('afspraken')) or []
