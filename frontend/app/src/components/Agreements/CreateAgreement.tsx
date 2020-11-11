@@ -65,7 +65,6 @@ const CreateAgreement = () => {
 	});
 	const searchTerm = useInput({
 		defaultValue: "",
-		validate: [Validators.required]
 	});
 	const [isRecurring, toggleRecurring] = useToggle(false);
 	const startDate = {
