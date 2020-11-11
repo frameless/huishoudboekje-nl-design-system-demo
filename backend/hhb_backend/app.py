@@ -5,7 +5,7 @@ from pprint import pformat
 from urllib.parse import urlparse
 
 import itsdangerous
-from flask import Flask, jsonify, redirect, make_response
+from flask import Flask, jsonify, redirect, make_response, session
 from flask_oidc import OpenIDConnect
 
 import hhb_backend.graphql.blueprint as graphql_blueprint
@@ -36,6 +36,7 @@ def create_app(config_name=os.getenv('APP_SETTINGS', None) or 'hhb_backend.confi
     @app.errorhandler(itsdangerous.exc.BadSignature)
     def handle_bad_signature(e):
         oidc.logout()
+        session.clear()
         return jsonify(message='Not logged in'), 401
 
     @app.route('/health')
@@ -52,6 +53,7 @@ def create_app(config_name=os.getenv('APP_SETTINGS', None) or 'hhb_backend.confi
     @app.route('/custom_oidc_callback')
     @oidc.custom_callback
     def oidc_redirect(url):
+        session.permanent = True
         parse_result = urlparse(url)
         new_url = "%s://%s" % (parse_result.scheme, parse_result.netloc)
         logging.info("oidc_redirect url=%s" % (new_url))
@@ -74,6 +76,7 @@ def create_app(config_name=os.getenv('APP_SETTINGS', None) or 'hhb_backend.confi
     @app.route('/logout')
     def logout():
         oidc.logout()
+        session.clear()
         return make_response(('ok', {'Content-Type': 'text/plain'}))
 
     return app
