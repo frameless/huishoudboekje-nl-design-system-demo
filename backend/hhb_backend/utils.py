@@ -11,14 +11,10 @@ def convert_hhb_interval_to_iso(graphql_format: dict):
     return None
 
 def convert_hhb_interval_to_dict(iso_format: str):
-    print(type(iso_format))
-    print(iso_format)
     if iso_format:
         print("if")
         p = re.compile(r'P(\d+)Y(\d+)M(\d+)W(\d+)D').findall(iso_format)
         if p:
-            print("=====")
-            print(p)
             return {
                 "jaren": int(p[0][0]),
                 "maanden": int(p[0][1]),
