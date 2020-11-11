@@ -1,4 +1,4 @@
-""" Test DELETE /customerstatementmessages/(<customerstatementmessage_id>/) """
+""" Test DELETE /banktransactions/(<banktransaction_id>/) """
 from models import BankTransaction
 
 
@@ -6,18 +6,18 @@ def test_bank_transaction_delete_success(client, dbsession, bank_transaction_fac
     """ Test a succesfull DELETE on banktransaction """
     bank_transaction = bank_transaction_factory.createBankTransaction()
     assert dbsession.query(BankTransaction).count() == 1
-    response = client.delete(f'/banktransaction/{bank_transaction.id}')
+    response = client.delete(f'/banktransactions/{bank_transaction.id}')
     assert response.status_code == 204
     assert dbsession.query(BankTransaction).count() == 0
 
 
 def test_bank_transaction_delete_bad_request(client):
     """ Test 405 error for DELETE on bank_transaction """
-    response = client.delete('/banktransaction/')
+    response = client.delete('/banktransactions/')
     assert response.status_code == 405
 
 
 def test_bank_transaction_delete_csm_not_found(client):
     """ Test 404 error for DELETE on bank_transaction """
-    response = client.delete('/banktransaction/1337')
+    response = client.delete('/banktransactions/1337')
     assert response.status_code == 404
