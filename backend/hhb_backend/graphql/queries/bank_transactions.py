@@ -27,15 +27,11 @@ class BankTransactionsQuery():
         else:
             bank_transactions_ids = []
             bank_transactions_csms = []
-            print("=============------------=========")
             if kwargs["ids"]:
                 bank_transactions_ids = await request.dataloader.bank_transactions_by_id.load_many(kwargs["ids"])
             if kwargs["csms"]:
-                print(kwargs["csms"])
-                bank_transactions_csms = await request.dataloader.bank_transactions_by_csm.load_many(kwargs["csms"])
+                [[bank_transactions_csms.append(bt) for bt in res] for res in await request.dataloader.bank_transactions_by_csm.load_many(kwargs["csms"])]
             
-            print(bank_transactions_ids)
-            print(bank_transactions_csms)
             if kwargs["ids"] and kwargs["csms"]:
                 bank_transactions = list(set(bank_transactions_ids) & set(bank_transactions_csms))
             else:
