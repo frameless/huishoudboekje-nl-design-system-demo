@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name='core-service',
-    version='0.1.0+' + os.getenv("COMMIT_SHA"),
+    version='0.1.0',
     packages=['core_service'],
     scripts=[],
     url='',

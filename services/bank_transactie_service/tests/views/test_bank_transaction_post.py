@@ -1,10 +1,10 @@
-""" Test POST /customerstatementmessages/(<customerstatementmessage_id>/) """
+""" Test POST /banktransactions/(<banktransaction_id>/) """
 import json
 from models import BankTransaction
 
 
-def test_csm_post_new_csm(client, dbsession, csm_factory):
-    """ Test /banktransaction/ path """
+def test_banktransaction_post_new_csm(client, dbsession, csm_factory):
+    """ Test /banktransactions/ path """
     csm = csm_factory.create_customer_statement_message()
     assert dbsession.query(BankTransaction).count() == 0
     bank_transaction_dict = {
@@ -13,7 +13,7 @@ def test_csm_post_new_csm(client, dbsession, csm_factory):
         "information_to_account_owner": "DESCRIPTION"
     }
     response = client.post(
-        '/banktransaction/',
+        '/banktransactions/',
         data=json.dumps(bank_transaction_dict),
         content_type='application/json'
     )
