@@ -14,13 +14,13 @@ variables:
   REVIEW_BASE_DOMAIN: nlx.reviews
   REVIEW_NAMESPACE: "hhb-$CI_ENVIRONMENT_SLUG"
   KUBECONFIG: /secrets/kubeconfig/review.conf
-
+  PYTHON_POSTGRES: python-postgres
 stages:
-  - test
   - build
+  - test
   - deploy
 
 include:
-#  - '/.gitlab/ci/test.yml'
+  - '/.gitlab/ci/test.yml'
   - '/.gitlab/ci/build.yml'
   - '/.gitlab/ci/deploy.yml'

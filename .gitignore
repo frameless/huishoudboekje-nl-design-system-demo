@@ -14,10 +14,13 @@ yarn-error.log*
 .history
 .idea
 .coverage
-coverage_html
+htmlcov
+coverage.xml
 
 __pycache__
 *.egg-info
+.cache
+.local
 
 helm/repo
 helm/**/*.tgz

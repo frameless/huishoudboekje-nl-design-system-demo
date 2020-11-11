@@ -1,121 +1,86 @@
 #!/usr/bin/env python
 import logging
 import os
-import secrets
-import itsdangerous
-from flask import Flask, jsonify, Response, redirect, render_template, request
-from flask_oidc import OpenIDConnect
-from flask_graphql import GraphQLView
-
-from hhb_backend.custom_oidc import CustomOidc
-from hhb_backend.graphql import schema
+from pprint import pformat
 from urllib.parse import urlparse
 
-from graphql.execution.executors.asyncio import AsyncioExecutor
-import asyncio
+import itsdangerous
+from flask import Flask, jsonify, redirect, make_response, session
+from flask_oidc import OpenIDConnect
 
+import hhb_backend.graphql.blueprint as graphql_blueprint
+from hhb_backend.custom_oidc import CustomOidc
 from hhb_backend.reverse_proxy import ReverseProxied
-from hhb_backend.graphql.dataloaders import HHBDataLoader
 
-loop = asyncio.new_event_loop()
-asyncio.set_event_loop(loop)
-
-# TODO extract
 logging.basicConfig(level=logging.DEBUG)
-app = Flask(__name__)
-secretKey = os.getenv('SECRET_KEY', secrets.token_urlsafe(16))
-app.config.from_mapping({
-    'SECRET_KEY': secretKey,
-    'SESSION_COOKIE_NAME': 'flask_session',
-    'OIDC_CLIENT_SECRETS': os.getenv('OIDC_CLIENT_SECRETS', './etc/client_secrets.json'),
-    'OIDC_SCOPES': ['openid', 'email', 'groups', 'profile'],
-    'OIDC_ID_TOKEN_COOKIE_SECURE': os.getenv('OIDC_ID_TOKEN_COOKIE_SECURE', False),
-})
-if 'PREFIX' in os.environ:
-    prefix = os.environ.get('PREFIX')
-    app.config.from_mapping({
-        'SESSION_COOKIE_PATH': prefix,
-    })
-    app.wsgi_app = ReverseProxied(app.wsgi_app, script_name=prefix)
-
-oidc_overrides = {}
-oidc = OpenIDConnect(app, **oidc_overrides)
-
-customOidc = oidc
-if 'OVERWITE_REDIRECT_URI_MAP' in os.environ:
-    customOidc = CustomOidc(oidc=oidc, flask_app=app, prefixes=os.environ.get('OVERWITE_REDIRECT_URI_MAP'))
 
 
-# TODO only needed when SECRET_KEY is generated
-@app.errorhandler(itsdangerous.exc.BadSignature)
-def handle_bad_signature(e):
-    oidc.logout()
-    return jsonify(message='Not logged in'), 401
+def create_app(config_name=os.getenv('APP_SETTINGS', None) or 'hhb_backend.config.DevelopmentConfig'):
+    app = Flask(__name__)
+    app.config.from_object(config_name)
 
+    logging.debug(f"{pformat(app.config)}")
+    logging.info(f"Starting {__name__} with {config_name}")
 
-@app.route('/health')
-def health():
-    return Response()
+    if app.config['PREFIX']:
+        app.wsgi_app = ReverseProxied(app.wsgi_app, script_name=app.config['PREFIX'])
 
+    oidc_overrides = {}
+    oidc = OpenIDConnect(app, **oidc_overrides)
 
-@app.route('/me')
-def me():
-    if oidc.user_loggedin:
-        return jsonify(email=oidc.user_getfield('email'), groups=oidc.user_getinfo('groups'))
-    else:
+    custom_oidc = oidc
+    if app.config['OVERWITE_REDIRECT_URI_MAP']:
+        logging.info(f"Loading custom OVERWITE_REDIRECT_URI_MAP: {app.config['OVERWITE_REDIRECT_URI_MAP']}")
+        custom_oidc = CustomOidc(oidc=oidc, flask_app=app, prefixes=app.config['OVERWITE_REDIRECT_URI_MAP'])
+
+    @app.errorhandler(itsdangerous.exc.BadSignature)
+    def handle_bad_signature(e):
+        oidc.logout()
+        session.clear()
         return jsonify(message='Not logged in'), 401
 
+    @app.route('/health')
+    def health():
+        return make_response(('ok', {'Content-Type': 'text/plain'}))
 
-@app.route('/custom_oidc_callback')
-@oidc.custom_callback
-def oidc_redirect(url):
-    parseResult = urlparse(url)
-    newUrl = "%s://%s" % (parseResult.scheme, parseResult.netloc)
-    logging.info("oidc_redirect url=%s" % (newUrl))
-    return redirect(newUrl)
+    @app.route('/me')
+    def me():
+        if oidc.user_loggedin:
+            return jsonify(email=oidc.user_getfield('email'), groups=oidc.user_getinfo('groups'))
+        else:
+            return jsonify(message='Not logged in'), 401
 
+    @app.route('/custom_oidc_callback')
+    @oidc.custom_callback
+    def oidc_redirect(url):
+        session.permanent = True
+        parse_result = urlparse(url)
+        new_url = "%s://%s" % (parse_result.scheme, parse_result.netloc)
+        logging.info("oidc_redirect url=%s" % (new_url))
+        return redirect(new_url)
 
-@app.route('/login')
-@customOidc.require_login
-def login():
-    return redirect('/', code=302)
+    @app.route('/login')
+    @custom_oidc.require_login
+    def login():
+        return redirect('/', code=302)
 
+    graphql = graphql_blueprint.create_blueprint()
+    if app.config['GRAPHQL_AUTH_ENABLED']:
+        @graphql.before_request
+        @custom_oidc.require_login
+        def auth_graphql():
+            pass
 
-graph_ql_view = GraphQLView.as_view('graphql', schema=schema, graphiql=True, executor=AsyncioExecutor(loop=loop))
-graph_ql_batch_view = GraphQLView.as_view('graphql_batch', schema=schema, batch=True)
-if app.config['ENV'] == 'development':
-    app.add_url_rule('/graphql', view_func=graph_ql_view, strict_slashes=False)
+    app.register_blueprint(graphql, url_prefix='/graphql')
 
-    # Optional, for adding batch query support (used in Apollo-Client)
-    app.add_url_rule('/graphql/batch', view_func=graph_ql_batch_view, strict_slashes=False)
+    @app.route('/logout')
+    def logout():
+        oidc.logout()
+        session.clear()
+        return make_response(('ok', {'Content-Type': 'text/plain'}))
 
-    @app.route('/graphql/help')
-    def voyager():
-        return render_template('voyager.html')
-else:
-    app.add_url_rule('/graphql', view_func=customOidc.require_login(graph_ql_view), strict_slashes=False)
-
-    # Optional, for adding batch query support (used in Apollo-Client)
-    app.add_url_rule('/graphql/batch', view_func=customOidc.require_login(graph_ql_batch_view), strict_slashes=False)
-
-    @app.route('/graphql/help')
-    @customOidc.require_login
-    def voyager():
-        return render_template('voyager.html')
-
-
-@app.route('/logout')
-def logout():
-    oidc.logout()
-    return Response()
-
-
-@app.before_request
-def add_dataloaders():
-    """ Initialize dataloader per request """
-    global loop
-    request.dataloader = HHBDataLoader(loop=loop)
+    return app
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    create_app().run(debug=True)

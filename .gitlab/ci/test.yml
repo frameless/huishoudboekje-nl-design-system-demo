@@ -1,27 +1,75 @@
-# Test Frontend
 test-frontend:
   stage: test
-  image: node:latest
+  tags:
+    - docker
+  needs: []
+  image: node:lts-alpine
   variables:
-    APP_NAME: frontend
-    DIRECTORY: frontend
-  only:
-    - branches@commonground/huishoudboekje/app-new
+    NPM_CACHE_DIR: ${CI_PROJECT_DIR}/.npm-cache
+  cache:
+    key: "${CI_COMMIT_REF_SLUG}__${CI_JOB_NAME}"
+    paths:
+      - ${NPM_CACHE_DIR}
   script:
     - cd ./frontend/app
-    - npm i npm@latest -g
-    - npm ci --silent
-    - npm run test
+    - npm ci --cache ${NPM_CACHE_DIR} --prefer-offline --no-progress --color=false --quiet
+    - npm run lint
 
-# Test Backend
-#test-backend:
-#  stage: build
-#  image: docker
-#  variables:
-#    APP_NAME: backend
-#    DIRECTORY: backend
-#  only:
-#    - branches@commonground/huishoudboekje/app-new
-#  script:
-#    - npm ci --silent
-#    - npm run test
+
+# This template requires the following:
+#   variables:
+#      DIRECTORY: <the directory of the application>
+.Service Test:
+  stage: test
+  needs:
+    - build-python-postgres
+  tags:
+    - cg
+    - docker
+  image:
+    name: $CI_REGISTRY_IMAGE/$PYTHON_POSTGRES:$IMAGE_TAG
+  variables:
+    PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  cache:
+    key: "${CI_COMMIT_REF_SLUG}__${CI_JOB_NAME}"
+    paths:
+      - ${PIP_CACHE_DIR}
+  script:
+    - make -C ${DIRECTORY} requirements
+    - make -C ${DIRECTORY} all
+  coverage: '/TOTAL.+ ([0-9]{1,3}%)/'
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - ${DIRECTORY}/htmlcov
+    reports:
+      cobertura: ${DIRECTORY}/coverage.xml
+
+
+backend-test:
+  extends: .Service Test
+  variables:
+    DIRECTORY: backend
+  only:
+    - branches@commonground/huishoudboekje/app-new
+
+huishoudboekje-service-test:
+  extends: .Service Test
+  variables:
+    DIRECTORY: services/huishoudboekje_service
+  only:
+    - branches@commonground/huishoudboekje/app-new
+
+organisatie-service-test:
+  extends: .Service Test
+  variables:
+    DIRECTORY: services/organisatie_service
+  only:
+    - branches@commonground/huishoudboekje/app-new
+
+bank-transactie-service-test:
+  extends: .Service Test
+  variables:
+    DIRECTORY: services/bank_transactie_service
+  only:
+    - branches@commonground/huishoudboekje/app-new

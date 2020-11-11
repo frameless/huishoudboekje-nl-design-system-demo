@@ -5,6 +5,7 @@ CHART_DEPENDENCIES := $(shell find helm -name 'Chart.yaml' | xargs grep -l 'depe
 NAMESPACE := huishoudboekje
 RELEASE := huishoudboekje
 MODULES := $(patsubst %/Dockerfile,%,$(wildcard */Dockerfile))
+SERVICE_MODULES := $(patsubst services/%/Dockerfile,%,$(wildcard services/*/Dockerfile))
 
 # Main target to build and deploy Huishoudboekje locally
 .PHONY: all
@@ -38,16 +39,17 @@ postgres-operator: helm/postgres-operator.yaml helm-init
 		--set serviceAccount.name=${NAMESPACE}-postgres-operator
 
 .PHONY: huishoudboekje
-huishoudboekje: helm/charts/huishoudboekje-review helm-init postgres-operator $(MODULES)
+huishoudboekje: helm/charts/huishoudboekje-review helm-init postgres-operator $(MODULES) $(SERVICE_MODULES)
 	helm upgrade --install --create-namespace --namespace $@ \
 		$@ $< \
 		--set database.traefik.enabled=true \
 		--set global.minikube=true \
 		--set global.imageTag=$(DOCKER_TAG) \
+        --set "medewerker-backend.appSettings=hhb_backend.config.DevelopmentConfig" \
 		--set "medewerker-backend.oidc.redirectUris[0].prefix=http://localhost:3000" \
 		--set "medewerker-backend.oidc.redirectUris[0].callback=http://localhost:3000/api/custom_oidc_callback" \
-		--set "medewerker-backend.oidc.redirectUris[1].prefix=http://hhhb.minikube" \
-		--set "medewerker-backend.oidc.redirectUris[1].callback=http://hhhb.minikube/api/custom_oidc_callback" \
+		--set "medewerker-backend.oidc.redirectUris[1].prefix=http://hhb.minikube" \
+		--set "medewerker-backend.oidc.redirectUris[1].callback=http://hhb.minikube/api/custom_oidc_callback" \
 		--render-subchart-notes
 
 helm/charts/%: helm/charts/%/Chart.lock
@@ -60,6 +62,11 @@ helm/charts/%: helm/charts/%/Chart.lock
 $(MODULES):
 	$(eval IMAGE := $(REGISTRY_PREFIX)/$@:$(DOCKER_TAG))
 	docker build -t $(IMAGE) ./$@
+
+.PHONY: $(SERVICE_MODULES)
+$(SERVICE_MODULES):
+	$(eval IMAGE := $(REGISTRY_PREFIX)/$(subst _,-,$@):$(DOCKER_TAG))
+	docker build -t $(IMAGE) -f ./services/$@/Dockerfile ./services
 
 frontend: helm/charts/medewerker-frontend/theme
 
