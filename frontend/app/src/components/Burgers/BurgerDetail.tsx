@@ -31,10 +31,10 @@ import Routes from "../../config/routes";
 import BackButton from "../BackButton";
 import {useMutation, useQuery} from "@apollo/client";
 import {IAfspraak, IGebruiker} from "../../models";
-import {GetOneGebruikerQuery} from "../../services/graphql/queries";
+import {GetGebruikerAfsprakenQuery, GetOneGebruikerQuery} from "../../services/graphql/queries";
 import {FormLeft, FormRight, Label} from "../Forms/FormLeftRight";
 import RekeningList from "../Rekeningen/RekeningList";
-import {CreateGebruikerRekeningMutation, DeleteGebruikerMutation,} from "../../services/graphql/mutations";
+import {CreateGebruikerRekeningMutation, DeleteAfspraakMutation, DeleteGebruikerMutation, ToggleAfspraakActiefMutation,} from "../../services/graphql/mutations";
 import {useIsMobile, useToggle} from "react-grapple";
 import DeadEndPage from "../DeadEndPage";
 import RekeningForm from "../Rekeningen/RekeningForm";
@@ -53,7 +53,8 @@ const BurgerDetail = () => {
 		setTabIndex(tabIdx);
 	};
 
-	const [showInactive, setShowInactive] = useState(true);
+	const [showInactive] = useState(true);
+	// const [showInactive, setShowInactive] = useState(true);
 	const [filteredAfspraken, setFilteredAfspraken] = useState<IAfspraak[]>([]);
 
 	const cancelDeleteRef = useRef(null);
@@ -69,7 +70,7 @@ const BurgerDetail = () => {
 		deleteMutation().then(() => {
 			onCloseDeleteDialog();
 			toast({
-				title: t("messages.burgers.deleteConfirmMessage", {name: `${data?.gebruiker.voornamen} ${data?.gebruiker.achternaam}`}),
+				title: t("messages.burgers.deleteConfirmMessage", {name: `${gebruikerData?.gebruiker.voornamen} ${gebruikerData?.gebruiker.achternaam}`}),
 				position: "top",
 				status: "success",
 			});
@@ -77,18 +78,19 @@ const BurgerDetail = () => {
 		})
 	};
 
-	const {data, loading, refetch} = useQuery<{ gebruiker: IGebruiker }>(GetOneGebruikerQuery, {
+	const {data: gebruikerData, loading: gebruikerLoading, refetch: refetchGebruiker} = useQuery<{ gebruiker: IGebruiker }>(GetOneGebruikerQuery, {
 		fetchPolicy: "no-cache",
 		variables: {id},
-		notifyOnNetworkStatusChange: true,
 	});
+	const [deleteAfspraak] = useMutation(DeleteAfspraakMutation);
+	const [toggleAfspraakActive] = useMutation(ToggleAfspraakActiefMutation);
 
 	useEffect(() => {
 		let mounted = true;
 
 		if (mounted) {
-			if (data && data.gebruiker) {
-				let _filteredAfspraken = data.gebruiker.afspraken;
+			if (gebruikerData && gebruikerData.gebruiker) {
+				let _filteredAfspraken = gebruikerData.gebruiker.afspraken.sort((a, b) => a.id < b.id ? -1 : 1);
 				// if (!showInactive) {
 				// 	_filteredAfspraken = data.gebruiker.afspraken.filter(a => !showInactive ? a.actief : true);
 				// }
@@ -100,14 +102,62 @@ const BurgerDetail = () => {
 		return () => {
 			mounted = false;
 		}
-	}, [data, showInactive]);
+	}, [gebruikerData, showInactive]);
 
 	const onClickEditButton = () => push(Routes.EditBurger(id));
 	const onClickAddAfspraakButton = () => push(Routes.CreateBurgerAgreement(id));
-	const onClickShowInactive = (e) => setShowInactive(e.currentTarget.checked);
+	const onDeleteAfspraak = (id) => {
+		deleteAfspraak({
+			variables: {id}
+		}).then(result => {
+			toast({
+				title: t("messages.agreements.deleteConfirmMessage"),
+				position: "top",
+				status: "success",
+			});
+			refetchGebruiker();
+		}).catch(err => {
+			console.error(err);
+			toast({
+				position: "top",
+				status: "error",
+				variant: "solid",
+				description: t("messages.genericError.description"),
+				title: t("messages.genericError.title")
+			});
+		});
+	};
+	const onToggleAfspraakActive = async (afspraakId: number, actief: boolean) => {
+		toggleAfspraakActive({
+			variables: {
+				id: afspraakId,
+				gebruikerId: id,
+				actief,
+			}
+		})
+			.then(result => {
+				toast({
+					title: t("messages.agreements.toggleConfirmMessage"),
+					position: "top",
+					status: "success",
+				});
+				refetchGebruiker();
+			})
+			.catch(err => {
+				console.error(err);
+				toast({
+					position: "top",
+					status: "error",
+					variant: "solid",
+					description: t("messages.genericError.description"),
+					title: t("messages.genericError.title")
+				});
+			});
+	}
+	// const onClickShowInactive = (e) => setShowInactive(e.currentTarget.checked);
 
 	const renderPageContent = () => {
-		if (loading) {
+		if (!gebruikerData && gebruikerLoading) {
 			return (
 				<Stack spacing={5} alignItems={"center"} justifyContent={"center"} my={10}>
 					<Spinner />
@@ -115,8 +165,8 @@ const BurgerDetail = () => {
 			);
 		}
 
-		if (data) {
-			if (!data.gebruiker) {
+		if (gebruikerData) {
+			if (!gebruikerData.gebruiker) {
 				return (
 					<Redirect to={Routes.NotFound} />
 				)
@@ -124,7 +174,7 @@ const BurgerDetail = () => {
 
 			if (isDeleted) {
 				return (
-					<DeadEndPage message={t("messages.burgers.deleteConfirmMessage", {name: `${data.gebruiker.voornamen} ${data.gebruiker.achternaam}`})}>
+					<DeadEndPage message={t("messages.burgers.deleteConfirmMessage", {name: `${gebruikerData.gebruiker.voornamen} ${gebruikerData.gebruiker.achternaam}`})}>
 						<Button variantColor={"primary"} onClick={() => push(Routes.Burgers)}>{t("actions.backToList")}</Button>
 					</DeadEndPage>
 				)
@@ -133,13 +183,13 @@ const BurgerDetail = () => {
 			return (
 				<Stack spacing={5}>
 					<Stack direction={"row"} justifyContent={"flex-start"} alignItems={"center"} spacing={3}>
-						<Heading size={"lg"}>{data.gebruiker.voornamen} {data.gebruiker.achternaam}</Heading>
+						<Heading size={"lg"}>{gebruikerData.gebruiker.voornamen} {gebruikerData.gebruiker.achternaam}</Heading>
 
 						<AlertDialog isOpen={deleteDialogOpen} leastDestructiveRef={cancelDeleteRef} onClose={onCloseDeleteDialog}>
 							<AlertDialogOverlay />
 							<AlertDialogContent>
 								<AlertDialogHeader fontSize="lg" fontWeight="bold">{t("messages.burgers.deleteTitle")}</AlertDialogHeader>
-								<AlertDialogBody>{t("messages.burgers.deleteQuestion", {name: `${data.gebruiker.voornamen} ${data.gebruiker.achternaam}`})}</AlertDialogBody>
+								<AlertDialogBody>{t("messages.burgers.deleteQuestion", {name: `${gebruikerData.gebruiker.voornamen} ${gebruikerData.gebruiker.achternaam}`})}</AlertDialogBody>
 								<AlertDialogFooter>
 									<Button ref={cancelDeleteRef} onClick={onCloseDeleteDialog}>{t("actions.cancel")}</Button>
 									<Button isLoading={deleteLoading} variantColor="red" onClick={onConfirmDeleteDialog} ml={3}>{t("actions.delete")}</Button>
@@ -156,7 +206,7 @@ const BurgerDetail = () => {
 						</Menu>
 					</Stack>
 
-					<BurgerDetailProfileView gebruiker={data.gebruiker} />
+					<BurgerDetailProfileView gebruiker={gebruikerData.gebruiker} />
 
 					{/* Rekeningen */}
 					<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
@@ -166,18 +216,18 @@ const BurgerDetail = () => {
 								<Label>{t("forms.burgers.sections.rekeningen.detailText")}</Label>
 							</FormLeft>
 							<FormRight justifyContent={"center"}>
-								<RekeningList rekeningen={data.gebruiker.rekeningen} gebruiker={data.gebruiker} onChange={() => refetch()} />
+								<RekeningList rekeningen={gebruikerData.gebruiker.rekeningen} gebruiker={gebruikerData.gebruiker} onChange={() => refetchGebruiker()} />
 								{showCreateRekeningForm ? (<>
-									{data.gebruiker.rekeningen.length > 0 && <Divider />}
+									{gebruikerData.gebruiker.rekeningen.length > 0 && <Divider />}
 									<RekeningForm rekening={{
-										rekeninghouder: `${data.gebruiker.voorletters} ${data.gebruiker.achternaam}`
+										rekeninghouder: `${gebruikerData.gebruiker.voorletters} ${gebruikerData.gebruiker.achternaam}`
 									}} onSave={(rekening, resetForm) => {
 										createGebruikerRekeningMutation({
 											variables: {gebruikerId: id, rekening}
 										}).then(() => {
 											resetForm();
 											toggleCreateRekeningForm(false);
-											refetch();
+											refetchGebruiker();
 										});
 									}} onCancel={() => {
 										toggleCreateRekeningForm(false)
@@ -211,10 +261,16 @@ const BurgerDetail = () => {
 										</TabList>
 										<TabPanels>
 											<TabPanel id="tab_incoming">
-												{filteredAfspraken.filter(a => a.credit).map((a, i) => <AfspraakItem py={2} key={i} afspraak={a} refetch={refetch} />)}
+												{filteredAfspraken.filter(a => a.credit).map((a, i) => (
+													<AfspraakItem key={a.id} data-id={a.id} afspraak={a} py={2} onDelete={(id: number) => onDeleteAfspraak(id)}
+													              onToggleActive={(id: number) => onToggleAfspraakActive(id, !a.actief)} />
+												))}
 											</TabPanel>
 											<TabPanel id="tab_outgoing">
-												{filteredAfspraken.filter(a => !a.credit).map((a, i) => <AfspraakItem py={2} key={i} afspraak={a} refetch={refetch} />)}
+												{filteredAfspraken.filter(a => !a.credit).map((a, i) => (
+													<AfspraakItem key={a.id} data-id={a.id} afspraak={a} py={2} onDelete={(id: number) => onDeleteAfspraak(id)}
+													              onToggleActive={(id: number) => onToggleAfspraakActive(id, !a.actief)} />
+												))}
 											</TabPanel>
 										</TabPanels>
 									</Tabs>

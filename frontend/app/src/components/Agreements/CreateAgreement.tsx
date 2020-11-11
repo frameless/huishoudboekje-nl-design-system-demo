@@ -139,9 +139,6 @@ const CreateAgreement = () => {
 		}
 
 		const formValid = fields.every(f => f.isValid);
-
-		console.log(fields.map(v => [v.value, v.isValid]));
-
 		if (!formValid) {
 			toast({
 				status: "error",
@@ -162,7 +159,7 @@ const CreateAgreement = () => {
 				bedrag: amount.value,
 				kenmerk: searchTerm.value,
 				startDatum: moment(startDatum).format("YYYY-MM-DD"),
-				interval: isRecurring && Interval.create(intervalType.value, intervalNumber.value),
+				interval: isRecurring ? Interval.create(intervalType.value, intervalNumber.value) : null,
 				aantalBetalingen: !isContinuous ? nTimes.value : null,
 				actief: true,
 			}
@@ -174,7 +171,7 @@ const CreateAgreement = () => {
 			});
 			push(Routes.Burger(burgerId))
 		}).catch(err => {
-			console.log(err);
+			console.error(err);
 			toast({
 				position: "top",
 				status: "error",

@@ -173,7 +173,7 @@ const BurgerEdit = () => {
 				description: t("messages.genericError.description"),
 				title: t("messages.genericError.title")
 			});
-		})
+		});
 	};
 
 	return (<>

@@ -71,7 +71,7 @@ export type IAfspraak = {
 	credit: boolean
 	beschrijving: string
 	organisatie: IOrganisatie,
-	tegenrekening: IRekening,
+	tegenRekening: IRekening,
 	bedrag: number,
 	kenmerk: string
 	type: "periodic" | "once",

@@ -1,42 +1,16 @@
 import React, {useState} from "react";
-import {Badge, Box, BoxProps, Stack} from "@chakra-ui/core";
+import {Badge, Box, BoxProps, IconButton, Stack} from "@chakra-ui/core";
 import {useIsMobile} from "react-grapple";
 import {IAfspraak} from "../../models";
 import {currencyFormat, Interval} from "../../utils/things";
 import {useTranslation} from "react-i18next";
 
-const AfspraakItem: React.FC<BoxProps & { afspraak: IAfspraak, refetch: VoidFunction }> = ({afspraak: a, refetch, ...props}) => {
+const AfspraakItem: React.FC<BoxProps & { afspraak: IAfspraak, onToggleActive?: (id: number) => void, onDelete?: (id: number) => void }> = ({afspraak: a, onToggleActive, onDelete, ...props}) => {
 	const isMobile = useIsMobile();
 	const {t} = useTranslation();
-	// const toast = useToast();
-	const [isActive] = useState<boolean>(a.actief);
+	const [deleteConfirm, setDeleteConfirm] = useState<boolean>(false);
 
-	// const [toggleAfspraakActiefMutation] = useMutation(ToggleAfspraakActiefMutation);
-
-	// const onToggleActive = (isActive: boolean) => {
-	// 	toggleAfspraakActiefMutation({
-	// 		variables: {
-	// 			id: a.id,
-	// 			gebruikerId: a.gebruiker.id,
-	// 			actief: isActive
-	// 		},
-	// 	}).then(() => {
-	// 		toast({
-	// 			position: "top",
-	// 			description: t("messages.agreements.toggleActive.successMessage"),
-	// 			status: "success",
-	// 		});
-	// 		refetch();
-	// 	}).catch(err => {
-	// 		console.log(err);
-	// 		toast({
-	// 			position: "top",
-	// 			title: t("messages.genericError.title"),
-	// 			description: t("messages.genericError.description"),
-	// 			status: "error",
-	// 		});
-	// 	});
-	// }
+	// const onClickEditButton = () => {};
 
 	const intervalString = (): string => {
 		const parsedInterval = Interval.parse(a.interval);
@@ -49,15 +23,46 @@ const AfspraakItem: React.FC<BoxProps & { afspraak: IAfspraak, refetch: VoidFunc
 		return t(`interval.every-${type}`, {count});
 	};
 
+	const onClickDeleteButton = () => {
+		if (onDelete) {
+			if (!deleteConfirm) {
+				setDeleteConfirm(true);
+				return;
+			}
+
+			onDelete(a.id);
+		}
+	};
+	const onClickDeleteCancel = () => {
+		setDeleteConfirm(false);
+	}
+
+	const onClickToggle = () => {
+		if (onToggleActive) {
+			onToggleActive(a.id)
+		}
+	};
+
 	return (
 		<Stack direction={isMobile ? "column" : "row"} {...props}>
-			<Box flex={1}>{a.tegenrekening?.rekeninghouder || t("unknown")}</Box>
+			<Box flex={1}>{a.tegenRekening?.rekeninghouder || t("unknown")}</Box>
 			<Box flex={1}>{a.beschrijving}</Box>
 			<Box flex={1} textAlign={"right"}>{currencyFormat.format(a.bedrag)}</Box>
 			<Box flex={1}>{intervalString()}</Box>
-			<Stack spacing={2} isInline flex={1} alignItems={"center"}>
-				<Badge fontSize={"10px"} bg={isActive ? "green.200" : "gray.200"}>{isActive ? t("active") : t("inactive")}</Badge>
+			<Stack spacing={2} isInline alignItems={"center"}>
+				<Badge fontSize={"10px"} bg={a.actief ? "green.200" : "gray.200"} {...onToggleActive && {cursor: "pointer"}}
+				       onClick={onClickToggle}>{a.actief ? t("active") : t("inactive")}</Badge>
 			</Stack>
+			<Box width={75}>
+				{/*<IconButton variant={"ghost"} size={"sm"} icon={"edit"} aria-label={t("actions.edit")} onClick={onClickEditButton} />*/}
+				{onDelete && (<>
+					<IconButton variant={deleteConfirm ? "solid" : "ghost"} size={"xs"} icon={deleteConfirm ? "check" : "delete"}
+					            variantColor={deleteConfirm ? "red" : "gray"}
+					            aria-label={t("actions.delete")} onClick={onClickDeleteButton} />
+					{deleteConfirm && <IconButton variant={"solid"} size={"xs"} icon={"close"} variantColor={"gray"} ml={2}
+												  aria-label={t("actions.delete")} onClick={onClickDeleteCancel} />}
+				</>)}
+			</Box>
 		</Stack>
 	);
 };

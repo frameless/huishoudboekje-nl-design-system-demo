@@ -165,6 +165,14 @@ export const CreateAfspraakMutation = gql`
     ${AfspraakFragment}
 `;
 
+export const DeleteAfspraakMutation = gql`
+    mutation deleteAfspraak($id: Int!){
+        deleteAfspraak(id: $id){
+            ok
+        }
+    }
+`;
+
 export const ToggleAfspraakActiefMutation = gql`
     mutation toggleAfspraakMutation(
         $id: Int!

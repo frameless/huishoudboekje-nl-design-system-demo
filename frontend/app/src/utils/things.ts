@@ -53,6 +53,10 @@ export const Interval = {
 		return interval;
 	},
 	parse: (interval: IInterval): { intervalType: string, count: number } | undefined => {
+		if(!interval){
+			return undefined;
+		}
+
 		const intervalType = Object.keys(interval).filter(k => interval[k] > 0).shift();
 
 		if (!intervalType) {
@@ -76,3 +80,9 @@ export const currencyFormat = new Intl.NumberFormat("nl-NL", {
 })
 export const numberFormat = new Intl.NumberFormat("nl-NL");
 export const dateFormat = new Intl.DateTimeFormat("nl-NL");
+
+export const wait = async (timeout: number = 1000): Promise<void> => {
+	return new Promise(resolve => {
+		setTimeout(resolve, timeout);
+	});
+}

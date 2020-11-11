@@ -49,6 +49,14 @@
         "component": true,
         "html": false
       }
+    ],
+    "no-console": [
+      "warn",
+      {
+        "allow": [
+          "error"
+        ]
+      }
     ]
   },
   "ignorePatterns": [
