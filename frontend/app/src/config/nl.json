@@ -155,7 +155,11 @@
         "intervalDays": "Dagen",
         "active": "Actief",
         "expenses": "Uitgaven",
-        "income": "Inkomsten"
+        "income": "Inkomsten",
+        "organization": "Organisatie",
+        "organizationChoose": "Kies een organisatie",
+        "bankAccount": "Bankrekening",
+        "bankAccountChoose": "Kies een bankrekening"
       }
     },
     "organizations": {

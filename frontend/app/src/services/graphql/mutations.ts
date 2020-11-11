@@ -142,6 +142,7 @@ export const CreateAfspraakMutation = gql`
         $kenmerk: String
         $startDatum: Date
         $tegenRekeningId: Int
+        $organisatieId: Int
     ){
         createAfspraak(
             aantalBetalingen: $aantalBetalingen
@@ -155,6 +156,7 @@ export const CreateAfspraakMutation = gql`
             kenmerk: $kenmerk
             startDatum: $startDatum
             tegenRekeningId: $tegenRekeningId
+            organisatieId: $organisatieId
         ){
             ok
             afspraak {

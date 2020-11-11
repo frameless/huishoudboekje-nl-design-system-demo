@@ -70,7 +70,7 @@ export type IAfspraak = {
 	gebruiker: IGebruiker
 	credit: boolean
 	beschrijving: string
-	organisatie: IOrganisatie,
+	organisatie?: IOrganisatie,
 	tegenRekening: IRekening,
 	bedrag: number,
 	kenmerk: string
@@ -79,5 +79,5 @@ export type IAfspraak = {
 	startDatum: Date
 	isContinuous: boolean,
 	nBetalingen: number,
-	actief: boolean
+	actief: boolean,
 }

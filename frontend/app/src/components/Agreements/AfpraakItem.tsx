@@ -45,7 +45,7 @@ const AfspraakItem: React.FC<BoxProps & { afspraak: IAfspraak, onToggleActive?: 
 
 	return (
 		<Stack direction={isMobile ? "column" : "row"} {...props}>
-			<Box flex={1}>{a.tegenRekening?.rekeninghouder || t("unknown")}</Box>
+			<Box flex={1}>{a.organisatie?.weergaveNaam || (a.gebruiker && (a.gebruiker.voorletters + " " + a.gebruiker.achternaam)) || t("unknown")}</Box>
 			<Box flex={1}>{a.beschrijving}</Box>
 			<Box flex={1} textAlign={"right"}>{currencyFormat.format(a.bedrag)}</Box>
 			<Box flex={1}>{intervalString()}</Box>

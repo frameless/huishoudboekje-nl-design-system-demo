@@ -52,7 +52,10 @@ const CreateAgreement = () => {
 		defaultValue: "",
 		validate: [Validators.required]
 	});
-	const beneficiaryAccountId = useInput<number>({
+	const organizationId = useInput<number>({
+		validate: [(v) => v !== undefined && v.toString() !== ""]
+	});
+	const rekeningId = useInput<number>({
 		validate: [(v) => v !== undefined && v.toString() !== ""]
 	});
 	const amount = useNumberInput({
@@ -102,7 +105,10 @@ const CreateAgreement = () => {
 
 		setAfspraakType(c.type);
 		description.setValue(c.omschrijving);
-		beneficiaryAccountId.setValue(c.organisatie.id);
+		organizationId.setValue(c.organisatie.id);
+		if(c.organisatie?.rekeningen?.length > 0){
+			rekeningId.setValue(c.organisatie.rekeningen[0].id);
+		}
 		amount.setValue(c.bedrag);
 		searchTerm.setValue(c.kenmerk);
 		toggleRecurring(c.type === AfspraakPeriod.Periodic);
@@ -121,7 +127,8 @@ const CreateAgreement = () => {
 
 		const fields: UseInput<any>[] = [
 			description,
-			beneficiaryAccountId,
+			organizationId,
+			rekeningId,
 			amount,
 			searchTerm,
 			startDate.day,
@@ -155,7 +162,8 @@ const CreateAgreement = () => {
 				gebruikerId: gebruikerData?.gebruiker.id,
 				credit: afspraakType === AfspraakType.Income,
 				beschrijving: description.value,
-				tegenRekeningId: beneficiaryAccountId.value,
+				tegenRekeningId: rekeningId.value,
+				organisatieId: organizationId.value,
 				bedrag: amount.value,
 				kenmerk: searchTerm.value,
 				startDatum: moment(startDatum).format("YYYY-MM-DD"),
@@ -242,23 +250,30 @@ const CreateAgreement = () => {
 									</Stack>
 									<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 										<Stack spacing={1} flex={1}>
-											<FormLabel htmlFor={"beneficiaryAccountId"}>{t("forms.agreements.fields.beneficiary")}</FormLabel>
-											{orgsLoading ? (<Spinner />) : (<Select {...beneficiaryAccountId.bind} isInvalid={isInvalid(beneficiaryAccountId)} id="beneficiaryId"
-											                                        value={beneficiaryAccountId.value}>
-												<option>{t("forms.agreements.fields.beneficiaryChoose")}</option>
-												{orgsData?.organisaties.filter(o => o.rekeningen.length > 0).map(o => (
-													<optgroup label={o.weergaveNaam} key={o.id}>
-														{o.rekeningen.map(r => (
-															<option key={r.id} value={r.id}>{r.rekeninghouder} ({r.iban})</option>
-														))}
-													</optgroup>
+											<FormLabel htmlFor={"organizationId"}>{t("forms.agreements.fields.organization")}</FormLabel>
+											{orgsLoading ? (<Spinner />) : (<Select {...organizationId.bind} isInvalid={isInvalid(organizationId)} id="organizationId"
+											                                        value={organizationId.value}>
+												<option>{t("forms.agreements.fields.organizationChoose")}</option>
+												{orgsData?.organisaties.map(o => (
+													<option key={"o"+ o.id} value={o.id}>{o.weergaveNaam}</option>
 												))}
-												<optgroup label={gebruikerData.gebruiker.voornamen + " " + gebruikerData.gebruiker.achternaam}>
+												<option value={0}>{gebruikerData.gebruiker.voorletters} {gebruikerData.gebruiker.achternaam}</option>
+											</Select>)}
+										</Stack>
+										<Stack spacing={1} flex={1}>
+											<FormLabel htmlFor={"rekeningId"}>{t("forms.agreements.fields.bankAccount")}</FormLabel>
+											<Select {...rekeningId.bind} isInvalid={isInvalid(rekeningId)} id="rekeningId" value={rekeningId.value}>
+												<option>{t("forms.agreements.fields.bankAccountChoose")}</option>
+												{parseInt(organizationId.value as unknown as string) === 0 ? (<>
 													{gebruikerData.gebruiker.rekeningen.map(r => (
 														<option key={r.id} value={r.id}>{r.rekeninghouder} ({r.iban})</option>
 													))}
-												</optgroup>
-											</Select>)}
+												</>) : (<>
+													{orgsData?.organisaties.find(o => o.id === parseInt(organizationId.value as unknown as string))?.rekeningen.map(r => (
+														<option key={r.id} value={r.id}>{r.rekeninghouder} ({r.iban})</option>
+													))}
+												</>)}
+											</Select>
 										</Stack>
 									</Stack>
 									<Stack spacing={2} direction={isMobile ? "column" : "row"}>
