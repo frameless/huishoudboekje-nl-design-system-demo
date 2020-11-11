@@ -9,6 +9,7 @@ import mt940
 from graphql import GraphQLError
 
 from hhb_backend.graphql import settings
+from hhb_backend.graphql.models.customer_statement_message import CustomerStatementMessage
 
 
 class CreateCustomerStatementMessage(graphene.Mutation):
@@ -16,8 +17,7 @@ class CreateCustomerStatementMessage(graphene.Mutation):
         file = Upload(required=True)
 
     ok = graphene.Boolean()
-
-    # TODO: CSM model returned
+    customerStatementMessage = graphene.Field(lambda: CustomerStatementMessage)
 
     def mutate(self, info, file, **kwargs):
         # do something with your file
@@ -59,15 +59,15 @@ class CreateCustomerStatementMessage(graphene.Mutation):
                 csm_file.data['forward_available_balance'].amount.amount * 100)
 
         # Send the model
-        org_service_response = requests.post(
+        post_response = requests.post(
             f"{settings.TRANSACTIE_SERVICES_URL}/customerstatementmessages/",
             data=json.dumps(csmServiceModel),
             headers={'Content-type': 'application/json'}
         )
-        if org_service_response.status_code != 201:
-            raise GraphQLError(f"Upstream API responded: {org_service_response.json()}")
+        if post_response.status_code != 201:
+            raise GraphQLError(f"Upstream API responded: {post_response.json()}")
 
         # Add banktransactions
         # Post banktransactions
 
-        return CreateCustomerStatementMessage(ok=True)
+        return CreateCustomerStatementMessage(customerStatementMessage=post_response.json()["data"], ok=True)
