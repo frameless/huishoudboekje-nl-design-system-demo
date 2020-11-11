@@ -31,7 +31,7 @@ import Routes from "../../config/routes";
 import BackButton from "../BackButton";
 import {useMutation, useQuery} from "@apollo/client";
 import {IAfspraak, IGebruiker} from "../../models";
-import {GetGebruikerAfsprakenQuery, GetOneGebruikerQuery} from "../../services/graphql/queries";
+import {GetOneGebruikerQuery} from "../../services/graphql/queries";
 import {FormLeft, FormRight, Label} from "../Forms/FormLeftRight";
 import RekeningList from "../Rekeningen/RekeningList";
 import {CreateGebruikerRekeningMutation, DeleteAfspraakMutation, DeleteGebruikerMutation, ToggleAfspraakActiefMutation,} from "../../services/graphql/mutations";
@@ -137,7 +137,7 @@ const BurgerDetail = () => {
 		})
 			.then(result => {
 				toast({
-					title: t("messages.agreements.toggleConfirmMessage"),
+					title: t("messages.agreements.editConfirmMessage"),
 					position: "top",
 					status: "success",
 				});
@@ -154,7 +154,6 @@ const BurgerDetail = () => {
 				});
 			});
 	}
-	// const onClickShowInactive = (e) => setShowInactive(e.currentTarget.checked);
 
 	const renderPageContent = () => {
 		if (!gebruikerData && gebruikerLoading) {
