@@ -27,13 +27,16 @@ def test_create_csm_with_ing_file(client):
     adapter = requests_mock.Adapter()
 
     def test_matcher(request):
-        assert request.json()["account_identification"] == "NL69INGB0123456789EUR"
-        assert request.json()["closing_available_funds"] == 56435
-        assert request.json()["closing_balance"] == 56435
-        assert request.json()["forward_available_balance"] == 56435
-        assert request.json()["opening_balance"] == 66223
-        assert request.json()["transaction_reference_number"] == "P140220000000001"
-        return MockResponse({'data': {'id': 1}}, 201)
+        if request.path == "/customerstatementmessages/":
+            assert request.json()["account_identification"] == "NL69INGB0123456789EUR"
+            assert request.json()["closing_available_funds"] == 56435
+            assert request.json()["closing_balance"] == 56435
+            assert request.json()["forward_available_balance"] == 56435
+            assert request.json()["opening_balance"] == 66223
+            assert request.json()["transaction_reference_number"] == "P140220000000001"
+            return MockResponse({'data': {'id': 1}}, 201)
+        elif request.path == "/banktransactions/":
+            return MockResponse({'data': {'id': 1}}, 201)
 
     adapter.add_matcher(test_matcher)
 
@@ -51,12 +54,15 @@ def test_create_csm_with_abn_file(client):
     adapter = requests_mock.Adapter()
 
     def test_matcher(request):
-        assert request.json()["account_identification"] == "123456789"
-        assert request.json()["transaction_reference_number"] == "ABN AMRO BANK NV"
-        assert request.json()["sequence_number"] == "1"
-        assert request.json()["opening_balance"] == 513861
-        assert request.json()["closing_balance"] == 563862
-        return MockResponse({'data': {'id': 1}}, 201)
+        if request.path == "/customerstatementmessages/":
+            assert request.json()["account_identification"] == "123456789"
+            assert request.json()["transaction_reference_number"] == "ABN AMRO BANK NV"
+            assert request.json()["sequence_number"] == "1"
+            assert request.json()["opening_balance"] == 513861
+            assert request.json()["closing_balance"] == 563862
+            return MockResponse({'data': {'id': 1}}, 201)
+        elif request.path == "/banktransactions/":
+            return MockResponse({'data': {'id': 1}}, 201)
 
     adapter.add_matcher(test_matcher)
 
@@ -74,12 +80,15 @@ def test_create_csm_with_bng_file(client):
     adapter = requests_mock.Adapter()
 
     def test_matcher(request):
-        assert request.json()["account_identification"] == "0285053876"
-        assert request.json()["transaction_reference_number"] == "34948929"
-        assert request.json()["sequence_number"] == "1"
-        assert request.json()["opening_balance"] == -2000000
-        assert request.json()["closing_balance"] == 17060000
-        return MockResponse({'data': {'id': 1}}, 201)
+        if request.path == "/customerstatementmessages/":
+            assert request.json()["account_identification"] == "0285053876"
+            assert request.json()["transaction_reference_number"] == "34948929"
+            assert request.json()["sequence_number"] == "1"
+            assert request.json()["opening_balance"] == -2000000
+            assert request.json()["closing_balance"] == 17060000
+            return MockResponse({'data': {'id': 1}}, 201)
+        elif request.path == "/banktransactions/":
+            return MockResponse({'data': {'id': 1}}, 201)
 
     adapter.add_matcher(test_matcher)
 
@@ -94,7 +103,6 @@ def test_create_csm_with_bng_file(client):
 
 
 def test_create_csm_with_incorrect_file(client):
-
     with open(INCORRECT_CSM_FILE, "rb") as testfile:
         response = client.post(
             '/graphql/upload',
