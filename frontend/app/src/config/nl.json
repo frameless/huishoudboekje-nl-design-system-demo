@@ -175,6 +175,10 @@
         "contact": {
           "title": "Contact",
           "helperText": "Vul de contactgegevens van de organisatie in."
+        },
+        "rekeningen": {
+          "title": "Rekeningen",
+          "detailText": "Rekeningen van de organisatie."
         }
       },
       "fields": {

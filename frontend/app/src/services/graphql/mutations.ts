@@ -220,3 +220,29 @@ export const DeleteGebruikerRekeningMutation = gql`
         }
     }
 `;
+
+export const CreateOrganizationRekeningMutation = gql`
+    mutation createOrganizationRekening(
+        $orgId: Int!
+        $rekening: RekeningInput!
+    ){
+        createOrganisatieRekening(organisatieId: $orgId, rekening: $rekening){
+            ok
+            rekening{
+                ...Rekening
+            }
+        }
+    }
+    ${RekeningFragment}
+`;
+
+export const DeleteOrganizationRekeningMutation = gql`
+    mutation deleteOrganizationRekening(
+        $id: Int!
+        $orgId: Int!
+    ){
+        deleteOrganisatieRekening(organisatieId: $orgId, rekeningId: $id){
+            ok
+        }
+    }
+`;
