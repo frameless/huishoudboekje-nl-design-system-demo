@@ -1,9 +1,11 @@
 const pkg = require("./package.json");
 const {resolve, relative} = require("path");
 const {writeFileSync, existsSync, mkdirSync} = require("fs");
+const {gitDescribeSync} = require("git-describe");
+const {hash} = gitDescribeSync();
 
-const {version, versionName} = pkg;
-const rawVersion = `${version} ${versionName}`;
+const {version} = pkg;
+const rawVersion = `${version} ${hash ? `(${hash})` : ""}`;
 
 if (!existsSync(resolve(__dirname, "src"))) {
 	mkdirSync(resolve(__dirname, "src"))
