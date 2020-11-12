@@ -4,7 +4,7 @@ import Routes from "../../src/config/routes";
 const sampleBurgers = require("../fixtures/burgers.json");
 
 
-describe("Burgers CRUD", () => {
+xdescribe("Burgers CRUD", () => {
 	beforeEach(() => {
 		cy.task("getSchema").then(schema => {
 			cy.server();

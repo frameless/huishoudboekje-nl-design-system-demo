@@ -30,7 +30,6 @@ const OrganizationListView: React.FC<BoxProps & { organizations: IOrganisatie[],
 				</GridCard>
 			))}
 		</Grid>
-
 	);
 };
 

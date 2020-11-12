@@ -1,28 +1,41 @@
 [
   {
-    "id": 21,
-    "weergaveNaam": "Kok B.V.",
-    "kvkNummer": "47133406",
+    "id": 27,
+    "weergaveNaam": "Willemsen Advocaten",
+    "kvkNummer": "23027707",
     "kvkDetails": {
-      "naam": "Kok B.V.",
-      "nummer": "47133406",
-      "straatnaam": "Thijsweg",
-      "huisnummer": "86",
-      "postcode": "1463LJ",
-      "plaatsnaam": "Vos aan de Rijn"
+      "nummer": "23027707",
+      "naam": "Willemsen Advocaten",
+      "straatnaam": "Janssenpark",
+      "huisnummer": "18",
+      "postcode": "7575SG",
+      "plaatsnaam": "Garnwerd aan de IJssel"
     }
   },
   {
-    "id": 22,
-    "weergaveNaam": "Dam V.O.F.",
-    "kvkNummer": "39955234",
+    "id": 28,
+    "weergaveNaam": "Heuvel en Zn.",
+    "kvkNummer": "23298325",
     "kvkDetails": {
-      "naam": "Dam V.O.F.",
-      "nummer": "39955234",
-      "straatnaam": "Lottelaan",
-      "huisnummer": "70",
-      "postcode": "9174XJ",
-      "plaatsnaam": "GrootEmmaveen"
+      "nummer": "23298325",
+      "naam": "Heuvel en Zn.",
+      "straatnaam": "Lindenweg",
+      "huisnummer": "73",
+      "postcode": "7112HE",
+      "plaatsnaam": "Bakkerbosch"
+    }
+  },
+  {
+    "id": 29,
+    "weergaveNaam": "Belastingdienst",
+    "kvkNummer": "25677709",
+    "kvkDetails": {
+      "nummer": "25677709",
+      "naam": "Belastingdienst",
+      "straatnaam": "Belastingstraat",
+      "huisnummer": "1",
+      "postcode": "1234BD",
+      "plaatsnaam": "Amsterdam"
     }
   }
 ]

@@ -12,9 +12,7 @@ describe("Organizations CRUD", () => {
 					ok: true,
 				}
 			}).as("DexStub");
-			cy.mockGraphql({
-				schema,
-			});
+			cy.mockGraphql({schema});
 			cy.mockGraphqlOps({
 				delay: 1000,
 				operations: {
@@ -45,8 +43,8 @@ describe("Organizations CRUD", () => {
 		cy.visit(Routes.Organizations);
 
 		sampleOrganizations.forEach(o => {
-			cy.get(".organizationCard").should("contain", o.weergaveNaam);
-			cy.get(".organizationCard").should("contain", o.kvkDetails.plaatsnaam);
+			cy.get("div").should("contain", o.weergaveNaam);
+			cy.get("div").should("contain", o.kvkDetails.plaatsnaam);
 		});
 	});
 
