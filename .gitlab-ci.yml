@@ -15,12 +15,15 @@ variables:
   REVIEW_NAMESPACE: "hhb-$CI_ENVIRONMENT_SLUG"
   KUBECONFIG: /secrets/kubeconfig/review.conf
   PYTHON_POSTGRES: python-postgres
+
 stages:
   - build
   - test
   - deploy
+  - e2e
 
 include:
-  - '/.gitlab/ci/test.yml'
   - '/.gitlab/ci/build.yml'
   - '/.gitlab/ci/deploy.yml'
+  - '/.gitlab/ci/test.yml'
+  - '/.gitlab/ci/e2e.yml'

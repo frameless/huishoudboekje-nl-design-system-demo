@@ -20,7 +20,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "cypress": "cypress open",
+    "cypress": "npx -q cypress open",
     "theme": "./setTheme.sh",
     "lint": "eslint src"
   },
@@ -60,7 +60,6 @@
     "@types/react-router-dom": "^5.1.6",
     "@typescript-eslint/parser": "^4.6.1",
     "browserslist": "^4.14.5",
-    "cypress": "^5.6.0",
     "cypress-graphql-mock": "0.3.1",
     "eslint-plugin-cypress": "^2.11.2",
     "eslint-plugin-react-app": "^6.2.2"
