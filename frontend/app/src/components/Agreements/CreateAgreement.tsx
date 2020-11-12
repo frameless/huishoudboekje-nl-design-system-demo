@@ -162,7 +162,7 @@ const CreateAgreement = () => {
 				credit: afspraakType === AfspraakType.Income,
 				beschrijving: description.value,
 				tegenRekeningId: rekeningId.value,
-				organisatieId: organizationId.value,
+				organisatieId: parseInt(organizationId.value as unknown as string) !== 0 ? organizationId.value : null,
 				bedrag: amount.value,
 				kenmerk: searchTerm.value,
 				startDatum: moment(startDatum).format("YYYY-MM-DD"),
