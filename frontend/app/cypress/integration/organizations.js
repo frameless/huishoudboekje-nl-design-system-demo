@@ -3,7 +3,7 @@ import Routes from "../../src/config/routes";
 
 const sampleOrganizations = require("../fixtures/organizations.json");
 
-describe("Organizations CRUD", () => {
+xdescribe("Organizations CRUD", () => {
 	beforeEach(() => {
 		cy.task("getSchema").then(schema => {
 			cy.server();
