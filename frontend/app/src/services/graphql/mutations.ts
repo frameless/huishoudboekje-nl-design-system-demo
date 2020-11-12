@@ -72,13 +72,15 @@ export const CreateOrganizationMutation = gql`
         $weergaveNaam: String!
     ){
         createOrganisatie(
-            huisnummer: $huisnummer
-            kvkNummer: $kvkNummer
-            naam: $naam
-            plaatsnaam: $plaatsnaam
-            postcode: $postcode
-            straatnaam: $straatnaam
-            weergaveNaam: $weergaveNaam
+            input: {
+                huisnummer: $huisnummer
+                kvkNummer: $kvkNummer
+                naam: $naam
+                plaatsnaam: $plaatsnaam
+                postcode: $postcode
+                straatnaam: $straatnaam
+                weergaveNaam: $weergaveNaam
+            }
         ){
             ok
             organisatie {
@@ -127,43 +129,65 @@ export const DeleteOrganizationMutation = gql`
     }
 `;
 
-export const AddAgreementMutation = gql`
-    mutation addAgreement(
-        $gebruiker: Int
-        $beschrijving: String
-        $start_datum: Date
-        $eind_datum: Date
-        $aantal_betalingen: Int
-        $jaren: Int
-        $maanden: Int
-        $weken: Int
-        $dagen: Int
-        $tegen_rekening: Int
-        $bedrag: Bedrag
-        $credit: Boolean
-        $kenmerk: String
+export const CreateAfspraakMutation = gql`
+    mutation createAfspraak(
+        $aantalBetalingen: Int
         $actief: Boolean
+        $bedrag: Bedrag
+        $beschrijving: String
+        $credit: Boolean
+        $eindDatum: Date
+        $gebruikerId: Int
+        $interval: IntervalInput
+        $kenmerk: String
+        $startDatum: Date
+        $tegenRekeningId: Int
+        $organisatieId: Int
     ){
         createAfspraak(
-            gebruikerId: $gebruiker
-            beschrijving: $beschrijving
-            startDatum: $start_datum
-            eindDatum: $eind_datum
-            aantalBetalingen: $aantal_betalingen
-            interval: {
-                jaren: $jaren
-                maanden: $maanden
-                weken: $weken
-                dagen: $dagen
-            },
-            tegenRekeningId: $tegen_rekening
-            bedrag: $bedrag
-            credit: $credit
-            kenmerk: $kenmerk
+            aantalBetalingen: $aantalBetalingen
             actief: $actief
+            bedrag: $bedrag
+            beschrijving: $beschrijving
+            credit: $credit
+            eindDatum: $eindDatum
+            gebruikerId: $gebruikerId
+            interval: $interval
+            kenmerk: $kenmerk
+            startDatum: $startDatum
+            tegenRekeningId: $tegenRekeningId
+            organisatieId: $organisatieId
         ){
             ok
             afspraak {
+                ...Afspraak
+            }
+        }
+    }
+    ${AfspraakFragment}
+`;
+
+export const DeleteAfspraakMutation = gql`
+    mutation deleteAfspraak($id: Int!){
+        deleteAfspraak(id: $id){
+            ok
+        }
+    }
+`;
+
+export const ToggleAfspraakActiefMutation = gql`
+    mutation toggleAfspraakMutation(
+        $id: Int!
+        $gebruikerId: Int!
+        $actief: Boolean!
+    ){
+        updateAfspraak(
+            id: $id
+            gebruikerId: $gebruikerId,
+            actief: $actief
+        ){
+            ok
+            afspraak{
                 ...Afspraak
             }
         }

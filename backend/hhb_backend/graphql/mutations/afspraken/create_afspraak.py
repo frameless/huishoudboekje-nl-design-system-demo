@@ -22,6 +22,7 @@ class CreateAfspraak(graphene.Mutation):
         credit = graphene.Boolean()
         kenmerk = graphene.String()
         actief = graphene.Boolean()
+        organisatie_id = graphene.Int()
 
     ok = graphene.Boolean()
     afspraak = graphene.Field(lambda: Afspraak)

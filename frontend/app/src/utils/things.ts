@@ -1,4 +1,5 @@
 import {createContext} from "react";
+import {IInterval} from "../models";
 
 export const searchFields = (term: string, fields: string[]): boolean => {
 	const _fields = fields.filter(f => f);
@@ -27,5 +28,61 @@ export const Months = ["jan", "feb", "mrt", "apr", "may", "jun", "jul", "aug", "
 export const isDev = process.env.NODE_ENV === "development";
 
 export const DrawerContext = createContext<{ onClose: () => void }>({
-	onClose: () => {}
+	onClose: () => {
+	}
 });
+
+export const Interval = {
+	create: (intervalType: "day" | "week" | "month" | "year", intervalCount: any): IInterval => {
+		const intervalTypeConversion = {
+			day: "dagen",
+			week: "weken",
+			month: "maanden",
+			year: "jaren",
+		};
+
+		const interval = {
+			jaren: 0,
+			maanden: 0,
+			weken: 0,
+			dagen: 0,
+		}
+
+		interval[intervalTypeConversion[intervalType]] = parseInt(intervalCount);
+
+		return interval;
+	},
+	parse: (interval: IInterval): { intervalType: string, count: number } | undefined => {
+		if(!interval){
+			return undefined;
+		}
+
+		const intervalType = Object.keys(interval).filter(k => interval[k] > 0).shift();
+
+		if (!intervalType) {
+			return undefined;
+		}
+
+		const intervalTypeName = {
+			dagen: "day",
+			weken: "week",
+			maanden: "month",
+			jaren: "year",
+		}[intervalType];
+
+		return {intervalType: intervalTypeName, count: interval[intervalType]};
+	},
+}
+
+export const currencyFormat = new Intl.NumberFormat("nl-NL", {
+	currency: "EUR",
+	style: "currency"
+})
+export const numberFormat = new Intl.NumberFormat("nl-NL");
+export const dateFormat = new Intl.DateTimeFormat("nl-NL");
+
+export const wait = async (timeout: number = 1000): Promise<void> => {
+	return new Promise(resolve => {
+		setTimeout(resolve, timeout);
+	});
+}

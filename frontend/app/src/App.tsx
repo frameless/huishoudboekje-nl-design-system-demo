@@ -1,5 +1,5 @@
-import React, {useEffect} from "react";
-import {Box, Button, Flex, Heading, IconButton, Menu, MenuButton, MenuItem, MenuList, PseudoBox, Spinner, Stack, Text, useTheme, useToast} from "@chakra-ui/core";
+import React, {useEffect, useState} from "react";
+import {Box, Button, Flex, Heading, Icon, IconButton, Menu, MenuButton, MenuItem, MenuList, PseudoBox, Spinner, Stack, Text, useTheme, useToast} from "@chakra-ui/core";
 import {useSession} from "./utils/hooks";
 import {observer} from "mobx-react";
 import SidebarContainer from "./components/Sidebar/SidebarContainer";
@@ -16,6 +16,7 @@ import {useTranslation} from "react-i18next";
 import Organizations from "./components/Organizations";
 import TwoColumns from "./components/Layouts/TwoColumns";
 
+
 const App = () => {
 	const {t} = useTranslation();
 	const isMobile = useIsMobile(TABLET_BREAKPOINT);
@@ -25,6 +26,7 @@ const App = () => {
 	const toast = useToast();
 	const theme = useTheme();
 	const {push} = useHistory();
+	const [backendError, setBackendError] = useState();
 
 	const onClickLoginButton = () => {
 		/* Save the current user's page so that we can quickly navigate back after login. */
@@ -60,8 +62,22 @@ const App = () => {
 				}
 
 				toggleLoading(false);
+			})
+			.catch(err => {
+				setBackendError(err);
 			});
 	}, [push, session, toast, toggleLoading]);
+
+	if (backendError) {
+		return (
+			<TwoColumns>
+				<Stack spacing={5} maxWidth={300} direction={"row"} alignItems={"center"}>
+					<Icon name={"warning"} color={"red.500"} />
+					<Text color={"red.600"}>{t("messages.backendError")}</Text>
+				</Stack>
+			</TwoColumns>
+		)
+	}
 
 	if (!session.user) {
 		return (

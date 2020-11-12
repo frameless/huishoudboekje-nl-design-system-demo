@@ -1,3 +1,13 @@
+export enum AfspraakType {
+	Expense = "expense",
+	Income = "income"
+}
+export enum AfspraakPeriod {
+	Periodic = "periodic",
+	Once = "once"
+}
+export type IntervalType = "day" | "week" | "month" | "year";
+
 export type IGebruiker = {
 	__typename: "Gebruiker",
 	id: number
@@ -35,6 +45,7 @@ export type IOrganisatie = {
 	kvkNummer: string,
 	weergaveNaam: string,
 	kvkDetails: IKvK,
+	rekeningen: IRekening[]
 }
 
 export type IKvK = {
@@ -46,19 +57,27 @@ export type IKvK = {
 	straatnaam: string,
 }
 
+export type IInterval = {
+	jaren: number
+	maanden: number
+	weken: number
+	dagen: number
+}
+
 export type IAfspraak = {
 	__typename: "Afspraak"
 	id: number
 	gebruiker: IGebruiker
-	beschrijving: string
-	startDatum: Date
-	eindDatum: Date
-	aantalBetalingen: number
-	interval: string  // TODO use interval
-	tegenRekening: IRekening
-	organisatie: IOrganisatie
-	bedrag: string
 	credit: boolean
+	beschrijving: string
+	organisatie?: IOrganisatie,
+	tegenRekening: IRekening,
+	bedrag: number,
 	kenmerk: string
-	actief: boolean
+	type: "periodic" | "once",
+	interval: IInterval,
+	startDatum: Date
+	isContinuous: boolean,
+	nBetalingen: number,
+	actief: boolean,
 }

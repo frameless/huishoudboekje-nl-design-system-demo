@@ -10,7 +10,9 @@
     "edit": "Wijzigen",
     "login": "Inloggen",
     "logout": "Uitloggen",
-    "clearSearch": "Zoekopdracht wissen"
+    "clearSearch": "Zoekopdracht wissen",
+    "activate": "Activeer",
+    "deactivate": "Deactiveer"
   },
   "sidebar": {
     "dashboard": "Dashboard"
@@ -21,6 +23,7 @@
     }
   },
   "messages": {
+    "backendError": "Systeemfout. Kan niet doorgaan. Neem contact op met de applicatiebeheerder.",
     "genericError": {
       "title": "Fout.",
       "description": "Er is een onbekende fout opgetreden. Probeer het later nog eens."
@@ -41,8 +44,12 @@
       "addHint": "Voeg burgers toe door te klikken op de knop {{buttonLabel}}."
     },
     "agreements": {
+      "invalidFormMessage": "Er is een fout opgetreden. Controleer de ingevulde gegevens en probeer het opnieuw.",
       "noSearchResults": "Geen afspraken gevonden.",
-      "addHint": "Voeg afspraken toe door te klikken op de knop {{buttonLabel}}."
+      "addHint": "Voeg afspraken toe door te klikken op de knop {{buttonLabel}}.",
+      "createSuccessMessage": "Nieuwe afspraak succesvol opgeslagen.",
+      "deleteConfirmMessage": "Afspraak succesvol verwijderd.",
+      "editConfirmMessage": "Afspraak succesvol gewijzigd."
     },
     "organizations": {
       "invalidFormMessage": "Er is een fout opgetreden. Controleer de ingevulde gegevens en probeer het opnieuw.",
@@ -65,6 +72,7 @@
   "forms": {
     "common": {
       "fields": {
+        "date": "Datum",
         "dateDay": "Dag",
         "dateMonth": "Maand",
         "dateYear": "Jaar"
@@ -102,6 +110,7 @@
         "firstName": "Voornamen",
         "lastName": "Achternaam",
         "dateOfBirth": "Geboortedatum",
+        "age": "Leeftijd",
         "street": "Straatnaam",
         "houseNumber": "Huisnummer",
         "zipcode": "Postcode",
@@ -115,21 +124,45 @@
       }
     },
     "agreements": {
-      "title": "Afspraak",
-      "subtitle": "Vul de gegevens van de afspraak in.",
+      "sections": [
+        {
+          "title": "Afspraak",
+          "helperText": "Vul de algemene gegevens van de nieuwe afspraak in."
+        },
+        {
+          "title": "Periode",
+          "helperText": "Bepaal om wat voor afspraak het gaat."
+        }
+      ],
       "fields": {
-        "description": "Beschrijving",
-        "startDate": "Start datum",
-        "endDate": "Eind datum",
-        "noOfPayments": "Aantal betalingen",
-        "interval": "Interval",
-        "contraAccount": "Tegen rekening",
+        "type": "Soort",
+        "description": "Omschrijving",
+        "beneficiary": "Begunstigde",
+        "beneficiaryChoose": "Kies een begunstigde",
         "amount": "Bedrag",
+        "searchTerm": "Zoekterm",
+        "continuous": "Doorlopend",
+        "nTimes": "Aantal keer",
+        "isRecurring": "Soort",
+        "isRecurring_once": "Eenmalig",
+        "isRecurring_periodic": "Periodiek",
+        "startDate": "Startdatum",
+        "endDate": "Einddatum",
         "credit": "Credit",
         "debit": "Debet",
-        "reference": "Kenmerk",
+        "nPayments": "Aantal betalingen",
+        "interval": "Herhaling",
+        "intervalYears": "Jaren",
+        "intervalMonths": "Maanden",
+        "intervalWeeks": "Weken",
+        "intervalDays": "Dagen",
         "active": "Actief",
-        "user": "Gebruiker"
+        "expenses": "Uitgaven",
+        "income": "Inkomsten",
+        "organization": "Organisatie",
+        "organizationChoose": "Kies een organisatie",
+        "bankAccount": "Bankrekening",
+        "bankAccountChoose": "Kies een bankrekening"
       }
     },
     "organizations": {
@@ -176,7 +209,12 @@
     "burgers": "Burgers"
   },
   "organizations": {
+    "organization": "Organisatie",
     "organizations": "Organisaties"
+  },
+  "agreements": {
+    "incoming": "Inkomsten",
+    "outgoing": "Uitgaven"
   },
   "balances": {
     "balances": "Huishoudboekjes"
@@ -197,5 +235,28 @@
     "oct": "oktober",
     "nov": "november",
     "dec": "december"
-  }
+  },
+  "interval": {
+    "once": "Eenmalig",
+    "every": "Elk(e)",
+    "every-day": "Elke dag",
+    "every-day_plural": "Elke {{count}} dagen",
+    "every-week": "Elke week",
+    "every-week_plural": "Elke {{count}} weken",
+    "every-month": "Elke maand",
+    "every-month_plural": "Elke {{count}} maanden",
+    "every-year": "Elk jaar",
+    "every-year_plural": "Elke {{count}} jaar",
+    "day": "dag",
+    "day_plural": "dagen",
+    "week": "week",
+    "week_plural": "weken",
+    "month": "maand",
+    "month_plural": "maanden",
+    "year": "jaar",
+    "year_plural": "jaar"
+  },
+  "unknown": "Onbekend",
+  "active": "Actief",
+  "inactive": "Inactief"
 }

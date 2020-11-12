@@ -23,6 +23,10 @@ export const AfspraakFragment = gql`
         tegenRekening {
             ...Rekening
         }
+        organisatie {
+            id
+            weergaveNaam
+        }
         bedrag
         credit
         kenmerk

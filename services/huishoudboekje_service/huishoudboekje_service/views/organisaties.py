@@ -23,6 +23,7 @@ class OrganisatieView(HHBView):
     def extend_get(self, **kwargs):
         """ Extend the get function with a filer on kvk nummers """
         self.add_filter_filter_kvks()
+        self.hhb_query.expose_many_relation("afspraken", "id")
 
     def add_filter_filter_kvks(self):
         """ Add filter_ids filter based on the kvk of the organisatie model """

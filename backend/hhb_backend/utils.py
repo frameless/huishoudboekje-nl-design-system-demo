@@ -3,14 +3,10 @@ import re
 def convert_hhb_interval_to_iso(graphql_format: dict):
     if any (graphql_format.get(k,None) for k in ('jaren', 'maanden','weken','dagen')):
         isoformat = "P"
-        if graphql_format.get('jaren', None):
-            isoformat += f"{graphql_format.get('jaren')}Y"
-        if graphql_format.get('maanden', None):
-            isoformat += f"{graphql_format.get('maanden')}M"
-        if graphql_format.get('weken', None):
-            isoformat += f"{graphql_format.get('weken')}W"
-        if graphql_format.get('dagen', None):
-            isoformat += f"{graphql_format.get('dagen')}D"
+        isoformat += f"{graphql_format.get('jaren', 0)}Y"
+        isoformat += f"{graphql_format.get('maanden', 0)}M"
+        isoformat += f"{graphql_format.get('weken', 0)}W"
+        isoformat += f"{graphql_format.get('dagen', 0)}D"
         return isoformat
     return None
 

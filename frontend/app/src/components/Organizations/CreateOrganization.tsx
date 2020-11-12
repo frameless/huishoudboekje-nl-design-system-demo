@@ -109,7 +109,7 @@ const CreateOrganization = () => {
 				push(Routes.Organization(id));
 			}
 		}).catch(err => {
-			console.log("Error:", err);
+			console.error(err);
 			toast({
 				position: "top",
 				status: "error",

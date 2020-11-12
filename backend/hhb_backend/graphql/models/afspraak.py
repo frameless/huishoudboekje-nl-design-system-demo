@@ -35,6 +35,7 @@ class Afspraak(graphene.ObjectType):
     credit = graphene.Boolean()
     kenmerk = graphene.String()
     actief = graphene.Boolean()
+    organisatie = graphene.Field(lambda: organisatie.Organisatie)
 
     async def resolve_gebruiker(root, info):
         """ Get gebruiker when requested """
@@ -60,3 +61,10 @@ class Afspraak(graphene.ObjectType):
         value = root.get('interval')
         if value:
             return convert_hhb_interval_to_dict(value)
+        else:
+            return {"jaren": 0, "maanden": 0, "weken": 0, "dagen":0}
+
+    async def resolve_organisatie(root, info):
+        """ Get organisatie when requested """
+        if root.get('organisatie_id'):
+            return await request.dataloader.organisaties_by_id.load(root.get('organisatie_id'))

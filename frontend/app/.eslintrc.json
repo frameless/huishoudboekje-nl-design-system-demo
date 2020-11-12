@@ -39,6 +39,24 @@
     "eol-last": [
       "warn",
       "never"
+    ],
+    "no-empty": [
+      "warn"
+    ],
+    "react/self-closing-comp": [
+      "warn",
+      {
+        "component": true,
+        "html": false
+      }
+    ],
+    "no-console": [
+      "warn",
+      {
+        "allow": [
+          "error"
+        ]
+      }
     ]
   },
   "ignorePatterns": [

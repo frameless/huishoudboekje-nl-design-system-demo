@@ -150,7 +150,7 @@ const CreateBurger = () => {
 				push(Routes.Burger(id));
 			}
 		}).catch(err => {
-			console.log("Error:", err);
+			console.error("Error:", err);
 			toast({
 				position: "top",
 				status: "error",
