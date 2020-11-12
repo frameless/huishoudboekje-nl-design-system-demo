@@ -4,7 +4,7 @@ import {useSession} from "./utils/hooks";
 import {observer} from "mobx-react";
 import SidebarContainer from "./components/Sidebar/SidebarContainer";
 import {useIsMobile, useToggle} from "react-grapple";
-import {Route, Switch, useHistory, useLocation} from "react-router-dom";
+import {Route, Switch, Redirect, useHistory, useLocation} from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import UserStatus from "./components/UserStatus";
 import {FaLock} from "react-icons/all";
@@ -15,7 +15,6 @@ import {TABLET_BREAKPOINT} from "./utils/things";
 import {useTranslation} from "react-i18next";
 import Organizations from "./components/Organizations";
 import TwoColumns from "./components/Layouts/TwoColumns";
-
 
 const App = () => {
 	const {t} = useTranslation();
@@ -124,6 +123,9 @@ const App = () => {
 							</Stack>
 
 							<Switch>
+								<Route exact path={Routes.Home}>
+									<Redirect to={Routes.Burgers} />
+								</Route>
 								<Route path={Routes.Burgers} component={Burgers} />
 								<Route path={Routes.Organizations} component={Organizations} />
 								{/*<Route path={ROUTEPATH} component={BANK_COMPONENT} />*/}
