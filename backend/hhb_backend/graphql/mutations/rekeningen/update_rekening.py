@@ -16,7 +16,7 @@ class UpdateRekening(graphene.Mutation):
         rekening = graphene.Argument(lambda: rekening_input.RekeningInput, required=True)
 
     ok = graphene.Boolean()
-    rekening = graphene.List(rekening.Rekening)
+    rekening = graphene.Field(rekening.Rekening)
 
     @staticmethod
     def mutate(root, info, **kwargs):
@@ -30,7 +30,10 @@ class UpdateRekening(graphene.Mutation):
         )
         if existing_rekeningen_response.status_code != 200:
             raise GraphQLError(f"Upstream API responded: {existing_rekeningen_response.json()}")
-        existing_rekening = next(existing_rekeningen_response.json()['data'], None)
+        existing_rekening = existing_rekeningen_response.json()['data']
+
+        for k in ['iban', 'rekeninghouder']:
+            rekening.setdefault(k, existing_rekening[k])
 
         if existing_rekening is None:
             raise GraphQLError(f"Rekening does not exist")
