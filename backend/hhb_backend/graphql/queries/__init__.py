@@ -1,12 +1,15 @@
 """ GraphQL schema queries module """
 import graphene
+
+from .afspraken import AfspraakQuery, AfsprakenQuery
+from .bank_transactions import BankTransactionQuery, BankTransactionsQuery
+from .customer_statement_messages import CustomerStatementMessageQuery, CustomerStatementMessagesQuery
 from .gebruikers import GebruikersQuery, GebruikerQuery
 from .grootboekrekeningen import GrootboekrekeningQuery, GrootboekrekeningenQuery
+from .journaalposten import JournaalpostQuery, JournaalpostenQuery
 from .organisaties import OrganisatieQuery, OrganisatiesQuery
-from .afspraken import AfspraakQuery, AfsprakenQuery
 from .rekeningen import RekeningQuery, RekeningenQuery
-from .customer_statement_messages import CustomerStatementMessageQuery, CustomerStatementMessagesQuery
-from .bank_transactions import BankTransactionQuery, BankTransactionsQuery
+
 
 class RootQuery(graphene.ObjectType):
     """ The root of all queries """
@@ -24,6 +27,8 @@ class RootQuery(graphene.ObjectType):
     bank_transactions = BankTransactionsQuery.return_type
     grootboekrekening = GrootboekrekeningQuery.return_type
     grootboekrekeningen = GrootboekrekeningenQuery.return_type
+    journaalpost = JournaalpostQuery.return_type
+    journaalposten = JournaalpostenQuery.return_type
 
     async def resolve_gebruiker(root, info, **kwargs):
         return await GebruikerQuery.resolver(root, info, **kwargs)
@@ -66,3 +71,9 @@ class RootQuery(graphene.ObjectType):
 
     async def resolve_grootboekrekeningen(root, info, **kwargs):
         return await GrootboekrekeningenQuery.resolver(root, info, **kwargs)
+
+    async def resolve_journaalpost(root, info, **kwargs):
+        return await JournaalpostQuery.resolver(root, info, **kwargs)
+
+    async def resolve_journaalposten(root, info, **kwargs):
+        return await JournaalpostenQuery.resolver(root, info, **kwargs)

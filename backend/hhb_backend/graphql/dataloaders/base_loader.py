@@ -17,8 +17,8 @@ class SingleDataLoader(DataLoader):
     def get_all_and_cache(self):
         response = requests.get(self.url_for())
 
-        if response.status_code != 200:
-            raise GraphQLError(f"Upstream API responded: {response.json()}")
+        if not response.ok:
+            raise GraphQLError(f"Upstream API responded: {response.text}")
         result = response.json()["data"]
 
         # Prime the cache with the complete result set to prevent unnecessary extra calls
@@ -30,8 +30,8 @@ class SingleDataLoader(DataLoader):
     async def batch_load_fn(self, keys):
         url = self.url_for(keys)
         response = requests.get(url)
-        if response.status_code != 200:
-            raise GraphQLError(f"Upstream API responded: {response.json()}")
+        if not response.ok:
+            raise GraphQLError(f"Upstream API responded: {response.text}")
         objects = {}
         for item in response.json()["data"]:
             objects[item[self.index]] = item
@@ -49,8 +49,8 @@ class ListDataLoader(DataLoader):
     async def batch_load_fn(self, keys):
         url = f"{self.service}/{self.model}/?{self.filter_item}={','.join([str(k) for k in keys])}"
         response = requests.get(url)
-        if response.status_code != 200:
-            raise GraphQLError(f"Upstream API responded: {response.json()}")
+        if not response.ok:
+            raise GraphQLError(f"Upstream API responded: {response.text}")
         objects = {}
         for item in response.json()["data"]:
             if self.is_list:

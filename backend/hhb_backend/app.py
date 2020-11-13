@@ -13,14 +13,12 @@ import hhb_backend.graphql.blueprint as graphql_blueprint
 from hhb_backend.custom_oidc import CustomOidc
 from hhb_backend.reverse_proxy import ReverseProxied
 
-logging.basicConfig(level=logging.DEBUG)
-
 
 def create_app(config_name=os.getenv('APP_SETTINGS', None) or 'hhb_backend.config.DevelopmentConfig'):
     app = Flask(__name__)
     app.config.from_object(config_name)
 
-    logging.debug(f"{pformat(app.config)}")
+    logging.basicConfig( level=app.config["LOG_LEVEL"],  )
     logging.info(f"Starting {__name__} with {config_name}")
 
     if app.config['PREFIX']:

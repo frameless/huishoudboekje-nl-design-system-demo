@@ -3,6 +3,8 @@ import graphene
 from .gebruikers.create_gebruiker import CreateGebruiker
 from .gebruikers.delete_gebruiker import DeleteGebruiker
 from .gebruikers.update_gebruiker import UpdateGebruiker
+from .journaalposten.create_journaalpost import CreateJournaalpostAfspraak, CreateJournaalpostGrootboekrekening
+from .journaalposten.delete_journaalpost import DeleteJournaalpost
 from .organisaties.create_organisatie import CreateOrganisatie
 from .organisaties.update_organisatie import UpdateOrganisatie
 from .organisaties.delete_organisatie import DeleteOrganisatie
@@ -35,3 +37,7 @@ class RootMutation(graphene.ObjectType):
     updateRekening = UpdateRekening.Field()
     deleteCustomerStatementMessage = DeleteCustomerStatementMessage.Field()
     createCustomerStatementMessage = CreateCustomerStatementMessage.Field()
+
+    createJournaalpostAfspraak = CreateJournaalpostAfspraak.Field()
+    createJournaalpostGrootboekrekening = CreateJournaalpostGrootboekrekening.Field()
+    deleteJournaalpost = DeleteJournaalpost.Field()

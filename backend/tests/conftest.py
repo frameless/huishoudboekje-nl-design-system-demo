@@ -1,4 +1,6 @@
 # """ Fixtures for core testing """
+import logging
+
 import pytest
 from hhb_backend.app import create_app
 
@@ -8,4 +10,6 @@ def client(request):
     """
     Returns session-wide application.
     """
-    yield create_app(config_name='hhb_backend.config.TestingConfig').test_client()
+    app = create_app(config_name='hhb_backend.config.TestingConfig')
+    logging.getLogger("faker").setLevel(logging.INFO)
+    yield app.test_client()

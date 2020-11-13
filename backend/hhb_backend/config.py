@@ -8,6 +8,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 class Config(object):
     CSRF_ENABLED = True
     DEBUG = False
+    LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
     DEVELOPMENT = False
     TESTING = False
     GRAPHQL_AUTH_ENABLED = True
@@ -38,6 +39,7 @@ class StagingConfig(Config):
 
 
 class LocalConfig(StagingConfig):
+    LOG_LEVEL = os.getenv("LOG_LEVEL", "DEBUG")
     SESSION_COOKIE_SECURE = False
     OIDC_ID_TOKEN_COOKIE_SECURE = False
 
