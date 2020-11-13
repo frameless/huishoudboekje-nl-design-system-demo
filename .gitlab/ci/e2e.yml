@@ -18,7 +18,7 @@
     paths:
       - frontend/app/cypress/videos/*.mp4
       - frontend/app/cypress/screenshots/**/*.png
-    expire_in: 1 day
+    expire_in: 1 week
 
 
 cypress-review:
@@ -30,3 +30,12 @@ cypress-review:
     - master
     - develop
     - acceptance
+
+
+cypress-test:
+  extends: .cypress
+  needs:
+    - job: deploy-test
+      artifacts: true
+  only:
+    - develop
