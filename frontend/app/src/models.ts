@@ -2,11 +2,18 @@ export enum AfspraakType {
 	Expense = "expense",
 	Income = "income"
 }
+
 export enum AfspraakPeriod {
 	Periodic = "periodic",
 	Once = "once"
 }
-export type IntervalType = "day" | "week" | "month" | "year";
+
+export enum IntervalType {
+	Day = "day",
+	Week = "week",
+	Month = "month",
+	Year = "year"
+}
 
 export type IGebruiker = {
 	__typename: "Gebruiker",

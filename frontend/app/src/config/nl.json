@@ -125,6 +125,7 @@
       }
     },
     "agreements": {
+      "titleEdit": "Afspraak bewerken",
       "sections": [
         {
           "title": "Afspraak",

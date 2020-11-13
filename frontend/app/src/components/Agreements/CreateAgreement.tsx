@@ -11,7 +11,6 @@ import {
 	InputGroup,
 	InputLeftElement,
 	RadioButtonGroup,
-	RadioProps,
 	Select,
 	Spinner,
 	Stack,
@@ -31,10 +30,11 @@ import {GetAllOrganisatiesQuery, GetOneGebruikerQuery} from "../../services/grap
 import {AfspraakPeriod, AfspraakType, IGebruiker, IntervalType, IOrganisatie} from "../../models";
 import {UseInput} from "react-grapple/dist/hooks/useInput";
 import moment from "moment";
+import CustomRadioButton from "./CustomRadioButton";
 
 const CreateAgreement = () => {
 	const {t} = useTranslation();
-	const {burgerId} = useParams();
+	const {burgerId} = useParams<{burgerId}>();
 	const {push} = useHistory();
 	const isMobile = useIsMobile(MOBILE_BREAKPOINT);
 	const toast = useToast();
@@ -89,8 +89,8 @@ const CreateAgreement = () => {
 		validate: [(v) => new RegExp(/^[0-9]+$/).test(v.toString())]
 	});
 	const intervalType = useInput<IntervalType>({
-		defaultValue: "month",
-		validate: [(v) => ["day", "week", "month", "year"].includes(v)]
+		defaultValue: IntervalType.Month,
+		validate: [(v) => Object.keys(IntervalType).includes(v)]
 	})
 	const intervalNumber = useInput({
 		defaultValue: "",
@@ -111,7 +111,7 @@ const CreateAgreement = () => {
 		amount.setValue(c.bedrag);
 		searchTerm.setValue(c.kenmerk);
 		toggleRecurring(c.type === AfspraakPeriod.Periodic);
-		intervalType.setValue("month");
+		intervalType.setValue(IntervalType.Month);
 		intervalNumber.setValue("3");
 		startDate.day.setValue(c.startDatum.split("-")[2]);
 		startDate.month.setValue(c.startDatum.split("-")[1]);
@@ -190,6 +190,11 @@ const CreateAgreement = () => {
 	};
 
 	const isInvalid = (input) => (input.dirty || isSubmitted) && !input.isValid;
+	const onChangeAfspraakType = val => {
+		if (val) {
+			setAfspraakType(val);
+		}
+	};
 
 	const renderPageContent = () => {
 		if (gebruikerLoading) {
@@ -203,12 +208,6 @@ const CreateAgreement = () => {
 		if (gebruikerError) {
 			return (<Redirect to={Routes.NotFound} />);
 		}
-
-		const onChangeAfspraakType = val => {
-			if (val) {
-				setAfspraakType(val);
-			}
-		};
 
 		if (gebruikerData) {
 			return (
@@ -389,12 +388,5 @@ const CreateAgreement = () => {
 		{renderPageContent()}
 	</>);
 };
-
-const CustomRadioButton: React.FC<RadioProps> = React.forwardRef((props, ref) => {
-	const {isChecked, isDisabled, value, children, ...rest} = props;
-	return (
-		<Button aria-checked={isChecked} ref={ref} variantColor={isChecked ? "primary" : "gray"} isDisabled={isDisabled} {...rest}>{children}</Button>
-	);
-});
 
 export default CreateAgreement;

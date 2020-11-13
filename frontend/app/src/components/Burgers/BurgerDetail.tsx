@@ -43,7 +43,7 @@ import AfspraakItem from "../Agreements/AfpraakItem";
 
 const BurgerDetail = () => {
 	const {t} = useTranslation();
-	const {id} = useParams();
+	const {id} = useParams<{id}>();
 	const {push} = useHistory();
 	const toast = useToast();
 	const isMobile = useIsMobile();

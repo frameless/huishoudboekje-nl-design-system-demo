@@ -15,7 +15,7 @@ import {UpdateGebruikerMutation} from "../../services/graphql/mutations";
 const BurgerEdit = () => {
 	const isMobile = useIsMobile();
 	const {t} = useTranslation();
-	const {id} = useParams();
+	const {id} = useParams<{id}>();
 	const toast = useToast();
 
 	// const bsn = useInput<string>({

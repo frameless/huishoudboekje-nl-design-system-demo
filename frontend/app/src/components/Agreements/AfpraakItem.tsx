@@ -4,10 +4,13 @@ import {useIsMobile} from "react-grapple";
 import {IAfspraak} from "../../models";
 import {currencyFormat, Interval} from "../../utils/things";
 import {useTranslation} from "react-i18next";
+import Routes from "../../config/routes";
+import { useHistory } from "react-router-dom";
 
 const AfspraakItem: React.FC<BoxProps & { afspraak: IAfspraak, onToggleActive?: (id: number) => void, onDelete?: (id: number) => void }> = ({afspraak: a, onToggleActive, onDelete, ...props}) => {
 	const isMobile = useIsMobile();
 	const {t} = useTranslation();
+	const {push} = useHistory();
 	const [deleteConfirm, setDeleteConfirm] = useState<boolean>(false);
 
 	// const onClickEditButton = () => {};
@@ -43,6 +46,8 @@ const AfspraakItem: React.FC<BoxProps & { afspraak: IAfspraak, onToggleActive?: 
 		}
 	};
 
+	const onClickEditButton = () => push(Routes.EditAgreement(a.id));
+
 	return (
 		<Stack direction={isMobile ? "column" : "row"} alignItems={"center"} {...props}>
 			<Box flex={1}>{a.organisatie?.weergaveNaam || a.tegenRekening?.rekeninghouder || t("unknown")}</Box>
@@ -58,7 +63,7 @@ const AfspraakItem: React.FC<BoxProps & { afspraak: IAfspraak, onToggleActive?: 
 				)}
 			</Stack>
 			<Box width={75}>
-				{/*<IconButton variant={"ghost"} size={"sm"} icon={"edit"} aria-label={t("actions.edit")} onClick={onClickEditButton} />*/}
+				<IconButton variant={"ghost"} size={"sm"} icon={"edit"} aria-label={t("actions.edit")} onClick={onClickEditButton} />
 				{onDelete && (<>
 					<IconButton variant={deleteConfirm ? "solid" : "ghost"} size={"xs"} icon={deleteConfirm ? "check" : "delete"}
 					            variantColor={deleteConfirm ? "red" : "gray"}
