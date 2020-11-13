@@ -37,24 +37,24 @@ class CreateCustomerStatementMessage(graphene.Mutation):
             raise GraphQLError(f"Incorrect file, missing tag 20 transaction reference")
 
         # csmServiceModel.related_reference = csm_file.data['??']
-        if 'account_identification' in csm_file.data and csm_file.data["account_identification"] is not None:
+        if csm_file.data.get('account_identification', False):
             csmServiceModel["account_identification"] = csm_file.data['account_identification']
         else:
             raise GraphQLError(f"Incorrect file, missing tag 25 account identification")
 
-        if 'sequence_number' in csm_file.data and csm_file.data["sequence_number"] is not None:
+        if csm_file.data.get('sequence_number', False):
             csmServiceModel["sequence_number"] = csm_file.data['sequence_number']
 
-        if 'final_opening_balance' in csm_file.data and csm_file.data["final_opening_balance"] is not None:
+        if csm_file.data.get('final_opening_balance', False):
             csmServiceModel["opening_balance"] = int(csm_file.data['final_opening_balance'].amount.amount * 100)
 
-        if 'final_closing_balance' in csm_file.data and csm_file.data["final_closing_balance"] is not None:
+        if csm_file.data.get('final_closing_balance', False):
             csmServiceModel["closing_balance"] = int(csm_file.data['final_closing_balance'].amount.amount * 100)
 
-        if 'available_balance' in csm_file.data and csm_file.data["available_balance"] is not None:
+        if csm_file.data.get('available_balance', False):
             csmServiceModel["closing_available_funds"] = int(csm_file.data['available_balance'].amount.amount * 100)
 
-        if 'forward_available_balance' in csm_file.data and csm_file.data["forward_available_balance"] is not None:
+        if csm_file.data.get('forward_available_balance', False):
             csmServiceModel["forward_available_balance"] = int(
                 csm_file.data['forward_available_balance'].amount.amount * 100)
 
