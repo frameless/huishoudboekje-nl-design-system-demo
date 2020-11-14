@@ -1,5 +1,5 @@
 import {createContext} from "react";
-import {IInterval} from "../models";
+import {IInterval, IntervalType} from "../models";
 
 export const searchFields = (term: string, fields: string[]): boolean => {
 	const _fields = fields.filter(f => f);
@@ -52,7 +52,7 @@ export const Interval = {
 
 		return interval;
 	},
-	parse: (interval: IInterval): { intervalType: string, count: number } | undefined => {
+	parse: (interval: IInterval): { intervalType: IntervalType, count: number } | undefined => {
 		if(!interval){
 			return undefined;
 		}

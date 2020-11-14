@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Interval, isDev} from "../../utils/things";
 import {
 	Box,
@@ -87,35 +87,42 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 		validate: [v => !isNaN(parseInt(v))]
 	});
 
-	if (afspraak) {
-		setAfspraakType(afspraak.credit ? AfspraakType.Income : AfspraakType.Expense);
-		description.setValue(afspraak.beschrijving);
-		organizationId.setValue(afspraak.organisatie?.id || 0);
-		if (afspraak.tegenRekening) {
-			rekeningId.setValue(afspraak.tegenRekening.id);
+	useEffect(() => {
+		if (afspraak) {
+			setAfspraakType(afspraak.credit ? AfspraakType.Income : AfspraakType.Expense);
+			description.setValue(afspraak.beschrijving);
+			organizationId.setValue(afspraak.organisatie?.id || 0);
+			if (afspraak.tegenRekening) {
+				rekeningId.setValue(afspraak.tegenRekening.id);
+			}
+			amount.setValue(afspraak.bedrag);
+			searchTerm.setValue(afspraak.kenmerk);
+			const interval = Interval.parse(afspraak.interval);
+			if (interval) {
+				toggleRecurring(true);
+				intervalType.setValue(interval.intervalType);
+				intervalNumber.setValue(interval.count.toString());
+			}
+			const startDatum = new Date(afspraak.startDatum);
+			startDate.day.setValue(startDatum.getDate());
+			startDate.month.setValue(startDatum.getMonth() + 1);
+			startDate.year.setValue(startDatum.getFullYear());
+			if (afspraak.nBetalingen) {
+				toggleContinuous();
+				nTimes.setValue(afspraak.nBetalingen);
+			}
 		}
-		amount.setValue(afspraak.bedrag);
-		searchTerm.setValue(afspraak.kenmerk);
-		const interval = Interval.parse(afspraak.interval);
-		if (interval) {
-			toggleRecurring(true);
-			intervalType.setValue(IntervalType[interval.intervalType]);
-			intervalNumber.setValue(interval.count.toString());
-		}
-		const startDatum = new Date(afspraak.startDatum);
-		startDate.day.setValue(startDatum.getDate());
-		startDate.month.setValue(startDatum.getMonth() + 1);
-		startDate.year.setValue(startDatum.getFullYear());
-		if (afspraak.nBetalingen) {
-			toggleContinuous();
-			nTimes.setValue(afspraak.nBetalingen);
-		}
-	}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [afspraak]);
+
+	useEffect(() => {
+		console.log([startDate.day, startDate.month, startDate.year]);
+	}, [startDate.day, startDate.month, startDate.year]);
 
 	const prePopulateForm = () => {
 		const c = sampleData.agreements[0];
 
-		setAfspraakType(c.type);
+		setAfspraakType(c.credit ? AfspraakType.Income : AfspraakType.Expense);
 		description.setValue(c.omschrijving);
 		organizationId.setValue(c.organisatie.id);
 		if (c.organisatie?.rekeningen?.length > 0) {
@@ -126,9 +133,9 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 		toggleRecurring(c.type === AfspraakPeriod.Periodic);
 		intervalType.setValue(IntervalType.Month);
 		intervalNumber.setValue("3");
-		startDate.day.setValue(c.startDatum.split("-")[2]);
-		startDate.month.setValue(c.startDatum.split("-")[1]);
-		startDate.year.setValue(c.startDatum.split("-")[0]);
+		startDate.day.setValue(parseInt(c.startDatum.split("-")[2]));
+		startDate.month.setValue(parseInt(c.startDatum.split("-")[1]));
+		startDate.year.setValue(parseInt(c.startDatum.split("-")[0]));
 		toggleContinuous(c.isContinuous);
 		nTimes.setValue(10);
 	}
@@ -167,7 +174,6 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 			return;
 		}
 
-		const startDatum = new Date(Date.UTC(startDate.year.value, startDate.month.value - 1, startDate.day.value));
 		onSave({
 			gebruikerId: gebruiker.id,
 			credit: afspraakType === AfspraakType.Income,
@@ -176,7 +182,7 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 			organisatieId: parseInt(organizationId.value as unknown as string) !== 0 ? organizationId.value : null,
 			bedrag: amount.value,
 			kenmerk: searchTerm.value,
-			startDatum: moment(startDatum).format("YYYY-MM-DD"),
+			startDatum: moment(Date.UTC(startDate.year.value, startDate.month.value - 1, startDate.day.value)).format("YYYY-MM-DD"),
 			interval: isRecurring ? Interval.create(intervalType.value, intervalNumber.value) : null,
 			aantalBetalingen: !isContinuous ? nTimes.value : null,
 			actief: true,
@@ -206,9 +212,8 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 						<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 							<Stack spacing={1} flex={1}>
 								<FormLabel htmlFor={"beschrijving"}>{t("forms.agreements.fields.type")}</FormLabel>
-								<RadioButtonGroup isInline onChange={onChangeAfspraakType} defaultValue={AfspraakType.Expense} spacing={0}>
-									<CustomRadioButton size={"sm"} roundedRight={0}
-									                   value={AfspraakType.Expense}>{t("forms.agreements.fields.expenses")}</CustomRadioButton>
+								<RadioButtonGroup isInline onChange={onChangeAfspraakType} value={afspraakType} defaultValue={AfspraakType.Expense} spacing={0}>
+									<CustomRadioButton size={"sm"} roundedRight={0} value={AfspraakType.Expense}>{t("forms.agreements.fields.expenses")}</CustomRadioButton>
 									<CustomRadioButton size={"sm"} roundedLeft={0} value={AfspraakType.Income}>{t("forms.agreements.fields.income")}</CustomRadioButton>
 								</RadioButtonGroup>
 							</Stack>
