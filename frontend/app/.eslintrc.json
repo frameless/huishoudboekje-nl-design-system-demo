@@ -54,7 +54,8 @@
       "warn",
       {
         "allow": [
-          "error"
+          "error",
+          "info"
         ]
       }
     ]
