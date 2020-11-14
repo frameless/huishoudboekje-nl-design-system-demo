@@ -85,6 +85,6 @@ export type IAfspraak = {
 	interval: IInterval,
 	startDatum: Date
 	isContinuous: boolean,
-	nBetalingen: number,
+	aantalBetalingen: number,
 	actief: boolean,
 }

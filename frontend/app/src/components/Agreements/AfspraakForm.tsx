@@ -107,17 +107,13 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 			startDate.day.setValue(startDatum.getDate());
 			startDate.month.setValue(startDatum.getMonth() + 1);
 			startDate.year.setValue(startDatum.getFullYear());
-			if (afspraak.nBetalingen) {
-				toggleContinuous();
-				nTimes.setValue(afspraak.nBetalingen);
+			if (afspraak.aantalBetalingen) {
+				toggleContinuous(false);
+				nTimes.setValue(afspraak.aantalBetalingen);
 			}
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [afspraak]);
-
-	useEffect(() => {
-		console.log([startDate.day, startDate.month, startDate.year]);
-	}, [startDate.day, startDate.month, startDate.year]);
 
 	const prePopulateForm = () => {
 		const c = sampleData.agreements[0];
