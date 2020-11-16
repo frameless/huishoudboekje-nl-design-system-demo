@@ -88,3 +88,24 @@ export type IAfspraak = {
 	aantalBetalingen: number,
 	actief: boolean,
 }
+
+export type IBankTransaction = {
+	customerStatementMessage: ICustomerStatementMessage
+	id: number
+	informationToAccountOwner: string
+	statementLine: string
+}
+
+export type ICustomerStatementMessage = {
+	accountIdentification: string
+	bankTransactions: IBankTransaction[]
+	closingAvailableFunds: number
+	closingBalance: number
+	forwardAvailableBalance: number
+	id: number
+	openingBalance: number
+	relatedReference: string
+	sequenceNumber: string
+	transactionReferenceNumber: string
+	uploadDate: Date
+};

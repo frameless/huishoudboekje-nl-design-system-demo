@@ -94,3 +94,23 @@ export const OrganisatieFragment = gql`
     ${RekeningFragment}
     ${OrganisatieKvkDetailsFragment}
 `;
+
+export const CustomerStatementMessageFragment = gql`
+    fragment CustomerStatementMessage on CustomerStatementMessage {
+        accountIdentification
+        bankTransactions{
+            id
+            informationToAccountOwner
+            statementLine
+        }
+        closingAvailableFunds
+        closingBalance
+        forwardAvailableBalance
+        id
+        openingBalance
+        relatedReference
+        sequenceNumber
+        transactionReferenceNumber
+        uploadDate
+    }
+`;

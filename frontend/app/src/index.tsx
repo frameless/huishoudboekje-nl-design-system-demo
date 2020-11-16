@@ -5,12 +5,8 @@ import "./config/i18n";
 import {CSSReset, ThemeProvider} from "@chakra-ui/core";
 import theme from "./config/theme";
 import {BrowserRouter as Router} from "react-router-dom";
-import {ApolloClient, ApolloProvider, InMemoryCache} from "@apollo/client";
-
-const client = new ApolloClient({
-	uri: "/api/graphql",
-	cache: new InMemoryCache()
-});
+import {ApolloProvider} from "@apollo/client";
+import apolloClient from "./services/graphql/client";
 
 ReactDOM.render(
 	<React.StrictMode>
@@ -18,7 +14,7 @@ ReactDOM.render(
 			<CSSReset />
 
 			<Router>
-				<ApolloProvider client={client}>
+				<ApolloProvider client={apolloClient}>
 					<App />
 				</ApolloProvider>
 			</Router>

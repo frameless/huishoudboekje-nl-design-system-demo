@@ -202,6 +202,14 @@
         "accountHolder": "Rekeninghouder",
         "iban": "IBAN"
       }
+    },
+    "banking": {
+      "sections": {
+        "customerStatementMessages": {
+          "title": "Customer Statement Messages",
+          "detailText": "Geüploade bankbestanden."
+        }
+      }
     }
   },
   "pages": {
@@ -226,7 +234,7 @@
     "balances": "Huishoudboekjes"
   },
   "banking": {
-    "banking": "Bank"
+    "banking": "Bankzaken"
   },
   "months": {
     "jan": "januari",

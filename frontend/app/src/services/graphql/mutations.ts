@@ -1,5 +1,5 @@
 import {gql} from "@apollo/client";
-import {AfspraakFragment, GebruikerFragment, OrganisatieFragment, RekeningFragment} from "./fragments";
+import {AfspraakFragment, CustomerStatementMessageFragment, GebruikerFragment, OrganisatieFragment, RekeningFragment} from "./fragments";
 
 export const CreateGebruikerMutation = gql`
     mutation createGebruiker(
@@ -285,4 +285,18 @@ export const DeleteOrganizationRekeningMutation = gql`
             ok
         }
     }
+`;
+
+export const CreateCustomerStatementMessage = gql`
+    mutation createCustomerStatementMessage(
+        $file: Upload!
+    ){
+        createCustomerStatementMessage(file: $file){
+            ok
+            customerStatementMessage{
+                ...CustomerStatementMessage
+            }
+        }
+    }
+    ${CustomerStatementMessageFragment}
 `;

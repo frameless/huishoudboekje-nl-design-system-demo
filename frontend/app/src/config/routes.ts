@@ -5,6 +5,7 @@ export enum RouteNames {
 	burgers = "burgers",
 	agreements = "afspraken",
 	organizations = "organisaties",
+	banking = "bankzaken",
 	notFound = "404",
 
 	// Sub routes
@@ -13,7 +14,6 @@ export enum RouteNames {
 
 	// Not in use yet
 	balances = "huishoudboekjes",
-	banking = "bank",
 	settings = "instellingen",
 }
 
