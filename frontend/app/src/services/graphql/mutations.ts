@@ -183,12 +183,12 @@ export const UpdateAfspraakMutation = gql`
         $bedrag: Bedrag
         $beschrijving: String
         $credit: Boolean
-        $eindDatum: Date
+        $eindDatum: String
         $gebruikerId: Int
         $interval: IntervalInput
         $kenmerk: String
         $organisatieId: Int
-        $startDatum: Date
+        $startDatum: String
         $tegenRekeningId: Int
     ){
         updateAfspraak(
