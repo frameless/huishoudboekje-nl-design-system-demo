@@ -1,6 +1,7 @@
 """ GraphQL schema queries module """
 import graphene
 from .gebruikers import GebruikersQuery, GebruikerQuery
+from .grootboekrekeningen import GrootboekrekeningQuery, GrootboekrekeningenQuery
 from .organisaties import OrganisatieQuery, OrganisatiesQuery
 from .afspraken import AfspraakQuery, AfsprakenQuery
 from .rekeningen import RekeningQuery, RekeningenQuery
@@ -21,6 +22,8 @@ class RootQuery(graphene.ObjectType):
     customer_statement_messages = CustomerStatementMessagesQuery.return_type
     bank_transaction = BankTransactionQuery.return_type
     bank_transactions = BankTransactionsQuery.return_type
+    grootboekrekening = GrootboekrekeningQuery.return_type
+    grootboekrekeningen = GrootboekrekeningenQuery.return_type
 
     async def resolve_gebruiker(root, info, **kwargs):
         return await GebruikerQuery.resolver(root, info, **kwargs)
@@ -57,3 +60,9 @@ class RootQuery(graphene.ObjectType):
 
     async def resolve_bank_transactions(root, info, **kwargs):
         return await BankTransactionsQuery.resolver(root, info, **kwargs)
+
+    async def resolve_grootboekrekening(root, info, **kwargs):
+        return await GrootboekrekeningQuery.resolver(root, info, **kwargs)
+
+    async def resolve_grootboekrekeningen(root, info, **kwargs):
+        return await GrootboekrekeningenQuery.resolver(root, info, **kwargs)

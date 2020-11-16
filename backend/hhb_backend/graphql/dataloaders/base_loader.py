@@ -1,8 +1,8 @@
 import requests
 from graphql import GraphQLError
-from promise import Promise
 from aiodataloader import DataLoader
 from hhb_backend.graphql import settings
+
 
 class SingleDataLoader(DataLoader):
     """ Dataloader for when the result is a single object """
@@ -11,8 +11,21 @@ class SingleDataLoader(DataLoader):
     filter_item = "filter_ids"
     index = "id"
 
+    def url_for(self, keys=None):
+        return f"""{self.service}/{self.model}/{f"?{self.filter_item}={','.join([str(k) for k in keys])}" if keys else ''}"""
+
+    def get_all_and_cache(self):
+        response = requests.get(self.url_for())
+
+        if response.status_code != 200:
+            raise GraphQLError(f"Upstream API responded: {response.json()}")
+        result = response.json()["data"]
+        for item in result:
+            self.prime(item[self.index], item)
+        return result
+
     async def batch_load_fn(self, keys):
-        url = f"{self.service}/{self.model}/?{self.filter_item}={','.join([str(k) for k in keys])}"
+        url = self.url_for(keys)
         response = requests.get(url)
         if response.status_code != 200:
             raise GraphQLError(f"Upstream API responded: {response.json()}")
@@ -28,10 +41,11 @@ class ListDataLoader(DataLoader):
     service = settings.HHB_SERVICES_URL
     filter_item = None
     index = None
-    is_list = False # elements in the result list are lists as well (1-n vs n-n)
+    is_list = False  # elements in the result list are lists as well (1-n vs n-n)
 
     async def batch_load_fn(self, keys):
-        response = requests.get(f"{self.service}/{self.model}/?{self.filter_item}={','.join([str(k) for k in keys])}")
+        url = f"{self.service}/{self.model}/?{self.filter_item}={','.join([str(k) for k in keys])}"
+        response = requests.get(url)
         if response.status_code != 200:
             raise GraphQLError(f"Upstream API responded: {response.json()}")
         objects = {}

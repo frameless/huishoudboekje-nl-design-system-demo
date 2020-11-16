@@ -1,4 +1,5 @@
 from .gebruiker_loader import GebruikersByIdLoader
+from .grootboekrekening_loader import GrootboekrekeningenByIdLoader
 from .organisatie_loader import OrganisatieByIdLoader, KvKDetailsLoader
 from .afspraken_loader import AfsprakenByIdLoader, AfsprakenByGebruikerLoader
 from .rekeningen_loader import RekeningenByIdLoader, RekeningenByGebruikerLoader, RekeningenByOrganisatieLoader
@@ -29,3 +30,5 @@ class HHBDataLoader:
         self.csms_by_id = CSMsByIdLoader(loop=loop)
         self.bank_transactions_by_id = BankTransactionByIdLoader(loop=loop)
         self.bank_transactions_by_csm = BankTransactionByCsmLoader(loop=loop)
+
+        self.grootboekrekeningen_by_id = GrootboekrekeningenByIdLoader(loop=loop)
