@@ -2,7 +2,6 @@ import {isDev} from "../utils/things";
 
 export enum RouteNames {
 	login = "inloggen",
-	dashboard = "dashboard",
 	burgers = "burgers",
 	agreements = "afspraken",
 	organizations = "organisaties",
@@ -20,7 +19,6 @@ export enum RouteNames {
 
 const Routes = {
 	Home: "/",
-	Dashboard: `/${RouteNames.dashboard}`,
 	Login: `/${RouteNames.login}`,
 
 	Burgers: `/${RouteNames.burgers}`,
