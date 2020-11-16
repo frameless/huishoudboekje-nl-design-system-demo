@@ -88,6 +88,21 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 	});
 
 	useEffect(() => {
+		if(organizationId.value){
+			if(orgsData && orgsData.organisaties){
+				const selectedOrg = orgsData.organisaties.find(o => o.id === parseInt(organizationId.value as unknown as string));
+
+				if(selectedOrg && selectedOrg.rekeningen.length === 1){
+					rekeningId.setValue(selectedOrg.rekeningen[0].id);
+				}
+			}
+
+		}
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [organizationId.value, orgsData]);
+
+	useEffect(() => {
 		if (afspraak) {
 			setAfspraakType(afspraak.credit ? AfspraakType.Income : AfspraakType.Expense);
 			description.setValue(afspraak.beschrijving);
