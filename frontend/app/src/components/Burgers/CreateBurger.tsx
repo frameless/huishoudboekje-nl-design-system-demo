@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {Box, Button, Divider, FormHelperText, FormLabel, Heading, Input, Select, Stack, Tooltip, useToast} from "@chakra-ui/core";
 import {useInput, useIsMobile, useNumberInput, Validators} from "react-grapple";
@@ -17,6 +17,7 @@ const CreateBurger = () => {
 	const {push} = useHistory();
 	const isMobile = useIsMobile(MOBILE_BREAKPOINT);
 	const toast = useToast();
+	const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
 	const initials = useInput<string>({
 		defaultValue: "",
@@ -96,6 +97,7 @@ const CreateBurger = () => {
 
 	const onSubmit = (e) => {
 		e.preventDefault();
+		setIsSubmitted(true);
 
 		const isFormValid = [
 			initials,
@@ -161,7 +163,7 @@ const CreateBurger = () => {
 		});
 	};
 
-	const isInvalid = (input) => input.dirty && !input.isValid;
+	const isInvalid = (input) => (input.dirty || isSubmitted) && !input.isValid;
 
 	// const onChangeRekeningen = (newRekeningen) => {
 	// 	setRekeningen(newRekeningen)
