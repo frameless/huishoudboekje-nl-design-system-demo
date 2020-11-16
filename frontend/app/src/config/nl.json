@@ -63,6 +63,7 @@
     },
     "rekeningen": {
       "addHint": "Voeg rekeningen toe door te klikken op de knop {{buttonLabel}}.",
+      "invalidFormMessage": "Er is een fout opgetreden. Controleer de ingevulde gegevens en probeer het opnieuw.",
       "createSuccessMessage": "Nieuwe rekening succesvol opgeslagen.",
       "deleteTitle": "Rekening verwijderen.",
       "deleteQuestion": "Weet u zeker dat u rekening {{iban}} op naam van {{accountHolder}} wil verwijderen? Deze actie kan ongedaan worden gemaakt.",
