@@ -1,37 +1,62 @@
 import React, {useRef, useState} from "react";
-import {Box, Button, Divider, Heading, Input, Skeleton, Stack, Text} from "@chakra-ui/core";
+import {Box, Button, Divider, Heading, Input, Skeleton, Stack, Text, useToast} from "@chakra-ui/core";
 import {useTranslation} from "react-i18next";
 import {CreateCustomerStatementMessage} from "../../services/graphql/mutations";
-import {useMutation} from "@apollo/client";
+import {useMutation, useQuery} from "@apollo/client";
 import {FormLeft, FormRight, Label} from "../Forms/FormLeftRight";
 import {useIsMobile} from "react-grapple";
 import FileUploadItem from "../FileUploadItem";
+import {GetAllCustomerStatementMessagesQuery} from "../../services/graphql/queries";
+
+type UploadedCSM = {
+	file: File,
+	validity: ValidityState,
+	success: boolean
+}
 
 const Banking = () => {
 	const isMobile = useIsMobile();
 	const {t} = useTranslation();
+	const toast = useToast();
 	const csms = [];
 	const fileUploadInput = useRef<HTMLInputElement>(null);
 
-	const [uploadedFile, setUploadedFile] = useState<any>();
-	const [createCSM, {loading: createCsmLoading}] = useMutation(CreateCustomerStatementMessage);
+	const [uploadedFile, setUploadedFile] = useState<UploadedCSM>();
+	const $customerStatementMessages = useQuery(GetAllCustomerStatementMessagesQuery);
+	const [createCSM, {loading: createCsmLoading}] = useMutation(CreateCustomerStatementMessage, {
+		context: {
+			method: "fileUpload"
+		}
+	});
 
 	const onChangeFile = (e: React.FormEvent<HTMLInputElement>) => {
 		const {currentTarget: {validity, files}} = e;
 
-		console.log(validity, files);
 		if (files && files.length > 0) {
-			setUploadedFile({file: files[0], validity});
-
 			createCSM({
 				variables: {
 					file: files[0]
 				}
-			}).then(result => {
-				console.log(result);
+			}).then(() => {
+				setUploadedFile({file: files[0], validity, success: true});
+				toast({
+					status: "success",
+					title: t("messages.banking.createSuccessMessage"),
+					position: "top",
+				});
 			}).catch(err => {
-				console.log(err);
+				console.error(err);
+
+				setUploadedFile({file: files[0], validity, success: false});
+				toast({
+					position: "top",
+					status: "error",
+					variant: "solid",
+					title: t("messages.genericError.title"),
+					description: t("messages.genericError.description"),
+				});
 			})
+
 		}
 	};
 
@@ -60,7 +85,7 @@ const Banking = () => {
 						<Stack spacing={5} id={"stack"}>
 							{uploadedFile && (
 								<Skeleton isLoaded={!createCsmLoading}>
-									<FileUploadItem file={uploadedFile.file} validity={uploadedFile.validity} />
+									<FileUploadItem file={uploadedFile.file} validity={uploadedFile.validity} success={uploadedFile.success} />
 								</Skeleton>
 							)}
 							<Box>
