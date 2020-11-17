@@ -44,7 +44,7 @@ test-frontend:
       - ${DIRECTORY}/htmlcov
     reports:
       cobertura: ${DIRECTORY}/coverage.xml
-
+      junit: ${DIRECTORY}/report.xml
 
 backend-test:
   extends: .Service Test
