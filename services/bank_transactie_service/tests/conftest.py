@@ -23,7 +23,7 @@ def app(request):
     """
     Returns session-wide application.
     """
-    with Postgresql() as postgresql:
+    with Postgresql(initdb="C:\\Program Files\\PostgreSQL\\13\\bin\\initdb.exe", postgres="C:\\Program Files\\PostgreSQL\\13\\bin\\postgres.exe") as postgresql:
         app = create_app(TestingConfig)
         app.config['SQLALCHEMY_DATABASE_URI'] = postgresql.url()
         yield app
