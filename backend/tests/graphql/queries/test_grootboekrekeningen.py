@@ -1,9 +1,12 @@
 import re
+
+import pytest
 import requests_mock
 from hhb_backend.graphql import settings
 
-mock_inkomsten = {"id": "m1", "naam": "inkomsten", "children": ["m12"]}
-mock_salaris = {"id": "m12", "naam": "salaris", "parent": "m1"}
+# mock_inkomsten = {"id": "m1", "naam": "inkomsten", "children": ["m12"]}
+mock_inkomsten = {"id": "m1", "naam": "inkomsten"}
+mock_salaris = {"id": "m12", "naam": "salaris", "parent_id": "m1"}
 mock_data = {"data": [
     mock_inkomsten,
     mock_salaris,
@@ -25,6 +28,8 @@ def test_grootboekrekeningen(client):
         ]}}
 
 
+
+@pytest.mark.skip('TODO enable when the children relationship is re-enabled in grootboek_service')
 def test_grootboekrekeningen_children(client):
     with requests_mock.Mocker() as mock:
         adapter = mock.get(f"{settings.GROOTBOEK_SERVICE_URL}/grootboekrekeningen/", json=mock_data)
@@ -44,6 +49,7 @@ def test_grootboekrekeningen_children(client):
         ]}}
 
 
+@pytest.mark.skip('TODO enable when the children relationship is re-enabled in grootboek_service')
 def test_grootboekrekeningen_with_ids(client):
     with requests_mock.Mocker() as mock:
         adapter = mock.get(f'{settings.GROOTBOEK_SERVICE_URL}/grootboekrekeningen/?filter_ids=m1,m12',
@@ -77,6 +83,7 @@ def test_grootboekrekening_by_id(client):
                                           }}
 
 
+@pytest.mark.skip('TODO enable when the children relationship is re-enabled in grootboek_service')
 def test_grootboekrekening_with_children(client):
     with requests_mock.Mocker() as mock:
         inkomsten_adapter = mock.get(f'{settings.GROOTBOEK_SERVICE_URL}/grootboekrekeningen/?filter_ids=m1',

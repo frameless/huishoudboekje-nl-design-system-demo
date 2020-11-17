@@ -20,8 +20,11 @@ class SingleDataLoader(DataLoader):
         if response.status_code != 200:
             raise GraphQLError(f"Upstream API responded: {response.json()}")
         result = response.json()["data"]
+
+        # Prime the cache with the complete result set to prevent unnecessary extra calls
         for item in result:
             self.prime(item[self.index], item)
+
         return result
 
     async def batch_load_fn(self, keys):
