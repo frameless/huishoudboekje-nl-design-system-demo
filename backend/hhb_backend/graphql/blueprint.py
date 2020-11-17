@@ -35,7 +35,9 @@ def create_blueprint():
         view_func=FileUploadGraphQLView.as_view(
             'upload',
             graphiql=True,
-            schema=schema
+            schema=schema,
+            executor=AsyncioExecutor(loop=loop),
+            strict_slashes=False
         )
     )
 
