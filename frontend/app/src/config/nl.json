@@ -68,6 +68,9 @@
       "deleteTitle": "Rekening verwijderen.",
       "deleteQuestion": "Weet u zeker dat u rekening {{iban}} op naam van {{accountHolder}} wil verwijderen? Deze actie kan ongedaan worden gemaakt.",
       "deleteSuccess": "Rekening is verwijderd."
+    },
+    "customerStatementMessages": {
+      "deleteSuccess": "Het betaalbestand is succesvol verwijderd."
     }
   },
   "forms": {

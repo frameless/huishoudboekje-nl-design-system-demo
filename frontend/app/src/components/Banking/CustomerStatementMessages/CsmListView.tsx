@@ -1,12 +1,39 @@
+import {useMutation} from "@apollo/client";
+import {Box, BoxProps, useToast} from "@chakra-ui/core";
 import React from "react";
-import {dateFormat} from "../../../utils/things";
-import {BoxProps, IconButton, Text} from "@chakra-ui/core";
-import {ICustomerStatementMessage} from "../../../models";
 import {useTranslation} from "react-i18next";
-import { Label } from "../../Forms/FormLeftRight";
+import {ICustomerStatementMessage} from "../../../models";
+import {DeleteCustomerStatementMessageMutation} from "../../../services/graphql/mutations";
+import {Label} from "../../Forms/FormLeftRight";
+import CsmListItem from "./CsmListItem";
 
-const CsmListView: React.FC<BoxProps & { csms: ICustomerStatementMessage[] }> = ({csms}) => {
+const CsmListView: React.FC<BoxProps & { csms: ICustomerStatementMessage[], refresh: VoidFunction }> = ({csms, refresh}) => {
 	const {t} = useTranslation();
+	const toast = useToast();
+
+	const [deleteCustomerStatementMessage] = useMutation(DeleteCustomerStatementMessageMutation);
+
+	const onDelete = (id: number) => {
+		deleteCustomerStatementMessage({
+			variables: {id}
+		}).then(() => {
+			toast({
+				title: t("messages.customerStatementMessages.deleteConfirm"),
+				position: "top",
+				status: "success",
+			});
+			refresh();
+		}).catch(err => {
+			console.error(err);
+			toast({
+				position: "top",
+				status: "error",
+				variant: "solid",
+				description: t("messages.genericError.description"),
+				title: t("messages.genericError.title")
+			});
+		});
+	}
 
 	return (
 		<table width={"100%"}>
@@ -28,16 +55,7 @@ const CsmListView: React.FC<BoxProps & { csms: ICustomerStatementMessage[] }> = 
 			</thead>
 			<tbody>
 				{csms.map(csm => (
-					<tr>
-						<td>{dateFormat.format(new Date(csm.uploadDate))}</td>
-						<td>{csm.accountIdentification}</td>
-						<td style={{textAlign: "right", paddingRight: "10px"}}>
-							<Text mr={4}>{csm.bankTransactions.length}</Text>
-						</td>
-						<td>
-							<IconButton size={"sm"} variant={"ghost"} aria-label={t("actions.delete")} icon={"delete"} />
-						</td>
-					</tr>
+					<CsmListItem key={csm.id} csm={csm} onDelete={onDelete} />
 				))}
 			</tbody>
 		</table>

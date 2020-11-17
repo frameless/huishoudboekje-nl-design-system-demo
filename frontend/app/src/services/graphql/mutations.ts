@@ -287,7 +287,7 @@ export const DeleteOrganizationRekeningMutation = gql`
     }
 `;
 
-export const CreateCustomerStatementMessage = gql`
+export const CreateCustomerStatementMessageMutation = gql`
     mutation createCustomerStatementMessage(
         $file: Upload!
     ){
@@ -299,4 +299,14 @@ export const CreateCustomerStatementMessage = gql`
         }
     }
     ${CustomerStatementMessageFragment}
+`;
+
+export const DeleteCustomerStatementMessageMutation = gql`
+    mutation deleteCustomerStatementMessage(
+        $id: Int!
+    ){
+        deleteCustomerStatementMessage(id: $id){
+            ok
+        }
+    }
 `;

@@ -1,15 +1,15 @@
-import React, {useRef, useState} from "react";
-import {Box, Button, Divider, Heading, Input, Skeleton, Stack, useToast} from "@chakra-ui/core";
-import {useTranslation} from "react-i18next";
-import {GetAllCustomerStatementMessagesQuery} from "../../../services/graphql/queries";
-import {ICustomerStatementMessage} from "../../../models";
 import {useMutation, useQuery} from "@apollo/client";
+import {Box, Button, Divider, Heading, Input, Skeleton, Stack, useToast} from "@chakra-ui/core";
+import React, {useRef, useState} from "react";
+import {useIsMobile} from "react-grapple";
+import {useTranslation} from "react-i18next";
+import {ICustomerStatementMessage} from "../../../models";
+import {CreateCustomerStatementMessageMutation} from "../../../services/graphql/mutations";
+import {GetAllCustomerStatementMessagesQuery} from "../../../services/graphql/queries";
 import Queryable from "../../../utils/Queryable";
+import FileUploadItem from "../../FileUploadItem";
 import {FormLeft, FormRight, Label} from "../../Forms/FormLeftRight";
 import CsmListView from "./CsmListView";
-import {CreateCustomerStatementMessage} from "../../../services/graphql/mutations";
-import FileUploadItem from "../../FileUploadItem";
-import {useIsMobile} from "react-grapple";
 
 type UploadedCSM = {
 	file: File,
@@ -26,7 +26,7 @@ const CustomerStatementMessages = () => {
 
 	const [uploadedFile, setUploadedFile] = useState<UploadedCSM>();
 	const $customerStatementMessages = useQuery<{ customerStatementMessages: ICustomerStatementMessage[] }>(GetAllCustomerStatementMessagesQuery);
-	const [createCSM, {loading: createCsmLoading}] = useMutation(CreateCustomerStatementMessage, {
+	const [createCSM, {loading: createCsmLoading}] = useMutation(CreateCustomerStatementMessageMutation, {
 		context: {
 			method: "fileUpload"
 		}
@@ -41,7 +41,6 @@ const CustomerStatementMessages = () => {
 					file: files[0]
 				}
 			}).then(() => {
-				setUploadedFile({file: files[0], validity, success: true});
 				toast({
 					status: "success",
 					title: t("messages.banking.createSuccessMessage"),
@@ -103,9 +102,14 @@ const CustomerStatementMessages = () => {
 					</FormLeft>
 					<FormRight>
 
-						<Queryable query={$customerStatementMessages}>{(data: { customerStatementMessages: ICustomerStatementMessage[] }) => (
-							<CsmListView csms={data.customerStatementMessages} />
-						)}
+						<Queryable query={$customerStatementMessages}>{(data: { customerStatementMessages: ICustomerStatementMessage[] }) => {
+							/* Sort CSMs so that the newest appears first */
+							const csms = [...data.customerStatementMessages].sort((a, b) => a.uploadDate <= b.uploadDate ? 1 : -1);
+
+							return (
+								<CsmListView csms={csms} refresh={$customerStatementMessages.refetch} />
+							)
+						}}
 						</Queryable>
 
 					</FormRight>
