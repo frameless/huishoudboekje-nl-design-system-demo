@@ -26,10 +26,9 @@ class GrootboekrekeningenView(HHBView):
         "required": ["id"]
     }
 
-    # TODO optimize `expose_many_relation`, currently it fires a query for every record
-    # def extend_get(self, **kwargs):
-    #     """ Extend the get function to expose children """
-    #     self.hhb_query.expose_many_relation("children", "id")
+    def extend_get(self, **kwargs):
+        """ Extend the get function to expose children """
+        self.hhb_query.expose_many_relation("children", "id")
 
     def get_object_id_from_kwargs(self, **kwargs):
         if "object_id" in kwargs:

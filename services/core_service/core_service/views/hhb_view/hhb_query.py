@@ -1,5 +1,6 @@
 from flask import request, abort, make_response
 from sqlalchemy import String
+from sqlalchemy.orm import joinedload
 from core_service.utils import row2dict
 
 class HHBQuery():
@@ -57,21 +58,26 @@ class HHBQuery():
         row = self.query.filter(self.hhb_model.id==row_id).one_or_none()
         if not row:
             return {"errors": [f"{self.hhb_model.__name__} not found."]}, 404
-        result_dict = row2dict(row)
-        for relation in self._exposed_many_relations:
-            result_dict[relation["relation"]] = [getattr(item, relation["relation_property"]) for item in getattr(row, relation["relation"])]
-        for relation in self._exposed_one_relations:
-                result_dict[relation["relation"]] = getattr(getattr(row, relation["relation"]), relation["relation_property"])
-        return {"data": result_dict}, 200
+        return {"data": self.post_process_data(row)}, 200
 
     def get_result_multiple(self):
         """ Get multiple results from the current query """
         result_list = []
         for row in self.query.all():
-            result_dict = row2dict(row)
-            for relation in self._exposed_many_relations:
-                result_dict[relation["relation"]] = [getattr(item, relation["relation_property"]) for item in getattr(row, relation["relation"])]
-            for relation in self._exposed_one_relations:
-                result_dict[relation["relation"]] = getattr(getattr(row, relation["relation"]), relation["relation_property"])
-            result_list.append(result_dict)
+            result_list.append(self.post_process_data(row))
         return {"data": result_list}, 200
+
+    def load_relations(self):
+        for relation in self._exposed_many_relations + self._exposed_one_relations:
+            self.query = self.query.options(joinedload(relation["relation"]))
+
+    def order_query(self):
+        self.query = self.query.order_by(self.hhb_model.id)
+
+    def post_process_data(self, row):
+        result_dict = row2dict(row)
+        for relation in self._exposed_many_relations:
+            result_dict[relation["relation"]] = [getattr(item, relation["relation_property"]) for item in getattr(row, relation["relation"])]
+        for relation in self._exposed_one_relations:
+            result_dict[relation["relation"]] = getattr(getattr(row, relation["relation"]), relation["relation_property"])
+        return result_dict
