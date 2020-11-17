@@ -1,5 +1,6 @@
 import React from "react";
 import {Box, Spinner, Stack} from "@chakra-ui/core";
+import {QueryResult} from "@apollo/client/react/types/types";
 
 const Loading = () => (
 	<Stack spacing={5} alignItems={"center"} justifyContent={"center"} my={10}>
@@ -7,7 +8,7 @@ const Loading = () => (
 	</Stack>
 );
 
-const Queryable: React.FC<{ query, loading?, error?, children }> = ({query, loading, error, children}) => {
+const Queryable: React.FC<{ query: QueryResult, loading?, error?, children }> = ({query, loading, error, children}) => {
 	const {data: _data, loading: _loading, error: _error} = query;
 
 	if (_loading) {

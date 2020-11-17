@@ -1,5 +1,5 @@
 import React, {useRef, useState} from "react";
-import {Box, Button, Divider, Heading, Input, Skeleton, Stack, Text, useToast} from "@chakra-ui/core";
+import {Box, Button, Divider, Heading, IconButton, Input, Skeleton, Stack, Text, useToast} from "@chakra-ui/core";
 import {useTranslation} from "react-i18next";
 import {CreateCustomerStatementMessage} from "../../services/graphql/mutations";
 import {useMutation, useQuery} from "@apollo/client";
@@ -7,6 +7,9 @@ import {FormLeft, FormRight, Label} from "../Forms/FormLeftRight";
 import {useIsMobile} from "react-grapple";
 import FileUploadItem from "../FileUploadItem";
 import {GetAllCustomerStatementMessagesQuery} from "../../services/graphql/queries";
+import Queryable from "../../utils/Queryable";
+import {ICustomerStatementMessage} from "../../models";
+import {dateFormat} from "../../utils/things";
 
 type UploadedCSM = {
 	file: File,
@@ -22,7 +25,7 @@ const Banking = () => {
 	const fileUploadInput = useRef<HTMLInputElement>(null);
 
 	const [uploadedFile, setUploadedFile] = useState<UploadedCSM>();
-	const $customerStatementMessages = useQuery(GetAllCustomerStatementMessagesQuery);
+	const $customerStatementMessages = useQuery<{ customerStatementMessages: ICustomerStatementMessage[] }>(GetAllCustomerStatementMessagesQuery);
 	const [createCSM, {loading: createCsmLoading}] = useMutation(CreateCustomerStatementMessage, {
 		context: {
 			method: "fileUpload"
@@ -98,7 +101,35 @@ const Banking = () => {
 						</Stack>
 					</FormLeft>
 					<FormRight>
-						<Text>List of CSMs</Text>
+
+						<Queryable query={$customerStatementMessages}>{(data: { customerStatementMessages: ICustomerStatementMessage[] }) => (
+							<table width={"100%"}>
+								<thead>
+									<tr>
+										<td>{t("forms.common.fields.date")}</td>
+										<td>{t("forms.banking.bankAccount")}</td>
+										<td>{t("forms.banking.nTransactions")}</td>
+										<td>{t("actions.actions")}</td>
+									</tr>
+								</thead>
+								<tbody>
+									{data.customerStatementMessages.map(csm => (
+										<tr>
+											<td>{dateFormat.format(new Date(csm.uploadDate))}</td>
+											<td>{csm.accountIdentification}</td>
+											<td style={{textAlign: "right", paddingRight: "10px"}}>
+												<Text mr={4}>{csm.bankTransactions.length}</Text>
+											</td>
+											<td>
+												<IconButton size={"sm"} variant={"ghost"} aria-label={t("actions.delete")} icon={"delete"} />
+											</td>
+										</tr>
+									))}
+								</tbody>
+							</table>
+						)}
+						</Queryable>
+
 					</FormRight>
 				</Stack>
 			</Stack>

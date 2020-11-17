@@ -1,5 +1,6 @@
 {
   "actions": {
+    "actions": "Acties",
     "back": "Terug",
     "backToHome": "Terug naar de hoofdpagina",
     "backToList": "Terug naar overzicht",
@@ -204,6 +205,8 @@
       }
     },
     "banking": {
+      "bankAccount": "Rekening",
+      "nTransactions": "Transacties",
       "sections": {
         "customerStatementMessages": {
           "title": "Customer Statement Messages",
