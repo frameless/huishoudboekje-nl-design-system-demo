@@ -52,6 +52,12 @@ export const Interval = {
 
 		return interval;
 	},
+	empty: {
+		jaren: 0,
+		maanden: 0,
+		weken: 0,
+		dagen: 0,
+	},
 	parse: (interval: IInterval): { intervalType: IntervalType, count: number } | undefined => {
 		if(!interval){
 			return undefined;
