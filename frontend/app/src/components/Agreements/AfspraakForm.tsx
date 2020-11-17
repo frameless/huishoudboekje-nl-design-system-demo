@@ -224,8 +224,8 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 							<Stack spacing={1} flex={1}>
 								<FormLabel htmlFor={"beschrijving"}>{t("forms.agreements.fields.type")}</FormLabel>
 								<RadioButtonGroup isInline onChange={onChangeAfspraakType} value={afspraakType} defaultValue={AfspraakType.Expense} spacing={0}>
-									<CustomRadioButton size={"sm"} roundedRight={0} value={AfspraakType.Expense}>{t("forms.agreements.fields.expenses")}</CustomRadioButton>
-									<CustomRadioButton size={"sm"} roundedLeft={0} value={AfspraakType.Income}>{t("forms.agreements.fields.income")}</CustomRadioButton>
+									<CustomRadioButton size={"sm"} roundedRight={0} value={AfspraakType.Income}>{t("forms.agreements.fields.income")}</CustomRadioButton>
+									<CustomRadioButton size={"sm"} roundedLeft={0} value={AfspraakType.Expense}>{t("forms.agreements.fields.expenses")}</CustomRadioButton>
 								</RadioButtonGroup>
 							</Stack>
 						</Stack>
