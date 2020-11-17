@@ -32,6 +32,7 @@ const Routes = {
 	Organizations: `/${RouteNames.organizations}`,
 	Organization: (id?: number) => `/${RouteNames.organizations}/${id || ":id(\\d+)"}`,
 	CreateOrganization: `/${RouteNames.organizations}/${RouteNames.add}`,
+	EditOrganization: (id: number) => `/${RouteNames.organizations}/${id}/${RouteNames.edit}`,
 
 	NotFound: `/${RouteNames.notFound}`,
 
