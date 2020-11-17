@@ -16,5 +16,7 @@ setup(
         'graphene>=2,<3',
         'requests>=2.24.0',
         'aiodataloader>=0.2.0',
+        'graphene-file-upload>=1.2.2',
+        'mt-940>=4.23.0',
     ],
 )

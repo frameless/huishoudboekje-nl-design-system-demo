@@ -72,6 +72,7 @@ def create_app(config_name=os.getenv('APP_SETTINGS', None) or 'hhb_backend.confi
             pass
 
     app.register_blueprint(graphql, url_prefix='/graphql')
+    app.register_blueprint(graphql, url_prefix='/graphql_upload')
 
     @app.route('/logout')
     def logout():

@@ -1,0 +1,36 @@
+0200 13XXXXXXXXXXXX00000
+0200 13BNGHNL20AXXX00000
+940 02
+:20:34948929
+:25:0285053876
+:28C:9/1
+:60F:D140831EUR20000,00
+:61:140912D1000,00NMSC028
+:86:0266474500                       Bakkerij van Bohemen Lange Houtstraat 11              Den Haag Bestelling van gebak
+:61:120912D1000,00NMSC028
+:86:DE37500700100925464001           DEUTDEFF Schuhe GMBH                      Frankfurt Zahlungsnummer 1234567
+:61:140912D10000,00NMSC028
+:86:EB BATCH: 123456789               POSTEN: 000057                        LST 5 POS SOM REKNRS 78.445                    
+:61:140912D10000,00NMSC028
+:86:EB BATCH: 123456790               POSTEN: 000022  
+:61:140912D100,00NMSC091
+:86:P0001234567                       Handelsmaatschappij Amsterdam                        BET KENMERK: 123456789 Levering potloden
+:61:140912D100,00NMSC091
+:86:DE37500700100925464001           DEUTDEFF Deutschland GMBH                 Frankfurt REFO:1234567890                  Incassant ID Kenmerk machtiging               Zahlungsnummer 1234568 :61:140912D100,00NMSC092
+:86:OORSPR. VEREV. 120903            BET KENMERK: KTB-966591 P0001234533                      P. Pieterse NIET AKKOORD MET AFSCHRIJVING      Huur september 
+:61:140912D100,00NMSC092
+:86: OORSPR. VEREV. 120903           REFO:KTB-966591 NL12RABO0313131314               J. Jansen REDEN TERUGBOEKING               Kenmerk machtiging Huur september 
+:61:140912C1000,00NMSC027
+:86:0266474855                       K. Geel                         Prinsessengracht 2               Den Haag Hondenbelasting 2012
+:61:140912C1000,00NMSC027
+:86:NL09INGB0000156610               INGBNL2A Belastingdienst                  Amsterdam NL REFO: BEL1234678                 correctiebedrag maand augustus
+:61:140912C100000,00NMSC091
+:86:000701326323232323               TOTAAL INCASSO                        VOOR COMPRIMEREN:3.500 POSTEN    LAATSTE 5 POS SOM REKNRS: 78.3345
+:61:140912C100000,00NMSC091
+:86:BATCH INCASSO:123456789          VOOR COMPRIMEREN:5.500 POSTEN   LAATSTE 5 POS SHA1:23473
+:61:140912C10000,00NMSC095
+:86:BGC. 99 ACCEPTGIRO’S             RUNNR: 4956
+:61:140912C1000,00NMSC095
+:86:IBAN ACCEPTGIRO                  NL09INGB0001236610 P.Klaassen                       REMI:1234567890123456
+:62F:C140912EUR170600,00
+-

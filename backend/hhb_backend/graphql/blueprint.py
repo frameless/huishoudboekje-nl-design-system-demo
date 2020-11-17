@@ -1,3 +1,4 @@
+from graphene_file_upload.flask import FileUploadGraphQLView
 from graphql.execution.executors.asyncio import AsyncioExecutor
 import asyncio
 from flask import render_template, Blueprint, request
@@ -28,6 +29,17 @@ def create_blueprint():
                                                   executor=AsyncioExecutor(loop=loop),
                                                   batch=True),
                     strict_slashes=False)
+
+    bp.add_url_rule(
+        '/upload',
+        view_func=FileUploadGraphQLView.as_view(
+            'upload',
+            graphiql=True,
+            schema=schema,
+            executor=AsyncioExecutor(loop=loop),
+            strict_slashes=False
+        )
+    )
 
     @bp.route('/help')
     def voyager():
