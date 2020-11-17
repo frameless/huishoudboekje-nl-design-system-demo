@@ -41,6 +41,10 @@ const App = () => {
 	}
 
 	useEffect(() => {
+		if(backendError){
+			return;
+		}
+
 		fetch("/api/me")
 			.then(result => result.json())
 			.then(result => {
@@ -67,7 +71,7 @@ const App = () => {
 			.catch(err => {
 				setBackendError(err);
 			});
-	}, [push, session, toast, toggleLoading]);
+	}, [backendError, push, session, toast, toggleLoading]);
 
 	if (backendError) {
 		return (
