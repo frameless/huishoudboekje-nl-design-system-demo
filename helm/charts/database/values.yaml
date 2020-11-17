@@ -16,6 +16,7 @@ databases:
   - huishoudboekje_service
   - organisatie_service
   - bank_transactie_service
+  - grootboek_service
 
 traefik:
   enabled: false

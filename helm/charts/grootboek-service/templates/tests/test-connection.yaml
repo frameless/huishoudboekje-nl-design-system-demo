@@ -1,0 +1,17 @@
+{{- if false -}}
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "grootboek-service.fullname" . }}-test-connection"
+  labels:
+    {{- include "grootboek-service.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "grootboek-service.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never
+{{- end -}}

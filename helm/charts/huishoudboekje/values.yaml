@@ -14,6 +14,7 @@ database:
     - huishoudboekjeservice
     - organisatieservice
     - banktransactieservice
+    - grootboekservice
 
 huishoudboekje-service:
   database:
@@ -29,3 +30,8 @@ bank-transactie-service:
   database:
     service: huishoudboekje-database
     name: banktransactieservice
+
+grootboek-service:
+  database:
+    service: huishoudboekje-database
+    name: grootboekservice

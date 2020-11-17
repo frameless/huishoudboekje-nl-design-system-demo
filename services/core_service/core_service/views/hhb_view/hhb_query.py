@@ -1,4 +1,5 @@
 from flask import request, abort, make_response
+from sqlalchemy import String
 from core_service.utils import row2dict
 
 class HHBQuery():
@@ -38,13 +39,17 @@ class HHBQuery():
         if filter_ids:
             ids = []
             for raw_id in filter_ids.split(","):
-                try:
-                    ids.append(int(raw_id))
-                except ValueError:
-                    abort(make_response(
-                        {"errors": [
-                            f"Input for filter_ids is not correct, '{raw_id}' is not a number."
-                        ]}, 400))
+                if str(self.hhb_model.__table__.c['id'].type) == "VARCHAR":
+                    ids.append(raw_id)
+                else:
+                    try:
+                        ids.append(int(raw_id))
+                    except ValueError:
+                        abort(make_response(
+                            {"errors": [
+                                f"Input for filter_ids is not correct, '{raw_id}' is not a number."
+                            ]}, 400))
+                    
             self.query = self.query.filter(self.hhb_model.id.in_(ids))
 
     def get_result_single(self, row_id):

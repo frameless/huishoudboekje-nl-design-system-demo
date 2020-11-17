@@ -73,3 +73,10 @@ bank-transactie-service-test:
     DIRECTORY: services/bank_transactie_service
   only:
     - branches@commonground/huishoudboekje/app-new
+
+grootboek-service-test:
+  extends: .Service Test
+  variables:
+    DIRECTORY: services/grootboek_service
+  only:
+    - branches@commonground/huishoudboekje/app-new
