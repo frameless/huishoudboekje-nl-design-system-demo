@@ -21,15 +21,14 @@ class CreateCustomerStatementMessage(graphene.Mutation):
 
     def mutate(self, info, file, **kwargs):
         # do something with your file
-        filename = file.filename
-        content = file.stream.read()
-
-        csm_file = mt940.parse(content)
-
-        # Fill the csm model
-        csmServiceModel = {
-            "upload_date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            "raw_data": content.decode("utf-8")}
+        csm_file = {}
+        csmServiceModel = {}
+        with file.stream.read() as content:
+            csm_file = mt940.parse(content)
+            # Fill the csm model
+            csmServiceModel = {
+                "upload_date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "raw_data": content.decode("utf-8")}
 
         if 'transaction_reference' in csm_file.data and csm_file.data["transaction_reference"] is not None:
             csmServiceModel["transaction_reference_number"] = csm_file.data['transaction_reference']
