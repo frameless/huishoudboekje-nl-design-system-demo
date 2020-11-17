@@ -1,13 +1,13 @@
+import {Stack} from "@chakra-ui/core";
 import React from "react";
-import {Stack, Text} from "@chakra-ui/core";
 import CustomerStatementMessages from "./CustomerStatementMessages";
+import Transactions from "./Transactions";
 
 const Banking = () => {
 	return (
-		<Stack>
+		<Stack spacing={5}>
 			<CustomerStatementMessages />
-
-			<Text>Whatefvermore</Text>
+			<Transactions />
 		</Stack>
 	);
 };

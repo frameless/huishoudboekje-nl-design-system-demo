@@ -1,5 +1,5 @@
 import {gql} from "@apollo/client";
-import {AfspraakFragment, CustomerStatementMessageFragment, GebruikerFragment, OrganisatieFragment} from "./fragments";
+import {AfspraakFragment, BankTransactionFragment, CustomerStatementMessageFragment, GebruikerFragment, OrganisatieFragment} from "./fragments";
 
 export const GetAllGebruikersQuery = gql`
     query getAllGebruikers {
@@ -77,4 +77,13 @@ export const GetAllCustomerStatementMessagesQuery = gql`
         }
     }
     ${CustomerStatementMessageFragment}
+`;
+
+export const GetAllTransactionsQuery = gql`
+    query getAllTransactions {
+        bankTransactions{
+            ...BankTransaction
+        }
+    }
+    ${BankTransactionFragment}
 `;

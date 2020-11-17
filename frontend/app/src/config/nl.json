@@ -214,6 +214,10 @@
         "customerStatementMessages": {
           "title": "Customer Statement Messages",
           "detailText": "Geüploade bankbestanden."
+        },
+        "transactions": {
+          "title": "Transacties",
+          "detailText": "Geïmporteerde transacties."
         }
       }
     }
@@ -240,7 +244,8 @@
     "balances": "Huishoudboekjes"
   },
   "banking": {
-    "banking": "Bankzaken"
+    "banking": "Bankzaken",
+    "transactions": "Transacties"
   },
   "months": {
     "jan": "januari",

@@ -1,5 +1,5 @@
 import {useMutation, useQuery} from "@apollo/client";
-import {Box, Button, Divider, Heading, Input, Skeleton, Stack, useToast} from "@chakra-ui/core";
+import {Box, BoxProps, Button, Divider, Heading, Input, Skeleton, Stack, useToast} from "@chakra-ui/core";
 import React, {useRef, useState} from "react";
 import {useIsMobile} from "react-grapple";
 import {useTranslation} from "react-i18next";
@@ -17,7 +17,7 @@ type UploadedCSM = {
 	success: boolean
 }
 
-const CustomerStatementMessages = () => {
+const CustomerStatementMessages: React.FC<BoxProps> = ({...props}) => {
 	const isMobile = useIsMobile();
 	const {t} = useTranslation();
 	const toast = useToast();
@@ -64,7 +64,7 @@ const CustomerStatementMessages = () => {
 	};
 
 	return (
-		<Stack spacing={5}>
+		<Stack spacing={5} {...props}>
 			<Stack direction={"row"} spacing={5} justifyContent={"space-between"} alignItems={"center"}>
 				<Stack direction={"row"} spacing={5} alignItems={"center"}>
 					<Heading size={"lg"}>{t("banking.banking")}</Heading>
