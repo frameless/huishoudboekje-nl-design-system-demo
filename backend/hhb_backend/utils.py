@@ -8,7 +8,7 @@ def convert_hhb_interval_to_iso(graphql_format: dict):
         isoformat += f"{graphql_format.get('weken', 0)}W"
         isoformat += f"{graphql_format.get('dagen', 0)}D"
         return isoformat
-    return None
+    return ""
 
 def convert_hhb_interval_to_dict(iso_format: str):
     if iso_format:
