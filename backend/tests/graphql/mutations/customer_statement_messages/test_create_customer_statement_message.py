@@ -47,6 +47,7 @@ def test_create_csm_with_ing_file(client):
                 '/graphql/upload',
                 data=create_data_post(testfile)
             )
+            assert response.json.get('errors', True)
             assert response.status_code == 200
 
 
@@ -73,6 +74,7 @@ def test_create_csm_with_abn_file(client):
                 '/graphql/upload',
                 data=create_data_post(testfile)
             )
+            assert response.json.get('errors', True)
             assert response.status_code == 200
 
 
@@ -99,6 +101,7 @@ def test_create_csm_with_bng_file(client):
                 '/graphql/upload',
                 data=create_data_post(testfile)
             )
+            assert response.json.get('errors', True)
             assert response.status_code == 200
 
 

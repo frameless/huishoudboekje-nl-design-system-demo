@@ -20,17 +20,14 @@ class CreateCustomerStatementMessage(graphene.Mutation):
     customerStatementMessage = graphene.Field(lambda: CustomerStatementMessage)
 
     def mutate(self, info, file, **kwargs):
-        # do something with your file
-        csm_file = {}
-        csmServiceModel = {}
-        with file.stream.read() as content:
-            csm_file = mt940.parse(content)
-            # Fill the csm model
-            csmServiceModel = {
-                "upload_date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                "raw_data": content.decode("utf-8")}
+        content = file.stream.read()
+        csm_file = mt940.parse(content)
+        # Fill the csm model
+        csmServiceModel = {
+            "upload_date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "raw_data": content.decode("utf-8")}
 
-        if 'transaction_reference' in csm_file.data and csm_file.data["transaction_reference"] is not None:
+        if csm_file.data.get('transaction_reference', False):
             csmServiceModel["transaction_reference_number"] = csm_file.data['transaction_reference']
         else:
             raise GraphQLError(f"Incorrect file, missing tag 20 transaction reference")
