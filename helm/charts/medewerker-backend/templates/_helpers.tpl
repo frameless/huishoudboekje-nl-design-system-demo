@@ -97,3 +97,13 @@ Create the name of the service account to use
 {{- end -}}
 bank-transactie-service.{{ .Release.Namespace }}.svc.cluster.local
 {{- end }}
+
+{{/*
+Create the name of the service account to use
+*/}}
+{{- define "medewerker-backend.grootboekServiceName" -}}
+{{- if .Values.serviceChartPrefix -}}
+{{ printf "%s-" .Values.serviceChartPrefix -}}
+{{- end -}}
+grootboek-service.{{ .Release.Namespace }}.svc.cluster.local
+{{- end }}

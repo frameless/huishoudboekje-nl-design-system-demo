@@ -70,6 +70,14 @@ build-bank-transactie-service:
   only:
     - branches@commonground/huishoudboekje/app-new
 
+build-grootboek-service:
+  variables:
+    APP_NAME: grootboek-service
+    APP_DIRECTORY: grootboek_service
+  extends: .build-service
+  only:
+    - branches@commonground/huishoudboekje/app-new
+
 build-docs:
   variables:
     APP_NAME: docs
