@@ -72,6 +72,10 @@ class CreateCustomerStatementMessage(graphene.Mutation):
             transactionModel["statement_line"] = t.data["date"].strftime("%y%m%d") + t.data["status"] + str(
                 t.data["amount"].amount) + t.data["id"] + \
                                                  t.data["customer_reference"] + t.data["extra_details"]
+            transactionModel["transactie_datum"] = str(t.data["date"])
+            transactionModel["tegen_rekening"] = t.data["transaction_details"]
+            transactionModel["is_credit"] = t.data["status"] == "C"
+            transactionModel["bedrag"] = int(t.data["amount"].amount * 100)
             bank_transaction_response = requests.post(
                 f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/",
                 data=json.dumps(transactionModel),
