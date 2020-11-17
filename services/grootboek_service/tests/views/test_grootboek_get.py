@@ -19,7 +19,6 @@ def test_grootboek_get_success_one(client, grootboekrekening_factory):
     assert response.status_code == 200
     assert response.json["data"]["naam"] == grootboek1.naam
 
-@pytest.mark.skip("TODO re-enable when children are exposed")
 def test_grootboek_get_success_exposed_children(client, grootboekrekening_factory):
     """ Test /grootboekrekeningen/(<grootboekrekening_id>) path """
     grootboek1 = grootboekrekening_factory.create_grootboekrekening("1", naam="grootboek1")

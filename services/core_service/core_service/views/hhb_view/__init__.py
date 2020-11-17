@@ -69,6 +69,8 @@ class HHBView(MethodView):
         self.hhb_query.add_filter_columns()
         self.hhb_query.add_filter_ids()
         self.extend_get(**kwargs)
+        self.hhb_query.load_relations()
+        self.hhb_query.order_query()
         if object_id:
             return self.hhb_query.get_result_single(object_id)
         return self.hhb_query.get_result_multiple()
