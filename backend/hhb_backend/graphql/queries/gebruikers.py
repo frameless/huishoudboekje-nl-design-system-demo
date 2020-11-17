@@ -1,9 +1,7 @@
 """ GraphQL Gebruikers query """
 import graphene
-import requests
 from flask import request
-from graphql import GraphQLError
-from hhb_backend.graphql import settings
+
 import hhb_backend.graphql.models.gebruiker as gebruiker
 
 
@@ -23,8 +21,5 @@ class GebruikersQuery():
         if kwargs["ids"]:
             gebruikers = await request.dataloader.gebruikers_by_id.load_many(kwargs["ids"])
         else:
-            gebruikers_response = requests.get(f"{settings.HHB_SERVICES_URL}/gebruikers/")
-            if gebruikers_response.status_code != 200:
-                raise GraphQLError(f"Upstream API responded: {gebruikers_response.json()}")
-            gebruikers = gebruikers_response.json()["data"]
+            gebruikers = request.dataloader.gebruikers_by_id.get_all_and_cache()
         return gebruikers

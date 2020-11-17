@@ -1,9 +1,7 @@
 """ GraphQL Gebruikers query """
 import graphene
-import requests
 from flask import request
-from graphql import GraphQLError
-from hhb_backend.graphql import settings
+
 from hhb_backend.graphql.models.bank_transaction import BankTransaction
 
 
@@ -20,10 +18,7 @@ class BankTransactionsQuery():
     @staticmethod
     async def resolver(root, info, **kwargs):
         if not kwargs["ids"] and not kwargs["csms"]:
-            bank_transactions_response = requests.get(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/")
-            if bank_transactions_response.status_code != 200:
-                raise GraphQLError(f"Upstream API responded: {bank_transactions_response.json()}")
-            bank_transactions = bank_transactions_response.json()["data"]
+            bank_transactions = request.dataloader.bank_transactions_by_id.get_all_and_cache()
         else:
             bank_transactions_ids = []
             bank_transactions_csms = []
