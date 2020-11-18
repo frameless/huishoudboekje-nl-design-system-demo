@@ -37,6 +37,7 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 	const {data: orgsData, loading: orgsLoading} = useQuery<{ organisaties: IOrganisatie[] }>(GetAllOrganisatiesQuery);
 
 	const [isSubmitted, setSubmitted] = useState<boolean>(false);
+	const [isActive, toggleActive] = useToggle(true);
 	const [afspraakType, setAfspraakType] = useState<AfspraakType>(AfspraakType.Expense);
 	const description = useInput({
 		defaultValue: "",
@@ -104,6 +105,7 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 
 	useEffect(() => {
 		if (afspraak) {
+			toggleActive(afspraak.actief);
 			setAfspraakType(afspraak.credit ? AfspraakType.Income : AfspraakType.Expense);
 			description.setValue(afspraak.beschrijving);
 			organizationId.setValue(afspraak.organisatie?.id || 0);
@@ -196,7 +198,7 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 			startDatum: moment(Date.UTC(startDate.year.value, startDate.month.value - 1, startDate.day.value)).format("YYYY-MM-DD"),
 			interval: isRecurring ? Interval.create(intervalType.value, intervalNumber.value) : Interval.empty,
 			aantalBetalingen: !isContinuous ? nTimes.value : 0,
-			actief: true,
+			actief: isActive,
 		});
 	};
 
@@ -220,6 +222,14 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 						<FormHelperText id="personal-helperText">{t("forms.agreements.sections.0.helperText")}</FormHelperText>
 					</FormLeft>
 					<FormRight>
+						<Stack spacing={2} direction={isMobile ? "column" : "row"}>
+							<Stack direction={isMobile ? "column" : "row"} spacing={1} mt={2}>
+								<Stack isInline={true} alignItems={"center"} spacing={3}>
+									<Switch isChecked={isActive} onChange={() => toggleActive()} id={"isActive"} />
+									<FormLabel htmlFor={"isActive"}>{isActive ? t("forms.agreements.fields.active") : t("forms.agreements.fields.inactive")}</FormLabel>
+								</Stack>
+							</Stack>
+						</Stack>
 						<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 							<Stack spacing={1} flex={1}>
 								<FormLabel htmlFor={"beschrijving"}>{t("forms.agreements.fields.type")}</FormLabel>

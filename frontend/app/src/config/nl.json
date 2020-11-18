@@ -10,9 +10,7 @@
     "edit": "Wijzigen",
     "login": "Inloggen",
     "logout": "Uitloggen",
-    "clearSearch": "Zoekopdracht wissen",
-    "activate": "Activeer",
-    "deactivate": "Deactiveer"
+    "clearSearch": "Zoekopdracht wissen"
   },
   "sidebar": {
     "dashboard": "Dashboard"
@@ -159,6 +157,7 @@
         "intervalWeeks": "Weken",
         "intervalDays": "Dagen",
         "active": "Actief",
+        "inactive": "Inactief",
         "expenses": "Uitgaven",
         "income": "Inkomsten",
         "organization": "Organisatie",

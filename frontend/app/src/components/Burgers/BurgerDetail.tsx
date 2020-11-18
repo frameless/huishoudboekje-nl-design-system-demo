@@ -1,3 +1,4 @@
+import {useMutation, useQuery} from "@apollo/client";
 import {
 	AlertDialog,
 	AlertDialogBody,
@@ -25,25 +26,24 @@ import {
 	useToast,
 } from "@chakra-ui/core";
 import React, {useEffect, useRef, useState} from "react";
+import {useIsMobile, useToggle} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {Redirect, useHistory, useParams} from "react-router-dom";
 import Routes from "../../config/routes";
-import BackButton from "../BackButton";
-import {useMutation, useQuery} from "@apollo/client";
 import {IAfspraak, IGebruiker} from "../../models";
+import {CreateGebruikerRekeningMutation, DeleteAfspraakMutation, DeleteGebruikerMutation} from "../../services/graphql/mutations";
 import {GetOneGebruikerQuery} from "../../services/graphql/queries";
-import {FormLeft, FormRight, Label} from "../Forms/FormLeftRight";
-import RekeningList from "../Rekeningen/RekeningList";
-import {CreateGebruikerRekeningMutation, DeleteAfspraakMutation, DeleteGebruikerMutation, ToggleAfspraakActiefMutation,} from "../../services/graphql/mutations";
-import {useIsMobile, useToggle} from "react-grapple";
-import DeadEndPage from "../DeadEndPage";
-import RekeningForm from "../Rekeningen/RekeningForm";
-import BurgerDetailProfileView from "./BurgerDetailProfileView";
 import AfspraakItem from "../Agreements/AfpraakItem";
+import BackButton from "../BackButton";
+import DeadEndPage from "../DeadEndPage";
+import {FormLeft, FormRight, Label} from "../Forms/FormLeftRight";
+import RekeningForm from "../Rekeningen/RekeningForm";
+import RekeningList from "../Rekeningen/RekeningList";
+import BurgerDetailProfileView from "./BurgerDetailProfileView";
 
 const BurgerDetail = () => {
 	const {t} = useTranslation();
-	const {id} = useParams<{id}>();
+	const {id} = useParams<{ id }>();
 	const {push} = useHistory();
 	const toast = useToast();
 	const isMobile = useIsMobile();
@@ -83,7 +83,6 @@ const BurgerDetail = () => {
 		variables: {id},
 	});
 	const [deleteAfspraak] = useMutation(DeleteAfspraakMutation);
-	const [toggleAfspraakActive] = useMutation(ToggleAfspraakActiefMutation);
 
 	useEffect(() => {
 		let mounted = true;
@@ -127,33 +126,6 @@ const BurgerDetail = () => {
 			});
 		});
 	};
-	const onToggleAfspraakActive = async (afspraakId: number, actief: boolean) => {
-		toggleAfspraakActive({
-			variables: {
-				id: afspraakId,
-				gebruikerId: id,
-				actief,
-			}
-		})
-			.then(result => {
-				toast({
-					title: t("messages.agreements.editConfirmMessage"),
-					position: "top",
-					status: "success",
-				});
-				refetchGebruiker();
-			})
-			.catch(err => {
-				console.error(err);
-				toast({
-					position: "top",
-					status: "error",
-					variant: "solid",
-					description: t("messages.genericError.description"),
-					title: t("messages.genericError.title")
-				});
-			});
-	}
 
 	const renderPageContent = () => {
 		if (!gebruikerData && gebruikerLoading) {
@@ -261,14 +233,12 @@ const BurgerDetail = () => {
 										<TabPanels>
 											<TabPanel id="tab_incoming">
 												{filteredAfspraken.filter(a => a.credit).map((a, i) => (
-													<AfspraakItem key={a.id} data-id={a.id} afspraak={a} py={2} onDelete={(id: number) => onDeleteAfspraak(id)}
-													              onToggleActive={(id: number) => onToggleAfspraakActive(id, !a.actief)} />
+													<AfspraakItem key={a.id} data-id={a.id} afspraak={a} py={2} onDelete={(id: number) => onDeleteAfspraak(id)} />
 												))}
 											</TabPanel>
 											<TabPanel id="tab_outgoing">
 												{filteredAfspraken.filter(a => !a.credit).map((a, i) => (
-													<AfspraakItem key={a.id} data-id={a.id} afspraak={a} py={2} onDelete={(id: number) => onDeleteAfspraak(id)}
-													              onToggleActive={(id: number) => onToggleAfspraakActive(id, !a.actief)} />
+													<AfspraakItem key={a.id} data-id={a.id} afspraak={a} py={2} onDelete={(id: number) => onDeleteAfspraak(id)} />
 												))}
 											</TabPanel>
 										</TabPanels>
