@@ -15,7 +15,10 @@
     ],
     "indent": [
       "warn",
-      "tab"
+      "tab",
+      {
+        "SwitchCase": 1
+      }
     ],
     "brace-style": [
       "warn",

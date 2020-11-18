@@ -15,7 +15,7 @@ import {UpdateOrganizationMutation} from "../../services/graphql/mutations";
 const OrganizationEdit = () => {
 	const isMobile = useIsMobile();
 	const {t} = useTranslation();
-	const {id} = useParams();
+	const {id} = useParams<{id}>();
 	const toast = useToast();
 
 	const kvkNumber = useInput({

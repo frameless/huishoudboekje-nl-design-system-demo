@@ -175,6 +175,46 @@ export const DeleteAfspraakMutation = gql`
     }
 `;
 
+export const UpdateAfspraakMutation = gql`
+    mutation updateAfspraak(
+        $id: Int!
+        $aantalBetalingen: Int
+        $actief: Boolean
+        $bedrag: Bedrag
+        $beschrijving: String
+        $credit: Boolean
+        $eindDatum: String
+        $gebruikerId: Int
+        $interval: IntervalInput
+        $kenmerk: String
+        $organisatieId: Int
+        $startDatum: String
+        $tegenRekeningId: Int
+    ){
+        updateAfspraak(
+            id: $id
+            aantalBetalingen: $aantalBetalingen
+            actief: $actief
+            bedrag: $bedrag
+            beschrijving: $beschrijving
+            credit: $credit
+            eindDatum: $eindDatum
+            gebruikerId: $gebruikerId
+            interval: $interval
+            kenmerk: $kenmerk
+            organisatieId: $organisatieId
+            startDatum: $startDatum
+            tegenRekeningId: $tegenRekeningId
+        ){
+            ok
+            afspraak{
+                ...Afspraak
+            }
+        }
+    }
+    ${AfspraakFragment}
+`;
+
 export const ToggleAfspraakActiefMutation = gql`
     mutation toggleAfspraakMutation(
         $id: Int!

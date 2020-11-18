@@ -32,7 +32,6 @@ const BurgerListView: React.FC<BoxProps & { burgers: IGebruiker[], showAddButton
 				</GridCard>
 			))}
 		</Grid>
-
 	);
 };
 

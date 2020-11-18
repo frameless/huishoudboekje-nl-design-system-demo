@@ -7,6 +7,7 @@ export const RekeningFragment = gql`
         rekeninghouder
     }
 `
+
 export const AfspraakFragment = gql`
     fragment Afspraak on Afspraak {
         id
@@ -19,6 +20,14 @@ export const AfspraakFragment = gql`
             weken
             maanden
             jaren
+        }
+        gebruiker{
+            id
+            voorletters
+            achternaam
+            rekeningen {
+                ...Rekening
+            }
         }
         tegenRekening {
             ...Rekening

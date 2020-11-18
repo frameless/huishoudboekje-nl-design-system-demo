@@ -28,6 +28,7 @@ const Routes = {
 
 	BurgerAgreements: (id?: number) => `/${RouteNames.burgers}/${id || ":burgerId(\\d+)"}/${RouteNames.agreements}`,
 	CreateBurgerAgreement: (burgerId: number) => `/${RouteNames.burgers}/${burgerId}/${RouteNames.agreements}/${RouteNames.add}`,
+	EditAgreement: (id?: number) => `/${RouteNames.agreements}/${id || ":id(\\d+)"}/${RouteNames.edit}`,
 
 	Organizations: `/${RouteNames.organizations}`,
 	Organization: (id?: number) => `/${RouteNames.organizations}/${id || ":id(\\d+)"}`,

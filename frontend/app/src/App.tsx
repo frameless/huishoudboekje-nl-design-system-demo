@@ -15,6 +15,7 @@ import {TABLET_BREAKPOINT} from "./utils/things";
 import {useTranslation} from "react-i18next";
 import Organizations from "./components/Organizations";
 import TwoColumns from "./components/Layouts/TwoColumns";
+import EditAgreement from "./components/Agreements/EditAgreement";
 
 const App = () => {
 	const {t} = useTranslation();
@@ -128,6 +129,7 @@ const App = () => {
 								</Route>
 								<Route path={Routes.Burgers} component={Burgers} />
 								<Route path={Routes.Organizations} component={Organizations} />
+								<Route path={Routes.EditAgreement()} component={EditAgreement} />
 								{/*<Route path={ROUTEPATH} component={BANK_COMPONENT} />*/}
 								{/*<Route path={ROUTEPATH} component={SETTINGS_COMPONENT} />*/}
 								<Route exact path={Routes.NotFound} component={PageNotFound} />
