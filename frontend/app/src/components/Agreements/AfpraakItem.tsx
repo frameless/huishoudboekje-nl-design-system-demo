@@ -70,11 +70,11 @@ const AfspraakItem: React.FC<BoxProps & { afspraak: IAfspraak, onDelete?: (id: n
 			<Box width={100}>
 				<IconButton variant={"ghost"} size={"sm"} icon={"edit"} aria-label={t("actions.edit")} onClick={onClickEditButton} />
 				{onDelete && (<>
+					{deleteConfirm && <IconButton variant={"solid"} size={"xs"} icon={"close"} variantColor={"gray"} mr={2}
+												  aria-label={t("actions.delete")} onClick={onClickDeleteCancel} />}
 					<IconButton variant={deleteConfirm ? "solid" : "ghost"} size={"xs"} icon={deleteConfirm ? "check" : "delete"}
 					            variantColor={deleteConfirm ? "red" : "gray"}
 					            aria-label={t("actions.delete")} onClick={onClickDeleteButton} />
-					{deleteConfirm && <IconButton variant={"solid"} size={"xs"} icon={"close"} variantColor={"gray"} ml={2}
-												  aria-label={t("actions.delete")} onClick={onClickDeleteCancel} />}
 				</>)}
 			</Box>
 		</Stack>
