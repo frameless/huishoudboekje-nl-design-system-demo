@@ -1,6 +1,6 @@
 import {useMutation, useQuery} from "@apollo/client";
 import {Box, BoxProps, Button, Divider, Heading, Input, Skeleton, Stack, useToast} from "@chakra-ui/core";
-import React, {useEffect, useRef, useState} from "react";
+import React, {useRef, useState} from "react";
 import {useIsMobile} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {ICustomerStatementMessage} from "../../../models";
