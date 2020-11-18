@@ -1,3 +1,14 @@
+# Create version.json
+FROM alpine:latest AS version
+
+RUN apk add --update jq
+
+ARG COMPONENT_NAME=backend
+ARG COMPONENT_TAG=undefined
+ARG COMPONENT_COMMIT_HASH=undefined
+RUN jq -ncM '{tag: env.COMPONENT_TAG, commit: env.COMPONENT_COMMIT_HASH, component: env.COMPONENT_NAME}' | tee /version.json
+
+# Build
 FROM python:3.8-slim-buster AS build
 
 # set the working directory in the container
@@ -7,12 +18,14 @@ WORKDIR /app
 
 # install the dependencies only for fast rebuilds
 COPY --chown=app:app setup.py ./
-RUN mkdir -p /app/hhb_backend/ && python3 setup.py install --user --prefix=''
+RUN mkdir -p hhb_backend/ && python3 setup.py install --user --prefix=''
 
 # copy the content of the local src directory to the working directory
 COPY --chown=app:app ./ ./
 # install the package
 RUN python3 setup.py install --user --prefix=''
+
+COPY --from=version --chown=app:app /version.json /app/hhb_backend/version.json
 
 # Set gunicorn settings
 ENV GUNICORN_PORT="8000" \

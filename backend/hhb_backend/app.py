@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 import logging
 import os
+from pathlib import Path
 from pprint import pformat
 from urllib.parse import urlparse
 
 import itsdangerous
-from flask import Flask, jsonify, redirect, make_response, session
+from flask import Flask, jsonify, redirect, make_response, session, send_file
 from flask_oidc import OpenIDConnect
 
 import hhb_backend.graphql.blueprint as graphql_blueprint
@@ -42,6 +43,13 @@ def create_app(config_name=os.getenv('APP_SETTINGS', None) or 'hhb_backend.confi
     @app.route('/health')
     def health():
         return make_response(('ok', {'Content-Type': 'text/plain'}))
+
+    @app.route('/version')
+    def version_file():
+        try:
+            return send_file('version.json')
+        except :
+            return jsonify(component='backend', tag='dev')
 
     @app.route('/me')
     def me():
