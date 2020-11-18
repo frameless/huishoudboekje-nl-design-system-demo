@@ -1,15 +1,15 @@
-import React, {useEffect, useState} from "react";
-import {useTranslation} from "react-i18next";
 import {useQuery} from "@apollo/client";
-import {searchFields} from "../../utils/things";
 import {Button, Heading, Icon, IconButton, Input, InputGroup, InputLeftElement, InputRightElement, Spinner, Stack, useToast} from "@chakra-ui/core";
+import React, {useEffect, useState} from "react";
+import {useInput} from "react-grapple";
+import {useTranslation} from "react-i18next";
+import {useHistory} from "react-router-dom";
+import Routes from "../../config/routes";
 import {IGebruiker} from "../../models";
 import {GetAllGebruikersQuery} from "../../services/graphql/queries";
-import BurgerListView from "./BurgerListView";
-import {useInput} from "react-grapple";
+import {searchFields} from "../../utils/things";
 import DeadEndPage from "../DeadEndPage";
-import Routes from "../../config/routes";
-import {useHistory} from "react-router-dom";
+import BurgerListView from "./BurgerListView";
 
 const BurgerList = () => {
 	const {t} = useTranslation();

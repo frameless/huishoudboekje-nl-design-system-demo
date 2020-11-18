@@ -30,10 +30,10 @@ const CsmListItem: React.FC<{ csm: ICustomerStatementMessage, onDelete: (id: num
 				<Text>{moment(csm.uploadDate).format("L LT")}</Text>
 			</td>
 			<td>{csm.accountIdentification}</td>
-			<td style={{textAlign: "right", paddingRight: "10px"}}>
+			<td style={{textAlign: "right", paddingRight: "40px"}}>
 				<Text mr={4}>{csm.bankTransactions.length}</Text>
 			</td>
-			<td style={{width: "100px"}}>
+			<td style={{width: "100px", textAlign: "right" }}>
 				{onDelete && (<>
 					<IconButton variant={deleteConfirm ? "solid" : "ghost"} size={"xs"} icon={deleteConfirm ? "check" : "delete"} variantColor={deleteConfirm ? "red" : "gray"}
 					            aria-label={t("actions.delete")} onClick={onClickDeleteButton} />

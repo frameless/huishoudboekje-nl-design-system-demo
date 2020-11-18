@@ -52,7 +52,7 @@ const CsmListView: React.FC<BoxProps & { csms: ICustomerStatementMessage[], refr
 					<td>
 						<Label>{t("forms.banking.nTransactions")}</Label>
 					</td>
-					<td>
+					<td style={{ textAlign: "right" }}>
 						<Label>{t("actions.actions")}</Label>
 					</td>
 				</tr>

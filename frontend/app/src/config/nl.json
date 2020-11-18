@@ -1,6 +1,7 @@
 {
   "actions": {
     "actions": "Acties",
+    "import": "Importeren",
     "back": "Terug",
     "backToHome": "Terug naar de hoofdpagina",
     "backToList": "Terug naar overzicht",
@@ -71,10 +72,11 @@
     },
     "customerStatementMessages": {
       "createSuccess": "Het betaalbestand is geïmporteerd en de transacties zijn succesvol ingelezen.",
-      "deleteSuccess": "Het betaalbestand is succesvol verwijderd."
+      "deleteSuccess": "Het betaalbestand is succesvol verwijderd.",
+      "incorrectFileError": "Het is niet gelukt om het bestand te importeren. Controleer de invoer en probeer het nog een keer."
     },
     "transactions": {
-      "addHint": "Voeg transacties toe door een customer statement message te importeren."
+      "addHint": "Voeg transacties toe door een bankafschrift te importeren."
     }
   },
   "forms": {
@@ -216,8 +218,8 @@
       "nTransactions": "Transacties",
       "sections": {
         "customerStatementMessages": {
-          "title": "Customer Statement Messages",
-          "detailText": "Geüploade bankbestanden."
+          "title": "Transacties importeren",
+          "detailText": "Hier is het mogelijk om bij- en afschrijvingen uit een MT940-bestand te importeren."
         },
         "transactions": {
           "title": "Transacties",
@@ -250,7 +252,7 @@
   "banking": {
     "banking": "Bankzaken",
     "transactions": "Transacties",
-    "customerStatementMessages": "Customer Statement Messages"
+    "customerStatementMessages": "Afschriften"
   },
   "months": {
     "jan": "januari",

@@ -1,21 +1,14 @@
 import {useMutation, useQuery} from "@apollo/client";
-import {Box, BoxProps, Button, Divider, Heading, Input, Skeleton, Stack, useToast} from "@chakra-ui/core";
-import React, {useRef, useState} from "react";
+import {Box, BoxProps, Button, Divider, Heading, Input, Stack, useToast} from "@chakra-ui/core";
+import React, {useRef} from "react";
 import {useIsMobile} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {ICustomerStatementMessage} from "../../../models";
 import {CreateCustomerStatementMessageMutation} from "../../../services/graphql/mutations";
 import {GetAllCustomerStatementMessagesQuery} from "../../../services/graphql/queries";
 import Queryable from "../../../utils/Queryable";
-import FileUploadItem from "../../FileUploadItem";
 import {FormLeft, FormRight, Label} from "../../Forms/FormLeftRight";
 import CsmListView from "./CsmListView";
-
-type UploadedCSM = {
-	file: File,
-	validity: ValidityState,
-	success: boolean
-}
 
 const CustomerStatementMessages: React.FC<BoxProps> = ({...props}) => {
 	const isMobile = useIsMobile();
@@ -24,7 +17,6 @@ const CustomerStatementMessages: React.FC<BoxProps> = ({...props}) => {
 	const csms = [];
 	const fileUploadInput = useRef<HTMLInputElement>(null);
 
-	const [uploadedFile, setUploadedFile] = useState<UploadedCSM>();
 	const $customerStatementMessages = useQuery<{ customerStatementMessages: ICustomerStatementMessage[] }>(GetAllCustomerStatementMessagesQuery, {
 		fetchPolicy: "no-cache"
 	});
@@ -51,14 +43,12 @@ const CustomerStatementMessages: React.FC<BoxProps> = ({...props}) => {
 				$customerStatementMessages.refetch();
 			}).catch(err => {
 				console.error(err);
-
-				setUploadedFile({file: files[0], validity, success: false});
 				toast({
 					position: "top",
 					status: "error",
 					variant: "solid",
 					title: t("messages.genericError.title"),
-					description: t("messages.genericError.description"),
+					description: t("messages.customerStatementMessages.incorrectFileError"),
 				});
 			})
 
@@ -82,22 +72,13 @@ const CustomerStatementMessages: React.FC<BoxProps> = ({...props}) => {
 						<Input type={"file"} id={"fileUpload"} onChange={onChangeFile} hidden={true} ref={fileUploadInput} />
 
 						<Stack spacing={5} id={"stack"}>
-							{uploadedFile && (
-								<Skeleton isLoaded={!createCsmLoading}>
-									<FileUploadItem file={uploadedFile.file} validity={uploadedFile.validity} success={uploadedFile.success} />
-								</Skeleton>
-							)}
 							<Box>
 								<Button variantColor={"primary"} size={"sm"} leftIcon={"add"} isLoading={createCsmLoading}
 								        onClick={() => fileUploadInput.current?.click()}>{t("actions.add")}</Button>
 							</Box>
 						</Stack>
-						<Stack spacing={5}>
-							{csms.map(c => <pre>{JSON.stringify(c, null, 2)}</pre>)}
-						</Stack>
 					</FormLeft>
 					<FormRight>
-
 						<Queryable query={$customerStatementMessages}>{(data: { customerStatementMessages: ICustomerStatementMessage[] }) => {
 							/* Sort CSMs so that the newest appears first */
 							const csms = [...data.customerStatementMessages].sort((a, b) => a.uploadDate <= b.uploadDate ? 1 : -1);
@@ -107,7 +88,6 @@ const CustomerStatementMessages: React.FC<BoxProps> = ({...props}) => {
 							)
 						}}
 						</Queryable>
-
 					</FormRight>
 				</Stack>
 			</Stack>
