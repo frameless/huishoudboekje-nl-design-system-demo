@@ -1,8 +1,8 @@
 import {IconButton, Text} from "@chakra-ui/core";
+import moment from "moment";
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {ICustomerStatementMessage} from "../../../models";
-import {dateFormat} from "../../../utils/things";
 
 const CsmListItem: React.FC<{ csm: ICustomerStatementMessage, onDelete: (id: number) => void }> = ({csm, onDelete}) => {
 	const {t} = useTranslation();
@@ -26,7 +26,9 @@ const CsmListItem: React.FC<{ csm: ICustomerStatementMessage, onDelete: (id: num
 
 	return (
 		<tr>
-			<td>{dateFormat.format(new Date(csm.uploadDate))}</td>
+			<td>
+				<Text>{moment(csm.uploadDate).format("L LT")}</Text>
+			</td>
 			<td>{csm.accountIdentification}</td>
 			<td style={{textAlign: "right", paddingRight: "10px"}}>
 				<Text mr={4}>{csm.bankTransactions.length}</Text>

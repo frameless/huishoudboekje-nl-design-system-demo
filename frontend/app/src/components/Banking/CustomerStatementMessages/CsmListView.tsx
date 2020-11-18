@@ -18,7 +18,7 @@ const CsmListView: React.FC<BoxProps & { csms: ICustomerStatementMessage[], refr
 			variables: {id}
 		}).then(() => {
 			toast({
-				title: t("messages.customerStatementMessages.deleteConfirm"),
+				title: t("messages.customerStatementMessages.deleteSuccess"),
 				position: "top",
 				status: "success",
 			});

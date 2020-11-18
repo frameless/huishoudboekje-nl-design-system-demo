@@ -1,6 +1,6 @@
 import {useMutation, useQuery} from "@apollo/client";
 import {Box, BoxProps, Button, Divider, Heading, Input, Skeleton, Stack, useToast} from "@chakra-ui/core";
-import React, {useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {useIsMobile} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {ICustomerStatementMessage} from "../../../models";
@@ -25,7 +25,9 @@ const CustomerStatementMessages: React.FC<BoxProps> = ({...props}) => {
 	const fileUploadInput = useRef<HTMLInputElement>(null);
 
 	const [uploadedFile, setUploadedFile] = useState<UploadedCSM>();
-	const $customerStatementMessages = useQuery<{ customerStatementMessages: ICustomerStatementMessage[] }>(GetAllCustomerStatementMessagesQuery);
+	const $customerStatementMessages = useQuery<{ customerStatementMessages: ICustomerStatementMessage[] }>(GetAllCustomerStatementMessagesQuery, {
+		fetchPolicy: "no-cache"
+	});
 	const [createCSM, {loading: createCsmLoading}] = useMutation(CreateCustomerStatementMessageMutation, {
 		context: {
 			method: "fileUpload"
@@ -43,7 +45,7 @@ const CustomerStatementMessages: React.FC<BoxProps> = ({...props}) => {
 			}).then(() => {
 				toast({
 					status: "success",
-					title: t("messages.banking.createSuccessMessage"),
+					title: t("messages.customerStatementMessages.createSuccess"),
 					position: "top",
 				});
 				$customerStatementMessages.refetch();
@@ -65,12 +67,6 @@ const CustomerStatementMessages: React.FC<BoxProps> = ({...props}) => {
 
 	return (
 		<Stack spacing={5} {...props}>
-			<Stack direction={"row"} spacing={5} justifyContent={"space-between"} alignItems={"center"}>
-				<Stack direction={"row"} spacing={5} alignItems={"center"}>
-					<Heading size={"lg"}>{t("banking.banking")}</Heading>
-				</Stack>
-			</Stack>
-
 			<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
 				<Stack direction={isMobile ? "column" : "row"} spacing={5}>
 					<FormLeft spacing={3}>
