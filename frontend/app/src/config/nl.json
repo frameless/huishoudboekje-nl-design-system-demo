@@ -72,6 +72,9 @@
     "customerStatementMessages": {
       "createSuccess": "Het betaalbestand is geïmporteerd en de transacties zijn succesvol ingelezen.",
       "deleteSuccess": "Het betaalbestand is succesvol verwijderd."
+    },
+    "transactions": {
+      "addHint": "Voeg transacties toe door een customer statement message te importeren."
     }
   },
   "forms": {

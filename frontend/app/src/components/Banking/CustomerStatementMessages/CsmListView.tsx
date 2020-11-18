@@ -1,5 +1,5 @@
 import {useMutation} from "@apollo/client";
-import {Box, BoxProps, useToast} from "@chakra-ui/core";
+import {BoxProps, useToast} from "@chakra-ui/core";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {ICustomerStatementMessage} from "../../../models";
@@ -33,6 +33,10 @@ const CsmListView: React.FC<BoxProps & { csms: ICustomerStatementMessage[], refr
 				title: t("messages.genericError.title")
 			});
 		});
+	}
+
+	if (csms.length === 0) {
+		return null;
 	}
 
 	return (
