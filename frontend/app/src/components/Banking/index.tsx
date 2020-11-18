@@ -23,7 +23,8 @@ const Banking = () => {
 	const {t} = useTranslation();
 	const location = useLocation();
 
-	const defaultTabRoute = tabRoutes.findIndex(l => location.pathname.includes(l)) || 0;
+	const defaultTabRouteIdx = tabRoutes.findIndex(l => location.pathname.includes(l));
+	const defaultTabRoute = defaultTabRouteIdx > -1 ? defaultTabRouteIdx : 0;
 
 	return (
 		<Stack spacing={5}>
@@ -47,7 +48,9 @@ const Banking = () => {
 				<Route path={Routes.CSMs}>
 					<CustomerStatementMessages />
 				</Route>
-				<Route><Redirect to={tabRoutes[defaultTabRoute]} /></Route>
+				<Route>
+					<Redirect to={tabRoutes[defaultTabRoute]} />
+				</Route>
 			</Switch>
 		</Stack>
 	);
