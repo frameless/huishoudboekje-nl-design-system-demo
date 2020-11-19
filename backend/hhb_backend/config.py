@@ -1,3 +1,4 @@
+import json
 import os
 import secrets
 
@@ -10,9 +11,9 @@ class Config(object):
     DEVELOPMENT = False
     TESTING = False
     GRAPHQL_AUTH_ENABLED = True
-    PREFIX = os.environ.get('PREFIX', None)
+    PREFIX = os.environ.get('PREFIX', '/api')
     SESSION_COOKIE_NAME = "flask_session"
-    SESSION_COOKIE_PATH = os.getenv('PREFIX', '/')
+    SESSION_COOKIE_PATH = os.getenv('PREFIX', '/api')
     SESSION_COOKIE_SECURE = True
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SAMESITE = 'Lax'
@@ -45,6 +46,9 @@ class DevelopmentConfig(LocalConfig):
     DEBUG = True
     DEVELOPMENT = True
     SECRET_KEY = os.getenv('SECRET_KEY', None) or secrets.token_urlsafe(16)
+    PREFIX = '/api'
+    OVERWITE_REDIRECT_URI_MAP = os.getenv('OVERWITE_REDIRECT_URI_MAP', None) or json.dumps(
+        {"http://localhost:3000": "http://localhost:3000/api/custom_oidc_callback"})
 
 
 class TestingConfig(LocalConfig):
