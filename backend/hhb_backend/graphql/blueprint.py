@@ -1,16 +1,16 @@
 from graphene_file_upload.flask import FileUploadGraphQLView
 from graphql.execution.executors.asyncio import AsyncioExecutor
 import asyncio
+import nest_asyncio
 from flask import render_template, Blueprint, request
 from flask_graphql import GraphQLView
 
 from hhb_backend.graphql import schema
 from hhb_backend.graphql.dataloaders import HHBDataLoader
 
-
 loop = asyncio.new_event_loop()
 asyncio.set_event_loop(loop)
-
+nest_asyncio.apply()
 
 def create_blueprint():
     bp = Blueprint('graphql', __name__)
@@ -36,10 +36,8 @@ def create_blueprint():
             'upload',
             graphiql=True,
             schema=schema,
-            executor=AsyncioExecutor(loop=loop),
-            strict_slashes=False
-        )
-    )
+            executor=AsyncioExecutor(loop=loop)),
+        strict_slashes=False)
 
     @bp.route('/help')
     def voyager():
