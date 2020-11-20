@@ -5,7 +5,8 @@ import graphene
 from flask import request
 import hhb_backend.graphql.models.gebruiker as gebruiker
 import hhb_backend.graphql.models.rekening as rekening
-from hhb_backend.graphql.models import organisatie
+import hhb_backend.graphql.models.organisatie as organisatie
+import hhb_backend.graphql.models.journaalpost as journaalpost
 from hhb_backend.graphql.scalars.bedrag import Bedrag
 from hhb_backend.utils import convert_hhb_interval_to_dict
 
@@ -36,6 +37,7 @@ class Afspraak(graphene.ObjectType):
     kenmerk = graphene.String()
     actief = graphene.Boolean()
     organisatie = graphene.Field(lambda: organisatie.Organisatie)
+    journaalposten = graphene.List(lambda: journaalpost.Journaalpost)
 
     async def resolve_gebruiker(root, info):
         """ Get gebruiker when requested """
@@ -68,3 +70,8 @@ class Afspraak(graphene.ObjectType):
         """ Get organisatie when requested """
         if root.get('organisatie_id'):
             return await request.dataloader.organisaties_by_id.load(root.get('organisatie_id'))
+
+    async def resolve_journaalposten(root, info):
+        """ Get organisatie when requested """
+        if root.get('journaalposten'):
+            return await request.dataloader.journaalposten_by_id.load_many(root.get('journaalposten')) or []

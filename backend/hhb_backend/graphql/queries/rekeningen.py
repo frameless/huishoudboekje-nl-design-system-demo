@@ -1,9 +1,7 @@
 """ GraphQL Rekeningen query """
 import graphene
-import requests
 from flask import request
-from graphql import GraphQLError
-from hhb_backend.graphql import settings
+
 from hhb_backend.graphql.models.rekening import Rekening
 
 
@@ -21,8 +19,5 @@ class RekeningenQuery():
         if kwargs["ids"]:
             rekeningen = await request.dataloader.rekeningen_by_id.load_many(kwargs["ids"])
         else:
-            response = requests.get(f"{settings.HHB_SERVICES_URL}/rekeningen/")
-            if response.status_code != 200:
-                raise GraphQLError(f"Upstream API responded: {response.json()}")
-            rekeningen = response.json()["data"]
+            rekeningen = request.dataloader.rekeningen_by_id.get_all_and_cache()
         return rekeningen

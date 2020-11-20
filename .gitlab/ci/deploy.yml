@@ -2,12 +2,7 @@
 .deploy-app:
   stage: deploy
   needs:
-    - build-frontend
-    - build-backend
-    - build-huishoudboekje-service
-    - build-organisatie-service
-    - build-bank-transactie-service
-    - build-grootboek-service
+    - build
   image: registry.gitlab.com/commonground/core/review-app-deployer:latest
   environment:
     name: $CI_COMMIT_REF_SLUG
@@ -79,7 +74,7 @@
 .deploy-docs:
   stage: deploy
   needs:
-    - build-docs
+    - build
   image: registry.gitlab.com/commonground/core/review-app-deployer:latest
   variables:
     DOCS_HOST: docs-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN

@@ -1,3 +1,14 @@
+# Create version.json
+FROM alpine:latest AS version
+
+RUN apk add --update jq
+
+ARG COMPONENT_NAME=huishoudboekje_service
+ARG COMPONENT_TAG=undefined
+ARG COMPONENT_COMMIT_HASH=undefined
+RUN jq -ncM '{tag: env.COMPONENT_TAG, commit: env.COMPONENT_COMMIT_HASH, component: env.COMPONENT_NAME}' | tee /version.json
+
+#Build
 FROM python:3.8-slim-buster
 
 # set the working directory in the container
@@ -17,6 +28,8 @@ COPY --chown=app:app ./core_service/core_service /app/core_service
 
 # install the package
 RUN python3 setup.py install --user --prefix=''
+
+COPY --from=version --chown=app:app /version.json /app/huishoudboekje_service/version.json
 
 # Set gunicorn settings
 ENV GUNICORN_PORT="8000" \

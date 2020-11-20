@@ -1,9 +1,7 @@
 """ GraphQL Gebruikers query """
 import graphene
-import requests
 from flask import request
-from graphql import GraphQLError
-from hhb_backend.graphql import settings
+
 from hhb_backend.graphql.models.afspraak import Afspraak
 
 
@@ -22,8 +20,5 @@ class AfsprakenQuery():
         if kwargs["ids"]:
             afspraken = await request.dataloader.afspraken_by_id.load_many(kwargs["ids"])
         else:
-            afspraken_response = requests.get(f"{settings.HHB_SERVICES_URL}/afspraken/")
-            if afspraken_response.status_code != 200:
-                raise GraphQLError(f"Upstream API responded: {afspraken_response.json()}")
-            afspraken = afspraken_response.json()["data"]
+            afspraken = request.dataloader.afspraken_by_id.get_all_and_cache()
         return afspraken

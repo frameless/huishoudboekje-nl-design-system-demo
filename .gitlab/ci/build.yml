@@ -1,87 +1,19 @@
-# This template requires the following:
-#   variables:
-#      APP_NAME: <the name of the application/directory>
-.build:
+build:
   stage: build
   needs: []
   tags:
     - cg
     - shell
-  script:
-    - docker build -t $CI_REGISTRY_IMAGE/$APP_NAME:$IMAGE_TAG ./$APP_NAME
-  after_script:
+  variables:
+    IMAGE_PREFIX: "$CI_REGISTRY/$CI_PROJECT_PATH/"
+  before_script:
+    - export COMPONENT_TAG=$(git describe --long --all | sed 's!heads/!!')
+    - export COMPONENT_COMMIT_HASH=$(git describe --always --abbrev=0 --match "NOT A TAG")
     - export DOCKER_CONFIG=/tmp/docker-config-$CI_JOB_ID
-    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-    - docker push $CI_REGISTRY_IMAGE/$APP_NAME:$IMAGE_TAG
-
-build-python-postgres:
-  extends: .build
-  variables:
-    APP_NAME: python-postgres
+    - docker login -u gitlab-ci-token --password-stdin $CI_REGISTRY <<< $CI_JOB_TOKEN
   script:
-    - docker build -t $CI_REGISTRY_IMAGE/$APP_NAME:$IMAGE_TAG - < test.dockerfile
-  only:
-    - branches@commonground/huishoudboekje/app-new
-
-build-frontend:
-  variables:
-    APP_NAME: frontend
-  extends: .build
-  only:
-    - branches@commonground/huishoudboekje/app-new
-
-build-backend:
-  variables:
-    APP_NAME: backend
-  extends: .build
-  only:
-    - branches@commonground/huishoudboekje/app-new
-
-# This template requires the following:
-#   variables:
-#      APP_NAME: <the name of the application>
-#      APP_DIRECTORY: <the directory in services that contains the application>
-.build-service:
-  extends: .build
-  script:
-    - docker build -t $CI_REGISTRY_IMAGE/$APP_NAME:$IMAGE_TAG -f ./services/$APP_DIRECTORY/Dockerfile ./services
-
-build-huishoudboekje-service:
-  variables:
-    APP_NAME: huishoudboekje-service
-    APP_DIRECTORY: huishoudboekje_service
-  extends: .build-service
-  only:
-    - branches@commonground/huishoudboekje/app-new
-
-build-organisatie-service:
-  variables:
-    APP_NAME: organisatie-service
-    APP_DIRECTORY: organisatie_service
-  extends: .build-service
-  only:
-    - branches@commonground/huishoudboekje/app-new
-
-build-bank-transactie-service:
-  variables:
-    APP_NAME: bank-transactie-service
-    APP_DIRECTORY: bank_transactie_service
-  extends: .build-service
-  only:
-    - branches@commonground/huishoudboekje/app-new
-
-build-grootboek-service:
-  variables:
-    APP_NAME: grootboek-service
-    APP_DIRECTORY: grootboek_service
-  extends: .build-service
-  only:
-    - branches@commonground/huishoudboekje/app-new
-
-build-docs:
-  variables:
-    APP_NAME: docs
-  extends: .build
+    - docker-compose build --parallel
+    - docker-compose push
   only:
     - branches@commonground/huishoudboekje/app-new
 

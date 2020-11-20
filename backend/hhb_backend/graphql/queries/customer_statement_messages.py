@@ -1,11 +1,9 @@
 """ GraphQL Gebruikers query """
-import os
 import graphene
-import requests
-from graphql import GraphQLError
 from flask import request
-from hhb_backend.graphql import settings
+
 from hhb_backend.graphql.models.customer_statement_message import CustomerStatementMessage
+
 
 class CustomerStatementMessageQuery():
     return_type = graphene.Field(CustomerStatementMessage, id=graphene.Int(required=True))
@@ -22,8 +20,5 @@ class CustomerStatementMessagesQuery():
         if kwargs["ids"]:
             customer_satement_messages = await request.dataloader.csms_by_id.load_many(kwargs["ids"])
         else:
-            response = requests.get(f"{settings.TRANSACTIE_SERVICES_URL}/customerstatementmessages/")
-            if response.status_code != 200:
-                raise GraphQLError(f"Upstream API responded: {response.json()}")
-            customer_satement_messages = response.json()["data"]
+            customer_satement_messages = request.dataloader.csms_by_id.get_all_and_cache()
         return customer_satement_messages

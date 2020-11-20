@@ -2,7 +2,7 @@ JUNIT_REPORT := report.xml
 COVERAGE_FILE := .coverage
 COVERAGE_HTML := htmlcov
 COVERAGE_XML := coverage.xml
-TESTS = tests
+TESTS := tests
 
 .PHONY: all
 all: coverage
@@ -22,6 +22,7 @@ $(COVERAGE_HTML): $(COVERAGE_FILE)
 
 $(COVERAGE_XML): $(COVERAGE_FILE)
 	coverage xml -o $@
+
 
 .PHONY: open_html
 open_html: $(COVERAGE_HTML)

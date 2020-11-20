@@ -1,25 +1,24 @@
 #!/usr/bin/env python
 import logging
 import os
+from pathlib import Path
 from pprint import pformat
 from urllib.parse import urlparse
 
 import itsdangerous
-from flask import Flask, jsonify, redirect, make_response, session
+from flask import Flask, jsonify, redirect, make_response, session, send_file
 from flask_oidc import OpenIDConnect
 
 import hhb_backend.graphql.blueprint as graphql_blueprint
 from hhb_backend.custom_oidc import CustomOidc
 from hhb_backend.reverse_proxy import ReverseProxied
 
-logging.basicConfig(level=logging.DEBUG)
-
 
 def create_app(config_name=os.getenv('APP_SETTINGS', None) or 'hhb_backend.config.DevelopmentConfig'):
     app = Flask(__name__)
     app.config.from_object(config_name)
 
-    logging.debug(f"{pformat(app.config)}")
+    logging.basicConfig( level=app.config["LOG_LEVEL"],  )
     logging.info(f"Starting {__name__} with {config_name}")
 
     if app.config['PREFIX']:
@@ -42,6 +41,13 @@ def create_app(config_name=os.getenv('APP_SETTINGS', None) or 'hhb_backend.confi
     @app.route('/health')
     def health():
         return make_response(('ok', {'Content-Type': 'text/plain'}))
+
+    @app.route('/version')
+    def version_file():
+        try:
+            return send_file('version.json')
+        except :
+            return jsonify(component='backend', tag='dev')
 
     @app.route('/me')
     def me():
