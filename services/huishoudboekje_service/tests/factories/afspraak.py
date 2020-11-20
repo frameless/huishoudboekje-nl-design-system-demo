@@ -22,7 +22,8 @@ class AfspraakFactory():
         bedrag: float = 13.37,
         credit: bool = True,
         kenmerk: str = "ABC1234",
-        actief: bool = True
+        actief: bool = True,
+        organisatie_id: int = None
     ):
         if not gebruiker:
             gebruiker = self.gebruikers_factory.createGebruiker()
@@ -40,6 +41,9 @@ class AfspraakFactory():
             kenmerk=kenmerk,
             actief=actief
         )
+        if organisatie_id:
+            afspraak.organisatie_id = organisatie_id
+            
         self.dbsession.add(afspraak)
         self.dbsession.flush()
         return afspraak
