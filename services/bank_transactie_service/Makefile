@@ -1,5 +1,8 @@
-MODULES := bank_transactie_service models
-export HHB_SECRET ?= test
-export TRANSACTIE_DATABASE_URL ?=
+CONFIG_MODULE := bank_transactie_service
+MODULES := $(CONFIG_MODULE) models
+DB_URL_NAME := TRANSACTIE_DATABASE_URL
+DB_NAME := transactieservice
 
 include ../../python.mk
+
+include ../db.mk
