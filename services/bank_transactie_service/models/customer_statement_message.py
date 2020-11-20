@@ -10,13 +10,13 @@ class CustomerStatementMessage(db.Model):
     upload_date = Column(DateTime, nullable=False)
     raw_data = Column(String, nullable=False)
 
-    transaction_reference_number = Column(String) # Tag 20
-    related_reference = Column(String) # Tag 21
-    account_identification = Column(String) # Tag 25
-    sequence_number = Column(String) # Tag 28C
-    opening_balance = Column(Integer) # Tag 60f
-    closing_balance = Column(Integer) # Tag 62f
-    closing_available_funds = Column(Integer) # Tag 64
-    forward_available_balance = Column(Integer) # Tag 65
+    transaction_reference_number = Column(String)  # Tag 20
+    related_reference = Column(String)  # Tag 21
+    account_identification = Column(String)  # Tag 25
+    sequence_number = Column(String)  # Tag 28C
+    opening_balance = Column(Integer)  # Tag 60f
+    closing_balance = Column(Integer)  # Tag 62f
+    closing_available_funds = Column(Integer)  # Tag 64
+    forward_available_balance = Column(Integer)  # Tag 65
 
     bank_transactions = relationship("BankTransaction", back_populates="customer_statement_message")
