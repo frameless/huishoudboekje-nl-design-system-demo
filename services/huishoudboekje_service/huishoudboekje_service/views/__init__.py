@@ -5,3 +5,4 @@ from huishoudboekje_service.views.afspraken import AfspraakView
 from huishoudboekje_service.views.rekeningen import RekeningView
 from huishoudboekje_service.views.rekening_gebruiker import RekeningGebruikerView
 from huishoudboekje_service.views.rekening_organisatie import RekeningOrganisatieView
+from huishoudboekje_service.views.journaalposten import JournaalpostView

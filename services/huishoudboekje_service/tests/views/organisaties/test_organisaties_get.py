@@ -56,3 +56,6 @@ def test_organisaties_get_filter_kvks(client, organisatie_factory):
     response = client.get('/organisaties/?filter_kvks=1337')
     assert response.status_code == 200
     assert response.json["data"] == []
+    response = client.get('/organisaties/?filter_kvks=pietje')
+    assert response.status_code == 400
+    assert response.json["errors"] == ["Input for filter_kvks is not correct, 'pietje' is not a number."]

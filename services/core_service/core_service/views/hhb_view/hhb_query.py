@@ -12,6 +12,7 @@ class HHBQuery():
         self._exposed_one_relations = []
         self.hhb_model = hhb_model
         self.query = self.hhb_model.query
+        self.filtered_columns = []
 
     def expose_one_relation(self, relation, relation_property):
         self._exposed_one_relations.append({"relation": relation, "relation_property": relation_property})
@@ -31,6 +32,7 @@ class HHBQuery():
                             f"Input for columns is not correct, '{column_name}' is not a column."
                         ]}, 400))
                 column_filter.append(self.hhb_model.__table__.columns[column_name])
+                self.filtered_columns.append(column_name)
             self.query = self.query.with_entities(*column_filter)
 
     def add_filter_ids(self):
@@ -69,7 +71,8 @@ class HHBQuery():
 
     def load_relations(self):
         for relation in self._exposed_many_relations + self._exposed_one_relations:
-            self.query = self.query.options(joinedload(relation["relation"]))
+            if not self.filtered_columns or relation['relation'] in self.filtered_columns:
+                self.query = self.query.options(joinedload(relation["relation"]))
 
     def order_query(self):
         self.query = self.query.order_by(self.hhb_model.id)
@@ -77,7 +80,9 @@ class HHBQuery():
     def post_process_data(self, row):
         result_dict = row2dict(row)
         for relation in self._exposed_many_relations:
-            result_dict[relation["relation"]] = [getattr(item, relation["relation_property"]) for item in getattr(row, relation["relation"])]
+            if not self.filtered_columns or relation['relation'] in self.filtered_columns:
+                result_dict[relation["relation"]] = [getattr(item, relation["relation_property"]) for item in getattr(row, relation["relation"])]
         for relation in self._exposed_one_relations:
-            result_dict[relation["relation"]] = getattr(getattr(row, relation["relation"]), relation["relation_property"])
+            if not self.filtered_columns or relation['relation'] in self.filtered_columns:
+                result_dict[relation["relation"]] = getattr(getattr(row, relation["relation"]), relation["relation_property"])
         return result_dict
