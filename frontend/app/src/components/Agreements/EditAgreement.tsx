@@ -29,7 +29,7 @@ const EditAgreement = () => {
 		}).then(result => {
 			toast({
 				status: "success",
-				title: t("messages.agreements.createSuccessMessage"),
+				title: t("messages.agreements.editSuccessMessage"),
 				position: "top",
 			});
 

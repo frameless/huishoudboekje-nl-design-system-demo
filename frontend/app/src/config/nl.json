@@ -10,9 +10,7 @@
     "edit": "Wijzigen",
     "login": "Inloggen",
     "logout": "Uitloggen",
-    "clearSearch": "Zoekopdracht wissen",
-    "activate": "Activeer",
-    "deactivate": "Deactiveer"
+    "clearSearch": "Zoekopdracht wissen"
   },
   "sidebar": {
     "dashboard": "Dashboard"
@@ -48,6 +46,7 @@
       "noSearchResults": "Geen afspraken gevonden.",
       "addHint": "Voeg afspraken toe door te klikken op de knop {{buttonLabel}}.",
       "createSuccessMessage": "Nieuwe afspraak succesvol opgeslagen.",
+      "editSuccessMessage": "Afspraak succesvol opgeslagen.",
       "deleteConfirmMessage": "Afspraak succesvol verwijderd.",
       "editConfirmMessage": "Afspraak succesvol gewijzigd."
     },
@@ -159,6 +158,7 @@
         "intervalWeeks": "Weken",
         "intervalDays": "Dagen",
         "active": "Actief",
+        "inactive": "Inactief",
         "expenses": "Uitgaven",
         "income": "Inkomsten",
         "organization": "Organisatie",
