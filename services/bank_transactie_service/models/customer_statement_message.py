@@ -19,4 +19,4 @@ class CustomerStatementMessage(db.Model):
     closing_available_funds = Column(Integer)  # Tag 64
     forward_available_balance = Column(Integer)  # Tag 65
 
-    bank_transactions = relationship("BankTransaction", back_populates="customer_statement_message", passive_deletes=True)
+    bank_transactions = relationship("BankTransaction", back_populates="customer_statement_message", cascade="all, delete")
