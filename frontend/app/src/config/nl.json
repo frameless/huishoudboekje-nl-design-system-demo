@@ -46,6 +46,7 @@
       "noSearchResults": "Geen afspraken gevonden.",
       "addHint": "Voeg afspraken toe door te klikken op de knop {{buttonLabel}}.",
       "createSuccessMessage": "Nieuwe afspraak succesvol opgeslagen.",
+      "editSuccessMessage": "Afspraak succesvol opgeslagen.",
       "deleteConfirmMessage": "Afspraak succesvol verwijderd.",
       "editConfirmMessage": "Afspraak succesvol gewijzigd."
     },
