@@ -7,7 +7,7 @@ export enum RouteNames {
 	organizations = "organisaties",
 	banking = "bankzaken",
 	transactions = "transacties",
-	csms = "bankbestanden",
+	csms = "bronbestanden",
 	notFound = "404",
 
 	// Sub routes
