@@ -73,7 +73,7 @@
     "customerStatementMessages": {
       "createSuccess": "Het betaalbestand is geïmporteerd en de transacties zijn succesvol ingelezen.",
       "deleteSuccess": "Het betaalbestand is succesvol verwijderd.",
-      "incorrectFileError": "Het is niet gelukt om het bestand te importeren. Controleer de invoer en probeer het nog een keer."
+      "incorrectFileError": "Dit bestand voldoet niet aan het formaat SWIFT MT940. Het is niet gelukt om het te importeren. Controleer het bestand en probeer het nog een keer."
     },
     "transactions": {
       "addHint": "Voeg transacties toe door een bankafschrift te importeren."
