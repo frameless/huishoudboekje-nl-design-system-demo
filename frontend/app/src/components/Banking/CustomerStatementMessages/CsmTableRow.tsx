@@ -1,11 +1,13 @@
 import {IconButton, Text} from "@chakra-ui/core";
 import moment from "moment";
 import React, {useState} from "react";
+import {useIsMobile} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {ICustomerStatementMessage} from "../../../models";
 
-const CsmListItem: React.FC<{ csm: ICustomerStatementMessage, onDelete: (id: number) => void }> = ({csm, onDelete}) => {
+const CsmTableRow: React.FC<{ csm: ICustomerStatementMessage, onDelete: (id: number) => void }> = ({csm, onDelete}) => {
 	const {t} = useTranslation();
+	const isMobile = useIsMobile();
 	const [deleteConfirm, setDeleteConfirm] = useState<boolean>(false);
 
 	const onClickDeleteButton = () => {
@@ -27,13 +29,12 @@ const CsmListItem: React.FC<{ csm: ICustomerStatementMessage, onDelete: (id: num
 	return (
 		<tr>
 			<td>
-				<Text>{moment(csm.uploadDate).format("L LT")}</Text>
+				<Text>{moment(csm.uploadDate).fromNow(isMobile)}</Text>
 			</td>
-			<td>{csm.accountIdentification}</td>
-			<td style={{textAlign: "right", paddingRight: "40px"}}>
-				<Text mr={4}>{csm.bankTransactions.length}</Text>
+			<td>
+				<Text>{csm.accountIdentification}</Text>
 			</td>
-			<td style={{width: "100px", textAlign: "right" }}>
+			<td style={{width: "100px", textAlign: "right"}}>
 				{onDelete && (<>
 					<IconButton variant={deleteConfirm ? "solid" : "ghost"} size={"xs"} icon={deleteConfirm ? "check" : "delete"} variantColor={deleteConfirm ? "red" : "gray"}
 					            aria-label={t("actions.delete")} onClick={onClickDeleteButton} />
@@ -46,4 +47,4 @@ const CsmListItem: React.FC<{ csm: ICustomerStatementMessage, onDelete: (id: num
 	)
 }
 
-export default CsmListItem;
+export default CsmTableRow;

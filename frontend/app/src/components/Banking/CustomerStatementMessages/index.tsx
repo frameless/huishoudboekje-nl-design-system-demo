@@ -14,7 +14,6 @@ const CustomerStatementMessages: React.FC<BoxProps> = ({...props}) => {
 	const isMobile = useIsMobile();
 	const {t} = useTranslation();
 	const toast = useToast();
-	const csms = [];
 	const fileUploadInput = useRef<HTMLInputElement>(null);
 
 	const $customerStatementMessages = useQuery<{ customerStatementMessages: ICustomerStatementMessage[] }>(GetAllCustomerStatementMessagesQuery, {
@@ -27,7 +26,7 @@ const CustomerStatementMessages: React.FC<BoxProps> = ({...props}) => {
 	});
 
 	const onChangeFile = (e: React.FormEvent<HTMLInputElement>) => {
-		const {currentTarget: {validity, files}} = e;
+		const {currentTarget: {files}} = e;
 
 		if (files && files.length > 0) {
 			createCSM({
@@ -64,28 +63,22 @@ const CustomerStatementMessages: React.FC<BoxProps> = ({...props}) => {
 							<Heading size={"md"}>{t("forms.banking.sections.customerStatementMessages.title")}</Heading>
 							<Label>{t("forms.banking.sections.customerStatementMessages.detailText")}</Label>
 						</Stack>
-
-						<Box>
-							<Divider />
-						</Box>
-
-						<Input type={"file"} id={"fileUpload"} onChange={onChangeFile} hidden={true} ref={fileUploadInput} />
-
-						<Stack spacing={5} id={"stack"}>
+					</FormLeft>
+					<FormRight>
+						<Stack spacing={5}>
+							<Input type={"file"} id={"fileUpload"} onChange={onChangeFile} hidden={true} ref={fileUploadInput} />
 							<Box>
 								<Button variantColor={"primary"} size={"sm"} leftIcon={"add"} isLoading={createCsmLoading}
 								        onClick={() => fileUploadInput.current?.click()}>{t("actions.add")}</Button>
 							</Box>
 						</Stack>
-					</FormLeft>
-					<FormRight>
+
+						<Divider />
+
 						<Queryable query={$customerStatementMessages}>{(data: { customerStatementMessages: ICustomerStatementMessage[] }) => {
 							/* Sort CSMs so that the newest appears first */
 							const csms = [...data.customerStatementMessages].sort((a, b) => a.uploadDate <= b.uploadDate ? 1 : -1);
-
-							return (
-								<CsmListView csms={csms} refresh={$customerStatementMessages.refetch} />
-							)
+							return (<CsmListView csms={csms} refresh={$customerStatementMessages.refetch} />);
 						}}
 						</Queryable>
 					</FormRight>

@@ -36,7 +36,7 @@ const Banking = () => {
 				<Tabs defaultIndex={defaultTabRoute}>
 					<TabList>
 						<NavLinkTab to={tabRoutes[0]}>{t("banking.transactions")}</NavLinkTab>
-						<NavLinkTab to={tabRoutes[1]}>{t("actions.import")}</NavLinkTab>
+						<NavLinkTab to={tabRoutes[1]}>{t("banking.customerStatementMessages")}</NavLinkTab>
 					</TabList>
 				</Tabs>
 			</Stack>

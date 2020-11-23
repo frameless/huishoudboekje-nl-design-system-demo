@@ -5,7 +5,7 @@ import {useTranslation} from "react-i18next";
 import {ICustomerStatementMessage} from "../../../models";
 import {DeleteCustomerStatementMessageMutation} from "../../../services/graphql/mutations";
 import {Label} from "../../Forms/FormLeftRight";
-import CsmListItem from "./CsmListItem";
+import CsmTableRow from "./CsmTableRow";
 
 const CsmListView: React.FC<BoxProps & { csms: ICustomerStatementMessage[], refresh: VoidFunction }> = ({csms, refresh}) => {
 	const {t} = useTranslation();
@@ -44,22 +44,19 @@ const CsmListView: React.FC<BoxProps & { csms: ICustomerStatementMessage[], refr
 			<thead>
 				<tr>
 					<td>
-						<Label>{t("forms.common.fields.date")}</Label>
+						<Label>{t("forms.common.fields.time")}</Label>
 					</td>
 					<td>
 						<Label>{t("forms.banking.bankAccount")}</Label>
 					</td>
-					<td>
-						<Label>{t("forms.banking.nTransactions")}</Label>
-					</td>
-					<td style={{ textAlign: "right" }}>
+					<td style={{textAlign: "right"}}>
 						<Label>{t("actions.actions")}</Label>
 					</td>
 				</tr>
 			</thead>
 			<tbody>
 				{csms.map(csm => (
-					<CsmListItem key={csm.id} csm={csm} onDelete={onDelete} />
+					<CsmTableRow key={csm.id} csm={csm} onDelete={onDelete} />
 				))}
 			</tbody>
 		</table>
