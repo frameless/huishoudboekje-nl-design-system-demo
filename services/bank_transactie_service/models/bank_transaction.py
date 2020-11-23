@@ -10,7 +10,12 @@ class BankTransaction(db.Model):
 
     # 20
     customer_statement_message_id = Column(Integer,
-        ForeignKey('customer_statement_messages.id', ondelete='CASCADE'), nullable=False)
+                                           ForeignKey('customer_statement_messages.id'), nullable=False)
+    customer_statement_message = relationship("CustomerStatementMessage",
+                                              back_populates="bank_transactions")
+
+    statement_line = Column(String)  # 61
+    information_to_account_owner = Column(String)  # 86
 
     transactie_datum = Column(Date)
     tegen_rekening = Column(String)
