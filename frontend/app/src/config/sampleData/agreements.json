@@ -19,6 +19,7 @@
     "startDatum": "2020-10-01",
     "isContinuous": false,
     "nBetalingen": 10,
-    "actief": true
+    "actief": true,
+    "rubriek": 1
   }
 ]

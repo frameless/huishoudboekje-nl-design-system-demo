@@ -9,7 +9,7 @@ from .grootboekrekeningen import GrootboekrekeningQuery, GrootboekrekeningenQuer
 from .journaalposten import JournaalpostQuery, JournaalpostenQuery
 from .organisaties import OrganisatieQuery, OrganisatiesQuery
 from .rekeningen import RekeningQuery, RekeningenQuery
-
+from .rubrieken import RubriekQuery, RubriekenQuery
 
 class RootQuery(graphene.ObjectType):
     """ The root of all queries """
@@ -29,6 +29,8 @@ class RootQuery(graphene.ObjectType):
     grootboekrekeningen = GrootboekrekeningenQuery.return_type
     journaalpost = JournaalpostQuery.return_type
     journaalposten = JournaalpostenQuery.return_type
+    rubriek = RubriekQuery.return_type
+    rubrieken = RubriekenQuery.return_type
 
     async def resolve_gebruiker(root, info, **kwargs):
         return await GebruikerQuery.resolver(root, info, **kwargs)
@@ -77,3 +79,9 @@ class RootQuery(graphene.ObjectType):
 
     async def resolve_journaalposten(root, info, **kwargs):
         return await JournaalpostenQuery.resolver(root, info, **kwargs)
+
+    async def resolve_rubriek(root, info, **kwargs):
+        return await RubriekQuery.resolver(root, info, **kwargs)
+
+    async def resolve_rubrieken(root, info, **kwargs):
+        return await RubriekenQuery.resolver(root, info, **kwargs)

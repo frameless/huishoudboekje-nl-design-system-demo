@@ -12,16 +12,14 @@ class GrootboekrekeningFactory():
         id,
         referentie="01",
         naam="Grootboek Naam",
-        omschijving_kort="Boekhoudkundige Naam Kort",
-        omschijving_lang="Boekhoudkundige Naam Lang",
+        omschrijving="Boekhoudkundige Naam Lang",
         parent_id=None
     ):
         grootboekrekening = Grootboekrekening(
             id=id,
             referentie=referentie,
             naam=naam,
-            omschijving_kort=omschijving_kort,
-            omschijving_lang=omschijving_lang,
+            omschrijving=omschrijving,
             parent_id=parent_id
         )
         self.dbsession.add(grootboekrekening)

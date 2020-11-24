@@ -71,6 +71,20 @@ export type IInterval = {
 	dagen: number
 }
 
+export type IGrootboekrekening = {
+	id: string
+    referentie: string
+    naam: string
+    omschrijving_kort: String
+    omschrijving_lang: String
+}
+
+export type IRubriek = {
+	id: number,
+	naam: string
+	grootboekrekening: IGrootboekrekening
+}
+
 export type IAfspraak = {
 	__typename: "Afspraak"
 	id: number
@@ -87,6 +101,7 @@ export type IAfspraak = {
 	isContinuous: boolean,
 	aantalBetalingen: number,
 	actief: boolean,
+	rubriek: IRubriek
 }
 
 export type IBankTransaction = {

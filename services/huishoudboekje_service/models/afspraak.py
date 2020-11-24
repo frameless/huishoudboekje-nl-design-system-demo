@@ -15,6 +15,8 @@ class Afspraak(db.Model):
     eind_datum = Column(Date)
     aantal_betalingen = Column(Integer)
     interval = Column(String)
+    rubriek_id = Column(Integer, ForeignKey('rubrieken.id'))
+    rubriek = relationship("Rubriek", back_populates="afspraken")
     tegen_rekening_id = Column(Integer, ForeignKey('rekeningen.id'))
     tegen_rekening = relationship("Rekening", back_populates="afspraken")
     bedrag = Column(Integer)

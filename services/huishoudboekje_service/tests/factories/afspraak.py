@@ -23,7 +23,8 @@ class AfspraakFactory():
         credit: bool = True,
         kenmerk: str = "ABC1234",
         actief: bool = True,
-        organisatie_id: int = None
+        organisatie_id: int = None,
+        rubriek_id: int = None
     ):
         if not gebruiker:
             gebruiker = self.gebruikers_factory.createGebruiker()
@@ -39,7 +40,8 @@ class AfspraakFactory():
             bedrag=bedrag,
             credit=credit,
             kenmerk=kenmerk,
-            actief=actief
+            actief=actief,
+            rubriek_id=rubriek_id,
         )
         if organisatie_id:
             afspraak.organisatie_id = organisatie_id

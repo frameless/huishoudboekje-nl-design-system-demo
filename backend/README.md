@@ -34,6 +34,8 @@ export APP_SETTINGS="hhb_backend.config.DevelopmentConfig"
 export PREFIX=/api
 export HHB_SERVICE_URL=http://localhost:8000
 export ORGANISATIE_SERVICE_URL=http://localhost:8001
+export TRANSACTIE_SERVICE_URL=http://localhost:8002
+export GROOTBOEK_SERVICE_URL=http://localhost:8003
 
 flask run
 ```

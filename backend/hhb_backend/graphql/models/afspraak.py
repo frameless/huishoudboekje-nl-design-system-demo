@@ -7,6 +7,9 @@ import hhb_backend.graphql.models.gebruiker as gebruiker
 import hhb_backend.graphql.models.rekening as rekening
 import hhb_backend.graphql.models.organisatie as organisatie
 import hhb_backend.graphql.models.journaalpost as journaalpost
+import hhb_backend.graphql.models.grootboekrekening as grootboekrekening
+import hhb_backend.graphql.models.journaalpost as journaalpost
+import hhb_backend.graphql.models.rubriek as rubriek
 from hhb_backend.graphql.scalars.bedrag import Bedrag
 from hhb_backend.utils import convert_hhb_interval_to_dict
 
@@ -38,7 +41,13 @@ class Afspraak(graphene.ObjectType):
     actief = graphene.Boolean()
     organisatie = graphene.Field(lambda: organisatie.Organisatie)
     journaalposten = graphene.List(lambda: journaalpost.Journaalpost)
+    rubriek = graphene.Field(lambda: rubriek.Rubriek)
 
+    async def resolve_rubriek(root, info):
+        """ Get rubriek when requested """
+        if root.get('rubriek_id'):
+            return await request.dataloader.rubrieken_by_id.load(root.get('rubriek_id'))
+  
     async def resolve_gebruiker(root, info):
         """ Get gebruiker when requested """
         if root.get('gebruiker_id'):

@@ -16,7 +16,7 @@ class GrootboekrekeningenView(HHBView):
             "naam": {
                 "type": "string",
             },
-            "boekhoudkundige_naam": {
+            "omschrijving": {
                 "type": "string",
             },
             "parent_id": {
