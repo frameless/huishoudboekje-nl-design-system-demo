@@ -72,3 +72,6 @@ frontend: helm/charts/medewerker-frontend/theme
 
 helm/charts/medewerker-frontend/theme: frontend/theme/sloothuizen
 	(cd helm/charts/medewerker-frontend; ln -s ../../../frontend/theme/sloothuizen theme)
+
+preparedb:
+	for service in $(SERVICE_MODULES); do make -C services/$$service $@; done

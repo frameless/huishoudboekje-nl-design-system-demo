@@ -18,7 +18,7 @@ class Config(object):
     SESSION_COOKIE_SECURE = True
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SAMESITE = 'Lax'
-    SECRET_KEY = os.getenv('SECRET_KEY', None)
+    SECRET_KEY = os.getenv('SECRET_KEY', None) or secrets.token_urlsafe(16)
     OIDC_CLIENT_SECRETS = os.getenv('OIDC_CLIENT_SECRETS', './etc/client_secrets.json')
     OIDC_SCOPES = ['openid', 'email', 'groups', 'profile']
     OIDC_ID_TOKEN_COOKIE_SECURE = True
@@ -47,7 +47,7 @@ class LocalConfig(StagingConfig):
 class DevelopmentConfig(LocalConfig):
     DEBUG = True
     DEVELOPMENT = True
-    SECRET_KEY = os.getenv('SECRET_KEY', None) or secrets.token_urlsafe(16)
+    SECRET_KEY = os.getenv('SECRET_KEY', None) or 'development'
     PREFIX = '/api'
     OVERWITE_REDIRECT_URI_MAP = os.getenv('OVERWITE_REDIRECT_URI_MAP', None) or json.dumps(
         {"http://localhost:3000": "http://localhost:3000/api/custom_oidc_callback"})
