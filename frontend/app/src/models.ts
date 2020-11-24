@@ -104,15 +104,12 @@ export type IAfspraak = {
 	rubriek: IRubriek
 }
 
-export type IGrootboekrekening = {
-	id: string
-	naam: string
-}
 export type IJournaalpost = {
 	id: number
 	afspraak: IAfspraak
 	grootboekrekening: IGrootboekrekening
 }
+
 export type IBankTransaction = {
 	customerStatementMessage: ICustomerStatementMessage
 	id: number
