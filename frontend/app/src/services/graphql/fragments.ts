@@ -6,7 +6,27 @@ export const RekeningFragment = gql`
         iban
         rekeninghouder
     }
-`
+`;
+
+export const GrootboekrekeningFragment = gql`
+    fragment Grootboekrekening on Grootboekrekening {
+        id
+        referentie
+        naam
+        omschrijving
+    }
+`;
+
+export const RubriekFragment = gql`
+    fragment Rubriek on Rubriek {
+        id
+        naam
+        grootboekrekening {
+            ...Grootboekrekening
+        }
+    }
+    ${GrootboekrekeningFragment}
+`;
 
 export const AfspraakFragment = gql`
     fragment Afspraak on Afspraak {
@@ -40,9 +60,13 @@ export const AfspraakFragment = gql`
         credit
         kenmerk
         actief
+        rubriek {
+            ...Rubriek
+        }
     }
     ${RekeningFragment}
-`
+    ${RubriekFragment}
+`;
 
 export const GebruikerFragment = gql`
     fragment Gebruiker on Gebruiker {

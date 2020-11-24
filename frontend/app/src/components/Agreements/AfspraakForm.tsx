@@ -19,14 +19,14 @@ import {
 	useToast
 } from "@chakra-ui/core";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
-import {AfspraakPeriod, AfspraakType, IAfspraak, IGebruiker, IntervalType, IOrganisatie} from "../../models";
+import {AfspraakPeriod, AfspraakType, IAfspraak, IGebruiker, IntervalType, IOrganisatie, IRubriek} from "../../models";
 import CustomRadioButton from "./CustomRadioButton";
 import {sampleData} from "../../config/sampleData/sampleData";
 import {useInput, useIsMobile, useNumberInput, useToggle, Validators} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {UseInput} from "react-grapple/dist/hooks/useInput";
 import {useQuery} from "@apollo/client";
-import {GetAllOrganisatiesQuery} from "../../services/graphql/queries";
+import {GetAllOrganisatiesQuery, GetAllRubrieken} from "../../services/graphql/queries";
 import moment from "moment";
 
 const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) => void, gebruiker: IGebruiker, loading: boolean }> = ({afspraak, onSave, gebruiker, loading = false, ...props}) => {
@@ -35,6 +35,7 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 	const isMobile = useIsMobile();
 
 	const {data: orgsData, loading: orgsLoading} = useQuery<{ organisaties: IOrganisatie[] }>(GetAllOrganisatiesQuery);
+	const {data: rubriekData, loading: rubriekLoading} = useQuery<{ rubrieken: IRubriek[] }>(GetAllRubrieken);
 
 	const [isSubmitted, setSubmitted] = useState<boolean>(false);
 	const [isActive, toggleActive] = useToggle(true);
@@ -44,6 +45,9 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 		validate: [Validators.required]
 	});
 	const organizationId = useInput<number>({
+		validate: [(v) => v !== undefined && v.toString() !== ""]
+	});
+	const rubriekId = useInput<number>({
 		validate: [(v) => v !== undefined && v.toString() !== ""]
 	});
 	const rekeningId = useInput<number>({
@@ -109,6 +113,7 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 			setAfspraakType(afspraak.credit ? AfspraakType.Income : AfspraakType.Expense);
 			description.setValue(afspraak.beschrijving);
 			organizationId.setValue(afspraak.organisatie?.id || 0);
+			rubriekId.setValue(afspraak.rubriek?.id || 0);
 			if (afspraak.tegenRekening) {
 				rekeningId.setValue(afspraak.tegenRekening.id);
 			}
@@ -141,6 +146,7 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 		if (c.organisatie?.rekeningen?.length > 0) {
 			rekeningId.setValue(c.organisatie.rekeningen[0].id);
 		}
+		rubriekId.setValue(c.rubriek.id);
 		amount.setValue(c.bedrag);
 		searchTerm.setValue(c.kenmerk);
 		toggleRecurring(c.type === AfspraakPeriod.Periodic);
@@ -160,6 +166,7 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 		const fields: UseInput<any>[] = [
 			description,
 			organizationId,
+			rubriekId,
 			rekeningId,
 			amount,
 			searchTerm,
@@ -193,6 +200,7 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 			beschrijving: description.value,
 			tegenRekeningId: rekeningId.value,
 			organisatieId: parseInt(organizationId.value as unknown as string) !== 0 ? organizationId.value : null,
+			rubriekId: rubriekId.value,
 			bedrag: amount.value,
 			kenmerk: searchTerm.value,
 			startDatum: moment(Date.UTC(startDate.year.value, startDate.month.value - 1, startDate.day.value)).format("YYYY-MM-DD"),
@@ -284,6 +292,18 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 							<Stack spacing={1} flex={1}>
 								<FormLabel htmlFor={"searchTerm"}>{t("forms.agreements.fields.searchTerm")}</FormLabel>
 								<Input isInvalid={isInvalid(searchTerm)} {...searchTerm.bind} id="searchTerm" />
+							</Stack>
+						</Stack>
+						<Stack spacing={2} direction={isMobile ? "column" : "row"}>
+							<Stack spacing={1} flex={1}>
+								<FormLabel htmlFor={"accountId"}>{t("forms.agreements.fields.rubriek")}</FormLabel>
+								{rubriekLoading ? (<Spinner />) : (<Select {...rubriekId.bind} isInvalid={isInvalid(rubriekId)} id="rubriekId"
+								                                        value={rubriekId.value}>
+									<option value="">{t("forms.agreements.fields.rubriekChoose")}</option>
+									{rubriekData?.rubrieken.map(o => (
+										<option key={"o" + o.id} value={o.id}>{o.naam}</option>
+									))}
+								</Select>)}
 							</Stack>
 						</Stack>
 					</FormRight>

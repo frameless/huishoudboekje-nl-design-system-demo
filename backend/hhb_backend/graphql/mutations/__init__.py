@@ -18,6 +18,9 @@ from .rekeningen.create_organisatie_rekening import CreateOrganisatieRekening
 from .rekeningen.delete_organisatie_rekening import DeleteOrganisatieRekening
 from .customer_statement_messages.delete_customer_statement_message import DeleteCustomerStatementMessage
 from .customer_statement_messages.create_customer_statement_message import  CreateCustomerStatementMessage
+from .rubrieken.create_rubriek import CreateRubriek
+from .rubrieken.update_rubriek import UpdateRubriek
+from .rubrieken.delete_rubriek import DeleteRubriek
 
 class RootMutation(graphene.ObjectType):
     """ The root of all mutations """
@@ -41,3 +44,8 @@ class RootMutation(graphene.ObjectType):
     createJournaalpostAfspraak = CreateJournaalpostAfspraak.Field()
     createJournaalpostGrootboekrekening = CreateJournaalpostGrootboekrekening.Field()
     deleteJournaalpost = DeleteJournaalpost.Field()
+
+    createRubriek = CreateRubriek.Field()
+    udpateRubriek = UpdateRubriek.Field()
+    deleteRubriek = DeleteRubriek.Field()
+      

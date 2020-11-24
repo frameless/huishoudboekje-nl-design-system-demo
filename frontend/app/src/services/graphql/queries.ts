@@ -1,5 +1,5 @@
 import {gql} from "@apollo/client";
-import {AfspraakFragment, BankTransactionFragment, CustomerStatementMessageFragment, GebruikerFragment, OrganisatieFragment} from "./fragments";
+import {AfspraakFragment, BankTransactionFragment, CustomerStatementMessageFragment, GebruikerFragment, OrganisatieFragment, GrootboekrekeningFragment, RubriekFragment} from "./fragments";
 
 export const GetAllGebruikersQuery = gql`
     query getAllGebruikers {
@@ -86,4 +86,22 @@ export const GetAllTransactionsQuery = gql`
         }
     }
     ${BankTransactionFragment}
+`;
+
+export const GetAllGrootboekrekeningen = gql`
+    query getAllGrootboekrekeningen {
+        grootboekrekeningen{
+            ...Grootboekrekening
+        }
+    }
+    ${GrootboekrekeningFragment}
+`;
+
+export const GetAllRubrieken = gql`
+    query getAllRubrieken {
+        rubrieken {
+            ...Rubriek
+        }
+    }
+    ${RubriekFragment}
 `;

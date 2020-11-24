@@ -23,6 +23,7 @@ class UpdateAfspraak(graphene.Mutation):
         kenmerk = graphene.String()
         actief = graphene.Boolean()
         organisatie_id = graphene.Int()
+        rubriek_id = graphene.Int()
 
     ok = graphene.Boolean()
     afspraak = graphene.Field(lambda: Afspraak)
