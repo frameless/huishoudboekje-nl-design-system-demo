@@ -1,4 +1,6 @@
-FROM node:12.18.3-alpine AS build
+ARG DOCKER_PROXY=''
+
+FROM ${DOCKER_PROXY}node:12.18.3-alpine AS build
 
 ENV CI=true
 
@@ -18,7 +20,7 @@ WORKDIR /src/website
 RUN npm run build
 
 # Copy static docs to alpine-based nginx container.
-FROM nginx:alpine
+FROM ${DOCKER_PROXY}nginx:alpine
 EXPOSE 8080
 
 # Add non-privileged user

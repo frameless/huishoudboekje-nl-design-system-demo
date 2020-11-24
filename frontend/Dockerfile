@@ -1,5 +1,7 @@
+ARG DOCKER_PROXY=''
+
 # Builder image
-FROM node:lts-alpine as builder
+FROM ${DOCKER_PROXY}node:lts-alpine as builder
 
 #ENV CI=true
 
@@ -13,7 +15,7 @@ VOLUME /app/public/theme
 RUN npm run build
 
 # Create version.json
-FROM alpine:latest AS version
+FROM ${DOCKER_PROXY}alpine:latest AS version
 
 RUN apk add --update jq
 
@@ -23,7 +25,7 @@ ARG COMPONENT_COMMIT_HASH=undefined
 RUN jq -ncM '{tag: env.COMPONENT_TAG, commit: env.COMPONENT_COMMIT_HASH, component: env.COMPONENT_NAME}' | tee /version.json
 
 # Set up production environment using nginx
-FROM nginx:1.19.0-alpine as webserver
+FROM ${DOCKER_PROXY}nginx:1.19.0-alpine as webserver
 
 # Add non-privileged user
 RUN adduser -D -u 1001 appuser

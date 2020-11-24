@@ -1,5 +1,7 @@
+ARG DOCKER_PROXY=''
+
 # Create version.json
-FROM alpine:latest AS version
+FROM ${DOCKER_PROXY}alpine:latest AS version
 
 RUN apk add --update jq
 
@@ -9,7 +11,7 @@ ARG COMPONENT_COMMIT_HASH=undefined
 RUN jq -ncM '{tag: env.COMPONENT_TAG, commit: env.COMPONENT_COMMIT_HASH, component: env.COMPONENT_NAME}' | tee /version.json
 
 # Build
-FROM python:3.8-slim-buster AS build
+FROM ${DOCKER_PROXY}python:3.8-slim-buster AS build
 
 # set the working directory in the container
 RUN useradd --home-dir /app --create-home --shell /bin/bash app
