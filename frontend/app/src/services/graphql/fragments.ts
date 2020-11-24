@@ -124,6 +124,14 @@ export const BankTransactionFragment = gql`
         id
         informationToAccountOwner
         statementLine
+		bedrag
+        isCredit
+        tegenRekeningIban
+        tegenRekening {
+            iban
+            rekeninghouder
+        }
+        transactieDatum
     }
 `;
 
@@ -144,4 +152,10 @@ export const CustomerStatementMessageFragment = gql`
         uploadDate
     }
     ${BankTransactionFragment}
+`;
+
+export const JournaalpostFragment = gql`
+    fragment Journaalpost on Journaalpost {
+        id
+    }
 `;

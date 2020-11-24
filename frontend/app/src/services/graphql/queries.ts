@@ -83,6 +83,18 @@ export const GetAllTransactionsQuery = gql`
     query getAllTransactions {
         bankTransactions{
             ...BankTransaction
+            journaalpost {
+                id
+                afspraak {
+                    id
+                }
+                grootboekrekening {
+                    id
+                    debet
+                    naam
+                }
+                
+            }
         }
     }
     ${BankTransactionFragment}
