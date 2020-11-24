@@ -22,3 +22,11 @@ class JournaalpostView(HHBView):
         },
         "required": []
     }
+
+    def add_filter_transactions(self):
+        # TODO check if this needs an index
+        filter_transactions = request.args.get('filter_transactions')
+        if filter_transactions:
+            self.hhb_query.query = self.hhb_query.query.filter(
+                Journaalpost.transaction_id.in_(filter_transactions.split(","))
+            )

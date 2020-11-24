@@ -18,3 +18,9 @@ class RekeningenByOrganisatieLoader(ListDataLoader):
     filter_item = "filter_organisaties"
     index = "organisaties"
     is_list = True
+
+class RekeningenByIbanLoader(SingleDataLoader):
+    """ Load rekeningen list for ibans """
+    model = "rekeningen"
+    filter_item = "filter_ibans"
+    index = "iban"

@@ -1,15 +1,16 @@
 from .gebruiker_loader import GebruikersByIdLoader
 from .grootboekrekening_loader import GrootboekrekeningenByIdLoader
-from .journaalpost_loader import JournaalpostenByIdLoader
+from .journaalpost_loader import JournaalpostenByIdLoader, JournaalpostenByTransactionLoader
 from .organisatie_loader import OrganisatieByIdLoader, KvKDetailsLoader
 from .afspraken_loader import AfsprakenByIdLoader, AfsprakenByGebruikerLoader
-from .rekeningen_loader import RekeningenByIdLoader, RekeningenByGebruikerLoader, RekeningenByOrganisatieLoader
+from .rekeningen_loader import RekeningenByIdLoader, RekeningenByGebruikerLoader, RekeningenByOrganisatieLoader, RekeningenByIbanLoader
 from .csm_loader import CSMsByIdLoader
 from .bank_transactions_loader import BankTransactionByIdLoader, BankTransactionByCsmLoader
 
+
 class HHBDataLoader:
     """ Main Dataloader class for HHB """
-    
+
     def __init__(self, loop):
         # Gebruikers
         self.gebruikers_by_id = GebruikersByIdLoader(loop=loop)
@@ -26,6 +27,7 @@ class HHBDataLoader:
         self.rekeningen_by_id = RekeningenByIdLoader(loop=loop)
         self.rekeningen_by_gebruiker = RekeningenByGebruikerLoader(loop=loop)
         self.rekeningen_by_organisatie = RekeningenByOrganisatieLoader(loop=loop)
+        self.rekeningen_by_iban = RekeningenByIbanLoader(loop=loop)
 
         # Transaction Service
         self.csms_by_id = CSMsByIdLoader(loop=loop)
@@ -34,3 +36,4 @@ class HHBDataLoader:
 
         self.grootboekrekeningen_by_id = GrootboekrekeningenByIdLoader(loop=loop)
         self.journaalposten_by_id = JournaalpostenByIdLoader(loop=loop)
+        self.journaalposten_by_transaction = JournaalpostenByTransactionLoader(loop=loop)
