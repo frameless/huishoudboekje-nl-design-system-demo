@@ -19,6 +19,8 @@ def setup_services(mock):
                                  json=mock_afspraken)
     grootboekrekeningen_adapter = mock.get(f"{settings.GROOTBOEK_SERVICE_URL}/grootboekrekeningen/",
                                            json=mock_grootboekrekeningen)
+    journaalposten_get_adapter = mock.get(f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_transactions=31",
+                                       json={"data": []})
     joornaalposten_adapter = mock.post(f"{settings.HHB_SERVICES_URL}/journaalposten/",
                                        json=lambda request, context: {
                                            "data": {
@@ -30,7 +32,8 @@ def setup_services(mock):
     bank_transactions_adapter = mock.get(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/",
                                          json=mock_bank_transactions)
     return {"afspraken": afspraken_adapter, "transacties": bank_transactions_adapter,
-            "grootboekrekeningen": grootboekrekeningen_adapter, "journaalposten": joornaalposten_adapter}
+            "grootboekrekeningen": grootboekrekeningen_adapter, "journaalposten": joornaalposten_adapter,
+            "journaalposten_get": journaalposten_get_adapter}
 
 
 def test_create_journaalpost_grootboekrekening(client):
@@ -67,6 +70,7 @@ mutation test($input:CreateJournaalpostGrootboekrekeningInput!) {
         }}
         assert adapters["grootboekrekeningen"].called_once
         assert adapters["journaalposten"].called_once
+        assert adapters["journaalposten_get"].called_once
         assert adapters["transacties"].called_once
         assert not adapters["afspraken"].called
 
