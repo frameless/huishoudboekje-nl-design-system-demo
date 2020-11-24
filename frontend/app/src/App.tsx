@@ -16,6 +16,7 @@ import {useTranslation} from "react-i18next";
 import Organizations from "./components/Organizations";
 import TwoColumns from "./components/Layouts/TwoColumns";
 import EditAgreement from "./components/Agreements/EditAgreement";
+import Banking from "./components/Banking";
 
 const App = () => {
 	const {t} = useTranslation();
@@ -40,6 +41,10 @@ const App = () => {
 	}
 
 	useEffect(() => {
+		if(backendError){
+			return;
+		}
+
 		fetch("/api/me")
 			.then(result => result.json())
 			.then(result => {
@@ -66,7 +71,7 @@ const App = () => {
 			.catch(err => {
 				setBackendError(err);
 			});
-	}, [push, session, toast, toggleLoading]);
+	}, [backendError, push, session, toast, toggleLoading]);
 
 	if (backendError) {
 		return (
@@ -130,7 +135,7 @@ const App = () => {
 								<Route path={Routes.Burgers} component={Burgers} />
 								<Route path={Routes.Organizations} component={Organizations} />
 								<Route path={Routes.EditAgreement()} component={EditAgreement} />
-								{/*<Route path={ROUTEPATH} component={BANK_COMPONENT} />*/}
+								<Route path={Routes.Banking} component={Banking} />
 								{/*<Route path={ROUTEPATH} component={SETTINGS_COMPONENT} />*/}
 								<Route exact path={Routes.NotFound} component={PageNotFound} />
 								<Route component={PageNotFound} />

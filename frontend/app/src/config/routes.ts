@@ -5,6 +5,9 @@ export enum RouteNames {
 	burgers = "burgers",
 	agreements = "afspraken",
 	organizations = "organisaties",
+	banking = "bankzaken",
+	transactions = "transacties",
+	csms = "bronbestanden",
 	notFound = "404",
 
 	// Sub routes
@@ -13,7 +16,6 @@ export enum RouteNames {
 
 	// Not in use yet
 	balances = "huishoudboekjes",
-	banking = "bank",
 	settings = "instellingen",
 }
 
@@ -35,6 +37,10 @@ const Routes = {
 	CreateOrganization: `/${RouteNames.organizations}/${RouteNames.add}`,
 	EditOrganization: (id: number) => `/${RouteNames.organizations}/${id}/${RouteNames.edit}`,
 
+	Banking: `/${RouteNames.banking}`,
+	Transactions: `/${RouteNames.banking}/${RouteNames.transactions}`,
+	CSMs: `/${RouteNames.banking}/${RouteNames.csms}`,
+
 	NotFound: `/${RouteNames.notFound}`,
 
 	// Dev things
@@ -42,7 +48,6 @@ const Routes = {
 
 	// Not in use yet
 	Balances: `/${RouteNames.balances}`,
-	Banking: `/${RouteNames.banking}`,
 	Settings: `/${RouteNames.settings}`,
 };
 

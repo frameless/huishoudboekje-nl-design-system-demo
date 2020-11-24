@@ -1,16 +1,16 @@
+import {ApolloProvider} from "@apollo/client";
+import {CSSReset, ThemeProvider} from "@chakra-ui/core";
+import moment from "moment";
+import "moment/locale/nl";
 import React from "react";
 import ReactDOM from "react-dom";
+import {BrowserRouter as Router} from "react-router-dom";
 import App from "./App";
 import "./config/i18n";
-import {CSSReset, ThemeProvider} from "@chakra-ui/core";
 import theme from "./config/theme";
-import {BrowserRouter as Router} from "react-router-dom";
-import {ApolloClient, ApolloProvider, InMemoryCache} from "@apollo/client";
+import apolloClient from "./services/graphql/client";
 
-const client = new ApolloClient({
-	uri: "/api/graphql",
-	cache: new InMemoryCache()
-});
+moment.locale("nl");
 
 ReactDOM.render(
 	<React.StrictMode>
@@ -18,7 +18,7 @@ ReactDOM.render(
 			<CSSReset />
 
 			<Router>
-				<ApolloProvider client={client}>
+				<ApolloProvider client={apolloClient}>
 					<App />
 				</ApolloProvider>
 			</Router>

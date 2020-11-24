@@ -1,5 +1,7 @@
 {
   "actions": {
+    "actions": "Acties",
+    "import": "Importeren",
     "back": "Terug",
     "backToHome": "Terug naar de hoofdpagina",
     "backToList": "Terug naar overzicht",
@@ -67,11 +69,20 @@
       "deleteTitle": "Rekening verwijderen.",
       "deleteQuestion": "Weet u zeker dat u rekening {{iban}} op naam van {{accountHolder}} wil verwijderen? Deze actie kan ongedaan worden gemaakt.",
       "deleteSuccess": "Rekening is verwijderd."
+    },
+    "customerStatementMessages": {
+      "createSuccess": "Het bronbestand is geïmporteerd en de transacties zijn succesvol ingelezen.",
+      "deleteSuccess": "Het bronbestand is succesvol verwijderd.",
+      "incorrectFileError": "Dit bestand voldoet niet aan het formaat SWIFT MT940. Het is niet gelukt om het te importeren. Controleer het bestand en probeer het nog een keer."
+    },
+    "transactions": {
+      "addHint": "Voeg transacties toe door een bronbestand te importeren."
     }
   },
   "forms": {
     "common": {
       "fields": {
+        "time": "Tijd",
         "date": "Datum",
         "dateDay": "Dag",
         "dateMonth": "Maand",
@@ -202,6 +213,20 @@
         "accountHolder": "Rekeninghouder",
         "iban": "IBAN"
       }
+    },
+    "banking": {
+      "bankAccount": "Rekening",
+      "nTransactions": "Transacties",
+      "sections": {
+        "customerStatementMessages": {
+          "title": "Transacties importeren",
+          "detailText": "Hier is het mogelijk om bij- en afschrijvingen uit een MT940-bestand te importeren."
+        },
+        "transactions": {
+          "title": "Transacties",
+          "detailText": "Geïmporteerde transacties."
+        }
+      }
     }
   },
   "pages": {
@@ -226,7 +251,9 @@
     "balances": "Huishoudboekjes"
   },
   "banking": {
-    "banking": "Bank"
+    "banking": "Bankzaken",
+    "transactions": "Transacties",
+    "customerStatementMessages": "Bronbestanden"
   },
   "months": {
     "jan": "januari",
