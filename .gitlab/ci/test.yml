@@ -3,7 +3,7 @@ test-frontend:
   tags:
     - docker
   needs: []
-  image: node:lts-alpine
+  image: gitlab.com/commonground/huishoudboekje/dependency_proxy/containers/node:lts-alpine
   variables:
     NPM_CACHE_DIR: ${CI_PROJECT_DIR}/.npm-cache
   cache:

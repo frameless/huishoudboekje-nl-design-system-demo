@@ -6,13 +6,14 @@ build:
     - shell
   variables:
     IMAGE_PREFIX: "$CI_REGISTRY/$CI_PROJECT_PATH/"
+    DOCKER_PROXY: "gitlab.com/commonground/huishoudboekje/dependency_proxy/containers/"
   before_script:
     - export COMPONENT_TAG=$(git describe --long --all | sed 's!heads/!!')
     - export COMPONENT_COMMIT_HASH=$(git describe --always --abbrev=0 --match "NOT A TAG")
     - export DOCKER_CONFIG=/tmp/docker-config-$CI_JOB_ID
     - docker login -u gitlab-ci-token --password-stdin $CI_REGISTRY <<< $CI_JOB_TOKEN
   script:
-    - docker-compose build --parallel
+    - docker-compose build --build-arg DOCKER_PROXY="$DOCKER_PROXY" --parallel
     - docker-compose push
   only:
     - branches@commonground/huishoudboekje/app-new
@@ -24,7 +25,7 @@ build-helm:
     - cg
     - docker
   image:
-    name: alpine/helm:latest
+    name: gitlab.com/commonground/huishoudboekje/dependency_proxy/containers/alpine/helm:latest
     entrypoint: [""]
   before_script:
     - helm repo add stable "https://charts.helm.sh/stable"

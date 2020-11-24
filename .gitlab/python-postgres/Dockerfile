@@ -1,4 +1,6 @@
-FROM python:3.8-slim-buster
+ARG DOCKER_PROXY=''
+
+FROM ${DOCKER_PROXY}python:3.8-slim-buster
 ENTRYPOINT /bin/bash
 
 ENV APP_HOME=/app
