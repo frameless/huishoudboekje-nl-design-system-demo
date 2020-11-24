@@ -1,5 +1,7 @@
 {
   "baseUrl": "http://localhost:3000",
-  "experimentalNetworkStubbing": true,
-  "experimentalFetchPolyfill": true
+  "experimentalFetchPolyfill": true,
+  "ignoreTestFiles": [
+    "__*"
+  ]
 }

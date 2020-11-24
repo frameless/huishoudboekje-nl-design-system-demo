@@ -80,7 +80,7 @@ const BurgerDetail = () => {
 
 	const {data: gebruikerData, loading: gebruikerLoading, refetch: refetchGebruiker} = useQuery<{ gebruiker: IGebruiker }>(GetOneGebruikerQuery, {
 		fetchPolicy: "no-cache",
-		variables: {id},
+		variables: {id: parseInt(id)},
 	});
 	const [deleteAfspraak] = useMutation(DeleteAfspraakMutation);
 
@@ -137,128 +137,130 @@ const BurgerDetail = () => {
 		}
 
 		if (gebruikerData) {
-			if (!gebruikerData.gebruiker) {
-				return (
-					<Redirect to={Routes.NotFound} />
-				)
-			}
+			if (gebruikerData.gebruiker) {
+				if (isDeleted) {
+					return (
+						<DeadEndPage message={t("messages.burgers.deleteConfirmMessage", {name: `${gebruikerData.gebruiker.voornamen} ${gebruikerData.gebruiker.achternaam}`})}>
+							<Button variantColor={"primary"} onClick={() => push(Routes.Burgers)}>{t("actions.backToList")}</Button>
+						</DeadEndPage>
+					)
+				}
 
-			if (isDeleted) {
 				return (
-					<DeadEndPage message={t("messages.burgers.deleteConfirmMessage", {name: `${gebruikerData.gebruiker.voornamen} ${gebruikerData.gebruiker.achternaam}`})}>
-						<Button variantColor={"primary"} onClick={() => push(Routes.Burgers)}>{t("actions.backToList")}</Button>
-					</DeadEndPage>
+					<Stack spacing={5}>
+						<Stack direction={"row"} justifyContent={"flex-start"} alignItems={"center"} spacing={3}>
+							<Heading size={"lg"}>{gebruikerData.gebruiker.voornamen} {gebruikerData.gebruiker.achternaam}</Heading>
+
+							<AlertDialog isOpen={deleteDialogOpen} leastDestructiveRef={cancelDeleteRef} onClose={onCloseDeleteDialog}>
+								<AlertDialogOverlay />
+								<AlertDialogContent>
+									<AlertDialogHeader fontSize="lg" fontWeight="bold">{t("messages.burgers.deleteTitle")}</AlertDialogHeader>
+									<AlertDialogBody>{t("messages.burgers.deleteQuestion", {name: `${gebruikerData.gebruiker.voornamen} ${gebruikerData.gebruiker.achternaam}`})}</AlertDialogBody>
+									<AlertDialogFooter>
+										<Button ref={cancelDeleteRef} onClick={onCloseDeleteDialog}>{t("actions.cancel")}</Button>
+										<Button isLoading={deleteLoading} variantColor="red" onClick={onConfirmDeleteDialog} ml={3}>{t("actions.delete")}</Button>
+									</AlertDialogFooter>
+								</AlertDialogContent>
+							</AlertDialog>
+
+							<Menu>
+								<IconButton as={MenuButton} icon="chevron-down" variant={"solid"} aria-label="Open menu" />
+								<MenuList>
+									<MenuItem onClick={onClickEditButton}>{t("actions.edit")}</MenuItem>
+									<MenuItem onClick={() => toggleDeleteDialog(true)}>{t("actions.delete")}</MenuItem>
+								</MenuList>
+							</Menu>
+						</Stack>
+
+						<BurgerDetailProfileView gebruiker={gebruikerData.gebruiker} />
+
+						{/* Rekeningen */}
+						<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
+							<Stack spacing={2} mb={1} direction={isMobile ? "column" : "row"}>
+								<FormLeft>
+									<Heading display={"box"} size={"md"}>{t("forms.burgers.sections.rekeningen.title")}</Heading>
+									<Label>{t("forms.burgers.sections.rekeningen.detailText")}</Label>
+								</FormLeft>
+								<FormRight justifyContent={"center"}>
+									<RekeningList rekeningen={gebruikerData.gebruiker.rekeningen} gebruiker={gebruikerData.gebruiker} onChange={() => refetchGebruiker()} />
+									{showCreateRekeningForm ? (<>
+										{gebruikerData.gebruiker.rekeningen.length > 0 && <Divider />}
+										<RekeningForm rekening={{
+											rekeninghouder: `${gebruikerData.gebruiker.voorletters} ${gebruikerData.gebruiker.achternaam}`
+										}} onSave={(rekening, resetForm) => {
+											createGebruikerRekeningMutation({
+												variables: {gebruikerId: id, rekening}
+											}).then(() => {
+												resetForm();
+												toggleCreateRekeningForm(false);
+												refetchGebruiker();
+											});
+										}} onCancel={() => {
+											toggleCreateRekeningForm(false)
+										}} />
+									</>) : (
+										<Box>
+											<Button leftIcon={"add"} variantColor={"primary"} size={"sm"} onClick={() => toggleCreateRekeningForm(true)}>{t("actions.add")}</Button>
+										</Box>
+									)}
+								</FormRight>
+							</Stack>
+						</Stack>
+
+						{/* Afspraken */}
+						<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
+							<Stack spacing={2} mb={1} direction={isMobile ? "column" : "row"}>
+								<FormLeft>
+									<Stack>
+										<Box>
+											<Heading size={"md"}>{t("forms.burgers.sections.agreements.title")}</Heading>
+											<Label>{t("forms.burgers.sections.agreements.detailText")}</Label>
+										</Box>
+									</Stack>
+								</FormLeft>
+								<FormRight>
+									{filteredAfspraken.length > 0 && (
+										<Tabs index={tabIndex} onChange={onChangeTabs} variant={"line"}>
+											<TabList>
+												<Tab>{t("agreements.incoming")} <Icon ml={3} name={"triangle-up"} color={"green.400"} size={"12px"} /> </Tab>
+												<Tab>{t("agreements.outgoing")} <Icon ml={3} name={"triangle-down"} color={"red.400"} size={"12px"} /> </Tab>
+											</TabList>
+											<TabPanels>
+												<TabPanel id="tab_incoming">
+													{filteredAfspraken.filter(a => a.credit).map((a, i) => (
+														<AfspraakItem key={a.id} data-id={a.id} afspraak={a} py={2} onDelete={(id: number) => onDeleteAfspraak(id)} />
+													))}
+												</TabPanel>
+												<TabPanel id="tab_outgoing">
+													{filteredAfspraken.filter(a => !a.credit).map((a, i) => (
+														<AfspraakItem key={a.id} data-id={a.id} afspraak={a} py={2} onDelete={(id: number) => onDeleteAfspraak(id)} />
+													))}
+												</TabPanel>
+											</TabPanels>
+										</Tabs>
+									)}
+
+									<Stack direction={isMobile ? "column" : "row"} spacing={5}>
+										<Button leftIcon={"add"} variantColor={"primary"} size={"sm"} onClick={onClickAddAfspraakButton}>{t("actions.add")}</Button>
+
+										{/*{data.gebruiker.afspraken.length > 0 && (*/}
+										{/*	<Stack isInline={true} alignItems={"center"} spacing={3}>*/}
+										{/*		<Switch id="show-inactive-agreements" onChange={onClickShowInactive} />*/}
+										{/*		<FormLabel htmlFor="show-inactive-agreements">{t("buttons.agreements.showInactive")}</FormLabel>*/}
+										{/*	</Stack>*/}
+										{/*)}*/}
+									</Stack>
+								</FormRight>
+							</Stack>
+						</Stack>
+					</Stack>
 				)
 			}
 
 			return (
-				<Stack spacing={5}>
-					<Stack direction={"row"} justifyContent={"flex-start"} alignItems={"center"} spacing={3}>
-						<Heading size={"lg"}>{gebruikerData.gebruiker.voornamen} {gebruikerData.gebruiker.achternaam}</Heading>
-
-						<AlertDialog isOpen={deleteDialogOpen} leastDestructiveRef={cancelDeleteRef} onClose={onCloseDeleteDialog}>
-							<AlertDialogOverlay />
-							<AlertDialogContent>
-								<AlertDialogHeader fontSize="lg" fontWeight="bold">{t("messages.burgers.deleteTitle")}</AlertDialogHeader>
-								<AlertDialogBody>{t("messages.burgers.deleteQuestion", {name: `${gebruikerData.gebruiker.voornamen} ${gebruikerData.gebruiker.achternaam}`})}</AlertDialogBody>
-								<AlertDialogFooter>
-									<Button ref={cancelDeleteRef} onClick={onCloseDeleteDialog}>{t("actions.cancel")}</Button>
-									<Button isLoading={deleteLoading} variantColor="red" onClick={onConfirmDeleteDialog} ml={3}>{t("actions.delete")}</Button>
-								</AlertDialogFooter>
-							</AlertDialogContent>
-						</AlertDialog>
-
-						<Menu>
-							<IconButton as={MenuButton} icon="chevron-down" variant={"solid"} aria-label="Open menu" />
-							<MenuList>
-								<MenuItem onClick={onClickEditButton}>{t("actions.edit")}</MenuItem>
-								<MenuItem onClick={() => toggleDeleteDialog(true)}>{t("actions.delete")}</MenuItem>
-							</MenuList>
-						</Menu>
-					</Stack>
-
-					<BurgerDetailProfileView gebruiker={gebruikerData.gebruiker} />
-
-					{/* Rekeningen */}
-					<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
-						<Stack spacing={2} mb={1} direction={isMobile ? "column" : "row"}>
-							<FormLeft>
-								<Heading display={"box"} size={"md"}>{t("forms.burgers.sections.rekeningen.title")}</Heading>
-								<Label>{t("forms.burgers.sections.rekeningen.detailText")}</Label>
-							</FormLeft>
-							<FormRight justifyContent={"center"}>
-								<RekeningList rekeningen={gebruikerData.gebruiker.rekeningen} gebruiker={gebruikerData.gebruiker} onChange={() => refetchGebruiker()} />
-								{showCreateRekeningForm ? (<>
-									{gebruikerData.gebruiker.rekeningen.length > 0 && <Divider />}
-									<RekeningForm rekening={{
-										rekeninghouder: `${gebruikerData.gebruiker.voorletters} ${gebruikerData.gebruiker.achternaam}`
-									}} onSave={(rekening, resetForm) => {
-										createGebruikerRekeningMutation({
-											variables: {gebruikerId: id, rekening}
-										}).then(() => {
-											resetForm();
-											toggleCreateRekeningForm(false);
-											refetchGebruiker();
-										});
-									}} onCancel={() => {
-										toggleCreateRekeningForm(false)
-									}} />
-								</>) : (
-									<Box>
-										<Button leftIcon={"add"} variantColor={"primary"} size={"sm"} onClick={() => toggleCreateRekeningForm(true)}>{t("actions.add")}</Button>
-									</Box>
-								)}
-							</FormRight>
-						</Stack>
-					</Stack>
-
-					{/* Afspraken */}
-					<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
-						<Stack spacing={2} mb={1} direction={isMobile ? "column" : "row"}>
-							<FormLeft>
-								<Stack>
-									<Box>
-										<Heading size={"md"}>{t("forms.burgers.sections.agreements.title")}</Heading>
-										<Label>{t("forms.burgers.sections.agreements.detailText")}</Label>
-									</Box>
-								</Stack>
-							</FormLeft>
-							<FormRight>
-								{filteredAfspraken.length > 0 && (
-									<Tabs index={tabIndex} onChange={onChangeTabs} variant={"line"}>
-										<TabList>
-											<Tab>{t("agreements.incoming")} <Icon ml={3} name={"triangle-up"} color={"green.400"} size={"12px"} /> </Tab>
-											<Tab>{t("agreements.outgoing")} <Icon ml={3} name={"triangle-down"} color={"red.400"} size={"12px"} /> </Tab>
-										</TabList>
-										<TabPanels>
-											<TabPanel id="tab_incoming">
-												{filteredAfspraken.filter(a => a.credit).map((a, i) => (
-													<AfspraakItem key={a.id} data-id={a.id} afspraak={a} py={2} onDelete={(id: number) => onDeleteAfspraak(id)} />
-												))}
-											</TabPanel>
-											<TabPanel id="tab_outgoing">
-												{filteredAfspraken.filter(a => !a.credit).map((a, i) => (
-													<AfspraakItem key={a.id} data-id={a.id} afspraak={a} py={2} onDelete={(id: number) => onDeleteAfspraak(id)} />
-												))}
-											</TabPanel>
-										</TabPanels>
-									</Tabs>
-								)}
-
-								<Stack direction={isMobile ? "column" : "row"} spacing={5}>
-									<Button leftIcon={"add"} variantColor={"primary"} size={"sm"} onClick={onClickAddAfspraakButton}>{t("actions.add")}</Button>
-
-									{/*{data.gebruiker.afspraken.length > 0 && (*/}
-									{/*	<Stack isInline={true} alignItems={"center"} spacing={3}>*/}
-									{/*		<Switch id="show-inactive-agreements" onChange={onClickShowInactive} />*/}
-									{/*		<FormLabel htmlFor="show-inactive-agreements">{t("buttons.agreements.showInactive")}</FormLabel>*/}
-									{/*	</Stack>*/}
-									{/*)}*/}
-								</Stack>
-							</FormRight>
-						</Stack>
-					</Stack>
-				</Stack>
+				<DeadEndPage message={t("messages.burgers.notFound")}>
+					<Button variantColor={"primary"} onClick={() => push(Routes.Burgers)}>{t("actions.backToList")}</Button>
+				</DeadEndPage>
 			);
 		}
 	}

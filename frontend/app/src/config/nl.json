@@ -34,6 +34,7 @@
       "invalidCredentialsError": "Onjuiste combinatie e-mailadres en wachtwoord."
     },
     "burgers": {
+      "notFound": "Deze burger is niet gevonden.",
       "invalidFormMessage": "Er is een fout opgetreden. Controleer de ingevulde gegevens en probeer het opnieuw.",
       "createSuccessMessage": "Nieuwe burger succesvol opgeslagen.",
       "updateSuccessMessage": "Gegevens succesvol gewijzigd.",

@@ -1,17 +1,14 @@
 /// <reference types="cypress" />
-const fs = require("fs");
-const path = require("path");
+import fs from "fs";
+import path from "path";
 
-/**
- * @type {Cypress.PluginConfig}
- */
-module.exports = (on, config) => {
+export default (on, config) => {
 	on("task", {
-		getSchema() {
+		getSchema: (): string => {
 			return fs.readFileSync(
 				path.resolve(__dirname, "../../../../frontend/app/schema.graphql"),
 				"utf8"
 			);
 		}
 	});
-};
+}
