@@ -79,7 +79,10 @@ const Transactions: React.FC<BoxProps> = ({...props}) => {
 											<Label>{transactionDate}</Label>
 										</Box>
 										<Box ml={isMobile ? 0 : 5}>
-											{bt[transactionDate].sort(sortBankTransactions).map(t => {
+											{bt[transactionDate].sort(sortBankTransactions).filter(t => t.isCredit).map(t => {
+												return <TransactionItem key={t.id} bankTransaction={t} />;
+											})}
+											{bt[transactionDate].sort(sortBankTransactions).filter(t => !t.isCredit).reverse().map(t => {
 												return <TransactionItem key={t.id} bankTransaction={t} />;
 											})}
 										</Box>
