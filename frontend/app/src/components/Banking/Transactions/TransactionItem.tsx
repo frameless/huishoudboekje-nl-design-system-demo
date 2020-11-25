@@ -24,7 +24,7 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: IBankTransaction }
 			</Box>
 			{!isMobile && (
 				<Box flex={1}>
-					<Badge fontSize={"12px"}>{a.journaalpost?.grootboekrekening.naam}</Badge>
+					<Badge fontSize={"12px"} fontWeight={"normal"}>{a.journaalpost?.grootboekrekening.naam}</Badge>
 				</Box>
 			)}
 			<Box flex={0} minWidth={120}>
