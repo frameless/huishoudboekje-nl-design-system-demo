@@ -43,7 +43,7 @@ beforeEach(() => {
 
 describe("Burgers CRUD", () => {
 
-	xit("Shows a list of burgers", () => {
+	it("Shows a list of burgers", () => {
 		// Go to burgers list page
 		cy.visit(Routes.Burgers);
 
@@ -53,7 +53,7 @@ describe("Burgers CRUD", () => {
 		});
 	});
 
-	xit("Shows a a single burger", () => {
+	it("Shows a a single burger", () => {
 		// Go to burgers list page
 		const b = sampleBurgers[0];
 		cy.visit(Routes.Burger(b.id));
@@ -62,7 +62,7 @@ describe("Burgers CRUD", () => {
 		cy.get("div").should("contain", b.achternaam);
 	});
 
-	xit("Creates a burger", () => {
+	it("Creates a burger", () => {
 		// Go to burgers list page
 		cy.visit(Routes.CreateBurger);
 
@@ -91,7 +91,7 @@ describe("Burgers CRUD", () => {
 		cy.get(".Toaster").should("contain", "succesvol");
 	});
 
-	xit("Updates a burger", () => {
+	it("Updates a burger", () => {
 		const b1 = sampleBurgers[0];
 		const b2 = sampleBurgers[1];
 
