@@ -13,7 +13,7 @@ build:
     - export DOCKER_CONFIG=/tmp/docker-config-$CI_JOB_ID
     - docker login -u gitlab-ci-token --password-stdin $CI_REGISTRY <<< $CI_JOB_TOKEN
   script:
-    - docker-compose build --build-arg DOCKER_PROXY="$DOCKER_PROXY" --parallel
+    - docker-compose build --build-arg DOCKER_PROXY="$DOCKER_PROXY" --parallel --pull
     - docker-compose push
   only:
     - branches@commonground/huishoudboekje/app-new
