@@ -13,6 +13,11 @@ RUN jq -ncM '{tag: env.COMPONENT_TAG, commit: env.COMPONENT_COMMIT_HASH, compone
 #Build
 FROM ${DOCKER_PROXY}python:3.8-slim-buster
 
+# Timezone 
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get -y install tzdata
+ENV TZ Europe/Amsterdam
+
 # set the working directory in the container
 RUN useradd --home-dir /app --create-home --shell /bin/bash app
 USER app
