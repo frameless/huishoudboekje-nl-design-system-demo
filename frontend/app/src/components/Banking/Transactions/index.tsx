@@ -56,13 +56,19 @@ const Transactions: React.FC<BoxProps> = ({...props}) => {
 						<Stack direction={"column"} spacing={5}>
 							<Box ml={isMobile ? 0 : 5}>
 								<Stack direction={"row"} alignItems={"center"} justifyContent={"center"} {...props}>
-									<Box flex={2} textAlign={"left"}><Label>Tegenrekening</Label></Box>
-									{!isMobile && <Box flex={1} textAlign={"left"}><Label>Journaalpost</Label></Box>}
-									<Box flex={1} textAlign={"left"}><Label>Bedrag</Label></Box>
+									<Box flex={2} textAlign={"left"}>
+										<Label>{t("transactions.beneficiaryAccount")}</Label>
+									</Box>
+									{!isMobile && <Box flex={1} textAlign={"left"}>
+										<Label>{t("transactions.rubric")}</Label>
+									</Box>}
+									<Box flex={0} minWidth={120}>
+										<Label>{t("transactions.amount")}</Label>
+									</Box>
 									<Box flex={0} pl={3}>
 										<Icon name={"question"} visibility={"hidden"} />
 									</Box>
-									{/* Todo: Later uit te breiden met geboekt op specifieke afspraak als deze bekend is */}
+									{/* Todo: Later uit te breiden met geboekt op specifieke afspraak als deze bekend is (23-11-2020) */}
 								</Stack>
 							</Box>
 
