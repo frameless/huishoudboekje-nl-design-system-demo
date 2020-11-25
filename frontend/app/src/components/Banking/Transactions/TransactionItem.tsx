@@ -11,7 +11,7 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: IBankTransaction }
 	const isMobile = useIsMobile();
 
 	return (
-		<Stack borderTop={"1px solid"} borderTopColor={"gray.200"} direction={"row"} alignItems={"center"} justifyContent={"center"} {...props}>
+		<Stack direction={"row"} alignItems={"center"} justifyContent={"center"} {...props}>
 			<Box flex={2}>{a.tegenRekening ? (<>
 				<Text>
 					<Tooltip label={friendlyFormatIBAN(a.tegenRekening.iban)} aria-label={friendlyFormatIBAN(a.tegenRekening.iban)} placement={"right"} hasArrow={true}>
@@ -24,10 +24,10 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: IBankTransaction }
 			</Box>
 			{!isMobile && (
 				<Box flex={1}>
-					<Badge fontSize={"12px"}>{a.journaalpost?.grootboekrekening.naam || t("unknown")}</Badge>
+					<Badge fontSize={"12px"}>{a.journaalpost?.grootboekrekening.naam}</Badge>
 				</Box>
 			)}
-			<Box flex={1}>
+			<Box flex={0} minWidth={120}>
 				<Currency value={a.bedrag} />
 			</Box>
 			<Box flex={0} pl={3}>
