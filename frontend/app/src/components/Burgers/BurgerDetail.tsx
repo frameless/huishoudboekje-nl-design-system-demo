@@ -28,7 +28,7 @@ import {
 import React, {useEffect, useRef, useState} from "react";
 import {useIsMobile, useToggle} from "react-grapple";
 import {useTranslation} from "react-i18next";
-import {Redirect, useHistory, useParams} from "react-router-dom";
+import {useHistory, useParams} from "react-router-dom";
 import Routes from "../../config/routes";
 import {IAfspraak, IGebruiker} from "../../models";
 import {CreateGebruikerRekeningMutation, DeleteAfspraakMutation, DeleteGebruikerMutation} from "../../services/graphql/mutations";
@@ -62,12 +62,12 @@ const BurgerDetail = () => {
 	const [isDeleted, toggleDeleted] = useToggle(false);
 	const [showCreateRekeningForm, toggleCreateRekeningForm] = useToggle(false);
 
-	const [deleteMutation, {loading: deleteLoading}] = useMutation(DeleteGebruikerMutation, {variables: {id}});
+	const [deleteGebruiker, {loading: deleteLoading}] = useMutation(DeleteGebruikerMutation, {variables: {id: parseInt(id)}});
 	const [createGebruikerRekeningMutation] = useMutation(CreateGebruikerRekeningMutation);
 
 	const onCloseDeleteDialog = () => toggleDeleteDialog(false);
 	const onConfirmDeleteDialog = () => {
-		deleteMutation().then(() => {
+		deleteGebruiker().then(() => {
 			onCloseDeleteDialog();
 			toast({
 				title: t("messages.burgers.deleteConfirmMessage", {name: `${gebruikerData?.gebruiker.voornamen} ${gebruikerData?.gebruiker.achternaam}`}),
@@ -106,9 +106,7 @@ const BurgerDetail = () => {
 	const onClickEditButton = () => push(Routes.EditBurger(id));
 	const onClickAddAfspraakButton = () => push(Routes.CreateBurgerAgreement(id));
 	const onDeleteAfspraak = (id) => {
-		deleteAfspraak({
-			variables: {id}
-		}).then(result => {
+		deleteAfspraak().then(() => {
 			toast({
 				title: t("messages.agreements.deleteConfirmMessage"),
 				position: "top",
@@ -164,7 +162,7 @@ const BurgerDetail = () => {
 							</AlertDialog>
 
 							<Menu>
-								<IconButton as={MenuButton} icon="chevron-down" variant={"solid"} aria-label="Open menu" />
+								<IconButton as={MenuButton} icon={"chevron-down"} variant={"solid"} aria-label={"Open menu"} id={"actionsMenuButton"} />
 								<MenuList>
 									<MenuItem onClick={onClickEditButton}>{t("actions.edit")}</MenuItem>
 									<MenuItem onClick={() => toggleDeleteDialog(true)}>{t("actions.delete")}</MenuItem>
