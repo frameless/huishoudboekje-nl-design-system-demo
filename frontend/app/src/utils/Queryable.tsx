@@ -1,6 +1,7 @@
 import React from "react";
 import {Box, Spinner, Stack} from "@chakra-ui/core";
 import {QueryResult} from "@apollo/client/react/types/types";
+import {useTranslation} from "react-i18next";
 
 const Loading = () => (
 	<Stack spacing={5} alignItems={"center"} justifyContent={"center"} my={10}>
@@ -9,6 +10,7 @@ const Loading = () => (
 );
 
 const Queryable: React.FC<{ query: QueryResult, loading?, error?, children }> = ({query, loading, error, children}) => {
+	const {t} = useTranslation();
 	const {data: _data, loading: _loading, error: _error} = query;
 
 	if (_loading) {
@@ -16,7 +18,7 @@ const Queryable: React.FC<{ query: QueryResult, loading?, error?, children }> = 
 	}
 
 	if (_error) {
-		return error || <Box>Oops. Error.</Box>;
+		return error || <Box>{t("messages.genericError.description")}</Box>;
 	}
 
 	return children(_data);
