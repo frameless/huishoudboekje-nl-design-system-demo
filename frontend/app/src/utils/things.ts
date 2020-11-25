@@ -106,9 +106,5 @@ export const wait = async (timeout: number = 1000): Promise<void> => {
 }
 
 export const sortBankTransactions = (a: IBankTransaction, b: IBankTransaction) => {
-	if (a.isCredit === b.isCredit) {
-		return a.bedrag >= b.bedrag ? -1 : 1
-	}
-
-	return a.isCredit ? -1 : 1;
+	return b.bedrag - a.bedrag;
 };
