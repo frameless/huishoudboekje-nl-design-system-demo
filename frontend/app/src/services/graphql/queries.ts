@@ -20,7 +20,7 @@ export const GetOneGebruikerQuery = gql`
 `;
 
 export const GetGebruikerAfsprakenQuery = gql`
-    query getOneGebruiker($id: Int!) {
+    query getOneGebruikerAfspraken($id: Int!) {
         gebruiker(id: $id) {
             afspraken{
                 ...Afspraak

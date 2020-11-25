@@ -64,7 +64,12 @@
       if $FAILED; then
         exit 1
       fi
-    - echo "Take a look at https://${REVIEW_NAMESPACE}.${REVIEW_BASE_DOMAIN}/"
+    - |
+      echo "Take a look at https://${HHB_HOST}/"
+      echo -e -n "${HHB_HOST}" > ci_review_hostname.txt
+  artifacts:
+    paths:
+      - ci_review_hostname.txt
   only:
     - branches@commonground/huishoudboekje/app-new
   tags:

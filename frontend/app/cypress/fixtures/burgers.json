@@ -1,0 +1,305 @@
+[
+  {
+    "id": 46,
+    "email": "huibert.winkel@example.com",
+    "telefoonnummer": "0683585579",
+    "voorletters": "H.S.",
+    "voornamen": "Huibert",
+    "achternaam": "Winkel",
+    "geboortedatum": "1959-11-30",
+    "straatnaam": "Carpenterweg",
+    "huisnummer": "12",
+    "postcode": "2374LJ",
+    "plaatsnaam": "Malumfashi",
+    "rekeningen": [
+      {
+        "id": 5,
+        "iban": "NL00BANK00000000",
+        "rekeninghouder": "H.S. Winkel"
+      },
+      {
+        "id": 6,
+        "iban": "NL11BANK111111111",
+        "rekeninghouder": "H.S. Winkel"
+      }
+    ],
+    "afspraken": [
+      {
+        "id": 65,
+        "beschrijving": "Wegenbelasting",
+        "startDatum": "2020-10-01",
+        "eindDatum": null,
+        "aantalBetalingen": 10,
+        "interval": {
+          "dagen": 0,
+          "weken": 0,
+          "maanden": 0,
+          "jaren": 3
+        },
+        "gebruiker": {
+          "id": 46,
+          "voorletters": "H.S.",
+          "achternaam": "Winkel",
+          "rekeningen": [
+            {
+              "id": 5,
+              "iban": "NL00BANK00000000",
+              "rekeninghouder": "H.S. Winkel"
+            },
+            {
+              "id": 6,
+              "iban": "NL11BANK111111111",
+              "rekeninghouder": "H.S. Winkel"
+            }
+          ]
+        },
+        "tegenRekening": {
+          "id": 9,
+          "iban": "NL99BANK4865123044",
+          "rekeninghouder": "Willemsen Advocaten"
+        },
+        "organisatie": {
+          "id": 27,
+          "weergaveNaam": "Willemsen Advocaten"
+        },
+        "bedrag": "129",
+        "credit": false,
+        "kenmerk": "215886412180000007",
+        "actief": false
+      },
+      {
+        "id": 66,
+        "beschrijving": "Teruggave",
+        "startDatum": "2003-01-01",
+        "eindDatum": null,
+        "aantalBetalingen": 23,
+        "interval": {
+          "dagen": 0,
+          "weken": 0,
+          "maanden": 4,
+          "jaren": 0
+        },
+        "gebruiker": {
+          "id": 46,
+          "voorletters": "H.S.",
+          "achternaam": "Winkel",
+          "rekeningen": [
+            {
+              "id": 5,
+              "iban": "NL00BANK00000000",
+              "rekeninghouder": "H.S. Winkel"
+            },
+            {
+              "id": 6,
+              "iban": "NL11BANK111111111",
+              "rekeninghouder": "H.S. Winkel"
+            }
+          ]
+        },
+        "tegenRekening": {
+          "id": 6,
+          "iban": "NL11BANK111111111",
+          "rekeninghouder": "H.S. Winkel"
+        },
+        "organisatie": null,
+        "bedrag": "23",
+        "credit": true,
+        "kenmerk": "sdfgsdfggfsdfg",
+        "actief": true
+      },
+      {
+        "id": 67,
+        "beschrijving": "Wegenbelasting",
+        "startDatum": "2003-10-01",
+        "eindDatum": null,
+        "aantalBetalingen": 10,
+        "interval": {
+          "dagen": 0,
+          "weken": 0,
+          "maanden": 3,
+          "jaren": 0
+        },
+        "gebruiker": {
+          "id": 46,
+          "voorletters": "H.S.",
+          "achternaam": "Winkel",
+          "rekeningen": [
+            {
+              "id": 5,
+              "iban": "NL00BANK00000000",
+              "rekeninghouder": "H.S. Winkel"
+            },
+            {
+              "id": 6,
+              "iban": "NL11BANK111111111",
+              "rekeninghouder": "H.S. Winkel"
+            }
+          ]
+        },
+        "tegenRekening": {
+          "id": 9,
+          "iban": "NL99BANK4865123044",
+          "rekeninghouder": "Willemsen Advocaten"
+        },
+        "organisatie": {
+          "id": 27,
+          "weergaveNaam": "Willemsen Advocaten"
+        },
+        "bedrag": "129",
+        "credit": false,
+        "kenmerk": "215886412180000007",
+        "actief": true
+      }
+    ]
+  },
+  {
+    "id": 51,
+    "email": "fien.dejager@example.com",
+    "telefoonnummer": "0673712981",
+    "voorletters": "F.S.",
+    "voornamen": "Fien",
+    "achternaam": "de Jager",
+    "geboortedatum": "1945-10-26",
+    "straatnaam": "Annamark Parkway",
+    "huisnummer": "51",
+    "postcode": "6111DP",
+    "plaatsnaam": "Lairoka",
+    "rekeningen": [
+      {
+        "id": 7,
+        "iban": "NL23BANK0235689112",
+        "rekeninghouder": "F.S. de Jager"
+      },
+      {
+        "id": 8,
+        "iban": "NL87BANK1125002895",
+        "rekeninghouder": "F.S. de Jager en/of"
+      }
+    ],
+    "afspraken": [
+      {
+        "id": 62,
+        "beschrijving": "Leefgeld",
+        "startDatum": "2020-10-01",
+        "eindDatum": null,
+        "aantalBetalingen": null,
+        "interval": {
+          "dagen": 0,
+          "weken": 4,
+          "maanden": 0,
+          "jaren": 0
+        },
+        "gebruiker": {
+          "id": 51,
+          "voorletters": "F.S.",
+          "achternaam": "de Jager",
+          "rekeningen": [
+            {
+              "id": 7,
+              "iban": "NL23BANK0235689112",
+              "rekeninghouder": "F.S. de Jager"
+            },
+            {
+              "id": 8,
+              "iban": "NL87BANK1125002895",
+              "rekeninghouder": "F.S. de Jager en/of"
+            }
+          ]
+        },
+        "tegenRekening": {
+          "id": 7,
+          "iban": "NL23BANK0235689112",
+          "rekeninghouder": "F.S. de Jager"
+        },
+        "organisatie": null,
+        "bedrag": "450",
+        "credit": false,
+        "kenmerk": "LEEFGELD",
+        "actief": true
+      },
+      {
+        "id": 63,
+        "beschrijving": "Resititutie advocaatkosten",
+        "startDatum": "2020-11-05",
+        "eindDatum": null,
+        "aantalBetalingen": 0,
+        "interval": {
+          "dagen": 0,
+          "weken": 0,
+          "maanden": 0,
+          "jaren": 0
+        },
+        "gebruiker": {
+          "id": 51,
+          "voorletters": "F.S.",
+          "achternaam": "de Jager",
+          "rekeningen": [
+            {
+              "id": 7,
+              "iban": "NL23BANK0235689112",
+              "rekeninghouder": "F.S. de Jager"
+            },
+            {
+              "id": 8,
+              "iban": "NL87BANK1125002895",
+              "rekeninghouder": "F.S. de Jager en/of"
+            }
+          ]
+        },
+        "tegenRekening": {
+          "id": 9,
+          "iban": "NL99BANK4865123044",
+          "rekeninghouder": "Willemsen Advocaten"
+        },
+        "organisatie": {
+          "id": 27,
+          "weergaveNaam": "Willemsen Advocaten"
+        },
+        "bedrag": "53.99",
+        "credit": true,
+        "kenmerk": "",
+        "actief": true
+      },
+      {
+        "id": 68,
+        "beschrijving": "Loon",
+        "startDatum": "2020-01-01",
+        "eindDatum": null,
+        "aantalBetalingen": 12,
+        "interval": {
+          "dagen": 0,
+          "weken": 0,
+          "maanden": 1,
+          "jaren": 0
+        },
+        "gebruiker": {
+          "id": 51,
+          "voorletters": "F.S.",
+          "achternaam": "de Jager",
+          "rekeningen": [
+            {
+              "id": 7,
+              "iban": "NL23BANK0235689112",
+              "rekeninghouder": "F.S. de Jager"
+            },
+            {
+              "id": 8,
+              "iban": "NL87BANK1125002895",
+              "rekeninghouder": "F.S. de Jager en/of"
+            }
+          ]
+        },
+        "tegenRekening": {
+          "id": 7,
+          "iban": "NL23BANK0235689112",
+          "rekeninghouder": "F.S. de Jager"
+        },
+        "organisatie": null,
+        "bedrag": "500",
+        "credit": true,
+        "kenmerk": "",
+        "actief": false
+      }
+    ]
+  }
+]

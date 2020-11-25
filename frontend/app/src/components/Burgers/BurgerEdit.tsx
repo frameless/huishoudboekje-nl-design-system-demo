@@ -78,7 +78,7 @@ const BurgerEdit = () => {
 	// });
 
 	const {data, loading, error} = useQuery<{ gebruiker: IGebruiker }>(GetOneGebruikerQuery, {
-		variables: {id}
+		variables: {id: parseInt(id)}
 	});
 
 	const [updateMutation, {loading: updateLoading}] = useMutation(UpdateGebruikerMutation);
@@ -142,7 +142,7 @@ const BurgerEdit = () => {
 
 		updateMutation({
 			variables: {
-				id,
+				id: parseInt(id),
 				voorletters: initials.value,
 				voornamen: firstName.value,
 				achternaam: lastName.value,
@@ -210,25 +210,25 @@ const BurgerEdit = () => {
 								<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 									<Stack spacing={1} flex={1}>
 										<FormLabel htmlFor={"initials"}>{t("forms.burgers.fields.initials")}</FormLabel>
-										<Input isInvalid={initials.dirty && !initials.isValid} {...initials.bind} />
+										<Input isInvalid={initials.dirty && !initials.isValid} id={"initials"} {...initials.bind} />
 									</Stack>
 									<Stack spacing={1} flex={3}>
 										<FormLabel htmlFor={"firstName"}>{t("forms.burgers.fields.firstName")}</FormLabel>
-										<Input isInvalid={firstName.dirty && !firstName.isValid} {...firstName.bind} />
+										<Input isInvalid={firstName.dirty && !firstName.isValid}  id={"firstName"}{...firstName.bind} />
 									</Stack>
 									<Stack spacing={1} flex={3}>
 										<FormLabel htmlFor={"lastName"}>{t("forms.burgers.fields.lastName")}</FormLabel>
-										<Input isInvalid={lastName.dirty && !lastName.isValid} {...lastName.bind} />
+										<Input isInvalid={lastName.dirty && !lastName.isValid} id={"lastName"} {...lastName.bind} />
 									</Stack>
 								</Stack>
 								<Stack spacing={1}>
 									<FormLabel htmlFor={"dateOfBirth"}>{t("forms.burgers.fields.dateOfBirth")}</FormLabel>
 									<Stack direction={"row"} maxW="100%">
 										<Box flex={1}>
-											<Input isInvalid={dateOfBirth.day.dirty && !dateOfBirth.day.isValid} {...dateOfBirth.day.bind} id="dateOfBirth.day" />
+											<Input isInvalid={dateOfBirth.day.dirty && !dateOfBirth.day.isValid} {...dateOfBirth.day.bind} id="dateOfBirth-day" />
 										</Box>
 										<Box flex={2}>
-											<Select isInvalid={dateOfBirth.month.dirty && !dateOfBirth.month.isValid} {...dateOfBirth.month.bind} id="dateOfBirth.month"
+											<Select isInvalid={dateOfBirth.month.dirty && !dateOfBirth.month.isValid} {...dateOfBirth.month.bind} id="dateOfBirth-month"
 											        value={parseInt(dateOfBirth.month.value.toString()).toString()}>
 												{Months.map((m, i) => (
 													<option key={i} value={i + 1}>{t("months." + m)}</option>
@@ -236,7 +236,7 @@ const BurgerEdit = () => {
 											</Select>
 										</Box>
 										<Box flex={1}>
-											<Input isInvalid={dateOfBirth.year.dirty && !dateOfBirth.year.isValid} {...dateOfBirth.year.bind} id="dateOfBirth.year" />
+											<Input isInvalid={dateOfBirth.year.dirty && !dateOfBirth.year.isValid} {...dateOfBirth.year.bind} id="dateOfBirth-year" />
 										</Box>
 									</Stack>
 								</Stack>
@@ -255,11 +255,11 @@ const BurgerEdit = () => {
 								<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 									<Stack spacing={1} flex={2}>
 										<FormLabel htmlFor={"street"}>{t("forms.burgers.fields.street")}</FormLabel>
-										<Input isInvalid={street.dirty && !street.isValid} {...street.bind} />
+										<Input isInvalid={street.dirty && !street.isValid} id={"street"} {...street.bind} />
 									</Stack>
 									<Stack spacing={1} flex={1}>
 										<FormLabel htmlFor={"houseNumber"}>{t("forms.burgers.fields.houseNumber")}</FormLabel>
-										<Input isInvalid={houseNumber.dirty && !houseNumber.isValid} {...houseNumber.bind} />
+										<Input isInvalid={houseNumber.dirty && !houseNumber.isValid} id={"houseNumber"} {...houseNumber.bind} />
 									</Stack>
 								</Stack>
 								<Stack spacing={2} direction={isMobile ? "column" : "row"}>
@@ -267,24 +267,24 @@ const BurgerEdit = () => {
 										<FormLabel htmlFor={"zipcode"}>{t("forms.burgers.fields.zipcode")}</FormLabel>
 										<Tooltip label={t("forms.burgers.tooltips.zipcode")} aria-label={t("forms.burgers.fields.zipcode")} hasArrow
 										         placement={isMobile ? "top" : "left"}>
-											<Input isInvalid={zipcode.dirty && !zipcode.isValid} {...zipcode.bind} />
+											<Input isInvalid={zipcode.dirty && !zipcode.isValid} id={"zipcode"} {...zipcode.bind} />
 										</Tooltip>
 									</Stack>
 									<Stack spacing={1} flex={2}>
 										<FormLabel htmlFor={"city"}>{t("forms.burgers.fields.city")}</FormLabel>
-										<Input isInvalid={city.dirty && !city.isValid} {...city.bind} />
+										<Input isInvalid={city.dirty && !city.isValid} id={"city"} {...city.bind} />
 									</Stack>
 								</Stack>
 								<Stack spacing={1}>
 									<FormLabel htmlFor={"phoneNumber"}>{t("forms.burgers.fields.phoneNumber")}</FormLabel>
 									<Tooltip label={t("forms.burgers.tooltips.phoneNumber")} aria-label={t("forms.burgers.tooltips.phoneNumber")} hasArrow
 									         placement={isMobile ? "top" : "left"}>
-										<Input isInvalid={phoneNumber.dirty && !phoneNumber.isValid} {...phoneNumber.bind} />
+										<Input isInvalid={phoneNumber.dirty && !phoneNumber.isValid} id={"phoneNumber"} {...phoneNumber.bind} />
 									</Tooltip>
 								</Stack>
 								<Stack spacing={1}>
 									<FormLabel htmlFor={"mail"}>{t("forms.burgers.fields.mail")}</FormLabel>
-									<Input isInvalid={mail.dirty && !mail.isValid} {...mail.bind} />
+									<Input isInvalid={mail.dirty && !mail.isValid} id={"mail"} {...mail.bind} />
 								</Stack>
 							</FormRight>
 						</Stack>

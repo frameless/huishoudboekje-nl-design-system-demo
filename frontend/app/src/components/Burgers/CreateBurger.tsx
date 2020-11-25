@@ -205,10 +205,10 @@ const CreateBurger = () => {
 								<FormLabel htmlFor={"dateOfBirth"}>{t("forms.burgers.fields.dateOfBirth")}</FormLabel>
 								<Stack direction={"row"} maxW="100%">
 									<Box flex={1}>
-										<Input isInvalid={isInvalid(dateOfBirth.day)} {...dateOfBirth.day.bind} id="dateOfBirth.day" />
+										<Input isInvalid={isInvalid(dateOfBirth.day)} {...dateOfBirth.day.bind} id="dateOfBirth-day" />
 									</Box>
 									<Box flex={2}>
-										<Select isInvalid={isInvalid(dateOfBirth.month)} {...dateOfBirth.month.bind} id="dateOfBirth.month"
+										<Select isInvalid={isInvalid(dateOfBirth.month)} {...dateOfBirth.month.bind} id="dateOfBirth-month"
 										        value={parseInt(dateOfBirth.month.value.toString()).toString()}>
 											{Months.map((m, i) => (
 												<option key={i} value={i + 1}>{t("months." + m)}</option>
@@ -216,7 +216,7 @@ const CreateBurger = () => {
 										</Select>
 									</Box>
 									<Box flex={1}>
-										<Input isInvalid={isInvalid(dateOfBirth.year)} {...dateOfBirth.year.bind} id="dateOfBirth.year" />
+										<Input isInvalid={isInvalid(dateOfBirth.year)} {...dateOfBirth.year.bind} id="dateOfBirth-year" />
 									</Box>
 								</Stack>
 							</Stack>

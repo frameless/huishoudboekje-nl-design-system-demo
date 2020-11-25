@@ -1,18 +1,24 @@
-test-frontend:
+.node:
   stage: test
-  tags:
-    - docker
-  needs: []
-  image: gitlab.com/commonground/huishoudboekje/dependency_proxy/containers/node:lts-alpine
+  image: node:lts-alpine
   variables:
-    NPM_CACHE_DIR: ${CI_PROJECT_DIR}/.npm-cache
+    NPM_CACHE_DIR: "${CI_PROJECT_DIR}/.cache/npm"
+  needs: []
   cache:
     key: "${CI_COMMIT_REF_SLUG}__${CI_JOB_NAME}"
     paths:
       - ${NPM_CACHE_DIR}
-  script:
+  before_script:
     - cd ./frontend/app
     - npm ci --cache ${NPM_CACHE_DIR} --prefer-offline --no-progress --color=false --quiet
+  tags:
+    - cg
+    - docker
+
+
+frontend-lint:
+  extends: .node
+  script:
     - npm run lint
 
 
