@@ -1,3 +1,4 @@
+import moment from "moment";
 import {createContext} from "react";
 import {IBankTransaction, IInterval, IntervalType} from "../models";
 
@@ -97,7 +98,10 @@ export const currencyFormat2 = (showCurrency = true) => {
  */
 export const currencyFormat = currencyFormat2();
 export const numberFormat = new Intl.NumberFormat("nl-NL");
-export const dateFormat = new Intl.DateTimeFormat("nl-NL");
+// Todo: export const dateFormat = (d: Date) => moment(d).format("L");
+export const dateFormat = {
+	format: (d: Date) => moment(d).format("L")
+}
 
 export const wait = async (timeout: number = 1000): Promise<void> => {
 	return new Promise(resolve => {

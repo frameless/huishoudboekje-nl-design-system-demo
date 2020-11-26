@@ -26,7 +26,7 @@ import {useInput, useIsMobile, useNumberInput, useToggle, Validators} from "reac
 import {useTranslation} from "react-i18next";
 import {UseInput} from "react-grapple/dist/hooks/useInput";
 import {useQuery} from "@apollo/client";
-import {GetAllOrganisatiesQuery, GetAllRubrieken} from "../../services/graphql/queries";
+import {GetAllOrganisatiesQuery, GetAllRubricsQuery} from "../../services/graphql/queries";
 import moment from "moment";
 
 const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) => void, gebruiker: IGebruiker, loading: boolean }> = ({afspraak, onSave, gebruiker, loading = false, ...props}) => {
@@ -35,7 +35,7 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 	const isMobile = useIsMobile();
 
 	const {data: orgsData, loading: orgsLoading} = useQuery<{ organisaties: IOrganisatie[] }>(GetAllOrganisatiesQuery);
-	const {data: rubriekData, loading: rubriekLoading} = useQuery<{ rubrieken: IRubriek[] }>(GetAllRubrieken);
+	const {data: rubriekData, loading: rubriekLoading} = useQuery<{ rubrieken: IRubriek[] }>(GetAllRubricsQuery);
 
 	const [isSubmitted, setSubmitted] = useState<boolean>(false);
 	const [isActive, toggleActive] = useToggle(true);

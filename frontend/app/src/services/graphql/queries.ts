@@ -99,19 +99,14 @@ export const GetAllTransactionsQuery = gql`
     ${BankTransactionFragment}
 `;
 
-export const GetAllGrootboekrekeningen = gql`
-    query getAllGrootboekrekeningen {
-        grootboekrekeningen{
-            ...Grootboekrekening
-        }
-    }
-    ${GrootboekrekeningFragment}
-`;
-
-export const GetAllRubrieken = gql`
-    query getAllRubrieken {
-        rubrieken {
+export const GetAllRubricsQuery = gql`
+    query x {
+        rubrieken{
             ...Rubriek
+            grootboekrekening{
+                id
+                naam
+            }
         }
     }
     ${RubriekFragment}

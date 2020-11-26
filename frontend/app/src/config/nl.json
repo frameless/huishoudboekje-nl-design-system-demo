@@ -228,7 +228,13 @@
         "transactions": {
           "title": "Transacties",
           "detailText": "Geïmporteerde transacties."
+        },
+        "journal": {
+          "title": "Journaalpost maken"
         }
+      },
+      "fields": {
+        "rubricChoose": "Kies een rubriek"
       }
     }
   },
@@ -256,7 +262,9 @@
   "banking": {
     "banking": "Bankzaken",
     "transactions": "Transacties",
-    "customerStatementMessages": "Bronbestanden"
+    "customerStatementMessages": "Bronbestanden",
+    "journal": "Journaalpost",
+    "rubric": "Rubriek"
   },
   "transactions": {
     "beneficiaryAccount": "Tegenrekening",

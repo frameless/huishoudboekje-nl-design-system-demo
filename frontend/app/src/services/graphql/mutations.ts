@@ -314,3 +314,17 @@ export const DeleteCustomerStatementMessageMutation = gql`
         }
     }
 `;
+
+export const CreateJournaalpostGrootboekrekeningMutation = gql`
+    mutation createJournaalpostGrootboekrekening($transactionId: Int! $grootboekrekeningId: String!){
+        createJournaalpostGrootboekrekening(input: {
+            transactionId: $transactionId, 
+            grootboekrekeningId: $grootboekrekeningId
+        }){
+            ok
+            journaalpost{
+                id
+            }
+        }
+    }
+`
