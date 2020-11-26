@@ -38,6 +38,10 @@ class CreateJournaalpostAfspraak(graphene.Mutation):
         if not afspraak:
             raise GraphQLError("afspraak not found")
 
+        journaalpost = await request.dataloader.journaalposten_by_transaction.load(input.get('transaction_id'))
+        if journaalpost:
+            raise GraphQLError(f"journaalpost already exists for transaction", nodes=journaalpost)
+
         # TODO validate that the debet/credit matches
         # TODO add grootboekrekening_id from afspraak
         post_response = requests.post(
@@ -68,6 +72,11 @@ class CreateJournaalpostGrootboekrekening(graphene.Mutation):
         grootboekrekening = await request.dataloader.grootboekrekeningen_by_id.load(input.get('grootboekrekening_id'))
         if not grootboekrekening:
             raise GraphQLError("grootboekrekening not found")
+
+        journaalpost = await request.dataloader.journaalposten_by_transaction.load(input.get('transaction_id'))
+        if journaalpost:
+            raise GraphQLError(f"Journaalpost already exists for Transaction", nodes=journaalpost)
+
 
         # TODO validate that the debet/credit matches
         post_response = requests.post(
