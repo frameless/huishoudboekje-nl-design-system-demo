@@ -12,7 +12,7 @@ import {
 	ModalContent,
 	ModalFooter,
 	ModalHeader,
-	ModalOverlay,
+	ModalOverlay, PseudoBox,
 	Select,
 	Stack,
 	Text,
@@ -138,30 +138,34 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: IBankTransaction }
 			</ModalContent>
 		</Modal>
 
-		<Stack direction={"row"} alignItems={"center"} justifyContent={"center"} {...props} onClick={() => onOpen()} cursor={"pointer"}>
-			<Box flex={2}>{bt.tegenRekening ? (<>
-				<Text>
-					<Tooltip label={friendlyFormatIBAN(bt.tegenRekening.iban)} aria-label={friendlyFormatIBAN(bt.tegenRekening.iban)} placement={"right"} hasArrow={true}>
-						<span>{bt.tegenRekening.rekeninghouder}</span>
-					</Tooltip>
-				</Text>
-			</>) :
-				<Text whiteSpace={"nowrap"}>{friendlyFormatIBAN(bt.tegenRekeningIban) || t("unknown")}</Text>
-			}
-			</Box>
-			{!isMobile && (
-				<Box flex={1}>
-					<Badge fontSize={"12px"} fontWeight={"normal"}>{bt.journaalpost?.grootboekrekening.naam}</Badge>
+		<PseudoBox px={2} mx={-2} _hover={{
+			bg: "gray.100"
+		}}>
+			<Stack direction={"row"} alignItems={"center"} justifyContent={"center"} {...props} onClick={() => onOpen()} cursor={"pointer"}>
+				<Box flex={2}>{bt.tegenRekening ? (<>
+					<Text>
+						<Tooltip label={friendlyFormatIBAN(bt.tegenRekening.iban)} aria-label={friendlyFormatIBAN(bt.tegenRekening.iban)} placement={"right"} hasArrow={true}>
+							<span>{bt.tegenRekening.rekeninghouder}</span>
+						</Tooltip>
+					</Text>
+				</>) :
+					<Text whiteSpace={"nowrap"}>{friendlyFormatIBAN(bt.tegenRekeningIban) || t("unknown")}</Text>
+				}
 				</Box>
-			)}
-			<Box flex={0} minWidth={120}>
-				<Currency value={bt.bedrag} />
-			</Box>
-			<Box flex={0} pl={3}>
-				<Icon name={bt.journaalpost ? "check-circle" : "question"} color={bt.journaalpost ? "gray.500" : "yellow.500"} />
-			</Box>
-			{/* Todo: Later uit te breiden met geboekt op specifieke afspraak als deze bekend is */}
-		</Stack>
+				{!isMobile && (
+					<Box flex={1}>
+						<Badge fontSize={"12px"} fontWeight={"normal"}>{bt.journaalpost?.grootboekrekening.naam}</Badge>
+					</Box>
+				)}
+				<Box flex={0} minWidth={120}>
+					<Currency value={bt.bedrag} />
+				</Box>
+				<Box flex={0} pl={3}>
+					<Icon name={bt.journaalpost ? "check-circle" : "question"} color={bt.journaalpost ? "gray.500" : "yellow.500"} />
+				</Box>
+				{/* Todo: Later uit te breiden met geboekt op specifieke afspraak als deze bekend is */}
+			</Stack>
+		</PseudoBox>
 	</>);
 };
 
