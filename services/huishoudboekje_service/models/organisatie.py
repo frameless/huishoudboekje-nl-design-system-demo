@@ -11,7 +11,10 @@ class Organisatie(db.Model):
     weergave_naam = Column(String)
     kvk_nummer = Column(String, unique=True)
 
-    rekeningen = relationship("RekeningOrganisatie", back_populates="organisatie")
+    rekeningen = relationship("RekeningOrganisatie",
+        back_populates="organisatie",
+        cascade="all, delete" # cascade only deletes relationship, not the rekening
+    )
     afspraken = relationship("Afspraak")
     
     def to_dict(self):
