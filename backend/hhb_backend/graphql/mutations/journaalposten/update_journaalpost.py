@@ -8,7 +8,7 @@ import json
 
 
 class UpdateJournaalpostGrootboekrekeningInput(graphene.InputObjectType):
-    id: graphene.Int(required=True)
+    id = graphene.Int(required=True)
     grootboekrekening_id = graphene.String(required=True)
 
 
@@ -33,7 +33,7 @@ class UpdateJournaalpostGrootboekrekening(graphene.Mutation):
             raise GraphQLError("grootboekrekening not found")
 
         # TODO validate that the debet/credit matches
-        post_response = requests.put(
+        post_response = requests.post(
             f"{settings.HHB_SERVICES_URL}/journaalposten/{input.get('id')}",
             data=json.dumps(input, default=str),
             headers={'Content-type': 'application/json'}
