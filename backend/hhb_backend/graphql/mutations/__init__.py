@@ -4,6 +4,7 @@ from .gebruikers.create_gebruiker import CreateGebruiker
 from .gebruikers.delete_gebruiker import DeleteGebruiker
 from .gebruikers.update_gebruiker import UpdateGebruiker
 from .journaalposten.create_journaalpost import CreateJournaalpostAfspraak, CreateJournaalpostGrootboekrekening
+from .journaalposten.update_journaalpost import UpdateJournaalpostGrootboekrekening
 from .journaalposten.delete_journaalpost import DeleteJournaalpost
 from .organisaties.create_organisatie import CreateOrganisatie
 from .organisaties.update_organisatie import UpdateOrganisatie
@@ -43,9 +44,10 @@ class RootMutation(graphene.ObjectType):
 
     createJournaalpostAfspraak = CreateJournaalpostAfspraak.Field()
     createJournaalpostGrootboekrekening = CreateJournaalpostGrootboekrekening.Field()
+    updateJournaalpostGrootboekrekening = UpdateJournaalpostGrootboekrekening.Field()
     deleteJournaalpost = DeleteJournaalpost.Field()
 
     createRubriek = CreateRubriek.Field()
-    udpateRubriek = UpdateRubriek.Field()
+    updateRubriek = UpdateRubriek.Field()
     deleteRubriek = DeleteRubriek.Field()
       

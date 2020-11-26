@@ -13,7 +13,7 @@ class UpdateJournaalpostGrootboekrekeningInput(graphene.InputObjectType):
 
 
 class UpdateJournaalpostGrootboekrekening(graphene.Mutation):
-    """Create a Journaalpost with a Grootboekrekening"""
+    """Update a Journaalpost with a Grootboekrekening"""
     class Arguments:
         input = graphene.Argument(UpdateJournaalpostGrootboekrekeningInput)
 

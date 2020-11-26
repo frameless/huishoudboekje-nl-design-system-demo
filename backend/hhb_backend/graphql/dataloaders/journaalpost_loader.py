@@ -12,5 +12,5 @@ class JournaalpostenByTransactionLoader(SingleDataLoader):
     """ Load journaalposten using transaction_ids """
     model = "journaalposten"
     filter_item = "filter_transactions"
-    index = "transaction"
+    index = "transaction_id"
 
