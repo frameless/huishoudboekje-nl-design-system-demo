@@ -4,7 +4,6 @@
 .eslintcache
 build
 node_modules
-.eslintcache
 public/theme
 src/version.ts
 schema.graphql
