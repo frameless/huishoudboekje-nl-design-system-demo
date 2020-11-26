@@ -28,5 +28,8 @@ class Gebruiker(db.Model):
     iban = Column(String)
 
     # Relations from other models
-    rekeningen = relationship("RekeningGebruiker", back_populates="gebruiker")
+    rekeningen = relationship("RekeningGebruiker",
+        back_populates="gebruiker",
+        cascade="all, delete" # cascade only deletes relationship, not the rekening
+    )
     afspraken = relationship("Afspraak")
