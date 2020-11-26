@@ -1,5 +1,6 @@
 import React from "react";
 import {Divider, Heading, Stack, Text} from "@chakra-ui/core";
+import {dateFormat} from "../../utils/things";
 import {FormLeft, FormRight, Label} from "../Forms/FormLeftRight";
 import moment from "moment";
 import {useTranslation} from "react-i18next";
@@ -36,14 +37,13 @@ const BurgerDetailProfileView = ({gebruiker, ...props}) => {
 					<Stack spacing={2} mb={1} direction={isMobile ? "column" : "row"}>
 						<Stack spacing={1} flex={1}>
 							<Label>{t("forms.burgers.fields.dateOfBirth")}</Label>
-							<Text>{gebruiker.geboortedatum}</Text>
+							<Text>{dateFormat.format(new Date(gebruiker.geboortedatum))}</Text>
 						</Stack>
 						<Stack spacing={1} flex={1}>
 							<Label>{t("forms.burgers.fields.age")}</Label>
 							<Text>{moment().diff(moment(gebruiker.geboortedatum), "year")}</Text>
 						</Stack>
 					</Stack>
-
 				</FormRight>
 			</Stack>
 

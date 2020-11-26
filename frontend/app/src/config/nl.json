@@ -176,7 +176,7 @@
         "organization": "Organisatie",
         "organizationChoose": "Kies een organisatie",
         "rubriek": "Rubriek",
-        "rubriekChoose": "Kies een rubriek",        
+        "rubriekChoose": "Kies een rubriek",
         "bankAccount": "Bankrekening",
         "bankAccountChoose": "Kies een bankrekening"
       }
@@ -257,6 +257,11 @@
     "banking": "Bankzaken",
     "transactions": "Transacties",
     "customerStatementMessages": "Bronbestanden"
+  },
+  "transactions": {
+    "beneficiaryAccount": "Tegenrekening",
+    "rubric": "Rubriek",
+    "amount": "Bedrag"
   },
   "months": {
     "jan": "januari",

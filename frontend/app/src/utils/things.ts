@@ -1,5 +1,5 @@
 import {createContext} from "react";
-import {IInterval, IntervalType} from "../models";
+import {IBankTransaction, IInterval, IntervalType} from "../models";
 
 export const searchFields = (term: string, fields: string[]): boolean => {
 	const _fields = fields.filter(f => f);
@@ -59,7 +59,7 @@ export const Interval = {
 		dagen: 0,
 	},
 	parse: (interval: IInterval): { intervalType: IntervalType, count: number } | undefined => {
-		if(!interval){
+		if (!interval) {
 			return undefined;
 		}
 
@@ -80,10 +80,22 @@ export const Interval = {
 	},
 }
 
-export const currencyFormat = new Intl.NumberFormat("nl-NL", {
-	currency: "EUR",
-	style: "currency"
-})
+export const currencyFormat2 = (showCurrency = true) => {
+	return new Intl.NumberFormat("nl-NL", {
+		style: showCurrency ? "currency" : "decimal",
+		...showCurrency ? {
+			currency: "EUR"
+		} : {
+			minimumFractionDigits: 2,
+			maximumFractionDigits: 2
+		}
+	});
+};
+
+/**
+ * @deprecated Use currencyFormat2 instead
+ */
+export const currencyFormat = currencyFormat2();
 export const numberFormat = new Intl.NumberFormat("nl-NL");
 export const dateFormat = new Intl.DateTimeFormat("nl-NL");
 
@@ -92,3 +104,7 @@ export const wait = async (timeout: number = 1000): Promise<void> => {
 		setTimeout(resolve, timeout);
 	});
 }
+
+export const sortBankTransactions = (a: IBankTransaction, b: IBankTransaction) => {
+	return b.bedrag - a.bedrag;
+};
