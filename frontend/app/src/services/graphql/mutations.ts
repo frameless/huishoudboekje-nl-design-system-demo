@@ -2,12 +2,8 @@ import {gql} from "@apollo/client";
 import {AfspraakFragment, CustomerStatementMessageFragment, GebruikerFragment, OrganisatieFragment, RekeningFragment} from "./fragments";
 
 export const CreateGebruikerMutation = gql`
-    mutation createGebruiker(
-        $input: CreateGebruikerInput
-    ) {
-        createGebruiker(
-            input: $input
-        ){
+    mutation createGebruiker($input: CreateGebruikerInput) {
+        createGebruiker(input: $input){
             ok
             gebruiker {
                 ...Gebruiker
@@ -219,26 +215,6 @@ export const UpdateAfspraakMutation = gql`
     ${AfspraakFragment}
 `;
 
-export const ToggleAfspraakActiefMutation = gql`
-    mutation toggleAfspraakMutation(
-        $id: Int!
-        $gebruikerId: Int!
-        $actief: Boolean!
-    ){
-        updateAfspraak(
-            id: $id
-            gebruikerId: $gebruikerId,
-            actief: $actief
-        ){
-            ok
-            afspraak{
-                ...Afspraak
-            }
-        }
-    }
-    ${AfspraakFragment}
-`;
-
 export const CreateGebruikerRekeningMutation = gql`
     mutation createGebruikerRekening(
         $gebruikerId: Int!
@@ -292,9 +268,7 @@ export const DeleteOrganizationRekeningMutation = gql`
 `;
 
 export const CreateCustomerStatementMessageMutation = gql`
-    mutation createCustomerStatementMessage(
-        $file: Upload!
-    ){
+    mutation createCustomerStatementMessage($file: Upload!){
         createCustomerStatementMessage(file: $file){
             ok
             customerStatementMessage{
@@ -306,9 +280,7 @@ export const CreateCustomerStatementMessageMutation = gql`
 `;
 
 export const DeleteCustomerStatementMessageMutation = gql`
-    mutation deleteCustomerStatementMessage(
-        $id: Int!
-    ){
+    mutation deleteCustomerStatementMessage($id: Int!){
         deleteCustomerStatementMessage(id: $id){
             ok
         }
@@ -318,7 +290,7 @@ export const DeleteCustomerStatementMessageMutation = gql`
 export const CreateJournaalpostGrootboekrekeningMutation = gql`
     mutation createJournaalpostGrootboekrekening($transactionId: Int! $grootboekrekeningId: String!){
         createJournaalpostGrootboekrekening(input: {
-            transactionId: $transactionId, 
+            transactionId: $transactionId,
             grootboekrekeningId: $grootboekrekeningId
         }){
             ok
@@ -327,4 +299,23 @@ export const CreateJournaalpostGrootboekrekeningMutation = gql`
             }
         }
     }
-`
+`;
+
+export const UpdateJournaalpostGrootboekrekeningMutation = gql`
+    mutation updateJournaalpostGrootboekrekening($id: Int!, $grootboekrekeningId: String!){
+        updateJournaalpostGrootboekrekening(input: {
+            id: $id
+            grootboekrekeningId: $grootboekrekeningId
+        }){
+            ok
+        }
+    }
+`;
+
+export const DeleteJournaalpostMutation = gql`
+    mutation deleteJournaalpost($id: Int!){
+        deleteJournaalpost(id: $id){
+            ok
+        }
+    }
+`;

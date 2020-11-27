@@ -83,20 +83,19 @@ export const GetAllTransactionsQuery = gql`
     query getAllTransactions {
         bankTransactions{
             ...BankTransaction
-#            journaalpost {
-#                id
-#                afspraak {
-#                    id
-#                }
-#                grootboekrekening {
-#                    id
-#                    debet
-#                    naam
-#                }
-#            }
+            journaalpost {
+                id
+                afspraak {
+                    id
+                }
+                grootboekrekening {
+                    ...Grootboekrekening
+                }
+            }
         }
     }
     ${BankTransactionFragment}
+    ${GrootboekrekeningFragment}
 `;
 
 export const GetAllRubricsQuery = gql`

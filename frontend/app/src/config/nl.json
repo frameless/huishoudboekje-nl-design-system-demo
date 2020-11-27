@@ -78,6 +78,10 @@
     },
     "transactions": {
       "addHint": "Voeg transacties toe door een bronbestand te importeren."
+    },
+    "journals": {
+      "createSuccessMessage": "",
+      "deleteSuccessMessage": ""
     }
   },
   "forms": {

@@ -1,6 +1,6 @@
 import {useQuery} from "@apollo/client";
 import {Box, BoxProps, Divider, Heading, Icon, Stack} from "@chakra-ui/core";
-import React from "react";
+import React, {createContext} from "react";
 import {useIsMobile} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {IBankTransaction} from "../../../models";
@@ -10,6 +10,11 @@ import {dateFormat, sortBankTransactions} from "../../../utils/things";
 import DeadEndPage from "../../DeadEndPage";
 import {FormLeft, FormRight, Label} from "../../Forms/FormLeftRight";
 import TransactionItem from "./TransactionItem";
+
+export const TransactionsContext = createContext<{ refetch: VoidFunction }>({
+	refetch: () => {
+	}
+});
 
 const Transactions: React.FC<BoxProps> = ({...props}) => {
 	const isMobile = useIsMobile();
@@ -72,23 +77,25 @@ const Transactions: React.FC<BoxProps> = ({...props}) => {
 								</Stack>
 							</Box>
 
-							{Object.keys(bt).map((transactionDate, i) => {
-								return (
-									<Stack key={i} spacing={5}>
-										<Box>
-											<Label>{transactionDate}</Label>
-										</Box>
-										<Box ml={isMobile ? 0 : 5}>
-											{bt[transactionDate].sort(sortBankTransactions).filter(t => t.isCredit).map(t => {
-												return <TransactionItem key={t.id} bankTransaction={t} />;
-											})}
-											{bt[transactionDate].sort(sortBankTransactions).filter(t => !t.isCredit).reverse().map(t => {
-												return <TransactionItem key={t.id} bankTransaction={t} />;
-											})}
-										</Box>
-									</Stack>
-								);
-							})}
+							<TransactionsContext.Provider value={{refetch: $transactions.refetch}}>
+								{Object.keys(bt).map((transactionDate, i) => {
+									return (
+										<Stack key={i} spacing={5}>
+											<Box>
+												<Label>{transactionDate}</Label>
+											</Box>
+											<Box ml={isMobile ? 0 : 5}>
+												{bt[transactionDate].sort(sortBankTransactions).filter(t => t.isCredit).map(t => {
+													return <TransactionItem key={t.id} bankTransaction={t} />;
+												})}
+												{bt[transactionDate].sort(sortBankTransactions).filter(t => !t.isCredit).reverse().map(t => {
+													return <TransactionItem key={t.id} bankTransaction={t} />;
+												})}
+											</Box>
+										</Stack>
+									);
+								})}
+							</TransactionsContext.Provider>
 						</Stack>
 					</>
 

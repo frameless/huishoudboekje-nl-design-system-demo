@@ -5,14 +5,14 @@ import {
 	BoxProps,
 	Button,
 	FormLabel,
-	Icon,
+	Icon, IconButton,
 	Modal,
 	ModalBody,
-	ModalCloseButton,
 	ModalContent,
 	ModalFooter,
 	ModalHeader,
-	ModalOverlay, PseudoBox,
+	ModalOverlay,
+	PseudoBox,
 	Select,
 	Stack,
 	Text,
@@ -21,31 +21,41 @@ import {
 	useToast
 } from "@chakra-ui/core";
 import {friendlyFormatIBAN} from "ibantools";
-import React from "react";
+import React, {useContext} from "react";
 import {useInput, useIsMobile, Validators} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {IBankTransaction, IRubriek} from "../../../models";
-import {CreateJournaalpostGrootboekrekeningMutation} from "../../../services/graphql/mutations";
+import {CreateJournaalpostGrootboekrekeningMutation, DeleteJournaalpostMutation, UpdateJournaalpostGrootboekrekeningMutation} from "../../../services/graphql/mutations";
 import {GetAllRubricsQuery} from "../../../services/graphql/queries";
 import Queryable from "../../../utils/Queryable";
 import {dateFormat} from "../../../utils/things";
 import Currency from "../../Currency";
 import {Label} from "../../Forms/FormLeftRight";
+import {TransactionsContext} from "./index";
 
 const TransactionItem: React.FC<BoxProps & { bankTransaction: IBankTransaction }> = ({bankTransaction: bt, ...props}) => {
 	const {t} = useTranslation();
 	const isMobile = useIsMobile();
 	const toast = useToast();
 	const {isOpen, onOpen, onClose} = useDisclosure();
+	const {refetch} = useContext(TransactionsContext);
 
 	const rubric = useInput({
 		validate: [Validators.required]
 	});
 
-	const $rubrics = useQuery(GetAllRubricsQuery);
+	const $rubrics = useQuery(GetAllRubricsQuery, {
+		onCompleted: (data: {rubrieken: IRubriek[]}) => {
+			if (bt.journaalpost) {
+				rubric.setValue(bt.journaalpost?.grootboekrekening.id);
+			}
+		}
+	});
 	const [createJournal] = useMutation(CreateJournaalpostGrootboekrekeningMutation);
+	const [updateJournal] = useMutation(UpdateJournaalpostGrootboekrekeningMutation);
+	const [deleteJournal] = useMutation(DeleteJournaalpostMutation);
 
-	const onClickSave = () => {
+	const onClickSave = async () => {
 		if (!rubric.isValid) {
 			toast({
 				status: "error",
@@ -55,17 +65,60 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: IBankTransaction }
 			return;
 		}
 
-		createJournal({
-			variables: {
-				transactionId: bt.id,
-				grootboekrekeningId: rubric.value
-			}
-		}).then(() => {
+		let mutation;
+
+		if (!bt.journaalpost) {
+			mutation = createJournal({
+				variables: {
+					transactionId: bt.id,
+					grootboekrekeningId: rubric.value
+				}
+			});
+		}
+		else {
+			mutation = updateJournal({
+				variables: {
+					id: bt.journaalpost.id,
+					grootboekrekeningId: rubric.value
+				}
+			});
+		}
+
+		mutation.then(() => {
 			toast({
 				status: "success",
 				title: t("messages.journals.createSuccessMessage"),
 				position: "top",
 			});
+			refetch();
+			onClose();
+		}).catch(err => {
+			console.error(err);
+			toast({
+				position: "top",
+				status: "error",
+				variant: "solid",
+				title: t("messages.genericError.title"),
+				description: t("messages.genericError.description"),
+			});
+		});
+	}
+	const onClickDelete = () => {
+		if (!bt.journaalpost) {
+			return;
+		}
+
+		deleteJournal({
+			variables: {
+				id: bt.journaalpost.id
+			}
+		}).then(() => {
+			toast({
+				status: "success",
+				title: t("messages.journals.deleteSuccessMessage"),
+				position: "top",
+			});
+			refetch();
 			onClose();
 		}).catch(err => {
 			console.error(err);
@@ -84,7 +137,6 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: IBankTransaction }
 			<ModalOverlay />
 			<ModalContent>
 				<ModalHeader>{t("forms.banking.sections.journal.title")}</ModalHeader>
-				<ModalCloseButton />
 				<ModalBody>
 
 					<Stack spacing={5}>
@@ -118,22 +170,29 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: IBankTransaction }
 						</Stack>
 
 						<Box as={"form"}>
-
 							<FormLabel>{t("banking.rubric")}</FormLabel>
 							<Queryable query={$rubrics}>{({rubrieken}) => (
-								<Select {...rubric.bind} isInvalid={!rubric.isValid}>
-									<option value={undefined}>{t("forms.banking.fields.rubricChoose")}</option>
-									{rubrieken.map((r: IRubriek) => (
-										<option key={r.id} value={r.grootboekrekening.id}>{r.naam}</option>
-									))}
-								</Select>
+								<Stack direction={"row"}>
+									<Select {...rubric.bind} isInvalid={!rubric.isValid}>
+										<option value={undefined}>{t("forms.banking.fields.rubricChoose")}</option>
+										{rubrieken.map((r: IRubriek) => (
+											<option key={r.id} value={r.grootboekrekening.id}>{r.naam}</option>
+										))}
+									</Select>
+									{bt.journaalpost && (
+										<IconButton icon={"delete"} aria-label={t("actions.delete")} variantColor={"red"} onClick={() => onClickDelete()} />
+									)}
+								</Stack>
 							)}</Queryable>
 						</Box>
 					</Stack>
 
 				</ModalBody>
 				<ModalFooter>
-					<Button variantColor={"primary"} onClick={() => onClickSave()}>{t("actions.save")}</Button>
+					<Stack direction={"row"}>
+						<Button onClick={() => onClose()}>{t("actions.cancel")}</Button>
+						<Button variantColor={"primary"} onClick={() => onClickSave()}>{t("actions.save")}</Button>
+					</Stack>
 				</ModalFooter>
 			</ModalContent>
 		</Modal>
@@ -154,14 +213,14 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: IBankTransaction }
 				</Box>
 				{!isMobile && (
 					<Box flex={1}>
-						<Badge fontSize={"12px"} fontWeight={"normal"}>{bt.journaalpost?.grootboekrekening.naam}</Badge>
+						<Text fontSize={"sm"}>{bt.journaalpost?.grootboekrekening.naam}</Text>
 					</Box>
 				)}
 				<Box flex={0} minWidth={120}>
 					<Currency value={bt.bedrag} />
 				</Box>
 				<Box flex={0} pl={3}>
-					<Icon name={bt.journaalpost ? "check-circle" : "question"} color={bt.journaalpost ? "gray.500" : "yellow.500"} />
+					<Icon name={bt.journaalpost ? "check-circle" : "warning"} color={bt.journaalpost ? "transparent" : "red.500"} />
 				</Box>
 				{/* Todo: Later uit te breiden met geboekt op specifieke afspraak als deze bekend is */}
 			</Stack>
