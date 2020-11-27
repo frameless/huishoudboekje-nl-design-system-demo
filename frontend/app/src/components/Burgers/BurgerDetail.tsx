@@ -225,12 +225,12 @@ const BurgerDetail = () => {
 												<Tab>{t("agreements.outgoing")} <TriangleDownIcon ml={3} color={"red.400"} w={"12px"} h={"12px"} /> </Tab>
 											</TabList>
 											<TabPanels>
-												<TabPanel id="tab_incoming">
+												<TabPanel id="tab_incoming" p={0}>
 													{filteredAfspraken.filter(a => a.credit).map((a, i) => (
 														<AfspraakItem key={a.id} data-id={a.id} afspraak={a} py={2} onDelete={(id: number) => onDeleteAfspraak(id)} />
 													))}
 												</TabPanel>
-												<TabPanel id="tab_outgoing">
+												<TabPanel id="tab_outgoing" p={0}>
 													{filteredAfspraken.filter(a => !a.credit).map((a, i) => (
 														<AfspraakItem key={a.id} data-id={a.id} afspraak={a} py={2} onDelete={(id: number) => onDeleteAfspraak(id)} />
 													))}
