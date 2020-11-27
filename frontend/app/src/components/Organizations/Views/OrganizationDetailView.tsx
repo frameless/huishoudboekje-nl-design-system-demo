@@ -1,9 +1,9 @@
+import {BoxProps, Divider, Heading, Stack, Text} from "@chakra-ui/react";
 import React from "react";
-import {BoxProps, Divider, FormHelperText, Heading, Stack, Text} from "@chakra-ui/react";
-import {FormLeft, FormRight, Label} from "../../Forms/FormLeftRight";
-import {useTranslation} from "react-i18next";
 import {useIsMobile} from "react-grapple";
+import {useTranslation} from "react-i18next";
 import {IOrganisatie} from "../../../models";
+import {FormLeft, FormRight, Label} from "../../Forms/FormLeftRight";
 
 const OrganizationDetailView: React.FC<BoxProps & { organisatie: IOrganisatie }> = ({organisatie, ...props}) => {
 	const isMobile = useIsMobile();

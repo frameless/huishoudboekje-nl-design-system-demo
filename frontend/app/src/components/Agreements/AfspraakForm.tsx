@@ -1,35 +1,34 @@
-import React, {useEffect, useState} from "react";
-import Queryable from "../../utils/Queryable";
-import {Interval, isDev} from "../../utils/things";
+import {useQuery} from "@apollo/client";
 import {
 	Box,
 	BoxProps,
 	Button,
 	Divider,
-	FormHelperText,
-	Text,
 	FormLabel,
 	Heading,
 	Input,
 	InputGroup,
 	InputLeftElement,
+	RadioGroup,
 	Select,
 	Spinner,
 	Stack,
 	Switch,
-	useToast,
-	RadioGroup
+	Text,
+	useToast
 } from "@chakra-ui/react";
-import {FormLeft, FormRight} from "../Forms/FormLeftRight";
-import {AfspraakPeriod, AfspraakType, IAfspraak, IGebruiker, IntervalType, IOrganisatie, IRubriek} from "../../models";
-import CustomRadioButton from "./CustomRadioButton";
-import {sampleData} from "../../config/sampleData/sampleData";
-import {useInput, useIsMobile, useNumberInput, useToggle, Validators} from "react-grapple";
-import {useTranslation} from "react-i18next";
-import {UseInput} from "react-grapple/dist/hooks/useInput";
-import {useQuery} from "@apollo/client";
-import {GetAllOrganisatiesQuery, GetAllRubricsQuery} from "../../services/graphql/queries";
 import moment from "moment";
+import React, {useEffect, useState} from "react";
+import {useInput, useIsMobile, useNumberInput, useToggle, Validators} from "react-grapple";
+import {UseInput} from "react-grapple/dist/hooks/useInput";
+import {useTranslation} from "react-i18next";
+import {sampleData} from "../../config/sampleData/sampleData";
+import {AfspraakPeriod, AfspraakType, IAfspraak, IGebruiker, IntervalType, IOrganisatie, IRubriek} from "../../models";
+import {GetAllOrganisatiesQuery, GetAllRubricsQuery} from "../../services/graphql/queries";
+import Queryable from "../../utils/Queryable";
+import {Interval, isDev} from "../../utils/things";
+import {FormLeft, FormRight} from "../Forms/FormLeftRight";
+import CustomRadioButton from "./CustomRadioButton";
 
 const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) => void, gebruiker: IGebruiker, loading: boolean }> = ({afspraak, onSave, gebruiker, loading = false, ...props}) => {
 	const {t} = useTranslation();
@@ -93,11 +92,11 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 	});
 
 	useEffect(() => {
-		if(organizationId.value){
-			if(orgsData && orgsData.organisaties){
+		if (organizationId.value) {
+			if (orgsData && orgsData.organisaties) {
 				const selectedOrg = orgsData.organisaties.find(o => o.id === parseInt(organizationId.value as unknown as string));
 
-				if(selectedOrg && selectedOrg.rekeningen.length === 1){
+				if (selectedOrg && selectedOrg.rekeningen.length === 1) {
 					rekeningId.setValue(selectedOrg.rekeningen[0].id);
 				}
 			}
@@ -322,8 +321,8 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 							<Stack spacing={1} flex={1}>
 								<FormLabel htmlFor={"beschrijving"}>{t("forms.agreements.fields.isRecurring")}</FormLabel>
 								<RadioGroup isInline onChange={(val) => toggleRecurring(val === AfspraakPeriod.Periodic)}
-								                  value={isRecurring ? AfspraakPeriod.Periodic : AfspraakPeriod.Once}
-								                  defaultValue={"once"} spacing={0}>
+								            value={isRecurring ? AfspraakPeriod.Periodic : AfspraakPeriod.Once}
+								            defaultValue={"once"} spacing={0}>
 									<CustomRadioButton size={"sm"} roundedRight={0}
 									                   value={AfspraakPeriod.Once}>{t("forms.agreements.fields.isRecurring_once")}</CustomRadioButton>
 									<CustomRadioButton size={"sm"} roundedLeft={0}

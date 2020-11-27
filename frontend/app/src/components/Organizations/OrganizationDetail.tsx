@@ -1,3 +1,4 @@
+import {useMutation, useQuery} from "@apollo/client";
 import {ChevronDownIcon} from "@chakra-ui/icons";
 import {
 	AlertDialog,
@@ -18,24 +19,23 @@ import {
 	useToast,
 } from "@chakra-ui/react";
 import React, {createContext, useRef} from "react";
+import {useToggle} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {Redirect, useHistory, useParams} from "react-router-dom";
 import Routes from "../../config/routes";
-import BackButton from "../BackButton";
-import {useMutation, useQuery} from "@apollo/client";
 import {IOrganisatie} from "../../models";
+import {DeleteOrganizationMutation} from "../../services/graphql/mutations";
 import {GetOneOrganisatieQuery} from "../../services/graphql/queries";
-import {useToggle} from "react-grapple";
+import BackButton from "../BackButton";
+import DeadEndPage from "../DeadEndPage";
 import OrganizationDetailView from "./Views/OrganizationDetailView";
 import OrganizationRekeningenView from "./Views/OrganizationRekeningenView";
-import DeadEndPage from "../DeadEndPage";
-import {DeleteOrganizationMutation} from "../../services/graphql/mutations";
 
 export const OrganizationDetailContext = createContext<any>({});
 
 const OrganizationDetail = () => {
 	const {t} = useTranslation();
-	const {id} = useParams<{id}>();
+	const {id} = useParams<{ id }>();
 	const {push} = useHistory();
 	const toast = useToast();
 
