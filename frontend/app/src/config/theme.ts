@@ -11,6 +11,18 @@ const theme = extendTheme({
 	colors: {
 		...colors,
 	},
+	components:{
+		Heading: {
+			sizes: {
+				lg: {
+					fontSize: "1.5rem"
+				}
+			}
+		}
+	},
+	fontSizes: {
+		lg: "1.5rem"
+	},
 	tenantName,
 });
 
