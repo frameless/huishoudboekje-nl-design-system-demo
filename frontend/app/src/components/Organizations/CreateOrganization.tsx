@@ -1,6 +1,6 @@
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {Box, Button, Divider, FormHelperText, FormLabel, Heading, Input, Stack, Tooltip, useToast} from "@chakra-ui/react";
+import {Box, Button, Divider, Text, FormLabel, Heading, Input, Stack, Tooltip, useToast} from "@chakra-ui/react";
 import {useInput, useIsMobile, useToggle, Validators} from "react-grapple";
 import BackButton from "../BackButton";
 import Routes from "../../config/routes";
@@ -137,7 +137,7 @@ const CreateOrganization = () => {
 					<Stack direction={isMobile ? "column" : "row"} spacing={2}>
 						<FormLeft>
 							<Heading size={"md"}>{t("forms.organizations.sections.organizational.title")}</Heading>
-							<FormHelperText id="personal-helperText">{t("forms.organizations.sections.organizational.helperText")}</FormHelperText>
+							<Text data-legacy="FormHelperText" id="personal-helperText">{t("forms.organizations.sections.organizational.helperText")}</Text>
 						</FormLeft>
 						<FormRight>
 							<Stack spacing={2} direction={isMobile ? "column" : "row"}>
@@ -167,7 +167,7 @@ const CreateOrganization = () => {
 					<Stack direction={isMobile ? "column" : "row"} spacing={2}>
 						<FormLeft>
 							<Heading size={"md"}>{t("forms.organizations.sections.contact.title")}</Heading>
-							<FormHelperText>{t("forms.organizations.sections.contact.helperText")}</FormHelperText>
+							<Text data-legacy="FormHelperText">{t("forms.organizations.sections.contact.helperText")}</Text>
 						</FormLeft>
 						<FormRight>
 							<Stack spacing={2} direction={isMobile ? "column" : "row"}>

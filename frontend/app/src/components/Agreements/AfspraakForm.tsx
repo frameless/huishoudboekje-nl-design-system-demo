@@ -13,12 +13,12 @@ import {
 	Input,
 	InputGroup,
 	InputLeftElement,
-	RadioButtonGroup,
 	Select,
 	Spinner,
 	Stack,
 	Switch,
-	useToast
+	useToast,
+	RadioGroup
 } from "@chakra-ui/react";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
 import {AfspraakPeriod, AfspraakType, IAfspraak, IGebruiker, IntervalType, IOrganisatie, IRubriek} from "../../models";
@@ -226,7 +226,7 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 				<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 					<FormLeft>
 						<Heading size={"md"}>{t("forms.agreements.sections.0.title")}</Heading>
-						<FormHelperText id="personal-helperText">{t("forms.agreements.sections.0.helperText")}</FormHelperText>
+						<Text id="personal-helperText">{t("forms.agreements.sections.0.helperText")}</Text>
 					</FormLeft>
 					<FormRight>
 						{/*<Stack spacing={2} direction={isMobile ? "column" : "row"}>*/}
@@ -240,10 +240,10 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 						<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 							<Stack spacing={1} flex={1}>
 								<FormLabel htmlFor={"beschrijving"}>{t("forms.agreements.fields.type")}</FormLabel>
-								<RadioButtonGroup isInline onChange={onChangeAfspraakType} value={afspraakType} defaultValue={AfspraakType.Expense} spacing={0}>
+								<RadioGroup isInline onChange={onChangeAfspraakType} value={afspraakType} defaultValue={AfspraakType.Expense} spacing={0}>
 									<CustomRadioButton size={"sm"} roundedRight={0} value={AfspraakType.Income}>{t("forms.agreements.fields.income")}</CustomRadioButton>
 									<CustomRadioButton size={"sm"} roundedLeft={0} value={AfspraakType.Expense}>{t("forms.agreements.fields.expenses")}</CustomRadioButton>
-								</RadioButtonGroup>
+								</RadioGroup>
 							</Stack>
 						</Stack>
 						<Stack spacing={2} direction={isMobile ? "column" : "row"}>
@@ -314,21 +314,21 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 				<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 					<FormLeft>
 						<Heading size={"md"}>{t("forms.agreements.sections.1.title")}</Heading>
-						<FormHelperText id="personal-helperText">{t("forms.agreements.sections.1.helperText")}</FormHelperText>
+						<Text data-legacy="FormHelperText" id="personal-helperText">{t("forms.agreements.sections.1.helperText")}</Text>
 					</FormLeft>
 					<FormRight>
 
 						<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 							<Stack spacing={1} flex={1}>
 								<FormLabel htmlFor={"beschrijving"}>{t("forms.agreements.fields.isRecurring")}</FormLabel>
-								<RadioButtonGroup isInline onChange={(val) => toggleRecurring(val === AfspraakPeriod.Periodic)}
+								<RadioGroup isInline onChange={(val) => toggleRecurring(val === AfspraakPeriod.Periodic)}
 								                  value={isRecurring ? AfspraakPeriod.Periodic : AfspraakPeriod.Once}
 								                  defaultValue={"once"} spacing={0}>
 									<CustomRadioButton size={"sm"} roundedRight={0}
 									                   value={AfspraakPeriod.Once}>{t("forms.agreements.fields.isRecurring_once")}</CustomRadioButton>
 									<CustomRadioButton size={"sm"} roundedLeft={0}
 									                   value={AfspraakPeriod.Periodic}>{t("forms.agreements.fields.isRecurring_periodic")}</CustomRadioButton>
-								</RadioButtonGroup>
+								</RadioGroup>
 							</Stack>
 						</Stack>
 

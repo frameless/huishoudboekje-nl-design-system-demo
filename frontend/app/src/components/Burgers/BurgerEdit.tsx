@@ -1,21 +1,21 @@
+import {useMutation, useQuery} from "@apollo/client";
+import {Box, Button, Divider, Text, FormLabel, Heading, Input, Select, Spinner, Stack, Tooltip, useToast} from "@chakra-ui/react";
 import React, {useEffect} from "react";
-import {Box, Button, Divider, FormHelperText, FormLabel, Heading, Input, Select, Spinner, Stack, Tooltip, useToast} from "@chakra-ui/react";
 import {useInput, useIsMobile, useNumberInput, Validators} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {Redirect, useParams} from "react-router-dom";
 import Routes from "../../config/routes";
+import {IGebruiker} from "../../models";
+import {UpdateGebruikerMutation} from "../../services/graphql/mutations";
+import {GetOneGebruikerQuery} from "../../services/graphql/queries";
+import {Months, Regex} from "../../utils/things";
 import BackButton from "../BackButton";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
-import {Months, Regex} from "../../utils/things";
-import {useMutation, useQuery} from "@apollo/client";
-import {IGebruiker} from "../../models";
-import {GetOneGebruikerQuery} from "../../services/graphql/queries";
-import {UpdateGebruikerMutation} from "../../services/graphql/mutations";
 
 const BurgerEdit = () => {
 	const isMobile = useIsMobile();
 	const {t} = useTranslation();
-	const {id} = useParams<{id}>();
+	const {id} = useParams<{ id }>();
 	const toast = useToast();
 
 	// const bsn = useInput<string>({
@@ -198,7 +198,7 @@ const BurgerEdit = () => {
 						<Stack direction={isMobile ? "column" : "row"} spacing={2}>
 							<FormLeft>
 								<Heading size={"md"}>{t("forms.burgers.sections.personal.title")}</Heading>
-								<FormHelperText id="personal-helperText">{t("forms.burgers.sections.personal.helperText")}</FormHelperText>
+								<Text data-legacy="FormHelperText" id="personal-helperText">{t("forms.burgers.sections.personal.helperText")}</Text>
 							</FormLeft>
 							<FormRight>
 								{/*<Stack spacing={1}>*/}
@@ -214,7 +214,7 @@ const BurgerEdit = () => {
 									</Stack>
 									<Stack spacing={1} flex={3}>
 										<FormLabel htmlFor={"firstName"}>{t("forms.burgers.fields.firstName")}</FormLabel>
-										<Input isInvalid={firstName.dirty && !firstName.isValid}  id={"firstName"}{...firstName.bind} />
+										<Input isInvalid={firstName.dirty && !firstName.isValid} id={"firstName"}{...firstName.bind} />
 									</Stack>
 									<Stack spacing={1} flex={3}>
 										<FormLabel htmlFor={"lastName"}>{t("forms.burgers.fields.lastName")}</FormLabel>
@@ -249,7 +249,7 @@ const BurgerEdit = () => {
 						<Stack direction={isMobile ? "column" : "row"} spacing={2}>
 							<FormLeft>
 								<Heading size={"md"}>{t("forms.burgers.sections.contact.title")}</Heading>
-								<FormHelperText>{t("forms.burgers.sections.contact.helperText")}</FormHelperText>
+								<Text data-legacy="FormHelperText">{t("forms.burgers.sections.contact.helperText")}</Text>
 							</FormLeft>
 							<FormRight>
 								<Stack spacing={2} direction={isMobile ? "column" : "row"}>

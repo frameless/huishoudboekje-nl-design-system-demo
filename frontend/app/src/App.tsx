@@ -1,23 +1,23 @@
 import {ChevronDownIcon, WarningIcon} from "@chakra-ui/icons";
-import React, {useEffect, useState} from "react";
-import {Box, Button, Flex, Heading, Icon, IconButton, Menu, MenuButton, MenuItem, MenuList, PseudoBox, Spinner, Stack, Text, useTheme, useToast} from "@chakra-ui/react";
-import {useSession} from "./utils/hooks";
+import {Box, Button, Flex, Heading, IconButton, Menu, MenuButton, MenuItem, MenuList, Spinner, Stack, Text, useTheme, useToast} from "@chakra-ui/react";
 import {observer} from "mobx-react";
-import SidebarContainer from "./components/Sidebar/SidebarContainer";
+import React, {useEffect, useState} from "react";
 import {useIsMobile, useToggle} from "react-grapple";
-import {Route, Switch, Redirect, useHistory, useLocation} from "react-router-dom";
-import Sidebar from "./components/Sidebar";
-import UserStatus from "./components/UserStatus";
-import {FaLock} from "react-icons/all";
-import Routes from "./config/routes";
-import Burgers from "./components/Burgers";
-import PageNotFound from "./components/PageNotFound";
-import {TABLET_BREAKPOINT} from "./utils/things";
 import {useTranslation} from "react-i18next";
-import Organizations from "./components/Organizations";
-import TwoColumns from "./components/Layouts/TwoColumns";
+import {FaLock} from "react-icons/all";
+import {Redirect, Route, Switch, useHistory, useLocation} from "react-router-dom";
 import EditAgreement from "./components/Agreements/EditAgreement";
 import Banking from "./components/Banking";
+import Burgers from "./components/Burgers";
+import TwoColumns from "./components/Layouts/TwoColumns";
+import Organizations from "./components/Organizations";
+import PageNotFound from "./components/PageNotFound";
+import Sidebar from "./components/Sidebar";
+import SidebarContainer from "./components/Sidebar/SidebarContainer";
+import UserStatus from "./components/UserStatus";
+import Routes from "./config/routes";
+import {useSession} from "./utils/hooks";
+import {TABLET_BREAKPOINT} from "./utils/things";
 
 const App = () => {
 	const {t} = useTranslation();
@@ -42,7 +42,7 @@ const App = () => {
 	}
 
 	useEffect(() => {
-		if(backendError){
+		if (backendError) {
 			return;
 		}
 
@@ -105,7 +105,7 @@ const App = () => {
 		<Switch>
 			<Route>
 				<Flex h={"auto"} minHeight={"100vh"} minWidth={"100%"} w={"auto"} bg={"gray.100"}>
-					<Stack width={"100%"} direction={isMobile ? "column" : "row"} justifyContent={"flex-start"} alignItems={"flex-start"} spacing={30}>
+					<Flex width={"100%"} justifyContent={"flex-start"} alignItems={"flex-start"} spacing={5}>
 						<SidebarContainer>
 							<Sidebar />
 						</SidebarContainer>
@@ -122,7 +122,7 @@ const App = () => {
 									<MenuList zIndex={3}>
 										<MenuItem onClick={onClickLogoutButton}>
 											<Box size={"16px"} as={FaLock} color={"gray.400"} _hover={{color: "primary.700"}} aria-label={t("actions.logout")}
-											           mr={3} />
+											     mr={3} />
 											<Text>{t("actions.logout")}</Text>
 										</MenuItem>
 									</MenuList>
@@ -142,7 +142,7 @@ const App = () => {
 								<Route component={PageNotFound} />
 							</Switch>
 						</Box>
-					</Stack>
+					</Flex>
 				</Flex>
 			</Route>
 		</Switch>

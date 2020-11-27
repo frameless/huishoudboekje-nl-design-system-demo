@@ -9,7 +9,7 @@ import {DrawerContext, TABLET_BREAKPOINT} from "../../utils/things";
 const SidebarContainer = ({children}) => {
 	const isMobile = useIsMobile(TABLET_BREAKPOINT);
 	const {isOpen, onOpen, onClose} = useDisclosure();
-	const sidebarButtonRef = useRef();
+	const sidebarButtonRef = useRef(null);
 
 	return isMobile ? (
 		<>

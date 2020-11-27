@@ -29,7 +29,7 @@ const SidebarLink: React.FC<ButtonProps & { icon?, href: string, exactMatch?: bo
 				push(href);
 			}} variant={isActive ? "solid" : "ghost"} colorScheme={isActive ? "primary" : "gray"} {...props} color={isActive ? "white" : "primary"} width="100%">
 				<Flex alignItems={"center"}>
-					<LinkIcon mr={5} fontSize={"24px"} />
+					{icon && <LinkIcon mr={5} fontSize={"24px"} />}
 					<Text color={linkColor}>{children}</Text>
 				</Flex>
 			</Button>

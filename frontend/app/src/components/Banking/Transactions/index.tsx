@@ -29,7 +29,6 @@ const Transactions: React.FC<BoxProps> = ({...props}) => {
 			<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
 
 				<Queryable query={$transactions}>{(data: { bankTransactions: IBankTransaction[] }) => {
-
 					if (data.bankTransactions.length === 0) {
 						return (<DeadEndPage message={t("messages.transactions.addHint")} />);
 					}

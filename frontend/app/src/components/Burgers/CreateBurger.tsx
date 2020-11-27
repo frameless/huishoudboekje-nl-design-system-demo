@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
-import {Box, Button, Divider, FormHelperText, FormLabel, Heading, Input, Select, Stack, Tooltip, useToast} from "@chakra-ui/react";
+import {Box, Button, Divider, Text, FormLabel, Heading, Input, Select, Stack, Tooltip, useToast} from "@chakra-ui/react";
 import {useInput, useIsMobile, useNumberInput, Validators} from "react-grapple";
 import BackButton from "../BackButton";
 import Routes from "../../config/routes";
@@ -184,7 +184,7 @@ const CreateBurger = () => {
 					<Stack direction={isMobile ? "column" : "row"} spacing={2}>
 						<FormLeft>
 							<Heading size={"md"}>{t("forms.burgers.sections.personal.title")}</Heading>
-							<FormHelperText id="personal-helperText">{t("forms.burgers.sections.personal.helperText")}</FormHelperText>
+							<Text data-legacy="FormHelperText" id="personal-helperText">{t("forms.burgers.sections.personal.helperText")}</Text>
 						</FormLeft>
 						<FormRight>
 							<Stack spacing={2} direction={isMobile ? "column" : "row"}>
@@ -228,7 +228,7 @@ const CreateBurger = () => {
 					<Stack direction={isMobile ? "column" : "row"} spacing={2}>
 						<FormLeft>
 							<Heading size={"md"}>{t("forms.burgers.sections.contact.title")}</Heading>
-							<FormHelperText>{t("forms.burgers.sections.contact.helperText")}</FormHelperText>
+							<Text data-legacy="FormHelperText">{t("forms.burgers.sections.contact.helperText")}</Text>
 						</FormLeft>
 						<FormRight>
 							<Stack spacing={2} direction={isMobile ? "column" : "row"}>

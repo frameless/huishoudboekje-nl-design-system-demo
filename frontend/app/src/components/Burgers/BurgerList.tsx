@@ -1,6 +1,6 @@
 import {useQuery} from "@apollo/client";
 import {AddIcon, CloseIcon, SearchIcon} from "@chakra-ui/icons";
-import {Button, Heading, Icon, IconButton, Input, InputGroup, InputLeftElement, InputRightElement, Spinner, Stack, useToast} from "@chakra-ui/react";
+import {Button, Heading, IconButton, Input, InputGroup, InputLeftElement, InputRightElement, Spinner, Stack, useToast} from "@chakra-ui/react";
 import React, {useEffect, useState} from "react";
 import {useInput} from "react-grapple";
 import {useTranslation} from "react-i18next";

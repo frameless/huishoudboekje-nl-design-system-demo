@@ -1,4 +1,4 @@
-import { theme as chakraTheme } from "@chakra-ui/react";
+import {extendTheme} from "@chakra-ui/react";
 
 if (!window["branding"]) {
 	document.querySelector("body")!.textContent = "Error: No tenant theme installed.";
@@ -7,13 +7,11 @@ if (!window["branding"]) {
 
 const {colors, tenantName} = window["branding"];
 
-const theme = {
-	...chakraTheme,
+const theme = extendTheme({
 	colors: {
-		...chakraTheme.colors,
 		...colors,
 	},
 	tenantName,
-};
+});
 
 export default theme;

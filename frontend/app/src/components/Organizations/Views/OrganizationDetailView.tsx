@@ -14,7 +14,7 @@ const OrganizationDetailView: React.FC<BoxProps & { organisatie: IOrganisatie }>
 			<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 				<FormLeft>
 					<Heading size={"md"}>{t("forms.organizations.sections.organizational.title")}</Heading>
-					<FormHelperText id="personal-helperText">{t("forms.organizations.sections.organizational.helperText")}</FormHelperText>
+					<Text data-legacy="FormHelperText" id="personal-helperText">{t("forms.organizations.sections.organizational.helperText")}</Text>
 				</FormLeft>
 				<FormRight>
 					<Stack spacing={2} direction={isMobile ? "column" : "row"}>
@@ -35,7 +35,7 @@ const OrganizationDetailView: React.FC<BoxProps & { organisatie: IOrganisatie }>
 			<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 				<FormLeft>
 					<Heading size={"md"}>{t("forms.organizations.sections.contact.title")}</Heading>
-					<FormHelperText id="personal-helperText">{t("forms.organizations.sections.contact.helperText")}</FormHelperText>
+					<Text data-legacy="FormHelperText" id="personal-helperText">{t("forms.organizations.sections.contact.helperText")}</Text>
 				</FormLeft>
 				<FormRight>
 					<Stack spacing={2} direction={isMobile ? "column" : "row"}>

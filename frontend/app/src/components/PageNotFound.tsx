@@ -1,10 +1,10 @@
+import {Box, Button, Heading, Stack, Text} from "@chakra-ui/react";
 import React from "react";
-import {Box, Button, Heading, Icon, Stack, Text} from "@chakra-ui/react";
-import {useHistory} from "react-router-dom";
-import {useTranslation} from "react-i18next";
 import {useIsMobile} from "react-grapple";
-import Routes from "../config/routes";
+import {useTranslation} from "react-i18next";
 import {MdArrowBack} from "react-icons/all";
+import {useHistory} from "react-router-dom";
+import Routes from "../config/routes";
 import NotFoundIllustration from "./Illustrations/NotFoundIllustration";
 
 const PageNotFound = () => {
