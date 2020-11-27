@@ -1,4 +1,4 @@
-import { theme as chakraTheme } from "@chakra-ui/core";
+import { theme as chakraTheme } from "@chakra-ui/react";
 
 if (!window["branding"]) {
 	document.querySelector("body")!.textContent = "Error: No tenant theme installed.";

@@ -1,4 +1,4 @@
-import {BoxProps, Stack, Text} from "@chakra-ui/core";
+import {BoxProps, Stack, Text} from "@chakra-ui/react";
 import React from "react";
 import {currencyFormat2} from "../utils/things";
 

@@ -19,7 +19,7 @@ import {
 	Stack,
 	Switch,
 	useToast
-} from "@chakra-ui/core";
+} from "@chakra-ui/react";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
 import {AfspraakPeriod, AfspraakType, IAfspraak, IGebruiker, IntervalType, IOrganisatie, IRubriek} from "../../models";
 import CustomRadioButton from "./CustomRadioButton";
@@ -218,7 +218,7 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 
 	return (<>
 		{isDev && (
-			<Button maxWidth={350} mb={5} variantColor={"yellow"} variant={"outline"} onClick={() => prePopulateForm()}>Formulier snel invullen met testdata</Button>
+			<Button maxWidth={350} mb={5} colorScheme={"yellow"} variant={"outline"} onClick={() => prePopulateForm()}>Formulier snel invullen met testdata</Button>
 		)}
 
 		<Box as={"form"} onSubmit={onSubmit} {...props}>
@@ -390,7 +390,7 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 					<FormLeft />
 					<FormRight>
 						<Stack direction={"row"} spacing={1} justifyContent={"flex-end"}>
-							<Button isLoading={loading} type={"submit"} variantColor={"primary"} onClick={onSubmit}>{t("actions.save")}</Button>
+							<Button isLoading={loading} type={"submit"} colorScheme={"primary"} onClick={onSubmit}>{t("actions.save")}</Button>
 						</Stack>
 					</FormRight>
 				</Stack>

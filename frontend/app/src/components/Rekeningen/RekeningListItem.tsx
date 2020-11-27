@@ -1,9 +1,10 @@
-import React, {useRef} from "react";
-import {IRekening} from "../../models";
-import {AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, ButtonProps, Icon, Tooltip} from "@chakra-ui/core";
+import {CloseIcon} from "@chakra-ui/icons";
+import {AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, ButtonProps, Tooltip} from "@chakra-ui/react";
 import {friendlyFormatIBAN} from "ibantools";
+import React, {useRef} from "react";
 import {useToggle} from "react-grapple";
 import {useTranslation} from "react-i18next";
+import {IRekening} from "../../models";
 
 type RekeningListItemProps = Omit<ButtonProps, "children">;
 const RekeningListItem: React.FC<RekeningListItemProps & { rekening: IRekening, onDelete?: VoidFunction }> = ({rekening, onDelete, ...props}) => {
@@ -28,7 +29,7 @@ const RekeningListItem: React.FC<RekeningListItemProps & { rekening: IRekening, 
 					<AlertDialogBody>{t("messages.rekeningen.deleteQuestion", {iban: rekening.iban, accountHolder: rekening.rekeninghouder})}</AlertDialogBody>
 					<AlertDialogFooter>
 						<Button ref={cancelDeleteRef} onClick={onCloseDeleteDialog}>{t("actions.cancel")}</Button>
-						<Button variantColor="red" onClick={onConfirmDeleteDialog} ml={3}>{t("actions.delete")}</Button>
+						<Button colorScheme="red" onClick={onConfirmDeleteDialog} ml={3}>{t("actions.delete")}</Button>
 					</AlertDialogFooter>
 				</AlertDialogContent>
 			</AlertDialog>
@@ -37,7 +38,7 @@ const RekeningListItem: React.FC<RekeningListItemProps & { rekening: IRekening, 
 		<Tooltip aria-label={rekening.rekeninghouder} label={rekening.rekeninghouder} placement={"top"} hasArrow={true}>
 			<Button size={"sm"} mb={2} mr={2} {...props}>
 				{friendlyFormatIBAN(rekening.iban)}
-				{onDelete && <Icon name={"close"} onClick={() => toggleDeleteDialog(true)} ml={2} size={"12px"} />}
+				{onDelete && <CloseIcon onClick={() => toggleDeleteDialog(true)} ml={2} w={"12px"} h={"12px"} />}
 			</Button>
 		</Tooltip>
 	</>)

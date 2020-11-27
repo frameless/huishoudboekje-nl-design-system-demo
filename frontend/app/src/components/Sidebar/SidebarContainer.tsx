@@ -1,6 +1,6 @@
 import React, {useRef} from "react";
 import Logo from "../Logo";
-import {Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Flex, Stack, useDisclosure} from "@chakra-ui/core";
+import {Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Flex, Stack, useDisclosure} from "@chakra-ui/react";
 import {useIsMobile} from "react-grapple";
 import {GiHamburgerMenu} from "react-icons/all";
 import SidebarFooter from "./SidebarFooter";

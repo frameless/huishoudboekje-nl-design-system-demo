@@ -1,5 +1,5 @@
 import React from "react";
-import {Box, Heading} from "@chakra-ui/core";
+import {Box, Heading} from "@chakra-ui/react";
 import VersionTag from "../VersionTag";
 
 const SidebarFooter = () => (

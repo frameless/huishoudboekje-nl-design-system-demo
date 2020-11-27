@@ -1,5 +1,5 @@
 import React from "react";
-import {BoxProps, Stack} from "@chakra-ui/core";
+import {BoxProps, Stack} from "@chakra-ui/react";
 
 const GridCard: React.FC<BoxProps> = ({children, ...props}) => {
 	return (

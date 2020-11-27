@@ -1,5 +1,6 @@
+import {AddIcon} from "@chakra-ui/icons";
 import React from "react";
-import {Box, BoxProps, Button, Grid, Stack, Text} from "@chakra-ui/core";
+import {Box, BoxProps, Button, Grid, Stack, Text} from "@chakra-ui/react";
 import {IOrganisatie} from "../../models";
 import Routes from "../../config/routes";
 import {useHistory} from "react-router-dom";
@@ -14,7 +15,7 @@ const OrganizationListView: React.FC<BoxProps & { organizations: IOrganisatie[],
 		<Grid maxWidth={"100%"} gridTemplateColumns={["repeat(1, 1fr)", "repeat(2, 1fr)", "repeat(3, 1fr)", "repeat(4, 1fr)", "repeat(6, 1fr)"]} gap={5}>
 			{showAddButton && (
 				<Box>
-					<Button variantColor={"blue"} borderStyle={"dashed"} variant={"outline"} leftIcon={"add"}
+					<Button colorScheme={"blue"} borderStyle={"dashed"} variant={"outline"} leftIcon={<AddIcon />}
 					        w="100%" h="100%" onClick={() => push(Routes.CreateOrganization)} borderRadius={5}
 					        p={5}>{t("actions.add")}</Button>
 				</Box>

@@ -1,5 +1,5 @@
 import React from "react";
-import {Box, BoxProps, Stack, Text} from "@chakra-ui/core";
+import {Box, BoxProps, Stack, Text} from "@chakra-ui/react";
 import EmptyIllustration from "./Illustrations/EmptyIllustration";
 
 const DeadEndPage: React.FC<BoxProps & { illustration?, message?: string }> = ({illustration = EmptyIllustration, message, children, ...props}) => {

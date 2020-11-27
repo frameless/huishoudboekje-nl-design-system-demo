@@ -1,5 +1,5 @@
 import {ApolloProvider} from "@apollo/client";
-import {CSSReset, ThemeProvider} from "@chakra-ui/core";
+import {ChakraProvider} from "@chakra-ui/react";
 import moment from "moment";
 import "moment/locale/nl";
 import React from "react";
@@ -14,15 +14,13 @@ moment.locale("nl");
 
 ReactDOM.render(
 	<React.StrictMode>
-		<ThemeProvider theme={theme}>
-			<CSSReset />
-
+		<ChakraProvider theme={theme}>
 			<Router>
 				<ApolloProvider client={apolloClient}>
 					<App />
 				</ApolloProvider>
 			</Router>
-		</ThemeProvider>
+		</ChakraProvider>
 	</React.StrictMode>,
 	document.getElementById("root"),
 );

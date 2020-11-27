@@ -1,4 +1,4 @@
-import {BoxProps, Divider, Stack} from "@chakra-ui/core";
+import {BoxProps, Divider, Stack} from "@chakra-ui/react";
 import React from "react";
 import {FaRegBuilding, GrGraphQl, MdCreditCard, RiShoppingCart2Line, RiUserLine} from "react-icons/all";
 import {useTranslate} from "../../config/i18n";

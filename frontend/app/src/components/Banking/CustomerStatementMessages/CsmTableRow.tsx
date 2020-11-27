@@ -1,4 +1,5 @@
-import {IconButton, Text} from "@chakra-ui/core";
+import {CheckIcon, CloseIcon, DeleteIcon} from "@chakra-ui/icons";
+import {IconButton, Text} from "@chakra-ui/react";
 import moment from "moment";
 import React, {useState} from "react";
 import {useIsMobile} from "react-grapple";
@@ -36,10 +37,10 @@ const CsmTableRow: React.FC<{ csm: ICustomerStatementMessage, onDelete: (id: num
 			</td>
 			<td style={{width: "100px", textAlign: "right"}}>
 				{onDelete && (<>
-					<IconButton variant={deleteConfirm ? "solid" : "ghost"} size={"xs"} icon={deleteConfirm ? "check" : "delete"} variantColor={deleteConfirm ? "red" : "gray"}
+					<IconButton variant={deleteConfirm ? "solid" : "ghost"} size={"xs"} icon={deleteConfirm ? <CheckIcon /> : <DeleteIcon />} colorScheme={deleteConfirm ? "red" : "gray"}
 					            aria-label={t("actions.delete")} onClick={onClickDeleteButton} />
 					{deleteConfirm && (
-						<IconButton variant={"solid"} size={"xs"} icon={"close"} variantColor={"gray"} ml={2} aria-label={t("actions.delete")} onClick={onClickDeleteCancel} />
+						<IconButton variant={"solid"} size={"xs"} icon={<CloseIcon />} colorScheme={"gray"} ml={2} aria-label={t("actions.delete")} onClick={onClickDeleteCancel} />
 					)}
 				</>)}
 			</td>

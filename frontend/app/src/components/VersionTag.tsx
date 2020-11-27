@@ -1,5 +1,5 @@
 import React from "react";
-import {BoxProps, Stack, Text} from "@chakra-ui/core";
+import {BoxProps, Stack, Text} from "@chakra-ui/react";
 import VERSION from "../version";
 
 const VersionTag: React.FC<BoxProps> = (props) => {

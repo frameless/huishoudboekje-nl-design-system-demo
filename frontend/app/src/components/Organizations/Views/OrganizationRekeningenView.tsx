@@ -1,14 +1,15 @@
+import {useMutation} from "@apollo/client";
+import {AddIcon} from "@chakra-ui/icons";
+import {Box, BoxProps, Button, Divider, Heading, Stack} from "@chakra-ui/react";
 import React, {useContext} from "react";
-import {Box, BoxProps, Button, Divider, Heading, Stack} from "@chakra-ui/core";
-import {FormLeft, FormRight, Label} from "../../Forms/FormLeftRight";
-import RekeningList from "../../Rekeningen/RekeningList";
-import RekeningForm from "../../Rekeningen/RekeningForm";
-import {IOrganisatie} from "../../../models";
 import {useIsMobile, useToggle} from "react-grapple";
 import {useTranslation} from "react-i18next";
-import {OrganizationDetailContext} from "../OrganizationDetail";
-import {useMutation} from "@apollo/client";
+import {IOrganisatie} from "../../../models";
 import {CreateOrganizationRekeningMutation} from "../../../services/graphql/mutations";
+import {FormLeft, FormRight, Label} from "../../Forms/FormLeftRight";
+import RekeningForm from "../../Rekeningen/RekeningForm";
+import RekeningList from "../../Rekeningen/RekeningList";
+import {OrganizationDetailContext} from "../OrganizationDetail";
 
 const OrganizationRekeningenView: React.FC<BoxProps & { organization: IOrganisatie }> = ({organization, ...props}) => {
 	const {t} = useTranslation();
@@ -46,7 +47,7 @@ const OrganizationRekeningenView: React.FC<BoxProps & { organization: IOrganisat
 						}} onSave={onSaveRekening} onCancel={() => toggleForm(false)} />
 					</>) : (
 						<Box>
-							<Button leftIcon={"add"} variantColor={"primary"} size={"sm"} onClick={() => toggleForm(true)}>{t("actions.add")}</Button>
+							<Button leftIcon={<AddIcon />} colorScheme={"primary"} size={"sm"} onClick={() => toggleForm(true)}>{t("actions.add")}</Button>
 						</Box>
 					)}
 				</FormRight>

@@ -1,4 +1,5 @@
 import {useMutation, useQuery} from "@apollo/client";
+import {AddIcon, ChevronDownIcon, TriangleDownIcon, TriangleUpIcon} from "@chakra-ui/icons";
 import {
 	AlertDialog,
 	AlertDialogBody,
@@ -10,7 +11,6 @@ import {
 	Button,
 	Divider,
 	Heading,
-	Icon,
 	IconButton,
 	Menu,
 	MenuButton,
@@ -24,7 +24,7 @@ import {
 	TabPanels,
 	Tabs,
 	useToast,
-} from "@chakra-ui/core";
+} from "@chakra-ui/react";
 import React, {useEffect, useRef, useState} from "react";
 import {useIsMobile, useToggle} from "react-grapple";
 import {useTranslation} from "react-i18next";
@@ -139,7 +139,7 @@ const BurgerDetail = () => {
 				if (isDeleted) {
 					return (
 						<DeadEndPage message={t("messages.burgers.deleteConfirmMessage", {name: `${gebruikerData.gebruiker.voornamen} ${gebruikerData.gebruiker.achternaam}`})}>
-							<Button variantColor={"primary"} onClick={() => push(Routes.Burgers)}>{t("actions.backToList")}</Button>
+							<Button colorScheme={"primary"} onClick={() => push(Routes.Burgers)}>{t("actions.backToList")}</Button>
 						</DeadEndPage>
 					)
 				}
@@ -156,13 +156,13 @@ const BurgerDetail = () => {
 									<AlertDialogBody>{t("messages.burgers.deleteQuestion", {name: `${gebruikerData.gebruiker.voornamen} ${gebruikerData.gebruiker.achternaam}`})}</AlertDialogBody>
 									<AlertDialogFooter>
 										<Button ref={cancelDeleteRef} onClick={onCloseDeleteDialog}>{t("actions.cancel")}</Button>
-										<Button isLoading={deleteLoading} variantColor="red" onClick={onConfirmDeleteDialog} ml={3}>{t("actions.delete")}</Button>
+										<Button isLoading={deleteLoading} colorScheme="red" onClick={onConfirmDeleteDialog} ml={3}>{t("actions.delete")}</Button>
 									</AlertDialogFooter>
 								</AlertDialogContent>
 							</AlertDialog>
 
 							<Menu>
-								<IconButton as={MenuButton} icon={"chevron-down"} variant={"solid"} aria-label={"Open menu"} id={"actionsMenuButton"} />
+								<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} id={"actionsMenuButton"} />
 								<MenuList>
 									<MenuItem onClick={onClickEditButton}>{t("actions.edit")}</MenuItem>
 									<MenuItem onClick={() => toggleDeleteDialog(true)}>{t("actions.delete")}</MenuItem>
@@ -198,7 +198,8 @@ const BurgerDetail = () => {
 										}} />
 									</>) : (
 										<Box>
-											<Button leftIcon={"add"} variantColor={"primary"} size={"sm"} onClick={() => toggleCreateRekeningForm(true)}>{t("actions.add")}</Button>
+											<Button leftIcon={<AddIcon />} colorScheme={"primary"} size={"sm"}
+											        onClick={() => toggleCreateRekeningForm(true)}>{t("actions.add")}</Button>
 										</Box>
 									)}
 								</FormRight>
@@ -220,8 +221,8 @@ const BurgerDetail = () => {
 									{filteredAfspraken.length > 0 && (
 										<Tabs index={tabIndex} onChange={onChangeTabs} variant={"line"}>
 											<TabList>
-												<Tab>{t("agreements.incoming")} <Icon ml={3} name={"triangle-up"} color={"green.400"} size={"12px"} /> </Tab>
-												<Tab>{t("agreements.outgoing")} <Icon ml={3} name={"triangle-down"} color={"red.400"} size={"12px"} /> </Tab>
+												<Tab>{t("agreements.incoming")} <TriangleUpIcon ml={3} color={"green.400"} w={"12px"} h={"12px"} /> </Tab>
+												<Tab>{t("agreements.outgoing")} <TriangleDownIcon ml={3} color={"red.400"} w={"12px"} h={"12px"} /> </Tab>
 											</TabList>
 											<TabPanels>
 												<TabPanel id="tab_incoming">
@@ -239,7 +240,7 @@ const BurgerDetail = () => {
 									)}
 
 									<Stack direction={isMobile ? "column" : "row"} spacing={5}>
-										<Button leftIcon={"add"} variantColor={"primary"} size={"sm"} onClick={onClickAddAfspraakButton}>{t("actions.add")}</Button>
+										<Button leftIcon={<AddIcon />} colorScheme={"primary"} size={"sm"} onClick={onClickAddAfspraakButton}>{t("actions.add")}</Button>
 
 										{/*{data.gebruiker.afspraken.length > 0 && (*/}
 										{/*	<Stack isInline={true} alignItems={"center"} spacing={3}>*/}
@@ -257,7 +258,7 @@ const BurgerDetail = () => {
 
 			return (
 				<DeadEndPage message={t("messages.burgers.notFound")}>
-					<Button variantColor={"primary"} onClick={() => push(Routes.Burgers)}>{t("actions.backToList")}</Button>
+					<Button colorScheme={"primary"} onClick={() => push(Routes.Burgers)}>{t("actions.backToList")}</Button>
 				</DeadEndPage>
 			);
 		}

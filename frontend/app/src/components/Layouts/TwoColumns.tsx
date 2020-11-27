@@ -1,7 +1,7 @@
 import React from "react";
 import {useIsMobile} from "react-grapple";
 import {TABLET_BREAKPOINT} from "../../utils/things";
-import {Flex, Stack} from "@chakra-ui/core";
+import {Flex, Stack} from "@chakra-ui/react";
 import Logo from "../Logo";
 
 const TwoColumns = ({children}) => {

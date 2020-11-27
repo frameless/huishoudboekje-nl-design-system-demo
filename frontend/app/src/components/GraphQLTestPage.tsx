@@ -1,5 +1,5 @@
 import React from "react";
-import {Box, BoxProps, Heading, Spinner, Stack} from "@chakra-ui/core";
+import {Box, BoxProps, Heading, Spinner, Stack} from "@chakra-ui/react";
 import {useQuery} from "@apollo/client";
 import {print} from "graphql";
 import {GetAllGebruikersQuery} from "../services/graphql/queries";

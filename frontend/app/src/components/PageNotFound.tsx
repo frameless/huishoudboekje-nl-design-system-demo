@@ -1,5 +1,5 @@
 import React from "react";
-import {Box, Button, Heading, Icon, Stack, Text} from "@chakra-ui/core";
+import {Box, Button, Heading, Icon, Stack, Text} from "@chakra-ui/react";
 import {useHistory} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import {useIsMobile} from "react-grapple";
@@ -23,7 +23,7 @@ const PageNotFound = () => {
 					<Text fontSize={"sm"} color={"gray.500"}>{t("pages.notFound.description")}</Text>
 					<Button variant={"unstyled"} onClick={() => push(Routes.Home)}>
 						<Stack direction={"row"} alignItems={"center"}>
-							<Icon as={MdArrowBack} size={"16px"} mr={2} color={"gray.400"} />
+							<Box as={MdArrowBack} w={"16px"} h={"16px"} mr={2} color={"gray.400"} />
 							<Text fontSize={"sm"} color={"gray.400"}>{t("actions.backToHome")}</Text>
 						</Stack>
 					</Button>

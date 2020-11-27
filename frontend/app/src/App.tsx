@@ -1,5 +1,6 @@
+import {ChevronDownIcon, WarningIcon} from "@chakra-ui/icons";
 import React, {useEffect, useState} from "react";
-import {Box, Button, Flex, Heading, Icon, IconButton, Menu, MenuButton, MenuItem, MenuList, PseudoBox, Spinner, Stack, Text, useTheme, useToast} from "@chakra-ui/core";
+import {Box, Button, Flex, Heading, Icon, IconButton, Menu, MenuButton, MenuItem, MenuList, PseudoBox, Spinner, Stack, Text, useTheme, useToast} from "@chakra-ui/react";
 import {useSession} from "./utils/hooks";
 import {observer} from "mobx-react";
 import SidebarContainer from "./components/Sidebar/SidebarContainer";
@@ -77,7 +78,7 @@ const App = () => {
 		return (
 			<TwoColumns>
 				<Stack spacing={5} maxWidth={300} direction={"row"} alignItems={"center"}>
-					<Icon name={"warning"} color={"red.500"} />
+					<WarningIcon color={"red.500"} />
 					<Text color={"red.600"}>{t("messages.backendError")}</Text>
 				</Stack>
 			</TwoColumns>
@@ -93,7 +94,7 @@ const App = () => {
 					<Stack spacing={5} maxWidth={300} alignSelf={isMobile ? "center" : "flex-start"}>
 						<Heading size="sm">{t("messages.login.welcome", {tenantName: theme["tenantName"]})}</Heading>
 						<Text fontSize={"sm"}>{t("messages.login.clickHereToContinue")}</Text>
-						<Button variantColor={"primary"} type={"submit"} onClick={onClickLoginButton}>{t("actions.login")}</Button>
+						<Button colorScheme={"primary"} type={"submit"} onClick={onClickLoginButton}>{t("actions.login")}</Button>
 					</Stack>
 				)}
 			</TwoColumns>
@@ -115,12 +116,12 @@ const App = () => {
 									<MenuButton as={Box}>
 										<Stack direction={"row"} spacing={5} alignItems={"center"}>
 											<UserStatus name={session.user.fullName} role={session.user.role} />
-											<IconButton icon="chevron-down" variant={"solid"} aria-label="Open menu" />
+											<IconButton icon={<ChevronDownIcon />} variant={"solid"} aria-label="Open menu" />
 										</Stack>
 									</MenuButton>
 									<MenuList zIndex={3}>
 										<MenuItem onClick={onClickLogoutButton}>
-											<PseudoBox size={"16px"} as={FaLock} color={"gray.400"} _hover={{color: "primary.700"}} aria-label={t("actions.logout")}
+											<Box size={"16px"} as={FaLock} color={"gray.400"} _hover={{color: "primary.700"}} aria-label={t("actions.logout")}
 											           mr={3} />
 											<Text>{t("actions.logout")}</Text>
 										</MenuItem>

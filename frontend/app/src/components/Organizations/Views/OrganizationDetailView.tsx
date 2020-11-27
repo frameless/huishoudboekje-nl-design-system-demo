@@ -1,5 +1,5 @@
 import React from "react";
-import {BoxProps, Divider, FormHelperText, Heading, Stack, Text} from "@chakra-ui/core";
+import {BoxProps, Divider, FormHelperText, Heading, Stack, Text} from "@chakra-ui/react";
 import {FormLeft, FormRight, Label} from "../../Forms/FormLeftRight";
 import {useTranslation} from "react-i18next";
 import {useIsMobile} from "react-grapple";

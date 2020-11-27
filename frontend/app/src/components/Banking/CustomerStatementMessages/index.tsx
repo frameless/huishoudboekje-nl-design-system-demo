@@ -1,5 +1,6 @@
 import {useMutation, useQuery} from "@apollo/client";
-import {Box, BoxProps, Button, Divider, Heading, Input, Stack, useToast} from "@chakra-ui/core";
+import {AddIcon} from "@chakra-ui/icons";
+import {Box, BoxProps, Button, Divider, Heading, Input, Stack, useToast} from "@chakra-ui/react";
 import React, {useRef} from "react";
 import {useIsMobile} from "react-grapple";
 import {useTranslation} from "react-i18next";
@@ -68,7 +69,7 @@ const CustomerStatementMessages: React.FC<BoxProps> = ({...props}) => {
 						<Stack spacing={5}>
 							<Input type={"file"} id={"fileUpload"} onChange={onChangeFile} hidden={true} ref={fileUploadInput} />
 							<Box>
-								<Button variantColor={"primary"} size={"sm"} leftIcon={"add"} isLoading={createCsmLoading}
+								<Button colorScheme={"primary"} size={"sm"} leftIcon={<AddIcon />} isLoading={createCsmLoading}
 								        onClick={() => fileUploadInput.current?.click()}>{t("actions.add")}</Button>
 							</Box>
 						</Stack>

@@ -1,5 +1,5 @@
 import {useQuery} from "@apollo/client";
-import {Box, BoxProps, Divider, Heading, Stack} from "@chakra-ui/core";
+import {Box, BoxProps, Divider, Heading, Stack} from "@chakra-ui/react";
 import React, {createContext} from "react";
 import {useIsMobile} from "react-grapple";
 import {useTranslation} from "react-i18next";

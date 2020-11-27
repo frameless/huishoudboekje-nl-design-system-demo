@@ -1,7 +1,7 @@
 import React from "react";
 import {useHistory, useParams} from "react-router-dom";
 import {GetOneAfspraakQuery} from "../../services/graphql/queries";
-import {Heading, Stack, useToast} from "@chakra-ui/core";
+import {Heading, Stack, useToast} from "@chakra-ui/react";
 import {useTranslation} from "react-i18next";
 import {useMutation, useQuery} from "@apollo/client";
 import Queryable from "../../utils/Queryable";

@@ -1,5 +1,5 @@
 import React from "react";
-import {Box, BoxProps, useToast,} from "@chakra-ui/core";
+import {Box, BoxProps, useToast,} from "@chakra-ui/react";
 import {IGebruiker, IOrganisatie, IRekening} from "../../models";
 import RekeningListItem from "./RekeningListItem";
 import {useTranslation} from "react-i18next";

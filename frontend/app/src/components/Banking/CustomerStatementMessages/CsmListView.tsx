@@ -1,5 +1,5 @@
 import {useMutation} from "@apollo/client";
-import {BoxProps, useToast} from "@chakra-ui/core";
+import {BoxProps, useToast} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {ICustomerStatementMessage} from "../../../models";

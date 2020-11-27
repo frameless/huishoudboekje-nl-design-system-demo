@@ -1,3 +1,4 @@
+import {ChevronDownIcon} from "@chakra-ui/icons";
 import {
 	AlertDialog,
 	AlertDialogBody,
@@ -15,7 +16,7 @@ import {
 	Spinner,
 	Stack,
 	useToast,
-} from "@chakra-ui/core";
+} from "@chakra-ui/react";
 import React, {createContext, useRef} from "react";
 import {useTranslation} from "react-i18next";
 import {Redirect, useHistory, useParams} from "react-router-dom";
@@ -84,7 +85,7 @@ const OrganizationDetail = () => {
 			if (isDeleted) {
 				return (
 					<DeadEndPage message={t("messages.organizations.deleteConfirmMessage", {name: orgData.organisatie.weergaveNaam})}>
-						<Button variantColor={"primary"} onClick={() => push(Routes.Organizations)}>{t("actions.backToList")}</Button>
+						<Button colorScheme={"primary"} onClick={() => push(Routes.Organizations)}>{t("actions.backToList")}</Button>
 					</DeadEndPage>
 				)
 			}
@@ -101,13 +102,13 @@ const OrganizationDetail = () => {
 								<AlertDialogBody>{t("messages.organizations.deleteQuestion", {name: orgData.organisatie.weergaveNaam})}</AlertDialogBody>
 								<AlertDialogFooter>
 									<Button ref={cancelDeleteRef} onClick={onCloseDeleteDialog}>{t("actions.cancel")}</Button>
-									<Button isLoading={deleteLoading} variantColor="red" onClick={onConfirmDeleteDialog} ml={3}>{t("actions.delete")}</Button>
+									<Button isLoading={deleteLoading} colorScheme="red" onClick={onConfirmDeleteDialog} ml={3}>{t("actions.delete")}</Button>
 								</AlertDialogFooter>
 							</AlertDialogContent>
 						</AlertDialog>
 
 						<Menu>
-							<IconButton as={MenuButton} icon="chevron-down" variant={"solid"} aria-label="Open menu" />
+							<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label="Open menu" />
 							<MenuList>
 								<MenuItem onClick={onClickEdit}>{t("actions.edit")}</MenuItem>
 								<MenuItem onClick={onClickDelete}>{t("actions.delete")}</MenuItem>

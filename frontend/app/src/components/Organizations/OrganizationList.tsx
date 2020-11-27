@@ -1,5 +1,6 @@
+import {AddIcon, CloseIcon, SearchIcon} from "@chakra-ui/icons";
 import React, {useEffect, useState} from "react";
-import {Button, Heading, Icon, IconButton, Input, InputGroup, InputLeftElement, InputRightElement, Spinner, Stack, useToast} from "@chakra-ui/core";
+import {Button, Heading, Icon, IconButton, Input, InputGroup, InputLeftElement, InputRightElement, Spinner, Stack, useToast} from "@chakra-ui/react";
 import Routes from "../../config/routes";
 import {useTranslation} from "react-i18next";
 import {useHistory} from "react-router-dom";
@@ -79,7 +80,7 @@ const OrganizationList = () => {
 		if (data?.organisaties.length === 0) {
 			return (
 				<DeadEndPage message={t("messages.organizations.addHint", {buttonLabel: t("actions.add")})}>
-					<Button size={"sm"} variantColor={"primary"} variant={"solid"} leftIcon={"add"}
+					<Button size={"sm"} colorScheme={"primary"} variant={"solid"} leftIcon={<AddIcon />}
 					        onClick={() => push(Routes.CreateOrganization)}>{t("actions.add")}</Button>
 				</DeadEndPage>
 			);
@@ -88,7 +89,7 @@ const OrganizationList = () => {
 		if (filteredOrganisaties.length === 0) {
 			return (
 				<DeadEndPage message={t("messages.organizations.noSearchResults")}>
-					<Button size="sm" variantColor="primary" onClick={onClickResetSearch}>{t("actions.clearSearch")}</Button>
+					<Button size="sm" colorScheme="primary" onClick={onClickResetSearch}>{t("actions.clearSearch")}</Button>
 				</DeadEndPage>
 			);
 		}
@@ -105,11 +106,11 @@ const OrganizationList = () => {
 				{showSearch && (
 					<Stack direction={"row"} spacing={5}>
 						<InputGroup>
-							<InputLeftElement><Icon name="search" color={"gray.300"} /></InputLeftElement>
+							<InputLeftElement><SearchIcon color={"gray.300"} /></InputLeftElement>
 							<Input type={"text"} {...search.bind} onKeyDown={onKeyDownOnSearchField} />
 							{search.value.length > 0 && (
 								<InputRightElement>
-									<IconButton onClick={() => search.clear()} size={"xs"} variant={"link"} icon={"close"} aria-label={""} color={"gray.300"} />
+									<IconButton onClick={() => search.clear()} size={"xs"} variant={"link"} icon={<CloseIcon />} aria-label={""} color={"gray.300"} />
 								</InputRightElement>
 							)}
 						</InputGroup>

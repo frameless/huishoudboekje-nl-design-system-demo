@@ -1,5 +1,5 @@
 import React from "react";
-import {Box, BoxProps, useTheme} from "@chakra-ui/core";
+import {Box, BoxProps, useTheme} from "@chakra-ui/react";
 
 const EmptyIllustration: React.FC<BoxProps> = ({...props}) => {
 	const theme = useTheme();
