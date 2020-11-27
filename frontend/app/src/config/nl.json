@@ -234,7 +234,7 @@
           "detailText": "Geïmporteerde transacties."
         },
         "journal": {
-          "title": "Journaalpost maken"
+          "title": "Transactie verwerken"
         }
       },
       "fields": {
@@ -273,7 +273,8 @@
   "transactions": {
     "beneficiaryAccount": "Tegenrekening",
     "rubric": "Rubriek",
-    "amount": "Bedrag"
+    "amount": "Bedrag",
+    "originalData": "Originele dataregel"
   },
   "months": {
     "jan": "januari",

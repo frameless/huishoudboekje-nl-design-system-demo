@@ -144,12 +144,20 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: IBankTransaction }
 							<Label>{t("transactions.beneficiaryAccount")}</Label>
 							<Box flex={2}>{bt.tegenRekening ? (
 								<Stack spacing={0}>
-									<Text>{friendlyFormatIBAN(bt.tegenRekening.iban)}</Text>
-									<Text fontSize={"sm"}>{bt.tegenRekening.rekeninghouder}</Text>
+									<Text>{bt.tegenRekening.rekeninghouder}</Text>
+									<Text fontSize={"sm"}>{friendlyFormatIBAN(bt.tegenRekening.iban)}</Text>
 								</Stack>
 							) : (
 								<Text>{friendlyFormatIBAN(bt.tegenRekeningIban) || t("unknown")}</Text>
 							)}
+							</Box>
+						</Box>
+
+						<Box>
+							<Label>{t("transactions.description")}</Label>
+							<Box>
+								{/* Todo: omschrijving toevoegen (27-11-2020) */}
+								<Text>OMSCHRIJVING</Text>
 							</Box>
 						</Box>
 
@@ -169,6 +177,14 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: IBankTransaction }
 							</Box>
 						</Stack>
 
+						<Box>
+							<Label>{t("transactions.originalData")}</Label>
+							<Box fontSize={"sm"} p={2} bg={"gray.100"} overflowX={"scroll"}>
+								<pre>{bt.informationToAccountOwner}</pre>
+								<pre>{bt.statementLine}</pre>
+							</Box>
+						</Box>
+
 						<Box as={"form"}>
 							<FormLabel>{t("banking.rubric")}</FormLabel>
 							<Queryable query={$rubrics}>{({rubrieken}) => (
@@ -180,7 +196,7 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: IBankTransaction }
 										))}
 									</Select>
 									{bt.journaalpost && (
-										<IconButton icon={"delete"} aria-label={t("actions.delete")} variantColor={"red"} onClick={() => onClickDelete()} />
+										<IconButton icon={"delete"} aria-label={t("actions.delete")} variant={"ghost"} onClick={() => onClickDelete()} />
 									)}
 								</Stack>
 							)}</Queryable>
@@ -219,9 +235,9 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: IBankTransaction }
 				<Box flex={0} minWidth={120}>
 					<Currency value={bt.bedrag} />
 				</Box>
-				<Box flex={0} pl={3}>
-					<Icon name={bt.journaalpost ? "check-circle" : "warning"} color={bt.journaalpost ? "transparent" : "red.500"} />
-				</Box>
+				{/*<Box flex={0} pl={3}>*/}
+				{/*	<Icon name={bt.journaalpost ? "check-circle" : "question"} color={bt.journaalpost ? "green.500" : "gray.500"} />*/}
+				{/*</Box>*/}
 				{/* Todo: Later uit te breiden met geboekt op specifieke afspraak als deze bekend is */}
 			</Stack>
 		</PseudoBox>

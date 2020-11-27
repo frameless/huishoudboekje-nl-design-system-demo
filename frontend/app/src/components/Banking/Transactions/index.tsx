@@ -1,5 +1,5 @@
 import {useQuery} from "@apollo/client";
-import {Box, BoxProps, Divider, Heading, Icon, Stack} from "@chakra-ui/core";
+import {Box, BoxProps, Divider, Heading, Stack} from "@chakra-ui/core";
 import React, {createContext} from "react";
 import {useIsMobile} from "react-grapple";
 import {useTranslation} from "react-i18next";
@@ -45,39 +45,35 @@ const Transactions: React.FC<BoxProps> = ({...props}) => {
 						};
 					}, {});
 
-					return (<>
-						<Stack direction={isMobile ? "column" : "row"} spacing={5}>
-							<FormLeft spacing={3}>
-								<Stack spacing={1}>
-									<Heading size={"md"}>{t("forms.banking.sections.transactions.title")}</Heading>
-									<Label>{t("forms.banking.sections.transactions.detailText")}</Label>
-								</Stack>
-							</FormLeft>
-							<FormRight />
-						</Stack>
+					return (
+						<TransactionsContext.Provider value={{refetch: $transactions.refetch}}>
+							<Stack direction={isMobile ? "column" : "row"} spacing={5}>
+								<FormLeft spacing={3}>
+									<Stack spacing={1}>
+										<Heading size={"md"}>{t("forms.banking.sections.transactions.title")}</Heading>
+									</Stack>
+								</FormLeft>
+								<FormRight />
+							</Stack>
 
-						<Divider />
+							<Divider />
 
-						<Stack direction={"column"} spacing={5}>
-							<Box ml={isMobile ? 0 : 5}>
-								<Stack direction={"row"} alignItems={"center"} justifyContent={"center"} {...props}>
-									<Box flex={2} textAlign={"left"}>
-										<Label>{t("transactions.beneficiaryAccount")}</Label>
-									</Box>
-									{!isMobile && <Box flex={1} textAlign={"left"}>
-										<Label>{t("transactions.rubric")}</Label>
-									</Box>}
-									<Box flex={0} minWidth={120}>
-										<Label>{t("transactions.amount")}</Label>
-									</Box>
-									<Box flex={0} pl={3}>
-										<Icon name={"question"} visibility={"hidden"} />
-									</Box>
-									{/* Todo: Later uit te breiden met geboekt op specifieke afspraak als deze bekend is (23-11-2020) */}
-								</Stack>
-							</Box>
+							<Stack direction={"column"} spacing={5}>
+								<Box ml={isMobile ? 0 : 5}>
+									<Stack direction={"row"} alignItems={"center"} justifyContent={"center"} {...props}>
+										<Box flex={2} textAlign={"left"}>
+											<Label>{t("transactions.beneficiaryAccount")}</Label>
+										</Box>
+										{!isMobile && <Box flex={1} textAlign={"left"}>
+											<Label>{t("transactions.rubric")}</Label>
+										</Box>}
+										<Box flex={0} minWidth={120}>
+											<Label>{t("transactions.amount")}</Label>
+										</Box>
+										{/* Todo: Later uit te breiden met geboekt op specifieke afspraak als deze bekend is (23-11-2020) */}
+									</Stack>
+								</Box>
 
-							<TransactionsContext.Provider value={{refetch: $transactions.refetch}}>
 								{Object.keys(bt).map((transactionDate, i) => {
 									return (
 										<Stack key={i} spacing={5}>
@@ -95,12 +91,9 @@ const Transactions: React.FC<BoxProps> = ({...props}) => {
 										</Stack>
 									);
 								})}
-							</TransactionsContext.Provider>
-						</Stack>
-					</>
-
+							</Stack>
+						</TransactionsContext.Provider>
 					);
-
 				}}
 				</Queryable>
 
