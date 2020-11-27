@@ -106,10 +106,10 @@ const BurgerList = () => {
 					<Stack direction={"row"} spacing={5}>
 						<InputGroup>
 							<InputLeftElement><SearchIcon color={"gray.300"} /></InputLeftElement>
-							<Input type={"text"} {...search.bind} onKeyDown={onKeyDownOnSearch} />
+							<Input type={"text"} {...search.bind} bg={"white"} onKeyDown={onKeyDownOnSearch} />
 							{search.value.length > 0 && (
 								<InputRightElement>
-									<IconButton onClick={() => search.reset()} size={"xs"} variant={"link"} icon={<CloseIcon />} aria-label={""} color={"gray.300"} />
+									<IconButton onClick={() => search.reset()} size={"xs"} variant={"link"} icon={<CloseIcon />} aria-label={t("actions.cancel")} color={"gray.300"} />
 								</InputRightElement>
 							)}
 						</InputGroup>

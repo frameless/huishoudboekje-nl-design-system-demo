@@ -1,11 +1,11 @@
+import {useQuery} from "@apollo/client";
 import {AddIcon, CloseIcon, SearchIcon} from "@chakra-ui/icons";
+import {Button, Heading, IconButton, Input, InputGroup, InputLeftElement, InputRightElement, Spinner, Stack, useToast} from "@chakra-ui/react";
 import React, {useEffect, useState} from "react";
-import {Button, Heading, Icon, IconButton, Input, InputGroup, InputLeftElement, InputRightElement, Spinner, Stack, useToast} from "@chakra-ui/react";
-import Routes from "../../config/routes";
+import {useInput} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {useHistory} from "react-router-dom";
-import {useInput} from "react-grapple";
-import {useQuery} from "@apollo/client";
+import Routes from "../../config/routes";
 import {IOrganisatie} from "../../models";
 import {GetAllOrganisatiesQuery} from "../../services/graphql/queries";
 import {searchFields} from "../../utils/things";
@@ -107,10 +107,11 @@ const OrganizationList = () => {
 					<Stack direction={"row"} spacing={5}>
 						<InputGroup>
 							<InputLeftElement><SearchIcon color={"gray.300"} /></InputLeftElement>
-							<Input type={"text"} {...search.bind} onKeyDown={onKeyDownOnSearchField} />
+							<Input type={"text"} {...search.bind} bg={"white"} onKeyDown={onKeyDownOnSearchField} />
 							{search.value.length > 0 && (
 								<InputRightElement>
-									<IconButton onClick={() => search.clear()} size={"xs"} variant={"link"} icon={<CloseIcon />} aria-label={""} color={"gray.300"} />
+									<IconButton onClick={() => search.clear()} size={"xs"} variant={"link"} icon={<CloseIcon />} aria-label={t("actions.cancel")}
+									            color={"gray.300"} />
 								</InputRightElement>
 							)}
 						</InputGroup>
