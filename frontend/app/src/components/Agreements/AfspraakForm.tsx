@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from "react";
+import Queryable from "../../utils/Queryable";
 import {Interval, isDev} from "../../utils/things";
 import {
 	Box,
@@ -6,6 +7,7 @@ import {
 	Button,
 	Divider,
 	FormHelperText,
+	Text,
 	FormLabel,
 	Heading,
 	Input,
@@ -26,7 +28,7 @@ import {useInput, useIsMobile, useNumberInput, useToggle, Validators} from "reac
 import {useTranslation} from "react-i18next";
 import {UseInput} from "react-grapple/dist/hooks/useInput";
 import {useQuery} from "@apollo/client";
-import {GetAllOrganisatiesQuery, GetAllRubrieken} from "../../services/graphql/queries";
+import {GetAllOrganisatiesQuery, GetAllRubricsQuery} from "../../services/graphql/queries";
 import moment from "moment";
 
 const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) => void, gebruiker: IGebruiker, loading: boolean }> = ({afspraak, onSave, gebruiker, loading = false, ...props}) => {
@@ -35,7 +37,7 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 	const isMobile = useIsMobile();
 
 	const {data: orgsData, loading: orgsLoading} = useQuery<{ organisaties: IOrganisatie[] }>(GetAllOrganisatiesQuery);
-	const {data: rubriekData, loading: rubriekLoading} = useQuery<{ rubrieken: IRubriek[] }>(GetAllRubrieken);
+	const $rubrics = useQuery<{ rubrieken: IRubriek[] }>(GetAllRubricsQuery);
 
 	const [isSubmitted, setSubmitted] = useState<boolean>(false);
 	const [isActive, toggleActive] = useToggle(true);
@@ -47,9 +49,7 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 	const organizationId = useInput<number>({
 		validate: [(v) => v !== undefined && v.toString() !== ""]
 	});
-	const rubriekId = useInput<number>({
-		validate: [(v) => v !== undefined && v.toString() !== ""]
-	});
+	const rubriekId = useInput<number>();
 	const rekeningId = useInput<number>({
 		validate: [(v) => v !== undefined && v.toString() !== ""]
 	});
@@ -101,7 +101,6 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 					rekeningId.setValue(selectedOrg.rekeningen[0].id);
 				}
 			}
-
 		}
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -200,7 +199,7 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 			beschrijving: description.value,
 			tegenRekeningId: rekeningId.value,
 			organisatieId: parseInt(organizationId.value as unknown as string) !== 0 ? organizationId.value : null,
-			rubriekId: rubriekId.value,
+			...rubriekId.value && {rubriekId: rubriekId.value},
 			bedrag: amount.value,
 			kenmerk: searchTerm.value,
 			startDatum: moment(Date.UTC(startDate.year.value, startDate.month.value - 1, startDate.day.value)).format("YYYY-MM-DD"),
@@ -297,13 +296,14 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 						<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 							<Stack spacing={1} flex={1}>
 								<FormLabel htmlFor={"accountId"}>{t("forms.agreements.fields.rubriek")}</FormLabel>
-								{rubriekLoading ? (<Spinner />) : (<Select {...rubriekId.bind} isInvalid={isInvalid(rubriekId)} id="rubriekId"
-								                                        value={rubriekId.value}>
-									<option value="">{t("forms.agreements.fields.rubriekChoose")}</option>
-									{rubriekData?.rubrieken.map(o => (
-										<option key={"o" + o.id} value={o.id}>{o.naam}</option>
-									))}
-								</Select>)}
+								<Queryable query={$rubrics}>{(data) => (
+									<Select {...rubriekId.bind} isInvalid={isInvalid(rubriekId)} id="rubriekId" value={rubriekId.value}>
+										<option value="">{t("forms.agreements.fields.rubriekChoose")}</option>
+										{data.rubrieken.map(o => (
+											<option key={"o" + o.id} value={o.id}>{o.naam}</option>
+										))}
+									</Select>
+								)}</Queryable>
 							</Stack>
 						</Stack>
 					</FormRight>

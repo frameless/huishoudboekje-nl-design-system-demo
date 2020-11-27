@@ -1,6 +1,7 @@
 .env*
 !.env.sample
 !.env.production
+.eslintcache
 build
 node_modules
 public/theme

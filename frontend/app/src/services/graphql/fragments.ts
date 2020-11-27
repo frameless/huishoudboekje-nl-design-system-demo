@@ -11,9 +11,9 @@ export const RekeningFragment = gql`
 export const GrootboekrekeningFragment = gql`
     fragment Grootboekrekening on Grootboekrekening {
         id
-        referentie
         naam
         omschrijving
+        referentie
     }
 `;
 
