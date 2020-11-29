@@ -155,14 +155,14 @@ const BurgerDetail = () => {
 									<AlertDialogHeader fontSize="lg" fontWeight="bold">{t("messages.burgers.deleteTitle")}</AlertDialogHeader>
 									<AlertDialogBody>{t("messages.burgers.deleteQuestion", {name: `${gebruikerData.gebruiker.voornamen} ${gebruikerData.gebruiker.achternaam}`})}</AlertDialogBody>
 									<AlertDialogFooter>
-										<Button ref={cancelDeleteRef} onClick={onCloseDeleteDialog}>{t("actions.cancel")}</Button>
-										<Button isLoading={deleteLoading} colorScheme="red" onClick={onConfirmDeleteDialog} ml={3}>{t("actions.delete")}</Button>
+										<Button ref={cancelDeleteRef} onClick={onCloseDeleteDialog} data-cy={"inModal"}>{t("actions.cancel")}</Button>
+										<Button isLoading={deleteLoading} colorScheme="red" onClick={onConfirmDeleteDialog} ml={3} data-cy={"inModal"}>{t("actions.delete")}</Button>
 									</AlertDialogFooter>
 								</AlertDialogContent>
 							</AlertDialog>
 
 							<Menu>
-								<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} id={"actionsMenuButton"} />
+								<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} data-cy={"actionsMenuButton"} />
 								<MenuList>
 									<MenuItem onClick={onClickEditButton}>{t("actions.edit")}</MenuItem>
 									<MenuItem onClick={() => toggleDeleteDialog(true)}>{t("actions.delete")}</MenuItem>
