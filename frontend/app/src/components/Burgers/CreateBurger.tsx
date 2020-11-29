@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
-import {Box, Button, Divider, FormHelperText, FormLabel, Heading, Input, Select, Stack, Tooltip, useToast} from "@chakra-ui/core";
+import {Box, Button, Divider, Text, FormLabel, Heading, Input, Select, Stack, Tooltip, useToast} from "@chakra-ui/react";
 import {useInput, useIsMobile, useNumberInput, Validators} from "react-grapple";
 import BackButton from "../BackButton";
 import Routes from "../../config/routes";
@@ -176,7 +176,7 @@ const CreateBurger = () => {
 			<Heading size={"lg"}>{t("forms.burgers.title")}</Heading>
 
 			{isDev && (
-				<Button maxWidth={350} variantColor={"yellow"} variant={"outline"} onClick={() => prePopulateForm()}>Formulier snel invullen met testdata</Button>
+				<Button maxWidth={350} colorScheme={"yellow"} variant={"outline"} onClick={() => prePopulateForm()}>Formulier snel invullen met testdata</Button>
 			)}
 
 			<Box as={"form"} onSubmit={onSubmit}>
@@ -184,7 +184,7 @@ const CreateBurger = () => {
 					<Stack direction={isMobile ? "column" : "row"} spacing={2}>
 						<FormLeft>
 							<Heading size={"md"}>{t("forms.burgers.sections.personal.title")}</Heading>
-							<FormHelperText id="personal-helperText">{t("forms.burgers.sections.personal.helperText")}</FormHelperText>
+							<Text data-legacy="FormHelperText" id="personal-helperText">{t("forms.burgers.sections.personal.helperText")}</Text>
 						</FormLeft>
 						<FormRight>
 							<Stack spacing={2} direction={isMobile ? "column" : "row"}>
@@ -228,7 +228,7 @@ const CreateBurger = () => {
 					<Stack direction={isMobile ? "column" : "row"} spacing={2}>
 						<FormLeft>
 							<Heading size={"md"}>{t("forms.burgers.sections.contact.title")}</Heading>
-							<FormHelperText>{t("forms.burgers.sections.contact.helperText")}</FormHelperText>
+							<Text data-legacy="FormHelperText">{t("forms.burgers.sections.contact.helperText")}</Text>
 						</FormLeft>
 						<FormRight>
 							<Stack spacing={2} direction={isMobile ? "column" : "row"}>
@@ -281,7 +281,7 @@ const CreateBurger = () => {
 						<FormLeft />
 						<FormRight>
 							<Stack direction={"row"} spacing={1} justifyContent={"flex-end"}>
-								<Button isLoading={loading} type={"submit"} variantColor={"primary"} onClick={onSubmit}>{t("actions.save")}</Button>
+								<Button isLoading={loading} type={"submit"} colorScheme={"primary"} onClick={onSubmit}>{t("actions.save")}</Button>
 							</Stack>
 						</FormRight>
 					</Stack>

@@ -1,9 +1,9 @@
+import {BoxProps, Divider, Heading, Stack, Text} from "@chakra-ui/react";
 import React from "react";
-import {BoxProps, Divider, FormHelperText, Heading, Stack, Text} from "@chakra-ui/core";
-import {FormLeft, FormRight, Label} from "../../Forms/FormLeftRight";
-import {useTranslation} from "react-i18next";
 import {useIsMobile} from "react-grapple";
+import {useTranslation} from "react-i18next";
 import {IOrganisatie} from "../../../models";
+import {FormLeft, FormRight, Label} from "../../Forms/FormLeftRight";
 
 const OrganizationDetailView: React.FC<BoxProps & { organisatie: IOrganisatie }> = ({organisatie, ...props}) => {
 	const isMobile = useIsMobile();
@@ -14,7 +14,7 @@ const OrganizationDetailView: React.FC<BoxProps & { organisatie: IOrganisatie }>
 			<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 				<FormLeft>
 					<Heading size={"md"}>{t("forms.organizations.sections.organizational.title")}</Heading>
-					<FormHelperText id="personal-helperText">{t("forms.organizations.sections.organizational.helperText")}</FormHelperText>
+					<Text data-legacy="FormHelperText" id="personal-helperText">{t("forms.organizations.sections.organizational.helperText")}</Text>
 				</FormLeft>
 				<FormRight>
 					<Stack spacing={2} direction={isMobile ? "column" : "row"}>
@@ -35,7 +35,7 @@ const OrganizationDetailView: React.FC<BoxProps & { organisatie: IOrganisatie }>
 			<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 				<FormLeft>
 					<Heading size={"md"}>{t("forms.organizations.sections.contact.title")}</Heading>
-					<FormHelperText id="personal-helperText">{t("forms.organizations.sections.contact.helperText")}</FormHelperText>
+					<Text data-legacy="FormHelperText" id="personal-helperText">{t("forms.organizations.sections.contact.helperText")}</Text>
 				</FormLeft>
 				<FormRight>
 					<Stack spacing={2} direction={isMobile ? "column" : "row"}>

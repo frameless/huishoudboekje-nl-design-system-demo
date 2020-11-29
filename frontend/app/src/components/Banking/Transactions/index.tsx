@@ -1,5 +1,5 @@
 import {useQuery} from "@apollo/client";
-import {Box, BoxProps, Divider, Heading, Stack} from "@chakra-ui/core";
+import {Box, BoxProps, Divider, Heading, Stack} from "@chakra-ui/react";
 import React, {createContext} from "react";
 import {useIsMobile} from "react-grapple";
 import {useTranslation} from "react-i18next";
@@ -8,7 +8,7 @@ import {GetAllTransactionsQuery} from "../../../services/graphql/queries";
 import Queryable from "../../../utils/Queryable";
 import {dateFormat, sortBankTransactions} from "../../../utils/things";
 import DeadEndPage from "../../DeadEndPage";
-import {FormLeft, FormRight, Label} from "../../Forms/FormLeftRight";
+import {Label} from "../../Forms/FormLeftRight";
 import TransactionItem from "./TransactionItem";
 
 export const TransactionsContext = createContext<{ refetch: VoidFunction }>({
@@ -29,7 +29,6 @@ const Transactions: React.FC<BoxProps> = ({...props}) => {
 			<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
 
 				<Queryable query={$transactions}>{(data: { bankTransactions: IBankTransaction[] }) => {
-
 					if (data.bankTransactions.length === 0) {
 						return (<DeadEndPage message={t("messages.transactions.addHint")} />);
 					}
@@ -48,18 +47,13 @@ const Transactions: React.FC<BoxProps> = ({...props}) => {
 					return (
 						<TransactionsContext.Provider value={{refetch: $transactions.refetch}}>
 							<Stack direction={isMobile ? "column" : "row"} spacing={5}>
-								<FormLeft spacing={3}>
-									<Stack spacing={1}>
-										<Heading size={"md"}>{t("forms.banking.sections.transactions.title")}</Heading>
-									</Stack>
-								</FormLeft>
-								<FormRight />
+								<Heading size={"md"}>{t("forms.banking.sections.transactions.title")}</Heading>
 							</Stack>
 
 							<Divider />
 
 							<Stack direction={"column"} spacing={5}>
-								<Box ml={isMobile ? 0 : 5}>
+								<Box>
 									<Stack direction={"row"} alignItems={"center"} justifyContent={"center"} {...props}>
 										<Box flex={2} textAlign={"left"}>
 											<Label>{t("transactions.beneficiaryAccount")}</Label>
@@ -80,7 +74,7 @@ const Transactions: React.FC<BoxProps> = ({...props}) => {
 											<Box>
 												<Label>{transactionDate}</Label>
 											</Box>
-											<Box ml={isMobile ? 0 : 5}>
+											<Box>
 												{bt[transactionDate].sort(sortBankTransactions).filter(t => t.isCredit).map(t => {
 													return <TransactionItem key={t.id} bankTransaction={t} />;
 												})}

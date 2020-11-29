@@ -1,4 +1,4 @@
-import {Heading, Stack} from "@chakra-ui/core";
+import {Heading, Stack} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {Route, Switch} from "react-router-dom";

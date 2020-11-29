@@ -4,7 +4,7 @@ import {useInput, useIsMobile, Validators} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {Regex, TABLET_BREAKPOINT} from "../../utils/things";
 import {friendlyFormatIBAN} from "ibantools";
-import {Button, FormLabel, Input, SimpleGrid, Stack, useToast} from "@chakra-ui/core";
+import {Button, FormLabel, Input, SimpleGrid, Stack, useToast} from "@chakra-ui/react";
 
 const RekeningForm: React.FC<{
 	rekening?: Partial<IRekening>,
@@ -61,7 +61,7 @@ const RekeningForm: React.FC<{
 			</Stack>
 			<Stack direction={"row"} alignItems={"flex-end"}>
 				<Button type={"reset"} onClick={() => onCancel()}>{t("actions.cancel")}</Button>
-				<Button type={"submit"} variantColor={"primary"} onClick={onSubmit}>{t("actions.save")}</Button>
+				<Button type={"submit"} colorScheme={"primary"} onClick={onSubmit}>{t("actions.save")}</Button>
 			</Stack>
 		</SimpleGrid>
 	);

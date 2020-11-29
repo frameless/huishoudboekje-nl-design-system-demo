@@ -1,4 +1,5 @@
-import {Badge, Box, BoxProps, IconButton, Stack, Text} from "@chakra-ui/core";
+import {CheckIcon, CloseIcon, DeleteIcon, EditIcon} from "@chakra-ui/icons";
+import {Badge, Box, BoxProps, IconButton, Stack, Text} from "@chakra-ui/react";
 import React, {useState} from "react";
 import {useIsMobile} from "react-grapple";
 import {useTranslation} from "react-i18next";
@@ -68,12 +69,12 @@ const AfspraakItem: React.FC<BoxProps & { afspraak: IAfspraak, onDelete?: (id: n
 				<Badge fontSize={"10px"}>{intervalString()}</Badge>
 			</Stack>
 			<Box width={100}>
-				<IconButton variant={"ghost"} size={"sm"} icon={"edit"} aria-label={t("actions.edit")} onClick={onClickEditButton} />
+				<IconButton variant={"ghost"} size={"sm"} icon={<EditIcon />} aria-label={t("actions.edit")} onClick={onClickEditButton} />
 				{onDelete && (<>
-					{deleteConfirm && <IconButton variant={"solid"} size={"xs"} icon={"close"} variantColor={"gray"} mr={2}
+					{deleteConfirm && <IconButton variant={"solid"} size={"xs"} icon={<CloseIcon />} colorScheme={"gray"} mr={2}
 												  aria-label={t("actions.delete")} onClick={onClickDeleteCancel} />}
-					<IconButton variant={deleteConfirm ? "solid" : "ghost"} size={"xs"} icon={deleteConfirm ? "check" : "delete"}
-					            variantColor={deleteConfirm ? "red" : "gray"}
+					<IconButton variant={deleteConfirm ? "solid" : "ghost"} size={"xs"} icon={deleteConfirm ? <CheckIcon /> : <DeleteIcon />}
+					            colorScheme={deleteConfirm ? "red" : "gray"}
 					            aria-label={t("actions.delete")} onClick={onClickDeleteButton} />
 				</>)}
 			</Box>

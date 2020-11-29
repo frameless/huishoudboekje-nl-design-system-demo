@@ -1,5 +1,5 @@
 import React from "react";
-import {Divider, Heading, Stack, Text} from "@chakra-ui/core";
+import {Divider, Heading, Stack, Text} from "@chakra-ui/react";
 import {dateFormat} from "../../utils/things";
 import {FormLeft, FormRight, Label} from "../Forms/FormLeftRight";
 import moment from "moment";

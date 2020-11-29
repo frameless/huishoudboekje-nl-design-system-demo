@@ -1,6 +1,6 @@
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {Box, Button, Divider, FormHelperText, FormLabel, Heading, Input, Stack, Tooltip, useToast} from "@chakra-ui/core";
+import {Box, Button, Divider, Text, FormLabel, Heading, Input, Stack, Tooltip, useToast} from "@chakra-ui/react";
 import {useInput, useIsMobile, useToggle, Validators} from "react-grapple";
 import BackButton from "../BackButton";
 import Routes from "../../config/routes";
@@ -129,7 +129,7 @@ const CreateOrganization = () => {
 			<Heading size={"lg"}>{t("forms.organizations.title")}</Heading>
 
 			{isDev && (
-				<Button maxWidth={350} variantColor={"yellow"} variant={"outline"} onClick={() => prePopulateForm()}>Formulier snel invullen met testdata</Button>
+				<Button maxWidth={350} colorScheme={"yellow"} variant={"outline"} onClick={() => prePopulateForm()}>Formulier snel invullen met testdata</Button>
 			)}
 
 			<Box as={"form"} onSubmit={onSubmit}>
@@ -137,7 +137,7 @@ const CreateOrganization = () => {
 					<Stack direction={isMobile ? "column" : "row"} spacing={2}>
 						<FormLeft>
 							<Heading size={"md"}>{t("forms.organizations.sections.organizational.title")}</Heading>
-							<FormHelperText id="personal-helperText">{t("forms.organizations.sections.organizational.helperText")}</FormHelperText>
+							<Text data-legacy="FormHelperText" id="personal-helperText">{t("forms.organizations.sections.organizational.helperText")}</Text>
 						</FormLeft>
 						<FormRight>
 							<Stack spacing={2} direction={isMobile ? "column" : "row"}>
@@ -167,7 +167,7 @@ const CreateOrganization = () => {
 					<Stack direction={isMobile ? "column" : "row"} spacing={2}>
 						<FormLeft>
 							<Heading size={"md"}>{t("forms.organizations.sections.contact.title")}</Heading>
-							<FormHelperText>{t("forms.organizations.sections.contact.helperText")}</FormHelperText>
+							<Text data-legacy="FormHelperText">{t("forms.organizations.sections.contact.helperText")}</Text>
 						</FormLeft>
 						<FormRight>
 							<Stack spacing={2} direction={isMobile ? "column" : "row"}>
@@ -202,7 +202,7 @@ const CreateOrganization = () => {
 						<FormLeft />
 						<FormRight>
 							<Stack direction={"row"} spacing={1} justifyContent={"flex-end"}>
-								<Button isLoading={loading} type={"submit"} variantColor={"primary"} onClick={onSubmit}>{t("actions.save")}</Button>
+								<Button isLoading={loading} type={"submit"} colorScheme={"primary"} onClick={onSubmit}>{t("actions.save")}</Button>
 							</Stack>
 						</FormRight>
 					</Stack>

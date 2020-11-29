@@ -1,5 +1,5 @@
 import React from "react";
-import {Stack, StackProps, Text} from "@chakra-ui/core";
+import {Stack, StackProps, Text} from "@chakra-ui/react";
 import theme from "../../config/theme";
 
 export const FormLeft: React.FC<StackProps> = (props) => (

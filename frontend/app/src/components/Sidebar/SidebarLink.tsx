@@ -1,4 +1,4 @@
-import {Box, BoxProps, Button, ButtonProps, Flex, Text, useTheme} from "@chakra-ui/core";
+import {Box, BoxProps, Button, ButtonProps, Flex, Text, useTheme} from "@chakra-ui/react";
 import React, {useContext} from "react";
 import {IconContext} from "react-icons";
 import {useHistory, useLocation} from "react-router-dom";
@@ -27,9 +27,9 @@ const SidebarLink: React.FC<ButtonProps & { icon?, href: string, exactMatch?: bo
 			<Button justifyContent={"flex-start"} onClick={() => {
 				drawerContext.onClose();
 				push(href);
-			}} variant={isActive ? "solid" : "ghost"} variantColor={isActive ? "primary" : "gray"} {...props} color={isActive ? "white" : "primary"} width="100%">
+			}} variant={isActive ? "solid" : "ghost"} colorScheme={isActive ? "primary" : "gray"} {...props} color={isActive ? "white" : "primary"} width="100%">
 				<Flex alignItems={"center"}>
-					<LinkIcon mr={5} fontSize={"24px"} />
+					{icon && <LinkIcon mr={5} fontSize={"24px"} />}
 					<Text color={linkColor}>{children}</Text>
 				</Flex>
 			</Button>

@@ -1,5 +1,5 @@
 import React from "react";
-import {Box, Spinner, Stack} from "@chakra-ui/core";
+import {Box, Spinner, Stack} from "@chakra-ui/react";
 import {QueryResult} from "@apollo/client/react/types/types";
 import {useTranslation} from "react-i18next";
 

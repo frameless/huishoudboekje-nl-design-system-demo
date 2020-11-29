@@ -1,21 +1,21 @@
-import {Box, Button, Divider, FormHelperText, FormLabel, Heading, Input, Spinner, Stack, Tooltip, useToast} from "@chakra-ui/core";
+import {useMutation, useQuery} from "@apollo/client";
+import {Box, Button, Divider, FormLabel, Heading, Input, Spinner, Stack, Text, Tooltip, useToast} from "@chakra-ui/react";
 import React, {useEffect} from "react";
 import {useInput, useIsMobile, Validators} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {Redirect, useParams} from "react-router-dom";
 import Routes from "../../config/routes";
+import {IOrganisatie} from "../../models";
+import {UpdateOrganizationMutation} from "../../services/graphql/mutations";
+import {GetOneOrganisatieQuery} from "../../services/graphql/queries";
+import {Regex} from "../../utils/things";
 import BackButton from "../BackButton";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
-import {Regex} from "../../utils/things";
-import {useMutation, useQuery} from "@apollo/client";
-import {IOrganisatie} from "../../models";
-import {GetOneOrganisatieQuery} from "../../services/graphql/queries";
-import {UpdateOrganizationMutation} from "../../services/graphql/mutations";
 
 const OrganizationEdit = () => {
 	const isMobile = useIsMobile();
 	const {t} = useTranslation();
-	const {id} = useParams<{id}>();
+	const {id} = useParams<{ id }>();
 	const toast = useToast();
 
 	const kvkNumber = useInput({
@@ -149,7 +149,7 @@ const OrganizationEdit = () => {
 						<Stack direction={isMobile ? "column" : "row"} spacing={2}>
 							<FormLeft>
 								<Heading size={"md"}>{t("forms.organizations.sections.organizational.title")}</Heading>
-								<FormHelperText id="personal-helperText">{t("forms.organizations.sections.organizational.helperText")}</FormHelperText>
+								<Text data-legacy="FormHelperText" id="personal-helperText">{t("forms.organizations.sections.organizational.helperText")}</Text>
 							</FormLeft>
 							<FormRight>
 								<Stack spacing={2} direction={isMobile ? "column" : "row"}>
@@ -179,7 +179,7 @@ const OrganizationEdit = () => {
 						<Stack direction={isMobile ? "column" : "row"} spacing={2}>
 							<FormLeft>
 								<Heading size={"md"}>{t("forms.organizations.sections.contact.title")}</Heading>
-								<FormHelperText>{t("forms.organizations.sections.contact.helperText")}</FormHelperText>
+								<Text data-legacy="FormHelperText">{t("forms.organizations.sections.contact.helperText")}</Text>
 							</FormLeft>
 							<FormRight>
 								<Stack spacing={2} direction={isMobile ? "column" : "row"}>
@@ -214,7 +214,7 @@ const OrganizationEdit = () => {
 							<FormLeft />
 							<FormRight>
 								<Stack direction={"row"} spacing={1} justifyContent={"flex-end"}>
-									<Button isLoading={loading || updateLoading} type={"submit"} variantColor={"primary"} onClick={onSubmit}>{t("actions.save")}</Button>
+									<Button isLoading={loading || updateLoading} type={"submit"} colorScheme={"primary"} onClick={onSubmit}>{t("actions.save")}</Button>
 								</Stack>
 							</FormRight>
 						</Stack>

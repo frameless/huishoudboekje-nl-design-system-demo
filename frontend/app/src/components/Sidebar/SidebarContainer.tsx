@@ -1,6 +1,6 @@
 import React, {useRef} from "react";
 import Logo from "../Logo";
-import {Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Flex, Stack, useDisclosure} from "@chakra-ui/core";
+import {Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Flex, Stack, useDisclosure} from "@chakra-ui/react";
 import {useIsMobile} from "react-grapple";
 import {GiHamburgerMenu} from "react-icons/all";
 import SidebarFooter from "./SidebarFooter";
@@ -9,7 +9,7 @@ import {DrawerContext, TABLET_BREAKPOINT} from "../../utils/things";
 const SidebarContainer = ({children}) => {
 	const isMobile = useIsMobile(TABLET_BREAKPOINT);
 	const {isOpen, onOpen, onClose} = useDisclosure();
-	const sidebarButtonRef = useRef();
+	const sidebarButtonRef = useRef(null);
 
 	return isMobile ? (
 		<>

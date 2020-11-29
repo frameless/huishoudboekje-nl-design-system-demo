@@ -1,3 +1,5 @@
+import {useMutation, useQuery} from "@apollo/client";
+import {ChevronDownIcon} from "@chakra-ui/icons";
 import {
 	AlertDialog,
 	AlertDialogBody,
@@ -15,26 +17,25 @@ import {
 	Spinner,
 	Stack,
 	useToast,
-} from "@chakra-ui/core";
+} from "@chakra-ui/react";
 import React, {createContext, useRef} from "react";
+import {useToggle} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {Redirect, useHistory, useParams} from "react-router-dom";
 import Routes from "../../config/routes";
-import BackButton from "../BackButton";
-import {useMutation, useQuery} from "@apollo/client";
 import {IOrganisatie} from "../../models";
+import {DeleteOrganizationMutation} from "../../services/graphql/mutations";
 import {GetOneOrganisatieQuery} from "../../services/graphql/queries";
-import {useToggle} from "react-grapple";
+import BackButton from "../BackButton";
+import DeadEndPage from "../DeadEndPage";
 import OrganizationDetailView from "./Views/OrganizationDetailView";
 import OrganizationRekeningenView from "./Views/OrganizationRekeningenView";
-import DeadEndPage from "../DeadEndPage";
-import {DeleteOrganizationMutation} from "../../services/graphql/mutations";
 
 export const OrganizationDetailContext = createContext<any>({});
 
 const OrganizationDetail = () => {
 	const {t} = useTranslation();
-	const {id} = useParams<{id}>();
+	const {id} = useParams<{ id }>();
 	const {push} = useHistory();
 	const toast = useToast();
 
@@ -84,7 +85,7 @@ const OrganizationDetail = () => {
 			if (isDeleted) {
 				return (
 					<DeadEndPage message={t("messages.organizations.deleteConfirmMessage", {name: orgData.organisatie.weergaveNaam})}>
-						<Button variantColor={"primary"} onClick={() => push(Routes.Organizations)}>{t("actions.backToList")}</Button>
+						<Button colorScheme={"primary"} onClick={() => push(Routes.Organizations)}>{t("actions.backToList")}</Button>
 					</DeadEndPage>
 				)
 			}
@@ -101,13 +102,13 @@ const OrganizationDetail = () => {
 								<AlertDialogBody>{t("messages.organizations.deleteQuestion", {name: orgData.organisatie.weergaveNaam})}</AlertDialogBody>
 								<AlertDialogFooter>
 									<Button ref={cancelDeleteRef} onClick={onCloseDeleteDialog}>{t("actions.cancel")}</Button>
-									<Button isLoading={deleteLoading} variantColor="red" onClick={onConfirmDeleteDialog} ml={3}>{t("actions.delete")}</Button>
+									<Button isLoading={deleteLoading} colorScheme="red" onClick={onConfirmDeleteDialog} ml={3}>{t("actions.delete")}</Button>
 								</AlertDialogFooter>
 							</AlertDialogContent>
 						</AlertDialog>
 
 						<Menu>
-							<IconButton as={MenuButton} icon="chevron-down" variant={"solid"} aria-label="Open menu" />
+							<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label="Open menu" />
 							<MenuList>
 								<MenuItem onClick={onClickEdit}>{t("actions.edit")}</MenuItem>
 								<MenuItem onClick={onClickDelete}>{t("actions.delete")}</MenuItem>

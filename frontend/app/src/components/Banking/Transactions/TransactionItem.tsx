@@ -1,25 +1,24 @@
 import {useMutation, useQuery} from "@apollo/client";
+import {DeleteIcon} from "@chakra-ui/icons";
 import {
-	Badge,
 	Box,
 	BoxProps,
 	Button,
 	FormLabel,
-	Icon, IconButton,
+	IconButton,
 	Modal,
 	ModalBody,
 	ModalContent,
 	ModalFooter,
 	ModalHeader,
 	ModalOverlay,
-	PseudoBox,
 	Select,
 	Stack,
 	Text,
 	Tooltip,
 	useDisclosure,
 	useToast
-} from "@chakra-ui/core";
+} from "@chakra-ui/react";
 import {friendlyFormatIBAN} from "ibantools";
 import React, {useContext} from "react";
 import {useInput, useIsMobile, Validators} from "react-grapple";
@@ -45,7 +44,7 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: IBankTransaction }
 	});
 
 	const $rubrics = useQuery(GetAllRubricsQuery, {
-		onCompleted: (data: {rubrieken: IRubriek[]}) => {
+		onCompleted: (data: { rubrieken: IRubriek[] }) => {
 			if (bt.journaalpost) {
 				rubric.setValue(bt.journaalpost?.grootboekrekening.id);
 			}
@@ -196,7 +195,7 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: IBankTransaction }
 										))}
 									</Select>
 									{bt.journaalpost && (
-										<IconButton icon={"delete"} aria-label={t("actions.delete")} variant={"ghost"} onClick={() => onClickDelete()} />
+										<IconButton icon={<DeleteIcon />} aria-label={t("actions.delete")} variant={"ghost"} onClick={() => onClickDelete()} />
 									)}
 								</Stack>
 							)}</Queryable>
@@ -207,13 +206,13 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: IBankTransaction }
 				<ModalFooter>
 					<Stack direction={"row"}>
 						<Button onClick={() => onClose()}>{t("actions.cancel")}</Button>
-						<Button variantColor={"primary"} onClick={() => onClickSave()}>{t("actions.save")}</Button>
+						<Button colorScheme={"primary"} onClick={() => onClickSave()}>{t("actions.save")}</Button>
 					</Stack>
 				</ModalFooter>
 			</ModalContent>
 		</Modal>
 
-		<PseudoBox px={2} mx={-2} _hover={{
+		<Box px={2} mx={-2} _hover={{
 			bg: "gray.100"
 		}}>
 			<Stack direction={"row"} alignItems={"center"} justifyContent={"center"} {...props} onClick={() => onOpen()} cursor={"pointer"}>
@@ -235,12 +234,9 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: IBankTransaction }
 				<Box flex={0} minWidth={120}>
 					<Currency value={bt.bedrag} />
 				</Box>
-				{/*<Box flex={0} pl={3}>*/}
-				{/*	<Icon name={bt.journaalpost ? "check-circle" : "question"} color={bt.journaalpost ? "green.500" : "gray.500"} />*/}
-				{/*</Box>*/}
 				{/* Todo: Later uit te breiden met geboekt op specifieke afspraak als deze bekend is */}
 			</Stack>
-		</PseudoBox>
+		</Box>
 	</>);
 };
 

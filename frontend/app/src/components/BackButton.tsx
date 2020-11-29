@@ -1,7 +1,7 @@
+import {Box, Button} from "@chakra-ui/react";
 import React from "react";
-import {Button, Icon} from "@chakra-ui/core";
-import {MdArrowBack} from "react-icons/all";
 import {useTranslation} from "react-i18next";
+import {MdArrowBack} from "react-icons/all";
 import {useHistory} from "react-router-dom";
 
 const BackButton: React.FC<{ to: string, label?: string }> = ({to, label}) => {
@@ -9,8 +9,8 @@ const BackButton: React.FC<{ to: string, label?: string }> = ({to, label}) => {
 	const {t} = useTranslation();
 
 	return (
-		<Button variant={"link"} variantColor={"gray"} fontSize={"sm"} mb={5} onClick={() => push(to)}>
-			<Icon as={MdArrowBack} size={"16px"} mr={2} />
+		<Button variant={"link"} colorScheme={"gray"} fontSize={"sm"} mb={5} onClick={() => push(to)}>
+			<Box as={MdArrowBack} size={"16px"} mr={2} />
 			{label || t("actions.back")}
 		</Button>
 	);

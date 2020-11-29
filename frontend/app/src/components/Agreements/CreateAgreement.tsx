@@ -1,5 +1,5 @@
 import React from "react";
-import {Heading, Spinner, Stack, useToast,} from "@chakra-ui/core";
+import {Heading, Spinner, Stack, useToast,} from "@chakra-ui/react";
 import BackButton from "../BackButton";
 import Routes from "../../config/routes";
 import {useMutation, useQuery} from "@apollo/client";
