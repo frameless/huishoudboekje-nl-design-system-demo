@@ -1,22 +1,5 @@
 import {useQuery} from "@apollo/client";
-import {
-	Box,
-	BoxProps,
-	Button,
-	Divider,
-	FormLabel,
-	Heading,
-	Input,
-	InputGroup,
-	InputLeftElement,
-	RadioGroup,
-	Select,
-	Spinner,
-	Stack,
-	Switch,
-	Text,
-	useToast
-} from "@chakra-ui/react";
+import {Box, BoxProps, Button, Divider, FormLabel, Heading, Input, InputGroup, InputLeftElement, Select, Spinner, Stack, Switch, Text, useToast} from "@chakra-ui/react";
 import moment from "moment";
 import React, {useEffect, useState} from "react";
 import {useInput, useIsMobile, useNumberInput, useToggle, Validators} from "react-grapple";
@@ -28,7 +11,7 @@ import {GetAllOrganisatiesQuery, GetAllRubricsQuery} from "../../services/graphq
 import Queryable from "../../utils/Queryable";
 import {Interval, isDev} from "../../utils/things";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
-import CustomRadioButton from "./CustomRadioButton";
+import RadioButtonGroup from "../Layouts/RadioButtons";
 
 const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) => void, gebruiker: IGebruiker, loading: boolean }> = ({afspraak, onSave, gebruiker, loading = false, ...props}) => {
 	const {t} = useTranslation();
@@ -182,6 +165,7 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 			}
 		}
 
+
 		const formValid = fields.every(f => f.isValid);
 		if (!formValid) {
 			toast({
@@ -215,6 +199,15 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 		}
 	};
 
+	const afspraakTypeOptions = {
+		[AfspraakType.Income]: t("forms.agreements.fields.income"),
+		[AfspraakType.Expense]: t("forms.agreements.fields.expenses")
+	};
+	const isRecurringOptions = {
+		[AfspraakPeriod.Once]: t("forms.agreements.fields.isRecurring_once"),
+		[AfspraakPeriod.Periodic]: t("forms.agreements.fields.isRecurring_periodic")
+	};
+
 	return (<>
 		{isDev && (
 			<Button maxWidth={350} mb={5} colorScheme={"yellow"} variant={"outline"} onClick={() => prePopulateForm()}>Formulier snel invullen met testdata</Button>
@@ -236,15 +229,10 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 						{/*		</Stack>*/}
 						{/*	</Stack>*/}
 						{/*</Stack>*/}
-						<Stack spacing={2} direction={isMobile ? "column" : "row"}>
-							<Stack spacing={1} flex={1}>
-								<FormLabel htmlFor={"beschrijving"}>{t("forms.agreements.fields.type")}</FormLabel>
-								<RadioGroup isInline onChange={onChangeAfspraakType} value={afspraakType} defaultValue={AfspraakType.Expense} spacing={0}>
-									<CustomRadioButton size={"sm"} roundedRight={0} value={AfspraakType.Income}>{t("forms.agreements.fields.income")}</CustomRadioButton>
-									<CustomRadioButton size={"sm"} roundedLeft={0} value={AfspraakType.Expense}>{t("forms.agreements.fields.expenses")}</CustomRadioButton>
-								</RadioGroup>
-							</Stack>
-						</Stack>
+
+						<RadioButtonGroup name={"afspraakType"} onChange={onChangeAfspraakType} defaultValue={afspraakType}
+						                  options={afspraakTypeOptions} />
+
 						<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 							<Stack spacing={1} flex={1}>
 								<FormLabel htmlFor={"description"}>{t("forms.agreements.fields.description")}</FormLabel>
@@ -320,14 +308,8 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 						<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 							<Stack spacing={1} flex={1}>
 								<FormLabel htmlFor={"beschrijving"}>{t("forms.agreements.fields.isRecurring")}</FormLabel>
-								<RadioGroup isInline onChange={(val) => toggleRecurring(val === AfspraakPeriod.Periodic)}
-								            value={isRecurring ? AfspraakPeriod.Periodic : AfspraakPeriod.Once}
-								            defaultValue={"once"} spacing={0}>
-									<CustomRadioButton size={"sm"} roundedRight={0}
-									                   value={AfspraakPeriod.Once}>{t("forms.agreements.fields.isRecurring_once")}</CustomRadioButton>
-									<CustomRadioButton size={"sm"} roundedLeft={0}
-									                   value={AfspraakPeriod.Periodic}>{t("forms.agreements.fields.isRecurring_periodic")}</CustomRadioButton>
-								</RadioGroup>
+								<RadioButtonGroup name={"isRecurring"} options={isRecurringOptions} onChange={(val) => toggleRecurring(val === AfspraakPeriod.Periodic)}
+								                  defaultValue={isRecurring ? AfspraakPeriod.Periodic : AfspraakPeriod.Once} />
 							</Stack>
 						</Stack>
 
@@ -338,10 +320,10 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 										<FormLabel htmlFor={"interval"}>{t("interval.every")}</FormLabel>
 										<Input type={"number"} min={1} {...intervalNumber.bind} width={100} id={"interval"} />
 										<Select {...intervalType.bind} id="interval" value={intervalType.value}>
-											<option value={"day"}>{t("interval.day", {count: parseInt(intervalNumber.value as unknown as string)})}</option>
-											<option value={"week"}>{t("interval.week", {count: parseInt(intervalNumber.value as unknown as string)})}</option>
-											<option value={"month"}>{t("interval.month", {count: parseInt(intervalNumber.value as unknown as string)})}</option>
-											<option value={"year"}>{t("interval.year", {count: parseInt(intervalNumber.value as unknown as string)})}</option>
+											<option value={"day"}>{t("interval.day", {count: parseInt(intervalNumber.value)})}</option>
+											<option value={"week"}>{t("interval.week", {count: parseInt(intervalNumber.value)})}</option>
+											<option value={"month"}>{t("interval.month", {count: parseInt(intervalNumber.value)})}</option>
+											<option value={"year"}>{t("interval.year", {count: parseInt(intervalNumber.value)})}</option>
 										</Select>
 									</Stack>
 								</Stack>
