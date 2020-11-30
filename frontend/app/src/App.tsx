@@ -1,5 +1,5 @@
 import {ChevronDownIcon, WarningIcon} from "@chakra-ui/icons";
-import {Box, Button, Flex, Heading, IconButton, Menu, MenuButton, MenuItem, MenuList, Spinner, Stack, Text, useTheme, useToast} from "@chakra-ui/react";
+import {Box, Button, Flex, Heading, HStack, IconButton, Spinner, Stack, Text, useTheme, useToast} from "@chakra-ui/react";
 import {observer} from "mobx-react";
 import React, {useEffect, useState} from "react";
 import {useIsMobile, useToggle} from "react-grapple";
@@ -111,22 +111,11 @@ const App = () => {
 						</SidebarContainer>
 
 						<Box height={"100%"} minHeight={"100vh"} width={"100%"} p={5}>
-							<Stack spacing={10} direction={"row"} justifyContent={"flex-end"} alignItems={"center"} pb={5}>
-								<Menu>
-									<MenuButton as={Box}>
-										<Stack direction={"row"} spacing={5} alignItems={"center"}>
-											<UserStatus name={session.user.fullName} role={session.user.role} />
-											<IconButton icon={<ChevronDownIcon />} variant={"solid"} aria-label="Open menu" />
-										</Stack>
-									</MenuButton>
-									<MenuList zIndex={3}>
-										<MenuItem onClick={onClickLogoutButton}>
-											<Box size={"16px"} as={FaLock} color={"gray.400"} _hover={{color: "primary.700"}} aria-label={t("actions.logout")}
-											     mr={3} />
-											<Text>{t("actions.logout")}</Text>
-										</MenuItem>
-									</MenuList>
-								</Menu>
+							<Stack spacing={5} direction={"row"} justifyContent={"flex-end"} alignItems={"center"} pb={5}>
+								<HStack spacing={5} alignItems={"center"}>
+									<UserStatus name={session.user.fullName} role={session.user.role} />
+									<IconButton size={"14px"} icon={<FaLock />} color={"gray.400"} _hover={{color: "primary.700"}} aria-label={t("actions.logout")} mr={3} onClick={onClickLogoutButton} />
+								</HStack>
 							</Stack>
 
 							<Switch>
