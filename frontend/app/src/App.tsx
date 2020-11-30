@@ -1,11 +1,11 @@
 import {WarningIcon} from "@chakra-ui/icons";
-import {Box, Button, Flex, Heading, HStack, IconButton, Spinner, Stack, Text, useTheme, useToast} from "@chakra-ui/react";
+import {Box, Button, Flex, Heading, HStack, IconButton, Spinner, Stack, Text, useTheme} from "@chakra-ui/react";
 import {observer} from "mobx-react";
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useMemo, useState} from "react";
 import {useIsMobile, useToggle} from "react-grapple";
 import {useTranslation} from "react-i18next";
-import {FaLock} from "react-icons/all";
-import {Redirect, Route, Switch, useHistory, useLocation} from "react-router-dom";
+import {FaLock} from "react-icons/fa";
+import {Redirect, Route, Switch, useLocation} from "react-router-dom";
 import EditAgreement from "./components/Agreements/EditAgreement";
 import Banking from "./components/Banking";
 import Burgers from "./components/Burgers";
@@ -16,19 +16,67 @@ import Sidebar from "./components/Sidebar";
 import SidebarContainer from "./components/Sidebar/SidebarContainer";
 import UserStatus from "./components/UserStatus";
 import Routes from "./config/routes";
-import {useSession} from "./utils/hooks";
 import {TABLET_BREAKPOINT} from "./utils/things";
+
+type IUser = {
+	email: string,
+	fullName: string,
+	role: string,
+}
+
+const useAuth = () => {
+	const [user, setUser] = useState<IUser>();
+	const [error, setError] = useToggle(false);
+	const [loading, toggleLoading] = useToggle(true);
+
+	const reset = useCallback(() => {
+		fetch("/api/logout")
+			.then(() => {
+				setUser(undefined);
+			})
+			.catch(err => {
+				console.error(err);
+				setError(true);
+				setUser(undefined);
+			});
+	}, [setError]);
+
+	useEffect(() => {
+		fetch("/api/me")
+			.then(result => result.json())
+			.then(result => {
+				const {email} = result;
+
+				if (email) {
+					setUser({
+						email: "koen.brouwer@vng.nl",
+						fullName: "Koen Brouwer",
+						role: "VNG Realisatie"
+					});
+				}
+
+				toggleLoading(false);
+			})
+			.catch(err => {
+				console.error(err);
+				setError(true);
+				toggleLoading(false);
+			});
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
+
+	return useMemo(() => ({
+		user, error, loading, reset
+	}), [user, error, loading, reset]);
+}
 
 const App = () => {
 	const {t} = useTranslation();
 	const isMobile = useIsMobile(TABLET_BREAKPOINT);
-	const session = useSession();
+	const {user, error, loading, reset} = useAuth();
 	const location = useLocation();
-	const [isLoading, toggleLoading] = useToggle(true);
-	const toast = useToast();
 	const theme = useTheme();
-	const {push} = useHistory();
-	const [backendError, setBackendError] = useState();
 
 	const onClickLoginButton = () => {
 		/* Save the current user's page so that we can quickly navigate back after login. */
@@ -36,45 +84,7 @@ const App = () => {
 		window.location.href = "/api/login";
 	};
 
-	const onClickLogoutButton = () => {
-		fetch("/api/logout")
-			.then(() => session.reset());
-	}
-
-	useEffect(() => {
-		if (backendError) {
-			return;
-		}
-
-		fetch("/api/me")
-			.then(result => result.json())
-			.then(result => {
-				if (!result.message) {
-					/* Todo: the full user profile (firstName, lastName, role etc) should come from the API.
-					 * For now, we just set a local user to make this work. */
-					session.setUser({
-						"email": "koen.brouwer@vng.nl",
-						"firstName": "Koen",
-						"lastName": "Brouwer",
-						"role": "VNG Realisatie"
-					});
-
-					/* Check if the user already visited a specific URL, and navigate there. */
-					const referer = localStorage.getItem("hhb-referer");
-					if (referer) {
-						localStorage.removeItem("hhb-referer");
-						push(referer);
-					}
-				}
-
-				toggleLoading(false);
-			})
-			.catch(err => {
-				setBackendError(err);
-			});
-	}, [backendError, push, session, toast, toggleLoading]);
-
-	if (backendError) {
+	if (error) {
 		return (
 			<TwoColumns>
 				<Stack spacing={5} maxWidth={300} direction={"row"} alignItems={"center"}>
@@ -85,10 +95,10 @@ const App = () => {
 		)
 	}
 
-	if (!session.user) {
+	if (!user) {
 		return (
 			<TwoColumns>
-				{isLoading ? (
+				{loading ? (
 					<Spinner size={"xl"} />
 				) : (
 					<Stack spacing={5} maxWidth={300} alignSelf={isMobile ? "center" : "flex-start"}>
@@ -113,9 +123,9 @@ const App = () => {
 						<Box height={"100%"} minHeight={"100vh"} width={"100%"} p={5}>
 							<Stack spacing={5} direction={"row"} justifyContent={"flex-end"} alignItems={"center"} pb={5}>
 								<HStack spacing={5} alignItems={"center"}>
-									<UserStatus name={session.user.fullName} role={session.user.role} />
+									<UserStatus name={user.fullName} role={user.role} />
 									<IconButton size={"14px"} icon={<FaLock />} color={"gray.400"} _hover={{color: "primary.700"}} aria-label={t("actions.logout")} mr={3}
-									            onClick={onClickLogoutButton} />
+									            onClick={reset} />
 								</HStack>
 							</Stack>
 

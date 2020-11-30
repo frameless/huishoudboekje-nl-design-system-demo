@@ -1,10 +1,11 @@
+import { Box } from "@chakra-ui/react";
 import React from "react";
 
 const BookingsExport = () => {
 	return (
-		<div>
+		<Box>
 			Deze wel
-		</div>
+		</Box>
 	);
 };
 

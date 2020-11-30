@@ -14,13 +14,13 @@ moment.locale("nl");
 
 ReactDOM.render(
 	<React.StrictMode>
-		<ChakraProvider theme={theme}>
-			<Router>
-				<ApolloProvider client={apolloClient}>
+		<Router>
+			<ApolloProvider client={apolloClient}>
+				<ChakraProvider theme={theme}>
 					<App />
-				</ApolloProvider>
-			</Router>
-		</ChakraProvider>
+				</ChakraProvider>
+			</ApolloProvider>
+		</Router>
 	</React.StrictMode>,
 	document.getElementById("root"),
 );
