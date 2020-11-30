@@ -7,12 +7,14 @@ export enum RouteNames {
 	organizations = "organisaties",
 	banking = "bankzaken",
 	transactions = "transacties",
+	bookings = "overschrijvingen",
 	csms = "bronbestanden",
 	notFound = "404",
 
 	// Sub routes
 	add = "toevoegen",
 	edit = "bewerken",
+	export = "exporteren",
 
 	// Not in use yet
 	balances = "huishoudboekjes",
@@ -40,6 +42,8 @@ const Routes = {
 	Banking: `/${RouteNames.banking}`,
 	Transactions: `/${RouteNames.banking}/${RouteNames.transactions}`,
 	CSMs: `/${RouteNames.banking}/${RouteNames.csms}`,
+	Bookings: `/${RouteNames.banking}/${RouteNames.bookings}`,
+	BookingsExport: `/${RouteNames.banking}/${RouteNames.bookings}/${RouteNames.export}`,
 
 	NotFound: `/${RouteNames.notFound}`,
 
