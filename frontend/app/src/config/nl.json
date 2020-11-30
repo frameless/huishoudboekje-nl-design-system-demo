@@ -270,7 +270,8 @@
     "transactions": "Transacties",
     "customerStatementMessages": "Bronbestanden",
     "journal": "Journaalpost",
-    "rubric": "Rubriek"
+    "rubric": "Rubriek",
+    "exports": "Overschrijvingen"
   },
   "transactions": {
     "beneficiaryAccount": "Tegenrekening",
