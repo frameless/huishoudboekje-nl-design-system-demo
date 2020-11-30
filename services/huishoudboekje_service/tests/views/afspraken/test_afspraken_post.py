@@ -17,6 +17,7 @@ def test_afspraken_post_new_afspraak(client, session):
         "credit":True,
         "kenmerk":"ABC1234",
         "actief":True,
+        "automatische_incasso": True,
     }
     response = client.post(
         '/afspraken/',

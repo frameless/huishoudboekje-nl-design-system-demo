@@ -23,6 +23,7 @@ class Afspraak(db.Model):
     credit = Column(Boolean)
     kenmerk = Column(String)
     actief = Column(Boolean)
+    automatische_incasso = Column(Boolean)
     organisatie_id = Column(Integer, ForeignKey('organisaties.id'))
     organisatie = relationship("Organisatie", back_populates="afspraken")
     journaalposten = relationship("Journaalpost", back_populates="afspraak")

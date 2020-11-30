@@ -7,3 +7,10 @@ TODO documentation
   - development
   - production
   
+## How to add migrations
+
+1. Change the model files
+1. Execute the following command to generate a script with the up and down migrations in it
+```shell script
+ python manage.py db revision --autogenerate -m '<message describing the change'
+``` 
