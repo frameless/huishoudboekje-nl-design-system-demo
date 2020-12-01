@@ -49,6 +49,6 @@ mutation test($id: Int!) {
         )
         assert response.json == {"data": {"deleteGebruiker": None},
                                  "errors": [{"locations": [{"column": 3, "line": 3}],
-                                             "message": "Upstream API responded: Not found",
+                                             "message": "Expecting value: line 1 column 1 (char 0)",
                                              "path": ["deleteGebruiker"]}]}
         assert adapter.called_once
