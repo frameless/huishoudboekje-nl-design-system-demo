@@ -221,6 +221,7 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 
 	const isInvalid = (input) => (input.dirty || isSubmitted) && !input.isValid;
 	const onChangeAfspraakType = val => {
+		console.log(val);
 		if (val) {
 			setAfspraakType(val);
 		}
@@ -257,7 +258,10 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 						{/*	</Stack>*/}
 						{/*</Stack>*/}
 
-						<RadioButtonGroup name={"afspraakType"} onChange={onChangeAfspraakType} defaultValue={afspraakType}
+						<RadioButtonGroup name={"afspraakType"} onChange={(o) => {
+							console.log(o)
+							onChangeAfspraakType(o)
+						}} defaultValue={afspraakType}
 						                  options={afspraakTypeOptions} />
 
 						<Stack spacing={2} direction={isMobile ? "column" : "row"}>
@@ -334,7 +338,6 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 
 						<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 							<Stack spacing={1} flex={1}>
-								<FormLabel htmlFor={"beschrijving"}>{t("forms.agreements.fields.isRecurring")}</FormLabel>
 								<RadioButtonGroup name={"isRecurring"} options={isRecurringOptions} onChange={(val) => toggleRecurring(val === AfspraakPeriod.Periodic)}
 								                  defaultValue={isRecurring ? AfspraakPeriod.Periodic : AfspraakPeriod.Once} />
 							</Stack>
@@ -376,7 +379,7 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 							<Stack direction={isMobile ? "column" : "row"} spacing={1} mt={2}>
 								<Stack isInline={true} alignItems={"center"} spacing={3}>
 									<Switch isChecked={isContinuous} onChange={() => toggleContinuous()} id={"isContinuous"} />
-									<FormLabel htmlFor={"isContinuous"}>{t("forms.agreements.fields.continuous")}</FormLabel>
+									<FormLabel mb={0} htmlFor={"isContinuous"}>{t("forms.agreements.fields.continuous")}</FormLabel>
 								</Stack>
 							</Stack>
 						)}
@@ -395,7 +398,7 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 								<Stack isInline={true} alignItems={"center"} spacing={3}>
 									<Switch isChecked={isAutomatischeIncasso} onChange={() => toggleAutomatischeIncasso()}
 										id={"isAutomatischeIncasso"} />
-									<FormLabel
+									<FormLabel mb={0}
 										htmlFor={"isAutomatischeIncasso"}>{t("forms.agreements.fields.automatischeIncasso")}</FormLabel>
 								</Stack>
 							</Stack>

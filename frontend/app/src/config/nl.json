@@ -147,8 +147,8 @@
           "helperText": "Vul de algemene gegevens van de nieuwe afspraak in."
         },
         {
-          "title": "Periode",
-          "helperText": "Bepaal om wat voor afspraak het gaat."
+          "title": "Betalingen",
+          "helperText": "Geef aan wanneer en hoeveel betalingen verwacht worden."
         }
       ],
       "fields": {
@@ -183,7 +183,7 @@
         "rubriekChoose": "Kies een rubriek",
         "bankAccount": "Bankrekening",
         "bankAccountChoose": "Kies een bankrekening",
-        "automatischeIncasso": "Automatische Incasso"
+        "automatischeIncasso": "Automatische incasso"
       }
     },
     "organizations": {
@@ -260,7 +260,7 @@
   "agreements": {
     "incoming": "Inkomsten",
     "outgoing": "Uitgaven",
-    "automatischeIncasso": "Automatische Incasso"
+    "automatischeIncasso": "Automatische incasso"
   },
   "balances": {
     "balances": "Huishoudboekjes"
