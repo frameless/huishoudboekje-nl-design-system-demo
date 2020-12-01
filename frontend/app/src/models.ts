@@ -97,6 +97,7 @@ export type IAfspraak = {
 	kenmerk: string
 	type: "periodic" | "once",
 	interval: IInterval,
+	automatischeIncasso: boolean
 	startDatum: Date
 	isContinuous: boolean,
 	aantalBetalingen: number,
