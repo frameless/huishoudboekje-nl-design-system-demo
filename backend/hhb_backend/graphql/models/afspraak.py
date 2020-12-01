@@ -11,7 +11,7 @@ import hhb_backend.graphql.models.grootboekrekening as grootboekrekening
 import hhb_backend.graphql.models.journaalpost as journaalpost
 import hhb_backend.graphql.models.rubriek as rubriek
 from hhb_backend.graphql.scalars.bedrag import Bedrag
-from hhb_backend.utils import convert_hhb_interval_to_dict
+from hhb_backend.graphql.utils import convert_hhb_interval_to_dict
 
 class Interval(graphene.ObjectType):
     jaren = graphene.Int()

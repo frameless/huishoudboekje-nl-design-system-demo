@@ -6,7 +6,7 @@ from hhb_backend.graphql import settings
 from hhb_backend.graphql.models.afspraak import Afspraak, IntervalInput
 from hhb_backend.graphql.mutations.afspraken import AfspraakInput
 from hhb_backend.graphql.scalars.bedrag import Bedrag
-from hhb_backend.utils import convert_hhb_interval_to_iso
+from hhb_backend.graphql.utils import convert_hhb_interval_to_iso
 import json
 
 class UpdateAfspraak(graphene.Mutation):
