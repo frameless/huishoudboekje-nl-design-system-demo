@@ -24,7 +24,7 @@ const EditAgreement = () => {
 		updateAfspraak({
 			variables: {
 				id,
-				...data
+				input: data
 			}
 		}).then(result => {
 			toast({

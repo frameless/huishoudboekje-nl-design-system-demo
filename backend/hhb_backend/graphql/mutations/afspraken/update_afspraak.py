@@ -4,6 +4,7 @@ from graphql import GraphQLError
 import requests
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.models.afspraak import Afspraak, IntervalInput
+from hhb_backend.graphql.mutations.afspraken import AfspraakInput
 from hhb_backend.graphql.scalars.bedrag import Bedrag
 from hhb_backend.utils import convert_hhb_interval_to_iso
 import json
@@ -11,32 +12,19 @@ import json
 class UpdateAfspraak(graphene.Mutation):
     class Arguments:
         id = graphene.Int(required=True)
-        gebruiker_id = graphene.Int()
-        beschrijving = graphene.String()
-        start_datum = graphene.String()
-        eind_datum = graphene.String()
-        aantal_betalingen = graphene.Int()
-        interval = graphene.Argument(lambda: IntervalInput)
-        tegen_rekening_id = graphene.Int()
-        bedrag = graphene.Argument(Bedrag)
-        credit = graphene.Boolean()
-        kenmerk = graphene.String()
-        actief = graphene.Boolean()
-        organisatie_id = graphene.Int()
-        rubriek_id = graphene.Int()
+        input = graphene.Argument(AfspraakInput, required=True)
 
     ok = graphene.Boolean()
     afspraak = graphene.Field(lambda: Afspraak)
 
-    def mutate(root, info, **kwargs):
+    def mutate(root, info, id, input, **kwargs):
         """ Update the Afspraak """
-        afspraak_id = kwargs.pop("id")
-        if "interval" in kwargs:
-            iso_interval = convert_hhb_interval_to_iso(kwargs["interval"])
-            kwargs["interval"] = iso_interval
+        if "interval" in input:
+            iso_interval = convert_hhb_interval_to_iso(input["interval"])
+            input["interval"] = iso_interval
         post_response = requests.post(
-            f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}",
-            data=json.dumps(kwargs),
+            f"{settings.HHB_SERVICES_URL}/afspraken/{id}",
+            data=json.dumps(input),
             headers={'Content-type': 'application/json'}
         )
         if not post_response.ok:

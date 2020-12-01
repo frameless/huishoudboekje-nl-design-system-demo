@@ -182,7 +182,8 @@
         "rubriek": "Rubriek",
         "rubriekChoose": "Kies een rubriek",
         "bankAccount": "Bankrekening",
-        "bankAccountChoose": "Kies een bankrekening"
+        "bankAccountChoose": "Kies een bankrekening",
+        "automatischeIncasso": "Automatische Incasso"
       }
     },
     "organizations": {
@@ -258,7 +259,8 @@
   },
   "agreements": {
     "incoming": "Inkomsten",
-    "outgoing": "Uitgaven"
+    "outgoing": "Uitgaven",
+    "automatischeIncasso": "Automatische Incasso"
   },
   "balances": {
     "balances": "Huishoudboekjes"
