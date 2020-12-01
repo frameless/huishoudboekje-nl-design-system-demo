@@ -274,7 +274,11 @@
     "customerStatementMessages": "Bronbestanden",
     "journal": "Journaalpost",
     "rubric": "Rubriek",
-    "exports": "Overschrijvingen"
+    "exports": {
+      "exports": "Overschrijvingen",
+      "title": "Overschrijvingen",
+      "helperText": "Exporteer een bestand met overschrijvingen voor verwerking in een bankierenapplicatie."
+    }
   },
   "transactions": {
     "beneficiaryAccount": "Tegenrekening",

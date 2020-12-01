@@ -1,15 +1,15 @@
-import React, {useState} from "react";
-import {useTranslation} from "react-i18next";
-import {Box, Button, Divider, Text, FormLabel, Heading, Input, Select, Stack, Tooltip, useToast} from "@chakra-ui/react";
-import {useInput, useIsMobile, useNumberInput, Validators} from "react-grapple";
-import BackButton from "../BackButton";
-import Routes from "../../config/routes";
-import {isDev, MOBILE_BREAKPOINT, Months, Regex} from "../../utils/things";
-import {FormLeft, FormRight} from "../Forms/FormLeftRight";
 import {useMutation} from "@apollo/client";
-import {sampleData} from "../../config/sampleData/sampleData";
+import {Box, Button, Divider, FormLabel, Heading, Input, Select, Stack, Tooltip, useToast} from "@chakra-ui/react";
+import React, {useState} from "react";
+import {useInput, useIsMobile, useNumberInput, Validators} from "react-grapple";
+import {useTranslation} from "react-i18next";
 import {useHistory} from "react-router-dom";
+import Routes from "../../config/routes";
+import {sampleData} from "../../config/sampleData/sampleData";
 import {CreateGebruikerMutation} from "../../services/graphql/mutations";
+import {isDev, MOBILE_BREAKPOINT, Months, Regex} from "../../utils/things";
+import BackButton from "../BackButton";
+import {FormLeft, FormRight} from "../Forms/FormLeftRight";
 
 // Todo: add more detailed error message per field?
 const CreateBurger = () => {

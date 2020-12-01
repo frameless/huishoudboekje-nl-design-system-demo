@@ -1,5 +1,5 @@
 import {useMutation, useQuery} from "@apollo/client";
-import {Box, Button, Divider, FormLabel, Heading, Input, Spinner, Stack, Text, Tooltip, useToast} from "@chakra-ui/react";
+import {Box, Button, Divider, FormLabel, Heading, Input, Spinner, Stack, Tooltip, useToast} from "@chakra-ui/react";
 import React, {useEffect} from "react";
 import {useInput, useIsMobile, Validators} from "react-grapple";
 import {useTranslation} from "react-i18next";

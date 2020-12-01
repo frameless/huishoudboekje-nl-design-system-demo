@@ -19,7 +19,7 @@ const Sidebar: React.FC<BoxProps> = (props) => {
 					<Box pl={5} ml={7}>&nbsp;</Box>
 					<VStack>
 						<SidebarLink size={"sm"} href={Routes.CSMs}>{t("banking.customerStatementMessages")}</SidebarLink>
-						<SidebarLink size={"sm"} href={Routes.BookingsExport}>{t("banking.exports")}</SidebarLink>
+						<SidebarLink size={"sm"} href={Routes.BookingsExport}>{t("banking.exports.exports")}</SidebarLink>
 					</VStack>
 				</HStack>
 			</Stack>

@@ -36,7 +36,7 @@ import {GetOneGebruikerQuery} from "../../services/graphql/queries";
 import AfspraakItem from "../Agreements/AfpraakItem";
 import BackButton from "../BackButton";
 import DeadEndPage from "../DeadEndPage";
-import {FormLeft, FormRight, Label} from "../Forms/FormLeftRight";
+import {FormLeft, FormRight} from "../Forms/FormLeftRight";
 import RekeningForm from "../Rekeningen/RekeningForm";
 import RekeningList from "../Rekeningen/RekeningList";
 import BurgerDetailProfileView from "./BurgerDetailProfileView";
@@ -156,7 +156,8 @@ const BurgerDetail = () => {
 									<AlertDialogBody>{t("messages.burgers.deleteQuestion", {name: `${gebruikerData.gebruiker.voornamen} ${gebruikerData.gebruiker.achternaam}`})}</AlertDialogBody>
 									<AlertDialogFooter>
 										<Button ref={cancelDeleteRef} onClick={onCloseDeleteDialog} data-cy={"inModal"}>{t("actions.cancel")}</Button>
-										<Button isLoading={deleteLoading} colorScheme="red" onClick={onConfirmDeleteDialog} ml={3} data-cy={"inModal"}>{t("actions.delete")}</Button>
+										<Button isLoading={deleteLoading} colorScheme="red" onClick={onConfirmDeleteDialog} ml={3}
+										        data-cy={"inModal"}>{t("actions.delete")}</Button>
 									</AlertDialogFooter>
 								</AlertDialogContent>
 							</AlertDialog>

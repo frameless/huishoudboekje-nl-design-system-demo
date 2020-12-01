@@ -1,4 +1,3 @@
-import {DownloadIcon} from "@chakra-ui/icons";
 import {Button, FormControl, FormLabel, Input, Stack, useToast} from "@chakra-ui/react";
 import moment from "moment";
 import React from "react";
@@ -35,21 +34,19 @@ const BookingsExport = () => {
 	return (
 		<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
 			<Stack direction={isMobile ? "column" : "row"} spacing={2}>
-				<FormLeft title={"Overschrijvingen"} helperText={"Hier is het mogelijk om overschrijvingen klaar te zetten en te exporteren."} />
+				<FormLeft title={t("banking.exports.title")} helperText={t("banking.exports.helperText")} />
 				<FormRight>
-					<Stack direction={"row"} alignItems={"flex-end"}>
+					<Stack direction={isMobile ? "column" : "row"} alignItems={"flex-end"}>
 						<FormControl flex={1}>
 							<FormLabel>{t("forms.common.fields.startDate")}</FormLabel>
 							<Input {...startDate.bind} type={"date"} pattern="\d{2}-\d{2}-\d{4}" />
 						</FormControl>
-
 						<FormControl flex={1}>
 							<FormLabel>{t("forms.common.fields.endDate")}</FormLabel>
 							<Input {...endDate.bind} type={"date"} pattern="\d{2}-\d{2}-\d{4}" />
 						</FormControl>
-
 						<FormControl>
-							<Button flex={1} colorScheme={"primary"} leftIcon={<DownloadIcon />} onClick={onClickExportButton}>{t("actions.export")}</Button>
+							<Button flex={1} colorScheme={"primary"} onClick={onClickExportButton}>{t("actions.export")}</Button>
 						</FormControl>
 					</Stack>
 				</FormRight>
