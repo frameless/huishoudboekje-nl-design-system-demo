@@ -1,0 +1,44 @@
+mutation createSampleBurgers{
+
+    user1: createGebruiker(
+        input: {
+            achternaam: "de Jager"
+            email: "fien.dejager@example.com"
+            geboortedatum: "1955-10-26"
+            huisnummer: "51"
+            plaatsnaam: "Sloothuizen"
+            postcode: "9999ZZ"
+            straatnaam: "Anna Walderstraat"
+            telefoonnummer: "0654887612"
+            voorletters: "F.S."
+            voornamen: "Fien Sandra"
+            rekeningen: [
+                {iban: "NL23BANK0235689112", rekeninghouder: "F.S. de Jager"},
+                {iban: "NL87BANK1125002895", rekeninghouder: "F.S. de Jager en/of"},
+            ]
+        }
+    ){
+        ok
+    }
+
+    user2: createGebruiker(
+        input: {
+            achternaam: "Winkel"
+            email: "hj.winkel@example.com"
+            geboortedatum: "1959-11-30"
+            huisnummer: "12"
+            plaatsnaam: "Sloothuizen"
+            postcode: "9999ZZ"
+            straatnaam: "Carpenterweg"
+            telefoonnummer: "0688551495"
+            voorletters: "H.J."
+            voornamen: "Henk Jan"
+            rekeningen: [
+                {iban: "NL55BANK8745213265", rekeninghouder: "H.J. Winkel"},
+                {iban: "NL22BANK9865322154", rekeninghouder: "H.J. Winkel en/of"},
+            ]
+        }
+    ){
+        ok
+    }
+}
