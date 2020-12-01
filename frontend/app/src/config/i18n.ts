@@ -1,5 +1,5 @@
 import i18Next from "i18next";
-import {initReactI18next, Trans, useTranslation} from "react-i18next";
+import {initReactI18next, Trans} from "react-i18next";
 
 /* Add languages here */
 const languages = {
@@ -23,4 +23,3 @@ i18Next.use(initReactI18next).init({
 });
 
 export {Trans};
-export const useTranslate = useTranslation;

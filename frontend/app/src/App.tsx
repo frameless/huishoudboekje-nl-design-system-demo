@@ -1,8 +1,8 @@
 import {WarningIcon} from "@chakra-ui/icons";
 import {Box, Button, Flex, Heading, HStack, IconButton, Spinner, Stack, Text, useTheme} from "@chakra-ui/react";
 import {observer} from "mobx-react";
-import React, {useCallback, useEffect, useMemo, useState} from "react";
-import {useIsMobile, useToggle} from "react-grapple";
+import React from "react";
+import {useIsMobile} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {FaLock} from "react-icons/fa";
 import {Redirect, Route, Switch, useLocation} from "react-router-dom";
@@ -16,60 +16,8 @@ import Sidebar from "./components/Sidebar";
 import SidebarContainer from "./components/Sidebar/SidebarContainer";
 import UserStatus from "./components/UserStatus";
 import Routes from "./config/routes";
+import {useAuth} from "./utils/hooks";
 import {TABLET_BREAKPOINT} from "./utils/things";
-
-type IUser = {
-	email: string,
-	fullName: string,
-	role: string,
-}
-
-const useAuth = () => {
-	const [user, setUser] = useState<IUser>();
-	const [error, setError] = useToggle(false);
-	const [loading, toggleLoading] = useToggle(true);
-
-	const reset = useCallback(() => {
-		fetch("/api/logout")
-			.then(() => {
-				setUser(undefined);
-			})
-			.catch(err => {
-				console.error(err);
-				setError(true);
-				setUser(undefined);
-			});
-	}, [setError]);
-
-	useEffect(() => {
-		fetch("/api/me")
-			.then(result => result.json())
-			.then(result => {
-				const {email} = result;
-
-				if (email) {
-					setUser({
-						email: "koen.brouwer@vng.nl",
-						fullName: "Koen Brouwer",
-						role: "VNG Realisatie"
-					});
-				}
-
-				toggleLoading(false);
-			})
-			.catch(err => {
-				console.error(err);
-				setError(true);
-				toggleLoading(false);
-			});
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
-
-
-	return useMemo(() => ({
-		user, error, loading, reset
-	}), [user, error, loading, reset]);
-}
 
 const App = () => {
 	const {t} = useTranslation();
@@ -77,6 +25,7 @@ const App = () => {
 	const {user, error, loading, reset} = useAuth();
 	const location = useLocation();
 	const theme = useTheme();
+	const {push} = useHistory();
 
 	const onClickLoginButton = () => {
 		/* Save the current user's page so that we can quickly navigate back after login. */
@@ -109,6 +58,15 @@ const App = () => {
 				)}
 			</TwoColumns>
 		);
+	}
+
+	if (user) {
+		/* Check if the user already visited a specific URL, and navigate there. */
+		const referer = localStorage.getItem("hhb-referer");
+		if (referer) {
+			localStorage.removeItem("hhb-referer");
+			return (<Redirect to={referer} />);
+		}
 	}
 
 	return (

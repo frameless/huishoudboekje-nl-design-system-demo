@@ -59,12 +59,7 @@ const CustomerStatementMessages: React.FC<BoxProps> = ({...props}) => {
 		<Stack spacing={5} {...props}>
 			<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
 				<Stack direction={isMobile ? "column" : "row"} spacing={5}>
-					<FormLeft spacing={3}>
-						<Stack spacing={1}>
-							<Heading size={"md"}>{t("forms.banking.sections.customerStatementMessages.title")}</Heading>
-							<Label>{t("forms.banking.sections.customerStatementMessages.detailText")}</Label>
-						</Stack>
-					</FormLeft>
+					<FormLeft title={t("forms.banking.sections.customerStatementMessages.title")} helperText={t("forms.banking.sections.customerStatementMessages.detailText")} />
 					<FormRight>
 						<Stack spacing={5}>
 							<Input type={"file"} id={"fileUpload"} onChange={onChangeFile} hidden={true} ref={fileUploadInput} />

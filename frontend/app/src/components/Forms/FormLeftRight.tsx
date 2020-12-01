@@ -1,9 +1,18 @@
 import React from "react";
-import {Stack, StackProps, Text} from "@chakra-ui/react";
+import {Heading, Stack, StackProps, Text} from "@chakra-ui/react";
 import theme from "../../config/theme";
 
-export const FormLeft: React.FC<StackProps> = (props) => (
-	<Stack flex={1} spacing={1} {...props} />
+type FormLeftProps = {
+	title?: string,
+	helperText?: string,
+}
+
+export const FormLeft: React.FC<StackProps & FormLeftProps> = ({title, helperText, children, ...props}) => (
+	<Stack flex={1} spacing={1} {...props}>
+		{title && <Heading size={"md"}>{title}</Heading>}
+		{helperText && <Text fontSize={"md"} color={"gray.500"}>{helperText}</Text>}
+		{children}
+	</Stack>
 );
 
 export const FormRight: React.FC<StackProps> = (props) => (

@@ -175,10 +175,7 @@ const BurgerDetail = () => {
 						{/* Rekeningen */}
 						<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
 							<Stack spacing={2} mb={1} direction={isMobile ? "column" : "row"}>
-								<FormLeft>
-									<Heading display={"box"} size={"md"}>{t("forms.burgers.sections.rekeningen.title")}</Heading>
-									<Label>{t("forms.burgers.sections.rekeningen.detailText")}</Label>
-								</FormLeft>
+								<FormLeft title={t("forms.burgers.sections.rekeningen.title")} helperText={t("forms.burgers.sections.rekeningen.detailText")} />
 								<FormRight justifyContent={"center"}>
 									<RekeningList rekeningen={gebruikerData.gebruiker.rekeningen} gebruiker={gebruikerData.gebruiker} onChange={() => refetchGebruiker()} />
 									{showCreateRekeningForm ? (<>
@@ -209,14 +206,7 @@ const BurgerDetail = () => {
 						{/* Afspraken */}
 						<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
 							<Stack spacing={2} mb={1} direction={isMobile ? "column" : "row"}>
-								<FormLeft>
-									<Stack>
-										<Box>
-											<Heading size={"md"}>{t("forms.burgers.sections.agreements.title")}</Heading>
-											<Label>{t("forms.burgers.sections.agreements.detailText")}</Label>
-										</Box>
-									</Stack>
-								</FormLeft>
+								<FormLeft title={t("forms.burgers.sections.agreements.title")} helperText={t("forms.burgers.sections.agreements.detailText")} />
 								<FormRight>
 									{filteredAfspraken.length > 0 && (
 										<Tabs index={tabIndex} onChange={onChangeTabs} variant={"line"}>

@@ -33,10 +33,7 @@ const OrganizationRekeningenView: React.FC<BoxProps & { organization: IOrganisat
 	return (
 		<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5} {...props}>
 			<Stack spacing={2} mb={1} direction={isMobile ? "column" : "row"}>
-				<FormLeft>
-					<Heading display={"box"} size={"md"}>{t("forms.organizations.sections.rekeningen.title")}</Heading>
-					<Label>{t("forms.organizations.sections.rekeningen.detailText")}</Label>
-				</FormLeft>
+				<FormLeft title={t("forms.organizations.sections.rekeningen.title")} helperText={t("forms.organizations.sections.rekeningen.detailText")} />
 				<FormRight justifyContent={"center"}>
 					<RekeningList rekeningen={organization.rekeningen} onChange={() => refresh()} organization={organization} />
 					{showForm ? (<>

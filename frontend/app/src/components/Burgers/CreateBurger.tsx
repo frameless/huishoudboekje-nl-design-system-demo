@@ -182,10 +182,7 @@ const CreateBurger = () => {
 			<Box as={"form"} onSubmit={onSubmit}>
 				<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
 					<Stack direction={isMobile ? "column" : "row"} spacing={2}>
-						<FormLeft>
-							<Heading size={"md"}>{t("forms.burgers.sections.personal.title")}</Heading>
-							<Text data-legacy="FormHelperText" id="personal-helperText">{t("forms.burgers.sections.personal.helperText")}</Text>
-						</FormLeft>
+						<FormLeft title={t("forms.burgers.sections.personal.title")} helperText={t("forms.burgers.sections.personal.helperText")} />
 						<FormRight>
 							<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 								<Stack spacing={1} flex={1}>
@@ -226,10 +223,7 @@ const CreateBurger = () => {
 					<Divider />
 
 					<Stack direction={isMobile ? "column" : "row"} spacing={2}>
-						<FormLeft>
-							<Heading size={"md"}>{t("forms.burgers.sections.contact.title")}</Heading>
-							<Text data-legacy="FormHelperText">{t("forms.burgers.sections.contact.helperText")}</Text>
-						</FormLeft>
+						<FormLeft title={t("forms.burgers.sections.contact.title")} helperText={t("forms.burgers.sections.contact.helperText")} />
 						<FormRight>
 							<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 								<Stack spacing={1} flex={2}>

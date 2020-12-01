@@ -243,10 +243,7 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 		<Box as={"form"} onSubmit={onSubmit} {...props}>
 			<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
 				<Stack spacing={2} direction={isMobile ? "column" : "row"}>
-					<FormLeft>
-						<Heading size={"md"}>{t("forms.agreements.sections.0.title")}</Heading>
-						<Text id="personal-helperText">{t("forms.agreements.sections.0.helperText")}</Text>
-					</FormLeft>
+					<FormLeft title={t("forms.agreements.sections.0.title")} helperText={t("forms.agreements.sections.0.helperText")} />
 					<FormRight>
 						{/*<Stack spacing={2} direction={isMobile ? "column" : "row"}>*/}
 						{/*	<Stack direction={isMobile ? "column" : "row"} spacing={1} mt={2}>*/}
@@ -325,10 +322,7 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 				<Divider />
 
 				<Stack spacing={2} direction={isMobile ? "column" : "row"}>
-					<FormLeft>
-						<Heading size={"md"}>{t("forms.agreements.sections.1.title")}</Heading>
-						<Text data-legacy="FormHelperText" id="personal-helperText">{t("forms.agreements.sections.1.helperText")}</Text>
-					</FormLeft>
+					<FormLeft title={t("forms.agreements.sections.1.title")} helperText={t("forms.agreements.sections.1.helperText")} />
 					<FormRight>
 
 						<Stack spacing={2} direction={isMobile ? "column" : "row"}>

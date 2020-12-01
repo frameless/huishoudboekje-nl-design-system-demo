@@ -1,13 +1,13 @@
 import {Box, BoxProps, Divider, HStack, Stack, VStack} from "@chakra-ui/react";
 import React from "react";
+import {useTranslation} from "react-i18next";
 import {FaRegBuilding, GrGraphQl, MdCreditCard, RiShoppingCart2Line, RiUserLine} from "react-icons/all";
-import {useTranslate} from "../../config/i18n";
 import Routes from "../../config/routes";
 import {isDev} from "../../utils/things";
 import SidebarLink from "./SidebarLink";
 
 const Sidebar: React.FC<BoxProps> = (props) => {
-	const {t} = useTranslate();
+	const {t} = useTranslation();
 
 	return (
 		<Stack spacing={5} p={5} alignSelf={"center"} {...props} width={"100%"}>

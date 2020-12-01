@@ -2,6 +2,7 @@
   "actions": {
     "actions": "Acties",
     "import": "Importeren",
+    "export": "Exporteren",
     "back": "Terug",
     "backToHome": "Terug naar de hoofdpagina",
     "backToList": "Terug naar overzicht",
