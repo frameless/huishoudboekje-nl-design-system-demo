@@ -1,16 +1,40 @@
-import {useQuery} from "@apollo/client";
-import {Box, BoxProps, Button, Divider, FormLabel, Heading, Input, InputGroup, InputLeftElement, Select, Spinner, Stack, Switch, Text, useToast} from "@chakra-ui/react";
+import { useQuery } from "@apollo/client";
+import {
+	Box,
+	BoxProps,
+	Button,
+	Divider,
+	FormLabel,
+	Heading,
+	Input,
+	InputGroup,
+	InputLeftElement,
+	Select,
+	Spinner,
+	Stack,
+	Switch,
+	Text,
+	useToast,
+} from "@chakra-ui/react";
 import moment from "moment";
-import React, {useEffect, useState} from "react";
-import {useInput, useIsMobile, useNumberInput, useToggle, Validators} from "react-grapple";
-import {UseInput} from "react-grapple/dist/hooks/useInput";
-import {useTranslation} from "react-i18next";
-import {sampleData} from "../../config/sampleData/sampleData";
-import {AfspraakPeriod, AfspraakType, IAfspraak, IGebruiker, IntervalType, IOrganisatie, IRubriek} from "../../models";
-import {GetAllOrganisatiesQuery, GetAllRubricsQuery} from "../../services/graphql/queries";
+import React, { useEffect, useState } from "react";
+import { useInput, useIsMobile, useNumberInput, useToggle, Validators } from "react-grapple";
+import { UseInput } from "react-grapple/dist/hooks/useInput";
+import { useTranslation } from "react-i18next";
+import { sampleData } from "../../config/sampleData/sampleData";
+import {
+	AfspraakPeriod,
+	AfspraakType,
+	IAfspraak,
+	IGebruiker,
+	IntervalType,
+	IOrganisatie,
+	IRubriek,
+} from "../../models";
+import { GetAllOrganisatiesQuery, GetAllRubricsQuery } from "../../services/graphql/queries";
 import Queryable from "../../utils/Queryable";
-import {Interval, isDev} from "../../utils/things";
-import {FormLeft, FormRight} from "../Forms/FormLeftRight";
+import { Interval, isDev } from "../../utils/things";
+import { FormLeft, FormRight } from "../Forms/FormLeftRight";
 import RadioButtonGroup from "../Layouts/RadioButtons";
 
 const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) => void, gebruiker: IGebruiker, loading: boolean }> = ({afspraak, onSave, gebruiker, loading = false, ...props}) => {
@@ -73,6 +97,7 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 		defaultValue: "",
 		validate: [v => !isNaN(parseInt(v))]
 	});
+	const [isAutomatischeIncasso, toggleAutomatischeIncasso] = useToggle(true);
 
 	useEffect(() => {
 		if (organizationId.value) {
@@ -114,6 +139,7 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 				toggleContinuous(false);
 				nTimes.setValue(afspraak.aantalBetalingen);
 			}
+			toggleAutomatischeIncasso(afspraak.automatischeIncasso)
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [afspraak]);
@@ -189,11 +215,13 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 			interval: isRecurring ? Interval.create(intervalType.value, intervalNumber.value) : Interval.empty,
 			aantalBetalingen: !isContinuous ? nTimes.value : 0,
 			actief: isActive,
+			automatischeIncasso: afspraakType === AfspraakType.Expense ? isAutomatischeIncasso : null,
 		});
 	};
 
 	const isInvalid = (input) => (input.dirty || isSubmitted) && !input.isValid;
 	const onChangeAfspraakType = val => {
+		console.log(val);
 		if (val) {
 			setAfspraakType(val);
 		}
@@ -230,7 +258,10 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 						{/*	</Stack>*/}
 						{/*</Stack>*/}
 
-						<RadioButtonGroup name={"afspraakType"} onChange={onChangeAfspraakType} defaultValue={afspraakType}
+						<RadioButtonGroup name={"afspraakType"} onChange={(o) => {
+							console.log(o)
+							onChangeAfspraakType(o)
+						}} defaultValue={afspraakType}
 						                  options={afspraakTypeOptions} />
 
 						<Stack spacing={2} direction={isMobile ? "column" : "row"}>
@@ -307,7 +338,6 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 
 						<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 							<Stack spacing={1} flex={1}>
-								<FormLabel htmlFor={"beschrijving"}>{t("forms.agreements.fields.isRecurring")}</FormLabel>
 								<RadioButtonGroup name={"isRecurring"} options={isRecurringOptions} onChange={(val) => toggleRecurring(val === AfspraakPeriod.Periodic)}
 								                  defaultValue={isRecurring ? AfspraakPeriod.Periodic : AfspraakPeriod.Once} />
 							</Stack>
@@ -349,7 +379,7 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 							<Stack direction={isMobile ? "column" : "row"} spacing={1} mt={2}>
 								<Stack isInline={true} alignItems={"center"} spacing={3}>
 									<Switch isChecked={isContinuous} onChange={() => toggleContinuous()} id={"isContinuous"} />
-									<FormLabel htmlFor={"isContinuous"}>{t("forms.agreements.fields.continuous")}</FormLabel>
+									<FormLabel mb={0} htmlFor={"isContinuous"}>{t("forms.agreements.fields.continuous")}</FormLabel>
 								</Stack>
 							</Stack>
 						)}
@@ -362,6 +392,18 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 								</Stack>
 							</Stack>
 						)}
+
+						{afspraakType === AfspraakType.Expense && (
+							<Stack direction={isMobile ? "column" : "row"} spacing={1} mt={2}>
+								<Stack isInline={true} alignItems={"center"} spacing={3}>
+									<Switch isChecked={isAutomatischeIncasso} onChange={() => toggleAutomatischeIncasso()}
+										id={"isAutomatischeIncasso"} />
+									<FormLabel mb={0}
+										htmlFor={"isAutomatischeIncasso"}>{t("forms.agreements.fields.automatischeIncasso")}</FormLabel>
+								</Stack>
+							</Stack>
+						)}
+
 					</FormRight>
 				</Stack>
 

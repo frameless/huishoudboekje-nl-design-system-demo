@@ -53,6 +53,11 @@ const AfspraakItem: React.FC<BoxProps & { afspraak: IAfspraak, onDelete?: (id: n
 				</Stack>
 				<Stack spacing={1} flex={1} alignItems={"flex-end"}>
 					<Box flex={1}>{currencyFormat.format(a.bedrag)}</Box>
+					{a.automatischeIncasso && (
+						<Box flex={1}>
+							<Badge fontSize={"10px"}>{t("agreements.automatischeIncasso")}</Badge>
+						</Box>
+					)}
 					<Box flex={1}>
 						<Badge fontSize={"10px"}>{intervalString()}</Badge>
 					</Box>
@@ -66,6 +71,7 @@ const AfspraakItem: React.FC<BoxProps & { afspraak: IAfspraak, onDelete?: (id: n
 			<Box flex={1}>{a.beschrijving}</Box>
 			<Stack spacing={1} flex={1} alignItems={"flex-end"}>
 				<Box textAlign={"right"}>{currencyFormat.format(a.bedrag)}</Box>
+				{a.automatischeIncasso && <Badge fontSize={"10px"}>{t("agreements.automatischeIncasso")}</Badge>}
 				<Badge fontSize={"10px"}>{intervalString()}</Badge>
 			</Stack>
 			<Box width={100}>

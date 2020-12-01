@@ -127,34 +127,10 @@ export const DeleteOrganizationMutation = gql`
 
 export const CreateAfspraakMutation = gql`
     mutation createAfspraak(
-        $aantalBetalingen: Int
-        $actief: Boolean
-        $bedrag: Bedrag
-        $beschrijving: String
-        $credit: Boolean
-        $eindDatum: Date
-        $gebruikerId: Int
-        $interval: IntervalInput
-        $kenmerk: String
-        $startDatum: Date
-        $tegenRekeningId: Int
-        $organisatieId: Int
-        $rubriekId: Int
+        $input: AfspraakInput!
     ){
         createAfspraak(
-            aantalBetalingen: $aantalBetalingen
-            actief: $actief
-            bedrag: $bedrag
-            beschrijving: $beschrijving
-            credit: $credit
-            eindDatum: $eindDatum
-            gebruikerId: $gebruikerId
-            interval: $interval
-            kenmerk: $kenmerk
-            startDatum: $startDatum
-            tegenRekeningId: $tegenRekeningId
-            organisatieId: $organisatieId
-            rubriekId: $rubriekId
+            input: $input
         ){
             ok
             afspraak {
@@ -176,35 +152,11 @@ export const DeleteAfspraakMutation = gql`
 export const UpdateAfspraakMutation = gql`
     mutation updateAfspraak(
         $id: Int!
-        $aantalBetalingen: Int
-        $actief: Boolean
-        $bedrag: Bedrag
-        $beschrijving: String
-        $credit: Boolean
-        $eindDatum: String
-        $gebruikerId: Int
-        $interval: IntervalInput
-        $kenmerk: String
-        $organisatieId: Int
-        $startDatum: String
-        $tegenRekeningId: Int
-        $rubriekId: Int
+        $input: AfspraakInput!
     ){
         updateAfspraak(
             id: $id
-            aantalBetalingen: $aantalBetalingen
-            actief: $actief
-            bedrag: $bedrag
-            beschrijving: $beschrijving
-            credit: $credit
-            eindDatum: $eindDatum
-            gebruikerId: $gebruikerId
-            interval: $interval
-            kenmerk: $kenmerk
-            organisatieId: $organisatieId
-            startDatum: $startDatum
-            tegenRekeningId: $tegenRekeningId
-            rubriekId: $rubriekId
+            input: $input
         ){
             ok
             afspraak{

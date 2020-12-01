@@ -28,7 +28,7 @@ def test_create_afspraak_success(client):
         m._adapter = adapter
         response = client.post(
             "/graphql",
-            data='{"query": "mutation { createAfspraak( gebruikerId: 1, interval: { jaren: 1, maanden: 2, weken: 3, dagen: 4 } ) { ok } }"}',
+            data='{"query": "mutation { createAfspraak( input: { gebruikerId: 1, interval: { jaren: 1, maanden: 2, weken: 3, dagen: 4 } } ) { ok } }"}',
             content_type='application/json'
         )
         assert response.json["data"]["createAfspraak"]["ok"] == True

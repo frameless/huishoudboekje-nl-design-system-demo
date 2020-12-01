@@ -27,7 +27,7 @@ const CreateAgreement = () => {
 
 	const onSubmit = (data) => {
 		createAfspraak({
-			variables: data
+			variables: { input: data }
 		}).then(() => {
 			toast({
 				status: "success",
