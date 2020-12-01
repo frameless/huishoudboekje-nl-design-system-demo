@@ -258,11 +258,7 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 						{/*	</Stack>*/}
 						{/*</Stack>*/}
 
-						<RadioButtonGroup name={"afspraakType"} onChange={(o) => {
-							console.log(o)
-							onChangeAfspraakType(o)
-						}} defaultValue={afspraakType}
-						                  options={afspraakTypeOptions} />
+						<RadioButtonGroup name={"afspraakType"} onChange={onChangeAfspraakType} defaultValue={AfspraakType.Expense} value={afspraakType} options={afspraakTypeOptions} />
 
 						<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 							<Stack spacing={1} flex={1}>
@@ -337,10 +333,7 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 					<FormRight>
 
 						<Stack spacing={2} direction={isMobile ? "column" : "row"}>
-							<Stack spacing={1} flex={1}>
-								<RadioButtonGroup name={"isRecurring"} options={isRecurringOptions} onChange={(val) => toggleRecurring(val === AfspraakPeriod.Periodic)}
-								                  defaultValue={isRecurring ? AfspraakPeriod.Periodic : AfspraakPeriod.Once} />
-							</Stack>
+							<RadioButtonGroup name={"isRecurring"} onChange={(val) => toggleRecurring(val === AfspraakPeriod.Periodic)} value={isRecurring ? AfspraakPeriod.Periodic : AfspraakPeriod.Once} options={isRecurringOptions} />
 						</Stack>
 
 						{isRecurring && (
