@@ -10,8 +10,10 @@ import hhb_backend.graphql.models.journaalpost as journaalpost
 import hhb_backend.graphql.models.grootboekrekening as grootboekrekening
 import hhb_backend.graphql.models.journaalpost as journaalpost
 import hhb_backend.graphql.models.rubriek as rubriek
+import hhb_backend.graphql.models.overschrijving as overschrijving
 from hhb_backend.graphql.scalars.bedrag import Bedrag
 from hhb_backend.graphql.utils import convert_hhb_interval_to_dict
+from hhb_backend.graphql.utils.afspraak_planner import planned_overschrijvingen
 
 class Interval(graphene.ObjectType):
     jaren = graphene.Int()
@@ -24,7 +26,7 @@ class IntervalInput(graphene.InputObjectType):
     maanden = graphene.Int()
     weken = graphene.Int()
     dagen = graphene.Int()
-    
+
 class Afspraak(graphene.ObjectType):
     """ GraphQL Afspraak model """
     id = graphene.Int()
@@ -43,6 +45,15 @@ class Afspraak(graphene.ObjectType):
     organisatie = graphene.Field(lambda: organisatie.Organisatie)
     journaalposten = graphene.List(lambda: journaalpost.Journaalpost)
     rubriek = graphene.Field(lambda: rubriek.Rubriek)
+    overschrijvingen = graphene.List(lambda: overschrijving.Overschijving, 
+        start_datum=graphene.Date(),
+        eind_datum=graphene.Date()
+    )
+
+    async def resolve_overschrijvingen(root, info, **kwargs):
+        results = []
+        results += planned_overschrijvingen(root, **kwargs)
+        return results
 
     async def resolve_rubriek(root, info):
         """ Get rubriek when requested """

@@ -18,6 +18,7 @@ setup(
         'aiodataloader>=0.2.0',
         'graphene-file-upload>=1.2.2',
         'mt-940>=4.23.0',
-        'nest-asyncio>=1.4.3'
+        'nest-asyncio>=1.4.3',
+        'python-dateutil>=2.8.1'
     ],
 )
