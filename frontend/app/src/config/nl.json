@@ -90,6 +90,8 @@
       "fields": {
         "time": "Tijd",
         "date": "Datum",
+        "startDate": "Startdatum",
+        "endDate": "Einddatum",
         "dateDay": "Dag",
         "dateMonth": "Maand",
         "dateYear": "Jaar"
