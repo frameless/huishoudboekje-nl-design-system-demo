@@ -1,5 +1,5 @@
 import {DownloadIcon} from "@chakra-ui/icons";
-import {Button, FormControl, FormLabel, Input, Stack} from "@chakra-ui/react";
+import {Button, FormControl, FormLabel, Input, Stack, useToast} from "@chakra-ui/react";
 import moment from "moment";
 import React from "react";
 import {useInput, useIsMobile} from "react-grapple";
@@ -9,6 +9,7 @@ import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
 const BookingsExport = () => {
 	const {t} = useTranslation();
 	const isMobile = useIsMobile();
+	const toast = useToast();
 
 	const startDate = useInput({
 		defaultValue: moment().startOf("quarter").format("yyyy-MM-DD"),
@@ -22,6 +23,13 @@ const BookingsExport = () => {
 	const onClickExportButton = () => {
 		// Todo: what happens next when the export button is clicked? (01-12-2020)
 		// console.log(startDate.value, endDate.value);
+
+		toast({
+			position: "top",
+			status: "warning",
+			title: "Niet beschikbaar.",
+			description: "Deze functionaliteit is nog niet beschikbaar."
+		});
 	};
 
 	return (
