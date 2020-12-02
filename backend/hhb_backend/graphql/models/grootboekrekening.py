@@ -27,4 +27,4 @@ class Grootboekrekening(graphene.ObjectType):
             return children_ or []
 
     async def resolve_rubriek(root, info):
-        return await request.dataloader.rubrieken_by_grootboekrekening.load(root.get('id'))
+        return await request.dataloader.rubrieken_by_grootboekrekening.load(root.get('id')) or None
