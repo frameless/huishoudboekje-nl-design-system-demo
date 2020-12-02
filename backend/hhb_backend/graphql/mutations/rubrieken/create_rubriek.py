@@ -17,6 +17,10 @@ class CreateRubriek(graphene.Mutation):
 
     def mutate(root, info, **kwargs):
         """ Create the new Rubriek """
+        if kwargs["grootboekrekening_id"]:
+            grootboek_check = requests.get(f"{settings.GROOTBOEK_SERVICE_URL}/grootboekrekeningen/{kwargs['grootboekrekening_id']}")
+            if grootboek_check.status_code != 200:
+                raise GraphQLError(f"Grootboekrekening id [{kwargs['grootboekrekening_id']}] not found.")
         post_response = requests.post(
             f"{settings.HHB_SERVICES_URL}/rubrieken/",
             data=json.dumps(kwargs, default=str),
