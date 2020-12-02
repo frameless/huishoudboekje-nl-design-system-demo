@@ -45,8 +45,8 @@ const BookingsExport = () => {
 							<FormLabel>{t("forms.common.fields.endDate")}</FormLabel>
 							<Input {...endDate.bind} type={"date"} pattern="\d{2}-\d{2}-\d{4}" />
 						</FormControl>
-						<FormControl>
-							<Button flex={1} colorScheme={"primary"} onClick={onClickExportButton}>{t("actions.export")}</Button>
+						<FormControl flex={1}>
+							<Button colorScheme={"primary"} onClick={onClickExportButton}>{t("actions.export")}</Button>
 						</FormControl>
 					</Stack>
 				</FormRight>
