@@ -1,9 +1,7 @@
 """ Grootboekrekening model as used in GraphQL queries """
 import graphene
-import requests
 from flask import request
 from hhb_backend.graphql.models.rubriek import Rubriek
-from hhb_backend.graphql import settings
 
 class Grootboekrekening(graphene.ObjectType):
     """ Grootboekrekening model """
@@ -28,8 +26,5 @@ class Grootboekrekening(graphene.ObjectType):
             children_ = await request.dataloader.grootboekrekeningen_by_id.load_many(root.get('children'))
             return children_ or []
 
-    def resolve_rubriek(root, info):
-        response = requests.get(settings.HHB_SERVICES_URL + "/rubrieken/?filter_grootboekrekeningen=" + root.get('id'))
-        if len(response.json()["data"]) > 0:
-            return response.json()["data"][0]
-        return None
+    async def resolve_rubriek(root, info):
+        return await request.dataloader.rubrieken_by_grootboekrekening.load(root.get('id'))
