@@ -208,7 +208,7 @@ const BurgerDetail = () => {
 						<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
 							<Stack spacing={2} mb={1} direction={isMobile ? "column" : "row"}>
 								<FormLeft title={t("forms.burgers.sections.agreements.title")} helperText={t("forms.burgers.sections.agreements.detailText")} />
-								<FormRight>
+								<FormRight justifyContent={"center"}>
 									{filteredAfspraken.length > 0 && (
 										<Tabs index={tabIndex} onChange={onChangeTabs} variant={"line"}>
 											<TabList>
