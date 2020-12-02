@@ -9,14 +9,14 @@ mock_grootboekrekeningen = {"data": [
     {"id": "m1", "naam": "inkomsten", "children": ["m12"]},
     {"id": "m12", "naam": "salaris", "parent_id": "m1"},
 ]}
-mock_grootboekrekening = {"data": {"id": "m12", "naam": "salaris", "parent_id": "m1"}}
+mock_grootboekrekening = {"data": [{"id": "m12", "naam": "salaris", "parent_id": "m1"}]}
 
 def setup_services(mock):
     grootboekrekeningen_adapter1 = mock.get(f"{settings.GROOTBOEK_SERVICE_URL}/grootboekrekeningen/",
                                            json=mock_grootboekrekeningen)
-    grootboekrekeningen_adapter2 = mock.get(f"{settings.GROOTBOEK_SERVICE_URL}/grootboekrekeningen/WRONG",
-                                           json=mock_grootboekrekeningen, status_code=404)
-    grootboekrekeningen_adapter3 = mock.get(f"{settings.GROOTBOEK_SERVICE_URL}/grootboekrekeningen/m12",
+    grootboekrekeningen_adapter2 = mock.get(f"{settings.GROOTBOEK_SERVICE_URL}/grootboekrekeningen/?filter_ids=WRONG",
+                                           json={'data': []})
+    grootboekrekeningen_adapter3 = mock.get(f"{settings.GROOTBOEK_SERVICE_URL}/grootboekrekeningen/?filter_ids=m12",
                                            json=mock_grootboekrekening)
     rubrieken_adapter = mock.post(f"{settings.HHB_SERVICES_URL}/rubrieken/11",
                                           json=mock_rubriek_post_success_repsonse, status_code=201)
