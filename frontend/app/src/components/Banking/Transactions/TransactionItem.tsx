@@ -3,6 +3,7 @@ import {
 	Box,
 	BoxProps,
 	Button,
+	Divider,
 	FormLabel,
 	IconButton,
 	Modal,
@@ -13,10 +14,13 @@ import {
 	ModalOverlay,
 	Select,
 	Stack,
+	Tabs, Tab, TabPanels, TabPanel,
+	TabList,
 	Text,
 	Tooltip,
 	useDisclosure,
-	useToast
+	useToast,
+	Heading
 } from "@chakra-ui/react";
 import {friendlyFormatIBAN} from "ibantools";
 import React, {useContext} from "react";
@@ -31,7 +35,7 @@ import {
 	useUpdateJournaalpostGrootboekrekeningMutation
 } from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
-import {dateFormat} from "../../../utils/things";
+import {formatBurgerName, dateFormat} from "../../../utils/things";
 import Currency from "../../Currency";
 import {Label} from "../../Forms/FormLeftRight";
 import {TransactionsContext} from "./index";
@@ -44,6 +48,9 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }>
 	const {refetch} = useContext(TransactionsContext);
 
 	const rubric = useInput({
+		validate: [Validators.required]
+	});
+	const afspraak = useInput({
 		validate: [Validators.required]
 	});
 
@@ -180,24 +187,57 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }>
 							</Box>
 						</Box>
 
-						<Box as={"form"}>
-							<FormLabel>{t("banking.rubric")}</FormLabel>
-							<Queryable query={$rubrics}>{({rubrieken}) => (
-								<Stack direction={"row"}>
-									<Select {...rubric.bind} isInvalid={!rubric.isValid}>
-										<option value={undefined}>{t("forms.banking.fields.rubricChoose")}</option>
-										{rubrieken.map((r: Rubriek) => {
-											return r.grootboekrekening && (
-												<option key={r.id} value={r.grootboekrekening.id}>{r.naam}</option>
-											);
-										})}
-									</Select>
-									{bt.journaalpost && (
-										<IconButton icon={<DeleteIcon />} aria-label={t("actions.delete")} variant={"ghost"} onClick={() => onClickDelete()} />
-									)}
-								</Stack>
-							)}</Queryable>
-						</Box>
+						<Divider />
+
+						<Heading size={"sm"}>Koppelen met</Heading>
+
+						<Tabs isFitted>
+							<TabList>
+								<Tab>Rubriek</Tab>
+								<Tab>Afspraak</Tab>
+							</TabList>
+							<TabPanels>
+								<TabPanel px={0}>
+									<Box>
+										<FormLabel>{t("banking.rubric")}</FormLabel>
+										<Queryable query={$rubrics}>{({rubrieken}) => (
+											<Stack direction={"row"}>
+												<Select {...rubric.bind} isInvalid={!rubric.isValid}>
+													<option value={undefined}>{t("forms.banking.fields.rubricChoose")}</option>
+													{rubrieken.map((r: IRubriek) => (
+														<option key={r.id} value={r.grootboekrekening.id}>{r.naam}</option>
+													))}
+												</Select>
+												{bt.journaalpost && (
+													<IconButton icon={<DeleteIcon />} aria-label={t("actions.delete")} variant={"ghost"} onClick={() => onClickDelete()} />
+												)}
+											</Stack>
+										)}</Queryable>
+									</Box>
+								</TabPanel>
+
+								<TabPanel px={0}>
+									<Box>
+										<FormLabel>Afspraak</FormLabel>
+										<Queryable query={$afspraken}>{({afspraken}) => (
+											<Stack direction={"row"}>
+												<Select {...afspraak.bind} isInvalid={!afspraak.isValid}>
+													<option value={undefined}>{t("forms.banking.fields.afspraakChoose")}</option>
+													{afspraken.map((a: IAfspraak) => (
+														<option key={a.id} value={a.id}>
+															{[a.organisatie?.weergaveNaam, "-", formatBurgerName(a.gebruiker)].join(" ")}
+														</option>
+													))}
+												</Select>
+												{bt.journaalpost && (
+													<IconButton icon={<DeleteIcon />} aria-label={t("actions.delete")} variant={"ghost"} onClick={() => onClickDelete()} />
+												)}
+											</Stack>
+										)}</Queryable>
+									</Box>
+								</TabPanel>
+							</TabPanels>
+						</Tabs>
 					</Stack>
 
 				</ModalBody>
