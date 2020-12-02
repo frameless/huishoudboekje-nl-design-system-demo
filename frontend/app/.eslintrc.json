@@ -46,13 +46,6 @@
     "no-empty": [
       "warn"
     ],
-    "react/self-closing-comp": [
-      "warn",
-      {
-        "component": true,
-        "html": false
-      }
-    ],
     "no-console": [
       "warn",
       {
@@ -61,6 +54,48 @@
           "info"
         ]
       }
+    ],
+    "react/self-closing-comp": [
+      "warn",
+      {
+        "component": true,
+        "html": false
+      }
+    ],
+    "react/forbid-elements": [
+      "error",
+      {
+        "forbid": [
+          {
+            "element": "div",
+            "message": "use <Box> or <Stack> from ChakraUI instead"
+          },
+          {
+            "element": "input",
+            "message": "use <Input> from ChakraUI instead"
+          },
+          {
+            "element": "button",
+            "message": "use <Button> from ChakraUI instead"
+          }
+        ]
+      }
+    ],
+    "react/no-multi-comp": [
+      "warn",
+      {
+        "ignoreStateless": true
+      }
+    ],
+    "react/function-component-definition": [
+      "warn",
+      {
+        "namedComponents": "arrow-function",
+        "unnamedComponents": "arrow-function"
+      }
+    ],
+    "react/no-unknown-property": [
+      "warn"
     ]
   },
   "ignorePatterns": [

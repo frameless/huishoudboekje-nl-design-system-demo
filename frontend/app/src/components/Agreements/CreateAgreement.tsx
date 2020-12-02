@@ -1,15 +1,15 @@
-import React from "react";
-import {Heading, Spinner, Stack, useToast,} from "@chakra-ui/react";
-import BackButton from "../BackButton";
-import Routes from "../../config/routes";
 import {useMutation, useQuery} from "@apollo/client";
+import {Heading, Stack, useToast,} from "@chakra-ui/react";
+import React from "react";
+import {useTranslation} from "react-i18next";
 import {Redirect, useHistory, useParams} from "react-router-dom";
+import Routes from "../../config/routes";
+import {IGebruiker} from "../../models";
 import {CreateAfspraakMutation} from "../../services/graphql/mutations";
 import {GetOneGebruikerQuery} from "../../services/graphql/queries";
-import {IGebruiker} from "../../models";
-import AfspraakForm from "./AfspraakForm";
 import Queryable from "../../utils/Queryable";
-import {useTranslation} from "react-i18next";
+import BackButton from "../BackButton";
+import AfspraakForm from "./AfspraakForm";
 
 const CreateAgreement = () => {
 	const {burgerId} = useParams<{ burgerId }>();
@@ -27,7 +27,7 @@ const CreateAgreement = () => {
 
 	const onSubmit = (data) => {
 		createAfspraak({
-			variables: { input: data }
+			variables: {input: data}
 		}).then(() => {
 			toast({
 				status: "success",
@@ -50,7 +50,7 @@ const CreateAgreement = () => {
 	return (<>
 		<BackButton to={Routes.Burger(burgerId)} />
 
-		<Queryable query={$gebruiker} loading={<Loading />} error={<Redirect to={Routes.NotFound} />}>{(data) => (
+		<Queryable query={$gebruiker} error={<Redirect to={Routes.NotFound} />}>{(data) => (
 			<Stack spacing={5}>
 				<Stack direction={"row"} spacing={5} justifyContent={"space-between"} alignItems={"center"}>
 					<Stack direction={"row"} justifyContent={"flex-start"} alignItems={"center"} spacing={3}>
@@ -63,11 +63,5 @@ const CreateAgreement = () => {
 		)}</Queryable>
 	</>);
 };
-
-const Loading = () => (
-	<Stack spacing={5} alignItems={"center"} justifyContent={"center"} my={10}>
-		<Spinner />
-	</Stack>
-);
 
 export default CreateAgreement;
