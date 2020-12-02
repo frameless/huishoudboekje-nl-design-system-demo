@@ -3,13 +3,13 @@ mutation importRubrieken {
     rubriek1: createRubriek(naam: "Gas", grootboekrekeningId: "WBedHuiGweGas"){
         ok
     }
-    rubriek2: createRubriek(naam: "Gas", grootboekrekeningId: "WBedHuiGweG"){
+    rubriek2: createRubriek(naam: "Gas", grootboekrekeningId: "WBedHuiGweGas"){
         ok
     }
-    rubriek3: createRubriek(naam: "Water", grootboekrekeningId: "WBedHuiGweW"){
+    rubriek3: createRubriek(naam: "Water", grootboekrekeningId: "WBedHuiGweWat"){
         ok
     }
-    rubriek4: createRubriek(naam: "Elektra", grootboekrekeningId: "WBedHuiGweE"){
+    rubriek4: createRubriek(naam: "Elektra", grootboekrekeningId: "WBedHuiGweElk"){
         ok
     }
     rubriek5: createRubriek(naam: "Inkomsten", grootboekrekeningId: "WOmzNooNdo"){
