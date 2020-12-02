@@ -35,7 +35,7 @@ import { GetAllOrganisatiesQuery, GetAllRubricsQuery } from "../../services/grap
 import Queryable from "../../utils/Queryable";
 import { Interval, isDev } from "../../utils/things";
 import { FormLeft, FormRight } from "../Forms/FormLeftRight";
-import RadioButtonGroup from "../Layouts/RadioButtons";
+import RadioButtonGroup from "../Layouts/RadioButtons/RadioButtonGroup";
 
 const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) => void, gebruiker: IGebruiker, loading: boolean }> = ({afspraak, onSave, gebruiker, loading = false, ...props}) => {
 	const {t} = useTranslation();
@@ -221,7 +221,6 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 
 	const isInvalid = (input) => (input.dirty || isSubmitted) && !input.isValid;
 	const onChangeAfspraakType = val => {
-		console.log(val);
 		if (val) {
 			setAfspraakType(val);
 		}

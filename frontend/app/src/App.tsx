@@ -1,4 +1,4 @@
-import {ChevronDownIcon, WarningIcon} from "@chakra-ui/icons";
+import {WarningIcon} from "@chakra-ui/icons";
 import {Box, Button, Flex, Heading, HStack, IconButton, Spinner, Stack, Text, useTheme, useToast} from "@chakra-ui/react";
 import {observer} from "mobx-react";
 import React, {useEffect, useState} from "react";
@@ -114,7 +114,8 @@ const App = () => {
 							<Stack spacing={5} direction={"row"} justifyContent={"flex-end"} alignItems={"center"} pb={5}>
 								<HStack spacing={5} alignItems={"center"}>
 									<UserStatus name={session.user.fullName} role={session.user.role} />
-									<IconButton size={"14px"} icon={<FaLock />} color={"gray.400"} _hover={{color: "primary.700"}} aria-label={t("actions.logout")} mr={3} onClick={onClickLogoutButton} />
+									<IconButton size={"14px"} icon={<FaLock />} color={"gray.400"} _hover={{color: "primary.700"}} aria-label={t("actions.logout")} mr={3}
+									            onClick={onClickLogoutButton} />
 								</HStack>
 							</Stack>
 
