@@ -1,22 +1,23 @@
-import {useMutation, useQuery} from "@apollo/client";
-import {Box, Button, Divider, FormLabel, Heading, Input, Spinner, Stack, Tooltip, useToast} from "@chakra-ui/react";
-import React, {useEffect} from "react";
+import {Box, Button, Divider, FormLabel, Input, Stack, Tooltip, useToast} from "@chakra-ui/react";
+import React from "react";
 import {useInput, useIsMobile, Validators} from "react-grapple";
 import {useTranslation} from "react-i18next";
-import {Redirect, useParams} from "react-router-dom";
+import {Redirect, useHistory, useParams} from "react-router-dom";
 import Routes from "../../config/routes";
-import {IOrganisatie} from "../../models";
-import {UpdateOrganizationMutation} from "../../services/graphql/mutations";
-import {GetOneOrganisatieQuery} from "../../services/graphql/queries";
+import {useGetOneOrganisatieQuery, useUpdateOrganisatieMutation} from "../../generated/graphql";
+import Queryable from "../../utils/Queryable";
 import {Regex} from "../../utils/things";
 import BackButton from "../BackButton";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
+import Page from "../Layouts/Page";
+import Section from "../Layouts/Section";
 
-const OrganizationEdit = () => {
+const OrganisatieEdit = () => {
 	const isMobile = useIsMobile();
 	const {t} = useTranslation();
-	const {id} = useParams<{ id }>();
+	const {id} = useParams<{ id: string }>();
 	const toast = useToast();
+	const {push}= useHistory();
 
 	const kvkNumber = useInput({
 		defaultValue: "",
@@ -48,34 +49,21 @@ const OrganizationEdit = () => {
 		validate: [Validators.required]
 	});
 
-	const {data, loading, error} = useQuery<{ organisatie: IOrganisatie }>(GetOneOrganisatieQuery, {
-		variables: {id}
-	});
-
-	const [updateMutation, {loading: updateLoading}] = useMutation(UpdateOrganizationMutation);
-
-	useEffect(() => {
-		let mounted = true;
-
-		if (mounted && data) {
-			const {organisatie} = data;
-
+	const $organisatie = useGetOneOrganisatieQuery({
+		variables: {id: parseInt(id)},
+		onCompleted: ({organisatie}) => {
 			if (organisatie) {
-				kvkNumber.setValue(organisatie.kvkNummer.toString());
-				companyName.setValue(organisatie.kvkDetails.naam);
-				displayName.setValue(organisatie.weergaveNaam);
-				street.setValue(organisatie.kvkDetails.straatnaam);
-				houseNumber.setValue(organisatie.kvkDetails.huisnummer);
-				zipcode.setValue(organisatie.kvkDetails.postcode);
-				city.setValue(organisatie.kvkDetails.plaatsnaam);
+				kvkNumber.setValue(organisatie.kvkNummer?.toString() || "");
+				companyName.setValue(organisatie.kvkDetails?.naam || "");
+				displayName.setValue(organisatie.weergaveNaam || "");
+				street.setValue(organisatie.kvkDetails?.straatnaam || "");
+				houseNumber.setValue(organisatie.kvkDetails?.huisnummer || "");
+				zipcode.setValue(organisatie.kvkDetails?.postcode || "");
+				city.setValue(organisatie.kvkDetails?.plaatsnaam || "");
 			}
 		}
-
-		return () => {
-			mounted = false;
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [data, loading]);
+	});
+	const [updateOrganisatie, $updateOrganisatie] = useUpdateOrganisatieMutation();
 
 	const onSubmit = (e) => {
 		e.preventDefault();
@@ -98,9 +86,9 @@ const OrganizationEdit = () => {
 			return;
 		}
 
-		updateMutation({
+		updateOrganisatie({
 			variables: {
-				id,
+				id: parseInt(id),
 				kvkNummer: kvkNumber.value,
 				naam: companyName.value,
 				weergaveNaam: displayName.value,
@@ -115,6 +103,7 @@ const OrganizationEdit = () => {
 				title: t("messages.organizations.updateSuccessMessage"),
 				position: "top",
 			});
+			push(Routes.Organisatie(parseInt(id)));
 		}).catch(err => {
 			console.error(err);
 			toast({
@@ -129,23 +118,11 @@ const OrganizationEdit = () => {
 
 	const isInvalid = (input) => input.dirty && !input.isValid;
 
-	return (<>
-		<BackButton to={Routes.Organization(id)} />
-
-		{loading && (
-			<Stack spacing={5} alignItems={"center"} justifyContent={"center"} my={10}>
-				<Spinner />
-			</Stack>
-		)}
-		{!loading && error && (
-			<Redirect to={Routes.NotFound} />
-		)}
-		{!loading && !error && data && (
-			<Stack spacing={5}>
-				<Heading size={"lg"}>{data.organisatie.weergaveNaam}</Heading>
-
+	return (
+		<Queryable query={$organisatie} error={<Redirect to={Routes.NotFound} />}>{({organisatie}) => (
+			<Page backButton={<BackButton to={Routes.Organisatie(parseInt(id))} />} title={organisatie.weergaveNaam}>
 				<Box as={"form"} onSubmit={onSubmit}>
-					<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
+					<Section>
 						<Stack direction={isMobile ? "column" : "row"} spacing={2}>
 							<FormLeft title={t("forms.organizations.sections.organizational.title")} helperText={t("forms.organizations.sections.organizational.helperText")} />
 							<FormRight>
@@ -208,15 +185,16 @@ const OrganizationEdit = () => {
 							<FormLeft />
 							<FormRight>
 								<Stack direction={"row"} spacing={1} justifyContent={"flex-end"}>
-									<Button isLoading={loading || updateLoading} type={"submit"} colorScheme={"primary"} onClick={onSubmit}>{t("actions.save")}</Button>
+									<Button isLoading={$organisatie.loading || $updateOrganisatie.loading} type={"submit"} colorScheme={"primary"} onClick={onSubmit}>{t("actions.save")}</Button>
 								</Stack>
 							</FormRight>
 						</Stack>
-					</Stack>
+					</Section>
 				</Box>
-			</Stack>
+			</Page>
 		)}
-	</>);
+		</Queryable>
+	)
 };
 
-export default OrganizationEdit;
+export default OrganisatieEdit;

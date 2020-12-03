@@ -4,10 +4,10 @@ import {friendlyFormatIBAN} from "ibantools";
 import React, {useRef} from "react";
 import {useToggle} from "react-grapple";
 import {useTranslation} from "react-i18next";
-import {IRekening} from "../../models";
+import {Rekening} from "../../generated/graphql";
 
 type RekeningListItemProps = Omit<ButtonProps, "children">;
-const RekeningListItem: React.FC<RekeningListItemProps & { rekening: IRekening, onDelete?: VoidFunction }> = ({rekening, onDelete, ...props}) => {
+const RekeningListItem: React.FC<RekeningListItemProps & { rekening: Rekening, onDelete?: VoidFunction }> = ({rekening, onDelete, ...props}) => {
 	const {t} = useTranslation();
 	const [deleteDialogOpen, toggleDeleteDialog] = useToggle(false);
 	const cancelDeleteRef = useRef(null);
@@ -19,6 +19,10 @@ const RekeningListItem: React.FC<RekeningListItemProps & { rekening: IRekening, 
 		}
 	}
 	const onCloseDeleteDialog = () => toggleDeleteDialog(false);
+
+	if (!rekening) {
+		return null;
+	}
 
 	return (<>
 		{onDelete && (
@@ -37,7 +41,8 @@ const RekeningListItem: React.FC<RekeningListItemProps & { rekening: IRekening, 
 
 		<Tooltip aria-label={rekening.rekeninghouder} label={rekening.rekeninghouder} placement={"top"} hasArrow={true}>
 			<Button size={"sm"} mb={2} mr={2} {...props}>
-				{friendlyFormatIBAN(rekening.iban)}
+				{/* Todo: display some error like "Unknown iban" here, if rekening.iban doesn't exist. */}
+				{rekening.iban ? friendlyFormatIBAN(rekening.iban) : "??"}
 				{onDelete && <CloseIcon onClick={() => toggleDeleteDialog(true)} ml={2} w={"12px"} h={"12px"} />}
 			</Button>
 		</Tooltip>

@@ -15,13 +15,13 @@ beforeEach(() => {
 		});
 		cy.mockGraphqlOps({
 			operations: {
-				getAllGebruikers: {
+				getAllBurgers: {
 					gebruikers: sampleBurgers,
 				},
-				getOneGebruiker: ({id}) => ({
+				getOneBurger: ({id}) => ({
 					gebruiker: sampleBurgers.find(b => b.id === parseInt(id))
 				}),
-				createGebruiker: (props) => ({
+				createBurger: (props) => ({
 					createGebruiker: {
 						gebruiker: {
 							...props,
@@ -29,11 +29,11 @@ beforeEach(() => {
 						}
 					}
 				}),
-				updateGebruiker: (props) => ({
+				updateBurger: (props) => ({
 					ok: true,
 					gebruiker: props
 				}),
-				deleteGebruiker: {
+				deleteBurger: {
 					ok: true,
 				}
 			}

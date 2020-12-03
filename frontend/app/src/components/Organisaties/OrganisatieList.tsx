@@ -5,46 +5,44 @@ import {useInput} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {useHistory} from "react-router-dom";
 import Routes from "../../config/routes";
-import {Gebruiker, useGetAllBurgersQuery} from "../../generated/graphql";
+import {Organisatie, useGetAllOrganisatiesQuery} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
 import {searchFields} from "../../utils/things";
 import DeadEndPage from "../DeadEndPage";
 import Page from "../Layouts/Page";
-import BurgerListView from "./BurgerListView";
+import OrganisatieListView from "./OrganisatieListView";
 
-const BurgerList = () => {
+const OrganisatieList = () => {
 	const {t} = useTranslation();
 	const {push} = useHistory();
 	const search = useInput<string>({
 		placeholder: t("forms.search.fields.search")
 	});
 
-	const [filteredBurgers, setFilteredBurgers] = useState<Gebruiker[]>([]);
-	const $burgers = useGetAllBurgersQuery({
+	const [filteredOrganisaties, setFilteredOrganisaties] = useState<Organisatie[]>([]);
+	const $organisaties = useGetAllOrganisatiesQuery({
 		fetchPolicy: "no-cache",
-		onCompleted: ({gebruikers: burgers = []}) => {
-			setFilteredBurgers(burgers);
-		},
+		onCompleted: ({organisaties = []}) => {
+			setFilteredOrganisaties(organisaties);
+		}
 	});
 
 	useEffect(() => {
 		let mounted = true;
 
-		const {data} = $burgers;
-
-		if (mounted && data) {
-			const {gebruikers: burgers = []} = data;
-			setFilteredBurgers(burgers.filter(b => searchFields(search.value, [b.achternaam || "", b.voornamen || ""])));
+		if (mounted && $organisaties.data) {
+			const {organisaties = []} = $organisaties.data;
+			setFilteredOrganisaties(organisaties.filter(o => searchFields(search.value, [o.weergaveNaam || ""])));
 		}
 
 		return () => {
 			mounted = false
 		};
-	}, [$burgers, search.value]);
+	}, [$organisaties, search.value]);
 
-	const onKeyDownOnSearch = (e) => {
+	const onKeyDownOnSearchField = (e) => {
 		if (e.key === "Escape") {
-			search.reset();
+			search.clear();
 		}
 	};
 
@@ -54,37 +52,37 @@ const BurgerList = () => {
 	};
 
 	return (
-		<Queryable query={$burgers}>{({gebruikers: burgers = []}: { gebruikers: Gebruiker[] }) => {
-			if (burgers.length === 0) {
+		<Queryable query={$organisaties}>{({organisaties = []}: { organisaties: Organisatie[] }) => {
+			if (organisaties.length === 0) {
 				return (
-					<DeadEndPage message={t("messages.burgers.addHint", {buttonLabel: t("actions.add")})}>
+					<DeadEndPage message={t("messages.organizations.addHint", {buttonLabel: t("actions.add")})}>
 						<Button size={"sm"} colorScheme={"primary"} variant={"solid"} leftIcon={<AddIcon />}
-						        onClick={() => push(Routes.CreateBurger)}>{t("actions.add")}</Button>
+						        onClick={() => push(Routes.CreateOrganisatie)}>{t("actions.add")}</Button>
 					</DeadEndPage>
 				);
 			}
 
 			return (
-				<Page title={t("burgers.burgers")} right={(
-					<Stack alignSelf={"flex-end"} direction={"row"} spacing={5}>
+				<Page title={t("organizations.organizations")} right={(
+					<Stack direction={"row"} spacing={5}>
 						<InputGroup>
 							<InputLeftElement><SearchIcon color={"gray.300"} /></InputLeftElement>
-							<Input type={"text"} {...search.bind} bg={"white"} onKeyDown={onKeyDownOnSearch} />
+							<Input type={"text"} {...search.bind} bg={"white"} onKeyDown={onKeyDownOnSearchField} />
 							{search.value.length > 0 && (
 								<InputRightElement>
-									<IconButton onClick={() => search.reset()} size={"xs"} variant={"link"} icon={<CloseIcon />} aria-label={t("actions.cancel")}
+									<IconButton onClick={() => search.clear()} size={"xs"} variant={"link"} icon={<CloseIcon />} aria-label={t("actions.cancel")}
 									            color={"gray.300"} />
 								</InputRightElement>
 							)}
 						</InputGroup>
 					</Stack>
 				)}>
-					{filteredBurgers.length === 0 ? (
-						<DeadEndPage message={t("messages.burgers.noSearchResults")}>
+					{filteredOrganisaties.length === 0 ? (
+						<DeadEndPage message={t("messages.organizations.noSearchResults")}>
 							<Button size="sm" colorScheme="primary" onClick={onClickResetSearch}>{t("actions.clearSearch")}</Button>
 						</DeadEndPage>
 					) : (
-						<BurgerListView burgers={filteredBurgers} showAddButton={search.value.trim().length === 0} />
+						<OrganisatieListView organisaties={filteredOrganisaties} showAddButton={search.value.trim().length === 0} />
 					)}
 				</Page>
 			);
@@ -93,4 +91,4 @@ const BurgerList = () => {
 	)
 };
 
-export default BurgerList;
+export default OrganisatieList;

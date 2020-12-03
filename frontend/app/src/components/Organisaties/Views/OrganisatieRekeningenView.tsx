@@ -1,26 +1,28 @@
-import {useMutation} from "@apollo/client";
 import {AddIcon} from "@chakra-ui/icons";
 import {Box, BoxProps, Button, Divider, Stack} from "@chakra-ui/react";
 import React, {useContext} from "react";
 import {useIsMobile, useToggle} from "react-grapple";
 import {useTranslation} from "react-i18next";
-import {IOrganisatie} from "../../../models";
-import {CreateOrganizationRekeningMutation} from "../../../services/graphql/mutations";
+import {Organisatie, useCreateOrganisatieRekeningMutation} from "../../../generated/graphql";
 import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
 import RekeningForm from "../../Rekeningen/RekeningForm";
 import RekeningList from "../../Rekeningen/RekeningList";
-import {OrganizationDetailContext} from "../OrganizationDetail";
+import {OrganizationDetailContext} from "../OrganisatieDetail";
 
-const OrganizationRekeningenView: React.FC<BoxProps & { organization: IOrganisatie }> = ({organization, ...props}) => {
+const OrganisatieRekeningenView: React.FC<BoxProps & { organisatie: Organisatie }> = ({organisatie, ...props}) => {
 	const {t} = useTranslation();
 	const isMobile = useIsMobile();
 	const {refresh} = useContext(OrganizationDetailContext);
 	const [showForm, toggleForm] = useToggle(false);
-	const [createRekeningForOrg] = useMutation(CreateOrganizationRekeningMutation);
+	const [createRekeningForOrg] = useCreateOrganisatieRekeningMutation();
 	const onSaveRekening = (rekening, resetForm) => {
+		if (!organisatie.id) {
+			return null;
+		}
+
 		createRekeningForOrg({
 			variables: {
-				orgId: organization.id,
+				orgId: organisatie.id,
 				rekening
 			}
 		}).then(() => {
@@ -30,17 +32,19 @@ const OrganizationRekeningenView: React.FC<BoxProps & { organization: IOrganisat
 		});
 	};
 
+	const {rekeningen = []} = organisatie;
+
 	return (
 		<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5} {...props}>
 			<Stack spacing={2} mb={1} direction={isMobile ? "column" : "row"}>
 				<FormLeft title={t("forms.organizations.sections.rekeningen.title")} helperText={t("forms.organizations.sections.rekeningen.detailText")} />
 				<FormRight justifyContent={"center"}>
-					<RekeningList rekeningen={organization.rekeningen} onChange={() => refresh()} organization={organization} />
+					<RekeningList rekeningen={rekeningen} onChange={() => refresh()} organisatie={organisatie} />
 					{showForm ? (<>
-						{organization.rekeningen.length > 0 && <Divider />}
+						{rekeningen.length > 0 && <Divider />}
 
 						<RekeningForm rekening={{
-							rekeninghouder: organization.weergaveNaam
+							rekeninghouder: organisatie.weergaveNaam
 						}} onSave={onSaveRekening} onCancel={() => toggleForm(false)} />
 					</>) : (
 						<Box>
@@ -53,4 +57,4 @@ const OrganizationRekeningenView: React.FC<BoxProps & { organization: IOrganisat
 	);
 };
 
-export default OrganizationRekeningenView;
+export default OrganisatieRekeningenView;

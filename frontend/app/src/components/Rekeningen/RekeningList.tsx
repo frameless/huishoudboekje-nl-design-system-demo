@@ -1,28 +1,18 @@
-import React from "react";
 import {Box, BoxProps, useToast,} from "@chakra-ui/react";
-import {IGebruiker, IOrganisatie, IRekening} from "../../models";
-import RekeningListItem from "./RekeningListItem";
+import React from "react";
 import {useTranslation} from "react-i18next";
-import {useMutation} from "@apollo/client";
-import {DeleteGebruikerRekeningMutation, DeleteOrganizationRekeningMutation} from "../../services/graphql/mutations";
+import {Gebruiker, Organisatie, Rekening, useDeleteGebruikerRekeningMutation, useDeleteOrganisatieRekeningMutation} from "../../generated/graphql";
+import RekeningListItem from "./RekeningListItem";
 
-const RekeningList: React.FC<BoxProps & { rekeningen: IRekening[], gebruiker?: IGebruiker, organization?: IOrganisatie, onChange?: VoidFunction }> = ({rekeningen, gebruiker, organization, onChange, ...props}) => {
+type RekeningListProps = { rekeningen: Rekening[], gebruiker?: Gebruiker, organisatie?: Organisatie, onChange?: VoidFunction };
+const RekeningList: React.FC<BoxProps & RekeningListProps> = ({rekeningen, gebruiker, organisatie, onChange, ...props}) => {
 	const {t} = useTranslation();
 	const toast = useToast();
-	const [deleteGebruikerRekening] = useMutation(DeleteGebruikerRekeningMutation);
-	const [deleteOrganizationRekening] = useMutation(DeleteOrganizationRekeningMutation);
+	const [deleteGebruikerRekening] = useDeleteGebruikerRekeningMutation();
+	const [deleteOrganizationRekening] = useDeleteOrganisatieRekeningMutation();
 
-	const onDeleteRekening = async (id: number, entity: "gebruiker" | "organization", entityId: number) => {
-		const mutation = {
-			"gebruiker": deleteGebruikerRekening,
-			"organization": deleteOrganizationRekening,
-		}[entity];
-		const variables = {
-			"gebruiker": {id, gebruikerId: entityId},
-			"organization": {id, orgId: entityId},
-		}[entity];
-
-		mutation({variables}).then(() => {
+	const handleMutation = (mutation: Promise<any>) => {
+		mutation.then(() => {
 			toast({
 				status: "success",
 				title: t("messages.rekeningen.deleteSuccess"),
@@ -44,6 +34,24 @@ const RekeningList: React.FC<BoxProps & { rekeningen: IRekening[], gebruiker?: I
 		});
 	}
 
+	const onDeleteGebruikerRekening = (id?: number, gebruikerId?: number) => {
+		if (!id || !gebruikerId) {
+			// Todo: show/log error
+			return;
+		}
+
+		handleMutation(deleteGebruikerRekening({variables: {id, gebruikerId}}));
+	}
+
+	const onDeleteOrganisatieRekening = (id?: number, orgId?: number) => {
+		if (!id || !orgId) {
+			// Todo: show/log error
+			return;
+		}
+
+		handleMutation(deleteOrganizationRekening({variables: {id, orgId}}));
+	}
+
 	if (rekeningen.length === 0) {
 		return null;
 	}
@@ -52,9 +60,9 @@ const RekeningList: React.FC<BoxProps & { rekeningen: IRekening[], gebruiker?: I
 		<Box {...props}>
 			{rekeningen.map((r, i) => (
 				<RekeningListItem key={i} mr={2} mb={2} rekening={r} {...gebruiker && {
-					onDelete: () => onDeleteRekening(r.id, "gebruiker", gebruiker.id)
-				}} {...organization && {
-					onDelete: () => onDeleteRekening(r.id, "organization", organization.id)
+					onDelete: () => onDeleteGebruikerRekening(r.id, gebruiker.id)
+				}} {...organisatie && {
+					onDelete: () => onDeleteOrganisatieRekening(r.id, organisatie.id)
 				}} />
 			))}
 		</Box>

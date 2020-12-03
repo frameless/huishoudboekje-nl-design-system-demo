@@ -10,7 +10,7 @@ import EditAgreement from "./components/Agreements/EditAgreement";
 import Banking from "./components/Banking";
 import Burgers from "./components/Burgers";
 import TwoColumns from "./components/Layouts/TwoColumns";
-import Organizations from "./components/Organizations";
+import Organisaties from "./components/Organisaties";
 import PageNotFound from "./components/PageNotFound";
 import Sidebar from "./components/Sidebar";
 import SidebarContainer from "./components/Sidebar/SidebarContainer";
@@ -91,7 +91,7 @@ const App = () => {
 									<Redirect to={Routes.Burgers} />
 								</Route>
 								<Route path={Routes.Burgers} component={Burgers} />
-								<Route path={Routes.Organizations} component={Organizations} />
+								<Route path={Routes.Organisaties} component={Organisaties} />
 								<Route path={Routes.EditAgreement()} component={EditAgreement} />
 								<Route path={Routes.Banking} component={Banking} />
 								{/*<Route path={ROUTEPATH} component={SETTINGS_COMPONENT} />*/}

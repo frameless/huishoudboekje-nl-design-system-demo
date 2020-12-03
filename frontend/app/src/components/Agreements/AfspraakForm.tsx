@@ -1,38 +1,46 @@
-import {useQuery} from "@apollo/client";
-import {Box, BoxProps, Button, Divider, FormLabel, Input, InputGroup, InputLeftElement, Select, Spinner, Stack, Switch, useToast,} from "@chakra-ui/react";
+import {Box, BoxProps, Button, Divider, FormLabel, Input, InputGroup, InputLeftElement, Select, Stack, Switch, useToast,} from "@chakra-ui/react";
 import moment from "moment";
 import React, {useEffect, useState} from "react";
 import {useInput, useIsMobile, useNumberInput, useToggle, Validators} from "react-grapple";
 import {UseInput} from "react-grapple/dist/hooks/useInput";
 import {useTranslation} from "react-i18next";
 import {sampleData} from "../../config/sampleData/sampleData";
-import {AfspraakPeriod, AfspraakType, IAfspraak, IGebruiker, IntervalType, IOrganisatie, IRubriek,} from "../../models";
-import {GetAllOrganisatiesQuery, GetAllRubricsQuery} from "../../services/graphql/queries";
+import {Afspraak, Gebruiker, Organisatie, useGetAllOrganisatiesQuery, useGetAllRubriekenQuery} from "../../generated/graphql";
+import {AfspraakPeriod, AfspraakType, IntervalType,} from "../../models";
 import Queryable from "../../utils/Queryable";
-import {Interval, isDev} from "../../utils/things";
+import {isDev, XInterval} from "../../utils/things";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
 import RadioButtonGroup from "../Layouts/RadioButtons/RadioButtonGroup";
 
-const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) => void, gebruiker: IGebruiker, loading: boolean }> = ({afspraak, onSave, gebruiker, loading = false, ...props}) => {
+type AfspraakFormProps = { afspraak?: Afspraak, onSave: (data) => void, burger?: Gebruiker, loading: boolean };
+const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave, loading = false, ...props}) => {
 	const {t} = useTranslation();
 	const toast = useToast();
 	const isMobile = useIsMobile();
+	const gebruiker = afspraak?.gebruiker || props.burger;
+	if(!gebruiker){
+		throw new Error("Missing property gebruiker.");
+	}
 
-	const {data: orgsData, loading: orgsLoading} = useQuery<{ organisaties: IOrganisatie[] }>(GetAllOrganisatiesQuery);
-	const $rubrics = useQuery<{ rubrieken: IRubriek[] }>(GetAllRubricsQuery);
-
+	const {rekeningen = []} = gebruiker;
 	const [isSubmitted, setSubmitted] = useState<boolean>(false);
+
+	const $rubrics = useGetAllRubriekenQuery();
+	const $organisaties = useGetAllOrganisatiesQuery();
+
 	const [isActive, toggleActive] = useToggle(true);
 	const [afspraakType, setAfspraakType] = useState<AfspraakType>(AfspraakType.Expense);
 	const description = useInput({
 		defaultValue: "",
 		validate: [Validators.required]
 	});
-	const organizationId = useInput<number>({
+	const organisatieId = useInput({
 		validate: [(v) => v !== undefined && v.toString() !== ""]
 	});
-	const rubriekId = useInput<number>();
-	const rekeningId = useInput<number>({
+	const rubriekId = useInput({
+		validate: [Validators.required]
+	});
+	const rekeningId = useInput({
 		validate: [(v) => v !== undefined && v.toString() !== ""]
 	});
 	const amount = useNumberInput({
@@ -76,32 +84,18 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 	const [isAutomatischeIncasso, toggleAutomatischeIncasso] = useToggle(true);
 
 	useEffect(() => {
-		if (organizationId.value) {
-			if (orgsData && orgsData.organisaties) {
-				const selectedOrg = orgsData.organisaties.find(o => o.id === parseInt(organizationId.value as unknown as string));
-
-				if (selectedOrg && selectedOrg.rekeningen.length === 1) {
-					rekeningId.setValue(selectedOrg.rekeningen[0].id);
-				}
-			}
-		}
-
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [organizationId.value, orgsData]);
-
-	useEffect(() => {
 		if (afspraak) {
 			toggleActive(afspraak.actief);
 			setAfspraakType(afspraak.credit ? AfspraakType.Income : AfspraakType.Expense);
-			description.setValue(afspraak.beschrijving);
-			organizationId.setValue(afspraak.organisatie?.id || 0);
-			rubriekId.setValue(afspraak.rubriek?.id || 0);
+			description.setValue(afspraak.beschrijving || "");
+			organisatieId.setValue((afspraak.organisatie?.id || 0).toString());
+			rubriekId.setValue((afspraak.rubriek?.id || 0).toString());
 			if (afspraak.tegenRekening) {
-				rekeningId.setValue(afspraak.tegenRekening.id);
+				rekeningId.setValue((afspraak.tegenRekening?.id || 0).toString());
 			}
 			amount.setValue(afspraak.bedrag);
-			searchTerm.setValue(afspraak.kenmerk);
-			const interval = Interval.parse(afspraak.interval);
+			searchTerm.setValue(afspraak.kenmerk || "");
+			const interval = XInterval.parse(afspraak.interval);
 			if (interval) {
 				toggleRecurring(true);
 				intervalType.setValue(interval.intervalType);
@@ -120,12 +114,26 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [afspraak]);
 
+	/* When an organisatie is selected, and it has one rekening, prefill the rekeningId input with that rekening. */
+	useEffect(() => {
+		const {organisaties = []} = $organisaties.data || {};
+
+		const selectedOrg = organisaties.find(o => o.id === parseInt(organisatieId.value));
+		if (selectedOrg) {
+			const {rekeningen = []} = selectedOrg;
+
+			if (rekeningen.length === 1 && rekeningen[0].id) {
+				rekeningId.setValue((rekeningen[0].id || 0).toString());
+			}
+		}
+	}, [$organisaties.data, organisatieId.value, rekeningId]);
+
 	const prePopulateForm = () => {
 		const c = sampleData.agreements[0];
 
 		setAfspraakType(c.credit ? AfspraakType.Income : AfspraakType.Expense);
 		description.setValue(c.omschrijving);
-		organizationId.setValue(c.organisatie.id);
+		organisatieId.setValue(c.organisatie.id);
 		if (c.organisatie?.rekeningen?.length > 0) {
 			rekeningId.setValue(c.organisatie.rekeningen[0].id);
 		}
@@ -148,7 +156,7 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 
 		const fields: UseInput<any>[] = [
 			description,
-			organizationId,
+			organisatieId,
 			rubriekId,
 			rekeningId,
 			amount,
@@ -167,7 +175,6 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 			}
 		}
 
-
 		const formValid = fields.every(f => f.isValid);
 		if (!formValid) {
 			toast({
@@ -183,12 +190,12 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 			credit: afspraakType === AfspraakType.Income,
 			beschrijving: description.value,
 			tegenRekeningId: rekeningId.value,
-			organisatieId: parseInt(organizationId.value as unknown as string) !== 0 ? organizationId.value : null,
+			organisatieId: parseInt(organisatieId.value as unknown as string) !== 0 ? organisatieId.value : null,
 			...rubriekId.value && {rubriekId: rubriekId.value},
 			bedrag: amount.value,
 			kenmerk: searchTerm.value,
 			startDatum: moment(Date.UTC(startDate.year.value, startDate.month.value - 1, startDate.day.value)).format("YYYY-MM-DD"),
-			interval: isRecurring ? Interval.create(intervalType.value, intervalNumber.value) : Interval.empty,
+			interval: isRecurring ? XInterval.create(intervalType.value, intervalNumber.value) : XInterval.empty,
 			aantalBetalingen: !isContinuous ? nTimes.value : 0,
 			actief: isActive,
 			automatischeIncasso: afspraakType === AfspraakType.Expense ? isAutomatischeIncasso : null,
@@ -221,15 +228,6 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 				<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 					<FormLeft title={t("forms.agreements.sections.0.title")} helperText={t("forms.agreements.sections.0.helperText")} />
 					<FormRight>
-						{/*<Stack spacing={2} direction={isMobile ? "column" : "row"}>*/}
-						{/*	<Stack direction={isMobile ? "column" : "row"} spacing={1} mt={2}>*/}
-						{/*		<Stack isInline={true} alignItems={"center"} spacing={3}>*/}
-						{/*			<Switch isChecked={isActive} onChange={() => toggleActive()} id={"isActive"} />*/}
-						{/*			<FormLabel htmlFor={"isActive"}>{isActive ? t("forms.agreements.fields.active") : t("forms.agreements.fields.inactive")}</FormLabel>*/}
-						{/*		</Stack>*/}
-						{/*	</Stack>*/}
-						{/*</Stack>*/}
-
 						<RadioButtonGroup name={"afspraakType"} onChange={onChangeAfspraakType} defaultValue={AfspraakType.Expense} value={afspraakType}
 						                  options={afspraakTypeOptions} />
 
@@ -241,30 +239,41 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 						</Stack>
 						<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 							<Stack spacing={1} flex={1}>
-								<FormLabel htmlFor={"organizationId"}>{t("forms.agreements.fields.organization")}</FormLabel>
-								{orgsLoading ? (<Spinner />) : (<Select {...organizationId.bind} isInvalid={isInvalid(organizationId)} id="organizationId"
-								                                        value={organizationId.value}>
-									<option>{t("forms.agreements.fields.organizationChoose")}</option>
-									{orgsData?.organisaties.map(o => (
-										<option key={"o" + o.id} value={o.id}>{o.weergaveNaam}</option>
-									))}
-									<option value={0}>{gebruiker.voorletters} {gebruiker.achternaam}</option>
-								</Select>)}
+								<FormLabel htmlFor={"organisatieId"}>{t("forms.agreements.fields.organization")}</FormLabel>
+								<Queryable query={$organisaties}>{({organisaties = []}: { organisaties: Organisatie[] }) => {
+									return (
+										<Select {...organisatieId.bind} isInvalid={isInvalid(organisatieId)} id="organizationId" value={organisatieId.value}>
+											<option>{t("forms.agreements.fields.organizationChoose")}</option>
+											{organisaties.map(o => (
+												<option key={"o" + o.id} value={o.id}>{o.weergaveNaam}</option>
+											))}
+											<option value={0}>{gebruiker.voorletters} {gebruiker.achternaam}</option>
+										</Select>
+									);
+								}}
+								</Queryable>
 							</Stack>
 							<Stack spacing={1} flex={1}>
 								<FormLabel htmlFor={"rekeningId"}>{t("forms.agreements.fields.bankAccount")}</FormLabel>
-								<Select {...rekeningId.bind} isInvalid={isInvalid(rekeningId)} id="rekeningId" value={rekeningId.value}>
-									<option>{t("forms.agreements.fields.bankAccountChoose")}</option>
-									{parseInt(organizationId.value as unknown as string) === 0 ? (<>
-										{gebruiker.rekeningen.map(r => (
-											<option key={r.id} value={r.id}>{r.rekeninghouder} ({r.iban})</option>
-										))}
-									</>) : (<>
-										{orgsData?.organisaties.find(o => o.id === parseInt(organizationId.value as unknown as string))?.rekeningen.map(r => (
-											<option key={r.id} value={r.id}>{r.rekeninghouder} ({r.iban})</option>
-										))}
-									</>)}
-								</Select>
+								<Queryable query={$organisaties}>{({organisaties = []}: { organisaties: Organisatie[] }) => {
+									const organisatieRekeningen = organisaties.find(o => o.id === parseInt(organisatieId.value))?.rekeningen || [];
+
+									return (
+										<Select {...rekeningId.bind} isInvalid={isInvalid(rekeningId)} id="rekeningId" value={rekeningId.value}>
+											<option>{t("forms.agreements.fields.bankAccountChoose")}</option>
+											{parseInt(organisatieId.value) === 0 ? (<>
+												{rekeningen.map(r => (
+													<option key={r.id} value={r.id}>{r.rekeninghouder} ({r.iban})</option>
+												))}
+											</>) : (<>
+												{organisatieRekeningen.map(r => (
+													<option key={r.id} value={r.id}>{r.rekeninghouder} ({r.iban})</option>
+												))}
+											</>)}
+										</Select>
+									);
+								}}
+								</Queryable>
 							</Stack>
 						</Stack>
 						<Stack spacing={2} direction={isMobile ? "column" : "row"}>

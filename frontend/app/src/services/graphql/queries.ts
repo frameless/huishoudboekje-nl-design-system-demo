@@ -1,8 +1,8 @@
 import {gql} from "@apollo/client";
 import {AfspraakFragment, BankTransactionFragment, CustomerStatementMessageFragment, GebruikerFragment, OrganisatieFragment, GrootboekrekeningFragment, RubriekFragment} from "./fragments";
 
-export const GetAllGebruikersQuery = gql`
-    query getAllGebruikers {
+export const GetAllBurgersQuery = gql`
+    query getAllBurgers {
         gebruikers {
             ...Gebruiker
         }
@@ -10,8 +10,8 @@ export const GetAllGebruikersQuery = gql`
     ${GebruikerFragment}
 `;
 
-export const GetOneGebruikerQuery = gql`
-    query getOneGebruiker($id: Int!) {
+export const GetOneBurgerQuery = gql`
+    query getOneBurger($id: Int!) {
         gebruiker(id: $id) {
             ...Gebruiker
         }
@@ -19,8 +19,8 @@ export const GetOneGebruikerQuery = gql`
     ${GebruikerFragment}
 `;
 
-export const GetGebruikerAfsprakenQuery = gql`
-    query getOneGebruikerAfspraken($id: Int!) {
+export const GetBurgerAfsprakenQuery = gql`
+    query getBurgerAfspraken($id: Int!) {
         gebruiker(id: $id) {
             afspraken{
                 ...Afspraak
@@ -98,8 +98,8 @@ export const GetAllTransactionsQuery = gql`
     ${GrootboekrekeningFragment}
 `;
 
-export const GetAllRubricsQuery = gql`
-    query x {
+export const GetAllRubriekenQuery = gql`
+    query getAllRubrieken {
         rubrieken{
             ...Rubriek
             grootboekrekening{

@@ -1,4 +1,3 @@
-import {useMutation} from "@apollo/client";
 import {Box, Button, Divider, FormLabel, Heading, Input, Select, Stack, Tooltip, useToast} from "@chakra-ui/react";
 import React, {useState} from "react";
 import {useInput, useIsMobile, useNumberInput, Validators} from "react-grapple";
@@ -6,7 +5,7 @@ import {useTranslation} from "react-i18next";
 import {useHistory} from "react-router-dom";
 import Routes from "../../config/routes";
 import {sampleData} from "../../config/sampleData/sampleData";
-import {CreateGebruikerMutation} from "../../services/graphql/mutations";
+import {useCreateBurgerMutation} from "../../generated/graphql";
 import {isDev, MOBILE_BREAKPOINT, Months, Regex} from "../../utils/things";
 import BackButton from "../BackButton";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
@@ -19,15 +18,15 @@ const CreateBurger = () => {
 	const toast = useToast();
 	const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
-	const initials = useInput<string>({
+	const initials = useInput({
 		defaultValue: "",
 		validate: [Validators.required]
 	});
-	const firstName = useInput<string>({
+	const firstName = useInput({
 		defaultValue: "",
 		validate: [Validators.required]
 	});
-	const lastName = useInput<string>({
+	const lastName = useInput({
 		defaultValue: "",
 		validate: [Validators.required]
 	});
@@ -49,34 +48,34 @@ const CreateBurger = () => {
 			max: (new Date()).getFullYear(), // No future births.
 		})
 	}
-	const street = useInput<string>({
+	const street = useInput({
 		defaultValue: "",
 		validate: [Validators.required]
 	});
-	const houseNumber = useInput<string>({
+	const houseNumber = useInput({
 		defaultValue: "",
 		validate: [Validators.required]
 	});
-	const zipcode = useInput<string>({
+	const zipcode = useInput({
 		defaultValue: "",
 		validate: [Validators.required, (v) => new RegExp(Regex.ZipcodeNL).test(v)],
 		placeholder: "1234AB"
 	});
-	const city = useInput<string>({
+	const city = useInput({
 		defaultValue: "",
 		validate: [Validators.required]
 	});
-	const phoneNumber = useInput<string>({
+	const phoneNumber = useInput({
 		defaultValue: "",
 		validate: [Validators.required, (v) => new RegExp(Regex.PhoneNumberNL).test(v) || new RegExp(Regex.MobilePhoneNL).test(v)],
 		placeholder: "0612345678"
 	});
-	const mail = useInput<string>({
+	const mail = useInput({
 		defaultValue: "",
 		validate: [Validators.required, Validators.email]
 	});
 
-	const [createGebruiker, {loading}] = useMutation(CreateGebruikerMutation);
+	const [createBurger, $createBurger] = useCreateBurgerMutation();
 
 	const prePopulateForm = () => {
 		const c = sampleData.burgers[(Math.floor(Math.random() * sampleData.burgers.length))];
@@ -124,7 +123,7 @@ const CreateBurger = () => {
 		}
 
 		const geboorteDatum = new Date(Date.UTC(dateOfBirth.year.value, dateOfBirth.month.value - 1, dateOfBirth.day.value));
-		createGebruiker({
+		createBurger({
 			variables: {
 				input: {
 					voorletters: initials.value,
@@ -137,7 +136,7 @@ const CreateBurger = () => {
 					plaatsnaam: city.value,
 					telefoonnummer: phoneNumber.value,
 					email: mail.value,
-					// rekeningen,
+					// Todo: rekeningen?
 				}
 			}
 		}).then(result => {
@@ -147,7 +146,7 @@ const CreateBurger = () => {
 				position: "top",
 			});
 
-			const {id} = result.data.createGebruiker.gebruiker;
+			const {id} = result?.data?.createGebruiker?.gebruiker || {};
 			if (id) {
 				push(Routes.Burger(id));
 			}
@@ -275,7 +274,7 @@ const CreateBurger = () => {
 						<FormLeft />
 						<FormRight>
 							<Stack direction={"row"} spacing={1} justifyContent={"flex-end"}>
-								<Button isLoading={loading} type={"submit"} colorScheme={"primary"} onClick={onSubmit}>{t("actions.save")}</Button>
+								<Button isLoading={$createBurger.loading} type={"submit"} colorScheme={"primary"} onClick={onSubmit}>{t("actions.save")}</Button>
 							</Stack>
 						</FormRight>
 					</Stack>

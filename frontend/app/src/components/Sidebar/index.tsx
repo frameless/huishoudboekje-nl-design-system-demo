@@ -12,7 +12,7 @@ const Sidebar: React.FC<BoxProps> = (props) => {
 	return (
 		<Stack spacing={5} p={5} alignSelf={"center"} {...props} width={"100%"}>
 			<SidebarLink href={Routes.Burgers} icon={RiUserLine}>{t("burgers.burgers")}</SidebarLink>
-			<SidebarLink href={Routes.Organizations} icon={FaRegBuilding}>{t("organizations.organizations")}</SidebarLink>
+			<SidebarLink href={Routes.Organisaties} icon={FaRegBuilding}>{t("organizations.organizations")}</SidebarLink>
 			<Stack>
 				<SidebarLink exactMatch href={Routes.Transactions} icon={MdCreditCard}>{t("banking.banking")}</SidebarLink>
 				<HStack direction={"row"}>

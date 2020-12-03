@@ -1,6 +1,7 @@
 import moment from "moment";
 import {createContext} from "react";
-import {IBankTransaction, IInterval, IntervalType} from "../models";
+import {BankTransaction, Gebruiker, Interval, IntervalInput} from "../generated/graphql";
+import {IntervalType} from "../models";
 
 export const searchFields = (term: string, fields: string[]): boolean => {
 	const _fields = fields.filter(f => f);
@@ -33,8 +34,8 @@ export const DrawerContext = createContext<{ onClose: () => void }>({
 	}
 });
 
-export const Interval = {
-	create: (intervalType: "day" | "week" | "month" | "year", intervalCount: any): IInterval => {
+export const XInterval = {
+	create: (intervalType: "day" | "week" | "month" | "year", intervalCount: any): Interval => {
 		const intervalTypeConversion = {
 			day: "dagen",
 			week: "weken",
@@ -59,7 +60,7 @@ export const Interval = {
 		weken: 0,
 		dagen: 0,
 	},
-	parse: (interval: IInterval): { intervalType: IntervalType, count: number } | undefined => {
+	parse: (interval: IntervalInput | undefined): { intervalType: IntervalType, count: number } | undefined => {
 		if (!interval) {
 			return undefined;
 		}
@@ -81,6 +82,7 @@ export const Interval = {
 	},
 }
 
+/* Todo: rename to currencyFormat (03-12-2020) */
 export const currencyFormat2 = (showCurrency = true) => {
 	return new Intl.NumberFormat("nl-NL", {
 		style: showCurrency ? "currency" : "decimal",
@@ -93,11 +95,6 @@ export const currencyFormat2 = (showCurrency = true) => {
 	});
 };
 
-/**
- * @deprecated Use currencyFormat2 instead
- */
-export const currencyFormat = currencyFormat2();
-export const numberFormat = new Intl.NumberFormat("nl-NL");
 // Todo: export const dateFormat = (d: Date) => moment(d).format("L");
 export const dateFormat = {
 	format: (d: Date) => moment(d).format("L")
@@ -109,6 +106,10 @@ export const wait = async (timeout: number = 1000): Promise<void> => {
 	});
 }
 
-export const sortBankTransactions = (a: IBankTransaction, b: IBankTransaction) => {
+export const sortBankTransactions = (a: BankTransaction, b: BankTransaction) => {
 	return b.bedrag - a.bedrag;
 };
+
+export const formatBurgerName = (burger: Gebruiker) => {
+	return [burger.voorletters, burger.achternaam].join(" ");
+}

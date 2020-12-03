@@ -1,0 +1,17 @@
+{
+  "overwrite": true,
+  "schema": "http://localhost:3000/api/graphql",
+  "documents": "./src/services/graphql/*",
+  "generates": {
+    "src/generated/graphql.tsx": {
+      "plugins": [
+        "typescript",
+        "typescript-operations",
+        "typescript-react-apollo"
+      ]
+    }
+  },
+  "config": {
+    "maybeValue": "T"
+  }
+}

@@ -1,8 +1,8 @@
 import {gql} from "@apollo/client";
 import {AfspraakFragment, CustomerStatementMessageFragment, GebruikerFragment, OrganisatieFragment, RekeningFragment} from "./fragments";
 
-export const CreateGebruikerMutation = gql`
-    mutation createGebruiker($input: CreateGebruikerInput) {
+export const CreateBurgerMutation = gql`
+    mutation createBurger($input: CreateGebruikerInput) {
         createGebruiker(input: $input){
             ok
             gebruiker {
@@ -13,8 +13,8 @@ export const CreateGebruikerMutation = gql`
     ${GebruikerFragment}
 `;
 
-export const UpdateGebruikerMutation = gql`
-    mutation updateGebruiker(
+export const UpdateBurgerMutation = gql`
+    mutation updateBurger(
         $id: Int!
         $voorletters: String
         $voornamen: String
@@ -49,16 +49,16 @@ export const UpdateGebruikerMutation = gql`
     ${GebruikerFragment}
 `;
 
-export const DeleteGebruikerMutation = gql`
-    mutation deleteGebruiker($id: Int!){
+export const DeleteBurgerMutation = gql`
+    mutation deleteBurger($id: Int!){
         deleteGebruiker(id: $id) {
             ok
         }
     }
 `;
 
-export const CreateOrganizationMutation = gql`
-    mutation createOrganization(
+export const CreateOrganisatieMutation = gql`
+    mutation createOrganisatie(
         $huisnummer: String
         $kvkNummer: String!
         $naam: String
@@ -87,8 +87,8 @@ export const CreateOrganizationMutation = gql`
     ${OrganisatieFragment}
 `;
 
-export const UpdateOrganizationMutation = gql`
-    mutation updateOrganization(
+export const UpdateOrganisatieMutation = gql`
+    mutation updateOrganisatie(
         $id: Int!
         $huisnummer: String
         $kvkNummer: String
@@ -117,8 +117,8 @@ export const UpdateOrganizationMutation = gql`
     ${OrganisatieFragment}
 `;
 
-export const DeleteOrganizationMutation = gql`
-    mutation deleteOrganization($id: Int!){
+export const DeleteOrganisatieMutation = gql`
+    mutation deleteOrganisatie($id: Int!){
         deleteOrganisatie(id: $id){
             ok
         }
@@ -193,8 +193,8 @@ export const DeleteGebruikerRekeningMutation = gql`
     }
 `;
 
-export const CreateOrganizationRekeningMutation = gql`
-    mutation createOrganizationRekening(
+export const CreateOrganisatieRekeningMutation = gql`
+    mutation createOrganisatieRekening(
         $orgId: Int!
         $rekening: RekeningInput!
     ){
@@ -208,8 +208,8 @@ export const CreateOrganizationRekeningMutation = gql`
     ${RekeningFragment}
 `;
 
-export const DeleteOrganizationRekeningMutation = gql`
-    mutation deleteOrganizationRekening(
+export const DeleteOrganisatieRekeningMutation = gql`
+    mutation deleteOrganisatieRekening(
         $id: Int!
         $orgId: Int!
     ){

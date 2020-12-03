@@ -4,15 +4,15 @@ import moment from "moment";
 import React, {useState} from "react";
 import {useIsMobile} from "react-grapple";
 import {useTranslation} from "react-i18next";
-import {ICustomerStatementMessage} from "../../../models";
+import {CustomerStatementMessage} from "../../../generated/graphql";
 
-const CsmTableRow: React.FC<{ csm: ICustomerStatementMessage, onDelete: (id: number) => void }> = ({csm, onDelete}) => {
+const CsmTableRow: React.FC<{ csm: CustomerStatementMessage, onDelete: (id: number) => void }> = ({csm, onDelete}) => {
 	const {t} = useTranslation();
 	const isMobile = useIsMobile();
 	const [deleteConfirm, setDeleteConfirm] = useState<boolean>(false);
 
 	const onClickDeleteButton = () => {
-		if (onDelete) {
+		if (onDelete && csm.id) {
 			if (!deleteConfirm) {
 				setDeleteConfirm(true);
 				return;
@@ -37,7 +37,8 @@ const CsmTableRow: React.FC<{ csm: ICustomerStatementMessage, onDelete: (id: num
 			</td>
 			<td style={{width: "100px", textAlign: "right"}}>
 				{onDelete && (<>
-					<IconButton variant={deleteConfirm ? "solid" : "ghost"} size={"xs"} icon={deleteConfirm ? <CheckIcon /> : <DeleteIcon />} colorScheme={deleteConfirm ? "red" : "gray"}
+					<IconButton variant={deleteConfirm ? "solid" : "ghost"} size={"xs"} icon={deleteConfirm ? <CheckIcon /> : <DeleteIcon />}
+					            colorScheme={deleteConfirm ? "red" : "gray"}
 					            aria-label={t("actions.delete")} onClick={onClickDeleteButton} />
 					{deleteConfirm && (
 						<IconButton variant={"solid"} size={"xs"} icon={<CloseIcon />} colorScheme={"gray"} ml={2} aria-label={t("actions.delete")} onClick={onClickDeleteCancel} />

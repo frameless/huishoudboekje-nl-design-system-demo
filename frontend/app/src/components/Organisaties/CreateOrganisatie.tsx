@@ -1,4 +1,3 @@
-import {useMutation} from "@apollo/client";
 import {Box, Button, Divider, FormLabel, Heading, Input, Stack, Tooltip, useToast} from "@chakra-ui/react";
 import React from "react";
 import {useInput, useIsMobile, useToggle, Validators} from "react-grapple";
@@ -7,13 +6,13 @@ import {useTranslation} from "react-i18next";
 import {useHistory} from "react-router-dom";
 import Routes from "../../config/routes";
 import {sampleData} from "../../config/sampleData/sampleData";
-import {CreateOrganizationMutation} from "../../services/graphql/mutations";
+import {useCreateOrganisatieMutation} from "../../generated/graphql";
 import {isDev, MOBILE_BREAKPOINT, Regex} from "../../utils/things";
 import BackButton from "../BackButton";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
 
 // Todo: add more detailed error message per field?
-const CreateOrganization = () => {
+const CreateOrganisatie = () => {
 	const {t} = useTranslation();
 	const {push} = useHistory();
 	const isMobile = useIsMobile(MOBILE_BREAKPOINT);
@@ -50,7 +49,7 @@ const CreateOrganization = () => {
 		validate: [Validators.required]
 	});
 
-	const [createOrganization, {loading}] = useMutation(CreateOrganizationMutation);
+	const [createOrganisatie, $createOrganisatie] = useCreateOrganisatieMutation();
 
 	const prePopulateForm = () => {
 		const c = sampleData.organisaties[Math.floor(Math.random() * sampleData.organisaties.length)];
@@ -87,7 +86,7 @@ const CreateOrganization = () => {
 			return;
 		}
 
-		createOrganization({
+		createOrganisatie({
 			variables: {
 				huisnummer: houseNumber.value,
 				kvkNummer: kvkNumber.value,
@@ -104,9 +103,9 @@ const CreateOrganization = () => {
 				position: "top",
 			});
 
-			const {id} = result.data.createOrganisatie.organisatie;
+			const {id} = result?.data?.createOrganisatie?.organisatie || {};
 			if (id) {
-				push(Routes.Organization(id));
+				push(Routes.Organisatie(id));
 			}
 		}).catch(err => {
 			console.error(err);
@@ -123,7 +122,7 @@ const CreateOrganization = () => {
 	const isInvalid = (input: UseInput) => (input.dirty || isSubmitted) && !input.isValid;
 
 	return (<>
-		<BackButton to={Routes.Organizations} />
+		<BackButton to={Routes.Organisaties} />
 
 		<Stack spacing={5}>
 			<Heading size={"lg"}>{t("forms.organizations.title")}</Heading>
@@ -196,7 +195,7 @@ const CreateOrganization = () => {
 						<FormLeft />
 						<FormRight>
 							<Stack direction={"row"} spacing={1} justifyContent={"flex-end"}>
-								<Button isLoading={loading} type={"submit"} colorScheme={"primary"} onClick={onSubmit}>{t("actions.save")}</Button>
+								<Button isLoading={$createOrganisatie.loading} type={"submit"} colorScheme={"primary"} onClick={onSubmit}>{t("actions.save")}</Button>
 							</Stack>
 						</FormRight>
 					</Stack>
@@ -206,4 +205,4 @@ const CreateOrganization = () => {
 	</>);
 };
 
-export default CreateOrganization;
+export default CreateOrganisatie;

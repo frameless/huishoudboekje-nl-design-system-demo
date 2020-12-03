@@ -1,34 +1,31 @@
-import {useMutation, useQuery} from "@apollo/client";
-import {Box, Button, Divider, FormLabel, Heading, Input, Select, Spinner, Stack, Tooltip, useToast} from "@chakra-ui/react";
-import React, {useEffect} from "react";
+import {Box, Button, Divider, FormLabel, Input, Select, Stack, Tooltip, useToast} from "@chakra-ui/react";
+import React from "react";
 import {useInput, useIsMobile, useNumberInput, Validators} from "react-grapple";
 import {useTranslation} from "react-i18next";
-import {Redirect, useParams} from "react-router-dom";
+import {Redirect, useHistory, useParams} from "react-router-dom";
 import Routes from "../../config/routes";
-import {IGebruiker} from "../../models";
-import {UpdateGebruikerMutation} from "../../services/graphql/mutations";
-import {GetOneGebruikerQuery} from "../../services/graphql/queries";
-import {Months, Regex} from "../../utils/things";
+import {useGetOneBurgerQuery, useUpdateBurgerMutation} from "../../generated/graphql";
+import Queryable from "../../utils/Queryable";
+import {formatBurgerName, Months, Regex} from "../../utils/things";
 import BackButton from "../BackButton";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
+import Page from "../Layouts/Page";
+import Section from "../Layouts/Section";
 
 const BurgerEdit = () => {
 	const isMobile = useIsMobile();
 	const {t} = useTranslation();
-	const {id} = useParams<{ id }>();
+	const {id} = useParams<{ id: string }>();
 	const toast = useToast();
+	const {push} = useHistory();
 
-	// const bsn = useInput<string>({
-	// 	validate: [Validators.required, (v) => new RegExp(Regex.BsnNL).test(v)],
-	// 	placeholder: "123456789"
-	// });
-	const initials = useInput<string>({
+	const initials = useInput({
 		validate: [Validators.required]
 	});
-	const firstName = useInput<string>({
+	const firstName = useInput({
 		validate: [Validators.required]
 	});
-	const lastName = useInput<string>({
+	const lastName = useInput({
 		validate: [Validators.required]
 	});
 	const dateOfBirth = {
@@ -49,70 +46,52 @@ const BurgerEdit = () => {
 			max: (new Date()).getFullYear(), // No future births.
 		})
 	};
-	const mail = useInput<string>({
+	const mail = useInput({
 		validate: [Validators.required, Validators.email]
 	});
-	const street = useInput<string>({
+	const street = useInput({
 		validate: [Validators.required]
 	});
-	const houseNumber = useInput<string>({
+	const houseNumber = useInput({
 		validate: [Validators.required]
 	});
-	const zipcode = useInput<string>({
+	const zipcode = useInput({
 		validate: [Validators.required, (v) => new RegExp(Regex.ZipcodeNL).test(v)],
 		placeholder: "1234AB"
 	});
-	const city = useInput<string>({
+	const city = useInput({
 		validate: [Validators.required]
 	});
-	const phoneNumber = useInput<string>({
+	const phoneNumber = useInput({
 		validate: [(v) => new RegExp(Regex.PhoneNumberNL).test(v) || new RegExp(Regex.MobilePhoneNL).test(v)],
 		placeholder: "0612345678"
 	});
-	// const iban = useInput({
-	// 	validate: [Validators.required, (v) => IbanCheck.isValid(v)],
-	// 	placeholder: !!TRANSLATE!!
-	// });
-	// const bankAccountHolder = useInput<string>({
-	// 	validate: [Validators.required],
-	// });
 
-	const {data, loading, error} = useQuery<{ gebruiker: IGebruiker }>(GetOneGebruikerQuery, {
-		variables: {id: parseInt(id)}
-	});
-
-	const [updateMutation, {loading: updateLoading}] = useMutation(UpdateGebruikerMutation);
-
-	useEffect(() => {
-		let mounted = true;
-
-		if (mounted && data) {
-			const {gebruiker} = data;
-
+	const $gebruiker = useGetOneBurgerQuery({
+		variables: {id: parseInt(id)},
+		onCompleted: ({gebruiker}) => {
 			if (gebruiker) {
-				// bsn.setValue(gebruiker.bsn.toString() || "");
 				initials.setValue(gebruiker.voorletters || "");
 				firstName.setValue(gebruiker.voornamen || "");
 				lastName.setValue(gebruiker.achternaam || "");
-				dateOfBirth.day.setValue(new Date(gebruiker.geboortedatum).getDate());
-				dateOfBirth.month.setValue(new Date(gebruiker.geboortedatum).getMonth() + 1);
-				dateOfBirth.year.setValue(new Date(gebruiker.geboortedatum).getFullYear());
+
+				const {geboortedatum} = gebruiker;
+				if (geboortedatum) {
+					dateOfBirth.day.setValue(new Date(geboortedatum).getDate());
+					dateOfBirth.month.setValue(new Date(geboortedatum).getMonth() + 1);
+					dateOfBirth.year.setValue(new Date(geboortedatum).getFullYear());
+				}
 				mail.setValue(gebruiker.email || "");
 				street.setValue(gebruiker.straatnaam || "");
 				houseNumber.setValue(gebruiker.huisnummer || "");
 				zipcode.setValue(gebruiker.postcode || "");
 				city.setValue(gebruiker.plaatsnaam || "");
 				phoneNumber.setValue(gebruiker.telefoonnummer || "");
-				// iban.setValue(gebruiker.iban || "");
-				// bankAccountHolder.setValue(gebruiker.rekeninghouder || "");
 			}
 		}
+	});
 
-		return () => {
-			mounted = false;
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [data, loading]);
+	const [updateGebruiker, $updateGebruiker] = useUpdateBurgerMutation();
 
 	const onSubmit = (e) => {
 		e.preventDefault();
@@ -140,7 +119,7 @@ const BurgerEdit = () => {
 			return;
 		}
 
-		updateMutation({
+		updateGebruiker({
 			variables: {
 				id: parseInt(id),
 				voorletters: initials.value,
@@ -164,6 +143,7 @@ const BurgerEdit = () => {
 				title: t("messages.burgers.updateSuccessMessage"),
 				position: "top",
 			});
+			push(Routes.Burger(parseInt(id)));
 		}).catch(err => {
 			console.error(err);
 			toast({
@@ -177,126 +157,118 @@ const BurgerEdit = () => {
 	};
 
 	return (<>
-		<BackButton to={Routes.Burger(id)} />
+		<BackButton to={Routes.Burger(parseInt(id))} />
 
-		{loading && (
-			<Stack spacing={5} alignItems={"center"} justifyContent={"center"} my={10}>
-				<Spinner />
-			</Stack>
-		)}
-		{!loading && error && (
-			<Redirect to={Routes.NotFound} />
-		)}
-		{!loading && !error && data && (
-			<Stack spacing={5}>
-				<Stack direction={"row"} justifyContent={"flex-start"} alignItems={"center"} spacing={3}>
-					<Heading size={"lg"}>{data.gebruiker.voornamen} {data.gebruiker.achternaam}</Heading>
-				</Stack>
+		<Queryable query={$gebruiker} error={<Redirect to={Routes.NotFound} />}>{(data) => {
+			return (
+				<Page title={formatBurgerName(data.gebruiker)}>
+					<Box as={"form"} onSubmit={onSubmit}>
+						<Section>
+							<Stack direction={isMobile ? "column" : "row"} spacing={2}>
+								<FormLeft title={t("forms.burgers.sections.personal.title")} helperText={t("forms.burgers.sections.personal.helperText")} />
+								<FormRight>
+									{/*<Stack spacing={1}>*/}
+									{/*	<FormLabel htmlFor={"bsn"}>{TRANSLATE}</FormLabel>*/}
+									{/*	<Tooltip label={TRANSLATE} aria-label={TRANSLATE} hasArrow placement={isMobile ? "top" : "left"}>*/}
+									{/*		<Input isInvalid={bsn.dirty && !bsn.isValid} {...bsn.bind} />*/}
+									{/*	</Tooltip>*/}
+									{/*</Stack>*/}
+									<Stack spacing={2} direction={isMobile ? "column" : "row"}>
+										<Stack spacing={1} flex={1}>
+											<FormLabel htmlFor={"initials"}>{t("forms.burgers.fields.initials")}</FormLabel>
+											<Input isInvalid={initials.dirty && !initials.isValid} id={"initials"} {...initials.bind} />
+										</Stack>
+										<Stack spacing={1} flex={3}>
+											<FormLabel htmlFor={"firstName"}>{t("forms.burgers.fields.firstName")}</FormLabel>
+											<Input isInvalid={firstName.dirty && !firstName.isValid} id={"firstName"}{...firstName.bind} />
+										</Stack>
+										<Stack spacing={1} flex={3}>
+											<FormLabel htmlFor={"lastName"}>{t("forms.burgers.fields.lastName")}</FormLabel>
+											<Input isInvalid={lastName.dirty && !lastName.isValid} id={"lastName"} {...lastName.bind} />
+										</Stack>
+									</Stack>
+									<Stack spacing={1}>
+										<FormLabel htmlFor={"dateOfBirth"}>{t("forms.burgers.fields.dateOfBirth")}</FormLabel>
+										<Stack direction={"row"} maxW="100%">
+											<Box flex={1}>
+												<Input isInvalid={dateOfBirth.day.dirty && !dateOfBirth.day.isValid} {...dateOfBirth.day.bind} id="dateOfBirth-day" />
+											</Box>
+											<Box flex={2}>
+												<Select isInvalid={dateOfBirth.month.dirty && !dateOfBirth.month.isValid} {...dateOfBirth.month.bind} id="dateOfBirth-month"
+												        value={parseInt(dateOfBirth.month.value.toString()).toString()}>
+													{Months.map((m, i) => (
+														<option key={i} value={i + 1}>{t("months." + m)}</option>
+													))}
+												</Select>
+											</Box>
+											<Box flex={1}>
+												<Input isInvalid={dateOfBirth.year.dirty && !dateOfBirth.year.isValid} {...dateOfBirth.year.bind} id="dateOfBirth-year" />
+											</Box>
+										</Stack>
+									</Stack>
 
-				<Box as={"form"} onSubmit={onSubmit}>
-					<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
-						<Stack direction={isMobile ? "column" : "row"} spacing={2}>
-							<FormLeft title={t("forms.burgers.sections.personal.title")} helperText={t("forms.burgers.sections.personal.helperText")} />
-							<FormRight>
-								{/*<Stack spacing={1}>*/}
-								{/*	<FormLabel htmlFor={"bsn"}>{TRANSLATE}</FormLabel>*/}
-								{/*	<Tooltip label={TRANSLATE} aria-label={TRANSLATE} hasArrow placement={isMobile ? "top" : "left"}>*/}
-								{/*		<Input isInvalid={bsn.dirty && !bsn.isValid} {...bsn.bind} />*/}
-								{/*	</Tooltip>*/}
-								{/*</Stack>*/}
-								<Stack spacing={2} direction={isMobile ? "column" : "row"}>
-									<Stack spacing={1} flex={1}>
-										<FormLabel htmlFor={"initials"}>{t("forms.burgers.fields.initials")}</FormLabel>
-										<Input isInvalid={initials.dirty && !initials.isValid} id={"initials"} {...initials.bind} />
-									</Stack>
-									<Stack spacing={1} flex={3}>
-										<FormLabel htmlFor={"firstName"}>{t("forms.burgers.fields.firstName")}</FormLabel>
-										<Input isInvalid={firstName.dirty && !firstName.isValid} id={"firstName"}{...firstName.bind} />
-									</Stack>
-									<Stack spacing={1} flex={3}>
-										<FormLabel htmlFor={"lastName"}>{t("forms.burgers.fields.lastName")}</FormLabel>
-										<Input isInvalid={lastName.dirty && !lastName.isValid} id={"lastName"} {...lastName.bind} />
-									</Stack>
-								</Stack>
-								<Stack spacing={1}>
-									<FormLabel htmlFor={"dateOfBirth"}>{t("forms.burgers.fields.dateOfBirth")}</FormLabel>
-									<Stack direction={"row"} maxW="100%">
-										<Box flex={1}>
-											<Input isInvalid={dateOfBirth.day.dirty && !dateOfBirth.day.isValid} {...dateOfBirth.day.bind} id="dateOfBirth-day" />
-										</Box>
-										<Box flex={2}>
-											<Select isInvalid={dateOfBirth.month.dirty && !dateOfBirth.month.isValid} {...dateOfBirth.month.bind} id="dateOfBirth-month"
-											        value={parseInt(dateOfBirth.month.value.toString()).toString()}>
-												{Months.map((m, i) => (
-													<option key={i} value={i + 1}>{t("months." + m)}</option>
-												))}
-											</Select>
-										</Box>
-										<Box flex={1}>
-											<Input isInvalid={dateOfBirth.year.dirty && !dateOfBirth.year.isValid} {...dateOfBirth.year.bind} id="dateOfBirth-year" />
-										</Box>
-									</Stack>
-								</Stack>
+								</FormRight>
+							</Stack>
 
-							</FormRight>
-						</Stack>
+							<Divider />
 
-						<Divider />
-
-						<Stack direction={isMobile ? "column" : "row"} spacing={2}>
-							<FormLeft title={t("forms.burgers.sections.contact.title")} helperText={t("forms.burgers.sections.contact.helperText")} />
-							<FormRight>
-								<Stack spacing={2} direction={isMobile ? "column" : "row"}>
-									<Stack spacing={1} flex={2}>
-										<FormLabel htmlFor={"street"}>{t("forms.burgers.fields.street")}</FormLabel>
-										<Input isInvalid={street.dirty && !street.isValid} id={"street"} {...street.bind} />
+							<Stack direction={isMobile ? "column" : "row"} spacing={2}>
+								<FormLeft title={t("forms.burgers.sections.contact.title")} helperText={t("forms.burgers.sections.contact.helperText")} />
+								<FormRight>
+									<Stack spacing={2} direction={isMobile ? "column" : "row"}>
+										<Stack spacing={1} flex={2}>
+											<FormLabel htmlFor={"street"}>{t("forms.burgers.fields.street")}</FormLabel>
+											<Input isInvalid={street.dirty && !street.isValid} id={"street"} {...street.bind} />
+										</Stack>
+										<Stack spacing={1} flex={1}>
+											<FormLabel htmlFor={"houseNumber"}>{t("forms.burgers.fields.houseNumber")}</FormLabel>
+											<Input isInvalid={houseNumber.dirty && !houseNumber.isValid} id={"houseNumber"} {...houseNumber.bind} />
+										</Stack>
 									</Stack>
-									<Stack spacing={1} flex={1}>
-										<FormLabel htmlFor={"houseNumber"}>{t("forms.burgers.fields.houseNumber")}</FormLabel>
-										<Input isInvalid={houseNumber.dirty && !houseNumber.isValid} id={"houseNumber"} {...houseNumber.bind} />
+									<Stack spacing={2} direction={isMobile ? "column" : "row"}>
+										<Stack spacing={1} flex={1}>
+											<FormLabel htmlFor={"zipcode"}>{t("forms.burgers.fields.zipcode")}</FormLabel>
+											<Tooltip label={t("forms.burgers.tooltips.zipcode")} aria-label={t("forms.burgers.fields.zipcode")} hasArrow
+											         placement={isMobile ? "top" : "left"}>
+												<Input isInvalid={zipcode.dirty && !zipcode.isValid} id={"zipcode"} {...zipcode.bind} />
+											</Tooltip>
+										</Stack>
+										<Stack spacing={1} flex={2}>
+											<FormLabel htmlFor={"city"}>{t("forms.burgers.fields.city")}</FormLabel>
+											<Input isInvalid={city.dirty && !city.isValid} id={"city"} {...city.bind} />
+										</Stack>
 									</Stack>
-								</Stack>
-								<Stack spacing={2} direction={isMobile ? "column" : "row"}>
-									<Stack spacing={1} flex={1}>
-										<FormLabel htmlFor={"zipcode"}>{t("forms.burgers.fields.zipcode")}</FormLabel>
-										<Tooltip label={t("forms.burgers.tooltips.zipcode")} aria-label={t("forms.burgers.fields.zipcode")} hasArrow
+									<Stack spacing={1}>
+										<FormLabel htmlFor={"phoneNumber"}>{t("forms.burgers.fields.phoneNumber")}</FormLabel>
+										<Tooltip label={t("forms.burgers.tooltips.phoneNumber")} aria-label={t("forms.burgers.tooltips.phoneNumber")} hasArrow
 										         placement={isMobile ? "top" : "left"}>
-											<Input isInvalid={zipcode.dirty && !zipcode.isValid} id={"zipcode"} {...zipcode.bind} />
+											<Input isInvalid={phoneNumber.dirty && !phoneNumber.isValid} id={"phoneNumber"} {...phoneNumber.bind} />
 										</Tooltip>
 									</Stack>
-									<Stack spacing={1} flex={2}>
-										<FormLabel htmlFor={"city"}>{t("forms.burgers.fields.city")}</FormLabel>
-										<Input isInvalid={city.dirty && !city.isValid} id={"city"} {...city.bind} />
+									<Stack spacing={1}>
+										<FormLabel htmlFor={"mail"}>{t("forms.burgers.fields.mail")}</FormLabel>
+										<Input isInvalid={mail.dirty && !mail.isValid} id={"mail"} {...mail.bind} />
 									</Stack>
-								</Stack>
-								<Stack spacing={1}>
-									<FormLabel htmlFor={"phoneNumber"}>{t("forms.burgers.fields.phoneNumber")}</FormLabel>
-									<Tooltip label={t("forms.burgers.tooltips.phoneNumber")} aria-label={t("forms.burgers.tooltips.phoneNumber")} hasArrow
-									         placement={isMobile ? "top" : "left"}>
-										<Input isInvalid={phoneNumber.dirty && !phoneNumber.isValid} id={"phoneNumber"} {...phoneNumber.bind} />
-									</Tooltip>
-								</Stack>
-								<Stack spacing={1}>
-									<FormLabel htmlFor={"mail"}>{t("forms.burgers.fields.mail")}</FormLabel>
-									<Input isInvalid={mail.dirty && !mail.isValid} id={"mail"} {...mail.bind} />
-								</Stack>
-							</FormRight>
-						</Stack>
+								</FormRight>
+							</Stack>
 
-						<Divider />
+							<Divider />
 
-						<Stack direction={isMobile ? "column" : "row"} spacing={2}>
-							<FormLeft />
-							<FormRight>
-								<Stack direction={"row"} spacing={1} justifyContent={"flex-end"}>
-									<Button isLoading={loading || updateLoading} type={"submit"} colorScheme={"primary"} onClick={onSubmit}>{t("actions.save")}</Button>
-								</Stack>
-							</FormRight>
-						</Stack>
-					</Stack>
-				</Box>
-			</Stack>
-		)}
+							<Stack direction={isMobile ? "column" : "row"} spacing={2}>
+								<FormLeft />
+								<FormRight>
+									<Stack direction={"row"} spacing={1} justifyContent={"flex-end"}>
+										<Button isLoading={$gebruiker.loading || $updateGebruiker.loading} type={"submit"} colorScheme={"primary"}
+										        onClick={onSubmit}>{t("actions.save")}</Button>
+									</Stack>
+								</FormRight>
+							</Stack>
+						</Section>
+					</Box>
+				</Page>
+			);
+		}}
+		</Queryable>
 	</>);
 };
 

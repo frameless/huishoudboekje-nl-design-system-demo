@@ -1,10 +1,8 @@
-import {useQuery} from "@apollo/client";
-import {Box, BoxProps, Divider, Heading, Stack} from "@chakra-ui/react";
+import {Box, Divider, Heading, Stack} from "@chakra-ui/react";
 import React, {createContext} from "react";
 import {useIsMobile} from "react-grapple";
 import {useTranslation} from "react-i18next";
-import {IBankTransaction} from "../../../models";
-import {GetAllTransactionsQuery} from "../../../services/graphql/queries";
+import {BankTransaction, useGetAllTransactionsQuery} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import {dateFormat, sortBankTransactions} from "../../../utils/things";
 import DeadEndPage from "../../DeadEndPage";
@@ -12,28 +10,27 @@ import {Label} from "../../Forms/FormLeftRight";
 import TransactionItem from "./TransactionItem";
 
 export const TransactionsContext = createContext<{ refetch: VoidFunction }>({
-	refetch: () => {
-	}
+	refetch: () => undefined
 });
 
-const Transactions: React.FC<BoxProps> = ({...props}) => {
+const Transactions = () => {
 	const isMobile = useIsMobile();
 	const {t} = useTranslation();
 
-	const $transactions = useQuery(GetAllTransactionsQuery, {
+	const $transactions = useGetAllTransactionsQuery({
 		fetchPolicy: "no-cache",
 	});
 
 	return (
-		<Stack spacing={5} {...props}>
+		<Stack spacing={5}>
 			<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
 
-				<Queryable query={$transactions}>{(data: { bankTransactions: IBankTransaction[] }) => {
-					if (data.bankTransactions.length === 0) {
+				<Queryable query={$transactions}>{({bankTransactions}: { bankTransactions: BankTransaction[] }) => {
+					if (!bankTransactions || bankTransactions.length === 0) {
 						return (<DeadEndPage message={t("messages.transactions.addHint")} />);
 					}
 
-					const bt = data.bankTransactions.sort((a, b) => a.transactieDatum > b.transactieDatum ? -1 : 1).reduce((result, t) => {
+					const bt = bankTransactions.sort((a, b) => a.transactieDatum > b.transactieDatum ? -1 : 1).reduce((result, t) => {
 						const trDateAsString = dateFormat.format(new Date(t.transactieDatum));
 						return {
 							...result,
@@ -54,7 +51,7 @@ const Transactions: React.FC<BoxProps> = ({...props}) => {
 
 							<Stack direction={"column"} spacing={5}>
 								<Box>
-									<Stack direction={"row"} alignItems={"center"} justifyContent={"center"} {...props}>
+									<Stack direction={"row"} alignItems={"center"} justifyContent={"center"}>
 										<Box flex={2} textAlign={"left"}>
 											<Label>{t("transactions.beneficiaryAccount")}</Label>
 										</Box>
@@ -64,7 +61,6 @@ const Transactions: React.FC<BoxProps> = ({...props}) => {
 										<Box flex={0} minWidth={120}>
 											<Label>{t("transactions.amount")}</Label>
 										</Box>
-										{/* Todo: Later uit te breiden met geboekt op specifieke afspraak als deze bekend is (23-11-2020) */}
 									</Stack>
 								</Box>
 
@@ -75,12 +71,12 @@ const Transactions: React.FC<BoxProps> = ({...props}) => {
 												<Label>{transactionDate}</Label>
 											</Box>
 											<Box>
-												{bt[transactionDate].sort(sortBankTransactions).filter(t => t.isCredit).map(t => {
-													return <TransactionItem key={t.id} bankTransaction={t} />;
-												})}
-												{bt[transactionDate].sort(sortBankTransactions).filter(t => !t.isCredit).reverse().map(t => {
-													return <TransactionItem key={t.id} bankTransaction={t} />;
-												})}
+												{bt[transactionDate].sort(sortBankTransactions).filter(t => t.isCredit).map(t => (
+													<TransactionItem key={t.id} bankTransaction={t} />
+												))}
+												{bt[transactionDate].sort(sortBankTransactions).filter(t => !t.isCredit).reverse().map(t => (
+													<TransactionItem key={t.id} bankTransaction={t} />
+												))}
 											</Box>
 										</Stack>
 									);
