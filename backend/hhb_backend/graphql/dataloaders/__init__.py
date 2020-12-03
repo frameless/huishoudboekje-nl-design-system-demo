@@ -7,6 +7,7 @@ from .rekeningen_loader import RekeningenByIdLoader, RekeningenByGebruikerLoader
 from .csm_loader import CSMsByIdLoader
 from .bank_transactions_loader import BankTransactionByIdLoader, BankTransactionByCsmLoader
 from .rubrieken_loader import RubriekByIdLoader
+from .configuratie_loader import ConfiguratieByIdLoader
 
 
 class HHBDataLoader:
@@ -39,3 +40,5 @@ class HHBDataLoader:
         self.grootboekrekeningen_by_id = GrootboekrekeningenByIdLoader(loop=loop)
         self.journaalposten_by_id = JournaalpostenByIdLoader(loop=loop)
         self.journaalposten_by_transaction = JournaalpostenByTransactionLoader(loop=loop)
+
+        self.configuratie_by_id= ConfiguratieByIdLoader(loop=loop)

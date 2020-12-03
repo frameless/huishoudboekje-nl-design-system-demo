@@ -100,7 +100,7 @@ class HHBView(MethodView):
         return {"data": self.hhb_object.json}, response_code
 
     def delete(self, **kwargs):
-        """ POST /<view_path>/<int:object_id>
+        """ DELETE /<view_path>/<int:object_id>
         
         Input:
             object_id: required path parameter

@@ -9,7 +9,8 @@ from huishoudboekje_service.views import (
     RekeningGebruikerView,
     RekeningOrganisatieView,
     JournaalpostView,
-    RubriekView
+    RubriekView,
+    ConfiguratieView,
 )
 from core_service import database
 from huishoudboekje_service import config
@@ -43,6 +44,8 @@ def create_app(config_name=os.getenv('APP_SETTINGS', 'huishoudboekje_service.con
         {"path": "/journaalposten/<object_id>", "view": JournaalpostView, "name": "journaalpost_detail_view"},
         {"path": "/rubrieken", "view": RubriekView, "name": "rubriek_view"},
         {"path": "/rubrieken/<object_id>", "view": RubriekView, "name": "rubriek_detail_view"},
+        {"path": "/configuratie", "view": ConfiguratieView, "name": "configuratie_view"},
+        {"path": "/configuratie/<object_id>", "view": ConfiguratieView, "name": "configuratie_detail_view"},
     ]
     for route in routes:
         app.add_url_rule(
