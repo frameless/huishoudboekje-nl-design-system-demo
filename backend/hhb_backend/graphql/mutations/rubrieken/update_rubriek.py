@@ -19,8 +19,10 @@ class UpdateRubriek(graphene.Mutation):
     def mutate(root, info, **kwargs):
         """ Update a Rubriek """
         rubriek_id = kwargs.pop("id")
+        if kwargs["grootboekrekening_id"] and len(requests.get(f"{settings.GROOTBOEK_SERVICE_URL}/grootboekrekeningen/?filter_ids={kwargs['grootboekrekening_id']}").json()['data']) == 0:
+            raise GraphQLError(f"Grootboekrekening id [{kwargs['grootboekrekening_id']}] not found.")
         post_response = requests.post(
-            f"{settings.HHB_SERVICES_URL}/afspraken/{rubriek_id}",
+            f"{settings.HHB_SERVICES_URL}/rubrieken/{rubriek_id}",
             data=json.dumps(kwargs),
             headers={'Content-type': 'application/json'}
         )
