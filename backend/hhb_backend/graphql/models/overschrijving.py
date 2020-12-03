@@ -11,7 +11,7 @@ class OverschijvingStatus(graphene.Enum):
 class Overschijving(graphene.ObjectType):
     id = graphene.Int()
     afspraak = graphene.Field(lambda: afspraak.Afspraak)
-    exportBestand = graphene.String()
+    exportId = graphene.Int()
     datum = graphene.Date()
     bedrag = graphene.Field(Bedrag)
     bankTransaction = graphene.Field(lambda: bank_transaction.BankTransaction)
@@ -20,6 +20,6 @@ class Overschijving(graphene.ObjectType):
     def resolve_status(root, info):
         if root.get("bank_transaction_id", None):
             return OverschijvingStatus.GEREED
-        if root.get("export_bestand", None):
+        if root.get("export_id", None):
             return OverschijvingStatus.IN_BEHANDELING
         return OverschijvingStatus.VERWACHTING
