@@ -8,3 +8,4 @@ from .rekening_organisatie import RekeningOrganisatieView
 from .journaalposten import JournaalpostView
 from .rubrieken import RubriekView
 from .configuratie import ConfiguratieView
+from .overschrijvingen import OverschrijvingView
