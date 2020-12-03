@@ -22,7 +22,8 @@
     "eject": "react-scripts eject",
     "cypress": "npx -q cypress open",
     "theme": "./setTheme.sh",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "gen-types": "graphql-codegen --config codegen.json"
   },
   "dependencies": {
     "@apollo/client": "^3.2.5",
@@ -51,6 +52,11 @@
     "typescript": "^4.0.5"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "1.19.4",
+    "@graphql-codegen/introspection": "1.18.1",
+    "@graphql-codegen/typescript": "1.19.0",
+    "@graphql-codegen/typescript-operations": "^1.17.12",
+    "@graphql-codegen/typescript-react-apollo": "^2.2.1",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
