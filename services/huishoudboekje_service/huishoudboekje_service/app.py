@@ -47,8 +47,8 @@ def create_app(config_name=os.getenv('APP_SETTINGS', 'huishoudboekje_service.con
         {"path": "/rubrieken/<object_id>", "view": RubriekView, "name": "rubriek_detail_view"},
         {"path": "/configuratie", "view": ConfiguratieView, "name": "configuratie_view"},
         {"path": "/configuratie/<object_id>", "view": ConfiguratieView, "name": "configuratie_detail_view"},
-        {"path": "/overschijvingen", "view": OverschrijvingView, "name": "overschijving_view"},
-        {"path": "/overschijvingen/<object_id>", "view": OverschrijvingView, "name": "overschijving_detail_view"},
+        {"path": "/overschrijvingen", "view": OverschrijvingView, "name": "overschijving_view"},
+        {"path": "/overschrijvingen/<object_id>", "view": OverschrijvingView, "name": "overschijving_detail_view"},
     ]
     for route in routes:
         app.add_url_rule(
