@@ -28,13 +28,16 @@ class SingleDataLoader(DataLoader):
         return result
 
     async def batch_load_fn(self, keys):
-        url = self.url_for(keys)
-        response = requests.get(url)
-        if not response.ok:
-            raise GraphQLError(f"Upstream API responded: {response.text}")
         objects = {}
-        for item in response.json()["data"]:
-            objects[item[self.index]] = item
+        batch_size = 250
+        for i in range(0, len(keys), batch_size):
+            url = self.url_for(keys[i:i+batch_size])
+            response = requests.get(url)
+            if not response.ok:
+                raise GraphQLError(f"Upstream API responded: {response.text}")
+        
+            for item in response.json()["data"]:
+                objects[item[self.index]] = item
         return [objects.get(key, None) for key in keys]
 
 

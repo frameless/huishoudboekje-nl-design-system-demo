@@ -53,5 +53,4 @@ CMD ["bash", "-c", "exec gunicorn \
   --capture-output \
   --worker-class=gthread \
   --worker-tmp-dir /dev/shm \
-  --limit-request-field_size 10000 \
   ${APP_NAME}"]
