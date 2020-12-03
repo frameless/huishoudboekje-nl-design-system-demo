@@ -43,7 +43,10 @@ class AfspraakView(HHBView):
                 "type": "boolean",
             },
             "organisatie_id": {
-                "type": "integer",
+                "oneOf": [
+                    {"type": "null"},
+                    {"type": "integer"},
+                ]
             },
         },
         "required": []

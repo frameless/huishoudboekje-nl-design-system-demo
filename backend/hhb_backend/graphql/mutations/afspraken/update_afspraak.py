@@ -28,5 +28,5 @@ class UpdateAfspraak(graphene.Mutation):
             headers={'Content-type': 'application/json'}
         )
         if not post_response.ok:
-            raise GraphQLError(f"Upstream API responded: {post_response.json()}")
+            raise GraphQLError(f"Upstream API responded: {post_response.text()}")
         return UpdateAfspraak(afspraak=post_response.json()["data"], ok=True)
