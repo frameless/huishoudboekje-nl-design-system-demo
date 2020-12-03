@@ -5,7 +5,7 @@ import {useTranslation} from "react-i18next";
 import {Organisatie} from "../../../generated/graphql";
 import {FormLeft, FormRight, Label} from "../../Forms/FormLeftRight";
 
-const OrganizationDetailView: React.FC<BoxProps & { organisatie: Organisatie }> = ({organisatie, ...props}) => {
+const OrganisatieDetailView: React.FC<BoxProps & { organisatie: Organisatie }> = ({organisatie, ...props}) => {
 	const isMobile = useIsMobile();
 	const {t} = useTranslation();
 
@@ -62,4 +62,4 @@ const OrganizationDetailView: React.FC<BoxProps & { organisatie: Organisatie }> 
 	);
 };
 
-export default OrganizationDetailView;
+export default OrganisatieDetailView;

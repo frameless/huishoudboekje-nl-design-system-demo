@@ -4,7 +4,7 @@ import {useInput, useIsMobile, useNumberInput, Validators} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {Redirect, useHistory, useParams} from "react-router-dom";
 import Routes from "../../config/routes";
-import {useGetOneGebruikerQuery, useUpdateGebruikerMutation} from "../../generated/graphql";
+import {useGetOneBurgerQuery, useUpdateBurgerMutation} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
 import {formatBurgerName, Months, Regex} from "../../utils/things";
 import BackButton from "../BackButton";
@@ -67,7 +67,7 @@ const BurgerEdit = () => {
 		placeholder: "0612345678"
 	});
 
-	const $gebruiker = useGetOneGebruikerQuery({
+	const $gebruiker = useGetOneBurgerQuery({
 		variables: {id: parseInt(id)},
 		onCompleted: ({gebruiker}) => {
 			if (gebruiker) {
@@ -91,7 +91,7 @@ const BurgerEdit = () => {
 		}
 	});
 
-	const [updateGebruiker, $updateGebruiker] = useUpdateGebruikerMutation();
+	const [updateGebruiker, $updateGebruiker] = useUpdateBurgerMutation();
 
 	const onSubmit = (e) => {
 		e.preventDefault();

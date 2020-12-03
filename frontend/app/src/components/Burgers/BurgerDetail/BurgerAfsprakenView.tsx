@@ -23,7 +23,7 @@ const BurgerAfsprakenView: React.FC<StackProps & { burger: Gebruiker, refetch: V
 
 	const onClickAddAfspraakButton = () => {
 		if(burger.id){
-			push(Routes.CreateBurgerAgreement(burger.id))
+			push(Routes.CreateBurgerAfspraken(burger.id))
 		}
 	};
 

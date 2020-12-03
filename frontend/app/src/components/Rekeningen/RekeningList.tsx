@@ -1,7 +1,7 @@
 import {Box, BoxProps, useToast,} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {Gebruiker, Organisatie, Rekening, useDeleteGebruikerRekeningMutation, useDeleteOrganizationRekeningMutation} from "../../generated/graphql";
+import {Gebruiker, Organisatie, Rekening, useDeleteGebruikerRekeningMutation, useDeleteOrganisatieRekeningMutation} from "../../generated/graphql";
 import RekeningListItem from "./RekeningListItem";
 
 type RekeningListProps = { rekeningen: Rekening[], gebruiker?: Gebruiker, organisatie?: Organisatie, onChange?: VoidFunction };
@@ -9,7 +9,7 @@ const RekeningList: React.FC<BoxProps & RekeningListProps> = ({rekeningen, gebru
 	const {t} = useTranslation();
 	const toast = useToast();
 	const [deleteGebruikerRekening] = useDeleteGebruikerRekeningMutation();
-	const [deleteOrganizationRekening] = useDeleteOrganizationRekeningMutation();
+	const [deleteOrganizationRekening] = useDeleteOrganisatieRekeningMutation();
 
 	const handleMutation = (mutation: Promise<any>) => {
 		mutation.then(() => {

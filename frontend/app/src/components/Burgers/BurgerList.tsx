@@ -5,7 +5,7 @@ import {useInput} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {useHistory} from "react-router-dom";
 import Routes from "../../config/routes";
-import {Gebruiker, useGetAllGebruikersQuery} from "../../generated/graphql";
+import {Gebruiker, useGetAllBurgersQuery} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
 import {searchFields} from "../../utils/things";
 import DeadEndPage from "../DeadEndPage";
@@ -20,7 +20,7 @@ const BurgerList = () => {
 	});
 
 	const [filteredBurgers, setFilteredBurgers] = useState<Gebruiker[]>([]);
-	const $burgers = useGetAllGebruikersQuery({
+	const $burgers = useGetAllBurgersQuery({
 		fetchPolicy: "no-cache",
 		onCompleted: ({gebruikers: burgers = []}) => {
 			setFilteredBurgers(burgers);

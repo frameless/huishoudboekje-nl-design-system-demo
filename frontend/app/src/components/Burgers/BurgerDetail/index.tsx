@@ -5,7 +5,7 @@ import {useToggle} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {useHistory, useParams} from "react-router-dom";
 import Routes from "../../../config/routes";
-import {Gebruiker, useDeleteGebruikerMutation, useGetOneGebruikerQuery} from "../../../generated/graphql";
+import {Gebruiker, useDeleteBurgerMutation, useGetOneBurgerQuery} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import {formatBurgerName} from "../../../utils/things";
 import BackButton from "../../BackButton";
@@ -26,11 +26,11 @@ const BurgerDetail = () => {
 	const [isAlertOpen, toggleAlert] = useToggle(false);
 	const [isDeleted, toggleDeleted] = useToggle(false);
 
-	const $burger = useGetOneGebruikerQuery({
+	const $burger = useGetOneBurgerQuery({
 		fetchPolicy: "no-cache",
 		variables: {id: parseInt(id)},
 	});
-	const [deleteGebruiker, {loading: deleteLoading}] = useDeleteGebruikerMutation({variables: {id: parseInt(id)}});
+	const [deleteBurger, $deleteBurger] = useDeleteBurgerMutation({variables: {id: parseInt(id)}});
 
 	const onClickEditMenuItem = () => push(Routes.EditBurger(parseInt(id)));
 	const onClickDeleteMenuItem = () => toggleAlert(true);
@@ -38,7 +38,7 @@ const BurgerDetail = () => {
 	return (
 		<Queryable query={$burger}>{({gebruiker}: { gebruiker: Gebruiker }) => {
 			const onConfirmDelete = () => {
-				deleteGebruiker().then(() => {
+				deleteBurger().then(() => {
 					toggleAlert(false);
 					toast({
 						title: t("messages.burgers.deleteConfirmMessage", {name: `${gebruiker.voornamen} ${gebruiker.achternaam}`}),
@@ -59,7 +59,7 @@ const BurgerDetail = () => {
 
 			return (<>
 				{isAlertOpen && <Alert title={t("messages.burgers.deleteTitle")} cancelButton={true} onClose={() => toggleAlert(false)} confirmButton={(
-					<Button isLoading={deleteLoading} colorScheme="red" onClick={onConfirmDelete} ml={3} data-cy={"inModal"}>{t("actions.delete")}</Button>
+					<Button isLoading={$deleteBurger.loading} colorScheme="red" onClick={onConfirmDelete} ml={3} data-cy={"inModal"}>{t("actions.delete")}</Button>
 				)}>
 					{t("messages.burgers.deleteQuestion", {name: `${gebruiker.voornamen} ${gebruiker.achternaam}`})}
 				</Alert>}

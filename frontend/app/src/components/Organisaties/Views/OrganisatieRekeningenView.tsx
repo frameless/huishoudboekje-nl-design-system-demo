@@ -3,20 +3,20 @@ import {Box, BoxProps, Button, Divider, Stack} from "@chakra-ui/react";
 import React, {useContext} from "react";
 import {useIsMobile, useToggle} from "react-grapple";
 import {useTranslation} from "react-i18next";
-import {Organisatie, useCreateOrganizationRekeningMutation} from "../../../generated/graphql";
+import {Organisatie, useCreateOrganisatieRekeningMutation} from "../../../generated/graphql";
 import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
 import RekeningForm from "../../Rekeningen/RekeningForm";
 import RekeningList from "../../Rekeningen/RekeningList";
-import {OrganizationDetailContext} from "../OrganizationDetail";
+import {OrganizationDetailContext} from "../OrganisatieDetail";
 
-const OrganizationRekeningenView: React.FC<BoxProps & { organisatie: Organisatie }> = ({organisatie, ...props}) => {
+const OrganisatieRekeningenView: React.FC<BoxProps & { organisatie: Organisatie }> = ({organisatie, ...props}) => {
 	const {t} = useTranslation();
 	const isMobile = useIsMobile();
 	const {refresh} = useContext(OrganizationDetailContext);
 	const [showForm, toggleForm] = useToggle(false);
-	const [createRekeningForOrg] = useCreateOrganizationRekeningMutation();
+	const [createRekeningForOrg] = useCreateOrganisatieRekeningMutation();
 	const onSaveRekening = (rekening, resetForm) => {
-		if(!organisatie.id){
+		if (!organisatie.id) {
 			return null;
 		}
 
@@ -57,4 +57,4 @@ const OrganizationRekeningenView: React.FC<BoxProps & { organisatie: Organisatie
 	);
 };
 
-export default OrganizationRekeningenView;
+export default OrganisatieRekeningenView;

@@ -21,16 +21,16 @@ import {useToggle} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {Redirect, useHistory, useParams} from "react-router-dom";
 import Routes from "../../config/routes";
-import {Organisatie, useDeleteOrganizationMutation, useGetOneOrganisatieQuery} from "../../generated/graphql";
+import {Organisatie, useDeleteOrganisatieMutation, useGetOneOrganisatieQuery} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
 import BackButton from "../BackButton";
 import DeadEndPage from "../DeadEndPage";
-import OrganizationDetailView from "./Views/OrganizationDetailView";
-import OrganizationRekeningenView from "./Views/OrganizationRekeningenView";
+import OrganisatieDetailView from "./Views/OrganisatieDetailView";
+import OrganisatieRekeningenView from "./Views/OrganisatieRekeningenView";
 
 export const OrganizationDetailContext = createContext<any>({});
 
-const OrganizationDetail = () => {
+const OrganisatieDetail = () => {
 	const {t} = useTranslation();
 	const {id} = useParams<{ id: string }>();
 	const {push} = useHistory();
@@ -40,19 +40,19 @@ const OrganizationDetail = () => {
 	const [deleteDialogOpen, toggleDeleteDialog] = useToggle(false);
 	const [isDeleted, toggleDeleted] = useToggle(false);
 
-	const onClickEdit = () => push(Routes.EditOrganization(parseInt(id)));
+	const onClickEdit = () => push(Routes.EditOrganisatie(parseInt(id)));
 	const onClickDelete = () => toggleDeleteDialog();
 
 	const $organisatie = useGetOneOrganisatieQuery({
 		fetchPolicy: "no-cache",
 		variables: {id: parseInt(id)},
 	});
-	const [deleteOrganization, {loading: deleteLoading}] = useDeleteOrganizationMutation({variables: {id: parseInt(id)}});
+	const [deleteOrganization, {loading: deleteLoading}] = useDeleteOrganisatieMutation({variables: {id: parseInt(id)}});
 	const onCloseDeleteDialog = () => toggleDeleteDialog(false);
 
 	return (
 		<OrganizationDetailContext.Provider value={{refresh: $organisatie.refetch}}>
-			<BackButton to={Routes.Organizations} />
+			<BackButton to={Routes.Organisaties} />
 
 			<Queryable query={$organisatie}>{({organisatie}: { organisatie: Organisatie }) => {
 				const onConfirmDeleteDialog = () => {
@@ -76,7 +76,7 @@ const OrganizationDetail = () => {
 				if (isDeleted) {
 					return (
 						<DeadEndPage message={t("messages.organizations.deleteConfirmMessage", {name: organisatie.weergaveNaam})}>
-							<Button colorScheme={"primary"} onClick={() => push(Routes.Organizations)}>{t("actions.backToList")}</Button>
+							<Button colorScheme={"primary"} onClick={() => push(Routes.Organisaties)}>{t("actions.backToList")}</Button>
 						</DeadEndPage>
 					)
 				}
@@ -107,8 +107,8 @@ const OrganizationDetail = () => {
 							</Menu>
 						</Stack>
 
-						<OrganizationDetailView organisatie={organisatie} />
-						<OrganizationRekeningenView organisatie={organisatie} />
+						<OrganisatieDetailView organisatie={organisatie} />
+						<OrganisatieRekeningenView organisatie={organisatie} />
 					</Stack>
 				);
 			}}
@@ -117,4 +117,4 @@ const OrganizationDetail = () => {
 	);
 };
 
-export default OrganizationDetail;
+export default OrganisatieDetail;

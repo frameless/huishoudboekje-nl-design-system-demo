@@ -900,12 +900,12 @@ export type JournaalpostFragment = (
   & Pick<Journaalpost, 'id'>
 );
 
-export type CreateGebruikerMutationVariables = Exact<{
+export type CreateBurgerMutationVariables = Exact<{
   input?: Maybe<CreateGebruikerInput>;
 }>;
 
 
-export type CreateGebruikerMutation = (
+export type CreateBurgerMutation = (
   { __typename?: 'RootMutation' }
   & { createGebruiker?: Maybe<(
     { __typename?: 'CreateGebruiker' }
@@ -917,7 +917,7 @@ export type CreateGebruikerMutation = (
   )> }
 );
 
-export type UpdateGebruikerMutationVariables = Exact<{
+export type UpdateBurgerMutationVariables = Exact<{
   id: Scalars['Int'];
   voorletters?: Maybe<Scalars['String']>;
   voornamen?: Maybe<Scalars['String']>;
@@ -932,7 +932,7 @@ export type UpdateGebruikerMutationVariables = Exact<{
 }>;
 
 
-export type UpdateGebruikerMutation = (
+export type UpdateBurgerMutation = (
   { __typename?: 'RootMutation' }
   & { updateGebruiker?: Maybe<(
     { __typename?: 'UpdateGebruiker' }
@@ -944,12 +944,12 @@ export type UpdateGebruikerMutation = (
   )> }
 );
 
-export type DeleteGebruikerMutationVariables = Exact<{
+export type DeleteBurgerMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type DeleteGebruikerMutation = (
+export type DeleteBurgerMutation = (
   { __typename?: 'RootMutation' }
   & { deleteGebruiker?: Maybe<(
     { __typename?: 'DeleteGebruiker' }
@@ -957,7 +957,7 @@ export type DeleteGebruikerMutation = (
   )> }
 );
 
-export type CreateOrganizationMutationVariables = Exact<{
+export type CreateOrganisatieMutationVariables = Exact<{
   huisnummer?: Maybe<Scalars['String']>;
   kvkNummer: Scalars['String'];
   naam?: Maybe<Scalars['String']>;
@@ -968,7 +968,7 @@ export type CreateOrganizationMutationVariables = Exact<{
 }>;
 
 
-export type CreateOrganizationMutation = (
+export type CreateOrganisatieMutation = (
   { __typename?: 'RootMutation' }
   & { createOrganisatie?: Maybe<(
     { __typename?: 'CreateOrganisatie' }
@@ -980,7 +980,7 @@ export type CreateOrganizationMutation = (
   )> }
 );
 
-export type UpdateOrganizationMutationVariables = Exact<{
+export type UpdateOrganisatieMutationVariables = Exact<{
   id: Scalars['Int'];
   huisnummer?: Maybe<Scalars['String']>;
   kvkNummer?: Maybe<Scalars['String']>;
@@ -992,7 +992,7 @@ export type UpdateOrganizationMutationVariables = Exact<{
 }>;
 
 
-export type UpdateOrganizationMutation = (
+export type UpdateOrganisatieMutation = (
   { __typename?: 'RootMutation' }
   & { updateOrganisatie?: Maybe<(
     { __typename?: 'UpdateOrganisatie' }
@@ -1004,12 +1004,12 @@ export type UpdateOrganizationMutation = (
   )> }
 );
 
-export type DeleteOrganizationMutationVariables = Exact<{
+export type DeleteOrganisatieMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type DeleteOrganizationMutation = (
+export type DeleteOrganisatieMutation = (
   { __typename?: 'RootMutation' }
   & { deleteOrganisatie?: Maybe<(
     { __typename?: 'DeleteOrganisatie' }
@@ -1097,13 +1097,13 @@ export type DeleteGebruikerRekeningMutation = (
   )> }
 );
 
-export type CreateOrganizationRekeningMutationVariables = Exact<{
+export type CreateOrganisatieRekeningMutationVariables = Exact<{
   orgId: Scalars['Int'];
   rekening: RekeningInput;
 }>;
 
 
-export type CreateOrganizationRekeningMutation = (
+export type CreateOrganisatieRekeningMutation = (
   { __typename?: 'RootMutation' }
   & { createOrganisatieRekening?: Maybe<(
     { __typename?: 'CreateOrganisatieRekening' }
@@ -1115,13 +1115,13 @@ export type CreateOrganizationRekeningMutation = (
   )> }
 );
 
-export type DeleteOrganizationRekeningMutationVariables = Exact<{
+export type DeleteOrganisatieRekeningMutationVariables = Exact<{
   id: Scalars['Int'];
   orgId: Scalars['Int'];
 }>;
 
 
-export type DeleteOrganizationRekeningMutation = (
+export type DeleteOrganisatieRekeningMutation = (
   { __typename?: 'RootMutation' }
   & { deleteOrganisatieRekening?: Maybe<(
     { __typename?: 'DeleteOrganisatieRekening' }
@@ -1204,10 +1204,10 @@ export type DeleteJournaalpostMutation = (
   )> }
 );
 
-export type GetAllGebruikersQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetAllBurgersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllGebruikersQuery = (
+export type GetAllBurgersQuery = (
   { __typename?: 'RootQuery' }
   & { gebruikers?: Maybe<Array<Maybe<(
     { __typename?: 'Gebruiker' }
@@ -1215,12 +1215,12 @@ export type GetAllGebruikersQuery = (
   )>>> }
 );
 
-export type GetOneGebruikerQueryVariables = Exact<{
+export type GetOneBurgerQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type GetOneGebruikerQuery = (
+export type GetOneBurgerQuery = (
   { __typename?: 'RootQuery' }
   & { gebruiker?: Maybe<(
     { __typename?: 'Gebruiker' }
@@ -1228,12 +1228,12 @@ export type GetOneGebruikerQuery = (
   )> }
 );
 
-export type GetOneGebruikerAfsprakenQueryVariables = Exact<{
+export type GetBurgerAfsprakenQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type GetOneGebruikerAfsprakenQuery = (
+export type GetBurgerAfsprakenQuery = (
   { __typename?: 'RootQuery' }
   & { gebruiker?: Maybe<(
     { __typename?: 'Gebruiker' }
@@ -1490,8 +1490,8 @@ export const JournaalpostFragmentDoc = gql`
   id
 }
     `;
-export const CreateGebruikerDocument = gql`
-    mutation createGebruiker($input: CreateGebruikerInput) {
+export const CreateBurgerDocument = gql`
+    mutation createBurger($input: CreateGebruikerInput) {
   createGebruiker(input: $input) {
     ok
     gebruiker {
@@ -1500,33 +1500,33 @@ export const CreateGebruikerDocument = gql`
   }
 }
     ${GebruikerFragmentDoc}`;
-export type CreateGebruikerMutationFn = Apollo.MutationFunction<CreateGebruikerMutation, CreateGebruikerMutationVariables>;
+export type CreateBurgerMutationFn = Apollo.MutationFunction<CreateBurgerMutation, CreateBurgerMutationVariables>;
 
 /**
- * __useCreateGebruikerMutation__
+ * __useCreateBurgerMutation__
  *
- * To run a mutation, you first call `useCreateGebruikerMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateGebruikerMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useCreateBurgerMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateBurgerMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [createGebruikerMutation, { data, loading, error }] = useCreateGebruikerMutation({
+ * const [createBurgerMutation, { data, loading, error }] = useCreateBurgerMutation({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useCreateGebruikerMutation(baseOptions?: Apollo.MutationHookOptions<CreateGebruikerMutation, CreateGebruikerMutationVariables>) {
-        return Apollo.useMutation<CreateGebruikerMutation, CreateGebruikerMutationVariables>(CreateGebruikerDocument, baseOptions);
+export function useCreateBurgerMutation(baseOptions?: Apollo.MutationHookOptions<CreateBurgerMutation, CreateBurgerMutationVariables>) {
+        return Apollo.useMutation<CreateBurgerMutation, CreateBurgerMutationVariables>(CreateBurgerDocument, baseOptions);
       }
-export type CreateGebruikerMutationHookResult = ReturnType<typeof useCreateGebruikerMutation>;
-export type CreateGebruikerMutationResult = Apollo.MutationResult<CreateGebruikerMutation>;
-export type CreateGebruikerMutationOptions = Apollo.BaseMutationOptions<CreateGebruikerMutation, CreateGebruikerMutationVariables>;
-export const UpdateGebruikerDocument = gql`
-    mutation updateGebruiker($id: Int!, $voorletters: String, $voornamen: String, $achternaam: String, $geboortedatum: String, $straatnaam: String, $huisnummer: String, $postcode: String, $plaatsnaam: String, $telefoonnummer: String, $email: String) {
+export type CreateBurgerMutationHookResult = ReturnType<typeof useCreateBurgerMutation>;
+export type CreateBurgerMutationResult = Apollo.MutationResult<CreateBurgerMutation>;
+export type CreateBurgerMutationOptions = Apollo.BaseMutationOptions<CreateBurgerMutation, CreateBurgerMutationVariables>;
+export const UpdateBurgerDocument = gql`
+    mutation updateBurger($id: Int!, $voorletters: String, $voornamen: String, $achternaam: String, $geboortedatum: String, $straatnaam: String, $huisnummer: String, $postcode: String, $plaatsnaam: String, $telefoonnummer: String, $email: String) {
   updateGebruiker(id: $id, voorletters: $voorletters, voornamen: $voornamen, achternaam: $achternaam, geboortedatum: $geboortedatum, straatnaam: $straatnaam, huisnummer: $huisnummer, postcode: $postcode, plaatsnaam: $plaatsnaam, telefoonnummer: $telefoonnummer, email: $email) {
     ok
     gebruiker {
@@ -1535,20 +1535,20 @@ export const UpdateGebruikerDocument = gql`
   }
 }
     ${GebruikerFragmentDoc}`;
-export type UpdateGebruikerMutationFn = Apollo.MutationFunction<UpdateGebruikerMutation, UpdateGebruikerMutationVariables>;
+export type UpdateBurgerMutationFn = Apollo.MutationFunction<UpdateBurgerMutation, UpdateBurgerMutationVariables>;
 
 /**
- * __useUpdateGebruikerMutation__
+ * __useUpdateBurgerMutation__
  *
- * To run a mutation, you first call `useUpdateGebruikerMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateGebruikerMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useUpdateBurgerMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateBurgerMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [updateGebruikerMutation, { data, loading, error }] = useUpdateGebruikerMutation({
+ * const [updateBurgerMutation, { data, loading, error }] = useUpdateBurgerMutation({
  *   variables: {
  *      id: // value for 'id'
  *      voorletters: // value for 'voorletters'
@@ -1564,46 +1564,46 @@ export type UpdateGebruikerMutationFn = Apollo.MutationFunction<UpdateGebruikerM
  *   },
  * });
  */
-export function useUpdateGebruikerMutation(baseOptions?: Apollo.MutationHookOptions<UpdateGebruikerMutation, UpdateGebruikerMutationVariables>) {
-        return Apollo.useMutation<UpdateGebruikerMutation, UpdateGebruikerMutationVariables>(UpdateGebruikerDocument, baseOptions);
+export function useUpdateBurgerMutation(baseOptions?: Apollo.MutationHookOptions<UpdateBurgerMutation, UpdateBurgerMutationVariables>) {
+        return Apollo.useMutation<UpdateBurgerMutation, UpdateBurgerMutationVariables>(UpdateBurgerDocument, baseOptions);
       }
-export type UpdateGebruikerMutationHookResult = ReturnType<typeof useUpdateGebruikerMutation>;
-export type UpdateGebruikerMutationResult = Apollo.MutationResult<UpdateGebruikerMutation>;
-export type UpdateGebruikerMutationOptions = Apollo.BaseMutationOptions<UpdateGebruikerMutation, UpdateGebruikerMutationVariables>;
-export const DeleteGebruikerDocument = gql`
-    mutation deleteGebruiker($id: Int!) {
+export type UpdateBurgerMutationHookResult = ReturnType<typeof useUpdateBurgerMutation>;
+export type UpdateBurgerMutationResult = Apollo.MutationResult<UpdateBurgerMutation>;
+export type UpdateBurgerMutationOptions = Apollo.BaseMutationOptions<UpdateBurgerMutation, UpdateBurgerMutationVariables>;
+export const DeleteBurgerDocument = gql`
+    mutation deleteBurger($id: Int!) {
   deleteGebruiker(id: $id) {
     ok
   }
 }
     `;
-export type DeleteGebruikerMutationFn = Apollo.MutationFunction<DeleteGebruikerMutation, DeleteGebruikerMutationVariables>;
+export type DeleteBurgerMutationFn = Apollo.MutationFunction<DeleteBurgerMutation, DeleteBurgerMutationVariables>;
 
 /**
- * __useDeleteGebruikerMutation__
+ * __useDeleteBurgerMutation__
  *
- * To run a mutation, you first call `useDeleteGebruikerMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteGebruikerMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useDeleteBurgerMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteBurgerMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [deleteGebruikerMutation, { data, loading, error }] = useDeleteGebruikerMutation({
+ * const [deleteBurgerMutation, { data, loading, error }] = useDeleteBurgerMutation({
  *   variables: {
  *      id: // value for 'id'
  *   },
  * });
  */
-export function useDeleteGebruikerMutation(baseOptions?: Apollo.MutationHookOptions<DeleteGebruikerMutation, DeleteGebruikerMutationVariables>) {
-        return Apollo.useMutation<DeleteGebruikerMutation, DeleteGebruikerMutationVariables>(DeleteGebruikerDocument, baseOptions);
+export function useDeleteBurgerMutation(baseOptions?: Apollo.MutationHookOptions<DeleteBurgerMutation, DeleteBurgerMutationVariables>) {
+        return Apollo.useMutation<DeleteBurgerMutation, DeleteBurgerMutationVariables>(DeleteBurgerDocument, baseOptions);
       }
-export type DeleteGebruikerMutationHookResult = ReturnType<typeof useDeleteGebruikerMutation>;
-export type DeleteGebruikerMutationResult = Apollo.MutationResult<DeleteGebruikerMutation>;
-export type DeleteGebruikerMutationOptions = Apollo.BaseMutationOptions<DeleteGebruikerMutation, DeleteGebruikerMutationVariables>;
-export const CreateOrganizationDocument = gql`
-    mutation createOrganization($huisnummer: String, $kvkNummer: String!, $naam: String, $plaatsnaam: String, $postcode: String, $straatnaam: String, $weergaveNaam: String!) {
+export type DeleteBurgerMutationHookResult = ReturnType<typeof useDeleteBurgerMutation>;
+export type DeleteBurgerMutationResult = Apollo.MutationResult<DeleteBurgerMutation>;
+export type DeleteBurgerMutationOptions = Apollo.BaseMutationOptions<DeleteBurgerMutation, DeleteBurgerMutationVariables>;
+export const CreateOrganisatieDocument = gql`
+    mutation createOrganisatie($huisnummer: String, $kvkNummer: String!, $naam: String, $plaatsnaam: String, $postcode: String, $straatnaam: String, $weergaveNaam: String!) {
   createOrganisatie(input: {huisnummer: $huisnummer, kvkNummer: $kvkNummer, naam: $naam, plaatsnaam: $plaatsnaam, postcode: $postcode, straatnaam: $straatnaam, weergaveNaam: $weergaveNaam}) {
     ok
     organisatie {
@@ -1612,20 +1612,20 @@ export const CreateOrganizationDocument = gql`
   }
 }
     ${OrganisatieFragmentDoc}`;
-export type CreateOrganizationMutationFn = Apollo.MutationFunction<CreateOrganizationMutation, CreateOrganizationMutationVariables>;
+export type CreateOrganisatieMutationFn = Apollo.MutationFunction<CreateOrganisatieMutation, CreateOrganisatieMutationVariables>;
 
 /**
- * __useCreateOrganizationMutation__
+ * __useCreateOrganisatieMutation__
  *
- * To run a mutation, you first call `useCreateOrganizationMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateOrganizationMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useCreateOrganisatieMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateOrganisatieMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [createOrganizationMutation, { data, loading, error }] = useCreateOrganizationMutation({
+ * const [createOrganisatieMutation, { data, loading, error }] = useCreateOrganisatieMutation({
  *   variables: {
  *      huisnummer: // value for 'huisnummer'
  *      kvkNummer: // value for 'kvkNummer'
@@ -1637,14 +1637,14 @@ export type CreateOrganizationMutationFn = Apollo.MutationFunction<CreateOrganiz
  *   },
  * });
  */
-export function useCreateOrganizationMutation(baseOptions?: Apollo.MutationHookOptions<CreateOrganizationMutation, CreateOrganizationMutationVariables>) {
-        return Apollo.useMutation<CreateOrganizationMutation, CreateOrganizationMutationVariables>(CreateOrganizationDocument, baseOptions);
+export function useCreateOrganisatieMutation(baseOptions?: Apollo.MutationHookOptions<CreateOrganisatieMutation, CreateOrganisatieMutationVariables>) {
+        return Apollo.useMutation<CreateOrganisatieMutation, CreateOrganisatieMutationVariables>(CreateOrganisatieDocument, baseOptions);
       }
-export type CreateOrganizationMutationHookResult = ReturnType<typeof useCreateOrganizationMutation>;
-export type CreateOrganizationMutationResult = Apollo.MutationResult<CreateOrganizationMutation>;
-export type CreateOrganizationMutationOptions = Apollo.BaseMutationOptions<CreateOrganizationMutation, CreateOrganizationMutationVariables>;
-export const UpdateOrganizationDocument = gql`
-    mutation updateOrganization($id: Int!, $huisnummer: String, $kvkNummer: String, $naam: String, $plaatsnaam: String, $postcode: String, $straatnaam: String, $weergaveNaam: String) {
+export type CreateOrganisatieMutationHookResult = ReturnType<typeof useCreateOrganisatieMutation>;
+export type CreateOrganisatieMutationResult = Apollo.MutationResult<CreateOrganisatieMutation>;
+export type CreateOrganisatieMutationOptions = Apollo.BaseMutationOptions<CreateOrganisatieMutation, CreateOrganisatieMutationVariables>;
+export const UpdateOrganisatieDocument = gql`
+    mutation updateOrganisatie($id: Int!, $huisnummer: String, $kvkNummer: String, $naam: String, $plaatsnaam: String, $postcode: String, $straatnaam: String, $weergaveNaam: String) {
   updateOrganisatie(id: $id, huisnummer: $huisnummer, kvkNummer: $kvkNummer, naam: $naam, plaatsnaam: $plaatsnaam, postcode: $postcode, straatnaam: $straatnaam, weergaveNaam: $weergaveNaam) {
     ok
     organisatie {
@@ -1653,20 +1653,20 @@ export const UpdateOrganizationDocument = gql`
   }
 }
     ${OrganisatieFragmentDoc}`;
-export type UpdateOrganizationMutationFn = Apollo.MutationFunction<UpdateOrganizationMutation, UpdateOrganizationMutationVariables>;
+export type UpdateOrganisatieMutationFn = Apollo.MutationFunction<UpdateOrganisatieMutation, UpdateOrganisatieMutationVariables>;
 
 /**
- * __useUpdateOrganizationMutation__
+ * __useUpdateOrganisatieMutation__
  *
- * To run a mutation, you first call `useUpdateOrganizationMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateOrganizationMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useUpdateOrganisatieMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateOrganisatieMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [updateOrganizationMutation, { data, loading, error }] = useUpdateOrganizationMutation({
+ * const [updateOrganisatieMutation, { data, loading, error }] = useUpdateOrganisatieMutation({
  *   variables: {
  *      id: // value for 'id'
  *      huisnummer: // value for 'huisnummer'
@@ -1679,44 +1679,44 @@ export type UpdateOrganizationMutationFn = Apollo.MutationFunction<UpdateOrganiz
  *   },
  * });
  */
-export function useUpdateOrganizationMutation(baseOptions?: Apollo.MutationHookOptions<UpdateOrganizationMutation, UpdateOrganizationMutationVariables>) {
-        return Apollo.useMutation<UpdateOrganizationMutation, UpdateOrganizationMutationVariables>(UpdateOrganizationDocument, baseOptions);
+export function useUpdateOrganisatieMutation(baseOptions?: Apollo.MutationHookOptions<UpdateOrganisatieMutation, UpdateOrganisatieMutationVariables>) {
+        return Apollo.useMutation<UpdateOrganisatieMutation, UpdateOrganisatieMutationVariables>(UpdateOrganisatieDocument, baseOptions);
       }
-export type UpdateOrganizationMutationHookResult = ReturnType<typeof useUpdateOrganizationMutation>;
-export type UpdateOrganizationMutationResult = Apollo.MutationResult<UpdateOrganizationMutation>;
-export type UpdateOrganizationMutationOptions = Apollo.BaseMutationOptions<UpdateOrganizationMutation, UpdateOrganizationMutationVariables>;
-export const DeleteOrganizationDocument = gql`
-    mutation deleteOrganization($id: Int!) {
+export type UpdateOrganisatieMutationHookResult = ReturnType<typeof useUpdateOrganisatieMutation>;
+export type UpdateOrganisatieMutationResult = Apollo.MutationResult<UpdateOrganisatieMutation>;
+export type UpdateOrganisatieMutationOptions = Apollo.BaseMutationOptions<UpdateOrganisatieMutation, UpdateOrganisatieMutationVariables>;
+export const DeleteOrganisatieDocument = gql`
+    mutation deleteOrganisatie($id: Int!) {
   deleteOrganisatie(id: $id) {
     ok
   }
 }
     `;
-export type DeleteOrganizationMutationFn = Apollo.MutationFunction<DeleteOrganizationMutation, DeleteOrganizationMutationVariables>;
+export type DeleteOrganisatieMutationFn = Apollo.MutationFunction<DeleteOrganisatieMutation, DeleteOrganisatieMutationVariables>;
 
 /**
- * __useDeleteOrganizationMutation__
+ * __useDeleteOrganisatieMutation__
  *
- * To run a mutation, you first call `useDeleteOrganizationMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteOrganizationMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useDeleteOrganisatieMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteOrganisatieMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [deleteOrganizationMutation, { data, loading, error }] = useDeleteOrganizationMutation({
+ * const [deleteOrganisatieMutation, { data, loading, error }] = useDeleteOrganisatieMutation({
  *   variables: {
  *      id: // value for 'id'
  *   },
  * });
  */
-export function useDeleteOrganizationMutation(baseOptions?: Apollo.MutationHookOptions<DeleteOrganizationMutation, DeleteOrganizationMutationVariables>) {
-        return Apollo.useMutation<DeleteOrganizationMutation, DeleteOrganizationMutationVariables>(DeleteOrganizationDocument, baseOptions);
+export function useDeleteOrganisatieMutation(baseOptions?: Apollo.MutationHookOptions<DeleteOrganisatieMutation, DeleteOrganisatieMutationVariables>) {
+        return Apollo.useMutation<DeleteOrganisatieMutation, DeleteOrganisatieMutationVariables>(DeleteOrganisatieDocument, baseOptions);
       }
-export type DeleteOrganizationMutationHookResult = ReturnType<typeof useDeleteOrganizationMutation>;
-export type DeleteOrganizationMutationResult = Apollo.MutationResult<DeleteOrganizationMutation>;
-export type DeleteOrganizationMutationOptions = Apollo.BaseMutationOptions<DeleteOrganizationMutation, DeleteOrganizationMutationVariables>;
+export type DeleteOrganisatieMutationHookResult = ReturnType<typeof useDeleteOrganisatieMutation>;
+export type DeleteOrganisatieMutationResult = Apollo.MutationResult<DeleteOrganisatieMutation>;
+export type DeleteOrganisatieMutationOptions = Apollo.BaseMutationOptions<DeleteOrganisatieMutation, DeleteOrganisatieMutationVariables>;
 export const CreateAfspraakDocument = gql`
     mutation createAfspraak($input: AfspraakInput!) {
   createAfspraak(input: $input) {
@@ -1889,8 +1889,8 @@ export function useDeleteGebruikerRekeningMutation(baseOptions?: Apollo.Mutation
 export type DeleteGebruikerRekeningMutationHookResult = ReturnType<typeof useDeleteGebruikerRekeningMutation>;
 export type DeleteGebruikerRekeningMutationResult = Apollo.MutationResult<DeleteGebruikerRekeningMutation>;
 export type DeleteGebruikerRekeningMutationOptions = Apollo.BaseMutationOptions<DeleteGebruikerRekeningMutation, DeleteGebruikerRekeningMutationVariables>;
-export const CreateOrganizationRekeningDocument = gql`
-    mutation createOrganizationRekening($orgId: Int!, $rekening: RekeningInput!) {
+export const CreateOrganisatieRekeningDocument = gql`
+    mutation createOrganisatieRekening($orgId: Int!, $rekening: RekeningInput!) {
   createOrganisatieRekening(organisatieId: $orgId, rekening: $rekening) {
     ok
     rekening {
@@ -1899,65 +1899,65 @@ export const CreateOrganizationRekeningDocument = gql`
   }
 }
     ${RekeningFragmentDoc}`;
-export type CreateOrganizationRekeningMutationFn = Apollo.MutationFunction<CreateOrganizationRekeningMutation, CreateOrganizationRekeningMutationVariables>;
+export type CreateOrganisatieRekeningMutationFn = Apollo.MutationFunction<CreateOrganisatieRekeningMutation, CreateOrganisatieRekeningMutationVariables>;
 
 /**
- * __useCreateOrganizationRekeningMutation__
+ * __useCreateOrganisatieRekeningMutation__
  *
- * To run a mutation, you first call `useCreateOrganizationRekeningMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateOrganizationRekeningMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useCreateOrganisatieRekeningMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateOrganisatieRekeningMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [createOrganizationRekeningMutation, { data, loading, error }] = useCreateOrganizationRekeningMutation({
+ * const [createOrganisatieRekeningMutation, { data, loading, error }] = useCreateOrganisatieRekeningMutation({
  *   variables: {
  *      orgId: // value for 'orgId'
  *      rekening: // value for 'rekening'
  *   },
  * });
  */
-export function useCreateOrganizationRekeningMutation(baseOptions?: Apollo.MutationHookOptions<CreateOrganizationRekeningMutation, CreateOrganizationRekeningMutationVariables>) {
-        return Apollo.useMutation<CreateOrganizationRekeningMutation, CreateOrganizationRekeningMutationVariables>(CreateOrganizationRekeningDocument, baseOptions);
+export function useCreateOrganisatieRekeningMutation(baseOptions?: Apollo.MutationHookOptions<CreateOrganisatieRekeningMutation, CreateOrganisatieRekeningMutationVariables>) {
+        return Apollo.useMutation<CreateOrganisatieRekeningMutation, CreateOrganisatieRekeningMutationVariables>(CreateOrganisatieRekeningDocument, baseOptions);
       }
-export type CreateOrganizationRekeningMutationHookResult = ReturnType<typeof useCreateOrganizationRekeningMutation>;
-export type CreateOrganizationRekeningMutationResult = Apollo.MutationResult<CreateOrganizationRekeningMutation>;
-export type CreateOrganizationRekeningMutationOptions = Apollo.BaseMutationOptions<CreateOrganizationRekeningMutation, CreateOrganizationRekeningMutationVariables>;
-export const DeleteOrganizationRekeningDocument = gql`
-    mutation deleteOrganizationRekening($id: Int!, $orgId: Int!) {
+export type CreateOrganisatieRekeningMutationHookResult = ReturnType<typeof useCreateOrganisatieRekeningMutation>;
+export type CreateOrganisatieRekeningMutationResult = Apollo.MutationResult<CreateOrganisatieRekeningMutation>;
+export type CreateOrganisatieRekeningMutationOptions = Apollo.BaseMutationOptions<CreateOrganisatieRekeningMutation, CreateOrganisatieRekeningMutationVariables>;
+export const DeleteOrganisatieRekeningDocument = gql`
+    mutation deleteOrganisatieRekening($id: Int!, $orgId: Int!) {
   deleteOrganisatieRekening(organisatieId: $orgId, rekeningId: $id) {
     ok
   }
 }
     `;
-export type DeleteOrganizationRekeningMutationFn = Apollo.MutationFunction<DeleteOrganizationRekeningMutation, DeleteOrganizationRekeningMutationVariables>;
+export type DeleteOrganisatieRekeningMutationFn = Apollo.MutationFunction<DeleteOrganisatieRekeningMutation, DeleteOrganisatieRekeningMutationVariables>;
 
 /**
- * __useDeleteOrganizationRekeningMutation__
+ * __useDeleteOrganisatieRekeningMutation__
  *
- * To run a mutation, you first call `useDeleteOrganizationRekeningMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteOrganizationRekeningMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useDeleteOrganisatieRekeningMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteOrganisatieRekeningMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [deleteOrganizationRekeningMutation, { data, loading, error }] = useDeleteOrganizationRekeningMutation({
+ * const [deleteOrganisatieRekeningMutation, { data, loading, error }] = useDeleteOrganisatieRekeningMutation({
  *   variables: {
  *      id: // value for 'id'
  *      orgId: // value for 'orgId'
  *   },
  * });
  */
-export function useDeleteOrganizationRekeningMutation(baseOptions?: Apollo.MutationHookOptions<DeleteOrganizationRekeningMutation, DeleteOrganizationRekeningMutationVariables>) {
-        return Apollo.useMutation<DeleteOrganizationRekeningMutation, DeleteOrganizationRekeningMutationVariables>(DeleteOrganizationRekeningDocument, baseOptions);
+export function useDeleteOrganisatieRekeningMutation(baseOptions?: Apollo.MutationHookOptions<DeleteOrganisatieRekeningMutation, DeleteOrganisatieRekeningMutationVariables>) {
+        return Apollo.useMutation<DeleteOrganisatieRekeningMutation, DeleteOrganisatieRekeningMutationVariables>(DeleteOrganisatieRekeningDocument, baseOptions);
       }
-export type DeleteOrganizationRekeningMutationHookResult = ReturnType<typeof useDeleteOrganizationRekeningMutation>;
-export type DeleteOrganizationRekeningMutationResult = Apollo.MutationResult<DeleteOrganizationRekeningMutation>;
-export type DeleteOrganizationRekeningMutationOptions = Apollo.BaseMutationOptions<DeleteOrganizationRekeningMutation, DeleteOrganizationRekeningMutationVariables>;
+export type DeleteOrganisatieRekeningMutationHookResult = ReturnType<typeof useDeleteOrganisatieRekeningMutation>;
+export type DeleteOrganisatieRekeningMutationResult = Apollo.MutationResult<DeleteOrganisatieRekeningMutation>;
+export type DeleteOrganisatieRekeningMutationOptions = Apollo.BaseMutationOptions<DeleteOrganisatieRekeningMutation, DeleteOrganisatieRekeningMutationVariables>;
 export const CreateCustomerStatementMessageDocument = gql`
     mutation createCustomerStatementMessage($file: Upload!) {
   createCustomerStatementMessage(file: $file) {
@@ -2126,8 +2126,8 @@ export function useDeleteJournaalpostMutation(baseOptions?: Apollo.MutationHookO
 export type DeleteJournaalpostMutationHookResult = ReturnType<typeof useDeleteJournaalpostMutation>;
 export type DeleteJournaalpostMutationResult = Apollo.MutationResult<DeleteJournaalpostMutation>;
 export type DeleteJournaalpostMutationOptions = Apollo.BaseMutationOptions<DeleteJournaalpostMutation, DeleteJournaalpostMutationVariables>;
-export const GetAllGebruikersDocument = gql`
-    query getAllGebruikers {
+export const GetAllBurgersDocument = gql`
+    query getAllBurgers {
   gebruikers {
     ...Gebruiker
   }
@@ -2135,31 +2135,31 @@ export const GetAllGebruikersDocument = gql`
     ${GebruikerFragmentDoc}`;
 
 /**
- * __useGetAllGebruikersQuery__
+ * __useGetAllBurgersQuery__
  *
- * To run a query within a React component, call `useGetAllGebruikersQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetAllGebruikersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetAllBurgersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllBurgersQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetAllGebruikersQuery({
+ * const { data, loading, error } = useGetAllBurgersQuery({
  *   variables: {
  *   },
  * });
  */
-export function useGetAllGebruikersQuery(baseOptions?: Apollo.QueryHookOptions<GetAllGebruikersQuery, GetAllGebruikersQueryVariables>) {
-        return Apollo.useQuery<GetAllGebruikersQuery, GetAllGebruikersQueryVariables>(GetAllGebruikersDocument, baseOptions);
+export function useGetAllBurgersQuery(baseOptions?: Apollo.QueryHookOptions<GetAllBurgersQuery, GetAllBurgersQueryVariables>) {
+        return Apollo.useQuery<GetAllBurgersQuery, GetAllBurgersQueryVariables>(GetAllBurgersDocument, baseOptions);
       }
-export function useGetAllGebruikersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllGebruikersQuery, GetAllGebruikersQueryVariables>) {
-          return Apollo.useLazyQuery<GetAllGebruikersQuery, GetAllGebruikersQueryVariables>(GetAllGebruikersDocument, baseOptions);
+export function useGetAllBurgersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllBurgersQuery, GetAllBurgersQueryVariables>) {
+          return Apollo.useLazyQuery<GetAllBurgersQuery, GetAllBurgersQueryVariables>(GetAllBurgersDocument, baseOptions);
         }
-export type GetAllGebruikersQueryHookResult = ReturnType<typeof useGetAllGebruikersQuery>;
-export type GetAllGebruikersLazyQueryHookResult = ReturnType<typeof useGetAllGebruikersLazyQuery>;
-export type GetAllGebruikersQueryResult = Apollo.QueryResult<GetAllGebruikersQuery, GetAllGebruikersQueryVariables>;
-export const GetOneGebruikerDocument = gql`
-    query getOneGebruiker($id: Int!) {
+export type GetAllBurgersQueryHookResult = ReturnType<typeof useGetAllBurgersQuery>;
+export type GetAllBurgersLazyQueryHookResult = ReturnType<typeof useGetAllBurgersLazyQuery>;
+export type GetAllBurgersQueryResult = Apollo.QueryResult<GetAllBurgersQuery, GetAllBurgersQueryVariables>;
+export const GetOneBurgerDocument = gql`
+    query getOneBurger($id: Int!) {
   gebruiker(id: $id) {
     ...Gebruiker
   }
@@ -2167,32 +2167,32 @@ export const GetOneGebruikerDocument = gql`
     ${GebruikerFragmentDoc}`;
 
 /**
- * __useGetOneGebruikerQuery__
+ * __useGetOneBurgerQuery__
  *
- * To run a query within a React component, call `useGetOneGebruikerQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetOneGebruikerQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetOneBurgerQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOneBurgerQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetOneGebruikerQuery({
+ * const { data, loading, error } = useGetOneBurgerQuery({
  *   variables: {
  *      id: // value for 'id'
  *   },
  * });
  */
-export function useGetOneGebruikerQuery(baseOptions: Apollo.QueryHookOptions<GetOneGebruikerQuery, GetOneGebruikerQueryVariables>) {
-        return Apollo.useQuery<GetOneGebruikerQuery, GetOneGebruikerQueryVariables>(GetOneGebruikerDocument, baseOptions);
+export function useGetOneBurgerQuery(baseOptions: Apollo.QueryHookOptions<GetOneBurgerQuery, GetOneBurgerQueryVariables>) {
+        return Apollo.useQuery<GetOneBurgerQuery, GetOneBurgerQueryVariables>(GetOneBurgerDocument, baseOptions);
       }
-export function useGetOneGebruikerLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOneGebruikerQuery, GetOneGebruikerQueryVariables>) {
-          return Apollo.useLazyQuery<GetOneGebruikerQuery, GetOneGebruikerQueryVariables>(GetOneGebruikerDocument, baseOptions);
+export function useGetOneBurgerLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOneBurgerQuery, GetOneBurgerQueryVariables>) {
+          return Apollo.useLazyQuery<GetOneBurgerQuery, GetOneBurgerQueryVariables>(GetOneBurgerDocument, baseOptions);
         }
-export type GetOneGebruikerQueryHookResult = ReturnType<typeof useGetOneGebruikerQuery>;
-export type GetOneGebruikerLazyQueryHookResult = ReturnType<typeof useGetOneGebruikerLazyQuery>;
-export type GetOneGebruikerQueryResult = Apollo.QueryResult<GetOneGebruikerQuery, GetOneGebruikerQueryVariables>;
-export const GetOneGebruikerAfsprakenDocument = gql`
-    query getOneGebruikerAfspraken($id: Int!) {
+export type GetOneBurgerQueryHookResult = ReturnType<typeof useGetOneBurgerQuery>;
+export type GetOneBurgerLazyQueryHookResult = ReturnType<typeof useGetOneBurgerLazyQuery>;
+export type GetOneBurgerQueryResult = Apollo.QueryResult<GetOneBurgerQuery, GetOneBurgerQueryVariables>;
+export const GetBurgerAfsprakenDocument = gql`
+    query getBurgerAfspraken($id: Int!) {
   gebruiker(id: $id) {
     afspraken {
       ...Afspraak
@@ -2205,30 +2205,30 @@ export const GetOneGebruikerAfsprakenDocument = gql`
     ${AfspraakFragmentDoc}`;
 
 /**
- * __useGetOneGebruikerAfsprakenQuery__
+ * __useGetBurgerAfsprakenQuery__
  *
- * To run a query within a React component, call `useGetOneGebruikerAfsprakenQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetOneGebruikerAfsprakenQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetBurgerAfsprakenQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBurgerAfsprakenQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetOneGebruikerAfsprakenQuery({
+ * const { data, loading, error } = useGetBurgerAfsprakenQuery({
  *   variables: {
  *      id: // value for 'id'
  *   },
  * });
  */
-export function useGetOneGebruikerAfsprakenQuery(baseOptions: Apollo.QueryHookOptions<GetOneGebruikerAfsprakenQuery, GetOneGebruikerAfsprakenQueryVariables>) {
-        return Apollo.useQuery<GetOneGebruikerAfsprakenQuery, GetOneGebruikerAfsprakenQueryVariables>(GetOneGebruikerAfsprakenDocument, baseOptions);
+export function useGetBurgerAfsprakenQuery(baseOptions: Apollo.QueryHookOptions<GetBurgerAfsprakenQuery, GetBurgerAfsprakenQueryVariables>) {
+        return Apollo.useQuery<GetBurgerAfsprakenQuery, GetBurgerAfsprakenQueryVariables>(GetBurgerAfsprakenDocument, baseOptions);
       }
-export function useGetOneGebruikerAfsprakenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOneGebruikerAfsprakenQuery, GetOneGebruikerAfsprakenQueryVariables>) {
-          return Apollo.useLazyQuery<GetOneGebruikerAfsprakenQuery, GetOneGebruikerAfsprakenQueryVariables>(GetOneGebruikerAfsprakenDocument, baseOptions);
+export function useGetBurgerAfsprakenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBurgerAfsprakenQuery, GetBurgerAfsprakenQueryVariables>) {
+          return Apollo.useLazyQuery<GetBurgerAfsprakenQuery, GetBurgerAfsprakenQueryVariables>(GetBurgerAfsprakenDocument, baseOptions);
         }
-export type GetOneGebruikerAfsprakenQueryHookResult = ReturnType<typeof useGetOneGebruikerAfsprakenQuery>;
-export type GetOneGebruikerAfsprakenLazyQueryHookResult = ReturnType<typeof useGetOneGebruikerAfsprakenLazyQuery>;
-export type GetOneGebruikerAfsprakenQueryResult = Apollo.QueryResult<GetOneGebruikerAfsprakenQuery, GetOneGebruikerAfsprakenQueryVariables>;
+export type GetBurgerAfsprakenQueryHookResult = ReturnType<typeof useGetBurgerAfsprakenQuery>;
+export type GetBurgerAfsprakenLazyQueryHookResult = ReturnType<typeof useGetBurgerAfsprakenLazyQuery>;
+export type GetBurgerAfsprakenQueryResult = Apollo.QueryResult<GetBurgerAfsprakenQuery, GetBurgerAfsprakenQueryVariables>;
 export const GetAllOrganisatiesDocument = gql`
     query getAllOrganisaties {
   organisaties {

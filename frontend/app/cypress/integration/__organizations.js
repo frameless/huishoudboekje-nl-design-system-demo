@@ -40,7 +40,7 @@ xdescribe("Organizations CRUD", () => {
 
 	it("Lists organizations", () => {
 		// Go to organizations list page
-		cy.visit(Routes.Organizations);
+		cy.visit(Routes.Organisaties);
 
 		sampleOrganizations.forEach(o => {
 			cy.get("div").should("contain", o.weergaveNaam);
@@ -50,7 +50,7 @@ xdescribe("Organizations CRUD", () => {
 
 	it("Creates an organization", () => {
 		// Go to organizations list page
-		cy.visit(Routes.Organizations);
+		cy.visit(Routes.Organisaties);
 
 		// Click the add button
 		cy.get("button").should("contain", "Toevoegen");
@@ -72,7 +72,7 @@ xdescribe("Organizations CRUD", () => {
 
 	it("Updates an organization", () => {
 		// Go to organizations list page
-		cy.visit(Routes.Organization(1));
+		cy.visit(Routes.Organisatie(1));
 
 		// Check if we're on the right page
 		cy.get("h2").should("contain", sampleOrganizations[0].weergaveNaam);
@@ -94,7 +94,7 @@ xdescribe("Organizations CRUD", () => {
 
 	it("Deletes an organization", () => {
 		// Go to organizations list page
-		cy.visit(Routes.Organization(1));
+		cy.visit(Routes.Organisatie(1));
 
 		// Check if we're on the right page
 		cy.get("h2").should("contain", sampleOrganizations[0].weergaveNaam);

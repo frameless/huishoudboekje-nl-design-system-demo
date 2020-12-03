@@ -3,7 +3,7 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {Redirect, useHistory, useParams} from "react-router-dom";
 import Routes from "../../config/routes";
-import {Gebruiker, useCreateAfspraakMutation, useGetOneGebruikerQuery} from "../../generated/graphql";
+import {Gebruiker, useCreateAfspraakMutation, useGetOneBurgerQuery} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
 import BackButton from "../BackButton";
 import AfspraakForm from "./AfspraakForm";
@@ -14,7 +14,7 @@ const CreateAfspraak = () => {
 	const {t} = useTranslation();
 	const toast = useToast();
 
-	const $gebruiker = useGetOneGebruikerQuery({
+	const $burger = useGetOneBurgerQuery({
 		variables: {
 			id: parseInt(burgerId)
 		}
@@ -47,8 +47,8 @@ const CreateAfspraak = () => {
 	return (<>
 		<BackButton to={Routes.Burger(parseInt(burgerId))} />
 
-		<Queryable query={$gebruiker} error={<Redirect to={Routes.NotFound} />}>{({gebruiker}: {gebruiker: Gebruiker}) => {
-			if(!gebruiker){
+		<Queryable query={$burger} error={<Redirect to={Routes.NotFound} />}>{({gebruiker: burger}: {gebruiker: Gebruiker}) => {
+			if(!burger){
 				return null;
 			}
 
@@ -56,11 +56,11 @@ const CreateAfspraak = () => {
 				<Stack spacing={5}>
 					<Stack direction={"row"} spacing={5} justifyContent={"space-between"} alignItems={"center"}>
 						<Stack direction={"row"} justifyContent={"flex-start"} alignItems={"center"} spacing={3}>
-							<Heading size={"lg"}>{gebruiker.voornamen} {gebruiker.achternaam}</Heading>
+							<Heading size={"lg"}>{burger.voornamen} {burger.achternaam}</Heading>
 						</Stack>
 					</Stack>
 
-					<AfspraakForm gebruiker={gebruiker} onSave={onSubmit} loading={loading} />
+					<AfspraakForm burger={burger} onSave={onSubmit} loading={loading} />
 				</Stack>
 			);
 		}}</Queryable>

@@ -4,7 +4,7 @@ import {useInput, useIsMobile, Validators} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {Redirect, useHistory, useParams} from "react-router-dom";
 import Routes from "../../config/routes";
-import {useGetOneOrganisatieQuery, useUpdateOrganizationMutation} from "../../generated/graphql";
+import {useGetOneOrganisatieQuery, useUpdateOrganisatieMutation} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
 import {Regex} from "../../utils/things";
 import BackButton from "../BackButton";
@@ -12,7 +12,7 @@ import {FormLeft, FormRight} from "../Forms/FormLeftRight";
 import Page from "../Layouts/Page";
 import Section from "../Layouts/Section";
 
-const OrganizationEdit = () => {
+const OrganisatieEdit = () => {
 	const isMobile = useIsMobile();
 	const {t} = useTranslation();
 	const {id} = useParams<{ id: string }>();
@@ -63,7 +63,7 @@ const OrganizationEdit = () => {
 			}
 		}
 	});
-	const [updateOrganisatie, $updateOrganisatie] = useUpdateOrganizationMutation();
+	const [updateOrganisatie, $updateOrganisatie] = useUpdateOrganisatieMutation();
 
 	const onSubmit = (e) => {
 		e.preventDefault();
@@ -103,7 +103,7 @@ const OrganizationEdit = () => {
 				title: t("messages.organizations.updateSuccessMessage"),
 				position: "top",
 			});
-			push(Routes.Organization(parseInt(id)));
+			push(Routes.Organisatie(parseInt(id)));
 		}).catch(err => {
 			console.error(err);
 			toast({
@@ -120,7 +120,7 @@ const OrganizationEdit = () => {
 
 	return (
 		<Queryable query={$organisatie} error={<Redirect to={Routes.NotFound} />}>{({organisatie}) => (
-			<Page backButton={<BackButton to={Routes.Organization(parseInt(id))} />} title={organisatie.weergaveNaam}>
+			<Page backButton={<BackButton to={Routes.Organisatie(parseInt(id))} />} title={organisatie.weergaveNaam}>
 				<Box as={"form"} onSubmit={onSubmit}>
 					<Section>
 						<Stack direction={isMobile ? "column" : "row"} spacing={2}>
@@ -197,4 +197,4 @@ const OrganizationEdit = () => {
 	)
 };
 
-export default OrganizationEdit;
+export default OrganisatieEdit;

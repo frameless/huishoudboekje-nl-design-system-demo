@@ -10,9 +10,9 @@ import Queryable from "../../utils/Queryable";
 import {searchFields} from "../../utils/things";
 import DeadEndPage from "../DeadEndPage";
 import Page from "../Layouts/Page";
-import OrganizationListView from "./OrganizationListView";
+import OrganisatieListView from "./OrganisatieListView";
 
-const OrganizationList = () => {
+const OrganisatieList = () => {
 	const {t} = useTranslation();
 	const {push} = useHistory();
 	const search = useInput<string>({
@@ -57,7 +57,7 @@ const OrganizationList = () => {
 				return (
 					<DeadEndPage message={t("messages.organizations.addHint", {buttonLabel: t("actions.add")})}>
 						<Button size={"sm"} colorScheme={"primary"} variant={"solid"} leftIcon={<AddIcon />}
-						        onClick={() => push(Routes.CreateOrganization)}>{t("actions.add")}</Button>
+						        onClick={() => push(Routes.CreateOrganisatie)}>{t("actions.add")}</Button>
 					</DeadEndPage>
 				);
 			}
@@ -82,7 +82,7 @@ const OrganizationList = () => {
 							<Button size="sm" colorScheme="primary" onClick={onClickResetSearch}>{t("actions.clearSearch")}</Button>
 						</DeadEndPage>
 					) : (
-						<OrganizationListView organisaties={filteredOrganisaties} showAddButton={search.value.trim().length === 0} />
+						<OrganisatieListView organisaties={filteredOrganisaties} showAddButton={search.value.trim().length === 0} />
 					)}
 				</Page>
 			);
@@ -91,4 +91,4 @@ const OrganizationList = () => {
 	)
 };
 
-export default OrganizationList;
+export default OrganisatieList;

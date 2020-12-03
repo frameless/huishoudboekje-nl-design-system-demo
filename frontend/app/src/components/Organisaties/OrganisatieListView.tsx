@@ -7,7 +7,7 @@ import Routes from "../../config/routes";
 import {Organisatie} from "../../generated/graphql";
 import GridCard from "../GridCard";
 
-const OrganizationListView: React.FC<BoxProps & { organisaties: Organisatie[], showAddButton?: boolean }> = ({organisaties, showAddButton = false, ...props}) => {
+const OrganisatieListView: React.FC<BoxProps & { organisaties: Organisatie[], showAddButton?: boolean }> = ({organisaties, showAddButton = false, ...props}) => {
 	const {t} = useTranslation();
 	const {push} = useHistory();
 
@@ -16,13 +16,13 @@ const OrganizationListView: React.FC<BoxProps & { organisaties: Organisatie[], s
 			{showAddButton && (
 				<Box>
 					<Button colorScheme={"blue"} borderStyle={"dashed"} variant={"outline"} leftIcon={<AddIcon />}
-					        w="100%" h="100%" onClick={() => push(Routes.CreateOrganization)} borderRadius={5}
+					        w="100%" h="100%" onClick={() => push(Routes.CreateOrganisatie)} borderRadius={5}
 					        p={5}>{t("actions.add")}</Button>
 				</Box>
 			)}
 			{organisaties.map((o, i) => (
 				<GridCard key={i} justifyContent={"flex-start"} onClick={() => {
-					push(Routes.Organization(o.id))
+					push(Routes.Organisatie(o.id))
 				}}>
 					<Stack spacing={1}>
 						<Text fontSize={"md"}><strong>{o.weergaveNaam}</strong></Text>
@@ -34,4 +34,4 @@ const OrganizationListView: React.FC<BoxProps & { organisaties: Organisatie[], s
 	);
 };
 
-export default OrganizationListView;
+export default OrganisatieListView;

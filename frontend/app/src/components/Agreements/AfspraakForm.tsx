@@ -12,12 +12,12 @@ import {isDev, XInterval} from "../../utils/things";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
 import RadioButtonGroup from "../Layouts/RadioButtons/RadioButtonGroup";
 
-type AfspraakFormProps = { afspraak?: Afspraak, onSave: (data) => void, gebruiker?: Gebruiker, loading: boolean };
+type AfspraakFormProps = { afspraak?: Afspraak, onSave: (data) => void, burger?: Gebruiker, loading: boolean };
 const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave, loading = false, ...props}) => {
 	const {t} = useTranslation();
 	const toast = useToast();
 	const isMobile = useIsMobile();
-	const gebruiker = afspraak?.gebruiker || props.gebruiker;
+	const gebruiker = afspraak?.gebruiker || props.burger;
 	if(!gebruiker){
 		throw new Error("Missing property gebruiker.");
 	}
@@ -34,7 +34,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 		defaultValue: "",
 		validate: [Validators.required]
 	});
-	const organizationId = useInput({
+	const organisatieId = useInput({
 		validate: [(v) => v !== undefined && v.toString() !== ""]
 	});
 	const rubriekId = useInput({
@@ -88,7 +88,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 			toggleActive(afspraak.actief);
 			setAfspraakType(afspraak.credit ? AfspraakType.Income : AfspraakType.Expense);
 			description.setValue(afspraak.beschrijving || "");
-			organizationId.setValue((afspraak.organisatie?.id || 0).toString());
+			organisatieId.setValue((afspraak.organisatie?.id || 0).toString());
 			rubriekId.setValue((afspraak.rubriek?.id || 0).toString());
 			if (afspraak.tegenRekening) {
 				rekeningId.setValue((afspraak.tegenRekening?.id || 0).toString());
@@ -118,7 +118,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 	useEffect(() => {
 		const {organisaties = []} = $organisaties.data || {};
 
-		const selectedOrg = organisaties.find(o => o.id === parseInt(organizationId.value));
+		const selectedOrg = organisaties.find(o => o.id === parseInt(organisatieId.value));
 		if (selectedOrg) {
 			const {rekeningen = []} = selectedOrg;
 
@@ -126,14 +126,14 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 				rekeningId.setValue((rekeningen[0].id || 0).toString());
 			}
 		}
-	}, [$organisaties.data, organizationId.value, rekeningId]);
+	}, [$organisaties.data, organisatieId.value, rekeningId]);
 
 	const prePopulateForm = () => {
 		const c = sampleData.agreements[0];
 
 		setAfspraakType(c.credit ? AfspraakType.Income : AfspraakType.Expense);
 		description.setValue(c.omschrijving);
-		organizationId.setValue(c.organisatie.id);
+		organisatieId.setValue(c.organisatie.id);
 		if (c.organisatie?.rekeningen?.length > 0) {
 			rekeningId.setValue(c.organisatie.rekeningen[0].id);
 		}
@@ -156,7 +156,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 
 		const fields: UseInput<any>[] = [
 			description,
-			organizationId,
+			organisatieId,
 			rubriekId,
 			rekeningId,
 			amount,
@@ -190,7 +190,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 			credit: afspraakType === AfspraakType.Income,
 			beschrijving: description.value,
 			tegenRekeningId: rekeningId.value,
-			organisatieId: parseInt(organizationId.value as unknown as string) !== 0 ? organizationId.value : null,
+			organisatieId: parseInt(organisatieId.value as unknown as string) !== 0 ? organisatieId.value : null,
 			...rubriekId.value && {rubriekId: rubriekId.value},
 			bedrag: amount.value,
 			kenmerk: searchTerm.value,
@@ -239,10 +239,10 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 						</Stack>
 						<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 							<Stack spacing={1} flex={1}>
-								<FormLabel htmlFor={"organizationId"}>{t("forms.agreements.fields.organization")}</FormLabel>
+								<FormLabel htmlFor={"organisatieId"}>{t("forms.agreements.fields.organization")}</FormLabel>
 								<Queryable query={$organisaties}>{({organisaties = []}: { organisaties: Organisatie[] }) => {
 									return (
-										<Select {...organizationId.bind} isInvalid={isInvalid(organizationId)} id="organizationId" value={organizationId.value}>
+										<Select {...organisatieId.bind} isInvalid={isInvalid(organisatieId)} id="organizationId" value={organisatieId.value}>
 											<option>{t("forms.agreements.fields.organizationChoose")}</option>
 											{organisaties.map(o => (
 												<option key={"o" + o.id} value={o.id}>{o.weergaveNaam}</option>
@@ -256,12 +256,12 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 							<Stack spacing={1} flex={1}>
 								<FormLabel htmlFor={"rekeningId"}>{t("forms.agreements.fields.bankAccount")}</FormLabel>
 								<Queryable query={$organisaties}>{({organisaties = []}: { organisaties: Organisatie[] }) => {
-									const organisatieRekeningen = organisaties.find(o => o.id === parseInt(organizationId.value))?.rekeningen || [];
+									const organisatieRekeningen = organisaties.find(o => o.id === parseInt(organisatieId.value))?.rekeningen || [];
 
 									return (
 										<Select {...rekeningId.bind} isInvalid={isInvalid(rekeningId)} id="rekeningId" value={rekeningId.value}>
 											<option>{t("forms.agreements.fields.bankAccountChoose")}</option>
-											{parseInt(organizationId.value) === 0 ? (<>
+											{parseInt(organisatieId.value) === 0 ? (<>
 												{rekeningen.map(r => (
 													<option key={r.id} value={r.id}>{r.rekeninghouder} ({r.iban})</option>
 												))}
