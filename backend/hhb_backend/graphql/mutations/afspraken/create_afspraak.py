@@ -1,13 +1,14 @@
 """ GraphQL mutation for creating a new Afspraak """
 
+import json
 import graphene
 from graphql import GraphQLError
 import requests
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.models.afspraak import Afspraak
 from hhb_backend.graphql.mutations.afspraken import AfspraakInput
-from hhb_backend.utils import convert_hhb_interval_to_iso
-import json
+from hhb_backend.graphql.utils import convert_hhb_interval_to_iso
+
 
 class CreateAfspraak(graphene.Mutation):
     class Arguments:
