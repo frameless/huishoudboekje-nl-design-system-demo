@@ -9,3 +9,4 @@ class RubriekByGrootboekrekeningLoader(SingleDataLoader):
     model = "rubrieken"
     filter_item = "filter_grootboekrekeningen"
     index = "grootboekrekening_id"
+    batch_size = 250
