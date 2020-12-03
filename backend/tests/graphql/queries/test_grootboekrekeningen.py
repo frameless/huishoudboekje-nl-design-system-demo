@@ -10,6 +10,14 @@ mock_data = {"data": [
     mock_inkomsten,
     mock_salaris,
 ]}
+mock_rubriek = {
+    "afspraken": [
+        3
+    ],
+    "grootboekrekening_id": "m1",
+    "id": 2,
+    "naam": "Rubriek 1"
+}
 
 
 def test_grootboekrekeningen(client):
@@ -115,3 +123,22 @@ def test_grootboekrekening_with_parent(client):
         assert response.json == {"data": {"grootboekrekening":
                                               {"id": "m12", "naam": "salaris", "parent": {"id": "m1", "naam": "inkomsten"}}
                                           }}
+
+def test_grootboekrekeningen_rubriek(client):
+    with requests_mock.Mocker() as mock:
+        adapter = mock.get(f"{settings.GROOTBOEK_SERVICE_URL}/grootboekrekeningen/", json=mock_data)
+        filter_adapter = mock.get(
+            re.compile(f'{settings.GROOTBOEK_SERVICE_URL}/grootboekrekeningen/\?filter_ids=\w+(?:,\w+)*'),
+            json={"data": [mock_inkomsten]})
+        hhb_adapter = mock.get(
+            re.compile(f'{settings.HHB_SERVICES_URL}/rubrieken/\?filter_grootboekrekeningen=\w+(?:,\w+)*'),
+            json={"data": [mock_rubriek]})
+        response = client.post(
+            "/graphql",
+            data='{"query":"query test($id:String!){ grootboekrekening(id: $id) { id rubriek { id naam }} }","variables":{"id":"m1"}}',
+            content_type='application/json'
+        )
+        assert adapter.call_count == 0
+        assert filter_adapter.called_once
+        assert hhb_adapter.called_once
+        assert response.json == {'data': {'grootboekrekening': {'id': 'm1', 'rubriek': {'id': 2, 'naam': 'Rubriek 1'}}}}

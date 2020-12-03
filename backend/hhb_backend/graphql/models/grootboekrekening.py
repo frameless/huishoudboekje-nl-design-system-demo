@@ -1,7 +1,7 @@
 """ Grootboekrekening model as used in GraphQL queries """
 import graphene
 from flask import request
-
+from hhb_backend.graphql.models.rubriek import Rubriek
 
 class Grootboekrekening(graphene.ObjectType):
     """ Grootboekrekening model """
@@ -12,6 +12,7 @@ class Grootboekrekening(graphene.ObjectType):
     debet = graphene.Boolean()
     parent = graphene.Field(lambda: Grootboekrekening)
     children = graphene.List(lambda: Grootboekrekening)
+    rubriek = graphene.Field(lambda: Rubriek)
 
     async def resolve_parent(root, info):
         """ Get parent when requested """
@@ -24,3 +25,6 @@ class Grootboekrekening(graphene.ObjectType):
         if root.get('children'):
             children_ = await request.dataloader.grootboekrekeningen_by_id.load_many(root.get('children'))
             return children_ or []
+
+    async def resolve_rubriek(root, info):
+        return await request.dataloader.rubrieken_by_grootboekrekening.load(root.get('id'))

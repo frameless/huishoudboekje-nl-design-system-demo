@@ -6,8 +6,8 @@ from .afspraken_loader import AfsprakenByIdLoader, AfsprakenByGebruikerLoader
 from .rekeningen_loader import RekeningenByIdLoader, RekeningenByGebruikerLoader, RekeningenByOrganisatieLoader, RekeningenByIbanLoader
 from .csm_loader import CSMsByIdLoader
 from .bank_transactions_loader import BankTransactionByIdLoader, BankTransactionByCsmLoader
-from .rubrieken_loader import RubriekByIdLoader
 from .configuratie_loader import ConfiguratieByIdLoader
+from .rubrieken_loader import RubriekByIdLoader, RubriekByGrootboekrekeningLoader
 
 
 class HHBDataLoader:
@@ -25,6 +25,7 @@ class HHBDataLoader:
         self.afspraken_by_id = AfsprakenByIdLoader(loop=loop)
         self.afspraken_by_gebruiker = AfsprakenByGebruikerLoader(loop=loop)
         self.rubrieken_by_id = RubriekByIdLoader(loop=loop)
+        self.rubrieken_by_grootboekrekening = RubriekByGrootboekrekeningLoader(loop=loop)
 
         # Rekeningen
         self.rekeningen_by_id = RekeningenByIdLoader(loop=loop)

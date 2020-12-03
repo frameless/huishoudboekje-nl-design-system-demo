@@ -10,6 +10,7 @@ class SingleDataLoader(DataLoader):
     service = settings.HHB_SERVICES_URL
     filter_item = "filter_ids"
     index = "id"
+    batch_size = 1000
 
     def url_for(self, keys=None):
         return f"""{self.service}/{self.model}/{f"?{self.filter_item}={','.join([str(k) for k in keys])}" if keys else ''}"""
@@ -28,13 +29,15 @@ class SingleDataLoader(DataLoader):
         return result
 
     async def batch_load_fn(self, keys):
-        url = self.url_for(keys)
-        response = requests.get(url)
-        if not response.ok:
-            raise GraphQLError(f"Upstream API responded: {response.text}")
         objects = {}
-        for item in response.json()["data"]:
-            objects[item[self.index]] = item
+        for i in range(0, len(keys), self.batch_size):
+            url = self.url_for(keys[i:i+self.batch_size])
+            response = requests.get(url)
+            if not response.ok:
+                raise GraphQLError(f"Upstream API responded: {response.text}")
+        
+            for item in response.json()["data"]:
+                objects[item[self.index]] = item
         return [objects.get(key, None) for key in keys]
 
 
