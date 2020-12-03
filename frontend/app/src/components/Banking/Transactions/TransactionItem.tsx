@@ -152,14 +152,6 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: IBankTransaction }
 							</Box>
 						</Box>
 
-						<Box>
-							<Label>{t("transactions.description")}</Label>
-							<Box>
-								{/* Todo: omschrijving toevoegen (27-11-2020) */}
-								<Text>OMSCHRIJVING</Text>
-							</Box>
-						</Box>
-
 						<Stack direction={"row"} justifyContent={"space-between"}>
 							<Box>
 								<Label>{t("forms.common.fields.date")}</Label>
@@ -177,10 +169,9 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: IBankTransaction }
 						</Stack>
 
 						<Box>
-							<Label>{t("transactions.originalData")}</Label>
+							<Label>{t("transactions.description")}</Label>
 							<Box fontSize={"sm"} p={2} bg={"gray.100"} overflowX={"scroll"}>
-								<pre>{bt.informationToAccountOwner}</pre>
-								<pre>{bt.statementLine}</pre>
+								<Text fontFamily={"monospace"} overflowWrap={"break-word"}>{bt.informationToAccountOwner}</Text>
 							</Box>
 						</Box>
 
