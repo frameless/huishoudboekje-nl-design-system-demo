@@ -36,3 +36,6 @@ open_html: $(COVERAGE_HTML)
 .PHONY: clean
 clean:
 	rm -rf $(JUNIT_REPORT) $(COVERAGE_FILE) $(COVERAGE_HTML) $(COVERAGE_XML)
+
+.PHONY: lint
+lint:
