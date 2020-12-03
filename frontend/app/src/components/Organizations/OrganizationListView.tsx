@@ -1,13 +1,13 @@
 import {AddIcon} from "@chakra-ui/icons";
-import React from "react";
 import {Box, BoxProps, Button, Grid, Stack, Text} from "@chakra-ui/react";
-import {IOrganisatie} from "../../models";
-import Routes from "../../config/routes";
-import {useHistory} from "react-router-dom";
+import React from "react";
 import {useTranslation} from "react-i18next";
+import {useHistory} from "react-router-dom";
+import Routes from "../../config/routes";
+import {Organisatie} from "../../generated/graphql";
 import GridCard from "../GridCard";
 
-const OrganizationListView: React.FC<BoxProps & { organizations: IOrganisatie[], showAddButton?: boolean }> = ({organizations, showAddButton = false, ...props}) => {
+const OrganizationListView: React.FC<BoxProps & { organisaties: Organisatie[], showAddButton?: boolean }> = ({organisaties, showAddButton = false, ...props}) => {
 	const {t} = useTranslation();
 	const {push} = useHistory();
 
@@ -20,13 +20,13 @@ const OrganizationListView: React.FC<BoxProps & { organizations: IOrganisatie[],
 					        p={5}>{t("actions.add")}</Button>
 				</Box>
 			)}
-			{organizations.map((o, i) => (
+			{organisaties.map((o, i) => (
 				<GridCard key={i} justifyContent={"flex-start"} onClick={() => {
 					push(Routes.Organization(o.id))
 				}}>
 					<Stack spacing={1}>
 						<Text fontSize={"md"}><strong>{o.weergaveNaam}</strong></Text>
-						<Text fontSize={"md"} color={"gray.400"}>{o.kvkDetails.plaatsnaam}</Text>
+						<Text fontSize={"md"} color={"gray.400"}>{o.kvkDetails?.plaatsnaam}</Text>
 					</Stack>
 				</GridCard>
 			))}

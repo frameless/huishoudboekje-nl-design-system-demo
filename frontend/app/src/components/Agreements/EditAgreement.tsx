@@ -1,39 +1,41 @@
+import {useToast} from "@chakra-ui/react";
 import React from "react";
-import {useHistory, useParams} from "react-router-dom";
-import {GetOneAfspraakQuery} from "../../services/graphql/queries";
-import {Heading, Stack, useToast} from "@chakra-ui/react";
 import {useTranslation} from "react-i18next";
-import {useMutation, useQuery} from "@apollo/client";
-import Queryable from "../../utils/Queryable";
-import {IAfspraak} from "../../models";
-import {UpdateAfspraakMutation} from "../../services/graphql/mutations";
+import {useHistory, useParams} from "react-router-dom";
 import Routes from "../../config/routes";
+import {Afspraak, useGetOneAfspraakQuery, useUpdateAfspraakMutation} from "../../generated/graphql";
+import Queryable from "../../utils/Queryable";
 import BackButton from "../BackButton";
+import Page from "../Layouts/Page";
 import AfspraakForm from "./AfspraakForm";
 
 const EditAgreement = () => {
-	const {id} = useParams<{ id }>();
+	const {id} = useParams<{ id: string }>();
 	const {t} = useTranslation();
 	const toast = useToast();
 	const {push} = useHistory();
 
-	const $afspraak = useQuery<{ afspraak: IAfspraak }>(GetOneAfspraakQuery, {variables: {id}});
-	const [updateAfspraak, {loading: updateLoading}] = useMutation(UpdateAfspraakMutation);
+	const $afspraak = useGetOneAfspraakQuery({
+		variables: {
+			id: parseInt(id)
+		}
+	});
+	const [updateAfspraak, $updateAfspraak] = useUpdateAfspraakMutation();
 
 	const onSaveAfspraak = (data) => {
 		updateAfspraak({
 			variables: {
-				id,
+				id: parseInt(id),
 				input: data
 			}
-		}).then(result => {
+		}).then(() => {
 			toast({
 				status: "success",
 				title: t("messages.agreements.editSuccessMessage"),
 				position: "top",
 			});
 
-			if ($afspraak.data && $afspraak.data.afspraak.gebruiker.id) {
+			if ($afspraak.data?.afspraak?.gebruiker?.id) {
 				push(Routes.Burger($afspraak.data.afspraak.gebruiker.id));
 			}
 		}).catch(err => {
@@ -49,24 +51,14 @@ const EditAgreement = () => {
 	};
 
 	return (
-		<Queryable query={$afspraak}>
-			{(data) => {
-				return (
-					<>
-						<BackButton to={Routes.Burger(data.afspraak.gebruiker.id)} />
-
-						<Stack spacing={5}>
-							<Stack direction={"row"} spacing={5} justifyContent={"space-between"} alignItems={"center"}>
-								<Stack direction={"row"} justifyContent={"flex-start"} alignItems={"center"} spacing={3}>
-									<Heading size={"lg"}>{t("forms.agreements.titleEdit")}</Heading>
-								</Stack>
-							</Stack>
-
-							<AfspraakForm gebruiker={data.afspraak.gebruiker} afspraak={data.afspraak} loading={updateLoading} onSave={onSaveAfspraak} />
-						</Stack>
-					</>
-				);
-			}}
+		<Queryable query={$afspraak}>{({afspraak}: {afspraak: Afspraak}) => {
+			return (
+				<Page backButton={<BackButton to={Routes.Burger(afspraak.gebruiker?.id)} />} title={t("forms.agreements.titleEdit")}>
+					{/* Todo: fix this ! somehow */}
+					<AfspraakForm afspraak={afspraak} loading={$updateAfspraak.loading} onSave={onSaveAfspraak} />
+				</Page>
+			);
+		}}
 		</Queryable>
 	);
 };

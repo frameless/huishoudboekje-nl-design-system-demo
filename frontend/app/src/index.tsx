@@ -8,7 +8,7 @@ import {BrowserRouter as Router} from "react-router-dom";
 import App from "./App";
 import "./config/i18n";
 import theme from "./config/theme";
-import apolloClient from "./services/graphql/client";
+import apolloClient from "./services/graphql-client";
 
 moment.locale("nl");
 

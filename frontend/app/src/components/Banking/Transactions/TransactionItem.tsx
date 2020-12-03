@@ -1,4 +1,3 @@
-import {useMutation, useQuery} from "@apollo/client";
 import {DeleteIcon} from "@chakra-ui/icons";
 import {
 	Box,
@@ -23,16 +22,21 @@ import {friendlyFormatIBAN} from "ibantools";
 import React, {useContext} from "react";
 import {useInput, useIsMobile, Validators} from "react-grapple";
 import {useTranslation} from "react-i18next";
-import {IBankTransaction, IRubriek} from "../../../models";
-import {CreateJournaalpostGrootboekrekeningMutation, DeleteJournaalpostMutation, UpdateJournaalpostGrootboekrekeningMutation} from "../../../services/graphql/mutations";
-import {GetAllRubricsQuery} from "../../../services/graphql/queries";
+import {
+	BankTransaction,
+	Rubriek,
+	useCreateJournaalpostGrootboekrekeningMutation,
+	useDeleteJournaalpostMutation,
+	useGetAllRubriekenQuery,
+	useUpdateJournaalpostGrootboekrekeningMutation
+} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import {dateFormat} from "../../../utils/things";
 import Currency from "../../Currency";
 import {Label} from "../../Forms/FormLeftRight";
 import {TransactionsContext} from "./index";
 
-const TransactionItem: React.FC<BoxProps & { bankTransaction: IBankTransaction }> = ({bankTransaction: bt, ...props}) => {
+const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }> = ({bankTransaction: bt, ...props}) => {
 	const {t} = useTranslation();
 	const isMobile = useIsMobile();
 	const toast = useToast();
@@ -43,16 +47,16 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: IBankTransaction }
 		validate: [Validators.required]
 	});
 
-	const $rubrics = useQuery(GetAllRubricsQuery, {
-		onCompleted: (data: { rubrieken: IRubriek[] }) => {
-			if (bt.journaalpost) {
+	const $rubrics = useGetAllRubriekenQuery({
+		onCompleted: () => {
+			if (bt.journaalpost?.grootboekrekening) {
 				rubric.setValue(bt.journaalpost?.grootboekrekening.id);
 			}
 		}
 	});
-	const [createJournal] = useMutation(CreateJournaalpostGrootboekrekeningMutation);
-	const [updateJournal] = useMutation(UpdateJournaalpostGrootboekrekeningMutation);
-	const [deleteJournal] = useMutation(DeleteJournaalpostMutation);
+	const [createJournaalpost] = useCreateJournaalpostGrootboekrekeningMutation();
+	const [updateJournaalpost] = useUpdateJournaalpostGrootboekrekeningMutation();
+	const [deleteJournaalpost] = useDeleteJournaalpostMutation();
 
 	const onClickSave = async () => {
 		if (!rubric.isValid) {
@@ -65,19 +69,18 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: IBankTransaction }
 		}
 
 		let mutation;
-
 		if (!bt.journaalpost) {
-			mutation = createJournal({
+			mutation = createJournaalpost({
 				variables: {
-					transactionId: bt.id,
+					transactionId: bt.id!, // Todo: fix this ! somehow
 					grootboekrekeningId: rubric.value
 				}
 			});
 		}
 		else {
-			mutation = updateJournal({
+			mutation = updateJournaalpost({
 				variables: {
-					id: bt.journaalpost.id,
+					id: bt.journaalpost.id!, // Todo: fix this ! somehow
 					grootboekrekeningId: rubric.value
 				}
 			});
@@ -107,9 +110,9 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: IBankTransaction }
 			return;
 		}
 
-		deleteJournal({
+		deleteJournaalpost({
 			variables: {
-				id: bt.journaalpost.id
+				id: bt.journaalpost.id! // Todo: fix this ! somehow
 			}
 		}).then(() => {
 			toast({
@@ -131,6 +134,8 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: IBankTransaction }
 		});
 	}
 
+	const maybeFormatIBAN = (iban?: string) => iban ? friendlyFormatIBAN(iban) : t("unknown")
+
 	return (<>
 		<Modal isOpen={isOpen} onClose={onClose} blockScrollOnMount={true}>
 			<ModalOverlay />
@@ -144,10 +149,10 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: IBankTransaction }
 							<Box flex={2}>{bt.tegenRekening ? (
 								<Stack spacing={0}>
 									<Text>{bt.tegenRekening.rekeninghouder}</Text>
-									<Text fontSize={"sm"}>{friendlyFormatIBAN(bt.tegenRekening.iban)}</Text>
+									<Text fontSize={"sm"}>{maybeFormatIBAN(bt.tegenRekening.iban)}</Text>
 								</Stack>
 							) : (
-								<Text>{friendlyFormatIBAN(bt.tegenRekeningIban) || t("unknown")}</Text>
+								<Text>{maybeFormatIBAN(bt.tegenRekeningIban)}</Text>
 							)}
 							</Box>
 						</Box>
@@ -181,9 +186,11 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: IBankTransaction }
 								<Stack direction={"row"}>
 									<Select {...rubric.bind} isInvalid={!rubric.isValid}>
 										<option value={undefined}>{t("forms.banking.fields.rubricChoose")}</option>
-										{rubrieken.map((r: IRubriek) => (
-											<option key={r.id} value={r.grootboekrekening.id}>{r.naam}</option>
-										))}
+										{rubrieken.map((r: Rubriek) => {
+											return r.grootboekrekening && (
+												<option key={r.id} value={r.grootboekrekening.id}>{r.naam}</option>
+											);
+										})}
 									</Select>
 									{bt.journaalpost && (
 										<IconButton icon={<DeleteIcon />} aria-label={t("actions.delete")} variant={"ghost"} onClick={() => onClickDelete()} />
@@ -209,23 +216,22 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: IBankTransaction }
 			<Stack direction={"row"} alignItems={"center"} justifyContent={"center"} {...props} onClick={() => onOpen()} cursor={"pointer"}>
 				<Box flex={2}>{bt.tegenRekening ? (<>
 					<Text>
-						<Tooltip label={friendlyFormatIBAN(bt.tegenRekening.iban)} aria-label={friendlyFormatIBAN(bt.tegenRekening.iban)} placement={"right"} hasArrow={true}>
+						<Tooltip label={maybeFormatIBAN(bt.tegenRekening.iban)} aria-label={maybeFormatIBAN(bt.tegenRekening.iban)} placement={"right"} hasArrow={true}>
 							<span>{bt.tegenRekening.rekeninghouder}</span>
 						</Tooltip>
 					</Text>
 				</>) :
-					<Text whiteSpace={"nowrap"}>{friendlyFormatIBAN(bt.tegenRekeningIban) || t("unknown")}</Text>
+					<Text whiteSpace={"nowrap"}>{maybeFormatIBAN(bt.tegenRekeningIban)}</Text>
 				}
 				</Box>
 				{!isMobile && (
 					<Box flex={1}>
-						<Text fontSize={"sm"}>{bt.journaalpost?.grootboekrekening.naam}</Text>
+						<Text fontSize={"sm"}>{bt.journaalpost?.grootboekrekening?.naam}</Text>
 					</Box>
 				)}
 				<Box flex={0} minWidth={120}>
 					<Currency value={bt.bedrag} />
 				</Box>
-				{/* Todo: Later uit te breiden met geboekt op specifieke afspraak als deze bekend is */}
 			</Stack>
 		</Box>
 	</>);

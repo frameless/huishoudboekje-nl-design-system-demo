@@ -35,7 +35,7 @@ export const AfspraakFragment = gql`
         startDatum
         eindDatum
         aantalBetalingen
-        automatischeIncasso
+        #        automatischeIncasso
         interval {
             dagen
             weken
@@ -87,6 +87,15 @@ export const GebruikerFragment = gql`
         }
         afspraken {
             ...Afspraak
+            #            overschrijvingen {
+            #                bedrag
+            #                datum
+            #                id
+            #                status
+            #                bankTransaction {
+            #                    id
+            #                }
+            #            }
         }
     }
     ${AfspraakFragment}
@@ -125,7 +134,7 @@ export const BankTransactionFragment = gql`
         id
         informationToAccountOwner
         statementLine
-		bedrag
+        bedrag
         isCredit
         tegenRekeningIban
         tegenRekening {

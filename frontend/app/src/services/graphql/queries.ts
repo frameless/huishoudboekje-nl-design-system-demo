@@ -98,8 +98,8 @@ export const GetAllTransactionsQuery = gql`
     ${GrootboekrekeningFragment}
 `;
 
-export const GetAllRubricsQuery = gql`
-    query x {
+export const GetAllRubriekenQuery = gql`
+    query getAllRubrieken {
         rubrieken{
             ...Rubriek
             grootboekrekening{

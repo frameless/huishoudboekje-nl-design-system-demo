@@ -1,17 +1,15 @@
-import {useMutation} from "@apollo/client";
 import {BoxProps, useToast} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {ICustomerStatementMessage} from "../../../models";
-import {DeleteCustomerStatementMessageMutation} from "../../../services/graphql/mutations";
+import {CustomerStatementMessage, useDeleteCustomerStatementMessageMutation} from "../../../generated/graphql";
 import {Label} from "../../Forms/FormLeftRight";
 import CsmTableRow from "./CsmTableRow";
 
-const CsmListView: React.FC<BoxProps & { csms: ICustomerStatementMessage[], refresh: VoidFunction }> = ({csms, refresh}) => {
+const CsmListView: React.FC<BoxProps & { csms: CustomerStatementMessage[], refresh: VoidFunction }> = ({csms, refresh}) => {
 	const {t} = useTranslation();
 	const toast = useToast();
 
-	const [deleteCustomerStatementMessage] = useMutation(DeleteCustomerStatementMessageMutation);
+	const [deleteCustomerStatementMessage] = useDeleteCustomerStatementMessageMutation();
 
 	const onDelete = (id: number) => {
 		deleteCustomerStatementMessage({

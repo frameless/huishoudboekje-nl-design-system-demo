@@ -895,6 +895,11 @@ export type CustomerStatementMessageFragment = (
   )>>> }
 );
 
+export type JournaalpostFragment = (
+  { __typename?: 'Journaalpost' }
+  & Pick<Journaalpost, 'id'>
+);
+
 export type CreateGebruikerMutationVariables = Exact<{
   input?: Maybe<CreateGebruikerInput>;
 }>;
@@ -1325,10 +1330,10 @@ export type GetAllTransactionsQuery = (
   )>>> }
 );
 
-export type XQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetAllRubriekenQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type XQuery = (
+export type GetAllRubriekenQuery = (
   { __typename?: 'RootQuery' }
   & { rubrieken?: Maybe<Array<Maybe<(
     { __typename?: 'Rubriek' }
@@ -1480,6 +1485,11 @@ export const CustomerStatementMessageFragmentDoc = gql`
   uploadDate
 }
     ${BankTransactionFragmentDoc}`;
+export const JournaalpostFragmentDoc = gql`
+    fragment Journaalpost on Journaalpost {
+  id
+}
+    `;
 export const CreateGebruikerDocument = gql`
     mutation createGebruiker($input: CreateGebruikerInput) {
   createGebruiker(input: $input) {
@@ -2424,8 +2434,8 @@ export function useGetAllTransactionsLazyQuery(baseOptions?: Apollo.LazyQueryHoo
 export type GetAllTransactionsQueryHookResult = ReturnType<typeof useGetAllTransactionsQuery>;
 export type GetAllTransactionsLazyQueryHookResult = ReturnType<typeof useGetAllTransactionsLazyQuery>;
 export type GetAllTransactionsQueryResult = Apollo.QueryResult<GetAllTransactionsQuery, GetAllTransactionsQueryVariables>;
-export const XDocument = gql`
-    query x {
+export const GetAllRubriekenDocument = gql`
+    query getAllRubrieken {
   rubrieken {
     ...Rubriek
     grootboekrekening {
@@ -2437,26 +2447,26 @@ export const XDocument = gql`
     ${RubriekFragmentDoc}`;
 
 /**
- * __useXQuery__
+ * __useGetAllRubriekenQuery__
  *
- * To run a query within a React component, call `useXQuery` and pass it any options that fit your needs.
- * When your component renders, `useXQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetAllRubriekenQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllRubriekenQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useXQuery({
+ * const { data, loading, error } = useGetAllRubriekenQuery({
  *   variables: {
  *   },
  * });
  */
-export function useXQuery(baseOptions?: Apollo.QueryHookOptions<XQuery, XQueryVariables>) {
-        return Apollo.useQuery<XQuery, XQueryVariables>(XDocument, baseOptions);
+export function useGetAllRubriekenQuery(baseOptions?: Apollo.QueryHookOptions<GetAllRubriekenQuery, GetAllRubriekenQueryVariables>) {
+        return Apollo.useQuery<GetAllRubriekenQuery, GetAllRubriekenQueryVariables>(GetAllRubriekenDocument, baseOptions);
       }
-export function useXLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<XQuery, XQueryVariables>) {
-          return Apollo.useLazyQuery<XQuery, XQueryVariables>(XDocument, baseOptions);
+export function useGetAllRubriekenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllRubriekenQuery, GetAllRubriekenQueryVariables>) {
+          return Apollo.useLazyQuery<GetAllRubriekenQuery, GetAllRubriekenQueryVariables>(GetAllRubriekenDocument, baseOptions);
         }
-export type XQueryHookResult = ReturnType<typeof useXQuery>;
-export type XLazyQueryHookResult = ReturnType<typeof useXLazyQuery>;
-export type XQueryResult = Apollo.QueryResult<XQuery, XQueryVariables>;
+export type GetAllRubriekenQueryHookResult = ReturnType<typeof useGetAllRubriekenQuery>;
+export type GetAllRubriekenLazyQueryHookResult = ReturnType<typeof useGetAllRubriekenLazyQuery>;
+export type GetAllRubriekenQueryResult = Apollo.QueryResult<GetAllRubriekenQuery, GetAllRubriekenQueryVariables>;

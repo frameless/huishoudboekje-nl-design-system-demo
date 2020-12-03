@@ -1,56 +1,44 @@
-import {useQuery} from "@apollo/client";
 import {AddIcon, CloseIcon, SearchIcon} from "@chakra-ui/icons";
-import {Button, Heading, IconButton, Input, InputGroup, InputLeftElement, InputRightElement, Spinner, Stack, useToast} from "@chakra-ui/react";
+import {Button, IconButton, Input, InputGroup, InputLeftElement, InputRightElement, Stack} from "@chakra-ui/react";
 import React, {useEffect, useState} from "react";
 import {useInput} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {useHistory} from "react-router-dom";
 import Routes from "../../config/routes";
-import {IOrganisatie} from "../../models";
-import {GetAllOrganisatiesQuery} from "../../services/graphql/queries";
+import {Organisatie, useGetAllOrganisatiesQuery} from "../../generated/graphql";
+import Queryable from "../../utils/Queryable";
 import {searchFields} from "../../utils/things";
 import DeadEndPage from "../DeadEndPage";
+import Page from "../Layouts/Page";
 import OrganizationListView from "./OrganizationListView";
 
 const OrganizationList = () => {
 	const {t} = useTranslation();
 	const {push} = useHistory();
-	const toast = useToast();
 	const search = useInput<string>({
 		placeholder: t("forms.search.fields.search")
 	});
 
-	const {data, loading, error} = useQuery<{ organisaties: IOrganisatie[] }>(GetAllOrganisatiesQuery, {
-		// This forces a refetch when we're routed back to this page after a mutation.
-		fetchPolicy: "no-cache"
-	});
-	const [filteredOrganisaties, setFilteredOrganisaties] = useState<IOrganisatie[]>([]);
-
-	useEffect(() => {
-		if (data) {
-			if (data.organisaties) {
-				setFilteredOrganisaties(data.organisaties);
-			}
+	const [filteredOrganisaties, setFilteredOrganisaties] = useState<Organisatie[]>([]);
+	const $organisaties = useGetAllOrganisatiesQuery({
+		fetchPolicy: "no-cache",
+		onCompleted: ({organisaties = []}) => {
+			setFilteredOrganisaties(organisaties);
 		}
-	}, [data, error, t, toast])
+	});
 
 	useEffect(() => {
 		let mounted = true;
 
-		if (mounted && data && data.organisaties) {
-			setFilteredOrganisaties(data.organisaties.filter(o => searchFields(search.value, [o.weergaveNaam])));
+		if (mounted && $organisaties.data) {
+			const {organisaties = []} = $organisaties.data;
+			setFilteredOrganisaties(organisaties.filter(o => searchFields(search.value, [o.weergaveNaam || ""])));
 		}
 
 		return () => {
 			mounted = false
 		};
-	}, [data, search.value]);
-
-	useEffect(() => {
-		if (error) {
-			console.error(error);
-		}
-	}, [error]);
+	}, [$organisaties, search.value]);
 
 	const onKeyDownOnSearchField = (e) => {
 		if (e.key === "Escape") {
@@ -58,52 +46,24 @@ const OrganizationList = () => {
 		}
 	};
 
-	const showSearch = (!loading && data && !error && data.organisaties.length > 0);
 	const onClickResetSearch = () => {
 		search.reset();
 		search.ref.current!.focus();
 	};
 
-	const renderPageContent = () => {
-		if (loading) {
-			return (
-				<DeadEndPage illustration={false} bg={"transparent"}>
-					<Spinner />
-				</DeadEndPage>
-			);
-		}
-
-		if (error) {
-			return (<DeadEndPage message={t("messages.genericError.description")} />);
-		}
-
-		if (data?.organisaties.length === 0) {
-			return (
-				<DeadEndPage message={t("messages.organizations.addHint", {buttonLabel: t("actions.add")})}>
-					<Button size={"sm"} colorScheme={"primary"} variant={"solid"} leftIcon={<AddIcon />}
-					        onClick={() => push(Routes.CreateOrganization)}>{t("actions.add")}</Button>
-				</DeadEndPage>
-			);
-		}
-
-		if (filteredOrganisaties.length === 0) {
-			return (
-				<DeadEndPage message={t("messages.organizations.noSearchResults")}>
-					<Button size="sm" colorScheme="primary" onClick={onClickResetSearch}>{t("actions.clearSearch")}</Button>
-				</DeadEndPage>
-			);
-		}
-
-		return (<OrganizationListView organizations={filteredOrganisaties} showAddButton={search.value.trim().length === 0} />);
-	}
-
 	return (
-		<Stack spacing={5}>
-			<Stack direction={"row"} spacing={5} justifyContent={"space-between"} alignItems={"center"}>
-				<Stack direction={"row"} spacing={5} alignItems={"center"}>
-					<Heading size={"lg"}>{t("organizations.organizations")}</Heading>
-				</Stack>
-				{showSearch && (
+		<Queryable query={$organisaties}>{({organisaties = []}: { organisaties: Organisatie[] }) => {
+			if (organisaties.length === 0) {
+				return (
+					<DeadEndPage message={t("messages.organizations.addHint", {buttonLabel: t("actions.add")})}>
+						<Button size={"sm"} colorScheme={"primary"} variant={"solid"} leftIcon={<AddIcon />}
+						        onClick={() => push(Routes.CreateOrganization)}>{t("actions.add")}</Button>
+					</DeadEndPage>
+				);
+			}
+
+			return (
+				<Page title={t("organizations.organizations")} right={(
 					<Stack direction={"row"} spacing={5}>
 						<InputGroup>
 							<InputLeftElement><SearchIcon color={"gray.300"} /></InputLeftElement>
@@ -116,11 +76,18 @@ const OrganizationList = () => {
 							)}
 						</InputGroup>
 					</Stack>
-				)}
-			</Stack>
-
-			{renderPageContent()}
-		</Stack>
+				)}>
+					{filteredOrganisaties.length === 0 ? (
+						<DeadEndPage message={t("messages.organizations.noSearchResults")}>
+							<Button size="sm" colorScheme="primary" onClick={onClickResetSearch}>{t("actions.clearSearch")}</Button>
+						</DeadEndPage>
+					) : (
+						<OrganizationListView organisaties={filteredOrganisaties} showAddButton={search.value.trim().length === 0} />
+					)}
+				</Page>
+			);
+		}}
+		</Queryable>
 	)
 };
 

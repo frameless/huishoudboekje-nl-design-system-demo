@@ -1,14 +1,14 @@
+import {Button, FormLabel, Input, SimpleGrid, Stack, useToast} from "@chakra-ui/react";
+import {friendlyFormatIBAN} from "ibantools";
 import React from "react";
-import {IRekening, IRekeningInput} from "../../models";
 import {useInput, useIsMobile, Validators} from "react-grapple";
 import {useTranslation} from "react-i18next";
+import {Rekening, RekeningInput} from "../../generated/graphql";
 import {Regex, TABLET_BREAKPOINT} from "../../utils/things";
-import {friendlyFormatIBAN} from "ibantools";
-import {Button, FormLabel, Input, SimpleGrid, Stack, useToast} from "@chakra-ui/react";
 
 const RekeningForm: React.FC<{
-	rekening?: Partial<IRekening>,
-	onSave: (rekening: IRekeningInput, resetForm: VoidFunction) => void,
+	rekening?: Rekening,
+	onSave: (rekening: RekeningInput, resetForm: VoidFunction) => void,
 	onCancel: VoidFunction,
 }> = ({rekening, onSave, onCancel}) => {
 	const isMobile = useIsMobile(TABLET_BREAKPOINT);

@@ -5,20 +5,18 @@ import {useIsMobile} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {useHistory} from "react-router-dom";
 import Routes from "../../config/routes";
-import {IAfspraak} from "../../models";
-import {currencyFormat, Interval} from "../../utils/things";
+import {Afspraak} from "../../generated/graphql";
+import {currencyFormat2, XInterval} from "../../utils/things";
 import GridCard from "../GridCard";
 
-const AfspraakItem: React.FC<BoxProps & { afspraak: IAfspraak, onDelete?: (id: number) => void }> = ({afspraak: a, onDelete, ...props}) => {
+const AfspraakItem: React.FC<BoxProps & { afspraak: Afspraak, onDelete?: (id: number) => void }> = ({afspraak: a, onDelete, ...props}) => {
 	const isMobile = useIsMobile();
 	const {t} = useTranslation();
 	const {push} = useHistory();
 	const [deleteConfirm, setDeleteConfirm] = useState<boolean>(false);
 
-	// const onClickEditButton = () => {};
-
 	const intervalString = (): string => {
-		const parsedInterval = Interval.parse(a.interval);
+		const parsedInterval = XInterval.parse(a.interval);
 
 		if (!parsedInterval) {
 			return t("interval.once");
@@ -29,7 +27,7 @@ const AfspraakItem: React.FC<BoxProps & { afspraak: IAfspraak, onDelete?: (id: n
 	};
 
 	const onClickDeleteButton = () => {
-		if (onDelete) {
+		if (onDelete && a.id) {
 			if (!deleteConfirm) {
 				setDeleteConfirm(true);
 				return;
@@ -52,7 +50,7 @@ const AfspraakItem: React.FC<BoxProps & { afspraak: IAfspraak, onDelete?: (id: n
 					<Text fontSize={"14px"} color={"gray.500"}>{a.organisatie?.weergaveNaam || a.tegenRekening?.rekeninghouder || t("unknown")}</Text>
 				</Stack>
 				<Stack spacing={1} flex={1} alignItems={"flex-end"}>
-					<Box flex={1}>{currencyFormat.format(a.bedrag)}</Box>
+					<Box flex={1}>{currencyFormat2().format(a.bedrag)}</Box>
 					{a.automatischeIncasso && (
 						<Box flex={1}>
 							<Badge fontSize={"10px"}>{t("agreements.automatischeIncasso")}</Badge>
@@ -66,11 +64,11 @@ const AfspraakItem: React.FC<BoxProps & { afspraak: IAfspraak, onDelete?: (id: n
 			{/*	Todo: edit and delete actions on mobile? (14-11-2020) */}
 		</GridCard>
 	) : (
-		<Stack direction={"row"} alignItems={"center"} justifyContent={"center"} {...!a.actief && { opacity: .5 }} {...props}>
+		<Stack direction={"row"} alignItems={"center"} justifyContent={"center"} {...!a.actief && {opacity: .5}} {...props}>
 			<Box flex={1}>{a.organisatie?.weergaveNaam || a.tegenRekening?.rekeninghouder || t("unknown")}</Box>
 			<Box flex={1}>{a.beschrijving}</Box>
 			<Stack spacing={1} flex={1} alignItems={"flex-end"}>
-				<Box textAlign={"right"}>{currencyFormat.format(a.bedrag)}</Box>
+				<Box textAlign={"right"}>{currencyFormat2().format(a.bedrag)}</Box>
 				{a.automatischeIncasso && <Badge fontSize={"10px"}>{t("agreements.automatischeIncasso")}</Badge>}
 				<Badge fontSize={"10px"}>{intervalString()}</Badge>
 			</Stack>

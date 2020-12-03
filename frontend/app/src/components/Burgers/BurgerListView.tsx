@@ -1,14 +1,14 @@
 import {AddIcon} from "@chakra-ui/icons";
 import React from "react";
 import {Avatar, Box, BoxProps, Button, Grid, Stack, Text} from "@chakra-ui/react";
-import {IGebruiker} from "../../models";
+import {Gebruiker} from "../../generated/graphql";
 import Routes from "../../config/routes";
 import {useHistory} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import {useIsMobile} from "react-grapple";
 import GridCard from "../GridCard";
 
-const BurgerListView: React.FC<BoxProps & { burgers: IGebruiker[], showAddButton?: boolean }> = ({burgers, showAddButton = false, ...props}) => {
+const BurgerListView: React.FC<BoxProps & { burgers: Gebruiker[], showAddButton?: boolean }> = ({burgers, showAddButton = false, ...props}) => {
 	const {t} = useTranslation();
 	const {push} = useHistory();
 	const isMobile = useIsMobile(450);
