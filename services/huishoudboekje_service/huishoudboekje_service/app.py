@@ -11,6 +11,7 @@ from huishoudboekje_service.views import (
     JournaalpostView,
     RubriekView,
     ConfiguratieView,
+    OverschijvingView
 )
 from core_service import database
 from huishoudboekje_service import config
@@ -46,6 +47,8 @@ def create_app(config_name=os.getenv('APP_SETTINGS', 'huishoudboekje_service.con
         {"path": "/rubrieken/<object_id>", "view": RubriekView, "name": "rubriek_detail_view"},
         {"path": "/configuratie", "view": ConfiguratieView, "name": "configuratie_view"},
         {"path": "/configuratie/<object_id>", "view": ConfiguratieView, "name": "configuratie_detail_view"},
+        {"path": "/overschijvingen", "view": OverschijvingView, "name": "overschijving_view"},
+        {"path": "/overschijvingen/<object_id>", "view": OverschijvingView, "name": "overschijving_detail_view"},
     ]
     for route in routes:
         app.add_url_rule(

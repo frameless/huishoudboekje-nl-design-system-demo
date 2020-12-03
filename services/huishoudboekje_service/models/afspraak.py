@@ -27,3 +27,4 @@ class Afspraak(db.Model):
     organisatie_id = Column(Integer, ForeignKey('organisaties.id'))
     organisatie = relationship("Organisatie", back_populates="afspraken")
     journaalposten = relationship("Journaalpost", back_populates="afspraak")
+    overschijvingen = relationship("Overschijving", back_populates="afspraak")

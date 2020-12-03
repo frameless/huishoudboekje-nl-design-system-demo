@@ -54,6 +54,7 @@ class AfspraakView(HHBView):
         self.add_filter_filter_gebruiker()
         self.add_filter_filter_organisaties()
         self.hhb_query.expose_many_relation("journaalposten", "id")
+        self.hhb_query.expose_many_relation("overschijvingen", "id")
 
     def add_filter_filter_gebruiker(self):
         """ Add filter_gebruiker filter based on the kvk of the organisatie model """
