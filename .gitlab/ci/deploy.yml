@@ -121,6 +121,7 @@
 deploy-review:
   environment:
     url: https://hhb-${CI_ENVIRONMENT_SLUG}.${REVIEW_BASE_DOMAIN}/
+    auto_stop_in: 10 days
   variables:
     APP_SETTINGS: "hhb_backend.config.StagingConfig"
   extends:
@@ -129,6 +130,18 @@ deploy-review:
     - master
     - develop
     - acceptance
+    - nijmegen
+
+# Deploy (Nijmegen)
+deploy-nijmegen:
+  environment:
+    url: https://hhb-${CI_ENVIRONMENT_SLUG}.${REVIEW_BASE_DOMAIN}/
+  variables:
+    APP_SETTINGS: "hhb_backend.config.StagingConfig"
+  extends:
+    - .deploy-app
+  only:
+    - nijmegen
 
 # Deploy (TEST)
 deploy-test:
@@ -161,10 +174,21 @@ docs-deploy-review:
     DOCS_HOST: docs-hhb-${CI_ENVIRONMENT_SLUG}.$REVIEW_BASE_DOMAIN
   extends:
     - .deploy-docs
+  environment:
+    auto_stop_in: 10 days
   except:
     - master
     - develop
     - acceptance
+
+# Deploy Docs (Nijmegen)
+docs-deploy-nijmegen:
+  variables:
+    DOCS_HOST: docs-hhb-${CI_ENVIRONMENT_SLUG}.$REVIEW_BASE_DOMAIN
+  extends:
+    - .deploy-docs
+  only:
+    - nijmegen
 
 # Deploy (TEST)
 docs-deploy-test:
