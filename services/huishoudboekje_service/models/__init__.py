@@ -1,4 +1,4 @@
-git add from .gebruiker import Gebruiker
+from .gebruiker import Gebruiker
 from .organisatie import Organisatie
 from .rekening import Rekening
 from .afspraak import Afspraak
