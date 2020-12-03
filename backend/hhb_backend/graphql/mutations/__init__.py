@@ -1,5 +1,7 @@
 """ GraphQL schema mutations module """
 import graphene
+
+from .configuraties.configuraties import CreateConfiguratie, DeleteConfiguratie, UpdateConfiguratie
 from .gebruikers.create_gebruiker import CreateGebruiker
 from .gebruikers.delete_gebruiker import DeleteGebruiker
 from .gebruikers.update_gebruiker import UpdateGebruiker
@@ -50,4 +52,8 @@ class RootMutation(graphene.ObjectType):
     createRubriek = CreateRubriek.Field()
     updateRubriek = UpdateRubriek.Field()
     deleteRubriek = DeleteRubriek.Field()
+
+    createConfiguratie = CreateConfiguratie.Field()
+    updateConfiguratie = UpdateConfiguratie.Field()
+    deleteConfiguratie = DeleteConfiguratie.Field()
       
