@@ -1,12 +1,12 @@
 """ MethodView for /overschijvingen/(<overschijving_id>)/ path """
 from flask import request, abort, make_response
-from models import Overschijving
+from models import Overschrijving
 from core_service.views.hhb_view import HHBView
 
-class OverschijvingView(HHBView):
+class OverschrijvingView(HHBView):
     """ Methods for /afspraken/ path """
 
-    hhb_model = Overschijving
+    hhb_model = Overschrijving
     validation_data = {
         "type": "object",
         "properties": {

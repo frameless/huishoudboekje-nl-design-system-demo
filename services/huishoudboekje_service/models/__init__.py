@@ -6,4 +6,4 @@ from .rekening_organisatie import RekeningOrganisatie
 from .rekening_gebruiker import RekeningGebruiker
 from .journaalpost import Journaalpost
 from .rubriek import Rubriek
-from .overschijving import Overschijving
+from .overschrijving import Overschrijving
