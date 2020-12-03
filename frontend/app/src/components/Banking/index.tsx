@@ -3,6 +3,7 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {Route, Switch} from "react-router-dom";
 import Routes from "../../config/routes";
+import BookingsExport from "./Bookings/BookingsExport";
 import CustomerStatementMessages from "./CustomerStatementMessages";
 import Transactions from "./Transactions";
 
@@ -18,12 +19,9 @@ const Banking = () => {
 			</Stack>
 
 			<Switch>
-				<Route path={Routes.Transactions}>
-					<Transactions />
-				</Route>
-				<Route path={Routes.CSMs}>
-					<CustomerStatementMessages />
-				</Route>
+				<Route path={Routes.Transactions} component={Transactions} />
+				<Route path={Routes.CSMs} component={CustomerStatementMessages} />
+				<Route path={Routes.BookingsExport} component={BookingsExport} />
 			</Switch>
 		</Stack>
 	);

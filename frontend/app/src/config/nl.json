@@ -2,6 +2,7 @@
   "actions": {
     "actions": "Acties",
     "import": "Importeren",
+    "export": "Exporteren",
     "back": "Terug",
     "backToHome": "Terug naar de hoofdpagina",
     "backToList": "Terug naar overzicht",
@@ -80,8 +81,8 @@
       "addHint": "Voeg transacties toe door een bronbestand te importeren."
     },
     "journals": {
-      "createSuccessMessage": "",
-      "deleteSuccessMessage": ""
+      "createSuccessMessage": "Transactie succesvol verwerkt.",
+      "deleteSuccessMessage": "Transactie succesvol verwerkt."
     }
   },
   "forms": {
@@ -89,6 +90,8 @@
       "fields": {
         "time": "Tijd",
         "date": "Datum",
+        "startDate": "Startdatum",
+        "endDate": "Einddatum",
         "dateDay": "Dag",
         "dateMonth": "Maand",
         "dateYear": "Jaar"
@@ -270,7 +273,12 @@
     "transactions": "Transacties",
     "customerStatementMessages": "Bronbestanden",
     "journal": "Journaalpost",
-    "rubric": "Rubriek"
+    "rubric": "Rubriek",
+    "exports": {
+      "exports": "Overschrijvingen",
+      "title": "Overschrijvingen",
+      "helperText": "Exporteer een bestand met overschrijvingen voor verwerking in een bankierenapplicatie."
+    }
   },
   "transactions": {
     "beneficiaryAccount": "Tegenrekening",

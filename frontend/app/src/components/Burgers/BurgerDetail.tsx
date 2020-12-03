@@ -36,7 +36,7 @@ import {GetOneGebruikerQuery} from "../../services/graphql/queries";
 import AfspraakItem from "../Agreements/AfpraakItem";
 import BackButton from "../BackButton";
 import DeadEndPage from "../DeadEndPage";
-import {FormLeft, FormRight, Label} from "../Forms/FormLeftRight";
+import {FormLeft, FormRight} from "../Forms/FormLeftRight";
 import RekeningForm from "../Rekeningen/RekeningForm";
 import RekeningList from "../Rekeningen/RekeningList";
 import BurgerDetailProfileView from "./BurgerDetailProfileView";
@@ -156,7 +156,8 @@ const BurgerDetail = () => {
 									<AlertDialogBody>{t("messages.burgers.deleteQuestion", {name: `${gebruikerData.gebruiker.voornamen} ${gebruikerData.gebruiker.achternaam}`})}</AlertDialogBody>
 									<AlertDialogFooter>
 										<Button ref={cancelDeleteRef} onClick={onCloseDeleteDialog} data-cy={"inModal"}>{t("actions.cancel")}</Button>
-										<Button isLoading={deleteLoading} colorScheme="red" onClick={onConfirmDeleteDialog} ml={3} data-cy={"inModal"}>{t("actions.delete")}</Button>
+										<Button isLoading={deleteLoading} colorScheme="red" onClick={onConfirmDeleteDialog} ml={3}
+										        data-cy={"inModal"}>{t("actions.delete")}</Button>
 									</AlertDialogFooter>
 								</AlertDialogContent>
 							</AlertDialog>
@@ -175,10 +176,7 @@ const BurgerDetail = () => {
 						{/* Rekeningen */}
 						<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
 							<Stack spacing={2} mb={1} direction={isMobile ? "column" : "row"}>
-								<FormLeft>
-									<Heading display={"box"} size={"md"}>{t("forms.burgers.sections.rekeningen.title")}</Heading>
-									<Label>{t("forms.burgers.sections.rekeningen.detailText")}</Label>
-								</FormLeft>
+								<FormLeft title={t("forms.burgers.sections.rekeningen.title")} helperText={t("forms.burgers.sections.rekeningen.detailText")} />
 								<FormRight justifyContent={"center"}>
 									<RekeningList rekeningen={gebruikerData.gebruiker.rekeningen} gebruiker={gebruikerData.gebruiker} onChange={() => refetchGebruiker()} />
 									{showCreateRekeningForm ? (<>
@@ -209,15 +207,8 @@ const BurgerDetail = () => {
 						{/* Afspraken */}
 						<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
 							<Stack spacing={2} mb={1} direction={isMobile ? "column" : "row"}>
-								<FormLeft>
-									<Stack>
-										<Box>
-											<Heading size={"md"}>{t("forms.burgers.sections.agreements.title")}</Heading>
-											<Label>{t("forms.burgers.sections.agreements.detailText")}</Label>
-										</Box>
-									</Stack>
-								</FormLeft>
-								<FormRight>
+								<FormLeft title={t("forms.burgers.sections.agreements.title")} helperText={t("forms.burgers.sections.agreements.detailText")} />
+								<FormRight justifyContent={"center"}>
 									{filteredAfspraken.length > 0 && (
 										<Tabs index={tabIndex} onChange={onChangeTabs} variant={"line"}>
 											<TabList>

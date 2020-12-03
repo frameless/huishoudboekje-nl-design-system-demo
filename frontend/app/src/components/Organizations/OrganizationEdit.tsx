@@ -1,5 +1,5 @@
 import {useMutation, useQuery} from "@apollo/client";
-import {Box, Button, Divider, FormLabel, Heading, Input, Spinner, Stack, Text, Tooltip, useToast} from "@chakra-ui/react";
+import {Box, Button, Divider, FormLabel, Heading, Input, Spinner, Stack, Tooltip, useToast} from "@chakra-ui/react";
 import React, {useEffect} from "react";
 import {useInput, useIsMobile, Validators} from "react-grapple";
 import {useTranslation} from "react-i18next";
@@ -147,10 +147,7 @@ const OrganizationEdit = () => {
 				<Box as={"form"} onSubmit={onSubmit}>
 					<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
 						<Stack direction={isMobile ? "column" : "row"} spacing={2}>
-							<FormLeft>
-								<Heading size={"md"}>{t("forms.organizations.sections.organizational.title")}</Heading>
-								<Text data-legacy="FormHelperText" id="personal-helperText">{t("forms.organizations.sections.organizational.helperText")}</Text>
-							</FormLeft>
+							<FormLeft title={t("forms.organizations.sections.organizational.title")} helperText={t("forms.organizations.sections.organizational.helperText")} />
 							<FormRight>
 								<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 									<Stack spacing={1} flex={1}>
@@ -177,10 +174,7 @@ const OrganizationEdit = () => {
 						<Divider />
 
 						<Stack direction={isMobile ? "column" : "row"} spacing={2}>
-							<FormLeft>
-								<Heading size={"md"}>{t("forms.organizations.sections.contact.title")}</Heading>
-								<Text data-legacy="FormHelperText">{t("forms.organizations.sections.contact.helperText")}</Text>
-							</FormLeft>
+							<FormLeft title={t("forms.organizations.sections.contact.title")} helperText={t("forms.organizations.sections.contact.helperText")} />
 							<FormRight>
 								<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 									<Stack spacing={1} flex={2}>

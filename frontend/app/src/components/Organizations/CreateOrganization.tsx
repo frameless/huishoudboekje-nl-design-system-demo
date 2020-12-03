@@ -1,16 +1,16 @@
-import React from "react";
-import {useTranslation} from "react-i18next";
-import {Box, Button, Divider, Text, FormLabel, Heading, Input, Stack, Tooltip, useToast} from "@chakra-ui/react";
-import {useInput, useIsMobile, useToggle, Validators} from "react-grapple";
-import BackButton from "../BackButton";
-import Routes from "../../config/routes";
-import {isDev, MOBILE_BREAKPOINT, Regex} from "../../utils/things";
-import {FormLeft, FormRight} from "../Forms/FormLeftRight";
 import {useMutation} from "@apollo/client";
-import {sampleData} from "../../config/sampleData/sampleData";
-import {useHistory} from "react-router-dom";
-import {CreateOrganizationMutation} from "../../services/graphql/mutations";
+import {Box, Button, Divider, FormLabel, Heading, Input, Stack, Tooltip, useToast} from "@chakra-ui/react";
+import React from "react";
+import {useInput, useIsMobile, useToggle, Validators} from "react-grapple";
 import {UseInput} from "react-grapple/dist/hooks/useInput";
+import {useTranslation} from "react-i18next";
+import {useHistory} from "react-router-dom";
+import Routes from "../../config/routes";
+import {sampleData} from "../../config/sampleData/sampleData";
+import {CreateOrganizationMutation} from "../../services/graphql/mutations";
+import {isDev, MOBILE_BREAKPOINT, Regex} from "../../utils/things";
+import BackButton from "../BackButton";
+import {FormLeft, FormRight} from "../Forms/FormLeftRight";
 
 // Todo: add more detailed error message per field?
 const CreateOrganization = () => {
@@ -135,10 +135,7 @@ const CreateOrganization = () => {
 			<Box as={"form"} onSubmit={onSubmit}>
 				<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
 					<Stack direction={isMobile ? "column" : "row"} spacing={2}>
-						<FormLeft>
-							<Heading size={"md"}>{t("forms.organizations.sections.organizational.title")}</Heading>
-							<Text data-legacy="FormHelperText" id="personal-helperText">{t("forms.organizations.sections.organizational.helperText")}</Text>
-						</FormLeft>
+						<FormLeft title={t("forms.organizations.sections.organizational.title")} helperText={t("forms.organizations.sections.organizational.helperText")} />
 						<FormRight>
 							<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 								<Stack spacing={1} flex={1}>
@@ -165,10 +162,7 @@ const CreateOrganization = () => {
 					<Divider />
 
 					<Stack direction={isMobile ? "column" : "row"} spacing={2}>
-						<FormLeft>
-							<Heading size={"md"}>{t("forms.organizations.sections.contact.title")}</Heading>
-							<Text data-legacy="FormHelperText">{t("forms.organizations.sections.contact.helperText")}</Text>
-						</FormLeft>
+						<FormLeft title={t("forms.organizations.sections.contact.title")} helperText={t("forms.organizations.sections.contact.helperText")} />
 						<FormRight>
 							<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 								<Stack spacing={1} flex={2}>

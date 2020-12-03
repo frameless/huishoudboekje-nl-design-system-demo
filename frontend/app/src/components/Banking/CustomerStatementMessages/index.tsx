@@ -1,6 +1,6 @@
 import {useMutation, useQuery} from "@apollo/client";
 import {AddIcon} from "@chakra-ui/icons";
-import {Box, BoxProps, Button, Divider, Heading, Input, Stack, useToast} from "@chakra-ui/react";
+import {Box, BoxProps, Button, Divider, Input, Stack, useToast} from "@chakra-ui/react";
 import React, {useRef} from "react";
 import {useIsMobile} from "react-grapple";
 import {useTranslation} from "react-i18next";
@@ -8,7 +8,7 @@ import {ICustomerStatementMessage} from "../../../models";
 import {CreateCustomerStatementMessageMutation} from "../../../services/graphql/mutations";
 import {GetAllCustomerStatementMessagesQuery} from "../../../services/graphql/queries";
 import Queryable from "../../../utils/Queryable";
-import {FormLeft, FormRight, Label} from "../../Forms/FormLeftRight";
+import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
 import CsmListView from "./CsmListView";
 
 const CustomerStatementMessages: React.FC<BoxProps> = ({...props}) => {
@@ -59,12 +59,7 @@ const CustomerStatementMessages: React.FC<BoxProps> = ({...props}) => {
 		<Stack spacing={5} {...props}>
 			<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
 				<Stack direction={isMobile ? "column" : "row"} spacing={5}>
-					<FormLeft spacing={3}>
-						<Stack spacing={1}>
-							<Heading size={"md"}>{t("forms.banking.sections.customerStatementMessages.title")}</Heading>
-							<Label>{t("forms.banking.sections.customerStatementMessages.detailText")}</Label>
-						</Stack>
-					</FormLeft>
+					<FormLeft title={t("forms.banking.sections.customerStatementMessages.title")} helperText={t("forms.banking.sections.customerStatementMessages.detailText")} />
 					<FormRight>
 						<Stack spacing={5}>
 							<Input type={"file"} id={"fileUpload"} onChange={onChangeFile} hidden={true} ref={fileUploadInput} />

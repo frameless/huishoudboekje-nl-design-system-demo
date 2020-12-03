@@ -1,40 +1,16 @@
-import { useQuery } from "@apollo/client";
-import {
-	Box,
-	BoxProps,
-	Button,
-	Divider,
-	FormLabel,
-	Heading,
-	Input,
-	InputGroup,
-	InputLeftElement,
-	Select,
-	Spinner,
-	Stack,
-	Switch,
-	Text,
-	useToast,
-} from "@chakra-ui/react";
+import {useQuery} from "@apollo/client";
+import {Box, BoxProps, Button, Divider, FormLabel, Input, InputGroup, InputLeftElement, Select, Spinner, Stack, Switch, useToast,} from "@chakra-ui/react";
 import moment from "moment";
-import React, { useEffect, useState } from "react";
-import { useInput, useIsMobile, useNumberInput, useToggle, Validators } from "react-grapple";
-import { UseInput } from "react-grapple/dist/hooks/useInput";
-import { useTranslation } from "react-i18next";
-import { sampleData } from "../../config/sampleData/sampleData";
-import {
-	AfspraakPeriod,
-	AfspraakType,
-	IAfspraak,
-	IGebruiker,
-	IntervalType,
-	IOrganisatie,
-	IRubriek,
-} from "../../models";
-import { GetAllOrganisatiesQuery, GetAllRubricsQuery } from "../../services/graphql/queries";
+import React, {useEffect, useState} from "react";
+import {useInput, useIsMobile, useNumberInput, useToggle, Validators} from "react-grapple";
+import {UseInput} from "react-grapple/dist/hooks/useInput";
+import {useTranslation} from "react-i18next";
+import {sampleData} from "../../config/sampleData/sampleData";
+import {AfspraakPeriod, AfspraakType, IAfspraak, IGebruiker, IntervalType, IOrganisatie, IRubriek,} from "../../models";
+import {GetAllOrganisatiesQuery, GetAllRubricsQuery} from "../../services/graphql/queries";
 import Queryable from "../../utils/Queryable";
-import { Interval, isDev } from "../../utils/things";
-import { FormLeft, FormRight } from "../Forms/FormLeftRight";
+import {Interval, isDev} from "../../utils/things";
+import {FormLeft, FormRight} from "../Forms/FormLeftRight";
 import RadioButtonGroup from "../Layouts/RadioButtons/RadioButtonGroup";
 
 const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) => void, gebruiker: IGebruiker, loading: boolean }> = ({afspraak, onSave, gebruiker, loading = false, ...props}) => {
@@ -243,10 +219,7 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 		<Box as={"form"} onSubmit={onSubmit} {...props}>
 			<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
 				<Stack spacing={2} direction={isMobile ? "column" : "row"}>
-					<FormLeft>
-						<Heading size={"md"}>{t("forms.agreements.sections.0.title")}</Heading>
-						<Text id="personal-helperText">{t("forms.agreements.sections.0.helperText")}</Text>
-					</FormLeft>
+					<FormLeft title={t("forms.agreements.sections.0.title")} helperText={t("forms.agreements.sections.0.helperText")} />
 					<FormRight>
 						{/*<Stack spacing={2} direction={isMobile ? "column" : "row"}>*/}
 						{/*	<Stack direction={isMobile ? "column" : "row"} spacing={1} mt={2}>*/}
@@ -257,7 +230,8 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 						{/*	</Stack>*/}
 						{/*</Stack>*/}
 
-						<RadioButtonGroup name={"afspraakType"} onChange={onChangeAfspraakType} defaultValue={AfspraakType.Expense} value={afspraakType} options={afspraakTypeOptions} />
+						<RadioButtonGroup name={"afspraakType"} onChange={onChangeAfspraakType} defaultValue={AfspraakType.Expense} value={afspraakType}
+						                  options={afspraakTypeOptions} />
 
 						<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 							<Stack spacing={1} flex={1}>
@@ -325,14 +299,12 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 				<Divider />
 
 				<Stack spacing={2} direction={isMobile ? "column" : "row"}>
-					<FormLeft>
-						<Heading size={"md"}>{t("forms.agreements.sections.1.title")}</Heading>
-						<Text data-legacy="FormHelperText" id="personal-helperText">{t("forms.agreements.sections.1.helperText")}</Text>
-					</FormLeft>
+					<FormLeft title={t("forms.agreements.sections.1.title")} helperText={t("forms.agreements.sections.1.helperText")} />
 					<FormRight>
 
 						<Stack spacing={2} direction={isMobile ? "column" : "row"}>
-							<RadioButtonGroup name={"isRecurring"} onChange={(val) => toggleRecurring(val === AfspraakPeriod.Periodic)} value={isRecurring ? AfspraakPeriod.Periodic : AfspraakPeriod.Once} options={isRecurringOptions} />
+							<RadioButtonGroup name={"isRecurring"} onChange={(val) => toggleRecurring(val === AfspraakPeriod.Periodic)}
+							                  value={isRecurring ? AfspraakPeriod.Periodic : AfspraakPeriod.Once} options={isRecurringOptions} />
 						</Stack>
 
 						{isRecurring && (
@@ -389,9 +361,9 @@ const AfspraakForm: React.FC<BoxProps & { afspraak?: IAfspraak, onSave: (data) =
 							<Stack direction={isMobile ? "column" : "row"} spacing={1} mt={2}>
 								<Stack isInline={true} alignItems={"center"} spacing={3}>
 									<Switch isChecked={isAutomatischeIncasso} onChange={() => toggleAutomatischeIncasso()}
-										id={"isAutomatischeIncasso"} />
+									        id={"isAutomatischeIncasso"} />
 									<FormLabel mb={0}
-										htmlFor={"isAutomatischeIncasso"}>{t("forms.agreements.fields.automatischeIncasso")}</FormLabel>
+									           htmlFor={"isAutomatischeIncasso"}>{t("forms.agreements.fields.automatischeIncasso")}</FormLabel>
 								</Stack>
 							</Stack>
 						)}

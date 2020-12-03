@@ -1,10 +1,10 @@
+import {Divider, Stack, Text} from "@chakra-ui/react";
+import moment from "moment";
 import React from "react";
-import {Divider, Heading, Stack, Text} from "@chakra-ui/react";
+import {useIsMobile} from "react-grapple";
+import {useTranslation} from "react-i18next";
 import {dateFormat} from "../../utils/things";
 import {FormLeft, FormRight, Label} from "../Forms/FormLeftRight";
-import moment from "moment";
-import {useTranslation} from "react-i18next";
-import {useIsMobile} from "react-grapple";
 
 const BurgerDetailProfileView = ({gebruiker, ...props}) => {
 	const isMobile = useIsMobile();
@@ -13,10 +13,7 @@ const BurgerDetailProfileView = ({gebruiker, ...props}) => {
 	return (
 		<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5} {...props}>
 			<Stack spacing={2} direction={isMobile ? "column" : "row"}>
-				<FormLeft>
-					<Heading display={"box"} size={"md"}>{t("forms.burgers.sections.personal.title")}</Heading>
-					<Label>{t("forms.burgers.sections.personal.detailText")}</Label>
-				</FormLeft>
+				<FormLeft title={t("forms.burgers.sections.personal.title")} helperText={t("forms.burgers.sections.personal.detailText")} />
 				<FormRight>
 					<Stack spacing={2} mb={1} direction={isMobile ? "column" : "row"}>
 						<Stack direction={isMobile ? "column" : "row"} spacing={1} flex={1}>
@@ -50,10 +47,7 @@ const BurgerDetailProfileView = ({gebruiker, ...props}) => {
 			<Divider />
 
 			<Stack spacing={2} direction={isMobile ? "column" : "row"}>
-				<FormLeft>
-					<Heading display={"box"} size={"md"}>{t("forms.burgers.sections.contact.title")}</Heading>
-					<Label>{t("forms.burgers.sections.contact.detailText")}</Label>
-				</FormLeft>
+				<FormLeft title={t("forms.burgers.sections.contact.title")} helperText={t("forms.burgers.sections.contact.detailText")} />
 				<FormRight>
 					<Stack spacing={2} mb={1} direction={isMobile ? "column" : "row"}>
 						<Stack spacing={1} flex={1}>

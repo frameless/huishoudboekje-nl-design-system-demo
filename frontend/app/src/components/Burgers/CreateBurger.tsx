@@ -1,15 +1,15 @@
-import React, {useState} from "react";
-import {useTranslation} from "react-i18next";
-import {Box, Button, Divider, Text, FormLabel, Heading, Input, Select, Stack, Tooltip, useToast} from "@chakra-ui/react";
-import {useInput, useIsMobile, useNumberInput, Validators} from "react-grapple";
-import BackButton from "../BackButton";
-import Routes from "../../config/routes";
-import {isDev, MOBILE_BREAKPOINT, Months, Regex} from "../../utils/things";
-import {FormLeft, FormRight} from "../Forms/FormLeftRight";
 import {useMutation} from "@apollo/client";
-import {sampleData} from "../../config/sampleData/sampleData";
+import {Box, Button, Divider, FormLabel, Heading, Input, Select, Stack, Tooltip, useToast} from "@chakra-ui/react";
+import React, {useState} from "react";
+import {useInput, useIsMobile, useNumberInput, Validators} from "react-grapple";
+import {useTranslation} from "react-i18next";
 import {useHistory} from "react-router-dom";
+import Routes from "../../config/routes";
+import {sampleData} from "../../config/sampleData/sampleData";
 import {CreateGebruikerMutation} from "../../services/graphql/mutations";
+import {isDev, MOBILE_BREAKPOINT, Months, Regex} from "../../utils/things";
+import BackButton from "../BackButton";
+import {FormLeft, FormRight} from "../Forms/FormLeftRight";
 
 // Todo: add more detailed error message per field?
 const CreateBurger = () => {
@@ -182,10 +182,7 @@ const CreateBurger = () => {
 			<Box as={"form"} onSubmit={onSubmit}>
 				<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
 					<Stack direction={isMobile ? "column" : "row"} spacing={2}>
-						<FormLeft>
-							<Heading size={"md"}>{t("forms.burgers.sections.personal.title")}</Heading>
-							<Text data-legacy="FormHelperText" id="personal-helperText">{t("forms.burgers.sections.personal.helperText")}</Text>
-						</FormLeft>
+						<FormLeft title={t("forms.burgers.sections.personal.title")} helperText={t("forms.burgers.sections.personal.helperText")} />
 						<FormRight>
 							<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 								<Stack spacing={1} flex={1}>
@@ -226,10 +223,7 @@ const CreateBurger = () => {
 					<Divider />
 
 					<Stack direction={isMobile ? "column" : "row"} spacing={2}>
-						<FormLeft>
-							<Heading size={"md"}>{t("forms.burgers.sections.contact.title")}</Heading>
-							<Text data-legacy="FormHelperText">{t("forms.burgers.sections.contact.helperText")}</Text>
-						</FormLeft>
+						<FormLeft title={t("forms.burgers.sections.contact.title")} helperText={t("forms.burgers.sections.contact.helperText")} />
 						<FormRight>
 							<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 								<Stack spacing={1} flex={2}>

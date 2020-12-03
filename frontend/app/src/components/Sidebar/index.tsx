@@ -1,13 +1,13 @@
-import {Box, BoxProps, Divider, HStack, Stack} from "@chakra-ui/react";
+import {Box, BoxProps, Divider, HStack, Stack, VStack} from "@chakra-ui/react";
 import React from "react";
+import {useTranslation} from "react-i18next";
 import {FaRegBuilding, GrGraphQl, MdCreditCard, RiShoppingCart2Line, RiUserLine} from "react-icons/all";
-import {useTranslate} from "../../config/i18n";
 import Routes from "../../config/routes";
 import {isDev} from "../../utils/things";
 import SidebarLink from "./SidebarLink";
 
 const Sidebar: React.FC<BoxProps> = (props) => {
-	const {t} = useTranslate();
+	const {t} = useTranslation();
 
 	return (
 		<Stack spacing={5} p={5} alignSelf={"center"} {...props} width={"100%"}>
@@ -16,8 +16,11 @@ const Sidebar: React.FC<BoxProps> = (props) => {
 			<Stack>
 				<SidebarLink exactMatch href={Routes.Transactions} icon={MdCreditCard}>{t("banking.banking")}</SidebarLink>
 				<HStack direction={"row"}>
-					<Box borderLeft={"1px solid"} borderColor={"gray.400"} pl={5} ml={7}>&nbsp;</Box>
-					<SidebarLink size={"sm"} href={Routes.CSMs}>{t("banking.customerStatementMessages")}</SidebarLink>
+					<Box pl={5} ml={7}>&nbsp;</Box>
+					<VStack>
+						<SidebarLink size={"sm"} href={Routes.CSMs}>{t("banking.customerStatementMessages")}</SidebarLink>
+						<SidebarLink size={"sm"} href={Routes.BookingsExport}>{t("banking.exports.exports")}</SidebarLink>
+					</VStack>
 				</HStack>
 			</Stack>
 			<SidebarLink href={Routes.Balances} icon={RiShoppingCart2Line}>{t("balances.balances")}</SidebarLink>
