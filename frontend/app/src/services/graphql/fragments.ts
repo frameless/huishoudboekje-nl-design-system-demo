@@ -14,6 +14,10 @@ export const GrootboekrekeningFragment = gql`
         naam
         omschrijving
         referentie
+        rubriek{
+            id
+            naam
+        }
     }
 `;
 

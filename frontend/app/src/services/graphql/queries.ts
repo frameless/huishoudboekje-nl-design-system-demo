@@ -90,6 +90,10 @@ export const GetAllTransactionsQuery = gql`
                 }
                 grootboekrekening {
                     ...Grootboekrekening
+	                rubriek {
+		                id
+		                naam
+	                }
                 }
             }
         }
