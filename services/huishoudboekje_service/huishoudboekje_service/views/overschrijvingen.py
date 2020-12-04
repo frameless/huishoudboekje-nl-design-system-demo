@@ -1,4 +1,4 @@
-""" MethodView for /overschrijvingen/(<overschijving_id>)/ path """
+""" MethodView for /overschrijvingen/(<overschrijving_id>)/ path """
 from flask import request, abort, make_response
 from models import Overschrijving
 from core_service.views.hhb_view import HHBView

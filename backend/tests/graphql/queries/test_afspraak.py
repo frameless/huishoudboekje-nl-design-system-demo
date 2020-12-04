@@ -74,7 +74,7 @@ def test_afspraak_empty_interval(client):
         }}
 
 @freeze_time("2020-01-01")
-def test_afspraak_overschijvingen_planner_normal(client):
+def test_afspraak_overschrijvingen_planner_normal(client):
     with requests_mock.Mocker() as rm:
         rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/", json={'data': [{
             'id': 1,
@@ -103,7 +103,7 @@ def test_afspraak_overschijvingen_planner_normal(client):
         ]
 
 @freeze_time("2020-01-01")
-def test_afspraak_overschijvingen_planner_no_einddatum(client):
+def test_afspraak_overschrijvingen_planner_no_einddatum(client):
     with requests_mock.Mocker() as rm:
         rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/", json={'data': [{
             'id': 1,
@@ -124,7 +124,7 @@ def test_afspraak_overschijvingen_planner_no_einddatum(client):
 
 
 @freeze_time("2020-01-01")
-def test_afspraak_overschijvingen_planner_doorlopened(client):
+def test_afspraak_overschrijvingen_planner_doorlopened(client):
     with requests_mock.Mocker() as rm:
         rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/", json={'data': [{
             'id': 1,

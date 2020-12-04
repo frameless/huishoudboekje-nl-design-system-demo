@@ -1,4 +1,4 @@
-"""Added overschijving tabel
+"""Added overschrgit staijving tabel
 
 Revision ID: dbbfa0d519b6
 Revises: 12b7c5007ec2
