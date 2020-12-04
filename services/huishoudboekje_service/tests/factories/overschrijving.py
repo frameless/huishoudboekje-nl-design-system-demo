@@ -12,11 +12,11 @@ class OverschrijvingFactory:
 
     def create_overschrijving(
             self,
-            afspraak_id: int = 9,
-            export_id: int = 5,
+            afspraak_id: int = None,
+            export_id: int = None,
             datum: str = "2020-10-10",
             bedrag: int = 3498,
-            bank_transaction_id: int = 2
+            bank_transaction_id: int = None
     ):
         overschrijving = Overschrijving(
             afspraak_id=afspraak_id,

@@ -1,6 +1,11 @@
-def test_overschrijving_filter_afspraak_id(client, overschrijving_factory):
-    overschrijving1 = overschrijving_factory.create_overschrijving(afspraak_id=10)
-    overschrijving2 = overschrijving_factory.create_overschrijving(afspraak_id=11)
+
+
+
+def test_overschrijving_filter_afspraak_id(client, overschrijving_factory, afspraak_factory):
+    afspraak1 = afspraak_factory.createAfspraak(kenmerk="Afspraak1")
+    afspraak2 = afspraak_factory.createAfspraak(kenmerk="Afspraak2")
+    overschrijving1 = overschrijving_factory.create_overschrijving(afspraak_id=afspraak1.id)
+    overschrijving2 = overschrijving_factory.create_overschrijving(afspraak_id=afspraak2.id)
     response = client.get(
         f'/overschrijvingen/?filter_afspraken={overschrijving1.afspraak_id},{overschrijving2.afspraak_id}')
     assert response.status_code == 200
@@ -11,7 +16,7 @@ def test_overschrijving_filter_afspraak_id(client, overschrijving_factory):
     assert response.status_code == 200
     assert len(response.json["data"]) == 1
     assert response.json["data"][0]["afspraak_id"] == overschrijving1.afspraak_id
-    response = client.get(f'/afspraken/?filter_ids={overschrijving2.afspraak_id}')
+    response = client.get(f'/overschrijvingen/?filter_afspraken={overschrijving2.afspraak_id}')
     assert response.status_code == 200
     assert len(response.json["data"]) == 1
     assert response.json["data"][0]["afspraak_id"] == overschrijving2.afspraak_id
@@ -20,4 +25,4 @@ def test_overschrijving_filter_afspraak_id(client, overschrijving_factory):
 def test_afspraak_filter_invalid_id(client):
     response = client.get(f'/overschrijvingen/?filter_afspraken=NaN')
     assert response.status_code == 400
-    assert response.json["errors"][0] == "Input for filter_ids is not correct, 'NaN' is not a number."
+    assert response.json["errors"][0] == "Input for filter_afspraken is not correct, 'NaN' is not a number."
