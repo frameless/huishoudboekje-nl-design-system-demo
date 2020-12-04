@@ -32,6 +32,9 @@ export type Scalars = {
   Upload: any;
 };
 
+
+
+
 /** GraphQL Afspraak model  */
 export type Afspraak = {
   __typename?: 'Afspraak';

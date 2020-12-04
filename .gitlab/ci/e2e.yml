@@ -5,8 +5,8 @@
   variables:
     CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/.cache/Cypress"
   script:
-    - BASE_URL=https://$(<$CI_PROJECT_DIR/ci_review_hostname.txt)
-    - npx -q apollo client:download-schema --endpoint=${BASE_URL}/api/graphql schema.graphql
+    - export BASE_URL=https://$(<$CI_PROJECT_DIR/ci_review_hostname.txt)
+    - npm run get-schema
     - npx -q cypress run --config "baseUrl=${BASE_URL}"
   cache:
     key: "${CI_COMMIT_REF_SLUG}__${CI_JOB_NAME}"
