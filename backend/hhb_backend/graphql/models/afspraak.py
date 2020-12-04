@@ -44,7 +44,7 @@ class Afspraak(graphene.ObjectType):
     organisatie = graphene.Field(lambda: organisatie.Organisatie)
     journaalposten = graphene.List(lambda: journaalpost.Journaalpost)
     rubriek = graphene.Field(lambda: rubriek.Rubriek)
-    overschrijvingen = graphene.List(lambda: overschrijving.Overschijving, 
+    overschrijvingen = graphene.List(lambda: overschrijving.Overschrijving, 
         start_datum=graphene.Date(),
         eind_datum=graphene.Date()
     )
