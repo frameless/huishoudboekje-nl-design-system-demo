@@ -4,19 +4,19 @@ import hhb_backend.graphql.models.afspraak as afspraak
 import hhb_backend.graphql.models.export as export
 import hhb_backend.graphql.models.bank_transaction as bank_transaction
 
-class OverschijvingStatus(graphene.Enum):
+class OverschrijvingStatus(graphene.Enum):
     GEREED = 1
     IN_BEHANDELING = 2
     VERWACHTING = 3
 
-class Overschijving(graphene.ObjectType):
+class Overschrijving(graphene.ObjectType):
     id = graphene.Int()
     afspraak = graphene.Field(lambda: afspraak.Afspraak)
     export = graphene.Field(lambda: export.Export)
     datum = graphene.Date()
     bedrag = graphene.Field(Bedrag)
     bankTransaction = graphene.Field(lambda: bank_transaction.BankTransaction)
-    status = graphene.Field(OverschijvingStatus)
+    status = graphene.Field(OverschrijvingStatus)
 
     async def resolve_afspraak(root, info):
         if root.get('afspraak_id'):
@@ -29,7 +29,7 @@ class Overschijving(graphene.ObjectType):
 
     def resolve_status(root, info):
         if root.get("bank_transaction_id", None):
-            return OverschijvingStatus.GEREED
+            return OverschrijvingStatus.GEREED
         if root.get("export_id", None):
-            return OverschijvingStatus.IN_BEHANDELING
-        return OverschijvingStatus.VERWACHTING
+            return OverschrijvingStatus.IN_BEHANDELING
+        return OverschrijvingStatus.VERWACHTING
