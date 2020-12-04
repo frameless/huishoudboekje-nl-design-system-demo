@@ -226,7 +226,7 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }>
 				</Box>
 				{!isMobile && (
 					<Box flex={1}>
-						<Text fontSize={"sm"}>{bt.journaalpost?.grootboekrekening?.naam}</Text>
+						<Text fontSize={"sm"}>{bt.journaalpost?.grootboekrekening?.rubriek?.naam}</Text>
 					</Box>
 				)}
 				<Box flex={0} minWidth={120}>

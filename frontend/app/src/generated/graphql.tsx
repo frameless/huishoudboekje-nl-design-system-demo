@@ -51,7 +51,7 @@ export type Afspraak = {
   organisatie?: Maybe<Organisatie>;
   journaalposten?: Maybe<Array<Maybe<Journaalpost>>>;
   rubriek?: Maybe<Rubriek>;
-  overschrijvingen?: Maybe<Array<Maybe<Overschijving>>>;
+  overschrijvingen?: Maybe<Array<Maybe<Overschrijving>>>;
 };
 
 
@@ -350,18 +350,18 @@ export type OrganisatieKvK = {
   plaatsnaam?: Maybe<Scalars['String']>;
 };
 
-export type Overschijving = {
-  __typename?: 'Overschijving';
+export type Overschrijving = {
+  __typename?: 'Overschrijving';
   id?: Maybe<Scalars['Int']>;
   afspraak?: Maybe<Afspraak>;
   export?: Maybe<Export>;
   datum?: Maybe<Scalars['Date']>;
   bedrag?: Maybe<Scalars['Bedrag']>;
   bankTransaction?: Maybe<BankTransaction>;
-  status?: Maybe<OverschijvingStatus>;
+  status?: Maybe<OverschrijvingStatus>;
 };
 
-export enum OverschijvingStatus {
+export enum OverschrijvingStatus {
   Gereed = 'GEREED',
   InBehandeling = 'IN_BEHANDELING',
   Verwachting = 'VERWACHTING'
@@ -811,6 +811,10 @@ export type RekeningFragment = (
 export type GrootboekrekeningFragment = (
   { __typename?: 'Grootboekrekening' }
   & Pick<Grootboekrekening, 'id' | 'naam' | 'omschrijving' | 'referentie'>
+  & { rubriek?: Maybe<(
+    { __typename?: 'Rubriek' }
+    & Pick<Rubriek, 'id' | 'naam'>
+  )> }
 );
 
 export type RubriekFragment = (
@@ -1323,6 +1327,10 @@ export type GetAllTransactionsQuery = (
         & Pick<Afspraak, 'id'>
       )>, grootboekrekening?: Maybe<(
         { __typename?: 'Grootboekrekening' }
+        & { rubriek?: Maybe<(
+          { __typename?: 'Rubriek' }
+          & Pick<Rubriek, 'id' | 'naam'>
+        )> }
         & GrootboekrekeningFragment
       )> }
     )> }
@@ -1358,6 +1366,10 @@ export const GrootboekrekeningFragmentDoc = gql`
   naam
   omschrijving
   referentie
+  rubriek {
+    id
+    naam
+  }
 }
     `;
 export const RubriekFragmentDoc = gql`
@@ -2403,6 +2415,10 @@ export const GetAllTransactionsDocument = gql`
       }
       grootboekrekening {
         ...Grootboekrekening
+        rubriek {
+          id
+          naam
+        }
       }
     }
   }
