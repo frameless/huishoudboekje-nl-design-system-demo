@@ -23,6 +23,8 @@
     "cypress": "npx -q cypress open",
     "theme": "./setTheme.sh",
     "lint": "eslint src",
+    "get-schema": "npx -q apollo client:download-schema --endpoint=${BASE_URL:-http://localhost:3000}/api/graphql schema.graphql",
+    "pregen-types": "npm run get-schema",
     "gen-types": "graphql-codegen --config codegen.json"
   },
   "dependencies": {
