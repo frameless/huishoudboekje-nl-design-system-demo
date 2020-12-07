@@ -155,7 +155,11 @@
         },
         {
           "title": "Prognose",
-          "helperText": "Dit is een globaal overzicht van de verwachte betalingen. Er worden er maximaal {{max}} weergegeven."
+          "helperText": "Dit is een globaal overzicht van de verwachte betalingen. Er wordt maximaal twee jaar vooruit gepland.",
+          "showPrognosisUntil": "Prognose weergeven tot en met",
+          "prognosisText": "Er wordt 1 overschrijving verwacht tussen {{start}} en {{end}}.",
+          "prognosisText_none": "Er worden geen overschrijvingen verwacht.",
+          "prognosisText_plural": "Er worden {{count}} overschrijvingen verwacht tussen {{start}} en {{end}}."
         }
       ],
       "fields": {
