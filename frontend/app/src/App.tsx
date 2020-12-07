@@ -16,6 +16,7 @@ import Sidebar from "./components/Sidebar";
 import SidebarContainer from "./components/Sidebar/SidebarContainer";
 import UserStatus from "./components/UserStatus";
 import Routes from "./config/routes";
+import Test from "./Test";
 import {useAuth} from "./utils/hooks";
 import {TABLET_BREAKPOINT} from "./utils/things";
 
@@ -95,6 +96,7 @@ const App = () => {
 								<Route path={Routes.EditAgreement()} component={EditAgreement} />
 								<Route path={Routes.Banking} component={Banking} />
 								{/*<Route path={ROUTEPATH} component={SETTINGS_COMPONENT} />*/}
+								<Route path={"/test"} component={Test} />
 								<Route exact path={Routes.NotFound} component={PageNotFound} />
 								<Route component={PageNotFound} />
 							</Switch>

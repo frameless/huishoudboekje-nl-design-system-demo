@@ -1,16 +1,43 @@
 import {Box, BoxProps, Button, Divider, FormLabel, Input, InputGroup, InputLeftElement, Select, Stack, Switch, useToast,} from "@chakra-ui/react";
 import moment from "moment";
+import "moment-recur-ts";
 import React, {useEffect, useState} from "react";
 import {useInput, useIsMobile, useNumberInput, useToggle, Validators} from "react-grapple";
 import {UseInput} from "react-grapple/dist/hooks/useInput";
 import {useTranslation} from "react-i18next";
 import {sampleData} from "../../config/sampleData/sampleData";
-import {Afspraak, Gebruiker, Organisatie, useGetAllOrganisatiesQuery, useGetAllRubriekenQuery} from "../../generated/graphql";
+import {Afspraak, Gebruiker, Interval, Organisatie, Overschrijving, OverschrijvingStatus, useGetAllOrganisatiesQuery, useGetAllRubriekenQuery} from "../../generated/graphql";
 import {AfspraakPeriod, AfspraakType, IntervalType,} from "../../models";
 import Queryable from "../../utils/Queryable";
-import {isDev, XInterval} from "../../utils/things";
+import {isDev, Regex, XInterval} from "../../utils/things";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
 import RadioButtonGroup from "../Layouts/RadioButtons/RadioButtonGroup";
+import OverschrijvingenListView from "../Overschrijvingen/OverschrijvingenListView";
+
+const maxOverschrijvingenInList = 12;
+type SampleOverschrijvingenProps = { bedrag: number, startDate: Date, interval: Interval, nTimes: number };
+const sampleOverschrijvingen = ({bedrag, startDate, interval, nTimes = 0}: SampleOverschrijvingenProps): Overschrijving[] => {
+	const o: Overschrijving = {
+		export: {},
+		datum: "",
+		bedrag,
+		status: OverschrijvingStatus.Verwachting
+	};
+
+	const parsedInterval = XInterval.parse(interval);
+	const _nTimes = nTimes === 0 ? maxOverschrijvingenInList : nTimes;
+
+	if (!parsedInterval || !moment(startDate).isValid()) {
+		return [];
+	}
+
+	const recursion = moment(startDate).recur().every(parsedInterval.count)[parsedInterval.intervalType]();
+	const nextDates = [moment(startDate), ...recursion.next(_nTimes)];
+	return nextDates.map(m => ({
+		...o,
+		datum: m.toDate()
+	}));
+};
 
 type AfspraakFormProps = { afspraak?: Afspraak, onSave: (data) => void, burger?: Gebruiker, loading: boolean };
 const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave, loading = false, ...props}) => {
@@ -18,7 +45,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 	const toast = useToast();
 	const isMobile = useIsMobile();
 	const gebruiker = afspraak?.gebruiker || props.burger;
-	if(!gebruiker){
+	if (!gebruiker) {
 		throw new Error("Missing property gebruiker.");
 	}
 
@@ -46,30 +73,26 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 	const amount = useNumberInput({
 		min: 0,
 		step: .01,
-		validate: [v => new RegExp(/^([0-9]+)((,|\.)[0-9]{2})?$/).test(v.toString())]
+		validate: [(v) => new RegExp(/^([0-9]+)((,|\.)[0-9]{2})?$/).test(v.toString())]
 	});
 	const searchTerm = useInput({
 		defaultValue: "",
 	});
 	const [isRecurring, toggleRecurring] = useToggle(false);
-	const startDate = {
-		day: useNumberInput({
-			validate: [(v) => new RegExp(/^[0-9]{1,2}$/).test(v.toString())],
-			placeholder: t("forms.common.fields.dateDay"),
-			min: 1,
-			max: 31,
-		}),
-		month: useNumberInput({
-			validate: [(v) => new RegExp(/^[0-9]{1,2}$/).test(v.toString())],
-			placeholder: t("forms.common.fields.dateMonth"),
-			min: 1, max: 12
-		}),
-		year: useNumberInput({
-			validate: [(v) => new RegExp(/^[0-9]{4}$/).test(v.toString())],
-			placeholder: t("forms.common.fields.dateYear"),
-		})
-	}
-	const [isContinuous, toggleContinuous] = useToggle(true);
+	const startDate = useInput({
+		placeholder: moment().format("L"),
+		validate: [
+			(v: string) => new RegExp(Regex.Date).test(v),
+			(v: string) => moment(v, "L").isValid()
+		]
+	});
+	const [isContinuous, _toggleContinuous] = useToggle(true);
+	const toggleContinuous = (...args) => {
+		_toggleContinuous(...args);
+		if (!isContinuous) {
+			nTimes.reset();
+		}
+	};
 	const nTimes = useNumberInput({
 		validate: [(v) => new RegExp(/^[0-9]+$/).test(v.toString())]
 	});
@@ -102,9 +125,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 				intervalNumber.setValue(interval.count.toString());
 			}
 			const startDatum = new Date(afspraak.startDatum);
-			startDate.day.setValue(startDatum.getDate());
-			startDate.month.setValue(startDatum.getMonth() + 1);
-			startDate.year.setValue(startDatum.getFullYear());
+			startDate.setValue(moment(startDatum).format("L"));
 			if (afspraak.aantalBetalingen) {
 				toggleContinuous(false);
 				nTimes.setValue(afspraak.aantalBetalingen);
@@ -143,9 +164,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 		toggleRecurring(c.type === AfspraakPeriod.Periodic);
 		intervalType.setValue(IntervalType.Month);
 		intervalNumber.setValue("3");
-		startDate.day.setValue(parseInt(c.startDatum.split("-")[2]));
-		startDate.month.setValue(parseInt(c.startDatum.split("-")[1]));
-		startDate.year.setValue(parseInt(c.startDatum.split("-")[0]));
+		startDate.setValue(moment(c.startDatum).format("L"));
 		toggleContinuous(c.isContinuous);
 		nTimes.setValue(10);
 	}
@@ -161,9 +180,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 			rekeningId,
 			amount,
 			searchTerm,
-			startDate.day,
-			startDate.month,
-			startDate.year,
+			startDate,
 		];
 
 		if (isRecurring) {
@@ -190,11 +207,11 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 			credit: afspraakType === AfspraakType.Income,
 			beschrijving: description.value,
 			tegenRekeningId: rekeningId.value,
-			organisatieId: parseInt(organisatieId.value as unknown as string) !== 0 ? organisatieId.value : null,
+			organisatieId: parseInt(organisatieId.value) !== 0 ? organisatieId.value : null,
 			...rubriekId.value && {rubriekId: rubriekId.value},
 			bedrag: amount.value,
 			kenmerk: searchTerm.value,
-			startDatum: moment(Date.UTC(startDate.year.value, startDate.month.value - 1, startDate.day.value)).format("YYYY-MM-DD"),
+			startDatum: moment(startDate.value, "DD MM YYYY").format("YYYY-MM-DD"),
 			interval: isRecurring ? XInterval.create(intervalType.value, intervalNumber.value) : XInterval.empty,
 			aantalBetalingen: !isContinuous ? nTimes.value : 0,
 			actief: isActive,
@@ -231,6 +248,19 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 						<RadioButtonGroup name={"afspraakType"} onChange={onChangeAfspraakType} defaultValue={AfspraakType.Expense} value={afspraakType}
 						                  options={afspraakTypeOptions} />
 
+						<Stack spacing={2} direction={isMobile ? "column" : "row"}>
+							<Stack spacing={1} flex={1}>
+								<FormLabel htmlFor={"accountId"}>{t("forms.agreements.fields.rubriek")}</FormLabel>
+								<Queryable query={$rubrics}>{(data) => (
+									<Select {...rubriekId.bind} isInvalid={isInvalid(rubriekId)} id="rubriekId" value={rubriekId.value}>
+										<option value="">{t("forms.agreements.fields.rubriekChoose")}</option>
+										{data.rubrieken.map(o => (
+											<option key={"o" + o.id} value={o.id}>{o.naam}</option>
+										))}
+									</Select>
+								)}</Queryable>
+							</Stack>
+						</Stack>
 						<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 							<Stack spacing={1} flex={1}>
 								<FormLabel htmlFor={"description"}>{t("forms.agreements.fields.description")}</FormLabel>
@@ -289,19 +319,6 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 								<Input isInvalid={isInvalid(searchTerm)} {...searchTerm.bind} id="searchTerm" />
 							</Stack>
 						</Stack>
-						<Stack spacing={2} direction={isMobile ? "column" : "row"}>
-							<Stack spacing={1} flex={1}>
-								<FormLabel htmlFor={"accountId"}>{t("forms.agreements.fields.rubriek")}</FormLabel>
-								<Queryable query={$rubrics}>{(data) => (
-									<Select {...rubriekId.bind} isInvalid={isInvalid(rubriekId)} id="rubriekId" value={rubriekId.value}>
-										<option value="">{t("forms.agreements.fields.rubriekChoose")}</option>
-										{data.rubrieken.map(o => (
-											<option key={"o" + o.id} value={o.id}>{o.naam}</option>
-										))}
-									</Select>
-								)}</Queryable>
-							</Stack>
-						</Stack>
 					</FormRight>
 				</Stack>
 
@@ -335,16 +352,8 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 
 						<Stack direction={isMobile ? "column" : "row"} spacing={1}>
 							<Stack spacing={1} flex={1}>
-								{isRecurring ? (
-									<FormLabel htmlFor={"startDate.day"}>{t("forms.agreements.fields.startDate")}</FormLabel>
-								) : (
-									<FormLabel htmlFor={"startDate.day"}>{t("forms.common.fields.date")}</FormLabel>
-								)}
-								<Stack justifyContent={"flex-start"} direction={"row"} spacing={1} maxWidth={isMobile ? "100%" : 280} width={"100%"}>
-									<Box flex={1}><Input isInvalid={isInvalid(startDate.day)} {...startDate.day.bind} id="startDate.day" /></Box>
-									<Box flex={1}><Input isInvalid={isInvalid(startDate.month)} {...startDate.month.bind} id="startDate.month" /></Box>
-									<Box flex={1}><Input isInvalid={isInvalid(startDate.year)} {...startDate.year.bind} id="startDate.year" /></Box>
-								</Stack>
+								<FormLabel htmlFor={"startDate"}>{isRecurring ? t("forms.agreements.fields.startDate") : t("forms.common.fields.date")}</FormLabel>
+								<Input isInvalid={isInvalid(startDate)} {...startDate.bind} id="startDate" />
 							</Stack>
 						</Stack>
 
@@ -376,7 +385,20 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 								</Stack>
 							</Stack>
 						)}
+					</FormRight>
+				</Stack>
 
+				<Divider />
+
+				<Stack direction={isMobile ? "column" : "row"} spacing={2}>
+					<FormLeft title={t("forms.agreements.sections.2.title")} helperText={t("forms.agreements.sections.2.helperText", {max: maxOverschrijvingenInList})} />
+					<FormRight>
+						<OverschrijvingenListView overschrijvingen={sampleOverschrijvingen({
+							bedrag: amount.value,
+							startDate: moment(startDate.value, "DD MM YYYY").toDate(),
+							nTimes: nTimes.value || 0,
+							interval: XInterval.create(intervalType.value, intervalNumber.value)
+						})} max={maxOverschrijvingenInList} />
 					</FormRight>
 				</Stack>
 

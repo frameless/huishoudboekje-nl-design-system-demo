@@ -1,5 +1,5 @@
 import {CheckIcon, CloseIcon, DeleteIcon, EditIcon} from "@chakra-ui/icons";
-import {Badge, Box, BoxProps, IconButton, Stack, Text} from "@chakra-ui/react";
+import {Badge, Box, BoxProps, Divider, IconButton, Stack, Text} from "@chakra-ui/react";
 import React, {useState} from "react";
 import {useIsMobile} from "react-grapple";
 import {useTranslation} from "react-i18next";
@@ -64,24 +64,29 @@ const AfspraakItem: React.FC<BoxProps & { afspraak: Afspraak, onDelete?: (id: nu
 			{/*	Todo: edit and delete actions on mobile? (14-11-2020) */}
 		</GridCard>
 	) : (
-		<Stack direction={"row"} alignItems={"center"} justifyContent={"center"} {...!a.actief && {opacity: .5}} {...props}>
-			<Box flex={1}>{a.organisatie?.weergaveNaam || a.tegenRekening?.rekeninghouder || t("unknown")}</Box>
-			<Box flex={1}>{a.beschrijving}</Box>
-			<Stack spacing={1} flex={1} alignItems={"flex-end"}>
-				<Box textAlign={"right"}>{currencyFormat2().format(a.bedrag)}</Box>
-				{a.automatischeIncasso && <Badge fontSize={"10px"}>{t("agreements.automatischeIncasso")}</Badge>}
-				<Badge fontSize={"10px"}>{intervalString()}</Badge>
+		<Stack>
+			<Stack direction={"row"} alignItems={"center"} justifyContent={"center"} py={5} {...props}>
+				<Box flex={1}>{a.organisatie?.weergaveNaam || a.tegenRekening?.rekeninghouder || t("unknown")}</Box>
+				<Box flex={1}>
+					<Text color={"gray.600"}>{a.beschrijving}</Text>
+				</Box>
+				<Stack spacing={1} flex={1} alignItems={"flex-end"}>
+					<Box textAlign={"right"}>{currencyFormat2().format(a.bedrag)}</Box>
+					{a.automatischeIncasso && <Badge fontSize={"10px"}>{t("agreements.automatischeIncasso")}</Badge>}
+					<Badge fontSize={"10px"}>{intervalString()}</Badge>
+				</Stack>
+				<Box width={100}>
+					<IconButton variant={"ghost"} size={"sm"} icon={<EditIcon />} aria-label={t("actions.edit")} onClick={onClickEditButton} />
+					{onDelete && (<>
+						{deleteConfirm && <IconButton variant={"solid"} size={"xs"} icon={<CloseIcon />} colorScheme={"gray"}
+						                              mr={2} aria-label={t("actions.delete")} onClick={onClickDeleteCancel} />}
+						<IconButton variant={deleteConfirm ? "solid" : "ghost"} size={"xs"} icon={deleteConfirm ? <CheckIcon /> : <DeleteIcon />}
+						            colorScheme={deleteConfirm ? "red" : "gray"} aria-label={t("actions.delete")} onClick={onClickDeleteButton} />
+					</>)}
+				</Box>
 			</Stack>
-			<Box width={100}>
-				<IconButton variant={"ghost"} size={"sm"} icon={<EditIcon />} aria-label={t("actions.edit")} onClick={onClickEditButton} />
-				{onDelete && (<>
-					{deleteConfirm && <IconButton variant={"solid"} size={"xs"} icon={<CloseIcon />} colorScheme={"gray"} mr={2}
-												  aria-label={t("actions.delete")} onClick={onClickDeleteCancel} />}
-					<IconButton variant={deleteConfirm ? "solid" : "ghost"} size={"xs"} icon={deleteConfirm ? <CheckIcon /> : <DeleteIcon />}
-					            colorScheme={deleteConfirm ? "red" : "gray"}
-					            aria-label={t("actions.delete")} onClick={onClickDeleteButton} />
-				</>)}
-			</Box>
+
+			<Divider />
 		</Stack>
 	);
 };

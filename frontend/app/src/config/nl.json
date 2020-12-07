@@ -152,6 +152,10 @@
         {
           "title": "Betalingen",
           "helperText": "Geef aan wanneer en hoeveel betalingen verwacht worden."
+        },
+        {
+          "title": "Prognose",
+          "helperText": "Dit is een globaal overzicht van de verwachte betalingen. Er worden er maximaal {{max}} weergegeven."
         }
       ],
       "fields": {
@@ -256,6 +260,14 @@
   "burgers": {
     "burgers": "Burgers"
   },
+  "sections": {
+    "burgers": {
+      "overschrijvingen": {
+        "title": "Overschrijvingen",
+        "detailText": "Alle geëxporteerde en geprognotiseerde overschrijvingen voor deze burger."
+      }
+    }
+  },
   "organizations": {
     "organization": "Organisatie",
     "organizations": "Organisaties"
@@ -322,5 +334,6 @@
   },
   "unknown": "Onbekend",
   "active": "Actief",
-  "inactive": "Inactief"
+  "inactive": "Inactief",
+  "status": "Status"
 }
