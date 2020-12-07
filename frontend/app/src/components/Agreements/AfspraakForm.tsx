@@ -9,7 +9,7 @@ import {sampleData} from "../../config/sampleData/sampleData";
 import {Afspraak, Gebruiker, Interval, Organisatie, Overschrijving, OverschrijvingStatus, useGetAllOrganisatiesQuery, useGetAllRubriekenQuery} from "../../generated/graphql";
 import {AfspraakPeriod, AfspraakType, IntervalType,} from "../../models";
 import Queryable from "../../utils/Queryable";
-import {isDev, Regex, XInterval} from "../../utils/things";
+import {isDev, XInterval} from "../../utils/things";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
 import RadioButtonGroup from "../Layouts/RadioButtons/RadioButtonGroup";
 import OverschrijvingenListView from "../Overschrijvingen/OverschrijvingenListView";
@@ -81,10 +81,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 	const [isRecurring, toggleRecurring] = useToggle(false);
 	const startDate = useInput({
 		placeholder: moment().format("L"),
-		validate: [
-			(v: string) => new RegExp(Regex.Date).test(v),
-			(v: string) => moment(v, "L").isValid()
-		]
+		validate: [(v: string) => moment(v, "L").isValid()]
 	});
 	const [isContinuous, _toggleContinuous] = useToggle(true);
 	const toggleContinuous = (...args) => {
@@ -395,10 +392,10 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 					<FormRight>
 						<OverschrijvingenListView overschrijvingen={sampleOverschrijvingen({
 							bedrag: amount.value,
-							startDate: moment(startDate.value, "DD MM YYYY").toDate(),
+							startDate: moment(startDate.value, "L").toDate(),
 							nTimes: nTimes.value || 0,
 							interval: XInterval.create(intervalType.value, intervalNumber.value)
-						})} max={maxOverschrijvingenInList} />
+						})} />
 					</FormRight>
 				</Stack>
 
