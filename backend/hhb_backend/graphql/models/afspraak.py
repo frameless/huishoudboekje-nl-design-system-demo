@@ -1,6 +1,6 @@
 """ Afspraak model as used in GraphQL queries """
 from datetime import date
-
+from dateutil.parser import isoparse
 import graphene
 from flask import request
 import hhb_backend.graphql.models.gebruiker as gebruiker
@@ -50,9 +50,15 @@ class Afspraak(graphene.ObjectType):
     )
 
     async def resolve_overschrijvingen(root, info, **kwargs):
-        results = []
-        results += planned_overschrijvingen(root, **kwargs)
-        return results
+        expected_overschrijvingen = planned_overschrijvingen(root, **kwargs)
+        known_overschrijvingen = {}
+        overschrijvingen = await request.dataloader.overschrijvingen_by_afspraak.load(root.get("id"))
+        for o in overschrijvingen:
+            known_overschrijvingen[o["datum"]] = o
+        for datum, o in known_overschrijvingen.items():
+            o["datum"] = isoparse(o["datum"]).date()
+        expected_overschrijvingen.update(known_overschrijvingen)
+        return expected_overschrijvingen.values()
 
     async def resolve_rubriek(root, info):
         """ Get rubriek when requested """
