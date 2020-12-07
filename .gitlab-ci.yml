@@ -14,6 +14,7 @@ variables:
   REVIEW_BASE_DOMAIN: nlx.reviews
   REVIEW_NAMESPACE: "hhb-$CI_ENVIRONMENT_SLUG"
   KUBECONFIG: /secrets/kubeconfig/review.conf
+  DOCKER_PROXY: "gitlab.com/commonground/huishoudboekje/dependency_proxy/containers/"
   PYTHON_POSTGRES: python-postgres
 
 stages:

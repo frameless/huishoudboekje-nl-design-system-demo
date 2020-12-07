@@ -6,7 +6,6 @@ build:
     - shell
   variables:
     IMAGE_PREFIX: "$CI_REGISTRY/$CI_PROJECT_PATH/"
-    DOCKER_PROXY: "gitlab.com/commonground/huishoudboekje/dependency_proxy/containers/"
   before_script:
     - export COMPONENT_TAG=$(git describe --long --all | sed 's!heads/!!')
     - export COMPONENT_COMMIT_HASH=$(git describe --always --abbrev=0 --match "NOT A TAG")
@@ -25,7 +24,7 @@ build-helm:
     - cg
     - docker
   image:
-    name: gitlab.com/commonground/huishoudboekje/dependency_proxy/containers/alpine/helm:latest
+    name: ${DOCKER_PROXY}alpine/helm:latest
     entrypoint: [""]
   before_script:
     - helm repo add stable "https://charts.helm.sh/stable"

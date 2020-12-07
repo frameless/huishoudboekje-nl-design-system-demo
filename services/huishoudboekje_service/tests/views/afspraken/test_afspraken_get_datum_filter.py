@@ -4,12 +4,12 @@ from urllib.parse import urlencode
 import pytest
 
 
-def filter_dict(input_dict: dict):
+def dict_only_keys_with_values(input_dict: dict):
     """ Only pass through dict items when it's value is not None """
     return {k: v for k, v in input_dict.items() if v is not None}
 
 
-def verification_dict(match_keys: list):
+def dict_keys_subset_builder(match_keys: list):
     """only include items with a matching key"""
     return lambda actual_dict: dict((k, actual_dict[k] if k in actual_dict else None) for k in match_keys)
 
@@ -54,12 +54,11 @@ def test_afspraken_get_datum_filter(app, afspraak_factory, caplog, begin_datum, 
 
     assert len(actual_afspraken) == len(expected)
 
-    dict_filter = verification_dict(['beschrijving', 'start_datum', 'eind_datum'])
+    dict_keys_subset = dict_keys_subset_builder(['beschrijving', 'start_datum', 'eind_datum'])
     # the order of results is expected to be the same as the verication set
     for actual_response, expected_afspraak in zip(actual_afspraken, expected):
         # assert only the properties we are interested in for the test case
-        assert dict_filter(actual_response) == dict_filter(expected_afspraak)
-        # assert all(expected_property in actual_response.items() for expected_property in expected_afspraak.items())
+        assert dict_keys_subset(actual_response) == dict_keys_subset(expected_afspraak)
 
 
 @pytest.mark.parametrize("begin_datum, eind_datum, statuscode, message", [
@@ -71,6 +70,6 @@ def test_afspraken_get_datum_filter(app, afspraak_factory, caplog, begin_datum, 
 def test_afspraken_get_datum_filter_errors(app, begin_datum, eind_datum, statuscode, message):
     client = app.test_client()
     response = client.get(
-        f'/afspraken/?{urlencode(filter_dict({"begin_datum": begin_datum, "eind_datum": eind_datum}))}')
+        f'/afspraken/?{urlencode(dict_only_keys_with_values({"begin_datum": begin_datum, "eind_datum": eind_datum}))}')
     assert response.status_code == statuscode
     assert response.json["errors"][0] == message
