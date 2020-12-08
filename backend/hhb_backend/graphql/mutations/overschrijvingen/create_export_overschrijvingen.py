@@ -1,12 +1,16 @@
+import json
 from datetime import date, datetime
 
 import graphene
+import requests
 from graphql import GraphQLError
 
+from hhb_backend.graphql import settings
 from hhb_backend.graphql.models.export import Export
 from flask import request
 
 from hhb_backend.graphql.utils import planned_overschrijvingen
+from hhb_backend.graphql.utils.create_sepa_export import create_export_string
 
 
 class CreateExportOverschrijvingen(graphene.Mutation):
@@ -16,7 +20,7 @@ class CreateExportOverschrijvingen(graphene.Mutation):
 
     ok = graphene.Boolean()
     # TODO File instead of export object?
-    export = graphene.Field(lambda: Export)
+    export = graphene.String()
 
     def mutate(root, info, **kwargs):
         """ Create the export file based on start and end date """
@@ -47,21 +51,21 @@ class CreateExportOverschrijvingen(graphene.Mutation):
                                                   o['afspraak_id'] != overschrijving.afspraak.id and
                                                   o['datum'] != overschrijving.datum,
                                                   future_overschrijvingen))
+
         # Creer export object en koppel deze aan overschrijvingen
+        exportFile = ""
+
         # Overschrijvingen wegschrijven in db + export object
+        for export_overschrijving in future_overschrijvingen:
+            gebruiker_response = requests.post(
+                f"{settings.HHB_SERVICES_URL}/overschrijvingen/",
+                data=json.dumps(export_overschrijving),
+                headers={'Content-type': 'application/json'}
+            )
+            if gebruiker_response.status_code != 201:
+                raise GraphQLError(f"Upstream API responded: {gebruiker_response.json()}")
+
         # Creer export bestand en return deze.
+        export_file_xml = create_export_string(future_overschrijvingen, exportFile)
 
-        # gebruiker_response = requests.post(
-        #     f"{settings.HHB_SERVICES_URL}/overschrijvingen/",
-        #     data=json.dumps(input, default=str),
-        #     headers={'Content-type': 'application/json'}
-        # )
-        # if gebruiker_response.status_code != 201:
-        #     raise GraphQLError(f"Upstream API responded: {gebruiker_response.json()}")
-        #
-        # result = gebruiker_response.json()["data"]
-        #
-        # if rekeningen:
-        #     result['rekeningen'] = [create_gebruiker_rekening(result['id'], rekening) for rekening in rekeningen]
-
-        return CreateExportOverschrijvingen(export=result, ok=True)
+        return CreateExportOverschrijvingen(export=export_file_xml, ok=True)
