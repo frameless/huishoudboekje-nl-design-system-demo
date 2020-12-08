@@ -13,6 +13,15 @@ from hhb_backend.graphql.utils import planned_overschrijvingen
 from hhb_backend.graphql.utils.create_sepa_export import create_export_string
 
 
+def create_json_payload_overschrijving(future_overschrijving, export_id) -> dict:
+    return {
+        "afspraak_id": future_overschrijving['afspraak_id'],
+        "export_id": export_id,
+        "bedrag": future_overschrijving['bedrag'],
+        "datum": future_overschrijving['datum']
+    }
+
+
 class CreateExportOverschrijvingen(graphene.Mutation):
     class Arguments:
         start_datum = graphene.Date()
@@ -57,9 +66,10 @@ class CreateExportOverschrijvingen(graphene.Mutation):
 
         # Overschrijvingen wegschrijven in db + export object
         for export_overschrijving in future_overschrijvingen:
+            json_payload = create_json_payload_overschrijving(export_overschrijving, 1)
             gebruiker_response = requests.post(
                 f"{settings.HHB_SERVICES_URL}/overschrijvingen/",
-                data=json.dumps(export_overschrijving),
+                data=json.dumps(json_payload),
                 headers={'Content-type': 'application/json'}
             )
             if gebruiker_response.status_code != 201:
