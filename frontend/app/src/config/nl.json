@@ -154,9 +154,10 @@
           "helperText": "Geef aan wanneer en hoeveel betalingen verwacht worden."
         },
         {
-          "title": "Prognose",
-          "helperText": "Dit is een globaal overzicht van de verwachte betalingen. Er wordt maximaal twee jaar vooruit gepland.",
-          "showPrognosisUntil": "Prognose weergeven tot en met",
+          "title": "Verwachting",
+          "helperText": "Dit is een overzicht van de verwachte betalingen bij deze afspraak.",
+          "startDate": "Startdatum",
+          "endDate": "Einddatum",
           "prognosisText": "Er wordt 1 overschrijving verwacht tussen {{start}} en {{end}}.",
           "prognosisText_none": "Er worden geen overschrijvingen verwacht.",
           "prognosisText_plural": "Er worden {{count}} overschrijvingen verwacht tussen {{start}} en {{end}}."
@@ -339,8 +340,5 @@
   "unknown": "Onbekend",
   "active": "Actief",
   "inactive": "Inactief",
-  "status": "Status",
-  "4weeks": "4 weken",
-  "3months": "3 maanden",
-  "1year": "1 jaar"
+  "status": "Status"
 }
