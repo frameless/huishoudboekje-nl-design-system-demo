@@ -2,13 +2,13 @@ import moment from "moment";
 import {Interval, Overschrijving, OverschrijvingStatus} from "../generated/graphql";
 import {XInterval} from "./things";
 
-type SampleOverschrijvingenProps = { bedrag: number, startDate: Date, endDate: Date, interval: Interval, nTimes: number };
+type SampleOverschrijvingenProps = {bedrag: number, startDate: Date, endDate: Date, interval: Interval, nTimes: number};
 const generateSampleOverschrijvingen = ({bedrag, startDate, endDate, interval, nTimes = 0}: SampleOverschrijvingenProps): Overschrijving[] => {
 	const o: Overschrijving = {
 		export: {},
 		datum: "",
 		bedrag,
-		status: OverschrijvingStatus.Verwachting
+		status: OverschrijvingStatus.Verwachting,
 	};
 
 	const parsedInterval = XInterval.parse(interval);
@@ -20,12 +20,14 @@ const generateSampleOverschrijvingen = ({bedrag, startDate, endDate, interval, n
 		return [];
 	}
 
-	/* Limit the date range from the start of the current year until the end of next year, otherwise moment-recur will go wild */
-	if (mStartDate.isBefore(moment().startOf("year"))) {
-		mStartDate = moment().startOf("year");
-	}
-	if (mEndDate.isAfter(moment().add(2, "year"))) {
-		mEndDate = moment().add(2, "year");
+	if (nTimes === 0) {
+		/* Limit the date range from the start of the current year until the end of next year, otherwise moment-recur will go wild */
+		if (mStartDate.isBefore(moment().startOf("year"))) {
+			mStartDate = moment().startOf("year");
+		}
+		if (mEndDate.isAfter(moment().add(2, "year"))) {
+			mEndDate = moment().add(2, "year");
+		}
 	}
 
 	try {
@@ -33,10 +35,9 @@ const generateSampleOverschrijvingen = ({bedrag, startDate, endDate, interval, n
 		const nextDates = nTimes > 0 ? [...recursion.next(nTimes)] : [...recursion.all()];
 		return nextDates.map(m => ({
 			...o,
-			datum: m.toDate()
+			datum: m.toDate(),
 		}));
-	}
-	catch (err) {
+	} catch (err) {
 		return [];
 	}
 };
