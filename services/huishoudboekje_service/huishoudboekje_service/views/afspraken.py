@@ -1,7 +1,22 @@
 """ MethodView for /afspraken/(<afspraak_id>)/ path """
+from dateutil import parser
 from flask import request, abort, make_response
+from sqlalchemy import or_, and_
+from werkzeug.exceptions import BadRequest
+
 from models.afspraak import Afspraak
 from core_service.views.hhb_view import HHBView
+
+
+def get_date_from_request(request, key):
+    value = request.args.get(key)
+    if value:
+        try:
+            return parser.isoparse(value).date()
+        except ValueError:
+            abort(make_response({'errors': [f'{key} is not a date']}, 400))
+    return None
+
 
 class AfspraakView(HHBView):
     """ Methods for /afspraken/ path """
@@ -56,6 +71,7 @@ class AfspraakView(HHBView):
         """ Extend the get function with a filer on kvk nummers """
         self.add_filter_filter_gebruiker()
         self.add_filter_filter_organisaties()
+        self.add_filter_filter_datums()
         self.hhb_query.expose_many_relation("journaalposten", "id")
         self.hhb_query.expose_many_relation("overschrijvingen", "id")
 
@@ -68,7 +84,8 @@ class AfspraakView(HHBView):
                 try:
                     ids.append(int(raw_id))
                 except ValueError:
-                    abort(make_response({"errors": [f"Input for filter_gebruikers is not correct, '{raw_id}' is not a number."]}, 400))
+                    abort(make_response(
+                        {"errors": [f"Input for filter_gebruikers is not correct, '{raw_id}' is not a number."]}, 400))
             self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.gebruiker_id.in_(ids))
 
     def add_filter_filter_organisaties(self):
@@ -80,5 +97,30 @@ class AfspraakView(HHBView):
                 try:
                     ids.append(int(raw_id))
                 except ValueError:
-                    abort(make_response({"errors": [f"Input for filter_organisaties is not correct, '{raw_id}' is not a number."]}, 400))
+                    abort(make_response(
+                        {"errors": [f"Input for filter_organisaties is not correct, '{raw_id}' is not a number."]},
+                        400))
             self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.organisatie_id.in_(ids))
+
+    def add_filter_filter_datums(self):
+        """ Add filter_datums filter based on the start_datum and eind_datum """
+        begin_datum = get_date_from_request(request, 'begin_datum')
+        eind_datum = get_date_from_request(request, 'eind_datum')
+
+        if begin_datum or eind_datum:
+            if not begin_datum:
+                abort(make_response({"errors": ['begin_datum is missing']}, 400))
+            if not eind_datum:
+                abort(make_response({"errors": ['eind_datum is missing']}, 400))
+            if begin_datum > eind_datum:
+                abort(make_response({"errors": ['eind_datum must be after begin_datum']}, 400))
+
+            self.hhb_query.query = self.hhb_query.query.filter(
+                and_(
+                    or_(
+                        self.hhb_model.eind_datum == None,
+                        self.hhb_model.eind_datum > begin_datum
+                    ),
+                    self.hhb_model.start_datum <= eind_datum
+                )
+            )

@@ -1,11 +1,26 @@
 .cypress:
   extends: .node
   stage: e2e
-  image: cypress/base:10
+  image:
+    name: ${DOCKER_PROXY}cypress/base:10
   variables:
     CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/.cache/Cypress"
   script:
     - export BASE_URL=https://$(<$CI_PROJECT_DIR/ci_review_hostname.txt)
+    - |
+      DOWN=true
+      for i in $(seq 1 8); do
+        if curl -sf "${BASE_URL}/api/graphql?query=%7B__schema%7BqueryType%7Bname%7D%7D%7D" > /dev/null
+        then
+          DOWN=false
+          break
+        else
+          sleep 6
+        fi
+      done
+      if $DOWN; then
+        exit 1
+      fi
     - npm run get-schema
     - npx -q cypress run --config "baseUrl=${BASE_URL}"
   cache:

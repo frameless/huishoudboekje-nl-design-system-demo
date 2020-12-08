@@ -1,6 +1,8 @@
 """ Main app for huishoudboekje_service """
+import logging
 import os
 from flask import Flask, Response
+
 from huishoudboekje_service.views import (
     GebruikerView,
     OrganisatieView,
@@ -22,6 +24,9 @@ from models import *
 def create_app(config_name=os.getenv('APP_SETTINGS', 'huishoudboekje_service.config.DevelopmentConfig')):
     app = Flask(__name__)
     app.config.from_object(config_name)
+
+    logging.basicConfig(level=app.config["LOG_LEVEL"])
+    logging.info(f"Starting {__name__} with {config_name}")
 
     db.init_app(app)
 

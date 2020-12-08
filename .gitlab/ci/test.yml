@@ -1,6 +1,7 @@
 .node:
   stage: test
-  image: node:lts-alpine
+  image:
+    name: ${DOCKER_PROXY}node:lts-alpine
   variables:
     NPM_CACHE_DIR: "${CI_PROJECT_DIR}/.cache/npm"
   needs: []
