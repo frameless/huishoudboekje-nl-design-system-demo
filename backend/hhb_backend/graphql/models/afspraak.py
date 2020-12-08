@@ -64,7 +64,9 @@ class Afspraak(graphene.ObjectType):
             known_overschrijvingen[o["datum"]] = o
         for datum, o in known_overschrijvingen.items():
             o["datum"] = isoparse(o["datum"]).date()
-        expected_overschrijvingen.update(known_overschrijvingen)
+        for o_date in expected_overschrijvingen:
+            if o_date in known_overschrijvingen:
+                expected_overschrijvingen[o_date] = known_overschrijvingen[o_date]
         return expected_overschrijvingen.values()
 
     async def resolve_rubriek(root, info):
