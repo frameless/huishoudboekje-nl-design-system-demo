@@ -1,26 +1,25 @@
+import requests_mock
 from sepaxml import SepaDD, SepaTransfer
 import datetime, uuid
 
 
-def test_create_csm_with_ing_file(client):
-    config = {
-        "name": "Test von Testenstein",
-        "IBAN": "NL50BANK1234567890",
-        "BIC": "BANKNL2A",
-        "batch": True,
-        "currency": "EUR",  # ISO 4217
-    }
-    sepa = SepaTransfer(config, clean=True)
-
-    payment = {
-        "name": "Test von Testenstein",
-        "IBAN": "NL50BANK1234567890",
-        "BIC": "BANKNL2A",
-        "amount": 5000,  # in cents
-        "execution_date": datetime.date.today(),
-        "description": "Test transaction",
-        # "endtoend_id": str(uuid.uuid1())  # optional
-    }
-    sepa.add_payment(payment)
-
-    print(sepa.export(validate=True))
+def test_create_export_success(client):
+    #with requests_mock.Mocker() as mock:
+        #mock._adapter = create_mock_adapter()
+    response = client.post(
+        "/graphql",
+        json={
+            "query": '''
+    mutation createExportOverschrijvingen($startDatum: String, 
+    $eindDatum: String) {
+      createExportOverschrijvingen(startDatum: $startDatum, eindDatum:$eindDatum) {
+        ok
+        export
+      }
+    }''',
+            "variables": {'startDatum': '2020-10-10',
+                          'eindDatum': '2020-12-31'}},
+        content_type='application/json'
+    )
+    #assert mock._adapter.call_count == 1
+    assert response.json["data"]["updateGebruiker"]["ok"] is True
