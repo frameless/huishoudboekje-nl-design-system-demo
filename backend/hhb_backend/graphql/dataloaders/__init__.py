@@ -1,3 +1,4 @@
+# TODO unify naming, filenames are singular, loader names are plural
 from .gebruiker_loader import GebruikersByIdLoader
 from .grootboekrekening_loader import GrootboekrekeningenByIdLoader
 from .journaalpost_loader import JournaalpostenByIdLoader, JournaalpostenByTransactionLoader
@@ -8,6 +9,7 @@ from .csm_loader import CSMsByIdLoader
 from .bank_transactions_loader import BankTransactionByIdLoader, BankTransactionByCsmLoader
 from .configuratie_loader import ConfiguratieByIdLoader
 from .rubrieken_loader import RubriekByIdLoader, RubriekByGrootboekrekeningLoader
+from .exports_loader import ExportsByIdLoader
 from .overschrijving_loader import OverschrijvingByIdLoader, OverschijvingByAfspraakLoader
 
 class HHBDataLoader:
@@ -44,4 +46,6 @@ class HHBDataLoader:
         self.journaalposten_by_id = JournaalpostenByIdLoader(loop=loop)
         self.journaalposten_by_transaction = JournaalpostenByTransactionLoader(loop=loop)
 
-        self.configuratie_by_id= ConfiguratieByIdLoader(loop=loop)
+        self.configuratie_by_id = ConfiguratieByIdLoader(loop=loop)
+
+        self.exports_by_id = ExportsByIdLoader(loop=loop)

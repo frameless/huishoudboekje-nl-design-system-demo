@@ -1,6 +1,8 @@
 """ Test POST /export/(<export_id>/) """
 import json
 from datetime import datetime
+
+from dateutil import tz
 import pytest
 from models.export import Export
 
@@ -9,7 +11,7 @@ def test_exports_post_new_export(client, session):
     assert session.query(Export).count() == 0
     export_dict = {
         "naam":"Nieuwe export",
-        "timestamp":datetime(2020, 10, 1).isoformat(),
+        "timestamp":datetime(2020, 10, 1, tzinfo=tz.tzlocal()).isoformat(),
     }
     response = client.post('/export/', json=export_dict)
     assert response.status_code == 201
