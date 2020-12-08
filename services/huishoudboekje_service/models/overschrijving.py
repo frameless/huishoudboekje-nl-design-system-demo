@@ -11,7 +11,8 @@ class Overschrijving(db.Model):
     afspraak_id = Column(Integer, ForeignKey('afspraken.id'))
     afspraak = relationship("Afspraak", back_populates="overschrijvingen")
     #Todo make FK
-    export_id = Column(Integer)
+    export_id = Column(Integer, ForeignKey('export.id', name='overschrijvingen_export_id_fkey'))
+    export = relationship("Export", back_populates="overschrijvingen")
     datum = Column(Date)
     bedrag = Column(Integer)
     bank_transaction_id = Column(Integer)

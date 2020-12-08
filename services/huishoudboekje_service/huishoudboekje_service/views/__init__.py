@@ -9,3 +9,4 @@ from .journaalposten import JournaalpostView
 from .rubrieken import RubriekView
 from .configuratie import ConfiguratieView
 from .overschrijvingen import OverschrijvingView
+from .exports import ExportView

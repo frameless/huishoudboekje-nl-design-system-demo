@@ -1,3 +1,5 @@
+import logging
+
 from flask import request, abort, make_response
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
@@ -40,6 +42,7 @@ class HHBObject():
         try:
             db.session.commit()
         except IntegrityError as error:
+            logging.warning(repr(error))
             abort(make_response({"errors": [str(error.orig).strip().split("DETAIL:  ")[1]]}, 409))
 
     def delete(self):
