@@ -29,9 +29,9 @@ export const Months = ["jan", "feb", "mrt", "apr", "may", "jun", "jul", "aug", "
 
 export const isDev = process.env.NODE_ENV === "development";
 
-export const DrawerContext = createContext<{ onClose: () => void }>({
+export const DrawerContext = createContext<{onClose: () => void}>({
 	onClose: () => {
-	}
+	},
 });
 
 export const XInterval = {
@@ -48,7 +48,7 @@ export const XInterval = {
 			maanden: 0,
 			weken: 0,
 			dagen: 0,
-		}
+		};
 
 		interval[intervalTypeConversion[intervalType]] = parseInt(intervalCount);
 
@@ -60,7 +60,7 @@ export const XInterval = {
 		weken: 0,
 		dagen: 0,
 	},
-	parse: (interval: IntervalInput | undefined): { intervalType: IntervalType, count: number } | undefined => {
+	parse: (interval: IntervalInput | undefined): {intervalType: IntervalType, count: number} | undefined => {
 		if (!interval) {
 			return undefined;
 		}
@@ -80,36 +80,36 @@ export const XInterval = {
 
 		return {intervalType: intervalTypeName, count: interval[intervalType]};
 	},
-}
+};
 
 /* Todo: rename to currencyFormat (03-12-2020) */
 export const currencyFormat2 = (showCurrency = true) => {
 	return new Intl.NumberFormat("nl-NL", {
 		style: showCurrency ? "currency" : "decimal",
 		...showCurrency ? {
-			currency: "EUR"
+			currency: "EUR",
 		} : {
 			minimumFractionDigits: 2,
-			maximumFractionDigits: 2
-		}
+			maximumFractionDigits: 2,
+		},
 	});
 };
 
 // Todo: export const dateFormat = (d: Date) => moment(d).format("L");
 export const dateFormat = {
-	format: (d: Date) => moment(d).format("L")
-}
+	format: (d: Date) => moment(d).format("L"),
+};
 
 export const wait = async (timeout: number = 1000): Promise<void> => {
 	return new Promise(resolve => {
 		setTimeout(resolve, timeout);
 	});
-}
+};
 
 export const sortBankTransactions = (a: BankTransaction, b: BankTransaction) => {
 	return b.bedrag - a.bedrag;
 };
 
-export const formatBurgerName = (burger: Gebruiker) => {
-	return [burger.voorletters, burger.achternaam].join(" ");
-}
+export const formatBurgerName = (burger: Gebruiker, fullName = false) => {
+	return [fullName ? burger.voornamen : burger.voorletters, burger.achternaam].join(" ");
+};
