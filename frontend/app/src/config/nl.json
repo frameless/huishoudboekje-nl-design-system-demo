@@ -339,5 +339,8 @@
   "unknown": "Onbekend",
   "active": "Actief",
   "inactive": "Inactief",
-  "status": "Status"
+  "status": "Status",
+  "4weeks": "4 weken",
+  "3months": "3 maanden",
+  "1year": "1 jaar"
 }
