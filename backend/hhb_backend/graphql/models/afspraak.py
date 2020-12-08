@@ -12,7 +12,8 @@ import hhb_backend.graphql.models.journaalpost as journaalpost
 import hhb_backend.graphql.models.rubriek as rubriek
 import hhb_backend.graphql.models.overschrijving as overschrijving
 from hhb_backend.graphql.scalars.bedrag import Bedrag
-from hhb_backend.graphql.utils import convert_hhb_interval_to_dict, planned_overschrijvingen
+from hhb_backend.graphql.utils import convert_hhb_interval_to_dict
+from hhb_backend.graphql.utils.overschrijvingen_planner import PlannedOverschijvingenInput, get_planned_overschrijvingen
 
 class Interval(graphene.ObjectType):
     jaren = graphene.Int()
@@ -50,7 +51,13 @@ class Afspraak(graphene.ObjectType):
     )
 
     async def resolve_overschrijvingen(root, info, **kwargs):
-        expected_overschrijvingen = planned_overschrijvingen(root, **kwargs)
+        planner_input = PlannedOverschijvingenInput(
+            root.get("start_datum"), 
+            root.get("interval"),
+            root.get("aantal_betalingen"),
+            root.get("bedrag")
+        )
+        expected_overschrijvingen = get_planned_overschrijvingen(planner_input, **kwargs)
         known_overschrijvingen = {}
         overschrijvingen = await request.dataloader.overschrijvingen_by_afspraak.load(root.get("id"))
         for o in overschrijvingen:
