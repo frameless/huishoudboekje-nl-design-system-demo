@@ -831,7 +831,7 @@ export type RubriekFragment = (
 
 export type AfspraakFragment = (
   { __typename?: 'Afspraak' }
-  & Pick<Afspraak, 'id' | 'beschrijving' | 'startDatum' | 'eindDatum' | 'aantalBetalingen' | 'bedrag' | 'credit' | 'kenmerk' | 'actief'>
+  & Pick<Afspraak, 'id' | 'beschrijving' | 'startDatum' | 'eindDatum' | 'aantalBetalingen' | 'automatischeIncasso' | 'bedrag' | 'credit' | 'kenmerk' | 'actief'>
   & { interval?: Maybe<(
     { __typename?: 'Interval' }
     & Pick<Interval, 'dagen' | 'weken' | 'maanden' | 'jaren'>
@@ -1391,6 +1391,7 @@ export const AfspraakFragmentDoc = gql`
   startDatum
   eindDatum
   aantalBetalingen
+  automatischeIncasso
   interval {
     dagen
     weken
