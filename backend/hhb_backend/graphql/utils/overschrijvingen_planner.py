@@ -59,8 +59,6 @@ def make_overschrijving_dict(bedrag, date, afspraak):
     return {
         "id": None,
         "afspraak_id": afspraak['id'],
-        "rekenhouder": afspraak['tegen_rekening']['rekeninghouder'],
-        "iban": afspraak['tegen_rekening']['iban'],
         "beschrijving": afspraak['beschrijving'],
         "bedrag": bedrag,
         "datum": date,
