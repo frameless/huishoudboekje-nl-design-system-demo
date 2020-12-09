@@ -1,4 +1,4 @@
-import {Box, Button, Divider, FormLabel, Input, Select, Stack, Tooltip, useToast} from "@chakra-ui/react";
+import {Box, Button, Divider, FormLabel, Input, Stack, Tooltip, useToast} from "@chakra-ui/react";
 import moment from "moment";
 import React from "react";
 import DatePicker from "react-datepicker";
@@ -8,7 +8,7 @@ import {Redirect, useHistory, useParams} from "react-router-dom";
 import Routes from "../../config/routes";
 import {useGetOneBurgerQuery, useUpdateBurgerMutation} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
-import {formatBurgerName, Months, Regex} from "../../utils/things";
+import {formatBurgerName, Regex} from "../../utils/things";
 import BackButton from "../BackButton";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
 import Page from "../Layouts/Page";

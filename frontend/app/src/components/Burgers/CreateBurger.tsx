@@ -1,14 +1,13 @@
-import {Box, Button, Divider, FormLabel, Heading, Input, Select, Stack, Tooltip, useToast} from "@chakra-ui/react";
+import {Box, Button, Divider, FormLabel, Heading, Input, Stack, Tooltip, useToast} from "@chakra-ui/react";
 import moment from "moment";
 import React, {useState} from "react";
 import DatePicker from "react-datepicker";
-import {useInput, useIsMobile, useNumberInput, Validators} from "react-grapple";
+import {useInput, useIsMobile, Validators} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {useHistory} from "react-router-dom";
 import Routes from "../../config/routes";
-import {sampleData} from "../../config/sampleData/sampleData";
 import {useCreateBurgerMutation} from "../../generated/graphql";
-import {isDev, MOBILE_BREAKPOINT, Months, Regex} from "../../utils/things";
+import {MOBILE_BREAKPOINT, Regex} from "../../utils/things";
 import BackButton from "../BackButton";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
 
@@ -133,10 +132,6 @@ const CreateBurger = () => {
 	};
 
 	const isInvalid = (input) => (input.dirty || isSubmitted) && !input.isValid;
-
-	// const onChangeRekeningen = (newRekeningen) => {
-	// 	setRekeningen(newRekeningen)
-	// };
 
 	return (<>
 		<BackButton to={Routes.Burgers} />
