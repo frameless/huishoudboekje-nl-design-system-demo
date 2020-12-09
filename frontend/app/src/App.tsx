@@ -95,8 +95,7 @@ const App = () => {
 								<Route path={Routes.Organisaties} component={Organisaties} />
 								<Route path={Routes.EditAgreement()} component={EditAgreement} />
 								<Route path={Routes.Banking} component={Banking} />
-								{/*<Route path={ROUTEPATH} component={SETTINGS_COMPONENT} />*/}
-								<Route path={"/test"} component={Test} />
+
 								<Route exact path={Routes.NotFound} component={PageNotFound} />
 								<Route component={PageNotFound} />
 							</Switch>
