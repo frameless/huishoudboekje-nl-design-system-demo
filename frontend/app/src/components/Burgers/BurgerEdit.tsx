@@ -1,6 +1,8 @@
 import {Box, Button, Divider, FormLabel, Input, Select, Stack, Tooltip, useToast} from "@chakra-ui/react";
+import moment from "moment";
 import React from "react";
-import {useInput, useIsMobile, useNumberInput, Validators} from "react-grapple";
+import DatePicker from "react-datepicker";
+import {useInput, useIsMobile, Validators} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {Redirect, useHistory, useParams} from "react-router-dom";
 import Routes from "../../config/routes";
@@ -28,24 +30,12 @@ const BurgerEdit = () => {
 	const lastName = useInput({
 		validate: [Validators.required]
 	});
-	const dateOfBirth = {
-		day: useNumberInput({
-			validate: [(v) => new RegExp(/^[0-9]{1,2}$/).test(v.toString())],
-			placeholder: t("forms.burgers.fields.dateOfBirthDay"),
-			min: 1,
-			max: 31,
-		}),
-		month: useNumberInput({
-			validate: [(v) => new RegExp(/^[0-9]{1,2}$/).test(v.toString())],
-			placeholder: t("forms.burgers.fields.dateOfBirthMonth"),
-			min: 1, max: 12
-		}),
-		year: useNumberInput({
-			validate: [(v) => new RegExp(/^[0-9]{4}$/).test(v.toString())],
-			placeholder: t("forms.burgers.fields.dateOfBirthYear"),
-			max: (new Date()).getFullYear(), // No future births.
-		})
-	};
+	const dateOfBirth = useInput({
+		validate: [
+			(v: string) => new RegExp(Regex.Date).test(v),
+			(v: string) => moment(v, "L").isValid()
+		]
+	});
 	const mail = useInput({
 		validate: [Validators.required, Validators.email]
 	});
@@ -74,13 +64,7 @@ const BurgerEdit = () => {
 				initials.setValue(gebruiker.voorletters || "");
 				firstName.setValue(gebruiker.voornamen || "");
 				lastName.setValue(gebruiker.achternaam || "");
-
-				const {geboortedatum} = gebruiker;
-				if (geboortedatum) {
-					dateOfBirth.day.setValue(new Date(geboortedatum).getDate());
-					dateOfBirth.month.setValue(new Date(geboortedatum).getMonth() + 1);
-					dateOfBirth.year.setValue(new Date(geboortedatum).getFullYear());
-				}
+				dateOfBirth.setValue(moment(gebruiker.geboortedatum, "YYYY MM DD").format("L"));
 				mail.setValue(gebruiker.email || "");
 				street.setValue(gebruiker.straatnaam || "");
 				houseNumber.setValue(gebruiker.huisnummer || "");
@@ -100,9 +84,7 @@ const BurgerEdit = () => {
 			initials,
 			firstName,
 			lastName,
-			dateOfBirth.day,
-			dateOfBirth.month,
-			dateOfBirth.year,
+			dateOfBirth,
 			street,
 			houseNumber,
 			zipcode,
@@ -125,11 +107,7 @@ const BurgerEdit = () => {
 				voorletters: initials.value,
 				voornamen: firstName.value,
 				achternaam: lastName.value,
-				geboortedatum: [
-					dateOfBirth.year.value,
-					("0" + dateOfBirth.month.value).substr(-2, 2),
-					("0" + dateOfBirth.day.value).substr(-2, 2),
-				].join("-"),
+				geboortedatum: moment(dateOfBirth.value, "L").format("YYYY-MM-DD"),
 				straatnaam: street.value,
 				huisnummer: houseNumber.value,
 				postcode: zipcode.value,
@@ -167,12 +145,6 @@ const BurgerEdit = () => {
 							<Stack direction={isMobile ? "column" : "row"} spacing={2}>
 								<FormLeft title={t("forms.burgers.sections.personal.title")} helperText={t("forms.burgers.sections.personal.helperText")} />
 								<FormRight>
-									{/*<Stack spacing={1}>*/}
-									{/*	<FormLabel htmlFor={"bsn"}>{TRANSLATE}</FormLabel>*/}
-									{/*	<Tooltip label={TRANSLATE} aria-label={TRANSLATE} hasArrow placement={isMobile ? "top" : "left"}>*/}
-									{/*		<Input isInvalid={bsn.dirty && !bsn.isValid} {...bsn.bind} />*/}
-									{/*	</Tooltip>*/}
-									{/*</Stack>*/}
 									<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 										<Stack spacing={1} flex={1}>
 											<FormLabel htmlFor={"initials"}>{t("forms.burgers.fields.initials")}</FormLabel>
@@ -189,26 +161,13 @@ const BurgerEdit = () => {
 									</Stack>
 									<Stack spacing={1}>
 										<FormLabel htmlFor={"dateOfBirth"}>{t("forms.burgers.fields.dateOfBirth")}</FormLabel>
-										<Stack direction={"row"} maxW="100%">
-											<Box flex={1}>
-												<Input isInvalid={dateOfBirth.day.dirty && !dateOfBirth.day.isValid} {...dateOfBirth.day.bind} id="dateOfBirth-day" />
-											</Box>
-											<Box flex={2}>
-												<Select isInvalid={dateOfBirth.month.dirty && !dateOfBirth.month.isValid} {...dateOfBirth.month.bind} id="dateOfBirth-month"
-												        value={parseInt(dateOfBirth.month.value.toString()).toString()}>
-													{Months.map((m, i) => (
-														/* t("months.jan") t("months.feb") t("months.mrt") t("months.apr") t("months.may") t("months.jun")
-														 * t("months.jul") t("months.aug") t("months.sep") t("months.oct") t("months.nov") t("months.dec") */
-														<option key={i} value={i + 1}>{t("months." + m)}</option>
-													))}
-												</Select>
-											</Box>
-											<Box flex={1}>
-												<Input isInvalid={dateOfBirth.year.dirty && !dateOfBirth.year.isValid} {...dateOfBirth.year.bind} id="dateOfBirth-year" />
-											</Box>
-										</Stack>
+										<DatePicker selected={moment(dateOfBirth.value, "L").isValid() ? moment(dateOfBirth.value, "L").toDate() : null} dateFormat={"dd-MM-yyyy"}
+										            onChange={(value: Date) => {
+											            if (value) {
+												            dateOfBirth.setValue(moment(value).format("L"));
+											            }
+										            }} customInput={<Input type="text" isInvalid={dateOfBirth.dirty && !dateOfBirth.isValid} {...dateOfBirth.bind} />} />
 									</Stack>
-
 								</FormRight>
 							</Stack>
 

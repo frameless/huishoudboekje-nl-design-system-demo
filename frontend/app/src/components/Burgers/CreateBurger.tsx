@@ -1,5 +1,7 @@
 import {Box, Button, Divider, FormLabel, Heading, Input, Select, Stack, Tooltip, useToast} from "@chakra-ui/react";
+import moment from "moment";
 import React, {useState} from "react";
+import DatePicker from "react-datepicker";
 import {useInput, useIsMobile, useNumberInput, Validators} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {useHistory} from "react-router-dom";
@@ -30,24 +32,12 @@ const CreateBurger = () => {
 		defaultValue: "",
 		validate: [Validators.required]
 	});
-	const dateOfBirth = {
-		day: useNumberInput({
-			validate: [(v) => new RegExp(/^[0-9]{1,2}$/).test(v.toString())],
-			placeholder: t("forms.common.fields.dateDay"),
-			min: 1,
-			max: 31,
-		}),
-		month: useNumberInput({
-			validate: [(v) => new RegExp(/^[0-9]{1,2}$/).test(v.toString())],
-			placeholder: t("forms.common.fields.dateMonth"),
-			min: 1, max: 12
-		}),
-		year: useNumberInput({
-			validate: [(v) => new RegExp(/^[0-9]{4}$/).test(v.toString())],
-			placeholder: t("forms.common.fields.dateYear"),
-			max: (new Date()).getFullYear(), // No future births.
-		})
-	}
+	const dateOfBirth = useInput({
+		validate: [
+			(v: string) => new RegExp(Regex.Date).test(v),
+			(v: string) => moment(v, "L").isValid()
+		]
+	});
 	const street = useInput({
 		defaultValue: "",
 		validate: [Validators.required]
@@ -77,23 +67,6 @@ const CreateBurger = () => {
 
 	const [createBurger, $createBurger] = useCreateBurgerMutation();
 
-	const prePopulateForm = () => {
-		const c = sampleData.burgers[(Math.floor(Math.random() * sampleData.burgers.length))];
-
-		initials.setValue(c.initials);
-		firstName.setValue(c.firstName);
-		lastName.setValue(c.lastName);
-		dateOfBirth.day.setValue(c.dateOfBirth.split("-")[0]);
-		dateOfBirth.month.setValue(c.dateOfBirth.split("-")[1]);
-		dateOfBirth.year.setValue(c.dateOfBirth.split("-")[2]);
-		street.setValue(c.street);
-		houseNumber.setValue(c.houseNumber);
-		zipcode.setValue(c.zipcode);
-		city.setValue(c.city);
-		phoneNumber.setValue(c.phoneNumber.toString());
-		mail.setValue(c.mail);
-	}
-
 	const onSubmit = (e) => {
 		e.preventDefault();
 		setIsSubmitted(true);
@@ -102,9 +75,7 @@ const CreateBurger = () => {
 			initials,
 			firstName,
 			lastName,
-			dateOfBirth.day,
-			dateOfBirth.month,
-			dateOfBirth.year,
+			dateOfBirth,
 			street,
 			houseNumber,
 			zipcode,
@@ -122,14 +93,13 @@ const CreateBurger = () => {
 			return;
 		}
 
-		const geboorteDatum = new Date(Date.UTC(dateOfBirth.year.value, dateOfBirth.month.value - 1, dateOfBirth.day.value));
 		createBurger({
 			variables: {
 				input: {
 					voorletters: initials.value,
 					voornamen: firstName.value,
 					achternaam: lastName.value,
-					geboortedatum: geboorteDatum.toISOString().substring(0, 10),
+					geboortedatum: moment(dateOfBirth.value, "L").format("YYYY-MM-DD"),
 					straatnaam: street.value,
 					huisnummer: houseNumber.value,
 					postcode: zipcode.value,
@@ -174,10 +144,6 @@ const CreateBurger = () => {
 		<Stack spacing={5}>
 			<Heading size={"lg"}>{t("forms.burgers.title")}</Heading>
 
-			{isDev && (
-				<Button maxWidth={350} colorScheme={"yellow"} variant={"outline"} onClick={() => prePopulateForm()}>Formulier snel invullen met testdata</Button>
-			)}
-
 			<Box as={"form"} onSubmit={onSubmit}>
 				<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
 					<Stack direction={isMobile ? "column" : "row"} spacing={2}>
@@ -199,24 +165,12 @@ const CreateBurger = () => {
 							</Stack>
 							<Stack spacing={1}>
 								<FormLabel htmlFor={"dateOfBirth"}>{t("forms.burgers.fields.dateOfBirth")}</FormLabel>
-								<Stack direction={"row"} maxW="100%">
-									<Box flex={1}>
-										<Input isInvalid={isInvalid(dateOfBirth.day)} {...dateOfBirth.day.bind} id="dateOfBirth-day" />
-									</Box>
-									<Box flex={2}>
-										<Select isInvalid={isInvalid(dateOfBirth.month)} {...dateOfBirth.month.bind} id="dateOfBirth-month"
-										        value={parseInt(dateOfBirth.month.value.toString()).toString()}>
-											{Months.map((m, i) => (
-												/* t("months.jan") t("months.feb") t("months.mrt") t("months.apr") t("months.may") t("months.jun")
-                                                 * t("months.jul") t("months.aug") t("months.sep") t("months.oct") t("months.nov") t("months.dec") */
-												<option key={i} value={i + 1}>{t("months." + m)}</option>
-											))}
-										</Select>
-									</Box>
-									<Box flex={1}>
-										<Input isInvalid={isInvalid(dateOfBirth.year)} {...dateOfBirth.year.bind} id="dateOfBirth-year" />
-									</Box>
-								</Stack>
+								<DatePicker selected={moment(dateOfBirth.value, "L").isValid() ? moment(dateOfBirth.value, "L").toDate() : null} dateFormat={"dd-MM-yyyy"}
+								            onChange={(value: Date) => {
+									            if (value) {
+										            dateOfBirth.setValue(moment(value).format("L"));
+									            }
+								            }} customInput={<Input type="text" isInvalid={isInvalid(dateOfBirth)} {...dateOfBirth.bind} />} />
 							</Stack>
 						</FormRight>
 					</Stack>
