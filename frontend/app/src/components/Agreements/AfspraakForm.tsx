@@ -64,7 +64,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 	});
 	const endDate = useInput({
 		placeholder: moment().format("L"),
-		defaultValue: (moment(startDate.value, "L").isValid() ? moment(startDate.value, "L") : moment()).add(1, "year").format("L"),
+		defaultValue: (moment(startDate.value, "L").isValid() ? moment(startDate.value, "L") : moment()).add(1, "year").subtract(1, "day").format("L"),
 		validate: [(v: string) => moment(v, "L").isValid()],
 	});
 	const [isContinuous, _toggleContinuous] = useToggle(true);
@@ -347,10 +347,8 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 							{afspraakType === AfspraakType.Expense && (
 								<Stack direction={isMobile ? "column" : "row"} spacing={1} mt={2}>
 									<Stack isInline={true} alignItems={"center"} spacing={3}>
-										<Switch isChecked={isAutomatischeIncasso} onChange={() => toggleAutomatischeIncasso()}
-												id={"isAutomatischeIncasso"} />
-										<FormLabel mb={0}
-												   htmlFor={"isAutomatischeIncasso"}>{t("forms.agreements.fields.automatischeIncasso")}</FormLabel>
+										<Switch isChecked={isAutomatischeIncasso} onChange={() => toggleAutomatischeIncasso()} id={"isAutomatischeIncasso"} />
+										<FormLabel mb={0} htmlFor={"isAutomatischeIncasso"}>{t("forms.agreements.fields.automatischeIncasso")}</FormLabel>
 									</Stack>
 								</Stack>
 							)}
