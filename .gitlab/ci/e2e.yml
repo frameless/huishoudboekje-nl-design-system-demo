@@ -1,6 +1,9 @@
 .cypress:
   extends: .node
   stage: e2e
+  retry:
+    max: 2
+    when: script_failure
   image:
     name: ${DOCKER_PROXY}cypress/base:10
   variables:
@@ -45,6 +48,8 @@ cypress-review:
     - master
     - develop
     - acceptance
+    - nijmegen
+    - feature/213
 
 
 cypress-test:
