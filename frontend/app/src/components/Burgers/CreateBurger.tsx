@@ -215,9 +215,6 @@ const CreateBurger = () => {
 					<Divider />
 
 					{/* Todo: Directly add rekeningen when creating new Burger */}
-					{/*<Stack direction={isMobile ? "column" : "row"} spacing={2}>*/}
-					{/*	<RekeningenList width={"100%"} gebruiker={burger} onChange={onChangeRekeningen} defaultRekeninghouder={`${firstName.value} ${lastName.value}`.trim()}/>*/}
-					{/*</Stack>*/}
 
 					<Divider />
 

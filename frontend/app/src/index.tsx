@@ -3,6 +3,7 @@ import {ChakraProvider} from "@chakra-ui/react";
 import moment from "moment";
 import "moment/locale/nl";
 import React from "react";
+import "react-datepicker/dist/react-datepicker.min.css"
 import ReactDOM from "react-dom";
 import {BrowserRouter as Router} from "react-router-dom";
 import App from "./App";

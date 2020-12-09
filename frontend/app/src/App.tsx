@@ -16,7 +16,6 @@ import Sidebar from "./components/Sidebar";
 import SidebarContainer from "./components/Sidebar/SidebarContainer";
 import UserStatus from "./components/UserStatus";
 import Routes from "./config/routes";
-import Test from "./Test";
 import {useAuth} from "./utils/hooks";
 import {TABLET_BREAKPOINT} from "./utils/things";
 
