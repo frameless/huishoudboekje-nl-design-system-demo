@@ -8,7 +8,7 @@ from sepaxml import SepaTransfer
 from hhb_backend.graphql import settings
 
 
-def create_export_string(overschrijvingen, export) -> str:
+async def create_export_string(overschrijvingen, export) -> str:
     # TODO get overschrijvingen by export
 
     afspraken_ids = list(set([overschrijving['afspraak_id'] for overschrijving in overschrijvingen]))
@@ -27,14 +27,14 @@ def create_export_string(overschrijvingen, export) -> str:
     sepa = SepaTransfer(config, clean=True)
 
     for overschrijving in overschrijvingen:
-        afspraak = next(filter(lambda x: x['id'] == overschrijving['id'], afspraken), None)
+        afspraak = next(filter(lambda x: x['id'] == overschrijving['afspraak_id'], afspraken), None)
         tegen_rekening = next(filter(lambda x: x['id'] == afspraak['tegen_rekening_id'], tegen_rekeningen), None)
         payment = {
-            "name": tegen_rekening["rekenhouder"],
+            "name": tegen_rekening["rekeninghouder"],
             "IBAN": tegen_rekening["iban"],
             "BIC": "BANKNL2A", # TODO nodig??
             "amount": overschrijving['bedrag'],
-            "execution_date": datetime.strptime(overschrijving['datum'], '%Y-%m-%d'),
+            "execution_date": overschrijving['datum'],
             "description": afspraak['beschrijving'],
             # "endtoend_id": str(uuid.uuid1())  # optional
         }

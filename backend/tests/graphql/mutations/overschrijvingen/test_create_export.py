@@ -14,7 +14,6 @@ def test_create_export_success(client):
     $eindDatum: String) {
       createExportOverschrijvingen(startDatum: $startDatum, eindDatum:$eindDatum) {
         ok
-        export
       }
     }''',
             "variables": {'startDatum': '2020-10-10',
