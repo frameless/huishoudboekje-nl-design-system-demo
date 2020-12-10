@@ -230,7 +230,7 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }>
 					</Box>
 				)}
 				<Box flex={0} minWidth={120}>
-					<Currency value={bt.bedrag} />
+					<Currency minWidth={120} value={bt.bedrag} />
 				</Box>
 			</Stack>
 		</Box>

@@ -28,7 +28,7 @@ const BurgerDetail = () => {
 
 	const $burger = useGetOneBurgerQuery({
 		fetchPolicy: "no-cache",
-		variables: {id: parseInt(id)},
+		variables: {id: parseInt(id)}
 	});
 	const [deleteBurger, $deleteBurger] = useDeleteBurgerMutation({variables: {id: parseInt(id)}});
 
@@ -76,7 +76,6 @@ const BurgerDetail = () => {
 					<Section><BurgerProfileView burger={gebruiker} /></Section>
 					<Section><BurgerRekeningenView burger={gebruiker} refetch={$burger.refetch} /></Section>
 					<Section><BurgerAfsprakenView burger={gebruiker} refetch={$burger.refetch} /></Section>
-					<Section><BurgerOverschrijvingenView burger={gebruiker} /></Section>
 				</Page>
 			</>)
 		}}

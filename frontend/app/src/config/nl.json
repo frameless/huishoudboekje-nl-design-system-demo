@@ -152,6 +152,17 @@
         {
           "title": "Betalingen",
           "helperText": "Geef aan wanneer en hoeveel betalingen verwacht worden."
+        },
+        {
+          "title": "Verwachting",
+          "helperText": "Dit is een overzicht van de verwachte betalingen bij deze afspraak.",
+          "startDate": "Startdatum",
+          "endDate": "Einddatum",
+          "prognosisText_incoming": "Er wordt 1 inkomende overschrijving verwacht tussen {{start}} en {{end}}.",
+          "prognosisText_outgoing": "Er wordt 1 uitgaande overschrijving verwacht tussen {{start}} en {{end}}.",
+          "prognosisText_none": "Er worden geen overschrijvingen verwacht.",
+          "prognosisText_incoming_plural": "Er worden {{count}} inkomende overschrijvingen verwacht tussen {{start}} en {{end}}.",
+          "prognosisText_outgoing_plural": "Er worden {{count}} uitgaande overschrijvingen verwacht tussen {{start}} en {{end}}."
         }
       ],
       "fields": {
@@ -256,6 +267,14 @@
   "burgers": {
     "burgers": "Burgers"
   },
+  "sections": {
+    "burgers": {
+      "overschrijvingen": {
+        "title": "Overschrijvingen",
+        "detailText": "Alle geëxporteerde en geprognotiseerde overschrijvingen voor deze burger."
+      }
+    }
+  },
   "organizations": {
     "organization": "Organisatie",
     "organizations": "Organisaties"
@@ -322,5 +341,6 @@
   },
   "unknown": "Onbekend",
   "active": "Actief",
-  "inactive": "Inactief"
+  "inactive": "Inactief",
+  "status": "Status"
 }
