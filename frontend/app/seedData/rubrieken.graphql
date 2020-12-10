@@ -1,8 +1,5 @@
 mutation importRubrieken {
 
-    rubriek1: createRubriek(naam: "Gas", grootboekrekeningId: "WBedHuiGweGas"){
-        ok
-    }
     rubriek2: createRubriek(naam: "Gas", grootboekrekeningId: "WBedHuiGweGas"){
         ok
     }
