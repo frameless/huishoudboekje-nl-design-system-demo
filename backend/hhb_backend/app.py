@@ -97,7 +97,7 @@ def create_app(config_name=os.getenv('APP_SETTINGS', None) or 'hhb_backend.confi
 
         export_file = io.BytesIO(xml_data.encode('utf-8'))
         response = make_response(send_file(export_file, attachment_filename=xml_filename))
-        response.headers['Content-Disposition'] = 'attachment'
+        response.headers['Content-Disposition'] = f'attachment; filename="{xml_filename}"'
         return response
 
     return app
