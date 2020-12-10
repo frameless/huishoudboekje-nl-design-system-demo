@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 import logging
 import os
+import io
+
 from pathlib import Path
 from pprint import pformat
 from urllib.parse import urlparse
@@ -85,6 +87,21 @@ def create_app(config_name=os.getenv('APP_SETTINGS', None) or 'hhb_backend.confi
         oidc.logout()
         session.clear()
         return make_response(('ok', {'Content-Type': 'text/plain'}))
+
+    @app.route('/export/<export_id>')
+    def export_overschrijvingen(export_id):
+        """ Send xml overschijvingen file to client """
+
+        # TODO replace 2 lines below with actual data/filename retrieved by function
+        # something like:
+        # xml_data, xml_filename = get_export(export_id)
+        xml_data = f"<xml>{export_id}</xml>"
+        xml_filename = f"{export_id}.xml"
+
+        export_file = io.BytesIO(xml_data.encode('utf-8'))
+        response = make_response(send_file(export_file, attachment_filename=xml_filename))
+        response.headers['Content-Disposition'] = 'attachment'
+        return response
 
     return app
 
