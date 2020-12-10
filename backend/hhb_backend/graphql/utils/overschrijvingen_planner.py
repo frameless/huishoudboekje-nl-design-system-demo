@@ -42,7 +42,7 @@ def get_normal_afspraak_overschrijvingen(input: PlannedOverschijvingenInput, sta
         payment_date = payment_date + input.interval
     return payments
 
-def get_doorlopende_afspraak_overschrijvingen(input: PlannedOverschijvingenInput, start_datum: date , eind_datum=None):
+def get_doorlopende_afspraak_overschrijvingen(input: PlannedOverschijvingenInput, start_datum: date , eind_datum: date=None):
     payments = {}
     payment_date = input.afspraak_start_datum
     while payment_date <= eind_datum:
