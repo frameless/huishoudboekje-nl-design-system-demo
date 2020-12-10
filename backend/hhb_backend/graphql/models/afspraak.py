@@ -1,6 +1,6 @@
 """ Afspraak model as used in GraphQL queries """
 from datetime import date
-
+from dateutil.parser import isoparse
 import graphene
 from flask import request
 import hhb_backend.graphql.models.gebruiker as gebruiker
@@ -12,7 +12,8 @@ import hhb_backend.graphql.models.journaalpost as journaalpost
 import hhb_backend.graphql.models.rubriek as rubriek
 import hhb_backend.graphql.models.overschrijving as overschrijving
 from hhb_backend.graphql.scalars.bedrag import Bedrag
-from hhb_backend.graphql.utils import convert_hhb_interval_to_dict, planned_overschrijvingen
+from hhb_backend.graphql.utils import convert_hhb_interval_to_dict
+from hhb_backend.graphql.utils.overschrijvingen_planner import PlannedOverschijvingenInput, get_planned_overschrijvingen
 
 class Interval(graphene.ObjectType):
     jaren = graphene.Int()
@@ -50,9 +51,23 @@ class Afspraak(graphene.ObjectType):
     )
 
     async def resolve_overschrijvingen(root, info, **kwargs):
-        results = []
-        results += planned_overschrijvingen(root, **kwargs)
-        return results
+        planner_input = PlannedOverschijvingenInput(
+            root.get("start_datum"), 
+            root.get("interval"),
+            root.get("aantal_betalingen"),
+            root.get("bedrag")
+        )
+        expected_overschrijvingen = get_planned_overschrijvingen(planner_input, **kwargs)
+        known_overschrijvingen = {}
+        overschrijvingen = await request.dataloader.overschrijvingen_by_afspraak.load(root.get("id"))
+        for o in overschrijvingen:
+            known_overschrijvingen[o["datum"]] = o
+        for datum, o in known_overschrijvingen.items():
+            o["datum"] = isoparse(o["datum"]).date()
+        for o_date in expected_overschrijvingen:
+            if o_date in known_overschrijvingen:
+                expected_overschrijvingen[o_date] = known_overschrijvingen[o_date]
+        return expected_overschrijvingen.values()
 
     async def resolve_rubriek(root, info):
         """ Get rubriek when requested """

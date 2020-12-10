@@ -83,15 +83,32 @@ def test_afspraak_overschrijvingen_planner_normal(client):
             'aantal_betalingen': 10,
             'bedrag': 1011
         }]})
+        rm.get(f"{settings.HHB_SERVICES_URL}/overschrijvingen/?filter_afspraken=1", json={'data': [
+            {
+                'id': 1,
+                "afspraak_id": 1,
+                'datum': "2020-01-01",
+                'bedrag': 101,
+                'export_id': 1,
+                'bank_transaction_id': 1
+            },
+            {
+                'id': 2,
+                "afspraak_id": 1,
+                'datum': "2020-02-01",
+                'bedrag': 101,
+                'export_id': 2,
+                'bank_transaction_id': None
+            }
+        ]})
         response = client.post(
             "/graphql",
             json={"query": '''{ afspraken(ids:[1]) { overschrijvingen(startDatum: "2020-01-01", eindDatum: "2021-01-01") { datum bedrag status } } }'''},
             content_type='application/json'
         )
-        print(response.json)
         assert response.json['data']['afspraken'][0]['overschrijvingen'] == [
-            {'datum': '2020-01-01', 'bedrag': '1.01', 'status': 'VERWACHTING'},
-            {'datum': '2020-02-01', 'bedrag': '1.01', 'status': 'VERWACHTING'},
+            {'datum': '2020-01-01', 'bedrag': '1.01', 'status': 'GEREED'},
+            {'datum': '2020-02-01', 'bedrag': '1.01', 'status': 'IN_BEHANDELING'},
             {'datum': '2020-03-01', 'bedrag': '1.01', 'status': 'VERWACHTING'},
             {'datum': '2020-04-01', 'bedrag': '1.01', 'status': 'VERWACHTING'},
             {'datum': '2020-05-01', 'bedrag': '1.01', 'status': 'VERWACHTING'},
@@ -112,6 +129,24 @@ def test_afspraak_overschrijvingen_planner_no_einddatum(client):
             'aantal_betalingen': 10,
             'bedrag': 1011
         }]})
+        rm.get(f"{settings.HHB_SERVICES_URL}/overschrijvingen/?filter_afspraken=1", json={'data': [
+            {
+                'id': 1,
+                "afspraak_id": 1,
+                'datum': "2020-01-01",
+                'bedrag': 101,
+                'export_id': 1,
+                'bank_transaction_id': 1
+            },
+            {
+                'id': 2,
+                "afspraak_id": 1,
+                'datum': "2020-02-01",
+                'bedrag': 101,
+                'export_id': 2,
+                'bank_transaction_id': None
+            }
+        ]})
         response = client.post(
             "/graphql",
             json={"query": '''{ afspraken(ids:[1]) { overschrijvingen(startDatum: "2020-01-01") { datum bedrag status } } }'''},
@@ -119,7 +154,7 @@ def test_afspraak_overschrijvingen_planner_no_einddatum(client):
         )
         print(response.json)
         assert response.json['data']['afspraken'][0]['overschrijvingen'] == [
-            {'datum': '2020-01-01', 'bedrag': '1.01', 'status': 'VERWACHTING'}
+            {'datum': '2020-01-01', 'bedrag': '1.01', 'status': 'GEREED'}
         ]
 
 
@@ -133,6 +168,24 @@ def test_afspraak_overschrijvingen_planner_doorlopened(client):
             'aantal_betalingen': 0,
             'bedrag': 101
         }]})
+        rm.get(f"{settings.HHB_SERVICES_URL}/overschrijvingen/?filter_afspraken=1", json={'data': [
+            {
+                'id': 1,
+                "afspraak_id": 1,
+                'datum': "2020-01-01",
+                'bedrag': 101,
+                'export_id': 1,
+                'bank_transaction_id': 1
+            },
+            {
+                'id': 2,
+                "afspraak_id": 1,
+                'datum': "2020-02-01",
+                'bedrag': 101,
+                'export_id': 2,
+                'bank_transaction_id': None
+            }
+        ]})
         response = client.post(
             "/graphql",
             json={"query": '''{ afspraken(ids:[1]) { overschrijvingen(startDatum: "2020-02-01", eindDatum: "2021-01-01") { datum bedrag status } } }'''},
@@ -140,7 +193,7 @@ def test_afspraak_overschrijvingen_planner_doorlopened(client):
         )
         print(response.json)
         assert response.json['data']['afspraken'][0]['overschrijvingen'] == [
-            {'datum': '2020-02-01', 'bedrag': '1.01', 'status': 'VERWACHTING'},
+            {'datum': '2020-02-01', 'bedrag': '1.01', 'status': 'IN_BEHANDELING'},
             {'datum': '2020-03-01', 'bedrag': '1.01', 'status': 'VERWACHTING'},
             {'datum': '2020-04-01', 'bedrag': '1.01', 'status': 'VERWACHTING'},
             {'datum': '2020-05-01', 'bedrag': '1.01', 'status': 'VERWACHTING'},
