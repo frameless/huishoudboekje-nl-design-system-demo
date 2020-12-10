@@ -15,6 +15,9 @@
   tags:
     - cg
     - docker
+  retry:
+    max: 2
+    when: script_failure
 
 
 frontend-lint:
@@ -33,6 +36,9 @@ frontend-lint:
   tags:
     - cg
     - docker
+  retry:
+    max: 2
+    when: script_failure
   image:
     name: $CI_REGISTRY_IMAGE/$PYTHON_POSTGRES:$IMAGE_TAG
   variables:

@@ -4,6 +4,9 @@ build:
   tags:
     - cg
     - shell
+  retry:
+    max: 2
+    when: script_failure
   variables:
     IMAGE_PREFIX: "$CI_REGISTRY/$CI_PROJECT_PATH/"
   before_script:
@@ -23,6 +26,9 @@ build-helm:
   tags:
     - cg
     - docker
+  retry:
+    max: 2
+    when: script_failure
   image:
     name: ${DOCKER_PROXY}alpine/helm:latest
     entrypoint: [""]

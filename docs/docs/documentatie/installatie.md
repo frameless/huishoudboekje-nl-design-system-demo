@@ -13,7 +13,7 @@ Voor beproevingen kan dat met elk kubernetes cluster of lokaal met [minikube](./
 - Download het installatie pakket op https://gitlab.com/commonground/huishoudboekje/app-new/-/jobs/artifacts/master/browse/huishoudboekje?job=build-helm
 - Zet het logo bestand klaar in SVG formaat
 - Bepaal op welke hostnaam huishoudboekje bereikbaar moet worden
-- Haal de gegevens op voor de OpenID Connect koppeling met b.v. ADFS
+- Haal de gegevens op voor de OpenID Connect koppeling met b.v. Azure AD
 - Bepaal de huidige versie tag van Huishoudboekje, deze staat rechtsbovenaan op https://gitlab.com/commonground/huishoudboekje/app-new/-/tree/master
 
 ### Huisstijl
@@ -25,8 +25,17 @@ definiëren. Zie het [thema van de fictieve gemeente Sloothuizen](https://gitlab
 ```shell script
 LOGO_SVG="<logo.svg>"
 DOMAIN="<huishoudboekje.sloothuizen.nl>"
-OIDC_SERVER="<https://adfs.sloothuizen.nl/oidc>"
-OIDC_SECRET="<random string>"
+# voor Azure AD 
+SLOOTHUIZEN_OIDC_TENANT_ID="1234aaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
+SLOOTHUIZEN_OIDC_CLIENT_ID="4567aaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
+SLOOTHUIZEN_OIDC_CLIENT_SECRET="beafaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
+OIDC_DEX="false"
+OIDC_ISSUER="https://login.microsoftonline.com/${SLOOTHUIZEN_OIDC_TENANT_ID}/v2.0"
+OIDC_CLIENT_ID="$SLOOTHUIZEN_OIDC_CLIENT_ID"
+OIDC_CLIENT_SECRET="$SLOOTHUIZEN_OIDC_CLIENT_SECRET"
+OIDC_AUTHORIZATION_ENDPOINT="https://login.microsoftonline.com/${SLOOTHUIZEN_OIDC_TENANT_ID}/oauth2/v2.0/authorize"
+OIDC_TOKEN_ENDPOINT="https://login.microsoftonline.com/${SLOOTHUIZEN_OIDC_TENANT_ID}/oauth2/v2.0/token"
+OIDC_USERINFO_ENDPOINT="https://graph.microsoft.com/oidc/userinfo"
 IMAGE_TAG=latest
 NAMESPACE=huishoudboekje
 
