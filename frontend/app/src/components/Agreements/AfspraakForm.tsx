@@ -384,7 +384,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 								</Stack>
 								{generatedSampleOverschrijvingen.length > 0 ? (
 									<Stack spacing={2}>
-										<Text>{t("forms.agreements.sections.2.prognosisText", {
+										<Text>{t(afspraakType === AfspraakType.Expense ? "forms.agreements.sections.2.prognosisText_outgoing" : "forms.agreements.sections.2.prognosisText_incoming", {
 											count: generatedSampleOverschrijvingen.length,
 											start: moment(generatedSampleOverschrijvingen[0].datum).format("L"),
 											end: moment(generatedSampleOverschrijvingen[generatedSampleOverschrijvingen.length - 1].datum).format("L"),

@@ -158,9 +158,11 @@
           "helperText": "Dit is een overzicht van de verwachte betalingen bij deze afspraak.",
           "startDate": "Startdatum",
           "endDate": "Einddatum",
-          "prognosisText": "Er wordt 1 overschrijving verwacht tussen {{start}} en {{end}}.",
+          "prognosisText_incoming": "Er wordt 1 inkomende overschrijving verwacht tussen {{start}} en {{end}}.",
+          "prognosisText_outgoing": "Er wordt 1 uitgaande overschrijving verwacht tussen {{start}} en {{end}}.",
           "prognosisText_none": "Er worden geen overschrijvingen verwacht.",
-          "prognosisText_plural": "Er worden {{count}} overschrijvingen verwacht tussen {{start}} en {{end}}."
+          "prognosisText_incoming_plural": "Er worden {{count}} inkomende overschrijvingen verwacht tussen {{start}} en {{end}}.",
+          "prognosisText_outgoing_plural": "Er worden {{count}} uitgaande overschrijvingen verwacht tussen {{start}} en {{end}}."
         }
       ],
       "fields": {
