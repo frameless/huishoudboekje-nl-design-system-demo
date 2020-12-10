@@ -53,7 +53,7 @@
         --set "dex.enabled=${OIDC_DEX}" \
         --set "dex.ingress.hosts[0]=dex-sloothuizen-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN" \
         --set "dex.config.issuer=${OIDC_ISSUER}" \
-        --set "dex.config.staticClients[0].secret=${OIDC_SECRET}" \
+        --set "dex.config.staticClients[0].secret=${OIDC_CLIENT_SECRET}" \
         --set "dex.config.staticClients[0].redirectURIs[0]=https://$HHB_HOST/api/custom_oidc_callback" \
         --set "dex.config.staticClients[0].redirectURIs[1]=http://localhost:3000/api/custom_oidc_callback"
     - |
