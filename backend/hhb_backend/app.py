@@ -2,9 +2,6 @@
 import logging
 import os
 import io
-
-from pathlib import Path
-from pprint import pformat
 from urllib.parse import urlparse
 
 import itsdangerous
