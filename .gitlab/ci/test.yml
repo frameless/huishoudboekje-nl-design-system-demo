@@ -20,10 +20,11 @@
     when: script_failure
 
 
-frontend-lint:
+frontend-test:
   extends: .node
   script:
     - npm run lint
+    - npm run test
 
 
 # This template requires the following:
