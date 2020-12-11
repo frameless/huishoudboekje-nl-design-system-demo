@@ -212,7 +212,7 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }>
 											<Stack direction={"row"}>
 												<Select {...rubric.bind} isInvalid={!rubric.isValid}>
 													<option value={undefined}>{t("forms.banking.fields.rubricChoose")}</option>
-													{rubrieken.filter(r => r.grootboekrekening?.id !== undefined).map((r: Rubriek) => (
+													{rubrieken.filter(r => r.grootboekrekening && r.grootboekrekening.id).map((r: Rubriek) => (
 														/* Fix this ! somehow */
 														<option key={r.id} value={r.grootboekrekening!.id}>{r.naam}</option>
 													))}
@@ -232,7 +232,7 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }>
 											<Stack direction={"row"}>
 												<Select {...afspraak.bind} isInvalid={!afspraak.isValid}>
 													<option value={undefined}>{t("forms.banking.fields.afspraakChoose")}</option>
-													{afspraken.filter(a => a.gebruiker !== undefined).map((a: Afspraak) => (
+													{afspraken.filter(a => a.gebruiker).map((a: Afspraak) => (
 														/* Fix this ! somehow */
 														<option key={a.id} value={a.id}>
 															{[a.organisatie?.weergaveNaam, "-", formatBurgerName(a.gebruiker!)].join(" ")}
