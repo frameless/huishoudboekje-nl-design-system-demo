@@ -4,6 +4,7 @@ import graphene
 from .afspraken import AfspraakQuery, AfsprakenQuery
 from .bank_transactions import BankTransactionQuery, BankTransactionsQuery
 from .customer_statement_messages import CustomerStatementMessageQuery, CustomerStatementMessagesQuery
+from .exports import ExportQuery, ExportsQuery
 from .gebruikers import GebruikersQuery, GebruikerQuery
 from .grootboekrekeningen import GrootboekrekeningQuery, GrootboekrekeningenQuery
 from .journaalposten import JournaalpostQuery, JournaalpostenQuery
@@ -36,6 +37,8 @@ class RootQuery(graphene.ObjectType):
     configuratie = ConfiguratieQuery.return_type
     configuraties = ConfiguratiesQuery.return_type
     planned_overschrijvingen = PlannedOverschijvingenQuery.return_type
+    export = ExportQuery.return_type
+    exports = ExportsQuery.return_type
 
     async def resolve_gebruiker(root, info, **kwargs):
         return await GebruikerQuery.resolver(root, info, **kwargs)
@@ -99,3 +102,9 @@ class RootQuery(graphene.ObjectType):
 
     async def resolve_planned_overschrijvingen(root, info, **kwargs):
         return await PlannedOverschijvingenQuery.resolver(root, info, **kwargs)
+
+    async def resolve_export(root, info, **kwargs):
+        return await ExportQuery.resolver(root, info, **kwargs)
+
+    async def resolve_exports(root, info, **kwargs):
+        return await ExportsQuery.resolver(root, info, **kwargs)

@@ -1,4 +1,6 @@
 import graphene
+from flask import request
+
 from hhb_backend.graphql.scalars.bedrag import Bedrag
 import hhb_backend.graphql.models.afspraak as afspraak
 import hhb_backend.graphql.models.export as export
@@ -23,9 +25,8 @@ class Overschrijving(graphene.ObjectType):
             return await request.dataloader.afspraken_by_id.load(root.get('afspraak_id'))
 
     async def resolve_export(root, info):
-        if root.get('afspraak_id'):
-            # TODO export dataloader
-            return {}
+        if root.get('export_id'):
+            return await request.dataloader.exports_by_id.load(root.get('export_id'))
 
     def resolve_status(root, info):
         if root.get("bank_transaction_id", None):
