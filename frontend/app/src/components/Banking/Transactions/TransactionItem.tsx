@@ -5,6 +5,7 @@ import {
 	Button,
 	Divider,
 	FormLabel,
+	Heading,
 	IconButton,
 	Modal,
 	ModalBody,
@@ -14,28 +15,32 @@ import {
 	ModalOverlay,
 	Select,
 	Stack,
-	Tabs, Tab, TabPanels, TabPanel,
+	Tab,
 	TabList,
+	TabPanel,
+	TabPanels,
+	Tabs,
 	Text,
 	Tooltip,
 	useDisclosure,
-	useToast,
-	Heading
+	useToast
 } from "@chakra-ui/react";
 import {friendlyFormatIBAN} from "ibantools";
 import React, {useContext} from "react";
 import {useInput, useIsMobile, Validators} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {
+	Afspraak,
 	BankTransaction,
 	Rubriek,
 	useCreateJournaalpostGrootboekrekeningMutation,
 	useDeleteJournaalpostMutation,
+	useGetAllAfsprakenQuery,
 	useGetAllRubriekenQuery,
 	useUpdateJournaalpostGrootboekrekeningMutation
 } from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
-import {formatBurgerName, dateFormat} from "../../../utils/things";
+import {dateFormat, formatBurgerName} from "../../../utils/things";
 import Currency from "../../Currency";
 import {Label} from "../../Forms/FormLeftRight";
 import {TransactionsContext} from "./index";
@@ -47,17 +52,20 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }>
 	const {isOpen, onOpen, onClose} = useDisclosure();
 	const {refetch} = useContext(TransactionsContext);
 
-	const rubric = useInput({
-		validate: [Validators.required]
-	});
-	const afspraak = useInput({
-		validate: [Validators.required]
-	});
+	const rubric = useInput();
+	const afspraak = useInput<number>();
 
 	const $rubrics = useGetAllRubriekenQuery({
 		onCompleted: () => {
-			if (bt.journaalpost?.grootboekrekening) {
+			if (bt.journaalpost?.grootboekrekening?.id) {
 				rubric.setValue(bt.journaalpost?.grootboekrekening.id);
+			}
+		}
+	});
+	const $afspraken = useGetAllAfsprakenQuery({
+		onCompleted: () => {
+			if (bt.journaalpost?.afspraak?.id) {
+				afspraak.setValue(bt.journaalpost?.afspraak?.id);
 			}
 		}
 	});
@@ -204,8 +212,9 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }>
 											<Stack direction={"row"}>
 												<Select {...rubric.bind} isInvalid={!rubric.isValid}>
 													<option value={undefined}>{t("forms.banking.fields.rubricChoose")}</option>
-													{rubrieken.map((r: IRubriek) => (
-														<option key={r.id} value={r.grootboekrekening.id}>{r.naam}</option>
+													{rubrieken.filter(r => r.grootboekrekening?.id !== undefined).map((r: Rubriek) => (
+														/* Fix this ! somehow */
+														<option key={r.id} value={r.grootboekrekening!.id}>{r.naam}</option>
 													))}
 												</Select>
 												{bt.journaalpost && (
@@ -223,9 +232,10 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }>
 											<Stack direction={"row"}>
 												<Select {...afspraak.bind} isInvalid={!afspraak.isValid}>
 													<option value={undefined}>{t("forms.banking.fields.afspraakChoose")}</option>
-													{afspraken.map((a: IAfspraak) => (
+													{afspraken.filter(a => a.gebruiker !== undefined).map((a: Afspraak) => (
+														/* Fix this ! somehow */
 														<option key={a.id} value={a.id}>
-															{[a.organisatie?.weergaveNaam, "-", formatBurgerName(a.gebruiker)].join(" ")}
+															{[a.organisatie?.weergaveNaam, "-", formatBurgerName(a.gebruiker!)].join(" ")}
 														</option>
 													))}
 												</Select>
