@@ -14,10 +14,11 @@ build:
     - export COMPONENT_COMMIT_HASH=$(git describe --always --abbrev=0 --match "NOT A TAG")
     - export DOCKER_CONFIG=/tmp/docker-config-$CI_JOB_ID
     - docker login -u gitlab-ci-token --password-stdin $CI_REGISTRY <<< $CI_JOB_TOKEN
-    - docker login -u "$CI_DEPENDENCY_PROXY_USER" --password-stdin "$CI_DEPENDENCY_PROXY_SERVER" <<< "$CI_DEPENDENCY_PROXY_PASSWORD"
+#    - docker login -u "$CI_DEPENDENCY_PROXY_USER" --password-stdin "$CI_DEPENDENCY_PROXY_SERVER" <<< "$CI_DEPENDENCY_PROXY_PASSWORD"
   script:
-    - env | sort | grep DEPENDENCY
-    - docker-compose build --build-arg DOCKER_PROXY="${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/" --parallel --pull
+#    - env | sort | grep DEPENDENCY
+#    - docker-compose build --build-arg DOCKER_PROXY="${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/" --parallel --pull
+    - docker-compose build --parallel --pull
     - docker-compose push
   only:
     - branches@commonground/huishoudboekje/app-new
