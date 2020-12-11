@@ -1,16 +1,14 @@
 import i18Next from "i18next";
-import {initReactI18next, Trans} from "react-i18next";
+import {initReactI18next} from "react-i18next";
+
+const defaultNamespace = "translation";
 
 /* Add languages here */
-const languages = {
-	nl: require("./nl.json"),
+const resources = {
+	nl: {
+		translation: require("../lang/nl.translation.json")
+	},
 };
-
-/* Don't change anything below this line */
-const resources = {};
-Object.keys(languages).forEach((lang) => {
-	resources[lang] = {translation: languages[lang]};
-});
 
 i18Next.use(initReactI18next).init({
 	resources,
@@ -19,7 +17,5 @@ i18Next.use(initReactI18next).init({
 	interpolation: {
 		escapeValue: false,
 	},
-	defaultNS: "translation",
+	defaultNS: defaultNamespace,
 });
-
-export {Trans};
