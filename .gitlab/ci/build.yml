@@ -17,7 +17,7 @@ build:
     - docker login -u "$CI_DEPENDENCY_PROXY_USER" --password-stdin "$CI_DEPENDENCY_PROXY_SERVER" <<< "$CI_DEPENDENCY_PROXY_PASSWORD"
   script:
     - env | sort | grep DEPENDENCY
-    - docker-compose build --build-arg DOCKER_PROXY="$CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX" --parallel --pull
+    - docker-compose build --build-arg DOCKER_PROXY="${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/" --parallel --pull
     - docker-compose push
   only:
     - branches@commonground/huishoudboekje/app-new
