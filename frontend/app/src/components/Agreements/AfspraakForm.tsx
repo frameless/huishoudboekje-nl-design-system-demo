@@ -1,4 +1,21 @@
-import {Box, BoxProps, Button, Divider, FormLabel, Input, InputGroup, InputLeftElement, Select, Stack, Switch, Text, useToast} from "@chakra-ui/react";
+import {
+	Box,
+	BoxProps,
+	Button,
+	Divider,
+	Editable,
+	EditableInput,
+	EditablePreview,
+	FormLabel,
+	Input,
+	InputGroup,
+	InputLeftElement,
+	Select,
+	Stack,
+	Switch,
+	Text,
+	useToast
+} from "@chakra-ui/react";
 import moment from "moment";
 import "moment-recur-ts";
 import React, {useEffect, useState} from "react";
@@ -6,6 +23,7 @@ import DatePicker from "react-datepicker";
 import {useInput, useIsMobile, useNumberInput, useToggle, Validators} from "react-grapple";
 import {UseInput} from "react-grapple/dist/hooks/useInput";
 import {useTranslation} from "react-i18next";
+import {Trans} from "../../config/i18n";
 import {Afspraak, Gebruiker, Organisatie, useGetAllOrganisatiesQuery, useGetAllRubriekenQuery} from "../../generated/graphql";
 import {AfspraakPeriod, AfspraakType, IntervalType} from "../../models";
 import Queryable from "../../utils/Queryable";
@@ -378,32 +396,38 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 						<Stack direction={isMobile ? "column" : "row"} spacing={2}>
 							<FormLeft title={t("forms.agreements.sections.2.title")} helperText={t("forms.agreements.sections.2.helperText")} />
 							<FormRight>
-								<Stack direction={isMobile ? "column-reverse" : "row"} alignItems={isMobile ? "flex-start" : "flex-end"}>
-									<Stack spacing={1} flex={1}>
-										<FormLabel htmlFor={"startDate2"}>{t("forms.agreements.sections.2.startDate")}</FormLabel>
-										<DatePicker selected={moment(startDate2.value, "L").isValid() ? moment(startDate2.value, "L").toDate() : null} dateFormat={"dd-MM-yyyy"}
-										            onChange={(value: Date) => {
-											            if (value) {
-												            startDate2.setValue(moment(value).format("L"));
-											            }
-										            }} customInput={<Input type="text" isInvalid={isInvalid(startDate2)} {...startDate2.bind} />} />
+								<Stack spacing={5}>
+									<Stack direction={"row"} alignItems={"center"} spacing={0}>
+										<Trans count={generatedSampleOverschrijvingen.length}
+										       i18nKey={afspraakType === AfspraakType.Expense ? "forms.agreements.sections.2.prognosisText_outgoing" : "forms.agreements.sections.2.prognosisText_incoming"}
+										       components={[
+											       <Text fontWeight={"bolder"} px={1}>{generatedSampleOverschrijvingen.length}</Text>,
+											       <DatePicker selected={moment(startDate2.value, "L").isValid() ? moment(startDate2.value, "L").toDate() : null}
+											                   dateFormat={"dd-MM-yyyy"}
+											                   onChange={(value: Date) => {
+												                   if (value) {
+													                   startDate2.setValue(moment(value).format("L"));
+												                   }
+											                   }} customInput={(
+												       <Editable defaultValue={startDate2.value}>
+													       <EditablePreview display={"inline"} px={2} mx={1} bg={"gray.100"} _hover={{ bg: "gray.200" }} />
+													       <EditableInput display={"inline"} px={1} mx={1} width={120} isInvalid={isInvalid(startDate2)} {...startDate2.bind} />
+												       </Editable>
+											       )} />,
+											       <DatePicker selected={moment(endDate.value, "L").isValid() ? moment(endDate.value, "L").toDate() : null}
+											                   dateFormat={"dd-MM-yyyy"}
+											                   onChange={(value: Date) => {
+												                   if (value) {
+													                   endDate.setValue(moment(value).format("L"));
+												                   }
+											                   }} customInput={(
+												       <Editable defaultValue={endDate.value}>
+													       <EditablePreview display={"inline"} px={2} mx={1} bg={"gray.100"} _hover={{ bg: "gray.200" }} />
+													       <EditableInput display={"inline"} px={1} mx={1} width={120} isInvalid={isInvalid(endDate)} {...endDate.bind} />
+												       </Editable>
+											       )} />
+										       ]} />
 									</Stack>
-									<Stack spacing={1} flex={1}>
-										<FormLabel htmlFor={"endDate"}>{t("forms.agreements.sections.2.endDate")}</FormLabel>
-										<DatePicker selected={moment(endDate.value, "L").isValid() ? moment(endDate.value, "L").toDate() : null} dateFormat={"dd-MM-yyyy"}
-										            onChange={(value: Date) => {
-											            if (value) {
-												            endDate.setValue(moment(value).format("L"));
-											            }
-										            }} customInput={<Input type="text" isInvalid={isInvalid(endDate)} {...endDate.bind} />} />
-									</Stack>
-								</Stack>
-								<Stack spacing={2}>
-									<Text>{t(afspraakType === AfspraakType.Expense ? "forms.agreements.sections.2.prognosisText_outgoing" : "forms.agreements.sections.2.prognosisText_incoming", {
-										count: generatedSampleOverschrijvingen.length,
-										start: moment(startDate2.value).format("L"),
-										end: moment(endDate.value).format("L"),
-									})}</Text>
 									<OverschrijvingenListView overschrijvingen={generatedSampleOverschrijvingen} />
 								</Stack>
 							</FormRight>
