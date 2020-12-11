@@ -2,7 +2,7 @@
 .deploy-app:
   stage: deploy
   needs:
-    - build
+    - build-cg
   image: registry.gitlab.com/commonground/core/review-app-deployer:latest
   environment:
     name: $CI_COMMIT_REF_SLUG
@@ -87,7 +87,7 @@
 .deploy-docs:
   stage: deploy
   needs:
-    - build
+    - build-cg
   image: registry.gitlab.com/commonground/core/review-app-deployer:latest
   variables:
     DOCS_HOST: docs-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN
