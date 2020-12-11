@@ -153,8 +153,7 @@
                 }
             },
             "fields": {
-                "rubricChoose": "Kies een rubriek",
-                "afspraakChoose": "__MISSING-TRANSLATION__"
+                "rubricChoose": "Kies een rubriek"
             }
         },
         "burgers": {
@@ -190,9 +189,9 @@
                 "city": "Plaatsnaam",
                 "phoneNumber": "Telefoonnummer",
                 "mail": "E-mailadres",
-                "dateOfBirthDay": "__MISSING-TRANSLATION__",
-                "dateOfBirthMonth": "__MISSING-TRANSLATION__",
-                "dateOfBirthYear": "__MISSING-TRANSLATION__"
+                "dateOfBirthDay": "Dag",
+                "dateOfBirthMonth": "Maand",
+                "dateOfBirthYear": "Jaar"
             },
             "tooltips": {
                 "zipcode": "Invoer zonder spaties. Voorbeeld: 1234AB",
@@ -258,22 +257,22 @@
         "amount": "Bedrag",
         "description": "Omschrijving"
     },
+    "months": {
+        "jan": "Januari",
+        "feb": "Februari",
+        "mrt": "Maart",
+        "apr": "April",
+        "may": "Mei",
+        "jun": "Juni",
+        "jul": "Juli",
+        "aug": "Augustus",
+        "sep": "September",
+        "oct": "Oktober",
+        "nov": "November",
+        "dec": "December"
+    },
     "burgers": {
         "burgers": "Burgers"
-    },
-    "months": {
-        "jan": "__MISSING-TRANSLATION__",
-        "feb": "__MISSING-TRANSLATION__",
-        "mrt": "__MISSING-TRANSLATION__",
-        "apr": "__MISSING-TRANSLATION__",
-        "may": "__MISSING-TRANSLATION__",
-        "jun": "__MISSING-TRANSLATION__",
-        "jul": "__MISSING-TRANSLATION__",
-        "aug": "__MISSING-TRANSLATION__",
-        "sep": "__MISSING-TRANSLATION__",
-        "oct": "__MISSING-TRANSLATION__",
-        "nov": "__MISSING-TRANSLATION__",
-        "dec": "__MISSING-TRANSLATION__"
     },
     "organizations": {
         "organizations": "Organisaties"
