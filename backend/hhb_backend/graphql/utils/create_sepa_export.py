@@ -21,7 +21,7 @@ async def create_export_string(overschrijvingen, export) -> str:
         "name": "Huishoudboekje " + get_config_value("gemeente_naam"),
         "IBAN": get_config_value("gemeente_iban"),
         "BIC": get_config_value("gemeente_bic"),
-        "batch": True,
+        "batch": False,
         "currency": "EUR",  # ISO 4217
     }
     sepa = SepaTransfer(config, clean=True)
@@ -32,7 +32,7 @@ async def create_export_string(overschrijvingen, export) -> str:
         payment = {
             "name": tegen_rekening["rekeninghouder"],
             "IBAN": tegen_rekening["iban"],
-            "BIC": "BANKNL2A", # TODO nodig??
+            #"BIC": "BANKNL2A", # TODO nodig??
             "amount": overschrijving['bedrag'],
             "execution_date": overschrijving['datum'],
             "description": afspraak['beschrijving'],

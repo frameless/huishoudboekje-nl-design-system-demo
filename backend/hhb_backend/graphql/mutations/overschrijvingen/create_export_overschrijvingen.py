@@ -82,6 +82,7 @@ class CreateExportOverschrijvingen(graphene.Mutation):
                 raise GraphQLError(f"Upstream API responded: {gebruiker_response.json()}")
 
         # Creer export bestand en return deze. # TODO deze moet weg uitdeze call
-        export_file_xml = create_export_string(future_overschrijvingen, export_object)
+        export_file_xml = await create_export_string(future_overschrijvingen, export_object)
+        print(export_file_xml)
 
         return CreateExportOverschrijvingen(export=export_object, ok=True)
