@@ -4,6 +4,7 @@
     name: ${DOCKER_PROXY}node:lts-alpine
   variables:
     NPM_CACHE_DIR: "${CI_PROJECT_DIR}/.cache/npm"
+    CYPRESS_INSTALL_BINARY: "0"
   needs: []
   cache:
     key: "${CI_COMMIT_REF_SLUG}__${CI_JOB_NAME}"
