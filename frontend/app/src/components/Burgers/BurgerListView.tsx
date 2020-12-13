@@ -9,7 +9,7 @@ import {Gebruiker} from "../../generated/graphql";
 import {formatBurgerName} from "../../utils/things";
 import GridCard from "../GridCard";
 
-const BurgerListView: React.FC<BoxProps & {burgers: Gebruiker[], showAddButton?: boolean}> = ({burgers, showAddButton = false, ...props}) => {
+const BurgerListView: React.FC<BoxProps & { burgers: Gebruiker[], showAddButton?: boolean }> = ({burgers, showAddButton = false, ...props}) => {
 	const {t} = useTranslation();
 	const {push} = useHistory();
 	const isMobile = useIsMobile(450);
@@ -18,9 +18,8 @@ const BurgerListView: React.FC<BoxProps & {burgers: Gebruiker[], showAddButton?:
 		<Grid maxWidth={"100%"} gridTemplateColumns={["repeat(1, 1fr)", "repeat(2, 1fr)", "repeat(3, 1fr)", "repeat(4, 1fr)", "repeat(6, 1fr)"]} gap={5}>
 			{showAddButton && (
 				<Box>
-					<Button colorScheme={"blue"} borderStyle={"dashed"} variant={"outline"} leftIcon={<AddIcon />}
-							w="100%" h="100%" onClick={() => push(Routes.CreateBurger)} borderRadius={5}
-							p={5}>{t("actions.add")}</Button>
+					<Button colorScheme={"blue"} borderStyle={"dashed"} variant={"outline"} leftIcon={<AddIcon />} w="100%" h="100%" onClick={() => push(Routes.CreateBurger)}
+					        borderRadius={5} p={5}>{t("actions.add")}</Button>
 				</Box>
 			)}
 			{burgers.map((g, i) => (
