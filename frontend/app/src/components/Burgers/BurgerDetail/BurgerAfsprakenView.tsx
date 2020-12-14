@@ -6,7 +6,7 @@ import {useTranslation} from "react-i18next";
 import {useHistory} from "react-router-dom";
 import Routes from "../../../config/routes";
 import {Gebruiker, useDeleteAfspraakMutation} from "../../../generated/graphql";
-import AfspraakItem from "../../Agreements/AfpraakItem";
+import AfspraakItem from "../../Agreements/AfspraakItem";
 import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
 
 const BurgerAfsprakenView: React.FC<StackProps & { burger: Gebruiker, refetch: VoidFunction }> = ({burger, refetch, ...props}) => {
