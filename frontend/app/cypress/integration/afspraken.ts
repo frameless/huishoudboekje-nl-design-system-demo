@@ -80,7 +80,7 @@ describe("Afspraken CRUD", () => {
 		cy.get("div").should("contain", a1.bedrag);
 	});
 
-	it("Creates a afspraak", () => {
+	it("Creates an afspraak", () => {
 		// Go to create afspraak page
 		const b = sampleBurgers[0];
 		const a = sampleBurgers[0].afspraken[0];
@@ -140,7 +140,7 @@ describe("Afspraken CRUD", () => {
 		cy.get(".chakra-toast").should("contain", "succesvol");
 	});
 
-	it("Deletes a afspraak", () => {
+	it("Deletes an afspraak", () => {
 		const b = sampleBurgers[0];
 
 		// Go to burgers list page
