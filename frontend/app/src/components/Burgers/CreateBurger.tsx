@@ -1,4 +1,4 @@
-import {Box, Button, Divider, FormLabel, Heading, Input, Stack, Tooltip, useToast} from "@chakra-ui/react";
+import {Box, Button, Divider, FormLabel, Input, Stack, Tooltip, useToast} from "@chakra-ui/react";
 import moment from "moment";
 import React, {useState} from "react";
 import DatePicker from "react-datepicker";
@@ -10,6 +10,7 @@ import {useCreateBurgerMutation} from "../../generated/graphql";
 import {MOBILE_BREAKPOINT, Regex} from "../../utils/things";
 import BackButton from "../BackButton";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
+import Page from "../Layouts/Page";
 
 // Todo: add more detailed error message per field?
 const CreateBurger = () => {
@@ -133,12 +134,8 @@ const CreateBurger = () => {
 
 	const isInvalid = (input) => (input.dirty || isSubmitted) && !input.isValid;
 
-	return (<>
-		<BackButton to={Routes.Burgers} />
-
-		<Stack spacing={5}>
-			<Heading size={"lg"}>{t("forms.burgers.title")}</Heading>
-
+	return (
+		<Page title={t("forms.burgers.title")} backButton={<BackButton to={Routes.Burgers} />}>
 			<Box as={"form"} onSubmit={onSubmit}>
 				<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
 					<Stack direction={isMobile ? "column" : "row"} spacing={2}>
@@ -228,8 +225,8 @@ const CreateBurger = () => {
 					</Stack>
 				</Stack>
 			</Box>
-		</Stack>
-	</>);
+		</Page>
+	);
 };
 
 export default CreateBurger;

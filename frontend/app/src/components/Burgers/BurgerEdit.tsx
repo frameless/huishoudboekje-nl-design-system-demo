@@ -134,12 +134,10 @@ const BurgerEdit = () => {
 		});
 	};
 
-	return (<>
-		<BackButton to={Routes.Burger(parseInt(id))} />
-
+	return (
 		<Queryable query={$gebruiker} error={<Redirect to={Routes.NotFound} />}>{(data) => {
 			return (
-				<Page title={formatBurgerName(data.gebruiker)}>
+				<Page title={formatBurgerName(data.gebruiker)} backButton={<BackButton to={Routes.Burger(parseInt(id))} />}>
 					<Box as={"form"} onSubmit={onSubmit}>
 						<Section>
 							<Stack direction={isMobile ? "column" : "row"} spacing={2}>
@@ -230,7 +228,7 @@ const BurgerEdit = () => {
 			);
 		}}
 		</Queryable>
-	</>);
+	);
 };
 
 export default BurgerEdit;

@@ -51,15 +51,13 @@ const EditAgreement = () => {
 	};
 
 	return (
-		<Queryable query={$afspraak}>{({afspraak}: {afspraak: Afspraak}) => {
+		<Queryable query={$afspraak}>{({afspraak}: { afspraak: Afspraak }) => {
 			return (
-				<Page backButton={<BackButton to={Routes.Burger(afspraak.gebruiker?.id)} />} title={t("forms.agreements.titleEdit")}>
-					{/* Todo: fix this ! somehow */}
+				<Page title={t("forms.agreements.titleEdit")} backButton={<BackButton to={Routes.Burger(afspraak.gebruiker?.id)} />}>
 					<AfspraakForm afspraak={afspraak} loading={$updateAfspraak.loading} onSave={onSaveAfspraak} />
 				</Page>
 			);
-		}}
-		</Queryable>
+		}}</Queryable>
 	);
 };
 

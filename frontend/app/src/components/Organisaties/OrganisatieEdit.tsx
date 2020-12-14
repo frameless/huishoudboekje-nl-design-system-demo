@@ -4,7 +4,7 @@ import {useInput, useIsMobile, Validators} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {Redirect, useHistory, useParams} from "react-router-dom";
 import Routes from "../../config/routes";
-import {useGetOneOrganisatieQuery, useUpdateOrganisatieMutation} from "../../generated/graphql";
+import {Organisatie, useGetOneOrganisatieQuery, useUpdateOrganisatieMutation} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
 import {Regex} from "../../utils/things";
 import BackButton from "../BackButton";
@@ -119,8 +119,8 @@ const OrganisatieEdit = () => {
 	const isInvalid = (input) => input.dirty && !input.isValid;
 
 	return (
-		<Queryable query={$organisatie} error={<Redirect to={Routes.NotFound} />}>{({organisatie}) => (
-			<Page backButton={<BackButton to={Routes.Organisatie(parseInt(id))} />} title={organisatie.weergaveNaam}>
+		<Queryable query={$organisatie} error={<Redirect to={Routes.NotFound} />}>{({organisatie}: { organisatie: Organisatie }) => (
+			<Page backButton={<BackButton to={Routes.Organisatie(parseInt(id))} />} title={organisatie.weergaveNaam || ""}>
 				<Box as={"form"} onSubmit={onSubmit}>
 					<Section>
 						<Stack direction={isMobile ? "column" : "row"} spacing={2}>

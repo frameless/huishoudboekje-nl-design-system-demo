@@ -70,6 +70,14 @@
         "backToHome": "Terug naar de hoofdpagina"
     },
     "interval": {
+        "every-day": "Elke dag",
+        "every-day_plural": "Elke {{count}} dagen",
+        "every-week": "Elke week",
+        "every-week_plural": "Elke {{count}} weken",
+        "every-month": "Elke maand",
+        "every-month_plural": "Elke {{count}} maanden",
+        "every-year": "Elk jaar",
+        "every-year_plural": "Elke {{count}} jaar",
         "once": "Eenmalig",
         "every": "Elk(e)",
         "choose": "Kies een periode",

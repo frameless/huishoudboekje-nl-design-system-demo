@@ -7,13 +7,11 @@ import {
 	AlertDialogHeader,
 	AlertDialogOverlay,
 	Button,
-	Heading,
 	IconButton,
 	Menu,
 	MenuButton,
 	MenuItem,
 	MenuList,
-	Stack,
 	useToast,
 } from "@chakra-ui/react";
 import React, {createContext, useRef} from "react";
@@ -25,6 +23,7 @@ import {Organisatie, useDeleteOrganisatieMutation, useGetOneOrganisatieQuery} fr
 import Queryable from "../../utils/Queryable";
 import BackButton from "../BackButton";
 import DeadEndPage from "../DeadEndPage";
+import Page from "../Layouts/Page";
 import OrganisatieDetailView from "./Views/OrganisatieDetailView";
 import OrganisatieRekeningenView from "./Views/OrganisatieRekeningenView";
 
@@ -52,8 +51,6 @@ const OrganisatieDetail = () => {
 
 	return (
 		<OrganizationDetailContext.Provider value={{refresh: $organisatie.refetch}}>
-			<BackButton to={Routes.Organisaties} />
-
 			<Queryable query={$organisatie}>{({organisatie}: { organisatie: Organisatie }) => {
 				const onConfirmDeleteDialog = () => {
 					deleteOrganization().then(() => {
@@ -82,34 +79,30 @@ const OrganisatieDetail = () => {
 				}
 
 				return (
-					<Stack spacing={5}>
-						<Stack direction={"row"} justifyContent={"flex-start"} alignItems={"center"} spacing={3}>
-							<Heading size={"lg"}>{organisatie.weergaveNaam}</Heading>
-
-							<AlertDialog isOpen={deleteDialogOpen} leastDestructiveRef={cancelDeleteRef} onClose={onCloseDeleteDialog}>
-								<AlertDialogOverlay />
-								<AlertDialogContent>
-									<AlertDialogHeader fontSize="lg" fontWeight="bold">{t("messages.organizations.deleteTitle")}</AlertDialogHeader>
-									<AlertDialogBody>{t("messages.organizations.deleteQuestion", {name: organisatie.weergaveNaam})}</AlertDialogBody>
-									<AlertDialogFooter>
-										<Button ref={cancelDeleteRef} onClick={onCloseDeleteDialog}>{t("actions.cancel")}</Button>
-										<Button isLoading={deleteLoading} colorScheme="red" onClick={onConfirmDeleteDialog} ml={3}>{t("actions.delete")}</Button>
-									</AlertDialogFooter>
-								</AlertDialogContent>
-							</AlertDialog>
-
-							<Menu>
-								<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label="Open menu" />
-								<MenuList>
-									<MenuItem onClick={onClickEdit}>{t("actions.edit")}</MenuItem>
-									<MenuItem onClick={onClickDelete}>{t("actions.delete")}</MenuItem>
-								</MenuList>
-							</Menu>
-						</Stack>
+					<Page title={organisatie.weergaveNaam || ""} backButton={<BackButton to={Routes.Organisaties} />} menu={(
+						<Menu>
+							<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label="Open menu" />
+							<MenuList>
+								<MenuItem onClick={onClickEdit}>{t("actions.edit")}</MenuItem>
+								<MenuItem onClick={onClickDelete}>{t("actions.delete")}</MenuItem>
+							</MenuList>
+						</Menu>
+					)}>
+						<AlertDialog isOpen={deleteDialogOpen} leastDestructiveRef={cancelDeleteRef} onClose={onCloseDeleteDialog}>
+							<AlertDialogOverlay />
+							<AlertDialogContent>
+								<AlertDialogHeader fontSize="lg" fontWeight="bold">{t("messages.organizations.deleteTitle")}</AlertDialogHeader>
+								<AlertDialogBody>{t("messages.organizations.deleteQuestion", {name: organisatie.weergaveNaam})}</AlertDialogBody>
+								<AlertDialogFooter>
+									<Button ref={cancelDeleteRef} onClick={onCloseDeleteDialog}>{t("actions.cancel")}</Button>
+									<Button isLoading={deleteLoading} colorScheme="red" onClick={onConfirmDeleteDialog} ml={3}>{t("actions.delete")}</Button>
+								</AlertDialogFooter>
+							</AlertDialogContent>
+						</AlertDialog>
 
 						<OrganisatieDetailView organisatie={organisatie} />
 						<OrganisatieRekeningenView organisatie={organisatie} />
-					</Stack>
+					</Page>
 				);
 			}}
 			</Queryable>

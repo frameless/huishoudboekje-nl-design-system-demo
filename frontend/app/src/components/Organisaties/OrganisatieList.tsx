@@ -1,5 +1,5 @@
 import {AddIcon, CloseIcon, SearchIcon} from "@chakra-ui/icons";
-import {Button, IconButton, Input, InputGroup, InputLeftElement, InputRightElement, Stack} from "@chakra-ui/react";
+import {Button, IconButton, Input, InputGroup, InputLeftElement, InputRightElement} from "@chakra-ui/react";
 import React, {useEffect, useState} from "react";
 import {useInput} from "react-grapple";
 import {useTranslation} from "react-i18next";
@@ -10,7 +10,7 @@ import Queryable from "../../utils/Queryable";
 import {searchFields} from "../../utils/things";
 import DeadEndPage from "../DeadEndPage";
 import Page from "../Layouts/Page";
-import OrganisatieListView from "./OrganisatieListView";
+import OrganisatieListView from "./Views/OrganisatieListView";
 
 const OrganisatieList = () => {
 	const {t} = useTranslation();
@@ -56,26 +56,22 @@ const OrganisatieList = () => {
 			if (organisaties.length === 0) {
 				return (
 					<DeadEndPage message={t("messages.organizations.addHint", {buttonLabel: t("actions.add")})}>
-						<Button size={"sm"} colorScheme={"primary"} variant={"solid"} leftIcon={<AddIcon />}
-						        onClick={() => push(Routes.CreateOrganisatie)}>{t("actions.add")}</Button>
+						<Button size={"sm"} colorScheme={"primary"} variant={"solid"} leftIcon={<AddIcon />} onClick={() => push(Routes.CreateOrganisatie)}>{t("actions.add")}</Button>
 					</DeadEndPage>
 				);
 			}
 
 			return (
 				<Page title={t("organizations.organizations")} right={(
-					<Stack direction={"row"} spacing={5}>
-						<InputGroup>
-							<InputLeftElement><SearchIcon color={"gray.300"} /></InputLeftElement>
-							<Input type={"text"} {...search.bind} bg={"white"} onKeyDown={onKeyDownOnSearchField} />
-							{search.value.length > 0 && (
-								<InputRightElement>
-									<IconButton onClick={() => search.clear()} size={"xs"} variant={"link"} icon={<CloseIcon />} aria-label={t("actions.cancel")}
-									            color={"gray.300"} />
-								</InputRightElement>
-							)}
-						</InputGroup>
-					</Stack>
+					<InputGroup>
+						<InputLeftElement><SearchIcon color={"gray.300"} /></InputLeftElement>
+						<Input type={"text"} {...search.bind} bg={"white"} onKeyDown={onKeyDownOnSearchField} />
+						{search.value.length > 0 && (
+							<InputRightElement>
+								<IconButton size={"xs"} variant={"link"} icon={<CloseIcon />} aria-label={t("actions.cancel")} color={"gray.300"} onClick={() => search.clear()} />
+							</InputRightElement>
+						)}
+					</InputGroup>
 				)}>
 					{filteredOrganisaties.length === 0 ? (
 						<DeadEndPage message={t("messages.organizations.noSearchResults")}>

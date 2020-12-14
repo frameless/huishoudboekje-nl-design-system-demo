@@ -16,6 +16,7 @@ const AfspraakItem: React.FC<BoxProps & { afspraak: Afspraak, onDelete?: (id: nu
 	const [deleteConfirm, setDeleteConfirm] = useState<boolean>(false);
 
 	const intervalString = (): string => {
+		/* t("interval.every-day", { count }) t("interval.every-week", { count }) t("interval.every-month", { count }) t("interval.every-year", { count }) */
 		const parsedInterval = XInterval.parse(a.interval);
 
 		if (!parsedInterval) {
@@ -79,9 +80,9 @@ const AfspraakItem: React.FC<BoxProps & { afspraak: Afspraak, onDelete?: (id: nu
 					<IconButton variant={"ghost"} size={"sm"} icon={<EditIcon />} aria-label={t("actions.edit")} onClick={onClickEditButton} />
 					{onDelete && (<>
 						{deleteConfirm && <IconButton variant={"solid"} size={"xs"} icon={<CloseIcon />} colorScheme={"gray"}
-						                              mr={2} aria-label={t("actions.delete")} onClick={onClickDeleteCancel} />}
+						                              mr={2} aria-label={t("actions.cancel")} onClick={onClickDeleteCancel} />}
 						<IconButton variant={deleteConfirm ? "solid" : "ghost"} size={"xs"} icon={deleteConfirm ? <CheckIcon /> : <DeleteIcon />}
-						            colorScheme={deleteConfirm ? "red" : "gray"} aria-label={t("actions.delete")} onClick={onClickDeleteButton} />
+						            colorScheme={deleteConfirm ? "red" : "gray"} aria-label={t("actions.delete")} data-cy={deleteConfirm ? "deleteConfirmButton2" : "deleteConfirmButton1"} onClick={onClickDeleteButton} />
 					</>)}
 				</Box>
 			</Stack>

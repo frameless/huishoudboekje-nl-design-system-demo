@@ -1,15 +1,15 @@
-import {Box, Button, Divider, FormLabel, Heading, Input, Stack, Tooltip, useToast} from "@chakra-ui/react";
+import {Box, Button, Divider, FormLabel, Input, Stack, Tooltip, useToast} from "@chakra-ui/react";
 import React from "react";
 import {useInput, useIsMobile, useToggle, Validators} from "react-grapple";
 import {UseInput} from "react-grapple/dist/hooks/useInput";
 import {useTranslation} from "react-i18next";
 import {useHistory} from "react-router-dom";
 import Routes from "../../config/routes";
-import {sampleData} from "../../config/sampleData/sampleData";
 import {useCreateOrganisatieMutation} from "../../generated/graphql";
-import {isDev, MOBILE_BREAKPOINT, Regex} from "../../utils/things";
+import {MOBILE_BREAKPOINT, Regex} from "../../utils/things";
 import BackButton from "../BackButton";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
+import Page from "../Layouts/Page";
 
 // Todo: add more detailed error message per field?
 const CreateOrganisatie = () => {
@@ -50,18 +50,6 @@ const CreateOrganisatie = () => {
 	});
 
 	const [createOrganisatie, $createOrganisatie] = useCreateOrganisatieMutation();
-
-	const prePopulateForm = () => {
-		const c = sampleData.organisaties[Math.floor(Math.random() * sampleData.organisaties.length)];
-
-		kvkNumber.setValue(c.kvkNumber.toString());
-		companyName.setValue(c.companyName);
-		displayName.setValue(c.displayName);
-		street.setValue(c.street);
-		houseNumber.setValue(c.houseNumber);
-		zipcode.setValue(c.zipcode);
-		city.setValue(c.city);
-	}
 
 	const onSubmit = (e) => {
 		e.preventDefault();
@@ -121,16 +109,8 @@ const CreateOrganisatie = () => {
 
 	const isInvalid = (input: UseInput) => (input.dirty || isSubmitted) && !input.isValid;
 
-	return (<>
-		<BackButton to={Routes.Organisaties} />
-
-		<Stack spacing={5}>
-			<Heading size={"lg"}>{t("forms.organizations.title")}</Heading>
-
-			{isDev && (
-				<Button maxWidth={350} colorScheme={"yellow"} variant={"outline"} onClick={() => prePopulateForm()}>Formulier snel invullen met testdata</Button>
-			)}
-
+	return (
+		<Page title={t("forms.organizations.title")} backButton={<BackButton to={Routes.Organisaties} />}>
 			<Box as={"form"} onSubmit={onSubmit}>
 				<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
 					<Stack direction={isMobile ? "column" : "row"} spacing={2}>
@@ -201,8 +181,8 @@ const CreateOrganisatie = () => {
 					</Stack>
 				</Stack>
 			</Box>
-		</Stack>
-	</>);
+		</Page>
+	);
 };
 
 export default CreateOrganisatie;
