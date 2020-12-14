@@ -1,12 +1,12 @@
+import {act, screen} from "@testing-library/react";
 import React from "react";
 import {render, unmountComponentAtNode} from "react-dom";
-import {act, screen} from "@testing-library/react";
-import {Gebruiker} from "../../generated/graphql";
-import BurgerListView from "./BurgerListView";
-import { formatBurgerName } from "../../utils/things";
+import BurgerListView from "../components/Burgers/BurgerListView";
+import {Gebruiker} from "../generated/graphql";
+import {formatBurgerName} from "../utils/things";
 
-jest.mock("react-i18next", () => require("../../testing-utils/mock-hooks").reactI18NextMock());
-jest.mock("react-router-dom", () => require("../../testing-utils/mock-hooks").reactRouterDomMock());
+jest.mock("react-i18next", () => require("./utils/mock-hooks").reactI18NextMock());
+jest.mock("react-router-dom", () => require("./utils/mock-hooks").reactRouterDomMock());
 
 let container: HTMLDivElement | null = null;
 
