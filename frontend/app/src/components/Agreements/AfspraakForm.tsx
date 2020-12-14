@@ -1,10 +1,28 @@
-import {Box, BoxProps, Button, Divider, FormLabel, Input, InputGroup, InputLeftElement, Select, Stack, Switch, Text, useToast} from "@chakra-ui/react";
+import {
+	Box,
+	BoxProps,
+	Button,
+	Divider,
+	Editable,
+	EditableInput,
+	EditablePreview,
+	FormLabel,
+	Input,
+	InputGroup,
+	InputLeftElement,
+	Select,
+	Stack,
+	Switch,
+	Text,
+	useToast
+} from "@chakra-ui/react";
 import moment from "moment";
 import "moment-recur-ts";
 import React, {useEffect, useState} from "react";
+import DatePicker from "react-datepicker";
 import {useInput, useIsMobile, useNumberInput, useToggle, Validators} from "react-grapple";
 import {UseInput} from "react-grapple/dist/hooks/useInput";
-import {useTranslation} from "react-i18next";
+import {useTranslation, Trans} from "react-i18next";
 import {Afspraak, Gebruiker, Organisatie, useGetAllOrganisatiesQuery, useGetAllRubriekenQuery} from "../../generated/graphql";
 import {AfspraakPeriod, AfspraakType, IntervalType} from "../../models";
 import Queryable from "../../utils/Queryable";
@@ -14,7 +32,7 @@ import {FormLeft, FormRight} from "../Forms/FormLeftRight";
 import RadioButtonGroup from "../Layouts/RadioButtons/RadioButtonGroup";
 import OverschrijvingenListView from "../Overschrijvingen/OverschrijvingenListView";
 
-type AfspraakFormProps = {afspraak?: Afspraak, onSave: (data) => void, burger?: Gebruiker, loading: boolean};
+type AfspraakFormProps = { afspraak?: Afspraak, onSave: (data) => void, burger?: Gebruiker, loading: boolean };
 const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave, loading = false, ...props}) => {
 	const {t} = useTranslation();
 	const toast = useToast();
@@ -78,7 +96,6 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 		validate: [(v) => new RegExp(/^[0-9]+$/).test(v.toString())],
 	});
 	const intervalType = useInput<IntervalType>({
-		defaultValue: IntervalType.Month,
 		validate: [(v) => Object.values(IntervalType).includes(v)],
 	});
 	const intervalNumber = useInput({
@@ -174,7 +191,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 			...rubriekId.value && {rubriekId: rubriekId.value},
 			bedrag: amount.value,
 			kenmerk: searchTerm.value,
-			startDatum: moment(startDate.value, "DD MM YYYY").format("YYYY-MM-DD"),
+			startDatum: moment(startDate.value, "L").format("YYYY-MM-DD"),
 			interval: isRecurring ? XInterval.create(intervalType.value, intervalNumber.value) : XInterval.empty,
 			aantalBetalingen: !isContinuous ? nTimes.value : 0,
 			actief: isActive,
@@ -215,7 +232,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 						<FormLeft title={t("forms.agreements.sections.0.title")} helperText={t("forms.agreements.sections.0.helperText")} />
 						<FormRight>
 							<RadioButtonGroup name={"afspraakType"} onChange={onChangeAfspraakType} defaultValue={AfspraakType.Expense} value={afspraakType}
-											  options={afspraakTypeOptions} />
+							                  options={afspraakTypeOptions} />
 
 							<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 								<Stack spacing={1} flex={1}>
@@ -239,7 +256,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 							<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 								<Stack spacing={1} flex={1}>
 									<FormLabel htmlFor={"organisatieId"}>{t("forms.agreements.fields.organization")}</FormLabel>
-									<Queryable query={$organisaties}>{({organisaties = []}: {organisaties: Organisatie[]}) => {
+									<Queryable query={$organisaties}>{({organisaties = []}: { organisaties: Organisatie[] }) => {
 										return (
 											<Select {...organisatieId.bind} isInvalid={isInvalid(organisatieId)} id="organizationId" value={organisatieId.value}>
 												<option>{t("forms.agreements.fields.organizationChoose")}</option>
@@ -254,7 +271,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 								</Stack>
 								<Stack spacing={1} flex={1}>
 									<FormLabel htmlFor={"rekeningId"}>{t("forms.agreements.fields.bankAccount")}</FormLabel>
-									<Queryable query={$organisaties}>{({organisaties = []}: {organisaties: Organisatie[]}) => {
+									<Queryable query={$organisaties}>{({organisaties = []}: { organisaties: Organisatie[] }) => {
 										const organisatieRekeningen = organisaties.find(o => o.id === parseInt(organisatieId.value))?.rekeningen || [];
 
 										return (
@@ -299,7 +316,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 
 							<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 								<RadioButtonGroup name={"isRecurring"} onChange={(val) => toggleRecurring(val === AfspraakPeriod.Periodic)}
-												  value={isRecurring ? AfspraakPeriod.Periodic : AfspraakPeriod.Once} options={isRecurringOptions} />
+								                  value={isRecurring ? AfspraakPeriod.Periodic : AfspraakPeriod.Once} options={isRecurringOptions} />
 							</Stack>
 
 							{isRecurring && (
@@ -309,6 +326,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 											<FormLabel htmlFor={"interval"}>{t("interval.every")}</FormLabel>
 											<Input type={"number"} min={1} {...intervalNumber.bind} width={100} id={"interval"} />
 											<Select {...intervalType.bind} id="interval" value={intervalType.value}>
+												<option value={""}>{t("interval.choose")}</option>
 												<option value={"day"}>{t("interval.day", {count: parseInt(intervalNumber.value)})}</option>
 												<option value={"week"}>{t("interval.week", {count: parseInt(intervalNumber.value)})}</option>
 												<option value={"month"}>{t("interval.month", {count: parseInt(intervalNumber.value)})}</option>
@@ -322,7 +340,12 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 							<Stack direction={isMobile ? "column" : "row"} spacing={1}>
 								<Stack spacing={1} flex={1}>
 									<FormLabel htmlFor={"startDate"}>{isRecurring ? t("forms.agreements.fields.startDate") : t("forms.common.fields.date")}</FormLabel>
-									<Input isInvalid={isInvalid(startDate)} {...startDate.bind} id="startDate" />
+									<DatePicker selected={moment(startDate.value, "L").isValid() ? moment(startDate.value, "L").toDate() : null} dateFormat={"dd-MM-yyyy"}
+									            onChange={(value: Date) => {
+										            if (value) {
+											            startDate.setValue(moment(value).format("L"));
+										            }
+									            }} customInput={<Input type="text" isInvalid={isInvalid(startDate)} {...startDate.bind} />} />
 								</Stack>
 							</Stack>
 
@@ -372,30 +395,41 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 						<Stack direction={isMobile ? "column" : "row"} spacing={2}>
 							<FormLeft title={t("forms.agreements.sections.2.title")} helperText={t("forms.agreements.sections.2.helperText")} />
 							<FormRight>
-								<Stack direction={isMobile ? "column-reverse" : "row"} alignItems={isMobile ? "flex-start" : "flex-end"}>
-									<Stack spacing={1} flex={1}>
-										<FormLabel htmlFor={"startDate2"}>{t("forms.agreements.sections.2.startDate")}</FormLabel>
-										<Input isInvalid={isInvalid(startDate2)} {...startDate2.bind} id={"startDate2"} />
+								<Stack spacing={5}>
+									<Stack direction={"row"} alignItems={"center"} spacing={0}>
+										{/* t("forms.agreements.sections.2.prognosisText_outgoing") t("forms.agreements.sections.2.prognosisText_incoming") */}
+										<Trans count={generatedSampleOverschrijvingen.length}
+										       i18nKey={afspraakType === AfspraakType.Expense ? "forms.agreements.sections.2.prognosisText_outgoing" : "forms.agreements.sections.2.prognosisText_incoming"}
+										       components={[
+											       <Text fontWeight={"bolder"} px={1}>{generatedSampleOverschrijvingen.length}</Text>,
+											       <DatePicker selected={moment(startDate2.value, "L").isValid() ? moment(startDate2.value, "L").toDate() : null}
+											                   dateFormat={"dd-MM-yyyy"}
+											                   onChange={(value: Date) => {
+												                   if (value) {
+													                   startDate2.setValue(moment(value).format("L"));
+												                   }
+											                   }} customInput={(
+												       <Editable defaultValue={startDate2.value}>
+													       <EditablePreview display={"inline"} px={2} mx={1} bg={"gray.100"} _hover={{ bg: "gray.200" }} />
+													       <EditableInput display={"inline"} px={1} mx={1} width={120} isInvalid={isInvalid(startDate2)} {...startDate2.bind} />
+												       </Editable>
+											       )} />,
+											       <DatePicker selected={moment(endDate.value, "L").isValid() ? moment(endDate.value, "L").toDate() : null}
+											                   dateFormat={"dd-MM-yyyy"}
+											                   onChange={(value: Date) => {
+												                   if (value) {
+													                   endDate.setValue(moment(value).format("L"));
+												                   }
+											                   }} customInput={(
+												       <Editable defaultValue={endDate.value}>
+													       <EditablePreview display={"inline"} px={2} mx={1} bg={"gray.100"} _hover={{ bg: "gray.200" }} />
+													       <EditableInput display={"inline"} px={1} mx={1} width={120} isInvalid={isInvalid(endDate)} {...endDate.bind} />
+												       </Editable>
+											       )} />
+										       ]} />
 									</Stack>
-									<Stack spacing={1} flex={1}>
-										<FormLabel htmlFor={"endDate"}>{t("forms.agreements.sections.2.endDate")}</FormLabel>
-										<Input isInvalid={isInvalid(endDate)} {...endDate.bind} id={"endDate"} />
-									</Stack>
+									<OverschrijvingenListView overschrijvingen={generatedSampleOverschrijvingen} />
 								</Stack>
-								{generatedSampleOverschrijvingen.length > 0 ? (
-									<Stack spacing={2}>
-										<Text>{t(afspraakType === AfspraakType.Expense ? "forms.agreements.sections.2.prognosisText_outgoing" : "forms.agreements.sections.2.prognosisText_incoming", {
-											count: generatedSampleOverschrijvingen.length,
-											start: moment(generatedSampleOverschrijvingen[0].datum).format("L"),
-											end: moment(generatedSampleOverschrijvingen[generatedSampleOverschrijvingen.length - 1].datum).format("L"),
-										})}</Text>
-										<OverschrijvingenListView overschrijvingen={generatedSampleOverschrijvingen} />
-									</Stack>
-								) : (
-									<Box py={3}>
-										<Text>{t("forms.agreements.sections.2.prognosisText_none")}</Text>
-									</Box>
-								)}
 							</FormRight>
 						</Stack>
 					</Stack>

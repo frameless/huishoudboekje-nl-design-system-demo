@@ -72,6 +72,7 @@
     "interval": {
         "once": "Eenmalig",
         "every": "Elk(e)",
+        "choose": "Kies een periode",
         "day": "dag",
         "day_plural": "dagen",
         "week": "week",
@@ -119,10 +120,7 @@
                 },
                 "2": {
                     "title": "Verwachting",
-                    "helperText": "Dit is een overzicht van de verwachte betalingen bij deze afspraak.",
-                    "startDate": "Startdatum",
-                    "endDate": "Einddatum",
-                    "prognosisText_none": "Er worden geen overschrijvingen verwacht."
+                    "helperText": "Dit is een overzicht van de verwachte betalingen bij deze afspraak."
                 }
             },
             "titleEdit": "Afspraak bewerken"
@@ -132,10 +130,7 @@
                 "date": "Datum",
                 "startDate": "Startdatum",
                 "endDate": "Einddatum",
-                "time": "Tijd",
-                "dateDay": "Dag",
-                "dateMonth": "Maand",
-                "dateYear": "Jaar"
+                "time": "Tijd"
             }
         },
         "banking": {
@@ -188,10 +183,7 @@
                 "zipcode": "Postcode",
                 "city": "Plaatsnaam",
                 "phoneNumber": "Telefoonnummer",
-                "mail": "E-mailadres",
-                "dateOfBirthDay": "Dag",
-                "dateOfBirthMonth": "Maand",
-                "dateOfBirthYear": "Jaar"
+                "mail": "E-mailadres"
             },
             "tooltips": {
                 "zipcode": "Invoer zonder spaties. Voorbeeld: 1234AB",
@@ -256,20 +248,6 @@
         "rubric": "Rubriek",
         "amount": "Bedrag",
         "description": "Omschrijving"
-    },
-    "months": {
-        "jan": "Januari",
-        "feb": "Februari",
-        "mrt": "Maart",
-        "apr": "April",
-        "may": "Mei",
-        "jun": "Juni",
-        "jul": "Juli",
-        "aug": "Augustus",
-        "sep": "September",
-        "oct": "Oktober",
-        "nov": "November",
-        "dec": "December"
     },
     "burgers": {
         "burgers": "Burgers"

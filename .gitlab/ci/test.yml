@@ -26,7 +26,7 @@ frontend-test:
   extends: .node
   script:
     - npm run lint
-    - npm run ci-test
+    - npm run test
 
 
 # This template requires the following:

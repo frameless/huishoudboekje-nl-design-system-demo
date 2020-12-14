@@ -1,4 +1,5 @@
 import "cypress-graphql-mock";
+import moment from "moment";
 import Routes from "../../src/config/routes";
 import sampleBurgers from "../fixtures/burgers.json";
 import "../support/commands";
@@ -76,9 +77,7 @@ describe("Burgers CRUD", () => {
 		cy.get("input#initials").type(b.voorletters);
 		cy.get("input#firstName").type(b.voornamen);
 		cy.get("input#lastName").type(b.achternaam);
-		cy.get("input#dateOfBirth-day").type(new Date(b.geboortedatum).getDate().toString());
-		cy.get("select#dateOfBirth-month").select(new Date(b.geboortedatum).getMonth().toString());
-		cy.get("input#dateOfBirth-year").type(new Date(b.geboortedatum).getFullYear().toString());
+		cy.get("input#dateOfBirth").type(moment(b.geboortedatum).format("L") + "{esc}");
 		cy.get("input#street").type(b.straatnaam);
 		cy.get("input#houseNumber").type(b.huisnummer);
 		cy.get("input#zipcode").type(b.postcode);
@@ -110,10 +109,7 @@ describe("Burgers CRUD", () => {
 		cy.get("input#initials").clear().type(b2.voorletters);
 		cy.get("input#firstName").clear().type(b2.voornamen);
 		cy.get("input#lastName").clear().type(b2.achternaam);
-		cy.get("input#dateOfBirth-day").clear().type(new Date(b2.geboortedatum).getDate().toString());
-		// cy.get("input#dateOfBirth-month").clear().type(new Date(b2.geboortedatum).getMonth().toString());
-		cy.get("select#dateOfBirth-month").select(new Date(b2.geboortedatum).getMonth().toString());
-		cy.get("input#dateOfBirth-year").clear().type(new Date(b2.geboortedatum).getFullYear().toString());
+		cy.get("input#dateOfBirth").clear().type(moment(b2.geboortedatum).format("L") + "{esc}");
 		cy.get("input#street").clear().type(b2.straatnaam);
 		cy.get("input#houseNumber").clear().type(b2.huisnummer);
 		cy.get("input#zipcode").clear().type(b2.postcode);
