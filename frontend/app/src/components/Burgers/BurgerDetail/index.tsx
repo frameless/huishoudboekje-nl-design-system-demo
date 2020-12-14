@@ -14,7 +14,6 @@ import Alert from "../../Layouts/Alert";
 import Page from "../../Layouts/Page";
 import Section from "../../Layouts/Section";
 import BurgerAfsprakenView from "./BurgerAfsprakenView";
-import BurgerOverschrijvingenView from "./BurgerOverschrijvingenView";
 import BurgerProfileView from "./BurgerProfileView";
 import BurgerRekeningenView from "./BurgerRekeningenView";
 

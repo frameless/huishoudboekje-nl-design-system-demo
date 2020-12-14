@@ -1,13 +1,11 @@
-import {Badge, Box, Stack, StackProps, Text} from "@chakra-ui/react";
+import {Badge, Box, Stack, StackProps} from "@chakra-ui/react";
 import moment from "moment";
 import React from "react";
-import {useIsMobile} from "react-grapple";
 import {Overschrijving, OverschrijvingStatus} from "../../generated/graphql";
 import Currency from "../Currency";
 
-const OverschrijvingItem: React.FC<{overschrijving: Overschrijving, showStatus?: boolean} & StackProps> = ({overschrijving, showStatus = true, ...props}) => {
+const OverschrijvingItem: React.FC<{ overschrijving: Overschrijving, showStatus?: boolean } & StackProps> = ({overschrijving, showStatus = true, ...props}) => {
 	const {datum, bedrag, status} = overschrijving;
-	const isMobile = useIsMobile();
 
 	const getOverschrijvingStatusColor = () => {
 		switch (status) {

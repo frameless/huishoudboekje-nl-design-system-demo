@@ -2,6 +2,7 @@
 !.env.sample
 !.env.production
 .eslintcache
+coverage
 build
 node_modules
 public/theme

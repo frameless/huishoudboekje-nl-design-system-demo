@@ -2,7 +2,7 @@ import moment from "moment";
 import {Interval, Overschrijving, OverschrijvingStatus} from "../generated/graphql";
 import {XInterval} from "./things";
 
-type SampleOverschrijvingenProps = {bedrag: number, startDate: Date, startDate2: Date, endDate: Date, interval: Interval, nTimes: number};
+type SampleOverschrijvingenProps = { bedrag: number, startDate: Date, startDate2: Date, endDate: Date, interval: Interval, nTimes: number };
 const generateSampleOverschrijvingen = ({bedrag, startDate, startDate2, endDate, interval, nTimes = 0}: SampleOverschrijvingenProps): Overschrijving[] => {
 	const o: Overschrijving = {
 		export: {},
@@ -22,7 +22,7 @@ const generateSampleOverschrijvingen = ({bedrag, startDate, startDate2, endDate,
 	}
 
 	// Limit the startDate of the prognosis
-	if(mStartDate2.isBefore(mStartDate)){
+	if (mStartDate2.isBefore(mStartDate)) {
 		mStartDate2 = mStartDate;
 	}
 
@@ -33,7 +33,8 @@ const generateSampleOverschrijvingen = ({bedrag, startDate, startDate2, endDate,
 			...o,
 			datum: m.toDate(),
 		}));
-	} catch (err) {
+	}
+	catch (err) {
 		return [];
 	}
 };
