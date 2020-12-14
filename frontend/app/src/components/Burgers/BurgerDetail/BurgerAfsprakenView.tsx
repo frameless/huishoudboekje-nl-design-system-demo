@@ -1,5 +1,5 @@
 import {AddIcon, TriangleDownIcon, TriangleUpIcon} from "@chakra-ui/icons";
-import {Button, Stack, StackProps, Tab, TabList, TabPanel, TabPanels, Tabs, useToast} from "@chakra-ui/react";
+import {Box, Button, Stack, StackProps, Tab, TabList, TabPanel, TabPanels, Tabs, useToast} from "@chakra-ui/react";
 import React, {useState} from "react";
 import {useIsMobile} from "react-grapple";
 import {useTranslation} from "react-i18next";
@@ -22,7 +22,7 @@ const BurgerAfsprakenView: React.FC<StackProps & { burger: Gebruiker, refetch: V
 	};
 
 	const onClickAddAfspraakButton = () => {
-		if(burger.id){
+		if (burger.id) {
 			push(Routes.CreateBurgerAfspraken(burger.id))
 		}
 	};
@@ -73,16 +73,9 @@ const BurgerAfsprakenView: React.FC<StackProps & { burger: Gebruiker, refetch: V
 					</Tabs>
 				)}
 
-				<Stack direction={isMobile ? "column" : "row"} spacing={5}>
+				<Box>
 					<Button leftIcon={<AddIcon />} colorScheme={"primary"} size={"sm"} onClick={onClickAddAfspraakButton}>{t("actions.add")}</Button>
-
-					{/*{data.gebruiker.afspraken.length > 0 && (*/}
-					{/*	<Stack isInline={true} alignItems={"center"} spacing={3}>*/}
-					{/*		<Switch id="show-inactive-agreements" onChange={onClickShowInactive} />*/}
-					{/*		<FormLabel htmlFor="show-inactive-agreements">{t("buttons.agreements.showInactive")}</FormLabel>*/}
-					{/*	</Stack>*/}
-					{/*)}*/}
-				</Stack>
+				</Box>
 			</FormRight>
 		</Stack>
 	);

@@ -16,6 +16,7 @@ const AfspraakItem: React.FC<BoxProps & { afspraak: Afspraak, onDelete?: (id: nu
 	const [deleteConfirm, setDeleteConfirm] = useState<boolean>(false);
 
 	const intervalString = (): string => {
+		/* t("interval.every-day", { count }) t("interval.every-week", { count }) t("interval.every-month", { count }) t("interval.every-year", { count }) */
 		const parsedInterval = XInterval.parse(a.interval);
 
 		if (!parsedInterval) {
