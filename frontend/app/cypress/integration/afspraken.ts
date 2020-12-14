@@ -64,7 +64,7 @@ beforeEach(() => {
 
 describe("Afspraken CRUD", () => {
 
-	it("Shows a a afspraken for a burger", () => {
+	it("Shows afspraken for a burger", () => {
 		const b = sampleBurgers[0];
 		const a1 = sampleBurgers[0]["afspraken"][0]
 		const a2 = sampleBurgers[0]["afspraken"][1]
@@ -109,7 +109,7 @@ describe("Afspraken CRUD", () => {
 		cy.get(".chakra-toast").should("contain", "succesvol");
 	});
 
-	it("Updates a afspraak", () => {
+	it("Updates an afspraak", () => {
 		const a1 = sampleAfspraken[0]
 		const a2 = sampleAfspraken[1]
 
