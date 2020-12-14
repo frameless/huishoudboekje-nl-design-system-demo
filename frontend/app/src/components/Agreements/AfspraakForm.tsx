@@ -345,7 +345,9 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 										            if (value) {
 											            startDate.setValue(moment(value).format("L"));
 										            }
-									            }} customInput={<Input type="text" isInvalid={isInvalid(startDate)} {...startDate.bind} />} />
+									            }} customInput={<Input type="text" isInvalid={isInvalid(startDate)} {...startDate.bind} />} 
+												id={"startDate"}
+									/>
 								</Stack>
 							</Stack>
 
