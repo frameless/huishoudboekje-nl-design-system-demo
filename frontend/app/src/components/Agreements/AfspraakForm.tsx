@@ -397,6 +397,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 							<FormRight>
 								<Stack spacing={5}>
 									<Stack direction={"row"} alignItems={"center"} spacing={0}>
+										{/* t("forms.agreements.sections.2.prognosisText_outgoing") t("forms.agreements.sections.2.prognosisText_incoming") */}
 										<Trans count={generatedSampleOverschrijvingen.length}
 										       i18nKey={afspraakType === AfspraakType.Expense ? "forms.agreements.sections.2.prognosisText_outgoing" : "forms.agreements.sections.2.prognosisText_incoming"}
 										       components={[
