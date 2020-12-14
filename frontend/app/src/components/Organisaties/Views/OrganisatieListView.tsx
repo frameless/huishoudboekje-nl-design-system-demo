@@ -3,9 +3,9 @@ import {Box, BoxProps, Button, Grid, Stack, Text} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {useHistory} from "react-router-dom";
-import Routes from "../../config/routes";
-import {Organisatie} from "../../generated/graphql";
-import GridCard from "../GridCard";
+import Routes from "../../../config/routes";
+import {Organisatie} from "../../../generated/graphql";
+import GridCard from "../../GridCard";
 
 const OrganisatieListView: React.FC<BoxProps & { organisaties: Organisatie[], showAddButton?: boolean }> = ({organisaties, showAddButton = false, ...props}) => {
 	const {t} = useTranslation();

@@ -1,5 +1,5 @@
 import {AddIcon, CloseIcon, SearchIcon} from "@chakra-ui/icons";
-import {Button, IconButton, Input, InputGroup, InputLeftElement, InputRightElement, Stack} from "@chakra-ui/react";
+import {Button, IconButton, Input, InputGroup, InputLeftElement, InputRightElement} from "@chakra-ui/react";
 import React, {useEffect, useState} from "react";
 import {useInput} from "react-grapple";
 import {useTranslation} from "react-i18next";
@@ -66,18 +66,16 @@ const BurgerList = () => {
 
 			return (
 				<Page title={t("burgers.burgers")} right={(
-					<Stack alignSelf={"flex-end"} direction={"row"} spacing={5}>
-						<InputGroup>
-							<InputLeftElement><SearchIcon color={"gray.300"} /></InputLeftElement>
-							<Input type={"text"} {...search.bind} bg={"white"} onKeyDown={onKeyDownOnSearch} />
-							{search.value.length > 0 && (
-								<InputRightElement>
-									<IconButton onClick={() => search.reset()} size={"xs"} variant={"link"} icon={<CloseIcon />} aria-label={t("actions.cancel")}
-									            color={"gray.300"} />
-								</InputRightElement>
-							)}
-						</InputGroup>
-					</Stack>
+					<InputGroup>
+						<InputLeftElement><SearchIcon color={"gray.300"} /></InputLeftElement>
+						<Input type={"text"} {...search.bind} bg={"white"} onKeyDown={onKeyDownOnSearch} />
+						{search.value.length > 0 && (
+							<InputRightElement>
+								<IconButton onClick={() => search.reset()} size={"xs"} variant={"link"} icon={<CloseIcon />} aria-label={t("actions.cancel")}
+								            color={"gray.300"} />
+							</InputRightElement>
+						)}
+					</InputGroup>
 				)}>
 					{filteredBurgers.length === 0 ? (
 						<DeadEndPage message={t("messages.burgers.noSearchResults")}>
