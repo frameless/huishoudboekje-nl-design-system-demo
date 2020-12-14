@@ -66,8 +66,8 @@ describe("Afspraken CRUD", () => {
 
 	it("Shows afspraken for a burger", () => {
 		const b = sampleBurgers[0];
-		const a1 = sampleBurgers[0]["afspraken"][0]
-		const a2 = sampleBurgers[0]["afspraken"][1]
+		const a1 = sampleBurgers[0].afspraken[0];
+		const a2 = sampleBurgers[0].afspraken[1];
 		cy.visit(Routes.Burger(b.id));
 
 		// check inkomsten afspraak
@@ -83,7 +83,7 @@ describe("Afspraken CRUD", () => {
 	it("Creates a afspraak", () => {
 		// Go to create afspraak page
 		const b = sampleBurgers[0];
-		const a = sampleBurgers[0]["afspraken"][0];
+		const a = sampleBurgers[0].afspraken[0];
 		cy.visit(Routes.CreateBurgerAfspraken(b.id));
 
 		// Todo: can't explain why, but for some reason it fails on a second /api/me call. (24-11-2020)
@@ -116,9 +116,9 @@ describe("Afspraken CRUD", () => {
 		// Go to edit afspraak page
 		cy.visit(Routes.EditAgreement(a1.id));
 
-		// Todo: can't explain why, but for some reason it fails on a second /api/me call. (24-11-2020)
+		// Todo: can't explain why, but for some reason it fails on a second /api/me call. (14-12-2020)
 		// eslint-disable-next-line cypress/no-unnecessary-waiting
-		cy.wait(2000);
+		cy.wait(1000);
 
 		// Check if we're on the right page
 		cy.get("h2").should("contain", "Afspraak bewerken");
