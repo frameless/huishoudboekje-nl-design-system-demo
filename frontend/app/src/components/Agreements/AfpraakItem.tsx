@@ -80,9 +80,9 @@ const AfspraakItem: React.FC<BoxProps & { afspraak: Afspraak, onDelete?: (id: nu
 					<IconButton variant={"ghost"} size={"sm"} icon={<EditIcon />} aria-label={t("actions.edit")} onClick={onClickEditButton} />
 					{onDelete && (<>
 						{deleteConfirm && <IconButton variant={"solid"} size={"xs"} icon={<CloseIcon />} colorScheme={"gray"}
-						                              mr={2} aria-label={t("actions.delete")} onClick={onClickDeleteCancel} />}
+						                              mr={2} aria-label={t("actions.cancel")} onClick={onClickDeleteCancel} />}
 						<IconButton variant={deleteConfirm ? "solid" : "ghost"} size={"xs"} icon={deleteConfirm ? <CheckIcon /> : <DeleteIcon />}
-						            colorScheme={deleteConfirm ? "red" : "gray"} aria-label={t("actions.delete")} onClick={onClickDeleteButton} />
+						            colorScheme={deleteConfirm ? "red" : "gray"} aria-label={t("actions.delete")} data-cy={deleteConfirm ? "deleteConfirmButton2" : "deleteConfirmButton1"} onClick={onClickDeleteButton} />
 					</>)}
 				</Box>
 			</Stack>
