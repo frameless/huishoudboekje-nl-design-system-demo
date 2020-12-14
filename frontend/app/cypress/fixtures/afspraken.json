@@ -30,7 +30,19 @@
         "id": 27,
         "weergaveNaam": "Willemsen Advocaten",
         "rekeningen": [
-          {"id": 1}
+          {
+            "afspraken": [
+              {"id": 65}
+            ],
+            "gebruikers": [
+            ],
+            "iban": "NL00BANK0000000",
+            "id": 1,
+            "organisaties": [
+                {"id": 27}
+            ],
+            "rekeninghouder": "Belastingdienst"
+          }
         ]
       },
       "bedrag": "129",
@@ -38,7 +50,8 @@
       "kenmerk": "215886412180000007",
       "actief": false,
       "rubriek": {
-        "id": 1
+        "id": 1,
+        "naam": "Gas"
       }
     },
     {
@@ -52,6 +65,9 @@
         "weken": 0,
         "maanden": 4,
         "jaren": 0
+      },
+      "rubriek": {
+        "naam": "Rubriek 1"
       },
       "gebruiker": {
         "id": 46,
@@ -75,7 +91,25 @@
         "iban": "NL11BANK111111111",
         "rekeninghouder": "H.S. Winkel"
       },
-      "organisatie": null,
+      "organisatie": {
+        "id": 27,
+        "weergaveNaam": "Willemsen Advocaten",
+        "rekeningen": [
+          {
+            "afspraken": [
+              {"id": 65}
+            ],
+            "gebruikers": [
+            ],
+            "iban": "NL00BANK0000000",
+            "id": 1,
+            "organisaties": [
+                {"id": 27}
+            ],
+            "rekeninghouder": "Belastingdienst"
+          }
+        ]
+      },
       "bedrag": "23",
       "credit": true,
       "kenmerk": "sdfgsdfggfsdfg",

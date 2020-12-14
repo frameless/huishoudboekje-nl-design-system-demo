@@ -47,7 +47,7 @@ describe("Burgers CRUD", () => {
 	it("Shows a list of burgers", () => {
 		// Go to burgers list page
 		cy.visit(Routes.Burgers);
-
+		cy.wait(2000);
 		sampleBurgers.forEach(b => {
 			cy.get("div").should("contain", b.voornamen);
 			cy.get("div").should("contain", b.achternaam);

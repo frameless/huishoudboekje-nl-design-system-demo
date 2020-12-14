@@ -36,6 +36,9 @@
           "maanden": 0,
           "jaren": 3
         },
+        "rubriek": {
+          "naam": "Gas"
+        },
         "gebruiker": {
           "id": 46,
           "voorletters": "H.S.",
@@ -60,7 +63,22 @@
         },
         "organisatie": {
           "id": 27,
-          "weergaveNaam": "Willemsen Advocaten"
+          "weergaveNaam": "Willemsen Advocaten",
+          "rekeningen": [
+            {
+              "afspraken": [
+                {"id": 65}
+              ],
+              "gebruikers": [
+              ],
+              "iban": "NL00BANK0000000",
+              "id": 1,
+              "organisaties": [
+                  {"id": 27}
+              ],
+              "rekeninghouder": "Belastingdienst"
+            }
+          ]
         },
         "bedrag": "129",
         "credit": false,
