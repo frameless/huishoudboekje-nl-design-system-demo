@@ -1,0 +1,32 @@
+[
+    {
+        "id": 1,
+        "naam": "Rubriek 2",
+        "grootboekrekening": {
+            "id": "WBedWkrWkoCib",
+            "naam": "Correctie inzake BTW",
+            "omschrijving": "Correctie inzake BTW overige personeelsgerelateerde kosten",
+            "referentie": "4011020"
+        }
+    },
+    {
+        "id": 2,
+        "naam": "Rubriek 1",
+        "grootboekrekening": {
+            "id": "BIvaKouCuhAfh",
+            "naam": "Afschrijving herwaarderingen",
+            "omschrijving": "Afschrijving herwaarderingen kosten van oprichting en van uitgifte van aandelen",
+            "referentie": "0101030.03"
+        }
+    },
+    {
+        "id": 3,
+        "naam": "Gas",
+        "grootboekrekening": {
+            "id": "WBedHuiGweGas",
+            "naam": "Gas",
+            "omschrijving": "Gas huisvestingskosten",
+            "referentie": "4201110"
+        }
+    }
+]

@@ -186,9 +186,9 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 			gebruikerId: gebruiker.id,
 			credit: afspraakType === AfspraakType.Income,
 			beschrijving: description.value,
-			tegenRekeningId: rekeningId.value,
-			organisatieId: parseInt(organisatieId.value) !== 0 ? organisatieId.value : null,
-			...rubriekId.value && {rubriekId: rubriekId.value},
+			tegenRekeningId: parseInt(rekeningId.value),
+			organisatieId: parseInt(organisatieId.value) !== 0 ? parseInt(organisatieId.value) : null,
+			...parseInt(rubriekId.value) && {rubriekId: parseInt(rubriekId.value)},
 			bedrag: amount.value,
 			kenmerk: searchTerm.value,
 			startDatum: moment(startDate.value, "L").format("YYYY-MM-DD"),
@@ -345,7 +345,9 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 										            if (value) {
 											            startDate.setValue(moment(value).format("L"));
 										            }
-									            }} customInput={<Input type="text" isInvalid={isInvalid(startDate)} {...startDate.bind} />} />
+									            }} customInput={<Input type="text" isInvalid={isInvalid(startDate)} {...startDate.bind} />} 
+												id={"startDate"}
+									/>
 								</Stack>
 							</Stack>
 

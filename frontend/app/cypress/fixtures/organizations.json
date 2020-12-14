@@ -10,7 +10,22 @@
       "huisnummer": "18",
       "postcode": "7575SG",
       "plaatsnaam": "Garnwerd aan de IJssel"
-    }
+    },
+    "rekeningen": [
+      {
+        "afspraken": [
+          {"id": 65}
+        ],
+        "gebruikers": [
+        ],
+        "iban": "NL00BANK0000000",
+        "id": 1,
+        "organisaties": [
+            {"id": 27}
+        ],
+        "rekeninghouder": "Belastingdienst"
+      }
+    ]
   },
   {
     "id": 28,

@@ -1,6 +1,7 @@
 import {ApolloProvider} from "@apollo/client";
 import {ChakraProvider} from "@chakra-ui/react";
 import moment from "moment";
+import "moment-recur-ts"
 import "moment/locale/nl";
 import React from "react";
 import "react-datepicker/dist/react-datepicker.min.css"
