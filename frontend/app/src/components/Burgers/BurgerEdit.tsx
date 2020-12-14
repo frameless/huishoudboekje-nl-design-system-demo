@@ -166,7 +166,7 @@ const BurgerEdit = () => {
 											            if (value) {
 												            dateOfBirth.setValue(moment(value).format("L"));
 											            }
-										            }} customInput={<Input type="text" isInvalid={dateOfBirth.dirty && !dateOfBirth.isValid} {...dateOfBirth.bind} />} />
+										            }} customInput={<Input type="text" isInvalid={dateOfBirth.dirty && !dateOfBirth.isValid} {...dateOfBirth.bind} />} id={"dateOfBirth"} />
 									</Stack>
 								</FormRight>
 							</Stack>

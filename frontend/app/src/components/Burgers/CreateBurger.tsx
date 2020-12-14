@@ -165,7 +165,7 @@ const CreateBurger = () => {
 									            if (value) {
 										            dateOfBirth.setValue(moment(value).format("L"));
 									            }
-								            }} customInput={<Input type="text" isInvalid={isInvalid(dateOfBirth)} {...dateOfBirth.bind} />} />
+								            }} customInput={<Input type="text" isInvalid={isInvalid(dateOfBirth)} {...dateOfBirth.bind} />} id={"dateOfBirth"} />
 							</Stack>
 						</FormRight>
 					</Stack>
