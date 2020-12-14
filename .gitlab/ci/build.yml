@@ -1,24 +1,55 @@
-build:
+.build:
   stage: build
   needs: []
+#  image: docker:19.03.13
+
+#  services:
+#  - docker:19.03.13-dind
   tags:
     - cg
     - shell
+#    - docker
   retry:
     max: 2
     when: script_failure
   variables:
+    DOCKER_TLS_CERTDIR: "/certs"
     IMAGE_PREFIX: "$CI_REGISTRY/$CI_PROJECT_PATH/"
-  before_script:
+    CYPRESS_INSTALL_BINARY: "0"
+  script:
+    - export CYPRESS_INSTALL_BINARY=0
     - export COMPONENT_TAG=$(git describe --long --all | sed 's!heads/!!')
     - export COMPONENT_COMMIT_HASH=$(git describe --always --abbrev=0 --match "NOT A TAG")
     - export DOCKER_CONFIG=/tmp/docker-config-$CI_JOB_ID
-    - docker login -u gitlab-ci-token --password-stdin $CI_REGISTRY <<< $CI_JOB_TOKEN
-  script:
-    - docker-compose build --build-arg DOCKER_PROXY="$DOCKER_PROXY" --parallel --pull
+    - export DOCKER_PROXY="${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/"
+    - docker login -u "$CI_DEPENDENCY_PROXY_USER" --password-stdin "$CI_DEPENDENCY_PROXY_SERVER" <<< "$CI_DEPENDENCY_PROXY_PASSWORD"
+    - docker-compose build --parallel
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
     - docker-compose push
   only:
     - branches@commonground/huishoudboekje/app-new
+
+build-cg:
+  extends:
+    - .build
+  tags:
+    - cg
+    - shell
+  only:
+    - branches@commonground/huishoudboekje/app-new
+
+build-gitlab:
+  extends:
+    - .build
+  image: docker:19.03.13
+  services:
+  - docker:19.03.13-dind
+  tags:
+    - docker
+  except:
+    - branches@commonground/huishoudboekje/app-new
+  before_script:
+    - apk add --no-cache git docker-compose
 
 build-helm:
   stage: build

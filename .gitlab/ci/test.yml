@@ -32,7 +32,7 @@ frontend-lint:
 .Service Test:
   stage: test
   needs:
-    - build
+    - build-cg
   tags:
     - cg
     - docker
