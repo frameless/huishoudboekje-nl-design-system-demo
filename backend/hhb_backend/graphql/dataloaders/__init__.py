@@ -10,6 +10,7 @@ from .bank_transactions_loader import BankTransactionByIdLoader, BankTransaction
 from .configuratie_loader import ConfiguratieByIdLoader
 from .rubrieken_loader import RubriekByIdLoader, RubriekByGrootboekrekeningLoader
 from .exports_loader import ExportsByIdLoader
+from .overschrijvingen_loader import OverschrijvingenByAfsprakenLoader
 from .overschrijving_loader import OverschrijvingByIdLoader, OverschijvingByAfspraakLoader
 
 class HHBDataLoader:
@@ -48,4 +49,6 @@ class HHBDataLoader:
 
         self.configuratie_by_id = ConfiguratieByIdLoader(loop=loop)
 
+        # Overschrijvingen
         self.exports_by_id = ExportsByIdLoader(loop=loop)
+        self.overschrijvingen_by_afspraken = OverschrijvingenByAfsprakenLoader(loop=loop)

@@ -1,5 +1,9 @@
-from hhb_backend.graphql.dataloaders.base_loader import SingleDataLoader
+from hhb_backend.graphql.dataloaders.base_loader import ListDataLoader
 
-class OverschrijvingenByIdLoader(SingleDataLoader):
-    """ Load overschrijvingen using ids """
+
+class OverschrijvingenByAfsprakenLoader(ListDataLoader):
+    """ Load overschrijvingen list for afspraken ids """
     model = "overschrijvingen"
+    filter_item = "filter_afspraken"
+    index = "afspraken"
+    is_list = True
