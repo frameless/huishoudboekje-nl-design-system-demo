@@ -19,6 +19,7 @@ class Overschrijving(graphene.ObjectType):
     bedrag = graphene.Field(Bedrag)
     bankTransaction = graphene.Field(lambda: bank_transaction.BankTransaction)
     status = graphene.Field(OverschrijvingStatus)
+    afspraken = graphene.List(lambda: afspraak.Afspraak)
 
     async def resolve_afspraak(root, info):
         if root.get('afspraak_id'):
@@ -34,3 +35,8 @@ class Overschrijving(graphene.ObjectType):
         if root.get("export_id", None):
             return OverschrijvingStatus.IN_BEHANDELING
         return OverschrijvingStatus.VERWACHTING
+
+    async def resolve_afspraken(root, info):
+        """ Get afspraken when requested """
+        if root.get('afspraken'):
+            return await request.dataloader.afspraken_by_id.load_many(root.get('afspraken')) or []

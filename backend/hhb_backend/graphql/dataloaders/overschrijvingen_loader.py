@@ -5,5 +5,4 @@ class OverschrijvingenByAfsprakenLoader(ListDataLoader):
     """ Load overschrijvingen list for afspraken ids """
     model = "overschrijvingen"
     filter_item = "filter_afspraken"
-    index = "afspraken"
-    is_list = True
+    index = "afspraak_id"
