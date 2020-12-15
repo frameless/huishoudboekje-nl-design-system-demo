@@ -7,7 +7,6 @@ const requiredTranslationFiles = ["nl.translation.json"];
 describe("Testing language files for missing translations", () => {
 
 	it("All required language files are there", () => {
-
 		expect(files).toEqual(expect.arrayContaining(requiredTranslationFiles));
 	});
 
@@ -16,7 +15,7 @@ describe("Testing language files for missing translations", () => {
 		it(`(${file}) contains no missing translations.`, () => {
 			const fileName = path.join(__dirname, LANG_DIR, file);
 			const fileContent = require(fileName);
-			const json = JSON.stringify(fileContent);
+			const json = JSON.stringify(fileContent, null, 2);
 			expect(json).not.toContain("__MISSING-TRANSLATION__");
 		});
 	});
