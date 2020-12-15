@@ -1,19 +1,15 @@
-import {DeleteIcon} from "@chakra-ui/icons";
 import {
 	Box,
 	BoxProps,
 	Button,
 	Divider,
-	FormLabel,
 	Heading,
-	IconButton,
 	Modal,
 	ModalBody,
 	ModalContent,
 	ModalFooter,
 	ModalHeader,
 	ModalOverlay,
-	Select,
 	Stack,
 	Tab,
 	TabList,
@@ -27,8 +23,9 @@ import {
 } from "@chakra-ui/react";
 import {friendlyFormatIBAN} from "ibantools";
 import React, {useContext} from "react";
-import {useInput, useIsMobile, Validators} from "react-grapple";
+import {useInput, useIsMobile} from "react-grapple";
 import {useTranslation} from "react-i18next";
+import Select from "react-select";
 import {
 	Afspraak,
 	BankTransaction,
@@ -56,6 +53,7 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }>
 	const afspraak = useInput<number>();
 
 	const $rubrics = useGetAllRubriekenQuery({
+		fetchPolicy: "no-cache",
 		onCompleted: () => {
 			if (bt.journaalpost?.grootboekrekening?.id) {
 				rubric.setValue(bt.journaalpost?.grootboekrekening.id);
@@ -63,6 +61,7 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }>
 		}
 	});
 	const $afspraken = useGetAllAfsprakenQuery({
+		fetchPolicy: "no-cache",
 		onCompleted: () => {
 			if (bt.journaalpost?.afspraak?.id) {
 				afspraak.setValue(bt.journaalpost?.afspraak?.id);
@@ -84,7 +83,7 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }>
 		}
 
 		let mutation;
-		if (!bt.journaalpost) {
+		if (!bt.journaalpost || !bt.journaalpost.id) {
 			mutation = createJournaalpost({
 				variables: {
 					transactionId: bt.id!, // Todo: fix this ! somehow
@@ -93,46 +92,27 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }>
 			});
 		}
 		else {
-			mutation = updateJournaalpost({
-				variables: {
-					id: bt.journaalpost.id!, // Todo: fix this ! somehow
-					grootboekrekeningId: rubric.value
-				}
-			});
+			if (!rubric.value) {
+				mutation = deleteJournaalpost({
+					variables: {
+						id: bt.journaalpost.id,
+					}
+				});
+			}
+			else {
+				mutation = updateJournaalpost({
+					variables: {
+						id: bt.journaalpost.id,
+						grootboekrekeningId: rubric.value
+					}
+				});
+			}
 		}
 
 		mutation.then(() => {
 			toast({
 				status: "success",
 				title: t("messages.journals.createSuccessMessage"),
-				position: "top",
-			});
-			refetch();
-			onClose();
-		}).catch(err => {
-			console.error(err);
-			toast({
-				position: "top",
-				status: "error",
-				variant: "solid",
-				title: t("messages.genericError.title"),
-				description: t("messages.genericError.description"),
-			});
-		});
-	}
-	const onClickDelete = () => {
-		if (!bt.journaalpost) {
-			return;
-		}
-
-		deleteJournaalpost({
-			variables: {
-				id: bt.journaalpost.id! // Todo: fix this ! somehow
-			}
-		}).then(() => {
-			toast({
-				status: "success",
-				title: t("messages.journals.deleteSuccessMessage"),
 				position: "top",
 			});
 			refetch();
@@ -201,50 +181,51 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }>
 
 						<Tabs isFitted>
 							<TabList>
-								<Tab>Rubriek</Tab>
 								<Tab>Afspraak</Tab>
+								<Tab>Rubriek</Tab>
 							</TabList>
 							<TabPanels>
 								<TabPanel px={0}>
-									<Box>
-										<FormLabel>{t("banking.rubric")}</FormLabel>
-										<Queryable query={$rubrics}>{({rubrieken}) => (
-											<Stack direction={"row"}>
-												<Select {...rubric.bind} isInvalid={!rubric.isValid}>
-													<option value={undefined}>{t("forms.banking.fields.rubricChoose")}</option>
-													{rubrieken.filter(r => r.grootboekrekening && r.grootboekrekening.id).map((r: Rubriek) => (
-														/* Fix this ! somehow */
-														<option key={r.id} value={r.grootboekrekening!.id}>{r.naam}</option>
-													))}
-												</Select>
-												{bt.journaalpost && (
-													<IconButton icon={<DeleteIcon />} aria-label={t("actions.delete")} variant={"ghost"} onClick={() => onClickDelete()} />
-												)}
-											</Stack>
-										)}</Queryable>
-									</Box>
-								</TabPanel>
+									<Queryable query={$afspraken}>{({afspraken}) => {
+										const options = afspraken.filter(a => a.gebruiker).map((a: Afspraak) => ({
+											key: a.id,
+											value: a.id,
+											label: [
+												(a.tegenRekening?.iban || "Onbekende tegenrekening"),
+												a.gebruiker ? formatBurgerName(a.gebruiker) : "Onbekende gebruiker",
+												a.bedrag
+											].join(" - "),
+										}));
 
-								<TabPanel px={0}>
-									<Box>
-										<FormLabel>Afspraak</FormLabel>
-										<Queryable query={$afspraken}>{({afspraken}) => (
-											<Stack direction={"row"}>
-												<Select {...afspraak.bind} isInvalid={!afspraak.isValid}>
-													<option value={undefined}>{t("forms.banking.fields.afspraakChoose")}</option>
-													{afspraken.filter(a => a.gebruiker).map((a: Afspraak) => (
-														/* Fix this ! somehow */
-														<option key={a.id} value={a.id}>
-															{[a.organisatie?.weergaveNaam, "-", formatBurgerName(a.gebruiker!)].join(" ")}
-														</option>
+										return (
+											<Stack>
+												<Stack>
+													{options.map(a => (
+														<Box>{a.label}</Box>
 													))}
-												</Select>
-												{bt.journaalpost && (
-													<IconButton icon={<DeleteIcon />} aria-label={t("actions.delete")} variant={"ghost"} onClick={() => onClickDelete()} />
-												)}
+												</Stack>
+
+												<Divider />
+
+												<Select onChange={(val) => afspraak.setValue(val?.value)} defaultValue={options.find(o => o.value === afspraak.value)}
+												        options={options} isClearable={true} />
 											</Stack>
-										)}</Queryable>
-									</Box>
+										);
+									}}</Queryable>
+								</TabPanel>
+								<TabPanel px={0}>
+									<Queryable query={$rubrics}>{({rubrieken}) => {
+										const options = rubrieken.filter(r => r.grootboekrekening && r.grootboekrekening.id).map((r: Rubriek) => ({
+											key: r.id,
+											label: r.naam,
+											value: r.grootboekrekening!.id
+										}));
+
+										return (
+											<Select onChange={(val) => rubric.setValue(val?.value)} defaultValue={options.find(o => o.value === rubric.value)} options={options} isClearable={true} />
+										);
+									}}
+									</Queryable>
 								</TabPanel>
 							</TabPanels>
 						</Tabs>
@@ -254,7 +235,7 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }>
 				<ModalFooter>
 					<Stack direction={"row"}>
 						<Button onClick={() => onClose()}>{t("actions.cancel")}</Button>
-						<Button colorScheme={"primary"} onClick={() => onClickSave()}>{t("actions.save")}</Button>
+						<Button colorScheme={"primary"} isDisabled={(!bt.journaalpost || !bt.journaalpost.id) && !rubric.value} onClick={() => onClickSave()}>{t("actions.save")}</Button>
 					</Stack>
 				</ModalFooter>
 			</ModalContent>
