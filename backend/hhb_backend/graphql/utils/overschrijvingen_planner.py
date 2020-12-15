@@ -1,4 +1,6 @@
+from datetime import datetime
 from math import floor
+
 from dateutil.parser import isoparse
 from datetime import datetime, date
 from hhb_backend.graphql.utils import convert_hhb_interval_to_relativetime
@@ -20,6 +22,7 @@ def get_planned_overschrijvingen(input: PlannedOverschijvingenInput, start_datum
         eind_datum = datetime.now().date()
     if not start_datum:
         start_datum = input.afspraak_start_datum
+                                                              eind_datum)
 
     if input.aantal_betalingen > 0:
         return get_normal_afspraak_overschrijvingen(input, start_datum, eind_datum)
@@ -51,9 +54,11 @@ def get_doorlopende_afspraak_overschrijvingen(input: PlannedOverschijvingenInput
         payment_date += input.interval
     return payments
 
-def make_overschrijving_dict(bedrag, date):
+
+def make_overschrijving_dict(bedrag, date, afspraak_id):
     return {
         "id": None,
+        "afspraak_id": afspraak_id,
         "bedrag": bedrag,
         "datum": date,
         "bank_transaction_id": None,
