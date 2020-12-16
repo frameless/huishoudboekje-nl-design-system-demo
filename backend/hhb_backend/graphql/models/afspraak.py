@@ -55,7 +55,8 @@ class Afspraak(graphene.ObjectType):
             root.get("start_datum"), 
             root.get("interval"),
             root.get("aantal_betalingen"),
-            root.get("bedrag")
+            root.get("bedrag"),
+            root.get("id")
         )
         expected_overschrijvingen = get_planned_overschrijvingen(planner_input, **kwargs)
         known_overschrijvingen = {}
