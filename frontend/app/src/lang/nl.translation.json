@@ -57,44 +57,17 @@
     "actions": {
         "login": "Inloggen",
         "logout": "Uitloggen",
-        "edit": "Wijzigen",
-        "delete": "Verwijderen",
         "save": "Opslaan",
+        "edit": "Wijzigen",
+        "cancel": "Annuleren",
+        "delete": "Verwijderen",
         "back": "Terug",
         "export": "Exporteren",
         "actions": "Acties",
         "add": "Toevoegen",
-        "cancel": "Annuleren",
         "backToList": "Terug naar overzicht",
         "clearSearch": "Zoekopdracht wissen",
         "backToHome": "Terug naar de hoofdpagina"
-    },
-    "interval": {
-        "every-day": "Elke dag",
-        "every-day_plural": "Elke {{count}} dagen",
-        "every-week": "Elke week",
-        "every-week_plural": "Elke {{count}} weken",
-        "every-month": "Elke maand",
-        "every-month_plural": "Elke {{count}} maanden",
-        "every-year": "Elk jaar",
-        "every-year_plural": "Elke {{count}} jaar",
-        "once": "Eenmalig",
-        "every": "Elk(e)",
-        "choose": "Kies een periode",
-        "day": "dag",
-        "day_plural": "dagen",
-        "week": "week",
-        "week_plural": "weken",
-        "month": "maand",
-        "month_plural": "maanden",
-        "year": "jaar",
-        "year_plural": "jaar"
-    },
-    "unknown": "Onbekend",
-    "agreements": {
-        "automatischeIncasso": "Automatische incasso",
-        "incoming": "Inkomsten",
-        "outgoing": "Uitgaven"
     },
     "forms": {
         "agreements": {
@@ -240,6 +213,33 @@
                 "iban": "IBAN"
             }
         }
+    },
+    "interval": {
+        "every": "Elk(e)",
+        "choose": "Kies een periode",
+        "day": "dag",
+        "day_plural": "dagen",
+        "week": "week",
+        "week_plural": "weken",
+        "month": "maand",
+        "month_plural": "maanden",
+        "year": "jaar",
+        "year_plural": "jaar",
+        "every-day": "Elke dag",
+        "every-day_plural": "Elke {{count}} dagen",
+        "every-week": "Elke week",
+        "every-week_plural": "Elke {{count}} weken",
+        "every-month": "Elke maand",
+        "every-month_plural": "Elke {{count}} maanden",
+        "every-year": "Elk jaar",
+        "every-year_plural": "Elke {{count}} jaar",
+        "once": "Eenmalig"
+    },
+    "unknown": "Onbekend",
+    "agreements": {
+        "automatischeIncasso": "Automatische incasso",
+        "incoming": "Inkomsten",
+        "outgoing": "Uitgaven"
     },
     "banking": {
         "exports": {
