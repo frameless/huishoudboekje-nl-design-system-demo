@@ -32,6 +32,7 @@ class OverschrijvingView(HHBView):
 
     def extend_get(self, **kwargs):
         self.add_filter_filter_afspraken()
+        self.add_filter_filter_exports()
 
     def add_filter_filter_afspraken(self):
         filter_ids = request.args.get('filter_afspraken')
@@ -43,3 +44,14 @@ class OverschrijvingView(HHBView):
                 except ValueError:
                     abort(make_response({"errors": [f"Input for filter_afspraken is not correct, '{raw_id}' is not a number."]}, 400))
             self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.afspraak_id.in_(ids))
+
+    def add_filter_filter_exports(self):
+        filter_ids = request.args.get('filter_exports')
+        if filter_ids:
+            ids = []
+            for raw_id in filter_ids.split(","):
+                try:
+                    ids.append(int(raw_id))
+                except ValueError:
+                    abort(make_response({"errors": [f"Input for filter_exports is not correct, '{raw_id}' is not a number."]}, 400))
+            self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.export_id.in_(ids))

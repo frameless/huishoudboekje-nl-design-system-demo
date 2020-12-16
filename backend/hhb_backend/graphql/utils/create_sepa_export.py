@@ -8,11 +8,16 @@ from sepaxml import SepaTransfer
 from hhb_backend.graphql import settings
 
 
-async def create_export_string(overschrijvingen, export) -> str:
-    # TODO get overschrijvingen by export
+async def create_export_string(export) -> str:
+    overschrijvingen = await request.dataloader.overschrijvingen_by_export.load(export['id'])
+    if not overschrijvingen:
+        return "Geen overschrijvingen gevonden"
 
     afspraken_ids = list(set([overschrijving['afspraak_id'] for overschrijving in overschrijvingen]))
     afspraken = await request.dataloader.afspraken_by_id.load_many(afspraken_ids)
+    if not afspraken:
+        return "Geen afspraken gevonden"
+
     # Get all tegen_rekeningen
     tegen_rekeningen_ids = [afspraak_result['tegen_rekening_id'] for afspraak_result in afspraken]
     tegen_rekeningen = await request.dataloader.rekeningen_by_id.load_many(tegen_rekeningen_ids)
