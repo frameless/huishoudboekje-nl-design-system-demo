@@ -1,4 +1,5 @@
 import {
+	Badge,
 	Box,
 	BoxProps,
 	Button,
@@ -38,11 +39,44 @@ import {
 	useGetAllRubriekenQuery,
 } from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
-import {dateFormat, formatBurgerName} from "../../../utils/things";
+import {dateFormat, formatBurgerName, intervalString} from "../../../utils/things";
 import Currency from "../../Currency";
 import {Label} from "../../Forms/FormLeftRight";
 import {AfspraakDetailView, GrootboekrekeningDetailView} from "../../Layouts/JournaalpostDetails";
 import {TransactionsContext} from "./index";
+
+const SingleValue = (props) => <Option {...props} />
+
+const Option = (props) => {
+	const {data, innerProps, innerRef} = props;
+	const {afspraak: a}: { afspraak: Afspraak } = data;
+	const {t} = useTranslation();
+
+	return (
+		<Stack direction={"row"} spacing={2} alignItems={"center"} px={5} py={1} width={"100%"} ref={innerRef} {...innerProps} _hover={{
+			bg: "gray.100"
+		}} {...props.isSelected && {
+			bg: "gray.100"
+		}}>
+			<Box flex={0}>
+				<Text>#{a.id}</Text>
+			</Box>
+			<Box flex={2}>
+				<Text>{a.beschrijving}</Text>
+				<Stack direction={"row"} spacing={1}>
+					{a.rubriek && <Badge colorScheme={"yellow"} fontWeight={"normal"}>{a.rubriek.naam}</Badge>}
+					{a.interval && <Badge colorScheme={"yellow"} fontWeight={"normal"}>{intervalString(a.interval, t)}</Badge>}
+				</Stack>
+			</Box>
+			<Box flex={2}>
+				<Text>{a.gebruiker ? formatBurgerName(a.gebruiker) : "Onbekende gebruiker"}</Text>
+			</Box>
+			<Box flex={0}>
+				<Currency value={(a.bedrag * (a.credit ? 1 : -1))} />
+			</Box>
+		</Stack>
+	);
+}
 
 const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }> = ({bankTransaction: bt, ...props}) => {
 	const {t} = useTranslation();
@@ -50,6 +84,7 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }>
 	const toast = useToast();
 	const {isOpen, onOpen, onClose} = useDisclosure();
 	const {refetch} = useContext(TransactionsContext);
+	const selectComponents = {Option, SingleValue};
 
 	const rubric = useInput({
 		validate: [(v) => v.trim().length > 0]
@@ -81,7 +116,6 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }>
 	const onClickSave = async () => {
 		// If rubric and afspraak are both invalid or valid. We need only one.
 		if ((!rubric.isValid && !afspraak.isValid) || (afspraak.isValid && rubric.isValid)) {
-			console.log("Both not valid", [rubric.isValid, rubric.value], [afspraak.isValid, afspraak.value]);
 			toast({
 				status: "error",
 				title: t("messages.agreements.invalidFormMessage"),
@@ -90,16 +124,7 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }>
 			return;
 		}
 
-		/*
-		If journaalpost > deleteJournaalpost
-		else If not journaalpost > create
-			If valid afspraak && not valid rubric > createJournaalpostAfspraak
-			If valid rubric && not valid afspraak > createJournaalpostGrootboekrekening
-			Else > Nope
-		*/
-
 		let mutation;
-
 		if (bt.journaalpost?.id) {
 			mutation = deleteJournaalpost({
 				variables: {
@@ -155,12 +180,16 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }>
 	};
 
 	const onSelectAfspraak = (val) => {
-		afspraak.setValue(String(val.value));
-		rubric.reset();
+		if (val) {
+			afspraak.setValue(String(val.value));
+			rubric.reset();
+		}
 	};
 	const onSelectRubriek = (val) => {
-		rubric.setValue(val.value);
-		afspraak.reset();
+		if (val) {
+			rubric.setValue(val.value);
+			afspraak.reset();
+		}
 	};
 
 	return (<>
@@ -232,13 +261,8 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }>
 											const options = afspraken.filter(a => a.gebruiker).map((a: Afspraak) => ({
 												key: a.id,
 												value: a.id,
-												label: [
-													`(${a.id})`,
-													a.beschrijving,
-													(a.tegenRekening?.iban || "Onbekende tegenrekening"),
-													a.gebruiker ? formatBurgerName(a.gebruiker) : "Onbekende gebruiker",
-													(a.bedrag * (a.credit ? 1 : -1))
-												].join(" | "),
+												label: a.toString(),
+												afspraak: a,
 											}));
 
 											/*
@@ -253,7 +277,7 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }>
 												 */
 											return (
 												// <Stack spacing={2} border={"1px solid #cccccc"} borderRadius={5} p={3}>
-												<Select onChange={onSelectAfspraak} defaultValue={options.find(o => o.value === afspraak.value)}
+												<Select components={selectComponents} onChange={onSelectAfspraak} defaultValue={options.find(o => o.value === afspraak.value)}
 												        options={options} isClearable={true}
 												        noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} />
 												// </Stack>

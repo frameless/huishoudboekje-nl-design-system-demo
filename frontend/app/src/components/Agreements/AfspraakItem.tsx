@@ -6,7 +6,7 @@ import {useTranslation} from "react-i18next";
 import {useHistory} from "react-router-dom";
 import Routes from "../../config/routes";
 import {Afspraak} from "../../generated/graphql";
-import {currencyFormat2, XInterval} from "../../utils/things";
+import {currencyFormat2, intervalString} from "../../utils/things";
 import GridCard from "../GridCard";
 
 const AfspraakItem: React.FC<BoxProps & { afspraak: Afspraak, onDelete?: (id: number) => void }> = ({afspraak: a, onDelete, ...props}) => {
@@ -14,18 +14,6 @@ const AfspraakItem: React.FC<BoxProps & { afspraak: Afspraak, onDelete?: (id: nu
 	const {t} = useTranslation();
 	const {push} = useHistory();
 	const [deleteConfirm, setDeleteConfirm] = useState<boolean>(false);
-
-	const intervalString = (): string => {
-		/* t("interval.every-day", { count }) t("interval.every-week", { count }) t("interval.every-month", { count }) t("interval.every-year", { count }) */
-		const parsedInterval = XInterval.parse(a.interval);
-
-		if (!parsedInterval) {
-			return t("interval.once");
-		}
-
-		const {intervalType: type, count} = parsedInterval;
-		return t(`interval.every-${type}`, {count});
-	};
 
 	const onClickDeleteButton = () => {
 		if (onDelete && a.id) {
@@ -58,7 +46,7 @@ const AfspraakItem: React.FC<BoxProps & { afspraak: Afspraak, onDelete?: (id: nu
 						</Box>
 					)}
 					<Box flex={1}>
-						<Badge fontSize={"10px"}>{intervalString()}</Badge>
+						<Badge fontSize={"10px"}>{intervalString(a.interval, t)}</Badge>
 					</Box>
 				</Stack>
 			</Stack>
@@ -74,7 +62,7 @@ const AfspraakItem: React.FC<BoxProps & { afspraak: Afspraak, onDelete?: (id: nu
 				<Stack spacing={1} flex={1} alignItems={"flex-end"}>
 					<Box textAlign={"right"}>{currencyFormat2().format(a.bedrag)}</Box>
 					{a.automatischeIncasso && <Badge fontSize={"10px"}>{t("agreements.automatischeIncasso")}</Badge>}
-					<Badge fontSize={"10px"}>{intervalString()}</Badge>
+					<Badge fontSize={"10px"}>{intervalString(a.interval, t)}</Badge>
 				</Stack>
 				<Box width={100}>
 					<IconButton variant={"ghost"} size={"sm"} icon={<EditIcon />} aria-label={t("actions.edit")} onClick={onClickEditButton} />

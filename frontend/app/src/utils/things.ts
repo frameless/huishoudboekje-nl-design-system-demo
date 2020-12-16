@@ -1,4 +1,5 @@
 import moment from "moment";
+import i18Next from "../config/i18n";
 import {createContext} from "react";
 import {BankTransaction, Gebruiker, Interval, IntervalInput} from "../generated/graphql";
 import {IntervalType} from "../models";
@@ -113,3 +114,15 @@ export const sortBankTransactions = (a: BankTransaction, b: BankTransaction) => 
 export const formatBurgerName = (burger: Gebruiker, fullName = false) => {
 	return [fullName ? burger.voornamen : burger.voorletters, burger.achternaam].join(" ");
 };
+
+export const intervalString = ((interval: Interval | undefined, t: (text, ...tProps) => string): string => {
+	/* t("interval.every-day", { count }) t("interval.every-week", { count }) t("interval.every-month", { count }) t("interval.every-year", { count }) */
+	const parsedInterval = XInterval.parse(interval);
+
+	if (!parsedInterval) {
+		return t("interval.once");
+	}
+
+	const {intervalType: type, count} = parsedInterval;
+	return t(`interval.every-${type}`, {count});
+});
