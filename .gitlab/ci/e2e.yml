@@ -1,5 +1,5 @@
 .cypress:
-  extends: .node
+  extends: .frontend
   stage: e2e
   retry:
     max: 2
@@ -7,6 +7,7 @@
   image:
     name: ${DOCKER_PROXY}cypress/base:10
   variables:
+    CYPRESS_INSTALL_BINARY: ""
     CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/.cache/Cypress"
   script:
     - export BASE_URL=https://$(<$CI_PROJECT_DIR/ci_review_hostname.txt)

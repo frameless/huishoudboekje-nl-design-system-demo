@@ -3,6 +3,7 @@
 !.env.production
 .eslintcache
 coverage
+junit.xml
 build
 node_modules
 public/theme
