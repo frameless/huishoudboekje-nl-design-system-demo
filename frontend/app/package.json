@@ -19,7 +19,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "pretest": "npm run i18n-migrate",
-    "test": "react-scripts test --coverage --watchAll=false",
+    "test": "react-scripts test",
+    "test:coverage": "npm run test -- --coverage --reporters=default --reporters=jest-junit",
     "eject": "react-scripts eject",
     "cypress": "npx -q cypress open",
     "theme": "./setTheme.sh",
@@ -78,10 +79,17 @@
     "cypress-graphql-mock": "0.3.1",
     "eslint-plugin-cypress": "^2.11.2",
     "eslint-plugin-react-app": "^6.2.2",
-    "i18next-parser": "^3.5.0"
+    "i18next-parser": "^3.5.0",
+    "jest-junit": "^12.0.0"
   },
   "browserslist": [
     "> 0.5%",
     "not ie 11"
-  ]
+  ],
+  "jest": {
+    "coverageReporters": [
+      "text",
+      "cobertura"
+    ]
+  }
 }
