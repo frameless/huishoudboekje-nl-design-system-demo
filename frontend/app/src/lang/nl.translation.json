@@ -259,7 +259,7 @@
     },
     "booking": "Boeking",
     "select": {
-        "noOptions": "__MISSING-TRANSLATION__"
+        "noOptions": "Geen opties"
     },
     "burgers": {
         "burgers": "Burgers",
