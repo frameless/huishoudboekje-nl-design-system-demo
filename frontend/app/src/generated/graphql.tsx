@@ -273,6 +273,9 @@ export type DeleteRubriek = {
 export type Export = {
   __typename?: 'Export';
   id?: Maybe<Scalars['Int']>;
+  naam?: Maybe<Scalars['String']>;
+  timestamp?: Maybe<Scalars['DateTime']>;
+  overschrijvingen?: Maybe<Array<Maybe<Overschrijving>>>;
 };
 
 /** GraphQL Gebruiker model  */
@@ -369,6 +372,15 @@ export enum OverschrijvingStatus {
   InBehandeling = 'IN_BEHANDELING',
   Verwachting = 'VERWACHTING'
 }
+
+export type PlannedOverschijvingenQueryInput = {
+  afspraakStartDatum: Scalars['Date'];
+  interval: IntervalInput;
+  aantalBetalingen: Scalars['Int'];
+  bedrag: Scalars['Bedrag'];
+  startDatum?: Maybe<Scalars['Date']>;
+  eindDatum?: Maybe<Scalars['Date']>;
+};
 
 /** GraphQL Rekening model */
 export type Rekening = {
@@ -612,6 +624,8 @@ export type RootQuery = {
   bankTransactions?: Maybe<Array<Maybe<BankTransaction>>>;
   customerStatementMessage?: Maybe<CustomerStatementMessage>;
   customerStatementMessages?: Maybe<Array<Maybe<CustomerStatementMessage>>>;
+  export?: Maybe<Export>;
+  exports?: Maybe<Array<Maybe<Export>>>;
   gebruiker?: Maybe<Gebruiker>;
   gebruikers?: Maybe<Array<Maybe<Gebruiker>>>;
   grootboekrekening?: Maybe<Grootboekrekening>;
@@ -626,6 +640,7 @@ export type RootQuery = {
   rubrieken?: Maybe<Array<Maybe<Rubriek>>>;
   configuratie?: Maybe<Configuratie>;
   configuraties?: Maybe<Array<Maybe<Configuratie>>>;
+  plannedOverschrijvingen?: Maybe<Array<Maybe<Overschrijving>>>;
 };
 
 
@@ -663,6 +678,20 @@ export type RootQueryCustomerStatementMessageArgs = {
 /** The root of all queries  */
 export type RootQueryCustomerStatementMessagesArgs = {
   ids?: Maybe<Array<Maybe<Scalars['Int']>>>;
+};
+
+
+/** The root of all queries  */
+export type RootQueryExportArgs = {
+  id: Scalars['Int'];
+};
+
+
+/** The root of all queries  */
+export type RootQueryExportsArgs = {
+  ids?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  beginTimestamp?: Maybe<Scalars['DateTime']>;
+  eindTimestamp?: Maybe<Scalars['DateTime']>;
 };
 
 
@@ -747,6 +776,12 @@ export type RootQueryConfiguratieArgs = {
 /** The root of all queries  */
 export type RootQueryConfiguratiesArgs = {
   ids?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+
+/** The root of all queries  */
+export type RootQueryPlannedOverschrijvingenArgs = {
+  input: PlannedOverschijvingenQueryInput;
 };
 
 /** GraphQL Rubriek model */
@@ -1198,6 +1233,24 @@ export type UpdateJournaalpostGrootboekrekeningMutation = (
   )> }
 );
 
+export type CreateJournaalpostAfspraakMutationVariables = Exact<{
+  transactionId: Scalars['Int'];
+  afspraakId: Scalars['Int'];
+}>;
+
+
+export type CreateJournaalpostAfspraakMutation = (
+  { __typename?: 'RootMutation' }
+  & { createJournaalpostAfspraak?: Maybe<(
+    { __typename?: 'CreateJournaalpostAfspraak' }
+    & Pick<CreateJournaalpostAfspraak, 'ok'>
+    & { journaalpost?: Maybe<(
+      { __typename?: 'Journaalpost' }
+      & Pick<Journaalpost, 'id'>
+    )> }
+  )> }
+);
+
 export type DeleteJournaalpostMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -1327,7 +1380,11 @@ export type GetAllTransactionsQuery = (
       & Pick<Journaalpost, 'id'>
       & { afspraak?: Maybe<(
         { __typename?: 'Afspraak' }
-        & Pick<Afspraak, 'id'>
+        & { rubriek?: Maybe<(
+          { __typename?: 'Rubriek' }
+          & Pick<Rubriek, 'id' | 'naam'>
+        )> }
+        & AfspraakFragment
       )>, grootboekrekening?: Maybe<(
         { __typename?: 'Grootboekrekening' }
         & { rubriek?: Maybe<(
@@ -2110,6 +2167,42 @@ export function useUpdateJournaalpostGrootboekrekeningMutation(baseOptions?: Apo
 export type UpdateJournaalpostGrootboekrekeningMutationHookResult = ReturnType<typeof useUpdateJournaalpostGrootboekrekeningMutation>;
 export type UpdateJournaalpostGrootboekrekeningMutationResult = Apollo.MutationResult<UpdateJournaalpostGrootboekrekeningMutation>;
 export type UpdateJournaalpostGrootboekrekeningMutationOptions = Apollo.BaseMutationOptions<UpdateJournaalpostGrootboekrekeningMutation, UpdateJournaalpostGrootboekrekeningMutationVariables>;
+export const CreateJournaalpostAfspraakDocument = gql`
+    mutation createJournaalpostAfspraak($transactionId: Int!, $afspraakId: Int!) {
+  createJournaalpostAfspraak(input: {transactionId: $transactionId, afspraakId: $afspraakId}) {
+    ok
+    journaalpost {
+      id
+    }
+  }
+}
+    `;
+export type CreateJournaalpostAfspraakMutationFn = Apollo.MutationFunction<CreateJournaalpostAfspraakMutation, CreateJournaalpostAfspraakMutationVariables>;
+
+/**
+ * __useCreateJournaalpostAfspraakMutation__
+ *
+ * To run a mutation, you first call `useCreateJournaalpostAfspraakMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateJournaalpostAfspraakMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createJournaalpostAfspraakMutation, { data, loading, error }] = useCreateJournaalpostAfspraakMutation({
+ *   variables: {
+ *      transactionId: // value for 'transactionId'
+ *      afspraakId: // value for 'afspraakId'
+ *   },
+ * });
+ */
+export function useCreateJournaalpostAfspraakMutation(baseOptions?: Apollo.MutationHookOptions<CreateJournaalpostAfspraakMutation, CreateJournaalpostAfspraakMutationVariables>) {
+        return Apollo.useMutation<CreateJournaalpostAfspraakMutation, CreateJournaalpostAfspraakMutationVariables>(CreateJournaalpostAfspraakDocument, baseOptions);
+      }
+export type CreateJournaalpostAfspraakMutationHookResult = ReturnType<typeof useCreateJournaalpostAfspraakMutation>;
+export type CreateJournaalpostAfspraakMutationResult = Apollo.MutationResult<CreateJournaalpostAfspraakMutation>;
+export type CreateJournaalpostAfspraakMutationOptions = Apollo.BaseMutationOptions<CreateJournaalpostAfspraakMutation, CreateJournaalpostAfspraakMutationVariables>;
 export const DeleteJournaalpostDocument = gql`
     mutation deleteJournaalpost($id: Int!) {
   deleteJournaalpost(id: $id) {
@@ -2415,7 +2508,11 @@ export const GetAllTransactionsDocument = gql`
     journaalpost {
       id
       afspraak {
-        id
+        ...Afspraak
+        rubriek {
+          id
+          naam
+        }
       }
       grootboekrekening {
         ...Grootboekrekening
@@ -2428,6 +2525,7 @@ export const GetAllTransactionsDocument = gql`
   }
 }
     ${BankTransactionFragmentDoc}
+${AfspraakFragmentDoc}
 ${GrootboekrekeningFragmentDoc}`;
 
 /**

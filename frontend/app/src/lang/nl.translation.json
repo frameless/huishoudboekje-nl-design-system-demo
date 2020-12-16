@@ -24,8 +24,7 @@
             "addHint": "Voeg transacties toe door een bronbestand te importeren."
         },
         "journals": {
-            "createSuccessMessage": "Transactie succesvol verwerkt.",
-            "deleteSuccessMessage": "Transactie succesvol verwerkt."
+            "createSuccessMessage": "Transactie succesvol verwerkt."
         },
         "burgers": {
             "deleteConfirmMessage": "Gegevens van {{name}} zijn verwijderd.",
@@ -65,6 +64,7 @@
         "export": "Exporteren",
         "actions": "Acties",
         "add": "Toevoegen",
+        "disconnect": "Koppeling verwijderen",
         "backToList": "Terug naar overzicht",
         "clearSearch": "Zoekopdracht wissen",
         "backToHome": "Terug naar de hoofdpagina"
@@ -100,12 +100,12 @@
                     "helperText": "Geef aan wanneer en hoeveel betalingen verwacht worden."
                 },
                 "2": {
-                    "title": "Verwachting",
-                    "helperText": "Dit is een overzicht van de verwachte betalingen bij deze afspraak.",
                     "prognosisText_outgoing": "Er wordt <0>1</0> uitgaande overschrijving verwacht tussen <1>{{start}}</1> en <2>{{end}}</2>.",
                     "prognosisText_outgoing_plural": "Er worden <0>{{count}}</0> uitgaande overschrijvingen verwacht tussen <1>{{start}}</1> en <2>{{end}}</2>.",
                     "prognosisText_incoming": "Er wordt <0>1</0> inkomende overschrijving verwacht tussen <1>{{start}}</1> en <2>{{end}}</2>.",
-                    "prognosisText_incoming_plural": "Er worden <0>{{count}}</0> inkomende overschrijvingen verwacht tussen <1>{{start}}</1> en <2>{{end}}</2>."
+                    "prognosisText_incoming_plural": "Er worden <0>{{count}}</0> inkomende overschrijvingen verwacht tussen <1>{{start}}</1> en <2>{{end}}</2>.",
+                    "title": "Verwachting",
+                    "helperText": "Dit is een overzicht van de verwachte betalingen bij deze afspraak."
                 }
             },
             "titleEdit": "Afspraak bewerken"
@@ -131,10 +131,6 @@
                 "journal": {
                     "title": "Transactie verwerken"
                 }
-            },
-            "fields": {
-                "afspraakChoose": "Kies een afspraak",
-                "rubricChoose": "Kies een rubriek"
             }
         },
         "burgers": {
@@ -253,7 +249,6 @@
             "exports": "Overschrijvingen"
         },
         "banking": "Bankzaken",
-        "rubric": "Rubriek",
         "customerStatementMessages": "Bronbestanden"
     },
     "transactions": {
@@ -262,8 +257,13 @@
         "amount": "Bedrag",
         "description": "Omschrijving"
     },
+    "booking": "Boeking",
+    "select": {
+        "noOptions": "__MISSING-TRANSLATION__"
+    },
     "burgers": {
-        "burgers": "Burgers"
+        "burgers": "Burgers",
+        "burger": "Burger"
     },
     "organizations": {
         "organizations": "Organisaties"

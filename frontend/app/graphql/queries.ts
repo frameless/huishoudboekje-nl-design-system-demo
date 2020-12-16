@@ -86,7 +86,11 @@ export const GetAllTransactionsQuery = gql`
             journaalpost {
                 id
                 afspraak {
-                    id
+                    ...Afspraak
+                    rubriek{
+                        id
+                        naam
+                    }
                 }
                 grootboekrekening {
                     ...Grootboekrekening

@@ -6,6 +6,7 @@ import {
 	Heading,
 	Modal,
 	ModalBody,
+	ModalCloseButton,
 	ModalContent,
 	ModalFooter,
 	ModalHeader,
@@ -30,16 +31,17 @@ import {
 	Afspraak,
 	BankTransaction,
 	Rubriek,
+	useCreateJournaalpostAfspraakMutation,
 	useCreateJournaalpostGrootboekrekeningMutation,
 	useDeleteJournaalpostMutation,
 	useGetAllAfsprakenQuery,
 	useGetAllRubriekenQuery,
-	useUpdateJournaalpostGrootboekrekeningMutation
 } from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import {dateFormat, formatBurgerName} from "../../../utils/things";
 import Currency from "../../Currency";
 import {Label} from "../../Forms/FormLeftRight";
+import {AfspraakDetailView, GrootboekrekeningDetailView} from "../../Layouts/JournaalpostDetails";
 import {TransactionsContext} from "./index";
 
 const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }> = ({bankTransaction: bt, ...props}) => {
@@ -49,8 +51,12 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }>
 	const {isOpen, onOpen, onClose} = useDisclosure();
 	const {refetch} = useContext(TransactionsContext);
 
-	const rubric = useInput();
-	const afspraak = useInput<number>();
+	const rubric = useInput({
+		validate: [(v) => v.trim().length > 0]
+	});
+	const afspraak = useInput({
+		validate: [(v) => v.trim().length > 0]
+	});
 
 	const $rubrics = useGetAllRubriekenQuery({
 		fetchPolicy: "no-cache",
@@ -64,16 +70,18 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }>
 		fetchPolicy: "no-cache",
 		onCompleted: () => {
 			if (bt.journaalpost?.afspraak?.id) {
-				afspraak.setValue(bt.journaalpost?.afspraak?.id);
+				afspraak.setValue("" + bt.journaalpost?.afspraak?.id);
 			}
 		}
 	});
-	const [createJournaalpost] = useCreateJournaalpostGrootboekrekeningMutation();
-	const [updateJournaalpost] = useUpdateJournaalpostGrootboekrekeningMutation();
+	const [createJournaalpostAfspraak] = useCreateJournaalpostAfspraakMutation();
+	const [createJournaalpostGrootboekrekening] = useCreateJournaalpostGrootboekrekeningMutation();
 	const [deleteJournaalpost] = useDeleteJournaalpostMutation();
 
 	const onClickSave = async () => {
-		if (!rubric.isValid) {
+		// If rubric and afspraak are both invalid or valid. We need only one.
+		if ((!rubric.isValid && !afspraak.isValid) || (afspraak.isValid && rubric.isValid)) {
+			console.log("Both not valid", [rubric.isValid, rubric.value], [afspraak.isValid, afspraak.value]);
 			toast({
 				status: "error",
 				title: t("messages.agreements.invalidFormMessage"),
@@ -82,28 +90,38 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }>
 			return;
 		}
 
+		/*
+		If journaalpost > deleteJournaalpost
+		else If not journaalpost > create
+			If valid afspraak && not valid rubric > createJournaalpostAfspraak
+			If valid rubric && not valid afspraak > createJournaalpostGrootboekrekening
+			Else > Nope
+		*/
+
 		let mutation;
-		if (!bt.journaalpost || !bt.journaalpost.id) {
-			mutation = createJournaalpost({
+
+		if (bt.journaalpost?.id) {
+			mutation = deleteJournaalpost({
 				variables: {
-					transactionId: bt.id!, // Todo: fix this ! somehow
-					grootboekrekeningId: rubric.value
+					id: bt.journaalpost.id,
 				}
 			});
 		}
 		else {
-			if (!rubric.value) {
-				mutation = deleteJournaalpost({
+			// Can't link to afspraak and rubric at the same time.
+			if (afspraak.isValid) {
+				mutation = createJournaalpostAfspraak({
 					variables: {
-						id: bt.journaalpost.id,
+						transactionId: bt.id!, // Todo: fix this ! somehow
+						afspraakId: parseInt(afspraak.value),
 					}
 				});
 			}
-			else {
-				mutation = updateJournaalpost({
+			else if (rubric.isValid) {
+				mutation = createJournaalpostGrootboekrekening({
 					variables: {
-						id: bt.journaalpost.id,
-						grootboekrekeningId: rubric.value
+						transactionId: bt.id!, // Todo: fix this ! somehow
+						grootboekrekeningId: rubric.value,
 					}
 				});
 			}
@@ -130,33 +148,41 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }>
 	}
 
 	const maybeFormatIBAN = (iban?: string) => iban ? friendlyFormatIBAN(iban) : t("unknown")
+	const onClick = () => {
+		if (!isMobile) {
+			onOpen();
+		}
+	};
+
+	const onSelectAfspraak = (val) => {
+		afspraak.setValue(String(val.value));
+		rubric.reset();
+	};
+	const onSelectRubriek = (val) => {
+		rubric.setValue(val.value);
+		afspraak.reset();
+	};
 
 	return (<>
-		<Modal isOpen={isOpen} onClose={onClose} blockScrollOnMount={true}>
+		<Modal isOpen={!isMobile && isOpen} onClose={onClose}>
 			<ModalOverlay />
-			<ModalContent>
+			<ModalContent width={"100%"} maxWidth={1200}>
+				<ModalCloseButton />
 				<ModalHeader>{t("forms.banking.sections.journal.title")}</ModalHeader>
 				<ModalBody>
 
-					<Stack spacing={5}>
-						<Box>
-							<Label>{t("transactions.beneficiaryAccount")}</Label>
-							<Box flex={2}>{bt.tegenRekening ? (
-								<Stack spacing={0}>
-									<Text>{bt.tegenRekening.rekeninghouder}</Text>
-									<Text fontSize={"sm"}>{maybeFormatIBAN(bt.tegenRekening.iban)}</Text>
-								</Stack>
-							) : (
-								<Text>{maybeFormatIBAN(bt.tegenRekeningIban)}</Text>
-							)}
-							</Box>
-						</Box>
-
-						<Stack direction={"row"} justifyContent={"space-between"}>
+					<Stack spacing={5} justifyContent={"space-between"}>
+						<Stack direction={"row"} spacing={5} justifyContent={"space-between"} maxWidth={500}>
 							<Box>
-								<Label>{t("forms.common.fields.date")}</Label>
-								<Box>
-									<Text>{dateFormat.format(new Date(bt.transactieDatum))}</Text>
+								<Label>{t("transactions.beneficiaryAccount")}</Label>
+								<Box flex={2}>{bt.tegenRekening ? (
+									<Stack spacing={0}>
+										<Text>{bt.tegenRekening.rekeninghouder}</Text>
+										<Text fontSize={"sm"}>{maybeFormatIBAN(bt.tegenRekening.iban)}</Text>
+									</Stack>
+								) : (
+									<Text>{maybeFormatIBAN(bt.tegenRekeningIban)}</Text>
+								)}
 								</Box>
 							</Box>
 
@@ -164,6 +190,13 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }>
 								<Label>{t("transactions.amount")}</Label>
 								<Box>
 									<Currency justifyContent={"flex-start"} value={bt.bedrag} />
+								</Box>
+							</Box>
+
+							<Box>
+								<Label>{t("forms.common.fields.date")}</Label>
+								<Box>
+									<Text>{dateFormat.format(new Date(bt.transactieDatum))}</Text>
 								</Box>
 							</Box>
 						</Stack>
@@ -177,65 +210,87 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }>
 
 						<Divider />
 
-						<Heading size={"sm"}>Koppelen met</Heading>
+						{bt.journaalpost ? (
+							<Stack spacing={2}>
+								<Heading size={"sm"}>{t("booking")}</Heading>
+								<Stack direction={"row"} justifyContent={"space-between"} alignItems={"center"}>
+									{bt.journaalpost.afspraak && <AfspraakDetailView afspraak={bt.journaalpost.afspraak} />}
+									{bt.journaalpost.grootboekrekening && <GrootboekrekeningDetailView grootboekrekening={bt.journaalpost.grootboekrekening} />}
+								</Stack>
+							</Stack>
+						) : (<>
+							<Heading size={"sm"}>Koppelen met</Heading>
 
-						<Tabs isFitted>
-							<TabList>
-								<Tab>Afspraak</Tab>
-								<Tab>Rubriek</Tab>
-							</TabList>
-							<TabPanels>
-								<TabPanel px={0}>
-									<Queryable query={$afspraken}>{({afspraken}) => {
-										const options = afspraken.filter(a => a.gebruiker).map((a: Afspraak) => ({
-											key: a.id,
-											value: a.id,
-											label: [
-												(a.tegenRekening?.iban || "Onbekende tegenrekening"),
-												a.gebruiker ? formatBurgerName(a.gebruiker) : "Onbekende gebruiker",
-												a.bedrag
-											].join(" - "),
-										}));
+							<Tabs>
+								<TabList>
+									<Tab>Afspraak</Tab>
+									<Tab>Rubriek</Tab>
+								</TabList>
+								<TabPanels>
+									<TabPanel px={0}>
+										<Queryable query={$afspraken}>{({afspraken}) => {
+											const options = afspraken.filter(a => a.gebruiker).map((a: Afspraak) => ({
+												key: a.id,
+												value: a.id,
+												label: [
+													`(${a.id})`,
+													a.beschrijving,
+													(a.tegenRekening?.iban || "Onbekende tegenrekening"),
+													a.gebruiker ? formatBurgerName(a.gebruiker) : "Onbekende gebruiker",
+													(a.bedrag * (a.credit ? 1 : -1))
+												].join(" | "),
+											}));
 
-										return (
-											<Stack>
+											/*
 												<Stack>
-													{options.map(a => (
-														<Box>{a.label}</Box>
-													))}
+												Suggesties op basis van:
+												- Exact hetzelfde bedrag
+												- Dezelfde tegenrekening
+												- Select is in alles zoeken
+												  - Groeperen op gebruiker
+												- Hoeveel vergelijkingen met andere afspraken
 												</Stack>
+												 */
+											return (
+												// <Stack spacing={2} border={"1px solid #cccccc"} borderRadius={5} p={3}>
+												<Select onChange={onSelectAfspraak} defaultValue={options.find(o => o.value === afspraak.value)}
+												        options={options} isClearable={true}
+												        noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} />
+												// </Stack>
+											);
+										}}</Queryable>
+									</TabPanel>
+									<TabPanel px={0}>
+										<Queryable query={$rubrics}>{({rubrieken}) => {
+											const options = rubrieken.filter(r => r.grootboekrekening && r.grootboekrekening.id).map((r: Rubriek) => ({
+												key: r.id,
+												label: r.naam,
+												value: r.grootboekrekening!.id
+											}));
 
-												<Divider />
-
-												<Select onChange={(val) => afspraak.setValue(val?.value)} defaultValue={options.find(o => o.value === afspraak.value)}
-												        options={options} isClearable={true} />
-											</Stack>
-										);
-									}}</Queryable>
-								</TabPanel>
-								<TabPanel px={0}>
-									<Queryable query={$rubrics}>{({rubrieken}) => {
-										const options = rubrieken.filter(r => r.grootboekrekening && r.grootboekrekening.id).map((r: Rubriek) => ({
-											key: r.id,
-											label: r.naam,
-											value: r.grootboekrekening!.id
-										}));
-
-										return (
-											<Select onChange={(val) => rubric.setValue(val?.value)} defaultValue={options.find(o => o.value === rubric.value)} options={options} isClearable={true} />
-										);
-									}}
-									</Queryable>
-								</TabPanel>
-							</TabPanels>
-						</Tabs>
+											return (
+												<Select onChange={onSelectRubriek} defaultValue={options.find(o => o.value === rubric.value)}
+												        options={options} isClearable={true}
+												        noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} />
+											);
+										}}
+										</Queryable>
+									</TabPanel>
+								</TabPanels>
+							</Tabs>
+						</>)}
 					</Stack>
 
 				</ModalBody>
 				<ModalFooter>
 					<Stack direction={"row"}>
 						<Button onClick={() => onClose()}>{t("actions.cancel")}</Button>
-						<Button colorScheme={"primary"} isDisabled={(!bt.journaalpost || !bt.journaalpost.id) && !rubric.value} onClick={() => onClickSave()}>{t("actions.save")}</Button>
+						{bt.journaalpost ? (
+							<Button colorScheme={"red"} onClick={() => onClickSave()}>{t("actions.disconnect")}</Button>
+						) : (
+							<Button colorScheme={"primary"} isDisabled={!rubric.value && !afspraak.value}
+							        onClick={() => onClickSave()}>{t("actions.save")}</Button>
+						)}
 					</Stack>
 				</ModalFooter>
 			</ModalContent>
@@ -244,20 +299,22 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }>
 		<Box px={2} mx={-2} _hover={{
 			bg: "gray.100"
 		}}>
-			<Stack direction={"row"} alignItems={"center"} justifyContent={"center"} {...props} onClick={() => onOpen()} cursor={"pointer"}>
-				<Box flex={2}>{bt.tegenRekening ? (<>
+			<Stack direction={"row"} alignItems={"center"} justifyContent={"center"} {...props} onClick={onClick} cursor={"pointer"}>
+				<Box flex={2}>{bt.tegenRekening ? (
 					<Text>
 						<Tooltip label={maybeFormatIBAN(bt.tegenRekening.iban)} aria-label={maybeFormatIBAN(bt.tegenRekening.iban)} placement={"right"} hasArrow={true}>
 							<span>{bt.tegenRekening.rekeninghouder}</span>
 						</Tooltip>
 					</Text>
-				</>) :
+				) : (
 					<Text whiteSpace={"nowrap"}>{maybeFormatIBAN(bt.tegenRekeningIban)}</Text>
-				}
+				)}
 				</Box>
 				{!isMobile && (
 					<Box flex={1}>
-						<Text fontSize={"sm"}>{bt.journaalpost?.grootboekrekening?.rubriek?.naam}</Text>
+						{bt.journaalpost && (
+							<Text fontSize={"sm"}>{bt.journaalpost.afspraak?.rubriek?.naam || bt.journaalpost.grootboekrekening?.rubriek?.naam}</Text>
+						)}
 					</Box>
 				)}
 				<Box flex={0} minWidth={120}>
