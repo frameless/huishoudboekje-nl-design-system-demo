@@ -1,5 +1,6 @@
 import json
 from datetime import datetime
+from dateutil import tz
 from urllib.parse import urlencode
 
 import graphene
@@ -9,8 +10,8 @@ from graphql import GraphQLError
 
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.models.export import Export
-from hhb_backend.graphql.utils import planned_overschrijvingen
 from hhb_backend.graphql.utils.create_sepa_export import create_export_string
+from hhb_backend.graphql.utils.overschrijvingen_planner import PlannedOverschijvingenInput, get_planned_overschrijvingen
 
 
 def create_json_payload_overschrijving(future_overschrijving, export_id) -> dict:
@@ -45,44 +46,61 @@ class CreateExportOverschrijvingen(graphene.Mutation):
             raise GraphQLError(f"Upstream API responded: {afspraken_response.text}")
 
         afspraken = afspraken_response.json()['data']
+        afspraken = list(filter(lambda o: o['automatische_incasso'] is False, afspraken))
         afspraken_ids = [afspraak_result['id'] for afspraak_result in afspraken]
-        # TODO automatische_incasso check has to be done. We only need afspraken with automatische incasso
 
         # Get all previous overschrijvingen from afspraken
-        overschrijvingen = await request.dataloader.overschrijvingen_by_afspraken.load_many(afspraken_ids)
+        overschrijvingen = await request.dataloader.overschrijvingen_by_afspraak.load_many(afspraken_ids)
         # Flatten the overschrijvingen list.
         overschrijvingen = [item for sublist in overschrijvingen for item in sublist]
 
         # Haal alle toekomstige overschrijvingen op. Met in achtneming van start en datum.
         future_overschrijvingen = []
         for afspraak in afspraken:
-            # TODO refactor aan de hand van andere features
-            future_overschrijvingen += planned_overschrijvingen(afspraak, start_datum, eind_datum)
+            planner_input = PlannedOverschijvingenInput(
+                afspraak["start_datum"],
+                afspraak["interval"],
+                afspraak["aantal_betalingen"],
+                afspraak["bedrag"],
+                afspraak["id"]
+            )
+            future_overschrijvingen += list(
+                get_planned_overschrijvingen(planner_input, start_datum, eind_datum).values())
 
         # Crossref met huidige overschrijvingen
         for overschrijving in overschrijvingen:
             future_overschrijvingen = list(filter(lambda o:
-                                                  not(o['afspraak_id'] == overschrijving["afspraak_id"] and
-                                                      o['datum'] == datetime.strptime(overschrijving['datum'], '%Y-%m-%d').date()),
+                                                  not (o['afspraak_id'] == overschrijving["afspraak_id"] and
+                                                       o['datum'] == datetime.strptime(overschrijving['datum'],
+                                                                                       '%Y-%m-%d').date()),
                                                   future_overschrijvingen))
 
-        # TODO Creer export object en koppel deze aan overschrijvingen
-        export_object = ""
+        if not future_overschrijvingen:
+            raise GraphQLError(f"Geen overschrijvingen in periode, geen export bestand aangemaakt.")
+
+        today = datetime.now()
+        export_response = requests.post(
+            f"{settings.HHB_SERVICES_URL}/export/",
+            data=json.dumps({
+                "naam": today.strftime('%Y-%m-%d_%H-%M-%S') + "-SEPA-EXPORT",
+                "timestamp": datetime(today.year, today.month, today.day, today.hour, today.minute, today.second,
+                                      tzinfo=tz.tzlocal()).isoformat(),
+            }),
+            headers={'Content-type': 'application/json'}
+        )
+        if export_response.status_code != 201:
+            raise GraphQLError(f"Upstream API responded: {export_response.json()}")
+        export_object = export_response.json()['data']
 
         # Overschrijvingen wegschrijven in db + export object
         for export_overschrijving in future_overschrijvingen:
-            # TODO use export_object id
-            json_payload = create_json_payload_overschrijving(export_overschrijving, 1)
-            gebruiker_response = requests.post(
+            json_payload = create_json_payload_overschrijving(export_overschrijving, export_object['id'])
+            overschrijving_response = requests.post(
                 f"{settings.HHB_SERVICES_URL}/overschrijvingen/",
                 data=json.dumps(json_payload),
                 headers={'Content-type': 'application/json'}
             )
-            if gebruiker_response.status_code != 201:
-                raise GraphQLError(f"Upstream API responded: {gebruiker_response.json()}")
-
-        # Creer export bestand en return deze. # TODO deze moet weg uitdeze call
-        export_file_xml = await create_export_string(future_overschrijvingen, export_object)
-        print(export_file_xml)
+            if overschrijving_response.status_code != 201:
+                raise GraphQLError(f"Upstream API responded: {overschrijving_response.json()}")
 
         return CreateExportOverschrijvingen(export=export_object, ok=True)
