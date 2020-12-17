@@ -1,6 +1,4 @@
-import { CheckIcon } from "@chakra-ui/icons";
-import {Box, Stack, StackProps, Text, HStack} from "@chakra-ui/react";
-import {friendlyFormatIBAN} from "ibantools";
+import {Box, Stack, StackProps, Text} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {BankTransaction} from "../../../generated/graphql";
@@ -27,7 +25,7 @@ const TransactionDetailsView: React.FC<StackProps & { transaction: BankTransacti
 					<Box flex={2}>{bt.tegenRekening ? (
 						<Stack spacing={0}>
 							<Text>{bt.tegenRekening.rekeninghouder}</Text>
-							<PrettyIban iban={bt.tegenRekening.iban} />
+							<Text size={"sm"}><PrettyIban iban={bt.tegenRekening.iban} /></Text>
 						</Stack>
 					) : (
 						<PrettyIban iban={bt.tegenRekeningIban} />

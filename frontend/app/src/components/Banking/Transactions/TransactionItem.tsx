@@ -26,7 +26,15 @@ import React, {useContext, useState} from "react";
 import {useIsMobile} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
-import {Afspraak, BankTransaction, Rubriek, useGetAllRubriekenAndAfsprakenQuery} from "../../../generated/graphql";
+import {
+	Afspraak,
+	BankTransaction,
+	Rubriek,
+	useCreateJournaalpostAfspraakMutation,
+	useCreateJournaalpostGrootboekrekeningMutation,
+	useDeleteJournaalpostMutation,
+	useGetAllRubriekenAndAfsprakenQuery
+} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import {formatIBAN} from "../../../utils/things";
 import Currency from "../../Currency";
@@ -50,67 +58,44 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }>
 		fetchPolicy: "no-cache",
 	});
 
-	// const [createJournaalpostAfspraak] = useCreateJournaalpostAfspraakMutation();
-	// const [createJournaalpostGrootboekrekening] = useCreateJournaalpostGrootboekrekeningMutation();
-	// const [deleteJournaalpost] = useDeleteJournaalpostMutation();
-	// const onClickSave = async () => {
-	// 	// If rubric and afspraak are both invalid or valid. We need only one.
-	// 	if ((!rubric.isValid && !afspraak.isValid) || (afspraak.isValid && rubric.isValid)) {
-	// 		toast({
-	// 			status: "error",
-	// 			title: t("messages.agreements.invalidFormMessage"),
-	// 			position: "top",
-	// 		});
-	// 		return;
-	// 	}
-	//
-	// 	let mutation;
-	// 	if (bt.journaalpost?.id) {
-	// 		mutation = deleteJournaalpost({
-	// 			variables: {
-	// 				id: bt.journaalpost.id,
-	// 			}
-	// 		});
-	// 	}
-	// 	else {
-	// 		// Can't link to afspraak and rubric at the same time.
-	// 		if (afspraak.isValid) {
-	// 			mutation = createJournaalpostAfspraak({
-	// 				variables: {
-	// 					transactionId: bt.id!, // Todo: fix this ! somehow
-	// 					afspraakId: parseInt(afspraak.value),
-	// 				}
-	// 			});
-	// 		}
-	// 		else if (rubric.isValid) {
-	// 			mutation = createJournaalpostGrootboekrekening({
-	// 				variables: {
-	// 					transactionId: bt.id!, // Todo: fix this ! somehow
-	// 					grootboekrekeningId: rubric.value,
-	// 				}
-	// 			});
-	// 		}
-	// 	}
-	//
-	// 	mutation.then(() => {
-	// 		toast({
-	// 			status: "success",
-	// 			title: t("messages.journals.createSuccessMessage"),
-	// 			position: "top",
-	// 		});
-	// 		refetch();
-	// 		onClose();
-	// 	}).catch(err => {
-	// 		console.error(err);
-	// 		toast({
-	// 			position: "top",
-	// 			status: "error",
-	// 			variant: "solid",
-	// 			title: t("messages.genericError.title"),
-	// 			description: t("messages.genericError.description"),
-	// 		});
-	// 	});
-	// }
+	const [createJournaalpostAfspraak] = useCreateJournaalpostAfspraakMutation();
+	const [createJournaalpostGrootboekrekening] = useCreateJournaalpostGrootboekrekeningMutation();
+	const [deleteJournaalpost, $deleteJournaalpost] = useDeleteJournaalpostMutation();
+
+	const handleMutation = (mutation: Promise<any>, callback: VoidFunction) => {
+		mutation
+			.then(() => {
+				toast({
+					status: "success",
+					title: t("messages.journals.createSuccessMessage"),
+					position: "top",
+				});
+				refetch();
+				callback();
+			}).catch(err => {
+				console.error(err);
+				toast({
+					position: "top",
+					status: "error",
+					variant: "solid",
+					title: t("messages.genericError.title"),
+					description: t("messages.genericError.description"),
+				});
+			});
+	}
+
+	const onClickDeleteJournaalpost = () => {
+		const id = bt.journaalpost?.id;
+
+		if (id) {
+			handleMutation(deleteJournaalpost({
+				variables: {id}
+			}), () => {
+				setSelectedRubriek(undefined);
+				setSelectedAfspraak(undefined);
+			});
+		}
+	}
 
 	const onClick = () => {
 		if (!isMobile) {
@@ -128,33 +113,33 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }>
 					<Stack spacing={5}>
 						<TransactionDetailsView transaction={bt} />
 
-						<Divider />
-
 						{selectedAfspraak && (
 							<Stack>
+								<Divider />
+
 								<Heading size={"sm"}>{t("booking")}</Heading>
 								<Stack direction={"row"} justifyContent={"space-between"} alignItems={"center"} spacing={2}>
 									<SelectAfspraakOption afspraak={selectedAfspraak} enableHover={false} />
 									<Box>
-										<IconButton icon={<DeleteIcon />} aria-label={t("actions.disconnect")} onClick={() => setSelectedAfspraak(undefined)} />
+										<IconButton icon={<DeleteIcon />} variant={"ghost"} aria-label={t("actions.disconnect")} onClick={onClickDeleteJournaalpost}
+										            isLoading={$deleteJournaalpost.loading} />
 									</Box>
 								</Stack>
 							</Stack>
 						)}
 						{selectedRubriek && (
-							<Stack>
-								<Heading size={"sm"}>{t("booking")}</Heading>
-								<Stack direction={"row"} justifyContent={"space-between"} alignItems={"center"} spacing={2}>
+							<Stack direction={"row"} justifyContent={"flex-start"} alignItems={"center"} spacing={3}>
+								<Box>
+									<Label>{t("forms.agreements.fields.rubriek")}</Label>
 									<Box>
-										<Label>{t("rubric")}</Label>
-										<Box>
-											<Text>{selectedRubriek.naam}</Text>
-										</Box>
+										<Text>{selectedRubriek.naam}</Text>
+										{selectedRubriek.grootboekrekening && <Text fontSize={"sm"}>{selectedRubriek.grootboekrekening.omschrijving}</Text>}
 									</Box>
-									<Box>
-										<IconButton icon={<DeleteIcon />} aria-label={t("actions.disconnect")} onClick={() => setSelectedRubriek(undefined)} />
-									</Box>
-								</Stack>
+								</Box>
+								<Box>
+									<IconButton icon={<DeleteIcon />} variant={"ghost"} aria-label={t("actions.disconnect")} onClick={onClickDeleteJournaalpost}
+									            isLoading={$deleteJournaalpost.loading} />
+								</Box>
 							</Stack>
 						)}
 
@@ -182,7 +167,30 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }>
 
 								const onSelectRubriek = (val) => {
 									const foundRubriek = rubrieken.find(r => r.grootboekrekening?.id === val.value);
-									setSelectedRubriek(foundRubriek);
+
+									const transactionId = bt?.id;
+									const grootboekrekeningId = foundRubriek?.grootboekrekening?.id;
+
+									if(transactionId && grootboekrekeningId){
+										handleMutation(createJournaalpostGrootboekrekening({
+											variables: {transactionId, grootboekrekeningId}
+										}), () => {
+											setSelectedRubriek(foundRubriek);
+										});
+									}
+								}
+
+								const onSelectAfspraak = (afspraak: Afspraak) => {
+									const transactionId = bt?.id;
+									const afspraakId = afspraak.id;
+
+									if(transactionId && afspraakId){
+										handleMutation(createJournaalpostAfspraak({
+											variables: {transactionId, afspraakId}
+										}), () => {
+											setSelectedAfspraak(afspraak);
+										});
+									}
 								}
 
 								return (
@@ -196,10 +204,11 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }>
 											</TabList>
 											<TabPanels>
 												<TabPanel px={0}>
-													<SelectAfspraak value={selectedAfspraak} options={options.afspraken} onChange={setSelectedAfspraak} />
+													<SelectAfspraak value={selectedAfspraak} options={options.afspraken} onChange={onSelectAfspraak} />
 												</TabPanel>
 												<TabPanel px={0}>
-													<Select onChange={onSelectRubriek} options={options.rubrieken} isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} />
+													<Select onChange={onSelectRubriek} options={options.rubrieken} isClearable={true} noOptionsMessage={() => t("select.noOptions")}
+													        maxMenuHeight={200} />
 												</TabPanel>
 											</TabPanels>
 										</Tabs>
