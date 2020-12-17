@@ -1409,6 +1409,24 @@ export type GetAllRubriekenQuery = (
   )>>> }
 );
 
+export type GetAllRubriekenAndAfsprakenQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAllRubriekenAndAfsprakenQuery = (
+  { __typename?: 'RootQuery' }
+  & { rubrieken?: Maybe<Array<Maybe<(
+    { __typename?: 'Rubriek' }
+    & { grootboekrekening?: Maybe<(
+      { __typename?: 'Grootboekrekening' }
+      & Pick<Grootboekrekening, 'id' | 'naam'>
+    )> }
+    & RubriekFragment
+  )>>>, afspraken?: Maybe<Array<Maybe<(
+    { __typename?: 'Afspraak' }
+    & AfspraakFragment
+  )>>> }
+);
+
 export const RekeningFragmentDoc = gql`
     fragment Rekening on Rekening {
   id
@@ -2583,3 +2601,43 @@ export function useGetAllRubriekenLazyQuery(baseOptions?: Apollo.LazyQueryHookOp
 export type GetAllRubriekenQueryHookResult = ReturnType<typeof useGetAllRubriekenQuery>;
 export type GetAllRubriekenLazyQueryHookResult = ReturnType<typeof useGetAllRubriekenLazyQuery>;
 export type GetAllRubriekenQueryResult = Apollo.QueryResult<GetAllRubriekenQuery, GetAllRubriekenQueryVariables>;
+export const GetAllRubriekenAndAfsprakenDocument = gql`
+    query getAllRubriekenAndAfspraken {
+  rubrieken {
+    ...Rubriek
+    grootboekrekening {
+      id
+      naam
+    }
+  }
+  afspraken {
+    ...Afspraak
+  }
+}
+    ${RubriekFragmentDoc}
+${AfspraakFragmentDoc}`;
+
+/**
+ * __useGetAllRubriekenAndAfsprakenQuery__
+ *
+ * To run a query within a React component, call `useGetAllRubriekenAndAfsprakenQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllRubriekenAndAfsprakenQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAllRubriekenAndAfsprakenQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetAllRubriekenAndAfsprakenQuery(baseOptions?: Apollo.QueryHookOptions<GetAllRubriekenAndAfsprakenQuery, GetAllRubriekenAndAfsprakenQueryVariables>) {
+        return Apollo.useQuery<GetAllRubriekenAndAfsprakenQuery, GetAllRubriekenAndAfsprakenQueryVariables>(GetAllRubriekenAndAfsprakenDocument, baseOptions);
+      }
+export function useGetAllRubriekenAndAfsprakenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllRubriekenAndAfsprakenQuery, GetAllRubriekenAndAfsprakenQueryVariables>) {
+          return Apollo.useLazyQuery<GetAllRubriekenAndAfsprakenQuery, GetAllRubriekenAndAfsprakenQueryVariables>(GetAllRubriekenAndAfsprakenDocument, baseOptions);
+        }
+export type GetAllRubriekenAndAfsprakenQueryHookResult = ReturnType<typeof useGetAllRubriekenAndAfsprakenQuery>;
+export type GetAllRubriekenAndAfsprakenLazyQueryHookResult = ReturnType<typeof useGetAllRubriekenAndAfsprakenLazyQuery>;
+export type GetAllRubriekenAndAfsprakenQueryResult = Apollo.QueryResult<GetAllRubriekenAndAfsprakenQuery, GetAllRubriekenAndAfsprakenQueryVariables>;

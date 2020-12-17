@@ -1,3 +1,4 @@
+import {friendlyFormatIBAN} from "ibantools";
 import moment from "moment";
 import {createContext} from "react";
 import {BankTransaction, Gebruiker, Interval, IntervalInput} from "../generated/graphql";
@@ -125,3 +126,9 @@ export const intervalString = ((interval: Interval | undefined, t: (text, ...tPr
 	const {intervalType: type, count} = parsedInterval;
 	return t(`interval.every-${type}`, {count});
 });
+
+export const formatIBAN = (iban?: string) => {
+	if(iban){
+		return friendlyFormatIBAN(iban);
+	}
+}

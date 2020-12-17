@@ -115,3 +115,20 @@ export const GetAllRubriekenQuery = gql`
     }
     ${RubriekFragment}
 `;
+
+export const GetRubriekenAndAfsprakenQuery = gql`
+    query getAllRubriekenAndAfspraken {
+        rubrieken{
+            ...Rubriek
+            grootboekrekening{
+                id
+                naam
+            }
+        }
+        afspraken{
+            ...Afspraak
+        }
+    }
+    ${RubriekFragment}
+    ${AfspraakFragment}
+`;
