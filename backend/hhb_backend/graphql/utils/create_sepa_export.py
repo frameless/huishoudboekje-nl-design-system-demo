@@ -1,27 +1,12 @@
-from datetime import datetime
-
 import requests
-from flask import request
 from graphql import GraphQLError
 from sepaxml import SepaTransfer
+from datetime import datetime
 
 from hhb_backend.graphql import settings
 
 
-async def create_export_string(export) -> str:
-    overschrijvingen = await request.dataloader.overschrijvingen_by_export.load(export['id'])
-    if not overschrijvingen:
-        return "Geen overschrijvingen gevonden"
-
-    afspraken_ids = list(set([overschrijving['afspraak_id'] for overschrijving in overschrijvingen]))
-    afspraken = await request.dataloader.afspraken_by_id.load_many(afspraken_ids)
-    if not afspraken:
-        return "Geen afspraken gevonden"
-
-    # Get all tegen_rekeningen
-    tegen_rekeningen_ids = [afspraak_result['tegen_rekening_id'] for afspraak_result in afspraken]
-    tegen_rekeningen = await request.dataloader.rekeningen_by_id.load_many(tegen_rekeningen_ids)
-
+def create_export_string(overschrijvingen, afspraken, tegen_rekeningen):
     config = {
         "name": "Huishoudboekje " + get_config_value("gemeente_naam"),
         "IBAN": get_config_value("gemeente_iban"),
@@ -37,9 +22,9 @@ async def create_export_string(export) -> str:
         payment = {
             "name": tegen_rekening["rekeninghouder"],
             "IBAN": tegen_rekening["iban"],
-            #"BIC": "BANKNL2A", # TODO nodig??
+            # "BIC": "BANKNL2A", # TODO nodig??
             "amount": overschrijving['bedrag'],
-            "execution_date": overschrijving['datum'],
+            "execution_date": datetime.strptime(overschrijving['datum'], '%Y-%m-%d').date(),
             "description": afspraak['beschrijving'],
             # "endtoend_id": str(uuid.uuid1())  # optional
         }

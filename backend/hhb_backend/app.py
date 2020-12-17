@@ -89,9 +89,9 @@ def create_app(config_name=os.getenv('APP_SETTINGS', None) or 'hhb_backend.confi
         return make_response(('ok', {'Content-Type': 'text/plain'}))
 
     @app.route('/export/<export_id>')
-    async def export_overschrijvingen(export_id):
+    def export_overschrijvingen(export_id):
         """ Send xml overschijvingen file to client """
-
+        # Get export object
         export_response = requests.get(
             f"{settings.HHB_SERVICES_URL}/export/{export_id}",
             headers={'Content-type': 'application/json'}
@@ -100,11 +100,46 @@ def create_app(config_name=os.getenv('APP_SETTINGS', None) or 'hhb_backend.confi
             return jsonify(message=export_response.json()), export_response.status_code
         export_object = export_response.json()['data']
 
-        xml_data = await create_export_string(export_object)
-        print(xml_data)
+        # Get all overschrijvingen based on export object
+        overschrijving_response = requests.get(
+            f"{settings.HHB_SERVICES_URL}/overschrijvingen/?filter_exports={export_object['id']}",
+            headers={'Content-type': 'application/json'}
+        )
+        if overschrijving_response.status_code != 200:
+            return jsonify(message=export_response.json()), export_response.status_code
+        overschrijvingen = overschrijving_response.json()['data']
+        if not overschrijvingen:
+            return jsonify(message="Geen overschrijvingen gevonden"), export_response.status_code
+
+        # Get all afspraken based on the overschrijvingen
+        afspraken_ids = list(set([overschrijving['afspraak_id'] for overschrijving in overschrijvingen]))
+        afspraken_response = requests.get(
+            f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={','.join(str(x) for x in afspraken_ids)}",
+            headers={'Content-type': 'application/json'}
+        )
+        if afspraken_response.status_code != 200:
+            return jsonify(message=afspraken_response.json()), afspraken_response.status_code
+        afspraken = afspraken_response.json()['data']
+        if not afspraken:
+            return jsonify(message="Geen afspraken gevonden"), afspraken_response.status_code
+
+        # Get all tegen_rekeningen based on the afspraken
+        tegen_rekeningen_ids = list(set([afspraak_result['tegen_rekening_id'] for afspraak_result in afspraken]))
+        rekeningen_response = requests.get(
+            f"{settings.HHB_SERVICES_URL}/rekeningen/?filter_ids={','.join(str(x) for x in tegen_rekeningen_ids)}",
+            headers={'Content-type': 'application/json'}
+        )
+        if rekeningen_response.status_code != 200:
+            return jsonify(message=rekeningen_response.json()), rekeningen_response.status_code
+        tegen_rekeningen = rekeningen_response.json()['data']
+        if not tegen_rekeningen:
+            return jsonify(message="Geen rekeningen gevonden"), rekeningen_response.status_code
+
+        # Create xml
+        xml_data = create_export_string(overschrijvingen, afspraken, tegen_rekeningen)
         xml_filename = f"{export_object['naam']}.xml"
 
-        export_file = io.BytesIO(xml_data.encode('utf-8'))
+        export_file = io.BytesIO(xml_data)
         response = make_response(send_file(export_file, attachment_filename=xml_filename))
         response.headers['Content-Disposition'] = f'attachment; filename="{xml_filename}"'
         return response
