@@ -1,5 +1,4 @@
 import {
-	Badge,
 	Box,
 	BoxProps,
 	Button,
@@ -39,44 +38,12 @@ import {
 	useGetAllRubriekenQuery,
 } from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
-import {dateFormat, formatBurgerName, intervalString} from "../../../utils/things";
+import {dateFormat} from "../../../utils/things";
 import Currency from "../../Currency";
 import {Label} from "../../Forms/FormLeftRight";
+import AfspraakSelectOption from "../../Layouts/AfspraakSelect";
 import {AfspraakDetailView, GrootboekrekeningDetailView} from "../../Layouts/JournaalpostDetails";
 import {TransactionsContext} from "./index";
-
-const SingleValue = (props) => <Option {...props} />
-
-const Option = (props) => {
-	const {data, innerProps, innerRef} = props;
-	const {afspraak: a}: { afspraak: Afspraak } = data;
-	const {t} = useTranslation();
-
-	return (
-		<Stack direction={"row"} spacing={2} alignItems={"center"} px={5} py={1} width={"100%"} ref={innerRef} {...innerProps} _hover={{
-			bg: "gray.100"
-		}} {...props.isSelected && {
-			bg: "gray.100"
-		}}>
-			<Box flex={0}>
-				<Text>#{a.id}</Text>
-			</Box>
-			<Box flex={2}>
-				<Text>{a.beschrijving}</Text>
-				<Stack direction={"row"} spacing={1}>
-					{a.rubriek && <Badge colorScheme={"yellow"} fontWeight={"normal"}>{a.rubriek.naam}</Badge>}
-					{a.interval && <Badge colorScheme={"yellow"} fontWeight={"normal"}>{intervalString(a.interval, t)}</Badge>}
-				</Stack>
-			</Box>
-			<Box flex={2}>
-				<Text>{a.gebruiker ? formatBurgerName(a.gebruiker) : "Onbekende gebruiker"}</Text>
-			</Box>
-			<Box flex={0}>
-				<Currency value={(a.bedrag * (a.credit ? 1 : -1))} />
-			</Box>
-		</Stack>
-	);
-}
 
 const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }> = ({bankTransaction: bt, ...props}) => {
 	const {t} = useTranslation();
@@ -84,7 +51,6 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }>
 	const toast = useToast();
 	const {isOpen, onOpen, onClose} = useDisclosure();
 	const {refetch} = useContext(TransactionsContext);
-	const selectComponents = {Option, SingleValue};
 
 	const rubric = useInput({
 		validate: [(v) => v.trim().length > 0]
@@ -178,7 +144,6 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }>
 			onOpen();
 		}
 	};
-
 	const onSelectAfspraak = (val) => {
 		if (val) {
 			afspraak.setValue(String(val.value));
@@ -257,13 +222,22 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }>
 								</TabList>
 								<TabPanels>
 									<TabPanel px={0}>
-										<Queryable query={$afspraken}>{({afspraken}) => {
-											const options = afspraken.filter(a => a.gebruiker).map((a: Afspraak) => ({
-												key: a.id,
-												value: a.id,
-												label: a.toString(),
-												afspraak: a,
-											}));
+										<Queryable query={$afspraken}>{({afspraken}: { afspraken: Afspraak[] }) => {
+											const options = afspraken
+												.filter(a => {
+													// Show all afspraken if there is no tegenRekening
+													if(!bt.tegenRekening && !bt.tegenRekeningIban){
+														return true;
+													}
+
+													return a.tegenRekening?.iban?.replaceAll(" ", "") === bt.tegenRekening?.iban?.replaceAll(" ", "") || a.tegenRekening?.iban?.replaceAll(" ", "") === bt.tegenRekeningIban?.replaceAll(" ", "");
+												})
+												.map((a: Afspraak) => ({
+													key: a.id,
+													value: a.id,
+													label: a.toString(),
+													afspraak: a,
+												}));
 
 											/*
 												<Stack>
@@ -276,11 +250,7 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }>
 												</Stack>
 												 */
 											return (
-												// <Stack spacing={2} border={"1px solid #cccccc"} borderRadius={5} p={3}>
-												<Select components={selectComponents} onChange={onSelectAfspraak} defaultValue={options.find(o => o.value === afspraak.value)}
-												        options={options} isClearable={true}
-												        noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} />
-												// </Stack>
+												<AfspraakSelectOption afspraak={afspraak} options={options} onSelectAfspraak={onSelectAfspraak} />
 											);
 										}}</Queryable>
 									</TabPanel>

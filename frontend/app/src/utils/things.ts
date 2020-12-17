@@ -1,5 +1,4 @@
 import moment from "moment";
-import i18Next from "../config/i18n";
 import {createContext} from "react";
 import {BankTransaction, Gebruiker, Interval, IntervalInput} from "../generated/graphql";
 import {IntervalType} from "../models";
@@ -30,7 +29,7 @@ export const Months = ["jan", "feb", "mrt", "apr", "may", "jun", "jul", "aug", "
 
 export const isDev = process.env.NODE_ENV === "development";
 
-export const DrawerContext = createContext<{onClose: () => void}>({
+export const DrawerContext = createContext<{ onClose: () => void }>({
 	onClose: () => {
 	},
 });
@@ -61,7 +60,7 @@ export const XInterval = {
 		weken: 0,
 		dagen: 0,
 	},
-	parse: (interval: IntervalInput | undefined): {intervalType: IntervalType, count: number} | undefined => {
+	parse: (interval: IntervalInput | undefined): { intervalType: IntervalType, count: number } | undefined => {
 		if (!interval) {
 			return undefined;
 		}

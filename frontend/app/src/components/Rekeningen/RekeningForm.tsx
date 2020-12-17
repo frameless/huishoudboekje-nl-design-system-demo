@@ -21,13 +21,12 @@ const RekeningForm: React.FC<{
 	});
 	const iban = useInput({
 		defaultValue: rekening?.iban,
-		validate: [Validators.required, (v) => new RegExp(Regex.IbanNL).test(v)],
+		validate: [Validators.required, (v) => new RegExp(Regex.IbanNL).test(v.replaceAll(" ", ""))],
 		placeholder: friendlyFormatIBAN("NL00BANK0123456789"),
 	});
 
 	const onSubmit = () => {
 		const fieldsValid = [rekeninghouder, iban].every(f => f.isValid);
-
 		if (!fieldsValid) {
 			toast({
 				status: "error",
@@ -39,7 +38,7 @@ const RekeningForm: React.FC<{
 
 		onSave({
 			...(rekening || {}),
-			rekeninghouder: rekeninghouder.value,
+			rekeninghouder: rekeninghouder.value.replaceAll(" ", ""),
 			iban: iban.value
 		}, () => {
 			rekeninghouder.reset();

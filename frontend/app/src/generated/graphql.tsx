@@ -872,7 +872,7 @@ export type AfspraakFragment = (
     & Pick<Interval, 'dagen' | 'weken' | 'maanden' | 'jaren'>
   )>, gebruiker?: Maybe<(
     { __typename?: 'Gebruiker' }
-    & Pick<Gebruiker, 'id' | 'voorletters' | 'achternaam'>
+    & Pick<Gebruiker, 'id' | 'voornamen' | 'voorletters' | 'achternaam' | 'plaatsnaam'>
     & { rekeningen?: Maybe<Array<Maybe<(
       { __typename?: 'Rekening' }
       & RekeningFragment
@@ -1299,10 +1299,6 @@ export type GetBurgerAfsprakenQuery = (
     { __typename?: 'Gebruiker' }
     & { afspraken?: Maybe<Array<Maybe<(
       { __typename?: 'Afspraak' }
-      & { gebruiker?: Maybe<(
-        { __typename?: 'Gebruiker' }
-        & Pick<Gebruiker, 'id'>
-      )> }
       & AfspraakFragment
     )>>> }
   )> }
@@ -1457,8 +1453,10 @@ export const AfspraakFragmentDoc = gql`
   }
   gebruiker {
     id
+    voornamen
     voorletters
     achternaam
+    plaatsnaam
     rekeningen {
       ...Rekening
     }
@@ -2305,9 +2303,6 @@ export const GetBurgerAfsprakenDocument = gql`
   gebruiker(id: $id) {
     afspraken {
       ...Afspraak
-      gebruiker {
-        id
-      }
     }
   }
 }

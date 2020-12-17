@@ -24,9 +24,6 @@ export const GetBurgerAfsprakenQuery = gql`
         gebruiker(id: $id) {
             afspraken{
                 ...Afspraak
-                gebruiker {
-                    id
-                }
             }
         }
     }
