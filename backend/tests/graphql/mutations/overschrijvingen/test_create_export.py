@@ -100,5 +100,5 @@ def test_create_export_success(client):
                               'eindDatum': '2020-12-31'}},
             content_type='application/json'
         )
-        assert mock._adapter.call_count == 9
+        assert mock._adapter.call_count == 4
         assert response.json["data"]["createExportOverschrijvingen"]["ok"] is True
