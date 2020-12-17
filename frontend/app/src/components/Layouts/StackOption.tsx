@@ -6,14 +6,14 @@ import {formatBurgerName, intervalString} from "../../utils/things";
 import Currency from "../Currency";
 
 const StackOption = (props) => {
-	const {data, innerProps, innerRef} = props;
+	const {data, innerProps, innerRef, noHover = false} = props;
 	const {afspraak: a}: { afspraak: Afspraak } = data;
 	const {t} = useTranslation();
 
 	return (
-		<Stack direction={"row"} spacing={2} alignItems={"center"} px={5} py={1} width={"100%"} ref={innerRef} {...innerProps} _hover={{
+		<Stack direction={"row"} spacing={2} alignItems={"center"} px={5} py={1} width={"100%"} ref={innerRef} {...innerProps} {...!noHover && {_hover: {
 			bg: "gray.100"
-		}} {...props.isSelected && {
+		}}} {...props.isSelected && {
 			bg: "gray.100"
 		}}>
 			<Box flex={0}>
