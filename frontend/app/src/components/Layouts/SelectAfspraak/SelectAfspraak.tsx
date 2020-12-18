@@ -32,7 +32,7 @@ const SelectAfspraak: React.FC<SelectAfspraakProps> = ({options, value, onChange
 			afspraak.kenmerk
 		];
 
-		return searchData.some(x => x && x.indexOf(input) > -1);
+		return searchData.some(x => x && x.toLowerCase().indexOf(input.toLowerCase()) > -1);
 	}
 
 	useEffect(() => {
