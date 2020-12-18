@@ -1,0 +1,9 @@
+naam	grootboekrekening_id
+Gas	WBedHuiGweGas
+Water	WBedHuiGweWat
+Elektra	WBedHuiGweElk
+Inkomsten	WOmzNooNdo
+Telefonie	WBedKanPrt
+Verzekeringen	WBedAssOva
+Betaalde huur	WBedHuiBeh
+Milieuheffingen en zuiveringsleges	WBedHuiMez

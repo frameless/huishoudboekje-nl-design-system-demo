@@ -26,11 +26,11 @@ def faker_postcode():
     return f"13{randrange(1, 9)}{randrange(1, 9)}{choice(string.ascii_letters).upper()}{choice(string.ascii_letters).upper()}"
 
 
-def create_rekening(naam: str, id: int):
+def create_rekening(rekening_houder: str, id: int):
     return {
         "id": id,
         "iban": IBAN.generate('NL', bank_code='BANK', account_code=str(id)),
-        "rekeninghouder": naam
+        "rekeninghouder": rekening_houder
     }
 
 
@@ -65,44 +65,47 @@ def dict_keys_subset_builder(match_keys: list):
     """only include items with a matching key"""
     return lambda actual_dict: dict((k, actual_dict[k] if k in actual_dict else None) for k in match_keys)
 
+
 class HHBCsvDialect(csv.Dialect):
     delimiter = '\t'
     quoting = QUOTE_MINIMAL
     quotechar = '"'
     lineterminator = '\n'
 
+
 class Generator:
-    fieldnames = {
-        "gebruikers": ["id", "telefoonnummer", "email", "geboortedatum", "voorletters", "voornamen", "achternaam",
-                       "straatnaam", "huisnummer", "postcode", "plaatsnaam"],
-        "rekeningen": ["id", "iban", "rekeninghouder"],
-        "gebruiker_rekeningen": ["rekening_id", "gebruiker_id"],
-        "kvk_details": ["kvk_nummer", "naam", "straatnaam", "huisnummer", "postcode", "plaatsnaam"],
-        "organisaties": ["id", "kvk_nummer", "naam"],
-        "organisatie_rekenignen": ["organisatie_id", "gebruiker_id"],
-        "configuratie": ["id", "waarde"],
-        "rubrieken": ["naam", "grootboekrekening_id"],
-    }
-    rubrieken = []
-    configuratie = []
-    gebruikers = []
-    rekeningen = []
-    afspraken = []
-    gebruiker_rekeningen = []
-
-    rekening_counter = 40200
-    gebruiker_counter = 200
-    kvk_number_counter = 462345
-
     def __init__(self, scenario: Scenario):
         self.scenario = scenario
 
+        self.fieldnames = {
+            "gebruikers": ["id", "telefoonnummer", "email", "geboortedatum", "voorletters", "voornamen", "achternaam",
+                           "straatnaam", "huisnummer", "postcode", "plaatsnaam"],
+            "rekeningen": ["id", "iban", "rekeninghouder"],
+            "gebruiker_rekeningen": ["rekening_id", "gebruiker_id"],
+            "kvk_details": ["kvk_nummer", "naam", "straatnaam", "huisnummer", "postcode", "plaatsnaam"],
+            "organisaties": ["id", "kvk_nummer", "naam"],
+            "organisatie_rekenignen": ["organisatie_id", "gebruiker_id"],
+            "configuratie": ["id", "waarde"],
+            "rubrieken": ["naam", "grootboekrekening_id"],
+        }
+        self.rubrieken = []
+
+        self.configuratie = []
+        self.gebruikers = []
+        self.rekeningen = []
+        self.afspraken = []
+        self.gebruiker_rekeningen = []
+
+        self.rekening_counter = 40200
+        self.gebruiker_counter = 200
+        self.kvk_number_counter = 462345
+
     def generate(self):
         self.rubrieken = map(dataclasses.asdict, self.scenario.configuratie.rubrieken)
-        self.configuratie = map(dataclasses.asdict,self.scenario.configuratie.configuratie)
-        for organisatie_scenario in self.scenario.organisatie.scenarios:
-            # self.generate_organisaties(organisatie_scenario)
-            pass
+        self.configuratie = map(dataclasses.asdict, self.scenario.configuratie.configuratie)
+        # for organisatie_scenario in self.scenario.organisatie.scenarios:
+        #     # self.generate_organisaties(organisatie_scenario)
+        #     pass
 
         for gebruiker_scenario in self.scenario.gebruikers.scenarios:
             self.generate_gebruikers(gebruiker_scenario)
@@ -118,23 +121,26 @@ class Generator:
         })
 
     def generate_gebruikers(self, scenario: GebruikerScenario):
-        for _ in range(scenario.gebruikers_scenario.aantal):
-            self.gebruiker_counter += 1
-            gebruiker = create_gebruiker(id=self.gebruiker_counter)
-            self.gebruikers.append(gebruiker)
+        for _ in range(scenario.aantal):
+            gezin = []
+            for _ in range(scenario.gezin):
+                self.gebruiker_counter += 1
+                gebruiker = create_gebruiker(id=self.gebruiker_counter)
+                self.gebruikers.append(gebruiker)
+                gezin.append(gebruiker)
 
+            rekening_houder = " ".join([g["achternaam"] for g in gezin])
             for _ in range(scenario.aantal_rekeningen):
                 self.rekening_counter += 1
-                rekening = create_rekening(id=self.rekening_counter, naam=gebruiker["achternaam"])
+                rekening = create_rekening(id=self.rekening_counter, rekening_houder=rekening_houder)
                 self.rekeningen.append(rekening)
 
-                gebruiker_rekening = create_gebruiker_rekening(gebruiker=gebruiker, rekening=rekening)
-                self.gebruiker_rekeningen.append(gebruiker_rekening)
+                for gebruiker in gezin:
+                    gebruiker_rekening = create_gebruiker_rekening(gebruiker=gebruiker, rekening=rekening)
+                    self.gebruiker_rekeningen.append(gebruiker_rekening)
 
             # for afspraak_scenario in scenario.afspraken:
             #     gebruiker.afspraken.append(self.generate_afspraak)
-
-            self.gebruikers.append(gebruiker)
 
     def save(self):
         self.save_csv(db='huishoudboekje_db', name='configuratie')
@@ -142,7 +148,7 @@ class Generator:
         self.save_csv(db='huishoudboekje_db', name='gebruikers')
         self.save_csv(db='huishoudboekje_db', name='rekeningen')
         self.save_csv(db='huishoudboekje_db', name='gebruiker_rekeningen')
-        self.save_csv(db='huishoudboekje_db', name='organisaties')
+        # self.save_csv(db='huishoudboekje_db', name='organisaties')
 
     def save_csv(self, db='huishoudboekje_db', name='gebruikers', fieldnames=None, data=None):
         if path.exists(f"../{db}/{name}.txt"):

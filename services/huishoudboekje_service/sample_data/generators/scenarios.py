@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from pprint import pprint
 from typing import List
 
 from yaml import load, SafeLoader
@@ -64,7 +63,8 @@ class AfspraakScenario:
 @dataclass
 class GebruikerScenario:
     aantal: int
-    aantal_rekeningen: int
+    aantal_rekeningen: int = 1
+    gezin: int = 1
     afspraken: List[AfspraakScenario] = field(default_factory=list)
 
 
