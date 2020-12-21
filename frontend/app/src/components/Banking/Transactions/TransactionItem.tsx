@@ -39,6 +39,7 @@ import Queryable from "../../../utils/Queryable";
 import {formatIBAN} from "../../../utils/things";
 import Currency from "../../Currency";
 import {Label} from "../../Forms/FormLeftRight";
+import PrettyIban from "../../Layouts/PrettyIban";
 import SelectAfspraak from "../../Layouts/SelectAfspraak/SelectAfspraak";
 import SelectAfspraakOption from "../../Layouts/SelectAfspraak/SelectAfspraakOption";
 import {TransactionsContext} from "./index";
@@ -232,7 +233,9 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }>
 						</Tooltip>
 					</Text>
 				) : (
-					<Text whiteSpace={"nowrap"}>{formatIBAN(bt.tegenRekeningIban) || t("unknown")}</Text>
+					<Text whiteSpace={"nowrap"}>
+						<PrettyIban iban={bt.tegenRekeningIban} />
+					</Text>
 				)}
 				</Box>
 				{!isMobile && (

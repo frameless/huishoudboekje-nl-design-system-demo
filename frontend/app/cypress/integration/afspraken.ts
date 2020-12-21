@@ -1,6 +1,6 @@
 import "cypress-graphql-mock";
 import Routes from "../../src/config/routes";
-import {formatBurgerName} from "../../src/utils/things";
+import {formatBurgerName, formatIBAN} from "../../src/utils/things";
 import sampleAfspraken from "../fixtures/afspraken.json";
 import sampleBurgers from "../fixtures/burgers.json";
 import sampleOrganizations from "../fixtures/organizations.json";
@@ -97,7 +97,7 @@ describe("Afspraken CRUD", () => {
 		// Fill the form
 		cy.get("input#description").type(a.beschrijving);
 		cy.get("select#organizationId").select(a.organisatie.weergaveNaam);
-		cy.get("select#rekeningId").select(a.organisatie.rekeningen[0].rekeninghouder + " (" + a.organisatie.rekeningen[0].iban + ")");
+		cy.get("select#rekeningId").select(formatIBAN(a.organisatie.rekeningen[0].iban) + " (" + a.organisatie.rekeningen[0].rekeninghouder + ")");
 
 		cy.get("select#rubriekId").select(a.rubriek.naam);
 		cy.get("input#amount").type(a.bedrag);
@@ -127,7 +127,7 @@ describe("Afspraken CRUD", () => {
 		// Fill the form
 		cy.get("input#description").clear().type(a2.beschrijving);
 		cy.get("select#organizationId").select(a2.organisatie.weergaveNaam);
-		cy.get("select#rekeningId").select(a2.organisatie.rekeningen[0].rekeninghouder + " (" + a2.organisatie.rekeningen[0].iban + ")");
+		cy.get("select#rekeningId").select(formatIBAN(a2.organisatie.rekeningen[0].iban) + " (" + a2.organisatie.rekeningen[0].rekeninghouder + ")");
 
 		cy.get("select#rubriekId").select(a2.rubriek.naam);
 		cy.get("input#amount").clear().type(a2.bedrag);

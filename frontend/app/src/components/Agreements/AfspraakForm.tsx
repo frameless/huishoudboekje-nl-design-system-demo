@@ -10,8 +10,9 @@ import {Afspraak, Gebruiker, Organisatie, useGetAllOrganisatiesQuery, useGetAllR
 import {AfspraakPeriod, AfspraakType, IntervalType} from "../../models";
 import Queryable from "../../utils/Queryable";
 import generateSampleOverschrijvingen from "../../utils/sampleOverschrijvingen";
-import {XInterval} from "../../utils/things";
+import {formatIBAN, XInterval} from "../../utils/things";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
+import PrettyIban from "../Layouts/PrettyIban";
 import RadioButtonGroup from "../Layouts/RadioButtons/RadioButtonGroup";
 import OverschrijvingenListView from "../Overschrijvingen/OverschrijvingenListView";
 
@@ -300,11 +301,11 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 												<option>{t("forms.agreements.fields.bankAccountChoose")}</option>
 												{parseInt(organisatieId.value) === 0 ? (<>
 													{rekeningen.map(r => (
-														<option key={r.id} value={r.id}>{r.rekeninghouder} ({r.iban})</option>
+														<option key={r.id} value={r.id}>{formatIBAN(r.iban)} ({r.rekeninghouder})</option>
 													))}
 												</>) : (<>
 													{organisatieRekeningen.map(r => (
-														<option key={r.id} value={r.id}>{r.rekeninghouder} ({r.iban})</option>
+														<option key={r.id} value={r.id}>{formatIBAN(r.iban)} ({r.rekeninghouder})</option>
 													))}
 												</>)}
 											</Select>

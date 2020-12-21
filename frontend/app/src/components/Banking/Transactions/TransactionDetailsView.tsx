@@ -28,7 +28,7 @@ const TransactionDetailsView: React.FC<StackProps & { transaction: BankTransacti
 							<Text size={"sm"}><PrettyIban iban={bt.tegenRekening.iban} /></Text>
 						</Stack>
 					) : (
-						<PrettyIban iban={bt.tegenRekeningIban} />
+						<Text size={"sm"}><PrettyIban iban={bt.tegenRekeningIban} /></Text>
 					)}
 					</Box>
 				</Box>

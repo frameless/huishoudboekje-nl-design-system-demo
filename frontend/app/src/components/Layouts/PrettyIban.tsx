@@ -1,13 +1,12 @@
-import {Text, TextProps} from "@chakra-ui/react";
 import {friendlyFormatIBAN} from "ibantools";
 import React from "react";
 import {useTranslation} from "react-i18next";
 
-const PrettyIban: React.FC<{iban?: string} & TextProps> = ({iban, ...props}) => {
+const PrettyIban: React.FC<{ iban?: string }> = ({iban, ...props}) => {
 	const {t} = useTranslation();
 
-	return (
-		<Text fontSize={"sm"} {...props}>{iban ? friendlyFormatIBAN(iban) : t("unknown")}</Text>
-	);
+	return (<>
+		{iban ? friendlyFormatIBAN(iban) : t("unknown")}
+	</>);
 };
 export default PrettyIban;
