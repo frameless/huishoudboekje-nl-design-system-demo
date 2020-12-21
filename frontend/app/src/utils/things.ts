@@ -1,3 +1,4 @@
+import {friendlyFormatIBAN} from "ibantools";
 import moment from "moment";
 import {createContext} from "react";
 import {BankTransaction, Gebruiker, Interval, IntervalInput} from "../generated/graphql";
@@ -29,7 +30,7 @@ export const Months = ["jan", "feb", "mrt", "apr", "may", "jun", "jul", "aug", "
 
 export const isDev = process.env.NODE_ENV === "development";
 
-export const DrawerContext = createContext<{onClose: () => void}>({
+export const DrawerContext = createContext<{ onClose: () => void }>({
 	onClose: () => {
 	},
 });
@@ -60,7 +61,7 @@ export const XInterval = {
 		weken: 0,
 		dagen: 0,
 	},
-	parse: (interval: IntervalInput | undefined): {intervalType: IntervalType, count: number} | undefined => {
+	parse: (interval: IntervalInput | undefined): { intervalType: IntervalType, count: number } | undefined => {
 		if (!interval) {
 			return undefined;
 		}
@@ -113,3 +114,21 @@ export const sortBankTransactions = (a: BankTransaction, b: BankTransaction) => 
 export const formatBurgerName = (burger: Gebruiker, fullName = false) => {
 	return [fullName ? burger.voornamen : burger.voorletters, burger.achternaam].join(" ");
 };
+
+export const intervalString = ((interval: Interval | undefined, t: (text, ...tProps) => string): string => {
+	/* t("interval.every-day", { count }) t("interval.every-week", { count }) t("interval.every-month", { count }) t("interval.every-year", { count }) */
+	const parsedInterval = XInterval.parse(interval);
+
+	if (!parsedInterval) {
+		return t("interval.once");
+	}
+
+	const {intervalType: type, count} = parsedInterval;
+	return t(`interval.every-${type}`, {count});
+});
+
+export const formatIBAN = (iban?: string) => {
+	if(iban){
+		return friendlyFormatIBAN(iban);
+	}
+}

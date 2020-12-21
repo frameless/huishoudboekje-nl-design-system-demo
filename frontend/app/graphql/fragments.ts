@@ -48,8 +48,10 @@ export const AfspraakFragment = gql`
         }
         gebruiker{
             id
+            voornamen
             voorletters
             achternaam
+            plaatsnaam
             rekeningen {
                 ...Rekening
             }

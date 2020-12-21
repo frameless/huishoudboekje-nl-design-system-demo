@@ -264,6 +264,20 @@ export const UpdateJournaalpostGrootboekrekeningMutation = gql`
     }
 `;
 
+export const CreateJournaalpostAfspraakMutation = gql`
+    mutation createJournaalpostAfspraak($transactionId: Int! $afspraakId: Int!){
+        createJournaalpostAfspraak(input: {
+            transactionId: $transactionId,
+            afspraakId: $afspraakId
+        }){
+            ok
+            journaalpost{
+                id
+            }
+        }
+    }
+`;
+
 export const DeleteJournaalpostMutation = gql`
     mutation deleteJournaalpost($id: Int!){
         deleteJournaalpost(id: $id){

@@ -1,28 +1,11 @@
-import {
-	Box,
-	BoxProps,
-	Button,
-	Divider,
-	Editable,
-	EditableInput,
-	EditablePreview,
-	FormLabel,
-	Input,
-	InputGroup,
-	InputLeftElement,
-	Select,
-	Stack,
-	Switch,
-	Text,
-	useToast
-} from "@chakra-ui/react";
+import {Box, BoxProps, Button, Divider, Editable, EditableInput, EditablePreview, FormLabel, Input, InputGroup, InputLeftElement, Select, Stack, Switch, Text, useToast} from "@chakra-ui/react";
 import moment from "moment";
 import "moment-recur-ts";
 import React, {useEffect, useState} from "react";
 import DatePicker from "react-datepicker";
 import {useInput, useIsMobile, useNumberInput, useToggle, Validators} from "react-grapple";
 import {UseInput} from "react-grapple/dist/hooks/useInput";
-import {useTranslation, Trans} from "react-i18next";
+import {Trans, useTranslation} from "react-i18next";
 import {Afspraak, Gebruiker, Organisatie, useGetAllOrganisatiesQuery, useGetAllRubriekenQuery} from "../../generated/graphql";
 import {AfspraakPeriod, AfspraakType, IntervalType} from "../../models";
 import Queryable from "../../utils/Queryable";
@@ -74,10 +57,12 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 	const [isRecurring, toggleRecurring] = useToggle(false);
 	const startDate = useInput({
 		placeholder: moment().format("L"),
+		defaultValue: moment().format("L"),
 		validate: [(v: string) => moment(v, "L").isValid()],
 	});
 	const startDate2 = useInput({
 		placeholder: moment().format("L"),
+		defaultValue: moment().format("L"),
 		validate: [(v: string) => moment(v, "L").isValid()],
 	});
 	const endDate = useInput({
@@ -223,6 +208,42 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 		nTimes: nTimes.value || 0,
 		interval: XInterval.create(intervalType.value, intervalNumber.value),
 	});
+
+	const HugeDatePicker = () => {
+		const components = [
+			<Text fontWeight={"bolder"} px={1}>{generatedSampleOverschrijvingen.length}</Text>,
+			<DatePicker selected={moment(startDate2.value, "L").isValid() ? moment(startDate2.value, "L").toDate() : null}
+			            dateFormat={"dd-MM-yyyy"}
+			            onChange={(value: Date) => {
+				            if (value) {
+					            startDate2.setValue(moment(value).format("L"));
+				            }
+			            }} customInput={(
+					<Editable defaultValue={startDate2.value}>
+						<EditablePreview display={"inline"} px={2} mx={1} bg={"gray.100"} _hover={{bg: "gray.200"}} />
+						<EditableInput display={"inline"} px={1} mx={1} width={120} isInvalid={isInvalid(startDate2)} {...startDate2.bind} />
+					</Editable>
+				)} />,
+			<DatePicker selected={moment(endDate.value, "L").isValid() ? moment(endDate.value, "L").toDate() : null}
+			            dateFormat={"dd-MM-yyyy"}
+			            onChange={(value: Date) => {
+				            if (value) {
+					            endDate.setValue(moment(value).format("L"));
+				            }
+			            }} customInput={(
+					<Editable defaultValue={endDate.value}>
+						<EditablePreview display={"inline"} px={2} mx={1} bg={"gray.100"} _hover={{bg: "gray.200"}} />
+						<EditableInput display={"inline"} px={1} mx={1} width={120} isInvalid={isInvalid(endDate)} {...endDate.bind} />
+					</Editable>
+				)} />
+		];
+		const outgoingTrans = <Trans count={generatedSampleOverschrijvingen.length} i18nKey={"forms.agreements.sections.2.prognosisText_outgoing"}
+		                             components={components} />;
+		const incomingTrans = <Trans count={generatedSampleOverschrijvingen.length} i18nKey={"forms.agreements.sections.2.prognosisText_incoming"}
+		                             components={components} />;
+
+		return afspraakType === AfspraakType.Expense ? outgoingTrans : incomingTrans;
+	};
 
 	return (
 		<Box as={"form"} onSubmit={onSubmit} {...props}>
@@ -397,36 +418,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 							<FormRight>
 								<Stack spacing={5}>
 									<Stack direction={"row"} alignItems={"center"} spacing={0}>
-										{/* t("forms.agreements.sections.2.prognosisText_outgoing") t("forms.agreements.sections.2.prognosisText_incoming") */}
-										<Trans count={generatedSampleOverschrijvingen.length}
-										       i18nKey={afspraakType === AfspraakType.Expense ? "forms.agreements.sections.2.prognosisText_outgoing" : "forms.agreements.sections.2.prognosisText_incoming"}
-										       components={[
-											       <Text fontWeight={"bolder"} px={1}>{generatedSampleOverschrijvingen.length}</Text>,
-											       <DatePicker selected={moment(startDate2.value, "L").isValid() ? moment(startDate2.value, "L").toDate() : null}
-											                   dateFormat={"dd-MM-yyyy"}
-											                   onChange={(value: Date) => {
-												                   if (value) {
-													                   startDate2.setValue(moment(value).format("L"));
-												                   }
-											                   }} customInput={(
-												       <Editable defaultValue={startDate2.value}>
-													       <EditablePreview display={"inline"} px={2} mx={1} bg={"gray.100"} _hover={{ bg: "gray.200" }} />
-													       <EditableInput display={"inline"} px={1} mx={1} width={120} isInvalid={isInvalid(startDate2)} {...startDate2.bind} />
-												       </Editable>
-											       )} />,
-											       <DatePicker selected={moment(endDate.value, "L").isValid() ? moment(endDate.value, "L").toDate() : null}
-											                   dateFormat={"dd-MM-yyyy"}
-											                   onChange={(value: Date) => {
-												                   if (value) {
-													                   endDate.setValue(moment(value).format("L"));
-												                   }
-											                   }} customInput={(
-												       <Editable defaultValue={endDate.value}>
-													       <EditablePreview display={"inline"} px={2} mx={1} bg={"gray.100"} _hover={{ bg: "gray.200" }} />
-													       <EditableInput display={"inline"} px={1} mx={1} width={120} isInvalid={isInvalid(endDate)} {...endDate.bind} />
-												       </Editable>
-											       )} />
-										       ]} />
+										<HugeDatePicker />
 									</Stack>
 									<OverschrijvingenListView overschrijvingen={generatedSampleOverschrijvingen} />
 								</Stack>

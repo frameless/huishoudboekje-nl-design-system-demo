@@ -24,9 +24,6 @@ export const GetBurgerAfsprakenQuery = gql`
         gebruiker(id: $id) {
             afspraken{
                 ...Afspraak
-                gebruiker {
-                    id
-                }
             }
         }
     }
@@ -86,7 +83,11 @@ export const GetAllTransactionsQuery = gql`
             journaalpost {
                 id
                 afspraak {
-                    id
+                    ...Afspraak
+                    rubriek{
+                        id
+                        naam
+                    }
                 }
                 grootboekrekening {
                     ...Grootboekrekening
@@ -113,4 +114,21 @@ export const GetAllRubriekenQuery = gql`
         }
     }
     ${RubriekFragment}
+`;
+
+export const GetRubriekenAndAfsprakenQuery = gql`
+    query getAllRubriekenAndAfspraken {
+        rubrieken{
+            ...Rubriek
+            grootboekrekening{
+                id
+                naam
+            }
+        }
+        afspraken{
+            ...Afspraak
+        }
+    }
+    ${RubriekFragment}
+    ${AfspraakFragment}
 `;

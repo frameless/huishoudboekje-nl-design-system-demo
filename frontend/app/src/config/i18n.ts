@@ -19,3 +19,5 @@ i18Next.use(initReactI18next).init({
 	},
 	defaultNS: defaultNamespace,
 });
+
+export default i18Next;

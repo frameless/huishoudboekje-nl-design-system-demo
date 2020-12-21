@@ -2,39 +2,47 @@ import {DeleteIcon} from "@chakra-ui/icons";
 import {
 	Box,
 	BoxProps,
-	Button,
-	FormLabel,
+	Divider,
+	Heading,
 	IconButton,
 	Modal,
 	ModalBody,
+	ModalCloseButton,
 	ModalContent,
-	ModalFooter,
 	ModalHeader,
 	ModalOverlay,
-	Select,
 	Stack,
+	Tab,
+	TabList,
+	TabPanel,
+	TabPanels,
+	Tabs,
 	Text,
 	Tooltip,
 	useDisclosure,
 	useToast
 } from "@chakra-ui/react";
-import {friendlyFormatIBAN} from "ibantools";
-import React, {useContext} from "react";
-import {useInput, useIsMobile, Validators} from "react-grapple";
+import React, {useContext, useState} from "react";
+import {useIsMobile} from "react-grapple";
 import {useTranslation} from "react-i18next";
+import Select from "react-select";
 import {
+	Afspraak,
 	BankTransaction,
 	Rubriek,
+	useCreateJournaalpostAfspraakMutation,
 	useCreateJournaalpostGrootboekrekeningMutation,
 	useDeleteJournaalpostMutation,
-	useGetAllRubriekenQuery,
-	useUpdateJournaalpostGrootboekrekeningMutation
+	useGetAllRubriekenAndAfsprakenQuery
 } from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
-import {dateFormat} from "../../../utils/things";
+import {formatIBAN} from "../../../utils/things";
 import Currency from "../../Currency";
 import {Label} from "../../Forms/FormLeftRight";
+import SelectAfspraak from "../../Layouts/SelectAfspraak/SelectAfspraak";
+import SelectAfspraakOption from "../../Layouts/SelectAfspraak/SelectAfspraakOption";
 import {TransactionsContext} from "./index";
+import TransactionDetailsView from "./TransactionDetailsView";
 
 const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }> = ({bankTransaction: bt, ...props}) => {
 	const {t} = useTranslation();
@@ -43,190 +51,195 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }>
 	const {isOpen, onOpen, onClose} = useDisclosure();
 	const {refetch} = useContext(TransactionsContext);
 
-	const rubric = useInput({
-		validate: [Validators.required]
+	const [selectedAfspraak, setSelectedAfspraak] = useState<Afspraak | undefined>(bt.journaalpost?.afspraak);
+	const [selectedRubriek, setSelectedRubriek] = useState<Rubriek | undefined>(bt.journaalpost?.grootboekrekening?.rubriek);
+
+	const $rubriekenEnAfspraken = useGetAllRubriekenAndAfsprakenQuery({
+		fetchPolicy: "no-cache",
 	});
 
-	const $rubrics = useGetAllRubriekenQuery({
-		onCompleted: () => {
-			if (bt.journaalpost?.grootboekrekening) {
-				rubric.setValue(bt.journaalpost?.grootboekrekening.id);
-			}
-		}
-	});
-	const [createJournaalpost] = useCreateJournaalpostGrootboekrekeningMutation();
-	const [updateJournaalpost] = useUpdateJournaalpostGrootboekrekeningMutation();
-	const [deleteJournaalpost] = useDeleteJournaalpostMutation();
+	const [createJournaalpostAfspraak] = useCreateJournaalpostAfspraakMutation();
+	const [createJournaalpostGrootboekrekening] = useCreateJournaalpostGrootboekrekeningMutation();
+	const [deleteJournaalpost, $deleteJournaalpost] = useDeleteJournaalpostMutation();
 
-	const onClickSave = async () => {
-		if (!rubric.isValid) {
-			toast({
-				status: "error",
-				title: t("messages.agreements.invalidFormMessage"),
-				position: "top",
+	const handleMutation = (mutation: Promise<any>, callback: VoidFunction) => {
+		mutation
+			.then(() => {
+				toast({
+					status: "success",
+					title: t("messages.journals.createSuccessMessage"),
+					position: "top",
+				});
+				refetch();
+				callback();
+			}).catch(err => {
+				console.error(err);
+				toast({
+					position: "top",
+					status: "error",
+					variant: "solid",
+					title: t("messages.genericError.title"),
+					description: t("messages.genericError.description"),
+				});
 			});
-			return;
-		}
-
-		let mutation;
-		if (!bt.journaalpost) {
-			mutation = createJournaalpost({
-				variables: {
-					transactionId: bt.id!, // Todo: fix this ! somehow
-					grootboekrekeningId: rubric.value
-				}
-			});
-		}
-		else {
-			mutation = updateJournaalpost({
-				variables: {
-					id: bt.journaalpost.id!, // Todo: fix this ! somehow
-					grootboekrekeningId: rubric.value
-				}
-			});
-		}
-
-		mutation.then(() => {
-			toast({
-				status: "success",
-				title: t("messages.journals.createSuccessMessage"),
-				position: "top",
-			});
-			refetch();
-			onClose();
-		}).catch(err => {
-			console.error(err);
-			toast({
-				position: "top",
-				status: "error",
-				variant: "solid",
-				title: t("messages.genericError.title"),
-				description: t("messages.genericError.description"),
-			});
-		});
-	}
-	const onClickDelete = () => {
-		if (!bt.journaalpost) {
-			return;
-		}
-
-		deleteJournaalpost({
-			variables: {
-				id: bt.journaalpost.id! // Todo: fix this ! somehow
-			}
-		}).then(() => {
-			toast({
-				status: "success",
-				title: t("messages.journals.deleteSuccessMessage"),
-				position: "top",
-			});
-			refetch();
-			onClose();
-		}).catch(err => {
-			console.error(err);
-			toast({
-				position: "top",
-				status: "error",
-				variant: "solid",
-				title: t("messages.genericError.title"),
-				description: t("messages.genericError.description"),
-			});
-		});
 	}
 
-	const maybeFormatIBAN = (iban?: string) => iban ? friendlyFormatIBAN(iban) : t("unknown")
+	const onClickDeleteJournaalpost = () => {
+		const id = bt.journaalpost?.id;
+
+		if (id) {
+			handleMutation(deleteJournaalpost({
+				variables: {id}
+			}), () => {
+				setSelectedRubriek(undefined);
+				setSelectedAfspraak(undefined);
+			});
+		}
+	}
+
+	const onClick = () => {
+		if (!isMobile) {
+			onOpen();
+		}
+	};
 
 	return (<>
-		<Modal isOpen={isOpen} onClose={onClose} blockScrollOnMount={true}>
+		<Modal isOpen={!isMobile && isOpen} onClose={onClose}>
 			<ModalOverlay />
-			<ModalContent>
+			<ModalContent width={"100%"} maxWidth={1000}>
+				<ModalCloseButton />
 				<ModalHeader>{t("forms.banking.sections.journal.title")}</ModalHeader>
 				<ModalBody>
-
 					<Stack spacing={5}>
-						<Box>
-							<Label>{t("transactions.beneficiaryAccount")}</Label>
-							<Box flex={2}>{bt.tegenRekening ? (
-								<Stack spacing={0}>
-									<Text>{bt.tegenRekening.rekeninghouder}</Text>
-									<Text fontSize={"sm"}>{maybeFormatIBAN(bt.tegenRekening.iban)}</Text>
+						<TransactionDetailsView transaction={bt} />
+
+						{selectedAfspraak && (
+							<Stack>
+								<Divider />
+
+								<Heading size={"sm"}>{t("booking")}</Heading>
+								<Stack direction={"row"} justifyContent={"space-between"} alignItems={"center"} spacing={2}>
+									<SelectAfspraakOption afspraak={selectedAfspraak} enableHover={false} />
+									<Box>
+										<IconButton icon={<DeleteIcon />} variant={"ghost"} aria-label={t("actions.disconnect")} onClick={onClickDeleteJournaalpost}
+										            isLoading={$deleteJournaalpost.loading} />
+									</Box>
 								</Stack>
-							) : (
-								<Text>{maybeFormatIBAN(bt.tegenRekeningIban)}</Text>
-							)}
-							</Box>
-						</Box>
-
-						<Stack direction={"row"} justifyContent={"space-between"}>
-							<Box>
-								<Label>{t("forms.common.fields.date")}</Label>
+							</Stack>
+						)}
+						{selectedRubriek && (
+							<Stack direction={"row"} justifyContent={"flex-start"} alignItems={"center"} spacing={3}>
 								<Box>
-									<Text>{dateFormat.format(new Date(bt.transactieDatum))}</Text>
+									<Label>{t("forms.agreements.fields.rubriek")}</Label>
+									<Box>
+										<Text>{selectedRubriek.naam}</Text>
+										{selectedRubriek.grootboekrekening && <Text fontSize={"sm"}>{selectedRubriek.grootboekrekening.omschrijving}</Text>}
+									</Box>
 								</Box>
-							</Box>
-
-							<Box>
-								<Label>{t("transactions.amount")}</Label>
 								<Box>
-									<Currency justifyContent={"flex-start"} value={bt.bedrag} />
+									<IconButton icon={<DeleteIcon />} variant={"ghost"} aria-label={t("actions.disconnect")} onClick={onClickDeleteJournaalpost}
+									            isLoading={$deleteJournaalpost.loading} />
 								</Box>
-							</Box>
-						</Stack>
+							</Stack>
+						)}
 
-						<Box>
-							<Label>{t("transactions.description")}</Label>
-							<Box fontSize={"sm"} p={2} bg={"gray.100"} overflowX={"scroll"}>
-								<Text fontFamily={"monospace"} overflowWrap={"break-word"}>{bt.informationToAccountOwner}</Text>
-							</Box>
-						</Box>
+						{(!selectedRubriek && !selectedAfspraak) && (
+							<Queryable query={$rubriekenEnAfspraken}>{(data: { rubrieken: Rubriek[], afspraken: Afspraak[] }) => {
+								const {rubrieken, afspraken} = data;
 
-						<Box as={"form"}>
-							<FormLabel>{t("banking.rubric")}</FormLabel>
-							<Queryable query={$rubrics}>{({rubrieken}) => (
-								<Stack direction={"row"}>
-									<Select {...rubric.bind} isInvalid={!rubric.isValid}>
-										<option value={undefined}>{t("forms.banking.fields.rubricChoose")}</option>
-										{rubrieken.map((r: Rubriek) => {
-											return r.grootboekrekening && (
-												<option key={r.id} value={r.grootboekrekening.id}>{r.naam}</option>
-											);
-										})}
-									</Select>
-									{bt.journaalpost && (
-										<IconButton icon={<DeleteIcon />} aria-label={t("actions.delete")} variant={"ghost"} onClick={() => onClickDelete()} />
-									)}
-								</Stack>
-							)}</Queryable>
-						</Box>
+								const options = {
+									afspraken: afspraken.filter(a => {
+										// Show all afspraken if there is no tegenRekening
+										if (!bt.tegenRekening && !bt.tegenRekeningIban) {
+											return true;
+										}
+										return (
+											a.tegenRekening?.iban?.replaceAll(" ", "") === bt.tegenRekening?.iban?.replaceAll(" ", "") ||
+											a.tegenRekening?.iban?.replaceAll(" ", "") === bt.tegenRekeningIban?.replaceAll(" ", "")
+										);
+									}),
+									rubrieken: rubrieken.filter(r => r.grootboekrekening && r.grootboekrekening.id).map((r: Rubriek) => ({
+										key: r.id,
+										label: r.naam,
+										value: r.grootboekrekening!.id
+									}))
+								};
+
+								const onSelectRubriek = (val) => {
+									const foundRubriek = rubrieken.find(r => r.grootboekrekening?.id === val.value);
+
+									const transactionId = bt?.id;
+									const grootboekrekeningId = foundRubriek?.grootboekrekening?.id;
+
+									if(transactionId && grootboekrekeningId){
+										handleMutation(createJournaalpostGrootboekrekening({
+											variables: {transactionId, grootboekrekeningId}
+										}), () => {
+											setSelectedRubriek(foundRubriek);
+										});
+									}
+								}
+
+								const onSelectAfspraak = (afspraak: Afspraak) => {
+									const transactionId = bt?.id;
+									const afspraakId = afspraak.id;
+
+									if(transactionId && afspraakId){
+										handleMutation(createJournaalpostAfspraak({
+											variables: {transactionId, afspraakId}
+										}), () => {
+											setSelectedAfspraak(afspraak);
+										});
+									}
+								}
+
+								return (
+									<Stack>
+										<Heading size={"sm"}>Koppelen met</Heading>
+
+										<Tabs isFitted>
+											<TabList>
+												<Tab>Afspraak</Tab>
+												<Tab>Rubriek</Tab>
+											</TabList>
+											<TabPanels>
+												<TabPanel px={0}>
+													<SelectAfspraak value={selectedAfspraak} options={options.afspraken} onChange={onSelectAfspraak} />
+												</TabPanel>
+												<TabPanel px={0}>
+													<Select onChange={onSelectRubriek} options={options.rubrieken} isClearable={true} noOptionsMessage={() => t("select.noOptions")}
+													        maxMenuHeight={200} />
+												</TabPanel>
+											</TabPanels>
+										</Tabs>
+									</Stack>
+								);
+							}}</Queryable>
+						)}
 					</Stack>
-
 				</ModalBody>
-				<ModalFooter>
-					<Stack direction={"row"}>
-						<Button onClick={() => onClose()}>{t("actions.cancel")}</Button>
-						<Button colorScheme={"primary"} onClick={() => onClickSave()}>{t("actions.save")}</Button>
-					</Stack>
-				</ModalFooter>
 			</ModalContent>
 		</Modal>
 
 		<Box px={2} mx={-2} _hover={{
 			bg: "gray.100"
 		}}>
-			<Stack direction={"row"} alignItems={"center"} justifyContent={"center"} {...props} onClick={() => onOpen()} cursor={"pointer"}>
-				<Box flex={2}>{bt.tegenRekening ? (<>
+			<Stack direction={"row"} alignItems={"center"} justifyContent={"center"} {...props} onClick={onClick} cursor={"pointer"}>
+				<Box flex={2}>{bt.tegenRekening ? (
 					<Text>
-						<Tooltip label={maybeFormatIBAN(bt.tegenRekening.iban)} aria-label={maybeFormatIBAN(bt.tegenRekening.iban)} placement={"right"} hasArrow={true}>
+						<Tooltip label={formatIBAN(bt.tegenRekening.iban) || t("unknown")} aria-label={formatIBAN(bt.tegenRekening.iban) || t("unknown")} placement={"right"} hasArrow={true}>
 							<span>{bt.tegenRekening.rekeninghouder}</span>
 						</Tooltip>
 					</Text>
-				</>) :
-					<Text whiteSpace={"nowrap"}>{maybeFormatIBAN(bt.tegenRekeningIban)}</Text>
-				}
+				) : (
+					<Text whiteSpace={"nowrap"}>{formatIBAN(bt.tegenRekeningIban) || t("unknown")}</Text>
+				)}
 				</Box>
 				{!isMobile && (
 					<Box flex={1}>
-						<Text fontSize={"sm"}>{bt.journaalpost?.grootboekrekening?.rubriek?.naam}</Text>
+						{bt.journaalpost && (
+							<Text fontSize={"sm"}>{bt.journaalpost.afspraak?.rubriek?.naam || bt.journaalpost.grootboekrekening?.rubriek?.naam}</Text>
+						)}
 					</Box>
 				)}
 				<Box flex={0} minWidth={120}>
@@ -234,6 +247,7 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }>
 				</Box>
 			</Stack>
 		</Box>
+
 	</>);
 };
 
