@@ -277,11 +277,11 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 							</Stack>
 							<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 								<Stack spacing={1} flex={1}>
-									<FormLabel htmlFor={"organisatieId"}>{t("forms.agreements.fields.organization")}</FormLabel>
+									<FormLabel htmlFor={"beneficiaryId"}>{t("forms.agreements.fields.beneficiary")}</FormLabel>
 									<Queryable query={$organisaties}>{({organisaties = []}: { organisaties: Organisatie[] }) => {
 										return (
-											<Select {...organisatieId.bind} isInvalid={isInvalid(organisatieId)} id="organizationId" value={organisatieId.value}>
-												<option>{t("forms.agreements.fields.organizationChoose")}</option>
+											<Select {...organisatieId.bind} isInvalid={isInvalid(organisatieId)} id="beneficiaryId" value={organisatieId.value}>
+												<option>{t("forms.agreements.fields.beneficiaryChoose")}</option>
 												{organisaties.map(o => (
 													<option key={"o" + o.id} value={o.id}>{o.weergaveNaam}</option>
 												))}

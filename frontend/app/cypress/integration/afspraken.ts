@@ -96,7 +96,7 @@ describe("Afspraken CRUD", () => {
 
 		// Fill the form
 		cy.get("input#description").type(a.beschrijving);
-		cy.get("select#organizationId").select(a.organisatie.weergaveNaam);
+		cy.get("select#beneficiaryId").select(a.organisatie.weergaveNaam);
 		cy.get("select#rekeningId").select(formatIBAN(a.organisatie.rekeningen[0].iban) + " (" + a.organisatie.rekeningen[0].rekeninghouder + ")");
 
 		cy.get("select#rubriekId").select(a.rubriek.naam);
@@ -126,7 +126,7 @@ describe("Afspraken CRUD", () => {
 
 		// Fill the form
 		cy.get("input#description").clear().type(a2.beschrijving);
-		cy.get("select#organizationId").select(a2.organisatie.weergaveNaam);
+		cy.get("select#beneficiaryId").select(a2.organisatie.weergaveNaam);
 		cy.get("select#rekeningId").select(formatIBAN(a2.organisatie.rekeningen[0].iban) + " (" + a2.organisatie.rekeningen[0].rekeninghouder + ")");
 
 		cy.get("select#rubriekId").select(a2.rubriek.naam);

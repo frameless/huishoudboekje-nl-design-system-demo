@@ -79,8 +79,8 @@
                 "rubriek": "Rubriek",
                 "rubriekChoose": "Kies een rubriek",
                 "description": "Omschrijving",
-                "organization": "Organisatie",
-                "organizationChoose": "Kies een organisatie",
+                "beneficiary": "Tegenrekening",
+                "beneficiaryChoose": "Kies een tegenrekening",
                 "bankAccount": "Bankrekening",
                 "bankAccountChoose": "Kies een bankrekening",
                 "amount": "Bedrag",
@@ -262,8 +262,7 @@
         "noOptions": "Geen resultaten"
     },
     "burgers": {
-        "burgers": "Burgers",
-        "burger": "Burger"
+        "burgers": "Burgers"
     },
     "organizations": {
         "organizations": "Organisaties"
