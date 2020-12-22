@@ -18,7 +18,9 @@
       helm repo add zalando-operator "https://raw.githubusercontent.com/zalando/postgres-operator/master/charts/postgres-operator"
       helm repo update
     - |
-      helm upgrade --install --create-namespace --namespace $REVIEW_NAMESPACE postgres-operator zalando-operator/postgres-operator \
+      kubectl create namespace $REVIEW_NAMESPACE || true
+      kubectl apply --namespace $REVIEW_NAMESPACE -f helm/postgres-operator-configmap.yaml
+      helm upgrade --install --namespace $REVIEW_NAMESPACE postgres-operator zalando-operator/postgres-operator \
         --debug \
       	--values helm/postgres-operator.yaml \
         --set podServiceAccount.name=${REVIEW_NAMESPACE}-postgres-pod \
