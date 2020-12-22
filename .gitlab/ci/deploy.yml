@@ -200,6 +200,7 @@ docs-deploy-review:
     - master
     - develop
     - acceptance
+  when: manual
 
 # Deploy Docs (Nijmegen)
 docs-deploy-nijmegen:
