@@ -32,7 +32,9 @@ huishoudboekje-test: huishoudboekje
 
 .PHONY: postgres-operator
 postgres-operator: helm/postgres-operator.yaml helm-init
-	helm upgrade --install --create-namespace --namespace ${NAMESPACE} \
+	kubectl create namespace ${NAMESPACE} || true
+	kubectl apply --namespace ${NAMESPACE} -f helm/postgres-operator-configmap.yaml
+	helm upgrade --install --namespace ${NAMESPACE} \
 		$@ zalando-operator/postgres-operator \
 		--values helm/postgres-operator.yaml \
 		--set podServiceAccount.name=${NAMESPACE}-postgres-pod \
