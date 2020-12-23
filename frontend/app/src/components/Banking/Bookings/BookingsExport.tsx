@@ -4,8 +4,11 @@ import React from "react";
 import DatePicker from "react-datepicker";
 import {useInput, useIsMobile} from "react-grapple";
 import {useTranslation} from "react-i18next";
+import {useGetExportsLazyQuery} from "../../../generated/graphql";
+import Queryable from "../../../utils/Queryable";
 import {Regex} from "../../../utils/things";
 import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
+import Section from "../../Layouts/Section";
 
 const BookingsExport = () => {
 	const {t} = useTranslation();
@@ -29,6 +32,15 @@ const BookingsExport = () => {
 		]
 	});
 
+	const [loadExports, $exports] = useGetExportsLazyQuery({
+		variables: {
+			// beginTijd: moment(startDate.value, "L").startOf("day").toDate(),
+			// eindTijd: moment(endDate.value, "L").endOf("day").toDate()
+			beginTijd: moment(startDate.value, "L").startOf("day").toJSON().slice(0, -1),
+			eindTijd: moment(endDate.value, "L").endOf("day").toJSON().slice(0,-1)
+		}
+	});
+
 	const onClickExportButton = () => {
 		// Todo: what happens next when the export button is clicked? (01-12-2020)
 		// console.log(startDate.value, endDate.value);
@@ -42,7 +54,7 @@ const BookingsExport = () => {
 	};
 
 	return (
-		<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
+		<Section>
 			<Stack direction={isMobile ? "column" : "row"} spacing={2}>
 				<FormLeft title={t("banking.exports.title")} helperText={t("banking.exports.helperText")} />
 				<FormRight>
@@ -71,7 +83,18 @@ const BookingsExport = () => {
 					</Stack>
 				</FormRight>
 			</Stack>
-		</Stack>
+
+			<Stack>
+
+				<Button onClick={() => loadExports()}>Click</Button>
+
+				<Queryable query={$exports}>{(data) => {
+					return <pre>{JSON.stringify(data, null, 2)}</pre>
+				}}
+				</Queryable>
+
+			</Stack>
+		</Section>
 	);
 };
 

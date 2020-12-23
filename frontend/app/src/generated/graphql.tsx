@@ -1520,6 +1520,21 @@ export type GetConfiguratieQuery = (
   )>>> }
 );
 
+export type GetExportsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetExportsQuery = (
+  { __typename?: 'RootQuery' }
+  & { exports?: Maybe<Array<Maybe<(
+    { __typename?: 'Export' }
+    & Pick<Export, 'id' | 'naam' | 'timestamp'>
+    & { overschrijvingen?: Maybe<Array<Maybe<(
+      { __typename?: 'Overschrijving' }
+      & Pick<Overschrijving, 'id'>
+    )>>> }
+  )>>> }
+);
+
 export const RekeningFragmentDoc = gql`
     fragment Rekening on Rekening {
   id
@@ -2914,3 +2929,40 @@ export function useGetConfiguratieLazyQuery(baseOptions?: Apollo.LazyQueryHookOp
 export type GetConfiguratieQueryHookResult = ReturnType<typeof useGetConfiguratieQuery>;
 export type GetConfiguratieLazyQueryHookResult = ReturnType<typeof useGetConfiguratieLazyQuery>;
 export type GetConfiguratieQueryResult = Apollo.QueryResult<GetConfiguratieQuery, GetConfiguratieQueryVariables>;
+export const GetExportsDocument = gql`
+    query getExports {
+  exports {
+    id
+    naam
+    timestamp
+    overschrijvingen {
+      id
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetExportsQuery__
+ *
+ * To run a query within a React component, call `useGetExportsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetExportsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetExportsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetExportsQuery(baseOptions?: Apollo.QueryHookOptions<GetExportsQuery, GetExportsQueryVariables>) {
+        return Apollo.useQuery<GetExportsQuery, GetExportsQueryVariables>(GetExportsDocument, baseOptions);
+      }
+export function useGetExportsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetExportsQuery, GetExportsQueryVariables>) {
+          return Apollo.useLazyQuery<GetExportsQuery, GetExportsQueryVariables>(GetExportsDocument, baseOptions);
+        }
+export type GetExportsQueryHookResult = ReturnType<typeof useGetExportsQuery>;
+export type GetExportsLazyQueryHookResult = ReturnType<typeof useGetExportsLazyQuery>;
+export type GetExportsQueryResult = Apollo.QueryResult<GetExportsQuery, GetExportsQueryVariables>;

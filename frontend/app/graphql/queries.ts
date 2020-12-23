@@ -159,3 +159,16 @@ export const GetConfiguratieQuery = gql`
         }
     }
 `;
+
+export const GetExportsQuery = gql`
+    query getExports {
+        exports {
+            id
+            naam
+            timestamp
+            overschrijvingen{
+                id
+            }
+        }
+    }
+`;
