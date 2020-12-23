@@ -20,6 +20,6 @@ setup(
         'mt-940>=4.23.0',
         'nest-asyncio>=1.4.3',
         'python-dateutil>=2.8.1',
-        'sepaxml>=2.3.0'
+        'sepaxml>=2.3.0',
     ],
 )

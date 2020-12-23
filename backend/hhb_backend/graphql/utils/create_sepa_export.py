@@ -1,16 +1,13 @@
-import requests
-from graphql import GraphQLError
-from sepaxml import SepaTransfer
 from datetime import datetime
 
-from hhb_backend.graphql import settings
+from sepaxml import SepaTransfer
 
 
-def create_export_string(overschrijvingen, afspraken, tegen_rekeningen):
+def create_export_string(overschrijvingen, afspraken, tegen_rekeningen, config_values):
     config = {
-        "name": "Huishoudboekje " + get_config_value("gemeente_naam"),
-        "IBAN": get_config_value("gemeente_iban"),
-        "BIC": get_config_value("gemeente_bic"),
+        "name": "Huishoudboekje " + config_values['gemeente_naam'],
+        "IBAN": config_values["gemeente_iban"],
+        "BIC": config_values["gemeente_bic"],
         "batch": False,
         "currency": "EUR",  # ISO 4217
     }
@@ -31,13 +28,3 @@ def create_export_string(overschrijvingen, afspraken, tegen_rekeningen):
         sepa.add_payment(payment)
 
     return sepa.export(validate=True)
-
-
-def get_config_value(config_id) -> str:
-    config_response = requests.get(
-        f"{settings.HHB_SERVICES_URL}/configuratie/{config_id}",
-        headers={'Content-type': 'application/json'}
-    )
-    if config_response.status_code != 200:
-        raise GraphQLError(f"Upstream API responded: {config_response.json()}")
-    return config_response.json()['data']['waarde']

@@ -8,6 +8,7 @@ import itsdangerous
 import requests
 from flask import Flask, jsonify, redirect, make_response, session, send_file
 from flask_oidc import OpenIDConnect
+from graphql import GraphQLError
 
 import hhb_backend.graphql.blueprint as graphql_blueprint
 from hhb_backend.custom_oidc import CustomOidc
@@ -20,7 +21,7 @@ def create_app(config_name=os.getenv('APP_SETTINGS', None) or 'hhb_backend.confi
     app = Flask(__name__)
     app.config.from_object(config_name)
 
-    logging.basicConfig( level=app.config["LOG_LEVEL"],  )
+    logging.basicConfig(level=app.config["LOG_LEVEL"], )
     logging.info(f"Starting {__name__} with {config_name}")
 
     if app.config['PREFIX']:
@@ -48,7 +49,7 @@ def create_app(config_name=os.getenv('APP_SETTINGS', None) or 'hhb_backend.confi
     def version_file():
         try:
             return send_file('version.json')
-        except :
+        except:
             return jsonify(component='backend', tag='dev')
 
     @app.route('/me')
@@ -135,14 +136,29 @@ def create_app(config_name=os.getenv('APP_SETTINGS', None) or 'hhb_backend.confi
         if not tegen_rekeningen:
             return jsonify(message="Geen rekeningen gevonden"), rekeningen_response.status_code
 
+        config_values = {
+            "gemeente_naam": get_config_value('gemeente_naam'),
+            "gemeente_iban": get_config_value("gemeente_iban"),
+            "gemeente_bic": get_config_value("gemeente_bic")
+        }
+
         # Create xml
-        xml_data = create_export_string(overschrijvingen, afspraken, tegen_rekeningen)
+        xml_data = create_export_string(overschrijvingen, afspraken, tegen_rekeningen, config_values)
         xml_filename = f"{export_object['naam']}.xml"
 
         export_file = io.BytesIO(xml_data)
         response = make_response(send_file(export_file, attachment_filename=xml_filename))
         response.headers['Content-Disposition'] = f'attachment; filename="{xml_filename}"'
         return response
+
+    def get_config_value(config_id) -> str:
+        config_response = requests.get(
+            f"{settings.HHB_SERVICES_URL}/configuratie/{config_id}",
+            headers={'Content-type': 'application/json'}
+        )
+        if config_response.status_code != 200:
+            raise GraphQLError(f"Upstream API responded: {config_response.json()}")
+        return config_response.json()['data']['waarde']
 
     return app
 
