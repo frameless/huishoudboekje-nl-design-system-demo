@@ -24,6 +24,7 @@ from .customer_statement_messages.create_customer_statement_message import  Crea
 from .rubrieken.create_rubriek import CreateRubriek
 from .rubrieken.update_rubriek import UpdateRubriek
 from .rubrieken.delete_rubriek import DeleteRubriek
+from .overschrijvingen.create_export_overschrijvingen import CreateExportOverschrijvingen
 
 class RootMutation(graphene.ObjectType):
     """ The root of all mutations """
@@ -56,4 +57,5 @@ class RootMutation(graphene.ObjectType):
     createConfiguratie = CreateConfiguratie.Field()
     updateConfiguratie = UpdateConfiguratie.Field()
     deleteConfiguratie = DeleteConfiguratie.Field()
-      
+
+    createExportOverschrijvingen = CreateExportOverschrijvingen.Field()

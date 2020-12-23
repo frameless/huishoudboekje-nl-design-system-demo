@@ -1,7 +1,7 @@
-
 import requests_mock
 from freezegun import freeze_time
 from hhb_backend.graphql import settings
+
 
 def test_afspraken(client):
     with requests_mock.Mocker() as rm:
@@ -19,6 +19,7 @@ def test_afspraken(client):
             }]
         }}
 
+
 def test_afspraak_resolvers(client):
     with requests_mock.Mocker() as rm:
         rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/", json={'data': [{
@@ -31,7 +32,7 @@ def test_afspraak_resolvers(client):
             'interval': "P1Y2M3W4D",
             'organisatie_id': 1,
             'journaalposten': [1, 2]
-            
+
         }]})
         rm.get(f"{settings.HHB_SERVICES_URL}/rubrieken/", json={'data': [{'id': 1}]})
         rm.get(f"{settings.HHB_SERVICES_URL}/gebruikers/", json={'data': [{'id': 1}]})
@@ -56,6 +57,7 @@ def test_afspraak_resolvers(client):
             }
         }}
 
+
 def test_afspraak_empty_interval(client):
     with requests_mock.Mocker() as rm:
         rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/", json={'data': [{
@@ -73,10 +75,11 @@ def test_afspraak_empty_interval(client):
             }]
         }}
 
+
 @freeze_time("2020-01-01")
 def test_afspraak_overschrijvingen_planner_normal(client):
     with requests_mock.Mocker() as rm:
-        rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/", json={'data': [{
+        rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/", json = {'data': [{
             'id': 1,
             'interval': "P0Y1M0W0D",
             'start_datum': "2020-01-01",
@@ -103,21 +106,23 @@ def test_afspraak_overschrijvingen_planner_normal(client):
         ]})
         response = client.post(
             "/graphql",
-            json={"query": '''{ afspraken(ids:[1]) { overschrijvingen(startDatum: "2020-01-01", eindDatum: "2021-01-01") { datum bedrag status } } }'''},
+            json={
+                "query": '''{ afspraken(ids:[1]) { overschrijvingen(startDatum: "2020-01-01", eindDatum: "2021-01-01") { datum bedrag status afspraak { id } } } }'''},
             content_type='application/json'
         )
         assert response.json['data']['afspraken'][0]['overschrijvingen'] == [
-            {'datum': '2020-01-01', 'bedrag': '1.01', 'status': 'GEREED'},
-            {'datum': '2020-02-01', 'bedrag': '1.01', 'status': 'IN_BEHANDELING'},
-            {'datum': '2020-03-01', 'bedrag': '1.01', 'status': 'VERWACHTING'},
-            {'datum': '2020-04-01', 'bedrag': '1.01', 'status': 'VERWACHTING'},
-            {'datum': '2020-05-01', 'bedrag': '1.01', 'status': 'VERWACHTING'},
-            {'datum': '2020-06-01', 'bedrag': '1.01', 'status': 'VERWACHTING'},
-            {'datum': '2020-07-01', 'bedrag': '1.01', 'status': 'VERWACHTING'},
-            {'datum': '2020-08-01', 'bedrag': '1.01', 'status': 'VERWACHTING'},
-            {'datum': '2020-09-01', 'bedrag': '1.01', 'status': 'VERWACHTING'},
-            {'datum': '2020-10-01', 'bedrag': '1.02', 'status': 'VERWACHTING'}
+            {'afspraak': {'id': 1}, 'datum': '2020-01-01', 'bedrag': '1.01', 'status': 'GEREED'},
+            {'afspraak': {'id': 1}, 'datum': '2020-02-01', 'bedrag': '1.01', 'status': 'IN_BEHANDELING'},
+            {'afspraak': {'id': 1}, 'datum': '2020-03-01', 'bedrag': '1.01', 'status': 'VERWACHTING'},
+            {'afspraak': {'id': 1}, 'datum': '2020-04-01', 'bedrag': '1.01', 'status': 'VERWACHTING'},
+            {'afspraak': {'id': 1}, 'datum': '2020-05-01', 'bedrag': '1.01', 'status': 'VERWACHTING'},
+            {'afspraak': {'id': 1}, 'datum': '2020-06-01', 'bedrag': '1.01', 'status': 'VERWACHTING'},
+            {'afspraak': {'id': 1}, 'datum': '2020-07-01', 'bedrag': '1.01', 'status': 'VERWACHTING'},
+            {'afspraak': {'id': 1}, 'datum': '2020-08-01', 'bedrag': '1.01', 'status': 'VERWACHTING'},
+            {'afspraak': {'id': 1}, 'datum': '2020-09-01', 'bedrag': '1.01', 'status': 'VERWACHTING'},
+            {'afspraak': {'id': 1}, 'datum': '2020-10-01', 'bedrag': '1.02', 'status': 'VERWACHTING'}
         ]
+
 
 @freeze_time("2020-01-01")
 def test_afspraak_overschrijvingen_planner_no_einddatum(client):
@@ -149,7 +154,8 @@ def test_afspraak_overschrijvingen_planner_no_einddatum(client):
         ]})
         response = client.post(
             "/graphql",
-            json={"query": '''{ afspraken(ids:[1]) { overschrijvingen(startDatum: "2020-01-01") { datum bedrag status } } }'''},
+            json={
+                "query": '''{ afspraken(ids:[1]) { overschrijvingen(startDatum: "2020-01-01") { datum bedrag status } } }'''},
             content_type='application/json'
         )
         print(response.json)
@@ -188,7 +194,8 @@ def test_afspraak_overschrijvingen_planner_doorlopened(client):
         ]})
         response = client.post(
             "/graphql",
-            json={"query": '''{ afspraken(ids:[1]) { overschrijvingen(startDatum: "2020-02-01", eindDatum: "2021-01-01") { datum bedrag status } } }'''},
+            json={
+                "query": '''{ afspraken(ids:[1]) { overschrijvingen(startDatum: "2020-02-01", eindDatum: "2021-01-01") { datum bedrag status } } }'''},
             content_type='application/json'
         )
         print(response.json)
