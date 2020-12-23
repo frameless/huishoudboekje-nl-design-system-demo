@@ -78,13 +78,12 @@ class CreateExportOverschrijvingen(graphene.Mutation):
         if not future_overschrijvingen:
             raise GraphQLError(f"Geen overschrijvingen in periode, geen export bestand aangemaakt.")
 
-        today = datetime.now()
+        today = datetime.now(tz=tz.tzlocal()).replace(microsecond=0)
         export_response = requests.post(
             f"{settings.HHB_SERVICES_URL}/export/",
             data=json.dumps({
                 "naam": today.strftime('%Y-%m-%d_%H-%M-%S') + "-SEPA-EXPORT",
-                "timestamp": datetime(today.year, today.month, today.day, today.hour, today.minute, today.second,
-                                      tzinfo=tz.tzlocal()).isoformat(),
+                "timestamp": today.isoformat(),
             }),
             headers={'Content-type': 'application/json'}
         )
