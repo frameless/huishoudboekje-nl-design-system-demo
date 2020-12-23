@@ -58,23 +58,6 @@ def create_mock_adapter() -> Adapter:
         elif request.path == "/overschrijvingen/":
             return MockResponse({'data': {'afspraak_id': 1, 'bank_transaction_id': None, 'bedrag': 10000,
                                           'datum': '2020-12-01', 'export_id': 1, 'id': 23}}, 201)
-        elif request.path == "/afspraken/" and request.query == "filter_ids=1":
-            return MockResponse({'data': [
-                {'aantal_betalingen': 12, 'actief': True, 'automatische_incasso': True, 'bedrag': 120000,
-                 'beschrijving': 'Leefgeld Hulleman', 'credit': True, 'eind_datum': '2020-12-31', 'gebruiker_id': 1,
-                 'id': 1, 'interval': 'P0Y1M0W0D', 'journaalposten': [], 'kenmerk': None, 'organisatie_id': None,
-                 'overschrijvingen': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 24], 'rubriek_id': None,
-                 'start_datum': '2020-01-01', 'tegen_rekening_id': 14}]}, 201)
-        elif request.path == "/rekeningen/" and request.query == "filter_ids=14":
-            return MockResponse({'data': [
-                {'afspraken': [1], 'gebruikers': [], 'iban': 'GB33BUKB20201555556655', 'id': 14, 'organisaties': [1],
-                 'rekeninghouder': 'S. Hulleman'}]}, 201)
-        elif request.path == '/configuratie/gemeente_naam':
-            return MockResponse({'data': {'id': 'gemeente_naam', 'waarde': 'Gemeente Sloothuizen'}}, 200)
-        elif request.path == "/configuratie/gemeente_iban":
-            return MockResponse({'data': {'id': 'gemeente_iban', 'waarde': 'NL36ABNA5632579034'}}, 200)
-        elif request.path == "/configuratie/gemeente_bic":
-            return MockResponse({'data': {'id': 'gemeente_bic', 'waarde': 'ABNANL2A'}}, 200)
         elif request.path == "/export/":
             return MockResponse({'data': {'id': 1, 'naam': '2020-12-16_13-04-27-SEPA-EXPORT',
                                           'timestamp': '2020-12-16T13:04:27+01:00'}}, 201)
