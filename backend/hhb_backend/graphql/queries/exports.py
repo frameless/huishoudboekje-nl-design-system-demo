@@ -13,8 +13,10 @@ class ExportQuery():
     async def resolver(root, info, **kwargs):
         return await request.dataloader.exports_by_id.load(kwargs["id"])
 
+
 class ExportsQuery():
-    return_type = graphene.List(Export, ids=graphene.List(graphene.Int, default_value=None), begin_timestamp=graphene.DateTime(), eind_timestamp=graphene.DateTime())
+    return_type = graphene.List(Export, ids=graphene.List(graphene.Int, default_value=None),
+                                begin_timestamp=graphene.Date(), eind_timestamp=graphene.Date())
 
     @staticmethod
     async def resolver(root, info, ids=None, begin_timestamp=None, eind_timestamp=None, **kwargs):
