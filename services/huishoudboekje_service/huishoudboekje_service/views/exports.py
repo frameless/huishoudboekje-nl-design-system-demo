@@ -53,19 +53,19 @@ class ExportView(HHBView):
 
     def add_filter_filter_timestamp(self):
         """ Add filter_timestamp filter based on the timestamp """
-        begin_timestamp = get_datetime_from_request(request, 'begin_timestamp')
-        eind_timestamp = get_datetime_from_request(request, 'eind_timestamp')
+        start_datum = get_datetime_from_request(request, 'start_datum')
+        eind_datum = get_datetime_from_request(request, 'eind_datum')
 
-        if begin_timestamp or eind_timestamp:
-            if not begin_timestamp:
-                abort(make_response({"errors": ['begin_timestamp is missing']}, 400))
-            if not eind_timestamp:
-                abort(make_response({"errors": ['eind_timestamp is missing']}, 400))
+        if start_datum or eind_datum:
+            if not start_datum:
+                abort(make_response({"errors": ['start_datum is missing']}, 400))
+            if not eind_datum:
+                abort(make_response({"errors": ['eind_datum is missing']}, 400))
             try:
-                if begin_timestamp > eind_timestamp:
-                    abort(make_response({"errors": ['eind_timestamp must be after begin_timestamp']}, 400))
+                if start_datum > eind_datum:
+                    abort(make_response({"errors": ['eind_datum must be after start_datum']}, 400))
             except TypeError as err:
-                abort(make_response({"errors": [f'failed to compare begin_timestamp to eind_timestamp: {repr(err)}']}, 400))
+                abort(make_response({"errors": [f'failed to compare start_datum to eind_datum: {repr(err)}']}, 400))
 
             self.hhb_query.query = self.hhb_query.query.filter(
-                self.hhb_model.timestamp.between(begin_timestamp, eind_timestamp))
+                self.hhb_model.timestamp.between(start_datum, eind_datum))
