@@ -5,7 +5,7 @@
     - build-cg
   image: registry.gitlab.com/commonground/core/review-app-deployer:latest
   environment:
-    name: $CI_COMMIT_REF_SLUG
+    name: review/$CI_COMMIT_REF_SLUG
     url: https://$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN/
     on_stop: destroy-app
   variables:
@@ -105,7 +105,7 @@
     reports:
       dotenv: docs.env
   environment:
-    name: docs-${CI_COMMIT_REF_SLUG}
+    name: review/docs-${CI_COMMIT_REF_SLUG}
     url: ${DOCS_URL}
     on_stop: destroy-docs
   only:
@@ -241,7 +241,6 @@ docs-deploy-proddemo:
   image: registry.gitlab.com/commonground/core/review-app-deployer:latest
   variables:
     GIT_STRATEGY: none
-    KUBECONFIG: /secrets/kubeconfig/review.conf
   script:
     - kubectl delete namespace $REVIEW_NAMESPACE
   when: manual
@@ -257,7 +256,7 @@ docs-deploy-proddemo:
 destroy-app:
   extends: .destroy
   environment:
-    name: $CI_COMMIT_REF_SLUG
+    name: review/$CI_COMMIT_REF_SLUG
   before_script:
     - helm uninstall --namespace $REVIEW_NAMESPACE postgres-operator
   except:
@@ -268,7 +267,7 @@ destroy-app:
 destroy-docs:
   extends: .destroy
   environment:
-    name: docs-${CI_COMMIT_REF_SLUG}
+    name: review/docs-${CI_COMMIT_REF_SLUG}
   except:
     - master
     - develop
