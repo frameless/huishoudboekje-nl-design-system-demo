@@ -1,4 +1,21 @@
-import {Box, BoxProps, Button, Divider, Editable, EditableInput, EditablePreview, FormLabel, Input, InputGroup, InputLeftElement, Select, Stack, Switch, Text, useToast} from "@chakra-ui/react";
+import {
+	Box,
+	BoxProps,
+	Button,
+	Divider,
+	Editable,
+	EditableInput,
+	EditablePreview,
+	FormLabel,
+	Input,
+	InputGroup,
+	InputLeftElement,
+	Select as ChakraSelect,
+	Stack,
+	Switch,
+	Text,
+	useToast
+} from "@chakra-ui/react";
 import moment from "moment";
 import "moment-recur-ts";
 import React, {useEffect, useState} from "react";
@@ -6,7 +23,8 @@ import DatePicker from "react-datepicker";
 import {useInput, useIsMobile, useNumberInput, useToggle, Validators} from "react-grapple";
 import {UseInput} from "react-grapple/dist/hooks/useInput";
 import {Trans, useTranslation} from "react-i18next";
-import {Afspraak, Gebruiker, Organisatie, useGetAllOrganisatiesQuery, useGetAllRubriekenQuery} from "../../generated/graphql";
+import Select from "react-select";
+import {Afspraak, Gebruiker, Organisatie, Rubriek, useGetAllOrganisatiesQuery, useGetAllRubriekenQuery} from "../../generated/graphql";
 import {AfspraakPeriod, AfspraakType, IntervalType} from "../../models";
 import Queryable from "../../utils/Queryable";
 import generateSampleOverschrijvingen from "../../utils/sampleOverschrijvingen";
@@ -246,6 +264,15 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 		return afspraakType === AfspraakType.Expense ? outgoingTrans : incomingTrans;
 	};
 
+	const onSelectRubriek = (val) => {
+		if ($rubrics.data?.rubrieken) {
+			const foundRubriek = $rubrics.data.rubrieken.find(r => r.grootboekrekening?.id === val);
+			if (foundRubriek) {
+				rubriekId.setValue(String(foundRubriek.id));
+			}
+		}
+	}
+
 	return (
 		<Box as={"form"} onSubmit={onSubmit} {...props}>
 			<Stack spacing={5}>
@@ -259,14 +286,19 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 							<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 								<Stack spacing={1} flex={1}>
 									<FormLabel htmlFor={"accountId"}>{t("forms.agreements.fields.rubriek")}</FormLabel>
-									<Queryable query={$rubrics}>{(data) => (
-										<Select {...rubriekId.bind} isInvalid={isInvalid(rubriekId)} id="rubriekId" value={rubriekId.value}>
-											<option value="">{t("forms.agreements.fields.rubriekChoose")}</option>
-											{data.rubrieken.map(o => (
-												<option key={"o" + o.id} value={o.id}>{o.naam}</option>
-											))}
-										</Select>
-									)}</Queryable>
+									<Queryable query={$rubrics}>{(data: { rubrieken: Rubriek[] }) => {
+										const options = data.rubrieken.filter(r => r.grootboekrekening && r.grootboekrekening.id).map((r: Rubriek) => ({
+											key: r.id,
+											label: r.naam,
+											value: r.grootboekrekening!.id
+										}))
+										const value = options.find(r => r.key === parseInt(rubriekId.value));
+
+										return (
+											<Select onChange={onSelectRubriek} id="rubriekId" isClearable={true} noOptionsMessage={() => t("select.noOptions")}
+											        maxMenuHeight={200} options={options} value={value} />
+										);
+									}}</Queryable>
 								</Stack>
 							</Stack>
 							<Stack spacing={2} direction={isMobile ? "column" : "row"}>
@@ -280,13 +312,13 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 									<FormLabel htmlFor={"beneficiaryId"}>{t("forms.agreements.fields.beneficiary")}</FormLabel>
 									<Queryable query={$organisaties}>{({organisaties = []}: { organisaties: Organisatie[] }) => {
 										return (
-											<Select {...organisatieId.bind} isInvalid={isInvalid(organisatieId)} id="beneficiaryId" value={organisatieId.value}>
+											<ChakraSelect {...organisatieId.bind} isInvalid={isInvalid(organisatieId)} id="beneficiaryId" value={organisatieId.value}>
 												<option>{t("forms.agreements.fields.beneficiaryChoose")}</option>
 												{organisaties.map(o => (
 													<option key={"o" + o.id} value={o.id}>{o.weergaveNaam}</option>
 												))}
 												<option value={0}>{gebruiker.voorletters} {gebruiker.achternaam}</option>
-											</Select>
+											</ChakraSelect>
 										);
 									}}
 									</Queryable>
@@ -297,7 +329,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 										const organisatieRekeningen = organisaties.find(o => o.id === parseInt(organisatieId.value))?.rekeningen || [];
 
 										return (
-											<Select {...rekeningId.bind} isInvalid={isInvalid(rekeningId)} id="rekeningId" value={rekeningId.value}>
+											<ChakraSelect {...rekeningId.bind} isInvalid={isInvalid(rekeningId)} id="rekeningId" value={rekeningId.value}>
 												<option>{t("forms.agreements.fields.bankAccountChoose")}</option>
 												{parseInt(organisatieId.value) === 0 ? (<>
 													{rekeningen.map(r => (
@@ -308,7 +340,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 														<option key={r.id} value={r.id}>{formatIBAN(r.iban)} ({r.rekeninghouder})</option>
 													))}
 												</>)}
-											</Select>
+											</ChakraSelect>
 										);
 									}}
 									</Queryable>
@@ -347,13 +379,13 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 										<Stack direction={"row"} alignItems={"center"}>
 											<FormLabel htmlFor={"interval"}>{t("interval.every")}</FormLabel>
 											<Input type={"number"} min={1} {...intervalNumber.bind} width={100} id={"interval"} />
-											<Select {...intervalType.bind} id="interval" value={intervalType.value}>
+											<ChakraSelect {...intervalType.bind} id="interval" value={intervalType.value}>
 												<option value={""}>{t("interval.choose")}</option>
 												<option value={"day"}>{t("interval.day", {count: parseInt(intervalNumber.value)})}</option>
 												<option value={"week"}>{t("interval.week", {count: parseInt(intervalNumber.value)})}</option>
 												<option value={"month"}>{t("interval.month", {count: parseInt(intervalNumber.value)})}</option>
 												<option value={"year"}>{t("interval.year", {count: parseInt(intervalNumber.value)})}</option>
-											</Select>
+											</ChakraSelect>
 										</Stack>
 									</Stack>
 								</Stack>

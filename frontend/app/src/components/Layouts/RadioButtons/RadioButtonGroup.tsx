@@ -33,7 +33,7 @@ const RadioButtonGroup: React.FC<RadioButtonGroupProps> = ({onChange, defaultVal
 					}
 				};
 
-				return (<RadioButton key={i} radio={getRadioProps({value})} {...roundingOptions}>{label}</RadioButton>);
+				return (<RadioButton key={i} radio={getRadioProps({value} as any)} {...roundingOptions}>{label}</RadioButton>);
 			})}
 		</Stack>
 	);

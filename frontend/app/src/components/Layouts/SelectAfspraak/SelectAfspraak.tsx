@@ -1,4 +1,4 @@
-import { SearchIcon } from "@chakra-ui/icons";
+import {SearchIcon} from "@chakra-ui/icons";
 import {Divider, Input, InputGroup, InputLeftElement, Stack, StackProps, Text} from "@chakra-ui/react";
 import React, {useEffect, useState} from "react";
 import {useInput} from "react-grapple";
@@ -6,7 +6,7 @@ import {useTranslation} from "react-i18next";
 import {Afspraak} from "../../../generated/graphql";
 import SelectAfspraakOption from "./SelectAfspraakOption";
 
-type SelectAfspraakProps = StackProps & {
+type SelectAfspraakProps = Omit<StackProps, "onChange"> & {
 	options: Afspraak[],
 	onChange: (afspraak: Afspraak) => void,
 	value?: Afspraak
@@ -59,7 +59,7 @@ const SelectAfspraak: React.FC<SelectAfspraakProps> = ({options, value, onChange
 				<Text>{t("select.noOptions")}</Text>
 			) : (
 				<Stack spacing={0} maxHeight={200} overflowY={"auto"}>
-					{results.map(a => <SelectAfspraakOption key={a.id} afspraak={a} isSelected={value && value.id === a.id} onClick={() => onChange(a)} px={5}/>)}
+					{results.map(a => <SelectAfspraakOption key={a.id} afspraak={a} isSelected={value && value.id === a.id} onClick={() => onChange(a)} px={5} />)}
 				</Stack>
 			)}
 		</Stack>
