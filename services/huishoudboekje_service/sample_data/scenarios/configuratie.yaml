@@ -7,19 +7,27 @@ configuratie:
     waarde: ABNANL2A
 
 rubrieken:
-  - naam: "Gas"
+  - id: 1
+    naam: "Gas"
     grootboekrekening_id: "WBedHuiGweGas"
-  - naam: "Water"
+  - id: 2
+    naam: "Water"
     grootboekrekening_id: "WBedHuiGweWat"
-  - naam: "Elektra"
+  - id: 3
+    naam: "Elektra"
     grootboekrekening_id: "WBedHuiGweElk"
-  - naam: "Inkomsten"
+  - id: 4
+    naam: "Inkomsten"
     grootboekrekening_id: "WOmzNooNdo"
-  - naam: "Telefonie"
+  - id: 5
+    naam: "Telefonie"
     grootboekrekening_id: "WBedKanPrt"
-  - naam: "Verzekeringen"
+  - id: 6
+    naam: "Verzekeringen"
     grootboekrekening_id: "WBedAssOva"
-  - naam: "Betaalde huur"
+  - id: 7
+    naam: "Betaalde huur"
     grootboekrekening_id: "WBedHuiBeh"
-  - naam: "Milieuheffingen en zuiveringsleges"
+  - id: 8
+    naam: "Milieuheffingen en zuiveringsleges"
     grootboekrekening_id: "WBedHuiMez"

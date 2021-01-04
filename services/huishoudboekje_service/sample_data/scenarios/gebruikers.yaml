@@ -11,4 +11,21 @@ scenarios:
     afspraken: []
   - aantal: 2
     aantal_rekeningen: 1
-    afspraken: []
+    afspraken:
+      - aantal: 1
+        rubriek: 1
+        organisatie_kvk: "23027707"
+        bedrag: -101.0
+        automatische_incasso: true
+        aantal_betalingen: 12
+        interval: "P0Y1M0W0D"
+        start_datum: "2021-01-01"
+        eind_datum: "2021-12-31"
+  - aantal: 2
+    aantal_rekeningen: 1
+    afspraken:
+      - aantal: 1
+      - aantal: 1
+        organisatie_kvk: ""
+
+

@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from datetime import datetime
 from typing import List
 
 from yaml import load, SafeLoader
@@ -13,6 +14,7 @@ class ConfiguratieItem:
 
 @dataclass
 class Rubriek:
+    id: int
     naam: str
     grootboekrekening_id: str
 
@@ -32,12 +34,12 @@ class Rekening:
 @dataclass
 class Organisatie:
     huisnummer: str
-    kvkNummer: str
+    kvk_nummer: str
     naam: str
     plaatsnaam: str
     postcode: str
     straatnaam: str
-    weergaveNaam: str
+    weergave_naam: str
     rekeningen: List[Rekening] = field(default_factory=list)
 
 
@@ -45,19 +47,28 @@ class Organisatie:
 class OrganisatieScenario:
     aantal: int
 
+
 @dataclass
 class Organisaties:
     organisaties: List[Organisatie] = field(default_factory=list)
-    straatnamen: List[str] = field(default_factory=list)
     scenarios: List[OrganisatieScenario] = field(default_factory=list)
+
+@dataclass
+class Metadata:
+    straatnamen: List[str] = field(default_factory=list)
 
 
 @dataclass
 class AfspraakScenario:
-    aantal: int
-    rubriek: str
-    organisatie: str
-    bedrag: int
+    aantal: int = 12
+    rubriek: int = None
+    organisatie_kvk: str = None
+    bedrag: float = -101.0
+    automatische_incasso: bool = True
+    aantal_betalingen: int = 12
+    interval: str = "P0Y1M0W0D"
+    start_datum: str = "2021-01-01"
+    eind_datum: str = "2021-12-31"
 
 
 @dataclass
@@ -72,6 +83,7 @@ class GebruikerScenario:
 class Gebruikers:
     scenarios: List[GebruikerScenario] = field(default_factory=list)
 
+
 def load_yaml_dataclass(filename: str, clazz):
     with open(filename, 'r') as reader:
         loaded = load(reader, Loader=SafeLoader)
@@ -80,7 +92,9 @@ def load_yaml_dataclass(filename: str, clazz):
 
         return schema().load(loaded)
 
+
 class Scenario:
     configuratie: Systeem = load_yaml_dataclass('../scenarios/configuratie.yaml', Systeem)
     organisatie: Organisaties = load_yaml_dataclass('../scenarios/organisaties.yaml', Organisaties)
     gebruikers: Gebruikers = load_yaml_dataclass('../scenarios/gebruikers.yaml', Gebruikers)
+    metadata: Metadata = load_yaml_dataclass('../scenarios/metadata.yaml', Metadata)

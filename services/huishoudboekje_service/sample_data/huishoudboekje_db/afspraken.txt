@@ -1,0 +1,7 @@
+organisatie_id	rubriek_id	bedrag	credit	automatische_incasso	aantal_betalingen	interval	start_datum	eind_datum	gebruiker_id	tegen_rekening_id
+2	1	-101.0	False	True	12	P0Y1M0W0D	2021-01-01	2021-12-31	209	40201
+2	1	-101.0	False	True	12	P0Y1M0W0D	2021-01-01	2021-12-31	210	40201
+	7	-101.0	False	True	12	P0Y1M0W0D	2021-01-01	2021-12-31	211	40262
+51	7	-101.0	False	True	12	P0Y1M0W0D	2021-01-01	2021-12-31	211	40250
+	6	-101.0	False	True	12	P0Y1M0W0D	2021-01-01	2021-12-31	212	40263
+6	7	-101.0	False	True	12	P0Y1M0W0D	2021-01-01	2021-12-31	212	40205
