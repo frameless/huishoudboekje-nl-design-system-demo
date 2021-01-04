@@ -13,14 +13,16 @@ class ExportQuery():
     async def resolver(root, info, **kwargs):
         return await request.dataloader.exports_by_id.load(kwargs["id"])
 
+
 class ExportsQuery():
-    return_type = graphene.List(Export, ids=graphene.List(graphene.Int, default_value=None), begin_timestamp=graphene.DateTime(), eind_timestamp=graphene.DateTime())
+    return_type = graphene.List(Export, ids=graphene.List(graphene.Int, default_value=None),
+                                start_datum=graphene.Date(), eind_datum=graphene.Date())
 
     @staticmethod
-    async def resolver(root, info, ids=None, begin_timestamp=None, eind_timestamp=None, **kwargs):
+    async def resolver(root, info, ids=None, start_datum=None, eind_datum=None, **kwargs):
         if ids:
             return await request.dataloader.exports_by_id.load_many(ids)
-        if begin_timestamp or eind_timestamp:
-            if not (begin_timestamp and eind_timestamp):
-                raise GraphQLError("begin_timestamp must be combined with eind_timestamp")
-        return request.dataloader.exports_by_id.get_by_timestamps(begin_timestamp, eind_timestamp)
+        if start_datum or eind_datum:
+            if not (start_datum and eind_datum):
+                raise GraphQLError("start_datum must be combined with eind_datum")
+        return request.dataloader.exports_by_id.get_by_timestamps(start_datum, eind_datum)

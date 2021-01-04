@@ -8,8 +8,8 @@ class ExportsByIdLoader(SingleDataLoader):
     """ Load exports using ids """
     model = "export"
 
-    def get_by_timestamps(self, begin_timestamp, eind_timestamp):
-        url = f"""{self.service}/{self.model}/?begin_timestamp={begin_timestamp}&eind_timestamp={eind_timestamp}"""
+    def get_by_timestamps(self, start_datum, eind_datum):
+        url = f"""{self.service}/{self.model}/?start_datum={start_datum}&eind_datum={eind_datum}"""
 
         response = requests.get(url)
 
