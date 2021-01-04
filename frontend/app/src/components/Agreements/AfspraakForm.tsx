@@ -1,21 +1,4 @@
-import {
-	Box,
-	BoxProps,
-	Button,
-	Divider,
-	Editable,
-	EditableInput,
-	EditablePreview,
-	FormLabel,
-	Input,
-	InputGroup,
-	InputLeftElement,
-	Select as ChakraSelect,
-	Stack,
-	Switch,
-	Text,
-	useToast
-} from "@chakra-ui/react";
+import {Box, BoxProps, Button, Divider, Editable, EditableInput, EditablePreview, FormLabel, Input, InputGroup, InputLeftElement, Stack, Switch, Text, useToast} from "@chakra-ui/react";
 import moment from "moment";
 import "moment-recur-ts";
 import React, {useEffect, useState} from "react";
@@ -24,11 +7,11 @@ import {useInput, useIsMobile, useNumberInput, useToggle, Validators} from "reac
 import {UseInput} from "react-grapple/dist/hooks/useInput";
 import {Trans, useTranslation} from "react-i18next";
 import Select from "react-select";
-import {Afspraak, Gebruiker, Organisatie, Rubriek, useGetAllOrganisatiesQuery, useGetAllRubriekenQuery} from "../../generated/graphql";
+import {Afspraak, Gebruiker, Organisatie, Rekening, Rubriek, useGetAllOrganisatiesQuery, useGetAllRubriekenQuery} from "../../generated/graphql";
 import {AfspraakPeriod, AfspraakType, IntervalType} from "../../models";
 import Queryable from "../../utils/Queryable";
 import generateSampleOverschrijvingen from "../../utils/sampleOverschrijvingen";
-import {formatIBAN, XInterval} from "../../utils/things";
+import {formatBurgerName, formatIBAN, useReactSelectStyles, XInterval} from "../../utils/things";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
 import PrettyIban from "../Layouts/PrettyIban";
 import RadioButtonGroup from "../Layouts/RadioButtons/RadioButtonGroup";
@@ -38,13 +21,13 @@ type AfspraakFormProps = { afspraak?: Afspraak, onSave: (data) => void, burger?:
 const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave, loading = false, ...props}) => {
 	const {t} = useTranslation();
 	const toast = useToast();
+	const reactSelectStyles = useReactSelectStyles();
 	const isMobile = useIsMobile();
 	const gebruiker = afspraak?.gebruiker || props.burger;
 	if (!gebruiker) {
 		throw new Error("Missing property gebruiker.");
 	}
 
-	const {rekeningen = []} = gebruiker;
 	const [isSubmitted, setSubmitted] = useState<boolean>(false);
 
 	const $rubrics = useGetAllRubriekenQuery();
@@ -99,8 +82,8 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 	const nTimes = useNumberInput({
 		validate: [(v) => new RegExp(/^[0-9]+$/).test(v.toString())],
 	});
-	const intervalType = useInput<IntervalType>({
-		validate: [(v) => Object.values(IntervalType).includes(v)],
+	const intervalType = useInput<IntervalType | undefined>({
+		validate: [(v) => v !== undefined && Object.values(IntervalType).includes(v)],
 	});
 	const intervalNumber = useInput({
 		defaultValue: "",
@@ -138,20 +121,6 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [afspraak]);
-
-	/* When an organisatie is selected, and it has one rekening, prefill the rekeningId input with that rekening. */
-	useEffect(() => {
-		const {organisaties = []} = $organisaties.data || {};
-
-		const selectedOrg = organisaties.find(o => o.id === parseInt(organisatieId.value));
-		if (selectedOrg) {
-			const {rekeningen = []} = selectedOrg;
-
-			if (rekeningen.length === 1 && rekeningen[0].id) {
-				rekeningId.setValue((rekeningen[0].id || 0).toString());
-			}
-		}
-	}, [$organisaties.data, organisatieId.value, rekeningId]);
 
 	const onSubmit = (e) => {
 		e.preventDefault();
@@ -192,11 +161,11 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 			beschrijving: description.value,
 			tegenRekeningId: parseInt(rekeningId.value),
 			organisatieId: parseInt(organisatieId.value) !== 0 ? parseInt(organisatieId.value) : null,
-			...parseInt(rubriekId.value) && {rubriekId: parseInt(rubriekId.value)},
+			rubriekId: parseInt(rubriekId.value) !== 0 ? parseInt(rubriekId.value) : null,
 			bedrag: amount.value,
 			kenmerk: searchTerm.value,
 			startDatum: moment(startDate.value, "L").format("YYYY-MM-DD"),
-			interval: isRecurring ? XInterval.create(intervalType.value, intervalNumber.value) : XInterval.empty,
+			interval: isRecurring ? XInterval.create(intervalType.value!, intervalNumber.value) : XInterval.empty,
 			aantalBetalingen: !isContinuous ? nTimes.value : 0,
 			actief: isActive,
 			automatischeIncasso: afspraakType === AfspraakType.Expense ? isAutomatischeIncasso : null,
@@ -225,7 +194,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 		startDate2: moment(startDate2.value, "L").toDate(),
 		endDate: moment(endDate.value, "L").toDate(),
 		nTimes: nTimes.value || 0,
-		interval: XInterval.create(intervalType.value, intervalNumber.value),
+		interval: XInterval.create(intervalType.value!, intervalNumber.value),
 	});
 
 	const HugeDatePicker = () => {
@@ -265,13 +234,49 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 	};
 
 	const onSelectRubriek = (val) => {
-		if ($rubrics.data?.rubrieken) {
-			const foundRubriek = $rubrics.data.rubrieken.find(r => r.grootboekrekening?.id === val);
-			if (foundRubriek) {
-				rubriekId.setValue(String(foundRubriek.id));
-			}
+		if (val) {
+			rubriekId.setValue(String(val.key));
+		}
+		else {
+			rubriekId.reset();
 		}
 	}
+	const onSelectOrganisatie = (val) => {
+		rekeningId.reset();
+
+		if (val) {
+			organisatieId.setValue(String(val.key));
+
+			if ($organisaties.data?.organisaties) {
+				const foundOrganisatie = $organisaties.data.organisaties.find(o => o.id === val.value);
+				if (foundOrganisatie) {
+					const {rekeningen = []} = foundOrganisatie;
+
+					if (rekeningen.length === 1 && rekeningen[0].id) {
+						rekeningId.setValue(String(rekeningen[0].id || 0));
+					}
+				}
+			}
+		}
+		else {
+			organisatieId.reset();
+		}
+	}
+	const onSelectRekening = (val) => {
+		if (val) {
+			rekeningId.setValue(String(val.key));
+		}
+		else {
+			rekeningId.reset();
+		}
+	}
+
+	const intervalOptions = [
+		{key: "day", label: t("interval.day", {count: parseInt(intervalNumber.value)}), value: IntervalType.Day},
+		{key: "week", label: t("interval.week", {count: parseInt(intervalNumber.value)}), value: IntervalType.Week},
+		{key: "month", label: t("interval.month", {count: parseInt(intervalNumber.value)}), value: IntervalType.Month},
+		{key: "year", label: t("interval.year", {count: parseInt(intervalNumber.value)}), value: IntervalType.Year},
+	];
 
 	return (
 		<Box as={"form"} onSubmit={onSubmit} {...props}>
@@ -295,8 +300,8 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 										const value = options.find(r => r.key === parseInt(rubriekId.value));
 
 										return (
-											<Select onChange={onSelectRubriek} id="rubriekId" isClearable={true} noOptionsMessage={() => t("select.noOptions")}
-											        maxMenuHeight={200} options={options} value={value} />
+											<Select onChange={onSelectRubriek} id="rubriekId" isClearable={true} noOptionsMessage={() => t("forms.agreements.fields.rubriekChoose")}
+											        maxMenuHeight={200} options={options} value={value} styles={reactSelectStyles} />
 										);
 									}}</Queryable>
 								</Stack>
@@ -310,37 +315,53 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 							<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 								<Stack spacing={1} flex={1}>
 									<FormLabel htmlFor={"beneficiaryId"}>{t("forms.agreements.fields.beneficiary")}</FormLabel>
-									<Queryable query={$organisaties}>{({organisaties = []}: { organisaties: Organisatie[] }) => {
+									<Queryable query={$organisaties}>{(data: { organisaties: Organisatie[] }) => {
+										const options = [
+											...data.organisaties.map(o => ({
+												key: o.id,
+												label: o.weergaveNaam,
+												value: o.id,
+											})),
+											{
+												key: 0,
+												label: formatBurgerName(gebruiker),
+												value: 0,
+											}
+										];
+										const value = options.find(o => o.key === parseInt(organisatieId.value));
+
 										return (
-											<ChakraSelect {...organisatieId.bind} isInvalid={isInvalid(organisatieId)} id="beneficiaryId" value={organisatieId.value}>
-												<option>{t("forms.agreements.fields.beneficiaryChoose")}</option>
-												{organisaties.map(o => (
-													<option key={"o" + o.id} value={o.id}>{o.weergaveNaam}</option>
-												))}
-												<option value={0}>{gebruiker.voorletters} {gebruiker.achternaam}</option>
-											</ChakraSelect>
+											<Select onChange={onSelectOrganisatie} id="beneficiaryId" isClearable={true} noOptionsMessage={() => t("select.noOptions")}
+											        maxMenuHeight={200} options={options} value={value} styles={reactSelectStyles} />
 										);
 									}}
 									</Queryable>
 								</Stack>
 								<Stack spacing={1} flex={1}>
 									<FormLabel htmlFor={"rekeningId"}>{t("forms.agreements.fields.bankAccount")}</FormLabel>
-									<Queryable query={$organisaties}>{({organisaties = []}: { organisaties: Organisatie[] }) => {
-										const organisatieRekeningen = organisaties.find(o => o.id === parseInt(organisatieId.value))?.rekeningen || [];
+									<Queryable query={$organisaties}>{(data: { organisaties: Organisatie[] }) => {
+										if (!data.organisaties) {
+											return null;
+										}
+
+										let rekeningen: Rekening[];
+										if (parseInt(organisatieId.value) === 0) {
+											rekeningen = gebruiker.rekeningen || [];
+										}
+										else {
+											rekeningen = data.organisaties.find(o => o.id === parseInt(organisatieId.value))?.rekeningen || [];
+										}
+
+										const options = rekeningen.map(r => ({
+											key: r.id,
+											label: `${formatIBAN(r.iban)} (${r.rekeninghouder})`,
+											value: r.id,
+										}));
+										const value = options.find(r => r.key === parseInt(rekeningId.value));
 
 										return (
-											<ChakraSelect {...rekeningId.bind} isInvalid={isInvalid(rekeningId)} id="rekeningId" value={rekeningId.value}>
-												<option>{t("forms.agreements.fields.bankAccountChoose")}</option>
-												{parseInt(organisatieId.value) === 0 ? (<>
-													{rekeningen.map(r => (
-														<option key={r.id} value={r.id}>{formatIBAN(r.iban)} ({r.rekeninghouder})</option>
-													))}
-												</>) : (<>
-													{organisatieRekeningen.map(r => (
-														<option key={r.id} value={r.id}>{formatIBAN(r.iban)} ({r.rekeninghouder})</option>
-													))}
-												</>)}
-											</ChakraSelect>
+											<Select onChange={onSelectRekening} id="rekeningId" isClearable={true} noOptionsMessage={() => t("forms.agreements.fields.bankAccountChoose")}
+											        maxMenuHeight={200} options={options} value={value} styles={reactSelectStyles} />
 										);
 									}}
 									</Queryable>
@@ -379,13 +400,12 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 										<Stack direction={"row"} alignItems={"center"}>
 											<FormLabel htmlFor={"interval"}>{t("interval.every")}</FormLabel>
 											<Input type={"number"} min={1} {...intervalNumber.bind} width={100} id={"interval"} />
-											<ChakraSelect {...intervalType.bind} id="interval" value={intervalType.value}>
-												<option value={""}>{t("interval.choose")}</option>
-												<option value={"day"}>{t("interval.day", {count: parseInt(intervalNumber.value)})}</option>
-												<option value={"week"}>{t("interval.week", {count: parseInt(intervalNumber.value)})}</option>
-												<option value={"month"}>{t("interval.month", {count: parseInt(intervalNumber.value)})}</option>
-												<option value={"year"}>{t("interval.year", {count: parseInt(intervalNumber.value)})}</option>
-											</ChakraSelect>
+
+											<Box flex={1}>
+												<Select onChange={(val) => intervalType.setValue(() => val?.value)} id="interval" isClearable={false} noOptionsMessage={() => t("interval.choose")}
+												        maxMenuHeight={200} options={intervalOptions} value={intervalOptions.find(i => i.value === intervalType.value)}
+												        styles={{...reactSelectStyles}} />
+											</Box>
 										</Stack>
 									</Stack>
 								</Stack>
