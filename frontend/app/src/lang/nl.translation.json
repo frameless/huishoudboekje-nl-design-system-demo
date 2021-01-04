@@ -267,6 +267,10 @@
         },
         "banking": "Bankzaken"
     },
+    "exports": {
+        "name": "Naam",
+        "overschrijvingen": "Overschrijvingen"
+    },
     "transactions": {
         "beneficiaryAccount": "Tegenrekening",
         "rubric": "Rubriek",

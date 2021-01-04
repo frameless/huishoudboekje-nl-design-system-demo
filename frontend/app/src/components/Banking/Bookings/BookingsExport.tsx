@@ -1,19 +1,18 @@
-import {Button, FormControl, FormLabel, Input, Stack, useToast} from "@chakra-ui/react";
+import {Button, FormControl, FormLabel, Input, Stack, Text, useToast} from "@chakra-ui/react";
 import moment from "moment";
 import React from "react";
 import DatePicker from "react-datepicker";
 import {useInput, useIsMobile} from "react-grapple";
 import {useTranslation} from "react-i18next";
-import {useGetExportsLazyQuery} from "../../../generated/graphql";
+import {Export, useGetExportsLazyQuery} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
-import {Regex} from "../../../utils/things";
-import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
+import {dateFormat, Regex} from "../../../utils/things";
+import {FormLeft, FormRight, Label} from "../../Forms/FormLeftRight";
 import Section from "../../Layouts/Section";
 
 const BookingsExport = () => {
 	const {t} = useTranslation();
 	const isMobile = useIsMobile();
-	const toast = useToast();
 
 	const startDate = useInput({
 		defaultValue: moment().startOf("quarter").format("L"),
@@ -33,23 +32,17 @@ const BookingsExport = () => {
 	});
 
 	const [loadExports, $exports] = useGetExportsLazyQuery({
-		variables: {
-			// beginTijd: moment(startDate.value, "L").startOf("day").toDate(),
-			// eindTijd: moment(endDate.value, "L").endOf("day").toDate()
-			beginTijd: moment(startDate.value, "L").startOf("day").toJSON().slice(0, -1),
-			eindTijd: moment(endDate.value, "L").endOf("day").toJSON().slice(0,-1)
-		}
+		fetchPolicy: "no-cache"
 	});
 
 	const onClickExportButton = () => {
 		// Todo: what happens next when the export button is clicked? (01-12-2020)
-		// console.log(startDate.value, endDate.value);
 
-		toast({
-			position: "top",
-			status: "warning",
-			title: "Niet beschikbaar.",
-			description: "Deze functionaliteit is nog niet beschikbaar.",
+		loadExports({
+			variables: {
+				startDatum: moment(startDate.value, "L").startOf("day").format("YYYY-MM-DD"),
+				eindDatum: moment(endDate.value, "L").endOf("day").format("YYYY-MM-DD"),
+			}
 		});
 	};
 
@@ -85,11 +78,38 @@ const BookingsExport = () => {
 			</Stack>
 
 			<Stack>
-
-				<Button onClick={() => loadExports()}>Click</Button>
+				<Stack direction={"row"} width={"100%"} alignItems={"center"} justifyContent={"center"}>
+					<Stack direction={"row"} spacing={1} flex={1}>
+						<Label>{t("exports.name")}</Label>
+					</Stack>
+					<Stack spacing={1} flex={1} alignItems={"flex-end"}>
+						<Label>{t("exports.overschrijvingen")}</Label>
+					</Stack>
+					<Stack spacing={1} flex={1} alignItems={"flex-end"}>
+						<Label>{t("forms.common.fields.date")}</Label>
+					</Stack>
+				</Stack>
 
 				<Queryable query={$exports}>{(data) => {
-					return <pre>{JSON.stringify(data, null, 2)}</pre>
+					if (data) {
+						const exports: Export[] = data.exports || [];
+
+						return exports.map(e => (
+							<Stack direction={"row"} width={"100%"} alignItems={"center"} justifyContent={"center"} key={e.id}>
+								<Stack direction={"row"} spacing={1} flex={1}>
+									<Text>{e.naam}</Text>
+								</Stack>
+								<Stack spacing={1} flex={1} alignItems={"flex-end"}>
+									<Text>{e.overschrijvingen?.length}</Text>
+								</Stack>
+								<Stack spacing={1} flex={1} alignItems={"flex-end"}>
+									<Text fontSize={"14px"} color={"gray.500"}>{dateFormat.format(e.timestamp)}</Text>
+								</Stack>
+							</Stack>
+						));
+					}
+
+					return null;
 				}}
 				</Queryable>
 
