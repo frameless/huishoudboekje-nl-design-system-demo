@@ -3,7 +3,7 @@ from hhb_backend.graphql.dataloaders.base_loader import SingleDataLoader, ListDa
 
 class OverschrijvingByIdLoader(SingleDataLoader):
     """ Load overschrijvingen using ids """
-    model = "overschijvingen"
+    model = "overschrijvingen"
 
 
 class OverschrijvingByAfspraakLoader(ListDataLoader):
