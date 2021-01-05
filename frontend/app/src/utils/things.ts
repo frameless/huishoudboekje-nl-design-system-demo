@@ -101,7 +101,7 @@ export const currencyFormat2 = (showCurrency = true) => {
 	});
 };
 
-// Todo: export const dateFormat = (d: Date) => moment(d).format("L");
+/** @deprecated Use moment(date).format("L") instead */
 export const dateFormat = {
 	format: (d: Date) => moment(d).format("L"),
 };
