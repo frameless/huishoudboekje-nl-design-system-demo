@@ -61,7 +61,7 @@ class Metadata:
 @dataclass
 class AfspraakScenario:
     aantal: int = 12
-    rubriek: int = None
+    rubriek: str = None
     organisatie_kvk: str = None
     bedrag: float = -101.0
     automatische_incasso: bool = True

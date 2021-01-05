@@ -185,10 +185,10 @@ class Generator:
         organisatie = None if scenario.organisatie_kvk is None else next(
             (o for o in self.organisaties if o["kvk_nummer"] == scenario.organisatie_kvk), choice(self.organisaties))
 
-        randomRubriek = choice(self.rubrieken)["id"] if len(self.rubrieken) > 0 else 1
+        rubriek = None if scenario.rubriek is None else next((r for r in self.rubrieken if r["naam"] == scenario.rubriek), choice(self.rubrieken))
         afspraak = {
             "organisatie_id": organisatie["id"] if organisatie is not None else None,
-            "rubriek_id": scenario.rubriek or randomRubriek,
+            "rubriek_id": rubriek["id"] if rubriek is not None else None,
             "bedrag": scenario.bedrag,
             "credit": scenario.bedrag > 0,
             "automatische_incasso": scenario.automatische_incasso or choice([True, False]),

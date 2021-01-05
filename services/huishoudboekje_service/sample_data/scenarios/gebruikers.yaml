@@ -13,7 +13,7 @@ scenarios:
     aantal_rekeningen: 1
     afspraken:
       - aantal: 1
-        rubriek: 1
+        rubriek: "Gas"
         organisatie_kvk: "23027707"
         bedrag: -101.0
         automatische_incasso: true
@@ -24,6 +24,8 @@ scenarios:
   - aantal: 2
     aantal_rekeningen: 1
     afspraken:
+      - aantal: 1
+        rubriek: ""
       - aantal: 1
       - aantal: 1
         organisatie_kvk: ""
