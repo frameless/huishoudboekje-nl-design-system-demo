@@ -9,6 +9,7 @@ export enum RouteNames {
 	transacties = "transacties",
 	bookings = "overschrijvingen",
 	csms = "bronbestanden",
+	auditTrail = "gebeurtenissen",
 	notFound = "404",
 
 	// Sub routes
@@ -46,6 +47,8 @@ const Routes = {
 	BookingsExport: `/${RouteNames.banking}/${RouteNames.bookings}/${RouteNames.export}`,
 	Settings: `/${RouteNames.settings}`,
 	Rapportage: `/${RouteNames.rapportage}`,
+
+	AuditTrail: `/${RouteNames.auditTrail}`,
 
 	NotFound: `/${RouteNames.notFound}`,
 
