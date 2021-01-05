@@ -80,7 +80,6 @@
                 "rubriekChoose": "Kies een rubriek",
                 "description": "Omschrijving",
                 "beneficiary": "Tegenrekening",
-                "beneficiaryChoose": "Kies een tegenrekening",
                 "bankAccount": "Bankrekening",
                 "bankAccountChoose": "Kies een bankrekening",
                 "amount": "Bedrag",
@@ -216,8 +215,6 @@
         }
     },
     "interval": {
-        "every": "Elk(e)",
-        "choose": "Kies een periode",
         "day": "dag",
         "day_plural": "dagen",
         "week": "week",
@@ -226,6 +223,8 @@
         "month_plural": "maanden",
         "year": "jaar",
         "year_plural": "jaar",
+        "every": "Elk(e)",
+        "choose": "Kies een periode",
         "every-day": "Elke dag",
         "every-day_plural": "Elke {{count}} dagen",
         "every-week": "Elke week",
@@ -236,6 +235,9 @@
         "every-year_plural": "Elke {{count}} jaar",
         "once": "Eenmalig"
     },
+    "select": {
+        "noOptions": "Geen resultaten"
+    },
     "unknown": "Onbekend",
     "agreements": {
         "automatischeIncasso": "Automatische incasso",
@@ -245,11 +247,9 @@
     "banking": {
         "exports": {
             "title": "Overschrijvingen",
-            "helperText": "Exporteer een bestand met overschrijvingen voor verwerking in een bankierenapplicatie.",
-            "exports": "Overschrijvingen"
+            "helperText": "Exporteer een bestand met overschrijvingen voor verwerking in een bankierenapplicatie."
         },
-        "banking": "Bankzaken",
-        "customerStatementMessages": "Bronbestanden"
+        "banking": "Bankzaken"
     },
     "transactions": {
         "beneficiaryAccount": "Tegenrekening",
@@ -258,9 +258,6 @@
         "description": "Omschrijving"
     },
     "booking": "Boeking",
-    "select": {
-        "noOptions": "Geen resultaten"
-    },
     "burgers": {
         "burgers": "Burgers"
     },
@@ -274,7 +271,13 @@
             "description": "De pagina die je zoekt kan niet worden gevonden."
         }
     },
-    "balances": {
-        "balances": "Huishoudboekjes"
+    "sidebar": {
+        "burgers": "Burgers",
+        "organisaties": "Organisaties",
+        "bankzaken": "Bankzaken",
+        "bronbestanden": "Bronbestanden",
+        "overschrijvingen": "Overschrijvingen",
+        "huishoudboekjes": "Huishoudboekjes",
+        "gebeurtenissen": "Gebeurtenissen"
     }
 }
