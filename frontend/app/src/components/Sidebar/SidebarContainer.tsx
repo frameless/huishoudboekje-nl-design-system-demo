@@ -46,7 +46,7 @@ const SidebarContainer = ({children}) => {
 			<Box>
 				<Logo mb={5} />
 
-				<Stack bg={"white"} width={"100%"} justifyContent={"space-between"} borderRadius={5}>
+				<Stack width={"100%"} justifyContent={"space-between"}>
 					<Stack width={"100%"} spacing={2}>
 						{children}
 					</Stack>

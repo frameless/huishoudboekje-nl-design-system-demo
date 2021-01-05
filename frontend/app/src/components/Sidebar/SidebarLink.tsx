@@ -1,13 +1,12 @@
 import {Box, BoxProps, Button, ButtonProps, Flex, Text, useTheme} from "@chakra-ui/react";
 import React, {useContext} from "react";
 import {IconContext} from "react-icons";
-import {useHistory, useLocation} from "react-router-dom";
+import {NavLink, useLocation} from "react-router-dom";
 import {DrawerContext} from "../../utils/things";
 
-const SidebarLink: React.FC<ButtonProps & { icon?, href: string, exactMatch?: boolean }> = ({icon, href, children, exactMatch = false, ...props}) => {
-	const {push} = useHistory();
+const SidebarLink: React.FC<ButtonProps & { icon?, to: string, exactMatch?: boolean, target?: string }> = ({icon, to, children, exactMatch = false, ...props}) => {
 	const location = useLocation();
-	const isActive = exactMatch ? location.pathname === href : location.pathname.includes(href);
+	const isActive = exactMatch ? location.pathname === to : location.pathname.includes(to);
 	const drawerContext = useContext(DrawerContext);
 	const theme = useTheme();
 
@@ -24,10 +23,8 @@ const SidebarLink: React.FC<ButtonProps & { icon?, href: string, exactMatch?: bo
 
 	return (
 		<IconContext.Provider value={{color: "blue"}}>
-			<Button justifyContent={"flex-start"} onClick={() => {
-				drawerContext.onClose();
-				push(href);
-			}} variant={isActive ? "solid" : "ghost"} colorScheme={isActive ? "primary" : "gray"} {...props} color={isActive ? "white" : "primary"} width="100%">
+			<Button as={NavLink} justifyContent={"flex-start"} to={to} onClick={() => drawerContext.onClose()} variant={isActive ? "solid" : "ghost"} colorScheme={isActive ? "primary" : "gray"}
+			        color={isActive ? "white" : "primary"} width={"100%"} _focus={{outline: "none", boxShadow: "none"}} {...props}>
 				<Flex alignItems={"center"}>
 					{icon && <LinkIcon mr={5} fontSize={"24px"} />}
 					<Text color={linkColor}>{children}</Text>
