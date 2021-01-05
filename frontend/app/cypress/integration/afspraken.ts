@@ -1,6 +1,6 @@
 import "cypress-graphql-mock";
 import Routes from "../../src/config/routes";
-import {formatBurgerName, formatIBAN} from "../../src/utils/things";
+import {formatBurgerName} from "../../src/utils/things";
 import sampleAfspraken from "../fixtures/afspraken.json";
 import sampleBurgers from "../fixtures/burgers.json";
 import sampleOrganizations from "../fixtures/organizations.json";
@@ -94,15 +94,22 @@ describe("Afspraken CRUD", () => {
 		// Check if we're on the right page
 		cy.get("h2").should("contain", formatBurgerName(b));
 
-		// Fill the form
-		cy.get("input#description").type(a.beschrijving);
-		cy.get("select#beneficiaryId").select(a.organisatie.weergaveNaam);
-		cy.get("select#rekeningId").select(formatIBAN(a.organisatie.rekeningen[0].iban) + " (" + a.organisatie.rekeningen[0].rekeninghouder + ")");
+		// Select rubriek 1
+		cy.get("#rubriekId").click();
+		cy.get("#rubriekId [class*=-menu]").find("[class*=-option]").eq(0).click();
 
-		cy.get("select#rubriekId").select(a.rubriek.naam);
+		cy.get("input#description").type(a.beschrijving);
+
+		// Select beneficiary
+		cy.get("#beneficiaryId").click();
+		cy.get("#beneficiaryId [class*=-menu]").find("[class*=-option]").eq(0).click();
+
+		// Select rekening
+		cy.get("#rekeningId").click();
+		cy.get("#rekeningId [class*=-menu]").find("[class*=-option]").eq(0).click();
+
 		cy.get("input#amount").type(a.bedrag);
 		cy.get("input#searchTerm").type(a.kenmerk);
-
 		cy.get("input#startDate").type(a.startDatum);
 
 		// Press submit
@@ -124,12 +131,20 @@ describe("Afspraken CRUD", () => {
 		// Check if we're on the right page
 		cy.get("h2").should("contain", "Afspraak bewerken");
 
-		// Fill the form
-		cy.get("input#description").clear().type(a2.beschrijving);
-		cy.get("select#beneficiaryId").select(a2.organisatie.weergaveNaam);
-		cy.get("select#rekeningId").select(formatIBAN(a2.organisatie.rekeningen[0].iban) + " (" + a2.organisatie.rekeningen[0].rekeninghouder + ")");
+		// Select rubriek 1
+		cy.get("#rubriekId").click();
+		cy.get("#rubriekId [class*=-menu]").find("[class*=-option]").eq(0).click();
 
-		cy.get("select#rubriekId").select(a2.rubriek.naam);
+		cy.get("input#description").clear().type(a2.beschrijving);
+
+		// Select beneficiary
+		cy.get("#beneficiaryId").click();
+		cy.get("#beneficiaryId [class*=-menu]").find("[class*=-option]").eq(0).click();
+
+		// Select rekening
+		cy.get("#rekeningId").click();
+		cy.get("#rekeningId [class*=-menu]").find("[class*=-option]").eq(0).click();
+
 		cy.get("input#amount").clear().type(a2.bedrag);
 		cy.get("input#searchTerm").clear().type(a2.kenmerk);
 
