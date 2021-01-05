@@ -50,9 +50,13 @@ class CreateExportOverschrijvingen(graphene.Mutation):
         afspraken_ids = [afspraak_result['id'] for afspraak_result in afspraken]
 
         # Get all previous overschrijvingen from afspraken
-        overschrijvingen = await request.dataloader.overschrijvingen_by_afspraak.load_many(afspraken_ids)
-        # Flatten the overschrijvingen list.
-        overschrijvingen = [item for sublist in overschrijvingen for item in sublist]
+        overschrijvingen_response = requests.get(
+            f"{settings.HHB_SERVICES_URL}/overschrijvingen/?filter_afspraken={','.join(str(x) for x in afspraken_ids)}",
+            headers={'Content-type': 'application/json'}
+        )
+        if overschrijvingen_response.status_code != 200:
+            raise GraphQLError(f"Upstream API responded: {afspraken_response.text}")
+        overschrijvingen = overschrijvingen_response.json()['data']
 
         # Haal alle toekomstige overschrijvingen op. Met in achtneming van start en datum.
         future_overschrijvingen = []

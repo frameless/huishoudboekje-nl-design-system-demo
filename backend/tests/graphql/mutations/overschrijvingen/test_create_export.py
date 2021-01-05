@@ -54,7 +54,7 @@ def create_mock_adapter() -> Adapter:
                 {'afspraak_id': 1, 'bank_transaction_id': None, 'bedrag': 10000, 'datum': '2020-10-01',
                  'export_id': None, 'id': 10},
                 {'afspraak_id': 1, 'bank_transaction_id': None, 'bedrag': 10000, 'datum': '2020-11-01',
-                 'export_id': None, 'id': 11}]}, 201)
+                 'export_id': None, 'id': 11}]}, 200)
         elif request.path == "/overschrijvingen/":
             return MockResponse({'data': {'afspraak_id': 1, 'bank_transaction_id': None, 'bedrag': 10000,
                                           'datum': '2020-12-01', 'export_id': 1, 'id': 23}}, 201)
