@@ -16,7 +16,7 @@ const SelectAfspraakOption: React.FC<SelectAfspraakOptionProps> = ({ afspraak: a
 
 	return (
 		<Stack direction={"row"} spacing={2} alignItems={"center"} py={1} width={"100%"} {...enableHover && {_hover: {
-			cusor: "pointer",
+			cursor: "pointer",
 			bg: "gray.100"
 		}}} {...isSelected && {
 			bg: "gray.100"

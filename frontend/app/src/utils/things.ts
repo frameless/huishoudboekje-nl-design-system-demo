@@ -1,3 +1,4 @@
+import { useToken } from "@chakra-ui/react";
 import {friendlyFormatIBAN} from "ibantools";
 import moment from "moment";
 import {createContext} from "react";
@@ -128,7 +129,18 @@ export const intervalString = ((interval: Interval | undefined, t: (text, ...tPr
 });
 
 export const formatIBAN = (iban?: string) => {
-	if(iban){
+	if (iban) {
 		return friendlyFormatIBAN(iban);
 	}
 }
+
+export const useReactSelectStyles = () => {
+	const inputBorderColor = useToken("colors","gray.200");
+
+	return ({
+		control: (provided) => ({
+			...provided,
+			borderColor: inputBorderColor
+		})
+	});
+};

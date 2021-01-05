@@ -1,8 +1,8 @@
-import {act, screen} from "@testing-library/react";
+import {act} from "@testing-library/react";
 import React from "react";
 import {render, unmountComponentAtNode} from "react-dom";
-import {formatIBAN} from "../utils/things";
 import PrettyIban from "../components/Layouts/PrettyIban";
+import {formatIBAN} from "../utils/things";
 
 jest.mock("react-i18next", () => require("./utils/mock-hooks").reactI18NextMock());
 
