@@ -126,6 +126,12 @@ export type CreateCustomerStatementMessage = {
   customerStatementMessage?: Maybe<CustomerStatementMessage>;
 };
 
+export type CreateExportOverschrijvingen = {
+  __typename?: 'CreateExportOverschrijvingen';
+  ok?: Maybe<Scalars['Boolean']>;
+  export?: Maybe<Export>;
+};
+
 export type CreateGebruiker = {
   __typename?: 'CreateGebruiker';
   ok?: Maybe<Scalars['Boolean']>;
@@ -365,6 +371,7 @@ export type Overschrijving = {
   bedrag?: Maybe<Scalars['Bedrag']>;
   bankTransaction?: Maybe<BankTransaction>;
   status?: Maybe<OverschrijvingStatus>;
+  afspraken?: Maybe<Array<Maybe<Afspraak>>>;
 };
 
 export enum OverschrijvingStatus {
@@ -431,6 +438,7 @@ export type RootMutation = {
   createConfiguratie?: Maybe<CreateConfiguratie>;
   updateConfiguratie?: Maybe<UpdateConfiguratie>;
   deleteConfiguratie?: Maybe<DeleteConfiguratie>;
+  createExportOverschrijvingen?: Maybe<CreateExportOverschrijvingen>;
 };
 
 
@@ -615,6 +623,13 @@ export type RootMutationDeleteConfiguratieArgs = {
   id: Scalars['String'];
 };
 
+
+/** The root of all mutations  */
+export type RootMutationCreateExportOverschrijvingenArgs = {
+  eindDatum?: Maybe<Scalars['String']>;
+  startDatum?: Maybe<Scalars['String']>;
+};
+
 /** The root of all queries  */
 export type RootQuery = {
   __typename?: 'RootQuery';
@@ -690,8 +705,8 @@ export type RootQueryExportArgs = {
 /** The root of all queries  */
 export type RootQueryExportsArgs = {
   ids?: Maybe<Array<Maybe<Scalars['Int']>>>;
-  beginTimestamp?: Maybe<Scalars['DateTime']>;
-  eindTimestamp?: Maybe<Scalars['DateTime']>;
+  startDatum?: Maybe<Scalars['Date']>;
+  eindDatum?: Maybe<Scalars['Date']>;
 };
 
 
@@ -1409,10 +1424,10 @@ export type GetAllRubriekenQuery = (
   )>>> }
 );
 
-export type GetAllRubriekenAndAfsprakenQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetTransactionItemFormDataQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllRubriekenAndAfsprakenQuery = (
+export type GetTransactionItemFormDataQuery = (
   { __typename?: 'RootQuery' }
   & { rubrieken?: Maybe<Array<Maybe<(
     { __typename?: 'Rubriek' }
@@ -1424,6 +1439,24 @@ export type GetAllRubriekenAndAfsprakenQuery = (
   )>>>, afspraken?: Maybe<Array<Maybe<(
     { __typename?: 'Afspraak' }
     & AfspraakFragment
+  )>>> }
+);
+
+export type GetAfspraakFormDataQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAfspraakFormDataQuery = (
+  { __typename?: 'RootQuery' }
+  & { rubrieken?: Maybe<Array<Maybe<(
+    { __typename?: 'Rubriek' }
+    & { grootboekrekening?: Maybe<(
+      { __typename?: 'Grootboekrekening' }
+      & Pick<Grootboekrekening, 'id' | 'naam'>
+    )> }
+    & RubriekFragment
+  )>>>, organisaties?: Maybe<Array<Maybe<(
+    { __typename?: 'Organisatie' }
+    & OrganisatieFragment
   )>>> }
 );
 
@@ -2601,8 +2634,8 @@ export function useGetAllRubriekenLazyQuery(baseOptions?: Apollo.LazyQueryHookOp
 export type GetAllRubriekenQueryHookResult = ReturnType<typeof useGetAllRubriekenQuery>;
 export type GetAllRubriekenLazyQueryHookResult = ReturnType<typeof useGetAllRubriekenLazyQuery>;
 export type GetAllRubriekenQueryResult = Apollo.QueryResult<GetAllRubriekenQuery, GetAllRubriekenQueryVariables>;
-export const GetAllRubriekenAndAfsprakenDocument = gql`
-    query getAllRubriekenAndAfspraken {
+export const GetTransactionItemFormDataDocument = gql`
+    query getTransactionItemFormData {
   rubrieken {
     ...Rubriek
     grootboekrekening {
@@ -2618,26 +2651,66 @@ export const GetAllRubriekenAndAfsprakenDocument = gql`
 ${AfspraakFragmentDoc}`;
 
 /**
- * __useGetAllRubriekenAndAfsprakenQuery__
+ * __useGetTransactionItemFormDataQuery__
  *
- * To run a query within a React component, call `useGetAllRubriekenAndAfsprakenQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetAllRubriekenAndAfsprakenQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetTransactionItemFormDataQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTransactionItemFormDataQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetAllRubriekenAndAfsprakenQuery({
+ * const { data, loading, error } = useGetTransactionItemFormDataQuery({
  *   variables: {
  *   },
  * });
  */
-export function useGetAllRubriekenAndAfsprakenQuery(baseOptions?: Apollo.QueryHookOptions<GetAllRubriekenAndAfsprakenQuery, GetAllRubriekenAndAfsprakenQueryVariables>) {
-        return Apollo.useQuery<GetAllRubriekenAndAfsprakenQuery, GetAllRubriekenAndAfsprakenQueryVariables>(GetAllRubriekenAndAfsprakenDocument, baseOptions);
+export function useGetTransactionItemFormDataQuery(baseOptions?: Apollo.QueryHookOptions<GetTransactionItemFormDataQuery, GetTransactionItemFormDataQueryVariables>) {
+        return Apollo.useQuery<GetTransactionItemFormDataQuery, GetTransactionItemFormDataQueryVariables>(GetTransactionItemFormDataDocument, baseOptions);
       }
-export function useGetAllRubriekenAndAfsprakenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllRubriekenAndAfsprakenQuery, GetAllRubriekenAndAfsprakenQueryVariables>) {
-          return Apollo.useLazyQuery<GetAllRubriekenAndAfsprakenQuery, GetAllRubriekenAndAfsprakenQueryVariables>(GetAllRubriekenAndAfsprakenDocument, baseOptions);
+export function useGetTransactionItemFormDataLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetTransactionItemFormDataQuery, GetTransactionItemFormDataQueryVariables>) {
+          return Apollo.useLazyQuery<GetTransactionItemFormDataQuery, GetTransactionItemFormDataQueryVariables>(GetTransactionItemFormDataDocument, baseOptions);
         }
-export type GetAllRubriekenAndAfsprakenQueryHookResult = ReturnType<typeof useGetAllRubriekenAndAfsprakenQuery>;
-export type GetAllRubriekenAndAfsprakenLazyQueryHookResult = ReturnType<typeof useGetAllRubriekenAndAfsprakenLazyQuery>;
-export type GetAllRubriekenAndAfsprakenQueryResult = Apollo.QueryResult<GetAllRubriekenAndAfsprakenQuery, GetAllRubriekenAndAfsprakenQueryVariables>;
+export type GetTransactionItemFormDataQueryHookResult = ReturnType<typeof useGetTransactionItemFormDataQuery>;
+export type GetTransactionItemFormDataLazyQueryHookResult = ReturnType<typeof useGetTransactionItemFormDataLazyQuery>;
+export type GetTransactionItemFormDataQueryResult = Apollo.QueryResult<GetTransactionItemFormDataQuery, GetTransactionItemFormDataQueryVariables>;
+export const GetAfspraakFormDataDocument = gql`
+    query getAfspraakFormData {
+  rubrieken {
+    ...Rubriek
+    grootboekrekening {
+      id
+      naam
+    }
+  }
+  organisaties {
+    ...Organisatie
+  }
+}
+    ${RubriekFragmentDoc}
+${OrganisatieFragmentDoc}`;
+
+/**
+ * __useGetAfspraakFormDataQuery__
+ *
+ * To run a query within a React component, call `useGetAfspraakFormDataQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAfspraakFormDataQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAfspraakFormDataQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetAfspraakFormDataQuery(baseOptions?: Apollo.QueryHookOptions<GetAfspraakFormDataQuery, GetAfspraakFormDataQueryVariables>) {
+        return Apollo.useQuery<GetAfspraakFormDataQuery, GetAfspraakFormDataQueryVariables>(GetAfspraakFormDataDocument, baseOptions);
+      }
+export function useGetAfspraakFormDataLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAfspraakFormDataQuery, GetAfspraakFormDataQueryVariables>) {
+          return Apollo.useLazyQuery<GetAfspraakFormDataQuery, GetAfspraakFormDataQueryVariables>(GetAfspraakFormDataDocument, baseOptions);
+        }
+export type GetAfspraakFormDataQueryHookResult = ReturnType<typeof useGetAfspraakFormDataQuery>;
+export type GetAfspraakFormDataLazyQueryHookResult = ReturnType<typeof useGetAfspraakFormDataLazyQuery>;
+export type GetAfspraakFormDataQueryResult = Apollo.QueryResult<GetAfspraakFormDataQuery, GetAfspraakFormDataQueryVariables>;

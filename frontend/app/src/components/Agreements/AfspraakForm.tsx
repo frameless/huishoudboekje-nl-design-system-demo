@@ -7,13 +7,12 @@ import {useInput, useIsMobile, useNumberInput, useToggle, Validators} from "reac
 import {UseInput} from "react-grapple/dist/hooks/useInput";
 import {Trans, useTranslation} from "react-i18next";
 import Select from "react-select";
-import {Afspraak, Gebruiker, Organisatie, Rekening, Rubriek, useGetAllOrganisatiesQuery, useGetAllRubriekenQuery} from "../../generated/graphql";
+import {Afspraak, Gebruiker, Organisatie, Rekening, Rubriek, useGetAfspraakFormDataQuery} from "../../generated/graphql";
 import {AfspraakPeriod, AfspraakType, IntervalType} from "../../models";
 import Queryable from "../../utils/Queryable";
 import generateSampleOverschrijvingen from "../../utils/sampleOverschrijvingen";
 import {formatBurgerName, formatIBAN, useReactSelectStyles, XInterval} from "../../utils/things";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
-import PrettyIban from "../Layouts/PrettyIban";
 import RadioButtonGroup from "../Layouts/RadioButtons/RadioButtonGroup";
 import OverschrijvingenListView from "../Overschrijvingen/OverschrijvingenListView";
 
@@ -30,8 +29,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 
 	const [isSubmitted, setSubmitted] = useState<boolean>(false);
 
-	const $rubrics = useGetAllRubriekenQuery();
-	const $organisaties = useGetAllOrganisatiesQuery();
+	const $afspraakFormData = useGetAfspraakFormDataQuery();
 
 	const [isActive, toggleActive] = useToggle(true);
 	const [afspraakType, setAfspraakType] = useState<AfspraakType>(AfspraakType.Expense);
@@ -247,8 +245,8 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 		if (val) {
 			organisatieId.setValue(String(val.key));
 
-			if ($organisaties.data?.organisaties) {
-				const foundOrganisatie = $organisaties.data.organisaties.find(o => o.id === val.value);
+			if ($afspraakFormData.data?.organisaties) {
+				const foundOrganisatie = $afspraakFormData.data.organisaties.find(o => o.id === val.value);
 				if (foundOrganisatie) {
 					const {rekeningen = []} = foundOrganisatie;
 
@@ -291,7 +289,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 							<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 								<Stack spacing={1} flex={1}>
 									<FormLabel htmlFor={"accountId"}>{t("forms.agreements.fields.rubriek")}</FormLabel>
-									<Queryable query={$rubrics}>{(data: { rubrieken: Rubriek[] }) => {
+									<Queryable query={$afspraakFormData}>{(data: { rubrieken: Rubriek[] }) => {
 										const options = data.rubrieken.filter(r => r.grootboekrekening && r.grootboekrekening.id).map((r: Rubriek) => ({
 											key: r.id,
 											label: r.naam,
@@ -315,7 +313,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 							<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 								<Stack spacing={1} flex={1}>
 									<FormLabel htmlFor={"beneficiaryId"}>{t("forms.agreements.fields.beneficiary")}</FormLabel>
-									<Queryable query={$organisaties}>{(data: { organisaties: Organisatie[] }) => {
+									<Queryable query={$afspraakFormData}>{(data: { organisaties: Organisatie[] }) => {
 										const options = [
 											...data.organisaties.map(o => ({
 												key: o.id,
@@ -339,7 +337,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 								</Stack>
 								<Stack spacing={1} flex={1}>
 									<FormLabel htmlFor={"rekeningId"}>{t("forms.agreements.fields.bankAccount")}</FormLabel>
-									<Queryable query={$organisaties}>{(data: { organisaties: Organisatie[] }) => {
+									<Queryable query={$afspraakFormData}>{(data: { organisaties: Organisatie[] }) => {
 										if (!data.organisaties) {
 											return null;
 										}

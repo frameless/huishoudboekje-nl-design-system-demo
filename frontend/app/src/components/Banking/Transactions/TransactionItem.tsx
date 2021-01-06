@@ -33,7 +33,7 @@ import {
 	useCreateJournaalpostAfspraakMutation,
 	useCreateJournaalpostGrootboekrekeningMutation,
 	useDeleteJournaalpostMutation,
-	useGetAllRubriekenAndAfsprakenQuery
+	useGetTransactionItemFormDataQuery
 } from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import {formatIBAN} from "../../../utils/things";
@@ -55,7 +55,7 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }>
 	const [selectedAfspraak, setSelectedAfspraak] = useState<Afspraak | undefined>(bt.journaalpost?.afspraak);
 	const [selectedRubriek, setSelectedRubriek] = useState<Rubriek | undefined>(bt.journaalpost?.grootboekrekening?.rubriek);
 
-	const $rubriekenEnAfspraken = useGetAllRubriekenAndAfsprakenQuery({
+	const $transactionItemFormData = useGetTransactionItemFormDataQuery({
 		fetchPolicy: "no-cache",
 	});
 
@@ -145,7 +145,7 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }>
 						)}
 
 						{(!selectedRubriek && !selectedAfspraak) && (
-							<Queryable query={$rubriekenEnAfspraken}>{(data: { rubrieken: Rubriek[], afspraken: Afspraak[] }) => {
+							<Queryable query={$transactionItemFormData}>{(data: { rubrieken: Rubriek[], afspraken: Afspraak[] }) => {
 								const {rubrieken, afspraken} = data;
 
 								const options = {
