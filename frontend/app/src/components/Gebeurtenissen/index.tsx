@@ -13,6 +13,8 @@ const RoundIcon = ({children, ...props}) => {
 	)
 }
 
+// Todo: Transactie verwerken: met en zonder suggestie, suggestie geaccepteerd, of afgewezen, en/of alleen deze of voor altijd geaccepteerd.
+
 enum AuditTrailAction {
 	Create = "create",
 	Update = "update",
