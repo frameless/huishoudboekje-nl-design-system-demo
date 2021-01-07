@@ -1328,6 +1328,24 @@ export type DeleteConfiguratieMutation = (
   )> }
 );
 
+export type CreateExportOverschrijvingenMutationVariables = Exact<{
+  startDatum: Scalars['String'];
+  eindDatum: Scalars['String'];
+}>;
+
+
+export type CreateExportOverschrijvingenMutation = (
+  { __typename?: 'RootMutation' }
+  & { createExportOverschrijvingen?: Maybe<(
+    { __typename?: 'CreateExportOverschrijvingen' }
+    & Pick<CreateExportOverschrijvingen, 'ok'>
+    & { export?: Maybe<(
+      { __typename?: 'Export' }
+      & Pick<Export, 'id'>
+    )> }
+  )> }
+);
+
 export type GetAllBurgersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -2465,6 +2483,42 @@ export function useDeleteConfiguratieMutation(baseOptions?: Apollo.MutationHookO
 export type DeleteConfiguratieMutationHookResult = ReturnType<typeof useDeleteConfiguratieMutation>;
 export type DeleteConfiguratieMutationResult = Apollo.MutationResult<DeleteConfiguratieMutation>;
 export type DeleteConfiguratieMutationOptions = Apollo.BaseMutationOptions<DeleteConfiguratieMutation, DeleteConfiguratieMutationVariables>;
+export const CreateExportOverschrijvingenDocument = gql`
+    mutation createExportOverschrijvingen($startDatum: String!, $eindDatum: String!) {
+  createExportOverschrijvingen(startDatum: $startDatum, eindDatum: $eindDatum) {
+    ok
+    export {
+      id
+    }
+  }
+}
+    `;
+export type CreateExportOverschrijvingenMutationFn = Apollo.MutationFunction<CreateExportOverschrijvingenMutation, CreateExportOverschrijvingenMutationVariables>;
+
+/**
+ * __useCreateExportOverschrijvingenMutation__
+ *
+ * To run a mutation, you first call `useCreateExportOverschrijvingenMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateExportOverschrijvingenMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createExportOverschrijvingenMutation, { data, loading, error }] = useCreateExportOverschrijvingenMutation({
+ *   variables: {
+ *      startDatum: // value for 'startDatum'
+ *      eindDatum: // value for 'eindDatum'
+ *   },
+ * });
+ */
+export function useCreateExportOverschrijvingenMutation(baseOptions?: Apollo.MutationHookOptions<CreateExportOverschrijvingenMutation, CreateExportOverschrijvingenMutationVariables>) {
+        return Apollo.useMutation<CreateExportOverschrijvingenMutation, CreateExportOverschrijvingenMutationVariables>(CreateExportOverschrijvingenDocument, baseOptions);
+      }
+export type CreateExportOverschrijvingenMutationHookResult = ReturnType<typeof useCreateExportOverschrijvingenMutation>;
+export type CreateExportOverschrijvingenMutationResult = Apollo.MutationResult<CreateExportOverschrijvingenMutation>;
+export type CreateExportOverschrijvingenMutationOptions = Apollo.BaseMutationOptions<CreateExportOverschrijvingenMutation, CreateExportOverschrijvingenMutationVariables>;
 export const GetAllBurgersDocument = gql`
     query getAllBurgers {
   gebruikers {
