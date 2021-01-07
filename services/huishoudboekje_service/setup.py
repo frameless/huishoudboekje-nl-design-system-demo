@@ -18,5 +18,8 @@ setup(
         "Flask-Inputs>=0.3.0",
         "jsonschema>=3.2.0",
         'gunicorn>=20.0.4',
+        'schwifty>=2020.11.0',
+        'marshmallow-dataclass>=8.3.0',
+        'pyyaml>=5.3.1',
     ],
 )

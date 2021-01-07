@@ -1,0 +1,33 @@
+configuratie:
+  - id: gemeente_naam
+    waarde: Sloothuizen
+  - id: gemeente_iban
+    waarde: NL36ABNA5632579034
+  - id: gemeente_bic
+    waarde: ABNANL2A
+
+rubrieken:
+  - id: 1
+    naam: "Gas"
+    grootboekrekening_id: "WBedHuiGweGas"
+  - id: 2
+    naam: "Water"
+    grootboekrekening_id: "WBedHuiGweWat"
+  - id: 3
+    naam: "Elektra"
+    grootboekrekening_id: "WBedHuiGweElk"
+  - id: 4
+    naam: "Inkomsten"
+    grootboekrekening_id: "WOmzNooNdo"
+  - id: 5
+    naam: "Telefonie"
+    grootboekrekening_id: "WBedKanPrt"
+  - id: 6
+    naam: "Verzekeringen"
+    grootboekrekening_id: "WBedAssOva"
+  - id: 7
+    naam: "Betaalde huur"
+    grootboekrekening_id: "WBedHuiBeh"
+  - id: 8
+    naam: "Milieuheffingen en zuiveringsleges"
+    grootboekrekening_id: "WBedHuiMez"

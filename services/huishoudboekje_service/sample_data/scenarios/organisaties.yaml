@@ -1,0 +1,35 @@
+organisaties:
+- huisnummer: "18"
+  kvk_nummer: "23027707"
+  naam: "Willemsen Advocaten B.V."
+  plaatsnaam: "Garnwerd"
+  postcode: "7575SG"
+  straatnaam: "Janssenpark"
+  weergave_naam: "Willemsen Advocaten"
+  rekeningen:
+  - iban: "NL34BANK47991934457"
+    rekeninghouder: "Willemsen Advocaten Derdengeldenrekening"
+
+- huisnummer: "73"
+  kvk_nummer: "23298325"
+  naam: "Heuvel en Zn. B.V."
+  plaatsnaam: "Bakkerbosch"
+  postcode: "7112HL"
+  straatnaam: "Lindenweg"
+  weergave_naam: "Heuvel en Zn."
+  rekeningen:
+  - iban: "NL43BANK57825167901"
+    rekeninghouder: "Heuvel en Zn. B.V."
+
+- huisnummer: "1"
+  kvk_nummer: "25677709"
+  naam: "Belastingdienst"
+  plaatsnaam: "Apeldoorn"
+  postcode: "9812BD"
+  straatnaam: "Belastingstraat"
+  weergave_naam: "Belastingdienst"
+  rekeningen:
+  - iban: "NL09BANK00228855501"
+    rekeninghouder: "Belastingdienst"
+scenarios:
+- aantal: 50

@@ -1,0 +1,13 @@
+id	telefoonnummer	email	geboortedatum	voorletters	voornamen	achternaam	straatnaam	huisnummer	postcode	plaatsnaam
+201	4713465371	Tom_Jansen81@gmail.com	1961-11-01	S B	Sophie Bosch	Sr.	42nd Street	7445	1352GM	Sloothuizen
+202	0684632314	Anouk.Ven16@hotmail.com	1960-04-28	M D S	Mevr. Dr. Sven	Vermeulen	Kalverstraat	1863	1335XD	Sloothuizen
+203	06 2106 8120	Noa75@yahoo.com	1958-02-23	B	Bas	Smits	Wetstraat	6869	1357ZA	Sloothuizen
+204	(3092) 635701	Luuk.Jacobs@yahoo.com	1975-01-31	A	Anne	Dijkstra	Kleine Zapstraat	215	1347LR	Sloothuizen
+205	0633027559	Anouk_Koster42@yahoo.com	1972-08-28	T	Tom	Veen	Via Dolorosa	2632	1335GJ	Sloothuizen
+206	06 2309 7832	Fleur_Graaf74@yahoo.com	1964-10-18	T	Thijs	Boer	Electric Avenue	1867	1315QG	Sloothuizen
+207	0666728966	Fleur.Vliet@hotmail.com	1952-05-20	M	Maud	Jansen	Via Dolorosa	9529	1315FC	Sloothuizen
+208	0684043022	Noa.Wal@hotmail.com	1990-11-03	A	Anouk	Hendriks	Kiliaanstraat	8480	1375RY	Sloothuizen
+209	0663896823	Sem0@gmail.com	1956-12-24	N	Nick	Berg	Friedrichstrasse	6457	1327ED	Sloothuizen
+210	(8098) 944955	Julian.Visser49@gmail.com	1968-07-14	E	Eva	Dijkstra	Via Dolorosa	5968	1315FO	Sloothuizen
+211	0642850549	Stijn77@hotmail.com	1997-01-13	L	Lucas	Boer	La Rambla	7098	1376WA	Sloothuizen
+212	1680848967	Johannes.Leeuwen45@gmail.com	1974-08-08	A M	Anne Maas	II	42nd Street	4477	1363HS	Sloothuizen
