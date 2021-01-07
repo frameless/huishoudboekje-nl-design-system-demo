@@ -6,11 +6,10 @@ from _csv import QUOTE_MINIMAL
 from os import path
 from random import choice, randrange
 import requests
-from dateutil.parser import parse
 from schwifty import IBAN
 from datetime import date, timedelta
 
-from sample_data.generators.scenarios import Scenario, GebruikerScenario, OrganisatieScenario, Organisatie, \
+from scenarios import Scenario, GebruikerScenario, OrganisatieScenario, Organisatie, \
     AfspraakScenario
 
 
@@ -232,11 +231,11 @@ class Generator:
             """only include items with a matching key"""
             return lambda actual_dict: dict((k, actual_dict[k] if k in actual_dict else None) for k in match_keys)
 
-        if path.exists(f"../{db}/{name}.txt"):
+        if path.exists(f"data/{db}/{name}.txt"):
             print(f"data for {db}:{name} already exists.")
         else:
-            os.makedirs(f"../{db}", exist_ok=True)
-            with open(f"../{db}/{name}.txt", "w") as out_file:
+            os.makedirs(f"data/{db}", exist_ok=True)
+            with open(f"data/{db}/{name}.txt", "w") as out_file:
                 fieldnames = fieldnames or self.fieldnames[db][name]
                 writer = csv.DictWriter(
                     out_file,

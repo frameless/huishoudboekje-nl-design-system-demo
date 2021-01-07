@@ -1,0 +1,54 @@
+kvk_nummer	naam	straatnaam	huisnummer	postcode	plaatsnaam
+23027707	Willemsen Advocaten B.V.	Janssenpark	18	7575SG	Garnwerd
+23298325	Heuvel en Zn. B.V.	Lindenweg	73	7112HL	Bakkerbosch
+25677709	Belastingdienst	Belastingstraat	1	9812BD	Apeldoorn
+00462346	Ven Group	Easy Street	7895	1358CW	Sloothuizen
+00462347	Haan - Dijkstra	Portobello Road	9691	1312XC	Sloothuizen
+00462348	Beek BV	Elm Street	3339	1348UC	Sloothuizen
+00462349	Ven, Bos and Stichting	Boudewijn de Eerste straat	5414	1334DA	Sloothuizen
+00462350	Smits Group	Abbey Road	3116	1331CO	Sloothuizen
+00462351	Schouten - Vries	Wetstraat	1308	1372TY	Sloothuizen
+00462352	Smits - Graaf	Easy Street	9619	1377MR	Sloothuizen
+00462353	Haan - Graaf	Electric Avenue	2675	1358TC	Sloothuizen
+00462354	Stichting BV	Wall Street	1999	1381JI	Sloothuizen
+00462355	Jong BV	Spooner Street	9140	1381EQ	Sloothuizen
+00462356	Vermeulen, Kok and Brouwer	Downing Street	6423	1335MK	Sloothuizen
+00462357	Vliet, Bos and Hoek	Medialaan	1029	1326JU	Sloothuizen
+00462358	Ven, Hoek and Schouten	Elm Street	2124	1355ES	Sloothuizen
+00462359	Jansen, Dijkstra and Dijk	Friedrichstrasse	9733	1336MZ	Sloothuizen
+00462360	Vliet - Stichting	Sunset Boulevard	6200	1346NG	Sloothuizen
+00462361	Berg V.O.F.	Mulholland Drive	6796	1343DP	Sloothuizen
+00462362	Vermeulen - Bosch	Mulholland Drive	1418	1368NS	Sloothuizen
+00462363	Meijer - Mulder	Wall Street	6806	1335NO	Sloothuizen
+00462364	Smit - Bakker	Electric Avenue	2545	1327FS	Sloothuizen
+00462365	Dam - Wal	Spooner Street	4743	1388KG	Sloothuizen
+00462366	Haan, Vos and Koster	Mulholland Drive	7503	1383GA	Sloothuizen
+00462367	Dijk Group	Charing Cross Road	8719	1384CO	Sloothuizen
+00462368	Bruin, Broek and Schouten	Wall Street	4625	1388UB	Sloothuizen
+00462369	Ruiter en Zonen	Via Appia	2078	1357XC	Sloothuizen
+00462370	Vries - Klein	Rue Morgue	1145	1362FD	Sloothuizen
+00462371	Haan, Haan and Bosch	Broadway	489	1375ME	Sloothuizen
+00462372	Haan V.O.F.	Spooner Street	9573	1386GL	Sloothuizen
+00462373	Janssen, Vermeulen and Koning	Avenue des Champs-Élysées	7010	1325FQ	Sloothuizen
+00462374	Veen - Mulder	Cemetery Ridge	5798	1331JN	Sloothuizen
+00462375	Hoek BV	Medialaan	2461	1328TY	Sloothuizen
+00462376	Koster - Ruiter	Sunset Boulevard	3123	1374TQ	Sloothuizen
+00462377	Bosch - Smit	Cemetery Ridge	925	1371HG	Sloothuizen
+00462378	Dijk, Smit and Meer	Mulholland Drive	3646	1383DD	Sloothuizen
+00462379	Bakker en Zonen	Penny Lane	3701	1341FO	Sloothuizen
+00462380	Broek V.O.F.	Via Appia	4435	1378OS	Sloothuizen
+00462381	Visser en Zonen	Beale Street	3038	1342DT	Sloothuizen
+00462382	Stichting - Beek	Koekoekstraat	2733	1327JJ	Sloothuizen
+00462383	Klein, Brink and Schouten	Medialaan	4862	1365XB	Sloothuizen
+00462384	Linden - Brouwer	Koekoekstraat	5202	1378RH	Sloothuizen
+00462385	Beek BV	Broadway	1702	1318SA	Sloothuizen
+00462386	Groot, Bruin and Bakker	Dapperstraat	2962	1312MB	Sloothuizen
+00462387	Mulder, Bruin and Klein	Avenue des Champs-Élysées	1392	1374AH	Sloothuizen
+00462388	Meijer Group	Medialaan	4291	1317IK	Sloothuizen
+00462389	Smit - Willems	Easy Street	385	1357KM	Sloothuizen
+00462390	Berg, Vries and Maas	Beale Street	8166	1375QB	Sloothuizen
+00462391	Vries BV	Wall Street	7035	1334YE	Sloothuizen
+00462392	Stichting - Dekker	Dapperstraat	972	1355LW	Sloothuizen
+00462393	Jacobs, Veen and Smit	Via Appia	7187	1321RP	Sloothuizen
+00462394	Graaf, Bos and Jacobs	Easy Street	7147	1375ZF	Sloothuizen
+00462395	Kok - Willems	Medialaan	6689	1333IY	Sloothuizen

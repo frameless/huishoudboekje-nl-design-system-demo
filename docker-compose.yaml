@@ -63,6 +63,14 @@ services:
       context: docs
     image: "${IMAGE_PREFIX}docs:${IMAGE_TAG}"
 
+  sample_data:
+    build:
+      context: sample_data
+      args:
+        COMPONENT_TAG: "${COMPONENT_TAG}"
+        COMPONENT_COMMIT_HASH: "${COMPONENT_COMMIT_HASH}"
+    image: "${IMAGE_PREFIX}sample_data:${IMAGE_TAG}"
+
 networks:
   default:
     driver: bridge
