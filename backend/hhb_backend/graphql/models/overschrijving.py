@@ -15,7 +15,7 @@ class Overschrijving(graphene.ObjectType):
     id = graphene.Int()
     afspraak = graphene.Field(lambda: afspraak.Afspraak)
     export = graphene.Field(lambda: export.Export)
-    datum = graphene.Date()
+    datum = graphene.String()
     bedrag = graphene.Field(Bedrag)
     bankTransaction = graphene.Field(lambda: bank_transaction.BankTransaction)
     status = graphene.Field(OverschrijvingStatus)
