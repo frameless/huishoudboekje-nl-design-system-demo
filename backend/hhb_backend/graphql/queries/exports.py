@@ -25,4 +25,6 @@ class ExportsQuery():
         if start_datum or eind_datum:
             if not (start_datum and eind_datum):
                 raise GraphQLError("start_datum must be combined with eind_datum")
+        if not (start_datum and eind_datum):
+            return request.dataloader.exports_by_id.get_all_and_cache()
         return request.dataloader.exports_by_id.get_by_timestamps(start_datum, eind_datum)
