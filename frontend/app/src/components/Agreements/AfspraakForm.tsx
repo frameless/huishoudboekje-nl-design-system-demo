@@ -1,4 +1,4 @@
-import {Box, BoxProps, Button, Divider, Editable, EditableInput, EditablePreview, FormLabel, Input, InputGroup, InputLeftElement, Stack, Switch, Text, useToast} from "@chakra-ui/react";
+import {Box, BoxProps, Button, Divider, FormLabel, Input, InputGroup, InputLeftElement, Stack, Switch, Text, useToast} from "@chakra-ui/react";
 import moment from "moment";
 import "moment-recur-ts";
 import React, {useEffect, useState} from "react";
@@ -204,24 +204,14 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 				            if (value) {
 					            startDate2.setValue(moment(value).format("L"));
 				            }
-			            }} customInput={(
-					<Editable defaultValue={startDate2.value}>
-						<EditablePreview display={"inline"} px={2} mx={1} bg={"gray.100"} _hover={{bg: "gray.200"}} />
-						<EditableInput display={"inline"} px={1} mx={1} width={120} isInvalid={isInvalid(startDate2)} {...startDate2.bind} />
-					</Editable>
-				)} />,
+			            }} customInput={(<Button size={"sm"} mx={1}>{startDate2.value}</Button>)} />,
 			<DatePicker selected={moment(endDate.value, "L").isValid() ? moment(endDate.value, "L").toDate() : null}
 			            dateFormat={"dd-MM-yyyy"}
 			            onChange={(value: Date) => {
 				            if (value) {
 					            endDate.setValue(moment(value).format("L"));
 				            }
-			            }} customInput={(
-					<Editable defaultValue={endDate.value}>
-						<EditablePreview display={"inline"} px={2} mx={1} bg={"gray.100"} _hover={{bg: "gray.200"}} />
-						<EditableInput display={"inline"} px={1} mx={1} width={120} isInvalid={isInvalid(endDate)} {...endDate.bind} />
-					</Editable>
-				)} />
+			            }} customInput={(<Button size={"sm"} mx={1}>{endDate.value}</Button>)} />
 		];
 		const outgoingTrans = <Trans count={generatedSampleOverschrijvingen.length} i18nKey={"forms.agreements.sections.2.prognosisText_outgoing"}
 		                             components={components} />;
@@ -369,7 +359,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 								<Stack spacing={1} flex={1}>
 									<FormLabel htmlFor={"amount"}>{t("forms.agreements.fields.amount")}</FormLabel>
 									<InputGroup maxWidth={"100%"} flex={1}>
-										<InputLeftElement>&euro;</InputLeftElement>
+										<InputLeftElement zIndex={0}>&euro;</InputLeftElement>
 										<Input isInvalid={isInvalid(amount)} {...amount.bind} id="amount" />
 									</InputGroup>
 								</Stack>

@@ -67,10 +67,10 @@ const BurgerList = () => {
 			return (
 				<Page title={t("burgers.burgers")} right={(
 					<InputGroup>
-						<InputLeftElement><SearchIcon color={"gray.300"} /></InputLeftElement>
+						<InputLeftElement zIndex={0}><SearchIcon color={"gray.300"} /></InputLeftElement>
 						<Input type={"text"} {...search.bind} bg={"white"} onKeyDown={onKeyDownOnSearch} />
 						{search.value.length > 0 && (
-							<InputRightElement>
+							<InputRightElement zIndex={0}>
 								<IconButton onClick={() => search.reset()} size={"xs"} variant={"link"} icon={<CloseIcon />} aria-label={t("actions.cancel")}
 								            color={"gray.300"} />
 							</InputRightElement>
