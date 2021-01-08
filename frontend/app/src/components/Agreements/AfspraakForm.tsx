@@ -359,7 +359,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 								<Stack spacing={1} flex={1}>
 									<FormLabel htmlFor={"amount"}>{t("forms.agreements.fields.amount")}</FormLabel>
 									<InputGroup maxWidth={"100%"} flex={1}>
-										<InputLeftElement>&euro;</InputLeftElement>
+										<InputLeftElement zIndex={0}>&euro;</InputLeftElement>
 										<Input isInvalid={isInvalid(amount)} {...amount.bind} id="amount" />
 									</InputGroup>
 								</Stack>
