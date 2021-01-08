@@ -60,7 +60,7 @@ class Afspraak(graphene.ObjectType):
         )
         expected_overschrijvingen = get_planned_overschrijvingen(planner_input, **kwargs)
         known_overschrijvingen = {}
-        overschrijvingen = await request.dataloader.overschrijvingen_by_afspraak.load(root.get("id"))
+        overschrijvingen = await request.dataloader.overschrijvingen_by_afspraak.load(root.get("id")) or []
         for o in overschrijvingen:
             known_overschrijvingen[o["datum"]] = o
         for datum, o in known_overschrijvingen.items():
