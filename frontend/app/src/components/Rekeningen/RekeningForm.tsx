@@ -22,7 +22,7 @@ const RekeningForm: React.FC<{
 	const iban = useInput({
 		defaultValue: rekening?.iban,
 		validate: [Validators.required, (v) => new RegExp(Regex.IbanNL).test(v.replaceAll(" ", ""))],
-		placeholder: friendlyFormatIBAN("NL00BANK0123456789"),
+		placeholder: friendlyFormatIBAN("NL00BANK0123456789") || "",
 	});
 
 	const onSubmit = () => {

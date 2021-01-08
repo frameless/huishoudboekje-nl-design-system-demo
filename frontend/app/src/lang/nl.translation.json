@@ -99,10 +99,10 @@
                     "helperText": "Geef aan wanneer en hoeveel betalingen verwacht worden."
                 },
                 "2": {
-                    "prognosisText_outgoing": "Er wordt <0>1</0> uitgaande overschrijving verwacht tussen <1>{{start}}</1> en <2>{{end}}</2>.",
-                    "prognosisText_outgoing_plural": "Er worden <0>{{count}}</0> uitgaande overschrijvingen verwacht tussen <1>{{start}}</1> en <2>{{end}}</2>.",
-                    "prognosisText_incoming": "Er wordt <0>1</0> inkomende overschrijving verwacht tussen <1>{{start}}</1> en <2>{{end}}</2>.",
-                    "prognosisText_incoming_plural": "Er worden <0>{{count}}</0> inkomende overschrijvingen verwacht tussen <1>{{start}}</1> en <2>{{end}}</2>.",
+                    "prognosisText_outgoing": "Er wordt <0>1</0> uitgaande overschrijving tussen <1>{{start}}</1> en <2>{{end}}</2> verwacht.",
+                    "prognosisText_outgoing_plural": "Er worden <0>{{count}}</0> uitgaande overschrijvingen tussen <1>{{start}}</1> en <2>{{end}}</2> verwacht.",
+                    "prognosisText_incoming": "Er wordt <0>1</0> inkomende overschrijving tussen <1>{{start}}</1> en <2>{{end}}</2> verwacht.",
+                    "prognosisText_incoming_plural": "Er worden <0>{{count}}</0> inkomende overschrijvingen tussen <1>{{start}}</1> en <2>{{end}}</2> verwacht.",
                     "title": "Verwachting",
                     "helperText": "Dit is een overzicht van de verwachte betalingen bij deze afspraak."
                 }
