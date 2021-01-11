@@ -2,6 +2,7 @@
 import logging
 import os
 import io
+import sys
 from urllib.parse import urlparse
 
 import itsdangerous
@@ -16,6 +17,7 @@ from hhb_backend.graphql import settings
 from hhb_backend.graphql.utils.create_sepa_export import create_export_string
 from hhb_backend.reverse_proxy import ReverseProxied
 
+from functools import wraps
 
 def create_app(config_name=os.getenv('APP_SETTINGS', None) or 'hhb_backend.config.DevelopmentConfig'):
     app = Flask(__name__)
@@ -34,6 +36,19 @@ def create_app(config_name=os.getenv('APP_SETTINGS', None) or 'hhb_backend.confi
     if app.config['OVERWITE_REDIRECT_URI_MAP']:
         logging.info(f"Loading custom OVERWITE_REDIRECT_URI_MAP: {app.config['OVERWITE_REDIRECT_URI_MAP']}")
         custom_oidc = CustomOidc(oidc=oidc, flask_app=app, prefixes=app.config['OVERWITE_REDIRECT_URI_MAP'])
+
+    def handle_oidc_error(view_func):
+        @wraps(view_func)
+        def decorated(*args, **kwargs):
+            try:
+                return view_func(*args, **kwargs)
+            except:
+                err = sys.exc_info()[0]
+                logging.warning(f"Error detected, redirecting to '/': {err}")
+                oidc.logout()
+                session.clear()
+                return redirect('/', code=302)
+        return decorated
 
     @app.errorhandler(itsdangerous.exc.BadSignature)
     def handle_bad_signature(e):
@@ -60,6 +75,7 @@ def create_app(config_name=os.getenv('APP_SETTINGS', None) or 'hhb_backend.confi
             return jsonify(message='Not logged in'), 401
 
     @app.route('/custom_oidc_callback')
+    @handle_oidc_error
     @oidc.custom_callback
     def oidc_redirect(url):
         session.permanent = True
