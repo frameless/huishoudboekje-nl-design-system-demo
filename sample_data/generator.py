@@ -143,10 +143,12 @@ class Generator:
         for _ in range(scenario.aantal):
             self.organisatie_counter += 1
             self.kvk_number_counter += 1
+            name = self.__faker_name
             organisatie = {
                 "id": self.organisatie_counter,
                 "kvk_nummer": str(self.kvk_number_counter).zfill(8),
-                "naam": self.__faker_name,
+                "naam": name,
+                "weergave_naam": name,
                 "straatnaam": self.__faker_straatnaam,
                 "huisnummer": randrange(1, 9999),
                 "postcode": self.__faker_postcode,
