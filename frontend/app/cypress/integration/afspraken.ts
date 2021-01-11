@@ -40,24 +40,13 @@ beforeEach(() => {
 				deleteBurger: {
 					ok: true,
 				},
-				getAllOrganisaties: {
-					organisaties: sampleOrganizations,
-				},
 				getOneOrganisatie: ({id}) => ({
 					organisatie: sampleOrganizations.find(b => b.id === parseInt(id)),
 				}),
-				getAllRubrieken: {
+				getAfspraakFormData: () => ({
 					rubrieken: sampleRubrieken,
-				},
-				getOneRubriek: ({id}) => ({
-					rubriek: sampleRubrieken.find(b => b.id === parseInt(id)),
-				}),
-				getAllAfspraken: {
-					afspraken: sampleAfspraken,
-				},
-				getOneAfspraak: ({id}) => ({
-					afspraak: sampleAfspraken.find(b => b.id === parseInt(id)),
-				}),
+					organisaties: sampleOrganizations,
+				})
 			}
 		});
 	});
