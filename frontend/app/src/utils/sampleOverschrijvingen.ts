@@ -31,7 +31,7 @@ const generateSampleOverschrijvingen = ({bedrag, startDate, startDate2, endDate,
 		const nextDates = nTimes > 0 ? [...recursion.fromDate(mStartDate2).next(nTimes)] : [...recursion.fromDate(mStartDate2).all()];
 		return nextDates.map(m => ({
 			...o,
-			datum: m.toDate(),
+			datum: m.toDate().toString(),
 		}));
 	}
 	catch (err) {
