@@ -36,6 +36,12 @@
             "noSearchResults": "Geen burgers gevonden. Gebruik een andere zoekterm.",
             "createSuccessMessage": "Nieuwe burger succesvol opgeslagen."
         },
+        "configuratie": {
+            "updateSuccess": "Configuratie succesvol opgeslagen.",
+            "deleteSuccess": "Configuratie is verwijderd.",
+            "createSuccess": "Configuratie succesvol opgeslagen.",
+            "alreadyExists": "Deze configuratie bestaat al."
+        },
         "organizations": {
             "invalidFormMessage": "Er is een fout opgetreden. Controleer de ingevulde gegevens en probeer het opnieuw.",
             "createSuccessMessage": "Nieuwe organisatie succesvol opgeslagen.",
@@ -177,6 +183,16 @@
                 "search": "Zoeken"
             }
         },
+        "configuratie": {
+            "sections": {
+                "title": "Configuratie",
+                "helperText": "Stel hier de benodigde parameters in. Dit is belangrijk voor de werking van Huishoudboekje."
+            },
+            "fields": {
+                "id": "Sleutel",
+                "waarde": "Waarde"
+            }
+        },
         "organizations": {
             "title": "Organisaties",
             "sections": {
@@ -261,6 +277,7 @@
     "burgers": {
         "burgers": "Burgers"
     },
+    "configuratie": "Configuratie",
     "organizations": {
         "organizations": "Organisaties"
     },
@@ -278,6 +295,6 @@
         "bronbestanden": "Bronbestanden",
         "overschrijvingen": "Overschrijvingen",
         "huishoudboekjes": "Huishoudboekjes",
-        "gebeurtenissen": "Gebeurtenissen"
+        "configuratie": "Configuratie"
     }
 }
