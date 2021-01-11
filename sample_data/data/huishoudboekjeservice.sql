@@ -1,0 +1,10 @@
+BEGIN;
+\COPY rubrieken (id,naam,grootboekrekening_id) FROM 'huishoudboekjeservice/rubrieken.csv' (FORMAT csv, DELIMITER '|', HEADER true);
+\COPY configuratie (id,waarde) FROM 'huishoudboekjeservice/configuratie.csv' (FORMAT csv, DELIMITER '|', HEADER true);
+\COPY gebruikers (id,telefoonnummer,email,geboortedatum,voorletters,voornamen,achternaam,straatnaam,huisnummer,postcode,plaatsnaam) FROM 'huishoudboekjeservice/gebruikers.csv' (FORMAT csv, DELIMITER '|', HEADER true);
+\COPY rekeningen (id,iban,rekeninghouder) FROM 'huishoudboekjeservice/rekeningen.csv' (FORMAT csv, DELIMITER '|', HEADER true);
+\COPY rekening_gebruiker (rekening_id,gebruiker_id) FROM 'huishoudboekjeservice/rekening_gebruiker.csv' (FORMAT csv, DELIMITER '|', HEADER true);
+\COPY organisaties (id,kvk_nummer,weergave_naam) FROM 'huishoudboekjeservice/organisaties.csv' (FORMAT csv, DELIMITER '|', HEADER true);
+\COPY rekening_organisatie (organisatie_id,rekening_id) FROM 'huishoudboekjeservice/rekening_organisatie.csv' (FORMAT csv, DELIMITER '|', HEADER true);
+\COPY afspraken (organisatie_id,rubriek_id,bedrag,credit,automatische_incasso,aantal_betalingen,interval,start_datum,eind_datum,gebruiker_id,tegen_rekening_id) FROM 'huishoudboekjeservice/afspraken.csv' (FORMAT csv, DELIMITER '|', HEADER true);
+END;
