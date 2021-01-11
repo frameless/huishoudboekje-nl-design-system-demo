@@ -12,7 +12,7 @@ mutation importRubrieken {
     rubriek5: createRubriek(naam: "Inkomsten", grootboekrekeningId: "WOmzNooNdo"){
         ok
     }
-    rubriek6: createRubriek(naam: "Telefonie", grootboekrekeningId: "WBedKanPrt"){
+    rubriek6: createRubriek(naam: "Telefonie", grootboekrekeningId: "WBedKanTef"){
         ok
     }
     rubriek7: createRubriek(naam: "Verzekeringen", grootboekrekeningId: "WBedAssOva"){

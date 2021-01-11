@@ -174,6 +174,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 	const onChangeAfspraakType = val => {
 		if (val) {
 			setAfspraakType(val);
+			rubriekId.clear();
 		}
 	};
 
@@ -220,6 +221,8 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 
 		return afspraakType === AfspraakType.Expense ? outgoingTrans : incomingTrans;
 	};
+
+	const filterRubriekenByAfspraakType = r => afspraakType === AfspraakType.Expense ? r.grootboekrekening?.debet : !r.grootboekrekening?.debet;
 
 	const onSelectRubriek = (val) => {
 		if (val) {
@@ -273,14 +276,13 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 					<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 						<FormLeft title={t("forms.agreements.sections.0.title")} helperText={t("forms.agreements.sections.0.helperText")} />
 						<FormRight>
-							<RadioButtonGroup name={"afspraakType"} onChange={onChangeAfspraakType} defaultValue={AfspraakType.Expense} value={afspraakType}
-							                  options={afspraakTypeOptions} />
+							<RadioButtonGroup name={"afspraakType"} onChange={onChangeAfspraakType} defaultValue={AfspraakType.Expense} value={afspraakType} options={afspraakTypeOptions} />
 
 							<Stack spacing={2} direction={isMobile ? "column" : "row"}>
 								<Stack spacing={1} flex={1}>
 									<FormLabel htmlFor={"accountId"}>{t("forms.agreements.fields.rubriek")}</FormLabel>
 									<Queryable query={$afspraakFormData}>{(data: { rubrieken: Rubriek[] }) => {
-										const options = data.rubrieken.filter(r => r.grootboekrekening && r.grootboekrekening.id).map((r: Rubriek) => ({
+										const options = data.rubrieken.filter(r => r.grootboekrekening && r.grootboekrekening.id).filter(filterRubriekenByAfspraakType).map((r: Rubriek) => ({
 											key: r.id,
 											label: r.naam,
 											value: r.grootboekrekening!.id
@@ -289,7 +291,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 
 										return (
 											<Select onChange={onSelectRubriek} id="rubriekId" isClearable={true} noOptionsMessage={() => t("forms.agreements.fields.rubriekChoose")}
-											        maxMenuHeight={200} options={options} value={value} styles={reactSelectStyles} />
+											        maxMenuHeight={200} options={options} value={value || null} styles={reactSelectStyles} />
 										);
 									}}</Queryable>
 								</Stack>
