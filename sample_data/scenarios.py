@@ -63,7 +63,7 @@ class AfspraakScenario:
     aantal: int = 12
     rubriek: str = None
     organisatie_kvk: str = None
-    bedrag: float = -101.0
+    bedrag: int = -10100
     automatische_incasso: bool = True
     aantal_betalingen: int = 12
     interval: str = "P0Y1M0W0D"
