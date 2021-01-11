@@ -1,32 +1,90 @@
 [
-    {
-        "id": 1,
-        "naam": "Rubriek 2",
-        "grootboekrekening": {
-            "id": "WBedWkrWkoCib",
-            "naam": "Correctie inzake BTW",
-            "omschrijving": "Correctie inzake BTW overige personeelsgerelateerde kosten",
-            "referentie": "4011020"
-        }
-    },
-    {
-        "id": 2,
-        "naam": "Rubriek 1",
-        "grootboekrekening": {
-            "id": "BIvaKouCuhAfh",
-            "naam": "Afschrijving herwaarderingen",
-            "omschrijving": "Afschrijving herwaarderingen kosten van oprichting en van uitgifte van aandelen",
-            "referentie": "0101030.03"
-        }
-    },
-    {
-        "id": 3,
-        "naam": "Gas",
-        "grootboekrekening": {
-            "id": "WBedHuiGweGas",
-            "naam": "Gas",
-            "omschrijving": "Gas huisvestingskosten",
-            "referentie": "4201110"
-        }
+  {
+    "id": 1,
+    "naam": "Gas",
+    "grootboekrekening": {
+      "id": "WBedHuiGweGas",
+      "naam": "Gas",
+      "omschrijving": "Gas huisvestingskosten",
+      "referentie": "4201110",
+      "debet": true
     }
+  },
+  {
+    "id": 2,
+    "naam": "Water",
+    "grootboekrekening": {
+      "id": "WBedHuiGweWat",
+      "naam": "Water",
+      "omschrijving": "Water huisvestingskosten",
+      "referentie": "4201130",
+      "debet": true
+    }
+  },
+  {
+    "id": 3,
+    "naam": "Elektra",
+    "grootboekrekening": {
+      "id": "WBedHuiGweElk",
+      "naam": "Elektra",
+      "omschrijving": "Elektra huisvestingskosten",
+      "referentie": "4201120",
+      "debet": true
+    }
+  },
+  {
+    "id": 4,
+    "naam": "Inkomsten",
+    "grootboekrekening": {
+      "id": "WOmzNooNdo",
+      "naam": "Opbrengsten uit overige bronnen",
+      "omschrijving": "Opbrengsten uit overige bronnen overige netto-omzet",
+      "referentie": "8004040",
+      "debet": false
+    }
+  },
+  {
+    "id": 5,
+    "naam": "Telefonie",
+    "grootboekrekening": {
+      "id": "WBedKanPrt",
+      "naam": "Privé-gebruik telefoon",
+      "omschrijving": "Privé-gebruik telefoon kantoorkosten",
+      "referentie": "4206040",
+      "debet": false
+    }
+  },
+  {
+    "id": 6,
+    "naam": "Verzekeringen",
+    "grootboekrekening": {
+      "id": "WBedAssOva",
+      "naam": "Overige assurantiepremies",
+      "omschrijving": "Overige assurantiepremies assurantiekosten",
+      "referentie": "4208020",
+      "debet": true
+    }
+  },
+  {
+    "id": 7,
+    "naam": "Betaalde huur",
+    "grootboekrekening": {
+      "id": "WBedHuiBeh",
+      "naam": "Betaalde huur",
+      "omschrijving": "Betaalde huur huisvestingskosten",
+      "referentie": "4201040",
+      "debet": true
+    }
+  },
+  {
+    "id": 8,
+    "naam": "Milieuheffingen en zuiveringsleges",
+    "grootboekrekening": {
+      "id": "WBedHuiMez",
+      "naam": "Milieuheffingen en zuiveringsleges",
+      "omschrijving": "Milieuheffingen en zuiveringsleges huisvestingskosten",
+      "referentie": "4201180",
+      "debet": true
+    }
+  }
 ]
