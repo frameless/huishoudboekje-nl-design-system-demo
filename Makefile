@@ -21,26 +21,15 @@ chart-dependencies: $(CHART_DEPENDENCIES:.yaml=.lock)
 .PHONY: helm-init
 helm-init:
 	helm repo add stable "https://charts.helm.sh/stable"
-	helm repo add zalando-operator "https://raw.githubusercontent.com/zalando/postgres-operator/master/charts/postgres-operator"
-	#helm repo add zalando-operator-ui "https://raw.githubusercontent.com/zalando/postgres-operator/master/charts/postgres-operator-ui"
+	helm repo add bitnami https://charts.bitnami.com/bitnami
 	helm repo update
 
 .PHONY: huishoudboekje-test
 huishoudboekje-test: huishoudboekje
 	helm test --logs --namespace $(NAMESPACE) $<
 
-.PHONY: postgres-operator
-postgres-operator: helm/postgres-operator.yaml helm-init
-	kubectl create namespace ${NAMESPACE} || true
-	kubectl apply --namespace ${NAMESPACE} -f helm/postgres-operator-configmap.yaml
-	helm upgrade --install --namespace ${NAMESPACE} \
-		$@ zalando-operator/postgres-operator \
-		--values helm/postgres-operator.yaml \
-		--set podServiceAccount.name=${NAMESPACE}-postgres-pod \
-		--set serviceAccount.name=${NAMESPACE}-postgres-operator
-
 .PHONY: huishoudboekje
-huishoudboekje: helm/charts/huishoudboekje-review helm-init postgres-operator docker-images
+huishoudboekje: helm/charts/huishoudboekje-review helm-init helm/charts/* docker-images
 	helm upgrade --install --create-namespace --namespace $@ \
 		$@ $< \
 		--set database.traefik.enabled=true \

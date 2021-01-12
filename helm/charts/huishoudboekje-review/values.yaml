@@ -46,16 +46,20 @@ docs:
     hosts:
       - "docs.hhb.minikube"
 
-database:
+postgresql:
   enabled: true
+  initdbScriptsConfigMap: initdbScripts
 
-  nameOverride: "huishoudboekje"
-
-  databases:
-    - huishoudboekjeservice
-    - organisatieservice
-    - banktransactieservice
-    - grootboekservice
+#database:
+#  enabled: true
+#
+#  nameOverride: "huishoudboekje"
+#
+#  databases:
+#    - huishoudboekjeservice
+#    - organisatieservice
+#    - banktransactieservice
+#    - grootboekservice
 
 medewerker-backend:
   serviceChartPrefix: huishoudboekje

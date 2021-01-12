@@ -15,18 +15,12 @@
   script:
     - |
       helm repo add stable "https://charts.helm.sh/stable"
-      helm repo add zalando-operator "https://raw.githubusercontent.com/zalando/postgres-operator/master/charts/postgres-operator"
+      helm repo add bitnami https://charts.bitnami.com/bitnami
       helm repo update
-    - |
-      kubectl create namespace $REVIEW_NAMESPACE || true
-      kubectl apply --namespace $REVIEW_NAMESPACE -f helm/postgres-operator-configmap.yaml
-      helm upgrade --install --namespace $REVIEW_NAMESPACE postgres-operator zalando-operator/postgres-operator \
-        --debug \
-      	--values helm/postgres-operator.yaml \
-        --set podServiceAccount.name=${REVIEW_NAMESPACE}-postgres-pod \
-        --set serviceAccount.name=${REVIEW_NAMESPACE}-postgres-operator
-    - helm dependency build helm/charts/huishoudboekje-review
+      helm dependency build helm/charts/database
+      helm dependency build helm/charts/huishoudboekje-review
     - (cd helm/charts/medewerker-frontend; ln -s ../../../frontend/theme/sloothuizen theme)
+    - kubectl create namespace $REVIEW_NAMESPACE || true
     - |
       HHB_HOST=${HHB_HOST:-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN}
       OIDC_ISSUER=${OIDC_ISSUER:-https://dex-sloothuizen-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN}
@@ -57,7 +51,8 @@
         --set "dex.config.issuer=${OIDC_ISSUER}" \
         --set "dex.config.staticClients[0].secret=${OIDC_CLIENT_SECRET}" \
         --set "dex.config.staticClients[0].redirectURIs[0]=https://$HHB_HOST/api/custom_oidc_callback" \
-        --set "dex.config.staticClients[0].redirectURIs[1]=http://localhost:3000/api/custom_oidc_callback"
+        --set "dex.config.staticClients[0].redirectURIs[1]=http://localhost:3000/api/custom_oidc_callback" \
+        --set "database.postgresql.postgresql-password=huishoudboekjedb"
     - |
       FAILED=true
       for i in $(seq 1 8); do

@@ -5,12 +5,15 @@
 global:
   minikube: false
 nameOverride: "huishoudboekje"
-fullnameOverride: ""
+#fullnameOverride: ""
 
 postgresql:
-  volumeSize: 1Gi
-  replicaCount: 1
-  version: "12"
+  enabled: true
+  persistence:
+    enabled: false
+    size: 1Gi
+    existingClaim: null
+  initdbScriptsSecret: huishoudboekje-database-init-scripts
 
 databases:
   - huishoudboekje_service
