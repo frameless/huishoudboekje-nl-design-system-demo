@@ -97,7 +97,7 @@ const App = () => {
 								<Route path={Routes.EditAgreement()} component={EditAgreement} />
 								<Route path={Routes.Banking} component={Banking} />
 								<Route path={Routes.Settings} component={Configuratie} />
-								<Route path={Routes.Huishoudboekjes} component={ChartsTest} />
+								<Route path={Routes.Rapportages} component={ChartsTest} />
 
 								<Route exact path={Routes.NotFound} component={PageNotFound} />
 								<Route component={PageNotFound} />

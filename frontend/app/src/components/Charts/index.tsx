@@ -1,6 +1,8 @@
-import {Box, chakra, Divider, FormControl, FormLabel, Heading, Input, List, ListIcon, ListItem, Spinner, Stack, useToken} from "@chakra-ui/react";
+import {
+	Box, chakra, Divider, FormControl, FormLabel, Heading, Input, List, ListIcon, ListItem, Slider, Spinner, Stack, SliderTrack, SliderFilledTrack, SliderThumb, useToken, HStack, Flex
+} from "@chakra-ui/react";
 import moment from "moment";
-import React from "react";
+import React, {useState} from "react";
 import DatePicker from "react-datepicker";
 import {Chart} from "react-google-charts";
 import {useInput} from "react-grapple";
@@ -25,24 +27,22 @@ const ChartsTest = () => {
 
 	const columns = [t("interval.month", {count: 2}), t("forms.agreements.fields.income"), t("forms.agreements.fields.expenses")];
 	const data = [
-		[moment("2020-01-01").format("MMM YYYY"), 1000, 850],
-		[moment("2020-02-01").format("MMM YYYY"), 1000, 860],
-		[moment("2020-03-01").format("MMM YYYY"), 1000, 1100],
-		[moment("2020-04-01").format("MMM YYYY"), 1000, 700],
-		[moment("2020-05-01").format("MMM YYYY"), 1000, 850],
-		[moment("2020-06-01").format("MMM YYYY"), 1250, 850],
-		[moment("2020-07-01").format("MMM YYYY"), 1000, 880],
-		[moment("2020-08-01").format("MMM YYYY"), 1000, 860],
-		[moment("2020-09-01").format("MMM YYYY"), 1000, 1150],
-		[moment("2020-10-01").format("MMM YYYY"), 1000, 580],
-		[moment("2020-11-01").format("MMM YYYY"), 1000, 830],
-		[moment("2020-12-01").format("MMM YYYY"), 1150, 850],
-	].filter((d, i) => {
-		const isAfter = moment(d[0], "MMM YYYY").isSameOrAfter(moment(startDate.value, "L"));
-		const isBefore = moment(d[0], "MMM YYYY").isSameOrBefore(moment(endDate.value, "L"));
+		{time: moment("2020-01-01"), income: 1000, expense: 850},
+		{time: moment("2020-02-01"), income: 1000, expense: 860},
+		{time: moment("2020-03-01"), income: 1000, expense: 1100},
+		{time: moment("2020-04-01"), income: 1000, expense: 700},
+		{time: moment("2020-05-01"), income: 1000, expense: 850},
+		{time: moment("2020-06-01"), income: 1250, expense: 850},
+		{time: moment("2020-07-01"), income: 1000, expense: 880},
+		{time: moment("2020-08-01"), income: 1000, expense: 860},
+		{time: moment("2020-09-01"), income: 1000, expense: 1150},
+		{time: moment("2020-10-01"), income: 1000, expense: 580},
+		{time: moment("2020-11-01"), income: 1000, expense: 830},
+		{time: moment("2020-12-01"), income: 1150, expense: 850},
+	];
 
-		return isAfter && isBefore;
-	});
+	const [startIdx, setStartIdx] = useState(0);
+	const [endIdx, setEndIdx] = useState(data.length - 1);
 
 	return (
 		<Page title={"Charts test"} position={"relative"}>
@@ -50,29 +50,29 @@ const ChartsTest = () => {
 			<Stack maxWidth={500} position={"absolute"} top={0} right={0}>
 				<Stack bg={"white"} borderRadius={10} p={5}>
 					<Heading size={"sm"}>Todo:</Heading>
-					<List>
-						<ListItem>
-							<ListIcon as={MdCheckCircle} color="green.500" />
+					<List color={"gray.500"}>
+						<ListItem textDecoration={"line-through"} color="green.500">
+							<ListIcon as={MdCheckCircle} />
 							Periode
 						</ListItem>
 						<ListItem>
-							<ListIcon as={MdCheckCircle} color="gray.500" />
+							<ListIcon as={MdCheckCircle} />
 							Granulariteit (dag/week/maand)
 						</ListItem>
 						<ListItem>
-							<ListIcon as={MdCheckCircle} color="gray.500" />
+							<ListIcon as={MdCheckCircle} />
 							Selectie op grootboek/rubriek
 						</ListItem>
 						<ListItem>
-							<ListIcon as={MdCheckCircle} color="gray.500" />
+							<ListIcon as={MdCheckCircle} />
 							Saldo vs. buffer
 						</ListItem>
 						<ListItem>
-							<ListIcon as={MdCheckCircle} color="gray.500" />
+							<ListIcon as={MdCheckCircle} />
 							Trendlijn?
 						</ListItem>
 						<ListItem>
-							<ListIcon as={MdCheckCircle} color="gray.500" />
+							<ListIcon as={MdCheckCircle} />
 							Todo verwijderen
 						</ListItem>
 					</List>
@@ -80,62 +80,66 @@ const ChartsTest = () => {
 
 				<Stack bg={"white"} borderRadius={10} p={5}>
 					<Heading size={"sm"}>Acceptatiecriteria:</Heading>
-					<List>
+					<List color={"gray.500"}>
 						<ListItem>
-							<ListIcon as={MdCheckCircle} color="gray.500" />
+							<ListIcon as={MdCheckCircle} />
 							Scherm met rapportage staat gelinkt in navigatiemenu.
 						</ListItem>
 						<ListItem>
-							<ListIcon as={MdCheckCircle} color="gray.500" />
+							<ListIcon as={MdCheckCircle} />
 							Rapportageperiode is instelbaar van een datum tot en met eenzelfde of opvolgende datum.
 						</ListItem>
 						<ListItem>
-							<ListIcon as={MdCheckCircle} color="gray.500" />
+							<ListIcon as={MdCheckCircle} />
 							Gegevens worden in een tabel weergegeven.
 						</ListItem>
 						<ListItem>
-							<ListIcon as={MdCheckCircle} color="gray.500" />
+							<ListIcon as={MdCheckCircle} />
 							Inkomsten en uitgaven zijn per soort gegroepeerd weergegeven.
 						</ListItem>
 						<ListItem>
-							<ListIcon as={MdCheckCircle} color="gray.500" />
+							<ListIcon as={MdCheckCircle} />
 							Inkomsten en uitgaven zijn per rubriek weergegeven.
 						</ListItem>
 						<ListItem>
-							<ListIcon as={MdCheckCircle} color="gray.500" />
+							<ListIcon as={MdCheckCircle} />
 							Filteren gegevens op geen, een of meerdere burgers.
 						</ListItem>
 						<ListItem>
-							<ListIcon as={MdCheckCircle} color="gray.500" />
+							<ListIcon as={MdCheckCircle} />
 							Filteren gegevens op geen, een of meerdere rubrieken.
 						</ListItem>
 						<ListItem>
-							<ListIcon as={MdCheckCircle} color="gray.500" />
+							<ListIcon as={MdCheckCircle} />
 							Gegevens worden in een grafiek weergegeven.
 						</ListItem>
 						<ListItem>
-							<ListIcon as={MdCheckCircle} color="gray.500" />
+							<ListIcon as={MdCheckCircle} />
 							Trend saldo op balans wordt in een LineChart weergegeven
 						</ListItem>
 						<ListItem>
-							<ListIcon as={MdCheckCircle} color="gray.500" />
+							<ListIcon as={MdCheckCircle} />
 							Datapunt in grafiek is geaggregeerd op kalendermaand
 						</ListItem>
 						<ListItem>
-							<ListIcon as={MdCheckCircle} color="gray.500" />
+							<ListIcon as={MdCheckCircle} />
 							Datapunt in grafiek kan in detail bekeken worden: periode datapunt, metriek en waarde. Bijvoorbeeld: "1-1-2020 t/m 31-1-2020 Saldo: € 1.234,-"
 						</ListItem>
 						<ListItem>
-							<ListIcon as={MdCheckCircle} color="gray.500" />
+							<ListIcon as={MdCheckCircle} />
 							Trend inkomsten wordt in een AreaChart weergegeven
 						</ListItem>
 						<ListItem>
-							<ListIcon as={MdCheckCircle} color="gray.500" />
+							<ListIcon as={MdCheckCircle} />
 							Trend uitgaven wordt in een AreaChart weergegeven
 						</ListItem>
 					</List>
 				</Stack>
 			</Stack>
+
+			<pre>{JSON.stringify({
+				startIdx, endIdx
+			}, null, 2)}</pre>
 
 			<Section title={"Area chart"}>
 
@@ -170,20 +174,44 @@ const ChartsTest = () => {
 
 				<Divider />
 
-				<Box justifyContent={"center"}>
+				<HStack maxWidth={"90%"}>
+					<Box flex={1}>
+						<Slider min={0} max={data.length - 1} step={1} onChange={val => setStartIdx(val)} value={startIdx}>
+							<SliderTrack>
+								<SliderFilledTrack />
+							</SliderTrack>
+							<SliderThumb />
+						</Slider>
+					</Box>
+					<Box flex={1}>
+						<Slider min={0} max={data.length - 1} step={1} onChange={val => setEndIdx(val)} value={endIdx}>
+							<SliderTrack>
+								<SliderFilledTrack />
+							</SliderTrack>
+							<SliderThumb />
+						</Slider>
+					</Box>
+				</HStack>
+
+				<Box>
 					<ChakraChart
 						height={"500px"}
 						chartType="AreaChart"
 						loader={<Spinner />}
-						data={[columns, ...data]}
+						data={[columns, ...data.map(d => [
+							d.time.format("MMM YYYY"),
+							d.income,
+							d.expense
+						])]}
 						options={{
-							title: "Inkomsten en uitgaven per maand",
+							title: "Inkomsten en uitgaven",
 							hAxis: {title: t("interval.month", {count: 2})},
 							vAxis: {minValue: 0},
 							chartArea: {width: "90%", height: "80%"},
 							legend: {position: "top"},
-							lineWidth: 0,
-							colors: [color1, color2]
+							colors: [color1, color2],
+							lineWidth: 1,
+							pointSize: 5
 						}}
 						// For tests
 						rootProps={{"data-testid": "1"}}
