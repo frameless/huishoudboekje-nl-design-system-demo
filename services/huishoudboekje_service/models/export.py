@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Sequence, TIMESTAMP
+from sqlalchemy import Column, Integer, String, Sequence, TIMESTAMP, Text, Date
 from sqlalchemy.orm import relationship
 
 from core_service.database import db
@@ -10,6 +10,9 @@ class Export(db.Model):
     id = Column(Integer, Sequence('export_id_seq'), primary_key=True)
     naam = Column(String, nullable=False, unique=True, index=True)
     timestamp = Column(TIMESTAMP(timezone=True), nullable=False, index=True)
+    xmldata = Column(Text)
+    start_datum = Column(Date)
+    eind_datum = Column(Date)
 
     overschrijvingen = relationship("Overschrijving", back_populates="export")
 
