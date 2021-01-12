@@ -9,7 +9,7 @@ class Grootboekrekening(graphene.ObjectType):
     naam = graphene.String()
     referentie = graphene.String()
     omschrijving = graphene.String()
-    debet = graphene.Boolean()
+    credit = graphene.Boolean()
     parent = graphene.Field(lambda: Grootboekrekening)
     children = graphene.List(lambda: Grootboekrekening)
     rubriek = graphene.Field(lambda: Rubriek)
@@ -28,3 +28,6 @@ class Grootboekrekening(graphene.ObjectType):
 
     async def resolve_rubriek(root, info):
         return await request.dataloader.rubrieken_by_grootboekrekening.load(root.get('id'))
+
+    def resolve_credit(root, info):
+        return not root.get('debet')
