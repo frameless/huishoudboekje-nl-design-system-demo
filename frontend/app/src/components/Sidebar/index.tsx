@@ -23,7 +23,7 @@ const Sidebar: React.FC<BoxProps> = (props) => {
 					</VStack>
 				</HStack>
 			</Stack>
-			<SidebarLink to={Routes.Balances} icon={RiShoppingCart2Line}>{t("sidebar.huishoudboekjes")}</SidebarLink>
+			<SidebarLink to={Routes.Huishoudboekjes} icon={RiShoppingCart2Line}>{t("sidebar.huishoudboekjes")}</SidebarLink>
 			<SidebarLink to={Routes.Settings} icon={TiCog}>{t("sidebar.configuratie")}</SidebarLink>
 		</Stack>
 
