@@ -1279,6 +1279,55 @@ export type DeleteJournaalpostMutation = (
   )> }
 );
 
+export type CreateConfiguratieMutationVariables = Exact<{
+  key: Scalars['String'];
+  value: Scalars['String'];
+}>;
+
+
+export type CreateConfiguratieMutation = (
+  { __typename?: 'RootMutation' }
+  & { createConfiguratie?: Maybe<(
+    { __typename?: 'CreateConfiguratie' }
+    & Pick<CreateConfiguratie, 'ok'>
+    & { configuratie?: Maybe<(
+      { __typename?: 'Configuratie' }
+      & Pick<Configuratie, 'id' | 'waarde'>
+    )> }
+  )> }
+);
+
+export type UpdateConfiguratieMutationVariables = Exact<{
+  key: Scalars['String'];
+  value: Scalars['String'];
+}>;
+
+
+export type UpdateConfiguratieMutation = (
+  { __typename?: 'RootMutation' }
+  & { updateConfiguratie?: Maybe<(
+    { __typename?: 'UpdateConfiguratie' }
+    & Pick<UpdateConfiguratie, 'ok'>
+    & { configuratie?: Maybe<(
+      { __typename?: 'Configuratie' }
+      & Pick<Configuratie, 'id' | 'waarde'>
+    )> }
+  )> }
+);
+
+export type DeleteConfiguratieMutationVariables = Exact<{
+  key: Scalars['String'];
+}>;
+
+
+export type DeleteConfiguratieMutation = (
+  { __typename?: 'RootMutation' }
+  & { deleteConfiguratie?: Maybe<(
+    { __typename?: 'DeleteConfiguratie' }
+    & Pick<DeleteConfiguratie, 'ok'>
+  )> }
+);
+
 export type GetAllBurgersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1457,6 +1506,17 @@ export type GetAfspraakFormDataQuery = (
   )>>>, organisaties?: Maybe<Array<Maybe<(
     { __typename?: 'Organisatie' }
     & OrganisatieFragment
+  )>>> }
+);
+
+export type GetConfiguratieQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetConfiguratieQuery = (
+  { __typename?: 'RootQuery' }
+  & { configuraties?: Maybe<Array<Maybe<(
+    { __typename?: 'Configuratie' }
+    & Pick<Configuratie, 'id' | 'waarde'>
   )>>> }
 );
 
@@ -2284,6 +2344,112 @@ export function useDeleteJournaalpostMutation(baseOptions?: Apollo.MutationHookO
 export type DeleteJournaalpostMutationHookResult = ReturnType<typeof useDeleteJournaalpostMutation>;
 export type DeleteJournaalpostMutationResult = Apollo.MutationResult<DeleteJournaalpostMutation>;
 export type DeleteJournaalpostMutationOptions = Apollo.BaseMutationOptions<DeleteJournaalpostMutation, DeleteJournaalpostMutationVariables>;
+export const CreateConfiguratieDocument = gql`
+    mutation createConfiguratie($key: String!, $value: String!) {
+  createConfiguratie(input: {id: $key, waarde: $value}) {
+    ok
+    configuratie {
+      id
+      waarde
+    }
+  }
+}
+    `;
+export type CreateConfiguratieMutationFn = Apollo.MutationFunction<CreateConfiguratieMutation, CreateConfiguratieMutationVariables>;
+
+/**
+ * __useCreateConfiguratieMutation__
+ *
+ * To run a mutation, you first call `useCreateConfiguratieMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateConfiguratieMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createConfiguratieMutation, { data, loading, error }] = useCreateConfiguratieMutation({
+ *   variables: {
+ *      key: // value for 'key'
+ *      value: // value for 'value'
+ *   },
+ * });
+ */
+export function useCreateConfiguratieMutation(baseOptions?: Apollo.MutationHookOptions<CreateConfiguratieMutation, CreateConfiguratieMutationVariables>) {
+        return Apollo.useMutation<CreateConfiguratieMutation, CreateConfiguratieMutationVariables>(CreateConfiguratieDocument, baseOptions);
+      }
+export type CreateConfiguratieMutationHookResult = ReturnType<typeof useCreateConfiguratieMutation>;
+export type CreateConfiguratieMutationResult = Apollo.MutationResult<CreateConfiguratieMutation>;
+export type CreateConfiguratieMutationOptions = Apollo.BaseMutationOptions<CreateConfiguratieMutation, CreateConfiguratieMutationVariables>;
+export const UpdateConfiguratieDocument = gql`
+    mutation updateConfiguratie($key: String!, $value: String!) {
+  updateConfiguratie(input: {id: $key, waarde: $value}) {
+    ok
+    configuratie {
+      id
+      waarde
+    }
+  }
+}
+    `;
+export type UpdateConfiguratieMutationFn = Apollo.MutationFunction<UpdateConfiguratieMutation, UpdateConfiguratieMutationVariables>;
+
+/**
+ * __useUpdateConfiguratieMutation__
+ *
+ * To run a mutation, you first call `useUpdateConfiguratieMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateConfiguratieMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateConfiguratieMutation, { data, loading, error }] = useUpdateConfiguratieMutation({
+ *   variables: {
+ *      key: // value for 'key'
+ *      value: // value for 'value'
+ *   },
+ * });
+ */
+export function useUpdateConfiguratieMutation(baseOptions?: Apollo.MutationHookOptions<UpdateConfiguratieMutation, UpdateConfiguratieMutationVariables>) {
+        return Apollo.useMutation<UpdateConfiguratieMutation, UpdateConfiguratieMutationVariables>(UpdateConfiguratieDocument, baseOptions);
+      }
+export type UpdateConfiguratieMutationHookResult = ReturnType<typeof useUpdateConfiguratieMutation>;
+export type UpdateConfiguratieMutationResult = Apollo.MutationResult<UpdateConfiguratieMutation>;
+export type UpdateConfiguratieMutationOptions = Apollo.BaseMutationOptions<UpdateConfiguratieMutation, UpdateConfiguratieMutationVariables>;
+export const DeleteConfiguratieDocument = gql`
+    mutation deleteConfiguratie($key: String!) {
+  deleteConfiguratie(id: $key) {
+    ok
+  }
+}
+    `;
+export type DeleteConfiguratieMutationFn = Apollo.MutationFunction<DeleteConfiguratieMutation, DeleteConfiguratieMutationVariables>;
+
+/**
+ * __useDeleteConfiguratieMutation__
+ *
+ * To run a mutation, you first call `useDeleteConfiguratieMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteConfiguratieMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteConfiguratieMutation, { data, loading, error }] = useDeleteConfiguratieMutation({
+ *   variables: {
+ *      key: // value for 'key'
+ *   },
+ * });
+ */
+export function useDeleteConfiguratieMutation(baseOptions?: Apollo.MutationHookOptions<DeleteConfiguratieMutation, DeleteConfiguratieMutationVariables>) {
+        return Apollo.useMutation<DeleteConfiguratieMutation, DeleteConfiguratieMutationVariables>(DeleteConfiguratieDocument, baseOptions);
+      }
+export type DeleteConfiguratieMutationHookResult = ReturnType<typeof useDeleteConfiguratieMutation>;
+export type DeleteConfiguratieMutationResult = Apollo.MutationResult<DeleteConfiguratieMutation>;
+export type DeleteConfiguratieMutationOptions = Apollo.BaseMutationOptions<DeleteConfiguratieMutation, DeleteConfiguratieMutationVariables>;
 export const GetAllBurgersDocument = gql`
     query getAllBurgers {
   gebruikers {
@@ -2715,3 +2881,36 @@ export function useGetAfspraakFormDataLazyQuery(baseOptions?: Apollo.LazyQueryHo
 export type GetAfspraakFormDataQueryHookResult = ReturnType<typeof useGetAfspraakFormDataQuery>;
 export type GetAfspraakFormDataLazyQueryHookResult = ReturnType<typeof useGetAfspraakFormDataLazyQuery>;
 export type GetAfspraakFormDataQueryResult = Apollo.QueryResult<GetAfspraakFormDataQuery, GetAfspraakFormDataQueryVariables>;
+export const GetConfiguratieDocument = gql`
+    query getConfiguratie {
+  configuraties {
+    id
+    waarde
+  }
+}
+    `;
+
+/**
+ * __useGetConfiguratieQuery__
+ *
+ * To run a query within a React component, call `useGetConfiguratieQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetConfiguratieQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetConfiguratieQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetConfiguratieQuery(baseOptions?: Apollo.QueryHookOptions<GetConfiguratieQuery, GetConfiguratieQueryVariables>) {
+        return Apollo.useQuery<GetConfiguratieQuery, GetConfiguratieQueryVariables>(GetConfiguratieDocument, baseOptions);
+      }
+export function useGetConfiguratieLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetConfiguratieQuery, GetConfiguratieQueryVariables>) {
+          return Apollo.useLazyQuery<GetConfiguratieQuery, GetConfiguratieQueryVariables>(GetConfiguratieDocument, baseOptions);
+        }
+export type GetConfiguratieQueryHookResult = ReturnType<typeof useGetConfiguratieQuery>;
+export type GetConfiguratieLazyQueryHookResult = ReturnType<typeof useGetConfiguratieLazyQuery>;
+export type GetConfiguratieQueryResult = Apollo.QueryResult<GetConfiguratieQuery, GetConfiguratieQueryVariables>;

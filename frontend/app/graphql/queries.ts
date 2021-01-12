@@ -150,3 +150,12 @@ export const GetAfspraakFormDataQuery = gql`
     ${RubriekFragment}
     ${OrganisatieFragment}
 `;
+
+export const GetConfiguratieQuery = gql`
+    query getConfiguratie {
+        configuraties {
+            id
+            waarde
+        }
+    }
+`;

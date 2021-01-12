@@ -44,6 +44,7 @@ const Routes = {
 	CSMs: `/${RouteNames.banking}/${RouteNames.csms}`,
 	Bookings: `/${RouteNames.banking}/${RouteNames.bookings}`,
 	BookingsExport: `/${RouteNames.banking}/${RouteNames.bookings}/${RouteNames.export}`,
+	Settings: `/${RouteNames.settings}`,
 
 	NotFound: `/${RouteNames.notFound}`,
 
@@ -52,7 +53,6 @@ const Routes = {
 
 	// Not in use yet
 	Balances: `/${RouteNames.balances}`,
-	Settings: `/${RouteNames.settings}`,
 };
 
 export default Routes;

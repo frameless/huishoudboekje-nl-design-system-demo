@@ -285,3 +285,37 @@ export const DeleteJournaalpostMutation = gql`
         }
     }
 `;
+
+export const CreateConfiguratieMutation = gql`
+    mutation createConfiguratie($key: String!, $value: String!) {
+        createConfiguratie(input: {
+            id: $key, waarde: $value
+        }){
+            ok
+            configuratie{
+                id
+                waarde
+            }
+        }
+    }
+`;
+export const UpdateConfiguratieMutation = gql`
+    mutation updateConfiguratie($key: String!, $value: String!) {
+        updateConfiguratie(input: {
+            id: $key, waarde: $value
+        }){
+            ok
+            configuratie{
+                id
+                waarde
+            }
+        }
+    }
+`;
+export const DeleteConfiguratieMutation = gql`
+    mutation deleteConfiguratie($key: String!) {
+        deleteConfiguratie(id: $key){
+            ok
+        }
+    }
+`;
