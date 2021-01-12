@@ -140,7 +140,7 @@ export const GetAfspraakFormDataQuery = gql`
             grootboekrekening{
                 id
                 naam
-                debet
+                credit
             }
         }
         organisaties {

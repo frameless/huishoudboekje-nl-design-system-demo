@@ -311,7 +311,7 @@ export type Grootboekrekening = {
   naam?: Maybe<Scalars['String']>;
   referentie?: Maybe<Scalars['String']>;
   omschrijving?: Maybe<Scalars['String']>;
-  debet?: Maybe<Scalars['Boolean']>;
+  credit?: Maybe<Scalars['Boolean']>;
   parent?: Maybe<Grootboekrekening>;
   children?: Maybe<Array<Maybe<Grootboekrekening>>>;
   rubriek?: Maybe<Rubriek>;
@@ -1500,7 +1500,7 @@ export type GetAfspraakFormDataQuery = (
     { __typename?: 'Rubriek' }
     & { grootboekrekening?: Maybe<(
       { __typename?: 'Grootboekrekening' }
-      & Pick<Grootboekrekening, 'id' | 'naam' | 'debet'>
+      & Pick<Grootboekrekening, 'id' | 'naam' | 'credit'>
     )> }
     & RubriekFragment
   )>>>, organisaties?: Maybe<Array<Maybe<(
@@ -2847,7 +2847,7 @@ export const GetAfspraakFormDataDocument = gql`
     grootboekrekening {
       id
       naam
-      debet
+      credit
     }
   }
   organisaties {

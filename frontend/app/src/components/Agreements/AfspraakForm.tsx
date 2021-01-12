@@ -222,7 +222,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 		return afspraakType === AfspraakType.Expense ? outgoingTrans : incomingTrans;
 	};
 
-	const filterRubriekenByAfspraakType = r => afspraakType === AfspraakType.Expense ? r.grootboekrekening?.debet : !r.grootboekrekening?.debet;
+	const filterRubriekenByAfspraakType = (r: Rubriek) => afspraakType === AfspraakType.Expense ? !r.grootboekrekening?.credit : r.grootboekrekening?.credit;
 
 	const onSelectRubriek = (val) => {
 		if (val) {
