@@ -4,11 +4,13 @@ import pytest
 import requests_mock
 from hhb_backend.graphql import settings
 
-mock_inkomsten = {"id": "m1", "naam": "inkomsten", "children": ["m12"]}
-mock_salaris = {"id": "m12", "naam": "salaris", "parent_id": "m1"}
+mock_inkomsten = {"id": "m1", "naam": "inkomsten", "children": ["m12"], "debet": False}
+mock_salaris = {"id": "m12", "naam": "salaris", "parent_id": "m1", "debet": False}
+mock_huur = {"id": "m21", "naam": "huur", "debet": True}
 mock_data = {"data": [
     mock_inkomsten,
     mock_salaris,
+    mock_huur,
 ]}
 mock_rubriek = {
     "afspraken": [
@@ -32,8 +34,8 @@ def test_grootboekrekeningen(client):
         assert response.json == {"data": {"grootboekrekeningen": [
             {"id": "m1", "naam": "inkomsten"},
             {"id": "m12", "naam": "salaris"},
+            {"id": "m21", "naam": "huur"},
         ]}}
-
 
 
 def test_grootboekrekeningen_children(client):
@@ -52,6 +54,7 @@ def test_grootboekrekeningen_children(client):
         assert response.json == {"data": {"grootboekrekeningen": [
             {"id": "m1", "naam": "inkomsten", "children": [{"id": "m12", "naam": "salaris"}]},
             {"id": "m12", "naam": "salaris", "children": None},
+            {"id": "m21", "naam": "huur", "children": None},
         ]}}
 
 
@@ -121,8 +124,10 @@ def test_grootboekrekening_with_parent(client):
         assert inkomsten_adapter.called_once
         assert salaris_adapter.called_once
         assert response.json == {"data": {"grootboekrekening":
-                                              {"id": "m12", "naam": "salaris", "parent": {"id": "m1", "naam": "inkomsten"}}
+                                              {"id": "m12", "naam": "salaris",
+                                               "parent": {"id": "m1", "naam": "inkomsten"}}
                                           }}
+
 
 def test_grootboekrekeningen_rubriek(client):
     with requests_mock.Mocker() as mock:
@@ -142,3 +147,19 @@ def test_grootboekrekeningen_rubriek(client):
         assert filter_adapter.called_once
         assert hhb_adapter.called_once
         assert response.json == {'data': {'grootboekrekening': {'id': 'm1', 'rubriek': {'id': 2, 'naam': 'Rubriek 1'}}}}
+
+def test_grootboekrekeningen_credit_transform(client):
+    with requests_mock.Mocker() as mock:
+        adapter = mock.get(f"{settings.GROOTBOEK_SERVICE_URL}/grootboekrekeningen/", json=mock_data)
+        response = client.post(
+            "/graphql",
+            data='{"query": "query test { grootboekrekeningen { id naam credit }}"}',
+            content_type='application/json'
+        )
+        assert adapter.called_once
+        assert response.json == {"data": {"grootboekrekeningen": [
+            {"id": "m1", "naam": "inkomsten", "credit": True},
+            {"id": "m12", "naam": "salaris", "credit": True},
+            {"id": "m21", "naam": "huur", "credit": False},
+        ]}}
+
