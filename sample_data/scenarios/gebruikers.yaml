@@ -15,7 +15,8 @@ scenarios:
       - aantal: 1
         rubriek: "Gas"
         organisatie_kvk: "23027707"
-        bedrag: -101.0
+        bedrag: 10100
+        credit: false
         automatische_incasso: true
         aantal_betalingen: 12
         interval: "P0Y1M0W0D"
