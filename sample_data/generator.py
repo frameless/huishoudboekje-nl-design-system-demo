@@ -197,7 +197,7 @@ class Generator:
             "organisatie_id": organisatie["id"] if organisatie is not None else None,
             "rubriek_id": rubriek["id"] if rubriek is not None else None,
             "bedrag": scenario.bedrag,
-            "credit": scenario.bedrag > 0,
+            "credit": scenario.credit if scenario.credit is not None else scenario.bedrag > 0,
             "automatische_incasso": scenario.automatische_incasso or choice([True, False]),
             "aantal_betalingen": scenario.aantal_betalingen or 12,
             "interval": scenario.interval,
