@@ -13,6 +13,9 @@ class Export(graphene.ObjectType):
     naam = graphene.String()
     timestamp = graphene.DateTime()
     overschrijvingen = graphene.List(lambda: overschrijving.Overschrijving)
+    xmldata = graphene.String()
+    start_datum = graphene.String()
+    eind_datum = graphene.String()
 
     def resolve_timestamp(root, info):
         value = root.get('timestamp')
