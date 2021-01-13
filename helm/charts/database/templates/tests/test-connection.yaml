@@ -15,12 +15,12 @@ spec:
         - name: PGPASSWORD
           valueFrom:
             secretKeyRef:
-              name: database-postgresql
+              name: {{ .Release.Name }}-postgresql
               key: postgresql-password
         - name: PGUSER
           value: "postgres"
       command: ['psql']
-      args: ['postgresql://{{ include "database.name" . }}/postgres', '-c', 'SELECT version();']
+      args: ['postgresql://{{ .Release.Name }}-postgresql/postgres', '-c', 'SELECT version();']
   restartPolicy: Never
 ---
 apiVersion: v1
@@ -40,10 +40,10 @@ spec:
         - name: PGPASSWORD
           valueFrom:
             secretKeyRef:
-              name: database-postgresql
+              name: {{ .Release.Name }}-postgresql
               key: postgresql-password
         - name: PGUSER
           value: "postgres"
       command: ['psql']
-      args: ['postgresql://{{ include "database.name" . }}/postgres', '-c', '\l']
+      args: ['postgresql://{{ .Release.Name }}-postgresql/postgres', '-c', '\l']
   restartPolicy: Never
