@@ -133,7 +133,6 @@ const BookingsExport = () => {
 										return (
 											<Tr key={e.id} _hover={{ bg: "gray.100" }}>
 												<Stack as={Td} direction={"row"} alignItems={"center"}>
-													<Box as={GrDocumentText} ml={1} />
 													<Stack fontSize={"sm"} flex={2} spacing={0}>
 														<Stack direction={"row"}>
 															<Label>{t("van")}</Label>
