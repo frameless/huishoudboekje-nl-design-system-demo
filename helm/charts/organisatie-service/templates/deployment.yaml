@@ -58,7 +58,7 @@ spec:
                   name: {{ .Values.database.service }}-{{ include "organisatie-service.name" . }}
                   key: password
             - name: ORGANISATIE_DATABASE_URL
-              value: "postgresql://$(PGUSER):$(PGPASSWORD)@{{ .Release.Namespace }}-postgresql/$(PGDATABASE)"
+              value: "postgresql://$(PGUSER):$(PGPASSWORD)@{{ .Release.Name }}-postgresql/$(PGDATABASE)"
           ports:
             - name: http
               containerPort: 8000
@@ -101,7 +101,7 @@ spec:
                   name: {{ .Values.database.service }}-{{ include "organisatie-service.name" . }}
                   key: password
             - name: ORGANISATIE_DATABASE_URL
-              value: "postgresql://$(PGUSER):$(PGPASSWORD)@{{ .Release.Namespace }}-postgresql/$(PGDATABASE)"
+              value: "postgresql://$(PGUSER):$(PGPASSWORD)@{{ .Release.Name }}-postgresql/$(PGDATABASE)"
           command: ["python"]
           args: ["manage.py", "db", "upgrade"]
           resources:
@@ -128,7 +128,7 @@ spec:
                   name: {{ .Values.database.service }}-{{ include "organisatie-service.name" . }}
                   key: password
             - name: DATABASE_URL
-              value: "postgresql://$(PGUSER):$(PGPASSWORD)@{{ .Release.Namespace }}-postgresql/$(PGDATABASE)"
+              value: "postgresql://$(PGUSER):$(PGPASSWORD)@{{ .Release.Name }}-postgresql/$(PGDATABASE)"
             - name: DATABASE_NAME
               value: "$(PGDATABASE)"
           resources:
