@@ -137,11 +137,11 @@ const BookingsExport = () => {
 													<Stack fontSize={"sm"} flex={2} spacing={0}>
 														<Stack direction={"row"}>
 															<Label>{t("van")}</Label>
-															<Text>{moment(e.startDatum).format("L LT")}</Text>
+															<Text>{moment(e.startDatum).format("L")}</Text>
 														</Stack>
 														<Stack direction={"row"}>
 															<Label>{t("tot")}</Label>
-															<Text>{moment(e.eindDatum).format("L LT")}</Text>
+															<Text>{moment(e.eindDatum).format("L")}</Text>
 														</Stack>
 													</Stack>
 												</Stack>
