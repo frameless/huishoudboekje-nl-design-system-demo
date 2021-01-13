@@ -32,6 +32,7 @@ huishoudboekje-test: huishoudboekje
 huishoudboekje: helm/charts/huishoudboekje-review helm-init helm/charts/* docker-images
 	helm upgrade --install --create-namespace --namespace $@ \
 		$@ $< \
+		--debug \
 		--set database.traefik.enabled=true \
 		--set global.minikube=true \
 		--set global.imageTag=$(DOCKER_TAG) \
@@ -40,6 +41,7 @@ huishoudboekje: helm/charts/huishoudboekje-review helm-init helm/charts/* docker
 		--set "medewerker-backend.oidc.redirectUris[0].callback=http://localhost:3000/api/custom_oidc_callback" \
 		--set "medewerker-backend.oidc.redirectUris[1].prefix=http://hhb.minikube" \
 		--set "medewerker-backend.oidc.redirectUris[1].callback=http://hhb.minikube/api/custom_oidc_callback" \
+		--set "database.postgresql.postgresqlPassword=huishoudboekjedb" \
 		--render-subchart-notes
 
 helm/charts/%: helm/charts/%/Chart.lock

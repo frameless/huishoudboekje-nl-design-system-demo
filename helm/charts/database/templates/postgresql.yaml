@@ -1,5 +1,8 @@
-{{- $databaseName := include "database.databasename" . -}}
+{{- $databaseName := include "database.name" . -}}
 {{- $databaseLabels := include "database.labels" . -}}
+{{- define "service.database" -}}
+{{- . | replace "_" "" }}
+{{- end -}}
 apiVersion: v1
 kind: Secret
 metadata:
@@ -9,21 +12,24 @@ metadata:
 type: Opaque
 stringData:
   01_service_databases.sql: |
-{{- range $database := .Values.databases }}
+{{- range $service := .Values.services }}
+  {{- $database := include "service.database" $service }}
     CREATE USER "{{ $database }}" WITH PASSWORD '{{ $database }}';
-    CREATE DATABASE {{ $database }} WITH OWNER {{ $database }};
+    CREATE DATABASE "{{ $database }}" WITH OWNER "{{ $database }}";
 {{- end -}}
 
-{{- range $database := .Values.databases }}
+{{- range $service := .Values.services }}
+{{- $database := include "service.database" $service }}
 ---
 apiVersion: v1
 kind: Secret
 metadata:
-  name: {{ printf "%s-%s" $databaseName $database | replace "_" "-" | trunc 63 | trimSuffix "-" | quote }}
+  name: {{ printf "%s-%s" $databaseName $service | replace "_" "-" | trunc 63 | trimSuffix "-" | quote }}
   labels:
   {{- $databaseLabels | nindent 4 }}
 type: Opaque
 stringData:
-  username: {{ printf "%s" $database | quote }}
-  password: {{ printf "%s" $database | quote }}
+  database: {{ $database | quote }}
+  username: {{ $database | quote }}
+  password: {{ $database | quote }}
 {{- end -}}

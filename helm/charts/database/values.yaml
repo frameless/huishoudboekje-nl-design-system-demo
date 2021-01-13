@@ -4,7 +4,7 @@
 
 global:
   minikube: false
-nameOverride: "huishoudboekje"
+#nameOverride: "huishoudboekje"
 #fullnameOverride: ""
 
 postgresql:
@@ -13,9 +13,9 @@ postgresql:
     enabled: false
     size: 1Gi
     existingClaim: null
-  initdbScriptsSecret: huishoudboekje-database-init-scripts
+  initdbScriptsSecret: database-init-scripts
 
-databases:
+services:
   - huishoudboekje_service
   - organisatie_service
   - bank_transactie_service

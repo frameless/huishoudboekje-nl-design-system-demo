@@ -1,6 +1,6 @@
 1. Get the application URL by running these commands:
-  export PGPASSWORD=$(kubectl --namespace {{ .Release.Namespace }} get secret {{ include "database.name" . }}.{{ include "database.databasename" . }}.credentials.postgresql.acid.zalan.do -o 'jsonpath={.data.password}' | base64 -D -)
-  export PGUSER=$(kubectl --namespace {{ .Release.Namespace }} get secret {{ include "database.name" . }}.{{ include "database.databasename" . }}.credentials.postgresql.acid.zalan.do -o 'jsonpath={.data.username}' | base64 -D -)
+  export PGPASSWORD=$(kubectl --namespace {{ .Release.Namespace }} get secret {{ include "database.name" . }}.{{ include "database.name" . }}.credentials.postgresql.acid.zalan.do -o 'jsonpath={.data.password}' | base64 -D -)
+  export PGUSER=$(kubectl --namespace {{ .Release.Namespace }} get secret {{ include "database.name" . }}.{{ include "database.name" . }}.credentials.postgresql.acid.zalan.do -o 'jsonpath={.data.username}' | base64 -D -)
 {{- if and .Values.traefik.enabled .Values.global.minikube }}
   psql postgresql://{{ .Values.traefik.minikube.host }}:{{ .Values.traefik.port }}/postgres
 {{- else }}

@@ -19,6 +19,10 @@
       helm repo update
       helm dependency build helm/charts/database
       helm dependency build helm/charts/huishoudboekje-review
+    - |
+      helm repo add zalando-operator "https://raw.githubusercontent.com/zalando/postgres-operator/master/charts/postgres-operator"
+      helm repo update
+      helm uninstall --namespace $REVIEW_NAMESPACE postgres-operator || true
     - (cd helm/charts/medewerker-frontend; ln -s ../../../frontend/theme/sloothuizen theme)
     - kubectl create namespace $REVIEW_NAMESPACE || true
     - |
@@ -52,7 +56,8 @@
         --set "dex.config.staticClients[0].secret=${OIDC_CLIENT_SECRET}" \
         --set "dex.config.staticClients[0].redirectURIs[0]=https://$HHB_HOST/api/custom_oidc_callback" \
         --set "dex.config.staticClients[0].redirectURIs[1]=http://localhost:3000/api/custom_oidc_callback" \
-        --set "database.postgresql.postgresql-password=huishoudboekjedb"
+        --set "database.postgresql.postgresqlPassword=huishoudboekjedb" \
+        --render-subchart-notes
     - |
       FAILED=true
       for i in $(seq 1 8); do
@@ -253,7 +258,7 @@ destroy-app:
   environment:
     name: review/$CI_COMMIT_REF_SLUG
   before_script:
-    - helm uninstall --namespace $REVIEW_NAMESPACE postgres-operator
+    - helm uninstall --namespace $REVIEW_NAMESPACE postgres-operator || true
   except:
     - master
     - develop

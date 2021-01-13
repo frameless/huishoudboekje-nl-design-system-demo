@@ -20,7 +20,7 @@ spec:
         - name: PGUSER
           value: "postgres"
       command: ['psql']
-      args: ['postgresql://{{ include "database.databasename" . }}/postgres', '-c', 'SELECT version();']
+      args: ['postgresql://{{ include "database.name" . }}/postgres', '-c', 'SELECT version();']
   restartPolicy: Never
 ---
 apiVersion: v1
@@ -45,5 +45,5 @@ spec:
         - name: PGUSER
           value: "postgres"
       command: ['psql']
-      args: ['postgresql://{{ include "database.databasename" . }}/postgres', '-c', '\l']
+      args: ['postgresql://{{ include "database.name" . }}/postgres', '-c', '\l']
   restartPolicy: Never

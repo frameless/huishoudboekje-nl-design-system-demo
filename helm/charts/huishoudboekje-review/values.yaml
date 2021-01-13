@@ -73,20 +73,20 @@ medewerker-backend:
 
 huishoudboekje-service:
   database:
-    service: huishoudboekje-database
+    service: database
     name: huishoudboekjeservice
 
 organisatie-service:
   database:
-    service: huishoudboekje-database
+    service: database
     name: organisatieservice
 
 bank-transactie-service:
   database:
-    service: huishoudboekje-database
+    service: database
     name: banktransactieservice
 
 grootboek-service:
   database:
-    service: huishoudboekje-database
+    service: database
     name: grootboekservice
