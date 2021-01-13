@@ -272,6 +272,12 @@
         },
         "banking": "Bankzaken"
     },
+    "exports": {
+        "period": "Periode",
+        "dateCreated": "Aanmaakdatum"
+    },
+    "van": "Van",
+    "tot": "Tot",
     "transactions": {
         "beneficiaryAccount": "Tegenrekening",
         "rubric": "Rubriek",
