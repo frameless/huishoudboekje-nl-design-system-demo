@@ -30,6 +30,8 @@ huishoudboekje-test: huishoudboekje
 
 .PHONY: huishoudboekje
 huishoudboekje: helm/charts/huishoudboekje-review helm-init helm/charts/* docker-images
+	kubectl delete --namespace $@ postgresql $@-database || true
+	kubectl delete --namespace $@ statefulsets.apps $@-postgresql --cascade=false || true
 	helm upgrade --install --create-namespace --namespace $@ \
 		$@ $< \
 		--debug \
