@@ -282,6 +282,9 @@ export type Export = {
   naam?: Maybe<Scalars['String']>;
   timestamp?: Maybe<Scalars['DateTime']>;
   overschrijvingen?: Maybe<Array<Maybe<Overschrijving>>>;
+  xmldata?: Maybe<Scalars['String']>;
+  startDatum?: Maybe<Scalars['String']>;
+  eindDatum?: Maybe<Scalars['String']>;
 };
 
 /** GraphQL Gebruiker model  */
@@ -1545,7 +1548,7 @@ export type GetExportsQuery = (
   { __typename?: 'RootQuery' }
   & { exports?: Maybe<Array<Maybe<(
     { __typename?: 'Export' }
-    & Pick<Export, 'id' | 'naam' | 'timestamp'>
+    & Pick<Export, 'id' | 'naam' | 'timestamp' | 'startDatum' | 'eindDatum'>
     & { overschrijvingen?: Maybe<Array<Maybe<(
       { __typename?: 'Overschrijving' }
       & Pick<Overschrijving, 'id'>
@@ -2989,6 +2992,8 @@ export const GetExportsDocument = gql`
     id
     naam
     timestamp
+    startDatum
+    eindDatum
     overschrijvingen {
       id
     }

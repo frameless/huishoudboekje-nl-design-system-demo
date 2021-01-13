@@ -166,6 +166,8 @@ export const GetExportsQuery = gql`
             id
             naam
             timestamp
+            startDatum
+            eindDatum
             overschrijvingen{
                 id
             }
