@@ -10,8 +10,76 @@ def test_exports_post_new_export(client, session):
     """ Test /export/ path """
     assert session.query(Export).count() == 0
     export_dict = {
-        "naam":"Nieuwe export",
-        "timestamp":datetime(2020, 10, 1, tzinfo=tz.tzlocal()).isoformat(),
+        "naam": "Nieuwe export",
+        "timestamp": datetime(2020, 10, 1, tzinfo=tz.tzlocal()).isoformat(),
+        "start_datum": '2021-01-01',
+        "eind_datum": '2021-02-01',
+        "xmldata": '''<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.001.001.03" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<CstmrCdtTrfInitn>
+		<GrpHdr>
+			<MsgId>20201210125908-81df7a00eb5e</MsgId>
+			<CreDtTm>2020-12-10T12:59:08</CreDtTm>
+			<NbOfTxs>1</NbOfTxs>
+			<CtrlSum>100.00</CtrlSum>
+			<InitgPty>
+				<Nm>Huishoudboekje Gemeente Sloothuizen</Nm>
+			</InitgPty>
+		</GrpHdr>
+		<PmtInf>
+			<PmtInfId>HuishoudboekjeGemeente-f8d22f1b54c3</PmtInfId>
+			<PmtMtd>TRF</PmtMtd>
+			<BtchBookg>true</BtchBookg>
+			<NbOfTxs>1</NbOfTxs>
+			<CtrlSum>100.00</CtrlSum>
+			<PmtTpInf>
+				<SvcLvl>
+					<Cd>SEPA</Cd>
+				</SvcLvl>
+			</PmtTpInf>
+			<ReqdExctnDt>2020-12-01</ReqdExctnDt>
+			<Dbtr>
+				<Nm>Huishoudboekje Gemeente Sloothuizen</Nm>
+			</Dbtr>
+			<DbtrAcct>
+				<Id>
+					<IBAN>NL36ABNA5632579034</IBAN>
+				</Id>
+			</DbtrAcct>
+			<DbtrAgt>
+				<FinInstnId>
+					<BIC>ABNANL2A</BIC>
+				</FinInstnId>
+			</DbtrAgt>
+			<ChrgBr>SLEV</ChrgBr>
+			<CdtTrfTxInf>
+				<PmtId>
+					<EndToEndId>NOTPROVIDED</EndToEndId>
+				</PmtId>
+				<Amt>
+					<InstdAmt Ccy="EUR">100.00</InstdAmt>
+				</Amt>
+				<CdtrAgt>
+					<FinInstnId>
+						<BIC>BANKNL2A</BIC>
+					</FinInstnId>
+				</CdtrAgt>
+				<Cdtr>
+					<Nm>S. Hulleman</Nm>
+				</Cdtr>
+				<CdtrAcct>
+					<Id>
+						<IBAN>GB33BUKB20201555556655</IBAN>
+					</Id>
+				</CdtrAcct>
+				<RmtInf>
+					<Ustrd>Leefgeld Hulleman</Ustrd>
+				</RmtInf>
+			</CdtTrfTxInf>
+		</PmtInf>
+	</CstmrCdtTrfInitn>
+</Document>
+'''
     }
     response = client.post('/export/', json=export_dict)
     assert response.status_code == 201

@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from sepaxml import SepaTransfer
 
 
@@ -21,7 +19,7 @@ def create_export_string(overschrijvingen, afspraken, tegen_rekeningen, config_v
             "IBAN": tegen_rekening["iban"],
             # "BIC": "BANKNL2A", # TODO nodig??
             "amount": overschrijving['bedrag'],
-            "execution_date": datetime.strptime(overschrijving['datum'], '%Y-%m-%d').date(),
+            "execution_date": overschrijving['datum'],
             "description": afspraak['beschrijving'],
             # "endtoend_id": str(uuid.uuid1())  # optional
         }
