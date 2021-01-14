@@ -21,7 +21,7 @@ chart-dependencies: $(CHART_DEPENDENCIES:.yaml=.lock)
 .PHONY: helm-init
 helm-init:
 	helm repo add stable "https://charts.helm.sh/stable"
-	helm repo add bitnami https://charts.bitnami.com/bitnami
+	helm repo add bitnami "https://charts.bitnami.com/bitnami"
 	helm repo update
 
 .PHONY: huishoudboekje-test
@@ -30,7 +30,6 @@ huishoudboekje-test: huishoudboekje
 
 .PHONY: huishoudboekje
 huishoudboekje: helm/charts/huishoudboekje-review helm-init helm/charts/* docker-images
-	kubectl delete --namespace $@ postgresql $@-database || true
 	kubectl delete --namespace $@ statefulsets.apps $@-postgresql --cascade=false || true
 	helm upgrade --install --create-namespace --namespace $@ \
 		$@ $< \
@@ -45,6 +44,7 @@ huishoudboekje: helm/charts/huishoudboekje-review helm-init helm/charts/* docker
 		--set "medewerker-backend.oidc.redirectUris[1].callback=http://hhb.minikube/api/custom_oidc_callback" \
 		--set "database.postgresql.postgresqlPassword=huishoudboekjedb" \
 		--render-subchart-notes
+	helm uninstall --namespace $@ postgres-operator || true
 
 helm/charts/%: helm/charts/%/Chart.lock
 
