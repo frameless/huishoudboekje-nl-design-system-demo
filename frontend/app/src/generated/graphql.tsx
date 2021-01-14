@@ -282,6 +282,9 @@ export type Export = {
   naam?: Maybe<Scalars['String']>;
   timestamp?: Maybe<Scalars['DateTime']>;
   overschrijvingen?: Maybe<Array<Maybe<Overschrijving>>>;
+  xmldata?: Maybe<Scalars['String']>;
+  startDatum?: Maybe<Scalars['String']>;
+  eindDatum?: Maybe<Scalars['String']>;
 };
 
 /** GraphQL Gebruiker model  */
@@ -1328,6 +1331,24 @@ export type DeleteConfiguratieMutation = (
   )> }
 );
 
+export type CreateExportOverschrijvingenMutationVariables = Exact<{
+  startDatum: Scalars['String'];
+  eindDatum: Scalars['String'];
+}>;
+
+
+export type CreateExportOverschrijvingenMutation = (
+  { __typename?: 'RootMutation' }
+  & { createExportOverschrijvingen?: Maybe<(
+    { __typename?: 'CreateExportOverschrijvingen' }
+    & Pick<CreateExportOverschrijvingen, 'ok'>
+    & { export?: Maybe<(
+      { __typename?: 'Export' }
+      & Pick<Export, 'id'>
+    )> }
+  )> }
+);
+
 export type GetAllBurgersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1517,6 +1538,21 @@ export type GetConfiguratieQuery = (
   & { configuraties?: Maybe<Array<Maybe<(
     { __typename?: 'Configuratie' }
     & Pick<Configuratie, 'id' | 'waarde'>
+  )>>> }
+);
+
+export type GetExportsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetExportsQuery = (
+  { __typename?: 'RootQuery' }
+  & { exports?: Maybe<Array<Maybe<(
+    { __typename?: 'Export' }
+    & Pick<Export, 'id' | 'naam' | 'timestamp' | 'startDatum' | 'eindDatum'>
+    & { overschrijvingen?: Maybe<Array<Maybe<(
+      { __typename?: 'Overschrijving' }
+      & Pick<Overschrijving, 'id'>
+    )>>> }
   )>>> }
 );
 
@@ -2450,6 +2486,42 @@ export function useDeleteConfiguratieMutation(baseOptions?: Apollo.MutationHookO
 export type DeleteConfiguratieMutationHookResult = ReturnType<typeof useDeleteConfiguratieMutation>;
 export type DeleteConfiguratieMutationResult = Apollo.MutationResult<DeleteConfiguratieMutation>;
 export type DeleteConfiguratieMutationOptions = Apollo.BaseMutationOptions<DeleteConfiguratieMutation, DeleteConfiguratieMutationVariables>;
+export const CreateExportOverschrijvingenDocument = gql`
+    mutation createExportOverschrijvingen($startDatum: String!, $eindDatum: String!) {
+  createExportOverschrijvingen(startDatum: $startDatum, eindDatum: $eindDatum) {
+    ok
+    export {
+      id
+    }
+  }
+}
+    `;
+export type CreateExportOverschrijvingenMutationFn = Apollo.MutationFunction<CreateExportOverschrijvingenMutation, CreateExportOverschrijvingenMutationVariables>;
+
+/**
+ * __useCreateExportOverschrijvingenMutation__
+ *
+ * To run a mutation, you first call `useCreateExportOverschrijvingenMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateExportOverschrijvingenMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createExportOverschrijvingenMutation, { data, loading, error }] = useCreateExportOverschrijvingenMutation({
+ *   variables: {
+ *      startDatum: // value for 'startDatum'
+ *      eindDatum: // value for 'eindDatum'
+ *   },
+ * });
+ */
+export function useCreateExportOverschrijvingenMutation(baseOptions?: Apollo.MutationHookOptions<CreateExportOverschrijvingenMutation, CreateExportOverschrijvingenMutationVariables>) {
+        return Apollo.useMutation<CreateExportOverschrijvingenMutation, CreateExportOverschrijvingenMutationVariables>(CreateExportOverschrijvingenDocument, baseOptions);
+      }
+export type CreateExportOverschrijvingenMutationHookResult = ReturnType<typeof useCreateExportOverschrijvingenMutation>;
+export type CreateExportOverschrijvingenMutationResult = Apollo.MutationResult<CreateExportOverschrijvingenMutation>;
+export type CreateExportOverschrijvingenMutationOptions = Apollo.BaseMutationOptions<CreateExportOverschrijvingenMutation, CreateExportOverschrijvingenMutationVariables>;
 export const GetAllBurgersDocument = gql`
     query getAllBurgers {
   gebruikers {
@@ -2914,3 +2986,42 @@ export function useGetConfiguratieLazyQuery(baseOptions?: Apollo.LazyQueryHookOp
 export type GetConfiguratieQueryHookResult = ReturnType<typeof useGetConfiguratieQuery>;
 export type GetConfiguratieLazyQueryHookResult = ReturnType<typeof useGetConfiguratieLazyQuery>;
 export type GetConfiguratieQueryResult = Apollo.QueryResult<GetConfiguratieQuery, GetConfiguratieQueryVariables>;
+export const GetExportsDocument = gql`
+    query getExports {
+  exports {
+    id
+    naam
+    timestamp
+    startDatum
+    eindDatum
+    overschrijvingen {
+      id
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetExportsQuery__
+ *
+ * To run a query within a React component, call `useGetExportsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetExportsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetExportsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetExportsQuery(baseOptions?: Apollo.QueryHookOptions<GetExportsQuery, GetExportsQueryVariables>) {
+        return Apollo.useQuery<GetExportsQuery, GetExportsQueryVariables>(GetExportsDocument, baseOptions);
+      }
+export function useGetExportsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetExportsQuery, GetExportsQueryVariables>) {
+          return Apollo.useLazyQuery<GetExportsQuery, GetExportsQueryVariables>(GetExportsDocument, baseOptions);
+        }
+export type GetExportsQueryHookResult = ReturnType<typeof useGetExportsQuery>;
+export type GetExportsLazyQueryHookResult = ReturnType<typeof useGetExportsLazyQuery>;
+export type GetExportsQueryResult = Apollo.QueryResult<GetExportsQuery, GetExportsQueryVariables>;

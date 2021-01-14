@@ -15,6 +15,10 @@
             "title": "Fout.",
             "description": "Er is een onbekende fout opgetreden. Probeer het later nog eens."
         },
+        "exports": {
+            "createSuccessMessage": "Exportbestand succesvol aangemaakt.",
+            "noExportsInPeriod": "Er is geen exportbestand aangemaakt. Er zijn in deze periode geen overschrijvingen."
+        },
         "customerStatementMessages": {
             "deleteSuccess": "Het bronbestand is succesvol verwijderd.",
             "createSuccess": "Het bronbestand is geïmporteerd en de transacties zijn succesvol ingelezen.",
@@ -68,6 +72,7 @@
         "delete": "Verwijderen",
         "back": "Terug",
         "export": "Exporteren",
+        "download": "Downloaden",
         "actions": "Acties",
         "add": "Toevoegen",
         "disconnect": "Koppeling verwijderen",
@@ -267,6 +272,13 @@
         },
         "banking": "Bankzaken"
     },
+    "exports": {
+        "period": "Periode",
+        "nOverschrijvingen": "Overschrijvingen",
+        "dateCreated": "Aanmaakdatum"
+    },
+    "van": "Van",
+    "tot": "Tot",
     "transactions": {
         "beneficiaryAccount": "Tegenrekening",
         "rubric": "Rubriek",

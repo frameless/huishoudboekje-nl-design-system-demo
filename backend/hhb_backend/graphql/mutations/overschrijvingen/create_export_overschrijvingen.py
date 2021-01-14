@@ -23,6 +23,16 @@ def create_json_payload_overschrijving(future_overschrijving, export_id) -> dict
     }
 
 
+def get_config_value(config_id) -> str:
+    config_response = requests.get(
+        f"{settings.HHB_SERVICES_URL}/configuratie/{config_id}",
+        headers={'Content-type': 'application/json'}
+    )
+    if config_response.status_code != 200:
+        raise GraphQLError(f"Upstream API responded: {config_response.json()}")
+    return config_response.json()['data']['waarde']
+
+
 class CreateExportOverschrijvingen(graphene.Mutation):
     class Arguments:
         startDatum = graphene.String()
@@ -82,12 +92,33 @@ class CreateExportOverschrijvingen(graphene.Mutation):
         if not future_overschrijvingen:
             raise GraphQLError(f"Geen overschrijvingen in periode, geen export bestand aangemaakt.")
 
+        # Get all tegen_rekeningen based on the afspraken
+        tegen_rekeningen_ids = list(set([afspraak_result['tegen_rekening_id'] for afspraak_result in afspraken]))
+        rekeningen_response = requests.get(
+            f"{settings.HHB_SERVICES_URL}/rekeningen/?filter_ids={','.join(str(x) for x in tegen_rekeningen_ids)}",
+            headers={'Content-type': 'application/json'}
+        )
+        if rekeningen_response.status_code != 200:
+            raise GraphQLError(f"Upstream API responded: {rekeningen_response.text}")
+        tegen_rekeningen = rekeningen_response.json()['data']
+        if not tegen_rekeningen:
+            raise GraphQLError(f"Geen rekeningen gevonden.")
+
+        config_values = {
+            "gemeente_naam": get_config_value('gemeente_naam'),
+            "gemeente_iban": get_config_value("gemeente_iban"),
+            "gemeente_bic": get_config_value("gemeente_bic")
+        }
+
         today = datetime.now(tz=tz.tzlocal()).replace(microsecond=0)
         export_response = requests.post(
             f"{settings.HHB_SERVICES_URL}/export/",
             data=json.dumps({
                 "naam": today.strftime('%Y-%m-%d_%H-%M-%S') + "-SEPA-EXPORT",
                 "timestamp": today.isoformat(),
+                "start_datum": start_datum_str,
+                "eind_datum": eind_datum_str,
+                "xmldata": create_export_string(future_overschrijvingen, afspraken, tegen_rekeningen, config_values).decode()
             }),
             headers={'Content-type': 'application/json'}
         )
