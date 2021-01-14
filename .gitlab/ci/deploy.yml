@@ -16,7 +16,7 @@
   script:
     - |
       helm repo add stable "https://charts.helm.sh/stable"
-      helm repo add bitnami https://charts.bitnami.com/bitnami
+      helm repo add bitnami "https://charts.bitnami.com/bitnami"
       helm repo update
       helm dependency build helm/charts/database
       helm dependency build helm/charts/huishoudboekje-review
