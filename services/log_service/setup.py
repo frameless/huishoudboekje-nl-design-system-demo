@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name='log-service',
     version='0.1.0',
-    packages=['models', 'log_service'],
+    packages=['models', 'log_service', 'core_service'],
     scripts=[],
     url='',
     license='',

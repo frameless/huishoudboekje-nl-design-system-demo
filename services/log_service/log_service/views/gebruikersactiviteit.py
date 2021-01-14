@@ -1,7 +1,8 @@
 """ MethodView for /gebruikersactiviteiten/ path """
-from flask import request, abort, make_response
-from models.gebruikersactiviteit import GebruikersActiviteit
+
 from core_service.views.hhb_view import HHBView
+
+from models.gebruikersactiviteit import GebruikersActiviteit
 
 
 class GebruikersActiviteitView(HHBView):
