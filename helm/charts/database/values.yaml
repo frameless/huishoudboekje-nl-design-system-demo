@@ -4,8 +4,6 @@
 
 global:
   minikube: false
-#nameOverride: "huishoudboekje"
-#fullnameOverride: ""
 
 postgresql:
   enabled: true

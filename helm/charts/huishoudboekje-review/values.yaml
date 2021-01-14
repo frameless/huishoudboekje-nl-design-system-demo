@@ -46,21 +46,6 @@ docs:
     hosts:
       - "docs.hhb.minikube"
 
-postgresql:
-  enabled: true
-  initdbScriptsConfigMap: initdbScripts
-
-#database:
-#  enabled: true
-#
-#  nameOverride: "huishoudboekje"
-#
-#  databases:
-#    - huishoudboekjeservice
-#    - organisatieservice
-#    - banktransactieservice
-#    - grootboekservice
-
 medewerker-backend:
   serviceChartPrefix: huishoudboekje
   oidc:
@@ -69,24 +54,3 @@ medewerker-backend:
         callback: http://localhost:3000/api/custom_oidc_callback
       - prefix: http://hhb.minikube
         callback: http://hhb.minikube/api/custom_oidc_callback
-
-
-huishoudboekje-service:
-  database:
-    service: database
-    name: huishoudboekjeservice
-
-organisatie-service:
-  database:
-    service: database
-    name: organisatieservice
-
-bank-transactie-service:
-  database:
-    service: database
-    name: banktransactieservice
-
-grootboek-service:
-  database:
-    service: database
-    name: grootboekservice
