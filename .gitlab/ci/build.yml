@@ -64,19 +64,26 @@ build-helm:
     name: ${DOCKER_PROXY}alpine/helm:latest
     entrypoint: [""]
   before_script:
-    - helm repo add stable "https://charts.helm.sh/stable"
-    - helm repo add zalando-operator "https://raw.githubusercontent.com/zalando/postgres-operator/master/charts/postgres-operator"
-    - helm repo update
+    - apk add --no-cache make
   script:
-    - helm dependency build helm/charts/huishoudboekje
-    - mkdir -p helm/charts/huishoudboekje/charts/medewerker-frontend/theme
-    - cp -r frontend/theme/sloothuizen/ helm/charts/huishoudboekje/charts/medewerker-frontend/theme
-    - helm package -d huishoudboekje helm/charts/huishoudboekje
+    - make -C helm
   artifacts:
-    name: huishoudboekje
-    expose_as: 'Huishoudboekje Helm Repository'
     paths:
-      - "huishoudboekje/"
-    expire_in: 1 week
+      - helm/repo
   only:
     - branches@commonground/huishoudboekje/app-new
+
+pages:
+  stage: deploy
+  needs:
+    - build-helm
+  tags:
+    - cg
+    - docker
+  script:
+    - mv helm/repo public
+  artifacts:
+    paths:
+      - public
+  only:
+    - develop@commonground/huishoudboekje/app-new

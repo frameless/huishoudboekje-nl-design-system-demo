@@ -6,6 +6,20 @@ version: 0.1.0
 appVersion: 1.16.0
 
 dependencies:
+  - name: medewerker-backend
+    version: 0.1.0
+  - name: medewerker-frontend
+    version: 0.1.0
+  - name: huishoudboekje-service
+    version: 0.1.0
+  - name: organisatie-service
+    version: 0.1.0
+  - name: bank-transactie-service
+    version: 0.1.0
+  - name: grootboek-service
+    version: 0.1.0
+  - name: database
+    version: 0.1.0
   - name: dex
     version: 2.13.0
     repository: "@stable"
