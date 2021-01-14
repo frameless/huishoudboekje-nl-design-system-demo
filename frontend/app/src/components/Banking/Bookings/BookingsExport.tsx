@@ -122,6 +122,7 @@ const BookingsExport = () => {
 								<Thead>
 									<Tr>
 										<Th><Label>{t("exports.period")}</Label></Th>
+										<Th><Label>{t("exports.nOverschrijvingen")}</Label></Th>
 										<Th><Label>{t("exports.dateCreated")}</Label></Th>
 										<Th />
 									</Tr>
@@ -144,6 +145,11 @@ const BookingsExport = () => {
 														</Stack>
 													</Stack>
 												</Stack>
+												<Td>
+													<Box flex={1}>
+														{(e.overschrijvingen || []).length}
+													</Box>
+												</Td>
 												<Td>
 													<Box flex={1}>{moment(e.timestamp).format("L LT")}</Box>
 												</Td>

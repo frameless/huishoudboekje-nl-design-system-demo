@@ -274,6 +274,7 @@
     },
     "exports": {
         "period": "Periode",
+        "nOverschrijvingen": "Overschrijvingen",
         "dateCreated": "Aanmaakdatum"
     },
     "van": "Van",
