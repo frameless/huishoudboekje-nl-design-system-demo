@@ -12,6 +12,7 @@
     OIDC_DEX: "true"
     OIDC_CLIENT_ID: "huishoudboekje"
     OIDC_CLIENT_SECRET: "ZwwcL2zjQyJUBnFPVoOb"
+    DATABASE_PERSISTENCE: "false"
   script:
     - |
       helm repo add stable "https://charts.helm.sh/stable"
@@ -53,7 +54,8 @@
         --set "dex.config.staticClients[0].secret=${OIDC_CLIENT_SECRET}" \
         --set "dex.config.staticClients[0].redirectURIs[0]=https://$HHB_HOST/api/custom_oidc_callback" \
         --set "dex.config.staticClients[0].redirectURIs[1]=http://localhost:3000/api/custom_oidc_callback" \
-        --set "database.postgresql.postgresqlPassword=huishoudboekjedb" \
+        --set "database.postgresql.postgresqlPassword=${DATABASE_PASSWORD}" \
+        --set "database.persistence.enabled=${DATABASE_PERSISTENCE}" \
         --render-subchart-notes
     - helm uninstall --namespace $REVIEW_NAMESPACE postgres-operator || true
     - |
@@ -119,14 +121,17 @@
   variables:
     REVIEW_NAMESPACE: "hhb-test"
     APP_SETTINGS: "hhb_backend.config.StagingConfig"
+    DATABASE_PERSISTENCE: "true"
 
 .acc:
   variables:
     REVIEW_NAMESPACE: "hhb-acc"
+    DATABASE_PERSISTENCE: "true"
 
 .proddemo:
   variables:
     REVIEW_NAMESPACE: "hhb-demo"
+    DATABASE_PERSISTENCE: "true"
 
 # Deploy (Review)
 deploy-review:
@@ -156,6 +161,7 @@ deploy-nijmegen:
     OIDC_AUTHORIZATION_ENDPOINT: "https://login.microsoftonline.com/${NIJMEGEN_OIDC_TENANT_ID}/oauth2/v2.0/authorize"
     OIDC_TOKEN_ENDPOINT: "https://login.microsoftonline.com/${NIJMEGEN_OIDC_TENANT_ID}/oauth2/v2.0/token"
     OIDC_USERINFO_ENDPOINT: "https://graph.microsoft.com/oidc/userinfo"
+    DATABASE_PERSISTENCE: "true"
   extends:
     - .deploy-app
   only:
