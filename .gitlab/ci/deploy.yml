@@ -57,6 +57,7 @@
         --set "database.postgresql.postgresqlPassword=${DATABASE_PASSWORD}" \
         --set "database.persistence.enabled=${DATABASE_PERSISTENCE}" \
         --render-subchart-notes
+    - echo -e -n "${HHB_HOST}" > ci_review_hostname.txt
     - helm uninstall --namespace $REVIEW_NAMESPACE postgres-operator || true
     - |
       FAILED=true
@@ -71,9 +72,7 @@
       if $FAILED; then
         exit 1
       fi
-    - |
-      echo "Take a look at https://${HHB_HOST}/"
-      echo -e -n "${HHB_HOST}" > ci_review_hostname.txt
+    - echo "Take a look at https://${HHB_HOST}/"
   artifacts:
     paths:
       - ci_review_hostname.txt
