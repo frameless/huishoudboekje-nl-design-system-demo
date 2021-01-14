@@ -3,9 +3,10 @@ import os
 from flask import Flask, Response
 from core_service import database
 from log_service import config
+from log_service.views.gebruikersactiviteit import GebruikersActiviteitView
 
 db = database.db
-from models import *
+from models import gebruikersactiviteit
 
 
 def create_app(config_name=os.getenv('APP_SETTINGS', 'log_service.config.DevelopmentConfig')):
@@ -20,14 +21,10 @@ def create_app(config_name=os.getenv('APP_SETTINGS', 'log_service.config.Develop
 
     # Views
     routes = [
-        {"path": "/customerstatementmessages", "view": CustomerStatementMessageView,
-         "name": "customer_statement_message_view"},
-        {"path": "/customerstatementmessages/<object_id>", "view": CustomerStatementMessageView,
-         "name": "customer_statement_message_detail_view"},
-        {"path": "/banktransactions", "view": BankTransactionView,
-         "name": "banktransaction_view"},
-        {"path": "/banktransactions/<object_id>", "view": BankTransactionView,
-         "name": "banktransaction_detail_view"},
+        {"path": "/gebruikersactiviteiten", "view": GebruikersActiviteitView,
+         "name": "gebruikersactiviteit_view"},
+        {"path": "/gebruikersactiviteiten/<object_id>", "view": GebruikersActiviteitView,
+         "name": "gebruikersactiviteit_detail_view"},
     ]
     for route in routes:
         app.add_url_rule(
