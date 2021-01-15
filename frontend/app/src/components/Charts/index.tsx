@@ -113,7 +113,6 @@ const TodoList = () => (
 				<MyListItem>Granulariteit (dag/week/maand) </MyListItem>
 				<MyListItem>Selectie op grootboek/rubriek </MyListItem>
 				<MyListItem>Saldo vs. buffer </MyListItem>
-				<MyListItem>Trendlijn? </MyListItem>
 				<MyListItem>Todo verwijderen </MyListItem>
 			</List>
 		</Stack>
@@ -124,12 +123,12 @@ const TodoList = () => (
 				<MyListItem done>Scherm met rapportage staat gelinkt in navigatiemenu. </MyListItem>
 				<MyListItem done>Rapportageperiode is instelbaar van een datum tot en met eenzelfde of opvolgende datum. </MyListItem>
 				<MyListItem done>Gegevens worden in een tabel weergegeven. </MyListItem>
-				<MyListItem>Inkomsten en uitgaven zijn per soort gegroepeerd weergegeven. </MyListItem>
-				<MyListItem>Inkomsten en uitgaven zijn per rubriek weergegeven. </MyListItem>
+				<MyListItem done>Inkomsten en uitgaven zijn per soort gegroepeerd weergegeven. </MyListItem>
+				<MyListItem done>Inkomsten en uitgaven zijn per rubriek weergegeven. </MyListItem>
 				<MyListItem>Filteren gegevens op geen, een of meerdere burgers. </MyListItem>
 				<MyListItem>Filteren gegevens op geen, een of meerdere rubrieken. </MyListItem>
 				<MyListItem done>Gegevens worden in een grafiek weergegeven. </MyListItem>
-				<MyListItem>Trend saldo op balans wordt in een LineChart weergegeven </MyListItem>
+				<MyListItem done>Trend saldo op balans wordt in een LineChart weergegeven </MyListItem>
 				<MyListItem done>Datapunt in grafiek is geaggregeerd op kalendermaand </MyListItem>
 				<MyListItem done>Datapunt in grafiek kan in detail bekeken worden: periode datapunt, metriek en waarde. Bijvoorbeeld: "1-1-2020 t/m 31-1-2020 Saldo: € 1.234,-" </MyListItem>
 				<MyListItem done>Trend inkomsten wordt in een AreaChart weergegeven </MyListItem>

@@ -1,4 +1,4 @@
-import {BoxProps, chakra, Spinner, Stack, Table, Tbody, Th, Thead, Tr, useToken} from "@chakra-ui/react";
+import {BoxProps, chakra, Divider, Heading, Spinner, Stack, Text, useToken} from "@chakra-ui/react";
 import {Moment} from "moment";
 import React from "react";
 import {Chart} from "react-google-charts";
@@ -11,18 +11,34 @@ const ChakraChart = chakra(Chart);
 
 const useCreateAggregationByRubriek = data => {
 	const {t} = useTranslation();
+	let balance = 0;
+
 	const _data = data.reduce((result, tr: BankTransaction & { rubriek: Rubriek }) => {
-		const rubriek: string = tr.journaalpost?.grootboekrekening?.rubriek?.naam || t("ongeboekt");
+		let rubriekNaam: string = t("ongeboekt");
+		if (tr.journaalpost?.grootboekrekening?.rubriek?.naam) {
+			rubriekNaam = tr.journaalpost?.grootboekrekening?.rubriek?.naam;
+		}
+
+		const category = tr.isCredit ? t("inkomsten") : t("uitgaven");
+		const bedrag = parseFloat(tr.bedrag);
+		balance += bedrag;
+
 		return {
 			...result,
-			[rubriek]: [
-				...result[rubriek] || [],
-				tr
-			]
-		};
-	}, {inkomsten: {}, uitgaven: {}});
+			[category]: {
+				...result[category],
+				[rubriekNaam]: (result[category][rubriekNaam] || 0) + bedrag,
+			},
+		}
+	}, {
+		inkomsten: {},
+		uitgaven: {},
+	});
 
-	return _data;
+	return {
+		data: _data,
+		balance
+	};
 };
 
 const InkomstenUitgaven: React.FC<BoxProps & { startDate: Moment, endDate: Moment, transactions: BankTransaction[] }> = ({startDate, endDate, transactions}) => {
@@ -32,6 +48,7 @@ const InkomstenUitgaven: React.FC<BoxProps & { startDate: Moment, endDate: Momen
 	const chartData = useCreateAggregationByCategoryByMonth(transactions);
 	const columns = [t("interval.period"), t("charts.inkomstenUitgaven.income"), t("charts.inkomstenUitgaven.expenses")];
 
+	const tableData = useCreateAggregationByRubriek(transactions);
 	return (<>
 		<Section>
 			<ChakraChart
@@ -51,30 +68,34 @@ const InkomstenUitgaven: React.FC<BoxProps & { startDate: Moment, endDate: Momen
 				// rootProps={{"data-testid": "1"}}
 			/>
 
-			<pre>{JSON.stringify(useCreateAggregationByRubriek(transactions), null, 2)}</pre>
+			<pre>{JSON.stringify(tableData, null, 2)}</pre>
 		</Section>
 
 		<Section>
 			<Stack justifyContent={"center"} alignItems={"center"}>
 
-				<Table maxW={800} size={"sm"}>
-					<Thead>
-						<Tr>
-							<Th>{t("month")}</Th>
-							<Th isNumeric>{t("income")}</Th>
-							<Th isNumeric>{t("expenses")}</Th>
-						</Tr>
-					</Thead>
-					<Tbody>
-						{/*{filteredData.map((d, i) => (*/}
-						{/*	<Tr key={i}>*/}
-						{/*		<Td>{d.time.format("MMM YYYY")}</Td>*/}
-						{/*		<Td isNumeric>{currencyFormat2(false).format(d.income)}</Td>*/}
-						{/*		<Td isNumeric>{currencyFormat2(false).format(d.expense)}</Td>*/}
-						{/*	</Tr>*/}
-						{/*))}*/}
-					</Tbody>
-				</Table>
+				{Object.keys(tableData.data).map(c => {
+					return (
+						<Stack>
+							<Heading>{c}</Heading>
+							{Object.keys(tableData.data[c]).map((r, i) => {
+								return (
+									<Stack direction={"row"}>
+										<Text><strong>{r}</strong></Text>
+										<Text>{tableData.data[c][r]}</Text>
+									</Stack>
+								)
+							})}
+						</Stack>
+					);
+				})}
+
+				<Divider />
+
+				<Stack direction={"row"}>
+					<Text><strong>{t("balance")}</strong></Text>
+					<Text>{tableData.balance}</Text>
+				</Stack>
 
 			</Stack>
 		</Section>
