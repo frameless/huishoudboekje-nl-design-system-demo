@@ -18,6 +18,8 @@ dependencies:
     version: 0.1.0
   - name: grootboek-service
     version: 0.1.0
+  - name: log-service
+    version: 0.1.0
   - name: database
     version: 0.1.0
   - name: dex

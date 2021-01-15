@@ -111,3 +111,10 @@ grootboek-service-test:
     DIRECTORY: services/grootboek_service
   only:
     - branches@commonground/huishoudboekje/app-new
+    
+log-service-test:
+  extends: .Service Test
+  variables:
+    DIRECTORY: services/log_service
+  only:
+    - branches@commonground/huishoudboekje/app-new
