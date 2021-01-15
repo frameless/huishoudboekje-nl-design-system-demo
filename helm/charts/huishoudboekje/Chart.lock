@@ -26,5 +26,8 @@ dependencies:
 - name: dex
   repository: https://charts.helm.sh/stable
   version: 2.13.0
-digest: sha256:213fa89860b10349c090692fde475d56e12b768c0a7e1a3dbc5179fb91cda814
-generated: "2021-01-15T15:20:07.975872+01:00"
+- name: postgresql
+  repository: https://charts.bitnami.com/bitnami
+  version: 10.2.1
+digest: sha256:87d08be2a595414f171f7283ee26de9d705237de9ac31588940c17f969ec115b
+generated: "2021-01-15T17:19:23.550198+01:00"
