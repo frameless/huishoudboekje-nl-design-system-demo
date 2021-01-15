@@ -11,15 +11,27 @@ class GebruikersActiviteitView(HHBView):
     validation_data = {
         "type": "object",
         "properties": {
-            "customer_statement_message_id": {
+            "timestamp": {
+                "type": "string", "pattern": "^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\+\d{2}:\d{2}|Z)?$"
+            },
+            "gebruiker_id": {
                 "type": "integer",
             },
-            "statement_line": {
+            "action": {
                 "type": "string",
             },
-            "information_to_account_owner": {
+            "entities": {
                 "type": "string",
-            }
+            },
+            "snapshot_before": {
+                "type": "string",
+            },
+            "snapshot_after": {
+                "type": "string",
+            },
+            "meta": {
+                "type": "string",
+            },
         },
-        "required": ["customer_statement_message_id"]
+        "required": []
     }
