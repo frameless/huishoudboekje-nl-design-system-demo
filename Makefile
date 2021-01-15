@@ -34,14 +34,16 @@ huishoudboekje: helm/charts/huishoudboekje-review helm-init helm/charts/* docker
 	helm upgrade --install --create-namespace --namespace $@ \
 		$@ $< \
 		--debug \
+		--values helm/theme-sloothuizen.yaml \
 		--set database.traefik.enabled=true \
 		--set global.minikube=true \
 		--set global.imageTag=$(DOCKER_TAG) \
-        --set "medewerker-backend.appSettings=hhb_backend.config.DevelopmentConfig" \
+		--set "medewerker-backend.appSettings=hhb_backend.config.DevelopmentConfig" \
 		--set "medewerker-backend.oidc.redirectUris[0].prefix=http://localhost:3000" \
 		--set "medewerker-backend.oidc.redirectUris[0].callback=http://localhost:3000/api/custom_oidc_callback" \
 		--set "medewerker-backend.oidc.redirectUris[1].prefix=http://hhb.minikube" \
 		--set "medewerker-backend.oidc.redirectUris[1].callback=http://hhb.minikube/api/custom_oidc_callback" \
+		--set "database.persistence.enabled=true" \
 		--set "database.postgresql.postgresqlPassword=huishoudboekjedb" \
 		--render-subchart-notes
 	helm uninstall --namespace $@ postgres-operator || true
