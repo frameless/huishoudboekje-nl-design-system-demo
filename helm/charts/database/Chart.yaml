@@ -9,5 +9,3 @@ dependencies:
   - name: postgresql
     version: 10.2.1
     repository: "@bitnami"
-    tags:
-      - postgresql
