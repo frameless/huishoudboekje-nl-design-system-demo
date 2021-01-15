@@ -65,7 +65,9 @@ build-helm:
     entrypoint: [""]
   before_script:
     - apk add --no-cache make
+    - apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community yq
   script:
+    - yq write --inplace helm/charts/huishoudboekje/values.yaml 'global.imageTag' $IMAGE_TAG
     - make -C helm
   artifacts:
     paths:
@@ -87,3 +89,4 @@ pages:
       - public
   only:
     - develop@commonground/huishoudboekje/app-new
+    - 197-helm-repo@commonground/huishoudboekje/app-new
