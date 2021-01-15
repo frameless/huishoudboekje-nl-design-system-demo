@@ -866,7 +866,7 @@ export type RekeningFragment = (
 
 export type GrootboekrekeningFragment = (
   { __typename?: 'Grootboekrekening' }
-  & Pick<Grootboekrekening, 'id' | 'naam' | 'omschrijving' | 'referentie'>
+  & Pick<Grootboekrekening, 'id' | 'naam' | 'credit' | 'omschrijving' | 'referentie'>
   & { rubriek?: Maybe<(
     { __typename?: 'Rubriek' }
     & Pick<Rubriek, 'id' | 'naam'>
@@ -1567,6 +1567,7 @@ export const GrootboekrekeningFragmentDoc = gql`
     fragment Grootboekrekening on Grootboekrekening {
   id
   naam
+  credit
   omschrijving
   referentie
   rubriek {

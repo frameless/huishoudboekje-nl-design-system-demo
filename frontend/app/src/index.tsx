@@ -11,8 +11,11 @@ import App from "./App";
 import "./config/i18n";
 import theme from "./config/theme";
 import apolloClient from "./services/graphql-client";
-
+import { registerLocale, setDefaultLocale } from "react-datepicker";
+import nl from "date-fns/locale/nl";
 moment.locale("nl");
+registerLocale("nl", nl);
+setDefaultLocale("nl");
 
 ReactDOM.render(
 	<React.StrictMode>

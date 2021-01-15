@@ -1,7 +1,7 @@
 import {Box, BoxProps, HStack, Stack, VStack} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {FaRegBuilding, GrGraphQl, MdCreditCard, RiBarChartFill, RiShoppingCart2Line, RiUserLine, TiCog} from "react-icons/all";
+import {FaRegBuilding, GrGraphQl, MdCreditCard, RiBarChartFill, RiUserLine, TiCog} from "react-icons/all";
 import Routes from "../../config/routes";
 import {isDev} from "../../utils/things";
 import SidebarLink from "./SidebarLink";
@@ -23,7 +23,16 @@ const Sidebar: React.FC<BoxProps> = (props) => {
 					</VStack>
 				</HStack>
 			</Stack>
-			<SidebarLink to={Routes.Rapportages} icon={RiBarChartFill}>{t("sidebar.rapportages")}</SidebarLink>
+			<Stack>
+				<SidebarLink to={Routes.Rapportages} icon={RiBarChartFill}>{t("sidebar.rapportages")}</SidebarLink>
+				<HStack direction={"row"}>
+					<Box pl={5} ml={7}>&nbsp;</Box>
+					<VStack>
+						<SidebarLink size={"sm"} to={Routes.RapportagesInkomstenUitgaven}>{t("sidebar.rapportageInkomstenUitgaven")}</SidebarLink>
+						<SidebarLink size={"sm"} to={Routes.RapportagesSaldo}>{t("sidebar.rapportageSaldo")}</SidebarLink>
+					</VStack>
+				</HStack>
+			</Stack>
 			<SidebarLink to={Routes.Settings} icon={TiCog}>{t("sidebar.configuratie")}</SidebarLink>
 		</Stack>
 

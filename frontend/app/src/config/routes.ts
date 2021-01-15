@@ -46,6 +46,8 @@ const Routes = {
 	BookingsExport: `/${RouteNames.banking}/${RouteNames.bookings}/${RouteNames.export}`,
 	Settings: `/${RouteNames.settings}`,
 	Rapportages: `/${RouteNames.rapportages}`,
+	RapportagesInkomstenUitgaven: `/${RouteNames.rapportages}/inkomsten-uitgaven`,
+	RapportagesSaldo: `/${RouteNames.rapportages}/saldo`,
 
 	NotFound: `/${RouteNames.notFound}`,
 

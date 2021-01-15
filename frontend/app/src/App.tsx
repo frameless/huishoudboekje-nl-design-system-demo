@@ -9,7 +9,7 @@ import {Redirect, Route, Switch, useLocation} from "react-router-dom";
 import EditAgreement from "./components/Agreements/EditAgreement";
 import Banking from "./components/Banking";
 import Burgers from "./components/Burgers";
-import ChartsTest from "./components/Charts";
+import Charts from "./components/Charts";
 import Configuratie from "./components/Configuratie";
 import TwoColumns from "./components/Layouts/TwoColumns";
 import Organisaties from "./components/Organisaties";
@@ -97,7 +97,7 @@ const App = () => {
 								<Route path={Routes.EditAgreement()} component={EditAgreement} />
 								<Route path={Routes.Banking} component={Banking} />
 								<Route path={Routes.Settings} component={Configuratie} />
-								<Route path={Routes.Rapportages} component={ChartsTest} />
+								<Route path={Routes.Rapportages} component={Charts} />
 
 								<Route exact path={Routes.NotFound} component={PageNotFound} />
 								<Route component={PageNotFound} />
