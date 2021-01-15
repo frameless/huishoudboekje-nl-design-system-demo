@@ -55,7 +55,7 @@
         --set "dex.config.staticClients[0].redirectURIs[0]=https://$HHB_HOST/api/custom_oidc_callback" \
         --set "dex.config.staticClients[0].redirectURIs[1]=http://localhost:3000/api/custom_oidc_callback" \
         --set "database.postgresql.postgresqlPassword=${DATABASE_PASSWORD}" \
-        --set "database.persistence.enabled=${DATABASE_PERSISTENCE}" \
+        --set "database.postgresql.persistence.enabled=${DATABASE_PERSISTENCE}" \
         --render-subchart-notes
     - echo -e -n "${HHB_HOST}" > ci_review_hostname.txt
     - helm uninstall --namespace $REVIEW_NAMESPACE postgres-operator || true
