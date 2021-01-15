@@ -10,20 +10,17 @@ metadata:
 spec:
   containers:
     - name: psql-version
-      image: postgres:12-alpine
+      image: postgres:11-alpine
       env:
         - name: PGPASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ include "database.name" . }}.{{ include "database.databasename" . }}.credentials.postgresql.acid.zalan.do
-              key: password
+              name: {{ .Release.Name }}-postgresql
+              key: postgresql-password
         - name: PGUSER
-          valueFrom:
-            secretKeyRef:
-              name: {{ include "database.name" . }}.{{ include "database.databasename" . }}.credentials.postgresql.acid.zalan.do
-              key: username
+          value: "postgres"
       command: ['psql']
-      args: ['postgresql://{{ include "database.databasename" . }}/postgres', '-c', 'SELECT version();']
+      args: ['postgresql://{{ .Release.Name }}-postgresql/postgres', '-c', 'SELECT version();']
   restartPolicy: Never
 ---
 apiVersion: v1
@@ -38,18 +35,15 @@ metadata:
 spec:
   containers:
     - name: psql-database-list
-      image: postgres:12-alpine
+      image: postgres:11-alpine
       env:
         - name: PGPASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ include "database.name" . }}.{{ include "database.databasename" . }}.credentials.postgresql.acid.zalan.do
-              key: password
+              name: {{ .Release.Name }}-postgresql
+              key: postgresql-password
         - name: PGUSER
-          valueFrom:
-            secretKeyRef:
-              name: {{ include "database.name" . }}.{{ include "database.databasename" . }}.credentials.postgresql.acid.zalan.do
-              key: username
+          value: "postgres"
       command: ['psql']
-      args: ['postgresql://{{ include "database.databasename" . }}/postgres', '-c', '\l']
+      args: ['postgresql://{{ .Release.Name }}-postgresql/postgres', '-c', '\l']
   restartPolicy: Never

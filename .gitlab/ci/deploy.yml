@@ -12,28 +12,24 @@
     OIDC_DEX: "true"
     OIDC_CLIENT_ID: "huishoudboekje"
     OIDC_CLIENT_SECRET: "ZwwcL2zjQyJUBnFPVoOb"
+    DATABASE_PERSISTENCE: "false"
   script:
     - |
       helm repo add stable "https://charts.helm.sh/stable"
-      helm repo add zalando-operator "https://raw.githubusercontent.com/zalando/postgres-operator/master/charts/postgres-operator"
+      helm repo add bitnami "https://charts.bitnami.com/bitnami"
       helm repo update
-    - |
-      kubectl create namespace $REVIEW_NAMESPACE || true
-      kubectl apply --namespace $REVIEW_NAMESPACE -f helm/postgres-operator-configmap.yaml
-      helm upgrade --install --namespace $REVIEW_NAMESPACE postgres-operator zalando-operator/postgres-operator \
-        --debug \
-      	--values helm/postgres-operator.yaml \
-        --set podServiceAccount.name=${REVIEW_NAMESPACE}-postgres-pod \
-        --set serviceAccount.name=${REVIEW_NAMESPACE}-postgres-operator
-    - helm dependency build helm/charts/huishoudboekje-review
+      helm dependency build helm/charts/database
+      helm dependency build helm/charts/huishoudboekje-review
+    - kubectl delete --namespace $REVIEW_NAMESPACE statefulsets.apps huishoudboekje-postgresql --cascade=false || true
     - (cd helm/charts/medewerker-frontend; ln -s ../../../frontend/theme/sloothuizen theme)
+    - kubectl create namespace $REVIEW_NAMESPACE || true
     - |
       HHB_HOST=${HHB_HOST:-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN}
       OIDC_ISSUER=${OIDC_ISSUER:-https://dex-sloothuizen-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN}
     - |
-      helm upgrade --install --create-namespace "huishoudboekje" helm/charts/huishoudboekje-review \
+      helm upgrade --install "huishoudboekje" helm/charts/huishoudboekje-review \
         --debug \
-        --namespace $REVIEW_NAMESPACE \
+        --namespace $REVIEW_NAMESPACE --create-namespace \
         --values helm/charts/huishoudboekje-review/values.yaml \
         --set "global.imageTag=$IMAGE_TAG" \
         --set "medewerker-frontend.ingress.hosts[0].host=$HHB_HOST" \
@@ -57,7 +53,12 @@
         --set "dex.config.issuer=${OIDC_ISSUER}" \
         --set "dex.config.staticClients[0].secret=${OIDC_CLIENT_SECRET}" \
         --set "dex.config.staticClients[0].redirectURIs[0]=https://$HHB_HOST/api/custom_oidc_callback" \
-        --set "dex.config.staticClients[0].redirectURIs[1]=http://localhost:3000/api/custom_oidc_callback"
+        --set "dex.config.staticClients[0].redirectURIs[1]=http://localhost:3000/api/custom_oidc_callback" \
+        --set "database.postgresql.postgresqlPassword=${DATABASE_PASSWORD}" \
+        --set "database.persistence.enabled=${DATABASE_PERSISTENCE}" \
+        --render-subchart-notes
+    - echo -e -n "${HHB_HOST}" > ci_review_hostname.txt
+    - helm uninstall --namespace $REVIEW_NAMESPACE postgres-operator || true
     - |
       FAILED=true
       for i in $(seq 1 8); do
@@ -71,9 +72,7 @@
       if $FAILED; then
         exit 1
       fi
-    - |
-      echo "Take a look at https://${HHB_HOST}/"
-      echo -e -n "${HHB_HOST}" > ci_review_hostname.txt
+    - echo "Take a look at https://${HHB_HOST}/"
   artifacts:
     paths:
       - ci_review_hostname.txt
@@ -121,14 +120,17 @@
   variables:
     REVIEW_NAMESPACE: "hhb-test"
     APP_SETTINGS: "hhb_backend.config.StagingConfig"
+    DATABASE_PERSISTENCE: "true"
 
 .acc:
   variables:
     REVIEW_NAMESPACE: "hhb-acc"
+    DATABASE_PERSISTENCE: "true"
 
 .proddemo:
   variables:
     REVIEW_NAMESPACE: "hhb-demo"
+    DATABASE_PERSISTENCE: "true"
 
 # Deploy (Review)
 deploy-review:
@@ -158,6 +160,7 @@ deploy-nijmegen:
     OIDC_AUTHORIZATION_ENDPOINT: "https://login.microsoftonline.com/${NIJMEGEN_OIDC_TENANT_ID}/oauth2/v2.0/authorize"
     OIDC_TOKEN_ENDPOINT: "https://login.microsoftonline.com/${NIJMEGEN_OIDC_TENANT_ID}/oauth2/v2.0/token"
     OIDC_USERINFO_ENDPOINT: "https://graph.microsoft.com/oidc/userinfo"
+    DATABASE_PERSISTENCE: "true"
   extends:
     - .deploy-app
   only:
@@ -258,7 +261,7 @@ destroy-app:
   environment:
     name: review/$CI_COMMIT_REF_SLUG
   before_script:
-    - helm uninstall --namespace $REVIEW_NAMESPACE postgres-operator
+    - helm uninstall --namespace $REVIEW_NAMESPACE postgres-operator || true
   except:
     - master
     - develop

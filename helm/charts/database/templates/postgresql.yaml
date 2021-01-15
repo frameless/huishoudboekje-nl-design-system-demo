@@ -1,24 +1,35 @@
-apiVersion: "acid.zalan.do/v1"
-kind: postgresql
+{{- $databaseName := include "database.name" . -}}
+{{- $databaseLabels := include "database.labels" . -}}
+{{- define "service.database" -}}
+{{- . | replace "_" "" }}
+{{- end -}}
+apiVersion: v1
+kind: Secret
 metadata:
-  name: {{ include "database.databasename" . | quote }}
+  name: {{ printf "%s-%s" $databaseName "init-scripts" | trunc 63 | trimSuffix "-" | quote }}
   labels:
-  {{- include "database.labels" . | nindent 4 }}
-spec:
-  volume:
-    size: {{ .Values.postgresql.volumeSize }}
-  numberOfInstances: {{ .Values.postgresql.replicaCount }}
-  postgresql:
-    version: {{ .Values.postgresql.version | quote }}
-  teamId: {{ include "database.name" .  | quote }}
-  users:
-    {{ include "database.name" . }}:  # database owner
-      - superuser
-      - createdb
-    {{- range $database := .Values.databases }}
-    {{ $database }}: []   # role for application {{ $database }}
-    {{- end }}
-  databases: # dbname: owner
-    {{- range $database := .Values.databases }}
-    {{ $database }}: {{ $database | quote }}
-    {{- end }}
+  {{- $databaseLabels | nindent 4 }}
+type: Opaque
+stringData:
+  01_service_databases.sql: |
+{{- range $service := .Values.services }}
+  {{- $database := include "service.database" $service }}
+    CREATE USER "{{ $database }}" WITH PASSWORD '{{ $database }}';
+    CREATE DATABASE "{{ $database }}" WITH OWNER "{{ $database }}";
+{{- end -}}
+
+{{- range $service := .Values.services }}
+{{- $database := include "service.database" $service }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ printf "%s-%s" $databaseName $service | replace "_" "-" | trunc 63 | trimSuffix "-" | quote }}
+  labels:
+  {{- $databaseLabels | nindent 4 }}
+type: Opaque
+stringData:
+  database: {{ $database | quote }}
+  username: {{ $database | quote }}
+  password: {{ $database | quote }}
+{{- end -}}

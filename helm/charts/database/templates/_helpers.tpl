@@ -31,13 +31,6 @@ Create chart name and version as used by the chart label.
 {{- end }}
 
 {{/*
-Create database name to adhere to the postgres operator naming convention.
-*/}}
-{{- define "database.databasename" -}}
-{{ printf "%s-database" (include "database.name" .) }}
-{{- end }}
-
-{{/*
 Common labels
 */}}
 {{- define "database.labels" -}}

@@ -42,18 +42,23 @@ spec:
                 secretKeyRef:
                   name: {{ printf "%s-secrets" (include "grootboek-service.fullname" .) }}
                   key: SECRET_KEY
-            - name: PGPASSWORD
+            - name: PGDATABASE
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.database.name }}.{{ .Values.database.service }}.credentials.postgresql.acid.zalan.do
-                  key: password
+                  name: {{ .Values.database.service }}-{{ include "grootboek-service.name" . }}
+                  key: database
             - name: PGUSER
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.database.name }}.{{ .Values.database.service }}.credentials.postgresql.acid.zalan.do
+                  name: {{ .Values.database.service }}-{{ include "grootboek-service.name" . }}
                   key: username
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.database.service }}-{{ include "grootboek-service.name" . }}
+                  key: password
             - name: GROOTBOEK_DATABASE_URL
-              value: "postgresql://$(PGUSER):$(PGPASSWORD)@{{ .Values.database.service }}/{{ .Values.database.name }}"
+              value: "postgresql://$(PGUSER):$(PGPASSWORD)@{{ .Release.Name }}-postgresql/$(PGDATABASE)"
           ports:
             - name: http
               containerPort: 8000
@@ -80,18 +85,23 @@ spec:
                 secretKeyRef:
                   name: {{ printf "%s-secrets" (include "grootboek-service.fullname" .) }}
                   key: SECRET_KEY
-            - name: PGPASSWORD
+            - name: PGDATABASE
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.database.name }}.{{ .Values.database.service }}.credentials.postgresql.acid.zalan.do
-                  key: password
+                  name: {{ .Values.database.service }}-{{ include "grootboek-service.name" . }}
+                  key: database
             - name: PGUSER
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.database.name }}.{{ .Values.database.service }}.credentials.postgresql.acid.zalan.do
+                  name: {{ .Values.database.service }}-{{ include "grootboek-service.name" . }}
                   key: username
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.database.service }}-{{ include "grootboek-service.name" . }}
+                  key: password
             - name: GROOTBOEK_DATABASE_URL
-              value: "postgresql://$(PGUSER):$(PGPASSWORD)@{{ .Values.database.service }}/{{ .Values.database.name }}"
+              value: "postgresql://$(PGUSER):$(PGPASSWORD)@{{ .Release.Name }}-postgresql/$(PGDATABASE)"
           command: ["python"]
           args: ["manage.py", "db", "upgrade"]
           resources:
