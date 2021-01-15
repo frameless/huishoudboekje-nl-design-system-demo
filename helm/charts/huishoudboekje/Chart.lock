@@ -17,6 +17,9 @@ dependencies:
 - name: grootboek-service
   repository: ""
   version: 0.1.0
+- name: log-service
+  repository: ""
+  version: 0.1.0
 - name: database
   repository: ""
   version: 0.1.0
