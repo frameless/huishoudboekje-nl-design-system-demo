@@ -18,6 +18,7 @@ services:
   - organisatie_service
   - bank_transactie_service
   - grootboek_service
+  - log_service
 
 traefik:
   enabled: false

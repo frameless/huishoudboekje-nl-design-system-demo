@@ -107,3 +107,13 @@ Create the name of the service account to use
 {{- end -}}
 grootboek-service.{{ .Release.Namespace }}.svc.cluster.local
 {{- end }}
+
+{{/*
+Create the name of the service account to use
+*/}}
+{{- define "medewerker-backend.logServiceName" -}}
+{{- if .Values.serviceChartPrefix -}}
+{{ printf "%s-" .Values.serviceChartPrefix -}}
+{{- end -}}
+log-service.{{ .Release.Namespace }}.svc.cluster.local
+{{- end }}
