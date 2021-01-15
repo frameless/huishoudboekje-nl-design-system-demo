@@ -5,4 +5,8 @@ metadata:
   labels:
   {{- include "medewerker-frontend.labels" . | nindent 4 }}
 data:
+  {{- if .Values.theme -}}
+  {{ toYaml .Values.theme | nindent 2 }}
+  {{- else if gt (len (.Files.Glob "theme/*")) 0 -}}
   {{- (.Files.Glob "theme/*").AsConfig | nindent 2 }}
+  {{- end -}}
