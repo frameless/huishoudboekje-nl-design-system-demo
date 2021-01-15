@@ -4,10 +4,10 @@ from sqlalchemy import event
 from sqlalchemy.orm.session import close_all_sessions
 from testing.postgresql import Postgresql
 
-from bank_transactie_service.app import create_app
-from bank_transactie_service.app import db as _db
-from bank_transactie_service.config import TestingConfig
-from tests.factories import CustomerStatementMessageFactory, BankTransactionFactory
+from log_service.app import create_app
+from log_service.app import db as _db
+from log_service.config import TestingConfig
+from tests.factories import GebruikersActiviteitFactory
 
 
 @pytest.yield_fixture(scope="session")
@@ -76,16 +76,8 @@ def dbsession(app, db, request):
 
 
 @pytest.fixture(scope="function")
-def csm_factory(dbsession, request):
+def gebruikersactiviteit_factory(dbsession, request):
     """
-    creates an instance of the CustomerStatementMessageFactory with function scope dbsession
+    creates an instance of the gebruikersactiviteit_factory with function scope dbsession
     """
-    return CustomerStatementMessageFactory(dbsession)
-
-
-@pytest.fixture(scope="function")
-def bank_transaction_factory(dbsession, request, csm_factory):
-    """
-    creates an instance of the BankTransactionFactory with function scope dbsession
-    """
-    return BankTransactionFactory(dbsession, csm_factory)
+    return GebruikersActiviteitFactory(dbsession)
