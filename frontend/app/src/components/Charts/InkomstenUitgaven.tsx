@@ -49,7 +49,7 @@ const InkomstenUitgaven: React.FC<BoxProps & { startDate: Moment, endDate: Momen
 						<Heading size={"md"}>{translatedCategory[c]}</Heading>
 						{Object.keys(aggregationByRubriek.rubrieken[c]).map((r, i) => {
 							return (
-								<Stack direction={"row"} maxW={"500px"} pl={2} key={i}>
+								<Stack direction={"row"} maxW={"500px"} pl={4} key={i}>
 									<Box flex={1}>
 										<Text><strong>{r === Category.Ongeboekt ? t("charts.inkomstenUitgaven.unbooked") : r}</strong></Text>
 									</Box>
@@ -65,7 +65,7 @@ const InkomstenUitgaven: React.FC<BoxProps & { startDate: Moment, endDate: Momen
 
 			<Divider />
 
-			<Stack direction={"row"} maxW={"500px"} pl={2}>
+			<Stack direction={"row"} maxW={"500px"} pl={4}>
 				<Box flex={1}>
 					<Text><strong>{t("balance")}</strong></Text>
 				</Box>
