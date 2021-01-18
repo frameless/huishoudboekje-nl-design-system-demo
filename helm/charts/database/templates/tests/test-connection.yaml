@@ -20,7 +20,7 @@ spec:
         - name: PGUSER
           value: "postgres"
       command: ['psql']
-      args: ['postgresql://{{ .Release.Name }}-postgresql/postgres', '-c', 'SELECT version();']
+      args: ['postgresql://{{ .Release.Name }}-postgresql.{{ .Release.Namespace }}.svc.cluster.local/postgres', '-c', 'SELECT version();']
   restartPolicy: Never
 ---
 apiVersion: v1
@@ -45,5 +45,5 @@ spec:
         - name: PGUSER
           value: "postgres"
       command: ['psql']
-      args: ['postgresql://{{ .Release.Name }}-postgresql/postgres', '-c', '\l']
+      args: ['postgresql://{{ .Release.Name }}-postgresql.{{ .Release.Namespace }}.svc.cluster.local/postgres', '-c', 'SELECT version();']
   restartPolicy: Never
