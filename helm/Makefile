@@ -23,6 +23,13 @@ repo: init lint
 .PHONY: dependencies
 dependencies: $(wildcard charts/*/Chart.lock)
 
+.PHONY: touch-dependencies
+touch-dependencies:
+	touch $(patsubst %.lock,%.yaml,$(wildcard charts/*/Chart.yaml))
+
+.PHONY: force-dependencies
+force-dependencies: touch-dependencies dependencies
+
 %/Chart.lock: %/Chart.yaml
 	helm dependency update $(@D)
 	helm dependency build $(@D)

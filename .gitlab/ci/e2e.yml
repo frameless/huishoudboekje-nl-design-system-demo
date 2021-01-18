@@ -49,8 +49,6 @@ cypress-review:
     - master
     - develop
     - acceptance
-    - nijmegen
-    - feature/213
 
 
 cypress-test:

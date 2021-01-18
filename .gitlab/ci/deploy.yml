@@ -62,8 +62,10 @@
     - |
       FAILED=true
       for i in $(seq 1 8); do
+        kubectl --namespace $REVIEW_NAMESPACE delete pod --selector test=test
         if helm test --logs --namespace $REVIEW_NAMESPACE huishoudboekje; then
           FAILED=false
+          kubectl --namespace $REVIEW_NAMESPACE delete pod --selector test=test
           break
         else
           sleep 6
@@ -145,26 +147,6 @@ deploy-review:
     - master
     - develop
     - acceptance
-    - nijmegen
-
-# Deploy (Nijmegen)
-deploy-nijmegen:
-  environment:
-    url: https://hhb-${CI_ENVIRONMENT_SLUG}.${REVIEW_BASE_DOMAIN}/
-  variables:
-    APP_SETTINGS: "hhb_backend.config.StagingConfig"
-    OIDC_DEX: "false"
-    OIDC_ISSUER: "https://login.microsoftonline.com/${NIJMEGEN_OIDC_TENANT_ID}/v2.0"
-    OIDC_CLIENT_ID: "$NIJMEGEN_OIDC_CLIENT_ID"
-    OIDC_CLIENT_SECRET: "$NIJMEGEN_OIDC_CLIENT_SECRET"
-    OIDC_AUTHORIZATION_ENDPOINT: "https://login.microsoftonline.com/${NIJMEGEN_OIDC_TENANT_ID}/oauth2/v2.0/authorize"
-    OIDC_TOKEN_ENDPOINT: "https://login.microsoftonline.com/${NIJMEGEN_OIDC_TENANT_ID}/oauth2/v2.0/token"
-    OIDC_USERINFO_ENDPOINT: "https://graph.microsoft.com/oidc/userinfo"
-    DATABASE_PERSISTENCE: "true"
-  extends:
-    - .deploy-app
-  only:
-    - nijmegen
 
 # Deploy (TEST)
 deploy-test:
@@ -204,15 +186,6 @@ docs-deploy-review:
     - develop
     - acceptance
   when: manual
-
-# Deploy Docs (Nijmegen)
-docs-deploy-nijmegen:
-  variables:
-    DOCS_HOST: docs-hhb-${CI_ENVIRONMENT_SLUG}.$REVIEW_BASE_DOMAIN
-  extends:
-    - .deploy-docs
-  only:
-    - nijmegen
 
 # Deploy (TEST)
 docs-deploy-test:

@@ -15,12 +15,12 @@ spec:
         - name: PGPASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ .Release.Name }}-postgresql
-              key: postgresql-password
+              name: {{ printf "%s-postgresql" .Release.Name | quote }}
+              key: "postgresql-password"
         - name: PGUSER
           value: "postgres"
       command: ['psql']
-      args: ['postgresql://{{ .Release.Name }}-postgresql/postgres', '-c', 'SELECT version();']
+      args: ['postgresql://{{ .Release.Name }}-postgresql.{{ .Release.Namespace }}.svc.cluster.local/postgres', '-c', 'SELECT version();']
   restartPolicy: Never
 ---
 apiVersion: v1
@@ -40,10 +40,10 @@ spec:
         - name: PGPASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ .Release.Name }}-postgresql
-              key: postgresql-password
+              name: {{ printf "%s-postgresql" .Release.Name | quote }}
+              key: "postgresql-password"
         - name: PGUSER
           value: "postgres"
       command: ['psql']
-      args: ['postgresql://{{ .Release.Name }}-postgresql/postgres', '-c', '\l']
+      args: ['postgresql://{{ .Release.Name }}-postgresql.{{ .Release.Namespace }}.svc.cluster.local/postgres', '-c', '\l']
   restartPolicy: Never

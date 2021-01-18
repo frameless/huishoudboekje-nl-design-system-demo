@@ -53,6 +53,15 @@ services:
         COMPONENT_COMMIT_HASH: "${COMPONENT_COMMIT_HASH}"
     image: "${IMAGE_PREFIX}grootboek-service:${IMAGE_TAG}"
 
+  log_service:
+    build:
+      context: services
+      dockerfile: log_service/Dockerfile
+      args:
+        COMPONENT_TAG: "${COMPONENT_TAG}"
+        COMPONENT_COMMIT_HASH: "${COMPONENT_COMMIT_HASH}"
+    image: "${IMAGE_PREFIX}log-service:${IMAGE_TAG}"
+
   python-postgres:
     build:
       context: .gitlab/python-postgres

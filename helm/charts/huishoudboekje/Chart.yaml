@@ -26,3 +26,6 @@ dependencies:
     version: 2.13.0
     repository: "@stable"
     condition: dex.enabled
+  - name: postgresql
+    version: 10.2.1
+    repository: "@bitnami"
