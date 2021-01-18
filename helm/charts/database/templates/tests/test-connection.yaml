@@ -16,7 +16,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: {{ .Release.Name }}-postgresql
-              key: postgresql-password
+              key: "postgresql-password"
         - name: PGUSER
           value: "postgres"
       command: ['psql']
@@ -41,9 +41,9 @@ spec:
           valueFrom:
             secretKeyRef:
               name: {{ .Release.Name }}-postgresql
-              key: postgresql-password
+              key: "postgresql-password"
         - name: PGUSER
           value: "postgres"
       command: ['psql']
-      args: ['postgresql://{{ .Release.Name }}-postgresql.{{ .Release.Namespace }}.svc.cluster.local/postgres', '-c', 'SELECT version();']
+      args: ['postgresql://{{ .Release.Name }}-postgresql.{{ .Release.Namespace }}.svc.cluster.local/postgres', '-c', '\l']
   restartPolicy: Never
