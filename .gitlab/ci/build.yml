@@ -89,4 +89,3 @@ pages:
       - public
   only:
     - develop@commonground/huishoudboekje/app-new
-    - 197-helm-repo@commonground/huishoudboekje/app-new
