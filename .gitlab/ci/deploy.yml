@@ -62,8 +62,10 @@
     - |
       FAILED=true
       for i in $(seq 1 8); do
+        kubectl --namespace $REVIEW_NAMESPACE delete pod --selector test=test
         if helm test --logs --namespace $REVIEW_NAMESPACE huishoudboekje; then
           FAILED=false
+          kubectl --namespace $REVIEW_NAMESPACE delete pod --selector test=test
           break
         else
           sleep 6
