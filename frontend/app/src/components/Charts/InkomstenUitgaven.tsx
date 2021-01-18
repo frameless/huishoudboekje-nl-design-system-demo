@@ -1,61 +1,35 @@
-import {BoxProps, chakra, Divider, Heading, Spinner, Stack, Text, useToken} from "@chakra-ui/react";
+import {Box, BoxProps, chakra, Divider, Heading, Spinner, Stack, Text, useToken} from "@chakra-ui/react";
 import {Moment} from "moment";
 import React from "react";
 import {Chart} from "react-google-charts";
 import {useTranslation} from "react-i18next";
-import {BankTransaction, Rubriek} from "../../generated/graphql";
-import {useCreateAggregationByCategoryByMonth} from "../../utils/DataEngine";
+import {BankTransaction} from "../../generated/graphql";
+import {Category, useCreateAggregationByCategoryByMonth, useCreateAggregationByRubriek} from "../../utils/DataEngine";
+import {currencyFormat2} from "../../utils/things";
 import Section from "../Layouts/Section";
 
 const ChakraChart = chakra(Chart);
-
-const useCreateAggregationByRubriek = data => {
-	const {t} = useTranslation();
-	let balance = 0;
-
-	const _data = data.reduce((result, tr: BankTransaction & { rubriek: Rubriek }) => {
-		let rubriekNaam: string = t("ongeboekt");
-		if (tr.journaalpost?.grootboekrekening?.rubriek?.naam) {
-			rubriekNaam = tr.journaalpost?.grootboekrekening?.rubriek?.naam;
-		}
-
-		const category = tr.isCredit ? t("inkomsten") : t("uitgaven");
-		const bedrag = parseFloat(tr.bedrag);
-		balance += bedrag;
-
-		return {
-			...result,
-			[category]: {
-				...result[category],
-				[rubriekNaam]: (result[category][rubriekNaam] || 0) + bedrag,
-			},
-		}
-	}, {
-		inkomsten: {},
-		uitgaven: {},
-	});
-
-	return {
-		data: _data,
-		balance
-	};
-};
 
 const InkomstenUitgaven: React.FC<BoxProps & { startDate: Moment, endDate: Moment, transactions: BankTransaction[] }> = ({startDate, endDate, transactions}) => {
 	const {t} = useTranslation();
 	const [color1, color2] = useToken("colors", ["primary.300", "secondary.300"]);
 
-	const chartData = useCreateAggregationByCategoryByMonth(transactions);
 	const columns = [t("interval.period"), t("charts.inkomstenUitgaven.income"), t("charts.inkomstenUitgaven.expenses")];
+	const aggregationByCategoryByMonth = useCreateAggregationByCategoryByMonth(transactions);
+	const aggregationByRubriek = useCreateAggregationByRubriek(transactions);
 
-	const tableData = useCreateAggregationByRubriek(transactions);
+	const translatedCategory = {
+		[Category.Inkomsten]: t("charts.inkomstenUitgaven.income"),
+		[Category.Uitgaven]: t("charts.inkomstenUitgaven.expenses"),
+	}
+
 	return (<>
 		<Section>
 			<ChakraChart
 				height={"500px"}
 				chartType="AreaChart"
 				loader={<Spinner />}
-				data={[columns, ...chartData]}
+				data={[columns, ...aggregationByCategoryByMonth]}
 				options={{
 					title: t("charts.inkomstenUitgaven.title"),
 					chartArea: {width: "90%", height: "80%"},
@@ -64,39 +38,40 @@ const InkomstenUitgaven: React.FC<BoxProps & { startDate: Moment, endDate: Momen
 					lineWidth: 1,
 					pointSize: 5
 				}}
-				// For tests
 				// rootProps={{"data-testid": "1"}}
 			/>
-
-			<pre>{JSON.stringify(tableData, null, 2)}</pre>
 		</Section>
 
 		<Section>
-			<Stack justifyContent={"center"} alignItems={"center"}>
+			{Object.keys(aggregationByRubriek.rubrieken).map(c => {
+				return (
+					<Stack key={c}>
+						<Heading size={"md"}>{translatedCategory[c]}</Heading>
+						{Object.keys(aggregationByRubriek.rubrieken[c]).map((r, i) => {
+							return (
+								<Stack direction={"row"} maxW={"500px"} pl={2} key={i}>
+									<Box flex={1}>
+										<Text><strong>{r === Category.Ongeboekt ? t("charts.inkomstenUitgaven.unbooked") : r}</strong></Text>
+									</Box>
+									<Box flex={2} textAlign={"right"}>
+										<Text>{currencyFormat2(false).format(aggregationByRubriek.rubrieken[c][r])}</Text>
+									</Box>
+								</Stack>
+							)
+						})}
+					</Stack>
+				);
+			})}
 
-				{Object.keys(tableData.data).map(c => {
-					return (
-						<Stack>
-							<Heading>{c}</Heading>
-							{Object.keys(tableData.data[c]).map((r, i) => {
-								return (
-									<Stack direction={"row"}>
-										<Text><strong>{r}</strong></Text>
-										<Text>{tableData.data[c][r]}</Text>
-									</Stack>
-								)
-							})}
-						</Stack>
-					);
-				})}
+			<Divider />
 
-				<Divider />
-
-				<Stack direction={"row"}>
+			<Stack direction={"row"} maxW={"500px"} pl={2}>
+				<Box flex={1}>
 					<Text><strong>{t("balance")}</strong></Text>
-					<Text>{tableData.balance}</Text>
-				</Stack>
-
+				</Box>
+				<Box flex={2} textAlign={"right"}>
+					<Text>{currencyFormat2(false).format(aggregationByRubriek.balance)}</Text>
+				</Box>
 			</Stack>
 		</Section>
 	</>);

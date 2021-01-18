@@ -246,6 +246,7 @@
         "year_plural": "jaar",
         "every": "Elk(e)",
         "choose": "Kies een periode",
+        "period": "Periode",
         "every-day": "Elke dag",
         "every-day_plural": "Elke {{count}} dagen",
         "every-week": "Elke week",
@@ -289,6 +290,22 @@
     "burgers": {
         "burgers": "Burgers"
     },
+    "charts": {
+        "inkomstenUitgaven": {
+            "title": "Inkomsten en uitgaven",
+            "helperText": "Een overzicht van inkomsten en uitgaven over tijd.",
+            "income": "Inkomsten",
+            "expenses": "Uitgaven",
+            "unbooked": "Ongeboekt"
+        },
+        "saldo": {
+            "title": "Saldo",
+            "helperText": "Een overzicht van saldo over tijd.",
+            "saldo": "Saldo"
+        }
+    },
+    "balance": "Balans",
+    "month": "Maand",
     "configuratie": "Configuratie",
     "organizations": {
         "organizations": "Organisaties"
@@ -306,7 +323,9 @@
         "bankzaken": "Bankzaken",
         "bronbestanden": "Bronbestanden",
         "overschrijvingen": "Overschrijvingen",
-        "huishoudboekjes": "Huishoudboekjes",
+        "rapportages": "Rapportages",
+        "rapportageInkomstenUitgaven": "Inkomsten en uitgaven",
+        "rapportageSaldo": "Saldo",
         "configuratie": "Configuratie"
     }
 }

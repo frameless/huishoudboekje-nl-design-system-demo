@@ -18,7 +18,9 @@ import Saldo from "./Saldo";
 const Charts = () => {
 	const {t} = useTranslation();
 
-	const $transactions = useGetAllTransactionsQuery();
+	const $transactions = useGetAllTransactionsQuery({
+		fetchPolicy: "no-cache",
+	});
 
 	const startDate = useInput({
 		defaultValue: moment().year(2020).startOf("year").format("L"),
@@ -38,10 +40,10 @@ const Charts = () => {
 				<Stack direction={["column", "row"]}>
 					<Switch>
 						<Route path={Routes.RapportagesInkomstenUitgaven}>
-							<FormLeft title={t("inkomsten en uitgaven")} helperText={t("Een overzicht van inkomsten en uitgaven over tijd.")} />
+							<FormLeft title={t("charts.inkomstenUitgaven.title")} helperText={t("charts.inkomstenUitgaven.helperText")} />
 						</Route>
 						<Route path={Routes.RapportagesSaldo}>
-							<FormLeft title={t("saldo")} helperText={t("Een overzicht van saldo over tijd.")} />
+							<FormLeft title={t("charts.saldo.title")} helperText={t("charts.saldo.helperText")} />
 						</Route>
 					</Switch>
 
