@@ -1,0 +1,6 @@
+
+docs:
+  ingress:
+    enabled: true
+    hosts:
+      - "docs.hhb.minikube"
