@@ -5,6 +5,7 @@ CHART_DEPENDENCIES := $(shell find helm -name 'Chart.yaml' | xargs grep -l 'depe
 NAMESPACE := huishoudboekje
 RELEASE := huishoudboekje
 SERVICE_MODULES := $(patsubst services/%/Makefile,%,$(wildcard services/*/Makefile))
+THEME := nijmegen
 
 # Main target to build and deploy Huishoudboekje locally
 .PHONY: all
@@ -34,7 +35,7 @@ huishoudboekje: helm/charts/huishoudboekje-review helm-init helm/charts/* docker
 	helm upgrade --install --create-namespace --namespace $@ \
 		$@ $< \
 		--debug \
-		--values helm/theme-sloothuizen.yaml \
+		--values helm/theme.yaml \
 		--set database.traefik.enabled=true \
 		--set global.minikube=true \
 		--set global.imageTag=$(DOCKER_TAG) \
@@ -58,10 +59,10 @@ helm/charts/%: helm/charts/%/Chart.lock
 docker-images: docker-compose.yaml
 	docker-compose -f $< build --parallel
 
-frontend: helm/charts/medewerker-frontend/theme
-
-helm/charts/medewerker-frontend/theme: frontend/theme/sloothuizen
-	(cd helm/charts/medewerker-frontend; ln -s ../../../frontend/theme/sloothuizen theme)
+helm/theme.yaml: frontend/theme/$(THEME) FORCE
+	helm/theme-yaml.sh $< > $@
 
 preparedb:
 	for service in $(SERVICE_MODULES); do make -C services/$$service $@; done
+
+FORCE:

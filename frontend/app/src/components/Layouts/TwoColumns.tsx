@@ -13,7 +13,7 @@ const TwoColumns = ({children}) => {
 				<Stack bg={"grey.800"} height={isMobile ? "auto" : "100%"} alignItems={isMobile ? "center" : "flex-end"} justifyContent={"center"}
 				       width={isMobile ? "100%" : "50%"}
 				       p={5}>
-					<Logo as={Flex} maxWidth={400} width={"100%"} />
+					<Logo as={Flex} maxWidth={400} width={"100%"} height={"100%"} maxHeight={500} />
 				</Stack>
 				<Stack bg={"white"} height={isMobile ? "auto" : "100%"} justifyContent={"center"} width={isMobile ? "100%" : "50%"} p={5}>
 					{children}
