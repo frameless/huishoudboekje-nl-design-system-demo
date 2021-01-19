@@ -32,7 +32,7 @@
         --debug \
         --namespace $REVIEW_NAMESPACE --create-namespace \
         --values helm/charts/huishoudboekje-review/values.yaml \
-        --values helm/theme-sloothuizen.yaml \
+        --values helm/theme.yaml \
         --set "global.imageTag=$IMAGE_TAG" \
         --set "medewerker-frontend.ingress.hosts[0].host=$HHB_HOST" \
         --set "medewerker-frontend.ingress.hosts[0].paths[0]=/" \
