@@ -4,7 +4,7 @@ dex:
 postgresql:
   enabled: true
   persistence:
-    enabled: false
+    enabled: true
     size: 1Gi
     existingClaim: null
   initdbScriptsSecret: database-init-scripts

@@ -14,8 +14,10 @@ stringData:
   01_service_databases.sql: |
 {{- range $service := .Values.services }}
   {{- $database := include "service.database" $service }}
-    CREATE USER "{{ $database }}" WITH PASSWORD '{{ $database }}';
-    CREATE DATABASE "{{ $database }}" WITH OWNER "{{ $database }}";
+    SELECT 'CREATE USER {{ $database }}' WHERE NOT EXISTS (SELECT FROM pg_catalog.pg_roles WHERE rolname = '{{ $database }}')\gexec
+    SELECT 'CREATE DATABASE {{ $database }}' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = '{{ $database }}')\gexec
+    ALTER ROLE "{{ $database }}" WITH PASSWORD '{{ $database }}';
+    ALTER DATABASE "{{ $database }}" OWNER TO "{{ $database }}";
 {{- end -}}
 
 {{- range $service := .Values.services }}

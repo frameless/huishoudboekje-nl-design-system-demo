@@ -30,8 +30,7 @@ huishoudboekje-test: huishoudboekje
 	helm test --logs --namespace $(NAMESPACE) $<
 
 .PHONY: huishoudboekje
-huishoudboekje: helm/charts/huishoudboekje-review helm-init helm/charts/* docker-images
-	kubectl delete --namespace $@ statefulsets.apps $@-postgresql --cascade=false || true
+huishoudboekje: helm/charts/huishoudboekje # helm-init helm/charts/* docker-images
 	helm upgrade --install --create-namespace --namespace $@ \
 		$@ $< \
 		--debug \
@@ -44,10 +43,9 @@ huishoudboekje: helm/charts/huishoudboekje-review helm-init helm/charts/* docker
 		--set "medewerker-backend.oidc.redirectUris[0].callback=http://localhost:3000/api/custom_oidc_callback" \
 		--set "medewerker-backend.oidc.redirectUris[1].prefix=http://hhb.minikube" \
 		--set "medewerker-backend.oidc.redirectUris[1].callback=http://hhb.minikube/api/custom_oidc_callback" \
-		--set "database.persistence.enabled=true" \
-		--set "database.postgresql.postgresqlPassword=huishoudboekjedb" \
+		--set "persistence.enabled=true" \
+		--set "postgresql.postgresqlPassword=huishoudboekjedb" \
 		--render-subchart-notes
-	helm uninstall --namespace $@ postgres-operator || true
 
 helm/charts/%: helm/charts/%/Chart.lock
 

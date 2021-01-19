@@ -1,0 +1,45 @@
+{{- $databaseName := include "database.name" . -}}
+{{- $databaseLabels := include "database.labels" . -}}
+{{- define "service.database" -}}
+{{- . | replace "_" "" }}
+{{- end -}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ printf "%s-%s" .Release.Name "create-databases" | trunc 63 | trimSuffix "-" | quote }}
+  labels:
+  {{- $databaseLabels | nindent 4 }}
+  annotations:
+    "helm.sh/hook": post-upgrade,post-install
+spec:
+{{/*  backoffLimit: 5*/}}
+  activeDeadlineSeconds: 100
+  ttlSecondsAfterFinished: 172800
+  template:
+    spec:
+      containers:
+        - name: "create-databases"
+          image: docker.io/bitnami/postgresql:11.10.0-debian-10-r52
+          env:
+            - name: PGUSER
+              value: "postgres"
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ printf "%s-postgresql" .Release.Name | quote }}
+                  key: "postgresql-password"
+          command:
+            - 'psql'
+          args:
+            - "postgresql://{{ .Release.Name }}-postgresql.{{ .Release.Namespace }}.svc.cluster.local/postgres"
+            - "-f"
+            - "/mnt/scripts/01_service_databases.sql"
+          volumeMounts:
+            - name: database-scripts
+              mountPath: /mnt/scripts
+      volumes:
+        - name: database-scripts
+          secret:
+            secretName: {{ printf "%s-%s" $databaseName "init-scripts" | trunc 63 | trimSuffix "-" | quote }}
+      restartPolicy: Never
+
