@@ -1,4 +1,15 @@
 organisaties:
+- huisnummer: "500"
+  kvk_nummer: "27365323"
+  naam: "Belastingdienst Toeslagen"
+  plaatsnaam: "Utrecht"
+  postcode: "3531AH"
+  straatnaam: "Graadt van Roggenweg"
+  weergave_naam: "Belastingdienst Toeslagen"
+  rekeningen:
+  - iban: "NL86INGB0002445588"
+    rekeninghouder: "Belastingdienst"
+
 - huisnummer: "18"
   kvk_nummer: "23027707"
   naam: "Willemsen Advocaten B.V."
