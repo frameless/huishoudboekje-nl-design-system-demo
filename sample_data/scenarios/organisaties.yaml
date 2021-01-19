@@ -1,4 +1,15 @@
 organisaties:
+- huisnummer: "70"
+  kvk_nummer: "50544403"
+  naam: "Anderzorg N.V."
+  plaatsnaam: "Groningen"
+  postcode: "709723AB"
+  straatnaam: "Winschoterdiep"
+  weergave_naam: "Anderzorg"
+  rekeningen:
+  - iban: "NL87INGB0676416217"
+    rekeninghouder: "Anderzorg N.V."
+    
 - huisnummer: "500"
   kvk_nummer: "27365323"
   naam: "Belastingdienst Toeslagen"
