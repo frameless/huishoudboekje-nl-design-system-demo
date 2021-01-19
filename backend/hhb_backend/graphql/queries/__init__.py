@@ -13,6 +13,7 @@ from .rekeningen import RekeningQuery, RekeningenQuery
 from .rubrieken import RubriekQuery, RubriekenQuery
 from .configuraties import ConfiguratieQuery, ConfiguratiesQuery
 from .planned_overschrijvingen import PlannedOverschijvingenQuery
+from .gebruikersactiviteiten import GebruikersActiviteitQuery, GebruikersActiviteitenQuery
 
 class RootQuery(graphene.ObjectType):
     """ The root of all queries """
@@ -39,6 +40,8 @@ class RootQuery(graphene.ObjectType):
     planned_overschrijvingen = PlannedOverschijvingenQuery.return_type
     export = ExportQuery.return_type
     exports = ExportsQuery.return_type
+    gebruikersactiviteit = GebruikersActiviteitQuery.return_type
+    gebruikersactiviteiten = GebruikersActiviteitenQuery.return_type
 
     async def resolve_gebruiker(root, info, **kwargs):
         return await GebruikerQuery.resolver(root, info, **kwargs)
@@ -108,3 +111,9 @@ class RootQuery(graphene.ObjectType):
 
     async def resolve_exports(root, info, **kwargs):
         return await ExportsQuery.resolver(root, info, **kwargs)
+
+    async def resolve_gebruikersactiviteit(root, info, **kwargs):
+        return await GebruikersActiviteitQuery.resolver(root, info, **kwargs)
+
+    async def resolve_gebruikersactiviteiten(root, info, **kwargs):
+        return await GebruikersActiviteitenQuery.resolver(root, info, **kwargs)

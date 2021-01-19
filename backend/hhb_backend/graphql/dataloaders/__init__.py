@@ -11,6 +11,7 @@ from .configuratie_loader import ConfiguratieByIdLoader
 from .rubrieken_loader import RubriekByIdLoader, RubriekByGrootboekrekeningLoader
 from .exports_loader import ExportsByIdLoader
 from .overschrijving_loader import OverschrijvingByIdLoader, OverschrijvingByAfspraakLoader, OverschrijvingByExportLoader
+from .gebruikersactiviteit_loader import GebruikersActiviteitenByIdLoader, GebruikersActiviteitenByGebruikersLoader
 
 
 class HHBDataLoader:
@@ -52,3 +53,6 @@ class HHBDataLoader:
 
         # Exports
         self.exports_by_id = ExportsByIdLoader(loop=loop)
+
+        self.gebruikersactiviteiten_by_id = GebruikersActiviteitenByIdLoader(loop=loop)
+        self.gebruikersactiviteiten_by_gebruikers = GebruikersActiviteitenByGebruikersLoader(loop=loop)
