@@ -12,7 +12,7 @@
     OIDC_DEX: "true"
     OIDC_CLIENT_ID: "huishoudboekje"
     OIDC_CLIENT_SECRET: "ZwwcL2zjQyJUBnFPVoOb"
-    THEME: "nijmegen"
+    THEME: "sloothuizen"
   script:
     - |
       helm repo add stable "https://charts.helm.sh/stable"
