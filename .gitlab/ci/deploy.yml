@@ -26,7 +26,7 @@
       HHB_HOST=${HHB_HOST:-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN}
       OIDC_ISSUER=${OIDC_ISSUER:-https://dex-sloothuizen-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN}
       DATABASE_PERSISTENCE="${DATABASE_PERSISTENCE:-false}"
-    - make helm/theme.yaml THEME=${THEME:-sloothuizen}
+    - helm/theme-yaml.sh frontend/theme/${THEME:-sloothuizen} > helm/theme.yaml
     - |
       helm upgrade --install "huishoudboekje" helm/charts/huishoudboekje-review \
         --debug \
