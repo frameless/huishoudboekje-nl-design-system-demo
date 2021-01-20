@@ -67,7 +67,7 @@ build-helm:
     - apk add --no-cache make
     - apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community yq
   script:
-    - yq --inplace e ".global.imageTag = $IMAGE_TAG" helm/charts/huishoudboekje/values.yaml
+    - yq --inplace e ".global.imageTag = \"$IMAGE_TAG\"" helm/charts/huishoudboekje/values.yaml
     - make -C helm
   artifacts:
     paths:
