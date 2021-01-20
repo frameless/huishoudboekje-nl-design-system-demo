@@ -12,4 +12,4 @@ class GebruikersActiviteitenByGebruikersLoader(SingleDataLoader):
     model = "gebruikersactiviteiten"
     service = settings.LOG_SERVICE_URL
     filter_item = "filter_gebruikers"
-    index = "entities"
+    index = "id"

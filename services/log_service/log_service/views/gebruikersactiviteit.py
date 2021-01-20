@@ -50,5 +50,6 @@ class GebruikersActiviteitView(HHBView):
                 except ValueError:
                     abort(make_response(
                         {"errors": [f"Input for filter_gebruikers is not correct, '{raw_id}' is not a number."]}, 400))
-                self.hhb_query.query = self.hhb_query.query.filter((self.hhb_model.entities.contains(
-                    [{'entityId': raw_id}])))
+                # self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.entities['entities', ['entityId']].astext == raw_id)
+                self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.entities.contains(
+                    [{"entityId": int(raw_id), "entityType": "burger"}]))
