@@ -29,7 +29,7 @@ const Sidebar: React.FC<BoxProps> = (props) => {
 					<Box pl={5} ml={7}>&nbsp;</Box>
 					<VStack>
 						<SidebarLink size={"sm"} to={Routes.RapportagesInkomstenUitgaven}>{t("sidebar.rapportageInkomstenUitgaven")}</SidebarLink>
-						<SidebarLink size={"sm"} to={Routes.RapportagesSaldo}>{t("sidebar.rapportageSaldo")}</SidebarLink>
+						{/*<SidebarLink size={"sm"} to={Routes.RapportagesSaldo}>{t("sidebar.rapportageSaldo")}</SidebarLink>*/}
 					</VStack>
 				</HStack>
 			</Stack>
