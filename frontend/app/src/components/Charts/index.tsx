@@ -1,15 +1,18 @@
-import {FormControl, FormLabel, Heading, Input, List, ListIcon, ListItem, ListItemProps, Stack} from "@chakra-ui/react";
+import {FormControl, Heading, Input, List, ListIcon, ListItem, ListItemProps, Stack} from "@chakra-ui/react";
 import moment from "moment";
-import React from "react";
+import React, {useState} from "react";
 import DatePicker from "react-datepicker";
 import {useInput} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {MdCheckCircle} from "react-icons/all";
 import {Route, Switch} from "react-router-dom";
+import Select from "react-select";
 import Routes from "../../config/routes";
-import {useGetAllTransactionsQuery} from "../../generated/graphql";
+import {Gebruiker, Rubriek, useGetReportingDataQuery} from "../../generated/graphql";
+import Transaction from "../../models/Transaction";
 import Queryable from "../../utils/Queryable";
-import {FormLeft, FormRight} from "../Forms/FormLeftRight";
+import {formatBurgerName, useReactSelectStyles} from "../../utils/things";
+import {FormLeft, FormRight, Label} from "../Forms/FormLeftRight";
 import Page from "../Layouts/Page";
 import Section from "../Layouts/Section";
 import InkomstenUitgaven from "./InkomstenUitgaven";
@@ -17,8 +20,9 @@ import Saldo from "./Saldo";
 
 const Charts = () => {
 	const {t} = useTranslation();
+	const reactSelectStyles = useReactSelectStyles();
 
-	const $transactions = useGetAllTransactionsQuery({
+	const $data = useGetReportingDataQuery({
 		fetchPolicy: "no-cache",
 	});
 
@@ -28,9 +32,13 @@ const Charts = () => {
 	const endDate = useInput({
 		defaultValue: moment().year(2020).endOf("year").format("L"),
 	});
+	const [filterBurgerIds, setFilterBurgerIds] = useState<number[]>([]);
+	const [filterRubriekIds, setFilterRubriekIds] = useState<number[]>([]);
+	const onSelectBurger = (value) => setFilterBurgerIds(value ? value.map(v => v.value) : []);
+	const onSelectRubriek = (value) => setFilterRubriekIds(value ? value.map(v => v.value) : []);
 
 	return (
-		<Page title={"Charts test"} position={"relative"}>
+		<Page title={t("sidebar.rapportages")} position={"relative"}>
 
 			{/* Todo: remove TodoList */}
 			<TodoList />
@@ -49,46 +57,78 @@ const Charts = () => {
 
 					<FormRight>
 
-						<Stack direction={["column", "row"]} justifyContent={["space-around"]} maxW={500}>
-							<FormControl as={Stack} flex={1} justifyContent={"flex-end"}>
-								<FormLabel>{t("forms.common.fields.startDate")}</FormLabel>
-								<DatePicker selected={moment(startDate.value, "L").isValid() ? moment(startDate.value, "L").toDate() : null}
-								            dateFormat={"MMM yyyy"}
-								            showMonthYearPicker
-								            showFullMonthYearPicker
-								            onChange={(value: Date) => {
-									            if (value) {
-										            startDate.setValue(moment(value).format("L"));
-									            }
-								            }} customInput={(<Input {...startDate.bind} />)} />
-							</FormControl>
-							<FormControl as={Stack} flex={1}>
-								<FormLabel>{t("forms.common.fields.endDate")}</FormLabel>
-								<DatePicker selected={moment(endDate.value, "L").isValid() ? moment(endDate.value, "L").toDate() : null}
-								            dateFormat={"MMM yyyy"}
-								            showMonthYearPicker
-								            showFullMonthYearPicker
-								            onChange={(value: Date) => {
-									            if (value) {
-										            endDate.setValue(moment(value).format("L"));
-									            }
-								            }} customInput={(<Input {...startDate.bind} />)} />
-							</FormControl>
+						<Stack spacing={5}>
+							<Stack direction={["column", "row"]} justifyContent={["space-around"]} maxW={500}>
+								<FormControl as={Stack} flex={1} justifyContent={"flex-end"}>
+									<Label>{t("forms.common.fields.startDate")}</Label>
+									<DatePicker selected={moment(startDate.value, "L").isValid() ? moment(startDate.value, "L").toDate() : null}
+									            dateFormat={"MMM yyyy"}
+									            showMonthYearPicker
+									            showFullMonthYearPicker
+									            onChange={(value: Date) => {
+										            if (value) {
+											            startDate.setValue(moment(value).format("L"));
+										            }
+									            }} customInput={(<Input {...startDate.bind} />)} />
+								</FormControl>
+								<FormControl as={Stack} flex={1}>
+									<Label>{t("forms.common.fields.endDate")}</Label>
+									<DatePicker selected={moment(endDate.value, "L").isValid() ? moment(endDate.value, "L").toDate() : null}
+									            dateFormat={"MMM yyyy"}
+									            showMonthYearPicker
+									            showFullMonthYearPicker
+									            onChange={(value: Date) => {
+										            if (value) {
+											            endDate.setValue(moment(value).format("L"));
+										            }
+									            }} customInput={(<Input {...startDate.bind} />)} />
+								</FormControl>
+							</Stack>
+							<Stack direction={["column", "row"]} justifyContent={["space-around"]} maxW={500}>
+								<FormControl as={Stack} flex={1}>
+									<Label>{t("Filter op burgers")}</Label>
+									<Queryable query={$data} children={data => {
+										const burgers: Gebruiker[] = data.gebruikers || [];
+										return (
+											<Select onChange={onSelectBurger} options={burgers.map(b => ({key: b.id, value: b.id, label: formatBurgerName(b)}))} styles={reactSelectStyles}
+											        isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("Alle burgers")} />
+										)
+									}} />
+								</FormControl>
+							</Stack>
+							{/*<Stack direction={["column", "row"]} justifyContent={["space-around"]} maxW={500}>*/}
+							{/*	<FormControl as={Stack} flex={1}>*/}
+							{/*		<Label>{t("Filter op rubrieken")}</Label>*/}
+							{/*		<Queryable query={$data} children={data => {*/}
+							{/*			const rubrieken: Rubriek[] = data.rubrieken || [];*/}
+							{/*			return (*/}
+							{/*				<Select onChange={onSelectRubriek} options={rubrieken.map(r => ({key: r.id, value: r.id, label: r.naam}))} styles={reactSelectStyles}*/}
+							{/*				        isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("Alle rubrieken")} />*/}
+							{/*			)*/}
+							{/*		}} />*/}
+							{/*	</FormControl>*/}
+							{/*</Stack>*/}
 						</Stack>
 					</FormRight>
 				</Stack>
 			</Section>
 
-			<Queryable query={$transactions} children={data => {
-				const {bankTransactions} = data;
+			<Queryable query={$data} children={data => {
+				const _startDate = moment(startDate.value, "L").startOf("month");
+				const _endDate = moment(endDate.value, "L").endOf("month");
+
+				const transactions: Transaction[] = data.bankTransactions.map(t => new Transaction(t));
+				const filteredTransactions = transactions
+					.filter(t => filterBurgerIds.length > 0 ? t.belongsToAnyBurger(filterBurgerIds) : true)
+					.filter(t => t.isBetweenDates(_startDate, _endDate));
 
 				return (
 					<Switch>
 						<Route path={Routes.RapportagesInkomstenUitgaven}>
-							<InkomstenUitgaven startDate={moment(startDate.value, "L")} endDate={moment(endDate.value, "L")} transactions={bankTransactions} />
+							<InkomstenUitgaven transactions={filteredTransactions} />
 						</Route>
 						<Route path={Routes.RapportagesSaldo}>
-							<Saldo startDate={moment(startDate.value, "L")} endDate={moment(endDate.value, "L")} transactions={bankTransactions} />
+							<Saldo transactions={filteredTransactions} />
 						</Route>
 					</Switch>
 				)
@@ -99,11 +139,11 @@ const Charts = () => {
 
 export default Charts;
 
-const MyListItem: React.FC<ListItemProps & { done?: boolean }> = ({done = false, ...props}) => (
-	<ListItem {...done && {textDecoration: "line-through", color: "green.500"}} {...props}>
+const MyListItem: React.FC<ListItemProps & { done?: boolean, hideDone?: boolean }> = ({done = false, hideDone = false, ...props}) => (
+	!(done && hideDone) ? <ListItem {...done && {textDecoration: "line-through", color: "green.500"}} {...props}>
 		<ListIcon as={MdCheckCircle} />
 		{props.children}
-	</ListItem>
+	</ListItem> : null
 );
 
 const TodoList = () => (
@@ -127,7 +167,7 @@ const TodoList = () => (
 				<MyListItem done>Gegevens worden in een tabel weergegeven. </MyListItem>
 				<MyListItem done>Inkomsten en uitgaven zijn per soort gegroepeerd weergegeven. </MyListItem>
 				<MyListItem done>Inkomsten en uitgaven zijn per rubriek weergegeven. </MyListItem>
-				<MyListItem>Filteren gegevens op geen, een of meerdere burgers. </MyListItem>
+				<MyListItem done>Filteren gegevens op geen, een of meerdere burgers. </MyListItem>
 				<MyListItem>Filteren gegevens op geen, een of meerdere rubrieken. </MyListItem>
 				<MyListItem done>Gegevens worden in een grafiek weergegeven. </MyListItem>
 				<MyListItem done>Trend saldo op balans wordt in een LineChart weergegeven </MyListItem>

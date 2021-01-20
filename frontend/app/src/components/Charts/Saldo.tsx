@@ -9,7 +9,7 @@ import Section from "../Layouts/Section";
 
 const ChakraChart = chakra(Chart);
 
-const InkomstenUitgaven: React.FC<BoxProps & {startDate: Moment, endDate: Moment, transactions: BankTransaction[]}> = ({startDate, endDate, transactions}) => {
+const InkomstenUitgaven: React.FC<BoxProps & {transactions: BankTransaction[]}> = ({transactions}) => {
 	const {t} = useTranslation();
 	const [color1, color2] = useToken("colors", ["primary.300", "secondary.300"]);
 
@@ -29,7 +29,7 @@ const InkomstenUitgaven: React.FC<BoxProps & {startDate: Moment, endDate: Moment
 		{time: moment("2020-12-01"), saldo: 500},
 	];
 
-	const filteredData = data.filter(d => d.time.isSameOrAfter(moment(startDate, "L")) && d.time.isSameOrBefore(moment(endDate, "L").endOf("month")));
+	const filteredData = data;
 
 	return (<>
 		<Section>

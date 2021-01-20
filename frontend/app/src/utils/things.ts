@@ -3,7 +3,7 @@ import {friendlyFormatIBAN} from "ibantools";
 import moment from "moment";
 import {createContext} from "react";
 import {BankTransaction, Gebruiker, Interval, IntervalInput} from "../generated/graphql";
-import {IntervalType} from "../models";
+import {IntervalType} from "../models/models";
 
 export const searchFields = (term: string, fields: string[]): boolean => {
 	const _fields = fields.filter(f => f);
@@ -113,7 +113,8 @@ export const sortBankTransactions = (a: BankTransaction, b: BankTransaction) => 
 };
 
 export const formatBurgerName = (burger: Gebruiker, fullName = false) => {
-	return [fullName ? burger.voornamen : burger.voorletters, burger.achternaam].join(" ");
+	const voorletters = burger.voorletters?.replaceAll(".", "").split("").join(". ") + ".";
+	return [fullName ? burger.voornamen : voorletters, burger.achternaam].join(" ");
 };
 
 export const intervalString = ((interval: Interval | undefined, t: (text, ...tProps) => string): string => {

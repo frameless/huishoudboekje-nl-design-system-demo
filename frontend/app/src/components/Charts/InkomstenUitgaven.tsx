@@ -1,5 +1,4 @@
 import {Box, BoxProps, chakra, Divider, Heading, Spinner, Stack, Text, useToken} from "@chakra-ui/react";
-import {Moment} from "moment";
 import React from "react";
 import {Chart} from "react-google-charts";
 import {useTranslation} from "react-i18next";
@@ -10,7 +9,7 @@ import Section from "../Layouts/Section";
 
 const ChakraChart = chakra(Chart);
 
-const InkomstenUitgaven: React.FC<BoxProps & { startDate: Moment, endDate: Moment, transactions: BankTransaction[] }> = ({startDate, endDate, transactions}) => {
+const InkomstenUitgaven: React.FC<BoxProps & { transactions: BankTransaction[] }> = ({transactions = []}) => {
 	const {t} = useTranslation();
 	const [color1, color2] = useToken("colors", ["primary.300", "secondary.300"]);
 
@@ -21,7 +20,12 @@ const InkomstenUitgaven: React.FC<BoxProps & { startDate: Moment, endDate: Momen
 	const translatedCategory = {
 		[Category.Inkomsten]: t("charts.inkomstenUitgaven.income"),
 		[Category.Uitgaven]: t("charts.inkomstenUitgaven.expenses"),
-	}
+	};
+
+	const data = [
+		columns,
+		...(aggregationByCategoryByMonth.length > 0 ? aggregationByCategoryByMonth : [["", 0, 0]])
+	];
 
 	return (<>
 		<Section>
@@ -29,7 +33,7 @@ const InkomstenUitgaven: React.FC<BoxProps & { startDate: Moment, endDate: Momen
 				height={"500px"}
 				chartType="AreaChart"
 				loader={<Spinner />}
-				data={[columns, ...aggregationByCategoryByMonth]}
+				data={data}
 				options={{
 					title: t("charts.inkomstenUitgaven.title"),
 					chartArea: {width: "90%", height: "80%"},

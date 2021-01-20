@@ -8,7 +8,7 @@ import {UseInput} from "react-grapple/dist/hooks/useInput";
 import {Trans, useTranslation} from "react-i18next";
 import Select from "react-select";
 import {Afspraak, Gebruiker, Organisatie, Rekening, Rubriek, useGetAfspraakFormDataQuery} from "../../generated/graphql";
-import {AfspraakPeriod, AfspraakType, IntervalType} from "../../models";
+import {AfspraakPeriod, AfspraakType, IntervalType} from "../../models/models";
 import Queryable from "../../utils/Queryable";
 import generateSampleOverschrijvingen from "../../utils/sampleOverschrijvingen";
 import {formatBurgerName, formatIBAN, useReactSelectStyles, XInterval} from "../../utils/things";
