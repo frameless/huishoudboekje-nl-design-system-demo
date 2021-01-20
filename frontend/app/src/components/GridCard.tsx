@@ -1,13 +1,15 @@
-import React from "react";
-import {BoxProps, Stack} from "@chakra-ui/react";
+import {chakra, Stack} from "@chakra-ui/react";
 
-const GridCard: React.FC<BoxProps> = ({children, ...props}) => {
-	return (
-		<Stack direction={"row"} width={"100%"} alignItems={"center"} bg={"white"} borderRadius={5} p={5} cursor={"pointer"}
-		       userSelect={"none"} {...props}>
-			{children}
-		</Stack>
-	);
-};
+const GridCard = chakra(Stack, {
+	baseStyle: {
+		direction: "column",
+		width: "100",
+		bg: "white",
+		borderRadius: 5,
+		p: 5,
+		cursor: "pointer",
+		userSelect: "none",
+	},
+});
 
 export default GridCard;

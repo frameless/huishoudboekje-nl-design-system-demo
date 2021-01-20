@@ -5,6 +5,7 @@ import {Chart} from "react-google-charts";
 import {useTranslation} from "react-i18next";
 import {BankTransaction} from "../../generated/graphql";
 import {currencyFormat2} from "../../utils/things";
+import {FormLeft} from "../Forms/FormLeftRight";
 import Section from "../Layouts/Section";
 
 const ChakraChart = chakra(Chart);
@@ -33,6 +34,8 @@ const InkomstenUitgaven: React.FC<BoxProps & {transactions: BankTransaction[]}> 
 
 	return (<>
 		<Section>
+			<FormLeft title={t("charts.saldo.title")} helperText={t("charts.saldo.helperText")} />
+
 			<ChakraChart
 				height={"500px"}
 				chartType="AreaChart"

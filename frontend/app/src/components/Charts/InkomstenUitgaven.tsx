@@ -2,9 +2,12 @@ import {Box, BoxProps, chakra, Divider, Heading, Spinner, Stack, Text, useToken}
 import React from "react";
 import {Chart} from "react-google-charts";
 import {useTranslation} from "react-i18next";
+import {Route, Switch} from "react-router-dom";
+import Routes from "../../config/routes";
 import {BankTransaction} from "../../generated/graphql";
 import {Category, useCreateAggregationByCategoryByMonth, useCreateAggregationByRubriek} from "../../utils/DataEngine";
 import {currencyFormat2} from "../../utils/things";
+import {FormLeft} from "../Forms/FormLeftRight";
 import Section from "../Layouts/Section";
 
 const ChakraChart = chakra(Chart);
@@ -29,6 +32,8 @@ const InkomstenUitgaven: React.FC<BoxProps & { transactions: BankTransaction[] }
 
 	return (<>
 		<Section>
+			<FormLeft title={t("charts.inkomstenUitgaven.title")} helperText={t("charts.inkomstenUitgaven.helperText")} />
+
 			<ChakraChart
 				height={"500px"}
 				chartType="AreaChart"
