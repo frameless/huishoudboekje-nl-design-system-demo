@@ -108,6 +108,7 @@ const Charts = () => {
 
 				const transactions: Transaction[] = data.bankTransactions.map(t => new Transaction(t));
 				const filteredTransactions = transactions
+					.filter(t => filterRubriekIds.length > 0 ? t.hasAnyRubriek(filterRubriekIds) : true)
 					.filter(t => filterBurgerIds.length > 0 ? t.belongsToAnyBurger(filterBurgerIds) : true)
 					.filter(t => t.isBetweenDates(_startDate, _endDate));
 

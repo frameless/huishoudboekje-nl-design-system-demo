@@ -2,8 +2,6 @@ import {Box, BoxProps, chakra, Divider, Heading, Spinner, Stack, Text, useToken}
 import React from "react";
 import {Chart} from "react-google-charts";
 import {useTranslation} from "react-i18next";
-import {Route, Switch} from "react-router-dom";
-import Routes from "../../config/routes";
 import {BankTransaction} from "../../generated/graphql";
 import {Category, useCreateAggregationByCategoryByMonth, useCreateAggregationByRubriek} from "../../utils/DataEngine";
 import {currencyFormat2} from "../../utils/things";
@@ -40,7 +38,6 @@ const InkomstenUitgaven: React.FC<BoxProps & { transactions: BankTransaction[] }
 				loader={<Spinner />}
 				data={data}
 				options={{
-					title: t("charts.inkomstenUitgaven.title"),
 					chartArea: {width: "90%", height: "80%"},
 					legend: {position: "top"},
 					colors: [color1, color2],
@@ -53,10 +50,11 @@ const InkomstenUitgaven: React.FC<BoxProps & { transactions: BankTransaction[] }
 
 		<Section>
 			{Object.keys(aggregationByRubriek.rubrieken).map(c => {
-				return (
+				const categories = Object.keys(aggregationByRubriek.rubrieken[c]);
+				return categories.length === 0 ? null : (
 					<Stack key={c}>
 						<Heading size={"md"}>{translatedCategory[c]}</Heading>
-						{Object.keys(aggregationByRubriek.rubrieken[c]).map((r, i) => {
+						{categories.map((r, i) => {
 							return (
 								<Stack direction={"row"} maxW={"500px"} pl={4} key={i}>
 									<Box flex={1}>

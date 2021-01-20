@@ -1,5 +1,5 @@
 import moment, {Moment} from "moment";
-import {BankTransaction, CustomerStatementMessage, Journaalpost, Rekening} from "../generated/graphql";
+import {BankTransaction, CustomerStatementMessage, Journaalpost, Rekening, Rubriek} from "../generated/graphql";
 
 export default class Transaction {
 
@@ -27,25 +27,37 @@ export default class Transaction {
 		this.journaalpost = props.journaalpost;
 	}
 
-	isBetweenDates(startDate: Moment, endDate: Moment): boolean {
-		return this.transactieDatum.isSameOrAfter(startDate) && this.transactieDatum.isSameOrBefore(endDate);
-	}
+	isBetweenDates = (startDate: Moment, endDate: Moment): boolean => this.transactieDatum.isSameOrAfter(startDate) && this.transactieDatum.isSameOrBefore(endDate);
 
-	isBooked(): boolean {
-		return this.journaalpost && !!(this.journaalpost.afspraak || this.journaalpost.grootboekrekening?.rubriek);
-	}
+	isBooked = (): boolean => this.journaalpost && !!(this.journaalpost.afspraak || this.journaalpost.grootboekrekening?.rubriek);
 
-	belongsToAnyBurger(burgerIds: number[] = []): boolean {
+	belongsToAnyBurger = (burgerIds: number[] = []): boolean => {
 		if (this.isBooked()) {
 			const bookingBurgerId = this.journaalpost?.afspraak?.gebruiker?.id
 
 			if (bookingBurgerId) {
-				if(burgerIds.length === 0){
+				if (burgerIds.length === 0) {
 					return true;
 				}
 
 				return this.isBooked() && burgerIds.includes(bookingBurgerId);
 			}
+		}
+
+		return false;
+	};
+
+	getRubriek = (): Rubriek | undefined => {
+		if (this.isBooked()) {
+			return this.journaalpost.afspraak?.rubriek || this.journaalpost.grootboekrekening?.rubriek;
+		}
+	};
+
+	hasAnyRubriek = (rubriekIds: number[] = []): boolean => {
+		const rubriek = this.getRubriek();
+
+		if (rubriek?.id) {
+			return rubriekIds.includes(rubriek.id);
 		}
 
 		return false;
