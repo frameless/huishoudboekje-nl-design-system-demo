@@ -42,62 +42,58 @@ const Charts = () => {
 		<Page title={t("sidebar.rapportages")} position={"relative"}>
 
 			{/* Todo: remove TodoList */}
-			{isDev && <TodoList />}
+			{/*{isDev && <TodoList />}*/}
 
 			<Section>
-
 				<Stack direction={["column", "row"]}>
-					<Stack spacing={5}>
-						<Stack direction={["column", "row"]} justifyContent={["space-around"]} maxW={500}>
-							<FormControl as={Stack} flex={1} justifyContent={"flex-end"}>
-								<Label>{t("forms.common.fields.startDate")}</Label>
-								<DatePicker selected={moment(startDate.value, "L").isValid() ? moment(startDate.value, "L").toDate() : null}
-								            dateFormat={"MMM yyyy"}
-								            showMonthYearPicker
-								            showFullMonthYearPicker
-								            onChange={(value: Date) => {
-									            if (value) {
-										            startDate.setValue(moment(value).format("L"));
-									            }
-								            }} customInput={(<Input {...startDate.bind} />)} />
-							</FormControl>
-							<FormControl as={Stack} flex={1}>
-								<Label>{t("forms.common.fields.endDate")}</Label>
-								<DatePicker selected={moment(endDate.value, "L").isValid() ? moment(endDate.value, "L").toDate() : null}
-								            dateFormat={"MMM yyyy"}
-								            showMonthYearPicker
-								            showFullMonthYearPicker
-								            onChange={(value: Date) => {
-									            if (value) {
-										            endDate.setValue(moment(value).format("L"));
-									            }
-								            }} customInput={(<Input {...startDate.bind} />)} />
-							</FormControl>
-						</Stack>
-						<Stack direction={["column", "row"]} justifyContent={["space-around"]} maxW={500}>
-							<FormControl as={Stack} flex={1}>
-								<Label>{t("Filter op burgers")}</Label>
-								<Queryable query={$data} children={data => {
-									const burgers: Gebruiker[] = data.gebruikers || [];
-									return (
-										<Select onChange={onSelectBurger} options={burgers.map(b => ({key: b.id, value: b.id, label: formatBurgerName(b)}))} styles={reactSelectStyles}
-										        isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("Alle burgers")} />
-									)
-								}} />
-							</FormControl>
-						</Stack>
-						<Stack direction={["column", "row"]} justifyContent={["space-around"]} maxW={500}>
-							<FormControl as={Stack} flex={1}>
-								<Label>{t("Filter op rubrieken")}</Label>
-								<Queryable query={$data} children={data => {
-									const rubrieken: Rubriek[] = data.rubrieken || [];
-									return (
-										<Select onChange={onSelectRubriek} options={rubrieken.map(r => ({key: r.id, value: r.id, label: r.naam}))} styles={reactSelectStyles}
-										        isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("Alle rubrieken")} />
-									)
-								}} />
-							</FormControl>
-						</Stack>
+					<Stack spacing={5} flex={1}>
+						<FormControl as={Stack} flex={1} justifyContent={"flex-end"}>
+							<Label>{t("forms.common.fields.startDate")}</Label>
+							<DatePicker selected={moment(startDate.value, "L").isValid() ? moment(startDate.value, "L").toDate() : null}
+							            dateFormat={"MMM yyyy"}
+							            showMonthYearPicker
+							            showFullMonthYearPicker
+							            onChange={(value: Date) => {
+								            if (value) {
+									            startDate.setValue(moment(value).format("L"));
+								            }
+							            }} customInput={(<Input {...startDate.bind} />)} />
+						</FormControl>
+						<FormControl as={Stack} flex={1}>
+							<Label>{t("forms.common.fields.endDate")}</Label>
+							<DatePicker selected={moment(endDate.value, "L").isValid() ? moment(endDate.value, "L").toDate() : null}
+							            dateFormat={"MMM yyyy"}
+							            showMonthYearPicker
+							            showFullMonthYearPicker
+							            onChange={(value: Date) => {
+								            if (value) {
+									            endDate.setValue(moment(value).format("L"));
+								            }
+							            }} customInput={(<Input {...startDate.bind} />)} />
+						</FormControl>
+					</Stack>
+
+					<Stack spacing={5} flex={1}>
+						<FormControl as={Stack} flex={1}>
+							<Label>{t("Filter op burgers")}</Label>
+							<Queryable query={$data} children={data => {
+								const burgers: Gebruiker[] = data.gebruikers || [];
+								return (
+									<Select onChange={onSelectBurger} options={burgers.map(b => ({key: b.id, value: b.id, label: formatBurgerName(b)}))} styles={reactSelectStyles}
+									        isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("Alle burgers")} />
+								)
+							}} />
+						</FormControl>
+						<FormControl as={Stack} flex={1}>
+							<Label>{t("Filter op rubrieken")}</Label>
+							<Queryable query={$data} children={data => {
+								const rubrieken: Rubriek[] = data.rubrieken || [];
+								return (
+									<Select onChange={onSelectRubriek} options={rubrieken.map(r => ({key: r.id, value: r.id, label: r.naam}))} styles={reactSelectStyles}
+									        isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("Alle rubrieken")} />
+								)
+							}} />
+						</FormControl>
 					</Stack>
 				</Stack>
 			</Section>
