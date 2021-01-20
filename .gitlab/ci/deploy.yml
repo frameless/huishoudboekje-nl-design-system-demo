@@ -13,18 +13,21 @@
     OIDC_CLIENT_ID: "huishoudboekje"
     OIDC_CLIENT_SECRET: "ZwwcL2zjQyJUBnFPVoOb"
     THEME: "sloothuizen"
-  script:
+  before_script:
     - |
       helm repo add stable "https://charts.helm.sh/stable"
       helm repo add bitnami "https://charts.bitnami.com/bitnami"
       helm repo update
-      helm dependency build helm/charts/database
       helm dependency build helm/charts/huishoudboekje
     - |
       HHB_HOST=${HHB_HOST:-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN}
       OIDC_ISSUER=${OIDC_ISSUER:-https://dex-sloothuizen-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN}
       DATABASE_PERSISTENCE="${DATABASE_PERSISTENCE:-false}"
     - sh helm/theme-yaml.sh frontend/theme/${THEME:-sloothuizen} > helm/theme.yaml
+    # This lets the huishoudboekje postgresql be upgraded
+    # see https://stackoverflow.com/questions/53186601/re-use-persistentvolume-after-re-installing-a-helm-deployment
+    - kubectl delete --namespace $REVIEW_NAMESPACE statefulsets.apps huishoudboekje-postgresql --cascade=false || true
+  script:
     - |
       helm upgrade --install "huishoudboekje" helm/charts/huishoudboekje \
         --debug \
@@ -60,6 +63,7 @@
         --set "postgresql.persistence.enabled=${DATABASE_PERSISTENCE}" \
         --render-subchart-notes
     - echo -e -n "${HHB_HOST}" > ci_review_hostname.txt
+  after_script:
     - helm uninstall --namespace $REVIEW_NAMESPACE postgres-operator || true
   artifacts:
     paths:
