@@ -47,3 +47,28 @@ spec:
       command: ['psql']
       args: ['postgresql://{{ .Release.Name }}-postgresql.{{ .Release.Namespace }}.svc.cluster.local/postgres', '-c', '\l']
   restartPolicy: Never
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "database.fullname" . }}-database-env"
+  labels:
+  {{- include "database.labels" . | nindent 4 }}
+    test: test
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: psql-database-list
+      image: postgres:11-alpine
+      env:
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ printf "%s-postgresql" .Release.Name | quote }}
+              key: "postgresql-password"
+        - name: PGUSER
+          value: "postgres"
+      command: ['sh']
+      args: ['-c', 'env | sort']
+  restartPolicy: Never

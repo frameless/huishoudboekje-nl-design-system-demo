@@ -239,20 +239,33 @@ destroy-docs:
     - develop
     - acceptance
 
-test-helm:
+.helm-test:
+  environment:
+    name: review/$CI_COMMIT_REF_SLUG
   tags:
     - cg
     - docker
-  needs:
-    - deploy-review
   stage: e2e
   image: registry.gitlab.com/commonground/core/review-app-deployer:latest
-  environment:
-    name: review/$CI_COMMIT_REF_SLUG
   script:
     helm test --namespace $REVIEW_NAMESPACE  --logs  huishoudboekje
   allow_failure: true
+
+helm-test-review:
+  needs:
+    - deploy-review
+  extends:
+    - .helm-test
   except:
     - master
     - develop
     - acceptance
+
+helm-test-develop:
+  needs:
+    - deploy-test
+  extends:
+    - .helm-test
+    - .test
+  only:
+    - develop
