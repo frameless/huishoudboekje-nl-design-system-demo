@@ -1,5 +1,5 @@
 import {BoxProps, chakra, Spinner, Stack, Table, Tbody, Td, Th, Thead, Tr, useToken} from "@chakra-ui/react";
-import moment, {Moment} from "moment";
+import moment from "moment";
 import React from "react";
 import {Chart} from "react-google-charts";
 import {useTranslation} from "react-i18next";

@@ -291,12 +291,27 @@
     "burgers": {
         "burgers": "Burgers"
     },
+    "sidebar": {
+        "rapportages": "Rapportages",
+        "burgers": "Burgers",
+        "organisaties": "Organisaties",
+        "bankzaken": "Bankzaken",
+        "bronbestanden": "Bronbestanden",
+        "overschrijvingen": "Overschrijvingen",
+        "rapportageInkomstenUitgaven": "Inkomsten en uitgaven",
+        "rapportageSaldo": "Saldo",
+        "configuratie": "Configuratie"
+    },
     "charts": {
+        "filterBurgers": "Filter op burgers",
+        "optionAllBurgers": "Alle burgers",
+        "filterRubrics": "Filter op rubriek",
+        "optionAllRubrics": "Alle rubrieken",
         "inkomstenUitgaven": {
             "title": "Inkomsten en uitgaven",
-            "helperText": "Een overzicht van inkomsten en uitgaven over tijd.",
             "income": "Inkomsten",
             "expenses": "Uitgaven",
+            "helperText": "Een overzicht van inkomsten en uitgaven over tijd.",
             "unbooked": "Ongeboekt"
         },
         "saldo": {
@@ -317,16 +332,5 @@
             "subTitle": "Pagina niet beschikbaar",
             "description": "De pagina die je zoekt kan niet worden gevonden."
         }
-    },
-    "sidebar": {
-        "burgers": "Burgers",
-        "organisaties": "Organisaties",
-        "bankzaken": "Bankzaken",
-        "bronbestanden": "Bronbestanden",
-        "overschrijvingen": "Overschrijvingen",
-        "rapportages": "Rapportages",
-        "rapportageInkomstenUitgaven": "Inkomsten en uitgaven",
-        "rapportageSaldo": "Saldo",
-        "configuratie": "Configuratie"
     }
 }

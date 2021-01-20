@@ -1,4 +1,4 @@
-import {AddIcon, DeleteIcon, WarningIcon} from "@chakra-ui/icons";
+import {DeleteIcon, WarningIcon} from "@chakra-ui/icons";
 import {
 	Box,
 	BoxProps,
