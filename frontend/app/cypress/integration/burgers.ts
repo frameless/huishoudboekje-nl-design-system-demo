@@ -1,6 +1,7 @@
 import "cypress-graphql-mock";
 import moment from "moment";
 import Routes from "../../src/config/routes";
+import {formatBurgerName} from "../../src/utils/things";
 import sampleBurgers from "../fixtures/burgers.json";
 import "../support/commands";
 
@@ -102,7 +103,7 @@ describe("Burgers CRUD", () => {
 		cy.wait(2000);
 
 		// Check if we're on the right page
-		cy.get("h2").should("contain", b1.voorletters);
+		cy.get("h2").should("contain", formatBurgerName(b1));
 		cy.get("h2").should("contain", b1.achternaam);
 
 		// Fill the form
@@ -129,7 +130,7 @@ describe("Burgers CRUD", () => {
 		cy.visit(Routes.Burger(b.id));
 
 		// Check if we're on the right page
-		cy.get("h2").should("contain", b.voorletters);
+		cy.get("h2").should("contain", formatBurgerName(b));
 		cy.get("h2").should("contain", b.achternaam);
 		cy.get("button[data-cy=actionsMenuButton]").trigger("click");
 
