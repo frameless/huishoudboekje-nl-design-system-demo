@@ -17,22 +17,31 @@ class GebruikersActiviteitView(HHBView):
                 "type": "string", "pattern": "^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\+\d{2}:\d{2}|Z)?$"
             },
             "gebruiker_id": {
-                "type": "integer",
+                "oneOf": [
+                    {"type": "null"},
+                    {"type": "integer"},
+                ]
             },
             "action": {
                 "type": "string",
             },
             "entities": {
-                "type": "string",
+                "type": "array",
             },
             "snapshot_before": {
-                "type": "string",
+                "oneOf": [
+                    {"type": "null"},
+                    {"type": "object"},
+                ]
             },
             "snapshot_after": {
-                "type": "string",
+                "oneOf": [
+                    {"type": "null"},
+                    {"type": "object"},
+                ]
             },
             "meta": {
-                "type": "string",
+                "type": "object",
             },
         },
         "required": []
