@@ -1,7 +1,7 @@
 import {Box, BoxProps, HStack, Stack, VStack} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {FaRegBuilding, GrGraphQl, MdCreditCard, RiBarChartFill, RiUserLine, TiCog} from "react-icons/all";
+import {AiOutlineAudit, FaRegBuilding, GrGraphQl, MdCreditCard, RiBarChartFill, RiUserLine, TiCog} from "react-icons/all";
 import Routes from "../../config/routes";
 import {isDev} from "../../utils/things";
 import SidebarLink from "./SidebarLink";
@@ -24,6 +24,7 @@ const Sidebar: React.FC<BoxProps> = (props) => {
 				</HStack>
 			</Stack>
 			<SidebarLink to={Routes.Rapportage} icon={RiBarChartFill}>{t("sidebar.rapportage")}</SidebarLink>
+			<SidebarLink to={Routes.AuditTrail} icon={AiOutlineAudit}>{t("sidebar.gebeurtenissen")}</SidebarLink>
 			<SidebarLink to={Routes.Settings} icon={TiCog}>{t("sidebar.configuratie")}</SidebarLink>
 		</Stack>
 
@@ -34,8 +35,7 @@ const Sidebar: React.FC<BoxProps> = (props) => {
 				</Stack>
 			</Stack>
 		)}
-	</>
-	);
+	</>);
 };
 
 export default Sidebar;

@@ -28,15 +28,15 @@ enum AuditTrailEntity {
 }
 
 const auditTrailData = [
-	{name: "Koen Brouwer", subject: [AuditTrailAction.Create, AuditTrailEntity.Organisatie], time: "2021-05-01 13:00"},
-	{name: "Koen Brouwer", subject: [AuditTrailAction.Create, AuditTrailEntity.Organisatie], time: "2021-05-01 13:02"},
-	{name: "Koen Brouwer", subject: [AuditTrailAction.Create, AuditTrailEntity.Organisatie], time: "2021-05-01 13:04"},
-	{name: "Koen Brouwer", subject: [AuditTrailAction.Create, AuditTrailEntity.Organisatie], time: "2021-05-01 13:06"},
-	{name: "Bauke Huijbers", subject: [AuditTrailAction.Create, AuditTrailEntity.Burger], time: "2021-05-01 13:24"},
-	{name: "Bauke Huijbers", subject: [AuditTrailAction.Create, AuditTrailEntity.Burger], time: "2021-05-01 13:26"},
-	{name: "Bauke Huijbers", subject: [AuditTrailAction.Create, AuditTrailEntity.Burger], time: "2021-05-01 13:28"},
-	{name: "Christian Hulleman", subject: [AuditTrailAction.Update, AuditTrailEntity.Afspraak], time: "2021-05-01 13:24"},
-	{name: "Christian Hulleman", subject: [AuditTrailAction.Update, AuditTrailEntity.Afspraak], time: "2021-05-01 13:03"},
+	{name: "Koen Brouwer", subject: [AuditTrailAction.Create, AuditTrailEntity.Organisatie], time: "2021-01-18 13:00"},
+	{name: "Koen Brouwer", subject: [AuditTrailAction.Create, AuditTrailEntity.Organisatie], time: "2021-01-18 13:02"},
+	{name: "Koen Brouwer", subject: [AuditTrailAction.Create, AuditTrailEntity.Organisatie], time: "2021-01-18 13:04"},
+	{name: "Koen Brouwer", subject: [AuditTrailAction.Create, AuditTrailEntity.Organisatie], time: "2021-01-18 13:06"},
+	{name: "Bauke Huijbers", subject: [AuditTrailAction.Create, AuditTrailEntity.Burger], time: "2021-01-18 13:24"},
+	{name: "Bauke Huijbers", subject: [AuditTrailAction.Create, AuditTrailEntity.Burger], time: "2021-01-18 13:26"},
+	{name: "Bauke Huijbers", subject: [AuditTrailAction.Create, AuditTrailEntity.Burger], time: "2021-01-18 13:28"},
+	{name: "Christian Hulleman", subject: [AuditTrailAction.Update, AuditTrailEntity.Afspraak], time: "2021-01-18 13:24"},
+	{name: "Christian Hulleman", subject: [AuditTrailAction.Update, AuditTrailEntity.Afspraak], time: "2021-01-18 13:03"},
 ];
 
 const AuditTrailSubjectToReadable = (subject) => {
