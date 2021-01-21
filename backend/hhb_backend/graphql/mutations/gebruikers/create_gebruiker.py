@@ -83,10 +83,10 @@ class CreateGebruiker(graphene.Mutation):
         gebruikersactiviteit(
             action='create',
             entities=[{"entityType": "burger", "entityId": result['id']}] +
-                     [
-                         ({"entityType": "rekening", "entityId": rekening['id'], })
+                     ([
+                         ({"entityType": "rekening", "entityId": rekening['id']})
                          for rekening in (result['rekeningen'] or [])
-                     ] if 'rekeningen' in result is not None else [],
+                     ] if 'rekeningen' in result is not None else []),
             before=None,
             after={
                 'burger': result,
