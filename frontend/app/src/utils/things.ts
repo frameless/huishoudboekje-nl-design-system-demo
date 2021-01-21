@@ -113,7 +113,7 @@ export const sortBankTransactions = (a: BankTransaction, b: BankTransaction) => 
 };
 
 export const formatBurgerName = (burger: Gebruiker, fullName = false) => {
-	const voorletters = burger.voorletters?.replaceAll(".", "").split("").join(". ") + ".";
+	const voorletters = burger.voorletters?.replace(/\./g, "").split("").join(". ") + ".";
 	return [fullName ? burger.voornamen : voorletters, burger.achternaam].join(" ");
 };
 
