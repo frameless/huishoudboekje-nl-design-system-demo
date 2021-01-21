@@ -8,7 +8,7 @@ class GebruikersActiviteit(db.Model):
 
     id = Column(Integer, Sequence("gebruikersactiviteiten_id_seq"), primary_key=True)
     timestamp = Column(TIMESTAMP(timezone=True), nullable=False)
-    gebruiker_id = Column(Integer)
+    gebruiker_id = Column(String)
     action = Column(String, nullable=False)
     entities = Column(JSONB, nullable=False)
     snapshot_before = Column(JSONB)

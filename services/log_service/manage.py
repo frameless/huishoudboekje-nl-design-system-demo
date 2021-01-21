@@ -7,7 +7,7 @@ from log_service.app import create_app
 app = create_app()
 from core_service.database import db
 
-app.config.from_object(os.environ['APP_SETTINGS'])
+app.config.from_object(os.getenv('APP_SETTINGS', 'log_service.config.DevelopmentConfig'))
 
 migrate = Migrate(app, db)
 manager = Manager(app)

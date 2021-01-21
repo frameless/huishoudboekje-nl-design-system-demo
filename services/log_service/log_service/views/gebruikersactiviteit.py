@@ -18,8 +18,8 @@ class GebruikersActiviteitView(HHBView):
             },
             "gebruiker_id": {
                 "oneOf": [
+                    {"type": "string"},
                     {"type": "null"},
-                    {"type": "integer"},
                 ]
             },
             "action": {
@@ -30,14 +30,14 @@ class GebruikersActiviteitView(HHBView):
             },
             "snapshot_before": {
                 "oneOf": [
-                    {"type": "null"},
                     {"type": "object"},
+                    {"type": "null"},
                 ]
             },
             "snapshot_after": {
                 "oneOf": [
-                    {"type": "null"},
                     {"type": "object"},
+                    {"type": "null"},
                 ]
             },
             "meta": {

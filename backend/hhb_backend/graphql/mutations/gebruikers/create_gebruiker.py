@@ -42,7 +42,7 @@ def gebruikersactiviteit(action: str, entities: list, before: dict, after: dict)
             'applicationVersion': '0.0.0-mock',
         },
 
-        'gebruiker_id': g.user if g.oidc_id_token is not None else None,
+        'gebruiker_id': g.oidc_id_token["email"] if g.oidc_id_token is not None else None,
         'action': action,
         'entities': entities,
         'snapshot_before': before,
