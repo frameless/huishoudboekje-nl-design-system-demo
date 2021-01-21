@@ -46,7 +46,7 @@ class UpdateGebruiker(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(root, info, id, **kwargs):
         """ Update the current Gebruiker/Burger """
-        previous_gebruiker = await request.dataloader.gebruikers_by_id.load(id)
+        previous = await request.dataloader.gebruikers_by_id.load(id)
 
         response = requests.post(
             f"{settings.HHB_SERVICES_URL}/gebruikers/{id}",
@@ -60,4 +60,4 @@ class UpdateGebruiker(graphene.Mutation):
 
         gebruiker = response.json()["data"]
 
-        return UpdateGebruiker(ok=True, gebruiker=gebruiker, previous=previous_gebruiker)
+        return UpdateGebruiker(ok=True, gebruiker=gebruiker, previous=previous)

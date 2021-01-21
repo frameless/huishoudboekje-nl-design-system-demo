@@ -1,4 +1,5 @@
 import logging
+import sys
 import typing
 from dataclasses import dataclass, field
 from functools import wraps
@@ -46,6 +47,7 @@ def log_gebruikers_activiteit(view_func):
             for entity in (gebruikers_activiteit.entities or [])
         ]
         try:
+            gebruikersactiviteit = result.gebruikers_activiteit.to_dict() if type(result.gebruikers_activiteit) == GebruikersActiviteit else result.gebruikers_activiteit
             json = {
                 'timestamp': datetime.now(tz=tz.tzlocal()).replace(microsecond=0).isoformat(),
                 'meta': {
@@ -54,7 +56,7 @@ def log_gebruikers_activiteit(view_func):
                     'applicationVersion': load_version().version,  # Read version.json
                 },
                 'gebruiker_id': g.oidc_id_token["email"] if g.oidc_id_token is not None else None,
-                **(gebruikers_activiteit.to_dict()),
+                **(gebruikersactiviteit),
             }
             # TODO use a Queue and asyncio.run_task
             response = requests.post(
@@ -63,7 +65,8 @@ def log_gebruikers_activiteit(view_func):
             )
             logging.debug(f"logged gebruikersactiviteit(status={response.status_code}) {json}")
         except:
-            logging.exception(f"Failed to log {gebruikers_activiteit.to_dict()}")
+            exc = sys.exc_info()[1]
+            logging.exception(f"Failed to log {gebruikers_activiteit}")
 
         return result
 
@@ -74,4 +77,8 @@ def gebruikers_activiteit_entities(result: dict, key: str, entity_type: str) -> 
     """Return a list of entities of a list of objects in a dictionary at 'key'"""
     if key not in result or not result[key]:
         return []
-    return [(GebruikersActiviteitEntity(entity_type=entity_type, entity_id=item['id'])) for item in result[key]]
+    if type(result[key]) == list:
+        return [(GebruikersActiviteitEntity(entity_type=entity_type, entity_id=item["id"])) for item in result[key]]
+    if type(result[key]) == dict:
+        return [GebruikersActiviteitEntity(entity_type=entity_type, entity_id=result[key]["id"])]
+    return [GebruikersActiviteitEntity(entity_type=entity_type, entity_id=result[key])]

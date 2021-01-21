@@ -8,6 +8,7 @@ from hhb_backend.graphql import settings
 from hhb_backend.graphql.models.afspraak import Afspraak
 from hhb_backend.graphql.mutations.afspraken import AfspraakInput
 from hhb_backend.graphql.utils import convert_hhb_interval_to_iso
+from hhb_backend.graphql.utils.gebruikersactiviteiten import log_gebruikers_activiteit
 
 
 class CreateAfspraak(graphene.Mutation):
@@ -17,7 +18,19 @@ class CreateAfspraak(graphene.Mutation):
     ok = graphene.Boolean()
     afspraak = graphene.Field(lambda: Afspraak)
 
-    def mutate(root, info, input, **kwargs):
+    @property
+    def gebruikers_activiteit(self):
+        return dict(
+            action="Update",
+            entities=[{"entity_type": "afspraak", "entity_id": self.afspraak["id"]}] +
+                     ([{"entity_type": "burger", "entity_id": self.afspraak["gebruiker"]["id"]}] if "gebruiker" in self.afspraak else []) +
+                     ([{"entity_type": "organisatie", "entity_id": self.afspraak["organisatie"]["id"]}] if "organisatie" in self.afspraak else []),
+            after=self.afspraak,
+        )
+
+
+    @log_gebruikers_activiteit
+    async def mutate(root, info, input, **kwargs):
         """ Create the new Gebruiker/Burger """
         if "interval" in input:
             iso_interval = convert_hhb_interval_to_iso(input["interval"])

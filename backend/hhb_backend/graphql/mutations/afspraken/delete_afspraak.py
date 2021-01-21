@@ -5,6 +5,10 @@ import graphene
 import requests
 from graphql import GraphQLError
 from hhb_backend.graphql import settings
+from hhb_backend.graphql.models.afspraak import Afspraak
+from flask import request
+
+from hhb_backend.graphql.utils.gebruikersactiviteiten import log_gebruikers_activiteit, gebruikers_activiteit_entities
 
 
 class DeleteAfspraak(graphene.Mutation):
@@ -14,10 +18,25 @@ class DeleteAfspraak(graphene.Mutation):
 
     ok = graphene.Boolean()
 
-    def mutate(root, info, id):
+    previous = graphene.Field(lambda: Afspraak)
+
+    @property
+    def gebruikers_activiteit(self):
+        return dict(
+            action="Delete",
+            entities=[dict(entity_type="afspraak", entity_id=self.previous['id'])] +
+                     gebruikers_activiteit_entities(self.previous, "gebruiker", entity_type="burger") +
+                     gebruikers_activiteit_entities(self.previous, "organisatie", entity_type="organisatie"),
+            before=self.previous,
+        )
+
+    @log_gebruikers_activiteit
+    async def mutate(root, info, id):
         """ Delete current gebruiker """
+
+        previous = await request.dataloader.afspraken_by_id.load(id)
 
         delete_response = requests.delete(f"{settings.HHB_SERVICES_URL}/afspraken/{id}")
         if delete_response.status_code != 204:
             raise GraphQLError(f"Upstream API responded: {delete_response.json()}")
-        return DeleteAfspraak(ok=True)
+        return DeleteAfspraak(ok=True, previous=previous)
