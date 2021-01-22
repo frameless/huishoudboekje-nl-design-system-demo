@@ -2,6 +2,7 @@
 
 from core_service.views.hhb_view import HHBView
 from flask import request, abort, make_response
+from sqlalchemy import or_
 
 from models.gebruikersactiviteit import GebruikersActiviteit
 
@@ -43,13 +44,17 @@ class GebruikersActiviteitView(HHBView):
     def add_filter_filter_gebruiker(self):
         filter_ids = request.args.get('filter_gebruikers')
         if filter_ids:
-            ids = []
+            filters = []
             for raw_id in filter_ids.split(","):
                 try:
-                    ids.append(int(raw_id))
+                    int_id = int(raw_id)
+                    filters.append(self.hhb_model.entities.contains(
+                        [{"entityId": int_id, "entityType": "burger"}]))
                 except ValueError:
                     abort(make_response(
                         {"errors": [f"Input for filter_gebruikers is not correct, '{raw_id}' is not a number."]}, 400))
-                # self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.entities['entities', ['entityId']].astext == raw_id)
-                self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.entities.contains(
-                    [{"entityId": int(raw_id), "entityType": "burger"}]))
+
+            if len(filters) > 0:
+                self.hhb_query.query = self.hhb_query.query.filter(or_(*filters))
+            #self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.entities.contains(
+                   # [{"entityId": int(raw_id), "entityType": "burger"}]))

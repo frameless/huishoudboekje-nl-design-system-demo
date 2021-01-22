@@ -21,9 +21,10 @@ class GebruikersActiviteitenQuery():
         if not kwargs["ids"] and not kwargs["gebruikerIds"]:
             gebruikersactiviteiten = request.dataloader.gebruikersactiviteiten_by_id.get_all_and_cache()
         else:
+            # gebruikersactiviteiten = {}
             if kwargs["ids"]:
                 gebruikersactiviteiten = await request.dataloader.gebruikersactiviteiten_by_id.load_many(kwargs["ids"])
             if kwargs["gebruikerIds"]:
-                gebruikersactiviteiten = await request.dataloader.gebruikersactiviteiten_by_gebruikers.load_many(kwargs["gebruikerIds"])
+                gebruikersactiviteiten = request.dataloader.gebruikersactiviteiten_by_gebruikers.get_by_ids(kwargs["gebruikerIds"]) #load_many(kwargs["gebruikerIds"])
 
         return gebruikersactiviteiten
