@@ -13,6 +13,7 @@ from dateutil import tz
 from flask import request, g
 
 from hhb_backend.graphql import settings
+from hhb_backend.version import load_version
 
 
 @dataclass_json(letter_case=LetterCase.CAMEL)
@@ -41,7 +42,7 @@ def log_gebruikers_activiteit(view_func):
                 'meta': {
                     'userAgent': str(request.user_agent),
                     'ip': ','.join(request.access_route),
-                    'applicationVersion': '0.0.0-mock',  # Read version.json
+                    'applicationVersion': load_version().version,  # Read version.json
                 },
                 'gebruiker_id': g.oidc_id_token["email"] if g.oidc_id_token is not None else None,
                 **(result.gebruikers_activiteit.to_dict()),
@@ -53,7 +54,7 @@ def log_gebruikers_activiteit(view_func):
             )
             logging.debug(f"logged gebruikersactiviteit(status={response.status_code}) {json}")
         except:
-            logging.warning(f"Failed to log {result.gebruikers_activiteit.to_dict()}")
+            logging.exception(f"Failed to log {result.gebruikers_activiteit.to_dict()}")
 
         return result
     return decorated

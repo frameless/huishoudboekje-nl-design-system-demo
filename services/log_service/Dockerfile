@@ -8,7 +8,8 @@ RUN apk add --update jq
 ARG COMPONENT_NAME=log_service
 ARG COMPONENT_TAG=undefined
 ARG COMPONENT_COMMIT_HASH=undefined
-RUN jq -ncM '{tag: env.COMPONENT_TAG, commit: env.COMPONENT_COMMIT_HASH, component: env.COMPONENT_NAME}' | tee /version.json
+ARG COMPONENT_VERSION=undefined
+RUN jq -ncM '{tag: env.COMPONENT_TAG, commit: env.COMPONENT_COMMIT_HASH, component: env.COMPONENT_NAME, version: env.COMPONENT_VERSION}' | tee /version.json
 
 #Build
 FROM ${DOCKER_PROXY}python:3.8-slim-buster
