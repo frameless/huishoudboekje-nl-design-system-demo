@@ -56,5 +56,3 @@ class GebruikersActiviteitView(HHBView):
 
             if len(filters) > 0:
                 self.hhb_query.query = self.hhb_query.query.filter(or_(*filters))
-            #self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.entities.contains(
-                   # [{"entityId": int(raw_id), "entityType": "burger"}]))
