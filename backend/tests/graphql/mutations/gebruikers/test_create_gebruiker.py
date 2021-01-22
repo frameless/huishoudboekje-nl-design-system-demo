@@ -61,5 +61,5 @@ def test_create_gebruiker_success(client):
                                     "rekeninghouder": "C. Lown"}]}}},
             content_type='application/json'
         )
-        assert mock._adapter.call_count == 3
+        assert mock._adapter.call_count == 4
         assert response.json["data"]["createGebruiker"]["ok"] is True
