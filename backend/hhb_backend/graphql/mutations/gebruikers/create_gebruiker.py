@@ -9,7 +9,7 @@ from hhb_backend.graphql import settings
 from hhb_backend.graphql.models.gebruiker import Gebruiker
 import hhb_backend.graphql.mutations.rekeningen.rekening_input as rekening_input
 from hhb_backend.graphql.mutations.rekeningen.utils import create_gebruiker_rekening
-from hhb_backend.graphql.utils.gebruikersactiviteiten import entity_list, gebruikersactiviteit
+from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteitEntity, gebruikers_activiteit_entities, GebruikersActiviteit, log_gebruikers_activiteit
 
 
 class CreateGebruikerInput(graphene.InputObjectType):
@@ -36,7 +36,17 @@ class CreateGebruiker(graphene.Mutation):
     ok = graphene.Boolean()
     gebruiker = graphene.Field(lambda: Gebruiker)
 
-    def mutate(root, info, **kwargs):
+    @property
+    def gebruikers_activiteit(self):
+        return GebruikersActiviteit(
+            action="Create",
+            entities=[GebruikersActiviteitEntity(entity_type="burger", entity_id=self.gebruiker['id'])] +
+                     gebruikers_activiteit_entities(result=self.gebruiker, key='rekeningen', entity_type='rekening'),
+            after=self.gebruiker,
+        )
+
+    @log_gebruikers_activiteit
+    async def mutate(root, info, **kwargs):
         """ Create the new Gebruiker/Burger """
         input = kwargs.pop("input")
         rekeningen = input.pop("rekeningen", None)
@@ -53,12 +63,4 @@ class CreateGebruiker(graphene.Mutation):
         if rekeningen:
             result['rekeningen'] = [create_gebruiker_rekening(result['id'], rekening) for rekening in rekeningen]
 
-        gebruikersactiviteit(
-            action='create',
-            entities=[{"entityType": "burger", "entityId": result['id']}] +
-                     entity_list(result=result, key='rekeningen', entity_type='rekening'),
-            before=None,
-            after={
-                "burger": result,
-            })
         return CreateGebruiker(gebruiker=result, ok=True)

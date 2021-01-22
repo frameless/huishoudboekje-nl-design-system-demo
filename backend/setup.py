@@ -21,5 +21,6 @@ setup(
         'nest-asyncio>=1.4.3',
         'python-dateutil>=2.8.1',
         'sepaxml>=2.3.0',
+        'dataclasses-json>=0.5.2',
     ],
 )
