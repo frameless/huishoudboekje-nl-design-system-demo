@@ -33,6 +33,21 @@ organisaties:
   - iban: "NL45INGB0705001903"
     rekeninghouder: "DUO"
 
+- naam: "Gemeente Utrecht"
+  weergave_naam: "Gemeente Utrecht"
+  kvk_nummer: "30280353"
+  straatnaam: "Postbus"
+  huisnummer: "16200"
+  postcode: "3500CE"
+  plaatsnaam: "Utrecht"
+  rekeningen:
+  - iban: "NL71ABNA0411065785"
+    rekeninghouder: "GEMEENTE UTRECHT"
+  - iban: "NL92BNGH0285178601"
+    rekeninghouder: ""
+  - iban: "NL76BNGH0285178598"
+    rekeninghouder: "GEM UTRECHT WENI"
+
 - naam: "Sociale Verzekeringsbank"
   weergave_naam: "Sociale Verzekeringsbank Utrecht"
   kvk_nummer: "34366008"
