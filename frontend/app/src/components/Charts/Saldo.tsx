@@ -20,7 +20,7 @@ const Saldo: React.FC<BoxProps & { transactions: BankTransaction[] }> = ({transa
 		const balance = _in - _out;
 
 		result.total += balance;
-		result.data.push([month, (result.total + balance)]);
+		result.data.push([month, (result.total)]);
 		return result;
 	}, {
 		data: [], total: 0
