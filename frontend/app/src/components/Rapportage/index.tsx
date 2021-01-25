@@ -1,4 +1,4 @@
-import {Box, Divider, FormControl, Heading, HStack, Input, Stack, Text} from "@chakra-ui/react";
+import {Box, Divider, FormControl, HStack, Input, Stack, Text} from "@chakra-ui/react";
 import moment from "moment";
 import React, {useState} from "react";
 import DatePicker from "react-datepicker";
@@ -41,7 +41,7 @@ const Charts = () => {
 	const onSelectRubriek = (value) => setFilterRubriekIds(value ? value.map(v => v.value) : []);
 
 	return (
-		<Page title={t("sidebar.rapportages")} position={"relative"}>
+		<Page title={t("sidebar.rapportage")} position={"relative"}>
 			<Section>
 				<FormLeft title={t("sections.filterOptions.title")} helperText={t("sections.filterOptions.helperText")} />
 				<FormRight>

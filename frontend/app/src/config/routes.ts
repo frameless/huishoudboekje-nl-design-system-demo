@@ -17,7 +17,7 @@ export enum RouteNames {
 	export = "exporteren",
 
 	// Not in use yet
-	rapportages = "rapportages",
+	rapportage = "rapportage",
 	settings = "instellingen",
 }
 
@@ -45,9 +45,7 @@ const Routes = {
 	Bookings: `/${RouteNames.banking}/${RouteNames.bookings}`,
 	BookingsExport: `/${RouteNames.banking}/${RouteNames.bookings}/${RouteNames.export}`,
 	Settings: `/${RouteNames.settings}`,
-	Rapportages: `/${RouteNames.rapportages}`,
-	RapportagesInkomstenUitgaven: `/${RouteNames.rapportages}/inkomsten-uitgaven`,
-	RapportagesSaldo: `/${RouteNames.rapportages}/saldo`,
+	Rapportage: `/${RouteNames.rapportage}`,
 
 	NotFound: `/${RouteNames.notFound}`,
 

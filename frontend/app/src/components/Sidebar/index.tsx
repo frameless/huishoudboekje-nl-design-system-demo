@@ -23,7 +23,7 @@ const Sidebar: React.FC<BoxProps> = (props) => {
 					</VStack>
 				</HStack>
 			</Stack>
-			<SidebarLink exactMatch to={Routes.Rapportages} icon={RiBarChartFill}>{t("sidebar.rapportages")}</SidebarLink>
+			<SidebarLink to={Routes.Rapportage} icon={RiBarChartFill}>{t("sidebar.rapportage")}</SidebarLink>
 			<SidebarLink to={Routes.Settings} icon={TiCog}>{t("sidebar.configuratie")}</SidebarLink>
 		</Stack>
 
