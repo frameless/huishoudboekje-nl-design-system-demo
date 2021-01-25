@@ -78,6 +78,17 @@ organisaties:
   - iban: "NL54INGB0661901246"
     rekeninghouder: "ENGIE Nederland RETAIL B.V."
 
+- naam: "Essent Retail Energie B.V."
+  weergave_naam: "Essent Retail Energie B.V."
+  kvk_nummer: "13041611"
+  straatnaam: "Willemsplein"
+  huisnummer: "4"
+  postcode: "5211AK"
+  plaatsnaam: "'s-Hertogenbosch"
+  rekeningen:
+  - iban: "NL32ABNA0242244777"
+    rekeninghouder: "ESSENT RETAIL ENERG"
+
 # verzekeraars
 - naam: "Anderzorg N.V."
   kvk_nummer: "50544403"
