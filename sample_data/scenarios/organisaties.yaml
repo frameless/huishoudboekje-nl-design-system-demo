@@ -61,6 +61,18 @@ organisaties:
   - iban: "NL49INGB0702712728"
     rekeninghouder: "UWV"
 
+# drinkwater
+- naam: "Vitens N.V."
+  weergave_naam: "Vitens N.V."
+  kvk_nummer: "05069581"
+  straatnaam: "Postbus"
+  huisnummer: "1205"
+  postcode: "8001BE"
+  plaatsnaam: "Zwolle"
+  rekeningen:
+  - iban: "NL94INGB0000869000"
+    rekeninghouder: "VITENS NV"
+
 # woningverhuur
 - naam: "Stichting Mitros"
   weergave_naam: "Stichting Mitros"
