@@ -1,12 +1,13 @@
 # Job to cleanup some stuff. Feel free to modify and run manually when required.
 recycle-namespaces:
-  stage: recycle
+  stage: maintenance
   environment:
-    name: review/recycle
+    name: review/$CI_COMMIT_REF_SLUG
   variables:
     GIT_STRATEGY: none
   image: registry.gitlab.com/commonground/core/review-app-deployer:latest
   script:
+    - echo "Cleaning up old namespaces..."
     - |
       kubectl delete namespace hhb-bug-cleanup || true
       kubectl delete namespace hhb-bug-cleanup-ci || true
