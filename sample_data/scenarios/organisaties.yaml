@@ -1,9 +1,20 @@
 organisaties:
+- naam: "Coöperatie VGZ"
+  weergave_naam: "Bewuzt"
+  kvk_nummer: "10029718"
+  straatnaam: "Winschoterdiep"
+  huisnummer: "70"
+  postcode: "709723AB"
+  plaatsnaam: "Groningen"
+  rekeningen:
+  - iban: "NL87INGB0000717127"
+    rekeninghouder: "Bewuzt"
+
 - huisnummer: "70"
   kvk_nummer: "50544403"
   naam: "Anderzorg N.V."
   plaatsnaam: "Groningen"
-  postcode: "709723AB"
+  postcode: "9723AB"
   straatnaam: "Winschoterdiep"
   weergave_naam: "Anderzorg"
   rekeningen:
