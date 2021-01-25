@@ -199,5 +199,17 @@ organisaties:
   - iban: "NL47INGB0000003054"
     rekeninghouder: "FBTO ZORGVERZEKERINGEN NV"
 
+# werkgevers
+- naam: "Albert Heijn B.V."
+  weergave_naam: "Albert Heijn"
+  kvk_nummer: "35012085"
+  straatnaam: "Postbus"
+  huisnummer: "3000"
+  postcode: "1500HA"
+  plaatsnaam: "Zaandam"
+  rekeningen:
+  - iban: "AH00AHOL0000000001"
+    rekeninghouder: "Albert Heijn B.V."
+
 scenarios:
 - aantal: 50
