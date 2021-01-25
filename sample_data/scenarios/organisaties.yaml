@@ -1,4 +1,15 @@
 organisaties:
+- naam: "Dienst Uitvoering Onderwijs"
+  weergave_naam: "DUO"
+  kvk_nummer: "50973029"
+  straatnaam: "Postbus"
+  huisnummer: "30155"
+  postcode: "9700LG"
+  plaatsnaam: "Groningen"
+  rekeningen:
+  - iban: "NL45INGB0705001903"
+    rekeninghouder: "DUO"
+
 - naam: "DSW Ziektekostenverzekeringen N.V."
   weergave_naam: "DSW Ziektekostenverzekeringen"
   kvk_nummer: "24230430"
