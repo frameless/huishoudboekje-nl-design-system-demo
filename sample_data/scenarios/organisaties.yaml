@@ -1,4 +1,15 @@
 organisaties:
+- naam: "CZ Groep Aanvullende Verzekering Zorgverzekeraar"
+  weergave_naam: "CZ Groep Zorgverzekeraar"
+  kvk_nummer: "18028752"
+  straatnaam: "Ringbaan-West"
+  huisnummer: "236"
+  postcode: "5038KE"
+  plaatsnaam: "Tilburg"
+  rekeningen:
+  - iban: "NL85INGB0668339063"
+    rekeninghouder: "CZ Groep Zorgverzekeraar"
+
 - naam: "De Nederlandse Energie Maatschappij"
   weergave_naam: "Budget Energie"
   kvk_nummer: "34297646"
