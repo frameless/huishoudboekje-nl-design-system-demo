@@ -45,6 +45,17 @@ organisaties:
   - iban: "NL86ABNA0511919131"
     rekeninghouder: "Budget Energie"
 
+- naam: "Eneco Consumenten B.V."
+  weergave_naam: "Eneco Consumenten"
+  kvk_nummer: "24324527"
+  straatnaam: "Marten Meesweg"
+  huisnummer: "5"
+  postcode: "3068AV"
+  plaatsnaam: "Rotterdam"
+  rekeningen:
+  - iban: "NL10ABNA0240120000"
+    rekeninghouder: "Eneco"
+
 # verzekeraars
 - naam: "Anderzorg N.V."
   kvk_nummer: "50544403"
