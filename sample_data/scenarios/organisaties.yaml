@@ -64,8 +64,19 @@ organisaties:
   postcode: "5211AK"
   plaatsnaam: "'s-Hertogenbosch"
   rekeningen:
-  - iban: "NL54INGB0661901246"
+  - iban: "NL71ABNA0629639183"
     rekeninghouder: "Energiedirect BV"
+
+- naam: "ENGIE Nederland Retail B.V."
+  weergave_naam: "ENGIE Nederland Retail B.V."
+  kvk_nummer: "05082820"
+  straatnaam: "Grote Voort"
+  huisnummer: "291"
+  postcode: "8041BL"
+  plaatsnaam: "Zwolle"
+  rekeningen:
+  - iban: "NL54INGB0661901246"
+    rekeninghouder: "ENGIE Nederland RETAIL B.V."
 
 # verzekeraars
 - naam: "Anderzorg N.V."
