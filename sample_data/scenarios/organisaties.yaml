@@ -33,6 +33,20 @@ organisaties:
   - iban: "NL45INGB0705001903"
     rekeninghouder: "DUO"
 
+# woningverhuur
+- naam: "Stichting Mitros"
+  weergave_naam: "Stichting Mitros"
+  kvk_nummer: "30136131"
+  straatnaam: "Postbus"
+  huisnummer: "8217"
+  postcode: "3503RE"
+  plaatsnaam: "Utrecht"
+  rekeningen:
+  - iban: "NL81ABNA0479270961"
+    rekeninghouder: "STICHTING MITROS"
+  - iban: "NL28INGB0668690550"
+    rekeninghouder: "STICHTING MITROS"
+
 # energieleveranciers
 - naam: "De Nederlandse Energie Maatschappij"
   weergave_naam: "Budget Energie"
