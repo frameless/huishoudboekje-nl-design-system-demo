@@ -1,4 +1,4 @@
-import {Box, Divider, FormControl, HStack, Input, Stack, Text} from "@chakra-ui/react";
+import {Box, Divider, FormControl, HStack, Input, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Text} from "@chakra-ui/react";
 import moment from "moment";
 import React, {useState} from "react";
 import DatePicker from "react-datepicker";
@@ -116,8 +116,20 @@ const Charts = () => {
 				const burgerNamesList: string[] = selectedBurgers.map(b => formatBurgerName(b));
 
 				return (<>
-					<InkomstenUitgaven transactions={filteredTransactions} />
-					<Saldo transactions={filteredTransactions} />
+					<Tabs>
+						<TabList>
+							<Tab>Saldo</Tab>
+							<Tab>Inkomsten en uitgaven</Tab>
+						</TabList>
+						<TabPanels>
+							<TabPanel>
+								<Saldo transactions={filteredTransactions} />
+							</TabPanel>
+							<TabPanel>
+								<InkomstenUitgaven transactions={filteredTransactions} />
+							</TabPanel>
+						</TabPanels>
+					</Tabs>
 
 					<Section direction={["column", "row"]}>
 						<FormLeft title={t("balance")} helperText={selectedBurgers.length > 0 ? humanJoin(burgerNamesList) : t("allBurgers")} />
