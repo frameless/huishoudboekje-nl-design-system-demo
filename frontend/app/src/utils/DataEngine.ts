@@ -7,7 +7,7 @@ export enum Category {
 	Inkomsten = "income", Uitgaven = "expenses", Ongeboekt = "unbooked"
 }
 
-export const useCreateAggregationByCategoryByMonth = (tr: BankTransaction[]) => {
+export const createAggregationByCategoryByMonth = (tr: BankTransaction[]) => {
 	const filtered = tr.filter(t => t.journaalpost !== null);
 
 	const _data = filtered.map(tr => ({
@@ -45,7 +45,7 @@ export const useCreateAggregationByCategoryByMonth = (tr: BankTransaction[]) => 
 	return chartData.sort((a, b) => moment(a, "MMM YYYY").isSameOrBefore(moment(b, "MMM YYYY")) ? -1 : 1);
 };
 
-export const useCreateAggregationByRubriek = data => {
+export const createAggregationByRubriek = data => {
 	let balance = 0;
 
 	const _data = data.reduce((result, tr: BankTransaction & { rubriek: Rubriek }) => {

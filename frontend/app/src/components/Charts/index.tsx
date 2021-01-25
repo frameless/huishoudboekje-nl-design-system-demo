@@ -1,19 +1,16 @@
-import {FormControl, Grid, Input, Stack, Text} from "@chakra-ui/react";
+import {Box, Divider, FormControl, Heading, Input, Stack, Text} from "@chakra-ui/react";
 import moment from "moment";
 import React, {useState} from "react";
 import DatePicker from "react-datepicker";
 import {useInput} from "react-grapple";
 import {useTranslation} from "react-i18next";
-import {RiBarChartFill} from "react-icons/all";
-import {NavLink, Route, Switch} from "react-router-dom";
 import Select from "react-select";
-import Routes from "../../config/routes";
 import {Gebruiker, Rubriek, useGetReportingDataQuery} from "../../generated/graphql";
 import Transaction from "../../models/Transaction";
+import {Category, createAggregationByRubriek} from "../../utils/DataEngine";
 import Queryable from "../../utils/Queryable";
-import {formatBurgerName, isDev, useReactSelectStyles} from "../../utils/things";
+import {currencyFormat2, formatBurgerName, useReactSelectStyles} from "../../utils/things";
 import {Label} from "../Forms/FormLeftRight";
-import GridCard from "../GridCard";
 import Page from "../Layouts/Page";
 import Section from "../Layouts/Section";
 import InkomstenUitgaven from "./InkomstenUitgaven";
@@ -22,6 +19,11 @@ import Saldo from "./Saldo";
 const Charts = () => {
 	const {t} = useTranslation();
 	const reactSelectStyles = useReactSelectStyles();
+
+	const translatedCategory = {
+		[Category.Inkomsten]: t("charts.inkomstenUitgaven.income"),
+		[Category.Uitgaven]: t("charts.inkomstenUitgaven.expenses"),
+	};
 
 	const $data = useGetReportingDataQuery({
 		fetchPolicy: "no-cache",
@@ -104,34 +106,45 @@ const Charts = () => {
 					.filter(t => filterBurgerIds.length > 0 ? t.belongsToAnyBurger(filterBurgerIds) : true)
 					.filter(t => t.isBetweenDates(_startDate, _endDate));
 
-				return (
-					<Switch>
-						<Route path={Routes.RapportagesInkomstenUitgaven}>
-							<InkomstenUitgaven transactions={filteredTransactions} />
-						</Route>
-						<Route path={Routes.RapportagesSaldo}>
-							<Saldo transactions={filteredTransactions} />
-						</Route>
-						<Route>
-							<Grid maxWidth={"100%"} gridTemplateColumns={["repeat(1, 1fr)", "repeat(2, 1fr)", "repeat(3, 1fr)", "repeat(4, 1fr)", "repeat(6, 1fr)"]} gap={5}>
-								<GridCard as={NavLink} to={Routes.RapportagesInkomstenUitgaven}>
-									<Stack direction={"row"} spacing={3} alignItems={"center"}>
-										<RiBarChartFill />
-										<Text>{t("charts.inkomstenUitgaven.title")}</Text>
-									</Stack>
-								</GridCard>
-								{isDev && (
-									<GridCard as={NavLink} to={Routes.RapportagesSaldo}>
-										<Stack direction={"row"} spacing={3} alignItems={"center"}>
-											<RiBarChartFill />
-											<Text>{t("charts.saldo.title")}</Text>
-										</Stack>
-									</GridCard>
-								)}
-							</Grid>
-						</Route>
-					</Switch>
-				)
+				const aggregationByRubriek = createAggregationByRubriek(filteredTransactions);
+				return (<>
+					<InkomstenUitgaven transactions={filteredTransactions} />
+					<Saldo transactions={filteredTransactions} />
+
+					<Section>
+						{Object.keys(aggregationByRubriek.rubrieken).map(c => {
+							const categories = Object.keys(aggregationByRubriek.rubrieken[c]);
+							return categories.length === 0 ? null : (
+								<Stack key={c}>
+									<Heading size={"md"}>{translatedCategory[c]}</Heading>
+									{categories.map((r, i) => {
+										return (
+											<Stack direction={"row"} maxW={"500px"} pl={4} key={i}>
+												<Box flex={1}>
+													<Text><strong>{r === Category.Ongeboekt ? t("charts.inkomstenUitgaven.unbooked") : r}</strong></Text>
+												</Box>
+												<Box flex={2} textAlign={"right"}>
+													<Text>{currencyFormat2(false).format(aggregationByRubriek.rubrieken[c][r])}</Text>
+												</Box>
+											</Stack>
+										)
+									})}
+								</Stack>
+							);
+						})}
+
+						<Divider />
+
+						<Stack direction={"row"} maxW={"500px"}>
+							<Box flex={1}>
+								<Text><strong>{t("balance")}</strong></Text>
+							</Box>
+							<Box flex={2} textAlign={"right"}>
+								<Text>{currencyFormat2(false).format(aggregationByRubriek.balance)}</Text>
+							</Box>
+						</Stack>
+					</Section>
+				</>)
 			}} />
 		</Page>
 	);

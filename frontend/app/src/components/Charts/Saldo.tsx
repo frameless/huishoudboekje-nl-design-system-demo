@@ -3,7 +3,7 @@ import React from "react";
 import {Chart} from "react-google-charts";
 import {useTranslation} from "react-i18next";
 import {BankTransaction} from "../../generated/graphql";
-import {useCreateAggregationByCategoryByMonth} from "../../utils/DataEngine";
+import {createAggregationByCategoryByMonth} from "../../utils/DataEngine";
 import {FormLeft} from "../Forms/FormLeftRight";
 import Section from "../Layouts/Section";
 
@@ -13,7 +13,7 @@ const InkomstenUitgaven: React.FC<BoxProps & { transactions: BankTransaction[] }
 	const {t} = useTranslation();
 	const [color1, color2] = useToken("colors", ["primary.300", "secondary.300"]);
 
-	const aggregationByCategoryByMonth = useCreateAggregationByCategoryByMonth(transactions);
+	const aggregationByCategoryByMonth = createAggregationByCategoryByMonth(transactions);
 
 	const columns = [t("interval.month", {count: 2}), t("charts.saldo.title")];
 
@@ -36,7 +36,10 @@ const InkomstenUitgaven: React.FC<BoxProps & { transactions: BankTransaction[] }
 				height={"500px"}
 				chartType="AreaChart"
 				loader={<Spinner />}
-				data={[columns, ...data]}
+				data={[
+					columns,
+					...(data.length > 0 ? data : [["", 0]])
+				]}
 				options={{
 					title: t("charts.saldo.saldo"),
 					hAxis: {title: t("interval.month", {count: 2})},

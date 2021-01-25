@@ -23,16 +23,7 @@ const Sidebar: React.FC<BoxProps> = (props) => {
 					</VStack>
 				</HStack>
 			</Stack>
-			<Stack>
-				<SidebarLink exactMatch to={Routes.Rapportages} icon={RiBarChartFill}>{t("sidebar.rapportages")}</SidebarLink>
-				<HStack direction={"row"}>
-					<Box pl={5} ml={7}>&nbsp;</Box>
-					<VStack>
-						<SidebarLink size={"sm"} to={Routes.RapportagesInkomstenUitgaven}>{t("sidebar.rapportageInkomstenUitgaven")}</SidebarLink>
-						{isDev && <SidebarLink size={"sm"} to={Routes.RapportagesSaldo}>{t("sidebar.rapportageSaldo")}</SidebarLink>}
-					</VStack>
-				</HStack>
-			</Stack>
+			<SidebarLink exactMatch to={Routes.Rapportages} icon={RiBarChartFill}>{t("sidebar.rapportages")}</SidebarLink>
 			<SidebarLink to={Routes.Settings} icon={TiCog}>{t("sidebar.configuratie")}</SidebarLink>
 		</Stack>
 
