@@ -7,7 +7,6 @@
 # where FE-D runs locally but talks BE-T. FE-T, FE-A and FE-P are talking to to BE-T, BE-A and BE-P respectively.
 # Hence we only need a pipeline for T, A and P, not for D.
 
-
 variables:
   IMAGE_PREFIX: "$CI_REGISTRY/$CI_PROJECT_PATH"
   IMAGE_TAG: $CI_COMMIT_SHA
@@ -19,13 +18,15 @@ variables:
   PYTHON_POSTGRES: python-postgres
 
 stages:
-  - build
-  - test
-  - deploy
-  - e2e
+  - recycle
+#  - build
+#  - test
+#  - deploy
+#  - e2e
 
 include:
-  - '/.gitlab/ci/build.yml'
-  - '/.gitlab/ci/deploy.yml'
-  - '/.gitlab/ci/test.yml'
-  - '/.gitlab/ci/e2e.yml'
+  - '/.gitlab/ci/recycle.yml'
+#  - '/.gitlab/ci/build.yml'
+#  - '/.gitlab/ci/deploy.yml'
+#  - '/.gitlab/ci/test.yml'
+#  - '/.gitlab/ci/e2e.yml'

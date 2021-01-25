@@ -1,0 +1,36 @@
+# Job to cleanup some stuff. Feel free to modify and run manually when required.
+recycle-namespaces:
+  stage: recycle
+  environment:
+    name: review/recycle
+  image: registry.gitlab.com/commonground/core/review-app-deployer:latest
+  script:
+    - |
+      kubectl delete namespace hhb-bug-cleanup || true
+      kubectl delete namespace hhb-bug-cleanup-ci || true
+      kubectl delete namespace hhb-docs-nijmegen || true
+      kubectl delete namespace hhb-feature-163 || true
+      kubectl delete namespace hhb-feature-163b || true
+      kubectl delete namespace hhb-feature-224 || true
+      kubectl delete namespace hhb-ignore-eslintcache || true
+      kubectl delete namespace hhb-review-251-boeken-sr6p8w || true
+      kubectl delete namespace hhb-review-253-call-d-3u20lv || true
+      kubectl delete namespace hhb-review-292-wuyoeo || true
+      kubectl delete namespace hhb-review-315-postgr-ukeumc || true
+      kubectl delete namespace hhb-review-baukehuijb-8ydv5b || true
+      kubectl delete namespace hhb-review-baukehuijb-9qqc3f || true
+      kubectl delete namespace hhb-review-baukehuijb-psxbup || true
+      kubectl delete namespace hhb-review-baukehuijb-zl0w6o || true
+      kubectl delete namespace hhb-review-feature-25-onqzy2 || true
+      kubectl delete namespace hhb-review-feature-25-ut2xx3 || true
+      kubectl delete namespace hhb-review-fix-databa-7vjrpi || true
+      kubectl delete namespace hhb-review-helm-test-vu18mi || true
+      kubectl delete namespace hhb-review-yq-upgrade-j10kmo || true
+  when: manual
+  tags:
+    - cg
+    - docker
+  except:
+    - master
+    - develop
+    - acceptance
