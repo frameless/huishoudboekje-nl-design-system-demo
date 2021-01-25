@@ -2,7 +2,6 @@ import moment from "moment";
 import {BankTransaction, Rubriek} from "../generated/graphql";
 
 // @i18n: t("charts.inkomstenUitgaven.income") t("charts.inkomstenUitgaven.expenses") t("charts.inkomstenUitgaven.unbooked")
-
 export enum Category {
 	Inkomsten = "income", Uitgaven = "expenses", Ongeboekt = "unbooked"
 }
@@ -61,12 +60,10 @@ export const createAggregationByRubriek = data => {
 		const bedrag = parseFloat(tr.bedrag);
 		balance += bedrag;
 
-		result[category] = result[category] || {}
-
 		return {
 			...result,
 			[category]: {
-				...result[category],
+				...result[category] || {},
 				[rubriekNaam]: (result[category][rubriekNaam] || 0) + bedrag,
 			},
 		}

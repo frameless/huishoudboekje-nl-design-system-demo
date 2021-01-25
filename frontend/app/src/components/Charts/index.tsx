@@ -43,8 +43,8 @@ const Charts = () => {
 	return (
 		<Page title={t("sidebar.rapportages")} position={"relative"}>
 			<Section>
-				<Stack direction={["column", "row"]}>
-					<Stack spacing={5} flex={1}>
+				<Stack>
+					<Stack direction={["column", "row"]} spacing={5} flex={1}>
 						<FormControl as={Stack} flex={1} justifyContent={"flex-end"}>
 							<Label>{t("forms.common.fields.startDate")}</Label>
 							<DatePicker selected={moment(startDate.value, "L").isValid() ? moment(startDate.value, "L").toDate() : null}
@@ -71,7 +71,7 @@ const Charts = () => {
 						</FormControl>
 					</Stack>
 
-					<Stack spacing={5} flex={1}>
+					<Stack direction={["column", "row"]} spacing={5} flex={1}>
 						<FormControl as={Stack} flex={1}>
 							<Label>{t("charts.filterBurgers")}</Label>
 							<Queryable query={$data} children={data => {
