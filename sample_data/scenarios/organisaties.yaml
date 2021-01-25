@@ -10,6 +10,17 @@ organisaties:
   - iban: "NL87INGB0000717127"
     rekeninghouder: "Bewuzt"
 
+- naam: "CAK"
+  weergave_naam: "Beschermd wonen"
+  kvk_nummer: "56806787"
+  straatnaam: "Prinses Beatrixlaan"
+  huisnummer: "7"
+  postcode: "2595AK"
+  plaatsnaam: "'s-Gravenhage"
+  rekeningen:
+  - iban: "NL38ABNA0435930001"
+    rekeninghouder: "CAK"
+
 - huisnummer: "70"
   kvk_nummer: "50544403"
   naam: "Anderzorg N.V."
