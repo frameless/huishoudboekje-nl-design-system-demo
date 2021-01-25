@@ -1,4 +1,15 @@
 organisaties:
+- naam: "De Nederlandse Energie Maatschappij"
+  weergave_naam: "Budget Energie"
+  kvk_nummer: "34297646"
+  straatnaam: "Aert van Nesstraat"
+  huisnummer: "45"
+  postcode: "3012CA"
+  plaatsnaam: "Rotterdam"
+  rekeningen:
+  - iban: "NL86ABNA0511919131"
+    rekeninghouder: "Budget Energie"
+
 - naam: "Coöperatie VGZ"
   weergave_naam: "Bewuzt"
   kvk_nummer: "10029718"
