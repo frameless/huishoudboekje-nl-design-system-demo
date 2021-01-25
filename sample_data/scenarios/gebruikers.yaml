@@ -10,4 +10,11 @@ scenarios:
         automatische_incasso: true
         interval: "P0Y0M3W0D"
         start_datum: "2021-01-01"
-  
+      - aantal: 1
+        rubriek: "Inkomsten"
+        organisatie_kvk: "35012085"
+        bedrag: 50000
+        credit: true
+        interval: "P0Y0M1W0D"
+        start_datum: "2021-01-01"
+
