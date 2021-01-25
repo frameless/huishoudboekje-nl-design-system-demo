@@ -9,6 +9,7 @@ export enum Category {
 
 export const useCreateAggregationByCategoryByMonth = (tr: BankTransaction[]) => {
 	const filtered = tr.filter(t => t.journaalpost !== null);
+
 	const _data = filtered.map(tr => ({
 		...tr,
 		rubriek: tr.journaalpost?.grootboekrekening?.rubriek
@@ -38,7 +39,7 @@ export const useCreateAggregationByCategoryByMonth = (tr: BankTransaction[]) => 
 			// Fixme: Here we're using strings that need to be translated as keys. This will cause errors when there are missing translations.
 			Math.abs(_data[month][Category.Inkomsten]) || 0,
 			Math.abs(_data[month][Category.Uitgaven]) || 0,
-		])
+		]);
 	}
 
 	return chartData.sort((a, b) => moment(a, "MMM YYYY").isSameOrBefore(moment(b, "MMM YYYY")) ? -1 : 1);
