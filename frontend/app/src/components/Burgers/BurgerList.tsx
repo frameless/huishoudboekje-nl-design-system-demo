@@ -67,7 +67,9 @@ const BurgerList = () => {
 			return (
 				<Page title={t("burgers.burgers")} right={(
 					<InputGroup>
-						<InputLeftElement zIndex={0}><SearchIcon color={"gray.300"} /></InputLeftElement>
+						<InputLeftElement>
+							<SearchIcon color={"gray.300"} />
+						</InputLeftElement>
 						<Input type={"text"} {...search.bind} bg={"white"} onKeyDown={onKeyDownOnSearch} />
 						{search.value.length > 0 && (
 							<InputRightElement zIndex={0}>
