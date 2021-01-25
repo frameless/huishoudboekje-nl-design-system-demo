@@ -1,4 +1,15 @@
 organisaties:
+- naam: "DSW Ziektekostenverzekeringen N.V."
+  weergave_naam: "DSW Ziektekostenverzekeringen"
+  kvk_nummer: "24230430"
+  straatnaam: "Postbus"
+  huisnummer: "173"
+  postcode: "3100AD"
+  plaatsnaam: "Schiedam"
+  rekeningen:
+  - iban: "NL11RABO0343685310"
+    rekeninghouder: "DSW Ziektekostenverzekeringen"
+
 - naam: "CZ Groep Aanvullende Verzekering Zorgverzekeraar"
   weergave_naam: "CZ Groep Zorgverzekeraar"
   kvk_nummer: "18028752"
