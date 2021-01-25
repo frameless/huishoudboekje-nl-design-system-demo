@@ -1,4 +1,5 @@
-import { useToken } from "@chakra-ui/react";
+import {useToken} from "@chakra-ui/react";
+import arrayToSentence from "array-to-sentence";
 import {friendlyFormatIBAN} from "ibantools";
 import moment from "moment";
 import {createContext} from "react";
@@ -136,7 +137,7 @@ export const formatIBAN = (iban?: string) => {
 }
 
 export const useReactSelectStyles = () => {
-	const inputBorderColor = useToken("colors","gray.200");
+	const inputBorderColor = useToken("colors", "gray.200");
 
 	return ({
 		control: (provided) => ({
@@ -145,3 +146,7 @@ export const useReactSelectStyles = () => {
 		})
 	});
 };
+
+export const humanJoin = (x) => arrayToSentence(x, {
+	lastSeparator: " en ",
+});

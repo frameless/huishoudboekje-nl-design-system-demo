@@ -291,6 +291,24 @@
     "burgers": {
         "burgers": "Burgers"
     },
+    "charts": {
+        "inkomstenUitgaven": {
+            "income": "Inkomsten",
+            "expenses": "Uitgaven",
+            "unbooked": "Ongeboekt",
+            "title": "Inkomsten en uitgaven",
+            "helperText": "Een overzicht van inkomsten en uitgaven over tijd."
+        },
+        "filterBurgers": "Filter op burgers",
+        "optionAllBurgers": "Alle burgers",
+        "filterRubrics": "Filter op rubriek",
+        "optionAllRubrics": "Alle rubrieken",
+        "saldo": {
+            "title": "Saldo",
+            "helperText": "Een overzicht van saldo over tijd.",
+            "saldo": "Saldo"
+        }
+    },
     "sidebar": {
         "rapportages": "Rapportages",
         "burgers": "Burgers",
@@ -298,30 +316,17 @@
         "bankzaken": "Bankzaken",
         "bronbestanden": "Bronbestanden",
         "overschrijvingen": "Overschrijvingen",
-        "rapportageInkomstenUitgaven": "Inkomsten en uitgaven",
-        "rapportageSaldo": "Saldo",
         "configuratie": "Configuratie"
     },
-    "charts": {
-        "filterBurgers": "Filter op burgers",
-        "optionAllBurgers": "Alle burgers",
-        "filterRubrics": "Filter op rubriek",
-        "optionAllRubrics": "Alle rubrieken",
-        "inkomstenUitgaven": {
-            "title": "Inkomsten en uitgaven",
-            "income": "Inkomsten",
-            "expenses": "Uitgaven",
-            "helperText": "Een overzicht van inkomsten en uitgaven over tijd.",
-            "unbooked": "Ongeboekt"
-        },
-        "saldo": {
-            "title": "Saldo",
-            "helperText": "Een overzicht van saldo over tijd.",
-            "saldo": "Saldo"
+    "sections": {
+        "filterOptions": {
+            "title": "Filteropties",
+            "helperText": "Selecteer een tijdsperiode, burger en/of rubriek om specifiekere gegevens in te zien."
         }
     },
     "balance": "Balans",
-    "month": "Maand",
+    "allBurgers": "Alle burgers",
+    "total": "Totaal",
     "configuratie": "Configuratie",
     "organizations": {
         "organizations": "Organisaties"
