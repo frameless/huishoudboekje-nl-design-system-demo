@@ -116,11 +116,11 @@ const Charts = () => {
 				const burgerNamesList: string[] = selectedBurgers.map(b => formatBurgerName(b));
 
 				return (<>
-					<Tabs>
-						<TabList>
+					<Tabs isLazy variant={"solid"} align={"end"} maxWidth={1200}>
+						<Stack direction={"row"} as={TabList} spacing={2}>
 							<Tab>Saldo</Tab>
 							<Tab>Inkomsten en uitgaven</Tab>
-						</TabList>
+						</Stack>
 						<TabPanels>
 							<TabPanel>
 								<Saldo transactions={filteredTransactions} />
