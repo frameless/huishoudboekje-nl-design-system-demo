@@ -134,5 +134,16 @@ organisaties:
   - iban: "NL11RABO0343685310"
     rekeninghouder: "DSW Ziektekostenverzekeringen"
 
+- naam: "FBTO Zorgverzekeringen N.V."
+  weergave_naam: "FBTO Zorgverzekeringen N.V."
+  kvk_nummer: "30208631"
+  straatnaam: "Postbus"
+  huisnummer: "318"
+  postcode: "8901BC"
+  plaatsnaam: "Leeuwarden"
+  rekeningen:
+  - iban: "NL47INGB0000003054"
+    rekeninghouder: "FBTO ZORGVERZEKERINGEN NV"
+
 scenarios:
 - aantal: 50
