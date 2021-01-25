@@ -33,6 +33,17 @@ organisaties:
   - iban: "NL45INGB0705001903"
     rekeninghouder: "DUO"
 
+- naam: "Sociale Verzekeringsbank"
+  weergave_naam: "Sociale Verzekeringsbank Utrecht"
+  kvk_nummer: "34366008"
+  straatnaam: "Graadt van Roggenweg"
+  huisnummer: "400"
+  postcode: "3531AH"
+  plaatsnaam: "Utrecht"
+  rekeningen:
+  - iban: "NL29RABO0317344927"
+    rekeninghouder: "SVB Utrecht"
+
 # woningverhuur
 - naam: "Stichting Mitros"
   weergave_naam: "Stichting Mitros"
