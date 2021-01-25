@@ -1,15 +1,13 @@
-import {BoxProps, chakra, Spinner, useToken} from "@chakra-ui/react";
+import {BoxProps, Spinner, useToken} from "@chakra-ui/react";
 import React from "react";
-import {Chart} from "react-google-charts";
 import {useTranslation} from "react-i18next";
 import {BankTransaction} from "../../generated/graphql";
 import {createAggregationByCategoryByMonth} from "../../utils/DataEngine";
 import {FormLeft} from "../Forms/FormLeftRight";
+import ChakraChart from "../Layouts/Chart";
 import Section from "../Layouts/Section";
 
-const ChakraChart = chakra(Chart);
-
-const InkomstenUitgaven: React.FC<BoxProps & { transactions: BankTransaction[] }> = ({transactions}) => {
+const Saldo: React.FC<BoxProps & { transactions: BankTransaction[] }> = ({transactions}) => {
 	const {t} = useTranslation();
 	const [color1, color2] = useToken("colors", ["primary.300", "secondary.300"]);
 
@@ -57,4 +55,4 @@ const InkomstenUitgaven: React.FC<BoxProps & { transactions: BankTransaction[] }
 	</>);
 };
 
-export default InkomstenUitgaven;
+export default Saldo;
