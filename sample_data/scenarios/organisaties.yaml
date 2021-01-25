@@ -44,6 +44,23 @@ organisaties:
   - iban: "NL29RABO0317344927"
     rekeninghouder: "SVB Utrecht"
 
+- naam: "UWV UTRECHT"
+  weergave_naam: "UWV UTRECHT WIA-uitkering (WGA of IVA)"
+  kvk_nummer: "34360247"
+  straatnaam: "Postbus"
+  huisnummer: "69254"
+  postcode: "1060CH"
+  plaatsnaam: "Amsterdam"
+  rekeningen:
+  - iban: "NL58INGB0702712760"
+    rekeninghouder: "UWV"
+  - iban: "NL27INGB0702712736"
+    rekeninghouder: "UWV"
+  - iban: "NL02INGB0702712701"
+    rekeninghouder: "UWV"
+  - iban: "NL49INGB0702712728"
+    rekeninghouder: "UWV"
+
 # woningverhuur
 - naam: "Stichting Mitros"
   weergave_naam: "Stichting Mitros"
