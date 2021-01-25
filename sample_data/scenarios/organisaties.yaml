@@ -56,6 +56,17 @@ organisaties:
   - iban: "NL10ABNA0240120000"
     rekeninghouder: "Eneco"
 
+- naam: "Energiedirect B.V."
+  weergave_naam: "Energiedirect B.V."
+  kvk_nummer: "17146989"
+  straatnaam: "Willemsplein"
+  huisnummer: "4"
+  postcode: "5211AK"
+  plaatsnaam: "'s-Hertogenbosch"
+  rekeningen:
+  - iban: "NL54INGB0661901246"
+    rekeninghouder: "Energiedirect BV"
+
 # verzekeraars
 - naam: "Anderzorg N.V."
   kvk_nummer: "50544403"
