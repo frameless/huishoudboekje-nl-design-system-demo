@@ -3,6 +3,8 @@ recycle-namespaces:
   stage: recycle
   environment:
     name: review/recycle
+  variables:
+    GIT_STRATEGY: none
   image: registry.gitlab.com/commonground/core/review-app-deployer:latest
   script:
     - |
