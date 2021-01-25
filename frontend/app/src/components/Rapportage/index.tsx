@@ -116,6 +116,9 @@ const Charts = () => {
 				const burgerNamesList: string[] = selectedBurgers.map(b => formatBurgerName(b));
 
 				return (<>
+					<InkomstenUitgaven transactions={filteredTransactions} />
+					<Saldo transactions={filteredTransactions} />
+
 					<Section direction={["column", "row"]}>
 						<FormLeft title={t("balance")} helperText={selectedBurgers.length > 0 ? humanJoin(burgerNamesList) : t("allBurgers")} />
 						<FormRight>
@@ -168,9 +171,6 @@ const Charts = () => {
 							</Stack>
 						</FormRight>
 					</Section>
-
-					<InkomstenUitgaven transactions={filteredTransactions} />
-					<Saldo transactions={filteredTransactions} />
 				</>)
 			}} />
 		</Page>
