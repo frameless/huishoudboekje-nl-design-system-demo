@@ -22,9 +22,11 @@ stages:
   - test
   - deploy
   - e2e
+  - maintenance
 
 include:
   - '/.gitlab/ci/build.yml'
   - '/.gitlab/ci/deploy.yml'
   - '/.gitlab/ci/test.yml'
   - '/.gitlab/ci/e2e.yml'
+  - '/.gitlab/ci/maintenance.yml'
