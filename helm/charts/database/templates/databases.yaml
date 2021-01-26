@@ -12,11 +12,12 @@ metadata:
   annotations:
     "helm.sh/hook": post-upgrade,post-install
 spec:
-{{/*  backoffLimit: 5*/}}
-  activeDeadlineSeconds: 100
+  backoffLimit: 6
+  activeDeadlineSeconds: 320
   ttlSecondsAfterFinished: 172800
   template:
     spec:
+      activeDeadlineSeconds: 10
       containers:
         - name: "create-databases"
           image: docker.io/bitnami/postgresql:11.10.0-debian-10-r52
