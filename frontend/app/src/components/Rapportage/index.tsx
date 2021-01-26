@@ -30,10 +30,10 @@ const Charts = () => {
 	});
 
 	const startDate = useInput({
-		defaultValue: moment().year(2020).startOf("year").format("L"),
+		defaultValue: moment().subtract(1, "year").startOf("month").format("L"),
 	});
 	const endDate = useInput({
-		defaultValue: moment().year(2020).endOf("year").format("L"),
+		defaultValue: moment().subtract(1, "month").endOf("month").format("L"),
 	});
 	const [filterBurgerIds, setFilterBurgerIds] = useState<number[]>([]);
 	const [filterRubriekIds, setFilterRubriekIds] = useState<number[]>([]);
