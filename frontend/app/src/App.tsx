@@ -1,5 +1,5 @@
 import {WarningIcon} from "@chakra-ui/icons";
-import {Box, Button, Flex, Heading, HStack, IconButton, Spinner, Stack, Text, useTheme} from "@chakra-ui/react";
+import {Box, Button, Heading, HStack, IconButton, Spinner, Stack, Text, useTheme, VStack} from "@chakra-ui/react";
 import {observer} from "mobx-react";
 import React from "react";
 import {useIsMobile} from "react-grapple";
@@ -71,8 +71,8 @@ const App = () => {
 	}
 
 	return (
-		<Flex h={"auto"} minHeight={"100vh"} minWidth={"100%"} w={"auto"} bg={"gray.100"} justifyContent={"center"}>
-			<Flex width={"100%"} maxWidth={"1600px"} justifyContent={"flex-start"} alignItems={"flex-start"} spacing={5}>
+		<VStack h={"auto"} minHeight={"100vh"} minWidth={"100%"} w={"auto"} bg={"gray.100"}>
+			<HStack width={"100%"} maxWidth={"1600px"} alignItems={"flex-start"} spacing={0}>
 				<SidebarContainer>
 					<Sidebar />
 				</SidebarContainer>
@@ -101,8 +101,8 @@ const App = () => {
 						<Route component={PageNotFound} />
 					</Switch>
 				</Box>
-			</Flex>
-		</Flex>
+			</HStack>
+		</VStack>
 	);
 };
 
