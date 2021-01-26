@@ -29,7 +29,10 @@ def get_config_value(config_id) -> str:
         headers={'Content-type': 'application/json'}
     )
     if config_response.status_code != 200:
-        raise GraphQLError(f"Upstream API responded: {config_response.json()}")
+        if config_response.status_code == 404:
+            raise GraphQLError(f"'{config_id}' is niet gevonden.")
+        else:
+            raise GraphQLError(f"Upstream API responded: {config_response.json()}")
     return config_response.json()['data']['waarde']
 
 
