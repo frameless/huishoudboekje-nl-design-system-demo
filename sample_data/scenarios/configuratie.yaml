@@ -1,9 +1,9 @@
 configuratie:
-  - id: gemeente_naam
+  - id: derdengeldenrekening_rekeninghouder
     waarde: Sloothuizen
-  - id: gemeente_iban
+  - id: derdengeldenrekening_iban
     waarde: NL36ABNA5632579034
-  - id: gemeente_bic
+  - id: derdengeldenrekening_bic
     waarde: ABNANL2A
 
 rubrieken:
