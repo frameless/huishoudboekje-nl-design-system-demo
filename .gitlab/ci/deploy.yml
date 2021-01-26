@@ -269,3 +269,19 @@ helm-test-develop:
     - .test
   only:
     - develop
+
+clean-namespaces:
+  stage: deploy
+  environment:
+    name: review/$CI_COMMIT_REF_SLUG
+  variables:
+    GIT_STRATEGY: none
+  image: registry.gitlab.com/commonground/core/review-app-deployer:latest
+  script:
+    - echo "Cleaning up old namespaces..."
+    - kubectl get namespaces --sort-by=.metadata.creationTimestamp | awk '$1 !~ /hhb-/ {next} $1 !~ /hhb-(acc|demo|test|nijmegen|utrecht)/ {system("kubectl delete namespace " $1)}'
+  when: manual
+  needs: []
+  tags:
+    - cg
+    - docker

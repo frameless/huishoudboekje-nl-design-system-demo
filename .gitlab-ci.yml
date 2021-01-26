@@ -18,14 +18,12 @@ variables:
   PYTHON_POSTGRES: python-postgres
 
 stages:
-  - maintenance
   - build
   - test
   - deploy
   - e2e
 
 include:
-  - '/.gitlab/ci/maintenance.yml'
   - '/.gitlab/ci/build.yml'
   - '/.gitlab/ci/deploy.yml'
   - '/.gitlab/ci/test.yml'
