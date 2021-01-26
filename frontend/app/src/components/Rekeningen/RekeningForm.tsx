@@ -4,7 +4,7 @@ import React from "react";
 import {useInput, useIsMobile, Validators} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {Rekening, RekeningInput} from "../../generated/graphql";
-import {Regex, TABLET_BREAKPOINT} from "../../utils/things";
+import {Regex, sanitizeIBAN, TABLET_BREAKPOINT} from "../../utils/things";
 
 const RekeningForm: React.FC<{
 	rekening?: Rekening,
@@ -39,7 +39,7 @@ const RekeningForm: React.FC<{
 		onSave({
 			...(rekening || {}),
 			rekeninghouder: rekeninghouder.value.replaceAll(" ", ""),
-			iban: iban.value
+			iban: sanitizeIBAN(iban.value),
 		}, () => {
 			rekeninghouder.reset();
 			iban.reset();
