@@ -66,12 +66,12 @@ def create_mock_adapter() -> Adapter:
             return MockResponse({'data': [
                 {'afspraken': [1], 'gebruikers': [], 'iban': 'GB33BUKB20201555556655', 'id': 14, 'organisaties': [1],
                  'rekeninghouder': 'S. Hulleman'}]}, 200)
-        elif request.path == '/configuratie/gemeente_naam':
-            return MockResponse({'data': {'id': 'gemeente_naam', 'waarde': 'Gemeente Sloothuizen'}}, 200)
-        elif request.path == "/configuratie/gemeente_iban":
-            return MockResponse({'data': {'id': 'gemeente_iban', 'waarde': 'NL36ABNA5632579034'}}, 200)
-        elif request.path == "/configuratie/gemeente_bic":
-            return MockResponse({'data': {'id': 'gemeente_bic', 'waarde': 'ABNANL2A'}}, 200)
+        elif request.path == '/configuratie/derdengeldenrekening_rekeninghouder':
+            return MockResponse({'data': {'id': 'derdengeldenrekening_rekeninghouder', 'waarde': 'Gemeente Sloothuizen'}}, 200)
+        elif request.path == "/configuratie/derdengeldenrekening_iban":
+            return MockResponse({'data': {'id': 'derdengeldenrekening_iban', 'waarde': 'NL36ABNA5632579034'}}, 200)
+        elif request.path == "/configuratie/derdengeldenrekening_bic":
+            return MockResponse({'data': {'id': 'derdengeldenrekening_bic', 'waarde': 'ABNANL2A'}}, 200)
 
     adapter.add_matcher(test_matcher)
     return adapter
