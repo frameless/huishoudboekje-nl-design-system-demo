@@ -14,16 +14,23 @@ class GebruikersActiviteitQuery():
 
 
 class GebruikersActiviteitenQuery():
-    return_type = graphene.List(GebruikersActiviteit, ids=graphene.List(graphene.Int, default_value=[]), gebruikerIds=graphene.List(graphene.Int, default_value=[]))
+    return_type = graphene.List(GebruikersActiviteit, ids=graphene.List(graphene.Int, default_value=[]),
+                                gebruikerIds=graphene.List(graphene.Int, default_value=[]),
+                                afsprakenIds=graphene.List(graphene.Int, default_value=[]))
 
     @staticmethod
     async def resolver(root, info, **kwargs):
-        if not kwargs["ids"] and not kwargs["gebruikerIds"]:
+        if not kwargs["ids"] and not kwargs["gebruikerIds"] and not ["afsprakenIds"]:
             gebruikersactiviteiten = request.dataloader.gebruikersactiviteiten_by_id.get_all_and_cache()
         else:
-            if kwargs["ids"]:
-                gebruikersactiviteiten = await request.dataloader.gebruikersactiviteiten_by_id.load_many(kwargs["ids"])
+            gebruikersactiviteiten = []
             if kwargs["gebruikerIds"]:
                 gebruikersactiviteiten = request.dataloader.gebruikersactiviteiten_by_gebruikers.get_by_ids(kwargs["gebruikerIds"])
+            if kwargs["afsprakenIds"]:
+                afspraken_list = request.dataloader.gebruikersactiviteiten_by_afspraken.get_by_ids(kwargs["afsprakenIds"])
+                gebruikersactiviteiten.extend(x for x in afspraken_list if x not in gebruikersactiviteiten)
+            if kwargs["ids"]:
+                ids_list = await request.dataloader.gebruikersactiviteiten_by_id.load_many(kwargs["ids"])
+                gebruikersactiviteiten.extend(x for x in ids_list if x not in gebruikersactiviteiten)
 
         return gebruikersactiviteiten
