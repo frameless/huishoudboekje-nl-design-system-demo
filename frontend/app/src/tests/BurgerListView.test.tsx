@@ -10,6 +10,19 @@ jest.mock("react-router-dom", () => require("./utils/mock-hooks").reactRouterDom
 
 let container: HTMLDivElement | null = null;
 
+beforeAll(() => {
+	window.matchMedia = (query) => ({
+		matches: false,
+		media: query,
+		onchange: null,
+		addListener: jest.fn(),
+		removeListener: jest.fn(),
+		addEventListener: jest.fn(),
+		removeEventListener: jest.fn(),
+		dispatchEvent: jest.fn(),
+	})
+})
+
 beforeEach(() => {
 	container = document.createElement("div");
 	document.body.appendChild(container);
