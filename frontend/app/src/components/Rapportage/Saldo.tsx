@@ -39,7 +39,6 @@ const Saldo: React.FC<BoxProps & { transactions: BankTransaction[] }> = ({transa
 					...(data.length > 0 ? data : [["", 0]])
 				]}
 				options={{
-					title: t("charts.saldo.saldo"),
 					hAxis: {title: t("interval.month", {count: 2})},
 					vAxis: {minValue: 0},
 					chartArea: {width: "90%", height: "80%"},
