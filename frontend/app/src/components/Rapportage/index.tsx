@@ -16,7 +16,7 @@ import Section from "../Layouts/Section";
 import InkomstenUitgaven from "./InkomstenUitgaven";
 import Saldo from "./Saldo";
 
-const Charts = () => {
+const Rapportage = () => {
 	const {t} = useTranslation();
 	const reactSelectStyles = useReactSelectStyles();
 
@@ -189,4 +189,4 @@ const Charts = () => {
 	);
 };
 
-export default Charts;
+export default Rapportage;
