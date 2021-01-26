@@ -135,6 +135,10 @@ const Rapportage = () => {
 						<FormLeft title={t("balance")} helperText={selectedBurgers.length > 0 ? humanJoin(burgerNamesList) : t("allBurgers")} />
 						<FormRight>
 							<Stack spacing={4}>
+								<HStack>
+									<Text>Rapportageperiode: <strong>{moment(startDate.value, "L").format("L")}</strong> tot en met <strong>{moment(endDate.value, "L").format("L")}</strong>.</Text>
+								</HStack>
+
 								{Object.keys(aggregationByRubriek.rubrieken).map(c => {
 									const categories = Object.keys(aggregationByRubriek.rubrieken[c]);
 									let total = 0;
