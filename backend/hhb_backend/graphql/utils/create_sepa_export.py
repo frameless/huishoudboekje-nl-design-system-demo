@@ -3,9 +3,9 @@ from sepaxml import SepaTransfer
 
 def create_export_string(overschrijvingen, afspraken, tegen_rekeningen, config_values):
     config = {
-        "name": "Huishoudboekje " + config_values['gemeente_naam'],
-        "IBAN": config_values["gemeente_iban"],
-        "BIC": config_values["gemeente_bic"],
+        "name": "Huishoudboekje " + config_values['derdengeldenrekening_rekeninghouder'],
+        "IBAN": config_values["derdengeldenrekening_iban"],
+        "BIC": config_values["derdengeldenrekening_bic"],
         "batch": False,
         "currency": "EUR",  # ISO 4217
     }

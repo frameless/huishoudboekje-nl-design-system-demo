@@ -108,9 +108,9 @@ class CreateExportOverschrijvingen(graphene.Mutation):
             raise GraphQLError(f"Geen rekeningen gevonden.")
 
         config_values = {
-            "gemeente_naam": get_config_value('gemeente_naam'),
-            "gemeente_iban": get_config_value("gemeente_iban"),
-            "gemeente_bic": get_config_value("gemeente_bic")
+            "derdengeldenrekening_rekeninghouder": get_config_value('derdengeldenrekening_rekeninghouder'),
+            "derdengeldenrekening_iban": get_config_value("derdengeldenrekening_iban"),
+            "derdengeldenrekening_bic": get_config_value("derdengeldenrekening_bic")
         }
 
         today = datetime.now(tz=tz.tzlocal()).replace(microsecond=0)
