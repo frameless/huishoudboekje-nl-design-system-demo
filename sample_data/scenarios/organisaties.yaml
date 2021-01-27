@@ -103,6 +103,17 @@ organisaties:
   - iban: "NL28INGB0668690550"
     rekeninghouder: "STICHTING MITROS"
 
+- naam: "Stichting Portaal"
+  weergave_naam: "Stichting Portaal"
+  kvk_nummer: "30038487"
+  straatnaam: "Postbus"
+  huisnummer: "2211"
+  postcode: "3500GE"
+  plaatsnaam: "Utrecht"
+  rekeningen:
+  - iban: "NL15BNGH0285162624"
+    rekeninghouder: "Portaal"
+
 # energieleveranciers
 - naam: "De Nederlandse Energie Maatschappij"
   weergave_naam: "Budget Energie"

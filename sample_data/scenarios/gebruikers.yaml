@@ -1,22 +1,16 @@
 scenarios:
+# persona 1
   - aantal: 1
     aantal_rekeningen: 1
     afspraken:
-      - aantal: 1
-        rubriek: "Water"
-        omschrijving: "Water"
-        organisatie_kvk: "05069581"
-        bedrag: 2000
-        credit: false
-        automatische_incasso: true
-        interval: "P0Y3M0W0D"
-        start_datum: "2021-01-01"
+      # inkomsten
       - aantal: 1
         rubriek: "Inkomsten"
         omschrijving: "Loon"
         organisatie_kvk: "35012085"
         bedrag: 76532
         credit: true
+        automatische_incasso: false
         interval: "P0Y1M0W0D"
         start_datum: "2021-01-01"
       - aantal: 1
@@ -26,5 +20,53 @@ scenarios:
   # TODO: add attribute for specific IBAN
         bedrag: 14784
         credit: true
+        automatische_incasso: false
         interval: "P0Y1M0W0D"
+        start_datum: "2019-01-07"
+      - aantal: 1
+        rubriek: "Inkomsten"
+        omschrijving: "Kindgebonden budget"
+        organisatie_kvk: "27365323"
+        bedrag: 39100
+        credit: true
+        automatische_incasso: false
+        interval: "P0Y1M0W0D"
+        start_datum: "2019-01-20"
+      - aantal: 1
+        rubriek: "Inkomsten"
+        omschrijving: "Huurtoeslag"
+        organisatie_kvk: "27365323"
+        bedrag: 32200
+        credit: true
+        automatische_incasso: false
+        interval: "P0Y1M0W0D"
+        start_datum: "2019-01-20"
+      - aantal: 1
+        rubriek: "Inkomsten"
+        omschrijving: "Zorgtoeslag"
+        organisatie_kvk: "27365323"
+        bedrag: 10700
+        credit: true
+        automatische_incasso: false
+        interval: "P0Y1M0W0D"
+        start_datum: "2019-01-20"
+      # uitgaven
+      - aantal: 1
+        rubriek: "Betaalde huur"
+        omschrijving: "Huur"
+        organisatie_kvk: "30038487"
+        bedrag: 64735
+        credit: false
+        automatische_incasso: true
+        interval: "P0Y1M0W0D"
+        start_datum: "2019-01-01"
+      - aantal: 1
+        rubriek: "Water"
+        omschrijving: "Water"
+        organisatie_kvk: "05069581"
+        bedrag: 2000
+        credit: false
+        automatische_incasso: true
+        interval: "P0Y3M0W0D"
         start_datum: "2021-01-01"
+
