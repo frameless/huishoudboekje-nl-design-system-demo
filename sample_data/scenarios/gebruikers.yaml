@@ -4,6 +4,7 @@ scenarios:
     afspraken:
       - aantal: 1
         rubriek: "Water"
+        omschrijving: "Water"
         organisatie_kvk: "05069581"
         bedrag: 2000
         credit: false
@@ -12,6 +13,7 @@ scenarios:
         start_datum: "2021-01-01"
       - aantal: 1
         rubriek: "Inkomsten"
+        omschrijving: "Loon"
         organisatie_kvk: "35012085"
         bedrag: 76532
         credit: true
@@ -19,6 +21,7 @@ scenarios:
         start_datum: "2021-01-01"
       - aantal: 1
         rubriek: "Inkomsten"
+        omschrijving: "Aanvullende uitkering"
         organisatie_kvk: "30280353"
         bedrag: 14784
         credit: true
