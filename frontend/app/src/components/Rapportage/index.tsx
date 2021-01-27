@@ -7,7 +7,7 @@ import {useTranslation} from "react-i18next";
 import Select from "react-select";
 import {Gebruiker, Rubriek, useGetReportingDataQuery} from "../../generated/graphql";
 import Transaction from "../../models/Transaction";
-import {Category, createAggregationByRubriek} from "../../utils/DataEngine";
+import {Type, createAggregationByRubriek} from "./Aggregator";
 import Queryable from "../../utils/Queryable";
 import {currencyFormat2, formatBurgerName, humanJoin, useReactSelectStyles} from "../../utils/things";
 import {FormLeft, FormRight, Label} from "../Forms/FormLeftRight";
@@ -22,8 +22,8 @@ const Rapportage = () => {
 	const reactSelectStyles = useReactSelectStyles();
 
 	const translatedCategory = {
-		[Category.Inkomsten]: t("charts.inkomstenUitgaven.income"),
-		[Category.Uitgaven]: t("charts.inkomstenUitgaven.expenses"),
+		[Type.Inkomsten]: t("charts.inkomstenUitgaven.income"),
+		[Type.Uitgaven]: t("charts.inkomstenUitgaven.expenses"),
 	};
 
 	const $data = useGetReportingDataQuery({
@@ -153,11 +153,10 @@ const Rapportage = () => {
 													return (
 														<Stack direction={"row"} key={i}>
 															<Box flex={1}>
-																<Text>{r === Category.Ongeboekt ? t("charts.inkomstenUitgaven.unbooked") : r}</Text>
+																<Text>{r === Type.Ongeboekt ? t("charts.inkomstenUitgaven.unbooked") : r}</Text>
 															</Box>
 															<Box flex={2} textAlign={"right"}>
-																<Text fontWeight={"bold"}>{currencyFormat2(false).format(aggregationByRubriek.rubrieken[c][r])}</Text>
-																{/*<Text fontWeight={"bold"}>{currencyFormat2(false).format(Math.abs(aggregationByRubriek.rubrieken[c][r]))}</Text>*/}
+																<Text fontWeight={"bold"}>{currencyFormat2(false).format(Math.abs(aggregationByRubriek.rubrieken[c][r]))}</Text>
 															</Box>
 														</Stack>
 													)
@@ -171,8 +170,7 @@ const Rapportage = () => {
 														<Text>{t("total")}</Text>
 													</Box>
 													<Box flex={2} textAlign={"right"}>
-														<Text fontWeight={"bold"}>{currencyFormat2(false).format(total)}</Text>
-														{/*<Text fontWeight={"bold"}>{currencyFormat2(false).format(Math.abs(total))}</Text>*/}
+														<Text fontWeight={"bold"}>{currencyFormat2(false).format(Math.abs(total))}</Text>
 													</Box>
 												</Stack>
 											</Stack>

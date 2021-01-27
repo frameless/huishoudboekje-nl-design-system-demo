@@ -1,46 +1,46 @@
 import {BoxProps, Spinner, useToken} from "@chakra-ui/react";
-import moment, {Moment} from "moment";
+import moment from "moment";
 import React, {useContext} from "react";
 import {useTranslation} from "react-i18next";
 import {BankTransaction} from "../../generated/graphql";
-import {createAggregationByCategoryByMonth} from "../../utils/DataEngine";
+import {prepareChartData} from "../../utils/things";
 import {FormLeft} from "../Forms/FormLeftRight";
 import ChakraChart from "../Layouts/Chart";
 import Section from "../Layouts/Section";
+import {createAggregation} from "./Aggregator";
 import {RapportageContext} from "./context";
 
+// Todo: specify types explicitly
 const InkomstenUitgaven: React.FC<BoxProps & { transactions: BankTransaction[] }> = ({transactions = []}) => {
 	const {t} = useTranslation();
 	const [color1, color2] = useToken("colors", ["primary.300", "secondary.300"]);
 	const {startDate, endDate} = useContext(RapportageContext);
 
 	const columns = [t("interval.period"), t("charts.inkomstenUitgaven.income"), t("charts.inkomstenUitgaven.expenses")];
-	const aggregationByCategoryByMonth = createAggregationByCategoryByMonth(transactions);
-	// const data = [
-	// 	columns,
-	// 	...(aggregationByCategoryByMonth.length > 0 ? aggregationByCategoryByMonth : [["", 0, 0]])
-	// ];
+	const [aggregatedByPeriod] = createAggregation(transactions);
 
-	const prepareData = (startDate: Moment, endDate: Moment, columns: number = 1): any[] => {
-		const nMonths = Math.abs(endDate.endOf("month").diff(startDate.startOf("month"), "month")) + 1;
+	const chartTemplate = prepareChartData(startDate, endDate, columns.length - 1);
 
-		return new Array(nMonths).fill(0).map((_, i) => {
-			return ([
-				moment(startDate).add(i, "month").startOf("month").format("MMM YYYY"),
-				...new Array(columns).fill(0)
-			]);
+	const chartData = (chartTemplate: any[], aggregation) => {
+		return chartTemplate.map(chartItem => {
+			const [period, tIncome, tExpenses] = chartItem;
+			const {income = 0, expenses = 0} = aggregation[period] || {};
+
+			return [
+				moment(period, "YYYY MM").format("MMM YYYY"),
+				tIncome + income,
+				tExpenses + Math.abs(expenses)
+			];
 		});
-	}
+	};
 
 	const data = [
 		columns,
-		...prepareData(startDate, endDate, columns.length - 1)
+		...chartData(chartTemplate, aggregatedByPeriod)
 	];
 
 	return (
 		<Section>
-			<pre>{JSON.stringify({data, aggregationByCategoryByMonth}, null, 2)}</pre>
-
 			<FormLeft title={t("charts.inkomstenUitgaven.title")} helperText={t("charts.inkomstenUitgaven.helperText")} />
 
 			<ChakraChart

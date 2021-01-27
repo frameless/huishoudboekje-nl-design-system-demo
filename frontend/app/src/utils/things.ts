@@ -1,9 +1,9 @@
 import {useToken} from "@chakra-ui/react";
 import arrayToSentence from "array-to-sentence";
 import {friendlyFormatIBAN} from "ibantools";
-import moment from "moment";
+import moment, {Moment} from "moment";
 import {createContext} from "react";
-import {BankTransaction, Gebruiker, Interval, IntervalInput} from "../generated/graphql";
+import {BankTransaction, Gebruiker, Interval, IntervalInput, Rubriek} from "../generated/graphql";
 import {IntervalType} from "../models/models";
 
 export const searchFields = (term: string, fields: string[]): boolean => {
@@ -150,3 +150,16 @@ export const useReactSelectStyles = () => {
 export const humanJoin = (x) => arrayToSentence(x, {
 	lastSeparator: " en ",
 });
+
+export const getRubriekForTransaction = (t: BankTransaction): Rubriek | undefined => t.journaalpost?.grootboekrekening?.rubriek || t.journaalpost?.afspraak?.rubriek;
+
+export const prepareChartData = (startDate: Moment, endDate: Moment, columns: number = 1): any[] => {
+	const nMonths = Math.abs(endDate.endOf("month").diff(startDate.startOf("month"), "month")) + 1;
+
+	return new Array(nMonths).fill(0).map((_, i) => {
+		return ([
+			moment(startDate).add(i, "month").startOf("month").format("YYYY-MM"),
+			...new Array(columns).fill(0)
+		]);
+	});
+};

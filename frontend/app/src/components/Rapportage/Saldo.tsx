@@ -1,30 +1,36 @@
 import {BoxProps, Spinner, useToken} from "@chakra-ui/react";
-import React from "react";
+import React, {useContext} from "react";
 import {useTranslation} from "react-i18next";
 import {BankTransaction} from "../../generated/graphql";
-import {createAggregationByCategoryByMonth} from "../../utils/DataEngine";
+import {prepareChartData} from "../../utils/things";
+import {createAggregation} from "./Aggregator";
 import {FormLeft} from "../Forms/FormLeftRight";
 import ChakraChart from "../Layouts/Chart";
 import Section from "../Layouts/Section";
+import {RapportageContext} from "./context";
 
 const Saldo: React.FC<BoxProps & { transactions: BankTransaction[] }> = ({transactions}) => {
 	const {t} = useTranslation();
 	const [color1, color2] = useToken("colors", ["primary.300", "secondary.300"]);
+	const {startDate, endDate} = useContext(RapportageContext);
 
-	const aggregationByCategoryByMonth = createAggregationByCategoryByMonth(transactions);
+	const aggregation = createAggregation(transactions);
 
 	const columns = [t("interval.month", {count: 2}), t("charts.saldo.title")];
+	const chartTemplate = prepareChartData(startDate, endDate, columns.length - 1);
 
-	const {data} = aggregationByCategoryByMonth.reduce((result, d) => {
-		const [month, _in, _out] = d;
-		const balance = _in - _out;
-
-		result.total += balance;
-		result.data.push([month, (result.total)]);
-		return result;
-	}, {
-		data: [], total: 0
-	});
+	// LEFTHERE
+	// const {data} = aggregation.reduce((result, d) => {
+	// 	const [month, _in, _out] = d;
+	// 	const balance = _in - _out;
+	//
+	// 	result.total += balance;
+	// 	result.data.push([month, (result.total)]);
+	// 	return result;
+	// }, {
+	// 	data: [], total: 0
+	// });
+	const data = [];
 
 	return (<>
 		<Section>
