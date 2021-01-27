@@ -5,8 +5,8 @@ class Config(object):
     DEBUG = False
     TESTING = False
     CSRF_ENABLED = True
-    SECRET_KEY = os.environ['HHB_SECRET']
-    SQLALCHEMY_DATABASE_URI = os.environ['ORGANISATIE_DATABASE_URL']
+    SECRET_KEY = os.getenv('HHB_SECRET', None)
+    SQLALCHEMY_DATABASE_URI = os.getenv('ORGANISATIE_DATABASE_URL', os.getenv('DATABASE_URL', None))
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 class ProductionConfig(Config):
