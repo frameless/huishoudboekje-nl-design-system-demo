@@ -1,16 +1,20 @@
 # TODO unify naming, filenames are singular, loader names are plural
+from .afspraken_loader import AfsprakenByIdLoader, AfsprakenByGebruikerLoader
+from .bank_transactions_loader import BankTransactionByIdLoader, BankTransactionByCsmLoader
+from .configuratie_loader import ConfiguratieByIdLoader
+from .csm_loader import CSMsByIdLoader
+from .exports_loader import ExportsByIdLoader
 from .gebruiker_loader import GebruikersByIdLoader
+from .gebruikersactiviteit_loader import GebruikersActiviteitenByIdLoader, GebruikersActiviteitenByGebruikersLoader, \
+    GebruikersActiviteitenByAfsprakenLoader
 from .grootboekrekening_loader import GrootboekrekeningenByIdLoader
 from .journaalpost_loader import JournaalpostenByIdLoader, JournaalpostenByTransactionLoader
 from .organisatie_loader import OrganisatieByIdLoader, KvKDetailsLoader
-from .afspraken_loader import AfsprakenByIdLoader, AfsprakenByGebruikerLoader
-from .rekeningen_loader import RekeningenByIdLoader, RekeningenByGebruikerLoader, RekeningenByOrganisatieLoader, RekeningenByIbanLoader
-from .csm_loader import CSMsByIdLoader
-from .bank_transactions_loader import BankTransactionByIdLoader, BankTransactionByCsmLoader
-from .configuratie_loader import ConfiguratieByIdLoader
+from .overschrijving_loader import OverschrijvingByIdLoader, OverschrijvingByAfspraakLoader, \
+    OverschrijvingByExportLoader
+from .rekeningen_loader import RekeningenByIdLoader, RekeningenByGebruikerLoader, RekeningenByOrganisatieLoader, \
+    RekeningenByIbanLoader
 from .rubrieken_loader import RubriekByIdLoader, RubriekByGrootboekrekeningLoader
-from .exports_loader import ExportsByIdLoader
-from .overschrijving_loader import OverschrijvingByIdLoader, OverschrijvingByAfspraakLoader, OverschrijvingByExportLoader
 
 
 class HHBDataLoader:
@@ -52,3 +56,7 @@ class HHBDataLoader:
 
         # Exports
         self.exports_by_id = ExportsByIdLoader(loop=loop)
+
+        self.gebruikersactiviteiten_by_id = GebruikersActiviteitenByIdLoader(loop=loop)
+        self.gebruikersactiviteiten_by_gebruikers = GebruikersActiviteitenByGebruikersLoader(loop=loop)
+        self.gebruikersactiviteiten_by_afspraken = GebruikersActiviteitenByAfsprakenLoader(loop=loop)
