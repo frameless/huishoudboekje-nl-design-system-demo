@@ -3,7 +3,6 @@ from datetime import date, datetime
 
 import graphene
 from flask import request
-import hhb_backend.graphql.models.gebruiker as gebruiker
 from hhb_backend.graphql.models.afspraak import Afspraak
 from hhb_backend.graphql.models.gebruiker import Gebruiker
 from hhb_backend.graphql.models.organisatie import Organisatie
@@ -33,8 +32,8 @@ class GebruikersActiviteitSnapshot(graphene.ObjectType):
             return Gebruiker(**value)
 
 class GebruikersActiviteitEntity(graphene.ObjectType):
-    entity_type = graphene.String()
-    entity_id = graphene.Int()
+    entityType = graphene.String()
+    entityId = graphene.Int()
 
     burger = graphene.Field(lambda: Gebruiker)
     organisatie = graphene.Field(lambda: Organisatie)
@@ -42,20 +41,20 @@ class GebruikersActiviteitEntity(graphene.ObjectType):
     rekening = graphene.Field(lambda: Rekening)
 
     async def resolve_burger(root, info):
-        if root.get('entity_type') == 'burger':
-            return await request.dataloader.gebruikers_by_id.load(root.get('entity_id'))
+        if root.get('entityType') == 'burger':
+            return await request.dataloader.gebruikers_by_id.load(root.get('entityId'))
 
     async def resolve_organisatie(root, info):
-        if root.get('entity_type') == 'organisatie':
-            return await request.dataloader.organisaties_by_id.load(root.get('entity_id'))
+        if root.get('entityType') == 'organisatie':
+            return await request.dataloader.organisaties_by_id.load(root.get('entityId'))
 
     async def resolve_afspraak(root, info):
-        if root.get('entity_type') == 'afspraak':
-            return await request.dataloader.afspraken_by_id.load(root.get('entity_id'))
+        if root.get('entityType') == 'afspraak':
+            return await request.dataloader.afspraken_by_id.load(root.get('entityId'))
 
     async def resolve_rekening(root, info):
-        if root.get('entity_type') == 'rekening':
-            return await request.dataloader.rekeningen_by_id.load(root.get('entity_id'))
+        if root.get('entityType') == 'rekening':
+            return await request.dataloader.rekeningen_by_id.load(root.get('entityId'))
 
 
 class GebruikersActiviteit(graphene.ObjectType):
