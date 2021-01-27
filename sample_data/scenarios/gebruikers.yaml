@@ -8,19 +8,19 @@ scenarios:
         bedrag: 2000
         credit: false
         automatische_incasso: true
-        interval: "P0Y0M3W0D"
+        interval: "P0Y3M0W0D"
         start_datum: "2021-01-01"
       - aantal: 1
         rubriek: "Inkomsten"
         organisatie_kvk: "35012085"
         bedrag: 76532
         credit: true
-        interval: "P0Y0M1W0D"
+        interval: "P0Y1M0W0D"
         start_datum: "2021-01-01"
       - aantal: 1
         rubriek: "Inkomsten"
         organisatie_kvk: "30280353"
         bedrag: 14784
         credit: true
-        interval: "P0Y0M1W0D"
+        interval: "P0Y1M0W0D"
         start_datum: "2021-01-01"
