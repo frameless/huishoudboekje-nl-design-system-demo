@@ -73,7 +73,7 @@ scenarios:
         rubriek: "Water"
         omschrijving: "Water"
         organisatie_kvk: "05069581"
-        bedrag: 2000
+        bedrag: 4161
         credit: false
         automatische_incasso: true
         interval: "P0Y3M0W0D"
