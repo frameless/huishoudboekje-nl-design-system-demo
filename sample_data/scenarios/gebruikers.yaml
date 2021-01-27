@@ -23,6 +23,7 @@ scenarios:
         rubriek: "Inkomsten"
         omschrijving: "Aanvullende uitkering"
         organisatie_kvk: "30280353"
+  # TODO: add attribute for specific IBAN
         bedrag: 14784
         credit: true
         interval: "P0Y1M0W0D"
