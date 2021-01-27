@@ -16,6 +16,7 @@
   before_script:
     - helm repo add stable "https://charts.helm.sh/stable"
     - helm repo add bitnami "https://charts.bitnami.com/bitnami"
+    - find helm -name tmpcharts -exec rm -rvf {} \;
     - helm repo update
     - helm dependency build helm/charts/huishoudboekje
     - |
