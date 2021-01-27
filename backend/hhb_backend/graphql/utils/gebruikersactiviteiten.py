@@ -36,6 +36,10 @@ def log_gebruikers_activiteit(view_func):
     @wraps(view_func)
     async def decorated(*args, **kwargs):
         result = await view_func(*args, **kwargs)
+        gebruikers_activiteit = result.gebruikers_activiteit \
+            if type(result.gebruikers_activiteit) == GebruikersActiviteit \
+            else GebruikersActiviteit(**(result.gebruikers_activiteit))
+
         try:
             json = {
                 'timestamp': datetime.now(tz=tz.tzlocal()).replace(microsecond=0).isoformat(),
@@ -45,7 +49,7 @@ def log_gebruikers_activiteit(view_func):
                     'applicationVersion': load_version().version,  # Read version.json
                 },
                 'gebruiker_id': g.oidc_id_token["email"] if g.oidc_id_token is not None else None,
-                **(result.gebruikers_activiteit.to_dict()),
+                **(gebruikers_activiteit.to_dict()),
             }
             # TODO use a Queue and asyncio.run_task
             response = requests.post(
@@ -54,7 +58,7 @@ def log_gebruikers_activiteit(view_func):
             )
             logging.debug(f"logged gebruikersactiviteit(status={response.status_code}) {json}")
         except:
-            logging.exception(f"Failed to log {result.gebruikers_activiteit.to_dict()}")
+            logging.exception(f"Failed to log {gebruikers_activiteit.to_dict()}")
 
         return result
     return decorated

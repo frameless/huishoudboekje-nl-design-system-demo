@@ -33,8 +33,8 @@ class GebruikersActiviteitSnapshot(graphene.ObjectType):
             return Gebruiker(**value)
 
 class GebruikersActiviteitEntity(graphene.ObjectType):
-    entityType = graphene.String()
-    entityId = graphene.Int()
+    entity_type = graphene.String()
+    entity_id = graphene.Int()
 
     burger = graphene.Field(lambda: Gebruiker)
     organisatie = graphene.Field(lambda: Organisatie)
@@ -42,30 +42,30 @@ class GebruikersActiviteitEntity(graphene.ObjectType):
     rekening = graphene.Field(lambda: Rekening)
 
     async def resolve_burger(root, info):
-        if root.get('entityType') == 'burger':
-            return await request.dataloader.gebruikers_by_id.load(root.get('entityId'))
+        if root.get('entity_type') == 'burger':
+            return await request.dataloader.gebruikers_by_id.load(root.get('entity_id'))
 
     async def resolve_organisatie(root, info):
-        if root.get('entityType') == 'organisatie':
-            return await request.dataloader.organisaties_by_id.load(root.get('entityId'))
+        if root.get('entity_type') == 'organisatie':
+            return await request.dataloader.organisaties_by_id.load(root.get('entity_id'))
 
     async def resolve_afspraak(root, info):
-        if root.get('entityType') == 'afspraak':
-            return await request.dataloader.afspraken_by_id.load(root.get('entityId'))
+        if root.get('entity_type') == 'afspraak':
+            return await request.dataloader.afspraken_by_id.load(root.get('entity_id'))
 
     async def resolve_rekening(root, info):
-        if root.get('entityType') == 'rekening':
-            return await request.dataloader.rekeningen_by_id.load(root.get('entityId'))
+        if root.get('entity_type') == 'rekening':
+            return await request.dataloader.rekeningen_by_id.load(root.get('entity_id'))
 
 
 class GebruikersActiviteit(graphene.ObjectType):
     """GebruikersActiviteit model"""
     id = graphene.Int()
     timestamp = graphene.DateTime()
-    gebruiker = graphene.Int()
+    gebruiker_id = graphene.String()
     action = graphene.String()
     entities = graphene.List(lambda: GebruikersActiviteitEntity)
-    snapshotBefore = graphene.Field(lambda: GebruikersActiviteitSnapshot)
+    snapshot_before = graphene.Field(lambda: GebruikersActiviteitSnapshot)
     snapshot_after = graphene.Field(lambda: GebruikersActiviteitSnapshot)
     meta = graphene.Field(lambda: GebruikersActiviteitMeta)
 

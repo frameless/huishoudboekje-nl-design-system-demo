@@ -1,15 +1,13 @@
 """ GraphQL mutation for deleting a Gebruiker/Burger """
-import os
 
 import graphene
-
-from flask import request
 import requests
+from flask import request
 from graphql import GraphQLError
+
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.models.gebruiker import Gebruiker
-from hhb_backend.graphql.utils.gebruikersactiviteiten import GebruikersActiviteit, GebruikersActiviteitEntity, \
-    log_gebruikers_activiteit
+from hhb_backend.graphql.utils.gebruikersactiviteiten import log_gebruikers_activiteit
 
 
 class DeleteGebruiker(graphene.Mutation):
@@ -18,24 +16,26 @@ class DeleteGebruiker(graphene.Mutation):
         id = graphene.Int(required=True)
 
     ok = graphene.Boolean()
-    previous_gebruiker = graphene.Field(lambda: Gebruiker)
+    previous = graphene.Field(lambda: Gebruiker)
 
     @property
     def gebruikers_activiteit(self):
-        return GebruikersActiviteit(
+        return dict(
             action="Delete",
-            entities=[GebruikersActiviteitEntity(entity_type="burger", entity_id=self.previous_gebruiker['id'])],
-            before=self.previous_gebruiker,
+            entities=[dict(entity_type="burger", entity_id=self.previous['id'])],
+            before={"burger": self.previous},
         )
 
     @log_gebruikers_activiteit
     async def mutate(root, info, id):
         """ Delete current gebruiker """
 
-        previous_gebruiker = await request.dataloader.gebruikers_by_id.load(id)
+        previous = await request.dataloader.gebruikers_by_id.load(id)
 
-        delete_response = requests.delete(f"{settings.HHB_SERVICES_URL}/gebruikers/{id}")
-        if delete_response.status_code != 204:
-            raise GraphQLError(f"Upstream API responded: {delete_response.json()}")
+        response = requests.delete(f"{settings.HHB_SERVICES_URL}/gebruikers/{id}")
+        if response.status_code != 204:
+            raise GraphQLError(f"Upstream API responded: {response.json()}")
+
         request.dataloader.gebruikers_by_id.clear(id)
-        return DeleteGebruiker(ok=True, previous_gebruiker=previous_gebruiker)
+
+        return DeleteGebruiker(ok=True, previous=previous)
