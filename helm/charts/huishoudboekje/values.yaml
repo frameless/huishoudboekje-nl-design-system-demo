@@ -1,5 +1,6 @@
 dex:
   enabled: false
+
 postgresql:
   enabled: true
   persistence:
@@ -7,10 +8,10 @@ postgresql:
     size: 1Gi
     existingClaim: null
   initdbScriptsSecret: database-init-scripts
+
 services:
   - huishoudboekje_service
   - organisatie_service
   - bank_transactie_service
   - grootboek_service
-global:
-  imageTag: "123"
+  - log_service

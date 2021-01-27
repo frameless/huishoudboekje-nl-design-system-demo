@@ -22,7 +22,8 @@ RUN apk add --update jq
 ARG COMPONENT_NAME=frontend
 ARG COMPONENT_TAG=undefined
 ARG COMPONENT_COMMIT_HASH=undefined
-RUN jq -ncM '{tag: env.COMPONENT_TAG, commit: env.COMPONENT_COMMIT_HASH, component: env.COMPONENT_NAME}' | tee /version.json
+ARG COMPONENT_VERSION=undefined
+RUN jq -ncM '{tag: env.COMPONENT_TAG, commit: env.COMPONENT_COMMIT_HASH, component: env.COMPONENT_NAME, version: env.COMPONENT_VERSION}' | tee /version.json
 
 # Set up production environment using nginx
 FROM ${DOCKER_PROXY}nginx:1.19.0-alpine as webserver

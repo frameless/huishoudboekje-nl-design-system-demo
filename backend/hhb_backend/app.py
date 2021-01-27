@@ -65,7 +65,7 @@ def create_app(config_name=os.getenv('APP_SETTINGS', None) or 'hhb_backend.confi
         try:
             return send_file('version.json')
         except:
-            return jsonify(component='backend', tag='dev')
+            return jsonify(component='backend', tag='dev', version="0.20.0")
 
     @app.route('/me')
     def me():

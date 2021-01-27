@@ -1,34 +1,14 @@
 import requests_mock
 from requests_mock import Adapter
 
-
-class MockResponse():
-    history = None
-    raw = None
-    is_redirect = None
-    content = None
-
-    def __init__(self, json_data, status_code):
-        self.json_data = json_data
-        self.status_code = status_code
-
-    def json(self):
-        return self.json_data
-
-
-def create_mock_adapter() -> Adapter:
-    adapter = requests_mock.Adapter()
-
-    def test_matcher(request):
-        return MockResponse({'data': "{'id': 1}"}, 200)
-
-    adapter.add_matcher(test_matcher)
-    return adapter
+from hhb_backend.graphql import settings
 
 
 def test_update_gebruiker_success(client):
     with requests_mock.Mocker() as mock:
-        mock._adapter = create_mock_adapter()
+        post_adapter = mock.post(f"{settings.HHB_SERVICES_URL}/gebruikers/1", status_code=200, json={"data": {"id": 1}})
+        get_adapter = mock.get(f"{settings.HHB_SERVICES_URL}/gebruikers/?filter_ids=1", status_code=200,
+                               json={"data": [{"id": 1}]})
         response = client.post(
             "/graphql",
             json={
@@ -63,7 +43,7 @@ def test_update_gebruiker_success(client):
                               'voorletters': "H",
                               'voornamen': "Hogan",
                               'plaatsnaam': "Dorp"}},
-            content_type='application/json'
         )
-        assert mock._adapter.call_count == 1
+        assert get_adapter.called_once
+        assert post_adapter.called_once
         assert response.json["data"]["updateGebruiker"]["ok"] is True

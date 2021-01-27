@@ -9,7 +9,7 @@ class Config(object):
     TESTING = False
     CSRF_ENABLED = True
     SECRET_KEY = os.getenv('HHB_SECRET', None)
-    SQLALCHEMY_DATABASE_URI = os.getenv('HHB_DATABASE_URL', None)
+    SQLALCHEMY_DATABASE_URI = os.getenv('HHB_DATABASE_URL', os.getenv('DATABASE_URL', None))
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 

@@ -4,6 +4,7 @@ from flask import Flask, Response
 from core_service import database
 from log_service import config
 from log_service.views.gebruikersactiviteit import GebruikersActiviteitView
+import logging
 
 db = database.db
 from models import gebruikersactiviteit
@@ -14,6 +15,9 @@ def create_app(config_name=os.getenv('APP_SETTINGS', 'log_service.config.Develop
     app.config.from_object(config_name)
 
     db.init_app(app)
+
+    logging.basicConfig(level=app.config["LOG_LEVEL"], )
+    logging.info(f"Starting {__name__} with {config_name}")
 
     @app.route('/health')
     def health():

@@ -20,7 +20,7 @@ class GebruikersActiviteitenQuery():
 
     @staticmethod
     async def resolver(root, info, **kwargs):
-        if not kwargs["ids"] and not kwargs["gebruikerIds"] and not ["afsprakenIds"]:
+        if not kwargs["ids"] and not kwargs["gebruikerIds"] and not kwargs["afsprakenIds"]:
             gebruikersactiviteiten = request.dataloader.gebruikersactiviteiten_by_id.get_all_and_cache()
         else:
             gebruikersactiviteiten = []
