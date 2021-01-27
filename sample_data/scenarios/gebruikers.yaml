@@ -61,6 +61,15 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-01"
       - aantal: 1
+        rubriek: "Elektra"
+        omschrijving: "Elektriciteit"
+        organisatie_kvk: "05082820"
+        bedrag: 13200
+        credit: false
+        automatische_incasso: true
+        interval: "P0Y1M0W0D"
+        start_datum: "2019-01-01"
+      - aantal: 1
         rubriek: "Water"
         omschrijving: "Water"
         organisatie_kvk: "05069581"
