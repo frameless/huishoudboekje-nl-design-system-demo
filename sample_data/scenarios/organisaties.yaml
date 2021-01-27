@@ -2,7 +2,8 @@ organisaties:
 # overheden
 - naam: "Belastingdienst Toeslagen"
   kvk_nummer: "27365323"
-  weergave_naam: "Belastingdienst Toeslagen"
+# TODO: add handelsregister vestigingsnummer
+  weergave_naam: "Belastingdienst"
   straatnaam: "Graadt van Roggenweg"
   huisnummer: "500"
   postcode: "3531AH"
