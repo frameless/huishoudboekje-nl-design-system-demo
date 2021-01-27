@@ -11,9 +11,9 @@ export const createAggregationByCategoryByMonth = (tr: BankTransaction[]) => {
 
 	const _data = filtered.map(tr => ({
 		...tr,
-		rubriek: tr.journaalpost?.grootboekrekening?.rubriek
-	})).reduce((result: any, tr: BankTransaction & { rubriek?: Rubriek }) => {
-		const month = moment(tr.transactieDatum, "YYYY MM DD").format("YYYY-MM");
+		rubriek: tr.journaalpost?.grootboekrekening?.rubriek || (tr.isCredit ? Category.Inkomsten : Category.Uitgaven)
+	})).reduce((result: any, tr: BankTransaction & { rubriek: Rubriek }) => {
+		const period = moment(tr.transactieDatum, "YYYY MM DD").format("YYYY-MM");
 
 		let category = Category.Ongeboekt;
 		// Geboekt op rubriek
@@ -25,19 +25,18 @@ export const createAggregationByCategoryByMonth = (tr: BankTransaction[]) => {
 			category = tr.journaalpost?.afspraak?.rubriek?.grootboekrekening?.credit ? Category.Inkomsten : Category.Uitgaven;
 		}
 
-		result[month] = result[month] || {};
-		result[month][category] = result[month][category] || 0;
-		result[month][category] += parseFloat(tr.bedrag);
+		result[period] = result[period] || {};
+		result[period][category] = result[period][category] || 0;
+		result[period][category] += parseFloat(tr.bedrag);
 		return result;
 	}, {});
 
 	const chartData: any[] = [];
-	for (let month in _data) {
+	for (let period in _data) {
 		chartData.push([
-			moment(month, "YYYY-MM").format("MMM YYYY"),
-			// Fixme: Here we're using strings that need to be translated as keys. This will cause errors when there are missing translations.
-			Math.abs(_data[month][Category.Inkomsten]) || 0,
-			Math.abs(_data[month][Category.Uitgaven]) || 0,
+			period,
+			Math.abs(_data[period][Category.Inkomsten]) || 0,
+			Math.abs(_data[period][Category.Uitgaven]) || 0,
 		]);
 	}
 
