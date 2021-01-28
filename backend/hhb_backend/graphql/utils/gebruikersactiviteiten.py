@@ -60,11 +60,11 @@ def log_gebruikers_activiteit(view_func):
             json = {
                 'timestamp': datetime.now(tz=tz.tzlocal()).replace(microsecond=0).isoformat(),
                 'meta': {
-                    'userAgent': str(request.user_agent),
-                    'ip': ','.join(request.access_route),
+                    'userAgent': str(request.user_agent) if request else None,
+                    'ip': ','.join(request.access_route) if request else None,
                     'applicationVersion': load_version().version,  # Read version.json
                 },
-                'gebruiker_id': g.oidc_id_token["email"] if g.oidc_id_token is not None else None,
+                'gebruiker_id': g.oidc_id_token["email"] if g and g.oidc_id_token is not None else None,
                 **(gebruikers_activiteit),
             }
             # TODO use a Queue and asyncio.run_task
@@ -83,10 +83,11 @@ def log_gebruikers_activiteit(view_func):
 def gebruikers_activiteit_entities(result: dict, key: str, entity_type: str) -> List[GebruikersActiviteitEntity]:
     """Return a list of entities of a list of objects in a dictionary at 'key'"""
     value = None
-    if type(result) == dict:
-        value = result[key] if key in result else None
-    elif inspect.isclass(type(result)):
-        value = vars(result)[key] if key in vars(result) else None
+    if result:
+        if type(result) == dict:
+            value = result[key] if key in result else None
+        elif inspect.isclass(type(result)):
+            value = vars(result)[key] if key in vars(result) else None
 
     if not value:
         return []
