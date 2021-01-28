@@ -291,6 +291,17 @@
     "burgers": {
         "burgers": "Burgers"
     },
+    "configuratie": "Configuratie",
+    "organizations": {
+        "organizations": "Organisaties"
+    },
+    "pages": {
+        "notFound": {
+            "title": "404",
+            "subTitle": "Pagina niet beschikbaar",
+            "description": "De pagina die je zoekt kan niet worden gevonden."
+        }
+    },
     "charts": {
         "inkomstenUitgaven": {
             "income": "Inkomsten",
@@ -303,11 +314,16 @@
         "optionAllBurgers": "Alle burgers",
         "filterRubrics": "Filter op rubriek",
         "optionAllRubrics": "Alle rubrieken",
+        "granularity": "Granulariteit",
         "saldo": {
             "title": "Saldo",
-            "helperText": "Een overzicht van saldo over tijd.",
-            "saldo": "Saldo"
+            "helperText": "Een overzicht van saldo over tijd."
         }
+    },
+    "granularity": {
+        "daily": "Dag",
+        "weekly": "Week",
+        "monthly": "Maand"
     },
     "sidebar": {
         "rapportage": "Rapportage",
@@ -326,16 +342,5 @@
     },
     "balance": "Balans",
     "allBurgers": "Alle burgers",
-    "total": "Totaal",
-    "configuratie": "Configuratie",
-    "organizations": {
-        "organizations": "Organisaties"
-    },
-    "pages": {
-        "notFound": {
-            "title": "404",
-            "subTitle": "Pagina niet beschikbaar",
-            "description": "De pagina die je zoekt kan niet worden gevonden."
-        }
-    }
+    "total": "Totaal"
 }

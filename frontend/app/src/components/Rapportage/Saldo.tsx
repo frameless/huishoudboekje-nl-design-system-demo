@@ -1,5 +1,4 @@
 import {BoxProps, Spinner, useToken} from "@chakra-ui/react";
-import moment from "moment";
 import React, {useContext} from "react";
 import {useTranslation} from "react-i18next";
 import {BankTransaction} from "../../generated/graphql";
@@ -13,12 +12,12 @@ import {RapportageContext} from "./context";
 const Saldo: React.FC<BoxProps & { transactions: BankTransaction[] }> = ({transactions}) => {
 	const {t} = useTranslation();
 	const [color1, color2] = useToken("colors", ["primary.300", "secondary.300"]);
-	const {startDate, endDate} = useContext(RapportageContext);
+	const {startDate, endDate, granularity} = useContext(RapportageContext);
 
-	const [aggregation] = createAggregation(transactions);
+	const [aggregation] = createAggregation(transactions, granularity);
 
 	const columns = [t("interval.month", {count: 2}), t("charts.saldo.title")];
-	const chartTemplate = prepareChartData(startDate, endDate, columns.length - 1);
+	const chartTemplate = prepareChartData(startDate, endDate, granularity, columns.length - 1);
 	const chartData = (chartTemplate: any[], aggregation) => {
 		let saldo = 0;
 		return chartTemplate.map(chartItem => {
@@ -27,7 +26,7 @@ const Saldo: React.FC<BoxProps & { transactions: BankTransaction[] }> = ({transa
 			saldo += (income + expenses);
 
 			return [
-				moment(period, "YYYY MM").format("MMM YYYY"),
+				period,
 				saldo
 			];
 		});

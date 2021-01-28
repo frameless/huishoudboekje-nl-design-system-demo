@@ -7,12 +7,13 @@ import {useTranslation} from "react-i18next";
 import Select from "react-select";
 import {Gebruiker, Rubriek, useGetReportingDataQuery} from "../../generated/graphql";
 import Transaction from "../../models/Transaction";
-import {Type, createAggregationByRubriek} from "./Aggregator";
 import Queryable from "../../utils/Queryable";
 import {currencyFormat2, formatBurgerName, humanJoin, useReactSelectStyles} from "../../utils/things";
 import {FormLeft, FormRight, Label} from "../Forms/FormLeftRight";
 import Page from "../Layouts/Page";
+import RadioButtonGroup from "../Layouts/RadioButtons/RadioButtonGroup";
 import Section from "../Layouts/Section";
+import {createAggregationByRubriek, Granularity, Type} from "./Aggregator";
 import {RapportageContext} from "./context";
 import InkomstenUitgaven from "./InkomstenUitgaven";
 import Saldo from "./Saldo";
@@ -36,13 +37,21 @@ const Rapportage = () => {
 	const endDate = useInput({
 		defaultValue: moment().subtract(1, "month").endOf("month").format("L"),
 	});
+	const [granularity, setGranularity] = useState<Granularity>(Granularity.Monthly);
+	const granularityOptions = {
+		[Granularity.Daily]: t("granularity.daily"),
+		[Granularity.Weekly]: t("granularity.weekly"),
+		[Granularity.Monthly]: t("granularity.monthly"),
+	};
+
 	const [filterBurgerIds, setFilterBurgerIds] = useState<number[]>([]);
 	const [filterRubriekIds, setFilterRubriekIds] = useState<number[]>([]);
 	const onSelectBurger = (value) => setFilterBurgerIds(value ? value.map(v => v.value) : []);
 	const onSelectRubriek = (value) => setFilterRubriekIds(value ? value.map(v => v.value) : []);
+	const onChangeGranularity = (value) => setGranularity(value);
 
 	return (
-		<RapportageContext.Provider value={{startDate: moment(startDate.value, "L"), endDate: moment(endDate.value, "L")}}>
+		<RapportageContext.Provider value={{startDate: moment(startDate.value, "L"), endDate: moment(endDate.value, "L"), granularity}}>
 			<Page title={t("sidebar.rapportage")} position={"relative"}>
 				<Section>
 					<FormLeft title={t("sections.filterOptions.title")} helperText={t("sections.filterOptions.helperText")} />
@@ -95,6 +104,13 @@ const Rapportage = () => {
 											        isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllRubrics")} />
 										)
 									}} />
+								</FormControl>
+							</Stack>
+
+							<Stack direction={["column", "row"]} spacing={5} flex={1}>
+								<FormControl as={Stack} flex={1}>
+									<Label>{t("charts.granularity")}</Label>
+									<RadioButtonGroup name={"granularity"} onChange={onChangeGranularity} defaultValue={Granularity.Monthly} value={granularity} options={granularityOptions} />
 								</FormControl>
 							</Stack>
 						</Stack>

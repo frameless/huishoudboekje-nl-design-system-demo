@@ -3,6 +3,7 @@ import arrayToSentence from "array-to-sentence";
 import {friendlyFormatIBAN} from "ibantools";
 import moment, {Moment} from "moment";
 import {createContext} from "react";
+import {Granularity, periodFormatForGranularity} from "../components/Rapportage/Aggregator";
 import {BankTransaction, Gebruiker, Interval, IntervalInput, Rubriek} from "../generated/graphql";
 import {IntervalType} from "../models/models";
 
@@ -153,13 +154,21 @@ export const humanJoin = (x) => arrayToSentence(x, {
 
 export const getRubriekForTransaction = (t: BankTransaction): Rubriek | undefined => t.journaalpost?.grootboekrekening?.rubriek || t.journaalpost?.afspraak?.rubriek;
 
-export const prepareChartData = (startDate: Moment, endDate: Moment, columns: number = 1): any[] => {
-	const nMonths = Math.abs(endDate.endOf("month").diff(startDate.startOf("month"), "month")) + 1;
+export const prepareChartData = (startDate: Moment, endDate: Moment, granularity: Granularity, columns: number = 1): any[] => {
+	const nPeriods = {
+		[Granularity.Monthly]: (Math.abs(endDate.endOf("month").diff(startDate.startOf("month"), "month")) + 1),
+		[Granularity.Weekly]: (Math.abs(endDate.endOf("month").diff(startDate.startOf("month"), "week")) + 1),
+		[Granularity.Daily]: (Math.abs(endDate.endOf("month").diff(startDate.startOf("month"), "day")) + 1),
+	}[granularity];
 
-	return new Array(nMonths).fill(0).map((_, i) => {
-		return ([
-			moment(startDate).add(i, "month").startOf("month").format("YYYY-MM"),
-			...new Array(columns).fill(0)
-		]);
-	});
+	const timeUnits: Record<Granularity, any> = {
+		[Granularity.Monthly]: "month",
+		[Granularity.Weekly]: "week",
+		[Granularity.Daily]: "day",
+	};
+
+	return new Array(nPeriods).fill(0).map((_, i) => [
+		moment(startDate).add(i, timeUnits[granularity]).startOf(timeUnits[granularity]).format(periodFormatForGranularity[granularity]),
+		...new Array(columns).fill(0)
+	]);
 };

@@ -14,12 +14,12 @@ import {RapportageContext} from "./context";
 const InkomstenUitgaven: React.FC<BoxProps & { transactions: BankTransaction[] }> = ({transactions = []}) => {
 	const {t} = useTranslation();
 	const [color1, color2] = useToken("colors", ["primary.300", "secondary.300"]);
-	const {startDate, endDate} = useContext(RapportageContext);
+	const {startDate, endDate, granularity} = useContext(RapportageContext);
 
-	const [aggregation] = createAggregation(transactions);
+	const [aggregation] = createAggregation(transactions, granularity);
 
 	const columns = [t("interval.period"), t("charts.inkomstenUitgaven.income"), t("charts.inkomstenUitgaven.expenses")];
-	const chartTemplate = prepareChartData(startDate, endDate, columns.length - 1);
+	const chartTemplate = prepareChartData(startDate, endDate, granularity,columns.length - 1);
 	const chartData = (chartTemplate: any[], aggregation) => chartTemplate.map(chartItem => {
 		const [period, tIncome, tExpenses] = chartItem;
 		const {income = 0, expenses = 0} = aggregation[period] || {};

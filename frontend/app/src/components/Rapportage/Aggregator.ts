@@ -12,32 +12,26 @@ type RichTransaction = BankTransaction & {
 	rubriek?: Rubriek
 };
 
-enum Granularity {
-	Monthly,
-	Weekly,
-	Daily,
+export enum Granularity {
+	Monthly = "monthly",
+	Weekly = "weekly",
+	Daily = "daily",
 }
 
-const periodFormatForGranularity = {
-	[Granularity.Monthly]: "YYYY-MM",
-	[Granularity.Weekly]: "YYYY-WW",
-	[Granularity.Daily]: "YYYY-MM-DD",
+export const periodFormatForGranularity = {
+	[Granularity.Monthly]: "MMM YYYY",
+	[Granularity.Weekly]: "GGGG-WW",
+	[Granularity.Daily]: "DD-MM-YYYY",
 };
 
 // Todo: clean this up, can be more compact maybe?
-export const createAggregation = (tr: BankTransaction[]) => {
+export const createAggregation = (tr: BankTransaction[], granularity = Granularity.Monthly) => {
 	// Enrich transaction with some useful data
 	const _data = tr.map(t => ({
 		...t,
 		mDate: moment(t.transactieDatum, "YYYY MM DD"),
 		rubriek: getRubriekForTransaction(t)
 	}));
-
-	// const period = tr.mDate.format("YYYY-MM");
-	// const category = tr.rubriek?.naam || "";
-	// result[period] = result[period] || {};
-	// result[period][category] = result[period][category] || 0;
-	// result[period][category] += parseFloat(tr.bedrag);
 
 	/* For chart */
 	const reducePerPeriod = (granularity: Granularity = Granularity.Monthly) => (result, tr) => {
@@ -50,8 +44,6 @@ export const createAggregation = (tr: BankTransaction[]) => {
 		return result;
 	};
 
-	// Todo: put this in a useState in /src/components/Rapportage/index.tsx and bind to a button so that it can be changed (27-01-2021)
-	const granularity = Granularity.Monthly;
 	const chartData = _data.reduce(reducePerPeriod(granularity), {});
 
 	const splitupFormat: { [Type.Inkomsten]: RichTransaction[], [Type.Uitgaven]: RichTransaction[] } = {
