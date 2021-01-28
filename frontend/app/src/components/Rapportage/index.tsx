@@ -32,12 +32,10 @@ const Rapportage = () => {
 	});
 
 	const startDate = useInput({
-		defaultValue: "01-01-2000",
-		// defaultValue: moment().subtract(1, "year").startOf("month").format("L"),
+		defaultValue: moment().subtract(1, "year").startOf("month").format("L"),
 	});
 	const endDate = useInput({
-		defaultValue: "31-12-2000",
-		// defaultValue: moment().subtract(1, "month").endOf("month").format("L"),
+		defaultValue: moment().subtract(1, "month").endOf("month").format("L"),
 	});
 	const [granularity, setGranularity] = useState<Granularity>(Granularity.Monthly);
 	const granularityOptions = {
