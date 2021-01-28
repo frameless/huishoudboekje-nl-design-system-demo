@@ -71,42 +71,38 @@ const App = () => {
 	}
 
 	return (
-		<Switch>
-			<Route>
-				<Flex h={"auto"} minHeight={"100vh"} minWidth={"100%"} w={"auto"} bg={"gray.100"}>
-					<Flex width={"100%"} justifyContent={"flex-start"} alignItems={"flex-start"} spacing={5}>
-						<SidebarContainer>
-							<Sidebar />
-						</SidebarContainer>
+		<Flex h={"auto"} minHeight={"100vh"} minWidth={"100%"} w={"auto"} bg={"gray.100"}>
+			<Flex width={"100%"} justifyContent={"flex-start"} alignItems={"flex-start"} spacing={5}>
+				<SidebarContainer>
+					<Sidebar />
+				</SidebarContainer>
 
-						<Box height={"100%"} minHeight={"100vh"} width={"100%"} p={5}>
-							<Stack spacing={5} direction={"row"} justifyContent={"flex-end"} alignItems={"center"} pb={5}>
-								<HStack spacing={5} alignItems={"center"}>
-									<UserStatus name={user.fullName} role={user.role} />
-									<IconButton size={"14px"} icon={<FaLock />} color={"gray.400"} _hover={{color: "primary.700"}} aria-label={t("actions.logout")} mr={3}
-									            onClick={reset} />
-								</HStack>
-							</Stack>
+				<Box height={"100%"} minHeight={"100vh"} width={"100%"} p={5}>
+					<Stack spacing={5} direction={"row"} justifyContent={"flex-end"} alignItems={"center"} pb={5}>
+						<HStack spacing={5} alignItems={"center"}>
+							<UserStatus name={user.fullName} role={user.role} />
+							<IconButton size={"14px"} icon={<FaLock />} color={"gray.400"} _hover={{color: "primary.700"}} aria-label={t("actions.logout")} mr={3}
+							            onClick={reset} />
+						</HStack>
+					</Stack>
 
-							<Switch>
-								<Route exact path={Routes.Home}>
-									<Redirect to={Routes.Burgers} />
-								</Route>
-								<Route path={Routes.Burgers} component={Burgers} />
-								<Route path={Routes.Organisaties} component={Organisaties} />
-								<Route path={Routes.EditAgreement()} component={EditAgreement} />
-								<Route path={Routes.Banking} component={Banking} />
-								<Route path={Routes.Settings} component={Configuratie} />
-								<Route path={Routes.Rapportage} component={Rapportage} />
+					<Switch>
+						<Route exact path={Routes.Home}>
+							<Redirect to={Routes.Burgers} />
+						</Route>
+						<Route path={Routes.Burgers} component={Burgers} />
+						<Route path={Routes.Organisaties} component={Organisaties} />
+						<Route path={Routes.EditAgreement()} component={EditAgreement} />
+						<Route path={Routes.Banking} component={Banking} />
+						<Route path={Routes.Settings} component={Configuratie} />
+						<Route path={Routes.Rapportage} component={Rapportage} />
 
-								<Route exact path={Routes.NotFound} component={PageNotFound} />
-								<Route component={PageNotFound} />
-							</Switch>
-						</Box>
-					</Flex>
-				</Flex>
-			</Route>
-		</Switch>
+						<Route exact path={Routes.NotFound} component={PageNotFound} />
+						<Route component={PageNotFound} />
+					</Switch>
+				</Box>
+			</Flex>
+		</Flex>
 	);
 };
 
