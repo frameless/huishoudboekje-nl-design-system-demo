@@ -2,7 +2,7 @@ import {Table, TableProps, Tbody, Th, Thead, Tr, useToast,} from "@chakra-ui/rea
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {Gebruiker, Organisatie, Rekening, useDeleteGebruikerRekeningMutation, useDeleteOrganisatieRekeningMutation} from "../../generated/graphql";
-import RekeningTableRow from "./RekeningTableRow";
+import RekeningListItem from "./RekeningListItem";
 
 type RekeningListProps = { rekeningen: Rekening[], gebruiker?: Gebruiker, organisatie?: Organisatie, onChange?: VoidFunction };
 const RekeningList: React.FC<TableProps & RekeningListProps> = ({rekeningen, gebruiker, organisatie, onChange, ...props}) => {
@@ -67,7 +67,7 @@ const RekeningList: React.FC<TableProps & RekeningListProps> = ({rekeningen, geb
 			</Thead>
 			<Tbody>
 				{rekeningen.map((r, i) => (
-					<RekeningTableRow key={i} rekening={r} {...gebruiker && {
+					<RekeningListItem key={i} rekening={r} {...gebruiker && {
 						onDelete: () => onDeleteGebruikerRekening(r.id, gebruiker.id)
 					}} {...organisatie && {
 						onDelete: () => onDeleteOrganisatieRekening(r.id, organisatie.id)
