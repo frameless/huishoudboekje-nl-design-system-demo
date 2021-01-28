@@ -9,6 +9,7 @@ from hhb_backend.graphql.scalars.bedrag import Bedrag
 from hhb_backend.graphql.utils import convert_hhb_interval_to_iso
 import json
 
+
 class UpdateAfspraak(graphene.Mutation):
     class Arguments:
         id = graphene.Int(required=True)
@@ -28,5 +29,5 @@ class UpdateAfspraak(graphene.Mutation):
             headers={'Content-type': 'application/json'}
         )
         if not post_response.ok:
-            raise GraphQLError(f"Upstream API responded: {post_response.text()}")
+            raise GraphQLError(f"Upstream API responded: {post_response.json()}")
         return UpdateAfspraak(afspraak=post_response.json()["data"], ok=True)
