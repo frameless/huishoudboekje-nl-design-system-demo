@@ -232,6 +232,7 @@ export type CustomerStatementMessage = {
 export type DeleteAfspraak = {
   __typename?: 'DeleteAfspraak';
   ok?: Maybe<Scalars['Boolean']>;
+  previous?: Maybe<Afspraak>;
 };
 
 export type DeleteConfiguratie = {
@@ -247,6 +248,7 @@ export type DeleteCustomerStatementMessage = {
 export type DeleteGebruiker = {
   __typename?: 'DeleteGebruiker';
   ok?: Maybe<Scalars['Boolean']>;
+  previous?: Maybe<Gebruiker>;
 };
 
 export type DeleteGebruikerRekening = {
@@ -305,6 +307,42 @@ export type Gebruiker = {
   plaatsnaam?: Maybe<Scalars['String']>;
   rekeningen?: Maybe<Array<Maybe<Rekening>>>;
   afspraken?: Maybe<Array<Maybe<Afspraak>>>;
+};
+
+/** GebruikersActiviteit model */
+export type GebruikersActiviteit = {
+  __typename?: 'GebruikersActiviteit';
+  id?: Maybe<Scalars['Int']>;
+  timestamp?: Maybe<Scalars['DateTime']>;
+  gebruikerId?: Maybe<Scalars['String']>;
+  action?: Maybe<Scalars['String']>;
+  entities?: Maybe<Array<Maybe<GebruikersActiviteitEntity>>>;
+  snapshotBefore?: Maybe<GebruikersActiviteitSnapshot>;
+  snapshotAfter?: Maybe<GebruikersActiviteitSnapshot>;
+  meta?: Maybe<GebruikersActiviteitMeta>;
+};
+
+export type GebruikersActiviteitEntity = {
+  __typename?: 'GebruikersActiviteitEntity';
+  entityType?: Maybe<Scalars['String']>;
+  entityId?: Maybe<Scalars['Int']>;
+  burger?: Maybe<Gebruiker>;
+  organisatie?: Maybe<Organisatie>;
+  afspraak?: Maybe<Afspraak>;
+  rekening?: Maybe<Rekening>;
+};
+
+export type GebruikersActiviteitMeta = {
+  __typename?: 'GebruikersActiviteitMeta';
+  userAgent?: Maybe<Scalars['String']>;
+  ip?: Maybe<Array<Maybe<Scalars['String']>>>;
+  applicationVersion?: Maybe<Scalars['String']>;
+};
+
+export type GebruikersActiviteitSnapshot = {
+  __typename?: 'GebruikersActiviteitSnapshot';
+  burger?: Maybe<Gebruiker>;
+  afspraak?: Maybe<Afspraak>;
 };
 
 /** Grootboekrekening model  */
@@ -659,6 +697,8 @@ export type RootQuery = {
   configuratie?: Maybe<Configuratie>;
   configuraties?: Maybe<Array<Maybe<Configuratie>>>;
   plannedOverschrijvingen?: Maybe<Array<Maybe<Overschrijving>>>;
+  gebruikersactiviteit?: Maybe<GebruikersActiviteit>;
+  gebruikersactiviteiten?: Maybe<Array<Maybe<GebruikersActiviteit>>>;
 };
 
 
@@ -802,6 +842,20 @@ export type RootQueryPlannedOverschrijvingenArgs = {
   input: PlannedOverschijvingenQueryInput;
 };
 
+
+/** The root of all queries  */
+export type RootQueryGebruikersactiviteitArgs = {
+  id: Scalars['Int'];
+};
+
+
+/** The root of all queries  */
+export type RootQueryGebruikersactiviteitenArgs = {
+  ids?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  gebruikerIds?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  afsprakenIds?: Maybe<Array<Maybe<Scalars['Int']>>>;
+};
+
 /** GraphQL Rubriek model */
 export type Rubriek = {
   __typename?: 'Rubriek';
@@ -814,6 +868,7 @@ export type UpdateAfspraak = {
   __typename?: 'UpdateAfspraak';
   ok?: Maybe<Scalars['Boolean']>;
   afspraak?: Maybe<Afspraak>;
+  previous?: Maybe<Afspraak>;
 };
 
 export type UpdateConfiguratie = {
@@ -826,6 +881,7 @@ export type UpdateGebruiker = {
   __typename?: 'UpdateGebruiker';
   ok?: Maybe<Scalars['Boolean']>;
   gebruiker?: Maybe<Gebruiker>;
+  previous?: Maybe<Gebruiker>;
 };
 
 /** Update a Journaalpost with a Grootboekrekening */
@@ -1186,6 +1242,21 @@ export type DeleteOrganisatieRekeningMutation = (
   & { deleteOrganisatieRekening?: Maybe<(
     { __typename?: 'DeleteOrganisatieRekening' }
     & Pick<DeleteOrganisatieRekening, 'ok'>
+  )> }
+);
+
+export type UpdateRekeningMutationVariables = Exact<{
+  id: Scalars['Int'];
+  iban?: Maybe<Scalars['String']>;
+  rekeninghouder?: Maybe<Scalars['String']>;
+}>;
+
+
+export type UpdateRekeningMutation = (
+  { __typename?: 'RootMutation' }
+  & { updateRekening?: Maybe<(
+    { __typename?: 'UpdateRekening' }
+    & Pick<UpdateRekening, 'ok'>
   )> }
 );
 
@@ -2213,6 +2284,40 @@ export function useDeleteOrganisatieRekeningMutation(baseOptions?: Apollo.Mutati
 export type DeleteOrganisatieRekeningMutationHookResult = ReturnType<typeof useDeleteOrganisatieRekeningMutation>;
 export type DeleteOrganisatieRekeningMutationResult = Apollo.MutationResult<DeleteOrganisatieRekeningMutation>;
 export type DeleteOrganisatieRekeningMutationOptions = Apollo.BaseMutationOptions<DeleteOrganisatieRekeningMutation, DeleteOrganisatieRekeningMutationVariables>;
+export const UpdateRekeningDocument = gql`
+    mutation updateRekening($id: Int!, $iban: String, $rekeninghouder: String) {
+  updateRekening(id: $id, rekening: {iban: $iban, rekeninghouder: $rekeninghouder}) {
+    ok
+  }
+}
+    `;
+export type UpdateRekeningMutationFn = Apollo.MutationFunction<UpdateRekeningMutation, UpdateRekeningMutationVariables>;
+
+/**
+ * __useUpdateRekeningMutation__
+ *
+ * To run a mutation, you first call `useUpdateRekeningMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateRekeningMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateRekeningMutation, { data, loading, error }] = useUpdateRekeningMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      iban: // value for 'iban'
+ *      rekeninghouder: // value for 'rekeninghouder'
+ *   },
+ * });
+ */
+export function useUpdateRekeningMutation(baseOptions?: Apollo.MutationHookOptions<UpdateRekeningMutation, UpdateRekeningMutationVariables>) {
+        return Apollo.useMutation<UpdateRekeningMutation, UpdateRekeningMutationVariables>(UpdateRekeningDocument, baseOptions);
+      }
+export type UpdateRekeningMutationHookResult = ReturnType<typeof useUpdateRekeningMutation>;
+export type UpdateRekeningMutationResult = Apollo.MutationResult<UpdateRekeningMutation>;
+export type UpdateRekeningMutationOptions = Apollo.BaseMutationOptions<UpdateRekeningMutation, UpdateRekeningMutationVariables>;
 export const CreateCustomerStatementMessageDocument = gql`
     mutation createCustomerStatementMessage($file: Upload!) {
   createCustomerStatementMessage(file: $file) {

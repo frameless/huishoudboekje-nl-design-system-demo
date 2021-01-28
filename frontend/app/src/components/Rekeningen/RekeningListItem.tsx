@@ -4,11 +4,15 @@ import React, {useRef} from "react";
 import {useToggle} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {Rekening} from "../../generated/graphql";
+import deprecatedComponent from "../../utils/Deprecated";
 import {formatIBAN} from "../../utils/things";
 import PrettyIban from "../Layouts/PrettyIban";
 
 type RekeningListItemProps = Omit<ButtonProps, "children">;
+
+/** @deprecated Use RekeningTableRow instead. */
 const RekeningListItem: React.FC<RekeningListItemProps & { rekening: Rekening, onDelete?: VoidFunction }> = ({rekening, onDelete, ...props}) => {
+
 	const {t} = useTranslation();
 	const [deleteDialogOpen, toggleDeleteDialog] = useToggle(false);
 	const cancelDeleteRef = useRef(null);
@@ -47,7 +51,6 @@ const RekeningListItem: React.FC<RekeningListItemProps & { rekening: Rekening, o
 			</Button>
 		</Tooltip>
 	</>)
-}
+};
 
-
-export default RekeningListItem;
+export default deprecatedComponent(RekeningListItem, "Use RekeningTableRow instead.");

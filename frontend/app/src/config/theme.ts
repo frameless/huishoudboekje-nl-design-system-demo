@@ -1,6 +1,7 @@
 import {extendTheme} from "@chakra-ui/react";
 import Section from "./theme/custom/Section";
 import Heading from "./theme/Heading";
+import Table from "./theme/Table";
 import Tabs from "./theme/Tabs";
 
 if (!window["branding"]) {
@@ -15,7 +16,8 @@ const theme = extendTheme({
 	components: {
 		Heading,
 		Tabs,
-		Section
+		Table,
+		Section,
 	},
 	fontSizes: {
 		lg: "1.5rem"

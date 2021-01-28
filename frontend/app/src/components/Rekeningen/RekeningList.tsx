@@ -1,11 +1,11 @@
-import {Box, BoxProps, useToast,} from "@chakra-ui/react";
+import {Table, TableProps, Tbody, Th, Thead, Tr, useToast,} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {Gebruiker, Organisatie, Rekening, useDeleteGebruikerRekeningMutation, useDeleteOrganisatieRekeningMutation} from "../../generated/graphql";
-import RekeningListItem from "./RekeningListItem";
+import RekeningTableRow from "./RekeningTableRow";
 
 type RekeningListProps = { rekeningen: Rekening[], gebruiker?: Gebruiker, organisatie?: Organisatie, onChange?: VoidFunction };
-const RekeningList: React.FC<BoxProps & RekeningListProps> = ({rekeningen, gebruiker, organisatie, onChange, ...props}) => {
+const RekeningList: React.FC<TableProps & RekeningListProps> = ({rekeningen, gebruiker, organisatie, onChange, ...props}) => {
 	const {t} = useTranslation();
 	const toast = useToast();
 	const [deleteGebruikerRekening] = useDeleteGebruikerRekeningMutation();
@@ -57,15 +57,24 @@ const RekeningList: React.FC<BoxProps & RekeningListProps> = ({rekeningen, gebru
 	}
 
 	return (
-		<Box {...props}>
-			{rekeningen.map((r, i) => (
-				<RekeningListItem key={i} mr={2} mb={2} rekening={r} {...gebruiker && {
-					onDelete: () => onDeleteGebruikerRekening(r.id, gebruiker.id)
-				}} {...organisatie && {
-					onDelete: () => onDeleteOrganisatieRekening(r.id, organisatie.id)
-				}} />
-			))}
-		</Box>
+		<Table {...props}>
+			<Thead>
+				<Tr>
+					<Th>{t("forms.rekeningen.fields.accountHolder")}</Th>
+					<Th>{t("forms.rekeningen.fields.iban")}</Th>
+					<Th />
+				</Tr>
+			</Thead>
+			<Tbody>
+				{rekeningen.map((r, i) => (
+					<RekeningTableRow key={i} rekening={r} {...gebruiker && {
+						onDelete: () => onDeleteGebruikerRekening(r.id, gebruiker.id)
+					}} {...organisatie && {
+						onDelete: () => onDeleteOrganisatieRekening(r.id, organisatie.id)
+					}} />
+				))}
+			</Tbody>
+		</Table>
 	);
 };
 
