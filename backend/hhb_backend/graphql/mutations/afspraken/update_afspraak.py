@@ -1,17 +1,19 @@
 """ GraphQL mutation for updating an Afspraak """
-import graphene
-from graphql import GraphQLError
-import requests
-from flask import request
-
-from hhb_backend.graphql import settings
-from hhb_backend.graphql.models.afspraak import Afspraak, IntervalInput
-from hhb_backend.graphql.mutations.afspraken import AfspraakInput
-from hhb_backend.graphql.scalars.bedrag import Bedrag
-from hhb_backend.graphql.utils import convert_hhb_interval_to_iso
 import json
 
-from hhb_backend.graphql.utils.gebruikersactiviteiten import log_gebruikers_activiteit
+import graphene
+import requests
+from flask import request
+from graphql import GraphQLError
+
+from hhb_backend.graphql import settings
+from hhb_backend.graphql.models.afspraak import Afspraak
+from hhb_backend.graphql.mutations.afspraken import AfspraakInput
+from hhb_backend.graphql.utils import convert_hhb_interval_to_iso
+from hhb_backend.graphql.utils.gebruikersactiviteiten import (
+    log_gebruikers_activiteit,
+    gebruikers_activiteit_entities,
+)
 
 
 def item_if(object: dict, path: list):
@@ -31,24 +33,17 @@ class UpdateAfspraak(graphene.Mutation):
     def gebruikers_activiteit(self):
         return dict(
             action="Update",
-            entities=[dict(entity_type="afspraak", entity_id=self.afspraak["id"])]
-            + (
-                [dict(entity_type="burger", entity_id=self.afspraak["gebruiker"]["id"])]
-                if "gebruiker" in self.afspraak
-                else []
+            entities=gebruikers_activiteit_entities(
+                result=self, key="afspraak", entity_type="afspraak"
             )
-            + (
-                [
-                    dict(
-                        entity_type="organisatie",
-                        entity_id=self.afspraak["organisatie"]["id"],
-                    )
-                ]
-                if "organisatie" in self.afspraak
-                else []
+            + gebruikers_activiteit_entities(
+                result=self.afspraak, key="gebruiker_id", entity_type="burger"
+            )
+            + gebruikers_activiteit_entities(
+                result=self.afspraak, key="organisatie_id", entity_type="organisatie"
             ),
-            before=self.previous,
-            after=self.afspraak,
+            before=dict(afspraak=self.previous),
+            after=dict(afspraak=self.afspraak),
         )
 
     @log_gebruikers_activiteit

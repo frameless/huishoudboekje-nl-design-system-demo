@@ -60,3 +60,6 @@ class HHBDataLoader:
         self.gebruikersactiviteiten_by_id = GebruikersActiviteitenByIdLoader(loop=loop)
         self.gebruikersactiviteiten_by_gebruikers = GebruikersActiviteitenByGebruikersLoader(loop=loop)
         self.gebruikersactiviteiten_by_afspraken = GebruikersActiviteitenByAfsprakenLoader(loop=loop)
+
+    def __getitem__(self, item: str):
+        return getattr(self, item)

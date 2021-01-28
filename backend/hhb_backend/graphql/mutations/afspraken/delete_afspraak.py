@@ -24,10 +24,10 @@ class DeleteAfspraak(graphene.Mutation):
     def gebruikers_activiteit(self):
         return dict(
             action="Delete",
-            entities=[dict(entity_type="afspraak", entity_id=self.previous['id'])] +
-                     gebruikers_activiteit_entities(self.previous, "gebruiker", entity_type="burger") +
-                     gebruikers_activiteit_entities(self.previous, "organisatie", entity_type="organisatie"),
-            before=self.previous,
+            entities=gebruikers_activiteit_entities(result=self, key="previous", entity_type="afspraak") +
+                     gebruikers_activiteit_entities(self.previous, "gebruiker_id", entity_type="burger") +
+                     gebruikers_activiteit_entities(self.previous, "organisatie_id", entity_type="organisatie"),
+            before=dict(afspraak=self.previous),
         )
 
     @log_gebruikers_activiteit

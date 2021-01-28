@@ -1,4 +1,5 @@
 """ GebruikersActiviteit model as used in GraphQL queries """
+import typing
 from datetime import date, datetime
 
 import graphene
@@ -22,14 +23,28 @@ class GebruikersActiviteitMeta(graphene.ObjectType):
 
 class GebruikersActiviteitSnapshot(graphene.ObjectType):
     burger = graphene.Field(lambda: Gebruiker)
+    afspraak = graphene.Field(lambda: Afspraak)
     # organisatie = graphene.Field(lambda: Organisatie)
-    # afspraak = graphene.Field(lambda: Afspraak)
     # rekening = graphene.Field(lambda: Rekening)
 
-    def resolve_burger(root, info):
-        value = root.get('burger')
+    @staticmethod
+    def __resolve_snapshot(root, entity_type: str, Model):
+        value = root.get(entity_type)
         if value:
-            return Gebruiker(**value)
+            while True:
+                try:
+                    return Model(**value)
+                except TypeError as e:
+                    bad_key = str(e).split('\'')[1]
+                    value.pop(bad_key)
+                    continue
+
+    def resolve_burger(root, info):
+        return GebruikersActiviteitSnapshot.__resolve_snapshot(root, 'burger', Gebruiker)
+
+    def resolve_afspraak(root, info):
+        return GebruikersActiviteitSnapshot.__resolve_snapshot(root, 'afspraak', Afspraak)
+
 
 class GebruikersActiviteitEntity(graphene.ObjectType):
     entityType = graphene.String()
@@ -40,21 +55,22 @@ class GebruikersActiviteitEntity(graphene.ObjectType):
     afspraak = graphene.Field(lambda: Afspraak)
     rekening = graphene.Field(lambda: Rekening)
 
+    @staticmethod
+    async def __resolve_enity(root, entity_type: str, dataloader_name: str):
+        if root.get('entityType') == entity_type:
+            return await request.dataloader[dataloader_name].load(root.get('entityId'))
+
     async def resolve_burger(root, info):
-        if root.get('entityType') == 'burger':
-            return await request.dataloader.gebruikers_by_id.load(root.get('entityId'))
+        return await GebruikersActiviteitEntity.__resolve_enity(root, entity_type='burger', dataloader_name='gebruikers_by_id')
 
     async def resolve_organisatie(root, info):
-        if root.get('entityType') == 'organisatie':
-            return await request.dataloader.organisaties_by_id.load(root.get('entityId'))
+        return await GebruikersActiviteitEntity.__resolve_enity(root, entity_type='organisatie', dataloader_name='organisaties_by_id')
 
     async def resolve_afspraak(root, info):
-        if root.get('entityType') == 'afspraak':
-            return await request.dataloader.afspraken_by_id.load(root.get('entityId'))
+        return await GebruikersActiviteitEntity.__resolve_enity(root, entity_type='afspraak', dataloader_name='afspraken_by_id')
 
     async def resolve_rekening(root, info):
-        if root.get('entityType') == 'rekening':
-            return await request.dataloader.rekeningen_by_id.load(root.get('entityId'))
+        return await GebruikersActiviteitEntity.__resolve_enity(root, entity_type='rekening', dataloader_name='rekeningen_by_id')
 
 
 class GebruikersActiviteit(graphene.ObjectType):

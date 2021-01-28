@@ -7,7 +7,7 @@ from graphql import GraphQLError
 
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.models.gebruiker import Gebruiker
-from hhb_backend.graphql.utils.gebruikersactiviteiten import log_gebruikers_activiteit
+from hhb_backend.graphql.utils.gebruikersactiviteiten import log_gebruikers_activiteit, gebruikers_activiteit_entities
 
 
 class DeleteGebruiker(graphene.Mutation):
@@ -22,8 +22,8 @@ class DeleteGebruiker(graphene.Mutation):
     def gebruikers_activiteit(self):
         return dict(
             action="Delete",
-            entities=[dict(entity_type="burger", entity_id=self.previous['id'])],
-            before={"burger": self.previous},
+            entities=gebruikers_activiteit_entities(result=self, key='previous', entity_type='burger'),
+            before=dict(burger=self.previous),
         )
 
     @log_gebruikers_activiteit
