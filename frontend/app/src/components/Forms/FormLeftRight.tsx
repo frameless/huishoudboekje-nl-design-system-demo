@@ -1,5 +1,5 @@
-import React from "react";
 import {Heading, Stack, StackProps, Text} from "@chakra-ui/react";
+import React from "react";
 import theme from "../../config/theme";
 
 type FormLeftProps = {

@@ -1,10 +1,10 @@
 import {BoxProps, Spinner, useToken} from "@chakra-ui/react";
 import React, {useContext} from "react";
 import {useTranslation} from "react-i18next";
+import ChakraChart from "../../config/theme/custom/Chart";
 import {BankTransaction} from "../../generated/graphql";
 import {prepareChartData} from "../../utils/things";
 import {FormLeft} from "../Forms/FormLeftRight";
-import ChakraChart from "../../config/theme/custom/Chart";
 import Section from "../Layouts/Section";
 import {createAggregation} from "./Aggregator";
 import {RapportageContext} from "./context";
