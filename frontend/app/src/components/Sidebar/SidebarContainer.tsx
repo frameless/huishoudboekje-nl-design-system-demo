@@ -1,13 +1,12 @@
+import {Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Flex, Stack, useBreakpointValue, useDisclosure} from "@chakra-ui/react";
 import React, {useRef} from "react";
-import Logo from "../Logo";
-import {Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Flex, Stack, useDisclosure} from "@chakra-ui/react";
-import {useIsMobile} from "react-grapple";
 import {GiHamburgerMenu} from "react-icons/all";
+import {DrawerContext} from "../../utils/things";
+import Logo from "../Logo";
 import SidebarFooter from "./SidebarFooter";
-import {DrawerContext, TABLET_BREAKPOINT} from "../../utils/things";
 
 const SidebarContainer = ({children}) => {
-	const isMobile = useIsMobile(TABLET_BREAKPOINT);
+	const isMobile = useBreakpointValue([true, null, null, false]);
 	const {isOpen, onOpen, onClose} = useDisclosure();
 	const sidebarButtonRef = useRef(null);
 

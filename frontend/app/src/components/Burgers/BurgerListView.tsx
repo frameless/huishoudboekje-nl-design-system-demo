@@ -1,7 +1,6 @@
 import {AddIcon} from "@chakra-ui/icons";
-import {Avatar, Box, BoxProps, Button, Grid, Stack, Text} from "@chakra-ui/react";
+import {Avatar, Box, BoxProps, Button, Grid, Stack, Text, useBreakpointValue} from "@chakra-ui/react";
 import React from "react";
-import {useIsMobile} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {useHistory} from "react-router-dom";
 import Routes from "../../config/routes";
@@ -12,7 +11,7 @@ import GridCard from "../GridCard";
 const BurgerListView: React.FC<BoxProps & { burgers: Gebruiker[], showAddButton?: boolean }> = ({burgers, showAddButton = false, ...props}) => {
 	const {t} = useTranslation();
 	const {push} = useHistory();
-	const isMobile = useIsMobile(450);
+	const isMobile = useBreakpointValue([true, null, null, false]);
 
 	return (
 		<Grid maxWidth={"100%"} gridTemplateColumns={["repeat(1, 1fr)", "repeat(2, 1fr)", "repeat(3, 1fr)", "repeat(4, 1fr)", "repeat(6, 1fr)"]} gap={5}>
@@ -23,10 +22,10 @@ const BurgerListView: React.FC<BoxProps & { burgers: Gebruiker[], showAddButton?
 				</Box>
 			)}
 			{burgers.map((g, i) => (
-				<GridCard key={i} justifyContent={isMobile ? "flex-start" : "center"} onClick={() => {
+				<GridCard key={i} justifyContent={["flex-start", "center"]} onClick={() => {
 					push(Routes.Burger(g.id));
 				}}>
-					<Stack direction={isMobile ? "row" : "column"} spacing={5} alignItems={"center"}>
+					<Stack direction={["row", "column"]} spacing={5} alignItems={"center"}>
 						<Avatar name={formatBurgerName(g, true)} />
 						<Text fontSize={"md"} {...!isMobile && {textAlign: "center"}}><strong>{`${g.voornamen} ${g.achternaam}`}</strong></Text>
 					</Stack>

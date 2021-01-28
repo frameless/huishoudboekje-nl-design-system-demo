@@ -2,7 +2,6 @@ import {WarningIcon} from "@chakra-ui/icons";
 import {Box, Button, Heading, HStack, IconButton, Spinner, Stack, Text, useTheme, VStack} from "@chakra-ui/react";
 import {observer} from "mobx-react";
 import React from "react";
-import {useIsMobile} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {FaLock} from "react-icons/fa";
 import {Redirect, Route, Switch, useLocation} from "react-router-dom";
@@ -14,16 +13,15 @@ import Configuratie from "./components/Configuratie";
 import TwoColumns from "./components/Layouts/TwoColumns";
 import Organisaties from "./components/Organisaties";
 import PageNotFound from "./components/PageNotFound";
+import Charts from "./components/Rapportage";
 import Sidebar from "./components/Sidebar";
 import SidebarContainer from "./components/Sidebar/SidebarContainer";
 import UserStatus from "./components/UserStatus";
 import Routes from "./config/routes";
 import {useAuth} from "./utils/hooks";
-import {TABLET_BREAKPOINT} from "./utils/things";
 
 const App = () => {
 	const {t} = useTranslation();
-	const isMobile = useIsMobile(TABLET_BREAKPOINT);
 	const {user, error, loading, reset} = useAuth();
 	const location = useLocation();
 	const theme = useTheme();
@@ -51,7 +49,7 @@ const App = () => {
 				{loading ? (
 					<Spinner size={"xl"} />
 				) : (
-					<Stack spacing={5} maxWidth={300} alignSelf={isMobile ? "center" : "flex-start"}>
+					<Stack spacing={5} maxWidth={300} alignSelf={["center", null, null, "flex-start"]}>
 						<Heading size="sm">{t("messages.login.welcome", {tenantName: theme["tenantName"]})}</Heading>
 						<Text fontSize={"sm"}>{t("messages.login.clickHereToContinue")}</Text>
 						<Button colorScheme={"primary"} type={"submit"} onClick={onClickLoginButton}>{t("actions.login")}</Button>

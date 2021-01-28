@@ -1,4 +1,5 @@
 import {extendTheme} from "@chakra-ui/react";
+import Section from "./theme/custom/Section";
 import Heading from "./theme/Heading";
 import Tabs from "./theme/Tabs";
 
@@ -13,7 +14,8 @@ const theme = extendTheme({
 	colors,
 	components: {
 		Heading,
-		Tabs
+		Tabs,
+		Section
 	},
 	fontSizes: {
 		lg: "1.5rem"

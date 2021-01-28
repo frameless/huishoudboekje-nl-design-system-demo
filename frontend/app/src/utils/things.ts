@@ -17,7 +17,9 @@ export const searchFields = (term: string, fields: string[]): boolean => {
 	return _fields.map(f => f.toLowerCase()).some(s => s.includes(term.toLowerCase()));
 };
 
+/** @deprecated */
 export const MOBILE_BREAKPOINT = 650;
+/** @deprecated */
 export const TABLET_BREAKPOINT = 1000;
 
 const ZipcodeNL = /^[1-9][0-9]{3}[A-Za-z]{2}$/i;

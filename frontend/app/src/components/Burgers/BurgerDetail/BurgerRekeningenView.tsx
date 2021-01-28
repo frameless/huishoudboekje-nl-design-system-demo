@@ -1,7 +1,7 @@
 import {AddIcon} from "@chakra-ui/icons";
 import {Box, Button, Divider, Stack, StackProps, useToast} from "@chakra-ui/react";
 import React from "react";
-import {useIsMobile, useToggle} from "react-grapple";
+import {useToggle} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {Gebruiker, useCreateGebruikerRekeningMutation} from "../../../generated/graphql";
 import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
@@ -9,7 +9,6 @@ import RekeningForm from "../../Rekeningen/RekeningForm";
 import RekeningList from "../../Rekeningen/RekeningList";
 
 const BurgerRekeningenView: React.FC<StackProps & { burger: Gebruiker, refetch: VoidFunction }> = ({burger, refetch, ...props}) => {
-	const isMobile = useIsMobile();
 	const {t} = useTranslation();
 	const toast = useToast();
 
@@ -19,7 +18,7 @@ const BurgerRekeningenView: React.FC<StackProps & { burger: Gebruiker, refetch: 
 	const {id: burgerId, rekeningen = []} = burger;
 
 	return (
-		<Stack spacing={2} mb={1} direction={isMobile ? "column" : "row"} {...props}>
+		<Stack spacing={2} mb={1} direction={["column", "row"]} {...props}>
 			<FormLeft title={t("forms.burgers.sections.rekeningen.title")} helperText={t("forms.burgers.sections.rekeningen.detailText")} />
 			<FormRight justifyContent={"center"}>
 				<RekeningList rekeningen={rekeningen || []} gebruiker={burger} onChange={() => refetch()} />

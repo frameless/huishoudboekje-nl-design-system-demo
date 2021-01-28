@@ -1,9 +1,9 @@
-import {Box, BoxProps, Button, Divider, FormLabel, Input, InputGroup, InputLeftElement, Stack, Switch, Text, useToast} from "@chakra-ui/react";
+import {Box, BoxProps, Button, Divider, FormLabel, Input, InputGroup, InputLeftElement, Stack, Switch, Text, useBreakpointValue, useToast} from "@chakra-ui/react";
 import moment from "moment";
 import "moment-recur-ts";
 import React, {useEffect, useState} from "react";
 import DatePicker from "react-datepicker";
-import {useInput, useIsMobile, useNumberInput, useToggle, Validators} from "react-grapple";
+import {useInput, useNumberInput, useToggle, Validators} from "react-grapple";
 import {UseInput} from "react-grapple/dist/hooks/useInput";
 import {Trans, useTranslation} from "react-i18next";
 import Select from "react-select";
@@ -14,6 +14,7 @@ import generateSampleOverschrijvingen from "../../utils/sampleOverschrijvingen";
 import {formatBurgerName, formatIBAN, useReactSelectStyles, XInterval} from "../../utils/things";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
 import RadioButtonGroup from "../Layouts/RadioButtons/RadioButtonGroup";
+import Section from "../Layouts/Section";
 import OverschrijvingenListView from "../Overschrijvingen/OverschrijvingenListView";
 
 type AfspraakFormProps = { afspraak?: Afspraak, onSave: (data) => void, burger?: Gebruiker, loading: boolean };
@@ -21,7 +22,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 	const {t} = useTranslation();
 	const toast = useToast();
 	const reactSelectStyles = useReactSelectStyles();
-	const isMobile = useIsMobile();
+	const isMobile = useBreakpointValue([true, null, null, false]);
 	const gebruiker = afspraak?.gebruiker || props.burger;
 	if (!gebruiker) {
 		throw new Error("Missing property gebruiker.");
@@ -272,13 +273,13 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 	return (
 		<Box as={"form"} onSubmit={onSubmit} {...props}>
 			<Stack spacing={5}>
-				<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
-					<Stack spacing={2} direction={isMobile ? "column" : "row"}>
+				<Section>
+					<Stack spacing={2} direction={["column", "row"]}>
 						<FormLeft title={t("forms.agreements.sections.0.title")} helperText={t("forms.agreements.sections.0.helperText")} />
 						<FormRight>
 							<RadioButtonGroup name={"afspraakType"} onChange={onChangeAfspraakType} defaultValue={AfspraakType.Expense} value={afspraakType} options={afspraakTypeOptions} />
 
-							<Stack spacing={2} direction={isMobile ? "column" : "row"}>
+							<Stack spacing={2} direction={["column", "row"]}>
 								<Stack spacing={1} flex={1}>
 									<FormLabel htmlFor={"accountId"}>{t("forms.agreements.fields.rubriek")}</FormLabel>
 									<Queryable query={$afspraakFormData}>{(data: { rubrieken: Rubriek[] }) => {
@@ -296,13 +297,13 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 									}}</Queryable>
 								</Stack>
 							</Stack>
-							<Stack spacing={2} direction={isMobile ? "column" : "row"}>
+							<Stack spacing={2} direction={["column", "row"]}>
 								<Stack spacing={1} flex={1}>
 									<FormLabel htmlFor={"description"}>{t("forms.agreements.fields.description")}</FormLabel>
 									<Input isInvalid={isInvalid(description)} {...description.bind} id="description" />
 								</Stack>
 							</Stack>
-							<Stack spacing={2} direction={isMobile ? "column" : "row"}>
+							<Stack spacing={2} direction={["column", "row"]}>
 								<Stack spacing={1} flex={1}>
 									<FormLabel htmlFor={"beneficiaryId"}>{t("forms.agreements.fields.beneficiary")}</FormLabel>
 									<Queryable query={$afspraakFormData}>{(data: { organisaties: Organisatie[] }) => {
@@ -357,7 +358,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 									</Queryable>
 								</Stack>
 							</Stack>
-							<Stack spacing={2} direction={isMobile ? "column" : "row"}>
+							<Stack spacing={2} direction={["column", "row"]}>
 								<Stack spacing={1} flex={1}>
 									<FormLabel htmlFor={"amount"}>{t("forms.agreements.fields.amount")}</FormLabel>
 									<InputGroup maxWidth={"100%"} flex={1}>
@@ -375,17 +376,17 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 
 					<Divider />
 
-					<Stack spacing={2} direction={isMobile ? "column" : "row"}>
+					<Stack spacing={2} direction={["column", "row"]}>
 						<FormLeft title={t("forms.agreements.sections.1.title")} helperText={t("forms.agreements.sections.1.helperText")} />
 						<FormRight>
 
-							<Stack spacing={2} direction={isMobile ? "column" : "row"}>
+							<Stack spacing={2} direction={["column", "row"]}>
 								<RadioButtonGroup name={"isRecurring"} onChange={(val) => toggleRecurring(val === AfspraakPeriod.Periodic)}
 								                  value={isRecurring ? AfspraakPeriod.Periodic : AfspraakPeriod.Once} options={isRecurringOptions} />
 							</Stack>
 
 							{isRecurring && (
-								<Stack direction={isMobile ? "column" : "row"} spacing={1} mt={2}>
+								<Stack direction={["column", "row"]} spacing={1} mt={2}>
 									<Stack spacing={1} flex={1}>
 										<Stack direction={"row"} alignItems={"center"}>
 											<FormLabel htmlFor={"interval"}>{t("interval.every")}</FormLabel>
@@ -401,7 +402,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 								</Stack>
 							)}
 
-							<Stack direction={isMobile ? "column" : "row"} spacing={1}>
+							<Stack direction={["column", "row"]} spacing={1}>
 								<Stack spacing={1} flex={1}>
 									<FormLabel htmlFor={"startDate"}>{isRecurring ? t("forms.agreements.fields.startDate") : t("forms.common.fields.date")}</FormLabel>
 									<DatePicker selected={moment(startDate.value, "L").isValid() ? moment(startDate.value, "L").toDate() : null} dateFormat={"dd-MM-yyyy"}
@@ -414,7 +415,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 							</Stack>
 
 							{isRecurring && (
-								<Stack direction={isMobile ? "column" : "row"} spacing={1} mt={2}>
+								<Stack direction={["column", "row"]} spacing={1} mt={2}>
 									<Stack isInline={true} alignItems={"center"} spacing={3}>
 										<Switch isChecked={isContinuous} onChange={() => toggleContinuous()} id={"isContinuous"} />
 										<FormLabel mb={0} htmlFor={"isContinuous"}>{t("forms.agreements.fields.continuous")}</FormLabel>
@@ -423,7 +424,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 							)}
 
 							{isRecurring && !isContinuous && (
-								<Stack direction={isMobile ? "column" : "row"} spacing={1}>
+								<Stack direction={["column", "row"]} spacing={1}>
 									<Stack spacing={1} flex={1}>
 										<FormLabel htmlFor={"nTimes"}>{t("forms.agreements.fields.nTimes")}</FormLabel>
 										<Input isInvalid={isInvalid(nTimes)} type={"number"} {...nTimes.bind} width={100} id={"nTimes"} />
@@ -432,7 +433,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 							)}
 
 							{afspraakType === AfspraakType.Expense && (
-								<Stack direction={isMobile ? "column" : "row"} spacing={1} mt={2}>
+								<Stack direction={["column", "row"]} spacing={1} mt={2}>
 									<Stack isInline={true} alignItems={"center"} spacing={3}>
 										<Switch isChecked={isAutomatischeIncasso} onChange={() => toggleAutomatischeIncasso()} id={"isAutomatischeIncasso"} />
 										<FormLabel mb={0} htmlFor={"isAutomatischeIncasso"}>{t("forms.agreements.fields.automatischeIncasso")}</FormLabel>
@@ -444,7 +445,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 
 					<Divider />
 
-					<Stack direction={isMobile ? "column" : "row"} spacing={2}>
+					<Stack direction={["column", "row"]} spacing={2}>
 						<FormLeft />
 						<FormRight>
 							<Stack direction={"row"} spacing={1} justifyContent={"flex-end"}>
@@ -452,11 +453,11 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 							</Stack>
 						</FormRight>
 					</Stack>
-				</Stack>
+				</Section>
 
 				{isRecurring && (
-					<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
-						<Stack direction={isMobile ? "column" : "row"} spacing={2}>
+					<Section>
+						<Stack direction={["column", "row"]} spacing={2}>
 							<FormLeft title={t("forms.agreements.sections.2.title")} helperText={t("forms.agreements.sections.2.helperText")} />
 							<FormRight>
 								<Stack spacing={5}>
@@ -467,7 +468,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 								</Stack>
 							</FormRight>
 						</Stack>
-					</Stack>
+					</Section>
 				)}
 			</Stack>
 		</Box>

@@ -1,18 +1,19 @@
 import {DownloadIcon} from "@chakra-ui/icons";
-import {Box, Button, Divider, FormControl, FormLabel, IconButton, Input, Stack, Table, Tbody, Td, Text, Th, Thead, Tr, useToast} from "@chakra-ui/react";
+import {Box, Button, Divider, FormControl, FormLabel, IconButton, Input, Stack, Table, Tbody, Td, Text, Th, Thead, Tr, useBreakpointValue, useToast} from "@chakra-ui/react";
 import moment from "moment";
 import React from "react";
 import DatePicker from "react-datepicker";
-import {useInput, useIsMobile} from "react-grapple";
+import {useInput} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {Export, useCreateExportOverschrijvingenMutation, useGetExportsQuery} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import {Regex} from "../../../utils/things";
 import {FormLeft, FormRight, Label} from "../../Forms/FormLeftRight";
+import Section from "../../Layouts/Section";
 
 const BookingsExport = () => {
 	const {t} = useTranslation();
-	const isMobile = useIsMobile();
+	const isMobile = useBreakpointValue([true, null, null, false]);
 	const toast = useToast();
 
 	const $exports = useGetExportsQuery();
@@ -67,11 +68,11 @@ const BookingsExport = () => {
 	};
 
 	return (
-		<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
-			<Stack direction={isMobile ? "column" : "row"} spacing={5}>
+		<Section>
+			<Stack direction={["column", "row"]} spacing={5}>
 				<FormLeft title={t("banking.exports.title")} helperText={t("banking.exports.helperText")} />
 				<FormRight>
-					<Stack direction={isMobile ? "column" : "row"} alignItems={"flex-end"}>
+					<Stack direction={["column", "row"]} alignItems={"flex-end"}>
 						<FormControl flex={1}>
 							<FormLabel>{t("forms.common.fields.startDate")}</FormLabel>
 							<DatePicker selected={moment(startDatum.value, "L").isValid() ? moment(startDatum.value, "L").toDate() : null} dateFormat={"dd-MM-yyyy"}
@@ -148,7 +149,7 @@ const BookingsExport = () => {
 					}} />
 				</FormRight>
 			</Stack>
-		</Stack>
+		</Section>
 	);
 };
 

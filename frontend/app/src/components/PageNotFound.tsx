@@ -1,6 +1,5 @@
-import {Box, Button, Heading, Stack, Text} from "@chakra-ui/react";
+import {Box, Button, Heading, Stack, Text, useBreakpointValue} from "@chakra-ui/react";
 import React from "react";
-import {useIsMobile} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {MdArrowBack} from "react-icons/all";
 import {useHistory} from "react-router-dom";
@@ -8,12 +7,12 @@ import Routes from "../config/routes";
 import NotFoundIllustration from "./Illustrations/NotFoundIllustration";
 
 const PageNotFound = () => {
-	const isMobile = useIsMobile();
+	const isMobile = useBreakpointValue([true, null, null, false]);
 	const {push} = useHistory();
 	const {t} = useTranslation();
 
 	return (
-		<Stack direction={isMobile ? "column" : "row"} justifyContent={"center"} alignItems={"center"} bg={"white"} borderRadius={5} p={20} spacing={20}>
+		<Stack direction={["column", "row"]} justifyContent={"center"} alignItems={"center"} bg={"white"} borderRadius={5} p={20} spacing={20}>
 			<Stack spacing={5}>
 				<Stack spacing={0}>
 					<Heading size={"2xl"} fontSize={"5em"} color={"primary.300"} maxWidth={450}>{t("pages.notFound.title")}</Heading>

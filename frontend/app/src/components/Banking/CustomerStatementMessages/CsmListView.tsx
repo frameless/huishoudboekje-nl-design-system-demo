@@ -1,4 +1,4 @@
-import {BoxProps, useToast} from "@chakra-ui/react";
+import {BoxProps, Table, Tbody, Th, Thead, Tr, useToast} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {CustomerStatementMessage, useDeleteCustomerStatementMessageMutation} from "../../../generated/graphql";
@@ -38,26 +38,26 @@ const CsmListView: React.FC<BoxProps & { csms: CustomerStatementMessage[], refre
 	}
 
 	return (
-		<table width={"100%"}>
-			<thead>
-				<tr>
-					<td>
+		<Table>
+			<Thead>
+				<Tr>
+					<Th>
 						<Label>{t("forms.common.fields.time")}</Label>
-					</td>
-					<td>
+					</Th>
+					<Th>
 						<Label>{t("forms.banking.bankAccount")}</Label>
-					</td>
-					<td style={{textAlign: "right"}}>
+					</Th>
+					<Th isNumeric>
 						<Label>{t("actions.actions")}</Label>
-					</td>
-				</tr>
-			</thead>
-			<tbody>
+					</Th>
+				</Tr>
+			</Thead>
+			<Tbody>
 				{csms.map(csm => (
 					<CsmTableRow key={csm.id} csm={csm} onDelete={onDelete} />
 				))}
-			</tbody>
-		</table>
+			</Tbody>
+		</Table>
 	);
 };
 

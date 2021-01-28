@@ -1,22 +1,23 @@
-import {Box, Button, Divider, FormLabel, Input, Stack, Tooltip, useToast} from "@chakra-ui/react";
+import {Box, Button, Divider, FormLabel, Input, Stack, Tooltip, useBreakpointValue, useToast} from "@chakra-ui/react";
 import moment from "moment";
 import React, {useState} from "react";
 import DatePicker from "react-datepicker";
-import {useInput, useIsMobile, Validators} from "react-grapple";
+import {useInput, Validators} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {useHistory} from "react-router-dom";
 import Routes from "../../config/routes";
 import {useCreateBurgerMutation} from "../../generated/graphql";
-import {MOBILE_BREAKPOINT, Regex} from "../../utils/things";
+import {Regex} from "../../utils/things";
 import BackButton from "../BackButton";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
 import Page from "../Layouts/Page";
+import Section from "../Layouts/Section";
 
 // Todo: add more detailed error message per field?
 const CreateBurger = () => {
 	const {t} = useTranslation();
 	const {push} = useHistory();
-	const isMobile = useIsMobile(MOBILE_BREAKPOINT);
+	const isMobile = useBreakpointValue([true, null, null, false]);
 	const toast = useToast();
 	const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
@@ -137,11 +138,11 @@ const CreateBurger = () => {
 	return (
 		<Page title={t("forms.burgers.title")} backButton={<BackButton to={Routes.Burgers} />}>
 			<Box as={"form"} onSubmit={onSubmit}>
-				<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
-					<Stack direction={isMobile ? "column" : "row"} spacing={2}>
+				<Section>
+					<Stack direction={["column", "row"]} spacing={2}>
 						<FormLeft title={t("forms.burgers.sections.personal.title")} helperText={t("forms.burgers.sections.personal.helperText")} />
 						<FormRight>
-							<Stack spacing={2} direction={isMobile ? "column" : "row"}>
+							<Stack spacing={2} direction={["column", "row"]}>
 								<Stack spacing={1} flex={1}>
 									<FormLabel htmlFor={"initials"}>{t("forms.burgers.fields.initials")}</FormLabel>
 									<Input isInvalid={isInvalid(initials)} {...initials.bind} id="initials" />
@@ -169,10 +170,10 @@ const CreateBurger = () => {
 
 					<Divider />
 
-					<Stack direction={isMobile ? "column" : "row"} spacing={2}>
+					<Stack direction={["column", "row"]} spacing={2}>
 						<FormLeft title={t("forms.burgers.sections.contact.title")} helperText={t("forms.burgers.sections.contact.helperText")} />
 						<FormRight>
-							<Stack spacing={2} direction={isMobile ? "column" : "row"}>
+							<Stack spacing={2} direction={["column", "row"]}>
 								<Stack spacing={1} flex={2}>
 									<FormLabel htmlFor={"street"}>{t("forms.burgers.fields.street")}</FormLabel>
 									<Input isInvalid={isInvalid(street)} {...street.bind} id="street" />
@@ -182,7 +183,7 @@ const CreateBurger = () => {
 									<Input isInvalid={isInvalid(houseNumber)} {...houseNumber.bind} id="houseNumber" />
 								</Stack>
 							</Stack>
-							<Stack spacing={2} direction={isMobile ? "column" : "row"}>
+							<Stack spacing={2} direction={["column", "row"]}>
 								<Stack spacing={1} flex={1}>
 									<FormLabel htmlFor={"zipcode"}>{t("forms.burgers.fields.zipcode")}</FormLabel>
 									<Tooltip label={t("forms.burgers.tooltips.zipcode")} aria-label={t("forms.burgers.tooltips.zipcode")} hasArrow
@@ -215,7 +216,7 @@ const CreateBurger = () => {
 
 					<Divider />
 
-					<Stack direction={isMobile ? "column" : "row"} spacing={2}>
+					<Stack direction={["column", "row"]} spacing={2}>
 						<FormLeft />
 						<FormRight>
 							<Stack direction={"row"} spacing={1} justifyContent={"flex-end"}>
@@ -223,7 +224,7 @@ const CreateBurger = () => {
 							</Stack>
 						</FormRight>
 					</Stack>
-				</Stack>
+				</Section>
 			</Box>
 		</Page>
 	);
