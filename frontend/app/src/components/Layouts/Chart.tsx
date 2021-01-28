@@ -8,4 +8,8 @@ const ChakraChart = chakra(Chart, {
 	}
 });
 
+export const chartProps = {
+	chartLanguage: "nl"
+}
+
 export default ChakraChart;

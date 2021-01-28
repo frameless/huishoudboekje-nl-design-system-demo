@@ -16,27 +16,24 @@ const InkomstenUitgaven: React.FC<BoxProps & { transactions: BankTransaction[] }
 	const [color1, color2] = useToken("colors", ["primary.300", "secondary.300"]);
 	const {startDate, endDate} = useContext(RapportageContext);
 
+	const [aggregation] = createAggregation(transactions);
+
 	const columns = [t("interval.period"), t("charts.inkomstenUitgaven.income"), t("charts.inkomstenUitgaven.expenses")];
-	const [aggregatedByPeriod] = createAggregation(transactions);
-
 	const chartTemplate = prepareChartData(startDate, endDate, columns.length - 1);
+	const chartData = (chartTemplate: any[], aggregation) => chartTemplate.map(chartItem => {
+		const [period, tIncome, tExpenses] = chartItem;
+		const {income = 0, expenses = 0} = aggregation[period] || {};
 
-	const chartData = (chartTemplate: any[], aggregation) => {
-		return chartTemplate.map(chartItem => {
-			const [period, tIncome, tExpenses] = chartItem;
-			const {income = 0, expenses = 0} = aggregation[period] || {};
-
-			return [
-				moment(period, "YYYY MM").format("MMM YYYY"),
-				tIncome + income,
-				tExpenses + Math.abs(expenses)
-			];
-		});
-	};
+		return [
+			moment(period, "YYYY MM").format("MMM YYYY"),
+			tIncome + income,
+			tExpenses + Math.abs(expenses)
+		];
+	});
 
 	const data = [
 		columns,
-		...chartData(chartTemplate, aggregatedByPeriod)
+		...chartData(chartTemplate, aggregation)
 	];
 
 	return (

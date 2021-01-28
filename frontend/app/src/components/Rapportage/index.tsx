@@ -120,15 +120,15 @@ const Rapportage = () => {
 					return (<>
 						<Tabs isLazy variant={"solid"} align={"end"} maxWidth={1200}>
 							<Stack direction={"row"} as={TabList} spacing={2}>
-								<Tab>Inkomsten en uitgaven</Tab>
 								<Tab>Saldo</Tab>
+								<Tab>Inkomsten en uitgaven</Tab>
 							</Stack>
 							<TabPanels>
 								<TabPanel>
-									<InkomstenUitgaven transactions={filteredTransactions} />
+									<Saldo transactions={filteredTransactions} />
 								</TabPanel>
 								<TabPanel>
-									<Saldo transactions={filteredTransactions} />
+									<InkomstenUitgaven transactions={filteredTransactions} />
 								</TabPanel>
 							</TabPanels>
 						</Tabs>
