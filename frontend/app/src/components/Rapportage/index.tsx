@@ -13,7 +13,7 @@ import {FormLeft, FormRight, Label} from "../Forms/FormLeftRight";
 import Page from "../Layouts/Page";
 import RadioButtonGroup from "../Layouts/RadioButtons/RadioButtonGroup";
 import Section from "../Layouts/Section";
-import {createAggregationByRubriek, Granularity, Type} from "./Aggregator";
+import {createAggregation, Granularity, Type} from "./Aggregator";
 import {RapportageContext} from "./context";
 import InkomstenUitgaven from "./InkomstenUitgaven";
 import Saldo from "./Saldo";
@@ -129,7 +129,8 @@ const Rapportage = () => {
 						.filter(t => filterBurgerIds.length > 0 ? t.belongsToAnyBurger(filterBurgerIds) : true)
 						.filter(t => t.isBetweenDates(_startDate, _endDate));
 
-					const aggregationByRubriek = createAggregationByRubriek(filteredTransactions);
+					// const aggregationByRubriek = createAggregationByRubriek(filteredTransactions);
+					const [, aggregationByRubriek, saldo] = createAggregation(filteredTransactions);
 					const selectedBurgers = burgers.filter(b => filterBurgerIds.includes(b.id!));
 					const burgerNamesList: string[] = selectedBurgers.map(b => formatBurgerName(b));
 
@@ -158,21 +159,21 @@ const Rapportage = () => {
 											met <strong>{moment(endDate.value, "L").format("L")}</strong>.</Text>
 									</HStack>
 
-									{Object.keys(aggregationByRubriek.rubrieken).map(c => {
-										const categories = Object.keys(aggregationByRubriek.rubrieken[c]);
+									{Object.keys(aggregationByRubriek).map(c => {
+										const categories = Object.keys(aggregationByRubriek[c]);
 										let total = 0;
 										return categories.length === 0 ? null : (
 											<Stack key={c} spacing={0}>
 												<Text fontWeight={"bold"}>{translatedCategory[c]}</Text>
 												{categories.map((r, i) => {
-													total += aggregationByRubriek.rubrieken[c][r];
+													total += aggregationByRubriek[c][r];
 													return (
 														<Stack direction={"row"} key={i}>
 															<Box flex={1}>
 																<Text>{r === Type.Ongeboekt ? t("charts.inkomstenUitgaven.unbooked") : r}</Text>
 															</Box>
 															<Box flex={2} textAlign={"right"}>
-																<Text fontWeight={"bold"}>{currencyFormat2(false).format(Math.abs(aggregationByRubriek.rubrieken[c][r]))}</Text>
+																<Text fontWeight={"bold"}>{currencyFormat2(false).format(Math.abs(aggregationByRubriek[c][r]))}</Text>
 															</Box>
 														</Stack>
 													)
@@ -195,10 +196,10 @@ const Rapportage = () => {
 
 									<Stack direction={"row"}>
 										<Box flex={1}>
-											<Text>{t("balance")}</Text>
+											<Text>{t("saldo")}</Text>
 										</Box>
 										<Box flex={2} textAlign={"right"}>
-											<Text fontWeight={"bold"}>{currencyFormat2(false).format(aggregationByRubriek.balance)}</Text>
+											<Text fontWeight={"bold"}>{currencyFormat2(false).format(saldo)}</Text>
 										</Box>
 									</Stack>
 								</Stack>

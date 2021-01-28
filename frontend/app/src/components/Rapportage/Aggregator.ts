@@ -66,44 +66,12 @@ export const createAggregation = (tr: BankTransaction[], granularity = Granulari
 
 	const tableData = {
 		[Type.Inkomsten]: tableDataPrepare[Type.Inkomsten].reduce(reducePerRubriek, {}),
-		[Type.Uitgaven]: tableDataPrepare[Type.Uitgaven].reduce(reducePerRubriek, {})
+		[Type.Uitgaven]: tableDataPrepare[Type.Uitgaven].reduce(reducePerRubriek, {}),
 	};
 
-	return [chartData, tableData];
-};
+	const saldo = _data.reduce((result, tr: RichTransaction) => {
+		return result + parseFloat(tr.bedrag);
+	}, 0);
 
-/** @deprecated Use createAggregation instead
- * Todo: remove */
-export const createAggregationByRubriek = data => {
-	let balance = 0;
-
-	const _data = data.reduce((result, tr: BankTransaction & { rubriek: Rubriek }) => {
-		let rubriekNaam: string = Type.Ongeboekt.toString();
-		if (tr.journaalpost?.grootboekrekening?.rubriek?.naam) {
-			rubriekNaam = tr.journaalpost?.grootboekrekening?.rubriek?.naam;
-		}
-		else if (tr.journaalpost?.afspraak?.rubriek?.naam) {
-			rubriekNaam = tr.journaalpost?.afspraak?.rubriek?.naam;
-		}
-
-		const category = tr.isCredit ? Type.Inkomsten : Type.Uitgaven;
-		const bedrag = parseFloat(tr.bedrag);
-		balance += bedrag;
-
-		return {
-			...result,
-			[category]: {
-				...result[category] || {},
-				[rubriekNaam]: (result[category][rubriekNaam] || 0) + bedrag,
-			},
-		}
-	}, {
-		[Type.Inkomsten]: {},
-		[Type.Uitgaven]: {},
-	});
-
-	return {
-		rubrieken: _data,
-		balance
-	};
+	return [chartData, tableData, saldo];
 };

@@ -25,7 +25,7 @@ const InkomstenUitgaven: React.FC<BoxProps & { transactions: BankTransaction[] }
 		const {income = 0, expenses = 0} = aggregation[period] || {};
 
 		return [
-			moment(period, "YYYY MM").format("MMM YYYY"),
+			period,
 			tIncome + income,
 			tExpenses + Math.abs(expenses)
 		];
