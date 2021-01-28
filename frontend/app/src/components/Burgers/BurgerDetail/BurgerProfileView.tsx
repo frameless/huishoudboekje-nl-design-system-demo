@@ -1,4 +1,4 @@
-import {Divider, Stack, StackProps, Text, useBreakpointValue} from "@chakra-ui/react";
+import {Divider, Stack, StackProps, Text} from "@chakra-ui/react";
 import moment from "moment";
 import React from "react";
 import {useTranslation} from "react-i18next";
@@ -7,7 +7,6 @@ import {dateFormat} from "../../../utils/things";
 import {FormLeft, FormRight, Label} from "../../Forms/FormLeftRight";
 
 const BurgerProfileView: React.FC<StackProps & { burger: Gebruiker }> = ({burger, ...props}) => {
-	const isMobile = useBreakpointValue([true, null, null, false]);
 	const {t} = useTranslation();
 
 	return (

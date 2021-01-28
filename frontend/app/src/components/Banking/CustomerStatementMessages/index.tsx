@@ -1,5 +1,5 @@
 import {AddIcon} from "@chakra-ui/icons";
-import {Box, Button, Divider, Input, Stack, useBreakpointValue, useToast} from "@chakra-ui/react";
+import {Box, Button, Divider, Input, Stack, useToast} from "@chakra-ui/react";
 import React, {useRef} from "react";
 import {useTranslation} from "react-i18next";
 import {CustomerStatementMessage, useCreateCustomerStatementMessageMutation, useGetAllCsmsQuery} from "../../../generated/graphql";
@@ -9,7 +9,6 @@ import Section from "../../Layouts/Section";
 import CsmListView from "./CsmListView";
 
 const CustomerStatementMessages = () => {
-	const isMobile = useBreakpointValue([true, null, null, false]);
 	const {t} = useTranslation();
 	const toast = useToast();
 	const fileUploadInput = useRef<HTMLInputElement>(null);

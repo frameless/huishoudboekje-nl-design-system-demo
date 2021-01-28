@@ -1,5 +1,5 @@
 import {AddIcon} from "@chakra-ui/icons";
-import {Box, BoxProps, Button, Divider, Stack, useBreakpointValue} from "@chakra-ui/react";
+import {Box, BoxProps, Button, Divider, Stack} from "@chakra-ui/react";
 import React, {useContext} from "react";
 import {useToggle} from "react-grapple";
 import {useTranslation} from "react-i18next";

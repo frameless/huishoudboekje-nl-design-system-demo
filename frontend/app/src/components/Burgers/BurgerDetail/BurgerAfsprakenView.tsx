@@ -1,5 +1,5 @@
 import {AddIcon, TriangleDownIcon, TriangleUpIcon} from "@chakra-ui/icons";
-import {Box, Button, Stack, StackProps, Tab, TabList, TabPanel, TabPanels, Tabs, useBreakpointValue, useToast} from "@chakra-ui/react";
+import {Box, Button, Stack, StackProps, Tab, TabList, TabPanel, TabPanels, Tabs, useToast} from "@chakra-ui/react";
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {useHistory} from "react-router-dom";
@@ -10,7 +10,6 @@ import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
 
 const BurgerAfsprakenView: React.FC<StackProps & { burger: Gebruiker, refetch: VoidFunction }> = ({burger, refetch, ...props}) => {
 	const {t} = useTranslation();
-	const isMobile = useBreakpointValue([true, null, null, false]);
 	const toast = useToast();
 	const {push} = useHistory();
 	const [tabIndex, setTabIndex] = useState(0);

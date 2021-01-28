@@ -1,5 +1,5 @@
 import {DownloadIcon} from "@chakra-ui/icons";
-import {Box, Button, Divider, FormControl, FormLabel, IconButton, Input, Stack, Table, Tbody, Td, Text, Th, Thead, Tr, useBreakpointValue, useToast} from "@chakra-ui/react";
+import {Box, Button, Divider, FormControl, FormLabel, IconButton, Input, Stack, Table, Tbody, Td, Text, Th, Thead, Tr, useToast} from "@chakra-ui/react";
 import moment from "moment";
 import React from "react";
 import DatePicker from "react-datepicker";
@@ -13,7 +13,6 @@ import Section from "../../Layouts/Section";
 
 const BookingsExport = () => {
 	const {t} = useTranslation();
-	const isMobile = useBreakpointValue([true, null, null, false]);
 	const toast = useToast();
 
 	const $exports = useGetExportsQuery();

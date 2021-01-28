@@ -1,4 +1,4 @@
-import {Box, BoxProps, Button, Divider, FormLabel, Input, InputGroup, InputLeftElement, Stack, Switch, Text, useBreakpointValue, useToast} from "@chakra-ui/react";
+import {Box, BoxProps, Button, Divider, FormLabel, Input, InputGroup, InputLeftElement, Stack, Switch, Text, useToast} from "@chakra-ui/react";
 import moment from "moment";
 import "moment-recur-ts";
 import React, {useEffect, useState} from "react";
@@ -22,7 +22,6 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 	const {t} = useTranslation();
 	const toast = useToast();
 	const reactSelectStyles = useReactSelectStyles();
-	const isMobile = useBreakpointValue([true, null, null, false]);
 	const gebruiker = afspraak?.gebruiker || props.burger;
 	if (!gebruiker) {
 		throw new Error("Missing property gebruiker.");
