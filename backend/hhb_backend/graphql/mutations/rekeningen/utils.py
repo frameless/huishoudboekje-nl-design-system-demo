@@ -3,6 +3,7 @@ import json
 import requests
 from graphql import GraphQLError
 from schwifty import IBAN
+from schwifty.exceptions import SchwiftyException
 
 from hhb_backend.graphql import settings
 
@@ -48,8 +49,8 @@ def create_connected_rekening(object_id, object_type, rekening):
 def create_rekening(rekening):
     try:
         iban = IBAN(rekening.iban)
-        # TODO dict nieuwe iban setten (compact) testcases toevoegen voor verschillende iban strings.
-    except:
+        rekening.iban = iban.compact
+    except SchwiftyException as error:
         raise GraphQLError(f"Foutieve IBAN: {rekening.iban}")
 
     rekening_response = requests.post(
