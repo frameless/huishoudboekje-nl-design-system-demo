@@ -42,7 +42,7 @@ class Generator:
                 "rekening_organisatie": ["organisatie_id", "rekening_id"],
                 "afspraken": ["organisatie_id", "rubriek_id", "bedrag", "credit", "automatische_incasso",
                               "aantal_betalingen", "interval", "start_datum", "eind_datum", "gebruiker_id",
-                              "tegen_rekening_id",
+                              "tegen_rekening_id", "actief", "beschrijving"
                               ],
             },
             "organisatieservice": {
