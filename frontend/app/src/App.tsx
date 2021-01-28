@@ -71,8 +71,8 @@ const App = () => {
 	}
 
 	return (
-		<Flex h={"auto"} minHeight={"100vh"} minWidth={"100%"} w={"auto"} bg={"gray.100"}>
-			<Flex width={"100%"} justifyContent={"flex-start"} alignItems={"flex-start"} spacing={5}>
+		<Flex h={"auto"} minHeight={"100vh"} minWidth={"100%"} w={"auto"} bg={"gray.100"} justifyContent={"center"}>
+			<Flex width={"100%"} maxWidth={"1600px"} justifyContent={"flex-start"} alignItems={"flex-start"} spacing={5}>
 				<SidebarContainer>
 					<Sidebar />
 				</SidebarContainer>
