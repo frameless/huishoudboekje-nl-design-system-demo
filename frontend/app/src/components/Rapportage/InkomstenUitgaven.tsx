@@ -1,5 +1,4 @@
 import {BoxProps, Spinner, useToken} from "@chakra-ui/react";
-import moment from "moment";
 import React, {useContext} from "react";
 import {useTranslation} from "react-i18next";
 import {BankTransaction} from "../../generated/graphql";

@@ -32,10 +32,12 @@ const Rapportage = () => {
 	});
 
 	const startDate = useInput({
-		defaultValue: moment().subtract(1, "year").startOf("month").format("L"),
+		defaultValue: "01-01-2000",
+		// defaultValue: moment().subtract(1, "year").startOf("month").format("L"),
 	});
 	const endDate = useInput({
-		defaultValue: moment().subtract(1, "month").endOf("month").format("L"),
+		defaultValue: "31-12-2000",
+		// defaultValue: moment().subtract(1, "month").endOf("month").format("L"),
 	});
 	const [granularity, setGranularity] = useState<Granularity>(Granularity.Monthly);
 	const granularityOptions = {
@@ -150,6 +152,7 @@ const Rapportage = () => {
 							</TabPanels>
 						</Tabs>
 
+						{/* Balance table */}
 						<Section direction={["column", "row"]}>
 							<FormLeft title={t("balance")} helperText={selectedBurgers.length > 0 ? humanJoin(burgerNamesList) : t("allBurgers")} />
 							<FormRight>
@@ -162,7 +165,7 @@ const Rapportage = () => {
 									{Object.keys(aggregationByRubriek).map(c => {
 										const categories = Object.keys(aggregationByRubriek[c]);
 										let total = 0;
-										return categories.length === 0 ? null : (
+										return (
 											<Stack key={c} spacing={0}>
 												<Text fontWeight={"bold"}>{translatedCategory[c]}</Text>
 												{categories.map((r, i) => {
