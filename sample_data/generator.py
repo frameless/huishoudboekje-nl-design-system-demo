@@ -83,7 +83,7 @@ class Generator:
 
     def generate_rekening_gebruiker(self, gebruiker_id, naam):
 
-        rekening = self.generate_rekening(naam)
+        rekening = self.create_rekening(naam)
         self.rekening_counter += 1
 
         self.rekening_gebruiker.append({
@@ -208,6 +208,8 @@ class Generator:
                 next(r["rekening_id"] for r in self.rekening_organisatie if
                      r["organisatie_id"] == organisatie["id"]) if organisatie is not None else next(
                     r["rekening_id"] for r in self.rekening_gebruiker if r["gebruiker_id"] == gebruiker["id"]),
+            "actief": scenario.actief,
+            "beschrijving": scenario.beschrijving
         }
         self.afspraken.append(afspraak)
 

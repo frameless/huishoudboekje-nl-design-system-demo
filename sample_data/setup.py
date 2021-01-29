@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name='sample_data',
     version='0.1.0',
-    packages=['generators'],
+    packages=[],
     scripts=[],
     url='',
     description='HuishoudBoekje Sample Data Generator',

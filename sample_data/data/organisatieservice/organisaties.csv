@@ -7,6 +7,7 @@ kvk_nummer|naam|straatnaam|huisnummer|postcode|plaatsnaam
 34360247|UWV UTRECHT|Postbus|69254|1060CH|Amsterdam
 05069581|Vitens N.V.|Postbus|1205|8001BE|Zwolle
 30136131|Stichting Mitros|Postbus|8217|3503RE|Utrecht
+30038487|Stichting Portaal|Postbus|2211|3500GE|Utrecht
 34297646|De Nederlandse Energie Maatschappij|Aert van Nesstraat|45|3012CA|Rotterdam
 24324527|Eneco Consumenten B.V.|Marten Meesweg|5|3068AV|Rotterdam
 17146989|Energiedirect B.V.|Willemsplein|4|5211AK|'s-Hertogenbosch
@@ -18,53 +19,53 @@ kvk_nummer|naam|straatnaam|huisnummer|postcode|plaatsnaam
 24230430|DSW Ziektekostenverzekeringen N.V.|Postbus|173|3100AD|Schiedam
 30208631|FBTO Zorgverzekeringen N.V.|Postbus|318|8901BC|Leeuwarden
 35012085|Albert Heijn B.V.|Postbus|3000|1500HA|Zaandam
-00462346|Bosch - Hendriks|42nd Street|4262|1361UL|Sloothuizen
-00462347|Peters BV|Spooner Street|7598|1374HV|Sloothuizen
-00462348|Veen - Meijer|Portobello Road|4922|1377DR|Sloothuizen
-00462349|Ruiter - Vries|Dapperstraat|9274|1346LQ|Sloothuizen
-00462350|Ruiter, Heuvel and Veen|Wetstraat|9187|1347IV|Sloothuizen
-00462351|Stichting, Wal and Dekker|Easy Street|7354|1356UX|Sloothuizen
-00462352|Vermeulen, Ruiter and Dijk|Spooner Street|6543|1317VP|Sloothuizen
-00462353|Visser, Hoek and Ven|Portobello Road|6255|1314CO|Sloothuizen
-00462354|Janssen, Vries and Broek|Evergreen Terrace|2707|1345CX|Sloothuizen
-00462355|Smits - Ven|Kalverstraat|128|1312QV|Sloothuizen
-00462356|Jong - Smits|Medialaan|6900|1367WJ|Sloothuizen
-00462357|Dam - Bos|Rue Morgue|2625|1342QV|Sloothuizen
-00462358|Kok, Stichting and Graaf|Mulholland Drive|2069|1385IX|Sloothuizen
-00462359|Jong BV|Baker Street|7316|1351AZ|Sloothuizen
-00462360|Vermeulen Group|Via Dolorosa|547|1386RL|Sloothuizen
-00462361|Dam, Leeuwen and Vos|Wetstraat|5468|1368KO|Sloothuizen
-00462362|Brouwer, Meijer and Vermeulen|Boudewijn de Eerste straat|9878|1368VK|Sloothuizen
-00462363|Brouwer Group|Sunset Boulevard|653|1321WQ|Sloothuizen
-00462364|Graaf, Stichting and Dijkstra|Melrose Place|7307|1343QM|Sloothuizen
-00462365|Jong, Klein and Jacobs|Melrose Place|3059|1387LD|Sloothuizen
-00462366|Vermeulen, Vermeulen and Hendriks|Medialaan|9705|1384IB|Sloothuizen
-00462367|Linden Group|Friedrichstrasse|1098|1387PD|Sloothuizen
-00462368|Veen - Vries|Via Dolorosa|9673|1337UD|Sloothuizen
-00462369|Broek en Zonen|La Rambla|1095|1312KV|Sloothuizen
-00462370|Smits BV|Penny Lane|5475|1366GZ|Sloothuizen
-00462371|Haan, Visser and Kok|Rue Morgue|6558|1315ID|Sloothuizen
-00462372|Jansen - Vliet|Evergreen Terrace|2787|1312CO|Sloothuizen
-00462373|Jong, Bruin and Koster|Koekoekstraat|4574|1313QD|Sloothuizen
-00462374|Bosch, Heuvel and Peters|Haight-Ashbury|8090|1365CM|Sloothuizen
-00462375|Broek, Dekker and Bos|110th Street|4178|1312DY|Sloothuizen
-00462376|Beek Group|Wall Street|8049|1376RE|Sloothuizen
-00462377|Schouten - Visser|Grote Houtstraat|641|1365ST|Sloothuizen
-00462378|Dijk Group|Evergreen Terrace|3220|1331BN|Sloothuizen
-00462379|Bos, Bosch and Visser|Penny Lane|6702|1314WO|Sloothuizen
-00462380|Jong V.O.F.|Boudewijn de Eerste straat|9437|1376FF|Sloothuizen
-00462381|Dijkstra, Bos and Meer|Mulholland Drive|2865|1368QL|Sloothuizen
-00462382|Berg, Smits and Bakker|Abbey Road|1350|1351UO|Sloothuizen
-00462383|Jansen, Meer and Bos|Wetstraat|7139|1318UJ|Sloothuizen
-00462384|Beek - Kok|Rue Morgue|8886|1331NO|Sloothuizen
-00462385|Wit BV|Cemetery Ridge|7702|1317HJ|Sloothuizen
-00462386|Beek, Visser and Haan|Grote Houtstraat|3922|1348BE|Sloothuizen
-00462387|Hendriks, Graaf and Klein|Via Appia|8804|1333CJ|Sloothuizen
-00462388|Jansen, Haan and Dijkstra|Broadway|8664|1352FO|Sloothuizen
-00462389|Smit - Dekker|Boudewijn de Eerste straat|9759|1332WH|Sloothuizen
-00462390|Linden, Heuvel and Smit|Cemetery Ridge|2863|1383EK|Sloothuizen
-00462391|Smit, Boer and Ven|Dapperstraat|6569|1372IX|Sloothuizen
-00462392|Koster en Zonen|Portobello Road|3192|1338FC|Sloothuizen
-00462393|Janssen - Peters|Cemetery Ridge|8925|1336OD|Sloothuizen
-00462394|Peters en Zonen|Elm Street|8523|1343NM|Sloothuizen
-00462395|Vos V.O.F.|Burma Road|2858|1374IK|Sloothuizen
+00462346|Meer, Janssen and Ruiter|Broadway|5680|1357FH|Sloothuizen
+00462347|Visser, Wal and Bos|Kleine Zapstraat|4417|1322VX|Sloothuizen
+00462348|Jansen, Vries and Brouwer|Dapperstraat|881|1375YT|Sloothuizen
+00462349|Brink, Meer and Stichting|Melrose Place|5369|1336EW|Sloothuizen
+00462350|Broek, Brink and Mulder|Medialaan|4030|1311RC|Sloothuizen
+00462351|Brink, Vliet and Jacobs|110th Street|3830|1313NS|Sloothuizen
+00462352|Boer - Jacobs|Portobello Road|2042|1358QU|Sloothuizen
+00462353|Jacobs Group|Kiliaanstraat|4250|1357QP|Sloothuizen
+00462354|Jansen V.O.F.|Electric Avenue|9879|1381HH|Sloothuizen
+00462355|Brink, Hendriks and Ruiter|Broadway|5136|1383SB|Sloothuizen
+00462356|Vries BV|Burma Road|545|1321QL|Sloothuizen
+00462357|Haan, Bos and Wit|Downing Street|7921|1353CC|Sloothuizen
+00462358|Jansen Group|Easy Street|8132|1353CD|Sloothuizen
+00462359|Ven - Ruiter|Electric Avenue|2185|1386HK|Sloothuizen
+00462360|Schouten - Jong|Evergreen Terrace|3748|1321SZ|Sloothuizen
+00462361|Jansen - Dam|Dapperstraat|7455|1342ZC|Sloothuizen
+00462362|Ruiter, Jong and Bos|Via Dolorosa|2896|1323MQ|Sloothuizen
+00462363|Bruin, Wit and Brouwer|Via Appia|8023|1323YJ|Sloothuizen
+00462364|Meijer, Meer and Koster|Wall Street|1738|1377PC|Sloothuizen
+00462365|Ruiter BV|Abbey Road|6436|1355SA|Sloothuizen
+00462366|Bosch - Kok|Abbey Road|8818|1312LI|Sloothuizen
+00462367|Heuvel, Willems and Wit|Cemetery Ridge|3612|1344UA|Sloothuizen
+00462368|Meer Group|Rue Morgue|1868|1385AY|Sloothuizen
+00462369|Vliet BV|Elm Street|5791|1344ZW|Sloothuizen
+00462370|Bosch Group|Avenue des Champs-Élysées|584|1385GG|Sloothuizen
+00462371|Stichting, Bos and Jacobs|Charing Cross Road|5903|1336LO|Sloothuizen
+00462372|Visser - Schouten|Charing Cross Road|6006|1358KE|Sloothuizen
+00462373|Ven, Linden and Ven|Spooner Street|9480|1322BU|Sloothuizen
+00462374|Heuvel - Wal|Spooner Street|9631|1375HZ|Sloothuizen
+00462375|Vliet, Veen and Smit|Friedrichstrasse|4830|1316HZ|Sloothuizen
+00462376|Janssen BV|Easy Street|2310|1353YV|Sloothuizen
+00462377|Vos, Heuvel and Linden|Easy Street|2967|1367CJ|Sloothuizen
+00462378|Janssen, Willems and Bakker|Broadway|70|1336XE|Sloothuizen
+00462379|Smit - Smit|Cemetery Ridge|3746|1377HT|Sloothuizen
+00462380|Vliet BV|Kalverstraat|2083|1326MD|Sloothuizen
+00462381|Vermeulen - Brink|Portobello Road|4483|1372TO|Sloothuizen
+00462382|Boer Group|Electric Avenue|1651|1343RN|Sloothuizen
+00462383|Bos - Maas|Merholaan|1481|1376GK|Sloothuizen
+00462384|Mulder en Zonen|110th Street|8295|1356GJ|Sloothuizen
+00462385|Graaf BV|Kiliaanstraat|4643|1336HU|Sloothuizen
+00462386|Meijer, Visser and Peters|Penny Lane|3395|1323FI|Sloothuizen
+00462387|Koning - Willems|Boudewijn de Eerste straat|3579|1376PH|Sloothuizen
+00462388|Koning - Brink|Beale Street|8762|1315RW|Sloothuizen
+00462389|Schouten en Zonen|Charing Cross Road|5615|1325HE|Sloothuizen
+00462390|Jansen - Vries|Cemetery Ridge|9875|1387DK|Sloothuizen
+00462391|Linden - Wit|Sesamstraat|6561|1368YQ|Sloothuizen
+00462392|Heuvel, Schouten and Wit|Beale Street|1372|1316XS|Sloothuizen
+00462393|Linden BV|Wetstraat|3953|1351DQ|Sloothuizen
+00462394|Leeuwen, Brouwer and Peters|Electric Avenue|6501|1326WD|Sloothuizen
+00462395|Vries V.O.F.|Kleine Zapstraat|9266|1376XM|Sloothuizen
