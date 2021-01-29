@@ -4,6 +4,7 @@ from graphql import GraphQLError
 
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
+from hhb_backend.graphql.models.afspraak import Afspraak
 from hhb_backend.graphql.models.journaalpost import Journaalpost
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     log_gebruikers_activiteit,
@@ -30,6 +31,15 @@ class DeleteJournaalpost(graphene.Mutation):
             + gebruikers_activiteit_entities(
                 result=self.previous, key="afspraak", entity_type="afspraak"
             )
+            + (
+                gebruikers_activiteit_entities(
+                    result=self.previous["afspraak"],
+                    key="gebruiker_id",
+                    entity_type="burger",
+                )
+                if "afspraak" in self.previous
+                else []
+            )
             + gebruikers_activiteit_entities(
                 result=self.previous, key="transaction", entity_type="transaction"
             ),
@@ -39,6 +49,10 @@ class DeleteJournaalpost(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(root, info, id):
         previous = await hhb_dataloader().journaalposten_by_id.load(id)
+        if "afspraak_id" in previous:
+            previous["afspraak"] = await hhb_dataloader().afspraken_by_id.load(
+                previous["afspraak_id"]
+            )
 
         response = requests.delete(f"{settings.HHB_SERVICES_URL}/journaalposten/{id}")
         if not response.ok:

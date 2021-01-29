@@ -43,6 +43,11 @@ class CreateJournaalpostAfspraak(graphene.Mutation):
                 result=self, key="journaalpost", entity_type="journaalpost"
             )
             + gebruikers_activiteit_entities(
+                result=self.journaalpost["afspraak"],
+                key="gebruiker_id",
+                entity_type="burger",
+            )
+            + gebruikers_activiteit_entities(
                 result=self.journaalpost, key="afspraak", entity_type="afspraak"
             )
             + gebruikers_activiteit_entities(
@@ -69,7 +74,7 @@ class CreateJournaalpostAfspraak(graphene.Mutation):
         if not afspraak:
             raise GraphQLError("afspraak not found")
 
-        if not (afspraak.credit == transaction.is_credit):
+        if not (afspraak["credit"] == transaction["is_credit"]):
             raise GraphQLError(f"credit in afspraak and transaction do not match")
 
         previous = await hhb_dataloader().journaalposten_by_transaction.load(
@@ -83,7 +88,10 @@ class CreateJournaalpostAfspraak(graphene.Mutation):
         )
         if not response.ok:
             raise GraphQLError(f"Upstream API responded: {response.text}")
+
         journaalpost = response.json()["data"]
+        journaalpost["afspraak"] = afspraak
+
         return CreateJournaalpostAfspraak(journaalpost=journaalpost, ok=True)
 
 
@@ -129,7 +137,7 @@ class CreateJournaalpostGrootboekrekening(graphene.Mutation):
         if not grootboekrekening:
             raise GraphQLError("grootboekrekening not found")
 
-        if not (grootboekrekening.credit == transaction.is_credit):
+        if not (grootboekrekening["credit"] == transaction["is_credit"]):
             raise GraphQLError(f"credit in afspraak and transaction do not match")
 
         previous = await hhb_dataloader().journaalposten_by_transaction.load(

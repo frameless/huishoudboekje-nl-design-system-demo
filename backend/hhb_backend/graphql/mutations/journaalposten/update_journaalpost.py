@@ -66,7 +66,7 @@ class UpdateJournaalpostGrootboekrekening(graphene.Mutation):
         if not grootboekrekening:
             raise GraphQLError("grootboekrekening not found")
 
-        if not (grootboekrekening.credit == previous.transaction.is_credit):
+        if not (grootboekrekening["credit"] == previous.transaction["is_credit"]):
             raise GraphQLError(
                 f"credit in grootboekrekening and transaction do not match"
             )
