@@ -1,25 +1,29 @@
 mutation createSampleAfspraken{
 
     afspraak1: createAfspraak(input: {
-        gebruikerId: 0
-        beschrijving: ""
-        startDatum: ""
+        # TODO: get gebruikerId by multiple attributes
+        gebruikerId: 201
+        beschrijving: "Loon"
+        startDatum: "2021-01-01"
         eindDatum: ""
         aantalBetalingen: 0
         interval: {
             jaren: 0
-            maanden: 0
+            maanden: 1
             weken: 0
             dagen: 0
         }
+        # TODO: get tegenRekeningId by gebruikerId, just use 1 iban
         tegenRekeningId: 0
-        bedrag: 1.00
-        credit: true
+        bedrag: 765.32
+        credit: false
         kenmerk: ""
         actief: true
+        # TODO: get organisatieId for "Albert Heijn"
         organisatieId: 0
+        # TODO: get rubriekId for "Loon"
         rubriekId: 0
-        automatischeIncasso: true
+        automatischeIncasso: false
     }){
         ok
         afspraak {
