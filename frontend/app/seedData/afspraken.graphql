@@ -1,0 +1,30 @@
+mutation createSampleAfspraken{
+
+    afspraak1: createAfspraak(input: {
+        gebruikerId: 0
+        beschrijving: ""
+        startDatum: ""
+        eindDatum: ""
+        aantalBetalingen: 0
+        interval: {
+            jaren: 0
+            maanden: 0
+            weken: 0
+            dagen: 0
+        }
+        tegenRekeningId: 0
+        bedrag: 1.00
+        credit: true
+        kenmerk: ""
+        actief: true
+        organisatieId: 0
+        rubriekId: 0
+        automatischeIncasso: true
+    }){
+        ok
+        afspraak {
+            id
+        }
+    }
+
+}

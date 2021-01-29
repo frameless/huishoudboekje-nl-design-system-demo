@@ -19,6 +19,12 @@ mutation createSampleBurgers{
         }
     ){
         ok
+        gebruiker {
+            id
+            voornamen
+            achternaam
+            email
+        }
     }
 
     user2: createGebruiker(
@@ -40,5 +46,11 @@ mutation createSampleBurgers{
         }
     ){
         ok
+        gebruiker {
+            id
+            voornamen
+            achternaam
+            email
+        }
     }
 }

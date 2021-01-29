@@ -1,27 +1,27 @@
 mutation importRubrieken {
 
-    rubriek2: createRubriek(naam: "Gas", grootboekrekeningId: "WBedHuiGweGas"){
+    rubriek1: createRubriek(naam: "Gas", grootboekrekeningId: "WBedHuiGweGas"){
         ok
     }
-    rubriek3: createRubriek(naam: "Water", grootboekrekeningId: "WBedHuiGweWat"){
+    rubriek2: createRubriek(naam: "Water", grootboekrekeningId: "WBedHuiGweWat"){
         ok
     }
-    rubriek4: createRubriek(naam: "Elektra", grootboekrekeningId: "WBedHuiGweElk"){
+    rubriek3: createRubriek(naam: "Elektra", grootboekrekeningId: "WBedHuiGweElk"){
         ok
     }
-    rubriek5: createRubriek(naam: "Inkomsten", grootboekrekeningId: "WOmzNooNdo"){
+    rubriek4: createRubriek(naam: "Inkomsten", grootboekrekeningId: "WOmzNooNdo"){
         ok
     }
-    rubriek6: createRubriek(naam: "Telefonie", grootboekrekeningId: "WBedKanTef"){
+    rubriek5: createRubriek(naam: "Telefonie", grootboekrekeningId: "WBedKanTef"){
         ok
     }
-    rubriek7: createRubriek(naam: "Verzekeringen", grootboekrekeningId: "WBedAssOva"){
+    rubriek6: createRubriek(naam: "Verzekeringen", grootboekrekeningId: "WBedAssOva"){
         ok
     }
-    rubriek8: createRubriek(naam: "Betaalde huur", grootboekrekeningId: "WBedHuiBeh"){
+    rubriek7: createRubriek(naam: "Betaalde huur", grootboekrekeningId: "WBedHuiBeh"){
         ok
     }
-    rubriek9: createRubriek(naam: "Milieuheffingen en zuiveringsleges", grootboekrekeningId: "WBedHuiMez"){
+    rubriek8: createRubriek(naam: "Milieuheffingen en zuiveringsleges", grootboekrekeningId: "WBedHuiMez"){
         ok
     }
     rubriek10: createRubriek(naam: "Leefgeld", grootboekrekeningId: "BEivKapProPok"){
