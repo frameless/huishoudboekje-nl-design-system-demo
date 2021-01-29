@@ -2,20 +2,22 @@ scenarios:
 # persona 1
   - aantal: 1
     aantal_rekeningen: 1
+    gezin: 1
     afspraken:
       # inkomsten
       - aantal: 1
         rubriek: "Inkomsten"
-        omschrijving: "Loon"
+        beschrijving: "Loon"
         organisatie_kvk: "35012085"
         bedrag: 76532
         credit: true
         automatische_incasso: false
         interval: "P0Y1M0W0D"
         start_datum: "2021-01-01"
+        actief: true
       - aantal: 1
         rubriek: "Inkomsten"
-        omschrijving: "Aanvullende uitkering"
+        beschrijving: "Aanvullende uitkering"
         organisatie_kvk: "30280353"
   # TODO: add attribute for specific IBAN
         bedrag: 14784
@@ -23,59 +25,66 @@ scenarios:
         automatische_incasso: false
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-07"
+        actief: true
       - aantal: 1
         rubriek: "Inkomsten"
-        omschrijving: "Kindgebonden budget"
+        beschrijving: "Kindgebonden budget"
         organisatie_kvk: "27365323"
         bedrag: 39100
         credit: true
         automatische_incasso: false
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-20"
+        actief: true
       - aantal: 1
         rubriek: "Inkomsten"
-        omschrijving: "Huurtoeslag"
+        beschrijving: "Huurtoeslag"
         organisatie_kvk: "27365323"
         bedrag: 32200
         credit: true
         automatische_incasso: false
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-20"
+        actief: true
       - aantal: 1
         rubriek: "Inkomsten"
-        omschrijving: "Zorgtoeslag"
+        beschrijving: "Zorgtoeslag"
         organisatie_kvk: "27365323"
         bedrag: 10700
         credit: true
         automatische_incasso: false
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-20"
+        actief: true
       # uitgaven
       - aantal: 1
         rubriek: "Betaalde huur"
-        omschrijving: "Huur"
+        beschrijving: "Huur"
         organisatie_kvk: "30038487"
         bedrag: 64735
         credit: false
         automatische_incasso: true
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-01"
+        actief: true
       - aantal: 1
         rubriek: "Elektra"
-        omschrijving: "Elektriciteit"
+        beschrijving: "Elektriciteit"
         organisatie_kvk: "05082820"
         bedrag: 13200
         credit: false
         automatische_incasso: true
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-01"
+        actief: true
       - aantal: 1
         rubriek: "Water"
-        omschrijving: "Water"
+        beschrijving: "Water"
         organisatie_kvk: "05069581"
         bedrag: 4161
         credit: false
         automatische_incasso: true
         interval: "P0Y3M0W0D"
         start_datum: "2021-01-01"
+        actief: true
 

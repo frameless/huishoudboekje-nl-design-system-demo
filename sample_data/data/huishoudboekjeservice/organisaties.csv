@@ -1,5 +1,5 @@
 id|kvk_nummer|weergave_naam
-2|27365323|Belastingdienst Toeslagen
+2|27365323|Belastingdienst
 3|56806787|Beschermd wonen
 4|50973029|DUO
 5|30280353|Gemeente Utrecht
@@ -7,64 +7,65 @@ id|kvk_nummer|weergave_naam
 7|34360247|UWV UTRECHT WIA-uitkering (WGA of IVA)
 8|05069581|Vitens N.V.
 9|30136131|Stichting Mitros
-10|34297646|Budget Energie
-11|24324527|Eneco Consumenten
-12|17146989|Energiedirect B.V.
-13|05082820|ENGIE Nederland Retail B.V.
-14|13041611|Essent Retail Energie B.V.
-15|50544403|Anderzorg
-16|10029718|Bewuzt
-17|18028752|CZ Groep Zorgverzekeraar
-18|24230430|DSW Ziektekostenverzekeringen
-19|30208631|FBTO Zorgverzekeringen N.V.
-20|35012085|Albert Heijn
-21|00462346|Bosch - Hendriks
-22|00462347|Peters BV
-23|00462348|Veen - Meijer
-24|00462349|Ruiter - Vries
-25|00462350|Ruiter, Heuvel and Veen
-26|00462351|Stichting, Wal and Dekker
-27|00462352|Vermeulen, Ruiter and Dijk
-28|00462353|Visser, Hoek and Ven
-29|00462354|Janssen, Vries and Broek
-30|00462355|Smits - Ven
-31|00462356|Jong - Smits
-32|00462357|Dam - Bos
-33|00462358|Kok, Stichting and Graaf
-34|00462359|Jong BV
-35|00462360|Vermeulen Group
-36|00462361|Dam, Leeuwen and Vos
-37|00462362|Brouwer, Meijer and Vermeulen
-38|00462363|Brouwer Group
-39|00462364|Graaf, Stichting and Dijkstra
-40|00462365|Jong, Klein and Jacobs
-41|00462366|Vermeulen, Vermeulen and Hendriks
-42|00462367|Linden Group
-43|00462368|Veen - Vries
-44|00462369|Broek en Zonen
-45|00462370|Smits BV
-46|00462371|Haan, Visser and Kok
-47|00462372|Jansen - Vliet
-48|00462373|Jong, Bruin and Koster
-49|00462374|Bosch, Heuvel and Peters
-50|00462375|Broek, Dekker and Bos
-51|00462376|Beek Group
-52|00462377|Schouten - Visser
-53|00462378|Dijk Group
-54|00462379|Bos, Bosch and Visser
-55|00462380|Jong V.O.F.
-56|00462381|Dijkstra, Bos and Meer
-57|00462382|Berg, Smits and Bakker
-58|00462383|Jansen, Meer and Bos
-59|00462384|Beek - Kok
-60|00462385|Wit BV
-61|00462386|Beek, Visser and Haan
-62|00462387|Hendriks, Graaf and Klein
-63|00462388|Jansen, Haan and Dijkstra
-64|00462389|Smit - Dekker
-65|00462390|Linden, Heuvel and Smit
-66|00462391|Smit, Boer and Ven
-67|00462392|Koster en Zonen
-68|00462393|Janssen - Peters
-69|00462394|Peters en Zonen
-70|00462395|Vos V.O.F.
+10|30038487|Stichting Portaal
+11|34297646|Budget Energie
+12|24324527|Eneco Consumenten
+13|17146989|Energiedirect B.V.
+14|05082820|ENGIE Nederland Retail B.V.
+15|13041611|Essent Retail Energie B.V.
+16|50544403|Anderzorg
+17|10029718|Bewuzt
+18|18028752|CZ Groep Zorgverzekeraar
+19|24230430|DSW Ziektekostenverzekeringen
+20|30208631|FBTO Zorgverzekeringen N.V.
+21|35012085|Albert Heijn
+22|00462346|Meer, Janssen and Ruiter
+23|00462347|Visser, Wal and Bos
+24|00462348|Jansen, Vries and Brouwer
+25|00462349|Brink, Meer and Stichting
+26|00462350|Broek, Brink and Mulder
+27|00462351|Brink, Vliet and Jacobs
+28|00462352|Boer - Jacobs
+29|00462353|Jacobs Group
+30|00462354|Jansen V.O.F.
+31|00462355|Brink, Hendriks and Ruiter
+32|00462356|Vries BV
+33|00462357|Haan, Bos and Wit
+34|00462358|Jansen Group
+35|00462359|Ven - Ruiter
+36|00462360|Schouten - Jong
+37|00462361|Jansen - Dam
+38|00462362|Ruiter, Jong and Bos
+39|00462363|Bruin, Wit and Brouwer
+40|00462364|Meijer, Meer and Koster
+41|00462365|Ruiter BV
+42|00462366|Bosch - Kok
+43|00462367|Heuvel, Willems and Wit
+44|00462368|Meer Group
+45|00462369|Vliet BV
+46|00462370|Bosch Group
+47|00462371|Stichting, Bos and Jacobs
+48|00462372|Visser - Schouten
+49|00462373|Ven, Linden and Ven
+50|00462374|Heuvel - Wal
+51|00462375|Vliet, Veen and Smit
+52|00462376|Janssen BV
+53|00462377|Vos, Heuvel and Linden
+54|00462378|Janssen, Willems and Bakker
+55|00462379|Smit - Smit
+56|00462380|Vliet BV
+57|00462381|Vermeulen - Brink
+58|00462382|Boer Group
+59|00462383|Bos - Maas
+60|00462384|Mulder en Zonen
+61|00462385|Graaf BV
+62|00462386|Meijer, Visser and Peters
+63|00462387|Koning - Willems
+64|00462388|Koning - Brink
+65|00462389|Schouten en Zonen
+66|00462390|Jansen - Vries
+67|00462391|Linden - Wit
+68|00462392|Heuvel, Schouten and Wit
+69|00462393|Linden BV
+70|00462394|Leeuwen, Brouwer and Peters
+71|00462395|Vries V.O.F.

@@ -62,6 +62,7 @@ class Metadata:
 class AfspraakScenario:
     aantal: int = 12
     rubriek: str = None
+    beschrijving: str = None
     organisatie_kvk: str = None
     bedrag: int = 10100
     credit: bool = False
@@ -70,6 +71,7 @@ class AfspraakScenario:
     interval: str = "P0Y1M0W0D"
     start_datum: str = "2021-01-01"
     eind_datum: str = "2021-12-31"
+    actief: bool = True
 
 
 @dataclass
@@ -95,7 +97,7 @@ def load_yaml_dataclass(filename: str, clazz):
 
 
 class Scenario:
-    configuratie: Systeem = load_yaml_dataclass('scenarios/configuratie.yaml', Systeem)
-    organisatie: Organisaties = load_yaml_dataclass('scenarios/organisaties.yaml', Organisaties)
-    gebruikers: Gebruikers = load_yaml_dataclass('scenarios/gebruikers.yaml', Gebruikers)
-    metadata: Metadata = load_yaml_dataclass('scenarios/metadata.yaml', Metadata)
+    configuratie: Systeem = load_yaml_dataclass('scenarios\\configuratie.yaml', Systeem)
+    organisatie: Organisaties = load_yaml_dataclass('scenarios\\organisaties.yaml', Organisaties)
+    gebruikers: Gebruikers = load_yaml_dataclass('scenarios\\gebruikers.yaml', Gebruikers)
+    metadata: Metadata = load_yaml_dataclass('scenarios\\metadata.yaml', Metadata)

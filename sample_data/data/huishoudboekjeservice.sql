@@ -6,5 +6,5 @@ BEGIN;
 \COPY rekening_gebruiker (rekening_id,gebruiker_id) FROM 'huishoudboekjeservice/rekening_gebruiker.csv' (FORMAT csv, DELIMITER '|', HEADER true);
 \COPY organisaties (id,kvk_nummer,weergave_naam) FROM 'huishoudboekjeservice/organisaties.csv' (FORMAT csv, DELIMITER '|', HEADER true);
 \COPY rekening_organisatie (organisatie_id,rekening_id) FROM 'huishoudboekjeservice/rekening_organisatie.csv' (FORMAT csv, DELIMITER '|', HEADER true);
-\COPY afspraken (organisatie_id,rubriek_id,bedrag,credit,automatische_incasso,aantal_betalingen,interval,start_datum,eind_datum,gebruiker_id,tegen_rekening_id) FROM 'huishoudboekjeservice/afspraken.csv' (FORMAT csv, DELIMITER '|', HEADER true);
+\COPY afspraken (organisatie_id,rubriek_id,bedrag,credit,automatische_incasso,aantal_betalingen,interval,start_datum,eind_datum,gebruiker_id,tegen_rekening_id,actief,beschrijving) FROM 'huishoudboekjeservice/afspraken.csv' (FORMAT csv, DELIMITER '|', HEADER true);
 END;
