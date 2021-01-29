@@ -13,16 +13,16 @@ mutation createSampleAfspraken{
             weken: 0
             dagen: 0
         }
-        # TODO: get tegenRekeningId by gebruikerId, just use 1 iban
-        tegenRekeningId: 0
-        bedrag: 765.32
+        # TODO: get tegenRekeningId by organisatieId, just use 1 iban for testing purposes
+        tegenRekeningId: 40225
+        bedrag: "765.32"
         credit: false
         kenmerk: ""
         actief: true
         # TODO: get organisatieId for "Albert Heijn"
-        organisatieId: 0
+        organisatieId: 20
         # TODO: get rubriekId for "Loon"
-        rubriekId: 0
+        rubriekId: 4
         automatischeIncasso: false
     }){
         ok
