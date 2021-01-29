@@ -49,7 +49,7 @@ class DeleteJournaalpost(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(root, info, id):
         previous = await hhb_dataloader().journaalposten_by_id.load(id)
-        if "afspraak_id" in previous:
+        if previous and "afspraak_id" in previous:
             previous["afspraak"] = await hhb_dataloader().afspraken_by_id.load(
                 previous["afspraak_id"]
             )
