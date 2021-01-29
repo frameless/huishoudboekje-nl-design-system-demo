@@ -1,19 +1,37 @@
 # TODO unify naming, filenames are singular, loader names are plural
+from flask import request
+
 from .afspraken_loader import AfsprakenByIdLoader, AfsprakenByGebruikerLoader
-from .bank_transactions_loader import BankTransactionByIdLoader, BankTransactionByCsmLoader
+from .bank_transactions_loader import (
+    BankTransactionByIdLoader,
+    BankTransactionByCsmLoader,
+)
 from .configuratie_loader import ConfiguratieByIdLoader
 from .csm_loader import CSMsByIdLoader
 from .exports_loader import ExportsByIdLoader
 from .gebruiker_loader import GebruikersByIdLoader
-from .gebruikersactiviteit_loader import GebruikersActiviteitenByIdLoader, GebruikersActiviteitenByGebruikersLoader, \
-    GebruikersActiviteitenByAfsprakenLoader
+from .gebruikersactiviteit_loader import (
+    GebruikersActiviteitenByIdLoader,
+    GebruikersActiviteitenByGebruikersLoader,
+    GebruikersActiviteitenByAfsprakenLoader,
+)
 from .grootboekrekening_loader import GrootboekrekeningenByIdLoader
-from .journaalpost_loader import JournaalpostenByIdLoader, JournaalpostenByTransactionLoader
+from .journaalpost_loader import (
+    JournaalpostenByIdLoader,
+    JournaalpostenByTransactionLoader,
+)
 from .organisatie_loader import OrganisatieByIdLoader, KvKDetailsLoader
-from .overschrijving_loader import OverschrijvingByIdLoader, OverschrijvingByAfspraakLoader, \
-    OverschrijvingByExportLoader
-from .rekeningen_loader import RekeningenByIdLoader, RekeningenByGebruikerLoader, RekeningenByOrganisatieLoader, \
-    RekeningenByIbanLoader
+from .overschrijving_loader import (
+    OverschrijvingByIdLoader,
+    OverschrijvingByAfspraakLoader,
+    OverschrijvingByExportLoader,
+)
+from .rekeningen_loader import (
+    RekeningenByIdLoader,
+    RekeningenByGebruikerLoader,
+    RekeningenByOrganisatieLoader,
+    RekeningenByIbanLoader,
+)
 from .rubrieken_loader import RubriekByIdLoader, RubriekByGrootboekrekeningLoader
 
 
@@ -32,7 +50,9 @@ class HHBDataLoader:
         self.afspraken_by_id = AfsprakenByIdLoader(loop=loop)
         self.afspraken_by_gebruiker = AfsprakenByGebruikerLoader(loop=loop)
         self.rubrieken_by_id = RubriekByIdLoader(loop=loop)
-        self.rubrieken_by_grootboekrekening = RubriekByGrootboekrekeningLoader(loop=loop)
+        self.rubrieken_by_grootboekrekening = RubriekByGrootboekrekeningLoader(
+            loop=loop
+        )
         self.overschrijvingen_by_id = OverschrijvingByIdLoader(loop=loop)
         self.overschrijvingen_by_afspraak = OverschrijvingByAfspraakLoader(loop=loop)
         self.overschrijvingen_by_export = OverschrijvingByExportLoader(loop=loop)
@@ -50,7 +70,9 @@ class HHBDataLoader:
 
         self.grootboekrekeningen_by_id = GrootboekrekeningenByIdLoader(loop=loop)
         self.journaalposten_by_id = JournaalpostenByIdLoader(loop=loop)
-        self.journaalposten_by_transaction = JournaalpostenByTransactionLoader(loop=loop)
+        self.journaalposten_by_transaction = JournaalpostenByTransactionLoader(
+            loop=loop
+        )
 
         self.configuratie_by_id = ConfiguratieByIdLoader(loop=loop)
 
@@ -58,8 +80,16 @@ class HHBDataLoader:
         self.exports_by_id = ExportsByIdLoader(loop=loop)
 
         self.gebruikersactiviteiten_by_id = GebruikersActiviteitenByIdLoader(loop=loop)
-        self.gebruikersactiviteiten_by_gebruikers = GebruikersActiviteitenByGebruikersLoader(loop=loop)
-        self.gebruikersactiviteiten_by_afspraken = GebruikersActiviteitenByAfsprakenLoader(loop=loop)
+        self.gebruikersactiviteiten_by_gebruikers = (
+            GebruikersActiviteitenByGebruikersLoader(loop=loop)
+        )
+        self.gebruikersactiviteiten_by_afspraken = (
+            GebruikersActiviteitenByAfsprakenLoader(loop=loop)
+        )
 
     def __getitem__(self, item: str):
         return getattr(self, item)
+
+
+def hhb_dataloader() -> HHBDataLoader:
+    return request.dataloader

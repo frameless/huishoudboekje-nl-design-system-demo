@@ -1,12 +1,11 @@
 """ GraphQL mutation for updating an Afspraak """
-import json
 
 import graphene
 import requests
-from flask import request
 from graphql import GraphQLError
 
 from hhb_backend.graphql import settings
+from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.afspraak import Afspraak
 from hhb_backend.graphql.mutations.afspraken import AfspraakInput
 from hhb_backend.graphql.utils import convert_hhb_interval_to_iso
@@ -14,10 +13,6 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     log_gebruikers_activiteit,
     gebruikers_activiteit_entities,
 )
-
-
-def item_if(object: dict, path: list):
-    return (object[path[0]],) if path[0] in object else ()
 
 
 class UpdateAfspraak(graphene.Mutation):
@@ -50,15 +45,15 @@ class UpdateAfspraak(graphene.Mutation):
     async def mutate(root, info, id, input, **kwargs):
         """ Update the Afspraak """
 
-        previous = await request.dataloader.afspraken_by_id.load(id)
+        previous = await hhb_dataloader().afspraken_by_id.load(id)
 
         if "interval" in input:
             iso_interval = convert_hhb_interval_to_iso(input["interval"])
             input["interval"] = iso_interval
+
         response = requests.post(
             f"{settings.HHB_SERVICES_URL}/afspraken/{id}",
-            data=json.dumps(input),
-            headers={"Content-type": "application/json"},
+            json=input,
         )
         if not response.ok:
             raise GraphQLError(f"Upstream API responded: {response.json()}")
