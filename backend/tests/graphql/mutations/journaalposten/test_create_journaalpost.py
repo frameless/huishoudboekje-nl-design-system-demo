@@ -1,3 +1,5 @@
+import re
+
 import pytest
 import requests_mock
 from hhb_backend.graphql import settings
@@ -5,6 +7,7 @@ from hhb_backend.graphql import settings
 mock_afspraken = {
     "data": [
         {"id": 11, "grootboekrekening_id": "m12", "credit": True},
+        {"id": 12, "grootboekrekening_id": "m2", "credit": False},
     ]
 }
 mock_grootboekrekeningen = {
@@ -14,7 +17,13 @@ mock_grootboekrekeningen = {
         {"id": "m2", "naam": "uitgaven", "is_credit": False},
     ]
 }
-mock_bank_transactions = {"data": [{"id": 31, "is_credit": True}]}
+mock_bank_transactions = {
+    "data": [
+        {"id": 31, "is_credit": True},
+        {"id": 32, "is_credit": False},
+        {"id": 33, "is_credit": False},
+    ]
+}
 
 journaalposten = dict()
 
@@ -36,12 +45,15 @@ def create_journaalpost_service(request, context):
 
 def get_journaalposten(request, context):
     global journaalposten
-    return {"data": [j for j in journaalposten.values() if j["transaction_id"] == 31]}
+    return {"data": [j for j in journaalposten.values()]}
 
 
 def setup_services(mock):
     global journaalposten
     journaalposten = dict()
+
+    journaalposten[33] = {"id": 22, "afspraak_id": 12, "transaction_id": 33}
+
     afspraken_adapter = mock.get(
         f"{settings.HHB_SERVICES_URL}/afspraken/", json=mock_afspraken
     )
@@ -50,7 +62,7 @@ def setup_services(mock):
         json=mock_grootboekrekeningen,
     )
     journaalposten_get_adapter = mock.get(
-        f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_transactions=31",
+        f"{settings.HHB_SERVICES_URL}/journaalposten/",
         json=get_journaalposten,
     )
     joornaalposten_adapter = mock.post(
@@ -134,7 +146,7 @@ mutation test($input:CreateJournaalpostGrootboekrekeningInput!) {
   }
 }""",
                 "variables": {
-                    "input": {"transactionId": 32, "grootboekrekeningId": "m12"}
+                    "input": {"transactionId": 7777, "grootboekrekeningId": "m12"}
                 },
             },
             content_type="application/json",
@@ -197,7 +209,6 @@ def test_create_journaalpost_grootboekrekening_duplicate_not_allowed(client):
         }
 
 
-@pytest.mark.skip("TODO implement grootboekrekening in afspraak")
 def test_create_journaalpost_afspraak(client):
     with requests_mock.Mocker() as mock:
         adapters = setup_services(mock)
@@ -213,7 +224,6 @@ mutation test($input:CreateJournaalpostAfspraakInput!) {
       id
       afspraak { id }
       transaction { id }
-      afspraak { id }
     }
   }
 }""",
@@ -229,7 +239,6 @@ mutation test($input:CreateJournaalpostAfspraakInput!) {
                         "id": 23,
                         "afspraak": {"id": 11},
                         "transaction": {"id": 31},
-                        "grootboekrekening": {"id": "m12"},
                     },
                 }
             }
@@ -237,4 +246,43 @@ mutation test($input:CreateJournaalpostAfspraakInput!) {
         assert adapters["afspraken"].called_once
         assert adapters["journaalposten"].called_once
         assert adapters["transacties"].called_once
-        assert adapters["grootboekrekeningen"].called
+        # assert adapters["grootboekrekeningen"].called
+
+
+def test_create_journaalpost_afspraak_journaalpost_exists(client):
+    with requests_mock.Mocker() as mock:
+        adapters = setup_services(mock)
+
+        response = client.post(
+            "/graphql",
+            json={
+                "query": """
+mutation test($input:CreateJournaalpostAfspraakInput!) {
+  createJournaalpostAfspraak(input:$input) {
+    ok
+    journaalpost {
+      id
+      afspraak { id }
+      transaction { id }
+    }
+  }
+}""",
+                "variables": {"input": {"transactionId": 33, "afspraakId": 12}},
+            },
+            content_type="application/json",
+        )
+        assert adapters["grootboekrekeningen"].call_count == 0
+        assert adapters["journaalposten_get"].called_once
+        assert adapters["journaalposten"].call_count == 0
+        assert adapters["afspraken"].called_once
+        assert adapters["transacties"].called_once
+        assert response.json == {
+            "data": {"createJournaalpostAfspraak": None},
+            "errors": [
+                {
+                    "locations": [{"column": 3, "line": 3}],
+                    "message": "journaalpost already exists for transaction",
+                    "path": ["createJournaalpostAfspraak"],
+                }
+            ],
+        }
