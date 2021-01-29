@@ -22,5 +22,6 @@ setup(
         'python-dateutil>=2.8.1',
         'sepaxml>=2.3.0',
         'dataclasses-json>=0.5.2',
+        'schwifty>=2021.01.0',
     ],
 )
