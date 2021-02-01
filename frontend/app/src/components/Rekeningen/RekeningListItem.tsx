@@ -1,4 +1,4 @@
-import {CloseIcon, DeleteIcon} from "@chakra-ui/icons";
+import {DeleteIcon} from "@chakra-ui/icons";
 import {
 	AlertDialog,
 	AlertDialogBody,
@@ -13,6 +13,7 @@ import {
 	IconButton,
 	TableRowProps,
 	Td,
+	Tooltip,
 	Tr,
 	useToast
 } from "@chakra-ui/react";
@@ -89,7 +90,9 @@ const RekeningListItem: React.FC<RekeningListItemProps> = ({rekening, onDelete, 
 		<Tr {...props}>
 			<Td>
 				<Editable defaultValue={rekening.rekeninghouder} flex={1} submitOnBlur={true} onSubmit={onSubmit}>
-					<EditablePreview />
+					<Tooltip label={t("actions.clickToEdit")} placement={"right"} hasArrow={true}>
+						<EditablePreview />
+					</Tooltip>
 					<EditableInput {...rekeninghouder.bind} name={"rekeningId"} id={"rekeningId"} />
 				</Editable>
 			</Td>

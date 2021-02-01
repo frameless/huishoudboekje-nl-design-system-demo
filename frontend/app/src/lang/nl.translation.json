@@ -82,7 +82,8 @@
         "disconnect": "Koppeling verwijderen",
         "backToList": "Terug naar overzicht",
         "clearSearch": "Zoekopdracht wissen",
-        "backToHome": "Terug naar de hoofdpagina"
+        "backToHome": "Terug naar de hoofdpagina",
+        "clickToEdit": "Klik om te wijzigen"
     },
     "forms": {
         "agreements": {
