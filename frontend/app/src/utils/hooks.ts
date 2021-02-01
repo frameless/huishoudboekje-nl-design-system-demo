@@ -63,3 +63,7 @@ export const useAuth = () => {
 		user, error, loading, reset
 	}), [user, error, loading, reset]);
 };
+
+export const useValue = (condition, values) => {
+	return values[condition];
+}

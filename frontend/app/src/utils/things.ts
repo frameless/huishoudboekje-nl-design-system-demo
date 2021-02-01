@@ -1,9 +1,11 @@
-import { useToken } from "@chakra-ui/react";
+import {useToken} from "@chakra-ui/react";
+import arrayToSentence from "array-to-sentence";
 import {friendlyFormatIBAN} from "ibantools";
-import moment from "moment";
+import moment, {Moment} from "moment";
 import {createContext} from "react";
-import {BankTransaction, Gebruiker, Interval, IntervalInput} from "../generated/graphql";
-import {IntervalType} from "../models";
+import {Granularity, periodFormatForGranularity} from "../components/Rapportage/Aggregator";
+import {BankTransaction, Gebruiker, Interval, IntervalInput, Rubriek} from "../generated/graphql";
+import {IntervalType} from "../models/models";
 
 export const searchFields = (term: string, fields: string[]): boolean => {
 	const _fields = fields.filter(f => f);
@@ -113,7 +115,8 @@ export const sortBankTransactions = (a: BankTransaction, b: BankTransaction) => 
 };
 
 export const formatBurgerName = (burger: Gebruiker, fullName = false) => {
-	return [fullName ? burger.voornamen : burger.voorletters, burger.achternaam].join(" ");
+	const voorletters = burger.voorletters?.replace(/\./g, "").split("").join(". ") + ".";
+	return [fullName ? burger.voornamen : voorletters, burger.achternaam].join(" ");
 };
 
 export const intervalString = ((interval: Interval | undefined, t: (text, ...tProps) => string): string => {
@@ -135,7 +138,7 @@ export const formatIBAN = (iban?: string) => {
 }
 
 export const useReactSelectStyles = () => {
-	const inputBorderColor = useToken("colors","gray.200");
+	const inputBorderColor = useToken("colors", "gray.200");
 
 	return ({
 		control: (provided) => ({
@@ -143,4 +146,29 @@ export const useReactSelectStyles = () => {
 			borderColor: inputBorderColor
 		})
 	});
+};
+
+export const humanJoin = (x) => arrayToSentence(x, {
+	lastSeparator: " en ",
+});
+
+export const getRubriekForTransaction = (t: BankTransaction): Rubriek | undefined => t.journaalpost?.grootboekrekening?.rubriek || t.journaalpost?.afspraak?.rubriek;
+
+export const prepareChartData = (startDate: Moment, endDate: Moment, granularity: Granularity, columns: number = 1): any[] => {
+	const nPeriods = {
+		[Granularity.Monthly]: (Math.abs(endDate.endOf("month").diff(startDate.startOf("month"), "month")) + 1),
+		[Granularity.Weekly]: (Math.abs(endDate.endOf("month").diff(startDate.startOf("month"), "week")) + 1),
+		[Granularity.Daily]: (Math.abs(endDate.endOf("month").diff(startDate.startOf("month"), "day")) + 1),
+	}[granularity];
+
+	const timeUnits: Record<Granularity, any> = {
+		[Granularity.Monthly]: "month",
+		[Granularity.Weekly]: "week",
+		[Granularity.Daily]: "day",
+	};
+
+	return new Array(nPeriods).fill(0).map((_, i) => [
+		moment(startDate).add(i, timeUnits[granularity]).startOf(timeUnits[granularity]).format(periodFormatForGranularity[granularity]),
+		...new Array(columns).fill(0)
+	]);
 };

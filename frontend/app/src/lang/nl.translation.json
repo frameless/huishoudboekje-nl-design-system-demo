@@ -246,6 +246,7 @@
         "year_plural": "jaar",
         "every": "Elk(e)",
         "choose": "Kies een periode",
+        "period": "Periode",
         "every-day": "Elke dag",
         "every-day_plural": "Elke {{count}} dagen",
         "every-week": "Elke week",
@@ -286,6 +287,7 @@
         "description": "Omschrijving"
     },
     "booking": "Boeking",
+    "unbooked": "Ongeboekt",
     "burgers": {
         "burgers": "Burgers"
     },
@@ -300,13 +302,46 @@
             "description": "De pagina die je zoekt kan niet worden gevonden."
         }
     },
+    "charts": {
+        "inkomstenUitgaven": {
+            "income": "Inkomsten",
+            "expenses": "Uitgaven",
+            "unbooked": "Ongeboekt",
+            "title": "Inkomsten en uitgaven",
+            "helperText": "Een overzicht van inkomsten en uitgaven over tijd."
+        },
+        "filterBurgers": "Filter op burgers",
+        "optionAllBurgers": "Alle burgers",
+        "filterRubrics": "Filter op rubriek",
+        "optionAllRubrics": "Alle rubrieken",
+        "granularity": "Granulariteit",
+        "saldo": {
+            "title": "Saldo",
+            "helperText": "Een overzicht van saldo over tijd."
+        }
+    },
+    "granularity": {
+        "daily": "Dag",
+        "weekly": "Week",
+        "monthly": "Maand"
+    },
     "sidebar": {
+        "rapportage": "Rapportage",
         "burgers": "Burgers",
         "organisaties": "Organisaties",
         "bankzaken": "Bankzaken",
         "bronbestanden": "Bronbestanden",
         "overschrijvingen": "Overschrijvingen",
-        "huishoudboekjes": "Huishoudboekjes",
         "configuratie": "Configuratie"
-    }
+    },
+    "sections": {
+        "filterOptions": {
+            "title": "Filteropties",
+            "helperText": "Selecteer een tijdsperiode, burger en/of rubriek om specifiekere gegevens in te zien."
+        }
+    },
+    "balance": "Balans",
+    "allBurgers": "Alle burgers",
+    "total": "Totaal",
+    "saldo": "Saldo"
 }

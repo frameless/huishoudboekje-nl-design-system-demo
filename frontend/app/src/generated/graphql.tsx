@@ -866,7 +866,7 @@ export type RekeningFragment = (
 
 export type GrootboekrekeningFragment = (
   { __typename?: 'Grootboekrekening' }
-  & Pick<Grootboekrekening, 'id' | 'naam' | 'omschrijving' | 'referentie'>
+  & Pick<Grootboekrekening, 'id' | 'naam' | 'credit' | 'omschrijving' | 'referentie'>
   & { rubriek?: Maybe<(
     { __typename?: 'Rubriek' }
     & Pick<Rubriek, 'id' | 'naam'>
@@ -1556,6 +1556,42 @@ export type GetExportsQuery = (
   )>>> }
 );
 
+export type GetReportingDataQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetReportingDataQuery = (
+  { __typename?: 'RootQuery' }
+  & { gebruikers?: Maybe<Array<Maybe<(
+    { __typename?: 'Gebruiker' }
+    & GebruikerFragment
+  )>>>, bankTransactions?: Maybe<Array<Maybe<(
+    { __typename?: 'BankTransaction' }
+    & { journaalpost?: Maybe<(
+      { __typename?: 'Journaalpost' }
+      & Pick<Journaalpost, 'id'>
+      & { afspraak?: Maybe<(
+        { __typename?: 'Afspraak' }
+        & { rubriek?: Maybe<(
+          { __typename?: 'Rubriek' }
+          & Pick<Rubriek, 'id' | 'naam'>
+        )> }
+        & AfspraakFragment
+      )>, grootboekrekening?: Maybe<(
+        { __typename?: 'Grootboekrekening' }
+        & { rubriek?: Maybe<(
+          { __typename?: 'Rubriek' }
+          & Pick<Rubriek, 'id' | 'naam'>
+        )> }
+        & GrootboekrekeningFragment
+      )> }
+    )> }
+    & BankTransactionFragment
+  )>>>, rubrieken?: Maybe<Array<Maybe<(
+    { __typename?: 'Rubriek' }
+    & Pick<Rubriek, 'id' | 'naam'>
+  )>>> }
+);
+
 export const RekeningFragmentDoc = gql`
     fragment Rekening on Rekening {
   id
@@ -1567,6 +1603,7 @@ export const GrootboekrekeningFragmentDoc = gql`
     fragment Grootboekrekening on Grootboekrekening {
   id
   naam
+  credit
   omschrijving
   referentie
   rubriek {
@@ -3025,3 +3062,62 @@ export function useGetExportsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type GetExportsQueryHookResult = ReturnType<typeof useGetExportsQuery>;
 export type GetExportsLazyQueryHookResult = ReturnType<typeof useGetExportsLazyQuery>;
 export type GetExportsQueryResult = Apollo.QueryResult<GetExportsQuery, GetExportsQueryVariables>;
+export const GetReportingDataDocument = gql`
+    query getReportingData {
+  gebruikers {
+    ...Gebruiker
+  }
+  bankTransactions {
+    ...BankTransaction
+    journaalpost {
+      id
+      afspraak {
+        ...Afspraak
+        rubriek {
+          id
+          naam
+        }
+      }
+      grootboekrekening {
+        ...Grootboekrekening
+        rubriek {
+          id
+          naam
+        }
+      }
+    }
+  }
+  rubrieken {
+    id
+    naam
+  }
+}
+    ${GebruikerFragmentDoc}
+${BankTransactionFragmentDoc}
+${AfspraakFragmentDoc}
+${GrootboekrekeningFragmentDoc}`;
+
+/**
+ * __useGetReportingDataQuery__
+ *
+ * To run a query within a React component, call `useGetReportingDataQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetReportingDataQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetReportingDataQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetReportingDataQuery(baseOptions?: Apollo.QueryHookOptions<GetReportingDataQuery, GetReportingDataQueryVariables>) {
+        return Apollo.useQuery<GetReportingDataQuery, GetReportingDataQueryVariables>(GetReportingDataDocument, baseOptions);
+      }
+export function useGetReportingDataLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetReportingDataQuery, GetReportingDataQueryVariables>) {
+          return Apollo.useLazyQuery<GetReportingDataQuery, GetReportingDataQueryVariables>(GetReportingDataDocument, baseOptions);
+        }
+export type GetReportingDataQueryHookResult = ReturnType<typeof useGetReportingDataQuery>;
+export type GetReportingDataLazyQueryHookResult = ReturnType<typeof useGetReportingDataLazyQuery>;
+export type GetReportingDataQueryResult = Apollo.QueryResult<GetReportingDataQuery, GetReportingDataQueryVariables>;

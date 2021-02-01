@@ -1,33 +1,14 @@
 import {DownloadIcon} from "@chakra-ui/icons";
-import {Box, Button, chakra, Divider, FormControl, FormLabel, IconButton, Input, Stack, Text, useToast} from "@chakra-ui/react";
+import {Box, Button, Divider, FormControl, FormLabel, IconButton, Input, Stack, Table, Tbody, Td, Text, Th, Thead, Tr, useToast} from "@chakra-ui/react";
 import moment from "moment";
 import React from "react";
 import DatePicker from "react-datepicker";
 import {useInput, useIsMobile} from "react-grapple";
 import {useTranslation} from "react-i18next";
-import {GrDocumentText} from "react-icons/all";
 import {Export, useCreateExportOverschrijvingenMutation, useGetExportsQuery} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import {Regex} from "../../../utils/things";
 import {FormLeft, FormRight, Label} from "../../Forms/FormLeftRight";
-
-const [Table, Thead, Tbody, Tr, Th, Td] = [
-	chakra("table",{
-		baseStyle: {
-			width: "100%"
-		}
-	}),
-	chakra("thead"),
-	chakra("tbody"),
-	chakra("tr"),
-	chakra("th", {
-		baseStyle: {
-			fontWeight: 400,
-			textAlign: "left",
-		}
-	}),
-	chakra("td")
-];
 
 const BookingsExport = () => {
 	const {t} = useTranslation();
@@ -121,9 +102,9 @@ const BookingsExport = () => {
 							<Table>
 								<Thead>
 									<Tr>
-										<Th><Label>{t("exports.period")}</Label></Th>
-										<Th><Label>{t("exports.nOverschrijvingen")}</Label></Th>
-										<Th><Label>{t("exports.dateCreated")}</Label></Th>
+										<Th>{t("exports.period")}</Th>
+										<Th>{t("exports.nOverschrijvingen")}</Th>
+										<Th>{t("exports.dateCreated")}</Th>
 										<Th />
 									</Tr>
 								</Thead>

@@ -17,7 +17,7 @@ export enum RouteNames {
 	export = "exporteren",
 
 	// Not in use yet
-	balances = "huishoudboekjes",
+	rapportage = "rapportage",
 	settings = "instellingen",
 }
 
@@ -45,14 +45,12 @@ const Routes = {
 	Bookings: `/${RouteNames.banking}/${RouteNames.bookings}`,
 	BookingsExport: `/${RouteNames.banking}/${RouteNames.bookings}/${RouteNames.export}`,
 	Settings: `/${RouteNames.settings}`,
+	Rapportage: `/${RouteNames.rapportage}`,
 
 	NotFound: `/${RouteNames.notFound}`,
 
 	// Dev things
 	...(isDev && {GraphiQL: "/api/graphql"}),
-
-	// Not in use yet
-	Balances: `/${RouteNames.balances}`,
 };
 
 export default Routes;

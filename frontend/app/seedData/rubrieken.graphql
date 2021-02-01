@@ -24,5 +24,8 @@ mutation importRubrieken {
     rubriek9: createRubriek(naam: "Milieuheffingen en zuiveringsleges", grootboekrekeningId: "WBedHuiMez"){
         ok
     }
+    rubriek10: createRubriek(naam: "Leefgeld", grootboekrekeningId: "BEivKapProPok"){
+        ok
+    }
 
 }

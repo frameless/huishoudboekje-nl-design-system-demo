@@ -1,8 +1,9 @@
-import {DeleteIcon} from "@chakra-ui/icons";
+import {DeleteIcon, WarningIcon} from "@chakra-ui/icons";
 import {
 	Box,
 	BoxProps,
 	Divider,
+	Flex,
 	Heading,
 	IconButton,
 	Modal,
@@ -17,6 +18,9 @@ import {
 	TabPanel,
 	TabPanels,
 	Tabs,
+	Tag,
+	TagLabel,
+	TagLeftIcon,
 	Text,
 	Tooltip,
 	useDisclosure,
@@ -172,7 +176,7 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }>
 									const transactionId = bt?.id;
 									const grootboekrekeningId = foundRubriek?.grootboekrekening?.id;
 
-									if(transactionId && grootboekrekeningId){
+									if (transactionId && grootboekrekeningId) {
 										handleMutation(createJournaalpostGrootboekrekening({
 											variables: {transactionId, grootboekrekeningId}
 										}), () => {
@@ -185,7 +189,7 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }>
 									const transactionId = bt?.id;
 									const afspraakId = afspraak.id;
 
-									if(transactionId && afspraakId){
+									if (transactionId && afspraakId) {
 										handleMutation(createJournaalpostAfspraak({
 											variables: {transactionId, afspraakId}
 										}), () => {
@@ -222,7 +226,9 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }>
 			</ModalContent>
 		</Modal>
 
-		<Box px={2} mx={-2} _hover={{
+		<Box px={2} mx={-2} {...!bt.journaalpost && {
+			// bg: "red.50"
+		}} _hover={{
 			bg: "gray.100"
 		}}>
 			<Stack direction={"row"} alignItems={"center"} justifyContent={"center"} {...props} onClick={onClick} cursor={"pointer"}>
@@ -239,11 +245,18 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }>
 				)}
 				</Box>
 				{!isMobile && (
-					<Box flex={1}>
-						{bt.journaalpost && (
+					<Flex flex={1} width={"100%"} alignItems={"center"}>
+						{bt.journaalpost ? (
 							<Text fontSize={"sm"}>{bt.journaalpost.afspraak?.rubriek?.naam || bt.journaalpost.grootboekrekening?.rubriek?.naam}</Text>
+						) : (
+							<Tag colorScheme={"red"} size={"sm"} variant={"subtle"}>
+								<TagLeftIcon boxSize="12px" as={WarningIcon} />
+								<TagLabel>
+									{t("unbooked")}
+								</TagLabel>
+							</Tag>
 						)}
-					</Box>
+					</Flex>
 				)}
 				<Box flex={0} minWidth={120}>
 					<Currency minWidth={120} value={bt.bedrag} />

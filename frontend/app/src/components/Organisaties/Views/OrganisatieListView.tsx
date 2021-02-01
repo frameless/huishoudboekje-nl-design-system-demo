@@ -21,7 +21,7 @@ const OrganisatieListView: React.FC<BoxProps & { organisaties: Organisatie[], sh
 				</Box>
 			)}
 			{organisaties.map((o, i) => (
-				<GridCard key={i} justifyContent={"flex-start"} onClick={() => {
+				<GridCard key={i} justifyContent={"center"} onClick={() => {
 					push(Routes.Organisatie(o.id))
 				}}>
 					<Stack spacing={1}>

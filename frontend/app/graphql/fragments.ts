@@ -12,6 +12,7 @@ export const GrootboekrekeningFragment = gql`
     fragment Grootboekrekening on Grootboekrekening {
         id
         naam
+        credit
         omschrijving
         referentie
         rubriek{

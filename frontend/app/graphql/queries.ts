@@ -174,3 +174,39 @@ export const GetExportsQuery = gql`
         }
     }
 `;
+
+export const GetReportingDataQuery = gql`
+    query getReportingData {
+        gebruikers {
+            ...Gebruiker
+        }
+        bankTransactions{
+            ...BankTransaction
+            journaalpost {
+                id
+                afspraak {
+                    ...Afspraak
+                    rubriek{
+                        id
+                        naam
+                    }
+                }
+                grootboekrekening {
+                    ...Grootboekrekening
+                    rubriek {
+                        id
+                        naam
+                    }
+                }
+            }
+        }
+        rubrieken {
+            id
+            naam
+        }
+    }
+
+    ${BankTransactionFragment}
+    ${GrootboekrekeningFragment}
+    ${GebruikerFragment}
+`;
