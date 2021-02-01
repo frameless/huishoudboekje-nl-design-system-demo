@@ -1,4 +1,4 @@
-import {Box, BoxProps, HStack, Stack, VStack} from "@chakra-ui/react";
+import {Box, BoxProps, Stack} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {FaRegBuilding, FiActivity, GrGraphQl, MdCreditCard, RiBarChartFill, RiUserLine, TiCog} from "react-icons/all";
@@ -15,13 +15,12 @@ const Sidebar: React.FC<BoxProps> = (props) => {
 			<SidebarLink to={Routes.Organisaties} icon={FaRegBuilding}>{t("sidebar.organisaties")}</SidebarLink>
 			<Stack>
 				<SidebarLink exactMatch to={Routes.Transactions} icon={MdCreditCard}>{t("sidebar.bankzaken")}</SidebarLink>
-				<HStack direction={"row"}>
-					<Box pl={5} ml={7}>&nbsp;</Box>
-					<VStack>
+				<Box pl={"27px"}>
+					<Stack spacing={1} borderLeft={"1px solid"} borderLeftColor={"gray.400"} pl={"21px"}>
 						<SidebarLink size={"sm"} to={Routes.CSMs}>{t("sidebar.bronbestanden")}</SidebarLink>
 						<SidebarLink size={"sm"} to={Routes.BookingsExport}>{t("sidebar.overschrijvingen")}</SidebarLink>
-					</VStack>
-				</HStack>
+					</Stack>
+				</Box>
 			</Stack>
 			<SidebarLink to={Routes.Rapportage} icon={RiBarChartFill}>{t("sidebar.rapportage")}</SidebarLink>
 			<SidebarLink to={Routes.AuditTrail} icon={FiActivity}>{t("sidebar.gebeurtenissen")}</SidebarLink>
