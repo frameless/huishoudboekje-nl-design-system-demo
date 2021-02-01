@@ -5,7 +5,16 @@ CHART_DEPENDENCIES := $(shell find helm -name 'Chart.yaml' | xargs grep -l 'depe
 NAMESPACE := huishoudboekje
 RELEASE := huishoudboekje
 SERVICE_MODULES := $(patsubst services/%/Makefile,%,$(wildcard services/*/Makefile))
-THEME := nijmegen
+THEME := sloothuizen
+SERVICE_CONTEXT_IMAGES := $(SERVICE_MODULES)
+DIRECT_CONTEXT_IMAGES := $(patsubst %/Dockerfile,%,$(wildcard */Dockerfile))
+IMAGES := $(DIRECT_CONTEXT_IMAGES) $(SERVICE_CONTEXT_IMAGES)
+
+IMAGE_TAG ?= dev
+COMPONENT_TAG ?= dev
+COMPONENT_COMMIT_HASH ?= undefined
+COMPONENT_VERSION ?= 0.20.0
+DOCKER_PROXY ?=
 
 # Main target to build and deploy Huishoudboekje locally
 .PHONY: all
@@ -53,10 +62,6 @@ helm/charts/%: helm/charts/%/Chart.lock
 	helm dependency update $(@D)
 	helm dependency build $(@D)
 
-.PHONY: docker-images
-docker-images: docker-compose.yaml
-	docker-compose -f $< build --parallel
-
 helm/theme.yaml: frontend/theme/$(THEME) FORCE
 	helm/theme-yaml.sh $< > $@
 
@@ -64,3 +69,44 @@ preparedb:
 	for service in $(SERVICE_MODULES); do make -C services/$$service $@; done
 
 FORCE:
+
+.PHONY: docker-images
+docker-images: $(patsubst %,build/%.direct_context_image,$(DIRECT_CONTEXT_IMAGES))
+docker-images: $(patsubst %,build/%.service_context_image,$(SERVICE_CONTEXT_IMAGES))
+
+$(patsubst %,%/.direct_context_image,$(DIRECT_CONTEXT_IMAGES)):
+$(patsubst %,%/.service_context_image,$(SERVICE_CONTEXT_IMAGES)):
+
+build/%.direct_context_image: %/Dockerfile
+	@echo "Building $<"
+	docker build \
+		--tag $(REGISTRY_PREFIX)/$(<D):$(IMAGE_TAG) \
+		--build-arg "COMPONENT_TAG=$(COMPONENT_TAG)" \
+		--build-arg "COMPONENT_COMMIT_HASH=$(COMPONENT_COMMIT_HASH)" \
+		--build-arg "COMPONENT_VERSION=$(COMPONENT_VERSION)" \
+		--build-arg "DOCKER_PROXY=$(DOCKER_PROXY)" \
+		$(<D)
+	mkdir -p $(@D)
+	echo $(REGISTRY_PREFIX)/$(<D):$(IMAGE_TAG) > $@
+
+build/%.service_context_image: services/%/Dockerfile
+	@echo "Building $<"
+	docker build \
+		--tag $(REGISTRY_PREFIX)/$(subst _,-,$(patsubst services/%,%,$(<D))):$(IMAGE_TAG) \
+		--build-arg "COMPONENT_TAG=$(COMPONENT_TAG)" \
+		--build-arg "COMPONENT_COMMIT_HASH=$(COMPONENT_COMMIT_HASH)" \
+		--build-arg "COMPONENT_VERSION=$(COMPONENT_VERSION)" \
+		--build-arg "DOCKER_PROXY=$(DOCKER_PROXY)" \
+		--file $< \
+		services
+	mkdir -p $(@D)
+	echo $(REGISTRY_PREFIX)/$(subst _,-,$(patsubst services/%,%,$(<D))):$(IMAGE_TAG) > $@
+
+.PHONY: docker-push
+docker-push: $(patsubst %,build/%.direct_push,$(DIRECT_CONTEXT_IMAGES))
+docker-push: $(patsubst %,build/%.service_push,$(SERVICE_CONTEXT_IMAGES))
+
+build/%.service_push: build/%.service_context_image
+	docker push $(shell cat $<)
+build/%.direct_push: build/%.direct_context_image
+	docker push $(shell cat $<)

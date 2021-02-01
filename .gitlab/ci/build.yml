@@ -23,9 +23,9 @@
     - export DOCKER_CONFIG=/tmp/docker-config-$CI_JOB_ID
     - export DOCKER_PROXY="${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/"
     - docker login -u "$CI_DEPENDENCY_PROXY_USER" --password-stdin "$CI_DEPENDENCY_PROXY_SERVER" <<< "$CI_DEPENDENCY_PROXY_PASSWORD"
-    - docker-compose build --parallel
+    - make --jobs --output-sync=line docker-images
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-    - docker-compose push
+    - make docker-push
   only:
     - branches@commonground/huishoudboekje/app-new
 

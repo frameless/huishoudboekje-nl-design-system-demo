@@ -109,7 +109,7 @@ spec:
         - name: {{ printf "%s-sample-data" .Chart.Name | quote }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "registry.gitlab.com/commonground/huishoudboekje/app-new/sample_data:{{ include "organisatie-service.imageTag" . }}"
+          image: "registry.gitlab.com/commonground/huishoudboekje/app-new/sample-data:{{ include "organisatie-service.imageTag" . }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: PGDATABASE

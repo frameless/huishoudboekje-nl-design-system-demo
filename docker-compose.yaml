@@ -64,13 +64,8 @@ services:
 
   python-postgres:
     build:
-      context: .gitlab/python-postgres
+      context: python-postgres
     image: "${IMAGE_PREFIX}python-postgres:${IMAGE_TAG}"
-
-  docs:
-    build:
-      context: docs
-    image: "${IMAGE_PREFIX}docs:${IMAGE_TAG}"
 
   sample_data:
     build:
