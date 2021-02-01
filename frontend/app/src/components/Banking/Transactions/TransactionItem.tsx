@@ -23,11 +23,11 @@ import {
 	TagLeftIcon,
 	Text,
 	Tooltip,
+	useBreakpointValue,
 	useDisclosure,
 	useToast
 } from "@chakra-ui/react";
 import React, {useContext, useState} from "react";
-import {useIsMobile} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
 import {
@@ -51,7 +51,7 @@ import TransactionDetailsView from "./TransactionDetailsView";
 
 const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }> = ({bankTransaction: bt, ...props}) => {
 	const {t} = useTranslation();
-	const isMobile = useIsMobile();
+	const isMobile = useBreakpointValue([true, null, null, false]);
 	const toast = useToast();
 	const {isOpen, onOpen, onClose} = useDisclosure();
 	const {refetch} = useContext(TransactionsContext);

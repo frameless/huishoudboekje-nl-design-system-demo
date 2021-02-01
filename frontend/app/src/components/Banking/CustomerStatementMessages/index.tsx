@@ -1,15 +1,14 @@
 import {AddIcon} from "@chakra-ui/icons";
 import {Box, Button, Divider, Input, Stack, useToast} from "@chakra-ui/react";
 import React, {useRef} from "react";
-import {useIsMobile} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {CustomerStatementMessage, useCreateCustomerStatementMessageMutation, useGetAllCsmsQuery} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
+import Section from "../../Layouts/Section";
 import CsmListView from "./CsmListView";
 
 const CustomerStatementMessages = () => {
-	const isMobile = useIsMobile();
 	const {t} = useTranslation();
 	const toast = useToast();
 	const fileUploadInput = useRef<HTMLInputElement>(null);
@@ -54,8 +53,8 @@ const CustomerStatementMessages = () => {
 
 	return (
 		<Stack spacing={5}>
-			<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
-				<Stack direction={isMobile ? "column" : "row"} spacing={5}>
+			<Section>
+				<Stack direction={["column", "row"]} spacing={5}>
 					<FormLeft title={t("forms.banking.sections.customerStatementMessages.title")} helperText={t("forms.banking.sections.customerStatementMessages.detailText")} />
 					<FormRight>
 						<Stack spacing={5}>
@@ -76,7 +75,7 @@ const CustomerStatementMessages = () => {
 						</Queryable>
 					</FormRight>
 				</Stack>
-			</Stack>
+			</Section>
 		</Stack>
 	);
 };

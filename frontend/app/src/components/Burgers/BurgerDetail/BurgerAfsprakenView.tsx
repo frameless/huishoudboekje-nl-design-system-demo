@@ -1,7 +1,6 @@
 import {AddIcon, TriangleDownIcon, TriangleUpIcon} from "@chakra-ui/icons";
 import {Box, Button, Stack, StackProps, Tab, TabList, TabPanel, TabPanels, Tabs, useToast} from "@chakra-ui/react";
 import React, {useState} from "react";
-import {useIsMobile} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {useHistory} from "react-router-dom";
 import Routes from "../../../config/routes";
@@ -11,7 +10,6 @@ import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
 
 const BurgerAfsprakenView: React.FC<StackProps & { burger: Gebruiker, refetch: VoidFunction }> = ({burger, refetch, ...props}) => {
 	const {t} = useTranslation();
-	const isMobile = useIsMobile();
 	const toast = useToast();
 	const {push} = useHistory();
 	const [tabIndex, setTabIndex] = useState(0);
@@ -49,7 +47,7 @@ const BurgerAfsprakenView: React.FC<StackProps & { burger: Gebruiker, refetch: V
 	};
 
 	return (
-		<Stack direction={isMobile ? "column" : "row"} {...props}>
+		<Stack direction={["column", "row"]} {...props}>
 			<FormLeft title={t("forms.burgers.sections.agreements.title")} helperText={t("forms.burgers.sections.agreements.detailText")} />
 			<FormRight justifyContent={"center"}>
 				{afspraken && afspraken.length > 0 && (

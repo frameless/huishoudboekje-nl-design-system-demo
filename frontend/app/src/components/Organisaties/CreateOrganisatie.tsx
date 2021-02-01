@@ -1,21 +1,22 @@
-import {Box, Button, Divider, FormLabel, Input, Stack, Tooltip, useToast} from "@chakra-ui/react";
+import {Box, Button, Divider, FormLabel, Input, Stack, Tooltip, useBreakpointValue, useToast} from "@chakra-ui/react";
 import React from "react";
-import {useInput, useIsMobile, useToggle, Validators} from "react-grapple";
+import {useInput, useToggle, Validators} from "react-grapple";
 import {UseInput} from "react-grapple/dist/hooks/useInput";
 import {useTranslation} from "react-i18next";
 import {useHistory} from "react-router-dom";
 import Routes from "../../config/routes";
 import {useCreateOrganisatieMutation} from "../../generated/graphql";
-import {MOBILE_BREAKPOINT, Regex} from "../../utils/things";
+import {Regex} from "../../utils/things";
 import BackButton from "../BackButton";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
 import Page from "../Layouts/Page";
+import Section from "../Layouts/Section";
 
 // Todo: add more detailed error message per field?
 const CreateOrganisatie = () => {
 	const {t} = useTranslation();
 	const {push} = useHistory();
-	const isMobile = useIsMobile(MOBILE_BREAKPOINT);
+	const isMobile = useBreakpointValue([true, null, null, false]);
 	const toast = useToast();
 	const [isSubmitted, toggleSubmitted] = useToggle(false);
 
@@ -112,11 +113,11 @@ const CreateOrganisatie = () => {
 	return (
 		<Page title={t("forms.organizations.title")} backButton={<BackButton to={Routes.Organisaties} />}>
 			<Box as={"form"} onSubmit={onSubmit}>
-				<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
-					<Stack direction={isMobile ? "column" : "row"} spacing={2}>
+				<Section>
+					<Stack direction={["column", "row"]} spacing={2}>
 						<FormLeft title={t("forms.organizations.sections.organizational.title")} helperText={t("forms.organizations.sections.organizational.helperText")} />
 						<FormRight>
-							<Stack spacing={2} direction={isMobile ? "column" : "row"}>
+							<Stack spacing={2} direction={["column", "row"]}>
 								<Stack spacing={1} flex={1}>
 									<FormLabel htmlFor={"kvkNumber"}>{t("forms.organizations.fields.kvkNumber")}</FormLabel>
 									<Tooltip label={t("forms.organizations.tooltips.kvkNumber")} aria-label={t("forms.organizations.fields.kvkNumber")} hasArrow
@@ -129,7 +130,7 @@ const CreateOrganisatie = () => {
 									<Input isInvalid={isInvalid(companyName)} {...companyName.bind} id="companyName" />
 								</Stack>
 							</Stack>
-							<Stack spacing={2} direction={isMobile ? "column" : "row"}>
+							<Stack spacing={2} direction={["column", "row"]}>
 								<Stack spacing={1} flex={1}>
 									<FormLabel htmlFor={"displayName"}>{t("forms.organizations.fields.displayName")}</FormLabel>
 									<Input isInvalid={isInvalid(displayName)} {...displayName.bind} id="displayName" />
@@ -140,10 +141,10 @@ const CreateOrganisatie = () => {
 
 					<Divider />
 
-					<Stack direction={isMobile ? "column" : "row"} spacing={2}>
+					<Stack direction={["column", "row"]} spacing={2}>
 						<FormLeft title={t("forms.organizations.sections.contact.title")} helperText={t("forms.organizations.sections.contact.helperText")} />
 						<FormRight>
-							<Stack spacing={2} direction={isMobile ? "column" : "row"}>
+							<Stack spacing={2} direction={["column", "row"]}>
 								<Stack spacing={1} flex={2}>
 									<FormLabel htmlFor={"street"}>{t("forms.organizations.fields.street")}</FormLabel>
 									<Input isInvalid={isInvalid(street)} {...street.bind} id="street" />
@@ -153,7 +154,7 @@ const CreateOrganisatie = () => {
 									<Input isInvalid={isInvalid(houseNumber)} {...houseNumber.bind} id="houseNumber" />
 								</Stack>
 							</Stack>
-							<Stack spacing={2} direction={isMobile ? "column" : "row"}>
+							<Stack spacing={2} direction={["column", "row"]}>
 								<Stack spacing={1} flex={1}>
 									<FormLabel htmlFor={"zipcode"}>{t("forms.organizations.fields.zipcode")}</FormLabel>
 									<Tooltip label={t("forms.organizations.tooltips.zipcode")} aria-label={t("forms.organizations.fields.zipcode")} hasArrow
@@ -171,7 +172,7 @@ const CreateOrganisatie = () => {
 
 					<Divider />
 
-					<Stack direction={isMobile ? "column" : "row"} spacing={2}>
+					<Stack direction={["column", "row"]} spacing={2}>
 						<FormLeft />
 						<FormRight>
 							<Stack direction={"row"} spacing={1} justifyContent={"flex-end"}>
@@ -179,7 +180,7 @@ const CreateOrganisatie = () => {
 							</Stack>
 						</FormRight>
 					</Stack>
-				</Stack>
+				</Section>
 			</Box>
 		</Page>
 	);

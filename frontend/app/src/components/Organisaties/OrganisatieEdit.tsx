@@ -1,6 +1,6 @@
-import {Box, Button, Divider, FormLabel, Input, Stack, Tooltip, useToast} from "@chakra-ui/react";
+import {Box, Button, Divider, FormLabel, Input, Stack, Tooltip, useBreakpointValue, useToast} from "@chakra-ui/react";
 import React from "react";
-import {useInput, useIsMobile, Validators} from "react-grapple";
+import {useInput, Validators} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {Redirect, useHistory, useParams} from "react-router-dom";
 import Routes from "../../config/routes";
@@ -13,11 +13,11 @@ import Page from "../Layouts/Page";
 import Section from "../Layouts/Section";
 
 const OrganisatieEdit = () => {
-	const isMobile = useIsMobile();
+	const isMobile = useBreakpointValue([true, null, null, false]);
 	const {t} = useTranslation();
 	const {id} = useParams<{ id: string }>();
 	const toast = useToast();
-	const {push}= useHistory();
+	const {push} = useHistory();
 
 	const kvkNumber = useInput({
 		defaultValue: "",
@@ -123,10 +123,10 @@ const OrganisatieEdit = () => {
 			<Page backButton={<BackButton to={Routes.Organisatie(parseInt(id))} />} title={organisatie.weergaveNaam || ""}>
 				<Box as={"form"} onSubmit={onSubmit}>
 					<Section>
-						<Stack direction={isMobile ? "column" : "row"} spacing={2}>
+						<Stack direction={["column", "row"]} spacing={2}>
 							<FormLeft title={t("forms.organizations.sections.organizational.title")} helperText={t("forms.organizations.sections.organizational.helperText")} />
 							<FormRight>
-								<Stack spacing={2} direction={isMobile ? "column" : "row"}>
+								<Stack spacing={2} direction={["column", "row"]}>
 									<Stack spacing={1} flex={1}>
 										<FormLabel htmlFor={"kvkNumber"}>{t("forms.organizations.fields.kvkNumber")}</FormLabel>
 										<Tooltip label={t("forms.organizations.tooltips.kvkNumber")} aria-label={t("forms.organizations.fields.kvkNumber")} hasArrow
@@ -139,7 +139,7 @@ const OrganisatieEdit = () => {
 										<Input isInvalid={isInvalid(companyName)} {...companyName.bind} id="companyName" />
 									</Stack>
 								</Stack>
-								<Stack spacing={2} direction={isMobile ? "column" : "row"}>
+								<Stack spacing={2} direction={["column", "row"]}>
 									<Stack spacing={1} flex={1}>
 										<FormLabel htmlFor={"displayName"}>{t("forms.organizations.fields.displayName")}</FormLabel>
 										<Input isInvalid={isInvalid(displayName)} {...displayName.bind} id="displayName" />
@@ -150,10 +150,10 @@ const OrganisatieEdit = () => {
 
 						<Divider />
 
-						<Stack direction={isMobile ? "column" : "row"} spacing={2}>
+						<Stack direction={["column", "row"]} spacing={2}>
 							<FormLeft title={t("forms.organizations.sections.contact.title")} helperText={t("forms.organizations.sections.contact.helperText")} />
 							<FormRight>
-								<Stack spacing={2} direction={isMobile ? "column" : "row"}>
+								<Stack spacing={2} direction={["column", "row"]}>
 									<Stack spacing={1} flex={2}>
 										<FormLabel htmlFor={"street"}>{t("forms.organizations.fields.street")}</FormLabel>
 										<Input isInvalid={isInvalid(street)} {...street.bind} id="street" />
@@ -163,7 +163,7 @@ const OrganisatieEdit = () => {
 										<Input isInvalid={isInvalid(houseNumber)} {...houseNumber.bind} id="houseNumber" />
 									</Stack>
 								</Stack>
-								<Stack spacing={2} direction={isMobile ? "column" : "row"}>
+								<Stack spacing={2} direction={["column", "row"]}>
 									<Stack spacing={1} flex={1}>
 										<FormLabel htmlFor={"zipcode"}>{t("forms.organizations.fields.zipcode")}</FormLabel>
 										<Tooltip label={t("forms.organizations.tooltips.zipcode")} aria-label={t("forms.organizations.fields.zipcode")} hasArrow
@@ -181,7 +181,7 @@ const OrganisatieEdit = () => {
 
 						<Divider />
 
-						<Stack direction={isMobile ? "column" : "row"} spacing={2}>
+						<Stack direction={["column", "row"]} spacing={2}>
 							<FormLeft />
 							<FormRight>
 								<Stack direction={"row"} spacing={1} justifyContent={"flex-end"}>

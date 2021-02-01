@@ -1,14 +1,13 @@
 import {CheckIcon, CloseIcon, DeleteIcon} from "@chakra-ui/icons";
-import {IconButton, Text} from "@chakra-ui/react";
+import {IconButton, Td, Text, Tr, useBreakpointValue} from "@chakra-ui/react";
 import moment from "moment";
 import React, {useState} from "react";
-import {useIsMobile} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {CustomerStatementMessage} from "../../../generated/graphql";
 
 const CsmTableRow: React.FC<{ csm: CustomerStatementMessage, onDelete: (id: number) => void }> = ({csm, onDelete}) => {
 	const {t} = useTranslation();
-	const isMobile = useIsMobile();
+	const isMobile = useBreakpointValue([true, null, null, false]);
 	const [deleteConfirm, setDeleteConfirm] = useState<boolean>(false);
 
 	const onClickDeleteButton = () => {
@@ -28,14 +27,14 @@ const CsmTableRow: React.FC<{ csm: CustomerStatementMessage, onDelete: (id: numb
 	}
 
 	return (
-		<tr>
-			<td>
-				<Text>{moment(csm.uploadDate).fromNow(isMobile)}</Text>
-			</td>
-			<td>
+		<Tr>
+			<Td>
+				<Text>{moment(csm.uploadDate).fromNow(!!isMobile)}</Text>
+			</Td>
+			<Td>
 				<Text>{csm.accountIdentification}</Text>
-			</td>
-			<td style={{width: "100px", textAlign: "right"}}>
+			</Td>
+			<Td style={{width: "100px", textAlign: "right"}}>
 				{onDelete && (<>
 					<IconButton variant={deleteConfirm ? "solid" : "ghost"} size={"xs"} icon={deleteConfirm ? <CheckIcon /> : <DeleteIcon />}
 					            colorScheme={deleteConfirm ? "red" : "gray"}
@@ -44,8 +43,8 @@ const CsmTableRow: React.FC<{ csm: CustomerStatementMessage, onDelete: (id: numb
 						<IconButton variant={"solid"} size={"xs"} icon={<CloseIcon />} colorScheme={"gray"} ml={2} aria-label={t("actions.delete")} onClick={onClickDeleteCancel} />
 					)}
 				</>)}
-			</td>
-		</tr>
+			</Td>
+		</Tr>
 	)
 }
 

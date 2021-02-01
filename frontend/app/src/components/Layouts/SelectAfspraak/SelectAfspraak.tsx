@@ -47,7 +47,7 @@ const SelectAfspraak: React.FC<SelectAfspraakProps> = ({options, value, onChange
 	return (
 		<Stack spacing={2} {...props}>
 			<InputGroup>
-				<InputLeftElement zIndex={0}>
+				<InputLeftElement>
 					<SearchIcon color={"gray.200"} />
 				</InputLeftElement>
 				<Input {...search.bind} />

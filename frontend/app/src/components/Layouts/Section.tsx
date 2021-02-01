@@ -1,11 +1,10 @@
-import {Stack, StackProps} from "@chakra-ui/react";
+import {Stack, useStyleConfig} from "@chakra-ui/react";
 import React from "react";
 
-const Section: React.FC<StackProps & { fluid?: boolean }> = ({fluid = false, children, ...props}) => {
+const Section = (props) => {
+	const styles = useStyleConfig("Section");
 	return (
-		<Stack maxWidth={fluid ? "100%" : 1200} bg={"white"} p={5} borderRadius={10} spacing={5} {...props}>
-			{children}
-		</Stack>
+		<Stack sx={styles} {...props} />
 	);
 };
 

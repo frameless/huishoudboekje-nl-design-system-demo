@@ -1,8 +1,8 @@
-import {Box, Button, Divider, FormLabel, Input, Stack, Tooltip, useToast} from "@chakra-ui/react";
+import {Box, Button, Divider, FormLabel, Input, Stack, Tooltip, useBreakpointValue, useToast} from "@chakra-ui/react";
 import moment from "moment";
 import React from "react";
 import DatePicker from "react-datepicker";
-import {useInput, useIsMobile, Validators} from "react-grapple";
+import {useInput, Validators} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {Redirect, useHistory, useParams} from "react-router-dom";
 import Routes from "../../config/routes";
@@ -15,7 +15,7 @@ import Page from "../Layouts/Page";
 import Section from "../Layouts/Section";
 
 const BurgerEdit = () => {
-	const isMobile = useIsMobile();
+	const isMobile = useBreakpointValue([true, null, null, false]);
 	const {t} = useTranslation();
 	const {id} = useParams<{ id: string }>();
 	const toast = useToast();
@@ -140,10 +140,10 @@ const BurgerEdit = () => {
 				<Page title={formatBurgerName(data.gebruiker)} backButton={<BackButton to={Routes.Burger(parseInt(id))} />}>
 					<Box as={"form"} onSubmit={onSubmit}>
 						<Section>
-							<Stack direction={isMobile ? "column" : "row"} spacing={2}>
+							<Stack direction={["column", "row"]} spacing={2}>
 								<FormLeft title={t("forms.burgers.sections.personal.title")} helperText={t("forms.burgers.sections.personal.helperText")} />
 								<FormRight>
-									<Stack spacing={2} direction={isMobile ? "column" : "row"}>
+									<Stack spacing={2} direction={["column", "row"]}>
 										<Stack spacing={1} flex={1}>
 											<FormLabel htmlFor={"initials"}>{t("forms.burgers.fields.initials")}</FormLabel>
 											<Input isInvalid={initials.dirty && !initials.isValid} id={"initials"} {...initials.bind} />
@@ -171,10 +171,10 @@ const BurgerEdit = () => {
 
 							<Divider />
 
-							<Stack direction={isMobile ? "column" : "row"} spacing={2}>
+							<Stack direction={["column", "row"]} spacing={2}>
 								<FormLeft title={t("forms.burgers.sections.contact.title")} helperText={t("forms.burgers.sections.contact.helperText")} />
 								<FormRight>
-									<Stack spacing={2} direction={isMobile ? "column" : "row"}>
+									<Stack spacing={2} direction={["column", "row"]}>
 										<Stack spacing={1} flex={2}>
 											<FormLabel htmlFor={"street"}>{t("forms.burgers.fields.street")}</FormLabel>
 											<Input isInvalid={street.dirty && !street.isValid} id={"street"} {...street.bind} />
@@ -184,7 +184,7 @@ const BurgerEdit = () => {
 											<Input isInvalid={houseNumber.dirty && !houseNumber.isValid} id={"houseNumber"} {...houseNumber.bind} />
 										</Stack>
 									</Stack>
-									<Stack spacing={2} direction={isMobile ? "column" : "row"}>
+									<Stack spacing={2} direction={["column", "row"]}>
 										<Stack spacing={1} flex={1}>
 											<FormLabel htmlFor={"zipcode"}>{t("forms.burgers.fields.zipcode")}</FormLabel>
 											<Tooltip label={t("forms.burgers.tooltips.zipcode")} aria-label={t("forms.burgers.fields.zipcode")} hasArrow
@@ -213,7 +213,7 @@ const BurgerEdit = () => {
 
 							<Divider />
 
-							<Stack direction={isMobile ? "column" : "row"} spacing={2}>
+							<Stack direction={["column", "row"]} spacing={2}>
 								<FormLeft />
 								<FormRight>
 									<Stack direction={"row"} spacing={1} justifyContent={"flex-end"}>

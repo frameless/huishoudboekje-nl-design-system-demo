@@ -1,12 +1,12 @@
-import {Box, Divider, Heading, Stack} from "@chakra-ui/react";
+import {Box, Divider, Heading, Stack, useBreakpointValue} from "@chakra-ui/react";
 import React, {createContext} from "react";
-import {useIsMobile} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {BankTransaction, useGetAllTransactionsQuery} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import {dateFormat, sortBankTransactions} from "../../../utils/things";
 import DeadEndPage from "../../DeadEndPage";
 import {Label} from "../../Forms/FormLeftRight";
+import Section from "../../Layouts/Section";
 import TransactionItem from "./TransactionItem";
 
 export const TransactionsContext = createContext<{ refetch: VoidFunction }>({
@@ -14,7 +14,7 @@ export const TransactionsContext = createContext<{ refetch: VoidFunction }>({
 });
 
 const Transactions = () => {
-	const isMobile = useIsMobile();
+	const isMobile = useBreakpointValue([true, null, null, false]);
 	const {t} = useTranslation();
 
 	const $transactions = useGetAllTransactionsQuery({
@@ -23,7 +23,7 @@ const Transactions = () => {
 
 	return (
 		<Stack spacing={5}>
-			<Stack maxWidth={1200} bg={"white"} p={5} borderRadius={10} spacing={5}>
+			<Section>
 
 				<Queryable query={$transactions}>{({bankTransactions}: { bankTransactions: BankTransaction[] }) => {
 					if (!bankTransactions || bankTransactions.length === 0) {
@@ -43,7 +43,7 @@ const Transactions = () => {
 
 					return (
 						<TransactionsContext.Provider value={{refetch: $transactions.refetch}}>
-							<Stack direction={isMobile ? "column" : "row"} spacing={5}>
+							<Stack direction={["column", "row"]} spacing={5}>
 								<Heading size={"md"}>{t("forms.banking.sections.transactions.title")}</Heading>
 							</Stack>
 
@@ -87,7 +87,7 @@ const Transactions = () => {
 				}}
 				</Queryable>
 
-			</Stack>
+			</Section>
 		</Stack>
 	);
 };

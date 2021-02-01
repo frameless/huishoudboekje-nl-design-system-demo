@@ -1,7 +1,6 @@
 import {CheckIcon, CloseIcon, DeleteIcon, EditIcon} from "@chakra-ui/icons";
-import {Badge, Box, BoxProps, Divider, IconButton, Stack, Text} from "@chakra-ui/react";
+import {Badge, Box, BoxProps, Divider, IconButton, Stack, Text, useBreakpointValue} from "@chakra-ui/react";
 import React, {useState} from "react";
-import {useIsMobile} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {useHistory} from "react-router-dom";
 import Routes from "../../config/routes";
@@ -10,7 +9,7 @@ import {currencyFormat2, intervalString} from "../../utils/things";
 import GridCard from "../GridCard";
 
 const AfspraakItem: React.FC<BoxProps & { afspraak: Afspraak, onDelete?: (id: number) => void }> = ({afspraak: a, onDelete, ...props}) => {
-	const isMobile = useIsMobile();
+	const isMobile = useBreakpointValue([true, null, null, false]);
 	const {t} = useTranslation();
 	const {push} = useHistory();
 	const [deleteConfirm, setDeleteConfirm] = useState<boolean>(false);

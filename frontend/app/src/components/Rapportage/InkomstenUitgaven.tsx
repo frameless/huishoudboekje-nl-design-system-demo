@@ -4,7 +4,7 @@ import {useTranslation} from "react-i18next";
 import {BankTransaction} from "../../generated/graphql";
 import {prepareChartData} from "../../utils/things";
 import {FormLeft} from "../Forms/FormLeftRight";
-import ChakraChart from "../Layouts/Chart";
+import ChakraChart from "../../config/theme/custom/Chart";
 import Section from "../Layouts/Section";
 import {createAggregation} from "./Aggregator";
 import {RapportageContext} from "./context";
