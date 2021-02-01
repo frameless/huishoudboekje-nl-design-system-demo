@@ -30,7 +30,7 @@
         "journals": {
             "createSuccessMessage": "Transactie succesvol verwerkt."
         },
-        "rekeningAlreadyExistsError": "Dit rekeningnummer bestaat al.",
+        "rekeningAlreadyExistsError": "Dit rekeningnummer is al gekoppeld.",
         "burgers": {
             "deleteConfirmMessage": "Gegevens van {{name}} zijn verwijderd.",
             "deleteTitle": "Burger verwijderen",
