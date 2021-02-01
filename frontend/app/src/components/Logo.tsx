@@ -1,5 +1,5 @@
-import React from "react";
 import {Box, Image} from "@chakra-ui/react";
+import React from "react";
 import {useHistory} from "react-router-dom";
 import Routes from "../config/routes";
 

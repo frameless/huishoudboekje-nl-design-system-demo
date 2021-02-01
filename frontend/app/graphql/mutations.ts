@@ -219,6 +219,17 @@ export const DeleteOrganisatieRekeningMutation = gql`
     }
 `;
 
+export const UpdateRekeningMutation = gql`
+    mutation updateRekening($id: Int!, $iban: String, $rekeninghouder: String){
+        updateRekening(id: $id, rekening: {
+            iban: $iban,
+            rekeninghouder: $rekeninghouder
+        }){
+            ok
+        }
+    }
+`;
+
 export const CreateCustomerStatementMessageMutation = gql`
     mutation createCustomerStatementMessage($file: Upload!){
         createCustomerStatementMessage(file: $file){

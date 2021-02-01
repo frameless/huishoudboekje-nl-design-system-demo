@@ -4,7 +4,7 @@ import {useTranslation} from "react-i18next";
 import {BankTransaction} from "../../../generated/graphql";
 import {dateFormat} from "../../../utils/things";
 import Currency from "../../Currency";
-import {Label} from "../../Forms/FormLeftRight";
+import Label from "../../Layouts/Label";
 import PrettyIban from "../../Layouts/PrettyIban";
 
 const TransactionDetailsView: React.FC<StackProps & { transaction: BankTransaction }> = ({transaction: bt, ...props}) => {

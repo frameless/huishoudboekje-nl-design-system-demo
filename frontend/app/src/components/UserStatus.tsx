@@ -1,5 +1,5 @@
-import React from "react";
 import {Avatar, BoxProps, Stack, Text} from "@chakra-ui/react";
+import React from "react";
 
 const UserStatus: React.FC<BoxProps & { name: string, role: string }> = ({name, role, ...props}) => {
 	return (

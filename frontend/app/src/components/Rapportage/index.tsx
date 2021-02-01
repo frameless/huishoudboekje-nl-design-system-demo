@@ -9,7 +9,8 @@ import {Gebruiker, Rubriek, useGetReportingDataQuery} from "../../generated/grap
 import Transaction from "../../models/Transaction";
 import Queryable from "../../utils/Queryable";
 import {currencyFormat2, formatBurgerName, humanJoin, useReactSelectStyles} from "../../utils/things";
-import {FormLeft, FormRight, Label} from "../Forms/FormLeftRight";
+import {FormLeft, FormRight} from "../Forms/FormLeftRight";
+import Label from "../Layouts/Label";
 import Page from "../Layouts/Page";
 import RadioButtonGroup from "../Layouts/RadioButtons/RadioButtonGroup";
 import Section from "../Layouts/Section";

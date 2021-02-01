@@ -1,10 +1,10 @@
 import React from "react";
 import {Route, Switch} from "react-router-dom";
 import Routes, {RouteNames} from "../../config/routes";
-import OrganisatieList from "./OrganisatieList";
 import CreateOrganisatie from "./CreateOrganisatie";
-import OrganisatieEdit from "./OrganisatieEdit";
 import OrganisatieDetail from "./OrganisatieDetail";
+import OrganisatieEdit from "./OrganisatieEdit";
+import OrganisatieList from "./OrganisatieList";
 
 const Organisaties = () => (
 	<Switch>

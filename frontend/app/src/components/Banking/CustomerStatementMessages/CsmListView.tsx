@@ -2,7 +2,7 @@ import {BoxProps, Table, Tbody, Th, Thead, Tr, useToast} from "@chakra-ui/react"
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {CustomerStatementMessage, useDeleteCustomerStatementMessageMutation} from "../../../generated/graphql";
-import {Label} from "../../Forms/FormLeftRight";
+import Label from "../../Layouts/Label";
 import CsmTableRow from "./CsmTableRow";
 
 const CsmListView: React.FC<BoxProps & { csms: CustomerStatementMessage[], refresh: VoidFunction }> = ({csms, refresh}) => {

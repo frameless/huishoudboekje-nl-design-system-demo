@@ -1,11 +1,11 @@
 import React from "react";
 import {Route, Switch} from "react-router-dom";
 import Routes, {RouteNames} from "../../config/routes";
-import BurgerList from "./BurgerList";
-import CreateBurger from "./CreateBurger";
+import CreateAfspraak from "../Agreements/CreateAfspraak";
 import BurgerDetail from "./BurgerDetail/index";
 import BurgerEdit from "./BurgerEdit";
-import CreateAfspraak from "../Agreements/CreateAfspraak";
+import BurgerList from "./BurgerList";
+import CreateBurger from "./CreateBurger";
 
 const Burgers = () => (
 	<Switch>
