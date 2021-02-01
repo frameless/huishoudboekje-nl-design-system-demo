@@ -172,3 +172,5 @@ export const prepareChartData = (startDate: Moment, endDate: Moment, granularity
 		...new Array(columns).fill(0)
 	]);
 };
+
+export const sanitizeIBAN = (iban: string) => iban.replace(/\s/g, "").toUpperCase();

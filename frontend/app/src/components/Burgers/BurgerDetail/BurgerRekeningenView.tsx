@@ -1,5 +1,5 @@
 import {AddIcon} from "@chakra-ui/icons";
-import {Box, Button, Divider, Stack, StackProps} from "@chakra-ui/react";
+import {Box, Button, Divider, Stack, StackProps, useToast} from "@chakra-ui/react";
 import React from "react";
 import {useIsMobile, useToggle} from "react-grapple";
 import {useTranslation} from "react-i18next";
@@ -11,6 +11,7 @@ import RekeningList from "../../Rekeningen/RekeningList";
 const BurgerRekeningenView: React.FC<StackProps & { burger: Gebruiker, refetch: VoidFunction }> = ({burger, refetch, ...props}) => {
 	const isMobile = useIsMobile();
 	const {t} = useTranslation();
+	const toast = useToast();
 
 	const [showCreateRekeningForm, toggleCreateRekeningForm] = useToggle(false);
 	const [createGebruikerRekeningMutation] = useCreateGebruikerRekeningMutation();
@@ -37,6 +38,16 @@ const BurgerRekeningenView: React.FC<StackProps & { burger: Gebruiker, refetch: 
 							resetForm();
 							toggleCreateRekeningForm(false);
 							refetch();
+						}).catch(err => {
+							const alreadyExists = (/already exists/g).test(err.message);
+							if (alreadyExists) {
+								toast({
+									position: "top",
+									status: "error",
+									title: t("messages.genericError.title"),
+									description: t("messages.rekeningAlreadyExistsError"),
+								});
+							}
 						});
 					}} onCancel={() => {
 						toggleCreateRekeningForm(false)
