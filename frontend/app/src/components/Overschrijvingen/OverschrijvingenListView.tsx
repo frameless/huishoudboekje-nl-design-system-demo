@@ -2,7 +2,7 @@ import {Box, Stack, StackProps, useBreakpointValue} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {Overschrijving} from "../../generated/graphql";
-import {Label} from "../Forms/FormLeftRight";
+import Label from "../Layouts/Label";
 import OverschrijvingItem from "./OverschrijvingItem";
 
 type OverschrijvingenListViewProps = StackProps & { overschrijvingen: Overschrijving[] };

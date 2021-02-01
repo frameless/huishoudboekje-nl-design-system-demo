@@ -1,6 +1,5 @@
 import {Heading, Stack, StackProps, Text} from "@chakra-ui/react";
 import React from "react";
-import theme from "../../config/theme";
 
 type FormLeftProps = {
 	title?: string,
@@ -17,8 +16,4 @@ export const FormLeft: React.FC<StackProps & FormLeftProps> = ({title, helperTex
 
 export const FormRight: React.FC<StackProps> = (props) => (
 	<Stack flex={2} spacing={4} {...props} />
-);
-
-export const Label: React.FC = ({children}) => (
-	<Text fontSize={"sm"} color={theme.colors.gray["500"]}>{children}</Text>
 );

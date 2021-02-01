@@ -1,4 +1,4 @@
-import {CloseIcon} from "@chakra-ui/icons";
+import {CloseIcon, DeleteIcon} from "@chakra-ui/icons";
 import {
 	AlertDialog,
 	AlertDialogBody,
@@ -97,7 +97,7 @@ const RekeningListItem: React.FC<RekeningListItemProps> = ({rekening, onDelete, 
 				<PrettyIban iban={rekening.iban} />
 			</Td>
 			<Td>{onDelete && (
-				<IconButton icon={<CloseIcon />} size={"sm"} onClick={() => toggleDeleteDialog(true)} aria-label={t("actions.delete")} />
+				<IconButton icon={<DeleteIcon />} size={"xs"} variant={"ghost"} onClick={() => toggleDeleteDialog(true)} aria-label={t("actions.delete")} />
 			)}</Td>
 		</Tr>
 	</>);

@@ -57,7 +57,7 @@ const RekeningList: React.FC<TableProps & RekeningListProps> = ({rekeningen, geb
 	}
 
 	return (
-		<Table {...props}>
+		<Table size={"sm"} {...props}>
 			<Thead>
 				<Tr>
 					<Th>{t("forms.rekeningen.fields.accountHolder")}</Th>

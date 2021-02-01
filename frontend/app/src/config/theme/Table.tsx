@@ -9,7 +9,12 @@ const noPaddingOnFirstTableCell = {
 const baseStyle = {
 	thead: {
 		th: {
-			...noPaddingOnFirstTableCell
+			...noPaddingOnFirstTableCell,
+			fontWeight: "normal",
+			textTransform: "none",
+			letterSpacing: 0,
+			fontSize: "sm",
+			color: "gray.500"
 		},
 	},
 	tbody: {

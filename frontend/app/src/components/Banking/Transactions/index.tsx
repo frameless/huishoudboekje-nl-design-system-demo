@@ -5,7 +5,7 @@ import {BankTransaction, useGetAllTransactionsQuery} from "../../../generated/gr
 import Queryable from "../../../utils/Queryable";
 import {dateFormat, sortBankTransactions} from "../../../utils/things";
 import DeadEndPage from "../../DeadEndPage";
-import {Label} from "../../Forms/FormLeftRight";
+import Label from "../../Layouts/Label";
 import Section from "../../Layouts/Section";
 import TransactionItem from "./TransactionItem";
 

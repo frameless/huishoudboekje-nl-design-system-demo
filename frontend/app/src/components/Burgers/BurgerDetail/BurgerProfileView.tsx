@@ -4,7 +4,8 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {Gebruiker} from "../../../generated/graphql";
 import {dateFormat} from "../../../utils/things";
-import {FormLeft, FormRight, Label} from "../../Forms/FormLeftRight";
+import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
+import Label from "../../Layouts/Label";
 
 const BurgerProfileView: React.FC<StackProps & { burger: Gebruiker }> = ({burger, ...props}) => {
 	const {t} = useTranslation();

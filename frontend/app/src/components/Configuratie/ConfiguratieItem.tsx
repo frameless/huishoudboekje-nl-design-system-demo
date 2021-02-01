@@ -3,7 +3,7 @@ import {Editable, EditableInput, EditablePreview, FormControl, FormControlProps,
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {Configuratie as IConfiguratie, useDeleteConfiguratieMutation, useUpdateConfiguratieMutation} from "../../generated/graphql";
-import {Label} from "../Forms/FormLeftRight";
+import Label from "../Layouts/Label";
 
 const ConfiguratieItem: React.FC<FormControlProps & { c: IConfiguratie, refetch: VoidFunction }> = ({c, refetch, ...props}) => {
 	const toast = useToast();

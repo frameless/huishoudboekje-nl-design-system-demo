@@ -42,7 +42,7 @@ import {
 import Queryable from "../../../utils/Queryable";
 import {formatIBAN} from "../../../utils/things";
 import Currency from "../../Currency";
-import {Label} from "../../Forms/FormLeftRight";
+import Label from "../../Layouts/Label";
 import PrettyIban from "../../Layouts/PrettyIban";
 import SelectAfspraak from "../../Layouts/SelectAfspraak/SelectAfspraak";
 import SelectAfspraakOption from "../../Layouts/SelectAfspraak/SelectAfspraakOption";
