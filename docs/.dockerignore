@@ -1,6 +1,0 @@
-Dockerfile
-website/node_modules
-website/build
-website/.docusaurus
-*.log
-*/i18n

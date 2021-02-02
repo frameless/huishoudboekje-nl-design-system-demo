@@ -1,3 +1,5 @@
+COMPONENT_VERSION ?= 0.20.0
+
 .PHONY: all
 all: repo
 
@@ -12,16 +14,29 @@ lint: init
 	helm lint charts/*
 
 .PHONY: repo
-repo: init lint
+repo: init dependencies lint charts/huishoudboekje/theme.yaml
 	mkdir -p $@
-	mkdir -p charts/huishoudboekje/charts/medewerker-frontend/theme
-	cp -r ../frontend/theme/sloothuizen/ charts/huishoudboekje/charts/medewerker-frontend/theme || true
 	echo "User-Agent: *\nDisallow: /" > repo/robots.txt
 	helm package charts/huishoudboekje --dependency-update --destination repo/
 	helm repo index --url $${CI_PAGES_URL:-http://localhost:5000} repo
 
+charts/huishoudboekje/theme.yaml: ../frontend/theme/sloothuizen/
+	sh theme-yaml.sh $< > $@
+
+theme.yaml: ../frontend/theme/sloothuizen/
+	sh theme-yaml.sh $< > $@
+
+.PHONY: version
+version:
+	find . -name 'Chart.yaml' | \
+		xargs grep -l '^version:' | \
+		xargs -n 1 yq --prettyPrint --inplace eval ".version = \"$(COMPONENT_VERSION)\""
+	find . -name 'Chart.yaml' | \
+		xargs grep -l '^appVersion:' | \
+		xargs -n 1 yq --prettyPrint --inplace eval ".appVersion = \"$(COMPONENT_VERSION)\""
+
 .PHONY: dependencies
-dependencies: $(wildcard charts/*/Chart.lock)
+dependencies: version $(shell find . -name 'Chart.lock')
 
 .PHONY: touch-dependencies
 touch-dependencies:

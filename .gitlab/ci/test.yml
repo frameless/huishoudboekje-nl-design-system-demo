@@ -14,7 +14,6 @@
     - cd ./frontend/app
     - npm ci --cache ${NPM_CACHE_DIR} --prefer-offline --no-progress --color=false --quiet
   tags:
-    - cg
     - docker
   retry:
     max: 2
@@ -48,9 +47,8 @@ frontend-test:
 .Service Test:
   stage: test
   needs:
-    - build-cg
+    - build-shell-runner
   tags:
-    - cg
     - docker
   retry:
     max: 2
@@ -81,40 +79,28 @@ backend-test:
   extends: .Service Test
   variables:
     DIRECTORY: backend
-  only:
-    - branches@commonground/huishoudboekje/app-new
 
 huishoudboekje-service-test:
   extends: .Service Test
   variables:
     DIRECTORY: services/huishoudboekje_service
-  only:
-    - branches@commonground/huishoudboekje/app-new
 
 organisatie-service-test:
   extends: .Service Test
   variables:
     DIRECTORY: services/organisatie_service
-  only:
-    - branches@commonground/huishoudboekje/app-new
 
 bank-transactie-service-test:
   extends: .Service Test
   variables:
     DIRECTORY: services/bank_transactie_service
-  only:
-    - branches@commonground/huishoudboekje/app-new
 
 grootboek-service-test:
   extends: .Service Test
   variables:
     DIRECTORY: services/grootboek_service
-  only:
-    - branches@commonground/huishoudboekje/app-new
-    
+
 log-service-test:
   extends: .Service Test
   variables:
     DIRECTORY: services/log_service
-  only:
-    - branches@commonground/huishoudboekje/app-new

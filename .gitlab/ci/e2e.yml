@@ -51,10 +51,10 @@ cypress-review:
     - acceptance
 
 
-cypress-test:
+cypress-develop:
   extends: .cypress
   needs:
-    - job: deploy-test
+    - job: deploy-develop
       artifacts: true
   only:
     - develop
