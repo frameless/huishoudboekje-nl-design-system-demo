@@ -31,7 +31,7 @@ class UpdateJournaalpostGrootboekrekening(graphene.Mutation):
     @property
     def gebruikers_activiteit(self):
         return dict(
-            action="Update",
+            action="updateJournaalpostGrootboekrekening",
             entities=gebruikers_activiteit_entities(
                 result=self, key="journaalpost", entity_type="journaalpost"
             )

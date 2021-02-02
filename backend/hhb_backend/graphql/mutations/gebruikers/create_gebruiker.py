@@ -43,7 +43,7 @@ class CreateGebruiker(graphene.Mutation):
     @property
     def gebruikers_activiteit(self):
         return dict(
-            action="Create",
+            action="createBurger",
             entities=gebruikers_activiteit_entities(result=self, key='gebruiker', entity_type='burger') +
                      gebruikers_activiteit_entities(result=self.gebruiker, key='rekeningen', entity_type='rekening'),
             after=dict(burger=self.gebruiker),

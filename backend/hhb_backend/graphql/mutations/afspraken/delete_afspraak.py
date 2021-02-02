@@ -25,7 +25,7 @@ class DeleteAfspraak(graphene.Mutation):
     @property
     def gebruikers_activiteit(self):
         return dict(
-            action="Delete",
+            action="deleteAfspraak",
             entities=gebruikers_activiteit_entities(
                 result=self, key="previous", entity_type="afspraak"
             )
