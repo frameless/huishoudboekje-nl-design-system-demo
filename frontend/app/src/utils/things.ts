@@ -116,9 +116,13 @@ export const sortBankTransactions = (a: BankTransaction, b: BankTransaction) => 
 	return b.bedrag - a.bedrag;
 };
 
-export const formatBurgerName = (burger: Gebruiker, fullName = false) => {
-	const voorletters = burger.voorletters?.replace(/\./g, "").split("").join(". ") + ".";
-	return [fullName ? burger.voornamen : voorletters, burger.achternaam].join(" ");
+export const formatBurgerName = (burger: Gebruiker | undefined, fullName = false) => {
+	if (fullName) {
+		return [burger?.voornamen, burger?.achternaam].join(" ");
+	}
+
+	const voorletters = burger?.voorletters?.replace(/\./g, "").split("").join(". ") + ".";
+	return [voorletters, burger?.achternaam].join(" ");
 };
 
 export const intervalString = ((interval: Interval | undefined, t: (text, ...tProps) => string): string => {

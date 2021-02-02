@@ -9,8 +9,8 @@ import {FormLeft} from "../Forms/FormLeftRight";
 import Page from "../Layouts/Page";
 import RoundIcon from "../Layouts/RoundIcon";
 import Section from "../Layouts/Section";
+import AuditLogText from "./AuditLogText";
 import BrowserIcon from "./BrowserIcon";
-import {gebeurtenis2readable} from "./gebeurtenis2readable";
 import OsIcon from "./OsIcon";
 
 const Gebeurtenissen = () => {
@@ -32,9 +32,7 @@ const Gebeurtenissen = () => {
 						<Table>
 							<Thead>
 								<Tr>
-									<Th>{t("Gebruiker en tijd")}</Th>
 									<Th>{t("Activiteit")}</Th>
-									<Th>{t("Actie")}</Th>
 									<Th>{t("Meta")}</Th>
 								</Tr>
 							</Thead>
@@ -47,23 +45,10 @@ const Gebeurtenissen = () => {
 													<FiActivity />
 												</RoundIcon>
 												<Stack spacing={0}>
-													<Text>{g.gebruikerId || t("unknown")}</Text>
+													<AuditLogText g={g} />
 													<Text fontSize={"sm"} color={"gray.500"}>{moment(g.timestamp).format("L LT")}</Text>
 												</Stack>
 											</HStack>
-										</Td>
-										<Td>
-											<HStack>
-												{g.entities?.map((e, i) => (
-													<Text key={i}>{e.entityType} ({e.entityId})</Text>
-												))}
-											</HStack>
-										</Td>
-										<Td>
-											{gebeurtenis2readable(g)}
-										</Td>
-										<Td>
-											<Text>{g.action}</Text>
 										</Td>
 										<Td>
 											<HStack>

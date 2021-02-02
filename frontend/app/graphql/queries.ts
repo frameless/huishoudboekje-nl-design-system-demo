@@ -223,6 +223,9 @@ export const GetGebeurtenissenQuery = gql`
                 entityId
                 burger {
                     id
+                    voorletters
+                    voornamen
+                    achternaam
                 }
                 organisatie {
                     id
