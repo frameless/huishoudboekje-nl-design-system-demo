@@ -10,51 +10,14 @@ import Page from "../Layouts/Page";
 import RoundIcon from "../Layouts/RoundIcon";
 import Section from "../Layouts/Section";
 import BrowserIcon from "./BrowserIcon";
+import {gebeurtenis2readable} from "./gebeurtenis2readable";
 import OsIcon from "./OsIcon";
-
-// const GebruikersActiviteit2Readable = (subject) => {
-// 	const [action, entity] = subject;
-//
-// 	let text = "";
-// 	let icon: JSX.Element;
-//
-// 	switch (action) {
-// 		case AuditTrailAction.Create: {
-// 			text = `heeft een nieuwe ${entity} toegevoegd.`;
-// 			break;
-// 		}
-// 		case AuditTrailAction.Update: {
-// 			text = `heeft een ${entity} bewerkt.`;
-// 			break;
-// 		}
-// 		default: {
-// 			text = `${action} ${entity}`;
-// 			break;
-// 		}
-// 	}
-//
-// 	switch (entity) {
-// 		case AuditTrailEntity.Burger: {
-// 			icon = <RiUserLine />;
-// 			break;
-// 		}
-// 		case AuditTrailEntity.Organisatie: {
-// 			icon = <FaRegBuilding />;
-// 			break;
-// 		}
-// 		default: {
-// 			icon = <FaQuestion />;
-// 		}
-// 	}
-//
-// 	return {
-// 		icon, text
-// 	};
-// }
 
 const Gebeurtenissen = () => {
 	const {t} = useTranslation();
-	const $gebeurtenissen = useGetGebeurtenissenQuery();
+	const $gebeurtenissen = useGetGebeurtenissenQuery({
+		fetchPolicy: "no-cache"
+	});
 
 	const sortAuditTrailByTime = (a: GebruikersActiviteit, b: GebruikersActiviteit) => moment(a.timestamp).isBefore(b.timestamp) ? 1 : -1;
 
@@ -69,8 +32,8 @@ const Gebeurtenissen = () => {
 						<Table>
 							<Thead>
 								<Tr>
+									<Th>{t("Gebruiker en tijd")}</Th>
 									<Th>{t("Activiteit")}</Th>
-									<Th>{t("Betrokken onderwerpen")}</Th>
 									<Th>{t("Actie")}</Th>
 									<Th>{t("Meta")}</Th>
 								</Tr>
@@ -91,10 +54,13 @@ const Gebeurtenissen = () => {
 										</Td>
 										<Td>
 											<HStack>
-												{g.entities?.map(e => (
-													<Text>{e.entityType} ({e.entityId})</Text>
+												{g.entities?.map((e, i) => (
+													<Text key={i}>{e.entityType} ({e.entityId})</Text>
 												))}
 											</HStack>
+										</Td>
+										<Td>
+											{gebeurtenis2readable(g)}
 										</Td>
 										<Td>
 											<Text>{g.action}</Text>
