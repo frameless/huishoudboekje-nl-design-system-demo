@@ -1,9 +1,13 @@
 """ GraphQL mutation for creating a new Gebruiker/Burger """
 import json
+import logging
+from datetime import datetime
 
 import graphene
 import requests
+from dateutil import tz
 from graphql import GraphQLError
+from flask import request, g
 
 import hhb_backend.graphql.mutations.rekeningen.rekening_input as rekening_input
 from hhb_backend.graphql import settings
@@ -40,9 +44,9 @@ class CreateGebruiker(graphene.Mutation):
     def gebruikers_activiteit(self):
         return dict(
             action="Create",
-            entities=[dict(entity_type="burger", entity_id=self.gebruiker['id'])] +
+            entities=gebruikers_activiteit_entities(result=self, key='gebruiker', entity_type='burger') +
                      gebruikers_activiteit_entities(result=self.gebruiker, key='rekeningen', entity_type='rekening'),
-            after={"burger": self.gebruiker},
+            after=dict(burger=self.gebruiker),
         )
 
     @log_gebruikers_activiteit

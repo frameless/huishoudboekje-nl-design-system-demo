@@ -36,17 +36,17 @@ class UpdateGebruiker(graphene.Mutation):
     def gebruikers_activiteit(self):
         return dict(
             action="Update",
-            entities=[dict(entity_type="burger", entity_id=self.gebruiker['id'])] +
+            entities=gebruikers_activiteit_entities(result=self, key='gebruiker', entity_type='burger') +
                      gebruikers_activiteit_entities(result=self.gebruiker, key='rekeningen', entity_type='rekening'),
-            before={"burger": self.previous},
-            after={"burger": self.gebruiker},
+            before=dict(burger=self.previous),
+            after=dict(burger=self.gebruiker),
         )
 
 
     @log_gebruikers_activiteit
     async def mutate(root, info, id, **kwargs):
         """ Update the current Gebruiker/Burger """
-        previous_gebruiker = await request.dataloader.gebruikers_by_id.load(id)
+        previous = await request.dataloader.gebruikers_by_id.load(id)
 
         response = requests.post(
             f"{settings.HHB_SERVICES_URL}/gebruikers/{id}",
@@ -60,4 +60,4 @@ class UpdateGebruiker(graphene.Mutation):
 
         gebruiker = response.json()["data"]
 
-        return UpdateGebruiker(ok=True, gebruiker=gebruiker, previous=previous_gebruiker)
+        return UpdateGebruiker(ok=True, gebruiker=gebruiker, previous=previous)

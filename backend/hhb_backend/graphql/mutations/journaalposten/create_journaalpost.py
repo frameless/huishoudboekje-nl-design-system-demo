@@ -1,12 +1,19 @@
 """ GraphQL mutation for creating a new Journaalpost """
 
 import graphene
-from flask import request
-from graphql import GraphQLError
 import requests
+from graphql import GraphQLError
+
 from hhb_backend.graphql import settings
+from hhb_backend.graphql.dataloaders import hhb_dataloader
+from hhb_backend.graphql.models.afspraak import Afspraak
+from hhb_backend.graphql.models.bank_transaction import BankTransaction
+from hhb_backend.graphql.models.grootboekrekening import Grootboekrekening
 from hhb_backend.graphql.models.journaalpost import Journaalpost
-import json
+from hhb_backend.graphql.utils.gebruikersactiviteiten import (
+    gebruikers_activiteit_entities,
+    log_gebruikers_activiteit,
+)
 
 
 class CreateJournaalpostAfspraakInput(graphene.InputObjectType):
@@ -21,69 +28,129 @@ class CreateJournaalpostGrootboekrekeningInput(graphene.InputObjectType):
 
 class CreateJournaalpostAfspraak(graphene.Mutation):
     """Create a Journaalpost with an Afspraak"""
+
     class Arguments:
         input = graphene.Argument(CreateJournaalpostAfspraakInput)
 
     ok = graphene.Boolean()
     journaalpost = graphene.Field(lambda: Journaalpost)
 
-    async def mutate(root, info, input, **kwargs):
+    @property
+    def gebruikers_activiteit(self):
+        return dict(
+            action="Create",
+            entities=gebruikers_activiteit_entities(
+                result=self, key="journaalpost", entity_type="journaalpost"
+            )
+            + gebruikers_activiteit_entities(
+                result=self.journaalpost["afspraak"],
+                key="gebruiker_id",
+                entity_type="burger",
+            )
+            + gebruikers_activiteit_entities(
+                result=self.journaalpost, key="afspraak", entity_type="afspraak"
+            )
+            + gebruikers_activiteit_entities(
+                result=self.journaalpost, key="transaction", entity_type="transaction"
+            ),
+            after=dict(journaalpost=self.journaalpost),
+        )
+
+    @log_gebruikers_activiteit
+    async def mutate(root, info, input: CreateJournaalpostAfspraakInput, **kwargs):
         """ Create the new Journaalpost """
         # Validate that the references exist
-        transaction = await request.dataloader.bank_transactions_by_id.load(input.get('transaction_id'))
+        transaction: BankTransaction = (
+            await hhb_dataloader().bank_transactions_by_id.load(
+                input.get("transaction_id")
+            )
+        )
         if not transaction:
             raise GraphQLError("transaction not found")
 
-        afspraak = await request.dataloader.afspraken_by_id.load(input.get('afspraak_id'))
+        afspraak: Afspraak = await hhb_dataloader().afspraken_by_id.load(
+            input.get("afspraak_id")
+        )
         if not afspraak:
             raise GraphQLError("afspraak not found")
 
-        journaalpost = await request.dataloader.journaalposten_by_transaction.load(input.get('transaction_id'))
-        if journaalpost:
-            raise GraphQLError(f"journaalpost already exists for transaction", nodes=journaalpost)
+        if not (afspraak["credit"] == transaction["is_credit"]):
+            raise GraphQLError(f"credit in afspraak and transaction do not match")
 
-        # TODO validate that the debet/credit matches
-        # TODO add grootboekrekening_id from afspraak
-        post_response = requests.post(
-            f"{settings.HHB_SERVICES_URL}/journaalposten/",
-            data=json.dumps(input, default=str),
-            headers={'Content-type': 'application/json'}
+        previous = await hhb_dataloader().journaalposten_by_transaction.load(
+            input.get("transaction_id")
         )
-        if not post_response.ok:
-            raise GraphQLError(f"Upstream API responded: {post_response.text}")
-        return CreateJournaalpostAfspraak(journaalpost=post_response.json()["data"], ok=True)
+        if previous:
+            raise GraphQLError(f"journaalpost already exists for transaction")
+
+        response = requests.post(
+            f"{settings.HHB_SERVICES_URL}/journaalposten/", json=input
+        )
+        if not response.ok:
+            raise GraphQLError(f"Upstream API responded: {response.text}")
+
+        journaalpost = response.json()["data"]
+        journaalpost["afspraak"] = afspraak
+
+        return CreateJournaalpostAfspraak(journaalpost=journaalpost, ok=True)
 
 
 class CreateJournaalpostGrootboekrekening(graphene.Mutation):
     """Create a Journaalpost with a Grootboekrekening"""
+
     class Arguments:
         input = graphene.Argument(CreateJournaalpostGrootboekrekeningInput)
 
     ok = graphene.Boolean()
     journaalpost = graphene.Field(lambda: Journaalpost)
 
+    @property
+    def gebruikers_activiteit(self):
+        return dict(
+            action="Create",
+            entities=gebruikers_activiteit_entities(
+                result=self, key="journaalpost", entity_type="journaalpost"
+            )
+            + gebruikers_activiteit_entities(
+                result=self.journaalpost, key="transaction", entity_type="transaction"
+            ),
+            after=dict(journaalpost=self.journaalpost),
+        )
+
+    @log_gebruikers_activiteit
     async def mutate(root, info, input, **kwargs):
         """ Create the new Journaalpost """
         # Validate that the references exist
-        transaction = await request.dataloader.bank_transactions_by_id.load(input.get('transaction_id'))
+        transaction: BankTransaction = (
+            await hhb_dataloader().bank_transactions_by_id.load(
+                input.get("transaction_id")
+            )
+        )
         if not transaction:
             raise GraphQLError("transaction not found")
 
-        grootboekrekening = await request.dataloader.grootboekrekeningen_by_id.load(input.get('grootboekrekening_id'))
+        grootboekrekening: Grootboekrekening = (
+            await hhb_dataloader().grootboekrekeningen_by_id.load(
+                input.get("grootboekrekening_id")
+            )
+        )
         if not grootboekrekening:
             raise GraphQLError("grootboekrekening not found")
 
-        journaalpost = await request.dataloader.journaalposten_by_transaction.load(input.get('transaction_id'))
-        if journaalpost:
-            raise GraphQLError(f"Journaalpost already exists for Transaction", nodes=journaalpost)
+        if not (grootboekrekening["credit"] == transaction["is_credit"]):
+            raise GraphQLError(f"credit in afspraak and transaction do not match")
 
-
-        # TODO validate that the debet/credit matches
-        post_response = requests.post(
-            f"{settings.HHB_SERVICES_URL}/journaalposten/",
-            data=json.dumps(input, default=str),
-            headers={'Content-type': 'application/json'}
+        previous = await hhb_dataloader().journaalposten_by_transaction.load(
+            input.get("transaction_id")
         )
-        if not post_response.ok:
-            raise GraphQLError(f"Upstream API responded: {post_response.text}")
-        return CreateJournaalpostGrootboekrekening(journaalpost=post_response.json()["data"], ok=True)
+        if previous:
+            raise GraphQLError(f"Journaalpost already exists for Transaction")
+
+        response = requests.post(
+            f"{settings.HHB_SERVICES_URL}/journaalposten/",
+            json=input,
+        )
+        if not response.ok:
+            raise GraphQLError(f"Upstream API responded: {response.text}")
+        journaalpost = response.json()["data"]
+        return CreateJournaalpostGrootboekrekening(journaalpost=journaalpost, ok=True)

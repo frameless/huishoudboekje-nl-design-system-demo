@@ -1,5 +1,6 @@
 import requests_mock
 from requests_mock import Adapter
+from pydash import objects
 
 from hhb_backend.graphql import settings
 
@@ -9,6 +10,7 @@ def test_update_gebruiker_success(client):
         post_adapter = mock.post(f"{settings.HHB_SERVICES_URL}/gebruikers/1", status_code=200, json={"data": {"id": 1}})
         get_adapter = mock.get(f"{settings.HHB_SERVICES_URL}/gebruikers/?filter_ids=1", status_code=200,
                                json={"data": [{"id": 1}]})
+        log_adapter = mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json={'data': {'id': 1}}, status_code=201)
         response = client.post(
             "/graphql",
             json={
@@ -46,4 +48,6 @@ def test_update_gebruiker_success(client):
         )
         assert get_adapter.called_once
         assert post_adapter.called_once
-        assert response.json["data"]["updateGebruiker"]["ok"] is True
+        assert log_adapter.called_once
+        assert objects.get(response.json, 'errors') == None
+        assert response.json == {"data": {"updateGebruiker": {"ok": True, "gebruiker": {"id": 1}}}}
