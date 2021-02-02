@@ -16,6 +16,7 @@ variables:
   # see https://docs.gitlab.com/ee/user/packages/dependency_proxy/index.html#authenticate-with-docker_auth_config
   DOCKER_PROXY: "gitlab.com/commonground/huishoudboekje/dependency_proxy/containers/"
   PYTHON_POSTGRES: python-postgres
+  COMPONENT_VERSION: "0.20.0"
 
 stages:
   - build

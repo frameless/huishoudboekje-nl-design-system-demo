@@ -1,6 +1,0 @@
-apiVersion: v2
-name: docs
-description: NLX Documentation
-type: application
-version: 0.87.1
-appVersion: 0.87.1

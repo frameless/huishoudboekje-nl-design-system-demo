@@ -2,26 +2,33 @@ apiVersion: v2
 name: huishoudboekje
 description: Metachart for the Huishoudboekje Schaalbaar application
 type: application
-version: 0.1.0
-appVersion: 1.16.0
-
+version: 0.20.0
+appVersion: "0.20.0"
 dependencies:
   - name: medewerker-backend
-    version: 0.1.0
+    repository: "file://../../charts/medewerker-backend"
+    version: ""
   - name: medewerker-frontend
-    version: 0.1.0
+    repository: "file://../..//charts/medewerker-frontend"
+    version: ""
   - name: huishoudboekje-service
-    version: 0.1.0
+    version: ""
+    repository: "file://../..//charts/huishoudboekje-service"
   - name: organisatie-service
-    version: 0.1.0
+    version: ""
+    repository: "file://../..//charts/organisatie-service"
   - name: bank-transactie-service
-    version: 0.1.0
+    version: ""
+    repository: "file://../..//charts/bank-transactie-service"
   - name: grootboek-service
-    version: 0.1.0
+    version: ""
+    repository: "file://../..//charts/grootboek-service"
   - name: log-service
-    version: 0.1.0
+    version: ""
+    repository: "file://../..//charts/log-service"
   - name: database
-    version: 0.1.0
+    version: ""
+    repository: "file://../..//charts/database"
   - name: dex
     version: 2.13.0
     repository: "@stable"

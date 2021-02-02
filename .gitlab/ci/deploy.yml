@@ -1,11 +1,15 @@
 # Deploy template for app
-.deploy-app:
+.deploy:
   stage: deploy
   needs:
-    - build-cg
+    - build-shell-runner
+    - build-helm
   image: registry.gitlab.com/commonground/core/review-app-deployer:latest
+  tags:
+    - cg
+    - docker
   environment:
-    name: review/$CI_COMMIT_REF_SLUG
+    name: $CI_COMMIT_REF_SLUG
     url: https://$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN/
     on_stop: destroy-app
   variables:
@@ -14,22 +18,17 @@
     OIDC_CLIENT_SECRET: "ZwwcL2zjQyJUBnFPVoOb"
     THEME: "sloothuizen"
   before_script:
-    - helm repo add stable "https://charts.helm.sh/stable"
-    - helm repo add bitnami "https://charts.bitnami.com/bitnami"
-    - find helm -name tmpcharts -exec rm -rvf {} \;
-    - helm repo update
-    - helm dependency build helm/charts/huishoudboekje
     - |
       HHB_HOST=${HHB_HOST:-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN}
       OIDC_ISSUER=${OIDC_ISSUER:-https://dex-sloothuizen-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN}
-      DATABASE_PERSISTENCE="${DATABASE_PERSISTENCE:-false}"
+      DATABASE_PERSISTENCE="${DATABASE_PERSISTENCE:-true}"
     - sh helm/theme-yaml.sh frontend/theme/${THEME:-sloothuizen} > helm/theme.yaml
     # This lets the huishoudboekje postgresql be upgraded
     # see https://stackoverflow.com/questions/53186601/re-use-persistentvolume-after-re-installing-a-helm-deployment
     - kubectl delete --namespace $REVIEW_NAMESPACE statefulsets.apps huishoudboekje-postgresql --cascade=false 2>&1 >/dev/null  || true
   script:
     - |
-      helm upgrade --install "huishoudboekje" helm/charts/huishoudboekje \
+      helm upgrade --install "huishoudboekje" helm/repo/huishoudboekje-${COMPONENT_VERSION}.tgz \
         --debug \
         --namespace $REVIEW_NAMESPACE --create-namespace \
         --values helm/charts/huishoudboekje/values.yaml \
@@ -70,192 +69,107 @@
       - ci_review_hostname.txt
   only:
     - branches@commonground/huishoudboekje/app-new
-  tags:
-    - cg
-    - docker
   retry:
     max: 2
     when: script_failure
-
-.deploy-docs:
-  stage: deploy
-  needs:
-    - build-cg
-  image: registry.gitlab.com/commonground/core/review-app-deployer:latest
-  variables:
-    DOCS_HOST: docs-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN
-  script:
-    - |
-      helm upgrade --install --create-namespace "huishoudboekje-docs" ./helm/charts/docs \
-        --namespace $REVIEW_NAMESPACE \
-        --values ./helm/charts/docs/values.yaml \
-        --set "global.imageTag=$IMAGE_TAG" \
-        --set "ingress.hosts[0]=$DOCS_HOST"
-    - echo "DOCS_URL=https://${DOCS_HOST}" > docs.env
-  artifacts:
-    reports:
-      dotenv: docs.env
-  environment:
-    name: review/docs-${CI_COMMIT_REF_SLUG}
-    url: ${DOCS_URL}
-    on_stop: destroy-docs
-  only:
-    - branches@commonground/huishoudboekje/app-new
-  tags:
-    - cg
-    - docker
-  retry:
-    max: 2
-    when: script_failure
-
-.test:
-  variables:
-    REVIEW_NAMESPACE: "hhb-test"
-    APP_SETTINGS: "hhb_backend.config.StagingConfig"
-    DATABASE_PERSISTENCE: "true"
-
-.acc:
-  variables:
-    REVIEW_NAMESPACE: "hhb-acc"
-    DATABASE_PERSISTENCE: "true"
-
-.proddemo:
-  variables:
-    REVIEW_NAMESPACE: "hhb-demo"
-    DATABASE_PERSISTENCE: "true"
-
-# Deploy (Review)
-deploy-review:
-  environment:
-    url: https://hhb-${CI_ENVIRONMENT_SLUG}.${REVIEW_BASE_DOMAIN}/
-    auto_stop_in: 10 days
-  variables:
-    APP_SETTINGS: "hhb_backend.config.StagingConfig"
-  extends:
-    - .deploy-app
-  except:
-    - master
-    - develop
-    - acceptance
-
-# Deploy (TEST)
-deploy-test:
-  extends:
-    - .test
-    - .deploy-app
-  only:
-    - develop
-
-# Deploy (ACC)
-deploy-acc:
-  extends:
-    - .acc
-    - .deploy-app
-  only:
-    - acceptance
-
-# Deploy (PROD/DEMO)
-deploy-proddemo:
-  extends:
-    - .proddemo
-    - .deploy-app
-  only:
-    - master
-
-
-# Deploy Docs (Review)
-docs-deploy-review:
-  variables:
-    DOCS_HOST: docs-hhb-${CI_ENVIRONMENT_SLUG}.$REVIEW_BASE_DOMAIN
-  extends:
-    - .deploy-docs
-  environment:
-    auto_stop_in: 10 days
-  except:
-    - master
-    - develop
-    - acceptance
-  when: manual
-
-# Deploy (TEST)
-docs-deploy-test:
-  extends:
-    - .test
-    - .deploy-docs
-  only:
-    - develop
-
-# Deploy (ACC)
-docs-deploy-acc:
-  extends:
-    - .acc
-    - .deploy-docs
-  only:
-    - acceptance
-
-# Deploy (PROD/DEMO)
-docs-deploy-proddemo:
-  extends:
-    - .proddemo
-    - .deploy-docs
-  only:
-    - master
 
 # Shut down app
-.destroy:
+destroy-app:
   stage: deploy
   image: registry.gitlab.com/commonground/core/review-app-deployer:latest
+  tags:
+    - cg
+    - docker
+  environment:
+    name: $CI_COMMIT_REF_SLUG
+    action: stop
   variables:
     GIT_STRATEGY: none
   script:
     - kubectl delete namespace $REVIEW_NAMESPACE
   when: manual
-  environment:
-    action: stop
-  tags:
-    - cg
-    - docker
   retry:
     max: 2
     when: script_failure
-
-destroy-app:
-  extends: .destroy
-  environment:
-    name: review/$CI_COMMIT_REF_SLUG
-  before_script:
-    - helm uninstall --namespace $REVIEW_NAMESPACE postgres-operator || true
-  except:
-    - master
-    - develop
-    - acceptance
-
-destroy-docs:
-  extends: .destroy
-  environment:
-    name: review/docs-${CI_COMMIT_REF_SLUG}
   except:
     - master
     - develop
     - acceptance
 
 .helm-test:
-  environment:
-    name: review/$CI_COMMIT_REF_SLUG
+  stage: e2e
+  image: registry.gitlab.com/commonground/core/review-app-deployer:latest
   tags:
     - cg
     - docker
-  stage: e2e
-  image: registry.gitlab.com/commonground/core/review-app-deployer:latest
+  environment:
+    name: $CI_COMMIT_REF_SLUG
   script:
     helm test --namespace $REVIEW_NAMESPACE  --logs  huishoudboekje
   allow_failure: true
+
+.develop:
+  variables:
+    REVIEW_NAMESPACE: "hhb-test"
+    APP_SETTINGS: "hhb_backend.config.StagingConfig"
+
+.acceptance:
+  variables:
+    REVIEW_NAMESPACE: "hhb-acc"
+
+.master:
+  variables:
+    REVIEW_NAMESPACE: "hhb-demo"
+
+# Deploy hhb-<environment slug>.nlx.reviews
+deploy-review:
+  environment:
+    url: https://hhb-${CI_ENVIRONMENT_SLUG}.${REVIEW_BASE_DOMAIN}/
+    auto_stop_in: 10 days
+  variables:
+    APP_SETTINGS: "hhb_backend.config.StagingConfig"
+    DATABASE_PERSISTENCE: "false"
+  extends:
+    - .deploy
+  only:
+    - branches@commonground/huishoudboekje/app-new
+  except:
+    - master
+    - develop
+    - acceptance
+
+# Deploy hhb-test.nlx.reviews
+deploy-develop:
+  extends:
+    - .develop
+    - .deploy
+  only:
+    - develop@commonground/huishoudboekje/app-new
+
+# Deploy hhb-acc.nlx.reviews
+deploy-acc:
+  extends:
+    - .acceptance
+    - .deploy
+  only:
+    - acceptance@commonground/huishoudboekje/app-new
+
+# Deploy hhb-demo.nlx.reviews
+deploy-master:
+  extends:
+    - .master
+    - .deploy
+  only:
+    - master@commonground/huishoudboekje/app-new
+
 
 helm-test-review:
   needs:
     - deploy-review
   extends:
     - .helm-test
+  only:
+    - branches@commonground/huishoudboekje/app-new
   except:
     - master
     - develop
@@ -263,9 +177,9 @@ helm-test-review:
 
 helm-test-develop:
   needs:
-    - deploy-test
+    - deploy-develop
   extends:
     - .helm-test
-    - .test
+    - .develop
   only:
-    - develop
+    - develop@commonground/huishoudboekje/app-new

@@ -5,7 +5,7 @@
 : "${DATABASE_URL:?DATABASE_URL not set}"
 : "${DATABASE_NAME:?DATABASE_NAME not set}"
 
-RUBRIEKEN=$(psql -d "${DATABASE_URL}" -At -c "SELECT COUNT(*) FROM rubrieken;")
+RUBRIEKEN=$(psql -d "${DATABASE_URL}" -At -c "SELECT COUNT(*) FROM alembic_version;")
 
 if [ "${RUBRIEKEN}" -gt 0 ]; then
   echo "Sample data already loaded for '${DATABASE_NAME}'"
