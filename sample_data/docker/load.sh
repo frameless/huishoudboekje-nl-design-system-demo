@@ -4,10 +4,11 @@
 
 : "${DATABASE_URL:?DATABASE_URL not set}"
 : "${DATABASE_NAME:?DATABASE_NAME not set}"
+: "${DATABASE_COUNT_TABLE:?DATABASE_COUNT_TABLE not set}"
 
-RUBRIEKEN=$(psql -d "${DATABASE_URL}" -At -c "SELECT COUNT(*) FROM alembic_version;")
+COUNT=$(psql -d "${DATABASE_URL}" -At -c "SELECT COUNT(*) FROM ${DATABASE_COUNT_TABLE};")
 
-if [ "${RUBRIEKEN}" -gt 0 ]; then
+if [ "${COUNT}" -gt 0 ]; then
   echo "Sample data already loaded for '${DATABASE_NAME}'"
   exit 0 # not an error, loading only works on a new database
 fi

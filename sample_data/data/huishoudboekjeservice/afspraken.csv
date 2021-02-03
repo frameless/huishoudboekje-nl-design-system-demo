@@ -1,9 +1,9 @@
-organisatie_id|rubriek_id|bedrag|credit|automatische_incasso|aantal_betalingen|interval|start_datum|eind_datum|gebruiker_id|tegen_rekening_id|actief|beschrijving
-21|4|76532|True|False|12|P0Y1M0W0D|2021-01-01|2021-12-31|201|40226|True|Loon
-5|4|14784|True|False|12|P0Y1M0W0D|2019-01-07|2021-12-31|201|40204|True|Aanvullende uitkering
-2|4|39100|True|False|12|P0Y1M0W0D|2019-01-20|2021-12-31|201|40201|True|Kindgebonden budget
-2|4|32200|True|False|12|P0Y1M0W0D|2019-01-20|2021-12-31|201|40201|True|Huurtoeslag
-2|4|10700|True|False|12|P0Y1M0W0D|2019-01-20|2021-12-31|201|40201|True|Zorgtoeslag
-10|7|64735|False|True|12|P0Y1M0W0D|2019-01-01|2021-12-31|201|40215|True|Huur
-14|3|13200|False|True|12|P0Y1M0W0D|2019-01-01|2021-12-31|201|40219|True|Elektriciteit
-8|2|4161|False|True|12|P0Y3M0W0D|2021-01-01|2021-12-31|201|40212|True|Water
+"organisatie_id"|"rubriek_id"|"bedrag"|"credit"|"automatische_incasso"|"aantal_betalingen"|"interval"|"start_datum"|"eind_datum"|"gebruiker_id"|"tegen_rekening_id"|"actief"|"beschrijving"
+"21"|"4"|"76532"|"True"|"False"|"12"|"P0Y1M0W0D"|"2021-01-01"|"2021-12-31"|"201"|"40226"|"True"|"Loon"
+"5"|"4"|"14784"|"True"|"False"|"12"|"P0Y1M0W0D"|"2019-01-07"|"2021-12-31"|"201"|"40205"|"True"|"Aanvullende uitkering"
+"2"|"4"|"39100"|"True"|"False"|"12"|"P0Y1M0W0D"|"2019-01-20"|"2021-12-31"|"201"|"40201"|"True"|"Kindgebonden budget"
+"2"|"4"|"32200"|"True"|"False"|"12"|"P0Y1M0W0D"|"2019-01-20"|"2021-12-31"|"201"|"40201"|"True"|"Huurtoeslag"
+"2"|"4"|"10700"|"True"|"False"|"12"|"P0Y1M0W0D"|"2019-01-20"|"2021-12-31"|"201"|"40201"|"True"|"Zorgtoeslag"
+"10"|"7"|"64735"|"False"|"True"|"12"|"P0Y1M0W0D"|"2019-01-01"|"2021-12-31"|"201"|"40215"|"True"|"Huur"
+"14"|"3"|"13200"|"False"|"True"|"12"|"P0Y1M0W0D"|"2019-01-01"|"2021-12-31"|"201"|"40219"|"True"|"Elektriciteit"
+"8"|"2"|"4161"|"False"|"True"|"12"|"P0Y3M0W0D"|"2021-01-01"|"2021-12-31"|"201"|"40212"|"True"|"Water"

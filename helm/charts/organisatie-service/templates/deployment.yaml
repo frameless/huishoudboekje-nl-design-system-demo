@@ -131,6 +131,8 @@ spec:
               value: "postgresql://$(PGUSER):$(PGPASSWORD)@{{ .Release.Name }}-postgresql/$(PGDATABASE)"
             - name: DATABASE_NAME
               value: "$(PGDATABASE)"
+            - name: DATABASE_COUNT_TABLE
+              value: organisaties
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

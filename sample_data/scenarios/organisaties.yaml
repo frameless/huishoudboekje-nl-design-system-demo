@@ -1,3 +1,6 @@
+bulk:
+- aantal: 10
+
 organisaties:
 # overheden
 - naam: "Belastingdienst Toeslagen"
@@ -45,7 +48,7 @@ organisaties:
   - iban: "NL71ABNA0411065785"
     rekeninghouder: "GEMEENTE UTRECHT"
   - iban: "NL92BNGH0285178601"
-    rekeninghouder: "Gemeente Utrecht"
+    rekeninghouder: ""
   - iban: "NL76BNGH0285178598"
     rekeninghouder: "GEM UTRECHT WENI"
 
@@ -238,5 +241,3 @@ organisaties:
   - iban: "AH00AHOL0000000001"
     rekeninghouder: "Albert Heijn B.V."
 
-scenarios:
-- aantal: 50

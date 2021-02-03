@@ -8,7 +8,8 @@ scenarios:
       - aantal: 1
         rubriek: "Inkomsten"
         beschrijving: "Loon"
-        organisatie_kvk: "35012085"
+        organisatie:
+          kvk: "35012085"
         bedrag: 76532
         credit: true
         automatische_incasso: false
@@ -18,8 +19,9 @@ scenarios:
       - aantal: 1
         rubriek: "Inkomsten"
         beschrijving: "Aanvullende uitkering"
-        organisatie_kvk: "30280353"
-  # TODO: add attribute for specific IBAN
+        organisatie:
+          kvk: "30280353"
+          iban: "NL76BNGH0285178598"
         bedrag: 14784
         credit: true
         automatische_incasso: false
@@ -29,7 +31,8 @@ scenarios:
       - aantal: 1
         rubriek: "Inkomsten"
         beschrijving: "Kindgebonden budget"
-        organisatie_kvk: "27365323"
+        organisatie:
+          kvk: "27365323"
         bedrag: 39100
         credit: true
         automatische_incasso: false
@@ -39,7 +42,8 @@ scenarios:
       - aantal: 1
         rubriek: "Inkomsten"
         beschrijving: "Huurtoeslag"
-        organisatie_kvk: "27365323"
+        organisatie:
+          kvk: "27365323"
         bedrag: 32200
         credit: true
         automatische_incasso: false
@@ -49,7 +53,8 @@ scenarios:
       - aantal: 1
         rubriek: "Inkomsten"
         beschrijving: "Zorgtoeslag"
-        organisatie_kvk: "27365323"
+        organisatie:
+          kvk: "27365323"
         bedrag: 10700
         credit: true
         automatische_incasso: false
@@ -60,7 +65,8 @@ scenarios:
       - aantal: 1
         rubriek: "Betaalde huur"
         beschrijving: "Huur"
-        organisatie_kvk: "30038487"
+        organisatie:
+          kvk: "30038487"
         bedrag: 64735
         credit: false
         automatische_incasso: true
@@ -70,7 +76,8 @@ scenarios:
       - aantal: 1
         rubriek: "Elektra"
         beschrijving: "Elektriciteit"
-        organisatie_kvk: "05082820"
+        organisatie:
+          kvk: "05082820"
         bedrag: 13200
         credit: false
         automatische_incasso: true
@@ -80,7 +87,8 @@ scenarios:
       - aantal: 1
         rubriek: "Water"
         beschrijving: "Water"
-        organisatie_kvk: "05069581"
+        organisatie:
+          kvk: "05069581"
         bedrag: 4161
         credit: false
         automatische_incasso: true

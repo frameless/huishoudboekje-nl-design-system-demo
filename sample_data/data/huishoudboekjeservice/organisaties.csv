@@ -1,71 +1,31 @@
-id|kvk_nummer|weergave_naam
-2|27365323|Belastingdienst
-3|56806787|Beschermd wonen
-4|50973029|DUO
-5|30280353|Gemeente Utrecht
-6|34366008|Sociale Verzekeringsbank Utrecht
-7|34360247|UWV UTRECHT WIA-uitkering (WGA of IVA)
-8|05069581|Vitens N.V.
-9|30136131|Stichting Mitros
-10|30038487|Stichting Portaal
-11|34297646|Budget Energie
-12|24324527|Eneco Consumenten
-13|17146989|Energiedirect B.V.
-14|05082820|ENGIE Nederland Retail B.V.
-15|13041611|Essent Retail Energie B.V.
-16|50544403|Anderzorg
-17|10029718|Bewuzt
-18|18028752|CZ Groep Zorgverzekeraar
-19|24230430|DSW Ziektekostenverzekeringen
-20|30208631|FBTO Zorgverzekeringen N.V.
-21|35012085|Albert Heijn
-22|00462346|Haan BV
-23|00462347|Dijkstra, Boer and Linden
-24|00462348|Kok V.O.F.
-25|00462349|Broek BV
-26|00462350|Janssen - Linden
-27|00462351|Smits en Zonen
-28|00462352|Broek, Mulder and Vos
-29|00462353|Wal en Zonen
-30|00462354|Visser, Vermeulen and Visser
-31|00462355|Jacobs, Janssen and Veen
-32|00462356|Haan, Willems and Vries
-33|00462357|Vos - Beek
-34|00462358|Berg, Dam and Smit
-35|00462359|Meijer, Bakker and Meijer
-36|00462360|Klein Group
-37|00462361|Ruiter BV
-38|00462362|Peters, Vliet and Visser
-39|00462363|Dam, Veen and Brouwer
-40|00462364|Vries BV
-41|00462365|Hendriks BV
-42|00462366|Koster - Brouwer
-43|00462367|Bruin BV
-44|00462368|Bos, Brouwer and Brink
-45|00462369|Haan - Janssen
-46|00462370|Schouten V.O.F.
-47|00462371|Graaf BV
-48|00462372|Smit en Zonen
-49|00462373|Maas - Wal
-50|00462374|Leeuwen V.O.F.
-51|00462375|Heuvel, Klein and Meer
-52|00462376|Wal - Jong
-53|00462377|Koster, Schouten and Ruiter
-54|00462378|Dam BV
-55|00462379|Graaf, Groot and Bakker
-56|00462380|Berg, Broek and Vliet
-57|00462381|Jacobs Group
-58|00462382|Bos Group
-59|00462383|Vries - Bos
-60|00462384|Jacobs, Groot and Bos
-61|00462385|Visser V.O.F.
-62|00462386|Ruiter - Willems
-63|00462387|Heuvel - Dijkstra
-64|00462388|Jacobs V.O.F.
-65|00462389|Janssen - Meijer
-66|00462390|Schouten - Bruin
-67|00462391|Dam - Stichting
-68|00462392|Stichting Group
-69|00462393|Meijer en Zonen
-70|00462394|Schouten - Maas
-71|00462395|Heuvel, Vries and Koning
+"id"|"kvk_nummer"|"weergave_naam"
+"2"|"27365323"|"Belastingdienst"
+"3"|"56806787"|"Beschermd wonen"
+"4"|"50973029"|"DUO"
+"5"|"30280353"|"Gemeente Utrecht"
+"6"|"34366008"|"Sociale Verzekeringsbank Utrecht"
+"7"|"34360247"|"UWV UTRECHT WIA-uitkering (WGA of IVA)"
+"8"|"05069581"|"Vitens N.V."
+"9"|"30136131"|"Stichting Mitros"
+"10"|"30038487"|"Stichting Portaal"
+"11"|"34297646"|"Budget Energie"
+"12"|"24324527"|"Eneco Consumenten"
+"13"|"17146989"|"Energiedirect B.V."
+"14"|"05082820"|"ENGIE Nederland Retail B.V."
+"15"|"13041611"|"Essent Retail Energie B.V."
+"16"|"50544403"|"Anderzorg"
+"17"|"10029718"|"Bewuzt"
+"18"|"18028752"|"CZ Groep Zorgverzekeraar"
+"19"|"24230430"|"DSW Ziektekostenverzekeringen"
+"20"|"30208631"|"FBTO Zorgverzekeringen N.V."
+"21"|"35012085"|"Albert Heijn"
+"22"|"00462346"|"Boer Group"
+"23"|"00462347"|"Wal - Wit"
+"24"|"00462348"|"Bakker - Bos"
+"25"|"00462349"|"Haan Group"
+"26"|"00462350"|"Heuvel - Bosch"
+"27"|"00462351"|"Willems - Wit"
+"28"|"00462352"|"Ruiter V.O.F."
+"29"|"00462353"|"Meer, Dijkstra and Linden"
+"30"|"00462354"|"Schouten - Smit"
+"31"|"00462355"|"Klein V.O.F."
