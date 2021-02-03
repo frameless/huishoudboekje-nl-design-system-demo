@@ -1,5 +1,5 @@
 """ Test GET /rubrieken/(<rubriek_id>/) """
-from models.afspraak import Afspraak
+
 
 def test_rubriek_expose_afspraak(client, rubriek_factory, afspraak_factory):
     """ Test /rubrieken/ path """
@@ -9,12 +9,11 @@ def test_rubriek_expose_afspraak(client, rubriek_factory, afspraak_factory):
     assert response.status_code == 200
     assert response.json["data"]["afspraken"] == [afspraak.id]
 
+
 def test_rubriek_get_filter_grootboekrekening(client, rubriek_factory, afspraak_factory):
     """ Test /rubrieken/?filter_grootboekrekeningen=.... path """
-    rubriek1 = rubriek_factory.create_rubriek()
-    rubriek2 = rubriek_factory.create_rubriek()
-    rubriek1.grootboekrekening_id = "Test"
-    rubriek2.grootboekrekening_id = "Test2"
+    rubriek1 = rubriek_factory.create_rubriek(grootboekrekening_id="Test")
+    rubriek2 = rubriek_factory.create_rubriek(grootboekrekening_id="Test2")
     response = client.get(f'/rubrieken/?filter_grootboekrekeningen={rubriek1.grootboekrekening_id}')
     assert response.status_code == 200
     assert len(response.json["data"]) == 1
