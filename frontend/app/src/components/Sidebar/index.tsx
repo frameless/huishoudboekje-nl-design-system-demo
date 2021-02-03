@@ -9,15 +9,15 @@ import SidebarLink from "./SidebarLink";
 const Sidebar: React.FC<BoxProps> = (props) => {
 	const {t} = useTranslation();
 
-	// Todo extra link naar Transacties onder bankzaken en dan bankzaken door redirecten naar transacties
 	return (<>
 		<Stack spacing={5} p={5} alignSelf={"center"} borderRadius={5} bg={"white"} {...props} width={"100%"}>
 			<SidebarLink to={Routes.Burgers} icon={RiUserLine}>{t("sidebar.burgers")}</SidebarLink>
 			<SidebarLink to={Routes.Organisaties} icon={FaRegBuilding}>{t("sidebar.organisaties")}</SidebarLink>
 			<Stack>
-				<SidebarLink exactMatch to={Routes.Transactions} icon={MdCreditCard}>{t("sidebar.bankzaken")}</SidebarLink>
+				<SidebarLink exactMatch to={Routes.Banking} icon={MdCreditCard}>{t("sidebar.bankzaken")}</SidebarLink>
 				<Box pl={"27px"}>
 					<Stack spacing={1} borderLeft={"1px solid"} borderLeftColor={"gray.400"} pl={"21px"}>
+						<SidebarLink size={"sm"} to={Routes.Transactions}>{t("sidebar.transacties")}</SidebarLink>
 						<SidebarLink size={"sm"} to={Routes.CSMs}>{t("sidebar.bronbestanden")}</SidebarLink>
 						<SidebarLink size={"sm"} to={Routes.BookingsExport}>{t("sidebar.overschrijvingen")}</SidebarLink>
 					</Stack>

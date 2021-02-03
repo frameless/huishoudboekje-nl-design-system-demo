@@ -137,7 +137,7 @@
             "bankAccount": "Rekening",
             "sections": {
                 "customerStatementMessages": {
-                    "title": "Transacties importeren",
+                    "title": "Bronbestanden",
                     "detailText": "Hier is het mogelijk om bij- en afschrijvingen uit een MT940-bestand te importeren."
                 },
                 "transactions": {
@@ -351,6 +351,7 @@
         "burgers": "Burgers",
         "organisaties": "Organisaties",
         "bankzaken": "Bankzaken",
+        "transacties": "Transacties",
         "bronbestanden": "Bronbestanden",
         "overschrijvingen": "Overschrijvingen",
         "gebeurtenissen": "Gebeurtenissen",

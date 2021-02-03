@@ -1,6 +1,6 @@
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {Route, Switch} from "react-router-dom";
+import {Redirect, Route, Switch} from "react-router-dom";
 import Routes from "../../config/routes";
 import Page from "../Layouts/Page";
 import BookingsExport from "./Bookings/BookingsExport";
@@ -16,6 +16,9 @@ const Banking = () => {
 				<Route path={Routes.Transactions} component={Transactions} />
 				<Route path={Routes.CSMs} component={CustomerStatementMessages} />
 				<Route path={Routes.BookingsExport} component={BookingsExport} />
+				<Route>
+					<Redirect to={Routes.Transactions} />
+				</Route>
 			</Switch>
 		</Page>
 	);
