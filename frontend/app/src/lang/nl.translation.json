@@ -297,6 +297,11 @@
         "burgers": "Burgers"
     },
     "configuratie": "Configuratie",
+    "auditLog": {
+        "unknown": "Onbekende gebeurtenis",
+        "createGebruiker": "{{gebruiker}} voegde <linkBurger>{{burger}}</linkBurger> toe.",
+        "updateAfspraak": "{{gebruiker}} wijzigde een afspraak van <linkBurger>{{burger}}</linkBurger> met <linkOrganisatie>{{organisatie}}</linkOrganisatie>."
+    },
     "organizations": {
         "organizations": "Organisaties"
     },

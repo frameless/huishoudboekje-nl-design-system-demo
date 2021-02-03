@@ -229,6 +229,7 @@ export const GetGebeurtenissenQuery = gql`
                 }
                 organisatie {
                     id
+                    weergaveNaam
                 }
                 afspraak {
                     id

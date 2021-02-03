@@ -1683,7 +1683,7 @@ export type GetGebeurtenissenQuery = (
         & Pick<Gebruiker, 'id' | 'voorletters' | 'voornamen' | 'achternaam'>
       )>, organisatie?: Maybe<(
         { __typename?: 'Organisatie' }
-        & Pick<Organisatie, 'id'>
+        & Pick<Organisatie, 'id' | 'weergaveNaam'>
       )>, afspraak?: Maybe<(
         { __typename?: 'Afspraak' }
         & Pick<Afspraak, 'id'>
@@ -3279,6 +3279,7 @@ export const GetGebeurtenissenDocument = gql`
       }
       organisatie {
         id
+        weergaveNaam
       }
       afspraak {
         id
