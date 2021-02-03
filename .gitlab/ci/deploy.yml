@@ -124,7 +124,6 @@ destroy-app:
 # Deploy hhb-<environment slug>.nlx.reviews
 deploy-review:
   environment:
-    url: https://hhb-${CI_ENVIRONMENT_SLUG}.${REVIEW_BASE_DOMAIN}/
     auto_stop_in: 10 days
   variables:
     APP_SETTINGS: "hhb_backend.config.StagingConfig"
