@@ -10,7 +10,7 @@
     - docker
   environment:
     name: review/$CI_COMMIT_REF_SLUG
-    url: https://$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN/
+    url: https://hhb-$CI_COMMIT_REF_SLUG.$REVIEW_BASE_DOMAIN/
     on_stop: destroy-app
   variables:
     OIDC_DEX: "true"
