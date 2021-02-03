@@ -42,6 +42,9 @@ class DeleteJournaalpost(graphene.Mutation):
             )
             + gebruikers_activiteit_entities(
                 result=self.previous, key="transaction", entity_type="transaction"
+            )
+            + gebruikers_activiteit_entities(
+                result=self.previous, key="grootboekrekening_id", entity_type="grootboekrekening"
             ),
             before=dict(journaalpost=self.previous),
         )

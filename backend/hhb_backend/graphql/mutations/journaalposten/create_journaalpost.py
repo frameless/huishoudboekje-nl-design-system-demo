@@ -113,6 +113,9 @@ class CreateJournaalpostGrootboekrekening(graphene.Mutation):
             )
             + gebruikers_activiteit_entities(
                 result=self.journaalpost, key="transaction", entity_type="transaction"
+            )
+            + gebruikers_activiteit_entities(
+                result=self.journaalpost, key="grootboekrekening_id", entity_type="grootboekrekening"
             ),
             after=dict(journaalpost=self.journaalpost),
         )
