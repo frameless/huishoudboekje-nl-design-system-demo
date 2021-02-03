@@ -22,7 +22,7 @@ const BrowserIcon = ({userAgent}) => {
 		icon = <DynamicIcon name={"safari"} />;
 	}
 
-	let tooltipLabel = t("Onbekende browser");
+	let tooltipLabel = t("unknownBrowser");
 	if (browser.name && browser.version) {
 		tooltipLabel = [browser.name, browser.version].join(" ");
 	}

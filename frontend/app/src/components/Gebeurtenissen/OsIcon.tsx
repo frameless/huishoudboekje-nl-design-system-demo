@@ -21,7 +21,7 @@ const OsIcon = ({userAgent}) => {
 		icon = <DynamicIcon name={"linux"} />;
 	}
 
-	let tooltipLabel = t("Onbekend besturingssysteem");
+	let tooltipLabel = t("unknownOperatingSystem");
 	if (os.name && os.version) {
 		tooltipLabel = [os.name, os.version].join(" ");
 	}

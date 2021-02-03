@@ -22,18 +22,18 @@ const Gebeurtenissen = () => {
 	const sortAuditTrailByTime = (a: GebruikersActiviteit, b: GebruikersActiviteit) => moment(a.timestamp).isBefore(b.timestamp) ? 1 : -1;
 
 	return (
-		<Page title={"Gebeurtenissen"}>
+		<Page title={"pages.gebeurtenissen.title"}>
 
 			<Section>
-				<FormLeft title={t("Gebeurtenissen")} helperText={t("Dit is een overzicht van alle gebruikersactiviteiten.")} />
+				<FormLeft title={t("pages.gebeurtenissen.title")} helperText={t("pages.gebeurtenissen.helperText")} />
 				<Queryable query={$gebeurtenissen} children={data => {
 					const gs: GebruikersActiviteit[] = data.gebruikersactiviteiten || [];
 					return (
 						<Table>
 							<Thead>
 								<Tr>
-									<Th>{t("Activiteit")}</Th>
-									<Th>{t("Meta")}</Th>
+									<Th>{t("pages.gebeurtenissen.activity")}</Th>
+									<Th>{t("pages.gebeurtenissen.meta")}</Th>
 								</Tr>
 							</Thead>
 							<Tbody>

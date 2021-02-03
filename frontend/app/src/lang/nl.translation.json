@@ -298,19 +298,27 @@
     },
     "configuratie": "Configuratie",
     "auditLog": {
-        "unknown": "Onbekende gebeurtenis",
         "createGebruiker": "{{gebruiker}} voegde <linkBurger>{{burger}}</linkBurger> toe.",
-        "updateAfspraak": "{{gebruiker}} wijzigde een afspraak van <linkBurger>{{burger}}</linkBurger> met <linkOrganisatie>{{organisatie}}</linkOrganisatie>."
+        "updateAfspraak": "{{gebruiker}} wijzigde een afspraak van <linkBurger>{{burger}}</linkBurger> met <linkOrganisatie>{{organisatie}}</linkOrganisatie>.",
+        "unknown": "Onbekende gebeurtenis"
     },
-    "organizations": {
-        "organizations": "Organisaties"
-    },
+    "unknownBrowser": "Onbekende browser",
     "pages": {
+        "gebeurtenissen": {
+            "title": "Gebeurtenissen",
+            "helperText": "Dit is een overzicht van gebruikersactiviteiten.",
+            "activity": "Activiteit",
+            "meta": "Meta-informatie"
+        },
         "notFound": {
             "title": "404",
             "subTitle": "Pagina niet beschikbaar",
             "description": "De pagina die je zoekt kan niet worden gevonden."
         }
+    },
+    "unknownOperatingSystem": "Onbekend besturingssysteem",
+    "organizations": {
+        "organizations": "Organisaties"
     },
     "charts": {
         "inkomstenUitgaven": {
