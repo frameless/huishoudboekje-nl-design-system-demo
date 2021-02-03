@@ -2,8 +2,8 @@ import {QuestionIcon} from "@chakra-ui/icons";
 import {Tooltip} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {FaChrome, FaFirefox, FaSafari} from "react-icons/all";
 import UAParser from "ua-parser-js";
+import DynamicIcon from "../DynamicIcon";
 import RoundIcon from "../Layouts/RoundIcon";
 
 const BrowserIcon = ({userAgent}) => {
@@ -13,13 +13,13 @@ const BrowserIcon = ({userAgent}) => {
 	let icon = <QuestionIcon />;
 
 	if (browser.name?.toLowerCase().includes("firefox")) {
-		icon = <FaFirefox />;
+		icon = <DynamicIcon name={"firefox"} />;
 	}
 	else if (browser.name?.toLowerCase().includes("chrome")) {
-		icon = <FaChrome />;
+		icon = <DynamicIcon name={"chrome"} />;
 	}
 	else if (browser.name?.toLowerCase().includes("safari")) {
-		icon = <FaSafari />;
+		icon = <DynamicIcon name={"safari"} />;
 	}
 
 	let tooltipLabel = t("Onbekende browser");
