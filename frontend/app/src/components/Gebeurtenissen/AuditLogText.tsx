@@ -27,10 +27,27 @@ const AuditLogText: React.FC<TextProps & { g: GebruikersActiviteit }> = ({g, ...
 			},
 			// deleteGebruiker: () => <>deleteGebruiker</>,
 			// updateGebruiker: () => <>updateGebruiker</>,
-			// createAfspraak: () => <>createAfspraak</>,
+			createAfspraak: () => {
+				const organisatie = g.entities?.find(e => e.entityType === "organisatie")?.organisatie;
+				const burger = g.entities?.find(e => e.entityType === "burger")?.burger;
+				const afspraak = g.entities?.find(e => e.entityType === "afspraak")?.afspraak;
+
+				const data = {
+					gebruiker: g.gebruikerId,
+					burger: formatBurgerName(burger),
+					organisatie: organisatie?.weergaveNaam,
+				};
+
+				return <Trans i18nKey={"auditLog.createAfspraak"} values={data} components={{
+					linkBurger: burger?.id ? <AuditLogLink to={Routes.Burger(burger.id)}>{formatBurgerName(burger)}</AuditLogLink> : t("unknown"),
+					linkOrganisatie: organisatie?.id ? <AuditLogLink to={Routes.Organisatie(organisatie.id)}>{organisatie.weergaveNaam}</AuditLogLink> : t("unknown"),
+					linkAfspraak: afspraak?.id ? <AuditLogLink to={Routes.EditAgreement(afspraak.id)} /> : t("unknown"),
+				}} />
+			},
 			updateAfspraak: () => {
 				const organisatie = g.entities?.find(e => e.entityType === "organisatie")?.organisatie;
 				const burger = g.entities?.find(e => e.entityType === "burger")?.burger;
+				const afspraak = g.entities?.find(e => e.entityType === "afspraak")?.afspraak;
 
 				const data = {
 					gebruiker: g.gebruikerId,
@@ -41,6 +58,7 @@ const AuditLogText: React.FC<TextProps & { g: GebruikersActiviteit }> = ({g, ...
 				return <Trans i18nKey={"auditLog.updateAfspraak"} values={data} components={{
 					linkBurger: burger?.id ? <AuditLogLink to={Routes.Burger(burger.id)}>{formatBurgerName(burger)}</AuditLogLink> : t("unknown"),
 					linkOrganisatie: organisatie?.id ? <AuditLogLink to={Routes.Organisatie(organisatie.id)}>{organisatie.weergaveNaam}</AuditLogLink> : t("unknown"),
+					linkAfspraak: afspraak?.id ? <AuditLogLink to={Routes.EditAgreement(afspraak.id)} /> : t("unknown"),
 				}} />
 			},
 			// deleteAfspraak: () => <>deleteAfspraak</>,

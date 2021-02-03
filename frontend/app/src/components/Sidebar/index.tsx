@@ -9,6 +9,7 @@ import SidebarLink from "./SidebarLink";
 const Sidebar: React.FC<BoxProps> = (props) => {
 	const {t} = useTranslation();
 
+	// Todo extra link naar Transacties onder bankzaken en dan bankzaken door redirecten naar transacties
 	return (<>
 		<Stack spacing={5} p={5} alignSelf={"center"} borderRadius={5} bg={"white"} {...props} width={"100%"}>
 			<SidebarLink to={Routes.Burgers} icon={RiUserLine}>{t("sidebar.burgers")}</SidebarLink>

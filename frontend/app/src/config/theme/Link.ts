@@ -6,10 +6,9 @@ const baseStyle = {
 
 const variants = {
 	inline: {
-		textDecoration: "underline",
-		color: "inherit",
+		fontWeight: "600",
 		_hover: {
-			color: "primary.700",
+			textDecoration: "underline",
 		}
 	}
 }

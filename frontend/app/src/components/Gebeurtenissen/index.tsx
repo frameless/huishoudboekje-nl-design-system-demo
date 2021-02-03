@@ -22,7 +22,7 @@ const Gebeurtenissen = () => {
 	const sortAuditTrailByTime = (a: GebruikersActiviteit, b: GebruikersActiviteit) => moment(a.timestamp).isBefore(b.timestamp) ? 1 : -1;
 
 	return (
-		<Page title={"pages.gebeurtenissen.title"}>
+		<Page title={t("pages.gebeurtenissen.title")}>
 
 			<Section>
 				<FormLeft title={t("pages.gebeurtenissen.title")} helperText={t("pages.gebeurtenissen.helperText")} />

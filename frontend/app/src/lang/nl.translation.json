@@ -293,23 +293,13 @@
     },
     "booking": "Boeking",
     "unbooked": "Ongeboekt",
-    "burgers": {
-        "burgers": "Burgers"
-    },
-    "configuratie": "Configuratie",
-    "unknownGebruiker": "Onbekende gebruiker",
-    "auditLog": {
-        "createGebruiker": "{{gebruiker}} voegde <linkBurger>{{burger}}</linkBurger> toe.",
-        "updateAfspraak": "{{gebruiker}} wijzigde een afspraak van <linkBurger>{{burger}}</linkBurger> met <linkOrganisatie>{{organisatie}}</linkOrganisatie>.",
-        "unknown": "Onbekende gebeurtenis"
-    },
-    "unknownBrowser": "Onbekende browser ({{name}})",
     "pages": {
         "gebeurtenissen": {
             "title": "Gebeurtenissen",
-            "helperText": "Dit is een overzicht van gebruikersactiviteiten.",
+            "helperTextBurger": "Dit is een overzicht van gebruikersactiviteiten van deze burger.",
             "activity": "Activiteit",
-            "meta": "Meta-informatie"
+            "meta": "Meta-informatie",
+            "helperText": "Dit is een overzicht van gebruikersactiviteiten."
         },
         "notFound": {
             "title": "404",
@@ -317,6 +307,18 @@
             "description": "De pagina die je zoekt kan niet worden gevonden."
         }
     },
+    "burgers": {
+        "burgers": "Burgers"
+    },
+    "configuratie": "Configuratie",
+    "unknownGebruiker": "Onbekende gebruiker",
+    "auditLog": {
+        "createGebruiker": "{{gebruiker}} voegde <linkBurger>{{burger}}</linkBurger> toe.",
+        "createAfspraak": "{{gebruiker}} voegde een <linkAfspraak>afspraak</linkAfspraak> van <linkBurger>{{burger}}</linkBurger> met <linkOrganisatie>{{organisatie}}</linkOrganisatie> toe.",
+        "updateAfspraak": "{{gebruiker}} wijzigde een <linkAfspraak>afspraak</linkAfspraak> van <linkBurger>{{burger}}</linkBurger> met <linkOrganisatie>{{organisatie}}</linkOrganisatie>.",
+        "unknown": "Onbekende gebeurtenis"
+    },
+    "unknownBrowser": "Onbekende browser ({{name}})",
     "unknownOperatingSystem": "Onbekend besturingssysteem",
     "organizations": {
         "organizations": "Organisaties"

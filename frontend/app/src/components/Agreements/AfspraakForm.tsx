@@ -164,7 +164,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 			kenmerk: searchTerm.value,
 			startDatum: moment(startDate.value, "L").format("YYYY-MM-DD"),
 			interval: isRecurring ? XInterval.create(intervalType.value!, intervalNumber.value) : XInterval.empty,
-			aantalBetalingen: !isContinuous ? nTimes.value : 1,
+			aantalBetalingen: isContinuous ? 0 : nTimes.value,
 			actief: isActive,
 			automatischeIncasso: afspraakType === AfspraakType.Expense ? isAutomatischeIncasso : null,
 		});

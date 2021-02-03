@@ -22,6 +22,9 @@ const BrowserIcon = ({userAgent}) => {
 		else if (browser.name?.toLowerCase().includes("safari")) {
 			icon = <DynamicIcon name={"safari"} />;
 		}
+		else if (browser.name?.toLowerCase().includes("edge")) {
+			icon = <DynamicIcon name={"edge"} />;
+		}
 	}
 	else if (userAgent.toLowerCase().includes("graphql")) {
 		icon = <DynamicIcon name={"graphql"} />;
