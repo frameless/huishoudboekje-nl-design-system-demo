@@ -38,7 +38,7 @@ class CreateJournaalpostAfspraak(graphene.Mutation):
     @property
     def gebruikers_activiteit(self):
         return dict(
-            action="Create",
+            action="createJournaalpostAfspraak",
             entities=gebruikers_activiteit_entities(
                 result=self, key="journaalpost", entity_type="journaalpost"
             )
@@ -107,12 +107,15 @@ class CreateJournaalpostGrootboekrekening(graphene.Mutation):
     @property
     def gebruikers_activiteit(self):
         return dict(
-            action="Create",
+            action="createJournaalpostGrootboekrekening",
             entities=gebruikers_activiteit_entities(
                 result=self, key="journaalpost", entity_type="journaalpost"
             )
             + gebruikers_activiteit_entities(
                 result=self.journaalpost, key="transaction", entity_type="transaction"
+            )
+            + gebruikers_activiteit_entities(
+                result=self.journaalpost, key="grootboekrekening_id", entity_type="grootboekrekening"
             ),
             after=dict(journaalpost=self.journaalpost),
         )

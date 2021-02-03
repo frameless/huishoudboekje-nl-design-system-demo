@@ -24,7 +24,7 @@ class DeleteJournaalpost(graphene.Mutation):
     @property
     def gebruikers_activiteit(self):
         return dict(
-            action="Delete",
+            action="deleteJournaalpostAfspraak",
             entities=gebruikers_activiteit_entities(
                 result=self, key="previous", entity_type="journaalpost"
             )
@@ -42,6 +42,9 @@ class DeleteJournaalpost(graphene.Mutation):
             )
             + gebruikers_activiteit_entities(
                 result=self.previous, key="transaction", entity_type="transaction"
+            )
+            + gebruikers_activiteit_entities(
+                result=self.previous, key="grootboekrekening_id", entity_type="grootboekrekening"
             ),
             before=dict(journaalpost=self.previous),
         )

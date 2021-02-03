@@ -35,7 +35,7 @@ class UpdateGebruiker(graphene.Mutation):
     @property
     def gebruikers_activiteit(self):
         return dict(
-            action="Update",
+            action="updateGebruiker",
             entities=gebruikers_activiteit_entities(result=self, key='gebruiker', entity_type='burger') +
                      gebruikers_activiteit_entities(result=self.gebruiker, key='rekeningen', entity_type='rekening'),
             before=dict(burger=self.previous),

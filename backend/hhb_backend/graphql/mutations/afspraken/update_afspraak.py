@@ -27,7 +27,7 @@ class UpdateAfspraak(graphene.Mutation):
     @property
     def gebruikers_activiteit(self):
         return dict(
-            action="Update",
+            action="updateAfspraak",
             entities=gebruikers_activiteit_entities(
                 result=self, key="afspraak", entity_type="afspraak"
             )
