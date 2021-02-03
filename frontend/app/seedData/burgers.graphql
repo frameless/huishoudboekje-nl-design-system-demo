@@ -13,8 +13,8 @@ mutation createSampleBurgers{
             voorletters: "F.S."
             voornamen: "Fien Sandra"
             rekeningen: [
-                {iban: "NL23BANK0235689112", rekeninghouder: "F.S. de Jager"},
-                {iban: "NL87BANK1125002895", rekeninghouder: "F.S. de Jager en/of"},
+                {iban: "NL50RABO7004792366", rekeninghouder: "F.S. de Jager"},
+                {iban: "NL85ABNA4683542374", rekeninghouder: "F.S. de Jager en/of"},
             ]
         }
     ){
@@ -34,8 +34,8 @@ mutation createSampleBurgers{
             voorletters: "H.J."
             voornamen: "Henk Jan"
             rekeningen: [
-                {iban: "NL55BANK8745213265", rekeninghouder: "H.J. Winkel"},
-                {iban: "NL22BANK9865322154", rekeninghouder: "H.J. Winkel en/of"},
+                {iban: "NL29INGB7070755813", rekeninghouder: "H.J. Winkel"},
+                {iban: "NL97RABO3783029058", rekeninghouder: "H.J. Winkel en/of"},
             ]
         }
     ){

@@ -17,12 +17,12 @@ const AuditLogText: React.FC<TextProps & { g: GebruikersActiviteit }> = ({g, ...
 			createGebruiker: () => {
 				const burger = g.entities?.find(e => e.entityType === "burger")?.burger;
 				const data = {
-					gebruikerNaam: g.gebruikerId,
-					burgerNaam: burger ? formatBurgerName(burger) : "unknown"
+					gebruiker: g.gebruikerId || t("unknownGebruiker"),
+					burger: formatBurgerName(burger)
 				};
 
 				return <Trans i18nKey={"auditLog.createGebruiker"} values={data} components={{
-					burgerLink: burger ? <AuditLogLink to={Routes.Burger(burger.id)}>{formatBurgerName(burger)}</AuditLogLink> : t("unknown")
+					linkBurger: burger ? <AuditLogLink to={Routes.Burger(burger.id)}>{formatBurgerName(burger)}</AuditLogLink> : t("unknown")
 				}} />;
 			},
 			// deleteGebruiker: () => <>deleteGebruiker</>,

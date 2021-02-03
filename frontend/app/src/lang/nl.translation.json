@@ -297,12 +297,13 @@
         "burgers": "Burgers"
     },
     "configuratie": "Configuratie",
+    "unknownGebruiker": "Onbekende gebruiker",
     "auditLog": {
         "createGebruiker": "{{gebruiker}} voegde <linkBurger>{{burger}}</linkBurger> toe.",
         "updateAfspraak": "{{gebruiker}} wijzigde een afspraak van <linkBurger>{{burger}}</linkBurger> met <linkOrganisatie>{{organisatie}}</linkOrganisatie>.",
         "unknown": "Onbekende gebeurtenis"
     },
-    "unknownBrowser": "Onbekende browser",
+    "unknownBrowser": "Onbekende browser ({{name}})",
     "pages": {
         "gebeurtenissen": {
             "title": "Gebeurtenissen",

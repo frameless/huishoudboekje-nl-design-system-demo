@@ -12,17 +12,22 @@ const BrowserIcon = ({userAgent}) => {
 
 	let icon = <QuestionIcon />;
 
-	if (browser.name?.toLowerCase().includes("firefox")) {
-		icon = <DynamicIcon name={"firefox"} />;
+	if (browser.name) {
+		if (browser.name?.toLowerCase().includes("firefox")) {
+			icon = <DynamicIcon name={"firefox"} />;
+		}
+		else if (browser.name?.toLowerCase().includes("chrome")) {
+			icon = <DynamicIcon name={"chrome"} />;
+		}
+		else if (browser.name?.toLowerCase().includes("safari")) {
+			icon = <DynamicIcon name={"safari"} />;
+		}
 	}
-	else if (browser.name?.toLowerCase().includes("chrome")) {
-		icon = <DynamicIcon name={"chrome"} />;
-	}
-	else if (browser.name?.toLowerCase().includes("safari")) {
-		icon = <DynamicIcon name={"safari"} />;
+	else if (userAgent.toLowerCase().includes("graphql")) {
+		icon = <DynamicIcon name={"graphql"} />;
 	}
 
-	let tooltipLabel = t("unknownBrowser");
+	let tooltipLabel = t("unknownBrowser", {name: userAgent});
 	if (browser.name && browser.version) {
 		tooltipLabel = [browser.name, browser.version].join(" ");
 	}
