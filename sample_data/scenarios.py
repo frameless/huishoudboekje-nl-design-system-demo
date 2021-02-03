@@ -35,6 +35,7 @@ class Rekening:
 class Organisatie:
     huisnummer: str
     kvk_nummer: str
+    # TODO: add handelsregister vestigingsnummer
     naam: str
     plaatsnaam: str
     postcode: str
@@ -44,14 +45,15 @@ class Organisatie:
 
 
 @dataclass
-class OrganisatieScenario:
+class OrganisatieBulkScenario:
     aantal: int
 
 
 @dataclass
 class Organisaties:
     organisaties: List[Organisatie] = field(default_factory=list)
-    scenarios: List[OrganisatieScenario] = field(default_factory=list)
+    bulk: List[OrganisatieBulkScenario] = field(default_factory=list)
+
 
 @dataclass
 class Metadata:
@@ -59,11 +61,17 @@ class Metadata:
 
 
 @dataclass
+class AfspraakOrganisatie:
+    kvk: str
+    iban: str = None
+
+
+@dataclass
 class AfspraakScenario:
     aantal: int = 12
     rubriek: str = None
     beschrijving: str = None
-    organisatie_kvk: str = None
+    organisatie: AfspraakOrganisatie = None
     bedrag: int = 10100
     credit: bool = False
     automatische_incasso: bool = True
@@ -88,7 +96,7 @@ class Gebruikers:
 
 
 def load_yaml_dataclass(filename: str, clazz):
-    with open(filename, 'r') as reader:
+    with open(filename, "r") as reader:
         loaded = load(reader, Loader=SafeLoader)
 
         schema = class_schema(clazz)
@@ -97,7 +105,11 @@ def load_yaml_dataclass(filename: str, clazz):
 
 
 class Scenario:
-    configuratie: Systeem = load_yaml_dataclass('scenarios\\configuratie.yaml', Systeem)
-    organisatie: Organisaties = load_yaml_dataclass('scenarios\\organisaties.yaml', Organisaties)
-    gebruikers: Gebruikers = load_yaml_dataclass('scenarios\\gebruikers.yaml', Gebruikers)
-    metadata: Metadata = load_yaml_dataclass('scenarios\\metadata.yaml', Metadata)
+    configuratie: Systeem = load_yaml_dataclass("scenarios/configuratie.yaml", Systeem)
+    organisatie: Organisaties = load_yaml_dataclass(
+        "scenarios/organisaties.yaml", Organisaties
+    )
+    gebruikers: Gebruikers = load_yaml_dataclass(
+        "scenarios/gebruikers.yaml", Gebruikers
+    )
+    metadata: Metadata = load_yaml_dataclass("scenarios/metadata.yaml", Metadata)

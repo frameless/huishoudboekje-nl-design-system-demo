@@ -12,5 +12,6 @@ DOCKER_TAG := dev
 docker:
 	$(eval IMAGE := $(REGISTRY_PREFIX)/sample_data:$(DOCKER_TAG))
 	docker build -t $(IMAGE) .
+
 clean:
 	rm -rvf data/*
