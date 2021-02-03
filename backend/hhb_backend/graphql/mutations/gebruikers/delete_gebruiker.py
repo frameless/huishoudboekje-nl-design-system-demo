@@ -21,7 +21,7 @@ class DeleteGebruiker(graphene.Mutation):
     @property
     def gebruikers_activiteit(self):
         return dict(
-            action="deleteBurger",
+            action="deleteGebruiker",
             entities=gebruikers_activiteit_entities(result=self, key='previous', entity_type='burger'),
             before=dict(burger=self.previous),
         )

@@ -36,7 +36,7 @@ class UpdateJournaalpostGrootboekrekening(graphene.Mutation):
                 result=self, key="journaalpost", entity_type="journaalpost"
             )
             + gebruikers_activiteit_entities(
-                result=self.journaalpost, key="afspraak", entity_type="afspraak"
+                result=self.journaalpost, key="grootboekrekening", entity_type="grootboekrekening"
             )
             + gebruikers_activiteit_entities(
                 result=self.journaalpost, key="transaction", entity_type="transaction"
