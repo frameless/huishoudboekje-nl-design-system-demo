@@ -10,7 +10,7 @@
     - docker
   environment:
     name: review/$CI_COMMIT_REF_SLUG
-    url: https://$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN/
+    url: https://hhb-$CI_COMMIT_REF_SLUG.$REVIEW_BASE_DOMAIN/
     on_stop: destroy-app
   variables:
     OIDC_DEX: "true"
@@ -124,7 +124,6 @@ destroy-app:
 # Deploy hhb-<environment slug>.nlx.reviews
 deploy-review:
   environment:
-    url: https://hhb-${CI_ENVIRONMENT_SLUG}.${REVIEW_BASE_DOMAIN}/
     auto_stop_in: 10 days
   variables:
     APP_SETTINGS: "hhb_backend.config.StagingConfig"
