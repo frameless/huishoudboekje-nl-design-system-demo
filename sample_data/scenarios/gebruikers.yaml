@@ -21,7 +21,7 @@ scenarios:
         beschrijving: "Aanvullende uitkering"
         organisatie:
           kvk: "30280353"
-          iban: "NL92BNGH0285178601"
+          iban: "NL76BNGH0285178598"
         bedrag: 14784
         credit: true
         automatische_incasso: false
