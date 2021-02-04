@@ -1,22 +1,16 @@
-import {HStack, Stack, StackProps, Table, Tbody, Td, Text, Th, Thead, Tr} from "@chakra-ui/react";
-import moment from "moment";
+import {Stack, StackProps} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {FiActivity} from "react-icons/all";
 import {Gebruiker, GebruikersActiviteit, useGetGebeurtenissenQuery} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import {FormLeft} from "../../Forms/FormLeftRight";
-import AuditLogText from "../../Gebeurtenissen/AuditLogText";
-import BrowserIcon from "../../Gebeurtenissen/BrowserIcon";
-import OsIcon from "../../Gebeurtenissen/OsIcon";
-import RoundIcon from "../../Layouts/RoundIcon";
+import GebeurtenissenTableView from "../../Gebeurtenissen/GebeurtenissenTableView";
 
 const BurgerGebeurtenissen: React.FC<StackProps & { burger: Gebruiker }> = ({burger, ...props}) => {
 	const {t} = useTranslation();
 	const $gebeurtenissen = useGetGebeurtenissenQuery({
 		fetchPolicy: "no-cache"
 	});
-	const sortAuditTrailByTime = (a: GebruikersActiviteit, b: GebruikersActiviteit) => moment(a.timestamp).isBefore(b.timestamp) ? 1 : -1;
 
 	return (
 		<Stack {...props}>
@@ -30,39 +24,7 @@ const BurgerGebeurtenissen: React.FC<StackProps & { burger: Gebruiker }> = ({bur
 					return burgerEntities.length > 0;
 				});
 
-				return (
-					<Table>
-						<Thead>
-							<Tr>
-								<Th>{t("pages.gebeurtenissen.activity")}</Th>
-								<Th>{t("pages.gebeurtenissen.meta")}</Th>
-							</Tr>
-						</Thead>
-						<Tbody>
-							{[...burgerGs].sort(sortAuditTrailByTime).map(g => (
-								<Tr alignItems={"center"} key={g.id}>
-									<Td>
-										<HStack>
-											<RoundIcon display={["none", null, "flex"]}>
-												<FiActivity />
-											</RoundIcon>
-											<Stack spacing={0}>
-												<AuditLogText g={g} />
-												<Text fontSize={"sm"} color={"gray.500"}>{moment(g.timestamp).format("L LT")}</Text>
-											</Stack>
-										</HStack>
-									</Td>
-									<Td>
-										<HStack>
-											<BrowserIcon userAgent={g.meta?.userAgent} />
-											<OsIcon userAgent={g.meta?.userAgent} />
-										</HStack>
-									</Td>
-								</Tr>
-							))}
-						</Tbody>
-					</Table>
-				);
+				return <GebeurtenissenTableView gebeurtenissen={burgerGs} />;
 			}} />
 		</Stack>
 	);

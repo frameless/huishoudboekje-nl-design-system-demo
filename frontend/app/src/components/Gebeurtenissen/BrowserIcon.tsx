@@ -37,7 +37,7 @@ const BrowserIcon = ({userAgent}) => {
 
 	return (
 		<Tooltip label={tooltipLabel}>
-			<RoundIcon>{icon}</RoundIcon>
+			<RoundIcon border={"none"}>{icon}</RoundIcon>
 		</Tooltip>
 	);
 };

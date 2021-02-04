@@ -4,7 +4,7 @@ import {friendlyFormatIBAN} from "ibantools";
 import moment, {Moment} from "moment";
 import {createContext} from "react";
 import {Granularity, periodFormatForGranularity} from "../components/Rapportage/Aggregator";
-import {BankTransaction, Gebruiker, Interval, IntervalInput, Rubriek} from "../generated/graphql";
+import {BankTransaction, Gebruiker, GebruikersActiviteit, Interval, IntervalInput, Rubriek} from "../generated/graphql";
 import {IntervalType} from "../models/models";
 
 export const searchFields = (term: string, fields: string[]): boolean => {
@@ -180,3 +180,5 @@ export const prepareChartData = (startDate: Moment, endDate: Moment, granularity
 };
 
 export const sanitizeIBAN = (iban: string) => iban.replace(/\s/g, "").toUpperCase();
+
+export const sortAuditTrailByTime = (a: GebruikersActiviteit, b: GebruikersActiviteit) => moment(a.timestamp).isBefore(b.timestamp) ? 1 : -1;

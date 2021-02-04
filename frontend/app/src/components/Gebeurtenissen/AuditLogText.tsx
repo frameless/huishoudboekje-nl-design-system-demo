@@ -47,7 +47,9 @@ const AuditLogText: React.FC<TextProps & { g: GebruikersActiviteit }> = ({g, ...
 		const auditLogTextConfigElement = auditLogTextConfig[action];
 
 		if (auditLogTextConfigElement) {
-			return <Text {...props}>{auditLogTextConfigElement()}</Text>
+			return (
+				<Text {...props}>{auditLogTextConfigElement()}</Text>
+			);
 		}
 	}
 
@@ -61,8 +63,8 @@ const AuditLogText: React.FC<TextProps & { g: GebruikersActiviteit }> = ({g, ...
 	];
 	return (
 		<Box>
-			<Text>{t("auditLog.unknown")}</Text>
-			<Text fontSize={"xs"}>{context.join(", ")}</Text>
+			<Text fontSize={"1rem"}>{t("auditLog.unknown")}</Text>
+			<Text>{context.join(", ")}</Text>
 		</Box>
 	);
 };

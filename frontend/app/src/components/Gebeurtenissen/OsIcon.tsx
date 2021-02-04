@@ -28,7 +28,7 @@ const OsIcon = ({userAgent}) => {
 
 	return (
 		<Tooltip label={tooltipLabel}>
-			<RoundIcon>{icon}</RoundIcon>
+			<RoundIcon border={"none"}>{icon}</RoundIcon>
 		</Tooltip>
 	);
 };
