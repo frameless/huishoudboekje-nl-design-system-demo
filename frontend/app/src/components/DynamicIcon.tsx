@@ -1,7 +1,8 @@
+import {chakra} from "@chakra-ui/react";
 import React, {useEffect, useState} from "react";
 import {QuestionOutlineIcon} from "@chakra-ui/icons";
 
-const FirefoxIcon: React.FC<{name: string}> = ({name}) => {
+const FirefoxIcon: React.FC<{ name: string }> = ({name}) => {
 	const iconRef = React.useRef<any>(null);
 	const [loading, setLoading] = useState(true);
 
@@ -21,8 +22,10 @@ const FirefoxIcon: React.FC<{name: string}> = ({name}) => {
 	}, [name]);
 
 	if (!loading) {
-		const { current: Icon } = iconRef;
-		return <Icon />;
+		const Icon = chakra(iconRef.current);
+		return (
+			<Icon flex={1} w={"100%"} h={"100%"} />
+		);
 	}
 
 	return null;
