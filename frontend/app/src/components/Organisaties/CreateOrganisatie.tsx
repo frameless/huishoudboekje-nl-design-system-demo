@@ -111,7 +111,7 @@ const CreateOrganisatie = () => {
 	const isInvalid = (input: UseInput) => (input.dirty || isSubmitted) && !input.isValid;
 
 	return (
-		<Page title={t("forms.organizations.title")} backButton={<BackButton to={Routes.Organisaties} />}>
+		<Page title={t("forms.createOrganisatie.title")} backButton={<BackButton to={Routes.Organisaties} />}>
 			<Box as={"form"} onSubmit={onSubmit}>
 				<Section>
 					<Stack direction={["column", "row"]} spacing={2}>

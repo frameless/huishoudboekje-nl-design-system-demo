@@ -185,13 +185,15 @@
             "tooltips": {
                 "zipcode": "Invoer zonder spaties. Voorbeeld: 1234AB",
                 "phoneNumber": "Invoer zonder spaties en streepjes. Voorbeeld: 0612345678"
-            },
-            "title": "Burgers"
+            }
         },
         "search": {
             "fields": {
                 "search": "Zoeken"
             }
+        },
+        "createBurger": {
+            "title": "Burger toevoegen"
         },
         "configuratie": {
             "sections": {
@@ -203,8 +205,10 @@
                 "waarde": "Waarde"
             }
         },
+        "createOrganisatie": {
+            "title": "Organisatie toevoegen"
+        },
         "organizations": {
-            "title": "Organisaties",
             "sections": {
                 "organizational": {
                     "title": "Organisatie",
