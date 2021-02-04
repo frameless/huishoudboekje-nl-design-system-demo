@@ -52,6 +52,9 @@ class CreateAfspraak(graphene.Mutation):
         if "interval" not in input and input["aantal_betalingen"] == 0:
             raise GraphQLError(f"Interval en aantal betalingen kan niet allebei nul zijn.")
 
+        if input["credit"] and input["automatische_incasso"]:
+            raise GraphQLError(f"Automatische incasso is niet mogelijk bij Inkomsten")
+
         response = requests.post(f"{settings.HHB_SERVICES_URL}/afspraken/", json=input)
         if response.status_code != 201:
             raise GraphQLError(f"Upstream API responded: {response.json()}")
