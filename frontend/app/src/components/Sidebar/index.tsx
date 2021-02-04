@@ -1,7 +1,7 @@
-import {Box, BoxProps, HStack, Stack, VStack} from "@chakra-ui/react";
+import {Box, BoxProps, Stack} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {FaRegBuilding, GrGraphQl, MdCreditCard, RiBarChartFill, RiUserLine, TiCog} from "react-icons/all";
+import {FaRegBuilding, FiActivity, GrGraphQl, MdCreditCard, RiBarChartFill, RiUserLine, TiCog} from "react-icons/all";
 import Routes from "../../config/routes";
 import {isDev} from "../../utils/things";
 import SidebarLink from "./SidebarLink";
@@ -14,16 +14,17 @@ const Sidebar: React.FC<BoxProps> = (props) => {
 			<SidebarLink to={Routes.Burgers} icon={RiUserLine}>{t("sidebar.burgers")}</SidebarLink>
 			<SidebarLink to={Routes.Organisaties} icon={FaRegBuilding}>{t("sidebar.organisaties")}</SidebarLink>
 			<Stack>
-				<SidebarLink exactMatch to={Routes.Transactions} icon={MdCreditCard}>{t("sidebar.bankzaken")}</SidebarLink>
-				<HStack direction={"row"}>
-					<Box pl={5} ml={7}>&nbsp;</Box>
-					<VStack>
+				<SidebarLink exactMatch to={Routes.Banking} icon={MdCreditCard}>{t("sidebar.bankzaken")}</SidebarLink>
+				<Box pl={"27px"}>
+					<Stack spacing={1} borderLeft={"1px solid"} borderLeftColor={"gray.400"} pl={"21px"}>
+						<SidebarLink size={"sm"} to={Routes.Transactions}>{t("sidebar.transacties")}</SidebarLink>
 						<SidebarLink size={"sm"} to={Routes.CSMs}>{t("sidebar.bronbestanden")}</SidebarLink>
 						<SidebarLink size={"sm"} to={Routes.BookingsExport}>{t("sidebar.overschrijvingen")}</SidebarLink>
-					</VStack>
-				</HStack>
+					</Stack>
+				</Box>
 			</Stack>
 			<SidebarLink to={Routes.Rapportage} icon={RiBarChartFill}>{t("sidebar.rapportage")}</SidebarLink>
+			<SidebarLink to={Routes.AuditTrail} icon={FiActivity}>{t("sidebar.gebeurtenissen")}</SidebarLink>
 			<SidebarLink to={Routes.Settings} icon={TiCog}>{t("sidebar.configuratie")}</SidebarLink>
 		</Stack>
 
@@ -34,8 +35,7 @@ const Sidebar: React.FC<BoxProps> = (props) => {
 				</Stack>
 			</Stack>
 		)}
-	</>
-	);
+	</>);
 };
 
 export default Sidebar;

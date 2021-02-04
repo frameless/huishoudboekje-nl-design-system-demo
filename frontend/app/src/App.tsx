@@ -6,6 +6,7 @@ import {useTranslation} from "react-i18next";
 import {FaLock} from "react-icons/fa";
 import {Redirect, Route, Switch, useLocation} from "react-router-dom";
 import EditAgreement from "./components/Agreements/EditAgreement";
+import Gebeurtenissen from "./components/Gebeurtenissen";
 import Banking from "./components/Banking";
 import Burgers from "./components/Burgers";
 import Configuratie from "./components/Configuratie";
@@ -93,6 +94,7 @@ const App = () => {
 						<Route path={Routes.Banking} component={Banking} />
 						<Route path={Routes.Settings} component={Configuratie} />
 						<Route path={Routes.Rapportage} component={Rapportage} />
+						<Route path={Routes.AuditTrail} component={Gebeurtenissen} />
 
 						<Route exact path={Routes.NotFound} component={PageNotFound} />
 						<Route component={PageNotFound} />

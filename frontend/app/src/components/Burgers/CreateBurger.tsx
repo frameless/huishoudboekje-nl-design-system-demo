@@ -136,7 +136,7 @@ const CreateBurger = () => {
 	const isInvalid = (input) => (input.dirty || isSubmitted) && !input.isValid;
 
 	return (
-		<Page title={t("forms.burgers.title")} backButton={<BackButton to={Routes.Burgers} />}>
+		<Page title={t("forms.createBurger.title")} backButton={<BackButton to={Routes.Burgers} />}>
 			<Box as={"form"} onSubmit={onSubmit}>
 				<Section>
 					<Stack direction={["column", "row"]} spacing={2}>

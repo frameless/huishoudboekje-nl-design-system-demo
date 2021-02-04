@@ -14,6 +14,7 @@ import Alert from "../../Layouts/Alert";
 import Page from "../../Layouts/Page";
 import Section from "../../Layouts/Section";
 import BurgerAfsprakenView from "./BurgerAfsprakenView";
+import BurgerGebeurtenissen from "./BurgerGebeurtenissen";
 import BurgerProfileView from "./BurgerProfileView";
 import BurgerRekeningenView from "./BurgerRekeningenView";
 
@@ -75,6 +76,7 @@ const BurgerDetail = () => {
 					<Section><BurgerProfileView burger={gebruiker} /></Section>
 					<Section><BurgerRekeningenView burger={gebruiker} refetch={$burger.refetch} /></Section>
 					<Section><BurgerAfsprakenView burger={gebruiker} refetch={$burger.refetch} /></Section>
+					<Section><BurgerGebeurtenissen burger={gebruiker} /></Section>
 				</Page>
 			</>)
 		}}

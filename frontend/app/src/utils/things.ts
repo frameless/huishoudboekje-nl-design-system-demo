@@ -4,7 +4,7 @@ import {friendlyFormatIBAN} from "ibantools";
 import moment, {Moment} from "moment";
 import {createContext} from "react";
 import {Granularity, periodFormatForGranularity} from "../components/Rapportage/Aggregator";
-import {BankTransaction, Gebruiker, Interval, IntervalInput, Rubriek} from "../generated/graphql";
+import {BankTransaction, Gebruiker, GebruikersActiviteit, Interval, IntervalInput, Rubriek} from "../generated/graphql";
 import {IntervalType} from "../models/models";
 
 export const searchFields = (term: string, fields: string[]): boolean => {
@@ -101,7 +101,7 @@ export const currencyFormat2 = (showCurrency = true) => {
 	});
 };
 
-// Todo: export const dateFormat = (d: Date) => moment(d).format("L");
+/** @deprecated Use moment(date).format("L") instead */
 export const dateFormat = {
 	format: (d: Date) => moment(d).format("L"),
 };
@@ -116,9 +116,13 @@ export const sortBankTransactions = (a: BankTransaction, b: BankTransaction) => 
 	return b.bedrag - a.bedrag;
 };
 
-export const formatBurgerName = (burger: Gebruiker, fullName = false) => {
-	const voorletters = burger.voorletters?.replace(/\./g, "").split("").join(". ") + ".";
-	return [fullName ? burger.voornamen : voorletters, burger.achternaam].join(" ");
+export const formatBurgerName = (burger: Gebruiker | undefined, fullName = false) => {
+	if (fullName) {
+		return [burger?.voornamen, burger?.achternaam].join(" ");
+	}
+
+	const voorletters = burger?.voorletters?.replace(/\./g, "").split("").join(". ") + ".";
+	return [voorletters, burger?.achternaam].join(" ");
 };
 
 export const intervalString = ((interval: Interval | undefined, t: (text, ...tProps) => string): string => {
@@ -176,3 +180,5 @@ export const prepareChartData = (startDate: Moment, endDate: Moment, granularity
 };
 
 export const sanitizeIBAN = (iban: string) => iban.replace(/\s/g, "").toUpperCase();
+
+export const sortAuditTrailByTime = (a: GebruikersActiviteit, b: GebruikersActiviteit) => moment(a.timestamp).isBefore(b.timestamp) ? 1 : -1;

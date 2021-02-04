@@ -12,7 +12,7 @@ const BurgerProfileView: React.FC<StackProps & { burger: Gebruiker }> = ({burger
 
 	return (
 		<>
-			<Stack spacing={2} direction={["column", "row"]} {...props}>
+			<Stack spacing={2} direction={["column", null, "row"]} {...props}>
 				<FormLeft title={t("forms.burgers.sections.personal.title")} helperText={t("forms.burgers.sections.personal.detailText")} />
 				<FormRight>
 					<Stack spacing={2} mb={1} direction={["column", "row"]}>
@@ -46,7 +46,7 @@ const BurgerProfileView: React.FC<StackProps & { burger: Gebruiker }> = ({burger
 
 			<Divider />
 
-			<Stack spacing={2} direction={["column", "row"]} {...props}>
+			<Stack spacing={2} direction={["column", null, "row"]} {...props}>
 				<FormLeft title={t("forms.burgers.sections.contact.title")} helperText={t("forms.burgers.sections.contact.detailText")} />
 				<FormRight>
 					<Stack spacing={2} mb={1} direction={["column", "row"]}>

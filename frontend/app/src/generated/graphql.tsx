@@ -260,6 +260,7 @@ export type DeleteGebruikerRekening = {
 export type DeleteJournaalpost = {
   __typename?: 'DeleteJournaalpost';
   ok?: Maybe<Scalars['Boolean']>;
+  previous?: Maybe<Journaalpost>;
 };
 
 export type DeleteOrganisatie = {
@@ -343,6 +344,8 @@ export type GebruikersActiviteitSnapshot = {
   __typename?: 'GebruikersActiviteitSnapshot';
   burger?: Maybe<Gebruiker>;
   afspraak?: Maybe<Afspraak>;
+  journaalpost?: Maybe<Journaalpost>;
+  organisatie?: Maybe<Organisatie>;
 };
 
 /** Grootboekrekening model  */
@@ -889,6 +892,7 @@ export type UpdateJournaalpostGrootboekrekening = {
   __typename?: 'UpdateJournaalpostGrootboekrekening';
   ok?: Maybe<Scalars['Boolean']>;
   journaalpost?: Maybe<Journaalpost>;
+  previous?: Maybe<Journaalpost>;
 };
 
 export type UpdateJournaalpostGrootboekrekeningInput = {
@@ -1660,6 +1664,41 @@ export type GetReportingDataQuery = (
   )>>>, rubrieken?: Maybe<Array<Maybe<(
     { __typename?: 'Rubriek' }
     & Pick<Rubriek, 'id' | 'naam'>
+  )>>> }
+);
+
+export type GetGebeurtenissenQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetGebeurtenissenQuery = (
+  { __typename?: 'RootQuery' }
+  & { gebruikersactiviteiten?: Maybe<Array<Maybe<(
+    { __typename?: 'GebruikersActiviteit' }
+    & Pick<GebruikersActiviteit, 'id' | 'timestamp' | 'gebruikerId' | 'action'>
+    & { entities?: Maybe<Array<Maybe<(
+      { __typename?: 'GebruikersActiviteitEntity' }
+      & Pick<GebruikersActiviteitEntity, 'entityType' | 'entityId'>
+      & { burger?: Maybe<(
+        { __typename?: 'Gebruiker' }
+        & Pick<Gebruiker, 'id' | 'voorletters' | 'voornamen' | 'achternaam'>
+      )>, organisatie?: Maybe<(
+        { __typename?: 'Organisatie' }
+        & Pick<Organisatie, 'id' | 'weergaveNaam'>
+      )>, afspraak?: Maybe<(
+        { __typename?: 'Afspraak' }
+        & Pick<Afspraak, 'id'>
+        & { organisatie?: Maybe<(
+          { __typename?: 'Organisatie' }
+          & Pick<Organisatie, 'id' | 'weergaveNaam'>
+        )> }
+      )>, rekening?: Maybe<(
+        { __typename?: 'Rekening' }
+        & Pick<Rekening, 'id'>
+      )> }
+    )>>>, meta?: Maybe<(
+      { __typename?: 'GebruikersActiviteitMeta' }
+      & Pick<GebruikersActiviteitMeta, 'userAgent' | 'ip' | 'applicationVersion'>
+    )> }
   )>>> }
 );
 
@@ -3226,3 +3265,67 @@ export function useGetReportingDataLazyQuery(baseOptions?: Apollo.LazyQueryHookO
 export type GetReportingDataQueryHookResult = ReturnType<typeof useGetReportingDataQuery>;
 export type GetReportingDataLazyQueryHookResult = ReturnType<typeof useGetReportingDataLazyQuery>;
 export type GetReportingDataQueryResult = Apollo.QueryResult<GetReportingDataQuery, GetReportingDataQueryVariables>;
+export const GetGebeurtenissenDocument = gql`
+    query GetGebeurtenissen {
+  gebruikersactiviteiten {
+    id
+    timestamp
+    gebruikerId
+    action
+    entities {
+      entityType
+      entityId
+      burger {
+        id
+        voorletters
+        voornamen
+        achternaam
+      }
+      organisatie {
+        id
+        weergaveNaam
+      }
+      afspraak {
+        id
+        organisatie {
+          id
+          weergaveNaam
+        }
+      }
+      rekening {
+        id
+      }
+    }
+    meta {
+      userAgent
+      ip
+      applicationVersion
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetGebeurtenissenQuery__
+ *
+ * To run a query within a React component, call `useGetGebeurtenissenQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetGebeurtenissenQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetGebeurtenissenQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetGebeurtenissenQuery(baseOptions?: Apollo.QueryHookOptions<GetGebeurtenissenQuery, GetGebeurtenissenQueryVariables>) {
+        return Apollo.useQuery<GetGebeurtenissenQuery, GetGebeurtenissenQueryVariables>(GetGebeurtenissenDocument, baseOptions);
+      }
+export function useGetGebeurtenissenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetGebeurtenissenQuery, GetGebeurtenissenQueryVariables>) {
+          return Apollo.useLazyQuery<GetGebeurtenissenQuery, GetGebeurtenissenQueryVariables>(GetGebeurtenissenDocument, baseOptions);
+        }
+export type GetGebeurtenissenQueryHookResult = ReturnType<typeof useGetGebeurtenissenQuery>;
+export type GetGebeurtenissenLazyQueryHookResult = ReturnType<typeof useGetGebeurtenissenLazyQuery>;
+export type GetGebeurtenissenQueryResult = Apollo.QueryResult<GetGebeurtenissenQuery, GetGebeurtenissenQueryVariables>;
