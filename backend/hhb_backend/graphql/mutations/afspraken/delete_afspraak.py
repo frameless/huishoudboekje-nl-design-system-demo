@@ -27,13 +27,13 @@ class DeleteAfspraak(graphene.Mutation):
         return dict(
             action="deleteAfspraak",
             entities=gebruikers_activiteit_entities(
-                result=self, key="previous", entity_type="afspraak"
+                entity_type="afspraak", result=self, key="previous"
             )
             + gebruikers_activiteit_entities(
-                self.previous, "gebruiker_id", entity_type="burger"
+                entity_type="burger", result=self.previous, key="gebruiker_id"
             )
             + gebruikers_activiteit_entities(
-                self.previous, "organisatie_id", entity_type="organisatie"
+                entity_type="organisatie", result=self.previous, key="organisatie_id"
             ),
             before=dict(afspraak=self.previous),
         )

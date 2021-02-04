@@ -8,7 +8,10 @@ from graphql import GraphQLError
 
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.models.gebruiker import Gebruiker
-from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities, log_gebruikers_activiteit
+from hhb_backend.graphql.utils.gebruikersactiviteiten import (
+    gebruikers_activiteit_entities,
+    log_gebruikers_activiteit,
+)
 
 
 class UpdateGebruiker(graphene.Mutation):
@@ -36,12 +39,15 @@ class UpdateGebruiker(graphene.Mutation):
     def gebruikers_activiteit(self):
         return dict(
             action="updateGebruiker",
-            entities=gebruikers_activiteit_entities(result=self, key='gebruiker', entity_type='burger') +
-                     gebruikers_activiteit_entities(result=self.gebruiker, key='rekeningen', entity_type='rekening'),
+            entities=gebruikers_activiteit_entities(
+                entity_type="burger", result=self, key="gebruiker"
+            )
+            + gebruikers_activiteit_entities(
+                entity_type="rekening", result=self.gebruiker, key="rekeningen"
+            ),
             before=dict(burger=self.previous),
             after=dict(burger=self.gebruiker),
         )
-
 
     @log_gebruikers_activiteit
     async def mutate(root, info, id, **kwargs):
@@ -51,7 +57,7 @@ class UpdateGebruiker(graphene.Mutation):
         response = requests.post(
             f"{settings.HHB_SERVICES_URL}/gebruikers/{id}",
             data=json.dumps(kwargs),
-            headers={'Content-type': 'application/json'}
+            headers={"Content-type": "application/json"},
         )
         if response.status_code != 200:
             raise GraphQLError(f"Upstream API responded: {response.json()}")

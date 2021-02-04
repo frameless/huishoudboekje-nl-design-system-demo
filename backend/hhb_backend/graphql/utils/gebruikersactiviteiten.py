@@ -31,27 +31,32 @@ class GebruikersActiviteit:
     before: dict = field(default=None, metadata=config(field_name="snapshot_before"))
     after: dict = field(default=None, metadata=config(field_name="snapshot_after"))
 
+    def map_entities(self):
+        """Map all entities to their DataClass """
+        self.entities = [
+            entity
+            if type(entity) == GebruikersActiviteitEntity
+            else GebruikersActiviteitEntity(**entity)
+            for entity in (self.entities or [])
+        ]
+        return self
 
-def extract_gebruikers_activiteit(result):
+
+def extract_gebruikers_activiteit(result, *args, **kwargs):
     """Return a dict of the GebruikersActiviteit DataClass from the result by reading its gebruikers_activiteit property"""
-    if not hasattr(result, "gebruikers_activiteit"):
+    if hasattr(result, "gebruikers_activiteit"):
+        gebruikers_activiteit = result.gebruikers_activiteit
+    elif inspect.isclass(args[0]) and hasattr(args[0], "gebruikers_activiteit"):
+        gebruikers_activiteit = args[0].gebruikers_activiteit(
+            *(args[1:]), **{**kwargs, "result": result}
+        )
+    else:
         return None
 
-    # Map the gebruikers_activiteit to a DataClass
-    gebruikers_activiteit = (
-        result.gebruikers_activiteit
-        if type(result.gebruikers_activiteit) == GebruikersActiviteit
-        else GebruikersActiviteit(**(result.gebruikers_activiteit))
-    )
+    if type(gebruikers_activiteit) == dict:
+        gebruikers_activiteit = GebruikersActiviteit(**(gebruikers_activiteit))
 
-    # Map all entities to their DataClass
-    gebruikers_activiteit.entities = [
-        entity
-        if type(entity) == GebruikersActiviteitEntity
-        else GebruikersActiviteitEntity(**entity)
-        for entity in (gebruikers_activiteit.entities or [])
-    ]
-    return gebruikers_activiteit.to_dict()
+    return gebruikers_activiteit.map_entities().to_dict()
 
 
 def log_gebruikers_activiteit(view_func):
@@ -59,11 +64,14 @@ def log_gebruikers_activiteit(view_func):
     the LOG_SERVICE"""
 
     @wraps(view_func)
-    async def decorated(*args, **kwargs):
+    async def decorated(*args, **kwargs):  # TODO add root, info to signature
+        # cls = args[0] if inspect.isclass(args[0]) else None
+        #     (cls, args) = args[0], args[1:]
         result = await view_func(*args, **kwargs)
-        gebruikers_activiteit = extract_gebruikers_activiteit(result)
+        gebruikers_activiteit = extract_gebruikers_activiteit(result, *args, **kwargs)
         if gebruikers_activiteit:
             try:
+                # TODO find out why snapshots are sometime logged as a string 'null'
                 json = {
                     "timestamp": datetime.now(tz=tz.tzlocal())
                     .replace(microsecond=0)
@@ -95,13 +103,19 @@ def log_gebruikers_activiteit(view_func):
 
 
 def gebruikers_activiteit_entities(
-    result: dict, key: str, entity_type: str
+    entity_type: str, result, key: str = None
 ) -> List[GebruikersActiviteitEntity]:
     """Return a list of entities of a list of objects in a dictionary at 'key'"""
     value = None
     if result:
         if type(result) == dict:
             value = result[key] if key in result else None
+        elif (
+            isinstance(result, int)
+            or isinstance(result, str)
+            or isinstance(result, list)
+        ):
+            value = result
         elif inspect.isclass(type(result)):
             value = vars(result)[key] if key in vars(result) else None
 
@@ -110,7 +124,12 @@ def gebruikers_activiteit_entities(
 
     if type(value) == list:
         return [
-            (GebruikersActiviteitEntity(entity_type=entity_type, entity_id=item["id"]))
+            (
+                GebruikersActiviteitEntity(
+                    entity_type=entity_type,
+                    entity_id=item["id"] if type(item) == dict else item,
+                )
+            )
             for item in value
         ]
     if type(value) == dict:

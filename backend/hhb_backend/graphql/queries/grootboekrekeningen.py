@@ -3,23 +3,47 @@ import graphene
 from flask import request
 
 from hhb_backend.graphql.models.grootboekrekening import Grootboekrekening
+from hhb_backend.graphql.utils.gebruikersactiviteiten import (
+    gebruikers_activiteit_entities,
+    log_gebruikers_activiteit,
+)
 
 
-class GrootboekrekeningQuery():
+class GrootboekrekeningQuery:
     return_type = graphene.Field(Grootboekrekening, id=graphene.String(required=True))
 
-    @staticmethod
-    async def resolver(root, info, **kwargs):
-        return await request.dataloader.grootboekrekeningen_by_id.load(kwargs["id"])
+    @classmethod
+    def gebruikers_activiteit(cls, _root, info, id, *_args, **_kwargs):
+        return dict(
+            action=info.field_name,
+            entities=gebruikers_activiteit_entities(
+                entity_type="grootboekrekening", result=id
+            ),
+        )
+
+    @classmethod
+    @log_gebruikers_activiteit
+    async def resolver(cls, _root, _info, id):
+        return await request.dataloader.grootboekrekeningen_by_id.load(id)
 
 
-class GrootboekrekeningenQuery():
-    return_type = graphene.List(Grootboekrekening, ids=graphene.List(graphene.String, default_value=[]))
+class GrootboekrekeningenQuery:
+    return_type = graphene.List(
+        Grootboekrekening, ids=graphene.List(graphene.String, default_value=[])
+    )
 
-    @staticmethod
-    async def resolver(root, info, **kwargs):
-        if kwargs["ids"]:
-            result = await request.dataloader.grootboekrekeningen_by_id.load_many(kwargs["ids"])
-        else:
-            result = request.dataloader.grootboekrekeningen_by_id.get_all_and_cache()
-        return result
+    @classmethod
+    def gebruikers_activiteit(cls, _root, info, ids, *_args, **_kwargs):
+        return dict(
+            action=info.field_name,
+            entities=gebruikers_activiteit_entities(
+                entity_type="grootboekrekening", result=ids
+            ),
+        )
+
+    @classmethod
+    @log_gebruikers_activiteit
+    async def resolver(cls, _root, _info, ids=None):
+        if ids:
+            return await request.dataloader.grootboekrekeningen_by_id.load_many(ids)
+        return request.dataloader.grootboekrekeningen_by_id.get_all_and_cache()

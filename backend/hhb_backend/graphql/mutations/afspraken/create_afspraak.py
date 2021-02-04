@@ -28,13 +28,13 @@ class CreateAfspraak(graphene.Mutation):
         return dict(
             action="createAfspraak",
             entities=gebruikers_activiteit_entities(
-                result=self, key="afspraak", entity_type="afspraak"
+                entity_type="afspraak", result=self, key="afspraak"
             )
             + gebruikers_activiteit_entities(
-                result=self.afspraak, key="gebruiker_id", entity_type="burger"
+                entity_type="burger", result=self.afspraak, key="gebruiker_id"
             )
             + gebruikers_activiteit_entities(
-                result=self.afspraak, key="organisatie_id", entity_type="organisatie"
+                entity_type="organisatie", result=self.afspraak, key="organisatie_id"
             ),
             after=dict(afspraak=self.afspraak),
         )

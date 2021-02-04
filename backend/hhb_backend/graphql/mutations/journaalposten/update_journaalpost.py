@@ -33,13 +33,15 @@ class UpdateJournaalpostGrootboekrekening(graphene.Mutation):
         return dict(
             action="updateJournaalpostGrootboekrekening",
             entities=gebruikers_activiteit_entities(
-                result=self, key="journaalpost", entity_type="journaalpost"
+                entity_type="journaalpost", result=self, key="journaalpost"
             )
             + gebruikers_activiteit_entities(
-                result=self.journaalpost, key="grootboekrekening_id", entity_type="grootboekrekening"
+                entity_type="grootboekrekening",
+                result=self.journaalpost,
+                key="grootboekrekening_id",
             )
             + gebruikers_activiteit_entities(
-                result=self.journaalpost, key="transaction", entity_type="transaction"
+                entity_type="transaction", result=self.journaalpost, key="transaction"
             ),
             before=dict(journaalpost=self.previous),
             after=dict(journaalpost=self.journaalpost),

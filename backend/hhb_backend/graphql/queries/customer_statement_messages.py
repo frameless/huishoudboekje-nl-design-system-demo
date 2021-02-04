@@ -2,23 +2,52 @@
 import graphene
 from flask import request
 
-from hhb_backend.graphql.models.customer_statement_message import CustomerStatementMessage
+from hhb_backend.graphql.models.customer_statement_message import (
+    CustomerStatementMessage,
+)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import (
+    gebruikers_activiteit_entities,
+    log_gebruikers_activiteit,
+)
 
 
-class CustomerStatementMessageQuery():
-    return_type = graphene.Field(CustomerStatementMessage, id=graphene.Int(required=True))
+class CustomerStatementMessageQuery:
+    return_type = graphene.Field(
+        CustomerStatementMessage, id=graphene.Int(required=True)
+    )
 
-    @staticmethod
-    async def resolver(root, info, **kwargs):
-        return await request.dataloader.csms_by_id.load(kwargs["id"])
+    @classmethod
+    def gebruikers_activiteit(cls, _root, info, id, *_args, **_kwargs):
+        return dict(
+            action=info.field_name,
+            entities=gebruikers_activiteit_entities(
+                entity_type="customer_statement_message", result=id
+            ),
+        )
 
-class CustomerStatementMessagesQuery():
-    return_type = graphene.List(CustomerStatementMessage, ids=graphene.List(graphene.Int, default_value=[]))
-    
-    @staticmethod
-    async def resolver(root, info, **kwargs):
-        if kwargs["ids"]:
-            customer_satement_messages = await request.dataloader.csms_by_id.load_many(kwargs["ids"])
-        else:
-            customer_satement_messages = request.dataloader.csms_by_id.get_all_and_cache()
-        return customer_satement_messages
+    @classmethod
+    @log_gebruikers_activiteit
+    async def resolver(cls, _root, _info, id):
+        return await request.dataloader.csms_by_id.load(id)
+
+
+class CustomerStatementMessagesQuery:
+    return_type = graphene.List(
+        CustomerStatementMessage, ids=graphene.List(graphene.Int, default_value=[])
+    )
+
+    @classmethod
+    def gebruikers_activiteit(cls, _root, info, ids, *_args, **_kwargs):
+        return dict(
+            action=info.field_name,
+            entities=gebruikers_activiteit_entities(
+                entity_type="customer_statement_message", result=ids
+            ),
+        )
+
+    @classmethod
+    @log_gebruikers_activiteit
+    async def resolver(cls, _root, _info, ids=None):
+        if ids:
+            return await request.dataloader.csms_by_id.load_many(ids)
+        return request.dataloader.csms_by_id.get_all_and_cache()
