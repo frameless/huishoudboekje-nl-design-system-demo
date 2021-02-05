@@ -1602,6 +1602,9 @@ export type GetAfspraakFormDataQuery = (
   )>>>, organisaties?: Maybe<Array<Maybe<(
     { __typename?: 'Organisatie' }
     & OrganisatieFragment
+  )>>>, afspraken?: Maybe<Array<Maybe<(
+    { __typename?: 'Afspraak' }
+    & Pick<Afspraak, 'kenmerk'>
   )>>> }
 );
 
@@ -3105,6 +3108,9 @@ export const GetAfspraakFormDataDocument = gql`
   }
   organisaties {
     ...Organisatie
+  }
+  afspraken {
+    kenmerk
   }
 }
     ${RubriekFragmentDoc}

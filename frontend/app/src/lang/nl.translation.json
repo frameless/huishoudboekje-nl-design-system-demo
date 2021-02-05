@@ -15,14 +15,14 @@
             "title": "Fout.",
             "description": "Er is een onbekende fout opgetreden. Probeer het later nog eens."
         },
-        "exports": {
-            "createSuccessMessage": "Exportbestand succesvol aangemaakt.",
-            "noExportsInPeriod": "Er is geen exportbestand aangemaakt. Er zijn in deze periode geen overschrijvingen."
-        },
         "customerStatementMessages": {
             "deleteSuccess": "Het bronbestand is succesvol verwijderd.",
             "createSuccess": "Het bronbestand is geïmporteerd en de transacties zijn succesvol ingelezen.",
             "incorrectFileError": "Dit bestand voldoet niet aan het formaat SWIFT MT940. Het is niet gelukt om het te importeren. Controleer het bestand en probeer het nog een keer."
+        },
+        "exports": {
+            "createSuccessMessage": "Exportbestand succesvol aangemaakt.",
+            "noExportsInPeriod": "Er is geen exportbestand aangemaakt. Er zijn in deze periode geen overschrijvingen."
         },
         "transactions": {
             "addHint": "Voeg transacties toe door een bronbestand te importeren."
@@ -75,10 +75,10 @@
         "cancel": "Annuleren",
         "delete": "Verwijderen",
         "back": "Terug",
-        "export": "Exporteren",
-        "download": "Downloaden",
         "actions": "Acties",
         "add": "Toevoegen",
+        "export": "Exporteren",
+        "download": "Downloaden",
         "disconnect": "Koppeling verwijderen",
         "backToList": "Terug naar overzicht",
         "clearSearch": "Zoekopdracht wissen",
@@ -100,6 +100,7 @@
                 "bankAccountChoose": "Kies een bankrekening",
                 "amount": "Bedrag",
                 "searchTerm": "Zoekterm",
+                "searchtermDuplicateFound": "Let op: deze zoekterm wordt al gebruikt bij een andere afspraak.",
                 "startDate": "Startdatum",
                 "continuous": "Doorlopend",
                 "nTimes": "Aantal keer",
@@ -128,9 +129,9 @@
         "common": {
             "fields": {
                 "date": "Datum",
+                "time": "Tijd",
                 "startDate": "Startdatum",
-                "endDate": "Einddatum",
-                "time": "Tijd"
+                "endDate": "Einddatum"
             }
         },
         "banking": {
@@ -279,8 +280,7 @@
         "exports": {
             "title": "Overschrijvingen",
             "helperText": "Exporteer een bestand met overschrijvingen voor verwerking in een bankierenapplicatie."
-        },
-        "banking": "Bankzaken"
+        }
     },
     "exports": {
         "period": "Periode",

@@ -146,6 +146,9 @@ export const GetAfspraakFormDataQuery = gql`
         organisaties {
             ...Organisatie
         }
+        afspraken{
+            kenmerk
+        }
     }
     ${RubriekFragment}
     ${OrganisatieFragment}
