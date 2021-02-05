@@ -1,7 +1,7 @@
 import React from "react";
 import {Route, Switch} from "react-router-dom";
 import Routes, {RouteNames} from "../../config/routes";
-import CreateAfspraak from "../Agreements/CreateAfspraak";
+import CreateAfspraak from "../Afspraken/CreateAfspraak";
 import BurgerDetail from "./BurgerDetail/index";
 import BurgerEdit from "./BurgerEdit";
 import BurgerList from "./BurgerList";

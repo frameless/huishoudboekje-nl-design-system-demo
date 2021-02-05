@@ -47,9 +47,9 @@ import PrettyIban from "../../Layouts/PrettyIban";
 import SelectAfspraak from "../../Layouts/SelectAfspraak/SelectAfspraak";
 import SelectAfspraakOption from "../../Layouts/SelectAfspraak/SelectAfspraakOption";
 import {TransactionsContext} from "./index";
-import TransactionDetailsView from "./TransactionDetailsView";
+import TransactieDetailsView from "./TransactieDetailsView";
 
-const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }> = ({bankTransaction: bt, ...props}) => {
+const TransactieItem: React.FC<BoxProps & { bankTransaction: BankTransaction }> = ({bankTransaction: bt, ...props}) => {
 	const {t} = useTranslation();
 	const isMobile = useBreakpointValue([true, null, null, false]);
 	const toast = useToast();
@@ -116,7 +116,7 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }>
 				<ModalCloseButton />
 				<ModalBody>
 					<Stack spacing={5}>
-						<TransactionDetailsView transaction={bt} />
+						<TransactieDetailsView transaction={bt} />
 
 						{selectedAfspraak && (
 							<Stack>
@@ -267,4 +267,4 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }>
 	</>);
 };
 
-export default TransactionItem;
+export default TransactieItem;

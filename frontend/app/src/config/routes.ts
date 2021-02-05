@@ -5,11 +5,12 @@ export enum RouteNames {
 	burgers = "burgers",
 	afspraken = "afspraken",
 	organisaties = "organisaties",
-	banking = "bankzaken",
+	bankzaken = "bankzaken",
 	transacties = "transacties",
-	bookings = "overschrijvingen",
-	csms = "bronbestanden",
-	auditTrail = "gebeurtenissen",
+	overschrijvingen = "overschrijvingen",
+	bronbestanden = "bronbestanden",
+	rapportage = "rapportage",
+	gebeurtenissen = "gebeurtenissen",
 	notFound = "404",
 
 	// Sub routes
@@ -18,7 +19,6 @@ export enum RouteNames {
 	export = "exporteren",
 
 	// Not in use yet
-	rapportage = "rapportage",
 	settings = "instellingen",
 }
 
@@ -33,22 +33,20 @@ const Routes = {
 
 	BurgerAfspraken: (id?: number) => `/${RouteNames.burgers}/${id || ":burgerId(\\d+)"}/${RouteNames.afspraken}`,
 	CreateBurgerAfspraken: (burgerId: number) => `/${RouteNames.burgers}/${burgerId}/${RouteNames.afspraken}/${RouteNames.add}`,
-	EditAgreement: (id?: number) => `/${RouteNames.afspraken}/${id || ":id(\\d+)"}/${RouteNames.edit}`,
+	EditAfspraak: (id?: number) => `/${RouteNames.afspraken}/${id || ":id(\\d+)"}/${RouteNames.edit}`,
 
 	Organisaties: `/${RouteNames.organisaties}`,
 	Organisatie: (id?: number) => `/${RouteNames.organisaties}/${id || ":id(\\d+)"}`,
 	CreateOrganisatie: `/${RouteNames.organisaties}/${RouteNames.add}`,
 	EditOrganisatie: (id: number) => `/${RouteNames.organisaties}/${id}/${RouteNames.edit}`,
 
-	Banking: `/${RouteNames.banking}`,
-	Transactions: `/${RouteNames.banking}/${RouteNames.transacties}`,
-	CSMs: `/${RouteNames.banking}/${RouteNames.csms}`,
-	Bookings: `/${RouteNames.banking}/${RouteNames.bookings}`,
-	BookingsExport: `/${RouteNames.banking}/${RouteNames.bookings}/${RouteNames.export}`,
+	Bankzaken: `/${RouteNames.bankzaken}`,
+	Transacties: `/${RouteNames.bankzaken}/${RouteNames.transacties}`,
+	Bronbestanden: `/${RouteNames.bankzaken}/${RouteNames.bronbestanden}`,
+	Overschrijvingen: `/${RouteNames.bankzaken}/${RouteNames.overschrijvingen}/${RouteNames.export}`,
 	Settings: `/${RouteNames.settings}`,
 	Rapportage: `/${RouteNames.rapportage}`,
-
-	AuditTrail: `/${RouteNames.auditTrail}`,
+	Gebeurtenissen: `/${RouteNames.gebeurtenissen}`,
 
 	NotFound: `/${RouteNames.notFound}`,
 

@@ -5,9 +5,11 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {FaLock} from "react-icons/fa";
 import {Redirect, Route, Switch, useLocation} from "react-router-dom";
-import EditAgreement from "./components/Agreements/EditAgreement";
+import EditAfspraak from "./components/Afspraken/EditAfspraak";
+import CustomerStatementMessages from "./components/Bankzaken/Bronbestanden";
+import OverschrijvingenExport from "./components/Bankzaken/OverschrijvingenExport";
+import Transactions from "./components/Bankzaken/Transacties";
 import Gebeurtenissen from "./components/Gebeurtenissen";
-import Banking from "./components/Banking";
 import Burgers from "./components/Burgers";
 import Configuratie from "./components/Configuratie";
 import TwoColumns from "./components/Layouts/TwoColumns";
@@ -79,22 +81,22 @@ const App = () => {
 					<Stack spacing={5} direction={"row"} justifyContent={"flex-end"} alignItems={"center"} pb={5}>
 						<HStack spacing={5} alignItems={"center"}>
 							<UserStatus name={user.fullName} role={user.role} />
-							<IconButton size={"14px"} icon={<FaLock />} color={"gray.400"} _hover={{color: "primary.700"}} aria-label={t("actions.logout")} mr={3}
-							            onClick={reset} />
+							<IconButton size={"14px"} icon={<FaLock />} color={"gray.400"} _hover={{color: "primary.700"}} aria-label={t("actions.logout")} mr={3} onClick={reset} />
 						</HStack>
 					</Stack>
 
 					<Switch>
-						<Route exact path={Routes.Home}>
-							<Redirect to={Routes.Burgers} />
-						</Route>
+						<Route exact path={Routes.Home} component={() => <Redirect to={Routes.Burgers} />} />
 						<Route path={Routes.Burgers} component={Burgers} />
 						<Route path={Routes.Organisaties} component={Organisaties} />
-						<Route path={Routes.EditAgreement()} component={EditAgreement} />
-						<Route path={Routes.Banking} component={Banking} />
+						<Route path={Routes.EditAfspraak()} component={EditAfspraak} />
+						<Route exact path={Routes.Bankzaken} component={() => <Redirect to={Routes.Transacties} />} />
+						<Route path={Routes.Transacties} component={Transactions} />
+						<Route path={Routes.Bronbestanden} component={CustomerStatementMessages} />
+						<Route path={Routes.Overschrijvingen} component={OverschrijvingenExport} />
 						<Route path={Routes.Settings} component={Configuratie} />
 						<Route path={Routes.Rapportage} component={Rapportage} />
-						<Route path={Routes.AuditTrail} component={Gebeurtenissen} />
+						<Route path={Routes.Gebeurtenissen} component={Gebeurtenissen} />
 
 						<Route exact path={Routes.NotFound} component={PageNotFound} />
 						<Route component={PageNotFound} />

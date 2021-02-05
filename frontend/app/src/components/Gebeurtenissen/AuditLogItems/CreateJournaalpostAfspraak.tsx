@@ -19,7 +19,7 @@ const CreateJournaalpostAfspraak: React.FC<{ g: GebruikersActiviteit }> = ({g}) 
 	return <Trans i18nKey={"auditLog.createJournaalpostAfspraak"} values={data} components={{
 		linkBurger: burger?.id ? <AuditLogLink to={Routes.Burger(burger.id)}>{formatBurgerName(burger)}</AuditLogLink> : t("unknownBurger"),
 		linkOrganisatie: afspraak?.organisatie?.id ? <AuditLogLink to={Routes.Organisatie(afspraak?.organisatie?.id)}>{afspraak?.organisatie.weergaveNaam}</AuditLogLink> : t("unknownOrganisatie"),
-		linkAfspraak: afspraak?.id ? <AuditLogLink to={Routes.EditAgreement(afspraak.id)} /> : t("unknownAfspraak"),
+		linkAfspraak: afspraak?.id ? <AuditLogLink to={Routes.EditAfspraak(afspraak.id)} /> : t("unknownAfspraak"),
 	}} />
 }
 

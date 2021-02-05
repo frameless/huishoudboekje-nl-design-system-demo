@@ -9,7 +9,7 @@ import BackButton from "../BackButton";
 import Page from "../Layouts/Page";
 import AfspraakForm from "./AfspraakForm";
 
-const EditAgreement = () => {
+const EditAfspraak = () => {
 	const {id} = useParams<{ id: string }>();
 	const {t} = useTranslation();
 	const toast = useToast();
@@ -61,4 +61,4 @@ const EditAgreement = () => {
 	);
 };
 
-export default EditAgreement;
+export default EditAfspraak;
