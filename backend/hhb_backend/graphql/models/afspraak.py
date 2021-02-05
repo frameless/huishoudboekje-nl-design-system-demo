@@ -42,6 +42,7 @@ class Afspraak(graphene.ObjectType):
     kenmerk = graphene.String()
     actief = graphene.Boolean()
     automatische_incasso = graphene.Boolean()
+    automatisch_boeken = graphene.Boolean()
     organisatie = graphene.Field(lambda: organisatie.Organisatie)
     journaalposten = graphene.List(lambda: journaalpost.Journaalpost)
     rubriek = graphene.Field(lambda: rubriek.Rubriek)
