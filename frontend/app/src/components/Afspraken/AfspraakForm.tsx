@@ -53,6 +53,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 	});
 	const searchTerm = useInput({
 		defaultValue: "",
+		validate: [(v) => (String(v).length === 0 || String(v).length >= 6)]
 	});
 	const [isRecurring, toggleRecurring] = useToggle(false);
 	const startDate = useInput({
