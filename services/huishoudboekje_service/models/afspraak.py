@@ -1,8 +1,7 @@
-from sqlalchemy import Column, Integer, String, Sequence, Date, Boolean, ForeignKey, Float
-from sqlalchemy.orm import relationship
-from sqlalchemy.orm.exc import NoResultFound
-from flask import abort, make_response
 from core_service.database import db
+from sqlalchemy import Column, Integer, String, Sequence, Date, Boolean, ForeignKey
+from sqlalchemy.orm import relationship
+
 
 class Afspraak(db.Model):
     __tablename__ = 'afspraken'
@@ -24,6 +23,7 @@ class Afspraak(db.Model):
     kenmerk = Column(String)
     actief = Column(Boolean)
     automatische_incasso = Column(Boolean)
+    automatisch_boeken = Column(Boolean)
     organisatie_id = Column(Integer, ForeignKey('organisaties.id'))
     organisatie = relationship("Organisatie", back_populates="afspraken")
     journaalposten = relationship("Journaalpost", back_populates="afspraak")

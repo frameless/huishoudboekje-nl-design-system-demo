@@ -24,7 +24,8 @@ class AfspraakFactory():
         kenmerk: str = "ABC1234",
         actief: bool = True,
         organisatie_id: int = None,
-        rubriek_id: int = None
+        rubriek_id: int = None,
+        automatisch_boeken: bool = False
     ):
         if not gebruiker:
             gebruiker = self.gebruikers_factory.createGebruiker()
@@ -42,6 +43,7 @@ class AfspraakFactory():
             kenmerk=kenmerk,
             actief=actief,
             rubriek_id=rubriek_id,
+            automatisch_boeken=automatisch_boeken
         )
         if organisatie_id:
             afspraak.organisatie_id = organisatie_id
