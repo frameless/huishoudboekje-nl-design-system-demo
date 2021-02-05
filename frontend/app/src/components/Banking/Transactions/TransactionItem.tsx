@@ -112,8 +112,8 @@ const TransactionItem: React.FC<BoxProps & { bankTransaction: BankTransaction }>
 		<Modal isOpen={!isMobile && isOpen} onClose={onClose}>
 			<ModalOverlay />
 			<ModalContent width={"100%"} maxWidth={1000}>
-				<ModalCloseButton />
 				<ModalHeader>{t("forms.banking.sections.journal.title")}</ModalHeader>
+				<ModalCloseButton />
 				<ModalBody>
 					<Stack spacing={5}>
 						<TransactionDetailsView transaction={bt} />

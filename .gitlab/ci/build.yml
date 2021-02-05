@@ -52,7 +52,7 @@ build-helm:
     max: 2
     when: script_failure
   image:
-    name: ${DOCKER_PROXY}alpine/helm:latest
+    name: ${DOCKER_PROXY}alpine/helm:3.5.0
     entrypoint: [""]
   before_script:
     - apk add --no-cache make
@@ -69,7 +69,6 @@ pages:
   needs:
     - build-helm
   tags:
-    - cg
     - docker
   script:
     - mv helm/repo public

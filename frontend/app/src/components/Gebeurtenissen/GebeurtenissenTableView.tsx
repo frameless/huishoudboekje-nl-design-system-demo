@@ -17,8 +17,8 @@ const GebeurtenissenTableView: React.FC<TableProps & { gebeurtenissen: Gebruiker
 				</Tr>
 			</Thead>
 			<Tbody>
-				{[...gs].sort(sortAuditTrailByTime).map(g => (
-					<GebeurtenisTableRow gebeurtenis={g} />
+				{[...gs].sort(sortAuditTrailByTime).map((g,i ) => (
+					<GebeurtenisTableRow gebeurtenis={g} key={i} />
 				))}
 			</Tbody>
 		</Table>
