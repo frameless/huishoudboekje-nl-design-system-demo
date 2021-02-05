@@ -1,6 +1,5 @@
 import {WarningIcon} from "@chakra-ui/icons";
 import {Box, Button, Heading, HStack, IconButton, Spinner, Stack, Text, useTheme, VStack} from "@chakra-ui/react";
-import {observer} from "mobx-react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {FaLock} from "react-icons/fa";
@@ -107,4 +106,4 @@ const App = () => {
 	);
 };
 
-export default observer(App);
+export default App;
