@@ -22,15 +22,15 @@ def create_app(
     logging.basicConfig(
         level=app.config["LOG_LEVEL"],
     )
-    logging.config.dictConfig(
-        {
-            "version": 1,
-            "incremental": True,
-            "loggers": {"sqlalchemy.engine": {"level": "DEBUG"}},
-        }
-    )
+    if "DEVELOPMENT" in app.config and app.config["DEVELOPMENT"]:
+        logging.config.dictConfig(
+            {
+                "version": 1,
+                "incremental": True,
+                "loggers": {"sqlalchemy.engine": {"level": "DEBUG"}},
+            }
+        )
     logging.info(f"Starting {__name__} with {config_name}")
-    # logging.getLogger("sqlalchemy.engine").setLevel(logging.INFO)
 
     @app.route("/health")
     def health():

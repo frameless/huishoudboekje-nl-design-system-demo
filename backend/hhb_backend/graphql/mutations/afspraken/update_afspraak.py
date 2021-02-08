@@ -24,10 +24,9 @@ class UpdateAfspraak(graphene.Mutation):
     afspraak = graphene.Field(lambda: Afspraak)
     previous = graphene.Field(lambda: Afspraak)
 
-    @property
-    def gebruikers_activiteit(self):
+    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
         return dict(
-            action="updateAfspraak",
+            action=info.field_name,
             entities=gebruikers_activiteit_entities(
                 entity_type="afspraak", result=self, key="afspraak"
             )
@@ -41,8 +40,9 @@ class UpdateAfspraak(graphene.Mutation):
             after=dict(afspraak=self.afspraak),
         )
 
+    @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(root, info, id, input, **kwargs):
+    async def mutate(_root, _info, id, input):
         """ Update the Afspraak """
 
         previous = await hhb_dataloader().afspraken_by_id.load(id)
@@ -56,7 +56,7 @@ class UpdateAfspraak(graphene.Mutation):
             json=input,
         )
         if not response.ok:
-            raise GraphQLError(f"Upstream API responded: {response.json()}")
+            raise GraphQLError(f"Upstream API responded: {response.text}")
 
         afspraak = response.json()["data"]
 

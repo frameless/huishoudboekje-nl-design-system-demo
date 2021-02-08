@@ -23,10 +23,9 @@ class CreateAfspraak(graphene.Mutation):
     ok = graphene.Boolean()
     afspraak = graphene.Field(lambda: Afspraak)
 
-    @property
-    def gebruikers_activiteit(self):
+    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
         return dict(
-            action="createAfspraak",
+            action=info.field_name,
             entities=gebruikers_activiteit_entities(
                 entity_type="afspraak", result=self, key="afspraak"
             )
@@ -39,8 +38,9 @@ class CreateAfspraak(graphene.Mutation):
             after=dict(afspraak=self.afspraak),
         )
 
+    @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(root, info, input, **kwargs):
+    async def mutate(_root, _info, input):
         """ Create the new Gebruiker/Burger """
         if "interval" in input:
             iso_interval = convert_hhb_interval_to_iso(input["interval"])

@@ -5,7 +5,12 @@ import requests
 import json
 from graphql import GraphQLError
 from hhb_backend.graphql import settings
+from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.organisatie import Organisatie
+from hhb_backend.graphql.utils.gebruikersactiviteiten import (
+    gebruikers_activiteit_entities,
+    log_gebruikers_activiteit,
+)
 
 
 class UpdateOrganisatie(graphene.Mutation):
@@ -24,42 +29,57 @@ class UpdateOrganisatie(graphene.Mutation):
 
     ok = graphene.Boolean()
     organisatie = graphene.Field(lambda: Organisatie)
+    previous = graphene.Field(lambda: Organisatie)
 
-    def mutate(root, info, id, **kwargs):
+    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
+        return dict(
+            action=info.field_name,
+            entities=gebruikers_activiteit_entities(
+                entity_type="organisatie", result=self, key="organisatie"
+            ),
+            before=dict(organisatie=self.previous),
+            after=dict(organisatie=self.organisatie),
+        )
+
+    @staticmethod
+    @log_gebruikers_activiteit
+    async def mutate(_root, _info, id, **kwargs):
         """ Update the current Organisatie """
-        # First update weergavenaam and get original kvk_number
+        previous = await hhb_dataloader().organisaties_by_id.load(id)
+        if not previous:
+            raise GraphQLError("Organisatie not found")
+
+        orgineel_kvk_nummer = previous["kvk_nummer"]
+        previous["kvk_details"] = await hhb_dataloader().organisaties_kvk_details.load(
+            orgineel_kvk_nummer
+        )
+
         hhb_service_data = {}
         if "weergave_naam" in kwargs:
             hhb_service_data["weergave_naam"] = kwargs.pop("weergave_naam")
+        if "kvk_nummer" in kwargs:
+            hhb_service_data["kvk_nummer"] = kwargs["kvk_nummer"]
 
+        # Try update of huishoudboekje service
         hhb_service_response = requests.post(
             f"{settings.HHB_SERVICES_URL}/organisaties/{id}",
-            data=json.dumps(hhb_service_data),
-            headers={'Content-type': 'application/json'}
+            json=hhb_service_data,
         )
         if hhb_service_response.status_code != 200:
-            raise GraphQLError(f"Upstream API responded: {hhb_service_response.json()}")
-        else:
-            orgineel_kvk_nummer = hhb_service_response.json()["data"]["kvk_nummer"]
+            raise GraphQLError(f"Upstream API responded: {hhb_service_response.text}")
 
         # Try update of organisatie service
         if kwargs:
             org_service_response = requests.post(
                 f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/{orgineel_kvk_nummer}",
-                data=json.dumps(kwargs),
-                headers={'Content-type': 'application/json'}
+                json=kwargs,
             )
             if org_service_response.status_code != 200:
-                raise GraphQLError(f"Upstream API responded: {org_service_response.json()}")
+                raise GraphQLError(
+                    f"Upstream API responded: {org_service_response.text}"
+                )
 
-        # Update kvk_nummer in huishoudboekje
-        if "kvk_nummer" in kwargs:
-            hhb_service_response = requests.post(
-                f"{settings.HHB_SERVICES_URL}/organisaties/{id}",
-                data=json.dumps({"kvk_nummer": kwargs["kvk_nummer"]}),
-                headers={'Content-type': 'application/json'}
-            )
-            if hhb_service_response.status_code != 200:
-                raise GraphQLError(f"Upstream API responded: {hhb_service_response.json()}")
+        organisatie = hhb_service_response.json()["data"]
+        organisatie["kvk_details"] = org_service_response.json()["data"]
 
-        return UpdateOrganisatie(organisatie=hhb_service_response.json()["data"], ok=True)
+        return UpdateOrganisatie(organisatie=organisatie, previous=previous, ok=True)

@@ -1,4 +1,6 @@
-FROM postgres:11-alpine
+ARG DOCKER_PROXY=''
+
+FROM ${DOCKER_PROXY}postgres:11-alpine
 
 WORKDIR /data
 COPY docker/ /data/

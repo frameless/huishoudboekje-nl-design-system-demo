@@ -14,7 +14,7 @@
     - export COMPONENT_COMMIT_HASH=$(git describe --always --abbrev=0 --match "NOT A TAG")
     - export DOCKER_CONFIG=/tmp/docker-config-$CI_JOB_ID
     - |
-      if [ "${DOCKER_PROXY}"]; then
+      if [ "${DOCKER_PROXY}" ]; then
         docker login -u "$CI_DEPENDENCY_PROXY_USER" --password-stdin "$CI_DEPENDENCY_PROXY_SERVER" <<< "$CI_DEPENDENCY_PROXY_PASSWORD"
       fi
     - make --jobs --output-sync=target docker-images

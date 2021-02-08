@@ -35,10 +35,9 @@ class UpdateGebruiker(graphene.Mutation):
     gebruiker = graphene.Field(lambda: Gebruiker)
     previous = graphene.Field(lambda: Gebruiker)
 
-    @property
-    def gebruikers_activiteit(self):
+    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
         return dict(
-            action="updateGebruiker",
+            action=info.field_name,
             entities=gebruikers_activiteit_entities(
                 entity_type="burger", result=self, key="gebruiker"
             )
@@ -49,8 +48,9 @@ class UpdateGebruiker(graphene.Mutation):
             after=dict(burger=self.gebruiker),
         )
 
+    @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(root, info, id, **kwargs):
+    async def mutate(_root, _info, id, **kwargs):
         """ Update the current Gebruiker/Burger """
         previous = await request.dataloader.gebruikers_by_id.load(id)
 

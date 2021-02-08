@@ -21,18 +21,18 @@ class DeleteGebruiker(graphene.Mutation):
     ok = graphene.Boolean()
     previous = graphene.Field(lambda: Gebruiker)
 
-    @property
-    def gebruikers_activiteit(self):
+    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
         return dict(
-            action="deleteGebruiker",
+            action=info.field_name,
             entities=gebruikers_activiteit_entities(
                 entity_type="burger", result=self, key="previous"
             ),
             before=dict(burger=self.previous),
         )
 
+    @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(root, info, id):
+    async def mutate(_root, info, id):
         """ Delete current gebruiker """
 
         previous = await request.dataloader.gebruikers_by_id.load(id)

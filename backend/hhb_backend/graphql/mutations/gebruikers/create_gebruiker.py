@@ -43,10 +43,9 @@ class CreateGebruiker(graphene.Mutation):
     ok = graphene.Boolean()
     gebruiker = graphene.Field(lambda: Gebruiker)
 
-    @property
-    def gebruikers_activiteit(self):
+    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
         return dict(
-            action="createGebruiker",
+            action=info.field_name,
             entities=gebruikers_activiteit_entities(
                 entity_type="burger", result=self, key="gebruiker"
             )
@@ -56,10 +55,10 @@ class CreateGebruiker(graphene.Mutation):
             after=dict(burger=self.gebruiker),
         )
 
+    @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(root, info, **kwargs):
+    async def mutate(_root, _info, input):
         """ Create the new Gebruiker/Burger """
-        input = kwargs.pop("input")
         rekeningen = input.pop("rekeningen", None)
         response = requests.post(
             f"{settings.HHB_SERVICES_URL}/gebruikers/",

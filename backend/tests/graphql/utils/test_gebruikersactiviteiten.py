@@ -22,10 +22,9 @@ class TestEntityResponse(graphene.Mutation):
     entity = graphene.Field(lambda: TestEntity)
     previous = graphene.Field(lambda: TestEntity)
 
-    @property
-    def gebruikers_activiteit(self):
+    def gebruikers_activiteit(self, _root, info):
         return dict(
-            action="Test",
+            action=info.field_name,
             entities=gebruikers_activiteit_entities(
                 entity_type="entity", result=self, key="entity"
             ),
@@ -33,8 +32,9 @@ class TestEntityResponse(graphene.Mutation):
             after=dict(entity=self.entity),
         )
 
+    @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(root, _):
+    async def mutate(_root, _info):
         return TestEntityResponse(
             entity=dict(id=1, attribute="new"), previous=dict(id=1, attribute="old")
         )
@@ -147,7 +147,9 @@ def test_extract_gebruikers_activiteit():
         entity=dict(id=1, attribute="after test"),
         previous=dict(id=-1, attribute="before test"),
     )
-    assert extract_gebruikers_activiteit(result=result) == dict(
+    assert extract_gebruikers_activiteit(
+        result, None, MockResolveInfo(field_name="Test")
+    ) == dict(
         action="Test",
         entities=[dict(entityType="entity", entityId=1)],
         snapshot_before=dict(entity=dict(id=-1, attribute="before test")),
@@ -181,8 +183,7 @@ async def test_log_gebruikers_activiteit_mutation():
             status_code=201,
         )
 
-        # TODO properly mock flask.request and flask.g
-        await TestEntityResponse.mutate(None, None)
+        await TestEntityResponse.mutate(None, MockResolveInfo(field_name="Test"))
 
         assert log_request.call_count == 1
 

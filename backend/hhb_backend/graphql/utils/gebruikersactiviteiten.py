@@ -1,5 +1,6 @@
 import inspect
 import logging
+import types
 from dataclasses import dataclass, field
 from functools import wraps
 
@@ -44,9 +45,23 @@ class GebruikersActiviteit:
 
 def extract_gebruikers_activiteit(result, *args, **kwargs):
     """Return a dict of the GebruikersActiviteit DataClass from the result by reading its gebruikers_activiteit property"""
-    if hasattr(result, "gebruikers_activiteit"):
+
+    # Mutation with gebruikers_activiteit method
+    if hasattr(result, "gebruikers_activiteit") and isinstance(
+        result.gebruikers_activiteit, types.MethodType
+    ):
+        gebruikers_activiteit = result.gebruikers_activiteit(*args, **kwargs)
+    # Mutation with gebruikers_activiteit property
+    elif hasattr(result, "gebruikers_activiteit") and isinstance(
+        result.gebruikers_activiteit, property
+    ):
         gebruikers_activiteit = result.gebruikers_activiteit
-    elif inspect.isclass(args[0]) and hasattr(args[0], "gebruikers_activiteit"):
+    # Query with gebruikers_activiteit method
+    elif (
+        len(args) > 0
+        and inspect.isclass(args[0])
+        and hasattr(args[0], "gebruikers_activiteit")
+    ):
         gebruikers_activiteit = args[0].gebruikers_activiteit(
             *(args[1:]), **{**kwargs, "result": result}
         )
@@ -60,18 +75,15 @@ def extract_gebruikers_activiteit(result, *args, **kwargs):
 
 
 def log_gebruikers_activiteit(view_func):
-    """Decorate graphql mutations with this to have the gebruikers_activiteit property of their response be logged to
+    """Decorate graphql mutations with this to have the result of their gebruikers_activiteit method be logged to
     the LOG_SERVICE"""
 
     @wraps(view_func)
-    async def decorated(*args, **kwargs):  # TODO add root, info to signature
-        # cls = args[0] if inspect.isclass(args[0]) else None
-        #     (cls, args) = args[0], args[1:]
+    async def decorated(*args, **kwargs):
         result = await view_func(*args, **kwargs)
         gebruikers_activiteit = extract_gebruikers_activiteit(result, *args, **kwargs)
         if gebruikers_activiteit:
             try:
-                # TODO find out why snapshots are sometime logged as a string 'null'
                 json = {
                     "timestamp": datetime.now(tz=tz.tzlocal())
                     .replace(microsecond=0)

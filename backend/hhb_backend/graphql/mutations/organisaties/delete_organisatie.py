@@ -1,10 +1,18 @@
 """ GraphQL mutation for deleting a Organisatie """
 import os
-import json
+
 import graphene
 import requests
 from graphql import GraphQLError
+
 from hhb_backend.graphql import settings
+from hhb_backend.graphql.dataloaders import hhb_dataloader
+from hhb_backend.graphql.models.organisatie import Organisatie
+from hhb_backend.graphql.utils.gebruikersactiviteiten import (
+    gebruikers_activiteit_entities,
+    log_gebruikers_activiteit,
+)
+
 
 class DeleteOrganisatie(graphene.Mutation):
     class Arguments:
@@ -12,26 +20,40 @@ class DeleteOrganisatie(graphene.Mutation):
         id = graphene.Int(required=True)
 
     ok = graphene.Boolean()
+    previous = graphene.Field(lambda: Organisatie)
 
-    def mutate(root, info, id):
-        """ Delete current organisatie """
-        kvk_nummer_response = requests.get(
-            f"{settings.HHB_SERVICES_URL}/organisaties/{id}"
+    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
+        return dict(
+            action=info.field_name,
+            entities=gebruikers_activiteit_entities(
+                entity_type="organisatie", result=self, key="previous"
+            ),
+            before=dict(organisatie=self.previous),
         )
-        if kvk_nummer_response.status_code != 200:
-            raise GraphQLError(f"Upstream API responded: {kvk_nummer_response.json()}")
-        kvk_nummer = kvk_nummer_response.json()["data"]["kvk_nummer"]
 
-        delete_response_hhb = requests.delete(
+    @log_gebruikers_activiteit
+    async def mutate(root, _info, id):
+        """ Delete current organisatie """
+        previous = await hhb_dataloader().organisaties_by_id.load(id)
+        if not previous:
+            raise GraphQLError("Organisatie not found")
+        kvk_nummer = previous["kvk_nummer"]
+        previous["kvk_details"] = await hhb_dataloader().organisaties_kvk_details.load(
+            kvk_nummer
+        )
+
+        response_hhb = requests.delete(
             os.path.join(settings.HHB_SERVICES_URL, f"organisaties/{id}")
         )
-        if delete_response_hhb.status_code != 204:
-            raise GraphQLError(f"Upstream API responded: {delete_response_hhb.json()}")
+        if response_hhb.status_code != 204:
+            raise GraphQLError(f"Upstream API responded: {response_hhb.text}")
 
-        delete_response_org = requests.delete(
-            os.path.join(settings.ORGANISATIE_SERVICES_URL, f"organisaties/{kvk_nummer}")
+        response_organisatie = requests.delete(
+            os.path.join(
+                settings.ORGANISATIE_SERVICES_URL, f"organisaties/{kvk_nummer}"
+            )
         )
-        if delete_response_org.status_code not in [204, 404]:
-            raise GraphQLError(f"Upstream API responded: {delete_response_hhb.json()}")
-        return DeleteOrganisatie(ok=True)
+        if response_organisatie.status_code not in [204, 404]:
+            raise GraphQLError(f"Upstream API responded: {response_hhb.text}")
 
+        return DeleteOrganisatie(ok=True, previous=previous)

@@ -21,10 +21,9 @@ class DeleteJournaalpost(graphene.Mutation):
     ok = graphene.Boolean()
     previous = graphene.Field(lambda: Journaalpost)
 
-    @property
-    def gebruikers_activiteit(self):
+    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
         return dict(
-            action="deleteJournaalpostAfspraak",
+            action=info.field_name,
             entities=gebruikers_activiteit_entities(
                 entity_type="journaalpost", result=self, key="previous"
             )
@@ -51,8 +50,9 @@ class DeleteJournaalpost(graphene.Mutation):
             before=dict(journaalpost=self.previous),
         )
 
+    @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(root, info, id):
+    async def mutate(_root, info, id):
         previous = await hhb_dataloader().journaalposten_by_id.load(id)
         if previous and "afspraak_id" in previous:
             previous["afspraak"] = await hhb_dataloader().afspraken_by_id.load(
