@@ -1,21 +1,11 @@
 import {useCallback, useEffect, useMemo, useState} from "react";
 import {useToggle} from "react-grapple";
-import Store from "../config/store";
 
 type IUser = {
 	email: string,
 	fullName: string,
 	role: string,
 }
-
-export const useStore = () => {
-	return Store;
-};
-
-export const useSession = () => {
-	const store = useStore();
-	return store.session;
-};
 
 export const useAuth = () => {
 	const [user, setUser] = useState<IUser>();
@@ -63,7 +53,3 @@ export const useAuth = () => {
 		user, error, loading, reset
 	}), [user, error, loading, reset]);
 };
-
-export const useValue = (condition, values) => {
-	return values[condition];
-}

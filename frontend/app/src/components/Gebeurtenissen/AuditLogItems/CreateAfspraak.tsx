@@ -20,7 +20,7 @@ const CreateAfspraak: React.FC<{ g: GebruikersActiviteit }> = ({g}) => {
 	return <Trans i18nKey={"auditLog.createAfspraak"} values={data} components={{
 		linkBurger: burger?.id ? <AuditLogLink to={Routes.Burger(burger.id)}>{formatBurgerName(burger)}</AuditLogLink> : t("unknownBurger"),
 		linkOrganisatie: organisatie?.id ? <AuditLogLink to={Routes.Organisatie(organisatie.id)}>{organisatie.weergaveNaam}</AuditLogLink> : t("unknownOrganisatie"),
-		linkAfspraak: afspraak?.id ? <AuditLogLink to={Routes.EditAgreement(afspraak.id)} /> : t("unknownAfspraak"),
+		linkAfspraak: afspraak?.id ? <AuditLogLink to={Routes.EditAfspraak(afspraak.id)} /> : t("unknownAfspraak"),
 	}} />
 }
 

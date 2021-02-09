@@ -5,14 +5,14 @@ import React from "react";
 import DatePicker from "react-datepicker";
 import {useInput} from "react-grapple";
 import {useTranslation} from "react-i18next";
-import {Export, useCreateExportOverschrijvingenMutation, useGetExportsQuery} from "../../../generated/graphql";
-import Queryable from "../../../utils/Queryable";
-import {Regex} from "../../../utils/things";
-import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
-import Label from "../../Layouts/Label";
-import Section from "../../Layouts/Section";
+import {Export, useCreateExportOverschrijvingenMutation, useGetExportsQuery} from "../../generated/graphql";
+import Queryable from "../../utils/Queryable";
+import {Regex} from "../../utils/things";
+import {FormLeft, FormRight} from "../Forms/FormLeftRight";
+import Label from "../Layouts/Label";
+import Section from "../Layouts/Section";
 
-const BookingsExport = () => {
+const OverschrijvingenExport = () => {
 	const {t} = useTranslation();
 	const toast = useToast();
 
@@ -153,4 +153,4 @@ const BookingsExport = () => {
 	);
 };
 
-export default BookingsExport;
+export default OverschrijvingenExport;

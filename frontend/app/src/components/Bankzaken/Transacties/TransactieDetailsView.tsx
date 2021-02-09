@@ -7,7 +7,7 @@ import Currency from "../../Currency";
 import Label from "../../Layouts/Label";
 import PrettyIban from "../../Layouts/PrettyIban";
 
-const TransactionDetailsView: React.FC<StackProps & { transaction: BankTransaction }> = ({transaction: bt, ...props}) => {
+const TransactieDetailsView: React.FC<StackProps & { transaction: BankTransaction }> = ({transaction: bt, ...props}) => {
 	const {t} = useTranslation();
 
 	return (
@@ -51,4 +51,4 @@ const TransactionDetailsView: React.FC<StackProps & { transaction: BankTransacti
 	);
 };
 
-export default TransactionDetailsView;
+export default TransactieDetailsView;

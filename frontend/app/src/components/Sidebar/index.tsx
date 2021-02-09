@@ -14,17 +14,17 @@ const Sidebar: React.FC<BoxProps> = (props) => {
 			<SidebarLink to={Routes.Burgers} icon={RiUserLine}>{t("sidebar.burgers")}</SidebarLink>
 			<SidebarLink to={Routes.Organisaties} icon={FaRegBuilding}>{t("sidebar.organisaties")}</SidebarLink>
 			<Stack>
-				<SidebarLink exactMatch to={Routes.Banking} icon={MdCreditCard}>{t("sidebar.bankzaken")}</SidebarLink>
+				<SidebarLink exactMatch to={Routes.Bankzaken} icon={MdCreditCard}>{t("sidebar.bankzaken")}</SidebarLink>
 				<Box pl={"27px"}>
 					<Stack spacing={1} borderLeft={"1px solid"} borderLeftColor={"gray.400"} pl={"21px"}>
-						<SidebarLink size={"sm"} to={Routes.Transactions}>{t("sidebar.transacties")}</SidebarLink>
-						<SidebarLink size={"sm"} to={Routes.CSMs}>{t("sidebar.bronbestanden")}</SidebarLink>
-						<SidebarLink size={"sm"} to={Routes.BookingsExport}>{t("sidebar.overschrijvingen")}</SidebarLink>
+						<SidebarLink size={"sm"} to={Routes.Transacties}>{t("sidebar.transacties")}</SidebarLink>
+						<SidebarLink size={"sm"} to={Routes.Bronbestanden}>{t("sidebar.bronbestanden")}</SidebarLink>
+						<SidebarLink size={"sm"} to={Routes.Overschrijvingen}>{t("sidebar.overschrijvingen")}</SidebarLink>
 					</Stack>
 				</Box>
 			</Stack>
 			<SidebarLink to={Routes.Rapportage} icon={RiBarChartFill}>{t("sidebar.rapportage")}</SidebarLink>
-			<SidebarLink to={Routes.AuditTrail} icon={FiActivity}>{t("sidebar.gebeurtenissen")}</SidebarLink>
+			<SidebarLink to={Routes.Gebeurtenissen} icon={FiActivity}>{t("sidebar.gebeurtenissen")}</SidebarLink>
 			<SidebarLink to={Routes.Settings} icon={TiCog}>{t("sidebar.configuratie")}</SidebarLink>
 		</Stack>
 

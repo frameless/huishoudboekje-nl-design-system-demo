@@ -1,4 +1,5 @@
-import {Box, BoxProps, Button, Divider, FormLabel, Input, InputGroup, InputLeftElement, Stack, Switch, Text, useToast} from "@chakra-ui/react";
+import {WarningIcon} from "@chakra-ui/icons";
+import {Box, BoxProps, Button, Divider, FormLabel, Input, InputGroup, InputLeftElement, InputRightElement, Stack, Switch, Text, useToast} from "@chakra-ui/react";
 import moment from "moment";
 import "moment-recur-ts";
 import React, {useEffect, useState} from "react";
@@ -28,6 +29,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 	}
 
 	const [isSubmitted, setSubmitted] = useState<boolean>(false);
+	const [zoektermDuplicateFound, setZoektermDuplicateFound] = useState<boolean>(false);
 
 	const $afspraakFormData = useGetAfspraakFormDataQuery();
 
@@ -53,6 +55,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 	});
 	const searchTerm = useInput({
 		defaultValue: "",
+		validate: [(v) => (String(v).length === 0 || String(v).length >= 6)]
 	});
 	const [isRecurring, toggleRecurring] = useToggle(false);
 	const startDate = useInput({
@@ -119,6 +122,32 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [afspraak]);
+
+	useEffect(() => {
+		const zoektermString = String(searchTerm.value);
+		if (zoektermString.length === 0) {
+			setZoektermDuplicateFound(false);
+		}
+		else {
+			const dupesByZoekterm: Afspraak[] = ($afspraakFormData.data?.afspraken || []).filter(a => {
+				if (afspraak?.id === a.id || !a.kenmerk) {
+					return false;
+				}
+
+				/* If the tegenRekening matches */
+				if (parseInt(rekeningId.value) === a.tegenRekening?.id && a.kenmerk?.length > 0) {
+					/* Check if this afspraak has (partly or whole) the same zoekterm */
+					if ((a.kenmerk.length > 0 ? zoektermString.includes(a.kenmerk) : false) || a.kenmerk?.includes(zoektermString)) {
+						return true;
+					}
+				}
+
+				return false;
+			});
+			setZoektermDuplicateFound(dupesByZoekterm.length > 0);
+		}
+
+	}, [searchTerm.value, $afspraakFormData.data, afspraak, rekeningId.value]);
 
 	const onSubmit = (e) => {
 		e.preventDefault();
@@ -366,8 +395,14 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 									</InputGroup>
 								</Stack>
 								<Stack spacing={1} flex={1}>
-									<FormLabel htmlFor={"searchTerm"}>{t("forms.agreements.fields.searchTerm")}</FormLabel>
-									<Input isInvalid={isInvalid(searchTerm)} {...searchTerm.bind} id="searchTerm" />
+									<Queryable query={$afspraakFormData} children={(data: { organisaties: Organisatie[] }) => (<>
+										<FormLabel htmlFor={"searchTerm"}>{t("forms.agreements.fields.searchTerm")}</FormLabel>
+										<InputGroup>
+											<Input isInvalid={isInvalid(searchTerm)} {...searchTerm.bind} id="searchTerm" />
+											{zoektermDuplicateFound && <InputRightElement> <WarningIcon color={"orange.500"} /> </InputRightElement>}
+										</InputGroup>
+										{zoektermDuplicateFound && <Text fontSize={"sm"}>{t("forms.agreements.fields.searchtermDuplicateFound")}</Text>}
+									</>)} />
 								</Stack>
 							</Stack>
 						</FormRight>

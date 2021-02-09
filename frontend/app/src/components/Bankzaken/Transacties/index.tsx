@@ -7,7 +7,7 @@ import {dateFormat, sortBankTransactions} from "../../../utils/things";
 import DeadEndPage from "../../DeadEndPage";
 import Label from "../../Layouts/Label";
 import Section from "../../Layouts/Section";
-import TransactionItem from "./TransactionItem";
+import TransactieItem from "./TransactieItem";
 
 export const TransactionsContext = createContext<{ refetch: VoidFunction }>({
 	refetch: () => undefined
@@ -72,10 +72,10 @@ const Transactions = () => {
 											</Box>
 											<Box>
 												{bt[transactionDate].sort(sortBankTransactions).filter(t => t.isCredit).map(t => (
-													<TransactionItem key={t.id} bankTransaction={t} />
+													<TransactieItem key={t.id} bankTransaction={t} />
 												))}
 												{bt[transactionDate].sort(sortBankTransactions).filter(t => !t.isCredit).reverse().map(t => (
-													<TransactionItem key={t.id} bankTransaction={t} />
+													<TransactieItem key={t.id} bankTransaction={t} />
 												))}
 											</Box>
 										</Stack>

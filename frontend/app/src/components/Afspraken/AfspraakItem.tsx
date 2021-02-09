@@ -28,7 +28,7 @@ const AfspraakItem: React.FC<BoxProps & { afspraak: Afspraak, onDelete?: (id: nu
 		setDeleteConfirm(false);
 	}
 
-	const onClickEditButton = () => push(Routes.EditAgreement(a.id));
+	const onClickEditButton = () => push(Routes.EditAfspraak(a.id));
 
 	return isMobile ? (
 		<GridCard cursor={"default"} {...props}>

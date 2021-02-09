@@ -111,7 +111,7 @@ describe("Afspraken CRUD", () => {
 		const a2 = sampleAfspraken[1];
 
 		// Go to edit afspraak page
-		cy.visit(Routes.EditAgreement(a1.id));
+		cy.visit(Routes.EditAfspraak(a1.id));
 
 		// Todo: can't explain why, but for some reason it fails on a second /api/me call. (14-12-2020)
 		// eslint-disable-next-line cypress/no-unnecessary-waiting

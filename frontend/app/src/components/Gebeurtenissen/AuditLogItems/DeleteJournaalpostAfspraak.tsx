@@ -17,7 +17,7 @@ const DeleteJournaalpostAfspraak: React.FC<{ g: GebruikersActiviteit }> = ({g}) 
 
 	return <Trans i18nKey={"auditLog.deleteJournaalpostAfspraak"} values={data} components={{
 		linkBurger: burger?.id ? <AuditLogLink to={Routes.Burger(burger.id)}>{formatBurgerName(burger)}</AuditLogLink> : t("unknownBurger"),
-		linkAfspraak: afspraak?.id ? <AuditLogLink to={Routes.EditAgreement(afspraak.id)} /> : t("unknownAfspraak"),
+		linkAfspraak: afspraak?.id ? <AuditLogLink to={Routes.EditAfspraak(afspraak.id)} /> : t("unknownAfspraak"),
 	}} />
 }
 
