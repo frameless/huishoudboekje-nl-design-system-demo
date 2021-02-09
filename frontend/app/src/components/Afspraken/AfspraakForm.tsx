@@ -124,16 +124,30 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 	}, [afspraak]);
 
 	useEffect(() => {
-		const afspraken: Afspraak[] = $afspraakFormData.data?.afspraken || [];
 		const zoektermString = String(searchTerm.value);
-
 		if (zoektermString.length === 0) {
 			setZoektermDuplicateFound(false);
 		}
 		else {
-			setZoektermDuplicateFound(afspraken.map(a => a.kenmerk).includes(zoektermString));
+			const dupesByZoekterm: Afspraak[] = ($afspraakFormData.data?.afspraken || []).filter(a => {
+				if (afspraak?.id === a.id || !a.kenmerk) {
+					return false;
+				}
+
+				/* If the tegenRekening matches */
+				if (parseInt(rekeningId.value) === a.tegenRekening?.id && a.kenmerk?.length > 0) {
+					/* Check if this afspraak has (partly or whole) the same zoekterm */
+					if ((a.kenmerk.length > 0 ? zoektermString.includes(a.kenmerk) : false) || a.kenmerk?.includes(zoektermString)) {
+						return true;
+					}
+				}
+
+				return false;
+			});
+			setZoektermDuplicateFound(dupesByZoekterm.length > 0);
 		}
-	}, [searchTerm.value, $afspraakFormData.data]);
+
+	}, [searchTerm.value, $afspraakFormData.data, afspraak, rekeningId.value]);
 
 	const onSubmit = (e) => {
 		e.preventDefault();
@@ -385,7 +399,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 										<FormLabel htmlFor={"searchTerm"}>{t("forms.agreements.fields.searchTerm")}</FormLabel>
 										<InputGroup>
 											<Input isInvalid={isInvalid(searchTerm)} {...searchTerm.bind} id="searchTerm" />
-											{zoektermDuplicateFound && <InputRightElement> <WarningIcon color={"orange.500"} /> </InputRightElement> }
+											{zoektermDuplicateFound && <InputRightElement> <WarningIcon color={"orange.500"} /> </InputRightElement>}
 										</InputGroup>
 										{zoektermDuplicateFound && <Text fontSize={"sm"}>{t("forms.agreements.fields.searchtermDuplicateFound")}</Text>}
 									</>)} />

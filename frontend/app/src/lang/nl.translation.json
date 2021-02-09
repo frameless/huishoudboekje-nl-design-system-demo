@@ -100,7 +100,7 @@
                 "bankAccountChoose": "Kies een bankrekening",
                 "amount": "Bedrag",
                 "searchTerm": "Zoekterm",
-                "searchtermDuplicateFound": "Let op: deze zoekterm wordt al gebruikt bij een andere afspraak.",
+                "searchtermDuplicateFound": "Let op: deze zoekterm of een deel ervan wordt al gebruikt bij een andere afspraak. Het is niet mogelijk om automatisch boeken aan te zetten voor deze afspraak.",
                 "startDate": "Startdatum",
                 "continuous": "Doorlopend",
                 "nTimes": "Aantal keer",
