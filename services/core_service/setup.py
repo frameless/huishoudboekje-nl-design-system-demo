@@ -16,5 +16,6 @@ setup(
         "Flask-SQLAlchemy>=2.4.4",
         "Flask-Inputs>=0.3.0",
         "jsonschema>=3.2.0",
+        'Werkzeug>=1.0.1,<2',
     ],
 )

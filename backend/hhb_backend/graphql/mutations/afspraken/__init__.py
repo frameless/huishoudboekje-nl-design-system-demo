@@ -19,3 +19,4 @@ class AfspraakInput(graphene.InputObjectType):
     organisatie_id = graphene.Int()
     rubriek_id = graphene.Int()
     automatische_incasso = graphene.Boolean()
+    automatisch_boeken = graphene.Boolean()

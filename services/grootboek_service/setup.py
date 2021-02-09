@@ -18,5 +18,6 @@ setup(
         "Flask-Inputs>=0.3.0",
         "jsonschema>=3.2.0",
         'gunicorn>=20.0.4',
+        'Werkzeug>=1.0.1,<2',
     ],
 )

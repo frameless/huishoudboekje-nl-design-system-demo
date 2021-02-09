@@ -21,5 +21,6 @@ setup(
         'schwifty>=2020.11.0',
         'marshmallow-dataclass>=8.3.0',
         'pyyaml>=5.3.1',
+        'Werkzeug>=1.0.1,<2',
     ],
 )
