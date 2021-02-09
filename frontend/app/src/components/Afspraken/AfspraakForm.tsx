@@ -31,7 +31,9 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 	const [isSubmitted, setSubmitted] = useState<boolean>(false);
 	const [zoektermDuplicateFound, setZoektermDuplicateFound] = useState<boolean>(false);
 
-	const $afspraakFormData = useGetAfspraakFormDataQuery();
+	const $afspraakFormData = useGetAfspraakFormDataQuery({
+		fetchPolicy: "no-cache"
+	});
 
 	const [isActive, toggleActive] = useToggle(true);
 	const [afspraakType, setAfspraakType] = useState<AfspraakType>(AfspraakType.Expense);
@@ -53,7 +55,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 		step: .01,
 		validate: [(v) => new RegExp(/^([0-9]+)((,|\.)[0-9]{2})?$/).test(v.toString())],
 	});
-	const searchTerm = useInput({
+	const zoekterm = useInput({
 		defaultValue: "",
 		validate: [(v) => (String(v).length === 0 || String(v).length >= 6)]
 	});
@@ -83,6 +85,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 	const nTimes = useNumberInput({
 		validate: [(v) => new RegExp(/^[0-9]+$/).test(v.toString())],
 	});
+	const [automatischBoeken, toggleAutomatischBoeken] = useToggle(false);
 	const intervalType = useInput<IntervalType | undefined>({
 		validate: [(v) => v !== undefined && Object.values(IntervalType).includes(v)],
 	});
@@ -103,7 +106,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 				rekeningId.setValue((afspraak.tegenRekening?.id || 0).toString());
 			}
 			amount.setValue(afspraak.bedrag);
-			searchTerm.setValue(afspraak.kenmerk || "");
+			zoekterm.setValue(afspraak.kenmerk || "");
 			const interval = XInterval.parse(afspraak.interval);
 			if (interval) {
 				toggleRecurring(true);
@@ -118,13 +121,14 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 				toggleContinuous(false);
 				nTimes.setValue(afspraak.aantalBetalingen);
 			}
+			toggleAutomatischBoeken(afspraak.automatischBoeken);
 			toggleAutomatischeIncasso(afspraak.automatischeIncasso);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [afspraak]);
 
 	useEffect(() => {
-		const zoektermString = String(searchTerm.value);
+		const zoektermString = String(zoekterm.value);
 		if (zoektermString.length === 0) {
 			setZoektermDuplicateFound(false);
 		}
@@ -144,10 +148,14 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 
 				return false;
 			});
-			setZoektermDuplicateFound(dupesByZoekterm.length > 0);
-		}
 
-	}, [searchTerm.value, $afspraakFormData.data, afspraak, rekeningId.value]);
+			const dupesFound = dupesByZoekterm.length > 0;
+			setZoektermDuplicateFound(dupesFound);
+			if (dupesFound) {
+				toggleAutomatischBoeken(false);
+			}
+		}
+	}, [zoekterm.value, $afspraakFormData.data, afspraak, rekeningId.value, toggleAutomatischBoeken, automatischBoeken]);
 
 	const onSubmit = (e) => {
 		e.preventDefault();
@@ -159,7 +167,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 			rubriekId,
 			rekeningId,
 			amount,
-			searchTerm,
+			zoekterm,
 			startDate,
 		];
 
@@ -190,12 +198,13 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 			organisatieId: parseInt(organisatieId.value) !== 0 ? parseInt(organisatieId.value) : null,
 			rubriekId: parseInt(rubriekId.value) !== 0 ? parseInt(rubriekId.value) : null,
 			bedrag: amount.value,
-			kenmerk: searchTerm.value,
+			kenmerk: zoekterm.value,
 			startDatum: moment(startDate.value, "L").format("YYYY-MM-DD"),
 			interval: isRecurring ? XInterval.create(intervalType.value!, intervalNumber.value) : XInterval.empty,
 			aantalBetalingen: isContinuous ? 0 : nTimes.value,
 			actief: isActive,
 			automatischeIncasso: afspraakType === AfspraakType.Expense ? isAutomatischeIncasso : null,
+			automatischBoeken,
 		});
 	};
 
@@ -298,10 +307,11 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 		{key: "year", label: t("interval.year", {count: parseInt(intervalNumber.value)}), value: IntervalType.Year},
 	];
 
+	const automatischBoekenPossible = zoekterm.value.length > 0 && !zoektermDuplicateFound;
 	return (
-		<Box as={"form"} onSubmit={onSubmit} {...props}>
-			<Stack spacing={5}>
-				<Section>
+		<Stack spacing={5} as={"form"} onSubmit={onSubmit} {...props}>
+			<Section>
+				<Stack spacing={5} divider={<Divider />}>
 					<Stack spacing={2} direction={["column", "row"]}>
 						<FormLeft title={t("forms.agreements.sections.0.title")} helperText={t("forms.agreements.sections.0.helperText")} />
 						<FormRight>
@@ -394,21 +404,9 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 										<Input isInvalid={isInvalid(amount)} {...amount.bind} id="amount" />
 									</InputGroup>
 								</Stack>
-								<Stack spacing={1} flex={1}>
-									<Queryable query={$afspraakFormData} children={(data: { organisaties: Organisatie[] }) => (<>
-										<FormLabel htmlFor={"searchTerm"}>{t("forms.agreements.fields.searchTerm")}</FormLabel>
-										<InputGroup>
-											<Input isInvalid={isInvalid(searchTerm)} {...searchTerm.bind} id="searchTerm" />
-											{zoektermDuplicateFound && <InputRightElement> <WarningIcon color={"orange.500"} /> </InputRightElement>}
-										</InputGroup>
-										{zoektermDuplicateFound && <Text fontSize={"sm"}>{t("forms.agreements.fields.searchtermDuplicateFound")}</Text>}
-									</>)} />
-								</Stack>
 							</Stack>
 						</FormRight>
 					</Stack>
-
-					<Divider />
 
 					<Stack spacing={2} direction={["column", "row"]}>
 						<FormLeft title={t("forms.agreements.sections.1.title")} helperText={t("forms.agreements.sections.1.helperText")} />
@@ -477,9 +475,30 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 						</FormRight>
 					</Stack>
 
-					<Divider />
+					<Stack spacing={2} direction={["column", "row"]}>
+						<FormLeft title={t("forms.agreements.sections.3.title")} helperText={t("forms.agreements.sections.3.helperText")} />
+						<FormRight>
+							<Stack spacing={1} flex={1}>
+								<Queryable query={$afspraakFormData} children={(data: { organisaties: Organisatie[] }) => (<>
+									<FormLabel htmlFor={"zoekterm"}>{t("forms.agreements.fields.zoekterm")}</FormLabel>
+									<InputGroup>
+										<Input isInvalid={isInvalid(zoekterm)} {...zoekterm.bind} id="searchTerm" />
+										{zoektermDuplicateFound && <InputRightElement> <WarningIcon color={"orange.500"} /> </InputRightElement>}
+									</InputGroup>
+									{zoektermDuplicateFound && <Text fontSize={"sm"}>{t("forms.agreements.fields.searchtermDuplicateFound")}</Text>}
+								</>)} />
+							</Stack>
+							<Stack direction={["column", "row"]} spacing={1}>
+								<Stack isInline={true} alignItems={"center"} spacing={3}>
+									<Switch isChecked={automatischBoeken} isDisabled={!automatischBoekenPossible} onChange={() => toggleAutomatischBoeken()}
+									        id={"automatischBoeken"} />
+									<FormLabel mb={0} htmlFor={"automatischBoeken"}>{t("forms.agreements.fields.automatischBoeken")}</FormLabel>
+								</Stack>
+							</Stack>
+						</FormRight>
+					</Stack>
 
-					<Stack direction={["column", "row"]} spacing={2}>
+					<Stack spacing={2} direction={["column", "row"]}>
 						<FormLeft />
 						<FormRight>
 							<Stack direction={"row"} spacing={1} justifyContent={"flex-end"}>
@@ -487,25 +506,24 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 							</Stack>
 						</FormRight>
 					</Stack>
-				</Section>
-
-				{isRecurring && (
-					<Section>
-						<Stack direction={["column", "row"]} spacing={2}>
-							<FormLeft title={t("forms.agreements.sections.2.title")} helperText={t("forms.agreements.sections.2.helperText")} />
-							<FormRight>
-								<Stack spacing={5}>
-									<Stack direction={"row"} alignItems={"center"} spacing={0}>
-										<HugeDatePicker />
-									</Stack>
-									<OverschrijvingenListView overschrijvingen={generatedSampleOverschrijvingen} />
+				</Stack>
+			</Section>
+			{isRecurring && (
+				<Section>
+					<Stack direction={["column", "row"]} spacing={2}>
+						<FormLeft title={t("forms.agreements.sections.2.title")} helperText={t("forms.agreements.sections.2.helperText")} />
+						<FormRight>
+							<Stack spacing={5}>
+								<Stack direction={"row"} alignItems={"center"} spacing={0}>
+									<HugeDatePicker />
 								</Stack>
-							</FormRight>
-						</Stack>
-					</Section>
-				)}
-			</Stack>
-		</Box>
+								<OverschrijvingenListView overschrijvingen={generatedSampleOverschrijvingen} />
+							</Stack>
+						</FormRight>
+					</Stack>
+				</Section>
+			)}
+		</Stack>
 	);
 };
 

@@ -99,12 +99,13 @@
                 "bankAccount": "Bankrekening",
                 "bankAccountChoose": "Kies een bankrekening",
                 "amount": "Bedrag",
-                "searchTerm": "Zoekterm",
-                "searchtermDuplicateFound": "Let op: deze zoekterm of een deel ervan wordt al gebruikt bij een andere afspraak. Het is niet mogelijk om automatisch boeken aan te zetten voor deze afspraak.",
                 "startDate": "Startdatum",
                 "continuous": "Doorlopend",
                 "nTimes": "Aantal keer",
-                "automatischeIncasso": "Automatische incasso"
+                "automatischeIncasso": "Automatische incasso",
+                "automatischBoeken": "Automatisch boeken",
+                "zoekterm": "Zoekterm",
+                "searchtermDuplicateFound": "Let op: deze zoekterm of een deel ervan wordt al gebruikt bij een andere afspraak. Het is niet mogelijk om automatisch boeken aan te zetten voor deze afspraak."
             },
             "sections": {
                 "0": {
@@ -122,6 +123,10 @@
                     "prognosisText_incoming_plural": "Er worden <0>{{count}}</0> inkomende overschrijvingen tussen <1>{{start}}</1> en <2>{{end}}</2> verwacht.",
                     "title": "Verwachting",
                     "helperText": "Dit is een overzicht van de verwachte betalingen bij deze afspraak."
+                },
+                "3": {
+                    "title": "Boekingen",
+                    "helperText": "Geef met een zoekterm aan welke tekst in de omschrijving van een banktransactie terugkomt. Schakel de automatische boeking in, zodat de applicatie de boeking uitvoert."
                 }
             },
             "titleEdit": "Afspraak bewerken"
