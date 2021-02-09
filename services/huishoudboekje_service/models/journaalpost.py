@@ -1,7 +1,6 @@
-from sqlalchemy import Column, Integer, String, Sequence, ForeignKey, Table
-from sqlalchemy.orm import relationship
-
 from core_service.database import db
+from sqlalchemy import Column, Integer, String, Sequence, ForeignKey, Boolean
+from sqlalchemy.orm import relationship
 
 
 class Journaalpost(db.Model):

@@ -12,6 +12,7 @@ class Journaalpost(graphene.ObjectType):
     afspraak = graphene.Field(lambda: afspraak.Afspraak)
     transaction = graphene.Field(lambda: bank_transaction.BankTransaction)
     grootboekrekening = graphene.Field(lambda: grootboekrekening.Grootboekrekening)
+    is_automatisch_geboekt = graphene.Boolean()
 
     async def resolve_transaction(root, info):
         """ Get transaction when requested """

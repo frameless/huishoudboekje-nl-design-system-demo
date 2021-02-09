@@ -97,11 +97,12 @@ mutation test($input:CreateJournaalpostGrootboekrekeningInput!) {
       grootboekrekening { id }
       transaction { id }
       afspraak { id }
+      isAutomatischGeboekt
     }
   }
 }""",
                 "variables": {
-                    "input": {"transactionId": 31, "grootboekrekeningId": "m12"}
+                    "input": {"transactionId": 31, "grootboekrekeningId": "m12", "isAutomatischGeboekt": False}
                 },
             },
             content_type="application/json",
@@ -115,6 +116,7 @@ mutation test($input:CreateJournaalpostGrootboekrekeningInput!) {
                         "grootboekrekening": {"id": "m12"},
                         "transaction": {"id": 31},
                         "afspraak": None,
+                        "isAutomatischGeboekt": False
                     },
                 }
             }
@@ -142,11 +144,12 @@ mutation test($input:CreateJournaalpostGrootboekrekeningInput!) {
       grootboekrekening { id }
       transaction { id }
       afspraak { id }
+      isAutomatischGeboekt
     }
   }
 }""",
                 "variables": {
-                    "input": {"transactionId": 7777, "grootboekrekeningId": "m12"}
+                    "input": {"transactionId": 7777, "grootboekrekeningId": "m12", "isAutomatischGeboekt": False}
                 },
             },
             content_type="application/json",
@@ -182,6 +185,7 @@ def test_create_journaalpost_grootboekrekening_duplicate_not_allowed(client):
                   grootboekrekening { id }
                   transaction { id }
                   afspraak { id }
+                  isAutomatischGeboekt
                 }
               }
             }"""
@@ -190,7 +194,7 @@ def test_create_journaalpost_grootboekrekening_duplicate_not_allowed(client):
             json={
                 "query": create_journaalpost_mutation,
                 "variables": {
-                    "input": {"transactionId": 31, "grootboekrekeningId": "m12"}
+                    "input": {"transactionId": 31, "grootboekrekeningId": "m12", "isAutomatischGeboekt": False}
                 },
             },
             content_type="application/json",
@@ -224,10 +228,11 @@ mutation test($input:CreateJournaalpostAfspraakInput!) {
       id
       afspraak { id }
       transaction { id }
+      isAutomatischGeboekt
     }
   }
 }""",
-                "variables": {"input": {"transactionId": 31, "afspraakId": 11}},
+                "variables": {"input": {"transactionId": 31, "afspraakId": 11, "isAutomatischGeboekt": False}},
             },
             content_type="application/json",
         )
@@ -239,6 +244,7 @@ mutation test($input:CreateJournaalpostAfspraakInput!) {
                         "id": 23,
                         "afspraak": {"id": 11},
                         "transaction": {"id": 31},
+                        "isAutomatischGeboekt": False
                     },
                 }
             }
@@ -264,10 +270,11 @@ mutation test($input:CreateJournaalpostAfspraakInput!) {
       id
       afspraak { id }
       transaction { id }
+      isAutomatischGeboekt
     }
   }
 }""",
-                "variables": {"input": {"transactionId": 33, "afspraakId": 12}},
+                "variables": {"input": {"transactionId": 33, "afspraakId": 12, "isAutomatischGeboekt": False}},
             },
             content_type="application/json",
         )
