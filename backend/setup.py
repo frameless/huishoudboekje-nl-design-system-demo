@@ -23,5 +23,6 @@ setup(
         'sepaxml>=2.3.0',
         'dataclasses-json>=0.5.2',
         'schwifty>=2021.01.0',
+        'Werkzeug>=1.0.1,<2',
     ],
 )
