@@ -12,3 +12,4 @@ class Journaalpost(db.Model):
     afspraak = relationship("Afspraak", back_populates="journaalposten")
     transaction_id = Column(Integer)
     grootboekrekening_id = Column(String)
+    is_automatisch_geboekt = Column(Boolean)
