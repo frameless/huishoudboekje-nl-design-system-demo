@@ -1,4 +1,4 @@
-import {HStack, Td, Text, Tr, Wrap, WrapItem} from "@chakra-ui/react";
+import {HStack, Stack, Td, Text, Tr} from "@chakra-ui/react";
 import moment from "moment";
 import React from "react";
 import {FiActivity} from "react-icons/all";
@@ -16,10 +16,10 @@ const GebeurtenisTableRow: React.FC<{gebeurtenis: GebruikersActiviteit}> = ({geb
 					<RoundIcon display={["none", null, "flex"]}>
 						<FiActivity />
 					</RoundIcon>
-					<Wrap spacing={2}>
-						<WrapItem><AuditLogText g={g} /></WrapItem>
-						<WrapItem><Text fontSize={"sm"} color={"gray.500"}>{moment(g.timestamp).format("L LT")}</Text></WrapItem>
-					</Wrap>
+					<Stack spacing={1}>
+						<AuditLogText g={g} />
+						<Text fontSize={"sm"} color={"gray.500"}>{moment(g.timestamp).format("LL LT")}</Text>
+					</Stack>
 				</HStack>
 			</Td>
 			<Td>

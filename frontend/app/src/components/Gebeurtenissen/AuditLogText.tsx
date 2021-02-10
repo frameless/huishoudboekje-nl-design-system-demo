@@ -1,4 +1,4 @@
-import {Box, Text, TextProps} from "@chakra-ui/react";
+import {Stack, Text, TextProps} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {GebruikersActiviteit} from "../../generated/graphql";
@@ -62,11 +62,11 @@ const AuditLogText: React.FC<TextProps & { g: GebruikersActiviteit }> = ({g, ...
 		]), [] as string[])
 	];
 	return (
-		<Box>
-			<Text fontSize={"1rem"}>{t("auditLog.unknown")}</Text>
-			<Text>{context.join(", ")}</Text>
-		</Box>
+		<Stack spacing={1}>
+			<Text>{t("auditLog.unknown")}</Text>
+			<Text fontSize={"sm"}>{context.join(", ")}</Text>
+		</Stack>
 	);
 };
 
-export default AuditLogText;
+export default AuditLogText
