@@ -19,11 +19,13 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import (
 class CreateJournaalpostAfspraakInput(graphene.InputObjectType):
     transaction_id = graphene.Int(required=True)
     afspraak_id = graphene.Int(required=True)
+    is_automatisch_geboekt = graphene.Boolean(required=True)
 
 
 class CreateJournaalpostGrootboekrekeningInput(graphene.InputObjectType):
     transaction_id = graphene.Int(required=True)
     grootboekrekening_id = graphene.String(required=True)
+    is_automatisch_geboekt = graphene.Boolean(required=True)
 
 
 class CreateJournaalpostAfspraak(graphene.Mutation):
