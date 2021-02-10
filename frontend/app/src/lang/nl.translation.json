@@ -103,7 +103,7 @@
                 "continuous": "Doorlopend",
                 "nTimes": "Aantal keer",
                 "automatischeIncasso": "Automatische incasso",
-                "automatischBoeken": "Automatisch boeken",
+                "automatischBoeken": "Geef toestemming voor automatisch boeken",
                 "zoekterm": "Zoekterm",
                 "searchtermDuplicateFound": "Let op: deze zoekterm of een deel ervan wordt al gebruikt bij een andere afspraak. Het is niet mogelijk om automatisch boeken aan te zetten voor deze afspraak."
             },
@@ -126,7 +126,7 @@
                 },
                 "3": {
                     "title": "Boekingen",
-                    "helperText": "Geef met een zoekterm aan welke tekst in de omschrijving van een banktransactie terugkomt. Schakel de automatische boeking in, zodat de applicatie de boeking uitvoert."
+                    "helperText": "Geef met een zoekterm aan welke tekst in de omschrijving van een banktransactie terugkomt. Wanneer automatisch boeken is ingeschakeld, probeert de applicatie transacties automatisch te verwerken."
                 }
             },
             "titleEdit": "Afspraak bewerken"
