@@ -9,7 +9,7 @@ from graphql import GraphQLError
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.models.afspraak import Afspraak
 from hhb_backend.graphql.mutations.afspraken import AfspraakInput
-from hhb_backend.graphql.utils import convert_hhb_interval_to_iso
+from hhb_backend.graphql.utils import convert_hhb_interval_to_iso, convert_hhb_interval_to_relativetime
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     log_gebruikers_activiteit,
     gebruikers_activiteit_entities,
@@ -48,6 +48,15 @@ class CreateAfspraak(graphene.Mutation):
                 input["interval"] = iso_interval
             else:
                 input.pop("interval")
+
+        if "interval" not in input and input["aantal_betalingen"] == 0:
+            raise GraphQLError(f"Interval en aantal betalingen kan niet allebei nul zijn.")
+
+        if input["credit"] is False and "automatische_incasso" not in input:
+            raise GraphQLError(f"Automatische incasso is verplicht bij uitgaven afspraak")
+
+        if input["credit"] and not("automatische_incasso" not in input):
+            raise GraphQLError(f"Automatische incasso is niet mogelijk bij inkomsten afspraak")
 
         response = requests.post(f"{settings.HHB_SERVICES_URL}/afspraken/", json=input)
         if response.status_code != 201:

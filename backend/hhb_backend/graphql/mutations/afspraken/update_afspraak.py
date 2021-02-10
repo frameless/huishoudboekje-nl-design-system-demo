@@ -51,6 +51,12 @@ class UpdateAfspraak(graphene.Mutation):
             iso_interval = convert_hhb_interval_to_iso(input["interval"])
             input["interval"] = iso_interval
 
+        if "interval" not in input and input["aantal_betalingen"] == 0:
+            raise GraphQLError(f"Interval en aantal betalingen kan niet allebei nul zijn.")
+
+        if input["credit"] and input["automatische_incasso"]:
+            raise GraphQLError(f"Automatische incasso is niet mogelijk bij Inkomsten")
+
         response = requests.post(
             f"{settings.HHB_SERVICES_URL}/afspraken/{id}",
             json=input,
