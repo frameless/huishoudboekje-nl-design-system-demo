@@ -35,9 +35,7 @@ class GebruikersActiviteit:
     def map_entities(self):
         """Map all entities to their DataClass """
         self.entities = [
-            entity
-            if type(entity) == GebruikersActiviteitEntity
-            else GebruikersActiviteitEntity(**entity)
+            (GebruikersActiviteitEntity(**entity) if type(entity) == dict else entity)
             for entity in (self.entities or [])
         ]
         return self
