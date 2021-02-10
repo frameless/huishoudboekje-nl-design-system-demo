@@ -1,23 +1,18 @@
-import {AddIcon, TriangleDownIcon, TriangleUpIcon} from "@chakra-ui/icons";
-import {Box, Button, Stack, StackProps, Tab, TabList, TabPanel, TabPanels, Tabs, useToast} from "@chakra-ui/react";
-import React, {useState} from "react";
+import {AddIcon} from "@chakra-ui/icons";
+import {Box, Button, Stack, StackProps, Table, Tbody, Th, Thead, Tr, useToast} from "@chakra-ui/react";
+import React from "react";
 import {useTranslation} from "react-i18next";
 import {useHistory} from "react-router-dom";
 import Routes from "../../../config/routes";
 import {Gebruiker, useDeleteAfspraakMutation} from "../../../generated/graphql";
-import AfspraakItem from "../../Afspraken/AfspraakItem";
+import AfspraakTableRow from "../../Afspraken/AfspraakTableRow";
 import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
 
 const BurgerAfsprakenView: React.FC<StackProps & { burger: Gebruiker, refetch: VoidFunction }> = ({burger, refetch, ...props}) => {
 	const {t} = useTranslation();
 	const toast = useToast();
 	const {push} = useHistory();
-	const [tabIndex, setTabIndex] = useState(0);
 	const {afspraken} = burger;
-
-	const onChangeTabs = (tabIdx) => {
-		setTabIndex(tabIdx);
-	};
 
 	const onClickAddAfspraakButton = () => {
 		if (burger.id) {
@@ -50,26 +45,26 @@ const BurgerAfsprakenView: React.FC<StackProps & { burger: Gebruiker, refetch: V
 		<Stack direction={["column", "row"]} {...props}>
 			<FormLeft title={t("forms.burgers.sections.agreements.title")} helperText={t("forms.burgers.sections.agreements.detailText")} />
 			<FormRight justifyContent={"center"}>
-				{afspraken && afspraken.length > 0 && (
-					<Tabs index={tabIndex} onChange={onChangeTabs} variant={"line"}>
-						<TabList>
-							<Tab>{t("agreements.incoming")} <TriangleUpIcon ml={3} color={"green.400"} w={"12px"} h={"12px"} /> </Tab>
-							<Tab>{t("agreements.outgoing")} <TriangleDownIcon ml={3} color={"red.400"} w={"12px"} h={"12px"} /> </Tab>
-						</TabList>
-						<TabPanels>
-							<TabPanel id="tab_incoming" p={0}>
-								{afspraken.filter(a => a.credit).map((a, i) => (
-									<AfspraakItem key={a.id} data-id={a.id} afspraak={a} py={2} onDelete={(id: number) => onDeleteAfspraak(id)} />
-								))}
-							</TabPanel>
-							<TabPanel id="tab_outgoing" p={0}>
-								{afspraken.filter(a => !a.credit).map((a, i) => (
-									<AfspraakItem key={a.id} data-id={a.id} afspraak={a} py={2} onDelete={(id: number) => onDeleteAfspraak(id)} />
-								))}
-							</TabPanel>
-						</TabPanels>
-					</Tabs>
-				)}
+				{afspraken && afspraken.length > 0 && (<>
+					<Table size={"sm"}>
+						<Thead>
+							<Tr>
+								<Th>{t("agreements.tegenpartij")}</Th>
+								<Th>{t("agreements.omschrijving")}</Th>
+								<Th textAlign={"right"}>{t("agreements.bedrag")}</Th>
+								<Th>{t("actions.actions")}</Th>
+							</Tr>
+						</Thead>
+						<Tbody>
+							{afspraken.filter(a => !a.credit).sort((a, b) => parseFloat(a.bedrag) >= parseFloat(b.bedrag) ? -1 : 1).map((a, i) => (
+								<AfspraakTableRow key={a.id} data-id={a.id} afspraak={a} py={2} onDelete={(id: number) => onDeleteAfspraak(id)} />
+							))}
+							{afspraken.filter(a => a.credit).sort((a, b) => a.bedrag >= b.bedrag ? -1 : 1).map((a, i) => (
+								<AfspraakTableRow key={a.id} data-id={a.id} afspraak={a} py={2} onDelete={(id: number) => onDeleteAfspraak(id)} />
+							))}
+						</Tbody>
+					</Table>
+				</>)}
 
 				<Box>
 					<Button leftIcon={<AddIcon />} colorScheme={"primary"} size={"sm"} onClick={onClickAddAfspraakButton}>{t("actions.add")}</Button>

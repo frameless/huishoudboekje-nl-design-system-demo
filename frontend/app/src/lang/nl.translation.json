@@ -103,9 +103,9 @@
                 "continuous": "Doorlopend",
                 "nTimes": "Aantal keer",
                 "automatischeIncasso": "Automatische incasso",
-                "automatischBoeken": "Geef toestemming voor automatisch boeken",
                 "zoekterm": "Zoekterm",
-                "searchtermDuplicateFound": "Let op: deze zoekterm of een deel ervan wordt al gebruikt bij een andere afspraak. Het is niet mogelijk om automatisch boeken aan te zetten voor deze afspraak."
+                "searchtermDuplicateFound": "Let op: deze zoekterm of een deel ervan wordt al gebruikt bij een andere afspraak. Het is niet mogelijk om automatisch boeken aan te zetten voor deze afspraak.",
+                "automatischBoeken": "Geef toestemming voor automatisch boeken"
             },
             "sections": {
                 "0": {
@@ -278,6 +278,11 @@
     "unknown": "Onbekend",
     "agreements": {
         "automatischeIncasso": "Automatische incasso",
+        "automatischeIncassoTooltip": "Automatische incasso",
+        "automatischeIncassoShort": "A",
+        "tegenpartij": "Tegenpartij",
+        "omschrijving": "Omschrijving",
+        "bedrag": "Bedrag",
         "incoming": "Inkomsten",
         "outgoing": "Uitgaven"
     },
