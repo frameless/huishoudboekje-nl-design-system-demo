@@ -51,6 +51,8 @@ organisaties:
     rekeninghouder: ""
   - iban: "NL76BNGH0285178598"
     rekeninghouder: "GEM UTRECHT WENI"
+  - iban: "NL49BNGH0285171712"
+    rekeninghouder: "Gemeente Utrecht Huishoudboekje"
 
 - naam: "Sociale Verzekeringsbank"
   weergave_naam: "Sociale Verzekeringsbank Utrecht"
@@ -228,6 +230,17 @@ organisaties:
   rekeningen:
   - iban: "NL47INGB0000003054"
     rekeninghouder: "FBTO ZORGVERZEKERINGEN NV"
+
+- naam: "Stichting Zorg en Zekerheid"
+  weergave_naam: "Stichting Zorg en Zekerheid"
+  kvk_nummer: "41168265"
+  straatnaam: "Postbus"
+  huisnummer: "400"
+  postcode: "2300AK"
+  plaatsnaam: "Leiden"
+  rekeningen:
+  - iban: "NL28INGB0000128526"
+    rekeninghouder: "Zorgverzekeraar Zorg en Zekerheid"
 
 # werkgevers
 - naam: "Albert Heijn B.V."
