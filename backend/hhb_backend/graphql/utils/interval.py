@@ -1,8 +1,10 @@
 import re
+
 from dateutil.relativedelta import relativedelta
 
+
 def convert_hhb_interval_to_iso(graphql_format: dict):
-    if any (graphql_format.get(k,None) for k in ('jaren', 'maanden','weken','dagen')):
+    if any(graphql_format.get(k, None) for k in ('jaren', 'maanden', 'weken', 'dagen')):
         isoformat = "P"
         isoformat += f"{graphql_format.get('jaren', 0)}Y"
         isoformat += f"{graphql_format.get('maanden', 0)}M"
@@ -10,6 +12,7 @@ def convert_hhb_interval_to_iso(graphql_format: dict):
         isoformat += f"{graphql_format.get('dagen', 0)}D"
         return isoformat
     return ""
+
 
 def convert_hhb_interval_to_dict(iso_format: str):
     if iso_format:
@@ -21,7 +24,8 @@ def convert_hhb_interval_to_dict(iso_format: str):
                 "weken": int(p[0][2]),
                 "dagen": int(p[0][3])
             }
-    return {"jaren": 0, "maanden": 0, "weken": 0, "dagen":0}
+    return {"jaren": 0, "maanden": 0, "weken": 0, "dagen": 0}
+
 
 def convert_hhb_interval_to_relativetime(iso_format: str):
     if iso_format:
