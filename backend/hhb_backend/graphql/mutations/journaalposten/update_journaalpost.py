@@ -16,7 +16,6 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import (
 class UpdateJournaalpostGrootboekrekeningInput(graphene.InputObjectType):
     id = graphene.Int(required=True)
     grootboekrekening_id = graphene.String(required=True)
-    is_automatisch_geboekt = graphene.Boolean()
 
 
 class UpdateJournaalpostGrootboekrekening(graphene.Mutation):
