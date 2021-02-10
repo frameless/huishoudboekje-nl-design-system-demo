@@ -95,6 +95,18 @@ scenarios:
         interval: "P0Y3M0W0D"
         start_datum: "2021-01-01"
         actief: true
+      - aantal: 1
+        rubriek: "Leefgeld"
+        beschrijving: "Leefgeld"
+        organisatie:
+          kvk: "30280353"
+          iban: "NL49BNGH0285171712"
+        bedrag: 93994
+        credit: false
+        automatische_incasso: false
+        interval: "P0Y1M0W0D"
+        start_datum: "2021-01-01"
+        actief: true
 
 # persona 2
   - aantal: 1
@@ -188,11 +200,11 @@ scenarios:
         beschrijving: "Leefgeld"
         organisatie:
           kvk: "30280353"
+          iban: "NL49BNGH0285171712"
         bedrag: 130760
         credit: false
         automatische_incasso: false
         interval: "P0Y1M0W0D"
         start_datum: "2021-01-01"
         actief: true
-        # TODO: add specific IBAN NL49BNGH0285171712
 
