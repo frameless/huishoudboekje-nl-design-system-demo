@@ -60,12 +60,8 @@ describe("Afspraken CRUD", () => {
 		const a2 = sampleBurgers[0].afspraken[1];
 		cy.visit(Routes.Burger(b.id));
 
-		// check inkomsten afspraak
 		cy.get("div").should("contain", a2.beschrijving);
 		cy.get("div").should("contain", a2.bedrag);
-
-		// check uitgave afspraak
-		cy.get("button").contains("Uitgaven").click();
 		cy.get("div").should("contain", a1.beschrijving);
 		cy.get("div").should("contain", a1.bedrag);
 	});

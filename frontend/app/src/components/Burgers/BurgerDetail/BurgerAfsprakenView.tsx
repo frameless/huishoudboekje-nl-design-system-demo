@@ -1,5 +1,5 @@
 import {AddIcon} from "@chakra-ui/icons";
-import {Box, Button, Stack, StackProps, Table, Tbody, Th, Thead, Tr, useToast} from "@chakra-ui/react";
+import {Box, Button, Stack, StackProps, Table, Tbody, Th, Thead, Tr, useBreakpointValue, useToast} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {useHistory} from "react-router-dom";
@@ -10,6 +10,7 @@ import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
 
 const BurgerAfsprakenView: React.FC<StackProps & { burger: Gebruiker, refetch: VoidFunction }> = ({burger, refetch, ...props}) => {
 	const {t} = useTranslation();
+	const isMobile = useBreakpointValue([true, null, null, false]);
 	const toast = useToast();
 	const {push} = useHistory();
 	const {afspraken} = burger;
@@ -50,7 +51,7 @@ const BurgerAfsprakenView: React.FC<StackProps & { burger: Gebruiker, refetch: V
 						<Thead>
 							<Tr>
 								<Th>{t("agreements.tegenpartij")}</Th>
-								<Th>{t("agreements.omschrijving")}</Th>
+								{!isMobile && <Th>{t("agreements.omschrijving")}</Th>}
 								<Th textAlign={"right"}>{t("agreements.bedrag")}</Th>
 								<Th>{t("actions.actions")}</Th>
 							</Tr>
