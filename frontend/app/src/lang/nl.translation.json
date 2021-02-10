@@ -277,14 +277,11 @@
     },
     "unknown": "Onbekend",
     "agreements": {
-        "automatischeIncasso": "Automatische incasso",
         "automatischeIncassoTooltip": "Automatische incasso",
         "automatischeIncassoShort": "A",
         "tegenpartij": "Tegenpartij",
         "omschrijving": "Omschrijving",
-        "bedrag": "Bedrag",
-        "incoming": "Inkomsten",
-        "outgoing": "Uitgaven"
+        "bedrag": "Bedrag"
     },
     "banking": {
         "exports": {
@@ -332,6 +329,8 @@
         "deleteJournaalpostAfspraak": "{{gebruiker}} verwijderde een verwerkte transactie op een <linkAfspraak>afspraak</linkAfspraak> met <linkBurger>{{burger}}</linkBurger>.",
         "updateAfspraak": "{{gebruiker}} wijzigde een <linkAfspraak>afspraak</linkAfspraak> van <linkBurger>{{burger}}</linkBurger> met <linkOrganisatie>{{organisatie}}</linkOrganisatie>.",
         "updateGebruiker": "{{gebruiker}} wijzigde <linkBurger>{{burger}}</linkBurger>.",
+        "viewGebruiker": "{{gebruiker}} bekeek <linkBurger>{{burger}}</linkBurger>.",
+        "viewGebruikers": "{{gebruiker}} bekeek alle burgers.",
         "unknown": "Onbekende gebeurtenis"
     },
     "unknownBurger": "Onbekende burger",
