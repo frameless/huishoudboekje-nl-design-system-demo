@@ -14,13 +14,12 @@ rubrieken:
     naam: "Water"
     grootboekrekening_id: "WBedHuiGweWat"
   - id: 3
-    naam: "Elektra"
+    naam: "Elektriciteit"
     grootboekrekening_id: "WBedHuiGweElk"
   - id: 4
     naam: "Inkomsten"
     grootboekrekening_id: "WOmzNooNdo"
   - id: 5
-  # TODO: wrong id WBedKanPrt
     naam: "Telefonie"
     grootboekrekening_id: "WBedKanTef"
   - id: 6
