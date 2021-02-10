@@ -21,36 +21,38 @@ class DeleteJournaalpost(graphene.Mutation):
     ok = graphene.Boolean()
     previous = graphene.Field(lambda: Journaalpost)
 
-    @property
-    def gebruikers_activiteit(self):
+    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
         return dict(
-            action="deleteJournaalpostAfspraak",
+            action=info.field_name,
             entities=gebruikers_activiteit_entities(
-                result=self, key="previous", entity_type="journaalpost"
+                entity_type="journaalpost", result=self, key="previous"
             )
             + gebruikers_activiteit_entities(
-                result=self.previous, key="afspraak", entity_type="afspraak"
+                entity_type="afspraak", result=self.previous, key="afspraak"
             )
             + (
                 gebruikers_activiteit_entities(
+                    entity_type="burger",
                     result=self.previous["afspraak"],
                     key="gebruiker_id",
-                    entity_type="burger",
                 )
                 if "afspraak" in self.previous
                 else []
             )
             + gebruikers_activiteit_entities(
-                result=self.previous, key="transaction", entity_type="transaction"
+                entity_type="transaction", result=self.previous, key="transaction"
             )
             + gebruikers_activiteit_entities(
-                result=self.previous, key="grootboekrekening_id", entity_type="grootboekrekening"
+                entity_type="grootboekrekening",
+                result=self.previous,
+                key="grootboekrekening_id",
             ),
             before=dict(journaalpost=self.previous),
         )
 
+    @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(root, info, id):
+    async def mutate(_root, info, id):
         previous = await hhb_dataloader().journaalposten_by_id.load(id)
         if previous and "afspraak_id" in previous:
             previous["afspraak"] = await hhb_dataloader().afspraken_by_id.load(

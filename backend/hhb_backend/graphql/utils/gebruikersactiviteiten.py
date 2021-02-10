@@ -1,5 +1,6 @@
 import inspect
 import logging
+import types
 from dataclasses import dataclass, field
 from functools import wraps
 
@@ -31,39 +32,57 @@ class GebruikersActiviteit:
     before: dict = field(default=None, metadata=config(field_name="snapshot_before"))
     after: dict = field(default=None, metadata=config(field_name="snapshot_after"))
 
+    def map_entities(self):
+        """Map all entities to their DataClass """
+        self.entities = [
+            (GebruikersActiviteitEntity(**entity) if type(entity) == dict else entity)
+            for entity in (self.entities or [])
+        ]
+        return self
 
-def extract_gebruikers_activiteit(result):
+
+def extract_gebruikers_activiteit(result, *args, **kwargs):
     """Return a dict of the GebruikersActiviteit DataClass from the result by reading its gebruikers_activiteit property"""
-    if not hasattr(result, "gebruikers_activiteit"):
+
+    # Mutation with gebruikers_activiteit method
+    if hasattr(result, "gebruikers_activiteit") and isinstance(
+        result.gebruikers_activiteit, types.MethodType
+    ):
+        gebruikers_activiteit = result.gebruikers_activiteit(*args, **kwargs)
+    # Mutation with gebruikers_activiteit property
+    elif hasattr(result, "gebruikers_activiteit") and isinstance(
+        result.gebruikers_activiteit, property
+    ):
+        gebruikers_activiteit = result.gebruikers_activiteit
+    # Query with gebruikers_activiteit method
+    elif (
+        len(args) > 0
+        and inspect.isclass(args[0])
+        and hasattr(args[0], "gebruikers_activiteit")
+    ):
+        gebruikers_activiteit = args[0].gebruikers_activiteit(
+            *(args[1:]), **{**kwargs, "result": result}
+        )
+    else:
         return None
 
-    # Map the gebruikers_activiteit to a DataClass
-    gebruikers_activiteit = (
-        result.gebruikers_activiteit
-        if type(result.gebruikers_activiteit) == GebruikersActiviteit
-        else GebruikersActiviteit(**(result.gebruikers_activiteit))
-    )
+    if type(gebruikers_activiteit) == dict:
+        gebruikers_activiteit = GebruikersActiviteit(**(gebruikers_activiteit))
 
-    # Map all entities to their DataClass
-    gebruikers_activiteit.entities = [
-        entity
-        if type(entity) == GebruikersActiviteitEntity
-        else GebruikersActiviteitEntity(**entity)
-        for entity in (gebruikers_activiteit.entities or [])
-    ]
-    return gebruikers_activiteit.to_dict()
+    return gebruikers_activiteit.map_entities().to_dict()
 
 
 def log_gebruikers_activiteit(view_func):
-    """Decorate graphql mutations with this to have the gebruikers_activiteit property of their response be logged to
+    """Decorate graphql mutations with this to have the result of their gebruikers_activiteit method be logged to
     the LOG_SERVICE"""
 
     @wraps(view_func)
     async def decorated(*args, **kwargs):
         result = await view_func(*args, **kwargs)
-        gebruikers_activiteit = extract_gebruikers_activiteit(result)
-        if gebruikers_activiteit:
-            try:
+        try:
+            if gebruikers_activiteit := extract_gebruikers_activiteit(
+                result, *args, **kwargs
+            ):
                 json = {
                     "timestamp": datetime.now(tz=tz.tzlocal())
                     .replace(microsecond=0)
@@ -86,8 +105,8 @@ def log_gebruikers_activiteit(view_func):
                 logging.debug(
                     f"logged gebruikersactiviteit(status={response.status_code}) {json}"
                 )
-            except:
-                logging.exception(f"Failed to log {gebruikers_activiteit}")
+        except:
+            logging.exception(f"Failed to log {gebruikers_activiteit}")
 
         return result
 
@@ -95,13 +114,19 @@ def log_gebruikers_activiteit(view_func):
 
 
 def gebruikers_activiteit_entities(
-    result: dict, key: str, entity_type: str
+    entity_type: str, result, key: str = None
 ) -> List[GebruikersActiviteitEntity]:
     """Return a list of entities of a list of objects in a dictionary at 'key'"""
     value = None
     if result:
         if type(result) == dict:
             value = result[key] if key in result else None
+        elif (
+            isinstance(result, int)
+            or isinstance(result, str)
+            or isinstance(result, list)
+        ):
+            value = result
         elif inspect.isclass(type(result)):
             value = vars(result)[key] if key in vars(result) else None
 
@@ -110,7 +135,12 @@ def gebruikers_activiteit_entities(
 
     if type(value) == list:
         return [
-            (GebruikersActiviteitEntity(entity_type=entity_type, entity_id=item["id"]))
+            (
+                GebruikersActiviteitEntity(
+                    entity_type=entity_type,
+                    entity_id=item["id"] if type(item) == dict else item,
+                )
+            )
             for item in value
         ]
     if type(value) == dict:

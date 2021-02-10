@@ -28,25 +28,27 @@ class UpdateJournaalpostGrootboekrekening(graphene.Mutation):
     journaalpost = graphene.Field(lambda: Journaalpost)
     previous = graphene.Field(lambda: Journaalpost)
 
-    @property
-    def gebruikers_activiteit(self):
+    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
         return dict(
-            action="updateJournaalpostGrootboekrekening",
+            action=info.field_name,
             entities=gebruikers_activiteit_entities(
-                result=self, key="journaalpost", entity_type="journaalpost"
+                entity_type="journaalpost", result=self, key="journaalpost"
             )
             + gebruikers_activiteit_entities(
-                result=self.journaalpost, key="grootboekrekening_id", entity_type="grootboekrekening"
+                entity_type="grootboekrekening",
+                result=self.journaalpost,
+                key="grootboekrekening_id",
             )
             + gebruikers_activiteit_entities(
-                result=self.journaalpost, key="transaction", entity_type="transaction"
+                entity_type="transaction", result=self.journaalpost, key="transaction"
             ),
             before=dict(journaalpost=self.previous),
             after=dict(journaalpost=self.journaalpost),
         )
 
+    @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(root, info, input, **kwargs):
+    async def mutate(_root, _info, input, **_kwargs):
         """ Create the new Journaalpost """
 
         previous: Journaalpost = await hhb_dataloader().journaalposten_by_id.load(

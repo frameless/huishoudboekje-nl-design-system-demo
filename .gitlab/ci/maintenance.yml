@@ -13,3 +13,10 @@ clean-namespaces:
   tags:
     - cg
     - docker
+
+env:
+  stage: maintenance
+  needs: []
+  when: manual
+  script:
+    - env -0 | sort -z | tr '\0' '\n'

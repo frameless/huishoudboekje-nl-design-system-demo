@@ -7,12 +7,14 @@ from bank_transactie_service.app import create_app
 app = create_app()
 from core_service.database import db
 
-app.config.from_object(os.environ['APP_SETTINGS'])
+app.config.from_object(
+    os.getenv("APP_SETTINGS", "bank_transactie_service.config.DevelopmentConfig")
+)
 
 migrate = Migrate(app, db)
 manager = Manager(app)
 
-manager.add_command('db', MigrateCommand)
+manager.add_command("db", MigrateCommand)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     manager.run()

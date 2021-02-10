@@ -13,7 +13,10 @@ import hhb_backend.graphql.mutations.rekeningen.rekening_input as rekening_input
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.models.gebruiker import Gebruiker
 from hhb_backend.graphql.mutations.rekeningen.utils import create_gebruiker_rekening
-from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities, log_gebruikers_activiteit
+from hhb_backend.graphql.utils.gebruikersactiviteiten import (
+    gebruikers_activiteit_entities,
+    log_gebruikers_activiteit,
+)
 
 
 class CreateGebruikerInput(graphene.InputObjectType):
@@ -40,24 +43,27 @@ class CreateGebruiker(graphene.Mutation):
     ok = graphene.Boolean()
     gebruiker = graphene.Field(lambda: Gebruiker)
 
-    @property
-    def gebruikers_activiteit(self):
+    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
         return dict(
-            action="createGebruiker",
-            entities=gebruikers_activiteit_entities(result=self, key='gebruiker', entity_type='burger') +
-                     gebruikers_activiteit_entities(result=self.gebruiker, key='rekeningen', entity_type='rekening'),
+            action=info.field_name,
+            entities=gebruikers_activiteit_entities(
+                entity_type="burger", result=self, key="gebruiker"
+            )
+            + gebruikers_activiteit_entities(
+                entity_type="rekening", result=self.gebruiker, key="rekeningen"
+            ),
             after=dict(burger=self.gebruiker),
         )
 
+    @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(root, info, **kwargs):
+    async def mutate(_root, _info, input):
         """ Create the new Gebruiker/Burger """
-        input = kwargs.pop("input")
         rekeningen = input.pop("rekeningen", None)
         response = requests.post(
             f"{settings.HHB_SERVICES_URL}/gebruikers/",
             data=json.dumps(input, default=str),
-            headers={'Content-type': 'application/json'}
+            headers={"Content-type": "application/json"},
         )
         if response.status_code != 201:
             raise GraphQLError(f"Upstream API responded: {response.json()}")
@@ -65,6 +71,9 @@ class CreateGebruiker(graphene.Mutation):
         gebruiker = response.json()["data"]
 
         if rekeningen:
-            gebruiker['rekeningen'] = [create_gebruiker_rekening(gebruiker['id'], rekening) for rekening in rekeningen]
+            gebruiker["rekeningen"] = [
+                create_gebruiker_rekening(gebruiker["id"], rekening)
+                for rekening in rekeningen
+            ]
 
         return CreateGebruiker(ok=True, gebruiker=gebruiker)

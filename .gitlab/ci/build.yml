@@ -13,8 +13,10 @@
     - export COMPONENT_TAG=$(git describe --long --all | sed 's!heads/!!')
     - export COMPONENT_COMMIT_HASH=$(git describe --always --abbrev=0 --match "NOT A TAG")
     - export DOCKER_CONFIG=/tmp/docker-config-$CI_JOB_ID
-    - export DOCKER_PROXY="${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/"
-    - docker login -u "$CI_DEPENDENCY_PROXY_USER" --password-stdin "$CI_DEPENDENCY_PROXY_SERVER" <<< "$CI_DEPENDENCY_PROXY_PASSWORD"
+    - |
+      if [ "${DOCKER_PROXY}" ]; then
+        docker login -u "$CI_DEPENDENCY_PROXY_USER" --password-stdin "$CI_DEPENDENCY_PROXY_SERVER" <<< "$CI_DEPENDENCY_PROXY_PASSWORD"
+      fi
     - make --jobs --output-sync=target docker-images
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
     - make --jobs --output-sync=target docker-push

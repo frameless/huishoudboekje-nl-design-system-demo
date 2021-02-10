@@ -112,14 +112,20 @@ destroy-app:
   variables:
     REVIEW_NAMESPACE: "hhb-test"
     APP_SETTINGS: "hhb_backend.config.StagingConfig"
+  environment:
+    url: https://hhb-test.$REVIEW_BASE_DOMAIN/
 
 .acceptance:
   variables:
     REVIEW_NAMESPACE: "hhb-acc"
+  environment:
+    url: https://hhb-acc.$REVIEW_BASE_DOMAIN/
 
 .master:
   variables:
     REVIEW_NAMESPACE: "hhb-demo"
+  environment:
+    url: https://hhb-demo.$REVIEW_BASE_DOMAIN/
 
 # Deploy hhb-<environment slug>.nlx.reviews
 deploy-review:
@@ -146,7 +152,7 @@ deploy-develop:
     - develop@commonground/huishoudboekje/app-new
 
 # Deploy hhb-acc.nlx.reviews
-deploy-acc:
+deploy-acceptance:
   extends:
     - .acceptance
     - .deploy

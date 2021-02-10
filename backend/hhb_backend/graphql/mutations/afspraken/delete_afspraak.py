@@ -22,24 +22,24 @@ class DeleteAfspraak(graphene.Mutation):
 
     previous = graphene.Field(lambda: Afspraak)
 
-    @property
-    def gebruikers_activiteit(self):
+    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
         return dict(
-            action="deleteAfspraak",
+            action=info.field_name,
             entities=gebruikers_activiteit_entities(
-                result=self, key="previous", entity_type="afspraak"
+                entity_type="afspraak", result=self, key="previous"
             )
             + gebruikers_activiteit_entities(
-                self.previous, "gebruiker_id", entity_type="burger"
+                entity_type="burger", result=self.previous, key="gebruiker_id"
             )
             + gebruikers_activiteit_entities(
-                self.previous, "organisatie_id", entity_type="organisatie"
+                entity_type="organisatie", result=self.previous, key="organisatie_id"
             ),
             before=dict(afspraak=self.previous),
         )
 
+    @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(root, info, id):
+    async def mutate(_root, _info, id):
         """ Delete current gebruiker """
         previous = await hhb_dataloader().afspraken_by_id.load(id)
 
