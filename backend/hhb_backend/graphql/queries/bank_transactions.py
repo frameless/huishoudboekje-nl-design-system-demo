@@ -46,7 +46,7 @@ class BankTransactionsQuery:
 
     @classmethod
     @log_gebruikers_activiteit
-    async def resolver(_root, _info, **kwargs):
+    async def resolver(cls, _root, _info, **kwargs):
         if not kwargs["ids"] and not kwargs["csms"]:
             bank_transactions = (
                 request.dataloader.bank_transactions_by_id.get_all_and_cache()

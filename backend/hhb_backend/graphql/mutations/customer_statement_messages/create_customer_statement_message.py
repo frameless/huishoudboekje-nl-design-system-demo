@@ -41,7 +41,7 @@ class CreateCustomerStatementMessage(graphene.Mutation):
                 result=self.customerStatementMessage,
                 key="bank_transactions",
             ),
-            after=dict(customerStatementMessage=self.configuratie),
+            after=dict(customerStatementMessage=self.customerStatementMessage),
         )
 
     @staticmethod
@@ -152,6 +152,6 @@ def process_transactions(csm_id, transactions):
                 f"Upstream API responded: {bank_transaction_response.text}"
             )
         bank_transaction = bank_transaction_response.json()["data"]
-        result.append(bank_transaction)
+        result.append(bank_transaction["id"])
 
     return result

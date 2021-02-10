@@ -81,9 +81,10 @@ def log_gebruikers_activiteit(view_func):
     @wraps(view_func)
     async def decorated(*args, **kwargs):
         result = await view_func(*args, **kwargs)
-        gebruikers_activiteit = extract_gebruikers_activiteit(result, *args, **kwargs)
-        if gebruikers_activiteit:
-            try:
+        try:
+            if gebruikers_activiteit := extract_gebruikers_activiteit(
+                result, *args, **kwargs
+            ):
                 json = {
                     "timestamp": datetime.now(tz=tz.tzlocal())
                     .replace(microsecond=0)
@@ -106,8 +107,8 @@ def log_gebruikers_activiteit(view_func):
                 logging.debug(
                     f"logged gebruikersactiviteit(status={response.status_code}) {json}"
                 )
-            except:
-                logging.exception(f"Failed to log {gebruikers_activiteit}")
+        except:
+            logging.exception(f"Failed to log {gebruikers_activiteit}")
 
         return result
 
