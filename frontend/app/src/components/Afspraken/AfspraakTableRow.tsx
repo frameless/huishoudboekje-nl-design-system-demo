@@ -1,12 +1,11 @@
 import {CheckIcon, CloseIcon, DeleteIcon, EditIcon} from "@chakra-ui/icons";
-import {Badge, Box, HStack, IconButton, Stack, TableRowProps, Td, Text, Tr, useBreakpointValue, Wrap, WrapItem} from "@chakra-ui/react";
+import {Badge, Box, HStack, IconButton, Stack, TableRowProps, Td, Text, Tr, useBreakpointValue} from "@chakra-ui/react";
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {useHistory} from "react-router-dom";
 import Routes from "../../config/routes";
 import {Afspraak} from "../../generated/graphql";
 import {currencyFormat2, intervalString} from "../../utils/things";
-import XTooltip from "../Layouts/XTooltip";
 
 const AfspraakTableRow: React.FC<TableRowProps & { afspraak: Afspraak, onDelete?: (id: number) => void }> = ({afspraak: a, onDelete, ...props}) => {
 	const {t} = useTranslation();

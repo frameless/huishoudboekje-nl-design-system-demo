@@ -11,7 +11,7 @@ const CreateJournaalpostAfspraak: React.FC<{ g: GebruikersActiviteit }> = ({g}) 
 	const afspraak = g.entities?.find(e => e.entityType === "afspraak")?.afspraak;
 
 	const data = {
-		gebruiker: g.gebruikerId,
+		gebruiker: g.gebruikerId || t("unknownGebruiker"),
 		burger: formatBurgerName(burger),
 		organisatie: afspraak?.organisatie?.weergaveNaam,
 	};

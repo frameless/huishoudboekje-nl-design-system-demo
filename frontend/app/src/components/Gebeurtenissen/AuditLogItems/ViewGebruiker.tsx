@@ -10,7 +10,7 @@ const ViewGebruiker: React.FC<{ g: GebruikersActiviteit }> = ({g}) => {
 	const burger = g.entities?.find(e => e.entityType === "burger")?.burger;
 
 	const data = {
-		gebruiker: g.gebruikerId,
+		gebruiker: g.gebruikerId || t("unknownGebruiker"),
 		burger: formatBurgerName(burger),
 	};
 
