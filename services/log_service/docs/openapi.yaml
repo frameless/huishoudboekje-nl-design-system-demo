@@ -1,9 +1,44 @@
-openapi: 3.0.0
+openapi: 3.0.1
 info:
-  version: 0.1.0
-  title: Log Service
-  description: API voor het beheren van data van logs
-
+  title: Application
+  description: Generated at 11/02/2021 16:21:32. This is the swagger 
+    ui based on the open api 3.0 specification of the Application
+  version: 1.0.0
+externalDocs:
+  description: Find out more about Swagger
+  url: 'http://swagger.io'
+servers:
+  - url: /
 paths:
-
-    # TODO
+  '/gebruikersactiviteiten/:object_id':
+    delete:
+      tags:
+      - None
+      operationId: 'gebruikersactiviteit_detail_view'
+    get:
+      tags:
+      - None
+      operationId: 'gebruikersactiviteit_detail_view'
+    post:
+      tags:
+      - None
+      operationId: 'gebruikersactiviteit_detail_view'
+  '/gebruikersactiviteiten':
+    delete:
+      tags:
+      - None
+      operationId: 'gebruikersactiviteit_view'
+    get:
+      tags:
+      - None
+      operationId: 'gebruikersactiviteit_view'
+    post:
+      tags:
+      - None
+      operationId: 'gebruikersactiviteit_view'
+  '/health':
+    get:
+      tags:
+      - None
+      operationId: 'health'
+components:

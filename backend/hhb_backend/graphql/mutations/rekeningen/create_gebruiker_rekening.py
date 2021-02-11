@@ -22,27 +22,20 @@ class CreateGebruikerRekening(graphene.Mutation):
 
     ok = graphene.Boolean()
     rekening = graphene.Field(lambda: rekening.Rekening)
-    gebruiker = graphene.Field(lambda: gebruiker.Gebruiker)
 
-    def gebruikers_activiteit(self, _root, info):
+    def gebruikers_activiteit(self, _root, info, gebruiker_id, *_args, **_kwargs):
         return dict(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="rekening", result=self, key="rekening"
-            )
+            entities=[dict(entity_type="burger", entity_id=gebruiker_id)]
             + gebruikers_activiteit_entities(
-                entity_type="gebruiker", result=self, key="gebruiker"
+                entity_type="rekening", result=self, key="rekening"
             ),
-            after=dict(configuratie=self.rekening),
+            after=dict(rekening=self.rekening),
         )
 
     @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(_root, _info, **kwargs):
+    async def mutate(_root, _info, gebruiker_id, rekening):
         """ Create the new Rekening """
-        gebruiker_id = kwargs.pop("gebruiker_id")
-        input = kwargs.pop("rekening")
-
-        gebruiker = await hhb_dataloader().gebruikers_by_id.load(gebruiker_id)
-        rekening = create_gebruiker_rekening(gebruiker_id, input)
-        return CreateGebruikerRekening(rekening=rekening, ok=True, gebruiker=gebruiker)
+        result = create_gebruiker_rekening(gebruiker_id, rekening)
+        return CreateGebruikerRekening(rekening=result, ok=True)
