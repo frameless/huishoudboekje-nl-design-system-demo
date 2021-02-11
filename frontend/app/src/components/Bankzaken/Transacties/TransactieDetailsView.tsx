@@ -1,4 +1,4 @@
-import {Box, Stack, StackProps, Text} from "@chakra-ui/react";
+import {Box, Badge, Stack, StackProps, Text} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {BankTransaction} from "../../../generated/graphql";
@@ -12,12 +12,30 @@ const TransactieDetailsView: React.FC<StackProps & { transaction: BankTransactio
 
 	return (
 		<Stack spacing={5} justifyContent={"space-between"} {...props}>
-			<Box>
-				<Label>{t("forms.common.fields.date")}</Label>
+			<Stack direction={"row"} spacing={5} justifyContent={"space-between"} maxWidth={500}>
 				<Box>
-					<Text>{dateFormat.format(new Date(bt.transactieDatum))}</Text>
+					<Label>{t("forms.common.fields.date")}</Label>
+					<Box>
+						<Text>{dateFormat.format(new Date(bt.transactieDatum))}</Text>
+					</Box>
 				</Box>
-			</Box>
+				<Box>
+					<Label>&nbsp;</Label>
+					{bt.journaalpost ? (bt.journaalpost.isAutomatischGeboekt ? (
+						<Box>
+							<Badge colorScheme={"green"}>{t("forms.agreements.fields.automatischGeboekt")}</Badge>
+						</Box>
+					) : (
+						<Box>
+							<Badge colorScheme={"green"}>{t("forms.agreements.fields.handmatigGeboekt")}</Badge>
+						</Box>
+					)) : (
+						<Box>
+							<Badge colorScheme={"red"}>{t("forms.agreements.fields.ongeboekt")}</Badge>
+						</Box>
+					)}
+				</Box>
+			</Stack>
 
 			<Stack direction={"row"} spacing={5} justifyContent={"space-between"} maxWidth={500}>
 				<Box>

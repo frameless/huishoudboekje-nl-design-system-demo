@@ -105,7 +105,10 @@
                 "startDate": "Startdatum",
                 "continuous": "Doorlopend",
                 "nTimes": "Aantal keer",
-                "automatischeIncasso": "Automatische incasso"
+                "automatischeIncasso": "Automatische incasso",
+                "automatischGeboekt": "Automatisch geboekt",
+                "handmatigGeboekt": "Handmatig geboekt",
+                "ongeboekt": "Niet geboekt"
             },
             "sections": {
                 "0": {
@@ -276,15 +279,6 @@
         "noOptions": "Geen resultaten"
     },
     "unknown": "Onbekend",
-    "agreements": {
-        "automatischeIncassoTooltip": "Automatische incasso",
-        "automatischeIncassoShort": "I",
-        "automatischBoekenTooltip": "Automatisch boeken",
-        "automatischBoekenShort": "B",
-        "tegenpartij": "Tegenpartij",
-        "omschrijving": "Omschrijving",
-        "bedrag": "Bedrag"
-    },
     "banking": {
         "exports": {
             "title": "Overschrijvingen",
@@ -305,7 +299,12 @@
         "description": "Omschrijving"
     },
     "booking": "Boeking",
-    "unbooked": "Ongeboekt",
+    "unbooked": "Niet geboekt",
+    "agreements": {
+        "tegenpartij": "Tegenpartij",
+        "omschrijving": "Omschrijving",
+        "bedrag": "Bedrag"
+    },
     "pages": {
         "gebeurtenissen": {
             "title": "Gebeurtenissen",
@@ -324,6 +323,7 @@
         "burgers": "Burgers"
     },
     "configuratie": "Configuratie",
+    "unknownGebruiker": "Onbekende gebruiker",
     "auditLog": {
         "createAfspraak": "{{gebruiker}} voegde een <linkAfspraak>afspraak</linkAfspraak> van <linkBurger>{{burger}}</linkBurger> met <linkOrganisatie>{{organisatie}}</linkOrganisatie> toe.",
         "createGebruiker": "{{gebruiker}} voegde <linkBurger>{{burger}}</linkBurger> toe.",
@@ -338,7 +338,6 @@
     "unknownBurger": "Onbekende burger",
     "unknownOrganisatie": "Onbekende organisatie",
     "unknownAfspraak": "Onbekende afspraak",
-    "unknownGebruiker": "Onbekende gebruiker",
     "unknownBrowser": "Onbekende browser ({{name}})",
     "unknownOperatingSystem": "Onbekend besturingssysteem",
     "organizations": {
@@ -348,7 +347,7 @@
         "inkomstenUitgaven": {
             "income": "Inkomsten",
             "expenses": "Uitgaven",
-            "unbooked": "Ongeboekt",
+            "unbooked": "Niet geboekt",
             "title": "Inkomsten en uitgaven",
             "helperText": "Een overzicht van inkomsten en uitgaven over tijd."
         },

@@ -254,7 +254,8 @@ export const CreateJournaalpostGrootboekrekeningMutation = gql`
     mutation createJournaalpostGrootboekrekening($transactionId: Int! $grootboekrekeningId: String!){
         createJournaalpostGrootboekrekening(input: {
             transactionId: $transactionId,
-            grootboekrekeningId: $grootboekrekeningId
+            grootboekrekeningId: $grootboekrekeningId,
+            isAutomatischGeboekt: false,
         }){
             ok
             journaalpost{
@@ -268,7 +269,7 @@ export const UpdateJournaalpostGrootboekrekeningMutation = gql`
     mutation updateJournaalpostGrootboekrekening($id: Int!, $grootboekrekeningId: String!){
         updateJournaalpostGrootboekrekening(input: {
             id: $id
-            grootboekrekeningId: $grootboekrekeningId
+            grootboekrekeningId: $grootboekrekeningId,
         }){
             ok
         }
@@ -276,10 +277,11 @@ export const UpdateJournaalpostGrootboekrekeningMutation = gql`
 `;
 
 export const CreateJournaalpostAfspraakMutation = gql`
-    mutation createJournaalpostAfspraak($transactionId: Int! $afspraakId: Int!){
+    mutation createJournaalpostAfspraak($transactionId: Int!, $afspraakId: Int!, $isAutomatischGeboekt: Boolean = false){
         createJournaalpostAfspraak(input: {
             transactionId: $transactionId,
-            afspraakId: $afspraakId
+            afspraakId: $afspraakId,
+            isAutomatischGeboekt: $isAutomatischGeboekt
         }){
             ok
             journaalpost{

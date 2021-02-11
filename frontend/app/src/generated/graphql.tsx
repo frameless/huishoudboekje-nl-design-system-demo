@@ -68,13 +68,13 @@ export type AfspraakOverschrijvingenArgs = {
 export type AfspraakInput = {
   gebruikerId?: Maybe<Scalars['Int']>;
   beschrijving?: Maybe<Scalars['String']>;
-  startDatum?: Maybe<Scalars['String']>;
+  startDatum: Scalars['String'];
   eindDatum?: Maybe<Scalars['String']>;
-  aantalBetalingen?: Maybe<Scalars['Int']>;
-  interval?: Maybe<IntervalInput>;
+  aantalBetalingen: Scalars['Int'];
+  interval: IntervalInput;
   tegenRekeningId?: Maybe<Scalars['Int']>;
   bedrag?: Maybe<Scalars['Bedrag']>;
-  credit?: Maybe<Scalars['Boolean']>;
+  credit: Scalars['Boolean'];
   kenmerk?: Maybe<Scalars['String']>;
   actief?: Maybe<Scalars['Boolean']>;
   organisatieId?: Maybe<Scalars['Int']>;
@@ -158,6 +158,7 @@ export type CreateGebruikerRekening = {
   __typename?: 'CreateGebruikerRekening';
   ok?: Maybe<Scalars['Boolean']>;
   rekening?: Maybe<Rekening>;
+  gebruiker?: Maybe<Gebruiker>;
 };
 
 /** Create a Journaalpost with an Afspraak */
@@ -170,6 +171,7 @@ export type CreateJournaalpostAfspraak = {
 export type CreateJournaalpostAfspraakInput = {
   transactionId: Scalars['Int'];
   afspraakId: Scalars['Int'];
+  isAutomatischGeboekt: Scalars['Boolean'];
 };
 
 /** Create a Journaalpost with a Grootboekrekening */
@@ -182,6 +184,7 @@ export type CreateJournaalpostGrootboekrekening = {
 export type CreateJournaalpostGrootboekrekeningInput = {
   transactionId: Scalars['Int'];
   grootboekrekeningId: Scalars['String'];
+  isAutomatischGeboekt: Scalars['Boolean'];
 };
 
 export type CreateOrganisatie = {
@@ -240,11 +243,13 @@ export type DeleteAfspraak = {
 export type DeleteConfiguratie = {
   __typename?: 'DeleteConfiguratie';
   ok?: Maybe<Scalars['Boolean']>;
+  previous?: Maybe<Configuratie>;
 };
 
 export type DeleteCustomerStatementMessage = {
   __typename?: 'DeleteCustomerStatementMessage';
   ok?: Maybe<Scalars['Boolean']>;
+  previous?: Maybe<CustomerStatementMessage>;
 };
 
 export type DeleteGebruiker = {
@@ -256,6 +261,8 @@ export type DeleteGebruiker = {
 export type DeleteGebruikerRekening = {
   __typename?: 'DeleteGebruikerRekening';
   ok?: Maybe<Scalars['Boolean']>;
+  previous?: Maybe<Rekening>;
+  gebruiker?: Maybe<Gebruiker>;
 };
 
 /** Delete journaalpost by id  */
@@ -268,16 +275,20 @@ export type DeleteJournaalpost = {
 export type DeleteOrganisatie = {
   __typename?: 'DeleteOrganisatie';
   ok?: Maybe<Scalars['Boolean']>;
+  previous?: Maybe<Organisatie>;
 };
 
 export type DeleteOrganisatieRekening = {
   __typename?: 'DeleteOrganisatieRekening';
   ok?: Maybe<Scalars['Boolean']>;
+  previous?: Maybe<Rekening>;
+  organisatie?: Maybe<Organisatie>;
 };
 
 export type DeleteRubriek = {
   __typename?: 'DeleteRubriek';
   ok?: Maybe<Scalars['Boolean']>;
+  previous?: Maybe<Rubriek>;
 };
 
 /** GraphQL Export model  */
@@ -329,10 +340,17 @@ export type GebruikersActiviteitEntity = {
   __typename?: 'GebruikersActiviteitEntity';
   entityType?: Maybe<Scalars['String']>;
   entityId?: Maybe<Scalars['Int']>;
-  burger?: Maybe<Gebruiker>;
-  organisatie?: Maybe<Organisatie>;
   afspraak?: Maybe<Afspraak>;
+  burger?: Maybe<Gebruiker>;
+  configuratie?: Maybe<Configuratie>;
+  customerStatementMessage?: Maybe<CustomerStatementMessage>;
+  export?: Maybe<Export>;
+  grootboekrekening?: Maybe<Grootboekrekening>;
+  journaalpost?: Maybe<Journaalpost>;
+  organisatie?: Maybe<Organisatie>;
   rekening?: Maybe<Rekening>;
+  rubriek?: Maybe<Rubriek>;
+  transaction?: Maybe<BankTransaction>;
 };
 
 export type GebruikersActiviteitMeta = {
@@ -344,10 +362,16 @@ export type GebruikersActiviteitMeta = {
 
 export type GebruikersActiviteitSnapshot = {
   __typename?: 'GebruikersActiviteitSnapshot';
-  burger?: Maybe<Gebruiker>;
   afspraak?: Maybe<Afspraak>;
+  burger?: Maybe<Gebruiker>;
+  configuratie?: Maybe<Configuratie>;
+  customerStatementMessage?: Maybe<CustomerStatementMessage>;
+  export?: Maybe<Export>;
+  grootboekrekening?: Maybe<Grootboekrekening>;
   journaalpost?: Maybe<Journaalpost>;
   organisatie?: Maybe<Organisatie>;
+  rubriek?: Maybe<Rubriek>;
+  transaction?: Maybe<BankTransaction>;
 };
 
 /** Grootboekrekening model  */
@@ -385,6 +409,7 @@ export type Journaalpost = {
   afspraak?: Maybe<Afspraak>;
   transaction?: Maybe<BankTransaction>;
   grootboekrekening?: Maybe<Grootboekrekening>;
+  isAutomatischGeboekt?: Maybe<Scalars['Boolean']>;
 };
 
 /** GraphQL Organisatie model  */
@@ -880,6 +905,7 @@ export type UpdateConfiguratie = {
   __typename?: 'UpdateConfiguratie';
   ok?: Maybe<Scalars['Boolean']>;
   configuratie?: Maybe<Configuratie>;
+  previous?: Maybe<Configuratie>;
 };
 
 export type UpdateGebruiker = {
@@ -906,18 +932,21 @@ export type UpdateOrganisatie = {
   __typename?: 'UpdateOrganisatie';
   ok?: Maybe<Scalars['Boolean']>;
   organisatie?: Maybe<Organisatie>;
+  previous?: Maybe<Organisatie>;
 };
 
 export type UpdateRekening = {
   __typename?: 'UpdateRekening';
   ok?: Maybe<Scalars['Boolean']>;
   rekening?: Maybe<Rekening>;
+  previous?: Maybe<Rekening>;
 };
 
 export type UpdateRubriek = {
   __typename?: 'UpdateRubriek';
   ok?: Maybe<Scalars['Boolean']>;
   rubriek?: Maybe<Rubriek>;
+  previous?: Maybe<Rubriek>;
 };
 
 
@@ -1331,6 +1360,7 @@ export type UpdateJournaalpostGrootboekrekeningMutation = (
 export type CreateJournaalpostAfspraakMutationVariables = Exact<{
   transactionId: Scalars['Int'];
   afspraakId: Scalars['Int'];
+  isAutomatischGeboekt?: Maybe<Scalars['Boolean']>;
 }>;
 
 
@@ -1535,7 +1565,7 @@ export type GetAllTransactionsQuery = (
     { __typename?: 'BankTransaction' }
     & { journaalpost?: Maybe<(
       { __typename?: 'Journaalpost' }
-      & Pick<Journaalpost, 'id'>
+      & Pick<Journaalpost, 'id' | 'isAutomatischGeboekt'>
       & { afspraak?: Maybe<(
         { __typename?: 'Afspraak' }
         & { rubriek?: Maybe<(
@@ -1652,7 +1682,7 @@ export type GetReportingDataQuery = (
     { __typename?: 'BankTransaction' }
     & { journaalpost?: Maybe<(
       { __typename?: 'Journaalpost' }
-      & Pick<Journaalpost, 'id'>
+      & Pick<Journaalpost, 'id' | 'isAutomatischGeboekt'>
       & { afspraak?: Maybe<(
         { __typename?: 'Afspraak' }
         & { rubriek?: Maybe<(
@@ -2436,7 +2466,7 @@ export type DeleteCustomerStatementMessageMutationResult = Apollo.MutationResult
 export type DeleteCustomerStatementMessageMutationOptions = Apollo.BaseMutationOptions<DeleteCustomerStatementMessageMutation, DeleteCustomerStatementMessageMutationVariables>;
 export const CreateJournaalpostGrootboekrekeningDocument = gql`
     mutation createJournaalpostGrootboekrekening($transactionId: Int!, $grootboekrekeningId: String!) {
-  createJournaalpostGrootboekrekening(input: {transactionId: $transactionId, grootboekrekeningId: $grootboekrekeningId}) {
+  createJournaalpostGrootboekrekening(input: {transactionId: $transactionId, grootboekrekeningId: $grootboekrekeningId, isAutomatischGeboekt: false}) {
     ok
     journaalpost {
       id
@@ -2504,8 +2534,8 @@ export type UpdateJournaalpostGrootboekrekeningMutationHookResult = ReturnType<t
 export type UpdateJournaalpostGrootboekrekeningMutationResult = Apollo.MutationResult<UpdateJournaalpostGrootboekrekeningMutation>;
 export type UpdateJournaalpostGrootboekrekeningMutationOptions = Apollo.BaseMutationOptions<UpdateJournaalpostGrootboekrekeningMutation, UpdateJournaalpostGrootboekrekeningMutationVariables>;
 export const CreateJournaalpostAfspraakDocument = gql`
-    mutation createJournaalpostAfspraak($transactionId: Int!, $afspraakId: Int!) {
-  createJournaalpostAfspraak(input: {transactionId: $transactionId, afspraakId: $afspraakId}) {
+    mutation createJournaalpostAfspraak($transactionId: Int!, $afspraakId: Int!, $isAutomatischGeboekt: Boolean = false) {
+  createJournaalpostAfspraak(input: {transactionId: $transactionId, afspraakId: $afspraakId, isAutomatischGeboekt: $isAutomatischGeboekt}) {
     ok
     journaalpost {
       id
@@ -2530,6 +2560,7 @@ export type CreateJournaalpostAfspraakMutationFn = Apollo.MutationFunction<Creat
  *   variables: {
  *      transactionId: // value for 'transactionId'
  *      afspraakId: // value for 'afspraakId'
+ *      isAutomatischGeboekt: // value for 'isAutomatischGeboekt'
  *   },
  * });
  */
@@ -2982,6 +3013,7 @@ export const GetAllTransactionsDocument = gql`
     ...BankTransaction
     journaalpost {
       id
+      isAutomatischGeboekt
       afspraak {
         ...Afspraak
         rubriek {
@@ -3233,6 +3265,7 @@ export const GetReportingDataDocument = gql`
     ...BankTransaction
     journaalpost {
       id
+      isAutomatischGeboekt
       afspraak {
         ...Afspraak
         rubriek {

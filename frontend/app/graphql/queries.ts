@@ -82,6 +82,7 @@ export const GetAllTransactionsQuery = gql`
             ...BankTransaction
             journaalpost {
                 id
+                isAutomatischGeboekt
                 afspraak {
                     ...Afspraak
                     rubriek{
@@ -192,6 +193,7 @@ export const GetReportingDataQuery = gql`
             ...BankTransaction
             journaalpost {
                 id
+                isAutomatischGeboekt
                 afspraak {
                     ...Afspraak
                     rubriek{
