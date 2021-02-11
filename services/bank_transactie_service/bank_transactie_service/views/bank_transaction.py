@@ -10,25 +10,45 @@ from core_service.views.hhb_view import HHBView
 
 
 class BankTransactionView(HHBView):
-    """ Methods for /banktransaction/(<banktransaction_id>) path """
+    """ Methods for /banktransactions/(<banktransaction_id>) path """
     hhb_model = BankTransaction
     validation_data = {
-        "type": "object",
-        "properties": {
-            "customer_statement_message_id": {
-                "type": "integer",
+        "definitions": {
+            "one_or_more_banktransactions": {
+                "anyOf": [
+                    {
+                        "type": "object",
+                        "$ref": "#/definitions/banktransaction"
+                    },
+                    {
+                        "type": "array",
+                        "items": {"$ref": "#/definitions/banktransaction"}
+                    }
+                ]
             },
-            "statement_line": {
-                "type": "string",
-            },
-            "information_to_account_owner": {
-                "type": "string",
-            },
-            "is_geboekt": {
-                "type": "boolean",
-            },
+            "banktransaction": {
+                "type": "object",
+                "required": ["customer_statement_message_id"],
+                "properties": {
+                    "customer_statement_message_id": {
+                        "type": "integer",
+                    },
+                    "statement_line": {
+                        "type": "string",
+                    },
+                    "information_to_account_owner": {
+                        "type": "string",
+                    },
+                    "is_geboekt": {
+                        "oneOf": [
+                            {"type": "null"},
+                            {"type": "boolean"},
+                        ],
+                    },
+                },
+            }
         },
-        "required": ["customer_statement_message_id"],
+        "$ref": "#/definitions/one_or_more_banktransactions"
     }
 
     def extend_get(self, **kwargs):

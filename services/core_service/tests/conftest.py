@@ -4,9 +4,9 @@ from sqlalchemy import event
 from sqlalchemy.orm.session import close_all_sessions
 from testing.postgresql import Postgresql
 
-from tests.factories.basket_factory import BasketFactory
 from tests.basket_service.app import create_app, db as _db
 from tests.basket_service.config import TestingConfig
+from tests.factories.basket_factory import BasketFactory
 from tests.factories.fruit_factory import FruitFactory
 
 

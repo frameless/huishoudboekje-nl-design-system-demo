@@ -98,12 +98,12 @@ def log_gebruikers_activiteit(view_func):
                     **(gebruikers_activiteit),
                 }
                 # TODO use a Queue and asyncio.run_task
-                response = requests.post(
+                logging.debug(
+                    f"logging gebruikersactiviteit {json}"
+                )
+                requests.post(
                     f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/",
                     json=json,
-                )
-                logging.debug(
-                    f"logged gebruikersactiviteit(status={response.status_code}) {json}"
                 )
         except:
             logging.exception(f"Failed to log gebruikers_activiteit")

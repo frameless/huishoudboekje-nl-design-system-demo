@@ -4,12 +4,9 @@ from graphql import GraphQLError
 
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
-from hhb_backend.graphql.models.afspraak import Afspraak
 from hhb_backend.graphql.models.journaalpost import Journaalpost
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    log_gebruikers_activiteit,
-    gebruikers_activiteit_entities,
-)
+from hhb_backend.graphql.mutations.journaalposten import update_transaction_is_geboekt
+from hhb_backend.graphql.utils.gebruikersactiviteiten import (gebruikers_activiteit_entities, log_gebruikers_activiteit)
 
 
 class DeleteJournaalpost(graphene.Mutation):
@@ -40,7 +37,7 @@ class DeleteJournaalpost(graphene.Mutation):
                 else []
             )
             + gebruikers_activiteit_entities(
-                entity_type="transaction", result=self.previous, key="transaction"
+                entity_type="transaction", result=self.previous, key="transaction_id"
             )
             + gebruikers_activiteit_entities(
                 entity_type="grootboekrekening",
@@ -62,4 +59,8 @@ class DeleteJournaalpost(graphene.Mutation):
         response = requests.delete(f"{settings.HHB_SERVICES_URL}/journaalposten/{id}")
         if not response.ok:
             raise GraphQLError(f"Upstream API responded: {response.text}")
+
+        transaction = await hhb_dataloader().bank_transactions_by_id.load(previous['transaction_id'])
+        update_transaction_is_geboekt(transaction, is_geboekt=False)
+
         return DeleteJournaalpost(ok=True, previous=previous)

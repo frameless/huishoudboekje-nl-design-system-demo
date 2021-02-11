@@ -12,7 +12,7 @@ def test_gebruikers_detail_get_success(client, gebruiker_factory):
 
 @pytest.mark.parametrize("gebruiker, statuscode, message", [
     ("1337", 404, "Gebruiker not found."),
-    ("a", 400, "Supplied id 'a' is not an integer.")
+    ("a", 400, "Supplied id 'a' is not valid.")
 ])
 def test_gebruikers_detail_get_invalid_gebruiker(app, gebruiker, statuscode, message):
     """ Test a GET on gebruikers_detail with a invalid gebruiker. """

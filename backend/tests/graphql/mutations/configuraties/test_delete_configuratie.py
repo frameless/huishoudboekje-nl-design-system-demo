@@ -15,6 +15,7 @@ def test_delete_configuratie(client):
         adapter = mock.delete(
             f"{settings.HHB_SERVICES_URL}/configuratie/1", status_code=200
         )
+        mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json={"data": {"id": 1}})
 
         response = client.post(
             "/graphql",

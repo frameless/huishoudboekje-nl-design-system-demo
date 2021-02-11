@@ -1,5 +1,4 @@
 """ Test POST /baskets/(<basket_id>/) """
-import json
 
 from tests.basket_service.models.basket import Basket
 

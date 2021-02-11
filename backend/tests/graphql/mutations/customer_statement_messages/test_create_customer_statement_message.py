@@ -4,6 +4,8 @@ import os
 import requests_mock
 from requests_mock import Adapter
 
+from hhb_backend.graphql import settings
+
 ING_CSM_FILE = os.path.join(os.path.dirname(__file__), "ING.txt")
 ABN_CSM_FILE = os.path.join(os.path.dirname(__file__), "ABN.txt")
 BNG_CSM_FILE = os.path.join(os.path.dirname(__file__), "BNG.txt")
@@ -30,6 +32,7 @@ def test_create_csm_with_ing_file(client):
     with open(ING_CSM_FILE, "rb") as testfile:
         with requests_mock.Mocker() as m:
             m._adapter = adapter
+            m.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json={"data": {"id": 1}})
             response = do_csm_post(client, testfile)
             # Customer Statement Message
             assert (
@@ -65,6 +68,7 @@ def test_create_csm_with_abn_file(client):
     with open(ABN_CSM_FILE, "rb") as testfile:
         with requests_mock.Mocker() as m:
             m._adapter = adapter
+            m.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json={"data": {"id": 1}})
             response = do_csm_post(client, testfile)
             # Customer Statement Message
             assert (
@@ -97,6 +101,7 @@ def test_create_csm_with_bng_file(client):
     with open(BNG_CSM_FILE, "rb") as testfile:
         with requests_mock.Mocker() as m:
             m._adapter = adapter
+            m.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json={"data": {"id": 1}})
             response = do_csm_post(client, testfile)
             # Customer Statement Message
             assert (
@@ -138,7 +143,7 @@ def create_mock_adapter() -> Adapter:
             return MockResponse({"data": {"id": 1}}, 201)
         elif request.path == "/banktransactions/":
             return MockResponse({"data": {"id": 1}}, 201)
-        elif request.path == "/gebruikersactiviteit":
+        elif request.path == "/gebruikersactiviteiten":
             return MockResponse({"data": {"id": 1}}, 201)
 
     adapter.add_matcher(test_matcher)

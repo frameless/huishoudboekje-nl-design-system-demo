@@ -1,3 +1,5 @@
+import re
+
 from flask import request, abort, make_response
 from sqlalchemy import String
 from sqlalchemy.orm import joinedload
@@ -35,25 +37,28 @@ class HHBQuery():
                 self.filtered_columns.append(column_name)
             self.query = self.query.with_entities(*column_filter)
 
-    def add_filter_ids(self):
+    def add_filter_ids(self, object_id):
         """ Add filter_ids filter based on the primary key of the hhb model """
-        # Todo check if it is possible to reference the PK column rather than the "id" column
-        filter_ids = request.args.get('filter_ids')
-        if filter_ids:
-            ids = []
-            for raw_id in filter_ids.split(","):
-                if str(self.hhb_model.__table__.c['id'].type) == "VARCHAR":
-                    ids.append(raw_id)
-                else:
-                    try:
-                        ids.append(int(raw_id))
-                    except ValueError:
-                        abort(make_response(
-                            {"errors": [
-                                f"Input for filter_ids is not correct, '{raw_id}' is not a number."
-                            ]}, 400))
-                    
-            self.query = self.query.filter(self.hhb_model.id.in_(ids))
+        if type(object_id) == list:
+            filter_ids = object_id
+        elif 'filter_ids' in request.args:
+            filter_ids = request.args.get('filter_ids').split(",")
+        else:
+            return
+
+        # TODO check if it is possible to reference the PK column rather than the "id" column
+        if str(self.hhb_model.__table__.c['id'].type) == "VARCHAR":
+            ids = [str(id) for id in filter_ids]
+        else:
+            try:
+                ids = [int(id) for id in filter_ids]
+            except ValueError as err:
+                abort(make_response(
+                    {"errors": [
+                        f"""Input for filter_ids is not correct, '{re.findall("'([^']*)'", str(err))[0]}' is not a number."""
+                    ]}, 400))
+
+        self.query = self.query.filter(self.hhb_model.id.in_(ids))
 
     def get_result_single(self, row_id):
         """ Get a single result from the current query """

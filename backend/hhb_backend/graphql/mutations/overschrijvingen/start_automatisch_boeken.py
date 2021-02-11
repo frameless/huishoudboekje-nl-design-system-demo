@@ -4,6 +4,7 @@ import hhb_backend.graphql.models.journaalpost as journaalpost
 from hhb_backend.processen import automatisch_boeken
 
 
+
 class StartAutomatischBoeken(graphene.Mutation):
 
     ok = graphene.Boolean()
