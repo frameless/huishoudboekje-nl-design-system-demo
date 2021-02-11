@@ -41,25 +41,7 @@ const AfspraakTableRow: React.FC<TableRowProps & { afspraak: Afspraak, onDelete?
 			<Td>
 				<Stack spacing={1} flex={1} alignItems={"flex-end"}>
 					<Box textAlign={"right"} color={bedrag < 0 ? "orange.500" : "currentcolor"}>{currencyFormat2().format(bedrag)}</Box>
-					<Wrap spacing={1}>
-						{a.automatischeIncasso && (
-							<WrapItem>
-								<XTooltip label={t("agreements.automatischeIncassoTooltip")}>
-									<Badge fontSize={"10px"}>{t("agreements.automatischeIncassoShort")}</Badge>
-								</XTooltip>
-							</WrapItem>
-						)}
-						{a.automatischBoeken && (
-							<WrapItem>
-								<XTooltip label={t("agreements.automatischBoekenTooltip")}>
-									<Badge fontSize={"10px"}>{t("agreements.automatischBoekenShort")}</Badge>
-								</XTooltip>
-							</WrapItem>
-						)}
-						<WrapItem>
-							<Badge fontSize={"10px"}>{intervalString(a.interval, t)}</Badge>
-						</WrapItem>
-					</Wrap>
+					<Badge fontSize={"10px"}>{intervalString(a.interval, t)}</Badge>
 				</Stack>
 			</Td>
 			<Td>
