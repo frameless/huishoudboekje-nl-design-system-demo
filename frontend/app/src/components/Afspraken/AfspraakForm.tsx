@@ -410,6 +410,29 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 					</Stack>
 
 					<Stack spacing={2} direction={["column", "row"]}>
+						<FormLeft title={t("forms.agreements.sections.3.title")} helperText={t("forms.agreements.sections.3.helperText")} />
+						<FormRight>
+							<Stack spacing={1} flex={1}>
+								<Queryable query={$afspraakFormData} children={(data: { organisaties: Organisatie[] }) => (<>
+									<FormLabel htmlFor={"zoekterm"}>{t("forms.agreements.fields.zoekterm")}</FormLabel>
+									<InputGroup>
+										<Input isInvalid={isInvalid(zoekterm)} {...zoekterm.bind} id="searchTerm" />
+										{zoektermDuplicateFound && <InputRightElement> <WarningIcon color={"orange.500"} /> </InputRightElement>}
+									</InputGroup>
+									{zoektermDuplicateFound && <Text fontSize={"sm"}>{t("forms.agreements.fields.searchtermDuplicateFound")}</Text>}
+								</>)} />
+							</Stack>
+							<Stack direction={["column", "row"]} spacing={1}>
+								<Stack isInline={true} alignItems={"center"} spacing={3}>
+									<Switch isChecked={automatischBoeken} isDisabled={!automatischBoekenPossible} onChange={() => toggleAutomatischBoeken()}
+									        id={"automatischBoeken"} />
+									<FormLabel mb={0} htmlFor={"automatischBoeken"}>{t("forms.agreements.fields.automatischBoeken")}</FormLabel>
+								</Stack>
+							</Stack>
+						</FormRight>
+					</Stack>
+
+					<Stack spacing={2} direction={["column", "row"]}>
 						<FormLeft title={t("forms.agreements.sections.1.title")} helperText={t("forms.agreements.sections.1.helperText")} />
 						<FormRight>
 
@@ -473,29 +496,6 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 									</Stack>
 								</Stack>
 							)}
-						</FormRight>
-					</Stack>
-
-					<Stack spacing={2} direction={["column", "row"]}>
-						<FormLeft title={t("forms.agreements.sections.3.title")} helperText={t("forms.agreements.sections.3.helperText")} />
-						<FormRight>
-							<Stack spacing={1} flex={1}>
-								<Queryable query={$afspraakFormData} children={(data: { organisaties: Organisatie[] }) => (<>
-									<FormLabel htmlFor={"zoekterm"}>{t("forms.agreements.fields.zoekterm")}</FormLabel>
-									<InputGroup>
-										<Input isInvalid={isInvalid(zoekterm)} {...zoekterm.bind} id="searchTerm" />
-										{zoektermDuplicateFound && <InputRightElement> <WarningIcon color={"orange.500"} /> </InputRightElement>}
-									</InputGroup>
-									{zoektermDuplicateFound && <Text fontSize={"sm"}>{t("forms.agreements.fields.searchtermDuplicateFound")}</Text>}
-								</>)} />
-							</Stack>
-							<Stack direction={["column", "row"]} spacing={1}>
-								<Stack isInline={true} alignItems={"center"} spacing={3}>
-									<Switch isChecked={automatischBoeken} isDisabled={!automatischBoekenPossible} onChange={() => toggleAutomatischBoeken()}
-									        id={"automatischBoeken"} />
-									<FormLabel mb={0} htmlFor={"automatischBoeken"}>{t("forms.agreements.fields.automatischBoeken")}</FormLabel>
-								</Stack>
-							</Stack>
 						</FormRight>
 					</Stack>
 
