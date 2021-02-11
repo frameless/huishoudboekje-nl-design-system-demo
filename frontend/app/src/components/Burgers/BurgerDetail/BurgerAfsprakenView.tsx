@@ -53,7 +53,7 @@ const BurgerAfsprakenView: React.FC<StackProps & { burger: Gebruiker, refetch: V
 								<Th>{t("agreements.tegenpartij")}</Th>
 								{!isMobile && <Th>{t("agreements.omschrijving")}</Th>}
 								<Th textAlign={"right"}>{t("agreements.bedrag")}</Th>
-								<Th>{t("actions.actions")}</Th>
+								<Th />
 							</Tr>
 						</Thead>
 						<Tbody>
