@@ -47,6 +47,7 @@ const OverschrijvingenExport = () => {
 				status: "success",
 				title: t("messages.exports.createSuccessMessage"),
 				position: "top",
+				isClosable: true,
 			});
 			$exports.refetch();
 		}).catch(err => {
@@ -63,6 +64,7 @@ const OverschrijvingenExport = () => {
 				variant: "solid",
 				title: t("messages.genericError.title"),
 				description: errorMessage,
+				isClosable: true,
 			});
 		});
 	};

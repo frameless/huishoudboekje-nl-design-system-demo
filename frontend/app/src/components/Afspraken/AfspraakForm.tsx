@@ -186,6 +186,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 				status: "error",
 				title: t("messages.agreements.invalidFormMessage"),
 				position: "top",
+				isClosable: true,
 			});
 			return;
 		}

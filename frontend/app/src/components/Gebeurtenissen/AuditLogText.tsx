@@ -8,6 +8,8 @@ import CreateJournaalpostAfspraak from "./AuditLogItems/CreateJournaalpostAfspra
 import DeleteJournaalpostAfspraak from "./AuditLogItems/DeleteJournaalpostAfspraak";
 import UpdateAfspraak from "./AuditLogItems/UpdateAfspraak";
 import UpdateGebruiker from "./AuditLogItems/UpdateGebruiker";
+import ViewGebruikers from "./AuditLogItems/ViewGebruikers";
+import ViewGebruiker from "./AuditLogItems/ViewGebruiker";
 
 const AuditLogText: React.FC<TextProps & { g: GebruikersActiviteit }> = ({g, ...props}) => {
 	const {t} = useTranslation();
@@ -15,9 +17,11 @@ const AuditLogText: React.FC<TextProps & { g: GebruikersActiviteit }> = ({g, ...
 
 	if (action) {
 		const auditLogTextConfig: Record<string, () => JSX.Element> = {
+			gebruiker: () => <ViewGebruiker g={g} />,
+			gebruikers: () => <ViewGebruikers g={g} />,
 			createGebruiker: () => <CreateGebruiker g={g} />,
-			// deleteGebruiker: () => <>deleteGebruiker</>,
 			updateGebruiker: () => <UpdateGebruiker g={g} />,
+			// deleteGebruiker: () => <>deleteGebruiker</>,
 			createAfspraak: () => <CreateAfspraak g={g} />,
 			updateAfspraak: () => <UpdateAfspraak g={g} />,
 			// deleteAfspraak: () => <>deleteAfspraak</>,

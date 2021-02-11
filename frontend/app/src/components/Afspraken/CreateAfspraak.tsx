@@ -32,6 +32,7 @@ const CreateAfspraak = () => {
 				status: "success",
 				title: t("messages.agreements.createSuccessMessage"),
 				position: "top",
+				isClosable: true,
 			});
 			push(Routes.Burger(parseInt(burgerId)))
 		}).catch(err => {
@@ -42,6 +43,7 @@ const CreateAfspraak = () => {
 				variant: "solid",
 				title: t("messages.genericError.title"),
 				description: t("messages.genericError.description"),
+				isClosable: true,
 			});
 		});
 	};

@@ -59,6 +59,7 @@ const OrganisatieDetail = () => {
 							title: t("messages.organizations.deleteConfirmMessage", {name: organisatie.weergaveNaam}),
 							position: "top",
 							status: "success",
+							isClosable: true,
 						});
 						toggleDeleted(true);
 					})

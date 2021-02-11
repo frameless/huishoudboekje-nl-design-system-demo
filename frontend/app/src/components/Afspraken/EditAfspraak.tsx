@@ -33,6 +33,7 @@ const EditAfspraak = () => {
 				status: "success",
 				title: t("messages.agreements.editSuccessMessage"),
 				position: "top",
+				isClosable: true,
 			});
 
 			if ($afspraak.data?.afspraak?.gebruiker?.id) {
@@ -46,6 +47,7 @@ const EditAfspraak = () => {
 				variant: "solid",
 				title: t("messages.genericError.title"),
 				description: t("messages.genericError.description"),
+				isClosable: true,
 			});
 		});
 	};

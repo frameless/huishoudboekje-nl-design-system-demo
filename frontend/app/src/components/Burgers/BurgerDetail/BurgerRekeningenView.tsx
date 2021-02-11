@@ -45,6 +45,7 @@ const BurgerRekeningenView: React.FC<StackProps & { burger: Gebruiker, refetch: 
 									status: "error",
 									title: t("messages.genericError.title"),
 									description: t("messages.rekeningAlreadyExistsError"),
+									isClosable: true,
 								});
 							}
 						});

@@ -74,6 +74,7 @@ const TransactieItem: React.FC<BoxProps & { bankTransaction: BankTransaction }> 
 					status: "success",
 					title: t("messages.journals.createSuccessMessage"),
 					position: "top",
+					isClosable: true,
 				});
 				refetch();
 				callback();
@@ -85,6 +86,7 @@ const TransactieItem: React.FC<BoxProps & { bankTransaction: BankTransaction }> 
 					variant: "solid",
 					title: t("messages.genericError.title"),
 					description: t("messages.genericError.description"),
+					isClosable: true,
 				});
 			});
 	}

@@ -44,6 +44,7 @@ const BurgerDetail = () => {
 						title: t("messages.burgers.deleteConfirmMessage", {name: `${gebruiker.voornamen} ${gebruiker.achternaam}`}),
 						position: "top",
 						status: "success",
+						isClosable: true,
 					});
 					toggleDeleted(true);
 				});

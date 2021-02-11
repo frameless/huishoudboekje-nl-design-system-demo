@@ -97,6 +97,7 @@ const BurgerEdit = () => {
 				status: "error",
 				title: t("messages.burgers.invalidFormMessage"),
 				position: "top",
+				isClosable: true,
 			});
 			return;
 		}
@@ -120,6 +121,7 @@ const BurgerEdit = () => {
 				status: "success",
 				title: t("messages.burgers.updateSuccessMessage"),
 				position: "top",
+				isClosable: true,
 			});
 			push(Routes.Burger(parseInt(id)));
 		}).catch(err => {
@@ -129,7 +131,8 @@ const BurgerEdit = () => {
 				status: "error",
 				variant: "solid",
 				description: t("messages.genericError.description"),
-				title: t("messages.genericError.title")
+				title: t("messages.genericError.title"),
+				isClosable: true,
 			});
 		});
 	};

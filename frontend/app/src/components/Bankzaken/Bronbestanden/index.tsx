@@ -35,6 +35,7 @@ const CustomerStatementMessages = () => {
 					status: "success",
 					title: t("messages.customerStatementMessages.createSuccess"),
 					position: "top",
+					isClosable: true,
 				});
 				$customerStatementMessages.refetch();
 			}).catch(err => {
@@ -45,6 +46,7 @@ const CustomerStatementMessages = () => {
 					variant: "solid",
 					title: t("messages.genericError.title"),
 					description: t("messages.customerStatementMessages.incorrectFileError"),
+					isClosable: true,
 				});
 			})
 
