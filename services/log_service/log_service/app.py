@@ -55,6 +55,7 @@ def create_app(
             view_func=route["view"].as_view(route["name"]),
             strict_slashes=False,
         )
+
     return app
 
 
