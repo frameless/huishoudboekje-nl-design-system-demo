@@ -1,14 +1,9 @@
 """ GraphQL Gebruikers query """
 import graphene
-from flask import request
 from hhb_backend.graphql.models.afspraak import IntervalInput
 from hhb_backend.graphql.scalars.bedrag import Bedrag
 from hhb_backend.graphql.models.overschrijving import Overschrijving
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    gebruikers_activiteit_entities,
-    log_gebruikers_activiteit,
-)
-from hhb_backend.graphql.utils.overschrijvingen_planner import (
+from hhb_backend.processen.overschrijvingen_planner import (
     PlannedOverschijvingenInput,
     get_planned_overschrijvingen,
 )
