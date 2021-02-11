@@ -31,6 +31,7 @@ const Configuratie = () => {
 				status: "error",
 				title: t("messages.genericError.title"),
 				description: t("messages.genericError.description"),
+				isClosable: true,
 			});
 			return;
 		}
@@ -43,7 +44,8 @@ const Configuratie = () => {
 				toast({
 					position: "top",
 					status: "success",
-					title: t("messages.configuratie.createSuccess")
+					title: t("messages.configuratie.createSuccess"),
+					isClosable: true,
 				});
 			})
 			.catch(err => {
@@ -57,6 +59,7 @@ const Configuratie = () => {
 					status: "error",
 					title: t("messages.genericError.title"),
 					description: message,
+					isClosable: true,
 				});
 			});
 	}

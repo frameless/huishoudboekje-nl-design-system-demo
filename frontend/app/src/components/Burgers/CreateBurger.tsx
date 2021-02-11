@@ -90,6 +90,7 @@ const CreateBurger = () => {
 				status: "error",
 				title: t("messages.burgers.invalidFormMessage"),
 				position: "top",
+				isClosable: true,
 			});
 			return;
 		}
@@ -115,6 +116,7 @@ const CreateBurger = () => {
 				status: "success",
 				title: t("messages.burgers.createSuccessMessage"),
 				position: "top",
+				isClosable: true,
 			});
 
 			const {id} = result?.data?.createGebruiker?.gebruiker || {};
@@ -128,7 +130,8 @@ const CreateBurger = () => {
 				status: "error",
 				variant: "solid",
 				description: t("messages.genericError.description"),
-				title: t("messages.genericError.title")
+				title: t("messages.genericError.title"),
+				isClosable: true,
 			});
 		});
 	};

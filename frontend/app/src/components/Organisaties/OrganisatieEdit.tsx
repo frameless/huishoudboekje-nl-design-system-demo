@@ -82,6 +82,7 @@ const OrganisatieEdit = () => {
 				status: "error",
 				title: t("messages.organizations.invalidFormMessage"),
 				position: "top",
+				isClosable: true,
 			});
 			return;
 		}
@@ -102,6 +103,7 @@ const OrganisatieEdit = () => {
 				status: "success",
 				title: t("messages.organizations.updateSuccessMessage"),
 				position: "top",
+				isClosable: true,
 			});
 			push(Routes.Organisatie(parseInt(id)));
 		}).catch(err => {
@@ -112,6 +114,7 @@ const OrganisatieEdit = () => {
 				variant: "solid",
 				title: t("messages.genericError.title"),
 				description: t("messages.genericError.description"),
+				isClosable: true,
 			});
 		})
 	};

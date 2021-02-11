@@ -32,6 +32,7 @@ const RekeningForm: React.FC<{
 				status: "error",
 				title: t("messages.rekeningen.invalidFormMessage"),
 				position: "top",
+				isClosable: true,
 			});
 			return;
 		}

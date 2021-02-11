@@ -71,6 +71,7 @@ const CreateOrganisatie = () => {
 				status: "error",
 				title: t("messages.organizations.invalidFormMessage"),
 				position: "top",
+				isClosable: true,
 			});
 			return;
 		}
@@ -90,6 +91,7 @@ const CreateOrganisatie = () => {
 				status: "success",
 				title: t("messages.organizations.createSuccessMessage"),
 				position: "top",
+				isClosable: true,
 			});
 
 			const {id} = result?.data?.createOrganisatie?.organisatie || {};
@@ -104,6 +106,7 @@ const CreateOrganisatie = () => {
 				variant: "solid",
 				title: t("messages.genericError.title"),
 				description: t("messages.genericError.description"),
+				isClosable: true,
 			});
 		});
 	};

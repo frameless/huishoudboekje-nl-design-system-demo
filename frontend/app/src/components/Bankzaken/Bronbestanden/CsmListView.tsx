@@ -19,6 +19,7 @@ const CsmListView: React.FC<BoxProps & { csms: CustomerStatementMessage[], refre
 				title: t("messages.customerStatementMessages.deleteSuccess"),
 				position: "top",
 				status: "success",
+				isClosable: true,
 			});
 			refresh();
 		}).catch(err => {
@@ -28,7 +29,8 @@ const CsmListView: React.FC<BoxProps & { csms: CustomerStatementMessage[], refre
 				status: "error",
 				variant: "solid",
 				description: t("messages.genericError.description"),
-				title: t("messages.genericError.title")
+				title: t("messages.genericError.title"),
+				isClosable: true,
 			});
 		});
 	}

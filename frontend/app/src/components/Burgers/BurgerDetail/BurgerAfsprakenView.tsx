@@ -28,6 +28,7 @@ const BurgerAfsprakenView: React.FC<StackProps & { burger: Gebruiker, refetch: V
 				title: t("messages.agreements.deleteConfirmMessage"),
 				position: "top",
 				status: "success",
+				isClosable: true,
 			});
 			refetch();
 		}).catch(err => {
@@ -37,7 +38,8 @@ const BurgerAfsprakenView: React.FC<StackProps & { burger: Gebruiker, refetch: V
 				status: "error",
 				variant: "solid",
 				description: t("messages.genericError.description"),
-				title: t("messages.genericError.title")
+				title: t("messages.genericError.title"),
+				isClosable: true,
 			});
 		});
 	};
