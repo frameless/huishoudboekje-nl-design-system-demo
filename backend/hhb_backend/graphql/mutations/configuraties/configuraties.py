@@ -87,7 +87,7 @@ class DeleteConfiguratie(graphene.Mutation):
     ok = graphene.Boolean()
     previous = graphene.Field(lambda: Configuratie)
 
-    def gebruikers_activiteit(self, _root, info, id, *_args):
+    def gebruikers_activiteit(self, _root, info, id, *_args, **_kwargs):
         return dict(
             action=info.field_name,
             entities=gebruikers_activiteit_entities(

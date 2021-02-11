@@ -24,18 +24,17 @@ class DeleteOrganisatieRekening(graphene.Mutation):
 
     ok = graphene.Boolean()
     previous = graphene.Field(lambda: rekening.Rekening)
-    organisatie = graphene.Field(lambda: organisatie.Organisatie)
 
-    def gebruikers_activiteit(self, _root, info):
+    def gebruikers_activiteit(
+        self, _root, info, rekening_id, organisatie_id, *_args, **_kwargs
+    ):
         return dict(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="rekening", result=self, key="previous"
-            )
-            + gebruikers_activiteit_entities(
-                entity_type="organisatie", result=self, key="organisatie"
-            ),
-            after=dict(configuratie=self.rekening),
+            entities=[
+                dict(entity_type="rekening", entity_id=rekening_id),
+                dict(entity_type="organisatie", entity_id=organisatie_id),
+            ],
+            before=dict(rekening=self.previous),
         )
 
     @staticmethod
@@ -43,7 +42,6 @@ class DeleteOrganisatieRekening(graphene.Mutation):
     async def mutate(_root, _info, rekening_id, organisatie_id):
         """ Delete rekening associations with an organisatie """
         previous = await hhb_dataloader().rekeningen_by_id.load(rekening_id)
-        organisatie_id = await hhb_dataloader().organisaties_by_id.load(organisatie_id)
 
         delete_response = requests.delete(
             f"{settings.HHB_SERVICES_URL}/organisaties/{organisatie_id}/rekeningen/",
@@ -54,6 +52,4 @@ class DeleteOrganisatieRekening(graphene.Mutation):
 
         cleanup_rekening_when_orphaned(rekening_id)
 
-        return DeleteOrganisatieRekening(
-            ok=True, previous=previous, organisatie=organisatie
-        )
+        return DeleteOrganisatieRekening(ok=True, previous=previous)

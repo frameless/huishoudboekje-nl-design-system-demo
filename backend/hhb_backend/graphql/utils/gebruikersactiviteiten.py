@@ -106,7 +106,7 @@ def log_gebruikers_activiteit(view_func):
                     f"logged gebruikersactiviteit(status={response.status_code}) {json}"
                 )
         except:
-            logging.exception(f"Failed to log {gebruikers_activiteit}")
+            logging.exception(f"Failed to log gebruikers_activiteit")
 
         return result
 

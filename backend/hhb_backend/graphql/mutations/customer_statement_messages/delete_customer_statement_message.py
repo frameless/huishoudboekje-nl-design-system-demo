@@ -22,13 +22,13 @@ class DeleteCustomerStatementMessage(graphene.Mutation):
     ok = graphene.Boolean()
     previous = graphene.Field(lambda: CustomerStatementMessage)
 
-    def gebruikers_activiteit(self, _root, info, *_args):
+    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
         return dict(
             action=info.field_name,
             entities=gebruikers_activiteit_entities(
                 entity_type="customerStatementMessage", result=self, key="previous"
             ),
-            before=dict(configuratie=self.previous),
+            before=dict(customerStatementMessage=self.previous),
         )
 
     @staticmethod
