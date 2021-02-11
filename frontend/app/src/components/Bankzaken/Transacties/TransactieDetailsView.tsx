@@ -13,13 +13,13 @@ const TransactieDetailsView: React.FC<StackProps & { transaction: BankTransactio
 	return (
 		<Stack spacing={5} justifyContent={"space-between"} {...props}>
 			<Stack direction={"row"} spacing={5} justifyContent={"space-between"} maxWidth={500}>
-				<Box>
+				<Box flex={2}>
 					<Label>{t("forms.common.fields.date")}</Label>
 					<Box>
 						<Text>{dateFormat.format(new Date(bt.transactieDatum))}</Text>
 					</Box>
 				</Box>
-				<Box>
+				<Box flex={1}>
 					<Label>&nbsp;</Label>
 					{bt.journaalpost ? (bt.journaalpost.isAutomatischGeboekt ? (
 						<Box>
@@ -38,9 +38,9 @@ const TransactieDetailsView: React.FC<StackProps & { transaction: BankTransactio
 			</Stack>
 
 			<Stack direction={"row"} spacing={5} justifyContent={"space-between"} maxWidth={500}>
-				<Box>
+				<Box flex={2}>
 					<Label>{t("transactions.beneficiaryAccount")}</Label>
-					<Box flex={2}>{bt.tegenRekening ? (
+					<Box>{bt.tegenRekening ? (
 						<Stack spacing={0}>
 							<Text>{bt.tegenRekening.rekeninghouder}</Text>
 							<Text size={"sm"}><PrettyIban iban={bt.tegenRekening.iban} /></Text>
@@ -51,7 +51,7 @@ const TransactieDetailsView: React.FC<StackProps & { transaction: BankTransactio
 					</Box>
 				</Box>
 
-				<Box>
+				<Box flex={1}>
 					<Label>{t("transactions.amount")}</Label>
 					<Box>
 						<Currency justifyContent={"flex-start"} value={bt.bedrag} />
