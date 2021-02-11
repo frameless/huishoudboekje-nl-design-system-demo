@@ -34,6 +34,7 @@ const ConfiguratieItem: React.FC<FormControlProps & { c: IConfiguratie, refetch:
 				status: "success",
 				title: t("messages.configuratie.updateSuccess"),
 				position: "top",
+				isClosable: true,
 			});
 		});
 	};
@@ -56,6 +57,7 @@ const ConfiguratieItem: React.FC<FormControlProps & { c: IConfiguratie, refetch:
 				status: "success",
 				title: t("messages.configuratie.deleteSuccess"),
 				position: "top",
+				isClosable: true,
 			});
 		});
 	}

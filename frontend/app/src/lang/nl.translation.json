@@ -99,8 +99,9 @@
                 "bankAccount": "Bankrekening",
                 "bankAccountChoose": "Kies een bankrekening",
                 "amount": "Bedrag",
-                "searchTerm": "Zoekterm",
+                "zoekterm": "Zoekterm",
                 "searchtermDuplicateFound": "Let op: deze zoekterm of een deel ervan wordt al gebruikt bij een andere afspraak. Het is niet mogelijk om automatisch boeken aan te zetten voor deze afspraak.",
+                "automatischBoeken": "Geef toestemming voor automatisch boeken",
                 "startDate": "Startdatum",
                 "continuous": "Doorlopend",
                 "nTimes": "Aantal keer",
@@ -122,6 +123,10 @@
                     "prognosisText_incoming_plural": "Er worden <0>{{count}}</0> inkomende overschrijvingen tussen <1>{{start}}</1> en <2>{{end}}</2> verwacht.",
                     "title": "Verwachting",
                     "helperText": "Dit is een overzicht van de verwachte betalingen bij deze afspraak."
+                },
+                "3": {
+                    "title": "Boekingen",
+                    "helperText": "Geef met een zoekterm aan welke tekst in de omschrijving van een banktransactie terugkomt. Wanneer automatisch boeken is ingeschakeld, probeert de applicatie transacties automatisch te verwerken."
                 }
             },
             "titleEdit": "Afspraak bewerken"
@@ -272,9 +277,13 @@
     },
     "unknown": "Onbekend",
     "agreements": {
-        "automatischeIncasso": "Automatische incasso",
-        "incoming": "Inkomsten",
-        "outgoing": "Uitgaven"
+        "automatischeIncassoTooltip": "Automatische incasso",
+        "automatischeIncassoShort": "I",
+        "automatischBoekenTooltip": "Automatisch boeken",
+        "automatischBoekenShort": "B",
+        "tegenpartij": "Tegenpartij",
+        "omschrijving": "Omschrijving",
+        "bedrag": "Bedrag"
     },
     "banking": {
         "exports": {
@@ -322,6 +331,8 @@
         "deleteJournaalpostAfspraak": "{{gebruiker}} verwijderde een verwerkte transactie op een <linkAfspraak>afspraak</linkAfspraak> met <linkBurger>{{burger}}</linkBurger>.",
         "updateAfspraak": "{{gebruiker}} wijzigde een <linkAfspraak>afspraak</linkAfspraak> van <linkBurger>{{burger}}</linkBurger> met <linkOrganisatie>{{organisatie}}</linkOrganisatie>.",
         "updateGebruiker": "{{gebruiker}} wijzigde <linkBurger>{{burger}}</linkBurger>.",
+        "viewGebruiker": "{{gebruiker}} bekeek <linkBurger>{{burger}}</linkBurger>.",
+        "viewGebruikers": "{{gebruiker}} bekeek alle burgers.",
         "unknown": "Onbekende gebeurtenis"
     },
     "unknownBurger": "Onbekende burger",

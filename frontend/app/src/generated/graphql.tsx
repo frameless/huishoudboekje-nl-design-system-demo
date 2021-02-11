@@ -51,6 +51,7 @@ export type Afspraak = {
   kenmerk?: Maybe<Scalars['String']>;
   actief?: Maybe<Scalars['Boolean']>;
   automatischeIncasso?: Maybe<Scalars['Boolean']>;
+  automatischBoeken?: Maybe<Scalars['Boolean']>;
   organisatie?: Maybe<Organisatie>;
   journaalposten?: Maybe<Array<Maybe<Journaalpost>>>;
   rubriek?: Maybe<Rubriek>;
@@ -79,6 +80,7 @@ export type AfspraakInput = {
   organisatieId?: Maybe<Scalars['Int']>;
   rubriekId?: Maybe<Scalars['Int']>;
   automatischeIncasso?: Maybe<Scalars['Boolean']>;
+  automatischBoeken?: Maybe<Scalars['Boolean']>;
 };
 
 /** BankTransaction model */
@@ -944,7 +946,7 @@ export type RubriekFragment = (
 
 export type AfspraakFragment = (
   { __typename?: 'Afspraak' }
-  & Pick<Afspraak, 'id' | 'beschrijving' | 'startDatum' | 'eindDatum' | 'aantalBetalingen' | 'automatischeIncasso' | 'bedrag' | 'credit' | 'kenmerk' | 'actief'>
+  & Pick<Afspraak, 'id' | 'beschrijving' | 'startDatum' | 'eindDatum' | 'aantalBetalingen' | 'automatischeIncasso' | 'automatischBoeken' | 'bedrag' | 'credit' | 'kenmerk' | 'actief'>
   & { interval?: Maybe<(
     { __typename?: 'Interval' }
     & Pick<Interval, 'dagen' | 'weken' | 'maanden' | 'jaren'>
@@ -1746,6 +1748,7 @@ export const AfspraakFragmentDoc = gql`
   eindDatum
   aantalBetalingen
   automatischeIncasso
+  automatischBoeken
   interval {
     dagen
     weken

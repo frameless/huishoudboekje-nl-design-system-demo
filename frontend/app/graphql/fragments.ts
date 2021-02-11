@@ -41,6 +41,7 @@ export const AfspraakFragment = gql`
         eindDatum
         aantalBetalingen
         automatischeIncasso
+        automatischBoeken
         interval {
             dagen
             weken

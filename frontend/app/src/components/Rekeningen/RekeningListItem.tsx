@@ -64,6 +64,7 @@ const RekeningListItem: React.FC<RekeningListItemProps> = ({rekening, onDelete, 
 				status: "success",
 				title: t("messages.rekening.updateSuccess"),
 				position: "top",
+				isClosable: true,
 			});
 		});
 	}

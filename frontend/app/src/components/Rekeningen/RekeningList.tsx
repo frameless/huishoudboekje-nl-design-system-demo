@@ -17,6 +17,7 @@ const RekeningList: React.FC<TableProps & RekeningListProps> = ({rekeningen, geb
 				status: "success",
 				title: t("messages.rekeningen.deleteSuccess"),
 				position: "top",
+				isClosable: true,
 			});
 
 			if (onChange) {
@@ -30,6 +31,7 @@ const RekeningList: React.FC<TableProps & RekeningListProps> = ({rekeningen, geb
 				variant: "solid",
 				title: t("messages.genericError.title"),
 				description: t("messages.genericError.description"),
+				isClosable: true,
 			})
 		});
 	}
