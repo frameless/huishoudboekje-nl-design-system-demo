@@ -2,7 +2,7 @@
 import graphene
 from flask import request
 
-from hhb_backend.graphql.models.afspraak import Afspraak
+import hhb_backend.graphql.models.afspraak as afspraak
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     gebruikers_activiteit_entities,
     log_gebruikers_activiteit,
@@ -10,7 +10,7 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import (
 
 
 class AfspraakQuery:
-    return_type = graphene.Field(Afspraak, id=graphene.Int(required=True))
+    return_type = graphene.Field(afspraak.Afspraak, id=graphene.Int(required=True))
 
     @classmethod
     def gebruikers_activiteit(cls, _root, info, id, result, *_args, **_kwargs):
@@ -30,7 +30,7 @@ class AfspraakQuery:
 
 class AfsprakenQuery:
     return_type = graphene.List(
-        Afspraak, ids=graphene.List(graphene.Int, default_value=[])
+        afspraak.Afspraak, ids=graphene.List(graphene.Int, default_value=[])
     )
 
     @classmethod

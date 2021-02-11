@@ -4,19 +4,17 @@ from datetime import datetime
 import graphene
 from flask import request
 
-from hhb_backend.graphql.models.afspraak import Afspraak
-from hhb_backend.graphql.models.bank_transaction import BankTransaction
-from hhb_backend.graphql.models.configuratie import Configuratie
-from hhb_backend.graphql.models.customer_statement_message import (
-    CustomerStatementMessage,
-)
-from hhb_backend.graphql.models.export import Export
-from hhb_backend.graphql.models.gebruiker import Gebruiker
-from hhb_backend.graphql.models.grootboekrekening import Grootboekrekening
-from hhb_backend.graphql.models.journaalpost import Journaalpost
-from hhb_backend.graphql.models.organisatie import Organisatie
-from hhb_backend.graphql.models.rekening import Rekening
-from hhb_backend.graphql.models.rubriek import Rubriek
+import hhb_backend.graphql.models.afspraak as afspraak
+import hhb_backend.graphql.models.bank_transaction as bank_transaction
+import hhb_backend.graphql.models.configuratie as configuratie
+import hhb_backend.graphql.models.customer_statement_message as customer_statement_message
+import hhb_backend.graphql.models.export as export
+import hhb_backend.graphql.models.gebruiker as gebruiker
+import hhb_backend.graphql.models.grootboekrekening as grootboekrekening
+import hhb_backend.graphql.models.journaalpost as journaalpost
+import hhb_backend.graphql.models.organisatie as organisatie
+import hhb_backend.graphql.models.rekening as rekening
+import hhb_backend.graphql.models.rubriek as rubriek
 
 
 class GebruikersActiviteitMeta(graphene.ObjectType):
@@ -31,16 +29,16 @@ class GebruikersActiviteitMeta(graphene.ObjectType):
 
 
 class GebruikersActiviteitSnapshot(graphene.ObjectType):
-    afspraak = graphene.Field(lambda: Afspraak)
-    burger = graphene.Field(lambda: Gebruiker)
-    configuratie = graphene.Field(lambda: Configuratie)
-    customer_statement_message = graphene.Field(lambda: CustomerStatementMessage)
-    export = graphene.Field(lambda: Export)
-    grootboekrekening = graphene.Field(lambda: Grootboekrekening)
-    journaalpost = graphene.Field(lambda: Journaalpost)
-    organisatie = graphene.Field(lambda: Organisatie)
-    rubriek = graphene.Field(lambda: Rubriek)
-    transaction = graphene.Field(lambda: BankTransaction)
+    afspraak = graphene.Field(lambda: afspraak.Afspraak)
+    burger = graphene.Field(lambda: gebruiker.Gebruiker)
+    configuratie = graphene.Field(lambda: configuratie.Configuratie)
+    customer_statement_message = graphene.Field(lambda: customer_statement_message.CustomerStatementMessage)
+    export = graphene.Field(lambda: export.Export)
+    grootboekrekening = graphene.Field(lambda: grootboekrekening.Grootboekrekening)
+    journaalpost = graphene.Field(lambda: journaalpost.Journaalpost)
+    organisatie = graphene.Field(lambda: organisatie.Organisatie)
+    rubriek = graphene.Field(lambda: rubriek.Rubriek)
+    transaction = graphene.Field(lambda: bank_transaction.BankTransaction)
 
     @classmethod
     def _resolve_snapshot(cls, root, entity_type: str, Model):
@@ -57,62 +55,62 @@ class GebruikersActiviteitSnapshot(graphene.ObjectType):
 
     @classmethod
     def resolve_afspraak(cls, root, _info):
-        return cls._resolve_snapshot(root, "afspraak", Afspraak)
+        return cls._resolve_snapshot(root, "afspraak", afspraak.Afspraak)
 
     @classmethod
     def resolve_burger(cls, root, _info):
-        return cls._resolve_snapshot(root, "burger", Gebruiker)
+        return cls._resolve_snapshot(root, "burger", gebruiker.Gebruiker)
 
     @classmethod
     def resolve_configuratie(cls, root, _info):
-        return cls._resolve_snapshot(root, "configuratie", Configuratie)
+        return cls._resolve_snapshot(root, "configuratie", configuratie.Configuratie)
 
     @classmethod
     def resolve_customer_statement_message(cls, root, _info):
         return cls._resolve_snapshot(
-            root, "customer_statement_message", CustomerStatementMessage
+            root, "customer_statement_message", customer_statement_message.CustomerStatementMessage
         )
 
     @classmethod
     def resolve_export(cls, root, _info):
-        return cls._resolve_snapshot(root, "export", Export)
+        return cls._resolve_snapshot(root, "export", export.Export)
 
     @classmethod
     def resolve_grootboekrekening(cls, root, _info):
-        return cls._resolve_snapshot(root, "grootboekrekening", Grootboekrekening)
+        return cls._resolve_snapshot(root, "grootboekrekening", grootboekrekening.Grootboekrekening)
 
     @classmethod
     def resolve_journaalpost(cls, root, _info):
-        return cls._resolve_snapshot(root, "journaalpost", Journaalpost)
+        return cls._resolve_snapshot(root, "journaalpost", journaalpost.Journaalpost)
 
     @classmethod
     def resolve_organisatie(cls, root, _info):
-        return cls._resolve_snapshot(root, "organisatie", Organisatie)
+        return cls._resolve_snapshot(root, "organisatie", organisatie.Organisatie)
 
     @classmethod
     def resolve_rubriek(cls, root, _info):
-        return cls._resolve_snapshot(root, "rubriek", Rubriek)
+        return cls._resolve_snapshot(root, "rubriek", rubriek.Rubriek)
 
     @classmethod
     def resolve_transaction(cls, root, _info):
-        return cls._resolve_snapshot(root, "transaction", BankTransaction)
+        return cls._resolve_snapshot(root, "transaction", bank_transaction.BankTransaction)
 
 
 class GebruikersActiviteitEntity(graphene.ObjectType):
     entityType = graphene.String()
     entityId = graphene.Int()
 
-    afspraak = graphene.Field(lambda: Afspraak)
-    burger = graphene.Field(lambda: Gebruiker)
-    configuratie = graphene.Field(lambda: Configuratie)
-    customer_statement_message = graphene.Field(lambda: CustomerStatementMessage)
-    export = graphene.Field(lambda: Export)
-    grootboekrekening = graphene.Field(lambda: Grootboekrekening)
-    journaalpost = graphene.Field(lambda: Journaalpost)
-    organisatie = graphene.Field(lambda: Organisatie)
-    rekening = graphene.Field(lambda: Rekening)
-    rubriek = graphene.Field(lambda: Rubriek)
-    transaction = graphene.Field(lambda: BankTransaction)
+    afspraak = graphene.Field(lambda: afspraak.Afspraak)
+    burger = graphene.Field(lambda: gebruiker.Gebruiker)
+    configuratie = graphene.Field(lambda: configuratie.Configuratie)
+    customer_statement_message = graphene.Field(lambda: customer_statement_message.CustomerStatementMessage)
+    export = graphene.Field(lambda: export.Export)
+    grootboekrekening = graphene.Field(lambda: grootboekrekening.Grootboekrekening)
+    journaalpost = graphene.Field(lambda: journaalpost.Journaalpost)
+    organisatie = graphene.Field(lambda: organisatie.Organisatie)
+    rekening = graphene.Field(lambda: rekening.Rekening)
+    rubriek = graphene.Field(lambda: rubriek.Rubriek)
+    transaction = graphene.Field(lambda: bank_transaction.BankTransaction)
 
     @classmethod
     async def _resolve_entity(cls, root, entity_type: str, dataloader_name: str):

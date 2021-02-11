@@ -4,6 +4,7 @@ from flask import request
 
 import hhb_backend.graphql.models.afspraak as afspraak
 import hhb_backend.graphql.models.rekening as rekening
+import hhb_backend.graphql.models.gebruikersactiviteit as gebruikersactiviteit
 
 
 class Gebruiker(graphene.ObjectType):
@@ -22,6 +23,7 @@ class Gebruiker(graphene.ObjectType):
     plaatsnaam = graphene.String()
     rekeningen = graphene.List(lambda: rekening.Rekening)
     afspraken = graphene.List(lambda: afspraak.Afspraak)
+    gebruikersactiviteiten = graphene.List(lambda: gebruikersactiviteit.GebruikersActiviteit)
 
     def resolve_iban(root, info):
         rekeningen = Gebruiker.resolve_rekeningen(root, info)
@@ -35,3 +37,6 @@ class Gebruiker(graphene.ObjectType):
 
     async def resolve_afspraken(root, info):
         return await request.dataloader.afspraken_by_gebruiker.load(root.get('id')) or []
+
+    async def resolve_gebruikersactiviteiten(root, info):
+        return request.dataloader.gebruikersactiviteiten_by_gebruikers.get_by_id(root.get('id')) or []
