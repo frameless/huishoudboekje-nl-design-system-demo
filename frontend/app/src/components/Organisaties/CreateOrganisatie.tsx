@@ -123,8 +123,7 @@ const CreateOrganisatie = () => {
 							<Stack spacing={2} direction={["column", "row"]}>
 								<Stack spacing={1} flex={1}>
 									<FormLabel htmlFor={"kvkNumber"}>{t("forms.organizations.fields.kvkNumber")}</FormLabel>
-									<Tooltip label={t("forms.organizations.tooltips.kvkNumber")} aria-label={t("forms.organizations.fields.kvkNumber")} hasArrow
-									         placement={isMobile ? "top" : "left"}>
+									<Tooltip label={t("forms.organizations.tooltips.kvkNumber")} aria-label={t("forms.organizations.fields.kvkNumber")} placement={isMobile ? "top" : "left"}>
 										<Input isInvalid={isInvalid(kvkNumber)} {...kvkNumber.bind} id="kvkNumber" />
 									</Tooltip>
 								</Stack>
@@ -160,8 +159,7 @@ const CreateOrganisatie = () => {
 							<Stack spacing={2} direction={["column", "row"]}>
 								<Stack spacing={1} flex={1}>
 									<FormLabel htmlFor={"zipcode"}>{t("forms.organizations.fields.zipcode")}</FormLabel>
-									<Tooltip label={t("forms.organizations.tooltips.zipcode")} aria-label={t("forms.organizations.fields.zipcode")} hasArrow
-									         placement={isMobile ? "top" : "left"}>
+									<Tooltip label={t("forms.organizations.tooltips.zipcode")} aria-label={t("forms.organizations.fields.zipcode")} placement={isMobile ? "top" : "left"}>
 										<Input isInvalid={isInvalid(zipcode)} {...zipcode.bind} id="zipcode" />
 									</Tooltip>
 								</Stack>
