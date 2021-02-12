@@ -158,7 +158,6 @@ export type CreateGebruikerRekening = {
   __typename?: 'CreateGebruikerRekening';
   ok?: Maybe<Scalars['Boolean']>;
   rekening?: Maybe<Rekening>;
-  gebruiker?: Maybe<Gebruiker>;
 };
 
 /** Create a Journaalpost with an Afspraak */
@@ -262,7 +261,6 @@ export type DeleteGebruikerRekening = {
   __typename?: 'DeleteGebruikerRekening';
   ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Rekening>;
-  gebruiker?: Maybe<Gebruiker>;
 };
 
 /** Delete journaalpost by id  */
@@ -282,7 +280,6 @@ export type DeleteOrganisatieRekening = {
   __typename?: 'DeleteOrganisatieRekening';
   ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Rekening>;
-  organisatie?: Maybe<Organisatie>;
 };
 
 export type DeleteRubriek = {
@@ -1636,11 +1633,7 @@ export type GetAfspraakFormDataQuery = (
     & OrganisatieFragment
   )>>>, afspraken?: Maybe<Array<Maybe<(
     { __typename?: 'Afspraak' }
-    & Pick<Afspraak, 'id' | 'kenmerk'>
-    & { tegenRekening?: Maybe<(
-      { __typename?: 'Rekening' }
-      & Pick<Rekening, 'id' | 'iban'>
-    )> }
+    & AfspraakFragment
   )>>> }
 );
 
@@ -3149,16 +3142,12 @@ export const GetAfspraakFormDataDocument = gql`
     ...Organisatie
   }
   afspraken {
-    id
-    kenmerk
-    tegenRekening {
-      id
-      iban
-    }
+    ...Afspraak
   }
 }
     ${RubriekFragmentDoc}
-${OrganisatieFragmentDoc}`;
+${OrganisatieFragmentDoc}
+${AfspraakFragmentDoc}`;
 
 /**
  * __useGetAfspraakFormDataQuery__

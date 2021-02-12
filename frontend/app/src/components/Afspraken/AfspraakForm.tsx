@@ -1,5 +1,25 @@
-import {WarningIcon} from "@chakra-ui/icons";
-import {Box, BoxProps, Button, Divider, FormLabel, Input, InputGroup, InputLeftElement, InputRightElement, Stack, Switch, Text, useToast} from "@chakra-ui/react";
+import {SearchIcon, WarningIcon} from "@chakra-ui/icons";
+import {
+	Badge,
+	Box,
+	BoxProps,
+	Button,
+	Divider,
+	FormLabel,
+	IconButton,
+	Input,
+	InputGroup,
+	InputLeftElement,
+	InputRightElement,
+	Stack,
+	Switch,
+	Table,
+	Tbody,
+	Td,
+	Text,
+	Tr,
+	useToast
+} from "@chakra-ui/react";
 import moment from "moment";
 import "moment-recur-ts";
 import React, {useEffect, useState} from "react";
@@ -7,12 +27,14 @@ import DatePicker from "react-datepicker";
 import {useInput, useNumberInput, useToggle, Validators} from "react-grapple";
 import {UseInput} from "react-grapple/dist/hooks/useInput";
 import {Trans, useTranslation} from "react-i18next";
+import {NavLink} from "react-router-dom";
 import Select from "react-select";
+import Routes from "../../config/routes";
 import {Afspraak, Gebruiker, Organisatie, Rekening, Rubriek, useGetAfspraakFormDataQuery} from "../../generated/graphql";
 import {AfspraakPeriod, AfspraakType, IntervalType} from "../../models/models";
 import Queryable from "../../utils/Queryable";
 import generateSampleOverschrijvingen from "../../utils/sampleOverschrijvingen";
-import {formatBurgerName, formatIBAN, useReactSelectStyles, XInterval} from "../../utils/things";
+import {currencyFormat2, formatBurgerName, formatIBAN, intervalString, useReactSelectStyles, XInterval} from "../../utils/things";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
 import RadioButtonGroup from "../Layouts/RadioButtons/RadioButtonGroup";
 import Section from "../Layouts/Section";
@@ -29,7 +51,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 	}
 
 	const [isSubmitted, setSubmitted] = useState<boolean>(false);
-	const [zoektermDuplicateFound, setZoektermDuplicateFound] = useState<boolean>(false);
+	const [zoektermDuplicates, setZoektermDuplicates] = useState<Afspraak[]>([]);
 
 	const $afspraakFormData = useGetAfspraakFormDataQuery({
 		fetchPolicy: "no-cache"
@@ -130,7 +152,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 	useEffect(() => {
 		const zoektermString = String(zoekterm.value);
 		if (zoektermString.length === 0) {
-			setZoektermDuplicateFound(false);
+			setZoektermDuplicates([]);
 		}
 		else {
 			const dupesByZoekterm: Afspraak[] = ($afspraakFormData.data?.afspraken || []).filter(a => {
@@ -149,13 +171,14 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 				return false;
 			});
 
-			const dupesFound = dupesByZoekterm.length > 0;
-			setZoektermDuplicateFound(dupesFound);
-			if (dupesFound) {
+			setZoektermDuplicates(dupesByZoekterm);
+			if (dupesByZoekterm.length > 0) {
 				toggleAutomatischBoeken(false);
 			}
 		}
-	}, [zoekterm.value, $afspraakFormData.data, afspraak, rekeningId.value, toggleAutomatischBoeken, automatischBoeken]);
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [zoekterm.value, $afspraakFormData.data, afspraak, rekeningId.value]);
 
 	const onSubmit = (e) => {
 		e.preventDefault();
@@ -204,7 +227,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 			interval: isRecurring ? XInterval.create(intervalType.value!, intervalNumber.value) : XInterval.empty,
 			aantalBetalingen: isContinuous ? 1 : nTimes.value,
 			actief: isActive,
-			automatischeIncasso: afspraakType === AfspraakType.Expense ? isAutomatischeIncasso : null,
+			automatischeIncasso: afspraakType === AfspraakType.Expense ? isAutomatischeIncasso : false,
 			automatischBoeken,
 		});
 	};
@@ -308,7 +331,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 		{key: "year", label: t("interval.year", {count: parseInt(intervalNumber.value)}), value: IntervalType.Year},
 	];
 
-	const automatischBoekenPossible = zoekterm.value.length > 0 && !zoektermDuplicateFound;
+	const automatischBoekenPossible = (zoekterm.value.length > 0 && zoektermDuplicates.length === 0);
 	return (
 		<Stack spacing={5} as={"form"} onSubmit={onSubmit} {...props}>
 			<Section>
@@ -417,16 +440,40 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 									<FormLabel htmlFor={"zoekterm"}>{t("forms.agreements.fields.zoekterm")}</FormLabel>
 									<InputGroup>
 										<Input isInvalid={isInvalid(zoekterm)} {...zoekterm.bind} id="searchTerm" />
-										{zoektermDuplicateFound && <InputRightElement> <WarningIcon color={"orange.500"} /> </InputRightElement>}
+										{zoektermDuplicates.length > 0 && <InputRightElement> <WarningIcon color={"orange.500"} /> </InputRightElement>}
 									</InputGroup>
-									{zoektermDuplicateFound && <Text fontSize={"sm"}>{t("forms.agreements.fields.searchtermDuplicateFound")}</Text>}
+									{zoektermDuplicates.length > 0 && (
+										<Stack spacing={1}>
+											<Text fontSize={"sm"}>{t("forms.agreements.fields.searchtermDuplicateFound", {count: zoektermDuplicates.length})}</Text>
+											<Table>
+												<Tbody>
+													{zoektermDuplicates.map(a => (
+														<Tr key={a.id}>
+															<Td>{formatBurgerName(a.gebruiker)}</Td>
+															<Td>
+																<Stack spacing={1} flex={1} alignItems={"flex-end"}>
+																	<Box textAlign={"right"} color={a.bedrag < 0 ? "orange.500" : "currentcolor"}>{currencyFormat2().format(a.bedrag)}</Box>
+																	<Badge fontSize={"10px"}>{intervalString(a.interval, t)}</Badge>
+																</Stack>
+															</Td>
+															<Td width={"50px"}>
+																<IconButton as={NavLink} to={Routes.Burger(a.gebruiker?.id)} variant={"ghost"} size={"sm"} icon={<SearchIcon />}
+																            aria-label={t("actions.edit")} />
+															</Td>
+														</Tr>
+													))}
+												</Tbody>
+											</Table>
+										</Stack>
+									)}
 								</>)} />
 							</Stack>
 							<Stack direction={["column", "row"]} spacing={1}>
 								<Stack isInline={true} alignItems={"center"} spacing={3}>
 									<Switch isChecked={automatischBoeken} isDisabled={!automatischBoekenPossible} onChange={() => toggleAutomatischBoeken()}
 									        id={"automatischBoeken"} />
-									<FormLabel mb={0} htmlFor={"automatischBoeken"}>{t("forms.agreements.fields.automatischBoeken")}</FormLabel>
+									<FormLabel mb={0} htmlFor={"automatischBoeken"}
+									           color={automatischBoekenPossible ? "currentcolor" : "gray.500"}>{t("forms.agreements.fields.automatischBoeken")}</FormLabel>
 								</Stack>
 							</Stack>
 						</FormRight>

@@ -148,14 +148,10 @@ export const GetAfspraakFormDataQuery = gql`
             ...Organisatie
         }
         afspraken{
-            id
-            kenmerk
-            tegenRekening{
-                id
-                iban
-            }
+            ...Afspraak
         }
     }
+    ${AfspraakFragment}
     ${RubriekFragment}
     ${OrganisatieFragment}
 `;
