@@ -1725,7 +1725,7 @@ export type GetGebeurtenissenQuery = (
         )> }
       )>, rekening?: Maybe<(
         { __typename?: 'Rekening' }
-        & Pick<Rekening, 'id'>
+        & Pick<Rekening, 'id' | 'iban' | 'rekeninghouder'>
       )> }
     )>>>, meta?: Maybe<(
       { __typename?: 'GebruikersActiviteitMeta' }
@@ -3334,6 +3334,8 @@ export const GetGebeurtenissenDocument = gql`
       }
       rekening {
         id
+        iban
+        rekeninghouder
       }
     }
     meta {

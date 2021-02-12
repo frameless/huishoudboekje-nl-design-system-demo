@@ -246,6 +246,8 @@ export const GetGebeurtenissenQuery = gql`
                 }
                 rekening {
                     id
+                    iban
+                    rekeninghouder
                 }
             }
             #            snapshotBefore {
