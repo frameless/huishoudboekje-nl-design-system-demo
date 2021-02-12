@@ -5,6 +5,7 @@ import {GebruikersActiviteit} from "../../generated/graphql";
 import CreateAfspraak from "./AuditLogItems/CreateAfspraak";
 import CreateGebruiker from "./AuditLogItems/CreateGebruiker";
 import CreateJournaalpostAfspraak from "./AuditLogItems/CreateJournaalpostAfspraak";
+import CreateOrganisatie from "./AuditLogItems/CreateOrganisatie";
 import DeleteJournaalpostAfspraak from "./AuditLogItems/DeleteJournaalpostAfspraak";
 import UpdateAfspraak from "./AuditLogItems/UpdateAfspraak";
 import UpdateGebruiker from "./AuditLogItems/UpdateGebruiker";
@@ -12,6 +13,7 @@ import ViewAfspraak from "./AuditLogItems/ViewAfspraak";
 import ViewGebruikers from "./AuditLogItems/ViewGebruikers";
 import ViewGebruiker from "./AuditLogItems/ViewGebruiker";
 import UpdateRekening from "./AuditLogItems/UpdateRekening";
+import UpdateOrganisatie from "./AuditLogItems/UpdateOrganisatie";
 
 const AuditLogText: React.FC<TextProps & { g: GebruikersActiviteit }> = ({g, ...props}) => {
 	const {t} = useTranslation();
@@ -29,8 +31,8 @@ const AuditLogText: React.FC<TextProps & { g: GebruikersActiviteit }> = ({g, ...
 			updateAfspraak: () => <UpdateAfspraak g={g} />,
 			// deleteAfspraak: () => <>deleteAfspraak</>,
 			updateRekening: () => <UpdateRekening g={g} />,
-			// createOrganisatie: () => <>createOrganisatie</>,
-			// updateOrganisatie: () => <>updateOrganisatie</>,
+			createOrganisatie: () => <CreateOrganisatie g={g} />,
+			updateOrganisatie: () => <UpdateOrganisatie g={g} />,
 			// deleteOrganisatie: () => <>deleteOrganisatie</>,
 			// createGebruikerRekening: () => <>createGebruikerRekening</>,
 			// deleteGebruikerRekening: () => <>deleteGebruikerRekening</>,
