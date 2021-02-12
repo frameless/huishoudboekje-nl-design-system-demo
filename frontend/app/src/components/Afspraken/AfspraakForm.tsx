@@ -227,7 +227,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 			interval: isRecurring ? XInterval.create(intervalType.value!, intervalNumber.value) : XInterval.empty,
 			aantalBetalingen: isContinuous ? 1 : nTimes.value,
 			actief: isActive,
-			automatischeIncasso: afspraakType === AfspraakType.Expense ? isAutomatischeIncasso : false,
+			automatischeIncasso: afspraakType === AfspraakType.Expense ? isAutomatischeIncasso : undefined,
 			automatischBoeken,
 		});
 	};
