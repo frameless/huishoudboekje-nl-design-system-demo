@@ -74,7 +74,7 @@ scenarios:
         start_datum: "2019-01-01"
         actief: true
       - aantal: 1
-        rubriek: "Elektra"
+        rubriek: "Elektriciteit"
         beschrijving: "Elektriciteit"
         organisatie:
           kvk: "05082820"
@@ -124,13 +124,13 @@ scenarios:
         credit: true
         automatische_incasso: false
         interval: "P0Y1M0W0D"
-        start_datum: "2021-01-01"
+        start_datum: "2019-01-07"
         aantal_betalingen: 16
         actief: true
       - aantal: 1
         rubriek: "Inkomsten"
         beschrijving: "Loon"
-        # TODO: Veilig Zorgen
+        # TODO: add organisation Veilig Zorgen
         organisatie:
           kvk: "35012085"
         bedrag: 166912
@@ -174,11 +174,22 @@ scenarios:
         start_datum: "2019-01-01"
         actief: true
       - aantal: 1
-        rubriek: "Elektra"
+        rubriek: "Elektriciteit"
         beschrijving: "Elektriciteit"
         organisatie:
           kvk: "24324527"
         bedrag: 12200
+        credit: false
+        automatische_incasso: true
+        interval: "P0Y1M0W0D"
+        start_datum: "2019-01-01"
+        actief: true
+      - aantal: 1
+        rubriek: "Verzekeringen"
+        beschrijving: "Zorgverzekering"
+        organisatie:
+          kvk: "41168265"
+        bedrag: 18134
         credit: false
         automatische_incasso: true
         interval: "P0Y1M0W0D"
