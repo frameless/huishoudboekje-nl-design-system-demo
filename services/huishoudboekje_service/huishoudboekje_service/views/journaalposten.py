@@ -3,24 +3,49 @@ from flask import request, abort, make_response
 from models import Journaalpost
 from core_service.views.hhb_view import HHBView
 
+
 class JournaalpostView(HHBView):
     """ Methods for /organisaties/ path """
 
     hhb_model = Journaalpost
     validation_data = {
-        "type": "object",
-        "properties": {
-            "afspraak_id": {
-                "type": "integer",
+        "definitions": {
+            "one_or_more_journaalposten": {
+                "anyOf": [
+                    {
+                        "type": "object",
+                        "$ref": "#/definitions/journaalpost"
+                    },
+                    {
+                        "type": "array",
+                        "items": {"$ref": "#/definitions/journaalpost"}
+                    }
+                ]
             },
-            "transaction_id": {
-                "type": "integer",
-            },
-            "grootboekrekening_id": {
-                "type": "string",
-            },
+            "journaalpost": {
+                "type": "object",
+                "required": [
+                    "grootboekrekening_id",
+                    "transaction_id",
+                    "is_automatisch_geboekt"
+                ],
+                "properties": {
+                    "afspraak_id": {
+                        "type": "integer"
+                    },
+                    "grootboekrekening_id": {
+                        "type": "string"
+                    },
+                    "transaction_id": {
+                        "type": "integer"
+                    },
+                    "is_automatisch_geboekt": {
+                        "type": "boolean"
+                    }
+                }
+            }
         },
-        "required": []
+        "$ref": "#/definitions/one_or_more_journaalposten"
     }
 
     def add_filter_transactions(self):
