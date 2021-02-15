@@ -1,5 +1,5 @@
 from core_service.database import db
-from sqlalchemy import Column, Integer, String, Sequence, ForeignKey, Date, Boolean
+from sqlalchemy import Column, Index, Integer, String, Sequence, ForeignKey, Date, Boolean
 from sqlalchemy.orm import relationship
 
 
@@ -21,3 +21,4 @@ class BankTransaction(db.Model):
     tegen_rekening = Column(String)
     is_credit = Column(Boolean)
     bedrag = Column(Integer)
+    is_geboekt = Column(Boolean, index=True, default=False)

@@ -1,38 +1,26 @@
 # TODO unify naming, filenames are singular, loader names are plural
 from flask import request
 
-from .afspraken_loader import AfsprakenByIdLoader, AfsprakenByGebruikerLoader
-from .bank_transactions_loader import (
-    BankTransactionByIdLoader,
-    BankTransactionByCsmLoader,
-)
+from .afspraken_loader import AfsprakenByGebruikerLoader, AfsprakenByIdLoader
+from .bank_transactions_loader import (BankTransactionByCsmLoader, BankTransactionByIdLoader,
+                                       BankTransactionByIsGeboektLoader)
 from .configuratie_loader import ConfiguratieByIdLoader
 from .csm_loader import CSMsByIdLoader
 from .exports_loader import ExportsByIdLoader
 from .gebruiker_loader import GebruikersByIdLoader
-from .gebruikersactiviteit_loader import (
-    GebruikersActiviteitenByIdLoader,
-    GebruikersActiviteitenByGebruikersLoader,
-    GebruikersActiviteitenByAfsprakenLoader,
-)
+from .gebruikersactiviteit_loader import (GebruikersActiviteitenByAfsprakenLoader,
+                                          GebruikersActiviteitenByGebruikersLoader, GebruikersActiviteitenByIdLoader)
 from .grootboekrekening_loader import GrootboekrekeningenByIdLoader
 from .journaalpost_loader import (
     JournaalpostenByIdLoader,
     JournaalpostenByTransactionLoader,
 )
-from .organisatie_loader import OrganisatieByIdLoader, KvKDetailsLoader
-from .overschrijving_loader import (
-    OverschrijvingByIdLoader,
-    OverschrijvingByAfspraakLoader,
-    OverschrijvingByExportLoader,
-)
-from .rekeningen_loader import (
-    RekeningenByIdLoader,
-    RekeningenByGebruikerLoader,
-    RekeningenByOrganisatieLoader,
-    RekeningenByIbanLoader,
-)
-from .rubrieken_loader import RubriekByIdLoader, RubriekByGrootboekrekeningLoader
+from .organisatie_loader import KvKDetailsLoader, OrganisatieByIdLoader
+from .overschrijving_loader import (OverschrijvingByAfspraakLoader, OverschrijvingByExportLoader,
+                                    OverschrijvingByIdLoader)
+from .rekeningen_loader import (RekeningenByGebruikerLoader, RekeningenByIbanLoader, RekeningenByIdLoader,
+                                RekeningenByOrganisatieLoader)
+from .rubrieken_loader import RubriekByGrootboekrekeningLoader, RubriekByIdLoader
 
 
 class HHBDataLoader:
@@ -67,6 +55,7 @@ class HHBDataLoader:
         self.csms_by_id = CSMsByIdLoader(loop=loop)
         self.bank_transactions_by_id = BankTransactionByIdLoader(loop=loop)
         self.bank_transactions_by_csm = BankTransactionByCsmLoader(loop=loop)
+        self.bank_transactions_by_is_geboekt = BankTransactionByIsGeboektLoader(loop=loop)
 
         self.grootboekrekeningen_by_id = GrootboekrekeningenByIdLoader(loop=loop)
         self.journaalposten_by_id = JournaalpostenByIdLoader(loop=loop)
