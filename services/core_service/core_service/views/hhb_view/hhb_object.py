@@ -1,3 +1,4 @@
+import json
 import logging
 
 from flask import request, abort, make_response
@@ -19,6 +20,9 @@ class HHBObject():
         if object_id:
             self.get_or_404(object_id)
             response_code = 200
+        elif type(request.json) == list:
+            self.hhb_object = []
+            response_code = 201
         else:
             self.hhb_object = self.hhb_model()
             db.session.add(self.hhb_object)
@@ -34,8 +38,16 @@ class HHBObject():
 
     def update_using_request_data(self):
         """ Add data to object based on request input """
-        for key, value in request.json.items():
-            setattr(self.hhb_object, key, value)
+        if type(request.json) == list:
+            for item in request.json:
+                hhb_object = self.hhb_model()
+                for key, value in item.items():
+                    setattr(hhb_object, key, value)
+                db.session.add(hhb_object)
+                self.hhb_object.append(hhb_object)
+        else:
+            for key, value in request.json.items():
+                setattr(self.hhb_object, key, value)
 
     def commit_changes(self):
         """ Try to commit database changes """
@@ -53,4 +65,6 @@ class HHBObject():
     @property
     def json(self):
         """ Convert object to json dict """
+        if type(self.hhb_object) == list:
+            return [row2dict(o) for o in self.hhb_object]
         return row2dict(self.hhb_object)

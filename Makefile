@@ -3,7 +3,7 @@ NAMESPACE := huishoudboekje
 RELEASE := huishoudboekje
 SERVICE_MODULES := $(patsubst services/%/Makefile,%,$(wildcard services/*/Makefile))
 THEME := sloothuizen
-SERVICE_CONTEXT_IMAGES := $(SERVICE_MODULES)
+SERVICE_CONTEXT_IMAGES := $(patsubst services/%/Dockerfile,%,$(wildcard services/*/Dockerfile))
 DIRECT_CONTEXT_IMAGES := $(patsubst %/Dockerfile,%,$(wildcard */Dockerfile))
 IMAGES := $(DIRECT_CONTEXT_IMAGES) $(SERVICE_CONTEXT_IMAGES)
 
