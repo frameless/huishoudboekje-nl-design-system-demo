@@ -10,7 +10,7 @@ import GebeurtenissenTableView from "./GebeurtenissenTableView";
 const Gebeurtenissen = () => {
 	const {t} = useTranslation();
 	const $gebeurtenissen = useGetGebeurtenissenQuery({
-		fetchPolicy: "no-cache"
+		fetchPolicy: "cache-first"
 	});
 
 	return (

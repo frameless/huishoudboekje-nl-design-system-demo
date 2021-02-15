@@ -249,6 +249,9 @@ export const GetGebeurtenissenQuery = gql`
                     iban
                     rekeninghouder
                 }
+                customerStatementMessage{
+                    id
+                }
             }
             #            snapshotBefore {
             #                burger {

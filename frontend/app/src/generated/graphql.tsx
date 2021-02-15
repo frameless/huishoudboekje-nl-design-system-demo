@@ -507,6 +507,7 @@ export type RootMutation = {
   updateConfiguratie?: Maybe<UpdateConfiguratie>;
   deleteConfiguratie?: Maybe<DeleteConfiguratie>;
   createExportOverschrijvingen?: Maybe<CreateExportOverschrijvingen>;
+  startAutomatischBoeken?: Maybe<StartAutomatischBoeken>;
 };
 
 
@@ -889,6 +890,12 @@ export type Rubriek = {
   id?: Maybe<Scalars['Int']>;
   naam?: Maybe<Scalars['String']>;
   grootboekrekening?: Maybe<Grootboekrekening>;
+};
+
+export type StartAutomatischBoeken = {
+  __typename?: 'StartAutomatischBoeken';
+  ok?: Maybe<Scalars['Boolean']>;
+  journaalposten?: Maybe<Array<Maybe<Journaalpost>>>;
 };
 
 export type UpdateAfspraak = {
@@ -1726,6 +1733,9 @@ export type GetGebeurtenissenQuery = (
       )>, rekening?: Maybe<(
         { __typename?: 'Rekening' }
         & Pick<Rekening, 'id' | 'iban' | 'rekeninghouder'>
+      )>, customerStatementMessage?: Maybe<(
+        { __typename?: 'CustomerStatementMessage' }
+        & Pick<CustomerStatementMessage, 'id'>
       )> }
     )>>>, meta?: Maybe<(
       { __typename?: 'GebruikersActiviteitMeta' }
@@ -3336,6 +3346,9 @@ export const GetGebeurtenissenDocument = gql`
         id
         iban
         rekeninghouder
+      }
+      customerStatementMessage {
+        id
       }
     }
     meta {
