@@ -14,6 +14,7 @@ from .organisaties.delete_organisatie import DeleteOrganisatie
 from .afspraken.create_afspraak import CreateAfspraak
 from .afspraken.update_afspraak import UpdateAfspraak
 from .afspraken.delete_afspraak import DeleteAfspraak
+from .overschrijvingen.start_automatisch_boeken import StartAutomatischBoeken
 from .rekeningen.update_rekening import UpdateRekening
 from .rekeningen.create_gebruiker_rekening import CreateGebruikerRekening
 from .rekeningen.delete_gebruiker_rekening import DeleteGebruikerRekening
@@ -59,3 +60,4 @@ class RootMutation(graphene.ObjectType):
     deleteConfiguratie = DeleteConfiguratie.Field()
 
     createExportOverschrijvingen = CreateExportOverschrijvingen.Field()
+    startAutomatischBoeken = StartAutomatischBoeken.Field()
