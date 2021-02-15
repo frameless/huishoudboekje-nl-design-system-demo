@@ -9,7 +9,7 @@ setup(
     description='HuishoudBoekje Sample Data Generator',
     install_requires=[
         'marshmallow_dataclass==8.3.0',
-        'schwifty==2020.11.0',
+        'schwifty>=2020.11.0',
         'python_dateutil==2.8.1',
         'PyYAML==5.3.1',
         'Requests==2.25.1',

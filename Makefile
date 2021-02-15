@@ -1,6 +1,7 @@
 
 NAMESPACE := huishoudboekje
 RELEASE := huishoudboekje
+PYTHON_MODULES := $(patsubst %/setup.py,%,$(wildcard */*/setup.py) $(wildcard */setup.py))
 SERVICE_MODULES := $(patsubst services/%/Makefile,%,$(wildcard services/*/Makefile))
 THEME := sloothuizen
 SERVICE_CONTEXT_IMAGES := $(patsubst services/%/Dockerfile,%,$(wildcard services/*/Dockerfile))
@@ -68,6 +69,9 @@ helm/charts/%: helm/charts/%/Chart.lock
 
 preparedb:
 	for service in $(SERVICE_MODULES); do make -C services/$$service $@; done
+
+requirements:
+	for python_module in $(PYTHON_MODULES); do make -C $$python_module $@; done
 
 FORCE:
 
