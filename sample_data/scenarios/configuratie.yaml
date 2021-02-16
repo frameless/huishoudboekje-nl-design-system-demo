@@ -1,10 +1,10 @@
 configuratie:
   - id: derdengeldenrekening_rekeninghouder
-    waarde: "Gemeente Utrecht Huishoudboekje"
+    waarde: "Gemeente Sloothuizen Huishoudboekje"
   - id: derdengeldenrekening_iban
-    waarde: "NL49BNGH0285171712"
+    waarde: "NL36ABNA5632579034"
   - id: derdengeldenrekening_bic
-    waarde: "BNGHNL2G"
+    waarde: "ABNANL2A"
 
 rubrieken:
   - id: 1
