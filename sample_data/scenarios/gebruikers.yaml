@@ -5,6 +5,7 @@ scenarios:
     gezin: 1
     afspraken:
       # inkomsten
+      # TODO add zoekterm
       - aantal: 1
         rubriek: "Inkomsten"
         beschrijving: "Loon"
