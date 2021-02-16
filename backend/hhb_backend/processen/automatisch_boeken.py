@@ -5,7 +5,7 @@ import hhb_backend.graphql as graphql
 import hhb_backend.graphql.dataloaders as dataloaders
 
 
-async def automatisch_boeken(customer_statement_message_id: int):
+async def automatisch_boeken(customer_statement_message_id: int = None):
     if customer_statement_message_id is not None:
         transactions = [t
                         for t in (await dataloaders.hhb_dataloader().bank_transactions_by_csm.load(customer_statement_message_id))

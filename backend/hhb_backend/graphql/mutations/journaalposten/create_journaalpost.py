@@ -89,7 +89,6 @@ class CreateJournaalpostAfspraak(graphene.Mutation):
         rubriek = await hhb_dataloader().rubrieken_by_id.load(afspraak["rubriek_id"])
         input["grootboekrekening_id"] = rubriek["grootboekrekening_id"]
 
-        # TODO add post to transaction service  to also update is_geboekt
         response = requests.post(
             f"{settings.HHB_SERVICES_URL}/journaalposten/",
             json=input
