@@ -24,10 +24,6 @@ RUN useradd --home-dir /app --create-home --shell /bin/bash app
 USER app
 WORKDIR /app
 
-ENV VIRTUAL_ENV=/app
-RUN python3 -m venv $VIRTUAL_ENV
-ENV PATH="$VIRTUAL_ENV/bin:$PATH"
-
 # install the dependencies only for fast rebuilds
 COPY --chown=app:app log_service/setup.py ./
 RUN mkdir -p core_service log_service models && \
