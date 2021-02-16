@@ -1460,6 +1460,21 @@ export type CreateExportOverschrijvingenMutation = (
   )> }
 );
 
+export type StartAutomatischBoekenMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type StartAutomatischBoekenMutation = (
+  { __typename?: 'RootMutation' }
+  & { startAutomatischBoeken?: Maybe<(
+    { __typename?: 'StartAutomatischBoeken' }
+    & Pick<StartAutomatischBoeken, 'ok'>
+    & { journaalposten?: Maybe<Array<Maybe<(
+      { __typename?: 'Journaalpost' }
+      & Pick<Journaalpost, 'id'>
+    )>>> }
+  )> }
+);
+
 export type GetAllBurgersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -2747,6 +2762,40 @@ export function useCreateExportOverschrijvingenMutation(baseOptions?: Apollo.Mut
 export type CreateExportOverschrijvingenMutationHookResult = ReturnType<typeof useCreateExportOverschrijvingenMutation>;
 export type CreateExportOverschrijvingenMutationResult = Apollo.MutationResult<CreateExportOverschrijvingenMutation>;
 export type CreateExportOverschrijvingenMutationOptions = Apollo.BaseMutationOptions<CreateExportOverschrijvingenMutation, CreateExportOverschrijvingenMutationVariables>;
+export const StartAutomatischBoekenDocument = gql`
+    mutation startAutomatischBoeken {
+  startAutomatischBoeken {
+    ok
+    journaalposten {
+      id
+    }
+  }
+}
+    `;
+export type StartAutomatischBoekenMutationFn = Apollo.MutationFunction<StartAutomatischBoekenMutation, StartAutomatischBoekenMutationVariables>;
+
+/**
+ * __useStartAutomatischBoekenMutation__
+ *
+ * To run a mutation, you first call `useStartAutomatischBoekenMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useStartAutomatischBoekenMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [startAutomatischBoekenMutation, { data, loading, error }] = useStartAutomatischBoekenMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useStartAutomatischBoekenMutation(baseOptions?: Apollo.MutationHookOptions<StartAutomatischBoekenMutation, StartAutomatischBoekenMutationVariables>) {
+        return Apollo.useMutation<StartAutomatischBoekenMutation, StartAutomatischBoekenMutationVariables>(StartAutomatischBoekenDocument, baseOptions);
+      }
+export type StartAutomatischBoekenMutationHookResult = ReturnType<typeof useStartAutomatischBoekenMutation>;
+export type StartAutomatischBoekenMutationResult = Apollo.MutationResult<StartAutomatischBoekenMutation>;
+export type StartAutomatischBoekenMutationOptions = Apollo.BaseMutationOptions<StartAutomatischBoekenMutation, StartAutomatischBoekenMutationVariables>;
 export const GetAllBurgersDocument = gql`
     query getAllBurgers {
   gebruikers {

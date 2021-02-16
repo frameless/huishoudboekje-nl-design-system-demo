@@ -1,31 +1,65 @@
-import {Box, Divider, Heading, Stack, useBreakpointValue} from "@chakra-ui/react";
+import {ChevronDownIcon} from "@chakra-ui/icons";
+import {Box, IconButton, Menu, MenuButton, MenuItem, MenuList, Stack, useBreakpointValue, useToast} from "@chakra-ui/react";
 import React, {createContext} from "react";
 import {useTranslation} from "react-i18next";
-import {BankTransaction, useGetAllTransactionsQuery} from "../../../generated/graphql";
+import {BankTransaction, useGetAllTransactionsQuery, useStartAutomatischBoekenMutation} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import {dateFormat, sortBankTransactions} from "../../../utils/things";
 import DeadEndPage from "../../DeadEndPage";
 import Label from "../../Layouts/Label";
+import Page from "../../Layouts/Page";
 import Section from "../../Layouts/Section";
 import TransactieItem from "./TransactieItem";
 
-export const TransactionsContext = createContext<{ refetch: VoidFunction }>({
-	refetch: () => undefined
+export const TransactionsContext = createContext<{refetch: VoidFunction}>({
+	refetch: () => undefined,
 });
 
 const Transactions = () => {
 	const isMobile = useBreakpointValue([true, null, null, false]);
 	const {t} = useTranslation();
+	const toast = useToast();
 
 	const $transactions = useGetAllTransactionsQuery({
 		fetchPolicy: "no-cache",
 	});
+	const [$startAutomatischBoeken] = useStartAutomatischBoekenMutation();
+
+	const onClickStartBoekenButton = () => {
+		$startAutomatischBoeken()
+			.then(() => {
+				toast({
+					status: "success",
+					title: t("messages.automatischBoeken.successMessage"),
+					position: "top",
+					isClosable: true,
+				});
+				$transactions.refetch();
+			})
+			.catch(err => {
+				console.error(err);
+				toast({
+					position: "top",
+					status: "error",
+					variant: "solid",
+					description: t("messages.genericError.description"),
+					title: t("messages.genericError.title"),
+					isClosable: true,
+				});
+			});
+	};
 
 	return (
-		<Stack spacing={5}>
+		<Page title={t("forms.banking.sections.transactions.title")} menu={(
+			<Menu>
+				<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} data-cy={"actionsMenuButton"} />
+				<MenuList>
+					<MenuItem onClick={onClickStartBoekenButton}>{t("actions.startBoeken")}</MenuItem>
+				</MenuList>
+			</Menu>
+		)}>
 			<Section>
-
-				<Queryable query={$transactions}>{({bankTransactions}: { bankTransactions: BankTransaction[] }) => {
+				<Queryable query={$transactions}>{({bankTransactions}: {bankTransactions: BankTransaction[]}) => {
 					if (!bankTransactions || bankTransactions.length === 0) {
 						return (<DeadEndPage message={t("messages.transactions.addHint")} />);
 					}
@@ -36,19 +70,13 @@ const Transactions = () => {
 							...result,
 							[trDateAsString]: [
 								...(result[trDateAsString] || []),
-								t
-							]
+								t,
+							],
 						};
 					}, {});
 
 					return (
 						<TransactionsContext.Provider value={{refetch: $transactions.refetch}}>
-							<Stack direction={["column", "row"]} spacing={5}>
-								<Heading size={"md"}>{t("forms.banking.sections.transactions.title")}</Heading>
-							</Stack>
-
-							<Divider />
-
 							<Stack direction={"column"} spacing={5}>
 								<Box>
 									<Stack direction={"row"} alignItems={"center"} justifyContent={"center"}>
@@ -88,7 +116,7 @@ const Transactions = () => {
 				</Queryable>
 
 			</Section>
-		</Stack>
+		</Page>
 	);
 };
 

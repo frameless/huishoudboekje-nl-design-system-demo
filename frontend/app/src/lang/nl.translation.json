@@ -24,6 +24,9 @@
             "createSuccessMessage": "Exportbestand succesvol aangemaakt.",
             "noExportsInPeriod": "Er is geen exportbestand aangemaakt. Er zijn in deze periode geen overschrijvingen."
         },
+        "automatischBoeken": {
+            "successMessage": "Transacties worden nu automatisch verwerkt. Dit kan even duren."
+        },
         "transactions": {
             "addHint": "Voeg transacties toe door een bronbestand te importeren."
         },
@@ -79,6 +82,7 @@
         "add": "Toevoegen",
         "export": "Exporteren",
         "download": "Downloaden",
+        "startBoeken": "Verwerk alle transacties",
         "disconnect": "Koppeling verwijderen",
         "backToList": "Terug naar overzicht",
         "clearSearch": "Zoekopdracht wissen",
