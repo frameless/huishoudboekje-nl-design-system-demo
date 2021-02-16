@@ -3,10 +3,13 @@ from datetime import date
 
 import graphene
 from flask import request
+
 import hhb_backend.graphql.models.customer_statement_message as customer_statement_message_model
 import hhb_backend.graphql.models.journaalpost as journaalpost
 import hhb_backend.graphql.models.rekening as rekening
+import hhb_backend.graphql.models.afspraak as afspraak
 from hhb_backend.graphql.scalars.bedrag import Bedrag
+from hhb_backend.processen import automatisch_boeken
 
 
 class BankTransaction(graphene.ObjectType):
@@ -23,6 +26,7 @@ class BankTransaction(graphene.ObjectType):
     is_geboekt = graphene.Boolean()
 
     journaalpost = graphene.Field(lambda: journaalpost.Journaalpost)
+    suggesties = graphene.List(lambda: afspraak.Afspraak)
 
     def resolve_transactie_datum(root, info):
         value = root.get('transactie_datum')
@@ -39,7 +43,6 @@ class BankTransaction(graphene.ObjectType):
         if tegen_rekening:
             return await request.dataloader.rekeningen_by_iban.load(tegen_rekening)
 
-
     async def resolve_journaalpost(root, info):
         return await request.dataloader.journaalposten_by_transaction.load(root.get('id'))
 
@@ -47,3 +50,8 @@ class BankTransaction(graphene.ObjectType):
         """ Get customer_statement_message when requested """
         if root.get('customer_statement_message_id'):
             return await request.dataloader.csms_by_id.load(root.get('customer_statement_message_id'))
+
+    async def resolve_suggesties(root, info):
+        """ Get rubriek when requested """
+        if root.get("transaction_id"):
+            return await automatisch_boeken.transactie_suggesties(root.get("transaction_id"))
