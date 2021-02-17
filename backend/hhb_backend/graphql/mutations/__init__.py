@@ -5,7 +5,8 @@ from .configuraties.configuraties import CreateConfiguratie, DeleteConfiguratie,
 from .gebruikers.create_gebruiker import CreateGebruiker
 from .gebruikers.delete_gebruiker import DeleteGebruiker
 from .gebruikers.update_gebruiker import UpdateGebruiker
-from .journaalposten.create_journaalpost import CreateJournaalpostAfspraak, CreateJournaalpostGrootboekrekening
+from .journaalposten.create_journaalpost import CreateJournaalpostAfspraak, CreateJournaalpostGrootboekrekening, \
+    CreateJournaalpostPerAfspraak
 from .journaalposten.update_journaalpost import UpdateJournaalpostGrootboekrekening
 from .journaalposten.delete_journaalpost import DeleteJournaalpost
 from .organisaties.create_organisatie import CreateOrganisatie
@@ -47,6 +48,7 @@ class RootMutation(graphene.ObjectType):
     createCustomerStatementMessage = CreateCustomerStatementMessage.Field()
 
     createJournaalpostAfspraak = CreateJournaalpostAfspraak.Field()
+    createJournaalpostPerAfspraak = CreateJournaalpostPerAfspraak.Field()
     createJournaalpostGrootboekrekening = CreateJournaalpostGrootboekrekening.Field()
     updateJournaalpostGrootboekrekening = UpdateJournaalpostGrootboekrekening.Field()
     deleteJournaalpost = DeleteJournaalpost.Field()

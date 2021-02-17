@@ -1,3 +1,5 @@
+import re
+
 from flask.views import MethodView
 from flask import request, abort, make_response
 from flask_inputs import Inputs
@@ -43,11 +45,18 @@ class HHBView(MethodView):
             abort(make_response({"errors": inputs.errors}, 400))
 
     def get_object_id_from_kwargs(self, **kwargs):
-        if "object_id" in kwargs:
-            try:
-                return int(kwargs["object_id"])
-            except ValueError:
-                abort(make_response({"errors": [f"Supplied id '{kwargs[list(kwargs.keys())[0]]}' is not an integer."]}, 400))
+        if (object_id := kwargs.get("object_id", None)) is not None:
+            if str(self.hhb_model.__table__.c['id'].type) == "VARCHAR":
+                if re.match("^\\w+$", object_id):
+                    return object_id
+                elif re.match("^\\w+(?:,\\w+)+$", object_id):
+                    return object_id.split(",")
+            else:
+                if re.match("^\\d+$", object_id):
+                    return int(object_id)
+                elif re.match("^\\d+(?:,\\d+)+$", object_id):
+                    return [int(s) for s in object_id.split(",")]
+            abort(make_response({"errors": [f"Supplied id '{object_id}' is not valid."]}, 400))
 
     def get(self, **kwargs):
         """ GET /<view_path>/(<int:object_id>)?(columns=..,..,..)&(filter_ids=..,..,..))
@@ -67,11 +76,11 @@ class HHBView(MethodView):
         """
         object_id = self.get_object_id_from_kwargs(**kwargs)
         self.hhb_query.add_filter_columns()
-        self.hhb_query.add_filter_ids()
+        self.hhb_query.add_filter_ids(object_id)
         self.extend_get(**kwargs)
         self.hhb_query.load_relations()
         self.hhb_query.order_query()
-        if object_id:
+        if object_id and type(object_id) != list:
             return self.hhb_query.get_result_single(object_id)
         return self.hhb_query.get_result_multiple()
 

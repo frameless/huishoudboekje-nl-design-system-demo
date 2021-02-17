@@ -7,6 +7,7 @@ class JournaalpostenByIdLoader(SingleDataLoader):
     model = "journaalposten"
     service = settings.HHB_SERVICES_URL
 
+
 class JournaalpostenByTransactionLoader(SingleDataLoader):
     """ Load rekeningen list for gebruiker ids """
     """ Load journaalposten using transaction_ids """
@@ -14,4 +15,3 @@ class JournaalpostenByTransactionLoader(SingleDataLoader):
     service = settings.HHB_SERVICES_URL
     filter_item = "filter_transactions"
     index = "transaction_id"
-

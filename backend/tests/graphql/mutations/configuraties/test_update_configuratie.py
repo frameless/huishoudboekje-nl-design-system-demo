@@ -14,6 +14,7 @@ def test_update_configuratie(client):
             f"{settings.HHB_SERVICES_URL}/configuratie/32",
             json=lambda request, context: {"data": request.json()},
         )
+        mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json={"data": {"id": 1}})
         response = client.post(
             "/graphql",
             json={

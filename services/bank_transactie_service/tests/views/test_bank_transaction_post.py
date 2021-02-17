@@ -14,7 +14,8 @@ def test_banktransaction_post_new_csm(client, dbsession, csm_factory):
         "transactie_datum": "2020-01-01",
         "tegen_rekening": "NL02ABNA0123456789",
         "is_credit": 1,
-        "bedrag": 100
+        "bedrag": 100,
+        "is_geboekt": True,
     }
     response = client.post(
         '/banktransactions/',
@@ -29,4 +30,5 @@ def test_banktransaction_post_new_csm(client, dbsession, csm_factory):
     assert response.json["data"]["tegen_rekening"] == bank_transaction_dict["tegen_rekening"]
     assert response.json["data"]["is_credit"] is True
     assert response.json["data"]["bedrag"] == bank_transaction_dict["bedrag"]
+    assert response.json["data"]["is_geboekt"] == bank_transaction_dict["is_geboekt"]
     assert dbsession.query(BankTransaction).count() == 1

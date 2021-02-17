@@ -20,7 +20,8 @@ class BankTransactionFactory:
             transactie_datum: date = date(2020, 10, 10),
             tegen_rekening: str = "NL02ABNA0123456789",
             is_credit: bool = True,
-            bedrag: int = 100
+            bedrag: int = 100,
+            is_geboekt: bool = None,
     ):
         if not customer_statement_message_id:
             csm = self.csm_factory.create_customer_statement_message()
@@ -34,7 +35,8 @@ class BankTransactionFactory:
             transactie_datum=transactie_datum,
             tegen_rekening=tegen_rekening,
             is_credit=is_credit,
-            bedrag=bedrag
+            bedrag=bedrag,
+            is_geboekt=is_geboekt,
         )
         self.dbsession.add(bank_transaction)
         self.dbsession.flush()

@@ -1,10 +1,12 @@
 import logging
 
-from flask import request, abort, make_response
+from flask import abort, make_response, request
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
+
 from core_service.database import db
 from core_service.utils import row2dict
+
 
 class HHBObject():
     hhb_model = None
@@ -16,26 +18,42 @@ class HHBObject():
 
     def get_or_create(self, object_id: int):
         """ Get or create an object of the current hhb model """
+        def create():
+            hhb_object = self.hhb_model()
+            db.session.add(hhb_object)
+            return hhb_object
         if object_id:
             self.get_or_404(object_id)
             response_code = 200
+        elif type(request.json) == list:
+            self.hhb_object = [create() for _ in request.json]
+            response_code = 201
         else:
-            self.hhb_object = self.hhb_model()
-            db.session.add(self.hhb_object)
+            self.hhb_object = create()
             response_code = 201
         return response_code
 
-    def get_or_404(self, object_id: int):
+    def get_or_404(self, object_id):
         """ Query database for a single object based on id """
         try:
-            self.hhb_object = self.hhb_model.query.filter(self.hhb_model.id==object_id).one()
+            if type(object_id) in [int, str]:
+                self.hhb_object = self.hhb_model.query.filter(self.hhb_model.id == object_id).one()
+            elif type(object_id) == list:
+                self.hhb_object = self.hhb_model.query.filter(self.hhb_model.id.in_(object_id)).all()
+                if len(object_id) != len(self.hhb_object):
+                    raise NoResultFound()
         except NoResultFound:
             abort(make_response({"errors": [f"{self.hhb_model.__name__} not found."]}, 404))
 
     def update_using_request_data(self):
         """ Add data to object based on request input """
-        for key, value in request.json.items():
-            setattr(self.hhb_object, key, value)
+        if type(request.json) == list:
+            for item, hhb_object in zip(request.json, self.hhb_object):
+                for key, value in item.items():
+                    setattr(hhb_object, key, value)
+        else:
+            for key, value in request.json.items():
+                setattr(self.hhb_object, key, value)
 
     def commit_changes(self):
         """ Try to commit database changes """
@@ -53,4 +71,6 @@ class HHBObject():
     @property
     def json(self):
         """ Convert object to json dict """
+        if type(self.hhb_object) == list:
+            return [row2dict(o) for o in self.hhb_object]
         return row2dict(self.hhb_object)

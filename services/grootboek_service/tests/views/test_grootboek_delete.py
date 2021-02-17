@@ -3,7 +3,7 @@ from models import Grootboekrekening
 
 def test_grootboek_delete_success(client, dbsession, grootboekrekening_factory):
     """ Test a succesfull DELETE on grootboekrekeningen """
-    grootboek = grootboekrekening_factory.create_grootboekrekening("1")
+    grootboek = grootboekrekening_factory.create_grootboekrekening("gbr_id")
     assert dbsession.query(Grootboekrekening).count() == 1
     response = client.delete(f'/grootboekrekeningen/{grootboek.id}')
     assert response.status_code == 204
@@ -23,5 +23,5 @@ def test_grootboek_delete_grootboek_not_found(client):
 
 def test_grootboek_delete_invalid_id(client):
     """ Test 400 error for DELETE on grootboekrekeningen """
-    response = client.delete('/grootboekrekeningen/NaN')
+    response = client.delete('/grootboekrekeningen/with%20space')
     assert response.status_code == 400

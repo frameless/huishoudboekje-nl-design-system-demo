@@ -8,6 +8,7 @@ from hhb_backend.graphql import settings
 def test_delete_gebruiker(client):
     with requests_mock.Mocker() as mock:
         mock.get(f"{settings.HHB_SERVICES_URL}/gebruikers/?filter_ids=1", status_code=200, json={"data":[{"id": 1}]})
+        mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json={"data": {"id": 1}})
         adapter = mock.delete(f"{settings.HHB_SERVICES_URL}/gebruikers/1", status_code=204)
 
         response = client.post(

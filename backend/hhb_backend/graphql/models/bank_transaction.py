@@ -20,6 +20,7 @@ class BankTransaction(graphene.ObjectType):
     tegen_rekening = graphene.Field(lambda: rekening.Rekening)
     tegen_rekening_iban = graphene.String()
     transactie_datum = graphene.Date()
+    is_geboekt = graphene.Boolean()
 
     journaalpost = graphene.Field(lambda: journaalpost.Journaalpost)
 

@@ -1,5 +1,3 @@
-import json
-
 import graphene
 import requests
 from graphql import GraphQLError
@@ -7,10 +5,7 @@ from graphql import GraphQLError
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.journaalpost import Journaalpost
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    log_gebruikers_activiteit,
-    gebruikers_activiteit_entities,
-)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import (gebruikers_activiteit_entities, log_gebruikers_activiteit)
 
 
 class UpdateJournaalpostGrootboekrekeningInput(graphene.InputObjectType):

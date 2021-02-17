@@ -80,6 +80,11 @@ backend-test:
   variables:
     DIRECTORY: backend
 
+core-service-test:
+  extends: .Service Test
+  variables:
+    DIRECTORY: services/core_service
+
 huishoudboekje-service-test:
   extends: .Service Test
   variables:
