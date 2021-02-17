@@ -118,3 +118,23 @@ def test_afspraak_get_journaalpost_relation(client, afspraak_factory, journaalpo
     assert len(response.json["data"]["journaalposten"]) == 2
     assert response.json["data"]["journaalposten"][0] == journaalpost1.id
     assert response.json["data"]["journaalposten"][1] == journaalpost2.id
+
+def test_afspraak_get_filter_rekening(client, afspraak_factory, rekening_factory):
+    rekening1 = rekening_factory.create_rekening()
+    rekening2 = rekening_factory.create_rekening(iban="NL42ABNA6879970117", rekeninghouder="Klaas")
+    afspraak1 = afspraak_factory.createAfspraak(tegen_rekening=rekening1, kenmerk="Afspraak1")
+    afspraak2 = afspraak_factory.createAfspraak(tegen_rekening=rekening2, kenmerk="Afspraak2")
+    response = client.get(f'/afspraken/?filter_rekening={rekening1.id}')
+    assert len(response.json["data"]) == 1
+    assert response.json["data"][0]["kenmerk"] == afspraak1.kenmerk
+    response = client.get(f'/afspraken/?filter_rekening={rekening2.id}')
+    assert len(response.json["data"]) == 1
+    assert response.json["data"][0]["kenmerk"] == afspraak2.kenmerk
+    response = client.get(f'/afspraken/?filter_rekening={rekening1.id},{rekening2.id}')
+    assert len(response.json["data"]) == 2
+    assert response.json["data"][0]["kenmerk"] == afspraak1.kenmerk
+    assert response.json["data"][1]["kenmerk"] == afspraak2.kenmerk
+    response = client.get(f'/afspraken/?filter_gebruikers=1337')
+    assert response.json["data"] == []
+    response = client.get(f'/afspraken/?filter_gebruikers=a')
+    assert response.json["errors"][0] == "Input for filter_gebruikers is not correct, 'a' is not a number."

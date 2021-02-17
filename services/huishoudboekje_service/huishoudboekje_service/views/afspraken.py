@@ -72,6 +72,7 @@ class AfspraakView(HHBView):
         self.add_filter_filter_gebruiker()
         self.add_filter_filter_organisaties()
         self.add_filter_filter_datums()
+        self.add_filter_filter_rekening()
         self.hhb_query.expose_many_relation("journaalposten", "id")
         self.hhb_query.expose_many_relation("overschrijvingen", "id")
 
@@ -124,3 +125,16 @@ class AfspraakView(HHBView):
                     self.hhb_model.start_datum <= eind_datum
                 )
             )
+
+    def add_filter_filter_rekening(self):
+        """ Add filter_rekening filter"""
+        filter_ids = request.args.get('filter_rekening')
+        if filter_ids:
+            ids = []
+            for raw_id in filter_ids.split(","):
+                try:
+                    ids.append(int(raw_id))
+                except ValueError:
+                    abort(make_response(
+                        {"errors": [f"Input for filter_rekening is not correct, '{raw_id}' is not a number."]}, 400))
+            self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.tegen_rekening_id.in_(ids))
