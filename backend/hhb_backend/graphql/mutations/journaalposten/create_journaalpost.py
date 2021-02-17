@@ -10,7 +10,7 @@ from hhb_backend.graphql.models.afspraak import Afspraak
 from hhb_backend.graphql.models.bank_transaction import BankTransaction
 from hhb_backend.graphql.models.grootboekrekening import Grootboekrekening
 from hhb_backend.graphql.models.journaalpost import Journaalpost
-from hhb_backend.graphql.mutations.journaalposten import update_transaction_is_geboekt
+from hhb_backend.graphql.mutations.journaalposten import update_transaction_service_is_geboekt
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     gebruikers_activiteit_entities,
     log_gebruikers_activiteit,
@@ -96,7 +96,7 @@ class CreateJournaalpostAfspraak(graphene.Mutation):
         if not response.ok:
             raise GraphQLError(f"Upstream API responded: {response.text}")
 
-        update_transaction_is_geboekt(transaction, is_geboekt=True)
+        update_transaction_service_is_geboekt(transaction, is_geboekt=True)
 
         journaalpost = response.json()["data"]
         journaalpost["afspraak"] = afspraak
@@ -175,7 +175,7 @@ class CreateJournaalpostPerAfspraak(graphene.Mutation):
         for journaalpost, afspraak in zip(journaalposten, afspraken):
             journaalpost["afspraak"] = afspraak
 
-        update_transaction_is_geboekt(transactions, is_geboekt=True)
+        update_transaction_service_is_geboekt(transactions, is_geboekt=True)
 
         return CreateJournaalpostPerAfspraak(journaalposten=journaalposten, ok=True)
 
@@ -242,6 +242,6 @@ class CreateJournaalpostGrootboekrekening(graphene.Mutation):
             raise GraphQLError(f"Upstream API responded: {response.text}")
         journaalpost = response.json()["data"]
 
-        update_transaction_is_geboekt(transaction, is_geboekt=True)
+        update_transaction_service_is_geboekt(transaction, is_geboekt=True)
 
         return CreateJournaalpostGrootboekrekening(journaalpost=journaalpost, ok=True)

@@ -8,11 +8,12 @@ from flask_graphql import GraphQLView
 from hhb_backend.graphql import schema
 from hhb_backend.graphql.dataloaders import HHBDataLoader
 
-loop = asyncio.new_event_loop()
-asyncio.set_event_loop(loop)
-nest_asyncio.apply()
+def create_blueprint(loop=None):
+    if not loop:
+        loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    nest_asyncio.apply()
 
-def create_blueprint():
     bp = Blueprint('graphql', __name__)
 
     bp.add_url_rule('/',
@@ -46,7 +47,7 @@ def create_blueprint():
     @bp.before_request
     def add_dataloaders():
         """ Initialize dataloader per request """
-        global loop
+        # global loop
         request.dataloader = HHBDataLoader(loop=loop)
 
     return bp
