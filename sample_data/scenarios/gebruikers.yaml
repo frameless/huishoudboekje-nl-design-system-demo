@@ -241,4 +241,14 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-01"
         actief: true
-
+      - aantal: 1
+        rubriek: "Telefonie"
+        beschrijving: "Mobiele telefonie"
+        organisatie:
+          kvk: "14052264"
+        bedrag: 3000
+        credit: false
+        automatische_incasso: true
+        interval: "P0Y1M0W0D"
+        start_datum: "2019-01-01"
+        actief: true

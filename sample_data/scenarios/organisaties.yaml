@@ -291,4 +291,13 @@ organisaties:
   - iban: "NL45INGB0670984779"
     rekeninghouder: "KPN"
 
-
+- naam: "Vodafone Libertel B.V."
+  weergave_naam: "Vodafone"
+  kvk_nummer: "14052264"
+  straatnaam: "Avenue Ceramique"
+  huisnummer: "300"
+  postcode: "6221KX"
+  plaatsnaam: "Maastricht"
+  rekeningen:
+  - iban: "NL93INGB0007939833"
+    rekeninghouder: "Vodafone Libertel B.V. te Maastricht"
