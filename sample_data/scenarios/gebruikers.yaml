@@ -13,7 +13,6 @@ scenarios:
           kvk: "35012085"
         bedrag: 76532
         credit: true
-        automatische_incasso: false
         interval: "P0Y1M0W0D"
         start_datum: "2021-01-01"
         actief: true
@@ -25,7 +24,6 @@ scenarios:
           iban: "NL76BNGH0285178598"
         bedrag: 14784
         credit: true
-        automatische_incasso: false
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-07"
         actief: true
@@ -36,7 +34,6 @@ scenarios:
           kvk: "27365323"
         bedrag: 39100
         credit: true
-        automatische_incasso: false
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-20"
         actief: true
@@ -47,7 +44,6 @@ scenarios:
           kvk: "27365323"
         bedrag: 32200
         credit: true
-        automatische_incasso: false
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-20"
         actief: true
@@ -58,7 +54,6 @@ scenarios:
           kvk: "27365323"
         bedrag: 10700
         credit: true
-        automatische_incasso: false
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-20"
         actief: true
@@ -123,7 +118,6 @@ scenarios:
           iban: "NL76BNGH0285178598"
         bedrag: 10485
         credit: true
-        automatische_incasso: false
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-07"
         aantal_betalingen: 16
@@ -136,7 +130,6 @@ scenarios:
           kvk: "35012085"
         bedrag: 166912
         credit: true
-        automatische_incasso: false
         interval: "P0Y1M0W0D"
         start_datum: "2021-01-01"
         actief: true
@@ -147,7 +140,6 @@ scenarios:
           kvk: "27365323"
         bedrag: 28600
         credit: true
-        automatische_incasso: false
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-20"
         actief: true
@@ -158,7 +150,6 @@ scenarios:
           kvk: "27365323"
         bedrag: 10700
         credit: true
-        automatische_incasso: false
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-20"
         actief: true
