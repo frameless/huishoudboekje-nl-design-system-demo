@@ -278,3 +278,17 @@ organisaties:
   - iban: "AH00AHOL0000000001"
     rekeninghouder: "Albert Heijn B.V."
 
+# dienstleveranciers
+- naam: "KPN B.V."
+  weergave_naam: "KPN"
+  kvk_nummer: "27124701"
+  straatnaam: "Postbus"
+  huisnummer: "30000"
+  postcode: "2500GA"
+  plaatsnaam: "Den Haag"
+  rekeningen:
+  # TODO: apply real IBAN
+  - iban: "NL45INGB0670984779"
+    rekeninghouder: "KPN"
+
+
