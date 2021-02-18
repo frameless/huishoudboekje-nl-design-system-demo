@@ -205,7 +205,7 @@ scenarios:
         credit: false
         automatische_incasso: true
         interval: "P0Y3M0W0D"
-        start_datum: "2021-01-01"
+        start_datum: "2019-01-01"
         actief: true
       - aantal: 1
         rubriek: "Leefgeld"
@@ -217,6 +217,17 @@ scenarios:
         credit: false
         automatische_incasso: false
         interval: "P0Y1M0W0D"
-        start_datum: "2021-01-01"
+        start_datum: "2019-01-01"
+        actief: true
+      - aantal: 1
+        rubriek: "Verzekeringen"
+        beschrijving: "Inboedelverzekering"
+        organisatie:
+          kvk: "69653852"
+        bedrag: 1952
+        credit: false
+        automatische_incasso: false
+        interval: "P0Y1M0W0D"
+        start_datum: "2019-01-01"
         actief: true
 
