@@ -213,7 +213,7 @@ scenarios:
         organisatie:
           kvk: "30280353"
           iban: "NL49BNGH0285171712"
-        bedrag: 130760
+        bedrag: 119520
         credit: false
         automatische_incasso: false
         interval: "P0Y1M0W0D"
