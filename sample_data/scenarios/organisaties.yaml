@@ -254,6 +254,18 @@ organisaties:
   - iban: "NL28INGB0000128526"
     rekeninghouder: "Zorgverzekeraar Zorg en Zekerheid"
 
+- naam: "RISK Direct B.V."
+  weergave_naam: "RISK Direct"
+  kvk_nummer: "69653852"
+  straatnaam: "Postbus"
+  huisnummer: "1006"
+  postcode: "3430BA"
+  plaatsnaam: "Nieuwegein"
+  rekeningen:
+  # TODO: apply real IBAN
+  - iban: "NL62INGB2650400811"
+    rekeninghouder: "RISK Direct"
+
 # werkgevers
 - naam: "Albert Heijn B.V."
   weergave_naam: "Albert Heijn"
