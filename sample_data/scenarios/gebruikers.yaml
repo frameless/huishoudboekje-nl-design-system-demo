@@ -231,7 +231,7 @@ scenarios:
         start_datum: "2019-01-01"
         actief: true
       - aantal: 1
-        rubriek: "Internet"
+        rubriek: "Telefonie"
         beschrijving: "Telefoon en Internet"
         organisatie:
           kvk: "27124701"
