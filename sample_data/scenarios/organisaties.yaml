@@ -140,7 +140,7 @@ organisaties:
   plaatsnaam: "Rotterdam"
   rekeningen:
   - iban: "NL10ABNA0240120000"
-    rekeninghouder: "Eneco"
+    rekeninghouder: "Eneco Services"
 
 - naam: "Energiedirect B.V."
   weergave_naam: "Energiedirect B.V."
