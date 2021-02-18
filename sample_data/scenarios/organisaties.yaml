@@ -82,6 +82,18 @@ organisaties:
   - iban: "NL49INGB0702712728"
     rekeninghouder: "UWV"
 
+- naam: "Stichting Vaste Lasten Pakket"
+  weergave_naam: "Stichting Vaste Lasten Pakket"
+  kvk_nummer: "73834238"
+  straatnaam: "Arthur van Schendelstraat"
+  huisnummer: "650"
+  postcode: "3511MJ"
+  plaatsnaam: "Utrecht"
+  rekeningen:
+  # TODO: apply real IBAN
+  - iban: "NL95RABO4545747078"
+    rekeninghouder: "Stichting Vaste Lasten Pakket"
+
 # drinkwater
 - naam: "Vitens N.V."
   weergave_naam: "Vitens N.V."
