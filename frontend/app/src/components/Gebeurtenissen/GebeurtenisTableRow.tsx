@@ -2,13 +2,15 @@ import {HStack, Stack, Td, Text, Tr} from "@chakra-ui/react";
 import moment from "moment";
 import React from "react";
 import {FiActivity} from "react-icons/all";
+import UAParser from "ua-parser-js";
 import {GebruikersActiviteit} from "../../generated/graphql";
 import RoundIcon from "../Layouts/RoundIcon";
 import AuditLogText from "./AuditLogText";
-import BrowserIcon from "./BrowserIcon";
-import OsIcon from "./OsIcon";
 
 const GebeurtenisTableRow: React.FC<{gebeurtenis: GebruikersActiviteit}> = ({gebeurtenis: g}) => {
+	const browser = new UAParser(g.meta?.userAgent).getBrowser();
+	const os = new UAParser(g.meta?.userAgent).getOS();
+
 	return (
 		<Tr alignItems={"center"} key={g.id}>
 			<Td>
@@ -18,14 +20,10 @@ const GebeurtenisTableRow: React.FC<{gebeurtenis: GebruikersActiviteit}> = ({geb
 					</RoundIcon>
 					<Stack spacing={1}>
 						<AuditLogText g={g} />
-						<Text fontSize={"sm"} color={"gray.500"}>{moment(g.timestamp).format("LL LT")}</Text>
+						<Text fontSize={"sm"} color={"gray.500"}>
+							{moment(g.timestamp).format("LL LT")} - {os.name} {os.version} - {browser.name} {browser.version}
+						</Text>
 					</Stack>
-				</HStack>
-			</Td>
-			<Td>
-				<HStack>
-					<BrowserIcon userAgent={g.meta?.userAgent} />
-					<OsIcon userAgent={g.meta?.userAgent} />
 				</HStack>
 			</Td>
 		</Tr>

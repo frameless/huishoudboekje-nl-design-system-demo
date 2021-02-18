@@ -13,7 +13,6 @@ const GebeurtenissenTableView: React.FC<TableProps & { gebeurtenissen: Gebruiker
 			<Thead>
 				<Tr>
 					<Th>{t("pages.gebeurtenissen.activity")}</Th>
-					<Th>{t("pages.gebeurtenissen.meta")}</Th>
 				</Tr>
 			</Thead>
 			<Tbody>

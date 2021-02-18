@@ -7,7 +7,7 @@ import Routes from "../../config/routes";
 import {Afspraak} from "../../generated/graphql";
 import {currencyFormat2, intervalString} from "../../utils/things";
 
-const AfspraakTableRow: React.FC<TableRowProps & { afspraak: Afspraak, onDelete?: (id: number) => void }> = ({afspraak: a, onDelete, ...props}) => {
+const AfspraakTableRow: React.FC<TableRowProps & { afspraak: Afspraak, canEdit?: boolean, onDelete?: (id: number) => void }> = ({afspraak: a, onDelete, canEdit = true, ...props}) => {
 	const {t} = useTranslation();
 	const {push} = useHistory();
 	const isMobile = useBreakpointValue([true, null, null, false]);
@@ -45,7 +45,7 @@ const AfspraakTableRow: React.FC<TableRowProps & { afspraak: Afspraak, onDelete?
 			</Td>
 			<Td>
 				<HStack>
-					<IconButton variant={"ghost"} size={"sm"} icon={<EditIcon />} aria-label={t("actions.edit")} onClick={onClickEditButton} />
+					{canEdit && <IconButton variant={"ghost"} size={"sm"} icon={<EditIcon />} aria-label={t("actions.edit")} onClick={onClickEditButton} />}
 					{onDelete && (<>
 						{deleteConfirm && <IconButton variant={"solid"} size={"xs"} icon={<CloseIcon />} colorScheme={"gray"}
 													  mr={2} aria-label={t("actions.cancel")} onClick={onClickDeleteCancel} />}

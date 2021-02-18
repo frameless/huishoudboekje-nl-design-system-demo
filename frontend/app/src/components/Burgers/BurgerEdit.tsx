@@ -190,8 +190,7 @@ const BurgerEdit = () => {
 									<Stack spacing={2} direction={["column", "row"]}>
 										<Stack spacing={1} flex={1}>
 											<FormLabel htmlFor={"zipcode"}>{t("forms.burgers.fields.zipcode")}</FormLabel>
-											<Tooltip label={t("forms.burgers.tooltips.zipcode")} aria-label={t("forms.burgers.fields.zipcode")} hasArrow
-											         placement={isMobile ? "top" : "left"}>
+											<Tooltip label={t("forms.burgers.tooltips.zipcode")} aria-label={t("forms.burgers.fields.zipcode")} placement={isMobile ? "top" : "left"}>
 												<Input isInvalid={zipcode.dirty && !zipcode.isValid} id={"zipcode"} {...zipcode.bind} />
 											</Tooltip>
 										</Stack>
@@ -202,8 +201,7 @@ const BurgerEdit = () => {
 									</Stack>
 									<Stack spacing={1}>
 										<FormLabel htmlFor={"phoneNumber"}>{t("forms.burgers.fields.phoneNumber")}</FormLabel>
-										<Tooltip label={t("forms.burgers.tooltips.phoneNumber")} aria-label={t("forms.burgers.tooltips.phoneNumber")} hasArrow
-										         placement={isMobile ? "top" : "left"}>
+										<Tooltip label={t("forms.burgers.tooltips.phoneNumber")} aria-label={t("forms.burgers.tooltips.phoneNumber")} placement={isMobile ? "top" : "left"}>
 											<Input isInvalid={phoneNumber.dirty && !phoneNumber.isValid} id={"phoneNumber"} {...phoneNumber.bind} />
 										</Tooltip>
 									</Stack>

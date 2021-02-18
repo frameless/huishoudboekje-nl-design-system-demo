@@ -158,7 +158,6 @@ export type CreateGebruikerRekening = {
   __typename?: 'CreateGebruikerRekening';
   ok?: Maybe<Scalars['Boolean']>;
   rekening?: Maybe<Rekening>;
-  gebruiker?: Maybe<Gebruiker>;
 };
 
 /** Create a Journaalpost with an Afspraak */
@@ -262,7 +261,6 @@ export type DeleteGebruikerRekening = {
   __typename?: 'DeleteGebruikerRekening';
   ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Rekening>;
-  gebruiker?: Maybe<Gebruiker>;
 };
 
 /** Delete journaalpost by id  */
@@ -282,7 +280,6 @@ export type DeleteOrganisatieRekening = {
   __typename?: 'DeleteOrganisatieRekening';
   ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Rekening>;
-  organisatie?: Maybe<Organisatie>;
 };
 
 export type DeleteRubriek = {
@@ -510,6 +507,7 @@ export type RootMutation = {
   updateConfiguratie?: Maybe<UpdateConfiguratie>;
   deleteConfiguratie?: Maybe<DeleteConfiguratie>;
   createExportOverschrijvingen?: Maybe<CreateExportOverschrijvingen>;
+  startAutomatischBoeken?: Maybe<StartAutomatischBoeken>;
 };
 
 
@@ -892,6 +890,12 @@ export type Rubriek = {
   id?: Maybe<Scalars['Int']>;
   naam?: Maybe<Scalars['String']>;
   grootboekrekening?: Maybe<Grootboekrekening>;
+};
+
+export type StartAutomatischBoeken = {
+  __typename?: 'StartAutomatischBoeken';
+  ok?: Maybe<Scalars['Boolean']>;
+  journaalposten?: Maybe<Array<Maybe<Journaalpost>>>;
 };
 
 export type UpdateAfspraak = {
@@ -1636,11 +1640,7 @@ export type GetAfspraakFormDataQuery = (
     & OrganisatieFragment
   )>>>, afspraken?: Maybe<Array<Maybe<(
     { __typename?: 'Afspraak' }
-    & Pick<Afspraak, 'id' | 'kenmerk'>
-    & { tegenRekening?: Maybe<(
-      { __typename?: 'Rekening' }
-      & Pick<Rekening, 'id' | 'iban'>
-    )> }
+    & AfspraakFragment
   )>>> }
 );
 
@@ -1732,7 +1732,10 @@ export type GetGebeurtenissenQuery = (
         )> }
       )>, rekening?: Maybe<(
         { __typename?: 'Rekening' }
-        & Pick<Rekening, 'id'>
+        & Pick<Rekening, 'id' | 'iban' | 'rekeninghouder'>
+      )>, customerStatementMessage?: Maybe<(
+        { __typename?: 'CustomerStatementMessage' }
+        & Pick<CustomerStatementMessage, 'id'>
       )> }
     )>>>, meta?: Maybe<(
       { __typename?: 'GebruikersActiviteitMeta' }
@@ -3149,16 +3152,12 @@ export const GetAfspraakFormDataDocument = gql`
     ...Organisatie
   }
   afspraken {
-    id
-    kenmerk
-    tegenRekening {
-      id
-      iban
-    }
+    ...Afspraak
   }
 }
     ${RubriekFragmentDoc}
-${OrganisatieFragmentDoc}`;
+${OrganisatieFragmentDoc}
+${AfspraakFragmentDoc}`;
 
 /**
  * __useGetAfspraakFormDataQuery__
@@ -3344,6 +3343,11 @@ export const GetGebeurtenissenDocument = gql`
         }
       }
       rekening {
+        id
+        iban
+        rekeninghouder
+      }
+      customerStatementMessage {
         id
       }
     }

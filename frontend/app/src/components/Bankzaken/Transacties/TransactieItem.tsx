@@ -236,7 +236,7 @@ const TransactieItem: React.FC<BoxProps & { bankTransaction: BankTransaction }> 
 			<Stack direction={"row"} alignItems={"center"} justifyContent={"center"} {...props} onClick={onClick} cursor={"pointer"}>
 				<Box flex={2}>{bt.tegenRekening ? (
 					<Text>
-						<Tooltip label={formatIBAN(bt.tegenRekening.iban) || t("unknown")} aria-label={formatIBAN(bt.tegenRekening.iban) || t("unknown")} placement={"right"} hasArrow={true}>
+						<Tooltip label={formatIBAN(bt.tegenRekening.iban) || t("unknown")} aria-label={formatIBAN(bt.tegenRekening.iban) || t("unknown")} placement={"right"}>
 							<span>{bt.tegenRekening.rekeninghouder}</span>
 						</Tooltip>
 					</Text>
