@@ -5,7 +5,6 @@ scenarios:
     gezin: 1
     afspraken:
       # inkomsten
-      # TODO add zoekterm
       - aantal: 1
         rubriek: "Inkomsten"
         beschrijving: "Loon"
@@ -16,6 +15,7 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2021-01-01"
         actief: true
+        kenmerk: " loon "
       - aantal: 1
         rubriek: "Inkomsten"
         beschrijving: "Aanvullende uitkering"

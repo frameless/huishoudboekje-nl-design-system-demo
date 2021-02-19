@@ -80,6 +80,7 @@ class AfspraakScenario:
     start_datum: str = "2021-01-01"
     eind_datum: str = "2021-12-31"
     actief: bool = True
+    kenmerk: str = None
 
 
 @dataclass
