@@ -1,14 +1,8 @@
 import {useCallback, useEffect, useMemo, useState} from "react";
 import {useToggle} from "react-grapple";
 
-type IUser = {
-	email: string,
-	fullName: string,
-	role: string,
-}
-
 export const useAuth = () => {
-	const [user, setUser] = useState<IUser>();
+	const [user, setUser] = useState<{email: string}>();
 	const [error, setError] = useToggle(false);
 	const [loading, toggleLoading] = useToggle(true);
 
@@ -28,20 +22,14 @@ export const useAuth = () => {
 		fetch("/api/me")
 			.then(result => result.json())
 			.then(result => {
-				const {email} = result;
-
-				if (email) {
-					setUser({
-						email: "koen.brouwer@vng.nl",
-						fullName: "Koen Brouwer",
-						role: "VNG Realisatie"
-					});
+				if (result.email) {
+					setUser(result);
 				}
-
 				toggleLoading(false);
 			})
 			.catch(err => {
 				console.error(err);
+				setUser(undefined);
 				setError(true);
 				toggleLoading(false);
 			});
@@ -50,6 +38,6 @@ export const useAuth = () => {
 
 
 	return useMemo(() => ({
-		user, error, loading, reset
+		user, error, loading, reset,
 	}), [user, error, loading, reset]);
 };
