@@ -47,7 +47,6 @@ def create_blueprint(loop=None):
     @bp.before_request
     def add_dataloaders():
         """ Initialize dataloader per request """
-        # global loop
         request.dataloader = HHBDataLoader(loop=loop)
 
     return bp

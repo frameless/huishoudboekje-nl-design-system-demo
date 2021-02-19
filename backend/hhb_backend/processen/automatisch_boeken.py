@@ -6,6 +6,7 @@ import hhb_backend.graphql.dataloaders as dataloaders
 
 
 async def automatisch_boeken(customer_statement_message_id: int = None):
+    logging.info(f"automatisch_boeken: customer_statement_message_id={customer_statement_message_id}")
     if customer_statement_message_id is not None:
         transactions = [t
                         for t in (await dataloaders.hhb_dataloader().bank_transactions_by_csm.load(customer_statement_message_id))
@@ -23,7 +24,7 @@ async def automatisch_boeken(customer_statement_message_id: int = None):
         if len(afspraken) == 1 and afspraken[0]["automatisch_boeken"] == True]
 
     stats = Counter(len(s) for s in suggesties.values())
-    logging.info(f"automatisch_boeken: {', '.join([f'{transactions_count} transactions with {suggestion_count}' for suggestion_count, transactions_count in stats.items() if suggestion_count != 1])} were not processed.")
+    logging.info(f"automatisch_boeken: {', '.join([f'{transactions_count} transactions with {suggestion_count} suggestions' for suggestion_count, transactions_count in stats.items() if suggestion_count != 1])} were not processed.")
 
     if len(automatische_transacties) == 0:
         return None
