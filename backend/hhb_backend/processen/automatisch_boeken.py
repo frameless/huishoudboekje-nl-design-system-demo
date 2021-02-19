@@ -61,11 +61,6 @@ mutation AutomatischBoeken($input: [CreateJournaalpostAfspraakInput!]!) {
 
 
 async def transactie_suggesties(transactie_ids):
-    # TODO add is_geboekt to bank_transaction
-    # TODO add index on is_geboekt to bank_transaction
-
-    # TODO add dataloader with filter on is_geboekt and use with false(mind the nulls)
-
     if type(transactie_ids) != list:
         transactie_ids = [transactie_ids]
 
@@ -89,6 +84,8 @@ async def transactie_suggesties(transactie_ids):
         )
     )
 
+    # key iban, value is list met afspraken
+
     transactie_ids_with_afspraken = {}
     # match afspraken by iban and zoekterm
     for transaction in transactions:
@@ -104,8 +101,9 @@ async def transactie_suggesties(transactie_ids):
     return transactie_ids_with_afspraken
 
 
-def match_zoekterm(afspraak, transaction):
-    if afspraak.tegen_rekening["id"] == transaction.tegen_rekening["id"] and \
+def match_zoekterm(afspraak, transaction, rekeningen):
+    rekening
+    if afspraak["tegen_rekening_id"] == transaction.tegen_rekening["id"] and \
             re.search(afspraak.kenmerk, transaction.information_to_account_owner, re.IGNORECASE):
         return True
 
