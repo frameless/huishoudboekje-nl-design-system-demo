@@ -65,4 +65,4 @@ class ListDataLoader(DataLoader):
                 if item[self.index] not in objects:
                     objects[item[self.index]] = list()
                 objects[item[self.index]].append(item)
-        return [objects.get(key, None) for key in keys]
+        return [objects.get(key, []) for key in keys]

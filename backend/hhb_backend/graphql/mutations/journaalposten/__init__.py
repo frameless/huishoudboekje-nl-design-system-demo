@@ -5,7 +5,7 @@ import requests
 from hhb_backend.graphql import settings
 
 
-def update_transaction_is_geboekt(transactions, is_geboekt: bool):
+def update_transaction_service_is_geboekt(transactions, is_geboekt: bool):
     if type(transactions) == list:
         data = [{**t, "is_geboekt": is_geboekt} for t in transactions]
         transaction_ids = ",".join([str(t["id"]) for t in transactions])

@@ -20,7 +20,8 @@ from functools import wraps
 
 def create_app(
     config_name=os.getenv("APP_SETTINGS", None)
-    or "hhb_backend.config.DevelopmentConfig"
+    or "hhb_backend.config.DevelopmentConfig",
+        loop=None
 ):
     app = Flask(__name__)
     app.config.from_object(config_name)
@@ -100,7 +101,7 @@ def create_app(
     def login():
         return redirect("/", code=302)
 
-    graphql = graphql_blueprint.create_blueprint()
+    graphql = graphql_blueprint.create_blueprint(loop)
     if app.config["GRAPHQL_AUTH_ENABLED"]:
 
         @graphql.before_request

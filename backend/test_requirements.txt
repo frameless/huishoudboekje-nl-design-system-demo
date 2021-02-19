@@ -7,3 +7,4 @@ requests_mock_flask==2020.9.25.0
 freezegun==1.0.0
 pydash==4.9.2
 pytest-asyncio>=0.14.0
+pytest-mock>=3.5.1

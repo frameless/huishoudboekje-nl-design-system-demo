@@ -6,6 +6,7 @@ import hhb_backend.graphql.dataloaders as dataloaders
 
 
 async def automatisch_boeken(customer_statement_message_id: int = None):
+    logging.info(f"automatisch_boeken: customer_statement_message_id={customer_statement_message_id}")
     if customer_statement_message_id is not None:
         transactions = [t
                         for t in (await dataloaders.hhb_dataloader().bank_transactions_by_csm.load(customer_statement_message_id))
@@ -19,10 +20,16 @@ async def automatisch_boeken(customer_statement_message_id: int = None):
 
     automatische_transacties = [
         {"transactionId": transactie_id, "afspraakId": afspraken[0]["id"], "isAutomatischGeboekt": True}
-        for transactie_id, afspraken in suggesties
+        for transactie_id, afspraken in suggesties.items()
         if len(afspraken) == 1 and afspraken[0]["automatisch_boeken"] == True]
 
-    result = graphql.schema.execute("""
+    stats = Counter(len(s) for s in suggesties.values())
+    logging.info(f"automatisch_boeken: {', '.join([f'{transactions_count} transactions with {suggestion_count} suggestions' for suggestion_count, transactions_count in stats.items() if suggestion_count != 1])} were not processed.")
+
+    if len(automatische_transacties) == 0:
+        return None
+
+    result = await graphql.schema.execute("""
 mutation AutomatischBoeken($input: [CreateJournaalpostAfspraakInput!]!) {
   createJournaalpostPerAfspraak(input: $input) {
     ok
@@ -38,12 +45,14 @@ mutation AutomatischBoeken($input: [CreateJournaalpostAfspraakInput!]!) {
     }
   }
 }
-""", variables={"input": automatische_transacties})
+""", variables={"input": automatische_transacties}, return_promise=True)
+    if result.errors is not None:
+        logging.warning(f"create journaalposten failed: {result.errors}")
+        return None
 
-    stats = Counter(len(s) for s in suggesties.values())
-    logging.info(f"automatisch_boeken completed for {len(automatische_transacties)} transactions. {[f'{transactions_count} transactions with {suggestion_count}' for suggestion_count, transactions_count in stats if suggestion_count != 1].join(', ')} were not processed.")
-
-    return result.data['createJournaalpostPerAfspraak']['journaalposten']
+    journaalposten_ = result.data['createJournaalpostPerAfspraak']['journaalposten']
+    logging.info(f"automatisch boeken completed with {len(journaalposten_)}")
+    return journaalposten_
 
 
 async def transactie_suggesties(transactie_ids):
@@ -60,7 +69,7 @@ async def transactie_suggesties(transactie_ids):
 
     # bulk return type dict with transaction_id as key and afspraken list as valie
     if type(transactie_ids) == list:
-        return {key: [] for key in list}
+        return {key: [] for key in transactie_ids}
 
     # singular return type
     return []
