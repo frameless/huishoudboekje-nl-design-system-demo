@@ -28,6 +28,9 @@ const CsmTableRow: React.FC<{ csm: CustomerStatementMessage, onDelete: (id: numb
 
 	return (
 		<Tr>
+			<Td maxWidth={"20px"}>
+				<Text>{csm.id}</Text>
+			</Td>
 			<Td>
 				<Text>{moment(csm.uploadDate).fromNow(!!isMobile)}</Text>
 			</Td>

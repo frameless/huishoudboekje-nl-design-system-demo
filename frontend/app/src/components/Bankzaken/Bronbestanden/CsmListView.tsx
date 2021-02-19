@@ -37,6 +37,9 @@ const CsmListView: React.FC<BoxProps & {csms: CustomerStatementMessage[], refres
 		<Table>
 			<Thead>
 				<Tr>
+					<Th maxWidth={"20px"}>
+						<Label>#</Label>
+					</Th>
 					<Th>
 						<Label>{t("forms.common.fields.time")}</Label>
 					</Th>
