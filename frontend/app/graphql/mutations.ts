@@ -343,3 +343,14 @@ export const CreateExportOverschrijvingenMutation = gql`
         }
     }
 `;
+
+export const StartAutomatischBoekenMutation = gql`
+    mutation startAutomatischBoeken{
+        startAutomatischBoeken{
+            ok
+            journaalposten {
+                id
+            }
+        }
+    }
+`;
