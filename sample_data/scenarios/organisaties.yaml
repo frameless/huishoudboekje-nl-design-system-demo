@@ -51,6 +51,8 @@ organisaties:
     rekeninghouder: ""
   - iban: "NL76BNGH0285178598"
     rekeninghouder: "GEM UTRECHT WENI"
+  - iban: "NL49BNGH0285171712"
+    rekeninghouder: "Gemeente Utrecht Huishoudboekje"
 
 - naam: "Sociale Verzekeringsbank"
   weergave_naam: "Sociale Verzekeringsbank Utrecht"
@@ -79,6 +81,18 @@ organisaties:
     rekeninghouder: "UWV"
   - iban: "NL49INGB0702712728"
     rekeninghouder: "UWV"
+
+- naam: "Stichting Vaste Lasten Pakket"
+  weergave_naam: "Stichting Vaste Lasten Pakket"
+  kvk_nummer: "73834238"
+  straatnaam: "Arthur van Schendelstraat"
+  huisnummer: "650"
+  postcode: "3511MJ"
+  plaatsnaam: "Utrecht"
+  rekeningen:
+  # TODO: apply real IBAN
+  - iban: "NL95RABO4545747078"
+    rekeninghouder: "Stichting Vaste Lasten Pakket"
 
 # drinkwater
 - naam: "Vitens N.V."
@@ -138,7 +152,7 @@ organisaties:
   plaatsnaam: "Rotterdam"
   rekeningen:
   - iban: "NL10ABNA0240120000"
-    rekeninghouder: "Eneco"
+    rekeninghouder: "Eneco Services"
 
 - naam: "Energiedirect B.V."
   weergave_naam: "Energiedirect B.V."
@@ -229,6 +243,29 @@ organisaties:
   - iban: "NL47INGB0000003054"
     rekeninghouder: "FBTO ZORGVERZEKERINGEN NV"
 
+- naam: "Stichting Zorg en Zekerheid"
+  weergave_naam: "Stichting Zorg en Zekerheid"
+  kvk_nummer: "41168265"
+  straatnaam: "Postbus"
+  huisnummer: "400"
+  postcode: "2300AK"
+  plaatsnaam: "Leiden"
+  rekeningen:
+  - iban: "NL28INGB0000128526"
+    rekeninghouder: "Zorgverzekeraar Zorg en Zekerheid"
+
+- naam: "RISK Direct B.V."
+  weergave_naam: "RISK Direct"
+  kvk_nummer: "69653852"
+  straatnaam: "Postbus"
+  huisnummer: "1006"
+  postcode: "3430BA"
+  plaatsnaam: "Nieuwegein"
+  rekeningen:
+  # TODO: apply real IBAN
+  - iban: "NL62INGB2650400811"
+    rekeninghouder: "RISK Direct"
+
 # werkgevers
 - naam: "Albert Heijn B.V."
   weergave_naam: "Albert Heijn"
@@ -241,3 +278,26 @@ organisaties:
   - iban: "AH00AHOL0000000001"
     rekeninghouder: "Albert Heijn B.V."
 
+# dienstleveranciers
+- naam: "KPN B.V."
+  weergave_naam: "KPN"
+  kvk_nummer: "27124701"
+  straatnaam: "Postbus"
+  huisnummer: "30000"
+  postcode: "2500GA"
+  plaatsnaam: "Den Haag"
+  rekeningen:
+  # TODO: apply real IBAN
+  - iban: "NL45INGB0670984779"
+    rekeninghouder: "KPN"
+
+- naam: "Vodafone Libertel B.V."
+  weergave_naam: "Vodafone"
+  kvk_nummer: "14052264"
+  straatnaam: "Avenue Ceramique"
+  huisnummer: "300"
+  postcode: "6221KX"
+  plaatsnaam: "Maastricht"
+  rekeningen:
+  - iban: "NL93INGB0007939833"
+    rekeninghouder: "Vodafone Libertel B.V. te Maastricht"

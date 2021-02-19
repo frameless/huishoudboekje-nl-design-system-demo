@@ -1,5 +1,6 @@
 mutation createSampleBurgers{
 
+    # persona 1
     user1: createGebruiker(
         input: {
             achternaam: "de Jager"
@@ -13,14 +14,20 @@ mutation createSampleBurgers{
             voorletters: "F.S."
             voornamen: "Fien Sandra"
             rekeningen: [
-                {iban: "NL50RABO7004792366", rekeninghouder: "F.S. de Jager"},
-                {iban: "NL85ABNA4683542374", rekeninghouder: "F.S. de Jager en/of"},
+                {iban: "NL84INGB2266765221", rekeninghouder: "F.S. de Jager"}
             ]
         }
     ){
         ok
+        gebruiker {
+            id
+            voornamen
+            achternaam
+            email
+        }
     }
 
+    #persona 2
     user2: createGebruiker(
         input: {
             achternaam: "Winkel"
@@ -34,11 +41,17 @@ mutation createSampleBurgers{
             voorletters: "H.J."
             voornamen: "Henk Jan"
             rekeningen: [
-                {iban: "NL29INGB7070755813", rekeninghouder: "H.J. Winkel"},
-                {iban: "NL97RABO3783029058", rekeninghouder: "H.J. Winkel en/of"},
+                {iban: "NL83ABNA1927261899", rekeninghouder: "H.J. Winkel"},
+                {iban: "NL58INGB5228863516", rekeninghouder: "H.J. Winkel en/of A.B. Zee"}
             ]
         }
     ){
         ok
+        gebruiker {
+            id
+            voornamen
+            achternaam
+            email
+        }
     }
 }

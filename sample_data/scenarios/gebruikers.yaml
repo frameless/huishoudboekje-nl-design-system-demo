@@ -5,6 +5,7 @@ scenarios:
     gezin: 1
     afspraken:
       # inkomsten
+      # TODO add zoekterm
       - aantal: 1
         rubriek: "Inkomsten"
         beschrijving: "Loon"
@@ -12,7 +13,6 @@ scenarios:
           kvk: "35012085"
         bedrag: 76532
         credit: true
-        automatische_incasso: false
         interval: "P0Y1M0W0D"
         start_datum: "2021-01-01"
         actief: true
@@ -24,7 +24,6 @@ scenarios:
           iban: "NL76BNGH0285178598"
         bedrag: 14784
         credit: true
-        automatische_incasso: false
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-07"
         actief: true
@@ -35,7 +34,6 @@ scenarios:
           kvk: "27365323"
         bedrag: 39100
         credit: true
-        automatische_incasso: false
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-20"
         actief: true
@@ -46,7 +44,6 @@ scenarios:
           kvk: "27365323"
         bedrag: 32200
         credit: true
-        automatische_incasso: false
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-20"
         actief: true
@@ -57,7 +54,6 @@ scenarios:
           kvk: "27365323"
         bedrag: 10700
         credit: true
-        automatische_incasso: false
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-20"
         actief: true
@@ -74,7 +70,7 @@ scenarios:
         start_datum: "2019-01-01"
         actief: true
       - aantal: 1
-        rubriek: "Elektra"
+        rubriek: "Elektriciteit"
         beschrijving: "Elektriciteit"
         organisatie:
           kvk: "05082820"
@@ -95,4 +91,155 @@ scenarios:
         interval: "P0Y3M0W0D"
         start_datum: "2021-01-01"
         actief: true
+      - aantal: 1
+        rubriek: "Leefgeld"
+        beschrijving: "Leefgeld"
+        organisatie:
+          kvk: "30280353"
+          iban: "NL49BNGH0285171712"
+        bedrag: 93994
+        credit: false
+        automatische_incasso: false
+        interval: "P0Y1M0W0D"
+        start_datum: "2021-01-01"
+        actief: true
 
+# persona 2
+  - aantal: 1
+    aantal_rekeningen: 1
+    gezin: 1
+    afspraken:
+      # inkomsten
+      - aantal: 1
+        rubriek: "Inkomsten"
+        beschrijving: "Aanvullende uitkering minus terugvordering"
+        organisatie:
+          kvk: "30280353"
+          iban: "NL76BNGH0285178598"
+        bedrag: 10485
+        credit: true
+        interval: "P0Y1M0W0D"
+        start_datum: "2019-01-07"
+        aantal_betalingen: 16
+        actief: true
+      - aantal: 1
+        rubriek: "Inkomsten"
+        beschrijving: "Loon"
+        # TODO: add organisation Veilig Zorgen
+        organisatie:
+          kvk: "35012085"
+        bedrag: 166912
+        credit: true
+        interval: "P0Y1M0W0D"
+        start_datum: "2021-01-01"
+        actief: true
+      - aantal: 1
+        rubriek: "Inkomsten"
+        beschrijving: "Huurtoeslag"
+        organisatie:
+          kvk: "27365323"
+        bedrag: 28600
+        credit: true
+        interval: "P0Y1M0W0D"
+        start_datum: "2019-01-20"
+        actief: true
+      - aantal: 1
+        rubriek: "Inkomsten"
+        beschrijving: "Zorgtoeslag"
+        organisatie:
+          kvk: "27365323"
+        bedrag: 10700
+        credit: true
+        interval: "P0Y1M0W0D"
+        start_datum: "2019-01-20"
+        actief: true
+      # uitgaven
+      - aantal: 1
+        rubriek: "Betaalde huur"
+        beschrijving: "Huur"
+        organisatie:
+          kvk: "30038487"
+        bedrag: 57077
+        credit: false
+        automatische_incasso: true
+        interval: "P0Y1M0W0D"
+        start_datum: "2019-01-01"
+        actief: true
+      - aantal: 1
+        rubriek: "Elektriciteit"
+        beschrijving: "Elektriciteit"
+        organisatie:
+          kvk: "24324527"
+        bedrag: 12200
+        credit: false
+        automatische_incasso: true
+        interval: "P0Y1M0W0D"
+        start_datum: "2019-01-01"
+        actief: true
+      - aantal: 1
+        rubriek: "Verzekeringen"
+        beschrijving: "Zorgverzekering"
+        organisatie:
+          kvk: "41168265"
+        bedrag: 18134
+        credit: false
+        automatische_incasso: true
+        interval: "P0Y1M0W0D"
+        start_datum: "2019-01-01"
+        actief: true
+      - aantal: 1
+        rubriek: "Water"
+        beschrijving: "Water"
+        organisatie:
+          kvk: "05069581"
+        bedrag: 4577
+        credit: false
+        automatische_incasso: true
+        interval: "P0Y3M0W0D"
+        start_datum: "2019-01-01"
+        actief: true
+      - aantal: 1
+        rubriek: "Leefgeld"
+        beschrijving: "Leefgeld"
+        organisatie:
+          kvk: "30280353"
+          iban: "NL49BNGH0285171712"
+        bedrag: 119520
+        credit: false
+        automatische_incasso: false
+        interval: "P0Y1M0W0D"
+        start_datum: "2019-01-01"
+        actief: true
+      - aantal: 1
+        rubriek: "Verzekeringen"
+        beschrijving: "Inboedelverzekering"
+        organisatie:
+          kvk: "69653852"
+        bedrag: 1952
+        credit: false
+        automatische_incasso: true
+        interval: "P0Y1M0W0D"
+        start_datum: "2019-01-01"
+        actief: true
+      - aantal: 1
+        rubriek: "Telefonie"
+        beschrijving: "Telefoon en Internet"
+        organisatie:
+          kvk: "27124701"
+        bedrag: 6288
+        credit: false
+        automatische_incasso: true
+        interval: "P0Y1M0W0D"
+        start_datum: "2019-01-01"
+        actief: true
+      - aantal: 1
+        rubriek: "Telefonie"
+        beschrijving: "Mobiele telefonie"
+        organisatie:
+          kvk: "14052264"
+        bedrag: 3000
+        credit: false
+        automatische_incasso: true
+        interval: "P0Y1M0W0D"
+        start_datum: "2019-01-01"
+        actief: true
