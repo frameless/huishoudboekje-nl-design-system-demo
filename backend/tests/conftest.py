@@ -2,6 +2,7 @@
 import logging
 
 import pytest
+
 from hhb_backend.app import create_app
 
 
