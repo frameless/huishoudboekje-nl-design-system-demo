@@ -70,10 +70,14 @@ async def transactie_suggesties(transactie_ids):
             transactie_ids
         )
     )
+    if not transactions:
+        return {key: [] for key in transactie_ids}
 
-    rekening_ibans = [t["tegen_rekening"] for t in transactions]
     #Rekeningen ophalen adhv iban
+    rekening_ibans = [t["tegen_rekening"] for t in transactions]
     rekeningen = await dataloaders.hhb_dataloader().rekeningen_by_iban.load_many(rekening_ibans)
+    if not rekeningen:
+        return {key: [] for key in transactie_ids}
 
     rekening_ids = [r["id"] for r in rekeningen]
 
@@ -83,28 +87,30 @@ async def transactie_suggesties(transactie_ids):
             rekening_ids
         )
     )
+    if not afspraken:
+        return {key: [] for key in transactie_ids}
 
-    # key iban, value is list met afspraken
+    # Flatten the afspraken list
+    afspraken = [item for sublist in afspraken for item in sublist]
+
+    # Sort the afspraken by iban
+    iban_afspraken = {}
+    for rekening in rekeningen:
+        iban_afspraken[rekening["iban"]] = [afspraak for afspraak in afspraken if afspraak["tegen_rekening_id"] == rekening["id"]]
 
     transactie_ids_with_afspraken = {}
     # match afspraken by iban and zoekterm
     for transaction in transactions:
+        afspraken_subset = iban_afspraken[transaction["tegen_rekening"]] or []
         transactie_ids_with_afspraken[transaction["id"]] = [afspraak
-                                                            for afspraak in afspraken
+                                                            for afspraak in afspraken_subset
                                                             if match_zoekterm(afspraak, transaction)]
 
-    # bulk return type dict with transaction_id as key and afspraken list as valie
-    # if type(transactie_ids) == list:
-        return {key: [] for key in transactie_ids}
-
-    # singular return type
     return transactie_ids_with_afspraken
 
 
-def match_zoekterm(afspraak, transaction, rekeningen):
-    rekening
-    if afspraak["tegen_rekening_id"] == transaction.tegen_rekening["id"] and \
-            re.search(afspraak.kenmerk, transaction.information_to_account_owner, re.IGNORECASE):
+def match_zoekterm(afspraak, transaction):
+    if afspraak["kenmerk"] and re.search(afspraak["kenmerk"], transaction["information_to_account_owner"], re.IGNORECASE):
         return True
 
     return False
