@@ -1,7 +1,7 @@
 # TODO unify naming, filenames are singular, loader names are plural
 from flask import request
 
-from .afspraken_loader import AfsprakenByGebruikerLoader, AfsprakenByIdLoader
+from .afspraken_loader import AfsprakenByGebruikerLoader, AfsprakenByIdLoader, AfsprakenByRekeningLoader
 from .bank_transactions_loader import (BankTransactionByCsmLoader, BankTransactionByIdLoader,
                                        BankTransactionByIsGeboektLoader)
 from .configuratie_loader import ConfiguratieByIdLoader
@@ -37,6 +37,7 @@ class HHBDataLoader:
         # Afspraken
         self.afspraken_by_id = AfsprakenByIdLoader(loop=loop)
         self.afspraken_by_gebruiker = AfsprakenByGebruikerLoader(loop=loop)
+        self.afspraken_by_rekening = AfsprakenByRekeningLoader(loop=loop)
         self.rubrieken_by_id = RubriekByIdLoader(loop=loop)
         self.rubrieken_by_grootboekrekening = RubriekByGrootboekrekeningLoader(
             loop=loop
