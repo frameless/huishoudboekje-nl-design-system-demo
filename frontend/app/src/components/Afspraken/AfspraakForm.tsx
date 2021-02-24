@@ -3,7 +3,7 @@ import {
 	Badge,
 	Box,
 	BoxProps,
-	Button,
+	Button, chakra,
 	Divider,
 	FormLabel,
 	IconButton,
@@ -18,7 +18,7 @@ import {
 	Td,
 	Text,
 	Tr,
-	useToast
+	useToast,
 } from "@chakra-ui/react";
 import moment from "moment";
 import "moment-recur-ts";
@@ -40,7 +40,7 @@ import RadioButtonGroup from "../Layouts/RadioButtons/RadioButtonGroup";
 import Section from "../Layouts/Section";
 import OverschrijvingenListView from "../Overschrijvingen/OverschrijvingenListView";
 
-type AfspraakFormProps = { afspraak?: Afspraak, onSave: (data) => void, burger?: Gebruiker, loading: boolean };
+type AfspraakFormProps = {afspraak?: Afspraak, onSave: (data) => void, burger?: Gebruiker, loading: boolean};
 const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave, loading = false, ...props}) => {
 	const {t} = useTranslation();
 	const toast = useToast();
@@ -54,7 +54,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 	const [zoektermDuplicates, setZoektermDuplicates] = useState<Afspraak[]>([]);
 
 	const $afspraakFormData = useGetAfspraakFormDataQuery({
-		fetchPolicy: "no-cache"
+		fetchPolicy: "no-cache",
 	});
 
 	const [isActive, toggleActive] = useToggle(true);
@@ -79,7 +79,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 	});
 	const zoekterm = useInput({
 		defaultValue: "",
-		validate: [(v) => (String(v).length === 0 || String(v).length >= 6)]
+		validate: [(v) => (String(v).length === 0 || String(v).length >= 6)],
 	});
 	const [isRecurring, toggleRecurring] = useToggle(false);
 	const startDate = useInput({
@@ -259,29 +259,33 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 	});
 
 	const HugeDatePicker = () => {
-		const components = [
-			<Text fontWeight={"bolder"} px={1}>{generatedSampleOverschrijvingen.length}</Text>,
-			<DatePicker selected={moment(startDate2.value, "L").isValid() ? moment(startDate2.value, "L").toDate() : null}
-			            dateFormat={"dd-MM-yyyy"}
-			            onChange={(value: Date) => {
-				            if (value) {
-					            startDate2.setValue(moment(value).format("L"));
-				            }
-			            }} customInput={(<Button size={"sm"} mx={1}>{startDate2.value}</Button>)} />,
-			<DatePicker selected={moment(endDate.value, "L").isValid() ? moment(endDate.value, "L").toDate() : null}
-			            dateFormat={"dd-MM-yyyy"}
-			            onChange={(value: Date) => {
-				            if (value) {
-					            endDate.setValue(moment(value).format("L"));
-				            }
-			            }} customInput={(<Button size={"sm"} mx={1}>{endDate.value}</Button>)} />
-		];
+		const components = {
+			strong: <strong />,
+			start: <DatePicker selected={moment(startDate2.value, "L").isValid() ? moment(startDate2.value, "L").toDate() : null}
+							   dateFormat={"dd-MM-yyyy"}
+							   onChange={(value: Date) => {
+								   if (value) {
+									   startDate2.setValue(moment(value).format("L"));
+								   }
+							   }} customInput={(<Button size={"sm"} mx={1}>{startDate2.value}</Button>)} />,
+			end: <DatePicker selected={moment(endDate.value, "L").isValid() ? moment(endDate.value, "L").toDate() : null}
+							 dateFormat={"dd-MM-yyyy"}
+							 onChange={(value: Date) => {
+								 if (value) {
+									 endDate.setValue(moment(value).format("L"));
+								 }
+							 }} customInput={(<Button size={"sm"} mx={1}>{endDate.value}</Button>)} />,
+		};
 		const outgoingTrans = <Trans count={generatedSampleOverschrijvingen.length} i18nKey={"forms.agreements.sections.2.prognosisText_outgoing"}
-		                             components={components} />;
+									 components={components} values={{ count: generatedSampleOverschrijvingen.length}} />;
 		const incomingTrans = <Trans count={generatedSampleOverschrijvingen.length} i18nKey={"forms.agreements.sections.2.prognosisText_incoming"}
-		                             components={components} />;
+									 components={components} values={{ count: generatedSampleOverschrijvingen.length}} />;
 
-		return afspraakType === AfspraakType.Expense ? outgoingTrans : incomingTrans;
+		return (
+			<Text>
+				{afspraakType === AfspraakType.Expense ? outgoingTrans : incomingTrans}
+			</Text>
+		);
 	};
 
 	const filterRubriekenByAfspraakType = (r: Rubriek) => afspraakType === AfspraakType.Expense ? !r.grootboekrekening?.credit : r.grootboekrekening?.credit;
@@ -293,7 +297,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 		else {
 			rubriekId.reset();
 		}
-	}
+	};
 	const onSelectOrganisatie = (val) => {
 		rekeningId.reset();
 
@@ -314,7 +318,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 		else {
 			organisatieId.reset();
 		}
-	}
+	};
 	const onSelectRekening = (val) => {
 		if (val) {
 			rekeningId.setValue(String(val.key));
@@ -322,7 +326,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 		else {
 			rekeningId.reset();
 		}
-	}
+	};
 
 	const intervalOptions = [
 		{key: "day", label: t("interval.day", {count: parseInt(intervalNumber.value)}), value: IntervalType.Day},
@@ -344,17 +348,17 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 							<Stack spacing={2} direction={["column", "row"]}>
 								<Stack spacing={1} flex={1}>
 									<FormLabel htmlFor={"accountId"}>{t("forms.agreements.fields.rubriek")}</FormLabel>
-									<Queryable query={$afspraakFormData}>{(data: { rubrieken: Rubriek[] }) => {
+									<Queryable query={$afspraakFormData}>{(data: {rubrieken: Rubriek[]}) => {
 										const options = data.rubrieken.filter(r => r.grootboekrekening && r.grootboekrekening.id).filter(filterRubriekenByAfspraakType).map((r: Rubriek) => ({
 											key: r.id,
 											label: r.naam,
-											value: r.grootboekrekening!.id
-										}))
+											value: r.grootboekrekening!.id,
+										}));
 										const value = options.find(r => r.key === parseInt(rubriekId.value));
 
 										return (
 											<Select onChange={onSelectRubriek} id="rubriekId" isClearable={true} noOptionsMessage={() => t("forms.agreements.fields.rubriekChoose")}
-											        maxMenuHeight={200} options={options} value={value || null} styles={reactSelectStyles} />
+												maxMenuHeight={200} options={options} value={value || null} styles={reactSelectStyles} />
 										);
 									}}</Queryable>
 								</Stack>
@@ -368,7 +372,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 							<Stack spacing={2} direction={["column", "row"]}>
 								<Stack spacing={1} flex={1}>
 									<FormLabel htmlFor={"beneficiaryId"}>{t("forms.agreements.fields.beneficiary")}</FormLabel>
-									<Queryable query={$afspraakFormData}>{(data: { organisaties: Organisatie[] }) => {
+									<Queryable query={$afspraakFormData}>{(data: {organisaties: Organisatie[]}) => {
 										const options = [
 											...data.organisaties.map(o => ({
 												key: o.id,
@@ -379,20 +383,20 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 												key: 0,
 												label: formatBurgerName(gebruiker),
 												value: 0,
-											}
+											},
 										];
 										const value = options.find(o => o.key === parseInt(organisatieId.value));
 
 										return (
 											<Select onChange={onSelectOrganisatie} id="beneficiaryId" isClearable={true} noOptionsMessage={() => t("select.noOptions")}
-											        maxMenuHeight={200} options={options} value={value} styles={reactSelectStyles} />
+												maxMenuHeight={200} options={options} value={value} styles={reactSelectStyles} />
 										);
 									}}
 									</Queryable>
 								</Stack>
 								<Stack spacing={1} flex={1}>
 									<FormLabel htmlFor={"rekeningId"}>{t("forms.agreements.fields.bankAccount")}</FormLabel>
-									<Queryable query={$afspraakFormData}>{(data: { organisaties: Organisatie[] }) => {
+									<Queryable query={$afspraakFormData}>{(data: {organisaties: Organisatie[]}) => {
 										if (!data.organisaties) {
 											return null;
 										}
@@ -414,7 +418,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 
 										return (
 											<Select onChange={onSelectRekening} id="rekeningId" isClearable={true} noOptionsMessage={() => t("forms.agreements.fields.bankAccountChoose")}
-											        maxMenuHeight={200} options={options} value={value} styles={reactSelectStyles} />
+												maxMenuHeight={200} options={options} value={value} styles={reactSelectStyles} />
 										);
 									}}
 									</Queryable>
@@ -436,7 +440,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 						<FormLeft title={t("forms.agreements.sections.3.title")} helperText={t("forms.agreements.sections.3.helperText")} />
 						<FormRight>
 							<Stack spacing={1} flex={1}>
-								<Queryable query={$afspraakFormData} children={(data: { organisaties: Organisatie[] }) => (<>
+								<Queryable query={$afspraakFormData} children={(data: {organisaties: Organisatie[]}) => (<>
 									<FormLabel htmlFor={"zoekterm"}>{t("forms.agreements.fields.zoekterm")}</FormLabel>
 									<InputGroup>
 										<Input isInvalid={isInvalid(zoekterm)} {...zoekterm.bind} id="searchTerm" />
@@ -458,7 +462,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 															</Td>
 															<Td width={"50px"}>
 																<IconButton as={NavLink} to={Routes.Burger(a.gebruiker?.id)} variant={"ghost"} size={"sm"} icon={<SearchIcon />}
-																            aria-label={t("actions.edit")} />
+																	aria-label={t("actions.edit")} />
 															</Td>
 														</Tr>
 													))}
@@ -471,9 +475,9 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 							<Stack direction={["column", "row"]} spacing={1}>
 								<Stack isInline={true} alignItems={"center"} spacing={3}>
 									<Switch isChecked={automatischBoeken} isDisabled={!automatischBoekenPossible} onChange={() => toggleAutomatischBoeken()}
-									        id={"automatischBoeken"} />
+										id={"automatischBoeken"} />
 									<FormLabel mb={0} htmlFor={"automatischBoeken"}
-									           color={automatischBoekenPossible ? "currentcolor" : "gray.500"}>{t("forms.agreements.fields.automatischBoeken")}</FormLabel>
+											   color={automatischBoekenPossible ? "currentcolor" : "gray.500"}>{t("forms.agreements.fields.automatischBoeken")}</FormLabel>
 								</Stack>
 							</Stack>
 						</FormRight>
@@ -485,7 +489,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 
 							<Stack spacing={2} direction={["column", "row"]}>
 								<RadioButtonGroup name={"isRecurring"} onChange={(val) => toggleRecurring(val === AfspraakPeriod.Periodic)}
-								                  value={isRecurring ? AfspraakPeriod.Periodic : AfspraakPeriod.Once} options={isRecurringOptions} />
+												  value={isRecurring ? AfspraakPeriod.Periodic : AfspraakPeriod.Once} options={isRecurringOptions} />
 							</Stack>
 
 							{isRecurring && (
@@ -497,8 +501,8 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 
 											<Box flex={1}>
 												<Select onChange={(val) => intervalType.setValue(() => val?.value)} id="interval" isClearable={false} noOptionsMessage={() => t("interval.choose")}
-												        maxMenuHeight={200} options={intervalOptions} value={intervalOptions.find(i => i.value === intervalType.value)}
-												        styles={{...reactSelectStyles}} />
+													maxMenuHeight={200} options={intervalOptions} value={intervalOptions.find(i => i.value === intervalType.value)}
+													styles={{...reactSelectStyles}} />
 											</Box>
 										</Stack>
 									</Stack>
@@ -509,11 +513,11 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 								<Stack spacing={1} flex={1}>
 									<FormLabel htmlFor={"startDate"}>{isRecurring ? t("forms.agreements.fields.startDate") : t("forms.common.fields.date")}</FormLabel>
 									<DatePicker selected={moment(startDate.value, "L").isValid() ? moment(startDate.value, "L").toDate() : null} dateFormat={"dd-MM-yyyy"}
-									            onChange={(value: Date) => {
-										            if (value) {
-											            startDate.setValue(moment(value).format("L"));
-										            }
-									            }} customInput={<Input type="text" isInvalid={isInvalid(startDate)} {...startDate.bind} />} id={"startDate"} />
+										onChange={(value: Date) => {
+											if (value) {
+												startDate.setValue(moment(value).format("L"));
+											}
+										}} customInput={<Input type="text" isInvalid={isInvalid(startDate)} {...startDate.bind} />} id={"startDate"} />
 								</Stack>
 							</Stack>
 
