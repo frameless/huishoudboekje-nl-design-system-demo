@@ -70,13 +70,13 @@ async def transactie_suggesties(transactie_ids):
             transactie_ids
         )
     )
-    if not transactions:
+    if transactions == [None] * len(transactions):
         return {key: [] for key in transactie_ids}
 
     #Rekeningen ophalen adhv iban
     rekening_ibans = [t["tegen_rekening"] for t in transactions]
     rekeningen = await dataloaders.hhb_dataloader().rekeningen_by_iban.load_many(rekening_ibans)
-    if not rekeningen:
+    if rekeningen == [None] * len(rekeningen):
         return {key: [] for key in transactie_ids}
 
     rekening_ids = [r["id"] for r in rekeningen]
@@ -87,7 +87,7 @@ async def transactie_suggesties(transactie_ids):
             rekening_ids
         )
     )
-    if not afspraken:
+    if afspraken == [None] * len(afspraken):
         return {key: [] for key in transactie_ids}
 
     # Flatten the afspraken list
