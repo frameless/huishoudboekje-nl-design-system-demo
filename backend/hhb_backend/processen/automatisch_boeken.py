@@ -52,8 +52,7 @@ mutation AutomatischBoeken($input: [CreateJournaalpostAfspraakInput!]!) {
 """, variables={"input": automatische_transacties}, return_promise=True)
     if result.errors is not None:
         logging.warning(f"create journaalposten failed: {result.errors}")
-    logging.info(
-        f"automatisch_boeken completed for {len(automatische_transacties)} transactions. {[f'{transactions_count} transactions with {suggestion_count}' for suggestion_count, transactions_count in stats if suggestion_count != 1].join(', ')} were not processed.")
+        return None
 
     journaalposten_ = result.data['createJournaalpostPerAfspraak']['journaalposten']
     logging.info(f"automatisch boeken completed with {len(journaalposten_)}")
