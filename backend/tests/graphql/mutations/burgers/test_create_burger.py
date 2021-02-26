@@ -23,9 +23,9 @@ def create_mock_adapter() -> Adapter:
     def test_matcher(request):
         if request.path == "/rekeningen/" and request.query == "filter_ibans=gb33bukb20201555555555":
             return MockResponse({'data': [{'id': 1}]}, 200)
-        elif request.path == "/gebruikers/":
+        elif request.path == "/burgers/":
             return MockResponse({'data': {'id': 1}}, 201)
-        elif request.path == "/gebruikers/1/rekeningen/":
+        elif request.path == "/burgers/1/rekeningen/":
             return MockResponse({'data': "{'id': 1}"}, 201)
         elif request.path == "/gebruikersactiviteiten/":
             return MockResponse({'data': {'id': 1}}, 201)
@@ -34,17 +34,17 @@ def create_mock_adapter() -> Adapter:
     return adapter
 
 
-def test_create_gebruiker_success(client):
+def test_create_burger_success(client):
     with requests_mock.Mocker() as mock:
         mock._adapter = create_mock_adapter()
         response = client.post(
             "/graphql",
             json={
                 "query": '''
-        mutation test($input:CreateGebruikerInput!) {
-          createGebruiker(input:$input) {
+        mutation test($input:CreateBurgerInput!) {
+          createBurger(input:$input) {
             ok
-            gebruiker {
+            burger {
               id
             }
           }
@@ -65,7 +65,7 @@ def test_create_gebruiker_success(client):
             content_type='application/json'
         )
         assert mock._adapter.call_count == 4
-        assert response.json["data"]["createGebruiker"]["ok"] is True
+        assert response.json["data"]["createBurger"]["ok"] is True
 
 
 def create_mock_new_rekening_adapter() -> Adapter:
@@ -74,9 +74,9 @@ def create_mock_new_rekening_adapter() -> Adapter:
     def test_matcher(request):
         if request.path == "/rekeningen/" and request.query == "filter_ibans=gb33bukb20201555555555":
             return MockResponse({'data': ""}, 200)
-        elif request.path == "/gebruikers/":
+        elif request.path == "/burgers/":
             return MockResponse({'data': {'id': 1}}, 201)
-        elif request.path == "/gebruikers/1/rekeningen/":
+        elif request.path == "/burgers/1/rekeningen/":
             return MockResponse({'data': "{'id': 1}"}, 201)
         elif request.path == "/rekeningen/":
             return MockResponse({'data': {'id': 10}}, 201)
@@ -87,17 +87,17 @@ def create_mock_new_rekening_adapter() -> Adapter:
     return adapter
 
 
-def test_create_gebruiker_with_new_rekening_valid_success(client):
+def test_create_burger_with_new_rekening_valid_success(client):
     with requests_mock.Mocker() as mock:
         mock._adapter = create_mock_new_rekening_adapter()
         response = client.post(
             "/graphql",
             json={
                 "query": '''
-        mutation test($input:CreateGebruikerInput!) {
-          createGebruiker(input:$input) {
+        mutation test($input:CreateBurgerInput!) {
+          createBurger(input:$input) {
             ok
-            gebruiker {
+            burger {
               id
             }
           }
@@ -118,7 +118,7 @@ def test_create_gebruiker_with_new_rekening_valid_success(client):
             content_type='application/json'
         )
         assert mock._adapter.call_count == 5
-        assert response.json == {"data": {"createGebruiker": {"ok": True, "gebruiker": {"id": 1}}}}
+        assert response.json == {"data": {"createBurger": {"ok": True, "burger": {"id": 1}}}}
 
 
 def create_mock_new_rekening_invalid_adapter() -> Adapter:
@@ -127,26 +127,26 @@ def create_mock_new_rekening_invalid_adapter() -> Adapter:
     def test_matcher(request):
         if request.path == "/rekeningen/" and request.query == "filter_ibans=33bukb20201555555555":
             return MockResponse({'data': ""}, 200)
-        elif request.path == "/gebruikers/":
+        elif request.path == "/burgers/":
             return MockResponse({'data': {'id': 1}}, 201)
-        elif request.path == "/gebruikers/1/rekeningen/":
+        elif request.path == "/burgers/1/rekeningen/":
             return MockResponse({'data': "{'id': 1}"}, 201)
 
     adapter.add_matcher(test_matcher)
     return adapter
 
 
-def test_create_gebruiker_with_new_rekening_invalid_success(client):
+def test_create_burger_with_new_rekening_invalid_success(client):
     with requests_mock.Mocker() as mock:
         mock._adapter = create_mock_new_rekening_invalid_adapter()
         response = client.post(
             "/graphql",
             json={
                 "query": '''
-        mutation test($input:CreateGebruikerInput!) {
-          createGebruiker(input:$input) {
+        mutation test($input:CreateBurgerInput!) {
+          createBurger(input:$input) {
             ok
-            gebruiker {
+            burger {
               id
             }
           }

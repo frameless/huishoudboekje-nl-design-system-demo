@@ -4,8 +4,8 @@ from pydash import objects
 from hhb_backend.graphql import settings
 
 
-def create_afpraken_matcher(gebruiker_id: int, interval: dict):
-    return lambda request: request.json()["gebruiker_id"] == gebruiker_id and request.json()[
+def create_afpraken_matcher(burger_id: int, interval: dict):
+    return lambda request: request.json()["burger_id"] == burger_id and request.json()[
         "interval"] == f'P{interval["jaren"]}Y{interval["maanden"]}M{interval["weken"]}W{interval["dagen"]}D'
 
 
@@ -32,7 +32,7 @@ def test_create_afspraak_success(client):
               }
             }''',
                 "variables": {
-                    "input": {"gebruikerId": 1,
+                    "input": {"burgerId": 1,
                               "interval": {"jaren": 1, "maanden": 2, "weken": 3, "dagen": 4},
                               "credit": 0,
                               "aantalBetalingen": 1,
@@ -69,7 +69,7 @@ def test_create_afspraak_failure(client):
               }
             }''',
                 "variables": {
-                    "input": {"gebruikerId": 2,
+                    "input": {"burgerId": 2,
                               "interval": {"jaren": 1, "maanden": 2, "weken": 3, "dagen": 4},
                               "credit": 0,
                               "aantalBetalingen": 1,
@@ -106,7 +106,7 @@ def test_create_afspraak_incorrect(client):
               }
             }''',
                 "variables": {
-                    "input": {"gebruikerId": 1,
+                    "input": {"burgerId": 1,
                               "interval": {"jaren": 0, "maanden": 0, "weken": 0, "dagen": 0},
                               "credit": 0,
                               "aantalBetalingen": 0,

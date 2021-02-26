@@ -5,7 +5,7 @@ from hhb_backend.graphql.scalars.bedrag import Bedrag
 
 
 class AfspraakInput(graphene.InputObjectType):
-    gebruiker_id = graphene.Int()
+    burger_id = graphene.Int()
     beschrijving = graphene.String()
     start_datum = graphene.String(required=True)
     eind_datum = graphene.String()

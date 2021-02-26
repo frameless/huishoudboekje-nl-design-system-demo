@@ -1,4 +1,4 @@
-""" GraphQL mutation for deleting a Gebruiker/Burger """
+""" GraphQL mutation for deleting a Afspraak """
 
 import graphene
 import requests
@@ -29,7 +29,7 @@ class DeleteAfspraak(graphene.Mutation):
                 entity_type="afspraak", result=self, key="previous"
             )
             + gebruikers_activiteit_entities(
-                entity_type="burger", result=self.previous, key="gebruiker_id"
+                entity_type="burger", result=self.previous, key="burger_id"
             )
             + gebruikers_activiteit_entities(
                 entity_type="organisatie", result=self.previous, key="organisatie_id"
@@ -40,7 +40,7 @@ class DeleteAfspraak(graphene.Mutation):
     @staticmethod
     @log_gebruikers_activiteit
     async def mutate(_root, _info, id):
-        """ Delete current gebruiker """
+        """ Delete current afspraak """
         previous = await hhb_dataloader().afspraken_by_id.load(id)
 
         response = requests.delete(f"{settings.HHB_SERVICES_URL}/afspraken/{id}")

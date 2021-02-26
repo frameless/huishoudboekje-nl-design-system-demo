@@ -1,4 +1,4 @@
-""" GraphQL mutation for deleting a Gebruiker/Burger """
+""" GraphQL mutation for deleting a Burger """
 
 import graphene
 import requests
@@ -6,20 +6,20 @@ from flask import request
 from graphql import GraphQLError
 
 from hhb_backend.graphql import settings
-from hhb_backend.graphql.models.gebruiker import Gebruiker
+from hhb_backend.graphql.models.burger import Burger
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     log_gebruikers_activiteit,
     gebruikers_activiteit_entities,
 )
 
 
-class DeleteGebruiker(graphene.Mutation):
+class DeleteBurger(graphene.Mutation):
     class Arguments:
-        # gebruiker arguments
+        # burger arguments
         id = graphene.Int(required=True)
 
     ok = graphene.Boolean()
-    previous = graphene.Field(lambda: Gebruiker)
+    previous = graphene.Field(lambda: Burger)
 
     def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
         return dict(
@@ -33,14 +33,14 @@ class DeleteGebruiker(graphene.Mutation):
     @staticmethod
     @log_gebruikers_activiteit
     async def mutate(_root, info, id):
-        """ Delete current gebruiker """
+        """ Delete current burger """
 
-        previous = await request.dataloader.gebruikers_by_id.load(id)
+        previous = await request.dataloader.burgers_by_id.load(id)
 
-        response = requests.delete(f"{settings.HHB_SERVICES_URL}/gebruikers/{id}")
+        response = requests.delete(f"{settings.HHB_SERVICES_URL}/burgers/{id}")
         if response.status_code != 204:
             raise GraphQLError(f"Upstream API responded: {response.json()}")
 
-        request.dataloader.gebruikers_by_id.clear(id)
+        request.dataloader.burgers_by_id.clear(id)
 
-        return DeleteGebruiker(ok=True, previous=previous)
+        return DeleteBurger(ok=True, previous=previous)

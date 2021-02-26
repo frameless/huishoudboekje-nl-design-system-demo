@@ -1,15 +1,15 @@
 # TODO unify naming, filenames are singular, loader names are plural
 from flask import request
 
-from .afspraken_loader import AfsprakenByGebruikerLoader, AfsprakenByIdLoader, AfsprakenByRekeningLoader
+from .afspraken_loader import AfsprakenByBurgerLoader, AfsprakenByIdLoader, AfsprakenByRekeningLoader
 from .bank_transactions_loader import (BankTransactionByCsmLoader, BankTransactionByIdLoader,
                                        BankTransactionByIsGeboektLoader)
 from .configuratie_loader import ConfiguratieByIdLoader
 from .csm_loader import CSMsByIdLoader
 from .exports_loader import ExportsByIdLoader
-from .gebruiker_loader import GebruikersByIdLoader
+from .burger_loader import BurgersByIdLoader
 from .gebruikersactiviteit_loader import (GebruikersActiviteitenByAfsprakenLoader,
-                                          GebruikersActiviteitenByGebruikersLoader, GebruikersActiviteitenByIdLoader)
+                                          GebruikersActiviteitenByBurgersLoader, GebruikersActiviteitenByIdLoader)
 from .grootboekrekening_loader import GrootboekrekeningenByIdLoader
 from .journaalpost_loader import (
     JournaalpostenByIdLoader,
@@ -18,7 +18,7 @@ from .journaalpost_loader import (
 from .organisatie_loader import KvKDetailsLoader, OrganisatieByIdLoader
 from .overschrijving_loader import (OverschrijvingByAfspraakLoader, OverschrijvingByExportLoader,
                                     OverschrijvingByIdLoader)
-from .rekeningen_loader import (RekeningenByGebruikerLoader, RekeningenByIbanLoader, RekeningenByIdLoader,
+from .rekeningen_loader import (RekeningenByBurgerLoader, RekeningenByIbanLoader, RekeningenByIdLoader,
                                 RekeningenByOrganisatieLoader)
 from .rubrieken_loader import RubriekByGrootboekrekeningLoader, RubriekByIdLoader
 
@@ -27,8 +27,8 @@ class HHBDataLoader:
     """ Main Dataloader class for HHB """
 
     def __init__(self, loop):
-        # Gebruikers
-        self.gebruikers_by_id = GebruikersByIdLoader(loop=loop)
+        # Burgers
+        self.burgers_by_id = BurgersByIdLoader(loop=loop)
 
         # Organisaties
         self.organisaties_by_id = OrganisatieByIdLoader(loop=loop)
@@ -36,7 +36,7 @@ class HHBDataLoader:
 
         # Afspraken
         self.afspraken_by_id = AfsprakenByIdLoader(loop=loop)
-        self.afspraken_by_gebruiker = AfsprakenByGebruikerLoader(loop=loop)
+        self.afspraken_by_burger = AfsprakenByBurgerLoader(loop=loop)
         self.afspraken_by_rekening = AfsprakenByRekeningLoader(loop=loop)
         self.rubrieken_by_id = RubriekByIdLoader(loop=loop)
         self.rubrieken_by_grootboekrekening = RubriekByGrootboekrekeningLoader(
@@ -48,7 +48,7 @@ class HHBDataLoader:
 
         # Rekeningen
         self.rekeningen_by_id = RekeningenByIdLoader(loop=loop)
-        self.rekeningen_by_gebruiker = RekeningenByGebruikerLoader(loop=loop)
+        self.rekeningen_by_burger = RekeningenByBurgerLoader(loop=loop)
         self.rekeningen_by_organisatie = RekeningenByOrganisatieLoader(loop=loop)
         self.rekeningen_by_iban = RekeningenByIbanLoader(loop=loop)
 
@@ -70,8 +70,8 @@ class HHBDataLoader:
         self.exports_by_id = ExportsByIdLoader(loop=loop)
 
         self.gebruikersactiviteiten_by_id = GebruikersActiviteitenByIdLoader(loop=loop)
-        self.gebruikersactiviteiten_by_gebruikers = (
-            GebruikersActiviteitenByGebruikersLoader(loop=loop)
+        self.gebruikersactiviteiten_by_burgers = (
+            GebruikersActiviteitenByBurgersLoader(loop=loop)
         )
         self.gebruikersactiviteiten_by_afspraken = (
             GebruikersActiviteitenByAfsprakenLoader(loop=loop)

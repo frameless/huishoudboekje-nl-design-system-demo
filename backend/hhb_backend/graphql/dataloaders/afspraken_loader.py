@@ -6,11 +6,11 @@ class AfsprakenByIdLoader(SingleDataLoader):
     model = "afspraken"
 
 
-class AfsprakenByGebruikerLoader(ListDataLoader):
-    """ Load afspraken using gebruiker ids """
+class AfsprakenByBurgerLoader(ListDataLoader):
+    """ Load afspraken using burger ids """
     model = "afspraken"
-    filter_item = "filter_gebruikers"
-    index = "gebruiker_id"
+    filter_item = "filter_burgers"
+    index = "burger_id"
 
 
 class AfsprakenByRekeningLoader(ListDataLoader):

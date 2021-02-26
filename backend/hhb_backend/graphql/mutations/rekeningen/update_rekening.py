@@ -33,7 +33,7 @@ class UpdateRekening(graphene.Mutation):
                 entity_type="rekening", result=self, key="rekening"
             )
             + gebruikers_activiteit_entities(
-                entity_type="burger", result=self, key="gebruikers"
+                entity_type="burger", result=self, key="burgers"
             )
             + gebruikers_activiteit_entities(
                 entity_type="organisatie", result=self, key="organisaties"

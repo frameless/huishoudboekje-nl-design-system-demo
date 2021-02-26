@@ -96,7 +96,7 @@ async def test_automatisch_boeken_no_csm_success_single(test_request_context, mo
                                                  json={"data": []})
         afspraken_by_id = mock.get(
             f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=11",
-            json={"data": [{"id": 11, "automatisch_boeken": True, "rubriek_id": 21, "gebruiker_id": 41}]})
+            json={"data": [{"id": 11, "automatisch_boeken": True, "rubriek_id": 21, "burger_id": 41}]})
         rubrieken_by_id = mock.get(
             f"{settings.HHB_SERVICES_URL}/rubrieken/?filter_ids=21",
             json={"data": [{"id": 21, "grootboekrekening_id": "test"}]})
@@ -157,8 +157,8 @@ async def test_automatisch_boeken_no_csm_success_multiple(test_request_context, 
                                                  json={"data": []})
         afspraken_by_id = mock.get(
             f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=11,12",
-            json={"data": [{"id": 11, "automatisch_boeken": True, "rubriek_id": 21, "gebruiker_id": 41},
-                           {"id": 12, "automatisch_boeken": True, "rubriek_id": 21, "gebruiker_id": 42},
+            json={"data": [{"id": 11, "automatisch_boeken": True, "rubriek_id": 21, "burger_id": 41},
+                           {"id": 12, "automatisch_boeken": True, "rubriek_id": 21, "burger_id": 42},
                            ]})
         rubrieken_by_id = mock.get(
             f"{settings.HHB_SERVICES_URL}/rubrieken/?filter_ids=21",
@@ -216,7 +216,7 @@ async def test_automatisch_boeken_csm_success_multiple(test_request_context, moc
                                                  json={"data": []})
         afspraken_by_id = mock.get(
             f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=11",
-            json={"data": [{"id": 11, "automatisch_boeken": True, "rubriek_id": 21, "gebruiker_id": 41},
+            json={"data": [{"id": 11, "automatisch_boeken": True, "rubriek_id": 21, "burger_id": 41},
                            ]})
         rubrieken_by_id = mock.get(
             f"{settings.HHB_SERVICES_URL}/rubrieken/?filter_ids=21",
@@ -270,7 +270,7 @@ async def test_automatisch_boeken_no_csm_failure_journaalpost_exists(test_reques
                                                  json={"data": []})
         afspraken_by_id = mock.get(
             f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=11",
-            json={"data": [{"id": 11, "automatisch_boeken": True, "rubriek_id": 21, "gebruiker_id": 41}]})
+            json={"data": [{"id": 11, "automatisch_boeken": True, "rubriek_id": 21, "burger_id": 41}]})
         rubrieken_by_id = mock.get(
             f"{settings.HHB_SERVICES_URL}/rubrieken/?filter_ids=21",
             json={"data": [{"id": 21, "grootboekrekening_id": "test"}]})
@@ -340,8 +340,8 @@ async def test_automatisch_boeken_no_csm_multiple_suggesties(test_request_contex
                                                  json={"data": []})
         afspraken_by_id = mock.get(
             f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=11,12",
-            json={"data": [{"id": 11, "automatisch_boeken": True, "rubriek_id": 21, "gebruiker_id": 41},
-                           {"id": 12, "automatisch_boeken": True, "rubriek_id": 21, "gebruiker_id": 42}
+            json={"data": [{"id": 11, "automatisch_boeken": True, "rubriek_id": 21, "burger_id": 41},
+                           {"id": 12, "automatisch_boeken": True, "rubriek_id": 21, "burger_id": 42}
                            ]})
         rubrieken_by_id = mock.get(
             f"{settings.HHB_SERVICES_URL}/rubrieken/?filter_ids=21",

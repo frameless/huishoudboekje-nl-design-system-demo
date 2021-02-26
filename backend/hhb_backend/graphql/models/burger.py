@@ -1,4 +1,4 @@
-""" Gebruiker model as used in GraphQL queries """
+""" Burger model as used in GraphQL queries """
 import graphene
 from flask import request
 
@@ -7,8 +7,8 @@ import hhb_backend.graphql.models.rekening as rekening
 import hhb_backend.graphql.models.gebruikersactiviteit as gebruikersactiviteit
 
 
-class Gebruiker(graphene.ObjectType):
-    """ GraphQL Gebruiker model """
+class Burger(graphene.ObjectType):
+    """ GraphQL Burger model """
     id = graphene.Int()
     telefoonnummer = graphene.String()
     email = graphene.String()
@@ -26,17 +26,17 @@ class Gebruiker(graphene.ObjectType):
     gebruikersactiviteiten = graphene.List(lambda: gebruikersactiviteit.GebruikersActiviteit)
 
     def resolve_iban(root, info):
-        rekeningen = Gebruiker.resolve_rekeningen(root, info)
+        rekeningen = Burger.resolve_rekeningen(root, info)
         if rekeningen:
             return rekeningen[0].get('iban')
         return None
 
     async def resolve_rekeningen(root, info):
         """ Get rekeningen when requested """
-        return await request.dataloader.rekeningen_by_gebruiker.load(root.get('id')) or []
+        return await request.dataloader.rekeningen_by_burger.load(root.get('id')) or []
 
     async def resolve_afspraken(root, info):
-        return await request.dataloader.afspraken_by_gebruiker.load(root.get('id')) or []
+        return await request.dataloader.afspraken_by_burger.load(root.get('id')) or []
 
     async def resolve_gebruikersactiviteiten(root, info):
         return request.dataloader.gebruikersactiviteiten_by_gebruikers.get_by_id(root.get('id')) or []

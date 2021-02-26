@@ -1,4 +1,4 @@
-""" GraphQL mutation for updating a Gebruiker/Burger """
+""" GraphQL mutation for updating a Burger """
 import json
 
 import graphene
@@ -7,16 +7,16 @@ from flask import request
 from graphql import GraphQLError
 
 from hhb_backend.graphql import settings
-from hhb_backend.graphql.models.gebruiker import Gebruiker
+from hhb_backend.graphql.models.burger import Burger
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     gebruikers_activiteit_entities,
     log_gebruikers_activiteit,
 )
 
 
-class UpdateGebruiker(graphene.Mutation):
+class UpdateBurger(graphene.Mutation):
     class Arguments:
-        # gebruiker arguments
+        # burger arguments
         id = graphene.Int(required=True)
         email = graphene.String()
         geboortedatum = graphene.String()
@@ -32,38 +32,38 @@ class UpdateGebruiker(graphene.Mutation):
         plaatsnaam = graphene.String()
 
     ok = graphene.Boolean()
-    gebruiker = graphene.Field(lambda: Gebruiker)
-    previous = graphene.Field(lambda: Gebruiker)
+    burger = graphene.Field(lambda: Burger)
+    previous = graphene.Field(lambda: Burger)
 
     def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
         return dict(
             action=info.field_name,
             entities=gebruikers_activiteit_entities(
-                entity_type="burger", result=self, key="gebruiker"
+                entity_type="burger", result=self, key="burger"
             )
             + gebruikers_activiteit_entities(
-                entity_type="rekening", result=self.gebruiker, key="rekeningen"
+                entity_type="rekening", result=self.burger, key="rekeningen"
             ),
             before=dict(burger=self.previous),
-            after=dict(burger=self.gebruiker),
+            after=dict(burger=self.burger),
         )
 
     @staticmethod
     @log_gebruikers_activiteit
     async def mutate(_root, _info, id, **kwargs):
         """ Update the current Gebruiker/Burger """
-        previous = await request.dataloader.gebruikers_by_id.load(id)
+        previous = await request.dataloader.burgers_by_id.load(id)
 
         response = requests.post(
-            f"{settings.HHB_SERVICES_URL}/gebruikers/{id}",
+            f"{settings.HHB_SERVICES_URL}/burgers/{id}",
             data=json.dumps(kwargs),
             headers={"Content-type": "application/json"},
         )
         if response.status_code != 200:
             raise GraphQLError(f"Upstream API responded: {response.json()}")
 
-        request.dataloader.gebruikers_by_id.clear(id)
+        request.dataloader.burgers_by_id.clear(id)
 
-        gebruiker = response.json()["data"]
+        burger = response.json()["data"]
 
-        return UpdateGebruiker(ok=True, gebruiker=gebruiker, previous=previous)
+        return UpdateBurger(ok=True, burger=burger, previous=previous)

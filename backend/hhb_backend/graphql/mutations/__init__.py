@@ -2,9 +2,9 @@
 import graphene
 
 from .configuraties.configuraties import CreateConfiguratie, DeleteConfiguratie, UpdateConfiguratie
-from .gebruikers.create_gebruiker import CreateGebruiker
-from .gebruikers.delete_gebruiker import DeleteGebruiker
-from .gebruikers.update_gebruiker import UpdateGebruiker
+from .burgers.create_burger import CreateBurger
+from .burgers.delete_burger import DeleteBurger
+from .burgers.update_burger import UpdateBurger
 from .journaalposten.create_journaalpost import CreateJournaalpostAfspraak, CreateJournaalpostGrootboekrekening, \
     CreateJournaalpostPerAfspraak
 from .journaalposten.update_journaalpost import UpdateJournaalpostGrootboekrekening
@@ -17,8 +17,8 @@ from .afspraken.update_afspraak import UpdateAfspraak
 from .afspraken.delete_afspraak import DeleteAfspraak
 from .overschrijvingen.start_automatisch_boeken import StartAutomatischBoeken
 from .rekeningen.update_rekening import UpdateRekening
-from .rekeningen.create_gebruiker_rekening import CreateGebruikerRekening
-from .rekeningen.delete_gebruiker_rekening import DeleteGebruikerRekening
+from .rekeningen.create_burger_rekening import CreateBurgerRekening
+from .rekeningen.delete_burger_rekening import DeleteBurgerRekening
 from .rekeningen.create_organisatie_rekening import CreateOrganisatieRekening
 from .rekeningen.delete_organisatie_rekening import DeleteOrganisatieRekening
 from .customer_statement_messages.delete_customer_statement_message import DeleteCustomerStatementMessage
@@ -30,17 +30,17 @@ from .overschrijvingen.create_export_overschrijvingen import CreateExportOversch
 
 class RootMutation(graphene.ObjectType):
     """ The root of all mutations """
-    createGebruiker = CreateGebruiker.Field()
-    deleteGebruiker = DeleteGebruiker.Field()
-    updateGebruiker = UpdateGebruiker.Field()
+    createBurger = CreateBurger.Field()
+    deleteBurger = DeleteBurger.Field()
+    updateBurger = UpdateBurger.Field()
     createAfspraak = CreateAfspraak.Field()
     updateAfspraak = UpdateAfspraak.Field()
     deleteAfspraak = DeleteAfspraak.Field()
     createOrganisatie = CreateOrganisatie.Field()
     updateOrganisatie = UpdateOrganisatie.Field()
     deleteOrganisatie = DeleteOrganisatie.Field()
-    createGebruikerRekening = CreateGebruikerRekening.Field()
-    deleteGebruikerRekening = DeleteGebruikerRekening.Field()
+    createBurgerRekening = CreateBurgerRekening.Field()
+    deleteBurgerRekening = DeleteBurgerRekening.Field()
     createOrganisatieRekening = CreateOrganisatieRekening.Field()
     deleteOrganisatieRekening = DeleteOrganisatieRekening.Field()
     updateRekening = UpdateRekening.Field()

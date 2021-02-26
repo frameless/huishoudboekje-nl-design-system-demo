@@ -17,7 +17,7 @@ class GebruikersActiviteitenQuery:
     return_type = graphene.List(
         GebruikersActiviteit,
         ids=graphene.List(graphene.Int, default_value=[]),
-        gebruikerIds=graphene.List(graphene.Int, default_value=[]),
+        burgerIds=graphene.List(graphene.Int, default_value=[]),
         afsprakenIds=graphene.List(graphene.Int, default_value=[]),
     )
 
@@ -25,7 +25,7 @@ class GebruikersActiviteitenQuery:
     async def resolver(root, info, **kwargs):
         if (
             not kwargs["ids"]
-            and not kwargs["gebruikerIds"]
+            and not kwargs["burgerIds"]
             and not kwargs["afsprakenIds"]
         ):
             gebruikersactiviteiten = (
@@ -35,8 +35,8 @@ class GebruikersActiviteitenQuery:
             gebruikersactiviteiten = []
             if kwargs["gebruikerIds"]:
                 gebruikersactiviteiten = (
-                    request.dataloader.gebruikersactiviteiten_by_gebruikers.get_by_ids(
-                        kwargs["gebruikerIds"]
+                    request.dataloader.gebruikersactiviteiten_by_burgers.get_by_ids(
+                        kwargs["burgerIds"]
                     )
                 )
             if kwargs["afsprakenIds"]:
