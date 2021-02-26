@@ -6,13 +6,13 @@ from models.afspraak import Afspraak
 class AfspraakFactory():
     """ Factory for Afspraak objects """
 
-    def __init__(self, session, gebruiker_factory):
-        self.gebruikers_factory = gebruiker_factory
+    def __init__(self, session, burger_factory):
+        self.burgers_factory = burger_factory
         self.dbsession = session
 
     def createAfspraak(
         self,
-        gebruiker = None,
+        burger = None,
         beschrijving: str = "Nieuwe afspraak",
         start_datum: date = date(2020, 10, 1),
         eind_datum: date = date(2020, 10, 1),
@@ -27,12 +27,12 @@ class AfspraakFactory():
         rubriek_id: int = None,
         automatisch_boeken: bool = False
     ):
-        if not gebruiker:
-            gebruiker = self.gebruikers_factory.createGebruiker()
-            self.dbsession.add(gebruiker)
+        if not burger:
+            burger = self.burgers_factory.createBurger()
+            self.dbsession.add(burger)
             self.dbsession.flush()
         afspraak = Afspraak(
-            gebruiker=gebruiker,
+            burger=burger,
             beschrijving=beschrijving,
             start_datum=start_datum,
             eind_datum=eind_datum,
@@ -54,8 +54,8 @@ class AfspraakFactory():
         return afspraak
 
 @pytest.fixture(scope="function")
-def afspraak_factory(session, request, gebruiker_factory):
+def afspraak_factory(session, request, burger_factory):
     """
     creates an instance of the AfspraakFactory with function scope dbsession
     """
-    return AfspraakFactory(session, gebruiker_factory)
+    return AfspraakFactory(session, burger_factory)

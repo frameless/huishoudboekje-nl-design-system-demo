@@ -1,11 +1,11 @@
-""" MethodView for /gebruiker/ path """
-from models.gebruiker import Gebruiker
+""" MethodView for /burger/ path """
+from models.burger import Burger
 from core_service.views.hhb_view import HHBView
 
 
-class GebruikerView(HHBView):
-    """ Methods for /gebruiker/(<gebruiker_id>) path """
-    hhb_model = Gebruiker
+class BurgerView(HHBView):
+    """ Methods for /burger/(<burger_id>) path """
+    hhb_model = Burger
     validation_data = {
         "type": "object",
         "properties": {

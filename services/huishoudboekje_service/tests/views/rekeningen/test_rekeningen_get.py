@@ -1,5 +1,5 @@
 """ Test GET /rekeningen/(<rekening_id>/) """
-from core_service.utils import row2dict
+
 
 def test_rekeningen_get_success_all(client, rekening_factory):
     """ Test /rekeningen/ path """
@@ -48,7 +48,7 @@ def test_rekeningen_get_filter_ibans(client, rekening_factory):
     """ Test filter_ibans on rekeningen """
     rek1 = rekening_factory.create_rekening(iban="NL52ABNA7527421754")
     rek2 = rekening_factory.create_rekening(rekeninghouder="S. Jansen",
-                                                                     iban="NL66RABO8214484995")
+                                            iban="NL66RABO8214484995")
 
     response = client.get(f'/rekeningen/?filter_ibans={rek1.iban}')
     assert response.status_code == 200
@@ -61,11 +61,12 @@ def test_rekeningen_get_filter_ibans(client, rekening_factory):
     assert response.status_code == 200
     assert response.json["data"] == []
 
+
 def test_rekeningen_get_filter_rekeninghouders(client, rekening_factory):
     """ Test filter_rekeninghouders on rekeningen """
     rek1 = rekening_factory.create_rekening(iban="NL52ABNA7527421754")
     rek2 = rekening_factory.create_rekening(rekeninghouder="S. Jansen",
-                                                                     iban="NL66RABO8214484995")
+                                            iban="NL66RABO8214484995")
 
     response = client.get(f'/rekeningen/?filter_rekeninghouders={rek1.rekeninghouder}')
     assert response.status_code == 200
@@ -96,7 +97,8 @@ def test_rekeningen_get_filter_organisaties(client, rekening_organisatie_factory
     assert response.status_code == 200
     assert len(response.json["data"]) == 1
     assert response.json["data"][0]["id"] == rekening_organisatie2.rekening.id
-    response = client.get(f'/rekeningen/?filter_organisaties={rekening_organisatie1.organisatie.id},{rekening_organisatie2.organisatie.id}')
+    response = client.get(
+        f'/rekeningen/?filter_organisaties={rekening_organisatie1.organisatie.id},{rekening_organisatie2.organisatie.id}')
     assert response.status_code == 200
     assert len(response.json["data"]) == 2
     assert response.json["data"][0]["id"] == rekening_organisatie1.rekening.id
@@ -104,24 +106,25 @@ def test_rekeningen_get_filter_organisaties(client, rekening_organisatie_factory
     response = client.get(f'/rekeningen/?filter_organisaties=NaN')
     assert response.json["errors"][0] == "Input for filter_organisaties is not correct."
 
-def test_rekeningen_get_filter_gebruikers(client, rekening_gebruiker_factory):
+
+def test_rekeningen_get_filter_burgers(client, rekening_burger_factory):
     """ Test filter_rekeninghouders on rekeningen """
-    rekening_gebruiker1 = rekening_gebruiker_factory.create_rekening_gebruiker()
-    rekening_gebruiker2 = rekening_gebruiker_factory.create_rekening_gebruiker()
-    assert rekening_gebruiker1.rekening != rekening_gebruiker2.rekening
-    assert rekening_gebruiker1.gebruiker != rekening_gebruiker2.gebruiker
-    response = client.get(f'/rekeningen/?filter_gebruikers={rekening_gebruiker1.gebruiker.id}')
+    rekening_burger1 = rekening_burger_factory.create_rekening_burger()
+    rekening_burger2 = rekening_burger_factory.create_rekening_burger()
+    assert rekening_burger1.rekening != rekening_burger2.rekening
+    assert rekening_burger1.burger != rekening_burger2.burger
+    response = client.get(f'/rekeningen/?filter_burgers={rekening_burger1.burger.id}')
     assert response.status_code == 200
     assert len(response.json["data"]) == 1
-    assert response.json["data"][0]["id"] == rekening_gebruiker1.rekening.id
-    response = client.get(f'/rekeningen/?filter_gebruikers={rekening_gebruiker2.gebruiker.id}')
+    assert response.json["data"][0]["id"] == rekening_burger1.rekening.id
+    response = client.get(f'/rekeningen/?filter_burgers={rekening_burger2.burger.id}')
     assert response.status_code == 200
     assert len(response.json["data"]) == 1
-    assert response.json["data"][0]["id"] == rekening_gebruiker2.rekening.id
-    response = client.get(f'/rekeningen/?filter_gebruikers={rekening_gebruiker1.gebruiker.id},{rekening_gebruiker2.gebruiker.id}')
+    assert response.json["data"][0]["id"] == rekening_burger2.rekening.id
+    response = client.get(f'/rekeningen/?filter_burgers={rekening_burger1.burger.id},{rekening_burger2.burger.id}')
     assert response.status_code == 200
     assert len(response.json["data"]) == 2
-    assert response.json["data"][0]["id"] == rekening_gebruiker1.rekening.id
-    assert response.json["data"][1]["id"] == rekening_gebruiker2.rekening.id
-    response = client.get(f'/rekeningen/?filter_gebruikers=NaN')
-    assert response.json["errors"][0] == "Input for filter_gebruikers is not correct."
+    assert response.json["data"][0]["id"] == rekening_burger1.rekening.id
+    assert response.json["data"][1]["id"] == rekening_burger2.rekening.id
+    response = client.get(f'/rekeningen/?filter_burgers=NaN')
+    assert response.json["errors"][0] == "Input for filter_burgers is not correct."

@@ -7,8 +7,8 @@ class Afspraak(db.Model):
     __tablename__ = 'afspraken'
 
     id = Column(Integer, Sequence('afspraken_id_seq'), primary_key=True)
-    gebruiker_id = Column(Integer, ForeignKey('gebruikers.id'))
-    gebruiker = relationship("Gebruiker", back_populates="afspraken")
+    burger_id = Column(Integer, ForeignKey('burgers.id'))
+    burger = relationship("Burger", back_populates="afspraken")
     beschrijving = Column(String)
     start_datum = Column(Date)
     eind_datum = Column(Date)

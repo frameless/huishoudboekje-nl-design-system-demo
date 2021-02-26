@@ -4,11 +4,11 @@ import os
 from flask import Flask, Response
 
 from huishoudboekje_service.views import (
-    GebruikerView,
+    BurgerView,
     OrganisatieView,
     AfspraakView,
     RekeningView,
-    RekeningGebruikerView,
+    RekeningBurgerView,
     RekeningOrganisatieView,
     JournaalpostView,
     RubriekView,
@@ -36,10 +36,10 @@ def create_app(config_name=os.getenv('APP_SETTINGS', 'huishoudboekje_service.con
 
     # Views
     routes = [
-        {"path": "/gebruikers", "view": GebruikerView, "name": "gebruiker_view"},
-        {"path": "/gebruikers/<object_id>", "view": GebruikerView, "name": "gebruiker_detail_view"},
-        {"path": "/gebruikers/<object_id>/rekeningen", "view": RekeningGebruikerView,
-         "name": "gebruiker_rekeningen_view"},
+        {"path": "/burgers", "view": BurgerView, "name": "burger_view"},
+        {"path": "/burgers/<object_id>", "view": BurgerView, "name": "burger_detail_view"},
+        {"path": "/burgers/<object_id>/rekeningen", "view": RekeningBurgerView,
+         "name": "burger_rekeningen_view"},
         {"path": "/organisaties", "view": OrganisatieView, "name": "organisatie_view"},
         {"path": "/organisaties/<object_id>", "view": OrganisatieView, "name": "organisatie_detail_view"},
         {"path": "/organisaties/<object_id>/rekeningen", "view": RekeningOrganisatieView,

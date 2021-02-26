@@ -1,14 +1,12 @@
-from flask import abort, make_response
+from core_service.database import db
 from sqlalchemy import Column, Integer, String, Sequence, Date
 from sqlalchemy.orm import relationship
-from sqlalchemy.orm.exc import NoResultFound
-from core_service.database import db
 
 
-class Gebruiker(db.Model):
-    __tablename__ = 'gebruikers'
+class Burger(db.Model):
+    __tablename__ = 'burgers'
 
-    id = Column(Integer, Sequence('gebruikers_id_seq'), primary_key=True)
+    id = Column(Integer, Sequence('burgers_id_seq'), primary_key=True)
 
     # Name fields
     voornamen = Column(String)
@@ -28,8 +26,8 @@ class Gebruiker(db.Model):
     iban = Column(String)
 
     # Relations from other models
-    rekeningen = relationship("RekeningGebruiker",
-        back_populates="gebruiker",
+    rekeningen = relationship("RekeningBurger",
+        back_populates="burger",
         cascade="all, delete" # cascade only deletes relationship, not the rekening
     )
     afspraken = relationship("Afspraak")

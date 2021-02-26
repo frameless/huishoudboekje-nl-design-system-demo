@@ -1,5 +1,5 @@
 """ Test GET /afspraken/(<afspraak_id>/) """
-from models.afspraak import Afspraak
+
 
 def test_afspraak_get_success_multiple(client, afspraak_factory):
     """ Test /afspraken/ path """
@@ -11,6 +11,7 @@ def test_afspraak_get_success_multiple(client, afspraak_factory):
     assert response.json["data"][0]["kenmerk"] == afspraak1.kenmerk
     assert response.json["data"][1]["kenmerk"] == afspraak2.kenmerk
 
+
 def test_afspraak_get_success_single(client, afspraak_factory):
     """ Test /afspraken/ path """
     afspraak1 = afspraak_factory.createAfspraak(kenmerk="Afspraak1")
@@ -19,10 +20,12 @@ def test_afspraak_get_success_single(client, afspraak_factory):
     assert response.status_code == 200
     assert response.json["data"]["kenmerk"] == afspraak2.kenmerk
 
+
 def test_afspraak_get_failure_not_found(client):
     response = client.get('/afspraken/1337')
     assert response.status_code == 404
     assert response.json["errors"][0] == "Afspraak not found."
+
 
 def test_afspraak_filter_columns(client, afspraak_factory):
     afspraak1 = afspraak_factory.createAfspraak(kenmerk="Afspraak1")
@@ -37,10 +40,12 @@ def test_afspraak_filter_columns(client, afspraak_factory):
     assert response.status_code == 200
     assert response.json["data"] == {"id": afspraak2.id, "kenmerk": afspraak2.kenmerk}
 
+
 def test_afspraak_filter_invalid_column(client):
     response = client.get('/afspraken/?columns=non-field')
     assert response.status_code == 400
     assert response.json["errors"][0] == "Input for columns is not correct, 'non-field' is not a column."
+
 
 def test_afspraak_filter_ids(client, afspraak_factory):
     afspraak1 = afspraak_factory.createAfspraak(kenmerk="Afspraak1")
@@ -59,33 +64,36 @@ def test_afspraak_filter_ids(client, afspraak_factory):
     assert len(response.json["data"]) == 1
     assert response.json["data"][0]["kenmerk"] == afspraak2.kenmerk
 
+
 def test_afspraak_filter_invalid_id(client):
     response = client.get(f'/afspraken/?filter_ids=NaN')
     assert response.status_code == 400
     assert response.json["errors"][0] == "Input for filter_ids is not correct, 'NaN' is not a number."
 
-def test_afspraak_get_filter_gebruikers(client, afspraak_factory, gebruiker_factory):
-    gebruiker1 = gebruiker_factory.createGebruiker()
-    gebruiker2 = gebruiker_factory.createGebruiker()
-    afspraak1 = afspraak_factory.createAfspraak(gebruiker=gebruiker1, kenmerk="Afspraak1")
-    afspraak2 = afspraak_factory.createAfspraak(gebruiker=gebruiker1, kenmerk="Afspraak2")
-    afspraak3 = afspraak_factory.createAfspraak(gebruiker=gebruiker2, kenmerk="Afspraak3")
-    response = client.get(f'/afspraken/?filter_gebruikers={gebruiker1.id}')
+
+def test_afspraak_get_filter_burgers(client, afspraak_factory, burger_factory):
+    burger1 = burger_factory.createBurger()
+    burger2 = burger_factory.createBurger()
+    afspraak1 = afspraak_factory.createAfspraak(burger=burger1, kenmerk="Afspraak1")
+    afspraak2 = afspraak_factory.createAfspraak(burger=burger1, kenmerk="Afspraak2")
+    afspraak3 = afspraak_factory.createAfspraak(burger=burger2, kenmerk="Afspraak3")
+    response = client.get(f'/afspraken/?filter_burgers={burger1.id}')
     assert len(response.json["data"]) == 2
     assert response.json["data"][0]["kenmerk"] == afspraak1.kenmerk
     assert response.json["data"][1]["kenmerk"] == afspraak2.kenmerk
-    response = client.get(f'/afspraken/?filter_gebruikers={gebruiker2.id}')
+    response = client.get(f'/afspraken/?filter_burgers={burger2.id}')
     assert len(response.json["data"]) == 1
     assert response.json["data"][0]["kenmerk"] == afspraak3.kenmerk
-    response = client.get(f'/afspraken/?filter_gebruikers={gebruiker1.id},{gebruiker2.id}')
+    response = client.get(f'/afspraken/?filter_burgers={burger1.id},{burger2.id}')
     assert len(response.json["data"]) == 3
     assert response.json["data"][0]["kenmerk"] == afspraak1.kenmerk
     assert response.json["data"][1]["kenmerk"] == afspraak2.kenmerk
     assert response.json["data"][2]["kenmerk"] == afspraak3.kenmerk
-    response = client.get(f'/afspraken/?filter_gebruikers=1337')
+    response = client.get(f'/afspraken/?filter_burgers=1337')
     assert response.json["data"] == []
-    response = client.get(f'/afspraken/?filter_gebruikers=a')
-    assert response.json["errors"][0] == "Input for filter_gebruikers is not correct, 'a' is not a number."
+    response = client.get(f'/afspraken/?filter_burgers=a')
+    assert response.json["errors"][0] == "Input for filter_burgers is not correct, 'a' is not a number."
+
 
 def test_afspraak_get_filter_organisaties(client, afspraak_factory, organisatie_factory):
     organisatie1 = organisatie_factory.createOrganisatie(kvk_nummer="1", weergave_naam="Organisatie1")
@@ -109,6 +117,7 @@ def test_afspraak_get_filter_organisaties(client, afspraak_factory, organisatie_
     assert response.json["data"] == []
     response = client.get(f'/afspraken/?filter_organisaties=a')
     assert response.json["errors"][0] == "Input for filter_organisaties is not correct, 'a' is not a number."
+
 
 def test_afspraak_get_journaalpost_relation(client, afspraak_factory, journaalpost_factory):
     afspraak = afspraak_factory.createAfspraak(kenmerk="Afspraak")
@@ -134,7 +143,7 @@ def test_afspraak_get_filter_rekening(client, afspraak_factory, rekening_factory
     assert len(response.json["data"]) == 2
     assert response.json["data"][0]["kenmerk"] == afspraak1.kenmerk
     assert response.json["data"][1]["kenmerk"] == afspraak2.kenmerk
-    response = client.get(f'/afspraken/?filter_gebruikers=1337')
+    response = client.get(f'/afspraken/?filter_burgers=1337')
     assert response.json["data"] == []
-    response = client.get(f'/afspraken/?filter_gebruikers=a')
-    assert response.json["errors"][0] == "Input for filter_gebruikers is not correct, 'a' is not a number."
+    response = client.get(f'/afspraken/?filter_burgers=a')
+    assert response.json["errors"][0] == "Input for filter_burgers is not correct, 'a' is not a number."

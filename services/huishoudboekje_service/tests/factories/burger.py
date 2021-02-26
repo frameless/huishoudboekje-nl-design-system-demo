@@ -3,16 +3,16 @@ from datetime import date
 
 import pytest
 
-from models.gebruiker import Gebruiker
+from models.burger import Burger
 
 
-class GebruikerFactory():
-    """ Factory for Gebruiker objects """
+class BurgerFactory():
+    """ Factory for Burger objects """
 
     def __init__(self, session):
         self.dbsession = session
 
-    def createGebruiker(
+    def createBurger(
             self,
             telefoonnummer: str = "0612345678",
             email: str = "a@a.com",
@@ -26,7 +26,7 @@ class GebruikerFactory():
             postcode: str = "1234AB",
             plaatsnaam: str = "Hoofddorp",
     ):
-        gebruiker = Gebruiker(
+        burger = Burger(
             telefoonnummer=telefoonnummer,
             email=email,
             geboortedatum=geboortedatum,
@@ -39,14 +39,14 @@ class GebruikerFactory():
             postcode=postcode,
             plaatsnaam=plaatsnaam
         )
-        self.dbsession.add(gebruiker)
+        self.dbsession.add(burger)
         self.dbsession.flush()
-        return gebruiker
+        return burger
 
 
 @pytest.fixture(scope="function")
-def gebruiker_factory(session, request):
+def burger_factory(session, request):
     """
-    creates an instance of the GebruikerFactory with function scope dbsession
+    creates an instance of the BurgerFactory with function scope dbsession
     """
-    return GebruikerFactory(session)
+    return BurgerFactory(session)

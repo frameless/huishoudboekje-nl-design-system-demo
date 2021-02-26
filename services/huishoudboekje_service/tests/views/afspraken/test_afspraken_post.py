@@ -4,19 +4,20 @@ from datetime import date
 import pytest
 from models.afspraak import Afspraak
 
+
 def test_afspraken_post_new_afspraak(client, session):
     """ Test /afspraken/ path """
     assert session.query(Afspraak).count() == 0
     afspraak_dict = {
-        "beschrijving":"Nieuwe afspraak",
-        "start_datum":date(2020, 10, 1).isoformat(),
-        "eind_datum":date(2020, 10, 1).isoformat(),
-        "aantal_betalingen":5,
-        "interval":"P1Y2M10DT2H30M",
-        "bedrag":1337,
-        "credit":True,
-        "kenmerk":"ABC1234",
-        "actief":True,
+        "beschrijving": "Nieuwe afspraak",
+        "start_datum": date(2020, 10, 1).isoformat(),
+        "eind_datum": date(2020, 10, 1).isoformat(),
+        "aantal_betalingen": 5,
+        "interval": "P1Y2M10DT2H30M",
+        "bedrag": 1337,
+        "credit": True,
+        "kenmerk": "ABC1234",
+        "actief": True,
         "automatische_incasso": True,
         "automatisch_boeken": False
     }
@@ -27,12 +28,13 @@ def test_afspraken_post_new_afspraak(client, session):
     )
     assert response.status_code == 201
     afspraak_dict["id"] = 1
-    afspraak_dict["gebruiker_id"] = None
+    afspraak_dict["burger_id"] = None
     afspraak_dict["tegen_rekening_id"] = None
     afspraak_dict["organisatie_id"] = None
     afspraak_dict["rubriek_id"] = None
     assert response.json["data"] == afspraak_dict
     assert session.query(Afspraak).count() == 1
+
 
 def test_afspraken_post_update_afspraak(client, session, afspraak_factory):
     """ Test /afspraken/<afspraak_id> path """
@@ -56,8 +58,9 @@ def test_afspraken_post_update_afspraak(client, session, afspraak_factory):
     )
     assert response.status_code == 404
 
+
 @pytest.mark.parametrize("key,bad_value", [
-    ("gebruiker_id", "Kareltje"),
+    ("burger_id", "Kareltje"),
     ("beschrijving", 1234),
     ("start_datum", 1234),
     ("eind_datum", 1234),
