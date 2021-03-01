@@ -14,7 +14,7 @@ class AfsprakenByGebruikerLoader(ListDataLoader):
 
 
 class AfsprakenByRekeningLoader(ListDataLoader):
-    """ Load afspraken using gebruiker ids """
+    """ Load afspraken using rekeningen """
     model = "afspraken"
     filter_item = "filter_rekening"
     index = "tegen_rekening_id"
