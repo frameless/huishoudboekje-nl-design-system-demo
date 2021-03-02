@@ -3,36 +3,36 @@ name: huishoudboekje
 description: Metachart for the Huishoudboekje Schaalbaar application
 type: application
 version: 0.20.0
-appVersion: "0.20.0"
+appVersion: 0.20.0
 dependencies:
   - name: medewerker-backend
-    repository: "file://../../charts/medewerker-backend"
+    repository: file://../../charts/medewerker-backend
     version: ""
   - name: medewerker-frontend
-    repository: "file://../..//charts/medewerker-frontend"
+    repository: file://../..//charts/medewerker-frontend
     version: ""
   - name: huishoudboekje-service
     version: ""
-    repository: "file://../..//charts/huishoudboekje-service"
+    repository: file://../..//charts/huishoudboekje-service
   - name: organisatie-service
     version: ""
-    repository: "file://../..//charts/organisatie-service"
+    repository: file://../..//charts/organisatie-service
   - name: bank-transactie-service
     version: ""
-    repository: "file://../..//charts/bank-transactie-service"
+    repository: file://../..//charts/bank-transactie-service
   - name: grootboek-service
     version: ""
-    repository: "file://../..//charts/grootboek-service"
+    repository: file://../..//charts/grootboek-service
   - name: log-service
     version: ""
-    repository: "file://../..//charts/log-service"
+    repository: file://../..//charts/log-service
   - name: database
     version: ""
-    repository: "file://../..//charts/database"
+    repository: file://../..//charts/database
   - name: dex
     version: 2.13.0
-    repository: "@stable"
+    repository: '@stable'
     condition: dex.enabled
   - name: postgresql
     version: 10.2.1
-    repository: "@bitnami"
+    repository: '@bitnami'

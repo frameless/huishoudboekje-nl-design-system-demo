@@ -46,6 +46,8 @@ huishoudboekje: helm/repo/huishoudboekje-$(COMPONENT_VERSION).tgz helm/theme.yam
 		$@  $< \
 		--debug \
 		--values helm/theme.yaml \
+		--set "medewerker-backend.extraEnv[0].name=OIDC_CLOCK_SKEW" \
+		--set "medewerker-backend.extraEnv[0].value='500'" \
 		--set database.traefik.enabled=true \
 		--set global.minikube=true \
 		--set global.imageTag=$(IMAGE_TAG) \

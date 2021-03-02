@@ -49,3 +49,6 @@ force-dependencies: touch-dependencies dependencies
 	helm dependency update $(@D)
 	helm dependency build $(@D)
 
+clean:
+	rm -rf repo
+	rm -rf charts/huishoudboekje/charts/*.tgz

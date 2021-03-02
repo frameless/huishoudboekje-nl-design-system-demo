@@ -70,6 +70,7 @@ pages:
   stage: deploy
   needs:
     - build-helm
+    - build-shell-runner
   tags:
     - docker
   script:
