@@ -1,4 +1,4 @@
-import {Box, Button, Divider, FormLabel, Input, Stack, Tooltip, useBreakpointValue, useToast} from "@chakra-ui/react";
+import {Box, Button, Divider, FormControl, FormLabel, Input, Stack, Tooltip, useBreakpointValue, useToast} from "@chakra-ui/react";
 import React from "react";
 import {useInput, Validators} from "react-grapple";
 import {useTranslation} from "react-i18next";
@@ -15,53 +15,53 @@ import Section from "../Layouts/Section";
 const OrganisatieEdit = () => {
 	const isMobile = useBreakpointValue([true, null, null, false]);
 	const {t} = useTranslation();
-	const {id} = useParams<{ id: string }>();
+	const {id} = useParams<{id: string}>();
 	const toast = useToast();
 	const {push} = useHistory();
 
-	const kvkNumber = useInput({
+	const kvkNummer = useInput({
 		defaultValue: "",
-		validate: [Validators.required, (v) => new RegExp(/^[0-9]{8}$/).test(v)]
+		validate: [Validators.required, (v) => new RegExp(/^[0-9]{8}$/).test(v)],
 	});
-	const companyName = useInput({
+	const bedrijfsnaam = useInput({
 		defaultValue: "",
-		validate: [Validators.required]
+		validate: [Validators.required],
 	});
-	const displayName = useInput({
+	const weergavenaam = useInput({
 		defaultValue: "",
-		validate: [Validators.required]
+		validate: [Validators.required],
 	});
-	const street = useInput({
+	const straatnaam = useInput({
 		defaultValue: "",
-		validate: [Validators.required]
+		validate: [Validators.required],
 	});
-	const houseNumber = useInput({
+	const huisnummer = useInput({
 		defaultValue: "",
-		validate: [Validators.required]
+		validate: [Validators.required],
 	});
-	const zipcode = useInput({
+	const postcode = useInput({
 		defaultValue: "",
 		validate: [Validators.required, (v) => new RegExp(Regex.ZipcodeNL).test(v)],
-		placeholder: "1234AB"
+		placeholder: "1234AB",
 	});
-	const city = useInput({
+	const plaatsnaam = useInput({
 		defaultValue: "",
-		validate: [Validators.required]
+		validate: [Validators.required],
 	});
 
 	const $organisatie = useGetOneOrganisatieQuery({
 		variables: {id: parseInt(id)},
 		onCompleted: ({organisatie}) => {
 			if (organisatie) {
-				kvkNumber.setValue(organisatie.kvkNummer?.toString() || "");
-				companyName.setValue(organisatie.kvkDetails?.naam || "");
-				displayName.setValue(organisatie.weergaveNaam || "");
-				street.setValue(organisatie.kvkDetails?.straatnaam || "");
-				houseNumber.setValue(organisatie.kvkDetails?.huisnummer || "");
-				zipcode.setValue(organisatie.kvkDetails?.postcode || "");
-				city.setValue(organisatie.kvkDetails?.plaatsnaam || "");
+				kvkNummer.setValue(organisatie.kvkNummer?.toString() || "");
+				bedrijfsnaam.setValue(organisatie.kvkDetails?.naam || "");
+				weergavenaam.setValue(organisatie.weergaveNaam || "");
+				straatnaam.setValue(organisatie.kvkDetails?.straatnaam || "");
+				huisnummer.setValue(organisatie.kvkDetails?.huisnummer || "");
+				postcode.setValue(organisatie.kvkDetails?.postcode || "");
+				plaatsnaam.setValue(organisatie.kvkDetails?.plaatsnaam || "");
 			}
-		}
+		},
 	});
 	const [updateOrganisatie, $updateOrganisatie] = useUpdateOrganisatieMutation();
 
@@ -69,13 +69,13 @@ const OrganisatieEdit = () => {
 		e.preventDefault();
 
 		const isFormValid = [
-			kvkNumber,
-			companyName,
-			displayName,
-			street,
-			houseNumber,
-			zipcode,
-			city,
+			kvkNummer,
+			bedrijfsnaam,
+			weergavenaam,
+			straatnaam,
+			huisnummer,
+			postcode,
+			plaatsnaam,
 		].every(f => f.isValid);
 		if (!isFormValid) {
 			toast({
@@ -90,14 +90,14 @@ const OrganisatieEdit = () => {
 		updateOrganisatie({
 			variables: {
 				id: parseInt(id),
-				kvkNummer: kvkNumber.value,
-				naam: companyName.value,
-				weergaveNaam: displayName.value,
-				straatnaam: street.value,
-				huisnummer: houseNumber.value,
-				postcode: zipcode.value,
-				plaatsnaam: city.value,
-			}
+				kvkNummer: kvkNummer.value,
+				naam: bedrijfsnaam.value,
+				weergaveNaam: weergavenaam.value,
+				straatnaam: straatnaam.value,
+				huisnummer: huisnummer.value,
+				postcode: postcode.value,
+				plaatsnaam: plaatsnaam.value,
+			},
 		}).then(() => {
 			toast({
 				status: "success",
@@ -116,13 +116,13 @@ const OrganisatieEdit = () => {
 				description: t("messages.genericError.description"),
 				isClosable: true,
 			});
-		})
+		});
 	};
 
 	const isInvalid = (input) => input.dirty && !input.isValid;
 
 	return (
-		<Queryable query={$organisatie} error={<Redirect to={Routes.NotFound} />}>{({organisatie}: { organisatie: Organisatie }) => (
+		<Queryable query={$organisatie} error={<Redirect to={Routes.NotFound} />}>{({organisatie}: {organisatie: Organisatie}) => (
 			<Page backButton={<BackButton to={Routes.Organisatie(parseInt(id))} />} title={organisatie.weergaveNaam || ""}>
 				<Box as={"form"} onSubmit={onSubmit}>
 					<Section>
@@ -130,22 +130,28 @@ const OrganisatieEdit = () => {
 							<FormLeft title={t("forms.organizations.sections.organizational.title")} helperText={t("forms.organizations.sections.organizational.helperText")} />
 							<FormRight>
 								<Stack spacing={2} direction={["column", "row"]}>
-									<Stack spacing={1} flex={1}>
-										<FormLabel htmlFor={"kvkNumber"}>{t("forms.organizations.fields.kvkNumber")}</FormLabel>
-										<Tooltip label={t("forms.organizations.tooltips.kvkNumber")} aria-label={t("forms.organizations.fields.kvkNumber")} placement={isMobile ? "top" : "left"}>
-											<Input isInvalid={isInvalid(kvkNumber)} {...kvkNumber.bind} id="kvkNumber" />
-										</Tooltip>
-									</Stack>
-									<Stack spacing={1} flex={2}>
-										<FormLabel htmlFor={"companyName"}>{t("forms.organizations.fields.companyName")}</FormLabel>
-										<Input isInvalid={isInvalid(companyName)} {...companyName.bind} id="companyName" />
-									</Stack>
+									<FormControl isRequired={true} id={"kvknummer"}>
+										<Stack spacing={1} flex={1}>
+											<FormLabel>{t("forms.organizations.fields.kvknummer")}</FormLabel>
+											<Tooltip label={t("forms.organizations.tooltips.kvknummer")} aria-label={t("forms.organizations.fields.kvknummer")} placement={isMobile ? "top" : "left"}>
+												<Input isInvalid={isInvalid(kvkNummer)} {...kvkNummer.bind} />
+											</Tooltip>
+										</Stack>
+									</FormControl>
+									<FormControl isRequired={true} id={"bedrijfsnaam"}>
+										<Stack spacing={1} flex={2}>
+											<FormLabel>{t("forms.organizations.fields.bedrijfsnaam")}</FormLabel>
+											<Input isInvalid={isInvalid(bedrijfsnaam)} {...bedrijfsnaam.bind} />
+										</Stack>
+									</FormControl>
 								</Stack>
 								<Stack spacing={2} direction={["column", "row"]}>
-									<Stack spacing={1} flex={1}>
-										<FormLabel htmlFor={"displayName"}>{t("forms.organizations.fields.displayName")}</FormLabel>
-										<Input isInvalid={isInvalid(displayName)} {...displayName.bind} id="displayName" />
-									</Stack>
+									<FormControl isRequired={true} id={"weergavenaam"}>
+										<Stack spacing={1} flex={1}>
+											<FormLabel>{t("forms.organizations.fields.weergavenaam")}</FormLabel>
+											<Input isInvalid={isInvalid(weergavenaam)} {...weergavenaam.bind} />
+										</Stack>
+									</FormControl>
 								</Stack>
 							</FormRight>
 						</Stack>
@@ -156,26 +162,34 @@ const OrganisatieEdit = () => {
 							<FormLeft title={t("forms.organizations.sections.contact.title")} helperText={t("forms.organizations.sections.contact.helperText")} />
 							<FormRight>
 								<Stack spacing={2} direction={["column", "row"]}>
-									<Stack spacing={1} flex={2}>
-										<FormLabel htmlFor={"street"}>{t("forms.organizations.fields.street")}</FormLabel>
-										<Input isInvalid={isInvalid(street)} {...street.bind} id="street" />
-									</Stack>
-									<Stack spacing={1} flex={1}>
-										<FormLabel htmlFor={"houseNumber"}>{t("forms.organizations.fields.houseNumber")}</FormLabel>
-										<Input isInvalid={isInvalid(houseNumber)} {...houseNumber.bind} id="houseNumber" />
-									</Stack>
+									<FormControl isRequired={true} id={"straatnaam"}>
+										<Stack spacing={1} flex={2}>
+											<FormLabel>{t("forms.organizations.fields.straatnaam")}</FormLabel>
+											<Input isInvalid={isInvalid(straatnaam)} {...straatnaam.bind} />
+										</Stack>
+									</FormControl>
+									<FormControl isRequired={true} id={"huisnummer"}>
+										<Stack spacing={1} flex={1}>
+											<FormLabel>{t("forms.organizations.fields.huisnummer")}</FormLabel>
+											<Input isInvalid={isInvalid(huisnummer)} {...huisnummer.bind} />
+										</Stack>
+									</FormControl>
 								</Stack>
 								<Stack spacing={2} direction={["column", "row"]}>
-									<Stack spacing={1} flex={1}>
-										<FormLabel htmlFor={"zipcode"}>{t("forms.organizations.fields.zipcode")}</FormLabel>
-										<Tooltip label={t("forms.organizations.tooltips.zipcode")} aria-label={t("forms.organizations.fields.zipcode")} placement={isMobile ? "top" : "left"}>
-											<Input isInvalid={isInvalid(zipcode)} {...zipcode.bind} id="zipcode" />
-										</Tooltip>
-									</Stack>
-									<Stack spacing={1} flex={2}>
-										<FormLabel htmlFor={"city"}>{t("forms.organizations.fields.city")}</FormLabel>
-										<Input isInvalid={isInvalid(city)} {...city.bind} id="city" />
-									</Stack>
+									<FormControl isRequired={true} id={"postcode"}>
+										<Stack spacing={1} flex={1}>
+											<FormLabel>{t("forms.organizations.fields.postcode")}</FormLabel>
+											<Tooltip label={t("forms.organizations.tooltips.postcode")} aria-label={t("forms.organizations.fields.postcode")} placement={isMobile ? "top" : "left"}>
+												<Input isInvalid={isInvalid(postcode)} {...postcode.bind} />
+											</Tooltip>
+										</Stack>
+									</FormControl>
+									<FormControl isRequired={true} id={"plaatsnaam"}>
+										<Stack spacing={1} flex={2}>
+											<FormLabel>{t("forms.organizations.fields.plaatsnaam")}</FormLabel>
+											<Input isInvalid={isInvalid(plaatsnaam)} {...plaatsnaam.bind} />
+										</Stack>
+									</FormControl>
 								</Stack>
 							</FormRight>
 						</Stack>
@@ -195,7 +209,7 @@ const OrganisatieEdit = () => {
 			</Page>
 		)}
 		</Queryable>
-	)
+	);
 };
 
 export default OrganisatieEdit;

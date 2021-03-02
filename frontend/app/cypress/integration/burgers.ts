@@ -75,15 +75,15 @@ describe("Burgers CRUD", () => {
 		// Fill the form
 		const b = sampleBurgers[0];
 
-		cy.get("input#initials").type(b.voorletters);
-		cy.get("input#firstName").type(b.voornamen);
-		cy.get("input#lastName").type(b.achternaam);
-		cy.get("input#dateOfBirth").type(moment(b.geboortedatum).format("L") + "{esc}");
-		cy.get("input#street").type(b.straatnaam);
-		cy.get("input#houseNumber").type(b.huisnummer);
-		cy.get("input#zipcode").type(b.postcode);
-		cy.get("input#city").type(b.plaatsnaam);
-		cy.get("input#phoneNumber").type(b.telefoonnummer);
+		cy.get("input#voorletters").type(b.voorletters);
+		cy.get("input#voornamen").type(b.voornamen);
+		cy.get("input#achternaam").type(b.achternaam);
+		cy.get("input#geboortedatum").type(moment(b.geboortedatum).format("L") + "{esc}");
+		cy.get("input#straatnaam").type(b.straatnaam);
+		cy.get("input#huisnummer").type(b.huisnummer);
+		cy.get("input#postcode").type(b.postcode);
+		cy.get("input#plaatsnaam").type(b.plaatsnaam);
+		cy.get("input#telefoonnummer").type(b.telefoonnummer);
 		cy.get("input#mail").type(b.email);
 
 		// Press submit
@@ -107,15 +107,15 @@ describe("Burgers CRUD", () => {
 		cy.get("h2").should("contain", b1.achternaam);
 
 		// Fill the form
-		cy.get("input#initials").clear().type(b2.voorletters);
-		cy.get("input#firstName").clear().type(b2.voornamen);
-		cy.get("input#lastName").clear().type(b2.achternaam);
-		cy.get("input#dateOfBirth").clear().type(moment(b2.geboortedatum).format("L") + "{esc}");
-		cy.get("input#street").clear().type(b2.straatnaam);
-		cy.get("input#houseNumber").clear().type(b2.huisnummer);
-		cy.get("input#zipcode").clear().type(b2.postcode);
-		cy.get("input#city").clear().type(b2.plaatsnaam);
-		cy.get("input#phoneNumber").clear().type(b2.telefoonnummer);
+		cy.get("input#voorletters").clear().type(b2.voorletters);
+		cy.get("input#voornamen").clear().type(b2.voornamen);
+		cy.get("input#achternaam").clear().type(b2.achternaam);
+		cy.get("input#geboortedatum").clear().type(moment(b2.geboortedatum).format("L") + "{esc}");
+		cy.get("input#straatnaam").clear().type(b2.straatnaam);
+		cy.get("input#huisnummer").clear().type(b2.huisnummer);
+		cy.get("input#postcode").clear().type(b2.postcode);
+		cy.get("input#plaatsnaam").clear().type(b2.plaatsnaam);
+		cy.get("input#telefoonnummer").clear().type(b2.telefoonnummer);
 		cy.get("input#mail").clear().type(b2.email);
 
 		// Press submit

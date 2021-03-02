@@ -1,4 +1,4 @@
-import {Box, Button, Divider, FormLabel, Input, Stack, Tooltip, useBreakpointValue, useToast} from "@chakra-ui/react";
+import {Box, Button, Divider, FormControl, FormLabel, Input, Stack, Tooltip, useBreakpointValue, useToast} from "@chakra-ui/react";
 import moment from "moment";
 import React from "react";
 import DatePicker from "react-datepicker";
@@ -17,62 +17,62 @@ import Section from "../Layouts/Section";
 const BurgerEdit = () => {
 	const isMobile = useBreakpointValue([true, null, null, false]);
 	const {t} = useTranslation();
-	const {id} = useParams<{ id: string }>();
+	const {id} = useParams<{id: string}>();
 	const toast = useToast();
 	const {push} = useHistory();
 
-	const initials = useInput({
-		validate: [Validators.required]
+	const voorletters = useInput({
+		validate: [Validators.required],
 	});
-	const firstName = useInput({
-		validate: [Validators.required]
+	const voornamen = useInput({
+		validate: [Validators.required],
 	});
-	const lastName = useInput({
-		validate: [Validators.required]
+	const achternaam = useInput({
+		validate: [Validators.required],
 	});
-	const dateOfBirth = useInput({
+	const geboortedatum = useInput({
 		validate: [
 			(v: string) => new RegExp(Regex.Date).test(v),
-			(v: string) => moment(v, "L").isValid()
-		]
+			(v: string) => moment(v, "L").isValid(),
+		],
 	});
 	const mail = useInput({
-		validate: [Validators.required, Validators.email]
+		validate: [Validators.required, Validators.email],
 	});
-	const street = useInput({
-		validate: [Validators.required]
+	const straatnaam = useInput({
+		validate: [Validators.required],
 	});
-	const houseNumber = useInput({
-		validate: [Validators.required]
+	const huisnummer = useInput({
+		validate: [Validators.required],
 	});
-	const zipcode = useInput({
+	const postcode = useInput({
 		validate: [Validators.required, (v) => new RegExp(Regex.ZipcodeNL).test(v)],
-		placeholder: "1234AB"
+		placeholder: "1234AB",
 	});
-	const city = useInput({
-		validate: [Validators.required]
+	const plaatsnaam = useInput({
+		validate: [Validators.required],
 	});
-	const phoneNumber = useInput({
+	const telefoonnummer = useInput({
 		validate: [(v) => new RegExp(Regex.PhoneNumberNL).test(v) || new RegExp(Regex.MobilePhoneNL).test(v)],
-		placeholder: "0612345678"
+		placeholder: "0612345678",
 	});
 
 	const $gebruiker = useGetOneBurgerQuery({
 		variables: {id: parseInt(id)},
 		onCompleted: ({gebruiker}) => {
 			if (gebruiker) {
-				initials.setValue(gebruiker.voorletters || "");
-				firstName.setValue(gebruiker.voornamen || "");
-				lastName.setValue(gebruiker.achternaam || "");
-				dateOfBirth.setValue(moment(gebruiker.geboortedatum, "YYYY MM DD").format("L"));
+				voorletters.setValue(gebruiker.voorletters || "");
+				voornamen.setValue(gebruiker.voornamen || "");
+				achternaam.setValue(gebruiker.achternaam || "");
+				geboortedatum.setValue(moment(gebruiker.geboortedatum, "YYYY MM DD").format("L"));
 				mail.setValue(gebruiker.email || "");
-				street.setValue(gebruiker.straatnaam || "");
-				houseNumber.setValue(gebruiker.huisnummer || "");
-				zipcode.setValue(gebruiker.postcode || "");
-				city.setValue(gebruiker.plaatsnaam || "");
-				phoneNumber.setValue(gebruiker.telefoonnummer || "");
+				straatnaam.setValue(gebruiker.straatnaam || "");
+				huisnummer.setValue(gebruiker.huisnummer || "");
+				postcode.setValue(gebruiker.postcode || "");
+				plaatsnaam.setValue(gebruiker.plaatsnaam || "");
+				telefoonnummer.setValue(gebruiker.telefoonnummer || "");
 			}
-		}
+		},
 	});
 
 	const [updateGebruiker, $updateGebruiker] = useUpdateBurgerMutation();
@@ -81,15 +81,15 @@ const BurgerEdit = () => {
 		e.preventDefault();
 
 		const isFormValid = [
-			initials,
-			firstName,
-			lastName,
-			dateOfBirth,
-			street,
-			houseNumber,
-			zipcode,
-			city,
-			phoneNumber,
+			voorletters,
+			voornamen,
+			achternaam,
+			geboortedatum,
+			straatnaam,
+			huisnummer,
+			postcode,
+			plaatsnaam,
+			telefoonnummer,
 			mail,
 		].every(f => f.isValid);
 		if (!isFormValid) {
@@ -105,17 +105,17 @@ const BurgerEdit = () => {
 		updateGebruiker({
 			variables: {
 				id: parseInt(id),
-				voorletters: initials.value,
-				voornamen: firstName.value,
-				achternaam: lastName.value,
-				geboortedatum: moment(dateOfBirth.value, "L").format("YYYY-MM-DD"),
-				straatnaam: street.value,
-				huisnummer: houseNumber.value,
-				postcode: zipcode.value,
-				plaatsnaam: city.value,
-				telefoonnummer: phoneNumber.value,
+				voorletters: voorletters.value,
+				voornamen: voornamen.value,
+				achternaam: achternaam.value,
+				geboortedatum: moment(geboortedatum.value, "L").format("YYYY-MM-DD"),
+				straatnaam: straatnaam.value,
+				huisnummer: huisnummer.value,
+				postcode: postcode.value,
+				plaatsnaam: plaatsnaam.value,
+				telefoonnummer: telefoonnummer.value,
 				email: mail.value,
-			}
+			},
 		}).then(() => {
 			toast({
 				status: "success",
@@ -142,84 +142,100 @@ const BurgerEdit = () => {
 			return (
 				<Page title={formatBurgerName(data.gebruiker)} backButton={<BackButton to={Routes.Burger(parseInt(id))} />}>
 					<Box as={"form"} onSubmit={onSubmit}>
-						<Section>
+						<Section divider={<Divider />}>
 							<Stack direction={["column", "row"]} spacing={2}>
 								<FormLeft title={t("forms.burgers.sections.personal.title")} helperText={t("forms.burgers.sections.personal.helperText")} />
 								<FormRight>
 									<Stack spacing={2} direction={["column", "row"]}>
-										<Stack spacing={1} flex={1}>
-											<FormLabel htmlFor={"initials"}>{t("forms.burgers.fields.initials")}</FormLabel>
-											<Input isInvalid={initials.dirty && !initials.isValid} id={"initials"} {...initials.bind} />
-										</Stack>
-										<Stack spacing={1} flex={3}>
-											<FormLabel htmlFor={"firstName"}>{t("forms.burgers.fields.firstName")}</FormLabel>
-											<Input isInvalid={firstName.dirty && !firstName.isValid} id={"firstName"}{...firstName.bind} />
-										</Stack>
-										<Stack spacing={1} flex={3}>
-											<FormLabel htmlFor={"lastName"}>{t("forms.burgers.fields.lastName")}</FormLabel>
-											<Input isInvalid={lastName.dirty && !lastName.isValid} id={"lastName"} {...lastName.bind} />
-										</Stack>
+										<FormControl id={"voorletters"} isRequired={true}>
+											<Stack spacing={1} flex={1}>
+												<FormLabel>{t("forms.burgers.fields.voorletters")}</FormLabel>
+												<Input isInvalid={voorletters.dirty && !voorletters.isValid} {...voorletters.bind} />
+											</Stack>
+										</FormControl>
+										<FormControl id={"voornamen"} isRequired={true}>
+											<Stack spacing={1} flex={3}>
+												<FormLabel>{t("forms.burgers.fields.voornamen")}</FormLabel>
+												<Input isInvalid={voornamen.dirty && !voornamen.isValid}{...voornamen.bind} />
+											</Stack>
+										</FormControl>
+										<FormControl id={"achternaam"} isRequired={true}>
+											<Stack spacing={1} flex={3}>
+												<FormLabel>{t("forms.burgers.fields.achternaam")}</FormLabel>
+												<Input isInvalid={achternaam.dirty && !achternaam.isValid} {...achternaam.bind} />
+											</Stack>
+										</FormControl>
 									</Stack>
-									<Stack spacing={1}>
-										<FormLabel htmlFor={"dateOfBirth"}>{t("forms.burgers.fields.dateOfBirth")}</FormLabel>
-										<DatePicker selected={moment(dateOfBirth.value, "L").isValid() ? moment(dateOfBirth.value, "L").toDate() : null} dateFormat={"dd-MM-yyyy"}
-										            onChange={(value: Date) => {
-											            if (value) {
-												            dateOfBirth.setValue(moment(value).format("L"));
-											            }
-										            }} customInput={<Input type="text" isInvalid={dateOfBirth.dirty && !dateOfBirth.isValid} {...dateOfBirth.bind} />} id={"dateOfBirth"} />
-									</Stack>
+									<FormControl id={"geboortedatum"} isRequired={true}>
+										<Stack spacing={1}>
+											<FormLabel>{t("forms.burgers.fields.geboortedatum")}</FormLabel>
+											<DatePicker selected={moment(geboortedatum.value, "L").isValid() ? moment(geboortedatum.value, "L").toDate() : null}
+												dateFormat={"dd-MM-yyyy"} onChange={(value: Date) => {
+													if (value) {
+														geboortedatum.setValue(moment(value).format("L"));
+													}
+												}} customInput={<Input type="text" isInvalid={geboortedatum.dirty && !geboortedatum.isValid} {...geboortedatum.bind} />} />
+										</Stack>
+									</FormControl>
 								</FormRight>
 							</Stack>
-
-							<Divider />
 
 							<Stack direction={["column", "row"]} spacing={2}>
 								<FormLeft title={t("forms.burgers.sections.contact.title")} helperText={t("forms.burgers.sections.contact.helperText")} />
 								<FormRight>
 									<Stack spacing={2} direction={["column", "row"]}>
-										<Stack spacing={1} flex={2}>
-											<FormLabel htmlFor={"street"}>{t("forms.burgers.fields.street")}</FormLabel>
-											<Input isInvalid={street.dirty && !street.isValid} id={"street"} {...street.bind} />
-										</Stack>
-										<Stack spacing={1} flex={1}>
-											<FormLabel htmlFor={"houseNumber"}>{t("forms.burgers.fields.houseNumber")}</FormLabel>
-											<Input isInvalid={houseNumber.dirty && !houseNumber.isValid} id={"houseNumber"} {...houseNumber.bind} />
-										</Stack>
+										<FormControl id={"straatnaam"} isRequired={true}>
+											<Stack spacing={1} flex={2}>
+												<FormLabel>{t("forms.burgers.fields.straatnaam")}</FormLabel>
+												<Input isInvalid={straatnaam.dirty && !straatnaam.isValid} {...straatnaam.bind} />
+											</Stack>
+										</FormControl>
+										<FormControl id={"huisnummer"} isRequired={true}>
+											<Stack spacing={1} flex={1}>
+												<FormLabel>{t("forms.burgers.fields.huisnummer")}</FormLabel>
+												<Input isInvalid={huisnummer.dirty && !huisnummer.isValid} {...huisnummer.bind} />
+											</Stack>
+										</FormControl>
 									</Stack>
 									<Stack spacing={2} direction={["column", "row"]}>
-										<Stack spacing={1} flex={1}>
-											<FormLabel htmlFor={"zipcode"}>{t("forms.burgers.fields.zipcode")}</FormLabel>
-											<Tooltip label={t("forms.burgers.tooltips.zipcode")} aria-label={t("forms.burgers.fields.zipcode")} placement={isMobile ? "top" : "left"}>
-												<Input isInvalid={zipcode.dirty && !zipcode.isValid} id={"zipcode"} {...zipcode.bind} />
+										<FormControl id={"postcode"} isRequired={true}>
+											<Stack spacing={1} flex={1}>
+												<FormLabel>{t("forms.burgers.fields.postcode")}</FormLabel>
+												<Tooltip label={t("forms.burgers.tooltips.postcode")} aria-label={t("forms.burgers.fields.postcode")} placement={isMobile ? "top" : "left"}>
+													<Input isInvalid={postcode.dirty && !postcode.isValid} {...postcode.bind} />
+												</Tooltip>
+											</Stack>
+										</FormControl>
+										<FormControl id={"plaatsnaam"} isRequired={true}>
+											<Stack spacing={1} flex={2}>
+												<FormLabel>{t("forms.burgers.fields.plaatsnaam")}</FormLabel>
+												<Input isInvalid={plaatsnaam.dirty && !plaatsnaam.isValid} {...plaatsnaam.bind} />
+											</Stack>
+										</FormControl>
+									</Stack>
+									<FormControl id={"telefoonnummer"} isRequired={true}>
+										<Stack spacing={1}>
+											<FormLabel>{t("forms.burgers.fields.telefoonnummer")}</FormLabel>
+											<Tooltip label={t("forms.burgers.tooltips.telefoonnummer")} aria-label={t("forms.burgers.tooltips.telefoonnummer")} placement={isMobile ? "top" : "left"}>
+												<Input isInvalid={telefoonnummer.dirty && !telefoonnummer.isValid} {...telefoonnummer.bind} />
 											</Tooltip>
 										</Stack>
-										<Stack spacing={1} flex={2}>
-											<FormLabel htmlFor={"city"}>{t("forms.burgers.fields.city")}</FormLabel>
-											<Input isInvalid={city.dirty && !city.isValid} id={"city"} {...city.bind} />
+									</FormControl>
+									<FormControl id={"mail"} isRequired={true}>
+										<Stack spacing={1}>
+											<FormLabel>{t("forms.burgers.fields.mail")}</FormLabel>
+											<Input isInvalid={mail.dirty && !mail.isValid} {...mail.bind} />
 										</Stack>
-									</Stack>
-									<Stack spacing={1}>
-										<FormLabel htmlFor={"phoneNumber"}>{t("forms.burgers.fields.phoneNumber")}</FormLabel>
-										<Tooltip label={t("forms.burgers.tooltips.phoneNumber")} aria-label={t("forms.burgers.tooltips.phoneNumber")} placement={isMobile ? "top" : "left"}>
-											<Input isInvalid={phoneNumber.dirty && !phoneNumber.isValid} id={"phoneNumber"} {...phoneNumber.bind} />
-										</Tooltip>
-									</Stack>
-									<Stack spacing={1}>
-										<FormLabel htmlFor={"mail"}>{t("forms.burgers.fields.mail")}</FormLabel>
-										<Input isInvalid={mail.dirty && !mail.isValid} id={"mail"} {...mail.bind} />
-									</Stack>
+									</FormControl>
 								</FormRight>
 							</Stack>
-
-							<Divider />
 
 							<Stack direction={["column", "row"]} spacing={2}>
 								<FormLeft />
 								<FormRight>
 									<Stack direction={"row"} spacing={1} justifyContent={"flex-end"}>
 										<Button isLoading={$gebruiker.loading || $updateGebruiker.loading} type={"submit"} colorScheme={"primary"}
-										        onClick={onSubmit}>{t("actions.save")}</Button>
+											onClick={onSubmit}>{t("actions.save")}</Button>
 									</Stack>
 								</FormRight>
 							</Stack>

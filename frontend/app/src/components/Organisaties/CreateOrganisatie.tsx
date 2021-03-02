@@ -1,4 +1,4 @@
-import {Box, Button, Divider, FormLabel, Input, Stack, Tooltip, useBreakpointValue, useToast} from "@chakra-ui/react";
+import {Box, Button, Divider, FormControl, FormLabel, Input, Stack, Tooltip, useBreakpointValue, useToast} from "@chakra-ui/react";
 import React from "react";
 import {useInput, useToggle, Validators} from "react-grapple";
 import {UseInput} from "react-grapple/dist/hooks/useInput";
@@ -20,34 +20,34 @@ const CreateOrganisatie = () => {
 	const toast = useToast();
 	const [isSubmitted, toggleSubmitted] = useToggle(false);
 
-	const kvkNumber = useInput({
+	const kvknummer = useInput({
 		defaultValue: "",
-		validate: [Validators.required, (v) => new RegExp(/^[0-9]{8}$/).test(v)]
+		validate: [Validators.required, (v) => new RegExp(/^[0-9]{8}$/).test(v)],
 	});
-	const companyName = useInput({
+	const bedrijfsnaam = useInput({
 		defaultValue: "",
-		validate: [Validators.required]
+		validate: [Validators.required],
 	});
-	const displayName = useInput({
+	const weergavenaam = useInput({
 		defaultValue: "",
-		validate: [Validators.required]
+		validate: [Validators.required],
 	});
-	const street = useInput({
+	const straatnaam = useInput({
 		defaultValue: "",
-		validate: [Validators.required]
+		validate: [Validators.required],
 	});
-	const houseNumber = useInput({
+	const huisnummer = useInput({
 		defaultValue: "",
-		validate: [Validators.required]
+		validate: [Validators.required],
 	});
-	const zipcode = useInput({
+	const postcode = useInput({
 		defaultValue: "",
 		validate: [Validators.required, (v) => new RegExp(Regex.ZipcodeNL).test(v)],
-		placeholder: "1234AB"
+		placeholder: "1234AB",
 	});
-	const city = useInput({
+	const plaatsnaam = useInput({
 		defaultValue: "",
-		validate: [Validators.required]
+		validate: [Validators.required],
 	});
 
 	const [createOrganisatie, $createOrganisatie] = useCreateOrganisatieMutation();
@@ -57,13 +57,13 @@ const CreateOrganisatie = () => {
 		toggleSubmitted(true);
 
 		const isFormValid = [
-			kvkNumber,
-			companyName,
-			displayName,
-			street,
-			houseNumber,
-			zipcode,
-			city,
+			kvknummer,
+			bedrijfsnaam,
+			weergavenaam,
+			straatnaam,
+			huisnummer,
+			postcode,
+			plaatsnaam,
 		].every(f => f.isValid);
 
 		if (!isFormValid) {
@@ -78,14 +78,14 @@ const CreateOrganisatie = () => {
 
 		createOrganisatie({
 			variables: {
-				huisnummer: houseNumber.value,
-				kvkNummer: kvkNumber.value,
-				naam: companyName.value,
-				plaatsnaam: city.value,
-				postcode: zipcode.value,
-				straatnaam: street.value,
-				weergaveNaam: displayName.value,
-			}
+				huisnummer: huisnummer.value,
+				kvkNummer: kvknummer.value,
+				naam: bedrijfsnaam.value,
+				plaatsnaam: plaatsnaam.value,
+				postcode: postcode.value,
+				straatnaam: straatnaam.value,
+				weergaveNaam: weergavenaam.value,
+			},
 		}).then(result => {
 			toast({
 				status: "success",
@@ -121,22 +121,28 @@ const CreateOrganisatie = () => {
 						<FormLeft title={t("forms.organizations.sections.organizational.title")} helperText={t("forms.organizations.sections.organizational.helperText")} />
 						<FormRight>
 							<Stack spacing={2} direction={["column", "row"]}>
-								<Stack spacing={1} flex={1}>
-									<FormLabel htmlFor={"kvkNumber"}>{t("forms.organizations.fields.kvkNumber")}</FormLabel>
-									<Tooltip label={t("forms.organizations.tooltips.kvkNumber")} aria-label={t("forms.organizations.fields.kvkNumber")} placement={isMobile ? "top" : "left"}>
-										<Input isInvalid={isInvalid(kvkNumber)} {...kvkNumber.bind} id="kvkNumber" />
-									</Tooltip>
-								</Stack>
-								<Stack spacing={1} flex={2}>
-									<FormLabel htmlFor={"companyName"}>{t("forms.organizations.fields.companyName")}</FormLabel>
-									<Input isInvalid={isInvalid(companyName)} {...companyName.bind} id="companyName" />
-								</Stack>
+								<FormControl id={"kvknummer"} isRequired={true}>
+									<Stack spacing={1} flex={1}>
+										<FormLabel>{t("forms.organizations.fields.kvknummer")}</FormLabel>
+										<Tooltip label={t("forms.organizations.tooltips.kvknummer")} aria-label={t("forms.organizations.fields.kvknummer")} placement={isMobile ? "top" : "left"}>
+											<Input isInvalid={isInvalid(kvknummer)} {...kvknummer.bind} />
+										</Tooltip>
+									</Stack>
+								</FormControl>
+								<FormControl id={"bedrijfsnaam"} isRequired={true}>
+									<Stack spacing={1} flex={2}>
+										<FormLabel>{t("forms.organizations.fields.bedrijfsnaam")}</FormLabel>
+										<Input isInvalid={isInvalid(bedrijfsnaam)} {...bedrijfsnaam.bind} />
+									</Stack>
+								</FormControl>
 							</Stack>
 							<Stack spacing={2} direction={["column", "row"]}>
-								<Stack spacing={1} flex={1}>
-									<FormLabel htmlFor={"displayName"}>{t("forms.organizations.fields.displayName")}</FormLabel>
-									<Input isInvalid={isInvalid(displayName)} {...displayName.bind} id="displayName" />
-								</Stack>
+								<FormControl id={"weergavenaam"} isRequired={true}>
+									<Stack spacing={1} flex={1}>
+										<FormLabel>{t("forms.organizations.fields.weergavenaam")}</FormLabel>
+										<Input isInvalid={isInvalid(weergavenaam)} {...weergavenaam.bind} />
+									</Stack>
+								</FormControl>
 							</Stack>
 						</FormRight>
 					</Stack>
@@ -147,26 +153,34 @@ const CreateOrganisatie = () => {
 						<FormLeft title={t("forms.organizations.sections.contact.title")} helperText={t("forms.organizations.sections.contact.helperText")} />
 						<FormRight>
 							<Stack spacing={2} direction={["column", "row"]}>
-								<Stack spacing={1} flex={2}>
-									<FormLabel htmlFor={"street"}>{t("forms.organizations.fields.street")}</FormLabel>
-									<Input isInvalid={isInvalid(street)} {...street.bind} id="street" />
-								</Stack>
-								<Stack spacing={1} flex={1}>
-									<FormLabel htmlFor={"houseNumber"}>{t("forms.organizations.fields.houseNumber")}</FormLabel>
-									<Input isInvalid={isInvalid(houseNumber)} {...houseNumber.bind} id="houseNumber" />
-								</Stack>
+								<FormControl id={"straatnaam"} isRequired={true}>
+									<Stack spacing={1} flex={2}>
+										<FormLabel>{t("forms.organizations.fields.straatnaam")}</FormLabel>
+										<Input isInvalid={isInvalid(straatnaam)} {...straatnaam.bind} />
+									</Stack>
+								</FormControl>
+								<FormControl id={"huisnummer"} isRequired={true}>
+									<Stack spacing={1} flex={1}>
+										<FormLabel>{t("forms.organizations.fields.huisnummer")}</FormLabel>
+										<Input isInvalid={isInvalid(huisnummer)} {...huisnummer.bind} />
+									</Stack>
+								</FormControl>
 							</Stack>
 							<Stack spacing={2} direction={["column", "row"]}>
-								<Stack spacing={1} flex={1}>
-									<FormLabel htmlFor={"zipcode"}>{t("forms.organizations.fields.zipcode")}</FormLabel>
-									<Tooltip label={t("forms.organizations.tooltips.zipcode")} aria-label={t("forms.organizations.fields.zipcode")} placement={isMobile ? "top" : "left"}>
-										<Input isInvalid={isInvalid(zipcode)} {...zipcode.bind} id="zipcode" />
-									</Tooltip>
-								</Stack>
-								<Stack spacing={1} flex={2}>
-									<FormLabel htmlFor={"city"}>{t("forms.organizations.fields.city")}</FormLabel>
-									<Input isInvalid={isInvalid(city)} {...city.bind} id="city" />
-								</Stack>
+								<FormControl id={"postcode"} isRequired={true}>
+									<Stack spacing={1} flex={1}>
+										<FormLabel>{t("forms.organizations.fields.postcode")}</FormLabel>
+										<Tooltip label={t("forms.organizations.tooltips.postcode")} aria-label={t("forms.organizations.fields.postcode")} placement={isMobile ? "top" : "left"}>
+											<Input isInvalid={isInvalid(postcode)} {...postcode.bind} />
+										</Tooltip>
+									</Stack>
+								</FormControl>
+								<FormControl id={"plaatsnaam"} isRequired={true}>
+									<Stack spacing={1} flex={2}>
+										<FormLabel>{t("forms.organizations.fields.plaatsnaam")}</FormLabel>
+										<Input isInvalid={isInvalid(plaatsnaam)} {...plaatsnaam.bind} />
+									</Stack>
+								</FormControl>
 							</Stack>
 						</FormRight>
 					</Stack>
