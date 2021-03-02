@@ -53,5 +53,6 @@ class BankTransaction(graphene.ObjectType):
 
     async def resolve_suggesties(root, info):
         """ Get rubriek when requested """
-        if root.get("transaction_id"):
-            return await automatisch_boeken.transactie_suggesties(root.get("transaction_id"))
+        suggesties = await automatisch_boeken.transactie_suggesties(root.get("id"))
+
+        return [item for sublist in suggesties.values() for item in sublist]
