@@ -194,11 +194,20 @@
                 "zipcode": "Postcode",
                 "city": "Plaatsnaam",
                 "phoneNumber": "Telefoonnummer",
-                "mail": "E-mailadres"
+                "mail": "E-mailadres",
+                "voorletters": "Voorletters",
+                "voornamen": "Voornamen",
+                "achternaam": "Achternaam",
+                "geboortedatum": "Geboortedatum",
+                "straatnaam": "Straatnaam",
+                "huisnummer": "Huisnummer",
+                "postcode": "Postcode",
+                "plaatsnaam": "Plaatsnaam",
+                "telefoonnummer": "Telefoonnummer"
             },
             "tooltips": {
-                "zipcode": "Invoer zonder spaties. Voorbeeld: 1234AB",
-                "phoneNumber": "Invoer zonder spaties en streepjes. Voorbeeld: 0612345678"
+                "postcode": "Invoer zonder spaties. Voorbeeld: 1234AB",
+                "telefoonnummer": "Invoer zonder spaties en streepjes. Voorbeeld: 0612345678"
             }
         },
         "search": {
@@ -238,17 +247,23 @@
                 }
             },
             "fields": {
+                "kvknummer": "KvK-nummer",
+                "bedrijfsnaam": "Bedrijfsnaam",
+                "weergavenaam": "Weergavenaam",
+                "straatnaam": "Straatnaam",
+                "huisnummer": "Huisnummer",
+                "postcode": "Postcode",
+                "plaatsnaam": "Plaatsnaam",
                 "kvkNumber": "KvK-nummer",
                 "companyName": "Bedrijfsnaam",
-                "displayName": "Weergavenaam",
                 "street": "Straatnaam",
                 "houseNumber": "Huisnummer",
                 "zipcode": "Postcode",
                 "city": "Plaatsnaam"
             },
             "tooltips": {
-                "kvkNumber": "Het KvK-nummer bestaat uit acht cijfers. Voorbeeld: 27348329",
-                "zipcode": "Invoer zonder spaties. Voorbeeld: 1234AB"
+                "kvknummer": "Het KvK-nummer bestaat uit acht cijfers. Voorbeeld: 27348329",
+                "postcode": "Invoer zonder spaties. Voorbeeld: 1234AB"
             }
         },
         "rekeningen": {

@@ -3,7 +3,7 @@ import {
 	Badge,
 	Box,
 	BoxProps,
-	Button, chakra,
+	Button,
 	Divider,
 	FormLabel,
 	IconButton,
