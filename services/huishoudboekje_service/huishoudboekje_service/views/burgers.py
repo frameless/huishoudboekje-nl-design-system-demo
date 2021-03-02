@@ -1,10 +1,10 @@
-""" MethodView for /burger/ path """
+""" MethodView for /burgers/ path """
 from models.burger import Burger
 from core_service.views.hhb_view import HHBView
 
 
 class BurgerView(HHBView):
-    """ Methods for /burger/(<burger_id>) path """
+    """ Methods for /burgers/(<burger_id>) path """
     hhb_model = Burger
     validation_data = {
         "type": "object",
