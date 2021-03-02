@@ -2,6 +2,7 @@ import json
 import os
 
 import requests_mock
+from pytest_mock import MockerFixture
 from requests_mock import Adapter
 
 from hhb_backend.graphql import settings
@@ -26,8 +27,8 @@ class MockResponse:
         return self.json_data
 
 
-def test_create_csm_with_ing_file(client):
-    adapter = create_mock_adapter()
+def test_create_csm_with_ing_file(client, mocker: MockerFixture):
+    adapter = create_mock_adapter(mocker)
 
     with open(ING_CSM_FILE, "rb") as testfile:
         with requests_mock.Mocker() as m:
@@ -58,12 +59,12 @@ def test_create_csm_with_ing_file(client):
             assert adapter.request_history[1].json()["transactie_datum"] == "2014-02-20"
             # Overall response
             assert adapter.call_count == 10
-            assert response.json.get("errors", True)
+            assert response.json.get("errors") is None
             assert response.status_code == 200
 
 
-def test_create_csm_with_abn_file(client):
-    adapter = create_mock_adapter()
+def test_create_csm_with_abn_file(client, mocker: MockerFixture):
+    adapter = create_mock_adapter(mocker)
 
     with open(ABN_CSM_FILE, "rb") as testfile:
         with requests_mock.Mocker() as m:
@@ -91,12 +92,12 @@ def test_create_csm_with_abn_file(client):
             assert adapter.request_history[1].json()["transactie_datum"] == "2012-05-12"
             # Overall response
             assert adapter.call_count == 3
-            assert response.json.get("errors", True)
+            assert response.json.get("errors") is None
             assert response.status_code == 200
 
 
-def test_create_csm_with_bng_file(client):
-    adapter = create_mock_adapter()
+def test_create_csm_with_bng_file(client, mocker: MockerFixture):
+    adapter = create_mock_adapter(mocker)
 
     with open(BNG_CSM_FILE, "rb") as testfile:
         with requests_mock.Mocker() as m:
@@ -124,7 +125,7 @@ def test_create_csm_with_bng_file(client):
             assert adapter.request_history[1].json()["transactie_datum"] == "2014-09-12"
             # Overall response
             assert adapter.call_count == 15
-            assert response.json.get("errors", True)
+            assert response.json.get("errors") is None
             assert response.status_code == 200
 
 
@@ -135,7 +136,7 @@ def test_create_csm_with_incorrect_file(client):
         assert response.status_code == 200
 
 
-def create_mock_adapter() -> Adapter:
+def create_mock_adapter(mocker: MockerFixture) -> Adapter:
     adapter = requests_mock.Adapter()
 
     def test_matcher(request):
@@ -146,6 +147,7 @@ def create_mock_adapter() -> Adapter:
         elif request.path == "/gebruikersactiviteiten":
             return MockResponse({"data": {"id": 1}}, 201)
 
+    mocker.patch('hhb_backend.processen.automatisch_boeken.automatisch_boeken', return_value=[])
     adapter.add_matcher(test_matcher)
     return adapter
 

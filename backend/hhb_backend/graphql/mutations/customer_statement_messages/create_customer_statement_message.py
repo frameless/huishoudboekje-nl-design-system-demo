@@ -17,6 +17,8 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     gebruikers_activiteit_entities,
     log_gebruikers_activiteit,
 )
+import hhb_backend.graphql.models.journaalpost as journaalpost
+from hhb_backend.processen import automatisch_boeken
 
 IBAN_REGEX = r"[a-zA-Z]{2}[0-9]{2}[a-zA-Z0-9]{4}[0-9]{7}([a-zA-Z0-9]?){0,16}"
 
@@ -27,6 +29,7 @@ class CreateCustomerStatementMessage(graphene.Mutation):
 
     ok = graphene.Boolean()
     customerStatementMessage = graphene.Field(lambda: CustomerStatementMessage)
+    journaalposten = graphene.List(lambda: journaalpost.Journaalpost)
 
     def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
         return dict(
@@ -108,8 +111,13 @@ class CreateCustomerStatementMessage(graphene.Mutation):
             customerStatementMessage["id"], csm_file.transactions
         )
 
+        # Try, if possible, to match banktransaction
+        journaalposten = await automatisch_boeken.automatisch_boeken(customerStatementMessage["id"])
+
         return CreateCustomerStatementMessage(
-            customerStatementMessage=customerStatementMessage, ok=True
+            journaalposten=journaalposten,
+            customerStatementMessage=customerStatementMessage,
+            ok=True
         )
 
 
