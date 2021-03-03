@@ -34,6 +34,7 @@ class CustomerStatementMessageFactory():
             self,
             upload_date: datetime = datetime(2020, 11, 1, 15, 15, 15),
             raw_data: str = raw_data,
+            filename: str = "2021-01-01_123.txt",
             transaction_reference_number: str = "P140220000000001",
             related_reference: str = "3948230",
             account_identification: str = "NL69INGB0123456789EUR",
@@ -46,6 +47,7 @@ class CustomerStatementMessageFactory():
         csm = CustomerStatementMessage(
             upload_date=upload_date,
             raw_data=raw_data,
+            filename=filename,
             transaction_reference_number=transaction_reference_number,
             related_reference=related_reference,
             account_identification=account_identification,

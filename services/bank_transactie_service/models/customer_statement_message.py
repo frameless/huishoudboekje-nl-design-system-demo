@@ -9,6 +9,7 @@ class CustomerStatementMessage(db.Model):
     id = Column(Integer, Sequence("customer_statement_messages_id_seq"), primary_key=True)
     upload_date = Column(DateTime, nullable=False)
     raw_data = Column(String, nullable=False)
+    filename = Column(String)
 
     transaction_reference_number = Column(String)  # Tag 20
     related_reference = Column(String)  # Tag 21

@@ -8,7 +8,8 @@ def test_csm_post_new_csm(client, dbsession):
     assert dbsession.query(CustomerStatementMessage).count() == 0
     csm_dict = {
         "upload_date": "2020-01-01 14:14:14",
-        "raw_data": "TESTDATA"
+        "raw_data": "TESTDATA",
+        "filename": "ING.txt"
     }
     response = client.post(
         '/customerstatementmessages/',

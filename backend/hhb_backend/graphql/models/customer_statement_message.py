@@ -1,6 +1,7 @@
 from datetime import datetime
+
 import graphene
-from flask import request
+
 import hhb_backend.graphql.models.bank_transaction as bank_transaction_model
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 
@@ -10,6 +11,8 @@ class CustomerStatementMessage(graphene.ObjectType):
 
     id = graphene.Int()
     upload_date = graphene.DateTime()
+    filename = graphene.String()
+
     transaction_reference_number = graphene.String()
     related_reference = graphene.String()
     account_identification = graphene.String()
