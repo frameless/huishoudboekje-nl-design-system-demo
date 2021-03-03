@@ -32,6 +32,7 @@ const SelectAfspraakOption: React.FC<SelectAfspraakOptionProps> = (props) => {
 				bg: "gray.100",
 			},
 		}} {...rest}>
+			<Td />
 			<Td>
 				<Text>{afspraak.beschrijving}</Text>
 			</Td>

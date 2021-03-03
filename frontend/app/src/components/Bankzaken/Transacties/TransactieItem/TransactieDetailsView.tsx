@@ -12,15 +12,17 @@ const TransactieDetailsView: React.FC<StackProps & { transaction: BankTransactio
 
 	return (
 		<Stack spacing={5} justifyContent={"space-between"} {...props}>
-			<Stack direction={"row"} spacing={5} justifyContent={"space-between"} maxWidth={500}>
-				<Box flex={2}>
+			<Heading size={"sm"}>{t("transaction")}</Heading>
+
+			<Stack direction={"row"} spacing={5}>
+				<Box flex={1}>
 					<Label>{t("forms.common.fields.date")}</Label>
 					<Box>
 						<Text>{d(bt.transactieDatum).format("L")}</Text>
 					</Box>
 				</Box>
 				<Box flex={1}>
-					<Label>&nbsp;</Label>
+					<Label>{t("form.common.fields.status")}</Label>
 					{bt.journaalpost ? (bt.journaalpost.isAutomatischGeboekt ? (
 						<Box>
 							<Badge colorScheme={"green"}>{t("forms.agreements.fields.automatischGeboekt")}</Badge>
@@ -37,8 +39,8 @@ const TransactieDetailsView: React.FC<StackProps & { transaction: BankTransactio
 				</Box>
 			</Stack>
 
-			<Stack direction={"row"} spacing={5} justifyContent={"space-between"} maxWidth={500}>
-				<Box flex={2}>
+			<Stack direction={"row"} spacing={5}>
+				<Box flex={1}>
 					<Label>{t("transactions.beneficiaryAccount")}</Label>
 					<Box>{bt.tegenRekening ? (
 						<Stack spacing={0}>
