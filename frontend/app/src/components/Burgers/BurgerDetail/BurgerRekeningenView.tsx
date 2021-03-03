@@ -1,16 +1,17 @@
 import {AddIcon} from "@chakra-ui/icons";
-import {Box, Button, Divider, Stack, StackProps, useToast} from "@chakra-ui/react";
+import {Box, Button, Divider, Stack, StackProps} from "@chakra-ui/react";
 import React from "react";
 import {useToggle} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {Gebruiker, useCreateGebruikerRekeningMutation} from "../../../generated/graphql";
+import useToaster from "../../../utils/useToaster";
 import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
 import RekeningForm from "../../Rekeningen/RekeningForm";
 import RekeningList from "../../Rekeningen/RekeningList";
 
-const BurgerRekeningenView: React.FC<StackProps & { burger: Gebruiker, refetch: VoidFunction }> = ({burger, refetch, ...props}) => {
+const BurgerRekeningenView: React.FC<StackProps & {burger: Gebruiker, refetch: VoidFunction}> = ({burger, refetch, ...props}) => {
 	const {t} = useTranslation();
-	const toast = useToast();
+	const toast = useToaster();
 
 	const [showCreateRekeningForm, toggleCreateRekeningForm] = useToggle(false);
 	const [createGebruikerRekeningMutation] = useCreateGebruikerRekeningMutation();
@@ -26,36 +27,34 @@ const BurgerRekeningenView: React.FC<StackProps & { burger: Gebruiker, refetch: 
 				{burgerId && showCreateRekeningForm ? (<>
 					{rekeningen.length > 0 && <Divider />}
 					<RekeningForm rekening={{
-						rekeninghouder: `${burger.voorletters} ${burger.achternaam}`
+						rekeninghouder: `${burger.voorletters} ${burger.achternaam}`,
 					}} onSave={(rekening, resetForm) => {
 						createGebruikerRekeningMutation({
 							variables: {
 								gebruikerId: burgerId,
-								rekening
-							}
+								rekening,
+							},
 						}).then(() => {
 							resetForm();
 							toggleCreateRekeningForm(false);
 							refetch();
 						}).catch(err => {
-							const alreadyExists = (/already exists/g).test(err.message);
-							if (alreadyExists) {
-								toast({
-									position: "top",
-									status: "error",
-									title: t("messages.genericError.title"),
-									description: t("messages.rekeningAlreadyExistsError"),
-									isClosable: true,
-								});
+							let errorMessage = err.message;
+
+							if (err.message.includes("already exists")) {
+								errorMessage = t("messages.rekeningAlreadyExistsError");
 							}
+							toast({
+								error: errorMessage,
+							});
 						});
 					}} onCancel={() => {
-						toggleCreateRekeningForm(false)
+						toggleCreateRekeningForm(false);
 					}} />
 				</>) : (
 					<Box>
 						<Button leftIcon={<AddIcon />} colorScheme={"primary"} size={"sm"}
-						        onClick={() => toggleCreateRekeningForm(true)}>{t("actions.add")}</Button>
+							onClick={() => toggleCreateRekeningForm(true)}>{t("actions.add")}</Button>
 					</Box>
 				)}
 			</FormRight>

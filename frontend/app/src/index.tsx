@@ -2,11 +2,11 @@ import {ApolloProvider} from "@apollo/client";
 import {ChakraProvider} from "@chakra-ui/react";
 import nl from "date-fns/locale/nl";
 import moment from "moment";
-import "moment-recur-ts"
+import "moment-recur-ts";
 import "moment/locale/nl";
 import React from "react";
 import {registerLocale, setDefaultLocale} from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.min.css"
+import "react-datepicker/dist/react-datepicker.min.css";
 import ReactDOM from "react-dom";
 import {BrowserRouter as Router} from "react-router-dom";
 import App from "./App";

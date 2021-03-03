@@ -1,23 +1,21 @@
-import {Table, TableProps, Tbody, Th, Thead, Tr, useToast,} from "@chakra-ui/react";
+import {Table, TableProps, Tbody, Th, Thead, Tr} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {Gebruiker, Organisatie, Rekening, useDeleteGebruikerRekeningMutation, useDeleteOrganisatieRekeningMutation} from "../../generated/graphql";
+import useToaster from "../../utils/useToaster";
 import RekeningListItem from "./RekeningListItem";
 
-type RekeningListProps = { rekeningen: Rekening[], gebruiker?: Gebruiker, organisatie?: Organisatie, onChange?: VoidFunction };
+type RekeningListProps = {rekeningen: Rekening[], gebruiker?: Gebruiker, organisatie?: Organisatie, onChange?: VoidFunction};
 const RekeningList: React.FC<TableProps & RekeningListProps> = ({rekeningen, gebruiker, organisatie, onChange, ...props}) => {
 	const {t} = useTranslation();
-	const toast = useToast();
+	const toast = useToaster();
 	const [deleteGebruikerRekening] = useDeleteGebruikerRekeningMutation();
 	const [deleteOrganizationRekening] = useDeleteOrganisatieRekeningMutation();
 
 	const handleMutation = (mutation: Promise<any>) => {
 		mutation.then(() => {
 			toast({
-				status: "success",
-				title: t("messages.rekeningen.deleteSuccess"),
-				position: "top",
-				isClosable: true,
+				success: t("messages.rekeningen.deleteSuccess"),
 			});
 
 			if (onChange) {
@@ -26,15 +24,10 @@ const RekeningList: React.FC<TableProps & RekeningListProps> = ({rekeningen, geb
 		}).catch(err => {
 			console.error(err);
 			toast({
-				position: "top",
-				status: "error",
-				variant: "solid",
-				title: t("messages.genericError.title"),
-				description: t("messages.genericError.description"),
-				isClosable: true,
-			})
+				error: err.message,
+			});
 		});
-	}
+	};
 
 	const onDeleteGebruikerRekening = (id?: number, gebruikerId?: number) => {
 		if (!id || !gebruikerId) {
@@ -43,7 +36,7 @@ const RekeningList: React.FC<TableProps & RekeningListProps> = ({rekeningen, geb
 		}
 
 		handleMutation(deleteGebruikerRekening({variables: {id, gebruikerId}}));
-	}
+	};
 
 	const onDeleteOrganisatieRekening = (id?: number, orgId?: number) => {
 		if (!id || !orgId) {
@@ -52,7 +45,7 @@ const RekeningList: React.FC<TableProps & RekeningListProps> = ({rekeningen, geb
 		}
 
 		handleMutation(deleteOrganizationRekening({variables: {id, orgId}}));
-	}
+	};
 
 	if (rekeningen.length === 0) {
 		return null;
@@ -70,9 +63,9 @@ const RekeningList: React.FC<TableProps & RekeningListProps> = ({rekeningen, geb
 			<Tbody>
 				{rekeningen.map((r, i) => (
 					<RekeningListItem key={i} rekening={r} {...gebruiker && {
-						onDelete: () => onDeleteGebruikerRekening(r.id, gebruiker.id)
+						onDelete: () => onDeleteGebruikerRekening(r.id, gebruiker.id),
 					}} {...organisatie && {
-						onDelete: () => onDeleteOrganisatieRekening(r.id, organisatie.id)
+						onDelete: () => onDeleteOrganisatieRekening(r.id, organisatie.id),
 					}} />
 				))}
 			</Tbody>

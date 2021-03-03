@@ -1,9 +1,10 @@
-import {Button, Divider, FormControl, FormLabel, Input, Stack, useToast} from "@chakra-ui/react";
+import {Button, Divider, FormControl, FormLabel, Input, Stack} from "@chakra-ui/react";
 import React from "react";
 import {useInput, Validators} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {Configuratie as IConfiguratie, useCreateConfiguratieMutation, useGetConfiguratieQuery} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
+import useToaster from "../../utils/useToaster";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
 import Page from "../Layouts/Page";
 import Section from "../Layouts/Section";
@@ -13,13 +14,13 @@ const Configuratie = () => {
 	const {t} = useTranslation();
 	const $configuraties = useGetConfiguratieQuery();
 	const [createConfiguratie] = useCreateConfiguratieMutation();
-	const toast = useToast();
+	const toast = useToaster();
 
 	const key = useInput({
-		validate: [Validators.required]
+		validate: [Validators.required],
 	});
 	const value = useInput({
-		validate: [Validators.required]
+		validate: [Validators.required],
 	});
 
 	const onSubmit = (e) => {
@@ -27,11 +28,7 @@ const Configuratie = () => {
 
 		if (!(key.isValid && value.isValid)) {
 			toast({
-				position: "top",
-				status: "error",
-				title: t("messages.genericError.title"),
-				description: t("messages.genericError.description"),
-				isClosable: true,
+				error: t("messages.genericError.description"),
 			});
 			return;
 		}
@@ -42,10 +39,7 @@ const Configuratie = () => {
 				key.reset();
 				value.reset();
 				toast({
-					position: "top",
-					status: "success",
-					title: t("messages.configuratie.createSuccess"),
-					isClosable: true,
+					success: t("messages.configuratie.createSuccess"),
 				});
 			})
 			.catch(err => {
@@ -55,14 +49,10 @@ const Configuratie = () => {
 				}
 
 				toast({
-					position: "top",
-					status: "error",
-					title: t("messages.genericError.title"),
-					description: message,
-					isClosable: true,
+					error: message,
 				});
 			});
-	}
+	};
 
 	return (
 		<Page title={t("configuratie")}>
@@ -98,7 +88,7 @@ const Configuratie = () => {
 											<ConfiguratieItem c={c} refetch={$configuraties.refetch} key={c.id} />
 										))}
 									</Stack>
-								)
+								);
 							}} />
 						</Stack>
 					</FormRight>

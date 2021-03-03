@@ -18,7 +18,7 @@ export const TransactionsContext = createContext<{refetch: VoidFunction}>({
 const Transactions = () => {
 	const isMobile = useBreakpointValue([true, null, null, false]);
 	const {t} = useTranslation();
-	const toast = useToast();
+	const chakraToast = useToast();
 
 	const $transactions = useGetAllTransactionsQuery({
 		fetchPolicy: "no-cache",
@@ -28,7 +28,7 @@ const Transactions = () => {
 	const onClickStartBoekenButton = () => {
 		$startAutomatischBoeken()
 			.then(() => {
-				toast({
+				chakraToast({
 					status: "success",
 					title: t("messages.automatischBoeken.successMessage"),
 					position: "top",
@@ -38,7 +38,7 @@ const Transactions = () => {
 			})
 			.catch(err => {
 				console.error(err);
-				toast({
+				chakraToast({
 					position: "top",
 					status: "error",
 					variant: "solid",

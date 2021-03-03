@@ -1,4 +1,4 @@
-import {Box, Button, Divider, FormControl, FormLabel, Input, Stack, Tooltip, useBreakpointValue, useToast} from "@chakra-ui/react";
+import {Box, Button, Divider, FormControl, FormLabel, Input, Stack, Tooltip, useBreakpointValue} from "@chakra-ui/react";
 import moment from "moment";
 import React from "react";
 import DatePicker from "react-datepicker";
@@ -9,6 +9,7 @@ import Routes from "../../config/routes";
 import {useGetOneBurgerQuery, useUpdateBurgerMutation} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
 import {formatBurgerName, Regex} from "../../utils/things";
+import useToaster from "../../utils/useToaster";
 import BackButton from "../BackButton";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
 import Page from "../Layouts/Page";
@@ -18,7 +19,7 @@ const BurgerEdit = () => {
 	const isMobile = useBreakpointValue([true, null, null, false]);
 	const {t} = useTranslation();
 	const {id} = useParams<{id: string}>();
-	const toast = useToast();
+	const toast = useToaster();
 	const {push} = useHistory();
 
 	const voorletters = useInput({
@@ -94,10 +95,7 @@ const BurgerEdit = () => {
 		].every(f => f.isValid);
 		if (!isFormValid) {
 			toast({
-				status: "error",
-				title: t("messages.burgers.invalidFormMessage"),
-				position: "top",
-				isClosable: true,
+				error: t("messages.burgers.invalidFormMessage")
 			});
 			return;
 		}
@@ -118,21 +116,13 @@ const BurgerEdit = () => {
 			},
 		}).then(() => {
 			toast({
-				status: "success",
-				title: t("messages.burgers.updateSuccessMessage"),
-				position: "top",
-				isClosable: true,
+				success: t("messages.burgers.updateSuccessMessage"),
 			});
 			push(Routes.Burger(parseInt(id)));
 		}).catch(err => {
 			console.error(err);
 			toast({
-				position: "top",
-				status: "error",
-				variant: "solid",
-				description: t("messages.genericError.description"),
-				title: t("messages.genericError.title"),
-				isClosable: true,
+				error: err.message
 			});
 		});
 	};

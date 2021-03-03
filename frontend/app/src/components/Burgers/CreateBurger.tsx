@@ -1,4 +1,4 @@
-import {Box, Button, Divider, FormControl, FormLabel, Input, Stack, Tooltip, useBreakpointValue, useToast} from "@chakra-ui/react";
+import {Box, Button, Divider, FormControl, FormLabel, Input, Stack, Tooltip, useBreakpointValue} from "@chakra-ui/react";
 import moment from "moment";
 import React, {useState} from "react";
 import DatePicker from "react-datepicker";
@@ -8,6 +8,7 @@ import {useHistory} from "react-router-dom";
 import Routes from "../../config/routes";
 import {useCreateBurgerMutation} from "../../generated/graphql";
 import {Regex} from "../../utils/things";
+import useToaster from "../../utils/useToaster";
 import BackButton from "../BackButton";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
 import Page from "../Layouts/Page";
@@ -18,7 +19,7 @@ const CreateBurger = () => {
 	const {t} = useTranslation();
 	const {push} = useHistory();
 	const isMobile = useBreakpointValue([true, null, null, false]);
-	const toast = useToast();
+	const toast = useToaster();
 	const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
 	const voorletters = useInput({
@@ -87,10 +88,7 @@ const CreateBurger = () => {
 
 		if (!isFormValid) {
 			toast({
-				status: "error",
-				title: t("messages.burgers.invalidFormMessage"),
-				position: "top",
-				isClosable: true,
+				error: t("messages.burgers.invalidFormMessage"),
 			});
 			return;
 		}
@@ -113,10 +111,7 @@ const CreateBurger = () => {
 			},
 		}).then(result => {
 			toast({
-				status: "success",
-				title: t("messages.burgers.createSuccessMessage"),
-				position: "top",
-				isClosable: true,
+				success: t("messages.burgers.createSuccessMessage"),
 			});
 
 			const {id} = result?.data?.createGebruiker?.gebruiker || {};
@@ -126,12 +121,7 @@ const CreateBurger = () => {
 		}).catch(err => {
 			console.error("Error:", err);
 			toast({
-				position: "top",
-				status: "error",
-				variant: "solid",
-				description: t("messages.genericError.description"),
-				title: t("messages.genericError.title"),
-				isClosable: true,
+				error: err.message
 			});
 		});
 	};
