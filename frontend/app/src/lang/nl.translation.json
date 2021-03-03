@@ -316,7 +316,8 @@
         "beneficiaryAccount": "Tegenrekening",
         "rubric": "Rubriek",
         "amount": "Bedrag",
-        "description": "Omschrijving"
+        "description": "Omschrijving",
+        "bookingChoose": "Boeken op:"
     },
     "booking": "Boeking",
     "unbooked": "Niet geboekt",
@@ -385,6 +386,7 @@
         "deleteBurgerRekening": "{{gebruiker}} verwijderde rekening <strong>{{iban}}</strong> op naam van <strong>{{rekeninghouder}}</strong> bij <linkBurger>{{burger}}</linkBurger>.",
         "unknown": "Onbekende gebeurtenis"
     },
+    "suggestion": "Suggestie",
     "organizations": {
         "organizations": "Organisaties"
     },

@@ -1621,7 +1621,10 @@ export type GetAllTransactionsQuery = (
         )> }
         & GrootboekrekeningFragment
       )> }
-    )> }
+    )>, suggesties?: Maybe<Array<Maybe<(
+      { __typename?: 'Afspraak' }
+      & AfspraakFragment
+    )>>> }
     & BankTransactionFragment
   )>>> }
 );
@@ -3183,6 +3186,9 @@ export const GetAllTransactionsDocument = gql`
           naam
         }
       }
+    }
+    suggesties {
+      ...Afspraak
     }
   }
 }

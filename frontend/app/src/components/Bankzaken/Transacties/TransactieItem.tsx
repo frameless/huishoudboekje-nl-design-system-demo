@@ -14,6 +14,7 @@ import {
 	ModalOverlay,
 	Stack,
 	Tab,
+	Table,
 	TabList,
 	TabPanel,
 	TabPanels,
@@ -21,6 +22,7 @@ import {
 	Tag,
 	TagLabel,
 	TagLeftIcon,
+	Tbody,
 	Text,
 	Tooltip,
 	useBreakpointValue,
@@ -44,7 +46,6 @@ import {formatIBAN} from "../../../utils/things";
 import Currency from "../../Currency";
 import Label from "../../Layouts/Label";
 import PrettyIban from "../../Layouts/PrettyIban";
-import SelectAfspraak from "../../Layouts/SelectAfspraak/SelectAfspraak";
 import SelectAfspraakOption from "../../Layouts/SelectAfspraak/SelectAfspraakOption";
 import {TransactionsContext} from "./index";
 import TransactieDetailsView from "./TransactieDetailsView";
@@ -55,6 +56,8 @@ const TransactieItem: React.FC<BoxProps & {bankTransaction: BankTransaction}> = 
 	const toast = useToast();
 	const {isOpen, onOpen, onClose} = useDisclosure();
 	const {refetch} = useContext(TransactionsContext);
+
+	const suggesties: Afspraak[] = bt.suggesties || [];
 
 	const [selectedAfspraak, setSelectedAfspraak] = useState<Afspraak | undefined>(bt.journaalpost?.afspraak);
 	const [selectedRubriek, setSelectedRubriek] = useState<Rubriek | undefined>(bt.journaalpost?.grootboekrekening?.rubriek);
@@ -117,13 +120,11 @@ const TransactieItem: React.FC<BoxProps & {bankTransaction: BankTransaction}> = 
 					<Divider />
 
 					<Heading size={"sm"}>{t("booking")}</Heading>
-					<Stack direction={"row"} justifyContent={"space-between"} alignItems={"center"} spacing={2}>
-						<SelectAfspraakOption afspraak={selectedAfspraak} enableHover={false} />
-						<Box>
-							<IconButton icon={<DeleteIcon />} variant={"ghost"} aria-label={t("actions.disconnect")} onClick={onClickDeleteJournaalpost}
-								isLoading={$deleteJournaalpost.loading} />
-						</Box>
-					</Stack>
+					<Table>
+						<Tbody>
+							<SelectAfspraakOption afspraak={selectedAfspraak} enableHover={false} onDelete={onClickDeleteJournaalpost} isLoading={$deleteJournaalpost.loading} />
+						</Tbody>
+					</Table>
 				</Stack>
 			);
 		}
@@ -150,15 +151,21 @@ const TransactieItem: React.FC<BoxProps & {bankTransaction: BankTransaction}> = 
 					const {rubrieken, afspraken} = data;
 
 					const options = {
+						suggesties: suggesties,
 						afspraken: afspraken.filter(a => {
+							// Skip afspraken that are suggesties
+							if (suggesties.find(b => b.id === a.id)) {
+								return false;
+							}
+
+							const tegenRekening = bt.tegenRekening?.iban || bt.tegenRekeningIban;
+
 							// Show all afspraken if there is no tegenRekening
-							if (!bt.tegenRekening && !bt.tegenRekeningIban) {
+							if (!tegenRekening) {
 								return true;
 							}
-							return (
-								a.tegenRekening?.iban?.replaceAll(" ", "") === bt.tegenRekening?.iban?.replaceAll(" ", "") ||
-								a.tegenRekening?.iban?.replaceAll(" ", "") === bt.tegenRekeningIban?.replaceAll(" ", "")
-							);
+
+							return a.tegenRekening?.iban?.replaceAll(" ", "") === tegenRekening.replaceAll(" ", "");
 						}),
 						rubrieken: rubrieken.filter(r => r.grootboekrekening && r.grootboekrekening.id).map((r: Rubriek) => ({
 							key: r.id,
@@ -197,16 +204,30 @@ const TransactieItem: React.FC<BoxProps & {bankTransaction: BankTransaction}> = 
 
 					return (
 						<Stack>
-							<Heading size={"sm"}>Koppelen met</Heading>
+							<Heading size={"sm"}>{t("transactions.bookingChoose")}</Heading>
 
-							<Tabs isFitted>
+							<Tabs align={"end"}>
 								<TabList>
 									<Tab>Afspraak</Tab>
 									<Tab>Rubriek</Tab>
 								</TabList>
 								<TabPanels>
 									<TabPanel px={0}>
-										<SelectAfspraak value={selectedAfspraak} options={options.afspraken} onChange={onSelectAfspraak} />
+										<Stack spacing={2}>
+											<Table size={"sm"}>
+												<Tbody>
+													{options.suggesties.map(a => (
+														<SelectAfspraakOption key={a.id} afspraak={a} isSuggestion={options.suggesties.length === 1} onClick={() => {
+															// Todo: accept suggestion
+															onSelectAfspraak(a);
+														}} px={5} />
+													))}
+													{options.afspraken.map(a => (
+														<SelectAfspraakOption key={a.id} afspraak={a} onClick={() => onSelectAfspraak(a)} px={5} />
+													))}
+												</Tbody>
+											</Table>
+										</Stack>
 									</TabPanel>
 									<TabPanel px={0}>
 										<Select onChange={onSelectRubriek} options={options.rubrieken} isClearable={true} noOptionsMessage={() => t("select.noOptions")}

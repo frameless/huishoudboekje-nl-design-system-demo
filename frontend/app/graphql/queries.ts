@@ -98,6 +98,9 @@ export const GetAllTransactionsQuery = gql`
                     }
                 }
             }
+            suggesties {
+                ...Afspraak
+            }
         }
     }
     ${BankTransactionFragment}
