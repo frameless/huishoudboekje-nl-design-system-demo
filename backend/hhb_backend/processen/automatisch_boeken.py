@@ -89,21 +89,9 @@ async def transactie_suggesties(transactie_ids):
     if afspraken == [None] * len(afspraken):
         return {key: [] for key in transactie_ids}
 
-    # Flatten the afspraken list
-    afspraken = [item for sublist in afspraken for item in sublist]
-
-    # Sort the afspraken by iban
-    iban_afspraken = {}
-    for rekening in rekeningen:
-        iban_afspraken[rekening["iban"]] = [afspraak for afspraak in afspraken if afspraak["tegen_rekening_id"] == rekening["id"]]
-
     transactie_ids_with_afspraken = {}
-    # match afspraken by iban and zoekterm
-    for transaction in transactions:
-        afspraken_subset = iban_afspraken[transaction["tegen_rekening"]] or []
-        transactie_ids_with_afspraken[transaction["id"]] = [afspraak
-                                                            for afspraak in afspraken_subset
-                                                            if match_zoekterm(afspraak, transaction)]
+    for transaction, suggesties in zip(transactions, afspraken):
+        transactie_ids_with_afspraken[transaction["id"]] = [afspraak for afspraak in suggesties if match_zoekterm(afspraak, transaction)]
 
     return transactie_ids_with_afspraken
 
