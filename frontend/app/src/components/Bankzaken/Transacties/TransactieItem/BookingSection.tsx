@@ -1,4 +1,4 @@
-import {Heading, HStack, Stack, Tab, Table, TabList, TabPanel, TabPanels, Tabs, Tbody, Tr, Thead, Th, useToast} from "@chakra-ui/react";
+import {Heading, HStack, Stack, Tab, Table, TabList, Text, TabPanel, TabPanels, Tabs, Tbody, Th, Thead, Tr, useToast, Box} from "@chakra-ui/react";
 import React, {useContext} from "react";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
@@ -101,23 +101,27 @@ const BookingSection = ({transaction, rubrieken, afspraken}) => {
 
 	return (
 		<Stack>
-			<Heading size={"sm"}>{t("booking")}</Heading>
-
 			<Tabs align={"end"}>
-				<TabList>
-					<Tab>Afspraak</Tab>
-					<Tab>Rubriek</Tab>
-				</TabList>
+				<HStack justify={"space-between"} align={"bottom"}>
+					<Box>
+						<Heading size={"sm"}>{t("transactieVerwerken.title")}</Heading>
+						<Text size={"xs"}>{t("transactieVerwerken.helperText")}</Text>
+					</Box>
+
+					<TabList>
+						<Tab>Afspraak</Tab>
+						<Tab>Rubriek</Tab>
+					</TabList>
+				</HStack>
 				<TabPanels>
 					<TabPanel px={0}>
 						<Stack spacing={2}>
 							<Table size={"sm"}>
 								<Thead>
 									<Tr>
-										<Th />
+										<Th>{t("burger")}</Th>
 										<Th>{t("afspraak.omschrijving")}</Th>
 										<Th>{t("afspraak.zoekterm")}</Th>
-										<Th>{t("burger")}</Th>
 										<Th />
 										<Th>{t("bedrag")}</Th>
 									</Tr>

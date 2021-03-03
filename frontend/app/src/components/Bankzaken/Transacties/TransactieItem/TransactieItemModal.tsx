@@ -23,7 +23,7 @@ const TransactieItemModal = ({transactie, disclosure}) => {
 				<ModalHeader>{t("forms.banking.sections.journal.title")}</ModalHeader>
 				<ModalCloseButton />
 				<ModalBody>
-					<Stack spacing={5}>
+					<Stack spacing={10}>
 						<TransactieDetailsView transaction={transactie} />
 
 						{transactie.journaalpost ? (

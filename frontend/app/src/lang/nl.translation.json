@@ -83,6 +83,7 @@
         "export": "Exporteren",
         "download": "Downloaden",
         "startBoeken": "Verwerk alle transacties",
+        "confirmAutomatischBoeken": "Voortaan automatisch boeken",
         "disconnect": "Koppeling verwijderen",
         "backToList": "Terug naar overzicht",
         "clearSearch": "Zoekopdracht wissen",
@@ -313,10 +314,15 @@
     "van": "Van",
     "tot": "Tot",
     "booking": "Boeking",
+    "automatischBoekenConfirmed": "Automatisch boeken ingeschakeld",
     "burger": "Burger",
     "omschrijving": "Omschrijving",
     "periodiek": "Periodiek",
     "rubriek": "Rubriek",
+    "transactieVerwerken": {
+        "title": "Verwerken",
+        "helperText": "Kies een afspraak om deze transactie erop te boeken."
+    },
     "afspraak": {
         "omschrijving": "Omschrijving",
         "zoekterm": "Zoekterm"
