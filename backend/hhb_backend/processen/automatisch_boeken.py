@@ -3,13 +3,17 @@ from collections import Counter
 
 import hhb_backend.graphql as graphql
 import hhb_backend.graphql.dataloaders as dataloaders
+import hhb_backend.graphql.models.bank_transaction as bank_transaction
+import hhb_backend.graphql.models.afspraak as afspraak
+import re
 
 
 async def automatisch_boeken(customer_statement_message_id: int = None):
     logging.info(f"automatisch_boeken: customer_statement_message_id={customer_statement_message_id}")
     if customer_statement_message_id is not None:
         transactions = [t
-                        for t in (await dataloaders.hhb_dataloader().bank_transactions_by_csm.load(customer_statement_message_id))
+                        for t in (await dataloaders.hhb_dataloader().bank_transactions_by_csm.load(
+                customer_statement_message_id))
                         if t["is_geboekt"] is False]
     else:
         transactions = await dataloaders.hhb_dataloader().bank_transactions_by_is_geboekt.load(False)
@@ -56,20 +60,56 @@ mutation AutomatischBoeken($input: [CreateJournaalpostAfspraakInput!]!) {
 
 
 async def transactie_suggesties(transactie_ids):
-    # TODO add is_geboekt to bank_transaction
-    # TODO add index on is_geboekt to bank_transaction
+    if type(transactie_ids) != list:
+        transactie_ids = [transactie_ids]
 
-    # TODO add dataloader with filter on is_geboekt and use with false(mind the nulls)
-
-    # TODO implement
-    # with hhb_dataloader()...
     # fetch transactions
-    # and afspraken for tegen_rekening.ibans of those transactions
-    # match afspraken by iban and zoekterm
-
-    # bulk return type dict with transaction_id as key and afspraken list as valie
-    if type(transactie_ids) == list:
+    transactions: [bank_transaction.BankTransaction] = (
+        await dataloaders.hhb_dataloader().bank_transactions_by_id.load_many(
+            transactie_ids
+        )
+    )
+    if transactions == [None] * len(transactions):
         return {key: [] for key in transactie_ids}
 
-    # singular return type
-    return []
+    #Rekeningen ophalen adhv iban
+    rekening_ibans = [t["tegen_rekening"] for t in transactions if t["tegen_rekening"]]
+    rekeningen = await dataloaders.hhb_dataloader().rekeningen_by_iban.load_many(rekening_ibans)
+    if rekeningen == [None] * len(rekeningen):
+        return {key: [] for key in transactie_ids}
+
+    rekening_ids = [r["id"] for r in rekeningen]
+
+    # and afspraken for tegen_rekening.ibans of those transactions
+    afspraken: [afspraak.Afspraak] = (
+        await dataloaders.hhb_dataloader().afspraken_by_rekening.load_many(
+            rekening_ids
+        )
+    )
+    if afspraken == [None] * len(afspraken):
+        return {key: [] for key in transactie_ids}
+
+    # Flatten the afspraken list
+    afspraken = [item for sublist in afspraken for item in sublist]
+
+    # Sort the afspraken by iban
+    iban_afspraken = {}
+    for rekening in rekeningen:
+        iban_afspraken[rekening["iban"]] = [afspraak for afspraak in afspraken if afspraak["tegen_rekening_id"] == rekening["id"]]
+
+    transactie_ids_with_afspraken = {}
+    # match afspraken by iban and zoekterm
+    for transaction in transactions:
+        afspraken_subset = iban_afspraken[transaction["tegen_rekening"]] or []
+        transactie_ids_with_afspraken[transaction["id"]] = [afspraak
+                                                            for afspraak in afspraken_subset
+                                                            if match_zoekterm(afspraak, transaction)]
+
+    return transactie_ids_with_afspraken
+
+
+def match_zoekterm(afspraak, transaction):
+    if afspraak["kenmerk"] and re.search(afspraak["kenmerk"], transaction["information_to_account_owner"], re.IGNORECASE):
+        return True
+
+    return False

@@ -18,7 +18,7 @@ class AfspraakFactory():
         eind_datum: date = date(2020, 10, 1),
         aantal_betalingen: int = 5,
         interval: str = "P1Y2M10DT2H30M",
-        #tegen_rekening=None,
+        tegen_rekening=None,
         bedrag: float = 13.37,
         credit: bool = True,
         kenmerk: str = "ABC1234",
@@ -43,7 +43,8 @@ class AfspraakFactory():
             kenmerk=kenmerk,
             actief=actief,
             rubriek_id=rubriek_id,
-            automatisch_boeken=automatisch_boeken
+            automatisch_boeken=automatisch_boeken,
+            tegen_rekening=tegen_rekening
         )
         if organisatie_id:
             afspraak.organisatie_id = organisatie_id

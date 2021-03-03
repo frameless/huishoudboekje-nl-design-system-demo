@@ -24,7 +24,7 @@ class BankTransactionQuery:
     @classmethod
     @log_gebruikers_activiteit
     async def resolver(cls, _root, _info, id):
-        return await request.dataloader.bank_transaction_by_id.load(id)
+        return await request.dataloader.bank_transactions_by_id.load(id)
 
 
 class BankTransactionsQuery:

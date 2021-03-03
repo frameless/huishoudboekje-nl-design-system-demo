@@ -8,6 +8,7 @@ from flask_graphql import GraphQLView
 from hhb_backend.graphql import schema
 from hhb_backend.graphql.dataloaders import HHBDataLoader
 
+
 def create_blueprint(loop=None):
     if not loop:
         loop = asyncio.new_event_loop()
