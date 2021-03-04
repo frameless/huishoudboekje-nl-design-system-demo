@@ -12,19 +12,19 @@ export type Scalars = {
   Int: number;
   Float: number;
   /**
-   * The `Date` scalar type represents a Date
-   * value as specified by
-   * [iso8601](https://en.wikipedia.org/wiki/ISO_8601).
-   */
-  Date: any;
-  /** Decimaal Scalar Description */
-  Bedrag: any;
-  /**
    * The `DateTime` scalar type represents a DateTime
    * value as specified by
    * [iso8601](https://en.wikipedia.org/wiki/ISO_8601).
    */
   DateTime: any;
+  /** Decimaal Scalar Description */
+  Bedrag: any;
+  /**
+   * The `Date` scalar type represents a Date
+   * value as specified by
+   * [iso8601](https://en.wikipedia.org/wiki/ISO_8601).
+   */
+  Date: any;
   /**
    * Create scalar that ignores normal serialization/deserialization, since
    * that will be handled by the multipart request spec
@@ -95,7 +95,9 @@ export type BankTransaction = {
   tegenRekening?: Maybe<Rekening>;
   tegenRekeningIban?: Maybe<Scalars['String']>;
   transactieDatum?: Maybe<Scalars['Date']>;
+  isGeboekt?: Maybe<Scalars['Boolean']>;
   journaalpost?: Maybe<Journaalpost>;
+  suggesties?: Maybe<Array<Maybe<Afspraak>>>;
 };
 
 
@@ -126,6 +128,7 @@ export type CreateCustomerStatementMessage = {
   __typename?: 'CreateCustomerStatementMessage';
   ok?: Maybe<Scalars['Boolean']>;
   customerStatementMessage?: Maybe<CustomerStatementMessage>;
+  journaalposten?: Maybe<Array<Maybe<Journaalpost>>>;
 };
 
 export type CreateExportOverschrijvingen = {
@@ -184,6 +187,13 @@ export type CreateJournaalpostGrootboekrekeningInput = {
   transactionId: Scalars['Int'];
   grootboekrekeningId: Scalars['String'];
   isAutomatischGeboekt: Scalars['Boolean'];
+};
+
+/** Create a Journaalpost with an Afspraak */
+export type CreateJournaalpostPerAfspraak = {
+  __typename?: 'CreateJournaalpostPerAfspraak';
+  ok?: Maybe<Scalars['Boolean']>;
+  journaalposten?: Maybe<Array<Maybe<Journaalpost>>>;
 };
 
 export type CreateOrganisatie = {
@@ -318,6 +328,7 @@ export type Gebruiker = {
   plaatsnaam?: Maybe<Scalars['String']>;
   rekeningen?: Maybe<Array<Maybe<Rekening>>>;
   afspraken?: Maybe<Array<Maybe<Afspraak>>>;
+  gebruikersactiviteiten?: Maybe<Array<Maybe<GebruikersActiviteit>>>;
 };
 
 /** GebruikersActiviteit model */
@@ -336,7 +347,7 @@ export type GebruikersActiviteit = {
 export type GebruikersActiviteitEntity = {
   __typename?: 'GebruikersActiviteitEntity';
   entityType?: Maybe<Scalars['String']>;
-  entityId?: Maybe<Scalars['Int']>;
+  entityId?: Maybe<Scalars['String']>;
   afspraak?: Maybe<Afspraak>;
   burger?: Maybe<Gebruiker>;
   configuratie?: Maybe<Configuratie>;
@@ -494,6 +505,8 @@ export type RootMutation = {
   createCustomerStatementMessage?: Maybe<CreateCustomerStatementMessage>;
   /** Create a Journaalpost with an Afspraak */
   createJournaalpostAfspraak?: Maybe<CreateJournaalpostAfspraak>;
+  /** Create a Journaalpost with an Afspraak */
+  createJournaalpostPerAfspraak?: Maybe<CreateJournaalpostPerAfspraak>;
   /** Create a Journaalpost with a Grootboekrekening */
   createJournaalpostGrootboekrekening?: Maybe<CreateJournaalpostGrootboekrekening>;
   /** Update a Journaalpost with a Grootboekrekening */
@@ -633,6 +646,12 @@ export type RootMutationCreateCustomerStatementMessageArgs = {
 /** The root of all mutations  */
 export type RootMutationCreateJournaalpostAfspraakArgs = {
   input?: Maybe<CreateJournaalpostAfspraakInput>;
+};
+
+
+/** The root of all mutations  */
+export type RootMutationCreateJournaalpostPerAfspraakArgs = {
+  input: Array<Maybe<CreateJournaalpostAfspraakInput>>;
 };
 
 
@@ -1725,6 +1744,46 @@ export type GetGebeurtenissenQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetGebeurtenissenQuery = (
+  { __typename?: 'RootQuery' }
+  & { gebruikersactiviteiten?: Maybe<Array<Maybe<(
+    { __typename?: 'GebruikersActiviteit' }
+    & Pick<GebruikersActiviteit, 'id' | 'timestamp' | 'gebruikerId' | 'action'>
+    & { entities?: Maybe<Array<Maybe<(
+      { __typename?: 'GebruikersActiviteitEntity' }
+      & Pick<GebruikersActiviteitEntity, 'entityType' | 'entityId'>
+      & { burger?: Maybe<(
+        { __typename?: 'Gebruiker' }
+        & Pick<Gebruiker, 'id' | 'voorletters' | 'voornamen' | 'achternaam'>
+      )>, organisatie?: Maybe<(
+        { __typename?: 'Organisatie' }
+        & Pick<Organisatie, 'id' | 'weergaveNaam'>
+      )>, afspraak?: Maybe<(
+        { __typename?: 'Afspraak' }
+        & Pick<Afspraak, 'id'>
+        & { organisatie?: Maybe<(
+          { __typename?: 'Organisatie' }
+          & Pick<Organisatie, 'id' | 'weergaveNaam'>
+        )> }
+      )>, rekening?: Maybe<(
+        { __typename?: 'Rekening' }
+        & Pick<Rekening, 'id' | 'iban' | 'rekeninghouder'>
+      )>, customerStatementMessage?: Maybe<(
+        { __typename?: 'CustomerStatementMessage' }
+        & Pick<CustomerStatementMessage, 'id'>
+      )> }
+    )>>>, meta?: Maybe<(
+      { __typename?: 'GebruikersActiviteitMeta' }
+      & Pick<GebruikersActiviteitMeta, 'userAgent' | 'ip' | 'applicationVersion'>
+    )> }
+  )>>> }
+);
+
+export type GetBurgerGebeurtenissenQueryVariables = Exact<{
+  ids: Array<Scalars['Int']>;
+}>;
+
+
+export type GetBurgerGebeurtenissenQuery = (
   { __typename?: 'RootQuery' }
   & { gebruikersactiviteiten?: Maybe<Array<Maybe<(
     { __typename?: 'GebruikersActiviteit' }
@@ -3433,3 +3492,73 @@ export function useGetGebeurtenissenLazyQuery(baseOptions?: Apollo.LazyQueryHook
 export type GetGebeurtenissenQueryHookResult = ReturnType<typeof useGetGebeurtenissenQuery>;
 export type GetGebeurtenissenLazyQueryHookResult = ReturnType<typeof useGetGebeurtenissenLazyQuery>;
 export type GetGebeurtenissenQueryResult = Apollo.QueryResult<GetGebeurtenissenQuery, GetGebeurtenissenQueryVariables>;
+export const GetBurgerGebeurtenissenDocument = gql`
+    query GetBurgerGebeurtenissen($ids: [Int!]!) {
+  gebruikersactiviteiten(gebruikerIds: $ids) {
+    id
+    timestamp
+    gebruikerId
+    action
+    entities {
+      entityType
+      entityId
+      burger {
+        id
+        voorletters
+        voornamen
+        achternaam
+      }
+      organisatie {
+        id
+        weergaveNaam
+      }
+      afspraak {
+        id
+        organisatie {
+          id
+          weergaveNaam
+        }
+      }
+      rekening {
+        id
+        iban
+        rekeninghouder
+      }
+      customerStatementMessage {
+        id
+      }
+    }
+    meta {
+      userAgent
+      ip
+      applicationVersion
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetBurgerGebeurtenissenQuery__
+ *
+ * To run a query within a React component, call `useGetBurgerGebeurtenissenQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBurgerGebeurtenissenQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetBurgerGebeurtenissenQuery({
+ *   variables: {
+ *      ids: // value for 'ids'
+ *   },
+ * });
+ */
+export function useGetBurgerGebeurtenissenQuery(baseOptions: Apollo.QueryHookOptions<GetBurgerGebeurtenissenQuery, GetBurgerGebeurtenissenQueryVariables>) {
+        return Apollo.useQuery<GetBurgerGebeurtenissenQuery, GetBurgerGebeurtenissenQueryVariables>(GetBurgerGebeurtenissenDocument, baseOptions);
+      }
+export function useGetBurgerGebeurtenissenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBurgerGebeurtenissenQuery, GetBurgerGebeurtenissenQueryVariables>) {
+          return Apollo.useLazyQuery<GetBurgerGebeurtenissenQuery, GetBurgerGebeurtenissenQueryVariables>(GetBurgerGebeurtenissenDocument, baseOptions);
+        }
+export type GetBurgerGebeurtenissenQueryHookResult = ReturnType<typeof useGetBurgerGebeurtenissenQuery>;
+export type GetBurgerGebeurtenissenLazyQueryHookResult = ReturnType<typeof useGetBurgerGebeurtenissenLazyQuery>;
+export type GetBurgerGebeurtenissenQueryResult = Apollo.QueryResult<GetBurgerGebeurtenissenQuery, GetBurgerGebeurtenissenQueryVariables>;
