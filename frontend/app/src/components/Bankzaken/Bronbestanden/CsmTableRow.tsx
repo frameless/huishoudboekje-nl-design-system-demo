@@ -4,6 +4,7 @@ import moment from "moment";
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {CustomerStatementMessage} from "../../../generated/graphql";
+import {truncateText} from "../../../utils/things";
 
 const CsmTableRow: React.FC<{ csm: CustomerStatementMessage, onDelete: (id: number) => void }> = ({csm, onDelete}) => {
 	const {t} = useTranslation();
@@ -29,7 +30,7 @@ const CsmTableRow: React.FC<{ csm: CustomerStatementMessage, onDelete: (id: numb
 	return (
 		<Tr>
 			<Td>
-				<Text>{csm.filename}</Text>
+				<Text>{truncateText(csm.filename || "", 60)}</Text>
 			</Td>
 			<Td>
 				<Text>{moment(csm.uploadDate).fromNow(!!isMobile)}</Text>

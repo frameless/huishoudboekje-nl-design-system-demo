@@ -182,3 +182,12 @@ export const prepareChartData = (startDate: Moment, endDate: Moment, granularity
 export const sanitizeIBAN = (iban: string) => iban.replace(/\s/g, "").toUpperCase();
 
 export const sortAuditTrailByTime = (a: GebruikersActiviteit, b: GebruikersActiviteit) => moment(a.timestamp).isBefore(b.timestamp) ? 1 : -1;
+
+export const truncateText = (str: string, maxLength = 50) => {
+	const padding = Math.floor((maxLength - 10) / 2);
+	if (str.length > maxLength) {
+		return str.substr(0, padding) + "..." + str.substr(str.length - padding, str.length);
+	}
+
+	return str;
+};
