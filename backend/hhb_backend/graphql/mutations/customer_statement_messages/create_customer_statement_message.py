@@ -56,6 +56,7 @@ class CreateCustomerStatementMessage(graphene.Mutation):
         csmServiceModel = {
             "upload_date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             "raw_data": content.decode("utf-8"),
+            "filename": file.filename
         }
 
         if csm_file.data.get("transaction_reference", False):
