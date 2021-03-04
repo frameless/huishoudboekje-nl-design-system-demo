@@ -88,6 +88,7 @@ class Generator:
                         "tegen_rekening_id",
                         "actief",
                         "beschrijving",
+                        "kenmerk",
                     ],
                 },
             },
@@ -311,6 +312,7 @@ class Generator:
             ),
             "actief": scenario.actief,
             "beschrijving": scenario.beschrijving,
+            "kenmerk": scenario.kenmerk,
         }
         self.afspraken.append(afspraak)
 
