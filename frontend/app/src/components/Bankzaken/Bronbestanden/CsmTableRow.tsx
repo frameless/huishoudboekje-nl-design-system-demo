@@ -28,14 +28,11 @@ const CsmTableRow: React.FC<{ csm: CustomerStatementMessage, onDelete: (id: numb
 
 	return (
 		<Tr>
-			<Td maxWidth={"20px"}>
-				<Text>{csm.id}</Text>
+			<Td>
+				<Text>{csm.filename}</Text>
 			</Td>
 			<Td>
 				<Text>{moment(csm.uploadDate).fromNow(!!isMobile)}</Text>
-			</Td>
-			<Td>
-				<Text>{csm.accountIdentification}</Text>
 			</Td>
 			<Td style={{width: "100px", textAlign: "right"}}>
 				{onDelete && (<>
