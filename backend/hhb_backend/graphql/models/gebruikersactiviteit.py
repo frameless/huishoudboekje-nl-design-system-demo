@@ -98,7 +98,7 @@ class GebruikersActiviteitSnapshot(graphene.ObjectType):
 
 class GebruikersActiviteitEntity(graphene.ObjectType):
     entityType = graphene.String()
-    entityId = graphene.Int()
+    entityId = graphene.String()
 
     afspraak = graphene.Field(lambda: afspraak.Afspraak)
     burger = graphene.Field(lambda: gebruiker.Gebruiker)

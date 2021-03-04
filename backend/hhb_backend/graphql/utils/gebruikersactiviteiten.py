@@ -21,7 +21,7 @@ from hhb_backend.version import load_version
 @dataclass
 class GebruikersActiviteitEntity:
     entity_type: str = field(default=None, metadata=config(field_name="entityType"))
-    entity_id: int = field(default=None, metadata=config(field_name="entityId"))
+    entity_id: str = field(default=None, metadata=config(field_name="entityId"))
 
 
 @dataclass_json(letter_case=LetterCase.CAMEL)
