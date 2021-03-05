@@ -21,7 +21,7 @@ from scenarios import (
 
 
 def faker_datum(
-    start_date: date = date(1950, 1, 1), end_date: date = date(1999, 12, 31)
+        start_date: date = date(1950, 1, 1), end_date: date = date(1999, 12, 31)
 ):
     return start_date + timedelta(days=randrange((end_date - start_date).days))
 
@@ -355,9 +355,18 @@ class Generator:
                         + ["END;"]
                     )
                 )
+            with open(f"data/{db}_clean.sql", "w") as sql_file:
+                sql_file.writelines(
+                    add_newline(
+                        ["BEGIN;"] +
+                         [
+                         f"""TRUNCATE {table_name} RESTART IDENTITY CASCADE;""" for table_name in self.tables[db]] +
+                         ["END;"]
+                    )
+                )
 
     def save_csv(
-        self, db="huishoudboekjeservice", name=None, fieldnames=None, data=None
+            self, db="huishoudboekjeservice", name=None, fieldnames=None, data=None
     ):
         datadir = f"data/{db}"
         filename = f"{datadir}/{name}.csv"

@@ -106,35 +106,6 @@ spec:
           args: ["manage.py", "db", "upgrade"]
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-        - name: {{ printf "%s-sample-data" .Chart.Name | quote }}
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "registry.gitlab.com/commonground/huishoudboekje/app-new/sample-data:{{ include "organisatie-service.imageTag" . }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          env:
-            - name: PGDATABASE
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.database.service }}-{{ include "organisatie-service.name" . }}
-                  key: database
-            - name: PGUSER
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.database.service }}-{{ include "organisatie-service.name" . }}
-                  key: username
-            - name: PGPASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.database.service }}-{{ include "organisatie-service.name" . }}
-                  key: password
-            - name: DATABASE_URL
-              value: "postgresql://$(PGUSER):$(PGPASSWORD)@{{ .Release.Name }}-postgresql/$(PGDATABASE)"
-            - name: DATABASE_NAME
-              value: "$(PGDATABASE)"
-            - name: DATABASE_COUNT_TABLE
-              value: organisaties
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
