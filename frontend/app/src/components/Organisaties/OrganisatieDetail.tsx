@@ -12,7 +12,6 @@ import {
 	MenuButton,
 	MenuItem,
 	MenuList,
-	useToast,
 } from "@chakra-ui/react";
 import React, {createContext, useRef} from "react";
 import {useToggle} from "react-grapple";
@@ -21,6 +20,7 @@ import {Redirect, useHistory, useParams} from "react-router-dom";
 import Routes from "../../config/routes";
 import {Organisatie, useDeleteOrganisatieMutation, useGetOneOrganisatieQuery} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
+import useToaster from "../../utils/useToaster";
 import BackButton from "../BackButton";
 import DeadEndPage from "../DeadEndPage";
 import Page from "../Layouts/Page";
@@ -31,9 +31,9 @@ export const OrganizationDetailContext = createContext<any>({});
 
 const OrganisatieDetail = () => {
 	const {t} = useTranslation();
-	const {id} = useParams<{ id: string }>();
+	const {id} = useParams<{id: string}>();
 	const {push} = useHistory();
-	const toast = useToast();
+	const toast = useToaster();
 
 	const cancelDeleteRef = useRef(null);
 	const [deleteDialogOpen, toggleDeleteDialog] = useToggle(false);
@@ -51,18 +51,22 @@ const OrganisatieDetail = () => {
 
 	return (
 		<OrganizationDetailContext.Provider value={{refresh: $organisatie.refetch}}>
-			<Queryable query={$organisatie}>{({organisatie}: { organisatie: Organisatie }) => {
+			<Queryable query={$organisatie}>{({organisatie}: {organisatie: Organisatie}) => {
 				const onConfirmDeleteDialog = () => {
-					deleteOrganization().then(() => {
-						onCloseDeleteDialog();
-						toast({
-							title: t("messages.organizations.deleteConfirmMessage", {name: organisatie.weergaveNaam}),
-							position: "top",
-							status: "success",
-							isClosable: true,
+					deleteOrganization()
+						.then(() => {
+							onCloseDeleteDialog();
+							toast({
+								success: t("messages.organizations.deleteConfirmMessage", {name: organisatie.weergaveNaam}),
+							});
+							toggleDeleted(true);
+						})
+						.catch(err => {
+							console.error(err);
+							toast({
+								error: err.message,
+							});
 						});
-						toggleDeleted(true);
-					})
 				};
 
 				if (!organisatie) {
@@ -76,7 +80,7 @@ const OrganisatieDetail = () => {
 						<DeadEndPage message={t("messages.organizations.deleteConfirmMessage", {name: organisatie.weergaveNaam})}>
 							<Button colorScheme={"primary"} onClick={() => push(Routes.Organisaties)}>{t("actions.backToList")}</Button>
 						</DeadEndPage>
-					)
+					);
 				}
 
 				return (

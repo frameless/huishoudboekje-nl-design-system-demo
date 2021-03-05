@@ -1,4 +1,4 @@
-import {Box, Button, Divider, FormControl, FormLabel, Input, Stack, Tooltip, useBreakpointValue, useToast} from "@chakra-ui/react";
+import {Box, Button, Divider, FormControl, FormLabel, Input, Stack, Tooltip, useBreakpointValue} from "@chakra-ui/react";
 import React from "react";
 import {useInput, Validators} from "react-grapple";
 import {useTranslation} from "react-i18next";
@@ -7,6 +7,7 @@ import Routes from "../../config/routes";
 import {Organisatie, useGetOneOrganisatieQuery, useUpdateOrganisatieMutation} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
 import {Regex} from "../../utils/things";
+import useToaster from "../../utils/useToaster";
 import BackButton from "../BackButton";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
 import Page from "../Layouts/Page";
@@ -16,7 +17,7 @@ const OrganisatieEdit = () => {
 	const isMobile = useBreakpointValue([true, null, null, false]);
 	const {t} = useTranslation();
 	const {id} = useParams<{id: string}>();
-	const toast = useToast();
+	const toast = useToaster();
 	const {push} = useHistory();
 
 	const kvkNummer = useInput({
@@ -79,10 +80,7 @@ const OrganisatieEdit = () => {
 		].every(f => f.isValid);
 		if (!isFormValid) {
 			toast({
-				status: "error",
-				title: t("messages.organizations.invalidFormMessage"),
-				position: "top",
-				isClosable: true,
+				error: t("messages.organizations.invalidFormMessage"),
 			});
 			return;
 		}
@@ -100,21 +98,13 @@ const OrganisatieEdit = () => {
 			},
 		}).then(() => {
 			toast({
-				status: "success",
-				title: t("messages.organizations.updateSuccessMessage"),
-				position: "top",
-				isClosable: true,
+				success: t("messages.organizations.updateSuccessMessage"),
 			});
 			push(Routes.Organisatie(parseInt(id)));
 		}).catch(err => {
 			console.error(err);
 			toast({
-				position: "top",
-				status: "error",
-				variant: "solid",
-				title: t("messages.genericError.title"),
-				description: t("messages.genericError.description"),
-				isClosable: true,
+				error: err.message,
 			});
 		});
 	};

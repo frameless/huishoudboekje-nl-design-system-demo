@@ -1,12 +1,13 @@
 import {CheckIcon, CloseIcon, DeleteIcon} from "@chakra-ui/icons";
-import {Editable, EditableInput, EditablePreview, FormControl, FormControlProps, IconButton, Stack, useToast} from "@chakra-ui/react";
+import {Editable, EditableInput, EditablePreview, FormControl, FormControlProps, IconButton, Stack} from "@chakra-ui/react";
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {Configuratie as IConfiguratie, useDeleteConfiguratieMutation, useUpdateConfiguratieMutation} from "../../generated/graphql";
+import useToaster from "../../utils/useToaster";
 import Label from "../Layouts/Label";
 
 const ConfiguratieItem: React.FC<FormControlProps & { c: IConfiguratie, refetch: VoidFunction }> = ({c, refetch, ...props}) => {
-	const toast = useToast();
+	const toast = useToaster();
 	const {t} = useTranslation();
 	const [value, setValue] = useState(c.waarde);
 	const [deleteConfirm, setDeleteConfirm] = useState(false);
@@ -31,10 +32,7 @@ const ConfiguratieItem: React.FC<FormControlProps & { c: IConfiguratie, refetch:
 		}).then(() => {
 			setSubmitted(true);
 			toast({
-				status: "success",
-				title: t("messages.configuratie.updateSuccess"),
-				position: "top",
-				isClosable: true,
+				success: t("messages.configuratie.updateSuccess"),
 			});
 		});
 	};
@@ -54,10 +52,7 @@ const ConfiguratieItem: React.FC<FormControlProps & { c: IConfiguratie, refetch:
 			setDeleteConfirm(false);
 			toast.closeAll();
 			toast({
-				status: "success",
-				title: t("messages.configuratie.deleteSuccess"),
-				position: "top",
-				isClosable: true,
+				success: t("messages.configuratie.deleteSuccess"),
 			});
 		});
 	}

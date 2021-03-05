@@ -15,13 +15,13 @@ import {
 	Td,
 	Tooltip,
 	Tr,
-	useToast
 } from "@chakra-ui/react";
 import React, {useRef} from "react";
 import {useInput, useToggle} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {Rekening, useUpdateRekeningMutation} from "../../generated/graphql";
 import {formatIBAN} from "../../utils/things";
+import useToaster from "../../utils/useToaster";
 import PrettyIban from "../Layouts/PrettyIban";
 
 type RekeningListItemProps = TableRowProps & {
@@ -31,13 +31,10 @@ type RekeningListItemProps = TableRowProps & {
 
 const RekeningListItem: React.FC<RekeningListItemProps> = ({rekening, onDelete, ...props}) => {
 	const {t} = useTranslation();
-	const toast = useToast();
+	const toast = useToaster();
 	const [deleteDialogOpen, toggleDeleteDialog] = useToggle(false);
 	const cancelDeleteRef = useRef(null);
 
-	// const iban = useInput({
-	// 	defaultValue: rekening.iban
-	// });
 	const rekeninghouder = useInput({
 		defaultValue: rekening.rekeninghouder,
 	});
@@ -49,7 +46,7 @@ const RekeningListItem: React.FC<RekeningListItemProps> = ({rekening, onDelete, 
 			onDelete();
 			toggleDeleteDialog(false);
 		}
-	}
+	};
 	const onCloseDeleteDialog = () => toggleDeleteDialog(false);
 
 	const onSubmit = () => {
@@ -58,16 +55,18 @@ const RekeningListItem: React.FC<RekeningListItemProps> = ({rekening, onDelete, 
 				id: rekening.id!,
 				iban: rekening.iban,
 				rekeninghouder: rekeninghouder.value,
-			}
+			},
 		}).then(() => {
 			toast({
-				status: "success",
-				title: t("messages.rekening.updateSuccess"),
-				position: "top",
-				isClosable: true,
+				success: t("messages.rekening.updateSuccess"),
+			});
+		}).catch(err => {
+			console.error(err);
+			toast({
+				error: err.message,
 			});
 		});
-	}
+	};
 
 	if (!rekening) {
 		return null;
@@ -105,6 +104,6 @@ const RekeningListItem: React.FC<RekeningListItemProps> = ({rekening, onDelete, 
 			)}</Td>
 		</Tr>
 	</>);
-}
+};
 
 export default RekeningListItem;

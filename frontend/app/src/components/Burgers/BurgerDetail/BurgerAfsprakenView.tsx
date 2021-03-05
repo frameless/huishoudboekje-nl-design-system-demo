@@ -1,17 +1,18 @@
 import {AddIcon} from "@chakra-ui/icons";
-import {Box, Button, Stack, StackProps, Table, Tbody, Th, Thead, Tr, useBreakpointValue, useToast} from "@chakra-ui/react";
+import {Box, Button, Stack, StackProps, Table, Tbody, Th, Thead, Tr, useBreakpointValue} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {useHistory} from "react-router-dom";
 import Routes from "../../../config/routes";
 import {Gebruiker, useDeleteAfspraakMutation} from "../../../generated/graphql";
+import useToaster from "../../../utils/useToaster";
 import AfspraakTableRow from "../../Afspraken/AfspraakTableRow";
 import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
 
 const BurgerAfsprakenView: React.FC<StackProps & { burger: Gebruiker, refetch: VoidFunction }> = ({burger, refetch, ...props}) => {
 	const {t} = useTranslation();
 	const isMobile = useBreakpointValue([true, null, null, false]);
-	const toast = useToast();
+	const toast = useToaster();
 	const {push} = useHistory();
 	const {afspraken} = burger;
 
@@ -25,21 +26,13 @@ const BurgerAfsprakenView: React.FC<StackProps & { burger: Gebruiker, refetch: V
 	const onDeleteAfspraak = (id) => {
 		deleteAfspraak({variables: {id}}).then(() => {
 			toast({
-				title: t("messages.agreements.deleteConfirmMessage"),
-				position: "top",
-				status: "success",
-				isClosable: true,
+				success: t("messages.agreements.deleteConfirmMessage"),
 			});
 			refetch();
 		}).catch(err => {
 			console.error(err);
 			toast({
-				position: "top",
-				status: "error",
-				variant: "solid",
-				description: t("messages.genericError.description"),
-				title: t("messages.genericError.title"),
-				isClosable: true,
+				error: err.message
 			});
 		});
 	};

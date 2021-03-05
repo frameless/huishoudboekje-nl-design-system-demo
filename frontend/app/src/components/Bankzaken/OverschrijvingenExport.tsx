@@ -1,5 +1,5 @@
 import {DownloadIcon} from "@chakra-ui/icons";
-import {Box, Button, Divider, FormControl, FormLabel, IconButton, Input, Stack, Table, Tbody, Td, Text, Th, Thead, Tr, useToast} from "@chakra-ui/react";
+import {Box, Button, Divider, FormControl, FormLabel, IconButton, Input, Stack, Table, Tbody, Td, Text, Th, Thead, Tr} from "@chakra-ui/react";
 import moment from "moment";
 import React from "react";
 import DatePicker from "react-datepicker";
@@ -8,13 +8,14 @@ import {useTranslation} from "react-i18next";
 import {Export, useCreateExportOverschrijvingenMutation, useGetExportsQuery} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
 import {Regex} from "../../utils/things";
+import useToaster from "../../utils/useToaster";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
 import Label from "../Layouts/Label";
 import Section from "../Layouts/Section";
 
 const OverschrijvingenExport = () => {
 	const {t} = useTranslation();
-	const toast = useToast();
+	const toast = useToaster();
 
 	const $exports = useGetExportsQuery();
 	const [createExportOverschrijvingen, $createExportOverschrijvingen] = useCreateExportOverschrijvingenMutation();
@@ -44,11 +45,8 @@ const OverschrijvingenExport = () => {
 			}
 		}).then(() => {
 			toast({
-				status: "success",
-				title: t("messages.exports.createSuccessMessage"),
-				position: "top",
-				isClosable: true,
-			});
+				success: t("messages.exports.createSuccessMessage")
+			})
 			$exports.refetch();
 		}).catch(err => {
 			console.error(err);
@@ -59,12 +57,7 @@ const OverschrijvingenExport = () => {
 			}
 
 			toast({
-				position: "top",
-				status: "error",
-				variant: "solid",
-				title: t("messages.genericError.title"),
-				description: errorMessage,
-				isClosable: true,
+				error: errorMessage
 			});
 		});
 	};

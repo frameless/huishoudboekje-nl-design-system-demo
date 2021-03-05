@@ -1,5 +1,5 @@
 import {ChevronDownIcon} from "@chakra-ui/icons";
-import {Button, IconButton, Menu, MenuButton, MenuItem, MenuList, useToast} from "@chakra-ui/react";
+import {Button, IconButton, Menu, MenuButton, MenuItem, MenuList} from "@chakra-ui/react";
 import React from "react";
 import {useToggle} from "react-grapple";
 import {useTranslation} from "react-i18next";
@@ -8,6 +8,7 @@ import Routes from "../../../config/routes";
 import {Gebruiker, useDeleteBurgerMutation, useGetOneBurgerQuery} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import {formatBurgerName} from "../../../utils/things";
+import useToaster from "../../../utils/useToaster";
 import BackButton from "../../BackButton";
 import DeadEndPage from "../../DeadEndPage";
 import Alert from "../../Layouts/Alert";
@@ -19,16 +20,16 @@ import BurgerProfileView from "./BurgerProfileView";
 import BurgerRekeningenView from "./BurgerRekeningenView";
 
 const BurgerDetail = () => {
-	const {id} = useParams<{ id: string }>();
+	const {id} = useParams<{id: string}>();
 	const {t} = useTranslation();
-	const toast = useToast();
+	const toast = useToaster();
 	const {push} = useHistory();
 	const [isAlertOpen, toggleAlert] = useToggle(false);
 	const [isDeleted, toggleDeleted] = useToggle(false);
 
 	const $burger = useGetOneBurgerQuery({
 		fetchPolicy: "no-cache",
-		variables: {id: parseInt(id)}
+		variables: {id: parseInt(id)},
 	});
 	const [deleteBurger, $deleteBurger] = useDeleteBurgerMutation({variables: {id: parseInt(id)}});
 
@@ -36,18 +37,22 @@ const BurgerDetail = () => {
 	const onClickDeleteMenuItem = () => toggleAlert(true);
 
 	return (
-		<Queryable query={$burger}>{({gebruiker}: { gebruiker: Gebruiker }) => {
+		<Queryable query={$burger}>{({gebruiker}: {gebruiker: Gebruiker}) => {
 			const onConfirmDelete = () => {
-				deleteBurger().then(() => {
-					toggleAlert(false);
-					toast({
-						title: t("messages.burgers.deleteConfirmMessage", {name: `${gebruiker.voornamen} ${gebruiker.achternaam}`}),
-						position: "top",
-						status: "success",
-						isClosable: true,
+				deleteBurger()
+					.then(() => {
+						toggleAlert(false);
+						toast({
+							success: t("messages.burgers.deleteConfirmMessage", {name: `${gebruiker.voornamen} ${gebruiker.achternaam}`}),
+						});
+						toggleDeleted(true);
+					})
+					.catch(err => {
+						console.error(err);
+						toast({
+							error: err.message,
+						});
 					});
-					toggleDeleted(true);
-				});
 			};
 
 			if (isDeleted) {
@@ -79,7 +84,7 @@ const BurgerDetail = () => {
 					<Section><BurgerAfsprakenView burger={gebruiker} refetch={$burger.refetch} /></Section>
 					<Section><BurgerGebeurtenissen burger={gebruiker} /></Section>
 				</Page>
-			</>)
+			</>);
 		}}
 		</Queryable>
 	);

@@ -427,5 +427,10 @@
     "balance": "Balans",
     "allBurgers": "Alle burgers",
     "total": "Totaal",
-    "saldo": "Saldo"
+    "saldo": "Saldo",
+    "toastMessages": {
+        "generic": {
+            "errorTitle": "Er is een fout opgetreden."
+        }
+    }
 }

@@ -1,10 +1,11 @@
-import {Button, FormLabel, Input, SimpleGrid, Stack, useBreakpointValue, useToast} from "@chakra-ui/react";
+import {Button, FormLabel, Input, SimpleGrid, Stack, useBreakpointValue} from "@chakra-ui/react";
 import {friendlyFormatIBAN} from "ibantools";
 import React from "react";
 import {useInput, Validators} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {Rekening, RekeningInput} from "../../generated/graphql";
 import {Regex, sanitizeIBAN} from "../../utils/things";
+import useToaster from "../../utils/useToaster";
 
 const RekeningForm: React.FC<{
 	rekening?: Rekening,
@@ -13,7 +14,7 @@ const RekeningForm: React.FC<{
 }> = ({rekening, onSave, onCancel}) => {
 	const isMobile = useBreakpointValue([true, null, null, false]);
 	const {t} = useTranslation();
-	const toast = useToast();
+	const toast = useToaster();
 
 	const rekeninghouder = useInput({
 		defaultValue: rekening?.rekeninghouder,
@@ -29,10 +30,7 @@ const RekeningForm: React.FC<{
 		const fieldsValid = [rekeninghouder, iban].every(f => f.isValid);
 		if (!fieldsValid) {
 			toast({
-				status: "error",
-				title: t("messages.rekeningen.invalidFormMessage"),
-				position: "top",
-				isClosable: true,
+				error: t("messages.rekeningen.invalidFormMessage"),
 			});
 			return;
 		}

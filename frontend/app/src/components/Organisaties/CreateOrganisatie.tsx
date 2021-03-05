@@ -1,4 +1,4 @@
-import {Box, Button, Divider, FormControl, FormLabel, Input, Stack, Tooltip, useBreakpointValue, useToast} from "@chakra-ui/react";
+import {Box, Button, Divider, FormControl, FormLabel, Input, Stack, Tooltip, useBreakpointValue} from "@chakra-ui/react";
 import React from "react";
 import {useInput, useToggle, Validators} from "react-grapple";
 import {UseInput} from "react-grapple/dist/hooks/useInput";
@@ -7,6 +7,7 @@ import {useHistory} from "react-router-dom";
 import Routes from "../../config/routes";
 import {useCreateOrganisatieMutation} from "../../generated/graphql";
 import {Regex} from "../../utils/things";
+import useToaster from "../../utils/useToaster";
 import BackButton from "../BackButton";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
 import Page from "../Layouts/Page";
@@ -17,7 +18,7 @@ const CreateOrganisatie = () => {
 	const {t} = useTranslation();
 	const {push} = useHistory();
 	const isMobile = useBreakpointValue([true, null, null, false]);
-	const toast = useToast();
+	const toast = useToaster();
 	const [isSubmitted, toggleSubmitted] = useToggle(false);
 
 	const kvknummer = useInput({
@@ -68,10 +69,7 @@ const CreateOrganisatie = () => {
 
 		if (!isFormValid) {
 			toast({
-				status: "error",
-				title: t("messages.organizations.invalidFormMessage"),
-				position: "top",
-				isClosable: true,
+				error: t("messages.organizations.invalidFormMessage"),
 			});
 			return;
 		}
@@ -88,10 +86,7 @@ const CreateOrganisatie = () => {
 			},
 		}).then(result => {
 			toast({
-				status: "success",
-				title: t("messages.organizations.createSuccessMessage"),
-				position: "top",
-				isClosable: true,
+				success: t("messages.organizations.createSuccessMessage"),
 			});
 
 			const {id} = result?.data?.createOrganisatie?.organisatie || {};
@@ -101,12 +96,7 @@ const CreateOrganisatie = () => {
 		}).catch(err => {
 			console.error(err);
 			toast({
-				position: "top",
-				status: "error",
-				variant: "solid",
-				title: t("messages.genericError.title"),
-				description: t("messages.genericError.description"),
-				isClosable: true,
+				error: err.message
 			});
 		});
 	};
