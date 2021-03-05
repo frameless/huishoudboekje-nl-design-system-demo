@@ -155,19 +155,20 @@ export const BankTransactionFragment = gql`
 
 export const CustomerStatementMessageFragment = gql`
     fragment CustomerStatementMessage on CustomerStatementMessage {
+        id
+        filename
+        uploadDate
         accountIdentification
-        bankTransactions{
-            ...BankTransaction
-        }
         closingAvailableFunds
         closingBalance
         forwardAvailableBalance
-        id
         openingBalance
         relatedReference
         sequenceNumber
         transactionReferenceNumber
-        uploadDate
+        bankTransactions{
+            ...BankTransaction
+        }
     }
     ${BankTransactionFragment}
 `;

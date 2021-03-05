@@ -230,6 +230,7 @@ export type CustomerStatementMessage = {
   __typename?: 'CustomerStatementMessage';
   id?: Maybe<Scalars['Int']>;
   uploadDate?: Maybe<Scalars['DateTime']>;
+  filename?: Maybe<Scalars['String']>;
   transactionReferenceNumber?: Maybe<Scalars['String']>;
   relatedReference?: Maybe<Scalars['String']>;
   accountIdentification?: Maybe<Scalars['String']>;
@@ -1062,7 +1063,7 @@ export type BankTransactionFragment = (
 
 export type CustomerStatementMessageFragment = (
   { __typename?: 'CustomerStatementMessage' }
-  & Pick<CustomerStatementMessage, 'accountIdentification' | 'closingAvailableFunds' | 'closingBalance' | 'forwardAvailableBalance' | 'id' | 'openingBalance' | 'relatedReference' | 'sequenceNumber' | 'transactionReferenceNumber' | 'uploadDate'>
+  & Pick<CustomerStatementMessage, 'id' | 'filename' | 'uploadDate' | 'accountIdentification' | 'closingAvailableFunds' | 'closingBalance' | 'forwardAvailableBalance' | 'openingBalance' | 'relatedReference' | 'sequenceNumber' | 'transactionReferenceNumber'>
   & { bankTransactions?: Maybe<Array<Maybe<(
     { __typename?: 'BankTransaction' }
     & BankTransactionFragment
@@ -1779,7 +1780,7 @@ export type GetGebeurtenissenQuery = (
 );
 
 export type GetBurgerGebeurtenissenQueryVariables = Exact<{
-  ids: Array<Scalars['Int']>;
+  ids: Array<Scalars['Int']> | Scalars['Int'];
 }>;
 
 
@@ -1952,19 +1953,20 @@ export const BankTransactionFragmentDoc = gql`
     `;
 export const CustomerStatementMessageFragmentDoc = gql`
     fragment CustomerStatementMessage on CustomerStatementMessage {
+  id
+  filename
+  uploadDate
   accountIdentification
-  bankTransactions {
-    ...BankTransaction
-  }
   closingAvailableFunds
   closingBalance
   forwardAvailableBalance
-  id
   openingBalance
   relatedReference
   sequenceNumber
   transactionReferenceNumber
-  uploadDate
+  bankTransactions {
+    ...BankTransaction
+  }
 }
     ${BankTransactionFragmentDoc}`;
 export const JournaalpostFragmentDoc = gql`

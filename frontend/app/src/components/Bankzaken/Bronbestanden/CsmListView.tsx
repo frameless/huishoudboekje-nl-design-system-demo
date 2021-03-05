@@ -38,10 +38,10 @@ const CsmListView: React.FC<BoxProps & {csms: CustomerStatementMessage[], refres
 			<Thead>
 				<Tr>
 					<Th>
-						<Label>{t("forms.common.fields.time")}</Label>
+						<Label>{t("forms.banking.sections.customerStatementMessages.filename")}</Label>
 					</Th>
 					<Th>
-						<Label>{t("forms.banking.bankAccount")}</Label>
+						<Label>{t("forms.common.fields.time")}</Label>
 					</Th>
 					<Th isNumeric>
 						<Label>{t("actions.actions")}</Label>

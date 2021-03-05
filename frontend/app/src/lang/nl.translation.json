@@ -148,9 +148,9 @@
             }
         },
         "banking": {
-            "bankAccount": "Rekening",
             "sections": {
                 "customerStatementMessages": {
+                    "filename": "Bestandsnaam",
                     "title": "Bronbestanden",
                     "detailText": "Hier is het mogelijk om bij- en afschrijvingen uit een MT940-bestand te importeren."
                 },
