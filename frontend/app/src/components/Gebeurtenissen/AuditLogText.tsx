@@ -16,6 +16,7 @@ const AuditLogText: React.FC<TextProps & {g: GebruikersActiviteit}> = ({g, ...pr
 	const organisatie = entities.find(e => e.entityType === "organisatie")?.organisatie;
 	const transactions = entities.filter(e => e.entityType === "transaction");
 	const customerStatementMessage = entities.find(e => e.entityType === "customerStatementMessage");
+	const rekening = entities.find(e => e.entityType === "rekening")?.rekening;
 
 	const burgerName = formatBurgerName(burger);
 
@@ -35,6 +36,8 @@ const AuditLogText: React.FC<TextProps & {g: GebruikersActiviteit}> = ({g, ...pr
 		afspraakOrganisatie: afspraak?.organisatie?.weergaveNaam || t("unknownOrganisatie"),
 		customerStatementMessage: customerStatementMessage?.entityId || "?",
 		nTransactions: transactions.length || t("unknown"),
+		iban: rekening?.iban || t("unknownIban"),
+		rekeninghouder: rekening?.rekeninghouder || t("unknownRekeninghouder"),
 	};
 
 	if (action) {
@@ -44,14 +47,14 @@ const AuditLogText: React.FC<TextProps & {g: GebruikersActiviteit}> = ({g, ...pr
 			afspraak: () => <Trans i18nKey={"auditLog.viewAfspraak"} values={values} components={components} />,
 			afspraken: () => <Trans i18nKey={"auditLog.viewAfspraken"} values={values} components={components} />,
 			rubrieken: () => <Trans i18nKey={"auditLog.viewRubrieken"} values={values} components={components} />,
-			gebruiker: () => <Trans i18nKey={"auditLog.viewGebruiker"} values={values} components={components} />,
-			gebruikers: () => <Trans i18nKey={"auditLog.viewGebruikers"} values={values} components={components} />,
+			burger: () => <Trans i18nKey={"auditLog.viewBurger"} values={values} components={components} />,
+			burgers: () => <Trans i18nKey={"auditLog.viewBurgers"} values={values} components={components} />,
 			customerStatementMessages: () => <Trans i18nKey={"auditLog.viewCustomerStatementMessages"} values={values} components={components} />,
 			bankTransactions: () => <Trans i18nKey={"auditLog.viewTransactions"} values={values} components={components} />,
 			exports: () => <Trans i18nKey={"auditLog.viewExports"} values={values} components={components} />,
-			createGebruiker: () => <Trans i18nKey={"auditLog.createGebruiker"} values={values} components={components} />,
-			updateGebruiker: () => <Trans i18nKey={"auditLog.updateGebruiker"} values={values} components={components} />,
-			deleteGebruiker: () => <Trans i18nKey={"auditLog.deleteGebruiker"} values={values} components={components} />,
+			createBurger: () => <Trans i18nKey={"auditLog.createBurger"} values={values} components={components} />,
+			updateBurger: () => <Trans i18nKey={"auditLog.updateBurger"} values={values} components={components} />,
+			deleteBurger: () => <Trans i18nKey={"auditLog.deleteBurger"} values={values} components={components} />,
 			createAfspraak: () => <Trans i18nKey={"auditLog.createAfspraak"} values={values} components={components} />,
 			updateAfspraak: () => <Trans i18nKey={"auditLog.updateAfspraak"} values={values} components={components} />,
 			deleteAfspraak: () => <Trans i18nKey={"auditLog.deleteAfspraak"} values={values} components={components} />,
@@ -71,9 +74,9 @@ const AuditLogText: React.FC<TextProps & {g: GebruikersActiviteit}> = ({g, ...pr
 			deleteConfiguratie: () => <Trans i18nKey={"auditLog.deleteConfiguratie"} values={values} components={components} />,
 			deleteCustomerStatementMessage: () => <Trans i18nKey={"auditLog.deleteCustomerStatementMessage"} values={values} components={components} />,
 			createCustomerStatementMessage: () => <Trans i18nKey={"auditLog.createCustomerStatementMessage"} values={values} components={components} />,
+			createBurgerRekening: () => <Trans i18nKey={"auditLog.createBurgerRekening"} values={values} components={components} />,
+			deleteBurgerRekening: () => <Trans i18nKey={"auditLog.deleteBurgerRekening"} values={values} components={components} />,
 			// createExportOverschrijvingen: () => <Trans i18nKey={"auditLog.createExportOverschrijvingen"} values={values} components={components} />,
-			// createGebruikerRekening: () => <Trans i18nKey={"auditLog.createGebruikerRekening"} values={values} components={components} />,
-			// deleteGebruikerRekening: () => <Trans i18nKey={"auditLog.deleteGebruikerRekening"} values={values} components={components} />,
 			// createOrganisatieRekening: () => <Trans i18nKey={"auditLog.createOrganisatieRekening"} values={values} components={components} />,
 			// deleteOrganisatieRekening: () => <Trans i18nKey={"auditLog.deleteOrganisatieRekening"} values={values} components={components} />,
 		};
@@ -95,6 +98,7 @@ const AuditLogText: React.FC<TextProps & {g: GebruikersActiviteit}> = ({g, ...pr
 			`${e.entityType} (${e.entityId})`,
 		]), [] as string[]),
 	];
+
 	return (
 		<Stack spacing={1}>
 			<Text>{t("auditLog.unknown")}</Text>
