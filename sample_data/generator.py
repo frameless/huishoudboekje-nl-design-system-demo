@@ -13,7 +13,7 @@ from schwifty import IBAN
 
 from scenarios import (
     Scenario,
-    GebruikerScenario,
+    BurgerScenario,
     OrganisatieBulkScenario,
     Organisatie,
     AfspraakScenario,
@@ -44,7 +44,7 @@ class Generator:
                     "fieldnames": ["id", "naam", "grootboekrekening_id"],
                 },
                 "configuratie": {"fieldnames": ["id", "waarde"]},
-                "gebruikers": {
+                "burgers": {
                     "sequence": True,
                     "fieldnames": [
                         "id",
@@ -64,7 +64,7 @@ class Generator:
                     "sequence": True,
                     "fieldnames": ["id", "iban", "rekeninghouder"],
                 },
-                "rekening_gebruiker": {"fieldnames": ["rekening_id", "gebruiker_id"]},
+                "rekening_burger": {"fieldnames": ["rekening_id", "burger_id"]},
                 "organisaties": {
                     "sequence": True,
                     "fieldnames": ["id", "kvk_nummer", "weergave_naam"],
@@ -84,7 +84,7 @@ class Generator:
                         "interval",
                         "start_datum",
                         "eind_datum",
-                        "gebruiker_id",
+                        "burger_id",
                         "tegen_rekening_id",
                         "actief",
                         "beschrijving",
@@ -108,15 +108,15 @@ class Generator:
         self.rubrieken = []
 
         self.configuratie = []
-        self.gebruikers = []
+        self.burgers = []
         self.rekeningen = []
         self.afspraken = []
-        self.rekening_gebruiker = []
+        self.rekening_burger = []
         self.rekening_organisatie = []
 
         self.organisaties: List[dict] = []
         self.rekening_counter = 40200
-        self.gebruiker_counter = 200
+        self.burger_counter = 200
         self.organisatie_counter = 1
         self.kvk_number_counter = 462345
 
@@ -137,35 +137,35 @@ class Generator:
         for organisatie_scenario in self.scenario.organisatie.bulk:
             self.generate_organisaties(organisatie_scenario)
 
-        print("generate gebruiker scenarios")
-        for gebruiker_scenario in self.scenario.gebruikers.scenarios:
-            self.generate_gebruikers(gebruiker_scenario)
+        print("generate burger scenarios")
+        for burger_scenario in self.scenario.burgers.scenarios:
+            self.generate_burgers(burger_scenario)
 
-    def generate_rekening_gebruiker(self, gebruiker_id, naam):
+    def generate_rekening_burger(self, burger_id, naam):
         rekening = self.create_rekening(naam)
         self.rekening_counter += 1
 
-        self.rekening_gebruiker.append(
-            {"rekening_id": rekening["id"], "gebruiker_id": gebruiker_id}
+        self.rekening_burger.append(
+            {"rekening_id": rekening["id"], "burger_id": burger_id}
         )
 
-    def generate_gebruikers(self, scenario: GebruikerScenario):
+    def generate_burgers(self, scenario: BurgerScenario):
         for _ in range(scenario.aantal):
-            gezin = [self.create_gebruiker() for _ in range(scenario.gezin)]
+            gezin = [self.create_burger() for _ in range(scenario.gezin)]
 
             rekeninghouder = " ".join([g["achternaam"] for g in gezin])
             for _ in range(scenario.aantal_rekeningen):
                 rekening = self.create_rekening(rekeninghouder=rekeninghouder)
 
-                for gebruiker in gezin:
-                    self.create_gebruiker_rekening(
-                        gebruiker=gebruiker, rekening=rekening
+                for burger in gezin:
+                    self.create_burger_rekening(
+                        burger=burger, rekening=rekening
                     )
 
             for afspraak_scenario in scenario.afspraken:
-                self.generate_afspraak(gebruiker, afspraak_scenario)
+                self.generate_afspraak(burger, afspraak_scenario)
 
-    def create_gebruiker(self):
+    def create_burger(self):
         response = requests.get(
             "http://faker.hook.io/?property=helpers.createCard&locale=nl"
         ).json()
@@ -173,10 +173,10 @@ class Generator:
         voornamen = " ".join(response["name"].split(" ")[:-1])
         voorletters = " ".join([n[0] for n in response["name"].split(" ")[:-1]])
 
-        self.gebruiker_counter += 1
+        self.burger_counter += 1
 
-        gebruiker = {
-            "id": self.gebruiker_counter,
+        burger = {
+            "id": self.burger_counter,
             "telefoonnummer": response["phone"],
             "email": response["email"],
             "geboortedatum": faker_datum(),
@@ -188,8 +188,8 @@ class Generator:
             "postcode": self.__faker_postcode,
             "plaatsnaam": "Sloothuizen",
         }
-        self.gebruikers.append(gebruiker)
-        return gebruiker
+        self.burgers.append(burger)
+        return burger
 
     def generate_organisatie(self, organisatie: Organisatie):
         self.organisatie_counter += 1
@@ -236,13 +236,13 @@ class Generator:
         self.rekeningen.append(rekening)
         return rekening
 
-    def create_gebruiker_rekening(self, gebruiker, rekening):
-        gebruiker_rekening = {
+    def create_burger_rekening(self, burger, rekening):
+        burger_rekening = {
             "rekening_id": rekening["id"],
-            "gebruiker_id": gebruiker["id"],
+            "burger_id": burger["id"],
         }
-        self.rekening_gebruiker.append(gebruiker_rekening)
-        return gebruiker_rekening
+        self.rekening_burger.append(burger_rekening)
+        return burger_rekening
 
     def generate_organisatie_rekening(self, organisatie, rekening):
         organisatie_rekening = {
@@ -251,7 +251,7 @@ class Generator:
         }
         self.rekening_organisatie.append(organisatie_rekening)
 
-    def generate_afspraak(self, gebruiker, scenario: AfspraakScenario):
+    def generate_afspraak(self, burger, scenario: AfspraakScenario):
         organisatie = (
             None
             if scenario.organisatie.kvk is None
@@ -285,7 +285,7 @@ class Generator:
             "interval": scenario.interval,
             "start_datum": scenario.start_datum,
             "eind_datum": scenario.eind_datum,
-            "gebruiker_id": gebruiker["id"],
+            "burger_id": burger["id"],
             "tegen_rekening_id": next(
                 iter(
                     (
@@ -307,8 +307,8 @@ class Generator:
             if organisatie is not None
             else next(
                 r["rekening_id"]
-                for r in self.rekening_gebruiker
-                if r["gebruiker_id"] == gebruiker["id"]
+                for r in self.rekening_burger
+                if r["burger_id"] == burger["id"]
             ),
             "actief": scenario.actief,
             "beschrijving": scenario.beschrijving,
