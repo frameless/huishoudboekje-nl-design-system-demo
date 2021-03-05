@@ -18,9 +18,9 @@ mock_rubrieken = {
 }
 mock_grootboekrekeningen = {
     "data": [
-        {"id": "m1", "naam": "inkomsten", "children": ["m12"], "credit": True},
-        {"id": "m12", "naam": "salaris", "parent_id": "m1", "credit": True},
-        {"id": "m2", "naam": "uitgaven", "is_credit": False},
+        {"id": "m1", "naam": "inkomsten", "children": ["m12"], "debet": False},
+        {"id": "m12", "naam": "salaris", "parent_id": "m1", "debet": False},
+        {"id": "m2", "naam": "uitgaven", "debet": True},
     ]
 }
 mock_bank_transactions = {
