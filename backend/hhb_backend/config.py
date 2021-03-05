@@ -27,7 +27,7 @@ class Config(object):
     OIDC_CLIENT_SECRETS = os.getenv('OIDC_CLIENT_SECRETS', './etc/client_secrets.json')
     OIDC_SCOPES = ['openid', 'email', 'profile']
     OIDC_ID_TOKEN_COOKIE_SECURE = True
-    OIDC_CLOCK_SKEW = float(strip_quotes(os.getenv('OIDC_CLOCK_SKEW', "0")))
+    OIDC_CLOCK_SKEW = float(strip_quotes(os.getenv('OIDC_CLOCK_SKEW', "60")))
     # OIDC_ID_TOKEN_COOKIE_PATH = os.getenv('PREFIX', '/') # This is broken in Flask-OIDC
     OVERWITE_REDIRECT_URI_MAP = os.getenv('OVERWITE_REDIRECT_URI_MAP', None)
 

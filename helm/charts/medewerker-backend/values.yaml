@@ -10,7 +10,9 @@ replicaCount: 1
 
 secretKey: ""
 appSettings: "hhb_backend.config.ProductionConfig"
-extraEnv: []
+extraEnv:
+  - name: OIDC_CLOCK_SKEW
+    value: "60"
 
 image:
   repository: registry.gitlab.com/commonground/huishoudboekje/app-new/backend
