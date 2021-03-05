@@ -33,7 +33,7 @@ class GebruikersActiviteitenQuery:
             )
         else:
             gebruikersactiviteiten = []
-            if kwargs["gebruikerIds"]:
+            if kwargs["burgerIds"]:
                 gebruikersactiviteiten = (
                     request.dataloader.gebruikersactiviteiten_by_burgers.get_by_ids(
                         kwargs["burgerIds"]
