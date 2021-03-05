@@ -37,6 +37,9 @@ spec:
           image: "{{ .Values.image.repository }}:{{ include "medewerker-backend.imageTag" . }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
+            {{- with .Values.extraEnv }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
             - name: PREFIX
               value: /api
             - name: APP_SETTINGS

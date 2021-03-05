@@ -1,13 +1,13 @@
 #!/usr/bin/env python
+import io
 import logging
 import os
-import io
-import sys
+from functools import wraps
 from urllib.parse import urlparse
 
 import itsdangerous
 import requests
-from flask import Flask, jsonify, redirect, make_response, session, send_file
+from flask import Flask, jsonify, make_response, redirect, send_file, session
 from flask_oidc import OpenIDConnect
 
 import hhb_backend.graphql.blueprint as graphql_blueprint
@@ -15,20 +15,16 @@ from hhb_backend.custom_oidc import CustomOidc
 from hhb_backend.graphql import settings
 from hhb_backend.reverse_proxy import ReverseProxied
 
-from functools import wraps
-
 
 def create_app(
-    config_name=os.getenv("APP_SETTINGS", None)
-    or "hhb_backend.config.DevelopmentConfig",
+        config_name=os.getenv("APP_SETTINGS", None)
+                    or "hhb_backend.config.DevelopmentConfig",
         loop=None
 ):
     app = Flask(__name__)
     app.config.from_object(config_name)
 
-    logging.basicConfig(
-        level=app.config["LOG_LEVEL"],
-    )
+    logging.basicConfig(level=app.config["LOG_LEVEL"])
     logging.info(f"Starting {__name__} with {config_name}")
 
     if app.config["PREFIX"]:
@@ -52,8 +48,7 @@ def create_app(
             try:
                 return view_func(*args, **kwargs)
             except:
-                err = sys.exc_info()[0]
-                logging.warning(f"Error detected, redirecting to '/': {err}")
+                logging.warning(f"Error detected, redirecting to '/'", exc_info=True)
                 oidc.logout()
                 session.clear()
                 return redirect("/", code=302)
@@ -103,7 +98,6 @@ def create_app(
 
     graphql = graphql_blueprint.create_blueprint(loop)
     if app.config["GRAPHQL_AUTH_ENABLED"]:
-
         @graphql.before_request
         @custom_oidc.require_login
         def auth_graphql():

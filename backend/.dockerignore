@@ -5,3 +5,10 @@ etc/
 README.md
 Dockerfile
 .idea
+.coverage
+coverage.xml
+htmlcov
+build
+dist
+backend.egg-info
+.pytest_cache
