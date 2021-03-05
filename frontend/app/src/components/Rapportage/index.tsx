@@ -89,7 +89,7 @@ const Rapportage = () => {
 								<FormControl as={Stack} flex={1}>
 									<Label>{t("charts.filterBurgers")}</Label>
 									<Queryable query={$data} children={data => {
-										const burgers: Burger[] = data.gebruikers || [];
+										const burgers: Burger[] = data.burgers || [];
 										return (
 											<Select onChange={onSelectBurger} options={burgers.map(b => ({key: b.id, value: b.id, label: formatBurgerName(b)}))} styles={reactSelectStyles}
 											        isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllBurgers")} />
