@@ -22,9 +22,9 @@ const SelectAfspraak: React.FC<SelectAfspraakProps> = ({options, value, onChange
 	const filterFn = (input: string) => (afspraak: Afspraak) => {
 		const searchData = [
 			afspraak.beschrijving,
-			afspraak.gebruiker?.voornamen,
-			afspraak.gebruiker?.voorletters,
-			afspraak.gebruiker?.achternaam,
+			afspraak.burger?.voornamen,
+			afspraak.burger?.voorletters,
+			afspraak.burger?.achternaam,
 			afspraak.tegenRekening?.iban,
 			afspraak.organisatie?.weergaveNaam,
 			afspraak.organisatie?.kvkNummer,

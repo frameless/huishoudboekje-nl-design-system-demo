@@ -48,7 +48,7 @@ export const AfspraakFragment = gql`
             maanden
             jaren
         }
-        gebruiker{
+        burger{
             id
             voornamen
             voorletters
@@ -77,8 +77,8 @@ export const AfspraakFragment = gql`
     ${RubriekFragment}
 `;
 
-export const GebruikerFragment = gql`
-    fragment Gebruiker on Gebruiker {
+export const BurgerFragment = gql`
+    fragment Burger on Burger {
         id
         email
         telefoonnummer
@@ -95,15 +95,6 @@ export const GebruikerFragment = gql`
         }
         afspraken {
             ...Afspraak
-            #            overschrijvingen {
-            #                bedrag
-            #                datum
-            #                id
-            #                status
-            #                bankTransaction {
-            #                    id
-            #                }
-            #            }
         }
     }
     ${AfspraakFragment}

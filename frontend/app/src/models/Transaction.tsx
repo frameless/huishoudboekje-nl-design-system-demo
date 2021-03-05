@@ -33,7 +33,7 @@ export default class Transaction {
 
 	belongsToAnyBurger = (burgerIds: number[] = []): boolean => {
 		if (this.isBooked()) {
-			const bookingBurgerId = this.journaalpost?.afspraak?.gebruiker?.id
+			const bookingBurgerId = this.journaalpost?.afspraak?.burger?.id
 
 			if (bookingBurgerId) {
 				if (burgerIds.length === 0) {

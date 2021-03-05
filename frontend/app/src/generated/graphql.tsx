@@ -5,6 +5,7 @@ export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K]
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 /** All built-in and custom scalars, mapped to their actual values */
+
 export type Scalars = {
   ID: string;
   String: string;
@@ -39,7 +40,7 @@ export type Scalars = {
 export type Afspraak = {
   __typename?: 'Afspraak';
   id?: Maybe<Scalars['Int']>;
-  gebruiker?: Maybe<Gebruiker>;
+  burger?: Maybe<Burger>;
   beschrijving?: Maybe<Scalars['String']>;
   startDatum?: Maybe<Scalars['Date']>;
   eindDatum?: Maybe<Scalars['Date']>;
@@ -66,7 +67,7 @@ export type AfspraakOverschrijvingenArgs = {
 };
 
 export type AfspraakInput = {
-  gebruikerId?: Maybe<Scalars['Int']>;
+  burgerId?: Maybe<Scalars['Int']>;
   beschrijving?: Maybe<Scalars['String']>;
   startDatum: Scalars['String'];
   eindDatum?: Maybe<Scalars['String']>;
@@ -97,9 +98,29 @@ export type BankTransaction = {
   transactieDatum?: Maybe<Scalars['Date']>;
   isGeboekt?: Maybe<Scalars['Boolean']>;
   journaalpost?: Maybe<Journaalpost>;
-  suggesties?: Maybe<Array<Maybe<Afspraak>>>;
 };
 
+
+/** GraphQL Burger model  */
+export type Burger = {
+  __typename?: 'Burger';
+  id?: Maybe<Scalars['Int']>;
+  telefoonnummer?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  geboortedatum?: Maybe<Scalars['String']>;
+  /** @deprecated Please use 'rekeningen' */
+  iban?: Maybe<Scalars['String']>;
+  achternaam?: Maybe<Scalars['String']>;
+  huisnummer?: Maybe<Scalars['String']>;
+  postcode?: Maybe<Scalars['String']>;
+  straatnaam?: Maybe<Scalars['String']>;
+  voorletters?: Maybe<Scalars['String']>;
+  voornamen?: Maybe<Scalars['String']>;
+  plaatsnaam?: Maybe<Scalars['String']>;
+  rekeningen?: Maybe<Array<Maybe<Rekening>>>;
+  afspraken?: Maybe<Array<Maybe<Afspraak>>>;
+  gebruikersactiviteiten?: Maybe<Array<Maybe<GebruikersActiviteit>>>;
+};
 
 export type Configuratie = {
   __typename?: 'Configuratie';
@@ -118,32 +139,13 @@ export type CreateAfspraak = {
   afspraak?: Maybe<Afspraak>;
 };
 
-export type CreateConfiguratie = {
-  __typename?: 'CreateConfiguratie';
+export type CreateBurger = {
+  __typename?: 'CreateBurger';
   ok?: Maybe<Scalars['Boolean']>;
-  configuratie?: Maybe<Configuratie>;
+  burger?: Maybe<Burger>;
 };
 
-export type CreateCustomerStatementMessage = {
-  __typename?: 'CreateCustomerStatementMessage';
-  ok?: Maybe<Scalars['Boolean']>;
-  customerStatementMessage?: Maybe<CustomerStatementMessage>;
-  journaalposten?: Maybe<Array<Maybe<Journaalpost>>>;
-};
-
-export type CreateExportOverschrijvingen = {
-  __typename?: 'CreateExportOverschrijvingen';
-  ok?: Maybe<Scalars['Boolean']>;
-  export?: Maybe<Export>;
-};
-
-export type CreateGebruiker = {
-  __typename?: 'CreateGebruiker';
-  ok?: Maybe<Scalars['Boolean']>;
-  gebruiker?: Maybe<Gebruiker>;
-};
-
-export type CreateGebruikerInput = {
+export type CreateBurgerInput = {
   email?: Maybe<Scalars['String']>;
   geboortedatum?: Maybe<Scalars['Date']>;
   telefoonnummer?: Maybe<Scalars['String']>;
@@ -157,10 +159,28 @@ export type CreateGebruikerInput = {
   plaatsnaam?: Maybe<Scalars['String']>;
 };
 
-export type CreateGebruikerRekening = {
-  __typename?: 'CreateGebruikerRekening';
+export type CreateBurgerRekening = {
+  __typename?: 'CreateBurgerRekening';
   ok?: Maybe<Scalars['Boolean']>;
   rekening?: Maybe<Rekening>;
+};
+
+export type CreateConfiguratie = {
+  __typename?: 'CreateConfiguratie';
+  ok?: Maybe<Scalars['Boolean']>;
+  configuratie?: Maybe<Configuratie>;
+};
+
+export type CreateCustomerStatementMessage = {
+  __typename?: 'CreateCustomerStatementMessage';
+  ok?: Maybe<Scalars['Boolean']>;
+  customerStatementMessage?: Maybe<CustomerStatementMessage>;
+};
+
+export type CreateExportOverschrijvingen = {
+  __typename?: 'CreateExportOverschrijvingen';
+  ok?: Maybe<Scalars['Boolean']>;
+  export?: Maybe<Export>;
 };
 
 /** Create a Journaalpost with an Afspraak */
@@ -250,6 +270,18 @@ export type DeleteAfspraak = {
   previous?: Maybe<Afspraak>;
 };
 
+export type DeleteBurger = {
+  __typename?: 'DeleteBurger';
+  ok?: Maybe<Scalars['Boolean']>;
+  previous?: Maybe<Burger>;
+};
+
+export type DeleteBurgerRekening = {
+  __typename?: 'DeleteBurgerRekening';
+  ok?: Maybe<Scalars['Boolean']>;
+  previous?: Maybe<Rekening>;
+};
+
 export type DeleteConfiguratie = {
   __typename?: 'DeleteConfiguratie';
   ok?: Maybe<Scalars['Boolean']>;
@@ -260,18 +292,6 @@ export type DeleteCustomerStatementMessage = {
   __typename?: 'DeleteCustomerStatementMessage';
   ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<CustomerStatementMessage>;
-};
-
-export type DeleteGebruiker = {
-  __typename?: 'DeleteGebruiker';
-  ok?: Maybe<Scalars['Boolean']>;
-  previous?: Maybe<Gebruiker>;
-};
-
-export type DeleteGebruikerRekening = {
-  __typename?: 'DeleteGebruikerRekening';
-  ok?: Maybe<Scalars['Boolean']>;
-  previous?: Maybe<Rekening>;
 };
 
 /** Delete journaalpost by id  */
@@ -311,27 +331,6 @@ export type Export = {
   eindDatum?: Maybe<Scalars['String']>;
 };
 
-/** GraphQL Gebruiker model  */
-export type Gebruiker = {
-  __typename?: 'Gebruiker';
-  id?: Maybe<Scalars['Int']>;
-  telefoonnummer?: Maybe<Scalars['String']>;
-  email?: Maybe<Scalars['String']>;
-  geboortedatum?: Maybe<Scalars['String']>;
-  /** @deprecated Please use 'rekeningen' */
-  iban?: Maybe<Scalars['String']>;
-  achternaam?: Maybe<Scalars['String']>;
-  huisnummer?: Maybe<Scalars['String']>;
-  postcode?: Maybe<Scalars['String']>;
-  straatnaam?: Maybe<Scalars['String']>;
-  voorletters?: Maybe<Scalars['String']>;
-  voornamen?: Maybe<Scalars['String']>;
-  plaatsnaam?: Maybe<Scalars['String']>;
-  rekeningen?: Maybe<Array<Maybe<Rekening>>>;
-  afspraken?: Maybe<Array<Maybe<Afspraak>>>;
-  gebruikersactiviteiten?: Maybe<Array<Maybe<GebruikersActiviteit>>>;
-};
-
 /** GebruikersActiviteit model */
 export type GebruikersActiviteit = {
   __typename?: 'GebruikersActiviteit';
@@ -348,9 +347,9 @@ export type GebruikersActiviteit = {
 export type GebruikersActiviteitEntity = {
   __typename?: 'GebruikersActiviteitEntity';
   entityType?: Maybe<Scalars['String']>;
-  entityId?: Maybe<Scalars['String']>;
+  entityId?: Maybe<Scalars['Int']>;
   afspraak?: Maybe<Afspraak>;
-  burger?: Maybe<Gebruiker>;
+  burger?: Maybe<Burger>;
   configuratie?: Maybe<Configuratie>;
   customerStatementMessage?: Maybe<CustomerStatementMessage>;
   export?: Maybe<Export>;
@@ -372,7 +371,7 @@ export type GebruikersActiviteitMeta = {
 export type GebruikersActiviteitSnapshot = {
   __typename?: 'GebruikersActiviteitSnapshot';
   afspraak?: Maybe<Afspraak>;
-  burger?: Maybe<Gebruiker>;
+  burger?: Maybe<Burger>;
   configuratie?: Maybe<Configuratie>;
   customerStatementMessage?: Maybe<CustomerStatementMessage>;
   export?: Maybe<Export>;
@@ -475,7 +474,7 @@ export type Rekening = {
   id?: Maybe<Scalars['Int']>;
   iban?: Maybe<Scalars['String']>;
   rekeninghouder?: Maybe<Scalars['String']>;
-  gebruikers?: Maybe<Array<Maybe<Gebruiker>>>;
+  burgers?: Maybe<Array<Maybe<Burger>>>;
   organisaties?: Maybe<Array<Maybe<Organisatie>>>;
   afspraken?: Maybe<Array<Maybe<Afspraak>>>;
 };
@@ -488,17 +487,17 @@ export type RekeningInput = {
 /** The root of all mutations  */
 export type RootMutation = {
   __typename?: 'RootMutation';
-  createGebruiker?: Maybe<CreateGebruiker>;
-  deleteGebruiker?: Maybe<DeleteGebruiker>;
-  updateGebruiker?: Maybe<UpdateGebruiker>;
+  createBurger?: Maybe<CreateBurger>;
+  deleteBurger?: Maybe<DeleteBurger>;
+  updateBurger?: Maybe<UpdateBurger>;
   createAfspraak?: Maybe<CreateAfspraak>;
   updateAfspraak?: Maybe<UpdateAfspraak>;
   deleteAfspraak?: Maybe<DeleteAfspraak>;
   createOrganisatie?: Maybe<CreateOrganisatie>;
   updateOrganisatie?: Maybe<UpdateOrganisatie>;
   deleteOrganisatie?: Maybe<DeleteOrganisatie>;
-  createGebruikerRekening?: Maybe<CreateGebruikerRekening>;
-  deleteGebruikerRekening?: Maybe<DeleteGebruikerRekening>;
+  createBurgerRekening?: Maybe<CreateBurgerRekening>;
+  deleteBurgerRekening?: Maybe<DeleteBurgerRekening>;
   createOrganisatieRekening?: Maybe<CreateOrganisatieRekening>;
   deleteOrganisatieRekening?: Maybe<DeleteOrganisatieRekening>;
   updateRekening?: Maybe<UpdateRekening>;
@@ -526,19 +525,19 @@ export type RootMutation = {
 
 
 /** The root of all mutations  */
-export type RootMutationCreateGebruikerArgs = {
-  input?: Maybe<CreateGebruikerInput>;
+export type RootMutationCreateBurgerArgs = {
+  input?: Maybe<CreateBurgerInput>;
 };
 
 
 /** The root of all mutations  */
-export type RootMutationDeleteGebruikerArgs = {
+export type RootMutationDeleteBurgerArgs = {
   id: Scalars['Int'];
 };
 
 
 /** The root of all mutations  */
-export type RootMutationUpdateGebruikerArgs = {
+export type RootMutationUpdateBurgerArgs = {
   achternaam?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
   geboortedatum?: Maybe<Scalars['String']>;
@@ -598,15 +597,15 @@ export type RootMutationDeleteOrganisatieArgs = {
 
 
 /** The root of all mutations  */
-export type RootMutationCreateGebruikerRekeningArgs = {
-  gebruikerId: Scalars['Int'];
+export type RootMutationCreateBurgerRekeningArgs = {
+  burgerId: Scalars['Int'];
   rekening: RekeningInput;
 };
 
 
 /** The root of all mutations  */
-export type RootMutationDeleteGebruikerRekeningArgs = {
-  gebruikerId: Scalars['Int'];
+export type RootMutationDeleteBurgerRekeningArgs = {
+  burgerId: Scalars['Int'];
   id: Scalars['Int'];
 };
 
@@ -730,8 +729,8 @@ export type RootQuery = {
   customerStatementMessages?: Maybe<Array<Maybe<CustomerStatementMessage>>>;
   export?: Maybe<Export>;
   exports?: Maybe<Array<Maybe<Export>>>;
-  gebruiker?: Maybe<Gebruiker>;
-  gebruikers?: Maybe<Array<Maybe<Gebruiker>>>;
+  burger?: Maybe<Burger>;
+  burgers?: Maybe<Array<Maybe<Burger>>>;
   grootboekrekening?: Maybe<Grootboekrekening>;
   grootboekrekeningen?: Maybe<Array<Maybe<Grootboekrekening>>>;
   journaalpost?: Maybe<Journaalpost>;
@@ -802,13 +801,13 @@ export type RootQueryExportsArgs = {
 
 
 /** The root of all queries  */
-export type RootQueryGebruikerArgs = {
+export type RootQueryBurgerArgs = {
   id: Scalars['Int'];
 };
 
 
 /** The root of all queries  */
-export type RootQueryGebruikersArgs = {
+export type RootQueryBurgersArgs = {
   ids?: Maybe<Array<Maybe<Scalars['Int']>>>;
 };
 
@@ -900,7 +899,7 @@ export type RootQueryGebruikersactiviteitArgs = {
 /** The root of all queries  */
 export type RootQueryGebruikersactiviteitenArgs = {
   ids?: Maybe<Array<Maybe<Scalars['Int']>>>;
-  gebruikerIds?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  burgerIds?: Maybe<Array<Maybe<Scalars['Int']>>>;
   afsprakenIds?: Maybe<Array<Maybe<Scalars['Int']>>>;
 };
 
@@ -925,18 +924,18 @@ export type UpdateAfspraak = {
   previous?: Maybe<Afspraak>;
 };
 
+export type UpdateBurger = {
+  __typename?: 'UpdateBurger';
+  ok?: Maybe<Scalars['Boolean']>;
+  burger?: Maybe<Burger>;
+  previous?: Maybe<Burger>;
+};
+
 export type UpdateConfiguratie = {
   __typename?: 'UpdateConfiguratie';
   ok?: Maybe<Scalars['Boolean']>;
   configuratie?: Maybe<Configuratie>;
   previous?: Maybe<Configuratie>;
-};
-
-export type UpdateGebruiker = {
-  __typename?: 'UpdateGebruiker';
-  ok?: Maybe<Scalars['Boolean']>;
-  gebruiker?: Maybe<Gebruiker>;
-  previous?: Maybe<Gebruiker>;
 };
 
 /** Update a Journaalpost with a Grootboekrekening */
@@ -1003,9 +1002,9 @@ export type AfspraakFragment = (
   & { interval?: Maybe<(
     { __typename?: 'Interval' }
     & Pick<Interval, 'dagen' | 'weken' | 'maanden' | 'jaren'>
-  )>, gebruiker?: Maybe<(
-    { __typename?: 'Gebruiker' }
-    & Pick<Gebruiker, 'id' | 'voornamen' | 'voorletters' | 'achternaam' | 'plaatsnaam'>
+  )>, burger?: Maybe<(
+    { __typename?: 'Burger' }
+    & Pick<Burger, 'id' | 'voornamen' | 'voorletters' | 'achternaam' | 'plaatsnaam'>
     & { rekeningen?: Maybe<Array<Maybe<(
       { __typename?: 'Rekening' }
       & RekeningFragment
@@ -1022,9 +1021,9 @@ export type AfspraakFragment = (
   )> }
 );
 
-export type GebruikerFragment = (
-  { __typename?: 'Gebruiker' }
-  & Pick<Gebruiker, 'id' | 'email' | 'telefoonnummer' | 'voorletters' | 'voornamen' | 'achternaam' | 'geboortedatum' | 'straatnaam' | 'huisnummer' | 'postcode' | 'plaatsnaam'>
+export type BurgerFragment = (
+  { __typename?: 'Burger' }
+  & Pick<Burger, 'id' | 'email' | 'telefoonnummer' | 'voorletters' | 'voornamen' | 'achternaam' | 'geboortedatum' | 'straatnaam' | 'huisnummer' | 'postcode' | 'plaatsnaam'>
   & { rekeningen?: Maybe<Array<Maybe<(
     { __typename?: 'Rekening' }
     & RekeningFragment
@@ -1076,18 +1075,18 @@ export type JournaalpostFragment = (
 );
 
 export type CreateBurgerMutationVariables = Exact<{
-  input?: Maybe<CreateGebruikerInput>;
+  input?: Maybe<CreateBurgerInput>;
 }>;
 
 
 export type CreateBurgerMutation = (
   { __typename?: 'RootMutation' }
-  & { createGebruiker?: Maybe<(
-    { __typename?: 'CreateGebruiker' }
-    & Pick<CreateGebruiker, 'ok'>
-    & { gebruiker?: Maybe<(
-      { __typename?: 'Gebruiker' }
-      & GebruikerFragment
+  & { createBurger?: Maybe<(
+    { __typename?: 'CreateBurger' }
+    & Pick<CreateBurger, 'ok'>
+    & { burger?: Maybe<(
+      { __typename?: 'Burger' }
+      & BurgerFragment
     )> }
   )> }
 );
@@ -1109,12 +1108,12 @@ export type UpdateBurgerMutationVariables = Exact<{
 
 export type UpdateBurgerMutation = (
   { __typename?: 'RootMutation' }
-  & { updateGebruiker?: Maybe<(
-    { __typename?: 'UpdateGebruiker' }
-    & Pick<UpdateGebruiker, 'ok'>
-    & { gebruiker?: Maybe<(
-      { __typename?: 'Gebruiker' }
-      & GebruikerFragment
+  & { updateBurger?: Maybe<(
+    { __typename?: 'UpdateBurger' }
+    & Pick<UpdateBurger, 'ok'>
+    & { burger?: Maybe<(
+      { __typename?: 'Burger' }
+      & BurgerFragment
     )> }
   )> }
 );
@@ -1126,9 +1125,9 @@ export type DeleteBurgerMutationVariables = Exact<{
 
 export type DeleteBurgerMutation = (
   { __typename?: 'RootMutation' }
-  & { deleteGebruiker?: Maybe<(
-    { __typename?: 'DeleteGebruiker' }
-    & Pick<DeleteGebruiker, 'ok'>
+  & { deleteBurger?: Maybe<(
+    { __typename?: 'DeleteBurger' }
+    & Pick<DeleteBurger, 'ok'>
   )> }
 );
 
@@ -1240,17 +1239,17 @@ export type UpdateAfspraakMutation = (
   )> }
 );
 
-export type CreateGebruikerRekeningMutationVariables = Exact<{
-  gebruikerId: Scalars['Int'];
+export type CreateBurgerRekeningMutationVariables = Exact<{
+  burgerId: Scalars['Int'];
   rekening: RekeningInput;
 }>;
 
 
-export type CreateGebruikerRekeningMutation = (
+export type CreateBurgerRekeningMutation = (
   { __typename?: 'RootMutation' }
-  & { createGebruikerRekening?: Maybe<(
-    { __typename?: 'CreateGebruikerRekening' }
-    & Pick<CreateGebruikerRekening, 'ok'>
+  & { createBurgerRekening?: Maybe<(
+    { __typename?: 'CreateBurgerRekening' }
+    & Pick<CreateBurgerRekening, 'ok'>
     & { rekening?: Maybe<(
       { __typename?: 'Rekening' }
       & RekeningFragment
@@ -1258,17 +1257,17 @@ export type CreateGebruikerRekeningMutation = (
   )> }
 );
 
-export type DeleteGebruikerRekeningMutationVariables = Exact<{
+export type DeleteBurgerRekeningMutationVariables = Exact<{
   id: Scalars['Int'];
-  gebruikerId: Scalars['Int'];
+  burgerId: Scalars['Int'];
 }>;
 
 
-export type DeleteGebruikerRekeningMutation = (
+export type DeleteBurgerRekeningMutation = (
   { __typename?: 'RootMutation' }
-  & { deleteGebruikerRekening?: Maybe<(
-    { __typename?: 'DeleteGebruikerRekening' }
-    & Pick<DeleteGebruikerRekening, 'ok'>
+  & { deleteBurgerRekening?: Maybe<(
+    { __typename?: 'DeleteBurgerRekening' }
+    & Pick<DeleteBurgerRekening, 'ok'>
   )> }
 );
 
@@ -1500,9 +1499,9 @@ export type GetAllBurgersQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetAllBurgersQuery = (
   { __typename?: 'RootQuery' }
-  & { gebruikers?: Maybe<Array<Maybe<(
-    { __typename?: 'Gebruiker' }
-    & GebruikerFragment
+  & { burgers?: Maybe<Array<Maybe<(
+    { __typename?: 'Burger' }
+    & BurgerFragment
   )>>> }
 );
 
@@ -1513,9 +1512,9 @@ export type GetOneBurgerQueryVariables = Exact<{
 
 export type GetOneBurgerQuery = (
   { __typename?: 'RootQuery' }
-  & { gebruiker?: Maybe<(
-    { __typename?: 'Gebruiker' }
-    & GebruikerFragment
+  & { burger?: Maybe<(
+    { __typename?: 'Burger' }
+    & BurgerFragment
   )> }
 );
 
@@ -1526,8 +1525,8 @@ export type GetBurgerAfsprakenQueryVariables = Exact<{
 
 export type GetBurgerAfsprakenQuery = (
   { __typename?: 'RootQuery' }
-  & { gebruiker?: Maybe<(
-    { __typename?: 'Gebruiker' }
+  & { burger?: Maybe<(
+    { __typename?: 'Burger' }
     & { afspraken?: Maybe<Array<Maybe<(
       { __typename?: 'Afspraak' }
       & AfspraakFragment
@@ -1710,9 +1709,9 @@ export type GetReportingDataQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetReportingDataQuery = (
   { __typename?: 'RootQuery' }
-  & { gebruikers?: Maybe<Array<Maybe<(
-    { __typename?: 'Gebruiker' }
-    & GebruikerFragment
+  & { burgers?: Maybe<Array<Maybe<(
+    { __typename?: 'Burger' }
+    & BurgerFragment
   )>>>, bankTransactions?: Maybe<Array<Maybe<(
     { __typename?: 'BankTransaction' }
     & { journaalpost?: Maybe<(
@@ -1753,8 +1752,8 @@ export type GetGebeurtenissenQuery = (
       { __typename?: 'GebruikersActiviteitEntity' }
       & Pick<GebruikersActiviteitEntity, 'entityType' | 'entityId'>
       & { burger?: Maybe<(
-        { __typename?: 'Gebruiker' }
-        & Pick<Gebruiker, 'id' | 'voorletters' | 'voornamen' | 'achternaam'>
+        { __typename?: 'Burger' }
+        & Pick<Burger, 'id' | 'voorletters' | 'voornamen' | 'achternaam'>
       )>, organisatie?: Maybe<(
         { __typename?: 'Organisatie' }
         & Pick<Organisatie, 'id' | 'weergaveNaam'>
@@ -1793,8 +1792,8 @@ export type GetBurgerGebeurtenissenQuery = (
       { __typename?: 'GebruikersActiviteitEntity' }
       & Pick<GebruikersActiviteitEntity, 'entityType' | 'entityId'>
       & { burger?: Maybe<(
-        { __typename?: 'Gebruiker' }
-        & Pick<Gebruiker, 'id' | 'voorletters' | 'voornamen' | 'achternaam'>
+        { __typename?: 'Burger' }
+        & Pick<Burger, 'id' | 'voorletters' | 'voornamen' | 'achternaam'>
       )>, organisatie?: Maybe<(
         { __typename?: 'Organisatie' }
         & Pick<Organisatie, 'id' | 'weergaveNaam'>
@@ -1863,7 +1862,7 @@ export const AfspraakFragmentDoc = gql`
     maanden
     jaren
   }
-  gebruiker {
+  burger {
     id
     voornamen
     voorletters
@@ -1890,8 +1889,8 @@ export const AfspraakFragmentDoc = gql`
 }
     ${RekeningFragmentDoc}
 ${RubriekFragmentDoc}`;
-export const GebruikerFragmentDoc = gql`
-    fragment Gebruiker on Gebruiker {
+export const BurgerFragmentDoc = gql`
+    fragment Burger on Burger {
   id
   email
   telefoonnummer
@@ -1975,15 +1974,15 @@ export const JournaalpostFragmentDoc = gql`
 }
     `;
 export const CreateBurgerDocument = gql`
-    mutation createBurger($input: CreateGebruikerInput) {
-  createGebruiker(input: $input) {
+    mutation createBurger($input: CreateBurgerInput) {
+  createBurger(input: $input) {
     ok
-    gebruiker {
-      ...Gebruiker
+    burger {
+      ...Burger
     }
   }
 }
-    ${GebruikerFragmentDoc}`;
+    ${BurgerFragmentDoc}`;
 export type CreateBurgerMutationFn = Apollo.MutationFunction<CreateBurgerMutation, CreateBurgerMutationVariables>;
 
 /**
@@ -2011,14 +2010,14 @@ export type CreateBurgerMutationResult = Apollo.MutationResult<CreateBurgerMutat
 export type CreateBurgerMutationOptions = Apollo.BaseMutationOptions<CreateBurgerMutation, CreateBurgerMutationVariables>;
 export const UpdateBurgerDocument = gql`
     mutation updateBurger($id: Int!, $voorletters: String, $voornamen: String, $achternaam: String, $geboortedatum: String, $straatnaam: String, $huisnummer: String, $postcode: String, $plaatsnaam: String, $telefoonnummer: String, $email: String) {
-  updateGebruiker(id: $id, voorletters: $voorletters, voornamen: $voornamen, achternaam: $achternaam, geboortedatum: $geboortedatum, straatnaam: $straatnaam, huisnummer: $huisnummer, postcode: $postcode, plaatsnaam: $plaatsnaam, telefoonnummer: $telefoonnummer, email: $email) {
+  updateBurger(id: $id, voorletters: $voorletters, voornamen: $voornamen, achternaam: $achternaam, geboortedatum: $geboortedatum, straatnaam: $straatnaam, huisnummer: $huisnummer, postcode: $postcode, plaatsnaam: $plaatsnaam, telefoonnummer: $telefoonnummer, email: $email) {
     ok
-    gebruiker {
-      ...Gebruiker
+    burger {
+      ...Burger
     }
   }
 }
-    ${GebruikerFragmentDoc}`;
+    ${BurgerFragmentDoc}`;
 export type UpdateBurgerMutationFn = Apollo.MutationFunction<UpdateBurgerMutation, UpdateBurgerMutationVariables>;
 
 /**
@@ -2056,7 +2055,7 @@ export type UpdateBurgerMutationResult = Apollo.MutationResult<UpdateBurgerMutat
 export type UpdateBurgerMutationOptions = Apollo.BaseMutationOptions<UpdateBurgerMutation, UpdateBurgerMutationVariables>;
 export const DeleteBurgerDocument = gql`
     mutation deleteBurger($id: Int!) {
-  deleteGebruiker(id: $id) {
+  deleteBurger(id: $id) {
     ok
   }
 }
@@ -2304,9 +2303,9 @@ export function useUpdateAfspraakMutation(baseOptions?: Apollo.MutationHookOptio
 export type UpdateAfspraakMutationHookResult = ReturnType<typeof useUpdateAfspraakMutation>;
 export type UpdateAfspraakMutationResult = Apollo.MutationResult<UpdateAfspraakMutation>;
 export type UpdateAfspraakMutationOptions = Apollo.BaseMutationOptions<UpdateAfspraakMutation, UpdateAfspraakMutationVariables>;
-export const CreateGebruikerRekeningDocument = gql`
-    mutation createGebruikerRekening($gebruikerId: Int!, $rekening: RekeningInput!) {
-  createGebruikerRekening(gebruikerId: $gebruikerId, rekening: $rekening) {
+export const CreateBurgerRekeningDocument = gql`
+    mutation createBurgerRekening($burgerId: Int!, $rekening: RekeningInput!) {
+  createBurgerRekening(burgerId: $burgerId, rekening: $rekening) {
     ok
     rekening {
       ...Rekening
@@ -2314,65 +2313,65 @@ export const CreateGebruikerRekeningDocument = gql`
   }
 }
     ${RekeningFragmentDoc}`;
-export type CreateGebruikerRekeningMutationFn = Apollo.MutationFunction<CreateGebruikerRekeningMutation, CreateGebruikerRekeningMutationVariables>;
+export type CreateBurgerRekeningMutationFn = Apollo.MutationFunction<CreateBurgerRekeningMutation, CreateBurgerRekeningMutationVariables>;
 
 /**
- * __useCreateGebruikerRekeningMutation__
+ * __useCreateBurgerRekeningMutation__
  *
- * To run a mutation, you first call `useCreateGebruikerRekeningMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateGebruikerRekeningMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useCreateBurgerRekeningMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateBurgerRekeningMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [createGebruikerRekeningMutation, { data, loading, error }] = useCreateGebruikerRekeningMutation({
+ * const [createBurgerRekeningMutation, { data, loading, error }] = useCreateBurgerRekeningMutation({
  *   variables: {
- *      gebruikerId: // value for 'gebruikerId'
+ *      burgerId: // value for 'burgerId'
  *      rekening: // value for 'rekening'
  *   },
  * });
  */
-export function useCreateGebruikerRekeningMutation(baseOptions?: Apollo.MutationHookOptions<CreateGebruikerRekeningMutation, CreateGebruikerRekeningMutationVariables>) {
-        return Apollo.useMutation<CreateGebruikerRekeningMutation, CreateGebruikerRekeningMutationVariables>(CreateGebruikerRekeningDocument, baseOptions);
+export function useCreateBurgerRekeningMutation(baseOptions?: Apollo.MutationHookOptions<CreateBurgerRekeningMutation, CreateBurgerRekeningMutationVariables>) {
+        return Apollo.useMutation<CreateBurgerRekeningMutation, CreateBurgerRekeningMutationVariables>(CreateBurgerRekeningDocument, baseOptions);
       }
-export type CreateGebruikerRekeningMutationHookResult = ReturnType<typeof useCreateGebruikerRekeningMutation>;
-export type CreateGebruikerRekeningMutationResult = Apollo.MutationResult<CreateGebruikerRekeningMutation>;
-export type CreateGebruikerRekeningMutationOptions = Apollo.BaseMutationOptions<CreateGebruikerRekeningMutation, CreateGebruikerRekeningMutationVariables>;
-export const DeleteGebruikerRekeningDocument = gql`
-    mutation deleteGebruikerRekening($id: Int!, $gebruikerId: Int!) {
-  deleteGebruikerRekening(id: $id, gebruikerId: $gebruikerId) {
+export type CreateBurgerRekeningMutationHookResult = ReturnType<typeof useCreateBurgerRekeningMutation>;
+export type CreateBurgerRekeningMutationResult = Apollo.MutationResult<CreateBurgerRekeningMutation>;
+export type CreateBurgerRekeningMutationOptions = Apollo.BaseMutationOptions<CreateBurgerRekeningMutation, CreateBurgerRekeningMutationVariables>;
+export const DeleteBurgerRekeningDocument = gql`
+    mutation deleteBurgerRekening($id: Int!, $burgerId: Int!) {
+  deleteBurgerRekening(id: $id, burgerId: $burgerId) {
     ok
   }
 }
     `;
-export type DeleteGebruikerRekeningMutationFn = Apollo.MutationFunction<DeleteGebruikerRekeningMutation, DeleteGebruikerRekeningMutationVariables>;
+export type DeleteBurgerRekeningMutationFn = Apollo.MutationFunction<DeleteBurgerRekeningMutation, DeleteBurgerRekeningMutationVariables>;
 
 /**
- * __useDeleteGebruikerRekeningMutation__
+ * __useDeleteBurgerRekeningMutation__
  *
- * To run a mutation, you first call `useDeleteGebruikerRekeningMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteGebruikerRekeningMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useDeleteBurgerRekeningMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteBurgerRekeningMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [deleteGebruikerRekeningMutation, { data, loading, error }] = useDeleteGebruikerRekeningMutation({
+ * const [deleteBurgerRekeningMutation, { data, loading, error }] = useDeleteBurgerRekeningMutation({
  *   variables: {
  *      id: // value for 'id'
- *      gebruikerId: // value for 'gebruikerId'
+ *      burgerId: // value for 'burgerId'
  *   },
  * });
  */
-export function useDeleteGebruikerRekeningMutation(baseOptions?: Apollo.MutationHookOptions<DeleteGebruikerRekeningMutation, DeleteGebruikerRekeningMutationVariables>) {
-        return Apollo.useMutation<DeleteGebruikerRekeningMutation, DeleteGebruikerRekeningMutationVariables>(DeleteGebruikerRekeningDocument, baseOptions);
+export function useDeleteBurgerRekeningMutation(baseOptions?: Apollo.MutationHookOptions<DeleteBurgerRekeningMutation, DeleteBurgerRekeningMutationVariables>) {
+        return Apollo.useMutation<DeleteBurgerRekeningMutation, DeleteBurgerRekeningMutationVariables>(DeleteBurgerRekeningDocument, baseOptions);
       }
-export type DeleteGebruikerRekeningMutationHookResult = ReturnType<typeof useDeleteGebruikerRekeningMutation>;
-export type DeleteGebruikerRekeningMutationResult = Apollo.MutationResult<DeleteGebruikerRekeningMutation>;
-export type DeleteGebruikerRekeningMutationOptions = Apollo.BaseMutationOptions<DeleteGebruikerRekeningMutation, DeleteGebruikerRekeningMutationVariables>;
+export type DeleteBurgerRekeningMutationHookResult = ReturnType<typeof useDeleteBurgerRekeningMutation>;
+export type DeleteBurgerRekeningMutationResult = Apollo.MutationResult<DeleteBurgerRekeningMutation>;
+export type DeleteBurgerRekeningMutationOptions = Apollo.BaseMutationOptions<DeleteBurgerRekeningMutation, DeleteBurgerRekeningMutationVariables>;
 export const CreateOrganisatieRekeningDocument = gql`
     mutation createOrganisatieRekening($orgId: Int!, $rekening: RekeningInput!) {
   createOrganisatieRekening(organisatieId: $orgId, rekening: $rekening) {
@@ -2859,11 +2858,11 @@ export type StartAutomatischBoekenMutationResult = Apollo.MutationResult<StartAu
 export type StartAutomatischBoekenMutationOptions = Apollo.BaseMutationOptions<StartAutomatischBoekenMutation, StartAutomatischBoekenMutationVariables>;
 export const GetAllBurgersDocument = gql`
     query getAllBurgers {
-  gebruikers {
-    ...Gebruiker
+  burgers {
+    ...Burger
   }
 }
-    ${GebruikerFragmentDoc}`;
+    ${BurgerFragmentDoc}`;
 
 /**
  * __useGetAllBurgersQuery__
@@ -2891,11 +2890,11 @@ export type GetAllBurgersLazyQueryHookResult = ReturnType<typeof useGetAllBurger
 export type GetAllBurgersQueryResult = Apollo.QueryResult<GetAllBurgersQuery, GetAllBurgersQueryVariables>;
 export const GetOneBurgerDocument = gql`
     query getOneBurger($id: Int!) {
-  gebruiker(id: $id) {
-    ...Gebruiker
+  burger(id: $id) {
+    ...Burger
   }
 }
-    ${GebruikerFragmentDoc}`;
+    ${BurgerFragmentDoc}`;
 
 /**
  * __useGetOneBurgerQuery__
@@ -2924,7 +2923,7 @@ export type GetOneBurgerLazyQueryHookResult = ReturnType<typeof useGetOneBurgerL
 export type GetOneBurgerQueryResult = Apollo.QueryResult<GetOneBurgerQuery, GetOneBurgerQueryVariables>;
 export const GetBurgerAfsprakenDocument = gql`
     query getBurgerAfspraken($id: Int!) {
-  gebruiker(id: $id) {
+  burger(id: $id) {
     afspraken {
       ...Afspraak
     }
@@ -3367,8 +3366,8 @@ export type GetExportsLazyQueryHookResult = ReturnType<typeof useGetExportsLazyQ
 export type GetExportsQueryResult = Apollo.QueryResult<GetExportsQuery, GetExportsQueryVariables>;
 export const GetReportingDataDocument = gql`
     query getReportingData {
-  gebruikers {
-    ...Gebruiker
+  burgers {
+    ...Burger
   }
   bankTransactions {
     ...BankTransaction
@@ -3396,7 +3395,7 @@ export const GetReportingDataDocument = gql`
     naam
   }
 }
-    ${GebruikerFragmentDoc}
+    ${BurgerFragmentDoc}
 ${BankTransactionFragmentDoc}
 ${AfspraakFragmentDoc}
 ${GrootboekrekeningFragmentDoc}`;
@@ -3496,7 +3495,7 @@ export type GetGebeurtenissenLazyQueryHookResult = ReturnType<typeof useGetGebeu
 export type GetGebeurtenissenQueryResult = Apollo.QueryResult<GetGebeurtenissenQuery, GetGebeurtenissenQueryVariables>;
 export const GetBurgerGebeurtenissenDocument = gql`
     query GetBurgerGebeurtenissen($ids: [Int!]!) {
-  gebruikersactiviteiten(gebruikerIds: $ids) {
+  gebruikersactiviteiten(burgerIds: $ids) {
     id
     timestamp
     gebruikerId

@@ -5,7 +5,7 @@ import DatePicker from "react-datepicker";
 import {useInput} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
-import {Gebruiker, Rubriek, useGetReportingDataQuery} from "../../generated/graphql";
+import {Burger, Rubriek, useGetReportingDataQuery} from "../../generated/graphql";
 import Transaction from "../../models/Transaction";
 import Queryable from "../../utils/Queryable";
 import {currencyFormat2, formatBurgerName, humanJoin, useReactSelectStyles} from "../../utils/things";
@@ -89,7 +89,7 @@ const Rapportage = () => {
 								<FormControl as={Stack} flex={1}>
 									<Label>{t("charts.filterBurgers")}</Label>
 									<Queryable query={$data} children={data => {
-										const burgers: Gebruiker[] = data.gebruikers || [];
+										const burgers: Burger[] = data.gebruikers || [];
 										return (
 											<Select onChange={onSelectBurger} options={burgers.map(b => ({key: b.id, value: b.id, label: formatBurgerName(b)}))} styles={reactSelectStyles}
 											        isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllBurgers")} />
@@ -123,7 +123,7 @@ const Rapportage = () => {
 					const _endDate = moment(endDate.value, "L").endOf("month");
 
 					const transactions: Transaction[] = data.bankTransactions.map(t => new Transaction(t));
-					const burgers: Gebruiker[] = data.gebruikers;
+					const burgers: Burger[] = data.burgers;
 
 					const filteredTransactions = transactions
 						.filter(t => filterRubriekIds.length > 0 ? t.hasAnyRubriek(filterRubriekIds) : true)

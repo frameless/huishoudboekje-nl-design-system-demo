@@ -6,7 +6,7 @@ import {useInput, Validators} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {Redirect, useHistory, useParams} from "react-router-dom";
 import Routes from "../../config/routes";
-import {useGetOneBurgerQuery, useUpdateBurgerMutation} from "../../generated/graphql";
+import {Burger, useGetOneBurgerQuery, useUpdateBurgerMutation} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
 import {formatBurgerName, Regex} from "../../utils/things";
 import useToaster from "../../utils/useToaster";
@@ -58,25 +58,25 @@ const BurgerEdit = () => {
 		placeholder: "0612345678",
 	});
 
-	const $gebruiker = useGetOneBurgerQuery({
+	const $burger = useGetOneBurgerQuery({
 		variables: {id: parseInt(id)},
-		onCompleted: ({gebruiker}) => {
-			if (gebruiker) {
-				voorletters.setValue(gebruiker.voorletters || "");
-				voornamen.setValue(gebruiker.voornamen || "");
-				achternaam.setValue(gebruiker.achternaam || "");
-				geboortedatum.setValue(moment(gebruiker.geboortedatum, "YYYY MM DD").format("L"));
-				mail.setValue(gebruiker.email || "");
-				straatnaam.setValue(gebruiker.straatnaam || "");
-				huisnummer.setValue(gebruiker.huisnummer || "");
-				postcode.setValue(gebruiker.postcode || "");
-				plaatsnaam.setValue(gebruiker.plaatsnaam || "");
-				telefoonnummer.setValue(gebruiker.telefoonnummer || "");
+		onCompleted: ({burger}) => {
+			if (burger) {
+				voorletters.setValue(burger.voorletters || "");
+				voornamen.setValue(burger.voornamen || "");
+				achternaam.setValue(burger.achternaam || "");
+				geboortedatum.setValue(moment(burger.geboortedatum, "YYYY MM DD").format("L"));
+				mail.setValue(burger.email || "");
+				straatnaam.setValue(burger.straatnaam || "");
+				huisnummer.setValue(burger.huisnummer || "");
+				postcode.setValue(burger.postcode || "");
+				plaatsnaam.setValue(burger.plaatsnaam || "");
+				telefoonnummer.setValue(burger.telefoonnummer || "");
 			}
 		},
 	});
 
-	const [updateGebruiker, $updateGebruiker] = useUpdateBurgerMutation();
+	const [updateBurger, $updateBurger] = useUpdateBurgerMutation();
 
 	const onSubmit = (e) => {
 		e.preventDefault();
@@ -95,12 +95,12 @@ const BurgerEdit = () => {
 		].every(f => f.isValid);
 		if (!isFormValid) {
 			toast({
-				error: t("messages.burgers.invalidFormMessage")
+				error: t("messages.burgers.invalidFormMessage"),
 			});
 			return;
 		}
 
-		updateGebruiker({
+		updateBurger({
 			variables: {
 				id: parseInt(id),
 				voorletters: voorletters.value,
@@ -122,15 +122,17 @@ const BurgerEdit = () => {
 		}).catch(err => {
 			console.error(err);
 			toast({
-				error: err.message
+				error: err.message,
 			});
 		});
 	};
 
 	return (
-		<Queryable query={$gebruiker} error={<Redirect to={Routes.NotFound} />}>{(data) => {
+		<Queryable query={$burger} error={<Redirect to={Routes.NotFound} />}>{(data) => {
+			const burger: Burger = data.burger;
+
 			return (
-				<Page title={formatBurgerName(data.gebruiker)} backButton={<BackButton to={Routes.Burger(parseInt(id))} />}>
+				<Page title={formatBurgerName(burger)} backButton={<BackButton to={Routes.Burger(parseInt(id))} />}>
 					<Box as={"form"} onSubmit={onSubmit}>
 						<Section divider={<Divider />}>
 							<Stack direction={["column", "row"]} spacing={2}>
@@ -224,7 +226,7 @@ const BurgerEdit = () => {
 								<FormLeft />
 								<FormRight>
 									<Stack direction={"row"} spacing={1} justifyContent={"flex-end"}>
-										<Button isLoading={$gebruiker.loading || $updateGebruiker.loading} type={"submit"} colorScheme={"primary"}
+										<Button isLoading={$burger.loading || $updateBurger.loading} type={"submit"} colorScheme={"primary"}
 											onClick={onSubmit}>{t("actions.save")}</Button>
 									</Stack>
 								</FormRight>
