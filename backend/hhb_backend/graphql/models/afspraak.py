@@ -3,7 +3,7 @@ from datetime import date
 from dateutil.parser import isoparse
 import graphene
 from flask import request
-import hhb_backend.graphql.models.gebruiker as gebruiker
+import hhb_backend.graphql.models.burger as burger
 import hhb_backend.graphql.models.rekening as rekening
 import hhb_backend.graphql.models.organisatie as organisatie
 import hhb_backend.graphql.models.journaalpost as journaalpost
@@ -35,7 +35,7 @@ class Afspraak(graphene.ObjectType):
     """ GraphQL Afspraak model """
 
     id = graphene.Int()
-    gebruiker = graphene.Field(lambda: gebruiker.Gebruiker)
+    burger = graphene.Field(lambda: burger.Burger)
     beschrijving = graphene.String()
     start_datum = graphene.Date()
     eind_datum = graphene.Date()
@@ -87,11 +87,11 @@ class Afspraak(graphene.ObjectType):
         if root.get("rubriek_id"):
             return await request.dataloader.rubrieken_by_id.load(root.get("rubriek_id"))
 
-    async def resolve_gebruiker(root, info):
-        """ Get gebruiker when requested """
-        if root.get("gebruiker_id"):
-            return await request.dataloader.gebruikers_by_id.load(
-                root.get("gebruiker_id")
+    async def resolve_burger(root, info):
+        """ Get burger when requested """
+        if root.get("burger_id"):
+            return await request.dataloader.burgers_by_id.load(
+                root.get("burger_id")
             )
 
     async def resolve_tegen_rekening(root, info):

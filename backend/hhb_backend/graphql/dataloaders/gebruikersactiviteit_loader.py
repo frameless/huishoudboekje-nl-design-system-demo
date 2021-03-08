@@ -11,10 +11,10 @@ class GebruikersActiviteitenByIdLoader(SingleDataLoader):
     service = settings.LOG_SERVICE_URL
 
 
-class GebruikersActiviteitenByGebruikersLoader(SingleDataLoader):
+class GebruikersActiviteitenByBurgersLoader(SingleDataLoader):
     model = "gebruikersactiviteiten"
     service = settings.LOG_SERVICE_URL
-    filter_item = "filter_gebruikers"
+    filter_item = "filter_burgers"
 
     def get_by_id(self, id):
         url = f"{self.service}/{self.model}/?{self.filter_item}={id}"

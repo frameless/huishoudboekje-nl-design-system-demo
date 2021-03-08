@@ -3,18 +3,18 @@ import {Box, Button, Divider, Stack, StackProps} from "@chakra-ui/react";
 import React from "react";
 import {useToggle} from "react-grapple";
 import {useTranslation} from "react-i18next";
-import {Gebruiker, useCreateGebruikerRekeningMutation} from "../../../generated/graphql";
+import {Burger, useCreateBurgerRekeningMutation} from "../../../generated/graphql";
 import useToaster from "../../../utils/useToaster";
 import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
 import RekeningForm from "../../Rekeningen/RekeningForm";
 import RekeningList from "../../Rekeningen/RekeningList";
 
-const BurgerRekeningenView: React.FC<StackProps & {burger: Gebruiker, refetch: VoidFunction}> = ({burger, refetch, ...props}) => {
+const BurgerRekeningenView: React.FC<StackProps & {burger: Burger, refetch: VoidFunction}> = ({burger, refetch, ...props}) => {
 	const {t} = useTranslation();
 	const toast = useToaster();
 
 	const [showCreateRekeningForm, toggleCreateRekeningForm] = useToggle(false);
-	const [createGebruikerRekeningMutation] = useCreateGebruikerRekeningMutation();
+	const [createBurgerRekening] = useCreateBurgerRekeningMutation();
 
 	const {id: burgerId, rekeningen = []} = burger;
 
@@ -22,16 +22,16 @@ const BurgerRekeningenView: React.FC<StackProps & {burger: Gebruiker, refetch: V
 		<Stack spacing={2} mb={1} direction={["column", "row"]} {...props}>
 			<FormLeft title={t("forms.burgers.sections.rekeningen.title")} helperText={t("forms.burgers.sections.rekeningen.detailText")} />
 			<FormRight justifyContent={"center"}>
-				<RekeningList rekeningen={rekeningen || []} gebruiker={burger} onChange={() => refetch()} />
+				<RekeningList rekeningen={rekeningen || []} burger={burger} onChange={() => refetch()} />
 
 				{burgerId && showCreateRekeningForm ? (<>
 					{rekeningen.length > 0 && <Divider />}
 					<RekeningForm rekening={{
 						rekeninghouder: `${burger.voorletters} ${burger.achternaam}`,
 					}} onSave={(rekening, resetForm) => {
-						createGebruikerRekeningMutation({
+						createBurgerRekening({
 							variables: {
-								gebruikerId: burgerId,
+								burgerId,
 								rekening,
 							},
 						}).then(() => {

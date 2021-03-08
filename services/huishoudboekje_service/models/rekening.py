@@ -11,7 +11,7 @@ class Rekening(db.Model):
     iban = Column(String, nullable=False)
     rekeninghouder = Column(String, nullable=False)
 
-    gebruikers = relationship("RekeningGebruiker", back_populates="rekening")
+    burgers = relationship("RekeningBurger", back_populates="rekening")
     organisaties = relationship("RekeningOrganisatie", back_populates="rekening")
     afspraken = relationship("Afspraak", back_populates="tegen_rekening")
 

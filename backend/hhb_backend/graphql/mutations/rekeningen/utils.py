@@ -18,8 +18,8 @@ def get_rekening(rekening_id):
     return rekeningen_response.json()["data"]
 
 
-def create_gebruiker_rekening(gebruiker_id, rekening):
-    return create_connected_rekening(gebruiker_id, "gebruikers", rekening)
+def create_burger_rekening(burger_id, rekening):
+    return create_connected_rekening(burger_id, "burgers", rekening)
 
 
 def create_organisatie_rekening(organisatie_id, rekening):
@@ -83,7 +83,7 @@ def cleanup_rekening_when_orphaned(rekening_id):
         rekening = rekening_response.json()["data"]
         if (
             not rekening["afspraken"]
-            and not rekening["gebruikers"]
+            and not rekening["burgers"]
             and not rekening["organisaties"]
         ):
             requests.delete(f"{settings.HHB_SERVICES_URL}/rekeningen/{rekening_id}")

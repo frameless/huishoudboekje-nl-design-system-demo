@@ -47,7 +47,7 @@ class CreateJournaalpostAfspraak(graphene.Mutation):
                      + gebruikers_activiteit_entities(
                 entity_type="burger",
                 result=self.journaalpost["afspraak"],
-                key="gebruiker_id",
+                key="burger_id",
             )
                      + gebruikers_activiteit_entities(
                 entity_type="afspraak", result=self.journaalpost, key="afspraak"
@@ -118,7 +118,7 @@ class CreateJournaalpostPerAfspraak(graphene.Mutation):
             action=info.field_name,
             entities=[dict(entity_type="journaalpost", entity_id=j["id"]) for j in self.journaalposten]
                      + [dict(entity_type="afspraak", entity_id=j["afspraak"]["id"]) for j in self.journaalposten]
-                     + [dict(entity_type="burger", entity_id=j["afspraak"]["gebruiker_id"])
+                     + [dict(entity_type="burger", entity_id=j["afspraak"]["burger_id"])
                         for j in self.journaalposten],
             after=dict(journaalpost=self.journaalposten),
 

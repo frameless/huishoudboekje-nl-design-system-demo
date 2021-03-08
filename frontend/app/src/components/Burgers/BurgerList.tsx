@@ -5,7 +5,7 @@ import {useInput} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {useHistory} from "react-router-dom";
 import Routes from "../../config/routes";
-import {Gebruiker, useGetAllBurgersQuery} from "../../generated/graphql";
+import {Burger, useGetAllBurgersQuery} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
 import {searchFields} from "../../utils/things";
 import DeadEndPage from "../DeadEndPage";
@@ -19,10 +19,10 @@ const BurgerList = () => {
 		placeholder: t("forms.search.fields.search")
 	});
 
-	const [filteredBurgers, setFilteredBurgers] = useState<Gebruiker[]>([]);
+	const [filteredBurgers, setFilteredBurgers] = useState<Burger[]>([]);
 	const $burgers = useGetAllBurgersQuery({
 		fetchPolicy: "no-cache",
-		onCompleted: ({gebruikers: burgers = []}) => {
+		onCompleted: ({burgers = []}) => {
 			setFilteredBurgers(burgers);
 		},
 	});
@@ -30,10 +30,8 @@ const BurgerList = () => {
 	useEffect(() => {
 		let mounted = true;
 
-		const {data} = $burgers;
-
-		if (mounted && data) {
-			const {gebruikers: burgers = []} = data;
+		if (mounted) {
+			const burgers: Burger[] = $burgers.data?.burgers || [];
 			setFilteredBurgers(burgers.filter(b => searchFields(search.value, [b.achternaam || "", b.voornamen || ""])));
 		}
 
@@ -54,7 +52,7 @@ const BurgerList = () => {
 	};
 
 	return (
-		<Queryable query={$burgers}>{({gebruikers: burgers = []}: { gebruikers: Gebruiker[] }) => {
+		<Queryable query={$burgers}>{({burgers = []}: { burgers: Burger[] }) => {
 			if (burgers.length === 0) {
 				return (
 					<DeadEndPage message={t("messages.burgers.addHint", {buttonLabel: t("actions.add")})}>

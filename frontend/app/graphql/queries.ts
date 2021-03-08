@@ -1,27 +1,27 @@
 import {gql} from "@apollo/client";
-import {AfspraakFragment, BankTransactionFragment, CustomerStatementMessageFragment, GebruikerFragment, GrootboekrekeningFragment, OrganisatieFragment, RubriekFragment} from "./fragments";
+import {AfspraakFragment, BankTransactionFragment, CustomerStatementMessageFragment, BurgerFragment, GrootboekrekeningFragment, OrganisatieFragment, RubriekFragment} from "./fragments";
 
 export const GetAllBurgersQuery = gql`
     query getAllBurgers {
-        gebruikers {
-            ...Gebruiker
+        burgers {
+            ...Burger
         }
     }
-    ${GebruikerFragment}
+    ${BurgerFragment}
 `;
 
 export const GetOneBurgerQuery = gql`
     query getOneBurger($id: Int!) {
-        gebruiker(id: $id) {
-            ...Gebruiker
+        burger(id: $id) {
+            ...Burger
         }
     }
-    ${GebruikerFragment}
+    ${BurgerFragment}
 `;
 
 export const GetBurgerAfsprakenQuery = gql`
     query getBurgerAfspraken($id: Int!) {
-        gebruiker(id: $id) {
+        burger(id: $id) {
             afspraken{
                 ...Afspraak
             }
@@ -182,8 +182,8 @@ export const GetExportsQuery = gql`
 
 export const GetReportingDataQuery = gql`
     query getReportingData {
-        gebruikers {
-            ...Gebruiker
+        burgers {
+            ...Burger
         }
         bankTransactions{
             ...BankTransaction
@@ -214,7 +214,7 @@ export const GetReportingDataQuery = gql`
 
     ${BankTransactionFragment}
     ${GrootboekrekeningFragment}
-    ${GebruikerFragment}
+    ${BurgerFragment}
 `;
 
 export const GetGebeurtenissenQuery = gql`
@@ -292,7 +292,7 @@ export const GetGebeurtenissenQuery = gql`
 
 export const GetBurgerGebeurtenissenQuery = gql`
     query GetBurgerGebeurtenissen($ids: [Int!]!) {
-        gebruikersactiviteiten(gebruikerIds: $ids) {
+        gebruikersactiviteiten(burgerIds: $ids) {
             id
             timestamp
             gebruikerId

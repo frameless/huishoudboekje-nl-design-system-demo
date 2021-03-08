@@ -31,7 +31,7 @@ class DeleteJournaalpost(graphene.Mutation):
                 gebruikers_activiteit_entities(
                     entity_type="burger",
                     result=self.previous["afspraak"],
-                    key="gebruiker_id",
+                    key="burger_id",
                 )
                 if "afspraak" in self.previous
                 else []

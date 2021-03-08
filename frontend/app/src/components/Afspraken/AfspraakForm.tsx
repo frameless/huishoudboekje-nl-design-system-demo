@@ -30,7 +30,7 @@ import {Trans, useTranslation} from "react-i18next";
 import {NavLink} from "react-router-dom";
 import Select from "react-select";
 import Routes from "../../config/routes";
-import {Afspraak, Gebruiker, Organisatie, Rekening, Rubriek, useGetAfspraakFormDataQuery} from "../../generated/graphql";
+import {Afspraak, Burger, Organisatie, Rekening, Rubriek, useGetAfspraakFormDataQuery} from "../../generated/graphql";
 import {AfspraakPeriod, AfspraakType, IntervalType} from "../../models/models";
 import Queryable from "../../utils/Queryable";
 import generateSampleOverschrijvingen from "../../utils/sampleOverschrijvingen";
@@ -40,14 +40,14 @@ import RadioButtonGroup from "../Layouts/RadioButtons/RadioButtonGroup";
 import Section from "../Layouts/Section";
 import OverschrijvingenListView from "../Overschrijvingen/OverschrijvingenListView";
 
-type AfspraakFormProps = {afspraak?: Afspraak, onSave: (data) => void, burger?: Gebruiker, loading: boolean};
+type AfspraakFormProps = {afspraak?: Afspraak, onSave: (data) => void, burger?: Burger, loading: boolean};
 const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave, loading = false, ...props}) => {
 	const {t} = useTranslation();
 	const toast = useToast();
 	const reactSelectStyles = useReactSelectStyles();
-	const gebruiker = afspraak?.gebruiker || props.burger;
-	if (!gebruiker) {
-		throw new Error("Missing property gebruiker.");
+	const burger = afspraak?.burger || props.burger;
+	if (!burger) {
+		throw new Error("Missing property burger.");
 	}
 
 	const [isSubmitted, setSubmitted] = useState<boolean>(false);
@@ -215,7 +215,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 		}
 
 		onSave({
-			gebruikerId: gebruiker.id,
+			burgerId: burger.id,
 			credit: afspraakType === AfspraakType.Income,
 			beschrijving: description.value,
 			tegenRekeningId: parseInt(rekeningId.value),
@@ -381,7 +381,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 											})),
 											{
 												key: 0,
-												label: formatBurgerName(gebruiker),
+												label: formatBurgerName(burger),
 												value: 0,
 											},
 										];
@@ -403,7 +403,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 
 										let rekeningen: Rekening[];
 										if (parseInt(organisatieId.value) === 0) {
-											rekeningen = gebruiker.rekeningen || [];
+											rekeningen = burger.rekeningen || [];
 										}
 										else {
 											rekeningen = data.organisaties.find(o => o.id === parseInt(organisatieId.value))?.rekeningen || [];
@@ -453,7 +453,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 												<Tbody>
 													{zoektermDuplicates.map(a => (
 														<Tr key={a.id}>
-															<Td>{formatBurgerName(a.gebruiker)}</Td>
+															<Td>{formatBurgerName(a.burger)}</Td>
 															<Td>
 																<Stack spacing={1} flex={1} alignItems={"flex-end"}>
 																	<Box textAlign={"right"} color={a.bedrag < 0 ? "orange.500" : "currentcolor"}>{currencyFormat2().format(a.bedrag)}</Box>
@@ -461,7 +461,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 																</Stack>
 															</Td>
 															<Td width={"50px"}>
-																<IconButton as={NavLink} to={Routes.Burger(a.gebruiker?.id)} variant={"ghost"} size={"sm"} icon={<SearchIcon />}
+																<IconButton as={NavLink} to={Routes.Burger(a.burger?.id)} variant={"ghost"} size={"sm"} icon={<SearchIcon />}
 																	aria-label={t("actions.edit")} />
 															</Td>
 														</Tr>

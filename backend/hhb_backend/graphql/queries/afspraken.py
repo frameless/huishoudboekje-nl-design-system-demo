@@ -1,4 +1,4 @@
-""" GraphQL Gebruikers query """
+""" GraphQL Afspraken query """
 import graphene
 from flask import request
 
@@ -18,7 +18,7 @@ class AfspraakQuery:
             action=info.field_name,
             entities=gebruikers_activiteit_entities(entity_type="afspraak", result=id)
             + gebruikers_activiteit_entities(
-                entity_type="burger", result=result, key="gebruiker_id"
+                entity_type="burger", result=result, key="burger_id"
             ),
         )
 

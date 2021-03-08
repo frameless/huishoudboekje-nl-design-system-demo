@@ -9,7 +9,7 @@ import hhb_backend.graphql.models.bank_transaction as bank_transaction
 import hhb_backend.graphql.models.configuratie as configuratie
 import hhb_backend.graphql.models.customer_statement_message as customer_statement_message
 import hhb_backend.graphql.models.export as export
-import hhb_backend.graphql.models.gebruiker as gebruiker
+import hhb_backend.graphql.models.burger as burger
 import hhb_backend.graphql.models.grootboekrekening as grootboekrekening
 import hhb_backend.graphql.models.journaalpost as journaalpost
 import hhb_backend.graphql.models.organisatie as organisatie
@@ -30,7 +30,7 @@ class GebruikersActiviteitMeta(graphene.ObjectType):
 
 class GebruikersActiviteitSnapshot(graphene.ObjectType):
     afspraak = graphene.Field(lambda: afspraak.Afspraak)
-    burger = graphene.Field(lambda: gebruiker.Gebruiker)
+    burger = graphene.Field(lambda: burger.Burger)
     configuratie = graphene.Field(lambda: configuratie.Configuratie)
     customer_statement_message = graphene.Field(lambda: customer_statement_message.CustomerStatementMessage)
     export = graphene.Field(lambda: export.Export)
@@ -59,7 +59,7 @@ class GebruikersActiviteitSnapshot(graphene.ObjectType):
 
     @classmethod
     def resolve_burger(cls, root, _info):
-        return cls._resolve_snapshot(root, "burger", gebruiker.Gebruiker)
+        return cls._resolve_snapshot(root, "burger", burger.Burger)
 
     @classmethod
     def resolve_configuratie(cls, root, _info):
@@ -101,7 +101,7 @@ class GebruikersActiviteitEntity(graphene.ObjectType):
     entityId = graphene.String()
 
     afspraak = graphene.Field(lambda: afspraak.Afspraak)
-    burger = graphene.Field(lambda: gebruiker.Gebruiker)
+    burger = graphene.Field(lambda: burger.Burger)
     configuratie = graphene.Field(lambda: configuratie.Configuratie)
     customer_statement_message = graphene.Field(lambda: customer_statement_message.CustomerStatementMessage)
     export = graphene.Field(lambda: export.Export)
@@ -126,7 +126,7 @@ class GebruikersActiviteitEntity(graphene.ObjectType):
     @classmethod
     async def resolve_burger(cls, root, _info):
         return await cls._resolve_entity(
-            root, entity_type="burger", dataloader_name="gebruikers_by_id"
+            root, entity_type="burger", dataloader_name="burgers_by_id"
         )
 
     @classmethod

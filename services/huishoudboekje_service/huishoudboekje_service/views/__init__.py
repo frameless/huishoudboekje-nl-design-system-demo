@@ -1,9 +1,9 @@
 """ huishoudboekje_service views module """
-from .gebruikers import GebruikerView
+from .burgers import BurgerView
 from .organisaties import OrganisatieView
 from .afspraken import AfspraakView
 from .rekeningen import RekeningView
-from .rekening_gebruiker import RekeningGebruikerView
+from .rekening_burger import RekeningBurgerView
 from .rekening_organisatie import RekeningOrganisatieView
 from .journaalposten import JournaalpostView
 from .rubrieken import RubriekView

@@ -48,11 +48,11 @@ class GebruikersActiviteitView(HHBView):
     }
 
     def extend_get(self, **kwargs):
-        self.add_filter_filter_gebruiker()
+        self.add_filter_filter_burger()
         self.add_filter_filter_afspraken()
 
-    def add_filter_filter_gebruiker(self):
-        filter_ids = request.args.get('filter_gebruikers')
+    def add_filter_filter_burger(self):
+        filter_ids = request.args.get('filter_burgers')
         if filter_ids:
             filters = []
             for raw_id in filter_ids.split(","):
@@ -62,7 +62,7 @@ class GebruikersActiviteitView(HHBView):
                         [{"entityId": int_id, "entityType": "burger"}]))
                 except ValueError:
                     abort(make_response(
-                        {"errors": [f"Input for filter_gebruikers is not correct, '{raw_id}' is not a number."]}, 400))
+                        {"errors": [f"Input for filter_burgers is not correct, '{raw_id}' is not a number."]}, 400))
 
             if len(filters) > 0:
                 self.hhb_query.query = self.hhb_query.query.filter(or_(*filters))

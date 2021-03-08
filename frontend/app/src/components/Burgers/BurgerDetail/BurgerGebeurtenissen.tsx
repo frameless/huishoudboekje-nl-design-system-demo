@@ -1,12 +1,12 @@
 import { Stack, StackProps } from "@chakra-ui/react";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Gebruiker, GebruikersActiviteit, useGetBurgerGebeurtenissenQuery } from "../../../generated/graphql";
+import { Burger, GebruikersActiviteit, useGetBurgerGebeurtenissenQuery } from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import { FormLeft } from "../../Forms/FormLeftRight";
 import GebeurtenissenTableView from "../../Gebeurtenissen/GebeurtenissenTableView";
 
-const BurgerGebeurtenissen: React.FC<StackProps & { burger: Gebruiker }> = ({burger, ...props}) => {
+const BurgerGebeurtenissen: React.FC<StackProps & { burger: Burger }> = ({burger, ...props}) => {
 	const {t} = useTranslation();
 	const $gebeurtenissen = useGetBurgerGebeurtenissenQuery({
 		fetchPolicy: "no-cache",

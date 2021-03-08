@@ -25,7 +25,7 @@ class AfspraakView(HHBView):
     validation_data = {
         "type": "object",
         "properties": {
-            "gebruiker_id": {
+            "burger_id": {
                 "type": "integer",
             },
             "beschrijving": {
@@ -69,16 +69,16 @@ class AfspraakView(HHBView):
 
     def extend_get(self, **kwargs):
         """ Extend the get function with a filer on kvk nummers """
-        self.add_filter_filter_gebruiker()
+        self.add_filter_filter_burger()
         self.add_filter_filter_organisaties()
         self.add_filter_filter_datums()
         self.add_filter_filter_rekening()
         self.hhb_query.expose_many_relation("journaalposten", "id")
         self.hhb_query.expose_many_relation("overschrijvingen", "id")
 
-    def add_filter_filter_gebruiker(self):
-        """ Add filter_gebruiker filter based on the kvk of the organisatie model """
-        filter_ids = request.args.get('filter_gebruikers')
+    def add_filter_filter_burger(self):
+        """ Add filter_burger filter based on the kvk of the organisatie model """
+        filter_ids = request.args.get('filter_burgers')
         if filter_ids:
             ids = []
             for raw_id in filter_ids.split(","):
@@ -86,8 +86,8 @@ class AfspraakView(HHBView):
                     ids.append(int(raw_id))
                 except ValueError:
                     abort(make_response(
-                        {"errors": [f"Input for filter_gebruikers is not correct, '{raw_id}' is not a number."]}, 400))
-            self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.gebruiker_id.in_(ids))
+                        {"errors": [f"Input for filter_burgers is not correct, '{raw_id}' is not a number."]}, 400))
+            self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.burger_id.in_(ids))
 
     def add_filter_filter_organisaties(self):
         """ Add filter_organisaties filter based on the id of the organisatie model """

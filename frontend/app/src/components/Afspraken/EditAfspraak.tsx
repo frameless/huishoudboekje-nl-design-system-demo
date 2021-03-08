@@ -36,8 +36,8 @@ const EditAfspraak = () => {
 				isClosable: true,
 			});
 
-			if ($afspraak.data?.afspraak?.gebruiker?.id) {
-				push(Routes.Burger($afspraak.data.afspraak.gebruiker.id));
+			if ($afspraak.data?.afspraak?.burger?.id) {
+				push(Routes.Burger($afspraak.data.afspraak.burger.id));
 			}
 		}).catch(err => {
 			console.error(err);
@@ -55,7 +55,7 @@ const EditAfspraak = () => {
 	return (
 		<Queryable query={$afspraak}>{({afspraak}: { afspraak: Afspraak }) => {
 			return (
-				<Page title={t("forms.agreements.titleEdit")} backButton={<BackButton to={Routes.Burger(afspraak.gebruiker?.id)} />}>
+				<Page title={t("forms.agreements.titleEdit")} backButton={<BackButton to={Routes.Burger(afspraak.burger?.id)} />}>
 					<AfspraakForm afspraak={afspraak} loading={$updateAfspraak.loading} onSave={onSaveAfspraak} />
 				</Page>
 			);

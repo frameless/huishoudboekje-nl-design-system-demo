@@ -1,7 +1,7 @@
 """ Rekening View """
 from flask import request, make_response, abort
 from models.rekening import Rekening
-from models.rekening_gebruiker import RekeningGebruiker 
+from models.rekening_burger import RekeningBurger
 from models.rekening_organisatie import RekeningOrganisatie
 from core_service.views.hhb_view import HHBView
 from core_service.utils import row2dict
@@ -24,23 +24,23 @@ class RekeningView(HHBView):
     }
 
     def extend_get(self, **kwargs):
-        self.add_filter_gebruikers()
+        self.add_filter_burgers()
         self.add_filter_organisaties()
         self.add_filter_ibans()
         self.add_filter_rekeninghouders()
         self.add_relations()
         
-    def add_filter_gebruikers(self):
-        filter_gebruikers = request.args.get('filter_gebruikers')
-        if filter_gebruikers:
+    def add_filter_burgers(self):
+        filter_burgers = request.args.get('filter_burgers')
+        if filter_burgers:
             try:
                 self.hhb_query.query = self.hhb_query.query.\
-                    join(Rekening.gebruikers).\
+                    join(Rekening.burgers).\
                     filter(
-                        RekeningGebruiker.gebruiker_id.in_([int(gebruiker) for gebruiker in filter_gebruikers.split(",")])
+                        RekeningBurger.burger_id.in_([int(burger) for burger in filter_burgers.split(",")])
                     )
             except ValueError: 
-                abort(make_response({"errors": [f"Input for filter_gebruikers is not correct."]}, 400))
+                abort(make_response({"errors": [f"Input for filter_burgers is not correct."]}, 400))
 
     def add_filter_organisaties(self):
         filter_organisaties = request.args.get('filter_organisaties')
@@ -69,6 +69,6 @@ class RekeningView(HHBView):
             )
 
     def add_relations(self, **kwargs):
-        self.hhb_query.expose_many_relation("gebruikers", "gebruiker_id")
+        self.hhb_query.expose_many_relation("burgers", "burger_id")
         self.hhb_query.expose_many_relation("organisaties", "organisatie_id")
         self.hhb_query.expose_many_relation("afspraken", "id")

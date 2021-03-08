@@ -4,11 +4,11 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {useHistory} from "react-router-dom";
 import Routes from "../../config/routes";
-import {Gebruiker} from "../../generated/graphql";
+import {Burger} from "../../generated/graphql";
 import {formatBurgerName} from "../../utils/things";
 import GridCard from "../GridCard";
 
-const BurgerListView: React.FC<BoxProps & { burgers: Gebruiker[], showAddButton?: boolean }> = ({burgers, showAddButton = false, ...props}) => {
+const BurgerListView: React.FC<BoxProps & { burgers: Burger[], showAddButton?: boolean }> = ({burgers, showAddButton = false, ...props}) => {
 	const {t} = useTranslation();
 	const {push} = useHistory();
 	const isMobile = useBreakpointValue([true, null, null, false]);

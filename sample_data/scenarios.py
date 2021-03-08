@@ -84,7 +84,7 @@ class AfspraakScenario:
 
 
 @dataclass
-class GebruikerScenario:
+class BurgerScenario:
     aantal: int
     aantal_rekeningen: int = 1
     gezin: int = 1
@@ -92,8 +92,8 @@ class GebruikerScenario:
 
 
 @dataclass
-class Gebruikers:
-    scenarios: List[GebruikerScenario] = field(default_factory=list)
+class Burgers:
+    scenarios: List[BurgerScenario] = field(default_factory=list)
 
 
 def load_yaml_dataclass(filename: str, clazz):
@@ -110,7 +110,7 @@ class Scenario:
     organisatie: Organisaties = load_yaml_dataclass(
         "scenarios/organisaties.yaml", Organisaties
     )
-    gebruikers: Gebruikers = load_yaml_dataclass(
-        "scenarios/gebruikers.yaml", Gebruikers
+    burgers: Burgers = load_yaml_dataclass(
+        "scenarios/burgers.yaml", Burgers
     )
     metadata: Metadata = load_yaml_dataclass("scenarios/metadata.yaml", Metadata)
