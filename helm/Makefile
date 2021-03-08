@@ -1,7 +1,7 @@
 COMPONENT_VERSION ?= 0.20.0
 
 .PHONY: all
-all: repo
+all: repo/index.yaml
 
 .PHONY: init
 init:
@@ -13,12 +13,17 @@ init:
 lint: init
 	helm lint charts/*
 
-.PHONY: repo
+repo/%-$(COMPONENT_VERSION).tgz: charts/% repo
+	helm package $< --dependency-update --destination $(@D)
+
+repo/robots.txt: repo
+	echo "User-Agent: *\nDisallow: /" > repo/robots.txt
+
+repo/index.yaml: repo/robots.txt repo/huishoudboekje-$(COMPONENT_VERSION).tgz repo/sample-data-$(COMPONENT_VERSION).tgz
+	helm repo index --url $${CI_PAGES_URL:-http://localhost:5000} repo
+
 repo: init dependencies lint charts/huishoudboekje/theme.yaml
 	mkdir -p $@
-	echo "User-Agent: *\nDisallow: /" > repo/robots.txt
-	helm package charts/huishoudboekje --dependency-update --destination repo/
-	helm repo index --url $${CI_PAGES_URL:-http://localhost:5000} repo
 
 charts/huishoudboekje/theme.yaml: ../frontend/theme/sloothuizen/
 	sh theme-yaml.sh $< > $@

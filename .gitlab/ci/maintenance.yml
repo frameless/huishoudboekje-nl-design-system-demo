@@ -1,18 +1,27 @@
-clean-namespaces:
-  stage: maintenance
+.deployer:
   environment:
     name: review/$CI_COMMIT_REF_SLUG
-  variables:
-    GIT_STRATEGY: none
   image: registry.gitlab.com/commonground/core/review-app-deployer:latest
-  script:
-    - echo "Cleaning up old namespaces..."
-    - kubectl get namespaces --sort-by=.metadata.creationTimestamp | awk '$1 !~ /hhb-/ {next} $1 !~ /hhb-(acc|demo|test|nijmegen|utrecht)/ {system("kubectl delete namespace " $1)}'
-  when: manual
-  needs: []
   tags:
     - cg
     - docker
+
+.maintenance:
+  stage: maintenance
+  extends:
+    - .deployer
+  variables:
+    GIT_STRATEGY: none
+  when: manual
+  needs: []
+
+clean-namespaces:
+  extends:
+    - .maintenance
+  script:
+    - echo "Cleaning up old namespaces..."
+    - kubectl get namespaces --sort-by=.metadata.creationTimestamp | awk '$1 !~ /hhb-/ {next} $1 !~ /hhb-(acc|demo|test|nijmegen|utrecht)/ {system("kubectl delete namespace " $1)}'
+
 
 env:
   stage: maintenance

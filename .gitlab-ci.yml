@@ -18,12 +18,14 @@ variables:
   DOCKER_PROXY: "${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/"
   PYTHON_POSTGRES: python-postgres
   COMPONENT_VERSION: "0.20.0"
+  HELM_DEBUG: ""
 
 stages:
   - build
   - test
   - deploy
   - e2e
+  - sample-data
   - maintenance
 
 include:
@@ -31,4 +33,5 @@ include:
   - '/.gitlab/ci/deploy.yml'
   - '/.gitlab/ci/test.yml'
   - '/.gitlab/ci/e2e.yml'
+  - '/.gitlab/ci/sample-data.yml'
   - '/.gitlab/ci/maintenance.yml'
