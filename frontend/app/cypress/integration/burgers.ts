@@ -18,14 +18,14 @@ beforeEach(() => {
 		cy.mockGraphqlOps({
 			operations: {
 				getAllBurgers: {
-					gebruikers: sampleBurgers,
+					burgers: sampleBurgers,
 				},
 				getOneBurger: ({id}) => ({
-					gebruiker: sampleBurgers.find(b => b.id === parseInt(id))
+					burger: sampleBurgers.find(b => b.id === parseInt(id))
 				}),
 				createBurger: (props) => ({
-					createGebruiker: {
-						gebruiker: {
+					createBurger: {
+						burger: {
 							...props,
 							id: sampleBurgers[sampleBurgers.length - 1].id
 						}
@@ -33,7 +33,7 @@ beforeEach(() => {
 				}),
 				updateBurger: (props) => ({
 					ok: true,
-					gebruiker: props
+					burger: props
 				}),
 				deleteBurger: {
 					ok: true,
@@ -55,7 +55,7 @@ describe("Burgers CRUD", () => {
 		});
 	});
 
-	it("Shows a a single burger", () => {
+	it("Shows a single burger", () => {
 		// Go to burgers list page
 		const b = sampleBurgers[0];
 		cy.visit(Routes.Burger(b.id));

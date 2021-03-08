@@ -114,7 +114,7 @@ const CreateBurger = () => {
 				success: t("messages.burgers.createSuccessMessage"),
 			});
 
-			const {id} = result?.data?.createGebruiker?.gebruiker || {};
+			const {id} = result?.data?.createBurger?.burger || {};
 			if (id) {
 				push(Routes.Burger(id));
 			}

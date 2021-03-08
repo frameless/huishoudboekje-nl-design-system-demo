@@ -2,7 +2,7 @@ import {act, screen} from "@testing-library/react";
 import React from "react";
 import {render, unmountComponentAtNode} from "react-dom";
 import BurgerListView from "../components/Burgers/BurgerListView";
-import {Gebruiker} from "../generated/graphql";
+import {Burger} from "../generated/graphql";
 import {formatBurgerName} from "../utils/things";
 
 jest.mock("react-i18next", () => require("./utils/mock-hooks").reactI18NextMock());
@@ -56,7 +56,7 @@ it("renders an empty list with addButton", () => {
 });
 
 it("renders a list of two burgers", () => {
-	const burgers: Gebruiker[] = [
+	const burgers: Burger[] = [
 		{
 			achternaam: "de Jager",
 			email: "fien.dejager@example.com",

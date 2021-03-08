@@ -5,7 +5,7 @@ import {useToggle} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {useHistory, useParams} from "react-router-dom";
 import Routes from "../../../config/routes";
-import {Gebruiker, useDeleteBurgerMutation, useGetOneBurgerQuery} from "../../../generated/graphql";
+import {Burger, useDeleteBurgerMutation, useGetOneBurgerQuery} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import {formatBurgerName} from "../../../utils/things";
 import useToaster from "../../../utils/useToaster";
@@ -37,13 +37,13 @@ const BurgerDetail = () => {
 	const onClickDeleteMenuItem = () => toggleAlert(true);
 
 	return (
-		<Queryable query={$burger}>{({gebruiker}: {gebruiker: Gebruiker}) => {
+		<Queryable query={$burger}>{({burger}: {burger: Burger}) => {
 			const onConfirmDelete = () => {
 				deleteBurger()
 					.then(() => {
 						toggleAlert(false);
 						toast({
-							success: t("messages.burgers.deleteConfirmMessage", {name: `${gebruiker.voornamen} ${gebruiker.achternaam}`}),
+							success: t("messages.burgers.deleteConfirmMessage", {name: `${burger.voornamen} ${burger.achternaam}`}),
 						});
 						toggleDeleted(true);
 					})
@@ -57,7 +57,7 @@ const BurgerDetail = () => {
 
 			if (isDeleted) {
 				return (
-					<DeadEndPage message={t("messages.burgers.deleteConfirmMessage", {name: `${gebruiker.voornamen} ${gebruiker.achternaam}`})}>
+					<DeadEndPage message={t("messages.burgers.deleteConfirmMessage", {name: `${burger.voornamen} ${burger.achternaam}`})}>
 						<Button colorScheme={"primary"} onClick={() => push(Routes.Burgers)}>{t("actions.backToList")}</Button>
 					</DeadEndPage>
 				);
@@ -67,10 +67,10 @@ const BurgerDetail = () => {
 				{isAlertOpen && <Alert title={t("messages.burgers.deleteTitle")} cancelButton={true} onClose={() => toggleAlert(false)} confirmButton={(
 					<Button isLoading={$deleteBurger.loading} colorScheme="red" onClick={onConfirmDelete} ml={3} data-cy={"inModal"}>{t("actions.delete")}</Button>
 				)}>
-					{t("messages.burgers.deleteQuestion", {name: `${gebruiker.voornamen} ${gebruiker.achternaam}`})}
+					{t("messages.burgers.deleteQuestion", {name: `${burger.voornamen} ${burger.achternaam}`})}
 				</Alert>}
 
-				<Page title={formatBurgerName(gebruiker)} backButton={<BackButton to={Routes.Burgers} />} menu={(
+				<Page title={formatBurgerName(burger)} backButton={<BackButton to={Routes.Burgers} />} menu={(
 					<Menu>
 						<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} data-cy={"actionsMenuButton"} />
 						<MenuList>
@@ -79,10 +79,10 @@ const BurgerDetail = () => {
 						</MenuList>
 					</Menu>
 				)}>
-					<Section><BurgerProfileView burger={gebruiker} /></Section>
-					<Section><BurgerRekeningenView burger={gebruiker} refetch={$burger.refetch} /></Section>
-					<Section><BurgerAfsprakenView burger={gebruiker} refetch={$burger.refetch} /></Section>
-					<Section><BurgerGebeurtenissen burger={gebruiker} /></Section>
+					<Section><BurgerProfileView burger={burger} /></Section>
+					<Section><BurgerRekeningenView burger={burger} refetch={$burger.refetch} /></Section>
+					<Section><BurgerAfsprakenView burger={burger} refetch={$burger.refetch} /></Section>
+					<Section><BurgerGebeurtenissen burger={burger} /></Section>
 				</Page>
 			</>);
 		}}

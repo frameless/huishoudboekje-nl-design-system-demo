@@ -4,7 +4,7 @@ import {friendlyFormatIBAN} from "ibantools";
 import moment, {Moment} from "moment";
 import {createContext} from "react";
 import {Granularity, periodFormatForGranularity} from "../components/Rapportage/Aggregator";
-import {BankTransaction, Gebruiker, GebruikersActiviteit, Interval, IntervalInput, Rubriek} from "../generated/graphql";
+import {BankTransaction, Burger, GebruikersActiviteit, Interval, IntervalInput, Rubriek} from "../generated/graphql";
 import {IntervalType} from "../models/models";
 
 export const searchFields = (term: string, fields: string[]): boolean => {
@@ -116,7 +116,7 @@ export const sortBankTransactions = (a: BankTransaction, b: BankTransaction) => 
 	return b.bedrag - a.bedrag;
 };
 
-export const formatBurgerName = (burger: Gebruiker | undefined, fullName = false) => {
+export const formatBurgerName = (burger: Burger | undefined, fullName = false) => {
 	if (fullName) {
 		return [burger?.voornamen, burger?.achternaam].join(" ");
 	}

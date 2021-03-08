@@ -4,12 +4,12 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {useHistory} from "react-router-dom";
 import Routes from "../../../config/routes";
-import {Gebruiker, useDeleteAfspraakMutation} from "../../../generated/graphql";
+import {Burger, useDeleteAfspraakMutation} from "../../../generated/graphql";
 import useToaster from "../../../utils/useToaster";
 import AfspraakTableRow from "../../Afspraken/AfspraakTableRow";
 import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
 
-const BurgerAfsprakenView: React.FC<StackProps & { burger: Gebruiker, refetch: VoidFunction }> = ({burger, refetch, ...props}) => {
+const BurgerAfsprakenView: React.FC<StackProps & { burger: Burger, refetch: VoidFunction }> = ({burger, refetch, ...props}) => {
 	const {t} = useTranslation();
 	const isMobile = useBreakpointValue([true, null, null, false]);
 	const toast = useToaster();

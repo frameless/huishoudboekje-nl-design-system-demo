@@ -89,7 +89,7 @@ const RekeningListItem: React.FC<RekeningListItemProps> = ({rekening, onDelete, 
 
 		<Tr {...props}>
 			<Td>
-				<Editable defaultValue={rekening.rekeninghouder} flex={1} submitOnBlur={true} onSubmit={onSubmit}>
+				<Editable defaultValue={(rekening.rekeninghouder || "").length > 0 ? rekening.rekeninghouder : t("unknown")} flex={1} submitOnBlur={true} onSubmit={onSubmit}>
 					<Tooltip label={t("actions.clickToEdit")} placement={"right"}>
 						<EditablePreview />
 					</Tooltip>

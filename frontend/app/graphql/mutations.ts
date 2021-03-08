@@ -1,16 +1,16 @@
 import {gql} from "@apollo/client";
-import {AfspraakFragment, CustomerStatementMessageFragment, GebruikerFragment, OrganisatieFragment, RekeningFragment} from "./fragments";
+import {AfspraakFragment, CustomerStatementMessageFragment, BurgerFragment, OrganisatieFragment, RekeningFragment} from "./fragments";
 
 export const CreateBurgerMutation = gql`
-    mutation createBurger($input: CreateGebruikerInput) {
-        createGebruiker(input: $input){
+    mutation createBurger($input: CreateBurgerInput) {
+        createBurger(input: $input){
             ok
-            gebruiker {
-                ...Gebruiker
+            burger {
+                ...Burger
             }
         }
     }
-    ${GebruikerFragment}
+    ${BurgerFragment}
 `;
 
 export const UpdateBurgerMutation = gql`
@@ -27,7 +27,7 @@ export const UpdateBurgerMutation = gql`
         $telefoonnummer: String
         $email: String
     ){
-        updateGebruiker(
+        updateBurger(
             id: $id
             voorletters: $voorletters
             voornamen: $voornamen
@@ -41,17 +41,17 @@ export const UpdateBurgerMutation = gql`
             email: $email
         ){
             ok
-            gebruiker {
-                ...Gebruiker
+            burger {
+                ...Burger
             }
         }
     }
-    ${GebruikerFragment}
+    ${BurgerFragment}
 `;
 
 export const DeleteBurgerMutation = gql`
     mutation deleteBurger($id: Int!){
-        deleteGebruiker(id: $id) {
+        deleteBurger(id: $id) {
             ok
         }
     }
@@ -167,12 +167,12 @@ export const UpdateAfspraakMutation = gql`
     ${AfspraakFragment}
 `;
 
-export const CreateGebruikerRekeningMutation = gql`
-    mutation createGebruikerRekening(
-        $gebruikerId: Int!
+export const CreateBurgerRekeningMutation = gql`
+    mutation createBurgerRekening(
+        $burgerId: Int!
         $rekening: RekeningInput!
     ){
-        createGebruikerRekening(gebruikerId: $gebruikerId, rekening: $rekening){
+        createBurgerRekening(burgerId: $burgerId, rekening: $rekening){
             ok
             rekening{
                 ...Rekening
@@ -182,12 +182,12 @@ export const CreateGebruikerRekeningMutation = gql`
     ${RekeningFragment}
 `;
 
-export const DeleteGebruikerRekeningMutation = gql`
-    mutation deleteGebruikerRekening(
+export const DeleteBurgerRekeningMutation = gql`
+    mutation deleteBurgerRekening(
         $id: Int!
-        $gebruikerId: Int!
+        $burgerId: Int!
     ){
-        deleteGebruikerRekening(id: $id, gebruikerId: $gebruikerId){
+        deleteBurgerRekening(id: $id, burgerId: $burgerId){
             ok
         }
     }
