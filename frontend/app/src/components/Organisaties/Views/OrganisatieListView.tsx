@@ -15,7 +15,7 @@ const OrganisatieListView: React.FC<BoxProps & {organisaties: Organisatie[], sho
 		<Grid maxWidth={"100%"} gridTemplateColumns={["repeat(1, 1fr)", "repeat(2, 1fr)", "repeat(3, 1fr)"]} overflowX={"scroll"} gap={5}>
 			{showAddButton && (
 				<Box>
-					<Button colorScheme={"blue"} borderStyle={"dashed"} variant={"outline"} leftIcon={<AddIcon />}
+					<Button colorScheme={"primary"} borderStyle={"dashed"} variant={"outline"} leftIcon={<AddIcon />}
 						w="100%" h="100%" onClick={() => push(Routes.CreateOrganisatie)} borderRadius={5}
 						p={5}>{t("actions.add")}</Button>
 				</Box>
