@@ -1,7 +1,10 @@
+from decimal import Context, ROUND_HALF_DOWN
+import re
+from decimal import Decimal
+
 from graphene.types import Scalar
 from graphql.language import ast
-from decimal import Decimal
-import re
+
 
 class Bedrag(Scalar):
     '''Decimaal Scalar Description'''
@@ -10,6 +13,7 @@ class Bedrag(Scalar):
 
     @staticmethod
     def serialize(value):
+        return f"{Decimal(value, Context(prec=2, rounding=ROUND_HALF_DOWN)) / 100:.2f}"
         return str(Decimal(value) / 100)
 
     @staticmethod
