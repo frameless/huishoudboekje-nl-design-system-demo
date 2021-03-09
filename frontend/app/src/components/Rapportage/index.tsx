@@ -136,7 +136,7 @@ const Rapportage = () => {
 					const burgerNamesList: string[] = selectedBurgers.map(b => formatBurgerName(b));
 
 					return (<>
-						<Tabs isLazy variant={"solid"} align={"end"}>
+						<Tabs isLazy variant={"solid"} align={"end"} colorScheme={"primary"}>
 							<Stack direction={"row"} as={TabList} spacing={2}>
 								<Tab>Saldo</Tab>
 								<Tab>Inkomsten en uitgaven</Tab>

@@ -77,7 +77,7 @@ const OrganisatieList = () => {
 				)}>
 					{filteredOrganisaties.length === 0 ? (
 						<DeadEndPage message={t("messages.organizations.noSearchResults")}>
-							<Button size="sm" colorScheme="primary" onClick={onClickResetSearch}>{t("actions.clearSearch")}</Button>
+							<Button size={"sm"} colorScheme={"primary"} onClick={onClickResetSearch}>{t("actions.clearSearch")}</Button>
 						</DeadEndPage>
 					) : (
 						<OrganisatieListView organisaties={filteredOrganisaties} showAddButton={search.value.trim().length === 0} />
