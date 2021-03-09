@@ -15,3 +15,67 @@ services:
   - bank_transactie_service
   - grootboek_service
   - log_service
+
+.service-resources: &service-resources
+  resources:
+     limits:
+       cpu: 1000m
+       memory: 1024Mi
+     requests:
+       cpu: 100m
+       memory: 512Mi
+
+
+medewerker-frontend:
+  ingress:
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+      - host: huishoudboekje.nlx.reviews
+        paths:
+          - "/"
+    tls:
+      - secretName: medewerker-frontend-ingress-tls
+        hosts:
+          - huishoudboekje.nlx.reviews
+  resources:
+     limits:
+       cpu: 100m
+       memory: 128Mi
+     requests:
+       cpu: 10m
+       memory: 12Mi
+
+medewerker-backend:
+  extraEnv:
+    - name: OIDC_CLOCK_SKEW
+      value: "600"
+  appSettings: hhb_backend.config.StagingConfig
+  oidc:
+    redirectUris:
+    - prefix: https://huishoudboekje.nlx.reviews
+      callback: https://huishoudboekje.nlx.reviews/api/custom_oidc_callback
+  ingress:
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+      - host: huishoudboekje.nlx.reviews
+        paths:
+          - "/api/"
+    tls:
+      - secretName: medewerker-backend-ingress-tls
+        hosts:
+          - huishoudboekje.nlx.reviews
+  <<: *service-resources
+
+huishoudboekje-service:
+  <<: *service-resources
+
+organisatie-service:
+  <<: *service-resources
+
+grootboek-service:
+  <<: *service-resources
+
+log-service:
+  <<: *service-resources

@@ -1,36 +1,105 @@
-# Deploy template for app
-.deploy:
-  stage: deploy
-  needs:
-    - build-shell-runner
-    - build-helm
+.review: &review
+  variables:
+    CREATE_NAMESPACE: "yes please"
+    NAMESPACE: "hhb-$CI_COMMIT_REF_SLUG"
+    BASE_DOMAIN: nlx.reviews
+    APP_SETTINGS: "hhb_backend.config.StagingConfig"
+    DATABASE_PERSISTENCE: "false"
+  environment:
+    name: review/$CI_COMMIT_REF_SLUG
+    url: https://hhb-$CI_COMMIT_REF_SLUG.$BASE_DOMAIN/
+  only:
+    - branches@commonground/huishoudboekje/app-new
+  except:
+    - master
+    - develop
+    - acceptance
+
+# TODO remove
+.develop-old: &develop-old
+  variables:
+    CREATE_NAMESPACE: ""
+    NAMESPACE: "hhb-test"
+    BASE_DOMAIN: nlx.reviews
+    APP_SETTINGS: "hhb_backend.config.StagingConfig"
+  environment:
+    name: review/$CI_COMMIT_REF_SLUG
+    url: https://hhb-test.$BASE_DOMAIN/
+  only:
+    - develop@commonground/huishoudboekje/app-new
+
+.develop: &develop
+  variables:
+    CREATE_NAMESPACE: ""
+    NAMESPACE: "hhb-test"
+    BASE_DOMAIN: huishoudboekje.demoground.nl
+    APP_SETTINGS: "hhb_backend.config.StagingConfig"
+    HHB_HOST: "test.$BASE_DOMAIN"
+  environment:
+    name: test
+    url: https://test.$BASE_DOMAIN/
+  only:
+    - develop@commonground/huishoudboekje/app-new
+
+.acceptance: &acceptance
+  variables:
+    CREATE_NAMESPACE: ""
+    NAMESPACE: "hhb-acc"
+    BASE_DOMAIN: huishoudboekje.demoground.nl
+  environment:
+    name: acc
+    url: https://acc.$BASE_DOMAIN/
+  only:
+    - acceptance@commonground/huishoudboekje/app-new
+
+.master: &master
+  variables:
+    CREATE_NAMESPACE: ""
+    NAMESPACE: "hhb-demo"
+    BASE_DOMAIN: huishoudboekje.demoground.nl
+  environment:
+    name: demo
+    url: https://demo.$BASE_DOMAIN/
+  only:
+    - master@commonground/huishoudboekje/app-new
+
+.retry: &retry
+  retry:
+    max: 2
+    when: script_failure
+
+.deployer: &deployer
   image: registry.gitlab.com/commonground/core/review-app-deployer:latest
   tags:
     - cg
     - docker
-  environment:
-    name: review/$CI_COMMIT_REF_SLUG
-    url: https://hhb-$CI_COMMIT_REF_SLUG.$REVIEW_BASE_DOMAIN/
-    on_stop: destroy-app
-  variables:
-    OIDC_DEX: "true"
-    OIDC_CLIENT_ID: "huishoudboekje"
-    OIDC_CLIENT_SECRET: "ZwwcL2zjQyJUBnFPVoOb"
-    THEME: "sloothuizen"
+
+# Deploy template for app
+.deploy: &deploy
+  <<: *deployer
+  <<: *retry
+  stage: deploy
+  needs:
+    - build-shell-runner
+    - build-helm
   before_script:
-    - |
-      HHB_HOST=${HHB_HOST:-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN}
-      OIDC_ISSUER=${OIDC_ISSUER:-https://dex-sloothuizen-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN}
-      DATABASE_PERSISTENCE="${DATABASE_PERSISTENCE:-true}"
+    - OIDC_CLIENT_ID="huishoudboekje"
+    - OIDC_CLIENT_SECRET="ZwwcL2zjQyJUBnFPVoOb"
+    - OIDC_DEX="true"
+    - THEME="sloothuizen"
+    - HHB_HOST=${HHB_HOST:-$NAMESPACE.$BASE_DOMAIN}
+    - DEX_HOST=dex-${HHB_HOST}
+    - OIDC_ISSUER=${OIDC_ISSUER:-https://${DEX_HOST}}
+    - DATABASE_PERSISTENCE="${DATABASE_PERSISTENCE:-true}"
     - sh helm/theme-yaml.sh frontend/theme/${THEME:-sloothuizen} > helm/theme.yaml
     # This lets the huishoudboekje postgresql be upgraded
     # see https://stackoverflow.com/questions/53186601/re-use-persistentvolume-after-re-installing-a-helm-deployment
-    - kubectl delete --namespace $REVIEW_NAMESPACE statefulsets.apps huishoudboekje-postgresql --cascade=false 2>&1 >/dev/null  || true
+    - kubectl delete --namespace $NAMESPACE statefulsets.apps huishoudboekje-postgresql --cascade=false 2>&1 >/dev/null  || true
   script:
     - |
       helm upgrade --install "huishoudboekje" helm/repo/huishoudboekje-${COMPONENT_VERSION}.tgz \
-        --debug \
-        --namespace $REVIEW_NAMESPACE --create-namespace \
+        ${HELM_DEBUG:+--debug} \
+        --namespace $NAMESPACE ${CREATE_NAMESPACE:+--create-namespace} \
         --values helm/charts/huishoudboekje/values.yaml \
         --values helm/values-dex.yaml \
         --values helm/theme.yaml \
@@ -38,8 +107,10 @@
         --set "global.imageTag=$IMAGE_TAG" \
         --set "medewerker-frontend.ingress.hosts[0].host=$HHB_HOST" \
         --set "medewerker-frontend.ingress.hosts[0].paths[0]=/" \
+        --set "medewerker-frontend.ingress.tls[0].hosts[0]=$HHB_HOST" \
         --set "medewerker-backend.ingress.hosts[0].host=$HHB_HOST" \
         --set "medewerker-backend.ingress.hosts[0].paths[0]=/api/" \
+        --set "medewerker-backend.ingress.tls[0].hosts[0]=$HHB_HOST" \
         --set "medewerker-backend.appSettings=${APP_SETTINGS:-hhb_backend.config.ProductionConfig}" \
         --set "medewerker-backend.oidc.issuer=${OIDC_ISSUER}" \
         --set "medewerker-backend.oidc.clientId=${OIDC_CLIENT_ID}" \
@@ -53,7 +124,8 @@
         --set "medewerker-backend.oidc.tokeninfoUri=${OIDC_TOKENINFO_ENDPOINT:-${OIDC_ISSUER}/tokeninfo}" \
         --set "medewerker-backend.oidc.userinfoUri=${OIDC_USERINFO_ENDPOINT:-${OIDC_ISSUER}/userinfo}" \
         --set "dex.enabled=${OIDC_DEX}" \
-        --set "dex.ingress.hosts[0]=dex-sloothuizen-$REVIEW_NAMESPACE.$REVIEW_BASE_DOMAIN" \
+        --set "dex.ingress.hosts[0]=${DEX_HOST}" \
+        --set "dex.ingress.tls[0].hosts[0]=${DEX_HOST}" \
         --set "dex.config.issuer=${OIDC_ISSUER}" \
         --set "dex.config.staticClients[0].secret=${OIDC_CLIENT_SECRET}" \
         --set "dex.config.staticClients[0].redirectURIs[0]=https://$HHB_HOST/api/custom_oidc_callback" \
@@ -62,129 +134,186 @@
         --set "postgresql.persistence.enabled=${DATABASE_PERSISTENCE}" \
         --render-subchart-notes
     - echo -e -n "${HHB_HOST}" > ci_review_hostname.txt
-  after_script:
-    - helm uninstall --namespace $REVIEW_NAMESPACE postgres-operator 2>&1 >/dev/null || true
   artifacts:
     paths:
       - ci_review_hostname.txt
-  only:
-    - branches@commonground/huishoudboekje/app-new
-  retry:
-    max: 2
-    when: script_failure
 
 # Shut down app
-destroy-app:
+destroy-review:
+  <<: *deployer
+  <<: *review
+  <<: *retry
   stage: deploy
-  image: registry.gitlab.com/commonground/core/review-app-deployer:latest
-  tags:
-    - cg
-    - docker
   environment:
     name: review/$CI_COMMIT_REF_SLUG
     action: stop
   variables:
+    NAMESPACE: "hhb-$CI_COMMIT_REF_SLUG"
     GIT_STRATEGY: none
   script:
-    - kubectl delete namespace $REVIEW_NAMESPACE
+    - kubectl delete namespace $NAMESPACE
   when: manual
-  retry:
-    max: 2
-    when: script_failure
-  except:
-    - master
-    - develop
-    - acceptance
 
-.helm-test:
+.helm-test: &helm-test
+  <<: *deployer
   stage: e2e
-  image: registry.gitlab.com/commonground/core/review-app-deployer:latest
-  tags:
-    - cg
-    - docker
-  environment:
-    name: review/$CI_COMMIT_REF_SLUG
   script:
-    helm test --namespace $REVIEW_NAMESPACE  --logs  huishoudboekje
+    helm test --namespace $NAMESPACE  --logs  huishoudboekje
   allow_failure: true
 
-.develop:
-  variables:
-    REVIEW_NAMESPACE: "hhb-test"
-    APP_SETTINGS: "hhb_backend.config.StagingConfig"
-  environment:
-    url: https://hhb-test.$REVIEW_BASE_DOMAIN/
-
-.acceptance:
-  variables:
-    REVIEW_NAMESPACE: "hhb-acc"
-  environment:
-    url: https://hhb-acc.$REVIEW_BASE_DOMAIN/
-
-.master:
-  variables:
-    REVIEW_NAMESPACE: "hhb-demo"
-  environment:
-    url: https://hhb-demo.$REVIEW_BASE_DOMAIN/
-
-# Deploy hhb-<environment slug>.nlx.reviews
 deploy-review:
+  <<: *deploy
+  <<: *review
   environment:
+    name: review/$CI_COMMIT_REF_SLUG
+    url: https://hhb-$CI_COMMIT_REF_SLUG.$BASE_DOMAIN/
+    on_stop: destroy-review
     auto_stop_in: 10 days
-  variables:
-    APP_SETTINGS: "hhb_backend.config.StagingConfig"
-    DATABASE_PERSISTENCE: "false"
-  extends:
-    - .deploy
-  only:
-    - branches@commonground/huishoudboekje/app-new
-  except:
-    - master
-    - develop
-    - acceptance
 
-# Deploy hhb-test.nlx.reviews
 deploy-develop:
-  extends:
-    - .develop
-    - .deploy
-  only:
-    - develop@commonground/huishoudboekje/app-new
+  <<: *deploy
+  <<: *develop
 
-# Deploy hhb-acc.nlx.reviews
+# TODO remove
+deploy-develop-old:
+  <<: *deploy
+  <<: *develop-old
+
 deploy-acceptance:
-  extends:
-    - .acceptance
-    - .deploy
-  only:
-    - acceptance@commonground/huishoudboekje/app-new
+  <<: *deploy
+  <<: *acceptance
 
-# Deploy hhb-demo.nlx.reviews
 deploy-master:
-  extends:
-    - .master
-    - .deploy
-  only:
-    - master@commonground/huishoudboekje/app-new
-
+  <<: *deploy
+  <<: *master
 
 helm-test-review:
+  <<: *helm-test
+  <<: *review
   needs:
     - deploy-review
-  extends:
-    - .helm-test
-  only:
-    - branches@commonground/huishoudboekje/app-new
-  except:
-    - master
-    - develop
-    - acceptance
 
 helm-test-develop:
+  <<: *helm-test
+  <<: *develop
   needs:
     - deploy-develop
+
+# TODO remove
+helm-test-develop-old:
+  <<: *helm-test
+  <<: *develop-old
+  needs:
+    - deploy-develop-old
+
+.sample-data: &sample-data
+  stage: sample-data
   extends:
-    - .helm-test
-    - .develop
-  only:
-    - develop@commonground/huishoudboekje/app-new
+    - .maintenance
+  when: manual
+  script:
+    - helm delete sample-data-${JOB_TYPE} --namespace $NAMESPACE || true
+    - |
+      helm upgrade --install \
+        sample-data-${JOB_TYPE} helm/repo/sample-data-${COMPONENT_VERSION}.tgz \
+        --namespace $NAMESPACE \
+        --set "global.imageTag=$IMAGE_TAG" \
+        --set jobType=${JOB_TYPE} \
+        ${HELM_DEBUG:+--debug}
+    - |
+      sleep 3
+      kubectl wait job \
+        --namespace $NAMESPACE \
+        --selector=app.kubernetes.io/instance=sample-data-${JOB_TYPE} \
+        --for=condition=Complete \
+        --timeout=60s
+    - |
+      kubectl logs \
+        --namespace $NAMESPACE \
+        --selector=app.kubernetes.io/instance=sample-data-${JOB_TYPE} \
+        --prefix \
+        --tail=-1 \
+        --timestamps
+
+.sample-data-clean: &sample-data-clean
+  <<: *sample-data
+  before_script:
+    - JOB_TYPE="clean"
+
+.sample-data-load: &sample-data-load
+  <<: *sample-data
+  before_script:
+    - JOB_TYPE="load"
+
+.sample-data-review: &sample-data-review
+  <<: *review
+  needs:
+    - build-helm
+    - helm-test-review
+
+.sample-data-develop: &sample-data-develop
+  <<: *develop
+  needs:
+    - build-helm
+    - helm-test-develop
+
+# TODO remove
+.sample-data-develop-old: &sample-data-develop-old
+  <<: *develop-old
+  needs:
+    - build-helm
+    - helm-test-develop-old
+
+.sample-data-acceptance: &sample-data-acceptance
+  <<: *acceptance
+  needs:
+    - build-helm
+    - deploy-acceptance
+
+.sample-data-master: &sample-data-master
+  <<: *master
+  needs:
+    - build-helm
+    - deploy-master
+
+clean-review:
+  <<: *sample-data-clean
+  <<: *sample-data-review
+
+clean-develop:
+  <<: *sample-data-clean
+  <<: *sample-data-develop
+
+# TODO remove
+clean-develop-old:
+  <<: *sample-data-clean
+  <<: *sample-data-develop-old
+
+clean-acceptance:
+  <<: *sample-data-clean
+  <<: *sample-data-acceptance
+
+clean-master:
+  <<: *sample-data-clean
+  <<: *sample-data-master
+
+load-review:
+  <<: *sample-data-load
+  <<: *sample-data-review
+
+load-develop:
+  <<: *sample-data-load
+  <<: *sample-data-develop
+
+# TODO remove
+load-develop-old:
+  <<: *sample-data-load
+  <<: *sample-data-develop-old
+
+load-acceptance:
+  <<: *sample-data-load
+  <<: *sample-data-acceptance
+
+load-master:
+  <<: *sample-data-load
+  <<: *sample-data-master
