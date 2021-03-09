@@ -6,6 +6,7 @@ import {Configuratie as IConfiguratie, useCreateConfiguratieMutation, useGetConf
 import Queryable from "../../utils/Queryable";
 import useToaster from "../../utils/useToaster";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
+import Label from "../Layouts/Label";
 import Page from "../Layouts/Page";
 import Section from "../Layouts/Section";
 import ConfiguratieItem from "./ConfiguratieItem";
@@ -65,11 +66,11 @@ const Configuratie = () => {
 							<form onSubmit={onSubmit}>
 								<Stack direction={["column", "row"]} alignItems={"flex-end"}>
 									<FormControl>
-										<FormLabel>{t("forms.configuratie.fields.id")}</FormLabel>
+										<Label>{t("forms.configuratie.fields.id")}</Label>
 										<Input {...key.bind} />
 									</FormControl>
 									<FormControl>
-										<FormLabel>{t("forms.configuratie.fields.waarde")}</FormLabel>
+										<Label>{t("forms.configuratie.fields.waarde")}</Label>
 										<Input {...value.bind} />
 									</FormControl>
 									<FormControl>
