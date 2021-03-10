@@ -30,6 +30,7 @@
         "journals": {
             "createSuccessMessage": "Transactie succesvol verwerkt."
         },
+        "toggleAfspraakAutomatischBoekenSuccess": "Automatisch boeken is ingeschakeld.",
         "transactions": {
             "addHint": "Voeg transacties toe door een bronbestand te importeren."
         },
