@@ -1,5 +1,3 @@
-import {isDev} from "../utils/things";
-
 export enum RouteNames {
 	login = "inloggen",
 	burgers = "burgers",
@@ -51,7 +49,7 @@ const Routes = {
 	NotFound: `/${RouteNames.notFound}`,
 
 	// Dev things
-	...(isDev && {GraphiQL: "/api/graphql"}),
+	GraphiQL: "/api/graphql",
 };
 
 export default Routes;

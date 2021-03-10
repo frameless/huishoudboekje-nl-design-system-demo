@@ -4,8 +4,8 @@ export type Maybe<T> = T;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+const defaultOptions =  {}
 /** All built-in and custom scalars, mapped to their actual values */
-
 export type Scalars = {
   ID: string;
   String: string;
@@ -98,6 +98,7 @@ export type BankTransaction = {
   transactieDatum?: Maybe<Scalars['Date']>;
   isGeboekt?: Maybe<Scalars['Boolean']>;
   journaalpost?: Maybe<Journaalpost>;
+  suggesties?: Maybe<Array<Maybe<Afspraak>>>;
 };
 
 
@@ -175,6 +176,7 @@ export type CreateCustomerStatementMessage = {
   __typename?: 'CreateCustomerStatementMessage';
   ok?: Maybe<Scalars['Boolean']>;
   customerStatementMessage?: Maybe<CustomerStatementMessage>;
+  journaalposten?: Maybe<Array<Maybe<Journaalpost>>>;
 };
 
 export type CreateExportOverschrijvingen = {
@@ -347,7 +349,7 @@ export type GebruikersActiviteit = {
 export type GebruikersActiviteitEntity = {
   __typename?: 'GebruikersActiviteitEntity';
   entityType?: Maybe<Scalars['String']>;
-  entityId?: Maybe<Scalars['Int']>;
+  entityId?: Maybe<Scalars['String']>;
   afspraak?: Maybe<Afspraak>;
   burger?: Maybe<Burger>;
   configuratie?: Maybe<Configuratie>;
@@ -2003,7 +2005,8 @@ export type CreateBurgerMutationFn = Apollo.MutationFunction<CreateBurgerMutatio
  * });
  */
 export function useCreateBurgerMutation(baseOptions?: Apollo.MutationHookOptions<CreateBurgerMutation, CreateBurgerMutationVariables>) {
-        return Apollo.useMutation<CreateBurgerMutation, CreateBurgerMutationVariables>(CreateBurgerDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateBurgerMutation, CreateBurgerMutationVariables>(CreateBurgerDocument, options);
       }
 export type CreateBurgerMutationHookResult = ReturnType<typeof useCreateBurgerMutation>;
 export type CreateBurgerMutationResult = Apollo.MutationResult<CreateBurgerMutation>;
@@ -2048,7 +2051,8 @@ export type UpdateBurgerMutationFn = Apollo.MutationFunction<UpdateBurgerMutatio
  * });
  */
 export function useUpdateBurgerMutation(baseOptions?: Apollo.MutationHookOptions<UpdateBurgerMutation, UpdateBurgerMutationVariables>) {
-        return Apollo.useMutation<UpdateBurgerMutation, UpdateBurgerMutationVariables>(UpdateBurgerDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateBurgerMutation, UpdateBurgerMutationVariables>(UpdateBurgerDocument, options);
       }
 export type UpdateBurgerMutationHookResult = ReturnType<typeof useUpdateBurgerMutation>;
 export type UpdateBurgerMutationResult = Apollo.MutationResult<UpdateBurgerMutation>;
@@ -2080,7 +2084,8 @@ export type DeleteBurgerMutationFn = Apollo.MutationFunction<DeleteBurgerMutatio
  * });
  */
 export function useDeleteBurgerMutation(baseOptions?: Apollo.MutationHookOptions<DeleteBurgerMutation, DeleteBurgerMutationVariables>) {
-        return Apollo.useMutation<DeleteBurgerMutation, DeleteBurgerMutationVariables>(DeleteBurgerDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteBurgerMutation, DeleteBurgerMutationVariables>(DeleteBurgerDocument, options);
       }
 export type DeleteBurgerMutationHookResult = ReturnType<typeof useDeleteBurgerMutation>;
 export type DeleteBurgerMutationResult = Apollo.MutationResult<DeleteBurgerMutation>;
@@ -2121,7 +2126,8 @@ export type CreateOrganisatieMutationFn = Apollo.MutationFunction<CreateOrganisa
  * });
  */
 export function useCreateOrganisatieMutation(baseOptions?: Apollo.MutationHookOptions<CreateOrganisatieMutation, CreateOrganisatieMutationVariables>) {
-        return Apollo.useMutation<CreateOrganisatieMutation, CreateOrganisatieMutationVariables>(CreateOrganisatieDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateOrganisatieMutation, CreateOrganisatieMutationVariables>(CreateOrganisatieDocument, options);
       }
 export type CreateOrganisatieMutationHookResult = ReturnType<typeof useCreateOrganisatieMutation>;
 export type CreateOrganisatieMutationResult = Apollo.MutationResult<CreateOrganisatieMutation>;
@@ -2163,7 +2169,8 @@ export type UpdateOrganisatieMutationFn = Apollo.MutationFunction<UpdateOrganisa
  * });
  */
 export function useUpdateOrganisatieMutation(baseOptions?: Apollo.MutationHookOptions<UpdateOrganisatieMutation, UpdateOrganisatieMutationVariables>) {
-        return Apollo.useMutation<UpdateOrganisatieMutation, UpdateOrganisatieMutationVariables>(UpdateOrganisatieDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateOrganisatieMutation, UpdateOrganisatieMutationVariables>(UpdateOrganisatieDocument, options);
       }
 export type UpdateOrganisatieMutationHookResult = ReturnType<typeof useUpdateOrganisatieMutation>;
 export type UpdateOrganisatieMutationResult = Apollo.MutationResult<UpdateOrganisatieMutation>;
@@ -2195,7 +2202,8 @@ export type DeleteOrganisatieMutationFn = Apollo.MutationFunction<DeleteOrganisa
  * });
  */
 export function useDeleteOrganisatieMutation(baseOptions?: Apollo.MutationHookOptions<DeleteOrganisatieMutation, DeleteOrganisatieMutationVariables>) {
-        return Apollo.useMutation<DeleteOrganisatieMutation, DeleteOrganisatieMutationVariables>(DeleteOrganisatieDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteOrganisatieMutation, DeleteOrganisatieMutationVariables>(DeleteOrganisatieDocument, options);
       }
 export type DeleteOrganisatieMutationHookResult = ReturnType<typeof useDeleteOrganisatieMutation>;
 export type DeleteOrganisatieMutationResult = Apollo.MutationResult<DeleteOrganisatieMutation>;
@@ -2230,7 +2238,8 @@ export type CreateAfspraakMutationFn = Apollo.MutationFunction<CreateAfspraakMut
  * });
  */
 export function useCreateAfspraakMutation(baseOptions?: Apollo.MutationHookOptions<CreateAfspraakMutation, CreateAfspraakMutationVariables>) {
-        return Apollo.useMutation<CreateAfspraakMutation, CreateAfspraakMutationVariables>(CreateAfspraakDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateAfspraakMutation, CreateAfspraakMutationVariables>(CreateAfspraakDocument, options);
       }
 export type CreateAfspraakMutationHookResult = ReturnType<typeof useCreateAfspraakMutation>;
 export type CreateAfspraakMutationResult = Apollo.MutationResult<CreateAfspraakMutation>;
@@ -2262,7 +2271,8 @@ export type DeleteAfspraakMutationFn = Apollo.MutationFunction<DeleteAfspraakMut
  * });
  */
 export function useDeleteAfspraakMutation(baseOptions?: Apollo.MutationHookOptions<DeleteAfspraakMutation, DeleteAfspraakMutationVariables>) {
-        return Apollo.useMutation<DeleteAfspraakMutation, DeleteAfspraakMutationVariables>(DeleteAfspraakDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteAfspraakMutation, DeleteAfspraakMutationVariables>(DeleteAfspraakDocument, options);
       }
 export type DeleteAfspraakMutationHookResult = ReturnType<typeof useDeleteAfspraakMutation>;
 export type DeleteAfspraakMutationResult = Apollo.MutationResult<DeleteAfspraakMutation>;
@@ -2298,7 +2308,8 @@ export type UpdateAfspraakMutationFn = Apollo.MutationFunction<UpdateAfspraakMut
  * });
  */
 export function useUpdateAfspraakMutation(baseOptions?: Apollo.MutationHookOptions<UpdateAfspraakMutation, UpdateAfspraakMutationVariables>) {
-        return Apollo.useMutation<UpdateAfspraakMutation, UpdateAfspraakMutationVariables>(UpdateAfspraakDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateAfspraakMutation, UpdateAfspraakMutationVariables>(UpdateAfspraakDocument, options);
       }
 export type UpdateAfspraakMutationHookResult = ReturnType<typeof useUpdateAfspraakMutation>;
 export type UpdateAfspraakMutationResult = Apollo.MutationResult<UpdateAfspraakMutation>;
@@ -2334,7 +2345,8 @@ export type CreateBurgerRekeningMutationFn = Apollo.MutationFunction<CreateBurge
  * });
  */
 export function useCreateBurgerRekeningMutation(baseOptions?: Apollo.MutationHookOptions<CreateBurgerRekeningMutation, CreateBurgerRekeningMutationVariables>) {
-        return Apollo.useMutation<CreateBurgerRekeningMutation, CreateBurgerRekeningMutationVariables>(CreateBurgerRekeningDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateBurgerRekeningMutation, CreateBurgerRekeningMutationVariables>(CreateBurgerRekeningDocument, options);
       }
 export type CreateBurgerRekeningMutationHookResult = ReturnType<typeof useCreateBurgerRekeningMutation>;
 export type CreateBurgerRekeningMutationResult = Apollo.MutationResult<CreateBurgerRekeningMutation>;
@@ -2367,7 +2379,8 @@ export type DeleteBurgerRekeningMutationFn = Apollo.MutationFunction<DeleteBurge
  * });
  */
 export function useDeleteBurgerRekeningMutation(baseOptions?: Apollo.MutationHookOptions<DeleteBurgerRekeningMutation, DeleteBurgerRekeningMutationVariables>) {
-        return Apollo.useMutation<DeleteBurgerRekeningMutation, DeleteBurgerRekeningMutationVariables>(DeleteBurgerRekeningDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteBurgerRekeningMutation, DeleteBurgerRekeningMutationVariables>(DeleteBurgerRekeningDocument, options);
       }
 export type DeleteBurgerRekeningMutationHookResult = ReturnType<typeof useDeleteBurgerRekeningMutation>;
 export type DeleteBurgerRekeningMutationResult = Apollo.MutationResult<DeleteBurgerRekeningMutation>;
@@ -2403,7 +2416,8 @@ export type CreateOrganisatieRekeningMutationFn = Apollo.MutationFunction<Create
  * });
  */
 export function useCreateOrganisatieRekeningMutation(baseOptions?: Apollo.MutationHookOptions<CreateOrganisatieRekeningMutation, CreateOrganisatieRekeningMutationVariables>) {
-        return Apollo.useMutation<CreateOrganisatieRekeningMutation, CreateOrganisatieRekeningMutationVariables>(CreateOrganisatieRekeningDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateOrganisatieRekeningMutation, CreateOrganisatieRekeningMutationVariables>(CreateOrganisatieRekeningDocument, options);
       }
 export type CreateOrganisatieRekeningMutationHookResult = ReturnType<typeof useCreateOrganisatieRekeningMutation>;
 export type CreateOrganisatieRekeningMutationResult = Apollo.MutationResult<CreateOrganisatieRekeningMutation>;
@@ -2436,7 +2450,8 @@ export type DeleteOrganisatieRekeningMutationFn = Apollo.MutationFunction<Delete
  * });
  */
 export function useDeleteOrganisatieRekeningMutation(baseOptions?: Apollo.MutationHookOptions<DeleteOrganisatieRekeningMutation, DeleteOrganisatieRekeningMutationVariables>) {
-        return Apollo.useMutation<DeleteOrganisatieRekeningMutation, DeleteOrganisatieRekeningMutationVariables>(DeleteOrganisatieRekeningDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteOrganisatieRekeningMutation, DeleteOrganisatieRekeningMutationVariables>(DeleteOrganisatieRekeningDocument, options);
       }
 export type DeleteOrganisatieRekeningMutationHookResult = ReturnType<typeof useDeleteOrganisatieRekeningMutation>;
 export type DeleteOrganisatieRekeningMutationResult = Apollo.MutationResult<DeleteOrganisatieRekeningMutation>;
@@ -2470,7 +2485,8 @@ export type UpdateRekeningMutationFn = Apollo.MutationFunction<UpdateRekeningMut
  * });
  */
 export function useUpdateRekeningMutation(baseOptions?: Apollo.MutationHookOptions<UpdateRekeningMutation, UpdateRekeningMutationVariables>) {
-        return Apollo.useMutation<UpdateRekeningMutation, UpdateRekeningMutationVariables>(UpdateRekeningDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateRekeningMutation, UpdateRekeningMutationVariables>(UpdateRekeningDocument, options);
       }
 export type UpdateRekeningMutationHookResult = ReturnType<typeof useUpdateRekeningMutation>;
 export type UpdateRekeningMutationResult = Apollo.MutationResult<UpdateRekeningMutation>;
@@ -2505,7 +2521,8 @@ export type CreateCustomerStatementMessageMutationFn = Apollo.MutationFunction<C
  * });
  */
 export function useCreateCustomerStatementMessageMutation(baseOptions?: Apollo.MutationHookOptions<CreateCustomerStatementMessageMutation, CreateCustomerStatementMessageMutationVariables>) {
-        return Apollo.useMutation<CreateCustomerStatementMessageMutation, CreateCustomerStatementMessageMutationVariables>(CreateCustomerStatementMessageDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateCustomerStatementMessageMutation, CreateCustomerStatementMessageMutationVariables>(CreateCustomerStatementMessageDocument, options);
       }
 export type CreateCustomerStatementMessageMutationHookResult = ReturnType<typeof useCreateCustomerStatementMessageMutation>;
 export type CreateCustomerStatementMessageMutationResult = Apollo.MutationResult<CreateCustomerStatementMessageMutation>;
@@ -2537,7 +2554,8 @@ export type DeleteCustomerStatementMessageMutationFn = Apollo.MutationFunction<D
  * });
  */
 export function useDeleteCustomerStatementMessageMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCustomerStatementMessageMutation, DeleteCustomerStatementMessageMutationVariables>) {
-        return Apollo.useMutation<DeleteCustomerStatementMessageMutation, DeleteCustomerStatementMessageMutationVariables>(DeleteCustomerStatementMessageDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteCustomerStatementMessageMutation, DeleteCustomerStatementMessageMutationVariables>(DeleteCustomerStatementMessageDocument, options);
       }
 export type DeleteCustomerStatementMessageMutationHookResult = ReturnType<typeof useDeleteCustomerStatementMessageMutation>;
 export type DeleteCustomerStatementMessageMutationResult = Apollo.MutationResult<DeleteCustomerStatementMessageMutation>;
@@ -2573,7 +2591,8 @@ export type CreateJournaalpostGrootboekrekeningMutationFn = Apollo.MutationFunct
  * });
  */
 export function useCreateJournaalpostGrootboekrekeningMutation(baseOptions?: Apollo.MutationHookOptions<CreateJournaalpostGrootboekrekeningMutation, CreateJournaalpostGrootboekrekeningMutationVariables>) {
-        return Apollo.useMutation<CreateJournaalpostGrootboekrekeningMutation, CreateJournaalpostGrootboekrekeningMutationVariables>(CreateJournaalpostGrootboekrekeningDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateJournaalpostGrootboekrekeningMutation, CreateJournaalpostGrootboekrekeningMutationVariables>(CreateJournaalpostGrootboekrekeningDocument, options);
       }
 export type CreateJournaalpostGrootboekrekeningMutationHookResult = ReturnType<typeof useCreateJournaalpostGrootboekrekeningMutation>;
 export type CreateJournaalpostGrootboekrekeningMutationResult = Apollo.MutationResult<CreateJournaalpostGrootboekrekeningMutation>;
@@ -2606,7 +2625,8 @@ export type UpdateJournaalpostGrootboekrekeningMutationFn = Apollo.MutationFunct
  * });
  */
 export function useUpdateJournaalpostGrootboekrekeningMutation(baseOptions?: Apollo.MutationHookOptions<UpdateJournaalpostGrootboekrekeningMutation, UpdateJournaalpostGrootboekrekeningMutationVariables>) {
-        return Apollo.useMutation<UpdateJournaalpostGrootboekrekeningMutation, UpdateJournaalpostGrootboekrekeningMutationVariables>(UpdateJournaalpostGrootboekrekeningDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateJournaalpostGrootboekrekeningMutation, UpdateJournaalpostGrootboekrekeningMutationVariables>(UpdateJournaalpostGrootboekrekeningDocument, options);
       }
 export type UpdateJournaalpostGrootboekrekeningMutationHookResult = ReturnType<typeof useUpdateJournaalpostGrootboekrekeningMutation>;
 export type UpdateJournaalpostGrootboekrekeningMutationResult = Apollo.MutationResult<UpdateJournaalpostGrootboekrekeningMutation>;
@@ -2643,7 +2663,8 @@ export type CreateJournaalpostAfspraakMutationFn = Apollo.MutationFunction<Creat
  * });
  */
 export function useCreateJournaalpostAfspraakMutation(baseOptions?: Apollo.MutationHookOptions<CreateJournaalpostAfspraakMutation, CreateJournaalpostAfspraakMutationVariables>) {
-        return Apollo.useMutation<CreateJournaalpostAfspraakMutation, CreateJournaalpostAfspraakMutationVariables>(CreateJournaalpostAfspraakDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateJournaalpostAfspraakMutation, CreateJournaalpostAfspraakMutationVariables>(CreateJournaalpostAfspraakDocument, options);
       }
 export type CreateJournaalpostAfspraakMutationHookResult = ReturnType<typeof useCreateJournaalpostAfspraakMutation>;
 export type CreateJournaalpostAfspraakMutationResult = Apollo.MutationResult<CreateJournaalpostAfspraakMutation>;
@@ -2675,7 +2696,8 @@ export type DeleteJournaalpostMutationFn = Apollo.MutationFunction<DeleteJournaa
  * });
  */
 export function useDeleteJournaalpostMutation(baseOptions?: Apollo.MutationHookOptions<DeleteJournaalpostMutation, DeleteJournaalpostMutationVariables>) {
-        return Apollo.useMutation<DeleteJournaalpostMutation, DeleteJournaalpostMutationVariables>(DeleteJournaalpostDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteJournaalpostMutation, DeleteJournaalpostMutationVariables>(DeleteJournaalpostDocument, options);
       }
 export type DeleteJournaalpostMutationHookResult = ReturnType<typeof useDeleteJournaalpostMutation>;
 export type DeleteJournaalpostMutationResult = Apollo.MutationResult<DeleteJournaalpostMutation>;
@@ -2712,7 +2734,8 @@ export type CreateConfiguratieMutationFn = Apollo.MutationFunction<CreateConfigu
  * });
  */
 export function useCreateConfiguratieMutation(baseOptions?: Apollo.MutationHookOptions<CreateConfiguratieMutation, CreateConfiguratieMutationVariables>) {
-        return Apollo.useMutation<CreateConfiguratieMutation, CreateConfiguratieMutationVariables>(CreateConfiguratieDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateConfiguratieMutation, CreateConfiguratieMutationVariables>(CreateConfiguratieDocument, options);
       }
 export type CreateConfiguratieMutationHookResult = ReturnType<typeof useCreateConfiguratieMutation>;
 export type CreateConfiguratieMutationResult = Apollo.MutationResult<CreateConfiguratieMutation>;
@@ -2749,7 +2772,8 @@ export type UpdateConfiguratieMutationFn = Apollo.MutationFunction<UpdateConfigu
  * });
  */
 export function useUpdateConfiguratieMutation(baseOptions?: Apollo.MutationHookOptions<UpdateConfiguratieMutation, UpdateConfiguratieMutationVariables>) {
-        return Apollo.useMutation<UpdateConfiguratieMutation, UpdateConfiguratieMutationVariables>(UpdateConfiguratieDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateConfiguratieMutation, UpdateConfiguratieMutationVariables>(UpdateConfiguratieDocument, options);
       }
 export type UpdateConfiguratieMutationHookResult = ReturnType<typeof useUpdateConfiguratieMutation>;
 export type UpdateConfiguratieMutationResult = Apollo.MutationResult<UpdateConfiguratieMutation>;
@@ -2781,7 +2805,8 @@ export type DeleteConfiguratieMutationFn = Apollo.MutationFunction<DeleteConfigu
  * });
  */
 export function useDeleteConfiguratieMutation(baseOptions?: Apollo.MutationHookOptions<DeleteConfiguratieMutation, DeleteConfiguratieMutationVariables>) {
-        return Apollo.useMutation<DeleteConfiguratieMutation, DeleteConfiguratieMutationVariables>(DeleteConfiguratieDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteConfiguratieMutation, DeleteConfiguratieMutationVariables>(DeleteConfiguratieDocument, options);
       }
 export type DeleteConfiguratieMutationHookResult = ReturnType<typeof useDeleteConfiguratieMutation>;
 export type DeleteConfiguratieMutationResult = Apollo.MutationResult<DeleteConfiguratieMutation>;
@@ -2817,7 +2842,8 @@ export type CreateExportOverschrijvingenMutationFn = Apollo.MutationFunction<Cre
  * });
  */
 export function useCreateExportOverschrijvingenMutation(baseOptions?: Apollo.MutationHookOptions<CreateExportOverschrijvingenMutation, CreateExportOverschrijvingenMutationVariables>) {
-        return Apollo.useMutation<CreateExportOverschrijvingenMutation, CreateExportOverschrijvingenMutationVariables>(CreateExportOverschrijvingenDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateExportOverschrijvingenMutation, CreateExportOverschrijvingenMutationVariables>(CreateExportOverschrijvingenDocument, options);
       }
 export type CreateExportOverschrijvingenMutationHookResult = ReturnType<typeof useCreateExportOverschrijvingenMutation>;
 export type CreateExportOverschrijvingenMutationResult = Apollo.MutationResult<CreateExportOverschrijvingenMutation>;
@@ -2851,7 +2877,8 @@ export type StartAutomatischBoekenMutationFn = Apollo.MutationFunction<StartAuto
  * });
  */
 export function useStartAutomatischBoekenMutation(baseOptions?: Apollo.MutationHookOptions<StartAutomatischBoekenMutation, StartAutomatischBoekenMutationVariables>) {
-        return Apollo.useMutation<StartAutomatischBoekenMutation, StartAutomatischBoekenMutationVariables>(StartAutomatischBoekenDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<StartAutomatischBoekenMutation, StartAutomatischBoekenMutationVariables>(StartAutomatischBoekenDocument, options);
       }
 export type StartAutomatischBoekenMutationHookResult = ReturnType<typeof useStartAutomatischBoekenMutation>;
 export type StartAutomatischBoekenMutationResult = Apollo.MutationResult<StartAutomatischBoekenMutation>;
@@ -2880,10 +2907,12 @@ export const GetAllBurgersDocument = gql`
  * });
  */
 export function useGetAllBurgersQuery(baseOptions?: Apollo.QueryHookOptions<GetAllBurgersQuery, GetAllBurgersQueryVariables>) {
-        return Apollo.useQuery<GetAllBurgersQuery, GetAllBurgersQueryVariables>(GetAllBurgersDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAllBurgersQuery, GetAllBurgersQueryVariables>(GetAllBurgersDocument, options);
       }
 export function useGetAllBurgersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllBurgersQuery, GetAllBurgersQueryVariables>) {
-          return Apollo.useLazyQuery<GetAllBurgersQuery, GetAllBurgersQueryVariables>(GetAllBurgersDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAllBurgersQuery, GetAllBurgersQueryVariables>(GetAllBurgersDocument, options);
         }
 export type GetAllBurgersQueryHookResult = ReturnType<typeof useGetAllBurgersQuery>;
 export type GetAllBurgersLazyQueryHookResult = ReturnType<typeof useGetAllBurgersLazyQuery>;
@@ -2913,10 +2942,12 @@ export const GetOneBurgerDocument = gql`
  * });
  */
 export function useGetOneBurgerQuery(baseOptions: Apollo.QueryHookOptions<GetOneBurgerQuery, GetOneBurgerQueryVariables>) {
-        return Apollo.useQuery<GetOneBurgerQuery, GetOneBurgerQueryVariables>(GetOneBurgerDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetOneBurgerQuery, GetOneBurgerQueryVariables>(GetOneBurgerDocument, options);
       }
 export function useGetOneBurgerLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOneBurgerQuery, GetOneBurgerQueryVariables>) {
-          return Apollo.useLazyQuery<GetOneBurgerQuery, GetOneBurgerQueryVariables>(GetOneBurgerDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetOneBurgerQuery, GetOneBurgerQueryVariables>(GetOneBurgerDocument, options);
         }
 export type GetOneBurgerQueryHookResult = ReturnType<typeof useGetOneBurgerQuery>;
 export type GetOneBurgerLazyQueryHookResult = ReturnType<typeof useGetOneBurgerLazyQuery>;
@@ -2948,10 +2979,12 @@ export const GetBurgerAfsprakenDocument = gql`
  * });
  */
 export function useGetBurgerAfsprakenQuery(baseOptions: Apollo.QueryHookOptions<GetBurgerAfsprakenQuery, GetBurgerAfsprakenQueryVariables>) {
-        return Apollo.useQuery<GetBurgerAfsprakenQuery, GetBurgerAfsprakenQueryVariables>(GetBurgerAfsprakenDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetBurgerAfsprakenQuery, GetBurgerAfsprakenQueryVariables>(GetBurgerAfsprakenDocument, options);
       }
 export function useGetBurgerAfsprakenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBurgerAfsprakenQuery, GetBurgerAfsprakenQueryVariables>) {
-          return Apollo.useLazyQuery<GetBurgerAfsprakenQuery, GetBurgerAfsprakenQueryVariables>(GetBurgerAfsprakenDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetBurgerAfsprakenQuery, GetBurgerAfsprakenQueryVariables>(GetBurgerAfsprakenDocument, options);
         }
 export type GetBurgerAfsprakenQueryHookResult = ReturnType<typeof useGetBurgerAfsprakenQuery>;
 export type GetBurgerAfsprakenLazyQueryHookResult = ReturnType<typeof useGetBurgerAfsprakenLazyQuery>;
@@ -2981,10 +3014,12 @@ export const GetAllOrganisatiesDocument = gql`
  * });
  */
 export function useGetAllOrganisatiesQuery(baseOptions?: Apollo.QueryHookOptions<GetAllOrganisatiesQuery, GetAllOrganisatiesQueryVariables>) {
-        return Apollo.useQuery<GetAllOrganisatiesQuery, GetAllOrganisatiesQueryVariables>(GetAllOrganisatiesDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAllOrganisatiesQuery, GetAllOrganisatiesQueryVariables>(GetAllOrganisatiesDocument, options);
       }
 export function useGetAllOrganisatiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllOrganisatiesQuery, GetAllOrganisatiesQueryVariables>) {
-          return Apollo.useLazyQuery<GetAllOrganisatiesQuery, GetAllOrganisatiesQueryVariables>(GetAllOrganisatiesDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAllOrganisatiesQuery, GetAllOrganisatiesQueryVariables>(GetAllOrganisatiesDocument, options);
         }
 export type GetAllOrganisatiesQueryHookResult = ReturnType<typeof useGetAllOrganisatiesQuery>;
 export type GetAllOrganisatiesLazyQueryHookResult = ReturnType<typeof useGetAllOrganisatiesLazyQuery>;
@@ -3014,10 +3049,12 @@ export const GetOneOrganisatieDocument = gql`
  * });
  */
 export function useGetOneOrganisatieQuery(baseOptions: Apollo.QueryHookOptions<GetOneOrganisatieQuery, GetOneOrganisatieQueryVariables>) {
-        return Apollo.useQuery<GetOneOrganisatieQuery, GetOneOrganisatieQueryVariables>(GetOneOrganisatieDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetOneOrganisatieQuery, GetOneOrganisatieQueryVariables>(GetOneOrganisatieDocument, options);
       }
 export function useGetOneOrganisatieLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOneOrganisatieQuery, GetOneOrganisatieQueryVariables>) {
-          return Apollo.useLazyQuery<GetOneOrganisatieQuery, GetOneOrganisatieQueryVariables>(GetOneOrganisatieDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetOneOrganisatieQuery, GetOneOrganisatieQueryVariables>(GetOneOrganisatieDocument, options);
         }
 export type GetOneOrganisatieQueryHookResult = ReturnType<typeof useGetOneOrganisatieQuery>;
 export type GetOneOrganisatieLazyQueryHookResult = ReturnType<typeof useGetOneOrganisatieLazyQuery>;
@@ -3046,10 +3083,12 @@ export const GetAllAfsprakenDocument = gql`
  * });
  */
 export function useGetAllAfsprakenQuery(baseOptions?: Apollo.QueryHookOptions<GetAllAfsprakenQuery, GetAllAfsprakenQueryVariables>) {
-        return Apollo.useQuery<GetAllAfsprakenQuery, GetAllAfsprakenQueryVariables>(GetAllAfsprakenDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAllAfsprakenQuery, GetAllAfsprakenQueryVariables>(GetAllAfsprakenDocument, options);
       }
 export function useGetAllAfsprakenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllAfsprakenQuery, GetAllAfsprakenQueryVariables>) {
-          return Apollo.useLazyQuery<GetAllAfsprakenQuery, GetAllAfsprakenQueryVariables>(GetAllAfsprakenDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAllAfsprakenQuery, GetAllAfsprakenQueryVariables>(GetAllAfsprakenDocument, options);
         }
 export type GetAllAfsprakenQueryHookResult = ReturnType<typeof useGetAllAfsprakenQuery>;
 export type GetAllAfsprakenLazyQueryHookResult = ReturnType<typeof useGetAllAfsprakenLazyQuery>;
@@ -3079,10 +3118,12 @@ export const GetOneAfspraakDocument = gql`
  * });
  */
 export function useGetOneAfspraakQuery(baseOptions: Apollo.QueryHookOptions<GetOneAfspraakQuery, GetOneAfspraakQueryVariables>) {
-        return Apollo.useQuery<GetOneAfspraakQuery, GetOneAfspraakQueryVariables>(GetOneAfspraakDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetOneAfspraakQuery, GetOneAfspraakQueryVariables>(GetOneAfspraakDocument, options);
       }
 export function useGetOneAfspraakLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOneAfspraakQuery, GetOneAfspraakQueryVariables>) {
-          return Apollo.useLazyQuery<GetOneAfspraakQuery, GetOneAfspraakQueryVariables>(GetOneAfspraakDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetOneAfspraakQuery, GetOneAfspraakQueryVariables>(GetOneAfspraakDocument, options);
         }
 export type GetOneAfspraakQueryHookResult = ReturnType<typeof useGetOneAfspraakQuery>;
 export type GetOneAfspraakLazyQueryHookResult = ReturnType<typeof useGetOneAfspraakLazyQuery>;
@@ -3111,10 +3152,12 @@ export const GetAllCsmsDocument = gql`
  * });
  */
 export function useGetAllCsmsQuery(baseOptions?: Apollo.QueryHookOptions<GetAllCsmsQuery, GetAllCsmsQueryVariables>) {
-        return Apollo.useQuery<GetAllCsmsQuery, GetAllCsmsQueryVariables>(GetAllCsmsDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAllCsmsQuery, GetAllCsmsQueryVariables>(GetAllCsmsDocument, options);
       }
 export function useGetAllCsmsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllCsmsQuery, GetAllCsmsQueryVariables>) {
-          return Apollo.useLazyQuery<GetAllCsmsQuery, GetAllCsmsQueryVariables>(GetAllCsmsDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAllCsmsQuery, GetAllCsmsQueryVariables>(GetAllCsmsDocument, options);
         }
 export type GetAllCsmsQueryHookResult = ReturnType<typeof useGetAllCsmsQuery>;
 export type GetAllCsmsLazyQueryHookResult = ReturnType<typeof useGetAllCsmsLazyQuery>;
@@ -3163,10 +3206,12 @@ ${GrootboekrekeningFragmentDoc}`;
  * });
  */
 export function useGetAllTransactionsQuery(baseOptions?: Apollo.QueryHookOptions<GetAllTransactionsQuery, GetAllTransactionsQueryVariables>) {
-        return Apollo.useQuery<GetAllTransactionsQuery, GetAllTransactionsQueryVariables>(GetAllTransactionsDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAllTransactionsQuery, GetAllTransactionsQueryVariables>(GetAllTransactionsDocument, options);
       }
 export function useGetAllTransactionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllTransactionsQuery, GetAllTransactionsQueryVariables>) {
-          return Apollo.useLazyQuery<GetAllTransactionsQuery, GetAllTransactionsQueryVariables>(GetAllTransactionsDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAllTransactionsQuery, GetAllTransactionsQueryVariables>(GetAllTransactionsDocument, options);
         }
 export type GetAllTransactionsQueryHookResult = ReturnType<typeof useGetAllTransactionsQuery>;
 export type GetAllTransactionsLazyQueryHookResult = ReturnType<typeof useGetAllTransactionsLazyQuery>;
@@ -3199,10 +3244,12 @@ export const GetAllRubriekenDocument = gql`
  * });
  */
 export function useGetAllRubriekenQuery(baseOptions?: Apollo.QueryHookOptions<GetAllRubriekenQuery, GetAllRubriekenQueryVariables>) {
-        return Apollo.useQuery<GetAllRubriekenQuery, GetAllRubriekenQueryVariables>(GetAllRubriekenDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAllRubriekenQuery, GetAllRubriekenQueryVariables>(GetAllRubriekenDocument, options);
       }
 export function useGetAllRubriekenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllRubriekenQuery, GetAllRubriekenQueryVariables>) {
-          return Apollo.useLazyQuery<GetAllRubriekenQuery, GetAllRubriekenQueryVariables>(GetAllRubriekenDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAllRubriekenQuery, GetAllRubriekenQueryVariables>(GetAllRubriekenDocument, options);
         }
 export type GetAllRubriekenQueryHookResult = ReturnType<typeof useGetAllRubriekenQuery>;
 export type GetAllRubriekenLazyQueryHookResult = ReturnType<typeof useGetAllRubriekenLazyQuery>;
@@ -3239,10 +3286,12 @@ ${AfspraakFragmentDoc}`;
  * });
  */
 export function useGetTransactionItemFormDataQuery(baseOptions?: Apollo.QueryHookOptions<GetTransactionItemFormDataQuery, GetTransactionItemFormDataQueryVariables>) {
-        return Apollo.useQuery<GetTransactionItemFormDataQuery, GetTransactionItemFormDataQueryVariables>(GetTransactionItemFormDataDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetTransactionItemFormDataQuery, GetTransactionItemFormDataQueryVariables>(GetTransactionItemFormDataDocument, options);
       }
 export function useGetTransactionItemFormDataLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetTransactionItemFormDataQuery, GetTransactionItemFormDataQueryVariables>) {
-          return Apollo.useLazyQuery<GetTransactionItemFormDataQuery, GetTransactionItemFormDataQueryVariables>(GetTransactionItemFormDataDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetTransactionItemFormDataQuery, GetTransactionItemFormDataQueryVariables>(GetTransactionItemFormDataDocument, options);
         }
 export type GetTransactionItemFormDataQueryHookResult = ReturnType<typeof useGetTransactionItemFormDataQuery>;
 export type GetTransactionItemFormDataLazyQueryHookResult = ReturnType<typeof useGetTransactionItemFormDataLazyQuery>;
@@ -3284,10 +3333,12 @@ ${AfspraakFragmentDoc}`;
  * });
  */
 export function useGetAfspraakFormDataQuery(baseOptions?: Apollo.QueryHookOptions<GetAfspraakFormDataQuery, GetAfspraakFormDataQueryVariables>) {
-        return Apollo.useQuery<GetAfspraakFormDataQuery, GetAfspraakFormDataQueryVariables>(GetAfspraakFormDataDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAfspraakFormDataQuery, GetAfspraakFormDataQueryVariables>(GetAfspraakFormDataDocument, options);
       }
 export function useGetAfspraakFormDataLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAfspraakFormDataQuery, GetAfspraakFormDataQueryVariables>) {
-          return Apollo.useLazyQuery<GetAfspraakFormDataQuery, GetAfspraakFormDataQueryVariables>(GetAfspraakFormDataDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAfspraakFormDataQuery, GetAfspraakFormDataQueryVariables>(GetAfspraakFormDataDocument, options);
         }
 export type GetAfspraakFormDataQueryHookResult = ReturnType<typeof useGetAfspraakFormDataQuery>;
 export type GetAfspraakFormDataLazyQueryHookResult = ReturnType<typeof useGetAfspraakFormDataLazyQuery>;
@@ -3317,10 +3368,12 @@ export const GetConfiguratieDocument = gql`
  * });
  */
 export function useGetConfiguratieQuery(baseOptions?: Apollo.QueryHookOptions<GetConfiguratieQuery, GetConfiguratieQueryVariables>) {
-        return Apollo.useQuery<GetConfiguratieQuery, GetConfiguratieQueryVariables>(GetConfiguratieDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetConfiguratieQuery, GetConfiguratieQueryVariables>(GetConfiguratieDocument, options);
       }
 export function useGetConfiguratieLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetConfiguratieQuery, GetConfiguratieQueryVariables>) {
-          return Apollo.useLazyQuery<GetConfiguratieQuery, GetConfiguratieQueryVariables>(GetConfiguratieDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetConfiguratieQuery, GetConfiguratieQueryVariables>(GetConfiguratieDocument, options);
         }
 export type GetConfiguratieQueryHookResult = ReturnType<typeof useGetConfiguratieQuery>;
 export type GetConfiguratieLazyQueryHookResult = ReturnType<typeof useGetConfiguratieLazyQuery>;
@@ -3356,10 +3409,12 @@ export const GetExportsDocument = gql`
  * });
  */
 export function useGetExportsQuery(baseOptions?: Apollo.QueryHookOptions<GetExportsQuery, GetExportsQueryVariables>) {
-        return Apollo.useQuery<GetExportsQuery, GetExportsQueryVariables>(GetExportsDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetExportsQuery, GetExportsQueryVariables>(GetExportsDocument, options);
       }
 export function useGetExportsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetExportsQuery, GetExportsQueryVariables>) {
-          return Apollo.useLazyQuery<GetExportsQuery, GetExportsQueryVariables>(GetExportsDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetExportsQuery, GetExportsQueryVariables>(GetExportsDocument, options);
         }
 export type GetExportsQueryHookResult = ReturnType<typeof useGetExportsQuery>;
 export type GetExportsLazyQueryHookResult = ReturnType<typeof useGetExportsLazyQuery>;
@@ -3416,10 +3471,12 @@ ${GrootboekrekeningFragmentDoc}`;
  * });
  */
 export function useGetReportingDataQuery(baseOptions?: Apollo.QueryHookOptions<GetReportingDataQuery, GetReportingDataQueryVariables>) {
-        return Apollo.useQuery<GetReportingDataQuery, GetReportingDataQueryVariables>(GetReportingDataDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetReportingDataQuery, GetReportingDataQueryVariables>(GetReportingDataDocument, options);
       }
 export function useGetReportingDataLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetReportingDataQuery, GetReportingDataQueryVariables>) {
-          return Apollo.useLazyQuery<GetReportingDataQuery, GetReportingDataQueryVariables>(GetReportingDataDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetReportingDataQuery, GetReportingDataQueryVariables>(GetReportingDataDocument, options);
         }
 export type GetReportingDataQueryHookResult = ReturnType<typeof useGetReportingDataQuery>;
 export type GetReportingDataLazyQueryHookResult = ReturnType<typeof useGetReportingDataLazyQuery>;
@@ -3485,10 +3542,12 @@ export const GetGebeurtenissenDocument = gql`
  * });
  */
 export function useGetGebeurtenissenQuery(baseOptions?: Apollo.QueryHookOptions<GetGebeurtenissenQuery, GetGebeurtenissenQueryVariables>) {
-        return Apollo.useQuery<GetGebeurtenissenQuery, GetGebeurtenissenQueryVariables>(GetGebeurtenissenDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetGebeurtenissenQuery, GetGebeurtenissenQueryVariables>(GetGebeurtenissenDocument, options);
       }
 export function useGetGebeurtenissenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetGebeurtenissenQuery, GetGebeurtenissenQueryVariables>) {
-          return Apollo.useLazyQuery<GetGebeurtenissenQuery, GetGebeurtenissenQueryVariables>(GetGebeurtenissenDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetGebeurtenissenQuery, GetGebeurtenissenQueryVariables>(GetGebeurtenissenDocument, options);
         }
 export type GetGebeurtenissenQueryHookResult = ReturnType<typeof useGetGebeurtenissenQuery>;
 export type GetGebeurtenissenLazyQueryHookResult = ReturnType<typeof useGetGebeurtenissenLazyQuery>;
@@ -3555,10 +3614,12 @@ export const GetBurgerGebeurtenissenDocument = gql`
  * });
  */
 export function useGetBurgerGebeurtenissenQuery(baseOptions: Apollo.QueryHookOptions<GetBurgerGebeurtenissenQuery, GetBurgerGebeurtenissenQueryVariables>) {
-        return Apollo.useQuery<GetBurgerGebeurtenissenQuery, GetBurgerGebeurtenissenQueryVariables>(GetBurgerGebeurtenissenDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetBurgerGebeurtenissenQuery, GetBurgerGebeurtenissenQueryVariables>(GetBurgerGebeurtenissenDocument, options);
       }
 export function useGetBurgerGebeurtenissenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBurgerGebeurtenissenQuery, GetBurgerGebeurtenissenQueryVariables>) {
-          return Apollo.useLazyQuery<GetBurgerGebeurtenissenQuery, GetBurgerGebeurtenissenQueryVariables>(GetBurgerGebeurtenissenDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetBurgerGebeurtenissenQuery, GetBurgerGebeurtenissenQueryVariables>(GetBurgerGebeurtenissenDocument, options);
         }
 export type GetBurgerGebeurtenissenQueryHookResult = ReturnType<typeof useGetBurgerGebeurtenissenQuery>;
 export type GetBurgerGebeurtenissenLazyQueryHookResult = ReturnType<typeof useGetBurgerGebeurtenissenLazyQuery>;

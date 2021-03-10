@@ -20,7 +20,6 @@ import {
 	Tr,
 	useToast,
 } from "@chakra-ui/react";
-import "moment-recur-ts";
 import React, {useEffect, useState} from "react";
 import DatePicker from "react-datepicker";
 import {useInput, useNumberInput, useToggle, Validators} from "react-grapple";

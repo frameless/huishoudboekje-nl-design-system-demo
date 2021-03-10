@@ -73,11 +73,11 @@ export const XInterval = {
 		}
 
 		const intervalTypeName = {
-			dagen: "day",
-			weken: "week",
-			maanden: "month",
-			jaren: "year",
-		}[intervalType];
+			dagen: IntervalType.Day,
+			weken: IntervalType.Week,
+			maanden: IntervalType.Month,
+			jaren: IntervalType.Year,
+		}[intervalType] as IntervalType;
 
 		return {intervalType: intervalTypeName, count: interval[intervalType]};
 	},
