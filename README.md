@@ -3,7 +3,7 @@ The scalable version of Huishoudboekje the software, usable for all Dutch munici
 Huishoudboekje is developed based on the vision of [Common Ground](https://commonground.nl).
 
 ## Installation
-To install Huishoudboekje follow [installation instructions](docs/docs/documentatie/installatie.md)
+To install Huishoudboekje follow [installation instructions](https://gitlab.com/commonground/huishoudboekje/app-new/-/wikis/Handleidingen/Installatie)
 
 ## Technical Stack
 Huishoudboekje uses the following technical stack
@@ -18,19 +18,14 @@ These are:
 - [Medewerker Backend](backend/)
 - [Huishoudboekje Services](services/)
 
-## Development
-
-Local development is easy and is described [here](docs/docs/developers/local-development.md)
-
 ### Minikube
-To run the full Huishoudboekje stack on a local kubernetes development stack using [minikube](docs/docs/developers/minikube.md)
+To run the full Huishoudboekje stack on a local kubernetes development stack using [minikube](https://gitlab.com/commonground/huishoudboekje/app-new/-/wikis/Ontwikkeling/Minikube)
 
 #### Database
 
-All data for our own services is stored in a single database that is managed by the [zalando postgres operator](https://postgres-operator.readthedocs.io/en/latest/)
+All data for our own services is stored in a single PostgreSQL server. 
  
 Every service receives it's own user and database to keep the data separated.\
 The credentials are stored in secrets and can be mounted to build the connection.
 
-In the installation instructions and review apps the operator is deployed to every namespace to be independent of
-cluster level configuration. The parameters that are passed to it make this possible. 
+The data models are managed using Alembic migration scripts that are executed using init containers.
