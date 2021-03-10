@@ -51,7 +51,7 @@ class DeleteJournaalpost(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(_root, info, id):
         previous = await hhb_dataloader().journaalposten_by_id.load(id)
-        if previous and "afspraak_id" in previous:
+        if previous and previous["afspraak_id"] is not None:
             previous["afspraak"] = await hhb_dataloader().afspraken_by_id.load(
                 previous["afspraak_id"]
             )
@@ -60,7 +60,8 @@ class DeleteJournaalpost(graphene.Mutation):
         if not response.ok:
             raise GraphQLError(f"Upstream API responded: {response.text}")
 
-        transaction = await hhb_dataloader().bank_transactions_by_id.load(previous['transaction_id'])
-        update_transaction_service_is_geboekt(transaction, is_geboekt=False)
+        if previous and previous["transaction_id"] is not None:
+            transaction = await hhb_dataloader().bank_transactions_by_id.load(previous['transaction_id'])
+            update_transaction_service_is_geboekt(transaction, is_geboekt=False)
 
         return DeleteJournaalpost(ok=True, previous=previous)
