@@ -227,7 +227,7 @@ class CreateJournaalpostGrootboekrekening(graphene.Mutation):
         if not grootboekrekening:
             raise GraphQLError("grootboekrekening not found")
 
-        if not (grootboekrekening["credit"] == transaction["is_credit"]):
+        if not (not(grootboekrekening["debet"]) == transaction["is_credit"]):
             raise GraphQLError(f"credit in afspraak and transaction do not match")
 
         previous = await hhb_dataloader().journaalposten_by_transaction.load(transaction_id)
