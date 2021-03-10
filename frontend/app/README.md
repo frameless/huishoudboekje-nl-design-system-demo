@@ -18,5 +18,5 @@ PROXY=https://hhb-<feature-slug>.nlx.reviews npm start
 The test environment can also be used
 
 ```shell script
-PROXY=https://hhb-test.nlx.reviews npm start
+PROXY=https://test.huishoudboekje.demoground.nl npm start
 ```
