@@ -1,18 +1,19 @@
 import {CheckIcon, DeleteIcon} from "@chakra-ui/icons";
-import {Box, Button, Heading, HStack, IconButton, Stack, Tag, TagLabel, TagLeftIcon, Text, useToast} from "@chakra-ui/react";
+import {Box, Button, Heading, HStack, IconButton, Stack, Tag, TagLabel, TagLeftIcon, Text} from "@chakra-ui/react";
 import React, {useContext} from "react";
 import {useTranslation} from "react-i18next";
-import {BankTransaction, useDeleteJournaalpostMutation, useUpdateAfspraakMutation} from "../../../../generated/graphql";
+import {BankTransaction, useDeleteJournaalpostMutation, useUpdateAfspraakAutomatischBoekenMutation} from "../../../../generated/graphql";
 import {formatBurgerName, intervalString} from "../../../../utils/things";
+import useToaster from "../../../../utils/useToaster";
 import Label from "../../../Layouts/Label";
 import {TransactionsContext} from "../context";
 
 const BookingDetailsView: React.FC<{transactie: BankTransaction}> = ({transactie}) => {
 	const {t} = useTranslation();
-	const toast = useToast();
+	const toast = useToaster();
 	const {refetch} = useContext(TransactionsContext);
 	const [deleteJournaalpost, $deleteJournaalpost] = useDeleteJournaalpostMutation();
-	const [updateAfspraak, $updateAfspraak] = useUpdateAfspraakMutation();
+	const [toggleAutomatischBoeken, $toggleAutomatischBoeken] = useUpdateAfspraakAutomatischBoekenMutation();
 
 	const journaalpostAfspraak = transactie.journaalpost?.afspraak;
 	const journaalpostRubriek = transactie.journaalpost?.grootboekrekening?.rubriek;
@@ -49,23 +50,17 @@ const BookingDetailsView: React.FC<{transactie: BankTransaction}> = ({transactie
 			return;
 		}
 
-		// Todo: Enable automatischBoeken for afspraak
-		// updateAfspraak({
-		// 	variables: {
-		// 		id: journaalpostAfspraak.id,
-		// 		input: {
-		// 			automatischBoeken: true
-		// 		}
-		// 	}
-		// });
-
-		toast({
-			status: "warning",
-			position: "top",
-			variant: "solid",
-			title: "Dit werkt nog niet.",
-			description: "Deze functionaliteit is nog niet ingebouwd.",
-			isClosable: true,
+		toggleAutomatischBoeken({
+			variables: {
+				afspraakId: journaalpostAfspraak.id,
+				automatischBoeken: true,
+			},
+		}).then(result => {
+			toast({
+				success: t("messages.toggleAfspraakAutomatischBoekenSuccess")
+			});
+		}).catch(err => {
+			toast({ error: err.message });
 		});
 	};
 
@@ -90,7 +85,7 @@ const BookingDetailsView: React.FC<{transactie: BankTransaction}> = ({transactie
 							</Tag>
 						) : (canEnableAutomatischBoeken && (
 							<Button size={"sm"} leftIcon={
-								<CheckIcon />} colorScheme={"green"} variant={"ghost"} onClick={onConfirmAutomatischBoeken} isLoading={$updateAfspraak.loading}>
+								<CheckIcon />} colorScheme={"green"} variant={"ghost"} onClick={onConfirmAutomatischBoeken} isLoading={$toggleAutomatischBoeken.loading}>
 								{t("actions.confirmAutomatischBoeken")}
 							</Button>
 						))}

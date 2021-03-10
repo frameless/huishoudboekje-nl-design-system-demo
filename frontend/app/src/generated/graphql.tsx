@@ -495,6 +495,7 @@ export type RootMutation = {
   createAfspraak?: Maybe<CreateAfspraak>;
   updateAfspraak?: Maybe<UpdateAfspraak>;
   deleteAfspraak?: Maybe<DeleteAfspraak>;
+  updateAfspraakAutomatischBoeken?: Maybe<UpdateAfspraakAutomatischBoeken>;
   createOrganisatie?: Maybe<CreateOrganisatie>;
   updateOrganisatie?: Maybe<UpdateOrganisatie>;
   deleteOrganisatie?: Maybe<DeleteOrganisatie>;
@@ -570,6 +571,13 @@ export type RootMutationUpdateAfspraakArgs = {
 /** The root of all mutations  */
 export type RootMutationDeleteAfspraakArgs = {
   id: Scalars['Int'];
+};
+
+
+/** The root of all mutations  */
+export type RootMutationUpdateAfspraakAutomatischBoekenArgs = {
+  afspraakId: Scalars['Int'];
+  automatischBoeken: Scalars['Boolean'];
 };
 
 
@@ -921,6 +929,13 @@ export type StartAutomatischBoeken = {
 
 export type UpdateAfspraak = {
   __typename?: 'UpdateAfspraak';
+  ok?: Maybe<Scalars['Boolean']>;
+  afspraak?: Maybe<Afspraak>;
+  previous?: Maybe<Afspraak>;
+};
+
+export type UpdateAfspraakAutomatischBoeken = {
+  __typename?: 'UpdateAfspraakAutomatischBoeken';
   ok?: Maybe<Scalars['Boolean']>;
   afspraak?: Maybe<Afspraak>;
   previous?: Maybe<Afspraak>;
@@ -1493,6 +1508,20 @@ export type StartAutomatischBoekenMutation = (
       { __typename?: 'Journaalpost' }
       & Pick<Journaalpost, 'id'>
     )>>> }
+  )> }
+);
+
+export type UpdateAfspraakAutomatischBoekenMutationVariables = Exact<{
+  afspraakId: Scalars['Int'];
+  automatischBoeken: Scalars['Boolean'];
+}>;
+
+
+export type UpdateAfspraakAutomatischBoekenMutation = (
+  { __typename?: 'RootMutation' }
+  & { updateAfspraakAutomatischBoeken?: Maybe<(
+    { __typename?: 'UpdateAfspraakAutomatischBoeken' }
+    & Pick<UpdateAfspraakAutomatischBoeken, 'ok'>
   )> }
 );
 
@@ -2886,6 +2915,39 @@ export function useStartAutomatischBoekenMutation(baseOptions?: Apollo.MutationH
 export type StartAutomatischBoekenMutationHookResult = ReturnType<typeof useStartAutomatischBoekenMutation>;
 export type StartAutomatischBoekenMutationResult = Apollo.MutationResult<StartAutomatischBoekenMutation>;
 export type StartAutomatischBoekenMutationOptions = Apollo.BaseMutationOptions<StartAutomatischBoekenMutation, StartAutomatischBoekenMutationVariables>;
+export const UpdateAfspraakAutomatischBoekenDocument = gql`
+    mutation updateAfspraakAutomatischBoeken($afspraakId: Int!, $automatischBoeken: Boolean!) {
+  updateAfspraakAutomatischBoeken(afspraakId: $afspraakId, automatischBoeken: $automatischBoeken) {
+    ok
+  }
+}
+    `;
+export type UpdateAfspraakAutomatischBoekenMutationFn = Apollo.MutationFunction<UpdateAfspraakAutomatischBoekenMutation, UpdateAfspraakAutomatischBoekenMutationVariables>;
+
+/**
+ * __useUpdateAfspraakAutomatischBoekenMutation__
+ *
+ * To run a mutation, you first call `useUpdateAfspraakAutomatischBoekenMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateAfspraakAutomatischBoekenMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateAfspraakAutomatischBoekenMutation, { data, loading, error }] = useUpdateAfspraakAutomatischBoekenMutation({
+ *   variables: {
+ *      afspraakId: // value for 'afspraakId'
+ *      automatischBoeken: // value for 'automatischBoeken'
+ *   },
+ * });
+ */
+export function useUpdateAfspraakAutomatischBoekenMutation(baseOptions?: Apollo.MutationHookOptions<UpdateAfspraakAutomatischBoekenMutation, UpdateAfspraakAutomatischBoekenMutationVariables>) {
+        return Apollo.useMutation<UpdateAfspraakAutomatischBoekenMutation, UpdateAfspraakAutomatischBoekenMutationVariables>(UpdateAfspraakAutomatischBoekenDocument, baseOptions);
+      }
+export type UpdateAfspraakAutomatischBoekenMutationHookResult = ReturnType<typeof useUpdateAfspraakAutomatischBoekenMutation>;
+export type UpdateAfspraakAutomatischBoekenMutationResult = Apollo.MutationResult<UpdateAfspraakAutomatischBoekenMutation>;
+export type UpdateAfspraakAutomatischBoekenMutationOptions = Apollo.BaseMutationOptions<UpdateAfspraakAutomatischBoekenMutation, UpdateAfspraakAutomatischBoekenMutationVariables>;
 export const GetAllBurgersDocument = gql`
     query getAllBurgers {
   burgers {
