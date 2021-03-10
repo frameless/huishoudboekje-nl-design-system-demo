@@ -1,7 +1,7 @@
 import {Badge, Box, Stack, StackProps} from "@chakra-ui/react";
-import moment from "moment";
 import React from "react";
 import {Overschrijving, OverschrijvingStatus} from "../../generated/graphql";
+import d from "../../utils/dayjs";
 import Currency from "../Currency";
 
 const OverschrijvingItem: React.FC<{ overschrijving: Overschrijving, showStatus?: boolean } & StackProps> = ({overschrijving, showStatus = true, ...props}) => {
@@ -22,7 +22,7 @@ const OverschrijvingItem: React.FC<{ overschrijving: Overschrijving, showStatus?
 	return (
 		<Stack direction={"row"} {...props}>
 			<Box flex={1}>
-				{moment(datum).format("dd L")}
+				{d(datum).format("L")}
 			</Box>
 			{showStatus && <Box flex={1}>
 				<Badge colorScheme={getOverschrijvingStatusColor()}>{status}</Badge>

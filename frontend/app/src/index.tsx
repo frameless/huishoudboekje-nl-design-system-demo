@@ -1,9 +1,7 @@
 import {ApolloProvider} from "@apollo/client";
 import {ChakraProvider} from "@chakra-ui/react";
 import nl from "date-fns/locale/nl";
-import moment from "moment";
-import "moment-recur-ts";
-import "moment/locale/nl";
+import dayjs from "dayjs";
 import React from "react";
 import {registerLocale, setDefaultLocale} from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.min.css";
@@ -14,7 +12,7 @@ import "./config/i18n";
 import theme from "./config/theme";
 import apolloClient from "./services/graphql-client";
 
-moment.locale("nl");
+dayjs.locale("nl-nl");
 registerLocale("nl", nl);
 setDefaultLocale("nl");
 

@@ -1,5 +1,5 @@
-import moment, {Moment} from "moment";
 import {BankTransaction, CustomerStatementMessage, Journaalpost, Rekening, Rubriek} from "../generated/graphql";
+import d from "../utils/dayjs";
 
 export default class Transaction {
 
@@ -11,7 +11,7 @@ export default class Transaction {
 	isCredit: boolean
 	tegenRekening: Rekening
 	tegenRekeningIban: string
-	transactieDatum: Moment
+	transactieDatum: d.Dayjs
 	journaalpost: Journaalpost
 
 	constructor(props: Required<BankTransaction>) {
@@ -23,11 +23,11 @@ export default class Transaction {
 		this.isCredit = props.isCredit;
 		this.tegenRekening = props.tegenRekening;
 		this.tegenRekeningIban = props.tegenRekeningIban;
-		this.transactieDatum = moment(props.transactieDatum, "YYYY MM DD");
+		this.transactieDatum = d(props.transactieDatum, "YYYY MM DD");
 		this.journaalpost = props.journaalpost;
 	}
 
-	isBetweenDates = (startDate: Moment, endDate: Moment): boolean => this.transactieDatum.isSameOrAfter(startDate) && this.transactieDatum.isSameOrBefore(endDate);
+	isBetweenDates = (startDate: d.Dayjs, endDate: d.Dayjs): boolean => this.transactieDatum.isSameOrAfter(startDate) && this.transactieDatum.isSameOrBefore(endDate);
 
 	isBooked = (): boolean => this.journaalpost && !!(this.journaalpost.afspraak || this.journaalpost.grootboekrekening?.rubriek);
 

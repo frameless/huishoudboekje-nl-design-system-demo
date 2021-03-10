@@ -1,14 +1,13 @@
 import {CheckIcon, CloseIcon, DeleteIcon} from "@chakra-ui/icons";
-import {IconButton, Td, Text, Tr, useBreakpointValue} from "@chakra-ui/react";
-import moment from "moment";
+import {IconButton, Td, Text, Tr} from "@chakra-ui/react";
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {CustomerStatementMessage} from "../../../generated/graphql";
+import d from "../../../utils/dayjs";
 import {truncateText} from "../../../utils/things";
 
 const CsmTableRow: React.FC<{ csm: CustomerStatementMessage, onDelete: (id: number) => void }> = ({csm, onDelete}) => {
 	const {t} = useTranslation();
-	const isMobile = useBreakpointValue([true, null, null, false]);
 	const [deleteConfirm, setDeleteConfirm] = useState<boolean>(false);
 
 	const onClickDeleteButton = () => {
@@ -33,7 +32,7 @@ const CsmTableRow: React.FC<{ csm: CustomerStatementMessage, onDelete: (id: numb
 				<Text>{truncateText(csm.filename || "", 60)}</Text>
 			</Td>
 			<Td>
-				<Text>{moment(csm.uploadDate).fromNow(!!isMobile)}</Text>
+				<Text>{d(csm.uploadDate).fromNow()}</Text>
 			</Td>
 			<Td style={{width: "100px", textAlign: "right"}}>
 				{onDelete && (<>

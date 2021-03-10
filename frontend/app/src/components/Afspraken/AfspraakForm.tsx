@@ -20,7 +20,6 @@ import {
 	Tr,
 	useToast,
 } from "@chakra-ui/react";
-import moment from "moment";
 import "moment-recur-ts";
 import React, {useEffect, useState} from "react";
 import DatePicker from "react-datepicker";
@@ -32,6 +31,7 @@ import Select from "react-select";
 import Routes from "../../config/routes";
 import {Afspraak, Burger, Organisatie, Rekening, Rubriek, useGetAfspraakFormDataQuery} from "../../generated/graphql";
 import {AfspraakPeriod, AfspraakType, IntervalType} from "../../models/models";
+import d from "../../utils/dayjs";
 import Queryable from "../../utils/Queryable";
 import generateSampleOverschrijvingen from "../../utils/sampleOverschrijvingen";
 import {currencyFormat2, formatBurgerName, formatIBAN, intervalString, useReactSelectStyles, XInterval} from "../../utils/things";
@@ -75,7 +75,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 	const amount = useNumberInput({
 		min: 0,
 		step: .01,
-		validate: [(v) => new RegExp(/^([0-9]+)((,|\.)[0-9]{2})?$/).test(v.toString())],
+		validate: [(v) => new RegExp(/^([0-9]+)(([,.])[0-9]{2})?$/).test(v.toString())],
 	});
 	const zoekterm = useInput({
 		defaultValue: "",
@@ -83,19 +83,19 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 	});
 	const [isRecurring, toggleRecurring] = useToggle(false);
 	const startDate = useInput({
-		placeholder: moment().format("L"),
-		defaultValue: moment().format("L"),
-		validate: [(v: string) => moment(v, "L").isValid()],
+		placeholder: d().format("L"),
+		defaultValue: d().format("L"),
+		validate: [(v: string) => d(v, "L").isValid()],
 	});
 	const startDate2 = useInput({
-		placeholder: moment().format("L"),
-		defaultValue: moment().format("L"),
-		validate: [(v: string) => moment(v, "L").isValid()],
+		placeholder: d().format("L"),
+		defaultValue: d().format("L"),
+		validate: [(v: string) => d(v, "L").isValid()],
 	});
 	const endDate = useInput({
-		placeholder: moment().format("L"),
-		defaultValue: (moment(startDate.value, "L").isValid() ? moment(startDate.value, "L") : moment()).add(1, "year").subtract(1, "day").format("L"),
-		validate: [(v: string) => moment(v, "L").isValid()],
+		placeholder: d().format("L"),
+		defaultValue: (d(startDate.value, "L").isValid() ? d(startDate.value, "L") : d()).add(1, "year").subtract(1, "day").format("L"),
+		validate: [(v: string) => d(v, "L").isValid()],
 	});
 	const [isContinuous, _toggleContinuous] = useToggle(true);
 	const toggleContinuous = (...args) => {
@@ -136,9 +136,9 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 				intervalNumber.setValue(interval.count.toString());
 			}
 			const startDatum = new Date(afspraak.startDatum);
-			startDate.setValue(moment(startDatum).format("L"));
-			startDate2.setValue(moment(startDatum).format("L"));
-			endDate.setValue(moment(startDatum).add(1, "year").subtract(1, "day").format("L"));
+			startDate.setValue(d(startDatum).format("L"));
+			startDate2.setValue(d(startDatum).format("L"));
+			endDate.setValue(d(startDatum).add(1, "year").subtract(1, "day").format("L"));
 			if (afspraak.aantalBetalingen) {
 				toggleContinuous(false);
 				nTimes.setValue(afspraak.aantalBetalingen);
@@ -223,7 +223,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 			rubriekId: parseInt(rubriekId.value) !== 0 ? parseInt(rubriekId.value) : null,
 			bedrag: amount.value,
 			kenmerk: zoekterm.value,
-			startDatum: moment(startDate.value, "L").format("YYYY-MM-DD"),
+			startDatum: d(startDate.value, "L").format("YYYY-MM-DD"),
 			interval: isRecurring ? XInterval.create(intervalType.value!, intervalNumber.value) : XInterval.empty,
 			aantalBetalingen: isContinuous ? 1 : nTimes.value,
 			actief: isActive,
@@ -251,9 +251,9 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 
 	const generatedSampleOverschrijvingen = generateSampleOverschrijvingen({
 		bedrag: amount.value,
-		startDate: moment(startDate.value, "L").toDate(),
-		startDate2: moment(startDate2.value, "L").toDate(),
-		endDate: moment(endDate.value, "L").toDate(),
+		startDate: d(startDate.value, "L").toDate(),
+		startDate2: d(startDate2.value, "L").toDate(),
+		endDate: d(endDate.value, "L").toDate(),
 		nTimes: nTimes.value || 0,
 		interval: XInterval.create(intervalType.value!, intervalNumber.value),
 	});
@@ -261,18 +261,18 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 	const HugeDatePicker = () => {
 		const components = {
 			strong: <strong />,
-			start: <DatePicker selected={moment(startDate2.value, "L").isValid() ? moment(startDate2.value, "L").toDate() : null}
+			start: <DatePicker selected={d(startDate2.value, "L").isValid() ? d(startDate2.value, "L").toDate() : null}
 							   dateFormat={"dd-MM-yyyy"}
 							   onChange={(value: Date) => {
 								   if (value) {
-									   startDate2.setValue(moment(value).format("L"));
+									   startDate2.setValue(d(value).format("L"));
 								   }
 							   }} customInput={(<Button size={"sm"} mx={1}>{startDate2.value}</Button>)} />,
-			end: <DatePicker selected={moment(endDate.value, "L").isValid() ? moment(endDate.value, "L").toDate() : null}
+			end: <DatePicker selected={d(endDate.value, "L").isValid() ? d(endDate.value, "L").toDate() : null}
 							 dateFormat={"dd-MM-yyyy"}
 							 onChange={(value: Date) => {
 								 if (value) {
-									 endDate.setValue(moment(value).format("L"));
+									 endDate.setValue(d(value).format("L"));
 								 }
 							 }} customInput={(<Button size={"sm"} mx={1}>{endDate.value}</Button>)} />,
 		};
@@ -440,7 +440,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 						<FormLeft title={t("forms.agreements.sections.3.title")} helperText={t("forms.agreements.sections.3.helperText")} />
 						<FormRight>
 							<Stack spacing={1} flex={1}>
-								<Queryable query={$afspraakFormData} children={(data: {organisaties: Organisatie[]}) => (<>
+								<Queryable query={$afspraakFormData} children={() => (<>
 									<FormLabel htmlFor={"zoekterm"}>{t("forms.agreements.fields.zoekterm")}</FormLabel>
 									<InputGroup>
 										<Input isInvalid={isInvalid(zoekterm)} {...zoekterm.bind} id="searchTerm" />
@@ -512,10 +512,10 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 							<Stack direction={["column", "row"]} spacing={1}>
 								<Stack spacing={1} flex={1}>
 									<FormLabel htmlFor={"startDate"}>{isRecurring ? t("forms.agreements.fields.startDate") : t("forms.common.fields.date")}</FormLabel>
-									<DatePicker selected={moment(startDate.value, "L").isValid() ? moment(startDate.value, "L").toDate() : null} dateFormat={"dd-MM-yyyy"}
+									<DatePicker selected={d(startDate.value, "L").isValid() ? d(startDate.value, "L").toDate() : null} dateFormat={"dd-MM-yyyy"}
 										onChange={(value: Date) => {
 											if (value) {
-												startDate.setValue(moment(value).format("L"));
+												startDate.setValue(d(value).format("L"));
 											}
 										}} customInput={<Input type="text" isInvalid={isInvalid(startDate)} {...startDate.bind} />} id={"startDate"} />
 								</Stack>
