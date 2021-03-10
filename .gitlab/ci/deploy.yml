@@ -15,19 +15,6 @@
     - develop
     - acceptance
 
-# TODO remove
-.develop-old: &develop-old
-  variables:
-    CREATE_NAMESPACE: ""
-    NAMESPACE: "hhb-test"
-    BASE_DOMAIN: nlx.reviews
-    APP_SETTINGS: "hhb_backend.config.StagingConfig"
-  environment:
-    name: review/$CI_COMMIT_REF_SLUG
-    url: https://hhb-test.$BASE_DOMAIN/
-  only:
-    - develop@commonground/huishoudboekje/app-new
-
 .develop: &develop
   variables:
     CREATE_NAMESPACE: ""
@@ -174,11 +161,6 @@ deploy-develop:
   <<: *deploy
   <<: *develop
 
-# TODO remove
-deploy-develop-old:
-  <<: *deploy
-  <<: *develop-old
-
 deploy-acceptance:
   <<: *deploy
   <<: *acceptance
@@ -198,13 +180,6 @@ helm-test-develop:
   <<: *develop
   needs:
     - deploy-develop
-
-# TODO remove
-helm-test-develop-old:
-  <<: *helm-test
-  <<: *develop-old
-  needs:
-    - deploy-develop-old
 
 .sample-data: &sample-data
   stage: sample-data
@@ -257,13 +232,6 @@ helm-test-develop-old:
     - build-helm
     - helm-test-develop
 
-# TODO remove
-.sample-data-develop-old: &sample-data-develop-old
-  <<: *develop-old
-  needs:
-    - build-helm
-    - helm-test-develop-old
-
 .sample-data-acceptance: &sample-data-acceptance
   <<: *acceptance
   needs:
@@ -284,11 +252,6 @@ clean-develop:
   <<: *sample-data-clean
   <<: *sample-data-develop
 
-# TODO remove
-clean-develop-old:
-  <<: *sample-data-clean
-  <<: *sample-data-develop-old
-
 clean-acceptance:
   <<: *sample-data-clean
   <<: *sample-data-acceptance
@@ -304,11 +267,6 @@ load-review:
 load-develop:
   <<: *sample-data-load
   <<: *sample-data-develop
-
-# TODO remove
-load-develop-old:
-  <<: *sample-data-load
-  <<: *sample-data-develop-old
 
 load-acceptance:
   <<: *sample-data-load
