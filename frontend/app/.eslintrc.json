@@ -1,7 +1,9 @@
 {
   "extends": [
     "eslint:recommended",
-    "react-app"
+    "react-app",
+    "plugin:you-dont-need-momentjs/recommended",
+    "./.eslint-moment.json"
   ],
   "plugins": [
     "react"
