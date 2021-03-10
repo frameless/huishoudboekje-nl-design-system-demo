@@ -1,11 +1,11 @@
 import {DownloadIcon} from "@chakra-ui/icons";
 import {Box, Button, Divider, FormControl, FormLabel, IconButton, Input, Stack, Table, Tbody, Td, Text, Th, Thead, Tr} from "@chakra-ui/react";
-import moment from "moment";
 import React from "react";
 import DatePicker from "react-datepicker";
 import {useInput} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {Export, useCreateExportOverschrijvingenMutation, useGetExportsQuery} from "../../generated/graphql";
+import d from "../../utils/dayjs";
 import Queryable from "../../utils/Queryable";
 import {Regex} from "../../utils/things";
 import useToaster from "../../utils/useToaster";
@@ -21,27 +21,27 @@ const OverschrijvingenExport = () => {
 	const [createExportOverschrijvingen, $createExportOverschrijvingen] = useCreateExportOverschrijvingenMutation();
 
 	const startDatum = useInput({
-		defaultValue: moment().startOf("quarter").format("L"),
-		placeholder: moment().startOf("quarter").format("L"),
+		defaultValue: d().startOf("quarter").format("L"),
+		placeholder: d().startOf("quarter").format("L"),
 		validate: [
 			(v: string) => new RegExp(Regex.Date).test(v),
-			(v: string) => moment(v, "L").isValid(),
+			(v: string) => d(v, "L").isValid(),
 		]
 	});
 	const eindDatum = useInput({
-		defaultValue: moment().endOf("quarter").format("L"),
-		placeholder: moment().endOf("quarter").format("L"),
+		defaultValue: d().endOf("quarter").format("L"),
+		placeholder: d().endOf("quarter").format("L"),
 		validate: [
 			(v: string) => new RegExp(Regex.Date).test(v),
-			(v: string) => moment(v, "L").isValid(),
+			(v: string) => d(v, "L").isValid(),
 		]
 	});
 
 	const onClickExportButton = () => {
 		createExportOverschrijvingen({
 			variables: {
-				startDatum: moment(startDatum.value, "L").format("YYYY-MM-DD"),
-				eindDatum: moment(eindDatum.value, "L").format("YYYY-MM-DD"),
+				startDatum: d(startDatum.value, "L").format("YYYY-MM-DD"),
+				eindDatum: d(eindDatum.value, "L").format("YYYY-MM-DD"),
 			}
 		}).then(() => {
 			toast({
@@ -70,21 +70,21 @@ const OverschrijvingenExport = () => {
 					<Stack direction={["column", "row"]} alignItems={"flex-end"}>
 						<FormControl flex={1}>
 							<FormLabel>{t("forms.common.fields.startDate")}</FormLabel>
-							<DatePicker selected={moment(startDatum.value, "L").isValid() ? moment(startDatum.value, "L").toDate() : null} dateFormat={"dd-MM-yyyy"}
+							<DatePicker selected={d(startDatum.value, "L").isValid() ? d(startDatum.value, "L").toDate() : null} dateFormat={"dd-MM-yyyy"}
 							            onChange={(value: Date) => {
 								            if (value) {
-									            startDatum.setValue(moment(value).format("L"));
+									            startDatum.setValue(d(value).format("L"));
 								            }
-							            }} customInput={<Input type="text" isInvalid={!moment(startDatum.value, "L").isValid()} {...startDatum.bind} />} />
+							            }} customInput={<Input type="text" isInvalid={!d(startDatum.value, "L").isValid()} {...startDatum.bind} />} />
 						</FormControl>
 						<FormControl flex={1}>
 							<FormLabel>{t("forms.common.fields.endDate")}</FormLabel>
-							<DatePicker selected={moment(eindDatum.value, "L").isValid() ? moment(eindDatum.value, "L").toDate() : null} dateFormat={"dd-MM-yyyy"}
+							<DatePicker selected={d(eindDatum.value, "L").isValid() ? d(eindDatum.value, "L").toDate() : null} dateFormat={"dd-MM-yyyy"}
 							            onChange={(value: Date) => {
 								            if (value) {
-									            eindDatum.setValue(moment(value).format("L"));
+									            eindDatum.setValue(d(value).format("L"));
 								            }
-							            }} customInput={<Input type="text" isInvalid={!moment(eindDatum.value, "L").isValid()} {...eindDatum.bind} />} />
+							            }} customInput={<Input type="text" isInvalid={!d(eindDatum.value, "L").isValid()} {...eindDatum.bind} />} />
 						</FormControl>
 						<FormControl flex={1}>
 							<Button colorScheme={"primary"} isLoading={$createExportOverschrijvingen.loading} onClick={onClickExportButton}>{t("actions.export")}</Button>
@@ -114,11 +114,11 @@ const OverschrijvingenExport = () => {
 													<Stack fontSize={"sm"} flex={2} spacing={0}>
 														<Stack direction={"row"}>
 															<Label>{t("van")}</Label>
-															<Text>{moment(e.startDatum).format("L")}</Text>
+															<Text>{d(e.startDatum).format("L")}</Text>
 														</Stack>
 														<Stack direction={"row"}>
 															<Label>{t("tot")}</Label>
-															<Text>{moment(e.eindDatum).format("L")}</Text>
+															<Text>{d(e.eindDatum).format("L")}</Text>
 														</Stack>
 													</Stack>
 												</Stack>
@@ -128,7 +128,7 @@ const OverschrijvingenExport = () => {
 													</Box>
 												</Td>
 												<Td>
-													<Box flex={1}>{moment(e.timestamp).format("L LT")}</Box>
+													<Box flex={1}>{d(e.timestamp).format("L LT")}</Box>
 												</Td>
 												<Td>
 													<Box flex={0}>

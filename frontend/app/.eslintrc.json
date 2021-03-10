@@ -1,106 +1,106 @@
 {
   "extends": [
-    "eslint:recommended",
-    "react-app"
+	"eslint:recommended",
+	"react-app"
   ],
   "plugins": [
-    "react"
+	"react"
   ],
   "rules": {
-    "@typescript-eslint/no-use-before-define": [
-      "off"
-    ],
-    "react/prop-types": [
-      "off"
-    ],
-    "indent": [
-      "warn",
-      "tab",
-      {
-        "SwitchCase": 1
-      }
-    ],
-    "brace-style": [
-      "warn",
-      "stroustrup"
-    ],
-    "linebreak-style": [
-      "warn",
-      "unix"
-    ],
-    "quotes": [
-      "warn",
-      "double"
-    ],
-    "no-mixed-spaces-and-tabs": [
-      "warn",
-      "smart-tabs"
-    ],
-    "no-trailing-spaces": [
-      "warn"
-    ],
-    "eol-last": [
-      "warn",
-      "never"
-    ],
-    "no-empty": [
-      "warn"
-    ],
-    "no-console": [
-      "warn",
-      {
-        "allow": [
-          "error",
-          "info"
-        ]
-      }
-    ],
-    "react/self-closing-comp": [
-      "warn",
-      {
-        "component": true,
-        "html": false
-      }
-    ],
-    "react/forbid-elements": [
-      "error",
-      {
-        "forbid": [
-          {
-            "element": "div",
-            "message": "use <Box> or <Stack> from ChakraUI instead"
-          },
-          {
-            "element": "input",
-            "message": "use <Input> from ChakraUI instead"
-          },
-          {
-            "element": "button",
-            "message": "use <Button> from ChakraUI instead"
-          }
-        ]
-      }
-    ],
-    "react/no-multi-comp": [
-      "warn",
-      {
-        "ignoreStateless": true
-      }
-    ],
-    "react/function-component-definition": [
-      "warn",
-      {
-        "namedComponents": "arrow-function",
-        "unnamedComponents": "arrow-function"
-      }
-    ],
-    "react/no-unknown-property": [
-      "warn"
-    ]
+	"@typescript-eslint/no-use-before-define": [
+	  "off"
+	],
+	"react/prop-types": [
+	  "off"
+	],
+	"indent": [
+	  "warn",
+	  "tab",
+	  {
+		"SwitchCase": 1
+	  }
+	],
+	"brace-style": [
+	  "warn",
+	  "stroustrup"
+	],
+	"linebreak-style": [
+	  "warn",
+	  "unix"
+	],
+	"quotes": [
+	  "warn",
+	  "double"
+	],
+	"no-mixed-spaces-and-tabs": [
+	  "warn",
+	  "smart-tabs"
+	],
+	"no-trailing-spaces": [
+	  "warn"
+	],
+	"eol-last": [
+	  "warn",
+	  "never"
+	],
+	"no-empty": [
+	  "warn"
+	],
+	"no-console": [
+	  "warn",
+	  {
+		"allow": [
+		  "error",
+		  "info"
+		]
+	  }
+	],
+	"react/self-closing-comp": [
+	  "warn",
+	  {
+		"component": true,
+		"html": false
+	  }
+	],
+	"react/forbid-elements": [
+	  "error",
+	  {
+		"forbid": [
+		  {
+			"element": "div",
+			"message": "use <Box> or <Stack> from ChakraUI instead"
+		  },
+		  {
+			"element": "input",
+			"message": "use <Input> from ChakraUI instead"
+		  },
+		  {
+			"element": "button",
+			"message": "use <Button> from ChakraUI instead"
+		  }
+		]
+	  }
+	],
+	"react/no-multi-comp": [
+	  "warn",
+	  {
+		"ignoreStateless": true
+	  }
+	],
+	"react/function-component-definition": [
+	  "warn",
+	  {
+		"namedComponents": "arrow-function",
+		"unnamedComponents": "arrow-function"
+	  }
+	],
+	"react/no-unknown-property": [
+	  "warn"
+	]
   },
   "ignorePatterns": [
-    "node_modules",
-    "build",
-    "src/generated/**"
+	"node_modules",
+	"build",
+	"src/generated/**"
   ]
 }

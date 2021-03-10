@@ -1,9 +1,8 @@
 import {Divider, Stack, StackProps, Text} from "@chakra-ui/react";
-import moment from "moment";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {Burger} from "../../../generated/graphql";
-import {dateFormat} from "../../../utils/things";
+import d from "../../../utils/dayjs";
 import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
 import Label from "../../Layouts/Label";
 
@@ -34,11 +33,11 @@ const BurgerProfileView: React.FC<StackProps & { burger: Burger }> = ({burger, .
 					<Stack spacing={2} mb={1} direction={["column", "row"]}>
 						<Stack spacing={1} flex={1}>
 							<Label>{t("forms.burgers.fields.dateOfBirth")}</Label>
-							<Text>{burger.geboortedatum && dateFormat.format(new Date(burger.geboortedatum))}</Text>
+							<Text>{burger.geboortedatum && d(burger.geboortedatum).format("L")}</Text>
 						</Stack>
 						<Stack spacing={1} flex={1}>
 							<Label>{t("forms.burgers.fields.age")}</Label>
-							<Text>{moment().diff(moment(burger.geboortedatum), "year")}</Text>
+							<Text>{d().diff(d(burger.geboortedatum), "year")}</Text>
 						</Stack>
 					</Stack>
 				</FormRight>

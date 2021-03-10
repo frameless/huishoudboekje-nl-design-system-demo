@@ -1,9 +1,9 @@
 import {HStack, Stack, Td, Text, Tr} from "@chakra-ui/react";
-import moment from "moment";
 import React from "react";
 import {FiActivity} from "react-icons/all";
 import UAParser from "ua-parser-js";
 import {GebruikersActiviteit} from "../../generated/graphql";
+import d from "../../utils/dayjs";
 import RoundIcon from "../Layouts/RoundIcon";
 import AuditLogText from "./AuditLogText";
 
@@ -21,7 +21,7 @@ const GebeurtenisTableRow: React.FC<{gebeurtenis: GebruikersActiviteit}> = ({geb
 					<Stack spacing={1}>
 						<AuditLogText g={g} />
 						<Text fontSize={"sm"} color={"gray.500"}>
-							{moment(g.timestamp).format("LL LT")} - {os.name} {os.version} - {browser.name} {browser.version}
+							{d(g.timestamp).format("LL LT")} - {os.name} {os.version} - {browser.name} {browser.version}
 						</Text>
 					</Stack>
 				</HStack>

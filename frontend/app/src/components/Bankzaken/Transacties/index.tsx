@@ -3,8 +3,9 @@ import {Box, IconButton, Menu, MenuButton, MenuItem, MenuList, Stack, useBreakpo
 import React, {createContext} from "react";
 import {useTranslation} from "react-i18next";
 import {BankTransaction, useGetAllTransactionsQuery, useStartAutomatischBoekenMutation} from "../../../generated/graphql";
+import d from "../../../utils/dayjs";
 import Queryable from "../../../utils/Queryable";
-import {dateFormat, sortBankTransactions} from "../../../utils/things";
+import {sortBankTransactions} from "../../../utils/things";
 import DeadEndPage from "../../DeadEndPage";
 import Label from "../../Layouts/Label";
 import Page from "../../Layouts/Page";
@@ -65,7 +66,7 @@ const Transactions = () => {
 					}
 
 					const bt = bankTransactions.sort((a, b) => a.transactieDatum > b.transactieDatum ? -1 : 1).reduce((result, t) => {
-						const trDateAsString = dateFormat.format(new Date(t.transactieDatum));
+						const trDateAsString = d(t.transactieDatum).format("L");
 						return {
 							...result,
 							[trDateAsString]: [

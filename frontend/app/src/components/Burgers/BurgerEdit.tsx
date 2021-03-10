@@ -1,5 +1,4 @@
 import {Box, Button, Divider, FormControl, FormLabel, Input, Stack, Tooltip, useBreakpointValue} from "@chakra-ui/react";
-import moment from "moment";
 import React from "react";
 import DatePicker from "react-datepicker";
 import {useInput, Validators} from "react-grapple";
@@ -7,6 +6,7 @@ import {useTranslation} from "react-i18next";
 import {Redirect, useHistory, useParams} from "react-router-dom";
 import Routes from "../../config/routes";
 import {Burger, useGetOneBurgerQuery, useUpdateBurgerMutation} from "../../generated/graphql";
+import d from "../../utils/dayjs";
 import Queryable from "../../utils/Queryable";
 import {formatBurgerName, Regex} from "../../utils/things";
 import useToaster from "../../utils/useToaster";
@@ -34,7 +34,7 @@ const BurgerEdit = () => {
 	const geboortedatum = useInput({
 		validate: [
 			(v: string) => new RegExp(Regex.Date).test(v),
-			(v: string) => moment(v, "L").isValid(),
+			(v: string) => d(v, "L").isValid(),
 		],
 	});
 	const mail = useInput({
@@ -65,7 +65,7 @@ const BurgerEdit = () => {
 				voorletters.setValue(burger.voorletters || "");
 				voornamen.setValue(burger.voornamen || "");
 				achternaam.setValue(burger.achternaam || "");
-				geboortedatum.setValue(moment(burger.geboortedatum, "YYYY MM DD").format("L"));
+				geboortedatum.setValue(d(burger.geboortedatum, "YYYY MM DD").format("L"));
 				mail.setValue(burger.email || "");
 				straatnaam.setValue(burger.straatnaam || "");
 				huisnummer.setValue(burger.huisnummer || "");
@@ -106,7 +106,7 @@ const BurgerEdit = () => {
 				voorletters: voorletters.value,
 				voornamen: voornamen.value,
 				achternaam: achternaam.value,
-				geboortedatum: moment(geboortedatum.value, "L").format("YYYY-MM-DD"),
+				geboortedatum: d(geboortedatum.value, "L").format("YYYY-MM-DD"),
 				straatnaam: straatnaam.value,
 				huisnummer: huisnummer.value,
 				postcode: postcode.value,
@@ -161,10 +161,10 @@ const BurgerEdit = () => {
 									<FormControl id={"geboortedatum"} isRequired={true}>
 										<Stack spacing={1}>
 											<FormLabel>{t("forms.burgers.fields.geboortedatum")}</FormLabel>
-											<DatePicker selected={moment(geboortedatum.value, "L").isValid() ? moment(geboortedatum.value, "L").toDate() : null}
+											<DatePicker selected={d(geboortedatum.value, "L").isValid() ? d(geboortedatum.value, "L").toDate() : null}
 												dateFormat={"dd-MM-yyyy"} onChange={(value: Date) => {
 													if (value) {
-														geboortedatum.setValue(moment(value).format("L"));
+														geboortedatum.setValue(d(value).format("L"));
 													}
 												}} customInput={<Input type="text" isInvalid={geboortedatum.dirty && !geboortedatum.isValid} {...geboortedatum.bind} />} />
 										</Stack>

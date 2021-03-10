@@ -1,11 +1,11 @@
 import {useToken} from "@chakra-ui/react";
 import arrayToSentence from "array-to-sentence";
 import {friendlyFormatIBAN} from "ibantools";
-import moment, {Moment} from "moment";
 import {createContext} from "react";
 import {Granularity, periodFormatForGranularity} from "../components/Rapportage/Aggregator";
 import {BankTransaction, Burger, GebruikersActiviteit, Interval, IntervalInput, Rubriek} from "../generated/graphql";
 import {IntervalType} from "../models/models";
+import d from "./dayjs";
 
 export const searchFields = (term: string, fields: string[]): boolean => {
 	const _fields = fields.filter(f => f);
@@ -16,11 +16,6 @@ export const searchFields = (term: string, fields: string[]): boolean => {
 
 	return _fields.map(f => f.toLowerCase()).some(s => s.includes(term.toLowerCase()));
 };
-
-/** @deprecated */
-export const MOBILE_BREAKPOINT = 650;
-/** @deprecated */
-export const TABLET_BREAKPOINT = 1000;
 
 const ZipcodeNL = /^[1-9][0-9]{3}[A-Za-z]{2}$/i;
 const PhoneNumberNL = /^(((0)[1-9]{2}[0-9][-]?[1-9][0-9]{5})|((\\+31|0|0031)[1-9][0-9][-]?[1-9][0-9]{6}))$/;
@@ -78,11 +73,11 @@ export const XInterval = {
 		}
 
 		const intervalTypeName = {
-			dagen: "day",
-			weken: "week",
-			maanden: "month",
-			jaren: "year",
-		}[intervalType];
+			dagen: IntervalType.Day,
+			weken: IntervalType.Week,
+			maanden: IntervalType.Month,
+			jaren: IntervalType.Year,
+		}[intervalType] as IntervalType;
 
 		return {intervalType: intervalTypeName, count: interval[intervalType]};
 	},
@@ -99,11 +94,6 @@ export const currencyFormat2 = (showCurrency = true) => {
 			maximumFractionDigits: 2,
 		},
 	});
-};
-
-/** @deprecated Use moment(date).format("L") instead */
-export const dateFormat = {
-	format: (d: Date) => moment(d).format("L"),
 };
 
 export const wait = async (timeout: number = 1000): Promise<void> => {
@@ -160,7 +150,17 @@ export const humanJoin = (x) => arrayToSentence(x, {
 
 export const getRubriekForTransaction = (t: BankTransaction): Rubriek | undefined => t.journaalpost?.grootboekrekening?.rubriek || t.journaalpost?.afspraak?.rubriek;
 
-export const prepareChartData = (startDate: Moment, endDate: Moment, granularity: Granularity, columns: number = 1): any[] => {
+export const prepareChartData = (startDate: d.Dayjs, endDate: d.Dayjs, granularity: Granularity, columns: number = 1): any[] => {
+	if(!startDate.isValid()){
+		console.error("Invalid startDate", startDate);
+		return [];
+	}
+
+	if(!endDate.isValid()){
+		console.error("Invalid endDate", endDate);
+		return [];
+	}
+
 	const nPeriods = {
 		[Granularity.Monthly]: (Math.abs(endDate.endOf("month").diff(startDate.startOf("month"), "month")) + 1),
 		[Granularity.Weekly]: (Math.abs(endDate.endOf("month").diff(startDate.startOf("month"), "week")) + 1),
@@ -174,14 +174,14 @@ export const prepareChartData = (startDate: Moment, endDate: Moment, granularity
 	};
 
 	return new Array(nPeriods).fill(0).map((_, i) => [
-		moment(startDate).add(i, timeUnits[granularity]).startOf(timeUnits[granularity]).format(periodFormatForGranularity[granularity]),
+		d(startDate).add(i, timeUnits[granularity]).startOf(timeUnits[granularity]).format(periodFormatForGranularity[granularity]),
 		...new Array(columns).fill(0)
 	]);
 };
 
 export const sanitizeIBAN = (iban: string) => iban.replace(/\s/g, "").toUpperCase();
 
-export const sortAuditTrailByTime = (a: GebruikersActiviteit, b: GebruikersActiviteit) => moment(a.timestamp).isBefore(b.timestamp) ? 1 : -1;
+export const sortAuditTrailByTime = (a: GebruikersActiviteit, b: GebruikersActiviteit) => d(a.timestamp).isBefore(b.timestamp) ? 1 : -1;
 
 export const truncateText = (str: string, maxLength = 50) => {
 	const padding = Math.floor((maxLength - 10) / 2);

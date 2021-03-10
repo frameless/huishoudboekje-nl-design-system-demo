@@ -1,4 +1,4 @@
-import {Button, Divider, FormControl, FormLabel, Input, Stack} from "@chakra-ui/react";
+import {Button, Divider, FormControl, Input, Stack} from "@chakra-ui/react";
 import React from "react";
 import {useInput, Validators} from "react-grapple";
 import {useTranslation} from "react-i18next";

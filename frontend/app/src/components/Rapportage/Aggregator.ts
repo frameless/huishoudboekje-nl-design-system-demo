@@ -1,5 +1,5 @@
-import moment, {Moment} from "moment";
 import {BankTransaction, Rubriek} from "../../generated/graphql";
+import d from "../../utils/dayjs";
 import {getRubriekForTransaction} from "../../utils/things";
 
 // @i18n: t("charts.inkomstenUitgaven.income") t("charts.inkomstenUitgaven.expenses") t("charts.inkomstenUitgaven.unbooked")
@@ -8,7 +8,7 @@ export enum Type {
 }
 
 type RichTransaction = BankTransaction & {
-	mDate: Moment,
+	mDate: d.Dayjs,
 	rubriek?: Rubriek
 };
 
@@ -29,7 +29,7 @@ export const createAggregation = (tr: BankTransaction[], granularity = Granulari
 	// Enrich transaction with some useful data
 	const _data = tr.map(t => ({
 		...t,
-		mDate: moment(t.transactieDatum, "YYYY MM DD"),
+		mDate: d(t.transactieDatum, "YYYY MM DD"),
 		rubriek: getRubriekForTransaction(t)
 	}));
 

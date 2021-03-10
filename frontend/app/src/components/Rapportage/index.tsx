@@ -1,5 +1,4 @@
 import {Box, Divider, FormControl, HStack, Input, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Text} from "@chakra-ui/react";
-import moment from "moment";
 import React, {useState} from "react";
 import DatePicker from "react-datepicker";
 import {useInput} from "react-grapple";
@@ -7,6 +6,7 @@ import {useTranslation} from "react-i18next";
 import Select from "react-select";
 import {Burger, Rubriek, useGetReportingDataQuery} from "../../generated/graphql";
 import Transaction from "../../models/Transaction";
+import d from "../../utils/dayjs";
 import Queryable from "../../utils/Queryable";
 import {currencyFormat2, formatBurgerName, humanJoin, useReactSelectStyles} from "../../utils/things";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
@@ -33,11 +33,12 @@ const Rapportage = () => {
 	});
 
 	const startDate = useInput({
-		defaultValue: moment().subtract(1, "year").startOf("month").format("L"),
+		defaultValue: d().subtract(1, "year").startOf("month").format("L"),
 	});
 	const endDate = useInput({
-		defaultValue: moment().subtract(1, "month").endOf("month").format("L"),
+		defaultValue: d().subtract(1, "month").endOf("month").format("L"),
 	});
+
 	const [granularity, setGranularity] = useState<Granularity>(Granularity.Monthly);
 	const granularityOptions = {
 		[Granularity.Daily]: t("granularity.daily"),
@@ -52,7 +53,7 @@ const Rapportage = () => {
 	const onChangeGranularity = (value) => setGranularity(value);
 
 	return (
-		<RapportageContext.Provider value={{startDate: moment(startDate.value, "L"), endDate: moment(endDate.value, "L"), granularity}}>
+		<RapportageContext.Provider value={{startDate: d(startDate.value, "L"), endDate: d(endDate.value, "L"), granularity}}>
 			<Page title={t("sidebar.rapportage")} position={"relative"}>
 				<Section>
 					<FormLeft title={t("sections.filterOptions.title")} helperText={t("sections.filterOptions.helperText")} />
@@ -61,25 +62,25 @@ const Rapportage = () => {
 							<Stack direction={["column", "row"]} spacing={5} flex={1}>
 								<FormControl as={Stack} flex={1} justifyContent={"flex-end"}>
 									<Label>{t("forms.common.fields.startDate")}</Label>
-									<DatePicker selected={moment(startDate.value, "L").isValid() ? moment(startDate.value, "L").toDate() : null}
+									<DatePicker selected={d(startDate.value, "L").isValid() ? d(startDate.value, "L").toDate() : null}
 									            dateFormat={"MMM yyyy"}
 									            showMonthYearPicker
 									            showFullMonthYearPicker
 									            onChange={(value: Date) => {
 										            if (value) {
-											            startDate.setValue(moment(value).format("L"));
+											            startDate.setValue(d(value).format("L"));
 										            }
 									            }} customInput={(<Input {...startDate.bind} />)} />
 								</FormControl>
 								<FormControl as={Stack} flex={1}>
 									<Label>{t("forms.common.fields.endDate")}</Label>
-									<DatePicker selected={moment(endDate.value, "L").isValid() ? moment(endDate.value, "L").toDate() : null}
+									<DatePicker selected={d(endDate.value, "L").isValid() ? d(endDate.value, "L").toDate() : null}
 									            dateFormat={"MMM yyyy"}
 									            showMonthYearPicker
 									            showFullMonthYearPicker
 									            onChange={(value: Date) => {
 										            if (value) {
-											            endDate.setValue(moment(value).format("L"));
+											            endDate.setValue(d(value).format("L"));
 										            }
 									            }} customInput={(<Input {...startDate.bind} />)} />
 								</FormControl>
@@ -119,8 +120,8 @@ const Rapportage = () => {
 				</Section>
 
 				<Queryable query={$data} children={data => {
-					const _startDate = moment(startDate.value, "L").startOf("month");
-					const _endDate = moment(endDate.value, "L").endOf("month");
+					const _startDate = d(startDate.value, "L").startOf("month");
+					const _endDate = d(endDate.value, "L").endOf("month");
 
 					const transactions: Transaction[] = data.bankTransactions.map(t => new Transaction(t));
 					const burgers: Burger[] = data.burgers;
@@ -157,8 +158,8 @@ const Rapportage = () => {
 							<FormRight>
 								<Stack spacing={4}>
 									<HStack>
-										<Text>Rapportageperiode: <strong>{moment(startDate.value, "L").format("L")}</strong> tot en
-											met <strong>{moment(endDate.value, "L").format("L")}</strong>.</Text>
+										<Text>Rapportageperiode: <strong>{d(startDate.value, "L").format("L")}</strong> tot en
+											met <strong>{d(endDate.value, "L").format("L")}</strong>.</Text>
 									</HStack>
 
 									{Object.keys(aggregationByRubriek).map(c => {

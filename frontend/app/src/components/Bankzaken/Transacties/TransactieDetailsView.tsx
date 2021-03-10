@@ -1,8 +1,8 @@
-import {Box, Badge, Stack, StackProps, Text} from "@chakra-ui/react";
+import {Badge, Box, Stack, StackProps, Text} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {BankTransaction} from "../../../generated/graphql";
-import {dateFormat} from "../../../utils/things";
+import d from "../../../utils/dayjs";
 import Currency from "../../Currency";
 import Label from "../../Layouts/Label";
 import PrettyIban from "../../Layouts/PrettyIban";
@@ -16,7 +16,7 @@ const TransactieDetailsView: React.FC<StackProps & { transaction: BankTransactio
 				<Box flex={2}>
 					<Label>{t("forms.common.fields.date")}</Label>
 					<Box>
-						<Text>{dateFormat.format(new Date(bt.transactieDatum))}</Text>
+						<Text>{d(bt.transactieDatum).format("L")}</Text>
 					</Box>
 				</Box>
 				<Box flex={1}>

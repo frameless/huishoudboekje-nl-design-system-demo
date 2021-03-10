@@ -1,15 +1,15 @@
-import moment, {Moment} from "moment";
 import {createContext} from "react";
+import d from "../../utils/dayjs";
 import {Granularity} from "./Aggregator";
 
 type RapportageContextValue = {
-	startDate: Moment,
-	endDate: Moment,
+	startDate: d.Dayjs,
+	endDate: d.Dayjs,
 	granularity: Granularity
 }
 
 export const RapportageContext = createContext<RapportageContextValue>({
-	startDate: moment(),
-	endDate: moment(),
+	startDate: d(),
+	endDate: d(),
 	granularity: Granularity.Monthly
 });
