@@ -354,3 +354,11 @@ export const StartAutomatischBoekenMutation = gql`
         }
     }
 `;
+
+export const UpdateAfspraakAutomatischBoekenMutation = gql`
+    mutation updateAfspraakAutomatischBoeken($afspraakId: Int!, $automatischBoeken: Boolean!) {
+        updateAfspraakAutomatischBoeken(afspraakId: $afspraakId, automatischBoeken: $automatischBoeken){
+            ok
+        }
+    }
+`;

@@ -27,11 +27,12 @@
         "automatischBoeken": {
             "successMessage": "Transacties worden nu verwerkt. Dit kan even duren."
         },
-        "transactions": {
-            "addHint": "Voeg transacties toe door een bronbestand te importeren."
-        },
         "journals": {
             "createSuccessMessage": "Transactie succesvol verwerkt."
+        },
+        "toggleAfspraakAutomatischBoekenSuccess": "Automatisch boeken is ingeschakeld.",
+        "transactions": {
+            "addHint": "Voeg transacties toe door een bronbestand te importeren."
         },
         "rekeningAlreadyExistsError": "Dit rekeningnummer is al gekoppeld.",
         "burgers": {
@@ -83,6 +84,7 @@
         "export": "Exporteren",
         "download": "Downloaden",
         "startBoeken": "Verwerk alle transacties",
+        "confirmAutomatischBoeken": "Voortaan automatisch boeken",
         "disconnect": "Koppeling verwijderen",
         "backToList": "Terug naar overzicht",
         "clearSearch": "Zoekopdracht wissen",
@@ -158,7 +160,7 @@
                     "title": "Transacties"
                 },
                 "journal": {
-                    "title": "Transactie verwerken"
+                    "title": "Transactie bekijken"
                 }
             }
         },
@@ -312,14 +314,40 @@
     },
     "van": "Van",
     "tot": "Tot",
+    "booking": "Boeking",
+    "automatischBoekenConfirmed": "Automatisch boeken ingeschakeld",
+    "burger": "Burger",
+    "omschrijving": "Omschrijving",
+    "periodiek": "Periodiek",
+    "rubriek": "Rubriek",
+    "transactieVerwerken": {
+        "title": "Verwerken",
+        "helperText": "Kies een afspraak om deze transactie erop te boeken."
+    },
+    "afspraak": {
+        "omschrijving": "Omschrijving",
+        "zoekterm": "Zoekterm"
+    },
+    "bedrag": "Bedrag",
+    "unbooked": "Niet geboekt",
+    "transaction": "Transactie",
+    "form": {
+        "common": {
+            "fields": {
+                "status": "Status"
+            }
+        }
+    },
     "transactions": {
         "beneficiaryAccount": "Tegenrekening",
-        "rubric": "Rubriek",
         "amount": "Bedrag",
         "description": "Omschrijving"
     },
-    "booking": "Boeking",
-    "unbooked": "Niet geboekt",
+    "transacties": {
+        "tegenrekening": "Tegenrekening",
+        "rubriek": "Rubriek",
+        "bedrag": "Bedrag"
+    },
     "agreements": {
         "tegenpartij": "Tegenpartij",
         "omschrijving": "Omschrijving",
@@ -385,6 +413,7 @@
         "deleteBurgerRekening": "{{gebruiker}} verwijderde rekening <strong>{{iban}}</strong> op naam van <strong>{{rekeninghouder}}</strong> bij <linkBurger>{{burger}}</linkBurger>.",
         "unknown": "Onbekende gebeurtenis"
     },
+    "suggestion": "Suggestie",
     "organizations": {
         "organizations": "Organisaties"
     },

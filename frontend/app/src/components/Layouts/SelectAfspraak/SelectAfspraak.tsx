@@ -7,16 +7,19 @@ import {Afspraak} from "../../../generated/graphql";
 import SelectAfspraakOption from "./SelectAfspraakOption";
 
 type SelectAfspraakProps = Omit<StackProps, "onChange"> & {
+	suggestions?: Afspraak[],
 	options: Afspraak[],
 	onChange: (afspraak: Afspraak) => void,
 	value?: Afspraak
 }
 
-const SelectAfspraak: React.FC<SelectAfspraakProps> = ({options, value, onChange, ...props}) => {
+const SelectAfspraak: React.FC<SelectAfspraakProps> = ({options = [], suggestions = [], value, onChange, ...props}) => {
+	const allOptions = [...suggestions, ...options];
+
 	const {t} = useTranslation();
-	const [results, setResults] = useState<Afspraak[]>(options);
+	const [results, setResults] = useState<Afspraak[]>(allOptions);
 	const search = useInput<string>({
-		placeholder: t("forms.search.fields.search")
+		placeholder: t("forms.search.fields.search"),
 	});
 
 	const filterFn = (input: string) => (afspraak: Afspraak) => {
@@ -29,23 +32,24 @@ const SelectAfspraak: React.FC<SelectAfspraakProps> = ({options, value, onChange
 			afspraak.organisatie?.weergaveNaam,
 			afspraak.organisatie?.kvkNummer,
 			afspraak.bedrag,
-			afspraak.kenmerk
+			afspraak.kenmerk,
 		];
 
 		return searchData.some(x => x && x.toLowerCase().indexOf(input.toLowerCase()) > -1);
-	}
+	};
 
 	useEffect(() => {
+		const allOptions = [...suggestions, ...options];
 		if (search.value.trim().length === 0) {
-			setResults(options);
+			setResults(allOptions);
 			return;
 		}
 
-		setResults(options.filter(filterFn(search.value.trim())));
-	}, [search.value, options]);
+		setResults(allOptions.filter(filterFn(search.value.trim())));
+	}, [search.value, options, suggestions]);
 
 	return (
-		<Stack spacing={2} {...props}>
+		<Stack spacing={2} divider={<Divider />} {...props}>
 			<InputGroup>
 				<InputLeftElement>
 					<SearchIcon color={"gray.200"} />
@@ -53,15 +57,16 @@ const SelectAfspraak: React.FC<SelectAfspraakProps> = ({options, value, onChange
 				<Input {...search.bind} />
 			</InputGroup>
 
-			<Divider />
+			<pre>{JSON.stringify(suggestions.length, null, 2)}</pre>
+			<pre>{JSON.stringify(options.length, null, 2)}</pre>
 
-			{results.length === 0 ? (
-				<Text>{t("select.noOptions")}</Text>
-			) : (
-				<Stack spacing={0} maxHeight={200} overflowY={"auto"}>
-					{results.map(a => <SelectAfspraakOption key={a.id} afspraak={a} isSelected={value && value.id === a.id} onClick={() => onChange(a)} px={5} />)}
-				</Stack>
-			)}
+			{/*{results.length === 0 ? (*/}
+			{/*	<Text>{t("select.noOptions")}</Text>*/}
+			{/*) : (*/}
+			{/*	<Stack spacing={0} maxHeight={200} overflowY={"auto"}>*/}
+			{/*		{results.map(a => <SelectAfspraakOption key={a.id} afspraak={a} isSelected={value && value.id === a.id} onClick={() => onChange(a)} px={5} />)}*/}
+			{/*	</Stack>*/}
+			{/*)}*/}
 		</Stack>
 	);
 };
