@@ -276,9 +276,9 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 							 }} customInput={(<Button size={"sm"} mx={1}>{endDate.value}</Button>)} />,
 		};
 		const outgoingTrans = <Trans count={generatedSampleOverschrijvingen.length} i18nKey={"forms.agreements.sections.2.prognosisText_outgoing"}
-									 components={components} values={{ count: generatedSampleOverschrijvingen.length}} />;
+									 components={components} values={{count: generatedSampleOverschrijvingen.length}} />;
 		const incomingTrans = <Trans count={generatedSampleOverschrijvingen.length} i18nKey={"forms.agreements.sections.2.prognosisText_incoming"}
-									 components={components} values={{ count: generatedSampleOverschrijvingen.length}} />;
+									 components={components} values={{count: generatedSampleOverschrijvingen.length}} />;
 
 		return (
 			<Text>
@@ -301,7 +301,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 		rekeningId.reset();
 
 		if (val) {
-			organisatieId.setValue(String(val.key));
+			organisatieId.setValue(String(val.value));
 
 			if ($afspraakFormData.data?.organisaties) {
 				const foundOrganisatie = $afspraakFormData.data.organisaties.find(o => o.id === val.value);
@@ -309,7 +309,18 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 					const {rekeningen = []} = foundOrganisatie;
 
 					if (rekeningen.length === 1 && rekeningen[0].id) {
-						rekeningId.setValue(String(rekeningen[0].id || 0));
+						rekeningId.setValue(String(rekeningen[0].id));
+					}
+					else{
+						rekeningId.clear();
+					}
+				}
+				else if (val.value === 0) {
+					if (burger.rekeningen?.length === 1 && burger.rekeningen?.[0].id) {
+						rekeningId.setValue(String(burger.rekeningen[0].id));
+					}
+					else{
+						rekeningId.clear();
 					}
 				}
 			}
@@ -320,7 +331,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 	};
 	const onSelectRekening = (val) => {
 		if (val) {
-			rekeningId.setValue(String(val.key));
+			rekeningId.setValue(String(val.value));
 		}
 		else {
 			rekeningId.reset();
