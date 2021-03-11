@@ -55,10 +55,11 @@ const BookingDetailsView: React.FC<{transactie: BankTransaction}> = ({transactie
 				afspraakId: journaalpostAfspraak.id,
 				automatischBoeken: true,
 			},
-		}).then(result => {
+		}).then(() => {
 			toast({
 				success: t("messages.toggleAfspraakAutomatischBoekenSuccess")
 			});
+			refetch();
 		}).catch(err => {
 			toast({ error: err.message });
 		});
