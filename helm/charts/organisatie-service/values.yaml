@@ -51,7 +51,7 @@ service:
   port: 80
 
 ingress:
-  enabled: true
+  enabled: false
   annotations: {}
   hosts:
     - host: organisatie-service.hhb.minikube

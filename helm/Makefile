@@ -1,4 +1,5 @@
 COMPONENT_VERSION ?= 0.20.0
+IMAGE_TAG ?= dev
 
 .PHONY: all
 all: repo/index.yaml
@@ -14,6 +15,7 @@ lint: init
 	helm lint charts/*
 
 repo/%-$(COMPONENT_VERSION).tgz: charts/% repo
+	yq --inplace e ".global.imageTag = \"$(IMAGE_TAG)\"" $</values.yaml
 	helm package $< --dependency-update --destination $(@D)
 
 repo/robots.txt: repo
