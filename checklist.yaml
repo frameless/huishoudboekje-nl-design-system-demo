@@ -674,11 +674,11 @@
             - Zijn voor alle services die registers ontsluiten API-specificaties beschikbaar?
           norms:
             - Gegevens die ook in andere applicaties bruikbaar kunnen zijn, worden enkel opgeslagen in (landelijke) basisregistraties, gemeentelijke kernregistraties en specifieke registers.
-            - Alle gegevens die in processen gebruikt worden, worden realtime opgehaald en opgeslagen bij bronregisters.
+            # - Alle gegevens die in processen gebruikt worden, worden realtime opgehaald en opgeslagen bij bronregisters.
             - Alle registers zijn toegankelijk via services die werken volgens (waar mogelijk gestandaardiseerde) API-specificaties.
             - Er worden geen gegevens opgeslagen die niet ontsloten worden via een API.
-            - Software kan koppelen met elke door een gemeente aangewezen authentieke bron.
-            - Er worden geen gegevens uit andere bronregisters gedupliceerd in nieuwe registers; er worden enkel verwijzigen (identifiers) naar die andere bronregisters opgenomen.
+            # - Software kan koppelen met elke door een gemeente aangewezen authentieke bron.
+            # - Er worden geen gegevens uit andere bronregisters gedupliceerd in nieuwe registers; er worden enkel verwijzigen (identifiers) naar die andere bronregisters opgenomen.
         - name: CGAP5 Regie op gegevens
           practice:
             - Burgers en bedrijven kunnen hun AVG-rechten uitoefenen (recht op informatie, kopie, vergetelheid en beperking).
@@ -697,7 +697,7 @@
             - Welke gegevens kunnen door burgers worden ge-exporteerd voor eigen dossiervorming?
           norms:
             - De software legt alle verwerkingen van gegevens vast in een logging- en verwerkingsregister.
-            - Voor iedere verwerking van gegevens zijn wettelijke basis, grondslag en expliciete doelbinding vastgelegd.
+            # - Voor iedere verwerking van gegevens zijn wettelijke basis, grondslag en expliciete doelbinding vastgelegd.
             - Er worden geen gegevens verwerkt waarvoor geen wettelijke basis bestaat of waarvoor wettelijke vereisten zoals die van de AVG niet zijn ingevuld.
             - De software draagt bij aan het volledig geautomatiseerd verstrekken (aan burgers en bedrijven) van een overzicht van gegevensverwerkingen.
             - Er worden geen besluiten aan gebruikers gecommuniceerd zonder dat het voor gebruikers ook mogelijk is om precies in te zien hoe dat besluit tot stand is gekomen.
@@ -718,10 +718,10 @@
             - Wordt de Nederlandse API Strategie gevolgd?
             - Wordt de Standard for Public Code gevolgd?
           norm:
-            - Alle componenten die API's bevatten, zijn voorzien van (OAS3-)specificaties.
-            - Er is gedocumenteerd welke internationale standaarden en de facto technische standaarden worden gevolgd.
+            # - Alle componenten die API's bevatten, zijn voorzien van (OAS3-)specificaties.
+            # - Er is gedocumenteerd welke internationale standaarden en de facto technische standaarden worden gevolgd.
             - Alle relevante gemeentelijke API-standaarden worden toegepast.
             - Alle componenten waarvoor landelijke open API-standaarden bestaan, voldoen aan die open API-standaarden.
             - Specificaties die een potentiële nieuwe standaard kunnen vormen zijn bij VNG aangeboden om tot nieuwe gemeentelijke API-standaarden te worden gemaakt.
-            - API's zijn geïmplementeerd volgens de Nederlandse API Strategie.
-            - Broncode van software wordt beheerd volgens de Standard for Public Code.
+            # - API's zijn geïmplementeerd volgens de Nederlandse API Strategie.
+            # - Broncode van software wordt beheerd volgens de Standard for Public Code.
