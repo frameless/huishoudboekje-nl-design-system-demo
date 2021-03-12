@@ -1,0 +1,689 @@
+---
+    versie: 1.0.0
+    date: 30 november 2020
+    product: Huishoudboekje
+    items:
+        - name: CG01 Moderne REST/json API-koppelvlakken
+          practice: Voor koppelingen tussen software(componenten) wordt gestandaardiseerd op het gebruik van moderne REST/json API-koppelvlakken. API's worden vormgegeven volgens de NL API Strategie, waar met partners aan wordt samengewerkt.
+          smart:
+            - Welke koppelvlakken worden gebruikt? (REST/json, SOAP, etc.)
+              - REST/json
+            - In hoeverre wordt de NL API Strategie toegepast? Zie https://docs.geostandaarden.nl/api/API-Strategie/
+              - Niet. Deze informatie is niet als kader aangeleverd bij de start van de ontwikkeling van het product in juni 2020.
+          norms:
+            # - De software heeft REST/json API-koppelvlakken.
+            # - Alle services die de software aanbiedt op laag 2 zijn voorzien van REST/json API-koppelvlakken.
+            # - Alle koppelvlakken van de software zijn beschikbaar als REST/json API's.
+            - De software maakt enkel gebruik van REST/json koppelvlakken.
+            # - De software maakt enkel gebruik van REST/json koppelvlakken en deze zijn ingericht volgens de NL API Strategie.
+          principles: [Moderne IT, Standaard, Community]
+        - name: CG02 Data realtime gebruiken bij de bron
+          practice: Gegevens worden niet meer opgeslagen in procesapplicaties (laag 4 of 5), maar in basisregistraties, gemeentelijke kernregistraties en specifieke registers die via services worden benaderd. Voor elk type gegeven wordt een heldere keuzegemaakt over wat daarvoor het authentieke bronregister is (dat kan in specifieke uiteraard ook een applicatiespecifiek registercomponent zijn). Er worden geen lokale kopieën van registers gemaakt, en geen gegevens gedupliceerd in andere registers.
+          smart:
+            - Worden er gegevens in procesapplicaties opgeslagen?
+            - Wat is voor elk type gegeven dat verwerkt wordt de authentieke bron?
+            - Wordt er gebruik gemaakt van datadistributie?
+            - Worden gegevens uit authentieke registers gedupliceerd in nieuwe registers?
+            - Welke organisaties zijn verantwoordelijk voor welke authentieke registers?
+          norms:
+            - Gegevens worden niet in procesapplicaties opgeslagen.
+            # - Gegevens worden niet in procesapplicaties opgeslagen, en voor ieder type gegeven wordt opgeslagen in een authentiek bronregister dat past bij de gemeentelijke API-standaarden.
+            # - Gegevens worden niet in procesapplicaties opgeslagen, en voor ieder type gegeven wordt opgeslagen in een authentiek bronregister dat past bij de gemeentelijke API-standaarden. Authentieke registers worden realtime 'bij de bron' gebruikt (er vindt geen datadistributie plaats).
+            # - Gegevens worden niet in procesapplicaties opgeslagen, en voor ieder type gegeven wordt opgeslagen in een authentiek bronregister dat past bij de gemeentelijke API-standaarden. Authentieke registers worden realtime 'bij de bron' gebruikt (er vindt geen datadistributie plaats). Gegevens uit authentieke bronnen worden niet gekopieerd naar andere registers.
+            # - Gegevens worden niet in procesapplicaties opgeslagen, en voor ieder type gegeven wordt opgeslagen in een authentiek bronregister dat past bij de gemeentelijke API-standaarden. Authentieke registers worden realtime 'bij de bron' gebruikt (er vindt geen datadistributie plaats). Gegevens uit authentieke bronnen worden niet gekopieerd naar andere registers. Registers zijn belegd bij organisaties wiens taak de bijhouding van die registers omvat.
+          principles: [Eenmalige vastlegging, Lagenarchitectuur, Componentgebaseerd, Standaard]
+        - name: CG03 Continu een werkend en toonbaar (tussen)resultaat opleveren
+          practice: De actuele versie van de software wordt (vanaf het einde van iedere ontwikkelcyclus) beschikbaar gesteld om deze te kunnen testen. Zoveel mogelijk kwaliteitsaspecten van de software worden geautomatiseerd getest en de kwaliteit is inzichtelijk.
+          smart:
+            - Waar staat de demo-omgeving voor de software?
+              - https://hhb-acc.nlx.reviews
+            - Waar staan testcode en het rapport van de geautomatiseerde tests van de software?
+              - TODO link?
+            - Welke zaken worden geautomatiseerd getest?
+              - https://gitlab.com/commonground/huishoudboekje/app-new/-/tree/develop/.gitlab/ci
+          norms:
+            # - Alle stakeholders kunnen de na afloop van iedere ontwikkelcyclus de laatste versie van de software op ieder moment testen in een demo-omgeving.
+            # - Alle stakeholders kunnen de na afloop van iedere ontwikkelcyclus de laatste versie van de software op ieder moment testen in een demo-omgeving, en er is een geautomatiseerd rapport beschikabar waaruit blijkt dat de werking van de software geautomatieerd wordt getest.
+            - Er is een publieke demo-omgeving waar de laatste versie van de software te testen is, en iedereen kan het rapport inzien waaruit blijkt dat de werking van de software geautomatieerd wordt getest.
+            # - Er is een publieke demo-omgeving waar de laatste versie van de software te testen is, en iedereen kan het rapport inzien waaruit blijkt dat de werking van de software geautomatieerd wordt getest op tenminste toegankelijkheid, werking en code coverage.
+            # - Er is een publieke demo-omgeving waar de laatste versie van de software te testen is, en iedereen kan het rapport inzien waaruit blijkt dat de werking van de software geautomatieerd wordt getest op tenminste toegankelijkheid, werking, code coverage en code complexity.
+          principles: [Agile, Moderne IT]
+        - name: CG04 Hergebruik en samenwerken aan software(componenten) in de community
+          practice: Gemeenten en partners werken samen aan software die herbruikbaar is. Software is voor meerdere gemeenten bruikbaar en kan door meerdere leveranciers worden geleverd.
+          smart:
+            - (Hoe) kan de software door meerdere gemeenten worden gebruikt?
+              - Ja. Een gemeente kan een installatie van de software doen en daarbij eigen parameters zetten.
+            - (Hoe) kan de software door meerdere leveranciers worden gebruikt?
+              - Ja. De broncode van de software is beschikbaar.
+          norms:
+            # - De software kan door meerdere gemeenten worden gebruikt.
+            # - De software kan door meerdere gemeenten worden gebruikt en de software kan door meerdere leveranciers worden gebruikt.
+            - De software kan door meerdere gemeenten worden gebruikt en de software kan door meerdere leveranciers worden gebruikt. De software wordt opgeleverd in de vorm van docker images en documentatie hoe de software gebruikt kan worden.
+            # - De software kan door meerdere gemeenten worden gebruikt en de software kan door meerdere leveranciers worden gebruikt. De software wordt opgeleverd in de vorm van docker images en documentatie hoe de software gebruikt kan worden. Meerdere leveranciers werken samen aan de software.
+            # - De software kan door meerdere gemeenten worden gebruikt en de software kan door meerdere leveranciers worden gebruikt. De software wordt opgeleverd in de vorm van docker images en documentatie hoe de software gebruikt kan worden. Meerdere leveranciers werken samen aan de software. Meerdere leveranciers kunnen de software leveren aan gemeenten.
+          principles: [Community, Moderne IT]
+        - name: CG05 Beheer van de software is onderdeel van ontwikkeling
+          practice: Het beheer van software gebeurt vanaf het begin van de ontwikkeling door middel van devops, zodat bruikbaarheid, kwaliteit en veiligheid vanaf het begin geregeld zijn.
+          smart:
+            - Wie is de eigenaar van de software?
+              - VNG Realisatie
+            - Hoe is beheer van de software geregeld? (denk aan ondersteuning, security-patches, softwareupdates en de reactietijd in SLA's)
+              - TODO Eigenaar voert regie op plannen voor beheer.
+            - Welke onderdelen van beheer zijn geautomatiseerd?
+              - TODO Nader te bepalen door eigenaar.
+            - In welke mate wordt de Standard for Public Code toegepast voor beheer van de softwarecode? Zie https://standard.publiccode.net/
+              - Niet. Deze informatie is niet als kader aangeleverd bij de start van de ontwikkeling van het product in juni 2020.
+          norms:
+            - De eigenaar van de software is bekend en de manier waarop software beheerd wordt is gedocumenteerd.
+            - De eigenaar van de software is bekend en er is duidelijk beschreven hoe ondersteuning, security-patches, en softwareupdates geregeld zijn.
+            - De eigenaar van de software is bekend en er is duidelijk beschreven hoe ondersteuning, security-patches, en softwareupdates geregeld zijn. Het is duidelijk hoeveel ondersteuning er mogelijk is en wat daarvoor reactietijden/SLA's zijn.
+            - De eigenaar van de software is bekend en er is duidelijk beschreven hoe ondersteuning, security-patches, en softwareupdates geregeld zijn. Het is duidelijk hoeveel ondersteuning er mogelijk is en wat daarvoor reactietijden/SLA's zijn. Security-patches en software-updates kunnen geautomatiseerd plaatsvinden.
+            - De eigenaar van de software is bekend en er is duidelijk beschreven hoe ondersteuning, security-patches, en softwareupdates geregeld zijn. Het is duidelijk hoeveel ondersteuning er mogelijk is en wat daarvoor reactietijden/SLA's zijn. Security-patches en software-updates kunnen geautomatiseerd plaatsvinden. De broncode van de software wordt beheerd volgens de Standard for Public Code.
+          principles: [Agile, Moderne IT, Community, Standaard]
+        - name: CG06 Planning en voortgang delen in de community
+          practice: Gemeenten en partners maken hun planning, voortgang en werkwijze actief bekend in de Common Ground community.
+          smart:
+            - Waar staan doelstellingen van de software?
+            - Waar staat de informatie over planning, voortgang en samenwerking?
+            - Waar staat informatie over de componenten waar de software uit bestaat?
+          norms:
+            - Informatie over planning, voortgang en samenwerking is alleen voor directe stakeholders beschikbaar.
+            - Informatie over planning, voortgang en samenwerking is publiek beschikbaar op de eigen website.
+            - Informatie over planning, voortgang en samenwerking is beschikbaar op commonground.nl.
+            - Informatie over planning, voortgang en samenwerking is beschikbaar in de Common Ground Componentencatalogus.
+            - Informatie over planning, voortgang en samenwerking is beschikbaar in de Common Ground Componentencatalogus en daarbij is voor ieder component inzichtelijk wanneer het beschikbaar komt.
+          principles: [Community]
+        - name: CG07 Kennis en informatie delen in de community
+          practice: Kennis, leerpunten en valkuilen tijdens de ontwikkeling van de software wordt actief gedeeld met andere leden van de community, bijvoorbeeld via blogs, chatgroepen en evenementen. Documentatie inclusief doelstelling van de softare, installatieprocedure, configuratiemogelijkheden en gebruikershandleiding zijn gedocumenteerd en beschikbaar.
+          smart:
+            - Waar staat de documentatie over de configutatie en het gebruik van de software?
+            - Waar staat de documentatie over de werking van de software?
+            - Is het mogelijk de software uit te proberen in een testversie, en zo ja hoe/waar?
+            - Waar worden leerpunten en valkuilen gedeeld?
+          norms:
+            - Er is documentatie op een publieke website beschikbaar.
+            - Heldere documentatie over architectuur, procesmodellen, algoritmen en gegevensverwerkingen van de software is op een publieke website beschikbaar.
+            - Heldere documentatie over architectuur, procesmodellen, algoritmen en gegevensverwerkingen van de software is op een publieke website beschikbaar. Leerpunten en valkuilen worden gedeeld via commonground.nl.
+            - Heldere documentatie over architectuur, procesmodellen, algoritmen en gegevensverwerkingen van de software is op een publieke website beschikbaar. Leerpunten en valkuilen worden gedeeld via commonground.nl, en de software kan in een testversie worden uitgeprobeerd.
+            - Heldere documentatie over architectuur, procesmodellen, algoritmen en gegevensverwerkingen van de software is op een publieke website beschikbaar. Leerpunten en valkuilen worden gedeeld via commonground.nl, en de software kan in een testversie worden uitgeprobeerd. Het is in de community duidelijk hoe het mogelijk is om in contact te komen met het team dat aan de software werkt.
+          principles: [Community, Open]
+        - name: CG08 Gebruik van containertechnologie en Haven-compliancy
+          practice: Om software uit kleinere componenten te kunnen samenstellen, beter te kunnen schalen, en wendbaarder te zijn, wordt containertechnologie (Docker) en de Haven-compliant infrastructuur gebruikt. Zo kunnen stukken software als bouwblokken worden opgeleverd en makkelijk worden gecombineerd, en op elke moderne infrastructuur worden gebruikt.
+          smart:
+            - Wordt de software uitgevoerd met behulp van containertechnologie?
+            - Waar worden docker container images gepubliceerd?
+            - Wat is de gemiddelde bestandsomvang van de containers die onderdeel zijn van de software?
+            - Wat is het gemiddelde geheugengebruik van de containers die onderdeel zijn van de software?
+            - Worden installatiescripts meegeleverd om de software op Haven-compliant infrastructuur te kunnen uitvoeren?
+          norms:
+            - De software maakt geen gebruik van functionaliteit die enkel op één specifieke infrastructuur werkt.
+            - De software wordt uitgevoerd met behulp van containertechnologie (Docker)
+            - De software kan worden uitgevoerd door middel van het starten van de benodigde containers (`docker run <image>` werkt).
+            - Er worden installatiescripts meegeleverd om de software gemakkelijk op iedere Haven-compliant infrastructuur te kunnen uitvoeren.
+            - De containers die nodig zijn om de software te gebruiken om een businessprobleem op te lossen, kunnen vanuit de Common Ground Componentencatalogus gemakkelijk worden geïnstalleerd op iedere Haven-compliant infrastructuur.
+          principles: [Moderne IT, Community, Standaard]
+        - name: CG09 Geautomatiseerd bouwen, testen versies en releasen CI/CD
+          practice: Softwarecode wordt bijgehouden in versiebeheersystemen, en heeft een duidelijk systeem voor het uitbrengen van nieuwe versies. Nieuwe versies kunnen zoveel mogelijk geautomatiseerd worden gereleased en getest. Tijdens het releasen worden kwaliteitsaspecten van software geautomatiseerd getest, zodat met een gerust gevoel kan worden geupdate naar de volgende versie. Zo kan de doorlooptijd voor het toevoegen van nieuwe functionaliteit en het oplossen van problemen omlaag.
+          smart:
+            - Wordt er gebruik gemaakt van versiebeheer voor code en releases? Zo ja van welke systemen?
+            - Hoe vaak per week kan er gereleased worden?
+            - Wordt gebruik gemaakt van een geautomatiseerde CI/CD-straat? (bijv functionaliteit/regressie, toegankelijkheid, code complexity en test coverage)
+            - Welke zaken worden bij het maken van een nieuwe release geautomatiseerd getest? (denk aan functionaliteit/regressie, toegankelijkheid, code complexity, code coverage)
+            - Wat is de doorlooptijd van het deployen van een nieuwe versie van de software naar producti met een eenvoudige (bijvoorbeeld enkel tekstuele) wijziging?
+          norms:
+            - Codeversies en softwareversies worden duidelijk bijgehouden volgens een versiebeheersysteem.
+            - Codeversies en softwareversies worden duidelijk bijgehouden volgens een versiebeheersysteem, en het is mogelijk om minimaal wekelijks een nieuw versie van de software te releasen.
+            - Het releasen van nieuwe versies van de software kan volledig geautomatiseerd.
+            - Het releasen van nieuwe versies van de software kan volledig geautomatiseerd en daarbij worden nieuwe versies geautomatiseerd getest op functionaliteit/regressie, toegankelijkheid, code complexity en test coverage.
+            - Het deployen van nieuwe versies van de software naar productie kan volledig geautomatiseerd en daarbij worden nieuwe versies geautomatiseerd getest op functionaliteit/regressie, toegankelijkheid en code complexity en test coverage. De doorlooptijd voor het doorvoeren van een kleine softwareupdate naar productie is korter dan een uur.
+          principles: [Agile, Moderne IT, Open]
+        - name: CG10 Software is bruikbaar in moderne browsers en op moderne besturingssystemen
+          practice: Software stelt geen bijzondere eisen aan de systemen van de gebruikers van de software, maar werkt juist op alle moderne browsers en besturingssystemen. Dat zorgt er voor dat software platformonafhankelijk kan werken en enkel moderne en veilige (up to date) platforms hoeven worden ondersteund.
+          smart:
+            - In welke browsers en/of op welke besturingssystemen is de software te geruiken?
+            - Zijn er bijzondere plugins of andere runtime-vereisten bij het gebruiken van de software?
+          norms:
+            - De software vereist geen verouderde browser, besturingssysteem of plugin.
+            - De software werkt in meerdere browsers of besturingssystemen.
+            - De software werkt in meerdere moderne browsers of besturingssystemen en vereist geen specifieke plugins of versies van browsers of besturingssystemen.
+            - De software is te gebruiken op alle up-to-date moderne browsers (Chrome, Firefox, Opera, Edge, Internet Explorer, Safari) of besturingssystemen (Windows, Linux, MacOS)
+            - De software is te gebruiken op alle up-to-date moderne besturingssystemen (Windows, Linux, MacOS) en (indien van toepassing) in elke moderne browser (Chrome, Firefox, Opera, Edge, Internet Explorer, Safari).
+          principles: [Moderne IT, Vertrouwd, Open]
+        - name: CG11 Open source software
+          practice: Softwarecode wordt (tenzij er een goed onderbouwde reden is om dat niet te doen) als open source software vrijgegeven onder een EUPL-licentie (of gelijkwaardig). Het (her)gebruik van open source software wordt expliciet gemaakt en er wordt bijgedragen aan bestaande open source software.
+          smart:
+            - Welke bestaande open source software wordt hergebruikt?
+            - Is de broncode van de software publiek beschikbaar?
+            - Onder welke licentie is de broncode beschikbaar en waar staat deze licentie?
+            - Zijn er een CODE_OF_CONDUCT.md en een CONTRIBUTING.md aanwezig, waarin beschreven staat hoe andere partijen kunnen bijdragen aan de software?
+            - Is er een opengov.yaml metadatabestand aanwezig?
+          norms:
+            - In de software wordt bestaande open source software wordt hergebruikt (en welke dat is), en dit hergebruik is gedocumenteerd.
+            - De broncode van de software is op verzoek beschikbaar.
+            - De broncode van de software is publiek beschikbaar op een gangbare Git-omgeving (bijvoorbeeld Gitlab of Github)
+            - De broncode van de software is publiek beschikbaar en voorzien van een EUPL licentie of minimaal gelijkwaardig (MIT, BSD, Apache 2.0).
+            - De broncode van de software is publiek beschikbaar en voorzien van een EUPL licentie of minimaal gelijkwaardig (MIT, BSD, Apache 2.0), en er zijn een CODE_OF_CONDUCT.md en een CONTRIBUTING.md opgenomen in de repository, waarin beschreven staat hoe andere partijen kunnen bijdragen aan de software.
+          principles: [Open Source]
+        - name: CG12 Componenten hebben een afgebakende functie binnen de vijflagen-architectuur
+          practice: Software wordt opgedeeld in kleinere zelfstandig bruikbare componenten die een duidelijk afgebakende functie binnen de vijflagen-architectuur hebben. Afhankelijkheden tussen componenten zijn in beeld.
+          smart:
+            - Waar zijn de functies van componenten gedocumenteerd?
+            - Waar is gedocumenteerd welke component zich op welke laag van het architectuurmodel bevindt?
+            - Waar zijn de afhankelijkheden tussen componenten gedocumenteerd?
+          norms:
+            - Voor alle componenten is helder gedocumenteerd welke functies deze vervullen.
+            - De documentatie van de software bevat een architectuurplaat waarin ieder component geplot is op de vijflagen-architectuur.
+            - De documentatie van de software bevat een architectuurplaat waarin ieder component geplot is op de vijflagen-architectuur, en daarin zijn componenten die data-services afnemen (procesapplicaties) duidelijk gescheiden van componenten die data-services aanbieden (dataregistercomponenten).
+            - De documentatie van de software bevat een architectuurplaat waarin ieder component geplot is op de vijflagen-architectuur, en daarin zijn componenten die data-services afnemen (procesapplicaties) duidelijk gescheiden van componenten die data-services aanbieden (dataregistercomponenten). Bovendien zijn user interfaces gescheiden van procesimplementaties, en dataservices van data-opslag.
+            - De documentatie van de software bevat een architectuurplaat waarin ieder component geplot is op de vijflagen-architectuur, en daarin zijn componenten die data-services afnemen (procesapplicaties) duidelijk gescheiden van componenten die data-services aanbieden (dataregistercomponenten). Bovendien zijn user interfaces gescheiden van procesimplementaties, en dataservices van data-opslag. Componenten op onderliggende lagen zijn nooit afhankelijk van bovenliggende lagen.
+          principles: [Lagenarchitectuur, Componentgebaseerd]
+        - name: CG13 Laag 5 Wendbare maar herkenbare user interfaces
+          practice: User interfaces zijn kleine en zelfstandig bruikbare componenten die wendbaar zijn en makkelijk vervangen kunnen worden. Ze zijn gericht op het uitvoeren van specifieke processen door specifieke gebruikers.
+          smart:
+            - In welke componenten zijn user interfaces opgedeeld?
+            - Zijn thema's voor verschillende organisaties beschikbaar? (bijvoorbeeld thema's voor alle afnemende gemeenten)
+          norms:
+            - User interface-componenten zijn zelfstandig bruikbaar (deploybaar als docker containers) en zijn niet opgenomen in een ander component.
+            - User interfaces voor verschillende doelgroepen of duidelijk verschillende processen zijn zelfstandig bruikbaar (deploybaar als docker containers, 'micro-frontends').
+            - User interfaces voor verschillende doelgroepen of duidelijk verschillende processen zijn zelfstandig bruikbaar (deploybaar als docker containers, 'micro-frontends'), maar de visuele elementen en user experience zijn voor gebruikers consistent omdat gebruik wordt gemaakt van een design system.
+            - User interfaces voor verschillende doelgroepen of duidelijk verschillende processen zijn zelfstandig bruikbaar (deploybaar als docker containers, 'micro-frontends'), maar visuele elementen zijn voor gebruikers consistent omdat gebruik wordt gemaakt van een gedeeld design system met thema's voor alle afnemende gemeenten.
+            - User interfaces voor verschillende doelgroepen of duidelijk verschillende processen zijn zelfstandig bruikbaar (deploybaar als docker containers, 'micro-frontends'), maar visuele elementen zijn voor gebruikers consistent omdat gebruik wordt gemaakt van het NL Design System, met thema's voor alle afnemende organisaties.
+          principles: [Lagenarchitectuur, Componentgebaseerd, Community]
+        - name: CG14 Laag 4 Procesimplementatie in afgebakende componenten
+          practice: Processen worden geimplementeerd in afzonderlijke procescomponenten die een helder afgebakende scope hebben ("do one thing and do it well"). Processtappen zoals het ontvangen van invoer uit user interfaces, het uitvoeren van businesslogica, of het doorvoeren van data-acties (lezen/schrijven) zijn helder gedocumenteerd. Er wordt gewerkt aan gestandaardiseerde basisprocessen.
+          smart:
+            - Welke componenten implementeren processen, en welke processen?
+            - Waar zijn procesimplementaties beschreven/gedocumenteerd? (bijvoorbeeld mbv BPMN)
+            - Wordt gebruik gemaakt van process engines?
+            - Worden er basisprocessen geimplementeerd?
+          norms:
+            - Er is helder gedocumenteerd welke processen in de software geimplementeerd worden.
+            - Er is helder gedocumenteerd welke processen in de software geimplementeerd worden en het is duidelijk welk proces in welke component geimplementeerd wordt.
+            - Er is helder gedocumenteerd welke processen in de software geimplementeerd worden en het is duidelijk welk proces in welke component geimplementeerd wordt. Voor ieder proces zijn afzonderlijke processtappen gedocumenteerd (bijvooreeld mbv BPMN).
+            - Er is helder gedocumenteerd welke processen in de software geimplementeerd worden en het is duidelijk welk proces in welke component geimplementeerd wordt. Voor ieder proces zijn afzonderlijke processtappen gedocumenteerd (bijvooreeld mbv BPMN). Processen zijn zelfstandig uitvoerbaar en kennen geen dependencies op andere processen (geen spaghetti/subprocessen).
+            - Er is helder gedocumenteerd welke processen in de software geimplementeerd worden en het is duidelijk welk proces in welke component geimplementeerd wordt. Voor ieder proces zijn afzonderlijke processtappen gedocumenteerd (bijvooreeld mbv BPMN). Elk proces is in een eigen afgebakend component geïmplementeerd.
+          principles: [Lagenarchitectuur, Componentgebaseerd]
+        - name: CG15 Laag 3 Gegevens raadplegen bij andere organisaties mbv NLX
+          practice: NLX wordt gebruikt als landelijk integratiemechanisme tussen procesimplementaties en registers. NLX maakt het mogelijk om gegevens die in registers bij andere organisaties (of andere organisatieonderdelen) staan, te bevragen alsof ze lokaal beschikbaar zijn. Daarmee wordt het maken van kopieën voorkomen en kunnen gevens op een goede manier worden gebruikt. Organisaties die NLX gebruiken zijn zelf verantwoordelijk dat ze dit op de juiste manier doen.
+          smart:
+            - Kan de software data aanbieden of afnemen via NLX? Om welke registers gaat het dan?
+            - Wordt er een voorbeeldconfiguratie meegeleverd om de software icm NLX te gebruiken? Waar staat dit voorbeeld?
+            - Vindt gegevensuitwisseling tussen organisaties in de software altijd plaats met gebruik van NLX of ook buiten NLX om? Om welke gegevensuitwisselingen gaat dit?
+            - Is het mogelijk de software
+            - Worden vanuit de ontwikkelaars van de software bijgedragen aan de doorontwikkeling van NLX? (bijvoorbeeld door bugs en gewenste features te melden of op te lossen voor de hele community).
+          norms:
+            - Software is geschikt om gegevensuitwisseling via NLX uit te voeren.
+            - Er wordt een bruikbare voorbeeldconfiguratie voor gebruik van de software icm NLX meegeleverd.
+            - De software gebruikt enkel NLX voor gegevensuitwisseling tussen organisaties, maar ten behoeve van transitie wordt nog niet van de juiste bron gebruik gemaakt (bijv een lokale versie van een registratie ipv een landelijk unieke bron of vice versa).
+            - De software gebruikt enkel NLX voor gegevensuitwisseling tussen organisaties, en gegevens worden bij de juiste bron geraadpleegd.
+            - De software gebruikt enkel NLX voor gegevensuitwisseling tussen organisaties, en gegevens worden bij de juiste bron geraadpleegd. Door de ontwikkelaar van de software wordt bijgedragen aan de doorontwikkeling van NLX.
+          principles: [NLX als gateway, Lagenarchitectuur, Componentgebaseerd]
+        - name: CG16 Laag 2 Data-services zijn onafhankelijke componenten
+          practice: Dataservices zijn onafhankelijke componenten die geen businesslogica bevatten (structurele datavalidatie of filtering op basis van autorisaties wordt niet beschouwd als proceslogica, maar als een technische data-service-functie).
+          smart:
+            - Welke data-services (laag 2) worden door de software aangeboden (welke gegevens worden met welk koppelvlak aangeboden)?
+            - Hoe verhouden data-services zich tot elkaar?
+            - Zijn data-services onafhankelijk van elkaar en andere componenten bruikbaar (deploybaar), of zijn er onderling afhankelijkheden?
+            - Is er proceslogica aanwezig in data-services? Zo ja, welke?
+          norms:
+            - Er is duidelijk gedocumenteerd welke data-services door de software worden aangeboden.
+            - Alle gegevens in de software worden ontsloten via data-services en deze zijn helder gedocumenteerd.
+            - Alle gegevens in de software worden ontsloten via in afzonderlijke servicecomponenten gerealiseerde data-services en de indeling daarvan is helder gedocumenteerd.
+            - Alle gegevens in de software worden ontsloten via in afzonderlijke servicecomponenten gerealiseerde data-services en de indeling daarvan is gedocumenteerd. Servicecomponenten bevatten geen proceslogica.
+            - Alle gegevens in de software worden ontsloten via in afzonderlijke servicecomponenten gerealiseerde data-services en de indeling daarvan is gedocumenteerd. Servicecomponenten bevatten geen proceslogica. Er zijn geen harde relaties tussen meerdere registers onderling (combineren gebeurt op procesniveau bijv mbv linked data).
+          principles: [Lagenarchitectuur, Componentgebaseerd, Standaard]
+        - name: CG17 Laag 1 Opslag van gegevens is een commodity
+          practice: Het is duidelijk waar en hoe gegevens worden opgeslagen. Opslag van gegevens gebeurt zo eenvoudig mogelijk in gangbare systemen, zodat gegevens gemakkelijk door services ontsloten kunnen worden. Componenten voor gegevensopslag bevatten geen businesslogica.
+          smart:
+            - Welke gegevens worden door de software in welke componenten opgeslagen? Welke typen gegevensopslag worden vereist, aangeraden of ondersteund?
+            - Welke businesslogica is aanwezig in componenten voor gegevensopslag?
+            - Worden verschillende gegevenssets in afzonderlijke databases opgeslagen?
+          norms:
+            - Er is helder gedocumenteerd hoe en waar gegevens worden opgeslagen, en welke typen gegevenopslag ondersteund worden.
+            - Er is helder gedocumenteerd hoe en waar gegevens worden opgeslagen, en welke typen gegevenopslag ondersteund worden. Componenten voor gegevensopslag zijn gescheiden van andere componenten.
+            - Er is helder gedocumenteerd hoe en waar gegevens worden opgeslagen, en welke typen gegevenopslag ondersteund worden. Componenten voor gegevensopslag zijn gescheiden van andere componenten, waarbij gebruik wordt gemaakt van gangbare moderne databasesystemen.
+            - Er is helder gedocumenteerd hoe en waar gegevens worden opgeslagen, en welke typen gegevenopslag ondersteund worden. Componenten voor gegevensopslag zijn gescheiden van andere componenten, waarbij gebruik wordt gemaakt van gangbare moderne databasesystemen. Componenten voor gegevensopslag bevatten geen businesslogica (zoals bijvoorbeeld stored procedures).
+            - Er is helder gedocumenteerd hoe en waar gegevens worden opgeslagen, en welke typen gegevenopslag ondersteund worden. Componenten voor gegevensopslag zijn gescheiden van andere componenten, waarbij gebruik wordt gemaakt van gangbare moderne databasesystemen. Componenten voor gegevensopslag bevatten geen businesslogica (zoals bijvoorbeeld stored procedures). Verschillende gegevens worden in onafhankelijke databases opgeslagen.
+          principles: [Lagenarchitectuur, Componentgebaseerd, Moderne IT, Open]
+        - name: CG18 Transparante werking van software
+          practice:
+          smart:
+            - Waar staat de werking van de software gedocumenteerd?
+            - Zijn er BPMN-modellen beschikbaar van geimplementeerde processen?
+            - Worden er besluiten gecommuniceerd aan burgers of bedrijven zonder dat de precieze totstandkoming van die besluiten gecommuniceerd wordt?
+          norms:
+            - Documentatie van de werking van de software (procesbeschrijvingen) is publiek beschikbaar.
+            - Documentatie van de werking van de software (procesbeschrijvingen) is publiek beschikbaar en processen zijn gemodelleerd in BPMN.
+            - Documentatie van de werking van de software (procesbeschrijvingen) is publiek beschikbaar en processen zijn gemodelleerd in BPMN, waarbij duidelijk is aangegeven welke actoren (burgers, bedrijven, medewerkers, andere partijen) welke processtappen uitvoeren.
+            - Documentatie van de werking van de software (procesbeschrijvingen) is publiek beschikbaar en processen zijn gemodelleerd in BPMN, waarbij duidelijk is aangegeven welke actoren (burgers, bedrijven, medewerkers, andere partijen) welke processtappen uitvoeren. Wanneer besluiten aan eindgebruikers worden gecommuniceerd, wordt daarbij gecommuniceerd hoe het besluit precies tot stand is gekomen.
+            - Documentatie van de werking van de software (procesbeschrijvingen) is publiek beschikbaar en processen zijn gemodelleerd in BPMN, waarbij duidelijk is aangegeven welke actoren (burgers, bedrijven, medewerkers, andere partijen) welke processtappen uitvoeren. Wanneer besluiten aan eindgebruikers worden gecommuniceerd, wordt daarbij gecommuniceerd hoe het besluit precies tot stand is gekomen. De werking van de software is volledig inzichtelijk omdat de broncode publiek beschikbaar is.
+          principles: [Open, Regie op gegevens, Open Source]
+        - name: CG19 Open ontwikkeling van nieuwe features
+          practice: Het is transparant inzichtelijk welke nieuwe features onderdeel kunnen worden van de software. Binnen de community is bekendgemaakt welke features te verwachten zijn, en iedereen kan nieuwe features voorstellen.
+          smart:
+            - Waar staat de prioriteit van nieuwe features?
+            - Is het mogelijk om features toe te voegen aan een publieke backlog?
+          norms:
+            - Er is een roadmap gepubliceerd van aankomende nieuwe features.
+            - De backlog met features (user stories) is inzichtelijk voor de opdrachtgevers.
+            - De backlog van features (user stories) is inzichtelijk voor de Common Ground community.
+            - De backlog van features (user stories) is publiek beschikbaar.
+            - De backlog van features (user stories) is publiek beschikbaar. Iedereen kan features toevoegen/voorstellen aan de backlog van features.
+          principles: [Agile, Community, Open]
+        - name: CG20 Multilevel authenticatie en autorisatie
+          practice: Er wordt multi-level authenticatie en autorisatie gebruikt; gebruikersauthenticatie en autorisatie (van bijvoorbeeld burgers of medewerkers) vindt plaats op het niveau van natuurlijke personen en binnen de context van processapplicaties. Authenticatie en autorisatie bij gegevensuitwisseling mbv data-services vindt plaats op organisatieniveau (bijvoorbeeld een gemeente die gegevens raadpleegt verkrijgt toegang tot een data-service bij een ketenpartner).
+          smart:
+            - Op welke manier vindt authenticatie en autorisatie van gebruikers (natuurlijke personen) plaats?
+            - Op welke manier vindt authenticatie en autorisatie van organisaties bij gegevensuitwisseling plaats?
+          norms:
+            - De authenticatie van gebruikers bij procesapplicaties is adequaat geregeld.
+            - De authenticatie van gebruikers bij procesapplicaties is adequaat geregeld en processen kunnen alleen worden uitgevoerd door gebruikers die de juiste autorisaties hebben.
+            - De authenticatie van gebruikers bij procesapplicaties is adequaat geregeld en processen kunnen alleen worden uitgevoerd door gebruikers die de juiste autorisaties hebben. Er is ondersteuning om rollen en rechten van gebruikers uit een afzonderlijk identity provider component op te halen (bijvoorbeeld een interne active directory of openid connect IDP).
+            - De authenticatie van gebruikers bij procesapplicaties is adequaat geregeld en processen kunnen alleen worden uitgevoerd door gebruikers die de juiste autorisaties hebben. Er is ondersteuning om rollen en rechten van gebruikers uit een afzonderlijk identity provider component op te halen (bijvoorbeeld een interne active directory of openid connect IDP). Gegevensuitwisseling met andere organisaties vindt enkel plaats op basis van autorisaties.
+            - De authenticatie van gebruikers bij procesapplicaties is adequaat geregeld en processen kunnen alleen worden uitgevoerd door gebruikers die de juiste autorisaties hebben. Er is ondersteuning om rollen en rechten van gebruikers uit een afzonderlijk identity provider component op te halen (bijvoorbeeld een interne active directory of openid connect IDP). Gegevensuitwisseling met andere organisaties vindt enkel plaats op basis van autorisaties, waarbij autorisatie plaatsvindt op het niveau van de afnemende organisatie.
+          principles: [Vertrouwd, NLX als gateway]
+        - name: CG21 Inzicht in en invloed op gegevensverwerking
+          practice: Gemeenten en andere organisaties zijn 'in control' als het gaat om verwerking van (persoons)gegevens. Er wordt bijgehouden welke gegevens verwerkt worden en met welk doel, en burgers kunnen van hun rechten mbt gegevensverwerking gebruik maken, inclusief het recht op inzage.
+          smart:
+            - Welke gegevens worden verwerkt, en met welke wettelijke basis, grondslag en doelbinding?
+            - Worden alle gegevensverwerkingen bijgehouden in een logging- en verwerkingsregister? Gebeurt dit in lijn met de beschrijving van 'Logging van verwerking van gegevens' (zie https://www.gemmaonline.nl/index.php/Gegevenslandschap)?
+            - Op welke manier draagt de software bij aan inzicht voor burgers en bedrijven in verwerking van gegevens?
+            - Hoe kunnen gebruikers incorrecte gegevens(verwerkingen) melden/herstellen?
+            - Welke informatie kan door gebruikers worden geexporteerd teneinde een eigen dossier op te bouwen?
+          norms:
+            - De software registreert alle exacte verwerkingen van gegevens.
+            - De software registreert alle exacte verwerkingen van gegevens, inclusief wettelijke grondslag en doelbinding.
+            - De software registreert alle exacte verwerkingen van gegevens, inclusief wettelijke grondslag en doelbinding. De software draagt eraan bij dat burgers en bedrijven inzicht verkrijgen in deze logging.
+            - De software registreert alle exacte verwerkingen van gegevens, inclusief wettelijke grondslag en doelbinding. De software draagt eraan bij dat burgers en bedrijven inzicht verkrijgen in deze logging, en dat zij op gemakkelijke wijze foutieve gegevens kunnen melden/herstellen.
+            - De software registreert alle exacte verwerkingen van gegevens, inclusief wettelijke grondslag en doelbinding. De software draagt eraan bij dat burgers en bedrijven inzicht verkrijgen in deze logging, en dat zij op gemakkelijke wijze foutieve gegevens kunnen melden/herstellen. Burgers en bedrijven kunnen gegevens die verwerkt worden exporteren naar een open formaat zodat zij een eigen dossier op kunnen bouwen van gegevensverwerking door de overheid.
+          principles: [Regie op gegevens, Open]
+        - name: CG22 Informatiebeveiliging op orde
+          practice: Software voldoet aan alle wettelijke vereisten rondom informatiebeveiliging en privacybescherming. Er wordt maximaal gebruik gemaakt van security en privacy by design en by default. Gegevensverwerkingen worden in kaart gebracht dmv een DPIA, en bijgehouden dmv een register van logging en verwerking. Waar mogelijk worden (inzichten in beschikbare) security-updates geautomatiseerd.
+          smart:
+            - Waar staat de assesment/rapport over de toepassing van de Baseline Informatiebeveiliging Overheid?
+            - Waar is de DPIA-rapporage te vinden?
+            - Hoe zijn Privacy en Security by Design toegepast?
+            - Welke gegevens worden voor welke doeleinden in de software verwerkt?
+            - Waar worden gegevensverwerkingen geregistreerd tbv logging- en auditdoeleinden?
+          norms:
+            - Uit de BIO-assesment blijkt dat er geen onacceptabele beveiligingsrisico's aanwezig zijn.
+            - Uit de BIO-assesment blijkt dat er geen onacceptabele beveiligingsrisico's aanwezig zijn, en uit het DPIA-rapport is duidelijk dat er geen grote risico's zijn voor de informatieveiligheid.
+            - Uit de BIO-assesment blijkt dat er geen onacceptabele beveiligingsrisico's aanwezig zijn, en uit het DPIA-rapport is duidelijk dat er geen grote risico's zijn voor de informatieveiligheid, en dat privacy en security by design en default zijn toegepast.
+            - Uit de BIO-assesment blijkt dat er geen onacceptabele beveiligingsrisico's aanwezig zijn, en uit het DPIA-rapport is duidelijk dat er geen grote risico's zijn voor de informatieveiligheid, en dat privacy en security by design en default zijn toegepast. Alle verwerkingen van gegevens worden bijgehouden in een logging- en verwerkingsregister.
+            - Uit de BIO-assesment blijkt dat er geen onacceptabele beveiligingsrisico's aanwezig zijn, en uit het DPIA-rapport is duidelijk dat er geen grote risico's zijn voor de informatieveiligheid, en dat privacy en security by design en default zijn toegepast. Alle verwerkingen van gegevens worden bijgehouden in een logging- en verwerkingsregister. Er is een geautomatiseerd, actueel inzicht in beschikbare veiligheidspatches voor de software of dependencies van de software.
+          principles: [Vertrouwd, Moderne IT]
+        - name: CG23 Permanent beta en de invloed van de opdrachtgever op productkeuzes
+          practice: Software krijgt gedurende de (door)ontwikkeling vorm en de focus voor doorontwikkeling is continu aanpasbaar. Het is voor de opdrachtgever mogelijk om invloed uit te oefenen op productkeuzes. Door middel van goed opdrachtgeverschap voeren gemeenten regie over de architectuur van software-oplossingen.
+          smart:
+            - Wie is de Product Owner?
+            - Zijn er periodieke sprint reviews?
+            - Wie voert regie over de architectuur van de oplossing?
+          norms:
+            - De software is ontwikkeld op basis van een functionele vraag van de opdrachtgever.
+            - De opdrachtgever kan in periodieke sprint reviews input leveren op het productkeuzes in de software.
+            - De software wordt iteratief ontwikkeld op basis van keuzes van de opdrachtgever.
+            - De opdrachtgever vervult de rol van Product Owner in het ontwikkelteam.
+            - De opdrachtgever voert de regie over de architectuur van de oplossing.
+          principles: [Agile, Nieuw naast oud]
+        - name: CG24 De duur van ontwikkelcycli.
+          practice: De (door)ontwikkeling van de software is kortcyclisch geregeld zodat wendbaar gereageerd kan worden op veranderende omstandigheden. Aan het eind van iedere cyclus wordt een werkend resultaat getoond en wordt de scope van de volgende ontwikkelcyclus bepaald op basis van gebruikersfeedback de prioriteit van nieuwe features.
+          smart:
+            - Hoe lang duurt iedere ontwikkelcyclus (sprint)?
+            - Is er een vaste cadans van ontwikkelcycli?
+            - Is er een werkend resultaat aan het einde van iedere ontwikkelcyclus?
+          norms:
+            - Software wordt niet kortcyclisch (door)ontwikkeld.
+            - Software wordt niet kortcyclisch (door)ontwikkeld, maar de doorontwikkeling heeft een vaste einddatum binnen één jaar.
+            - Software wordt kortcyclisch (door)ontwikkeld. De ontwikkelcyclus is korter dan drie maanden, maar er is geen vaste cadans van ontwikkelcycli.
+            - Software wordt kortcyclisch (door)ontwikkeld. De ontwikkelcyclus is korter dan een maand, maar er is geen vaste cadans van ontwikkelcycli.
+            - Software wordt kortcyclisch (door)ontwikkeld. De ontwikkelcyclus is korter dan een maand en er is een vaste cadans van ontwikkelcycli.
+          principles: [Agile]
+        - name: CG25 Open Standaarden
+          practice: Er wordt maximaal gebruik gemaakt van standaarden en bij voorkeur met gebruik van (internationale) open standaarden die zorgen voor een zo groot mogelijke compatibiliteit van software. Er wordt gedocumenteerd welke standaarden gebruikt worden en er deze sluiten aan bij de verplichte en aanbevolen standaarden van het Forum Standaardisatie.
+          smart:
+            - Waar is gedocumenteerd welke standaarden in de software worden toegepast.
+            - Welke toegepaste standaarden zijn open of gesloten? Zijn er licentiekosten?
+            - Welke verplichte en aanbevolen standaarden van het Forum Standaardisatie worden toegepast?
+          norms:
+            - Er is gedocumenteerd welke standaarden in de software worden toegepast.
+            - Er is gedocumenteerd welke open en gesloten standaarden in de software worden toegepast en of en welke licentiekosten vereist zijn.
+            - Er is gedocumenteerd welke open en gesloten standaarden in de software worden toegepast en of en welke licentiekosten vereist zijn. De software past alle relevante verplichte standaarden van het Forum Standaardisatie toe.
+            - Er is gedocumenteerd welke open en gesloten standaarden in de software worden toegepast en of en welke licentiekosten vereist zijn. De software past alle relevante verplichte en aanbevolen standaarden van het Forum Standaardisatie toe.
+            - Er is gedocumenteerd welke open en gesloten standaarden in de software worden toegepast en of en welke licentiekosten vereist zijn. De software past alle relevante verplichte standaarden van het Forum Standaardisatie toe. De software gebruikt enkel open standaarden waarvoor geen licentiekosten vereist zijn.
+          principles: [Standaard, Open]
+        - name: CG26 API-standaarden uit de Agenda van het Gegevenslandschap
+          practice: Voor gegevens en berichtenverkeer stelt VNG gemeentelijke API-standaarden op. Deze standaarden worden opgesteld tegelijk met het uitproberen ervan in de praktijk, zodat zeker is dat ze goed werken. API-specificaties die nog geen standaard zijn worden bij VNG aangemeld om bij bewezen werking en meerwaarde tot standaard te worden verklaard.
+          smart:
+            - Welke gemeentelijke API-standaarden voor gegevens en berichtenverkeer worden in de software toegepast? (Zie https://www.gemmaonline.nl/index.php/API-standaarden)
+            - Welke van deze API-standaarden worden NIET geimplementeerd en waarom?
+            - Welke API's in de software zouden tot een nieuwe API-standaard voor gemeenten kunnen leiden?
+          norms:
+            - Voor de API's in de software zijn OAS3 specificaties beschikbaar, maar wordt geen gebruik gemaakt van bestaande standaarden.
+            - De software implementeert alle relevante gemeentelijke API-standaarden voor gegevens- en berichtenverkeer die verbindend zijn verklaard.
+            - De software implementeert alle relevante gemeentelijke API-standaarden voor gegevens- en berichtenverkeer die 'verbindend zijn verklaard' of 'in gebruik' zijn.
+            - De software implementeert alle relevante gemeentelijke API-standaarden voor gegevens- en berichtenverkeer die 'verbindend zijn verklaard' of 'in gebruik' zijn, en draagt bij aan de ontwikkeling van nieuwe gemeentelijke API-standaarden voor gegevens- en berichtenverkeer.
+            - De software implementeert alle relevante gemeentelijke API-standaarden voor gegevens- en berichtenverkeer die 'verbindend zijn verklaard' of 'in gebruik' zijn, en draagt bij aan de ontwikkeling van nieuwe gemeentelijke API-standaarden voor gegevens- en berichtenverkeer. De software draagt een potentiële nieuwe gemeentelijke API-standaard voor gegevens- en berichtenverkeer bij aan de community.
+          principles: [Moderne IT, Standaard, Community]
+        - name: CG27 Expliciet maken hoe transitie plaats kan vinden
+          practice: De status van bestaande en nieuwe componenten wordt expliciet gemaakt en erkend. Omschakeling naar Common Ground vergt een transitie, wat betekent dat bestaande en nieuwe componenten naast elkaar kunnen bestaan, en beide hun doelmatige meerwaarde kennen.
+          smart:
+            - Welke nieuwe componenten worden ontwikkeld, welke bestaande componenten zijn nodig?
+            - Is de transitiestatus van componenten te vinden in de Componentencatalogus?
+            - Waar is het transitieplan te vinden?
+          norms:
+            - Er is in beeld gebracht welke nieuwe en bestaande componenten nodig zijn.
+            - Nieuwe en bestaande componenten zijn inzichtelijk in de Common Ground Componentencatalogus.
+            - Nieuwe en bestaande componenten zijn inzichtelijk in de Common Ground Componentencatalogus, en er is een transitieplan beschreven.
+            - Nieuwe en bestaande componenten zijn inzichtelijk in de Common Ground Componentencatalogus, en in een transitieplan staat per component beschreven hoe lang dat component nodig is en wanneer het herzien of uitgefaseerd kan worden.
+            - Nieuwe en bestaande componenten zijn inzichtelijk in de Common Ground Componentencatalogus, en in een transitieplan staat per component beschreven hoe lang dat component nodig is en wanneer het herzien of uitgefaseerd kan worden. Bovendien is beschreven hoe de nieuwe componenten in de toekomst weer vervangen kunnen worden.
+          principles: [Nieuw naast oud, Componentgebaseerd]
+    principles:
+        - name: CGRP1 Agile
+          practice:
+            - Gemeenten en hun partners werken kortcyclisch samen.
+            - Het is voor de opdrachtgever inzichtelijk op basis van welke User Stories de software ontwikkeld is en/of wordt, zodat deze daar prioriteit in kan aanbrengen.
+            - Per ontwikkelcyclus (bijvoorbeeld sprint) is het te bereiken doel aan het einde van die fase inzichtelijk.
+            - De (door)ontwikkelcyclus van de software is zo dat nieuwe features en wijzigingen prioriteit kunnen krijgen.
+            - Er is een transparante CI/CD ontwikkelstraat aanwezig.
+            - Gebruikers en andere betrokkenen worden actief betrokken bij de totstandkoming van de software, zodat het belang van de gebruikers van en andere betrokkenen bij de sofware wordt meegewogen in het ontwerpproces.
+          smart:
+            - Wie is de Product Owner? (naam + organisatie)
+            - Waar staan User Stories / Backlog? Zijn deze publiek inzichtelijk?
+            - Hoe lang duurt iedere ontwikkelcyclus en hoeveel vinden er wanneer plaats?
+            - Welke zaken worden geautomatiseerd uitgevoerd in een CI/CD ontwikkelstraat?
+            - Op welke manier worden gebruikers en stakeholders betrokken bij de totstandkoming van de software?
+          norms:
+            - De opdrachtgever levert de product owner.
+            - De backlog/sprint backlog is op een publieke url beschikbaar.
+            - Ontwikkelcycli zijn korter dan een maand.
+            - De testcode en resultaten van elke geautomatiseerde CI-straat zijn publiek beschikbaar.
+            - De testcode en resultaten van de geautomatiseerde CI-straat bevatten toegankelijkheid, API-standaardcompliance, pentests, code coverage, code complexity.
+            - Gebruikers en belanghebbenden bij de software zijn gedurende het ontwikkelproces uitgenodigd voor sprint reviews en/of specifiek georganiseerde gebruikerstests of demo's.
+        - name: CGRP2 Community
+          practice:
+            - Als onderdeel van het software-ontwikkelproces delen gemeenten en hun leveranciers de voortgang en plannen met de community.
+            - Teams nemen deel aan evenementen die in de community worden georganiseerd om ontwikkelportfolio op elkaar afstemmen, zoals bijvoorbeeld fieldlabs of PI events.
+            - De eigenaar van de software verwelkomt en reageert op contributies, bijdragen en feedback.
+            - Documentatie is op orde; doelstellingen van de software, installatieprocedure, configuratiemogelijkheden en gebruikershandleiding zijn gedocumenteerd en beschikbaar.
+          smart:
+            - Waar staat informatie over voortgang en planning?
+            - Waar staat een overzicht van ontwikkelde softwarecomponenten die gebruikt worden in de oplossing?
+            - Hoe worden opgedane kennis en valkuilen gedeeld met de community
+            - Waar is documentatie over de software te vinden?
+            - Is er een voorbeeld deploy script beschikbaar?
+          norms:
+            - Heldere informatie over voortgang en planning is opgenomen in de CG componentencatalogus (of indien deze functie nog niet beschikbaar is, de VNG voortgangsrapportage)
+            - Heldere informatie over ontwikkelde software is beschikbaar in de CG componentencatalogus
+            - Er is een documentatiewebsite over de software beschikbaar.
+            - Inzichten, ontdekte valkuilen of andere voor de community waardevolle kennis wordt (publiek) gedeeld met de community op het commonground.nl blog.
+        - name: CGRP3 Nieuw naast oud
+          practice:
+            - De status van bestaande en nieuwe systemen wordt expliciet gemaakt en erkend. Omschakeling naar Common Ground vergt een transitie, wat betekent dat bestaande en nieuwe systemen naast elkaar zullen bestaan, en beide hun doelmatige meerwaarde kennen.
+            - Er is een transitieplan aanwezig.
+            - De principes van Common Ground zijn leidend voor nieuwe ontwikkelingen. Als nieuw en bestaand noodzakelijkerwijs gecombineerd moeten worden, dan worden geen compromissen gesloten in de nieuwe situatie.
+            - Bestaande oplossingen kunnen (wanneer dit economisch efficiënt is) meegroeien door deze stapsgewijs te vervangen door kleinere componenten, zodat delen die niet meer nodig zijn kunnen worden uitgefaseerd.
+            - De nieuwe situatie wordt wendbaar ingericht, zodat deze continu kan blijven vernieuwen in 'permanent beta'.
+          smart:
+            - Welke nieuw en bestaande systemen/componenten zijn nodig?
+            - Waar zijn transitiescenario's beschreven?
+            - Wat is de impact op bestaande systemen? Welke bestaande systemen/componenten kunnen op termijn worden vervangen, en wanneer?
+            - Welke tijdelijke voorzieningen worden ontwikkeld en wanneer worden deze uitgefaseerd?
+            - Hoe draagt de nieuwe oplossing bij aan grotere wendbaarheid?
+          norms:
+            - De benodigde nieuwe, bestaande en tijdelijke componenten zijn helder gedocumenteerd inclusief hun transitiedatums.
+            - Nieuwe softwarecomponenten (die niet tijdelijk zijn) bevatten geen onnodige afwijkingen van de Principes van Common Ground.
+            - Er staat in één of meerdere transitiescenario's beschreven hoe de nieuwe oplossing de bestaande oplossing (geleidelijk) kan vervangen.
+            - Er zijn geen tijdelijke voorzieningen nodig die lastig kunnen worden uitgefaseerd.
+        - name: CGRP4 Moderne IT
+          practice:
+            - Code wordt bijgehouden in een versiebeheersysteem (Git).
+            - Het releasen van nieuwe versies van software kan volledig geautomatiseerd.
+            - Er worden enkel moderne programmeertalen en frameworks gebruikt die tot efficient bruikbare software leiden.
+            - De software wordt geautomatiseerd getest zodat fouten/regressies voorkomen kunnen worden.
+            - Componenten worden opgeleverd in publiek beschikbare Docker container images. Ontwikkelde software(componenten) zijn zo beschikbaar voor gebruik door andere gemeenten en leveranciers en/of in andere use cases.
+            - Software is Haven-compatible zodat het op iedere moderne infrastructuur kan draaien.
+            - Software bevat geen CVE's en gebruikt up-to-date afhankelijkheden.
+            - Software is bruikbaar in moderne browsers en op ieder besturingssysteem
+            - Software gebruikt in principe RESTful API's als koppelvlakmechanisme en geen SOAP.
+          smart:
+            - Hoe vaak per week kan er gereleased worden?
+            - Wat is de doorlooptijd van een nieuwe release met een kleine tekstuele wijziging?
+            - Wordt er gebruik gemaakt van versiebeheer voor code en releases?
+            - Waar worden Docker container images gepubliceerd?
+            - Hoeveel geheugen gebruiken applicatiecontainers gemiddeld?
+            - Wat is de gemiddelde bestandsomvang van docker container images van de applicatie?
+            - Hoe makkelijk kan de software gebruikt worden op Haven? (zijn bijvoorbeeld installatiescripts meegeleverd?)
+            - Op welke browsers en/of besturingssystemen werkt de software?
+            - Worden moderne (REST/json-)koppelvlakstandaarden gebruikt?
+          norms:
+            - Er kan minimaal wekelijks een nieuwe versie worden gereleased.
+            - De doorlooptijd van een nieuwe release is kleiner dan een uur.
+            - Ontwikkelde software(componenten) zijn beschikbaar voor gebruik door andere gemeenten en leveranciers in de vorm van docker container images (docker run <image> 'werkt').
+            - Iedere container gebruikt in principe maximaal 100MB werkgeheugen.
+            - De gemiddelde omvang van een Docker container image is kleiner dan 200MB.
+            - De software wordt in productie gedraaid op een Haven compliant infrastructuur en er zijn installatiescripts meegeleverd.
+            - De software is te gebruiken op alle up-to-date moderne browsers (Chrome, Firefox, Opera, Edge, Internet Explorer, Safari) en/of besturingssystemen (Windows, Linux, MacOS)
+            - De software gebruikt in principe enkel nog REST/json API-koppelvlakken.
+        - name: CGRP5 Open Source
+          practice:
+            - Software maakt waar mogelijk hergebruik van bestaande open source software en er wordt waar nodig bijgedragen aan de kwaliteit daarvan (bijvoorbeeld door bugs te fixen of features toe te voegen).
+            - Broncode van software wordt onder een open source licentie vrijgegeven zodat hergebruik en samenwerking mogelijk is.
+            - Broncode wordt idealiter vanaf het begin van de ontwikkeling publiek vrijgegeven.
+            - Bij het vrijgeven van software onder open source licentie maakt de beheerder het voor de community mogelijk om bij te dragen.
+            - Er is een contactpersoon/beheerder vermeld (in opengov.yaml of README.md).
+            - Bij het vrijgeven van software onder open source licentie wordt ook gezorgd voor beheer van de open source code. (hoe lang, inhoud, security updates/features)
+            - Softwarecode wordt beheerd volgens de Standard for Public Code.
+          smart:
+            - Welke bestaande open source software wordt in de software hergebruikt?
+            - Waar of hoe kan de broncode van de software worden ingezien?
+            - Welke licentie zit er op de softwarecode?
+            - Is het voor de community mogelijk om issues (bugs of functionaliteitsverzoeken) of merge requests (voorstellen voor code-wijzigingen) in te dienen? SLA issues/updates?
+            - Wie draagt zorg voor beheer van de software, voor welke periode is ondersteuning geregeld, en welke responstijden bij issues worden gehanteerd?
+          norms:
+            - In documentatie of README van de software staat benoemd of en welke bestaande open source software gebruikt wordt.
+            - Als licentie voor open source software wordt de EUPL of gelijkwaardig (MIT, BSD, Apache 2.0) gebruikt.
+            - De mate waarin code publiek beschikbaar is beschikbbaar, publiek beschikbaar, publiek beschikbaar met open source licentie
+            - De broncode van ontwikkelde software is voor community (publiek) beschikbaar op een gangbare Git-omgeving.
+            - Er is een CODE_OF_CONDUCT.md aanwezig in de repository.
+            - Er is een CONTRIBUTING.md aanwezig in de repository.
+            - Er is metadata in de repository aanwezig in een opengov.yaml bestand.
+            - Het is duidelijk door wie en voor hoe lang beheer van de open source software (patches, updates, wijzigingsverzoeken) geregeld is. Beheerder, Minimaal securitypatches en response op issues?
+        - name: CGRP6 Lagenarchitectuur
+          practice:
+            - Formulieren, schermen en andere interactiecomponenten zijn geïmplementeerd in afzonderlijke ontkoppelde componenten op laag 5.
+            - Laag 5 - Er wordt gebruik gemaakt van het NL Design System
+            - Laag 5 - Er wordt gebruik gemaakt van microfrontends
+            - Laag 5 - Frontends hebben een duidelijke UX met een duidelijk doel/wizard/flow
+            - Laag 5 - Frontends zijn toegankelijk en gebruikersvriendelijk.
+            - Procesautomatisering en business logica zijn geïmplementeerd in afzonderlijke ontkoppelde componenten per proces op laag 4.
+            - Laag 4 - Procesimplementaties bestaan uit de uitvoering van processtappen.
+            - Laag 4 - Processtappen bestaan uit verwerken input, uitvoeren businesslogica, of data-acties in registers (lezen/schrijven)
+            - Laag 4 - Er zijn niet teveel processen in één procescomponent geïmplementeerd.
+            - Laag 4 - Er wordt eventueel gebruik gemaakt van proces engines.
+            - Laag 4 - Processen worden gemodelleerd volgens de principes van Basisprocessen.
+            - Gegevensuitwisseling tussen processen en registers (NLX) is geïmplementeerd in afzonderlijke ontkoppelde componenten op laag 3.
+            - Servicecomponenten zijn geïmplementeerd in afzonderlijke ontkoppelde componenten per register op laag 2.
+            - Laag 2 - Software implementeert duidelijk afgebakende registers.
+            - Laag 2 - Registers bieden data-services aan.
+            - Laag 2 - Het is duidelijk welke data-services voor de software benodigd zijn.
+            - Gegevensopslag is geïmplementeerd in afzonderlijke ontkoppelde componenten per register op laag 1.
+            - Laag 1 - Gegevensopslag is 'dom'. Er bevindt zich geen businesslogica op data-niveau.
+            - Laag 1 - In principe wordt voor gegevensopslag gebruik gemaakt van off the shelf database-software (zoals Postgres).
+            - Laag 1 - Het is duidelijk voor welke typen gegevensopslagsystemen de software ondersteuning biedt.
+          smart:
+            - Welke functionaliteit en componenten wordt op welke laag geïmplementeerd?
+            - Welke processen worden in de software geïmplementeerd? Hoe zijn processen gemodelleerd en waar zijn deze modellen te vinden?
+            - Door wie (burger, gemeente, andere partij) worden de processen die in de software worden geïmplementeerd uitgevoerd? Wie is verantwoordelijk ieder proces?
+            - Welke registers worden door de software geruikt? Welke zijn specifiek voor de software en welke herbruikbaar?
+            - Welke partij is verantwoordelijk voor welk register? Welke data wordt in deze registers opgeslagen?
+          norms:
+            - Afzonderlijke normen/checklist items nodig per laag.
+            - Er is een vijf-lagen architectuurplaat beschikbaar in de CG componentencatalogus.
+            - Per component is duidelijk omschreven welke functionaliteit wel en niet wordt geleverd.
+            - Laaggebonden functionaliteit wordt niet in een component dat ook functionaliteit op een andere laag gerealiseerd (er zijn bijvoorbeeld geen frontends geïntegreerd in backendcomponenten).
+            - Componenten roepen enkel functionaliteit aan in de directonderliggende laag.
+            - (Componenten op) onderliggende lagen zijn niet afhankelijk van bovenliggende lagen.
+        - name: CGRP7 NLX als gateway
+          practice:
+            - NLX wordt gebruikt voor gegevensuitwisseling tussen organisaties.
+            - NLX wordt indien dat waardevol is ingezet voor gegevensuitwisseling binnen organisaties.
+            - NLX Inways worden geinstalleerd bij de organisatie die de API aanbiedt.
+            - NLX Outways worden geinstalleerd bij de organisatie die de API afneemt.
+            - Partijen die NLX gebruiken zijn zelf verantwoordelijk voor lokale installatie, beheer en gebruik.
+            - Er wordt bijgedragen aan de doorontwikkeling van NLX door problemen te melden in user stories.
+          smart:
+            - Op welke plekken worden inways en outways gebruikt?
+            - Is het mogelijk om de API's via NLX aan te spreken/af te nemen?
+            - Welke organisaties, welke API's, welke afnemende processen.
+            - Is er een voorbeeldconfiguratie voor gebruik van de software over NLX.
+            - In welke processen wordt NLX gebruikt voor gegegevensuitwisseling?
+            - Welke registers bij welke organisaties worden via NLX geraadpleegd?
+          norms:
+            - Software is geschikt om alle gegevensuitwisseling via NLX te regelen.
+            - Om vanuit processen data real time bij de bron te bevragen wordt enkel NLX gebruikt.
+            - Er wordt een voorbeeldconfiguratie voor geruik van de software met NLX meegeleverd.
+            - Alle gebruikte registers worden via NLX rechtsstreeks bij de daadwerkelijke bron geraadpleegd (dus niet bij een kopie of via een tussenpartij).
+            - Als gegevens vanwege transitie-redenen nog niet bij de juiste bron geraadpleegt kunnen worden, wordt NLX toegepast voor de tijdelijke ontsluiting van een alternatieve bron. Op deze manier kan op een later moment eenvoudig de juiste bron worden gekoppeld.
+        - name: CGAP1 Componentgebaseerd
+          practice:
+            - Software wordt als meerdere zelfstandig bruikbare containers ontwikkeld in plaats van als één grote silo-applicatie.
+            - Componenten hebben een duidelijke en kleine functionele scope binnen één laag van het vijf-lagen architectuurmodel ('do one thing and do it well').
+            - Het is voor iedere component duidelijk welke functionaliteit dat component implementeert.
+            - Componenten zijn compatible met Haven, zodat ze op iedere moderne cloudinfrastructuur kunnen draaien.
+            - Componenten worden zo opgezet dat ieder afzonderlijk component in meerdere applicaties herbruikbaar kan zijn.
+            - Componenten houden zijn combineerbaar en koppelbaar door middel van open interfaces (open specificaties en open standaarden).
+            - De componenten zijn afzonderlijk testbaar.
+            - Componenten zijn stateless.
+            - Componenten zijn schaalbaar.
+          smart:
+            - Hoe en in welke docker containers vindt deployment van componenten plaats?
+            - Is het mogelijk om componenten te hergebruiken door ze te starten als onderdeel van een andere applicatie?
+            - Welke specificaties beschrijven voor ieder component hoe deze gebruikt kunnen worden?
+            - Waar staan de OAS3 specificaties van componenten? (bij interactiecomponenten is een OAS3 specificatie niet relevant)
+            - Hoe is gespecificeerd welke functies een component heeft? (Zijn er bijvoorbeeld API-specs aanwezig?)
+            - Zijn er componenten die functionaliteit uit verschillende architectuurlagen implementeren?
+            - Welke componenten zijn statefull? Welke componenten zijn stateless?
+            - Welke processen zijn met welke procescomponent(en) geïmplementeerd?
+            - Welke gegevens worden in welk register opgeslagen?
+            - Gaan er gegevens definitief verloren wanneer een draaiende instantie van een component wordt verwijderd.
+          norms:
+            - Alle componenten zijn als afzonderlijke Dockercontainers te starten.
+            - Componenten zijn as-is herbruikbaar in andere toepassingen, bij andere gemeenten, en door andere levernaciers die dezelfde functionaliteit nodig hebben.
+            - Alle componenten zijn stateless (state wordt enkel op persistent volumes georganiseerd). Wanneer een instantie van een component wordt verwijderd gaan dus geen gegevens verloren omdat deze enkel in het werkgeheugen van de component bestonden.
+            - Processen die niet direct met elkaar samenhangen zijn afzonderlijke procescomponenten geimplementeerd. Ook procescomponenten moeten dus niet te groot worden.
+            - Gegevens die niet direct met elkaar samenhangen worden opgeslagen in afzonderlijke datacomponenten.
+        - name: CGAP2 Open
+          practice:
+            - Software gebruikt open standaarden die vrij zijn van licentierechten, zodat er geen drempels zijn voor partijen om de software te gebruiken of ermee te koppelen.
+            - De software voldoet aan moderne toegankelijkheidseisen zodat software door alle gebruikers te gebruiken is.
+            - Software wordt op een open manier ontwikkeld, zodat de werking en totstandkoming inzichtelijk is voor alle stakeholders.
+            - Architectuurbeschrijvingen, procesmodellen (BPMN), algoritmen en gegevensverwerking, en/of broncode worden gepubliceerd zodat belanghebbenden weten hoe systemen werken.
+            - Het is makkelijk om een testversie van de software uit te proberen.
+            - Testresultaten of rapporten waaruit blijkt in welke mate software aan bepaalde eisen (bijvoorbeeld standaarden of kwaliteitseisen) voldoet zijn openbaar beschikbaar.
+            - Indien data in de software aan gebruikers beschikbaar gesteld kan worden, is voor gebruikers mogelijk om data uit systemen te exporteren naar open formaten, zodat zij deze data in andere software naar keuze kunnen verwerken.
+          smart:
+            - Welke open en proprietary standaarden worden gebruikt?
+            - Hoe wordt toegankelijkheid getest, en waar staat het testresultaat?
+            - In welke mate vindt de ontwikkeling op open wijze plaats? Welke stakeholders hebben inzicht in de totstandkoming van de software?
+            - Welke gebruikers en andere betrokkenen zijn bij het ontwikkelproces betrokken en op welke manier?
+            - Waar staat gedocumenteerd hoe de software werkt? (denk aan architectuurbeschrijvingen, procesmodellen (bijvoorbeeld BPMN), algoritmen en gegevensverwerkingen, en/of broncode)?
+            - Hoe kan de software worden uitgeprobeerd? Is er een publieke testversie beschikbaar en zo ja waar?
+            - Welke testresultaten of rapporten waaruit blijkt in welke mate software aan bepaalde eisen (bijvoorbeeld standaarden of kwaliteitseisen) voldoet zijn (al dan niet publiek) beschikbaar en waar staan deze?
+            - Welke gegevens kunnen door gebruikers worden ge-exporteerd of importeerd en in welk(e) (bestands)forma(a)t(en)?
+          norms:
+            - De software gebruikt enkel open standaarden, vrij van licentierechten.
+            - De software wordt continue geautomatiseerd getest op WCAG-richtlijnen, en slaagt voor deze test. Het testresultaat is inzichtelijk.
+            - Heldere documentatie over architectuur, procesmodellen, algoritmen en gegevensverwerkingen van de software is publiek beschikbaar.
+            - Het is makkelijk om de software te testen in een (evt. gelimiteerde of tijdelijke) testversie.
+            - Testresultaten en rapporten waaruit blijkt in welke mate software aan bepaalde eisen voldoet zijn publiek beschikbaar tenzij er goede redenen zijn om deze niet publiek te maken.
+            - Voor gebruikers relevante en toegestane gegevensbestanden kunnen in een open formaat worden geëxporteerd of geïmporteerd.
+        - name: CGAP3 Vertrouwd
+          practice:
+            - Software voldoet aan alle wettelijke vereisten rondom informatiebeveiliging en privacybescherming, zoals de Baseline Informatiebeveiliging Overheid.
+            - Door Privacy en Security by design toe te passen (bijvoorbeeld op het gebied van doelbinding, subsidiariteit en proportionaliteit van verwerking van gegevens), wordt privacy en security al gedurende de ontwikkeling van de software geregeld, en niet pas achteraf.
+            - Bij instellingen die van invloed zijn op privacy en security zijn de standaardinstellingen altijd de meest veilige (privacy en security by default).
+            - Er wordt gebruik gemaakt van multi-level authenticatie en autorisatie; gebruikersauthenticatie en autorisatie (van bijvoorbeeld burgers of medewerkers) vindt plaats op het niveau van natuurlijke personen en binnen de context van processapplicaties. Authenticatie en autorisatie bij gegevensuitwisseling mbv data-services vindt plaats op organisatieniveau (bijvoorbeeld een gemeente die gegevens raadpleegt verkrijgt toegang tot een data-service bij een ketenpartner).
+            - Afnemers van gegevens uit data-services zijn zelf verantwoordelijk voor rechtmatig en verantwoord gebruik van afgenomen gegevens. Misbruik wordt gemeld aan de bronhouder.
+            - Alle gegevensverwerkingen worden vastgelegd in logging- en verwerkingsregisters zodat een actueel en exact overzicht beschikbaar van alle gegevensverwerkingen die in de software hebben plaatsgevonden.
+            - Gegevensleveringen vinden enkel proportioneel (alleen voorzover werkelijk noodzakelijk) en subsidiair (alleen indien er geen minder ingrijpende oplossing mogelijk is) plaats.
+          smart:
+            - Waar staat de assesment/rapport over de toepassing van de Baseline Informatiebeveiliging Overheid?
+            - Waar staat de DPIA?
+            - Hoe zijn Privacy en Security by Design toegepast? Welke gegevens worden voor welke doeleinden in de software verwerkt?
+            - Welke typen gegevensverwerkingen vinden plaats? En waar worden deze geregistreerd tbv logging- en auditdoeleinden?
+            - Op welke manier vindt authenticatie en autorisatie van gebruikers (natuurlijke personen) plaats? Op welke manier vindt authenticatie en autorisatie van organisaties bij gegevensuitwisseling plaats?
+          norms:
+            - De software voldoet aan de voor gemeenten van toepassing zijnde standaarden voor informatiebeveiliging (tenminste de Baseline Informatiebeveiliging Overheid).
+            - Er is een DPIA uitgevoerd waaruit blijkt dat er geen onacceptabele risico's zijn voor de informatieveiligheid, en waarin beschreven is welke verantwoordelijkheden voor dataverwerking bij gemeenten of leveranciers liggen.
+            - Uit de architectuurbeschrijvingen en beschrijving van gegevensverwerking blijkt dat privacy en security by design zijn toegepast. (o.a. subsidiariteit, proportionaliteit, dataminimalisatie, filteren, abstraheren, verbergen).
+            - Alle verwerkingen van gegevens kunnen door de software worden vastgelegd in een logging- en verwerkingsregister conform landelijke afspraken.
+            - Er wordt multi-level autorisatie toegepast.
+            - Gegevens worden voordat deze de bron verlaten gefilterd, zodat 'smalle leveringen' plaatsvinden.
+        - name: CGAP4 Eenmalige vastlegging
+          practice:
+            - Gegevens worden niet opgeslagen in procesapplicaties (laag 4 of 5), maar via services in specifieke registers voor ieder type gegeven (dat kan in specifieke uiteraard ook een applicatiespecifiek registercomponent zijn).
+            - Voor elk type gegeven wordt een heldere keuze gemaakt over wat daarvoor het authentieke bronregister is.
+            - Er vindt geen gegevensdistributie plaats; van (gegevens uit) bronregisters worden geen lokale kopieën gemaakt.
+            - Vanuit processen worden gegevens realtime opgehaald en opgeslagen bij de bron.
+            - Voor alle registers is helder vastgelegd welke gegevens worden opgeslagen, en hoe deze ontsloten kunnen worden.
+            - Voor zeer specifieke toepassingen zoals big data analyses worden in sommige gevallen afgeleide datasets gemaakt die kopieën kunnen bevatten van data uit authentieke bronregisters. Dit soort analysesets zijn zelf nooit authentieke bron, maar slechts een werk-cache. In het algemeen wordt expliciet tijdelijke/technische caching niet als het kopiëren van gegevens beschouwd. Voor afnemers moeten caches ten alle tijde transparant zijn (ze kunnen niet zien of er van caching gebruik wordt gemaakt).
+            - Gegevens uit authentieke bronregisters worden niet als onderdeel van andere gegevenstypen gekopieerd naar een ander register (zo wordt bijvoorbeeld bij opname van een BAG-object in een ander datatype in principe enkel een identifier opgenomen van dat BAG-object in plaats van een kopie van het gehele BAG-object).
+          smart:
+            - Welke registers zijn voor welke type gegevens de 'unieke bron'?
+            - Worden er gegevens opgeslagen in procesapplicaties?
+            - Op welke plekken worden gegevens uitgewisseld?
+            - Worden er kopieën van gegevens gemaakt?
+            - Zijn voor alle services die registers ontsluiten API-specificaties beschikbaar?
+          norms:
+            - Gegevens die ook in andere applicaties bruikbaar kunnen zijn, worden enkel opgeslagen in (landelijke) basisregistraties, gemeentelijke kernregistraties en specifieke registers.
+            - Alle gegevens die in processen gebruikt worden, worden realtime opgehaald en opgeslagen bij bronregisters.
+            - Alle registers zijn toegankelijk via services die werken volgens (waar mogelijk gestandaardiseerde) API-specificaties.
+            - Er worden geen gegevens opgeslagen die niet ontsloten worden via een API.
+            - Software kan koppelen met elke door een gemeente aangewezen authentieke bron.
+            - Er worden geen gegevens uit andere bronregisters gedupliceerd in nieuwe registers; er worden enkel verwijzigen (identifiers) naar die andere bronregisters opgenomen.
+        - name: CGAP5 Regie op gegevens
+          practice:
+            - Burgers en bedrijven kunnen hun AVG-rechten uitoefenen (recht op informatie, kopie, vergetelheid en beperking).
+            - Burgers en bedrijven kunnen waar mogelijk regie uitoefenen op het gebruik van hun eigen gegevens.
+            - Burgers en bedrijven krijgen inzicht in hoe besluiten tot stand zijn gekomen.
+            - Burgers krijgen direct online inzicht in de actuele verwerking van hun gegevens en de daarvoor gehanteerde doelbindingsclaims.
+            - Burgers en bedrijven kunnen toestemming geven en intrekken voor bovenwettelijk gebruik van hun gegevens.
+            - Burgers kunnen hun eigen gegevens in een open bestandsformaat exporteren zodat zij een eigen dossier kunnen aanleggen.
+          smart:
+            - Staat de software het uitoefenen van AVG-rechten in de weg?
+            - Houdt de software bij welke verwerkingen van gegevens plaatsvinden, en op zo'n manier dat deze informatie aan burgers en bedrijven verstrekt kan worden? (recht op informatie)
+            - Op welke manieren kunnen betrokkenen invloed uitoefenen op welke gegevens over hen wel of niet verwerkt worden?
+            - Hoe maakt de software het mogelijk om in te zien hoe besluiten tot stand zijn gekomen?
+            - Hoe worden verwerkingen van gegevens vastgelegd (logging)?
+            - Worden gegevens verwerkt op manieren waarvoor geen expliciete wettelijke grondslag bestaat? Hoe wordt daar toestemming voor gevraagd?
+            - Welke gegevens kunnen door burgers worden ge-exporteerd voor eigen dossiervorming?
+          norms:
+            - De software legt alle verwerkingen van gegevens vast in een logging- en verwerkingsregister.
+            - Voor iedere verwerking van gegevens zijn wettelijke basis, grondslag en expliciete doelbinding vastgelegd.
+            - Er worden geen gegevens verwerkt waarvoor geen wettelijke basis bestaat of waarvoor wettelijke vereisten zoals die van de AVG niet zijn ingevuld.
+            - De software draagt bij aan het volledig geautomatiseerd verstrekken (aan burgers en bedrijven) van een overzicht van gegevensverwerkingen.
+            - Er worden geen besluiten aan gebruikers gecommuniceerd zonder dat het voor gebruikers ook mogelijk is om precies in te zien hoe dat besluit tot stand is gekomen.
+        - name: CGAP6 Standaard
+          practice:
+            - Bij componenten zijn duidelijke specificaties beschreven (zoals OAS3) die beschrijven hoe ze door andere componenten gebruikt kunnen worden.
+            - Software gebruikt zo veel mogelijk (internationale of landelijke) open standaarden.
+            - Binnen de lifecycle van API-standaarden die door VNG wordt gefaciliteerd a) worden bestaande standaarden zoveel mogelijk gevolgd, b) worden voorstellen gedaan voor uitbreiding en verbetering van standaarden, en c) worden nieuwe specificaties aangeboden aan VNG om tot standaard te worden gemaakt.
+            - Componenten maken zoveel mogelijk gebruik van de gemeentelijke API-standaarden die er al zijn( https://www.gemmaonline.nl/index.php/API-standaarden ) of ontwikkeld worden binnen de Agenda van het Gegevenslandschap (link naar de agenda opnemen?).
+            - Waardevolle API-specificaties die nog geen standaard zijn, worden na bewezen werking in de praktijk door gemeenten in afstemming met leveranciers tot nieuwe standaarden doorontwikkeld.
+            - Voor de ontwikkeling van API(-standaarden) worden gezamenlijke richtlijnen rondom API-ontwerp gevolgd.
+            - Voor het beheren van softwarecode worden gezamenlijke richtlijnen en best practices gevolgd, zoals de Standard for Public Code.
+          smart:
+            - Waar staan de OAS3 specificaties van de componenten?
+            - Welke open en gesloten standaarden worden gebruikt, en welke licenties zijn benodigd?
+            - Aan welke gemeentelijke, landelijke of internationale API-standaarden wordt (wel of niet) voldaan?
+            - Welke nieuwe API-specificaties kunnen als onderdeel van de software worden opgeleverd?
+            - Wordt de Nederlandse API Strategie gevolgd?
+            - Wordt de Standard for Public Code gevolgd?
+          norm:
+            - Alle componenten die API's bevatten, zijn voorzien van (OAS3-)specificaties.
+            - Er is gedocumenteerd welke internationale standaarden en de facto technische standaarden worden gevolgd.
+            - Alle relevante gemeentelijke API-standaarden worden toegepast.
+            - Alle componenten waarvoor landelijke open API-standaarden bestaan, voldoen aan die open API-standaarden.
+            - Specificaties die een potentiële nieuwe standaard kunnen vormen zijn bij VNG aangeboden om tot nieuwe gemeentelijke API-standaarden te worden gemaakt.
+            - API's zijn geïmplementeerd volgens de Nederlandse API Strategie.
+            - Broncode van software wordt beheerd volgens de Standard for Public Code.
