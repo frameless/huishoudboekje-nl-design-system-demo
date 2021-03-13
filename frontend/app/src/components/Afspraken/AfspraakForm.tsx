@@ -127,7 +127,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 				rekeningId.setValue((afspraak.tegenRekening?.id || 0).toString());
 			}
 			amount.setValue(afspraak.bedrag);
-			zoekterm.setValue(afspraak.kenmerk || "");
+			zoekterm.setValue(afspraak.zoektermen?.[0] || "");
 			const interval = XInterval.parse(afspraak.interval);
 			if (interval) {
 				toggleRecurring(true);
@@ -155,14 +155,14 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 		}
 		else {
 			const dupesByZoekterm: Afspraak[] = ($afspraakFormData.data?.afspraken || []).filter(a => {
-				if (afspraak?.id === a.id || !a.kenmerk) {
+				if (afspraak?.id === a.id || !a.zoektermen?.[0]) {
 					return false;
 				}
 
 				/* If the tegenRekening matches */
-				if (parseInt(rekeningId.value) === a.tegenRekening?.id && a.kenmerk?.length > 0) {
+				if (parseInt(rekeningId.value) === a.tegenRekening?.id && a.zoektermen?.[0]?.length > 0) {
 					/* Check if this afspraak has (partly or whole) the same zoekterm */
-					if ((a.kenmerk.length > 0 ? zoektermString.includes(a.kenmerk) : false) || a.kenmerk?.includes(zoektermString)) {
+					if ((a.zoektermen?.[0].length > 0 ? zoektermString.includes(a.zoektermen?.[0]) : false) || a.zoektermen?.[0]?.includes(zoektermString)) {
 						return true;
 					}
 				}
@@ -221,7 +221,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 			organisatieId: parseInt(organisatieId.value) !== 0 ? parseInt(organisatieId.value) : null,
 			rubriekId: parseInt(rubriekId.value) !== 0 ? parseInt(rubriekId.value) : null,
 			bedrag: amount.value,
-			kenmerk: zoekterm.value,
+			zoektermen: [zoekterm.value],
 			startDatum: d(startDate.value, "L").format("YYYY-MM-DD"),
 			interval: isRecurring ? XInterval.create(intervalType.value!, intervalNumber.value) : XInterval.empty,
 			aantalBetalingen: isContinuous ? 1 : nTimes.value,

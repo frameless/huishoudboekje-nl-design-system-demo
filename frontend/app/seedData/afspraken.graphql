@@ -17,7 +17,7 @@ mutation createSampleAfspraken{
         tegenRekeningId: 40225
         bedrag: "765.32"
         credit: false
-        kenmerk: ""
+        zoektermen: []
         actief: true
         # TODO: get organisatieId for "Albert Heijn"
         organisatieId: 20

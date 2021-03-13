@@ -82,7 +82,7 @@
         },
         "bedrag": "129",
         "credit": false,
-        "kenmerk": "215886412180000007",
+        "zoektermen": ["215886412180000007"],
         "actief": false
       },
       {
@@ -122,7 +122,7 @@
         "organisatie": null,
         "bedrag": "23",
         "credit": true,
-        "kenmerk": "sdfgsdfggfsdfg",
+        "zoektermen": ["sdfgsdfggfsdfg"],
         "actief": true
       },
       {
@@ -165,7 +165,7 @@
         },
         "bedrag": "129",
         "credit": false,
-        "kenmerk": "215886412180000007",
+        "zoektermen": ["215886412180000007"],
         "actief": true
       }
     ]
@@ -232,7 +232,7 @@
         "organisatie": null,
         "bedrag": "450",
         "credit": false,
-        "kenmerk": "LEEFGELD",
+        "zoektermen": ["LEEFGELD"],
         "actief": true
       },
       {
@@ -275,7 +275,7 @@
         },
         "bedrag": "53.99",
         "credit": true,
-        "kenmerk": "",
+        "zoektermen": null,
         "actief": true
       },
       {
@@ -315,7 +315,7 @@
         "organisatie": null,
         "bedrag": "500",
         "credit": true,
-        "kenmerk": "",
+        "zoektermen": null,
         "actief": false
       }
     ]
