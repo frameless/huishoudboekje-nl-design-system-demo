@@ -51,8 +51,19 @@ class AfspraakView(HHBView):
             "credit": {
                 "type": "boolean",
             },
-            "kenmerk": {
-                "type": "string",
+            "zoektermen": {
+                "oneOf": [
+                    {"type": "null"},
+                    {
+                        "type": "array",
+                        "uniqueItems": True,
+                        "items": {
+                            "type": "string",
+                            "minLength": 1,
+                            "pattern": "\\w",
+                        },
+                    },
+                ]
             },
             "actief": {
                 "type": "boolean",
@@ -68,40 +79,42 @@ class AfspraakView(HHBView):
     }
 
     def extend_get(self, **kwargs):
-        """ Extend the get function with a filer on kvk nummers """
+        """ Extend the get function with extra filter """
         self.add_filter_filter_burger()
         self.add_filter_filter_organisaties()
         self.add_filter_filter_datums()
         self.add_filter_filter_rekening()
+        self.add_filter_filter_zoektermen()
         self.hhb_query.expose_many_relation("journaalposten", "id")
         self.hhb_query.expose_many_relation("overschrijvingen", "id")
 
-    def add_filter_filter_burger(self):
-        """ Add filter_burger filter based on the kvk of the organisatie model """
-        filter_ids = request.args.get('filter_burgers')
-        if filter_ids:
+    @staticmethod
+    def filter_in_string(name, cb):
+        filter_string = request.args.get(name)
+        if filter_string:
             ids = []
-            for raw_id in filter_ids.split(","):
+            for raw_id in filter_string.split(","):
                 try:
                     ids.append(int(raw_id))
                 except ValueError:
                     abort(make_response(
-                        {"errors": [f"Input for filter_burgers is not correct, '{raw_id}' is not a number."]}, 400))
+                        {"errors": [f"Input for {name} is not correct, '{raw_id}' is not a number."]},
+                        400))
+            cb(ids)
+
+    def add_filter_filter_burger(self):
+        """ Add filter_burger filter based on the kvk of the organisatie model """
+        def add_filter(ids):
             self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.burger_id.in_(ids))
+
+        AfspraakView.filter_in_string('filter_burgers', add_filter)
 
     def add_filter_filter_organisaties(self):
         """ Add filter_organisaties filter based on the id of the organisatie model """
-        filter_organisaties = request.args.get('filter_organisaties')
-        if filter_organisaties:
-            ids = []
-            for raw_id in filter_organisaties.split(","):
-                try:
-                    ids.append(int(raw_id))
-                except ValueError:
-                    abort(make_response(
-                        {"errors": [f"Input for filter_organisaties is not correct, '{raw_id}' is not a number."]},
-                        400))
+        def cb(ids):
             self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.organisatie_id.in_(ids))
+
+        AfspraakView.filter_in_string('filter_organisaties', cb)
 
     def add_filter_filter_datums(self):
         """ Add filter_datums filter based on the start_datum and eind_datum """
@@ -128,13 +141,14 @@ class AfspraakView(HHBView):
 
     def add_filter_filter_rekening(self):
         """ Add filter_rekening filter"""
-        filter_ids = request.args.get('filter_rekening')
-        if filter_ids:
-            ids = []
-            for raw_id in filter_ids.split(","):
-                try:
-                    ids.append(int(raw_id))
-                except ValueError:
-                    abort(make_response(
-                        {"errors": [f"Input for filter_rekening is not correct, '{raw_id}' is not a number."]}, 400))
+        def add_filter(ids):
             self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.tegen_rekening_id.in_(ids))
+
+        AfspraakView.filter_in_string('filter_rekening', add_filter)
+
+    def add_filter_filter_zoektermen(self):
+        """ Add filter_zoektermen filter"""
+        zoektermenen = request.args.get('filter_zoektermen')
+        if zoektermenen:
+            for zoektermen in zoektermenen.split(","):
+                self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.zoektermen.contains(zoektermen))
