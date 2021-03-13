@@ -44,7 +44,7 @@ class Afspraak(graphene.ObjectType):
     tegen_rekening = graphene.Field(lambda: rekening.Rekening)
     bedrag = graphene.Field(Bedrag)
     credit = graphene.Boolean()
-    kenmerk = graphene.String()
+    zoektermen = graphene.List(graphene.String)
     actief = graphene.Boolean()
     automatische_incasso = graphene.Boolean()
     automatisch_boeken = graphene.Boolean()

@@ -97,7 +97,7 @@ async def transactie_suggesties(transactie_ids):
 
 
 def match_zoekterm(afspraak, transaction):
-    if afspraak["kenmerk"] and re.search(afspraak["kenmerk"], transaction["information_to_account_owner"], re.IGNORECASE):
+    if afspraak["zoektermen"] and re.search(afspraak["zoektermen"][0], transaction["information_to_account_owner"], re.IGNORECASE):
         return True
 
     return False
