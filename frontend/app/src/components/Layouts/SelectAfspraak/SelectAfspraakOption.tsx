@@ -26,7 +26,7 @@ const SelectAfspraakOption: React.FC<SelectAfspraakOptionProps> = ({afspraak, is
 				<Text>{afspraak.beschrijving}</Text>
 			</Td>
 			<Td>
-				<Text>{afspraak.zoektermen?.[0]}</Text>
+				<Text>{afspraak.zoektermen?.join(", ")}</Text>
 			</Td>
 			<Td>
 				{isSuggestion && (
