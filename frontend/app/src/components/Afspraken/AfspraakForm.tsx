@@ -1,39 +1,16 @@
-import {SearchIcon, WarningIcon} from "@chakra-ui/icons";
-import {
-	Badge,
-	Box,
-	BoxProps,
-	Button,
-	Divider,
-	FormLabel,
-	IconButton,
-	Input,
-	InputGroup,
-	InputLeftElement,
-	InputRightElement,
-	Stack,
-	Switch,
-	Table,
-	Tbody,
-	Td,
-	Text,
-	Tr,
-	useToast,
-} from "@chakra-ui/react";
+import {Box, BoxProps, Button, Divider, FormLabel, Input, InputGroup, InputLeftElement, Stack, Switch, Text, useToast} from "@chakra-ui/react";
 import React, {useEffect, useState} from "react";
 import DatePicker from "react-datepicker";
 import {useInput, useNumberInput, useToggle, Validators} from "react-grapple";
 import {UseInput} from "react-grapple/dist/hooks/useInput";
 import {Trans, useTranslation} from "react-i18next";
-import {NavLink} from "react-router-dom";
 import Select from "react-select";
-import Routes from "../../config/routes";
 import {Afspraak, Burger, Organisatie, Rekening, Rubriek, useGetAfspraakFormDataQuery} from "../../generated/graphql";
 import {AfspraakPeriod, AfspraakType, IntervalType} from "../../models/models";
 import d from "../../utils/dayjs";
 import Queryable from "../../utils/Queryable";
 import generateSampleOverschrijvingen from "../../utils/sampleOverschrijvingen";
-import {currencyFormat2, formatBurgerName, formatIBAN, intervalString, useReactSelectStyles, XInterval} from "../../utils/things";
+import {formatBurgerName, formatIBAN, useReactSelectStyles, XInterval} from "../../utils/things";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
 import RadioButtonGroup from "../Layouts/RadioButtons/RadioButtonGroup";
 import Section from "../Layouts/Section";
