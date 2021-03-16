@@ -1,4 +1,4 @@
-import {Box, BoxProps, Button, Divider, FormLabel, Input, InputGroup, InputLeftElement, Stack, Switch, Text, useToast} from "@chakra-ui/react";
+import {Box, BoxProps, Button, Divider, FormLabel, HStack, Input, InputGroup, InputLeftElement, Stack, Switch, Text, useToast} from "@chakra-ui/react";
 import React, {useEffect, useState} from "react";
 import DatePicker from "react-datepicker";
 import {useInput, useNumberInput, useToggle, Validators} from "react-grapple";
@@ -15,6 +15,7 @@ import {FormLeft, FormRight} from "../Forms/FormLeftRight";
 import RadioButtonGroup from "../Layouts/RadioButtons/RadioButtonGroup";
 import Section from "../Layouts/Section";
 import OverschrijvingenListView from "../Overschrijvingen/OverschrijvingenListView";
+import ZoektermenList from "./ZoektermenList";
 
 type AfspraakFormProps = {afspraak?: Afspraak, onSave: (data) => void, burger?: Burger, loading: boolean};
 const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave, loading = false, ...props}) => {
@@ -53,9 +54,10 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 		step: .01,
 		validate: [(v) => new RegExp(/^([0-9]+)(([,.])[0-9]{2})?$/).test(v.toString())],
 	});
-	const zoektermen = useInput({
+	const [zoektermen, setZoektermen] = useState<string[]>([]);
+	const zoekterm = useInput<string>({
 		defaultValue: "",
-		validate: [(v) => (String(v).length === 0 || String(v).length >= 6)],
+		validate: [Validators.required],
 	});
 	const [isRecurring, toggleRecurring] = useToggle(false);
 	const startDate = useInput({
@@ -104,7 +106,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 				rekeningId.setValue((afspraak.tegenRekening?.id || 0).toString());
 			}
 			amount.setValue(afspraak.bedrag);
-			zoektermen.setValue(afspraak.zoektermen?.join(", ") || "");
+			setZoektermen(() => [...afspraak.zoektermen || []]);
 			const interval = XInterval.parse(afspraak.interval);
 			if (interval) {
 				toggleRecurring(true);
@@ -167,7 +169,6 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 			rubriekId,
 			rekeningId,
 			amount,
-			zoektermen,
 			startDate,
 		];
 
@@ -199,7 +200,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 			organisatieId: parseInt(organisatieId.value) !== 0 ? parseInt(organisatieId.value) : null,
 			rubriekId: parseInt(rubriekId.value) !== 0 ? parseInt(rubriekId.value) : null,
 			bedrag: amount.value,
-			zoektermen: zoektermen.value.split(", "),
+			zoektermen: zoektermen,
 			startDatum: d(startDate.value, "L").format("YYYY-MM-DD"),
 			interval: isRecurring ? XInterval.create(intervalType.value!, intervalNumber.value) : XInterval.empty,
 			aantalBetalingen: isContinuous ? 1 : nTimes.value,
@@ -289,7 +290,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 					if (rekeningen.length === 1 && rekeningen[0].id) {
 						rekeningId.setValue(String(rekeningen[0].id));
 					}
-					else{
+					else {
 						rekeningId.clear();
 					}
 				}
@@ -297,7 +298,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 					if (burger.rekeningen?.length === 1 && burger.rekeningen?.[0].id) {
 						rekeningId.setValue(String(burger.rekeningen[0].id));
 					}
-					else{
+					else {
 						rekeningId.clear();
 					}
 				}
@@ -323,7 +324,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 		{key: "year", label: t("interval.year", {count: parseInt(intervalNumber.value)}), value: IntervalType.Year},
 	];
 
-	const automatischBoekenPossible = (zoektermen.value.length > 0 && zoektermDuplicates.length === 0);
+	const automatischBoekenPossible = (zoektermen.length > 0 && zoektermDuplicates.length === 0);
 	return (
 		<Stack spacing={5} as={"form"} onSubmit={onSubmit} {...props}>
 			<Section>
@@ -430,10 +431,18 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 							<Stack spacing={1} flex={1}>
 								<Queryable query={$afspraakFormData} children={() => (<>
 									<FormLabel htmlFor={"zoektermen"}>{t("forms.agreements.fields.zoektermen")}</FormLabel>
-									<InputGroup>
-										<Input isInvalid={isInvalid(zoektermen)} {...zoektermen.bind} id="zoektermen" />
-										{/*{zoektermDuplicates.length > 0 && <InputRightElement> <WarningIcon color={"orange.500"} /> </InputRightElement>}*/}
-									</InputGroup>
+									<ZoektermenList zoektermen={zoektermen} onChange={val => setZoektermen(val)} />
+									<HStack>
+										<Input id="zoektermen" {...zoekterm.bind} />
+										<Button colorScheme={"primary"} onClick={(e) => {
+											e.preventDefault();
+											if (zoekterm.value.length > 0 && !zoektermen.find(z => z === zoekterm.value)) {
+												setZoektermen(z => [...z, zoekterm.value]);
+											}
+											zoekterm.clear();
+										}}>{t("actions.add")}</Button>
+									</HStack>
+									{/* Todo: {zoektermDuplicates.length > 0 && <InputRightElement> <WarningIcon color={"orange.500"} /> </InputRightElement>}*/}
 									{/*{zoektermDuplicates.length > 0 && (*/}
 									{/*	<Stack spacing={1}>*/}
 									{/*		<Text fontSize={"sm"}>{t("forms.agreements.fields.searchtermDuplicateFound", {count: zoektermDuplicates.length})}</Text>*/}
