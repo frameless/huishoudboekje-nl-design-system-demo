@@ -56,7 +56,7 @@ scenarios:
         actief: true
         # TODO apply zoektermen bsn "123456781" and subject "VOORSCHOT HUURTOESLAG"
         zoektermen: 
-          - "Huurtoeslag ZOEKTERMPERSONA1"
+          - "Huurtoeslag 123456781"
       - aantal: 1
         rubriek: "Inkomsten"
         beschrijving: "Zorgtoeslag"
