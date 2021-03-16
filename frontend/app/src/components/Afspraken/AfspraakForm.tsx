@@ -152,39 +152,39 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [afspraak]);
 
-	useEffect(() => {
-		if (zoektermen.length === 0) {
-			setZoektermDuplicates([]);
-		}
-		else {
-			const dupesByZoekterm: Afspraak[] = ($afspraakFormData.data?.afspraken || []).filter(a => {
-				if (afspraak?.id === a.id || a.zoektermen?.length === 0) {
-					return false;
-				}
-
-				/* If the tegenRekening matches */
-				if (parseInt(rekeningId.value) === a.tegenRekening?.id) {
-					/* Check if any of the zoektermen match in any way with this afspraak. */
-					return a.zoektermen?.some(z => {
-						const zL = z.toLowerCase();
-						return zoektermen.find(x => {
-							const xL = x.toLowerCase();
-							return xL.toLowerCase().includes(zL) || zL.includes(xL);
-						});
-					});
-				}
-
-				return false;
-			});
-
-			setZoektermDuplicates(dupesByZoekterm);
-			if (dupesByZoekterm.length > 0) {
-				toggleAutomatischBoeken(false);
-			}
-		}
-
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [zoektermen, $afspraakFormData.data, afspraak, rekeningId.value]);
+	// useEffect(() => {
+	// 	if (zoektermen.length === 0) {
+	// 		setZoektermDuplicates([]);
+	// 	}
+	// 	else {
+	// 		const dupesByZoekterm: Afspraak[] = ($afspraakFormData.data?.afspraken || []).filter(a => {
+	// 			if (afspraak?.id === a.id || a.zoektermen?.length === 0) {
+	// 				return false;
+	// 			}
+	//
+	// 			/* If the tegenRekening matches */
+	// 			if (parseInt(rekeningId.value) === a.tegenRekening?.id) {
+	// 				/* Check if all of the zoektermen match in any way with this afspraak. */
+	// 				return a.zoektermen?.every(z => {
+	// 					const zL = z.toLowerCase();
+	// 					return zoektermen.find(x => {
+	// 						const xL = x.toLowerCase();
+	// 						return xL.toLowerCase().includes(zL) || zL.includes(xL);
+	// 					});
+	// 				});
+	// 			}
+	//
+	// 			return false;
+	// 		});
+	//
+	// 		setZoektermDuplicates(dupesByZoekterm);
+	// 		if (dupesByZoekterm.length > 0) {
+	// 			toggleAutomatischBoeken(false);
+	// 		}
+	// 	}
+	//
+	// 	// eslint-disable-next-line react-hooks/exhaustive-deps
+	// }, [zoektermen, $afspraakFormData.data, afspraak, rekeningId.value]);
 
 	const onSubmit = (e) => {
 		e.preventDefault();
@@ -351,7 +351,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 		{key: "year", label: t("interval.year", {count: parseInt(intervalNumber.value)}), value: IntervalType.Year},
 	];
 
-	const automatischBoekenPossible = (zoektermen.length > 0 && zoektermDuplicates.length === 0);
+	const automatischBoekenPossible = (zoektermen.length > 0);
 	return (
 		<Stack spacing={5} as={"form"} onSubmit={onSubmit} {...props}>
 			<Section>
@@ -469,51 +469,49 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 											zoekterm.clear();
 										}}>{t("actions.add")}</Button>
 									</HStack>
-									{zoektermDuplicates.length > 0 && (
-										<Stack spacing={1}>
-											<Text fontSize={"sm"}>{t("forms.agreements.fields.searchtermDuplicateFound", {count: zoektermDuplicates.length})}</Text>
-											<Table size={"sm"}>
-												<Thead>
-													<Tr>
-														<Td pl={0}>
-															<Label>{t("burgers.burger")}</Label>
-														</Td>
-														<Td>
-															<Label>{t("forms.agreements.fields.zoektermen")}</Label>
-														</Td>
-														<Td />
-														<Td />
-													</Tr>
-												</Thead>
-												<Tbody>
-													{zoektermDuplicates.map(a => (
-														<Tr key={a.id}>
-															<Td>{formatBurgerName(a.burger)}</Td>
-															<Td>{(a.zoektermen || []).join(", ")}</Td>
-															<Td>
-																<Stack spacing={1} flex={1} alignItems={"flex-end"}>
-																	<Box textAlign={"right"} color={a.bedrag < 0 ? "orange.500" : "currentcolor"}>{currencyFormat2().format(a.bedrag)}</Box>
-																	<Badge fontSize={"10px"}>{intervalString(a.interval, t)}</Badge>
-																</Stack>
-															</Td>
-															<Td width={"50px"}>
-																<IconButton as={NavLink} to={Routes.Burger(a.burger?.id)} variant={"ghost"} size={"sm"} icon={<SearchIcon />}
-																	aria-label={t("actions.edit")} />
-															</Td>
-														</Tr>
-													))}
-												</Tbody>
-											</Table>
-										</Stack>
-									)}
+									{/*{zoektermDuplicates.length > 0 && (*/}
+									{/*	<Stack spacing={1}>*/}
+									{/*		<Text fontSize={"sm"}>{t("forms.agreements.fields.searchtermDuplicateFound", {count: zoektermDuplicates.length})}</Text>*/}
+									{/*		<Table size={"sm"}>*/}
+									{/*			<Thead>*/}
+									{/*				<Tr>*/}
+									{/*					<Td pl={0}>*/}
+									{/*						<Label>{t("burgers.burger")}</Label>*/}
+									{/*					</Td>*/}
+									{/*					<Td>*/}
+									{/*						<Label>{t("forms.agreements.fields.zoektermen")}</Label>*/}
+									{/*					</Td>*/}
+									{/*					<Td />*/}
+									{/*					<Td />*/}
+									{/*				</Tr>*/}
+									{/*			</Thead>*/}
+									{/*			<Tbody>*/}
+									{/*				{zoektermDuplicates.map(a => (*/}
+									{/*					<Tr key={a.id}>*/}
+									{/*						<Td>{formatBurgerName(a.burger)}</Td>*/}
+									{/*						<Td>{(a.zoektermen || []).join(", ")}</Td>*/}
+									{/*						<Td>*/}
+									{/*							<Stack spacing={1} flex={1} alignItems={"flex-end"}>*/}
+									{/*								<Box textAlign={"right"} color={a.bedrag < 0 ? "orange.500" : "currentcolor"}>{currencyFormat2().format(a.bedrag)}</Box>*/}
+									{/*								<Badge fontSize={"10px"}>{intervalString(a.interval, t)}</Badge>*/}
+									{/*							</Stack>*/}
+									{/*						</Td>*/}
+									{/*						<Td width={"50px"}>*/}
+									{/*							<IconButton as={NavLink} to={Routes.Burger(a.burger?.id)} variant={"ghost"} size={"sm"} icon={<SearchIcon />}*/}
+									{/*								aria-label={t("actions.edit")} />*/}
+									{/*						</Td>*/}
+									{/*					</Tr>*/}
+									{/*				))}*/}
+									{/*			</Tbody>*/}
+									{/*		</Table>*/}
+									{/*	</Stack>*/}
+									{/*)}*/}
 								</>)} />
 							</Stack>
 							<Stack direction={["column", "row"]} spacing={1}>
 								<Stack isInline={true} alignItems={"center"} spacing={3}>
-									<Switch isChecked={automatischBoeken} isDisabled={!automatischBoekenPossible} onChange={() => toggleAutomatischBoeken()}
-										id={"automatischBoeken"} />
-									<FormLabel mb={0} htmlFor={"automatischBoeken"}
-											   color={automatischBoekenPossible ? "currentcolor" : "gray.500"}>{t("forms.agreements.fields.automatischBoeken")}</FormLabel>
+									<Switch isChecked={automatischBoeken} isDisabled={!automatischBoekenPossible} onChange={() => toggleAutomatischBoeken()} id={"automatischBoeken"} />
+									<FormLabel mb={0} htmlFor={"automatischBoeken"} color={automatischBoekenPossible ? "currentcolor" : "gray.500"}>{t("forms.agreements.fields.automatischBoeken")}</FormLabel>
 								</Stack>
 							</Stack>
 						</FormRight>
