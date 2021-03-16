@@ -1,7 +1,11 @@
 """ Factories to generate objects within a test scope """
-import pytest
+
 from datetime import date
+
+import pytest
+
 from models.afspraak import Afspraak
+
 
 class AfspraakFactory():
     """ Factory for Afspraak objects """
@@ -21,7 +25,7 @@ class AfspraakFactory():
         tegen_rekening=None,
         bedrag: float = 13.37,
         credit: bool = True,
-        kenmerk: str = "ABC1234",
+        zoektermen = ["ABC1234"],
         actief: bool = True,
         organisatie_id: int = None,
         rubriek_id: int = None,
@@ -40,7 +44,7 @@ class AfspraakFactory():
             interval=interval,
             bedrag=bedrag,
             credit=credit,
-            kenmerk=kenmerk,
+            zoektermen=zoektermen,
             actief=actief,
             rubriek_id=rubriek_id,
             automatisch_boeken=automatisch_boeken,

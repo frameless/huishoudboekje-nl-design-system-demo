@@ -14,7 +14,7 @@ class AfspraakInput(graphene.InputObjectType):
     tegen_rekening_id = graphene.Int()
     bedrag = graphene.Argument(Bedrag)
     credit = graphene.Boolean(required=True)
-    kenmerk = graphene.String()
+    zoektermen = graphene.List(graphene.String)
     actief = graphene.Boolean()
     organisatie_id = graphene.Int()
     rubriek_id = graphene.Int()

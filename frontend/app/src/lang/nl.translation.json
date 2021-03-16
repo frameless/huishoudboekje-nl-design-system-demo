@@ -74,8 +74,8 @@
     "actions": {
         "login": "Inloggen",
         "logout": "Uitloggen",
-        "edit": "Wijzigen",
         "save": "Opslaan",
+        "edit": "Wijzigen",
         "cancel": "Annuleren",
         "delete": "Verwijderen",
         "back": "Terug",
@@ -105,9 +105,7 @@
                 "bankAccount": "Bankrekening",
                 "bankAccountChoose": "Kies een bankrekening",
                 "amount": "Bedrag",
-                "zoekterm": "Zoekterm",
-                "searchtermDuplicateFound": "Deze zoekterm of een deel ervan komt overeen met een zoekterm in de onderstaande afspraak. Automatisch boeken voor deze afspraak kan niet ingeschakeld worden.",
-                "searchtermDuplicateFound_plural": "Deze zoekterm of een deel ervan komt overeen met een zoekterm in de onderstaande afspraken. Automatisch boeken voor deze afspraak kan niet ingeschakeld worden.",
+                "zoektermen": "Zoektermen",
                 "automatischBoeken": "Geef toestemming voor automatisch boeken",
                 "startDate": "Startdatum",
                 "continuous": "Doorlopend",
@@ -326,7 +324,7 @@
     },
     "afspraak": {
         "omschrijving": "Omschrijving",
-        "zoekterm": "Zoekterm"
+        "zoekterm": "zoekterm"
     },
     "bedrag": "Bedrag",
     "unbooked": "Niet geboekt",

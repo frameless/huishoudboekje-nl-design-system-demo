@@ -15,7 +15,8 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2021-01-01"
         actief: true
-        kenmerk: "Loon ZOEKTERMPERSONA1"
+        zoektermen: 
+          - "Loon ZOEKTERMPERSONA1"
       - aantal: 1
         rubriek: "Inkomsten"
         beschrijving: "Aanvullende uitkering"
@@ -27,7 +28,8 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-07"
         actief: true
-        kenmerk: "Aanvullende uitkering ZOEKTERMPERSONA1"
+        zoektermen: 
+          - "Aanvullende uitkering ZOEKTERMPERSONA1"
       - aantal: 1
         rubriek: "Inkomsten"
         beschrijving: "Kindgebonden budget"
@@ -38,7 +40,8 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-20"
         actief: true
-        kenmerk: "Kindgebonden budget ZOEKTERMPERSONA1"
+        zoektermen: 
+          - "Kindgebonden budget ZOEKTERMPERSONA1"
       - aantal: 1
         rubriek: "Inkomsten"
         beschrijving: "Huurtoeslag"
@@ -49,7 +52,8 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-20"
         actief: true
-        kenmerk: "Huurtoeslag ZOEKTERMPERSONA1"
+        zoektermen: 
+          - "Huurtoeslag ZOEKTERMPERSONA1"
       - aantal: 1
         rubriek: "Inkomsten"
         beschrijving: "Zorgtoeslag"
@@ -60,7 +64,8 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-20"
         actief: true
-        kenmerk: "Zorgtoeslag ZOEKTERMPERSONA1"
+        zoektermen: 
+          - "Zorgtoeslag ZOEKTERMPERSONA1"
       # uitgaven
       - aantal: 1
         rubriek: "Betaalde huur"
@@ -73,7 +78,8 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-01"
         actief: true
-        kenmerk: "Betaalde huur ZOEKTERMPERSONA1"
+        zoektermen: 
+          - "Betaalde huur ZOEKTERMPERSONA1"
       - aantal: 1
         rubriek: "Elektriciteit"
         beschrijving: "Elektriciteit"
@@ -85,7 +91,8 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-01"
         actief: true
-        kenmerk: "Elektriciteit ZOEKTERMPERSONA1"
+        zoektermen: 
+          - "Elektriciteit ZOEKTERMPERSONA1"
       - aantal: 1
         rubriek: "Water"
         beschrijving: "Water"
@@ -97,7 +104,8 @@ scenarios:
         interval: "P0Y3M0W0D"
         start_datum: "2021-01-01"
         actief: true
-        kenmerk: "Water ZOEKTERMPERSONA1"
+        zoektermen: 
+          - "Water ZOEKTERMPERSONA1"
       - aantal: 1
         rubriek: "Leefgeld"
         beschrijving: "Leefgeld"
@@ -110,7 +118,8 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2021-01-01"
         actief: true
-        kenmerk: "Leefgeld ZOEKTERMPERSONA1"
+        zoektermen: 
+          - "Leefgeld ZOEKTERMPERSONA1"
 
 # persona 2
   - aantal: 1
@@ -130,7 +139,8 @@ scenarios:
         start_datum: "2019-01-07"
         aantal_betalingen: 16
         actief: true
-        kenmerk: "Aanvullende uitkering ZOEKTERMPERSONA2"
+        zoektermen: 
+          - "Aanvullende uitkering ZOEKTERMPERSONA2"
       - aantal: 1
         rubriek: "Inkomsten"
         beschrijving: "Loon"
@@ -142,7 +152,8 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2021-01-01"
         actief: true
-        kenmerk: "Loon ZOEKTERMPERSONA2"
+        zoektermen: 
+          - "Loon ZOEKTERMPERSONA2"
       - aantal: 1
         rubriek: "Inkomsten"
         beschrijving: "Huurtoeslag"
@@ -153,7 +164,8 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-20"
         actief: true
-        kenmerk: "Huurtoeslag ZOEKTERMPERSONA2"
+        zoektermen: 
+          - "Huurtoeslag ZOEKTERMPERSONA2"
       - aantal: 1
         rubriek: "Inkomsten"
         beschrijving: "Zorgtoeslag"
@@ -164,7 +176,8 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-20"
         actief: true
-        kenmerk: "Zorgtoeslag ZOEKTERMPERSONA2"
+        zoektermen: 
+          - "Zorgtoeslag ZOEKTERMPERSONA2"
       # uitgaven
       - aantal: 1
         rubriek: "Betaalde huur"
@@ -177,7 +190,8 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-01"
         actief: true
-        kenmerk: "Betaalde huur ZOEKTERMPERSONA2"
+        zoektermen: 
+          - "Betaalde huur ZOEKTERMPERSONA2"
       - aantal: 1
         rubriek: "Elektriciteit"
         beschrijving: "Elektriciteit"
@@ -189,7 +203,8 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-01"
         actief: true
-        kenmerk: "Elektriciteit ZOEKTERMPERSONA2"
+        zoektermen: 
+          - "Elektriciteit ZOEKTERMPERSONA2"
       - aantal: 1
         rubriek: "Verzekeringen"
         beschrijving: "Zorgverzekering"
@@ -201,7 +216,8 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-01"
         actief: true
-        kenmerk: "Zorgverzekering ZOEKTERMPERSONA2"
+        zoektermen: 
+          - "Zorgverzekering ZOEKTERMPERSONA2"
       - aantal: 1
         rubriek: "Water"
         beschrijving: "Water"
@@ -213,7 +229,8 @@ scenarios:
         interval: "P0Y3M0W0D"
         start_datum: "2019-01-01"
         actief: true
-        kenmerk: "Water ZOEKTERMPERSONA2"
+        zoektermen: 
+          - "Water ZOEKTERMPERSONA2"
       - aantal: 1
         rubriek: "Leefgeld"
         beschrijving: "Leefgeld"
@@ -226,7 +243,8 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-01"
         actief: true
-        kenmerk: "Leefgeld ZOEKTERMPERSONA2"
+        zoektermen: 
+          - "Leefgeld ZOEKTERMPERSONA2"
       - aantal: 1
         rubriek: "Verzekeringen"
         beschrijving: "Inboedelverzekering"
@@ -238,7 +256,8 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-01"
         actief: true
-        kenmerk: "Inboedelverzekering ZOEKTERMPERSONA2"
+        zoektermen: 
+          - "Inboedelverzekering ZOEKTERMPERSONA2"
       - aantal: 1
         rubriek: "Telefonie"
         beschrijving: "Telefoon en Internet"
@@ -250,7 +269,8 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-01"
         actief: true
-        kenmerk: "Vaste telefonie en internet ZOEKTERMPERSONA2"
+        zoektermen: 
+          - "Vaste telefonie en internet ZOEKTERMPERSONA2"
       - aantal: 1
         rubriek: "Telefonie"
         beschrijving: "Mobiele telefonie"
@@ -262,4 +282,5 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-01"
         actief: true
-        kenmerk: "Mobiele telefonie ZOEKTERMPERSONA2"
+        zoektermen: 
+          - "Mobiele telefonie ZOEKTERMPERSONA2"

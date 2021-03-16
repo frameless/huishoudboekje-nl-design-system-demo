@@ -2,8 +2,8 @@
 
 
 def test_overschrijving_filter_afspraak_id(client, overschrijving_factory, afspraak_factory):
-    afspraak1 = afspraak_factory.createAfspraak(kenmerk="Afspraak1")
-    afspraak2 = afspraak_factory.createAfspraak(kenmerk="Afspraak2")
+    afspraak1 = afspraak_factory.createAfspraak(zoektermen="Afspraak1")
+    afspraak2 = afspraak_factory.createAfspraak(zoektermen="Afspraak2")
     overschrijving1 = overschrijving_factory.create_overschrijving(afspraak_id=afspraak1.id)
     overschrijving2 = overschrijving_factory.create_overschrijving(afspraak_id=afspraak2.id)
     response = client.get(

@@ -16,7 +16,7 @@ def test_afspraken_post_new_afspraak(client, session):
         "interval": "P1Y2M10DT2H30M",
         "bedrag": 1337,
         "credit": True,
-        "kenmerk": "ABC1234",
+        "zoektermen": ["ABC1234"],
         "actief": True,
         "automatische_incasso": True,
         "automatisch_boeken": False
@@ -68,7 +68,13 @@ def test_afspraken_post_update_afspraak(client, session, afspraak_factory):
     ("interval", 1234),
     ("bedrag", "13,37"),
     ("credit", "True"),
-    ("kenmerk", 1234),
+    ("zoektermen", ""),
+    ("zoektermen", {}),
+    ("zoektermen", [True]),
+    ("zoektermen", [1234]),
+    ("zoektermen", [""]),
+    ("zoektermen", [" "]),
+    ("zoektermen", ["a", "a"]),
     ("actief", "True")
 ])
 def test_afspraken_post_bad_requests(client, key, bad_value):

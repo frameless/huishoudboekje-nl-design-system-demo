@@ -10,7 +10,7 @@ setup(
     description='Huishoudboekje Service',
     install_requires=[
         "Flask>=1.1.2",
-        "SQLAlchemy>=1.3.19",
+        "SQLAlchemy>=1.4",
         "psycopg2-binary>=2.8.6",
         "Flask-SQLAlchemy>=2.4.4",
         "Flask-Migrate>=2.5.3",

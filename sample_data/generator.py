@@ -2,7 +2,7 @@ import csv
 import dataclasses
 import os
 import string
-from _csv import QUOTE_ALL, QUOTE_MINIMAL
+from _csv import QUOTE_ALL
 from datetime import date, timedelta
 from os import path
 from random import choice, randrange
@@ -11,13 +11,7 @@ from typing import List
 import requests
 from schwifty import IBAN
 
-from scenarios import (
-    Scenario,
-    BurgerScenario,
-    OrganisatieBulkScenario,
-    Organisatie,
-    AfspraakScenario,
-)
+from scenarios import (AfspraakScenario, BurgerScenario, Organisatie, OrganisatieBulkScenario, Scenario)
 
 
 def faker_datum(
@@ -88,7 +82,7 @@ class Generator:
                         "tegen_rekening_id",
                         "actief",
                         "beschrijving",
-                        "kenmerk",
+                        "zoektermen",
                     ],
                 },
             },
@@ -312,7 +306,7 @@ class Generator:
             ),
             "actief": scenario.actief,
             "beschrijving": scenario.beschrijving,
-            "kenmerk": scenario.kenmerk,
+            "zoektermen": f"""{{{",".join(scenario.zoektermen)}}}""" if scenario.zoektermen and len(scenario.zoektermen) > 0 else None,
         }
         self.afspraken.append(afspraak)
 

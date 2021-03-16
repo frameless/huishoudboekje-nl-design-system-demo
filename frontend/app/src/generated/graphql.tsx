@@ -49,7 +49,7 @@ export type Afspraak = {
   tegenRekening?: Maybe<Rekening>;
   bedrag?: Maybe<Scalars['Bedrag']>;
   credit?: Maybe<Scalars['Boolean']>;
-  kenmerk?: Maybe<Scalars['String']>;
+  zoektermen?: Maybe<Array<Maybe<Scalars['String']>>>;
   actief?: Maybe<Scalars['Boolean']>;
   automatischeIncasso?: Maybe<Scalars['Boolean']>;
   automatischBoeken?: Maybe<Scalars['Boolean']>;
@@ -76,7 +76,7 @@ export type AfspraakInput = {
   tegenRekeningId?: Maybe<Scalars['Int']>;
   bedrag?: Maybe<Scalars['Bedrag']>;
   credit: Scalars['Boolean'];
-  kenmerk?: Maybe<Scalars['String']>;
+  zoektermen?: Maybe<Array<Maybe<Scalars['String']>>>;
   actief?: Maybe<Scalars['Boolean']>;
   organisatieId?: Maybe<Scalars['Int']>;
   rubriekId?: Maybe<Scalars['Int']>;
@@ -1015,7 +1015,7 @@ export type RubriekFragment = (
 
 export type AfspraakFragment = (
   { __typename?: 'Afspraak' }
-  & Pick<Afspraak, 'id' | 'beschrijving' | 'startDatum' | 'eindDatum' | 'aantalBetalingen' | 'automatischeIncasso' | 'automatischBoeken' | 'bedrag' | 'credit' | 'kenmerk' | 'actief'>
+  & Pick<Afspraak, 'id' | 'beschrijving' | 'startDatum' | 'eindDatum' | 'aantalBetalingen' | 'automatischeIncasso' | 'automatischBoeken' | 'bedrag' | 'credit' | 'zoektermen' | 'actief'>
   & { interval?: Maybe<(
     { __typename?: 'Interval' }
     & Pick<Interval, 'dagen' | 'weken' | 'maanden' | 'jaren'>
@@ -1915,7 +1915,7 @@ export const AfspraakFragmentDoc = gql`
   }
   bedrag
   credit
-  kenmerk
+  zoektermen
   actief
   rubriek {
     ...Rubriek
@@ -2943,7 +2943,8 @@ export type UpdateAfspraakAutomatischBoekenMutationFn = Apollo.MutationFunction<
  * });
  */
 export function useUpdateAfspraakAutomatischBoekenMutation(baseOptions?: Apollo.MutationHookOptions<UpdateAfspraakAutomatischBoekenMutation, UpdateAfspraakAutomatischBoekenMutationVariables>) {
-        return Apollo.useMutation<UpdateAfspraakAutomatischBoekenMutation, UpdateAfspraakAutomatischBoekenMutationVariables>(UpdateAfspraakAutomatischBoekenDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateAfspraakAutomatischBoekenMutation, UpdateAfspraakAutomatischBoekenMutationVariables>(UpdateAfspraakAutomatischBoekenDocument, options);
       }
 export type UpdateAfspraakAutomatischBoekenMutationHookResult = ReturnType<typeof useUpdateAfspraakAutomatischBoekenMutation>;
 export type UpdateAfspraakAutomatischBoekenMutationResult = Apollo.MutationResult<UpdateAfspraakAutomatischBoekenMutation>;

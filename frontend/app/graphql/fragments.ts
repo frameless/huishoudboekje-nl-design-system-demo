@@ -67,7 +67,7 @@ export const AfspraakFragment = gql`
         }
         bedrag
         credit
-        kenmerk
+        zoektermen
         actief
         rubriek {
             ...Rubriek

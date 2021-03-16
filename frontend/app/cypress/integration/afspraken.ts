@@ -94,7 +94,7 @@ describe("Afspraken CRUD", () => {
 		cy.get("#rekeningId [class*=-menu]").find("[class*=-option]").eq(0).click();
 
 		cy.get("input#amount").type(a.bedrag);
-		cy.get("input#searchTerm").type(a.kenmerk);
+		cy.get("input#zoektermen").type(a.zoektermen?.join(", "));
 		cy.get("input#startDate").type(a.startDatum);
 
 		// Press submit
@@ -131,7 +131,7 @@ describe("Afspraken CRUD", () => {
 		cy.get("#rekeningId [class*=-menu]").find("[class*=-option]").eq(0).click();
 
 		cy.get("input#amount").clear().type(a2.bedrag);
-		cy.get("input#searchTerm").clear().type(a2.kenmerk);
+		cy.get("input#zoektermen").clear().type(a2.zoektermen?.join(", "));
 
 		cy.get("div").contains("Eenmalig").click();
 		cy.get("input#startDate").clear().type(a2.startDatum);
