@@ -21,6 +21,7 @@ setup(
         'mt-940>=4.23.0',
         'nest-asyncio>=1.4.3',
         'pydash==4.9.2',
+        'pyjwt==2.0.1',
         'python-dateutil>=2.8.1',
         'requests>=2.24.0',
         'schwifty>=2021.01.0',
