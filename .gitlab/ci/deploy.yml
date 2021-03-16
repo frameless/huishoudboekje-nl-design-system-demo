@@ -33,6 +33,7 @@
     CREATE_NAMESPACE: ""
     NAMESPACE: "hhb-acc"
     BASE_DOMAIN: huishoudboekje.demoground.nl
+    HHB_HOST: "acc.$BASE_DOMAIN"
   environment:
     name: acc
     url: https://acc.$BASE_DOMAIN/
@@ -44,6 +45,7 @@
     CREATE_NAMESPACE: ""
     NAMESPACE: "hhb-demo"
     BASE_DOMAIN: huishoudboekje.demoground.nl
+    HHB_HOST: "demo.$BASE_DOMAIN"
   environment:
     name: demo
     url: https://demo.$BASE_DOMAIN/
