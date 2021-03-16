@@ -17,7 +17,7 @@ def test_burger_rekeningen_post_success(client, burger_factory, rekening_factory
     assert burger.rekeningen[0].rekening == rekening
 
 
-def test_burger_rekeningen_post_realtion_already_exsists(client, rekening_burger_factory):
+def test_burger_rekeningen_post_realtion_already_exists(client, rekening_burger_factory):
     """ Test /burgers/<object_id>/rekeningen/ path """
     rekening_burger = rekening_burger_factory.create_rekening_burger()
     response = client.post(
@@ -26,4 +26,4 @@ def test_burger_rekeningen_post_realtion_already_exsists(client, rekening_burger
         content_type='application/json'
     )
     assert response.status_code == 409
-    assert response.json["errors"][0] == "Burger / Rekening relation already exsists."
+    assert response.json["errors"][0] == "Key (rekening_id, burger_id)=(1, 1) already exists."
