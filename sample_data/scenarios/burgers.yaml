@@ -41,7 +41,7 @@ scenarios:
         start_datum: "2019-01-20"
         actief: true
         zoektermen: 
-          - "123456781"
+          - "123456781T000014 VOORSCHOT KIT/Kgb"
       - aantal: 1
         # TODO add rubriek "Toeslag"
         rubriek: "Inkomsten"
@@ -56,7 +56,7 @@ scenarios:
         actief: true
         # TODO apply zoektermen bsn "123456781" and subject "VOORSCHOT HUURTOESLAG"
         zoektermen: 
-          - "Huurtoeslag 123456781"
+          - "123456781T900252 VOORSCHOT HUURTOESLAG"
       - aantal: 1
         rubriek: "Inkomsten"
         beschrijving: "Zorgtoeslag"
@@ -69,7 +69,7 @@ scenarios:
         actief: true
         # TODO apply zoektermen bsn "123456781" and subject "VOORSCHOT ZORGTOESLAG"
         zoektermen: 
-          - "123456781"
+          - "123456781T000013 VOORSCHOT ZORGTOESLAG"
       # uitgaven
       - aantal: 1
         rubriek: "Betaalde huur"
@@ -160,7 +160,7 @@ scenarios:
           - "Loon ZOEKTERMPERSONA2"
       - aantal: 1
         rubriek: "Inkomsten"
-        beschrijving: "Huurtoeslag"
+        beschrijving: "Voorschot huurtoeslag"
         organisatie:
           kvk: "27365323"
         bedrag: 28600
@@ -168,8 +168,9 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-20"
         actief: true
+        # TODO apply zoektermen bsn "123456782" and subject "VOORSCHOT HUURTOESLAG"
         zoektermen: 
-          - "Huurtoeslag ZOEKTERMPERSONA2"
+          - "123456782T900252 VOORSCHOT HUURTOESLAG"
       - aantal: 1
         rubriek: "Inkomsten"
         beschrijving: "Zorgtoeslag"
@@ -180,8 +181,9 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-20"
         actief: true
+        # TODO apply zoektermen bsn "123456782" and subject "VOORSCHOT ZORGTOESLAG"
         zoektermen: 
-          - "Zorgtoeslag ZOEKTERMPERSONA2"
+          - "123456782T000013 VOORSCHOT ZORGTOESLAG"
       # uitgaven
       - aantal: 1
         rubriek: "Betaalde huur"
