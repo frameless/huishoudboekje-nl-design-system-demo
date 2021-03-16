@@ -74,13 +74,13 @@
     "actions": {
         "login": "Inloggen",
         "logout": "Uitloggen",
-        "save": "Opslaan",
+        "add": "Toevoegen",
         "edit": "Wijzigen",
+        "save": "Opslaan",
         "cancel": "Annuleren",
         "delete": "Verwijderen",
         "back": "Terug",
         "actions": "Acties",
-        "add": "Toevoegen",
         "export": "Exporteren",
         "download": "Downloaden",
         "startBoeken": "Verwerk alle transacties",
@@ -106,6 +106,8 @@
                 "bankAccountChoose": "Kies een bankrekening",
                 "amount": "Bedrag",
                 "zoektermen": "Zoektermen",
+                "searchtermDuplicateFound": "Deze zoekterm of een deel ervan komt overeen met een zoekterm in de onderstaande afspraak. Automatisch boeken voor deze afspraak kan niet ingeschakeld worden.",
+                "searchtermDuplicateFound_plural": "Deze zoekterm of een deel ervan komt overeen met een zoekterm in de onderstaande afspraken. Automatisch boeken voor deze afspraak kan niet ingeschakeld worden.",
                 "automatischBoeken": "Geef toestemming voor automatisch boeken",
                 "startDate": "Startdatum",
                 "continuous": "Doorlopend",
@@ -298,6 +300,10 @@
     "select": {
         "noOptions": "Geen resultaten"
     },
+    "burgers": {
+        "burger": "Burger",
+        "burgers": "Burgers"
+    },
     "unknown": "Onbekend",
     "banking": {
         "exports": {
@@ -363,9 +369,6 @@
             "subTitle": "Pagina niet beschikbaar",
             "description": "De pagina die je zoekt kan niet worden gevonden."
         }
-    },
-    "burgers": {
-        "burgers": "Burgers"
     },
     "configuratie": "Configuratie",
     "unknownGebruiker": "Onbekende gebruiker",

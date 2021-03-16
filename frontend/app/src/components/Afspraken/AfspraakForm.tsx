@@ -1,17 +1,42 @@
-import {Box, BoxProps, Button, Divider, FormLabel, HStack, Input, InputGroup, InputLeftElement, Stack, Switch, Text, useToast} from "@chakra-ui/react";
+import {SearchIcon} from "@chakra-ui/icons";
+import {
+	Badge,
+	Box,
+	BoxProps,
+	Button,
+	Divider,
+	FormLabel,
+	HStack,
+	IconButton,
+	Input,
+	InputGroup,
+	InputLeftElement,
+	Stack,
+	Switch,
+	Table,
+	Tbody,
+	Td,
+	Text,
+	Thead,
+	Tr,
+	useToast,
+} from "@chakra-ui/react";
 import React, {useEffect, useState} from "react";
 import DatePicker from "react-datepicker";
 import {useInput, useNumberInput, useToggle, Validators} from "react-grapple";
 import {UseInput} from "react-grapple/dist/hooks/useInput";
 import {Trans, useTranslation} from "react-i18next";
+import {NavLink} from "react-router-dom";
 import Select from "react-select";
+import Routes from "../../config/routes";
 import {Afspraak, Burger, Organisatie, Rekening, Rubriek, useGetAfspraakFormDataQuery} from "../../generated/graphql";
 import {AfspraakPeriod, AfspraakType, IntervalType} from "../../models/models";
 import d from "../../utils/dayjs";
 import Queryable from "../../utils/Queryable";
 import generateSampleOverschrijvingen from "../../utils/sampleOverschrijvingen";
-import {formatBurgerName, formatIBAN, useReactSelectStyles, XInterval} from "../../utils/things";
+import {currencyFormat2, formatBurgerName, formatIBAN, intervalString, useReactSelectStyles, XInterval} from "../../utils/things";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
+import Label from "../Layouts/Label";
 import RadioButtonGroup from "../Layouts/RadioButtons/RadioButtonGroup";
 import Section from "../Layouts/Section";
 import OverschrijvingenListView from "../Overschrijvingen/OverschrijvingenListView";
@@ -127,37 +152,39 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [afspraak]);
 
-	// useEffect(() => {
-	// 	// Todo: rewrite checking against multiple zoektermen
-	// 	const zoektermString = String(zoektermen.value);
-	// 	if (zoektermString.length === 0) {
-	// 		setZoektermDuplicates([]);
-	// 	}
-	// 	else {
-	// 		const dupesByZoekterm: Afspraak[] = ($afspraakFormData.data?.afspraken || []).filter(a => {
-	// 			if (afspraak?.id === a.id || a.zoektermen?.length === 0) {
-	// 				return false;
-	// 			}
-	//
-	// 			/* If the tegenRekening matches */
-	// 			if (parseInt(rekeningId.value) === a.tegenRekening?.id && a.zoektermen?.[0]?.length > 0) {
-	// 				/* Check if this afspraak has (partly or whole) the same zoektermen */
-	// 				if ((a.zoektermen?.[0].length > 0 ? zoektermString.includes(a.zoektermen?.[0]) : false) || a.zoektermen?.[0]?.includes(zoektermString)) {
-	// 					return true;
-	// 				}
-	// 			}
-	//
-	// 			return false;
-	// 		});
-	//
-	// 		setZoektermDuplicates(dupesByZoekterm);
-	// 		if (dupesByZoekterm.length > 0) {
-	// 			toggleAutomatischBoeken(false);
-	// 		}
-	// 	}
-	//
-	// 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	// }, [zoektermen.value, $afspraakFormData.data, afspraak, rekeningId.value]);
+	useEffect(() => {
+		if (zoektermen.length === 0) {
+			setZoektermDuplicates([]);
+		}
+		else {
+			const dupesByZoekterm: Afspraak[] = ($afspraakFormData.data?.afspraken || []).filter(a => {
+				if (afspraak?.id === a.id || a.zoektermen?.length === 0) {
+					return false;
+				}
+
+				/* If the tegenRekening matches */
+				if (parseInt(rekeningId.value) === a.tegenRekening?.id) {
+					/* Check if any of the zoektermen match in any way with this afspraak. */
+					return a.zoektermen?.some(z => {
+						const zL = z.toLowerCase();
+						return zoektermen.find(x => {
+							const xL = x.toLowerCase();
+							return xL.toLowerCase().includes(zL) || zL.includes(xL);
+						});
+					});
+				}
+
+				return false;
+			});
+
+			setZoektermDuplicates(dupesByZoekterm);
+			if (dupesByZoekterm.length > 0) {
+				toggleAutomatischBoeken(false);
+			}
+		}
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [zoektermen, $afspraakFormData.data, afspraak, rekeningId.value]);
 
 	const onSubmit = (e) => {
 		e.preventDefault();
@@ -442,31 +469,43 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 											zoekterm.clear();
 										}}>{t("actions.add")}</Button>
 									</HStack>
-									{/* Todo: {zoektermDuplicates.length > 0 && <InputRightElement> <WarningIcon color={"orange.500"} /> </InputRightElement>}*/}
-									{/*{zoektermDuplicates.length > 0 && (*/}
-									{/*	<Stack spacing={1}>*/}
-									{/*		<Text fontSize={"sm"}>{t("forms.agreements.fields.searchtermDuplicateFound", {count: zoektermDuplicates.length})}</Text>*/}
-									{/*		<Table>*/}
-									{/*			<Tbody>*/}
-									{/*				{zoektermDuplicates.map(a => (*/}
-									{/*					<Tr key={a.id}>*/}
-									{/*						<Td>{formatBurgerName(a.burger)}</Td>*/}
-									{/*						<Td>*/}
-									{/*							<Stack spacing={1} flex={1} alignItems={"flex-end"}>*/}
-									{/*								<Box textAlign={"right"} color={a.bedrag < 0 ? "orange.500" : "currentcolor"}>{currencyFormat2().format(a.bedrag)}</Box>*/}
-									{/*								<Badge fontSize={"10px"}>{intervalString(a.interval, t)}</Badge>*/}
-									{/*							</Stack>*/}
-									{/*						</Td>*/}
-									{/*						<Td width={"50px"}>*/}
-									{/*							<IconButton as={NavLink} to={Routes.Burger(a.burger?.id)} variant={"ghost"} size={"sm"} icon={<SearchIcon />}*/}
-									{/*								aria-label={t("actions.edit")} />*/}
-									{/*						</Td>*/}
-									{/*					</Tr>*/}
-									{/*				))}*/}
-									{/*			</Tbody>*/}
-									{/*		</Table>*/}
-									{/*	</Stack>*/}
-									{/*)}*/}
+									{zoektermDuplicates.length > 0 && (
+										<Stack spacing={1}>
+											<Text fontSize={"sm"}>{t("forms.agreements.fields.searchtermDuplicateFound", {count: zoektermDuplicates.length})}</Text>
+											<Table size={"sm"}>
+												<Thead>
+													<Tr>
+														<Td pl={0}>
+															<Label>{t("burgers.burger")}</Label>
+														</Td>
+														<Td>
+															<Label>{t("forms.agreements.fields.zoektermen")}</Label>
+														</Td>
+														<Td />
+														<Td />
+													</Tr>
+												</Thead>
+												<Tbody>
+													{zoektermDuplicates.map(a => (
+														<Tr key={a.id}>
+															<Td>{formatBurgerName(a.burger)}</Td>
+															<Td>{(a.zoektermen || []).join(", ")}</Td>
+															<Td>
+																<Stack spacing={1} flex={1} alignItems={"flex-end"}>
+																	<Box textAlign={"right"} color={a.bedrag < 0 ? "orange.500" : "currentcolor"}>{currencyFormat2().format(a.bedrag)}</Box>
+																	<Badge fontSize={"10px"}>{intervalString(a.interval, t)}</Badge>
+																</Stack>
+															</Td>
+															<Td width={"50px"}>
+																<IconButton as={NavLink} to={Routes.Burger(a.burger?.id)} variant={"ghost"} size={"sm"} icon={<SearchIcon />}
+																	aria-label={t("actions.edit")} />
+															</Td>
+														</Tr>
+													))}
+												</Tbody>
+											</Table>
+										</Stack>
+									)}
 								</>)} />
 							</Stack>
 							<Stack direction={["column", "row"]} spacing={1}>
