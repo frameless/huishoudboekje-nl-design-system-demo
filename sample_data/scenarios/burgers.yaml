@@ -193,7 +193,8 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2021-01-01"
         actief: true
-        kenmerk: "Vaste Lasten Pakket ZOEKTERMPERSONA2"
+        zoektermen: 
+          - "Vaste Lasten Pakket ZOEKTERMPERSONA2"
       # uitgaven
       - aantal: 1
         rubriek: "Betaalde huur"
@@ -300,4 +301,5 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-01"
         actief: true
-        kenmerk: "Inboedelverzekering ZOEKTERMPERSONA2"
+        zoektermen: 
+          - "Inboedelverzekering ZOEKTERMPERSONA2"
