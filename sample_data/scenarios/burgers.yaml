@@ -43,15 +43,18 @@ scenarios:
         zoektermen: 
           - "Kindgebonden budget ZOEKTERMPERSONA1"
       - aantal: 1
+        # TODO add rubriek "Toeslag"
         rubriek: "Inkomsten"
         beschrijving: "Huurtoeslag"
         organisatie:
           kvk: "27365323"
+          iban: "NL36INGB0003445588"
         bedrag: 32200
         credit: true
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-20"
         actief: true
+        # TODO apply zoektermen bsn "123456781" and subject "VOORSCHOT HUURTOESLAG"
         zoektermen: 
           - "Huurtoeslag ZOEKTERMPERSONA1"
       - aantal: 1
