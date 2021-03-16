@@ -39,6 +39,22 @@ class DeleteCustomerStatementMessage(graphene.Mutation):
 
         transactions = await dataloaders.hhb_dataloader().bank_transactions_by_csm.load(id)
 
+        transaction_ids = [t["id"] for t in transactions]
+
+        journaalposten = await hhb_dataloader().journaalposten_by_transaction.load_many(
+            transaction_ids
+        )
+
+        for journaalpost in journaalposten:
+            if journaalpost is not None:
+                response = requests.delete(f"{settings.HHB_SERVICES_URL}/journaalposten/{journaalpost['id']}")
+                if not response.ok:
+                    raise GraphQLError(f"Upstream API responded: {response.text}")
+
+        for transaction in transactions:
+            response = requests.delete(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/{transaction['id']}")
+            if not response.ok:
+                raise GraphQLError(f"Upstream API responded: {response.text}")
 
         delete_response_hhb = requests.delete(
             f"{settings.TRANSACTIE_SERVICES_URL}/customerstatementmessages/{id}"
