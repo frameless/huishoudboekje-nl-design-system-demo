@@ -7,30 +7,42 @@ configuratie:
     waarde: "ABNANL2A"
 
 rubrieken:
+  # Inkomsten
   - id: 1
-    naam: "Gas"
-    grootboekrekening_id: "WBedHuiGweGas"
-  - id: 2
-    naam: "Water"
-    grootboekrekening_id: "WBedHuiGweWat"
-  - id: 3
-    naam: "Elektriciteit"
-    grootboekrekening_id: "WBedHuiGweElk"
-  - id: 4
     naam: "Inkomsten"
     grootboekrekening_id: "WOmzNooNdo"
-  - id: 5
-    naam: "Telefonie"
-    grootboekrekening_id: "WBedKanTef"
-  - id: 6
-    naam: "Verzekeringen"
-    grootboekrekening_id: "WBedAssOva"
-  - id: 7
-    naam: "Betaalde huur"
-    grootboekrekening_id: "WBedHuiBeh"
-  - id: 8
-    naam: "Milieuheffingen en zuiveringsleges"
-    grootboekrekening_id: "WBedHuiMez"
-  - id: 9
+  - id: 10
+    naam: "Toeslagen"
+    grootboekrekening_id: "WOvbOrsOsuSro"
+  - id: 11
+    naam: "Uitkeringen"
+    grootboekrekening_id: "WOvbOrsOsuSov"
+  - id: 12
+    naam: "Subsidies"
+    grootboekrekening_id: "WOvbOrsOsuSpo"
+
+  # Uitgaven
+  - id: 2
     naam: "Leefgeld"
     grootboekrekening_id: "BEivKapProPok"
+  - id: 3
+    naam: "Gas"
+    grootboekrekening_id: "WBedHuiGweGas"
+  - id: 4
+    naam: "Water"
+    grootboekrekening_id: "WBedHuiGweWat"
+  - id: 5
+    naam: "Elektriciteit"
+    grootboekrekening_id: "WBedHuiGweElk"
+  - id: 6
+    naam: "Telefonie"
+    grootboekrekening_id: "WBedKanTef"
+  - id: 7
+    naam: "Verzekeringen"
+    grootboekrekening_id: "WBedAssOva"
+  - id: 8
+    naam: "Betaalde huur"
+    grootboekrekening_id: "WBedHuiBeh"
+  - id: 9
+    naam: "Milieuheffingen en zuiveringsleges"
+    grootboekrekening_id: "WBedHuiMez"

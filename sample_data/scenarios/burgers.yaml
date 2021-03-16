@@ -31,8 +31,8 @@ scenarios:
         zoektermen: 
           - "Aanvullende uitkering ZOEKTERMPERSONA1"
       - aantal: 1
-        rubriek: "Inkomsten"
-        beschrijving: "Kindgebonden budget"
+        rubriek: "Toeslagen"
+        beschrijving: "Voorschot kindgebonden budget"
         organisatie:
           kvk: "27365323"
         bedrag: 39100
@@ -43,9 +43,8 @@ scenarios:
         zoektermen: 
           - "123456781T000014 VOORSCHOT KIT/Kgb"
       - aantal: 1
-        # TODO add rubriek "Toeslag"
-        rubriek: "Inkomsten"
-        beschrijving: "Huurtoeslag"
+        rubriek: "Toeslagen"
+        beschrijving: "Voorschot huurtoeslag"
         organisatie:
           kvk: "27365323"
           iban: "NL36INGB0003445588"
@@ -58,8 +57,8 @@ scenarios:
         zoektermen: 
           - "123456781T900252 VOORSCHOT HUURTOESLAG"
       - aantal: 1
-        rubriek: "Inkomsten"
-        beschrijving: "Zorgtoeslag"
+        rubriek: "Toeslagen"
+        beschrijving: "Voorschot zorgtoeslag"
         organisatie:
           kvk: "27365323"
         bedrag: 10700
@@ -159,7 +158,7 @@ scenarios:
         zoektermen: 
           - "Loon ZOEKTERMPERSONA2"
       - aantal: 1
-        rubriek: "Inkomsten"
+        rubriek: "Toeslagen"
         beschrijving: "Voorschot huurtoeslag"
         organisatie:
           kvk: "27365323"
@@ -172,8 +171,8 @@ scenarios:
         zoektermen: 
           - "123456782T900252 VOORSCHOT HUURTOESLAG"
       - aantal: 1
-        rubriek: "Inkomsten"
-        beschrijving: "Zorgtoeslag"
+        rubriek: "Toeslagen"
+        beschrijving: "Voorschot zorgtoeslag"
         organisatie:
           kvk: "27365323"
         bedrag: 10700
@@ -184,6 +183,17 @@ scenarios:
         # TODO apply zoektermen bsn "123456782" and subject "VOORSCHOT ZORGTOESLAG"
         zoektermen: 
           - "123456782T000013 VOORSCHOT ZORGTOESLAG"
+      - aantal: 1
+        rubriek: "Subsidies"
+        beschrijving: "Bijdrage Vaste Lasten Pakket"
+        organisatie:
+          kvk: "73834238"
+        bedrag: 3000
+        credit: true
+        interval: "P0Y1M0W0D"
+        start_datum: "2021-01-01"
+        actief: true
+        kenmerk: "Vaste Lasten Pakket ZOEKTERMPERSONA2"
       # uitgaven
       - aantal: 1
         rubriek: "Betaalde huur"
@@ -252,21 +262,10 @@ scenarios:
         zoektermen: 
           - "Leefgeld ZOEKTERMPERSONA2"
       - aantal: 1
-        rubriek: "Verzekeringen"
-        beschrijving: "Inboedelverzekering"
-        organisatie:
-          kvk: "69653852"
-        bedrag: 1952
-        credit: false
-        automatische_incasso: true
-        interval: "P0Y1M0W0D"
-        start_datum: "2019-01-01"
-        actief: true
         zoektermen: 
           - "Inboedelverzekering ZOEKTERMPERSONA2"
-      - aantal: 1
         rubriek: "Telefonie"
-        beschrijving: "Telefoon en Internet"
+        beschrijving: "Vaste telefonie en internet"
         organisatie:
           kvk: "27124701"
         bedrag: 6288
@@ -290,3 +289,14 @@ scenarios:
         actief: true
         zoektermen: 
           - "Mobiele telefonie ZOEKTERMPERSONA2"
+        rubriek: "Verzekeringen"
+        beschrijving: "Inboedelverzekering"
+        organisatie:
+          kvk: "69653852"
+        bedrag: 1952
+        credit: false
+        automatische_incasso: true
+        interval: "P0Y1M0W0D"
+        start_datum: "2019-01-01"
+        actief: true
+        kenmerk: "Inboedelverzekering ZOEKTERMPERSONA2"
