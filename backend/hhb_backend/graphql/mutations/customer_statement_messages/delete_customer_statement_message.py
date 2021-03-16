@@ -3,7 +3,7 @@ import os
 import graphene
 import requests
 from graphql import GraphQLError
-from hhb_backend.graphql import settings
+from hhb_backend.graphql import settings, dataloaders
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.customer_statement_message import (
     CustomerStatementMessage,
@@ -36,6 +36,9 @@ class DeleteCustomerStatementMessage(graphene.Mutation):
     async def mutate(_root, _info, id):
         """ Delete current Customer Statement Message """
         previous = await hhb_dataloader().csms_by_id.load(id)
+
+        transactions = await dataloaders.hhb_dataloader().bank_transactions_by_csm.load(id)
+
 
         delete_response_hhb = requests.delete(
             f"{settings.TRANSACTIE_SERVICES_URL}/customerstatementmessages/{id}"
