@@ -41,7 +41,7 @@ scenarios:
         start_datum: "2019-01-20"
         actief: true
         zoektermen: 
-          - "Kindgebonden budget ZOEKTERMPERSONA1"
+          - "123456781"
       - aantal: 1
         # TODO add rubriek "Toeslag"
         rubriek: "Inkomsten"
@@ -67,8 +67,9 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-20"
         actief: true
+        # TODO apply zoektermen bsn "123456781" and subject "VOORSCHOT ZORGTOESLAG"
         zoektermen: 
-          - "Zorgtoeslag ZOEKTERMPERSONA1"
+          - "123456781"
       # uitgaven
       - aantal: 1
         rubriek: "Betaalde huur"
