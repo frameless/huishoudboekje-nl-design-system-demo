@@ -282,3 +282,77 @@ async def test_transactie_suggesties_no_transactions(test_request_context):
         # No leftover calls
         assert not post_any.called
         assert not get_any.called
+
+
+@pytest.mark.asyncio
+async def test_transactie_suggesties_multiple_zoektermen(test_request_context):
+    with requests_mock.Mocker() as mock:
+        get_any = mock.get(requests_mock.ANY, json={"data": []})
+        post_any = mock.post(requests_mock.ANY, json=post_echo)
+
+        get_transactions = mock.get(
+            f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids=7", json={'data': [
+                {'id': 7, 'information_to_account_owner': '15814016000676480 J.Janssen',
+                 'tegen_rekening': 'NL04RABO5082680188'},
+            ]})
+
+        get_rekeningen = mock.get(
+            f"{settings.HHB_SERVICES_URL}/rekeningen/?filter_ibans=NL04RABO5082680188",
+            json={'data': [
+                {'afspraken': [4], 'iban': 'NL04RABO5082680188', 'id': 2},
+            ]})
+
+        get_afspraken = mock.get(
+            f"{settings.HHB_SERVICES_URL}/afspraken/?filter_rekening=2", json={
+                'data': [
+                    {'id': 4, 'automatisch_boeken': True, 'zoektermen': ['15814016000676480', 'Janssen'],
+                     'tegen_rekening_id': 2},
+                ]})
+
+        result = await transactie_suggesties([7])
+
+        assert result == {7: [{'automatisch_boeken': True, 'id': 4, 'tegen_rekening_id': 2,
+                               'zoektermen': ['15814016000676480', 'Janssen']}]}
+        assert get_transactions.called_once
+        assert get_rekeningen.called_once
+        assert get_afspraken.called_once
+
+        # No leftover calls
+        assert not post_any.called
+        assert not get_any.called
+
+@pytest.mark.asyncio
+async def test_transactie_suggesties_multiple_zoektermen_too_specific(test_request_context):
+    with requests_mock.Mocker() as mock:
+        get_any = mock.get(requests_mock.ANY, json={"data": []})
+        post_any = mock.post(requests_mock.ANY, json=post_echo)
+
+        get_transactions = mock.get(
+            f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids=7", json={'data': [
+                {'id': 7, 'information_to_account_owner': '15814016000676480 J.Janssen',
+                 'tegen_rekening': 'NL04RABO5082680188'},
+            ]})
+
+        get_rekeningen = mock.get(
+            f"{settings.HHB_SERVICES_URL}/rekeningen/?filter_ibans=NL04RABO5082680188",
+            json={'data': [
+                {'afspraken': [4], 'iban': 'NL04RABO5082680188', 'id': 2},
+            ]})
+
+        get_afspraken = mock.get(
+            f"{settings.HHB_SERVICES_URL}/afspraken/?filter_rekening=2", json={
+                'data': [
+                    {'id': 4, 'automatisch_boeken': True, 'zoektermen': ['15814016000676480', 'Janssen', 'Loon'],
+                     'tegen_rekening_id': 2},
+                ]})
+
+        result = await transactie_suggesties([7])
+
+        assert result == {7: []}
+        assert get_transactions.called_once
+        assert get_rekeningen.called_once
+        assert get_afspraken.called_once
+
+        # No leftover calls
+        assert not post_any.called
+        assert not get_any.called
