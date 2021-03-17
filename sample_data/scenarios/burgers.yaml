@@ -15,7 +15,7 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2021-01-01"
         actief: true
-        zoektermen: 
+        zoektermen:
           - "Loon ZOEKTERMPERSONA1"
       - aantal: 1
         rubriek: "Inkomsten"
@@ -28,7 +28,7 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-07"
         actief: true
-        zoektermen: 
+        zoektermen:
           - "Aanvullende uitkering ZOEKTERMPERSONA1"
       - aantal: 1
         rubriek: "Toeslagen"
@@ -40,8 +40,9 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-20"
         actief: true
-        zoektermen: 
-          - "123456781T000014 VOORSCHOT KIT/Kgb"
+        zoektermen:
+          - "123456781"
+          - "VOORSCHOT KIT/Kgb"
       - aantal: 1
         rubriek: "Toeslagen"
         beschrijving: "Voorschot huurtoeslag"
@@ -53,9 +54,9 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-20"
         actief: true
-        # TODO apply zoektermen bsn "123456781" and subject "VOORSCHOT HUURTOESLAG"
-        zoektermen: 
-          - "123456781T900252 VOORSCHOT HUURTOESLAG"
+        zoektermen:
+          - "123456781"
+          - "VOORSCHOT HUURTOESLAG"
       - aantal: 1
         rubriek: "Toeslagen"
         beschrijving: "Voorschot zorgtoeslag"
@@ -66,9 +67,9 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-20"
         actief: true
-        # TODO apply zoektermen bsn "123456781" and subject "VOORSCHOT ZORGTOESLAG"
-        zoektermen: 
-          - "123456781T000013 VOORSCHOT ZORGTOESLAG"
+        zoektermen:
+          - "123456781"
+          - "VOORSCHOT ZORGTOESLAG"
       # uitgaven
       - aantal: 1
         rubriek: "Betaalde huur"
@@ -81,7 +82,7 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-01"
         actief: true
-        zoektermen: 
+        zoektermen:
           - "Betaalde huur ZOEKTERMPERSONA1"
       - aantal: 1
         rubriek: "Elektriciteit"
@@ -94,7 +95,7 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-01"
         actief: true
-        zoektermen: 
+        zoektermen:
           - "Elektriciteit ZOEKTERMPERSONA1"
       - aantal: 1
         rubriek: "Water"
@@ -107,7 +108,7 @@ scenarios:
         interval: "P0Y3M0W0D"
         start_datum: "2021-01-01"
         actief: true
-        zoektermen: 
+        zoektermen:
           - "Water ZOEKTERMPERSONA1"
       - aantal: 1
         rubriek: "Leefgeld"
@@ -121,7 +122,7 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2021-01-01"
         actief: true
-        zoektermen: 
+        zoektermen:
           - "Leefgeld ZOEKTERMPERSONA1"
 
 # persona 2
@@ -142,7 +143,7 @@ scenarios:
         start_datum: "2019-01-07"
         aantal_betalingen: 16
         actief: true
-        zoektermen: 
+        zoektermen:
           - "Aanvullende uitkering ZOEKTERMPERSONA2"
       - aantal: 1
         rubriek: "Inkomsten"
@@ -155,7 +156,7 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2021-01-01"
         actief: true
-        zoektermen: 
+        zoektermen:
           - "Loon ZOEKTERMPERSONA2"
       - aantal: 1
         rubriek: "Toeslagen"
@@ -167,9 +168,9 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-20"
         actief: true
-        # TODO apply zoektermen bsn "123456782" and subject "VOORSCHOT HUURTOESLAG"
-        zoektermen: 
-          - "123456782T900252 VOORSCHOT HUURTOESLAG"
+        zoektermen:
+          - "123456782"
+          - "VOORSCHOT HUURTOESLAG"
       - aantal: 1
         rubriek: "Toeslagen"
         beschrijving: "Voorschot zorgtoeslag"
@@ -180,9 +181,9 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-20"
         actief: true
-        # TODO apply zoektermen bsn "123456782" and subject "VOORSCHOT ZORGTOESLAG"
-        zoektermen: 
-          - "123456782T000013 VOORSCHOT ZORGTOESLAG"
+        zoektermen:
+          - "123456782"
+          - "VOORSCHOT ZORGTOESLAG"
       - aantal: 1
         rubriek: "Subsidies"
         beschrijving: "Bijdrage Vaste Lasten Pakket"
@@ -193,7 +194,7 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2021-01-01"
         actief: true
-        zoektermen: 
+        zoektermen:
           - "Vaste Lasten Pakket ZOEKTERMPERSONA2"
       # uitgaven
       - aantal: 1
@@ -207,7 +208,7 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-01"
         actief: true
-        zoektermen: 
+        zoektermen:
           - "Betaalde huur ZOEKTERMPERSONA2"
       - aantal: 1
         rubriek: "Elektriciteit"
@@ -220,7 +221,7 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-01"
         actief: true
-        zoektermen: 
+        zoektermen:
           - "Elektriciteit ZOEKTERMPERSONA2"
       - aantal: 1
         rubriek: "Verzekeringen"
@@ -233,7 +234,7 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-01"
         actief: true
-        zoektermen: 
+        zoektermen:
           - "Zorgverzekering ZOEKTERMPERSONA2"
       - aantal: 1
         rubriek: "Water"
@@ -246,7 +247,7 @@ scenarios:
         interval: "P0Y3M0W0D"
         start_datum: "2019-01-01"
         actief: true
-        zoektermen: 
+        zoektermen:
           - "Water ZOEKTERMPERSONA2"
       - aantal: 1
         rubriek: "Leefgeld"
@@ -260,11 +261,22 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-01"
         actief: true
-        zoektermen: 
+        zoektermen:
           - "Leefgeld ZOEKTERMPERSONA2"
       - aantal: 1
-        zoektermen: 
+        rubriek: "Verzekeringen"
+        beschrijving: "Inboedelverzekering"
+        organisatie:
+          kvk: "69653852"
+        bedrag: 1952
+        credit: false
+        automatische_incasso: true
+        interval: "P0Y1M0W0D"
+        start_datum: "2019-01-01"
+        actief: true
+        zoektermen:
           - "Inboedelverzekering ZOEKTERMPERSONA2"
+      - aantal: 1
         rubriek: "Telefonie"
         beschrijving: "Vaste telefonie en internet"
         organisatie:
@@ -275,7 +287,7 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-01"
         actief: true
-        zoektermen: 
+        zoektermen:
           - "Vaste telefonie en internet ZOEKTERMPERSONA2"
       - aantal: 1
         rubriek: "Telefonie"
@@ -288,18 +300,5 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-01"
         actief: true
-        zoektermen: 
+        zoektermen:
           - "Mobiele telefonie ZOEKTERMPERSONA2"
-      - aantal: 1
-        rubriek: "Verzekeringen"
-        beschrijving: "Inboedelverzekering"
-        organisatie:
-          kvk: "69653852"
-        bedrag: 1952
-        credit: false
-        automatische_incasso: true
-        interval: "P0Y1M0W0D"
-        start_datum: "2019-01-01"
-        actief: true
-        zoektermen: 
-          - "Inboedelverzekering ZOEKTERMPERSONA2"
