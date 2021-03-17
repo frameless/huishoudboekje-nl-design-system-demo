@@ -15,7 +15,7 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2021-01-01"
         actief: true
-        zoektermen: 
+        zoektermen:
           - "Loon ZOEKTERMPERSONA1"
       - aantal: 1
         rubriek: "Inkomsten"
@@ -28,11 +28,11 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-07"
         actief: true
-        zoektermen: 
+        zoektermen:
           - "Aanvullende uitkering ZOEKTERMPERSONA1"
       - aantal: 1
-        rubriek: "Inkomsten"
-        beschrijving: "Kindgebonden budget"
+        rubriek: "Toeslagen"
+        beschrijving: "Voorschot kindgebonden budget"
         organisatie:
           kvk: "27365323"
         bedrag: 39100
@@ -40,23 +40,26 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-20"
         actief: true
-        zoektermen: 
-          - "Kindgebonden budget ZOEKTERMPERSONA1"
+        zoektermen:
+          - "123456781"
+          - "VOORSCHOT KIT/Kgb"
       - aantal: 1
-        rubriek: "Inkomsten"
-        beschrijving: "Huurtoeslag"
+        rubriek: "Toeslagen"
+        beschrijving: "Voorschot huurtoeslag"
         organisatie:
           kvk: "27365323"
+          iban: "NL36INGB0003445588"
         bedrag: 32200
         credit: true
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-20"
         actief: true
-        zoektermen: 
-          - "Huurtoeslag ZOEKTERMPERSONA1"
+        zoektermen:
+          - "123456781"
+          - "VOORSCHOT HUURTOESLAG"
       - aantal: 1
-        rubriek: "Inkomsten"
-        beschrijving: "Zorgtoeslag"
+        rubriek: "Toeslagen"
+        beschrijving: "Voorschot zorgtoeslag"
         organisatie:
           kvk: "27365323"
         bedrag: 10700
@@ -64,8 +67,9 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-20"
         actief: true
-        zoektermen: 
-          - "Zorgtoeslag ZOEKTERMPERSONA1"
+        zoektermen:
+          - "123456781"
+          - "VOORSCHOT ZORGTOESLAG"
       # uitgaven
       - aantal: 1
         rubriek: "Betaalde huur"
@@ -78,7 +82,7 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-01"
         actief: true
-        zoektermen: 
+        zoektermen:
           - "Betaalde huur ZOEKTERMPERSONA1"
       - aantal: 1
         rubriek: "Elektriciteit"
@@ -91,7 +95,7 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-01"
         actief: true
-        zoektermen: 
+        zoektermen:
           - "Elektriciteit ZOEKTERMPERSONA1"
       - aantal: 1
         rubriek: "Water"
@@ -104,7 +108,7 @@ scenarios:
         interval: "P0Y3M0W0D"
         start_datum: "2021-01-01"
         actief: true
-        zoektermen: 
+        zoektermen:
           - "Water ZOEKTERMPERSONA1"
       - aantal: 1
         rubriek: "Leefgeld"
@@ -118,7 +122,7 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2021-01-01"
         actief: true
-        zoektermen: 
+        zoektermen:
           - "Leefgeld ZOEKTERMPERSONA1"
 
 # persona 2
@@ -139,7 +143,7 @@ scenarios:
         start_datum: "2019-01-07"
         aantal_betalingen: 16
         actief: true
-        zoektermen: 
+        zoektermen:
           - "Aanvullende uitkering ZOEKTERMPERSONA2"
       - aantal: 1
         rubriek: "Inkomsten"
@@ -152,11 +156,11 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2021-01-01"
         actief: true
-        zoektermen: 
+        zoektermen:
           - "Loon ZOEKTERMPERSONA2"
       - aantal: 1
-        rubriek: "Inkomsten"
-        beschrijving: "Huurtoeslag"
+        rubriek: "Toeslagen"
+        beschrijving: "Voorschot huurtoeslag"
         organisatie:
           kvk: "27365323"
         bedrag: 28600
@@ -164,11 +168,12 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-20"
         actief: true
-        zoektermen: 
-          - "Huurtoeslag ZOEKTERMPERSONA2"
+        zoektermen:
+          - "123456782"
+          - "VOORSCHOT HUURTOESLAG"
       - aantal: 1
-        rubriek: "Inkomsten"
-        beschrijving: "Zorgtoeslag"
+        rubriek: "Toeslagen"
+        beschrijving: "Voorschot zorgtoeslag"
         organisatie:
           kvk: "27365323"
         bedrag: 10700
@@ -176,8 +181,21 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-20"
         actief: true
-        zoektermen: 
-          - "Zorgtoeslag ZOEKTERMPERSONA2"
+        zoektermen:
+          - "123456782"
+          - "VOORSCHOT ZORGTOESLAG"
+      - aantal: 1
+        rubriek: "Subsidies"
+        beschrijving: "Bijdrage Vaste Lasten Pakket"
+        organisatie:
+          kvk: "73834238"
+        bedrag: 3000
+        credit: true
+        interval: "P0Y1M0W0D"
+        start_datum: "2021-01-01"
+        actief: true
+        zoektermen:
+          - "Vaste Lasten Pakket ZOEKTERMPERSONA2"
       # uitgaven
       - aantal: 1
         rubriek: "Betaalde huur"
@@ -190,7 +208,7 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-01"
         actief: true
-        zoektermen: 
+        zoektermen:
           - "Betaalde huur ZOEKTERMPERSONA2"
       - aantal: 1
         rubriek: "Elektriciteit"
@@ -203,7 +221,7 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-01"
         actief: true
-        zoektermen: 
+        zoektermen:
           - "Elektriciteit ZOEKTERMPERSONA2"
       - aantal: 1
         rubriek: "Verzekeringen"
@@ -216,7 +234,7 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-01"
         actief: true
-        zoektermen: 
+        zoektermen:
           - "Zorgverzekering ZOEKTERMPERSONA2"
       - aantal: 1
         rubriek: "Water"
@@ -229,7 +247,7 @@ scenarios:
         interval: "P0Y3M0W0D"
         start_datum: "2019-01-01"
         actief: true
-        zoektermen: 
+        zoektermen:
           - "Water ZOEKTERMPERSONA2"
       - aantal: 1
         rubriek: "Leefgeld"
@@ -243,7 +261,7 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-01"
         actief: true
-        zoektermen: 
+        zoektermen:
           - "Leefgeld ZOEKTERMPERSONA2"
       - aantal: 1
         rubriek: "Verzekeringen"
@@ -256,11 +274,11 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-01"
         actief: true
-        zoektermen: 
+        zoektermen:
           - "Inboedelverzekering ZOEKTERMPERSONA2"
       - aantal: 1
         rubriek: "Telefonie"
-        beschrijving: "Telefoon en Internet"
+        beschrijving: "Vaste telefonie en internet"
         organisatie:
           kvk: "27124701"
         bedrag: 6288
@@ -269,7 +287,7 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-01"
         actief: true
-        zoektermen: 
+        zoektermen:
           - "Vaste telefonie en internet ZOEKTERMPERSONA2"
       - aantal: 1
         rubriek: "Telefonie"
@@ -282,5 +300,5 @@ scenarios:
         interval: "P0Y1M0W0D"
         start_datum: "2019-01-01"
         actief: true
-        zoektermen: 
+        zoektermen:
           - "Mobiele telefonie ZOEKTERMPERSONA2"
