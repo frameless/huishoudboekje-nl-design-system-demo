@@ -1,20 +1,46 @@
-import {Box, BoxProps, Button, Divider, FormLabel, Input, InputGroup, InputLeftElement, Stack, Switch, Text, useToast} from "@chakra-ui/react";
+import {SearchIcon} from "@chakra-ui/icons";
+import {
+	Badge,
+	Box,
+	BoxProps,
+	Button,
+	Divider,
+	FormLabel,
+	HStack,
+	IconButton,
+	Input,
+	InputGroup,
+	InputLeftElement,
+	Stack,
+	Switch,
+	Table,
+	Tbody,
+	Td,
+	Text,
+	Thead,
+	Tr,
+	useToast,
+} from "@chakra-ui/react";
 import React, {useEffect, useState} from "react";
 import DatePicker from "react-datepicker";
 import {useInput, useNumberInput, useToggle, Validators} from "react-grapple";
 import {UseInput} from "react-grapple/dist/hooks/useInput";
 import {Trans, useTranslation} from "react-i18next";
+import {NavLink} from "react-router-dom";
 import Select from "react-select";
+import Routes from "../../config/routes";
 import {Afspraak, Burger, Organisatie, Rekening, Rubriek, useGetAfspraakFormDataQuery} from "../../generated/graphql";
 import {AfspraakPeriod, AfspraakType, IntervalType} from "../../models/models";
 import d from "../../utils/dayjs";
 import Queryable from "../../utils/Queryable";
 import generateSampleOverschrijvingen from "../../utils/sampleOverschrijvingen";
-import {formatBurgerName, formatIBAN, useReactSelectStyles, XInterval} from "../../utils/things";
+import {currencyFormat2, formatBurgerName, formatIBAN, intervalString, useReactSelectStyles, XInterval} from "../../utils/things";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
+import Label from "../Layouts/Label";
 import RadioButtonGroup from "../Layouts/RadioButtons/RadioButtonGroup";
 import Section from "../Layouts/Section";
 import OverschrijvingenListView from "../Overschrijvingen/OverschrijvingenListView";
+import ZoektermenList from "./ZoektermenList";
 
 type AfspraakFormProps = {afspraak?: Afspraak, onSave: (data) => void, burger?: Burger, loading: boolean};
 const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave, loading = false, ...props}) => {
@@ -53,9 +79,10 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 		step: .01,
 		validate: [(v) => new RegExp(/^([0-9]+)(([,.])[0-9]{2})?$/).test(v.toString())],
 	});
-	const zoektermen = useInput({
+	const [zoektermen, setZoektermen] = useState<string[]>([]);
+	const zoekterm = useInput<string>({
 		defaultValue: "",
-		validate: [(v) => (String(v).length === 0 || String(v).length >= 6)],
+		validate: [Validators.required],
 	});
 	const [isRecurring, toggleRecurring] = useToggle(false);
 	const startDate = useInput({
@@ -104,7 +131,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 				rekeningId.setValue((afspraak.tegenRekening?.id || 0).toString());
 			}
 			amount.setValue(afspraak.bedrag);
-			zoektermen.setValue(afspraak.zoektermen?.join(", ") || "");
+			setZoektermen(() => [...afspraak.zoektermen || []]);
 			const interval = XInterval.parse(afspraak.interval);
 			if (interval) {
 				toggleRecurring(true);
@@ -126,9 +153,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 	}, [afspraak]);
 
 	// useEffect(() => {
-	// 	// Todo: rewrite checking against multiple zoektermen
-	// 	const zoektermString = String(zoektermen.value);
-	// 	if (zoektermString.length === 0) {
+	// 	if (zoektermen.length === 0) {
 	// 		setZoektermDuplicates([]);
 	// 	}
 	// 	else {
@@ -138,11 +163,15 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 	// 			}
 	//
 	// 			/* If the tegenRekening matches */
-	// 			if (parseInt(rekeningId.value) === a.tegenRekening?.id && a.zoektermen?.[0]?.length > 0) {
-	// 				/* Check if this afspraak has (partly or whole) the same zoektermen */
-	// 				if ((a.zoektermen?.[0].length > 0 ? zoektermString.includes(a.zoektermen?.[0]) : false) || a.zoektermen?.[0]?.includes(zoektermString)) {
-	// 					return true;
-	// 				}
+	// 			if (parseInt(rekeningId.value) === a.tegenRekening?.id) {
+	// 				/* Check if all of the zoektermen match in any way with this afspraak. */
+	// 				return a.zoektermen?.every(z => {
+	// 					const zL = z.toLowerCase();
+	// 					return zoektermen.find(x => {
+	// 						const xL = x.toLowerCase();
+	// 						return xL.toLowerCase().includes(zL) || zL.includes(xL);
+	// 					});
+	// 				});
 	// 			}
 	//
 	// 			return false;
@@ -155,7 +184,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 	// 	}
 	//
 	// 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	// }, [zoektermen.value, $afspraakFormData.data, afspraak, rekeningId.value]);
+	// }, [zoektermen, $afspraakFormData.data, afspraak, rekeningId.value]);
 
 	const onSubmit = (e) => {
 		e.preventDefault();
@@ -167,7 +196,6 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 			rubriekId,
 			rekeningId,
 			amount,
-			zoektermen,
 			startDate,
 		];
 
@@ -199,7 +227,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 			organisatieId: parseInt(organisatieId.value) !== 0 ? parseInt(organisatieId.value) : null,
 			rubriekId: parseInt(rubriekId.value) !== 0 ? parseInt(rubriekId.value) : null,
 			bedrag: amount.value,
-			zoektermen: zoektermen.value.split(", "),
+			zoektermen: zoektermen,
 			startDatum: d(startDate.value, "L").format("YYYY-MM-DD"),
 			interval: isRecurring ? XInterval.create(intervalType.value!, intervalNumber.value) : XInterval.empty,
 			aantalBetalingen: isContinuous ? 1 : nTimes.value,
@@ -289,7 +317,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 					if (rekeningen.length === 1 && rekeningen[0].id) {
 						rekeningId.setValue(String(rekeningen[0].id));
 					}
-					else{
+					else {
 						rekeningId.clear();
 					}
 				}
@@ -297,7 +325,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 					if (burger.rekeningen?.length === 1 && burger.rekeningen?.[0].id) {
 						rekeningId.setValue(String(burger.rekeningen[0].id));
 					}
-					else{
+					else {
 						rekeningId.clear();
 					}
 				}
@@ -323,7 +351,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 		{key: "year", label: t("interval.year", {count: parseInt(intervalNumber.value)}), value: IntervalType.Year},
 	];
 
-	const automatischBoekenPossible = (zoektermen.value.length > 0 && zoektermDuplicates.length === 0);
+	const automatischBoekenPossible = (zoektermen.length > 0);
 	return (
 		<Stack spacing={5} as={"form"} onSubmit={onSubmit} {...props}>
 			<Section>
@@ -430,18 +458,38 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 							<Stack spacing={1} flex={1}>
 								<Queryable query={$afspraakFormData} children={() => (<>
 									<FormLabel htmlFor={"zoektermen"}>{t("forms.agreements.fields.zoektermen")}</FormLabel>
-									<InputGroup>
-										<Input isInvalid={isInvalid(zoektermen)} {...zoektermen.bind} id="zoektermen" />
-										{/*{zoektermDuplicates.length > 0 && <InputRightElement> <WarningIcon color={"orange.500"} /> </InputRightElement>}*/}
-									</InputGroup>
+									<ZoektermenList zoektermen={zoektermen} onChange={val => setZoektermen(val)} />
+									<HStack>
+										<Input id="zoektermen" {...zoekterm.bind} />
+										<Button colorScheme={"primary"} onClick={(e) => {
+											e.preventDefault();
+											if (zoekterm.value.length > 0 && !zoektermen.find(z => z === zoekterm.value)) {
+												setZoektermen(z => [...z, zoekterm.value]);
+											}
+											zoekterm.clear();
+										}}>{t("actions.add")}</Button>
+									</HStack>
 									{/*{zoektermDuplicates.length > 0 && (*/}
 									{/*	<Stack spacing={1}>*/}
 									{/*		<Text fontSize={"sm"}>{t("forms.agreements.fields.searchtermDuplicateFound", {count: zoektermDuplicates.length})}</Text>*/}
-									{/*		<Table>*/}
+									{/*		<Table size={"sm"}>*/}
+									{/*			<Thead>*/}
+									{/*				<Tr>*/}
+									{/*					<Td pl={0}>*/}
+									{/*						<Label>{t("burgers.burger")}</Label>*/}
+									{/*					</Td>*/}
+									{/*					<Td>*/}
+									{/*						<Label>{t("forms.agreements.fields.zoektermen")}</Label>*/}
+									{/*					</Td>*/}
+									{/*					<Td />*/}
+									{/*					<Td />*/}
+									{/*				</Tr>*/}
+									{/*			</Thead>*/}
 									{/*			<Tbody>*/}
 									{/*				{zoektermDuplicates.map(a => (*/}
 									{/*					<Tr key={a.id}>*/}
 									{/*						<Td>{formatBurgerName(a.burger)}</Td>*/}
+									{/*						<Td>{(a.zoektermen || []).join(", ")}</Td>*/}
 									{/*						<Td>*/}
 									{/*							<Stack spacing={1} flex={1} alignItems={"flex-end"}>*/}
 									{/*								<Box textAlign={"right"} color={a.bedrag < 0 ? "orange.500" : "currentcolor"}>{currencyFormat2().format(a.bedrag)}</Box>*/}
@@ -462,10 +510,8 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 							</Stack>
 							<Stack direction={["column", "row"]} spacing={1}>
 								<Stack isInline={true} alignItems={"center"} spacing={3}>
-									<Switch isChecked={automatischBoeken} isDisabled={!automatischBoekenPossible} onChange={() => toggleAutomatischBoeken()}
-										id={"automatischBoeken"} />
-									<FormLabel mb={0} htmlFor={"automatischBoeken"}
-											   color={automatischBoekenPossible ? "currentcolor" : "gray.500"}>{t("forms.agreements.fields.automatischBoeken")}</FormLabel>
+									<Switch isChecked={automatischBoeken} isDisabled={!automatischBoekenPossible} onChange={() => toggleAutomatischBoeken()} id={"automatischBoeken"} />
+									<FormLabel mb={0} htmlFor={"automatischBoeken"} color={automatischBoekenPossible ? "currentcolor" : "gray.500"}>{t("forms.agreements.fields.automatischBoeken")}</FormLabel>
 								</Stack>
 							</Stack>
 						</FormRight>
