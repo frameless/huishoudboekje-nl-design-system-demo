@@ -78,7 +78,7 @@ async def transactie_suggesties(transactie_ids):
     if rekeningen == [None] * len(rekeningen):
         return {key: [] for key in transactie_ids}
 
-    rekening_ids = [r["id"] for r in rekeningen]
+    rekening_ids = [r["id"] if r is not None else -1 for r in rekeningen]
 
     # and afspraken for tegen_rekening.ibans of those transactions
     afspraken: [afspraak.Afspraak] = (

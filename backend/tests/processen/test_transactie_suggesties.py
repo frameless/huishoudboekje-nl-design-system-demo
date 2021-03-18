@@ -16,7 +16,7 @@ async def test_transactie_suggesties_matches(test_request_context):
         post_any = mock.post(requests_mock.ANY, json=post_echo)
 
         get_transactions = mock.get(
-            f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids=7,8", json={'data': [
+            f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids=7,8,9", json={'data': [
                 {'bedrag': None, 'customer_statement_message_id': 17, 'id': 7,
                  'information_to_account_owner': '/EREF/15814016000676480//CNTP/NL32INGB0000012345/INGBNL2A/J.Janssen///REMI/STRD/CUR/9001123412341234/',
                  'is_credit': None, 'is_geboekt': None, 'statement_line': '140220C32.00NTRF900112341234123408/',
@@ -24,17 +24,22 @@ async def test_transactie_suggesties_matches(test_request_context):
                 {'bedrag': None, 'customer_statement_message_id': 17, 'id': 8,
                  'information_to_account_owner': '/EREF/15614016000384600//CNTP/NL32INGB0000012345/INGBNL2A/INGBANK NV///REMI/STRD/CUR/1070123412341234/\n/SUM/4/4/134,46/36,58/\n\xad}',
                  'is_credit': None, 'is_geboekt': None, 'statement_line': '140220D-119.00NTRF107012341234123408/',
-                 'tegen_rekening': 'NL29ABNA5179205913', 'transactie_datum': None}]})
+                 'tegen_rekening': 'NL29ABNA5179205913', 'transactie_datum': None},
+                {'bedrag': None, 'customer_statement_message_id': 17, 'id': 9,
+                 'information_to_account_owner': '/EREF/15614016000384600//CNTP/NL32INGB0000012345/INGBNL2A/INGBANK NV///REMI/STRD/CUR/1070123412341234/\n/SUM/4/4/134,46/36,58/\n\xad}',
+                 'is_credit': None, 'is_geboekt': None, 'statement_line': '140220D-119.00NTRF107012341234123408/',
+                 'tegen_rekening': 'NL29ABNA5179215913', 'transactie_datum': None}
+            ]})
 
         get_rekeningen = mock.get(
-            f"{settings.HHB_SERVICES_URL}/rekeningen/?filter_ibans=NL04RABO5082680188,NL29ABNA5179205913", json={
+            f"{settings.HHB_SERVICES_URL}/rekeningen/?filter_ibans=NL04RABO5082680188,NL29ABNA5179205913,NL29ABNA5179215913", json={
                 'data': [{'afspraken': [4], 'gebruikers': [], 'iban': 'NL04RABO5082680188', 'id': 2, 'organisaties': [],
                           'rekeninghouder': 'Hema'},
                          {'afspraken': [3], 'gebruikers': [], 'iban': 'NL29ABNA5179205913', 'id': 3, 'organisaties': [],
                           'rekeninghouder': 'Shell'}]})
 
         get_afspraken = mock.get(
-            f"{settings.HHB_SERVICES_URL}/afspraken/?filter_rekening=2,3", json={
+            f"{settings.HHB_SERVICES_URL}/afspraken/?filter_rekening=2,3,-1", json={
                 'data': [{'aantal_betalingen': 12, 'actief': True, 'automatisch_boeken': None,
                           'automatische_incasso': False, 'bedrag': 450000, 'beschrijving': 'Nog meer geld overmaken',
                           'credit': True, 'eind_datum': '2021-12-31', 'gebruiker_id': 1, 'id': 4,
@@ -49,7 +54,7 @@ async def test_transactie_suggesties_matches(test_request_context):
                           'overschrijvingen': [40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51], 'rubriek_id': None,
                           'start_datum': '2021-01-01', 'tegen_rekening_id': 3}]})
 
-        result = await transactie_suggesties([7, 8])
+        result = await transactie_suggesties([7, 8, 9])
 
         assert get_transactions.called_once
         assert get_rekeningen.called_once
@@ -320,6 +325,7 @@ async def test_transactie_suggesties_multiple_zoektermen(test_request_context):
         # No leftover calls
         assert not post_any.called
         assert not get_any.called
+
 
 @pytest.mark.asyncio
 async def test_transactie_suggesties_multiple_zoektermen_too_specific(test_request_context):
