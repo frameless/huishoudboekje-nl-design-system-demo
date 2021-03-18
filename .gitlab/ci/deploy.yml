@@ -105,10 +105,8 @@
         --set "medewerker-backend.oidc.clientId=${OIDC_CLIENT_ID}" \
         --set "medewerker-backend.oidc.clientSecret=${OIDC_CLIENT_SECRET}" \
         --set "medewerker-backend.oidc.authorizationEndpoint=${OIDC_AUTHORIZATION_ENDPOINT:-${OIDC_ISSUER}/auth}" \
-        --set "medewerker-backend.oidc.redirectUris[0].prefix=http://localhost:3000" \
-        --set "medewerker-backend.oidc.redirectUris[0].callback=http://localhost:3000/api/custom_oidc_callback" \
-        --set "medewerker-backend.oidc.redirectUris[1].prefix=https://$HHB_HOST" \
-        --set "medewerker-backend.oidc.redirectUris[1].callback=https://$HHB_HOST/api/custom_oidc_callback" \
+        --set "medewerker-backend.oidc.redirectUris[0].prefix=https://$HHB_HOST" \
+        --set "medewerker-backend.oidc.redirectUris[0].callback=https://$HHB_HOST/api/oidc_callback" \
         --set "medewerker-backend.oidc.tokenUri=${OIDC_TOKEN_ENDPOINT:-${OIDC_ISSUER}/token}" \
         --set "medewerker-backend.oidc.tokeninfoUri=${OIDC_TOKENINFO_ENDPOINT:-${OIDC_ISSUER}/tokeninfo}" \
         --set "medewerker-backend.oidc.userinfoUri=${OIDC_USERINFO_ENDPOINT:-${OIDC_ISSUER}/userinfo}" \
@@ -117,8 +115,7 @@
         --set "dex.ingress.tls[0].hosts[0]=${DEX_HOST}" \
         --set "dex.config.issuer=${OIDC_ISSUER}" \
         --set "dex.config.staticClients[0].secret=${OIDC_CLIENT_SECRET}" \
-        --set "dex.config.staticClients[0].redirectURIs[0]=https://$HHB_HOST/api/custom_oidc_callback" \
-        --set "dex.config.staticClients[0].redirectURIs[1]=http://localhost:3000/api/custom_oidc_callback" \
+        --set "dex.config.staticClients[0].redirectURIs[0]=https://$HHB_HOST/api/oidc_callback" \
         --set "postgresql.postgresqlPassword=${DATABASE_PASSWORD}" \
         --set "postgresql.persistence.enabled=${DATABASE_PERSISTENCE}" \
         --render-subchart-notes

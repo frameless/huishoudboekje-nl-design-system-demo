@@ -54,7 +54,7 @@ medewerker-backend:
   oidc:
     redirectUris:
     - prefix: https://huishoudboekje.nlx.reviews
-      callback: https://huishoudboekje.nlx.reviews/api/custom_oidc_callback
+      callback: https://huishoudboekje.nlx.reviews/api/oidc_callback
   ingress:
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod

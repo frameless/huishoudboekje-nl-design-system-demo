@@ -13,8 +13,7 @@ dex:
         name: Huishoudboekje Schaalbaar
         secret: ZwwcL2zjQyJUBnFPVoOb
         redirectURIs:
-          - http://hhb.minikube/api/custom_oidc_callback
-          - http://localhost:3000/api/custom_oidc_callback
+          - http://hhb.minikube/api/oidc_callback
     enablePasswordDB: true
     staticPasswords:
       - username: henk.poortvliet@sloothuizen.nl

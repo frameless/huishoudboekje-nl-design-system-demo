@@ -24,7 +24,7 @@ oauth2:
 staticClients:
 - id: huishoudboekje
   redirectURIs:
-    - http://localhost:3000/api/custom_oidc_callback
+    - http://localhost:3000/api/oidc_callback
   name: 'Huishoudboekje Schaalbaar'
   secret: ZwwcL2zjQyJUBnFPVoOb
 

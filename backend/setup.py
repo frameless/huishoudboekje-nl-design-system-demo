@@ -14,6 +14,7 @@ setup(
         'dataclasses-json>=0.5.2',
         'flask-graphql>=2,<3',
         'flask-oidc>=1.4.0',
+        'flask-rbac==0.5.0',
         'graphene-file-upload>=1.2.2',
         'graphene>=2,<3',
         'graphql-core>=2,<3',

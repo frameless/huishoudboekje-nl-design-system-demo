@@ -2,6 +2,7 @@ import json
 import os
 import re
 import secrets
+from datetime import timedelta
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -11,12 +12,15 @@ def strip_quotes(s):
 
 
 class Config(object):
+    AUTH_ADVERTISE = os.getenv("AUTH_ADVERTISE", None)
+    AUTH_AUDIENCE = os.getenv("AUTH_AUDIENCE", None)
+    AUTH_EXP_OFFSET = os.getenv("AUTH_EXP_OFFSET", None)
+    AUTH_TOKEN_SECRET = os.getenv("AUTH_TOKEN_SECRET", None)
     CSRF_ENABLED = True
     DEBUG = False
     LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
     DEVELOPMENT = False
     TESTING = False
-    GRAPHQL_AUTH_ENABLED = True
     PREFIX = os.environ.get('PREFIX', '/api')
     SESSION_COOKIE_NAME = "flask_session"
     SESSION_COOKIE_PATH = os.getenv('PREFIX', '/api')
@@ -25,11 +29,10 @@ class Config(object):
     SESSION_COOKIE_SAMESITE = 'Lax'
     SECRET_KEY = os.getenv('SECRET_KEY', None) or secrets.token_urlsafe(16)
     OIDC_CLIENT_SECRETS = os.getenv('OIDC_CLIENT_SECRETS', './etc/client_secrets.json')
-    OIDC_SCOPES = ['openid', 'email', 'profile']
+    OIDC_SCOPES = ['openid', 'email', 'profile', 'offline_access']
     OIDC_ID_TOKEN_COOKIE_SECURE = True
     OIDC_CLOCK_SKEW = float(strip_quotes(os.getenv('OIDC_CLOCK_SKEW', "60")))
     # OIDC_ID_TOKEN_COOKIE_PATH = os.getenv('PREFIX', '/') # This is broken in Flask-OIDC
-    OVERWITE_REDIRECT_URI_MAP = os.getenv('OVERWITE_REDIRECT_URI_MAP', None)
 
 
 class ProductionConfig(Config):
@@ -39,7 +42,9 @@ class ProductionConfig(Config):
 
 
 class StagingConfig(Config):
-    GRAPHQL_AUTH_ENABLED = False
+    AUTH_ADVERTISE = os.getenv("AUTH_ADVERTISE", True)
+    AUTH_EXP_OFFSET = os.getenv("AUTH_EXP_OFFSET", "-1")
+    AUTH_TOKEN_SECRET = os.getenv("AUTH_TOKEN_SECRET", os.getenv("SECRET_KEY", None))
     SESSION_COOKIE_SECURE = True
     OIDC_ID_TOKEN_COOKIE_SECURE = True
 
@@ -55,8 +60,6 @@ class DevelopmentConfig(LocalConfig):
     DEVELOPMENT = True
     SECRET_KEY = os.getenv('SECRET_KEY', None) or 'development'
     PREFIX = '/api'
-    OVERWITE_REDIRECT_URI_MAP = os.getenv('OVERWITE_REDIRECT_URI_MAP', None) or json.dumps(
-        {"http://localhost:3000": "http://localhost:3000/api/custom_oidc_callback"})
 
 
 class TestingConfig(LocalConfig):
