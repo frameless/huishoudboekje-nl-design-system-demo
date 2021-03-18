@@ -37,9 +37,7 @@ class DeleteCustomerStatementMessage(graphene.Mutation):
         """ Delete current Customer Statement Message """
         previous = await hhb_dataloader().csms_by_id.load(id)
 
-        transactions = await dataloaders.hhb_dataloader().bank_transactions_by_csm.load(id)
-
-        transaction_ids = [t["id"] for t in transactions]
+        transaction_ids = previous["bank_transactions"]
 
         journaalposten = await hhb_dataloader().journaalposten_by_transaction.load_many(
             transaction_ids
@@ -51,15 +49,15 @@ class DeleteCustomerStatementMessage(graphene.Mutation):
                 if not response.ok:
                     raise GraphQLError(f"Upstream API responded: {response.text}")
 
-        for transaction in transactions:
-            response = requests.delete(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/{transaction['id']}")
+        for transaction in transaction_ids:
+            response = requests.delete(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/{transaction}")
             if not response.ok:
                 raise GraphQLError(f"Upstream API responded: {response.text}")
 
         delete_response_hhb = requests.delete(
             f"{settings.TRANSACTIE_SERVICES_URL}/customerstatementmessages/{id}"
         )
-        if delete_response_hhb.status_code != 204:
+        if not delete_response_hhb.ok:
             raise GraphQLError(f"Upstream API responded: {delete_response_hhb.text}")
 
         return DeleteCustomerStatementMessage(ok=True, previous=previous)
