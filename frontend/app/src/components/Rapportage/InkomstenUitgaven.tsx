@@ -12,7 +12,7 @@ import {RapportageContext} from "./context";
 // Todo: specify types explicitly
 const InkomstenUitgaven: React.FC<BoxProps & { transactions: BankTransaction[] }> = ({transactions = []}) => {
 	const {t} = useTranslation();
-	const [color1, color2] = useToken("colors", ["primary.300", "secondary.300"]);
+	const [colorInkomsten, colorUitgaven] = useToken("colors", ["green.300", "red.300"]);
 	const {startDate, endDate, granularity} = useContext(RapportageContext);
 
 	const [aggregation] = createAggregation(transactions, granularity);
@@ -46,7 +46,7 @@ const InkomstenUitgaven: React.FC<BoxProps & { transactions: BankTransaction[] }
 				options={{
 					chartArea: {width: "90%", height: "80%"},
 					legend: {position: "top"},
-					colors: [color1, color2],
+					colors: [colorInkomsten, colorUitgaven],
 					lineWidth: 1,
 					pointSize: 5
 				}}
