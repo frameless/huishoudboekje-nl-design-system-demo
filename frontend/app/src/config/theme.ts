@@ -1,4 +1,5 @@
 import {extendTheme, Tooltip} from "@chakra-ui/react";
+import Button from "./theme/Button";
 import Section from "./theme/custom/Section";
 import Heading from "./theme/Heading";
 import Link from "./theme/Link";
@@ -25,6 +26,7 @@ const theme = extendTheme({
 		Table,
 		Section,
 		Link,
+		Button
 	},
 	fontSizes: {
 		lg: "1.5rem"
