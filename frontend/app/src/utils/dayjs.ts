@@ -7,9 +7,15 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import recur from "dayjs-recur";
 import quarterOfYear from "dayjs/plugin/quarterOfYear";
+import advancedFormat from "dayjs/plugin/advancedFormat";
+import weekYear from "dayjs/plugin/weekYear";
+import weekOfYear from "dayjs/plugin/weekOfYear";
 
 d.locale("nl");
 d.extend(localizedFormat);
+d.extend(weekYear);
+d.extend(weekOfYear);
+d.extend(advancedFormat);
 d.extend(relativeTime);
 d.extend(isSameOrBefore);
 d.extend(isSameOrAfter);
