@@ -14,6 +14,8 @@ organisaties:
   rekeningen:
   - iban: "NL86INGB0002445588"
     rekeninghouder: "Belastingdienst"
+  - iban: "NL36INGB0003445588"
+    rekeninghouder: "Belastingdienst" 
 
 - naam: "CAK"
   weergave_naam: "Beschermd wonen"
