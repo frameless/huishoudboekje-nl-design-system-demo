@@ -162,7 +162,7 @@ def do_csm_post(client, testfile):
     """
 
     return client.post(
-        "/graphql/upload",
+        "/graphql",
         data={
             "operations": json.dumps(
                 {

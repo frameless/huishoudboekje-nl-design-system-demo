@@ -120,7 +120,7 @@ class Auth(TokenProvider):
 
     @property
     def current_user(self):
-        return g.current_user
+        return g.current_user if 'current_user' in g else None
 
     @current_user.setter
     def current_user(self, user):
@@ -147,6 +147,9 @@ class Auth(TokenProvider):
         return token
 
     def _user_loader(self):
+        if self.current_user:
+            return self.current_user
+
         if self.oidc.user_loggedin:
             logging.info(f"_user_loader oidc_id_token={g.oidc_id_token}")
             return self._default_role_user(self.oidc.user_getfield('email'))
