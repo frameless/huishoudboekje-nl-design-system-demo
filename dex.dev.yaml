@@ -21,6 +21,9 @@ oauth2:
   # Uncommend the passwordConnector to use a specific connector for password grants
   #   passwordConnector: local
 
+expiry:
+  idTokens: "168h"
+
 staticClients:
 - id: huishoudboekje
   redirectURIs:

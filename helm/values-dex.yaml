@@ -8,6 +8,8 @@ dex:
     logger:
       level: info
     issuer: http://dex.hhb.minikube
+    expiry:
+      idTokens: "168h"
     staticClients:
       - id: huishoudboekje
         name: Huishoudboekje Schaalbaar
@@ -33,6 +35,7 @@ dex:
         email: bauke.huijbers@vng.nl
     oauth2:
       skipApprovalScreen: true
+      alwaysShowLoginScreen: false
   ingress:
     enabled: true
     annotations:
