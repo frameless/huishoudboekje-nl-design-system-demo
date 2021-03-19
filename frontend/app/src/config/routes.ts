@@ -12,6 +12,7 @@ export enum RouteNames {
 	notFound = "404",
 
 	// Sub routes
+	view = "bekijken",
 	add = "toevoegen",
 	edit = "bewerken",
 	export = "exporteren",
@@ -31,6 +32,9 @@ const Routes = {
 
 	BurgerAfspraken: (id?: number) => `/${RouteNames.burgers}/${id || ":burgerId(\\d+)"}/${RouteNames.afspraken}`,
 	CreateBurgerAfspraken: (burgerId: number) => `/${RouteNames.burgers}/${burgerId}/${RouteNames.afspraken}/${RouteNames.add}`,
+
+	Afspraken: `/${RouteNames.afspraken}`,
+	ViewAfspraak: (id?: number) => `/${RouteNames.afspraken}/${id || ":id(\\d+)"}/${RouteNames.view}`,
 	EditAfspraak: (id?: number) => `/${RouteNames.afspraken}/${id || ":id(\\d+)"}/${RouteNames.edit}`,
 
 	Organisaties: `/${RouteNames.organisaties}`,
