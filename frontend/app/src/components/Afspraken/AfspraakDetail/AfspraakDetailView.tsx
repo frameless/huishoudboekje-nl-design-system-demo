@@ -8,6 +8,7 @@ import Routes from "../../../config/routes";
 import {Afspraak} from "../../../generated/graphql";
 import d from "../../../utils/dayjs";
 import {currencyFormat2, formatBurgerName, intervalString} from "../../../utils/things";
+import {zoektermValidator} from "../../../utils/zod";
 import BackButton from "../../BackButton";
 import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
 import DataItem from "../../Layouts/DataItem";
@@ -23,10 +24,15 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	const {t} = useTranslation();
 	const {deleteAfspraak, deleteAfspraakZoekterm, addAfspraakZoekterm} = useContext(AfspraakDetailContext);
 	const [zoekterm, setZoekterm] = useState<string>();
+	const [zoektermTouched, setZoektermTouched] = useState<boolean>(false);
 
 	const onAddAfspraakZoekterm = (e) => {
 		e.preventDefault();
-		addAfspraakZoekterm(String(zoekterm), () => setZoekterm(""));
+		setZoektermTouched(true);
+		addAfspraakZoekterm(zoekterm || "", () => {
+			setZoekterm("");
+			setZoektermTouched(false);
+		});
 	};
 
 	const menu = <AfspraakDetailMenu afspraak={afspraak} onDelete={() => deleteAfspraak()} />;
@@ -94,14 +100,14 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 				<FormRight>
 					<Stack direction={"column"}>
 						<form onSubmit={onAddAfspraakZoekterm}>
-							<FormControl>
+							<FormControl isInvalid={!zoektermValidator.safeParse(zoekterm).success && zoektermTouched}>
 								<Stack>
 									<Label>{t("afspraak.zoektermen")}</Label>
 									<InputGroup size={"md"}>
 										<InputLeftElement pointerEvents="none" color="gray.300" fontSize="1.2em">
 											<AiOutlineTag />
 										</InputLeftElement>
-										<Input id="zoektermen" onChange={e => setZoekterm(e.target.value)} value={zoekterm || ""} />
+										<Input id="zoektermen" onChange={e => setZoekterm(e.target.value)} value={zoekterm || ""} onFocus={() => setZoektermTouched(true)} onBlur={() => setZoektermTouched(true)} />
 										<InputRightElement width={"auto"} pr={1}>
 											<Button type={"submit"} size={"sm"} colorScheme={"primary"}>{t("actions.add")}</Button>
 										</InputRightElement>
