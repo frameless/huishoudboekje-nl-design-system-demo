@@ -1,4 +1,4 @@
-import {Heading, HStack, Stack, Tab, Table, TabList, Text, TabPanel, TabPanels, Tabs, Tbody, Th, Thead, Tr, useToast, Box, VStack} from "@chakra-ui/react";
+import {Heading, HStack, Stack, Tab, Table, TabList, TabPanel, TabPanels, Tabs, Tbody, Text, Th, Thead, Tr, useToast} from "@chakra-ui/react";
 import React, {useContext} from "react";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";

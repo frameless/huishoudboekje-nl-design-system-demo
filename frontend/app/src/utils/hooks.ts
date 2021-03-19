@@ -1,5 +1,6 @@
 import {useCallback, useEffect, useMemo, useState} from "react";
 import {useToggle} from "react-grapple";
+import {isDev} from "./things";
 
 export const useAuth = () => {
 	const [user, setUser] = useState<{email: string}>();
@@ -19,6 +20,11 @@ export const useAuth = () => {
 	}, [setError]);
 
 	useEffect(() => {
+		if (isDev && process.env.REACT_APP_AUTOLOGIN_USER) {
+			setUser({email: process.env.REACT_APP_AUTOLOGIN_USER});
+			return;
+		}
+
 		fetch("/api/me")
 			.then(result => result.json())
 			.then(result => {
