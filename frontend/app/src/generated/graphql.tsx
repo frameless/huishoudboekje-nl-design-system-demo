@@ -1039,6 +1039,10 @@ export type AfspraakFragment = (
   )>, organisatie?: Maybe<(
     { __typename?: 'Organisatie' }
     & Pick<Organisatie, 'id' | 'weergaveNaam'>
+    & { kvkDetails?: Maybe<(
+      { __typename?: 'OrganisatieKvK' }
+      & Pick<OrganisatieKvK, 'naam' | 'plaatsnaam'>
+    )> }
   )>, rubriek?: Maybe<(
     { __typename?: 'Rubriek' }
     & RubriekFragment
@@ -1935,6 +1939,10 @@ export const AfspraakFragmentDoc = gql`
   organisatie {
     id
     weergaveNaam
+    kvkDetails {
+      naam
+      plaatsnaam
+    }
   }
   bedrag
   credit

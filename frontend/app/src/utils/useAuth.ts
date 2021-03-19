@@ -2,7 +2,7 @@ import {useCallback, useEffect, useMemo, useState} from "react";
 import {useToggle} from "react-grapple";
 import {isDev} from "./things";
 
-export const useAuth = () => {
+const useAuth = () => {
 	const [user, setUser] = useState<{email: string}>();
 	const [error, setError] = useToggle(false);
 	const [loading, toggleLoading] = useToggle(true);
@@ -47,3 +47,5 @@ export const useAuth = () => {
 		user, error, loading, reset,
 	}), [user, error, loading, reset]);
 };
+
+export default useAuth;

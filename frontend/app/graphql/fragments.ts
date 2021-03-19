@@ -64,6 +64,10 @@ export const AfspraakFragment = gql`
         organisatie {
             id
             weergaveNaam
+            kvkDetails {
+                naam
+                plaatsnaam
+            }
         }
         bedrag
         credit

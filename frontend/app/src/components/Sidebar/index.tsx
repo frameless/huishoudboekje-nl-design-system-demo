@@ -19,7 +19,7 @@ const Sidebar: React.FC<BoxProps> = (props) => {
 					<Stack spacing={1} borderLeft={"1px solid"} borderLeftColor={"gray.400"} pl={"21px"}>
 						<SidebarLink size={"sm"} to={Routes.Transacties}>{t("sidebar.transacties")}</SidebarLink>
 						<SidebarLink size={"sm"} to={Routes.Bronbestanden}>{t("sidebar.bronbestanden")}</SidebarLink>
-						<SidebarLink size={"sm"} to={Routes.Overschrijvingen}>{t("sidebar.overschrijvingen")}</SidebarLink>
+						<SidebarLink size={"sm"} to={Routes.Overschrijvingen}>{t("sidebar.betaalinstructies")}</SidebarLink>
 					</Stack>
 				</Box>
 			</Stack>

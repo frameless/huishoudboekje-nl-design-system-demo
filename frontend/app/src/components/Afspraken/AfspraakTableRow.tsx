@@ -1,5 +1,5 @@
-import {CheckIcon, CloseIcon, DeleteIcon, EditIcon, ViewIcon} from "@chakra-ui/icons";
-import {Badge, Box, HStack, IconButton, Stack, TableRowProps, Td, Text, Tr, useBreakpointValue} from "@chakra-ui/react";
+import {ViewIcon} from "@chakra-ui/icons";
+import {Badge, Box, IconButton, Stack, TableRowProps, Td, Text, Tr, useBreakpointValue} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {NavLink} from "react-router-dom";
@@ -21,14 +21,12 @@ const AfspraakTableRow: React.FC<TableRowProps & {afspraak: Afspraak}> = ({afspr
 			</Td>)}
 			<Td>
 				<Stack spacing={1} flex={1} alignItems={"flex-end"}>
-					<Box textAlign={"right"} color={bedrag < 0 ? "orange.500" : "currentcolor"}>{currencyFormat2().format(bedrag)}</Box>
+					<Box textAlign={"right"} color={bedrag < 0 ? "red.500" : "currentcolor"}>{currencyFormat2().format(bedrag)}</Box>
 					<Badge fontSize={"10px"}>{intervalString(afspraak.interval, t)}</Badge>
 				</Stack>
 			</Td>
 			<Td>
-				<NavLink to={Routes.ViewAfspraak(afspraak.id)}>
-					<IconButton variant={"ghost"} size={"sm"} icon={<ViewIcon />} aria-label={t("actions.view")} />
-				</NavLink>
+				<IconButton as={NavLink} to={Routes.ViewAfspraak(afspraak.id)} variant={"ghost"} size={"sm"} icon={<ViewIcon />} aria-label={t("actions.view")} />
 			</Td>
 		</Tr>
 	);

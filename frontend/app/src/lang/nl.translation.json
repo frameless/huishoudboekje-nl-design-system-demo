@@ -1,15 +1,15 @@
 {
     "messages": {
+        "agreements": {
+            "deleteConfirmMessage": "Afspraak succesvol verwijderd.",
+            "invalidFormMessage": "Er is een fout opgetreden. Controleer de ingevulde gegevens en probeer het opnieuw.",
+            "createSuccessMessage": "Nieuwe afspraak succesvol opgeslagen.",
+            "editSuccessMessage": "Afspraak succesvol opgeslagen."
+        },
         "backendError": "Systeemfout. Kan niet doorgaan. Neem contact op met de applicatiebeheerder.",
         "login": {
             "welcome": "Welkom bij het Huishoudboekje van {{tenantName}}.",
             "clickHereToContinue": "Klik hieronder op inloggen om te beginnen."
-        },
-        "agreements": {
-            "invalidFormMessage": "Er is een fout opgetreden. Controleer de ingevulde gegevens en probeer het opnieuw.",
-            "createSuccessMessage": "Nieuwe afspraak succesvol opgeslagen.",
-            "editSuccessMessage": "Afspraak succesvol opgeslagen.",
-            "deleteConfirmMessage": "Afspraak succesvol verwijderd."
         },
         "genericError": {
             "title": "Fout.",
@@ -74,11 +74,12 @@
     "actions": {
         "login": "Inloggen",
         "logout": "Uitloggen",
-        "add": "Toevoegen",
-        "edit": "Wijzigen",
-        "save": "Opslaan",
         "cancel": "Annuleren",
         "delete": "Verwijderen",
+        "edit": "Wijzigen",
+        "view": "Bekijken",
+        "add": "Toevoegen",
+        "save": "Opslaan",
         "back": "Terug",
         "actions": "Acties",
         "export": "Exporteren",
@@ -91,6 +92,46 @@
         "backToHome": "Terug naar de hoofdpagina",
         "clickToEdit": "Klik om te wijzigen"
     },
+    "deleteAfspraak": {
+        "confirmModalTitle": "Afspraak verwijderen",
+        "confirmModalBody": "Weet u zeker dat u deze afspraak wil verwijderen?"
+    },
+    "afspraakDetailView": {
+        "title": "Afspraak bekijken",
+        "section1": {
+            "title": "Tegenpartij",
+            "helperText": "Burger en/of organisatie."
+        },
+        "section2": {
+            "title": "Betaling",
+            "helperText": "Gegevens over de betaling."
+        },
+        "section3": {
+            "title": "Afletteren",
+            "helperText": "Voeg zoektermen toe voor het automatisch afletteren van geïmporteerde banktransacties."
+        },
+        "section4": {
+            "title": "Betaalinstructie",
+            "helperText": "Instellingen voor de betaalinstructie."
+        }
+    },
+    "burger": "Burger",
+    "organisatie": {
+        "naam": "Naam"
+    },
+    "afspraak": {
+        "rubriek": "Rubriek",
+        "omschrijving": "Omschrijving",
+        "tegenrekening": "Tegenrekening",
+        "bedrag": "Bedrag",
+        "zoektermen": "Zoektermen",
+        "periodiek": "Periodiek",
+        "periode": "Periode",
+        "zoekterm": "zoekterm"
+    },
+    "automatischBoekenConfirmed": "Automatisch boeken ingeschakeld",
+    "automatischBoekenDisabled": "Niet ingeschakeld",
+    "vanTotDatums": "{{start}} t/m {{end}}",
     "forms": {
         "agreements": {
             "fields": {
@@ -106,8 +147,6 @@
                 "bankAccountChoose": "Kies een bankrekening",
                 "amount": "Bedrag",
                 "zoektermen": "Zoektermen",
-                "searchtermDuplicateFound": "Deze zoekterm of een deel ervan komt overeen met een zoekterm in de onderstaande afspraak. Automatisch boeken voor deze afspraak kan niet ingeschakeld worden.",
-                "searchtermDuplicateFound_plural": "Deze zoekterm of een deel ervan komt overeen met een zoekterm in de onderstaande afspraken. Automatisch boeken voor deze afspraak kan niet ingeschakeld worden.",
                 "automatischBoeken": "Geef toestemming voor automatisch boeken",
                 "startDate": "Startdatum",
                 "continuous": "Doorlopend",
@@ -300,10 +339,6 @@
     "select": {
         "noOptions": "Geen resultaten"
     },
-    "burgers": {
-        "burger": "Burger",
-        "burgers": "Burgers"
-    },
     "unknown": "Onbekend",
     "banking": {
         "exports": {
@@ -319,18 +354,12 @@
     "van": "Van",
     "tot": "Tot",
     "booking": "Boeking",
-    "automatischBoekenConfirmed": "Automatisch boeken ingeschakeld",
-    "burger": "Burger",
     "omschrijving": "Omschrijving",
     "periodiek": "Periodiek",
     "rubriek": "Rubriek",
     "transactieVerwerken": {
         "title": "Verwerken",
         "helperText": "Kies een afspraak om deze transactie erop te boeken."
-    },
-    "afspraak": {
-        "omschrijving": "Omschrijving",
-        "zoekterm": "zoekterm"
     },
     "bedrag": "Bedrag",
     "unbooked": "Niet geboekt",
@@ -369,6 +398,9 @@
             "subTitle": "Pagina niet beschikbaar",
             "description": "De pagina die je zoekt kan niet worden gevonden."
         }
+    },
+    "burgers": {
+        "burgers": "Burgers"
     },
     "configuratie": "Configuratie",
     "unknownGebruiker": "Onbekende gebruiker",
@@ -448,7 +480,7 @@
         "bankzaken": "Bankzaken",
         "transacties": "Transacties",
         "bronbestanden": "Bronbestanden",
-        "overschrijvingen": "Overschrijvingen",
+        "betaalinstructies": "Betaalinstructies",
         "gebeurtenissen": "Gebeurtenissen",
         "configuratie": "Configuratie"
     },

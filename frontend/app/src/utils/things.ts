@@ -106,7 +106,7 @@ export const sortBankTransactions = (a: BankTransaction, b: BankTransaction) => 
 	return b.bedrag - a.bedrag;
 };
 
-export const formatBurgerName = (burger: Burger | undefined, fullName = false) => {
+export const formatBurgerName = (burger: Burger | undefined, fullName = true) => {
 	if (fullName) {
 		return [burger?.voornamen, burger?.achternaam].join(" ");
 	}
