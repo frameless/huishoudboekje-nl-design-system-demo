@@ -14,7 +14,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	const menu = <AfspraakDetailMenu afspraak={afspraak} onDelete={() => deleteAfspraak()} />;
 
 	return (
-		<Page title={t("__AfspraakDetailView")} backButton={<BackButton to={Routes.Burgers} />} menu={menu}>
+		<Page title={t("__AfspraakDetailView")} backButton={<BackButton to={Routes.Burger(afspraak.burger?.id)} />} menu={menu}>
 			<Section>
 				<pre>{JSON.stringify(afspraak, null, 2)}</pre>
 			</Section>
