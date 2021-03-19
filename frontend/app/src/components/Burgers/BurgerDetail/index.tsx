@@ -14,6 +14,7 @@ import DeadEndPage from "../../DeadEndPage";
 import Alert from "../../Layouts/Alert";
 import Page from "../../Layouts/Page";
 import Section from "../../Layouts/Section";
+import PageNotFound from "../../PageNotFound";
 import BurgerAfsprakenView from "./BurgerAfsprakenView";
 import BurgerGebeurtenissen from "./BurgerGebeurtenissen";
 import BurgerProfileView from "./BurgerProfileView";
@@ -37,7 +38,13 @@ const BurgerDetail = () => {
 	const onClickDeleteMenuItem = () => toggleAlert(true);
 
 	return (
-		<Queryable query={$burger}>{({burger}: {burger: Burger}) => {
+		<Queryable query={$burger}>{(data) => {
+			const burger: Burger = data.burger;
+
+			if (!burger) {
+				return <PageNotFound />;
+			}
+
 			const onConfirmDelete = () => {
 				deleteBurger()
 					.then(() => {

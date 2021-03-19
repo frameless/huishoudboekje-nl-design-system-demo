@@ -44,7 +44,7 @@ const AfspraakDetail = () => {
 			const ctxValue = {
 				deleteAfspraak: () => handleMutation(deleteAfspraak({
 					variables: {id},
-				}), t("messages.agreements.deleteConfirmMessage"), () => push(Routes.Burger(id))),
+				}), t("messages.agreements.deleteConfirmMessage"), () => push(Routes.Burger(afspraak.burger?.id))),
 				deleteAfspraakZoekterm: (zoekterm: string) => handleMutation(deleteAfspraakZoekterm({
 					variables: {id, zoekterm},
 				}), t("messages.deleteAfspraakZoektermSuccess"), () => $afspraak.refetch()),

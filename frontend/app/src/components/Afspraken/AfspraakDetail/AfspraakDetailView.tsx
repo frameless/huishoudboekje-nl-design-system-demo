@@ -26,10 +26,10 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 
 	const onAddAfspraakZoekterm = (e) => {
 		e.preventDefault();
-		addAfspraakZoekterm(zoekterm, () => setZoekterm(""));
+		addAfspraakZoekterm(String(zoekterm), () => setZoekterm(""));
 	};
 
-	const menu = <AfspraakDetailMenu afspraak={afspraak} onDelete={() => deleteAfspraak(afspraak)} />;
+	const menu = <AfspraakDetailMenu afspraak={afspraak} onDelete={() => deleteAfspraak()} />;
 	const bedrag = afspraak.credit ? parseFloat(afspraak.bedrag) : (parseFloat(afspraak.bedrag) * -1);
 	const zoektermen = afspraak.zoektermen || [];
 
