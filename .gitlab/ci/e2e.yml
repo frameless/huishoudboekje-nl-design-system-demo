@@ -1,3 +1,39 @@
+.cypress-token:
+  stage: build
+  image:
+    name: ${DOCKER_PROXY}node:lts-alpine
+  needs: []
+  script:
+    - |
+      npx --quiet --package '@clarketm/jwt-cli' \
+        jwt sign \
+        --expiresIn "1 hour" \
+        --subject "cypress@huishoudboekje.nlx.reviews" \
+        --issuer "https://huishoudboekje.nlx.reviews" \
+        --audience "https://huishoudboekje.nlx.reviews" \
+        --jwtid "$(tr -dc 'A-F0-9' < /dev/urandom | head -c32)" \
+        --noCopy \
+        "{}" "${SESSION_SECRET:-test}" > ci_cypress_token.txt
+  artifacts:
+    paths:
+      - ci_cypress_token.txt
+
+cypress-token-review:
+  extends: .cypress-token
+  environment:
+    name: review/$CI_COMMIT_REF_SLUG
+  except:
+    - master
+    - develop
+    - acceptance
+
+cypress-token-develop:
+  extends: .cypress-token
+  environment:
+    name: test
+  only:
+    - develop
+
 .cypress:
   extends: .frontend
   stage: e2e
@@ -11,10 +47,11 @@
     CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/.cache/Cypress"
   script:
     - export BASE_URL=https://$(<$CI_PROJECT_DIR/ci_review_hostname.txt)
+    - export PROXY_AUTHORIZATION="Authorization:Bearer $(<$CI_PROJECT_DIR/ci_cypress_token.txt)"
     - |
       DOWN=true
       for i in $(seq 1 8); do
-        if curl -sf "${BASE_URL}/api/graphql?query=%7B__schema%7BqueryType%7Bname%7D%7D%7D" > /dev/null
+        if curl -sf -H "$PROXY_AUTHORIZATION" "${BASE_URL}/api/me" > /dev/null
         then
           DOWN=false
           break
@@ -39,22 +76,24 @@
       - frontend/app/cypress/screenshots/**/*.png
     expire_in: 1 week
 
-
 cypress-review:
   extends: .cypress
   needs:
     - job: deploy-review
+      artifacts: true
+    - job: cypress-token-review
       artifacts: true
   except:
     - master
     - develop
     - acceptance
 
-
 cypress-develop:
   extends: .cypress
   needs:
     - job: deploy-develop
+      artifacts: true
+    - job: cypress-token-review
       artifacts: true
   only:
     - develop

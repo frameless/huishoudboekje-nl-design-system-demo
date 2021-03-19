@@ -34,6 +34,7 @@
     NAMESPACE: "hhb-acc"
     BASE_DOMAIN: huishoudboekje.demoground.nl
     HHB_HOST: "acc.$BASE_DOMAIN"
+    AUTH_AUDIENCE: "https://acc.$BASE_DOMAIN"
   environment:
     name: acc
     url: https://acc.$BASE_DOMAIN/
@@ -46,6 +47,7 @@
     NAMESPACE: "hhb-demo"
     BASE_DOMAIN: huishoudboekje.demoground.nl
     HHB_HOST: "demo.$BASE_DOMAIN"
+    AUTH_AUDIENCE: "https://demo.$BASE_DOMAIN"
   environment:
     name: demo
     url: https://demo.$BASE_DOMAIN/
@@ -72,6 +74,7 @@
     - build-shell-runner
     - build-helm
   before_script:
+    # SESSION_SECRET in GitLab CI/CD variables
     - OIDC_CLIENT_ID="huishoudboekje"
     - OIDC_CLIENT_SECRET="ZwwcL2zjQyJUBnFPVoOb"
     - OIDC_DEX="true"
@@ -100,6 +103,8 @@
         --set "medewerker-backend.ingress.hosts[0].host=$HHB_HOST" \
         --set "medewerker-backend.ingress.hosts[0].paths[0]=/api/" \
         --set "medewerker-backend.ingress.tls[0].hosts[0]=$HHB_HOST" \
+        ${SESSION_SECRET:+--set "medewerker-backend.secretKey=${SESSION_SECRET}"} \
+        ${AUTH_AUDIENCE:+--set medewerker-backend.authAudience=${AUTH_AUDIENCE}} \
         --set "medewerker-backend.appSettings=${APP_SETTINGS:-hhb_backend.config.ProductionConfig}" \
         --set "medewerker-backend.oidc.issuer=${OIDC_ISSUER}" \
         --set "medewerker-backend.oidc.clientId=${OIDC_CLIENT_ID}" \

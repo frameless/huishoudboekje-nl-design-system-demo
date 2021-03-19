@@ -11,7 +11,7 @@ import jwt
 from flask import Flask, g, make_response, redirect, request, session
 from flask_oidc import OpenIDConnect
 from flask_rbac import RBAC, RoleMixin, UserMixin
-from jwt import InvalidSignatureError
+from jwt import InvalidSignatureError, InvalidTokenError
 
 
 class TokenProvider:
@@ -50,10 +50,11 @@ class Auth(TokenProvider):
         app.config.setdefault("RBAC_USE_WHITE", True)
 
         self.secret = app.config.get('AUTH_TOKEN_SECRET', None) or secrets.token_urlsafe(16)
-        self.audience = app.config.get("AUTH_AUDIENCE", None) or "huishoudboekje.nlx.reviews"
+        self.audience = app.config.get("AUTH_AUDIENCE", None) or "https://huishoudboekje.nlx.reviews"
         self.exp_offset = int(app.config.get("AUTH_EXP_OFFSET", None) or str(int(timedelta(days=7).total_seconds())))
         self.advertise = app.config.get("AUTH_ADVERTISE", None) or False
 
+        logging.info(f"audience={self.audience},secret={self.secret}")
         oidc_overrides = {}
         oidc = OpenIDConnect(app, **oidc_overrides)
 
@@ -164,8 +165,8 @@ class Auth(TokenProvider):
                     claims = jwt.decode(token, self.secret, algorithms="HS256", audience=self.audience)
                     if email := claims.get('sub', None):
                         return self._default_role_user(email)
-                except InvalidSignatureError as err:
-                    logging.warning(f"{err}")
+                except InvalidTokenError as err:
+                    logging.warning(f"""_user_loader: {err}; claims: {jwt.decode(token, algorithms="HS256", options={"verify_signature": False})}""")
 
         logging.info(f"_user_loader: anonymous")
         return User(roles=[self.anonymous_role])

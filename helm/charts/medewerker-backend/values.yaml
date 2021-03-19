@@ -10,6 +10,7 @@ replicaCount: 1
 
 secretKey: ""
 appSettings: "hhb_backend.config.ProductionConfig"
+authAudience: "https://huishoudboekje.nlx.reviews"
 extraEnv:
   - name: OIDC_CLOCK_SKEW
     value: "60"
