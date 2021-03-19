@@ -46,7 +46,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 				<FormLeft title={t("afspraakDetailView.section1.title")} helperText={t("afspraakDetailView.section1.helperText")} />
 				<FormRight>
 					<Stack direction={["column", "row"]}>
-						<DataItem label={t("burger.naam")}>
+						<DataItem label={t("burger")}>
 							<HStack>
 								<Text>{formatBurgerName(afspraak.burger)}</Text>
 								<IconButton as={NavLink} to={Routes.Burger(afspraak.burger?.id)} variant={"ghost"} size={"sm"} icon={
@@ -54,7 +54,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 							</HStack>
 						</DataItem>
 						{afspraak.organisatie && (
-							<DataItem label={t("organisatie.naam")}>
+							<DataItem label={t("organisatie")}>
 								<HStack>
 									<Text>{afspraak.organisatie?.kvkDetails?.naam}</Text>
 									<IconButton as={NavLink} to={Routes.Organisatie(afspraak.organisatie?.id)} variant={"ghost"} size={"sm"} icon={

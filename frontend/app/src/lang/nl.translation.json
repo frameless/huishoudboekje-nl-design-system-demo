@@ -1,16 +1,18 @@
 {
     "messages": {
+        "backendError": "Systeemfout. Kan niet doorgaan. Neem contact op met de applicatiebeheerder.",
+        "login": {
+            "welcome": "Welkom bij het Huishoudboekje van {{tenantName}}.",
+            "clickHereToContinue": "Klik hieronder op inloggen om te beginnen."
+        },
         "agreements": {
             "deleteConfirmMessage": "Afspraak succesvol verwijderd.",
             "invalidFormMessage": "Er is een fout opgetreden. Controleer de ingevulde gegevens en probeer het opnieuw.",
             "createSuccessMessage": "Nieuwe afspraak succesvol opgeslagen.",
             "editSuccessMessage": "Afspraak succesvol opgeslagen."
         },
-        "backendError": "Systeemfout. Kan niet doorgaan. Neem contact op met de applicatiebeheerder.",
-        "login": {
-            "welcome": "Welkom bij het Huishoudboekje van {{tenantName}}.",
-            "clickHereToContinue": "Klik hieronder op inloggen om te beginnen."
-        },
+        "deleteAfspraakZoektermSuccess": "Zoekterm is verwijderd.",
+        "addAfspraakZoektermSuccess": "Zoekterm is opgeslagen.",
         "genericError": {
             "title": "Fout.",
             "description": "Er is een onbekende fout opgetreden. Probeer het later nog eens."
@@ -116,9 +118,7 @@
         }
     },
     "burger": "Burger",
-    "organisatie": {
-        "naam": "Naam"
-    },
+    "organisatie": "Organisatie",
     "afspraak": {
         "rubriek": "Rubriek",
         "omschrijving": "Omschrijving",
@@ -130,7 +130,6 @@
         "zoekterm": "zoekterm"
     },
     "automatischBoekenConfirmed": "Automatisch boeken ingeschakeld",
-    "automatischBoekenDisabled": "Niet ingeschakeld",
     "vanTotDatums": "{{start}} t/m {{end}}",
     "forms": {
         "agreements": {
@@ -146,8 +145,6 @@
                 "bankAccount": "Bankrekening",
                 "bankAccountChoose": "Kies een bankrekening",
                 "amount": "Bedrag",
-                "zoektermen": "Zoektermen",
-                "automatischBoeken": "Geef toestemming voor automatisch boeken",
                 "startDate": "Startdatum",
                 "continuous": "Doorlopend",
                 "nTimes": "Aantal keer",
@@ -172,10 +169,6 @@
                     "prognosisText_incoming_plural": "Er worden <strong>{{count}}</strong> inkomende overschrijvingen tussen <start>{{start}}</start> en <end>{{end}}</end> verwacht.",
                     "title": "Verwachting",
                     "helperText": "Dit is een overzicht van de verwachte betalingen bij deze afspraak."
-                },
-                "3": {
-                    "title": "Boekingen",
-                    "helperText": "Geef met een zoekterm aan welke tekst in de omschrijving van een banktransactie terugkomt. Wanneer automatisch boeken is ingeschakeld, probeert de applicatie transacties automatisch te verwerken."
                 }
             },
             "titleEdit": "Afspraak bewerken"
