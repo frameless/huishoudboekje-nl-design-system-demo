@@ -7,7 +7,7 @@ type FormLeftProps = {
 }
 
 export const FormLeft: React.FC<StackProps & FormLeftProps> = ({title, helperText, children, ...props}) => (
-	<Stack flex={1} spacing={1} alignItems={"flex-start"} {...props}>
+	<Stack flex={1} alignItems={"flex-start"} {...props}>
 		{title && <Heading size={"md"}>{title}</Heading>}
 		{helperText && <Text fontSize={"md"} color={"gray.500"}>{helperText}</Text>}
 		{children}
@@ -15,5 +15,5 @@ export const FormLeft: React.FC<StackProps & FormLeftProps> = ({title, helperTex
 );
 
 export const FormRight: React.FC<StackProps> = (props) => (
-	<Stack flex={2} spacing={4} {...props} />
+	<Stack flex={2} {...props} />
 );

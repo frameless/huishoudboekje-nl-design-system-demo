@@ -13,6 +13,8 @@
         },
         "deleteAfspraakZoektermSuccess": "Zoekterm is verwijderd.",
         "addAfspraakZoektermSuccess": "Zoekterm is opgeslagen.",
+        "automatischBoekenDisabled_noZoektermen": "Het is niet mogelijk om deze afspraak automatisch af te letteren. Voeg een zoekterm toe waarop het systeem transacties kan zoeken.",
+        "automatischBoekenDisabled_duplicatesFound": "Het is niet mogelijk om deze afspraak automatisch af te letteren. Er zijn andere afspraken met dezelfde zoektermen gevonden. Voeg een unieke zoekterm toe waarop het systeem transacties kan zoeken.",
         "genericError": {
             "title": "Fout.",
             "description": "Er is een onbekende fout opgetreden. Probeer het later nog eens."
@@ -129,7 +131,6 @@
         "periode": "Periode",
         "zoekterm": "zoekterm"
     },
-    "automatischBoekenConfirmed": "Automatisch boeken ingeschakeld",
     "vanTotDatums": "{{start}} t/m {{end}}",
     "forms": {
         "agreements": {
@@ -347,6 +348,7 @@
     "van": "Van",
     "tot": "Tot",
     "booking": "Boeking",
+    "automatischBoekenConfirmed": "Automatisch boeken ingeschakeld",
     "omschrijving": "Omschrijving",
     "periodiek": "Periodiek",
     "rubriek": "Rubriek",
