@@ -7,10 +7,16 @@ const baseStyle = {
 			textTransform: "none",
 			letterSpacing: 0,
 			fontSize: "sm",
-			color: "gray.500"
+			color: "gray.500",
+			paddingLeft: 0,
 		},
 	},
-}
+	tbody: {
+		td: {
+			paddingLeft: 0,
+		},
+	},
+};
 
 const sizes = {
 	sm: {
@@ -68,9 +74,9 @@ const sizes = {
 			fontSize: "md",
 		},
 	},
-}
+};
 
 export default {
 	baseStyle,
 	sizes,
-}
+};
