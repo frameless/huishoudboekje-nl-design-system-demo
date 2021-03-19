@@ -55,7 +55,7 @@ const EditAfspraak = () => {
 	return (
 		<Queryable query={$afspraak}>{({afspraak}: { afspraak: Afspraak }) => {
 			return (
-				<Page title={t("forms.agreements.titleEdit")} backButton={<BackButton to={Routes.Burger(afspraak.burger?.id)} />}>
+				<Page title={t("forms.agreements.titleEdit")} backButton={<BackButton to={Routes.ViewAfspraak(afspraak.id)} />}>
 					<AfspraakForm afspraak={afspraak} loading={$updateAfspraak.loading} onSave={onSaveAfspraak} />
 				</Page>
 			);
