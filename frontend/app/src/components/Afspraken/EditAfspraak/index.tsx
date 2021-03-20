@@ -7,7 +7,7 @@ import Queryable from "../../../utils/Queryable";
 import useFakeMutation from "../../../utils/useFakeMutation";
 import useHandleMutation from "../../../utils/useHandleMutation";
 import PageNotFound from "../../PageNotFound";
-import AfspraakFormContext from "../AfspraakForm/context";
+import AfspraakFormContext from "./context";
 import EditAfspraakForm from "./EditAfspraakForm";
 
 export type AfspraakBetalingValues = {

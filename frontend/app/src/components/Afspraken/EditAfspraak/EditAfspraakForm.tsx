@@ -13,7 +13,7 @@ import Label from "../../Layouts/Label";
 import Page from "../../Layouts/Page";
 import {RekeningOption, RekeningValueContainer} from "../../Layouts/ReactSelect/RekeningOption";
 import Section from "../../Layouts/Section";
-import AfspraakFormContext from "../AfspraakForm/context";
+import AfspraakFormContext from "./context";
 import {AfspraakBetalingValues} from "./index";
 
 const validator = zod.object({
@@ -108,7 +108,7 @@ const EditAfspraakForm: React.FC<EditAfspraakFormProps> = ({values, afspraak, on
 
 						<FormControl flex={1}>
 							<HStack>
-								<Switch onChange={e => updateForm("credit", e.target.checked)} />
+								<Switch isChecked={data.credit} onChange={e => updateForm("credit", e.target.checked)} />
 								<Label>{data.credit ? t("afspraak.inkomsten") : t("afspraak.uitgaven")}</Label>
 							</HStack>
 						</FormControl>
