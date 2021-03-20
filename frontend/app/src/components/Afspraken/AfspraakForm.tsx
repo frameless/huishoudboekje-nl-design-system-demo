@@ -304,7 +304,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 
 										return (
 											<Select onChange={onSelectRubriek} id="rubriekId" isClearable={true} noOptionsMessage={() => t("forms.agreements.fields.rubriekChoose")}
-												maxMenuHeight={200} options={options} value={value || null} styles={reactSelectStyles} />
+												maxMenuHeight={200} options={options} value={value || null} styles={reactSelectStyles.default} />
 										);
 									}}</Queryable>
 								</Stack>
@@ -335,7 +335,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 
 										return (
 											<Select onChange={onSelectOrganisatie} id="beneficiaryId" isClearable={true} noOptionsMessage={() => t("select.noOptions")}
-												maxMenuHeight={200} options={options} value={value} styles={reactSelectStyles} />
+												maxMenuHeight={200} options={options} value={value} styles={reactSelectStyles.default} />
 										);
 									}}
 									</Queryable>
@@ -364,7 +364,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 
 										return (
 											<Select onChange={onSelectRekening} id="rekeningId" isClearable={true} noOptionsMessage={() => t("forms.agreements.fields.bankAccountChoose")}
-												maxMenuHeight={200} options={options} value={value} styles={reactSelectStyles} />
+												maxMenuHeight={200} options={options} value={value} styles={reactSelectStyles.default} />
 										);
 									}}
 									</Queryable>
@@ -401,7 +401,7 @@ const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave,
 											<Box flex={1}>
 												<Select onChange={(val) => intervalType.setValue(() => val?.value)} id="interval" isClearable={false} noOptionsMessage={() => t("interval.choose")}
 													maxMenuHeight={200} options={intervalOptions} value={intervalOptions.find(i => i.value === intervalType.value)}
-													styles={{...reactSelectStyles}} />
+													styles={reactSelectStyles.default} />
 											</Box>
 										</Stack>
 									</Stack>

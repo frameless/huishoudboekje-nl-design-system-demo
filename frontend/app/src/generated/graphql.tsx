@@ -1707,12 +1707,17 @@ export type GetTransactionItemFormDataQuery = (
   )>>> }
 );
 
-export type GetAfspraakFormDataQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetAfspraakFormDataQueryVariables = Exact<{
+  afspraakId: Scalars['Int'];
+}>;
 
 
 export type GetAfspraakFormDataQuery = (
   { __typename?: 'RootQuery' }
-  & { rubrieken?: Maybe<Array<Maybe<(
+  & { afspraak?: Maybe<(
+    { __typename?: 'Afspraak' }
+    & AfspraakFragment
+  )>, rubrieken?: Maybe<Array<Maybe<(
     { __typename?: 'Rubriek' }
     & { grootboekrekening?: Maybe<(
       { __typename?: 'Grootboekrekening' }
@@ -1722,9 +1727,6 @@ export type GetAfspraakFormDataQuery = (
   )>>>, organisaties?: Maybe<Array<Maybe<(
     { __typename?: 'Organisatie' }
     & OrganisatieFragment
-  )>>>, afspraken?: Maybe<Array<Maybe<(
-    { __typename?: 'Afspraak' }
-    & AfspraakFragment
   )>>> }
 );
 
@@ -3402,7 +3404,10 @@ export type GetTransactionItemFormDataQueryHookResult = ReturnType<typeof useGet
 export type GetTransactionItemFormDataLazyQueryHookResult = ReturnType<typeof useGetTransactionItemFormDataLazyQuery>;
 export type GetTransactionItemFormDataQueryResult = Apollo.QueryResult<GetTransactionItemFormDataQuery, GetTransactionItemFormDataQueryVariables>;
 export const GetAfspraakFormDataDocument = gql`
-    query getAfspraakFormData {
+    query getAfspraakFormData($afspraakId: Int!) {
+  afspraak(id: $afspraakId) {
+    ...Afspraak
+  }
   rubrieken {
     ...Rubriek
     grootboekrekening {
@@ -3414,13 +3419,10 @@ export const GetAfspraakFormDataDocument = gql`
   organisaties {
     ...Organisatie
   }
-  afspraken {
-    ...Afspraak
-  }
 }
-    ${RubriekFragmentDoc}
-${OrganisatieFragmentDoc}
-${AfspraakFragmentDoc}`;
+    ${AfspraakFragmentDoc}
+${RubriekFragmentDoc}
+${OrganisatieFragmentDoc}`;
 
 /**
  * __useGetAfspraakFormDataQuery__
@@ -3434,10 +3436,11 @@ ${AfspraakFragmentDoc}`;
  * @example
  * const { data, loading, error } = useGetAfspraakFormDataQuery({
  *   variables: {
+ *      afspraakId: // value for 'afspraakId'
  *   },
  * });
  */
-export function useGetAfspraakFormDataQuery(baseOptions?: Apollo.QueryHookOptions<GetAfspraakFormDataQuery, GetAfspraakFormDataQueryVariables>) {
+export function useGetAfspraakFormDataQuery(baseOptions: Apollo.QueryHookOptions<GetAfspraakFormDataQuery, GetAfspraakFormDataQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetAfspraakFormDataQuery, GetAfspraakFormDataQueryVariables>(GetAfspraakFormDataDocument, options);
       }

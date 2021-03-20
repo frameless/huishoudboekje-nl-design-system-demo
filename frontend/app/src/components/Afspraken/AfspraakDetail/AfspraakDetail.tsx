@@ -44,7 +44,7 @@ const AfspraakDetail = () => {
 			const ctxValue = {
 				deleteAfspraak: () => handleMutation(deleteAfspraak({
 					variables: {id},
-				}), t("messages.agreements.deleteConfirmMessage"), () => push(Routes.Burger(afspraak.burger?.id))),
+				}), t("messages.deleteAfspraakSuccess"), () => push(Routes.Burger(afspraak.burger?.id))),
 				deleteAfspraakZoekterm: (zoekterm: string) => handleMutation(deleteAfspraakZoekterm({
 					variables: {id, zoekterm},
 				}), t("messages.deleteAfspraakZoektermSuccess"), () => $afspraak.refetch()),
@@ -63,7 +63,7 @@ const AfspraakDetail = () => {
 
 						if (err instanceof zod.ZodError) {
 							if (containsZodErrorCode(err, [zod.ZodErrorCode.too_small, zod.ZodErrorCode.invalid_type])) {
-								error = "Zoekterm moet minimaal één teken lang zijn.";
+								error = t("messages.zoektermLengthError");
 							}
 						}
 

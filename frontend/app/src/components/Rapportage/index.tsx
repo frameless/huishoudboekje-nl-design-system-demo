@@ -92,7 +92,7 @@ const Rapportage = () => {
 									<Queryable query={$data} children={data => {
 										const burgers: Burger[] = data.burgers || [];
 										return (
-											<Select onChange={onSelectBurger} options={burgers.map(b => ({key: b.id, value: b.id, label: formatBurgerName(b)}))} styles={reactSelectStyles}
+											<Select onChange={onSelectBurger} options={burgers.map(b => ({key: b.id, value: b.id, label: formatBurgerName(b)}))} styles={reactSelectStyles.default}
 											        isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllBurgers")} />
 										)
 									}} />
@@ -102,7 +102,7 @@ const Rapportage = () => {
 									<Queryable query={$data} children={data => {
 										const rubrieken: Rubriek[] = data.rubrieken || [];
 										return (
-											<Select onChange={onSelectRubriek} options={rubrieken.map(r => ({key: r.id, value: r.id, label: r.naam}))} styles={reactSelectStyles}
+											<Select onChange={onSelectRubriek} options={rubrieken.map(r => ({key: r.id, value: r.id, label: r.naam}))} styles={reactSelectStyles.default}
 											        isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllRubrics")} />
 										)
 									}} />

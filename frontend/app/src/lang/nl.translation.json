@@ -5,20 +5,21 @@
             "welcome": "Welkom bij het Huishoudboekje van {{tenantName}}.",
             "clickHereToContinue": "Klik hieronder op inloggen om te beginnen."
         },
-        "agreements": {
-            "deleteConfirmMessage": "Afspraak succesvol verwijderd.",
-            "invalidFormMessage": "Er is een fout opgetreden. Controleer de ingevulde gegevens en probeer het opnieuw.",
-            "createSuccessMessage": "Nieuwe afspraak succesvol opgeslagen.",
-            "editSuccessMessage": "Afspraak succesvol opgeslagen."
-        },
+        "deleteAfspraakSuccess": "Afspraak is verwijderd.",
         "deleteAfspraakZoektermSuccess": "Zoekterm is verwijderd.",
         "addAfspraakZoektermSuccess": "Zoekterm is opgeslagen.",
+        "zoektermLengthError": "Zoekterm moet minimaal één teken lang zijn.",
         "automatischBoekenDisabled_noZoektermen": "Het is niet mogelijk om deze afspraak automatisch af te letteren. Voeg een zoekterm toe waarop het systeem transacties kan zoeken.",
         "automatischBoekenDisabled_duplicatesFound": "Het is niet mogelijk om deze afspraak automatisch af te letteren. Er zijn andere afspraken met dezelfde zoektermen gevonden. Voeg een unieke zoekterm toe waarop het systeem transacties kan zoeken.",
+        "agreements": {
+            "invalidFormMessage": "Er is een fout opgetreden. Controleer de ingevulde gegevens en probeer het opnieuw.",
+            "createSuccessMessage": "Nieuwe afspraak succesvol opgeslagen."
+        },
         "genericError": {
             "title": "Fout.",
             "description": "Er is een onbekende fout opgetreden. Probeer het later nog eens."
         },
+        "updateAfspraakSuccess": "Afspraak is gewijzigd.",
         "customerStatementMessages": {
             "deleteSuccess": "Het bronbestand is succesvol verwijderd.",
             "createSuccess": "Het bronbestand is geïmporteerd en de transacties zijn succesvol ingelezen.",
@@ -80,7 +81,7 @@
         "logout": "Uitloggen",
         "cancel": "Annuleren",
         "delete": "Verwijderen",
-        "edit": "Wijzigen",
+        "editBetaling": "Betaling wijzigen",
         "view": "Bekijken",
         "add": "Toevoegen",
         "save": "Opslaan",
@@ -92,6 +93,7 @@
         "confirmAutomatischBoeken": "Voortaan automatisch boeken",
         "disconnect": "Koppeling verwijderen",
         "backToList": "Terug naar overzicht",
+        "edit": "Wijzigen",
         "clearSearch": "Zoekopdracht wissen",
         "backToHome": "Terug naar de hoofdpagina",
         "clickToEdit": "Klik om te wijzigen"
@@ -117,7 +119,11 @@
         "section4": {
             "title": "Betaalinstructie",
             "helperText": "Instellingen voor de betaalinstructie."
-        }
+        },
+        "invalidRubriekError": "Kies een rubriek.",
+        "invalidOmschrijvingError": "Vul een omschrijving in.",
+        "invalidBedragError": "Vul een geldig bedrag in.",
+        "invalidTegenrekeningError": "Kies een tegenrekening."
     },
     "burger": "Burger",
     "organisatie": "Organisatie",
@@ -129,6 +135,8 @@
         "zoektermen": "Zoektermen",
         "periodiek": "Periodiek",
         "periode": "Periode",
+        "inkomsten": "Inkomsten",
+        "uitgaven": "Uitgaven",
         "zoekterm": "zoekterm"
     },
     "vanTotDatums": "{{start}} t/m {{end}}",

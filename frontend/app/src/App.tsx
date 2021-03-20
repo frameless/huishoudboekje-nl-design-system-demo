@@ -5,13 +5,12 @@ import {useTranslation} from "react-i18next";
 import {FaLock} from "react-icons/fa";
 import {Redirect, Route, Switch, useLocation} from "react-router-dom";
 import Afspraken from "./components/Afspraken";
-import EditAfspraak from "./components/Afspraken/EditAfspraak";
 import CustomerStatementMessages from "./components/Bankzaken/Bronbestanden";
 import OverschrijvingenExport from "./components/Bankzaken/OverschrijvingenExport";
 import Transactions from "./components/Bankzaken/Transacties";
-import Gebeurtenissen from "./components/Gebeurtenissen";
 import Burgers from "./components/Burgers";
 import Configuratie from "./components/Configuratie";
+import Gebeurtenissen from "./components/Gebeurtenissen";
 import TwoColumns from "./components/Layouts/TwoColumns";
 import Organisaties from "./components/Organisaties";
 import PageNotFound from "./components/PageNotFound";
@@ -89,7 +88,6 @@ const App = () => {
 						<Route exact path={Routes.Home} component={() => <Redirect to={Routes.Burgers} />} />
 						<Route path={Routes.Burgers} component={Burgers} />
 						<Route path={Routes.Organisaties} component={Organisaties} />
-						<Route path={Routes.EditAfspraak()} component={EditAfspraak} />
 						<Route path={Routes.Afspraken} component={Afspraken} />
 						<Route exact path={Routes.Bankzaken} component={() => <Redirect to={Routes.Transacties} />} />
 						<Route path={Routes.Transacties} component={Transactions} />

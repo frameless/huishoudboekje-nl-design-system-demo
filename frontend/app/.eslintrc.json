@@ -7,12 +7,8 @@
 	"react"
   ],
   "rules": {
-	"@typescript-eslint/no-use-before-define": [
-	  "off"
-	],
-	"react/prop-types": [
-	  "off"
-	],
+	"@typescript-eslint/no-use-before-define": ["off"],
+	"react/prop-types": ["off"],
 	"indent": [
 	  "warn",
 	  "tab",
@@ -20,32 +16,13 @@
 		"SwitchCase": 1
 	  }
 	],
-	"brace-style": [
-	  "warn",
-	  "stroustrup"
-	],
-	"linebreak-style": [
-	  "warn",
-	  "unix"
-	],
-	"quotes": [
-	  "warn",
-	  "double"
-	],
-	"no-mixed-spaces-and-tabs": [
-	  "warn",
-	  "smart-tabs"
-	],
-	"no-trailing-spaces": [
-	  "warn"
-	],
-	"eol-last": [
-	  "warn",
-	  "never"
-	],
-	"no-empty": [
-	  "warn"
-	],
+	"brace-style": ["warn", "stroustrup"],
+	"linebreak-style": ["warn", "unix"],
+	"quotes": ["warn", "double"],
+	"no-mixed-spaces-and-tabs": ["warn", "smart-tabs"],
+	"no-trailing-spaces": ["warn"],
+	"eol-last": ["warn", "never"],
+	"no-empty": ["warn"],
 	"no-console": [
 	  "warn",
 	  {
@@ -94,9 +71,8 @@
 		"unnamedComponents": "arrow-function"
 	  }
 	],
-	"react/no-unknown-property": [
-	  "warn"
-	]
+	"react/no-unknown-property": ["warn"],
+	"no-constant-condition": ["warn"]
   },
   "ignorePatterns": [
 	"node_modules",

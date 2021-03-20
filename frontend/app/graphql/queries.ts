@@ -147,7 +147,10 @@ export const GetTransactionItemFormDataQuery = gql`
 `;
 
 export const GetAfspraakFormDataQuery = gql`
-    query getAfspraakFormData {
+    query getAfspraakFormData($afspraakId: Int!) {
+        afspraak(id: $afspraakId){
+            ...Afspraak
+        }
         rubrieken {
             ...Rubriek
             grootboekrekening{
@@ -158,9 +161,6 @@ export const GetAfspraakFormDataQuery = gql`
         }
         organisaties {
             ...Organisatie
-        }
-        afspraken{
-            ...Afspraak
         }
     }
     ${AfspraakFragment}
