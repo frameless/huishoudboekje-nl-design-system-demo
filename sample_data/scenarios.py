@@ -81,6 +81,7 @@ class AfspraakScenario:
     eind_datum: str = "2021-12-31"
     actief: bool = True
     zoektermen: list = None
+    automatisch_boeken: bool = False
 
 
 @dataclass

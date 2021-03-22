@@ -16,7 +16,9 @@ scenarios:
         start_datum: "2021-01-01"
         actief: true
         zoektermen:
-          - "Loon ZOEKTERMPERSONA1"
+          - "Loon"
+          - "ZOEKTERMPERSONA1"
+        automatisch_boeken: true
       - aantal: 1
         rubriek: "Inkomsten"
         beschrijving: "Aanvullende uitkering"
@@ -29,7 +31,9 @@ scenarios:
         start_datum: "2019-01-07"
         actief: true
         zoektermen:
-          - "Aanvullende uitkering ZOEKTERMPERSONA1"
+          - "Aanvullende uitkering"
+          - "ZOEKTERMPERSONA1"
+        automatisch_boeken: true
       - aantal: 1
         rubriek: "Toeslagen"
         beschrijving: "Voorschot kindgebonden budget"
@@ -43,6 +47,7 @@ scenarios:
         zoektermen:
           - "123456781"
           - "VOORSCHOT KIT/Kgb"
+        automatisch_boeken: true
       - aantal: 1
         rubriek: "Toeslagen"
         beschrijving: "Voorschot huurtoeslag"
@@ -57,6 +62,7 @@ scenarios:
         zoektermen:
           - "123456781"
           - "VOORSCHOT HUURTOESLAG"
+        automatisch_boeken: true
       - aantal: 1
         rubriek: "Toeslagen"
         beschrijving: "Voorschot zorgtoeslag"
@@ -70,6 +76,7 @@ scenarios:
         zoektermen:
           - "123456781"
           - "VOORSCHOT ZORGTOESLAG"
+        automatisch_boeken: true
       # uitgaven
       - aantal: 1
         rubriek: "Betaalde huur"
@@ -83,7 +90,9 @@ scenarios:
         start_datum: "2019-01-01"
         actief: true
         zoektermen:
-          - "Betaalde huur ZOEKTERMPERSONA1"
+          - "Betaalde huur"
+          - "ZOEKTERMPERSONA1"
+        automatisch_boeken: true
       - aantal: 1
         rubriek: "Elektriciteit"
         beschrijving: "Elektriciteit"
@@ -96,7 +105,9 @@ scenarios:
         start_datum: "2019-01-01"
         actief: true
         zoektermen:
-          - "Elektriciteit ZOEKTERMPERSONA1"
+          - "Elektriciteit"
+          - "ZOEKTERMPERSONA1"
+        automatisch_boeken: true
       - aantal: 1
         rubriek: "Water"
         beschrijving: "Water"
@@ -109,7 +120,9 @@ scenarios:
         start_datum: "2021-01-01"
         actief: true
         zoektermen:
-          - "Water ZOEKTERMPERSONA1"
+          - "Water"
+          - "ZOEKTERMPERSONA1"
+        automatisch_boeken: true
       - aantal: 1
         rubriek: "Leefgeld"
         beschrijving: "Leefgeld"
@@ -123,7 +136,9 @@ scenarios:
         start_datum: "2021-01-01"
         actief: true
         zoektermen:
-          - "Leefgeld ZOEKTERMPERSONA1"
+          - "Leefgeld"
+          - "ZOEKTERMPERSONA1"
+        automatisch_boeken: true
 
 # persona 2
   - aantal: 1
@@ -144,7 +159,9 @@ scenarios:
         aantal_betalingen: 16
         actief: true
         zoektermen:
-          - "Aanvullende uitkering ZOEKTERMPERSONA2"
+          - "Aanvullende uitkering"
+          - "ZOEKTERMPERSONA2"
+        automatisch_boeken: true
       - aantal: 1
         rubriek: "Inkomsten"
         beschrijving: "Loon"
@@ -157,7 +174,9 @@ scenarios:
         start_datum: "2021-01-01"
         actief: true
         zoektermen:
-          - "Loon ZOEKTERMPERSONA2"
+          - "Loon"
+          - "ZOEKTERMPERSONA2"
+        automatisch_boeken: true
       - aantal: 1
         rubriek: "Toeslagen"
         beschrijving: "Voorschot huurtoeslag"
@@ -171,6 +190,7 @@ scenarios:
         zoektermen:
           - "123456782"
           - "VOORSCHOT HUURTOESLAG"
+        automatisch_boeken: true
       - aantal: 1
         rubriek: "Toeslagen"
         beschrijving: "Voorschot zorgtoeslag"
@@ -184,6 +204,7 @@ scenarios:
         zoektermen:
           - "123456782"
           - "VOORSCHOT ZORGTOESLAG"
+        automatisch_boeken: true
       - aantal: 1
         rubriek: "Subsidies"
         beschrijving: "Bijdrage Vaste Lasten Pakket"
@@ -195,7 +216,9 @@ scenarios:
         start_datum: "2021-01-01"
         actief: true
         zoektermen:
-          - "Vaste Lasten Pakket ZOEKTERMPERSONA2"
+          - "Vaste Lasten Pakket"
+          - "ZOEKTERMPERSONA2"
+        automatisch_boeken: true
       # uitgaven
       - aantal: 1
         rubriek: "Betaalde huur"
@@ -209,7 +232,9 @@ scenarios:
         start_datum: "2019-01-01"
         actief: true
         zoektermen:
-          - "Betaalde huur ZOEKTERMPERSONA2"
+          - "Betaalde huur"
+          - "ZOEKTERMPERSONA2"
+        automatisch_boeken: true
       - aantal: 1
         rubriek: "Elektriciteit"
         beschrijving: "Elektriciteit"
@@ -222,7 +247,9 @@ scenarios:
         start_datum: "2019-01-01"
         actief: true
         zoektermen:
-          - "Elektriciteit ZOEKTERMPERSONA2"
+          - "Elektriciteit"
+          - "ZOEKTERMPERSONA2"
+        automatisch_boeken: true
       - aantal: 1
         rubriek: "Verzekeringen"
         beschrijving: "Zorgverzekering"
@@ -235,7 +262,9 @@ scenarios:
         start_datum: "2019-01-01"
         actief: true
         zoektermen:
-          - "Zorgverzekering ZOEKTERMPERSONA2"
+          - "Zorgverzekering"
+          - "ZOEKTERMPERSONA2"
+        automatisch_boeken: true
       - aantal: 1
         rubriek: "Water"
         beschrijving: "Water"
@@ -248,7 +277,9 @@ scenarios:
         start_datum: "2019-01-01"
         actief: true
         zoektermen:
-          - "Water ZOEKTERMPERSONA2"
+          - "Water"
+          - "ZOEKTERMPERSONA2"
+        automatisch_boeken: true
       - aantal: 1
         rubriek: "Leefgeld"
         beschrijving: "Leefgeld"
@@ -262,7 +293,9 @@ scenarios:
         start_datum: "2019-01-01"
         actief: true
         zoektermen:
-          - "Leefgeld ZOEKTERMPERSONA2"
+          - "Leefgeld"
+          - "ZOEKTERMPERSONA2"
+        automatisch_boeken: true
       - aantal: 1
         rubriek: "Verzekeringen"
         beschrijving: "Inboedelverzekering"
@@ -275,7 +308,9 @@ scenarios:
         start_datum: "2019-01-01"
         actief: true
         zoektermen:
-          - "Inboedelverzekering ZOEKTERMPERSONA2"
+          - "Inboedelverzekering"
+          - "ZOEKTERMPERSONA2"
+        automatisch_boeken: true
       - aantal: 1
         rubriek: "Telefonie"
         beschrijving: "Vaste telefonie en internet"
@@ -288,7 +323,9 @@ scenarios:
         start_datum: "2019-01-01"
         actief: true
         zoektermen:
-          - "Vaste telefonie en internet ZOEKTERMPERSONA2"
+          - "Vaste telefonie en internet"
+          - "ZOEKTERMPERSONA2"
+        automatisch_boeken: true
       - aantal: 1
         rubriek: "Telefonie"
         beschrijving: "Mobiele telefonie"
@@ -301,4 +338,6 @@ scenarios:
         start_datum: "2019-01-01"
         actief: true
         zoektermen:
-          - "Mobiele telefonie ZOEKTERMPERSONA2"
+          - "Mobiele telefonie"
+          - "ZOEKTERMPERSONA2"
+        automatisch_boeken: true

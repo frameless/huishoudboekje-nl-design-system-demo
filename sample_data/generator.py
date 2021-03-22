@@ -2,7 +2,7 @@ import csv
 import dataclasses
 import os
 import string
-from _csv import QUOTE_ALL
+from _csv import QUOTE_NONNUMERIC
 from datetime import date, timedelta
 from os import path
 from random import choice, randrange
@@ -22,7 +22,7 @@ def faker_datum(
 
 class HHBCsvDialect(csv.Dialect):
     delimiter = "|"
-    quoting = QUOTE_ALL
+    quoting = QUOTE_NONNUMERIC
     quotechar = '"'
     lineterminator = "\n"
 
@@ -83,6 +83,7 @@ class Generator:
                         "actief",
                         "beschrijving",
                         "zoektermen",
+                        "automatisch_boeken",
                     ],
                 },
             },
@@ -274,6 +275,7 @@ class Generator:
             "credit": scenario.credit
             if scenario.credit is not None
             else scenario.bedrag > 0,
+            "automatisch_boeken": scenario.automatisch_boeken or False,
             "automatische_incasso": scenario.automatische_incasso,
             "aantal_betalingen": scenario.aantal_betalingen or 12,
             "interval": scenario.interval,
@@ -306,7 +308,8 @@ class Generator:
             ),
             "actief": scenario.actief,
             "beschrijving": scenario.beschrijving,
-            "zoektermen": f"""{{{",".join(scenario.zoektermen)}}}""" if scenario.zoektermen and len(scenario.zoektermen) > 0 else None,
+            "zoektermen": f"""{{{",".join(scenario.zoektermen)}}}""" if scenario.zoektermen and len(
+                scenario.zoektermen) > 0 else None,
         }
         self.afspraken.append(afspraak)
 
@@ -338,7 +341,7 @@ class Generator:
                     add_newline(
                         ["BEGIN;"]
                         + [
-                            f"""\\COPY {table_name} ({",".join(self.tables[db][table_name]["fieldnames"])}) FROM '{db}/{table_name}.csv' (FORMAT csv, DELIMITER '|', HEADER true);"""
+                            f"""\\COPY {table_name} ({",".join(self.tables[db][table_name]["fieldnames"])}) FROM '{db}/{table_name}.csv' (FORMAT csv, DELIMITER '|', HEADER true, NULL 'null');"""
                             for table_name in self.tables[db]
                         ]
                         + [
@@ -353,9 +356,9 @@ class Generator:
                 sql_file.writelines(
                     add_newline(
                         ["BEGIN;"] +
-                         [
-                         f"""TRUNCATE {table_name} RESTART IDENTITY CASCADE;""" for table_name in self.tables[db]] +
-                         ["END;"]
+                        [
+                            f"""TRUNCATE {table_name} RESTART IDENTITY CASCADE;""" for table_name in self.tables[db]] +
+                        ["END;"]
                     )
                 )
 
