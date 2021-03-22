@@ -3,7 +3,7 @@ import os
 import graphene
 import requests
 from graphql import GraphQLError
-from hhb_backend.graphql import settings
+from hhb_backend.graphql import settings, dataloaders
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.customer_statement_message import (
     CustomerStatementMessage,
@@ -37,10 +37,27 @@ class DeleteCustomerStatementMessage(graphene.Mutation):
         """ Delete current Customer Statement Message """
         previous = await hhb_dataloader().csms_by_id.load(id)
 
+        transaction_ids = previous["bank_transactions"]
+
+        journaalposten = await hhb_dataloader().journaalposten_by_transaction.load_many(
+            transaction_ids
+        )
+
+        for journaalpost in journaalposten:
+            if journaalpost is not None:
+                response = requests.delete(f"{settings.HHB_SERVICES_URL}/journaalposten/{journaalpost['id']}")
+                if not response.ok:
+                    raise GraphQLError(f"Upstream API responded: {response.text}")
+
+        for transaction in transaction_ids:
+            response = requests.delete(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/{transaction}")
+            if not response.ok:
+                raise GraphQLError(f"Upstream API responded: {response.text}")
+
         delete_response_hhb = requests.delete(
             f"{settings.TRANSACTIE_SERVICES_URL}/customerstatementmessages/{id}"
         )
-        if delete_response_hhb.status_code != 204:
+        if not delete_response_hhb.ok:
             raise GraphQLError(f"Upstream API responded: {delete_response_hhb.text}")
 
         return DeleteCustomerStatementMessage(ok=True, previous=previous)
