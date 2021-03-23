@@ -20,7 +20,7 @@ export enum Granularity {
 
 export const periodFormatForGranularity = {
 	[Granularity.Monthly]: "MMM YYYY",
-	[Granularity.Weekly]: "GGGG-WW",
+	[Granularity.Weekly]: "gggg-ww",
 	[Granularity.Daily]: "DD-MM-YYYY",
 };
 

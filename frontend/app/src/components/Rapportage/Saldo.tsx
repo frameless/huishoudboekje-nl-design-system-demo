@@ -11,7 +11,7 @@ import {RapportageContext} from "./context";
 
 const Saldo: React.FC<BoxProps & { transactions: BankTransaction[] }> = ({transactions}) => {
 	const {t} = useTranslation();
-	const [color1, color2] = useToken("colors", ["primary.300", "secondary.300"]);
+	const [colorSaldo] = useToken("colors", ["blue.300"]);
 	const {startDate, endDate, granularity} = useContext(RapportageContext);
 
 	const [aggregation] = createAggregation(transactions, granularity);
@@ -52,7 +52,7 @@ const Saldo: React.FC<BoxProps & { transactions: BankTransaction[] }> = ({transa
 					},
 					chartArea: {width: "90%", height: "80%"},
 					legend: {position: "top"},
-					colors: [color1, color2],
+					colors: [colorSaldo],
 					lineWidth: 1,
 					pointSize: 5,
 					// onLoad: console.log
