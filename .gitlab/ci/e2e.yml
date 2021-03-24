@@ -2,6 +2,9 @@
   stage: build
   image:
     name: ${DOCKER_PROXY}node:alpine
+  tags:
+    - cg
+    - docker
   needs: []
   script:
     - |
