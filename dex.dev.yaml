@@ -39,3 +39,18 @@ staticPasswords:
   hash: $2y$12$xWWlTptiMyPJbuPo7WwBgefl/sj3vz8iNJn5fPwVWQcBcZh1HsC.W # demo
   name: Henk Poortvliet
   email: henk.poortvliet@sloothuizen.nl
+- username: koen.brouwer@vng.nl
+  userID: a151be49-c956-4834-a511-880b39011959
+  hash: $2y$12$xWWlTptiMyPJbuPo7WwBgefl/sj3vz8iNJn5fPwVWQcBcZh1HsC.W # demo
+  name: Koen Brouwer
+  email: koen.brouwer@vng.nl
+- username: bauke.huijbers@vng.nl
+  userID: bcfe94b8-fc0e-48d8-ada7-c04f96d31e18
+  hash: $2y$12$xWWlTptiMyPJbuPo7WwBgefl/sj3vz8iNJn5fPwVWQcBcZh1HsC.W # demo
+  name: Bauke Huijbers
+  email: bauke.huijbers@vng.nl
+- username: gilgamesh.nootebos@vng.nl
+  userID: f944d421-72bd-4e6a-9ede-1af45057e70e
+  hash: $2y$12$xWWlTptiMyPJbuPo7WwBgefl/sj3vz8iNJn5fPwVWQcBcZh1HsC.W # demo
+  name: Gilgamesh Nootebos
+  email: gilgamesh.nootebos@vng.nl
