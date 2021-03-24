@@ -67,12 +67,54 @@ class HHBQuery():
             return {"errors": [f"{self.hhb_model.__name__} not found."]}, 404
         return {"data": self.post_process_data(row)}, 200
 
-    def get_result_multiple(self):
+    def get_result_multiple(self, start=None, limit=None):
         """ Get multiple results from the current query """
-        result_list = []
-        for row in self.query.all():
-            result_list.append(self.post_process_data(row))
-        return {"data": result_list}, 200
+        results = self.query.all()
+
+        if start is not None and limit is not None:
+            start = int(start)
+            limit = int(limit)
+            count = len(results)
+            if count < start:
+                abort(404)
+            # make response
+            obj = {'start': start, 'limit': limit, 'count': count}
+            # make URLs
+            # make previous url
+            if start == 1:
+                obj['previous'] = ''
+            else:
+                start_copy = max(1, start - limit)
+                limit_copy = start - 1
+                obj['previous'] = '?start=%d&limit=%d' % (start_copy, limit_copy)
+            # make next url
+            if start + limit > count:
+                obj['next'] = ''
+            else:
+                start_copy = start + limit
+                obj['next'] = '?start=%d&limit=%d' % (start_copy, limit)
+            # finally extract result according to bounds
+            obj['data'] = []
+            for row in results[(start - 1):(start - 1 + limit)]:
+                obj['data'].append(self.post_process_data(row))
+            return obj
+        else:
+            result_list = []
+            for row in results:
+                result_list.append(self.post_process_data(row))
+            return {"data": result_list}, 200
+
+        # result_list = []
+        # if start is not None and limit is not None:
+        #     record_query = self.query.paginate(page=start, per_page=limit, error_out=False)
+        #     total = record_query.total
+        #     rows = record_query.items
+        # else:
+        #     rows = self.query.all
+        #
+        # for row in rows:
+        #     result_list.append(self.post_process_data(row))
+        # return {"data": result_list}, 200
 
     def load_relations(self):
         for relation in self._exposed_many_relations + self._exposed_one_relations:

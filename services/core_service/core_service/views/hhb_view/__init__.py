@@ -82,7 +82,9 @@ class HHBView(MethodView):
         self.hhb_query.order_query()
         if object_id and type(object_id) != list:
             return self.hhb_query.get_result_single(object_id)
-        return self.hhb_query.get_result_multiple()
+        start = request.args.get('start', None)
+        limit = request.args.get('limit', None)
+        return self.hhb_query.get_result_multiple(start=start, limit=limit)
 
     def extend_get(self, **kwargs):
         """ Allows code injection into the get method """

@@ -11,6 +11,25 @@ def test_basket_get_success_all(client, basket_factory):
     assert response.json["data"][0]["name"] == basket1.name
     assert response.json["data"][1]["name"] == basket2.name
 
+def test_basket_get_success_paged(client, basket_factory):
+    """ Test /baskets/ path """
+    basket1 = basket_factory.create_basket(name="bamboo1")
+    basket2 = basket_factory.create_basket(name="bamboo2")
+    basket3 = basket_factory.create_basket(name="bamboo3")
+    basket4 = basket_factory.create_basket(name="bamboo4")
+    basket5 = basket_factory.create_basket(name="bamboo5")
+    basket6 = basket_factory.create_basket(name="bamboo6")
+    basket7 = basket_factory.create_basket(name="bamboo7")
+    basket8 = basket_factory.create_basket(name="bamboo8")
+    basket9 = basket_factory.create_basket(name="bamboo9")
+    basket10 = basket_factory.create_basket(name="bambo010")
+    basket11 = basket_factory.create_basket(name="bamboo11")
+    response = client.get(f'/baskets/?start=1&limit=10')
+    assert response.status_code == 200
+    assert len(response.json["data"]) == 10
+    assert response.json["data"][0]["name"] == basket1.name
+    assert response.json["data"][1]["name"] == basket2.name
+
 
 def test_basket_get_success_by_id(client, basket_factory):
     """ Test /baskets/ path """
