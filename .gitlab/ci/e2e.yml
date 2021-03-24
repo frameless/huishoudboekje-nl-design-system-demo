@@ -1,11 +1,11 @@
 .cypress-token:
   stage: build
   image:
-    name: ${DOCKER_PROXY}node:lts-alpine
+    name: ${DOCKER_PROXY}node:alpine
   needs: []
   script:
     - |
-      npx --quiet --package '@clarketm/jwt-cli' \
+      npx --yes --quiet --package '@clarketm/jwt-cli' \
         jwt sign \
         --expiresIn "1 hour" \
         --subject "cypress@huishoudboekje.nlx.reviews" \

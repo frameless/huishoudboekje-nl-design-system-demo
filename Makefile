@@ -46,6 +46,7 @@ huishoudboekje: helm/repo/huishoudboekje-$(COMPONENT_VERSION).tgz helm/theme.yam
 		$@  $< \
 		--debug \
 		--values helm/theme.yaml \
+		--values helm/values-dex.yaml \
 		--set "medewerker-backend.extraEnv[0].name=OIDC_CLOCK_SKEW" \
 		--set "medewerker-backend.extraEnv[0].value='500'" \
 		--set database.traefik.enabled=true \

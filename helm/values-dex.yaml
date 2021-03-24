@@ -33,6 +33,11 @@ dex:
         hash: $2y$12$xWWlTptiMyPJbuPo7WwBgefl/sj3vz8iNJn5fPwVWQcBcZh1HsC.W # demo
         name: Bauke Huijbers
         email: bauke.huijbers@vng.nl
+      - username: gilgamesh.nootebos@vng.nl
+        userID: bcfe94b8-fc0e-48d8-ada7-c04f96d31e18
+        hash: $2y$12$xWWlTptiMyPJbuPo7WwBgefl/sj3vz8iNJn5fPwVWQcBcZh1HsC.W # demo
+        name: Gilgamesh Nootebos
+        email: gilgamesh.nootebos@vng.nl
     oauth2:
       skipApprovalScreen: true
       alwaysShowLoginScreen: false

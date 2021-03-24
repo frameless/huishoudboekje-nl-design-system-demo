@@ -48,15 +48,6 @@ spec:
               value: {{ .Values.appSettings }}
             - name: OIDC_CLIENT_SECRETS
               value: /opt/etc/oidc/client_secrets.json
-            - name: OVERWITE_REDIRECT_URI_MAP
-              value: |-
-                {{- $result := dict -}}
-                {{- range $item := .Values.oidc.redirectUris -}}
-                {{- $key := get $item "prefix" -}}
-                {{- $value := get $item "callback" -}}
-                {{- $result = set $result $key $value -}}
-                {{- end }}
-                {{- toPrettyJson $result | nindent 16 }}
             - name: HHB_SERVICE_URL
               value: {{ printf "http://%s" (include "medewerker-backend.huishoudboekjeServiceName" .) }}
             - name: ORGANISATIE_SERVICE_URL
