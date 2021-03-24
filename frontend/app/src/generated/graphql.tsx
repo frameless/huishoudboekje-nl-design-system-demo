@@ -12,12 +12,6 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /**
-   * The `DateTime` scalar type represents a DateTime
-   * value as specified by
-   * [iso8601](https://en.wikipedia.org/wiki/ISO_8601).
-   */
-  DateTime: any;
   /** Decimaal Scalar Description */
   Bedrag: any;
   /**
@@ -26,6 +20,12 @@ export type Scalars = {
    * [iso8601](https://en.wikipedia.org/wiki/ISO_8601).
    */
   Date: any;
+  /**
+   * The `DateTime` scalar type represents a DateTime
+   * value as specified by
+   * [iso8601](https://en.wikipedia.org/wiki/ISO_8601).
+   */
+  DateTime: any;
   /**
    * Create scalar that ignores normal serialization/deserialization, since
    * that will be handled by the multipart request spec
@@ -2083,7 +2083,19 @@ export type CreateBurgerMutationResult = Apollo.MutationResult<CreateBurgerMutat
 export type CreateBurgerMutationOptions = Apollo.BaseMutationOptions<CreateBurgerMutation, CreateBurgerMutationVariables>;
 export const UpdateBurgerDocument = gql`
     mutation updateBurger($id: Int!, $voorletters: String, $voornamen: String, $achternaam: String, $geboortedatum: String, $straatnaam: String, $huisnummer: String, $postcode: String, $plaatsnaam: String, $telefoonnummer: String, $email: String) {
-  updateBurger(id: $id, voorletters: $voorletters, voornamen: $voornamen, achternaam: $achternaam, geboortedatum: $geboortedatum, straatnaam: $straatnaam, huisnummer: $huisnummer, postcode: $postcode, plaatsnaam: $plaatsnaam, telefoonnummer: $telefoonnummer, email: $email) {
+  updateBurger(
+    id: $id
+    voorletters: $voorletters
+    voornamen: $voornamen
+    achternaam: $achternaam
+    geboortedatum: $geboortedatum
+    straatnaam: $straatnaam
+    huisnummer: $huisnummer
+    postcode: $postcode
+    plaatsnaam: $plaatsnaam
+    telefoonnummer: $telefoonnummer
+    email: $email
+  ) {
     ok
     burger {
       ...Burger
@@ -2162,7 +2174,9 @@ export type DeleteBurgerMutationResult = Apollo.MutationResult<DeleteBurgerMutat
 export type DeleteBurgerMutationOptions = Apollo.BaseMutationOptions<DeleteBurgerMutation, DeleteBurgerMutationVariables>;
 export const CreateOrganisatieDocument = gql`
     mutation createOrganisatie($huisnummer: String, $kvkNummer: String!, $naam: String, $plaatsnaam: String, $postcode: String, $straatnaam: String, $weergaveNaam: String!) {
-  createOrganisatie(input: {huisnummer: $huisnummer, kvkNummer: $kvkNummer, naam: $naam, plaatsnaam: $plaatsnaam, postcode: $postcode, straatnaam: $straatnaam, weergaveNaam: $weergaveNaam}) {
+  createOrganisatie(
+    input: {huisnummer: $huisnummer, kvkNummer: $kvkNummer, naam: $naam, plaatsnaam: $plaatsnaam, postcode: $postcode, straatnaam: $straatnaam, weergaveNaam: $weergaveNaam}
+  ) {
     ok
     organisatie {
       ...Organisatie
@@ -2204,7 +2218,16 @@ export type CreateOrganisatieMutationResult = Apollo.MutationResult<CreateOrgani
 export type CreateOrganisatieMutationOptions = Apollo.BaseMutationOptions<CreateOrganisatieMutation, CreateOrganisatieMutationVariables>;
 export const UpdateOrganisatieDocument = gql`
     mutation updateOrganisatie($id: Int!, $huisnummer: String, $kvkNummer: String, $naam: String, $plaatsnaam: String, $postcode: String, $straatnaam: String, $weergaveNaam: String) {
-  updateOrganisatie(id: $id, huisnummer: $huisnummer, kvkNummer: $kvkNummer, naam: $naam, plaatsnaam: $plaatsnaam, postcode: $postcode, straatnaam: $straatnaam, weergaveNaam: $weergaveNaam) {
+  updateOrganisatie(
+    id: $id
+    huisnummer: $huisnummer
+    kvkNummer: $kvkNummer
+    naam: $naam
+    plaatsnaam: $plaatsnaam
+    postcode: $postcode
+    straatnaam: $straatnaam
+    weergaveNaam: $weergaveNaam
+  ) {
     ok
     organisatie {
       ...Organisatie
@@ -2528,7 +2551,10 @@ export type DeleteOrganisatieRekeningMutationResult = Apollo.MutationResult<Dele
 export type DeleteOrganisatieRekeningMutationOptions = Apollo.BaseMutationOptions<DeleteOrganisatieRekeningMutation, DeleteOrganisatieRekeningMutationVariables>;
 export const UpdateRekeningDocument = gql`
     mutation updateRekening($id: Int!, $iban: String, $rekeninghouder: String) {
-  updateRekening(id: $id, rekening: {iban: $iban, rekeninghouder: $rekeninghouder}) {
+  updateRekening(
+    id: $id
+    rekening: {iban: $iban, rekeninghouder: $rekeninghouder}
+  ) {
     ok
   }
 }
@@ -2632,7 +2658,9 @@ export type DeleteCustomerStatementMessageMutationResult = Apollo.MutationResult
 export type DeleteCustomerStatementMessageMutationOptions = Apollo.BaseMutationOptions<DeleteCustomerStatementMessageMutation, DeleteCustomerStatementMessageMutationVariables>;
 export const CreateJournaalpostGrootboekrekeningDocument = gql`
     mutation createJournaalpostGrootboekrekening($transactionId: Int!, $grootboekrekeningId: String!) {
-  createJournaalpostGrootboekrekening(input: {transactionId: $transactionId, grootboekrekeningId: $grootboekrekeningId, isAutomatischGeboekt: false}) {
+  createJournaalpostGrootboekrekening(
+    input: {transactionId: $transactionId, grootboekrekeningId: $grootboekrekeningId, isAutomatischGeboekt: false}
+  ) {
     ok
     journaalpost {
       id
@@ -2669,7 +2697,9 @@ export type CreateJournaalpostGrootboekrekeningMutationResult = Apollo.MutationR
 export type CreateJournaalpostGrootboekrekeningMutationOptions = Apollo.BaseMutationOptions<CreateJournaalpostGrootboekrekeningMutation, CreateJournaalpostGrootboekrekeningMutationVariables>;
 export const UpdateJournaalpostGrootboekrekeningDocument = gql`
     mutation updateJournaalpostGrootboekrekening($id: Int!, $grootboekrekeningId: String!) {
-  updateJournaalpostGrootboekrekening(input: {id: $id, grootboekrekeningId: $grootboekrekeningId}) {
+  updateJournaalpostGrootboekrekening(
+    input: {id: $id, grootboekrekeningId: $grootboekrekeningId}
+  ) {
     ok
   }
 }
@@ -2703,7 +2733,9 @@ export type UpdateJournaalpostGrootboekrekeningMutationResult = Apollo.MutationR
 export type UpdateJournaalpostGrootboekrekeningMutationOptions = Apollo.BaseMutationOptions<UpdateJournaalpostGrootboekrekeningMutation, UpdateJournaalpostGrootboekrekeningMutationVariables>;
 export const CreateJournaalpostAfspraakDocument = gql`
     mutation createJournaalpostAfspraak($transactionId: Int!, $afspraakId: Int!, $isAutomatischGeboekt: Boolean = false) {
-  createJournaalpostAfspraak(input: {transactionId: $transactionId, afspraakId: $afspraakId, isAutomatischGeboekt: $isAutomatischGeboekt}) {
+  createJournaalpostAfspraak(
+    input: {transactionId: $transactionId, afspraakId: $afspraakId, isAutomatischGeboekt: $isAutomatischGeboekt}
+  ) {
     ok
     journaalpost {
       id
@@ -2955,7 +2987,10 @@ export type StartAutomatischBoekenMutationResult = Apollo.MutationResult<StartAu
 export type StartAutomatischBoekenMutationOptions = Apollo.BaseMutationOptions<StartAutomatischBoekenMutation, StartAutomatischBoekenMutationVariables>;
 export const UpdateAfspraakAutomatischBoekenDocument = gql`
     mutation updateAfspraakAutomatischBoeken($afspraakId: Int!, $automatischBoeken: Boolean!) {
-  updateAfspraakAutomatischBoeken(afspraakId: $afspraakId, automatischBoeken: $automatischBoeken) {
+  updateAfspraakAutomatischBoeken(
+    afspraakId: $afspraakId
+    automatischBoeken: $automatischBoeken
+  ) {
     ok
   }
 }
