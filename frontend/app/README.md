@@ -35,7 +35,7 @@ PROXY_AUTHORIZATION="Authorization: Bearer $(npx --quiet --package '@clarketm/jw
     --subject "cypress@huishoudboekje.nlx.reviews" \
     --issuer "https://huishoudboekje.nlx.reviews" \
     --audience "https://huishoudboekje.nlx.reviews" \
-    --jwtid "$(tr -dc 'A-F0-9' < /dev/urandom | head -c32)" \
+    --jwtid "$(LC_CTYPE=C tr -dc 'A-F0-9' < /dev/urandom | head -c32)" \
     --noCopy \
     "{}" "${SESSION_SECRET:-test}")"
 ```
