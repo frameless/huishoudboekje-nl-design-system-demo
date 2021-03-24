@@ -8,3 +8,4 @@ services:
       - 6556:6556
     volumes:
       - ./dex.dev.yaml:/config.yaml
+    restart: unless-stopped

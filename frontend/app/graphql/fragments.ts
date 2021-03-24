@@ -169,3 +169,9 @@ export const JournaalpostFragment = gql`
         id
     }
 `;
+
+export const GebruikerFragment = gql`
+    fragment Gebruiker on Gebruiker {
+        email
+    }
+`;

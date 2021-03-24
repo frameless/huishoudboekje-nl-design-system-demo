@@ -25,7 +25,7 @@
     "cypress": "npx -q cypress open",
     "theme": "./setTheme.sh",
     "lint": "eslint src",
-    "get-schema": "npx -q apollo client:download-schema --endpoint=${BASE_URL:-http://localhost:3000}/api/graphql schema.graphql",
+    "get-schema": "npx -q apollo client:download-schema ${PROXY_AUTHORIZATION:+--header \"${PROXY_AUTHORIZATION}\"} --endpoint=${BASE_URL:-http://localhost:3000}/api/graphql schema.graphql",
     "pregen-types": "npm run get-schema",
     "gen-types": "graphql-codegen --config codegen.json",
     "i18n-migrate": "i18next 'src/**/*.{ts,tsx}' [-oc]"
@@ -62,6 +62,7 @@
     "ua-parser-js": "^0.7.24"
   },
   "devDependencies": {
+    "@clarketm/jwt-cli": "^1.2.0",
     "@graphql-codegen/cli": "^1.21.2",
     "@graphql-codegen/introspection": "1.18.1",
     "@graphql-codegen/typescript": "^1.21.1",

@@ -1,8 +1,9 @@
+import pytest
 import requests_mock
 from freezegun import freeze_time
 from hhb_backend.graphql import settings
 
-
+# @pytest.mark.only
 def test_afspraken(client):
     with requests_mock.Mocker() as rm:
         rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/", json={'data': [{
@@ -13,6 +14,7 @@ def test_afspraken(client):
             data='{"query": "{ afspraken { id } }"}',
             content_type='application/json'
         )
+        assert response.status_code == 200
         assert response.json == {'data': {
             'afspraken': [{
                 'id': 1,

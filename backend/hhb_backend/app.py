@@ -2,18 +2,17 @@
 import io
 import logging
 import os
-from functools import wraps
-from urllib.parse import urlparse
 
-import itsdangerous
 import requests
-from flask import Flask, jsonify, make_response, redirect, send_file, session
-from flask_oidc import OpenIDConnect
+from flask import Flask, jsonify, make_response, render_template, send_file
 
 import hhb_backend.graphql.blueprint as graphql_blueprint
-from hhb_backend.custom_oidc import CustomOidc
+from hhb_backend.auth import Auth
 from hhb_backend.graphql import settings
 from hhb_backend.reverse_proxy import ReverseProxied
+
+ANONYMOUS_ROLENAME = 'anonymous'
+MEDEWERKER_ROLENAME = 'medewerker'
 
 
 def create_app(
@@ -30,89 +29,37 @@ def create_app(
     if app.config["PREFIX"]:
         app.wsgi_app = ReverseProxied(app.wsgi_app, script_name=app.config["PREFIX"])
 
-    oidc_overrides = {}
-    oidc = OpenIDConnect(app, **oidc_overrides)
-
-    custom_oidc = oidc
-    if app.config["OVERWITE_REDIRECT_URI_MAP"]:
-        logging.info(
-            f"Loading custom OVERWITE_REDIRECT_URI_MAP: {app.config['OVERWITE_REDIRECT_URI_MAP']}"
-        )
-        custom_oidc = CustomOidc(
-            oidc=oidc, flask_app=app, prefixes=app.config["OVERWITE_REDIRECT_URI_MAP"]
-        )
-
-    def handle_oidc_error(view_func):
-        @wraps(view_func)
-        def decorated(*args, **kwargs):
-            try:
-                return view_func(*args, **kwargs)
-            except:
-                logging.warning(f"Error detected, redirecting to '/'", exc_info=True)
-                oidc.logout()
-                session.clear()
-                return redirect("/", code=302)
-
-        return decorated
-
-    @app.errorhandler(itsdangerous.exc.BadSignature)
-    def handle_bad_signature(e):
-        oidc.logout()
-        session.clear()
-        return jsonify(message="Not logged in"), 401
+    auth = Auth(app, anonymous_rolename=ANONYMOUS_ROLENAME, default_rolename=MEDEWERKER_ROLENAME)
 
     @app.route("/health")
+    @auth.rbac.allow([ANONYMOUS_ROLENAME], ['GET'])
     def health():
         return make_response(("ok", {"Content-Type": "text/plain"}))
 
     @app.route("/version")
+    @auth.rbac.allow([ANONYMOUS_ROLENAME], ['GET'])
     def version_file():
         try:
             return send_file("version.json")
         except:
             return jsonify(component="backend", tag="dev", version="0.20.0")
 
-    @app.route("/me")
-    def me():
-        if oidc.user_loggedin:
-            return jsonify(
-                email=oidc.user_getfield("email"), groups=oidc.user_getinfo("groups")
-            )
-        else:
-            return jsonify(message="Not logged in"), 401
+    graphql = graphql_blueprint.create_blueprint(loop=loop)
 
-    @app.route("/custom_oidc_callback")
-    @handle_oidc_error
-    @oidc.custom_callback
-    def oidc_redirect(url):
-        session.permanent = True
-        parse_result = urlparse(url)
-        new_url = "%s://%s" % (parse_result.scheme, parse_result.netloc)
-        logging.info("oidc_redirect url=%s" % (new_url))
-        return redirect(new_url)
-
-    @app.route("/login")
-    @custom_oidc.require_login
-    def login():
-        return redirect("/", code=302)
-
-    graphql = graphql_blueprint.create_blueprint(loop)
-    if app.config["GRAPHQL_AUTH_ENABLED"]:
-        @graphql.before_request
-        @custom_oidc.require_login
-        def auth_graphql():
-            pass
+    @graphql.before_request
+    @auth.rbac.allow([MEDEWERKER_ROLENAME], methods=['GET', 'POST'], endpoint="graphql.graphql")
+    def auth_graphql():
+        pass
 
     app.register_blueprint(graphql, url_prefix="/graphql")
-    app.register_blueprint(graphql, url_prefix="/graphql_upload")
 
-    @app.route("/logout")
-    def logout():
-        oidc.logout()
-        session.clear()
-        return make_response(("ok", {"Content-Type": "text/plain"}))
+    @app.route('/graphql/help')
+    @auth.rbac.allow([ANONYMOUS_ROLENAME], methods=['GET'])
+    def voyager():
+        return render_template('voyager.html')
 
     @app.route("/export/<export_id>")
+    @auth.rbac.allow([MEDEWERKER_ROLENAME], methods=['GET'])
     def export_overschrijvingen(export_id):
         """ Send xml overschijvingen file to client """
         # Get export object
@@ -137,6 +84,7 @@ def create_app(
         ] = f'attachment; filename="{xml_filename}"'
         return response
 
+    app.auth=auth
     return app
 
 

@@ -42,19 +42,12 @@ spec:
             {{- end }}
             - name: PREFIX
               value: /api
+            - name: AUTH_AUDIENCE
+              value: {{ .Values.authAudience }}
             - name: APP_SETTINGS
               value: {{ .Values.appSettings }}
             - name: OIDC_CLIENT_SECRETS
               value: /opt/etc/oidc/client_secrets.json
-            - name: OVERWITE_REDIRECT_URI_MAP
-              value: |-
-                {{- $result := dict -}}
-                {{- range $item := .Values.oidc.redirectUris -}}
-                {{- $key := get $item "prefix" -}}
-                {{- $value := get $item "callback" -}}
-                {{- $result = set $result $key $value -}}
-                {{- end }}
-                {{- toPrettyJson $result | nindent 16 }}
             - name: HHB_SERVICE_URL
               value: {{ printf "http://%s" (include "medewerker-backend.huishoudboekjeServiceName" .) }}
             - name: ORGANISATIE_SERVICE_URL
@@ -66,6 +59,11 @@ spec:
             - name: LOG_SERVICE_URL
               value: {{ printf "http://%s" (include "medewerker-backend.logServiceName" .) }}               
             - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ printf "%s-secrets" (include "medewerker-backend.fullname" .) }}
+                  key: SECRET_KEY
+            - name: AUTH_TOKEN_SECRET
               valueFrom:
                 secretKeyRef:
                   name: {{ printf "%s-secrets" (include "medewerker-backend.fullname" .) }}
@@ -143,4 +141,4 @@ metadata:
   labels:
   {{- include "medewerker-backend.labels" . | nindent 4 }}
 data:
-  SECRET_KEY: {{ default (randAlphaNum 24) .Values.secretKey | b64enc | quote }}
+  SECRET_KEY: {{ .Values.secretKey | b64enc | quote }}

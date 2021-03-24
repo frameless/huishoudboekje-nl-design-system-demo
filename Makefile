@@ -46,16 +46,15 @@ huishoudboekje: helm/repo/huishoudboekje-$(COMPONENT_VERSION).tgz helm/theme.yam
 		$@  $< \
 		--debug \
 		--values helm/theme.yaml \
+		--values helm/values-dex.yaml \
 		--set "medewerker-backend.extraEnv[0].name=OIDC_CLOCK_SKEW" \
 		--set "medewerker-backend.extraEnv[0].value='500'" \
 		--set database.traefik.enabled=true \
 		--set global.minikube=true \
 		--set global.imageTag=$(IMAGE_TAG) \
 		--set "medewerker-backend.appSettings=hhb_backend.config.DevelopmentConfig" \
-		--set "medewerker-backend.oidc.redirectUris[0].prefix=http://localhost:3000" \
-		--set "medewerker-backend.oidc.redirectUris[0].callback=http://localhost:3000/api/custom_oidc_callback" \
-		--set "medewerker-backend.oidc.redirectUris[1].prefix=http://hhb.minikube" \
-		--set "medewerker-backend.oidc.redirectUris[1].callback=http://hhb.minikube/api/custom_oidc_callback" \
+		--set "medewerker-backend.oidc.redirectUris[0].prefix=http://hhb.minikube" \
+		--set "medewerker-backend.oidc.redirectUris[0].callback=http://hhb.minikube/api/oidc_callback" \
 		--set "persistence.enabled=true" \
 		--set "postgresql.postgresqlPassword=huishoudboekjedb" \
 		--render-subchart-notes

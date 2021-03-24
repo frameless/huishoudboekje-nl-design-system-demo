@@ -51,6 +51,7 @@ CMD ["bash", "-c", "exec gunicorn \
   --threads=${GUNICORN_THREADS} \
   --bind=0.0.0.0:${GUNICORN_PORT} \
   --log-level=${GUNICORN_LOGLEVEL} \
+  --forwarded-allow-ips '*' \
   --capture-output \
   --worker-class=gthread \
   --worker-tmp-dir /dev/shm \

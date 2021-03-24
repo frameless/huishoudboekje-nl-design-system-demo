@@ -1,5 +1,14 @@
 import {gql} from "@apollo/client";
-import {AfspraakFragment, BankTransactionFragment, CustomerStatementMessageFragment, BurgerFragment, GrootboekrekeningFragment, OrganisatieFragment, RubriekFragment} from "./fragments";
+import {
+    AfspraakFragment,
+    BankTransactionFragment,
+    BurgerFragment,
+    CustomerStatementMessageFragment,
+    GebruikerFragment,
+    GrootboekrekeningFragment,
+    OrganisatieFragment,
+    RubriekFragment,
+} from "./fragments";
 
 export const GetAllBurgersQuery = gql`
     query getAllBurgers {
@@ -364,4 +373,14 @@ export const GetBurgerGebeurtenissenQuery = gql`
             }
         }
     }
+`;
+
+
+export const GetGebruikerQuery = gql`
+    query getGebruiker {
+        gebruiker {
+            ...Gebruiker
+        }
+    }
+    ${GebruikerFragment}
 `;

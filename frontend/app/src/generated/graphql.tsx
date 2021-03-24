@@ -333,6 +333,12 @@ export type Export = {
   eindDatum?: Maybe<Scalars['String']>;
 };
 
+export type Gebruiker = {
+  __typename?: 'Gebruiker';
+  email?: Maybe<Scalars['String']>;
+  token?: Maybe<Scalars['String']>;
+};
+
 /** GebruikersActiviteit model */
 export type GebruikersActiviteit = {
   __typename?: 'GebruikersActiviteit';
@@ -756,6 +762,7 @@ export type RootQuery = {
   plannedOverschrijvingen?: Maybe<Array<Maybe<Overschrijving>>>;
   gebruikersactiviteit?: Maybe<GebruikersActiviteit>;
   gebruikersactiviteiten?: Maybe<Array<Maybe<GebruikersActiviteit>>>;
+  gebruiker?: Maybe<Gebruiker>;
 };
 
 
@@ -1089,6 +1096,11 @@ export type CustomerStatementMessageFragment = (
 export type JournaalpostFragment = (
   { __typename?: 'Journaalpost' }
   & Pick<Journaalpost, 'id'>
+);
+
+export type GebruikerFragment = (
+  { __typename?: 'Gebruiker' }
+  & Pick<Gebruiker, 'email'>
 );
 
 export type CreateBurgerMutationVariables = Exact<{
@@ -1852,6 +1864,17 @@ export type GetBurgerGebeurtenissenQuery = (
   )>>> }
 );
 
+export type GetGebruikerQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetGebruikerQuery = (
+  { __typename?: 'RootQuery' }
+  & { gebruiker?: Maybe<(
+    { __typename?: 'Gebruiker' }
+    & GebruikerFragment
+  )> }
+);
+
 export const RekeningFragmentDoc = gql`
     fragment Rekening on Rekening {
   id
@@ -2005,6 +2028,11 @@ export const CustomerStatementMessageFragmentDoc = gql`
 export const JournaalpostFragmentDoc = gql`
     fragment Journaalpost on Journaalpost {
   id
+}
+    `;
+export const GebruikerFragmentDoc = gql`
+    fragment Gebruiker on Gebruiker {
+  email
 }
     `;
 export const CreateBurgerDocument = gql`
@@ -3693,3 +3721,37 @@ export function useGetBurgerGebeurtenissenLazyQuery(baseOptions?: Apollo.LazyQue
 export type GetBurgerGebeurtenissenQueryHookResult = ReturnType<typeof useGetBurgerGebeurtenissenQuery>;
 export type GetBurgerGebeurtenissenLazyQueryHookResult = ReturnType<typeof useGetBurgerGebeurtenissenLazyQuery>;
 export type GetBurgerGebeurtenissenQueryResult = Apollo.QueryResult<GetBurgerGebeurtenissenQuery, GetBurgerGebeurtenissenQueryVariables>;
+export const GetGebruikerDocument = gql`
+    query getGebruiker {
+  gebruiker {
+    ...Gebruiker
+  }
+}
+    ${GebruikerFragmentDoc}`;
+
+/**
+ * __useGetGebruikerQuery__
+ *
+ * To run a query within a React component, call `useGetGebruikerQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetGebruikerQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetGebruikerQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetGebruikerQuery(baseOptions?: Apollo.QueryHookOptions<GetGebruikerQuery, GetGebruikerQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetGebruikerQuery, GetGebruikerQueryVariables>(GetGebruikerDocument, options);
+      }
+export function useGetGebruikerLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetGebruikerQuery, GetGebruikerQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetGebruikerQuery, GetGebruikerQueryVariables>(GetGebruikerDocument, options);
+        }
+export type GetGebruikerQueryHookResult = ReturnType<typeof useGetGebruikerQuery>;
+export type GetGebruikerLazyQueryHookResult = ReturnType<typeof useGetGebruikerLazyQuery>;
+export type GetGebruikerQueryResult = Apollo.QueryResult<GetGebruikerQuery, GetGebruikerQueryVariables>;

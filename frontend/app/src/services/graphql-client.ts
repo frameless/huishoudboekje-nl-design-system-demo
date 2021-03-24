@@ -2,7 +2,7 @@ import {ApolloClient, ApolloLink, createHttpLink, InMemoryCache} from "@apollo/c
 import {createUploadLink} from "apollo-upload-client";
 
 const GraphqlApiUrl = "/api/graphql";
-const GraphqlApiUrlUpload = "/api/graphql/upload";
+const GraphqlApiUrlUpload = "/api/graphql";
 
 const defaultLink = createHttpLink({
 	uri: GraphqlApiUrl

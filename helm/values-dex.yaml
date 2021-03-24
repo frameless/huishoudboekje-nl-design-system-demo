@@ -8,13 +8,14 @@ dex:
     logger:
       level: info
     issuer: http://dex.hhb.minikube
+    expiry:
+      idTokens: "168h"
     staticClients:
       - id: huishoudboekje
         name: Huishoudboekje Schaalbaar
         secret: ZwwcL2zjQyJUBnFPVoOb
         redirectURIs:
-          - http://hhb.minikube/api/custom_oidc_callback
-          - http://localhost:3000/api/custom_oidc_callback
+          - http://hhb.minikube/api/oidc_callback
     enablePasswordDB: true
     staticPasswords:
       - username: henk.poortvliet@sloothuizen.nl
@@ -32,8 +33,14 @@ dex:
         hash: $2y$12$xWWlTptiMyPJbuPo7WwBgefl/sj3vz8iNJn5fPwVWQcBcZh1HsC.W # demo
         name: Bauke Huijbers
         email: bauke.huijbers@vng.nl
+      - username: gilgamesh.nootebos@vng.nl
+        userID: f944d421-72bd-4e6a-9ede-1af45057e70e
+        hash: $2y$12$xWWlTptiMyPJbuPo7WwBgefl/sj3vz8iNJn5fPwVWQcBcZh1HsC.W # demo
+        name: Gilgamesh Nootebos
+        email: gilgamesh.nootebos@vng.nl
     oauth2:
       skipApprovalScreen: true
+      alwaysShowLoginScreen: false
   ingress:
     enabled: true
     annotations:
