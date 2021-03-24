@@ -96,7 +96,7 @@ cypress-develop:
   needs:
     - job: deploy-develop
       artifacts: true
-    - job: cypress-token-review
+    - job: cypress-token-develop
       artifacts: true
   only:
     - develop
