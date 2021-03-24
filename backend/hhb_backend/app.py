@@ -84,6 +84,7 @@ def create_app(
         ] = f'attachment; filename="{xml_filename}"'
         return response
 
+    app.auth=auth
     return app
 
 

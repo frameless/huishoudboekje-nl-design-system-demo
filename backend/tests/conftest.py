@@ -1,8 +1,10 @@
 # """ Fixtures for core testing """
 import logging
+from time import time
 
 import pytest
-from flask import request, testing
+from flask import testing
+from itsdangerous import TimedJSONWebSignatureSerializer
 from werkzeug.datastructures import Headers
 
 from hhb_backend.app import create_app
@@ -20,6 +22,7 @@ def test_request_context(event_loop):
         app.preprocess_request()
         yield ctx
 
+
 class TestClient(testing.FlaskClient):
     def open(self, *args, **kwargs):
         headers = kwargs.pop('headers', Headers())
@@ -33,11 +36,60 @@ class TestClient(testing.FlaskClient):
 
 
 @pytest.fixture(scope="session")
-def client(request):
+def api_client(request):
     """
     Returns session-wide application.
     """
     app = create_app(config_name='hhb_backend.config.TestingConfig')
     app.test_client_class = TestClient
+    logging.getLogger("faker").setLevel(logging.INFO)
+
+    yield app.test_client()
+
+
+@pytest.fixture(scope="session")
+def client(request):
+    """
+    Returns session-wide application.
+    """
+    app = create_app(config_name='hhb_backend.config.TestingConfig')
+
+    # cookie_serializer = TimedJSONWebSignatureSerializer(app.config['SECRET_KEY'])
+    logging.getLogger("faker").setLevel(logging.INFO)
+
+    app.test_client_class = TestClient
+
+    # with app.test_client() as client:
+    #     client.set_cookie('localhost', 'oidc_id_token', cookie_serializer.dumps(
+    #         {'sub': 'test', 'email': 'test@example.com', 'exp': int(time()) + 600}))
+    #
+    #     yield client
+    yield app.test_client()
+
+
+@pytest.fixture(scope="session")
+def oidc_client(request):
+    """
+    Returns session-wide application.
+    """
+    app = create_app(config_name='hhb_backend.config.TestingConfig')
+
+    cookie_serializer = TimedJSONWebSignatureSerializer(app.config['SECRET_KEY'])
+    logging.getLogger("faker").setLevel(logging.INFO)
+
+    app.test_client_class = TestClient
+
+    with app.test_client() as client:
+        client.set_cookie('localhost', 'oidc_id_token', cookie_serializer.dumps(
+            {'sub': 'test', 'email': 'test@example.com', 'exp': int(time()) + 600}))
+
+        yield client
+
+@pytest.fixture(scope="session")
+def auth_client(request):
+    """
+    Returns session-wide application.
+    """
+    app = create_app(config_name='hhb_backend.config.TestingConfig')
     logging.getLogger("faker").setLevel(logging.INFO)
     yield app.test_client()
