@@ -81,7 +81,7 @@
         "logout": "Uitloggen",
         "cancel": "Annuleren",
         "delete": "Verwijderen",
-        "editBetaling": "Betaling wijzigen",
+        "edit": "Wijzigen",
         "view": "Bekijken",
         "add": "Toevoegen",
         "save": "Opslaan",
@@ -93,7 +93,6 @@
         "confirmAutomatischBoeken": "Voortaan automatisch boeken",
         "disconnect": "Koppeling verwijderen",
         "backToList": "Terug naar overzicht",
-        "edit": "Wijzigen",
         "clearSearch": "Zoekopdracht wissen",
         "backToHome": "Terug naar de hoofdpagina",
         "clickToEdit": "Klik om te wijzigen"
@@ -105,7 +104,7 @@
     "afspraakDetailView": {
         "title": "Afspraak bekijken",
         "section1": {
-            "title": "Tegenpartij",
+            "title": "Partijen",
             "helperText": "Burger en/of organisatie."
         },
         "section2": {
@@ -120,21 +119,21 @@
             "title": "Betaalinstructie",
             "helperText": "Instellingen voor de betaalinstructie."
         },
+        "invalidTegenrekeningError": "Kies een tegenrekening.",
         "invalidRubriekError": "Kies een rubriek.",
         "invalidOmschrijvingError": "Vul een omschrijving in.",
-        "invalidBedragError": "Vul een geldig bedrag in.",
-        "invalidTegenrekeningError": "Kies een tegenrekening."
+        "invalidBedragError": "Vul een geldig bedrag in."
     },
     "burger": "Burger",
-    "organisatie": "Organisatie",
     "afspraak": {
+        "tegenrekening": "Tegenrekening",
         "rubriek": "Rubriek",
         "omschrijving": "Omschrijving",
-        "tegenrekening": "Tegenrekening",
         "bedrag": "Bedrag",
         "zoektermen": "Zoektermen",
         "periodiek": "Periodiek",
         "periode": "Periode",
+        "betaalrichting": "Betaalrichting",
         "inkomsten": "Inkomsten",
         "uitgaven": "Uitgaven",
         "zoekterm": "zoekterm"
@@ -180,7 +179,7 @@
                     "helperText": "Dit is een overzicht van de verwachte betalingen bij deze afspraak."
                 }
             },
-            "titleEdit": "Afspraak bewerken"
+            "titleEdit": "Afspraak wijzigen"
         },
         "common": {
             "fields": {
@@ -342,6 +341,12 @@
         "noOptions": "Geen resultaten"
     },
     "unknown": "Onbekend",
+    "afspraakForm": {
+        "section1": {
+            "title": "Tegenpartij en betaling",
+            "helperText": "Vul hier alle gegevens over de afspraak in."
+        }
+    },
     "banking": {
         "exports": {
             "title": "Overschrijvingen",

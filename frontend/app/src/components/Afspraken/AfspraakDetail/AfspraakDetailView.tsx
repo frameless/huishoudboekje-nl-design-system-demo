@@ -1,5 +1,5 @@
 import {ViewIcon, WarningTwoIcon} from "@chakra-ui/icons";
-import {Button, FormControl, HStack, IconButton, Input, InputGroup, InputLeftElement, InputRightElement, Stack, Text} from "@chakra-ui/react";
+import {Button, Divider, FormControl, FormLabel, HStack, IconButton, Input, InputGroup, InputLeftElement, InputRightElement, Stack, Text, VStack} from "@chakra-ui/react";
 import React, {useContext, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {AiOutlineTag} from "react-icons/all";
@@ -12,7 +12,6 @@ import {zoektermValidator} from "../../../utils/zod";
 import BackButton from "../../BackButton";
 import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
 import DataItem from "../../Layouts/DataItem";
-import Label from "../../Layouts/Label";
 import Page from "../../Layouts/Page";
 import PrettyIban from "../../Layouts/PrettyIban";
 import Section from "../../Layouts/Section";
@@ -52,57 +51,63 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 
 	return (
 		<Page title={t("afspraakDetailView.title")} backButton={<BackButton to={Routes.Burger(afspraak.burger?.id)} />} menu={menu}>
-			<Section direction={["column", "row"]}>
-				<FormLeft title={t("afspraakDetailView.section1.title")} helperText={t("afspraakDetailView.section1.helperText")} />
-				<FormRight>
-					<Stack direction={["column", "row"]}>
-						<DataItem label={t("burger")}>
-							<HStack>
-								<Text>{formatBurgerName(afspraak.burger)}</Text>
-								<IconButton as={NavLink} to={Routes.Burger(afspraak.burger?.id)} variant={"ghost"} size={"sm"} icon={
-									<ViewIcon />} aria-label={t("actions.view")} />
-							</HStack>
-						</DataItem>
-						{afspraak.organisatie && (
-							<DataItem label={t("organisatie")}>
+			<Section>
+				<Stack direction={["column", "row"]}>
+					<FormLeft title={t("afspraakDetailView.section1.title")} helperText={t("afspraakDetailView.section1.helperText")} />
+					<FormRight>
+
+						<Stack direction={["column", "row"]}>
+							<DataItem label={t("burger")}>
 								<HStack>
-									<Text>{afspraak.organisatie?.kvkDetails?.naam}</Text>
-									<IconButton as={NavLink} to={Routes.Organisatie(afspraak.organisatie?.id)} variant={"ghost"} size={"sm"} icon={
+									<Text>{formatBurgerName(afspraak.burger)}</Text>
+									<IconButton as={NavLink} to={Routes.Burger(afspraak.burger?.id)} variant={"ghost"} size={"sm"} icon={
 										<ViewIcon />} aria-label={t("actions.view")} />
 								</HStack>
 							</DataItem>
-						)}
-					</Stack>
-				</FormRight>
-			</Section>
+							<DataItem label={t("afspraak.tegenrekening")}>
+								<HStack>
+									<Text>{afspraak.tegenRekening?.rekeninghouder}</Text>
+									<IconButton as={NavLink} to={Routes.Organisatie(afspraak.organisatie?.id)} variant={"ghost"} size={"sm"} icon={
+										<ViewIcon />} aria-label={t("actions.view")} />
+								</HStack>
+								<Text size={"sm"}><PrettyIban iban={afspraak.tegenRekening?.iban} /></Text>
+							</DataItem>
+						</Stack>
 
-			<Section direction={["column", "row"]}>
-				<FormLeft title={t("afspraakDetailView.section2.title")} helperText={t("afspraakDetailView.section2.helperText")} />
-				<FormRight>
-					<Stack direction={["column", "row"]}>
-						<DataItem label={t("afspraak.rubriek")}>{afspraak.rubriek?.naam}</DataItem>
-						<DataItem label={t("afspraak.omschrijving")}>{afspraak.beschrijving}</DataItem>
-					</Stack>
-					<Stack direction={["column", "row"]}>
-						<DataItem label={t("afspraak.tegenrekening")}>
-							<Text>{afspraak.tegenRekening?.rekeninghouder}</Text>
-							<Text size={"sm"}><PrettyIban iban={afspraak.tegenRekening?.iban} /></Text>
-						</DataItem>
-						<DataItem label={t("afspraak.bedrag")}>
-							<Text color={bedrag < 0 ? "red.500" : "currentcolor"}>{currencyFormat2().format(bedrag)}</Text>
-						</DataItem>
-					</Stack>
-				</FormRight>
+					</FormRight>
+				</Stack>
+
+				<VStack py={3}>
+					<Divider />
+				</VStack>
+
+				<Stack direction={["column", "row"]}>
+					<FormLeft title={t("afspraakDetailView.section2.title")} helperText={t("afspraakDetailView.section2.helperText")} />
+					<FormRight>
+
+						<Stack direction={["column", "row"]}>
+							<DataItem label={t("afspraak.rubriek")}>{afspraak.rubriek?.naam}</DataItem>
+							<DataItem label={t("afspraak.omschrijving")}>{afspraak.beschrijving}</DataItem>
+						</Stack>
+						<Stack direction={["column", "row"]}>
+							<DataItem label={t("afspraak.bedrag")}>
+								<Text color={bedrag < 0 ? "red.500" : "currentcolor"}>{currencyFormat2().format(bedrag)}</Text>
+							</DataItem>
+						</Stack>
+
+					</FormRight>
+				</Stack>
 			</Section>
 
 			<Section direction={["column", "row"]}>
 				<FormLeft title={t("afspraakDetailView.section3.title")} helperText={t("afspraakDetailView.section3.helperText")} />
 				<FormRight>
+
 					<Stack direction={"column"}>
 						<form onSubmit={onAddAfspraakZoekterm}>
 							<FormControl isInvalid={!zoektermValidator.safeParse(zoekterm).success && zoektermTouched}>
 								<Stack>
-									<Label>{t("afspraak.zoektermen")}</Label>
+									<FormLabel>{t("afspraak.zoektermen")}</FormLabel>
 									<InputGroup size={"md"}>
 										<InputLeftElement pointerEvents="none" color="gray.300" fontSize="1.2em">
 											<AiOutlineTag />
@@ -117,37 +122,44 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 						</form>
 						<ZoektermenList zoektermen={zoektermen} onDeleteZoekterm={(zoekterm: string) => deleteAfspraakZoekterm(zoekterm)} />
 					</Stack>
+
 					{zoektermen.length === 0 && (
 						<Text color={"red.500"}>
 							<WarningTwoIcon mr={1} />
 							{t("messages.automatischBoekenDisabled_noZoektermen")}
 						</Text>
 					)}
+
 					{zoektermenDuplicatesFound && (
 						<Text color={"red.500"}>
 							<WarningTwoIcon mr={1} />
 							{t("messages.automatischBoekenDisabled_duplicatesFound")}
 						</Text>
 					)}
+
 				</FormRight>
 			</Section>
 
 			<Section direction={["column", "row"]}>
 				<FormLeft title={t("afspraakDetailView.section4.title")} helperText={t("afspraakDetailView.section4.helperText")} />
 				<FormRight>
+
 					<Stack direction={["column", "row"]}>
 						<DataItem label={t("afspraak.periodiek")}>{intervalString(afspraak.interval, t)}</DataItem>
 						<DataItem label={t("afspraak.periode")}>{t("vanTotDatums", {start: d(afspraak.startDatum).format("L"), end: d(afspraak.eindDatum).format("L")})}</DataItem>
 					</Stack>
+
 					<Stack direction={["column", "row"]}>
 						<DataItem label={t("afspraak.omschrijving")}>{/* Todo */ "omschrijving"}</DataItem>
 					</Stack>
+
 					{/* Todo: show verwachte betalingen (19-03-2021) */}
 					{/* <Stack direction={["column", "row"]}>*/}
 					{/*	<Box>*/}
 					{/*		<Button>Bekijk verwachte betalingen</Button>*/}
 					{/*	</Box>*/}
 					{/*</Stack>*/}
+
 				</FormRight>
 			</Section>
 
