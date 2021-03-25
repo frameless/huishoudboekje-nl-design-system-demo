@@ -40,3 +40,12 @@ class Burger(graphene.ObjectType):
 
     async def resolve_gebruikersactiviteiten(root, info):
         return request.dataloader.gebruikersactiviteiten_by_gebruikers.get_by_id(root.get('id')) or []
+
+
+class BurgersPaged(graphene.ObjectType):
+    burgers = graphene.List(
+        Burger
+    )
+    count = graphene.Int()
+    start = graphene.Int()
+    limit = graphene.Int()

@@ -15,6 +15,9 @@ class SingleDataLoader(DataLoader):
     def url_for(self, keys=None):
         return f"""{self.service}/{self.model}/{f"?{self.filter_item}={','.join([str(k) for k in keys])}" if keys else ''}"""
 
+    def url_for_paged(self, start, limit):
+        return f"""{self.service}/{self.model}/{f"?start={start}&limit={limit}"}"""
+
     def get_all_and_cache(self):
         response = requests.get(self.url_for())
 
@@ -27,6 +30,22 @@ class SingleDataLoader(DataLoader):
             self.prime(item[self.index], item)
 
         return result
+
+    def get_all_paged(self, start=1, limit=20):
+        response = requests.get(self.url_for_paged(start, limit))
+
+        if not response.ok:
+            raise GraphQLError(f"Upstream API responded: {response.text}")
+        result = response.json()["data"]
+
+        # Prime the cache with the complete result set to prevent unnecessary extra calls
+        for item in result:
+            self.prime(item[self.index], item)
+
+        return_obj = {self.model: result, "count": response.json()["count"], "start": response.json()["start"],
+                      "limit": response.json()["limit"]}
+
+        return return_obj
 
     async def batch_load_fn(self, keys):
         objects = {}

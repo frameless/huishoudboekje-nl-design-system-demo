@@ -5,7 +5,7 @@ from .afspraken import AfspraakQuery, AfsprakenQuery
 from .bank_transactions import BankTransactionQuery, BankTransactionsQuery
 from .customer_statement_messages import CustomerStatementMessageQuery, CustomerStatementMessagesQuery
 from .exports import ExportQuery, ExportsQuery
-from .burgers import BurgersQuery, BurgerQuery
+from .burgers import BurgersQuery, BurgerQuery, BurgersPagedQuery
 from .grootboekrekeningen import GrootboekrekeningQuery, GrootboekrekeningenQuery
 from .journaalposten import JournaalpostQuery, JournaalpostenQuery
 from .organisaties import OrganisatieQuery, OrganisatiesQuery
@@ -16,10 +16,12 @@ from .planned_overschrijvingen import PlannedOverschijvingenQuery
 from .gebruikersactiviteiten import GebruikersActiviteitQuery, GebruikersActiviteitenQuery
 from .gebruiker import GebruikerQuery
 
+
 class RootQuery(graphene.ObjectType):
     """ The root of all queries """
     burger = BurgerQuery.return_type
     burgers = BurgersQuery.return_type
+    burgers_paged = BurgersPagedQuery.return_type
     organisatie = OrganisatieQuery.return_type
     organisaties = OrganisatiesQuery.return_type
     afspraak = AfspraakQuery.return_type
@@ -50,6 +52,9 @@ class RootQuery(graphene.ObjectType):
 
     async def resolve_burgers(root, info, **kwargs):
         return await BurgersQuery.resolver(root, info, **kwargs)
+
+    async def resolve_burgers_paged(root, info, **kwargs):
+        return await BurgersPagedQuery.resolver(root, info, **kwargs)
 
     async def resolve_organisatie(root, info, **kwargs):
         return await OrganisatieQuery.resolver(root, info, **kwargs)
