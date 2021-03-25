@@ -249,7 +249,7 @@ class Generator:
     def generate_afspraak(self, burger, scenario: AfspraakScenario):
         organisatie = (
             None
-            if scenario.organisatie.kvk is None
+            if scenario.organisatie is None or scenario.organisatie.kvk is None
             else next(
                 (
                     o
