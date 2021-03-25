@@ -28,7 +28,7 @@ class Systeem:
 @dataclass
 class Rekening:
     iban: str
-    rekeninghouder: str
+    rekeninghouder: str = ""
 
 
 @dataclass

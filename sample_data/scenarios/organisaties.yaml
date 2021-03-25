@@ -50,7 +50,7 @@ organisaties:
   - iban: "NL71ABNA0411065785"
     rekeninghouder: "GEMEENTE UTRECHT"
   - iban: "NL92BNGH0285178601"
-    rekeninghouder: ""
+    rekeninghouder: " "
   - iban: "NL76BNGH0285178598"
     rekeninghouder: "GEM UTRECHT WENI"
   - iban: "NL49BNGH0285171712"

@@ -2,7 +2,7 @@ import csv
 import dataclasses
 import os
 import string
-from _csv import QUOTE_NONNUMERIC
+from _csv import QUOTE_MINIMAL
 from datetime import date, timedelta
 from os import path
 from random import choice, randrange
@@ -22,7 +22,7 @@ def faker_datum(
 
 class HHBCsvDialect(csv.Dialect):
     delimiter = "|"
-    quoting = QUOTE_NONNUMERIC
+    quoting = QUOTE_MINIMAL
     quotechar = '"'
     lineterminator = "\n"
 
@@ -249,7 +249,7 @@ class Generator:
     def generate_afspraak(self, burger, scenario: AfspraakScenario):
         organisatie = (
             None
-            if scenario.organisatie.kvk is None
+            if scenario.organisatie is None or scenario.organisatie.kvk is None
             else next(
                 (
                     o
@@ -341,7 +341,7 @@ class Generator:
                     add_newline(
                         ["BEGIN;"]
                         + [
-                            f"""\\COPY {table_name} ({",".join(self.tables[db][table_name]["fieldnames"])}) FROM '{db}/{table_name}.csv' (FORMAT csv, DELIMITER '|', HEADER true, NULL 'null');"""
+                            f"""\\COPY {table_name} ({",".join(self.tables[db][table_name]["fieldnames"])}) FROM '{db}/{table_name}.csv' (FORMAT csv, DELIMITER '|', HEADER true, NULL '');"""
                             for table_name in self.tables[db]
                         ]
                         + [
