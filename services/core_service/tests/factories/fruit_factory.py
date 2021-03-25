@@ -9,6 +9,7 @@ class FruitFactory:
 
     def create_fruit(
             self,
+            id: int = None,
             basket_id: int = None,
             name: str = None,
     ):
@@ -19,6 +20,7 @@ class FruitFactory:
             basket_id = basket.id
 
         item = Fruit(
+            id=id,
             basket_id=basket_id,
             name=name,
         )
