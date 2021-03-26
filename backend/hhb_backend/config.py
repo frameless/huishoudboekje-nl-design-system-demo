@@ -32,6 +32,7 @@ class Config(object):
     OIDC_SCOPES = ['openid', 'email', 'profile', 'offline_access']
     OIDC_ID_TOKEN_COOKIE_SECURE = True
     OIDC_CLOCK_SKEW = float(strip_quotes(os.getenv('OIDC_CLOCK_SKEW', "60")))
+    OIDC_ID_TOKEN_MAX_EXPIRES = os.getenv('OIDC_ID_TOKEN_MAX_EXPIRES', 'PT1H')
     # OIDC_ID_TOKEN_COOKIE_PATH = os.getenv('PREFIX', '/') # This is broken in Flask-OIDC
 
 
@@ -47,6 +48,7 @@ class StagingConfig(Config):
     AUTH_TOKEN_SECRET = os.getenv("AUTH_TOKEN_SECRET", os.getenv("SECRET_KEY", None))
     SESSION_COOKIE_SECURE = True
     OIDC_ID_TOKEN_COOKIE_SECURE = True
+    OIDC_ID_TOKEN_MAX_EXPIRES = os.getenv('OIDC_ID_TOKEN_MAX_EXPIRES', 'P1W')
 
 
 class LocalConfig(StagingConfig):

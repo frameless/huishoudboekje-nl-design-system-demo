@@ -7,9 +7,11 @@ from time import time
 
 import itsdangerous
 import jwt
+from isodate import parse_duration
 from flask import Flask, g, make_response, redirect, request, session
 from flask_oidc import OpenIDConnect
 from flask_rbac import RBAC
+from itsdangerous import TimedJSONWebSignatureSerializer
 from jwt import InvalidTokenError
 
 from hhb_backend.auth.models import Role, User
@@ -29,10 +31,12 @@ class Auth(TokenProvider):
         self.audience = app.config.get("AUTH_AUDIENCE", None) or "https://huishoudboekje.nlx.reviews"
         self.exp_offset = int(app.config.get("AUTH_EXP_OFFSET", None) or str(int(timedelta(days=7).total_seconds())))
         self.advertise = app.config.get("AUTH_ADVERTISE", None) or False
+        self.oidc_id_token_max_expires = app.config.get('OIDC_ID_TOKEN_MAX_EXPIRES', None) or 'PT1H'
 
-        logger.info(f"audience={self.audience}, exp_offset={self.exp_offset}, advertise={self.advertise}")
-        oidc_overrides = {}
-        oidc = OpenIDConnect(app, **oidc_overrides)
+        logger.info(f"audience={self.audience}, exp_offset={self.exp_offset}, advertise={self.advertise}, oidc_id_token_max_expires={self.oidc_id_token_max_expires}")
+        oidc = OpenIDConnect(app)
+        oidc.cookie_serializer = TimedJSONWebSignatureSerializer(
+            self.secret, expires_in=int(parse_duration(self.oidc_id_token_max_expires).total_seconds()))
 
         rbac = RBAC(app,
                     role_model=Role,

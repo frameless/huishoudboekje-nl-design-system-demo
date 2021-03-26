@@ -19,6 +19,7 @@ setup(
         'graphene>=2,<3',
         'graphql-core>=2,<3',
         'gunicorn>=20.0.4',
+        'isodate==0.6.0',
         'mt-940>=4.23.0',
         'nest-asyncio>=1.4.3',
         'pydash==4.9.2',
