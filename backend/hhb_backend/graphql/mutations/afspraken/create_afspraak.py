@@ -1,6 +1,5 @@
 """ GraphQL mutation for creating a new Afspraak """
 
-import json
 
 import graphene
 import requests
@@ -8,7 +7,7 @@ from graphql import GraphQLError
 
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.models.afspraak import Afspraak
-from hhb_backend.graphql.mutations.afspraken import AfspraakInput
+from hhb_backend.graphql.scalars.bedrag import Bedrag
 from hhb_backend.graphql.utils import convert_hhb_interval_to_iso, convert_hhb_interval_to_relativetime
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     log_gebruikers_activiteit,
@@ -16,9 +15,19 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import (
 )
 
 
+class CreateAfspraakInput(graphene.InputObjectType):
+    burger_id = graphene.Int(required=True)
+    credit = graphene.Boolean(required=True)
+    organisatie_id = graphene.Int(required=True)
+    tegen_rekening_id = graphene.Int(required=True)
+    rubriek_id = graphene.Int(required=True)
+    omschrijving = graphene.String(required=True)
+    bedrag = graphene.Argument(Bedrag, required=True)
+
+
 class CreateAfspraak(graphene.Mutation):
     class Arguments:
-        input = graphene.Argument(AfspraakInput, required=True)
+        input = graphene.Argument(CreateAfspraakInput, required=True)
 
     ok = graphene.Boolean()
     afspraak = graphene.Field(lambda: Afspraak)
@@ -40,7 +49,7 @@ class CreateAfspraak(graphene.Mutation):
 
     @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(_root, _info, input):
+    async def mutate(_root, _info, input: CreateAfspraakInput):
         """ Create the new Gebruiker/Burger """
         if "interval" in input:
             iso_interval = convert_hhb_interval_to_iso(input["interval"])

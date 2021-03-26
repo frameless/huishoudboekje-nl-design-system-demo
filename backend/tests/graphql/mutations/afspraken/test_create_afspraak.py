@@ -11,14 +11,16 @@ def create_afpraken_matcher(burger_id: int, interval: dict):
 
 def test_create_afspraak_success(client):
     with requests_mock.mock() as m:
-        log_request = m.register_uri('POST', f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=200, json={"data": {"id": 1}})
+        log_request = m.register_uri('POST', f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=200,
+                                     json={"data": {"id": 1}})
         bad_request = m.register_uri('POST', f"{settings.HHB_SERVICES_URL}/afspraken/",
-                             status_code=400)
+                                     status_code=400)
         good_request = m.register_uri('POST', f"{settings.HHB_SERVICES_URL}/afspraken/",
-                             additional_matcher=create_afpraken_matcher(1,
-                                                                        {"jaren": 1, "maanden": 2, "weken": 3, "dagen": 4}),
-                             json={"data": {"id": 1}},
-                             status_code=201)
+                                      additional_matcher=create_afpraken_matcher(1,
+                                                                                 {"jaren": 1, "maanden": 2, "weken": 3,
+                                                                                  "dagen": 4}),
+                                      json={"data": {"id": 1}},
+                                      status_code=201)
         response = client.post(
             "/graphql",
             json={
@@ -33,11 +35,8 @@ def test_create_afspraak_success(client):
             }''',
                 "variables": {
                     "input": {"burgerId": 1,
-                              "interval": {"jaren": 1, "maanden": 2, "weken": 3, "dagen": 4},
                               "credit": 0,
-                              "aantalBetalingen": 1,
-                              "startDatum": "2021-01-01",
-                              "automatischeIncasso": 0}}},
+                              }}},
         )
         assert not bad_request.called
         assert good_request.called_once
@@ -45,17 +44,20 @@ def test_create_afspraak_success(client):
         assert objects.get(response.json, 'errors') == None
         assert response.json == {"data": {"createAfspraak": {'ok': True, 'afspraak': {'id': 1}}}}
 
+
 def test_create_afspraak_failure(client):
     with requests_mock.mock() as m:
-        log_request = m.register_uri('POST', f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=200, json={"data": {"id": 1}})
+        log_request = m.register_uri('POST', f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=200,
+                                     json={"data": {"id": 1}})
 
         bad_request = m.register_uri('POST', f"{settings.HHB_SERVICES_URL}/afspraken/",
-                             status_code=400)
+                                     status_code=400)
         good_request = m.register_uri('POST', f"{settings.HHB_SERVICES_URL}/afspraken/",
-                             additional_matcher=create_afpraken_matcher(1,
-                                                                        {"jaren": 1, "maanden": 2, "weken": 3, "dagen": 4}),
-                             json={"data": {"id": 1}},
-                             status_code=201)
+                                      additional_matcher=create_afpraken_matcher(1,
+                                                                                 {"jaren": 1, "maanden": 2, "weken": 3,
+                                                                                  "dagen": 4}),
+                                      json={"data": {"id": 1}},
+                                      status_code=201)
         response = client.post(
             "/graphql",
             json={
@@ -85,14 +87,16 @@ def test_create_afspraak_failure(client):
 
 def test_create_afspraak_incorrect(client):
     with requests_mock.mock() as m:
-        log_request = m.register_uri('POST', f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=200, json={"data": {"id": 1}})
+        log_request = m.register_uri('POST', f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=200,
+                                     json={"data": {"id": 1}})
         bad_request = m.register_uri('POST', f"{settings.HHB_SERVICES_URL}/afspraken/",
-                             status_code=400)
+                                     status_code=400)
         good_request = m.register_uri('POST', f"{settings.HHB_SERVICES_URL}/afspraken/",
-                             additional_matcher=create_afpraken_matcher(1,
-                                                                        {"jaren": 0, "maanden": 0, "weken": 0, "dagen": 0}),
-                             json={"data": {"id": 1}},
-                             status_code=201)
+                                      additional_matcher=create_afpraken_matcher(1,
+                                                                                 {"jaren": 0, "maanden": 0, "weken": 0,
+                                                                                  "dagen": 0}),
+                                      json={"data": {"id": 1}},
+                                      status_code=201)
         response = client.post(
             "/graphql",
             json={
