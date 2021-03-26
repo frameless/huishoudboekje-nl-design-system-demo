@@ -103,6 +103,5 @@ class BankTransactionsPagedQuery:
             if not kwargs["csms"]:
                 return request.dataloader.bank_transactions_by_id.get_all_paged(start=kwargs["start"], limit=kwargs["limit"])
             else:
-                foo = 1
-                #return request.dataloader.bank_transactions_by_csm.load_many_paged
+                return request.dataloader.bank_transactions_by_csm.get_all_paged(keys=kwargs["csms"], start=kwargs["start"], limit=kwargs["limit"])
         return request.dataloader.bank_transactions_by_id.get_all_and_cache()

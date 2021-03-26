@@ -85,3 +85,19 @@ class ListDataLoader(DataLoader):
                     objects[item[self.index]] = list()
                 objects[item[self.index]].append(item)
         return [objects.get(key, []) for key in keys]
+
+    def get_all_paged(self, keys, start=1, limit=20):
+        url = f"{self.service}/{self.model}/?{self.filter_item}={','.join([str(k) for k in keys])}&start={start}&limit={limit}"
+        response = requests.get(url)
+        if not response.ok:
+            raise GraphQLError(f"Upstream API responded: {response.text}")
+        result = response.json()["data"]
+
+        # Prime the cache with the complete result set to prevent unnecessary extra calls
+        for item in result:
+            self.prime(item[self.index], item)
+
+        return_obj = {self.model: result, "count": response.json()["count"], "start": response.json()["start"],
+                      "limit": response.json()["limit"]}
+
+        return return_obj
