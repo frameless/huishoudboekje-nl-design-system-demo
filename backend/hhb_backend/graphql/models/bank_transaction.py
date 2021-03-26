@@ -56,3 +56,12 @@ class BankTransaction(graphene.ObjectType):
         suggesties = await automatisch_boeken.transactie_suggesties(root.get("id"))
 
         return [item for sublist in suggesties.values() for item in sublist]
+
+
+class BankTransactionsPaged(graphene.ObjectType):
+    banktransactions = graphene.List(
+        BankTransaction
+    )
+    count = graphene.Int()
+    start = graphene.Int()
+    limit = graphene.Int()

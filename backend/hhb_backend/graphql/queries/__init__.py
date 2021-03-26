@@ -2,7 +2,7 @@
 import graphene
 
 from .afspraken import AfspraakQuery, AfsprakenQuery
-from .bank_transactions import BankTransactionQuery, BankTransactionsQuery
+from .bank_transactions import BankTransactionQuery, BankTransactionsQuery, BankTransactionsPagedQuery
 from .customer_statement_messages import CustomerStatementMessageQuery, CustomerStatementMessagesQuery
 from .exports import ExportQuery, ExportsQuery
 from .burgers import BurgersQuery, BurgerQuery, BurgersPagedQuery
@@ -32,6 +32,7 @@ class RootQuery(graphene.ObjectType):
     customer_statement_messages = CustomerStatementMessagesQuery.return_type
     bank_transaction = BankTransactionQuery.return_type
     bank_transactions = BankTransactionsQuery.return_type
+    bank_transactions_paged = BankTransactionsPagedQuery.return_type
     grootboekrekening = GrootboekrekeningQuery.return_type
     grootboekrekeningen = GrootboekrekeningenQuery.return_type
     journaalpost = JournaalpostQuery.return_type
@@ -85,6 +86,9 @@ class RootQuery(graphene.ObjectType):
 
     async def resolve_bank_transactions(root, info, **kwargs):
         return await BankTransactionsQuery.resolver(root, info, **kwargs)
+
+    async def resolve_bank_transactions_paged(root, info, **kwargs):
+        return await BankTransactionsPagedQuery.resolver(root, info, **kwargs)
 
     async def resolve_grootboekrekening(root, info, **kwargs):
         return await GrootboekrekeningQuery.resolver(root, info, **kwargs)
