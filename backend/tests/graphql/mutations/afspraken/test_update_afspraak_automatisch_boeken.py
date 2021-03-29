@@ -1,10 +1,7 @@
 import requests_mock
 
 from hhb_backend.graphql import settings
-
-
-def post_echo(request, _context):
-    return {"data": (request.json())}
+from tests import post_echo
 
 
 def test_update_afspraak_automatisch_boeken_success(client):

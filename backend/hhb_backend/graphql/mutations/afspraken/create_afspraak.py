@@ -51,25 +51,25 @@ class CreateAfspraak(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(_root, _info, input: CreateAfspraakInput):
         """ Create the new Gebruiker/Burger """
-        if "interval" in input:
-            iso_interval = convert_hhb_interval_to_iso(input["interval"])
-            if iso_interval:
-                input["interval"] = iso_interval
-            else:
-                input.pop("interval")
-
-        if "interval" not in input and input["aantal_betalingen"] == 0:
-            raise GraphQLError(f"Interval en aantal betalingen kan niet allebei nul zijn.")
-
-        if input["credit"] is False and "automatische_incasso" not in input:
-            raise GraphQLError(f"Automatische incasso is verplicht bij uitgaven afspraak")
-
-        if input["credit"] and not("automatische_incasso" not in input):
-            raise GraphQLError(f"Automatische incasso is niet mogelijk bij inkomsten afspraak")
-
+        # if "interval" in input:
+        #     iso_interval = convert_hhb_interval_to_iso(input["interval"])
+        #     if iso_interval:
+        #         input["interval"] = iso_interval
+        #     else:
+        #         input.pop("interval")
+        #
+        # if "interval" not in input and input["aantal_betalingen"] == 0:
+        #     raise GraphQLError(f"Interval en aantal betalingen kan niet allebei nul zijn.")
+        #
+        # if input["credit"] is False and "automatische_incasso" not in input:
+        #     raise GraphQLError(f"Automatische incasso is verplicht bij uitgaven afspraak")
+        #
+        # if input["credit"] and not("automatische_incasso" not in input):
+        #     raise GraphQLError(f"Automatische incasso is niet mogelijk bij inkomsten afspraak")
+        #
         response = requests.post(f"{settings.HHB_SERVICES_URL}/afspraken/", json=input)
         if response.status_code != 201:
-            raise GraphQLError(f"Upstream API responded: {response.json()}")
+            raise GraphQLError(f"Upstream API responded: {response.text}")
         afspraak = response.json()["data"]
 
         return CreateAfspraak(afspraak=afspraak, ok=True)

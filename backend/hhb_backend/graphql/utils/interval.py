@@ -1,4 +1,6 @@
+import calendar
 import re
+from datetime import date
 
 from dateutil.relativedelta import relativedelta
 
@@ -12,6 +14,31 @@ def convert_hhb_interval_to_iso(graphql_format: dict):
         isoformat += f"{graphql_format.get('dagen', 0)}D"
         return isoformat
     return ""
+
+
+DURATION_PATTERN = re.compile(r'P(\d+)Y(\d+)M(\d+)W(\d+)D')
+
+
+def convert_iso_duration_to_schedule_by_month(iso_format: str, start_date: date):
+    if iso_format:
+        if p := DURATION_PATTERN.findall(iso_format):
+            month_interval = int(p[0][1])
+            if month_interval > 1:
+                return by_month(start_date.month, month_interval)
+    return None
+
+
+def by_month(start, step):
+    return sorted([m % 12 + 1 for m in range(start - 1, start - 1 + 12, step)])
+
+
+def convert_iso_duration_to_schedule_by_day(iso_format: str, start_date: date):
+    if iso_format:
+        if p := DURATION_PATTERN.findall(iso_format):
+            week_interval = int(p[0][2])
+            if week_interval == 1:
+                return [calendar.day_name[start_date.weekday()]]
+    return None
 
 
 def convert_hhb_interval_to_dict(iso_format: str):
