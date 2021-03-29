@@ -12,8 +12,8 @@ from werkzeug.datastructures import Headers
 from hhb_backend.app import create_app
 
 
-def test_login_redirects_to_oidc(auth_client: FlaskClient):
-    response = auth_client.get('/login')
+def test_login_redirects_to_oidc(no_auth_client: FlaskClient):
+    response = no_auth_client.get('/login')
 
     assert response.status_code == 302
     assert response.headers["Location"].startswith(
@@ -35,8 +35,8 @@ def test_me(client):
     assert omit(response.json, ['token']) == {'email': 'test@example.com'}
 
 
-def test_me_unauthenticated(auth_client):
-    response = auth_client.get('/me')
+def test_me_unauthenticated(no_auth_client):
+    response = no_auth_client.get('/me')
 
     assert response.status_code == 401
     assert response.json == {'message': 'Not logged in'}
