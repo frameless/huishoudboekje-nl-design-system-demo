@@ -1,22 +1,21 @@
 """ GraphQL Gebruikers query """
 import graphene
-from hhb_backend.graphql.models.afspraak import IntervalInput
+
+from hhb_backend.graphql.mutations.afspraken.update_afspraak_betaalinstructie import BetaalinstructieInput
 from hhb_backend.graphql.scalars.bedrag import Bedrag
 from hhb_backend.graphql.models.overschrijving import Overschrijving
+from hhb_backend.graphql.utils.interval import convert_betaalinstructie_interval
 from hhb_backend.processen.overschrijvingen_planner import (
     PlannedOverschijvingenInput,
     get_planned_overschrijvingen,
 )
-from hhb_backend.graphql.utils.interval import convert_hhb_interval_to_iso
 from logging import getLogger
 
 log = getLogger(__name__)
 
 
 class PlannedOverschijvingenQueryInput(graphene.InputObjectType):
-    afspraak_start_datum = graphene.Date(required=True)
-    interval = graphene.Argument(lambda: IntervalInput, required=True)
-    aantal_betalingen = graphene.Int(required=True)
+    betaalinstructie = graphene.Argument(lambda: BetaalinstructieInput, required=True)
     bedrag = graphene.Argument(Bedrag, required=True)
     start_datum = graphene.Date()
     eind_datum = graphene.Date()
@@ -29,17 +28,17 @@ class PlannedOverschijvingenQuery:
     )
 
     @classmethod
-    async def resolver(cls, _root, _info, **kwargs):
-        input_data = kwargs["input"]
+    async def resolver(cls, _root, _info, input: PlannedOverschijvingenQueryInput, **kwargs):
+        betaalinstructie = input["betaalinstructie"]
         planner_input = PlannedOverschijvingenInput(
-            input_data["afspraak_start_datum"].isoformat(),
-            convert_hhb_interval_to_iso(input_data["interval"]),
-            input_data["aantal_betalingen"],
-            input_data["bedrag"],
+            betaalinstructie.start_date.isoformat(),
+            convert_betaalinstructie_interval(betaalinstructie),
+            betaalinstructie.repeat_count,
+            input["bedrag"],
         )
         overschijvingen = get_planned_overschrijvingen(
             planner_input,
-            start_datum=input_data.get("start_datum", None),
-            eind_datum=input_data.get("eind_datum", None),
+            start_datum=input.get("start_datum", None),
+            eind_datum=input.get("eind_datum", None),
         )
         return overschijvingen.values()

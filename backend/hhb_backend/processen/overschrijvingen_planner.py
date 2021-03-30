@@ -1,9 +1,9 @@
-from datetime import datetime
 from math import floor
 
 from dateutil.parser import isoparse
 from datetime import datetime, date
-from hhb_backend.graphql.utils import convert_hhb_interval_to_relativetime
+
+from hhb_backend.graphql.utils.interval import convert_hhb_interval_to_relativetime
 
 
 class PlannedOverschijvingenInput():

@@ -8,7 +8,6 @@ from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.afspraak import Afspraak
 from hhb_backend.graphql.scalars.bedrag import Bedrag
-from hhb_backend.graphql.utils import convert_hhb_interval_to_iso
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (gebruikers_activiteit_entities, log_gebruikers_activiteit)
 
 
@@ -49,23 +48,23 @@ class UpdateAfspraak(graphene.Mutation):
 
     @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(_root, _info, id: int, input, UpdateAfspraakInput):
+    async def mutate(_root, _info, id: int, input: UpdateAfspraakInput):
         """ Update the Afspraak """
 
         previous = await hhb_dataloader().afspraken_by_id.load(id)
 
-        if "interval" in input:
-            iso_interval = convert_hhb_interval_to_iso(input["interval"])
-            input["interval"] = iso_interval
-
-        if "interval" not in input and input["aantal_betalingen"] == 0:
-            raise GraphQLError(f"Interval en aantal betalingen kan niet allebei nul zijn.")
-
-        if input["credit"] is False and "automatische_incasso" not in input:
-            raise GraphQLError(f"Automatische incasso is verplicht bij uitgaven afspraak")
-
-        if input["credit"] and not("automatische_incasso" not in input):
-            raise GraphQLError(f"Automatische incasso is niet mogelijk bij inkomsten afspraak")
+        # if "interval" in input:
+        #     iso_interval = convert_hhb_interval_to_iso(input["interval"])
+        #     input["interval"] = iso_interval
+        #
+        # if "interval" not in input and input["aantal_betalingen"] == 0:
+        #     raise GraphQLError(f"Interval en aantal betalingen kan niet allebei nul zijn.")
+        #
+        # if input["credit"] is False and "automatische_incasso" not in input:
+        #     raise GraphQLError(f"Automatische incasso is verplicht bij uitgaven afspraak")
+        #
+        # if input["credit"] and not("automatische_incasso" not in input):
+        #     raise GraphQLError(f"Automatische incasso is niet mogelijk bij inkomsten afspraak")
 
         response = requests.post(
             f"{settings.HHB_SERVICES_URL}/afspraken/{id}",

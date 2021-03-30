@@ -13,28 +13,18 @@ import hhb_backend.graphql.models.rekening as rekening
 import hhb_backend.graphql.models.rubriek as rubriek
 from hhb_backend.graphql.scalars.bedrag import Bedrag
 from hhb_backend.graphql.scalars.day_of_week import DayOfWeek
-from hhb_backend.graphql.utils import convert_hhb_interval_to_dict
-from hhb_backend.graphql.utils.interval import convert_iso_duration_to_schedule_by_day, \
+from hhb_backend.graphql.utils.interval import convert_hhb_interval_to_dict, convert_iso_duration_to_schedule_by_day, \
     convert_iso_duration_to_schedule_by_month
 from hhb_backend.processen.overschrijvingen_planner import (
     PlannedOverschijvingenInput,
     get_planned_overschrijvingen,
 )
 
-
 class Interval(graphene.ObjectType):
     jaren = graphene.Int()
     maanden = graphene.Int()
     weken = graphene.Int()
     dagen = graphene.Int()
-
-
-class IntervalInput(graphene.InputObjectType):
-    jaren = graphene.Int()
-    maanden = graphene.Int()
-    weken = graphene.Int()
-    dagen = graphene.Int()
-
 
 class Betaalinstructie(graphene.ObjectType):
     """Implementatie op basis van http://schema.org/Schedule"""
@@ -51,7 +41,7 @@ class Betaalinstructie(graphene.ObjectType):
 
     @staticmethod
     def resolve_start_date(root, _info):
-        if value := root.get("start_datum"): # TODO rename to start_date in service
+        if value := root.get("start_datum"):  # TODO rename to start_date in service
             return date.fromisoformat(value)
 
     @staticmethod
@@ -129,8 +119,8 @@ class Afspraak(graphene.ObjectType):
         )
         known_overschrijvingen = {}
         overschrijvingen = (
-            await request.dataloader.overschrijvingen_by_afspraak.load(root.get("id"))
-            or []
+                await request.dataloader.overschrijvingen_by_afspraak.load(root.get("id"))
+                or []
         )
         for o in overschrijvingen:
             known_overschrijvingen[o["datum"]] = o
@@ -185,10 +175,10 @@ class Afspraak(graphene.ObjectType):
         """ Get organisatie when requested """
         if root.get("journaalposten"):
             return (
-                await request.dataloader.journaalposten_by_id.load_many(
-                    root.get("journaalposten")
-                )
-                or []
+                    await request.dataloader.journaalposten_by_id.load_many(
+                        root.get("journaalposten")
+                    )
+                    or []
             )
 
     @staticmethod

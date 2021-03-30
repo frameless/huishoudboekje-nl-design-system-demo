@@ -1,6 +1,5 @@
 """ GraphQL mutation for creating a new Afspraak """
 
-
 import graphene
 import requests
 from graphql import GraphQLError
@@ -8,7 +7,6 @@ from graphql import GraphQLError
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.models.afspraak import Afspraak
 from hhb_backend.graphql.scalars.bedrag import Bedrag
-from hhb_backend.graphql.utils import convert_hhb_interval_to_iso, convert_hhb_interval_to_relativetime
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     log_gebruikers_activiteit,
     gebruikers_activiteit_entities,
@@ -38,10 +36,10 @@ class CreateAfspraak(graphene.Mutation):
             entities=gebruikers_activiteit_entities(
                 entity_type="afspraak", result=self, key="afspraak"
             )
-            + gebruikers_activiteit_entities(
+                     + gebruikers_activiteit_entities(
                 entity_type="burger", result=self.afspraak, key="burger_id"
             )
-            + gebruikers_activiteit_entities(
+                     + gebruikers_activiteit_entities(
                 entity_type="organisatie", result=self.afspraak, key="organisatie_id"
             ),
             after=dict(afspraak=self.afspraak),

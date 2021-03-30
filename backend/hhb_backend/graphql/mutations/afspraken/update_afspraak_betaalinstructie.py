@@ -1,5 +1,3 @@
-""" GraphQL mutation for updating an Afspraak """
-
 import graphene
 import pydash
 import requests
@@ -10,32 +8,27 @@ from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models import afspraak
 from hhb_backend.graphql.scalars.day_of_week import DayOfWeek
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (gebruikers_activiteit_entities, log_gebruikers_activiteit)
+from hhb_backend.graphql.utils.interval import convert_betaalinstructie_interval
 
 
 class BetaalinstructieInput(graphene.InputObjectType):
-    start_datum = graphene.String(required=True)
-    eind_datum = graphene.String()
-
-    """
-    Array van dagen, bijvoorbeeld [3, 7] voor "elke woensdag en zondag"
-    """
+    """Implementatie op basis van http://schema.org/Schedule"""
+    start_date = graphene.Date(required=True)
+    end_date = graphene.Date()
+    '''Het aantal keer dat deze ingepland moet worden'''
+    repeat_count = graphene.Int()
+    '''Lijst van dagen in de week'''
     by_day = graphene.List(DayOfWeek)
-    """
-    De dag van de maand, bijvoorbeeld "25" voor "de 25 dag van de maand"
-    """
+    '''De dag van de maand'''
     by_month_day = graphene.Int()
-    """
-    Array van maanden, bijvoorbeeld [5, 9] voor "in mei en september"
-    """
-    by_month = graphene.List(graphene.Int) #
-
-    aantal_betalingen = graphene.Int(required=True)
+    '''Lijst van maanden in het jaar'''
+    by_month = graphene.List(graphene.Int)
 
 
 class UpdateAfspraakBetaalinstructie(graphene.Mutation):
     class Arguments:
         afspraak_id = graphene.Int(required=True)
-        automatisch_boeken = graphene.Boolean(required=True)
+        betaalinstructie = graphene.Argument(lambda: BetaalinstructieInput, required=True)
 
     ok = graphene.Boolean()
     afspraak = graphene.Field(lambda: afspraak.Afspraak)
@@ -56,7 +49,7 @@ class UpdateAfspraakBetaalinstructie(graphene.Mutation):
 
     @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(_root, _info, afspraak_id: int, automatisch_boeken: bool):
+    async def mutate(_root, _info, afspraak_id: int, betaalinstructie: BetaalinstructieInput):
         """ Update the Afspraak """
 
         previous = await hhb_dataloader().afspraken_by_id.load(afspraak_id)
@@ -69,9 +62,14 @@ class UpdateAfspraakBetaalinstructie(graphene.Mutation):
         # them here.
         previous = pydash.omit(previous, 'journaalposten', 'overschrijvingen')
 
+        interval = convert_betaalinstructie_interval(betaalinstructie)
+
         input = {
             **previous,
-            "automatisch_boeken": automatisch_boeken,
+            "start_datum": str(betaalinstructie.start_date),
+            "eind_datum": str(betaalinstructie.end_date),
+            "aantal_betalingen": betaalinstructie.repeat_count,
+            "interval": interval
         }
 
         response = requests.post(
@@ -83,4 +81,5 @@ class UpdateAfspraakBetaalinstructie(graphene.Mutation):
 
         afspraak = response.json()["data"]
 
-        return UpdateAfspraakBetaalInstructie(afspraak=afspraak, previous=previous, ok=True)
+        return UpdateAfspraakBetaalinstructie(afspraak=afspraak, previous=previous, ok=True)
+
