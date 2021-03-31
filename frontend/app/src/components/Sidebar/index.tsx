@@ -25,7 +25,7 @@ const Sidebar: React.FC<BoxProps> = (props) => {
 			</Stack>
 			<SidebarLink to={Routes.Rapportage} icon={RiBarChartFill}>{t("sidebar.rapportage")}</SidebarLink>
 			<SidebarLink to={Routes.Gebeurtenissen} icon={FiActivity}>{t("sidebar.gebeurtenissen")}</SidebarLink>
-			<SidebarLink to={Routes.Settings} icon={TiCog}>{t("sidebar.configuratie")}</SidebarLink>
+			<SidebarLink to={Routes.Configuratie} icon={TiCog}>{t("sidebar.configuratie")}</SidebarLink>
 		</Stack>
 
 		{isDev && (

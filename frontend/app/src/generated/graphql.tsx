@@ -41,22 +41,30 @@ export type Afspraak = {
   __typename?: 'Afspraak';
   id?: Maybe<Scalars['Int']>;
   burger?: Maybe<Burger>;
-  beschrijving?: Maybe<Scalars['String']>;
-  startDatum?: Maybe<Scalars['Date']>;
-  eindDatum?: Maybe<Scalars['Date']>;
-  aantalBetalingen?: Maybe<Scalars['Int']>;
-  interval?: Maybe<Interval>;
+  omschrijving?: Maybe<Scalars['String']>;
   tegenRekening?: Maybe<Rekening>;
   bedrag?: Maybe<Scalars['Bedrag']>;
   credit?: Maybe<Scalars['Boolean']>;
   zoektermen?: Maybe<Array<Maybe<Scalars['String']>>>;
   actief?: Maybe<Scalars['Boolean']>;
-  automatischeIncasso?: Maybe<Scalars['Boolean']>;
+  betaalinstructie?: Maybe<Betaalinstructie>;
   automatischBoeken?: Maybe<Scalars['Boolean']>;
   organisatie?: Maybe<Organisatie>;
   journaalposten?: Maybe<Array<Maybe<Journaalpost>>>;
   rubriek?: Maybe<Rubriek>;
   overschrijvingen?: Maybe<Array<Maybe<Overschrijving>>>;
+  /** @deprecated use betaalinstructie instead */
+  startDatum?: Maybe<Scalars['Date']>;
+  /** @deprecated use betaalinstructie instead */
+  eindDatum?: Maybe<Scalars['Date']>;
+  /** @deprecated use betaalinstructie instead */
+  interval?: Maybe<Interval>;
+  /** @deprecated use betaalinstructie instead */
+  aantalBetalingen?: Maybe<Scalars['Int']>;
+  /** @deprecated use omschrijving instead */
+  beschrijving?: Maybe<Scalars['String']>;
+  /** @deprecated use betaalinstructie instead */
+  automatischeIncasso?: Maybe<Scalars['Boolean']>;
 };
 
 
@@ -64,24 +72,6 @@ export type Afspraak = {
 export type AfspraakOverschrijvingenArgs = {
   startDatum?: Maybe<Scalars['Date']>;
   eindDatum?: Maybe<Scalars['Date']>;
-};
-
-export type AfspraakInput = {
-  burgerId?: Maybe<Scalars['Int']>;
-  beschrijving?: Maybe<Scalars['String']>;
-  startDatum: Scalars['String'];
-  eindDatum?: Maybe<Scalars['String']>;
-  aantalBetalingen: Scalars['Int'];
-  interval: IntervalInput;
-  tegenRekeningId?: Maybe<Scalars['Int']>;
-  bedrag?: Maybe<Scalars['Bedrag']>;
-  credit: Scalars['Boolean'];
-  zoektermen?: Maybe<Array<Maybe<Scalars['String']>>>;
-  actief?: Maybe<Scalars['Boolean']>;
-  organisatieId?: Maybe<Scalars['Int']>;
-  rubriekId?: Maybe<Scalars['Int']>;
-  automatischeIncasso?: Maybe<Scalars['Boolean']>;
-  automatischBoeken?: Maybe<Scalars['Boolean']>;
 };
 
 /** BankTransaction model */
@@ -101,6 +91,27 @@ export type BankTransaction = {
   suggesties?: Maybe<Array<Maybe<Afspraak>>>;
 };
 
+
+/** Implementatie op basis van http://schema.org/Schedule */
+export type Betaalinstructie = {
+  __typename?: 'Betaalinstructie';
+  startDate?: Maybe<Scalars['Date']>;
+  endDate?: Maybe<Scalars['Date']>;
+  repeatCount?: Maybe<Scalars['Int']>;
+  byDay?: Maybe<Array<Maybe<DayOfWeek>>>;
+  byMonthDay?: Maybe<Scalars['Int']>;
+  byMonth?: Maybe<Array<Maybe<Scalars['Int']>>>;
+};
+
+/** Implementatie op basis van http://schema.org/Schedule */
+export type BetaalinstructieInput = {
+  startDate: Scalars['Date'];
+  endDate?: Maybe<Scalars['Date']>;
+  repeatCount?: Maybe<Scalars['Int']>;
+  byDay?: Maybe<Array<Maybe<DayOfWeek>>>;
+  byMonthDay?: Maybe<Scalars['Int']>;
+  byMonth?: Maybe<Array<Maybe<Scalars['Int']>>>;
+};
 
 /** GraphQL Burger model  */
 export type Burger = {
@@ -138,6 +149,16 @@ export type CreateAfspraak = {
   __typename?: 'CreateAfspraak';
   ok?: Maybe<Scalars['Boolean']>;
   afspraak?: Maybe<Afspraak>;
+};
+
+export type CreateAfspraakInput = {
+  burgerId: Scalars['Int'];
+  credit: Scalars['Boolean'];
+  organisatieId: Scalars['Int'];
+  tegenRekeningId: Scalars['Int'];
+  rubriekId: Scalars['Int'];
+  omschrijving: Scalars['String'];
+  bedrag: Scalars['Bedrag'];
 };
 
 export type CreateBurger = {
@@ -265,6 +286,17 @@ export type CustomerStatementMessage = {
 };
 
 
+
+/** http://schema.org/DayOfWeek implementation */
+export enum DayOfWeek {
+  Monday = 'Monday',
+  Tuesday = 'Tuesday',
+  Wednesday = 'Wednesday',
+  Thursday = 'Thursday',
+  Friday = 'Friday',
+  Saturday = 'Saturday',
+  Sunday = 'Sunday'
+}
 
 export type DeleteAfspraak = {
   __typename?: 'DeleteAfspraak';
@@ -411,13 +443,6 @@ export type Interval = {
   dagen?: Maybe<Scalars['Int']>;
 };
 
-export type IntervalInput = {
-  jaren?: Maybe<Scalars['Int']>;
-  maanden?: Maybe<Scalars['Int']>;
-  weken?: Maybe<Scalars['Int']>;
-  dagen?: Maybe<Scalars['Int']>;
-};
-
 /** Journaalpost model */
 export type Journaalpost = {
   __typename?: 'Journaalpost';
@@ -468,9 +493,7 @@ export enum OverschrijvingStatus {
 }
 
 export type PlannedOverschijvingenQueryInput = {
-  afspraakStartDatum: Scalars['Date'];
-  interval: IntervalInput;
-  aantalBetalingen: Scalars['Int'];
+  betaalinstructie: BetaalinstructieInput;
   bedrag: Scalars['Bedrag'];
   startDatum?: Maybe<Scalars['Date']>;
   eindDatum?: Maybe<Scalars['Date']>;
@@ -502,6 +525,7 @@ export type RootMutation = {
   updateAfspraak?: Maybe<UpdateAfspraak>;
   deleteAfspraak?: Maybe<DeleteAfspraak>;
   updateAfspraakAutomatischBoeken?: Maybe<UpdateAfspraakAutomatischBoeken>;
+  updateAfspraakBetaalinstructie?: Maybe<UpdateAfspraakBetaalinstructie>;
   createOrganisatie?: Maybe<CreateOrganisatie>;
   updateOrganisatie?: Maybe<UpdateOrganisatie>;
   deleteOrganisatie?: Maybe<DeleteOrganisatie>;
@@ -563,14 +587,14 @@ export type RootMutationUpdateBurgerArgs = {
 
 /** The root of all mutations  */
 export type RootMutationCreateAfspraakArgs = {
-  input: AfspraakInput;
+  input: CreateAfspraakInput;
 };
 
 
 /** The root of all mutations  */
 export type RootMutationUpdateAfspraakArgs = {
   id: Scalars['Int'];
-  input: AfspraakInput;
+  input: UpdateAfspraakInput;
 };
 
 
@@ -584,6 +608,13 @@ export type RootMutationDeleteAfspraakArgs = {
 export type RootMutationUpdateAfspraakAutomatischBoekenArgs = {
   afspraakId: Scalars['Int'];
   automatischBoeken: Scalars['Boolean'];
+};
+
+
+/** The root of all mutations  */
+export type RootMutationUpdateAfspraakBetaalinstructieArgs = {
+  afspraakId: Scalars['Int'];
+  betaalinstructie: BetaalinstructieInput;
 };
 
 
@@ -948,6 +979,23 @@ export type UpdateAfspraakAutomatischBoeken = {
   previous?: Maybe<Afspraak>;
 };
 
+export type UpdateAfspraakBetaalinstructie = {
+  __typename?: 'UpdateAfspraakBetaalinstructie';
+  ok?: Maybe<Scalars['Boolean']>;
+  afspraak?: Maybe<Afspraak>;
+  previous?: Maybe<Afspraak>;
+};
+
+export type UpdateAfspraakInput = {
+  burgerId?: Maybe<Scalars['Int']>;
+  credit?: Maybe<Scalars['Boolean']>;
+  organisatieId?: Maybe<Scalars['Int']>;
+  tegenRekeningId?: Maybe<Scalars['Int']>;
+  rubriekId?: Maybe<Scalars['Int']>;
+  omschrijving?: Maybe<Scalars['String']>;
+  bedrag?: Maybe<Scalars['Bedrag']>;
+};
+
 export type UpdateBurger = {
   __typename?: 'UpdateBurger';
   ok?: Maybe<Scalars['Boolean']>;
@@ -1022,7 +1070,7 @@ export type RubriekFragment = (
 
 export type AfspraakFragment = (
   { __typename?: 'Afspraak' }
-  & Pick<Afspraak, 'id' | 'beschrijving' | 'startDatum' | 'eindDatum' | 'aantalBetalingen' | 'automatischeIncasso' | 'automatischBoeken' | 'bedrag' | 'credit' | 'zoektermen' | 'actief'>
+  & Pick<Afspraak, 'id' | 'omschrijving' | 'startDatum' | 'eindDatum' | 'aantalBetalingen' | 'automatischeIncasso' | 'automatischBoeken' | 'bedrag' | 'credit' | 'zoektermen' | 'actief'>
   & { interval?: Maybe<(
     { __typename?: 'Interval' }
     & Pick<Interval, 'dagen' | 'weken' | 'maanden' | 'jaren'>
@@ -1225,7 +1273,7 @@ export type DeleteOrganisatieMutation = (
 );
 
 export type CreateAfspraakMutationVariables = Exact<{
-  input: AfspraakInput;
+  input: CreateAfspraakInput;
 }>;
 
 
@@ -1256,7 +1304,7 @@ export type DeleteAfspraakMutation = (
 
 export type UpdateAfspraakMutationVariables = Exact<{
   id: Scalars['Int'];
-  input: AfspraakInput;
+  input: UpdateAfspraakInput;
 }>;
 
 
@@ -1730,6 +1778,32 @@ export type GetAfspraakFormDataQuery = (
   )>>> }
 );
 
+export type GetCreateAfspraakFormDataQueryVariables = Exact<{
+  burgerId: Scalars['Int'];
+}>;
+
+
+export type GetCreateAfspraakFormDataQuery = (
+  { __typename?: 'RootQuery' }
+  & { burger?: Maybe<(
+    { __typename?: 'Burger' }
+    & { rekeningen?: Maybe<Array<Maybe<(
+      { __typename?: 'Rekening' }
+      & RekeningFragment
+    )>>> }
+  )>, rubrieken?: Maybe<Array<Maybe<(
+    { __typename?: 'Rubriek' }
+    & { grootboekrekening?: Maybe<(
+      { __typename?: 'Grootboekrekening' }
+      & Pick<Grootboekrekening, 'id' | 'naam' | 'credit'>
+    )> }
+    & RubriekFragment
+  )>>>, organisaties?: Maybe<Array<Maybe<(
+    { __typename?: 'Organisatie' }
+    & OrganisatieFragment
+  )>>> }
+);
+
 export type GetConfiguratieQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1913,7 +1987,7 @@ export const RubriekFragmentDoc = gql`
 export const AfspraakFragmentDoc = gql`
     fragment Afspraak on Afspraak {
   id
-  beschrijving
+  omschrijving
   startDatum
   eindDatum
   aantalBetalingen
@@ -2302,7 +2376,7 @@ export type DeleteOrganisatieMutationHookResult = ReturnType<typeof useDeleteOrg
 export type DeleteOrganisatieMutationResult = Apollo.MutationResult<DeleteOrganisatieMutation>;
 export type DeleteOrganisatieMutationOptions = Apollo.BaseMutationOptions<DeleteOrganisatieMutation, DeleteOrganisatieMutationVariables>;
 export const CreateAfspraakDocument = gql`
-    mutation createAfspraak($input: AfspraakInput!) {
+    mutation createAfspraak($input: CreateAfspraakInput!) {
   createAfspraak(input: $input) {
     ok
     afspraak {
@@ -2371,7 +2445,7 @@ export type DeleteAfspraakMutationHookResult = ReturnType<typeof useDeleteAfspra
 export type DeleteAfspraakMutationResult = Apollo.MutationResult<DeleteAfspraakMutation>;
 export type DeleteAfspraakMutationOptions = Apollo.BaseMutationOptions<DeleteAfspraakMutation, DeleteAfspraakMutationVariables>;
 export const UpdateAfspraakDocument = gql`
-    mutation updateAfspraak($id: Int!, $input: AfspraakInput!) {
+    mutation updateAfspraak($id: Int!, $input: UpdateAfspraakInput!) {
   updateAfspraak(id: $id, input: $input) {
     ok
     afspraak {
@@ -3486,6 +3560,56 @@ export function useGetAfspraakFormDataLazyQuery(baseOptions?: Apollo.LazyQueryHo
 export type GetAfspraakFormDataQueryHookResult = ReturnType<typeof useGetAfspraakFormDataQuery>;
 export type GetAfspraakFormDataLazyQueryHookResult = ReturnType<typeof useGetAfspraakFormDataLazyQuery>;
 export type GetAfspraakFormDataQueryResult = Apollo.QueryResult<GetAfspraakFormDataQuery, GetAfspraakFormDataQueryVariables>;
+export const GetCreateAfspraakFormDataDocument = gql`
+    query getCreateAfspraakFormData($burgerId: Int!) {
+  burger(id: $burgerId) {
+    rekeningen {
+      ...Rekening
+    }
+  }
+  rubrieken {
+    ...Rubriek
+    grootboekrekening {
+      id
+      naam
+      credit
+    }
+  }
+  organisaties {
+    ...Organisatie
+  }
+}
+    ${RekeningFragmentDoc}
+${RubriekFragmentDoc}
+${OrganisatieFragmentDoc}`;
+
+/**
+ * __useGetCreateAfspraakFormDataQuery__
+ *
+ * To run a query within a React component, call `useGetCreateAfspraakFormDataQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCreateAfspraakFormDataQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCreateAfspraakFormDataQuery({
+ *   variables: {
+ *      burgerId: // value for 'burgerId'
+ *   },
+ * });
+ */
+export function useGetCreateAfspraakFormDataQuery(baseOptions: Apollo.QueryHookOptions<GetCreateAfspraakFormDataQuery, GetCreateAfspraakFormDataQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCreateAfspraakFormDataQuery, GetCreateAfspraakFormDataQueryVariables>(GetCreateAfspraakFormDataDocument, options);
+      }
+export function useGetCreateAfspraakFormDataLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCreateAfspraakFormDataQuery, GetCreateAfspraakFormDataQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCreateAfspraakFormDataQuery, GetCreateAfspraakFormDataQueryVariables>(GetCreateAfspraakFormDataDocument, options);
+        }
+export type GetCreateAfspraakFormDataQueryHookResult = ReturnType<typeof useGetCreateAfspraakFormDataQuery>;
+export type GetCreateAfspraakFormDataLazyQueryHookResult = ReturnType<typeof useGetCreateAfspraakFormDataLazyQuery>;
+export type GetCreateAfspraakFormDataQueryResult = Apollo.QueryResult<GetCreateAfspraakFormDataQuery, GetCreateAfspraakFormDataQueryVariables>;
 export const GetConfiguratieDocument = gql`
     query getConfiguratie {
   configuraties {

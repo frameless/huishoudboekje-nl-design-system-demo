@@ -127,7 +127,7 @@ export const DeleteOrganisatieMutation = gql`
 
 export const CreateAfspraakMutation = gql`
     mutation createAfspraak(
-        $input: AfspraakInput!
+        $input: CreateAfspraakInput!
     ){
         createAfspraak(
             input: $input
@@ -152,7 +152,7 @@ export const DeleteAfspraakMutation = gql`
 export const UpdateAfspraakMutation = gql`
     mutation updateAfspraak(
         $id: Int!
-        $input: AfspraakInput!
+        $input: UpdateAfspraakInput!
     ){
         updateAfspraak(
             id: $id

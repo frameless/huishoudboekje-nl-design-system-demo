@@ -57,7 +57,7 @@ const AfspraakDetailMenu: React.FC<{afspraak: Afspraak, onDelete: VoidFunction}>
 		<Menu>
 			<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} data-cy={"actionsMenuButton"} />
 			<MenuList>
-				<MenuItem><NavLink to={Routes.EditAfspraak(afspraak.id)}>{t("actions.edit")}</NavLink></MenuItem>
+				<NavLink to={Routes.EditAfspraak(afspraak.id)}><MenuItem>{t("actions.edit")}</MenuItem></NavLink>
 				<MenuItem onClick={onClickDelete}>{t("actions.delete")}</MenuItem>
 			</MenuList>
 		</Menu>

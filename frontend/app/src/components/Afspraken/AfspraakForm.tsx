@@ -1,480 +1,168 @@
-import {Box, BoxProps, Button, Divider, FormLabel, Input, InputGroup, InputLeftElement, Stack, Switch, Text, useToast} from "@chakra-ui/react";
-import React, {useEffect, useState} from "react";
-import DatePicker from "react-datepicker";
-import {useInput, useNumberInput, useToggle, Validators} from "react-grapple";
-import {UseInput} from "react-grapple/dist/hooks/useInput";
-import {Trans, useTranslation} from "react-i18next";
+import {Box, Button, FormControl, FormErrorMessage, FormLabel, Input, InputGroup, InputLeftElement, Radio, RadioGroup, Stack} from "@chakra-ui/react";
+import React, {useContext, useState} from "react";
+import {useTranslation} from "react-i18next";
 import Select from "react-select";
-import {Afspraak, Burger, Organisatie, Rekening, Rubriek, useGetAfspraakFormDataQuery} from "../../generated/graphql";
-import {AfspraakPeriod, AfspraakType, IntervalType} from "../../models/models";
-import d from "../../utils/dayjs";
-import Queryable from "../../utils/Queryable";
-import generateSampleOverschrijvingen from "../../utils/sampleOverschrijvingen";
-import {formatBurgerName, formatIBAN, useReactSelectStyles, XInterval} from "../../utils/things";
+import {CreateAfspraakMutationVariables, Organisatie, Rekening, Rubriek, UpdateAfspraakMutationVariables} from "../../generated/graphql";
+import {currencyFormat, useReactSelectStyles} from "../../utils/things";
+import useToaster from "../../utils/useToaster";
+import zod from "../../utils/zod";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
-import RadioButtonGroup from "../Layouts/RadioButtons/RadioButtonGroup";
+import {RekeningOption, RekeningValueContainer} from "../Layouts/ReactSelect/RekeningOption";
 import Section from "../Layouts/Section";
-import OverschrijvingenListView from "../Overschrijvingen/OverschrijvingenListView";
+import AfspraakFormContext from "./EditAfspraak/context";
 
-type AfspraakFormProps = {afspraak?: Afspraak, onSave: (data) => void, burger?: Burger, loading: boolean};
-const AfspraakForm: React.FC<BoxProps & AfspraakFormProps> = ({afspraak, onSave, loading = false, ...props}) => {
+const validator = zod.object({
+	rubriekId: zod.number().nonnegative(),
+	omschrijving: zod.string().nonempty(),
+	organisatieId: zod.number().nonnegative().optional(),
+	tegenRekeningId: zod.number().nonnegative(),
+	bedrag: zod.number().min(.01),
+	credit: zod.boolean(),
+});
+
+type AfspraakFormProps = {
+	burgerRekeningen: Rekening[],
+	onChange: (values: CreateAfspraakMutationVariables["input"] | UpdateAfspraakMutationVariables["input"]) => void,
+	values?: UpdateAfspraakMutationVariables["input"],
+};
+
+const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, onChange}) => {
+	const toast = useToaster();
 	const {t} = useTranslation();
-	const toast = useToast();
+	const [data, setData] = useState(values || {});
 	const reactSelectStyles = useReactSelectStyles();
-	const burger = afspraak?.burger || props.burger;
-	if (!burger) {
-		throw new Error("Missing property burger.");
-	}
 
-	const [isSubmitted, setSubmitted] = useState<boolean>(false);
-	const $afspraakFormData = useGetAfspraakFormDataQuery({
-		fetchPolicy: "no-cache",
-	});
+	const {
+		organisaties = [],
+		rubrieken = [],
+	} = useContext(AfspraakFormContext);
 
-	const [isActive, toggleActive] = useToggle(true);
-	const [afspraakType, setAfspraakType] = useState<AfspraakType>(AfspraakType.Expense);
-	const description = useInput({
-		defaultValue: "",
-		validate: [Validators.required],
-	});
-	const organisatieId = useInput({
-		validate: [(v) => v !== undefined && v.toString() !== ""],
-	});
-	const rubriekId = useInput({
-		validate: [Validators.required],
-	});
-	const rekeningId = useInput({
-		validate: [(v) => v !== undefined && v.toString() !== ""],
-	});
-	const amount = useNumberInput({
-		min: 0,
-		step: .01,
-		validate: [(v) => new RegExp(/^([0-9]+)(([,.])[0-9]{2})?$/).test(v.toString())],
-	});
-	const [isRecurring, toggleRecurring] = useToggle(false);
-	const startDate = useInput({
-		placeholder: d().format("L"),
-		defaultValue: d().format("L"),
-		validate: [(v: string) => d(v, "L").isValid()],
-	});
-	const startDate2 = useInput({
-		placeholder: d().format("L"),
-		defaultValue: d().format("L"),
-		validate: [(v: string) => d(v, "L").isValid()],
-	});
-	const endDate = useInput({
-		placeholder: d().format("L"),
-		defaultValue: (d(startDate.value, "L").isValid() ? d(startDate.value, "L") : d()).add(1, "year").subtract(1, "day").format("L"),
-		validate: [(v: string) => d(v, "L").isValid()],
-	});
-	const [isContinuous, _toggleContinuous] = useToggle(true);
-	const toggleContinuous = (...args) => {
-		_toggleContinuous(...args);
-		if (!isContinuous) {
-			nTimes.reset();
-		}
-	};
-	const nTimes = useNumberInput({
-		validate: [(v) => new RegExp(/^[0-9]+$/).test(v.toString())],
-	});
-	const [automatischBoeken, toggleAutomatischBoeken] = useToggle(false);
-	const intervalType = useInput<IntervalType | undefined>({
-		validate: [(v) => v !== undefined && Object.values(IntervalType).includes(v)],
-	});
-	const intervalNumber = useInput({
-		defaultValue: "",
-		validate: [v => !isNaN(parseInt(v))],
-	});
-	const [isAutomatischeIncasso, toggleAutomatischeIncasso] = useToggle(true);
-
-	useEffect(() => {
-		if (afspraak) {
-			toggleActive(afspraak.actief);
-			setAfspraakType(afspraak.credit ? AfspraakType.Income : AfspraakType.Expense);
-			description.setValue(afspraak.beschrijving || "");
-			organisatieId.setValue((afspraak.organisatie?.id || 0).toString());
-			rubriekId.setValue((afspraak.rubriek?.id || 0).toString());
-			if (afspraak.tegenRekening) {
-				rekeningId.setValue((afspraak.tegenRekening?.id || 0).toString());
-			}
-			amount.setValue(afspraak.bedrag);
-			const interval = XInterval.parse(afspraak.interval);
-			if (interval) {
-				toggleRecurring(true);
-				intervalType.setValue(interval.intervalType);
-				intervalNumber.setValue(interval.count.toString());
-			}
-			const startDatum = new Date(afspraak.startDatum);
-			startDate.setValue(d(startDatum).format("L"));
-			startDate2.setValue(d(startDatum).format("L"));
-			endDate.setValue(d(startDatum).add(1, "year").subtract(1, "day").format("L"));
-			if (afspraak.aantalBetalingen) {
-				toggleContinuous(false);
-				nTimes.setValue(afspraak.aantalBetalingen);
-			}
-			toggleAutomatischBoeken(afspraak.automatischBoeken);
-			toggleAutomatischeIncasso(afspraak.automatischeIncasso);
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [afspraak]);
-
-	const onSubmit = (e) => {
-		e.preventDefault();
-		setSubmitted(true);
-
-		const fields: UseInput<any>[] = [
-			description,
-			organisatieId,
-			rubriekId,
-			rekeningId,
-			amount,
-			startDate,
-		];
-
-		if (isRecurring) {
-			fields.push(intervalType);
-			fields.push(intervalNumber);
-
-			if (!isContinuous) {
-				fields.push(nTimes);
-			}
-		}
-
-		const formValid = fields.every(f => f.isValid);
-		if (!formValid) {
-			toast({
-				status: "error",
-				title: t("messages.agreements.invalidFormMessage"),
-				position: "top",
-				isClosable: true,
-			});
-			return;
-		}
-
-		onSave({
-			burgerId: burger.id,
-			credit: afspraakType === AfspraakType.Income,
-			beschrijving: description.value,
-			tegenRekeningId: parseInt(rekeningId.value),
-			organisatieId: parseInt(organisatieId.value) !== 0 ? parseInt(organisatieId.value) : null,
-			rubriekId: parseInt(rubriekId.value) !== 0 ? parseInt(rubriekId.value) : null,
-			bedrag: amount.value,
-			startDatum: d(startDate.value, "L").format("YYYY-MM-DD"),
-			interval: isRecurring ? XInterval.create(intervalType.value!, intervalNumber.value) : XInterval.empty,
-			aantalBetalingen: isContinuous ? 1 : nTimes.value,
-			actief: isActive,
-			automatischeIncasso: afspraakType === AfspraakType.Expense ? isAutomatischeIncasso : undefined,
-			automatischBoeken,
-		});
+	const isValid = (fieldName: string) => validator.shape[fieldName]?.safeParse(data[fieldName]).success;
+	const updateForm = (field: string, value: any) => {
+		setData(prevData => ({
+			...prevData,
+			[field]: value,
+		}));
 	};
 
-	const isInvalid = (input) => (input.dirty || isSubmitted) && !input.isValid;
-	const onChangeAfspraakType = val => {
-		if (val) {
-			setAfspraakType(val);
-			rubriekId.clear();
-		}
-	};
+	const rubriekOptions = rubrieken.map((r: Rubriek) => ({
+		key: r.id,
+		value: r.id,
+		label: r.naam,
+	}));
 
-	const afspraakTypeOptions = {
-		[AfspraakType.Income]: t("forms.agreements.fields.income"),
-		[AfspraakType.Expense]: t("forms.agreements.fields.expenses"),
-	};
-	const isRecurringOptions = {
-		[AfspraakPeriod.Once]: t("forms.agreements.fields.isRecurring_once"),
-		[AfspraakPeriod.Periodic]: t("forms.agreements.fields.isRecurring_periodic"),
-	};
-
-	const generatedSampleOverschrijvingen = generateSampleOverschrijvingen({
-		bedrag: amount.value,
-		startDate: d(startDate.value, "L").toDate(),
-		startDate2: d(startDate2.value, "L").toDate(),
-		endDate: d(endDate.value, "L").toDate(),
-		nTimes: nTimes.value || 0,
-		interval: XInterval.create(intervalType.value!, intervalNumber.value),
-	});
-
-	const HugeDatePicker = () => {
-		const components = {
-			strong: <strong />,
-			start: <DatePicker selected={d(startDate2.value, "L").isValid() ? d(startDate2.value, "L").toDate() : null}
-							   dateFormat={"dd-MM-yyyy"}
-							   onChange={(value: Date) => {
-								   if (value) {
-									   startDate2.setValue(d(value).format("L"));
-								   }
-							   }} customInput={(<Button size={"sm"} mx={1}>{startDate2.value}</Button>)} />,
-			end: <DatePicker selected={d(endDate.value, "L").isValid() ? d(endDate.value, "L").toDate() : null}
-							 dateFormat={"dd-MM-yyyy"}
-							 onChange={(value: Date) => {
-								 if (value) {
-									 endDate.setValue(d(value).format("L"));
-								 }
-							 }} customInput={(<Button size={"sm"} mx={1}>{endDate.value}</Button>)} />,
-		};
-		const outgoingTrans = <Trans count={generatedSampleOverschrijvingen.length} i18nKey={"forms.agreements.sections.2.prognosisText_outgoing"}
-									 components={components} values={{count: generatedSampleOverschrijvingen.length}} />;
-		const incomingTrans = <Trans count={generatedSampleOverschrijvingen.length} i18nKey={"forms.agreements.sections.2.prognosisText_incoming"}
-									 components={components} values={{count: generatedSampleOverschrijvingen.length}} />;
-
-		return (
-			<Text>
-				{afspraakType === AfspraakType.Expense ? outgoingTrans : incomingTrans}
-			</Text>
-		);
-	};
-
-	const filterRubriekenByAfspraakType = (r: Rubriek) => afspraakType === AfspraakType.Expense ? !r.grootboekrekening?.credit : r.grootboekrekening?.credit;
-
-	const onSelectRubriek = (val) => {
-		if (val) {
-			rubriekId.setValue(String(val.key));
-		}
-		else {
-			rubriekId.reset();
-		}
-	};
-	const onSelectOrganisatie = (val) => {
-		rekeningId.reset();
-
-		if (val) {
-			organisatieId.setValue(String(val.value));
-
-			if ($afspraakFormData.data?.organisaties) {
-				const foundOrganisatie = $afspraakFormData.data.organisaties.find(o => o.id === val.value);
-				if (foundOrganisatie) {
-					const {rekeningen = []} = foundOrganisatie;
-
-					if (rekeningen.length === 1 && rekeningen[0].id) {
-						rekeningId.setValue(String(rekeningen[0].id));
-					}
-					else {
-						rekeningId.clear();
-					}
-				}
-				else if (val.value === 0) {
-					if (burger.rekeningen?.length === 1 && burger.rekeningen?.[0].id) {
-						rekeningId.setValue(String(burger.rekeningen[0].id));
-					}
-					else {
-						rekeningId.clear();
-					}
-				}
-			}
-		}
-		else {
-			organisatieId.reset();
-		}
-	};
-	const onSelectRekening = (val) => {
-		if (val) {
-			rekeningId.setValue(String(val.value));
-		}
-		else {
-			rekeningId.reset();
-		}
-	};
-
-	const intervalOptions = [
-		{key: "day", label: t("interval.day", {count: parseInt(intervalNumber.value)}), value: IntervalType.Day},
-		{key: "week", label: t("interval.week", {count: parseInt(intervalNumber.value)}), value: IntervalType.Week},
-		{key: "month", label: t("interval.month", {count: parseInt(intervalNumber.value)}), value: IntervalType.Month},
-		{key: "year", label: t("interval.year", {count: parseInt(intervalNumber.value)}), value: IntervalType.Year},
+	const tegenrekeningOptions = [
+		...burgerRekeningen.map(r => ({
+			key: `burger-${r.id}`,
+			value: r.id,
+			label: `${r.iban} (${r.rekeninghouder})`,
+			context: {
+				iban: r.iban,
+				rekeninghouder: r.rekeninghouder,
+			},
+		})),
+		// @ts-ignore Todo: for some reason this throws an error, while this works perfectly fine. (31-03-2021)
+		...organisaties.reduce((options, o: Organisatie) => {
+			const rekeningen = (o.rekeningen || []).map(r => ({
+				key: `${o.id}-${r.id}`,
+				value: r.id,
+				label: `${r.iban} (${r.rekeninghouder})`,
+				context: {
+					iban: r.iban,
+					rekeninghouder: r.rekeninghouder,
+					organisatieId: o.id,
+				},
+			}));
+			return [
+				...options,
+				...rekeningen,
+			];
+		}, []),
 	];
 
+	const rekeningSelectProps = {
+		styles: isValid("tegenRekeningId") ? reactSelectStyles.default : reactSelectStyles.error,
+		components: {
+			Option: RekeningOption,
+			ValueContainer: RekeningValueContainer,
+		},
+	};
+
+	const onSubmit = () => {
+		try {
+			const validatedData = validator.parse(data);
+			onChange(validatedData);
+		}
+		catch (err) {
+			toast({error: err.message, title: t("messages.genericError.title")});
+		}
+	};
+
+	// Todo: add back button
 	return (
-		<Stack spacing={5} as={"form"} onSubmit={onSubmit} {...props}>
-			<Section>
-				<Stack spacing={5} divider={<Divider />}>
-					<Stack spacing={2} direction={["column", "row"]}>
-						<FormLeft title={t("forms.agreements.sections.0.title")} helperText={t("forms.agreements.sections.0.helperText")} />
-						<FormRight>
-							<RadioButtonGroup name={"afspraakType"} onChange={onChangeAfspraakType} defaultValue={AfspraakType.Expense} value={afspraakType} options={afspraakTypeOptions} />
+		<Section direction={["column", "row"]}>
+			<FormLeft title={t("afspraakForm.section1.title")} helperText={t("afspraakForm.section1.helperText")} />
+			<FormRight spacing={5}>
 
-							<Stack spacing={2} direction={["column", "row"]}>
-								<Stack spacing={1} flex={1}>
-									<FormLabel htmlFor={"accountId"}>{t("forms.agreements.fields.rubriek")}</FormLabel>
-									<Queryable query={$afspraakFormData}>{(data: {rubrieken: Rubriek[]}) => {
-										const options = data.rubrieken.filter(r => r.grootboekrekening && r.grootboekrekening.id).filter(filterRubriekenByAfspraakType).map((r: Rubriek) => ({
-											key: r.id,
-											label: r.naam,
-											value: r.grootboekrekening!.id,
-										}));
-										const value = options.find(r => r.key === parseInt(rubriekId.value));
-
-										return (
-											<Select onChange={onSelectRubriek} id="rubriekId" isClearable={true} noOptionsMessage={() => t("forms.agreements.fields.rubriekChoose")}
-												maxMenuHeight={200} options={options} value={value || null} styles={reactSelectStyles.default} />
-										);
-									}}</Queryable>
-								</Stack>
+				<Stack direction={["column", "row"]}>
+					<FormControl flex={1} isInvalid={!isValid("credit")} isRequired>
+						<FormLabel>{t("afspraak.betaalrichting")}</FormLabel>
+						<RadioGroup colorScheme={"primary"} onChange={e => updateForm("credit", e === "inkomsten")} value={data.credit !== undefined ? (data.credit ? "inkomsten" : "uitgaven") : undefined}>
+							<Stack>
+								<Radio value="inkomsten">{t("afspraak.inkomsten")}</Radio>
+								<Radio value="uitgaven">{t("afspraak.uitgaven")}</Radio>
 							</Stack>
-							<Stack spacing={2} direction={["column", "row"]}>
-								<Stack spacing={1} flex={1}>
-									<FormLabel htmlFor={"description"}>{t("forms.agreements.fields.description")}</FormLabel>
-									<Input isInvalid={isInvalid(description)} {...description.bind} id="description" />
-								</Stack>
-							</Stack>
-							<Stack spacing={2} direction={["column", "row"]}>
-								<Stack spacing={1} flex={1}>
-									<FormLabel htmlFor={"beneficiaryId"}>{t("forms.agreements.fields.beneficiary")}</FormLabel>
-									<Queryable query={$afspraakFormData}>{(data: {organisaties: Organisatie[]}) => {
-										const options = [
-											...data.organisaties.map(o => ({
-												key: o.id,
-												label: o.weergaveNaam,
-												value: o.id,
-											})),
-											{
-												key: 0,
-												label: formatBurgerName(burger),
-												value: 0,
-											},
-										];
-										const value = options.find(o => o.key === parseInt(organisatieId.value));
-
-										return (
-											<Select onChange={onSelectOrganisatie} id="beneficiaryId" isClearable={true} noOptionsMessage={() => t("select.noOptions")}
-												maxMenuHeight={200} options={options} value={value} styles={reactSelectStyles.default} />
-										);
-									}}
-									</Queryable>
-								</Stack>
-								<Stack spacing={1} flex={1}>
-									<FormLabel htmlFor={"rekeningId"}>{t("forms.agreements.fields.bankAccount")}</FormLabel>
-									<Queryable query={$afspraakFormData}>{(data: {organisaties: Organisatie[]}) => {
-										if (!data.organisaties) {
-											return null;
-										}
-
-										let rekeningen: Rekening[];
-										if (parseInt(organisatieId.value) === 0) {
-											rekeningen = burger.rekeningen || [];
-										}
-										else {
-											rekeningen = data.organisaties.find(o => o.id === parseInt(organisatieId.value))?.rekeningen || [];
-										}
-
-										const options = rekeningen.map(r => ({
-											key: r.id,
-											label: `${formatIBAN(r.iban)} (${r.rekeninghouder})`,
-											value: r.id,
-										}));
-										const value = options.find(r => r.key === parseInt(rekeningId.value));
-
-										return (
-											<Select onChange={onSelectRekening} id="rekeningId" isClearable={true} noOptionsMessage={() => t("forms.agreements.fields.bankAccountChoose")}
-												maxMenuHeight={200} options={options} value={value} styles={reactSelectStyles.default} />
-										);
-									}}
-									</Queryable>
-								</Stack>
-							</Stack>
-							<Stack spacing={2} direction={["column", "row"]}>
-								<Stack spacing={1} flex={1}>
-									<FormLabel htmlFor={"amount"}>{t("forms.agreements.fields.amount")}</FormLabel>
-									<InputGroup maxWidth={"100%"} flex={1}>
-										<InputLeftElement zIndex={0}>&euro;</InputLeftElement>
-										<Input isInvalid={isInvalid(amount)} {...amount.bind} id="amount" />
-									</InputGroup>
-								</Stack>
-							</Stack>
-						</FormRight>
-					</Stack>
-
-					<Stack spacing={2} direction={["column", "row"]}>
-						<FormLeft title={t("forms.agreements.sections.1.title")} helperText={t("forms.agreements.sections.1.helperText")} />
-						<FormRight>
-
-							<Stack spacing={2} direction={["column", "row"]}>
-								<RadioButtonGroup name={"isRecurring"} onChange={(val) => toggleRecurring(val === AfspraakPeriod.Periodic)}
-												  value={isRecurring ? AfspraakPeriod.Periodic : AfspraakPeriod.Once} options={isRecurringOptions} />
-							</Stack>
-
-							{isRecurring && (
-								<Stack direction={["column", "row"]} spacing={1} mt={2}>
-									<Stack spacing={1} flex={1}>
-										<Stack direction={"row"} alignItems={"center"}>
-											<FormLabel htmlFor={"interval"}>{t("interval.every")}</FormLabel>
-											<Input type={"number"} min={1} {...intervalNumber.bind} width={100} id={"interval"} />
-
-											<Box flex={1}>
-												<Select onChange={(val) => intervalType.setValue(() => val?.value)} id="interval" isClearable={false} noOptionsMessage={() => t("interval.choose")}
-													maxMenuHeight={200} options={intervalOptions} value={intervalOptions.find(i => i.value === intervalType.value)}
-													styles={reactSelectStyles.default} />
-											</Box>
-										</Stack>
-									</Stack>
-								</Stack>
-							)}
-
-							<Stack direction={["column", "row"]} spacing={1}>
-								<Stack spacing={1} flex={1}>
-									<FormLabel htmlFor={"startDate"}>{isRecurring ? t("forms.agreements.fields.startDate") : t("forms.common.fields.date")}</FormLabel>
-									<DatePicker selected={d(startDate.value, "L").isValid() ? d(startDate.value, "L").toDate() : null} dateFormat={"dd-MM-yyyy"}
-										onChange={(value: Date) => {
-											if (value) {
-												startDate.setValue(d(value).format("L"));
-											}
-										}} customInput={<Input type="text" isInvalid={isInvalid(startDate)} {...startDate.bind} />} id={"startDate"} />
-								</Stack>
-							</Stack>
-
-							{isRecurring && (
-								<Stack direction={["column", "row"]} spacing={1} mt={2}>
-									<Stack isInline={true} alignItems={"center"} spacing={3}>
-										<Switch isChecked={isContinuous} onChange={() => toggleContinuous()} id={"isContinuous"} />
-										<FormLabel mb={0} htmlFor={"isContinuous"}>{t("forms.agreements.fields.continuous")}</FormLabel>
-									</Stack>
-								</Stack>
-							)}
-
-							{isRecurring && !isContinuous && (
-								<Stack direction={["column", "row"]} spacing={1}>
-									<Stack spacing={1} flex={1}>
-										<FormLabel htmlFor={"nTimes"}>{t("forms.agreements.fields.nTimes")}</FormLabel>
-										<Input isInvalid={isInvalid(nTimes)} type={"number"} {...nTimes.bind} width={100} id={"nTimes"} />
-									</Stack>
-								</Stack>
-							)}
-
-							{afspraakType === AfspraakType.Expense && (
-								<Stack direction={["column", "row"]} spacing={1} mt={2}>
-									<Stack isInline={true} alignItems={"center"} spacing={3}>
-										<Switch isChecked={isAutomatischeIncasso} onChange={() => toggleAutomatischeIncasso()} id={"isAutomatischeIncasso"} />
-										<FormLabel mb={0} htmlFor={"isAutomatischeIncasso"}>{t("forms.agreements.fields.automatischeIncasso")}</FormLabel>
-									</Stack>
-								</Stack>
-							)}
-						</FormRight>
-					</Stack>
-
-					<Stack spacing={2} direction={["column", "row"]}>
-						<FormLeft />
-						<FormRight>
-							<Stack direction={"row"} spacing={1} justifyContent={"flex-end"}>
-								<Button isLoading={loading} type={"submit"} colorScheme={"primary"} onClick={onSubmit}>{t("actions.save")}</Button>
-							</Stack>
-						</FormRight>
-					</Stack>
+						</RadioGroup>
+						<FormErrorMessage>{t("afspraakDetailView.invalidBetaalrichtingError")}</FormErrorMessage>
+					</FormControl>
 				</Stack>
-			</Section>
-			{isRecurring && (
-				<Section>
-					<Stack direction={["column", "row"]} spacing={2}>
-						<FormLeft title={t("forms.agreements.sections.2.title")} helperText={t("forms.agreements.sections.2.helperText")} />
-						<FormRight>
-							<Stack spacing={5}>
-								<Stack direction={"row"} alignItems={"center"} spacing={0}>
-									<HugeDatePicker />
-								</Stack>
-								<OverschrijvingenListView overschrijvingen={generatedSampleOverschrijvingen} />
-							</Stack>
-						</FormRight>
-					</Stack>
-				</Section>
-			)}
-		</Stack>
+
+				<Stack direction={["column", "row"]}>
+					<FormControl flex={1} isInvalid={!isValid("tegenRekeningId")} isRequired>
+						<FormLabel>{t("afspraak.tegenrekening")}</FormLabel>
+						<Select id="tegenrekening" isClearable={true} noOptionsMessage={() => t("forms.agreements.fields.bankAccountChoose")} maxMenuHeight={350}
+							options={tegenrekeningOptions} value={data.tegenRekeningId ? tegenrekeningOptions.find(o => o.value === data.tegenRekeningId) : null}
+							onChange={(result) => {
+								updateForm("tegenRekeningId", result?.value);
+								updateForm("organisatieId", result?.context.organisatieId);
+							}} {...rekeningSelectProps} />
+						<FormErrorMessage>{t("afspraakDetailView.invalidTegenrekeningError")}</FormErrorMessage>
+					</FormControl>
+				</Stack>
+
+				<Stack direction={["column", "row"]}>
+					<FormControl flex={1} isInvalid={!isValid("rubriekId")} isRequired>
+						<FormLabel>{t("afspraak.rubriek")}</FormLabel>
+						<Select id="rubriek" isClearable={true} noOptionsMessage={() => t("forms.agreements.fields.rubriekChoose")} maxMenuHeight={350}
+							options={rubriekOptions} value={data.rubriekId ? rubriekOptions.find(r => r.value === data.rubriekId) : null}
+							onChange={(result) => updateForm("rubriekId", result?.value)} styles={isValid("rubriekId") ? reactSelectStyles.default : reactSelectStyles.error} />
+						<FormErrorMessage>{t("afspraakDetailView.invalidRubriekError")}</FormErrorMessage>
+					</FormControl>
+
+					<FormControl flex={1} isInvalid={!isValid("omschrijving")} isRequired={true}>
+						<FormLabel>{t("afspraak.omschrijving")}</FormLabel>
+						<Input value={data.omschrijving || ""} onChange={e => updateForm("omschrijving", e.target.value)} />
+						<FormErrorMessage>{t("afspraakDetailView.invalidOmschrijvingError")}</FormErrorMessage>
+					</FormControl>
+				</Stack>
+
+				<Stack direction={["column", "row"]}>
+					<FormControl flex={1} isInvalid={!isValid("bedrag")} isRequired>
+						<FormLabel>{t("afspraak.bedrag")}</FormLabel>
+						<InputGroup>
+							<InputLeftElement zIndex={0}>&euro;</InputLeftElement>
+							<Input flex={3} type={"text"} defaultValue={currencyFormat(data.bedrag).format() || ""} onChange={e => updateForm("bedrag", parseFloat(currencyFormat(e.target.value).toString()))} />
+						</InputGroup>
+						<FormErrorMessage>{t("afspraakDetailView.invalidBedragError")}</FormErrorMessage>
+					</FormControl>
+				</Stack>
+
+				<Box>
+					<Button colorScheme={"primary"} onClick={onSubmit}>{t("actions.save")}</Button>
+				</Box>
+
+			</FormRight>
+		</Section>
 	);
 };
 

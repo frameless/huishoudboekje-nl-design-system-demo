@@ -1,4 +1,4 @@
-import {ViewIcon, WarningTwoIcon} from "@chakra-ui/icons";
+import {AddIcon, ViewIcon, WarningTwoIcon} from "@chakra-ui/icons";
 import {Button, Divider, FormControl, FormLabel, HStack, IconButton, Input, InputGroup, InputLeftElement, InputRightElement, Stack, Text, VStack} from "@chakra-ui/react";
 import React, {useContext, useState} from "react";
 import {useTranslation} from "react-i18next";
@@ -6,8 +6,7 @@ import {AiOutlineTag} from "react-icons/all";
 import {NavLink} from "react-router-dom";
 import Routes from "../../../config/routes";
 import {Afspraak} from "../../../generated/graphql";
-import d from "../../../utils/dayjs";
-import {currencyFormat2, formatBurgerName, intervalString} from "../../../utils/things";
+import {currencyFormat2, formatBurgerName} from "../../../utils/things";
 import {zoektermValidator} from "../../../utils/zod";
 import BackButton from "../../BackButton";
 import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
@@ -37,17 +36,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	const menu = <AfspraakDetailMenu afspraak={afspraak} onDelete={() => deleteAfspraak()} />;
 	const bedrag = afspraak.credit ? parseFloat(afspraak.bedrag) : (parseFloat(afspraak.bedrag) * -1);
 	const zoektermen = afspraak.zoektermen || [];
-
 	const zoektermenDuplicatesFound = true; // Todo: backend will tell if automatischBoeken is possible (19-03-2021)
-
-	// const generatedSampleOverschrijvingen = generateSampleOverschrijvingen({
-	// 	bedrag: afspraak.bedrag,
-	// 	startDate: d(afspraak.startDatum).toDate(),
-	// 	startDate2: d(afspraak.startDatum).toDate(),
-	// 	endDate: d(afspraak.eindDatum).toDate(),
-	// 	nTimes: afspraak.aantalBetalingen || 1,
-	// 	interval: afspraak.interval || XInterval.empty,
-	// });
 
 	return (
 		<Page title={t("afspraakDetailView.title")} backButton={<BackButton to={Routes.Burger(afspraak.burger?.id)} />} menu={menu}>
@@ -67,8 +56,10 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 							<DataItem label={t("afspraak.tegenrekening")}>
 								<HStack>
 									<Text>{afspraak.tegenRekening?.rekeninghouder}</Text>
-									<IconButton as={NavLink} to={Routes.Organisatie(afspraak.organisatie?.id)} variant={"ghost"} size={"sm"} icon={
-										<ViewIcon />} aria-label={t("actions.view")} />
+									{afspraak.organisatie?.id && (
+										<IconButton as={NavLink} to={Routes.Organisatie(afspraak.organisatie.id)} variant={"ghost"}
+											size={"sm"} icon={<ViewIcon />} aria-label={t("actions.view")} />
+									)}
 								</HStack>
 								<Text size={"sm"}><PrettyIban iban={afspraak.tegenRekening?.iban} /></Text>
 							</DataItem>
@@ -87,7 +78,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 
 						<Stack direction={["column", "row"]}>
 							<DataItem label={t("afspraak.rubriek")}>{afspraak.rubriek?.naam}</DataItem>
-							<DataItem label={t("afspraak.omschrijving")}>{afspraak.beschrijving}</DataItem>
+							<DataItem label={t("afspraak.omschrijving")}>{afspraak.omschrijving}</DataItem>
 						</Stack>
 						<Stack direction={["column", "row"]}>
 							<DataItem label={t("afspraak.bedrag")}>
@@ -144,13 +135,20 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 				<FormLeft title={t("afspraakDetailView.section4.title")} helperText={t("afspraakDetailView.section4.helperText")} />
 				<FormRight>
 
-					<Stack direction={["column", "row"]}>
-						<DataItem label={t("afspraak.periodiek")}>{intervalString(afspraak.interval, t)}</DataItem>
-						<DataItem label={t("afspraak.periode")}>{t("vanTotDatums", {start: d(afspraak.startDatum).format("L"), end: d(afspraak.eindDatum).format("L")})}</DataItem>
-					</Stack>
+					{/* Todo: interval volgens https://schema.org/Schedule
+					Velden (UI nog bepalen):
+					- startDatum: Date	  (vanaf welke datum de herhaling begint)
+					- eindDatum: Date	  (tot welke datum de herhaling duurt)
+					- byDay: Int[] 		  (op welke dagen van de week, bijv: [1, 3, 5] voor maandag, woensdag en vrijdag)
+					- byMonth: Int[] 	  (in welke maanden, bijv: [1, 4, 7, 10] voor januari, april, juli en oktober)
+					- byMonthDay: Int[]   (op welke dagen van de week, bijv. [25] voor "elke maand op de 25e", of [-1] voor "elke laatste dag van de maand")
+					- byMonthWeek: Int[]  (in welke week van de maand, bijvoorbeeld [2] voor elke tweede week)
+					- exceptDates: Date[] (welke datums worden overgeslagen, bijvoorbeeld [2020-01-01] voor "niet op 1 januari 2020")
+					*/}
 
 					<Stack direction={["column", "row"]}>
-						<DataItem label={t("afspraak.omschrijving")}>{/* Todo */ "omschrijving"}</DataItem>
+						<Button colorScheme={"primary"} size={"sm"} leftIcon={
+							<AddIcon />} as={NavLink} to={Routes.AfspraakBetaalinstructie(afspraak.id!)}>{t("actions.add")}</Button>
 					</Stack>
 
 					{/* Todo: show verwachte betalingen (19-03-2021) */}
@@ -158,18 +156,10 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 					{/*	<Box>*/}
 					{/*		<Button>Bekijk verwachte betalingen</Button>*/}
 					{/*	</Box>*/}
+					{/*	<OverschrijvingenListView overschrijvingen={generatedSampleOverschrijvingen} />*/}
 					{/*</Stack>*/}
-
 				</FormRight>
 			</Section>
-
-			{/* Todo: show verwachte betalingen (19-03-2021) */}
-			{/*<Section direction={["column", "row"]}>*/}
-			{/*	<FormLeft title={t("forms.agreements.sections.2.title")} helperText={t("forms.agreements.sections.2.helperText")} />*/}
-			{/*	<FormRight>*/}
-			{/*		<OverschrijvingenListView overschrijvingen={generatedSampleOverschrijvingen} />*/}
-			{/*	</FormRight>*/}
-			{/*</Section>*/}
 		</Page>
 	);
 };

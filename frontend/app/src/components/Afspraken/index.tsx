@@ -1,16 +1,20 @@
 import React from "react";
-import {Route, Switch} from "react-router-dom";
+import {Route, Switch, useParams} from "react-router-dom";
 import Routes from "../../config/routes";
-import AfspraakDetail from "./AfspraakDetail/AfspraakDetail";
+import CreateAfspraak from "./CreateAfspraak";
 import EditAfspraak from "./EditAfspraak";
+import ViewAfspraak from "./ViewAfspraak";
 
-const Afspraken = () => {
+const AfspraakRouter = () => {
+	const {burgerId} = useParams<{burgerId: string}>();
+
 	return (
 		<Switch>
-			<Route path={Routes.ViewAfspraak()} component={AfspraakDetail} />
 			<Route path={Routes.EditAfspraak()} component={EditAfspraak} />
+			<Route path={Routes.ViewAfspraak()} component={ViewAfspraak} />
+			<Route path={Routes.CreateBurgerAfspraken(parseInt(burgerId))} render={(props) => <CreateAfspraak burgerId={parseInt(burgerId)} {...props} />} />
 		</Switch>
 	);
 };
 
-export default Afspraken;
+export default AfspraakRouter;

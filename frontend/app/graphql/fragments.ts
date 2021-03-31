@@ -36,7 +36,7 @@ export const RubriekFragment = gql`
 export const AfspraakFragment = gql`
     fragment Afspraak on Afspraak {
         id
-        beschrijving
+        omschrijving
         startDatum
         eindDatum
         aantalBetalingen

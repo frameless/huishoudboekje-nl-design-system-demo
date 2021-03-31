@@ -4,7 +4,7 @@ import currency from "currency.js";
 import {friendlyFormatIBAN} from "ibantools";
 import {createContext} from "react";
 import {Granularity, periodFormatForGranularity} from "../components/Rapportage/Aggregator";
-import {BankTransaction, Burger, GebruikersActiviteit, Interval, IntervalInput, Rubriek} from "../generated/graphql";
+import {BankTransaction, Burger, GebruikersActiviteit, Interval, Rubriek} from "../generated/graphql";
 import {IntervalType} from "../models/models";
 import d from "./dayjs";
 
@@ -62,7 +62,7 @@ export const XInterval = {
 		weken: 0,
 		dagen: 0,
 	},
-	parse: (interval: IntervalInput | undefined): {intervalType: IntervalType, count: number} | undefined => {
+	parse: (interval: any | undefined): {intervalType: IntervalType, count: number} | undefined => {
 		if (!interval) {
 			return undefined;
 		}

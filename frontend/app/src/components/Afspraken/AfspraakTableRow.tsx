@@ -17,7 +17,7 @@ const AfspraakTableRow: React.FC<TableRowProps & {afspraak: Afspraak}> = ({afspr
 		<Tr {...props}>
 			<Td>{afspraak.organisatie?.weergaveNaam || afspraak.tegenRekening?.rekeninghouder || t("unknown")}</Td>
 			{!isMobile && (<Td>
-				<Text color={"gray.600"}>{afspraak.beschrijving}</Text>
+				<Text color={"gray.600"}>{afspraak.omschrijving}</Text>
 			</Td>)}
 			<Td>
 				<Stack spacing={1} flex={1} alignItems={"flex-end"}>

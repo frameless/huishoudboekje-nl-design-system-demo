@@ -2,66 +2,56 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {useHistory, useParams} from "react-router-dom";
 import Routes from "../../../config/routes";
-import {Afspraak, useGetAfspraakFormDataQuery} from "../../../generated/graphql";
+import {Afspraak, UpdateAfspraakMutationVariables, useGetAfspraakFormDataQuery, useUpdateAfspraakMutation} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
-import useFakeMutation from "../../../utils/useFakeMutation";
 import useHandleMutation from "../../../utils/useHandleMutation";
-import PageNotFound from "../../PageNotFound";
-import AfspraakFormContext from "./context";
-import EditAfspraakForm from "./EditAfspraakForm";
-
-export type AfspraakBetalingValues = {
-	rubriek?: number,
-	omschrijving?: string,
-	tegenrekening?: number,
-	bedrag?: number,
-	credit?: boolean,
-}
+import BackButton from "../../BackButton";
+import Page from "../../Layouts/Page";
+import AfspraakForm from "../AfspraakForm";
+import AfspraakFormContext, {AfspraakFormContextType} from "./context";
 
 const EditAfspraak = () => {
 	const {id} = useParams<{id: string}>();
 	const {t} = useTranslation();
-	const {push} = useHistory();
 	const handleMutation = useHandleMutation();
-	const $afspraakFormData = useGetAfspraakFormDataQuery({
+	const [updateAfspraakMutation] = useUpdateAfspraakMutation();
+	const {push} = useHistory();
+
+	const $afspraak = useGetAfspraakFormDataQuery({
 		variables: {
 			afspraakId: parseInt(id),
 		},
 	});
 
-	// Todo: implement this once there's a mutation for this action.
-	// const [updateAfspraakBetalingMutation] = useUpdateAfspraakMutation();
-	const updateAfspraakBetalingMutation = useFakeMutation();
-
 	return (
-		<Queryable query={$afspraakFormData} children={(data) => {
-			const {organisaties = [], rubrieken = []} = data;
+		<Queryable query={$afspraak} children={(data) => {
 			const afspraak: Afspraak = data.afspraak;
 
-			if (!afspraak) {
-				return <PageNotFound />;
-			}
-
-			const ctxValue = {afspraak, organisaties, rubrieken};
-			const {bedrag, rubriek, tegenRekening, beschrijving, credit} = afspraak;
-			const values = {
-				bedrag: parseFloat(bedrag),
-				credit,
-				rubriek: rubriek?.id,
-				omschrijving: beschrijving,
-				tegenrekening: tegenRekening?.id,
+			const editAfspraakValues: UpdateAfspraakMutationVariables["input"] = {
+				bedrag: parseFloat(afspraak.bedrag),
+				credit: afspraak.credit,
+				rubriekId: afspraak.rubriek?.id,
+				omschrijving: afspraak.omschrijving,
+				tegenRekeningId: afspraak.tegenRekening?.id,
 			};
 
-			const updateAfspraakBetaling = (data: AfspraakBetalingValues) => handleMutation(updateAfspraakBetalingMutation({
+			const updateAfspraak = (data: UpdateAfspraakMutationVariables["input"]) => handleMutation(updateAfspraakMutation({
 				variables: {
 					id: afspraak.id!,
-					...data,
+					input: data,
 				},
 			}), t("messages.updateAfspraakSuccess"), () => push(Routes.ViewAfspraak(afspraak.id)));
 
+			const ctxValue: AfspraakFormContextType = {
+				rubrieken: data.rubrieken || [],
+				organisaties: data.organisaties || [],
+			};
+
 			return (
 				<AfspraakFormContext.Provider value={ctxValue}>
-					<EditAfspraakForm afspraak={afspraak} values={values} onChange={updateAfspraakBetaling} />
+					<Page title={t("forms.agreements.titleEdit")} backButton={<BackButton to={Routes.ViewAfspraak(afspraak.id)} />}>
+						<AfspraakForm burgerRekeningen={afspraak.burger?.rekeningen || []} values={editAfspraakValues} onChange={updateAfspraak} />
+					</Page>
 				</AfspraakFormContext.Provider>
 			);
 		}} />

@@ -5,21 +5,18 @@
             "welcome": "Welkom bij het Huishoudboekje van {{tenantName}}.",
             "clickHereToContinue": "Klik hieronder op inloggen om te beginnen."
         },
-        "deleteAfspraakSuccess": "Afspraak is verwijderd.",
-        "deleteAfspraakZoektermSuccess": "Zoekterm is verwijderd.",
-        "addAfspraakZoektermSuccess": "Zoekterm is opgeslagen.",
-        "zoektermLengthError": "Zoekterm moet minimaal één teken lang zijn.",
-        "automatischBoekenDisabled_noZoektermen": "Het is niet mogelijk om deze afspraak automatisch af te letteren. Voeg een zoekterm toe waarop het systeem transacties kan zoeken.",
-        "automatischBoekenDisabled_duplicatesFound": "Het is niet mogelijk om deze afspraak automatisch af te letteren. Er zijn andere afspraken met dezelfde zoektermen gevonden. Voeg een unieke zoekterm toe waarop het systeem transacties kan zoeken.",
-        "agreements": {
-            "invalidFormMessage": "Er is een fout opgetreden. Controleer de ingevulde gegevens en probeer het opnieuw.",
-            "createSuccessMessage": "Nieuwe afspraak succesvol opgeslagen."
-        },
         "genericError": {
             "title": "Fout.",
             "description": "Er is een onbekende fout opgetreden. Probeer het later nog eens."
         },
+        "createAfspraakSuccess": "Afspraak is opgeslagen.",
         "updateAfspraakSuccess": "Afspraak is gewijzigd.",
+        "automatischBoekenDisabled_noZoektermen": "Het is niet mogelijk om deze afspraak automatisch af te letteren. Voeg een zoekterm toe waarop het systeem transacties kan zoeken.",
+        "automatischBoekenDisabled_duplicatesFound": "Het is niet mogelijk om deze afspraak automatisch af te letteren. Er zijn andere afspraken met dezelfde zoektermen gevonden. Voeg een unieke zoekterm toe waarop het systeem transacties kan zoeken.",
+        "deleteAfspraakSuccess": "Afspraak is verwijderd.",
+        "deleteAfspraakZoektermSuccess": "Zoekterm is verwijderd.",
+        "addAfspraakZoektermSuccess": "Zoekterm is opgeslagen.",
+        "zoektermLengthError": "Zoekterm moet minimaal één teken lang zijn.",
         "customerStatementMessages": {
             "deleteSuccess": "Het bronbestand is succesvol verwijderd.",
             "createSuccess": "Het bronbestand is geïmporteerd en de transacties zijn succesvol ingelezen.",
@@ -79,12 +76,12 @@
     "actions": {
         "login": "Inloggen",
         "logout": "Uitloggen",
+        "save": "Opslaan",
+        "view": "Bekijken",
         "cancel": "Annuleren",
         "delete": "Verwijderen",
         "edit": "Wijzigen",
-        "view": "Bekijken",
         "add": "Toevoegen",
-        "save": "Opslaan",
         "back": "Terug",
         "actions": "Acties",
         "export": "Exporteren",
@@ -97,11 +94,29 @@
         "backToHome": "Terug naar de hoofdpagina",
         "clickToEdit": "Klik om te wijzigen"
     },
-    "deleteAfspraak": {
-        "confirmModalTitle": "Afspraak verwijderen",
-        "confirmModalBody": "Weet u zeker dat u deze afspraak wil verwijderen?"
+    "afspraakForm": {
+        "section1": {
+            "title": "Tegenpartij en betaling",
+            "helperText": "Vul hier alle gegevens over de afspraak in."
+        }
+    },
+    "afspraak": {
+        "betaalrichting": "Betaalrichting",
+        "inkomsten": "Inkomsten",
+        "uitgaven": "Uitgaven",
+        "tegenrekening": "Tegenrekening",
+        "rubriek": "Rubriek",
+        "omschrijving": "Omschrijving",
+        "bedrag": "Bedrag",
+        "zoektermen": "Zoektermen",
+        "zoekterm": "zoekterm"
     },
     "afspraakDetailView": {
+        "invalidBetaalrichtingError": "Kies een betaalrichting.",
+        "invalidTegenrekeningError": "Kies een tegenrekening.",
+        "invalidRubriekError": "Kies een rubriek.",
+        "invalidOmschrijvingError": "Vul een omschrijving in.",
+        "invalidBedragError": "Vul een geldig bedrag in.",
         "title": "Afspraak bekijken",
         "section1": {
             "title": "Partijen",
@@ -118,76 +133,19 @@
         "section4": {
             "title": "Betaalinstructie",
             "helperText": "Instellingen voor de betaalinstructie."
-        },
-        "invalidTegenrekeningError": "Kies een tegenrekening.",
-        "invalidRubriekError": "Kies een rubriek.",
-        "invalidOmschrijvingError": "Vul een omschrijving in.",
-        "invalidBedragError": "Vul een geldig bedrag in."
+        }
     },
-    "burger": "Burger",
-    "afspraak": {
-        "tegenrekening": "Tegenrekening",
-        "rubriek": "Rubriek",
-        "omschrijving": "Omschrijving",
-        "bedrag": "Bedrag",
-        "zoektermen": "Zoektermen",
-        "periodiek": "Periodiek",
-        "periode": "Periode",
-        "betaalrichting": "Betaalrichting",
-        "inkomsten": "Inkomsten",
-        "uitgaven": "Uitgaven",
-        "zoekterm": "zoekterm"
-    },
-    "vanTotDatums": "{{start}} t/m {{end}}",
     "forms": {
         "agreements": {
             "fields": {
-                "income": "Inkomsten",
-                "expenses": "Uitgaven",
-                "isRecurring_once": "Eenmalig",
-                "isRecurring_periodic": "Periodiek",
-                "rubriek": "Rubriek",
-                "rubriekChoose": "Kies een rubriek",
-                "description": "Omschrijving",
-                "beneficiary": "Tegenrekening",
-                "bankAccount": "Bankrekening",
                 "bankAccountChoose": "Kies een bankrekening",
-                "amount": "Bedrag",
-                "startDate": "Startdatum",
-                "continuous": "Doorlopend",
-                "nTimes": "Aantal keer",
-                "automatischeIncasso": "Automatische incasso",
+                "rubriekChoose": "Kies een rubriek",
                 "automatischGeboekt": "Automatisch geboekt",
                 "handmatigGeboekt": "Handmatig geboekt",
                 "ongeboekt": "Niet geboekt"
             },
-            "sections": {
-                "0": {
-                    "title": "Afspraak",
-                    "helperText": "Vul de algemene gegevens van de nieuwe afspraak in."
-                },
-                "1": {
-                    "title": "Betalingen",
-                    "helperText": "Geef aan wanneer en hoeveel betalingen verwacht worden."
-                },
-                "2": {
-                    "prognosisText_outgoing": "Er wordt <strong>1</strong> uitgaande overschrijving tussen <start>{{start}}</start> en <end>{{end}}</end> verwacht.",
-                    "prognosisText_outgoing_plural": "Er worden <strong>{{count}}</strong> uitgaande overschrijvingen tussen <start>{{start}}</start> en <end>{{end}}</end> verwacht.",
-                    "prognosisText_incoming": "Er wordt <strong>1</strong> inkomende overschrijving tussen <start>{{start}}</start> en <end>{{end}}</end> verwacht.",
-                    "prognosisText_incoming_plural": "Er worden <strong>{{count}}</strong> inkomende overschrijvingen tussen <start>{{start}}</start> en <end>{{end}}</end> verwacht.",
-                    "title": "Verwachting",
-                    "helperText": "Dit is een overzicht van de verwachte betalingen bij deze afspraak."
-                }
-            },
+            "titleCreate": "Afspraak toevoegen",
             "titleEdit": "Afspraak wijzigen"
-        },
-        "common": {
-            "fields": {
-                "date": "Datum",
-                "time": "Tijd",
-                "startDate": "Startdatum",
-                "endDate": "Einddatum"
-            }
         },
         "banking": {
             "sections": {
@@ -202,6 +160,14 @@
                 "journal": {
                     "title": "Transactie bekijken"
                 }
+            }
+        },
+        "common": {
+            "fields": {
+                "time": "Tijd",
+                "startDate": "Startdatum",
+                "endDate": "Einddatum",
+                "date": "Datum"
             }
         },
         "burgers": {
@@ -315,38 +281,12 @@
             }
         }
     },
-    "interval": {
-        "day": "dag",
-        "day_plural": "dagen",
-        "week": "week",
-        "week_plural": "weken",
-        "month": "maand",
-        "month_plural": "maanden",
-        "year": "jaar",
-        "year_plural": "jaar",
-        "every": "Elk(e)",
-        "choose": "Kies een periode",
-        "period": "Periode",
-        "every-day": "Elke dag",
-        "every-day_plural": "Elke {{count}} dagen",
-        "every-week": "Elke week",
-        "every-week_plural": "Elke {{count}} weken",
-        "every-month": "Elke maand",
-        "every-month_plural": "Elke {{count}} maanden",
-        "every-year": "Elk jaar",
-        "every-year_plural": "Elke {{count}} jaar",
-        "once": "Eenmalig"
-    },
-    "select": {
-        "noOptions": "Geen resultaten"
-    },
     "unknown": "Onbekend",
-    "afspraakForm": {
-        "section1": {
-            "title": "Tegenpartij en betaling",
-            "helperText": "Vul hier alle gegevens over de afspraak in."
-        }
+    "deleteAfspraak": {
+        "confirmModalTitle": "Afspraak verwijderen",
+        "confirmModalBody": "Weet u zeker dat u deze afspraak wil verwijderen?"
     },
+    "burger": "Burger",
     "banking": {
         "exports": {
             "title": "Overschrijvingen",
@@ -370,6 +310,9 @@
         "helperText": "Kies een afspraak om deze transactie erop te boeken."
     },
     "bedrag": "Bedrag",
+    "select": {
+        "noOptions": "Geen resultaten"
+    },
     "unbooked": "Niet geboekt",
     "transaction": "Transactie",
     "form": {
@@ -502,6 +445,20 @@
     "allBurgers": "Alle burgers",
     "total": "Totaal",
     "saldo": "Saldo",
+    "interval": {
+        "period": "Periode",
+        "month": "maand",
+        "month_plural": "maanden",
+        "every-day": "Elke dag",
+        "every-day_plural": "Elke {{count}} dagen",
+        "every-week": "Elke week",
+        "every-week_plural": "Elke {{count}} weken",
+        "every-month": "Elke maand",
+        "every-month_plural": "Elke {{count}} maanden",
+        "every-year": "Elk jaar",
+        "every-year_plural": "Elke {{count}} jaar",
+        "once": "Eenmalig"
+    },
     "toastMessages": {
         "generic": {
             "errorTitle": "Er is een fout opgetreden."

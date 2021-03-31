@@ -1,13 +1,13 @@
 import {gql} from "@apollo/client";
 import {
-    AfspraakFragment,
-    BankTransactionFragment,
-    BurgerFragment,
-    CustomerStatementMessageFragment,
-    GebruikerFragment,
-    GrootboekrekeningFragment,
-    OrganisatieFragment,
-    RubriekFragment,
+	AfspraakFragment,
+	BankTransactionFragment,
+	BurgerFragment,
+	CustomerStatementMessageFragment,
+	GebruikerFragment,
+	GrootboekrekeningFragment,
+	OrganisatieFragment, RekeningFragment,
+	RubriekFragment,
 } from "./fragments";
 
 export const GetAllBurgersQuery = gql`
@@ -164,6 +164,30 @@ export const GetAfspraakFormDataQuery = gql`
         }
     }
     ${AfspraakFragment}
+    ${RubriekFragment}
+    ${OrganisatieFragment}
+`;
+
+export const GetCreateAfspraakFormDataQuery = gql`
+    query getCreateAfspraakFormData($burgerId: Int!) {
+        burger(id: $burgerId){
+            rekeningen{
+                ...Rekening
+            }
+        }
+        rubrieken {
+            ...Rubriek
+            grootboekrekening{
+                id
+                naam
+                credit
+            }
+        }
+        organisaties {
+            ...Organisatie
+        }
+    }
+    ${RekeningFragment}
     ${RubriekFragment}
     ${OrganisatieFragment}
 `;
