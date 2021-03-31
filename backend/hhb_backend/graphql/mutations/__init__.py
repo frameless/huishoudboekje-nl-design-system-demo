@@ -1,6 +1,7 @@
 """ GraphQL schema mutations module """
 import graphene
 
+from .afspraken.add_afspraak_zoekterm import AddAfspraakZoekterm
 from .afspraken.create_afspraak import CreateAfspraak
 from .afspraken.delete_afspraak import DeleteAfspraak
 from .afspraken.update_afspraak import UpdateAfspraak
@@ -42,6 +43,7 @@ class RootMutation(graphene.ObjectType):
     deleteAfspraak = DeleteAfspraak.Field()
     updateAfspraakAutomatischBoeken = UpdateAfspraakAutomatischBoeken.Field()
     updateAfspraakBetaalinstructie = UpdateAfspraakBetaalinstructie.Field()
+	addAfspraakZoekterm = AddAfspraakZoekterm.Field()
 
     createOrganisatie = CreateOrganisatie.Field()
     updateOrganisatie = UpdateOrganisatie.Field()
