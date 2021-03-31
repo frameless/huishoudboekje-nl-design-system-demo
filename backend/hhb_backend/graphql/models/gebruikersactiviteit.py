@@ -209,3 +209,12 @@ class GebruikersActiviteit(graphene.ObjectType):
     #     # TODO medewerker?
     #     if root.get('gebruiker_id'):
     #         return await request.dataloader.gebruikers_by_id.load(root.get('gebruiker_id'))
+
+
+class GebruikersActiviteitenPaged(graphene.ObjectType):
+    gebruikersactiviteiten = graphene.List(
+        GebruikersActiviteit
+    )
+    count = graphene.Int()
+    start = graphene.Int()
+    limit = graphene.Int()

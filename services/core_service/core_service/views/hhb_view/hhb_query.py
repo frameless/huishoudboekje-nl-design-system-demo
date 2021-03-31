@@ -104,18 +104,6 @@ class HHBQuery():
                 result_list.append(self.post_process_data(row))
             return {"data": result_list}, 200
 
-        # result_list = []
-        # if start is not None and limit is not None:
-        #     record_query = self.query.paginate(page=start, per_page=limit, error_out=False)
-        #     total = record_query.total
-        #     rows = record_query.items
-        # else:
-        #     rows = self.query.all
-        #
-        # for row in rows:
-        #     result_list.append(self.post_process_data(row))
-        # return {"data": result_list}, 200
-
     def load_relations(self):
         for relation in self._exposed_many_relations + self._exposed_one_relations:
             if not self.filtered_columns or relation['relation'] in self.filtered_columns:
