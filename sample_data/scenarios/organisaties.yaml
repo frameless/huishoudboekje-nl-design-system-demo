@@ -67,8 +67,9 @@ organisaties:
   - iban: "NL29RABO0317344927"
     rekeninghouder: "SVB Utrecht"
 
-- naam: "UWV UTRECHT"
-  weergave_naam: "UWV UTRECHT WIA-uitkering (WGA of IVA)"
+#  WIA-uitkering (WGA of IVA)
+- naam: "UWV Utrecht"
+  weergave_naam: "UWV Utrecht"
   kvk_nummer: "34360247"
   straatnaam: "Postbus"
   huisnummer: "69254"
