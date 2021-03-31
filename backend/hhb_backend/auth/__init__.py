@@ -7,9 +7,11 @@ from time import time
 
 import itsdangerous
 import jwt
+from isodate import parse_duration
 from flask import Flask, g, make_response, redirect, request, session
 from flask_oidc import OpenIDConnect
 from flask_rbac import RBAC
+from itsdangerous import TimedJSONWebSignatureSerializer
 from jwt import InvalidTokenError
 
 from hhb_backend.auth.models import Role, User
@@ -21,6 +23,7 @@ class Auth(TokenProvider):
     oidc: OpenIDConnect
 
     def __init__(self, app: Flask, anonymous_rolename: str = 'anonymous', default_rolename='user'):
+        self.logger = logger = logging.getLogger(__name__)
 
         app.config.setdefault("RBAC_USE_WHITE", True)
 
@@ -28,10 +31,12 @@ class Auth(TokenProvider):
         self.audience = app.config.get("AUTH_AUDIENCE", None) or "https://huishoudboekje.nlx.reviews"
         self.exp_offset = int(app.config.get("AUTH_EXP_OFFSET", None) or str(int(timedelta(days=7).total_seconds())))
         self.advertise = app.config.get("AUTH_ADVERTISE", None) or False
+        self.oidc_id_token_max_expires = app.config.get('OIDC_ID_TOKEN_MAX_EXPIRES', None) or 'PT1H'
 
-        logging.info(f"audience={self.audience},secret={self.secret}")
-        oidc_overrides = {}
-        oidc = OpenIDConnect(app, **oidc_overrides)
+        logger.info(f"audience={self.audience}, exp_offset={self.exp_offset}, advertise={self.advertise}, oidc_id_token_max_expires={self.oidc_id_token_max_expires}")
+        oidc = OpenIDConnect(app)
+        oidc.cookie_serializer = TimedJSONWebSignatureSerializer(
+            self.secret, expires_in=int(parse_duration(self.oidc_id_token_max_expires).total_seconds()))
 
         rbac = RBAC(app,
                     role_model=Role,
@@ -122,19 +127,20 @@ class Auth(TokenProvider):
             payload=payload,
             key=self.secret,
             algorithm="HS256")
-        logging.info(f"token={token}")
+        self.logger.info(f"token={token}")
         return token
 
     def _user_loader(self):
         if self.current_user:
             return self.current_user
 
+        self.logger.debug(f"_user_loader: oidc_id_token={g.oidc_id_token}, authorization={request.headers.get('authorization', None)}")
         if self.oidc.user_loggedin:
-            logging.info(f"_user_loader oidc_id_token={g.oidc_id_token}")
-            return self._default_role_user(self.oidc.user_getfield('email'))
+            user = self._default_role_user(self.oidc.user_getfield('email'))
+            self.logger.debug(f"_user_loader: oidc user: {user}")
+            return user
 
         if 'authorization' in request.headers:
-            logging.info(f"_user_loader: authorization={request.headers['authorization']}")
             token_search = re.search('bearer (.*)', request.headers['authorization'], re.IGNORECASE)
 
             if token_search:
@@ -142,11 +148,13 @@ class Auth(TokenProvider):
                 try:
                     claims = jwt.decode(token, self.secret, algorithms="HS256", audience=self.audience)
                     if email := claims.get('sub', None):
-                        return self._default_role_user(email)
+                        user = self._default_role_user(email)
+                        self.logger.debug(f"_user_loader: token user: {user}")
+                        return user
                 except InvalidTokenError as err:
-                    logging.warning(f"""_user_loader: {err}; claims: {jwt.decode(token, algorithms="HS256", options={"verify_signature": False})}""")
+                    self.logger.warning(f"""_user_loader: {err}; claims: {jwt.decode(token, algorithms="HS256", options={"verify_signature": False})}""")
 
-        logging.info(f"_user_loader: anonymous")
+        self.logger.debug(f"_user_loader: anonymous user")
         return User(roles=[self.anonymous_role], is_authenticated=False)
 
     def _default_role_user(self, email):

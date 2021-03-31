@@ -24,7 +24,8 @@ def create_app(
     app.config.from_object(config_name)
 
     logging.basicConfig(level=app.config["LOG_LEVEL"])
-    logging.info(f"Starting {__name__} with {config_name}")
+    app.logger = logger = logging.getLogger(__name__)
+    logger.info(f"Starting {__name__} with {config_name}")
 
     if app.config["PREFIX"]:
         app.wsgi_app = ReverseProxied(app.wsgi_app, script_name=app.config["PREFIX"])
@@ -84,7 +85,16 @@ def create_app(
         ] = f'attachment; filename="{xml_filename}"'
         return response
 
-    app.auth=auth
+    app.auth = auth
+
+    logging.getLogger("flask_oidc").setLevel("DEBUG")
+    logging.getLogger("hhb_backend").setLevel("DEBUG")
+    logging.getLogger("hhb_backend.auth").setLevel("DEBUG")
+
+    loggers = [logging.getLogger()] + [logging.getLogger(name) for name in logging.root.manager.loggerDict]
+
+    logger.debug(f"loggers: {', '.join([f'{l.name}:{logging.getLevelName(l.level)}' for l in loggers])}")
+
     return app
 
 

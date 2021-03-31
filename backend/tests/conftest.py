@@ -54,16 +54,10 @@ def client(request):
     """
     app = create_app(config_name='hhb_backend.config.TestingConfig')
 
-    # cookie_serializer = TimedJSONWebSignatureSerializer(app.config['SECRET_KEY'])
     logging.getLogger("faker").setLevel(logging.INFO)
 
     app.test_client_class = TestClient
 
-    # with app.test_client() as client:
-    #     client.set_cookie('localhost', 'oidc_id_token', cookie_serializer.dumps(
-    #         {'sub': 'test', 'email': 'test@example.com', 'exp': int(time()) + 600}))
-    #
-    #     yield client
     yield app.test_client()
 
 
@@ -74,19 +68,16 @@ def oidc_client(request):
     """
     app = create_app(config_name='hhb_backend.config.TestingConfig')
 
-    cookie_serializer = TimedJSONWebSignatureSerializer(app.config['SECRET_KEY'])
     logging.getLogger("faker").setLevel(logging.INFO)
 
-    app.test_client_class = TestClient
-
     with app.test_client() as client:
-        client.set_cookie('localhost', 'oidc_id_token', cookie_serializer.dumps(
+        client.set_cookie('localhost', 'oidc_id_token', app.auth.oidc.cookie_serializer.dumps(
             {'sub': 'test', 'email': 'test@example.com', 'exp': int(time()) + 600}))
 
         yield client
 
 @pytest.fixture(scope="session")
-def auth_client(request):
+def no_auth_client(request):
     """
     Returns session-wide application.
     """
