@@ -16,8 +16,8 @@ class MockBetaalinstructie:
     end_date: date = None
     repeat_count: str = None
     by_month_day: int = None
-    by_day: list[int] = None
-    by_month: list[int] = None
+    by_day: list = None
+    by_month: list = None
 
 
 @pytest.mark.parametrize(["betaalinstructie", "result", "message"], [
