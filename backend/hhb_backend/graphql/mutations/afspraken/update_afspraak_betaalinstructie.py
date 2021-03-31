@@ -1,6 +1,7 @@
 import graphene
 import pydash
 import requests
+from dateutil.parser import isoparse
 from graphql import GraphQLError
 
 from hhb_backend.graphql import settings
@@ -62,12 +63,20 @@ class UpdateAfspraakBetaalinstructie(graphene.Mutation):
         # them here.
         previous = pydash.omit(previous, 'journaalposten', 'overschrijvingen')
 
+        if previous.get("credit") == True:
+            raise GraphQLError("betaalinstructie is alleen mogelijk bij uitgaven")
+
+        previous_start_date = previous['start_datum']
+        if previous_start_date is not None and isoparse(previous_start_date).date() != betaalinstructie.start_date:
+            raise GraphQLError("start_date kan niet aangepast worden")
+
         interval = convert_betaalinstructie_interval(betaalinstructie)
 
         input = {
             **previous,
+            "automatische_incasso": False,
             "start_datum": str(betaalinstructie.start_date),
-            "eind_datum": str(betaalinstructie.end_date),
+            "eind_datum": str(betaalinstructie.end_date) if betaalinstructie.end_date is not None else None,
             "aantal_betalingen": betaalinstructie.repeat_count,
             "interval": interval
         }

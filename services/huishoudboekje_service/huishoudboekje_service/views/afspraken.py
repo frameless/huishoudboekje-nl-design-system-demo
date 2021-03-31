@@ -33,17 +33,28 @@ class AfspraakView(HHBView):
             },
             "start_datum": {
                 "type": "string",
-                "pattern": "^(?:[0-9]{4}-[0-9]{2}-[0-9]{2}|)$"
+                "pattern": "^(?:[0-9]{4}-[0-9]{2}-[0-9]{2}|)$",
             },
             "eind_datum": {
-                "type": "string",
-                "pattern": "^(?:[0-9]{4}-[0-9]{2}-[0-9]{2}|)$"
+                "oneOf": [
+                    {"type": "null"},
+                    {
+                        "type": "string",
+                        "pattern": "^(?:[0-9]{4}-[0-9]{2}-[0-9]{2}|)$",
+                    },
+                ],
             },
             "aantal_betalingen": {
-                "type": "integer",
+                "oneOf": [
+                    {"type": "null"},
+                    {"type": "integer"},
+                ],
             },
             "interval": {
-                "type": "string",
+                "oneOf": [
+                    {"type": "null"},
+                    {"type": "string"},
+                ],
             },
             "bedrag": {
                 "type": "number",
@@ -104,6 +115,7 @@ class AfspraakView(HHBView):
 
     def add_filter_filter_burger(self):
         """ Add filter_burger filter based on the kvk of the organisatie model """
+
         def add_filter(ids):
             self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.burger_id.in_(ids))
 
@@ -111,6 +123,7 @@ class AfspraakView(HHBView):
 
     def add_filter_filter_organisaties(self):
         """ Add filter_organisaties filter based on the id of the organisatie model """
+
         def cb(ids):
             self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.organisatie_id.in_(ids))
 
@@ -141,6 +154,7 @@ class AfspraakView(HHBView):
 
     def add_filter_filter_rekening(self):
         """ Add filter_rekening filter"""
+
         def add_filter(ids):
             self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.tegen_rekening_id.in_(ids))
 
