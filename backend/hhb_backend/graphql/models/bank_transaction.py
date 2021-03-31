@@ -8,6 +8,7 @@ import hhb_backend.graphql.models.customer_statement_message as customer_stateme
 import hhb_backend.graphql.models.journaalpost as journaalpost
 import hhb_backend.graphql.models.rekening as rekening
 import hhb_backend.graphql.models.afspraak as afspraak
+from hhb_backend.graphql.models.pageinfo import PageInfo
 from hhb_backend.graphql.scalars.bedrag import Bedrag
 from hhb_backend.processen import automatisch_boeken
 
@@ -62,6 +63,4 @@ class BankTransactionsPaged(graphene.ObjectType):
     banktransactions = graphene.List(
         BankTransaction
     )
-    count = graphene.Int()
-    start = graphene.Int()
-    limit = graphene.Int()
+    page_info = graphene.Field(lambda: PageInfo)

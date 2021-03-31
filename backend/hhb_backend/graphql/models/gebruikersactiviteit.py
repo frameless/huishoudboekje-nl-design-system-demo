@@ -15,6 +15,7 @@ import hhb_backend.graphql.models.journaalpost as journaalpost
 import hhb_backend.graphql.models.organisatie as organisatie
 import hhb_backend.graphql.models.rekening as rekening
 import hhb_backend.graphql.models.rubriek as rubriek
+from hhb_backend.graphql.models.pageinfo import PageInfo
 
 
 class GebruikersActiviteitMeta(graphene.ObjectType):
@@ -215,6 +216,4 @@ class GebruikersActiviteitenPaged(graphene.ObjectType):
     gebruikersactiviteiten = graphene.List(
         GebruikersActiviteit
     )
-    count = graphene.Int()
-    start = graphene.Int()
-    limit = graphene.Int()
+    page_info = graphene.Field(lambda: PageInfo)

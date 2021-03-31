@@ -75,8 +75,12 @@ class HHBQuery():
             start = int(start)
             limit = int(limit)
             count = len(results)
+            if limit < 1:
+                return {"errors": [f"Limit cannot be below one."]}, 404
+            if start < 1:
+                return {"errors": [f"Start cannot be below one."]}, 404
             if count < start:
-                abort(404)
+                return {"errors": [f"No results found."]}, 404
             # make response
             obj = {'start': start, 'limit': limit, 'count': count}
             # make URLs

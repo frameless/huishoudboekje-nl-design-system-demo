@@ -1,6 +1,7 @@
 """ GraphQL Gebruikers query """
 import graphene
 from flask import request
+from graphql import GraphQLError
 
 import hhb_backend.graphql.models.bank_transaction as bank_transaction
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
@@ -104,4 +105,5 @@ class BankTransactionsPagedQuery:
                 return request.dataloader.bank_transactions_by_id.get_all_paged(start=kwargs["start"], limit=kwargs["limit"])
             else:
                 return request.dataloader.bank_transactions_by_csm.get_all_paged(keys=kwargs["csms"], start=kwargs["start"], limit=kwargs["limit"])
-        return request.dataloader.bank_transactions_by_id.get_all_and_cache()
+        else:
+            raise GraphQLError(f"Query needs params 'start', 'limit'. ")

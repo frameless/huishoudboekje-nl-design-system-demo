@@ -42,8 +42,10 @@ class SingleDataLoader(DataLoader):
         for item in result:
             self.prime(item[self.index], item)
 
-        return_obj = {self.model: result, "count": response.json()["count"], "start": response.json()["start"],
+        page_info = {"count": response.json()["count"], "start": response.json()["start"],
                       "limit": response.json()["limit"]}
+
+        return_obj = {self.model: result, "page_info": page_info}
 
         return return_obj
 
@@ -97,7 +99,9 @@ class ListDataLoader(DataLoader):
         for item in result:
             self.prime(item[self.index], item)
 
-        return_obj = {self.model: result, "count": response.json()["count"], "start": response.json()["start"],
+        page_info = {"count": response.json()["count"], "start": response.json()["start"],
                       "limit": response.json()["limit"]}
+
+        return_obj = {self.model: result, "page_info": page_info}
 
         return return_obj

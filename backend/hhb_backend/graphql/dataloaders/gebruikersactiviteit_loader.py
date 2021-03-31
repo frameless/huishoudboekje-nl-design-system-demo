@@ -38,10 +38,10 @@ class GebruikersActiviteitenByBurgersLoader(SingleDataLoader):
         if not response.ok:
             raise GraphQLError(f"Upstream API responded: {response.text}")
 
-        result = response.json()["data"]
+        page_info = {"count": response.json()["count"], "start": response.json()["start"],
+                      "limit": response.json()["limit"]}
 
-        return {self.model: result, "count": response.json()["count"], "start": response.json()["start"],
-                "limit": response.json()["limit"]}
+        return {self.model: response.json()["data"], "page_info": page_info}
 
 
 class GebruikersActiviteitenByAfsprakenLoader(SingleDataLoader):
@@ -63,7 +63,7 @@ class GebruikersActiviteitenByAfsprakenLoader(SingleDataLoader):
         if not response.ok:
             raise GraphQLError(f"Upstream API responded: {response.text}")
 
-        result = response.json()["data"]
+        page_info = {"count": response.json()["count"], "start": response.json()["start"],
+                      "limit": response.json()["limit"]}
 
-        return {self.model: result, "count": response.json()["count"], "start": response.json()["start"],
-                "limit": response.json()["limit"]}
+        return {self.model: response.json()["data"], "page_info": page_info}
