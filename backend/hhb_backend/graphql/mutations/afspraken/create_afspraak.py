@@ -16,7 +16,7 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import (
 class CreateAfspraakInput(graphene.InputObjectType):
     burger_id = graphene.Int(required=True)
     credit = graphene.Boolean(required=True)
-    organisatie_id = graphene.Int(required=True)
+    organisatie_id = graphene.Int()
     tegen_rekening_id = graphene.Int(required=True)
     rubriek_id = graphene.Int(required=True)
     omschrijving = graphene.String(required=True)
