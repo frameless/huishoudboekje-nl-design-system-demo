@@ -180,8 +180,3 @@ class Afspraak(graphene.ObjectType):
                     )
                     or []
             )
-
-    @staticmethod
-    def resolve_omschrijving(root, _info):
-        if value := root.get('beschrijving'):
-            return value

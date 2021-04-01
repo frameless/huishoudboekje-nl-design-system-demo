@@ -16,29 +16,29 @@ def dict_keys_subset_builder(match_keys: list):
 
 @pytest.mark.parametrize("begin_datum, eind_datum, afspraken, expected", [
     ("2021-01-01", "2021-02-01", [
-        dict(beschrijving="precies pas", start_datum="2021-01-01", eind_datum="2021-02-01"),
-        dict(beschrijving="eromheen", start_datum="2020-01-01", eind_datum="2021-12-31"),
+        dict(omschrijving="precies pas", start_datum="2021-01-01", eind_datum="2021-02-01"),
+        dict(omschrijving="eromheen", start_datum="2020-01-01", eind_datum="2021-12-31"),
     ], [
-         dict(beschrijving="precies pas", start_datum="2021-01-01", eind_datum="2021-02-01"),
-         dict(beschrijving="eromheen", start_datum="2020-01-01", eind_datum='2021-12-31'),
+         dict(omschrijving="precies pas", start_datum="2021-01-01", eind_datum="2021-02-01"),
+         dict(omschrijving="eromheen", start_datum="2020-01-01", eind_datum='2021-12-31'),
      ]),
 
     ("2021-01-01", "2021-02-01", [
-        dict(beschrijving="te vroeg", start_datum="2020-01-01", eind_datum="2020-12-31"),
-        dict(beschrijving="te vroeg", start_datum="2020-01-01", eind_datum="2021-01-01"),
+        dict(omschrijving="te vroeg", start_datum="2020-01-01", eind_datum="2020-12-31"),
+        dict(omschrijving="te vroeg", start_datum="2020-01-01", eind_datum="2021-01-01"),
     ], []),
 
     ("2021-01-01", "2021-02-01", [
-        dict(beschrijving="te laat", start_datum="2021-02-02", eind_datum="2021-12-31"),
-        dict(beschrijving="te laat, open", start_datum="2021-02-02", eind_datum=None),
+        dict(omschrijving="te laat", start_datum="2021-02-02", eind_datum="2021-12-31"),
+        dict(omschrijving="te laat, open", start_datum="2021-02-02", eind_datum=None),
     ], []),
 
     ("2021-01-01", "2021-02-01", [
-        dict(beschrijving="start voor begin, open", start_datum="2020-12-31", eind_datum=None),
-        dict(beschrijving="start na begin, open", start_datum="2021-01-02", eind_datum=None),
+        dict(omschrijving="start voor begin, open", start_datum="2020-12-31", eind_datum=None),
+        dict(omschrijving="start na begin, open", start_datum="2021-01-02", eind_datum=None),
     ], [
-         dict(beschrijving="start voor begin, open", start_datum="2020-12-31", eind_datum=None),
-         dict(beschrijving="start na begin, open", start_datum="2021-01-02", eind_datum=None),
+         dict(omschrijving="start voor begin, open", start_datum="2020-12-31", eind_datum=None),
+         dict(omschrijving="start na begin, open", start_datum="2021-01-02", eind_datum=None),
      ]),
 ])
 def test_afspraken_get_datum_filter(app, afspraak_factory, caplog, begin_datum, eind_datum, afspraken, expected):
@@ -54,7 +54,7 @@ def test_afspraken_get_datum_filter(app, afspraak_factory, caplog, begin_datum, 
 
     assert len(actual_afspraken) == len(expected)
 
-    dict_keys_subset = dict_keys_subset_builder(['beschrijving', 'start_datum', 'eind_datum'])
+    dict_keys_subset = dict_keys_subset_builder(['omschrijving', 'start_datum', 'eind_datum'])
     # the order of results is expected to be the same as the verication set
     for actual_response, expected_afspraak in zip(actual_afspraken, expected):
         # assert only the properties we are interested in for the test case

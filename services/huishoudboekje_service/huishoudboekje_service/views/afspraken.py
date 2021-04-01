@@ -28,7 +28,7 @@ class AfspraakView(HHBView):
             "burger_id": {
                 "type": "integer",
             },
-            "beschrijving": {
+            "omschrijving": {
                 "type": "string",
             },
             "start_datum": {
