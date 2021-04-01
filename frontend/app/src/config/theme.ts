@@ -9,8 +9,8 @@ import Tabs from "./theme/Tabs";
 
 Tooltip.defaultProps = {
 	hasArrow: true,
-	placement: "top"
-}
+	placement: "top",
+};
 
 if (!window["branding"]) {
 	document.querySelector("body")!.textContent = "Error: No tenant theme installed.";
@@ -31,7 +31,7 @@ const theme = extendTheme({
 		FormLabel,
 	},
 	fontSizes: {
-		lg: "1.5rem"
+		lg: "1.5rem",
 	},
 
 	// Custom
