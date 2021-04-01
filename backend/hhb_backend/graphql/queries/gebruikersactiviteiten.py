@@ -1,12 +1,13 @@
 """ GraphQL GebruikersActiviteiten query """
 import graphene
 from flask import request
+from graphql import GraphQLError
 
-from hhb_backend.graphql.models.gebruikersactiviteit import GebruikersActiviteit
+import hhb_backend.graphql.models.gebruikersactiviteit as gebruikersactiviteit
 
 
 class GebruikersActiviteitQuery:
-    return_type = graphene.Field(GebruikersActiviteit, id=graphene.Int(required=True))
+    return_type = graphene.Field(gebruikersactiviteit.GebruikersActiviteit, id=graphene.Int(required=True))
 
     @staticmethod
     async def resolver(root, info, **kwargs):
@@ -15,7 +16,7 @@ class GebruikersActiviteitQuery:
 
 class GebruikersActiviteitenQuery:
     return_type = graphene.List(
-        GebruikersActiviteit,
+        gebruikersactiviteit.GebruikersActiviteit,
         ids=graphene.List(graphene.Int, default_value=[]),
         burgerIds=graphene.List(graphene.Int, default_value=[]),
         afsprakenIds=graphene.List(graphene.Int, default_value=[]),
@@ -24,9 +25,9 @@ class GebruikersActiviteitenQuery:
     @staticmethod
     async def resolver(root, info, **kwargs):
         if (
-            not kwargs["ids"]
-            and not kwargs["burgerIds"]
-            and not kwargs["afsprakenIds"]
+                not kwargs["ids"]
+                and not kwargs["burgerIds"]
+                and not kwargs["afsprakenIds"]
         ):
             gebruikersactiviteiten = (
                 request.dataloader.gebruikersactiviteiten_by_id.get_all_and_cache()
@@ -59,3 +60,32 @@ class GebruikersActiviteitenQuery:
                 )
 
         return gebruikersactiviteiten
+
+
+class GebruikersActiviteitenPagedQuery:
+    return_type = graphene.Field(
+        gebruikersactiviteit.GebruikersActiviteitenPaged,
+        start=graphene.Int(),
+        limit=graphene.Int(),
+        burgerIds=graphene.List(graphene.Int, default_value=[]),
+        afsprakenIds=graphene.List(graphene.Int, default_value=[])
+    )
+
+    @staticmethod
+    async def resolver(root, info, **kwargs):
+        if "start" in kwargs and "limit" in kwargs:
+            if not kwargs["burgerIds"] and not kwargs["afsprakenIds"]:
+                return request.dataloader.gebruikersactiviteiten_by_id.get_all_paged \
+                    (start=kwargs["start"], limit=kwargs["limit"])
+            else:
+                if kwargs["burgerIds"] and kwargs["afsprakenIds"]:
+                    raise GraphQLError(f"Only burgerIds or afsprakenIds is supported. ")
+                if kwargs["burgerIds"]:
+                    return request.dataloader.gebruikersactiviteiten_by_burgers.get_by_ids_paged(
+                            kwargs["burgerIds"], start=kwargs["start"], limit=kwargs["limit"])
+                if kwargs["afsprakenIds"]:
+                    return request.dataloader.gebruikersactiviteiten_by_afspraken.get_by_ids_paged(
+                            kwargs["afsprakenIds"], start=kwargs["start"], limit=kwargs["limit"])
+        else:
+            raise GraphQLError(f"Query needs params 'start', 'limit'. ")
+

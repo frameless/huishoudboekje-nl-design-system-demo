@@ -21,7 +21,6 @@ class GebruikersActiviteitenByBurgersLoader(SingleDataLoader):
         response = requests.get(url)
         if not response.ok:
             raise GraphQLError(f"Upstream API responded: {response.text}")
-        response = requests.get(url)
 
         return response.json()["data"]
 
@@ -30,9 +29,19 @@ class GebruikersActiviteitenByBurgersLoader(SingleDataLoader):
         response = requests.get(url)
         if not response.ok:
             raise GraphQLError(f"Upstream API responded: {response.text}")
-        response = requests.get(url)
 
         return response.json()["data"]
+
+    def get_by_ids_paged(self, ids, start=1, limit=20):
+        url = f"{self.service}/{self.model}/?{self.filter_item}={','.join([str(k) for k in ids])}&start={start}&limit={limit}"
+        response = requests.get(url)
+        if not response.ok:
+            raise GraphQLError(f"Upstream API responded: {response.text}")
+
+        page_info = {"count": response.json()["count"], "start": response.json()["start"],
+                      "limit": response.json()["limit"]}
+
+        return {self.model: response.json()["data"], "page_info": page_info}
 
 
 class GebruikersActiviteitenByAfsprakenLoader(SingleDataLoader):
@@ -45,6 +54,16 @@ class GebruikersActiviteitenByAfsprakenLoader(SingleDataLoader):
         response = requests.get(url)
         if not response.ok:
             raise GraphQLError(f"Upstream API responded: {response.text}")
-        response = requests.get(url)
 
         return response.json()["data"]
+
+    def get_by_ids_paged(self, ids, start=1, limit=20):
+        url = f"{self.service}/{self.model}/?{self.filter_item}={','.join([str(k) for k in ids])}&start={start}&limit={limit}"
+        response = requests.get(url)
+        if not response.ok:
+            raise GraphQLError(f"Upstream API responded: {response.text}")
+
+        page_info = {"count": response.json()["count"], "start": response.json()["start"],
+                      "limit": response.json()["limit"]}
+
+        return {self.model: response.json()["data"], "page_info": page_info}

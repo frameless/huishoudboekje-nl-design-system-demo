@@ -15,6 +15,9 @@ class SingleDataLoader(DataLoader):
     def url_for(self, keys=None):
         return f"""{self.service}/{self.model}/{f"?{self.filter_item}={','.join([str(k) for k in keys])}" if keys else ''}"""
 
+    def url_for_paged(self, start, limit):
+        return f"""{self.service}/{self.model}/{f"?start={start}&limit={limit}"}"""
+
     def get_all_and_cache(self):
         response = requests.get(self.url_for())
 
@@ -27,6 +30,24 @@ class SingleDataLoader(DataLoader):
             self.prime(item[self.index], item)
 
         return result
+
+    def get_all_paged(self, start=1, limit=20):
+        response = requests.get(self.url_for_paged(start, limit))
+
+        if not response.ok:
+            raise GraphQLError(f"Upstream API responded: {response.text}")
+        result = response.json()["data"]
+
+        # Prime the cache with the complete result set to prevent unnecessary extra calls
+        for item in result:
+            self.prime(item[self.index], item)
+
+        page_info = {"count": response.json()["count"], "start": response.json()["start"],
+                      "limit": response.json()["limit"]}
+
+        return_obj = {self.model: result, "page_info": page_info}
+
+        return return_obj
 
     async def batch_load_fn(self, keys):
         objects = {}
@@ -66,3 +87,21 @@ class ListDataLoader(DataLoader):
                     objects[item[self.index]] = list()
                 objects[item[self.index]].append(item)
         return [objects.get(key, []) for key in keys]
+
+    def get_all_paged(self, keys, start=1, limit=20):
+        url = f"{self.service}/{self.model}/?{self.filter_item}={','.join([str(k) for k in keys])}&start={start}&limit={limit}"
+        response = requests.get(url)
+        if not response.ok:
+            raise GraphQLError(f"Upstream API responded: {response.text}")
+        result = response.json()["data"]
+
+        # Prime the cache with the complete result set to prevent unnecessary extra calls
+        for item in result:
+            self.prime(item[self.index], item)
+
+        page_info = {"count": response.json()["count"], "start": response.json()["start"],
+                      "limit": response.json()["limit"]}
+
+        return_obj = {self.model: result, "page_info": page_info}
+
+        return return_obj

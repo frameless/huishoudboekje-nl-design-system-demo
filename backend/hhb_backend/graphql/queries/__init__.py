@@ -2,10 +2,10 @@
 import graphene
 
 from .afspraken import AfspraakQuery, AfsprakenQuery
-from .bank_transactions import BankTransactionQuery, BankTransactionsQuery
+from .bank_transactions import BankTransactionQuery, BankTransactionsQuery, BankTransactionsPagedQuery
 from .customer_statement_messages import CustomerStatementMessageQuery, CustomerStatementMessagesQuery
 from .exports import ExportQuery, ExportsQuery
-from .burgers import BurgersQuery, BurgerQuery
+from .burgers import BurgersQuery, BurgerQuery, BurgersPagedQuery
 from .grootboekrekeningen import GrootboekrekeningQuery, GrootboekrekeningenQuery
 from .journaalposten import JournaalpostQuery, JournaalpostenQuery
 from .organisaties import OrganisatieQuery, OrganisatiesQuery
@@ -13,13 +13,16 @@ from .rekeningen import RekeningQuery, RekeningenQuery
 from .rubrieken import RubriekQuery, RubriekenQuery
 from .configuraties import ConfiguratieQuery, ConfiguratiesQuery
 from .planned_overschrijvingen import PlannedOverschijvingenQuery
-from .gebruikersactiviteiten import GebruikersActiviteitQuery, GebruikersActiviteitenQuery
+from .gebruikersactiviteiten import GebruikersActiviteitQuery, GebruikersActiviteitenQuery, \
+    GebruikersActiviteitenPagedQuery
 from .gebruiker import GebruikerQuery
+
 
 class RootQuery(graphene.ObjectType):
     """ The root of all queries """
     burger = BurgerQuery.return_type
     burgers = BurgersQuery.return_type
+    burgers_paged = BurgersPagedQuery.return_type
     organisatie = OrganisatieQuery.return_type
     organisaties = OrganisatiesQuery.return_type
     afspraak = AfspraakQuery.return_type
@@ -30,6 +33,7 @@ class RootQuery(graphene.ObjectType):
     customer_statement_messages = CustomerStatementMessagesQuery.return_type
     bank_transaction = BankTransactionQuery.return_type
     bank_transactions = BankTransactionsQuery.return_type
+    bank_transactions_paged = BankTransactionsPagedQuery.return_type
     grootboekrekening = GrootboekrekeningQuery.return_type
     grootboekrekeningen = GrootboekrekeningenQuery.return_type
     journaalpost = JournaalpostQuery.return_type
@@ -43,6 +47,7 @@ class RootQuery(graphene.ObjectType):
     exports = ExportsQuery.return_type
     gebruikersactiviteit = GebruikersActiviteitQuery.return_type
     gebruikersactiviteiten = GebruikersActiviteitenQuery.return_type
+    gebruikersactiviteiten_paged = GebruikersActiviteitenPagedQuery.return_type
     gebruiker = GebruikerQuery.return_type
 
     async def resolve_burger(root, info, **kwargs):
@@ -50,6 +55,9 @@ class RootQuery(graphene.ObjectType):
 
     async def resolve_burgers(root, info, **kwargs):
         return await BurgersQuery.resolver(root, info, **kwargs)
+
+    async def resolve_burgers_paged(root, info, **kwargs):
+        return await BurgersPagedQuery.resolver(root, info, **kwargs)
 
     async def resolve_organisatie(root, info, **kwargs):
         return await OrganisatieQuery.resolver(root, info, **kwargs)
@@ -80,6 +88,9 @@ class RootQuery(graphene.ObjectType):
 
     async def resolve_bank_transactions(root, info, **kwargs):
         return await BankTransactionsQuery.resolver(root, info, **kwargs)
+
+    async def resolve_bank_transactions_paged(root, info, **kwargs):
+        return await BankTransactionsPagedQuery.resolver(root, info, **kwargs)
 
     async def resolve_grootboekrekening(root, info, **kwargs):
         return await GrootboekrekeningQuery.resolver(root, info, **kwargs)
@@ -120,6 +131,9 @@ class RootQuery(graphene.ObjectType):
     async def resolve_gebruikersactiviteiten(root, info, **kwargs):
         return await GebruikersActiviteitenQuery.resolver(root, info, **kwargs)
 
+    async def resolve_gebruikersactiviteiten_paged(root, info, **kwargs):
+        return await GebruikersActiviteitenPagedQuery.resolver(root, info, **kwargs)
+        
     @staticmethod
     async def resolve_gebruiker(root, info, **kwargs):
         return GebruikerQuery.resolver(root, info, **kwargs)

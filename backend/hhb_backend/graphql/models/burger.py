@@ -5,6 +5,7 @@ from flask import request
 import hhb_backend.graphql.models.afspraak as afspraak
 import hhb_backend.graphql.models.rekening as rekening
 import hhb_backend.graphql.models.gebruikersactiviteit as gebruikersactiviteit
+from hhb_backend.graphql.models.pageinfo import PageInfo
 
 
 class Burger(graphene.ObjectType):
@@ -40,3 +41,10 @@ class Burger(graphene.ObjectType):
 
     async def resolve_gebruikersactiviteiten(root, info):
         return request.dataloader.gebruikersactiviteiten_by_gebruikers.get_by_id(root.get('id')) or []
+
+
+class BurgersPaged(graphene.ObjectType):
+    burgers = graphene.List(
+        Burger
+    )
+    page_info = graphene.Field(lambda: PageInfo)
