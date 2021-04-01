@@ -362,3 +362,11 @@ export const UpdateAfspraakAutomatischBoekenMutation = gql`
         }
     }
 `;
+
+export const UpdateAfspraakBetaalinstructie = gql`
+    mutation updateAfspraakBetaalinstructie($id: Int!, $betaalinstructie: BetaalinstructieInput!) {
+        updateAfspraakBetaalinstructie(afspraakId: $id, betaalinstructie: $betaalinstructie){
+            ok
+        }
+    }
+`;

@@ -9,8 +9,8 @@
             "title": "Fout.",
             "description": "Er is een onbekende fout opgetreden. Probeer het later nog eens."
         },
-        "createAfspraakSuccess": "Afspraak is opgeslagen.",
         "updateAfspraakSuccess": "Afspraak is gewijzigd.",
+        "createAfspraakSuccess": "Afspraak is opgeslagen.",
         "automatischBoekenDisabled_noZoektermen": "Het is niet mogelijk om deze afspraak automatisch af te letteren. Voeg een zoekterm toe waarop het systeem transacties kan zoeken.",
         "automatischBoekenDisabled_duplicatesFound": "Het is niet mogelijk om deze afspraak automatisch af te letteren. Er zijn andere afspraken met dezelfde zoektermen gevonden. Voeg een unieke zoekterm toe waarop het systeem transacties kan zoeken.",
         "deleteAfspraakSuccess": "Afspraak is verwijderd.",
@@ -108,8 +108,9 @@
         "rubriek": "Rubriek",
         "omschrijving": "Omschrijving",
         "bedrag": "Bedrag",
+        "periodiek": "Periodiek",
         "zoektermen": "Zoektermen",
-        "zoekterm": "zoekterm"
+        "zoekterm": "Zoekterm"
     },
     "afspraakDetailView": {
         "invalidBetaalrichtingError": "Kies een betaalrichting.",
@@ -117,6 +118,10 @@
         "invalidRubriekError": "Kies een rubriek.",
         "invalidOmschrijvingError": "Vul een omschrijving in.",
         "invalidBedragError": "Vul een geldig bedrag in.",
+        "section4": {
+            "title": "Betaalinstructie",
+            "helperText": "Instellingen voor de betaalinstructie."
+        },
         "title": "Afspraak bekijken",
         "section1": {
             "title": "Partijen",
@@ -130,10 +135,8 @@
             "title": "Afletteren",
             "helperText": "Voeg zoektermen toe voor het automatisch afletteren van geïmporteerde banktransacties."
         },
-        "section4": {
-            "title": "Betaalinstructie",
-            "helperText": "Instellingen voor de betaalinstructie."
-        }
+        "noBetaalinstructiePossible": "Het is voor inkomsten niet mogelijk om een betaalinstructie te maken.",
+        "noBetaalinstructie": "Er is voor deze afspraak geen betaalinstructie ingesteld. Het is mogelijk om een betaalinstructie toe te voegen. Bij automatisch incasso is er geen betaalinstructie nodig."
     },
     "forms": {
         "agreements": {
@@ -282,6 +285,45 @@
         }
     },
     "unknown": "Onbekend",
+    "interval": {
+        "day": "dag",
+        "day_plural": "dagen",
+        "week": "week",
+        "week_plural": "weken",
+        "month": "maand",
+        "month_plural": "maanden",
+        "choose": "Kies",
+        "period": "Periode",
+        "every-day": "Elke dag",
+        "every-day_plural": "Elke {{count}} dagen",
+        "every-week": "Elke week",
+        "every-week_plural": "Elke {{count}} weken",
+        "every-month": "Elke maand",
+        "every-month_plural": "Elke {{count}} maanden",
+        "every-year": "Elk jaar",
+        "every-year_plural": "Elke {{count}} jaar",
+        "once": "Eenmalig"
+    },
+    "schedule": {
+        "eenmalig": "Eenmalig",
+        "periodiek": "Periodiek",
+        "startDate": "Startdatum",
+        "endDate": "Einddatum",
+        "repeatEvery": "Herhaal elke",
+        "invalidIntervalCountError": "Vul een aantal in.",
+        "repeatEveryPeriod": "Aantal weken/maanden",
+        "invalidIntervalTypeError": "Kies een optie.",
+        "byDay": "Weekdag(en)",
+        "invalidByDayError": "Kies minimaal een weekdag.",
+        "byMonthDay": "Dag van de maand",
+        "byMonthDay_placeholder": "Bijv.: 26 (voor elke 26e dag van de maand)",
+        "invalidByMonthDayError": "Vul een dag van de maand in.",
+        "datum": "Datum"
+    },
+    "afspraakBetaalinstructie": {
+        "invalidPeriodiekError": "Kies een periodiek.",
+        "invalidDateError": "Vul een juiste datum in."
+    },
     "deleteAfspraak": {
         "confirmModalTitle": "Afspraak verwijderen",
         "confirmModalBody": "Weet u zeker dat u deze afspraak wil verwijderen?"
@@ -445,20 +487,6 @@
     "allBurgers": "Alle burgers",
     "total": "Totaal",
     "saldo": "Saldo",
-    "interval": {
-        "period": "Periode",
-        "month": "maand",
-        "month_plural": "maanden",
-        "every-day": "Elke dag",
-        "every-day_plural": "Elke {{count}} dagen",
-        "every-week": "Elke week",
-        "every-week_plural": "Elke {{count}} weken",
-        "every-month": "Elke maand",
-        "every-month_plural": "Elke {{count}} maanden",
-        "every-year": "Elk jaar",
-        "every-year_plural": "Elke {{count}} jaar",
-        "once": "Eenmalig"
-    },
     "toastMessages": {
         "generic": {
             "errorTitle": "Er is een fout opgetreden."

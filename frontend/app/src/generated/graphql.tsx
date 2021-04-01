@@ -91,6 +91,12 @@ export type BankTransaction = {
   suggesties?: Maybe<Array<Maybe<Afspraak>>>;
 };
 
+export type BankTransactionsPaged = {
+  __typename?: 'BankTransactionsPaged';
+  banktransactions?: Maybe<Array<Maybe<BankTransaction>>>;
+  pageInfo?: Maybe<PageInfo>;
+};
+
 
 /** Implementatie op basis van http://schema.org/Schedule */
 export type Betaalinstructie = {
@@ -134,6 +140,12 @@ export type Burger = {
   gebruikersactiviteiten?: Maybe<Array<Maybe<GebruikersActiviteit>>>;
 };
 
+export type BurgersPaged = {
+  __typename?: 'BurgersPaged';
+  burgers?: Maybe<Array<Maybe<Burger>>>;
+  pageInfo?: Maybe<PageInfo>;
+};
+
 export type Configuratie = {
   __typename?: 'Configuratie';
   id?: Maybe<Scalars['String']>;
@@ -154,7 +166,7 @@ export type CreateAfspraak = {
 export type CreateAfspraakInput = {
   burgerId: Scalars['Int'];
   credit: Scalars['Boolean'];
-  organisatieId: Scalars['Int'];
+  organisatieId?: Maybe<Scalars['Int']>;
   tegenRekeningId: Scalars['Int'];
   rubriekId: Scalars['Int'];
   omschrijving: Scalars['String'];
@@ -422,6 +434,12 @@ export type GebruikersActiviteitSnapshot = {
   transaction?: Maybe<BankTransaction>;
 };
 
+export type GebruikersActiviteitenPaged = {
+  __typename?: 'GebruikersActiviteitenPaged';
+  gebruikersactiviteiten?: Maybe<Array<Maybe<GebruikersActiviteit>>>;
+  pageInfo?: Maybe<PageInfo>;
+};
+
 /** Grootboekrekening model  */
 export type Grootboekrekening = {
   __typename?: 'Grootboekrekening';
@@ -491,6 +509,13 @@ export enum OverschrijvingStatus {
   InBehandeling = 'IN_BEHANDELING',
   Verwachting = 'VERWACHTING'
 }
+
+export type PageInfo = {
+  __typename?: 'PageInfo';
+  count?: Maybe<Scalars['Int']>;
+  start?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+};
 
 export type PlannedOverschijvingenQueryInput = {
   betaalinstructie: BetaalinstructieInput;
@@ -772,12 +797,14 @@ export type RootQuery = {
   afspraken?: Maybe<Array<Maybe<Afspraak>>>;
   bankTransaction?: Maybe<BankTransaction>;
   bankTransactions?: Maybe<Array<Maybe<BankTransaction>>>;
+  bankTransactionsPaged?: Maybe<BankTransactionsPaged>;
   customerStatementMessage?: Maybe<CustomerStatementMessage>;
   customerStatementMessages?: Maybe<Array<Maybe<CustomerStatementMessage>>>;
   export?: Maybe<Export>;
   exports?: Maybe<Array<Maybe<Export>>>;
   burger?: Maybe<Burger>;
   burgers?: Maybe<Array<Maybe<Burger>>>;
+  burgersPaged?: Maybe<BurgersPaged>;
   grootboekrekening?: Maybe<Grootboekrekening>;
   grootboekrekeningen?: Maybe<Array<Maybe<Grootboekrekening>>>;
   journaalpost?: Maybe<Journaalpost>;
@@ -793,6 +820,7 @@ export type RootQuery = {
   plannedOverschrijvingen?: Maybe<Array<Maybe<Overschrijving>>>;
   gebruikersactiviteit?: Maybe<GebruikersActiviteit>;
   gebruikersactiviteiten?: Maybe<Array<Maybe<GebruikersActiviteit>>>;
+  gebruikersactiviteitenPaged?: Maybe<GebruikersActiviteitenPaged>;
   gebruiker?: Maybe<Gebruiker>;
 };
 
@@ -819,6 +847,14 @@ export type RootQueryBankTransactionArgs = {
 export type RootQueryBankTransactionsArgs = {
   csms?: Maybe<Array<Maybe<Scalars['Int']>>>;
   ids?: Maybe<Array<Maybe<Scalars['Int']>>>;
+};
+
+
+/** The root of all queries  */
+export type RootQueryBankTransactionsPagedArgs = {
+  start?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+  csms?: Maybe<Array<Maybe<Scalars['Int']>>>;
 };
 
 
@@ -857,6 +893,13 @@ export type RootQueryBurgerArgs = {
 /** The root of all queries  */
 export type RootQueryBurgersArgs = {
   ids?: Maybe<Array<Maybe<Scalars['Int']>>>;
+};
+
+
+/** The root of all queries  */
+export type RootQueryBurgersPagedArgs = {
+  start?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
 };
 
 
@@ -947,6 +990,15 @@ export type RootQueryGebruikersactiviteitArgs = {
 /** The root of all queries  */
 export type RootQueryGebruikersactiviteitenArgs = {
   ids?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  burgerIds?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  afsprakenIds?: Maybe<Array<Maybe<Scalars['Int']>>>;
+};
+
+
+/** The root of all queries  */
+export type RootQueryGebruikersactiviteitenPagedArgs = {
+  start?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
   burgerIds?: Maybe<Array<Maybe<Scalars['Int']>>>;
   afsprakenIds?: Maybe<Array<Maybe<Scalars['Int']>>>;
 };
@@ -1586,6 +1638,20 @@ export type UpdateAfspraakAutomatischBoekenMutation = (
   & { updateAfspraakAutomatischBoeken?: Maybe<(
     { __typename?: 'UpdateAfspraakAutomatischBoeken' }
     & Pick<UpdateAfspraakAutomatischBoeken, 'ok'>
+  )> }
+);
+
+export type UpdateAfspraakBetaalinstructieMutationVariables = Exact<{
+  id: Scalars['Int'];
+  betaalinstructie: BetaalinstructieInput;
+}>;
+
+
+export type UpdateAfspraakBetaalinstructieMutation = (
+  { __typename?: 'RootMutation' }
+  & { updateAfspraakBetaalinstructie?: Maybe<(
+    { __typename?: 'UpdateAfspraakBetaalinstructie' }
+    & Pick<UpdateAfspraakBetaalinstructie, 'ok'>
   )> }
 );
 
@@ -3096,6 +3162,43 @@ export function useUpdateAfspraakAutomatischBoekenMutation(baseOptions?: Apollo.
 export type UpdateAfspraakAutomatischBoekenMutationHookResult = ReturnType<typeof useUpdateAfspraakAutomatischBoekenMutation>;
 export type UpdateAfspraakAutomatischBoekenMutationResult = Apollo.MutationResult<UpdateAfspraakAutomatischBoekenMutation>;
 export type UpdateAfspraakAutomatischBoekenMutationOptions = Apollo.BaseMutationOptions<UpdateAfspraakAutomatischBoekenMutation, UpdateAfspraakAutomatischBoekenMutationVariables>;
+export const UpdateAfspraakBetaalinstructieDocument = gql`
+    mutation updateAfspraakBetaalinstructie($id: Int!, $betaalinstructie: BetaalinstructieInput!) {
+  updateAfspraakBetaalinstructie(
+    afspraakId: $id
+    betaalinstructie: $betaalinstructie
+  ) {
+    ok
+  }
+}
+    `;
+export type UpdateAfspraakBetaalinstructieMutationFn = Apollo.MutationFunction<UpdateAfspraakBetaalinstructieMutation, UpdateAfspraakBetaalinstructieMutationVariables>;
+
+/**
+ * __useUpdateAfspraakBetaalinstructieMutation__
+ *
+ * To run a mutation, you first call `useUpdateAfspraakBetaalinstructieMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateAfspraakBetaalinstructieMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateAfspraakBetaalinstructieMutation, { data, loading, error }] = useUpdateAfspraakBetaalinstructieMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      betaalinstructie: // value for 'betaalinstructie'
+ *   },
+ * });
+ */
+export function useUpdateAfspraakBetaalinstructieMutation(baseOptions?: Apollo.MutationHookOptions<UpdateAfspraakBetaalinstructieMutation, UpdateAfspraakBetaalinstructieMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateAfspraakBetaalinstructieMutation, UpdateAfspraakBetaalinstructieMutationVariables>(UpdateAfspraakBetaalinstructieDocument, options);
+      }
+export type UpdateAfspraakBetaalinstructieMutationHookResult = ReturnType<typeof useUpdateAfspraakBetaalinstructieMutation>;
+export type UpdateAfspraakBetaalinstructieMutationResult = Apollo.MutationResult<UpdateAfspraakBetaalinstructieMutation>;
+export type UpdateAfspraakBetaalinstructieMutationOptions = Apollo.BaseMutationOptions<UpdateAfspraakBetaalinstructieMutation, UpdateAfspraakBetaalinstructieMutationVariables>;
 export const GetAllBurgersDocument = gql`
     query getAllBurgers {
   burgers {

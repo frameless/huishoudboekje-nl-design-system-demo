@@ -133,32 +133,29 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 
 			<Section direction={["column", "row"]}>
 				<FormLeft title={t("afspraakDetailView.section4.title")} helperText={t("afspraakDetailView.section4.helperText")} />
-				<FormRight>
+				{afspraak.credit ? (
+					<FormRight justify={"center"}>
+						<Text>{t("afspraakDetailView.noBetaalinstructiePossible")}</Text>
+					</FormRight>
+				) : (
+					<FormRight spacing={5}>
+						<Text>{t("afspraakDetailView.noBetaalinstructie")}</Text>
 
-					{/* Todo: interval volgens https://schema.org/Schedule
-					Velden (UI nog bepalen):
-					- startDatum: Date	  (vanaf welke datum de herhaling begint)
-					- eindDatum: Date	  (tot welke datum de herhaling duurt)
-					- byDay: Int[] 		  (op welke dagen van de week, bijv: [1, 3, 5] voor maandag, woensdag en vrijdag)
-					- byMonth: Int[] 	  (in welke maanden, bijv: [1, 4, 7, 10] voor januari, april, juli en oktober)
-					- byMonthDay: Int[]   (op welke dagen van de week, bijv. [25] voor "elke maand op de 25e", of [-1] voor "elke laatste dag van de maand")
-					- byMonthWeek: Int[]  (in welke week van de maand, bijvoorbeeld [2] voor elke tweede week)
-					- exceptDates: Date[] (welke datums worden overgeslagen, bijvoorbeeld [2020-01-01] voor "niet op 1 januari 2020")
-					*/}
+						<Stack direction={["column", "row"]}>
+							<Button colorScheme={"primary"} size={"sm"} leftIcon={<AddIcon />} as={NavLink} to={Routes.AfspraakBetaalinstructie(afspraak.id!)}>
+								{t("actions.add")}
+							</Button>
+						</Stack>
 
-					<Stack direction={["column", "row"]}>
-						<Button colorScheme={"primary"} size={"sm"} leftIcon={
-							<AddIcon />} as={NavLink} to={Routes.AfspraakBetaalinstructie(afspraak.id!)}>{t("actions.add")}</Button>
-					</Stack>
-
-					{/* Todo: show verwachte betalingen (19-03-2021) */}
-					{/* <Stack direction={["column", "row"]}>*/}
-					{/*	<Box>*/}
-					{/*		<Button>Bekijk verwachte betalingen</Button>*/}
-					{/*	</Box>*/}
-					{/*	<OverschrijvingenListView overschrijvingen={generatedSampleOverschrijvingen} />*/}
-					{/*</Stack>*/}
-				</FormRight>
+						{/* Todo: show verwachte betalingen? (19-03-2021) */}
+						{/* <Stack direction={["column", "row"]}>*/}
+						{/*	<Box>*/}
+						{/*		<Button>Bekijk verwachte betalingen</Button>*/}
+						{/*	</Box>*/}
+						{/*	<OverschrijvingenListView overschrijvingen={generatedSampleOverschrijvingen} />*/}
+						{/*</Stack>*/}
+					</FormRight>
+				)}
 			</Section>
 		</Page>
 	);
