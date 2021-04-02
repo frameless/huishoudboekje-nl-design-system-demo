@@ -28,7 +28,8 @@ async def automatisch_boeken(customer_statement_message_id: int = None):
         if len(afspraken) == 1 and afspraken[0]["automatisch_boeken"] == True]
 
     stats = Counter(len(s) for s in suggesties.values())
-    logging.info(f"automatisch_boeken: {', '.join([f'{transactions_count} transactions with {suggestion_count} suggestions' for suggestion_count, transactions_count in stats.items() if suggestion_count != 1])} were not processed.")
+    logging.info(
+        f"automatisch_boeken: {', '.join([f'{transactions_count} transactions with {suggestion_count} suggestions' for suggestion_count, transactions_count in stats.items() if suggestion_count != 1])} were not processed.")
 
     if len(automatische_transacties) == 0:
         return None
@@ -72,7 +73,7 @@ async def transactie_suggesties(transactie_ids):
     if transactions == [None] * len(transactions):
         return {key: [] for key in transactie_ids}
 
-    #Rekeningen ophalen adhv iban
+    # Rekeningen ophalen adhv iban
     rekening_ibans = [t["tegen_rekening"] for t in transactions if t["tegen_rekening"]]
     rekeningen = await dataloaders.hhb_dataloader().rekeningen_by_iban.load_many(rekening_ibans)
     if rekeningen == [None] * len(rekeningen):
@@ -91,13 +92,35 @@ async def transactie_suggesties(transactie_ids):
 
     transactie_ids_with_afspraken = {}
     for transaction, suggesties in zip(transactions, afspraken):
-        transactie_ids_with_afspraken[transaction["id"]] = [afspraak for afspraak in suggesties if match_zoekterm(afspraak, transaction)]
+        transactie_ids_with_afspraken[transaction["id"]] = [afspraak for afspraak in suggesties if
+                                                            match_zoekterm(afspraak,
+                                                                           transaction["information_to_account_owner"])]
 
     return transactie_ids_with_afspraken
 
 
-def match_zoekterm(afspraak, transaction):
-    if afspraak["zoektermen"] and all([re.search(zoekterm, transaction["information_to_account_owner"], re.IGNORECASE) for zoekterm in afspraak["zoektermen"]]):
+def match_zoekterm(afspraak, target_text):
+    if afspraak["zoektermen"] and all(
+            [re.search(zoekterm, target_text, re.IGNORECASE) for zoekterm in afspraak["zoektermen"]]):
         return True
 
     return False
+
+
+async def find_matching_afspraken_by_afspraak(main_afspraak):
+    matching_afspraken = list()
+    if not main_afspraak["zoektermen"]:
+        return matching_afspraken
+
+    afspraken = await dataloaders.hhb_dataloader().afspraken_by_rekening.load(
+        main_afspraak["tegen_rekening_id"])
+
+    zoektermen_main = ' '.join(main_afspraak["zoektermen"])
+
+    for afspraak in afspraken:
+        zoektermen_afspraak = ' '.join(afspraak["zoektermen"])
+        if (afspraak["id"] != main_afspraak["id"]) and (
+                match_zoekterm(afspraak, zoektermen_main) or match_zoekterm(main_afspraak, zoektermen_afspraak)):
+            matching_afspraken.append(afspraak)
+
+    return matching_afspraken

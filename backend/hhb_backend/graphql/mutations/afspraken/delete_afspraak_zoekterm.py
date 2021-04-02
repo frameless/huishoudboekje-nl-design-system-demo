@@ -9,6 +9,7 @@ from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models import afspraak
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (gebruikers_activiteit_entities, log_gebruikers_activiteit)
+from hhb_backend.processen.automatisch_boeken import find_matching_afspraken_by_afspraak
 
 
 class DeleteAfspraakZoekterm(graphene.Mutation):
@@ -74,4 +75,6 @@ class DeleteAfspraakZoekterm(graphene.Mutation):
 
         afspraak = response.json()["data"]
 
-        return DeleteAfspraakZoekterm(afspraak=afspraak, previous=previous, ok=True)
+        matching_afspraken = await find_matching_afspraken_by_afspraak(afspraak)
+
+        return DeleteAfspraakZoekterm(afspraak=afspraak, previous=previous, matching_afspraken=matching_afspraken, ok=True)
