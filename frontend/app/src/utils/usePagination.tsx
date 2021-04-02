@@ -62,7 +62,7 @@ const usePagination = (options?: Partial<typeof defaultOptions>) => {
 		}
 
 		return (
-			<ButtonGroup size={"md"} isAttached>
+			<ButtonGroup size={"sm"} isAttached>
 				<Button mr={0} colorScheme={"gray"} isDisabled={page === 1} onClick={fn.goFirst}>{_options.buttonLabels.first}</Button>
 				<Button mr={0} colorScheme={"gray"} isDisabled={page === 1} onClick={fn.goPrevious}>{_options.buttonLabels.previous}</Button>
 				{fn.navigation().map((p, i) => (
