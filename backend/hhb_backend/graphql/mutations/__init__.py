@@ -4,6 +4,7 @@ import graphene
 from .afspraken.add_afspraak_zoekterm import AddAfspraakZoekterm
 from .afspraken.create_afspraak import CreateAfspraak
 from .afspraken.delete_afspraak import DeleteAfspraak
+from .afspraken.delete_afspraak_zoekterm import DeleteAfspraakZoekterm
 from .afspraken.update_afspraak import UpdateAfspraak
 from .afspraken.update_afspraak_automatisch_boeken import UpdateAfspraakAutomatischBoeken
 from .afspraken.update_afspraak_betaalinstructie import UpdateAfspraakBetaalinstructie
@@ -43,7 +44,8 @@ class RootMutation(graphene.ObjectType):
     deleteAfspraak = DeleteAfspraak.Field()
     updateAfspraakAutomatischBoeken = UpdateAfspraakAutomatischBoeken.Field()
     updateAfspraakBetaalinstructie = UpdateAfspraakBetaalinstructie.Field()
-	addAfspraakZoekterm = AddAfspraakZoekterm.Field()
+    addAfspraakZoekterm = AddAfspraakZoekterm.Field()
+    deleteAfspraakZoekterm = DeleteAfspraakZoekterm.Field()
 
     createOrganisatie = CreateOrganisatie.Field()
     updateOrganisatie = UpdateOrganisatie.Field()

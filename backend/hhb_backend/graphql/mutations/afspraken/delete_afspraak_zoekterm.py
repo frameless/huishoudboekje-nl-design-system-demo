@@ -11,7 +11,7 @@ from hhb_backend.graphql.models import afspraak
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (gebruikers_activiteit_entities, log_gebruikers_activiteit)
 
 
-class AddAfspraakZoekterm(graphene.Mutation):
+class DeleteAfspraakZoekterm(graphene.Mutation):
     class Arguments:
         afspraak_id = graphene.Int(required=True)
         zoekterm = graphene.String(required=True)
@@ -37,7 +37,7 @@ class AddAfspraakZoekterm(graphene.Mutation):
     @staticmethod
     @log_gebruikers_activiteit
     async def mutate(_root, _info, afspraak_id: int, zoekterm):
-        """ Add zoekterm to afspraak """
+        """ Delete zoekterm to afspraak """
 
         previous = await hhb_dataloader().afspraken_by_id.load(afspraak_id)
 
@@ -55,14 +55,14 @@ class AddAfspraakZoekterm(graphene.Mutation):
             zoektermen = list()
 
         if zoekterm in zoektermen:
-            raise GraphQLError("Zoekterm already in zoektermen")
-
-        zoektermen.append(zoekterm)
+            zoektermen.remove(zoekterm)
+        else:
+            raise GraphQLError("Zoekterm not found in zoektermen of afspraak.")
 
         input = {
             **previous,
             "zoektermen": zoektermen,
-            "automatisch_boeken": True
+            "automatisch_boeken": False if not zoektermen else True
         }
 
         response = requests.post(
@@ -74,4 +74,4 @@ class AddAfspraakZoekterm(graphene.Mutation):
 
         afspraak = response.json()["data"]
 
-        return AddAfspraakZoekterm(afspraak=afspraak, previous=previous, ok=True)
+        return DeleteAfspraakZoekterm(afspraak=afspraak, previous=previous, ok=True)
