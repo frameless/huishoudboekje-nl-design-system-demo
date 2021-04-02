@@ -17,7 +17,7 @@ class AfspraakFactory():
     def createAfspraak(
         self,
         burger = None,
-        beschrijving: str = "Nieuwe afspraak",
+        omschrijving: str = "Nieuwe afspraak",
         start_datum: date = date(2020, 10, 1),
         eind_datum: date = date(2020, 10, 1),
         aantal_betalingen: int = 5,
@@ -37,7 +37,7 @@ class AfspraakFactory():
             self.dbsession.flush()
         afspraak = Afspraak(
             burger=burger,
-            beschrijving=beschrijving,
+            omschrijving=omschrijving,
             start_datum=start_datum,
             eind_datum=eind_datum,
             aantal_betalingen=aantal_betalingen,

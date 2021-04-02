@@ -9,7 +9,7 @@ def test_afspraken_post_new_afspraak(client, session):
     """ Test /afspraken/ path """
     assert session.query(Afspraak).count() == 0
     afspraak_dict = {
-        "beschrijving": "Nieuwe afspraak",
+        "omschrijving": "Nieuwe afspraak",
         "start_datum": date(2020, 10, 1).isoformat(),
         "eind_datum": date(2020, 10, 1).isoformat(),
         "aantal_betalingen": 5,
@@ -38,10 +38,10 @@ def test_afspraken_post_new_afspraak(client, session):
 
 def test_afspraken_post_update_afspraak(client, session, afspraak_factory):
     """ Test /afspraken/<afspraak_id> path """
-    afspraak = afspraak_factory.createAfspraak(bedrag=1.1, beschrijving="Test Afspraak")
+    afspraak = afspraak_factory.createAfspraak(bedrag=1.1, omschrijving="Test Afspraak")
     update_dict = {
         "bedrag": 220,
-        "beschrijving": "Test Afspraak edited"
+        "omschrijving": "Test Afspraak edited"
     }
     response = client.post(
         f'/afspraken/{afspraak.id}',
@@ -50,7 +50,7 @@ def test_afspraken_post_update_afspraak(client, session, afspraak_factory):
     )
     assert response.status_code == 200
     assert response.json["data"]["bedrag"] == update_dict["bedrag"] == afspraak.bedrag
-    assert response.json["data"]["beschrijving"] == update_dict["beschrijving"] == afspraak.beschrijving
+    assert response.json["data"]["omschrijving"] == update_dict["omschrijving"] == afspraak.omschrijving
     response = client.post(
         f'/afspraken/1337',
         data=json.dumps(update_dict),
@@ -61,7 +61,7 @@ def test_afspraken_post_update_afspraak(client, session, afspraak_factory):
 
 @pytest.mark.parametrize("key,bad_value", [
     ("burger_id", "Kareltje"),
-    ("beschrijving", 1234),
+    ("omschrijving", 1234),
     ("start_datum", 1234),
     ("eind_datum", 1234),
     ("aantal_betalingen", "5"),

@@ -52,7 +52,7 @@ beforeEach(() => {
 	});
 })
 
-describe("Afspraken CRUD", () => {
+xdescribe("Afspraken CRUD", () => {
 
 	it("Shows afspraken for a burger", () => {
 		const b = sampleBurgers[0];

@@ -5,6 +5,7 @@ from .afspraken.create_afspraak import CreateAfspraak
 from .afspraken.delete_afspraak import DeleteAfspraak
 from .afspraken.update_afspraak import UpdateAfspraak
 from .afspraken.update_afspraak_automatisch_boeken import UpdateAfspraakAutomatischBoeken
+from .afspraken.update_afspraak_betaalinstructie import UpdateAfspraakBetaalinstructie
 from .burgers.create_burger import CreateBurger
 from .burgers.delete_burger import DeleteBurger
 from .burgers.update_burger import UpdateBurger
@@ -40,6 +41,7 @@ class RootMutation(graphene.ObjectType):
     updateAfspraak = UpdateAfspraak.Field()
     deleteAfspraak = DeleteAfspraak.Field()
     updateAfspraakAutomatischBoeken = UpdateAfspraakAutomatischBoeken.Field()
+    updateAfspraakBetaalinstructie = UpdateAfspraakBetaalinstructie.Field()
 
     createOrganisatie = CreateOrganisatie.Field()
     updateOrganisatie = UpdateOrganisatie.Field()
