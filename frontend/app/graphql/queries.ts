@@ -254,73 +254,78 @@ export const GetReportingDataQuery = gql`
 `;
 
 export const GetGebeurtenissenQuery = gql`
-    query GetGebeurtenissen {
-        gebruikersactiviteiten {
-            id
-            timestamp
-            gebruikerId
-            action
-            entities {
-                entityType
-                entityId
-                burger {
-                    id
-                    voorletters
-                    voornamen
-                    achternaam
-                }
-                organisatie {
-                    id
-                    weergaveNaam
-                }
-                afspraak {
-                    id
-                    organisatie{
+    query GetGebeurtenissen($limit: Int!, $offset: Int!) {
+        gebruikersactiviteitenPaged(start: $offset, limit: $limit) {
+            gebruikersactiviteiten{
+                id
+                timestamp
+                gebruikerId
+                action
+                entities {
+                    entityType
+                    entityId
+                    burger {
+                        id
+                        voorletters
+                        voornamen
+                        achternaam
+                    }
+                    organisatie {
                         id
                         weergaveNaam
                     }
+                    afspraak {
+                        id
+                        organisatie{
+                            id
+                            weergaveNaam
+                        }
+                    }
+                    rekening {
+                        id
+                        iban
+                        rekeninghouder
+                    }
+                    customerStatementMessage{
+                        id
+                    }
                 }
-                rekening {
-                    id
-                    iban
-                    rekeninghouder
-                }
-                customerStatementMessage{
-                    id
+                #            snapshotBefore {
+                #                burger {
+                #                    id
+                #                }
+                #                organisatie {
+                #                    id
+                #                }
+                #                afspraak {
+                #                    id
+                #                }
+                #                journaalpost {
+                #                    id
+                #                }
+                #            }
+                #            snapshotAfter {
+                #                burger {
+                #                    id
+                #                }
+                #                organisatie {
+                #                    id
+                #                }
+                #                afspraak {
+                #                    id
+                #                }
+                #                journaalpost {
+                #                    id
+                #                }
+                #            }
+                meta {
+                    userAgent
+                    ip
+                    applicationVersion
                 }
             }
-            #            snapshotBefore {
-            #                burger {
-            #                    id
-            #                }
-            #                organisatie {
-            #                    id
-            #                }
-            #                afspraak {
-            #                    id
-            #                }
-            #                journaalpost {
-            #                    id
-            #                }
-            #            }
-            #            snapshotAfter {
-            #                burger {
-            #                    id
-            #                }
-            #                organisatie {
-            #                    id
-            #                }
-            #                afspraak {
-            #                    id
-            #                }
-            #                journaalpost {
-            #                    id
-            #                }
-            #            }
-            meta {
-                userAgent
-                ip
-                applicationVersion
+            pageInfo{
+                count
             }
         }
     }

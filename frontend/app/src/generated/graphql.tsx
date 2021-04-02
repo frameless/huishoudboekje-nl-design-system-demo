@@ -2028,42 +2028,51 @@ export type GetReportingDataQuery = (
   )>>> }
 );
 
-export type GetGebeurtenissenQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetGebeurtenissenQueryVariables = Exact<{
+  limit: Scalars['Int'];
+  offset: Scalars['Int'];
+}>;
 
 
 export type GetGebeurtenissenQuery = (
   { __typename?: 'RootQuery' }
-  & { gebruikersactiviteiten?: Maybe<Array<Maybe<(
-    { __typename?: 'GebruikersActiviteit' }
-    & Pick<GebruikersActiviteit, 'id' | 'timestamp' | 'gebruikerId' | 'action'>
-    & { entities?: Maybe<Array<Maybe<(
-      { __typename?: 'GebruikersActiviteitEntity' }
-      & Pick<GebruikersActiviteitEntity, 'entityType' | 'entityId'>
-      & { burger?: Maybe<(
-        { __typename?: 'Burger' }
-        & Pick<Burger, 'id' | 'voorletters' | 'voornamen' | 'achternaam'>
-      )>, organisatie?: Maybe<(
-        { __typename?: 'Organisatie' }
-        & Pick<Organisatie, 'id' | 'weergaveNaam'>
-      )>, afspraak?: Maybe<(
-        { __typename?: 'Afspraak' }
-        & Pick<Afspraak, 'id'>
-        & { organisatie?: Maybe<(
+  & { gebruikersactiviteitenPaged?: Maybe<(
+    { __typename?: 'GebruikersActiviteitenPaged' }
+    & { gebruikersactiviteiten?: Maybe<Array<Maybe<(
+      { __typename?: 'GebruikersActiviteit' }
+      & Pick<GebruikersActiviteit, 'id' | 'timestamp' | 'gebruikerId' | 'action'>
+      & { entities?: Maybe<Array<Maybe<(
+        { __typename?: 'GebruikersActiviteitEntity' }
+        & Pick<GebruikersActiviteitEntity, 'entityType' | 'entityId'>
+        & { burger?: Maybe<(
+          { __typename?: 'Burger' }
+          & Pick<Burger, 'id' | 'voorletters' | 'voornamen' | 'achternaam'>
+        )>, organisatie?: Maybe<(
           { __typename?: 'Organisatie' }
           & Pick<Organisatie, 'id' | 'weergaveNaam'>
+        )>, afspraak?: Maybe<(
+          { __typename?: 'Afspraak' }
+          & Pick<Afspraak, 'id'>
+          & { organisatie?: Maybe<(
+            { __typename?: 'Organisatie' }
+            & Pick<Organisatie, 'id' | 'weergaveNaam'>
+          )> }
+        )>, rekening?: Maybe<(
+          { __typename?: 'Rekening' }
+          & Pick<Rekening, 'id' | 'iban' | 'rekeninghouder'>
+        )>, customerStatementMessage?: Maybe<(
+          { __typename?: 'CustomerStatementMessage' }
+          & Pick<CustomerStatementMessage, 'id'>
         )> }
-      )>, rekening?: Maybe<(
-        { __typename?: 'Rekening' }
-        & Pick<Rekening, 'id' | 'iban' | 'rekeninghouder'>
-      )>, customerStatementMessage?: Maybe<(
-        { __typename?: 'CustomerStatementMessage' }
-        & Pick<CustomerStatementMessage, 'id'>
+      )>>>, meta?: Maybe<(
+        { __typename?: 'GebruikersActiviteitMeta' }
+        & Pick<GebruikersActiviteitMeta, 'userAgent' | 'ip' | 'applicationVersion'>
       )> }
-    )>>>, meta?: Maybe<(
-      { __typename?: 'GebruikersActiviteitMeta' }
-      & Pick<GebruikersActiviteitMeta, 'userAgent' | 'ip' | 'applicationVersion'>
+    )>>>, pageInfo?: Maybe<(
+      { __typename?: 'PageInfo' }
+      & Pick<PageInfo, 'count'>
     )> }
-  )>>> }
+  )> }
 );
 
 export type GetBurgerGebeurtenissenQueryVariables = Exact<{
@@ -4069,45 +4078,50 @@ export type GetReportingDataQueryHookResult = ReturnType<typeof useGetReportingD
 export type GetReportingDataLazyQueryHookResult = ReturnType<typeof useGetReportingDataLazyQuery>;
 export type GetReportingDataQueryResult = Apollo.QueryResult<GetReportingDataQuery, GetReportingDataQueryVariables>;
 export const GetGebeurtenissenDocument = gql`
-    query GetGebeurtenissen {
-  gebruikersactiviteiten {
-    id
-    timestamp
-    gebruikerId
-    action
-    entities {
-      entityType
-      entityId
-      burger {
-        id
-        voorletters
-        voornamen
-        achternaam
-      }
-      organisatie {
-        id
-        weergaveNaam
-      }
-      afspraak {
-        id
+    query GetGebeurtenissen($limit: Int!, $offset: Int!) {
+  gebruikersactiviteitenPaged(start: $offset, limit: $limit) {
+    gebruikersactiviteiten {
+      id
+      timestamp
+      gebruikerId
+      action
+      entities {
+        entityType
+        entityId
+        burger {
+          id
+          voorletters
+          voornamen
+          achternaam
+        }
         organisatie {
           id
           weergaveNaam
         }
+        afspraak {
+          id
+          organisatie {
+            id
+            weergaveNaam
+          }
+        }
+        rekening {
+          id
+          iban
+          rekeninghouder
+        }
+        customerStatementMessage {
+          id
+        }
       }
-      rekening {
-        id
-        iban
-        rekeninghouder
-      }
-      customerStatementMessage {
-        id
+      meta {
+        userAgent
+        ip
+        applicationVersion
       }
     }
-    meta {
-      userAgent
-      ip
-      applicationVersion
+    pageInfo {
+      count
     }
   }
 }
@@ -4125,10 +4139,12 @@ export const GetGebeurtenissenDocument = gql`
  * @example
  * const { data, loading, error } = useGetGebeurtenissenQuery({
  *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
  *   },
  * });
  */
-export function useGetGebeurtenissenQuery(baseOptions?: Apollo.QueryHookOptions<GetGebeurtenissenQuery, GetGebeurtenissenQueryVariables>) {
+export function useGetGebeurtenissenQuery(baseOptions: Apollo.QueryHookOptions<GetGebeurtenissenQuery, GetGebeurtenissenQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetGebeurtenissenQuery, GetGebeurtenissenQueryVariables>(GetGebeurtenissenDocument, options);
       }

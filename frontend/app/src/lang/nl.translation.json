@@ -486,6 +486,12 @@
     "allBurgers": "Alle burgers",
     "total": "Totaal",
     "saldo": "Saldo",
+    "pagination": {
+        "first": "Eerste",
+        "previous": "Vorige",
+        "next": "Volgende",
+        "last": "Laatste"
+    },
     "toastMessages": {
         "generic": {
             "errorTitle": "Er is een fout opgetreden."
