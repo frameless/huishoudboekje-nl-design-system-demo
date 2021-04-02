@@ -27,7 +27,7 @@ export enum DayOfWeek {
 	// PublicHolidays,
 }
 
-export const allDaysOfWeek = Object.values(DayOfWeek).map(d => parseInt(String(d))).filter(d => !isNaN(d));
+// export const allDaysOfWeek = Object.values(DayOfWeek).map(d => parseInt(String(d))).filter(d => !isNaN(d));
 
 // See https://schema.org/Schedule
 export type Schedule = {

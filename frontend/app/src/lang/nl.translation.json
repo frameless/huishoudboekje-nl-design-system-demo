@@ -118,10 +118,6 @@
         "invalidRubriekError": "Kies een rubriek.",
         "invalidOmschrijvingError": "Vul een omschrijving in.",
         "invalidBedragError": "Vul een geldig bedrag in.",
-        "section4": {
-            "title": "Betaalinstructie",
-            "helperText": "Instellingen voor de betaalinstructie."
-        },
         "title": "Afspraak bekijken",
         "section1": {
             "title": "Partijen",
@@ -134,6 +130,10 @@
         "section3": {
             "title": "Afletteren",
             "helperText": "Voeg zoektermen toe voor het automatisch afletteren van geïmporteerde banktransacties."
+        },
+        "section4": {
+            "title": "Betaalinstructie",
+            "helperText": "Instellingen voor de betaalinstructie."
         },
         "noBetaalinstructiePossible": "Het is voor inkomsten niet mogelijk om een betaalinstructie te maken.",
         "noBetaalinstructie": "Er is voor deze afspraak geen betaalinstructie ingesteld. Het is mogelijk om een betaalinstructie toe te voegen. Bij automatisch incasso is er geen betaalinstructie nodig."
@@ -292,6 +292,8 @@
         "week_plural": "weken",
         "month": "maand",
         "month_plural": "maanden",
+        "year": "Jaar",
+        "year_plural": "Jaren",
         "choose": "Kies",
         "period": "Periode",
         "every-day": "Elke dag",
@@ -304,41 +306,41 @@
         "every-year_plural": "Elke {{count}} jaar",
         "once": "Eenmalig"
     },
+    "customInterval": {
+        "elkeWeek": "Elke week",
+        "elkeMaand": "Elke maand",
+        "elke3Maanden": "Elke 3 maanden"
+    },
+    "afspraakBetaalinstructie": {
+        "title": "Betaalinstructie instellen",
+        "helperText": "Door een betaalinstructie in te stellen kan Huishoudboekje deze exporteren.",
+        "invalidPeriodiekError": "Kies een periodiek.",
+        "invalidDateError": "Vul een juiste datum in."
+    },
     "schedule": {
         "eenmalig": "Eenmalig",
         "periodiek": "Periodiek",
+        "datum": "Datum",
         "startDate": "Startdatum",
         "endDate": "Einddatum",
-        "repeatEvery": "Herhaal elke",
-        "invalidIntervalCountError": "Vul een aantal in.",
-        "repeatEveryPeriod": "Aantal weken/maanden",
-        "invalidIntervalTypeError": "Kies een optie.",
-        "byDay": "Weekdag(en)",
-        "invalidByDayError": "Kies minimaal een weekdag.",
-        "byMonthDay": "Dag van de maand",
-        "byMonthDay_placeholder": "Bijv.: 26 (voor elke 26e dag van de maand)",
-        "invalidByMonthDayError": "Vul een dag van de maand in.",
-        "datum": "Datum"
-    },
-    "afspraakBetaalinstructie": {
-        "invalidPeriodiekError": "Kies een periodiek.",
-        "invalidDateError": "Vul een juiste datum in."
+        "customIntervalType": "Periodiek",
+        "invalidPeriodiekError": "Kies een periodiek."
     },
     "deleteAfspraak": {
         "confirmModalTitle": "Afspraak verwijderen",
         "confirmModalBody": "Weet u zeker dat u deze afspraak wil verwijderen?"
     },
     "burger": "Burger",
+    "exports": {
+        "period": "Periode",
+        "nOverschrijvingen": "Overschrijvingen",
+        "dateCreated": "Aanmaakdatum"
+    },
     "banking": {
         "exports": {
             "title": "Overschrijvingen",
             "helperText": "Exporteer een bestand met overschrijvingen voor verwerking in een bankierenapplicatie."
         }
-    },
-    "exports": {
-        "period": "Periode",
-        "nOverschrijvingen": "Overschrijvingen",
-        "dateCreated": "Aanmaakdatum"
     },
     "van": "Van",
     "tot": "Tot",

@@ -31,7 +31,7 @@ const BetaalinstructiePage = () => {
 	}), t("messages.updateAfspraakSuccess"), () => push(Routes.ViewAfspraak(parseInt(id))));
 
 	return (
-		<Page title={t("afspraakDetailView.title")} backButton={<BackButton to={Routes.ViewAfspraak(parseInt(id))} />}>
+		<Page title={t("afspraakBetaalinstructie.title")} backButton={<BackButton to={Routes.ViewAfspraak(parseInt(id))} />}>
 			<Queryable query={$afspraak} children={data => {
 				const afspraak: Afspraak = data.afspraak;
 

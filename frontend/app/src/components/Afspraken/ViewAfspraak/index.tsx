@@ -22,6 +22,7 @@ const ViewAfspraak = () => {
 	const addAfspraakZoekterm = useFakeMutation(); // Todo: implement this once there is a mutation for deleting individual zoektermen from Afspraken. (19-03-2021)
 	const deleteAfspraakZoekterm = useFakeMutation(); // Todo: implement this once there is a mutation for deleting individual zoektermen from Afspraken. (19-03-2021)
 	const $afspraak = useGetOneAfspraakQuery({
+		fetchPolicy: "no-cache",
 		variables: {
 			id: parseInt(id),
 		},

@@ -1,12 +1,13 @@
 import {AddIcon, ViewIcon, WarningTwoIcon} from "@chakra-ui/icons";
-import {Button, Divider, FormControl, FormLabel, HStack, IconButton, Input, InputGroup, InputLeftElement, InputRightElement, Stack, Text, VStack} from "@chakra-ui/react";
+import {Box, Button, Divider, FormControl, FormLabel, HStack, IconButton, Input, InputGroup, InputLeftElement, InputRightElement, Stack, Text, VStack} from "@chakra-ui/react";
 import React, {useContext, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {AiOutlineTag} from "react-icons/all";
 import {NavLink} from "react-router-dom";
 import Routes from "../../../config/routes";
 import {Afspraak} from "../../../generated/graphql";
-import {currencyFormat2, formatBurgerName} from "../../../utils/things";
+import d from "../../../utils/dayjs";
+import {currencyFormat2, formatBurgerName, intervalString} from "../../../utils/things";
 import {zoektermValidator} from "../../../utils/zod";
 import BackButton from "../../BackButton";
 import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
@@ -139,13 +140,30 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 					</FormRight>
 				) : (
 					<FormRight spacing={5}>
-						<Text>{t("afspraakDetailView.noBetaalinstructie")}</Text>
+						{afspraak.interval ? (<>
+							<Stack direction={["column", "row"]}>
+								<DataItem label={t("afspraak.periodiek")}>
+									<Text>{intervalString(afspraak.interval, t)}</Text>
+								</DataItem>
+								<DataItem label={t("exports.period")}>
+									<Text>{d(afspraak.startDatum, "YYYY-MM-DD").format("L")} / {afspraak.eindDatum ? d(afspraak.eindDatum, "YYYY-MM-DD").format("L") : "-"}</Text>
+								</DataItem>
+							</Stack>
 
-						<Stack direction={["column", "row"]}>
-							<Button colorScheme={"primary"} size={"sm"} leftIcon={<AddIcon />} as={NavLink} to={Routes.AfspraakBetaalinstructie(afspraak.id!)}>
-								{t("actions.add")}
-							</Button>
-						</Stack>
+							<Box>
+								<Button colorScheme={"primary"} size={"sm"} as={NavLink} to={Routes.AfspraakBetaalinstructie(afspraak.id!)}>
+									{t("actions.edit")}
+								</Button>
+							</Box>
+						</>) : (<>
+							<Text>{t("afspraakDetailView.noBetaalinstructie")}</Text>
+
+							<Stack direction={["column", "row"]}>
+								<Button colorScheme={"primary"} size={"sm"} leftIcon={<AddIcon />} as={NavLink} to={Routes.AfspraakBetaalinstructie(afspraak.id!)}>
+									{t("actions.add")}
+								</Button>
+							</Stack>
+						</>)}
 
 						{/* Todo: show verwachte betalingen? (19-03-2021) */}
 						{/* <Stack direction={["column", "row"]}>*/}
