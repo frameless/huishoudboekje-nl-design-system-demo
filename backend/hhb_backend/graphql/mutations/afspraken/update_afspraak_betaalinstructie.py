@@ -66,9 +66,10 @@ class UpdateAfspraakBetaalinstructie(graphene.Mutation):
         if previous.get("credit") == True:
             raise GraphQLError("betaalinstructie is alleen mogelijk bij uitgaven")
 
-        previous_start_date = previous['start_datum']
-        if previous_start_date is not None and isoparse(previous_start_date).date() != betaalinstructie.start_date:
-            raise GraphQLError("start_date kan niet aangepast worden")
+        # TODO Bepalen of dit nodig is
+        # previous_start_date = previous['start_datum']
+        # if previous_start_date is not None and isoparse(previous_start_date).date() != betaalinstructie.start_date:
+        #     raise GraphQLError("start_date kan niet aangepast worden")
 
         interval = convert_betaalinstructie_interval(betaalinstructie)
 
