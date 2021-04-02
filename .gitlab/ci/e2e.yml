@@ -79,24 +79,24 @@ cypress-token-develop:
       - frontend/app/cypress/screenshots/**/*.png
     expire_in: 1 week
 
-cypress-review:
-  extends: .cypress
-  needs:
-    - job: deploy-review
-      artifacts: true
-    - job: cypress-token-review
-      artifacts: true
-  except:
-    - master
-    - develop
-    - acceptance
+#cypress-review:
+#  extends: .cypress
+#  needs:
+#    - job: deploy-review
+#      artifacts: true
+#    - job: cypress-token-review
+#      artifacts: true
+#  except:
+#    - master
+#    - develop
+#    - acceptance
 
-cypress-develop:
-  extends: .cypress
-  needs:
-    - job: deploy-develop
-      artifacts: true
-    - job: cypress-token-develop
-      artifacts: true
-  only:
-    - develop
+#cypress-develop:
+#  extends: .cypress
+#  needs:
+#    - job: deploy-develop
+#      artifacts: true
+#    - job: cypress-token-develop
+#      artifacts: true
+#  only:
+#    - develop
