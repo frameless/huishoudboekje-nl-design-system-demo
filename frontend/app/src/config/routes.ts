@@ -7,7 +7,7 @@ export enum RouteNames {
 	bankzaken = "bankzaken",
 	transacties = "transacties",
 	overschrijvingen = "overschrijvingen",
-	bronbestanden = "bronbestanden",
+	bankafschriften = "bankafschriften",
 	rapportage = "rapportage",
 	gebeurtenissen = "gebeurtenissen",
 	configuratie = "configuratie",
@@ -44,7 +44,7 @@ const Routes = {
 
 	Bankzaken: `/${RouteNames.bankzaken}`,
 	Transacties: `/${RouteNames.bankzaken}/${RouteNames.transacties}`,
-	Bronbestanden: `/${RouteNames.bankzaken}/${RouteNames.bronbestanden}`,
+	Bankafschriften: `/${RouteNames.bankzaken}/${RouteNames.bankafschriften}`,
 	Overschrijvingen: `/${RouteNames.bankzaken}/${RouteNames.overschrijvingen}/${RouteNames.export}`,
 	Configuratie: `/${RouteNames.configuratie}`,
 	Rapportage: `/${RouteNames.rapportage}`,
