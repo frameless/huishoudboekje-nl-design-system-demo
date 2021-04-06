@@ -120,28 +120,32 @@ const BookingSection = ({transaction, rubrieken, afspraken}) => {
 				<TabPanels>
 					<TabPanel px={0}>
 						<Stack spacing={2}>
-							<Table size={"sm"}>
-								<Thead>
-									<Tr>
-										<Th>{t("burger")}</Th>
-										<Th>{t("afspraak.omschrijving")}</Th>
-										<Th>{t("afspraak.zoekterm")}</Th>
-										<Th />
-										<Th>{t("bedrag")}</Th>
-									</Tr>
-								</Thead>
-								<Tbody>
-									{options.suggesties.map(a => (
-										<SelectAfspraakOption key={a.id} afspraak={a} isSuggestion={options.suggesties.length === 1} onClick={() => {
-											// Todo: accept suggestion
-											onSelectAfspraak(a);
-										}} />
-									))}
-									{options.afspraken.map(a => (
-										<SelectAfspraakOption key={a.id} afspraak={a} onClick={() => onSelectAfspraak(a)} />
-									))}
-								</Tbody>
-							</Table>
+							{[...options.suggesties, ...options.afspraken].length === 0 ? (
+								<Text>{t("bookingSection.noResults")}</Text>
+							) : (
+								<Table size={"sm"}>
+									<Thead>
+										<Tr>
+											<Th>{t("burger")}</Th>
+											<Th>{t("afspraak.omschrijving")}</Th>
+											<Th>{t("afspraak.zoekterm")}</Th>
+											<Th />
+											<Th>{t("bedrag")}</Th>
+										</Tr>
+									</Thead>
+									<Tbody>
+										{options.suggesties.map(a => (
+											<SelectAfspraakOption key={a.id} afspraak={a} isSuggestion={options.suggesties.length === 1} onClick={() => {
+												// Todo: accept suggestion
+												onSelectAfspraak(a);
+											}} />
+										))}
+										{options.afspraken.map(a => (
+											<SelectAfspraakOption key={a.id} afspraak={a} onClick={() => onSelectAfspraak(a)} />
+										))}
+									</Tbody>
+								</Table>
+							)}
 						</Stack>
 					</TabPanel>
 					<TabPanel px={0}>
