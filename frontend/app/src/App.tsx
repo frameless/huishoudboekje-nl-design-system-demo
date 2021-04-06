@@ -6,7 +6,7 @@ import {FaLock} from "react-icons/fa";
 import {Redirect, Route, Switch, useLocation} from "react-router-dom";
 import AfspraakRouter from "./components/Afspraken";
 import CustomerStatementMessages from "./components/Bankzaken/Bankafschriften";
-import OverschrijvingenExport from "./components/Bankzaken/OverschrijvingenExport";
+import Betaalinstructies from "./components/Bankzaken/Betaalinstructies";
 import Transactions from "./components/Bankzaken/Transacties";
 import Burgers from "./components/Burgers";
 import Configuratie from "./components/Configuratie";
@@ -93,7 +93,7 @@ const App = () => {
 						<Route exact path={Routes.Bankzaken} component={() => <Redirect to={Routes.Transacties} />} />
 						<Route path={Routes.Transacties} component={Transactions} />
 						<Route path={Routes.Bankafschriften} component={CustomerStatementMessages} />
-						<Route path={Routes.Overschrijvingen} component={OverschrijvingenExport} />
+						<Route path={Routes.Overschrijvingen} component={Betaalinstructies} />
 						<Route path={Routes.Configuratie} component={Configuratie} />
 						<Route path={Routes.Rapportage} component={Rapportage} />
 						<Route path={Routes.Gebeurtenissen} component={Gebeurtenissen} />

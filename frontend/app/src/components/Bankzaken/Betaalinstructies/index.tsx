@@ -4,33 +4,33 @@ import React from "react";
 import DatePicker from "react-datepicker";
 import {useInput} from "react-grapple";
 import {useTranslation} from "react-i18next";
-import {Export, useCreateExportOverschrijvingenMutation, useGetExportsQuery} from "../../generated/graphql";
-import d from "../../utils/dayjs";
-import Queryable from "../../utils/Queryable";
-import {Regex} from "../../utils/things";
-import useToaster from "../../utils/useToaster";
-import {FormLeft, FormRight} from "../Forms/FormLeftRight";
-import Label from "../Layouts/Label";
-import Section from "../Layouts/Section";
+import {Export, useCreateExportOverschrijvingenMutation, useGetExportsQuery} from "../../../generated/graphql";
+import d from "../../../utils/dayjs";
+import Queryable from "../../../utils/Queryable";
+import {Regex} from "../../../utils/things";
+import useHandleMutation from "../../../utils/useHandleMutation";
+import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
+import Label from "../../Layouts/Label";
+import Section from "../../Layouts/Section";
 
-const OverschrijvingenExport = () => {
+const Betaalinstructies = () => {
 	const {t} = useTranslation();
-	const toast = useToaster();
+	const handleMutation = useHandleMutation();
 
 	const $exports = useGetExportsQuery();
 	const [createExportOverschrijvingen, $createExportOverschrijvingen] = useCreateExportOverschrijvingenMutation();
 
 	const startDatum = useInput({
-		defaultValue: d().startOf("quarter").format("L"),
-		placeholder: d().startOf("quarter").format("L"),
+		defaultValue: d().startOf("day").format("L"),
+		placeholder: d().startOf("day").format("L"),
 		validate: [
 			(v: string) => new RegExp(Regex.Date).test(v),
 			(v: string) => d(v, "L").isValid(),
 		],
 	});
 	const eindDatum = useInput({
-		defaultValue: d().endOf("quarter").format("L"),
-		placeholder: d().endOf("quarter").format("L"),
+		defaultValue: d().endOf("day").format("L"),
+		placeholder: d().endOf("day").format("L"),
 		validate: [
 			(v: string) => new RegExp(Regex.Date).test(v),
 			(v: string) => d(v, "L").isValid(),
@@ -38,28 +38,12 @@ const OverschrijvingenExport = () => {
 	});
 
 	const onClickExportButton = () => {
-		createExportOverschrijvingen({
+		handleMutation(createExportOverschrijvingen({
 			variables: {
 				startDatum: d(startDatum.value, "L").format("YYYY-MM-DD"),
 				eindDatum: d(eindDatum.value, "L").format("YYYY-MM-DD"),
 			},
-		}).then(() => {
-			toast({
-				success: t("messages.exports.createSuccessMessage"),
-			});
-			$exports.refetch();
-		}).catch(err => {
-			console.error(err);
-
-			let errorMessage = err.message;
-			if (err.message.includes("periode")) {
-				errorMessage = t("messages.exports.noExportsInPeriod");
-			}
-
-			toast({
-				error: errorMessage,
-			});
-		});
+		}), t("messages.exports.createSuccessMessage"), () => $exports.refetch());
 	};
 
 	return (
@@ -101,7 +85,7 @@ const OverschrijvingenExport = () => {
 								<Thead>
 									<Tr>
 										<Th>{t("exports.period")}</Th>
-										<Th>{t("exports.nOverschrijvingen")}</Th>
+										<Th>{t("exports.nTransacties")}</Th>
 										<Th>{t("exports.dateCreated")}</Th>
 										<Th />
 									</Tr>
@@ -151,4 +135,4 @@ const OverschrijvingenExport = () => {
 	);
 };
 
-export default OverschrijvingenExport;
+export default Betaalinstructies;
