@@ -106,7 +106,7 @@ const BookingDetailsView: React.FC<{transactie: BankTransaction}> = ({transactie
 					<Box flex={1}>
 						<Label>{t("omschrijving")}</Label>
 						<Box>
-							<Text>{journaalpostAfspraak.beschrijving}</Text>
+							<Text>{journaalpostAfspraak.omschrijving}</Text>
 						</Box>
 					</Box>
 				</Stack>
