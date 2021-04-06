@@ -55,7 +55,7 @@ class DeleteAfspraakZoekterm(graphene.Mutation):
         else:
             zoektermen = list()
 
-        if zoekterm in zoektermen:
+        if zoekterm.lower() in (zk.lower() for zk in zoektermen):
             zoektermen.remove(zoekterm)
         else:
             raise GraphQLError("Zoekterm not found in zoektermen of afspraak.")
