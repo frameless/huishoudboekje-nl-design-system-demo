@@ -93,7 +93,9 @@ const OverschrijvingenExport = () => {
 
 					<Divider />
 
-					<Queryable query={$exports} children={(data: {exports: Export[]}) => {
+					<Queryable query={$exports} children={(data) => {
+						const exports: Export[] = data.exports || [];
+
 						return (
 							<Table variant={"noLeftPadding"}>
 								<Thead>
@@ -105,7 +107,7 @@ const OverschrijvingenExport = () => {
 									</Tr>
 								</Thead>
 								<Tbody>
-									{data.exports.map(e => {
+									{exports.map(e => {
 										const href = `/api/export/${e.id}`;
 
 										return (

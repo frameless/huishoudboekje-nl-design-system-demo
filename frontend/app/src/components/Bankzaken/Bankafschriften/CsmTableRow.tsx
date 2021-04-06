@@ -32,7 +32,7 @@ const CsmTableRow: React.FC<{csm: CustomerStatementMessage, onDelete: (id: numbe
 				<Text>{truncateText(csm.filename || "", 60)}</Text>
 			</Td>
 			<Td>
-				<Text>{d(csm.uploadDate).fromNow()}</Text>
+				<Text fontSize={"sm"} color={"gray.500"}>{d(csm.uploadDate).format("L LT")}</Text>
 			</Td>
 			<Td style={{width: "100px", textAlign: "right"}}>
 				<IconButton variant={deleteConfirm ? "solid" : "ghost"} size={"xs"} icon={deleteConfirm ? <CheckIcon /> : <DeleteIcon />}
