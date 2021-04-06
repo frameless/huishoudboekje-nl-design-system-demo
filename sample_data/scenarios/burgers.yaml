@@ -7,7 +7,7 @@ scenarios:
       # inkomsten
       - aantal: 1
         rubriek: "Inkomsten"
-        beschrijving: "Loon"
+        omschrijving: "Loon"
         organisatie:
           kvk: "35012085"
         bedrag: 76532
@@ -21,7 +21,7 @@ scenarios:
         automatisch_boeken: true
       - aantal: 1
         rubriek: "Inkomsten"
-        beschrijving: "Aanvullende uitkering"
+        omschrijving: "Aanvullende uitkering"
         organisatie:
           kvk: "30280353"
           iban: "NL76BNGH0285178598"
@@ -36,7 +36,7 @@ scenarios:
         automatisch_boeken: true
       - aantal: 1
         rubriek: "Toeslagen"
-        beschrijving: "Voorschot kindgebonden budget"
+        omschrijving: "Voorschot kindgebonden budget"
         organisatie:
           kvk: "27365323"
         bedrag: 39100
@@ -50,7 +50,7 @@ scenarios:
         automatisch_boeken: true
       - aantal: 1
         rubriek: "Toeslagen"
-        beschrijving: "Voorschot huurtoeslag"
+        omschrijving: "Voorschot huurtoeslag"
         organisatie:
           kvk: "27365323"
           iban: "NL36INGB0003445588"
@@ -65,7 +65,7 @@ scenarios:
         automatisch_boeken: true
       - aantal: 1
         rubriek: "Toeslagen"
-        beschrijving: "Voorschot zorgtoeslag"
+        omschrijving: "Voorschot zorgtoeslag"
         organisatie:
           kvk: "27365323"
         bedrag: 10700
@@ -80,7 +80,7 @@ scenarios:
       # uitgaven
       - aantal: 1
         rubriek: "Betaalde huur"
-        beschrijving: "Huur"
+        omschrijving: "Huur"
         organisatie:
           kvk: "30038487"
         bedrag: 64735
@@ -95,7 +95,7 @@ scenarios:
         automatisch_boeken: true
       - aantal: 1
         rubriek: "Elektriciteit"
-        beschrijving: "Elektriciteit"
+        omschrijving: "Elektriciteit"
         organisatie:
           kvk: "05082820"
         bedrag: 13200
@@ -110,7 +110,7 @@ scenarios:
         automatisch_boeken: true
       - aantal: 1
         rubriek: "Water"
-        beschrijving: "Water"
+        omschrijving: "Water"
         organisatie:
           kvk: "05069581"
         bedrag: 4161
@@ -125,7 +125,7 @@ scenarios:
         automatisch_boeken: true
       - aantal: 1
         rubriek: "Leefgeld"
-        beschrijving: "Leefgeld"
+        omschrijving: "Leefgeld"
         bedrag: 93994
         credit: false
         automatische_incasso: false
@@ -145,7 +145,7 @@ scenarios:
       # inkomsten
       - aantal: 1
         rubriek: "Inkomsten"
-        beschrijving: "Aanvullende uitkering minus terugvordering"
+        omschrijving: "Aanvullende uitkering minus terugvordering"
         organisatie:
           kvk: "30280353"
           iban: "NL76BNGH0285178598"
@@ -161,7 +161,7 @@ scenarios:
         automatisch_boeken: true
       - aantal: 1
         rubriek: "Inkomsten"
-        beschrijving: "Loon"
+        omschrijving: "Loon"
         # TODO: add organisation Veilig Zorgen
         organisatie:
           kvk: "35012085"
@@ -176,7 +176,7 @@ scenarios:
         automatisch_boeken: true
       - aantal: 1
         rubriek: "Toeslagen"
-        beschrijving: "Voorschot huurtoeslag"
+        omschrijving: "Voorschot huurtoeslag"
         organisatie:
           kvk: "27365323"
         bedrag: 28600
@@ -190,7 +190,7 @@ scenarios:
         automatisch_boeken: true
       - aantal: 1
         rubriek: "Toeslagen"
-        beschrijving: "Voorschot zorgtoeslag"
+        omschrijving: "Voorschot zorgtoeslag"
         organisatie:
           kvk: "27365323"
         bedrag: 10700
@@ -204,7 +204,7 @@ scenarios:
         automatisch_boeken: true
       - aantal: 1
         rubriek: "Subsidies"
-        beschrijving: "Bijdrage Vaste Lasten Pakket"
+        omschrijving: "Bijdrage Vaste Lasten Pakket"
         organisatie:
           kvk: "73834238"
         bedrag: 3000
@@ -219,7 +219,7 @@ scenarios:
       # uitgaven
       - aantal: 1
         rubriek: "Betaalde huur"
-        beschrijving: "Huur"
+        omschrijving: "Huur"
         organisatie:
           kvk: "30038487"
         bedrag: 57077
@@ -234,7 +234,7 @@ scenarios:
         automatisch_boeken: true
       - aantal: 1
         rubriek: "Elektriciteit"
-        beschrijving: "Elektriciteit"
+        omschrijving: "Elektriciteit"
         organisatie:
           kvk: "24324527"
         bedrag: 12200
@@ -249,7 +249,7 @@ scenarios:
         automatisch_boeken: true
       - aantal: 1
         rubriek: "Verzekeringen"
-        beschrijving: "Zorgverzekering"
+        omschrijving: "Zorgverzekering"
         organisatie:
           kvk: "41168265"
         bedrag: 18134
@@ -264,7 +264,7 @@ scenarios:
         automatisch_boeken: true
       - aantal: 1
         rubriek: "Water"
-        beschrijving: "Water"
+        omschrijving: "Water"
         organisatie:
           kvk: "05069581"
         bedrag: 4577
@@ -279,7 +279,7 @@ scenarios:
         automatisch_boeken: true
       - aantal: 1
         rubriek: "Leefgeld"
-        beschrijving: "Leefgeld"
+        omschrijving: "Leefgeld"
         bedrag: 119520
         credit: false
         automatische_incasso: false
@@ -292,7 +292,7 @@ scenarios:
         automatisch_boeken: true
       - aantal: 1
         rubriek: "Verzekeringen"
-        beschrijving: "Inboedelverzekering"
+        omschrijving: "Inboedelverzekering"
         organisatie:
           kvk: "69653852"
         bedrag: 1952
@@ -307,7 +307,7 @@ scenarios:
         automatisch_boeken: true
       - aantal: 1
         rubriek: "Telefonie"
-        beschrijving: "Vaste telefonie en internet"
+        omschrijving: "Vaste telefonie en internet"
         organisatie:
           kvk: "27124701"
         bedrag: 6288
@@ -322,7 +322,7 @@ scenarios:
         automatisch_boeken: true
       - aantal: 1
         rubriek: "Telefonie"
-        beschrijving: "Mobiele telefonie"
+        omschrijving: "Mobiele telefonie"
         organisatie:
           kvk: "14052264"
         bedrag: 3000
