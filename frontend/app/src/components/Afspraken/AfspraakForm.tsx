@@ -45,7 +45,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 		}));
 	};
 
-	const rubriekOptions = rubrieken.map((r: Rubriek) => ({
+	const rubriekOptions = rubrieken.filter(r => r.grootboekrekening?.credit === data.credit).map((r: Rubriek) => ({
 		key: r.id,
 		value: r.id,
 		label: r.naam,
