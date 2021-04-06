@@ -113,8 +113,11 @@ class HHBQuery():
             if not self.filtered_columns or relation['relation'] in self.filtered_columns:
                 self.query = self.query.options(joinedload(relation["relation"]))
 
-    def order_query(self):
-        self.query = self.query.order_by(self.hhb_model.id)
+    def order_query(self, desc=False):
+        if desc:
+            self.query = self.query.order_by(self.hhb_model.id.desc())
+        else:
+            self.query = self.query.order_by(self.hhb_model.id)
 
     def post_process_data(self, row):
         result_dict = row2dict(row)
