@@ -70,7 +70,7 @@ class AfspraakOrganisatie:
 class AfspraakScenario:
     aantal: int = 12
     rubriek: str = None
-    beschrijving: str = None
+    omschrijving: str = None
     organisatie: AfspraakOrganisatie = None
     bedrag: int = 10100
     credit: bool = False

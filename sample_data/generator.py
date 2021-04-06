@@ -81,7 +81,7 @@ class Generator:
                         "burger_id",
                         "tegen_rekening_id",
                         "actief",
-                        "beschrijving",
+                        "omschrijving",
                         "zoektermen",
                         "automatisch_boeken",
                     ],
@@ -307,7 +307,7 @@ class Generator:
                 if r["burger_id"] == burger["id"]
             ),
             "actief": scenario.actief,
-            "beschrijving": scenario.beschrijving,
+            "omschrijving": scenario.omschrijving,
             "zoektermen": f"""{{{",".join(scenario.zoektermen)}}}""" if scenario.zoektermen and len(
                 scenario.zoektermen) > 0 else None,
         }
