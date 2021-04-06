@@ -34,7 +34,7 @@ const CsmListView: React.FC<BoxProps & {csms: CustomerStatementMessage[], refres
 
 
 	return (
-		<Table>
+		<Table variant={"noLeftPadding"}>
 			<Thead>
 				<Tr>
 					<Th>

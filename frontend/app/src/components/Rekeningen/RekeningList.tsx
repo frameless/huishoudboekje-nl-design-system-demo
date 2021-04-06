@@ -46,7 +46,7 @@ const RekeningList: React.FC<TableProps & RekeningListProps> = ({rekeningen, bur
 	}
 
 	return (
-		<Table size={"sm"} {...props}>
+		<Table size={"sm"} variant={"noLeftPadding"} {...props}>
 			<Thead>
 				<Tr>
 					<Th>{t("forms.rekeningen.fields.accountHolder")}</Th>

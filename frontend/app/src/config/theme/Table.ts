@@ -1,4 +1,4 @@
-// Reference: https://github.com/chakra-ui/chakra-ui/blob/develop/packages/theme/src/components/table.ts
+// Reference: https://github.com/chakra-ui/chakra-ui/blob/main/packages/theme/src/components/table.ts
 
 const baseStyle = {
 	thead: {
@@ -8,12 +8,6 @@ const baseStyle = {
 			letterSpacing: 0,
 			fontSize: "sm",
 			color: "gray.500",
-			paddingLeft: 0,
-		},
-	},
-	tbody: {
-		td: {
-			paddingLeft: 0,
 		},
 	},
 };
@@ -76,7 +70,19 @@ const sizes = {
 	},
 };
 
+const variants = {
+	noLeftPadding: () => ({
+		th: {
+			pl: 0,
+		},
+		td: {
+			pl: 0,
+		},
+	}),
+};
+
 export default {
 	baseStyle,
 	sizes,
+	variants,
 };

@@ -9,7 +9,7 @@ const GebeurtenissenTableView: React.FC<TableProps & {gebeurtenissen: Gebruikers
 	const {t} = useTranslation();
 
 	return (
-		<Table size={"sm"} {...props}>
+		<Table size={"sm"} variant={"noLeftPadding"} {...props}>
 			<Thead>
 				<Tr>
 					<Th>{t("pages.gebeurtenissen.activity")}</Th>

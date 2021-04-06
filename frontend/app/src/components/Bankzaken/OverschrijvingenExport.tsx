@@ -95,7 +95,7 @@ const OverschrijvingenExport = () => {
 
 					<Queryable query={$exports} children={(data: {exports: Export[]}) => {
 						return (
-							<Table>
+							<Table variant={"noLeftPadding"}>
 								<Thead>
 									<Tr>
 										<Th>{t("exports.period")}</Th>

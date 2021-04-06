@@ -18,7 +18,7 @@ const BurgerAfsprakenView: React.FC<StackProps & {burger: Burger, refetch: VoidF
 			<FormLeft title={t("forms.burgers.sections.agreements.title")} helperText={t("forms.burgers.sections.agreements.detailText")} />
 			<FormRight justifyContent={"center"}>
 				{afspraken && afspraken.length > 0 && (<>
-					<Table size={"sm"}>
+					<Table size={"sm"} variant={"noLeftPadding"}>
 						<Thead>
 							<Tr>
 								<Th>{t("agreements.tegenpartij")}</Th>
