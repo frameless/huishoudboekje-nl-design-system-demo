@@ -13,6 +13,8 @@ import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
 import Section from "../../Layouts/Section";
 import PageNotFound from "../../PageNotFound";
 
+// Todo
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 enum CustomIntervalTypeEnum {
 	ElkeWeek = 1,
 	ElkeMaand,
@@ -173,7 +175,7 @@ const EditAfspraakBetaalinstructieForm: React.FC<EditAfspraakBetaalinstructiePro
 
 	const validator = getValidator(data, customIntervalType);
 	const isValid = (fieldName: string) => {
-		if(fieldName === "periodiek"){
+		if (fieldName === "periodiek") {
 			return data.periodiek === true || data.periodiek === false;
 		}
 

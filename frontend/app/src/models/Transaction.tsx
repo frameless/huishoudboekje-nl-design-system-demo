@@ -3,16 +3,16 @@ import d from "../utils/dayjs";
 
 export default class Transaction {
 
-	id: number
-	customerStatementMessage: CustomerStatementMessage
-	statementLine: string
-	informationToAccountOwner: string
-	bedrag: string
-	isCredit: boolean
-	tegenRekening: Rekening
-	tegenRekeningIban: string
-	transactieDatum: d.Dayjs
-	journaalpost: Journaalpost
+	id: number;
+	customerStatementMessage: CustomerStatementMessage;
+	statementLine: string;
+	informationToAccountOwner: string;
+	bedrag: string;
+	isCredit: boolean;
+	tegenRekening: Rekening;
+	tegenRekeningIban: string;
+	transactieDatum: d.Dayjs;
+	journaalpost: Journaalpost;
 
 	constructor(props: Required<BankTransaction>) {
 		this.id = props.id;
@@ -33,7 +33,7 @@ export default class Transaction {
 
 	belongsToAnyBurger = (burgerIds: number[] = []): boolean => {
 		if (this.isBooked()) {
-			const bookingBurgerId = this.journaalpost?.afspraak?.burger?.id
+			const bookingBurgerId = this.journaalpost?.afspraak?.burger?.id;
 
 			if (bookingBurgerId) {
 				if (burgerIds.length === 0) {
@@ -61,6 +61,6 @@ export default class Transaction {
 		}
 
 		return false;
-	}
+	};
 
 }

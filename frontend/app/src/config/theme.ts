@@ -1,7 +1,7 @@
 import {extendTheme, Tooltip} from "@chakra-ui/react";
-import FormLabel from "./theme/FormLabel";
 import Button from "./theme/Button";
 import Section from "./theme/custom/Section";
+import FormLabel from "./theme/FormLabel";
 import Heading from "./theme/Heading";
 import Link from "./theme/Link";
 import Table from "./theme/Table";

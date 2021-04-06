@@ -18,7 +18,7 @@ import {useToggle} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {Redirect, useHistory, useParams} from "react-router-dom";
 import Routes from "../../config/routes";
-import {Organisatie, useDeleteOrganisatieMutation, useGetOneOrganisatieQuery} from "../../generated/graphql";
+import {Organisatie, useDeleteOrganisatieMutation, useGetOrganisatieQuery} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
 import useToaster from "../../utils/useToaster";
 import BackButton from "../BackButton";
@@ -42,7 +42,7 @@ const OrganisatieDetail = () => {
 	const onClickEdit = () => push(Routes.EditOrganisatie(parseInt(id)));
 	const onClickDelete = () => toggleDeleteDialog();
 
-	const $organisatie = useGetOneOrganisatieQuery({
+	const $organisatie = useGetOrganisatieQuery({
 		fetchPolicy: "no-cache",
 		variables: {id: parseInt(id)},
 	});

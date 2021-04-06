@@ -9,7 +9,7 @@ import Section from "../Layouts/Section";
 import {createAggregation} from "./Aggregator";
 import {RapportageContext} from "./context";
 
-const Saldo: React.FC<BoxProps & { transactions: BankTransaction[] }> = ({transactions}) => {
+const Saldo: React.FC<BoxProps & {transactions: BankTransaction[]}> = ({transactions}) => {
 	const {t} = useTranslation();
 	const [colorSaldo] = useToken("colors", ["blue.300"]);
 	const {startDate, endDate, granularity} = useContext(RapportageContext);
@@ -27,14 +27,14 @@ const Saldo: React.FC<BoxProps & { transactions: BankTransaction[] }> = ({transa
 
 			return [
 				period,
-				saldo
+				saldo,
 			];
 		});
 	};
 
 	const data = [
 		columns,
-		...chartData(chartTemplate, aggregation)
+		...chartData(chartTemplate, aggregation),
 	];
 
 	return (

@@ -2,7 +2,7 @@ import {gql} from "@apollo/client";
 import {AfspraakFragment} from "../fragments/AfspraakFragment";
 import {RubriekFragment} from "../fragments/RubriekFragment";
 
-export const GetTransactionItemFormDataQuery = gql`
+export const GetTransactieItemFormDataQuery = gql`
     query getTransactionItemFormData {
         rubrieken {
             ...Rubriek

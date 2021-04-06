@@ -1,7 +1,7 @@
 // Reference: https://github.com/chakra-ui/chakra-ui/blob/develop/packages/theme/src/components/tabs.ts
 
 const variantSolid = (props: Record<string, any>) => {
-	const {theme} = props
+	const {theme} = props;
 	return ({
 		tab: {
 			...theme.components.Button.baseStyle,
@@ -16,14 +16,14 @@ const baseStyle = {
 	tabpanel: {
 		px: 0,
 		outline: "none",
-	}
-}
+	},
+};
 
 const variants = {
 	solid: variantSolid,
-}
+};
 
 export default {
 	variants,
 	baseStyle,
-}
+};

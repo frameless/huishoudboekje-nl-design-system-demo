@@ -11,5 +11,5 @@ type RapportageContextValue = {
 export const RapportageContext = createContext<RapportageContextValue>({
 	startDate: d(),
 	endDate: d(),
-	granularity: Granularity.Monthly
+	granularity: Granularity.Monthly,
 });

@@ -2,7 +2,7 @@ import {AddIcon} from "@chakra-ui/icons";
 import {Box, Button, Divider, Input, Stack} from "@chakra-ui/react";
 import React, {useRef} from "react";
 import {useTranslation} from "react-i18next";
-import {CustomerStatementMessage, useCreateCustomerStatementMessageMutation, useGetAllCsmsQuery} from "../../../generated/graphql";
+import {CustomerStatementMessage, useCreateCustomerStatementMessageMutation, useGetCsmsQuery} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import useToaster from "../../../utils/useToaster";
 import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
@@ -14,7 +14,7 @@ const CustomerStatementMessages = () => {
 	const toast = useToaster();
 	const fileUploadInput = useRef<HTMLInputElement>(null);
 
-	const $customerStatementMessages = useGetAllCsmsQuery({
+	const $customerStatementMessages = useGetCsmsQuery({
 		fetchPolicy: "no-cache",
 	});
 	const [createCSM, $createCSM] = useCreateCustomerStatementMessageMutation({

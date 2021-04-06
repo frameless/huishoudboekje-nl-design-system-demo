@@ -10,7 +10,7 @@ import RekeningForm from "../../Rekeningen/RekeningForm";
 import RekeningList from "../../Rekeningen/RekeningList";
 import {OrganizationDetailContext} from "../OrganisatieDetail";
 
-const OrganisatieRekeningenView: React.FC<BoxProps & { organisatie: Organisatie }> = ({organisatie, ...props}) => {
+const OrganisatieRekeningenView: React.FC<BoxProps & {organisatie: Organisatie}> = ({organisatie, ...props}) => {
 	const {t} = useTranslation();
 	const {refresh} = useContext(OrganizationDetailContext);
 	const [showForm, toggleForm] = useToggle(false);
@@ -23,8 +23,8 @@ const OrganisatieRekeningenView: React.FC<BoxProps & { organisatie: Organisatie 
 		createRekeningForOrg({
 			variables: {
 				orgId: organisatie.id,
-				rekening
-			}
+				rekening,
+			},
 		}).then(() => {
 			resetForm();
 			toggleForm(false);
@@ -44,7 +44,7 @@ const OrganisatieRekeningenView: React.FC<BoxProps & { organisatie: Organisatie 
 						{rekeningen.length > 0 && <Divider />}
 
 						<RekeningForm rekening={{
-							rekeninghouder: organisatie.weergaveNaam
+							rekeninghouder: organisatie.weergaveNaam,
 						}} onSave={onSaveRekening} onCancel={() => toggleForm(false)} />
 					</>) : (
 						<Box>

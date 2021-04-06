@@ -10,7 +10,7 @@ import {createAggregation} from "./Aggregator";
 import {RapportageContext} from "./context";
 
 // Todo: specify types explicitly
-const InkomstenUitgaven: React.FC<BoxProps & { transactions: BankTransaction[] }> = ({transactions = []}) => {
+const InkomstenUitgaven: React.FC<BoxProps & {transactions: BankTransaction[]}> = ({transactions = []}) => {
 	const {t} = useTranslation();
 	const [colorInkomsten, colorUitgaven] = useToken("colors", ["green.300", "red.300"]);
 	const {startDate, endDate, granularity} = useContext(RapportageContext);
@@ -18,7 +18,7 @@ const InkomstenUitgaven: React.FC<BoxProps & { transactions: BankTransaction[] }
 	const [aggregation] = createAggregation(transactions, granularity);
 
 	const columns = [t("interval.period"), t("charts.inkomstenUitgaven.income"), t("charts.inkomstenUitgaven.expenses")];
-	const chartTemplate = prepareChartData(startDate, endDate, granularity,columns.length - 1);
+	const chartTemplate = prepareChartData(startDate, endDate, granularity, columns.length - 1);
 	const chartData = (chartTemplate: any[], aggregation) => chartTemplate.map(chartItem => {
 		const [period, tIncome, tExpenses] = chartItem;
 		const {income = 0, expenses = 0} = aggregation[period] || {};
@@ -26,13 +26,13 @@ const InkomstenUitgaven: React.FC<BoxProps & { transactions: BankTransaction[] }
 		return [
 			period,
 			tIncome + income,
-			tExpenses + Math.abs(expenses)
+			tExpenses + Math.abs(expenses),
 		];
 	});
 
 	const data = [
 		columns,
-		...chartData(chartTemplate, aggregation)
+		...chartData(chartTemplate, aggregation),
 	];
 
 	return (
@@ -48,7 +48,7 @@ const InkomstenUitgaven: React.FC<BoxProps & { transactions: BankTransaction[] }
 					legend: {position: "top"},
 					colors: [colorInkomsten, colorUitgaven],
 					lineWidth: 1,
-					pointSize: 5
+					pointSize: 5,
 				}}
 				// rootProps={{"data-testid": "1"}}
 			/>

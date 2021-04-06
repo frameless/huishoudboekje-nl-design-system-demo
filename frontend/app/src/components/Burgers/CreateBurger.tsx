@@ -121,7 +121,7 @@ const CreateBurger = () => {
 		}).catch(err => {
 			console.error("Error:", err);
 			toast({
-				error: err.message
+				error: err.message,
 			});
 		});
 	};

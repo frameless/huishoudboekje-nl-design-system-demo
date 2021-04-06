@@ -5,10 +5,10 @@ const GraphqlApiUrl = "/api/graphql";
 const GraphqlApiUrlUpload = "/api/graphql";
 
 const defaultLink = createHttpLink({
-	uri: GraphqlApiUrl
+	uri: GraphqlApiUrl,
 });
 const uploadLink = createUploadLink({
-	uri: GraphqlApiUrlUpload
+	uri: GraphqlApiUrlUpload,
 });
 
 const apolloClient = new ApolloClient({
@@ -16,8 +16,8 @@ const apolloClient = new ApolloClient({
 	link: ApolloLink.split(
 		(operation) => operation.getContext().method === "fileUpload",
 		uploadLink,
-		defaultLink
-	)
+		defaultLink,
+	),
 });
 
 export default apolloClient;

@@ -4,7 +4,7 @@ import {Overschrijving, OverschrijvingStatus} from "../../generated/graphql";
 import d from "../../utils/dayjs";
 import Currency from "../Currency";
 
-const OverschrijvingItem: React.FC<{ overschrijving: Overschrijving, showStatus?: boolean } & StackProps> = ({overschrijving, showStatus = true, ...props}) => {
+const OverschrijvingItem: React.FC<{overschrijving: Overschrijving, showStatus?: boolean} & StackProps> = ({overschrijving, showStatus = true, ...props}) => {
 	const {datum, bedrag, status} = overschrijving;
 
 	const getOverschrijvingStatusColor = () => {

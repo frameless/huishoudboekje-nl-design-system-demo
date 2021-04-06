@@ -26,7 +26,7 @@ const OverschrijvingenExport = () => {
 		validate: [
 			(v: string) => new RegExp(Regex.Date).test(v),
 			(v: string) => d(v, "L").isValid(),
-		]
+		],
 	});
 	const eindDatum = useInput({
 		defaultValue: d().endOf("quarter").format("L"),
@@ -34,7 +34,7 @@ const OverschrijvingenExport = () => {
 		validate: [
 			(v: string) => new RegExp(Regex.Date).test(v),
 			(v: string) => d(v, "L").isValid(),
-		]
+		],
 	});
 
 	const onClickExportButton = () => {
@@ -42,11 +42,11 @@ const OverschrijvingenExport = () => {
 			variables: {
 				startDatum: d(startDatum.value, "L").format("YYYY-MM-DD"),
 				eindDatum: d(eindDatum.value, "L").format("YYYY-MM-DD"),
-			}
+			},
 		}).then(() => {
 			toast({
-				success: t("messages.exports.createSuccessMessage")
-			})
+				success: t("messages.exports.createSuccessMessage"),
+			});
 			$exports.refetch();
 		}).catch(err => {
 			console.error(err);
@@ -57,7 +57,7 @@ const OverschrijvingenExport = () => {
 			}
 
 			toast({
-				error: errorMessage
+				error: errorMessage,
 			});
 		});
 	};
@@ -71,20 +71,20 @@ const OverschrijvingenExport = () => {
 						<FormControl flex={1}>
 							<FormLabel>{t("forms.common.fields.startDate")}</FormLabel>
 							<DatePicker selected={d(startDatum.value, "L").isValid() ? d(startDatum.value, "L").toDate() : null} dateFormat={"dd-MM-yyyy"}
-							            onChange={(value: Date) => {
-								            if (value) {
-									            startDatum.setValue(d(value).format("L"));
-								            }
-							            }} customInput={<Input type="text" isInvalid={!d(startDatum.value, "L").isValid()} {...startDatum.bind} />} />
+								onChange={(value: Date) => {
+									if (value) {
+										startDatum.setValue(d(value).format("L"));
+									}
+								}} customInput={<Input type="text" isInvalid={!d(startDatum.value, "L").isValid()} {...startDatum.bind} />} />
 						</FormControl>
 						<FormControl flex={1}>
 							<FormLabel>{t("forms.common.fields.endDate")}</FormLabel>
 							<DatePicker selected={d(eindDatum.value, "L").isValid() ? d(eindDatum.value, "L").toDate() : null} dateFormat={"dd-MM-yyyy"}
-							            onChange={(value: Date) => {
-								            if (value) {
-									            eindDatum.setValue(d(value).format("L"));
-								            }
-							            }} customInput={<Input type="text" isInvalid={!d(eindDatum.value, "L").isValid()} {...eindDatum.bind} />} />
+								onChange={(value: Date) => {
+									if (value) {
+										eindDatum.setValue(d(value).format("L"));
+									}
+								}} customInput={<Input type="text" isInvalid={!d(eindDatum.value, "L").isValid()} {...eindDatum.bind} />} />
 						</FormControl>
 						<FormControl flex={1}>
 							<Button colorScheme={"primary"} isLoading={$createExportOverschrijvingen.loading} onClick={onClickExportButton}>{t("actions.export")}</Button>
@@ -93,7 +93,7 @@ const OverschrijvingenExport = () => {
 
 					<Divider />
 
-					<Queryable query={$exports} children={(data: { exports: Export[] }) => {
+					<Queryable query={$exports} children={(data: {exports: Export[]}) => {
 						return (
 							<Table>
 								<Thead>
@@ -109,7 +109,7 @@ const OverschrijvingenExport = () => {
 										const href = `/api/export/${e.id}`;
 
 										return (
-											<Tr key={e.id} _hover={{ bg: "gray.100" }}>
+											<Tr key={e.id} _hover={{bg: "gray.100"}}>
 												<Stack as={Td} direction={"row"} alignItems={"center"}>
 													<Stack fontSize={"sm"} flex={2} spacing={0}>
 														<Stack direction={"row"}>
@@ -132,7 +132,8 @@ const OverschrijvingenExport = () => {
 												</Td>
 												<Td>
 													<Box flex={0}>
-														<IconButton size={"sm"} variant={"ghost"} icon={<DownloadIcon />} aria-label={t("actions.download")} as={"a"} target={"_blank"} href={href} download={href} />
+														<IconButton size={"sm"} variant={"ghost"} icon={
+															<DownloadIcon />} aria-label={t("actions.download")} as={"a"} target={"_blank"} href={href} download={href} />
 													</Box>
 												</Td>
 											</Tr>
@@ -140,7 +141,7 @@ const OverschrijvingenExport = () => {
 									})}
 								</Tbody>
 							</Table>
-						)
+						);
 					}} />
 				</FormRight>
 			</Stack>

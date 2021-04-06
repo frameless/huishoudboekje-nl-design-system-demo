@@ -7,19 +7,19 @@ type RadioButtonGroupProps = {
 	defaultValue?: string,
 	value?: string,
 	name?: string,
-	options: string[] | { [key: string]: string },
+	options: string[] | {[key: string]: string},
 }
 
 const RadioButtonGroup: React.FC<RadioButtonGroupProps> = ({onChange, defaultValue = undefined, value = undefined, name, options = []}) => {
 	const {getRadioProps, getRootProps} = useRadioGroup({
-		name, defaultValue, onChange, value: value || defaultValue
+		name, defaultValue, onChange, value: value || defaultValue,
 	});
 	const group = getRootProps();
 
 	const mapOptions = (renderFn: (value: string, i: number, label: string) => JSX.Element) => {
 		const mapThis = options instanceof Array ? options : Object.keys(options);
 		return mapThis.map((value, i) => renderFn(value, i, options instanceof Array ? value : options[value]));
-	}
+	};
 
 	return (
 		<Stack {...group} direction={"row"} spacing={0}>
@@ -30,7 +30,7 @@ const RadioButtonGroup: React.FC<RadioButtonGroupProps> = ({onChange, defaultVal
 					},
 					...(i < Object.keys(options).length - 1) && {
 						roundedRight: 0,
-					}
+					},
 				};
 
 				return (<RadioButton key={i} radio={getRadioProps({value} as any)} {...roundingOptions}>{label}</RadioButton>);

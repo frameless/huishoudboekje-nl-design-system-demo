@@ -5,7 +5,7 @@ import {Overschrijving} from "../../generated/graphql";
 import Label from "../Layouts/Label";
 import OverschrijvingItem from "./OverschrijvingItem";
 
-type OverschrijvingenListViewProps = StackProps & { overschrijvingen: Overschrijving[] };
+type OverschrijvingenListViewProps = StackProps & {overschrijvingen: Overschrijving[]};
 const OverschrijvingenListView: React.FC<OverschrijvingenListViewProps> = ({overschrijvingen, ...props}) => {
 	const {t} = useTranslation();
 	const isMobile = useBreakpointValue([true, null, null, false]);

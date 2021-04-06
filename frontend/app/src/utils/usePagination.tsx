@@ -40,7 +40,7 @@ const usePagination = (options?: Partial<typeof defaultOptions>) => {
 		},
 		navigation: () => {
 			// nPages = 2, Page = 1, pagesAround = 3 > [1,2]
-			if(nPages < (pagesAround * 2)){
+			if (nPages < (pagesAround * 2)) {
 				return fill(1, nPages);
 			}
 

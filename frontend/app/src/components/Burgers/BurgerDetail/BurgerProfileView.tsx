@@ -6,7 +6,7 @@ import d from "../../../utils/dayjs";
 import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
 import Label from "../../Layouts/Label";
 
-const BurgerProfileView: React.FC<StackProps & { burger: Burger }> = ({burger, ...props}) => {
+const BurgerProfileView: React.FC<StackProps & {burger: Burger}> = ({burger, ...props}) => {
 	const {t} = useTranslation();
 
 	return (

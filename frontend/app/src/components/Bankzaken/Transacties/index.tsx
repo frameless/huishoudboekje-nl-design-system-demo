@@ -2,7 +2,7 @@ import {ChevronDownIcon} from "@chakra-ui/icons";
 import {IconButton, Menu, MenuButton, MenuItem, MenuList, useToast} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {useGetAllTransactionsQuery, useStartAutomatischBoekenMutation} from "../../../generated/graphql";
+import {useGetTransactiesQuery, useStartAutomatischBoekenMutation} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import Page from "../../Layouts/Page";
 import Section from "../../Layouts/Section";
@@ -13,7 +13,7 @@ const Transactions = () => {
 	const {t} = useTranslation();
 	const chakraToast = useToast();
 
-	const $transactions = useGetAllTransactionsQuery({
+	const $transactions = useGetTransactiesQuery({
 		fetchPolicy: "no-cache",
 	});
 

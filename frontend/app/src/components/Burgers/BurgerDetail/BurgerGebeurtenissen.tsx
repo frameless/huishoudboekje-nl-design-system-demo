@@ -11,7 +11,7 @@ import GebeurtenissenTableView from "../../Gebeurtenissen/GebeurtenissenTableVie
 const BurgerGebeurtenissen: React.FC<StackProps & {burger: Burger}> = ({burger, ...props}) => {
 	const {t} = useTranslation();
 	const isMobile = useBreakpointValue([true, true, true, false]);
-	const {pageSize, offset, setTotal, PaginationButtons} = usePagination(paginationSettings(t, isMobile));
+	const {setTotal, pageSize, offset, PaginationButtons} = usePagination(paginationSettings(t, isMobile));
 	const $gebeurtenissen = useGetBurgerGebeurtenissenQuery({
 		variables: {
 			ids: [burger.id!],
@@ -26,7 +26,6 @@ const BurgerGebeurtenissen: React.FC<StackProps & {burger: Burger}> = ({burger, 
 			<FormLeft title={t("pages.gebeurtenissen.title")} helperText={t("pages.gebeurtenissen.helperTextBurger")} />
 			<Queryable query={$gebeurtenissen} children={data => {
 				const gs: GebruikersActiviteit[] = data.gebruikersactiviteitenPaged?.gebruikersactiviteiten || [];
-
 				return (
 					<FormRight>
 						<HStack justify={"center"}>

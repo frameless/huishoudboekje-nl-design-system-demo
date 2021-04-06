@@ -5,7 +5,7 @@ import {useToggle} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {useHistory, useParams} from "react-router-dom";
 import Routes from "../../../config/routes";
-import {Burger, useDeleteBurgerMutation, useGetOneBurgerQuery} from "../../../generated/graphql";
+import {Burger, useDeleteBurgerMutation, useGetBurgerQuery} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import {formatBurgerName} from "../../../utils/things";
 import useToaster from "../../../utils/useToaster";
@@ -28,7 +28,7 @@ const BurgerDetail = () => {
 	const [isAlertOpen, toggleAlert] = useToggle(false);
 	const [isDeleted, toggleDeleted] = useToggle(false);
 
-	const $burger = useGetOneBurgerQuery({
+	const $burger = useGetBurgerQuery({
 		fetchPolicy: "no-cache",
 		variables: {id: parseInt(id)},
 	});

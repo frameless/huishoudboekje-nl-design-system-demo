@@ -2,12 +2,7 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {useHistory, useParams} from "react-router-dom";
 import Routes from "../../../config/routes";
-import {
-	Afspraak,
-	UpdateAfspraakBetaalinstructieMutationVariables,
-	useGetOneAfspraakQuery,
-	useUpdateAfspraakBetaalinstructieMutation,
-} from "../../../generated/graphql";
+import {Afspraak, UpdateAfspraakBetaalinstructieMutationVariables, useGetAfspraakQuery, useUpdateAfspraakBetaalinstructieMutation} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import useHandleMutation from "../../../utils/useHandleMutation";
 import BackButton from "../../BackButton";
@@ -21,13 +16,13 @@ const BetaalinstructiePage = () => {
 	const {push} = useHistory();
 	const handleMutation = useHandleMutation();
 
-	const $afspraak = useGetOneAfspraakQuery({variables: {id: parseInt(id)}});
+	const $afspraak = useGetAfspraakQuery({variables: {id: parseInt(id)}});
 	const [updateAfspraakBetaalinstructieMutation] = useUpdateAfspraakBetaalinstructieMutation();
 	const updateAfspraakBetaalinstructie = (data: UpdateAfspraakBetaalinstructieMutationVariables["betaalinstructie"]) => handleMutation(updateAfspraakBetaalinstructieMutation({
 		variables: {
 			id: parseInt(id),
-			betaalinstructie: data
-		}
+			betaalinstructie: data,
+		},
 	}), t("messages.updateAfspraakSuccess"), () => push(Routes.ViewAfspraak(parseInt(id))));
 
 	return (

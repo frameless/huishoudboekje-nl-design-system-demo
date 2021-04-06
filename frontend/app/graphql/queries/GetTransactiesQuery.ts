@@ -2,8 +2,8 @@ import {gql} from "@apollo/client";
 import {GrootboekrekeningFragment} from "../fragments/GrootboekrekeningFragment";
 import {TransactieFragment} from "../fragments/TransactieFragment";
 
-export const GetTransactionsQuery = gql`
-    query getTransactions {
+export const GetTransactiesQuery = gql`
+    query getTransacties {
         bankTransactions{
             ...BankTransaction
             journaalpost {

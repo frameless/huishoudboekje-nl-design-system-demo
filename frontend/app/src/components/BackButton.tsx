@@ -4,7 +4,7 @@ import {useTranslation} from "react-i18next";
 import {MdArrowBack} from "react-icons/all";
 import {useHistory} from "react-router-dom";
 
-const BackButton: React.FC<{ to: string, label?: string }> = ({to, label}) => {
+const BackButton: React.FC<{to: string, label?: string}> = ({to, label}) => {
 	const {push} = useHistory();
 	const {t} = useTranslation();
 

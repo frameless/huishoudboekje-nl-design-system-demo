@@ -30,18 +30,17 @@ const Gebeurtenissen = () => {
 			<Section>
 				<Stack direction={["column", "row"]}>
 					<FormLeft title={t("pages.gebeurtenissen.title")} helperText={t("pages.gebeurtenissen.helperText")} flex={1} />
-					<FormRight flex={4}>
-						<HStack justify={"center"}>
-							<PaginationButtons />
-						</HStack>
-
-						<Queryable query={$gebeurtenissen} loading={false} children={data => {
-							const gs: GebruikersActiviteit[] = data.gebruikersactiviteitenPaged?.gebruikersactiviteiten || [];
-							return (
+					<Queryable query={$gebeurtenissen} children={data => {
+						const gs: GebruikersActiviteit[] = data.gebruikersactiviteitenPaged?.gebruikersactiviteiten || [];
+						return (
+							<FormRight flex={4}>
+								<HStack justify={"center"}>
+									<PaginationButtons />
+								</HStack>
 								<GebeurtenissenTableView gebeurtenissen={gs} />
-							);
-						}} />
-					</FormRight>
+							</FormRight>
+						);
+					}} />
 				</Stack>
 			</Section>
 		</Page>

@@ -6,7 +6,7 @@ import {Configuratie as IConfiguratie, useDeleteConfiguratieMutation, useUpdateC
 import useToaster from "../../utils/useToaster";
 import Label from "../Layouts/Label";
 
-const ConfiguratieItem: React.FC<FormControlProps & { c: IConfiguratie, refetch: VoidFunction }> = ({c, refetch, ...props}) => {
+const ConfiguratieItem: React.FC<FormControlProps & {c: IConfiguratie, refetch: VoidFunction}> = ({c, refetch, ...props}) => {
 	const toast = useToaster();
 	const {t} = useTranslation();
 	const [value, setValue] = useState(c.waarde);
@@ -14,7 +14,7 @@ const ConfiguratieItem: React.FC<FormControlProps & { c: IConfiguratie, refetch:
 	const [isSubmitted, setSubmitted] = useState(false);
 	const onChange = (e) => {
 		setValue(e.target.value);
-	}
+	};
 
 	const [updateConfig] = useUpdateConfiguratieMutation();
 	const [deleteConfig] = useDeleteConfiguratieMutation({variables: {key: String(c.id)}});
@@ -28,7 +28,7 @@ const ConfiguratieItem: React.FC<FormControlProps & { c: IConfiguratie, refetch:
 			variables: {
 				key: String(c.id),
 				value: String(value),
-			}
+			},
 		}).then(() => {
 			setSubmitted(true);
 			toast({
@@ -44,7 +44,7 @@ const ConfiguratieItem: React.FC<FormControlProps & { c: IConfiguratie, refetch:
 		else {
 			setDeleteConfirm(true);
 		}
-	}
+	};
 
 	const onDelete = () => {
 		deleteConfig().then(() => {
@@ -55,7 +55,7 @@ const ConfiguratieItem: React.FC<FormControlProps & { c: IConfiguratie, refetch:
 				success: t("messages.configuratie.deleteSuccess"),
 			});
 		});
-	}
+	};
 
 	const onFocus = () => {
 		setSubmitted(false);
@@ -72,16 +72,16 @@ const ConfiguratieItem: React.FC<FormControlProps & { c: IConfiguratie, refetch:
 				</Editable>
 				{deleteConfirm ? (<>
 					<IconButton size={"sm"} flex={0} variant={"solid"} colorScheme={"red"} icon={<CheckIcon />} aria-label={t("actions.delete")}
-					            onClick={() => onClickDelete()} />
+						onClick={() => onClickDelete()} />
 					<IconButton size={"sm"} flex={0} variant={"solid"} colorScheme={"gray"} icon={<CloseIcon />} aria-label={t("actions.cancel")}
-					            onClick={() => setDeleteConfirm(false)} />
+						onClick={() => setDeleteConfirm(false)} />
 				</>) : (
 					<IconButton size={"sm"} flex={0} variant={"ghost"} colorScheme={"gray"} icon={<DeleteIcon />}
-					            aria-label={t("actions.delete")} onClick={() => setDeleteConfirm(true)} />
+						aria-label={t("actions.delete")} onClick={() => setDeleteConfirm(true)} />
 				)}
 			</Stack>
 		</FormControl>
-	)
-}
+	);
+};
 
 export default ConfiguratieItem;

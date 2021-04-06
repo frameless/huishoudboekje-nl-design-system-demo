@@ -2,10 +2,10 @@
 
 const sizes = {
 	lg: {
-		fontSize: "1.5rem"
-	}
+		fontSize: "1.5rem",
+	},
 };
 
 export default {
-	sizes
-}
+	sizes,
+};

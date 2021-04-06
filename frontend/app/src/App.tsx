@@ -41,7 +41,7 @@ const App = () => {
 					<Text color={"red.600"}>{t("messages.backendError")}</Text>
 				</Stack>
 			</TwoColumns>
-		)
+		);
 	}
 
 	if (!user) {
@@ -80,7 +80,8 @@ const App = () => {
 					<Stack spacing={5} direction={"row"} justifyContent={"flex-end"} alignItems={"center"} pb={5}>
 						<HStack spacing={5} alignItems={"center"}>
 							<UserStatus name={user.email} />
-							<IconButton size={"14px"} icon={<FaLock />} color={"gray.400"} _hover={{color: "primary.700"}} aria-label={t("actions.logout")} mr={3} onClick={reset} />
+							<IconButton size={"14px"} icon={
+								<FaLock />} color={"gray.400"} _hover={{color: "primary.700"}} aria-label={t("actions.logout")} mr={3} onClick={reset} />
 						</HStack>
 					</Stack>
 

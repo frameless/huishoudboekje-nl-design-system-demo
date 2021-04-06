@@ -4,7 +4,7 @@ import {useInput, Validators} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {Redirect, useHistory, useParams} from "react-router-dom";
 import Routes from "../../config/routes";
-import {Organisatie, useGetOneOrganisatieQuery, useUpdateOrganisatieMutation} from "../../generated/graphql";
+import {Organisatie, useGetOrganisatieQuery, useUpdateOrganisatieMutation} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
 import {Regex} from "../../utils/things";
 import useToaster from "../../utils/useToaster";
@@ -50,7 +50,7 @@ const OrganisatieEdit = () => {
 		validate: [Validators.required],
 	});
 
-	const $organisatie = useGetOneOrganisatieQuery({
+	const $organisatie = useGetOrganisatieQuery({
 		variables: {id: parseInt(id)},
 		onCompleted: ({organisatie}) => {
 			if (organisatie) {
