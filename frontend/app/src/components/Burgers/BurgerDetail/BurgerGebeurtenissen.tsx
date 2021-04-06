@@ -1,25 +1,40 @@
-import { Stack, StackProps } from "@chakra-ui/react";
+import {HStack, Stack, StackProps, useBreakpointValue} from "@chakra-ui/react";
 import React from "react";
-import { useTranslation } from "react-i18next";
-import { Burger, GebruikersActiviteit, useGetBurgerGebeurtenissenQuery } from "../../../generated/graphql";
+import {useTranslation} from "react-i18next";
+import {Burger, GebruikersActiviteit, useGetBurgerGebeurtenissenQuery} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
-import { FormLeft } from "../../Forms/FormLeftRight";
+import {paginationSettings} from "../../../utils/things";
+import usePagination from "../../../utils/usePagination";
+import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
 import GebeurtenissenTableView from "../../Gebeurtenissen/GebeurtenissenTableView";
 
-const BurgerGebeurtenissen: React.FC<StackProps & { burger: Burger }> = ({burger, ...props}) => {
+const BurgerGebeurtenissen: React.FC<StackProps & {burger: Burger}> = ({burger, ...props}) => {
 	const {t} = useTranslation();
+	const isMobile = useBreakpointValue([true, true, true, false]);
+	const {pageSize, offset, setTotal, PaginationButtons} = usePagination(paginationSettings(t, isMobile));
 	const $gebeurtenissen = useGetBurgerGebeurtenissenQuery({
-		fetchPolicy: "no-cache",
-		variables: { ids:  [burger.id || -1] }
+		variables: {
+			ids: [burger.id!],
+			limit: pageSize,
+			offset: offset,
+		},
+		onCompleted: data => setTotal(data.gebruikersactiviteitenPaged?.pageInfo?.count),
 	});
 
 	return (
-		<Stack {...props}>
+		<Stack direction={["column", "row"]} {...props}>
 			<FormLeft title={t("pages.gebeurtenissen.title")} helperText={t("pages.gebeurtenissen.helperTextBurger")} />
 			<Queryable query={$gebeurtenissen} children={data => {
-				const gs: GebruikersActiviteit[] = data.gebruikersactiviteiten || [];
+				const gs: GebruikersActiviteit[] = data.gebruikersactiviteitenPaged?.gebruikersactiviteiten || [];
 
-				return <GebeurtenissenTableView gebeurtenissen={gs} />;
+				return (
+					<FormRight>
+						<HStack justify={"center"}>
+							<PaginationButtons />
+						</HStack>
+						<GebeurtenissenTableView gebeurtenissen={gs} />
+					</FormRight>
+				);
 			}} />
 		</Stack>
 	);

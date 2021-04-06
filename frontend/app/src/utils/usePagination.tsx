@@ -39,6 +39,11 @@ const usePagination = (options?: Partial<typeof defaultOptions>) => {
 			setPage(nPages);
 		},
 		navigation: () => {
+			// nPages = 2, Page = 1, pagesAround = 3 > [1,2]
+			if(nPages < (pagesAround * 2)){
+				return fill(1, nPages);
+			}
+
 			// nPages = 100, Page = 2, pagesAround = 3 > [1,2,3,4,5,6,7]
 			if (page < (pagesAround + 1)) {
 				return fill(1, (pagesAround * 2) + 1);

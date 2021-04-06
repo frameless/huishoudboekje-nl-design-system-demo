@@ -4,7 +4,7 @@ import {
 	BankTransactionFragment,
 	BurgerFragment,
 	CustomerStatementMessageFragment,
-	GebruikerFragment,
+	GebruikerFragment, GebruikersactiviteitFragment,
 	GrootboekrekeningFragment,
 	OrganisatieFragment, RekeningFragment,
 	RubriekFragment,
@@ -257,148 +257,24 @@ export const GetGebeurtenissenQuery = gql`
     query GetGebeurtenissen($limit: Int!, $offset: Int!) {
         gebruikersactiviteitenPaged(start: $offset, limit: $limit) {
             gebruikersactiviteiten{
-                id
-                timestamp
-                gebruikerId
-                action
-                entities {
-                    entityType
-                    entityId
-                    burger {
-                        id
-                        voorletters
-                        voornamen
-                        achternaam
-                    }
-                    organisatie {
-                        id
-                        weergaveNaam
-                    }
-                    afspraak {
-                        id
-                        organisatie{
-                            id
-                            weergaveNaam
-                        }
-                    }
-                    rekening {
-                        id
-                        iban
-                        rekeninghouder
-                    }
-                    customerStatementMessage{
-                        id
-                    }
-                }
-                #            snapshotBefore {
-                #                burger {
-                #                    id
-                #                }
-                #                organisatie {
-                #                    id
-                #                }
-                #                afspraak {
-                #                    id
-                #                }
-                #                journaalpost {
-                #                    id
-                #                }
-                #            }
-                #            snapshotAfter {
-                #                burger {
-                #                    id
-                #                }
-                #                organisatie {
-                #                    id
-                #                }
-                #                afspraak {
-                #                    id
-                #                }
-                #                journaalpost {
-                #                    id
-                #                }
-                #            }
-                meta {
-                    userAgent
-                    ip
-                    applicationVersion
-                }
+                ...Gebruikersactiviteit
             }
             pageInfo{
                 count
             }
         }
     }
+    ${GebruikersactiviteitFragment}
 `;
 
 export const GetBurgerGebeurtenissenQuery = gql`
-    query GetBurgerGebeurtenissen($ids: [Int!]!) {
-        gebruikersactiviteiten(burgerIds: $ids) {
-            id
-            timestamp
-            gebruikerId
-            action
-            entities {
-                entityType
-                entityId
-                burger {
-                    id
-                    voorletters
-                    voornamen
-                    achternaam
-                }
-                organisatie {
-                    id
-                    weergaveNaam
-                }
-                afspraak {
-                    id
-                    organisatie{
-                        id
-                        weergaveNaam
-                    }
-                }
-                rekening {
-                    id
-                    iban
-                    rekeninghouder
-                }
-                customerStatementMessage{
-                    id
-                }
+    query GetBurgerGebeurtenissen($ids: [Int!]!, $limit: Int!, $offset: Int!) {
+        gebruikersactiviteitenPaged(burgerIds: $ids, start: $offset, limit: $limit) {
+            gebruikersactiviteiten{
+                ...Gebruikersactiviteit
             }
-            #            snapshotBefore {
-            #                burger {
-            #                    id
-            #                }
-            #                organisatie {
-            #                    id
-            #                }
-            #                afspraak {
-            #                    id
-            #                }
-            #                journaalpost {
-            #                    id
-            #                }
-            #            }
-            #            snapshotAfter {
-            #                burger {
-            #                    id
-            #                }
-            #                organisatie {
-            #                    id
-            #                }
-            #                afspraak {
-            #                    id
-            #                }
-            #                journaalpost {
-            #                    id
-            #                }
-            #            }
-            meta {
-                userAgent
-                ip
-                applicationVersion
+            pageInfo{
+                count
             }
         }
     }
