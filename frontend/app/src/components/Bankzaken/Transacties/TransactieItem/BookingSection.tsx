@@ -1,12 +1,14 @@
-import {Heading, HStack, Stack, Tab, Table, TabList, TabPanel, TabPanels, Tabs, Tbody, Text, Th, Thead, Tr, useToast} from "@chakra-ui/react";
+import {FormControl, Heading, HStack, Stack, Tab, Table, TabList, TabPanel, TabPanels, Tabs, Tbody, Text, Th, Thead, Tr, useToast} from "@chakra-ui/react";
 import React, {useContext} from "react";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
 import {Afspraak, Rubriek, useCreateJournaalpostAfspraakMutation, useCreateJournaalpostGrootboekrekeningMutation} from "../../../../generated/graphql";
+import {useReactSelectStyles} from "../../../../utils/things";
 import SelectAfspraakOption from "../../../Layouts/SelectAfspraak/SelectAfspraakOption";
 import {TransactionsContext} from "../context";
 
 const BookingSection = ({transaction, rubrieken, afspraken}) => {
+	const reactSelectStyles = useReactSelectStyles();
 	const toast = useToast();
 	const {t} = useTranslation();
 	const suggesties: Afspraak[] = transaction.suggesties || [];
@@ -143,8 +145,10 @@ const BookingSection = ({transaction, rubrieken, afspraken}) => {
 						</Stack>
 					</TabPanel>
 					<TabPanel px={0}>
-						<Select onChange={onSelectRubriek} options={options.rubrieken} isClearable={true} noOptionsMessage={() => t("select.noOptions")}
-							maxMenuHeight={200} />
+						<FormControl>
+							<Select onChange={onSelectRubriek} options={options.rubrieken} isClearable={true} noOptionsMessage={() => t("select.noOptions")}
+								maxMenuHeight={350} styles={reactSelectStyles.default} />
+						</FormControl>
 					</TabPanel>
 				</TabPanels>
 			</Tabs>

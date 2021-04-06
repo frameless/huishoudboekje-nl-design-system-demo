@@ -143,12 +143,20 @@ export const useReactSelectStyles = () => {
 				...provided,
 				borderColor: inputBorderColor,
 			}),
+			option: (provided) => ({
+				...provided,
+				textAlign: "left",
+			}),
 		},
 		error: {
 			control: (provided) => ({
 				...provided,
 				borderColor: inputBorderErrorColor,
 				borderWidth: "2px",
+			}),
+			option: (provided) => ({
+				...provided,
+				textAlign: "left",
 			}),
 		},
 	};
