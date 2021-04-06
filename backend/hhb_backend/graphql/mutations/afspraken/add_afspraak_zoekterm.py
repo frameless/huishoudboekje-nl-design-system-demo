@@ -55,7 +55,7 @@ class AddAfspraakZoekterm(graphene.Mutation):
         else:
             zoektermen = list()
 
-        if zoekterm in zoektermen:
+        if zoekterm.lower() in (zk.lower() for zk in zoektermen):
             raise GraphQLError("Zoekterm already in zoektermen")
 
         zoektermen.append(zoekterm)
