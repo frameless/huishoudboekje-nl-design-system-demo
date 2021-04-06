@@ -224,7 +224,7 @@ export const GebruikersactiviteitFragment = gql`
             }
             afspraak {
                 id
-                organisatie{
+                organisatie {
                     id
                     weergaveNaam
                 }
@@ -234,8 +234,12 @@ export const GebruikersactiviteitFragment = gql`
                 iban
                 rekeninghouder
             }
-            customerStatementMessage{
+            customerStatementMessage {
                 id
+            }
+            configuratie {
+                id 
+                waarde
             }
         }
 #        snapshotBefore{

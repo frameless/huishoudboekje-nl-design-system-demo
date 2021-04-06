@@ -17,6 +17,7 @@ const AuditLogText: React.FC<TextProps & {g: GebruikersActiviteit}> = ({g, ...pr
 	const transactions = entities.filter(e => e.entityType === "transaction");
 	const customerStatementMessage = entities.find(e => e.entityType === "customerStatementMessage");
 	const rekening = entities.find(e => e.entityType === "rekening")?.rekening;
+	const configuratie = entities.find(e => e.entityType === "configuratie")?.configuratie;
 
 	const burgerName = formatBurgerName(burger);
 
@@ -38,6 +39,8 @@ const AuditLogText: React.FC<TextProps & {g: GebruikersActiviteit}> = ({g, ...pr
 		nTransactions: transactions.length || t("unknown"),
 		iban: rekening?.iban || t("unknownIban"),
 		rekeninghouder: rekening?.rekeninghouder || t("unknownRekeninghouder"),
+		configuratieId: configuratie?.id || t("unknown"),
+		configuratieWaarde: configuratie?.waarde || t("unknown"),
 	};
 
 	if (action) {
@@ -52,6 +55,7 @@ const AuditLogText: React.FC<TextProps & {g: GebruikersActiviteit}> = ({g, ...pr
 			customerStatementMessages: () => <Trans i18nKey={"auditLog.viewCustomerStatementMessages"} values={values} components={components} />,
 			bankTransactions: () => <Trans i18nKey={"auditLog.viewTransactions"} values={values} components={components} />,
 			exports: () => <Trans i18nKey={"auditLog.viewExports"} values={values} components={components} />,
+			configuraties: () => <Trans i18nKey={"auditLog.viewConfiguraties"} values={values} components={components} />,
 			createBurger: () => <Trans i18nKey={"auditLog.createBurger"} values={values} components={components} />,
 			updateBurger: () => <Trans i18nKey={"auditLog.updateBurger"} values={values} components={components} />,
 			deleteBurger: () => <Trans i18nKey={"auditLog.deleteBurger"} values={values} components={components} />,
