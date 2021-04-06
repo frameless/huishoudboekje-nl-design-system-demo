@@ -20,7 +20,7 @@ const TransactiesList: React.FC<TransactiesListProps> = ({transacties}) => {
 	}
 
 	/* Group transacties by date */
-	const bt = transacties.sort((a, b) => a.transactieDatum > b.transactieDatum ? -1 : 1).reduce((result, t) => {
+	const bt = transacties.reduce((result, t) => {
 		const trDateAsString = d(new Date(t.transactieDatum)).format("L");
 		return {
 			...result,

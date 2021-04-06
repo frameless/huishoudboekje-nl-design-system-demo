@@ -1,9 +1,8 @@
-import {HStack, Stack, useBreakpointValue} from "@chakra-ui/react";
+import {HStack, Stack} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {GebruikersActiviteit, useGetGebeurtenissenQuery} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
-import {paginationSettings} from "../../utils/things";
 import usePagination from "../../utils/usePagination";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
 import Page from "../Layouts/Page";
@@ -12,17 +11,14 @@ import GebeurtenissenTableView from "./GebeurtenissenTableView";
 
 const Gebeurtenissen = () => {
 	const {t} = useTranslation();
-	const isMobile = useBreakpointValue([true, true, false, false]);
-	const {setTotal, pageSize, offset, PaginationButtons} = usePagination(paginationSettings(t, isMobile));
+	const {setTotal, pageSize, offset, PaginationButtons} = usePagination();
 
 	const $gebeurtenissen = useGetGebeurtenissenQuery({
 		variables: {
 			limit: pageSize,
 			offset,
 		},
-		onCompleted: data => {
-			setTotal(data.gebruikersactiviteitenPaged?.pageInfo?.count || 0);
-		},
+		onCompleted: data => setTotal(data.gebruikersactiviteitenPaged?.pageInfo?.count || 0),
 	});
 
 	return (

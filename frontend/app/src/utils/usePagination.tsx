@@ -1,22 +1,26 @@
-import {Button, ButtonGroup} from "@chakra-ui/react";
+import {Button, ButtonGroup, useBreakpointValue} from "@chakra-ui/react";
 import fill from "fill-range";
 import React, {useState} from "react";
+import { useTranslation } from "react-i18next";
 
-const defaultOptions = {
+const defaultOptions = (t) => ({
+	/* I18n: t("pagination.first"), t("pagination.previous"), t("pagination.next"), t("pagination.last") */
 	pageSize: 10,
 	pagesAround: 3,
 	buttonLabels: {
-		first: "First",
-		previous: "Previous",
-		next: "Next",
-		last: "Last",
+		first: t("pagination.first"),
+		previous: t("pagination.previous"),
+		next: t("pagination.next"),
+		last: t("pagination.last"),
 	},
-};
+});
 
 const usePagination = (options?: Partial<typeof defaultOptions>) => {
-	const _options = {...defaultOptions, ...options};
-	const {pagesAround} = _options;
+	const {t} = useTranslation();
+	const _options = {...defaultOptions(t), ...options};
+	const isMobile = useBreakpointValue([true, true, true, false]);
 
+	const pagesAround = isMobile ? 1 : _options.pagesAround;
 	const [pageSize, setPageSize] = useState<number>(_options.pageSize);
 	const [page, setPage] = useState<number>(1);
 	const [total, setTotal] = useState<number>();

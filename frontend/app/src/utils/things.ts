@@ -209,13 +209,3 @@ export const truncateText = (str: string, maxLength = 50) => {
 
 	return str;
 };
-
-export const paginationSettings = (t, isMobile = false) => ({
-	buttonLabels: {
-		first: t("pagination.first"),
-		previous: t("pagination.previous"),
-		next: t("pagination.next"),
-		last: t("pagination.last"),
-	},
-	pagesAround: isMobile ? 1 : 3,
-});
