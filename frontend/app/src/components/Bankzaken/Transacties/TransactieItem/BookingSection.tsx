@@ -108,8 +108,8 @@ const BookingSection = ({transaction, rubrieken, afspraken}) => {
 			<Tabs align={"end"}>
 				<HStack justify={"space-between"} align={"bottom"}>
 					<Stack spacing={0} alignItems={"flex-start"}>
-						<Heading size={"sm"}>{t("transactieVerwerken.title")}</Heading>
-						<Text size={"xs"}>{t("transactieVerwerken.helperText")}</Text>
+						<Heading size={"sm"}>{t("transactieAfletteren.title")}</Heading>
+						<Text size={"xs"}>{t("transactieAfletteren.helperText")}</Text>
 					</Stack>
 
 					<TabList>
