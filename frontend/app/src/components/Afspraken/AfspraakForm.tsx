@@ -1,5 +1,5 @@
 import {Box, Button, FormControl, FormErrorMessage, FormLabel, Input, InputGroup, InputLeftElement, Radio, RadioGroup, Stack} from "@chakra-ui/react";
-import React, {useContext, useState} from "react";
+import React, {useContext, useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
 import {CreateAfspraakMutationVariables, Organisatie, Rekening, Rubriek, UpdateAfspraakMutationVariables} from "../../generated/graphql";
@@ -10,6 +10,8 @@ import {FormLeft, FormRight} from "../Forms/FormLeftRight";
 import {RekeningOption, RekeningValueContainer} from "../Layouts/ReactSelect/RekeningOption";
 import Section from "../Layouts/Section";
 import AfspraakFormContext from "./EditAfspraak/context";
+
+const bedragInputValidator = zod.string().regex(/^[^.]*$/);
 
 const validator = zod.object({
 	rubriekId: zod.number().nonnegative(),
@@ -31,6 +33,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 	const {t} = useTranslation();
 	const [data, setData] = useState(values || {});
 	const reactSelectStyles = useReactSelectStyles();
+	const bedragRef = useRef<HTMLInputElement>(null);
 
 	const {
 		organisaties = [],
@@ -90,11 +93,12 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 
 	const onSubmit = () => {
 		try {
+			bedragInputValidator.parse(bedragRef.current?.value);
 			const validatedData = validator.parse(data);
 			onChange(validatedData);
 		}
 		catch (err) {
-			toast({error: err.message, title: t("messages.genericError.title")});
+			toast({error: t("genericInputErrorMessage"), title: t("messages.genericError.title")});
 		}
 	};
 
@@ -147,11 +151,11 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 				</Stack>
 
 				<Stack direction={["column", "row"]}>
-					<FormControl flex={1} isInvalid={!isValid("bedrag")} isRequired>
+					<FormControl flex={1} isInvalid={!isValid("bedrag") || (bedragRef.current?.value ? !bedragInputValidator.safeParse(bedragRef.current?.value).success : false)} isRequired>
 						<FormLabel>{t("afspraak.bedrag")}</FormLabel>
 						<InputGroup>
 							<InputLeftElement zIndex={0}>&euro;</InputLeftElement>
-							<Input flex={3} type={"text"} defaultValue={currencyFormat(data.bedrag).format() || ""} onChange={e => updateForm("bedrag", parseFloat(currencyFormat(e.target.value).toString()))} />
+							<Input flex={3} ref={bedragRef} type={"text"} pattern={"^[^.]*$"} defaultValue={currencyFormat(data.bedrag || values?.bedrag || "").format() || ""} onChange={e => updateForm("bedrag", parseFloat(currencyFormat(e.target.value).toString()))} />
 						</InputGroup>
 						<FormErrorMessage>{t("afspraakDetailView.invalidBedragError")}</FormErrorMessage>
 					</FormControl>

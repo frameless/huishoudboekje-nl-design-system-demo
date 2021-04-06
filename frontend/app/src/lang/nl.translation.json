@@ -94,6 +94,7 @@
         "backToHome": "Terug naar de hoofdpagina",
         "clickToEdit": "Klik om te wijzigen"
     },
+    "genericInputErrorMessage": "Er is een fout opgetreden. Controleer de invoer en probeer het nog eens.",
     "afspraakForm": {
         "section1": {
             "title": "Tegenpartij en betaling",
