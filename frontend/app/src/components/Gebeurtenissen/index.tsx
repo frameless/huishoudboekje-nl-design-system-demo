@@ -14,6 +14,7 @@ const Gebeurtenissen = () => {
 	const {setTotal, pageSize, offset, PaginationButtons} = usePagination();
 
 	const $gebeurtenissen = useGetGebeurtenissenQuery({
+		fetchPolicy: "cache-and-network",
 		variables: {
 			limit: pageSize,
 			offset,
