@@ -2,7 +2,7 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {useHistory, useParams} from "react-router-dom";
 import Routes from "../../../config/routes";
-import {Afspraak, useAddAfspraakZoektermMutation, useDeleteAfspraakMutation, useDeleteAfspraakZoektermMutation, useGetOneAfspraakQuery} from "../../../generated/graphql";
+import {Afspraak, useAddAfspraakZoektermMutation, useDeleteAfspraakMutation, useDeleteAfspraakZoektermMutation, useGetAfspraakQuery} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import useHandleMutation from "../../../utils/useHandleMutation";
 import useToaster from "../../../utils/useToaster";
@@ -20,7 +20,7 @@ const ViewAfspraak = () => {
 	const [deleteAfspraak] = useDeleteAfspraakMutation();
 	const [addAfspraakZoekterm] = useAddAfspraakZoektermMutation();
 	const [deleteAfspraakZoekterm] = useDeleteAfspraakZoektermMutation();
-	const $afspraak = useGetOneAfspraakQuery({
+	const $afspraak = useGetAfspraakQuery({
 		fetchPolicy: "no-cache",
 		variables: {
 			id: parseInt(id),

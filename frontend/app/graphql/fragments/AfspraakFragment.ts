@@ -6,11 +6,6 @@ export const AfspraakFragment = gql`
     fragment Afspraak on Afspraak {
         id
         omschrijving
-        startDatum
-        eindDatum
-        aantalBetalingen
-        automatischeIncasso
-        automatischBoeken
         interval {
             dagen
             weken
@@ -44,6 +39,29 @@ export const AfspraakFragment = gql`
         actief
         rubriek {
             ...Rubriek
+        }
+        matchingAfspraken {
+            id
+            credit
+            burger{
+                voorletters
+                voornamen
+                achternaam
+            }
+            zoektermen
+            bedrag
+            omschrijving
+            interval {
+                dagen
+                weken
+                maanden
+                jaren
+            }
+            tegenRekening {
+                id
+                iban
+                rekeninghouder
+            }
         }
     }
     ${RekeningFragment}
