@@ -36,6 +36,14 @@ export type Scalars = {
 
 
 
+export type AddAfspraakZoekterm = {
+  __typename?: 'AddAfspraakZoekterm';
+  ok?: Maybe<Scalars['Boolean']>;
+  afspraak?: Maybe<Afspraak>;
+  previous?: Maybe<Afspraak>;
+  matchingAfspraken?: Maybe<Array<Maybe<Afspraak>>>;
+};
+
 /** GraphQL Afspraak model  */
 export type Afspraak = {
   __typename?: 'Afspraak';
@@ -316,6 +324,14 @@ export type DeleteAfspraak = {
   previous?: Maybe<Afspraak>;
 };
 
+export type DeleteAfspraakZoekterm = {
+  __typename?: 'DeleteAfspraakZoekterm';
+  ok?: Maybe<Scalars['Boolean']>;
+  afspraak?: Maybe<Afspraak>;
+  previous?: Maybe<Afspraak>;
+  matchingAfspraken?: Maybe<Array<Maybe<Afspraak>>>;
+};
+
 export type DeleteBurger = {
   __typename?: 'DeleteBurger';
   ok?: Maybe<Scalars['Boolean']>;
@@ -551,6 +567,8 @@ export type RootMutation = {
   deleteAfspraak?: Maybe<DeleteAfspraak>;
   updateAfspraakAutomatischBoeken?: Maybe<UpdateAfspraakAutomatischBoeken>;
   updateAfspraakBetaalinstructie?: Maybe<UpdateAfspraakBetaalinstructie>;
+  addAfspraakZoekterm?: Maybe<AddAfspraakZoekterm>;
+  deleteAfspraakZoekterm?: Maybe<DeleteAfspraakZoekterm>;
   createOrganisatie?: Maybe<CreateOrganisatie>;
   updateOrganisatie?: Maybe<UpdateOrganisatie>;
   deleteOrganisatie?: Maybe<DeleteOrganisatie>;
@@ -640,6 +658,20 @@ export type RootMutationUpdateAfspraakAutomatischBoekenArgs = {
 export type RootMutationUpdateAfspraakBetaalinstructieArgs = {
   afspraakId: Scalars['Int'];
   betaalinstructie: BetaalinstructieInput;
+};
+
+
+/** The root of all mutations  */
+export type RootMutationAddAfspraakZoektermArgs = {
+  afspraakId: Scalars['Int'];
+  zoekterm: Scalars['String'];
+};
+
+
+/** The root of all mutations  */
+export type RootMutationDeleteAfspraakZoektermArgs = {
+  afspraakId: Scalars['Int'];
+  zoekterm: Scalars['String'];
 };
 
 
@@ -1096,6 +1128,56 @@ export type UpdateRubriek = {
   previous?: Maybe<Rubriek>;
 };
 
+
+export type AddAfspraakZoektermMutationVariables = Exact<{
+  afspraakId: Scalars['Int'];
+  zoekterm: Scalars['String'];
+}>;
+
+
+export type AddAfspraakZoektermMutation = (
+  { __typename?: 'RootMutation' }
+  & { addAfspraakZoekterm?: Maybe<(
+    { __typename?: 'AddAfspraakZoekterm' }
+    & Pick<AddAfspraakZoekterm, 'ok'>
+    & { matchingAfspraken?: Maybe<Array<Maybe<(
+      { __typename?: 'Afspraak' }
+      & Pick<Afspraak, 'id' | 'zoektermen' | 'bedrag'>
+      & { burger?: Maybe<(
+        { __typename?: 'Burger' }
+        & Pick<Burger, 'id' | 'voorletters' | 'voornamen' | 'achternaam'>
+      )>, tegenRekening?: Maybe<(
+        { __typename?: 'Rekening' }
+        & Pick<Rekening, 'rekeninghouder' | 'iban'>
+      )> }
+    )>>> }
+  )> }
+);
+
+export type DeleteAfspraakZoektermMutationVariables = Exact<{
+  afspraakId: Scalars['Int'];
+  zoekterm: Scalars['String'];
+}>;
+
+
+export type DeleteAfspraakZoektermMutation = (
+  { __typename?: 'RootMutation' }
+  & { deleteAfspraakZoekterm?: Maybe<(
+    { __typename?: 'DeleteAfspraakZoekterm' }
+    & Pick<DeleteAfspraakZoekterm, 'ok'>
+    & { matchingAfspraken?: Maybe<Array<Maybe<(
+      { __typename?: 'Afspraak' }
+      & Pick<Afspraak, 'id' | 'zoektermen' | 'bedrag'>
+      & { burger?: Maybe<(
+        { __typename?: 'Burger' }
+        & Pick<Burger, 'id' | 'voorletters' | 'voornamen' | 'achternaam'>
+      )>, tegenRekening?: Maybe<(
+        { __typename?: 'Rekening' }
+        & Pick<Rekening, 'rekeninghouder' | 'iban'>
+      )> }
+    )>>> }
+  )> }
+);
 
 export type RekeningFragment = (
   { __typename?: 'Rekening' }
@@ -2185,6 +2267,104 @@ export const GebruikerFragmentDoc = gql`
   email
 }
     `;
+export const AddAfspraakZoektermDocument = gql`
+    mutation addAfspraakZoekterm($afspraakId: Int!, $zoekterm: String!) {
+  addAfspraakZoekterm(afspraakId: $afspraakId, zoekterm: $zoekterm) {
+    ok
+    matchingAfspraken {
+      id
+      zoektermen
+      bedrag
+      burger {
+        id
+        voorletters
+        voornamen
+        achternaam
+      }
+      tegenRekening {
+        rekeninghouder
+        iban
+      }
+    }
+  }
+}
+    `;
+export type AddAfspraakZoektermMutationFn = Apollo.MutationFunction<AddAfspraakZoektermMutation, AddAfspraakZoektermMutationVariables>;
+
+/**
+ * __useAddAfspraakZoektermMutation__
+ *
+ * To run a mutation, you first call `useAddAfspraakZoektermMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddAfspraakZoektermMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addAfspraakZoektermMutation, { data, loading, error }] = useAddAfspraakZoektermMutation({
+ *   variables: {
+ *      afspraakId: // value for 'afspraakId'
+ *      zoekterm: // value for 'zoekterm'
+ *   },
+ * });
+ */
+export function useAddAfspraakZoektermMutation(baseOptions?: Apollo.MutationHookOptions<AddAfspraakZoektermMutation, AddAfspraakZoektermMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddAfspraakZoektermMutation, AddAfspraakZoektermMutationVariables>(AddAfspraakZoektermDocument, options);
+      }
+export type AddAfspraakZoektermMutationHookResult = ReturnType<typeof useAddAfspraakZoektermMutation>;
+export type AddAfspraakZoektermMutationResult = Apollo.MutationResult<AddAfspraakZoektermMutation>;
+export type AddAfspraakZoektermMutationOptions = Apollo.BaseMutationOptions<AddAfspraakZoektermMutation, AddAfspraakZoektermMutationVariables>;
+export const DeleteAfspraakZoektermDocument = gql`
+    mutation deleteAfspraakZoekterm($afspraakId: Int!, $zoekterm: String!) {
+  deleteAfspraakZoekterm(afspraakId: $afspraakId, zoekterm: $zoekterm) {
+    ok
+    matchingAfspraken {
+      id
+      zoektermen
+      bedrag
+      burger {
+        id
+        voorletters
+        voornamen
+        achternaam
+      }
+      tegenRekening {
+        rekeninghouder
+        iban
+      }
+    }
+  }
+}
+    `;
+export type DeleteAfspraakZoektermMutationFn = Apollo.MutationFunction<DeleteAfspraakZoektermMutation, DeleteAfspraakZoektermMutationVariables>;
+
+/**
+ * __useDeleteAfspraakZoektermMutation__
+ *
+ * To run a mutation, you first call `useDeleteAfspraakZoektermMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteAfspraakZoektermMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteAfspraakZoektermMutation, { data, loading, error }] = useDeleteAfspraakZoektermMutation({
+ *   variables: {
+ *      afspraakId: // value for 'afspraakId'
+ *      zoekterm: // value for 'zoekterm'
+ *   },
+ * });
+ */
+export function useDeleteAfspraakZoektermMutation(baseOptions?: Apollo.MutationHookOptions<DeleteAfspraakZoektermMutation, DeleteAfspraakZoektermMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteAfspraakZoektermMutation, DeleteAfspraakZoektermMutationVariables>(DeleteAfspraakZoektermDocument, options);
+      }
+export type DeleteAfspraakZoektermMutationHookResult = ReturnType<typeof useDeleteAfspraakZoektermMutation>;
+export type DeleteAfspraakZoektermMutationResult = Apollo.MutationResult<DeleteAfspraakZoektermMutation>;
+export type DeleteAfspraakZoektermMutationOptions = Apollo.BaseMutationOptions<DeleteAfspraakZoektermMutation, DeleteAfspraakZoektermMutationVariables>;
 export const CreateBurgerDocument = gql`
     mutation createBurger($input: CreateBurgerInput) {
   createBurger(input: $input) {

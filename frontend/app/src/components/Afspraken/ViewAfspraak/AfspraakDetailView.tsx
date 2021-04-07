@@ -37,7 +37,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	const menu = <AfspraakDetailMenu afspraak={afspraak} onDelete={() => deleteAfspraak()} />;
 	const bedrag = afspraak.credit ? parseFloat(afspraak.bedrag) : (parseFloat(afspraak.bedrag) * -1);
 	const zoektermen = afspraak.zoektermen || [];
-	const zoektermenDuplicatesFound = true; // Todo: backend will tell if automatischBoeken is possible (19-03-2021)
+	const zoektermenDuplicatesFound = false; // Todo: backend will tell if automatischBoeken is possible (19-03-2021)
 
 	return (
 		<Page title={t("afspraakDetailView.title")} backButton={<BackButton to={Routes.Burger(afspraak.burger?.id)} />} menu={menu}>
@@ -128,7 +128,6 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 							{t("messages.automatischBoekenDisabled_duplicatesFound")}
 						</Text>
 					)}
-
 				</FormRight>
 			</Section>
 

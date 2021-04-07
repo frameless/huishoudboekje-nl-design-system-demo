@@ -2,9 +2,8 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {useHistory, useParams} from "react-router-dom";
 import Routes from "../../../config/routes";
-import {Afspraak, useDeleteAfspraakMutation, useGetOneAfspraakQuery} from "../../../generated/graphql";
+import {Afspraak, useAddAfspraakZoektermMutation, useDeleteAfspraakMutation, useDeleteAfspraakZoektermMutation, useGetOneAfspraakQuery} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
-import useFakeMutation from "../../../utils/useFakeMutation";
 import useHandleMutation from "../../../utils/useHandleMutation";
 import useToaster from "../../../utils/useToaster";
 import zod, {containsZodErrorCode, zoektermValidator} from "../../../utils/zod";
@@ -15,12 +14,12 @@ const ViewAfspraak = () => {
 	const {id} = useParams<{id: string}>();
 	const {t} = useTranslation();
 	const {push} = useHistory();
-	const handleMutation = useHandleMutation();
-	const [deleteAfspraak] = useDeleteAfspraakMutation();
 	const toast = useToaster();
+	const handleMutation = useHandleMutation();
 
-	const addAfspraakZoekterm = useFakeMutation(); // Todo: implement this once there is a mutation for deleting individual zoektermen from Afspraken. (19-03-2021)
-	const deleteAfspraakZoekterm = useFakeMutation(); // Todo: implement this once there is a mutation for deleting individual zoektermen from Afspraken. (19-03-2021)
+	const [deleteAfspraak] = useDeleteAfspraakMutation();
+	const [addAfspraakZoekterm] = useAddAfspraakZoektermMutation();
+	const [deleteAfspraakZoekterm] = useDeleteAfspraakZoektermMutation();
 	const $afspraak = useGetOneAfspraakQuery({
 		fetchPolicy: "no-cache",
 		variables: {
@@ -35,14 +34,11 @@ const ViewAfspraak = () => {
 				deleteAfspraak: () => handleMutation(deleteAfspraak({
 					variables: {id: parseInt(id)},
 				}), t("messages.deleteAfspraakSuccess"), () => push(Routes.Burger(afspraak.burger?.id))),
-				deleteAfspraakZoekterm: (zoekterm: string) => handleMutation(deleteAfspraakZoekterm({
-					variables: {id, zoekterm},
-				}), t("messages.deleteAfspraakZoektermSuccess"), () => $afspraak.refetch()),
 				addAfspraakZoekterm: (zoekterm: string, callback) => {
 					try {
 						const validatedZoekterm = zoektermValidator.parse(zoekterm);
 						handleMutation(addAfspraakZoekterm({
-							variables: {id, zoekterm: validatedZoekterm},
+							variables: {afspraakId: parseInt(id), zoekterm: validatedZoekterm},
 						}), t("messages.addAfspraakZoektermSuccess"), () => {
 							$afspraak.refetch();
 						});
@@ -60,6 +56,9 @@ const ViewAfspraak = () => {
 						toast({error});
 					}
 				},
+				deleteAfspraakZoekterm: (zoekterm: string) => handleMutation(deleteAfspraakZoekterm({
+					variables: {afspraakId: parseInt(id), zoekterm},
+				}), t("messages.deleteAfspraakZoektermSuccess"), () => $afspraak.refetch()),
 			};
 
 			return (

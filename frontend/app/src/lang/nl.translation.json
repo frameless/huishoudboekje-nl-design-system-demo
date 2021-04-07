@@ -14,9 +14,9 @@
         "automatischBoekenDisabled_noZoektermen": "Het is niet mogelijk om deze afspraak automatisch af te letteren. Voeg een zoekterm toe waarop het systeem transacties kan zoeken.",
         "automatischBoekenDisabled_duplicatesFound": "Het is niet mogelijk om deze afspraak automatisch af te letteren. Er zijn andere afspraken met dezelfde zoektermen gevonden. Voeg een unieke zoekterm toe waarop het systeem transacties kan zoeken.",
         "deleteAfspraakSuccess": "Afspraak is verwijderd.",
-        "deleteAfspraakZoektermSuccess": "Zoekterm is verwijderd.",
         "addAfspraakZoektermSuccess": "Zoekterm is opgeslagen.",
         "zoektermLengthError": "Zoekterm moet minimaal één teken lang zijn.",
+        "deleteAfspraakZoektermSuccess": "Zoekterm is verwijderd.",
         "customerStatementMessages": {
             "deleteSuccess": "Het bronbestand is succesvol verwijderd.",
             "createSuccess": "Het bronbestand is geïmporteerd en de transacties zijn succesvol ingelezen.",
@@ -440,6 +440,8 @@
         "createCustomerStatementMessage": "{{gebruiker}} importeerde <strong>{{nTransactions}} transactie(s)</strong> uit <strong>bronbestand {{customerStatementMessage}}</strong>.",
         "createBurgerRekening": "{{gebruiker}} voegde rekening <strong>{{iban}}</strong> op naam van <strong>{{rekeninghouder}}</strong> toe bij <linkBurger>{{burger}}</linkBurger>.",
         "deleteBurgerRekening": "{{gebruiker}} verwijderde rekening <strong>{{iban}}</strong> op naam van <strong>{{rekeninghouder}}</strong> bij <linkBurger>{{burger}}</linkBurger>.",
+        "addAfspraakZoekterm": "{{gebruiker}} voegde een zoekterm toe bij een <linkAfspraak>afspraak</linkAfspraak> met <linkBurger>{{burger}}</linkBurger> en <linkAfspraakOrganisatie>{{afspraakOrganisatie}}</linkAfspraakOrganisatie>.",
+        "deleteAfspraakZoekterm": "{{gebruiker}} verwijderde een zoekterm bij een <linkAfspraak>afspraak</linkAfspraak> met <linkBurger>{{burger}}</linkBurger> en <linkAfspraakOrganisatie>{{afspraakOrganisatie}}</linkAfspraakOrganisatie>.",
         "unknown": "Onbekende gebeurtenis"
     },
     "suggestion": "Suggestie",
