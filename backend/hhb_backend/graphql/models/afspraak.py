@@ -15,16 +15,19 @@ from hhb_backend.graphql.scalars.bedrag import Bedrag
 from hhb_backend.graphql.scalars.day_of_week import DayOfWeek
 from hhb_backend.graphql.utils.interval import convert_hhb_interval_to_dict, convert_iso_duration_to_schedule_by_day, \
     convert_iso_duration_to_schedule_by_month
+from hhb_backend.processen.automatisch_boeken import find_matching_afspraken_by_afspraak
 from hhb_backend.processen.overschrijvingen_planner import (
     PlannedOverschijvingenInput,
     get_planned_overschrijvingen,
 )
+
 
 class Interval(graphene.ObjectType):
     jaren = graphene.Int()
     maanden = graphene.Int()
     weken = graphene.Int()
     dagen = graphene.Int()
+
 
 class Betaalinstructie(graphene.ObjectType):
     """Implementatie op basis van http://schema.org/Schedule"""
@@ -93,6 +96,7 @@ class Afspraak(graphene.ObjectType):
         start_datum=graphene.Date(),
         eind_datum=graphene.Date(),
     )
+    matching_afspraken = graphene.List(lambda: Afspraak)
 
     start_datum = graphene.Date(deprecation_reason='use betaalinstructie instead')
     eind_datum = graphene.Date(deprecation_reason='use betaalinstructie instead')
@@ -180,3 +184,6 @@ class Afspraak(graphene.ObjectType):
                     )
                     or []
             )
+
+    async def resolve_matching_afspraken(root, info):
+        return await find_matching_afspraken_by_afspraak(root)
