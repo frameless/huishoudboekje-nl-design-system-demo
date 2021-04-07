@@ -23,8 +23,7 @@
             "incorrectFileError": "Dit bestand voldoet niet aan het formaat SWIFT MT940. Het is niet gelukt om het te importeren. Controleer het bestand en probeer het nog een keer."
         },
         "exports": {
-            "createSuccessMessage": "Exportbestand succesvol aangemaakt.",
-            "noExportsInPeriod": "Er is geen exportbestand aangemaakt. Er zijn in deze periode geen betaalinstructies."
+            "createSuccessMessage": "Exportbestand succesvol aangemaakt."
         },
         "automatischBoeken": {
             "successMessage": "Transacties worden nu afgeletterd. Dit kan even duren."
@@ -163,9 +162,9 @@
         "common": {
             "fields": {
                 "time": "Tijd",
+                "date": "Datum",
                 "startDate": "Startdatum",
-                "endDate": "Einddatum",
-                "date": "Datum"
+                "endDate": "Einddatum"
             }
         },
         "burgers": {
@@ -326,6 +325,11 @@
         "confirmModalBody": "Weet u zeker dat u deze afspraak wil verwijderen?"
     },
     "burger": "Burger",
+    "transactions": {
+        "amount": "Bedrag",
+        "beneficiaryAccount": "Tegenrekening",
+        "description": "Omschrijving"
+    },
     "banking": {
         "exports": {
             "title": "Betaalinstructies",
@@ -334,7 +338,7 @@
     },
     "exports": {
         "period": "Periode",
-        "nOverschrijvingen": "Overschrijvingen",
+        "nTransacties": "Overschrijvingen",
         "dateCreated": "Aanmaakdatum"
     },
     "van": "Van",
@@ -344,9 +348,12 @@
     "omschrijving": "Omschrijving",
     "periodiek": "Periodiek",
     "rubriek": "Rubriek",
-    "transactieVerwerken": {
+    "transactieAfletteren": {
         "title": "Afletteren",
         "helperText": "Kies een afspraak om deze transactie op af te letteren."
+    },
+    "bookingSection": {
+        "noResults": "Er zijn geen afspraken gevonden. Voeg een afspraak toe, of kies een rubriek om deze transactie op af te letteren."
     },
     "bedrag": "Bedrag",
     "select": {
@@ -360,11 +367,6 @@
                 "status": "Status"
             }
         }
-    },
-    "transactions": {
-        "beneficiaryAccount": "Tegenrekening",
-        "amount": "Bedrag",
-        "description": "Omschrijving"
     },
     "transacties": {
         "tegenrekening": "Tegenrekening",
@@ -472,7 +474,7 @@
         "organisaties": "Organisaties",
         "bankzaken": "Bankzaken",
         "transacties": "Transacties",
-        "bronbestanden": "Bankafschriften",
+        "bankafschriften": "Bankafschriften",
         "betaalinstructies": "Betaalinstructies",
         "gebeurtenissen": "Gebeurtenissen",
         "configuratie": "Configuratie"
