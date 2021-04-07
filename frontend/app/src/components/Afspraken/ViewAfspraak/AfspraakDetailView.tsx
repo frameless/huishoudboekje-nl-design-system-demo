@@ -1,4 +1,4 @@
-import {AddIcon, ViewIcon, WarningTwoIcon} from "@chakra-ui/icons";
+import {ViewIcon, WarningTwoIcon} from "@chakra-ui/icons";
 import {
 	Badge,
 	Box,
@@ -29,7 +29,6 @@ import {AiOutlineTag} from "react-icons/all";
 import {NavLink} from "react-router-dom";
 import Routes from "../../../config/routes";
 import {Afspraak} from "../../../generated/graphql";
-import d from "../../../utils/dayjs";
 import {currencyFormat2, formatBurgerName, intervalString} from "../../../utils/things";
 import {zoektermValidator} from "../../../utils/zod";
 import BackButton from "../../BackButton";
@@ -193,45 +192,45 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 				</FormRight>
 			</Section>
 
-			{!afspraak.credit && (
-				<Section direction={["column", "row"]}>
-					<FormLeft title={t("afspraakDetailView.section4.title")} helperText={t("afspraakDetailView.section4.helperText")} />
-					<FormRight spacing={5}>
-						{afspraak.interval ? (<>
-							<Stack direction={["column", "row"]}>
-								<DataItem label={t("afspraak.periodiek")}>
-									<Text>{intervalString(afspraak.interval, t)}</Text>
-								</DataItem>
-								<DataItem label={t("exports.period")}>
-									<Text>{d(afspraak.startDatum, "YYYY-MM-DD").format("L")} / {afspraak.eindDatum ? d(afspraak.eindDatum, "YYYY-MM-DD").format("L") : "-"}</Text>
-								</DataItem>
-							</Stack>
+			{/*{!afspraak.credit && (*/}
+			{/*	<Section direction={["column", "row"]}>*/}
+			{/*		<FormLeft title={t("afspraakDetailView.section4.title")} helperText={t("afspraakDetailView.section4.helperText")} />*/}
+			{/*		<FormRight spacing={5}>*/}
+			{/*			{afspraak.interval ? (<>*/}
+			{/*				<Stack direction={["column", "row"]}>*/}
+			{/*					<DataItem label={t("afspraak.periodiek")}>*/}
+			{/*						<Text>{intervalString(afspraak.interval, t)}</Text>*/}
+			{/*					</DataItem>*/}
+			{/*					<DataItem label={t("exports.period")}>*/}
+			{/*						<Text>{d(afspraak.startDatum, "YYYY-MM-DD").format("L")} / {afspraak.eindDatum ? d(afspraak.eindDatum, "YYYY-MM-DD").format("L") : "-"}</Text>*/}
+			{/*					</DataItem>*/}
+			{/*				</Stack>*/}
 
-							<Box>
-								<Button colorScheme={"primary"} size={"sm"} as={NavLink} to={Routes.AfspraakBetaalinstructie(afspraak.id!)}>
-									{t("actions.edit")}
-								</Button>
-							</Box>
-						</>) : (<>
-							<Text>{t("afspraakDetailView.noBetaalinstructie")}</Text>
+			{/*				<Box>*/}
+			{/*					<Button colorScheme={"primary"} size={"sm"} as={NavLink} to={Routes.AfspraakBetaalinstructie(afspraak.id!)}>*/}
+			{/*						{t("actions.edit")}*/}
+			{/*					</Button>*/}
+			{/*				</Box>*/}
+			{/*			</>) : (<>*/}
+			{/*				<Text>{t("afspraakDetailView.noBetaalinstructie")}</Text>*/}
 
-							<Stack direction={["column", "row"]}>
-								<Button colorScheme={"primary"} size={"sm"} leftIcon={<AddIcon />} as={NavLink} to={Routes.AfspraakBetaalinstructie(afspraak.id!)}>
-									{t("actions.add")}
-								</Button>
-							</Stack>
+			{/*				<Stack direction={["column", "row"]}>*/}
+			{/*					<Button colorScheme={"primary"} size={"sm"} leftIcon={<AddIcon />} as={NavLink} to={Routes.AfspraakBetaalinstructie(afspraak.id!)}>*/}
+			{/*						{t("actions.add")}*/}
+			{/*					</Button>*/}
+			{/*				</Stack>*/}
 
-							{/* Todo: show verwachte betalingen? (19-03-2021) */}
-							{/* <Stack direction={["column", "row"]}>*/}
-							{/*	<Box>*/}
-							{/*		<Button>Bekijk verwachte betalingen</Button>*/}
-							{/*	</Box>*/}
-							{/*	<OverschrijvingenListView overschrijvingen={generatedSampleOverschrijvingen} />*/}
-							{/*</Stack>*/}
-						</>)}
-					</FormRight>
-				</Section>
-			)}
+			{/*				/!* Todo: show verwachte betalingen? (19-03-2021) *!/*/}
+			{/*				/!* <Stack direction={["column", "row"]}>*!/*/}
+			{/*				/!*	<Box>*!/*/}
+			{/*				/!*		<Button>Bekijk verwachte betalingen</Button>*!/*/}
+			{/*				/!*	</Box>*!/*/}
+			{/*				/!*	<OverschrijvingenListView overschrijvingen={generatedSampleOverschrijvingen} />*!/*/}
+			{/*				/!*</Stack>*!/*/}
+			{/*			</>)}*/}
+			{/*		</FormRight>*/}
+			{/*	</Section>*/}
+			{/*)}*/}
 		</Page>
 	);
 };
