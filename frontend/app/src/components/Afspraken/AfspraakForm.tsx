@@ -102,7 +102,6 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 		}
 	};
 
-	// Todo: add back button
 	return (
 		<Section direction={["column", "row"]}>
 			<FormLeft title={t("afspraakForm.section1.title")} helperText={t("afspraakForm.section1.helperText")} />
@@ -111,7 +110,10 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 				<Stack direction={["column", "row"]}>
 					<FormControl flex={1} isInvalid={!isValid("credit")} isRequired>
 						<FormLabel>{t("afspraak.betaalrichting")}</FormLabel>
-						<RadioGroup colorScheme={"primary"} onChange={e => updateForm("credit", e === "inkomsten")} value={data.credit !== undefined ? (data.credit ? "inkomsten" : "uitgaven") : undefined}>
+						<RadioGroup colorScheme={"primary"} onChange={e => {
+							updateForm("credit", e === "inkomsten");
+							updateForm("rubriekId", undefined);
+						}} value={data.credit !== undefined ? (data.credit ? "inkomsten" : "uitgaven") : undefined}>
 							<Stack>
 								<Radio value="inkomsten">{t("afspraak.inkomsten")}</Radio>
 								<Radio value="uitgaven">{t("afspraak.uitgaven")}</Radio>
