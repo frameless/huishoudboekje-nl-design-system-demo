@@ -32,7 +32,9 @@ const BookingSection = ({transaction, rubrieken, afspraken}) => {
 
 			return a.tegenRekening?.iban?.replaceAll(" ", "") === tegenRekening.replaceAll(" ", "");
 		}),
-		rubrieken: rubrieken.filter(r => r.grootboekrekening && r.grootboekrekening.id).map((r: Rubriek) => ({
+		rubrieken: rubrieken.filter(r => r.grootboekrekening && r.grootboekrekening.id).sort((a: Rubriek, b: Rubriek) => {
+			return (a.naam && b.naam) && a.naam < b.naam ? -1 : 1;
+		}).map((r: Rubriek) => ({
 			key: r.id,
 			label: r.naam,
 			value: r.grootboekrekening!.id,
