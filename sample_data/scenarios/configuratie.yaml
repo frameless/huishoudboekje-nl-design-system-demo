@@ -11,38 +11,36 @@ rubrieken:
   - id: 1
     naam: "Inkomsten"
     grootboekrekening_id: "WOmzNooNdo"
-  - id: 10
+  - id: 2
     naam: "Toeslagen"
     grootboekrekening_id: "WOvbOrsOsuSro"
-  - id: 11
+  - id: 3
     naam: "Uitkeringen"
     grootboekrekening_id: "WOvbOrsOsuSov"
-  - id: 12
+  - id: 4
     naam: "Subsidies"
     grootboekrekening_id: "WOvbOrsOsuSpo"
-
+  
   # Uitgaven
-  - id: 2
-    naam: "Leefgeld"
-    grootboekrekening_id: "BEivKapProPok"
-  - id: 3
-    naam: "Gas"
-    grootboekrekening_id: "WBedHuiGweGas"
-  - id: 4
+  # Gebaseerd op definitie vaste lasten van Nibud, TODO onderwijs, kinderopvang, vervoer
+  - id: 6
+    naam: "Huur of hypotheek"
+    grootboekrekening_id: "WBedHuiBeh"
+  - id: 7
+    naam: "Gas en elektriciteit"
+    grootboekrekening_id: "WBedHuiGweElk"
+  - id: 8
     naam: "Water"
     grootboekrekening_id: "WBedHuiGweWat"
-  - id: 5
-    naam: "Elektriciteit"
-    grootboekrekening_id: "WBedHuiGweElk"
-  - id: 6
-    naam: "Telefonie"
+  - id: 9
+    naam: "Lokale lasten"
+    grootboekrekening_id: "WBedHuiMez"
+  - id: 10
+    naam: "Telefoon, internet en televisie"
     grootboekrekening_id: "WBedKanTef"
-  - id: 7
+  - id: 11
     naam: "Verzekeringen"
     grootboekrekening_id: "WBedAssOva"
-  - id: 8
-    naam: "Betaalde huur"
-    grootboekrekening_id: "WBedHuiBeh"
-  - id: 9
-    naam: "Milieuheffingen en zuiveringsleges"
-    grootboekrekening_id: "WBedHuiMez"
+  - id: 12
+    naam: "Privé-opname"
+    grootboekrekening_id: "BEivKapProPok"

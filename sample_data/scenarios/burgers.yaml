@@ -20,7 +20,7 @@ scenarios:
           - "ZOEKTERMPERSONA1"
         automatisch_boeken: true
       - aantal: 1
-        rubriek: "Inkomsten"
+        rubriek: "Uitkeringen"
         omschrijving: "Aanvullende uitkering"
         organisatie:
           kvk: "30280353"
@@ -79,7 +79,7 @@ scenarios:
         automatisch_boeken: true
       # uitgaven
       - aantal: 1
-        rubriek: "Betaalde huur"
+        rubriek: "Huur of hypotheek"
         omschrijving: "Huur"
         organisatie:
           kvk: "30038487"
@@ -94,7 +94,7 @@ scenarios:
           - "ZOEKTERMPERSONA1"
         automatisch_boeken: true
       - aantal: 1
-        rubriek: "Elektriciteit"
+        rubriek: "Gas en elektriciteit"
         omschrijving: "Elektriciteit"
         organisatie:
           kvk: "05082820"
@@ -124,7 +124,7 @@ scenarios:
           - "ZOEKTERMPERSONA1"
         automatisch_boeken: true
       - aantal: 1
-        rubriek: "Leefgeld"
+        rubriek: "Privé-opname"
         omschrijving: "Leefgeld"
         bedrag: 93994
         credit: false
@@ -144,7 +144,7 @@ scenarios:
     afspraken:
       # inkomsten
       - aantal: 1
-        rubriek: "Inkomsten"
+        rubriek: "Uitkeringen"
         omschrijving: "Aanvullende uitkering minus terugvordering"
         organisatie:
           kvk: "30280353"
@@ -203,7 +203,7 @@ scenarios:
           - "VOORSCHOT ZORGTOESLAG"
         automatisch_boeken: true
       - aantal: 1
-        rubriek: "Subsidies"
+        rubriek: "Inkomsten"
         omschrijving: "Bijdrage Vaste Lasten Pakket"
         organisatie:
           kvk: "73834238"
@@ -218,7 +218,7 @@ scenarios:
         automatisch_boeken: true
       # uitgaven
       - aantal: 1
-        rubriek: "Betaalde huur"
+        rubriek: "Huur of hypotheek"
         omschrijving: "Huur"
         organisatie:
           kvk: "30038487"
@@ -233,7 +233,7 @@ scenarios:
           - "ZOEKTERMPERSONA2"
         automatisch_boeken: true
       - aantal: 1
-        rubriek: "Elektriciteit"
+        rubriek: "Gas en elektriciteit"
         omschrijving: "Elektriciteit"
         organisatie:
           kvk: "24324527"
@@ -278,7 +278,7 @@ scenarios:
           - "ZOEKTERMPERSONA2"
         automatisch_boeken: true
       - aantal: 1
-        rubriek: "Leefgeld"
+        rubriek: "Privé-opname"
         omschrijving: "Leefgeld"
         bedrag: 119520
         credit: false
@@ -306,7 +306,7 @@ scenarios:
           - "ZOEKTERMPERSONA2"
         automatisch_boeken: true
       - aantal: 1
-        rubriek: "Telefonie"
+        rubriek: "Telefoon, internet en televisie"
         omschrijving: "Vaste telefonie en internet"
         organisatie:
           kvk: "27124701"
@@ -321,7 +321,7 @@ scenarios:
           - "ZOEKTERMPERSONA2"
         automatisch_boeken: true
       - aantal: 1
-        rubriek: "Telefonie"
+        rubriek: "Telefoon, internet en televisie"
         omschrijving: "Mobiele telefonie"
         organisatie:
           kvk: "14052264"
