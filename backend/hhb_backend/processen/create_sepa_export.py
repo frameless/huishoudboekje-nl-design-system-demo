@@ -20,7 +20,7 @@ def create_export_string(overschrijvingen, afspraken, tegen_rekeningen, config_v
             # "BIC": "BANKNL2A", # TODO nodig??
             "amount": overschrijving['bedrag'],
             "execution_date": overschrijving['datum'],
-            "description": afspraak['beschrijving'],
+            "description": afspraak['omschrijving'],
             # "endtoend_id": str(uuid.uuid1())  # optional
         }
         sepa.add_payment(payment)
