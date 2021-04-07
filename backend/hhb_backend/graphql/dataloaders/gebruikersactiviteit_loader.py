@@ -32,8 +32,8 @@ class GebruikersActiviteitenByBurgersLoader(SingleDataLoader):
 
         return response.json()["data"]
 
-    def get_by_ids_paged(self, ids, start=1, limit=20):
-        url = f"{self.service}/{self.model}/?{self.filter_item}={','.join([str(k) for k in ids])}&start={start}&limit={limit}"
+    def get_by_ids_paged(self, ids, start=1, limit=20, desc=False, sortingColumn="id"):
+        url = f"{self.service}/{self.model}/?{self.filter_item}={','.join([str(k) for k in ids])}&start={start}&limit={limit}&desc={desc}&sortingColumn={sortingColumn}"
         response = requests.get(url)
         if not response.ok:
             raise GraphQLError(f"Upstream API responded: {response.text}")
@@ -57,8 +57,8 @@ class GebruikersActiviteitenByAfsprakenLoader(SingleDataLoader):
 
         return response.json()["data"]
 
-    def get_by_ids_paged(self, ids, start=1, limit=20):
-        url = f"{self.service}/{self.model}/?{self.filter_item}={','.join([str(k) for k in ids])}&start={start}&limit={limit}"
+    def get_by_ids_paged(self, ids, start=1, limit=20, desc=False, sortingColumn="id"):
+        url = f"{self.service}/{self.model}/?{self.filter_item}={','.join([str(k) for k in ids])}&start={start}&limit={limit}&desc={desc}&sortingColumn={sortingColumn}"
         response = requests.get(url)
         if not response.ok:
             raise GraphQLError(f"Upstream API responded: {response.text}")

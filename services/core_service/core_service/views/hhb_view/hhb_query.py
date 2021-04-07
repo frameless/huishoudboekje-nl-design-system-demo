@@ -1,9 +1,10 @@
 import re
 
 from flask import request, abort, make_response
-from sqlalchemy import String
 from sqlalchemy.orm import joinedload
+
 from core_service.utils import row2dict
+
 
 class HHBQuery():
     hhb_model = None
@@ -62,7 +63,7 @@ class HHBQuery():
 
     def get_result_single(self, row_id):
         """ Get a single result from the current query """
-        row = self.query.filter(self.hhb_model.id==row_id).one_or_none()
+        row = self.query.filter(self.hhb_model.id == row_id).one_or_none()
         if not row:
             return {"errors": [f"{self.hhb_model.__name__} not found."]}, 404
         return {"data": self.post_process_data(row)}, 200
@@ -113,18 +114,20 @@ class HHBQuery():
             if not self.filtered_columns or relation['relation'] in self.filtered_columns:
                 self.query = self.query.options(joinedload(relation["relation"]))
 
-    def order_query(self, desc=False):
+    def order_query(self, desc=False, sortingColumn="id"):
         if desc:
-            self.query = self.query.order_by(self.hhb_model.id.desc())
+            self.query = self.query.order_by(self.hhb_model.__table__.c[sortingColumn].desc())
         else:
-            self.query = self.query.order_by(self.hhb_model.id)
+            self.query = self.query.order_by(self.hhb_model.__table__.c[sortingColumn])
 
     def post_process_data(self, row):
         result_dict = row2dict(row)
         for relation in self._exposed_many_relations:
             if not self.filtered_columns or relation['relation'] in self.filtered_columns:
-                result_dict[relation["relation"]] = [getattr(item, relation["relation_property"]) for item in getattr(row, relation["relation"])]
+                result_dict[relation["relation"]] = [getattr(item, relation["relation_property"]) for item in
+                                                     getattr(row, relation["relation"])]
         for relation in self._exposed_one_relations:
             if not self.filtered_columns or relation['relation'] in self.filtered_columns:
-                result_dict[relation["relation"]] = getattr(getattr(row, relation["relation"]), relation["relation_property"])
+                result_dict[relation["relation"]] = getattr(getattr(row, relation["relation"]),
+                                                            relation["relation_property"])
         return result_dict

@@ -76,16 +76,16 @@ class GebruikersActiviteitenPagedQuery:
         if "start" in kwargs and "limit" in kwargs:
             if not kwargs["burgerIds"] and not kwargs["afsprakenIds"]:
                 return request.dataloader.gebruikersactiviteiten_by_id.get_all_paged \
-                    (start=kwargs["start"], limit=kwargs["limit"])
+                    (start=kwargs["start"], limit=kwargs["limit"], desc=True, sortingColumn="timestamp")
             else:
                 if kwargs["burgerIds"] and kwargs["afsprakenIds"]:
                     raise GraphQLError(f"Only burgerIds or afsprakenIds is supported. ")
                 if kwargs["burgerIds"]:
                     return request.dataloader.gebruikersactiviteiten_by_burgers.get_by_ids_paged(
-                            kwargs["burgerIds"], start=kwargs["start"], limit=kwargs["limit"])
+                            kwargs["burgerIds"], start=kwargs["start"], limit=kwargs["limit"], desc=True, sortingColumn="timestamp")
                 if kwargs["afsprakenIds"]:
                     return request.dataloader.gebruikersactiviteiten_by_afspraken.get_by_ids_paged(
-                            kwargs["afsprakenIds"], start=kwargs["start"], limit=kwargs["limit"])
+                            kwargs["afsprakenIds"], start=kwargs["start"], limit=kwargs["limit"], desc=True, sortingColumn="timestamp")
         else:
             raise GraphQLError(f"Query needs params 'start', 'limit'. ")
 
