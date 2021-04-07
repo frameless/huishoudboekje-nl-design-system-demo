@@ -131,13 +131,7 @@
         "section3": {
             "title": "Afletteren",
             "helperText": "Voeg zoektermen toe voor het automatisch afletteren van geïmporteerde banktransacties."
-        },
-        "section4": {
-            "title": "Betaalinstructie",
-            "helperText": "Instellingen voor de betaalinstructie."
-        },
-        "noBetaalinstructiePossible": "Het is voor inkomsten niet mogelijk om een betaalinstructie te maken.",
-        "noBetaalinstructie": "Er is voor deze afspraak geen betaalinstructie ingesteld. Het is mogelijk om een betaalinstructie toe te voegen. Bij automatisch incasso is er geen betaalinstructie nodig."
+        }
     },
     "forms": {
         "agreements": {
@@ -332,16 +326,16 @@
         "confirmModalBody": "Weet u zeker dat u deze afspraak wil verwijderen?"
     },
     "burger": "Burger",
-    "exports": {
-        "period": "Periode",
-        "nOverschrijvingen": "Overschrijvingen",
-        "dateCreated": "Aanmaakdatum"
-    },
     "banking": {
         "exports": {
             "title": "Overschrijvingen",
             "helperText": "Exporteer een bestand met overschrijvingen voor verwerking in een bankierenapplicatie."
         }
+    },
+    "exports": {
+        "period": "Periode",
+        "nOverschrijvingen": "Overschrijvingen",
+        "dateCreated": "Aanmaakdatum"
     },
     "van": "Van",
     "tot": "Tot",
@@ -477,7 +471,7 @@
         "organisaties": "Organisaties",
         "bankzaken": "Bankzaken",
         "transacties": "Transacties",
-        "bronbestanden": "Bronbestanden",
+        "bronbestanden": "Bankafschriften",
         "betaalinstructies": "Betaalinstructies",
         "gebeurtenissen": "Gebeurtenissen",
         "configuratie": "Configuratie"
