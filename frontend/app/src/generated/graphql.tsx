@@ -61,6 +61,7 @@ export type Afspraak = {
   journaalposten?: Maybe<Array<Maybe<Journaalpost>>>;
   rubriek?: Maybe<Rubriek>;
   overschrijvingen?: Maybe<Array<Maybe<Overschrijving>>>;
+  matchingAfspraken?: Maybe<Array<Maybe<Afspraak>>>;
   /** @deprecated use betaalinstructie instead */
   startDatum?: Maybe<Scalars['Date']>;
   /** @deprecated use betaalinstructie instead */
@@ -1204,7 +1205,7 @@ export type RubriekFragment = (
 
 export type AfspraakFragment = (
   { __typename?: 'Afspraak' }
-  & Pick<Afspraak, 'id' | 'omschrijving' | 'bedrag' | 'credit' | 'zoektermen' | 'actief'>
+  & Pick<Afspraak, 'id' | 'omschrijving' | 'startDatum' | 'eindDatum' | 'aantalBetalingen' | 'automatischeIncasso' | 'automatischBoeken' | 'bedrag' | 'credit' | 'zoektermen' | 'actief'>
   & { interval?: Maybe<(
     { __typename?: 'Interval' }
     & Pick<Interval, 'dagen' | 'weken' | 'maanden' | 'jaren'>
@@ -2149,6 +2150,11 @@ export const AfspraakFragmentDoc = gql`
     fragment Afspraak on Afspraak {
   id
   omschrijving
+  startDatum
+  eindDatum
+  aantalBetalingen
+  automatischeIncasso
+  automatischBoeken
   interval {
     dagen
     weken

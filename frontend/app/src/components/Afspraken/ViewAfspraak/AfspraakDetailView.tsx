@@ -140,8 +140,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 					</Stack>
 
 					{zoektermen.length === 0 && (
-						<Text color={"red.500"}>
-							<WarningTwoIcon mr={1} />
+						<Text>
 							{t("messages.automatischBoekenDisabled_noZoektermen")}
 						</Text>
 					)}
@@ -194,13 +193,9 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 				</FormRight>
 			</Section>
 
-			<Section direction={["column", "row"]}>
-				<FormLeft title={t("afspraakDetailView.section4.title")} helperText={t("afspraakDetailView.section4.helperText")} />
-				{afspraak.credit ? (
-					<FormRight justify={"center"}>
-						<Text>{t("afspraakDetailView.noBetaalinstructiePossible")}</Text>
-					</FormRight>
-				) : (
+			{!afspraak.credit && (
+				<Section direction={["column", "row"]}>
+					<FormLeft title={t("afspraakDetailView.section4.title")} helperText={t("afspraakDetailView.section4.helperText")} />
 					<FormRight spacing={5}>
 						{afspraak.interval ? (<>
 							<Stack direction={["column", "row"]}>
@@ -225,18 +220,18 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 									{t("actions.add")}
 								</Button>
 							</Stack>
-						</>)}
 
-						{/* Todo: show verwachte betalingen? (19-03-2021) */}
-						{/* <Stack direction={["column", "row"]}>*/}
-						{/*	<Box>*/}
-						{/*		<Button>Bekijk verwachte betalingen</Button>*/}
-						{/*	</Box>*/}
-						{/*	<OverschrijvingenListView overschrijvingen={generatedSampleOverschrijvingen} />*/}
-						{/*</Stack>*/}
+							{/* Todo: show verwachte betalingen? (19-03-2021) */}
+							{/* <Stack direction={["column", "row"]}>*/}
+							{/*	<Box>*/}
+							{/*		<Button>Bekijk verwachte betalingen</Button>*/}
+							{/*	</Box>*/}
+							{/*	<OverschrijvingenListView overschrijvingen={generatedSampleOverschrijvingen} />*/}
+							{/*</Stack>*/}
+						</>)}
 					</FormRight>
-				)}
-			</Section>
+				</Section>
+			)}
 		</Page>
 	);
 };

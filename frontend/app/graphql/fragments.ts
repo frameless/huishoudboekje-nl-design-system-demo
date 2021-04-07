@@ -76,6 +76,29 @@ export const AfspraakFragment = gql`
         rubriek {
             ...Rubriek
         }
+        matchingAfspraken {
+            id
+            credit
+            burger{
+                voorletters
+                voornamen
+                achternaam
+            }
+            zoektermen
+            bedrag
+            omschrijving
+            interval {
+                dagen
+                weken
+                maanden
+                jaren
+            }
+            tegenRekening {
+                id
+                iban
+                rekeninghouder
+            }
+        }
     }
     ${RekeningFragment}
     ${RubriekFragment}
