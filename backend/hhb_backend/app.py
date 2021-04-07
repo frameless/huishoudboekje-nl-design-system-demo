@@ -49,7 +49,6 @@ def create_app(
 
     @graphql.before_request
     @auth.rbac.allow([MEDEWERKER_ROLENAME], methods=['GET', 'POST'], endpoint="graphql.graphql")
-    @auth.rbac.allow([ANONYMOUS_ROLENAME], methods=['GET', 'POST'], endpoint="graphql.graphql")
     def auth_graphql():
         pass
 
