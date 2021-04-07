@@ -1204,7 +1204,7 @@ export type RubriekFragment = (
 
 export type AfspraakFragment = (
   { __typename?: 'Afspraak' }
-  & Pick<Afspraak, 'id' | 'omschrijving' | 'startDatum' | 'eindDatum' | 'aantalBetalingen' | 'automatischeIncasso' | 'automatischBoeken' | 'bedrag' | 'credit' | 'zoektermen' | 'actief'>
+  & Pick<Afspraak, 'id' | 'omschrijving' | 'bedrag' | 'credit' | 'zoektermen' | 'actief'>
   & { interval?: Maybe<(
     { __typename?: 'Interval' }
     & Pick<Interval, 'dagen' | 'weken' | 'maanden' | 'jaren'>
@@ -1228,7 +1228,20 @@ export type AfspraakFragment = (
   )>, rubriek?: Maybe<(
     { __typename?: 'Rubriek' }
     & RubriekFragment
-  )> }
+  )>, matchingAfspraken?: Maybe<Array<Maybe<(
+    { __typename?: 'Afspraak' }
+    & Pick<Afspraak, 'id' | 'credit' | 'zoektermen' | 'bedrag' | 'omschrijving'>
+    & { burger?: Maybe<(
+      { __typename?: 'Burger' }
+      & Pick<Burger, 'voorletters' | 'voornamen' | 'achternaam'>
+    )>, interval?: Maybe<(
+      { __typename?: 'Interval' }
+      & Pick<Interval, 'dagen' | 'weken' | 'maanden' | 'jaren'>
+    )>, tegenRekening?: Maybe<(
+      { __typename?: 'Rekening' }
+      & Pick<Rekening, 'id' | 'iban' | 'rekeninghouder'>
+    )> }
+  )>>> }
 );
 
 export type BurgerFragment = (
@@ -2136,11 +2149,6 @@ export const AfspraakFragmentDoc = gql`
     fragment Afspraak on Afspraak {
   id
   omschrijving
-  startDatum
-  eindDatum
-  aantalBetalingen
-  automatischeIncasso
-  automatischBoeken
   interval {
     dagen
     weken
@@ -2174,6 +2182,29 @@ export const AfspraakFragmentDoc = gql`
   actief
   rubriek {
     ...Rubriek
+  }
+  matchingAfspraken {
+    id
+    credit
+    burger {
+      voorletters
+      voornamen
+      achternaam
+    }
+    zoektermen
+    bedrag
+    omschrijving
+    interval {
+      dagen
+      weken
+      maanden
+      jaren
+    }
+    tegenRekening {
+      id
+      iban
+      rekeninghouder
+    }
   }
 }
     ${RekeningFragmentDoc}

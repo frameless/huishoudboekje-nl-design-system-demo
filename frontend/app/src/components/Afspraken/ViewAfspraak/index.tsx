@@ -39,9 +39,7 @@ const ViewAfspraak = () => {
 						const validatedZoekterm = zoektermValidator.parse(zoekterm);
 						handleMutation(addAfspraakZoekterm({
 							variables: {afspraakId: parseInt(id), zoekterm: validatedZoekterm},
-						}), t("messages.addAfspraakZoektermSuccess"), () => {
-							$afspraak.refetch();
-						});
+						}), t("messages.addAfspraakZoektermSuccess"), () => $afspraak.refetch());
 						callback();
 					}
 					catch (err) {

@@ -1,5 +1,28 @@
 import {AddIcon, ViewIcon, WarningTwoIcon} from "@chakra-ui/icons";
-import {Box, Button, Divider, FormControl, FormLabel, HStack, IconButton, Input, InputGroup, InputLeftElement, InputRightElement, Stack, Text, VStack} from "@chakra-ui/react";
+import {
+	Badge,
+	Box,
+	Button,
+	Divider,
+	FormControl,
+	FormLabel,
+	HStack,
+	IconButton,
+	Input,
+	InputGroup,
+	InputLeftElement,
+	InputRightElement,
+	Stack,
+	Table,
+	Tbody,
+	Td,
+	Text,
+	Th,
+	Thead,
+	Tr,
+	useBreakpointValue,
+	VStack,
+} from "@chakra-ui/react";
 import React, {useContext, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {AiOutlineTag} from "react-icons/all";
@@ -20,6 +43,7 @@ import AfspraakDetailMenu from "./AfspraakDetailMenu";
 import AfspraakDetailContext from "./context";
 
 const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
+	const isMobile = useBreakpointValue([true, null, null, false]);
 	const {t} = useTranslation();
 	const {deleteAfspraak, deleteAfspraakZoekterm, addAfspraakZoekterm} = useContext(AfspraakDetailContext);
 	const [zoekterm, setZoekterm] = useState<string>();
@@ -37,7 +61,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	const menu = <AfspraakDetailMenu afspraak={afspraak} onDelete={() => deleteAfspraak()} />;
 	const bedrag = afspraak.credit ? parseFloat(afspraak.bedrag) : (parseFloat(afspraak.bedrag) * -1);
 	const zoektermen = afspraak.zoektermen || [];
-	const zoektermenDuplicatesFound = false; // Todo: backend will tell if automatischBoeken is possible (19-03-2021)
+	const matchingAfspraken = afspraak.matchingAfspraken || [];
 
 	return (
 		<Page title={t("afspraakDetailView.title")} backButton={<BackButton to={Routes.Burger(afspraak.burger?.id)} />} menu={menu}>
@@ -122,11 +146,50 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 						</Text>
 					)}
 
-					{zoektermenDuplicatesFound && (
-						<Text color={"red.500"}>
-							<WarningTwoIcon mr={1} />
-							{t("messages.automatischBoekenDisabled_duplicatesFound")}
-						</Text>
+					{matchingAfspraken.length > 0 && (
+						<Stack spacing={5}>
+							<Text color={"red.500"}>
+								<WarningTwoIcon mr={1} />
+								{t("messages.automatischBoekenDisabled_duplicatesFound")}
+							</Text>
+
+							<Table size={"sm"} variant={"noLeftPadding"}>
+								<Thead>
+									<Tr>
+										<Th>{t("burger")}</Th>
+										{!isMobile && <Th>{t("afspraak.zoektermen")}</Th>}
+										<Th textAlign={"right"}>{t("afspraak.bedrag")}</Th>
+										<Th />
+									</Tr>
+								</Thead>
+								<Tbody>
+									{matchingAfspraken.map((a, i) => {
+										const bedrag = a.credit ? parseFloat(a.bedrag) : (parseFloat(a.bedrag) * -1);
+
+										return (
+											<Tr key={i}>
+												<Td>{formatBurgerName(a.burger)}</Td>
+												{!isMobile && (<Td>
+													<Text color={"gray.600"}>{(a.zoektermen || []).join(", ")}</Text>
+												</Td>)}
+												<Td>
+													<Stack spacing={1} flex={1} alignItems={"flex-end"}>
+														<Box textAlign={"right"} color={bedrag < 0 ? "red.500" : "currentcolor"}>{currencyFormat2().format(bedrag)}</Box>
+														<Badge fontSize={"10px"}>{intervalString(a.interval, t)}</Badge>
+													</Stack>
+												</Td>
+												<Td>
+													<IconButton as={NavLink} to={Routes.ViewAfspraak(a.id)} variant={"ghost"} size={"sm"} icon={
+														<ViewIcon />} aria-label={t("actions.view")} title={t("actions.view")} />
+												</Td>
+											</Tr>
+										);
+									})}
+								</Tbody>
+							</Table>
+
+
+						</Stack>
 					)}
 				</FormRight>
 			</Section>
