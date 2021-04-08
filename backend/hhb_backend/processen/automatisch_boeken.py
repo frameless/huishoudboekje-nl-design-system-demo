@@ -118,9 +118,10 @@ async def find_matching_afspraken_by_afspraak(main_afspraak):
     zoektermen_main = ' '.join(main_afspraak["zoektermen"])
 
     for afspraak in afspraken:
-        zoektermen_afspraak = ' '.join(afspraak["zoektermen"])
-        if (afspraak["id"] != main_afspraak["id"]) and (
-                match_zoekterm(afspraak, zoektermen_main) or match_zoekterm(main_afspraak, zoektermen_afspraak)):
-            matching_afspraken.append(afspraak)
+        if afspraak["zoektermen"]:
+            zoektermen_afspraak = ' '.join(afspraak["zoektermen"])
+            if (afspraak["id"] != main_afspraak["id"]) and (
+                    match_zoekterm(afspraak, zoektermen_main) or match_zoekterm(main_afspraak, zoektermen_afspraak)):
+                matching_afspraken.append(afspraak)
 
     return matching_afspraken
