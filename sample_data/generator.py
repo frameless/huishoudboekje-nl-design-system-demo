@@ -164,9 +164,9 @@ class Generator:
         response = requests.get(
             "http://faker.hook.io/?property=helpers.createCard&locale=nl"
         ).json()
-        achternaam = response["name"].split(" ")[-1]
-        voornamen = " ".join(response["name"].split(" ")[:-1])
-        voorletters = " ".join([n[0] for n in response["name"].split(" ")[:-1]])
+        voornamen = requests.get("http://faker.hook.io/?property=name.firstName&locale=nl").json()
+        achternaam = requests.get("http://faker.hook.io/?property=name.lastName&locale=nl").json()
+        voorletters = voornamen[0]
 
         self.burger_counter += 1
 
