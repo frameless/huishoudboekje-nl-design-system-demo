@@ -65,8 +65,8 @@ class BankTransactionsQuery:
                 [
                     [bank_transactions_csms.append(bt) for bt in res]
                     for res in await request.dataloader.bank_transactions_by_csm.load_many(
-                        kwargs["csms"]
-                    )
+                    kwargs["csms"]
+                )
                 ]
 
             if kwargs["ids"] and kwargs["csms"]:
@@ -102,8 +102,13 @@ class BankTransactionsPagedQuery:
     async def resolver(cls, _root, _info, **kwargs):
         if "start" in kwargs and "limit" in kwargs:
             if not kwargs["csms"]:
-                return request.dataloader.bank_transactions_by_id.get_all_paged(start=kwargs["start"], limit=kwargs["limit"])
+                return request.dataloader.bank_transactions_by_id.get_all_paged(start=kwargs["start"],
+                                                                                limit=kwargs["limit"], desc=True,
+                                                                                sortingColumn="transactie_datum")
             else:
-                return request.dataloader.bank_transactions_by_csm.get_all_paged(keys=kwargs["csms"], start=kwargs["start"], limit=kwargs["limit"])
+                return request.dataloader.bank_transactions_by_csm.get_all_paged(keys=kwargs["csms"],
+                                                                                 start=kwargs["start"],
+                                                                                 limit=kwargs["limit"], desc=True,
+                                                                                 sortingColumn="transactie_datum")
         else:
             raise GraphQLError(f"Query needs params 'start', 'limit'. ")

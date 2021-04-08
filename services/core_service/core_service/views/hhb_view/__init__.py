@@ -79,7 +79,9 @@ class HHBView(MethodView):
         self.hhb_query.add_filter_ids(object_id)
         self.extend_get(**kwargs)
         self.hhb_query.load_relations()
-        self.hhb_query.order_query()
+        desc = request.args.get('desc', False)
+        sortingColumn = request.args.get('sortingColumn', "id")
+        self.hhb_query.order_query(desc=desc, sortingColumn=sortingColumn)
         if object_id and type(object_id) != list:
             return self.hhb_query.get_result_single(object_id)
         start = request.args.get('start', None)

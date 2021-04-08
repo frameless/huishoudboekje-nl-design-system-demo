@@ -15,8 +15,8 @@ class SingleDataLoader(DataLoader):
     def url_for(self, keys=None):
         return f"""{self.service}/{self.model}/{f"?{self.filter_item}={','.join([str(k) for k in keys])}" if keys else ''}"""
 
-    def url_for_paged(self, start, limit):
-        return f"""{self.service}/{self.model}/{f"?start={start}&limit={limit}"}"""
+    def url_for_paged(self, start, limit, desc, sortingColumn):
+        return f"""{self.service}/{self.model}/{f"?start={start}&limit={limit}&desc={desc}&sortingColumn={sortingColumn}"}"""
 
     def get_all_and_cache(self):
         response = requests.get(self.url_for())
@@ -31,8 +31,8 @@ class SingleDataLoader(DataLoader):
 
         return result
 
-    def get_all_paged(self, start=1, limit=20):
-        response = requests.get(self.url_for_paged(start, limit))
+    def get_all_paged(self, start=1, limit=20, desc=False, sortingColumn="id"):
+        response = requests.get(self.url_for_paged(start, limit, desc, sortingColumn))
 
         if not response.ok:
             raise GraphQLError(f"Upstream API responded: {response.text}")
@@ -43,7 +43,7 @@ class SingleDataLoader(DataLoader):
             self.prime(item[self.index], item)
 
         page_info = {"count": response.json()["count"], "start": response.json()["start"],
-                      "limit": response.json()["limit"]}
+                     "limit": response.json()["limit"]}
 
         return_obj = {self.model: result, "page_info": page_info}
 
@@ -88,8 +88,9 @@ class ListDataLoader(DataLoader):
                 objects[item[self.index]].append(item)
         return [objects.get(key, []) for key in keys]
 
-    def get_all_paged(self, keys, start=1, limit=20):
-        url = f"{self.service}/{self.model}/?{self.filter_item}={','.join([str(k) for k in keys])}&start={start}&limit={limit}"
+    def get_all_paged(self, keys, start=1, limit=20, desc=False, sortingColumn="id"):
+        url = f"{self.service}/{self.model}/?{self.filter_item}={','.join([str(k) for k in keys])}&start={start}&limit={limit}&desc={desc}&sortingColumn={sortingColumn}"
+
         response = requests.get(url)
         if not response.ok:
             raise GraphQLError(f"Upstream API responded: {response.text}")
@@ -100,7 +101,7 @@ class ListDataLoader(DataLoader):
             self.prime(item[self.index], item)
 
         page_info = {"count": response.json()["count"], "start": response.json()["start"],
-                      "limit": response.json()["limit"]}
+                     "limit": response.json()["limit"]}
 
         return_obj = {self.model: result, "page_info": page_info}
 
