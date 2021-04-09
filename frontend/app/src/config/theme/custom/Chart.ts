@@ -5,11 +5,11 @@ const ChakraChart = chakra(Chart, {
 	baseStyle: {
 		h: "500px",
 		maxW: "100%",
-	}
+	},
 });
 
 export const chartProps = {
-	chartLanguage: "nl"
-}
+	chartLanguage: "nl",
+};
 
 export default ChakraChart;

@@ -6,8 +6,8 @@ const Label = chakra(Text, {
 		textTransform: "none",
 		letterSpacing: "none",
 		fontSize: "sm",
-		color: "gray.500"
-	}
+		color: "gray.500",
+	},
 });
 
 export default Label;

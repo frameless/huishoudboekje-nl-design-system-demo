@@ -63,26 +63,26 @@ const Rapportage = () => {
 								<FormControl as={Stack} flex={1} justifyContent={"flex-end"}>
 									<Label>{t("forms.common.fields.startDate")}</Label>
 									<DatePicker selected={d(startDate.value, "L").isValid() ? d(startDate.value, "L").toDate() : null}
-									            dateFormat={"MMM yyyy"}
-									            showMonthYearPicker
-									            showFullMonthYearPicker
-									            onChange={(value: Date) => {
-										            if (value) {
-											            startDate.setValue(d(value).format("L"));
-										            }
-									            }} customInput={(<Input {...startDate.bind} />)} />
+										dateFormat={"MMM yyyy"}
+										showMonthYearPicker
+										showFullMonthYearPicker
+										onChange={(value: Date) => {
+											if (value) {
+												startDate.setValue(d(value).format("L"));
+											}
+										}} customInput={(<Input {...startDate.bind} />)} />
 								</FormControl>
 								<FormControl as={Stack} flex={1}>
 									<Label>{t("forms.common.fields.endDate")}</Label>
 									<DatePicker selected={d(endDate.value, "L").isValid() ? d(endDate.value, "L").toDate() : null}
-									            dateFormat={"MMM yyyy"}
-									            showMonthYearPicker
-									            showFullMonthYearPicker
-									            onChange={(value: Date) => {
-										            if (value) {
-											            endDate.setValue(d(value).format("L"));
-										            }
-									            }} customInput={(<Input {...startDate.bind} />)} />
+										dateFormat={"MMM yyyy"}
+										showMonthYearPicker
+										showFullMonthYearPicker
+										onChange={(value: Date) => {
+											if (value) {
+												endDate.setValue(d(value).format("L"));
+											}
+										}} customInput={(<Input {...startDate.bind} />)} />
 								</FormControl>
 							</Stack>
 
@@ -92,9 +92,13 @@ const Rapportage = () => {
 									<Queryable query={$data} children={data => {
 										const burgers: Burger[] = data.burgers || [];
 										return (
-											<Select onChange={onSelectBurger} options={burgers.map(b => ({key: b.id, value: b.id, label: formatBurgerName(b)}))} styles={reactSelectStyles}
-											        isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllBurgers")} />
-										)
+											<Select onChange={onSelectBurger} options={burgers.map(b => ({
+												key: b.id,
+												value: b.id,
+												label: formatBurgerName(b),
+											}))} styles={reactSelectStyles.default}
+											isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllBurgers")} />
+										);
 									}} />
 								</FormControl>
 								<FormControl as={Stack} flex={1}>
@@ -102,9 +106,13 @@ const Rapportage = () => {
 									<Queryable query={$data} children={data => {
 										const rubrieken: Rubriek[] = data.rubrieken || [];
 										return (
-											<Select onChange={onSelectRubriek} options={rubrieken.map(r => ({key: r.id, value: r.id, label: r.naam}))} styles={reactSelectStyles}
-											        isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllRubrics")} />
-										)
+											<Select onChange={onSelectRubriek} options={rubrieken.map(r => ({
+												key: r.id,
+												value: r.id,
+												label: r.naam,
+											}))} styles={reactSelectStyles.default}
+											isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllRubrics")} />
+										);
 									}} />
 								</FormControl>
 							</Stack>
@@ -159,7 +167,7 @@ const Rapportage = () => {
 								<Stack spacing={4}>
 									<HStack>
 										<Text>Rapportageperiode: <strong>{d(startDate.value, "L").format("L")}</strong> tot en
-											met <strong>{d(endDate.value, "L").format("L")}</strong>.</Text>
+											  met <strong>{d(endDate.value, "L").format("L")}</strong>.</Text>
 									</HStack>
 
 									{Object.keys(aggregationByRubriek).map(c => {
@@ -179,7 +187,7 @@ const Rapportage = () => {
 																<Text fontWeight={"bold"}>{currencyFormat2(false).format(Math.abs(aggregationByRubriek[c][r]))}</Text>
 															</Box>
 														</Stack>
-													)
+													);
 												})}
 												<HStack alignItems={"center"}>
 													<Divider borderColor={"black"} flex={1} pt={1} />
@@ -208,7 +216,7 @@ const Rapportage = () => {
 								</Stack>
 							</FormRight>
 						</Section>
-					</>)
+					</>);
 				}} />
 			</Page>
 		</RapportageContext.Provider>

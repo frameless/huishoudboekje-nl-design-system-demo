@@ -1,6 +1,6 @@
-import React from "react";
-import {Box, Spinner, Stack} from "@chakra-ui/react";
 import {LazyQueryResult, QueryResult} from "@apollo/client/react/types/types";
+import {Box, Spinner, Stack} from "@chakra-ui/react";
+import React from "react";
 import {useTranslation} from "react-i18next";
 
 const Loading = () => (
@@ -9,7 +9,7 @@ const Loading = () => (
 	</Stack>
 );
 
-const Queryable: React.FC<{ query: QueryResult | LazyQueryResult<any, any>, loading?, error?, children }> = ({query, loading, error, children}) => {
+const Queryable: React.FC<{query: QueryResult | LazyQueryResult<any, any>, loading?, error?, children}> = ({query, loading, error, children}) => {
 	const {t} = useTranslation();
 	const {data: _data, loading: _loading, error: _error} = query;
 
@@ -22,6 +22,6 @@ const Queryable: React.FC<{ query: QueryResult | LazyQueryResult<any, any>, load
 	}
 
 	return children(_data);
-}
+};
 
 export default Queryable;

@@ -6,7 +6,7 @@ const defaultNamespace = "translation";
 /* Add languages here */
 const resources = {
 	nl: {
-		translation: require("../lang/nl.translation.json")
+		translation: require("../lang/nl.translation.json"),
 	},
 };
 

@@ -20,8 +20,8 @@ beforeAll(() => {
 		addEventListener: jest.fn(),
 		removeEventListener: jest.fn(),
 		dispatchEvent: jest.fn(),
-	})
-})
+	});
+});
 
 beforeEach(() => {
 	container = document.createElement("div");
@@ -80,7 +80,7 @@ it("renders a list of two burgers", () => {
 			telefoonnummer: "0688551495",
 			voorletters: "H.J.",
 			voornamen: "Henk Jan",
-		}
+		},
 	];
 
 	act(() => {

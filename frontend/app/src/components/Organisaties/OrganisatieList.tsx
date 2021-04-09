@@ -5,7 +5,7 @@ import {useInput} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {useHistory} from "react-router-dom";
 import Routes from "../../config/routes";
-import {Organisatie, useGetAllOrganisatiesQuery} from "../../generated/graphql";
+import {Organisatie, useGetOrganisatiesQuery} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
 import {searchFields} from "../../utils/things";
 import DeadEndPage from "../DeadEndPage";
@@ -16,15 +16,15 @@ const OrganisatieList = () => {
 	const {t} = useTranslation();
 	const {push} = useHistory();
 	const search = useInput<string>({
-		placeholder: t("forms.search.fields.search")
+		placeholder: t("forms.search.fields.search"),
 	});
 
 	const [filteredOrganisaties, setFilteredOrganisaties] = useState<Organisatie[]>([]);
-	const $organisaties = useGetAllOrganisatiesQuery({
+	const $organisaties = useGetOrganisatiesQuery({
 		fetchPolicy: "no-cache",
 		onCompleted: ({organisaties = []}) => {
 			setFilteredOrganisaties(organisaties);
-		}
+		},
 	});
 
 	useEffect(() => {
@@ -36,7 +36,7 @@ const OrganisatieList = () => {
 		}
 
 		return () => {
-			mounted = false
+			mounted = false;
 		};
 	}, [$organisaties, search.value]);
 
@@ -52,11 +52,12 @@ const OrganisatieList = () => {
 	};
 
 	return (
-		<Queryable query={$organisaties}>{({organisaties = []}: { organisaties: Organisatie[] }) => {
+		<Queryable query={$organisaties}>{({organisaties = []}: {organisaties: Organisatie[]}) => {
 			if (organisaties.length === 0) {
 				return (
 					<DeadEndPage message={t("messages.organizations.addHint", {buttonLabel: t("actions.add")})}>
-						<Button size={"sm"} colorScheme={"primary"} variant={"solid"} leftIcon={<AddIcon />} onClick={() => push(Routes.CreateOrganisatie)}>{t("actions.add")}</Button>
+						<Button size={"sm"} colorScheme={"primary"} variant={"solid"} leftIcon={
+							<AddIcon />} onClick={() => push(Routes.CreateOrganisatie)}>{t("actions.add")}</Button>
 					</DeadEndPage>
 				);
 			}
@@ -86,7 +87,7 @@ const OrganisatieList = () => {
 			);
 		}}
 		</Queryable>
-	)
+	);
 };
 
 export default OrganisatieList;

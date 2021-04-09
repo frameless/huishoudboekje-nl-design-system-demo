@@ -17,8 +17,8 @@ const useToaster = () => {
 			isClosable: true,
 			status: error ? "error" : "success",
 
-			title: error && t("toastMessages.generic.errorTitle"),
-			description: error || success,
+			title: error ? t("toastMessages.generic.errorTitle") : success,
+			description: error,
 			...toastProps,
 		});
 	};

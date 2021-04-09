@@ -8,7 +8,7 @@ import {Burger} from "../../generated/graphql";
 import {formatBurgerName} from "../../utils/things";
 import GridCard from "../GridCard";
 
-const BurgerListView: React.FC<BoxProps & { burgers: Burger[], showAddButton?: boolean }> = ({burgers, showAddButton = false, ...props}) => {
+const BurgerListView: React.FC<BoxProps & {burgers: Burger[], showAddButton?: boolean}> = ({burgers, showAddButton = false, ...props}) => {
 	const {t} = useTranslation();
 	const {push} = useHistory();
 	const isMobile = useBreakpointValue([true, null, null, false]);
@@ -18,7 +18,7 @@ const BurgerListView: React.FC<BoxProps & { burgers: Burger[], showAddButton?: b
 			{showAddButton && (
 				<Box>
 					<Button colorScheme={"primary"} borderStyle={"dashed"} variant={"outline"} leftIcon={<AddIcon />} w="100%" h="100%" onClick={() => push(Routes.CreateBurger)}
-					        borderRadius={5} p={5}>{t("actions.add")}</Button>
+						borderRadius={5} p={5}>{t("actions.add")}</Button>
 				</Box>
 			)}
 			{burgers.map((g, i) => (

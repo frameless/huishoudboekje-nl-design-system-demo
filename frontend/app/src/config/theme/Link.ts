@@ -9,11 +9,11 @@ const variants = {
 		fontWeight: "600",
 		_hover: {
 			textDecoration: "underline",
-		}
-	}
-}
+		},
+	},
+};
 
 export default {
 	baseStyle,
 	variants,
-}
+};

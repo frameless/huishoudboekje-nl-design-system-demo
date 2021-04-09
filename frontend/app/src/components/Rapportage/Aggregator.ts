@@ -30,7 +30,7 @@ export const createAggregation = (tr: BankTransaction[], granularity = Granulari
 	const _data = tr.map(t => ({
 		...t,
 		mDate: d(t.transactieDatum, "YYYY MM DD"),
-		rubriek: getRubriekForTransaction(t)
+		rubriek: getRubriekForTransaction(t),
 	}));
 
 	/* For chart */
@@ -46,10 +46,10 @@ export const createAggregation = (tr: BankTransaction[], granularity = Granulari
 
 	const chartData = _data.reduce(reducePerPeriod(granularity), {});
 
-	const splitupFormat: { [Type.Inkomsten]: RichTransaction[], [Type.Uitgaven]: RichTransaction[] } = {
+	const splitupFormat: {[Type.Inkomsten]: RichTransaction[], [Type.Uitgaven]: RichTransaction[]} = {
 		[Type.Inkomsten]: [],
 		[Type.Uitgaven]: [],
-	}
+	};
 
 	const tableDataPrepare = _data.reduce((result: any, tr: RichTransaction) => {
 		result[tr.isCredit ? Type.Inkomsten : Type.Uitgaven].push(tr);

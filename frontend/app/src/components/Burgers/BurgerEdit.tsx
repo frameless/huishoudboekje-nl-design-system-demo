@@ -5,7 +5,7 @@ import {useInput, Validators} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {Redirect, useHistory, useParams} from "react-router-dom";
 import Routes from "../../config/routes";
-import {Burger, useGetOneBurgerQuery, useUpdateBurgerMutation} from "../../generated/graphql";
+import {Burger, useGetBurgerQuery, useUpdateBurgerMutation} from "../../generated/graphql";
 import d from "../../utils/dayjs";
 import Queryable from "../../utils/Queryable";
 import {formatBurgerName, Regex} from "../../utils/things";
@@ -58,7 +58,7 @@ const BurgerEdit = () => {
 		placeholder: "0612345678",
 	});
 
-	const $burger = useGetOneBurgerQuery({
+	const $burger = useGetBurgerQuery({
 		variables: {id: parseInt(id)},
 		onCompleted: ({burger}) => {
 			if (burger) {

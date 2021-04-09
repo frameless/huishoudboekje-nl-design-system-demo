@@ -7,7 +7,7 @@ import Currency from "../../../Currency";
 import Label from "../../../Layouts/Label";
 import PrettyIban from "../../../Layouts/PrettyIban";
 
-const TransactieDetailsView: React.FC<StackProps & { transaction: BankTransaction }> = ({transaction: bt, ...props}) => {
+const TransactieDetailsView: React.FC<StackProps & {transaction: BankTransaction}> = ({transaction: bt, ...props}) => {
 	const {t} = useTranslation();
 
 	return (

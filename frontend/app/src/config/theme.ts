@@ -1,6 +1,7 @@
 import {extendTheme, Tooltip} from "@chakra-ui/react";
 import Button from "./theme/Button";
 import Section from "./theme/custom/Section";
+import FormLabel from "./theme/FormLabel";
 import Heading from "./theme/Heading";
 import Link from "./theme/Link";
 import Table from "./theme/Table";
@@ -8,8 +9,8 @@ import Tabs from "./theme/Tabs";
 
 Tooltip.defaultProps = {
 	hasArrow: true,
-	placement: "top"
-}
+	placement: "top",
+};
 
 if (!window["branding"]) {
 	document.querySelector("body")!.textContent = "Error: No tenant theme installed.";
@@ -26,10 +27,11 @@ const theme = extendTheme({
 		Table,
 		Section,
 		Link,
-		Button
+		Button,
+		FormLabel,
 	},
 	fontSizes: {
-		lg: "1.5rem"
+		lg: "1.5rem",
 	},
 
 	// Custom

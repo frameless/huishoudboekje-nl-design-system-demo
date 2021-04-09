@@ -18,14 +18,14 @@ const Sidebar: React.FC<BoxProps> = (props) => {
 				<Box pl={"27px"}>
 					<Stack spacing={1} borderLeft={"1px solid"} borderLeftColor={"gray.400"} pl={"21px"}>
 						<SidebarLink size={"sm"} to={Routes.Transacties}>{t("sidebar.transacties")}</SidebarLink>
-						<SidebarLink size={"sm"} to={Routes.Bronbestanden}>{t("sidebar.bronbestanden")}</SidebarLink>
-						<SidebarLink size={"sm"} to={Routes.Overschrijvingen}>{t("sidebar.overschrijvingen")}</SidebarLink>
+						<SidebarLink size={"sm"} to={Routes.Bankafschriften}>{t("sidebar.bankafschriften")}</SidebarLink>
+						<SidebarLink size={"sm"} to={Routes.Overschrijvingen}>{t("sidebar.betaalinstructies")}</SidebarLink>
 					</Stack>
 				</Box>
 			</Stack>
 			<SidebarLink to={Routes.Rapportage} icon={RiBarChartFill}>{t("sidebar.rapportage")}</SidebarLink>
 			<SidebarLink to={Routes.Gebeurtenissen} icon={FiActivity}>{t("sidebar.gebeurtenissen")}</SidebarLink>
-			<SidebarLink to={Routes.Settings} icon={TiCog}>{t("sidebar.configuratie")}</SidebarLink>
+			<SidebarLink to={Routes.Configuratie} icon={TiCog}>{t("sidebar.configuratie")}</SidebarLink>
 		</Stack>
 
 		{isDev && (

@@ -5,7 +5,7 @@ import {useToggle} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {useHistory, useParams} from "react-router-dom";
 import Routes from "../../../config/routes";
-import {Burger, useDeleteBurgerMutation, useGetOneBurgerQuery} from "../../../generated/graphql";
+import {Burger, useDeleteBurgerMutation, useGetBurgerQuery} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import {formatBurgerName} from "../../../utils/things";
 import useToaster from "../../../utils/useToaster";
@@ -14,6 +14,7 @@ import DeadEndPage from "../../DeadEndPage";
 import Alert from "../../Layouts/Alert";
 import Page from "../../Layouts/Page";
 import Section from "../../Layouts/Section";
+import PageNotFound from "../../PageNotFound";
 import BurgerAfsprakenView from "./BurgerAfsprakenView";
 import BurgerGebeurtenissen from "./BurgerGebeurtenissen";
 import BurgerProfileView from "./BurgerProfileView";
@@ -27,7 +28,7 @@ const BurgerDetail = () => {
 	const [isAlertOpen, toggleAlert] = useToggle(false);
 	const [isDeleted, toggleDeleted] = useToggle(false);
 
-	const $burger = useGetOneBurgerQuery({
+	const $burger = useGetBurgerQuery({
 		fetchPolicy: "no-cache",
 		variables: {id: parseInt(id)},
 	});
@@ -37,7 +38,13 @@ const BurgerDetail = () => {
 	const onClickDeleteMenuItem = () => toggleAlert(true);
 
 	return (
-		<Queryable query={$burger}>{({burger}: {burger: Burger}) => {
+		<Queryable query={$burger}>{(data) => {
+			const burger: Burger = data.burger;
+
+			if (!burger) {
+				return <PageNotFound />;
+			}
+
 			const onConfirmDelete = () => {
 				deleteBurger()
 					.then(() => {

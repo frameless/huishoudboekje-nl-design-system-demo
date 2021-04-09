@@ -18,6 +18,6 @@ const RadioButton: React.FC<RadioButtonProps> = ({children, radio, ...props}) =>
 			{children}
 		</Button>
 	);
-}
+};
 
 export default RadioButton;

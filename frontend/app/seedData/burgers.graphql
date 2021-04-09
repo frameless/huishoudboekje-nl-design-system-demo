@@ -1,7 +1,7 @@
 mutation createSampleBurgers{
 
     # persona 1
-    user1: createGebruiker(
+    user1: createBurger(
         input: {
             achternaam: "de Jager"
             email: "fien.dejager@example.com"
@@ -19,7 +19,7 @@ mutation createSampleBurgers{
         }
     ){
         ok
-        gebruiker {
+        burger {
             id
             voornamen
             achternaam
@@ -28,7 +28,7 @@ mutation createSampleBurgers{
     }
 
     #persona 2
-    user2: createGebruiker(
+    user2: createBurger(
         input: {
             achternaam: "Winkel"
             email: "hj.winkel@example.com"
@@ -47,7 +47,7 @@ mutation createSampleBurgers{
         }
     ){
         ok
-        gebruiker {
+        burger {
             id
             voornamen
             achternaam

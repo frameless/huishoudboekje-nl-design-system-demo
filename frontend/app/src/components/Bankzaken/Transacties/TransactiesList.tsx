@@ -1,8 +1,8 @@
 import {Box, Stack, useBreakpointValue} from "@chakra-ui/react";
-import moment from "moment";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {BankTransaction} from "../../../generated/graphql";
+import d from "../../../utils/dayjs";
 import {sortBankTransactions} from "../../../utils/things";
 import DeadEndPage from "../../DeadEndPage";
 import Label from "../../Layouts/Label";
@@ -20,8 +20,8 @@ const TransactiesList: React.FC<TransactiesListProps> = ({transacties}) => {
 	}
 
 	/* Group transacties by date */
-	const bt = transacties.sort((a, b) => a.transactieDatum > b.transactieDatum ? -1 : 1).reduce((result, t) => {
-		const trDateAsString = moment(new Date(t.transactieDatum)).format("L");
+	const bt = transacties.reduce((result, t) => {
+		const trDateAsString = d(new Date(t.transactieDatum)).format("L");
 		return {
 			...result,
 			[trDateAsString]: [

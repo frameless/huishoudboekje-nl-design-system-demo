@@ -1,9 +1,10 @@
 import {useToken} from "@chakra-ui/react";
 import arrayToSentence from "array-to-sentence";
+import currency from "currency.js";
 import {friendlyFormatIBAN} from "ibantools";
 import {createContext} from "react";
 import {Granularity, periodFormatForGranularity} from "../components/Rapportage/Aggregator";
-import {BankTransaction, Burger, GebruikersActiviteit, Interval, IntervalInput, Rubriek} from "../generated/graphql";
+import {BankTransaction, Burger, GebruikersActiviteit, Interval, Rubriek} from "../generated/graphql";
 import {IntervalType} from "../models/models";
 import d from "./dayjs";
 
@@ -30,7 +31,7 @@ export const Months = ["jan", "feb", "mrt", "apr", "may", "jun", "jul", "aug", "
 
 export const isDev = process.env.NODE_ENV === "development";
 
-export const DrawerContext = createContext<{ onClose: () => void }>({
+export const DrawerContext = createContext<{onClose: () => void}>({
 	onClose: () => {
 	},
 });
@@ -61,7 +62,7 @@ export const XInterval = {
 		weken: 0,
 		dagen: 0,
 	},
-	parse: (interval: IntervalInput | undefined): { intervalType: IntervalType, count: number } | undefined => {
+	parse: (interval: any | undefined): {intervalType: IntervalType, count: number} | undefined => {
 		if (!interval) {
 			return undefined;
 		}
@@ -83,7 +84,13 @@ export const XInterval = {
 	},
 };
 
-/* Todo: rename to currencyFormat (03-12-2020) */
+/*
+ * Format to EUR: 					currencyFormat(12999.23).format()); // "12.999,23"
+ * Parse from EUR (user input): 	currencyFormat("12.999,23").toString() // "12999.23"
+ */
+export const currencyFormat = value => currency(value, {separator: "", decimal: ",", symbol: ""});
+
+/* Todo: move to currencyFormat (03-12-2020) */
 export const currencyFormat2 = (showCurrency = true) => {
 	return new Intl.NumberFormat("nl-NL", {
 		style: showCurrency ? "currency" : "decimal",
@@ -96,17 +103,11 @@ export const currencyFormat2 = (showCurrency = true) => {
 	});
 };
 
-export const wait = async (timeout: number = 1000): Promise<void> => {
-	return new Promise(resolve => {
-		setTimeout(resolve, timeout);
-	});
-};
-
 export const sortBankTransactions = (a: BankTransaction, b: BankTransaction) => {
 	return b.bedrag - a.bedrag;
 };
 
-export const formatBurgerName = (burger: Burger | undefined, fullName = false) => {
+export const formatBurgerName = (burger: Burger | undefined, fullName = true) => {
 	if (fullName) {
 		return [burger?.voornamen, burger?.achternaam].join(" ");
 	}
@@ -131,17 +132,34 @@ export const formatIBAN = (iban?: string) => {
 	if (iban) {
 		return friendlyFormatIBAN(iban);
 	}
-}
+};
 
 export const useReactSelectStyles = () => {
-	const inputBorderColor = useToken("colors", "gray.200");
+	const [inputBorderColor, inputBorderErrorColor] = useToken("colors", ["gray.200", "red.500"]);
 
-	return ({
-		control: (provided) => ({
-			...provided,
-			borderColor: inputBorderColor
-		})
-	});
+	return {
+		default: {
+			control: (provided) => ({
+				...provided,
+				borderColor: inputBorderColor,
+			}),
+			option: (provided) => ({
+				...provided,
+				textAlign: "left",
+			}),
+		},
+		error: {
+			control: (provided) => ({
+				...provided,
+				borderColor: inputBorderErrorColor,
+				borderWidth: "2px",
+			}),
+			option: (provided) => ({
+				...provided,
+				textAlign: "left",
+			}),
+		},
+	};
 };
 
 export const humanJoin = (x) => arrayToSentence(x, {
@@ -151,12 +169,12 @@ export const humanJoin = (x) => arrayToSentence(x, {
 export const getRubriekForTransaction = (t: BankTransaction): Rubriek | undefined => t.journaalpost?.grootboekrekening?.rubriek || t.journaalpost?.afspraak?.rubriek;
 
 export const prepareChartData = (startDate: d.Dayjs, endDate: d.Dayjs, granularity: Granularity, columns: number = 1): any[] => {
-	if(!startDate.isValid()){
+	if (!startDate.isValid()) {
 		console.error("Invalid startDate", startDate);
 		return [];
 	}
 
-	if(!endDate.isValid()){
+	if (!endDate.isValid()) {
 		console.error("Invalid endDate", endDate);
 		return [];
 	}
@@ -175,7 +193,7 @@ export const prepareChartData = (startDate: d.Dayjs, endDate: d.Dayjs, granulari
 
 	return new Array(nPeriods).fill(0).map((_, i) => [
 		d(startDate).add(i, timeUnits[granularity]).startOf(timeUnits[granularity]).format(periodFormatForGranularity[granularity]),
-		...new Array(columns).fill(0)
+		...new Array(columns).fill(0),
 	]);
 };
 

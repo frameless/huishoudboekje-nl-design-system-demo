@@ -1,7 +1,7 @@
 import {Box, Heading, Stack, StackProps} from "@chakra-ui/react";
 import React from "react";
 
-type PageProps = Omit<Partial<StackProps>, "right"> & { title: string, backButton?: JSX.Element, menu?: JSX.Element, right?: JSX.Element };
+type PageProps = Omit<Partial<StackProps>, "right"> & {title: string, backButton?: JSX.Element, menu?: JSX.Element, right?: JSX.Element};
 const Page: React.FC<PageProps> = ({title, backButton, menu, right, children, ...props}) => {
 	return (
 		<Stack spacing={5} {...props}>
@@ -17,7 +17,7 @@ const Page: React.FC<PageProps> = ({title, backButton, menu, right, children, ..
 
 			{children}
 		</Stack>
-	)
+	);
 };
 
 export default Page;

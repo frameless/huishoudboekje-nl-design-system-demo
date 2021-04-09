@@ -5,7 +5,7 @@ import {useInput} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {useHistory} from "react-router-dom";
 import Routes from "../../config/routes";
-import {Burger, useGetAllBurgersQuery} from "../../generated/graphql";
+import {Burger, useGetBurgersQuery} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
 import {searchFields} from "../../utils/things";
 import DeadEndPage from "../DeadEndPage";
@@ -16,11 +16,11 @@ const BurgerList = () => {
 	const {t} = useTranslation();
 	const {push} = useHistory();
 	const search = useInput<string>({
-		placeholder: t("forms.search.fields.search")
+		placeholder: t("forms.search.fields.search"),
 	});
 
 	const [filteredBurgers, setFilteredBurgers] = useState<Burger[]>([]);
-	const $burgers = useGetAllBurgersQuery({
+	const $burgers = useGetBurgersQuery({
 		fetchPolicy: "no-cache",
 		onCompleted: ({burgers = []}) => {
 			setFilteredBurgers(burgers);
@@ -36,7 +36,7 @@ const BurgerList = () => {
 		}
 
 		return () => {
-			mounted = false
+			mounted = false;
 		};
 	}, [$burgers, search.value]);
 
@@ -52,12 +52,12 @@ const BurgerList = () => {
 	};
 
 	return (
-		<Queryable query={$burgers}>{({burgers = []}: { burgers: Burger[] }) => {
+		<Queryable query={$burgers}>{({burgers = []}: {burgers: Burger[]}) => {
 			if (burgers.length === 0) {
 				return (
 					<DeadEndPage message={t("messages.burgers.addHint", {buttonLabel: t("actions.add")})}>
 						<Button size={"sm"} colorScheme={"primary"} variant={"solid"} leftIcon={<AddIcon />}
-						        onClick={() => push(Routes.CreateBurger)}>{t("actions.add")}</Button>
+							onClick={() => push(Routes.CreateBurger)}>{t("actions.add")}</Button>
 					</DeadEndPage>
 				);
 			}
@@ -72,7 +72,7 @@ const BurgerList = () => {
 						{search.value.length > 0 && (
 							<InputRightElement zIndex={0}>
 								<IconButton onClick={() => search.reset()} size={"xs"} variant={"link"} icon={<CloseIcon />} aria-label={t("actions.cancel")}
-								            color={"gray.300"} />
+									color={"gray.300"} />
 							</InputRightElement>
 						)}
 					</InputGroup>
@@ -88,7 +88,7 @@ const BurgerList = () => {
 			);
 		}}
 		</Queryable>
-	)
+	);
 };
 
 export default BurgerList;

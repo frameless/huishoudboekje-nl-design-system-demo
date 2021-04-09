@@ -1,0 +1,238 @@
+import {ViewIcon, WarningTwoIcon} from "@chakra-ui/icons";
+import {
+	Badge,
+	Box,
+	Button,
+	Divider,
+	FormControl,
+	FormLabel,
+	HStack,
+	IconButton,
+	Input,
+	InputGroup,
+	InputLeftElement,
+	InputRightElement,
+	Stack,
+	Table,
+	Tbody,
+	Td,
+	Text,
+	Th,
+	Thead,
+	Tr,
+	useBreakpointValue,
+	VStack,
+} from "@chakra-ui/react";
+import React, {useContext, useState} from "react";
+import {useTranslation} from "react-i18next";
+import {AiOutlineTag} from "react-icons/all";
+import {NavLink} from "react-router-dom";
+import Routes from "../../../config/routes";
+import {Afspraak} from "../../../generated/graphql";
+import {currencyFormat2, formatBurgerName, intervalString} from "../../../utils/things";
+import {zoektermValidator} from "../../../utils/zod";
+import BackButton from "../../BackButton";
+import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
+import DataItem from "../../Layouts/DataItem";
+import Page from "../../Layouts/Page";
+import PrettyIban from "../../Layouts/PrettyIban";
+import Section from "../../Layouts/Section";
+import ZoektermenList from "../ZoektermenList";
+import AfspraakDetailMenu from "./AfspraakDetailMenu";
+import AfspraakDetailContext from "./context";
+
+const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
+	const isMobile = useBreakpointValue([true, null, null, false]);
+	const {t} = useTranslation();
+	const {deleteAfspraak, deleteAfspraakZoekterm, addAfspraakZoekterm} = useContext(AfspraakDetailContext);
+	const [zoekterm, setZoekterm] = useState<string>();
+	const [zoektermTouched, setZoektermTouched] = useState<boolean>(false);
+
+	const onAddAfspraakZoekterm = (e) => {
+		e.preventDefault();
+		setZoektermTouched(true);
+		addAfspraakZoekterm(zoekterm || "", () => {
+			setZoekterm("");
+			setZoektermTouched(false);
+		});
+	};
+
+	const menu = <AfspraakDetailMenu afspraak={afspraak} onDelete={() => deleteAfspraak()} />;
+	const bedrag = afspraak.credit ? parseFloat(afspraak.bedrag) : (parseFloat(afspraak.bedrag) * -1);
+	const zoektermen = afspraak.zoektermen || [];
+	const matchingAfspraken = afspraak.matchingAfspraken || [];
+
+	return (
+		<Page title={t("afspraakDetailView.title")} backButton={<BackButton to={Routes.Burger(afspraak.burger?.id)} />} menu={menu}>
+			<Section>
+				<Stack direction={["column", "row"]}>
+					<FormLeft title={t("afspraakDetailView.section1.title")} helperText={t("afspraakDetailView.section1.helperText")} />
+					<FormRight>
+
+						<Stack direction={["column", "row"]}>
+							<DataItem label={t("burger")}>
+								<HStack>
+									<Text>{formatBurgerName(afspraak.burger)}</Text>
+									<IconButton as={NavLink} to={Routes.Burger(afspraak.burger?.id)} variant={"ghost"} size={"sm"} icon={
+										<ViewIcon />} aria-label={t("actions.view")} />
+								</HStack>
+							</DataItem>
+							<DataItem label={t("afspraak.tegenrekening")}>
+								<HStack>
+									<Text>{afspraak.tegenRekening?.rekeninghouder}</Text>
+									{afspraak.organisatie?.id && (
+										<IconButton as={NavLink} to={Routes.Organisatie(afspraak.organisatie.id)} variant={"ghost"}
+											size={"sm"} icon={<ViewIcon />} aria-label={t("actions.view")} />
+									)}
+								</HStack>
+								<Text size={"sm"}><PrettyIban iban={afspraak.tegenRekening?.iban} /></Text>
+							</DataItem>
+						</Stack>
+
+					</FormRight>
+				</Stack>
+
+				<VStack py={3}>
+					<Divider />
+				</VStack>
+
+				<Stack direction={["column", "row"]}>
+					<FormLeft title={t("afspraakDetailView.section2.title")} helperText={t("afspraakDetailView.section2.helperText")} />
+					<FormRight>
+
+						<Stack direction={["column", "row"]}>
+							<DataItem label={t("afspraak.rubriek")}>{afspraak.rubriek?.naam}</DataItem>
+							<DataItem label={t("afspraak.omschrijving")}>{afspraak.omschrijving}</DataItem>
+						</Stack>
+						<Stack direction={["column", "row"]}>
+							<DataItem label={t("afspraak.bedrag")}>
+								<Text color={bedrag < 0 ? "red.500" : "currentcolor"}>{currencyFormat2().format(bedrag)}</Text>
+							</DataItem>
+						</Stack>
+
+					</FormRight>
+				</Stack>
+			</Section>
+
+			<Section direction={["column", "row"]}>
+				<FormLeft title={t("afspraakDetailView.section3.title")} helperText={t("afspraakDetailView.section3.helperText")} />
+				<FormRight>
+
+					<Stack direction={"column"}>
+						<form onSubmit={onAddAfspraakZoekterm}>
+							<FormControl isInvalid={!zoektermValidator.safeParse(zoekterm).success && zoektermTouched}>
+								<Stack>
+									<FormLabel>{t("afspraak.zoektermen")}</FormLabel>
+									<InputGroup size={"md"}>
+										<InputLeftElement pointerEvents="none" color="gray.300" fontSize="1.2em">
+											<AiOutlineTag />
+										</InputLeftElement>
+										<Input id="zoektermen" onChange={e => setZoekterm(e.target.value)} value={zoekterm || ""} onFocus={() => setZoektermTouched(true)} onBlur={() => setZoektermTouched(true)} />
+										<InputRightElement width={"auto"} pr={1}>
+											<Button type={"submit"} size={"sm"} colorScheme={"primary"}>{t("actions.add")}</Button>
+										</InputRightElement>
+									</InputGroup>
+								</Stack>
+							</FormControl>
+						</form>
+						<ZoektermenList zoektermen={zoektermen} onDeleteZoekterm={(zoekterm: string) => deleteAfspraakZoekterm(zoekterm)} />
+					</Stack>
+
+					{zoektermen.length === 0 && (
+						<Text>
+							{t("messages.automatischBoekenDisabled_noZoektermen")}
+						</Text>
+					)}
+
+					{matchingAfspraken.length > 0 && (
+						<Stack spacing={5}>
+							<Text color={"red.500"}>
+								<WarningTwoIcon mr={1} />
+								{t("messages.automatischBoekenDisabled_duplicatesFound")}
+							</Text>
+
+							<Table size={"sm"} variant={"noLeftPadding"}>
+								<Thead>
+									<Tr>
+										<Th>{t("burger")}</Th>
+										{!isMobile && <Th>{t("afspraak.zoektermen")}</Th>}
+										<Th textAlign={"right"}>{t("afspraak.bedrag")}</Th>
+										<Th />
+									</Tr>
+								</Thead>
+								<Tbody>
+									{matchingAfspraken.map((a, i) => {
+										const bedrag = a.credit ? parseFloat(a.bedrag) : (parseFloat(a.bedrag) * -1);
+
+										return (
+											<Tr key={i}>
+												<Td>{formatBurgerName(a.burger)}</Td>
+												{!isMobile && (<Td>
+													<Text color={"gray.600"}>{(a.zoektermen || []).join(", ")}</Text>
+												</Td>)}
+												<Td>
+													<Stack spacing={1} flex={1} alignItems={"flex-end"}>
+														<Box textAlign={"right"} color={bedrag < 0 ? "red.500" : "currentcolor"}>{currencyFormat2().format(bedrag)}</Box>
+														<Badge fontSize={"10px"}>{intervalString(a.interval, t)}</Badge>
+													</Stack>
+												</Td>
+												<Td>
+													<IconButton as={NavLink} to={Routes.ViewAfspraak(a.id)} variant={"ghost"} size={"sm"} icon={
+														<ViewIcon />} aria-label={t("actions.view")} title={t("actions.view")} />
+												</Td>
+											</Tr>
+										);
+									})}
+								</Tbody>
+							</Table>
+
+
+						</Stack>
+					)}
+				</FormRight>
+			</Section>
+
+			{/*{!afspraak.credit && (*/}
+			{/*	<Section direction={["column", "row"]}>*/}
+			{/*		<FormLeft title={t("afspraakDetailView.section4.title")} helperText={t("afspraakDetailView.section4.helperText")} />*/}
+			{/*		<FormRight spacing={5}>*/}
+			{/*			{afspraak.interval ? (<>*/}
+			{/*				<Stack direction={["column", "row"]}>*/}
+			{/*					<DataItem label={t("afspraak.periodiek")}>*/}
+			{/*						<Text>{intervalString(afspraak.interval, t)}</Text>*/}
+			{/*					</DataItem>*/}
+			{/*					<DataItem label={t("exports.period")}>*/}
+			{/*						<Text>{d(afspraak.startDatum, "YYYY-MM-DD").format("L")} / {afspraak.eindDatum ? d(afspraak.eindDatum, "YYYY-MM-DD").format("L") : "-"}</Text>*/}
+			{/*					</DataItem>*/}
+			{/*				</Stack>*/}
+
+			{/*				<Box>*/}
+			{/*					<Button colorScheme={"primary"} size={"sm"} as={NavLink} to={Routes.AfspraakBetaalinstructie(afspraak.id!)}>*/}
+			{/*						{t("actions.edit")}*/}
+			{/*					</Button>*/}
+			{/*				</Box>*/}
+			{/*			</>) : (<>*/}
+			{/*				<Text>{t("afspraakDetailView.noBetaalinstructie")}</Text>*/}
+
+			{/*				<Stack direction={["column", "row"]}>*/}
+			{/*					<Button colorScheme={"primary"} size={"sm"} leftIcon={<AddIcon />} as={NavLink} to={Routes.AfspraakBetaalinstructie(afspraak.id!)}>*/}
+			{/*						{t("actions.add")}*/}
+			{/*					</Button>*/}
+			{/*				</Stack>*/}
+
+			{/*				/!* Todo: show verwachte betalingen? (19-03-2021) *!/*/}
+			{/*				/!* <Stack direction={["column", "row"]}>*!/*/}
+			{/*				/!*	<Box>*!/*/}
+			{/*				/!*		<Button>Bekijk verwachte betalingen</Button>*!/*/}
+			{/*				/!*	</Box>*!/*/}
+			{/*				/!*	<OverschrijvingenListView overschrijvingen={generatedSampleOverschrijvingen} />*!/*/}
+			{/*				/!*</Stack>*!/*/}
+			{/*			</>)}*/}
+			{/*		</FormRight>*/}
+			{/*	</Section>*/}
+			{/*)}*/}
+		</Page>
+	);
+};
+
+export default AfspraakDetailView;

@@ -6,7 +6,7 @@ import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
 import Label from "../../Layouts/Label";
 import Section from "../../Layouts/Section";
 
-const OrganisatieDetailView: React.FC<BoxProps & { organisatie: Organisatie }> = ({organisatie, ...props}) => {
+const OrganisatieDetailView: React.FC<BoxProps & {organisatie: Organisatie}> = ({organisatie, ...props}) => {
 	const {t} = useTranslation();
 
 	if (!organisatie) {

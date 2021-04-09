@@ -6,5 +6,5 @@ const baseStyle = {
 };
 
 export default {
-	baseStyle
-}
+	baseStyle,
+};

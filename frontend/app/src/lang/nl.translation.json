@@ -5,34 +5,35 @@
             "welcome": "Welkom bij het Huishoudboekje van {{tenantName}}.",
             "clickHereToContinue": "Klik hieronder op inloggen om te beginnen."
         },
-        "agreements": {
-            "invalidFormMessage": "Er is een fout opgetreden. Controleer de ingevulde gegevens en probeer het opnieuw.",
-            "createSuccessMessage": "Nieuwe afspraak succesvol opgeslagen.",
-            "editSuccessMessage": "Afspraak succesvol opgeslagen.",
-            "deleteConfirmMessage": "Afspraak succesvol verwijderd."
-        },
         "genericError": {
             "title": "Fout.",
             "description": "Er is een onbekende fout opgetreden. Probeer het later nog eens."
         },
+        "updateAfspraakSuccess": "Afspraak is gewijzigd.",
+        "createAfspraakSuccess": "Afspraak is opgeslagen.",
+        "automatischBoekenDisabled_noZoektermen": "Voeg een zoekterm toe die het systeem kan gebruiken om transacties automatisch af te letteren.",
+        "automatischBoekenDisabled_duplicatesFound": "Deze zoekterm of combinatie van zoektermen is niet uniek. Automatisch afletteren is daarom niet mogelijk. Maak een unieke combinatie van zoektermen.",
+        "deleteAfspraakSuccess": "Afspraak is verwijderd.",
+        "addAfspraakZoektermSuccess": "Zoekterm is opgeslagen.",
+        "zoektermLengthError": "Zoekterm moet minimaal één teken lang zijn.",
+        "deleteAfspraakZoektermSuccess": "Zoekterm is verwijderd.",
         "customerStatementMessages": {
-            "deleteSuccess": "Het bronbestand is succesvol verwijderd.",
-            "createSuccess": "Het bronbestand is geïmporteerd en de transacties zijn succesvol ingelezen.",
+            "deleteSuccess": "Het bankafschrift is succesvol verwijderd.",
+            "createSuccess": "Het bankafschrift is geïmporteerd en de transacties zijn succesvol ingelezen.",
             "incorrectFileError": "Dit bestand voldoet niet aan het formaat SWIFT MT940. Het is niet gelukt om het te importeren. Controleer het bestand en probeer het nog een keer."
         },
         "exports": {
-            "createSuccessMessage": "Exportbestand succesvol aangemaakt.",
-            "noExportsInPeriod": "Er is geen exportbestand aangemaakt. Er zijn in deze periode geen overschrijvingen."
+            "createSuccessMessage": "Exportbestand succesvol aangemaakt."
         },
         "automatischBoeken": {
-            "successMessage": "Transacties worden nu verwerkt. Dit kan even duren."
+            "successMessage": "Transacties worden nu afgeletterd. Dit kan even duren."
         },
         "journals": {
-            "createSuccessMessage": "Transactie succesvol verwerkt."
+            "createSuccessMessage": "Transactie succesvol afgeletterd."
         },
-        "toggleAfspraakAutomatischBoekenSuccess": "Automatisch boeken is ingeschakeld.",
+        "toggleAfspraakAutomatischBoekenSuccess": "Automatisch afletteren is ingeschakeld.",
         "transactions": {
-            "addHint": "Voeg transacties toe door een bronbestand te importeren."
+            "addHint": "Voeg transacties toe door een bankafschrift te importeren."
         },
         "rekeningAlreadyExistsError": "Dit rekeningnummer is al gekoppeld.",
         "burgers": {
@@ -74,86 +75,80 @@
     "actions": {
         "login": "Inloggen",
         "logout": "Uitloggen",
-        "add": "Toevoegen",
-        "edit": "Wijzigen",
         "save": "Opslaan",
+        "view": "Bekijken",
         "cancel": "Annuleren",
         "delete": "Verwijderen",
+        "edit": "Wijzigen",
+        "add": "Toevoegen",
         "back": "Terug",
         "actions": "Acties",
         "export": "Exporteren",
         "download": "Downloaden",
-        "startBoeken": "Verwerk alle transacties",
-        "confirmAutomatischBoeken": "Voortaan automatisch boeken",
+        "startBoeken": "Alle transacties afletteren",
+        "confirmAutomatischBoeken": "Voortaan automatisch afletteren",
         "disconnect": "Koppeling verwijderen",
         "backToList": "Terug naar overzicht",
         "clearSearch": "Zoekopdracht wissen",
         "backToHome": "Terug naar de hoofdpagina",
         "clickToEdit": "Klik om te wijzigen"
     },
+    "genericInputErrorMessage": "Er is een fout opgetreden. Controleer de invoer en probeer het nog eens.",
+    "afspraakForm": {
+        "section1": {
+            "title": "Tegenpartij en betaling",
+            "helperText": "Vul hier alle gegevens over de afspraak in."
+        }
+    },
+    "afspraak": {
+        "betaalrichting": "Betaalrichting",
+        "inkomsten": "Inkomsten",
+        "uitgaven": "Uitgaven",
+        "tegenrekening": "Tegenrekening",
+        "rubriek": "Rubriek",
+        "omschrijving": "Omschrijving",
+        "bedrag": "Bedrag",
+        "periodiek": "Periodiek",
+        "zoektermen": "Zoektermen",
+        "zoekterm": "Zoekterm"
+    },
+    "afspraakDetailView": {
+        "invalidBetaalrichtingError": "Kies een betaalrichting.",
+        "invalidTegenrekeningError": "Kies een tegenrekening.",
+        "invalidRubriekError": "Kies een rubriek.",
+        "invalidOmschrijvingError": "Vul een omschrijving in.",
+        "invalidBedragError": "Vul een geldig bedrag in.",
+        "title": "Afspraak bekijken",
+        "section1": {
+            "title": "Partijen",
+            "helperText": "Burger en/of organisatie."
+        },
+        "section2": {
+            "title": "Betaling",
+            "helperText": "Gegevens over de betaling."
+        },
+        "section3": {
+            "title": "Afletteren",
+            "helperText": "Voeg zoektermen toe voor het automatisch afletteren van geïmporteerde banktransacties."
+        }
+    },
     "forms": {
         "agreements": {
             "fields": {
-                "income": "Inkomsten",
-                "expenses": "Uitgaven",
-                "isRecurring_once": "Eenmalig",
-                "isRecurring_periodic": "Periodiek",
-                "rubriek": "Rubriek",
-                "rubriekChoose": "Kies een rubriek",
-                "description": "Omschrijving",
-                "beneficiary": "Tegenrekening",
-                "bankAccount": "Bankrekening",
                 "bankAccountChoose": "Kies een bankrekening",
-                "amount": "Bedrag",
-                "zoektermen": "Zoektermen",
-                "searchtermDuplicateFound": "Deze zoekterm of een deel ervan komt overeen met een zoekterm in de onderstaande afspraak. Automatisch boeken voor deze afspraak kan niet ingeschakeld worden.",
-                "searchtermDuplicateFound_plural": "Deze zoekterm of een deel ervan komt overeen met een zoekterm in de onderstaande afspraken. Automatisch boeken voor deze afspraak kan niet ingeschakeld worden.",
-                "automatischBoeken": "Geef toestemming voor automatisch boeken",
-                "startDate": "Startdatum",
-                "continuous": "Doorlopend",
-                "nTimes": "Aantal keer",
-                "automatischeIncasso": "Automatische incasso",
-                "automatischGeboekt": "Automatisch geboekt",
-                "handmatigGeboekt": "Handmatig geboekt",
-                "ongeboekt": "Niet geboekt"
+                "rubriekChoose": "Kies een rubriek",
+                "automatischGeboekt": "Automatisch afgeletterd",
+                "handmatigGeboekt": "Handmatig afgeletterd",
+                "ongeboekt": "Niet afgeletterd"
             },
-            "sections": {
-                "0": {
-                    "title": "Afspraak",
-                    "helperText": "Vul de algemene gegevens van de nieuwe afspraak in."
-                },
-                "1": {
-                    "title": "Betalingen",
-                    "helperText": "Geef aan wanneer en hoeveel betalingen verwacht worden."
-                },
-                "2": {
-                    "prognosisText_outgoing": "Er wordt <strong>1</strong> uitgaande overschrijving tussen <start>{{start}}</start> en <end>{{end}}</end> verwacht.",
-                    "prognosisText_outgoing_plural": "Er worden <strong>{{count}}</strong> uitgaande overschrijvingen tussen <start>{{start}}</start> en <end>{{end}}</end> verwacht.",
-                    "prognosisText_incoming": "Er wordt <strong>1</strong> inkomende overschrijving tussen <start>{{start}}</start> en <end>{{end}}</end> verwacht.",
-                    "prognosisText_incoming_plural": "Er worden <strong>{{count}}</strong> inkomende overschrijvingen tussen <start>{{start}}</start> en <end>{{end}}</end> verwacht.",
-                    "title": "Verwachting",
-                    "helperText": "Dit is een overzicht van de verwachte betalingen bij deze afspraak."
-                },
-                "3": {
-                    "title": "Boekingen",
-                    "helperText": "Geef met een zoekterm aan welke tekst in de omschrijving van een banktransactie terugkomt. Wanneer automatisch boeken is ingeschakeld, probeert de applicatie transacties automatisch te verwerken."
-                }
-            },
-            "titleEdit": "Afspraak bewerken"
-        },
-        "common": {
-            "fields": {
-                "date": "Datum",
-                "time": "Tijd",
-                "startDate": "Startdatum",
-                "endDate": "Einddatum"
-            }
+            "titleCreate": "Afspraak toevoegen",
+            "titleEdit": "Afspraak wijzigen"
         },
         "banking": {
             "sections": {
                 "customerStatementMessages": {
                     "filename": "Bestandsnaam",
-                    "title": "Bronbestanden",
+                    "title": "Bankafschriften",
                     "detailText": "Hier is het mogelijk om bij- en afschrijvingen uit een MT940-bestand te importeren."
                 },
                 "transactions": {
@@ -162,6 +157,14 @@
                 "journal": {
                     "title": "Transactie bekijken"
                 }
+            }
+        },
+        "common": {
+            "fields": {
+                "time": "Tijd",
+                "date": "Datum",
+                "startDate": "Startdatum",
+                "endDate": "Einddatum"
             }
         },
         "burgers": {
@@ -275,6 +278,7 @@
             }
         }
     },
+    "unknown": "Onbekend",
     "interval": {
         "day": "dag",
         "day_plural": "dagen",
@@ -282,10 +286,9 @@
         "week_plural": "weken",
         "month": "maand",
         "month_plural": "maanden",
-        "year": "jaar",
-        "year_plural": "jaar",
-        "every": "Elk(e)",
-        "choose": "Kies een periode",
+        "year": "Jaar",
+        "year_plural": "Jaren",
+        "choose": "Kies",
         "period": "Periode",
         "every-day": "Elke dag",
         "every-day_plural": "Elke {{count}} dagen",
@@ -297,43 +300,66 @@
         "every-year_plural": "Elke {{count}} jaar",
         "once": "Eenmalig"
     },
-    "select": {
-        "noOptions": "Geen resultaten"
+    "customInterval": {
+        "elkeWeek": "Elke week",
+        "elkeMaand": "Elke maand",
+        "elke3Maanden": "Elke 3 maanden"
     },
-    "burgers": {
-        "burger": "Burger",
-        "burgers": "Burgers"
+    "afspraakBetaalinstructie": {
+        "title": "Betaalinstructie instellen",
+        "helperText": "Door een betaalinstructie in te stellen kan Huishoudboekje deze exporteren.",
+        "invalidPeriodiekError": "Kies een periodiek.",
+        "invalidDateError": "Vul een juiste datum in."
     },
-    "unknown": "Onbekend",
+    "schedule": {
+        "eenmalig": "Eenmalig",
+        "periodiek": "Periodiek",
+        "datum": "Datum",
+        "startDate": "Startdatum",
+        "endDate": "Einddatum",
+        "customIntervalType": "Periodiek",
+        "invalidPeriodiekError": "Kies een periodiek."
+    },
+    "deleteAfspraak": {
+        "confirmModalTitle": "Afspraak verwijderen",
+        "confirmModalBody": "Weet u zeker dat u deze afspraak wil verwijderen?"
+    },
+    "burger": "Burger",
+    "transactions": {
+        "amount": "Bedrag",
+        "beneficiaryAccount": "Tegenrekening",
+        "description": "Omschrijving"
+    },
     "banking": {
         "exports": {
-            "title": "Overschrijvingen",
-            "helperText": "Exporteer een bestand met overschrijvingen voor verwerking in een bankierenapplicatie."
+            "title": "Betaalinstructies",
+            "helperText": "Exporteer een bestand met betaalinstructies voor verwerking in een bankierenapplicatie."
         }
     },
     "exports": {
         "period": "Periode",
-        "nOverschrijvingen": "Overschrijvingen",
+        "nTransacties": "Overschrijvingen",
         "dateCreated": "Aanmaakdatum"
     },
     "van": "Van",
     "tot": "Tot",
     "booking": "Boeking",
-    "automatischBoekenConfirmed": "Automatisch boeken ingeschakeld",
-    "burger": "Burger",
+    "automatischBoekenConfirmed": "Automatisch afletteren ingeschakeld",
     "omschrijving": "Omschrijving",
     "periodiek": "Periodiek",
     "rubriek": "Rubriek",
-    "transactieVerwerken": {
-        "title": "Verwerken",
-        "helperText": "Kies een afspraak om deze transactie erop te boeken."
+    "transactieAfletteren": {
+        "title": "Afletteren",
+        "helperText": "Kies een afspraak om deze transactie op af te letteren."
     },
-    "afspraak": {
-        "omschrijving": "Omschrijving",
-        "zoekterm": "zoekterm"
+    "bookingSection": {
+        "noResults": "Er zijn geen afspraken gevonden. Voeg een afspraak toe, of kies een rubriek om deze transactie op af te letteren."
     },
     "bedrag": "Bedrag",
-    "unbooked": "Niet geboekt",
+    "select": {
+        "noOptions": "Geen resultaten"
+    },
+    "unbooked": "Niet afgeletterd",
     "transaction": "Transactie",
     "form": {
         "common": {
@@ -341,11 +367,6 @@
                 "status": "Status"
             }
         }
-    },
-    "transactions": {
-        "beneficiaryAccount": "Tegenrekening",
-        "amount": "Bedrag",
-        "description": "Omschrijving"
     },
     "transacties": {
         "tegenrekening": "Tegenrekening",
@@ -370,6 +391,9 @@
             "description": "De pagina die je zoekt kan niet worden gevonden."
         }
     },
+    "burgers": {
+        "burgers": "Burgers"
+    },
     "configuratie": "Configuratie",
     "unknownGebruiker": "Onbekende gebruiker",
     "unknownBurger": "Onbekende burger",
@@ -385,9 +409,10 @@
         "viewRubrieken": "{{gebruiker}} bekeek alle <strong>rubrieken</strong>.",
         "viewBurger": "{{gebruiker}} bekeek <linkBurger>{{burger}}</linkBurger>.",
         "viewBurgers": "{{gebruiker}} bekeek alle <strong>burgers</strong>.",
-        "viewCustomerStatementMessages": "{{gebruiker}} bekeek alle <strong>bronbestanden</strong>.",
+        "viewCustomerStatementMessages": "{{gebruiker}} bekeek alle <strong>bankafschriften</strong>.",
         "viewTransactions": "{{gebruiker}} bekeek alle <strong>banktransacties</strong>.",
-        "viewExports": "{{gebruiker}} bekeek alle <strong>overschrijvingen</strong>.",
+        "viewExports": "{{gebruiker}} bekeek alle <strong>betaalinstructies</strong>.",
+        "viewConfiguraties": "{{gebruiker}} bekeek de <strong>configuratie</strong>.",
         "createBurger": "{{gebruiker}} voegde <linkBurger>{{burger}}</linkBurger> toe.",
         "updateBurger": "{{gebruiker}} wijzigde <linkBurger>{{burger}}</linkBurger>.",
         "deleteBurger": "{{gebruiker}} verwijderde <linkBurger>{{burger}}</linkBurger}}.",
@@ -398,20 +423,22 @@
         "createOrganisatie": "{{gebruiker}} voegde <linkOrganisatie>{{organisatie}}</linkOrganisatie> toe.",
         "updateOrganisatie": "{{gebruiker}} wijzigde <linkOrganisatie>{{organisatie}}</linkOrganisatie>.",
         "deleteOrganisatie": "{{gebruiker}} verwijderde <linkOrganisatie>{{organisatie}}</linkOrganisatie>.",
-        "createJournaalpostAfspraak": "{{gebruiker}} verwerkte een transactie op een <linkAfspraak>afspraak</linkAfspraak> met <linkBurger>{{burger}}</linkBurger> en <linkAfspraakOrganisatie>{{afspraakOrganisatie}}</linkAfspraakOrganisatie>.",
-        "createJournaalpostGrootboekrekening": "{{gebruiker}} verwerkte een transactie op <strong>{{rubriek}}</strong>",
-        "updateJournaalpostGrootboekrekening": "{{gebruiker}} wijzigde een verwerkte transactie op <strong>{{rubriek}}</strong>",
-        "deleteJournaalpost": "{{gebruiker}} verwijderde een verwerkte transactie.",
+        "createJournaalpostAfspraak": "{{gebruiker}} letterde een transactie af op een <linkAfspraak>afspraak</linkAfspraak> met <linkBurger>{{burger}}</linkBurger> en <linkAfspraakOrganisatie>{{afspraakOrganisatie}}</linkAfspraakOrganisatie>.",
+        "createJournaalpostGrootboekrekening": "{{gebruiker}} letterde een transactie af op <strong>{{rubriek}}</strong>",
+        "updateJournaalpostGrootboekrekening": "{{gebruiker}} wijzigde een op een rubriek afgeletterde transactie. Nieuwe rubriek: <strong>{{rubriek}}</strong>",
+        "deleteJournaalpost": "{{gebruiker}} maakte een aflettering ongedaan.",
         "createRubriek": "{{gebruiker}} voegde <strong>{{rubriek}}</strong> toe.",
         "updateRubriek": "{{gebruiker}} wijzigde <strong>{{rubriek}}</strong>.",
         "deleteRubriek": "{{gebruiker}} verwijderde <strong>{{rubriek}}</strong>.",
-        "createConfiguratie": "{{gebruiker}} voegde <strong>{{configuratie}}</strong> toe.",
-        "updateConfiguratie": "{{gebruiker}} wijzigde <strong>{{configuratie}}</strong>.",
-        "deleteConfiguratie": "{{gebruiker}} verwijderde <strong>{{configuratie}}</strong>.",
-        "deleteCustomerStatementMessage": "{{gebruiker}} verwijderde <strong>bronbestand {{customerStatementMessage}}</strong>.",
-        "createCustomerStatementMessage": "{{gebruiker}} importeerde <strong>{{nTransactions}} transactie(s)</strong> uit <strong>bronbestand {{customerStatementMessage}}</strong>.",
+        "createConfiguratie": "{{gebruiker}} voegde configuratie <strong>{{configuratieId}}</strong> met waarde <strong>{{configuratieWaarde}}</strong> toe.",
+        "updateConfiguratie": "{{gebruiker}} wijzigde configuratie <strong>{{configuratieId}}</strong> naar waarde <strong>{{configuratieWaarde}}</strong>.",
+        "deleteConfiguratie": "{{gebruiker}} verwijderde configuratie <strong>{{configuratieId}}</strong>.",
+        "deleteCustomerStatementMessage": "{{gebruiker}} verwijderde <strong>bankafschrift {{customerStatementMessage}}</strong>.",
+        "createCustomerStatementMessage": "{{gebruiker}} importeerde <strong>{{nTransactions}} transactie(s)</strong> uit <strong>bankafschrift {{customerStatementMessage}}</strong>.",
         "createBurgerRekening": "{{gebruiker}} voegde rekening <strong>{{iban}}</strong> op naam van <strong>{{rekeninghouder}}</strong> toe bij <linkBurger>{{burger}}</linkBurger>.",
         "deleteBurgerRekening": "{{gebruiker}} verwijderde rekening <strong>{{iban}}</strong> op naam van <strong>{{rekeninghouder}}</strong> bij <linkBurger>{{burger}}</linkBurger>.",
+        "addAfspraakZoekterm": "{{gebruiker}} voegde een zoekterm toe bij een <linkAfspraak>afspraak</linkAfspraak> met <linkBurger>{{burger}}</linkBurger> en <linkAfspraakOrganisatie>{{afspraakOrganisatie}}</linkAfspraakOrganisatie>.",
+        "deleteAfspraakZoekterm": "{{gebruiker}} verwijderde een zoekterm bij een <linkAfspraak>afspraak</linkAfspraak> met <linkBurger>{{burger}}</linkBurger> en <linkAfspraakOrganisatie>{{afspraakOrganisatie}}</linkAfspraakOrganisatie>.",
         "unknown": "Onbekende gebeurtenis"
     },
     "suggestion": "Suggestie",
@@ -422,7 +449,7 @@
         "inkomstenUitgaven": {
             "income": "Inkomsten",
             "expenses": "Uitgaven",
-            "unbooked": "Niet geboekt",
+            "unbooked": "Niet afgeletterd",
             "title": "Inkomsten en uitgaven",
             "helperText": "Een overzicht van inkomsten en uitgaven over tijd."
         },
@@ -447,8 +474,8 @@
         "organisaties": "Organisaties",
         "bankzaken": "Bankzaken",
         "transacties": "Transacties",
-        "bronbestanden": "Bronbestanden",
-        "overschrijvingen": "Overschrijvingen",
+        "bankafschriften": "Bankafschriften",
+        "betaalinstructies": "Betaalinstructies",
         "gebeurtenissen": "Gebeurtenissen",
         "configuratie": "Configuratie"
     },
@@ -462,6 +489,12 @@
     "allBurgers": "Alle burgers",
     "total": "Totaal",
     "saldo": "Saldo",
+    "pagination": {
+        "first": "Eerste",
+        "previous": "Vorige",
+        "next": "Volgende",
+        "last": "Laatste"
+    },
     "toastMessages": {
         "generic": {
             "errorTitle": "Er is een fout opgetreden."

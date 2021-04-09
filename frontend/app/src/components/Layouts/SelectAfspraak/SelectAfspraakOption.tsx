@@ -23,7 +23,7 @@ const SelectAfspraakOption: React.FC<SelectAfspraakOptionProps> = ({afspraak, is
 				<Text>{afspraak.burger ? formatBurgerName(afspraak.burger) : t("unknownBurger")}</Text>
 			</Td>
 			<Td>
-				<Text>{afspraak.beschrijving}</Text>
+				<Text>{afspraak.omschrijving}</Text>
 			</Td>
 			<Td>
 				<Text>{afspraak.zoektermen?.join(", ")}</Text>

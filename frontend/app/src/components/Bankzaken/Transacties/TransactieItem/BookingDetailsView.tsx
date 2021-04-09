@@ -2,8 +2,9 @@ import {CheckIcon, DeleteIcon} from "@chakra-ui/icons";
 import {Box, Button, Heading, HStack, IconButton, Stack, Tag, TagLabel, TagLeftIcon, Text} from "@chakra-ui/react";
 import React, {useContext} from "react";
 import {useTranslation} from "react-i18next";
-import {BankTransaction, useDeleteJournaalpostMutation, useUpdateAfspraakAutomatischBoekenMutation} from "../../../../generated/graphql";
+import {BankTransaction, useDeleteJournaalpostMutation} from "../../../../generated/graphql";
 import {formatBurgerName, intervalString} from "../../../../utils/things";
+import useFakeMutation from "../../../../utils/useFakeMutation";
 import useToaster from "../../../../utils/useToaster";
 import Label from "../../../Layouts/Label";
 import {TransactionsContext} from "../context";
@@ -13,7 +14,7 @@ const BookingDetailsView: React.FC<{transactie: BankTransaction}> = ({transactie
 	const toast = useToaster();
 	const {refetch} = useContext(TransactionsContext);
 	const [deleteJournaalpost, $deleteJournaalpost] = useDeleteJournaalpostMutation();
-	const [toggleAutomatischBoeken, $toggleAutomatischBoeken] = useUpdateAfspraakAutomatischBoekenMutation();
+	const toggleAutomatischBoeken = useFakeMutation();
 
 	const journaalpostAfspraak = transactie.journaalpost?.afspraak;
 	const journaalpostRubriek = transactie.journaalpost?.grootboekrekening?.rubriek;
@@ -57,11 +58,11 @@ const BookingDetailsView: React.FC<{transactie: BankTransaction}> = ({transactie
 			},
 		}).then(() => {
 			toast({
-				success: t("messages.toggleAfspraakAutomatischBoekenSuccess")
+				success: t("messages.toggleAfspraakAutomatischBoekenSuccess"),
 			});
 			refetch();
 		}).catch(err => {
-			toast({ error: err.message });
+			toast({error: err.message});
 		});
 	};
 
@@ -86,7 +87,7 @@ const BookingDetailsView: React.FC<{transactie: BankTransaction}> = ({transactie
 							</Tag>
 						) : (canEnableAutomatischBoeken && (
 							<Button size={"sm"} leftIcon={
-								<CheckIcon />} colorScheme={"green"} variant={"ghost"} onClick={onConfirmAutomatischBoeken} isLoading={$toggleAutomatischBoeken.loading}>
+								<CheckIcon />} colorScheme={"green"} variant={"ghost"} onClick={onConfirmAutomatischBoeken}>
 								{t("actions.confirmAutomatischBoeken")}
 							</Button>
 						))}
@@ -105,7 +106,7 @@ const BookingDetailsView: React.FC<{transactie: BankTransaction}> = ({transactie
 					<Box flex={1}>
 						<Label>{t("omschrijving")}</Label>
 						<Box>
-							<Text>{journaalpostAfspraak.beschrijving}</Text>
+							<Text>{journaalpostAfspraak.omschrijving}</Text>
 						</Box>
 					</Box>
 				</Stack>

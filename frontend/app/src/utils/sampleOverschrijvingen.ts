@@ -2,7 +2,7 @@ import {Interval, Overschrijving, OverschrijvingStatus} from "../generated/graph
 import d from "./dayjs";
 import {XInterval} from "./things";
 
-type SampleOverschrijvingenProps = { bedrag: number, startDate: Date, startDate2: Date, endDate: Date, interval: Interval, nTimes: number };
+type SampleOverschrijvingenProps = {bedrag: number, startDate: Date, startDate2: Date, endDate: Date, interval: Interval, nTimes: number};
 const generateSampleOverschrijvingen = ({bedrag, startDate, startDate2, endDate, interval, nTimes = 0}: SampleOverschrijvingenProps): Overschrijving[] => {
 	const o: Overschrijving = {
 		export: {},

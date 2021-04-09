@@ -17,6 +17,7 @@ const AuditLogText: React.FC<TextProps & {g: GebruikersActiviteit}> = ({g, ...pr
 	const transactions = entities.filter(e => e.entityType === "transaction");
 	const customerStatementMessage = entities.find(e => e.entityType === "customerStatementMessage");
 	const rekening = entities.find(e => e.entityType === "rekening")?.rekening;
+	const configuratie = entities.find(e => e.entityType === "configuratie")?.configuratie;
 
 	const burgerName = formatBurgerName(burger);
 
@@ -38,6 +39,8 @@ const AuditLogText: React.FC<TextProps & {g: GebruikersActiviteit}> = ({g, ...pr
 		nTransactions: transactions.length || t("unknown"),
 		iban: rekening?.iban || t("unknownIban"),
 		rekeninghouder: rekening?.rekeninghouder || t("unknownRekeninghouder"),
+		configuratieId: configuratie?.id || t("unknown"),
+		configuratieWaarde: configuratie?.waarde || t("unknown"),
 	};
 
 	if (action) {
@@ -52,6 +55,7 @@ const AuditLogText: React.FC<TextProps & {g: GebruikersActiviteit}> = ({g, ...pr
 			customerStatementMessages: () => <Trans i18nKey={"auditLog.viewCustomerStatementMessages"} values={values} components={components} />,
 			bankTransactions: () => <Trans i18nKey={"auditLog.viewTransactions"} values={values} components={components} />,
 			exports: () => <Trans i18nKey={"auditLog.viewExports"} values={values} components={components} />,
+			configuraties: () => <Trans i18nKey={"auditLog.viewConfiguraties"} values={values} components={components} />,
 			createBurger: () => <Trans i18nKey={"auditLog.createBurger"} values={values} components={components} />,
 			updateBurger: () => <Trans i18nKey={"auditLog.updateBurger"} values={values} components={components} />,
 			deleteBurger: () => <Trans i18nKey={"auditLog.deleteBurger"} values={values} components={components} />,
@@ -62,7 +66,7 @@ const AuditLogText: React.FC<TextProps & {g: GebruikersActiviteit}> = ({g, ...pr
 			createOrganisatie: () => <Trans i18nKey={"auditLog.createOrganisatie"} values={values} components={components} />,
 			updateOrganisatie: () => <Trans i18nKey={"auditLog.updateOrganisatie"} values={values} components={components} />,
 			deleteOrganisatie: () => <Trans i18nKey={"auditLog.deleteOrganisatie"} values={values} components={components} />,
-			createJournaalpostAfspraak: () => <Trans i18nKey={"auditLog.createJournaalpostAfspraak"} values={values} components={components} />,
+			createJournaalpostPerAfspraak: () => <Trans i18nKey={"auditLog.createJournaalpostAfspraak"} values={values} components={components} />,
 			createJournaalpostGrootboekrekening: () => <Trans i18nKey={"auditLog.createJournaalpostGrootboekrekening"} values={values} components={components} />,
 			updateJournaalpostGrootboekrekening: () => <Trans i18nKey={"auditLog.updateJournaalpostGrootboekrekening"} values={values} components={components} />,
 			deleteJournaalpost: () => <Trans i18nKey={"auditLog.deleteJournaalpost"} values={values} components={components} />,
@@ -76,9 +80,8 @@ const AuditLogText: React.FC<TextProps & {g: GebruikersActiviteit}> = ({g, ...pr
 			createCustomerStatementMessage: () => <Trans i18nKey={"auditLog.createCustomerStatementMessage"} values={values} components={components} />,
 			createBurgerRekening: () => <Trans i18nKey={"auditLog.createBurgerRekening"} values={values} components={components} />,
 			deleteBurgerRekening: () => <Trans i18nKey={"auditLog.deleteBurgerRekening"} values={values} components={components} />,
-			// createExportOverschrijvingen: () => <Trans i18nKey={"auditLog.createExportOverschrijvingen"} values={values} components={components} />,
-			// createOrganisatieRekening: () => <Trans i18nKey={"auditLog.createOrganisatieRekening"} values={values} components={components} />,
-			// deleteOrganisatieRekening: () => <Trans i18nKey={"auditLog.deleteOrganisatieRekening"} values={values} components={components} />,
+			addAfspraakZoekterm: () => <Trans i18nKey={"auditLog.addAfspraakZoekterm"} values={values} components={components} />,
+			deleteAfspraakZoekterm: () => <Trans i18nKey={"auditLog.deleteAfspraakZoekterm"} values={values} components={components} />,
 		};
 
 		const auditLogTextConfigElement = auditLogTextConfig[action];

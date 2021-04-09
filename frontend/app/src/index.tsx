@@ -10,6 +10,7 @@ import {BrowserRouter as Router} from "react-router-dom";
 import App from "./App";
 import "./config/i18n";
 import theme from "./config/theme";
+import "./global.scss";
 import apolloClient from "./services/graphql-client";
 
 dayjs.locale("nl-nl");

@@ -1,15 +1,15 @@
 import d from "dayjs";
+import recur from "dayjs-recur";
 import "dayjs/locale/nl";
+import advancedFormat from "dayjs/plugin/advancedFormat";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import localizedFormat from "dayjs/plugin/localizedFormat";
-import relativeTime from "dayjs/plugin/relativeTime";
-import customParseFormat from "dayjs/plugin/customParseFormat";
-import recur from "dayjs-recur";
 import quarterOfYear from "dayjs/plugin/quarterOfYear";
-import advancedFormat from "dayjs/plugin/advancedFormat";
-import weekYear from "dayjs/plugin/weekYear";
+import relativeTime from "dayjs/plugin/relativeTime";
 import weekOfYear from "dayjs/plugin/weekOfYear";
+import weekYear from "dayjs/plugin/weekYear";
 
 d.locale("nl");
 d.extend(localizedFormat);

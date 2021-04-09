@@ -1,4 +1,5 @@
 export enum RouteNames {
+	notFound = "404",
 	login = "inloggen",
 	burgers = "burgers",
 	afspraken = "afspraken",
@@ -6,18 +7,17 @@ export enum RouteNames {
 	bankzaken = "bankzaken",
 	transacties = "transacties",
 	overschrijvingen = "overschrijvingen",
-	bronbestanden = "bronbestanden",
+	bankafschriften = "bankafschriften",
 	rapportage = "rapportage",
 	gebeurtenissen = "gebeurtenissen",
-	notFound = "404",
+	configuratie = "configuratie",
+	betaalinstructie = "betaalinstructie",
 
 	// Sub routes
+	view = "bekijken",
 	add = "toevoegen",
-	edit = "bewerken",
+	edit = "wijzigen",
 	export = "exporteren",
-
-	// Not in use yet
-	settings = "instellingen",
 }
 
 const Routes = {
@@ -31,7 +31,11 @@ const Routes = {
 
 	BurgerAfspraken: (id?: number) => `/${RouteNames.burgers}/${id || ":burgerId(\\d+)"}/${RouteNames.afspraken}`,
 	CreateBurgerAfspraken: (burgerId: number) => `/${RouteNames.burgers}/${burgerId}/${RouteNames.afspraken}/${RouteNames.add}`,
+
+	Afspraken: `/${RouteNames.afspraken}`,
+	ViewAfspraak: (id?: number) => `/${RouteNames.afspraken}/${id || ":id(\\d+)"}/${RouteNames.view}`,
 	EditAfspraak: (id?: number) => `/${RouteNames.afspraken}/${id || ":id(\\d+)"}/${RouteNames.edit}`,
+	AfspraakBetaalinstructie: (id?: number) => `/${RouteNames.afspraken}/${id || ":id(\\d+)"}/${RouteNames.betaalinstructie}`,
 
 	Organisaties: `/${RouteNames.organisaties}`,
 	Organisatie: (id?: number) => `/${RouteNames.organisaties}/${id || ":id(\\d+)"}`,
@@ -40,9 +44,9 @@ const Routes = {
 
 	Bankzaken: `/${RouteNames.bankzaken}`,
 	Transacties: `/${RouteNames.bankzaken}/${RouteNames.transacties}`,
-	Bronbestanden: `/${RouteNames.bankzaken}/${RouteNames.bronbestanden}`,
+	Bankafschriften: `/${RouteNames.bankzaken}/${RouteNames.bankafschriften}`,
 	Overschrijvingen: `/${RouteNames.bankzaken}/${RouteNames.overschrijvingen}/${RouteNames.export}`,
-	Settings: `/${RouteNames.settings}`,
+	Configuratie: `/${RouteNames.configuratie}`,
 	Rapportage: `/${RouteNames.rapportage}`,
 	Gebeurtenissen: `/${RouteNames.gebeurtenissen}`,
 

@@ -4,13 +4,13 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {FaLock} from "react-icons/fa";
 import {Redirect, Route, Switch, useLocation} from "react-router-dom";
-import EditAfspraak from "./components/Afspraken/EditAfspraak";
-import CustomerStatementMessages from "./components/Bankzaken/Bronbestanden";
-import OverschrijvingenExport from "./components/Bankzaken/OverschrijvingenExport";
+import AfspraakRouter from "./components/Afspraken";
+import CustomerStatementMessages from "./components/Bankzaken/Bankafschriften";
+import Betaalinstructies from "./components/Bankzaken/Betaalinstructies";
 import Transactions from "./components/Bankzaken/Transacties";
-import Gebeurtenissen from "./components/Gebeurtenissen";
 import Burgers from "./components/Burgers";
 import Configuratie from "./components/Configuratie";
+import Gebeurtenissen from "./components/Gebeurtenissen";
 import TwoColumns from "./components/Layouts/TwoColumns";
 import Organisaties from "./components/Organisaties";
 import PageNotFound from "./components/PageNotFound";
@@ -19,7 +19,7 @@ import Sidebar from "./components/Sidebar";
 import SidebarContainer from "./components/Sidebar/SidebarContainer";
 import UserStatus from "./components/UserStatus";
 import Routes from "./config/routes";
-import {useAuth} from "./utils/hooks";
+import useAuth from "./utils/useAuth";
 
 const App = () => {
 	const {t} = useTranslation();
@@ -41,7 +41,7 @@ const App = () => {
 					<Text color={"red.600"}>{t("messages.backendError")}</Text>
 				</Stack>
 			</TwoColumns>
-		)
+		);
 	}
 
 	if (!user) {
@@ -80,7 +80,8 @@ const App = () => {
 					<Stack spacing={5} direction={"row"} justifyContent={"flex-end"} alignItems={"center"} pb={5}>
 						<HStack spacing={5} alignItems={"center"}>
 							<UserStatus name={user.email} />
-							<IconButton size={"14px"} icon={<FaLock />} color={"gray.400"} _hover={{color: "primary.700"}} aria-label={t("actions.logout")} mr={3} onClick={reset} />
+							<IconButton size={"14px"} icon={
+								<FaLock />} color={"gray.400"} _hover={{color: "primary.700"}} aria-label={t("actions.logout")} mr={3} onClick={reset} />
 						</HStack>
 					</Stack>
 
@@ -88,12 +89,12 @@ const App = () => {
 						<Route exact path={Routes.Home} component={() => <Redirect to={Routes.Burgers} />} />
 						<Route path={Routes.Burgers} component={Burgers} />
 						<Route path={Routes.Organisaties} component={Organisaties} />
-						<Route path={Routes.EditAfspraak()} component={EditAfspraak} />
+						<Route path={Routes.Afspraken} component={AfspraakRouter} />
 						<Route exact path={Routes.Bankzaken} component={() => <Redirect to={Routes.Transacties} />} />
 						<Route path={Routes.Transacties} component={Transactions} />
-						<Route path={Routes.Bronbestanden} component={CustomerStatementMessages} />
-						<Route path={Routes.Overschrijvingen} component={OverschrijvingenExport} />
-						<Route path={Routes.Settings} component={Configuratie} />
+						<Route path={Routes.Bankafschriften} component={CustomerStatementMessages} />
+						<Route path={Routes.Overschrijvingen} component={Betaalinstructies} />
+						<Route path={Routes.Configuratie} component={Configuratie} />
 						<Route path={Routes.Rapportage} component={Rapportage} />
 						<Route path={Routes.Gebeurtenissen} component={Gebeurtenissen} />
 

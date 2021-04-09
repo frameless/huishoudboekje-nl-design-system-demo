@@ -96,7 +96,7 @@ const CreateOrganisatie = () => {
 		}).catch(err => {
 			console.error(err);
 			toast({
-				error: err.message
+				error: err.message,
 			});
 		});
 	};
