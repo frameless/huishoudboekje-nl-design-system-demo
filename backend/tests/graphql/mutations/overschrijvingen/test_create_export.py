@@ -26,7 +26,7 @@ def create_mock_adapter() -> Adapter:
     def test_matcher(request):
         if request.path == "/afspraken/" and request.query == "begin_datum=2020-10-10&eind_datum=2020-12-31":
             return MockResponse({'data': [
-                {'aantal_betalingen': 12, 'actief': True, 'automatische_incasso': False, 'bedrag': 120000,
+                {'aantal_betalingen': 12, 'automatische_incasso': False, 'bedrag': 120000,
                  'omschrijving': 'Leefgeld Hulleman', 'credit': True, 'eind_datum': '2020-12-31', 'gebruiker_id': 1,
                  'id': 1, 'interval': 'P0Y1M0W0D', 'journaalposten': [], 'zoektermen': None, 'organisatie_id': None,
                  'overschrijvingen': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], 'rubriek_id': None,

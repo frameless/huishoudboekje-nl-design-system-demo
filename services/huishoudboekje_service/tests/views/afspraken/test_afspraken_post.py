@@ -17,7 +17,6 @@ def test_afspraken_post_new_afspraak(client, session):
         "bedrag": 1337,
         "credit": True,
         "zoektermen": ["ABC1234"],
-        "actief": True,
         "automatische_incasso": True,
         "automatisch_boeken": False
     }
@@ -74,8 +73,7 @@ def test_afspraken_post_update_afspraak(client, session, afspraak_factory):
     ("zoektermen", [1234]),
     ("zoektermen", [""]),
     ("zoektermen", [" "]),
-    ("zoektermen", ["a", "a"]),
-    ("actief", "True")
+    ("zoektermen", ["a", "a"])
 ])
 def test_afspraken_post_bad_requests(client, key, bad_value):
     """ Test /afspraken/ path bad request """

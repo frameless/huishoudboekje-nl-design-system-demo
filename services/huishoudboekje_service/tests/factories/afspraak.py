@@ -26,7 +26,6 @@ class AfspraakFactory():
         bedrag: float = 13.37,
         credit: bool = True,
         zoektermen = ["ABC1234"],
-        actief: bool = True,
         organisatie_id: int = None,
         rubriek_id: int = None,
         automatisch_boeken: bool = False
@@ -45,7 +44,6 @@ class AfspraakFactory():
             bedrag=bedrag,
             credit=credit,
             zoektermen=zoektermen,
-            actief=actief,
             rubriek_id=rubriek_id,
             automatisch_boeken=automatisch_boeken,
             tegen_rekening=tegen_rekening

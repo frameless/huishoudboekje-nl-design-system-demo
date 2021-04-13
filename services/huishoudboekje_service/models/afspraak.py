@@ -24,7 +24,6 @@ class Afspraak(db.Model):
     bedrag = Column(Integer)
     credit = Column(Boolean)
     zoektermen = Column(ARRAY(String))
-    actief = Column(Boolean)
     automatische_incasso = Column(Boolean)
     automatisch_boeken = Column(Boolean)
     organisatie_id = Column(Integer, ForeignKey('organisaties.id'), index=True)

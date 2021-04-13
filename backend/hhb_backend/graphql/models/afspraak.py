@@ -85,7 +85,6 @@ class Afspraak(graphene.ObjectType):
     bedrag = graphene.Field(Bedrag)
     credit = graphene.Boolean()
     zoektermen = graphene.List(graphene.String)
-    actief = graphene.Boolean()
     betaalinstructie = graphene.Field(lambda: Betaalinstructie)
     automatisch_boeken = graphene.Boolean()
     organisatie = graphene.Field(lambda: organisatie.Organisatie)

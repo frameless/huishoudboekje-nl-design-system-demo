@@ -76,9 +76,6 @@ class AfspraakView(HHBView):
                     },
                 ]
             },
-            "actief": {
-                "type": "boolean",
-            },
             "organisatie_id": {
                 "oneOf": [
                     {"type": "null"},
