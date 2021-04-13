@@ -35,17 +35,27 @@ enablePasswordDB: true
 
 staticPasswords:
 - username: henk.poortvliet@sloothuizen.nl
+  email: henk.poortvliet@sloothuizen.nl
+  name: Henk Poortvliet
   userID: 363283b9-07bb-4247-bfe4-977a1e221cc4
   hash: $2y$12$xWWlTptiMyPJbuPo7WwBgefl/sj3vz8iNJn5fPwVWQcBcZh1HsC.W # demo
-  name: Henk Poortvliet
-  email: henk.poortvliet@sloothuizen.nl
 - username: koen.brouwer@vng.nl
+  email: koen.brouwer@vng.nl
+  name: Koen Brouwer
   userID: a151be49-c956-4834-a511-880b39011959
   hash: $2y$12$xWWlTptiMyPJbuPo7WwBgefl/sj3vz8iNJn5fPwVWQcBcZh1HsC.W # demo
-  name: Koen Brouwer
-  email: koen.brouwer@vng.nl
 - username: bauke.huijbers@vng.nl
+  email: bauke.huijbers@vng.nl
+  name: Bauke Huijbers
   userID: bcfe94b8-fc0e-48d8-ada7-c04f96d31e18
   hash: $2y$12$xWWlTptiMyPJbuPo7WwBgefl/sj3vz8iNJn5fPwVWQcBcZh1HsC.W # demo
-  name: Bauke Huijbers
-  email: bauke.huijbers@vng.nl
+- username: huishoudboekje010@rotterdam.nl
+  email: huishoudboekje010@rotterdam.nl
+  name: Gemeente Rotterdam
+  userID: 397c2959-e692-42fa-ae54-fad84f4d256e
+  hash: $2y$12$xWWlTptiMyPJbuPo7WwBgefl/sj3vz8iNJn5fPwVWQcBcZh1HsC.W # demo
+- username: huishoudboekje@utrecht.nl
+  email: huishoudboekje@utrecht.nl
+  name: Gemeente Utrecht
+  userID: 41e2bb72-f62d-44c1-ae0c-b1190892db50
+  hash: $2y$12$xWWlTptiMyPJbuPo7WwBgefl/sj3vz8iNJn5fPwVWQcBcZh1HsC.W # demo
