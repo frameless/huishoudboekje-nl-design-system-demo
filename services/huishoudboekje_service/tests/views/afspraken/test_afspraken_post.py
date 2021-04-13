@@ -17,8 +17,7 @@ def test_afspraken_post_new_afspraak(client, session):
         "bedrag": 1337,
         "credit": True,
         "zoektermen": ["ABC1234"],
-        "automatische_incasso": True,
-        "automatisch_boeken": False
+        "automatische_incasso": True
     }
     response = client.post(
         '/afspraken/',

@@ -62,8 +62,7 @@ class DeleteAfspraakZoekterm(graphene.Mutation):
 
         input = {
             **previous,
-            "zoektermen": zoektermen,
-            "automatisch_boeken": False if not zoektermen else True
+            "zoektermen": zoektermen
         }
 
         response = requests.post(

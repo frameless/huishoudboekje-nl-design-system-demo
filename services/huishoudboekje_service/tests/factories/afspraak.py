@@ -27,8 +27,7 @@ class AfspraakFactory():
         credit: bool = True,
         zoektermen = ["ABC1234"],
         organisatie_id: int = None,
-        rubriek_id: int = None,
-        automatisch_boeken: bool = False
+        rubriek_id: int = None
     ):
         if not burger:
             burger = self.burgers_factory.createBurger()
@@ -45,7 +44,6 @@ class AfspraakFactory():
             credit=credit,
             zoektermen=zoektermen,
             rubriek_id=rubriek_id,
-            automatisch_boeken=automatisch_boeken,
             tegen_rekening=tegen_rekening
         )
         if organisatie_id:

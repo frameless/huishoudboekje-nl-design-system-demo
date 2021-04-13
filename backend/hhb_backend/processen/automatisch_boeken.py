@@ -25,7 +25,7 @@ async def automatisch_boeken(customer_statement_message_id: int = None):
     automatische_transacties = [
         {"transactionId": transactie_id, "afspraakId": afspraken[0]["id"], "isAutomatischGeboekt": True}
         for transactie_id, afspraken in suggesties.items()
-        if len(afspraken) == 1 and afspraken[0]["automatisch_boeken"] == True]
+        if len(afspraken) == 1 and afspraken[0]["zoektermen"]]
 
     stats = Counter(len(s) for s in suggesties.values())
     logging.info(
