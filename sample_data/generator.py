@@ -80,7 +80,6 @@ class Generator:
                         "valid_through",
                         "burger_id",
                         "tegen_rekening_id",
-                        "actief",
                         "omschrijving",
                         "zoektermen",
                     ],
