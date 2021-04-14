@@ -78,7 +78,7 @@ class AfspraakScenario:
     aantal_betalingen: int = 12
     interval: str = "P0Y1M0W0D"
     valid_from: str = "2021-01-01"
-    valid_through: str = "2021-12-31"
+    valid_through: str = None
     actief: bool = True
     zoektermen: list = None
 
