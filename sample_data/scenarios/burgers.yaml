@@ -14,7 +14,6 @@ scenarios:
         credit: true
         interval: "P0Y1M0W0D"
         valid_from: "2021-01-01"
-        actief: true
         zoektermen:
           - "Loon"
           - "ZOEKTERMPERSONA1"
@@ -28,7 +27,6 @@ scenarios:
         credit: true
         interval: "P0Y1M0W0D"
         valid_from: "2019-01-07"
-        actief: true
         zoektermen:
           - "Aanvullende uitkering"
           - "ZOEKTERMPERSONA1"
@@ -41,7 +39,6 @@ scenarios:
         credit: true
         interval: "P0Y1M0W0D"
         valid_from: "2019-01-20"
-        actief: true
         zoektermen:
           - "123456781"
           - "VOORSCHOT KIT/Kgb"
@@ -55,7 +52,6 @@ scenarios:
         credit: true
         interval: "P0Y1M0W0D"
         valid_from: "2019-01-20"
-        actief: true
         zoektermen:
           - "123456781"
           - "VOORSCHOT HUURTOESLAG"
@@ -68,7 +64,6 @@ scenarios:
         credit: true
         interval: "P0Y1M0W0D"
         valid_from: "2019-01-20"
-        actief: true
         zoektermen:
           - "123456781"
           - "VOORSCHOT ZORGTOESLAG"
@@ -83,7 +78,6 @@ scenarios:
         automatische_incasso: true
         interval: "P0Y1M0W0D"
         valid_from: "2019-01-01"
-        actief: true
         zoektermen:
           - "Betaalde huur"
           - "ZOEKTERMPERSONA1"
@@ -97,7 +91,6 @@ scenarios:
         automatische_incasso: true
         interval: "P0Y1M0W0D"
         valid_from: "2019-01-01"
-        actief: true
         zoektermen:
           - "Elektriciteit"
           - "ZOEKTERMPERSONA1"
@@ -111,7 +104,6 @@ scenarios:
         automatische_incasso: true
         interval: "P0Y3M0W0D"
         valid_from: "2021-01-01"
-        actief: true
         zoektermen:
           - "Water"
           - "ZOEKTERMPERSONA1"
@@ -123,7 +115,6 @@ scenarios:
         automatische_incasso: false
         interval: "P0Y1M0W0D"
         valid_from: "2021-01-01"
-        actief: true
         zoektermen:
           - "Leefgeld"
           - "ZOEKTERMPERSONA1"
@@ -145,7 +136,6 @@ scenarios:
         interval: "P0Y1M0W0D"
         valid_from: "2019-01-07"
         aantal_betalingen: 16
-        actief: true
         zoektermen:
           - "Aanvullende uitkering"
           - "ZOEKTERMPERSONA2"
@@ -159,7 +149,6 @@ scenarios:
         credit: true
         interval: "P0Y1M0W0D"
         valid_from: "2021-01-01"
-        actief: true
         zoektermen:
           - "Loon"
           - "ZOEKTERMPERSONA2"
@@ -172,7 +161,6 @@ scenarios:
         credit: true
         interval: "P0Y1M0W0D"
         valid_from: "2019-01-20"
-        actief: true
         zoektermen:
           - "123456782"
           - "VOORSCHOT HUURTOESLAG"
@@ -185,7 +173,6 @@ scenarios:
         credit: true
         interval: "P0Y1M0W0D"
         valid_from: "2019-01-20"
-        actief: true
         zoektermen:
           - "123456782"
           - "VOORSCHOT ZORGTOESLAG"
@@ -198,7 +185,6 @@ scenarios:
         credit: true
         interval: "P0Y1M0W0D"
         valid_from: "2021-01-01"
-        actief: true
         zoektermen:
           - "Vaste Lasten Pakket"
           - "ZOEKTERMPERSONA2"
@@ -213,7 +199,6 @@ scenarios:
         automatische_incasso: true
         interval: "P0Y1M0W0D"
         valid_from: "2019-01-01"
-        actief: true
         zoektermen:
           - "Betaalde huur"
           - "ZOEKTERMPERSONA2"
@@ -227,7 +212,6 @@ scenarios:
         automatische_incasso: true
         interval: "P0Y1M0W0D"
         valid_from: "2019-01-01"
-        actief: true
         zoektermen:
           - "Elektriciteit"
           - "ZOEKTERMPERSONA2"
@@ -241,7 +225,6 @@ scenarios:
         automatische_incasso: true
         interval: "P0Y1M0W0D"
         valid_from: "2019-01-01"
-        actief: true
         zoektermen:
           - "Zorgverzekering"
           - "ZOEKTERMPERSONA2"
@@ -255,7 +238,6 @@ scenarios:
         automatische_incasso: true
         interval: "P0Y3M0W0D"
         valid_from: "2019-01-01"
-        actief: true
         zoektermen:
           - "Water"
           - "ZOEKTERMPERSONA2"
@@ -267,7 +249,6 @@ scenarios:
         automatische_incasso: false
         interval: "P0Y1M0W0D"
         valid_from: "2019-01-01"
-        actief: true
         zoektermen:
           - "Leefgeld"
           - "ZOEKTERMPERSONA2"
@@ -281,7 +262,6 @@ scenarios:
         automatische_incasso: true
         interval: "P0Y1M0W0D"
         valid_from: "2019-01-01"
-        actief: true
         zoektermen:
           - "Inboedelverzekering"
           - "ZOEKTERMPERSONA2"
@@ -295,7 +275,6 @@ scenarios:
         automatische_incasso: true
         interval: "P0Y1M0W0D"
         valid_from: "2019-01-01"
-        actief: true
         zoektermen:
           - "Vaste telefonie en internet"
           - "ZOEKTERMPERSONA2"
@@ -309,7 +288,6 @@ scenarios:
         automatische_incasso: true
         interval: "P0Y1M0W0D"
         valid_from: "2019-01-01"
-        actief: true
         zoektermen:
           - "Mobiele telefonie"
           - "ZOEKTERMPERSONA2"
