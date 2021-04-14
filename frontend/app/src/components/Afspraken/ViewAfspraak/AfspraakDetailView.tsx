@@ -139,9 +139,9 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 						<FormLeft />
 						<FormRight>
 							{d().isBefore(validThrough) ? (
-								<Text color={"red.500"}>{t(`Deze afspraak eindigt op ${validThrough.format("L")}.`)}</Text>
+								<Text color={"red.500"}>{t("afspraak.willEndOn", {date: validThrough.format("L")})}</Text>
 							) : (
-								<Text color={"red.500"}>{t(`Deze afspraak is beëindigd per ${validThrough.format("L")}.`)}</Text>
+								<Text color={"gray.500"}>{t("afspraak.endedOn", {date: validThrough.format("L")})}</Text>
 							)}
 						</FormRight>
 					</Stack>

@@ -110,6 +110,8 @@
         "omschrijving": "Omschrijving",
         "bedrag": "Bedrag",
         "periodiek": "Periodiek",
+        "willEndOn": "Deze afspraak eindigt op {{date}}.",
+        "endedOn": "Deze afspraak is beëindigd per {{date}}.",
         "zoektermen": "Zoektermen",
         "zoekterm": "Zoekterm"
     },
