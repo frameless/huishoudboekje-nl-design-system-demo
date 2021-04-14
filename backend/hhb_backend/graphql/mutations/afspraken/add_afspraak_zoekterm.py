@@ -62,8 +62,7 @@ class AddAfspraakZoekterm(graphene.Mutation):
 
         input = {
             **previous,
-            "zoektermen": zoektermen,
-            "automatisch_boeken": True
+            "zoektermen": zoektermen
         }
 
         response = requests.post(

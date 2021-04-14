@@ -40,19 +40,19 @@ async def test_transactie_suggesties_matches(test_request_context):
 
         get_afspraken = mock.get(
             f"{settings.HHB_SERVICES_URL}/afspraken/?filter_rekening=2,3,-1", json={
-                'data': [{'aantal_betalingen': 12, 'actief': True, 'automatisch_boeken': None,
+                'data': [{'aantal_betalingen': 12,
                           'automatische_incasso': False, 'bedrag': 450000, 'omschrijving': 'Nog meer geld overmaken',
-                          'credit': True, 'eind_datum': '2021-12-31', 'gebruiker_id': 1, 'id': 4,
+                          'credit': True, 'valid_through': '2021-12-31', 'gebruiker_id': 1, 'id': 4,
                           'interval': 'P0Y1M0W0D', 'journaalposten': [], 'zoektermen': ['15814016000676480'],
                           'organisatie_id': None,
                           'overschrijvingen': [52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63], 'rubriek_id': None,
-                          'start_datum': '2021-01-01', 'tegen_rekening_id': 2},
-                         {'aantal_betalingen': 12, 'actief': True, 'automatisch_boeken': None,
+                          'valid_from': '2021-01-01', 'tegen_rekening_id': 2},
+                         {'aantal_betalingen': 12,
                           'automatische_incasso': False, 'bedrag': 4654654, 'omschrijving': 'Money', 'credit': True,
-                          'eind_datum': '2021-12-31', 'gebruiker_id': 1, 'id': 3, 'interval': 'P0Y1M0W0D',
+                          'valid_through': '2021-12-31', 'gebruiker_id': 1, 'id': 3, 'interval': 'P0Y1M0W0D',
                           'journaalposten': [], 'zoektermen': ['1070123412341234'], 'organisatie_id': None,
                           'overschrijvingen': [40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51], 'rubriek_id': None,
-                          'start_datum': '2021-01-01', 'tegen_rekening_id': 3}]})
+                          'valid_from': '2021-01-01', 'tegen_rekening_id': 3}]})
 
         result = await transactie_suggesties([7, 8, 9])
 
@@ -95,25 +95,25 @@ async def test_transactie_suggesties_multiple_matches(test_request_context):
 
         get_afspraken = mock.get(
             f"{settings.HHB_SERVICES_URL}/afspraken/?filter_rekening=2,3", json={
-                'data': [{'aantal_betalingen': 12, 'actief': True, 'automatisch_boeken': None,
+                'data': [{'aantal_betalingen': 12,
                           'automatische_incasso': False, 'bedrag': 450000, 'omschrijving': 'Nog meer geld overmaken',
-                          'credit': True, 'eind_datum': '2021-12-31', 'gebruiker_id': 1, 'id': 4,
+                          'credit': True, 'valid_through': '2021-12-31', 'gebruiker_id': 1, 'id': 4,
                           'interval': 'P0Y1M0W0D', 'journaalposten': [], 'zoektermen': ['15814016000676480'],
                           'organisatie_id': None,
                           'overschrijvingen': [52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63], 'rubriek_id': None,
-                          'start_datum': '2021-01-01', 'tegen_rekening_id': 2},
-                         {'aantal_betalingen': 12, 'actief': True, 'automatisch_boeken': None,
+                          'valid_from': '2021-01-01', 'tegen_rekening_id': 2},
+                         {'aantal_betalingen': 12,
                           'automatische_incasso': False, 'bedrag': 4654654, 'omschrijving': 'Zorg', 'credit': True,
-                          'eind_datum': '2021-12-31', 'gebruiker_id': 1, 'id': 3, 'interval': 'P0Y1M0W0D',
+                          'valid_through': '2021-12-31', 'gebruiker_id': 1, 'id': 3, 'interval': 'P0Y1M0W0D',
                           'journaalposten': [], 'zoektermen': ['1070123412341234'], 'organisatie_id': None,
                           'overschrijvingen': [40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51], 'rubriek_id': None,
-                          'start_datum': '2021-01-01', 'tegen_rekening_id': 3},
-                         {'aantal_betalingen': 12, 'actief': True, 'automatisch_boeken': None,
+                          'valid_from': '2021-01-01', 'tegen_rekening_id': 3},
+                         {'aantal_betalingen': 12,
                           'automatische_incasso': False, 'bedrag': 54646, 'omschrijving': 'Zorg 2', 'credit': True,
-                          'eind_datum': '2021-12-31', 'gebruiker_id': 1, 'id': 5, 'interval': 'P0Y1M0W0D',
+                          'valid_through': '2021-12-31', 'gebruiker_id': 1, 'id': 5, 'interval': 'P0Y1M0W0D',
                           'journaalposten': [], 'zoektermen': ['12341234'], 'organisatie_id': None,
                           'overschrijvingen': [40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51], 'rubriek_id': None,
-                          'start_datum': '2021-01-01', 'tegen_rekening_id': 3}
+                          'valid_from': '2021-01-01', 'tegen_rekening_id': 3}
                          ]})
 
         result = await transactie_suggesties([7, 8])
@@ -158,18 +158,18 @@ async def test_transactie_suggesties_no_matches(test_request_context):
 
         get_afspraken = mock.get(
             f"{settings.HHB_SERVICES_URL}/afspraken/?filter_rekening=2,3", json={
-                'data': [{'aantal_betalingen': 12, 'actief': True, 'automatisch_boeken': None,
+                'data': [{'aantal_betalingen': 12,
                           'automatische_incasso': False, 'bedrag': 450000, 'omschrijving': 'Nog meer geld overmaken',
-                          'credit': True, 'eind_datum': '2021-12-31', 'gebruiker_id': 1, 'id': 4,
+                          'credit': True, 'valid_through': '2021-12-31', 'gebruiker_id': 1, 'id': 4,
                           'interval': 'P0Y1M0W0D', 'journaalposten': [], 'zoektermen': None, 'organisatie_id': None,
                           'overschrijvingen': [52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63], 'rubriek_id': None,
-                          'start_datum': '2021-01-01', 'tegen_rekening_id': 2},
-                         {'aantal_betalingen': 12, 'actief': True, 'automatisch_boeken': None,
+                          'valid_from': '2021-01-01', 'tegen_rekening_id': 2},
+                         {'aantal_betalingen': 12,
                           'automatische_incasso': False, 'bedrag': 4654654, 'omschrijving': 'Money', 'credit': True,
-                          'eind_datum': '2021-12-31', 'gebruiker_id': 1, 'id': 3, 'interval': 'P0Y1M0W0D',
+                          'valid_through': '2021-12-31', 'gebruiker_id': 1, 'id': 3, 'interval': 'P0Y1M0W0D',
                           'journaalposten': [], 'zoektermen': None, 'organisatie_id': None,
                           'overschrijvingen': [40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51], 'rubriek_id': None,
-                          'start_datum': '2021-01-01', 'tegen_rekening_id': 3}]})
+                          'valid_from': '2021-01-01', 'tegen_rekening_id': 3}]})
 
         result = await transactie_suggesties([7, 8])
 
@@ -310,13 +310,13 @@ async def test_transactie_suggesties_multiple_zoektermen(test_request_context):
         get_afspraken = mock.get(
             f"{settings.HHB_SERVICES_URL}/afspraken/?filter_rekening=2", json={
                 'data': [
-                    {'id': 4, 'automatisch_boeken': True, 'zoektermen': ['15814016000676480', 'Janssen'],
+                    {'id': 4, 'zoektermen': ['15814016000676480', 'Janssen'],
                      'tegen_rekening_id': 2},
                 ]})
 
         result = await transactie_suggesties([7])
 
-        assert result == {7: [{'automatisch_boeken': True, 'id': 4, 'tegen_rekening_id': 2,
+        assert result == {7: [{'id': 4, 'tegen_rekening_id': 2,
                                'zoektermen': ['15814016000676480', 'Janssen']}]}
         assert get_transactions.called_once
         assert get_rekeningen.called_once
@@ -348,7 +348,7 @@ async def test_transactie_suggesties_multiple_zoektermen_too_specific(test_reque
         get_afspraken = mock.get(
             f"{settings.HHB_SERVICES_URL}/afspraken/?filter_rekening=2", json={
                 'data': [
-                    {'id': 4, 'automatisch_boeken': True, 'zoektermen': ['15814016000676480', 'Janssen', 'Loon'],
+                    {'id': 4, 'zoektermen': ['15814016000676480', 'Janssen', 'Loon'],
                      'tegen_rekening_id': 2},
                 ]})
 

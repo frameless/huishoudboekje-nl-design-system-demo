@@ -29,8 +29,8 @@ def test_afspraak_resolvers(client):
             'rubriek_id': 1,
             'burger_id': 1,
             'tegen_rekening_id': 1,
-            'start_datum': "2020-10-01",
-            'eind_datum': "2020-10-01",
+            'valid_from': "2020-10-01",
+            'valid_through': "2020-10-01",
             'interval': "P1Y2M3W4D",
             'organisatie_id': 1,
             'journaalposten': [1, 2]
@@ -43,13 +43,13 @@ def test_afspraak_resolvers(client):
         rm.get(f"{settings.HHB_SERVICES_URL}/journaalposten/", json={'data': [{'id': 1}, {'id': 2}]})
         response = client.post(
             "/graphql",
-            data='{"query": "{ afspraak(id:1) { rubriek { id } burger { id } tegenRekening { id } organisatie { id } journaalposten { id } startDatum eindDatum interval { dagen weken maanden jaren }} }"}',
+            data='{"query": "{ afspraak(id:1) { rubriek { id } burger { id } tegenRekening { id } organisatie { id } journaalposten { id } validFrom validThrough interval { dagen weken maanden jaren }} }"}',
             content_type='application/json'
         )
         assert response.json == {'data': {
             'afspraak': {
-                'startDatum': '2020-10-01',
-                'eindDatum': '2020-10-01',
+                'validFrom': '2020-10-01',
+                'validThrough': '2020-10-01',
                 'interval': {'dagen': 4, 'jaren': 1, 'maanden': 2, 'weken': 3},
                 'rubriek': {'id': 1},
                 'burger': {'id': 1},
@@ -84,7 +84,7 @@ def test_afspraak_overschrijvingen_planner_normal(client):
         rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/", json = {'data': [{
             'id': 1,
             'interval': "P0Y1M0W0D",
-            'start_datum': "2020-01-01",
+            'valid_from': "2020-01-01",
             'aantal_betalingen': 10,
             'bedrag': 1011
         }]})
@@ -132,7 +132,7 @@ def test_afspraak_overschrijvingen_planner_no_einddatum(client):
         rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/", json={'data': [{
             'id': 1,
             'interval': "P0Y1M0W0D",
-            'start_datum': "2020-01-01",
+            'valid_from': "2020-01-01",
             'aantal_betalingen': 10,
             'bedrag': 1011
         }]})
@@ -172,7 +172,7 @@ def test_afspraak_overschrijvingen_planner_doorlopened(client):
         rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/", json={'data': [{
             'id': 1,
             'interval': "P0Y1M0W0D",
-            'start_datum': "2020-01-01",
+            'valid_from': "2020-01-01",
             'aantal_betalingen': 0,
             'bedrag': 101
         }]})

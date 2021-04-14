@@ -76,8 +76,6 @@ class UpdateAfspraakBetaalinstructie(graphene.Mutation):
         input = {
             **previous,
             "automatische_incasso": False,
-            "start_datum": str(betaalinstructie.start_date),
-            "eind_datum": str(betaalinstructie.end_date) if betaalinstructie.end_date is not None else None,
             "aantal_betalingen": betaalinstructie.repeat_count,
             "interval": interval
         }

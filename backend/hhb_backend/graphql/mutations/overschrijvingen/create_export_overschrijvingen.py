@@ -55,7 +55,7 @@ class CreateExportOverschrijvingen(graphene.Mutation):
 
         # Get all afspraken with the start and end date.
         afspraken_response = requests.get(
-            f'{settings.HHB_SERVICES_URL}/afspraken/?{urlencode({"begin_datum": start_datum_str, "eind_datum": eind_datum_str})}',
+            f'{settings.HHB_SERVICES_URL}/afspraken/?{urlencode({"valid_from": start_datum_str, "valid_through": eind_datum_str})}',
             headers={"Content-type": "application/json"},
         )
         if not afspraken_response.ok:
@@ -80,7 +80,7 @@ class CreateExportOverschrijvingen(graphene.Mutation):
         future_overschrijvingen = []
         for afspraak in afspraken:
             planner_input = PlannedOverschijvingenInput(
-                afspraak["start_datum"],
+                afspraak["valid_from"],
                 afspraak["interval"],
                 afspraak["aantal_betalingen"],
                 afspraak["bedrag"],
