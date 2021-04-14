@@ -1115,7 +1115,7 @@ export type UpdateRubriek = {
 
 export type AfspraakFragment = (
   { __typename?: 'Afspraak' }
-  & Pick<Afspraak, 'id' | 'omschrijving' | 'bedrag' | 'credit' | 'zoektermen'>
+  & Pick<Afspraak, 'id' | 'omschrijving' | 'bedrag' | 'credit' | 'zoektermen' | 'validFrom' | 'validThrough'>
   & { interval?: Maybe<(
     { __typename?: 'Interval' }
     & Pick<Interval, 'dagen' | 'weken' | 'maanden' | 'jaren'>
@@ -2144,6 +2144,11 @@ export const AfspraakFragmentDoc = gql`
     fragment Afspraak on Afspraak {
   id
   omschrijving
+  bedrag
+  credit
+  zoektermen
+  validFrom
+  validThrough
   interval {
     dagen
     weken
@@ -2171,9 +2176,6 @@ export const AfspraakFragmentDoc = gql`
       plaatsnaam
     }
   }
-  bedrag
-  credit
-  zoektermen
   rubriek {
     ...Rubriek
   }

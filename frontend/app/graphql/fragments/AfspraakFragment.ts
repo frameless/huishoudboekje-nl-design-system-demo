@@ -6,6 +6,11 @@ export const AfspraakFragment = gql`
     fragment Afspraak on Afspraak {
         id
         omschrijving
+        bedrag
+        credit
+        zoektermen
+        validFrom
+        validThrough
         interval {
             dagen
             weken
@@ -33,9 +38,6 @@ export const AfspraakFragment = gql`
                 plaatsnaam
             }
         }
-        bedrag
-        credit
-        zoektermen
         rubriek {
             ...Rubriek
         }

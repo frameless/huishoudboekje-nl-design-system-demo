@@ -77,6 +77,8 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	const zoektermen = afspraak.zoektermen || [];
 	const matchingAfspraken = afspraak.matchingAfspraken || [];
 
+	const validThrough = d(afspraak.validThrough, "YYYY-MM-DD");
+
 	return (
 		<Page title={t("afspraakDetailView.title")} backButton={<BackButton to={Routes.Burger(afspraak.burger?.id)} />} menu={menu}>
 			<Section>
@@ -127,6 +129,23 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 
 					</FormRight>
 				</Stack>
+
+				{afspraak.validThrough && (<>
+					<VStack py={3}>
+						<Divider />
+					</VStack>
+
+					<Stack direction={["column", "row"]}>
+						<FormLeft />
+						<FormRight>
+							{d().isBefore(validThrough) ? (
+								<Text color={"red.500"}>{t(`Deze afspraak eindigt op ${validThrough.format("L")}.`)}</Text>
+							) : (
+								<Text color={"red.500"}>{t(`Deze afspraak is beëindigd per ${validThrough.format("L")}.`)}</Text>
+							)}
+						</FormRight>
+					</Stack>
+				</>)}
 			</Section>
 
 			<Section direction={["column", "row"]}>
