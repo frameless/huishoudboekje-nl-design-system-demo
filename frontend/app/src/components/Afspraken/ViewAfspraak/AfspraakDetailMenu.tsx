@@ -1,64 +1,43 @@
 import {ChevronDownIcon} from "@chakra-ui/icons";
-import {
-	Button,
-	HStack,
-	IconButton,
-	Menu,
-	MenuButton,
-	MenuItem,
-	MenuList,
-	Modal,
-	ModalBody,
-	ModalCloseButton,
-	ModalContent,
-	ModalFooter,
-	ModalHeader,
-	ModalOverlay,
-	Text,
-	useDisclosure,
-} from "@chakra-ui/react";
+import {IconButton, Menu, MenuButton, MenuItem, MenuList, useDisclosure} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {NavLink} from "react-router-dom";
 import Routes from "../../../config/routes";
 import {Afspraak} from "../../../generated/graphql";
+import AfspraakDeleteModal from "./AfspraakDeleteModal";
+import AfspraakEndModal from "./AfspraakEndModal";
 
-const AfspraakDetailMenu: React.FC<{afspraak: Afspraak, onDelete: VoidFunction}> = ({afspraak, onDelete}) => {
+const AfspraakDetailMenu: React.FC<{afspraak: Afspraak, onDelete: VoidFunction, onEndAfspraak: (validThrough: Date) => void}> = ({afspraak, onDelete, onEndAfspraak}) => {
 	const {t} = useTranslation();
-	const {isOpen, onOpen, onClose} = useDisclosure();
+	const deleteModal = useDisclosure();
+	const endModal = useDisclosure();
 
 	const onClickDelete = () => {
-		if (!isOpen) {
-			onOpen();
+		if (!deleteModal.isOpen) {
+			endModal.onClose();
+			deleteModal.onOpen();
 		}
 		else {
 			onDelete();
 		}
 	};
 
+	const onSubmitEndAfspraak = (validThrough: Date) => {
+		onEndAfspraak(validThrough);
+		endModal.onClose();
+	};
+
 	return (<>
-		<Modal isOpen={isOpen} onClose={onClose}>
-			<ModalOverlay />
-			<ModalContent>
-				<ModalHeader>{t("deleteAfspraak.confirmModalTitle")}</ModalHeader>
-				<ModalCloseButton />
-				<ModalBody>
-					<Text>{t("deleteAfspraak.confirmModalBody")}</Text>
-				</ModalBody>
-				<ModalFooter>
-					<HStack>
-						<Button variant={"ghost"} onClick={onClose}>{t("actions.cancel")}</Button>
-						<Button colorScheme={"red"} onClick={onClickDelete}>{t("actions.delete")}</Button>
-					</HStack>
-				</ModalFooter>
-			</ModalContent>
-		</Modal>
+		<AfspraakDeleteModal onSubmit={onClickDelete} isOpen={deleteModal.isOpen} onClose={deleteModal.onClose} />
+		<AfspraakEndModal onSubmit={onSubmitEndAfspraak} isOpen={endModal.isOpen} onClose={endModal.onClose} />
 
 		<Menu>
 			<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} data-cy={"actionsMenuButton"} />
 			<MenuList>
 				<NavLink to={Routes.EditAfspraak(afspraak.id)}><MenuItem>{t("actions.edit")}</MenuItem></NavLink>
-				<MenuItem onClick={onClickDelete}>{t("actions.delete")}</MenuItem>
+				<MenuItem onClick={endModal.onOpen}>{t("actions.end")}</MenuItem>
+				<MenuItem onClick={deleteModal.onOpen}>{t("actions.delete")}</MenuItem>
 			</MenuList>
 		</Menu>
 	</>);

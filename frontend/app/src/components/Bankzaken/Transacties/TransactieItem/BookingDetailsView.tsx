@@ -71,7 +71,7 @@ const BookingDetailsView: React.FC<{transactie: BankTransaction}> = ({transactie
 	* - the the id of the journaalpostAfspraak matches the id of the suggestie
 	*  */
 	const canEnableAutomatischBoeken = transactie.suggesties?.length === 1 && (journaalpostAfspraak?.id === transactie.suggesties?.[0].id);
-	const automatischBoekenEnabled = journaalpostAfspraak?.automatischBoeken;
+	const automatischBoekenEnabled = true; // Todo: fix this.
 
 	/* Booked by Afspraak */
 	if (journaalpostAfspraak) {

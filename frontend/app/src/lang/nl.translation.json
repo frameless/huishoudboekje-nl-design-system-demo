@@ -80,6 +80,7 @@
         "cancel": "Annuleren",
         "delete": "Verwijderen",
         "edit": "Wijzigen",
+        "end": "Beëindigen",
         "add": "Toevoegen",
         "back": "Terug",
         "actions": "Acties",
@@ -324,7 +325,15 @@
         "confirmModalTitle": "Afspraak verwijderen",
         "confirmModalBody": "Weet u zeker dat u deze afspraak wil verwijderen?"
     },
+    "endAfspraak": {
+        "successMessage": "Afspraak beëindigd per {{date}}.",
+        "confirmModalTitle": "Afspraak beëindigen",
+        "confirmModalBody": "Vanaf welke datum wordt deze afspraak beëindigd?"
+    },
     "burger": "Burger",
+    "errors": {
+        "invalidDateError": "Vul een geldige datum in."
+    },
     "transactions": {
         "amount": "Bedrag",
         "beneficiaryAccount": "Tegenrekening",

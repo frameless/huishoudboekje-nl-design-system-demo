@@ -28,8 +28,10 @@ import {useTranslation} from "react-i18next";
 import {AiOutlineTag} from "react-icons/all";
 import {NavLink} from "react-router-dom";
 import Routes from "../../../config/routes";
-import {Afspraak} from "../../../generated/graphql";
+import {Afspraak, useEndAfspraakMutation} from "../../../generated/graphql";
+import d from "../../../utils/dayjs";
 import {currencyFormat2, formatBurgerName, intervalString} from "../../../utils/things";
+import useHandleMutation from "../../../utils/useHandleMutation";
 import {zoektermValidator} from "../../../utils/zod";
 import BackButton from "../../BackButton";
 import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
@@ -44,9 +46,10 @@ import AfspraakDetailContext from "./context";
 const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	const isMobile = useBreakpointValue([true, null, null, false]);
 	const {t} = useTranslation();
-	const {deleteAfspraak, deleteAfspraakZoekterm, addAfspraakZoekterm} = useContext(AfspraakDetailContext);
+	const {deleteAfspraak, deleteAfspraakZoekterm, addAfspraakZoekterm, refetch} = useContext(AfspraakDetailContext);
 	const [zoekterm, setZoekterm] = useState<string>();
 	const [zoektermTouched, setZoektermTouched] = useState<boolean>(false);
+	const handleMutation = useHandleMutation();
 
 	const onAddAfspraakZoekterm = (e) => {
 		e.preventDefault();
@@ -57,7 +60,19 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 		});
 	};
 
-	const menu = <AfspraakDetailMenu afspraak={afspraak} onDelete={() => deleteAfspraak()} />;
+	const [endAfspraakMutation] = useEndAfspraakMutation();
+	const endAfspraak = (validThrough: Date) => {
+		handleMutation(endAfspraakMutation({
+			variables: {
+				id: afspraak.id!,
+				validThrough: d(validThrough).format("YYYY-MM-DD"),
+			},
+		}), t("endAfspraak.successMessage", {date: d(validThrough).format("L")}), () => {
+			refetch();
+		});
+	};
+
+	const menu = <AfspraakDetailMenu afspraak={afspraak} onDelete={() => deleteAfspraak()} onEndAfspraak={(validThrough: Date) => endAfspraak(validThrough)} />;
 	const bedrag = afspraak.credit ? parseFloat(afspraak.bedrag) : (parseFloat(afspraak.bedrag) * -1);
 	const zoektermen = afspraak.zoektermen || [];
 	const matchingAfspraken = afspraak.matchingAfspraken || [];
