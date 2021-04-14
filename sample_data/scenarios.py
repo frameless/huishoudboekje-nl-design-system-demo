@@ -77,11 +77,10 @@ class AfspraakScenario:
     automatische_incasso: bool = True
     aantal_betalingen: int = 12
     interval: str = "P0Y1M0W0D"
-    start_datum: str = "2021-01-01"
-    eind_datum: str = "2021-12-31"
+    valid_from: str = "2021-01-01"
+    valid_through: str = "2021-12-31"
     actief: bool = True
     zoektermen: list = None
-    automatisch_boeken: bool = False
 
 
 @dataclass

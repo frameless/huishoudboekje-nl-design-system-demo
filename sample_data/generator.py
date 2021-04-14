@@ -76,14 +76,13 @@ class Generator:
                         "automatische_incasso",
                         "aantal_betalingen",
                         "interval",
-                        "start_datum",
-                        "eind_datum",
+                        "valid_from",
+                        "valid_through",
                         "burger_id",
                         "tegen_rekening_id",
                         "actief",
                         "omschrijving",
                         "zoektermen",
-                        "automatisch_boeken",
                     ],
                 },
             },
@@ -275,12 +274,11 @@ class Generator:
             "credit": scenario.credit
             if scenario.credit is not None
             else scenario.bedrag > 0,
-            "automatisch_boeken": scenario.automatisch_boeken or False,
             "automatische_incasso": scenario.automatische_incasso,
             "aantal_betalingen": scenario.aantal_betalingen or 12,
             "interval": scenario.interval,
-            "start_datum": scenario.start_datum,
-            "eind_datum": scenario.eind_datum,
+            "valid_from": scenario.valid_from,
+            "valid_through": scenario.valid_through,
             "burger_id": burger["id"],
             "tegen_rekening_id": next(
                 iter(
@@ -306,7 +304,6 @@ class Generator:
                 for r in self.rekening_burger
                 if r["burger_id"] == burger["id"]
             ),
-            "actief": scenario.actief,
             "omschrijving": scenario.omschrijving,
             "zoektermen": f"""{{{",".join(scenario.zoektermen)}}}""" if scenario.zoektermen and len(
                 scenario.zoektermen) > 0 else None,

@@ -13,12 +13,11 @@ scenarios:
         bedrag: 76532
         credit: true
         interval: "P0Y1M0W0D"
-        start_datum: "2021-01-01"
+        valid_from: "2021-01-01"
         actief: true
         zoektermen:
           - "Loon"
           - "ZOEKTERMPERSONA1"
-        automatisch_boeken: true
       - aantal: 1
         rubriek: "Uitkeringen"
         omschrijving: "Aanvullende uitkering"
@@ -28,12 +27,11 @@ scenarios:
         bedrag: 14784
         credit: true
         interval: "P0Y1M0W0D"
-        start_datum: "2019-01-07"
+        valid_from: "2019-01-07"
         actief: true
         zoektermen:
           - "Aanvullende uitkering"
           - "ZOEKTERMPERSONA1"
-        automatisch_boeken: true
       - aantal: 1
         rubriek: "Toeslagen"
         omschrijving: "Voorschot kindgebonden budget"
@@ -42,12 +40,11 @@ scenarios:
         bedrag: 39100
         credit: true
         interval: "P0Y1M0W0D"
-        start_datum: "2019-01-20"
+        valid_from: "2019-01-20"
         actief: true
         zoektermen:
           - "123456781"
           - "VOORSCHOT KIT/Kgb"
-        automatisch_boeken: true
       - aantal: 1
         rubriek: "Toeslagen"
         omschrijving: "Voorschot huurtoeslag"
@@ -57,12 +54,11 @@ scenarios:
         bedrag: 32200
         credit: true
         interval: "P0Y1M0W0D"
-        start_datum: "2019-01-20"
+        valid_from: "2019-01-20"
         actief: true
         zoektermen:
           - "123456781"
           - "VOORSCHOT HUURTOESLAG"
-        automatisch_boeken: true
       - aantal: 1
         rubriek: "Toeslagen"
         omschrijving: "Voorschot zorgtoeslag"
@@ -71,12 +67,11 @@ scenarios:
         bedrag: 10700
         credit: true
         interval: "P0Y1M0W0D"
-        start_datum: "2019-01-20"
+        valid_from: "2019-01-20"
         actief: true
         zoektermen:
           - "123456781"
           - "VOORSCHOT ZORGTOESLAG"
-        automatisch_boeken: true
       # uitgaven
       - aantal: 1
         rubriek: "Huur of hypotheek"
@@ -87,12 +82,11 @@ scenarios:
         credit: false
         automatische_incasso: true
         interval: "P0Y1M0W0D"
-        start_datum: "2019-01-01"
+        valid_from: "2019-01-01"
         actief: true
         zoektermen:
           - "Betaalde huur"
           - "ZOEKTERMPERSONA1"
-        automatisch_boeken: true
       - aantal: 1
         rubriek: "Gas en elektriciteit"
         omschrijving: "Elektriciteit"
@@ -102,12 +96,11 @@ scenarios:
         credit: false
         automatische_incasso: true
         interval: "P0Y1M0W0D"
-        start_datum: "2019-01-01"
+        valid_from: "2019-01-01"
         actief: true
         zoektermen:
           - "Elektriciteit"
           - "ZOEKTERMPERSONA1"
-        automatisch_boeken: true
       - aantal: 1
         rubriek: "Water"
         omschrijving: "Water"
@@ -117,12 +110,11 @@ scenarios:
         credit: false
         automatische_incasso: true
         interval: "P0Y3M0W0D"
-        start_datum: "2021-01-01"
+        valid_from: "2021-01-01"
         actief: true
         zoektermen:
           - "Water"
           - "ZOEKTERMPERSONA1"
-        automatisch_boeken: true
       - aantal: 1
         rubriek: "Privé-opname"
         omschrijving: "Leefgeld"
@@ -130,12 +122,11 @@ scenarios:
         credit: false
         automatische_incasso: false
         interval: "P0Y1M0W0D"
-        start_datum: "2021-01-01"
+        valid_from: "2021-01-01"
         actief: true
         zoektermen:
           - "Leefgeld"
           - "ZOEKTERMPERSONA1"
-        automatisch_boeken: true
 
 # persona 2
   - aantal: 1
@@ -152,13 +143,12 @@ scenarios:
         bedrag: 10485
         credit: true
         interval: "P0Y1M0W0D"
-        start_datum: "2019-01-07"
+        valid_from: "2019-01-07"
         aantal_betalingen: 16
         actief: true
         zoektermen:
           - "Aanvullende uitkering"
           - "ZOEKTERMPERSONA2"
-        automatisch_boeken: true
       - aantal: 1
         rubriek: "Inkomsten"
         omschrijving: "Loon"
@@ -168,12 +158,11 @@ scenarios:
         bedrag: 166912
         credit: true
         interval: "P0Y1M0W0D"
-        start_datum: "2021-01-01"
+        valid_from: "2021-01-01"
         actief: true
         zoektermen:
           - "Loon"
           - "ZOEKTERMPERSONA2"
-        automatisch_boeken: true
       - aantal: 1
         rubriek: "Toeslagen"
         omschrijving: "Voorschot huurtoeslag"
@@ -182,12 +171,11 @@ scenarios:
         bedrag: 28600
         credit: true
         interval: "P0Y1M0W0D"
-        start_datum: "2019-01-20"
+        valid_from: "2019-01-20"
         actief: true
         zoektermen:
           - "123456782"
           - "VOORSCHOT HUURTOESLAG"
-        automatisch_boeken: true
       - aantal: 1
         rubriek: "Toeslagen"
         omschrijving: "Voorschot zorgtoeslag"
@@ -196,12 +184,11 @@ scenarios:
         bedrag: 10700
         credit: true
         interval: "P0Y1M0W0D"
-        start_datum: "2019-01-20"
+        valid_from: "2019-01-20"
         actief: true
         zoektermen:
           - "123456782"
           - "VOORSCHOT ZORGTOESLAG"
-        automatisch_boeken: true
       - aantal: 1
         rubriek: "Inkomsten"
         omschrijving: "Bijdrage Vaste Lasten Pakket"
@@ -210,12 +197,11 @@ scenarios:
         bedrag: 3000
         credit: true
         interval: "P0Y1M0W0D"
-        start_datum: "2021-01-01"
+        valid_from: "2021-01-01"
         actief: true
         zoektermen:
           - "Vaste Lasten Pakket"
           - "ZOEKTERMPERSONA2"
-        automatisch_boeken: true
       # uitgaven
       - aantal: 1
         rubriek: "Huur of hypotheek"
@@ -226,12 +212,11 @@ scenarios:
         credit: false
         automatische_incasso: true
         interval: "P0Y1M0W0D"
-        start_datum: "2019-01-01"
+        valid_from: "2019-01-01"
         actief: true
         zoektermen:
           - "Betaalde huur"
           - "ZOEKTERMPERSONA2"
-        automatisch_boeken: true
       - aantal: 1
         rubriek: "Gas en elektriciteit"
         omschrijving: "Elektriciteit"
@@ -241,12 +226,11 @@ scenarios:
         credit: false
         automatische_incasso: true
         interval: "P0Y1M0W0D"
-        start_datum: "2019-01-01"
+        valid_from: "2019-01-01"
         actief: true
         zoektermen:
           - "Elektriciteit"
           - "ZOEKTERMPERSONA2"
-        automatisch_boeken: true
       - aantal: 1
         rubriek: "Verzekeringen"
         omschrijving: "Zorgverzekering"
@@ -256,12 +240,11 @@ scenarios:
         credit: false
         automatische_incasso: true
         interval: "P0Y1M0W0D"
-        start_datum: "2019-01-01"
+        valid_from: "2019-01-01"
         actief: true
         zoektermen:
           - "Zorgverzekering"
           - "ZOEKTERMPERSONA2"
-        automatisch_boeken: true
       - aantal: 1
         rubriek: "Water"
         omschrijving: "Water"
@@ -271,12 +254,11 @@ scenarios:
         credit: false
         automatische_incasso: true
         interval: "P0Y3M0W0D"
-        start_datum: "2019-01-01"
+        valid_from: "2019-01-01"
         actief: true
         zoektermen:
           - "Water"
           - "ZOEKTERMPERSONA2"
-        automatisch_boeken: true
       - aantal: 1
         rubriek: "Privé-opname"
         omschrijving: "Leefgeld"
@@ -284,12 +266,11 @@ scenarios:
         credit: false
         automatische_incasso: false
         interval: "P0Y1M0W0D"
-        start_datum: "2019-01-01"
+        valid_from: "2019-01-01"
         actief: true
         zoektermen:
           - "Leefgeld"
           - "ZOEKTERMPERSONA2"
-        automatisch_boeken: true
       - aantal: 1
         rubriek: "Verzekeringen"
         omschrijving: "Inboedelverzekering"
@@ -299,12 +280,11 @@ scenarios:
         credit: false
         automatische_incasso: true
         interval: "P0Y1M0W0D"
-        start_datum: "2019-01-01"
+        valid_from: "2019-01-01"
         actief: true
         zoektermen:
           - "Inboedelverzekering"
           - "ZOEKTERMPERSONA2"
-        automatisch_boeken: true
       - aantal: 1
         rubriek: "Telefoon, internet en televisie"
         omschrijving: "Vaste telefonie en internet"
@@ -314,12 +294,11 @@ scenarios:
         credit: false
         automatische_incasso: true
         interval: "P0Y1M0W0D"
-        start_datum: "2019-01-01"
+        valid_from: "2019-01-01"
         actief: true
         zoektermen:
           - "Vaste telefonie en internet"
           - "ZOEKTERMPERSONA2"
-        automatisch_boeken: true
       - aantal: 1
         rubriek: "Telefoon, internet en televisie"
         omschrijving: "Mobiele telefonie"
@@ -329,9 +308,8 @@ scenarios:
         credit: false
         automatische_incasso: true
         interval: "P0Y1M0W0D"
-        start_datum: "2019-01-01"
+        valid_from: "2019-01-01"
         actief: true
         zoektermen:
           - "Mobiele telefonie"
           - "ZOEKTERMPERSONA2"
-        automatisch_boeken: true
