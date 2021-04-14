@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import pytest
 import requests_mock
 from pydash import objects
@@ -38,7 +40,8 @@ def test_create_afspraak_success(client):
                               "tegenRekeningId": 1,
                               "rubriekId": 1,
                               "omschrijving": "",
-                              "bedrag": "0.00"
+                              "bedrag": "0.00",
+                              "validFrom": '2021-01-01'
                               }}},
         )
         assert objects.get(response.json, 'errors') == None

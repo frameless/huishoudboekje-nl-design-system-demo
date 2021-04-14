@@ -19,6 +19,7 @@ class UpdateAfspraakInput(graphene.InputObjectType):
     rubriek_id = graphene.Int()
     omschrijving = graphene.String()
     bedrag = graphene.Argument(Bedrag)
+    valid_through = graphene.String()
 
 
 class UpdateAfspraak(graphene.Mutation):

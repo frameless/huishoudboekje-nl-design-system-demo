@@ -1,4 +1,5 @@
 """ GraphQL mutation for creating a new Afspraak """
+from datetime import datetime
 
 import graphene
 import requests
@@ -21,6 +22,7 @@ class CreateAfspraakInput(graphene.InputObjectType):
     rubriek_id = graphene.Int(required=True)
     omschrijving = graphene.String(required=True)
     bedrag = graphene.Argument(Bedrag, required=True)
+    valid_from = graphene.String()
 
 
 class CreateAfspraak(graphene.Mutation):
@@ -49,6 +51,9 @@ class CreateAfspraak(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(_root, _info, input: CreateAfspraakInput):
         """ Create the new Afspraak """
+
+        if "valid_from" not in input:
+            input["valid_from"] = str(datetime.now().date())
 
         input["automatische_incasso"] = None if input["credit"] else True
 
