@@ -44,13 +44,15 @@ class Betaalinstructie(graphene.ObjectType):
 
     @staticmethod
     def resolve_start_date(root, _info):
-        if value := root.get("start_datum"):  # TODO rename to start_date in service
-            return date.fromisoformat(value)
+        return None
+        # if value := root.get("start_datum"):  # TODO rename to start_date in service
+        #     return date.fromisoformat(value)
 
     @staticmethod
     def resolve_end_date(root, _info):
-        if value := root.get("eind_datum"):  # TODO rename to end_date in service
-            return date.fromisoformat(value)
+        return None
+        # if value := root.get("eind_datum"):  # TODO rename to end_date in service
+        #     return date.fromisoformat(value)
 
     @staticmethod
     def resolve_repeat_count(root, _info):
@@ -95,9 +97,9 @@ class Afspraak(graphene.ObjectType):
         eind_datum=graphene.Date(),
     )
     matching_afspraken = graphene.List(lambda: Afspraak)
+    valid_from = graphene.Date()
+    valid_through = graphene.Date()
 
-    start_datum = graphene.Date(deprecation_reason='use betaalinstructie instead')
-    eind_datum = graphene.Date(deprecation_reason='use betaalinstructie instead')
     interval = graphene.Field(Interval, deprecation_reason='use betaalinstructie instead')
     aantal_betalingen = graphene.Int(deprecation_reason='use betaalinstructie instead')
     beschrijving = graphene.String(deprecation_reason='use omschrijving instead')
@@ -105,12 +107,12 @@ class Afspraak(graphene.ObjectType):
 
     @staticmethod
     def resolve_betaalinstructie(root, _info):
-        if root.get('aantal_betalingen') or root.get('eind_datum'):
+        if root.get('aantal_betalingen') or root.get('valid_through'):
             return root
 
     async def resolve_overschrijvingen(root, info, **kwargs):
         planner_input = PlannedOverschijvingenInput(
-            root.get("start_datum"),
+            root.get("valid_from"), # TODO dit wordt betaalinstructie start_datum
             root.get("interval"),
             root.get("aantal_betalingen"),
             root.get("bedrag"),
@@ -152,12 +154,12 @@ class Afspraak(graphene.ObjectType):
                 root.get("tegen_rekening_id")
             )
 
-    def resolve_start_datum(root, info):
-        if value := root.get("start_datum"):
+    def resolve_valid_from(root, info):
+        if value := root.get("valid_from"):
             return date.fromisoformat(value)
 
-    def resolve_eind_datum(root, info):
-        if value := root.get("eind_datum"):
+    def resolve_valid_through(root, info):
+        if value := root.get("valid_through"):
             return date.fromisoformat(value)
 
     def resolve_interval(root, info):

@@ -14,39 +14,39 @@ def dict_keys_subset_builder(match_keys: list):
     return lambda actual_dict: dict((k, actual_dict[k] if k in actual_dict else None) for k in match_keys)
 
 
-@pytest.mark.parametrize("begin_datum, eind_datum, afspraken, expected", [
+@pytest.mark.parametrize("valid_from, valid_through, afspraken, expected", [
     ("2021-01-01", "2021-02-01", [
-        dict(omschrijving="precies pas", start_datum="2021-01-01", eind_datum="2021-02-01"),
-        dict(omschrijving="eromheen", start_datum="2020-01-01", eind_datum="2021-12-31"),
+        dict(omschrijving="precies pas", valid_from="2021-01-01", valid_through="2021-02-01"),
+        dict(omschrijving="eromheen", valid_from="2020-01-01", valid_through="2021-12-31"),
     ], [
-         dict(omschrijving="precies pas", start_datum="2021-01-01", eind_datum="2021-02-01"),
-         dict(omschrijving="eromheen", start_datum="2020-01-01", eind_datum='2021-12-31'),
+         dict(omschrijving="precies pas", valid_from="2021-01-01", valid_through="2021-02-01"),
+         dict(omschrijving="eromheen", valid_from="2020-01-01", valid_through='2021-12-31'),
      ]),
 
     ("2021-01-01", "2021-02-01", [
-        dict(omschrijving="te vroeg", start_datum="2020-01-01", eind_datum="2020-12-31"),
-        dict(omschrijving="te vroeg", start_datum="2020-01-01", eind_datum="2021-01-01"),
+        dict(omschrijving="te vroeg", valid_from="2020-01-01", valid_through="2020-12-31"),
+        dict(omschrijving="te vroeg", valid_from="2020-01-01", valid_through="2021-01-01"),
     ], []),
 
     ("2021-01-01", "2021-02-01", [
-        dict(omschrijving="te laat", start_datum="2021-02-02", eind_datum="2021-12-31"),
-        dict(omschrijving="te laat, open", start_datum="2021-02-02", eind_datum=None),
+        dict(omschrijving="te laat", valid_from="2021-02-02", valid_through="2021-12-31"),
+        dict(omschrijving="te laat, open", valid_from="2021-02-02", valid_through=None),
     ], []),
 
     ("2021-01-01", "2021-02-01", [
-        dict(omschrijving="start voor begin, open", start_datum="2020-12-31", eind_datum=None),
-        dict(omschrijving="start na begin, open", start_datum="2021-01-02", eind_datum=None),
+        dict(omschrijving="start voor begin, open", valid_from="2020-12-31", valid_through=None),
+        dict(omschrijving="start na begin, open", valid_from="2021-01-02", valid_through=None),
     ], [
-         dict(omschrijving="start voor begin, open", start_datum="2020-12-31", eind_datum=None),
-         dict(omschrijving="start na begin, open", start_datum="2021-01-02", eind_datum=None),
+         dict(omschrijving="start voor begin, open", valid_from="2020-12-31", valid_through=None),
+         dict(omschrijving="start na begin, open", valid_from="2021-01-02", valid_through=None),
      ]),
 ])
-def test_afspraken_get_datum_filter(app, afspraak_factory, caplog, begin_datum, eind_datum, afspraken, expected):
+def test_afspraken_get_datum_filter(app, afspraak_factory, caplog, valid_from, valid_through, afspraken, expected):
     caplog.set_level(logging.DEBUG)
     for afspraak in afspraken:
         afspraak_factory.createAfspraak(**afspraak)
     client = app.test_client()
-    response = client.get(f'/afspraken/?{urlencode({"begin_datum": begin_datum, "eind_datum": eind_datum})}')
+    response = client.get(f'/afspraken/?{urlencode({"valid_from": valid_from, "valid_through": valid_through})}')
 
     assert response.status_code == 200
 
@@ -54,22 +54,22 @@ def test_afspraken_get_datum_filter(app, afspraak_factory, caplog, begin_datum, 
 
     assert len(actual_afspraken) == len(expected)
 
-    dict_keys_subset = dict_keys_subset_builder(['omschrijving', 'start_datum', 'eind_datum'])
+    dict_keys_subset = dict_keys_subset_builder(['omschrijving', 'valid_from', 'valid_through'])
     # the order of results is expected to be the same as the verication set
     for actual_response, expected_afspraak in zip(actual_afspraken, expected):
         # assert only the properties we are interested in for the test case
         assert dict_keys_subset(actual_response) == dict_keys_subset(expected_afspraak)
 
 
-@pytest.mark.parametrize("begin_datum, eind_datum, statuscode, message", [
-    (None, "2021-01-01", 400, "begin_datum is missing"),
-    ("2021-01-01", None, 400, "eind_datum is missing"),
-    ("2021-01-01", "2020-12-31", 400, "eind_datum must be after begin_datum"),
+@pytest.mark.parametrize("valid_from, valid_through, statuscode, message", [
+    (None, "2021-01-01", 400, "valid_from is missing"),
+    ("2021-01-01", None, 400, "valid_through is missing"),
+    ("2021-01-01", "2020-12-31", 400, "valid_through must be after valid_from"),
 
 ])
-def test_afspraken_get_datum_filter_errors(app, begin_datum, eind_datum, statuscode, message):
+def test_afspraken_get_datum_filter_errors(app, valid_from, valid_through, statuscode, message):
     client = app.test_client()
     response = client.get(
-        f'/afspraken/?{urlencode(dict_only_keys_with_values({"begin_datum": begin_datum, "eind_datum": eind_datum}))}')
+        f'/afspraken/?{urlencode(dict_only_keys_with_values({"valid_from": valid_from, "valid_through": valid_through}))}')
     assert response.status_code == statuscode
     assert response.json["errors"][0] == message

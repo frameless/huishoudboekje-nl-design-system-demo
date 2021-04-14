@@ -31,11 +31,11 @@ class AfspraakView(HHBView):
             "omschrijving": {
                 "type": "string",
             },
-            "start_datum": {
+            "valid_from": {
                 "type": "string",
                 "pattern": "^(?:[0-9]{4}-[0-9]{2}-[0-9]{2}|)$",
             },
-            "eind_datum": {
+            "valid_through": {
                 "oneOf": [
                     {"type": "null"},
                     {
@@ -127,25 +127,25 @@ class AfspraakView(HHBView):
         AfspraakView.filter_in_string('filter_organisaties', cb)
 
     def add_filter_filter_datums(self):
-        """ Add filter_datums filter based on the start_datum and eind_datum """
-        begin_datum = get_date_from_request(request, 'begin_datum')
-        eind_datum = get_date_from_request(request, 'eind_datum')
+        """ Add filter_datums filter based on the valid_from and valid_through """
+        valid_from = get_date_from_request(request, 'valid_from')
+        valid_through = get_date_from_request(request, 'valid_through')
 
-        if begin_datum or eind_datum:
-            if not begin_datum:
-                abort(make_response({"errors": ['begin_datum is missing']}, 400))
-            if not eind_datum:
-                abort(make_response({"errors": ['eind_datum is missing']}, 400))
-            if begin_datum > eind_datum:
-                abort(make_response({"errors": ['eind_datum must be after begin_datum']}, 400))
+        if valid_from or valid_through:
+            if not valid_from:
+                abort(make_response({"errors": ['valid_from is missing']}, 400))
+            if not valid_through:
+                abort(make_response({"errors": ['valid_through is missing']}, 400))
+            if valid_from > valid_through:
+                abort(make_response({"errors": ['valid_through must be after valid_from']}, 400))
 
             self.hhb_query.query = self.hhb_query.query.filter(
                 and_(
                     or_(
-                        self.hhb_model.eind_datum == None,
-                        self.hhb_model.eind_datum > begin_datum
+                        self.hhb_model.valid_through == None,
+                        self.hhb_model.valid_through > valid_from
                     ),
-                    self.hhb_model.start_datum <= eind_datum
+                    self.hhb_model.valid_from <= valid_through
                 )
             )
 

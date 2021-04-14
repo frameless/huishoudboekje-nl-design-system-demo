@@ -10,8 +10,8 @@ def test_afspraken_post_new_afspraak(client, session):
     assert session.query(Afspraak).count() == 0
     afspraak_dict = {
         "omschrijving": "Nieuwe afspraak",
-        "start_datum": date(2020, 10, 1).isoformat(),
-        "eind_datum": date(2020, 10, 1).isoformat(),
+        "valid_from": date(2020, 10, 1).isoformat(),
+        "valid_through": date(2020, 10, 1).isoformat(),
         "aantal_betalingen": 5,
         "interval": "P1Y2M10DT2H30M",
         "bedrag": 1337,
@@ -60,8 +60,8 @@ def test_afspraken_post_update_afspraak(client, session, afspraak_factory):
 @pytest.mark.parametrize("key,bad_value", [
     ("burger_id", "Kareltje"),
     ("omschrijving", 1234),
-    ("start_datum", 1234),
-    ("eind_datum", 1234),
+    ("valid_from", 1234),
+    ("valid_through", 1234),
     ("aantal_betalingen", "5"),
     ("interval", 1234),
     ("bedrag", "13,37"),

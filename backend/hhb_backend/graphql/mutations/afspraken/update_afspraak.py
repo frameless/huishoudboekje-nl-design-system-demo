@@ -54,7 +54,7 @@ class UpdateAfspraak(graphene.Mutation):
         previous = await hhb_dataloader().afspraken_by_id.load(id)
 
         if "credit" in input:
-            input["automatische_incasso"] = None if input["credit"] else previous['start_datum'] is None
+            input["automatische_incasso"] = None if input["credit"] else previous['valid_from'] is None
 
         response = requests.post(
             f"{settings.HHB_SERVICES_URL}/afspraken/{id}",
