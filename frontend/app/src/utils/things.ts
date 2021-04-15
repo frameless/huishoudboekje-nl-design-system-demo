@@ -211,15 +211,13 @@ export const truncateText = (str: string, maxLength = 50) => {
 };
 
 export const isAfspraakActive = (afspraak: Afspraak) => {
-	const {validFrom, validThrough} = afspraak;
+	const {validThrough} = afspraak;
 
-	if (validFrom && validThrough) {
-		const _validFrom = d(validFrom, "YYYY-MM-DD");
-		const _validThrough = d(validThrough, "YYYY-MM-DD");
-
-		return (d().isBefore(_validThrough) && d().isSameOrAfter(_validFrom));
+	if (validThrough) {
+		const _validThrough = d(validThrough, "YYYY-MM-DD").endOf("day");
+		return (d().endOf("day").isSameOrBefore(_validThrough));
 	}
 
-	// If there's no validFrom or no validThrough, assume this Afspraak is active.
+	// If there's no validThrough, assume this Afspraak is active.
 	return true;
 };

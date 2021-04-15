@@ -1,4 +1,4 @@
-import {ViewIcon, WarningTwoIcon} from "@chakra-ui/icons";
+import {AddIcon, ViewIcon, WarningTwoIcon} from "@chakra-ui/icons";
 import {
 	Badge,
 	Box,
@@ -137,11 +137,14 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 					<Stack direction={["column", "row"]}>
 						<FormLeft />
 						<FormRight>
-							{d().isBefore(validThrough) ? (
+							{isAfspraakActive(afspraak) ? (
 								<Text color={"red.500"}>{t("afspraak.willEndOn", {date: validThrough.format("L")})}</Text>
 							) : (
 								<Text color={"gray.500"}>{t("afspraak.endedOn", {date: validThrough.format("L")})}</Text>
 							)}
+							<Box>
+								<Button as={NavLink} to={Routes.FollowUpAfspraak(afspraak.id)} colorScheme={"primary"} size={"sm"} leftIcon={<AddIcon />}>{t("afspraak.planFollowup")}</Button>
+							</Box>
 						</FormRight>
 					</Stack>
 				</>)}
