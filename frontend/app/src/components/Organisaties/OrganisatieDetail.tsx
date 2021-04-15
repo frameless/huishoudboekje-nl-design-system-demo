@@ -21,7 +21,7 @@ import Routes from "../../config/routes";
 import {Organisatie, useDeleteOrganisatieMutation, useGetOrganisatieQuery} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
 import useToaster from "../../utils/useToaster";
-import BackButton from "../BackButton";
+import BackButton from "../Layouts/BackButton";
 import DeadEndPage from "../DeadEndPage";
 import Page from "../Layouts/Page";
 import OrganisatieDetailView from "./Views/OrganisatieDetailView";

@@ -6,7 +6,7 @@ import {useHistory} from "react-router-dom";
 import Routes from "../../config/routes";
 import {Burger} from "../../generated/graphql";
 import {formatBurgerName} from "../../utils/things";
-import GridCard from "../GridCard";
+import GridCard from "../Layouts/GridCard";
 
 const BurgerListView: React.FC<BoxProps & {burgers: Burger[], showAddButton?: boolean}> = ({burgers, showAddButton = false, ...props}) => {
 	const {t} = useTranslation();

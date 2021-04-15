@@ -33,7 +33,7 @@ import d from "../../../utils/dayjs";
 import {currencyFormat2, formatBurgerName, intervalString, isAfspraakActive} from "../../../utils/things";
 import useHandleMutation from "../../../utils/useHandleMutation";
 import {zoektermValidator} from "../../../utils/zod";
-import BackButton from "../../BackButton";
+import BackButton from "../../Layouts/BackButton";
 import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
 import DataItem from "../../Layouts/DataItem";
 import Page from "../../Layouts/Page";

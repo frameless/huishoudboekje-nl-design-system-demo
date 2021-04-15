@@ -9,7 +9,7 @@ import {Burger, useDeleteBurgerMutation, useGetBurgerQuery} from "../../../gener
 import Queryable from "../../../utils/Queryable";
 import {formatBurgerName} from "../../../utils/things";
 import useToaster from "../../../utils/useToaster";
-import BackButton from "../../BackButton";
+import BackButton from "../../Layouts/BackButton";
 import DeadEndPage from "../../DeadEndPage";
 import Alert from "../../Layouts/Alert";
 import Page from "../../Layouts/Page";

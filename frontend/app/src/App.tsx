@@ -17,7 +17,7 @@ import PageNotFound from "./components/PageNotFound";
 import Rapportage from "./components/Rapportage";
 import Sidebar from "./components/Sidebar";
 import SidebarContainer from "./components/Sidebar/SidebarContainer";
-import UserStatus from "./components/UserStatus";
+import UserStatus from "./components/Layouts/UserStatus";
 import Routes from "./config/routes";
 import useAuth from "./utils/useAuth";
 
