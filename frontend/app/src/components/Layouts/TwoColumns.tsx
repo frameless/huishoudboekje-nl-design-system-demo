@@ -9,7 +9,7 @@ const TwoColumns = ({children}) => {
 				<Stack bg={"grey.800"} height={["auto", null, null, "100%"]} alignItems={["center", null, null, "flex-end"]} justifyContent={"center"}
 					   width={["100%", null, null, "50%"]}
 					   p={5}>
-					<Logo as={Flex} maxWidth={400} width={"100%"} height={"100%"} maxHeight={500} />
+					<Logo as={Flex} maxWidth={400} width={"100%"} height={"auto"} maxHeight={500} />
 				</Stack>
 				<Stack bg={"white"} height={["auto", null, null, "100%"]} justifyContent={"center"} width={["100%", null, null, "50%"]} p={5}>
 					{children}
