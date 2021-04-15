@@ -113,7 +113,9 @@
         "willEndOn": "Deze afspraak eindigt op {{date}}.",
         "endedOn": "Deze afspraak is beëindigd per {{date}}.",
         "zoektermen": "Zoektermen",
-        "zoekterm": "Zoekterm"
+        "zoekterm": "Zoekterm",
+        "showActive": "Actieve afspraken",
+        "showInActive": "Beëindigde afspraken"
     },
     "afspraakDetailView": {
         "invalidBetaalrichtingError": "Kies een betaalrichting.",
@@ -388,6 +390,9 @@
         "tegenpartij": "Tegenpartij",
         "omschrijving": "Omschrijving",
         "bedrag": "Bedrag"
+    },
+    "afspraken": {
+        "noResults": "Er zijn geen afspraken gevonden."
     },
     "pages": {
         "gebeurtenissen": {
