@@ -177,7 +177,7 @@ class Generator:
             "voornamen": voornamen,
             "achternaam": achternaam,
             "straatnaam": self.__faker_straatnaam,
-            "huisnummer": randrange(1, 9999),
+            "huisnummer": randrange(1, 250),
             "postcode": self.__faker_postcode,
             "plaatsnaam": "Sloothuizen",
         }
@@ -209,7 +209,7 @@ class Generator:
                 "naam": name,
                 "weergave_naam": name,
                 "straatnaam": self.__faker_straatnaam,
-                "huisnummer": randrange(1, 9999),
+                "huisnummer": randrange(1, 999),
                 "postcode": self.__faker_postcode,
                 "plaatsnaam": "Sloothuizen",
             }
