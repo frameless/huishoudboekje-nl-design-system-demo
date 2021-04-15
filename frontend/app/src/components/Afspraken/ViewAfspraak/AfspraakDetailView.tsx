@@ -30,7 +30,7 @@ import {NavLink} from "react-router-dom";
 import Routes from "../../../config/routes";
 import {Afspraak, useEndAfspraakMutation} from "../../../generated/graphql";
 import d from "../../../utils/dayjs";
-import {currencyFormat2, formatBurgerName, intervalString} from "../../../utils/things";
+import {currencyFormat2, formatBurgerName, intervalString, isAfspraakActive} from "../../../utils/things";
 import useHandleMutation from "../../../utils/useHandleMutation";
 import {zoektermValidator} from "../../../utils/zod";
 import BackButton from "../../BackButton";
@@ -78,6 +78,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	const matchingAfspraken = afspraak.matchingAfspraken || [];
 
 	const validThrough = d(afspraak.validThrough, "YYYY-MM-DD");
+	const isActive = isAfspraakActive(afspraak);
 
 	return (
 		<Page title={t("afspraakDetailView.title")} backButton={<BackButton to={Routes.Burger(afspraak.burger?.id)} />} menu={menu}>
@@ -152,24 +153,28 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 				<FormLeft title={t("afspraakDetailView.section3.title")} helperText={t("afspraakDetailView.section3.helperText")} />
 				<FormRight>
 
-					<Stack direction={"column"}>
-						<form onSubmit={onAddAfspraakZoekterm}>
-							<FormControl isInvalid={!zoektermValidator.safeParse(zoekterm).success && zoektermTouched}>
-								<Stack>
-									<FormLabel>{t("afspraak.zoektermen")}</FormLabel>
-									<InputGroup size={"md"}>
-										<InputLeftElement pointerEvents="none" color="gray.300" fontSize="1.2em">
-											<AiOutlineTag />
-										</InputLeftElement>
-										<Input id="zoektermen" onChange={e => setZoekterm(e.target.value)} value={zoekterm || ""} onFocus={() => setZoektermTouched(true)} onBlur={() => setZoektermTouched(true)} />
-										<InputRightElement width={"auto"} pr={1}>
-											<Button type={"submit"} size={"sm"} colorScheme={"primary"}>{t("actions.add")}</Button>
-										</InputRightElement>
-									</InputGroup>
-								</Stack>
-							</FormControl>
-						</form>
-						<ZoektermenList zoektermen={zoektermen} onDeleteZoekterm={(zoekterm: string) => deleteAfspraakZoekterm(zoekterm)} />
+					<Stack>
+						{isAfspraakActive(afspraak) ? (
+							<form onSubmit={onAddAfspraakZoekterm}>
+								<FormControl isInvalid={!zoektermValidator.safeParse(zoekterm).success && zoektermTouched}>
+									<Stack>
+										<FormLabel>{t("afspraak.zoektermen")}</FormLabel>
+										<InputGroup size={"md"}>
+											<InputLeftElement pointerEvents="none" color="gray.300" fontSize="1.2em">
+												<AiOutlineTag />
+											</InputLeftElement>
+											<Input id="zoektermen" onChange={e => setZoekterm(e.target.value)} value={zoekterm || ""} onFocus={() => setZoektermTouched(true)} onBlur={() => setZoektermTouched(true)} />
+											<InputRightElement width={"auto"} pr={1}>
+												<Button type={"submit"} size={"sm"} colorScheme={"primary"}>{t("actions.add")}</Button>
+											</InputRightElement>
+										</InputGroup>
+									</Stack>
+								</FormControl>
+							</form>
+						) : (
+							<FormLabel>{t("afspraak.zoektermen")}</FormLabel>
+						)}
+						<ZoektermenList zoektermen={zoektermen} onDeleteZoekterm={isAfspraakActive(afspraak) ? (zoekterm: string) => deleteAfspraakZoekterm(zoekterm) : undefined} />
 					</Stack>
 
 					{zoektermen.length === 0 && (
