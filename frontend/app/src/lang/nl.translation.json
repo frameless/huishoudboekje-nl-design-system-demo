@@ -82,7 +82,6 @@
         "edit": "Wijzigen",
         "end": "Beëindigen",
         "add": "Toevoegen",
-        "back": "Terug",
         "actions": "Acties",
         "export": "Exporteren",
         "download": "Downloaden",
@@ -92,6 +91,7 @@
         "filter": "Filteren",
         "backToList": "Terug naar overzicht",
         "clearSearch": "Zoekopdracht wissen",
+        "back": "Terug",
         "backToHome": "Terug naar de hoofdpagina",
         "clickToEdit": "Klik om te wijzigen"
     },
@@ -113,6 +113,7 @@
         "periodiek": "Periodiek",
         "willEndOn": "Deze afspraak eindigt op {{date}}.",
         "endedOn": "Deze afspraak is beëindigd per {{date}}.",
+        "planFollowup": "Vervolgafspraak toevoegen",
         "zoektermen": "Zoektermen",
         "zoekterm": "Zoekterm",
         "showActive": "Actieve afspraken",
@@ -326,6 +327,15 @@
         "customIntervalType": "Periodiek",
         "invalidPeriodiekError": "Kies een periodiek."
     },
+    "afspraken": {
+        "vervolg": {
+            "pageTitle": "Vervolgafspraak toevoegen"
+        },
+        "tegenpartij": "Tegenpartij",
+        "omschrijving": "Omschrijving",
+        "bedrag": "Bedrag",
+        "noResults": "Er zijn geen afspraken gevonden."
+    },
     "deleteAfspraak": {
         "confirmModalTitle": "Afspraak verwijderen",
         "confirmModalBody": "Weet u zeker dat u deze afspraak wil verwijderen?"
@@ -386,12 +396,6 @@
         "tegenrekening": "Tegenrekening",
         "rubriek": "Rubriek",
         "bedrag": "Bedrag"
-    },
-    "afspraken": {
-        "tegenpartij": "Tegenpartij",
-        "omschrijving": "Omschrijving",
-        "bedrag": "Bedrag",
-        "noResults": "Er zijn geen afspraken gevonden."
     },
     "pages": {
         "gebeurtenissen": {

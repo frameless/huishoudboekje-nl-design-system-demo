@@ -2,7 +2,7 @@ import {Box, Button, FormControl, FormErrorMessage, FormLabel, Input, InputGroup
 import React, {useContext, useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
-import {CreateAfspraakMutationVariables, Organisatie, Rekening, Rubriek, UpdateAfspraakMutationVariables} from "../../generated/graphql";
+import {Organisatie, Rekening, Rubriek, UpdateAfspraakMutationVariables} from "../../generated/graphql";
 import {currencyFormat, useReactSelectStyles} from "../../utils/things";
 import useToaster from "../../utils/useToaster";
 import zod from "../../utils/zod";
@@ -24,7 +24,7 @@ const validator = zod.object({
 
 type AfspraakFormProps = {
 	burgerRekeningen: Rekening[],
-	onChange: (values: CreateAfspraakMutationVariables["input"] | UpdateAfspraakMutationVariables["input"]) => void,
+	onChange: (values) => void,
 	values?: UpdateAfspraakMutationVariables["input"],
 };
 
