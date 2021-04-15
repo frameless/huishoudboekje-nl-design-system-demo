@@ -24,7 +24,7 @@ const AuditLogText: React.FC<TextProps & {g: GebruikersActiviteit}> = ({g, ...pr
 	const components = {
 		linkBurger: burger?.id ? <AuditLogLink to={Routes.Burger(burger.id)}>{formatBurgerName(burger)}</AuditLogLink> : t("unknownBurger"),
 		linkOrganisatie: organisatie?.id ? <AuditLogLink to={Routes.Organisatie(organisatie.id)}>{organisatie.weergaveNaam}</AuditLogLink> : t("unknownOrganisatie"),
-		linkAfspraak: afspraak?.id ? <AuditLogLink to={Routes.EditAfspraak(afspraak.id)} /> : t("unknownAfspraak"),
+		linkAfspraak: afspraak?.id ? <AuditLogLink to={Routes.ViewAfspraak(afspraak.id)} /> : t("unknownAfspraak"),
 		linkAfspraakOrganisatie: afspraak?.organisatie?.id ?
 			<AuditLogLink to={Routes.Organisatie(afspraak?.organisatie?.id)}>{afspraak?.organisatie.weergaveNaam}</AuditLogLink> : t("unknownOrganisatie"),
 		strong: <strong />,
