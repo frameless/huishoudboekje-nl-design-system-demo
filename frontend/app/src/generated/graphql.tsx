@@ -54,18 +54,14 @@ export type Afspraak = {
   bedrag?: Maybe<Scalars['Bedrag']>;
   credit?: Maybe<Scalars['Boolean']>;
   zoektermen?: Maybe<Array<Maybe<Scalars['String']>>>;
-  actief?: Maybe<Scalars['Boolean']>;
   betaalinstructie?: Maybe<Betaalinstructie>;
-  automatischBoeken?: Maybe<Scalars['Boolean']>;
   organisatie?: Maybe<Organisatie>;
   journaalposten?: Maybe<Array<Maybe<Journaalpost>>>;
   rubriek?: Maybe<Rubriek>;
   overschrijvingen?: Maybe<Array<Maybe<Overschrijving>>>;
   matchingAfspraken?: Maybe<Array<Maybe<Afspraak>>>;
-  /** @deprecated use betaalinstructie instead */
-  startDatum?: Maybe<Scalars['Date']>;
-  /** @deprecated use betaalinstructie instead */
-  eindDatum?: Maybe<Scalars['Date']>;
+  validFrom?: Maybe<Scalars['Date']>;
+  validThrough?: Maybe<Scalars['Date']>;
   /** @deprecated use betaalinstructie instead */
   interval?: Maybe<Interval>;
   /** @deprecated use betaalinstructie instead */
@@ -180,6 +176,7 @@ export type CreateAfspraakInput = {
   rubriekId: Scalars['Int'];
   omschrijving: Scalars['String'];
   bedrag: Scalars['Bedrag'];
+  validFrom?: Maybe<Scalars['String']>;
 };
 
 export type CreateBurger = {
@@ -566,7 +563,6 @@ export type RootMutation = {
   createAfspraak?: Maybe<CreateAfspraak>;
   updateAfspraak?: Maybe<UpdateAfspraak>;
   deleteAfspraak?: Maybe<DeleteAfspraak>;
-  updateAfspraakAutomatischBoeken?: Maybe<UpdateAfspraakAutomatischBoeken>;
   updateAfspraakBetaalinstructie?: Maybe<UpdateAfspraakBetaalinstructie>;
   addAfspraakZoekterm?: Maybe<AddAfspraakZoekterm>;
   deleteAfspraakZoekterm?: Maybe<DeleteAfspraakZoekterm>;
@@ -645,13 +641,6 @@ export type RootMutationUpdateAfspraakArgs = {
 /** The root of all mutations  */
 export type RootMutationDeleteAfspraakArgs = {
   id: Scalars['Int'];
-};
-
-
-/** The root of all mutations  */
-export type RootMutationUpdateAfspraakAutomatischBoekenArgs = {
-  afspraakId: Scalars['Int'];
-  automatischBoeken: Scalars['Boolean'];
 };
 
 
@@ -1057,13 +1046,6 @@ export type UpdateAfspraak = {
   previous?: Maybe<Afspraak>;
 };
 
-export type UpdateAfspraakAutomatischBoeken = {
-  __typename?: 'UpdateAfspraakAutomatischBoeken';
-  ok?: Maybe<Scalars['Boolean']>;
-  afspraak?: Maybe<Afspraak>;
-  previous?: Maybe<Afspraak>;
-};
-
 export type UpdateAfspraakBetaalinstructie = {
   __typename?: 'UpdateAfspraakBetaalinstructie';
   ok?: Maybe<Scalars['Boolean']>;
@@ -1079,6 +1061,7 @@ export type UpdateAfspraakInput = {
   rubriekId?: Maybe<Scalars['Int']>;
   omschrijving?: Maybe<Scalars['String']>;
   bedrag?: Maybe<Scalars['Bedrag']>;
+  validThrough?: Maybe<Scalars['String']>;
 };
 
 export type UpdateBurger = {
@@ -1132,7 +1115,7 @@ export type UpdateRubriek = {
 
 export type AfspraakFragment = (
   { __typename?: 'Afspraak' }
-  & Pick<Afspraak, 'id' | 'omschrijving' | 'startDatum' | 'eindDatum' | 'aantalBetalingen' | 'automatischeIncasso' | 'automatischBoeken' | 'bedrag' | 'credit' | 'zoektermen' | 'actief'>
+  & Pick<Afspraak, 'id' | 'omschrijving' | 'bedrag' | 'credit' | 'zoektermen' | 'validFrom' | 'validThrough'>
   & { interval?: Maybe<(
     { __typename?: 'Interval' }
     & Pick<Interval, 'dagen' | 'weken' | 'maanden' | 'jaren'>
@@ -1624,6 +1607,24 @@ export type DeleteOrganisatieRekeningMutation = (
   & { deleteOrganisatieRekening?: Maybe<(
     { __typename?: 'DeleteOrganisatieRekening' }
     & Pick<DeleteOrganisatieRekening, 'ok'>
+  )> }
+);
+
+export type EndAfspraakMutationVariables = Exact<{
+  id: Scalars['Int'];
+  validThrough: Scalars['String'];
+}>;
+
+
+export type EndAfspraakMutation = (
+  { __typename?: 'RootMutation' }
+  & { updateAfspraak?: Maybe<(
+    { __typename?: 'UpdateAfspraak' }
+    & Pick<UpdateAfspraak, 'ok'>
+    & { afspraak?: Maybe<(
+      { __typename?: 'Afspraak' }
+      & AfspraakFragment
+    )> }
   )> }
 );
 
@@ -2143,11 +2144,11 @@ export const AfspraakFragmentDoc = gql`
     fragment Afspraak on Afspraak {
   id
   omschrijving
-  startDatum
-  eindDatum
-  aantalBetalingen
-  automatischeIncasso
-  automatischBoeken
+  bedrag
+  credit
+  zoektermen
+  validFrom
+  validThrough
   interval {
     dagen
     weken
@@ -2175,10 +2176,6 @@ export const AfspraakFragmentDoc = gql`
       plaatsnaam
     }
   }
-  bedrag
-  credit
-  zoektermen
-  actief
   rubriek {
     ...Rubriek
   }
@@ -3087,6 +3084,43 @@ export function useDeleteOrganisatieRekeningMutation(baseOptions?: Apollo.Mutati
 export type DeleteOrganisatieRekeningMutationHookResult = ReturnType<typeof useDeleteOrganisatieRekeningMutation>;
 export type DeleteOrganisatieRekeningMutationResult = Apollo.MutationResult<DeleteOrganisatieRekeningMutation>;
 export type DeleteOrganisatieRekeningMutationOptions = Apollo.BaseMutationOptions<DeleteOrganisatieRekeningMutation, DeleteOrganisatieRekeningMutationVariables>;
+export const EndAfspraakDocument = gql`
+    mutation endAfspraak($id: Int!, $validThrough: String!) {
+  updateAfspraak(id: $id, input: {validThrough: $validThrough}) {
+    ok
+    afspraak {
+      ...Afspraak
+    }
+  }
+}
+    ${AfspraakFragmentDoc}`;
+export type EndAfspraakMutationFn = Apollo.MutationFunction<EndAfspraakMutation, EndAfspraakMutationVariables>;
+
+/**
+ * __useEndAfspraakMutation__
+ *
+ * To run a mutation, you first call `useEndAfspraakMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEndAfspraakMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [endAfspraakMutation, { data, loading, error }] = useEndAfspraakMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      validThrough: // value for 'validThrough'
+ *   },
+ * });
+ */
+export function useEndAfspraakMutation(baseOptions?: Apollo.MutationHookOptions<EndAfspraakMutation, EndAfspraakMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EndAfspraakMutation, EndAfspraakMutationVariables>(EndAfspraakDocument, options);
+      }
+export type EndAfspraakMutationHookResult = ReturnType<typeof useEndAfspraakMutation>;
+export type EndAfspraakMutationResult = Apollo.MutationResult<EndAfspraakMutation>;
+export type EndAfspraakMutationOptions = Apollo.BaseMutationOptions<EndAfspraakMutation, EndAfspraakMutationVariables>;
 export const StartAutomatischBoekenDocument = gql`
     mutation startAutomatischBoeken {
   startAutomatischBoeken {

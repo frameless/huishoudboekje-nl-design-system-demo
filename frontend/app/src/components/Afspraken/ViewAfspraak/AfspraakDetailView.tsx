@@ -28,8 +28,10 @@ import {useTranslation} from "react-i18next";
 import {AiOutlineTag} from "react-icons/all";
 import {NavLink} from "react-router-dom";
 import Routes from "../../../config/routes";
-import {Afspraak} from "../../../generated/graphql";
-import {currencyFormat2, formatBurgerName, intervalString} from "../../../utils/things";
+import {Afspraak, useEndAfspraakMutation} from "../../../generated/graphql";
+import d from "../../../utils/dayjs";
+import {currencyFormat2, formatBurgerName, intervalString, isAfspraakActive} from "../../../utils/things";
+import useHandleMutation from "../../../utils/useHandleMutation";
 import {zoektermValidator} from "../../../utils/zod";
 import BackButton from "../../BackButton";
 import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
@@ -44,9 +46,10 @@ import AfspraakDetailContext from "./context";
 const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	const isMobile = useBreakpointValue([true, null, null, false]);
 	const {t} = useTranslation();
-	const {deleteAfspraak, deleteAfspraakZoekterm, addAfspraakZoekterm} = useContext(AfspraakDetailContext);
+	const {deleteAfspraak, deleteAfspraakZoekterm, addAfspraakZoekterm, refetch} = useContext(AfspraakDetailContext);
 	const [zoekterm, setZoekterm] = useState<string>();
 	const [zoektermTouched, setZoektermTouched] = useState<boolean>(false);
+	const handleMutation = useHandleMutation();
 
 	const onAddAfspraakZoekterm = (e) => {
 		e.preventDefault();
@@ -57,10 +60,23 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 		});
 	};
 
-	const menu = <AfspraakDetailMenu afspraak={afspraak} onDelete={() => deleteAfspraak()} />;
+	const [endAfspraakMutation] = useEndAfspraakMutation();
+	const endAfspraak = (validThrough: Date) => {
+		handleMutation(endAfspraakMutation({
+			variables: {
+				id: afspraak.id!,
+				validThrough: d(validThrough).format("YYYY-MM-DD"),
+			},
+		}), t("endAfspraak.successMessage", {date: d(validThrough).format("L")}), () => {
+			refetch();
+		});
+	};
+
+	const menu = <AfspraakDetailMenu afspraak={afspraak} onDelete={() => deleteAfspraak()} onEndAfspraak={(validThrough: Date) => endAfspraak(validThrough)} />;
 	const bedrag = afspraak.credit ? parseFloat(afspraak.bedrag) : (parseFloat(afspraak.bedrag) * -1);
 	const zoektermen = afspraak.zoektermen || [];
 	const matchingAfspraken = afspraak.matchingAfspraken || [];
+	const validThrough = d(afspraak.validThrough, "YYYY-MM-DD");
 
 	return (
 		<Page title={t("afspraakDetailView.title")} backButton={<BackButton to={Routes.Burger(afspraak.burger?.id)} />} menu={menu}>
@@ -112,30 +128,51 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 
 					</FormRight>
 				</Stack>
+
+				{afspraak.validThrough && (<>
+					<VStack py={3}>
+						<Divider />
+					</VStack>
+
+					<Stack direction={["column", "row"]}>
+						<FormLeft />
+						<FormRight>
+							{d().isBefore(validThrough) ? (
+								<Text color={"red.500"}>{t("afspraak.willEndOn", {date: validThrough.format("L")})}</Text>
+							) : (
+								<Text color={"gray.500"}>{t("afspraak.endedOn", {date: validThrough.format("L")})}</Text>
+							)}
+						</FormRight>
+					</Stack>
+				</>)}
 			</Section>
 
 			<Section direction={["column", "row"]}>
 				<FormLeft title={t("afspraakDetailView.section3.title")} helperText={t("afspraakDetailView.section3.helperText")} />
 				<FormRight>
 
-					<Stack direction={"column"}>
-						<form onSubmit={onAddAfspraakZoekterm}>
-							<FormControl isInvalid={!zoektermValidator.safeParse(zoekterm).success && zoektermTouched}>
-								<Stack>
-									<FormLabel>{t("afspraak.zoektermen")}</FormLabel>
-									<InputGroup size={"md"}>
-										<InputLeftElement pointerEvents="none" color="gray.300" fontSize="1.2em">
-											<AiOutlineTag />
-										</InputLeftElement>
-										<Input id="zoektermen" onChange={e => setZoekterm(e.target.value)} value={zoekterm || ""} onFocus={() => setZoektermTouched(true)} onBlur={() => setZoektermTouched(true)} />
-										<InputRightElement width={"auto"} pr={1}>
-											<Button type={"submit"} size={"sm"} colorScheme={"primary"}>{t("actions.add")}</Button>
-										</InputRightElement>
-									</InputGroup>
-								</Stack>
-							</FormControl>
-						</form>
-						<ZoektermenList zoektermen={zoektermen} onDeleteZoekterm={(zoekterm: string) => deleteAfspraakZoekterm(zoekterm)} />
+					<Stack>
+						{isAfspraakActive(afspraak) ? (
+							<form onSubmit={onAddAfspraakZoekterm}>
+								<FormControl isInvalid={!zoektermValidator.safeParse(zoekterm).success && zoektermTouched}>
+									<Stack>
+										<FormLabel>{t("afspraak.zoektermen")}</FormLabel>
+										<InputGroup size={"md"}>
+											<InputLeftElement pointerEvents="none" color="gray.300" fontSize="1.2em">
+												<AiOutlineTag />
+											</InputLeftElement>
+											<Input id="zoektermen" onChange={e => setZoekterm(e.target.value)} value={zoekterm || ""} onFocus={() => setZoektermTouched(true)} onBlur={() => setZoektermTouched(true)} />
+											<InputRightElement width={"auto"} pr={1}>
+												<Button type={"submit"} size={"sm"} colorScheme={"primary"}>{t("actions.add")}</Button>
+											</InputRightElement>
+										</InputGroup>
+									</Stack>
+								</FormControl>
+							</form>
+						) : (
+							<FormLabel>{t("afspraak.zoektermen")}</FormLabel>
+						)}
+						<ZoektermenList zoektermen={zoektermen} onDeleteZoekterm={isAfspraakActive(afspraak) ? (zoekterm: string) => deleteAfspraakZoekterm(zoekterm) : undefined} />
 					</Stack>
 
 					{zoektermen.length === 0 && (
@@ -185,8 +222,6 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 									})}
 								</Tbody>
 							</Table>
-
-
 						</Stack>
 					)}
 				</FormRight>

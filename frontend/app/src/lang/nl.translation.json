@@ -80,6 +80,7 @@
         "cancel": "Annuleren",
         "delete": "Verwijderen",
         "edit": "Wijzigen",
+        "end": "Beëindigen",
         "add": "Toevoegen",
         "back": "Terug",
         "actions": "Acties",
@@ -88,6 +89,7 @@
         "startBoeken": "Alle transacties afletteren",
         "confirmAutomatischBoeken": "Voortaan automatisch afletteren",
         "disconnect": "Koppeling verwijderen",
+        "filter": "Filteren",
         "backToList": "Terug naar overzicht",
         "clearSearch": "Zoekopdracht wissen",
         "backToHome": "Terug naar de hoofdpagina",
@@ -109,8 +111,12 @@
         "omschrijving": "Omschrijving",
         "bedrag": "Bedrag",
         "periodiek": "Periodiek",
+        "willEndOn": "Deze afspraak eindigt op {{date}}.",
+        "endedOn": "Deze afspraak is beëindigd per {{date}}.",
         "zoektermen": "Zoektermen",
-        "zoekterm": "Zoekterm"
+        "zoekterm": "Zoekterm",
+        "showActive": "Actieve afspraken",
+        "showInActive": "Beëindigde afspraken"
     },
     "afspraakDetailView": {
         "invalidBetaalrichtingError": "Kies een betaalrichting.",
@@ -324,7 +330,15 @@
         "confirmModalTitle": "Afspraak verwijderen",
         "confirmModalBody": "Weet u zeker dat u deze afspraak wil verwijderen?"
     },
+    "endAfspraak": {
+        "successMessage": "Afspraak beëindigd per {{date}}.",
+        "confirmModalTitle": "Afspraak beëindigen",
+        "confirmModalBody": "Vanaf welke datum wordt deze afspraak beëindigd?"
+    },
     "burger": "Burger",
+    "errors": {
+        "invalidDateError": "Vul een geldige datum in."
+    },
     "transactions": {
         "amount": "Bedrag",
         "beneficiaryAccount": "Tegenrekening",
@@ -373,10 +387,11 @@
         "rubriek": "Rubriek",
         "bedrag": "Bedrag"
     },
-    "agreements": {
+    "afspraken": {
         "tegenpartij": "Tegenpartij",
         "omschrijving": "Omschrijving",
-        "bedrag": "Bedrag"
+        "bedrag": "Bedrag",
+        "noResults": "Er zijn geen afspraken gevonden."
     },
     "pages": {
         "gebeurtenissen": {

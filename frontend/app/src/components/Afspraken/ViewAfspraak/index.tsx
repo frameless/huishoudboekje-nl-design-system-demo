@@ -57,6 +57,7 @@ const ViewAfspraak = () => {
 				deleteAfspraakZoekterm: (zoekterm: string) => handleMutation(deleteAfspraakZoekterm({
 					variables: {afspraakId: parseInt(id), zoekterm},
 				}), t("messages.deleteAfspraakZoektermSuccess"), () => $afspraak.refetch()),
+				refetch: $afspraak.refetch,
 			};
 
 			return (
