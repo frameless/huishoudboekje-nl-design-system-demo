@@ -387,12 +387,10 @@
         "rubriek": "Rubriek",
         "bedrag": "Bedrag"
     },
-    "agreements": {
+    "afspraken": {
         "tegenpartij": "Tegenpartij",
         "omschrijving": "Omschrijving",
-        "bedrag": "Bedrag"
-    },
-    "afspraken": {
+        "bedrag": "Bedrag",
         "noResults": "Er zijn geen afspraken gevonden."
     },
     "pages": {

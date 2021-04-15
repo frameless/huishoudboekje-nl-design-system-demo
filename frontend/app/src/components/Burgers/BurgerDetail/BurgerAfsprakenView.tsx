@@ -50,16 +50,16 @@ const BurgerAfsprakenView: React.FC<StackProps & {burger: Burger, refetch: VoidF
 					<Table size={"sm"} variant={"noLeftPadding"}>
 						<Thead>
 							<Tr>
-								<Th>{t("agreements.tegenpartij")}</Th>
-								{!isMobile && <Th>{t("agreements.omschrijving")}</Th>}
-								<Th textAlign={"right"}>{t("agreements.bedrag")}</Th>
+								<Th>{t("afspraken.tegenpartij")}</Th>
+								{!isMobile && <Th>{t("afspraken.omschrijving")}</Th>}
+								<Th textAlign={"right"}>{t("afspraken.bedrag")}</Th>
 								<Th />
 							</Tr>
 						</Thead>
 						<Tbody>
 							{sortedAfspraken.length === 0 && (
 								<Tr>
-									<Td colspan={10}>
+									<Td colSpan={10}>
 										<Text>{t("afspraken.noResults")}</Text>
 									</Td>
 								</Tr>
