@@ -13,7 +13,16 @@ def test_afspraken_post_new_afspraak(client, session):
         "valid_from": date(2020, 10, 1).isoformat(),
         "valid_through": date(2020, 10, 1).isoformat(),
         "aantal_betalingen": 5,
-        "interval": "P1Y2M10DT2H30M",
+        "betaalinstructie": '''{
+            byDay: [1,2]
+            byMonth: [3,4]
+            byMonthDay: []
+            byMonthWeek: []
+            exceptDates: []
+            startDatum: 2021-01-01
+            eindDatum: 2021-12-31
+
+        }''',
         "bedrag": 1337,
         "credit": True,
         "zoektermen": ["ABC1234"],
