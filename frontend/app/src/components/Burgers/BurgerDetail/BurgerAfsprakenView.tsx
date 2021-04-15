@@ -1,5 +1,5 @@
 import {AddIcon} from "@chakra-ui/icons";
-import {Box, Button, Checkbox, CheckboxGroup, Stack, StackProps, Table, Tbody, Td, Text, Th, Thead, Tr, useBreakpointValue} from "@chakra-ui/react";
+import {Box, Button, Checkbox, CheckboxGroup, FormControl, FormLabel, Stack, StackProps, Table, Tbody, Td, Text, Th, Thead, Tr, useBreakpointValue} from "@chakra-ui/react";
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {NavLink} from "react-router-dom";
@@ -30,17 +30,20 @@ const BurgerAfsprakenView: React.FC<StackProps & {burger: Burger, refetch: VoidF
 	return (
 		<Stack direction={["column", "row"]} {...props}>
 			<FormLeft title={t("forms.burgers.sections.agreements.title")} helperText={t("forms.burgers.sections.agreements.detailText")}>
-				<CheckboxGroup defaultValue={["active"]} onChange={(val) => {
-					setFilter(() => ({
-						active: val.includes("active"),
-						inactive: val.includes("inactive"),
-					}));
-				}}>
-					<Stack>
-						<Checkbox value={"active"}>{t("afspraak.showActive")}</Checkbox>
-						<Checkbox value={"inactive"}>{t("afspraak.showInActive")}</Checkbox>
-					</Stack>
-				</CheckboxGroup>
+				<FormControl>
+					<FormLabel>{t("actions.filter")}</FormLabel>
+					<CheckboxGroup defaultValue={["active"]} onChange={(val) => {
+						setFilter(() => ({
+							active: val.includes("active"),
+							inactive: val.includes("inactive"),
+						}));
+					}}>
+						<Stack>
+							<Checkbox value={"active"}>{t("afspraak.showActive")}</Checkbox>
+							<Checkbox value={"inactive"}>{t("afspraak.showInActive")}</Checkbox>
+						</Stack>
+					</CheckboxGroup>
+				</FormControl>
 			</FormLeft>
 			<FormRight justify={"start"}>
 				{afspraken && afspraken.length > 0 && (<>
