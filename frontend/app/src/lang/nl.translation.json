@@ -89,6 +89,7 @@
         "startBoeken": "Alle transacties afletteren",
         "confirmAutomatischBoeken": "Voortaan automatisch afletteren",
         "disconnect": "Koppeling verwijderen",
+        "filter": "Filteren",
         "backToList": "Terug naar overzicht",
         "clearSearch": "Zoekopdracht wissen",
         "backToHome": "Terug naar de hoofdpagina",
@@ -113,7 +114,9 @@
         "willEndOn": "Deze afspraak eindigt op {{date}}.",
         "endedOn": "Deze afspraak is beëindigd per {{date}}.",
         "zoektermen": "Zoektermen",
-        "zoekterm": "Zoekterm"
+        "zoekterm": "Zoekterm",
+        "showActive": "Actieve afspraken",
+        "showInActive": "Beëindigde afspraken"
     },
     "afspraakDetailView": {
         "invalidBetaalrichtingError": "Kies een betaalrichting.",
@@ -388,6 +391,9 @@
         "tegenpartij": "Tegenpartij",
         "omschrijving": "Omschrijving",
         "bedrag": "Bedrag"
+    },
+    "afspraken": {
+        "noResults": "Er zijn geen afspraken gevonden."
     },
     "pages": {
         "gebeurtenissen": {

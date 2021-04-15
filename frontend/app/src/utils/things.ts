@@ -4,7 +4,7 @@ import currency from "currency.js";
 import {friendlyFormatIBAN} from "ibantools";
 import {createContext} from "react";
 import {Granularity, periodFormatForGranularity} from "../components/Rapportage/Aggregator";
-import {BankTransaction, Burger, GebruikersActiviteit, Interval, Rubriek} from "../generated/graphql";
+import {Afspraak, BankTransaction, Burger, GebruikersActiviteit, Interval, Rubriek} from "../generated/graphql";
 import {IntervalType} from "../models/models";
 import d from "./dayjs";
 
@@ -208,4 +208,18 @@ export const truncateText = (str: string, maxLength = 50) => {
 	}
 
 	return str;
+};
+
+export const isAfspraakActive = (afspraak: Afspraak) => {
+	const {validFrom, validThrough} = afspraak;
+
+	if (validFrom && validThrough) {
+		const _validFrom = d(validFrom, "YYYY-MM-DD");
+		const _validThrough = d(validThrough, "YYYY-MM-DD");
+
+		return (d().isBefore(_validThrough) && d().isSameOrAfter(_validFrom));
+	}
+
+	// If there's no validFrom or no validThrough, assume this Afspraak is active.
+	return true;
 };
