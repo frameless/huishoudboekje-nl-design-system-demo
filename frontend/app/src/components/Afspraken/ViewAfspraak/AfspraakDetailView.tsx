@@ -76,9 +76,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	const bedrag = afspraak.credit ? parseFloat(afspraak.bedrag) : (parseFloat(afspraak.bedrag) * -1);
 	const zoektermen = afspraak.zoektermen || [];
 	const matchingAfspraken = afspraak.matchingAfspraken || [];
-
 	const validThrough = d(afspraak.validThrough, "YYYY-MM-DD");
-	const isActive = isAfspraakActive(afspraak);
 
 	return (
 		<Page title={t("afspraakDetailView.title")} backButton={<BackButton to={Routes.Burger(afspraak.burger?.id)} />} menu={menu}>
@@ -224,8 +222,6 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 									})}
 								</Tbody>
 							</Table>
-
-
 						</Stack>
 					)}
 				</FormRight>
