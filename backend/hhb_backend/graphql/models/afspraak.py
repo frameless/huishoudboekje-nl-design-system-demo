@@ -31,50 +31,19 @@ class Interval(graphene.ObjectType):
 
 class Betaalinstructie(graphene.ObjectType):
     """Implementatie op basis van http://schema.org/Schedule"""
-    start_date = graphene.Date()
-    end_date = graphene.Date()
-    '''Het aantal keer dat deze ingepland moet worden'''
-    repeat_count = graphene.Int()
+
     '''Lijst van dagen in de week'''
     by_day = graphene.List(DayOfWeek)
-    '''De dag van de maand'''
-    by_month_day = graphene.Int()
     '''Lijst van maanden in het jaar'''
     by_month = graphene.List(graphene.Int)
-
-    @staticmethod
-    def resolve_start_date(root, _info):
-        return None
-        # if value := root.get("start_datum"):  # TODO rename to start_date in service
-        #     return date.fromisoformat(value)
-
-    @staticmethod
-    def resolve_end_date(root, _info):
-        return None
-        # if value := root.get("eind_datum"):  # TODO rename to end_date in service
-        #     return date.fromisoformat(value)
-
-    @staticmethod
-    def resolve_repeat_count(root, _info):
-        if value := root.get("aantal_betalingen"):  # TODO rename to repeat_count in service
-            return value
-
-    @staticmethod
-    def resolve_by_day(root, info):
-        if value := root.get("interval"):
-            if start_date := Betaalinstructie.resolve_start_date(root, info):
-                return convert_iso_duration_to_schedule_by_day(value, start_date)
-
-    @staticmethod
-    def resolve_by_month_day(root, info):
-        if start_date := Betaalinstructie.resolve_start_date(root, info):
-            return start_date.day
-
-    @staticmethod
-    def resolve_by_month(root, info):
-        if value := root.get("interval"):
-            if start_date := Betaalinstructie.resolve_start_date(root, info):
-                return convert_iso_duration_to_schedule_by_month(value, start_date)
+    '''De dagen van de maand'''
+    by_month_day = graphene.List(graphene.Int)
+    '''Bijvoorbeeld "P1W" elke week.'''
+    repeat_frequency = graphene.String()
+    '''Lijst met datums waarop het NIET geldt'''
+    except_dates = graphene.List(graphene.String)
+    start_date = graphene.String()
+    end_date = graphene.String()
 
 
 class Afspraak(graphene.ObjectType):
@@ -100,15 +69,7 @@ class Afspraak(graphene.ObjectType):
     valid_from = graphene.Date()
     valid_through = graphene.Date()
 
-    interval = graphene.Field(Interval, deprecation_reason='use betaalinstructie instead')
-    aantal_betalingen = graphene.Int(deprecation_reason='use betaalinstructie instead')
-    beschrijving = graphene.String(deprecation_reason='use omschrijving instead')
     automatische_incasso = graphene.Boolean(deprecation_reason='use betaalinstructie instead')
-
-    @staticmethod
-    def resolve_betaalinstructie(root, _info):
-        if root.get('aantal_betalingen') or root.get('valid_through'):
-            return root
 
     async def resolve_overschrijvingen(root, info, **kwargs):
         planner_input = PlannedOverschijvingenInput(
@@ -161,12 +122,6 @@ class Afspraak(graphene.ObjectType):
     def resolve_valid_through(root, info):
         if value := root.get("valid_through"):
             return date.fromisoformat(value)
-
-    def resolve_interval(root, info):
-        if value := root.get("interval"):
-            return convert_hhb_interval_to_dict(value)
-        else:
-            return {"jaren": 0, "maanden": 0, "weken": 0, "dagen": 0}
 
     async def resolve_organisatie(root, info):
         """ Get organisatie when requested """

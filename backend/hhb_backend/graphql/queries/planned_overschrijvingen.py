@@ -1,15 +1,15 @@
 """ GraphQL Gebruikers query """
+from logging import getLogger
+
 import graphene
 
+from hhb_backend.graphql.models.overschrijving import Overschrijving
 from hhb_backend.graphql.mutations.afspraken.update_afspraak_betaalinstructie import BetaalinstructieInput
 from hhb_backend.graphql.scalars.bedrag import Bedrag
-from hhb_backend.graphql.models.overschrijving import Overschrijving
-from hhb_backend.graphql.utils.interval import convert_betaalinstructie_interval
 from hhb_backend.processen.overschrijvingen_planner import (
     PlannedOverschijvingenInput,
     get_planned_overschrijvingen,
 )
-from logging import getLogger
 
 log = getLogger(__name__)
 
@@ -32,7 +32,7 @@ class PlannedOverschijvingenQuery:
         betaalinstructie = input["betaalinstructie"]
         planner_input = PlannedOverschijvingenInput(
             betaalinstructie.start_date.isoformat(),
-            convert_betaalinstructie_interval(betaalinstructie),
+            "dummy",#convert_betaalinstructie_interval(betaalinstructie),
             betaalinstructie.repeat_count,
             input["bedrag"],
         )

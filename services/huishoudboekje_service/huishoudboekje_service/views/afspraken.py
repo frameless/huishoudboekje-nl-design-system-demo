@@ -50,11 +50,11 @@ class AfspraakView(HHBView):
                     {"type": "integer"},
                 ],
             },
-            "interval": {
+            "betaalinstructie": {
                 "oneOf": [
+                    {"type": "object"},
                     {"type": "null"},
-                    {"type": "string"},
-                ],
+                ]
             },
             "bedrag": {
                 "type": "number",

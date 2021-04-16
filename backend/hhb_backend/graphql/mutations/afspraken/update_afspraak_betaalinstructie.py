@@ -7,6 +7,7 @@ from graphql import GraphQLError
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models import afspraak
+from hhb_backend.graphql.models.afspraak import Betaalinstructie
 from hhb_backend.graphql.scalars.day_of_week import DayOfWeek
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (gebruikers_activiteit_entities, log_gebruikers_activiteit)
 from hhb_backend.graphql.utils.interval import convert_betaalinstructie_interval
@@ -14,16 +15,18 @@ from hhb_backend.graphql.utils.interval import convert_betaalinstructie_interval
 
 class BetaalinstructieInput(graphene.InputObjectType):
     """Implementatie op basis van http://schema.org/Schedule"""
-    start_date = graphene.Date(required=True)
-    end_date = graphene.Date()
-    '''Het aantal keer dat deze ingepland moet worden'''
-    repeat_count = graphene.Int()
     '''Lijst van dagen in de week'''
     by_day = graphene.List(DayOfWeek)
-    '''De dag van de maand'''
-    by_month_day = graphene.Int()
     '''Lijst van maanden in het jaar'''
     by_month = graphene.List(graphene.Int)
+    '''De dagen van de maand'''
+    by_month_day = graphene.List(graphene.Int)
+    '''Bijvoorbeeld "P1W" elke week.'''
+    repeat_frequency = graphene.String()
+    '''Lijst met datums waarop het NIET geldt'''
+    except_dates = graphene.List(graphene.String)
+    start_date = graphene.String()
+    end_date = graphene.String()
 
 
 class UpdateAfspraakBetaalinstructie(graphene.Mutation):
@@ -41,7 +44,7 @@ class UpdateAfspraakBetaalinstructie(graphene.Mutation):
             entities=gebruikers_activiteit_entities(
                 entity_type="afspraak", result=self, key="afspraak"
             )
-            + gebruikers_activiteit_entities(
+                     + gebruikers_activiteit_entities(
                 entity_type="burger", result=self.afspraak, key="burger_id"
             ),
             before=dict(afspraak=self.previous),
@@ -66,18 +69,10 @@ class UpdateAfspraakBetaalinstructie(graphene.Mutation):
         if previous.get("credit") == True:
             raise GraphQLError("betaalinstructie is alleen mogelijk bij uitgaven")
 
-        # TODO Bepalen of dit nodig is
-        # previous_start_date = previous['start_datum']
-        # if previous_start_date is not None and isoparse(previous_start_date).date() != betaalinstructie.start_date:
-        #     raise GraphQLError("start_date kan niet aangepast worden")
-
-        interval = convert_betaalinstructie_interval(betaalinstructie)
-
         input = {
             **previous,
             "automatische_incasso": False,
-            "aantal_betalingen": betaalinstructie.repeat_count,
-            "interval": interval
+            "betaalinstructie": betaalinstructie
         }
 
         response = requests.post(
@@ -90,4 +85,3 @@ class UpdateAfspraakBetaalinstructie(graphene.Mutation):
         afspraak = response.json()["data"]
 
         return UpdateAfspraakBetaalinstructie(afspraak=afspraak, previous=previous, ok=True)
-
