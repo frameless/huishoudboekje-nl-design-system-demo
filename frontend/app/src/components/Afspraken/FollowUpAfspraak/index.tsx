@@ -8,6 +8,7 @@ import Queryable from "../../../utils/Queryable";
 import useToaster from "../../../utils/useToaster";
 import BackButton from "../../Layouts/BackButton";
 import Page from "../../Layouts/Page";
+import PageNotFound from "../../PageNotFound";
 import AfspraakForm from "../AfspraakForm";
 import AfspraakFormContext from "../EditAfspraak/context";
 import {FollowUpAfspraakFormContextType} from "./context";
@@ -32,6 +33,10 @@ const FollowUpAfspraak = () => {
 		<Queryable query={$afspraak} children={(data) => {
 			const afspraak: Afspraak = data.afspraak;
 
+			if (!afspraak) {
+				return <PageNotFound />;
+			}
+
 			const createFollowupAfspraak = async (input: Omit<CreateAfspraakMutationVariables["input"], "burgerId">) => {
 				// Create afspraak first
 				const data = await createAfspraak({
@@ -48,12 +53,14 @@ const FollowUpAfspraak = () => {
 				const createdAfspraakId = data.data?.createAfspraak?.afspraak?.id;
 
 				if (createdAfspraakId) {
-					const addZoektermen = (afspraak.zoektermen || []).map(z => {
-						return addAfspraakZoekterm({variables: {afspraakId: createdAfspraakId, zoekterm: z}});
+					const addZoektermen = (afspraak.zoektermen || []).map(async z => {
+						console.log("Adding zoekterm", z);
+						return await addAfspraakZoekterm({variables: {afspraakId: createdAfspraakId, zoekterm: z}});
 					});
 
 					Promise.all(addZoektermen)
 						.then((result) => {
+							console.log(result);
 							toast({
 								success: t("messages.createAfspraakSuccess"),
 							});

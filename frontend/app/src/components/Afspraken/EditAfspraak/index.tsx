@@ -7,6 +7,7 @@ import Queryable from "../../../utils/Queryable";
 import useHandleMutation from "../../../utils/useHandleMutation";
 import BackButton from "../../Layouts/BackButton";
 import Page from "../../Layouts/Page";
+import PageNotFound from "../../PageNotFound";
 import AfspraakForm from "../AfspraakForm";
 import AfspraakFormContext, {AfspraakFormContextType} from "./context";
 
@@ -26,6 +27,10 @@ const EditAfspraak = () => {
 	return (
 		<Queryable query={$afspraak} children={(data) => {
 			const afspraak: Afspraak = data.afspraak;
+
+			if (!afspraak) {
+				return <PageNotFound />;
+			}
 
 			const editAfspraakValues: UpdateAfspraakMutationVariables["input"] = {
 				bedrag: parseFloat(afspraak.bedrag),
