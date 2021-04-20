@@ -96,12 +96,6 @@
         "clickToEdit": "Klik om te wijzigen"
     },
     "genericInputErrorMessage": "Er is een fout opgetreden. Controleer de invoer en probeer het nog eens.",
-    "afspraakForm": {
-        "section1": {
-            "title": "Tegenpartij en betaling",
-            "helperText": "Vul hier alle gegevens over de afspraak in."
-        }
-    },
     "afspraak": {
         "betaalrichting": "Betaalrichting",
         "inkomsten": "Inkomsten",
@@ -327,9 +321,19 @@
         "customIntervalType": "Periodiek",
         "invalidPeriodiekError": "Kies een periodiek."
     },
+    "afspraakForm": {
+        "section1": {
+            "title": "Tegenpartij en betaling",
+            "helperText": "Vul hier alle gegevens over de afspraak in."
+        }
+    },
     "afspraken": {
         "vervolg": {
             "pageTitle": "Vervolgafspraak toevoegen"
+        },
+        "followUp": {
+            "zoektermenHelperText": "De volgende zoektermen worden overgenomen bij de vervolgafspraak:",
+            "betaalinstructieHelperText": "Voor een vervolgafspraak moet een nieuwe betaalinstructie worden ingesteld."
         },
         "tegenpartij": "Tegenpartij",
         "omschrijving": "Omschrijving",

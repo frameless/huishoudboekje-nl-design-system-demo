@@ -1,5 +1,8 @@
+import {Divider, List, ListIcon, ListItem, Stack} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
+import {BsExclamationCircleFill} from "react-icons/bs";
+import { MdCheckCircle } from "react-icons/md";
 import {useHistory, useParams} from "react-router-dom";
 import Routes from "../../../config/routes";
 import {Afspraak, CreateAfspraakMutationVariables, useAddAfspraakZoektermMutation, useCreateAfspraakMutation, useGetAfspraakFormDataQuery} from "../../../generated/graphql";
@@ -13,9 +16,8 @@ import Section from "../../Layouts/Section";
 import PageNotFound from "../../PageNotFound";
 import AfspraakForm from "../AfspraakForm";
 import AfspraakFormContext from "../EditAfspraak/context";
+import ZoektermenList from "../ZoektermenList";
 import {FollowUpAfspraakFormContextType} from "./context";
-
-// Todo: zoektermen ook aanmaken bij nieuwe afspraak werkt niet, want twee mutations tegelijk slaat enkel de laatste zoekterm op!
 
 const FollowUpAfspraak = () => {
 	const {id} = useParams<{id: string}>();
@@ -90,13 +92,30 @@ const FollowUpAfspraak = () => {
 
 			return (
 				<Page title={t("afspraken.vervolg.pageTitle")} backButton={<BackButton to={Routes.ViewAfspraak(afspraak.id)} />}>
-					<Section direction={["column", "row"]}>
-						<FormLeft title={t("afspraakForm.section1.title")} helperText={t("afspraakForm.section1.helperText")} />
-						<FormRight spacing={5}>
-							<AfspraakFormContext.Provider value={ctxValue}>
-								<AfspraakForm burgerRekeningen={afspraak.burger?.rekeningen || []} values={values} onChange={createFollowupAfspraak} />
-							</AfspraakFormContext.Provider>
-						</FormRight>
+					<Section spacing={5}>
+						<Stack direction={["column", "row"]}>
+							<FormLeft title={t("afspraakForm.section1.title")} helperText={t("afspraakForm.section1.helperText")}>
+								<Divider />
+								<List spacing={2}>
+									<ListItem>
+										<ListIcon as={MdCheckCircle} color="green.500" />
+										{t("afspraken.followUp.zoektermenHelperText")}
+										<ZoektermenList zoektermen={afspraak.zoektermen || []} />
+									</ListItem>
+									{!afspraak.betaalinstructie && (
+										<ListItem>
+											<ListIcon as={BsExclamationCircleFill} color="orange.500" />
+											{t("afspraken.followUp.betaalinstructieHelperText")}
+										</ListItem>
+									)}
+								</List>
+							</FormLeft>
+							<FormRight spacing={5}>
+								<AfspraakFormContext.Provider value={ctxValue}>
+									<AfspraakForm burgerRekeningen={afspraak.burger?.rekeningen || []} values={values} onChange={createFollowupAfspraak} />
+								</AfspraakFormContext.Provider>
+							</FormRight>
+						</Stack>
 					</Section>
 				</Page>
 			);
