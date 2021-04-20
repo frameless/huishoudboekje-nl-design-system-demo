@@ -8,7 +8,7 @@ setup(
     url='',
     description='HuishoudBoekje GraphQL backend',
     install_requires=[
-        'Flask>=1.1.2',
+        'Flask>=1.1.2,<2',
         'Werkzeug>=1.0.1,<2',
         'aiodataloader>=0.2.0',
         'dataclasses-json>=0.5.2',
