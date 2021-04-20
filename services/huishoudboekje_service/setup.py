@@ -9,7 +9,7 @@ setup(
     license='',
     description='Huishoudboekje Service',
     install_requires=[
-        "Flask>=1.1.2",
+        "Flask>=1.1.2,<2",
         "SQLAlchemy>=1.4",
         "psycopg2-binary>=2.8.6",
         "Flask-SQLAlchemy>=2.4.4",
