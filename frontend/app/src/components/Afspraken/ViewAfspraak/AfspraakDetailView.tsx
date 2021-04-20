@@ -1,6 +1,5 @@
 import {AddIcon, ViewIcon, WarningTwoIcon} from "@chakra-ui/icons";
 import {
-	Badge,
 	Box,
 	Button,
 	Divider,
@@ -30,11 +29,11 @@ import {NavLink} from "react-router-dom";
 import Routes from "../../../config/routes";
 import {Afspraak, useEndAfspraakMutation} from "../../../generated/graphql";
 import d from "../../../utils/dayjs";
-import {currencyFormat2, formatBurgerName, intervalString, isAfspraakActive} from "../../../utils/things";
+import {currencyFormat2, formatBurgerName, isAfspraakActive} from "../../../utils/things";
 import useHandleMutation from "../../../utils/useHandleMutation";
 import {zoektermValidator} from "../../../utils/zod";
-import BackButton from "../../Layouts/BackButton";
 import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
+import BackButton from "../../Layouts/BackButton";
 import DataItem from "../../Layouts/DataItem";
 import Page from "../../Layouts/Page";
 import PrettyIban from "../../Layouts/PrettyIban";
@@ -143,7 +142,8 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 								<Text color={"gray.500"}>{t("afspraak.endedOn", {date: validThrough.format("L")})}</Text>
 							)}
 							<Box>
-								<Button as={NavLink} to={Routes.FollowUpAfspraak(afspraak.id)} colorScheme={"primary"} size={"sm"} leftIcon={<AddIcon />}>{t("afspraak.planFollowup")}</Button>
+								<Button as={NavLink} to={Routes.FollowUpAfspraak(afspraak.id)} colorScheme={"primary"} size={"sm"} leftIcon={
+									<AddIcon />}>{t("afspraak.planFollowup")}</Button>
 							</Box>
 						</FormRight>
 					</Stack>

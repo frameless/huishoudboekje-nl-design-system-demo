@@ -6,8 +6,10 @@ import {Afspraak, CreateAfspraakMutationVariables, useAddAfspraakZoektermMutatio
 import d from "../../../utils/dayjs";
 import Queryable from "../../../utils/Queryable";
 import useToaster from "../../../utils/useToaster";
+import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
 import BackButton from "../../Layouts/BackButton";
 import Page from "../../Layouts/Page";
+import Section from "../../Layouts/Section";
 import PageNotFound from "../../PageNotFound";
 import AfspraakForm from "../AfspraakForm";
 import AfspraakFormContext from "../EditAfspraak/context";
@@ -54,13 +56,11 @@ const FollowUpAfspraak = () => {
 
 				if (createdAfspraakId) {
 					const addZoektermen = (afspraak.zoektermen || []).map(async z => {
-						console.log("Adding zoekterm", z);
 						return await addAfspraakZoekterm({variables: {afspraakId: createdAfspraakId, zoekterm: z}});
 					});
 
 					Promise.all(addZoektermen)
 						.then((result) => {
-							console.log(result);
 							toast({
 								success: t("messages.createAfspraakSuccess"),
 							});
@@ -89,11 +89,16 @@ const FollowUpAfspraak = () => {
 			};
 
 			return (
-				<AfspraakFormContext.Provider value={ctxValue}>
-					<Page title={t("afspraken.vervolg.pageTitle")} backButton={<BackButton to={Routes.ViewAfspraak(afspraak.id)} />}>
-						<AfspraakForm burgerRekeningen={afspraak.burger?.rekeningen || []} values={values} onChange={createFollowupAfspraak} />
-					</Page>
-				</AfspraakFormContext.Provider>
+				<Page title={t("afspraken.vervolg.pageTitle")} backButton={<BackButton to={Routes.ViewAfspraak(afspraak.id)} />}>
+					<Section direction={["column", "row"]}>
+						<FormLeft title={t("afspraakForm.section1.title")} helperText={t("afspraakForm.section1.helperText")} />
+						<FormRight spacing={5}>
+							<AfspraakFormContext.Provider value={ctxValue}>
+								<AfspraakForm burgerRekeningen={afspraak.burger?.rekeningen || []} values={values} onChange={createFollowupAfspraak} />
+							</AfspraakFormContext.Provider>
+						</FormRight>
+					</Section>
+				</Page>
 			);
 		}} />
 	);

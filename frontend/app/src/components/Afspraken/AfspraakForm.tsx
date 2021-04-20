@@ -6,9 +6,7 @@ import {Organisatie, Rekening, Rubriek, UpdateAfspraakMutationVariables} from ".
 import {currencyFormat, useReactSelectStyles} from "../../utils/things";
 import useToaster from "../../utils/useToaster";
 import zod from "../../utils/zod";
-import {FormLeft, FormRight} from "../Forms/FormLeftRight";
 import {RekeningOption, RekeningValueContainer} from "../Layouts/ReactSelect/RekeningOption";
-import Section from "../Layouts/Section";
 import AfspraakFormContext from "./EditAfspraak/context";
 
 const bedragInputValidator = zod.string().regex(/^[^.]*$/);
@@ -105,72 +103,69 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 	};
 
 	return (
-		<Section direction={["column", "row"]}>
-			<FormLeft title={t("afspraakForm.section1.title")} helperText={t("afspraakForm.section1.helperText")} />
-			<FormRight spacing={5}>
+		<Stack spacing={5}>
 
-				<Stack direction={["column", "row"]}>
-					<FormControl flex={1} isInvalid={!isValid("credit")} isRequired>
-						<FormLabel>{t("afspraak.betaalrichting")}</FormLabel>
-						<RadioGroup colorScheme={"primary"} onChange={e => {
-							updateForm("credit", e === "inkomsten");
-							updateForm("rubriekId", undefined);
-						}} value={data.credit !== undefined ? (data.credit ? "inkomsten" : "uitgaven") : undefined}>
-							<Stack>
-								<Radio value="inkomsten">{t("afspraak.inkomsten")}</Radio>
-								<Radio value="uitgaven">{t("afspraak.uitgaven")}</Radio>
-							</Stack>
-						</RadioGroup>
-						<FormErrorMessage>{t("afspraakDetailView.invalidBetaalrichtingError")}</FormErrorMessage>
-					</FormControl>
-				</Stack>
+			<Stack direction={["column", "row"]}>
+				<FormControl flex={1} isInvalid={!isValid("credit")} isRequired>
+					<FormLabel>{t("afspraak.betaalrichting")}</FormLabel>
+					<RadioGroup colorScheme={"primary"} onChange={e => {
+						updateForm("credit", e === "inkomsten");
+						updateForm("rubriekId", undefined);
+					}} value={data.credit !== undefined ? (data.credit ? "inkomsten" : "uitgaven") : undefined}>
+						<Stack>
+							<Radio value="inkomsten">{t("afspraak.inkomsten")}</Radio>
+							<Radio value="uitgaven">{t("afspraak.uitgaven")}</Radio>
+						</Stack>
+					</RadioGroup>
+					<FormErrorMessage>{t("afspraakDetailView.invalidBetaalrichtingError")}</FormErrorMessage>
+				</FormControl>
+			</Stack>
 
-				<Stack direction={["column", "row"]}>
-					<FormControl flex={1} isInvalid={!isValid("tegenRekeningId")} isRequired>
-						<FormLabel>{t("afspraak.tegenrekening")}</FormLabel>
-						<Select id="tegenrekening" isClearable={true} noOptionsMessage={() => t("forms.agreements.fields.bankAccountChoose")} maxMenuHeight={350}
-							options={tegenrekeningOptions} value={data.tegenRekeningId ? tegenrekeningOptions.find(o => o.value === data.tegenRekeningId) : null}
-							onChange={(result) => {
-								updateForm("tegenRekeningId", result?.value);
-								updateForm("organisatieId", result?.context.organisatieId);
-							}} {...rekeningSelectProps} />
-						<FormErrorMessage>{t("afspraakDetailView.invalidTegenrekeningError")}</FormErrorMessage>
-					</FormControl>
-				</Stack>
+			<Stack direction={["column", "row"]}>
+				<FormControl flex={1} isInvalid={!isValid("tegenRekeningId")} isRequired>
+					<FormLabel>{t("afspraak.tegenrekening")}</FormLabel>
+					<Select id="tegenrekening" isClearable={true} noOptionsMessage={() => t("forms.agreements.fields.bankAccountChoose")} maxMenuHeight={350}
+						options={tegenrekeningOptions} value={data.tegenRekeningId ? tegenrekeningOptions.find(o => o.value === data.tegenRekeningId) : null}
+						onChange={(result) => {
+							updateForm("tegenRekeningId", result?.value);
+							updateForm("organisatieId", result?.context.organisatieId);
+						}} {...rekeningSelectProps} />
+					<FormErrorMessage>{t("afspraakDetailView.invalidTegenrekeningError")}</FormErrorMessage>
+				</FormControl>
+			</Stack>
 
-				<Stack direction={["column", "row"]}>
-					<FormControl flex={1} isInvalid={!isValid("rubriekId")} isRequired>
-						<FormLabel>{t("afspraak.rubriek")}</FormLabel>
-						<Select id="rubriek" isClearable={true} noOptionsMessage={() => t("forms.agreements.fields.rubriekChoose")} maxMenuHeight={350}
-							options={rubriekOptions} value={data.rubriekId ? rubriekOptions.find(r => r.value === data.rubriekId) : null}
-							onChange={(result) => updateForm("rubriekId", result?.value)} styles={isValid("rubriekId") ? reactSelectStyles.default : reactSelectStyles.error} />
-						<FormErrorMessage>{t("afspraakDetailView.invalidRubriekError")}</FormErrorMessage>
-					</FormControl>
+			<Stack direction={["column", "row"]}>
+				<FormControl flex={1} isInvalid={!isValid("rubriekId")} isRequired>
+					<FormLabel>{t("afspraak.rubriek")}</FormLabel>
+					<Select id="rubriek" isClearable={true} noOptionsMessage={() => t("forms.agreements.fields.rubriekChoose")} maxMenuHeight={350}
+						options={rubriekOptions} value={data.rubriekId ? rubriekOptions.find(r => r.value === data.rubriekId) : null}
+						onChange={(result) => updateForm("rubriekId", result?.value)} styles={isValid("rubriekId") ? reactSelectStyles.default : reactSelectStyles.error} />
+					<FormErrorMessage>{t("afspraakDetailView.invalidRubriekError")}</FormErrorMessage>
+				</FormControl>
 
-					<FormControl flex={1} isInvalid={!isValid("omschrijving")} isRequired={true}>
-						<FormLabel>{t("afspraak.omschrijving")}</FormLabel>
-						<Input value={data.omschrijving || ""} onChange={e => updateForm("omschrijving", e.target.value)} />
-						<FormErrorMessage>{t("afspraakDetailView.invalidOmschrijvingError")}</FormErrorMessage>
-					</FormControl>
-				</Stack>
+				<FormControl flex={1} isInvalid={!isValid("omschrijving")} isRequired={true}>
+					<FormLabel>{t("afspraak.omschrijving")}</FormLabel>
+					<Input value={data.omschrijving || ""} onChange={e => updateForm("omschrijving", e.target.value)} />
+					<FormErrorMessage>{t("afspraakDetailView.invalidOmschrijvingError")}</FormErrorMessage>
+				</FormControl>
+			</Stack>
 
-				<Stack direction={["column", "row"]}>
-					<FormControl flex={1} isInvalid={!isValid("bedrag") || (bedragRef.current?.value ? !bedragInputValidator.safeParse(bedragRef.current?.value).success : false)} isRequired>
-						<FormLabel>{t("afspraak.bedrag")}</FormLabel>
-						<InputGroup>
-							<InputLeftElement zIndex={0}>&euro;</InputLeftElement>
-							<Input flex={3} ref={bedragRef} type={"text"} pattern={"^[^.]*$"} defaultValue={currencyFormat(data.bedrag || values?.bedrag || "").format() || ""} onChange={e => updateForm("bedrag", parseFloat(currencyFormat(e.target.value).toString()))} />
-						</InputGroup>
-						<FormErrorMessage>{t("afspraakDetailView.invalidBedragError")}</FormErrorMessage>
-					</FormControl>
-				</Stack>
+			<Stack direction={["column", "row"]}>
+				<FormControl flex={1} isInvalid={!isValid("bedrag") || (bedragRef.current?.value ? !bedragInputValidator.safeParse(bedragRef.current?.value).success : false)} isRequired>
+					<FormLabel>{t("afspraak.bedrag")}</FormLabel>
+					<InputGroup>
+						<InputLeftElement zIndex={0}>&euro;</InputLeftElement>
+						<Input flex={3} ref={bedragRef} type={"text"} pattern={"^[^.]*$"} defaultValue={currencyFormat(data.bedrag || values?.bedrag || "").format() || ""} onChange={e => updateForm("bedrag", parseFloat(currencyFormat(e.target.value).toString()))} />
+					</InputGroup>
+					<FormErrorMessage>{t("afspraakDetailView.invalidBedragError")}</FormErrorMessage>
+				</FormControl>
+			</Stack>
 
-				<Box>
-					<Button colorScheme={"primary"} onClick={onSubmit}>{t("actions.save")}</Button>
-				</Box>
+			<Box>
+				<Button colorScheme={"primary"} onClick={onSubmit}>{t("actions.save")}</Button>
+			</Box>
 
-			</FormRight>
-		</Section>
+		</Stack>
 	);
 };
 
