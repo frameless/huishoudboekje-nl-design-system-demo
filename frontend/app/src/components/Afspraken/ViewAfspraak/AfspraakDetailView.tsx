@@ -213,7 +213,6 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 												<Td>
 													<Stack spacing={1} flex={1} alignItems={"flex-end"}>
 														<Box textAlign={"right"} color={bedrag < 0 ? "red.500" : "currentcolor"}>{currencyFormat2().format(bedrag)}</Box>
-														<Badge fontSize={"10px"}>{intervalString(a.interval, t)}</Badge>
 													</Stack>
 												</Td>
 												<Td>
