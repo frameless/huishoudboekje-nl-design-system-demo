@@ -184,7 +184,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 						</Text>
 					)}
 
-					{matchingAfspraken.length > 0 && (
+					{isAfspraakActive(afspraak) && matchingAfspraken.length > 0 && (
 						<Stack spacing={5}>
 							<Text color={"red.500"}>
 								<WarningTwoIcon mr={1} />
