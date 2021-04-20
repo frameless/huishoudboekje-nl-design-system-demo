@@ -72,10 +72,12 @@ class Afspraak(graphene.ObjectType):
     automatische_incasso = graphene.Boolean(deprecation_reason='use betaalinstructie instead')
 
     async def resolve_overschrijvingen(root, info, **kwargs):
+        if root.get("betaalinstructie") is None:
+            return []
+
+        betaalinstructie = root.get("betaalinstructie")
         planner_input = PlannedOverschijvingenInput(
-            root.get("valid_from"), # TODO dit wordt betaalinstructie start_datum
-            root.get("interval"),
-            root.get("aantal_betalingen"),
+            betaalinstructie,
             root.get("bedrag"),
             root.get("id"),
         )

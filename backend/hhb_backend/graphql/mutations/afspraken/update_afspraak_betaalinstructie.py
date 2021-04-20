@@ -22,10 +22,10 @@ class BetaalinstructieInput(graphene.InputObjectType):
     '''De dagen van de maand'''
     by_month_day = graphene.List(graphene.Int)
     '''Bijvoorbeeld "P1W" elke week.'''
-    repeat_frequency = graphene.String()
+    repeat_frequency = graphene.String(required=True)
     '''Lijst met datums waarop het NIET geldt'''
     except_dates = graphene.List(graphene.String)
-    start_date = graphene.String()
+    start_date = graphene.String(required=True)
     end_date = graphene.String()
 
 
