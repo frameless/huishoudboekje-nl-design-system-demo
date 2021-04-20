@@ -28,5 +28,6 @@ setup(
         'requests>=2.24.0',
         'schwifty>=2021.01.0',
         'sepaxml>=2.3.0',
+        'Jinja2>=2.11.3,<3'
     ],
 )
