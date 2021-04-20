@@ -41,9 +41,10 @@ def get_doorlopende_afspraak_overschrijvingen(input: PlannedOverschijvingenInput
     elif input.betaalinstructie["by_month_day"] and input.betaalinstructie["by_month"]:
         x = 2
 
-    payments = sorted(payments, key=lambda p: p[3])
+    sorted_tuples = sorted(payments, key=lambda p: p[3])
+    sorted_dict = {k: v for k, v in sorted_tuples}
 
-    return payments
+    return sorted_dict
 
     # determine first day, loop until enddate
     # Feitelijk 2 opties, of per week met de mogelijkheid tot meerdere dagen. Of per maand met de opties tot meerdere dagen per maand. Except dates in de gaten houden.
