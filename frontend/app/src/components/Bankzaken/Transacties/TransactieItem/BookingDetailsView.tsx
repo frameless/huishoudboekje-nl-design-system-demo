@@ -1,10 +1,9 @@
-import {CheckIcon, DeleteIcon} from "@chakra-ui/icons";
-import {Box, Button, Heading, HStack, IconButton, Stack, Tag, TagLabel, TagLeftIcon, Text} from "@chakra-ui/react";
+import {DeleteIcon} from "@chakra-ui/icons";
+import {Box, Heading, HStack, IconButton, Stack, Text} from "@chakra-ui/react";
 import React, {useContext} from "react";
 import {useTranslation} from "react-i18next";
 import {BankTransaction, useDeleteJournaalpostMutation} from "../../../../generated/graphql";
 import {formatBurgerName, intervalString} from "../../../../utils/things";
-import useFakeMutation from "../../../../utils/useFakeMutation";
 import useToaster from "../../../../utils/useToaster";
 import Label from "../../../Layouts/Label";
 import {TransactionsContext} from "../context";
@@ -14,7 +13,6 @@ const BookingDetailsView: React.FC<{transactie: BankTransaction}> = ({transactie
 	const toast = useToaster();
 	const {refetch} = useContext(TransactionsContext);
 	const [deleteJournaalpost, $deleteJournaalpost] = useDeleteJournaalpostMutation();
-	const toggleAutomatischBoeken = useFakeMutation();
 
 	const journaalpostAfspraak = transactie.journaalpost?.afspraak;
 	const journaalpostRubriek = transactie.journaalpost?.grootboekrekening?.rubriek;
@@ -46,32 +44,6 @@ const BookingDetailsView: React.FC<{transactie: BankTransaction}> = ({transactie
 			});
 		}
 	};
-	const onConfirmAutomatischBoeken = () => {
-		if (!journaalpostAfspraak || !journaalpostAfspraak.id) {
-			return;
-		}
-
-		toggleAutomatischBoeken({
-			variables: {
-				afspraakId: journaalpostAfspraak.id,
-				automatischBoeken: true,
-			},
-		}).then(() => {
-			toast({
-				success: t("messages.toggleAfspraakAutomatischBoekenSuccess"),
-			});
-			refetch();
-		}).catch(err => {
-			toast({error: err.message});
-		});
-	};
-
-	/* We can enable automatisch boeken if:
-	* - this transactie has only one suggestie
-	* - the the id of the journaalpostAfspraak matches the id of the suggestie
-	*  */
-	const canEnableAutomatischBoeken = transactie.suggesties?.length === 1 && (journaalpostAfspraak?.id === transactie.suggesties?.[0].id);
-	const automatischBoekenEnabled = true; // Todo: fix this.
 
 	/* Booked by Afspraak */
 	if (journaalpostAfspraak) {
@@ -79,22 +51,6 @@ const BookingDetailsView: React.FC<{transactie: BankTransaction}> = ({transactie
 			<Stack spacing={5} justifyContent={"space-between"} mb={3}>
 				<HStack justify={"space-between"}>
 					<Heading size={"sm"}>{t("booking")}</Heading>
-					<HStack>
-						{automatischBoekenEnabled ? (
-							<Tag colorScheme={"green"}>
-								<TagLeftIcon as={CheckIcon} />
-								<TagLabel>{t("automatischBoekenConfirmed")}</TagLabel>
-							</Tag>
-						) : (canEnableAutomatischBoeken && (
-							<Button size={"sm"} leftIcon={
-								<CheckIcon />} colorScheme={"green"} variant={"ghost"} onClick={onConfirmAutomatischBoeken}>
-								{t("actions.confirmAutomatischBoeken")}
-							</Button>
-						))}
-						<Button size={"sm"} leftIcon={<DeleteIcon />} colorScheme={"red"} variant={"ghost"} onClick={onDelete} isLoading={$deleteJournaalpost.loading}>
-							{t("actions.delete")}
-						</Button>
-					</HStack>
 				</HStack>
 				<Stack direction={"row"} spacing={5}>
 					<Box flex={1}>
