@@ -4,6 +4,7 @@ import Routes from "../../config/routes";
 import BetaalinstructiePage from "./Betaalinstructie";
 import CreateAfspraak from "./CreateAfspraak";
 import EditAfspraak from "./EditAfspraak";
+import FollowUpAfspraak from "./FollowUpAfspraak";
 import ViewAfspraak from "./ViewAfspraak";
 
 const AfspraakRouter = () => {
@@ -15,6 +16,7 @@ const AfspraakRouter = () => {
 			<Route path={Routes.CreateBurgerAfspraken(parseInt(burgerId))} render={(props) => <CreateAfspraak burgerId={parseInt(burgerId)} {...props} />} />
 			<Route path={Routes.EditAfspraak()} component={EditAfspraak} />
 			<Route path={Routes.ViewAfspraak()} component={ViewAfspraak} />
+			<Route path={Routes.FollowUpAfspraak()} component={FollowUpAfspraak} />
 		</Switch>
 	);
 };

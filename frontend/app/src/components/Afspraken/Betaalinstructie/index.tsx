@@ -5,7 +5,7 @@ import Routes from "../../../config/routes";
 import {Afspraak, UpdateAfspraakBetaalinstructieMutationVariables, useGetAfspraakQuery, useUpdateAfspraakBetaalinstructieMutation} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import useHandleMutation from "../../../utils/useHandleMutation";
-import BackButton from "../../BackButton";
+import BackButton from "../../Layouts/BackButton";
 import Page from "../../Layouts/Page";
 import PageNotFound from "../../PageNotFound";
 import AfspraakBetaalinstructieForm from "./EditAfspraakBetaalinstructieForm";

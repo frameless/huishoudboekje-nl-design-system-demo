@@ -5,8 +5,11 @@ import Routes from "../../../config/routes";
 import {Afspraak, UpdateAfspraakMutationVariables, useGetAfspraakFormDataQuery, useUpdateAfspraakMutation} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import useHandleMutation from "../../../utils/useHandleMutation";
-import BackButton from "../../BackButton";
+import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
+import BackButton from "../../Layouts/BackButton";
 import Page from "../../Layouts/Page";
+import Section from "../../Layouts/Section";
+import PageNotFound from "../../PageNotFound";
 import AfspraakForm from "../AfspraakForm";
 import AfspraakFormContext, {AfspraakFormContextType} from "./context";
 
@@ -26,6 +29,10 @@ const EditAfspraak = () => {
 	return (
 		<Queryable query={$afspraak} children={(data) => {
 			const afspraak: Afspraak = data.afspraak;
+
+			if (!afspraak) {
+				return <PageNotFound />;
+			}
 
 			const editAfspraakValues: UpdateAfspraakMutationVariables["input"] = {
 				bedrag: parseFloat(afspraak.bedrag),
@@ -48,11 +55,16 @@ const EditAfspraak = () => {
 			};
 
 			return (
-				<AfspraakFormContext.Provider value={ctxValue}>
-					<Page title={t("forms.agreements.titleEdit")} backButton={<BackButton to={Routes.ViewAfspraak(afspraak.id)} />}>
-						<AfspraakForm burgerRekeningen={afspraak.burger?.rekeningen || []} values={editAfspraakValues} onChange={updateAfspraak} />
-					</Page>
-				</AfspraakFormContext.Provider>
+				<Page title={t("forms.agreements.titleEdit")} backButton={<BackButton to={Routes.ViewAfspraak(afspraak.id)} />}>
+					<Section direction={["column", "row"]}>
+						<FormLeft title={t("afspraakForm.section1.title")} helperText={t("afspraakForm.section1.helperText")} />
+						<FormRight spacing={5}>
+							<AfspraakFormContext.Provider value={ctxValue}>
+								<AfspraakForm burgerRekeningen={afspraak.burger?.rekeningen || []} values={editAfspraakValues} onChange={updateAfspraak} />
+							</AfspraakFormContext.Provider>
+						</FormRight>
+					</Section>
+				</Page>
 			);
 		}} />
 	);

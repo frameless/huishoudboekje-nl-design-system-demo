@@ -4,7 +4,7 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {BankTransaction} from "../../../../generated/graphql";
 import {formatIBAN} from "../../../../utils/things";
-import Currency from "../../../Currency";
+import Currency from "../../../Layouts/Currency";
 import PrettyIban from "../../../Layouts/PrettyIban";
 import TransactieItemModal from "./TransactieItemModal";
 

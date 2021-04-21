@@ -39,7 +39,7 @@
         "burgers": {
             "deleteConfirmMessage": "Gegevens van {{name}} zijn verwijderd.",
             "deleteTitle": "Burger verwijderen",
-            "deleteQuestion": "Weet u zeker dat u de gegevens van {{name}} definitief wil verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
+            "deleteQuestion": "Weet je zeker dat je de gegevens van {{name}} definitief wil verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
             "invalidFormMessage": "Er is een fout opgetreden. Controleer de ingevulde gegevens en probeer het opnieuw.",
             "updateSuccessMessage": "Gegevens succesvol gewijzigd.",
             "addHint": "Voeg burgers toe door te klikken op de knop {{buttonLabel}}.",
@@ -57,7 +57,7 @@
             "createSuccessMessage": "Nieuwe organisatie succesvol opgeslagen.",
             "deleteConfirmMessage": "Gegevens van {{name}} zijn verwijderd.",
             "deleteTitle": "Organisatie verwijderen",
-            "deleteQuestion": "Weet u zeker dat u de gegevens van {{name}} definitief wil verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
+            "deleteQuestion": "Weet je zeker dat je de gegevens van {{name}} definitief wil verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
             "updateSuccessMessage": "Gegevens succesvol gewijzigd.",
             "addHint": "Voeg organisaties toe door te klikken op de knop {{buttonLabel}}.",
             "noSearchResults": "Geen organisaties gevonden. Gebruik een andere zoekterm."
@@ -66,7 +66,7 @@
             "invalidFormMessage": "Er is een fout opgetreden. Controleer de ingevulde gegevens en probeer het opnieuw.",
             "deleteSuccess": "Rekening is verwijderd.",
             "deleteTitle": "Rekening verwijderen.",
-            "deleteQuestion": "Weet u zeker dat u rekening {{iban}} op naam van {{accountHolder}} wil verwijderen? Deze actie kan ongedaan worden gemaakt."
+            "deleteQuestion": "Weet je zeker dat je rekening {{iban}} op naam van {{accountHolder}} wil verwijderen? Deze actie kan ongedaan worden gemaakt."
         },
         "rekening": {
             "updateSuccess": "Gegevens succesvol gewijzigd."
@@ -82,7 +82,6 @@
         "edit": "Wijzigen",
         "end": "Beëindigen",
         "add": "Toevoegen",
-        "back": "Terug",
         "actions": "Acties",
         "export": "Exporteren",
         "download": "Downloaden",
@@ -92,16 +91,11 @@
         "filter": "Filteren",
         "backToList": "Terug naar overzicht",
         "clearSearch": "Zoekopdracht wissen",
+        "back": "Terug",
         "backToHome": "Terug naar de hoofdpagina",
         "clickToEdit": "Klik om te wijzigen"
     },
     "genericInputErrorMessage": "Er is een fout opgetreden. Controleer de invoer en probeer het nog eens.",
-    "afspraakForm": {
-        "section1": {
-            "title": "Tegenpartij en betaling",
-            "helperText": "Vul hier alle gegevens over de afspraak in."
-        }
-    },
     "afspraak": {
         "betaalrichting": "Betaalrichting",
         "inkomsten": "Inkomsten",
@@ -113,6 +107,7 @@
         "periodiek": "Periodiek",
         "willEndOn": "Deze afspraak eindigt op {{date}}.",
         "endedOn": "Deze afspraak is beëindigd per {{date}}.",
+        "planFollowup": "Vervolgafspraak toevoegen",
         "zoektermen": "Zoektermen",
         "zoekterm": "Zoekterm",
         "showActive": "Actieve afspraken",
@@ -326,9 +321,28 @@
         "customIntervalType": "Periodiek",
         "invalidPeriodiekError": "Kies een periodiek."
     },
+    "afspraakForm": {
+        "section1": {
+            "title": "Tegenpartij en betaling",
+            "helperText": "Vul hier alle gegevens over de afspraak in."
+        }
+    },
+    "afspraken": {
+        "vervolg": {
+            "pageTitle": "Vervolgafspraak toevoegen"
+        },
+        "followUp": {
+            "zoektermenHelperText": "De volgende zoektermen worden overgenomen bij de vervolgafspraak:",
+            "betaalinstructieHelperText": "Voor een vervolgafspraak moet een nieuwe betaalinstructie worden ingesteld."
+        },
+        "tegenpartij": "Tegenpartij",
+        "omschrijving": "Omschrijving",
+        "bedrag": "Bedrag",
+        "noResults": "Er zijn geen afspraken gevonden."
+    },
     "deleteAfspraak": {
         "confirmModalTitle": "Afspraak verwijderen",
-        "confirmModalBody": "Weet u zeker dat u deze afspraak wil verwijderen?"
+        "confirmModalBody": "Weet je zeker dat je deze afspraak wil verwijderen? Je kunt ook een vervolgafspraak maken, beëindig dan eerst deze afspraak."
     },
     "endAfspraak": {
         "successMessage": "Afspraak beëindigd per {{date}}.",
@@ -386,12 +400,6 @@
         "tegenrekening": "Tegenrekening",
         "rubriek": "Rubriek",
         "bedrag": "Bedrag"
-    },
-    "afspraken": {
-        "tegenpartij": "Tegenpartij",
-        "omschrijving": "Omschrijving",
-        "bedrag": "Bedrag",
-        "noResults": "Er zijn geen afspraken gevonden."
     },
     "pages": {
         "gebeurtenissen": {

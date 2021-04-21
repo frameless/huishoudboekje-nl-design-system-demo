@@ -1,6 +1,5 @@
-import {ViewIcon, WarningTwoIcon} from "@chakra-ui/icons";
+import {AddIcon, ViewIcon, WarningTwoIcon} from "@chakra-ui/icons";
 import {
-	Badge,
 	Box,
 	Button,
 	Divider,
@@ -30,11 +29,11 @@ import {NavLink} from "react-router-dom";
 import Routes from "../../../config/routes";
 import {Afspraak, useEndAfspraakMutation} from "../../../generated/graphql";
 import d from "../../../utils/dayjs";
-import {currencyFormat2, formatBurgerName, intervalString, isAfspraakActive} from "../../../utils/things";
+import {currencyFormat2, formatBurgerName, isAfspraakActive} from "../../../utils/things";
 import useHandleMutation from "../../../utils/useHandleMutation";
 import {zoektermValidator} from "../../../utils/zod";
-import BackButton from "../../BackButton";
 import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
+import BackButton from "../../Layouts/BackButton";
 import DataItem from "../../Layouts/DataItem";
 import Page from "../../Layouts/Page";
 import PrettyIban from "../../Layouts/PrettyIban";
@@ -137,11 +136,15 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 					<Stack direction={["column", "row"]}>
 						<FormLeft />
 						<FormRight>
-							{d().isBefore(validThrough) ? (
+							{isAfspraakActive(afspraak) ? (
 								<Text color={"red.500"}>{t("afspraak.willEndOn", {date: validThrough.format("L")})}</Text>
 							) : (
 								<Text color={"gray.500"}>{t("afspraak.endedOn", {date: validThrough.format("L")})}</Text>
 							)}
+							<Box>
+								<Button as={NavLink} to={Routes.FollowUpAfspraak(afspraak.id)} colorScheme={"primary"} size={"sm"} leftIcon={
+									<AddIcon />}>{t("afspraak.planFollowup")}</Button>
+							</Box>
 						</FormRight>
 					</Stack>
 				</>)}
@@ -181,7 +184,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 						</Text>
 					)}
 
-					{matchingAfspraken.length > 0 && (
+					{isAfspraakActive(afspraak) && matchingAfspraken.length > 0 && (
 						<Stack spacing={5}>
 							<Text color={"red.500"}>
 								<WarningTwoIcon mr={1} />
@@ -210,7 +213,6 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 												<Td>
 													<Stack spacing={1} flex={1} alignItems={"flex-end"}>
 														<Box textAlign={"right"} color={bedrag < 0 ? "red.500" : "currentcolor"}>{currencyFormat2().format(bedrag)}</Box>
-														<Badge fontSize={"10px"}>{intervalString(a.interval, t)}</Badge>
 													</Stack>
 												</Td>
 												<Td>

@@ -2,7 +2,7 @@ import {Badge, Box, Stack, StackProps} from "@chakra-ui/react";
 import React from "react";
 import {Overschrijving, OverschrijvingStatus} from "../../../generated/graphql";
 import d from "../../../utils/dayjs";
-import Currency from "../../Currency";
+import Currency from "../../Layouts/Currency";
 
 const BetaalinstructieItem: React.FC<{overschrijving: Overschrijving, showStatus?: boolean} & StackProps> = ({overschrijving, showStatus = true, ...props}) => {
 	const {datum, bedrag, status} = overschrijving;

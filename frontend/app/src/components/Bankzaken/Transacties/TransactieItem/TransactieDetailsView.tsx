@@ -3,7 +3,7 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {BankTransaction} from "../../../../generated/graphql";
 import d from "../../../../utils/dayjs";
-import Currency from "../../../Currency";
+import Currency from "../../../Layouts/Currency";
 import Label from "../../../Layouts/Label";
 import PrettyIban from "../../../Layouts/PrettyIban";
 

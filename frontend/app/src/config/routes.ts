@@ -18,6 +18,7 @@ export enum RouteNames {
 	add = "toevoegen",
 	edit = "wijzigen",
 	export = "exporteren",
+	followUp = "vervolg",
 }
 
 const Routes = {
@@ -35,6 +36,7 @@ const Routes = {
 	Afspraken: `/${RouteNames.afspraken}`,
 	ViewAfspraak: (id?: number) => `/${RouteNames.afspraken}/${id || ":id(\\d+)"}/${RouteNames.view}`,
 	EditAfspraak: (id?: number) => `/${RouteNames.afspraken}/${id || ":id(\\d+)"}/${RouteNames.edit}`,
+	FollowUpAfspraak: (id?: number) => `/${RouteNames.afspraken}/${id || ":id(\\d+)"}/${RouteNames.followUp}`,
 	AfspraakBetaalinstructie: (id?: number) => `/${RouteNames.afspraken}/${id || ":id(\\d+)"}/${RouteNames.betaalinstructie}`,
 
 	Organisaties: `/${RouteNames.organisaties}`,

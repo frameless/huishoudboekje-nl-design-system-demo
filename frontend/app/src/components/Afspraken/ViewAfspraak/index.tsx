@@ -7,6 +7,7 @@ import Queryable from "../../../utils/Queryable";
 import useHandleMutation from "../../../utils/useHandleMutation";
 import useToaster from "../../../utils/useToaster";
 import zod, {containsZodErrorCode, zoektermValidator} from "../../../utils/zod";
+import PageNotFound from "../../PageNotFound";
 import AfspraakDetailView from "./AfspraakDetailView";
 import AfspraakDetailContext from "./context";
 
@@ -30,6 +31,11 @@ const ViewAfspraak = () => {
 	return (
 		<Queryable query={$afspraak} children={(data) => {
 			const afspraak: Afspraak = data.afspraak;
+
+			if (!afspraak) {
+				return <PageNotFound />;
+			}
+
 			const ctxValue = {
 				deleteAfspraak: () => handleMutation(deleteAfspraak({
 					variables: {id: parseInt(id)},

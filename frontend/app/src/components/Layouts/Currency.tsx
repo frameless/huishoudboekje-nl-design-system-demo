@@ -1,6 +1,6 @@
 import {BoxProps, Stack, Text, TextProps} from "@chakra-ui/react";
 import React from "react";
-import {currencyFormat2} from "../utils/things";
+import {currencyFormat2} from "../../utils/things";
 
 const Currency: React.FC<BoxProps & {value: number, text?: TextProps}> = ({value, text, ...props}) => {
 	return (

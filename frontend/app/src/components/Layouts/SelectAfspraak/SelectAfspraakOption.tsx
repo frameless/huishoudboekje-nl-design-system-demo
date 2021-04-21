@@ -4,7 +4,7 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {Afspraak} from "../../../generated/graphql";
 import {formatBurgerName} from "../../../utils/things";
-import Currency from "../../Currency";
+import Currency from "../Currency";
 
 type SelectAfspraakOptionProps = TableRowProps & {
 	afspraak: Afspraak,
