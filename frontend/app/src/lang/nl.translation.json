@@ -31,7 +31,6 @@
         "journals": {
             "createSuccessMessage": "Transactie succesvol afgeletterd."
         },
-        "toggleAfspraakAutomatischBoekenSuccess": "Automatisch afletteren is ingeschakeld.",
         "transactions": {
             "addHint": "Voeg transacties toe door een bankafschrift te importeren."
         },
@@ -86,7 +85,6 @@
         "export": "Exporteren",
         "download": "Downloaden",
         "startBoeken": "Alle transacties afletteren",
-        "confirmAutomatischBoeken": "Voortaan automatisch afletteren",
         "disconnect": "Koppeling verwijderen",
         "filter": "Filteren",
         "backToList": "Terug naar overzicht",
@@ -371,11 +369,12 @@
     },
     "van": "Van",
     "tot": "Tot",
-    "booking": "Boeking",
-    "automatischBoekenConfirmed": "Automatisch afletteren ingeschakeld",
+    "words": {
+        "afspraak": "Afspraak"
+    },
     "omschrijving": "Omschrijving",
-    "periodiek": "Periodiek",
     "rubriek": "Rubriek",
+    "bedrag": "Bedrag",
     "transactieAfletteren": {
         "title": "Afletteren",
         "helperText": "Kies een afspraak om deze transactie op af te letteren."
@@ -383,7 +382,6 @@
     "bookingSection": {
         "noResults": "Er zijn geen afspraken gevonden. Voeg een afspraak toe, of kies een rubriek om deze transactie op af te letteren."
     },
-    "bedrag": "Bedrag",
     "select": {
         "noOptions": "Geen resultaten"
     },

@@ -1,9 +1,11 @@
-import {DeleteIcon} from "@chakra-ui/icons";
-import {Box, Heading, HStack, IconButton, Stack, Text} from "@chakra-ui/react";
+import {DeleteIcon, ViewIcon} from "@chakra-ui/icons";
+import {Box, Button, Heading, IconButton, Stack, Text} from "@chakra-ui/react";
 import React, {useContext} from "react";
 import {useTranslation} from "react-i18next";
+import {NavLink} from "react-router-dom";
+import Routes from "../../../../config/routes";
 import {BankTransaction, useDeleteJournaalpostMutation} from "../../../../generated/graphql";
-import {formatBurgerName, intervalString} from "../../../../utils/things";
+import {currencyFormat2, formatBurgerName} from "../../../../utils/things";
 import useToaster from "../../../../utils/useToaster";
 import Label from "../../../Layouts/Label";
 import {TransactionsContext} from "../context";
@@ -48,10 +50,11 @@ const BookingDetailsView: React.FC<{transactie: BankTransaction}> = ({transactie
 	/* Booked by Afspraak */
 	if (journaalpostAfspraak) {
 		return (
-			<Stack spacing={5} justifyContent={"space-between"} mb={3}>
-				<HStack justify={"space-between"}>
-					<Heading size={"sm"}>{t("booking")}</Heading>
-				</HStack>
+			<Stack spacing={5} justify={"space-between"} mb={3}>
+				<Stack justify={"flex-start"}>
+					<Heading size={"sm"}>{t("words.afspraak")}</Heading>
+				</Stack>
+
 				<Stack direction={"row"} spacing={5}>
 					<Box flex={1}>
 						<Label>{t("burger")}</Label>
@@ -67,12 +70,6 @@ const BookingDetailsView: React.FC<{transactie: BankTransaction}> = ({transactie
 					</Box>
 				</Stack>
 				<Stack direction={"row"} spacing={5}>
-					<Box flex={1}>
-						<Label>{t("periodiek")}</Label>
-						<Box>
-							<Text>{intervalString(journaalpostAfspraak.interval, t)}</Text>
-						</Box>
-					</Box>
 					{transactie.journaalpost?.grootboekrekening?.rubriek?.naam && (
 						<Box flex={1}>
 							<Label>{t("rubriek")}</Label>
@@ -81,6 +78,16 @@ const BookingDetailsView: React.FC<{transactie: BankTransaction}> = ({transactie
 							</Box>
 						</Box>
 					)}
+					<Box flex={1}>
+						<Label>{t("bedrag")}</Label>
+						<Box color={journaalpostAfspraak.bedrag < 0 ? "red.500" : undefined}>{currencyFormat2().format(journaalpostAfspraak.bedrag)}</Box>
+					</Box>
+				</Stack>
+				<Stack direction={"row"} spacing={5}>
+					<Box mb={3}>
+						<Button leftIcon={
+							<ViewIcon />} colorScheme={"primary"} size={"sm"} as={NavLink} to={Routes.ViewAfspraak(journaalpostAfspraak.id)}>{t("actions.view")}</Button>
+					</Box>
 				</Stack>
 			</Stack>
 		);
