@@ -19,6 +19,7 @@ const Transactions = () => {
 	const handleMutation = useHandleMutation();
 
 	const $transactions = useGetTransactiesQuery({
+		fetchPolicy: "no-cache",
 		variables: {
 			offset,
 			limit: pageSize,
