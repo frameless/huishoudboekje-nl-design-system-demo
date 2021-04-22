@@ -423,8 +423,10 @@
     "unknownIban": "Onbekende IBAN",
     "unknownRekeninghouder": "Onbekende rekeninghouder",
     "auditLog": {
+        "unknown": "Onbekende gebeurtenis",
         "viewOrganisatie": "{{gebruiker}} bekeek <linkOrganisatie>{{organisatie}}</linkOrganisatie>.",
         "viewOrganisaties": "{{gebruiker}} bekeek alle <strong>organisaties</strong>.",
+        "viewAfspraakBurger": "{{gebruiker}} bekeek een <linkAfspraak>afspraak</linkAfspraak> met <linkBurger>{{burger}}</linkBurger>.",
         "viewAfspraak": "{{gebruiker}} bekeek een <linkAfspraak>afspraak</linkAfspraak> van <linkBurger>{{burger}}</linkBurger> met <linkAfspraakOrganisatie>{{afspraakOrganisatie}}</linkAfspraakOrganisatie>.",
         "viewAfspraken": "{{gebruiker}} bekeek alle <strong>afspraken</strong>.",
         "viewRubrieken": "{{gebruiker}} bekeek alle <strong>rubrieken</strong>.",
@@ -460,7 +462,7 @@
         "deleteBurgerRekening": "{{gebruiker}} verwijderde rekening <strong>{{iban}}</strong> op naam van <strong>{{rekeninghouder}}</strong> bij <linkBurger>{{burger}}</linkBurger>.",
         "addAfspraakZoekterm": "{{gebruiker}} voegde een zoekterm toe bij een <linkAfspraak>afspraak</linkAfspraak> met <linkBurger>{{burger}}</linkBurger> en <linkAfspraakOrganisatie>{{afspraakOrganisatie}}</linkAfspraakOrganisatie>.",
         "deleteAfspraakZoekterm": "{{gebruiker}} verwijderde een zoekterm bij een <linkAfspraak>afspraak</linkAfspraak> met <linkBurger>{{burger}}</linkBurger> en <linkAfspraakOrganisatie>{{afspraakOrganisatie}}</linkAfspraakOrganisatie>.",
-        "unknown": "Onbekende gebeurtenis"
+        "startAutomatischBoeken": "{{gebruiker}} startte het afletteren van transacties."
     },
     "suggestion": "Suggestie",
     "organizations": {
