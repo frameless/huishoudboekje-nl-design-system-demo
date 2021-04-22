@@ -35,7 +35,7 @@ const AuditLogText: React.FC<TextProps & {g: GebruikersActiviteit}> = ({g, ...pr
 		gebruiker,
 		burger: burgerName,
 		organisatie: organisatie?.weergaveNaam || t("unknownOrganisatie"),
-		afspraakOrganisatie: afspraak?.organisatie?.weergaveNaam || t("unknownOrganisatie"),
+		afspraakOrganisatie: afspraak?.organisatie?.weergaveNaam,
 		customerStatementMessage: customerStatementMessage?.entityId || "?",
 		nTransactions: transactions.length || t("unknown"),
 		iban: rekening?.iban || t("unknownIban"),

@@ -5,7 +5,12 @@ export const auditLogTexts = (values, components, action) => {
 	const texts = {
 		organisatie: () => <Trans i18nKey={"auditLog.viewOrganisatie"} values={values} components={components} />,
 		organisaties: () => <Trans i18nKey={"auditLog.viewOrganisaties"} values={values} components={components} />,
-		afspraak: () => <Trans i18nKey={"auditLog.viewAfspraak"} values={values} components={components} />,
+		afspraak: () => {
+			if(!values.afspraakOrganisatie){
+				return (<Trans i18nKey={"auditLog.viewAfspraakBurger"} values={values} components={components} />);
+			}
+			return (<Trans i18nKey={"auditLog.viewAfspraak"} values={values} components={components} />);
+		},
 		afspraken: () => <Trans i18nKey={"auditLog.viewAfspraken"} values={values} components={components} />,
 		rubrieken: () => <Trans i18nKey={"auditLog.viewRubrieken"} values={values} components={components} />,
 		burger: () => <Trans i18nKey={"auditLog.viewBurger"} values={values} components={components} />,
@@ -25,7 +30,8 @@ export const auditLogTexts = (values, components, action) => {
 		createOrganisatie: () => <Trans i18nKey={"auditLog.createOrganisatie"} values={values} components={components} />,
 		updateOrganisatie: () => <Trans i18nKey={"auditLog.updateOrganisatie"} values={values} components={components} />,
 		deleteOrganisatie: () => <Trans i18nKey={"auditLog.deleteOrganisatie"} values={values} components={components} />,
-		createJournaalpostPerAfspraak: () => <Trans i18nKey={"auditLog.createJournaalpostPerAfspraak"} values={values} components={components} />,
+		createJournaalpostAfspraak: () => <Trans i18nKey={"auditLog.createJournaalpostAfspraak"} values={values} components={components} />,
+		createJournaalpostPerAfspraak: () => <Trans i18nKey={"auditLog.createJournaalpostAfspraak"} values={values} components={components} />,
 		createJournaalpostGrootboekrekening: () => <Trans i18nKey={"auditLog.createJournaalpostGrootboekrekening"} values={values} components={components} />,
 		updateJournaalpostGrootboekrekening: () => <Trans i18nKey={"auditLog.updateJournaalpostGrootboekrekening"} values={values} components={components} />,
 		deleteJournaalpost: () => <Trans i18nKey={"auditLog.deleteJournaalpost"} values={values} components={components} />,
