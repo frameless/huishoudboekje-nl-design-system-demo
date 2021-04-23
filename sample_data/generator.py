@@ -23,7 +23,7 @@ def faker_datum(
 class HHBCsvDialect(csv.Dialect):
     delimiter = "|"
     quoting = QUOTE_MINIMAL
-    quotechar = '"'
+    quotechar = "'"
     lineterminator = "\n"
 
 
@@ -378,7 +378,7 @@ class Generator:
             with open(filename, "w") as out_file:
                 fieldnames = fieldnames or self.tables[db][name]["fieldnames"]
                 writer = csv.DictWriter(
-                    out_file, fieldnames=fieldnames, dialect=HHBCsvDialect
+                    out_file, fieldnames=fieldnames, dialect=HHBCsvDialect, escapechar=' '
                 )
                 writer.writeheader()
                 writer.writerows(
