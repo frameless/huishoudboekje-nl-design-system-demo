@@ -1090,7 +1090,10 @@ export type UpdateRubriek = {
 export type AfspraakFragment = (
   { __typename?: 'Afspraak' }
   & Pick<Afspraak, 'id' | 'omschrijving' | 'bedrag' | 'credit' | 'zoektermen' | 'validFrom' | 'validThrough'>
-  & { burger?: Maybe<(
+  & { betaalinstructie?: Maybe<(
+    { __typename?: 'Betaalinstructie' }
+    & BetaalinstructieFragment
+  )>, burger?: Maybe<(
     { __typename?: 'Burger' }
     & Pick<Burger, 'id' | 'voornamen' | 'voorletters' | 'achternaam' | 'plaatsnaam'>
     & { rekeningen?: Maybe<Array<Maybe<(
@@ -1121,6 +1124,11 @@ export type AfspraakFragment = (
       & Pick<Rekening, 'id' | 'iban' | 'rekeninghouder'>
     )> }
   )>>> }
+);
+
+export type BetaalinstructieFragment = (
+  { __typename?: 'Betaalinstructie' }
+  & Pick<Betaalinstructie, 'byDay' | 'byMonth' | 'byMonthDay' | 'exceptDates' | 'repeatFrequency' | 'startDate' | 'endDate'>
 );
 
 export type BurgerFragment = (
@@ -2086,6 +2094,17 @@ export const RekeningFragmentDoc = gql`
   rekeninghouder
 }
     `;
+export const BetaalinstructieFragmentDoc = gql`
+    fragment Betaalinstructie on Betaalinstructie {
+  byDay
+  byMonth
+  byMonthDay
+  exceptDates
+  repeatFrequency
+  startDate
+  endDate
+}
+    `;
 export const GrootboekrekeningFragmentDoc = gql`
     fragment Grootboekrekening on Grootboekrekening {
   id
@@ -2114,6 +2133,9 @@ export const AfspraakFragmentDoc = gql`
   omschrijving
   bedrag
   credit
+  betaalinstructie {
+    ...Betaalinstructie
+  }
   zoektermen
   validFrom
   validThrough
@@ -2159,7 +2181,8 @@ export const AfspraakFragmentDoc = gql`
     }
   }
 }
-    ${RekeningFragmentDoc}
+    ${BetaalinstructieFragmentDoc}
+${RekeningFragmentDoc}
 ${RubriekFragmentDoc}`;
 export const BurgerFragmentDoc = gql`
     fragment Burger on Burger {

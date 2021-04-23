@@ -1,4 +1,5 @@
 import {gql} from "@apollo/client";
+import {BetaalinstructieFragment} from "./BetaalinstructieFragment";
 import {RekeningFragment} from "./RekeningFragment";
 import {RubriekFragment} from "./RubriekFragment";
 
@@ -8,6 +9,9 @@ export const AfspraakFragment = gql`
         omschrijving
         bedrag
         credit
+        betaalinstructie{
+            ...Betaalinstructie
+        }
         zoektermen
         validFrom
         validThrough
@@ -55,4 +59,5 @@ export const AfspraakFragment = gql`
     }
     ${RekeningFragment}
     ${RubriekFragment}
+    ${BetaalinstructieFragment}
 `;

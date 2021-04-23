@@ -229,45 +229,39 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 				</FormRight>
 			</Section>
 
-			{/*{!afspraak.credit && (*/}
-			{/*	<Section direction={["column", "row"]}>*/}
-			{/*		<FormLeft title={t("afspraakDetailView.section4.title")} helperText={t("afspraakDetailView.section4.helperText")} />*/}
-			{/*		<FormRight spacing={5}>*/}
-			{/*			{afspraak.interval ? (<>*/}
-			{/*				<Stack direction={["column", "row"]}>*/}
-			{/*					<DataItem label={t("afspraak.periodiek")}>*/}
-			{/*						<Text>{intervalString(afspraak.interval, t)}</Text>*/}
-			{/*					</DataItem>*/}
-			{/*					<DataItem label={t("exports.period")}>*/}
-			{/*						<Text>{d(afspraak.startDatum, "YYYY-MM-DD").format("L")} / {afspraak.eindDatum ? d(afspraak.eindDatum, "YYYY-MM-DD").format("L") : "-"}</Text>*/}
-			{/*					</DataItem>*/}
-			{/*				</Stack>*/}
+			{!afspraak.credit && (
+				<Section direction={["column", "row"]}>
+					<FormLeft title={t("afspraakDetailView.betaalinstructie.title")} helperText={t("afspraakDetailView.betaalinstructie.helperText")}>
+						<pre>{JSON.stringify(afspraak.betaalinstructie, null, 2)}</pre>
+					</FormLeft>
+					<FormRight spacing={5}>
+						{afspraak.betaalinstructie ? (<>
+							<Stack direction={["column", "row"]}>
+								<DataItem label={t("afspraak.periodiek")}>
+									<Text>{"INTERVAL" /* TODO */}</Text>
+								</DataItem>
+								<DataItem label={t("exports.period")}>
+									<Text>{d(afspraak.validFrom, "YYYY-MM-DD").format("L")} - {afspraak.validThrough ? d(afspraak.validThrough, "YYYY-MM-DD").format("L") : "-"}</Text>
+								</DataItem>
+							</Stack>
 
-			{/*				<Box>*/}
-			{/*					<Button colorScheme={"primary"} size={"sm"} as={NavLink} to={Routes.AfspraakBetaalinstructie(afspraak.id!)}>*/}
-			{/*						{t("actions.edit")}*/}
-			{/*					</Button>*/}
-			{/*				</Box>*/}
-			{/*			</>) : (<>*/}
-			{/*				<Text>{t("afspraakDetailView.noBetaalinstructie")}</Text>*/}
+							<Box>
+								<Button colorScheme={"primary"} size={"sm"} as={NavLink} to={Routes.AfspraakBetaalinstructie(afspraak.id!)}>
+									{t("actions.edit")}
+								</Button>
+							</Box>
+						</>) : (<>
+							<Text>{t("afspraakDetailView.noBetaalinstructie")}</Text>
 
-			{/*				<Stack direction={["column", "row"]}>*/}
-			{/*					<Button colorScheme={"primary"} size={"sm"} leftIcon={<AddIcon />} as={NavLink} to={Routes.AfspraakBetaalinstructie(afspraak.id!)}>*/}
-			{/*						{t("actions.add")}*/}
-			{/*					</Button>*/}
-			{/*				</Stack>*/}
-
-			{/*				/!* Todo: show verwachte betalingen? (19-03-2021) *!/*/}
-			{/*				/!* <Stack direction={["column", "row"]}>*!/*/}
-			{/*				/!*	<Box>*!/*/}
-			{/*				/!*		<Button>Bekijk verwachte betalingen</Button>*!/*/}
-			{/*				/!*	</Box>*!/*/}
-			{/*				/!*	<OverschrijvingenListView overschrijvingen={generatedSampleOverschrijvingen} />*!/*/}
-			{/*				/!*</Stack>*!/*/}
-			{/*			</>)}*/}
-			{/*		</FormRight>*/}
-			{/*	</Section>*/}
-			{/*)}*/}
+							<Stack direction={["column", "row"]}>
+								<Button colorScheme={"primary"} size={"sm"} leftIcon={<AddIcon />} as={NavLink} to={Routes.AfspraakBetaalinstructie(afspraak.id!)}>
+									{t("actions.add")}
+								</Button>
+							</Stack>
+						</>)}
+					</FormRight>
+				</Section>
+			)}
 		</Page>
 	);
 };

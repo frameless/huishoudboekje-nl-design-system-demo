@@ -129,7 +129,12 @@
         "section3": {
             "title": "Afletteren",
             "helperText": "Voeg zoektermen toe voor het automatisch afletteren van geïmporteerde banktransacties."
-        }
+        },
+        "betaalinstructie": {
+            "title": "Betaalinstructie",
+            "helperText": "Instellingen voor een betaalinstructie."
+        },
+        "noBetaalinstructie": "Er is geen betaalinstructie ingesteld."
     },
     "forms": {
         "agreements": {
@@ -288,16 +293,7 @@
         "year": "Jaar",
         "year_plural": "Jaren",
         "choose": "Kies",
-        "period": "Periode",
-        "every-day": "Elke dag",
-        "every-day_plural": "Elke {{count}} dagen",
-        "every-week": "Elke week",
-        "every-week_plural": "Elke {{count}} weken",
-        "every-month": "Elke maand",
-        "every-month_plural": "Elke {{count}} maanden",
-        "every-year": "Elk jaar",
-        "every-year_plural": "Elke {{count}} jaar",
-        "once": "Eenmalig"
+        "period": "Periode"
     },
     "customInterval": {
         "elkeWeek": "Elke week",
@@ -348,6 +344,11 @@
         "confirmModalBody": "Vanaf welke datum wordt deze afspraak beëindigd?"
     },
     "burger": "Burger",
+    "exports": {
+        "period": "Periode",
+        "nTransacties": "Overschrijvingen",
+        "dateCreated": "Aanmaakdatum"
+    },
     "errors": {
         "invalidDateError": "Vul een geldige datum in."
     },
@@ -361,11 +362,6 @@
             "title": "Betaalinstructies",
             "helperText": "Exporteer een bestand met betaalinstructies voor verwerking in een bankierenapplicatie."
         }
-    },
-    "exports": {
-        "period": "Periode",
-        "nTransacties": "Overschrijvingen",
-        "dateCreated": "Aanmaakdatum"
     },
     "van": "Van",
     "tot": "Tot",
