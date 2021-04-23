@@ -76,7 +76,7 @@ class AfspraakScenario:
     credit: bool = False
     automatische_incasso: bool = True
     aantal_betalingen: int = 12
-    interval: str = "P0Y1M0W0D"
+    betaalinstructie: str = None
     valid_from: str = "2021-01-01"
     valid_through: str = None
     actief: bool = True

@@ -75,7 +75,7 @@ class Generator:
                         "credit",
                         "automatische_incasso",
                         "aantal_betalingen",
-                        "interval",
+                        "betaalinstructie",
                         "valid_from",
                         "valid_through",
                         "burger_id",
@@ -275,7 +275,7 @@ class Generator:
             else scenario.bedrag > 0,
             "automatische_incasso": scenario.automatische_incasso,
             "aantal_betalingen": scenario.aantal_betalingen or 12,
-            "interval": scenario.interval,
+            "betaalinstructie": scenario.betaalinstructie,
             "valid_from": scenario.valid_from,
             "valid_through": scenario.valid_through,
             "burger_id": burger["id"],
@@ -378,7 +378,7 @@ class Generator:
             with open(filename, "w") as out_file:
                 fieldnames = fieldnames or self.tables[db][name]["fieldnames"]
                 writer = csv.DictWriter(
-                    out_file, fieldnames=fieldnames, dialect=HHBCsvDialect
+                    out_file, fieldnames=fieldnames, dialect=HHBCsvDialect, escapechar='\\'
                 )
                 writer.writeheader()
                 writer.writerows(
