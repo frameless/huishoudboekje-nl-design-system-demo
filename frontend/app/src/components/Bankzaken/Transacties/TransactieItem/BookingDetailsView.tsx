@@ -1,10 +1,11 @@
-import {CheckIcon, DeleteIcon} from "@chakra-ui/icons";
-import {Box, Button, Heading, HStack, IconButton, Stack, Tag, TagLabel, TagLeftIcon, Text} from "@chakra-ui/react";
+import {DeleteIcon, ViewIcon} from "@chakra-ui/icons";
+import {Box, Button, Heading, IconButton, Stack, Text} from "@chakra-ui/react";
 import React, {useContext} from "react";
 import {useTranslation} from "react-i18next";
+import {NavLink} from "react-router-dom";
+import Routes from "../../../../config/routes";
 import {BankTransaction, useDeleteJournaalpostMutation} from "../../../../generated/graphql";
-import {formatBurgerName, intervalString} from "../../../../utils/things";
-import useFakeMutation from "../../../../utils/useFakeMutation";
+import {currencyFormat2, formatBurgerName} from "../../../../utils/things";
 import useToaster from "../../../../utils/useToaster";
 import Label from "../../../Layouts/Label";
 import {TransactionsContext} from "../context";
@@ -14,7 +15,6 @@ const BookingDetailsView: React.FC<{transactie: BankTransaction}> = ({transactie
 	const toast = useToaster();
 	const {refetch} = useContext(TransactionsContext);
 	const [deleteJournaalpost, $deleteJournaalpost] = useDeleteJournaalpostMutation();
-	const toggleAutomatischBoeken = useFakeMutation();
 
 	const journaalpostAfspraak = transactie.journaalpost?.afspraak;
 	const journaalpostRubriek = transactie.journaalpost?.grootboekrekening?.rubriek;
@@ -46,56 +46,15 @@ const BookingDetailsView: React.FC<{transactie: BankTransaction}> = ({transactie
 			});
 		}
 	};
-	const onConfirmAutomatischBoeken = () => {
-		if (!journaalpostAfspraak || !journaalpostAfspraak.id) {
-			return;
-		}
-
-		toggleAutomatischBoeken({
-			variables: {
-				afspraakId: journaalpostAfspraak.id,
-				automatischBoeken: true,
-			},
-		}).then(() => {
-			toast({
-				success: t("messages.toggleAfspraakAutomatischBoekenSuccess"),
-			});
-			refetch();
-		}).catch(err => {
-			toast({error: err.message});
-		});
-	};
-
-	/* We can enable automatisch boeken if:
-	* - this transactie has only one suggestie
-	* - the the id of the journaalpostAfspraak matches the id of the suggestie
-	*  */
-	const canEnableAutomatischBoeken = transactie.suggesties?.length === 1 && (journaalpostAfspraak?.id === transactie.suggesties?.[0].id);
-	const automatischBoekenEnabled = true; // Todo: fix this.
 
 	/* Booked by Afspraak */
 	if (journaalpostAfspraak) {
 		return (
-			<Stack spacing={5} justifyContent={"space-between"} mb={3}>
-				<HStack justify={"space-between"}>
-					<Heading size={"sm"}>{t("booking")}</Heading>
-					<HStack>
-						{automatischBoekenEnabled ? (
-							<Tag colorScheme={"green"}>
-								<TagLeftIcon as={CheckIcon} />
-								<TagLabel>{t("automatischBoekenConfirmed")}</TagLabel>
-							</Tag>
-						) : (canEnableAutomatischBoeken && (
-							<Button size={"sm"} leftIcon={
-								<CheckIcon />} colorScheme={"green"} variant={"ghost"} onClick={onConfirmAutomatischBoeken}>
-								{t("actions.confirmAutomatischBoeken")}
-							</Button>
-						))}
-						<Button size={"sm"} leftIcon={<DeleteIcon />} colorScheme={"red"} variant={"ghost"} onClick={onDelete} isLoading={$deleteJournaalpost.loading}>
-							{t("actions.delete")}
-						</Button>
-					</HStack>
-				</HStack>
+			<Stack spacing={5} justify={"space-between"} mb={3}>
+				<Stack justify={"flex-start"}>
+					<Heading size={"sm"}>{t("words.afspraak")}</Heading>
+				</Stack>
+
 				<Stack direction={"row"} spacing={5}>
 					<Box flex={1}>
 						<Label>{t("burger")}</Label>
@@ -111,12 +70,6 @@ const BookingDetailsView: React.FC<{transactie: BankTransaction}> = ({transactie
 					</Box>
 				</Stack>
 				<Stack direction={"row"} spacing={5}>
-					<Box flex={1}>
-						<Label>{t("periodiek")}</Label>
-						<Box>
-							<Text>{intervalString(journaalpostAfspraak.interval, t)}</Text>
-						</Box>
-					</Box>
 					{transactie.journaalpost?.grootboekrekening?.rubriek?.naam && (
 						<Box flex={1}>
 							<Label>{t("rubriek")}</Label>
@@ -125,6 +78,16 @@ const BookingDetailsView: React.FC<{transactie: BankTransaction}> = ({transactie
 							</Box>
 						</Box>
 					)}
+					<Box flex={1}>
+						<Label>{t("bedrag")}</Label>
+						<Box color={journaalpostAfspraak.bedrag < 0 ? "red.500" : undefined}>{currencyFormat2().format(journaalpostAfspraak.bedrag)}</Box>
+					</Box>
+				</Stack>
+				<Stack direction={"row"} spacing={5}>
+					<Box mb={3}>
+						<Button leftIcon={
+							<ViewIcon />} colorScheme={"primary"} size={"sm"} as={NavLink} to={Routes.ViewAfspraak(journaalpostAfspraak.id)}>{t("actions.view")}</Button>
+					</Box>
 				</Stack>
 			</Stack>
 		);

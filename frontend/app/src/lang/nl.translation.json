@@ -31,7 +31,6 @@
         "journals": {
             "createSuccessMessage": "Transactie succesvol afgeletterd."
         },
-        "toggleAfspraakAutomatischBoekenSuccess": "Automatisch afletteren is ingeschakeld.",
         "transactions": {
             "addHint": "Voeg transacties toe door een bankafschrift te importeren."
         },
@@ -86,7 +85,6 @@
         "export": "Exporteren",
         "download": "Downloaden",
         "startBoeken": "Alle transacties afletteren",
-        "confirmAutomatischBoeken": "Voortaan automatisch afletteren",
         "disconnect": "Koppeling verwijderen",
         "filter": "Filteren",
         "backToList": "Terug naar overzicht",
@@ -371,11 +369,12 @@
     },
     "van": "Van",
     "tot": "Tot",
-    "booking": "Boeking",
-    "automatischBoekenConfirmed": "Automatisch afletteren ingeschakeld",
+    "words": {
+        "afspraak": "Afspraak"
+    },
     "omschrijving": "Omschrijving",
-    "periodiek": "Periodiek",
     "rubriek": "Rubriek",
+    "bedrag": "Bedrag",
     "transactieAfletteren": {
         "title": "Afletteren",
         "helperText": "Kies een afspraak om deze transactie op af te letteren."
@@ -383,7 +382,6 @@
     "bookingSection": {
         "noResults": "Er zijn geen afspraken gevonden. Voeg een afspraak toe, of kies een rubriek om deze transactie op af te letteren."
     },
-    "bedrag": "Bedrag",
     "select": {
         "noOptions": "Geen resultaten"
     },
@@ -425,8 +423,10 @@
     "unknownIban": "Onbekende IBAN",
     "unknownRekeninghouder": "Onbekende rekeninghouder",
     "auditLog": {
+        "unknown": "Onbekende gebeurtenis",
         "viewOrganisatie": "{{gebruiker}} bekeek <linkOrganisatie>{{organisatie}}</linkOrganisatie>.",
         "viewOrganisaties": "{{gebruiker}} bekeek alle <strong>organisaties</strong>.",
+        "viewAfspraakBurger": "{{gebruiker}} bekeek een <linkAfspraak>afspraak</linkAfspraak> met <linkBurger>{{burger}}</linkBurger>.",
         "viewAfspraak": "{{gebruiker}} bekeek een <linkAfspraak>afspraak</linkAfspraak> van <linkBurger>{{burger}}</linkBurger> met <linkAfspraakOrganisatie>{{afspraakOrganisatie}}</linkAfspraakOrganisatie>.",
         "viewAfspraken": "{{gebruiker}} bekeek alle <strong>afspraken</strong>.",
         "viewRubrieken": "{{gebruiker}} bekeek alle <strong>rubrieken</strong>.",
@@ -462,7 +462,7 @@
         "deleteBurgerRekening": "{{gebruiker}} verwijderde rekening <strong>{{iban}}</strong> op naam van <strong>{{rekeninghouder}}</strong> bij <linkBurger>{{burger}}</linkBurger>.",
         "addAfspraakZoekterm": "{{gebruiker}} voegde een zoekterm toe bij een <linkAfspraak>afspraak</linkAfspraak> met <linkBurger>{{burger}}</linkBurger> en <linkAfspraakOrganisatie>{{afspraakOrganisatie}}</linkAfspraakOrganisatie>.",
         "deleteAfspraakZoekterm": "{{gebruiker}} verwijderde een zoekterm bij een <linkAfspraak>afspraak</linkAfspraak> met <linkBurger>{{burger}}</linkBurger> en <linkAfspraakOrganisatie>{{afspraakOrganisatie}}</linkAfspraakOrganisatie>.",
-        "unknown": "Onbekende gebeurtenis"
+        "startAutomatischBoeken": "{{gebruiker}} startte het afletteren van transacties."
     },
     "suggestion": "Suggestie",
     "organizations": {
