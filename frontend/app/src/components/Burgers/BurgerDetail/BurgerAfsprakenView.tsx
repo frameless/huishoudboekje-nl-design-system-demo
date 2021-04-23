@@ -30,23 +30,25 @@ const BurgerAfsprakenView: React.FC<StackProps & {burger: Burger, refetch: VoidF
 	return (
 		<Stack direction={["column", "row"]} {...props}>
 			<FormLeft title={t("forms.burgers.sections.agreements.title")} helperText={t("forms.burgers.sections.agreements.detailText")}>
-				<FormControl>
-					<FormLabel>{t("actions.filter")}</FormLabel>
-					<CheckboxGroup defaultValue={["active"]} onChange={(val) => {
-						setFilter(() => ({
-							active: val.includes("active"),
-							inactive: val.includes("inactive"),
-						}));
-					}}>
-						<Stack>
-							<Checkbox value={"active"}>{t("afspraak.showActive")}</Checkbox>
-							<Checkbox value={"inactive"}>{t("afspraak.showInActive")}</Checkbox>
-						</Stack>
-					</CheckboxGroup>
-				</FormControl>
+				{sortedAfspraken.length > 0 && (
+					<FormControl>
+						<FormLabel>{t("actions.filter")}</FormLabel>
+						<CheckboxGroup defaultValue={["active"]} onChange={(val) => {
+							setFilter(() => ({
+								active: val.includes("active"),
+								inactive: val.includes("inactive"),
+							}));
+						}}>
+							<Stack>
+								<Checkbox value={"active"}>{t("afspraak.showActive")}</Checkbox>
+								<Checkbox value={"inactive"}>{t("afspraak.showInActive")}</Checkbox>
+							</Stack>
+						</CheckboxGroup>
+					</FormControl>
+				)}
 			</FormLeft>
 			<FormRight justify={"start"}>
-				{afspraken && afspraken.length > 0 && (<>
+				{sortedAfspraken.length > 0 && (<>
 					<Table size={"sm"} variant={"noLeftPadding"}>
 						<Thead>
 							<Tr>
