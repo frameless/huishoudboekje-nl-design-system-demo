@@ -17,10 +17,16 @@ class PlannedOverschijvingenInput():
 
 
 def get_planned_overschrijvingen(input: PlannedOverschijvingenInput, start_datum: date = None, eind_datum: date = None):
+    betaalinstructie_startdate = isoparse(input.betaalinstructie["start_date"]).date()
     if not eind_datum:
         eind_datum = datetime.datetime.now().date()
-    if not start_datum:
-        start_datum = isoparse(input.betaalinstructie["start_date"]).date()
+    if not start_datum or start_datum < betaalinstructie_startdate:
+        start_datum = betaalinstructie_startdate
+
+    if "end_date" in input.betaalinstructie and input.betaalinstructie["end_date"]:
+        betaalinstructie_enddate = isoparse(input.betaalinstructie["end_date"]).date()
+        if eind_datum > betaalinstructie_enddate:
+            eind_datum = betaalinstructie_enddate
 
     return get_doorlopende_afspraak_overschrijvingen(input, start_datum, eind_datum)
 
@@ -28,6 +34,9 @@ def get_planned_overschrijvingen(input: PlannedOverschijvingenInput, start_datum
 def get_doorlopende_afspraak_overschrijvingen(input: PlannedOverschijvingenInput, start_datum: date,
                                               eind_datum: date = None):
     payments = {}
+    # Might be the case
+    if start_datum > eind_datum:
+        return payments
     except_dates = []
     if "except_dates" in input.betaalinstructie:
         except_dates = input.betaalinstructie["except_dates"] or []
