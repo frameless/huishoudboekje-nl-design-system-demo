@@ -33,15 +33,15 @@ class Betaalinstructie(graphene.ObjectType):
     """Implementatie op basis van http://schema.org/Schedule"""
 
     '''Lijst van dagen in de week'''
-    by_day = graphene.List(DayOfWeek)
+    by_day = graphene.List(DayOfWeek, default_value=[])
     '''Lijst van maanden in het jaar'''
-    by_month = graphene.List(graphene.Int)
+    by_month = graphene.List(graphene.Int, default_value=[])
     '''De dagen van de maand'''
-    by_month_day = graphene.List(graphene.Int)
+    by_month_day = graphene.List(graphene.Int, default_value=[])
     '''Bijvoorbeeld "P1W" elke week.'''
     repeat_frequency = graphene.String()
     '''Lijst met datums waarop het NIET geldt'''
-    except_dates = graphene.List(graphene.String)
+    except_dates = graphene.List(graphene.String, default_value=[])
     start_date = graphene.String()
     end_date = graphene.String()
 

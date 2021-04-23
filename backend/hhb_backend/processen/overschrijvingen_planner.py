@@ -28,40 +28,37 @@ def get_planned_overschrijvingen(input: PlannedOverschijvingenInput, start_datum
 def get_doorlopende_afspraak_overschrijvingen(input: PlannedOverschijvingenInput, start_datum: date,
                                               eind_datum: date = None):
     payments = {}
-    except_dates = input.betaalinstructie["except_dates"] or []
+    except_dates = []
+    if "except_dates" in input.betaalinstructie:
+        except_dates = input.betaalinstructie["except_dates"] or []
 
-    if input.betaalinstructie["by_day"]:
+    if "by_day" in input.betaalinstructie and input.betaalinstructie["by_day"]:
         for weekday in input.betaalinstructie["by_day"]:
             weekday_int = time.strptime(weekday, "%A").tm_wday
             payment_date = start_datum
             while payment_date <= eind_datum:
-                if (not start_datum or payment_date >= start_datum) and payment_date.weekday() == weekday_int:
+                if (not start_datum or payment_date >= start_datum) and payment_date.weekday() == weekday_int \
+                        and payment_date.isoformat() not in except_dates:
                     payments[payment_date.isoformat()] = make_overschrijving_dict(input.bedrag, payment_date,
                                                                                   input.afspraak_id)
                 payment_date = next_weekday(payment_date, weekday_int)
-    elif input.betaalinstructie["by_month_day"]:
-        date_list = [start_datum + datetime.timedelta(days=x) for x in range(0, (eind_datum - start_datum).days)]
+    elif "by_month_day" in input.betaalinstructie and input.betaalinstructie["by_month_day"]:
+        date_list = [start_datum + datetime.timedelta(days=x) for x in
+                     range(0, (eind_datum - (start_datum - datetime.timedelta(days=1))).days)]
         pay_days = input.betaalinstructie["by_month_day"]
         pay_months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-        if input.betaalinstructie["by_month"]:
+        if "by_month" in input.betaalinstructie and input.betaalinstructie["by_month"]:
             pay_months = input.betaalinstructie["by_month"]
         for possible_date in date_list:
-            if possible_date.day in pay_days and possible_date.month in pay_months:
+            if possible_date.day in pay_days and possible_date.month in pay_months \
+                    and possible_date.isoformat() not in except_dates:
                 payments[possible_date.isoformat()] = make_overschrijving_dict(input.bedrag, possible_date,
                                                                                input.afspraak_id)
 
-    return dict(sorted(payments.items()))
-
-    # determine first day, loop until enddate
-    # Feitelijk 2 opties, of per week met de mogelijkheid tot meerdere dagen. Of per maand met de opties tot meerdere dagen per maand. Except dates in de gaten houden.
-
-    # payments = {}
-    # payment_date = input.afspraak_start_datum
-    # while payment_date <= eind_datum:
-    #     if not start_datum or payment_date >= start_datum:
-    #         payments[payment_date.isoformat()] = make_overschrijving_dict(input.bedrag, payment_date, input.afspraak_id)
-    #     payment_date += input.interval
-    # return payments
+    if payments:
+        return dict(sorted(payments.items()))
+    else:
+        return payments
 
 
 def next_weekday(d, weekday):

@@ -12,7 +12,6 @@ from .organisaties import OrganisatieQuery, OrganisatiesQuery
 from .rekeningen import RekeningQuery, RekeningenQuery
 from .rubrieken import RubriekQuery, RubriekenQuery
 from .configuraties import ConfiguratieQuery, ConfiguratiesQuery
-from .planned_overschrijvingen import PlannedOverschijvingenQuery
 from .gebruikersactiviteiten import GebruikersActiviteitQuery, GebruikersActiviteitenQuery, \
     GebruikersActiviteitenPagedQuery
 from .gebruiker import GebruikerQuery
@@ -42,7 +41,6 @@ class RootQuery(graphene.ObjectType):
     rubrieken = RubriekenQuery.return_type
     configuratie = ConfiguratieQuery.return_type
     configuraties = ConfiguratiesQuery.return_type
-    planned_overschrijvingen = PlannedOverschijvingenQuery.return_type
     export = ExportQuery.return_type
     exports = ExportsQuery.return_type
     gebruikersactiviteit = GebruikersActiviteitQuery.return_type

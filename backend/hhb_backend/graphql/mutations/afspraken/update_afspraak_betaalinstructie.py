@@ -56,6 +56,8 @@ class UpdateAfspraakBetaalinstructie(graphene.Mutation):
     async def mutate(_root, _info, afspraak_id: int, betaalinstructie: BetaalinstructieInput):
         """ Update the Afspraak """
 
+        ''' Clear the cache since we need to have the most up te date version possible. '''
+        hhb_dataloader().afspraken_by_id.clear(afspraak_id)
         previous = await hhb_dataloader().afspraken_by_id.load(afspraak_id)
 
         if previous is None:
@@ -68,6 +70,10 @@ class UpdateAfspraakBetaalinstructie(graphene.Mutation):
 
         if previous.get("credit") == True:
             raise GraphQLError("betaalinstructie is alleen mogelijk bij uitgaven")
+        if (betaalinstructie.by_day and betaalinstructie.by_month_day) or (not betaalinstructie.by_day and not betaalinstructie.by_month_day):
+            raise GraphQLError("Betaalinstructie: 'by_day' of 'by_month_day' moet zijn ingevuld.")
+        if betaalinstructie.end_date and betaalinstructie.end_date <= betaalinstructie.start_date:
+            raise GraphQLError("Startdatum kan niet voor einddatum liggen.")
 
         input = {
             **previous,
