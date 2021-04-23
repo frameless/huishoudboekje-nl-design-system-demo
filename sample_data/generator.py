@@ -378,7 +378,7 @@ class Generator:
             with open(filename, "w") as out_file:
                 fieldnames = fieldnames or self.tables[db][name]["fieldnames"]
                 writer = csv.DictWriter(
-                    out_file, fieldnames=fieldnames, dialect=HHBCsvDialect, escapechar='\\'
+                    out_file, fieldnames=fieldnames, dialect=HHBCsvDialect
                 )
                 writer.writeheader()
                 writer.writerows(
