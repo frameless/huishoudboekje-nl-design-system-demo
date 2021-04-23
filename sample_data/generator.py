@@ -337,7 +337,7 @@ class Generator:
                     add_newline(
                         ["BEGIN;"]
                         + [
-                            f"""\\COPY {table_name} ({",".join(self.tables[db][table_name]["fieldnames"])}) FROM '{db}/{table_name}.csv' (FORMAT csv, DELIMITER '|', QUOTE '''', ESCAPE '\"', HEADER true, NULL '');"""
+                            f"""\\COPY {table_name} ({",".join(self.tables[db][table_name]["fieldnames"])}) FROM '{db}/{table_name}.csv' (FORMAT csv, DELIMITER '|', QUOTE '''', HEADER true, NULL '');"""
                             for table_name in self.tables[db]
                         ]
                         + [
