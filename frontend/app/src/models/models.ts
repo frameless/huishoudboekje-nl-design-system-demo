@@ -1,10 +1,3 @@
-export enum IntervalType {
-	Day = "day",
-	Week = "week",
-	Month = "month",
-	Year = "year"
-}
-
 // See https://schema.org/DayOfWeek
 export enum DayOfWeek {
 	Monday = 1,
@@ -17,8 +10,6 @@ export enum DayOfWeek {
 	// PublicHolidays,
 }
 
-// export const allDaysOfWeek = Object.values(DayOfWeek).map(d => parseInt(String(d))).filter(d => !isNaN(d));
-
 // See https://schema.org/Schedule
 export type Schedule = {
 	startDate: Date,
@@ -27,4 +18,5 @@ export type Schedule = {
 	byMonth: number[],
 	byMonthDay: number,
 	byMonthWeek: number,
+	exceptDates: Date[],
 }

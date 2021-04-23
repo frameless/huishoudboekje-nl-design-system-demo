@@ -11,12 +11,6 @@ export const AfspraakFragment = gql`
         zoektermen
         validFrom
         validThrough
-        interval {
-            dagen
-            weken
-            maanden
-            jaren
-        }
         burger {
             id
             voornamen
@@ -52,12 +46,6 @@ export const AfspraakFragment = gql`
             zoektermen
             bedrag
             omschrijving
-            interval {
-                dagen
-                weken
-                maanden
-                jaren
-            }
             tegenRekening {
                 id
                 iban

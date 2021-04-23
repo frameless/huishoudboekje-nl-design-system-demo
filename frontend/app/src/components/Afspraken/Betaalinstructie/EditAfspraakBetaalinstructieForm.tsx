@@ -4,7 +4,6 @@ import DatePicker from "react-datepicker";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
 import {Afspraak, Betaalinstructie, BetaalinstructieInput, DayOfWeek} from "../../../generated/graphql";
-import {IntervalType} from "../../../models/models";
 import d from "../../../utils/dayjs";
 import {useReactSelectStyles} from "../../../utils/things";
 import useToaster from "../../../utils/useToaster";
@@ -62,10 +61,10 @@ type EditAfspraakBetaalinstructieProps = {
 }
 
 type BetaalinstructieFormValues = Betaalinstructie & {
-	intervalType?: IntervalType,
+	intervalType?: any, // Todo this used to be IntervalType, but we moved to Schedule
 	intervalCount?: number,
-	startDate?: Date,
-	endDate?: Date,
+	startDate?: string | Date,
+	endDate?: string | Date,
 	periodiek?: boolean,
 };
 
