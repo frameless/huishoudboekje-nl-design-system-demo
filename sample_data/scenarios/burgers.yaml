@@ -12,7 +12,7 @@ scenarios:
           kvk: "35012085"
         bedrag: 76532
         credit: true
-        betaalinstructie: '{"start_date": "2021-01-01","end_date": "2021-12-31","by_month_day": [1],"except_dates": []}'
+        # betaalinstructie: '{"start_date": "2021-01-01","end_date": "2021-12-31","by_month_day": [1],"except_dates": []}'
         valid_from: "2021-01-01"
         zoektermen:
           - "Loon"
@@ -25,7 +25,7 @@ scenarios:
           iban: "NL76BNGH0285178598"
         bedrag: 14784
         credit: true
-        betaalinstructie: '{"start_date": "2021-01-01","end_date": "2021-12-31","by_month_day": [1],"except_dates": []}'
+        # betaalinstructie: '{"start_date": "2021-01-01","end_date": "2021-12-31","by_month_day": [1],"except_dates": []}'
         valid_from: "2019-01-07"
         zoektermen:
           - "Aanvullende uitkering"
@@ -37,7 +37,7 @@ scenarios:
           kvk: "27365323"
         bedrag: 39100
         credit: true
-        betaalinstructie: '{"start_date": "2021-01-01","end_date": "2021-12-31","by_month_day": [1],"except_dates": []}'
+        # betaalinstructie: '{"start_date": "2021-01-01","end_date": "2021-12-31","by_month_day": [1],"except_dates": []}'
         valid_from: "2019-01-20"
         zoektermen:
           - "123456781"
@@ -50,7 +50,7 @@ scenarios:
           iban: "NL36INGB0003445588"
         bedrag: 32200
         credit: true
-        betaalinstructie: '{"start_date": "2021-01-01","end_date": "2021-12-31","by_month_day": [1],"except_dates": []}'
+        # betaalinstructie: '{"start_date": "2021-01-01","end_date": "2021-12-31","by_month_day": [1],"except_dates": []}'
         valid_from: "2019-01-20"
         zoektermen:
           - "123456781"
@@ -62,7 +62,7 @@ scenarios:
           kvk: "27365323"
         bedrag: 10700
         credit: true
-        betaalinstructie: '{"start_date": "2021-01-01","end_date": "2021-12-31","by_month_day": [1],"except_dates": []}'
+        # betaalinstructie: '{"start_date": "2021-01-01","end_date": "2021-12-31","by_month_day": [1],"except_dates": []}'
         valid_from: "2019-01-20"
         zoektermen:
           - "123456781"
@@ -76,7 +76,7 @@ scenarios:
         bedrag: 64735
         credit: false
         automatische_incasso: true
-        betaalinstructie: '{"start_date": "2021-01-01","end_date": "2021-12-31","by_month_day": [1],"except_dates": []}'
+        # betaalinstructie: '{"start_date": "2021-01-01","end_date": "2021-12-31","by_month_day": [1],"except_dates": []}'
         valid_from: "2019-01-01"
         zoektermen:
           - "Betaalde huur"
@@ -89,7 +89,7 @@ scenarios:
         bedrag: 13200
         credit: false
         automatische_incasso: true
-        betaalinstructie: '{"start_date": "2021-01-01","end_date": "2021-12-31","by_month_day": [1],"except_dates": []}'
+        # betaalinstructie: '{"start_date": "2021-01-01","end_date": "2021-12-31","by_month_day": [1],"except_dates": []}'
         valid_from: "2019-01-01"
         zoektermen:
           - "Elektriciteit"
@@ -102,7 +102,7 @@ scenarios:
         bedrag: 4161
         credit: false
         automatische_incasso: true
-        betaalinstructie: '{"start_date": "2021-01-01","end_date": "2021-12-31","by_month": [1,4,7,10]"by_month_day": [1],"except_dates": []}'
+        # betaalinstructie: '{"start_date": "2021-01-01","end_date": "2021-12-31","by_month": [1,4,7,10]"by_month_day": [1],"except_dates": []}'
         valid_from: "2021-01-01"
         zoektermen:
           - "Water"
@@ -113,7 +113,7 @@ scenarios:
         bedrag: 93994
         credit: false
         automatische_incasso: false
-        betaalinstructie: '{"start_date": "2021-01-01","end_date": "2021-12-31","by_month_day": [1],"except_dates": []}'
+        # betaalinstructie: '{"start_date": "2021-01-01","end_date": "2021-12-31","by_month_day": [1],"except_dates": []}'
         valid_from: "2021-01-01"
         zoektermen:
           - "Leefgeld"
@@ -133,7 +133,7 @@ scenarios:
           iban: "NL76BNGH0285178598"
         bedrag: 10485
         credit: true
-        betaalinstructie: '{"start_date": "2021-01-01","end_date": "2021-12-31","by_month_day": [1],"except_dates": []}'
+        # betaalinstructie: '{"start_date": "2021-01-01","end_date": "2021-12-31","by_month_day": [1],"except_dates": []}'
         valid_from: "2019-01-07"
         aantal_betalingen: 16
         zoektermen:
@@ -147,7 +147,7 @@ scenarios:
           kvk: "35012085"
         bedrag: 166912
         credit: true
-        betaalinstructie: '{"start_date": "2021-01-01","end_date": "2021-12-31","by_month_day": [1],"except_dates": []}'
+        # betaalinstructie: '{"start_date": "2021-01-01","end_date": "2021-12-31","by_month_day": [1],"except_dates": []}'
         valid_from: "2021-01-01"
         zoektermen:
           - "Loon"
@@ -159,7 +159,7 @@ scenarios:
           kvk: "27365323"
         bedrag: 28600
         credit: true
-        betaalinstructie: '{"start_date": "2021-01-01","end_date": "2021-12-31","by_month_day": [1],"except_dates": []}'
+        # betaalinstructie: '{"start_date": "2021-01-01","end_date": "2021-12-31","by_month_day": [1],"except_dates": []}'
         valid_from: "2019-01-20"
         zoektermen:
           - "123456782"
@@ -171,7 +171,7 @@ scenarios:
           kvk: "27365323"
         bedrag: 10700
         credit: true
-        betaalinstructie: '{"start_date": "2021-01-01","end_date": "2021-12-31","by_month_day": [1],"except_dates": []}'
+        # betaalinstructie: '{"start_date": "2021-01-01","end_date": "2021-12-31","by_month_day": [1],"except_dates": []}'
         valid_from: "2019-01-20"
         zoektermen:
           - "123456782"
@@ -183,7 +183,7 @@ scenarios:
           kvk: "73834238"
         bedrag: 3000
         credit: true
-        betaalinstructie: '{"start_date": "2021-01-01","end_date": "2021-12-31","by_month_day": [1],"except_dates": []}'
+        # betaalinstructie: '{"start_date": "2021-01-01","end_date": "2021-12-31","by_month_day": [1],"except_dates": []}'
         valid_from: "2021-01-01"
         zoektermen:
           - "Vaste Lasten Pakket"
@@ -197,7 +197,7 @@ scenarios:
         bedrag: 57077
         credit: false
         automatische_incasso: true
-        betaalinstructie: '{"start_date": "2021-01-01","end_date": "2021-12-31","by_month_day": [1],"except_dates": []}'
+        # betaalinstructie: '{"start_date": "2021-01-01","end_date": "2021-12-31","by_month_day": [1],"except_dates": []}'
         valid_from: "2019-01-01"
         zoektermen:
           - "Betaalde huur"
@@ -210,7 +210,7 @@ scenarios:
         bedrag: 12200
         credit: false
         automatische_incasso: true
-        betaalinstructie: '{"start_date": "2021-01-01","end_date": "2021-12-31","by_month_day": [1],"except_dates": []}'
+        # betaalinstructie: '{"start_date": "2021-01-01","end_date": "2021-12-31","by_month_day": [1],"except_dates": []}'
         valid_from: "2019-01-01"
         zoektermen:
           - "Elektriciteit"
@@ -223,7 +223,7 @@ scenarios:
         bedrag: 18134
         credit: false
         automatische_incasso: true
-        betaalinstructie: '{"start_date": "2021-01-01","end_date": "2021-12-31","by_month_day": [1],"except_dates": []}'
+        # betaalinstructie: '{"start_date": "2021-01-01","end_date": "2021-12-31","by_month_day": [1],"except_dates": []}'
         valid_from: "2019-01-01"
         zoektermen:
           - "Zorgverzekering"
@@ -236,7 +236,7 @@ scenarios:
         bedrag: 4577
         credit: false
         automatische_incasso: true
-        betaalinstructie: '{"start_date": "2021-01-01","end_date": "2021-12-31","by_month": [1,4,7,10]"by_month_day": [1],"except_dates": []}'
+        # betaalinstructie: '{"start_date": "2021-01-01","end_date": "2021-12-31","by_month": [1,4,7,10]"by_month_day": [1],"except_dates": []}'
         valid_from: "2019-01-01"
         zoektermen:
           - "Water"
@@ -247,7 +247,7 @@ scenarios:
         bedrag: 119520
         credit: false
         automatische_incasso: false
-        betaalinstructie: '{"start_date": "2021-01-01","end_date": "2021-12-31","by_month_day": [1],"except_dates": []}'
+        # betaalinstructie: '{"start_date": "2021-01-01","end_date": "2021-12-31","by_month_day": [1],"except_dates": []}'
         valid_from: "2019-01-01"
         zoektermen:
           - "Leefgeld"
@@ -260,7 +260,7 @@ scenarios:
         bedrag: 1952
         credit: false
         automatische_incasso: true
-        betaalinstructie: '{"start_date": "2021-01-01","end_date": "2021-12-31","by_month_day": [1],"except_dates": []}'
+        # betaalinstructie: '{"start_date": "2021-01-01","end_date": "2021-12-31","by_month_day": [1],"except_dates": []}'
         valid_from: "2019-01-01"
         zoektermen:
           - "Inboedelverzekering"
@@ -273,7 +273,7 @@ scenarios:
         bedrag: 6288
         credit: false
         automatische_incasso: true
-        betaalinstructie: '{"start_date": "2021-01-01","end_date": "2021-12-31","by_month_day": [1],"except_dates": []}'
+        # betaalinstructie: '{"start_date": "2021-01-01","end_date": "2021-12-31","by_month_day": [1],"except_dates": []}'
         valid_from: "2019-01-01"
         zoektermen:
           - "Vaste telefonie en internet"
@@ -286,7 +286,7 @@ scenarios:
         bedrag: 3000
         credit: false
         automatische_incasso: true
-        betaalinstructie: '{"start_date": "2021-01-01","end_date": "2021-12-31","by_month_day": [1],"except_dates": []}'
+        # betaalinstructie: '{"start_date": "2021-01-01","end_date": "2021-12-31","by_month_day": [1],"except_dates": []}'
         valid_from: "2019-01-01"
         zoektermen:
           - "Mobiele telefonie"
