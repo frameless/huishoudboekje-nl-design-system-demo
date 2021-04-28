@@ -11,11 +11,11 @@ setup(
     description='Core Service for elements shared between other services',
     install_requires=[
         "Flask>=1.1.2,<2",
-        "SQLAlchemy>=1.3.19",
-        "psycopg2-binary>=2.8.6",
-        "Flask-SQLAlchemy>=2.4.4",
-        "Flask-Inputs>=0.3.0",
-        "jsonschema>=3.2.0",
+        "SQLAlchemy>=1.3.19,<2",
+        "psycopg2-binary>=2.8.6,<3",
+        "Flask-SQLAlchemy>=2.4.4,<3",
+        "Flask-Inputs>=0.3.0,<1",
+        "jsonschema>=3.2.0,<4",
         'Werkzeug>=1.0.1,<2',
     ],
 )
