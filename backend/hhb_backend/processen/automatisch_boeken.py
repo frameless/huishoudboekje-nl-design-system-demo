@@ -1,5 +1,6 @@
 import logging
 from collections import Counter
+from datetime import date
 
 import hhb_backend.graphql as graphql
 import hhb_backend.graphql.dataloaders as dataloaders
@@ -60,6 +61,15 @@ mutation AutomatischBoeken($input: [CreateJournaalpostAfspraakInput!]!) {
     return journaalposten_
 
 
+def valid_afspraak(afspraak, transactie_datum):
+    if "valid_through" in afspraak and afspraak["valid_through"]:
+        afspraak_valid_through = date.fromisoformat(afspraak["valid_through"])
+        transaction_date = date.fromisoformat(transactie_datum)
+        if transaction_date >= afspraak_valid_through:
+            return False
+    return True
+
+
 async def transactie_suggesties(transactie_ids):
     if type(transactie_ids) != list:
         transactie_ids = [transactie_ids]
@@ -94,7 +104,7 @@ async def transactie_suggesties(transactie_ids):
     for transaction, suggesties in zip(transactions, afspraken):
         transactie_ids_with_afspraken[transaction["id"]] = [afspraak for afspraak in suggesties if
                                                             match_zoekterm(afspraak,
-                                                                           transaction["information_to_account_owner"])]
+                                                                           transaction["information_to_account_owner"]) and valid_afspraak(afspraak, transaction["transactie_datum"])]
 
     return transactie_ids_with_afspraken
 
