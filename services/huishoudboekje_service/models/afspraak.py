@@ -1,5 +1,6 @@
 from core_service.database import db
 from sqlalchemy import ARRAY, Column, Index, Integer, String, Sequence, Date, Boolean, ForeignKey
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship
 
 
@@ -16,7 +17,7 @@ class Afspraak(db.Model):
     valid_from = Column(Date)
     valid_through = Column(Date)
     aantal_betalingen = Column(Integer)
-    interval = Column(String)
+    betaalinstructie = Column(JSONB(none_as_null=True))
     rubriek_id = Column(Integer, ForeignKey('rubrieken.id'))
     rubriek = relationship("Rubriek", back_populates="afspraken")
     tegen_rekening_id = Column(Integer, ForeignKey('rekeningen.id'), index=True)

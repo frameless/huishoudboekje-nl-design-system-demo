@@ -75,7 +75,7 @@ class Generator:
                         "credit",
                         "automatische_incasso",
                         "aantal_betalingen",
-                        "interval",
+                        "betaalinstructie",
                         "valid_from",
                         "valid_through",
                         "burger_id",
@@ -275,7 +275,7 @@ class Generator:
             else scenario.bedrag > 0,
             "automatische_incasso": scenario.automatische_incasso,
             "aantal_betalingen": scenario.aantal_betalingen or 12,
-            "interval": scenario.interval,
+            "betaalinstructie": scenario.betaalinstructie,
             "valid_from": scenario.valid_from,
             "valid_through": scenario.valid_through,
             "burger_id": burger["id"],
@@ -337,8 +337,7 @@ class Generator:
                     add_newline(
                         ["BEGIN;"]
                         + [
-                            f"""\\COPY {table_name} ({",".join(self.tables[db][table_name]["fieldnames"])}) FROM '{db}/{table_name}.csv' (FORMAT csv, DELIMITER '|', HEADER true, NULL '');"""
-                            for table_name in self.tables[db]
+                            f"""\\COPY {table_name} ({",".join(self.tables[db][table_name]["fieldnames"])}) FROM '{db}/{table_name}.csv' (FORMAT csv, DELIMITER '|', HEADER true, NULL '');"""                            for table_name in self.tables[db]
                         ]
                         + [
                             f"""select setval('{table_name}_id_seq', (select max("id") from {table_name}));"""

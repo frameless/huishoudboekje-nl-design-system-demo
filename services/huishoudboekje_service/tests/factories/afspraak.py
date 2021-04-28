@@ -21,7 +21,16 @@ class AfspraakFactory():
         valid_from: date = date(2020, 10, 1),
         valid_through: date = date(2020, 10, 1),
         aantal_betalingen: int = 5,
-        interval: str = "P1Y2M10DT2H30M",
+        betaalinstructie: str = '''{
+            byDay: [1,2]
+            byMonth: [3,4]
+            byMonthDay: []
+            byMonthWeek: []
+            exceptDates: []
+            startDatum: 2021-01-01
+            eindDatum: 2021-12-31
+
+        }''',
         tegen_rekening=None,
         bedrag: float = 13.37,
         credit: bool = True,
@@ -39,7 +48,7 @@ class AfspraakFactory():
             valid_from=valid_from,
             valid_through=valid_through,
             aantal_betalingen=aantal_betalingen,
-            interval=interval,
+            betaalinstructie=betaalinstructie,
             bedrag=bedrag,
             credit=credit,
             zoektermen=zoektermen,

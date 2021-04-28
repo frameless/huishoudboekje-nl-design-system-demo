@@ -76,13 +76,11 @@ class CreateExportOverschrijvingen(graphene.Mutation):
             raise GraphQLError(f"Upstream API responded: {afspraken_response.text}")
         overschrijvingen = overschrijvingen_response.json()["data"]
 
-        # Haal alle toekomstige overschrijvingen op. Met in achtneming van start en datum.
+        # Haal alle toekomstige overschrijvingen op. Met in achtneming van start en eind datum.
         future_overschrijvingen = []
         for afspraak in afspraken:
             planner_input = PlannedOverschijvingenInput(
-                afspraak["valid_from"],
-                afspraak["interval"],
-                afspraak["aantal_betalingen"],
+                afspraak["betaalinstructie"],
                 afspraak["bedrag"],
                 afspraak["id"],
             )
