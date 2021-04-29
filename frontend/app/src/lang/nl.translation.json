@@ -102,7 +102,6 @@
         "rubriek": "Rubriek",
         "omschrijving": "Omschrijving",
         "bedrag": "Bedrag",
-        "periodiek": "Periodiek",
         "willEndOn": "Deze afspraak eindigt op {{date}}.",
         "endedOn": "Deze afspraak is beëindigd per {{date}}.",
         "planFollowup": "Vervolgafspraak toevoegen",
@@ -129,12 +128,7 @@
         "section3": {
             "title": "Afletteren",
             "helperText": "Voeg zoektermen toe voor het automatisch afletteren van geïmporteerde banktransacties."
-        },
-        "betaalinstructie": {
-            "title": "Betaalinstructie",
-            "helperText": "Instellingen voor een betaalinstructie."
-        },
-        "noBetaalinstructie": "Er is geen betaalinstructie ingesteld."
+        }
     },
     "forms": {
         "agreements": {
@@ -301,19 +295,7 @@
         "elke3Maanden": "Elke 3 maanden"
     },
     "afspraakBetaalinstructie": {
-        "title": "Betaalinstructie instellen",
-        "helperText": "Door een betaalinstructie in te stellen kan Huishoudboekje deze exporteren.",
-        "invalidPeriodiekError": "Kies een periodiek.",
-        "invalidDateError": "Vul een juiste datum in."
-    },
-    "schedule": {
-        "eenmalig": "Eenmalig",
-        "periodiek": "Periodiek",
-        "datum": "Datum",
-        "startDate": "Startdatum",
-        "endDate": "Einddatum",
-        "customIntervalType": "Periodiek",
-        "invalidPeriodiekError": "Kies een periodiek."
+        "title": "Betaalinstructie instellen"
     },
     "afspraakForm": {
         "section1": {
@@ -344,13 +326,11 @@
         "confirmModalBody": "Vanaf welke datum wordt deze afspraak beëindigd?"
     },
     "burger": "Burger",
-    "exports": {
-        "period": "Periode",
-        "nTransacties": "Overschrijvingen",
-        "dateCreated": "Aanmaakdatum"
-    },
     "errors": {
         "invalidDateError": "Vul een geldige datum in."
+    },
+    "schedule": {
+        "endDate": "Einddatum"
     },
     "transactions": {
         "amount": "Bedrag",
@@ -362,6 +342,11 @@
             "title": "Betaalinstructies",
             "helperText": "Exporteer een bestand met betaalinstructies voor verwerking in een bankierenapplicatie."
         }
+    },
+    "exports": {
+        "period": "Periode",
+        "nTransacties": "Overschrijvingen",
+        "dateCreated": "Aanmaakdatum"
     },
     "van": "Van",
     "tot": "Tot",
