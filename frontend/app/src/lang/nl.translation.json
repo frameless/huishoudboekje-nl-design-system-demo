@@ -102,7 +102,6 @@
         "rubriek": "Rubriek",
         "omschrijving": "Omschrijving",
         "bedrag": "Bedrag",
-        "periodiek": "Periodiek",
         "willEndOn": "Deze afspraak eindigt op {{date}}.",
         "endedOn": "Deze afspraak is beëindigd per {{date}}.",
         "planFollowup": "Vervolgafspraak toevoegen",
@@ -288,16 +287,7 @@
         "year": "Jaar",
         "year_plural": "Jaren",
         "choose": "Kies",
-        "period": "Periode",
-        "every-day": "Elke dag",
-        "every-day_plural": "Elke {{count}} dagen",
-        "every-week": "Elke week",
-        "every-week_plural": "Elke {{count}} weken",
-        "every-month": "Elke maand",
-        "every-month_plural": "Elke {{count}} maanden",
-        "every-year": "Elk jaar",
-        "every-year_plural": "Elke {{count}} jaar",
-        "once": "Eenmalig"
+        "period": "Periode"
     },
     "customInterval": {
         "elkeWeek": "Elke week",
@@ -305,19 +295,7 @@
         "elke3Maanden": "Elke 3 maanden"
     },
     "afspraakBetaalinstructie": {
-        "title": "Betaalinstructie instellen",
-        "helperText": "Door een betaalinstructie in te stellen kan Huishoudboekje deze exporteren.",
-        "invalidPeriodiekError": "Kies een periodiek.",
-        "invalidDateError": "Vul een juiste datum in."
-    },
-    "schedule": {
-        "eenmalig": "Eenmalig",
-        "periodiek": "Periodiek",
-        "datum": "Datum",
-        "startDate": "Startdatum",
-        "endDate": "Einddatum",
-        "customIntervalType": "Periodiek",
-        "invalidPeriodiekError": "Kies een periodiek."
+        "title": "Betaalinstructie instellen"
     },
     "afspraakForm": {
         "section1": {
@@ -350,6 +328,9 @@
     "burger": "Burger",
     "errors": {
         "invalidDateError": "Vul een geldige datum in."
+    },
+    "schedule": {
+        "endDate": "Einddatum"
     },
     "transactions": {
         "amount": "Bedrag",

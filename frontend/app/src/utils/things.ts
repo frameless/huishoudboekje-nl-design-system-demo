@@ -4,8 +4,7 @@ import currency from "currency.js";
 import {friendlyFormatIBAN} from "ibantools";
 import {createContext} from "react";
 import {Granularity, periodFormatForGranularity} from "../components/Rapportage/Aggregator";
-import {Afspraak, BankTransaction, Burger, GebruikersActiviteit, Interval, Rubriek} from "../generated/graphql";
-import {IntervalType} from "../models/models";
+import {Afspraak, BankTransaction, Burger, GebruikersActiviteit, Rubriek} from "../generated/graphql";
 import d from "./dayjs";
 
 export const searchFields = (term: string, fields: string[]): boolean => {
@@ -35,54 +34,6 @@ export const DrawerContext = createContext<{onClose: () => void}>({
 	onClose: () => {
 	},
 });
-
-export const XInterval = {
-	create: (intervalType: "day" | "week" | "month" | "year", intervalCount: any): Interval => {
-		const intervalTypeConversion = {
-			day: "dagen",
-			week: "weken",
-			month: "maanden",
-			year: "jaren",
-		};
-
-		const interval = {
-			jaren: 0,
-			maanden: 0,
-			weken: 0,
-			dagen: 0,
-		};
-
-		interval[intervalTypeConversion[intervalType]] = parseInt(intervalCount);
-
-		return interval;
-	},
-	empty: {
-		jaren: 0,
-		maanden: 0,
-		weken: 0,
-		dagen: 0,
-	},
-	parse: (interval: any | undefined): {intervalType: IntervalType, count: number} | undefined => {
-		if (!interval) {
-			return undefined;
-		}
-
-		const intervalType = Object.keys(interval).filter(k => interval[k] > 0).shift();
-
-		if (!intervalType) {
-			return undefined;
-		}
-
-		const intervalTypeName = {
-			dagen: IntervalType.Day,
-			weken: IntervalType.Week,
-			maanden: IntervalType.Month,
-			jaren: IntervalType.Year,
-		}[intervalType] as IntervalType;
-
-		return {intervalType: intervalTypeName, count: interval[intervalType]};
-	},
-};
 
 /*
  * Format to EUR: 					currencyFormat(12999.23).format()); // "12.999,23"
@@ -115,18 +66,6 @@ export const formatBurgerName = (burger: Burger | undefined, fullName = true) =>
 	const voorletters = burger?.voorletters?.replace(/\./g, "").split("").join(". ") + ".";
 	return [voorletters, burger?.achternaam].join(" ");
 };
-
-export const intervalString = ((interval: Interval | undefined, t: (text, ...tProps) => string): string => {
-	/* t("interval.every-day", { count }) t("interval.every-week", { count }) t("interval.every-month", { count }) t("interval.every-year", { count }) */
-	const parsedInterval = XInterval.parse(interval);
-
-	if (!parsedInterval) {
-		return t("interval.once");
-	}
-
-	const {intervalType: type, count} = parsedInterval;
-	return t(`interval.every-${type}`, {count});
-});
 
 export const formatIBAN = (iban?: string) => {
 	if (iban) {

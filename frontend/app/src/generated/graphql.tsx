@@ -63,12 +63,6 @@ export type Afspraak = {
   validFrom?: Maybe<Scalars['Date']>;
   validThrough?: Maybe<Scalars['Date']>;
   /** @deprecated use betaalinstructie instead */
-  interval?: Maybe<Interval>;
-  /** @deprecated use betaalinstructie instead */
-  aantalBetalingen?: Maybe<Scalars['Int']>;
-  /** @deprecated use omschrijving instead */
-  beschrijving?: Maybe<Scalars['String']>;
-  /** @deprecated use betaalinstructie instead */
   automatischeIncasso?: Maybe<Scalars['Boolean']>;
 };
 
@@ -106,22 +100,24 @@ export type BankTransactionsPaged = {
 /** Implementatie op basis van http://schema.org/Schedule */
 export type Betaalinstructie = {
   __typename?: 'Betaalinstructie';
-  startDate?: Maybe<Scalars['Date']>;
-  endDate?: Maybe<Scalars['Date']>;
-  repeatCount?: Maybe<Scalars['Int']>;
   byDay?: Maybe<Array<Maybe<DayOfWeek>>>;
-  byMonthDay?: Maybe<Scalars['Int']>;
   byMonth?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  byMonthDay?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  repeatFrequency?: Maybe<Scalars['String']>;
+  exceptDates?: Maybe<Array<Maybe<Scalars['String']>>>;
+  startDate?: Maybe<Scalars['String']>;
+  endDate?: Maybe<Scalars['String']>;
 };
 
 /** Implementatie op basis van http://schema.org/Schedule */
 export type BetaalinstructieInput = {
-  startDate: Scalars['Date'];
-  endDate?: Maybe<Scalars['Date']>;
-  repeatCount?: Maybe<Scalars['Int']>;
   byDay?: Maybe<Array<Maybe<DayOfWeek>>>;
-  byMonthDay?: Maybe<Scalars['Int']>;
   byMonth?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  byMonthDay?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  repeatFrequency: Scalars['String'];
+  exceptDates?: Maybe<Array<Maybe<Scalars['String']>>>;
+  startDate: Scalars['String'];
+  endDate?: Maybe<Scalars['String']>;
 };
 
 /** GraphQL Burger model  */
@@ -467,14 +463,6 @@ export type Grootboekrekening = {
   rubriek?: Maybe<Rubriek>;
 };
 
-export type Interval = {
-  __typename?: 'Interval';
-  jaren?: Maybe<Scalars['Int']>;
-  maanden?: Maybe<Scalars['Int']>;
-  weken?: Maybe<Scalars['Int']>;
-  dagen?: Maybe<Scalars['Int']>;
-};
-
 /** Journaalpost model */
 export type Journaalpost = {
   __typename?: 'Journaalpost';
@@ -529,13 +517,6 @@ export type PageInfo = {
   count?: Maybe<Scalars['Int']>;
   start?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
-};
-
-export type PlannedOverschijvingenQueryInput = {
-  betaalinstructie: BetaalinstructieInput;
-  bedrag: Scalars['Bedrag'];
-  startDatum?: Maybe<Scalars['Date']>;
-  eindDatum?: Maybe<Scalars['Date']>;
 };
 
 /** GraphQL Rekening model */
@@ -839,7 +820,6 @@ export type RootQuery = {
   rubrieken?: Maybe<Array<Maybe<Rubriek>>>;
   configuratie?: Maybe<Configuratie>;
   configuraties?: Maybe<Array<Maybe<Configuratie>>>;
-  plannedOverschrijvingen?: Maybe<Array<Maybe<Overschrijving>>>;
   gebruikersactiviteit?: Maybe<GebruikersActiviteit>;
   gebruikersactiviteiten?: Maybe<Array<Maybe<GebruikersActiviteit>>>;
   gebruikersactiviteitenPaged?: Maybe<GebruikersActiviteitenPaged>;
@@ -998,12 +978,6 @@ export type RootQueryConfiguratiesArgs = {
 
 
 /** The root of all queries  */
-export type RootQueryPlannedOverschrijvingenArgs = {
-  input: PlannedOverschijvingenQueryInput;
-};
-
-
-/** The root of all queries  */
 export type RootQueryGebruikersactiviteitArgs = {
   id: Scalars['Int'];
 };
@@ -1116,9 +1090,9 @@ export type UpdateRubriek = {
 export type AfspraakFragment = (
   { __typename?: 'Afspraak' }
   & Pick<Afspraak, 'id' | 'omschrijving' | 'bedrag' | 'credit' | 'zoektermen' | 'validFrom' | 'validThrough'>
-  & { interval?: Maybe<(
-    { __typename?: 'Interval' }
-    & Pick<Interval, 'dagen' | 'weken' | 'maanden' | 'jaren'>
+  & { betaalinstructie?: Maybe<(
+    { __typename?: 'Betaalinstructie' }
+    & BetaalinstructieFragment
   )>, burger?: Maybe<(
     { __typename?: 'Burger' }
     & Pick<Burger, 'id' | 'voornamen' | 'voorletters' | 'achternaam' | 'plaatsnaam'>
@@ -1145,14 +1119,16 @@ export type AfspraakFragment = (
     & { burger?: Maybe<(
       { __typename?: 'Burger' }
       & Pick<Burger, 'voorletters' | 'voornamen' | 'achternaam'>
-    )>, interval?: Maybe<(
-      { __typename?: 'Interval' }
-      & Pick<Interval, 'dagen' | 'weken' | 'maanden' | 'jaren'>
     )>, tegenRekening?: Maybe<(
       { __typename?: 'Rekening' }
       & Pick<Rekening, 'id' | 'iban' | 'rekeninghouder'>
     )> }
   )>>> }
+);
+
+export type BetaalinstructieFragment = (
+  { __typename?: 'Betaalinstructie' }
+  & Pick<Betaalinstructie, 'byDay' | 'byMonth' | 'byMonthDay' | 'exceptDates' | 'repeatFrequency' | 'startDate' | 'endDate'>
 );
 
 export type BurgerFragment = (
@@ -2118,6 +2094,17 @@ export const RekeningFragmentDoc = gql`
   rekeninghouder
 }
     `;
+export const BetaalinstructieFragmentDoc = gql`
+    fragment Betaalinstructie on Betaalinstructie {
+  byDay
+  byMonth
+  byMonthDay
+  exceptDates
+  repeatFrequency
+  startDate
+  endDate
+}
+    `;
 export const GrootboekrekeningFragmentDoc = gql`
     fragment Grootboekrekening on Grootboekrekening {
   id
@@ -2146,15 +2133,12 @@ export const AfspraakFragmentDoc = gql`
   omschrijving
   bedrag
   credit
+  betaalinstructie {
+    ...Betaalinstructie
+  }
   zoektermen
   validFrom
   validThrough
-  interval {
-    dagen
-    weken
-    maanden
-    jaren
-  }
   burger {
     id
     voornamen
@@ -2190,12 +2174,6 @@ export const AfspraakFragmentDoc = gql`
     zoektermen
     bedrag
     omschrijving
-    interval {
-      dagen
-      weken
-      maanden
-      jaren
-    }
     tegenRekening {
       id
       iban
@@ -2203,7 +2181,8 @@ export const AfspraakFragmentDoc = gql`
     }
   }
 }
-    ${RekeningFragmentDoc}
+    ${BetaalinstructieFragmentDoc}
+${RekeningFragmentDoc}
 ${RubriekFragmentDoc}`;
 export const BurgerFragmentDoc = gql`
     fragment Burger on Burger {

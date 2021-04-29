@@ -1,5 +1,0 @@
-mutation DerdengeldenRekening {
-    rekeninghouder: createConfiguratie(input:{id: "gemeente_naam", waarde: "Gemeente Sloothuizen"}) {ok}
-    iban: createConfiguratie(input:{id: "gemeente_iban", waarde: "NL36ABNA5632579034"}){ok}
-    bic: createConfiguratie(input:{id: "gemeente_bic", waarde: "ABNANL2A"}){ok}
-}

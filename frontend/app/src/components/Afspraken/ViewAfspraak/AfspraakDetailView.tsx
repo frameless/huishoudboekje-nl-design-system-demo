@@ -231,15 +231,17 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 
 			{/*{!afspraak.credit && (*/}
 			{/*	<Section direction={["column", "row"]}>*/}
-			{/*		<FormLeft title={t("afspraakDetailView.section4.title")} helperText={t("afspraakDetailView.section4.helperText")} />*/}
+			{/*		<FormLeft title={t("afspraakDetailView.betaalinstructie.title")} helperText={t("afspraakDetailView.betaalinstructie.helperText")}>*/}
+			{/*			<pre>{JSON.stringify(afspraak.betaalinstructie, null, 2)}</pre>*/}
+			{/*		</FormLeft>*/}
 			{/*		<FormRight spacing={5}>*/}
-			{/*			{afspraak.interval ? (<>*/}
+			{/*			{afspraak.betaalinstructie ? (<>*/}
 			{/*				<Stack direction={["column", "row"]}>*/}
 			{/*					<DataItem label={t("afspraak.periodiek")}>*/}
-			{/*						<Text>{intervalString(afspraak.interval, t)}</Text>*/}
+			{/*						<Text>{"INTERVAL" /* TODO *!/</Text>*/}
 			{/*					</DataItem>*/}
 			{/*					<DataItem label={t("exports.period")}>*/}
-			{/*						<Text>{d(afspraak.startDatum, "YYYY-MM-DD").format("L")} / {afspraak.eindDatum ? d(afspraak.eindDatum, "YYYY-MM-DD").format("L") : "-"}</Text>*/}
+			{/*						<Text>{d(afspraak.validFrom, "YYYY-MM-DD").format("L")} - {afspraak.validThrough ? d(afspraak.validThrough, "YYYY-MM-DD").format("L") : "-"}</Text>*/}
 			{/*					</DataItem>*/}
 			{/*				</Stack>*/}
 
@@ -256,14 +258,6 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 			{/*						{t("actions.add")}*/}
 			{/*					</Button>*/}
 			{/*				</Stack>*/}
-
-			{/*				/!* Todo: show verwachte betalingen? (19-03-2021) *!/*/}
-			{/*				/!* <Stack direction={["column", "row"]}>*!/*/}
-			{/*				/!*	<Box>*!/*/}
-			{/*				/!*		<Button>Bekijk verwachte betalingen</Button>*!/*/}
-			{/*				/!*	</Box>*!/*/}
-			{/*				/!*	<OverschrijvingenListView overschrijvingen={generatedSampleOverschrijvingen} />*!/*/}
-			{/*				/!*</Stack>*!/*/}
 			{/*			</>)}*/}
 			{/*		</FormRight>*/}
 			{/*	</Section>*/}
