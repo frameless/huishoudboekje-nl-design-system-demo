@@ -129,7 +129,12 @@
         "section3": {
             "title": "Afletteren",
             "helperText": "Voeg zoektermen toe voor het automatisch afletteren van geïmporteerde banktransacties."
-        }
+        },
+        "betaalinstructie": {
+            "title": "Betaalinstructie",
+            "helperText": "Instellingen voor een betaalinstructie."
+        },
+        "noBetaalinstructie": "Er is geen betaalinstructie ingesteld."
     },
     "forms": {
         "agreements": {
@@ -278,37 +283,32 @@
         }
     },
     "unknown": "Onbekend",
-    "interval": {
-        "day": "dag",
-        "day_plural": "dagen",
-        "week": "week",
-        "week_plural": "weken",
-        "month": "maand",
-        "month_plural": "maanden",
-        "year": "Jaar",
-        "year_plural": "Jaren",
-        "choose": "Kies",
-        "period": "Periode"
-    },
-    "customInterval": {
-        "elkeWeek": "Elke week",
-        "elkeMaand": "Elke maand",
-        "elke3Maanden": "Elke 3 maanden"
+    "schedule": {
+        "repeatType_day": "Dagelijks",
+        "repeatType_week": "Wekelijks",
+        "repeatType_month": "Maandelijks",
+        "repeatType_year": "Jaarlijks",
+        "eenmalig": "Eenmalig",
+        "periodiek": "Periodiek",
+        "datum": "Datum",
+        "startDate": "Startdatum",
+        "endDate": "Einddatum",
+        "repeatType": "Herhaling",
+        "repeatTypeChoose": "Kies een herhaling.",
+        "invalidPeriodiekError": "Kies een periodiek.",
+        "byDay": "Weekdag",
+        "invalidByDayError": "Kies minimaal één weekdag.",
+        "byMonth": "Maand(en)",
+        "invalidByMonthError": "Kies minimaal één maand.",
+        "byMonthDay": "Dag van de maand (1-28)",
+        "invalidByMonthDayError": "Vul de dag van de maand in.",
+        "fromThrough": "Van {{from}} t/m {{through}}"
     },
     "afspraakBetaalinstructie": {
         "title": "Betaalinstructie instellen",
         "helperText": "Door een betaalinstructie in te stellen kan Huishoudboekje deze exporteren.",
         "invalidPeriodiekError": "Kies een periodiek.",
         "invalidDateError": "Vul een juiste datum in."
-    },
-    "schedule": {
-        "eenmalig": "Eenmalig",
-        "periodiek": "Periodiek",
-        "datum": "Datum",
-        "startDate": "Startdatum",
-        "endDate": "Einddatum",
-        "customIntervalType": "Periodiek",
-        "invalidPeriodiekError": "Kies een periodiek."
     },
     "afspraakForm": {
         "section1": {
@@ -339,6 +339,11 @@
         "confirmModalBody": "Vanaf welke datum wordt deze afspraak beëindigd?"
     },
     "burger": "Burger",
+    "exports": {
+        "period": "Periode",
+        "nTransacties": "Overschrijvingen",
+        "dateCreated": "Aanmaakdatum"
+    },
     "errors": {
         "invalidDateError": "Vul een geldige datum in."
     },
@@ -352,11 +357,6 @@
             "title": "Betaalinstructies",
             "helperText": "Exporteer een bestand met betaalinstructies voor verwerking in een bankierenapplicatie."
         }
-    },
-    "exports": {
-        "period": "Periode",
-        "nTransacties": "Overschrijvingen",
-        "dateCreated": "Aanmaakdatum"
     },
     "van": "Van",
     "tot": "Tot",
@@ -503,6 +503,11 @@
     "allBurgers": "Alle burgers",
     "total": "Totaal",
     "saldo": "Saldo",
+    "interval": {
+        "period": "Periode",
+        "month": "maand",
+        "month_plural": "maanden"
+    },
     "pagination": {
         "first": "Eerste",
         "previous": "Vorige",

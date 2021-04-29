@@ -238,17 +238,18 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 						{afspraak.betaalinstructie ? (<>
 							<Stack direction={["column", "row"]}>
 								<DataItem label={t("afspraak.periodiek")}>
-									<Text>{"TODO_INTERVAL" /* TODO */}</Text>
+									<Text>{JSON.stringify(afspraak.betaalinstructie, null, 2)}</Text>
 								</DataItem>
 								<DataItem label={t("exports.period")}>
-									<Text>{d(afspraak.validFrom, "YYYY-MM-DD").format("L")} - {afspraak.validThrough ? d(afspraak.validThrough, "YYYY-MM-DD").format("L") : "-"}</Text>
+									<Text>{t("schedule.fromThrough", {
+										from: d(afspraak.betaalinstructie.startDate, "YYYY-MM-DD").format("L"),
+										through: afspraak.betaalinstructie.endDate ? d(afspraak.betaalinstructie.endDate, "YYYY-MM-DD").format("L") : "∞",
+									})}</Text>
 								</DataItem>
 							</Stack>
 
 							<Box>
-								<Button colorScheme={"primary"} size={"sm"} as={NavLink} to={Routes.AfspraakBetaalinstructie(afspraak.id!)}>
-									{t("actions.edit")}
-								</Button>
+								<Button colorScheme={"primary"} size={"sm"} as={NavLink} to={Routes.AfspraakBetaalinstructie(afspraak.id!)}>{t("actions.edit")}</Button>
 							</Box>
 						</>) : (<>
 							<Text>{t("afspraakDetailView.noBetaalinstructie")}</Text>
