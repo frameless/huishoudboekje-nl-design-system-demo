@@ -14,7 +14,6 @@ import {FormLeft, FormRight} from "../Forms/FormLeftRight";
 import Page from "../Layouts/Page";
 import Section from "../Layouts/Section";
 
-// Todo: add more detailed error message per field?
 const CreateBurger = () => {
 	const {t} = useTranslation();
 	const {push} = useHistory();
@@ -106,7 +105,6 @@ const CreateBurger = () => {
 					plaatsnaam: plaatsnaam.value,
 					telefoonnummer: telefoonnummer.value,
 					email: mail.value,
-					// Todo: rekeningen?
 				},
 			},
 		}).then(result => {
@@ -218,8 +216,6 @@ const CreateBurger = () => {
 							</FormControl>
 						</FormRight>
 					</Stack>
-
-					{/* Todo: Directly add rekeningen when creating new Burger */}
 
 					<Stack direction={["column", "row"]} spacing={2}>
 						<FormLeft />

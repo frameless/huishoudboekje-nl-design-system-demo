@@ -238,7 +238,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 						{afspraak.betaalinstructie ? (<>
 							<Stack direction={["column", "row"]}>
 								<DataItem label={t("afspraak.periodiek")}>
-									<Text>{JSON.stringify(afspraak.betaalinstructie, null, 2)}</Text>
+									<Text>{JSON.stringify(afspraak.betaalinstructie, null, 2) /* Todo */}</Text>
 								</DataItem>
 								<DataItem label={t("exports.period")}>
 									<Text>{t("schedule.fromThrough", {

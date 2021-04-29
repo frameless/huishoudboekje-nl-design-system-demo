@@ -135,10 +135,7 @@ const BookingSection = ({transaction, rubrieken, afspraken}) => {
 									</Thead>
 									<Tbody>
 										{options.suggesties.map(a => (
-											<SelectAfspraakOption key={a.id} afspraak={a} isSuggestion={options.suggesties.length === 1} onClick={() => {
-												// Todo: accept suggestion
-												onSelectAfspraak(a);
-											}} />
+											<SelectAfspraakOption key={a.id} afspraak={a} isSuggestion={options.suggesties.length === 1} onClick={() => onSelectAfspraak(a)} />
 										))}
 										{options.afspraken.map(a => (
 											<SelectAfspraakOption key={a.id} afspraak={a} onClick={() => onSelectAfspraak(a)} />

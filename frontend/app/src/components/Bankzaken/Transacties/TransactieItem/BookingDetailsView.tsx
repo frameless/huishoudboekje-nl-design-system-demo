@@ -94,7 +94,6 @@ const BookingDetailsView: React.FC<{transactie: BankTransaction}> = ({transactie
 	}
 	/* Booked by Rubriek */
 	else if (journaalpostRubriek) {
-		// Todo: check if this section looks good. Backend didn't work when this was built. (03-03-2021)
 		return (
 			<Stack direction={"row"} spacing={5} mb={3}>
 				<Box flex={1}>

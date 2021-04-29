@@ -13,7 +13,6 @@ import {FormLeft, FormRight} from "../Forms/FormLeftRight";
 import Page from "../Layouts/Page";
 import Section from "../Layouts/Section";
 
-// Todo: add more detailed error message per field?
 const CreateOrganisatie = () => {
 	const {t} = useTranslation();
 	const {push} = useHistory();
