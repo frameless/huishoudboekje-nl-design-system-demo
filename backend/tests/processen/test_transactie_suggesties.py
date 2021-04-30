@@ -74,7 +74,7 @@ async def test_transactie_suggesties_matches(test_request_context):
         assert result[8][0]["id"] == 3
         assert len(result[8]) == 1
         # Transaction date is on valid_through date
-        assert len(result[9]) == 0
+        assert len(result[9]) == 1
 
         # No leftover calls
         assert not post_any.called

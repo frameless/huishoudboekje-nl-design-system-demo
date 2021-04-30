@@ -65,7 +65,7 @@ def valid_afspraak(afspraak, transactie_datum):
     if "valid_through" in afspraak and afspraak["valid_through"]:
         afspraak_valid_through = date.fromisoformat(afspraak["valid_through"])
         transaction_date = date.fromisoformat(transactie_datum)
-        if transaction_date >= afspraak_valid_through:
+        if transaction_date > afspraak_valid_through:
             return False
     return True
 
