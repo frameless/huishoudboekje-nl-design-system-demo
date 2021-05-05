@@ -1,4 +1,4 @@
-import {AddIcon, ViewIcon, WarningTwoIcon} from "@chakra-ui/icons";
+import {AddIcon, EditIcon, ViewIcon, WarningTwoIcon} from "@chakra-ui/icons";
 import {
 	Box,
 	Button,
@@ -31,6 +31,7 @@ import {Afspraak, useEndAfspraakMutation} from "../../../generated/graphql";
 import d from "../../../utils/dayjs";
 import {currencyFormat2, formatBurgerName, isAfspraakActive} from "../../../utils/things";
 import useHandleMutation from "../../../utils/useHandleMutation";
+import useScheduleHelper from "../../../utils/useScheduleHelper";
 import {zoektermValidator} from "../../../utils/zod";
 import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
 import BackButton from "../../Layouts/BackButton";
@@ -49,6 +50,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	const [zoekterm, setZoekterm] = useState<string>();
 	const [zoektermTouched, setZoektermTouched] = useState<boolean>(false);
 	const handleMutation = useHandleMutation();
+	const scheduleHelper = useScheduleHelper(afspraak.betaalinstructie);
 
 	const onAddAfspraakZoekterm = (e) => {
 		e.preventDefault();
@@ -231,14 +233,12 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 
 			{!afspraak.credit && (
 				<Section direction={["column", "row"]}>
-					<FormLeft title={t("afspraakDetailView.betaalinstructie.title")} helperText={t("afspraakDetailView.betaalinstructie.helperText")}>
-						<pre>{JSON.stringify(afspraak.betaalinstructie, null, 2)}</pre>
-					</FormLeft>
+					<FormLeft title={t("afspraakDetailView.betaalinstructie.title")} helperText={t("afspraakDetailView.betaalinstructie.helperText")} />
 					<FormRight spacing={5}>
 						{afspraak.betaalinstructie ? (<>
 							<Stack direction={["column", "row"]}>
 								<DataItem label={t("afspraak.periodiek")}>
-									<Text>{JSON.stringify(afspraak.betaalinstructie, null, 2) /* Todo */}</Text>
+									<Text>{scheduleHelper.toString()}</Text>
 								</DataItem>
 								<DataItem label={t("exports.period")}>
 									<Text>{t("schedule.fromThrough", {
@@ -249,7 +249,8 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 							</Stack>
 
 							<Box>
-								<Button colorScheme={"primary"} size={"sm"} as={NavLink} to={Routes.AfspraakBetaalinstructie(afspraak.id!)}>{t("actions.edit")}</Button>
+								<Button colorScheme={"primary"} size={"sm"} leftIcon={
+									<EditIcon />} as={NavLink} to={Routes.AfspraakBetaalinstructie(afspraak.id!)}>{t("actions.edit")}</Button>
 							</Box>
 						</>) : (<>
 							<Text>{t("afspraakDetailView.noBetaalinstructie")}</Text>

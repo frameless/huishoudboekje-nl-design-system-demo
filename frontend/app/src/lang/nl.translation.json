@@ -302,7 +302,23 @@
         "invalidByMonthError": "Kies minimaal één maand.",
         "byMonthDay": "Dag van de maand (1-28)",
         "invalidByMonthDayError": "Vul de dag van de maand in.",
-        "fromThrough": "Van {{from}} t/m {{through}}"
+        "fromThrough": "Van {{from}} t/m {{through}}",
+        "monday": "maandag",
+        "tuesday": "dinsdag",
+        "wednesday": "woensdag",
+        "thursday": "donderdag",
+        "friday": "vrijdag",
+        "saturday": "zaterdag",
+        "sunday": "zondag",
+        "unknown": "Onbekend",
+        "everyDay": "Elke dag",
+        "everyWeek": "Elke week",
+        "onDays": "op {{days}}",
+        "everyMonth": "Elke maand",
+        "onceOnDate": "Eenmalig, op {{date}}.",
+        "everyYear": "Elk jaar",
+        "inMonths": "in {{months}}",
+        "onDates": "op de {{dates}}"
     },
     "afspraakBetaalinstructie": {
         "title": "Betaalinstructie instellen",
@@ -507,6 +523,20 @@
         "period": "Periode",
         "month": "maand",
         "month_plural": "maanden"
+    },
+    "months": {
+        "jan": "januari",
+        "feb": "februari",
+        "mrt": "maart",
+        "apr": "april",
+        "may": "mei",
+        "jun": "juni",
+        "jul": "juli",
+        "aug": "augustus",
+        "sep": "september",
+        "oct": "oktober",
+        "nov": "november",
+        "dec": "december"
     },
     "pagination": {
         "first": "Eerste",
