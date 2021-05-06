@@ -42,7 +42,7 @@ const OrganisatieList = () => {
 
 	const onKeyDownOnSearchField = (e) => {
 		if (e.key === "Escape") {
-			search.clear();
+			search.reset();
 		}
 	};
 
@@ -71,7 +71,7 @@ const OrganisatieList = () => {
 						<Input type={"text"} {...search.bind} bg={"white"} onKeyDown={onKeyDownOnSearchField} />
 						{search.value.length > 0 && (
 							<InputRightElement>
-								<IconButton size={"xs"} variant={"link"} icon={<CloseIcon />} aria-label={t("actions.cancel")} color={"gray.300"} onClick={() => search.clear()} />
+								<IconButton size={"xs"} variant={"link"} icon={<CloseIcon />} aria-label={t("actions.cancel")} color={"gray.300"} onClick={() => search.reset()} />
 							</InputRightElement>
 						)}
 					</InputGroup>

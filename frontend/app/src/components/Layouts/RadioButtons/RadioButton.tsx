@@ -1,5 +1,4 @@
-import {UseRadioProps} from "@chakra-ui/radio/dist/types/use-radio";
-import {Button, ButtonProps, Input, useId, useRadio} from "@chakra-ui/react";
+import {Button, ButtonProps, Input, useId, useRadio, UseRadioProps} from "@chakra-ui/react";
 import React from "react";
 
 type RadioButtonProps = ButtonProps & {
