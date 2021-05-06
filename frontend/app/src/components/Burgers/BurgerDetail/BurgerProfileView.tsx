@@ -1,10 +1,9 @@
-import {Divider, Stack, StackProps, Text} from "@chakra-ui/react";
+import {Divider, FormLabel, Stack, StackProps, Text} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {Burger} from "../../../generated/graphql";
 import d from "../../../utils/dayjs";
 import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
-import Label from "../../Layouts/Label";
 
 const BurgerProfileView: React.FC<StackProps & {burger: Burger}> = ({burger, ...props}) => {
 	const {t} = useTranslation();
@@ -17,26 +16,26 @@ const BurgerProfileView: React.FC<StackProps & {burger: Burger}> = ({burger, ...
 					<Stack spacing={2} mb={1} direction={["column", "row"]}>
 						<Stack direction={["column", "row"]} spacing={1} flex={1}>
 							<Stack spacing={1} flex={1}>
-								<Label>{t("forms.burgers.fields.initials")}</Label>
+								<FormLabel>{t("forms.burgers.fields.initials")}</FormLabel>
 								<Text>{burger.voorletters}</Text>
 							</Stack>
 							<Stack spacing={1} flex={1}>
-								<Label>{t("forms.burgers.fields.firstName")}</Label>
+								<FormLabel>{t("forms.burgers.fields.firstName")}</FormLabel>
 								<Text>{burger.voornamen}</Text>
 							</Stack>
 						</Stack>
 						<Stack spacing={1} flex={1}>
-							<Label>{t("forms.burgers.fields.lastName")}</Label>
+							<FormLabel>{t("forms.burgers.fields.lastName")}</FormLabel>
 							<Text>{burger.achternaam}</Text>
 						</Stack>
 					</Stack>
 					<Stack spacing={2} mb={1} direction={["column", "row"]}>
 						<Stack spacing={1} flex={1}>
-							<Label>{t("forms.burgers.fields.dateOfBirth")}</Label>
+							<FormLabel>{t("forms.burgers.fields.dateOfBirth")}</FormLabel>
 							<Text>{burger.geboortedatum && d(burger.geboortedatum).format("L")}</Text>
 						</Stack>
 						<Stack spacing={1} flex={1}>
-							<Label>{t("forms.burgers.fields.age")}</Label>
+							<FormLabel>{t("forms.burgers.fields.age")}</FormLabel>
 							<Text>{d().diff(d(burger.geboortedatum), "year")}</Text>
 						</Stack>
 					</Stack>
@@ -50,31 +49,31 @@ const BurgerProfileView: React.FC<StackProps & {burger: Burger}> = ({burger, ...
 				<FormRight>
 					<Stack spacing={2} mb={1} direction={["column", "row"]}>
 						<Stack spacing={1} flex={1}>
-							<Label>{t("forms.burgers.fields.street")}</Label>
+							<FormLabel>{t("forms.burgers.fields.street")}</FormLabel>
 							<Text>{burger.straatnaam}</Text>
 						</Stack>
 						<Stack spacing={1} flex={1}>
-							<Label>{t("forms.burgers.fields.houseNumber")}</Label>
+							<FormLabel>{t("forms.burgers.fields.houseNumber")}</FormLabel>
 							<Text>{burger.huisnummer}</Text>
 						</Stack>
 					</Stack>
 					<Stack spacing={2} mb={1} direction={["column", "row"]}>
 						<Stack spacing={1} flex={1}>
-							<Label>{t("forms.burgers.fields.zipcode")}</Label>
+							<FormLabel>{t("forms.burgers.fields.zipcode")}</FormLabel>
 							<Text>{burger.postcode}</Text>
 						</Stack>
 						<Stack spacing={1} flex={1}>
-							<Label>{t("forms.burgers.fields.city")}</Label>
+							<FormLabel>{t("forms.burgers.fields.city")}</FormLabel>
 							<Text>{burger.plaatsnaam}</Text>
 						</Stack>
 					</Stack>
 					<Stack spacing={2} mb={1} direction={["column", "row"]}>
 						<Stack spacing={1} flex={1}>
-							<Label>{t("forms.burgers.fields.phoneNumber")}</Label>
+							<FormLabel>{t("forms.burgers.fields.phoneNumber")}</FormLabel>
 							<Text>{burger.telefoonnummer}</Text>
 						</Stack>
 						<Stack spacing={1} flex={1}>
-							<Label>{t("forms.burgers.fields.mail")}</Label>
+							<FormLabel>{t("forms.burgers.fields.mail")}</FormLabel>
 							<Text>{burger.email}</Text>
 						</Stack>
 					</Stack>

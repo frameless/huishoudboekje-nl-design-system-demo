@@ -1,4 +1,4 @@
-import {Button, Divider, FormControl, Input, Stack} from "@chakra-ui/react";
+import {Button, Divider, FormControl, FormLabel, Input, Stack} from "@chakra-ui/react";
 import React from "react";
 import {useInput, Validators} from "react-grapple";
 import {useTranslation} from "react-i18next";
@@ -6,7 +6,6 @@ import {Configuratie as IConfiguratie, useCreateConfiguratieMutation, useGetConf
 import Queryable from "../../utils/Queryable";
 import useToaster from "../../utils/useToaster";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
-import Label from "../Layouts/Label";
 import Page from "../Layouts/Page";
 import Section from "../Layouts/Section";
 import ConfiguratieItem from "./ConfiguratieItem";
@@ -66,11 +65,11 @@ const Configuratie = () => {
 							<form onSubmit={onSubmit}>
 								<Stack direction={["column", "row"]} alignItems={"flex-end"}>
 									<FormControl>
-										<Label>{t("forms.configuratie.fields.id")}</Label>
+										<FormLabel>{t("forms.configuratie.fields.id")}</FormLabel>
 										<Input {...key.bind} />
 									</FormControl>
 									<FormControl>
-										<Label>{t("forms.configuratie.fields.waarde")}</Label>
+										<FormLabel>{t("forms.configuratie.fields.waarde")}</FormLabel>
 										<Input {...value.bind} />
 									</FormControl>
 									<FormControl>

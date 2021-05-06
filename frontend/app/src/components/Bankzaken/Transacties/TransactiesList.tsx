@@ -1,11 +1,10 @@
-import {Box, Stack, useBreakpointValue} from "@chakra-ui/react";
+import {Box, FormLabel, Stack, useBreakpointValue} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {BankTransaction} from "../../../generated/graphql";
 import d from "../../../utils/dayjs";
 import {sortBankTransactions} from "../../../utils/things";
 import DeadEndPage from "../../DeadEndPage";
-import Label from "../../Layouts/Label";
 import TransactieItem from "./TransactieItem";
 
 type TransactiesListProps = {transacties: BankTransaction[]};
@@ -35,13 +34,13 @@ const TransactiesList: React.FC<TransactiesListProps> = ({transacties}) => {
 		<Stack direction={"column"} spacing={5}>
 			<Stack direction={"row"} align={"center"}>
 				<Box flex={2} textAlign={"left"}>
-					<Label>{t("transacties.tegenrekening")}</Label>
+					<FormLabel>{t("transacties.tegenrekening")}</FormLabel>
 				</Box>
 				{!isMobile && <Box flex={1} textAlign={"left"}>
-					<Label>{t("transacties.rubriek")}</Label>
+					<FormLabel>{t("transacties.rubriek")}</FormLabel>
 				</Box>}
 				<Box flex={0} minWidth={120}>
-					<Label>{t("transacties.bedrag")}</Label>
+					<FormLabel>{t("transacties.bedrag")}</FormLabel>
 				</Box>
 			</Stack>
 
@@ -49,7 +48,7 @@ const TransactiesList: React.FC<TransactiesListProps> = ({transacties}) => {
 				return (
 					<Stack key={i} spacing={1}>
 						<Box>
-							<Label>{transactionDate}</Label>
+							<FormLabel>{transactionDate}</FormLabel>
 						</Box>
 						<Box>
 							{bt[transactionDate].sort(sortBankTransactions).filter(t => t.isCredit).map(t => (

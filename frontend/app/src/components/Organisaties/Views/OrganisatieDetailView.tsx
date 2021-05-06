@@ -1,9 +1,8 @@
-import {BoxProps, Divider, Stack, Text} from "@chakra-ui/react";
+import {BoxProps, Divider, FormLabel, Stack, Text} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {Organisatie} from "../../../generated/graphql";
 import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
-import Label from "../../Layouts/Label";
 import Section from "../../Layouts/Section";
 
 const OrganisatieDetailView: React.FC<BoxProps & {organisatie: Organisatie}> = ({organisatie, ...props}) => {
@@ -20,11 +19,11 @@ const OrganisatieDetailView: React.FC<BoxProps & {organisatie: Organisatie}> = (
 				<FormRight>
 					<Stack spacing={2} direction={["column", "row"]}>
 						<Stack spacing={1} flex={1}>
-							<Label>{t("forms.organizations.fields.kvkNumber")}</Label>
+							<FormLabel>{t("forms.organizations.fields.kvkNumber")}</FormLabel>
 							<Text>{organisatie.kvkNummer}</Text>
 						</Stack>
 						<Stack spacing={1} flex={1}>
-							<Label>{t("forms.organizations.fields.companyName")}</Label>
+							<FormLabel>{t("forms.organizations.fields.companyName")}</FormLabel>
 							<Text>{organisatie.kvkDetails?.naam}</Text>
 						</Stack>
 					</Stack>
@@ -38,21 +37,21 @@ const OrganisatieDetailView: React.FC<BoxProps & {organisatie: Organisatie}> = (
 				<FormRight>
 					<Stack spacing={2} direction={["column", "row"]}>
 						<Stack spacing={1} flex={1}>
-							<Label>{t("forms.organizations.fields.street")}</Label>
+							<FormLabel>{t("forms.organizations.fields.street")}</FormLabel>
 							<Text>{organisatie.kvkDetails?.straatnaam}</Text>
 						</Stack>
 						<Stack spacing={1} flex={1}>
-							<Label>{t("forms.organizations.fields.houseNumber")}</Label>
+							<FormLabel>{t("forms.organizations.fields.houseNumber")}</FormLabel>
 							<Text>{organisatie.kvkDetails?.huisnummer}</Text>
 						</Stack>
 					</Stack>
 					<Stack spacing={2} direction={["column", "row"]}>
 						<Stack spacing={1} flex={1}>
-							<Label>{t("forms.organizations.fields.zipcode")}</Label>
+							<FormLabel>{t("forms.organizations.fields.zipcode")}</FormLabel>
 							<Text>{organisatie.kvkDetails?.postcode}</Text>
 						</Stack>
 						<Stack spacing={1} flex={1}>
-							<Label>{t("forms.organizations.fields.city")}</Label>
+							<FormLabel>{t("forms.organizations.fields.city")}</FormLabel>
 							<Text>{organisatie.kvkDetails?.plaatsnaam}</Text>
 						</Stack>
 					</Stack>

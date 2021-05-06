@@ -1,10 +1,9 @@
 import {CheckIcon, CloseIcon, DeleteIcon} from "@chakra-ui/icons";
-import {Editable, EditableInput, EditablePreview, FormControl, FormControlProps, IconButton, Stack} from "@chakra-ui/react";
+import {Editable, EditableInput, EditablePreview, FormControl, FormControlProps, FormLabel, IconButton, Stack} from "@chakra-ui/react";
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {Configuratie as IConfiguratie, useDeleteConfiguratieMutation, useUpdateConfiguratieMutation} from "../../generated/graphql";
 import useToaster from "../../utils/useToaster";
-import Label from "../Layouts/Label";
 
 const ConfiguratieItem: React.FC<FormControlProps & {c: IConfiguratie, refetch: VoidFunction}> = ({c, refetch, ...props}) => {
 	const toast = useToaster();
@@ -64,7 +63,7 @@ const ConfiguratieItem: React.FC<FormControlProps & {c: IConfiguratie, refetch: 
 
 	return (
 		<FormControl key={c.id} {...props}>
-			<Label>{c.id}</Label>
+			<FormLabel>{c.id}</FormLabel>
 			<Stack direction={"row"} alignItems={"center"}>
 				<Editable defaultValue={c.waarde} flex={1} submitOnBlur={true} onSubmit={onSubmit} onFocus={onFocus}>
 					<EditablePreview />
