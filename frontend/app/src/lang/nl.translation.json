@@ -470,7 +470,8 @@
         "deleteBurgerRekening": "{{gebruiker}} verwijderde rekening <strong>{{iban}}</strong> op naam van <strong>{{rekeninghouder}}</strong> bij <linkBurger>{{burger}}</linkBurger>.",
         "addAfspraakZoekterm": "{{gebruiker}} voegde een zoekterm toe bij een <linkAfspraak>afspraak</linkAfspraak> met <linkBurger>{{burger}}</linkBurger> en <linkAfspraakOrganisatie>{{afspraakOrganisatie}}</linkAfspraakOrganisatie>.",
         "deleteAfspraakZoekterm": "{{gebruiker}} verwijderde een zoekterm bij een <linkAfspraak>afspraak</linkAfspraak> met <linkBurger>{{burger}}</linkBurger> en <linkAfspraakOrganisatie>{{afspraakOrganisatie}}</linkAfspraakOrganisatie>.",
-        "startAutomatischBoeken": "{{gebruiker}} startte het afletteren van transacties."
+        "startAutomatischBoeken": "{{gebruiker}} startte het afletteren van transacties.",
+        "updateAfspraakBetaalinstructie": "{{gebruiker}} stelde een betaalinstructie in voor een <linkAfspraak>afspraak</linkAfspraak> met <linkBurger>{{burger}}</linkBurger>."
     },
     "suggestion": "Suggestie",
     "organizations": {
