@@ -69,10 +69,7 @@ const EditAfspraakBetaalinstructieForm: React.FC<EditAfspraakBetaalinstructiePro
 		<Section>
 			<form onSubmit={onSubmit}>
 				<Stack direction={["column", "row"]}>
-					<FormLeft title={t("afspraakBetaalinstructie.title")} helperText={t("afspraakBetaalinstructie.helperText")}>
-						<pre>{JSON.stringify(values, null, 2)}</pre>
-						<pre>{JSON.stringify(data, null, 2)}</pre>
-					</FormLeft>
+					<FormLeft title={t("afspraakBetaalinstructie.title")} helperText={t("afspraakBetaalinstructie.helperText")} />
 					<FormRight spacing={5}>
 
 						<Stack direction={["column", "row"]}>

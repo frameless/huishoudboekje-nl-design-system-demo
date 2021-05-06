@@ -250,7 +250,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 
 							<Box>
 								<Button colorScheme={"primary"} size={"sm"} leftIcon={
-									<EditIcon />} as={NavLink} to={Routes.AfspraakBetaalinstructie(afspraak.id!)}>{t("actions.edit")}</Button>
+									<EditIcon />} as={NavLink} to={Routes.AfspraakBetaalinstructie(afspraak.id!)}>{t("actions.newBetaalinstructie")}</Button>
 							</Box>
 						</>) : (<>
 							<Text>{t("afspraakDetailView.noBetaalinstructie")}</Text>
