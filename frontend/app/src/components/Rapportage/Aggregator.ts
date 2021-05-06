@@ -4,7 +4,9 @@ import {getRubriekForTransaction} from "../../utils/things";
 
 // @i18n: t("charts.inkomstenUitgaven.income") t("charts.inkomstenUitgaven.expenses") t("charts.inkomstenUitgaven.unbooked")
 export enum Type {
-	Inkomsten = "income", Uitgaven = "expenses", Ongeboekt = "unbooked"
+	Inkomsten = "income",
+	Uitgaven = "expenses",
+	Ongeboekt = "unbooked"
 }
 
 type RichTransaction = BankTransaction & {

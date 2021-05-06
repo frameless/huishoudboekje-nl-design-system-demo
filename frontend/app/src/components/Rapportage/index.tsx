@@ -63,9 +63,7 @@ const Rapportage = () => {
 								<FormControl as={Stack} flex={1} justifyContent={"flex-end"}>
 									<Label>{t("forms.common.fields.startDate")}</Label>
 									<DatePicker selected={d(startDate.value, "L").isValid() ? d(startDate.value, "L").toDate() : null}
-										dateFormat={"MMM yyyy"}
-										showMonthYearPicker
-										showFullMonthYearPicker
+										dateFormat={"dd-MM-yyyy"}
 										onChange={(value: Date) => {
 											if (value) {
 												startDate.setValue(d(value).format("L"));
@@ -75,9 +73,7 @@ const Rapportage = () => {
 								<FormControl as={Stack} flex={1}>
 									<Label>{t("forms.common.fields.endDate")}</Label>
 									<DatePicker selected={d(endDate.value, "L").isValid() ? d(endDate.value, "L").toDate() : null}
-										dateFormat={"MMM yyyy"}
-										showMonthYearPicker
-										showFullMonthYearPicker
+										dateFormat={"dd-MM-yyyy"}
 										onChange={(value: Date) => {
 											if (value) {
 												endDate.setValue(d(value).format("L"));
@@ -166,8 +162,8 @@ const Rapportage = () => {
 							<FormRight>
 								<Stack spacing={4}>
 									<HStack>
-										<Text>Rapportageperiode: <strong>{d(startDate.value, "L").format("L")}</strong> tot en
-											  met <strong>{d(endDate.value, "L").format("L")}</strong>.</Text>
+										<Text>Rapportageperiode: <strong>{d(startDate.value, "L").startOf("day").format("L")}</strong> tot en
+											  met <strong>{d(endDate.value, "L").endOf("day").format("L")}</strong>.</Text>
 									</HStack>
 
 									{Object.keys(aggregationByRubriek).map(c => {
