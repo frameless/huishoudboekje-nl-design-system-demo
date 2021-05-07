@@ -37,7 +37,6 @@ export type Scalars = {
 
 
 export type AddAfspraakZoekterm = {
-  __typename?: 'AddAfspraakZoekterm';
   ok?: Maybe<Scalars['Boolean']>;
   afspraak?: Maybe<Afspraak>;
   previous?: Maybe<Afspraak>;
@@ -46,7 +45,6 @@ export type AddAfspraakZoekterm = {
 
 /** GraphQL Afspraak model  */
 export type Afspraak = {
-  __typename?: 'Afspraak';
   id?: Maybe<Scalars['Int']>;
   burger?: Maybe<Burger>;
   omschrijving?: Maybe<Scalars['String']>;
@@ -75,7 +73,6 @@ export type AfspraakOverschrijvingenArgs = {
 
 /** BankTransaction model */
 export type BankTransaction = {
-  __typename?: 'BankTransaction';
   id?: Maybe<Scalars['Int']>;
   customerStatementMessage?: Maybe<CustomerStatementMessage>;
   statementLine?: Maybe<Scalars['String']>;
@@ -91,7 +88,6 @@ export type BankTransaction = {
 };
 
 export type BankTransactionsPaged = {
-  __typename?: 'BankTransactionsPaged';
   banktransactions?: Maybe<Array<Maybe<BankTransaction>>>;
   pageInfo?: Maybe<PageInfo>;
 };
@@ -99,7 +95,6 @@ export type BankTransactionsPaged = {
 
 /** Implementatie op basis van http://schema.org/Schedule */
 export type Betaalinstructie = {
-  __typename?: 'Betaalinstructie';
   byDay?: Maybe<Array<Maybe<DayOfWeek>>>;
   byMonth?: Maybe<Array<Maybe<Scalars['Int']>>>;
   byMonthDay?: Maybe<Array<Maybe<Scalars['Int']>>>;
@@ -114,7 +109,7 @@ export type BetaalinstructieInput = {
   byDay?: Maybe<Array<Maybe<DayOfWeek>>>;
   byMonth?: Maybe<Array<Maybe<Scalars['Int']>>>;
   byMonthDay?: Maybe<Array<Maybe<Scalars['Int']>>>;
-  repeatFrequency: Scalars['String'];
+  repeatFrequency?: Maybe<Scalars['String']>;
   exceptDates?: Maybe<Array<Maybe<Scalars['String']>>>;
   startDate: Scalars['String'];
   endDate?: Maybe<Scalars['String']>;
@@ -122,7 +117,6 @@ export type BetaalinstructieInput = {
 
 /** GraphQL Burger model  */
 export type Burger = {
-  __typename?: 'Burger';
   id?: Maybe<Scalars['Int']>;
   telefoonnummer?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
@@ -142,13 +136,11 @@ export type Burger = {
 };
 
 export type BurgersPaged = {
-  __typename?: 'BurgersPaged';
   burgers?: Maybe<Array<Maybe<Burger>>>;
   pageInfo?: Maybe<PageInfo>;
 };
 
 export type Configuratie = {
-  __typename?: 'Configuratie';
   id?: Maybe<Scalars['String']>;
   waarde?: Maybe<Scalars['String']>;
 };
@@ -159,7 +151,6 @@ export type ConfiguratieInput = {
 };
 
 export type CreateAfspraak = {
-  __typename?: 'CreateAfspraak';
   ok?: Maybe<Scalars['Boolean']>;
   afspraak?: Maybe<Afspraak>;
 };
@@ -176,7 +167,6 @@ export type CreateAfspraakInput = {
 };
 
 export type CreateBurger = {
-  __typename?: 'CreateBurger';
   ok?: Maybe<Scalars['Boolean']>;
   burger?: Maybe<Burger>;
 };
@@ -196,33 +186,28 @@ export type CreateBurgerInput = {
 };
 
 export type CreateBurgerRekening = {
-  __typename?: 'CreateBurgerRekening';
   ok?: Maybe<Scalars['Boolean']>;
   rekening?: Maybe<Rekening>;
 };
 
 export type CreateConfiguratie = {
-  __typename?: 'CreateConfiguratie';
   ok?: Maybe<Scalars['Boolean']>;
   configuratie?: Maybe<Configuratie>;
 };
 
 export type CreateCustomerStatementMessage = {
-  __typename?: 'CreateCustomerStatementMessage';
   ok?: Maybe<Scalars['Boolean']>;
   customerStatementMessage?: Maybe<CustomerStatementMessage>;
   journaalposten?: Maybe<Array<Maybe<Journaalpost>>>;
 };
 
 export type CreateExportOverschrijvingen = {
-  __typename?: 'CreateExportOverschrijvingen';
   ok?: Maybe<Scalars['Boolean']>;
   export?: Maybe<Export>;
 };
 
 /** Create a Journaalpost with an Afspraak */
 export type CreateJournaalpostAfspraak = {
-  __typename?: 'CreateJournaalpostAfspraak';
   ok?: Maybe<Scalars['Boolean']>;
   journaalpost?: Maybe<Journaalpost>;
 };
@@ -235,7 +220,6 @@ export type CreateJournaalpostAfspraakInput = {
 
 /** Create a Journaalpost with a Grootboekrekening */
 export type CreateJournaalpostGrootboekrekening = {
-  __typename?: 'CreateJournaalpostGrootboekrekening';
   ok?: Maybe<Scalars['Boolean']>;
   journaalpost?: Maybe<Journaalpost>;
 };
@@ -248,13 +232,11 @@ export type CreateJournaalpostGrootboekrekeningInput = {
 
 /** Create a Journaalpost with an Afspraak */
 export type CreateJournaalpostPerAfspraak = {
-  __typename?: 'CreateJournaalpostPerAfspraak';
   ok?: Maybe<Scalars['Boolean']>;
   journaalposten?: Maybe<Array<Maybe<Journaalpost>>>;
 };
 
 export type CreateOrganisatie = {
-  __typename?: 'CreateOrganisatie';
   ok?: Maybe<Scalars['Boolean']>;
   organisatie?: Maybe<Organisatie>;
 };
@@ -271,20 +253,17 @@ export type CreateOrganisatieInput = {
 };
 
 export type CreateOrganisatieRekening = {
-  __typename?: 'CreateOrganisatieRekening';
   ok?: Maybe<Scalars['Boolean']>;
   rekening?: Maybe<Rekening>;
 };
 
 export type CreateRubriek = {
-  __typename?: 'CreateRubriek';
   ok?: Maybe<Scalars['Boolean']>;
   rubriek?: Maybe<Rubriek>;
 };
 
 /** GraphQL CustomerStatementMessage model */
 export type CustomerStatementMessage = {
-  __typename?: 'CustomerStatementMessage';
   id?: Maybe<Scalars['Int']>;
   uploadDate?: Maybe<Scalars['DateTime']>;
   filename?: Maybe<Scalars['String']>;
@@ -313,13 +292,11 @@ export enum DayOfWeek {
 }
 
 export type DeleteAfspraak = {
-  __typename?: 'DeleteAfspraak';
   ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Afspraak>;
 };
 
 export type DeleteAfspraakZoekterm = {
-  __typename?: 'DeleteAfspraakZoekterm';
   ok?: Maybe<Scalars['Boolean']>;
   afspraak?: Maybe<Afspraak>;
   previous?: Maybe<Afspraak>;
@@ -327,57 +304,48 @@ export type DeleteAfspraakZoekterm = {
 };
 
 export type DeleteBurger = {
-  __typename?: 'DeleteBurger';
   ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Burger>;
 };
 
 export type DeleteBurgerRekening = {
-  __typename?: 'DeleteBurgerRekening';
   ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Rekening>;
 };
 
 export type DeleteConfiguratie = {
-  __typename?: 'DeleteConfiguratie';
   ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Configuratie>;
 };
 
 export type DeleteCustomerStatementMessage = {
-  __typename?: 'DeleteCustomerStatementMessage';
   ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<CustomerStatementMessage>;
 };
 
 /** Delete journaalpost by id  */
 export type DeleteJournaalpost = {
-  __typename?: 'DeleteJournaalpost';
   ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Journaalpost>;
 };
 
 export type DeleteOrganisatie = {
-  __typename?: 'DeleteOrganisatie';
   ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Organisatie>;
 };
 
 export type DeleteOrganisatieRekening = {
-  __typename?: 'DeleteOrganisatieRekening';
   ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Rekening>;
 };
 
 export type DeleteRubriek = {
-  __typename?: 'DeleteRubriek';
   ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Rubriek>;
 };
 
 /** GraphQL Export model  */
 export type Export = {
-  __typename?: 'Export';
   id?: Maybe<Scalars['Int']>;
   naam?: Maybe<Scalars['String']>;
   timestamp?: Maybe<Scalars['DateTime']>;
@@ -388,14 +356,12 @@ export type Export = {
 };
 
 export type Gebruiker = {
-  __typename?: 'Gebruiker';
   email?: Maybe<Scalars['String']>;
   token?: Maybe<Scalars['String']>;
 };
 
 /** GebruikersActiviteit model */
 export type GebruikersActiviteit = {
-  __typename?: 'GebruikersActiviteit';
   id?: Maybe<Scalars['Int']>;
   timestamp?: Maybe<Scalars['DateTime']>;
   gebruikerId?: Maybe<Scalars['String']>;
@@ -407,7 +373,6 @@ export type GebruikersActiviteit = {
 };
 
 export type GebruikersActiviteitEntity = {
-  __typename?: 'GebruikersActiviteitEntity';
   entityType?: Maybe<Scalars['String']>;
   entityId?: Maybe<Scalars['String']>;
   afspraak?: Maybe<Afspraak>;
@@ -424,14 +389,12 @@ export type GebruikersActiviteitEntity = {
 };
 
 export type GebruikersActiviteitMeta = {
-  __typename?: 'GebruikersActiviteitMeta';
   userAgent?: Maybe<Scalars['String']>;
   ip?: Maybe<Array<Maybe<Scalars['String']>>>;
   applicationVersion?: Maybe<Scalars['String']>;
 };
 
 export type GebruikersActiviteitSnapshot = {
-  __typename?: 'GebruikersActiviteitSnapshot';
   afspraak?: Maybe<Afspraak>;
   burger?: Maybe<Burger>;
   configuratie?: Maybe<Configuratie>;
@@ -445,14 +408,12 @@ export type GebruikersActiviteitSnapshot = {
 };
 
 export type GebruikersActiviteitenPaged = {
-  __typename?: 'GebruikersActiviteitenPaged';
   gebruikersactiviteiten?: Maybe<Array<Maybe<GebruikersActiviteit>>>;
   pageInfo?: Maybe<PageInfo>;
 };
 
 /** Grootboekrekening model  */
 export type Grootboekrekening = {
-  __typename?: 'Grootboekrekening';
   id: Scalars['String'];
   naam?: Maybe<Scalars['String']>;
   referentie?: Maybe<Scalars['String']>;
@@ -465,7 +426,6 @@ export type Grootboekrekening = {
 
 /** Journaalpost model */
 export type Journaalpost = {
-  __typename?: 'Journaalpost';
   id?: Maybe<Scalars['Int']>;
   afspraak?: Maybe<Afspraak>;
   transaction?: Maybe<BankTransaction>;
@@ -475,7 +435,6 @@ export type Journaalpost = {
 
 /** GraphQL Organisatie model  */
 export type Organisatie = {
-  __typename?: 'Organisatie';
   id?: Maybe<Scalars['Int']>;
   weergaveNaam?: Maybe<Scalars['String']>;
   rekeningen?: Maybe<Array<Maybe<Rekening>>>;
@@ -485,7 +444,6 @@ export type Organisatie = {
 };
 
 export type OrganisatieKvK = {
-  __typename?: 'OrganisatieKvK';
   nummer?: Maybe<Scalars['String']>;
   naam?: Maybe<Scalars['String']>;
   straatnaam?: Maybe<Scalars['String']>;
@@ -495,7 +453,6 @@ export type OrganisatieKvK = {
 };
 
 export type Overschrijving = {
-  __typename?: 'Overschrijving';
   id?: Maybe<Scalars['Int']>;
   afspraak?: Maybe<Afspraak>;
   export?: Maybe<Export>;
@@ -513,7 +470,6 @@ export enum OverschrijvingStatus {
 }
 
 export type PageInfo = {
-  __typename?: 'PageInfo';
   count?: Maybe<Scalars['Int']>;
   start?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
@@ -521,7 +477,6 @@ export type PageInfo = {
 
 /** GraphQL Rekening model */
 export type Rekening = {
-  __typename?: 'Rekening';
   id?: Maybe<Scalars['Int']>;
   iban?: Maybe<Scalars['String']>;
   rekeninghouder?: Maybe<Scalars['String']>;
@@ -537,7 +492,6 @@ export type RekeningInput = {
 
 /** The root of all mutations  */
 export type RootMutation = {
-  __typename?: 'RootMutation';
   createBurger?: Maybe<CreateBurger>;
   deleteBurger?: Maybe<DeleteBurger>;
   updateBurger?: Maybe<UpdateBurger>;
@@ -795,7 +749,6 @@ export type RootMutationCreateExportOverschrijvingenArgs = {
 
 /** The root of all queries  */
 export type RootQuery = {
-  __typename?: 'RootQuery';
   afspraak?: Maybe<Afspraak>;
   afspraken?: Maybe<Array<Maybe<Afspraak>>>;
   bankTransaction?: Maybe<BankTransaction>;
@@ -1001,27 +954,23 @@ export type RootQueryGebruikersactiviteitenPagedArgs = {
 
 /** GraphQL Rubriek model */
 export type Rubriek = {
-  __typename?: 'Rubriek';
   id?: Maybe<Scalars['Int']>;
   naam?: Maybe<Scalars['String']>;
   grootboekrekening?: Maybe<Grootboekrekening>;
 };
 
 export type StartAutomatischBoeken = {
-  __typename?: 'StartAutomatischBoeken';
   ok?: Maybe<Scalars['Boolean']>;
   journaalposten?: Maybe<Array<Maybe<Journaalpost>>>;
 };
 
 export type UpdateAfspraak = {
-  __typename?: 'UpdateAfspraak';
   ok?: Maybe<Scalars['Boolean']>;
   afspraak?: Maybe<Afspraak>;
   previous?: Maybe<Afspraak>;
 };
 
 export type UpdateAfspraakBetaalinstructie = {
-  __typename?: 'UpdateAfspraakBetaalinstructie';
   ok?: Maybe<Scalars['Boolean']>;
   afspraak?: Maybe<Afspraak>;
   previous?: Maybe<Afspraak>;
@@ -1039,14 +988,12 @@ export type UpdateAfspraakInput = {
 };
 
 export type UpdateBurger = {
-  __typename?: 'UpdateBurger';
   ok?: Maybe<Scalars['Boolean']>;
   burger?: Maybe<Burger>;
   previous?: Maybe<Burger>;
 };
 
 export type UpdateConfiguratie = {
-  __typename?: 'UpdateConfiguratie';
   ok?: Maybe<Scalars['Boolean']>;
   configuratie?: Maybe<Configuratie>;
   previous?: Maybe<Configuratie>;
@@ -1054,7 +1001,6 @@ export type UpdateConfiguratie = {
 
 /** Update a Journaalpost with a Grootboekrekening */
 export type UpdateJournaalpostGrootboekrekening = {
-  __typename?: 'UpdateJournaalpostGrootboekrekening';
   ok?: Maybe<Scalars['Boolean']>;
   journaalpost?: Maybe<Journaalpost>;
   previous?: Maybe<Journaalpost>;
@@ -1066,21 +1012,18 @@ export type UpdateJournaalpostGrootboekrekeningInput = {
 };
 
 export type UpdateOrganisatie = {
-  __typename?: 'UpdateOrganisatie';
   ok?: Maybe<Scalars['Boolean']>;
   organisatie?: Maybe<Organisatie>;
   previous?: Maybe<Organisatie>;
 };
 
 export type UpdateRekening = {
-  __typename?: 'UpdateRekening';
   ok?: Maybe<Scalars['Boolean']>;
   rekening?: Maybe<Rekening>;
   previous?: Maybe<Rekening>;
 };
 
 export type UpdateRubriek = {
-  __typename?: 'UpdateRubriek';
   ok?: Maybe<Scalars['Boolean']>;
   rubriek?: Maybe<Rubriek>;
   previous?: Maybe<Rubriek>;
@@ -1088,163 +1031,69 @@ export type UpdateRubriek = {
 
 
 export type AfspraakFragment = (
-  { __typename?: 'Afspraak' }
-  & Pick<Afspraak, 'id' | 'omschrijving' | 'bedrag' | 'credit' | 'zoektermen' | 'validFrom' | 'validThrough'>
-  & { betaalinstructie?: Maybe<(
-    { __typename?: 'Betaalinstructie' }
-    & BetaalinstructieFragment
-  )>, burger?: Maybe<(
-    { __typename?: 'Burger' }
-    & Pick<Burger, 'id' | 'voornamen' | 'voorletters' | 'achternaam' | 'plaatsnaam'>
-    & { rekeningen?: Maybe<Array<Maybe<(
-      { __typename?: 'Rekening' }
-      & RekeningFragment
-    )>>> }
-  )>, tegenRekening?: Maybe<(
-    { __typename?: 'Rekening' }
-    & RekeningFragment
-  )>, organisatie?: Maybe<(
-    { __typename?: 'Organisatie' }
-    & Pick<Organisatie, 'id' | 'weergaveNaam'>
-    & { kvkDetails?: Maybe<(
-      { __typename?: 'OrganisatieKvK' }
-      & Pick<OrganisatieKvK, 'naam' | 'plaatsnaam'>
-    )> }
-  )>, rubriek?: Maybe<(
-    { __typename?: 'Rubriek' }
-    & RubriekFragment
-  )>, matchingAfspraken?: Maybe<Array<Maybe<(
-    { __typename?: 'Afspraak' }
-    & Pick<Afspraak, 'id' | 'credit' | 'zoektermen' | 'bedrag' | 'omschrijving'>
-    & { burger?: Maybe<(
-      { __typename?: 'Burger' }
-      & Pick<Burger, 'voorletters' | 'voornamen' | 'achternaam'>
-    )>, tegenRekening?: Maybe<(
-      { __typename?: 'Rekening' }
-      & Pick<Rekening, 'id' | 'iban' | 'rekeninghouder'>
-    )> }
+  Pick<Afspraak, 'id' | 'omschrijving' | 'bedrag' | 'credit' | 'zoektermen' | 'validFrom' | 'validThrough'>
+  & { betaalinstructie?: Maybe<BetaalinstructieFragment>, burger?: Maybe<(
+    Pick<Burger, 'id' | 'voornamen' | 'voorletters' | 'achternaam' | 'plaatsnaam'>
+    & { rekeningen?: Maybe<Array<Maybe<RekeningFragment>>> }
+  )>, tegenRekening?: Maybe<RekeningFragment>, organisatie?: Maybe<(
+    Pick<Organisatie, 'id' | 'weergaveNaam'>
+    & { kvkDetails?: Maybe<Pick<OrganisatieKvK, 'naam' | 'plaatsnaam'>> }
+  )>, rubriek?: Maybe<RubriekFragment>, matchingAfspraken?: Maybe<Array<Maybe<(
+    Pick<Afspraak, 'id' | 'credit' | 'zoektermen' | 'bedrag' | 'omschrijving'>
+    & { burger?: Maybe<Pick<Burger, 'voorletters' | 'voornamen' | 'achternaam'>>, tegenRekening?: Maybe<Pick<Rekening, 'id' | 'iban' | 'rekeninghouder'>> }
   )>>> }
 );
 
-export type BetaalinstructieFragment = (
-  { __typename?: 'Betaalinstructie' }
-  & Pick<Betaalinstructie, 'byDay' | 'byMonth' | 'byMonthDay' | 'exceptDates' | 'repeatFrequency' | 'startDate' | 'endDate'>
-);
+export type BetaalinstructieFragment = Pick<Betaalinstructie, 'byDay' | 'byMonth' | 'byMonthDay' | 'exceptDates' | 'repeatFrequency' | 'startDate' | 'endDate'>;
 
 export type BurgerFragment = (
-  { __typename?: 'Burger' }
-  & Pick<Burger, 'id' | 'email' | 'telefoonnummer' | 'voorletters' | 'voornamen' | 'achternaam' | 'geboortedatum' | 'straatnaam' | 'huisnummer' | 'postcode' | 'plaatsnaam'>
-  & { rekeningen?: Maybe<Array<Maybe<(
-    { __typename?: 'Rekening' }
-    & RekeningFragment
-  )>>>, afspraken?: Maybe<Array<Maybe<(
-    { __typename?: 'Afspraak' }
-    & AfspraakFragment
-  )>>> }
+  Pick<Burger, 'id' | 'email' | 'telefoonnummer' | 'voorletters' | 'voornamen' | 'achternaam' | 'geboortedatum' | 'straatnaam' | 'huisnummer' | 'postcode' | 'plaatsnaam'>
+  & { rekeningen?: Maybe<Array<Maybe<RekeningFragment>>>, afspraken?: Maybe<Array<Maybe<AfspraakFragment>>> }
 );
 
 export type CustomerStatementMessageFragment = (
-  { __typename?: 'CustomerStatementMessage' }
-  & Pick<CustomerStatementMessage, 'id' | 'filename' | 'uploadDate' | 'accountIdentification' | 'closingAvailableFunds' | 'closingBalance' | 'forwardAvailableBalance' | 'openingBalance' | 'relatedReference' | 'sequenceNumber' | 'transactionReferenceNumber'>
-  & { bankTransactions?: Maybe<Array<Maybe<(
-    { __typename?: 'BankTransaction' }
-    & BankTransactionFragment
-  )>>> }
+  Pick<CustomerStatementMessage, 'id' | 'filename' | 'uploadDate' | 'accountIdentification' | 'closingAvailableFunds' | 'closingBalance' | 'forwardAvailableBalance' | 'openingBalance' | 'relatedReference' | 'sequenceNumber' | 'transactionReferenceNumber'>
+  & { bankTransactions?: Maybe<Array<Maybe<BankTransactionFragment>>> }
 );
 
-export type GebruikerFragment = (
-  { __typename?: 'Gebruiker' }
-  & Pick<Gebruiker, 'email'>
-);
+export type GebruikerFragment = Pick<Gebruiker, 'email'>;
 
 export type GebruikersactiviteitFragment = (
-  { __typename?: 'GebruikersActiviteit' }
-  & Pick<GebruikersActiviteit, 'id' | 'timestamp' | 'gebruikerId' | 'action'>
+  Pick<GebruikersActiviteit, 'id' | 'timestamp' | 'gebruikerId' | 'action'>
   & { entities?: Maybe<Array<Maybe<(
-    { __typename?: 'GebruikersActiviteitEntity' }
-    & Pick<GebruikersActiviteitEntity, 'entityType' | 'entityId'>
-    & { burger?: Maybe<(
-      { __typename?: 'Burger' }
-      & Pick<Burger, 'id' | 'voorletters' | 'voornamen' | 'achternaam'>
-    )>, organisatie?: Maybe<(
-      { __typename?: 'Organisatie' }
-      & Pick<Organisatie, 'id' | 'weergaveNaam'>
-    )>, afspraak?: Maybe<(
-      { __typename?: 'Afspraak' }
-      & Pick<Afspraak, 'id'>
-      & { organisatie?: Maybe<(
-        { __typename?: 'Organisatie' }
-        & Pick<Organisatie, 'id' | 'weergaveNaam'>
-      )> }
-    )>, rekening?: Maybe<(
-      { __typename?: 'Rekening' }
-      & Pick<Rekening, 'id' | 'iban' | 'rekeninghouder'>
-    )>, customerStatementMessage?: Maybe<(
-      { __typename?: 'CustomerStatementMessage' }
-      & Pick<CustomerStatementMessage, 'id'>
-    )>, configuratie?: Maybe<(
-      { __typename?: 'Configuratie' }
-      & Pick<Configuratie, 'id' | 'waarde'>
-    )> }
-  )>>>, meta?: Maybe<(
-    { __typename?: 'GebruikersActiviteitMeta' }
-    & Pick<GebruikersActiviteitMeta, 'userAgent' | 'ip' | 'applicationVersion'>
-  )> }
+    Pick<GebruikersActiviteitEntity, 'entityType' | 'entityId'>
+    & { burger?: Maybe<Pick<Burger, 'id' | 'voorletters' | 'voornamen' | 'achternaam'>>, organisatie?: Maybe<Pick<Organisatie, 'id' | 'weergaveNaam'>>, afspraak?: Maybe<(
+      Pick<Afspraak, 'id'>
+      & { organisatie?: Maybe<Pick<Organisatie, 'id' | 'weergaveNaam'>> }
+    )>, rekening?: Maybe<Pick<Rekening, 'id' | 'iban' | 'rekeninghouder'>>, customerStatementMessage?: Maybe<Pick<CustomerStatementMessage, 'id'>>, configuratie?: Maybe<Pick<Configuratie, 'id' | 'waarde'>> }
+  )>>>, meta?: Maybe<Pick<GebruikersActiviteitMeta, 'userAgent' | 'ip' | 'applicationVersion'>> }
 );
 
 export type GrootboekrekeningFragment = (
-  { __typename?: 'Grootboekrekening' }
-  & Pick<Grootboekrekening, 'id' | 'naam' | 'credit' | 'omschrijving' | 'referentie'>
-  & { rubriek?: Maybe<(
-    { __typename?: 'Rubriek' }
-    & Pick<Rubriek, 'id' | 'naam'>
-  )> }
+  Pick<Grootboekrekening, 'id' | 'naam' | 'credit' | 'omschrijving' | 'referentie'>
+  & { rubriek?: Maybe<Pick<Rubriek, 'id' | 'naam'>> }
 );
 
-export type JournaalpostFragment = (
-  { __typename?: 'Journaalpost' }
-  & Pick<Journaalpost, 'id'>
-);
+export type JournaalpostFragment = Pick<Journaalpost, 'id'>;
 
 export type OrganisatieFragment = (
-  { __typename?: 'Organisatie' }
-  & Pick<Organisatie, 'id' | 'kvkNummer' | 'weergaveNaam'>
-  & { rekeningen?: Maybe<Array<Maybe<(
-    { __typename?: 'Rekening' }
-    & RekeningFragment
-  )>>> }
+  Pick<Organisatie, 'id' | 'kvkNummer' | 'weergaveNaam'>
+  & { rekeningen?: Maybe<Array<Maybe<RekeningFragment>>> }
   & KvkFragment
 );
 
-export type KvkFragment = (
-  { __typename?: 'Organisatie' }
-  & { kvkDetails?: Maybe<(
-    { __typename?: 'OrganisatieKvK' }
-    & Pick<OrganisatieKvK, 'huisnummer' | 'naam' | 'nummer' | 'plaatsnaam' | 'postcode' | 'straatnaam'>
-  )> }
-);
+export type KvkFragment = { kvkDetails?: Maybe<Pick<OrganisatieKvK, 'huisnummer' | 'naam' | 'nummer' | 'plaatsnaam' | 'postcode' | 'straatnaam'>> };
 
-export type RekeningFragment = (
-  { __typename?: 'Rekening' }
-  & Pick<Rekening, 'id' | 'iban' | 'rekeninghouder'>
-);
+export type RekeningFragment = Pick<Rekening, 'id' | 'iban' | 'rekeninghouder'>;
 
 export type RubriekFragment = (
-  { __typename?: 'Rubriek' }
-  & Pick<Rubriek, 'id' | 'naam'>
-  & { grootboekrekening?: Maybe<(
-    { __typename?: 'Grootboekrekening' }
-    & GrootboekrekeningFragment
-  )> }
+  Pick<Rubriek, 'id' | 'naam'>
+  & { grootboekrekening?: Maybe<GrootboekrekeningFragment> }
 );
 
 export type BankTransactionFragment = (
-  { __typename?: 'BankTransaction' }
-  & Pick<BankTransaction, 'id' | 'informationToAccountOwner' | 'statementLine' | 'bedrag' | 'isCredit' | 'tegenRekeningIban' | 'transactieDatum'>
-  & { tegenRekening?: Maybe<(
-    { __typename?: 'Rekening' }
-    & Pick<Rekening, 'iban' | 'rekeninghouder'>
-  )> }
+  Pick<BankTransaction, 'id' | 'informationToAccountOwner' | 'statementLine' | 'bedrag' | 'isCredit' | 'tegenRekeningIban' | 'transactieDatum'>
+  & { tegenRekening?: Maybe<Pick<Rekening, 'iban' | 'rekeninghouder'>> }
 );
 
 export type AddAfspraakZoektermMutationVariables = Exact<{
@@ -1253,58 +1102,33 @@ export type AddAfspraakZoektermMutationVariables = Exact<{
 }>;
 
 
-export type AddAfspraakZoektermMutation = (
-  { __typename?: 'RootMutation' }
-  & { addAfspraakZoekterm?: Maybe<(
-    { __typename?: 'AddAfspraakZoekterm' }
-    & Pick<AddAfspraakZoekterm, 'ok'>
+export type AddAfspraakZoektermMutation = { addAfspraakZoekterm?: Maybe<(
+    Pick<AddAfspraakZoekterm, 'ok'>
     & { matchingAfspraken?: Maybe<Array<Maybe<(
-      { __typename?: 'Afspraak' }
-      & Pick<Afspraak, 'id' | 'zoektermen' | 'bedrag'>
-      & { burger?: Maybe<(
-        { __typename?: 'Burger' }
-        & Pick<Burger, 'id' | 'voorletters' | 'voornamen' | 'achternaam'>
-      )>, tegenRekening?: Maybe<(
-        { __typename?: 'Rekening' }
-        & Pick<Rekening, 'rekeninghouder' | 'iban'>
-      )> }
+      Pick<Afspraak, 'id' | 'zoektermen' | 'bedrag'>
+      & { burger?: Maybe<Pick<Burger, 'id' | 'voorletters' | 'voornamen' | 'achternaam'>>, tegenRekening?: Maybe<Pick<Rekening, 'rekeninghouder' | 'iban'>> }
     )>>> }
-  )> }
-);
+  )> };
 
 export type CreateAfspraakMutationVariables = Exact<{
   input: CreateAfspraakInput;
 }>;
 
 
-export type CreateAfspraakMutation = (
-  { __typename?: 'RootMutation' }
-  & { createAfspraak?: Maybe<(
-    { __typename?: 'CreateAfspraak' }
-    & Pick<CreateAfspraak, 'ok'>
-    & { afspraak?: Maybe<(
-      { __typename?: 'Afspraak' }
-      & AfspraakFragment
-    )> }
-  )> }
-);
+export type CreateAfspraakMutation = { createAfspraak?: Maybe<(
+    Pick<CreateAfspraak, 'ok'>
+    & { afspraak?: Maybe<AfspraakFragment> }
+  )> };
 
 export type CreateBurgerMutationVariables = Exact<{
   input?: Maybe<CreateBurgerInput>;
 }>;
 
 
-export type CreateBurgerMutation = (
-  { __typename?: 'RootMutation' }
-  & { createBurger?: Maybe<(
-    { __typename?: 'CreateBurger' }
-    & Pick<CreateBurger, 'ok'>
-    & { burger?: Maybe<(
-      { __typename?: 'Burger' }
-      & BurgerFragment
-    )> }
-  )> }
-);
+export type CreateBurgerMutation = { createBurger?: Maybe<(
+    Pick<CreateBurger, 'ok'>
+    & { burger?: Maybe<BurgerFragment> }
+  )> };
 
 export type CreateBurgerRekeningMutationVariables = Exact<{
   burgerId: Scalars['Int'];
@@ -1312,17 +1136,10 @@ export type CreateBurgerRekeningMutationVariables = Exact<{
 }>;
 
 
-export type CreateBurgerRekeningMutation = (
-  { __typename?: 'RootMutation' }
-  & { createBurgerRekening?: Maybe<(
-    { __typename?: 'CreateBurgerRekening' }
-    & Pick<CreateBurgerRekening, 'ok'>
-    & { rekening?: Maybe<(
-      { __typename?: 'Rekening' }
-      & RekeningFragment
-    )> }
-  )> }
-);
+export type CreateBurgerRekeningMutation = { createBurgerRekening?: Maybe<(
+    Pick<CreateBurgerRekening, 'ok'>
+    & { rekening?: Maybe<RekeningFragment> }
+  )> };
 
 export type CreateConfiguratieMutationVariables = Exact<{
   key: Scalars['String'];
@@ -1330,34 +1147,20 @@ export type CreateConfiguratieMutationVariables = Exact<{
 }>;
 
 
-export type CreateConfiguratieMutation = (
-  { __typename?: 'RootMutation' }
-  & { createConfiguratie?: Maybe<(
-    { __typename?: 'CreateConfiguratie' }
-    & Pick<CreateConfiguratie, 'ok'>
-    & { configuratie?: Maybe<(
-      { __typename?: 'Configuratie' }
-      & Pick<Configuratie, 'id' | 'waarde'>
-    )> }
-  )> }
-);
+export type CreateConfiguratieMutation = { createConfiguratie?: Maybe<(
+    Pick<CreateConfiguratie, 'ok'>
+    & { configuratie?: Maybe<Pick<Configuratie, 'id' | 'waarde'>> }
+  )> };
 
 export type CreateCustomerStatementMessageMutationVariables = Exact<{
   file: Scalars['Upload'];
 }>;
 
 
-export type CreateCustomerStatementMessageMutation = (
-  { __typename?: 'RootMutation' }
-  & { createCustomerStatementMessage?: Maybe<(
-    { __typename?: 'CreateCustomerStatementMessage' }
-    & Pick<CreateCustomerStatementMessage, 'ok'>
-    & { customerStatementMessage?: Maybe<(
-      { __typename?: 'CustomerStatementMessage' }
-      & CustomerStatementMessageFragment
-    )> }
-  )> }
-);
+export type CreateCustomerStatementMessageMutation = { createCustomerStatementMessage?: Maybe<(
+    Pick<CreateCustomerStatementMessage, 'ok'>
+    & { customerStatementMessage?: Maybe<CustomerStatementMessageFragment> }
+  )> };
 
 export type CreateExportOverschrijvingenMutationVariables = Exact<{
   startDatum: Scalars['String'];
@@ -1365,17 +1168,10 @@ export type CreateExportOverschrijvingenMutationVariables = Exact<{
 }>;
 
 
-export type CreateExportOverschrijvingenMutation = (
-  { __typename?: 'RootMutation' }
-  & { createExportOverschrijvingen?: Maybe<(
-    { __typename?: 'CreateExportOverschrijvingen' }
-    & Pick<CreateExportOverschrijvingen, 'ok'>
-    & { export?: Maybe<(
-      { __typename?: 'Export' }
-      & Pick<Export, 'id'>
-    )> }
-  )> }
-);
+export type CreateExportOverschrijvingenMutation = { createExportOverschrijvingen?: Maybe<(
+    Pick<CreateExportOverschrijvingen, 'ok'>
+    & { export?: Maybe<Pick<Export, 'id'>> }
+  )> };
 
 export type CreateJournaalpostAfspraakMutationVariables = Exact<{
   transactionId: Scalars['Int'];
@@ -1384,17 +1180,10 @@ export type CreateJournaalpostAfspraakMutationVariables = Exact<{
 }>;
 
 
-export type CreateJournaalpostAfspraakMutation = (
-  { __typename?: 'RootMutation' }
-  & { createJournaalpostAfspraak?: Maybe<(
-    { __typename?: 'CreateJournaalpostAfspraak' }
-    & Pick<CreateJournaalpostAfspraak, 'ok'>
-    & { journaalpost?: Maybe<(
-      { __typename?: 'Journaalpost' }
-      & Pick<Journaalpost, 'id'>
-    )> }
-  )> }
-);
+export type CreateJournaalpostAfspraakMutation = { createJournaalpostAfspraak?: Maybe<(
+    Pick<CreateJournaalpostAfspraak, 'ok'>
+    & { journaalpost?: Maybe<Pick<Journaalpost, 'id'>> }
+  )> };
 
 export type CreateJournaalpostGrootboekrekeningMutationVariables = Exact<{
   transactionId: Scalars['Int'];
@@ -1402,17 +1191,10 @@ export type CreateJournaalpostGrootboekrekeningMutationVariables = Exact<{
 }>;
 
 
-export type CreateJournaalpostGrootboekrekeningMutation = (
-  { __typename?: 'RootMutation' }
-  & { createJournaalpostGrootboekrekening?: Maybe<(
-    { __typename?: 'CreateJournaalpostGrootboekrekening' }
-    & Pick<CreateJournaalpostGrootboekrekening, 'ok'>
-    & { journaalpost?: Maybe<(
-      { __typename?: 'Journaalpost' }
-      & Pick<Journaalpost, 'id'>
-    )> }
-  )> }
-);
+export type CreateJournaalpostGrootboekrekeningMutation = { createJournaalpostGrootboekrekening?: Maybe<(
+    Pick<CreateJournaalpostGrootboekrekening, 'ok'>
+    & { journaalpost?: Maybe<Pick<Journaalpost, 'id'>> }
+  )> };
 
 export type CreateOrganisatieMutationVariables = Exact<{
   huisnummer?: Maybe<Scalars['String']>;
@@ -1425,17 +1207,10 @@ export type CreateOrganisatieMutationVariables = Exact<{
 }>;
 
 
-export type CreateOrganisatieMutation = (
-  { __typename?: 'RootMutation' }
-  & { createOrganisatie?: Maybe<(
-    { __typename?: 'CreateOrganisatie' }
-    & Pick<CreateOrganisatie, 'ok'>
-    & { organisatie?: Maybe<(
-      { __typename?: 'Organisatie' }
-      & OrganisatieFragment
-    )> }
-  )> }
-);
+export type CreateOrganisatieMutation = { createOrganisatie?: Maybe<(
+    Pick<CreateOrganisatie, 'ok'>
+    & { organisatie?: Maybe<OrganisatieFragment> }
+  )> };
 
 export type CreateOrganisatieRekeningMutationVariables = Exact<{
   orgId: Scalars['Int'];
@@ -1443,43 +1218,24 @@ export type CreateOrganisatieRekeningMutationVariables = Exact<{
 }>;
 
 
-export type CreateOrganisatieRekeningMutation = (
-  { __typename?: 'RootMutation' }
-  & { createOrganisatieRekening?: Maybe<(
-    { __typename?: 'CreateOrganisatieRekening' }
-    & Pick<CreateOrganisatieRekening, 'ok'>
-    & { rekening?: Maybe<(
-      { __typename?: 'Rekening' }
-      & RekeningFragment
-    )> }
-  )> }
-);
+export type CreateOrganisatieRekeningMutation = { createOrganisatieRekening?: Maybe<(
+    Pick<CreateOrganisatieRekening, 'ok'>
+    & { rekening?: Maybe<RekeningFragment> }
+  )> };
 
 export type DeleteOrganisatieMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type DeleteOrganisatieMutation = (
-  { __typename?: 'RootMutation' }
-  & { deleteOrganisatie?: Maybe<(
-    { __typename?: 'DeleteOrganisatie' }
-    & Pick<DeleteOrganisatie, 'ok'>
-  )> }
-);
+export type DeleteOrganisatieMutation = { deleteOrganisatie?: Maybe<Pick<DeleteOrganisatie, 'ok'>> };
 
 export type DeleteAfspraakMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type DeleteAfspraakMutation = (
-  { __typename?: 'RootMutation' }
-  & { deleteAfspraak?: Maybe<(
-    { __typename?: 'DeleteAfspraak' }
-    & Pick<DeleteAfspraak, 'ok'>
-  )> }
-);
+export type DeleteAfspraakMutation = { deleteAfspraak?: Maybe<Pick<DeleteAfspraak, 'ok'>> };
 
 export type DeleteAfspraakZoektermMutationVariables = Exact<{
   afspraakId: Scalars['Int'];
@@ -1487,37 +1243,20 @@ export type DeleteAfspraakZoektermMutationVariables = Exact<{
 }>;
 
 
-export type DeleteAfspraakZoektermMutation = (
-  { __typename?: 'RootMutation' }
-  & { deleteAfspraakZoekterm?: Maybe<(
-    { __typename?: 'DeleteAfspraakZoekterm' }
-    & Pick<DeleteAfspraakZoekterm, 'ok'>
+export type DeleteAfspraakZoektermMutation = { deleteAfspraakZoekterm?: Maybe<(
+    Pick<DeleteAfspraakZoekterm, 'ok'>
     & { matchingAfspraken?: Maybe<Array<Maybe<(
-      { __typename?: 'Afspraak' }
-      & Pick<Afspraak, 'id' | 'zoektermen' | 'bedrag'>
-      & { burger?: Maybe<(
-        { __typename?: 'Burger' }
-        & Pick<Burger, 'id' | 'voorletters' | 'voornamen' | 'achternaam'>
-      )>, tegenRekening?: Maybe<(
-        { __typename?: 'Rekening' }
-        & Pick<Rekening, 'rekeninghouder' | 'iban'>
-      )> }
+      Pick<Afspraak, 'id' | 'zoektermen' | 'bedrag'>
+      & { burger?: Maybe<Pick<Burger, 'id' | 'voorletters' | 'voornamen' | 'achternaam'>>, tegenRekening?: Maybe<Pick<Rekening, 'rekeninghouder' | 'iban'>> }
     )>>> }
-  )> }
-);
+  )> };
 
 export type DeleteBurgerMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type DeleteBurgerMutation = (
-  { __typename?: 'RootMutation' }
-  & { deleteBurger?: Maybe<(
-    { __typename?: 'DeleteBurger' }
-    & Pick<DeleteBurger, 'ok'>
-  )> }
-);
+export type DeleteBurgerMutation = { deleteBurger?: Maybe<Pick<DeleteBurger, 'ok'>> };
 
 export type DeleteBurgerRekeningMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -1525,52 +1264,28 @@ export type DeleteBurgerRekeningMutationVariables = Exact<{
 }>;
 
 
-export type DeleteBurgerRekeningMutation = (
-  { __typename?: 'RootMutation' }
-  & { deleteBurgerRekening?: Maybe<(
-    { __typename?: 'DeleteBurgerRekening' }
-    & Pick<DeleteBurgerRekening, 'ok'>
-  )> }
-);
+export type DeleteBurgerRekeningMutation = { deleteBurgerRekening?: Maybe<Pick<DeleteBurgerRekening, 'ok'>> };
 
 export type DeleteConfiguratieMutationVariables = Exact<{
   key: Scalars['String'];
 }>;
 
 
-export type DeleteConfiguratieMutation = (
-  { __typename?: 'RootMutation' }
-  & { deleteConfiguratie?: Maybe<(
-    { __typename?: 'DeleteConfiguratie' }
-    & Pick<DeleteConfiguratie, 'ok'>
-  )> }
-);
+export type DeleteConfiguratieMutation = { deleteConfiguratie?: Maybe<Pick<DeleteConfiguratie, 'ok'>> };
 
 export type DeleteCustomerStatementMessageMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type DeleteCustomerStatementMessageMutation = (
-  { __typename?: 'RootMutation' }
-  & { deleteCustomerStatementMessage?: Maybe<(
-    { __typename?: 'DeleteCustomerStatementMessage' }
-    & Pick<DeleteCustomerStatementMessage, 'ok'>
-  )> }
-);
+export type DeleteCustomerStatementMessageMutation = { deleteCustomerStatementMessage?: Maybe<Pick<DeleteCustomerStatementMessage, 'ok'>> };
 
 export type DeleteJournaalpostMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type DeleteJournaalpostMutation = (
-  { __typename?: 'RootMutation' }
-  & { deleteJournaalpost?: Maybe<(
-    { __typename?: 'DeleteJournaalpost' }
-    & Pick<DeleteJournaalpost, 'ok'>
-  )> }
-);
+export type DeleteJournaalpostMutation = { deleteJournaalpost?: Maybe<Pick<DeleteJournaalpost, 'ok'>> };
 
 export type DeleteOrganisatieRekeningMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -1578,13 +1293,7 @@ export type DeleteOrganisatieRekeningMutationVariables = Exact<{
 }>;
 
 
-export type DeleteOrganisatieRekeningMutation = (
-  { __typename?: 'RootMutation' }
-  & { deleteOrganisatieRekening?: Maybe<(
-    { __typename?: 'DeleteOrganisatieRekening' }
-    & Pick<DeleteOrganisatieRekening, 'ok'>
-  )> }
-);
+export type DeleteOrganisatieRekeningMutation = { deleteOrganisatieRekening?: Maybe<Pick<DeleteOrganisatieRekening, 'ok'>> };
 
 export type EndAfspraakMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -1592,32 +1301,18 @@ export type EndAfspraakMutationVariables = Exact<{
 }>;
 
 
-export type EndAfspraakMutation = (
-  { __typename?: 'RootMutation' }
-  & { updateAfspraak?: Maybe<(
-    { __typename?: 'UpdateAfspraak' }
-    & Pick<UpdateAfspraak, 'ok'>
-    & { afspraak?: Maybe<(
-      { __typename?: 'Afspraak' }
-      & AfspraakFragment
-    )> }
-  )> }
-);
+export type EndAfspraakMutation = { updateAfspraak?: Maybe<(
+    Pick<UpdateAfspraak, 'ok'>
+    & { afspraak?: Maybe<AfspraakFragment> }
+  )> };
 
 export type StartAutomatischBoekenMutationVariables = Exact<{ [key: string]: never; }>;
 
 
-export type StartAutomatischBoekenMutation = (
-  { __typename?: 'RootMutation' }
-  & { startAutomatischBoeken?: Maybe<(
-    { __typename?: 'StartAutomatischBoeken' }
-    & Pick<StartAutomatischBoeken, 'ok'>
-    & { journaalposten?: Maybe<Array<Maybe<(
-      { __typename?: 'Journaalpost' }
-      & Pick<Journaalpost, 'id'>
-    )>>> }
-  )> }
-);
+export type StartAutomatischBoekenMutation = { startAutomatischBoeken?: Maybe<(
+    Pick<StartAutomatischBoeken, 'ok'>
+    & { journaalposten?: Maybe<Array<Maybe<Pick<Journaalpost, 'id'>>>> }
+  )> };
 
 export type UpdateAfspraakBetaalinstructieMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -1625,13 +1320,7 @@ export type UpdateAfspraakBetaalinstructieMutationVariables = Exact<{
 }>;
 
 
-export type UpdateAfspraakBetaalinstructieMutation = (
-  { __typename?: 'RootMutation' }
-  & { updateAfspraakBetaalinstructie?: Maybe<(
-    { __typename?: 'UpdateAfspraakBetaalinstructie' }
-    & Pick<UpdateAfspraakBetaalinstructie, 'ok'>
-  )> }
-);
+export type UpdateAfspraakBetaalinstructieMutation = { updateAfspraakBetaalinstructie?: Maybe<Pick<UpdateAfspraakBetaalinstructie, 'ok'>> };
 
 export type UpdateAfspraakMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -1639,17 +1328,10 @@ export type UpdateAfspraakMutationVariables = Exact<{
 }>;
 
 
-export type UpdateAfspraakMutation = (
-  { __typename?: 'RootMutation' }
-  & { updateAfspraak?: Maybe<(
-    { __typename?: 'UpdateAfspraak' }
-    & Pick<UpdateAfspraak, 'ok'>
-    & { afspraak?: Maybe<(
-      { __typename?: 'Afspraak' }
-      & AfspraakFragment
-    )> }
-  )> }
-);
+export type UpdateAfspraakMutation = { updateAfspraak?: Maybe<(
+    Pick<UpdateAfspraak, 'ok'>
+    & { afspraak?: Maybe<AfspraakFragment> }
+  )> };
 
 export type UpdateBurgerMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -1666,17 +1348,10 @@ export type UpdateBurgerMutationVariables = Exact<{
 }>;
 
 
-export type UpdateBurgerMutation = (
-  { __typename?: 'RootMutation' }
-  & { updateBurger?: Maybe<(
-    { __typename?: 'UpdateBurger' }
-    & Pick<UpdateBurger, 'ok'>
-    & { burger?: Maybe<(
-      { __typename?: 'Burger' }
-      & BurgerFragment
-    )> }
-  )> }
-);
+export type UpdateBurgerMutation = { updateBurger?: Maybe<(
+    Pick<UpdateBurger, 'ok'>
+    & { burger?: Maybe<BurgerFragment> }
+  )> };
 
 export type UpdateConfiguratieMutationVariables = Exact<{
   key: Scalars['String'];
@@ -1684,17 +1359,10 @@ export type UpdateConfiguratieMutationVariables = Exact<{
 }>;
 
 
-export type UpdateConfiguratieMutation = (
-  { __typename?: 'RootMutation' }
-  & { updateConfiguratie?: Maybe<(
-    { __typename?: 'UpdateConfiguratie' }
-    & Pick<UpdateConfiguratie, 'ok'>
-    & { configuratie?: Maybe<(
-      { __typename?: 'Configuratie' }
-      & Pick<Configuratie, 'id' | 'waarde'>
-    )> }
-  )> }
-);
+export type UpdateConfiguratieMutation = { updateConfiguratie?: Maybe<(
+    Pick<UpdateConfiguratie, 'ok'>
+    & { configuratie?: Maybe<Pick<Configuratie, 'id' | 'waarde'>> }
+  )> };
 
 export type UpdateJournaalpostGrootboekrekeningMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -1702,13 +1370,7 @@ export type UpdateJournaalpostGrootboekrekeningMutationVariables = Exact<{
 }>;
 
 
-export type UpdateJournaalpostGrootboekrekeningMutation = (
-  { __typename?: 'RootMutation' }
-  & { updateJournaalpostGrootboekrekening?: Maybe<(
-    { __typename?: 'UpdateJournaalpostGrootboekrekening' }
-    & Pick<UpdateJournaalpostGrootboekrekening, 'ok'>
-  )> }
-);
+export type UpdateJournaalpostGrootboekrekeningMutation = { updateJournaalpostGrootboekrekening?: Maybe<Pick<UpdateJournaalpostGrootboekrekening, 'ok'>> };
 
 export type UpdateOrganisatieMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -1722,17 +1384,10 @@ export type UpdateOrganisatieMutationVariables = Exact<{
 }>;
 
 
-export type UpdateOrganisatieMutation = (
-  { __typename?: 'RootMutation' }
-  & { updateOrganisatie?: Maybe<(
-    { __typename?: 'UpdateOrganisatie' }
-    & Pick<UpdateOrganisatie, 'ok'>
-    & { organisatie?: Maybe<(
-      { __typename?: 'Organisatie' }
-      & OrganisatieFragment
-    )> }
-  )> }
-);
+export type UpdateOrganisatieMutation = { updateOrganisatie?: Maybe<(
+    Pick<UpdateOrganisatie, 'ok'>
+    & { organisatie?: Maybe<OrganisatieFragment> }
+  )> };
 
 export type UpdateRekeningMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -1741,63 +1396,29 @@ export type UpdateRekeningMutationVariables = Exact<{
 }>;
 
 
-export type UpdateRekeningMutation = (
-  { __typename?: 'RootMutation' }
-  & { updateRekening?: Maybe<(
-    { __typename?: 'UpdateRekening' }
-    & Pick<UpdateRekening, 'ok'>
-  )> }
-);
+export type UpdateRekeningMutation = { updateRekening?: Maybe<Pick<UpdateRekening, 'ok'>> };
 
 export type GetAfspraakFormDataQueryVariables = Exact<{
   afspraakId: Scalars['Int'];
 }>;
 
 
-export type GetAfspraakFormDataQuery = (
-  { __typename?: 'RootQuery' }
-  & { afspraak?: Maybe<(
-    { __typename?: 'Afspraak' }
-    & AfspraakFragment
-  )>, rubrieken?: Maybe<Array<Maybe<(
-    { __typename?: 'Rubriek' }
-    & { grootboekrekening?: Maybe<(
-      { __typename?: 'Grootboekrekening' }
-      & Pick<Grootboekrekening, 'id' | 'naam' | 'credit'>
-    )> }
+export type GetAfspraakFormDataQuery = { afspraak?: Maybe<AfspraakFragment>, rubrieken?: Maybe<Array<Maybe<(
+    { grootboekrekening?: Maybe<Pick<Grootboekrekening, 'id' | 'naam' | 'credit'>> }
     & RubriekFragment
-  )>>>, organisaties?: Maybe<Array<Maybe<(
-    { __typename?: 'Organisatie' }
-    & OrganisatieFragment
-  )>>> }
-);
+  )>>>, organisaties?: Maybe<Array<Maybe<OrganisatieFragment>>> };
 
 export type GetAfsprakenQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAfsprakenQuery = (
-  { __typename?: 'RootQuery' }
-  & { afspraken?: Maybe<Array<Maybe<(
-    { __typename?: 'Afspraak' }
-    & AfspraakFragment
-  )>>> }
-);
+export type GetAfsprakenQuery = { afspraken?: Maybe<Array<Maybe<AfspraakFragment>>> };
 
 export type GetBurgerAfsprakenQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type GetBurgerAfsprakenQuery = (
-  { __typename?: 'RootQuery' }
-  & { burger?: Maybe<(
-    { __typename?: 'Burger' }
-    & { afspraken?: Maybe<Array<Maybe<(
-      { __typename?: 'Afspraak' }
-      & AfspraakFragment
-    )>>> }
-  )> }
-);
+export type GetBurgerAfsprakenQuery = { burger?: Maybe<{ afspraken?: Maybe<Array<Maybe<AfspraakFragment>>> }> };
 
 export type GetBurgerGebeurtenissenQueryVariables = Exact<{
   ids: Array<Scalars['Int']> | Scalars['Int'];
@@ -1806,106 +1427,47 @@ export type GetBurgerGebeurtenissenQueryVariables = Exact<{
 }>;
 
 
-export type GetBurgerGebeurtenissenQuery = (
-  { __typename?: 'RootQuery' }
-  & { gebruikersactiviteitenPaged?: Maybe<(
-    { __typename?: 'GebruikersActiviteitenPaged' }
-    & { gebruikersactiviteiten?: Maybe<Array<Maybe<(
-      { __typename?: 'GebruikersActiviteit' }
-      & GebruikersactiviteitFragment
-    )>>>, pageInfo?: Maybe<(
-      { __typename?: 'PageInfo' }
-      & Pick<PageInfo, 'count'>
-    )> }
-  )> }
-);
+export type GetBurgerGebeurtenissenQuery = { gebruikersactiviteitenPaged?: Maybe<{ gebruikersactiviteiten?: Maybe<Array<Maybe<GebruikersactiviteitFragment>>>, pageInfo?: Maybe<Pick<PageInfo, 'count'>> }> };
 
 export type GetBurgerQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type GetBurgerQuery = (
-  { __typename?: 'RootQuery' }
-  & { burger?: Maybe<(
-    { __typename?: 'Burger' }
-    & BurgerFragment
-  )> }
-);
+export type GetBurgerQuery = { burger?: Maybe<BurgerFragment> };
 
 export type GetBurgersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetBurgersQuery = (
-  { __typename?: 'RootQuery' }
-  & { burgers?: Maybe<Array<Maybe<(
-    { __typename?: 'Burger' }
-    & BurgerFragment
-  )>>> }
-);
+export type GetBurgersQuery = { burgers?: Maybe<Array<Maybe<BurgerFragment>>> };
 
 export type GetConfiguratieQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetConfiguratieQuery = (
-  { __typename?: 'RootQuery' }
-  & { configuraties?: Maybe<Array<Maybe<(
-    { __typename?: 'Configuratie' }
-    & Pick<Configuratie, 'id' | 'waarde'>
-  )>>> }
-);
+export type GetConfiguratieQuery = { configuraties?: Maybe<Array<Maybe<Pick<Configuratie, 'id' | 'waarde'>>>> };
 
 export type GetCreateAfspraakFormDataQueryVariables = Exact<{
   burgerId: Scalars['Int'];
 }>;
 
 
-export type GetCreateAfspraakFormDataQuery = (
-  { __typename?: 'RootQuery' }
-  & { burger?: Maybe<(
-    { __typename?: 'Burger' }
-    & { rekeningen?: Maybe<Array<Maybe<(
-      { __typename?: 'Rekening' }
-      & RekeningFragment
-    )>>> }
-  )>, rubrieken?: Maybe<Array<Maybe<(
-    { __typename?: 'Rubriek' }
-    & { grootboekrekening?: Maybe<(
-      { __typename?: 'Grootboekrekening' }
-      & Pick<Grootboekrekening, 'id' | 'naam' | 'credit'>
-    )> }
+export type GetCreateAfspraakFormDataQuery = { burger?: Maybe<{ rekeningen?: Maybe<Array<Maybe<RekeningFragment>>> }>, rubrieken?: Maybe<Array<Maybe<(
+    { grootboekrekening?: Maybe<Pick<Grootboekrekening, 'id' | 'naam' | 'credit'>> }
     & RubriekFragment
-  )>>>, organisaties?: Maybe<Array<Maybe<(
-    { __typename?: 'Organisatie' }
-    & OrganisatieFragment
-  )>>> }
-);
+  )>>>, organisaties?: Maybe<Array<Maybe<OrganisatieFragment>>> };
 
 export type GetCsmsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCsmsQuery = (
-  { __typename?: 'RootQuery' }
-  & { customerStatementMessages?: Maybe<Array<Maybe<(
-    { __typename?: 'CustomerStatementMessage' }
-    & CustomerStatementMessageFragment
-  )>>> }
-);
+export type GetCsmsQuery = { customerStatementMessages?: Maybe<Array<Maybe<CustomerStatementMessageFragment>>> };
 
 export type GetExportsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetExportsQuery = (
-  { __typename?: 'RootQuery' }
-  & { exports?: Maybe<Array<Maybe<(
-    { __typename?: 'Export' }
-    & Pick<Export, 'id' | 'naam' | 'timestamp' | 'startDatum' | 'eindDatum'>
-    & { overschrijvingen?: Maybe<Array<Maybe<(
-      { __typename?: 'Overschrijving' }
-      & Pick<Overschrijving, 'id'>
-    )>>> }
-  )>>> }
-);
+export type GetExportsQuery = { exports?: Maybe<Array<Maybe<(
+    Pick<Export, 'id' | 'naam' | 'timestamp' | 'startDatum' | 'eindDatum'>
+    & { overschrijvingen?: Maybe<Array<Maybe<Pick<Overschrijving, 'id'>>>> }
+  )>>> };
 
 export type GetGebeurtenissenQueryVariables = Exact<{
   limit: Scalars['Int'];
@@ -1913,137 +1475,67 @@ export type GetGebeurtenissenQueryVariables = Exact<{
 }>;
 
 
-export type GetGebeurtenissenQuery = (
-  { __typename?: 'RootQuery' }
-  & { gebruikersactiviteitenPaged?: Maybe<(
-    { __typename?: 'GebruikersActiviteitenPaged' }
-    & { gebruikersactiviteiten?: Maybe<Array<Maybe<(
-      { __typename?: 'GebruikersActiviteit' }
-      & GebruikersactiviteitFragment
-    )>>>, pageInfo?: Maybe<(
-      { __typename?: 'PageInfo' }
-      & Pick<PageInfo, 'count'>
-    )> }
-  )> }
-);
+export type GetGebeurtenissenQuery = { gebruikersactiviteitenPaged?: Maybe<{ gebruikersactiviteiten?: Maybe<Array<Maybe<GebruikersactiviteitFragment>>>, pageInfo?: Maybe<Pick<PageInfo, 'count'>> }> };
 
 export type GetGebruikerQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetGebruikerQuery = (
-  { __typename?: 'RootQuery' }
-  & { gebruiker?: Maybe<(
-    { __typename?: 'Gebruiker' }
-    & GebruikerFragment
-  )> }
-);
+export type GetGebruikerQuery = { gebruiker?: Maybe<GebruikerFragment> };
 
 export type GetAfspraakQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type GetAfspraakQuery = (
-  { __typename?: 'RootQuery' }
-  & { afspraak?: Maybe<(
-    { __typename?: 'Afspraak' }
-    & AfspraakFragment
-  )> }
-);
+export type GetAfspraakQuery = { afspraak?: Maybe<AfspraakFragment> };
 
 export type GetOrganisatieQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type GetOrganisatieQuery = (
-  { __typename?: 'RootQuery' }
-  & { organisatie?: Maybe<(
-    { __typename?: 'Organisatie' }
-    & OrganisatieFragment
-  )> }
-);
+export type GetOrganisatieQuery = { organisatie?: Maybe<OrganisatieFragment> };
 
 export type GetOrganisatiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetOrganisatiesQuery = (
-  { __typename?: 'RootQuery' }
-  & { organisaties?: Maybe<Array<Maybe<(
-    { __typename?: 'Organisatie' }
-    & Pick<Organisatie, 'id'>
+export type GetOrganisatiesQuery = { organisaties?: Maybe<Array<Maybe<(
+    Pick<Organisatie, 'id'>
     & OrganisatieFragment
-  )>>> }
-);
+  )>>> };
 
 export type GetReportingDataQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetReportingDataQuery = (
-  { __typename?: 'RootQuery' }
-  & { burgers?: Maybe<Array<Maybe<(
-    { __typename?: 'Burger' }
-    & BurgerFragment
-  )>>>, bankTransactions?: Maybe<Array<Maybe<(
-    { __typename?: 'BankTransaction' }
-    & { journaalpost?: Maybe<(
-      { __typename?: 'Journaalpost' }
-      & Pick<Journaalpost, 'id' | 'isAutomatischGeboekt'>
+export type GetReportingDataQuery = { burgers?: Maybe<Array<Maybe<BurgerFragment>>>, bankTransactions?: Maybe<Array<Maybe<(
+    { journaalpost?: Maybe<(
+      Pick<Journaalpost, 'id' | 'isAutomatischGeboekt'>
       & { afspraak?: Maybe<(
-        { __typename?: 'Afspraak' }
-        & { rubriek?: Maybe<(
-          { __typename?: 'Rubriek' }
-          & Pick<Rubriek, 'id' | 'naam'>
-        )> }
+        { rubriek?: Maybe<Pick<Rubriek, 'id' | 'naam'>> }
         & AfspraakFragment
       )>, grootboekrekening?: Maybe<(
-        { __typename?: 'Grootboekrekening' }
-        & { rubriek?: Maybe<(
-          { __typename?: 'Rubriek' }
-          & Pick<Rubriek, 'id' | 'naam'>
-        )> }
+        { rubriek?: Maybe<Pick<Rubriek, 'id' | 'naam'>> }
         & GrootboekrekeningFragment
       )> }
     )> }
     & BankTransactionFragment
-  )>>>, rubrieken?: Maybe<Array<Maybe<(
-    { __typename?: 'Rubriek' }
-    & Pick<Rubriek, 'id' | 'naam'>
-  )>>> }
-);
+  )>>>, rubrieken?: Maybe<Array<Maybe<Pick<Rubriek, 'id' | 'naam'>>>> };
 
 export type GetRubriekenQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetRubriekenQuery = (
-  { __typename?: 'RootQuery' }
-  & { rubrieken?: Maybe<Array<Maybe<(
-    { __typename?: 'Rubriek' }
-    & { grootboekrekening?: Maybe<(
-      { __typename?: 'Grootboekrekening' }
-      & Pick<Grootboekrekening, 'id' | 'naam'>
-    )> }
+export type GetRubriekenQuery = { rubrieken?: Maybe<Array<Maybe<(
+    { grootboekrekening?: Maybe<Pick<Grootboekrekening, 'id' | 'naam'>> }
     & RubriekFragment
-  )>>> }
-);
+  )>>> };
 
 export type GetTransactionItemFormDataQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetTransactionItemFormDataQuery = (
-  { __typename?: 'RootQuery' }
-  & { rubrieken?: Maybe<Array<Maybe<(
-    { __typename?: 'Rubriek' }
-    & { grootboekrekening?: Maybe<(
-      { __typename?: 'Grootboekrekening' }
-      & Pick<Grootboekrekening, 'id' | 'naam'>
-    )> }
+export type GetTransactionItemFormDataQuery = { rubrieken?: Maybe<Array<Maybe<(
+    { grootboekrekening?: Maybe<Pick<Grootboekrekening, 'id' | 'naam'>> }
     & RubriekFragment
-  )>>>, afspraken?: Maybe<Array<Maybe<(
-    { __typename?: 'Afspraak' }
-    & AfspraakFragment
-  )>>> }
-);
+  )>>>, afspraken?: Maybe<Array<Maybe<AfspraakFragment>>> };
 
 export type GetTransactiesQueryVariables = Exact<{
   offset: Scalars['Int'];
@@ -2051,41 +1543,19 @@ export type GetTransactiesQueryVariables = Exact<{
 }>;
 
 
-export type GetTransactiesQuery = (
-  { __typename?: 'RootQuery' }
-  & { bankTransactionsPaged?: Maybe<(
-    { __typename?: 'BankTransactionsPaged' }
-    & { banktransactions?: Maybe<Array<Maybe<(
-      { __typename?: 'BankTransaction' }
-      & { journaalpost?: Maybe<(
-        { __typename?: 'Journaalpost' }
-        & Pick<Journaalpost, 'id' | 'isAutomatischGeboekt'>
+export type GetTransactiesQuery = { bankTransactionsPaged?: Maybe<{ banktransactions?: Maybe<Array<Maybe<(
+      { journaalpost?: Maybe<(
+        Pick<Journaalpost, 'id' | 'isAutomatischGeboekt'>
         & { afspraak?: Maybe<(
-          { __typename?: 'Afspraak' }
-          & { rubriek?: Maybe<(
-            { __typename?: 'Rubriek' }
-            & Pick<Rubriek, 'id' | 'naam'>
-          )> }
+          { rubriek?: Maybe<Pick<Rubriek, 'id' | 'naam'>> }
           & AfspraakFragment
         )>, grootboekrekening?: Maybe<(
-          { __typename?: 'Grootboekrekening' }
-          & { rubriek?: Maybe<(
-            { __typename?: 'Rubriek' }
-            & Pick<Rubriek, 'id' | 'naam'>
-          )> }
+          { rubriek?: Maybe<Pick<Rubriek, 'id' | 'naam'>> }
           & GrootboekrekeningFragment
         )> }
-      )>, suggesties?: Maybe<Array<Maybe<(
-        { __typename?: 'Afspraak' }
-        & AfspraakFragment
-      )>>> }
+      )>, suggesties?: Maybe<Array<Maybe<AfspraakFragment>>> }
       & BankTransactionFragment
-    )>>>, pageInfo?: Maybe<(
-      { __typename?: 'PageInfo' }
-      & Pick<PageInfo, 'count' | 'limit' | 'start'>
-    )> }
-  )> }
-);
+    )>>>, pageInfo?: Maybe<Pick<PageInfo, 'count' | 'limit' | 'start'>> }> };
 
 export const RekeningFragmentDoc = gql`
     fragment Rekening on Rekening {

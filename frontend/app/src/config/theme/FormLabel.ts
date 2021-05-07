@@ -4,6 +4,7 @@ const baseStyle = {
 	letterSpacing: "none",
 	fontSize: "sm",
 	color: "gray.500",
+	m: 0,
 };
 
 export default {

@@ -3,15 +3,17 @@
   "schema": "schema.graphql",
   "documents": "./graphql/**",
   "generates": {
-    "src/generated/graphql.tsx": {
-      "plugins": [
-        "typescript",
-        "typescript-operations",
-        "typescript-react-apollo"
-      ]
-    }
+	"src/generated/graphql.tsx": {
+	  "plugins": [
+		"typescript",
+		"typescript-operations",
+		"typescript-react-apollo"
+	  ]
+	}
   },
   "config": {
-    "maybeValue": "T"
+	"maybeValue": "T",
+	"defaultScalarType": "string",
+	"skipTypename": true
   }
 }

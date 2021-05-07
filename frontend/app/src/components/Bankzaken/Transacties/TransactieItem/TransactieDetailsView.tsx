@@ -1,10 +1,9 @@
-import {Badge, Box, Heading, Stack, StackProps, Text} from "@chakra-ui/react";
+import {Badge, Box, FormLabel, Heading, Stack, StackProps, Text} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {BankTransaction} from "../../../../generated/graphql";
 import d from "../../../../utils/dayjs";
 import Currency from "../../../Layouts/Currency";
-import Label from "../../../Layouts/Label";
 import PrettyIban from "../../../Layouts/PrettyIban";
 
 const TransactieDetailsView: React.FC<StackProps & {transaction: BankTransaction}> = ({transaction: bt, ...props}) => {
@@ -16,13 +15,13 @@ const TransactieDetailsView: React.FC<StackProps & {transaction: BankTransaction
 
 			<Stack direction={"row"} spacing={5}>
 				<Box flex={1}>
-					<Label>{t("forms.common.fields.date")}</Label>
+					<FormLabel>{t("forms.common.fields.date")}</FormLabel>
 					<Box>
 						<Text>{d(bt.transactieDatum).format("L")}</Text>
 					</Box>
 				</Box>
 				<Box flex={1}>
-					<Label>{t("form.common.fields.status")}</Label>
+					<FormLabel>{t("form.common.fields.status")}</FormLabel>
 					{bt.journaalpost ? (bt.journaalpost.isAutomatischGeboekt ? (
 						<Box>
 							<Badge colorScheme={"green"}>{t("forms.agreements.fields.automatischGeboekt")}</Badge>
@@ -41,7 +40,7 @@ const TransactieDetailsView: React.FC<StackProps & {transaction: BankTransaction
 
 			<Stack direction={"row"} spacing={5}>
 				<Box flex={1}>
-					<Label>{t("transactions.beneficiaryAccount")}</Label>
+					<FormLabel>{t("transactions.beneficiaryAccount")}</FormLabel>
 					<Box>{bt.tegenRekening ? (
 						<Stack spacing={0}>
 							<Text>{bt.tegenRekening.rekeninghouder}</Text>
@@ -54,7 +53,7 @@ const TransactieDetailsView: React.FC<StackProps & {transaction: BankTransaction
 				</Box>
 
 				<Box flex={1}>
-					<Label>{t("transactions.amount")}</Label>
+					<FormLabel>{t("transactions.amount")}</FormLabel>
 					<Box>
 						<Currency justifyContent={"flex-start"} value={bt.bedrag} />
 					</Box>
@@ -62,7 +61,7 @@ const TransactieDetailsView: React.FC<StackProps & {transaction: BankTransaction
 			</Stack>
 
 			<Box>
-				<Label>{t("transactions.description")}</Label>
+				<FormLabel>{t("transactions.description")}</FormLabel>
 				<Box fontSize={"sm"} p={2} bg={"gray.100"} overflowX={"auto"}>
 					<Text fontFamily={"monospace"} overflowWrap={"break-word"}>{bt.informationToAccountOwner}</Text>
 				</Box>

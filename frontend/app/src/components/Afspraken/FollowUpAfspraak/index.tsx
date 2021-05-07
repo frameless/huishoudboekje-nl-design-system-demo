@@ -1,8 +1,7 @@
 import {Divider, List, ListIcon, ListItem, Stack} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {BsExclamationCircleFill} from "react-icons/bs";
-import { MdCheckCircle } from "react-icons/md";
+import {MdCheckCircle, MdReportProblem} from "react-icons/md";
 import {useHistory, useParams} from "react-router-dom";
 import Routes from "../../../config/routes";
 import {Afspraak, CreateAfspraakMutationVariables, useAddAfspraakZoektermMutation, useCreateAfspraakMutation, useGetAfspraakFormDataQuery} from "../../../generated/graphql";
@@ -97,14 +96,14 @@ const FollowUpAfspraak = () => {
 							<FormLeft title={t("afspraakForm.section1.title")} helperText={t("afspraakForm.section1.helperText")}>
 								<Divider />
 								<List spacing={2}>
-									<ListItem>
-										<ListIcon as={MdCheckCircle} color="green.500" />
+									<ListItem align={"center"}>
+										<ListIcon as={MdCheckCircle} color="green.500" w={5} h={5} />
 										{t("afspraken.followUp.zoektermenHelperText")}
 										<ZoektermenList zoektermen={afspraak.zoektermen || []} />
 									</ListItem>
-									{!afspraak.betaalinstructie && (
-										<ListItem>
-											<ListIcon as={BsExclamationCircleFill} color="orange.500" />
+									{afspraak.betaalinstructie && (
+										<ListItem align={"center"}>
+											<ListIcon as={MdReportProblem} color="orange.500" w={5} h={5} />
 											{t("afspraken.followUp.betaalinstructieHelperText")}
 										</ListItem>
 									)}

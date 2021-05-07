@@ -1,9 +1,8 @@
-import {BoxProps, Table, Tbody, Th, Thead, Tr} from "@chakra-ui/react";
+import {BoxProps, FormLabel, Table, Tbody, Th, Thead, Tr} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {CustomerStatementMessage, useDeleteCustomerStatementMessageMutation} from "../../../generated/graphql";
 import useToaster from "../../../utils/useToaster";
-import Label from "../../Layouts/Label";
 import CsmTableRow from "./CsmTableRow";
 
 const CsmListView: React.FC<BoxProps & {csms: CustomerStatementMessage[], refresh: VoidFunction}> = ({csms, refresh}) => {
@@ -38,13 +37,13 @@ const CsmListView: React.FC<BoxProps & {csms: CustomerStatementMessage[], refres
 			<Thead>
 				<Tr>
 					<Th>
-						<Label>{t("forms.banking.sections.customerStatementMessages.filename")}</Label>
+						<FormLabel>{t("forms.banking.sections.customerStatementMessages.filename")}</FormLabel>
 					</Th>
 					<Th>
-						<Label>{t("forms.common.fields.time")}</Label>
+						<FormLabel>{t("forms.common.fields.time")}</FormLabel>
 					</Th>
 					<Th isNumeric>
-						<Label>{t("actions.actions")}</Label>
+						<FormLabel>{t("actions.actions")}</FormLabel>
 					</Th>
 				</Tr>
 			</Thead>

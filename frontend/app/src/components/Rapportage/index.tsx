@@ -1,4 +1,4 @@
-import {Box, Divider, FormControl, HStack, Input, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Text} from "@chakra-ui/react";
+import {Box, Divider, FormControl, FormLabel, HStack, Input, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Text} from "@chakra-ui/react";
 import React, {useState} from "react";
 import DatePicker from "react-datepicker";
 import {useInput} from "react-grapple";
@@ -10,7 +10,6 @@ import d from "../../utils/dayjs";
 import Queryable from "../../utils/Queryable";
 import {currencyFormat2, formatBurgerName, humanJoin, useReactSelectStyles} from "../../utils/things";
 import {FormLeft, FormRight} from "../Forms/FormLeftRight";
-import Label from "../Layouts/Label";
 import Page from "../Layouts/Page";
 import RadioButtonGroup from "../Layouts/RadioButtons/RadioButtonGroup";
 import Section from "../Layouts/Section";
@@ -61,11 +60,9 @@ const Rapportage = () => {
 						<Stack>
 							<Stack direction={["column", "row"]} spacing={5} flex={1}>
 								<FormControl as={Stack} flex={1} justifyContent={"flex-end"}>
-									<Label>{t("forms.common.fields.startDate")}</Label>
+									<FormLabel>{t("forms.common.fields.startDate")}</FormLabel>
 									<DatePicker selected={d(startDate.value, "L").isValid() ? d(startDate.value, "L").toDate() : null}
-										dateFormat={"MMM yyyy"}
-										showMonthYearPicker
-										showFullMonthYearPicker
+										dateFormat={"dd-MM-yyyy"}
 										onChange={(value: Date) => {
 											if (value) {
 												startDate.setValue(d(value).format("L"));
@@ -73,11 +70,9 @@ const Rapportage = () => {
 										}} customInput={(<Input {...startDate.bind} />)} />
 								</FormControl>
 								<FormControl as={Stack} flex={1}>
-									<Label>{t("forms.common.fields.endDate")}</Label>
+									<FormLabel>{t("forms.common.fields.endDate")}</FormLabel>
 									<DatePicker selected={d(endDate.value, "L").isValid() ? d(endDate.value, "L").toDate() : null}
-										dateFormat={"MMM yyyy"}
-										showMonthYearPicker
-										showFullMonthYearPicker
+										dateFormat={"dd-MM-yyyy"}
 										onChange={(value: Date) => {
 											if (value) {
 												endDate.setValue(d(value).format("L"));
@@ -88,7 +83,7 @@ const Rapportage = () => {
 
 							<Stack direction={["column", "row"]} spacing={5} flex={1}>
 								<FormControl as={Stack} flex={1}>
-									<Label>{t("charts.filterBurgers")}</Label>
+									<FormLabel>{t("charts.filterBurgers")}</FormLabel>
 									<Queryable query={$data} children={data => {
 										const burgers: Burger[] = data.burgers || [];
 										return (
@@ -102,7 +97,7 @@ const Rapportage = () => {
 									}} />
 								</FormControl>
 								<FormControl as={Stack} flex={1}>
-									<Label>{t("charts.filterRubrics")}</Label>
+									<FormLabel>{t("charts.filterRubrics")}</FormLabel>
 									<Queryable query={$data} children={data => {
 										const rubrieken: Rubriek[] = data.rubrieken || [];
 										return (
@@ -119,7 +114,7 @@ const Rapportage = () => {
 
 							<Stack direction={["column", "row"]} spacing={5} flex={1}>
 								<FormControl as={Stack} flex={1}>
-									<Label>{t("charts.granularity")}</Label>
+									<FormLabel>{t("charts.granularity")}</FormLabel>
 									<RadioButtonGroup name={"granularity"} onChange={onChangeGranularity} defaultValue={Granularity.Monthly} value={granularity} options={granularityOptions} />
 								</FormControl>
 							</Stack>
@@ -166,8 +161,8 @@ const Rapportage = () => {
 							<FormRight>
 								<Stack spacing={4}>
 									<HStack>
-										<Text>Rapportageperiode: <strong>{d(startDate.value, "L").format("L")}</strong> tot en
-											  met <strong>{d(endDate.value, "L").format("L")}</strong>.</Text>
+										<Text>Rapportageperiode: <strong>{d(startDate.value, "L").startOf("day").format("L")}</strong> tot en
+											  met <strong>{d(endDate.value, "L").endOf("day").format("L")}</strong>.</Text>
 									</HStack>
 
 									{Object.keys(aggregationByRubriek).map(c => {

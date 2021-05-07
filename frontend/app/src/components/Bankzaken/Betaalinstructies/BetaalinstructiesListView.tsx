@@ -1,8 +1,7 @@
-import {Box, Stack, StackProps, useBreakpointValue} from "@chakra-ui/react";
+import {Box, FormLabel, Stack, StackProps, useBreakpointValue} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {Overschrijving} from "../../../generated/graphql";
-import Label from "../../Layouts/Label";
 import BetaalinstructieItem from "./BetaalinstructieItem";
 
 type OverschrijvingenListViewProps = StackProps & {overschrijvingen: Overschrijving[]};
@@ -14,10 +13,10 @@ const BetaalinstructiesListView: React.FC<OverschrijvingenListViewProps> = ({ove
 		<Stack {...props}>
 			{!isMobile && (<Stack direction={"row"}>
 				<Box flex={1}>
-					<Label>{t("forms.common.fields.date")}</Label>
+					<FormLabel>{t("forms.common.fields.date")}</FormLabel>
 				</Box>
 				<Box flex={1} maxWidth={150} width={"100%"}>
-					<Label>{t("transactions.amount")}</Label>
+					<FormLabel>{t("transactions.amount")}</FormLabel>
 				</Box>
 			</Stack>)}
 

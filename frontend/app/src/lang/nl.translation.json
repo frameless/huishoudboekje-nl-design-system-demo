@@ -81,6 +81,7 @@
         "edit": "Wijzigen",
         "end": "Beëindigen",
         "add": "Toevoegen",
+        "newBetaalinstructie": "Nieuwe betaalinstructie instellen",
         "actions": "Acties",
         "export": "Exporteren",
         "download": "Downloaden",
@@ -102,6 +103,7 @@
         "rubriek": "Rubriek",
         "omschrijving": "Omschrijving",
         "bedrag": "Bedrag",
+        "periodiek": "Periodiek",
         "willEndOn": "Deze afspraak eindigt op {{date}}.",
         "endedOn": "Deze afspraak is beëindigd per {{date}}.",
         "planFollowup": "Vervolgafspraak toevoegen",
@@ -128,7 +130,12 @@
         "section3": {
             "title": "Afletteren",
             "helperText": "Voeg zoektermen toe voor het automatisch afletteren van geïmporteerde banktransacties."
-        }
+        },
+        "betaalinstructie": {
+            "title": "Betaalinstructie",
+            "helperText": "Instellingen voor een betaalinstructie."
+        },
+        "noBetaalinstructie": "Er is geen betaalinstructie ingesteld."
     },
     "forms": {
         "agreements": {
@@ -277,25 +284,48 @@
         }
     },
     "unknown": "Onbekend",
-    "interval": {
-        "day": "dag",
-        "day_plural": "dagen",
-        "week": "week",
-        "week_plural": "weken",
-        "month": "maand",
-        "month_plural": "maanden",
-        "year": "Jaar",
-        "year_plural": "Jaren",
-        "choose": "Kies",
-        "period": "Periode"
-    },
-    "customInterval": {
-        "elkeWeek": "Elke week",
-        "elkeMaand": "Elke maand",
-        "elke3Maanden": "Elke 3 maanden"
+    "schedule": {
+        "repeatType_day": "Dagelijks",
+        "repeatType_week": "Wekelijks",
+        "repeatType_month": "Maandelijks",
+        "repeatType_year": "Jaarlijks",
+        "eenmalig": "Eenmalig",
+        "periodiek": "Periodiek",
+        "datum": "Datum",
+        "startDate": "Startdatum",
+        "endDate": "Einddatum",
+        "repeatType": "Herhaling",
+        "repeatTypeChoose": "Kies een herhaling.",
+        "invalidPeriodiekError": "Kies een periodiek.",
+        "byDay": "Weekdag",
+        "invalidByDayError": "Kies minimaal één weekdag.",
+        "byMonth": "Maand(en)",
+        "invalidByMonthError": "Kies minimaal één maand.",
+        "byMonthDay": "Dag van de maand (1-28)",
+        "invalidByMonthDayError": "Vul de dag van de maand in.",
+        "fromThrough": "Van {{from}} t/m {{through}}",
+        "monday": "maandag",
+        "tuesday": "dinsdag",
+        "wednesday": "woensdag",
+        "thursday": "donderdag",
+        "friday": "vrijdag",
+        "saturday": "zaterdag",
+        "sunday": "zondag",
+        "unknown": "Onbekend",
+        "everyDay": "Elke dag",
+        "everyWeek": "Elke week",
+        "onDays": "op {{days}}",
+        "onceOnDate": "Eenmalig, op {{date}}.",
+        "everyMonth": "Elke maand",
+        "everyYear": "Elk jaar",
+        "inMonths": "in {{months}}",
+        "onDates": "op de {{dates}}"
     },
     "afspraakBetaalinstructie": {
-        "title": "Betaalinstructie instellen"
+        "title": "Betaalinstructie instellen",
+        "helperText": "Door een betaalinstructie in te stellen kan Huishoudboekje deze exporteren.",
+        "invalidPeriodiekError": "Kies een periodiek.",
+        "invalidDateError": "Vul een juiste datum in."
     },
     "afspraakForm": {
         "section1": {
@@ -326,11 +356,13 @@
         "confirmModalBody": "Vanaf welke datum wordt deze afspraak beëindigd?"
     },
     "burger": "Burger",
+    "exports": {
+        "period": "Periode",
+        "nTransacties": "Overschrijvingen",
+        "dateCreated": "Aanmaakdatum"
+    },
     "errors": {
         "invalidDateError": "Vul een geldige datum in."
-    },
-    "schedule": {
-        "endDate": "Einddatum"
     },
     "transactions": {
         "amount": "Bedrag",
@@ -342,11 +374,6 @@
             "title": "Betaalinstructies",
             "helperText": "Exporteer een bestand met betaalinstructies voor verwerking in een bankierenapplicatie."
         }
-    },
-    "exports": {
-        "period": "Periode",
-        "nTransacties": "Overschrijvingen",
-        "dateCreated": "Aanmaakdatum"
     },
     "van": "Van",
     "tot": "Tot",
@@ -443,7 +470,8 @@
         "deleteBurgerRekening": "{{gebruiker}} verwijderde rekening <strong>{{iban}}</strong> op naam van <strong>{{rekeninghouder}}</strong> bij <linkBurger>{{burger}}</linkBurger>.",
         "addAfspraakZoekterm": "{{gebruiker}} voegde een zoekterm toe bij een <linkAfspraak>afspraak</linkAfspraak> met <linkBurger>{{burger}}</linkBurger> en <linkAfspraakOrganisatie>{{afspraakOrganisatie}}</linkAfspraakOrganisatie>.",
         "deleteAfspraakZoekterm": "{{gebruiker}} verwijderde een zoekterm bij een <linkAfspraak>afspraak</linkAfspraak> met <linkBurger>{{burger}}</linkBurger> en <linkAfspraakOrganisatie>{{afspraakOrganisatie}}</linkAfspraakOrganisatie>.",
-        "startAutomatischBoeken": "{{gebruiker}} startte het afletteren van transacties."
+        "startAutomatischBoeken": "{{gebruiker}} startte het afletteren van transacties.",
+        "updateAfspraakBetaalinstructie": "{{gebruiker}} stelde een betaalinstructie in voor een <linkAfspraak>afspraak</linkAfspraak> met <linkBurger>{{burger}}</linkBurger>."
     },
     "suggestion": "Suggestie",
     "organizations": {
@@ -493,6 +521,25 @@
     "allBurgers": "Alle burgers",
     "total": "Totaal",
     "saldo": "Saldo",
+    "interval": {
+        "period": "Periode",
+        "month": "maand",
+        "month_plural": "maanden"
+    },
+    "months": {
+        "jan": "januari",
+        "feb": "februari",
+        "mrt": "maart",
+        "apr": "april",
+        "may": "mei",
+        "jun": "juni",
+        "jul": "juli",
+        "aug": "augustus",
+        "sep": "september",
+        "oct": "oktober",
+        "nov": "november",
+        "dec": "december"
+    },
     "pagination": {
         "first": "Eerste",
         "previous": "Vorige",

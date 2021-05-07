@@ -23,7 +23,7 @@ d.extend(customParseFormat);
 d.extend(recur);
 d.extend(quarterOfYear);
 
-// Todo: temporary solution for missing Typescript support of dayjs-recur. (10-00-2021)
+// Todo: temporary solution for missing Typescript support of dayjs-recur. (10-03-2021)
 declare module "dayjs" {
 	interface Dayjs {
 		recur: Function

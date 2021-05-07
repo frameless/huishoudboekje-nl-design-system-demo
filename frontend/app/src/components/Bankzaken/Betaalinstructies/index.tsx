@@ -10,7 +10,6 @@ import Queryable from "../../../utils/Queryable";
 import {Regex} from "../../../utils/things";
 import useHandleMutation from "../../../utils/useHandleMutation";
 import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
-import Label from "../../Layouts/Label";
 import Section from "../../Layouts/Section";
 
 const Betaalinstructies = () => {
@@ -99,11 +98,11 @@ const Betaalinstructies = () => {
 												<Stack as={Td} direction={"row"} alignItems={"center"}>
 													<Stack fontSize={"sm"} flex={2} spacing={0}>
 														<Stack direction={"row"}>
-															<Label>{t("van")}</Label>
+															<FormLabel>{t("van")}</FormLabel>
 															<Text>{d(e.startDatum).format("L")}</Text>
 														</Stack>
 														<Stack direction={"row"}>
-															<Label>{t("tot")}</Label>
+															<FormLabel>{t("tot")}</FormLabel>
 															<Text>{d(e.eindDatum).format("L")}</Text>
 														</Stack>
 													</Stack>

@@ -1,5 +1,5 @@
 import {DeleteIcon, ViewIcon} from "@chakra-ui/icons";
-import {Box, Button, Heading, IconButton, Stack, Text} from "@chakra-ui/react";
+import {Box, Button, FormLabel, Heading, IconButton, Stack, Text} from "@chakra-ui/react";
 import React, {useContext} from "react";
 import {useTranslation} from "react-i18next";
 import {NavLink} from "react-router-dom";
@@ -7,7 +7,6 @@ import Routes from "../../../../config/routes";
 import {BankTransaction, useDeleteJournaalpostMutation} from "../../../../generated/graphql";
 import {currencyFormat2, formatBurgerName} from "../../../../utils/things";
 import useToaster from "../../../../utils/useToaster";
-import Label from "../../../Layouts/Label";
 import {TransactionsContext} from "../context";
 
 const BookingDetailsView: React.FC<{transactie: BankTransaction}> = ({transactie}) => {
@@ -57,13 +56,13 @@ const BookingDetailsView: React.FC<{transactie: BankTransaction}> = ({transactie
 
 				<Stack direction={"row"} spacing={5}>
 					<Box flex={1}>
-						<Label>{t("burger")}</Label>
+						<FormLabel>{t("burger")}</FormLabel>
 						<Box>
 							<Text>{formatBurgerName(journaalpostAfspraak.burger)}</Text>
 						</Box>
 					</Box>
 					<Box flex={1}>
-						<Label>{t("omschrijving")}</Label>
+						<FormLabel>{t("omschrijving")}</FormLabel>
 						<Box>
 							<Text>{journaalpostAfspraak.omschrijving}</Text>
 						</Box>
@@ -72,14 +71,14 @@ const BookingDetailsView: React.FC<{transactie: BankTransaction}> = ({transactie
 				<Stack direction={"row"} spacing={5}>
 					{transactie.journaalpost?.grootboekrekening?.rubriek?.naam && (
 						<Box flex={1}>
-							<Label>{t("rubriek")}</Label>
+							<FormLabel>{t("rubriek")}</FormLabel>
 							<Box>
 								<Text>{transactie.journaalpost?.grootboekrekening?.rubriek?.naam}</Text>
 							</Box>
 						</Box>
 					)}
 					<Box flex={1}>
-						<Label>{t("bedrag")}</Label>
+						<FormLabel>{t("bedrag")}</FormLabel>
 						<Box color={journaalpostAfspraak.bedrag < 0 ? "red.500" : undefined}>{currencyFormat2().format(journaalpostAfspraak.bedrag)}</Box>
 					</Box>
 				</Stack>
@@ -94,11 +93,10 @@ const BookingDetailsView: React.FC<{transactie: BankTransaction}> = ({transactie
 	}
 	/* Booked by Rubriek */
 	else if (journaalpostRubriek) {
-		// Todo: check if this section looks good. Backend didn't work when this was built. (03-03-2021)
 		return (
 			<Stack direction={"row"} spacing={5} mb={3}>
 				<Box flex={1}>
-					<Label>{t("rubriek")}</Label>
+					<FormLabel>{t("rubriek")}</FormLabel>
 					<Box>
 						<Text>{journaalpostRubriek.naam}</Text>
 						{journaalpostRubriek.grootboekrekening && <Text fontSize={"sm"}>{journaalpostRubriek.grootboekrekening.omschrijving}</Text>}
