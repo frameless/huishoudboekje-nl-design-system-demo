@@ -2,7 +2,7 @@ import {Box, Divider, FormControl, FormLabel, HStack, Input, Stack, Tab, TabList
 import React, {useState} from "react";
 import DatePicker from "react-datepicker";
 import {useInput} from "react-grapple";
-import {useTranslation} from "react-i18next";
+import {Trans, useTranslation} from "react-i18next";
 import Select from "react-select";
 import {Burger, Rubriek, useGetReportingDataQuery} from "../../generated/graphql";
 import Transaction from "../../models/Transaction";
@@ -134,7 +134,6 @@ const Rapportage = () => {
 						.filter(t => filterBurgerIds.length > 0 ? t.belongsToAnyBurger(filterBurgerIds) : true)
 						.filter(t => t.isBetweenDates(_startDate, _endDate));
 
-					// const aggregationByRubriek = createAggregationByRubriek(filteredTransactions);
 					const [, aggregationByRubriek, saldo] = createAggregation(filteredTransactions);
 					const selectedBurgers = burgers.filter(b => filterBurgerIds.includes(b.id!));
 					const burgerNamesList: string[] = selectedBurgers.map(b => formatBurgerName(b));
@@ -160,10 +159,12 @@ const Rapportage = () => {
 							<FormLeft title={t("balance")} helperText={selectedBurgers.length > 0 ? humanJoin(burgerNamesList) : t("allBurgers")} />
 							<FormRight>
 								<Stack spacing={4}>
-									<HStack>
-										<Text>Rapportageperiode: <strong>{d(startDate.value, "L").startOf("day").format("L")}</strong> tot en
-											  met <strong>{d(endDate.value, "L").endOf("day").format("L")}</strong>.</Text>
-									</HStack>
+									<Text>
+										<Trans i18nKey={"reports.period"} components={{strong: <strong />}} values={{
+											from: d(startDate.value, "L").startOf("day").format("L"),
+											through: d(endDate.value, "L").endOf("day").format("L"),
+										}} />
+									</Text>
 
 									{Object.keys(aggregationByRubriek).map(c => {
 										const categories = Object.keys(aggregationByRubriek[c]);
