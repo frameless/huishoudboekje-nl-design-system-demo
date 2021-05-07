@@ -89,6 +89,7 @@
         "disconnect": "Koppeling verwijderen",
         "filter": "Filteren",
         "backToList": "Terug naar overzicht",
+        "brievenExport": "Exporteer gegevens voor brieven",
         "clearSearch": "Zoekopdracht wissen",
         "back": "Terug",
         "backToHome": "Terug naar de hoofdpagina",
@@ -518,10 +519,10 @@
         }
     },
     "balance": "Balans",
+    "allBurgers": "Alle burgers",
     "reports": {
         "period": "Rapportageperiode: van <strong>{{from}}</strong> tot en met <strong>{{through}}</strong>."
     },
-    "allBurgers": "Alle burgers",
     "total": "Totaal",
     "saldo": "Saldo",
     "interval": {
