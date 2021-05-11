@@ -1,9 +1,9 @@
 import {ChevronDownIcon} from "@chakra-ui/icons";
-import {Button, IconButton, Menu, MenuButton, MenuItem, MenuList} from "@chakra-ui/react";
+import {Button, IconButton, Link, Menu, MenuButton, MenuItem, MenuList} from "@chakra-ui/react";
 import React from "react";
 import {useToggle} from "react-grapple";
 import {useTranslation} from "react-i18next";
-import {useHistory, useParams} from "react-router-dom";
+import {NavLink, useHistory, useParams} from "react-router-dom";
 import Routes from "../../../config/routes";
 import {Burger, useDeleteBurgerMutation, useGetBurgerQuery} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
@@ -34,7 +34,6 @@ const BurgerDetail = () => {
 	});
 	const [deleteBurger, $deleteBurger] = useDeleteBurgerMutation({variables: {id: parseInt(id)}});
 
-	const onClickEditMenuItem = () => push(Routes.EditBurger(parseInt(id)));
 	const onClickDeleteMenuItem = () => toggleAlert(true);
 
 	return (
@@ -81,7 +80,8 @@ const BurgerDetail = () => {
 					<Menu>
 						<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} data-cy={"actionsMenuButton"} />
 						<MenuList>
-							<MenuItem onClick={onClickEditMenuItem}>{t("actions.edit")}</MenuItem>
+							<Link href={Routes.BrievenExport(parseInt(id))} target={"_blank"}><MenuItem>{t("actions.brievenExport")}</MenuItem></Link>
+							<NavLink to={Routes.EditBurger(parseInt(id))}><MenuItem>{t("actions.edit")}</MenuItem></NavLink>
 							<MenuItem onClick={onClickDeleteMenuItem}>{t("actions.delete")}</MenuItem>
 						</MenuList>
 					</Menu>

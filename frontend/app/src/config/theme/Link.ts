@@ -2,6 +2,9 @@
 
 const baseStyle = {
 	textDecoration: "none",
+	_hover: {
+		textDecoration: "none",
+	},
 };
 
 const variants = {

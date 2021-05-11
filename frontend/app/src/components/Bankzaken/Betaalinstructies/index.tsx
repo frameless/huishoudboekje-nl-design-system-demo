@@ -4,6 +4,7 @@ import React from "react";
 import DatePicker from "react-datepicker";
 import {useInput} from "react-grapple";
 import {useTranslation} from "react-i18next";
+import Routes from "../../../config/routes";
 import {Export, useCreateExportOverschrijvingenMutation, useGetExportsQuery} from "../../../generated/graphql";
 import d from "../../../utils/dayjs";
 import Queryable from "../../../utils/Queryable";
@@ -91,7 +92,7 @@ const Betaalinstructies = () => {
 								</Thead>
 								<Tbody>
 									{exports.map(e => {
-										const href = `/api/export/${e.id}`;
+										const href = Routes.Exports(e.id!);
 
 										return (
 											<Tr key={e.id} _hover={{bg: "gray.100"}}>

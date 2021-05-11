@@ -52,6 +52,9 @@ const Routes = {
 	Rapportage: `/${RouteNames.rapportage}`,
 	Gebeurtenissen: `/${RouteNames.gebeurtenissen}`,
 
+	Exports: (id: number) => `/api/exports/${id}`,
+	BrievenExport: (burgerId: number) => `/api/brievenexport/${burgerId}`,
+
 	NotFound: `/${RouteNames.notFound}`,
 
 	// Dev things
