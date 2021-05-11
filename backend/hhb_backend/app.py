@@ -9,6 +9,7 @@ from flask import Flask, jsonify, make_response, render_template, send_file
 import hhb_backend.graphql.blueprint as graphql_blueprint
 from hhb_backend.auth import Auth
 from hhb_backend.graphql import settings
+from hhb_backend.processen import brieven_export
 from hhb_backend.reverse_proxy import ReverseProxied
 
 ANONYMOUS_ROLENAME = 'anonymous'
@@ -84,6 +85,23 @@ def create_app(
             "Content-Disposition"
         ] = f'attachment; filename="{xml_filename}"'
         return response
+
+    @app.route("/brievenexport/<burger_id>")
+    @auth.rbac.allow([MEDEWERKER_ROLENAME], methods=['GET'])
+    def export_afspraken(burger_id):
+        """ Send csv with afspraken data to medewerker """
+        data, csv_filename_or_errorcode = brieven_export.create_brieven_export(burger_id)
+
+        # If the filename is an int, its an error code.
+        if isinstance(csv_filename_or_errorcode, int):
+            return data, csv_filename_or_errorcode
+
+        csv_filename = csv_filename_or_errorcode
+
+        output = make_response(data)
+        output.headers["Content-Disposition"] = f"attachment; filename={csv_filename}"
+        output.headers["Content-type"] = "text/csv"
+        return output
 
     app.auth = auth
 
