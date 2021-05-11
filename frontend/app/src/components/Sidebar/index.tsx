@@ -3,8 +3,8 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {AiTwotoneExperiment, FaRegBuilding, FiActivity, GrGraphQl, MdCreditCard, RiBarChartFill, RiUserLine, TiCog} from "react-icons/all";
 import Routes from "../../config/routes";
+import {useFeatureFlag} from "../../utils/features";
 import {isDev} from "../../utils/things";
-import useFeatureFlag from "../../utils/useFeatureFlag";
 import SidebarLink from "./SidebarLink";
 
 const Sidebar: React.FC<BoxProps> = (props) => {

@@ -21,8 +21,8 @@ import Sidebar from "./components/Sidebar";
 import SidebarContainer from "./components/Sidebar/SidebarContainer";
 import UserStatus from "./components/Layouts/UserStatus";
 import Routes from "./config/routes";
+import {useFeatureFlag} from "./utils/features";
 import useAuth from "./utils/useAuth";
-import useFeatureFlag from "./utils/useFeatureFlag";
 
 const App = () => {
 	const {t} = useTranslation();
