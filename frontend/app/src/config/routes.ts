@@ -59,6 +59,7 @@ const Routes = {
 
 	// Dev things
 	GraphiQL: "/api/graphql",
+	TestPage: "/test",
 };
 
 export default Routes;
