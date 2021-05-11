@@ -7,6 +7,7 @@
     "url": "https://twitter.com/KoenBrouwer"
   },
   "private": true,
+  "license": "SEE LICENSE IN LICENSE.md",
   "repository": {
     "type": "git",
     "url": "https://gitlab.com/commonground/huishoudboekje/app-new"
