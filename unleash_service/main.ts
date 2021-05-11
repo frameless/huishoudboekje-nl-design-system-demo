@@ -12,7 +12,7 @@ app.use(json());
 
 unleashClient.on("synchronized", () => {
 
-	console.info("Unleash connected.");
+	console.info("Unleash synced.");
 
 	app.get("/health", healthRouter);
 	app.use("/api/unleash", apiRouter);

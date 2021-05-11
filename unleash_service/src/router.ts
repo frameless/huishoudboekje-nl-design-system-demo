@@ -16,13 +16,16 @@ apiRouter.get("/health", healthRouter);
 
 apiRouter.get("/version", (req, res) => res.send(pkg.version));
 
-apiRouter.post("/:feature", (req, res) => {
-	const {feature} = req.params;
+apiRouter.post("/:features", (req, res) => {
+	const features = (req.params.features || "").split(",");
 	const context = req.body || {};
 
-	res.json({
-		[feature]: isFeatureEnabled(feature, context),
-	});
+	const result = features.reduce((result, f) => ({
+		...result,
+		[f]: isFeatureEnabled(f, context),
+	}), {});
+
+	res.json(result);
 });
 
 export default apiRouter;
