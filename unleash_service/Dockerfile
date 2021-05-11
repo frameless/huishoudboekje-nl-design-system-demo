@@ -22,11 +22,11 @@ RUN chown -R appuser /app
 
 USER appuser
 
-COPY package*.json ./
+COPY ./package*.json /app/
 RUN npm ci
 
 COPY . .
 
 CMD ["npm", "run", "start"]
 
-EXPOSE 80
+EXPOSE 8080

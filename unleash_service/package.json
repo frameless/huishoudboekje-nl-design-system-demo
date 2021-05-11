@@ -1,0 +1,25 @@
+{
+  "name": "unleash-server",
+  "version": "0.1.0",
+  "description": "Little NodeJS Express server that handles Unleash requests.",
+  "main": "main.ts",
+  "scripts": {
+	"dev": "nodemon -r dotenv/config",
+	"start": "ts-node -r dotenv/config main.ts dotenv_config_path=.env.production"
+  },
+  "author": {
+	"name": "Koen Brouwer",
+	"email": "koen.brouwer@vng.nl",
+	"url": "https://twitter.com/KoenBrouwer"
+  },
+  "license": "SEE LICENSE IN LICENSE.md",
+  "dependencies": {
+	"@types/node": "^15.0.2",
+	"cors": "^2.8.5",
+	"dotenv": "^9.0.2",
+	"express": "^4.17.1",
+	"ts-node": "^9.1.1",
+	"typescript": "^4.2.4",
+	"unleash-client": "^3.8.1"
+  }
+}

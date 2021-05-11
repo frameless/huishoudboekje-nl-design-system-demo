@@ -12,27 +12,30 @@ dependencies:
     repository: file://../..//charts/medewerker-frontend
     version: ""
   - name: huishoudboekje-service
-    version: ""
     repository: file://../..//charts/huishoudboekje-service
+    version: ""
   - name: organisatie-service
-    version: ""
     repository: file://../..//charts/organisatie-service
+    version: ""
   - name: bank-transactie-service
-    version: ""
     repository: file://../..//charts/bank-transactie-service
+    version: ""
   - name: grootboek-service
-    version: ""
     repository: file://../..//charts/grootboek-service
+    version: ""
   - name: log-service
-    version: ""
     repository: file://../..//charts/log-service
-  - name: database
     version: ""
+  - name: unleash-service
+    repository: file://../..//charts/unleash-service
+    version: ""
+  - name: database
     repository: file://../..//charts/database
+    version: ""
   - name: dex
-    version: 2.13.0
     repository: '@stable'
+    version: 2.13.0
     condition: dex.enabled
   - name: postgresql
-    version: 10.2.1
     repository: '@bitnami'
+    version: 10.2.1

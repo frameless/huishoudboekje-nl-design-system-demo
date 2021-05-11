@@ -1,13 +1,10 @@
 import cors from "cors";
-import {config} from "dotenv";
 import express, {json} from "express";
 import pkg from "./package.json";
 import unleashClient from "./src/unleash";
 
-config();
-
 const app = express();
-const port = process.env.PORT || 80;
+const port = process.env.PORT || 8080;
 
 app.use(cors());
 app.use(json());

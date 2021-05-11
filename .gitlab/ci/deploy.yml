@@ -83,6 +83,9 @@
     - DEX_HOST=dex-${HHB_HOST}
     - OIDC_ISSUER=${OIDC_ISSUER:-https://${DEX_HOST}}
     - DATABASE_PERSISTENCE="${DATABASE_PERSISTENCE:-true}"
+    - UNLEASH_URL=https://gitlab.com/api/v4/feature_flags/unleash/20352213
+    - UNLEASH_INSTANCEID=JbZyPux6M7xwejsESy9L
+    - UNLEASH_APPNAME=huishoudboekje-frontend
     - sh helm/theme-yaml.sh frontend/theme/${THEME:-sloothuizen} > helm/theme.yaml
     # This lets the huishoudboekje postgresql be upgraded
     # see https://stackoverflow.com/questions/53186601/re-use-persistentvolume-after-re-installing-a-helm-deployment
@@ -100,6 +103,9 @@
         --set "medewerker-frontend.ingress.hosts[0].host=$HHB_HOST" \
         --set "medewerker-frontend.ingress.hosts[0].paths[0]=/" \
         --set "medewerker-frontend.ingress.tls[0].hosts[0]=$HHB_HOST" \
+        --set "unleash-service.ingress.hosts[0].host=$HHB_HOST" \
+        --set "unleash-service.ingress.hosts[0].paths[0]=/api/unleash/" \
+        --set "unleash-service.ingress.tls[0].hosts[0]=$HHB_HOST" \
         --set "medewerker-backend.ingress.hosts[0].host=$HHB_HOST" \
         --set "medewerker-backend.ingress.hosts[0].paths[0]=/api/" \
         --set "medewerker-backend.ingress.tls[0].hosts[0]=$HHB_HOST" \
