@@ -340,7 +340,8 @@
         },
         "followUp": {
             "zoektermenHelperText": "De volgende zoektermen worden overgenomen bij de vervolgafspraak:",
-            "betaalinstructieHelperText": "Voor een vervolgafspraak moet een nieuwe betaalinstructie worden ingesteld."
+            "zoektermenWarningHelperText": "Let op: Voor een vervolgafspraak moeten nieuwe zoektermen worden ingesteld.",
+            "betaalinstructieHelperText": "Let op: voor een vervolgafspraak moet een nieuwe betaalinstructie worden ingesteld."
         },
         "tegenpartij": "Tegenpartij",
         "omschrijving": "Omschrijving",

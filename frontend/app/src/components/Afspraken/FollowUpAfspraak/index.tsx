@@ -7,6 +7,7 @@ import Routes from "../../../config/routes";
 import {Afspraak, CreateAfspraakMutationVariables, useAddAfspraakZoektermMutation, useCreateAfspraakMutation, useGetAfspraakFormDataQuery} from "../../../generated/graphql";
 import d from "../../../utils/dayjs";
 import Queryable from "../../../utils/Queryable";
+import useFeatureFlag from "../../../utils/useFeatureFlag";
 import useToaster from "../../../utils/useToaster";
 import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
 import BackButton from "../../Layouts/BackButton";
@@ -24,6 +25,7 @@ const FollowUpAfspraak = () => {
 	const toast = useToaster();
 	const [createAfspraak] = useCreateAfspraakMutation();
 	const [addAfspraakZoekterm] = useAddAfspraakZoektermMutation();
+	const featureFollowUpZoektermenOpslaan = useFeatureFlag("follow-up-zoektermen-opslaan");
 	const {push} = useHistory();
 
 	const $afspraak = useGetAfspraakFormDataQuery({
@@ -56,22 +58,23 @@ const FollowUpAfspraak = () => {
 				const createdAfspraakId = data.data?.createAfspraak?.afspraak?.id;
 
 				if (createdAfspraakId) {
-					const addZoektermen = (afspraak.zoektermen || []).map(async z => {
-						return await addAfspraakZoekterm({variables: {afspraakId: createdAfspraakId, zoekterm: z}});
-					});
-
-					Promise.all(addZoektermen)
-						.then((result) => {
-							toast({
-								success: t("messages.createAfspraakSuccess"),
-							});
-							push(Routes.ViewAfspraak(createdAfspraakId));
-						})
-						.catch(err => {
-							toast({
-								error: err.message,
-							});
+					if (featureFollowUpZoektermenOpslaan) {
+						const addZoektermen = (afspraak.zoektermen || []).map(async z => {
+							return await addAfspraakZoekterm({variables: {afspraakId: createdAfspraakId, zoekterm: z}});
 						});
+
+						await Promise.all(addZoektermen)
+							.catch(err => {
+								toast({
+									error: err.message,
+								});
+							});
+					}
+
+					toast({
+						success: t("messages.createAfspraakSuccess"),
+					});
+					push(Routes.ViewAfspraak(createdAfspraakId));
 				}
 			};
 
@@ -96,11 +99,18 @@ const FollowUpAfspraak = () => {
 							<FormLeft title={t("afspraakForm.section1.title")} helperText={t("afspraakForm.section1.helperText")}>
 								<Divider />
 								<List spacing={2}>
-									<ListItem align={"center"}>
-										<ListIcon as={MdCheckCircle} color="green.500" w={5} h={5} />
-										{t("afspraken.followUp.zoektermenHelperText")}
-										<ZoektermenList zoektermen={afspraak.zoektermen || []} />
-									</ListItem>
+									{featureFollowUpZoektermenOpslaan ? (
+										<ListItem align={"center"}>
+											<ListIcon as={MdCheckCircle} color="green.500" w={5} h={5} />
+											{t("afspraken.followUp.zoektermenHelperText")}
+											<ZoektermenList zoektermen={afspraak.zoektermen || []} />
+										</ListItem>
+									) : (
+										<ListItem align={"center"}>
+											<ListIcon as={MdReportProblem} color="orange.500" w={5} h={5} />
+											{t("afspraken.followUp.zoektermenWarningHelperText")}
+										</ListItem>
+									)}
 									{afspraak.betaalinstructie && (
 										<ListItem align={"center"}>
 											<ListIcon as={MdReportProblem} color="orange.500" w={5} h={5} />
