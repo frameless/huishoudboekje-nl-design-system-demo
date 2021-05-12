@@ -92,7 +92,7 @@ const Betaalinstructies = () => {
 								</Thead>
 								<Tbody>
 									{exports.map(e => {
-										const href = Routes.Exports(e.id!);
+										const href = Routes.Export(e.id!);
 
 										return (
 											<Tr key={e.id} _hover={{bg: "gray.100"}}>
