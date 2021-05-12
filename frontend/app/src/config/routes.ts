@@ -52,7 +52,7 @@ const Routes = {
 	Rapportage: `/${RouteNames.rapportage}`,
 	Gebeurtenissen: `/${RouteNames.gebeurtenissen}`,
 
-	Exports: (id: number) => `/api/exports/${id}`,
+	Export: (id: number) => `/api/export/${id}`,
 	BrievenExport: (burgerId: number) => `/api/brievenexport/${burgerId}`,
 
 	NotFound: `/${RouteNames.notFound}`,
