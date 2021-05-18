@@ -15,7 +15,7 @@ export const FeatureProvider = ({children}) => {
 	const {user} = useAuth();
 
 	useEffect(() => {
-		fetch(`http://localhost:8080/api/unleash/${featureFlags.join(",")}`, {
+		fetch(`/api/unleash/${featureFlags.join(",")}`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",

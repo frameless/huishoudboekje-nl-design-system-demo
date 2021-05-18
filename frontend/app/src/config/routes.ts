@@ -47,6 +47,7 @@ const Routes = {
 	Bankzaken: `/${RouteNames.bankzaken}`,
 	Transacties: `/${RouteNames.bankzaken}/${RouteNames.transacties}`,
 	Bankafschriften: `/${RouteNames.bankzaken}/${RouteNames.bankafschriften}`,
+	BankafschriftenBatch: `/${RouteNames.bankzaken}/${RouteNames.bankafschriften}/batch`,
 	Overschrijvingen: `/${RouteNames.bankzaken}/${RouteNames.overschrijvingen}/${RouteNames.export}`,
 	Configuratie: `/${RouteNames.configuratie}`,
 	Rapportage: `/${RouteNames.rapportage}`,
