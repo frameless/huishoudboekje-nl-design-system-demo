@@ -1,5 +1,4 @@
 const featureFlags = [
-	"testpage",
 	"follow-up-zoektermen-opslaan",
 	"batch-bankafschriften"
 ];

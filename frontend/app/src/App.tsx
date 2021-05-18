@@ -11,8 +11,6 @@ import Transactions from "./components/Bankzaken/Transacties";
 import Burgers from "./components/Burgers";
 import Configuratie from "./components/Configuratie";
 import Gebeurtenissen from "./components/Gebeurtenissen";
-import Page from "./components/Layouts/Page";
-import Section from "./components/Layouts/Section";
 import TwoColumns from "./components/Layouts/TwoColumns";
 import UserStatus from "./components/Layouts/UserStatus";
 import Organisaties from "./components/Organisaties";
@@ -21,13 +19,11 @@ import Rapportage from "./components/Rapportage";
 import Sidebar from "./components/Sidebar";
 import SidebarContainer from "./components/Sidebar/SidebarContainer";
 import Routes from "./config/routes";
-import {useFeatureFlag} from "./utils/features";
 import useAuth from "./utils/useAuth";
 
 const App = () => {
 	const {t} = useTranslation();
 	const {user, error, loading, reset} = useAuth();
-	const testPageEnabled = useFeatureFlag("testpage");
 	const location = useLocation();
 	const theme = useTheme();
 
@@ -101,13 +97,6 @@ const App = () => {
 						<Route path={Routes.Configuratie} component={Configuratie} />
 						<Route path={Routes.Rapportage} component={Rapportage} />
 						<Route path={Routes.Gebeurtenissen} component={Gebeurtenissen} />
-						{testPageEnabled && (<Route path={Routes.TestPage} render={() => (
-							<Page title={"Testpagina"}>
-								<Section>
-									<Text>Dit is een testpagina</Text>
-								</Section>
-							</Page>
-						)} />)}
 
 						<Route exact path={Routes.NotFound} component={PageNotFound} />
 						<Route component={PageNotFound} />
