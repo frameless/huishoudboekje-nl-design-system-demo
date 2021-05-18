@@ -33,9 +33,9 @@ import {currencyFormat2, formatBurgerName, isAfspraakActive} from "../../../util
 import useHandleMutation from "../../../utils/useHandleMutation";
 import useScheduleHelper from "../../../utils/useScheduleHelper";
 import {zoektermValidator} from "../../../utils/zod";
-import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
 import BackButton from "../../Layouts/BackButton";
 import DataItem from "../../Layouts/DataItem";
+import {FormLeft, FormRight} from "../../Layouts/Forms";
 import Page from "../../Layouts/Page";
 import PrettyIban from "../../Layouts/PrettyIban";
 import Section from "../../Layouts/Section";

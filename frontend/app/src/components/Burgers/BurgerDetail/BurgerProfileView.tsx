@@ -3,7 +3,7 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {Burger} from "../../../generated/graphql";
 import d from "../../../utils/dayjs";
-import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
+import {FormLeft, FormRight} from "../../Layouts/Forms";
 
 const BurgerProfileView: React.FC<StackProps & {burger: Burger}> = ({burger, ...props}) => {
 	const {t} = useTranslation();

@@ -9,7 +9,7 @@ import d from "../../../utils/dayjs";
 import {useReactSelectStyles} from "../../../utils/things";
 import useForm from "../../../utils/useForm";
 import useToaster from "../../../utils/useToaster";
-import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
+import {FormLeft, FormRight} from "../../Layouts/Forms";
 import Section from "../../Layouts/Section";
 import PageNotFound from "../../PageNotFound";
 

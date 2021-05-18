@@ -4,7 +4,7 @@ import React, {useContext} from "react";
 import {useToggle} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {Organisatie, useCreateOrganisatieRekeningMutation} from "../../../generated/graphql";
-import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
+import {FormLeft, FormRight} from "../../Layouts/Forms";
 import Section from "../../Layouts/Section";
 import RekeningForm from "../../Rekeningen/RekeningForm";
 import RekeningList from "../../Rekeningen/RekeningList";

@@ -9,7 +9,7 @@ import Queryable from "../../utils/Queryable";
 import {Regex} from "../../utils/things";
 import useToaster from "../../utils/useToaster";
 import BackButton from "../Layouts/BackButton";
-import {FormLeft, FormRight} from "../Forms/FormLeftRight";
+import {FormLeft, FormRight} from "../Layouts/Forms";
 import Page from "../Layouts/Page";
 import Section from "../Layouts/Section";
 

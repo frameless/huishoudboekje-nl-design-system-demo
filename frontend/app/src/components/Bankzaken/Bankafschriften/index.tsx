@@ -5,7 +5,7 @@ import {useTranslation} from "react-i18next";
 import {CustomerStatementMessage, useCreateCustomerStatementMessageMutation, useGetCsmsQuery} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import useToaster from "../../../utils/useToaster";
-import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
+import {FormLeft, FormRight} from "../../Layouts/Forms";
 import Section from "../../Layouts/Section";
 import CsmListView from "./CsmListView";
 

@@ -7,7 +7,7 @@ import Routes from "../../../config/routes";
 import {Burger} from "../../../generated/graphql";
 import {isAfspraakActive} from "../../../utils/things";
 import AfspraakTableRow from "../../Afspraken/AfspraakTableRow";
-import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
+import {FormLeft, FormRight} from "../../Layouts/Forms";
 
 type ActiveSwitch = {
 	active: boolean,
