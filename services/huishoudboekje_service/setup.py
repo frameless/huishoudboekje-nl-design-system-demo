@@ -22,5 +22,6 @@ setup(
         'marshmallow-dataclass>=8.3.0,<9',
         'pyyaml>=5.3.1,<6',
         'Werkzeug>=1.0.1,<2',
+        'itsdangerous>=1.1.0,<2'
     ],
 )
