@@ -1,11 +1,14 @@
-import {ChevronDownIcon} from "@chakra-ui/icons";
-import {HStack, IconButton, Menu, MenuButton, MenuItem, MenuList} from "@chakra-ui/react";
+import {AddIcon, ChevronDownIcon} from "@chakra-ui/icons";
+import {Button, HStack, IconButton, Menu, MenuButton, MenuItem, MenuList} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
+import { NavLink } from "react-router-dom";
+import Routes from "../../../config/routes";
 import {useGetTransactiesQuery, useStartAutomatischBoekenMutation} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import useHandleMutation from "../../../utils/useHandleMutation";
 import usePagination from "../../../utils/usePagination";
+import DeadEndPage from "../../DeadEndPage";
 import Page from "../../Layouts/Page";
 import Section from "../../Layouts/Section";
 import {TransactionsContext} from "./context";
@@ -51,9 +54,16 @@ const Transactions = () => {
 					<Queryable query={$transactions} children={(data) => {
 						const transacties = data.bankTransactionsPaged?.banktransactions || [];
 
-						// return (
-						// 	<pre>{JSON.stringify(transacties, null, 2)}</pre>
-						// );
+						/* If no transacties were found */
+						if (transacties.length === 0) {
+							return (
+								<DeadEndPage message={t("messages.transactions.addHint")}>
+									<Button size={"sm"} colorScheme={"primary"} variant={"solid"} leftIcon={<AddIcon />}
+										as={NavLink} to={Routes.Bankafschriften}>{t("actions.add")}</Button>
+								</DeadEndPage>
+							);
+						}
+
 						return (
 							<TransactiesList transacties={transacties} />
 						);

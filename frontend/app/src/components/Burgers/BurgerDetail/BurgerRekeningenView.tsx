@@ -5,7 +5,7 @@ import {useToggle} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {Burger, useCreateBurgerRekeningMutation} from "../../../generated/graphql";
 import useToaster from "../../../utils/useToaster";
-import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
+import {FormLeft, FormRight} from "../../Layouts/Forms";
 import RekeningForm from "../../Rekeningen/RekeningForm";
 import RekeningList from "../../Rekeningen/RekeningList";
 

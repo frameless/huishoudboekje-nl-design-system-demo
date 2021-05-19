@@ -4,7 +4,7 @@ import {useTranslation} from "react-i18next";
 import {GebruikersActiviteit, useGetGebeurtenissenQuery} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
 import usePagination from "../../utils/usePagination";
-import {FormLeft, FormRight} from "../Forms/FormLeftRight";
+import {FormLeft, FormRight} from "../Layouts/Forms";
 import Page from "../Layouts/Page";
 import Section from "../Layouts/Section";
 import GebeurtenissenTableView from "./GebeurtenissenTableView";

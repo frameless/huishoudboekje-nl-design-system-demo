@@ -5,6 +5,9 @@ dependencies:
 - name: medewerker-frontend
   repository: file://../..//charts/medewerker-frontend
   version: 0.20.0
+- name: unleash-service
+  repository: file://../..//charts/unleash-service
+  version: 0.20.0
 - name: huishoudboekje-service
   repository: file://../..//charts/huishoudboekje-service
   version: 0.20.0

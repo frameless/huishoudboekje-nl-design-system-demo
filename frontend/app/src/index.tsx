@@ -12,17 +12,25 @@ import "./config/i18n";
 import theme from "./config/theme";
 import "./global.scss";
 import apolloClient from "./services/graphql-client";
+import {FeatureProvider} from "./utils/features";
 
 dayjs.locale("nl-nl");
 registerLocale("nl", nl);
 setDefaultLocale("nl");
+
+const featureFlags = [
+	"follow-up-zoektermen-opslaan",
+	"batch-bankafschriften"
+];
 
 ReactDOM.render(
 	<React.StrictMode>
 		<Router>
 			<ApolloProvider client={apolloClient}>
 				<ChakraProvider theme={theme}>
-					<App />
+					<FeatureProvider flags={featureFlags}>
+						<App />
+					</FeatureProvider>
 				</ChakraProvider>
 			</ApolloProvider>
 		</Router>

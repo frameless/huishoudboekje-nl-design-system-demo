@@ -3,9 +3,11 @@
   "version": "0.24.0",
   "author": {
     "name": "Koen Brouwer",
-    "email": "koen.brouwer@vng.nl"
+    "email": "koen.brouwer@vng.nl",
+    "url": "https://twitter.com/KoenBrouwer"
   },
   "private": true,
+  "license": "SEE LICENSE IN LICENSE.md",
   "repository": {
     "type": "git",
     "url": "https://gitlab.com/commonground/huishoudboekje/app-new"

@@ -10,7 +10,7 @@ import d from "../../../utils/dayjs";
 import Queryable from "../../../utils/Queryable";
 import {Regex} from "../../../utils/things";
 import useHandleMutation from "../../../utils/useHandleMutation";
-import {FormLeft, FormRight} from "../../Forms/FormLeftRight";
+import {FormLeft, FormRight} from "../../Layouts/Forms";
 import Section from "../../Layouts/Section";
 
 const Betaalinstructies = () => {

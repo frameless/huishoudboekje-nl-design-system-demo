@@ -15,6 +15,7 @@ services:
   - bank_transactie_service
   - grootboek_service
   - log_service
+  - unleash_service
 
 .service-resources: &service-resources
   resources:
@@ -45,6 +46,27 @@ medewerker-frontend:
      requests:
        cpu: 10m
        memory: 12Mi
+
+unleash_service:
+  extraEnv:
+    - name: UNLEASH_URL
+      value: "https://gitlab.com/api/v4/feature_flags/unleash/20352213"
+    - name: UNLEASH_INSTANCEID
+      value: "JbZyPux6M7xwejsESy9L"
+    - name: UNLEASH_APPNAME
+      value: "huishoudboekje"
+  ingress:
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+      - host: huishoudboekje.nlx.reviews
+        paths:
+          - "/api/unleash/"
+    tls:
+      - secretName: unleash-service-ingress-tls
+        hosts:
+          - huishoudboekje.nlx.reviews
+  <<: *service-resources
 
 medewerker-backend:
   extraEnv:

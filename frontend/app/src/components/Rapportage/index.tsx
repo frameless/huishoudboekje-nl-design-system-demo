@@ -9,7 +9,7 @@ import Transaction from "../../models/Transaction";
 import d from "../../utils/dayjs";
 import Queryable from "../../utils/Queryable";
 import {currencyFormat2, formatBurgerName, humanJoin, useReactSelectStyles} from "../../utils/things";
-import {FormLeft, FormRight} from "../Forms/FormLeftRight";
+import {FormLeft, FormRight} from "../Layouts/Forms";
 import Page from "../Layouts/Page";
 import RadioButtonGroup from "../Layouts/RadioButtons/RadioButtonGroup";
 import Section from "../Layouts/Section";

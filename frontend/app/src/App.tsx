@@ -12,12 +12,12 @@ import Burgers from "./components/Burgers";
 import Configuratie from "./components/Configuratie";
 import Gebeurtenissen from "./components/Gebeurtenissen";
 import TwoColumns from "./components/Layouts/TwoColumns";
+import UserStatus from "./components/Layouts/UserStatus";
 import Organisaties from "./components/Organisaties";
 import PageNotFound from "./components/PageNotFound";
 import Rapportage from "./components/Rapportage";
 import Sidebar from "./components/Sidebar";
 import SidebarContainer from "./components/Sidebar/SidebarContainer";
-import UserStatus from "./components/Layouts/UserStatus";
 import Routes from "./config/routes";
 import useAuth from "./utils/useAuth";
 
@@ -97,7 +97,6 @@ const App = () => {
 						<Route path={Routes.Configuratie} component={Configuratie} />
 						<Route path={Routes.Rapportage} component={Rapportage} />
 						<Route path={Routes.Gebeurtenissen} component={Gebeurtenissen} />
-
 						<Route exact path={Routes.NotFound} component={PageNotFound} />
 						<Route component={PageNotFound} />
 					</Switch>
