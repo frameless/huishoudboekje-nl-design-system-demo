@@ -28,6 +28,7 @@ setup(
         'requests>=2.24.0,<3',
         'schwifty>=2021.01.0',
         'sepaxml>=2.3.0,<3',
-        'Jinja2>=2.11.3,<3'
+        'Jinja2>=2.11.3,<3',
+        'itsdangerous>=1.1.0,<2'
     ],
 )
