@@ -1,6 +1,6 @@
-import {BankTransaction, Rubriek} from "../../generated/graphql";
+import {BankTransaction, Organisatie, Rubriek} from "../../generated/graphql";
 import d from "../../utils/dayjs";
-import {getRubriekForTransaction} from "../../utils/things";
+import {getOrganisatieForTransaction, getRubriekForTransaction} from "../../utils/things";
 
 // @i18n: t("charts.inkomstenUitgaven.income") t("charts.inkomstenUitgaven.expenses") t("charts.inkomstenUitgaven.unbooked")
 export enum Type {
@@ -10,8 +10,9 @@ export enum Type {
 }
 
 type RichTransaction = BankTransaction & {
-	mDate: d.Dayjs,
-	rubriek?: Rubriek
+	dayjsDate: d.Dayjs,
+	rubriek?: Rubriek,
+	organisatie?: Organisatie,
 };
 
 export enum Granularity {
@@ -31,13 +32,14 @@ export const createAggregation = (tr: BankTransaction[], granularity = Granulari
 	// Enrich transaction with some useful data
 	const _data = tr.map(t => ({
 		...t,
-		mDate: d(t.transactieDatum, "YYYY MM DD"),
+		dayjsDate: d(t.transactieDatum, "YYYY MM DD"),
 		rubriek: getRubriekForTransaction(t),
+		organisatie: getOrganisatieForTransaction(t),
 	}));
 
 	/* For chart */
-	const reducePerPeriod = (granularity: Granularity = Granularity.Monthly) => (result, tr) => {
-		const period = tr.mDate.format(periodFormatForGranularity[granularity]);
+	const reduceByPeriod = (granularity: Granularity = Granularity.Monthly) => (result, tr) => {
+		const period = tr.dayjsDate.format(periodFormatForGranularity[granularity]);
 		const type = tr.isCredit ? Type.Inkomsten : Type.Uitgaven;
 
 		result[period] = result[period] || {};
@@ -46,7 +48,7 @@ export const createAggregation = (tr: BankTransaction[], granularity = Granulari
 		return result;
 	};
 
-	const chartData = _data.reduce(reducePerPeriod(granularity), {});
+	const chartData = _data.reduce(reduceByPeriod(granularity), {});
 
 	const splitupFormat: {[Type.Inkomsten]: RichTransaction[], [Type.Uitgaven]: RichTransaction[]} = {
 		[Type.Inkomsten]: [],
@@ -59,16 +61,17 @@ export const createAggregation = (tr: BankTransaction[], granularity = Granulari
 	}, splitupFormat);
 
 	/* For table */
-	const reducePerRubriek = (result, tr: RichTransaction) => {
-		const rubriek = tr.rubriek?.naam || Type.Ongeboekt.toString();
-		result[rubriek] = result[rubriek] || 0;
-		result[rubriek] += parseFloat(tr.bedrag);
+	const reduceByOrganisatie = (result, tr: RichTransaction) => {
+		const organisatie = tr.organisatie;
+		const index = organisatie?.weergaveNaam || "???";
+		result[index] = result[index] || 0;
+		result[index] += parseFloat(tr.bedrag);
 		return result;
 	};
 
 	const tableData = {
-		[Type.Inkomsten]: tableDataPrepare[Type.Inkomsten].reduce(reducePerRubriek, {}),
-		[Type.Uitgaven]: tableDataPrepare[Type.Uitgaven].reduce(reducePerRubriek, {}),
+		[Type.Inkomsten]: tableDataPrepare[Type.Inkomsten].reduce(reduceByOrganisatie, {}),
+		[Type.Uitgaven]: tableDataPrepare[Type.Uitgaven].reduce(reduceByOrganisatie, {}),
 	};
 
 	const saldo = _data.reduce((result, tr: RichTransaction) => {

@@ -5,7 +5,7 @@ import currency from "currency.js";
 import {friendlyFormatIBAN} from "ibantools";
 import {createContext} from "react";
 import {Granularity, periodFormatForGranularity} from "../components/Rapportage/Aggregator";
-import {Afspraak, BankTransaction, Burger, GebruikersActiviteit, Rubriek} from "../generated/graphql";
+import {Afspraak, BankTransaction, Burger, GebruikersActiviteit, Organisatie, Rubriek} from "../generated/graphql";
 import d from "./dayjs";
 
 export const searchFields = (term: string, fields: string[]): boolean => {
@@ -107,6 +107,7 @@ export const humanJoin = (x) => arrayToSentence(x, {
 });
 
 export const getRubriekForTransaction = (t: BankTransaction): Rubriek | undefined => t.journaalpost?.grootboekrekening?.rubriek || t.journaalpost?.afspraak?.rubriek;
+export const getOrganisatieForTransaction = (t: BankTransaction): Organisatie | undefined => t.journaalpost?.afspraak?.organisatie;
 
 export const prepareChartData = (startDate: d.Dayjs, endDate: d.Dayjs, granularity: Granularity, columns: number = 1): any[] => {
 	if (!startDate.isValid()) {

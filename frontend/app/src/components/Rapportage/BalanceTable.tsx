@@ -13,7 +13,7 @@ type BalanceTableProps = {transactions: BankTransaction[], selectedBurgers: Burg
 const BalanceTable: React.FC<BalanceTableProps> = ({transactions, selectedBurgers, startDate, endDate}) => {
 	const {t} = useTranslation();
 	const burgerNamesList: string[] = selectedBurgers.map(b => formatBurgerName(b));
-	const [, aggregationByRubriek, saldo] = createAggregation(transactions);
+	const [, aggregationByOrganisatie, saldo] = createAggregation(transactions);
 
 	const translatedCategory = {
 		[Type.Inkomsten]: t("charts.inkomstenUitgaven.income"),
@@ -32,21 +32,21 @@ const BalanceTable: React.FC<BalanceTableProps> = ({transactions, selectedBurger
 						}} />
 					</Text>
 
-					{Object.keys(aggregationByRubriek).map(c => {
-						const categories = Object.keys(aggregationByRubriek[c]);
+					{Object.keys(aggregationByOrganisatie).map(c => {
+						const categories = Object.keys(aggregationByOrganisatie[c]).sort();
 						let total = 0;
 						return (
 							<Stack key={c} spacing={0}>
 								<Text fontWeight={"bold"}>{translatedCategory[c]}</Text>
 								{categories.map((r, i) => {
-									total += aggregationByRubriek[c][r];
+									total += aggregationByOrganisatie[c][r];
 									return (
 										<Stack direction={"row"} key={i}>
-											<Box flex={1}>
+											<Box flex={2}>
 												<Text>{r === Type.Ongeboekt ? t("charts.inkomstenUitgaven.unbooked") : r}</Text>
 											</Box>
-											<Box flex={2} textAlign={"right"}>
-												<Text fontWeight={"bold"}>{currencyFormat2(false).format(Math.abs(aggregationByRubriek[c][r]))}</Text>
+											<Box flex={1} textAlign={"right"}>
+												<Text fontWeight={"bold"}>{currencyFormat2(false).format(Math.abs(aggregationByOrganisatie[c][r]))}</Text>
 											</Box>
 										</Stack>
 									);
