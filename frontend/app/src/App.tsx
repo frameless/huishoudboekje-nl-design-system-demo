@@ -97,7 +97,6 @@ const App = () => {
 						<Route path={Routes.Configuratie} component={Configuratie} />
 						<Route path={Routes.Rapportage} component={Rapportage} />
 						<Route path={Routes.Gebeurtenissen} component={Gebeurtenissen} />
-
 						<Route exact path={Routes.NotFound} component={PageNotFound} />
 						<Route component={PageNotFound} />
 					</Switch>

@@ -1,5 +1,4 @@
 import React, {createContext, Dispatch, useContext, useEffect, useState} from "react";
-import featureFlags from "../config/featureFlags";
 import useAuth from "./useAuth";
 
 type FeatureContextValue = {
@@ -10,12 +9,12 @@ const FeatureContext = createContext<FeatureContextValue>({
 	features: {}, setFeatures: () => ({}),
 });
 
-export const FeatureProvider = ({children}) => {
+export const FeatureProvider = ({flags, children}) => {
 	const [features, setFeatures] = useState<Record<string, boolean>>({});
 	const {user} = useAuth();
 
 	useEffect(() => {
-		fetch(`/api/unleash/${featureFlags.join(",")}`, {
+		fetch(`/api/unleash/${flags.join(",")}`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -26,7 +25,7 @@ export const FeatureProvider = ({children}) => {
 			.then(result => {
 				setFeatures(result);
 			});
-	}, [setFeatures, user]);
+	}, [setFeatures, user, flags]);
 
 	return (
 		<FeatureContext.Provider value={{features, setFeatures}} children={children} />
