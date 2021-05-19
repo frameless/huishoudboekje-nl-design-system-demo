@@ -1,6 +1,6 @@
 import {BankTransaction, Organisatie, Rubriek} from "../../generated/graphql";
 import d from "../../utils/dayjs";
-import {getOrganisatieForTransaction, getRubriekForTransaction} from "../../utils/things";
+import {formatBurgerName, getOrganisatieForTransaction, getRubriekForTransaction} from "../../utils/things";
 
 // @i18n: t("charts.inkomstenUitgaven.income") t("charts.inkomstenUitgaven.expenses") t("charts.inkomstenUitgaven.unbooked")
 export enum Type {
@@ -62,8 +62,8 @@ export const createAggregation = (tr: BankTransaction[], granularity = Granulari
 
 	/* For table */
 	const reduceByOrganisatie = (result, tr: RichTransaction) => {
-		const organisatie = tr.organisatie;
-		const index = organisatie?.weergaveNaam || "???";
+		let beneficiary = tr.organisatie?.weergaveNaam || (tr.journaalpost?.afspraak?.burger ? formatBurgerName(tr.journaalpost?.afspraak?.burger) : undefined);
+		const index = beneficiary || "???";
 		result[index] = result[index] || 0;
 		result[index] += parseFloat(tr.bedrag);
 		return result;
