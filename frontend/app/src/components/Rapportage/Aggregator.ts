@@ -63,7 +63,7 @@ export const createAggregation = (tr: BankTransaction[], granularity = Granulari
 	/* For table */
 	const reduceByOrganisatie = (result, tr: RichTransaction) => {
 		let beneficiary = tr.organisatie?.weergaveNaam || (tr.journaalpost?.afspraak?.burger ? formatBurgerName(tr.journaalpost?.afspraak?.burger) : undefined);
-		const index = beneficiary || "???";
+		const index = beneficiary || "Niet afgeletterd"; // Todo: i18n / translate
 		result[index] = result[index] || 0;
 		result[index] += parseFloat(tr.bedrag);
 		return result;
