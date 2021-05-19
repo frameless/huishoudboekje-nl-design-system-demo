@@ -28,11 +28,11 @@
         "automatischBoeken": {
             "successMessage": "Transacties worden nu afgeletterd. Dit kan even duren."
         },
-        "journals": {
-            "createSuccessMessage": "Transactie succesvol afgeletterd."
-        },
         "transactions": {
             "addHint": "Voeg transacties toe door een bankafschrift te importeren."
+        },
+        "journals": {
+            "createSuccessMessage": "Transactie succesvol afgeletterd."
         },
         "rekeningAlreadyExistsError": "Dit rekeningnummer is al gekoppeld.",
         "burgers": {
@@ -86,7 +86,7 @@
         "export": "Exporteren",
         "download": "Downloaden",
         "startBoeken": "Alle transacties afletteren",
-        "disconnect": "Koppeling verwijderen",
+        "undoAfletteren": "Afletteren ongedaan maken",
         "filter": "Filteren",
         "backToList": "Terug naar overzicht",
         "brievenExport": "Exporteer gegevens voor brieven",
@@ -497,6 +497,13 @@
             "helperText": "Een overzicht van saldo over tijd."
         }
     },
+    "balance": "Balans",
+    "allBurgers": "Alle burgers",
+    "reports": {
+        "period": "Rapportageperiode: van <strong>{{from}}</strong> tot en met <strong>{{through}}</strong>."
+    },
+    "total": "Totaal",
+    "saldo": "Saldo",
     "granularity": {
         "daily": "Dag",
         "weekly": "Week",
@@ -519,13 +526,6 @@
             "helperText": "Selecteer een tijdsperiode, burger en/of rubriek om specifiekere gegevens in te zien."
         }
     },
-    "balance": "Balans",
-    "allBurgers": "Alle burgers",
-    "reports": {
-        "period": "Rapportageperiode: van <strong>{{from}}</strong> tot en met <strong>{{through}}</strong>."
-    },
-    "total": "Totaal",
-    "saldo": "Saldo",
     "interval": {
         "period": "Periode",
         "month": "maand",
