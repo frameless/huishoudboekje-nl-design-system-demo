@@ -4,7 +4,6 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {FaLock} from "react-icons/fa";
 import {Redirect, Route, Switch, useLocation} from "react-router-dom";
-import BatchTest from "./BatchTest";
 import AfspraakRouter from "./components/Afspraken";
 import CustomerStatementMessages from "./components/Bankzaken/Bankafschriften";
 import Betaalinstructies from "./components/Bankzaken/Betaalinstructies";
@@ -99,7 +98,6 @@ const App = () => {
 						<Route path={Routes.Rapportage} component={Rapportage} />
 						<Route path={Routes.Gebeurtenissen} component={Gebeurtenissen} />
 						<Route exact path={Routes.NotFound} component={PageNotFound} />
-						<Route exact path={"/batch"} component={BatchTest} />
 						<Route component={PageNotFound} />
 					</Switch>
 				</Box>
