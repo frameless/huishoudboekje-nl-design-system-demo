@@ -9,8 +9,8 @@ categories:
   - workflow-management
   - task-management
 usedBy:
-  - Gemeente Amsterdam
-  - Gemeente 's-Hertogenbosch
+  - Gemeente Rotterdam
+  - Gemeente Utrecht
 developmentStatus: stable
 softwareType: standalone/web
 description:
@@ -18,15 +18,21 @@ description:
     localisedName: Huishoudboekje
     genericName: Huishoudboekje
     shortDescription: >-
-      Een huishoudboekje is een document waarin huishouduitgaven zoals boodschappen, hulp in de huishouding en voorzieningen worden bijgehouden. 
-      Ze worden vooral gebruikt door gezinnen die hun geldstromen overzichtelijk willen houden.​
+      Een huishoudboekje is een document waarin huishouduitgaven zoals
+      boodschappen, hulp in de huishouding en voorzieningen worden bijgehouden. 
+      Ze worden vooral gebruikt door gezinnen die hun geldstromen overzichtelijk
+      willen houden.​
     longDescription: >-
-      Een huishoudboekje is een document waarin huishouduitgaven zoals boodschappen, hulp in de huishouding en voorzieningen worden bijgehouden. 
-      Ze worden vooral gebruikt door gezinnen die hun geldstromen overzichtelijk willen houden.​
+      Een huishoudboekje is een document waarin huishouduitgaven zoals
+      boodschappen, hulp in de huishouding en voorzieningen worden bijgehouden. 
+      Ze worden vooral gebruikt door gezinnen die hun geldstromen overzichtelijk
+      willen houden.​
 
-      Naast de uitgaven worden ook de inkomende geldstromen bijgehouden. Op deze manier wordt een compleet overzicht gecreëerd van de financiën. 
-      Door dit overzicht regelmatig te analyseren kan de financiële positie worden bepaald, en kunnen de uitgaven eventueel aangepast worden. 
-      Om die reden wordt een huishoudboekje vaak ingezet als hulpmiddel bij bezuinigingen.​
+      Naast de uitgaven worden ook de inkomende geldstromen bijgehouden. Op deze
+      manier wordt een compleet overzicht gecreëerd van de financiën.  Door dit
+      overzicht regelmatig te analyseren kan de financiële positie worden
+      bepaald, en kunnen de uitgaven eventueel aangepast worden.  Om die reden
+      wordt een huishoudboekje vaak ingezet als hulpmiddel bij bezuinigingen.​
     documentation: "https://gitlab.com/commonground/huishoudboekje/app-new/-/wikis/home"
     features:
       - Inkomen stabiliseren
