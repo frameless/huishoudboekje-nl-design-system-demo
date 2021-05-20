@@ -1,19 +1,20 @@
-import {Box, Divider, FormControl, FormLabel, HStack, Input, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Text} from "@chakra-ui/react";
+import {FormControl, FormLabel, Input, Stack, Tab, TabList, TabPanel, TabPanels, Tabs} from "@chakra-ui/react";
 import React, {useState} from "react";
 import DatePicker from "react-datepicker";
 import {useInput} from "react-grapple";
-import {Trans, useTranslation} from "react-i18next";
+import {useTranslation} from "react-i18next";
 import Select from "react-select";
 import {Burger, Rubriek, useGetReportingDataQuery} from "../../generated/graphql";
 import Transaction from "../../models/Transaction";
 import d from "../../utils/dayjs";
 import Queryable from "../../utils/Queryable";
-import {currencyFormat2, formatBurgerName, humanJoin, useReactSelectStyles} from "../../utils/things";
+import {formatBurgerName, useReactSelectStyles} from "../../utils/things";
 import {FormLeft, FormRight} from "../Layouts/Forms";
 import Page from "../Layouts/Page";
 import RadioButtonGroup from "../Layouts/RadioButtons/RadioButtonGroup";
 import Section from "../Layouts/Section";
-import {createAggregation, Granularity, Type} from "./Aggregator";
+import {Granularity} from "./Aggregator";
+import BalanceTable from "./BalanceTable";
 import {RapportageContext} from "./context";
 import InkomstenUitgaven from "./InkomstenUitgaven";
 import Saldo from "./Saldo";
@@ -21,11 +22,6 @@ import Saldo from "./Saldo";
 const Rapportage = () => {
 	const {t} = useTranslation();
 	const reactSelectStyles = useReactSelectStyles();
-
-	const translatedCategory = {
-		[Type.Inkomsten]: t("charts.inkomstenUitgaven.income"),
-		[Type.Uitgaven]: t("charts.inkomstenUitgaven.expenses"),
-	};
 
 	const $data = useGetReportingDataQuery({
 		fetchPolicy: "no-cache",
@@ -91,8 +87,7 @@ const Rapportage = () => {
 												key: b.id,
 												value: b.id,
 												label: formatBurgerName(b),
-											}))} styles={reactSelectStyles.default}
-											isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllBurgers")} />
+											}))} styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllBurgers")} />
 										);
 									}} />
 								</FormControl>
@@ -105,8 +100,7 @@ const Rapportage = () => {
 												key: r.id,
 												value: r.id,
 												label: r.naam,
-											}))} styles={reactSelectStyles.default}
-											isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllRubrics")} />
+											}))} styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllRubrics")} />
 										);
 									}} />
 								</FormControl>
@@ -134,9 +128,7 @@ const Rapportage = () => {
 						.filter(t => filterBurgerIds.length > 0 ? t.belongsToAnyBurger(filterBurgerIds) : true)
 						.filter(t => t.isBetweenDates(_startDate, _endDate));
 
-					const [, aggregationByRubriek, saldo] = createAggregation(filteredTransactions);
 					const selectedBurgers = burgers.filter(b => filterBurgerIds.includes(b.id!));
-					const burgerNamesList: string[] = selectedBurgers.map(b => formatBurgerName(b));
 
 					return (<>
 						<Tabs isLazy variant={"solid"} align={"end"} colorScheme={"primary"}>
@@ -154,64 +146,7 @@ const Rapportage = () => {
 							</TabPanels>
 						</Tabs>
 
-						{/* Balance table */}
-						<Section direction={["column", "row"]}>
-							<FormLeft title={t("balance")} helperText={selectedBurgers.length > 0 ? humanJoin(burgerNamesList) : t("allBurgers")} />
-							<FormRight>
-								<Stack spacing={4}>
-									<Text>
-										<Trans i18nKey={"reports.period"} components={{strong: <strong />}} values={{
-											from: d(startDate.value, "L").startOf("day").format("L"),
-											through: d(endDate.value, "L").endOf("day").format("L"),
-										}} />
-									</Text>
-
-									{Object.keys(aggregationByRubriek).map(c => {
-										const categories = Object.keys(aggregationByRubriek[c]);
-										let total = 0;
-										return (
-											<Stack key={c} spacing={0}>
-												<Text fontWeight={"bold"}>{translatedCategory[c]}</Text>
-												{categories.map((r, i) => {
-													total += aggregationByRubriek[c][r];
-													return (
-														<Stack direction={"row"} key={i}>
-															<Box flex={1}>
-																<Text>{r === Type.Ongeboekt ? t("charts.inkomstenUitgaven.unbooked") : r}</Text>
-															</Box>
-															<Box flex={2} textAlign={"right"}>
-																<Text fontWeight={"bold"}>{currencyFormat2(false).format(Math.abs(aggregationByRubriek[c][r]))}</Text>
-															</Box>
-														</Stack>
-													);
-												})}
-												<HStack alignItems={"center"}>
-													<Divider borderColor={"black"} flex={1} pt={1} />
-													<Text flex={0}>+</Text>
-												</HStack>
-												<Stack direction={"row"}>
-													<Box flex={1}>
-														<Text>{t("total")}</Text>
-													</Box>
-													<Box flex={2} textAlign={"right"}>
-														<Text fontWeight={"bold"}>{currencyFormat2(false).format(Math.abs(total))}</Text>
-													</Box>
-												</Stack>
-											</Stack>
-										);
-									})}
-
-									<Stack direction={"row"}>
-										<Box flex={1}>
-											<Text>{t("saldo")}</Text>
-										</Box>
-										<Box flex={2} textAlign={"right"}>
-											<Text fontWeight={"bold"}>{currencyFormat2(false).format(saldo)}</Text>
-										</Box>
-									</Stack>
-								</Stack>
-							</FormRight>
-						</Section>
+						<BalanceTable transactions={filteredTransactions} startDate={startDate.value} endDate={endDate.value} selectedBurgers={selectedBurgers} />
 					</>);
 				}} />
 			</Page>

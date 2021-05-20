@@ -1,5 +1,5 @@
 import {DeleteIcon, ViewIcon} from "@chakra-ui/icons";
-import {Box, Button, FormLabel, Heading, IconButton, Stack, Text} from "@chakra-ui/react";
+import {Box, Button, FormLabel, Heading, Stack, Text} from "@chakra-ui/react";
 import React, {useContext} from "react";
 import {useTranslation} from "react-i18next";
 import {NavLink} from "react-router-dom";
@@ -84,8 +84,10 @@ const BookingDetailsView: React.FC<{transactie: BankTransaction}> = ({transactie
 				</Stack>
 				<Stack direction={"row"} spacing={5}>
 					<Box mb={3}>
-						<Button leftIcon={
-							<ViewIcon />} colorScheme={"primary"} size={"sm"} as={NavLink} to={Routes.ViewAfspraak(journaalpostAfspraak.id)}>{t("actions.view")}</Button>
+						<Button leftIcon={<ViewIcon />} colorScheme={"primary"} size={"sm"} as={NavLink} to={Routes.ViewAfspraak(journaalpostAfspraak.id)}>{t("actions.view")}</Button>
+					</Box>
+					<Box>
+						<Button leftIcon={<DeleteIcon />} variant={"ghost"} colorScheme={"red"} size={"sm"} onClick={onDelete} isLoading={$deleteJournaalpost.loading}>{t("actions.undoAfletteren")}</Button>
 					</Box>
 				</Stack>
 			</Stack>
@@ -103,8 +105,7 @@ const BookingDetailsView: React.FC<{transactie: BankTransaction}> = ({transactie
 					</Box>
 				</Box>
 				<Box>
-					<IconButton icon={<DeleteIcon />} variant={"ghost"} aria-label={t("actions.disconnect")}
-						onClick={onDelete} isLoading={$deleteJournaalpost.loading} />
+					<Button leftIcon={<DeleteIcon />} variant={"ghost"} colorScheme={"red"} size={"sm"} onClick={onDelete} isLoading={$deleteJournaalpost.loading}>{t("actions.undoAfletteren")}</Button>
 				</Box>
 			</Stack>
 		);

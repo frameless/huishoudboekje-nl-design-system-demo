@@ -157,6 +157,7 @@ scenarios:
         omschrijving: "Voorschot huurtoeslag"
         organisatie:
           kvk: "27365323"
+          iban: "NL36INGB0003445588"
         bedrag: 28600
         credit: true
         # betaalinstructie: '{"start_date": "2021-01-01","end_date": "2021-12-31","by_month_day": [1],"except_dates": []}'
