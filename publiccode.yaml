@@ -7,14 +7,24 @@ releaseDate: "2021-05-20"
 platforms:
   - web
 categories:
-  - workflow-management
-  - task-management
-developmentStatus: beta
+  - accounting
+  - budgeting
+  - financial reporting
+developmentStatus: development
 softwareType: standalone/web
+intendedAudience:
+  scope:
+    - employment
+    - finance-and-economic-development
+    - government
+    - society
+    - welfare
+  countries:
+    - nl
 description:
   nl:
     localisedName: Huishoudboekje
-    genericName: Huishoudboekje
+    genericName: Kasboek
     shortDescription: >-
       Een huishoudboekje is een document waarin huishouduitgaven zoals
       boodschappen, hulp in de huishouding en voorzieningen worden bijgehouden.
@@ -33,7 +43,22 @@ description:
       wordt een huishoudboekje vaak ingezet als hulpmiddel bij bezuinigingen.
     documentation: "https://gitlab.com/commonground/huishoudboekje/app-new/-/wikis/home"
     features:
-      - Inkomen stabiliseren
+      - Burgers beheren
+      - Bankrekeningen beheren
+      - Afspraken beheren
+      - Afspraken exporteren voor brieven
+      - Zoektermen beheren
+      - Betaalinstructies beheren
+      - Organisaties beheren
+      - Banktransacties beheren
+      - Banktransacties afletteren op afspraken
+      - Banktransacties afletteren op rubrieken
+      - Betaalinstructies exporteren
+      - Rapportage trend saldo
+      - Rapportage trend inkomsten en uitgaven
+      - Rapportage tabel inkomsten en uitgaven
+      - Gebeurtenissen loggen
+
 legal:
   license: EUPL-1.2
   mainCopyrightOwner: VNG Realisatie
@@ -43,11 +68,17 @@ maintenance:
   contacts:
     - name: Bauke Huijbers
       email: bauke.huijbers@vng.nl
-    - name: Koen Brouwer
-      email: koen.brouwer@vng.nl
-    - name: Christian Hulleman
-      email: c.hulleman@anchormen.nl
+      affiliation: gemeenten Amsterdam, Nijmegen, Rotterdam en Utrecht
+    - name: Jacco Brouwer
+      email: jacco.brouwer@vng.nl
+      affiliation: VNG Realisatie
 localisation:
   localisationReady: yes
   availableLanguages:
     - nl
+
+dependsOn:
+  open:
+    - name: PostgreSQL
+      version: ""
+      optional: yes
