@@ -1,0 +1,84 @@
+publiccodeYmlVersion: "0.2"
+name: Huishoudboekje
+url: "https://gitlab.com/commonground/huishoudboekje/app-new"
+roadmap: "https://gitlab.com/groups/commonground/huishoudboekje/-/roadmap"
+softwareVersion: "0.25.0"
+platforms:
+  - web
+categories:
+  - accounting
+  - budgeting
+  - financial reporting
+developmentStatus: development
+softwareType: standalone/web
+intendedAudience:
+  scope:
+    - employment
+    - finance-and-economic-development
+    - government
+    - society
+    - welfare
+  countries:
+    - nl
+description:
+  nl:
+    localisedName: Huishoudboekje
+    genericName: Kasboek
+    shortDescription: >-
+      Een huishoudboekje is een document waarin huishouduitgaven zoals
+      boodschappen, hulp in de huishouding en voorzieningen worden bijgehouden.
+      Ze worden vooral gebruikt door gezinnen die hun geldstromen overzichtelijk
+      willen houden.
+    longDescription: >-
+      Een huishoudboekje is een document waarin huishouduitgaven zoals
+      boodschappen, hulp in de huishouding en voorzieningen worden bijgehouden.
+      Ze worden vooral gebruikt door gezinnen die hun geldstromen overzichtelijk
+      willen houden.
+
+      Naast de uitgaven worden ook de inkomende geldstromen bijgehouden. Op deze
+      manier wordt een compleet overzicht gecreëerd van de financiën.  Door dit
+      overzicht regelmatig te analyseren kan de financiële positie worden
+      bepaald, en kunnen de uitgaven eventueel aangepast worden.  Om die reden
+      wordt een huishoudboekje vaak ingezet als hulpmiddel bij bezuinigingen.
+    documentation: "https://gitlab.com/commonground/huishoudboekje/app-new/-/wikis/home"
+    features:
+      - Burgers beheren
+      - Bankrekeningen beheren
+      - Afspraken beheren
+      - Afspraken exporteren voor brieven
+      - Zoektermen beheren
+      - Betaalinstructies beheren
+      - Organisaties beheren
+      - Banktransacties beheren
+      - Banktransacties afletteren op afspraken
+      - Banktransacties afletteren op rubrieken
+      - Betaalinstructies exporteren
+      - Rapportage trend saldo
+      - Rapportage trend inkomsten en uitgaven
+      - Rapportage tabel inkomsten en uitgaven
+      - Gebeurtenissen loggen
+legal:
+  license: EUPL-1.2
+  mainCopyrightOwner: VNG Realisatie
+  repoOwner: VNG Realisatie
+maintenance:
+  type: community
+  contacts:
+    - name: Bauke Huijbers
+      email: bauke.huijbers@vng.nl
+      affiliation: gemeenten Amsterdam, Nijmegen, Rotterdam en Utrecht
+    - name: Jacco Brouwer
+      email: jacco.brouwer@vng.nl
+      affiliation: VNG Realisatie
+localisation:
+  localisationReady: yes
+  availableLanguages:
+    - nl
+dependsOn:
+  open:
+    - name: Kubernetes
+    - name: Docker
+    - name: PostgreSQL
+    - name: Node.js
+    - name: npm
+    - name: Python
