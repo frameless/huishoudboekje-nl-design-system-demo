@@ -3,7 +3,6 @@ name: Huishoudboekje
 url: "https://gitlab.com/commonground/huishoudboekje/app-new"
 roadmap: "https://gitlab.com/groups/commonground/huishoudboekje/-/roadmap"
 softwareVersion: "0.25.0"
-releaseDate: "2021-05-20"
 platforms:
   - web
 categories:
@@ -58,7 +57,6 @@ description:
       - Rapportage trend inkomsten en uitgaven
       - Rapportage tabel inkomsten en uitgaven
       - Gebeurtenissen loggen
-
 legal:
   license: EUPL-1.2
   mainCopyrightOwner: VNG Realisatie
@@ -76,9 +74,11 @@ localisation:
   localisationReady: yes
   availableLanguages:
     - nl
-
 dependsOn:
   open:
+    - name: Kubernetes
+    - name: Docker
     - name: PostgreSQL
-      version: ""
-      optional: yes
+    - name: Node.js
+    - name: npm
+    - name: Python
