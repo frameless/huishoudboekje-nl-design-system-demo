@@ -55,20 +55,26 @@ const Betaalinstructies = () => {
 						<FormControl flex={1}>
 							<FormLabel>{t("forms.common.fields.startDate")}</FormLabel>
 							<DatePicker selected={d(startDatum.value, "L").isValid() ? d(startDatum.value, "L").toDate() : null} dateFormat={"dd-MM-yyyy"}
-								onChange={(value: Date) => {
-									if (value) {
-										startDatum.setValue(d(value).format("L"));
-									}
-								}} customInput={<Input type="text" isInvalid={!d(startDatum.value, "L").isValid()} {...startDatum.bind} />} />
+										onChange={(value: Date) => {
+											if (value) {
+												startDatum.setValue(d(value).format("L"));
+												if (d(value).isAfter(d(eindDatum.value, "L"))) {
+													eindDatum.setValue(d(value).format("L"));
+												}
+											}
+										}} customInput={<Input type="text" isInvalid={!d(startDatum.value, "L").isValid()} {...startDatum.bind} />} />
 						</FormControl>
 						<FormControl flex={1}>
 							<FormLabel>{t("forms.common.fields.endDate")}</FormLabel>
 							<DatePicker selected={d(eindDatum.value, "L").isValid() ? d(eindDatum.value, "L").toDate() : null} dateFormat={"dd-MM-yyyy"}
-								onChange={(value: Date) => {
-									if (value) {
-										eindDatum.setValue(d(value).format("L"));
-									}
-								}} customInput={<Input type="text" isInvalid={!d(eindDatum.value, "L").isValid()} {...eindDatum.bind} />} />
+										onChange={(value: Date) => {
+											if (value) {
+												eindDatum.setValue(d(value).format("L"));
+												if (d(value).isBefore(d(startDatum.value, "L"))) {
+													startDatum.setValue(d(value).format("L"));
+												}
+											}
+										}} customInput={<Input type="text" isInvalid={!d(eindDatum.value, "L").isValid()} {...eindDatum.bind} />} />
 						</FormControl>
 						<FormControl flex={1}>
 							<Button colorScheme={"primary"} isLoading={$createExportOverschrijvingen.loading} onClick={onClickExportButton}>{t("actions.export")}</Button>
