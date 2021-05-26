@@ -1,6 +1,6 @@
 import {AddIcon, CloseIcon, SearchIcon} from "@chakra-ui/icons";
 import {Button, IconButton, Input, InputGroup, InputLeftElement, InputRightElement} from "@chakra-ui/react";
-import React, {useEffect, useRef, useState} from "react";
+import React, {useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {useHistory} from "react-router-dom";
 import Routes from "../../config/routes";
@@ -17,26 +17,7 @@ const OrganisatieList = () => {
 	const [search, setSearch] = useState<string>("");
 	const searchRef = useRef<HTMLInputElement>(null);
 
-	const [filteredOrganisaties, setFilteredOrganisaties] = useState<Organisatie[]>([]);
-	const $organisaties = useGetOrganisatiesQuery({
-		fetchPolicy: "no-cache",
-		onCompleted: ({organisaties = []}) => {
-			setFilteredOrganisaties(organisaties);
-		},
-	});
-
-	useEffect(() => {
-		let mounted = true;
-
-		if (mounted && $organisaties.data) {
-			const {organisaties = []} = $organisaties.data;
-			setFilteredOrganisaties(organisaties.filter(o => searchFields(search, [o.weergaveNaam || ""])));
-		}
-
-		return () => {
-			mounted = false;
-		};
-	}, [$organisaties, search]);
+	const $organisaties = useGetOrganisatiesQuery();
 
 	const onKeyDownOnSearchField = (e) => {
 		if (e.key === "Escape") {
@@ -59,6 +40,13 @@ const OrganisatieList = () => {
 					</DeadEndPage>
 				);
 			}
+
+			const filteredOrganisaties = organisaties.filter(o => {
+				return [
+					searchFields(search, [o.weergaveNaam || ""]),
+					searchFields(search.replaceAll(" ", ""), [...(o.rekeningen || []).map(r => r.iban || "")])
+				].some(t => t);
+			});
 
 			return (
 				<Page title={t("organizations.organizations")} right={(
