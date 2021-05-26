@@ -1,7 +1,6 @@
 import {AddIcon, CloseIcon, SearchIcon} from "@chakra-ui/icons";
 import {Button, IconButton, Input, InputGroup, InputLeftElement, InputRightElement} from "@chakra-ui/react";
-import React, {useEffect, useState} from "react";
-import {useInput} from "react-grapple";
+import React, {useEffect, useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {useHistory} from "react-router-dom";
 import Routes from "../../config/routes";
@@ -15,9 +14,8 @@ import OrganisatieListView from "./Views/OrganisatieListView";
 const OrganisatieList = () => {
 	const {t} = useTranslation();
 	const {push} = useHistory();
-	const search = useInput<string>({
-		placeholder: t("forms.search.fields.search"),
-	});
+	const [search, setSearch] = useState<string>("");
+	const searchRef = useRef<HTMLInputElement>(null);
 
 	const [filteredOrganisaties, setFilteredOrganisaties] = useState<Organisatie[]>([]);
 	const $organisaties = useGetOrganisatiesQuery({
@@ -32,23 +30,23 @@ const OrganisatieList = () => {
 
 		if (mounted && $organisaties.data) {
 			const {organisaties = []} = $organisaties.data;
-			setFilteredOrganisaties(organisaties.filter(o => searchFields(search.value, [o.weergaveNaam || ""])));
+			setFilteredOrganisaties(organisaties.filter(o => searchFields(search, [o.weergaveNaam || ""])));
 		}
 
 		return () => {
 			mounted = false;
 		};
-	}, [$organisaties, search.value]);
+	}, [$organisaties, search]);
 
 	const onKeyDownOnSearchField = (e) => {
 		if (e.key === "Escape") {
-			search.reset();
+			setSearch("");
 		}
 	};
 
 	const onClickResetSearch = () => {
-		search.reset();
-		search.ref.current!.focus();
+		setSearch("");
+		searchRef.current!.focus();
 	};
 
 	return (
@@ -68,10 +66,10 @@ const OrganisatieList = () => {
 						<InputLeftElement>
 							<SearchIcon color={"gray.300"} />
 						</InputLeftElement>
-						<Input type={"text"} {...search.bind} bg={"white"} onKeyDown={onKeyDownOnSearchField} />
-						{search.value.length > 0 && (
+						<Input type={"text"} bg={"white"} onChange={e => setSearch(e.target.value)} onKeyDown={onKeyDownOnSearchField} value={search || ""} placeholder={t("forms.search.fields.search")} />
+						{search.length > 0 && (
 							<InputRightElement>
-								<IconButton size={"xs"} variant={"link"} icon={<CloseIcon />} aria-label={t("actions.cancel")} color={"gray.300"} onClick={() => search.reset()} />
+								<IconButton size={"xs"} variant={"link"} icon={<CloseIcon />} aria-label={t("actions.cancel")} color={"gray.300"} onClick={() => setSearch("")} />
 							</InputRightElement>
 						)}
 					</InputGroup>
@@ -81,7 +79,7 @@ const OrganisatieList = () => {
 							<Button size={"sm"} colorScheme={"primary"} onClick={onClickResetSearch}>{t("actions.clearSearch")}</Button>
 						</DeadEndPage>
 					) : (
-						<OrganisatieListView organisaties={filteredOrganisaties} showAddButton={search.value.trim().length === 0} />
+						<OrganisatieListView organisaties={filteredOrganisaties} showAddButton={search.trim().length === 0} />
 					)}
 				</Page>
 			);
