@@ -54,7 +54,7 @@ const OrganisatieList = () => {
 						<InputLeftElement>
 							<SearchIcon color={"gray.300"} />
 						</InputLeftElement>
-						<Input type={"text"} bg={"white"} onChange={e => setSearch(e.target.value)} onKeyDown={onKeyDownOnSearchField} value={search || ""} placeholder={t("forms.search.fields.search")} />
+						<Input type={"text"} bg={"white"} onChange={e => setSearch(e.target.value)} onKeyDown={onKeyDownOnSearchField} value={search || ""} placeholder={t("forms.search.fields.search")} ref={searchRef} />
 						{search.length > 0 && (
 							<InputRightElement>
 								<IconButton size={"xs"} variant={"link"} icon={<CloseIcon />} aria-label={t("actions.cancel")} color={"gray.300"} onClick={() => setSearch("")} />
