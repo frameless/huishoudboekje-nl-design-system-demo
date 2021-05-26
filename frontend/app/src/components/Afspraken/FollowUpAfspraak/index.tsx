@@ -95,14 +95,14 @@ const FollowUpAfspraak = () => {
 							<FormLeft title={t("afspraakForm.section1.title")} helperText={t("afspraakForm.section1.helperText")}>
 								<Divider />
 								<List spacing={2}>
-									<ListItem align={"center"}>
-										<ListIcon as={MdCheckCircle} color="green.500" w={5} h={5} />
+									<ListItem justify={"center"}>
+										<ListIcon as={MdCheckCircle} color="green.500" w={5} h={5} verticalAlign={"middle"} />
 										{t("afspraken.followUp.zoektermenHelperText")}
 										<ZoektermenList zoektermen={afspraak.zoektermen || []} />
 									</ListItem>
 									{afspraak.betaalinstructie && (
-										<ListItem align={"center"}>
-											<ListIcon as={MdReportProblem} color="orange.500" w={5} h={5} />
+										<ListItem justify={"center"}>
+											<ListIcon as={MdReportProblem} color="orange.500" w={5} h={5} verticalAlign={"middle"} />
 											{t("afspraken.followUp.betaalinstructieHelperText")}
 										</ListItem>
 									)}
