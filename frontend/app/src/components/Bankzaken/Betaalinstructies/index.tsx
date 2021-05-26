@@ -78,7 +78,9 @@ const Betaalinstructies = () => {
 					<Divider />
 
 					<Queryable query={$exports} children={(data) => {
-						const exports: Export[] = data.exports || [];
+						const exports: Export[] = [...data.exports || []].sort((a: Export, b: Export) => {
+							return (a.timestamp && b.timestamp) ? (a.timestamp >= b.timestamp ? -1 : 1) : 1;
+						});
 
 						return (
 							<Table variant={"noLeftPadding"}>
