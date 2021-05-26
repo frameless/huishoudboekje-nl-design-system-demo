@@ -30,7 +30,7 @@ const BurgerAfsprakenView: React.FC<StackProps & {burger: Burger, refetch: VoidF
 	return (
 		<Stack direction={["column", "row"]} {...props}>
 			<FormLeft title={t("forms.burgers.sections.agreements.title")} helperText={t("forms.burgers.sections.agreements.detailText")}>
-				{sortedAfspraken.length > 0 && (
+				{afspraken.length > 0 && (
 					<FormControl>
 						<FormLabel>{t("actions.filter")}</FormLabel>
 						<CheckboxGroup defaultValue={["active"]} onChange={(val) => {
