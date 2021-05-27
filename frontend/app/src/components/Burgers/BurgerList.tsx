@@ -1,7 +1,6 @@
 import {AddIcon, CloseIcon, SearchIcon} from "@chakra-ui/icons";
 import {Button, IconButton, Input, InputGroup, InputLeftElement, InputRightElement} from "@chakra-ui/react";
-import React, {useEffect, useState} from "react";
-import {useInput} from "react-grapple";
+import React, {useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {useHistory} from "react-router-dom";
 import Routes from "../../config/routes";
@@ -15,49 +14,43 @@ import BurgerListView from "./BurgerListView";
 const BurgerList = () => {
 	const {t} = useTranslation();
 	const {push} = useHistory();
-	const search = useInput<string>({
-		placeholder: t("forms.search.fields.search"),
-	});
-
-	const [filteredBurgers, setFilteredBurgers] = useState<Burger[]>([]);
-	const $burgers = useGetBurgersQuery({
-		fetchPolicy: "no-cache",
-		onCompleted: ({burgers = []}) => {
-			setFilteredBurgers(burgers);
-		},
-	});
-
-	useEffect(() => {
-		let mounted = true;
-
-		if (mounted) {
-			const burgers: Burger[] = $burgers.data?.burgers || [];
-			setFilteredBurgers(burgers.filter(b => searchFields(search.value, [b.achternaam || "", b.voornamen || ""])));
-		}
-
-		return () => {
-			mounted = false;
-		};
-	}, [$burgers, search.value]);
+	const [search, setSearch] = useState<string>("");
+	const searchRef = useRef<HTMLInputElement>(null);
+	const $burgers = useGetBurgersQuery();
 
 	const onKeyDownOnSearch = (e) => {
 		if (e.key === "Escape") {
-			search.reset();
+			setSearch("");
 		}
 	};
 
 	const onClickResetSearch = () => {
-		search.reset();
-		search.ref.current!.focus();
+		setSearch("");
+		searchRef.current!.focus();
 	};
 
 	return (
-		<Queryable query={$burgers}>{({burgers = []}: {burgers: Burger[]}) => {
+		<Queryable query={$burgers}>{(data) => {
+			const burgers: Burger[] = [...data.burgers || []];
+			const filteredBurgers = burgers.filter(b => {
+				return [
+					searchFields(search, [
+						b.achternaam || "",
+						b.voornamen || "",
+						...(b.afspraken || []).flatMap(a => [
+							a.organisatie?.weergaveNaam || "",
+							a.organisatie?.kvkDetails?.naam || "",
+							...(a.zoektermen || [""]),
+						]),
+					]),
+					searchFields(search.replaceAll(" ", ""), [...(b.rekeningen || []).map(r => r.iban || "")]),
+				].some(t => t);
+			});
+
 			if (burgers.length === 0) {
 				return (
 					<DeadEndPage message={t("messages.burgers.addHint", {buttonLabel: t("actions.add")})}>
-						<Button size={"sm"} colorScheme={"primary"} variant={"solid"} leftIcon={<AddIcon />}
-							onClick={() => push(Routes.CreateBurger)}>{t("actions.add")}</Button>
+						<Button size={"sm"} colorScheme={"primary"} variant={"solid"} leftIcon={<AddIcon />} onClick={() => push(Routes.CreateBurger)}>{t("actions.add")}</Button>
 					</DeadEndPage>
 				);
 			}
@@ -68,11 +61,10 @@ const BurgerList = () => {
 						<InputLeftElement>
 							<SearchIcon color={"gray.300"} />
 						</InputLeftElement>
-						<Input type={"text"} {...search.bind} bg={"white"} onKeyDown={onKeyDownOnSearch} />
-						{search.value.length > 0 && (
+						<Input type={"text"} onChange={e => setSearch(e.target.value)} bg={"white"} onKeyDown={onKeyDownOnSearch} placeholder={t("forms.search.fields.search")} ref={searchRef} />
+						{search.length > 0 && (
 							<InputRightElement zIndex={0}>
-								<IconButton onClick={() => search.reset()} size={"xs"} variant={"link"} icon={<CloseIcon />} aria-label={t("actions.cancel")}
-									color={"gray.300"} />
+								<IconButton onClick={() => setSearch("")} size={"xs"} variant={"link"} icon={<CloseIcon />} aria-label={t("actions.cancel")} color={"gray.300"} />
 							</InputRightElement>
 						)}
 					</InputGroup>
@@ -82,7 +74,7 @@ const BurgerList = () => {
 							<Button size="sm" colorScheme="primary" onClick={onClickResetSearch}>{t("actions.clearSearch")}</Button>
 						</DeadEndPage>
 					) : (
-						<BurgerListView burgers={filteredBurgers} showAddButton={search.value.trim().length === 0} />
+						<BurgerListView burgers={filteredBurgers} showAddButton={search.trim().length === 0} />
 					)}
 				</Page>
 			);

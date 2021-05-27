@@ -62,6 +62,9 @@ const Rapportage = () => {
 										onChange={(value: Date) => {
 											if (value) {
 												startDate.setValue(d(value).format("L"));
+												if(d(endDate.value, "L").isBefore(d(value))){
+													endDate.setValue(d(value).format("L"));
+												}
 											}
 										}} customInput={(<Input {...startDate.bind} />)} />
 								</FormControl>
@@ -72,6 +75,9 @@ const Rapportage = () => {
 										onChange={(value: Date) => {
 											if (value) {
 												endDate.setValue(d(value).format("L"));
+												if(d(startDate.value, "L").isAfter(d(value))){
+													startDate.setValue(d(value).format("L"));
+												}
 											}
 										}} customInput={(<Input {...startDate.bind} />)} />
 								</FormControl>

@@ -355,7 +355,7 @@
         "confirmModalBody": "Weet je zeker dat je deze afspraak wil verwijderen? Je kunt ook een vervolgafspraak maken, beëindig dan eerst deze afspraak."
     },
     "endAfspraak": {
-        "successMessage": "Afspraak beëindigd per {{date}}.",
+        "successMessage": "Afspraak beëindigd op {{date}}.",
         "confirmModalTitle": "Afspraak beëindigen",
         "confirmModalBody": "Vanaf welke datum wordt deze afspraak beëindigd?"
     },

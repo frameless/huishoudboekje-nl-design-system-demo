@@ -12,7 +12,7 @@ const OrganisatieListView: React.FC<BoxProps & {organisaties: Organisatie[], sho
 	const {push} = useHistory();
 
 	return (
-		<Grid maxWidth={"100%"} gridTemplateColumns={["repeat(1, 1fr)", "repeat(2, 1fr)", "repeat(3, 1fr)"]} overflowX={"scroll"} gap={5}>
+		<Grid maxWidth={"100%"} gridTemplateColumns={["repeat(1, 1fr)", "repeat(2, 1fr)", "repeat(3, 1fr)"]} gap={5}>
 			{showAddButton && (
 				<Box>
 					<Button colorScheme={"primary"} borderStyle={"dashed"} variant={"outline"} leftIcon={<AddIcon />}
