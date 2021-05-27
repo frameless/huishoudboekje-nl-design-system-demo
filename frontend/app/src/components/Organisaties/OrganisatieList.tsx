@@ -43,7 +43,7 @@ const OrganisatieList = () => {
 
 			const filteredOrganisaties = organisaties.filter(o => {
 				return [
-					searchFields(search, [o.weergaveNaam || ""]),
+					searchFields(search, [o.weergaveNaam || "", o.kvkDetails?.naam || ""]),
 					searchFields(search.replaceAll(" ", ""), [...(o.rekeningen || []).map(r => r.iban || "")])
 				].some(t => t);
 			});
