@@ -6,7 +6,12 @@ import {CustomerStatementMessage} from "../../../generated/graphql";
 import d from "../../../utils/dayjs";
 import {truncateText} from "../../../utils/things";
 
-const CsmTableRow: React.FC<{csm: CustomerStatementMessage, onDelete: (id: number) => void}> = ({csm, onDelete}) => {
+type CsmTableRowProps = {
+	csm: CustomerStatementMessage,
+	onDelete?: (id: number) => void
+};
+
+const CsmTableRow: React.FC<CsmTableRowProps> = ({csm, onDelete}) => {
 	const {t} = useTranslation();
 	const [deleteConfirm, setDeleteConfirm] = useState<boolean>(false);
 
@@ -36,10 +41,10 @@ const CsmTableRow: React.FC<{csm: CustomerStatementMessage, onDelete: (id: numbe
 			</Td>
 			<Td style={{width: "100px", textAlign: "right"}}>
 				<IconButton variant={deleteConfirm ? "solid" : "ghost"} size={"xs"} icon={deleteConfirm ? <CheckIcon /> : <DeleteIcon />}
-					colorScheme={deleteConfirm ? "red" : "gray"}
-					aria-label={t("actions.delete")} onClick={onClickDeleteButton} />
+					colorScheme={deleteConfirm ? "red" : "gray"} aria-label={t("actions.delete")} onClick={onClickDeleteButton} />
 				{deleteConfirm && (
-					<IconButton variant={"solid"} size={"xs"} icon={<CloseIcon />} colorScheme={"gray"} ml={2} aria-label={t("actions.delete")} onClick={onClickDeleteCancel} />
+					<IconButton variant={"solid"} size={"xs"} icon={
+						<CloseIcon />} colorScheme={"gray"} ml={2} aria-label={t("actions.delete")} onClick={onClickDeleteCancel} />
 				)}
 			</Td>
 		</Tr>

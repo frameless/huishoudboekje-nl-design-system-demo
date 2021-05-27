@@ -1,111 +1,105 @@
 import {AddIcon} from "@chakra-ui/icons";
-import {Box, Button, Divider, Input, Stack} from "@chakra-ui/react";
-import React, {useRef, useState} from "react";
+import {Box, Button, FormLabel, Stack, Table, Tbody, Th, Thead, Tr, useDisclosure} from "@chakra-ui/react";
+import React from "react";
 import {useTranslation} from "react-i18next";
-import {CustomerStatementMessage, useCreateCustomerStatementMessageMutation, useGetCsmsQuery} from "../../../generated/graphql";
-import {useFeatureFlag} from "../../../utils/features";
+import {useDeleteCustomerStatementMessageMutation, useGetCsmsQuery} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import useToaster from "../../../utils/useToaster";
+import DeadEndPage from "../../DeadEndPage";
 import {FormLeft, FormRight} from "../../Layouts/Forms";
+import Page from "../../Layouts/Page";
 import Section from "../../Layouts/Section";
-import CsmListView from "./CsmListView";
+import CsmTableRow from "./CsmTableRow";
+import CsmUploadModal from "./CsmUploadModal";
 
 const CustomerStatementMessages = () => {
 	const {t} = useTranslation();
+	const {isOpen, onClose, onOpen} = useDisclosure();
 	const toast = useToaster();
-	const batchBankAfschriftenEnabled = useFeatureFlag("batch-bankafschriften");
-	const fileUploadInput = useRef<HTMLInputElement>(null);
-	const [busy, setBusy] = useState<boolean>(false);
 
 	const $customerStatementMessages = useGetCsmsQuery({
 		fetchPolicy: "no-cache",
 	});
-	const [createCSM, $createCSM] = useCreateCustomerStatementMessageMutation({
-		context: {
-			method: "fileUpload",
-		},
-		onCompleted: (options) => {
-			console.info("Done uploading", options.createCustomerStatementMessage?.customerStatementMessage?.filename);
-		},
-	});
 
-	const generateFileUpload = function* (files: FileList): Generator<Promise<unknown>> {
-		for (let i = 0; i < files.length; i++) {
-			yield new Promise(resolve => {
-				createCSM({
-					variables: {file: files[i]},
-				}).then(result => {
-					// Wait for the backend to finish
-					setTimeout(() => resolve(result), 5000);
-				});
+	const [deleteCustomerStatementMessage] = useDeleteCustomerStatementMessageMutation();
+
+	const onDelete = (id: number) => {
+		deleteCustomerStatementMessage({
+			variables: {id},
+		}).then(() => {
+			toast({
+				success: t("messages.customerStatementMessages.deleteSuccess"),
 			});
-		}
-	};
-
-	const onChangeFile = async (e: React.FormEvent<HTMLInputElement>) => {
-		const {currentTarget: {files}} = e;
-
-		setBusy(true);
-
-		if (files && files.length > 0) {
-			const uploads = generateFileUpload(files);
-
-			do {
-				const upload = uploads.next();
-
-				if (upload.done) {
-					break;
-				}
-
-				upload.value.then(() => {
-					toast({
-						success: t("messages.customerStatementMessages.createSuccess"),
-					});
-				}).catch(err => {
-					console.error(err);
-
-					let errorMessage = err.message;
-					if (err.message.includes("Incorrect file")) {
-						errorMessage = t("messages.customerStatementMessages.incorrectFileError");
-					}
-
-					toast({
-						error: errorMessage,
-					});
-				});
-			} while (true);
-
 			$customerStatementMessages.refetch();
-			setBusy(false);
-		}
+		}).catch(err => {
+			console.error(err);
+			toast({
+				error: err.message,
+			});
+		});
 	};
 
 	return (
-		<Stack spacing={5}>
-			<Section>
-				<Stack direction={["column", "row"]} spacing={5}>
-					<FormLeft title={t("forms.banking.sections.customerStatementMessages.title")} helperText={t("forms.banking.sections.customerStatementMessages.detailText")} />
-					<FormRight>
-						<Stack spacing={5}>
-							<Input type={"file"} id={"fileUpload"} onChange={onChangeFile} ref={fileUploadInput} hidden multiple={batchBankAfschriftenEnabled} />
-							<Box>
-								<Button colorScheme={"primary"} size={"sm"} leftIcon={<AddIcon />} isLoading={$createCSM.loading || busy}
-									onClick={() => fileUploadInput.current?.click()}>{t("actions.add")}</Button>
-							</Box>
-						</Stack>
+		<Page title={t("banking.customerStatementMessages.title")}>
+			{isOpen && (
+				<CsmUploadModal onClose={() => {
+					$customerStatementMessages.refetch();
+					onClose();
+				}} />
+			)}
+			<Queryable query={$customerStatementMessages}>{data => {
+				/* Sort CSMs so that the newest appears first */
+				const csms = [...data.customerStatementMessages].sort((a, b) => a.uploadDate <= b.uploadDate ? 1 : -1);
 
-						<Divider />
+				if (csms.length === 0) {
+					return (
+						<DeadEndPage message={t("messages.csms.addHint", {buttonLabel: t("actions.add")})}>
+							<Button colorScheme={"primary"} size={"sm"} leftIcon={<AddIcon />}
+								onClick={() => onOpen()}>{t("actions.add")}</Button>
+						</DeadEndPage>
+					);
+				}
 
-						<Queryable query={$customerStatementMessages}>{(data: {customerStatementMessages: CustomerStatementMessage[]}) => {
-							/* Sort CSMs so that the newest appears first */
-							const csms = [...data.customerStatementMessages].sort((a, b) => a.uploadDate <= b.uploadDate ? 1 : -1);
-							return (<CsmListView csms={csms} refresh={$customerStatementMessages.refetch} />);
-						}}
-						</Queryable>
-					</FormRight>
-				</Stack>
-			</Section>
-		</Stack>
+				return (
+					<Stack spacing={5}>
+						<Section>
+							<Stack direction={["column", "row"]} spacing={5}>
+								<FormLeft title={t("forms.banking.sections.customerStatementMessages.title")} helperText={t("forms.banking.sections.customerStatementMessages.detailText")} />
+								<FormRight>
+									<Box>
+										<Button colorScheme={"primary"} size={"sm"} leftIcon={<AddIcon />} onClick={() => onOpen()}>{t("actions.add")}</Button>
+									</Box>
+
+									{csms.length > 0 && (
+										<Table variant={"noLeftPadding"}>
+											<Thead>
+												<Tr>
+													<Th>
+														<FormLabel>{t("forms.banking.sections.customerStatementMessages.filename")}</FormLabel>
+													</Th>
+													<Th>
+														<FormLabel>{t("forms.common.fields.time")}</FormLabel>
+													</Th>
+													<Th isNumeric>
+														<FormLabel>{t("actions.actions")}</FormLabel>
+													</Th>
+												</Tr>
+											</Thead>
+											<Tbody>
+												{csms.map(csm => (
+													<CsmTableRow key={csm.id} csm={csm} onDelete={onDelete} />
+												))}
+											</Tbody>
+										</Table>
+									)}
+								</FormRight>
+							</Stack>
+						</Section>
+					</Stack>
+				);
+			}}
+			</Queryable>
+		</Page>
 	);
 };
 
