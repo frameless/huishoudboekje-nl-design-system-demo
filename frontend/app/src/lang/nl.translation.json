@@ -18,9 +18,10 @@
         "zoektermLengthError": "Zoekterm moet minimaal één teken lang zijn.",
         "deleteAfspraakZoektermSuccess": "Zoekterm is verwijderd.",
         "customerStatementMessages": {
-            "deleteSuccess": "Het bankafschrift is succesvol verwijderd.",
-            "createSuccess": "Het bankafschrift is geïmporteerd en de transacties zijn succesvol ingelezen.",
-            "incorrectFileError": "Dit bestand voldoet niet aan het formaat SWIFT MT940. Het is niet gelukt om het te importeren. Controleer het bestand en probeer het nog een keer."
+            "deleteSuccess": "Het bankafschrift is succesvol verwijderd."
+        },
+        "csms": {
+            "addHint": "Voeg bankafschriften toe door te klikken op de knop {{buttonLabel}}."
         },
         "exports": {
             "createSuccessMessage": "Exportbestand succesvol aangemaakt."
@@ -82,6 +83,8 @@
         "end": "Beëindigen",
         "add": "Toevoegen",
         "newBetaalinstructie": "Nieuwe betaalinstructie instellen",
+        "selectFile": "Selecteer een of meerdere bestanden",
+        "close": "Sluiten",
         "actions": "Acties",
         "export": "Exporteren",
         "download": "Downloaden",
@@ -153,9 +156,9 @@
         "banking": {
             "sections": {
                 "customerStatementMessages": {
-                    "filename": "Bestandsnaam",
                     "title": "Bankafschriften",
-                    "detailText": "Hier is het mogelijk om bij- en afschrijvingen uit een MT940-bestand te importeren."
+                    "detailText": "Hier is het mogelijk om bij- en afschrijvingen uit een MT940-bestand te importeren.",
+                    "filename": "Bestandsnaam"
                 },
                 "transactions": {
                     "title": "Transacties"
@@ -340,7 +343,6 @@
         },
         "followUp": {
             "zoektermenHelperText": "De volgende zoektermen worden overgenomen bij de vervolgafspraak:",
-            "zoektermenWarningHelperText": "Let op: Voor een vervolgafspraak moeten nieuwe zoektermen worden ingesteld.",
             "betaalinstructieHelperText": "Let op: voor een vervolgafspraak moet een nieuwe betaalinstructie worden ingesteld."
         },
         "tegenpartij": "Tegenpartij",
@@ -366,16 +368,22 @@
     "errors": {
         "invalidDateError": "Vul een geldige datum in."
     },
-    "transactions": {
-        "amount": "Bedrag",
-        "beneficiaryAccount": "Tegenrekening",
-        "description": "Omschrijving"
+    "uploadCsmModal": {
+        "title": "Bankafschrift toevoegen"
     },
     "banking": {
+        "customerStatementMessages": {
+            "title": "Bankafschriften"
+        },
         "exports": {
             "title": "Betaalinstructies",
             "helperText": "Exporteer een bestand met betaalinstructies voor verwerking in een bankierenapplicatie."
         }
+    },
+    "transactions": {
+        "amount": "Bedrag",
+        "beneficiaryAccount": "Tegenrekening",
+        "description": "Omschrijving"
     },
     "van": "Van",
     "tot": "Tot",
