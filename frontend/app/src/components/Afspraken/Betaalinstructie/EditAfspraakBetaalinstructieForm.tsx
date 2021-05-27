@@ -25,7 +25,7 @@ const EditAfspraakBetaalinstructieForm: React.FC<EditAfspraakBetaalinstructiePro
 	const reactSelectStyles = useReactSelectStyles();
 	const toast = useToaster();
 
-	const [isPeriodiek, setPeriodiek] = useState<boolean | undefined>(undefined);
+	const [isPeriodiek, setPeriodiek] = useState<boolean>(true);
 	const [repeatType, setRepeatType] = useState<RepeatType | undefined>(undefined);
 	const [data, {setForm, updateForm, reset}] = useForm<string, any>({});
 
