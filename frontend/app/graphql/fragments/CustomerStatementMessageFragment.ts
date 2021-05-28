@@ -14,9 +14,6 @@ export const CustomerStatementMessageFragment = gql`
         relatedReference
         sequenceNumber
         transactionReferenceNumber
-        bankTransactions{
-            ...BankTransaction
-        }
     }
     ${TransactieFragment}
 `;
