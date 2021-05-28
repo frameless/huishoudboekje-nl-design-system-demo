@@ -118,7 +118,7 @@ async def test_automatisch_boeken_no_csm_success_single(test_request_context, mo
         assert journaalposten_post.last_request.json() == [
             {"afspraak_id": 11, "grootboekrekening_id": "test", "is_automatisch_geboekt": True, "transaction_id": 1}]
         assert transactions_post.called_once
-        assert transactions_post.last_request.json() == [{"id": 1, "is_geboekt": True}]
+        assert transactions_post.last_request.json() == {"id": 1, "is_geboekt": True}
 
         assert transactions_is_geboekt.called_once
         assert transactions_by_id.called_once
@@ -166,7 +166,8 @@ async def test_automatisch_boeken_no_csm_success_multiple(test_request_context, 
 
         journaalposten_post = mock.post(f"{settings.HHB_SERVICES_URL}/journaalposten/", json=post_echo_multi(30))
         log_post = mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json=post_echo_single(50))
-        transactions_post = mock.post(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/1,2", json=post_echo)
+        transactions_post = mock.post(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/1", json=post_echo)
+        transactions_post2 = mock.post(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/2", json=post_echo)
 
         result = await automatisch_boeken()
 
@@ -179,7 +180,9 @@ async def test_automatisch_boeken_no_csm_success_multiple(test_request_context, 
             {"afspraak_id": 12, "grootboekrekening_id": "test", "is_automatisch_geboekt": True, "transaction_id": 2},
         ]
         assert transactions_post.call_count == 1
-        assert transactions_post.last_request.json() == [{"id": 1, "is_geboekt": True}, {"id": 2, "is_geboekt": True}]
+        assert transactions_post.last_request.json() == {"id": 1, "is_geboekt": True}
+        assert transactions_post2.call_count == 1
+        assert transactions_post2.last_request.json() == {"id": 2, "is_geboekt": True}
 
         assert transactions_is_geboekt.called_once
         assert transactions_by_id.called_once
@@ -235,7 +238,7 @@ async def test_automatisch_boeken_csm_success_multiple(test_request_context, moc
             {"afspraak_id": 11, "grootboekrekening_id": "test", "is_automatisch_geboekt": True, "transaction_id": 1},
         ]
         assert transactions_post.call_count == 1
-        assert transactions_post.last_request.json() == [{"id": 1, "is_geboekt": True}]
+        assert transactions_post.last_request.json() == {"id": 1, "is_geboekt": True}
 
         assert bank_transactions_by_csm.called_once
         assert transactions_by_id.called_once
@@ -349,7 +352,8 @@ async def test_automatisch_boeken_no_csm_multiple_suggesties(test_request_contex
 
         journaalposten_post = mock.post(f"{settings.HHB_SERVICES_URL}/journaalposten/", json=post_echo_multi(30))
         log_post = mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json=post_echo_single(50))
-        transactions_post = mock.post(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/1,2", json=post_echo)
+        transactions_post = mock.post(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/1", json=post_echo)
+        transactions_post2 = mock.post(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/2", json=post_echo)
 
         result = await automatisch_boeken()
 
@@ -362,7 +366,9 @@ async def test_automatisch_boeken_no_csm_multiple_suggesties(test_request_contex
             {"afspraak_id": 12, "grootboekrekening_id": "test", "is_automatisch_geboekt": True, "transaction_id": 2},
         ]
         assert transactions_post.call_count == 1
-        assert transactions_post.last_request.json() == [{"id": 1, "is_geboekt": True}, {"id": 2, "is_geboekt": True}]
+        assert transactions_post.last_request.json() == {"id": 1, "is_geboekt": True}
+        assert transactions_post2.call_count == 1
+        assert transactions_post2.last_request.json() == {"id": 2, "is_geboekt": True}
 
         assert transactions_is_geboekt.called_once
         assert transactions_by_id.called_once

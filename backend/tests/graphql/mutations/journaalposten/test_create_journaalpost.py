@@ -378,5 +378,5 @@ mutation test($input: [CreateJournaalpostAfspraakInput!]!) {
         assert adapters["afspraken"].called_once
         assert adapters["journaalposten"].called_once
         assert adapters["transacties"].called_once
-        assert adapters["transacties_update"].called_once
+        assert adapters["transacties_update"].call_count == 2
         # assert adapters["grootboekrekeningen"].called
