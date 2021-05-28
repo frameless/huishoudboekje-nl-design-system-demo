@@ -1051,10 +1051,7 @@ export type BurgerFragment = (
   & { rekeningen?: Maybe<Array<Maybe<RekeningFragment>>>, afspraken?: Maybe<Array<Maybe<AfspraakFragment>>> }
 );
 
-export type CustomerStatementMessageFragment = (
-  Pick<CustomerStatementMessage, 'id' | 'filename' | 'uploadDate' | 'accountIdentification' | 'closingAvailableFunds' | 'closingBalance' | 'forwardAvailableBalance' | 'openingBalance' | 'relatedReference' | 'sequenceNumber' | 'transactionReferenceNumber'>
-  & { bankTransactions?: Maybe<Array<Maybe<BankTransactionFragment>>> }
-);
+export type CustomerStatementMessageFragment = Pick<CustomerStatementMessage, 'id' | 'filename' | 'uploadDate' | 'accountIdentification' | 'closingAvailableFunds' | 'closingBalance' | 'forwardAvailableBalance' | 'openingBalance' | 'relatedReference' | 'sequenceNumber' | 'transactionReferenceNumber'>;
 
 export type GebruikerFragment = Pick<Gebruiker, 'email'>;
 
@@ -1676,21 +1673,6 @@ export const BurgerFragmentDoc = gql`
 }
     ${RekeningFragmentDoc}
 ${AfspraakFragmentDoc}`;
-export const BankTransactionFragmentDoc = gql`
-    fragment BankTransaction on BankTransaction {
-  id
-  informationToAccountOwner
-  statementLine
-  bedrag
-  isCredit
-  tegenRekeningIban
-  tegenRekening {
-    iban
-    rekeninghouder
-  }
-  transactieDatum
-}
-    `;
 export const CustomerStatementMessageFragmentDoc = gql`
     fragment CustomerStatementMessage on CustomerStatementMessage {
   id
@@ -1704,11 +1686,8 @@ export const CustomerStatementMessageFragmentDoc = gql`
   relatedReference
   sequenceNumber
   transactionReferenceNumber
-  bankTransactions {
-    ...BankTransaction
-  }
 }
-    ${BankTransactionFragmentDoc}`;
+    `;
 export const GebruikerFragmentDoc = gql`
     fragment Gebruiker on Gebruiker {
   email
@@ -1789,6 +1768,21 @@ export const OrganisatieFragmentDoc = gql`
 }
     ${RekeningFragmentDoc}
 ${KvkFragmentDoc}`;
+export const BankTransactionFragmentDoc = gql`
+    fragment BankTransaction on BankTransaction {
+  id
+  informationToAccountOwner
+  statementLine
+  bedrag
+  isCredit
+  tegenRekeningIban
+  tegenRekening {
+    iban
+    rekeninghouder
+  }
+  transactieDatum
+}
+    `;
 export const AddAfspraakZoektermDocument = gql`
     mutation addAfspraakZoekterm($afspraakId: Int!, $zoekterm: String!) {
   addAfspraakZoekterm(afspraakId: $afspraakId, zoekterm: $zoekterm) {
