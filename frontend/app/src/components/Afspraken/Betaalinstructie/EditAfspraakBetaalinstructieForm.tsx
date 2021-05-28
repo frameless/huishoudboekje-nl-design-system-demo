@@ -39,7 +39,7 @@ const EditAfspraakBetaalinstructieForm: React.FC<EditAfspraakBetaalinstructiePro
 			endDate: data.endDate ? d(data.endDate, "YYYY-MM-DD").isValid() : true,
 			byDay: (data.byDay || []).length > 0,
 			byMonth: (data.byMonth || []).length > 0,
-			byMonthDay: data.byMonthDay && parseInt(data.byMonthDay) >= 1 && parseInt(data.byMonthDay) <= 28,
+			byMonthDay: data.byMonthDay && parseInt(data.byMonthDay) >= 1 && parseInt(data.byMonthDay) <= (isPeriodiek ? 28 : 31),
 		};
 
 		return validators[fieldName] || false;
