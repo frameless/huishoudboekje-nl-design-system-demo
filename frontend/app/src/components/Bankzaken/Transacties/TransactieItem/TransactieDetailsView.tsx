@@ -11,7 +11,7 @@ const TransactieDetailsView: React.FC<StackProps & {transaction: BankTransaction
 
 	return (
 		<Stack spacing={5} justifyContent={"space-between"} {...props}>
-			<Heading size={"sm"}>{t("transaction")}</Heading>
+			<Heading size={"sm"}>{t("transaction")} #{bt.id}</Heading>
 
 			<Stack direction={"row"} spacing={5}>
 				<Box flex={1}>
