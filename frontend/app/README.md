@@ -7,35 +7,29 @@ The frontend component requires the latest version of Node.js.
 - `npm start` runs the application in development mode.
 - `npm run theme {yourThemeName}` will install `../theme/{yourThemeName}` into `public/theme`.
 
-### Review App
+Please note that for ESLint to work, you will need to put the following lines in your `.env` file:
+
+```bash
+EXTEND_ESLINT=true
+
+# -= OPTIONAL BELOW =-
+
+# This prevents your browser window from opening after starting the app.
+BROWSER=none 
+
+# Fast refresh doesn't really work that well, so advice is to disable it.
+FAST_REFRESH=false
+
+# If you want your app to talk to a backend on another host (for example a review branch 
+# or your local running backend), set this host (and port) here.
+PROXY=https://hhb-518.nlx.reviews
+
+# Authorization through OIDC doesn't work in dev mode, we use a JsonWebToken to authorize directly against the proxy.
+PROXY_AUTHORIZATION={YOUR_JWT_HERE}
+```
+
+### Authorization
 
 Review apps can be used as backend instead of a local setup. The url to be used can be found on the MR page as the `View App` button.
-
 The authentication can be done using a jwt token which can be obtained from the `/api/me` endpoint after succesful login.
-
-```shell script
-PROXY_AUTHORIZATION="Authorization: Bearer <token>" \
-PROXY=https://hhb-<feature-slug>.nlx.reviews npm start
-```
-
-The test environment can also be used
-
-```shell script
-PROXY_AUTHORIZATION="Authorization: Bearer <token>" \
-PROXY=https://test.huishoudboekje.demoground.nl npm start
-```
-
-
-Alternatively the token can be generated using the SESSION_SECRET variable from GitLab for the environment using
-
-```shell
-PROXY_AUTHORIZATION="Authorization: Bearer $(npx --quiet --package '@clarketm/jwt-cli' \
-    jwt sign \
-    --expiresIn "1 hour" \
-    --subject "cypress@huishoudboekje.nlx.reviews" \
-    --issuer "https://huishoudboekje.nlx.reviews" \
-    --audience "https://huishoudboekje.nlx.reviews" \
-    --jwtid "$(LC_CTYPE=C tr -dc 'A-F0-9' < /dev/urandom | head -c32)" \
-    --noCopy \
-    "{}" "${SESSION_SECRET:-test}")"
-```
+Just use that as the value of `PROXY_AUTHORIZATION`.
