@@ -3,6 +3,7 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {Burger} from "../../../generated/graphql";
 import d from "../../../utils/dayjs";
+import {getBurgerHhbId} from "../../../utils/things";
 import {FormLeft, FormRight} from "../../Layouts/Forms";
 
 const BurgerProfileView: React.FC<StackProps & {burger: Burger}> = ({burger, ...props}) => {
@@ -13,6 +14,10 @@ const BurgerProfileView: React.FC<StackProps & {burger: Burger}> = ({burger, ...
 			<Stack spacing={2} direction={["column", null, "row"]} {...props}>
 				<FormLeft title={t("forms.burgers.sections.personal.title")} helperText={t("forms.burgers.sections.personal.detailText")} />
 				<FormRight>
+					<Stack spacing={1} flex={1}>
+						<FormLabel>{t("forms.burgers.fields.hhbId")}</FormLabel>
+						<Text>{getBurgerHhbId(burger)}</Text>
+					</Stack>
 					<Stack spacing={2} mb={1} direction={["column", "row"]}>
 						<Stack direction={["column", "row"]} spacing={1} flex={1}>
 							<Stack spacing={1} flex={1}>

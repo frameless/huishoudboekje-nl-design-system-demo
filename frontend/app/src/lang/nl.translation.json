@@ -1,6 +1,5 @@
 {
     "messages": {
-        "backendError": "Er is een systeemfout opgetreden. Neem contact op met de applicatiebeheerder voor ondersteuning.",
         "login": {
             "welcome": "Welkom bij het Huishoudboekje van {{tenantName}}.",
             "clickHereToContinue": "Klik hieronder op inloggen om te beginnen."
@@ -72,14 +71,8 @@
         },
         "rekening": {
             "updateSuccess": "Gegevens succesvol gewijzigd."
-        }
-    },
-    "statuspage": {
-        "title": "Status",
-        "services": {
-            "title": "Services",
-            "helperText": "Bekijk hier of alle services beschikbaar zijn."
-        }
+        },
+        "backendError": "Er is een systeemfout opgetreden. Neem contact op met de applicatiebeheerder voor ondersteuning."
     },
     "actions": {
         "login": "Inloggen",
@@ -207,6 +200,7 @@
                 }
             },
             "fields": {
+                "hhbId": "Identificatienummer",
                 "initials": "Initialen",
                 "firstName": "Voornamen",
                 "lastName": "Achternaam",
@@ -556,6 +550,13 @@
         "period": "Periode",
         "month": "maand",
         "month_plural": "maanden"
+    },
+    "statuspage": {
+        "title": "Status",
+        "services": {
+            "title": "Services",
+            "helperText": "Bekijk hier of alle services beschikbaar zijn."
+        }
     },
     "months": {
         "jan": "januari",
