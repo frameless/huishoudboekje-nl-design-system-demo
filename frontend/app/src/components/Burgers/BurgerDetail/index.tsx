@@ -1,5 +1,5 @@
 import {ChevronDownIcon} from "@chakra-ui/icons";
-import {Button, IconButton, Link, Menu, MenuButton, MenuItem, MenuList} from "@chakra-ui/react";
+import {Button, Divider, IconButton, Link, Menu, MenuButton, MenuItem, MenuList} from "@chakra-ui/react";
 import React from "react";
 import {useToggle} from "react-grapple";
 import {useTranslation} from "react-i18next";
@@ -81,6 +81,8 @@ const BurgerDetail = () => {
 						<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} data-cy={"actionsMenuButton"} />
 						<MenuList>
 							<Link href={Routes.BrievenExport(parseInt(id))} target={"_blank"}><MenuItem>{t("actions.brievenExport")}</MenuItem></Link>
+							<NavLink to={Routes.RapportageBurger([parseInt(id)])}><MenuItem>{t("sidebar.rapportage")}</MenuItem></NavLink>
+							<Divider />
 							<NavLink to={Routes.EditBurger(parseInt(id))}><MenuItem>{t("actions.edit")}</MenuItem></NavLink>
 							<MenuItem onClick={onClickDeleteMenuItem}>{t("actions.delete")}</MenuItem>
 						</MenuList>
