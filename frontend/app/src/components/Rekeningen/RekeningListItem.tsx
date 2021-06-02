@@ -16,11 +16,11 @@ import {
 	Tooltip,
 	Tr,
 } from "@chakra-ui/react";
-import React, {useRef} from "react";
+import React, {useEffect, useRef} from "react";
 import {useInput, useToggle} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {Rekening, useUpdateRekeningMutation} from "../../generated/graphql";
-import {formatIBAN} from "../../utils/things";
+import {formatIBAN, truncateText} from "../../utils/things";
 import useToaster from "../../utils/useToaster";
 import PrettyIban from "../Layouts/PrettyIban";
 
@@ -68,6 +68,16 @@ const RekeningListItem: React.FC<RekeningListItemProps> = ({rekening, onDelete, 
 		});
 	};
 
+	const editablePreviewRef = useRef<HTMLSpanElement>(null);
+
+	/* Truncate the length of the text if EditablePreview's value gets too long. */
+	useEffect(() => {
+		if (editablePreviewRef.current) {
+			editablePreviewRef.current.innerText = truncateText(editablePreviewRef.current.innerText, 50);
+		}
+	});
+
+
 	if (!rekening) {
 		return null;
 	}
@@ -91,7 +101,7 @@ const RekeningListItem: React.FC<RekeningListItemProps> = ({rekening, onDelete, 
 			<Td>
 				<Editable defaultValue={(rekening.rekeninghouder || "").length > 0 ? rekening.rekeninghouder : t("unknown")} flex={1} submitOnBlur={true} onSubmit={onSubmit}>
 					<Tooltip label={t("actions.clickToEdit")} placement={"right"}>
-						<EditablePreview />
+						<EditablePreview ref={editablePreviewRef} />
 					</Tooltip>
 					<EditableInput {...rekeninghouder.bind} name={"rekeningId"} id={"rekeningId"} />
 				</Editable>
