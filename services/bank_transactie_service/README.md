@@ -4,19 +4,35 @@ This service contains the functionality needed to access data from banktransacti
  
 ## Setup
 
-- Python environment
-    ```shell script
+- Install dependencies
+    ```shell
     pip install -r requirements.txt
     ```
 
-- Postgres
-  > for macOS you can use [Postgres.app](https://postgresapp.com/)
+- Put in `.envrc`:
+    ```shell
+    export PATH=/Applications/Postgres.app/Contents/Versions/13/bin:$PATH
+    export FLASK_APP="bank_transactie_service.app"
+    export FLASK_RUN_PORT="8002"
+    export FLASK_ENV="development"
+    export HHB_SECRET="local-secret"
+    export TRANSACTIE_DATABASE_URL="postgresql://transactieservice:transactieservice@localhost/transactieservice"
+    export APP_SETTINGS="bank_transactie_service.config.DevelopmentConfig"
     ```
-    PATH=/Applications/Postgres.app/Contents/Versions/13/bin:$PATH
+
+- setup db (make sure you have a PostgreSQL database up and running. See [root README](../../README.md) on how to do this)
+    ```shell
     createuser --echo --login --host localhost --username postgres transactieservice
     createdb --echo --owner transactieservice --host localhost --username postgres transactieservice
     psql --host localhost --username postgres --dbname postgres --command "ALTER USER transactieservice WITH ENCRYPTED PASSWORD 'transactieservice';"
+    python manage.py db upgrade
     ```
+
+- run app
+    ```shell script
+    flask run
+    ```
+
 
 ## Project Layout
 
@@ -28,11 +44,6 @@ Contains ORM models for the Transaction Service
 #### migrations
 Database migration schema
 
-##### Initial db setup
-```shell script
-export TRANSACTIE_DATABASE_URL="postgresql://transactieservice:transactieservice@localhost/transactieservice"
-python manage.py db upgrade
-```
 ##### Create new migration
 ```shell script
 python manage.py db migrate
@@ -43,19 +54,3 @@ python manage.py db migrate
 
 #### bank_transactie_service
 [API documentation](docs/openapi.yaml)
-
-Prerequisites: \
-Put in `.envrc`:
-```shell script
-export FLASK_APP="bank_transactie_service.app"
-export FLASK_RUN_PORT="8002"
-export FLASK_ENV="development"
-export HHB_SECRET="local-secret"
-export TRANSACTIE_DATABASE_URL="postgresql://transactieservice:transactieservice@localhost/transactieservice"
-export APP_SETTINGS="bank_transactie_service.config.DevelopmentConfig"
-```
-Run app:
-```shell script
-flask run
-```
-

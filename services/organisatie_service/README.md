@@ -13,10 +13,10 @@ This service contains the functionality needed to access data that belongs to th
     ```shell
     export PATH=/Applications/Postgres.app/Contents/Versions/13/bin:$PATH
     export FLASK_APP="organisatie_service.app"
-    export FLASK_RUN_PORT="5001"
+    export FLASK_RUN_PORT="8001"
     export FLASK_ENV="development"
     export HHB_SECRET="local-secret"
-    export ORGANISATIE_DATABASE_URL="postgresql://huishoudboekjeservice:huishoudboekjeservice@localhost/huishoudboekjeservice"
+    export ORGANISATIE_DATABASE_URL="postgresql://organisatieservice:organisatieservice@localhost/organisatieservice"
     export APP_SETTINGS="organisatie_service.config.DevelopmentConfig"
     ```
 
@@ -54,19 +54,3 @@ python manage.py db migrate
 
 #### organisatie_service
 [API documentation](docs/openapi.yaml)
-
-Prerequisites: \
-Put in `.envrc`:
-```shell script
-export FLASK_APP="organisatie_service.app"
-export FLASK_RUN_PORT="5001"
-export FLASK_ENV="development"
-export HHB_SECRET="local-secret"
-export ORGANISATIE_DATABASE_URL="postgresql://huishoudboekjeservice:huishoudboekjeservice@localhost/huishoudboekjeservice"
-export APP_SETTINGS="organisatie_service.config.DevelopmentConfig"
-```
-Run app:
-```shell script
-flask run
-```
-
