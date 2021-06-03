@@ -28,23 +28,24 @@ Contains ORM models for the Transaction Service
 #### migrations
 Database migration schema
 
+##### Initial db setup
+```shell script
+export TRANSACTIE_DATABASE_URL="postgresql://transactieservice:transactieservice@localhost/transactieservice"
+python manage.py db upgrade
+```
 ##### Create new migration
 ```shell script
 python manage.py db migrate
 ```
 
-##### Apply migrations on database
-```shell script
-export TRANSACTIE_DATABASE_URL="postgresql://transactieservice:transactieservice@localhost/transactieservice"
-python manage.py db upgrade
-```
+
 ### Layer 2 (services)
 
 #### bank_transactie_service
 [API documentation](docs/openapi.yaml)
 
-Prerequisites:
-
+Prerequisites: \
+Put in `.envrc`:
 ```shell script
 export FLASK_APP="bank_transactie_service.app"
 export FLASK_RUN_PORT="8002"
@@ -52,7 +53,9 @@ export FLASK_ENV="development"
 export HHB_SECRET="local-secret"
 export TRANSACTIE_DATABASE_URL="postgresql://transactieservice:transactieservice@localhost/transactieservice"
 export APP_SETTINGS="bank_transactie_service.config.DevelopmentConfig"
-
+```
+Run app:
+```shell script
 flask run
 ```
 

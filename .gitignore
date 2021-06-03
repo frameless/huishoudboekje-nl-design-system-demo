@@ -27,3 +27,5 @@ helm/repo
 helm/**/*.tgz
 helm/charts/**/theme
 environment.env
+
+.envrc
