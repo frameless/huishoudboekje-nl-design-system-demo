@@ -3,6 +3,7 @@ import React, {useState} from "react";
 import DatePicker from "react-datepicker";
 import {useInput} from "react-grapple";
 import {useTranslation} from "react-i18next";
+import {useLocation} from "react-router-dom";
 import Select from "react-select";
 import {Burger, Rubriek, useGetReportingDataQuery} from "../../generated/graphql";
 import Transaction from "../../models/Transaction";
@@ -22,6 +23,7 @@ import Saldo from "./Saldo";
 const Rapportage = () => {
 	const {t} = useTranslation();
 	const reactSelectStyles = useReactSelectStyles();
+	const {search: queryParams} = useLocation();
 
 	const $data = useGetReportingDataQuery({
 		fetchPolicy: "no-cache",
@@ -41,7 +43,7 @@ const Rapportage = () => {
 		[Granularity.Monthly]: t("granularity.monthly"),
 	};
 
-	const [filterBurgerIds, setFilterBurgerIds] = useState<number[]>([]);
+	const [filterBurgerIds, setFilterBurgerIds] = useState<number[]>(new URLSearchParams(queryParams).get("burgerId")?.split(",").map(p => parseInt(p)) || []);
 	const [filterRubriekIds, setFilterRubriekIds] = useState<number[]>([]);
 	const onSelectBurger = (value) => setFilterBurgerIds(value ? value.map(v => v.value) : []);
 	const onSelectRubriek = (value) => setFilterRubriekIds(value ? value.map(v => v.value) : []);
@@ -58,28 +60,28 @@ const Rapportage = () => {
 								<FormControl as={Stack} flex={1} justifyContent={"flex-end"}>
 									<FormLabel>{t("forms.common.fields.startDate")}</FormLabel>
 									<DatePicker selected={d(startDate.value, "L").isValid() ? d(startDate.value, "L").toDate() : null}
-										dateFormat={"dd-MM-yyyy"}
-										onChange={(value: Date) => {
-											if (value) {
-												startDate.setValue(d(value).format("L"));
-												if(d(endDate.value, "L").isBefore(d(value))){
-													endDate.setValue(d(value).format("L"));
-												}
-											}
-										}} customInput={(<Input {...startDate.bind} />)} />
+												dateFormat={"dd-MM-yyyy"}
+												onChange={(value: Date) => {
+													if (value) {
+														startDate.setValue(d(value).format("L"));
+														if (d(endDate.value, "L").isBefore(d(value))) {
+															endDate.setValue(d(value).format("L"));
+														}
+													}
+												}} customInput={(<Input {...startDate.bind} />)} />
 								</FormControl>
 								<FormControl as={Stack} flex={1}>
 									<FormLabel>{t("forms.common.fields.endDate")}</FormLabel>
 									<DatePicker selected={d(endDate.value, "L").isValid() ? d(endDate.value, "L").toDate() : null}
-										dateFormat={"dd-MM-yyyy"}
-										onChange={(value: Date) => {
-											if (value) {
-												endDate.setValue(d(value).format("L"));
-												if(d(startDate.value, "L").isAfter(d(value))){
-													startDate.setValue(d(value).format("L"));
-												}
-											}
-										}} customInput={(<Input {...startDate.bind} />)} />
+												dateFormat={"dd-MM-yyyy"}
+												onChange={(value: Date) => {
+													if (value) {
+														endDate.setValue(d(value).format("L"));
+														if (d(startDate.value, "L").isAfter(d(value))) {
+															startDate.setValue(d(value).format("L"));
+														}
+													}
+												}} customInput={(<Input {...startDate.bind} />)} />
 								</FormControl>
 							</Stack>
 
@@ -88,12 +90,13 @@ const Rapportage = () => {
 									<FormLabel>{t("charts.filterBurgers")}</FormLabel>
 									<Queryable query={$data} children={data => {
 										const burgers: Burger[] = data.burgers || [];
+										const value = burgers.filter(b => filterBurgerIds.includes(b.id!)).map(b => ({key: b.id, value: b.id, label: formatBurgerName(b)}));
 										return (
 											<Select onChange={onSelectBurger} options={burgers.map(b => ({
 												key: b.id,
 												value: b.id,
 												label: formatBurgerName(b),
-											}))} styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllBurgers")} />
+											}))} styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllBurgers")} value={value} />
 										);
 									}} />
 								</FormControl>

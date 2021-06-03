@@ -50,6 +50,7 @@ const Routes = {
 	Overschrijvingen: `/${RouteNames.bankzaken}/${RouteNames.overschrijvingen}/${RouteNames.export}`,
 	Configuratie: `/${RouteNames.configuratie}`,
 	Rapportage: `/${RouteNames.rapportage}`,
+	RapportageBurger: (burgerIds: number[]) => `/${RouteNames.rapportage}?burgerId=${burgerIds.join(",")}`,
 	Gebeurtenissen: `/${RouteNames.gebeurtenissen}`,
 
 	Export: (id: number) => `/api/export/${id}`,
