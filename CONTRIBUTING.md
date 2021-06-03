@@ -27,14 +27,16 @@ If you are a developer on the team, you can directly push your branch to the rep
 If you're working on a specific issue, the name of your branch should be the number of the issue.
 > If you're working on [this issue](https://gitlab.com/commonground/huishoudboekje/app-new/-/issues/469), you're working on branch `469`.
 
-If your work is not related to a specific issue, give your branch a clear name, but keep it as short a possible. 
+If your work is not related to a specific issue, give your branch a clear name, but keep it as short as possible. 
 For example, if you're working on design changes, use `design` as your branch name.
 
 > The name of your branch will be used to spin up a review app on our Kubernetes cluster. 
 > The URL to that review app will be `https://hhb-{branch-name}.nlx.reviews`.
 
+## Merging your changes
+
 When ready, create a [Merge Request](https://gitlab.com/commonground/huishoudboekje/app-new/-/merge_requests) and ask for a review.
-Please describe your changes in the description, to make reviewing easier.
+Please describe your changes in the description, to make reviewing easier. Hint: use the title of the issue that your MR is related to as the title of your MR!
 
 After approval, if you'd like to merge your branch, always merge **into** `develop`. 
 If you're a few commits behind `develop`, please don't merge `develop` into your branch, pull and rebase onto `develop` instead. 
@@ -45,15 +47,19 @@ Pushing directly to `develop` is disabled. You can force-push to your own branch
 ## Branches and deployment
 
 We use a DTRAP setup (Develop, Test, Review, Acceptance, Production), linked to specific branches.
-When you push, a Gitlab CI will automatically deploy a new or update an existing environment.
+When you push, Gitlab CI will automatically deploy a new environment or update an existing one.
 
 | Branch      | Environment       | URL                                       |
 |-------------|-------------------|-------------------------------------------|
 | your-branch | Review            | https://hhb-your-branch.nlx.reviews       |
 | feature/420 | Review            | https://hhb-feature-420.nlx.reviews       |
+| 999         | Review            | https://hhb-999.nlx.reviews               |
 | develop     | Test              | https://test.huishoudboekje.demoground.nl |
 | acceptance  | Acceptance        | https://acc.huishoudboekje.demoground.nl  |
 | master      | Production (Demo) | https://huishoudboekje.demoground.nl      |
+
+You might have noticed that the `Development` environment doesn't have a URL that it is deployed to. 
+That's right, because it should be running on your own local machine!
 
 # License
 
