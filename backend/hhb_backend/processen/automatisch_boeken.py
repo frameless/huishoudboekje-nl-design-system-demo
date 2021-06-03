@@ -1,3 +1,4 @@
+import re
 import logging
 from collections import Counter
 from datetime import date
@@ -6,7 +7,7 @@ import hhb_backend.graphql as graphql
 import hhb_backend.graphql.dataloaders as dataloaders
 import hhb_backend.graphql.models.bank_transaction as bank_transaction
 import hhb_backend.graphql.models.afspraak as afspraak
-import re
+from hhb_backend.graphql.utils.dates import afspraken_intersect
 
 
 async def automatisch_boeken(customer_statement_message_id: int = None):
@@ -130,8 +131,12 @@ async def find_matching_afspraken_by_afspraak(main_afspraak):
     for afspraak in afspraken:
         if afspraak["zoektermen"]:
             zoektermen_afspraak = ' '.join(afspraak["zoektermen"])
-            if (afspraak["id"] != main_afspraak["id"]) and (
-                    match_zoekterm(afspraak, zoektermen_main) or match_zoekterm(main_afspraak, zoektermen_afspraak)):
+
+            not_main_afspraak = (afspraak["id"] != main_afspraak["id"])
+            matching_zoekterm = match_zoekterm(afspraak, zoektermen_main) or match_zoekterm(main_afspraak, zoektermen_afspraak)
+            afspraken_overlap = afspraken_intersect(afspraak1=afspraak, afspraak2=main_afspraak)
+
+            if not_main_afspraak and matching_zoekterm and afspraken_overlap:
                 matching_afspraken.append(afspraak)
 
     return matching_afspraken
