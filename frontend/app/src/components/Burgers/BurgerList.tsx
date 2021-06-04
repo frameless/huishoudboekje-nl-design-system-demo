@@ -31,7 +31,7 @@ const BurgerList = () => {
 
 	return (
 		<Queryable query={$burgers}>{(data) => {
-			const burgers: Burger[] = [...data.burgers || []];
+			const burgers: Burger[] = data?.burgers || [];
 			const filteredBurgers = burgers.filter(b => {
 				return [
 					searchFields(search, [
