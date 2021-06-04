@@ -103,6 +103,31 @@ def create_app(
         output.headers["Content-type"] = "text/csv"
         return output
 
+    @app.route("/services_health")
+    @auth.rbac.allow([ANONYMOUS_ROLENAME], methods=['GET'])
+    def services_health():
+        service_dict = {}
+        service_dict["huishoudboekje-service"] = do_health_call_service(settings.HHB_SERVICES_URL)
+        service_dict["organisatie-service"] = do_health_call_service(settings.ORGANISATIE_SERVICES_URL)
+        service_dict["log-service"] = do_health_call_service(settings.LOG_SERVICE_URL)
+        service_dict["grootboek-service"] = do_health_call_service(settings.GROOTBOEK_SERVICE_URL)
+        service_dict["transactie-service"] = do_health_call_service(settings.TRANSACTIE_SERVICES_URL)
+
+        return jsonify(service_dict)
+
+    def do_health_call_service(service_url):
+        try:
+            response = requests.get(
+                f"{service_url}/health",
+                headers={"Content-type": "application/json"},
+            )
+            if response.ok:
+                return "up"
+        except:
+            pass
+
+        return "down"
+
     app.auth = auth
 
     logging.getLogger("flask_oidc").setLevel("DEBUG")
