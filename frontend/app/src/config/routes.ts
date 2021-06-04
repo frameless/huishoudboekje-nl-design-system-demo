@@ -12,6 +12,7 @@ export enum RouteNames {
 	gebeurtenissen = "gebeurtenissen",
 	configuratie = "configuratie",
 	betaalinstructie = "betaalinstructie",
+	status = "status",
 
 	// Sub routes
 	view = "bekijken",
@@ -56,6 +57,7 @@ const Routes = {
 	Export: (id: number) => `/api/export/${id}`,
 	BrievenExport: (burgerId: number) => `/api/brievenexport/${burgerId}`,
 
+	Status: `/${RouteNames.status}`,
 	NotFound: `/${RouteNames.notFound}`,
 
 	// Dev things
