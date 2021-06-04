@@ -1,3 +1,4 @@
+import re
 import logging
 from collections import Counter
 from datetime import date
@@ -6,7 +7,7 @@ import hhb_backend.graphql as graphql
 import hhb_backend.graphql.dataloaders as dataloaders
 import hhb_backend.graphql.models.bank_transaction as bank_transaction
 import hhb_backend.graphql.models.afspraak as afspraak
-import re
+from hhb_backend.graphql.utils.dates import afspraken_intersect, to_date
 
 
 async def automatisch_boeken(customer_statement_message_id: int = None):
@@ -126,12 +127,26 @@ async def find_matching_afspraken_by_afspraak(main_afspraak):
         main_afspraak["tegen_rekening_id"])
 
     zoektermen_main = ' '.join(main_afspraak["zoektermen"])
+    main_afspraak_valid_from = to_date(main_afspraak["valid_from"])
+    main_afspraak_valid_through = to_date(main_afspraak["valid_through"])
 
     for afspraak in afspraken:
         if afspraak["zoektermen"]:
             zoektermen_afspraak = ' '.join(afspraak["zoektermen"])
-            if (afspraak["id"] != main_afspraak["id"]) and (
-                    match_zoekterm(afspraak, zoektermen_main) or match_zoekterm(main_afspraak, zoektermen_afspraak)):
+
+            not_main_afspraak = (afspraak["id"] != main_afspraak["id"])
+            matching_zoekterm = match_zoekterm(afspraak, zoektermen_main) or match_zoekterm(main_afspraak, zoektermen_afspraak)
+
+            afspraak_valid_from = to_date(afspraak["valid_from"])
+            afspraak_valid_through = to_date(afspraak["valid_through"])
+            afspraken_overlap = afspraken_intersect(
+                valid_from1=main_afspraak_valid_from,
+                valid_from2=afspraak_valid_from,
+                valid_through1=main_afspraak_valid_through,
+                valid_through2=afspraak_valid_through
+            )
+
+            if not_main_afspraak and matching_zoekterm and afspraken_overlap:
                 matching_afspraken.append(afspraak)
 
     return matching_afspraken
