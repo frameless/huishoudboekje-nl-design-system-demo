@@ -31,9 +31,9 @@ def test_add_afspraak_zoekterm_success_1(client):
         log_post = mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=200,
                              json={"data": {"id": 1}})
         afspraken_get = mock.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=1",
-                                 json={"data": [{"id": 1, "zoektermen": ["Albert Heijn"], "tegen_rekening_id": 14}]})
+                                 json={"data": [{"id": 1, "zoektermen": ["Albert Heijn"], "tegen_rekening_id": 14, "valid_from": "2020-01-01", "valid_through": None}]})
         afspraken_get_rekening = mock.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_rekening=14",
-                                 json={"data": [{"id": 1, "zoektermen": ["Albert Heijn"], "tegen_rekening_id": 14}, {"id": 2, "zoektermen": ["Albert Heijn", "loon"], "tegen_rekening_id": 14}]})
+                                 json={"data": [{"id": 1, "zoektermen": ["Albert Heijn"], "tegen_rekening_id": 14, "valid_from": "2020-01-01", "valid_through": None}, {"id": 2, "zoektermen": ["Albert Heijn", "loon"], "tegen_rekening_id": 14, "valid_from": "2020-01-01", "valid_through": None}]})
         afspraken_post = mock.post(f"{settings.HHB_SERVICES_URL}/afspraken/1", json=post_echo)
 
         response = client.post(
@@ -61,9 +61,9 @@ def test_add_afspraak_zoekterm_conflict_1(client):
         log_post = mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=200,
                              json={"data": {"id": 1}})
         afspraken_get = mock.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=1",
-                                 json={"data": [{"id": 1, "zoektermen": ["Albert Heijn"], "tegen_rekening_id": 14}]})
+                                 json={"data": [{"id": 1, "zoektermen": ["Albert Heijn"], "tegen_rekening_id": 14, "valid_from": "2020-01-01", "valid_through": None}]})
         afspraken_get_rekening = mock.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_rekening=14",
-                                 json={"data": [{"id": 1, "zoektermen": ["Albert Heijn"], "tegen_rekening_id": 14}, {"id": 2, "zoektermen": ["Albert Heijn", "loon"], "tegen_rekening_id": 14}]})
+                                 json={"data": [{"id": 1, "zoektermen": ["Albert Heijn"], "tegen_rekening_id": 14, "valid_from": "2020-01-01", "valid_through": None}, {"id": 2, "zoektermen": ["Albert Heijn", "loon"], "tegen_rekening_id": 14, "valid_from": "2020-01-01", "valid_through": None}]})
         afspraken_post = mock.post(f"{settings.HHB_SERVICES_URL}/afspraken/1", json=post_echo)
 
         response = client.post(
@@ -94,9 +94,9 @@ def test_add_afspraak_zoekterm_conflict_2(client):
         log_post = mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=200,
                              json={"data": {"id": 1}})
         afspraken_get = mock.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=1",
-                                 json={"data": [{"id": 1, "zoektermen": ["Albert Heijn", "loon"], "tegen_rekening_id": 14}]})
+                                 json={"data": [{"id": 1, "zoektermen": ["Albert Heijn", "loon"], "tegen_rekening_id": 14, "valid_from": "2020-01-01", "valid_through": None}]})
         afspraken_get_rekening = mock.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_rekening=14",
-                                 json={"data": [{"id": 1, "zoektermen": ["Albert Heijn", "loon"], "tegen_rekening_id": 14}, {"id": 2, "zoektermen": ["Albert Heijn", "loonbetaling"], "tegen_rekening_id": 14}]})
+                                 json={"data": [{"id": 1, "zoektermen": ["Albert Heijn", "loon"], "tegen_rekening_id": 14, "valid_from": "2020-01-01", "valid_through": None}, {"id": 2, "zoektermen": ["Albert Heijn", "loonbetaling"], "tegen_rekening_id": 14, "valid_from": "2020-01-01", "valid_through": None}]})
         afspraken_post = mock.post(f"{settings.HHB_SERVICES_URL}/afspraken/1", json=post_echo)
 
         response = client.post(
@@ -127,9 +127,9 @@ def test_add_afspraak_zoekterm_success_2(client):
         log_post = mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=200,
                              json={"data": {"id": 1}})
         afspraken_get = mock.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=1",
-                                 json={"data": [{"id": 1, "zoektermen": ["Albert Heijn", "loon "], "tegen_rekening_id": 14}]})
+                                 json={"data": [{"id": 1, "zoektermen": ["Albert Heijn", "loon "], "tegen_rekening_id": 14, "valid_from": "2020-01-01", "valid_through": None}]})
         afspraken_get_rekening = mock.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_rekening=14",
-                                 json={"data": [{"id": 1, "zoektermen": ["Albert Heijn", "loon "], "tegen_rekening_id": 14}, {"id": 2, "zoektermen": ["Albert Heijn", "loonbetaling"], "tegen_rekening_id": 14}]})
+                                 json={"data": [{"id": 1, "zoektermen": ["Albert Heijn", "loon "], "tegen_rekening_id": 14, "valid_from": "2020-01-01", "valid_through": None}, {"id": 2, "zoektermen": ["Albert Heijn", "loonbetaling"], "tegen_rekening_id": 14, "valid_from": "2020-01-01", "valid_through": None}]})
         afspraken_post = mock.post(f"{settings.HHB_SERVICES_URL}/afspraken/1", json=post_echo)
 
         response = client.post(
@@ -157,9 +157,9 @@ def test_add_afspraak_zoekterm_conflict_3(client):
         log_post = mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=200,
                              json={"data": {"id": 1}})
         afspraken_get = mock.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=1",
-                                 json={"data": [{"id": 1, "zoektermen": ["Albert Heijn", "loon "], "tegen_rekening_id": 14}]})
+                                 json={"data": [{"id": 1, "zoektermen": ["Albert Heijn", "loon "], "tegen_rekening_id": 14, "valid_from": "2020-01-01", "valid_through": None}]})
         afspraken_get_rekening = mock.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_rekening=14",
-                                 json={"data": [{"id": 1, "zoektermen": ["Albert Heijn", "loon "], "tegen_rekening_id": 14}, {"id": 2, "zoektermen": ["Albert Heijn", "loon betaling"], "tegen_rekening_id": 14}]})
+                                 json={"data": [{"id": 1, "zoektermen": ["Albert Heijn", "loon "], "tegen_rekening_id": 14, "valid_from": "2020-01-01", "valid_through": None}, {"id": 2, "zoektermen": ["Albert Heijn", "loon betaling"], "tegen_rekening_id": 14, "valid_from": "2020-01-01", "valid_through": None}]})
         afspraken_post = mock.post(f"{settings.HHB_SERVICES_URL}/afspraken/1", json=post_echo)
 
         response = client.post(

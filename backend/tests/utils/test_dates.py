@@ -1,39 +1,49 @@
+from datetime import date
+
 import pytest
 
 from hhb_backend.graphql.utils.dates import afspraken_intersect
 
 
-@pytest.mark.parametrize(["afspraak1", "afspraak2", "expected"], [
-    # After
-    ({"valid_from": "2020-01-01", "valid_through": "2020-01-02"}, {"valid_from": "2020-01-03", "valid_through": "2020-01-04"}, False),
-    # StartTouching
-    ({"valid_from": "2020-01-01", "valid_through": "2020-01-02"}, {"valid_from": "2020-01-02", "valid_through": "2020-01-03"}, True),
-    # StartInside
-    ({"valid_from": "2020-01-01", "valid_through": "2020-01-03"}, {"valid_from": "2020-01-02", "valid_through": "2020-01-04"}, True),
-    # InsideStartTouching
-    ({"valid_from": "2020-01-01", "valid_through": "2020-01-03"}, {"valid_from": "2020-01-01", "valid_through": "2020-01-02"}, True),
-    # EnclosingStartTouching
-    ({"valid_from": "2020-01-01", "valid_through": "2020-01-02"}, {"valid_from": "2020-01-01", "valid_through": "2020-01-03"}, True),
-    # Enclosing
-    ({"valid_from": "2020-01-02", "valid_through": "2020-01-03"}, {"valid_from": "2020-01-01", "valid_through": "2020-01-04"}, True),
-    # EnclosingEndTouching
-    ({"valid_from": "2020-01-02", "valid_through": "2020-01-03"}, {"valid_from": "2020-01-01", "valid_through": "2020-01-03"}, True),
-    # ExactMatch
-    ({"valid_from": "2020-01-01", "valid_through": "2020-01-02"}, {"valid_from": "2020-01-01", "valid_through": "2020-01-02"}, True),
-    # Inside
-    ({"valid_from": "2020-01-01", "valid_through": "2020-01-04"}, {"valid_from": "2020-01-02", "valid_through": "2020-01-03"}, True),
-    # InsideEndTouching
-    ({"valid_from": "2020-01-01", "valid_through": "2020-01-03"}, {"valid_from": "2020-01-02", "valid_through": "2020-01-03"}, True),
-    # EndInside
-    ({"valid_from": "2020-01-02", "valid_through": "2020-01-04"}, {"valid_from": "2020-01-01", "valid_through": "2020-01-03"}, True),
-    # EndTouching
-    ({"valid_from": "2020-01-02", "valid_through": "2020-01-03"}, {"valid_from": "2020-01-01", "valid_through": "2020-01-02"}, True),
-    # Before
-    ({"valid_from": "2020-01-03", "valid_through": "2020-01-04"}, {"valid_from": "2020-01-01", "valid_through": "2020-01-02"}, False),
-])
-def test_afspraken_intersect(afspraak1, afspraak2, expected):
+@pytest.mark.parametrize(
+    ["valid_from1", "valid_through1", "valid_from2", "valid_through2", "expected"],
+    [
+        # After
+        (date(2020, 1, 1), date(2020, 1, 2), date(2020, 1, 3), date(2020, 1, 4), False),
+        # StartTouching
+        (date(2020, 1, 1), date(2020, 1, 2), date(2020, 1, 2), date(2020, 1, 3), True),
+        # StartInside
+        (date(2020, 1, 1), date(2020, 1, 3), date(2020, 1, 2), date(2020, 1, 4), True),
+        # InsideStartTouching
+        (date(2020, 1, 1), date(2020, 1, 3), date(2020, 1, 1), date(2020, 1, 2), True),
+        # EnclosingStartTouching
+        (date(2020, 1, 1), date(2020, 1, 2), date(2020, 1, 1), date(2020, 1, 3), True),
+        # Enclosing
+        (date(2020, 1, 2), date(2020, 1, 3), date(2020, 1, 1), date(2020, 1, 4), True),
+        # EnclosingEndTouching
+        (date(2020, 1, 2), date(2020, 1, 3), date(2020, 1, 1), date(2020, 1, 3), True),
+        # ExactMatch
+        (date(2020, 1, 1), date(2020, 1, 2), date(2020, 1, 1), date(2020, 1, 2), True),
+        # Inside
+        (date(2020, 1, 1), date(2020, 1, 4), date(2020, 1, 2), date(2020, 1, 3), True),
+        # InsideEndTouching
+        (date(2020, 1, 1), date(2020, 1, 3), date(2020, 1, 2), date(2020, 1, 3), True),
+        # EndInside
+        (date(2020, 1, 2), date(2020, 1, 4), date(2020, 1, 1), date(2020, 1, 3), True),
+        # EndTouching
+        (date(2020, 1, 2), date(2020, 1, 3), date(2020, 1, 1), date(2020, 1, 2), True),
+        # Before
+        (date(2020, 1, 3), date(2020, 1, 4), date(2020, 1, 1), date(2020, 1, 2), False),
+    ],
+)
+def test_afspraken_intersect(valid_from1, valid_through1, valid_from2, valid_through2, expected):
     """
     For a visualization of the terms, see: https://www.codeproject.com/KB/datetime/TimePeriod/PeriodRelations.png
     """
-    result = afspraken_intersect(afspraak1=afspraak1, afspraak2=afspraak2)
+    result = afspraken_intersect(
+        valid_from1=valid_from1,
+        valid_from2=valid_from2,
+        valid_through1=valid_through1,
+        valid_through2=valid_through2,
+    )
     assert result == expected

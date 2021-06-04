@@ -1,24 +1,28 @@
-from datetime import date, datetime, timedelta
-from typing import Dict
+from datetime import date, datetime
 
 
-def to_date(date_str) -> date:
+def to_date(date_str: str = None) -> date:
     """Convenient function for deriving a datetime.date from a string"""
-    return datetime.strptime(date_str, "%Y-%m-%d").date()
+    return datetime.strptime(date_str, "%Y-%m-%d").date() if date_str else None
 
 
-def afspraken_intersect(afspraak1: Dict[str, str], afspraak2: Dict[str, str]) -> bool:
+def afspraken_intersect(
+    valid_from1: date, valid_from2: date, valid_through1: date = None, valid_through2: date = None
+) -> bool:
     """
-    Checks whether whether date range of given afspraak overlaps with main_afspraak's date range.
-    For more info on the technique used, see:
-    https://stackoverflow.com/questions/325933/determine-whether-two-date-ranges-overlap#answer-325964
+    Checks whether whether two date ranges intersect (= touch or overlap) with each other.
+    See also: https://stackoverflow.com/questions/325933/determine-whether-two-date-ranges-overlap#answer-325964
+    To be able to treat None values, a little bit of extra logic was needed.
     """
-    latest_start = max(to_date(afspraak1["valid_from"]), to_date(afspraak2["valid_from"]))
-    # based on the assumption that valid_through will never be higher than future_date
-    future_date = date.today() + timedelta(days=10000)
-    afspraak_stop = to_date(afspraak1["valid_through"]) if afspraak1["valid_through"] else future_date
-    main_afspraak_stop = to_date(afspraak2["valid_through"]) if afspraak2["valid_through"] else future_date
+    if not valid_through1:
+        if not valid_through2:
+            return True
+        return False if valid_from1 > valid_through2 else True
 
-    earliest_end = min(afspraak_stop, main_afspraak_stop)
+    elif not valid_through2:
+        return False if valid_from2 > valid_through1 else True
 
-    return latest_start <= earliest_end
+    else:
+        latest_start = max(valid_from1, valid_from2)
+        earliest_end = min(valid_through1, valid_through2)
+        return latest_start <= earliest_end
