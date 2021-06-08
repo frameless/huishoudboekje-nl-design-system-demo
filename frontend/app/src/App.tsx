@@ -1,5 +1,21 @@
 import {WarningIcon} from "@chakra-ui/icons";
-import {Box, Button, Heading, HStack, IconButton, Spinner, Stack, Text, useTheme, VStack} from "@chakra-ui/react";
+import {
+	Accordion,
+	AccordionButton,
+	AccordionIcon,
+	AccordionItem,
+	AccordionPanel,
+	Box,
+	Button,
+	Heading,
+	HStack,
+	IconButton,
+	Spinner,
+	Stack,
+	Text,
+	useTheme,
+	VStack,
+} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {FaLock} from "react-icons/fa";
@@ -18,6 +34,8 @@ import PageNotFound from "./components/PageNotFound";
 import Rapportage from "./components/Rapportage";
 import Sidebar from "./components/Sidebar";
 import SidebarContainer from "./components/Sidebar/SidebarContainer";
+import {ServicesStatus} from "./components/Status/ServicesStatus";
+import StatusPage from "./components/Status/StatusPage";
 import Routes from "./config/routes";
 import useAuth from "./utils/useAuth";
 
@@ -36,9 +54,25 @@ const App = () => {
 	if (error) {
 		return (
 			<TwoColumns>
-				<Stack spacing={5} maxWidth={300} direction={"row"} alignItems={"center"}>
-					<WarningIcon color={"red.500"} />
-					<Text color={"red.600"}>{t("messages.backendError")}</Text>
+				<Stack spacing={6}>
+					<Stack spacing={5} maxWidth={400} direction={"row"} alignItems={"center"}>
+						<WarningIcon color={"red.500"} />
+						<Text color={"red.600"}>{t("messages.backendError")}</Text>
+					</Stack>
+
+					<Box maxW={400}>
+						<Accordion allowToggle>
+							<AccordionItem>
+								<AccordionButton>
+									<Box flex={"1"}>{t("statuspage.title")}</Box>
+									<AccordionIcon />
+								</AccordionButton>
+								<AccordionPanel pb={4}>
+									<ServicesStatus />
+								</AccordionPanel>
+							</AccordionItem>
+						</Accordion>
+					</Box>
 				</Stack>
 			</TwoColumns>
 		);
@@ -97,6 +131,7 @@ const App = () => {
 						<Route path={Routes.Configuratie} component={Configuratie} />
 						<Route path={Routes.Rapportage} component={Rapportage} />
 						<Route path={Routes.Gebeurtenissen} component={Gebeurtenissen} />
+						<Route exact path={Routes.Status} component={StatusPage} />
 						<Route exact path={Routes.NotFound} component={PageNotFound} />
 						<Route component={PageNotFound} />
 					</Switch>
