@@ -48,8 +48,7 @@ dex:
       alwaysShowLoginScreen: false
   ingress:
     enabled: true
-    annotations:
-      cert-manager.io/cluster-issuer: letsencrypt-prod
+    annotations: {}
     hosts:
       - "dex.hhb.minikube"
     tls:
