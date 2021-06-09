@@ -29,8 +29,7 @@ services:
 
 medewerker-frontend:
   ingress:
-    annotations:
-      cert-manager.io/cluster-issuer: letsencrypt-prod
+    annotations: {}
     hosts:
       - host: huishoudboekje.nlx.reviews
         paths:
@@ -56,8 +55,7 @@ unleash_service:
     - name: UNLEASH_APPNAME
       value: "huishoudboekje"
   ingress:
-    annotations:
-      cert-manager.io/cluster-issuer: letsencrypt-prod
+    annotations: {}
     hosts:
       - host: huishoudboekje.nlx.reviews
         paths:
@@ -78,8 +76,7 @@ medewerker-backend:
     - prefix: https://huishoudboekje.nlx.reviews
       callback: https://huishoudboekje.nlx.reviews/api/oidc_callback
   ingress:
-    annotations:
-      cert-manager.io/cluster-issuer: letsencrypt-prod
+    annotations: {}
     hosts:
       - host: huishoudboekje.nlx.reviews
         paths:
