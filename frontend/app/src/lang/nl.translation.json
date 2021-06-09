@@ -72,6 +72,13 @@
             "updateSuccess": "Gegevens succesvol gewijzigd."
         }
     },
+    "statuspage": {
+        "title": "Status",
+        "services": {
+            "title": "Services",
+            "helperText": "Bekijk hier of alle services beschikbaar zijn."
+        }
+    },
     "actions": {
         "login": "Inloggen",
         "logout": "Uitloggen",
@@ -492,7 +499,10 @@
         "addAfspraakZoekterm": "{{gebruiker}} voegde een zoekterm toe bij een <linkAfspraak>afspraak</linkAfspraak> met <linkBurger>{{burger}}</linkBurger> en <linkAfspraakOrganisatie>{{afspraakOrganisatie}}</linkAfspraakOrganisatie>.",
         "deleteAfspraakZoekterm": "{{gebruiker}} verwijderde een zoekterm bij een <linkAfspraak>afspraak</linkAfspraak> met <linkBurger>{{burger}}</linkBurger> en <linkAfspraakOrganisatie>{{afspraakOrganisatie}}</linkAfspraakOrganisatie>.",
         "startAutomatischBoeken": "{{gebruiker}} startte het afletteren van transacties.",
-        "updateAfspraakBetaalinstructie": "{{gebruiker}} stelde een betaalinstructie in voor een <linkAfspraak>afspraak</linkAfspraak> met <linkBurger>{{burger}}</linkBurger>."
+        "updateAfspraakBetaalinstructie": "{{gebruiker}} stelde een betaalinstructie in voor een <linkAfspraak>afspraak</linkAfspraak> met <linkBurger>{{burger}}</linkBurger>.",
+        "createExportOverschrijvingen": "{{gebruiker}} creëerde betaalinstructies.",
+        "createOrganisatieRekening": "{{gebruiker}} voegde <strong>{{iban}}</strong> op naam van <strong>{{rekeninghouder}}</strong> toe aan <linkOrganisatie>{{organisatie}}</linkOrganisatie>.",
+        "deleteOrganisatieRekening": "{{gebruiker}} verwijderde <strong>{{iban}}</strong> op naam van <strong>{{rekeninghouder}}</strong> bij <linkOrganisatie>{{organisatie}}</linkOrganisatie>."
     },
     "suggestion": "Suggestie",
     "organizations": {
@@ -538,13 +548,6 @@
         "period": "Periode",
         "month": "maand",
         "month_plural": "maanden"
-    },
-    "statuspage": {
-        "title": "Status",
-        "services": {
-            "title": "Services",
-            "helperText": "Bekijk hier of alle services beschikbaar zijn."
-        }
     },
     "months": {
         "jan": "januari",
