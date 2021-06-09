@@ -13,12 +13,9 @@
     - export COMPONENT_TAG=$(git describe --long --all | sed 's!heads/!!')
     - export COMPONENT_COMMIT_HASH=$(git describe --always --abbrev=0 --match "NOT A TAG")
     - export DOCKER_CONFIG=/tmp/docker-config-$CI_JOB_ID
-    - |
-      if [ "${DOCKER_PROXY}" ]; then
-        docker login -u "$CI_DEPENDENCY_PROXY_USER" --password-stdin "$CI_DEPENDENCY_PROXY_SERVER" <<< "$CI_DEPENDENCY_PROXY_PASSWORD"
-      fi
-    - make --jobs --output-sync=target docker-images
+    - mkdir -p $DOCKER_CONFIG && echo $DOCKER_AUTH_CONFIG > $DOCKER_CONFIG/config.json
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - make --jobs --output-sync=target docker-images
     - make --jobs --output-sync=target docker-push
   only:
     - branches@commonground/huishoudboekje/app-new
