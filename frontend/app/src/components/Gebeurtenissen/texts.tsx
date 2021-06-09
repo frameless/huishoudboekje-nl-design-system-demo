@@ -1,12 +1,13 @@
 import React from "react";
-import { Trans } from "react-i18next";
+import {Trans} from "react-i18next";
 
 export const auditLogTexts = (values, components, action) => {
 	const texts = {
+		// Queries
 		organisatie: () => <Trans i18nKey={"auditLog.viewOrganisatie"} values={values} components={components} />,
 		organisaties: () => <Trans i18nKey={"auditLog.viewOrganisaties"} values={values} components={components} />,
 		afspraak: () => {
-			if(!values.afspraakOrganisatie){
+			if (!values.afspraakOrganisatie) {
 				return (<Trans i18nKey={"auditLog.viewAfspraakBurger"} values={values} components={components} />);
 			}
 			return (<Trans i18nKey={"auditLog.viewAfspraak"} values={values} components={components} />);
@@ -20,6 +21,8 @@ export const auditLogTexts = (values, components, action) => {
 		bankTransactionsPaged: () => <Trans i18nKey={"auditLog.viewTransactions"} values={values} components={components} />,
 		exports: () => <Trans i18nKey={"auditLog.viewExports"} values={values} components={components} />,
 		configuraties: () => <Trans i18nKey={"auditLog.viewConfiguraties"} values={values} components={components} />,
+
+		// Mutations
 		createBurger: () => <Trans i18nKey={"auditLog.createBurger"} values={values} components={components} />,
 		updateBurger: () => <Trans i18nKey={"auditLog.updateBurger"} values={values} components={components} />,
 		deleteBurger: () => <Trans i18nKey={"auditLog.deleteBurger"} values={values} components={components} />,
@@ -49,6 +52,9 @@ export const auditLogTexts = (values, components, action) => {
 		deleteAfspraakZoekterm: () => <Trans i18nKey={"auditLog.deleteAfspraakZoekterm"} values={values} components={components} />,
 		startAutomatischBoeken: () => <Trans i18nKey={"auditLog.startAutomatischBoeken"} values={values} components={components} />,
 		updateAfspraakBetaalinstructie: () => <Trans i18nKey={"auditLog.updateAfspraakBetaalinstructie"} values={values} components={components} />,
+		createExportOverschrijvingen: () => <Trans i18nKey={"auditLog.createExportOverschrijvingen"} values={values} components={components} />,
+		createOrganisatieRekening: () => <Trans i18nKey={"auditLog.createOrganisatieRekening"} values={values} components={components} />,
+		deleteOrganisatieRekening: () => <Trans i18nKey={"auditLog.deleteOrganisatieRekening"} values={values} components={components} />,
 	};
 
 	return texts[action];
