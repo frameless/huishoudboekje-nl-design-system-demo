@@ -1,9 +1,17 @@
+import json
+import logging
 import re
+from typing import Dict, Union, List
 
 from flask import request, abort, make_response
 from sqlalchemy.orm import joinedload
+from sqlalchemy.sql.expression import ColumnElement
 
 from core_service.utils import row2dict
+from core_service.consts import AND_OR_OPERATORS, COMPARISON_OPERATORS, IN_NOT_IN_OPERATORS
+
+
+logger = logging.getLogger(__name__)
 
 
 class HHBQuery():
@@ -60,6 +68,83 @@ class HHBQuery():
                     ]}, 400))
 
         self.query = self.query.filter(self.hhb_model.id.in_(ids))
+
+    def filter_results(self):
+        """
+        Prepares complex filter query building.
+        Expects a JSON-stringified dictionary under the key "filters".
+        """
+        filter_kwargs_str = request.args.get('filters', '{}')
+        try:
+            filter_kwargs = json.loads(filter_kwargs_str)
+            if filter_kwargs:
+                filters = self.__parse_filter_kwargs(filter_kwargs=filter_kwargs)
+                self.query = self.query.filter(*filters)
+        except ValueError as e:
+            logger.error(e)
+            abort(make_response({"errors": [f"Failed to parse filters."]}, 400))
+
+    def __parse_filter_kwargs(self, filter_kwargs: Dict[str, Union[str, int, bool]], col_name: str = None) -> List[ColumnElement]:
+        """
+        Dynamically builds complex filter queries.
+
+        Based on the dict filter_kwargs, a SQLAlchemy filter list is created on which the desired data
+        should be filtered.
+        For supported operators, see consts in ../consts.py.
+
+        example:
+        query {
+            bankTransactionsPaged(
+              start: 1, limit: 50, filters:{
+                or_: {
+                  bedrag: {
+                    inInt: [39100, 166912]
+                  }
+                  and_: {
+                    isGeboekt:false,
+                    isCredit:true,
+                    bedrag: {
+                      gt:30000
+                    }
+                  }
+
+                }
+              }
+            ) {
+                banktransactions{
+                id
+                isGeboekt
+                isCredit
+                bedrag
+              }
+            }
+        }
+        """
+        sqlalchemy_filters = []
+        for key, value in filter_kwargs.items():
+            if isinstance(value, dict):
+                if (operator := AND_OR_OPERATORS.get(key, None)):
+                    # value is dict with one or more filters
+                    filter = operator(*self.__parse_filter_kwargs(filter_kwargs=value))
+                    sqlalchemy_filters.append(filter)
+                else:
+                    # key is column name, value is operator. Pass col_name so it is remembered
+                    filters = self.__parse_filter_kwargs(filter_kwargs=value, col_name=key)
+                    sqlalchemy_filters.append(*filters)
+            else:
+                if (operator := COMPARISON_OPERATORS.get(key, None)):
+                    filter = operator(getattr(self.hhb_model, col_name), value)
+                    sqlalchemy_filters.append(filter)
+                elif (operator := IN_NOT_IN_OPERATORS.get(key, None)):
+                    filter = getattr(getattr(self.hhb_model, col_name), operator)(value)
+                    sqlalchemy_filters.append(filter)
+                elif isinstance(value, bool):
+                    filter = getattr(self.hhb_model, key) == value
+                    sqlalchemy_filters.append(filter)
+                else:
+                    raise ValueError('Incorrect syntax in filter_kwargs')
+
+        return sqlalchemy_filters
 
     def get_result_single(self, row_id):
         """ Get a single result from the current query """

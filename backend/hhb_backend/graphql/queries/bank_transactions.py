@@ -79,12 +79,38 @@ class BankTransactionsQuery:
         return bank_transactions
 
 
+# TODO: make these filters applicable for all models
+class CustomOperator(graphene.InputObjectType):
+    neq = graphene.Int()
+    eq = graphene.Int()
+    gt = graphene.Int()
+    gte = graphene.Int()
+    lt = graphene.Int()
+    lte = graphene.Int()
+    # TODO: find out a way to define a List which accepts both Int and String
+    #  so we don't need separate keys for this
+    in_int = graphene.List(graphene.Int)
+    notin_int = graphene.List(graphene.Int)
+    in_str = graphene.List(graphene.String)
+    notin_str = graphene.List(graphene.String)
+
+
+class BankTransactionFilter(graphene.InputObjectType):
+    or_ = graphene.Field(lambda: BankTransactionFilter)
+    and_ = graphene.Field(lambda: BankTransactionFilter)
+    is_geboekt = graphene.Boolean()
+    is_credit = graphene.Boolean()
+    bedrag = CustomOperator()
+    tegen_rekening = CustomOperator()
+
+
 class BankTransactionsPagedQuery:
     return_type = graphene.Field(
         bank_transaction.BankTransactionsPaged,
         start=graphene.Int(),
         limit=graphene.Int(),
-        csms=graphene.List(graphene.Int, default_value=[])
+        csms=graphene.List(graphene.Int, default_value=[]),
+        filters=BankTransactionFilter()
     )
 
     @classmethod
@@ -102,13 +128,20 @@ class BankTransactionsPagedQuery:
     async def resolver(cls, _root, _info, **kwargs):
         if "start" in kwargs and "limit" in kwargs:
             if not kwargs["csms"]:
-                return request.dataloader.bank_transactions_by_id.get_all_paged(start=kwargs["start"],
-                                                                                limit=kwargs["limit"], desc=True,
-                                                                                sortingColumn="transactie_datum")
+                return request.dataloader.bank_transactions_by_id.get_all_paged(
+                    start=kwargs["start"],
+                    limit=kwargs["limit"],
+                    desc=True,
+                    sortingColumn="transactie_datum",
+                    filters=kwargs.get("filters")
+                )
             else:
-                return request.dataloader.bank_transactions_by_csm.get_all_paged(keys=kwargs["csms"],
-                                                                                 start=kwargs["start"],
-                                                                                 limit=kwargs["limit"], desc=True,
-                                                                                 sortingColumn="transactie_datum")
+                return request.dataloader.bank_transactions_by_csm.get_all_paged(
+                    keys=kwargs["csms"],
+                    start=kwargs["start"],
+                    limit=kwargs["limit"], desc=True,
+                    sortingColumn="transactie_datum",
+                    filters=kwargs.get("filters")
+                )
         else:
             raise GraphQLError(f"Query needs params 'start', 'limit'. ")

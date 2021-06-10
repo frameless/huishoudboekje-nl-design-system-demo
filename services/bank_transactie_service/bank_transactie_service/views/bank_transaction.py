@@ -9,6 +9,9 @@ from models.bank_transaction import BankTransaction
 from core_service.views.hhb_view import HHBView
 
 
+logger = logging.getLogger(__name__)
+
+
 class BankTransactionView(HHBView):
     """ Methods for /banktransactions/(<banktransaction_id>) path """
     hhb_model = BankTransaction
