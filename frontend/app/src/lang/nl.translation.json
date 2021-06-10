@@ -62,8 +62,10 @@
             "addHint": "Voeg organisaties toe door te klikken op de knop {{buttonLabel}}.",
             "noSearchResults": "Geen organisaties gevonden. Gebruik een andere zoekterm."
         },
+        "formInputError": {
+            "description": "Er is een fout opgetreden. Controleer de invoer."
+        },
         "rekeningen": {
-            "invalidFormMessage": "Er is een fout opgetreden. Controleer de ingevulde gegevens en probeer het opnieuw.",
             "deleteSuccess": "Rekening is verwijderd.",
             "deleteTitle": "Rekening verwijderen.",
             "deleteQuestion": "Weet je zeker dat je rekening {{iban}} op naam van {{accountHolder}} wil verwijderen? Deze actie kan ongedaan worden gemaakt."
@@ -373,7 +375,13 @@
         "dateCreated": "Aanmaakdatum"
     },
     "errors": {
-        "invalidDateError": "Vul een geldige datum in."
+        "invalidDateError": "Vul een geldige datum in.",
+        "iban": {
+            "generalError": "Vul een geldig IBAN in."
+        },
+        "rekeninghouder": {
+            "generalError": "Vul een rekeninghouder in. De naam mag niet langer zijn dan 100 tekens."
+        }
     },
     "uploadCsmModal": {
         "title": "Bankafschrift toevoegen"
