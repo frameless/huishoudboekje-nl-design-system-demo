@@ -8,11 +8,13 @@ import "react-datepicker/dist/react-datepicker.min.css";
 import ReactDOM from "react-dom";
 import {BrowserRouter as Router} from "react-router-dom";
 import App from "./App";
+import StatusErrorPage from "./components/Status/StatusErrorPage";
 import "./config/i18n";
 import theme from "./config/theme";
 import "./global.scss";
 import apolloClient from "./services/graphql-client";
 import {FeatureProvider} from "./utils/features";
+import {ServicesProvider} from "./utils/Services";
 
 dayjs.locale("nl-nl");
 registerLocale("nl", nl);
@@ -20,7 +22,7 @@ setDefaultLocale("nl");
 
 const featureFlags = [
 	"follow-up-zoektermen-opslaan",
-	"batch-bankafschriften"
+	"batch-bankafschriften",
 ];
 
 ReactDOM.render(
@@ -28,9 +30,11 @@ ReactDOM.render(
 		<Router>
 			<ApolloProvider client={apolloClient}>
 				<ChakraProvider theme={theme}>
-					<FeatureProvider flags={featureFlags}>
-						<App />
-					</FeatureProvider>
+					<ServicesProvider fallback={<StatusErrorPage />}>
+						<FeatureProvider flags={featureFlags}>
+							<App />
+						</FeatureProvider>
+					</ServicesProvider>
 				</ChakraProvider>
 			</ApolloProvider>
 		</Router>
