@@ -60,28 +60,28 @@ const Rapportage = () => {
 								<FormControl as={Stack} flex={1} justifyContent={"flex-end"}>
 									<FormLabel>{t("forms.common.fields.startDate")}</FormLabel>
 									<DatePicker selected={d(startDate.value, "L").isValid() ? d(startDate.value, "L").toDate() : null}
-												dateFormat={"dd-MM-yyyy"}
-												onChange={(value: Date) => {
-													if (value) {
-														startDate.setValue(d(value).format("L"));
-														if (d(endDate.value, "L").isBefore(d(value))) {
-															endDate.setValue(d(value).format("L"));
-														}
-													}
-												}} customInput={(<Input {...startDate.bind} />)} />
+										dateFormat={"dd-MM-yyyy"}
+										onChange={(value: Date) => {
+											if (value) {
+												startDate.setValue(d(value).format("L"));
+												if (d(endDate.value, "L").isBefore(d(value))) {
+													endDate.setValue(d(value).format("L"));
+												}
+											}
+										}} customInput={(<Input {...startDate.bind} />)} />
 								</FormControl>
 								<FormControl as={Stack} flex={1}>
 									<FormLabel>{t("forms.common.fields.endDate")}</FormLabel>
 									<DatePicker selected={d(endDate.value, "L").isValid() ? d(endDate.value, "L").toDate() : null}
-												dateFormat={"dd-MM-yyyy"}
-												onChange={(value: Date) => {
-													if (value) {
-														endDate.setValue(d(value).format("L"));
-														if (d(startDate.value, "L").isAfter(d(value))) {
-															startDate.setValue(d(value).format("L"));
-														}
-													}
-												}} customInput={(<Input {...startDate.bind} />)} />
+										dateFormat={"dd-MM-yyyy"}
+										onChange={(value: Date) => {
+											if (value) {
+												endDate.setValue(d(value).format("L"));
+												if (d(startDate.value, "L").isAfter(d(value))) {
+													startDate.setValue(d(value).format("L"));
+												}
+											}
+										}} customInput={(<Input {...startDate.bind} />)} />
 								</FormControl>
 							</Stack>
 
