@@ -8,7 +8,7 @@ from sqlalchemy.orm import joinedload
 from sqlalchemy.sql.expression import ColumnElement
 
 from core_service.utils import row2dict
-from core_service.consts import AND_OR_OPERATORS, COMPARISON_OPERATORS, IN_NOT_IN_OPERATORS
+from core_service.consts import AND_OR_OPERATORS, ComparisonOperator, ListAppearanceOperator
 
 
 logger = logging.getLogger(__name__)
@@ -133,11 +133,11 @@ class HHBQuery():
                     filters = self.__parse_filter_kwargs(filter_kwargs=value, col_name=key)
                     sqlalchemy_filters.append(*filters)
             else:
-                if (operator := COMPARISON_OPERATORS.get(key, None)):
-                    filter = operator(getattr(self.hhb_model, col_name), value)
+                if (operator := ComparisonOperator.get(key, None)):
+                    filter = operator.value(getattr(self.hhb_model, col_name), value)
                     sqlalchemy_filters.append(filter)
-                elif (operator := IN_NOT_IN_OPERATORS.get(key, None)):
-                    filter = getattr(getattr(self.hhb_model, col_name), operator)(value)
+                elif (operator := ListAppearanceOperator.get(key, None)):
+                    filter = getattr(getattr(self.hhb_model, col_name), operator.value)(value)
                     sqlalchemy_filters.append(filter)
                 elif isinstance(value, bool):
                     filter = getattr(self.hhb_model, key) == value
