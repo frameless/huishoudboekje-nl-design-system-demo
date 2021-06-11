@@ -71,11 +71,20 @@ export const useServices = () => {
 
 	return {
 		services,
+		ready,
 		allAvailable: ready && services.length > 0 && services.every(s => s.isAlive === true),
 	};
 };
 
-export const ServicesProvider: React.FC<{fallback, children}> = ({fallback, children}) => {
-	const {allAvailable} = useServices();
-	return allAvailable ? children : fallback;
+export const ServicesProvider: React.FC<{loading, fallback, children}> = ({loading, fallback, children}) => {
+	const {allAvailable, ready} = useServices();
+
+	if (!ready) {
+		return loading;
+	}
+	else if(!allAvailable){
+		return fallback;
+	}
+
+	return children;
 };
