@@ -1,6 +1,6 @@
 {
     "messages": {
-        "backendError": "Systeemfout. Kan niet doorgaan. Neem contact op met de applicatiebeheerder.",
+        "backendError": "Er is een systeemfout opgetreden. Neem contact op met de applicatiebeheerder voor ondersteuning.",
         "login": {
             "welcome": "Welkom bij het Huishoudboekje van {{tenantName}}.",
             "clickHereToContinue": "Klik hieronder op inloggen om te beginnen."
