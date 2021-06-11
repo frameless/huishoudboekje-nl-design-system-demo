@@ -1,11 +1,27 @@
-import {Button, FormLabel, Input, SimpleGrid, Stack, useBreakpointValue} from "@chakra-ui/react";
+import {Button, FormControl, FormErrorMessage, FormLabel, Input, SimpleGrid, Stack, useBreakpointValue} from "@chakra-ui/react";
 import {friendlyFormatIBAN} from "ibantools";
-import React from "react";
-import {useInput, Validators} from "react-grapple";
+import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {Rekening, RekeningInput} from "../../generated/graphql";
 import {Regex, sanitizeIBAN} from "../../utils/things";
 import useToaster from "../../utils/useToaster";
+import zod from "../../utils/zod";
+
+const validator = zod.object({
+	rekeninghouder: zod.string().nonempty().max(100),
+	iban: zod.string().regex(Regex.IbanNL),
+});
+
+const useErrorMap = (t): zod.ZodErrorMap => (error, ctx) => {
+	if (error.path.includes("iban")) {
+		return {message: t("errors.iban.generalError")};
+	}
+	else if (error.path.includes("rekeninghouder")) {
+		return {message: t("errors.rekeninghouder.generalError")};
+	}
+
+	return {message: ctx.defaultError};
+};
 
 const RekeningForm: React.FC<{
 	rekening?: Rekening,
@@ -15,47 +31,45 @@ const RekeningForm: React.FC<{
 	const isMobile = useBreakpointValue([true, null, null, false]);
 	const {t} = useTranslation();
 	const toast = useToaster();
+	const errorMap = useErrorMap(t);
 
-	const rekeninghouder = useInput({
-		defaultValue: rekening?.rekeninghouder,
-		validate: [Validators.required],
-	});
-	const iban = useInput({
-		defaultValue: rekening?.iban,
-		validate: [Validators.required, (v) => new RegExp(Regex.IbanNL).test(sanitizeIBAN(v))],
-		placeholder: friendlyFormatIBAN("NL00BANK0123456789") || "",
-	});
+	const [rekeninghouder, setRekeninghouder] = useState<string>(rekening?.rekeninghouder || "");
+	const [iban, setIban] = useState<string>(rekening?.iban || "");
 
 	const onSubmit = () => {
-		const fieldsValid = [rekeninghouder, iban].every(f => f.isValid);
-		if (!fieldsValid) {
-			toast({
-				error: t("messages.rekeningen.invalidFormMessage"),
+		try {
+			const data = validator.parse({rekeninghouder, iban}, {errorMap});
+			onSave({
+				...(rekening || {}),
+				rekeninghouder: data.rekeninghouder,
+				iban: data.iban ? sanitizeIBAN(data.iban) : undefined,
+			}, () => {
+				setRekeninghouder("");
+				setIban("");
 			});
-			return;
 		}
-
-		onSave({
-			...(rekening || {}),
-			rekeninghouder: rekeninghouder.value,
-			iban: sanitizeIBAN(iban.value),
-		}, () => {
-			rekeninghouder.reset();
-			iban.reset();
-		});
+		catch (err) {
+			toast({
+				error: t("messages.formInputError.description"),
+			});
+		}
 	};
-
-	const isInvalid = (input) => input.dirty && !input.isValid;
 
 	return (
 		<SimpleGrid minChildWidth={isMobile ? "100%" : 250} gridGap={2}>
 			<Stack spacing={1}>
-				<FormLabel htmlFor={"rekeninghouder"}>{t("forms.rekeningen.fields.accountHolder")}</FormLabel>
-				<Input isInvalid={isInvalid(rekeninghouder)} {...rekeninghouder.bind} id="rekeninghouder" autoFocus={!(rekening?.rekeninghouder)} />
+				<FormControl isInvalid={!validator.shape.rekeninghouder?.safeParse(rekeninghouder).success} id={"rekeninghouder"}>
+					<FormLabel>{t("forms.rekeningen.fields.accountHolder")}</FormLabel>
+					<Input onChange={e => setRekeninghouder(e.target.value)} value={rekeninghouder || ""} autoFocus={!(rekening?.rekeninghouder)} />
+					<FormErrorMessage>{t("errors.rekeninghouder.generalError")}</FormErrorMessage>
+				</FormControl>
 			</Stack>
 			<Stack spacing={1}>
-				<FormLabel htmlFor={"iban"}>{t("forms.rekeningen.fields.iban")}</FormLabel>
-				<Input isInvalid={isInvalid(iban)} {...iban.bind} id="iban" autoFocus={!!(rekening?.rekeninghouder)} />
+				<FormControl isInvalid={!validator.shape.iban?.safeParse(iban).success} id={"iban"}>
+					<FormLabel>{t("forms.rekeningen.fields.iban")}</FormLabel>
+					<Input onChange={e => setIban(e.target.value)} value={iban || ""} placeholder={friendlyFormatIBAN("NL00BANK0123456789") || ""} autoFocus={!!(rekening?.rekeninghouder)} />
+					<FormErrorMessage>{t("errors.iban.generalError")}</FormErrorMessage>
+				</FormControl>
 			</Stack>
 			<Stack direction={"row"} alignItems={"flex-end"}>
 				<Button type={"reset"} onClick={() => onCancel()}>{t("actions.cancel")}</Button>

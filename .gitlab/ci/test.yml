@@ -19,16 +19,10 @@
     max: 2
     when: script_failure
 
-
-frontend-lint:
-  extends: .frontend
-  script:
-    - npm run lint
-
-
 frontend-test:
   extends: .frontend
   script:
+    - npm run lint
     - npm run test:coverage
   coverage: /All\sfiles.*?\s+(\d+.\d+)/
   artifacts:
