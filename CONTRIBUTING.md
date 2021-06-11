@@ -42,7 +42,15 @@ After approval, if you'd like to merge your branch, always merge **into** `devel
 If you're a few commits behind `develop`, please don't merge `develop` into your branch, pull and rebase onto `develop` instead. 
 This is how we maintain a semi-linear history.
 
-Pushing directly to `develop` is disabled. You can force-push to your own branch, **but please bear in mind that you're overwriting changes**!
+To make it easy for you, just setup your git so that this happens automatically by using the following command:
+```bash
+git config --global pull.rebase true
+```
+
+### Force pushing
+
+You can force-push to your own branch, **but please bear in mind that you're overwriting changes**! \
+Pushing directly to `develop` is disabled.
 
 ## Branches and deployment
 
