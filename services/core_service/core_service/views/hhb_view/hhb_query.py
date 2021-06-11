@@ -84,7 +84,8 @@ class HHBQuery():
             logger.error(e)
             abort(make_response({"errors": [f"Failed to parse filters."]}, 400))
 
-    def __parse_filter_kwargs(self, filter_kwargs: Dict[str, Union[str, int, bool]], col_name: str = None) -> List[ColumnElement]:
+    def __parse_filter_kwargs(self, filter_kwargs: Dict[str, Union[str, int, bool]],
+                              col_name: str = None) -> List[ColumnElement]:
         """
         Dynamically builds complex filter queries.
 
@@ -142,7 +143,7 @@ class HHBQuery():
                     filter = getattr(self.hhb_model, key) == value
                     sqlalchemy_filters.append(filter)
                 else:
-                    raise ValueError('Incorrect syntax in filter_kwargs')
+                    raise ValueError(f"Incorrect syntax in filter_kwargs: {key =} - {value =}")
 
         return sqlalchemy_filters
 

@@ -4,6 +4,7 @@ from flask import request
 from graphql import GraphQLError
 
 import hhb_backend.graphql.models.bank_transaction as bank_transaction
+from hhb_backend.graphql.scalars.custom_operator import ComplexFilterType
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     gebruikers_activiteit_entities,
     log_gebruikers_activiteit,
@@ -79,29 +80,14 @@ class BankTransactionsQuery:
         return bank_transactions
 
 
-# TODO: make these filters applicable for all models
-class CustomOperator(graphene.InputObjectType):
-    neq = graphene.Int()
-    eq = graphene.Int()
-    gt = graphene.Int()
-    gte = graphene.Int()
-    lt = graphene.Int()
-    lte = graphene.Int()
-    # TODO: find out a way to define a List which accepts both Int and String
-    #  so we don't need separate keys for this
-    in_int = graphene.List(graphene.Int)
-    notin_int = graphene.List(graphene.Int)
-    in_str = graphene.List(graphene.String)
-    notin_str = graphene.List(graphene.String)
-
-
 class BankTransactionFilter(graphene.InputObjectType):
     or_ = graphene.Field(lambda: BankTransactionFilter)
     and_ = graphene.Field(lambda: BankTransactionFilter)
     is_geboekt = graphene.Boolean()
     is_credit = graphene.Boolean()
-    bedrag = CustomOperator()
-    tegen_rekening = CustomOperator()
+    bedrag = ComplexFilterType()
+    tegen_rekening = ComplexFilterType()
+    statement_line = ComplexFilterType()
 
 
 class BankTransactionsPagedQuery:

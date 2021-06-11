@@ -18,8 +18,6 @@ AND_OR_OPERATORS = {
 
 
 IN_NOT_IN_OPERATORS = {
-    "in_int": "in_",
-    "notin_int": "notin_",
-    "in_str": "in_",
-    "notin_str": "notin_",
+    "in_": "in_",
+    "notin_": "notin_"
 }
