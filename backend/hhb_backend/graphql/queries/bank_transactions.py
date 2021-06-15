@@ -4,7 +4,7 @@ from flask import request
 from graphql import GraphQLError
 
 import hhb_backend.graphql.models.bank_transaction as bank_transaction
-from hhb_backend.graphql.scalars.custom_operator import ComplexFilterType
+from hhb_backend.graphql.filters.bank_transactions import BankTransactionFilter
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     gebruikers_activiteit_entities,
     log_gebruikers_activiteit,
@@ -78,16 +78,6 @@ class BankTransactionsQuery:
                 bank_transactions = bank_transactions_ids or bank_transactions_csms
 
         return bank_transactions
-
-
-class BankTransactionFilter(graphene.InputObjectType):
-    or_ = graphene.Field(lambda: BankTransactionFilter)
-    and_ = graphene.Field(lambda: BankTransactionFilter)
-    is_geboekt = graphene.Boolean()
-    is_credit = graphene.Boolean()
-    bedrag = ComplexFilterType()
-    tegen_rekening = ComplexFilterType()
-    statement_line = ComplexFilterType()
 
 
 class BankTransactionsPagedQuery:

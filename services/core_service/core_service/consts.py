@@ -11,21 +11,21 @@ class EnumWithGet(Enum):
 
 
 class ComparisonOperator(EnumWithGet):
-    eq = operators.eq
-    neq = operators.ne
-    gt = operators.gt
-    gte = operators.ge
-    lt = operators.lt
-    lte = operators.le
+    EQ = operators.eq
+    NEQ = operators.ne
+    GT = operators.gt
+    GTE = operators.ge
+    LT = operators.lt
+    LTE = operators.le
 
 
 class ListAppearanceOperator(EnumWithGet):
-    in_ = "in_"
-    notin_ = "notin_"
+    IN = "in_"
+    NOTIN = "notin_"
 
 
 # TODO: find out why Enum version of this returns errors, then replace for Enum as well
 AND_OR_OPERATORS = {
-    "and_": sql.and_,
-    "or_": sql.or_,
+    "AND": sql.and_,
+    "OR": sql.or_,
 }

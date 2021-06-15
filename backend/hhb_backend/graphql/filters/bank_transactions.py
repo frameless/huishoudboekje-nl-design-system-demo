@@ -1,0 +1,14 @@
+import graphene
+
+from ..scalars.complex_filter import ComplexFilterType
+
+
+class BankTransactionFilter(graphene.InputObjectType):
+    OR = graphene.Field(lambda: BankTransactionFilter)
+    AND = graphene.Field(lambda: BankTransactionFilter)
+    is_geboekt = graphene.Boolean()
+    is_credit = graphene.Boolean()
+    id = ComplexFilterType()
+    bedrag = ComplexFilterType()
+    tegen_rekening = ComplexFilterType()
+    statement_line = ComplexFilterType()

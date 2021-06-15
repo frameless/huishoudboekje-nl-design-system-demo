@@ -97,15 +97,15 @@ class HHBQuery():
         query {
             bankTransactionsPaged(
               start: 1, limit: 50, filters:{
-                or_: {
+                OR: {
                   bedrag: {
-                    inInt: [39100, 166912]
+                    IN: [39100, 166912]
                   }
-                  and_: {
+                  AND: {
                     isGeboekt:false,
                     isCredit:true,
                     bedrag: {
-                      gt:30000
+                      GT:30000
                     }
                   }
 
