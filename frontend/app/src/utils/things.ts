@@ -8,6 +8,8 @@ import {Granularity, periodFormatForGranularity} from "../components/Rapportage/
 import {Afspraak, BankTransaction, Burger, GebruikersActiviteit, Organisatie, Rubriek} from "../generated/graphql";
 import d from "./dayjs";
 
+const HHB_NUMMER_FORMAT = "HHB000000";
+
 export const searchFields = (term: string, fields: string[]): boolean => {
 	const _fields = fields.filter(f => f);
 
@@ -162,3 +164,5 @@ export const isAfspraakActive = (afspraak: Afspraak) => {
 	// If there's no validThrough, assume this Afspraak is active.
 	return true;
 };
+
+export const getBurgerHhbId = (burger: Burger) => burger.id && String(burger.id).padStart(9, HHB_NUMMER_FORMAT);
