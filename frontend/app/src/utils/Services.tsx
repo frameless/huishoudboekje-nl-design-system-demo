@@ -72,7 +72,7 @@ export const useServices = () => {
 	return {
 		services,
 		ready,
-		allAvailable: ready && services.length > 0 && services.every(s => s.isAlive === true),
+		allAvailable: ready && services.length > 0 && services.filter(s => s.serviceName !== "unleash-service").every(s => s.isAlive === true),
 	};
 };
 
