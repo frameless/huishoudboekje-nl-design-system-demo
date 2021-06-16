@@ -19,8 +19,11 @@ class SingleDataLoader(DataLoader):
     def url_for(self, keys=None):
         return f"""{self.service}/{self.model}/{f"?{self.filter_item}={','.join([str(k) for k in keys])}" if keys else ''}"""
 
-    def get_all_and_cache(self):
-        response = requests.get(self.url_for())
+    def get_all_and_cache(self, filters: Dict[str, Union[str, int, bool]] = None):
+        params = {
+            'filters': json.dumps(filters) if filters else None
+        }
+        response = requests.get(url=f"{self.service}/{self.model}/", params=params)
 
         if not response.ok:
             raise GraphQLError(f"Upstream API responded: {response.text}")
