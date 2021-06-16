@@ -14,11 +14,10 @@ class Bedrag(Scalar):
     @staticmethod
     def serialize(value):
         return f"{Decimal(value, Context(prec=2, rounding=ROUND_HALF_DOWN)) / 100:.2f}"
-        return str(Decimal(value) / 100)
 
     @staticmethod
     def parse_literal(node):
-        if isinstance(node, ast.StringValue):
+        if isinstance(node, (ast.StringValue, ast.IntValue, ast.FloatValue)):
             return Bedrag.parse_value(node.value)
 
     @staticmethod

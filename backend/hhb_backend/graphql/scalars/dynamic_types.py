@@ -1,8 +1,8 @@
-from datetime import datetime, date
+from datetime import date, datetime
 
+from aniso8601 import parse_date, parse_datetime
 from graphene.types import Scalar
 from graphql.language.ast import IntValue
-from aniso8601 import parse_date, parse_datetime
 
 
 # As per the GraphQL Spec, Integers are only treated as valid when a valid
@@ -10,6 +10,8 @@ from aniso8601 import parse_date, parse_datetime
 #
 # n.b. JavaScript's integers are safe between -(2^53 - 1) and 2^53 - 1 because
 # they are internally represented as IEEE 754 doubles.
+
+
 MAX_INT = 2147483647
 MIN_INT = -2147483648
 
@@ -50,6 +52,7 @@ class DynamicType(Scalar):
     """
     Accepts dates, datetimes, ints and strings.
     """
+
     @staticmethod
     def serialize(value):
         if isinstance(value, (datetime, date)):

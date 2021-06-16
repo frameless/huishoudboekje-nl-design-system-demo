@@ -1,6 +1,6 @@
 import graphene
 
-from ..scalars.complex_filter import ComplexFilterType
+from ..scalars.complex_filter import ComplexFilterType, ComplexBedragFilterType
 
 
 class BankTransactionFilter(graphene.InputObjectType):
@@ -9,6 +9,6 @@ class BankTransactionFilter(graphene.InputObjectType):
     is_geboekt = graphene.Boolean()
     is_credit = graphene.Boolean()
     id = ComplexFilterType()
-    bedrag = ComplexFilterType()
+    bedrag = ComplexBedragFilterType()
     tegen_rekening = ComplexFilterType()
     statement_line = ComplexFilterType()
