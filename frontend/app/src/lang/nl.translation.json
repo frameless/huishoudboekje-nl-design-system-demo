@@ -91,8 +91,8 @@
         "export": "Exporteren",
         "download": "Downloaden",
         "startBoeken": "Alle transacties afletteren",
-        "undoAfletteren": "Afletteren ongedaan maken",
         "filter": "Filteren",
+        "undoAfletteren": "Afletteren ongedaan maken",
         "backToList": "Terug naar overzicht",
         "brievenExport": "Exporteer gegevens voor brieven",
         "clearSearch": "Zoekopdracht wissen",
@@ -391,6 +391,11 @@
     },
     "van": "Van",
     "tot": "Tot",
+    "filters": {
+        "transactions": {
+            "onlyUnbooked": "Alleen niet-afgeletterde transacties weergeven"
+        }
+    },
     "words": {
         "afspraak": "Afspraak"
     },

@@ -1,8 +1,8 @@
 import {AddIcon, ChevronDownIcon} from "@chakra-ui/icons";
-import {Button, HStack, IconButton, Menu, MenuButton, MenuItem, MenuList} from "@chakra-ui/react";
-import React from "react";
+import {Button, Checkbox, FormLabel, HStack, IconButton, Menu, MenuButton, MenuItem, MenuList, Stack} from "@chakra-ui/react";
+import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
-import { NavLink } from "react-router-dom";
+import {NavLink} from "react-router-dom";
 import Routes from "../../../config/routes";
 import {useGetTransactiesQuery, useStartAutomatischBoekenMutation} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
@@ -16,9 +16,10 @@ import TransactiesList from "./TransactiesList";
 
 const Transactions = () => {
 	const {t} = useTranslation();
-	const {offset, pageSize, setTotal, PaginationButtons} = usePagination({
-		pageSize: 50,
+	const {offset, pageSize, total, setTotal, goFirst, PaginationButtons} = usePagination({
+		pageSize: 100,
 	});
+	const [filters, setFilters] = useState<Record<string, boolean | string>>({});
 	const handleMutation = useHandleMutation();
 
 	const $transactions = useGetTransactiesQuery({
@@ -26,8 +27,16 @@ const Transactions = () => {
 		variables: {
 			offset,
 			limit: pageSize,
+			filters: {
+				isGeboekt: filters.onlyUnbooked ? false : undefined,
+			},
 		},
-		onCompleted: data => setTotal(data.bankTransactionsPaged?.pageInfo?.count),
+		onCompleted: data => {
+			if (total !== data.bankTransactionsPaged?.pageInfo?.count) {
+				setTotal(data.bankTransactionsPaged?.pageInfo?.count);
+				goFirst();
+			}
+		},
 	});
 
 	const [startAutomatischBoeken] = useStartAutomatischBoekenMutation();
@@ -47,6 +56,13 @@ const Transactions = () => {
 					</MenuList>
 				</Menu>
 			)}>
+				<Section>
+					<Stack>
+						<FormLabel>{t("actions.filter")}</FormLabel>
+						<Checkbox onChange={e => setFilters(f => ({...f, onlyUnbooked: e.target.checked}))}>{t("filters.transactions.onlyUnbooked")}</Checkbox>
+					</Stack>
+				</Section>
+
 				<Section spacing={5}>
 					<HStack justify={"center"}>
 						<PaginationButtons />
