@@ -52,7 +52,7 @@ const ViewAfspraak = () => {
 						let error = err.message;
 
 						if (err instanceof zod.ZodError) {
-							if (containsZodErrorCode(err, [zod.ZodErrorCode.too_small, zod.ZodErrorCode.invalid_type])) {
+							if (containsZodErrorCode(err, [zod.ZodIssueCode.too_small, zod.ZodIssueCode.invalid_type])) {
 								error = t("messages.zoektermLengthError");
 							}
 						}
