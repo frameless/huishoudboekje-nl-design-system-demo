@@ -59,3 +59,9 @@ staticPasswords:
   name: Gemeente Utrecht
   userID: 41e2bb72-f62d-44c1-ae0c-b1190892db50
   hash: $2y$12$xWWlTptiMyPJbuPo7WwBgefl/sj3vz8iNJn5fPwVWQcBcZh1HsC.W # demo
+- username: nerds@sloothuizen.nl
+  email: nerds@sloothuizen.nl
+  name: Nerds Company
+  userID: da072226-ce83-11eb-b8bc-0242ac130003
+  hash: $2y$12$xWWlTptiMyPJbuPo7WwBgefl/sj3vz8iNJn5fPwVWQcBcZh1HsC.W # demo
+
