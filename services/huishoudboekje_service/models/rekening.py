@@ -9,9 +9,8 @@ class Rekening(db.Model):
 
     id = Column(Integer, Sequence('rekeningen_id_seq'), primary_key=True)
     iban = Column(String, nullable=False)
-    rekeninghouder = Column(String, nullable=False)
+    rekeninghouder = Column(String(length=100), nullable=False)
 
     burgers = relationship("RekeningBurger", back_populates="rekening")
     organisaties = relationship("RekeningOrganisatie", back_populates="rekening")
     afspraken = relationship("Afspraak", back_populates="tegen_rekening")
-
