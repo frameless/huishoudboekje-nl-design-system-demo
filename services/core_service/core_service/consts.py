@@ -19,6 +19,10 @@ class ComparisonOperator(EnumWithGet):
     LTE = operators.le
 
 
+class RangeOperator(EnumWithGet):
+    BTWN = "between"
+
+
 class ListAppearanceOperator(EnumWithGet):
     IN = "in_"
     NOTIN = "notin_"

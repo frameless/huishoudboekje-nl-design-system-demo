@@ -8,7 +8,7 @@ from sqlalchemy.orm import joinedload
 from sqlalchemy.sql.expression import ColumnElement
 
 from core_service.utils import row2dict
-from core_service.consts import AND_OR_OPERATORS, ComparisonOperator, ListAppearanceOperator
+from core_service.consts import AND_OR_OPERATORS, ComparisonOperator, ListAppearanceOperator, RangeOperator
 
 
 logger = logging.getLogger(__name__)
@@ -82,7 +82,7 @@ class HHBQuery():
                 self.query = self.query.filter(*filters)
         except ValueError as e:
             logger.error(e)
-            abort(make_response({"errors": [f"Failed to parse filters."]}, 400))
+            abort(make_response({"errors": [f"Failed to parse filters: {e}"]}, 400))
 
     def __parse_filter_kwargs(self, filter_kwargs: Dict[str, Union[str, int, bool]],
                               col_name: str = None) -> List[ColumnElement]:
@@ -96,16 +96,19 @@ class HHBQuery():
         example:
         query {
             bankTransactionsPaged(
-              start: 1, limit: 50, filters:{
+              start: 1, limit: 50, filters: {
                 OR: {
                   bedrag: {
                     IN: [39100, 166912]
                   }
+                  bedrag: {
+                    BTWN: [0, 200]
+                  }
                   AND: {
-                    isGeboekt:false,
-                    isCredit:true,
+                    isGeboekt: false,
+                    isCredit: true,
                     bedrag: {
-                      GT:30000
+                      GT: 30000
                     }
                   }
 
@@ -136,12 +139,28 @@ class HHBQuery():
                 if (operator := ComparisonOperator.get(key, None)):
                     filter = operator.value(getattr(self.hhb_model, col_name), value)
                     sqlalchemy_filters.append(filter)
+
+                elif (operator := RangeOperator.get(key, None)):
+                    if not isinstance(value, list):
+                        raise ValueError(f"Incorrect input for BTWN operator: "
+                                         f"value should be list ({value =})")
+                    elif len(value) != 2:
+                        raise ValueError(f"Incorrect input for BTWN operator: "
+                                         f"value list should contain 2 values (min and max) ({value =})")
+                    filter = getattr(getattr(self.hhb_model, col_name), operator.value)(*value, symmetric=True)
+                    sqlalchemy_filters.append(filter)
+
                 elif (operator := ListAppearanceOperator.get(key, None)):
+                    if not isinstance(value, list):
+                        raise ValueError(f"Incorrect syntax for BTWN operator: "
+                                         f"value should be list ({key =} - {value =})")
                     filter = getattr(getattr(self.hhb_model, col_name), operator.value)(value)
                     sqlalchemy_filters.append(filter)
+
                 elif isinstance(value, bool):
                     filter = getattr(self.hhb_model, key) == value
                     sqlalchemy_filters.append(filter)
+
                 else:
                     raise ValueError(f"Incorrect syntax in filter_kwargs: {key =} - {value =}")
 
