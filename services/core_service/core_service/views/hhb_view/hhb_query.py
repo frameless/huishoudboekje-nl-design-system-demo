@@ -4,11 +4,12 @@ import re
 from typing import Dict, Union, List
 
 from flask import request, abort, make_response
+from sqlalchemy import sql
 from sqlalchemy.orm import joinedload
 from sqlalchemy.sql.expression import ColumnElement
 
 from core_service.utils import row2dict
-from core_service.consts import AND_OR_OPERATORS, ComparisonOperator, ListAppearanceOperator, RangeOperator
+from core_service.consts import AndOrOperator, ComparisonOperator, ListAppearanceOperator, RangeOperator
 
 
 logger = logging.getLogger(__name__)
@@ -127,17 +128,23 @@ class HHBQuery():
         sqlalchemy_filters = []
         for key, value in filter_kwargs.items():
             if isinstance(value, dict):
-                if (operator := AND_OR_OPERATORS.get(key, None)):
+                if (operator := AndOrOperator.get(key, None)):
                     # value is dict with one or more filters
-                    filter = operator(*self.__parse_filter_kwargs(filter_kwargs=value))
+                    op = getattr(sql, operator.value)
+                    filter = op(*self.__parse_filter_kwargs(filter_kwargs=value))
                     sqlalchemy_filters.append(filter)
                 else:
                     # key is column name, value is operator. Pass col_name so it is remembered
                     filters = self.__parse_filter_kwargs(filter_kwargs=value, col_name=key)
                     sqlalchemy_filters.append(*filters)
+            elif isinstance(value, bool):
+                filter = getattr(self.hhb_model, key) == value
+                sqlalchemy_filters.append(filter)
             else:
+                db_column = getattr(self.hhb_model, col_name)
+
                 if (operator := ComparisonOperator.get(key, None)):
-                    filter = operator.value(getattr(self.hhb_model, col_name), value)
+                    filter = operator.value(db_column, value)
                     sqlalchemy_filters.append(filter)
 
                 elif (operator := RangeOperator.get(key, None)):
@@ -147,22 +154,20 @@ class HHBQuery():
                     elif len(value) != 2:
                         raise ValueError(f"Incorrect input for BTWN operator: "
                                          f"value list should contain 2 values (min and max) ({value =})")
-                    filter = getattr(getattr(self.hhb_model, col_name), operator.value)(*value, symmetric=True)
+                    filter = getattr(db_column, operator.value)(*value, symmetric=True)
                     sqlalchemy_filters.append(filter)
 
                 elif (operator := ListAppearanceOperator.get(key, None)):
                     if not isinstance(value, list):
                         raise ValueError(f"Incorrect syntax for BTWN operator: "
                                          f"value should be list ({key =} - {value =})")
-                    filter = getattr(getattr(self.hhb_model, col_name), operator.value)(value)
-                    sqlalchemy_filters.append(filter)
-
-                elif isinstance(value, bool):
-                    filter = getattr(self.hhb_model, key) == value
+                    filter = getattr(db_column, operator.value)(value)
                     sqlalchemy_filters.append(filter)
 
                 else:
-                    raise ValueError(f"Incorrect syntax in filter_kwargs: {key =} - {value =}")
+                    raise ValueError(f"Incorrect syntax in filter_kwargs: "
+                                     f"expected to find operator for key but could not find one "
+                                     f"({key =}  {value =})")
 
         return sqlalchemy_filters
 

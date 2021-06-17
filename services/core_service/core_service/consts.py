@@ -1,7 +1,6 @@
 from enum import Enum
 
 from sqlalchemy.sql import operators
-from sqlalchemy import sql
 
 
 class EnumWithGet(Enum):
@@ -28,8 +27,6 @@ class ListAppearanceOperator(EnumWithGet):
     NOTIN = "notin_"
 
 
-# TODO: find out why Enum version of this returns errors, then replace for Enum as well
-AND_OR_OPERATORS = {
-    "AND": sql.and_,
-    "OR": sql.or_,
-}
+class AndOrOperator(EnumWithGet):
+    AND = "and_"
+    OR = "or_"
