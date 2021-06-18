@@ -1,0 +1,19 @@
+{
+  "overwrite": true,
+  "schema": "schema.graphql",
+  "documents": "../frontend/app/graphql/**",
+  "generates": {
+	"graphql.ts": {
+	  "plugins": [
+		"typescript",
+		"typescript-operations",
+		"typescript-generic-sdk"
+	  ]
+	}
+  },
+  "config": {
+	"maybeValue": "T",
+	"defaultScalarType": "any",
+	"skipTypename": true
+  }
+}
