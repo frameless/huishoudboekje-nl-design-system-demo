@@ -12,3 +12,4 @@ class BankTransactionFilter(graphene.InputObjectType):
     bedrag = ComplexBedragFilterType()
     tegen_rekening = ComplexFilterType()
     statement_line = ComplexFilterType()
+    transactie_datum = ComplexFilterType()
