@@ -13,7 +13,7 @@ class ComplexFilterType(graphene.InputObjectType):
     LTE = DynamicType()
     IN = graphene.List(DynamicType)
     NOTIN = graphene.List(DynamicType)
-    BTWN = graphene.List(DynamicType)
+    BETWEEN = graphene.List(DynamicType)
 
 
 class ComplexBedragFilterType(graphene.InputObjectType):
@@ -25,4 +25,4 @@ class ComplexBedragFilterType(graphene.InputObjectType):
     LTE = graphene.Argument(Bedrag)
     IN = graphene.List(Bedrag)
     NOTIN = graphene.List(Bedrag)
-    BTWN = graphene.List(Bedrag)
+    BETWEEN = graphene.List(Bedrag)

@@ -1,5 +1,4 @@
 import json
-import logging
 import re
 from typing import Dict, Union, List
 
@@ -10,9 +9,6 @@ from sqlalchemy.sql.expression import ColumnElement
 
 from core_service.utils import row2dict
 from core_service.consts import AndOrOperator, ComparisonOperator, ListAppearanceOperator, RangeOperator
-
-
-logger = logging.getLogger(__name__)
 
 
 class HHBQuery():
@@ -82,7 +78,6 @@ class HHBQuery():
                 filters = self.__parse_filter_kwargs(filter_kwargs=filter_kwargs)
                 self.query = self.query.filter(*filters)
         except ValueError as e:
-            logger.error(e)
             abort(make_response({"errors": [f"Failed to parse filters: {e}"]}, 400))
 
     def __parse_filter_kwargs(self, filter_kwargs: Dict[str, Union[str, int, bool]],
@@ -103,7 +98,7 @@ class HHBQuery():
                     IN: [39100, 166912]
                   }
                   bedrag: {
-                    BTWN: [0, 200]
+                    BETWEEN: [0, 200]
                   }
                   AND: {
                     isGeboekt: false,
@@ -149,19 +144,21 @@ class HHBQuery():
 
                 elif (operator := RangeOperator.get(key, None)):
                     if not isinstance(value, list):
-                        raise ValueError(f"Incorrect input for BTWN operator: "
+                        raise ValueError(f"Incorrect input for BETWEEN operator: "
                                          f"value should be list ({value =})")
                     elif len(value) != 2:
-                        raise ValueError(f"Incorrect input for BTWN operator: "
+                        raise ValueError(f"Incorrect input for BETWEEN operator: "
                                          f"value list should contain 2 values (min and max) ({value =})")
-                    filter = getattr(db_column, operator.value)(*value, symmetric=True)
+                    column_operator = getattr(db_column, operator.value)
+                    filter = column_operator(*value, symmetric=True)
                     sqlalchemy_filters.append(filter)
 
                 elif (operator := ListAppearanceOperator.get(key, None)):
                     if not isinstance(value, list):
-                        raise ValueError(f"Incorrect syntax for BTWN operator: "
+                        raise ValueError(f"Incorrect syntax for BETWEEN operator: "
                                          f"value should be list ({key =} - {value =})")
-                    filter = getattr(db_column, operator.value)(value)
+                    column_operator = getattr(db_column, operator.value)
+                    filter = column_operator(value)
                     sqlalchemy_filters.append(filter)
 
                 else:

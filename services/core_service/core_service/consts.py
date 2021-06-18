@@ -19,7 +19,7 @@ class ComparisonOperator(EnumWithGet):
 
 
 class RangeOperator(EnumWithGet):
-    BTWN = "between"
+    BETWEEN = "between"
 
 
 class ListAppearanceOperator(EnumWithGet):

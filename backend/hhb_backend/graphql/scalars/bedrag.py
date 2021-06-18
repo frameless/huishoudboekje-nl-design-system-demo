@@ -17,7 +17,7 @@ class Bedrag(Scalar):
 
     @staticmethod
     def parse_literal(node):
-        if isinstance(node, (ast.StringValue, ast.IntValue, ast.FloatValue)):
+        if isinstance(node, ast.StringValue):
             return Bedrag.parse_value(node.value)
 
     @staticmethod

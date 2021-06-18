@@ -16,38 +16,6 @@ MAX_INT = 2147483647
 MIN_INT = -2147483648
 
 
-class StringOrInt(Scalar):
-    """
-    Accepts both strings and ints.
-    Tries to parse incoming value into an int, if not possible the value is returned as string.
-    Loosely based on Int: https://docs.graphene-python.org/en/latest/_modules/graphene/types/scalars/
-    """
-
-    @staticmethod
-    def coerce_int(value):
-        try:
-            num = int(value)
-        except ValueError:
-            try:
-                num = int(float(value))
-            except ValueError:
-                return value
-        if MIN_INT <= num <= MAX_INT:
-            return num
-
-    serialize = coerce_int
-    parse_value = coerce_int
-
-    @staticmethod
-    def parse_literal(ast):
-        if isinstance(ast, IntValue):
-            num = int(ast.value)
-            if MIN_INT <= num <= MAX_INT:
-                return num
-        else:
-            return ast.value
-
-
 class DynamicType(Scalar):
     """
     Accepts dates, datetimes, ints and strings.

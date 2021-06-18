@@ -1,11 +1,13 @@
 import json
 from typing import Dict, Union
-from urllib.parse import urlencode
 
 import requests
 from graphql import GraphQLError
 from aiodataloader import DataLoader
 from hhb_backend.graphql import settings
+
+
+Filters = Dict[str, Union['Filters', str, int, bool]]
 
 
 class SingleDataLoader(DataLoader):
@@ -19,7 +21,7 @@ class SingleDataLoader(DataLoader):
     def url_for(self, keys=None):
         return f"""{self.service}/{self.model}/{f"?{self.filter_item}={','.join([str(k) for k in keys])}" if keys else ''}"""
 
-    def get_all_and_cache(self, filters: Dict[str, Union[str, int, bool]] = None):
+    def get_all_and_cache(self, filters: Filters = None):
         params = {
             'filters': json.dumps(filters) if filters else None
         }
@@ -36,7 +38,7 @@ class SingleDataLoader(DataLoader):
         return result
 
     def get_all_paged(self, start: int = 1, limit: int = 20, desc: bool = False,
-                      sortingColumn: str = "id", filters: Dict[str, Union[str, int, bool]] = None):
+                      sortingColumn: str = "id", filters: Filters = None):
         params = {
             'start': start,
             'limit': limit,
@@ -101,7 +103,7 @@ class ListDataLoader(DataLoader):
         return [objects.get(key, []) for key in keys]
 
     def get_all_paged(self, keys, start: int = 1, limit: int = 20, desc: bool = False,
-                      sortingColumn: str = "id", filters: Dict[str, Union[str, int, bool]] = None):
+                      sortingColumn: str = "id", filters: Filters = None):
         params = {
             f'{self.filter_item}': ','.join([str(k) for k in keys]),
             'start': start,

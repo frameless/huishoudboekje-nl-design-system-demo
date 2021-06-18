@@ -1,15 +1,9 @@
 """ MethodView for /customerstatementmessages/ path """
-import json
-import logging
-
 from flask import request, abort, make_response
 from sqlalchemy import func
 
 from models.bank_transaction import BankTransaction
 from core_service.views.hhb_view import HHBView
-
-
-logger = logging.getLogger(__name__)
 
 
 class BankTransactionView(HHBView):
