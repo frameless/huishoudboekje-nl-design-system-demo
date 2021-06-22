@@ -84,16 +84,6 @@ def test_bank_transaction_get_success_filter_is_geboekt_and_csm(client, bank_tra
 
 class TestBankTransactionComplexFilter:
     """ Test /banktransactions/?filters(<filters>) path """
-    filters = {
-        "OR": {
-            "AND": {"is_geboekt": True, "is_credit": True},
-            "id": {"IN": [4, 6]},
-            "transactie_datum": {
-                "BETWEEN": ["2021-01-01T00:00:00", "2021-01-10T00:00:00"]
-            },
-        }
-    }
-
     @pytest.fixture
     def setup(self, bank_transaction_factory):
         self.bt_tt = bank_transaction_factory.createBankTransaction(is_credit=True, is_geboekt=True)
