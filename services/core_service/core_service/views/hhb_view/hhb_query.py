@@ -132,10 +132,8 @@ class HHBQuery():
                     # key is column name, value is operator. Pass col_name so it is remembered
                     filters = self.__parse_filter_kwargs(filter_kwargs=value, col_name=key)
                     sqlalchemy_filters.append(*filters)
-            elif isinstance(value, bool):
-                filter = getattr(self.hhb_model, key) == value
-                sqlalchemy_filters.append(filter)
-            else:
+            elif col_name:
+                # existence of col_name indicates a nested comparison with an operator
                 db_column = getattr(self.hhb_model, col_name)
 
                 if (operator := ComparisonOperator.get(key, None)):
@@ -160,11 +158,14 @@ class HHBQuery():
                     column_operator = getattr(db_column, operator.value)
                     filter = column_operator(value)
                     sqlalchemy_filters.append(filter)
-
                 else:
                     raise ValueError(f"Incorrect syntax in filter_kwargs: "
                                      f"expected to find operator for key but could not find one "
                                      f"({key =}  {value =})")
+            else:
+                # just a simple equation
+                filter = getattr(self.hhb_model, key) == value
+                sqlalchemy_filters.append(filter)
 
         return sqlalchemy_filters
 
