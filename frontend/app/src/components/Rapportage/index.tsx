@@ -1,19 +1,36 @@
-import {FormControl, FormLabel, Input, Stack, Tab, TabList, TabPanel, TabPanels, Tabs} from "@chakra-ui/react";
+import {
+	Button,
+	FormControl,
+	FormLabel,
+	Input,
+	Modal,
+	ModalBody,
+	ModalCloseButton,
+	ModalContent,
+	ModalFooter,
+	ModalHeader,
+	ModalOverlay,
+	Stack,
+	Tab,
+	TabList,
+	TabPanel,
+	TabPanels,
+	Tabs,
+	useDisclosure,
+} from "@chakra-ui/react";
 import React, {useState} from "react";
 import DatePicker from "react-datepicker";
-import {useInput} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {useLocation} from "react-router-dom";
 import Select from "react-select";
 import {Burger, Rubriek, useGetReportingDataQuery} from "../../generated/graphql";
+import {DateRange} from "../../models/models";
 import Transaction from "../../models/Transaction";
 import d from "../../utils/dayjs";
 import Queryable from "../../utils/Queryable";
 import {formatBurgerName, useReactSelectStyles} from "../../utils/things";
-import {FormLeft, FormRight} from "../Layouts/Forms";
 import Page from "../Layouts/Page";
 import RadioButtonGroup from "../Layouts/RadioButtons/RadioButtonGroup";
-import Section from "../Layouts/Section";
 import {Granularity} from "./Aggregator";
 import BalanceTable from "./BalanceTable";
 import {RapportageContext} from "./context";
@@ -24,16 +41,12 @@ const Rapportage = () => {
 	const {t} = useTranslation();
 	const reactSelectStyles = useReactSelectStyles();
 	const {search: queryParams} = useLocation();
+	const filterModal = useDisclosure();
+	const $data = useGetReportingDataQuery();
 
-	const $data = useGetReportingDataQuery({
-		fetchPolicy: "no-cache",
-	});
-
-	const startDate = useInput({
-		defaultValue: d().subtract(1, "year").startOf("month").format("L"),
-	});
-	const endDate = useInput({
-		defaultValue: d().subtract(1, "month").endOf("month").format("L"),
+	const [dateRange, setDateRange] = useState<Required<DateRange>>({
+		from: d().subtract(1, "year").startOf("month").toDate(),
+		through: d().subtract(1, "month").endOf("month").toDate(),
 	});
 
 	const [granularity, setGranularity] = useState<Granularity>(Granularity.Monthly);
@@ -50,84 +63,82 @@ const Rapportage = () => {
 	const onChangeGranularity = (value) => setGranularity(value);
 
 	return (
-		<RapportageContext.Provider value={{startDate: d(startDate.value, "L"), endDate: d(endDate.value, "L"), granularity}}>
-			<Page title={t("sidebar.rapportage")} position={"relative"}>
-				<Section>
-					<FormLeft title={t("sections.filterOptions.title")} helperText={t("sections.filterOptions.helperText")} />
-					<FormRight>
-						<Stack>
-							<Stack direction={["column", "row"]} spacing={5} flex={1}>
-								<FormControl as={Stack} flex={1} justifyContent={"flex-end"}>
-									<FormLabel>{t("forms.common.fields.startDate")}</FormLabel>
-									<DatePicker selected={d(startDate.value, "L").isValid() ? d(startDate.value, "L").toDate() : null}
-										dateFormat={"dd-MM-yyyy"}
-										onChange={(value: Date) => {
-											if (value) {
-												startDate.setValue(d(value).format("L"));
-												if (d(endDate.value, "L").isBefore(d(value))) {
-													endDate.setValue(d(value).format("L"));
-												}
-											}
-										}} customInput={(<Input {...startDate.bind} />)} />
-								</FormControl>
-								<FormControl as={Stack} flex={1}>
-									<FormLabel>{t("forms.common.fields.endDate")}</FormLabel>
-									<DatePicker selected={d(endDate.value, "L").isValid() ? d(endDate.value, "L").toDate() : null}
-										dateFormat={"dd-MM-yyyy"}
-										onChange={(value: Date) => {
-											if (value) {
-												endDate.setValue(d(value).format("L"));
-												if (d(startDate.value, "L").isAfter(d(value))) {
-													startDate.setValue(d(value).format("L"));
-												}
-											}
-										}} customInput={(<Input {...startDate.bind} />)} />
-								</FormControl>
-							</Stack>
+		<RapportageContext.Provider value={{startDate: d(dateRange.from), endDate: d(dateRange.through), granularity}}>
+			<Page title={t("sidebar.rapportage")} position={"relative"} right={!$data.loading ? (
+				<Button size={"sm"} colorScheme={"primary"} onClick={() => filterModal.onOpen()}>{t("sections.filterOptions.title")}</Button>
+			) : undefined}>
+				<Modal isOpen={filterModal.isOpen} onClose={filterModal.onClose}>
+					<ModalOverlay />
+					<ModalContent width={"100%"} maxWidth={500}>
+						<ModalHeader>{t("sections.filterOptions.title")}</ModalHeader>
+						<ModalCloseButton />
+						<ModalBody>
+							<Stack>
+								<Stack>
+									<Stack direction={["column", "row"]} spacing={5} flex={1}>
+										<FormControl as={Stack} flex={1} justifyContent={"flex-end"}>
+											<FormLabel>{t("forms.common.fields.startDate")}</FormLabel>
+											<DatePicker selected={dateRange.from || null}
+												dateFormat={"dd-MM-yyyy"} startDate={dateRange.from} endDate={dateRange.through} isClearable={false} selectsRange={true}
+												onChange={(value: [Date, Date]) => {
+													if (value) {
+														const [from, through] = value;
+														if (from || through) {
+															setDateRange(() => ({from, through}));
+														}
+													}
+												}} customInput={(<Input />)} />
+										</FormControl>
+									</Stack>
 
-							<Stack direction={["column", "row"]} spacing={5} flex={1}>
-								<FormControl as={Stack} flex={1}>
-									<FormLabel>{t("charts.filterBurgers")}</FormLabel>
-									<Queryable query={$data} children={data => {
-										const burgers: Burger[] = data.burgers || [];
-										const value = burgers.filter(b => filterBurgerIds.includes(b.id!)).map(b => ({key: b.id, value: b.id, label: formatBurgerName(b)}));
-										return (
-											<Select onChange={onSelectBurger} options={burgers.map(b => ({
-												key: b.id,
-												value: b.id,
-												label: formatBurgerName(b),
-											}))} styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllBurgers")} value={value} />
-										);
-									}} />
-								</FormControl>
-								<FormControl as={Stack} flex={1}>
-									<FormLabel>{t("charts.filterRubrics")}</FormLabel>
-									<Queryable query={$data} children={data => {
-										const rubrieken: Rubriek[] = data.rubrieken || [];
-										return (
-											<Select onChange={onSelectRubriek} options={rubrieken.map(r => ({
-												key: r.id,
-												value: r.id,
-												label: r.naam,
-											}))} styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllRubrics")} />
-										);
-									}} />
-								</FormControl>
-							</Stack>
+									<Stack direction={["column", "row"]} spacing={5} flex={1}>
+										<FormControl as={Stack} flex={1}>
+											<FormLabel>{t("charts.filterBurgers")}</FormLabel>
+											<Queryable query={$data} children={data => {
+												const burgers: Burger[] = data.burgers || [];
+												const value = burgers.filter(b => filterBurgerIds.includes(b.id!)).map(b => ({key: b.id, value: b.id, label: formatBurgerName(b)}));
+												return (
+													<Select onChange={onSelectBurger} options={burgers.map(b => ({
+														key: b.id,
+														value: b.id,
+														label: formatBurgerName(b),
+													}))} styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllBurgers")} value={value} />
+												);
+											}} />
+										</FormControl>
+										<FormControl as={Stack} flex={1}>
+											<FormLabel>{t("charts.filterRubrics")}</FormLabel>
+											<Queryable query={$data} children={data => {
+												const rubrieken: Rubriek[] = data.rubrieken || [];
+												return (
+													<Select onChange={onSelectRubriek} options={rubrieken.map(r => ({
+														key: r.id,
+														value: r.id,
+														label: r.naam,
+													}))} styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllRubrics")} />
+												);
+											}} />
+										</FormControl>
+									</Stack>
 
-							<Stack direction={["column", "row"]} spacing={5} flex={1}>
-								<FormControl as={Stack} flex={1}>
-									<FormLabel>{t("charts.granularity")}</FormLabel>
-									<RadioButtonGroup name={"granularity"} onChange={onChangeGranularity} defaultValue={Granularity.Monthly} value={granularity} options={granularityOptions} />
-								</FormControl>
+									<Stack direction={["column", "row"]} spacing={5} flex={1}>
+										<FormControl as={Stack} flex={1}>
+											<FormLabel>{t("charts.granularity")}</FormLabel>
+											<RadioButtonGroup name={"granularity"} onChange={onChangeGranularity} defaultValue={Granularity.Monthly} value={granularity} options={granularityOptions} />
+										</FormControl>
+									</Stack>
+								</Stack>
 							</Stack>
-						</Stack>
-					</FormRight>
-				</Section>
+						</ModalBody>
+						<ModalFooter>
+							<Button colorScheme={"primary"} onClick={filterModal.onClose}>{t("actions.close")}</Button>
+						</ModalFooter>
+					</ModalContent>
+				</Modal>
 
 				<Queryable query={$data} children={data => {
-					const _startDate = d(startDate.value, "L").startOf("month");
-					const _endDate = d(endDate.value, "L").endOf("month");
+					const _startDate = d(dateRange.from).startOf("month");
+					const _endDate = d(dateRange.through).endOf("month");
 
 					const transactions: Transaction[] = data.bankTransactions.map(t => new Transaction(t));
 					const burgers: Burger[] = data.burgers;
@@ -140,7 +151,7 @@ const Rapportage = () => {
 					const selectedBurgers = burgers.filter(b => filterBurgerIds.includes(b.id!));
 
 					return (<>
-						<Tabs isLazy variant={"solid"} align={"end"} colorScheme={"primary"}>
+						<Tabs isLazy variant={"solid"} align={"start"} colorScheme={"primary"}>
 							<Stack direction={"row"} as={TabList} spacing={2}>
 								<Tab>Saldo</Tab>
 								<Tab>Inkomsten en uitgaven</Tab>
@@ -155,7 +166,7 @@ const Rapportage = () => {
 							</TabPanels>
 						</Tabs>
 
-						<BalanceTable transactions={filteredTransactions} startDate={startDate.value} endDate={endDate.value} selectedBurgers={selectedBurgers} />
+						<BalanceTable transactions={filteredTransactions} startDate={d(dateRange.from).format("L")} endDate={d(dateRange.through).format("L")} selectedBurgers={selectedBurgers} />
 					</>);
 				}} />
 			</Page>
