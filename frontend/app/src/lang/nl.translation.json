@@ -393,7 +393,15 @@
     "tot": "Tot",
     "filters": {
         "transactions": {
-            "onlyUnbooked": "Alleen niet-afgeletterde transacties weergeven"
+            "isCredit": {
+                "all": "Alles",
+                "income": "Inkomsten",
+                "expenses": "Uitgaven",
+                "title": "Betaalrichting",
+                "choose": "- Kies een betaalrichting -"
+            },
+            "onlyUnbooked": "Alleen niet-afgeletterde transacties weergeven",
+            "pageSize": "Aantal transacties per pagina"
         }
     },
     "words": {

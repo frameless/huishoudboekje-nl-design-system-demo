@@ -21,3 +21,15 @@ export type Schedule = {
 	byMonthWeek: number,
 	exceptDates: Date[],
 }
+
+export enum RepeatType {
+	Once = "Once",
+	Week = "Week",
+	Month = "Month",
+	Year = "Year"
+}
+
+export type DateRange = {
+	from?: Date,
+	through?: Date,
+}

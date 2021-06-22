@@ -95,9 +95,10 @@ export type BankTransactionFilter = {
   isGeboekt?: Maybe<Scalars['Boolean']>;
   isCredit?: Maybe<Scalars['Boolean']>;
   id?: Maybe<ComplexFilterType>;
-  bedrag?: Maybe<ComplexFilterType>;
+  bedrag?: Maybe<ComplexBedragFilterType>;
   tegenRekening?: Maybe<ComplexFilterType>;
   statementLine?: Maybe<ComplexFilterType>;
+  transactieDatum?: Maybe<ComplexFilterType>;
 };
 
 export type BankTransactionsPaged = {
@@ -153,6 +154,18 @@ export type BurgersPaged = {
   pageInfo?: Maybe<PageInfo>;
 };
 
+export type ComplexBedragFilterType = {
+  EQ?: Maybe<Scalars['Bedrag']>;
+  NEQ?: Maybe<Scalars['Bedrag']>;
+  GT?: Maybe<Scalars['Bedrag']>;
+  GTE?: Maybe<Scalars['Bedrag']>;
+  LT?: Maybe<Scalars['Bedrag']>;
+  LTE?: Maybe<Scalars['Bedrag']>;
+  IN?: Maybe<Array<Maybe<Scalars['Bedrag']>>>;
+  NOTIN?: Maybe<Array<Maybe<Scalars['Bedrag']>>>;
+  BETWEEN?: Maybe<Array<Maybe<Scalars['Bedrag']>>>;
+};
+
 export type ComplexFilterType = {
   EQ?: Maybe<Scalars['DynamicType']>;
   NEQ?: Maybe<Scalars['DynamicType']>;
@@ -162,6 +175,7 @@ export type ComplexFilterType = {
   LTE?: Maybe<Scalars['DynamicType']>;
   IN?: Maybe<Array<Maybe<Scalars['DynamicType']>>>;
   NOTIN?: Maybe<Array<Maybe<Scalars['DynamicType']>>>;
+  BETWEEN?: Maybe<Array<Maybe<Scalars['DynamicType']>>>;
 };
 
 export type Configuratie = {
@@ -825,8 +839,7 @@ export type RootQueryBankTransactionArgs = {
 
 /** The root of all queries  */
 export type RootQueryBankTransactionsArgs = {
-  csms?: Maybe<Array<Maybe<Scalars['Int']>>>;
-  ids?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  filters?: Maybe<BankTransactionFilter>;
 };
 
 
@@ -834,7 +847,6 @@ export type RootQueryBankTransactionsArgs = {
 export type RootQueryBankTransactionsPagedArgs = {
   start?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
-  csms?: Maybe<Array<Maybe<Scalars['Int']>>>;
   filters?: Maybe<BankTransactionFilter>;
 };
 
