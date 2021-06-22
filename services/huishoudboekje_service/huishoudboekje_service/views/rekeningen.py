@@ -4,7 +4,7 @@ from models.rekening import Rekening
 from models.rekening_burger import RekeningBurger
 from models.rekening_organisatie import RekeningOrganisatie
 from core_service.views.hhb_view import HHBView
-from core_service.utils import row2dict
+
 
 class RekeningView(HHBView):
     """ Methods for /rekeningen/ path """
@@ -18,6 +18,7 @@ class RekeningView(HHBView):
             },
             "rekeninghouder": {
                 "type": "string",
+                "maxLength": Rekening.get_max_rekeninghouder_length()
             },
         },
         "required": []
