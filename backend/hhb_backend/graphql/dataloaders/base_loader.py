@@ -1,7 +1,17 @@
+import json
+from typing import Dict, Union
+
 import requests
 from graphql import GraphQLError
 from aiodataloader import DataLoader
 from hhb_backend.graphql import settings
+
+
+# Possible formats:
+#   {"<column_name>": <str|int|bool>}
+#   {"<column_name>": {"<Operator>": <str|int|bool>}}
+#   {"<AND|OR>": {...}
+Filters = Dict[str, Union['Filters', str, int, bool]]
 
 
 class SingleDataLoader(DataLoader):
@@ -15,11 +25,11 @@ class SingleDataLoader(DataLoader):
     def url_for(self, keys=None):
         return f"""{self.service}/{self.model}/{f"?{self.filter_item}={','.join([str(k) for k in keys])}" if keys else ''}"""
 
-    def url_for_paged(self, start, limit, desc, sortingColumn):
-        return f"""{self.service}/{self.model}/{f"?start={start}&limit={limit}&desc={desc}&sortingColumn={sortingColumn}"}"""
-
-    def get_all_and_cache(self):
-        response = requests.get(self.url_for())
+    def get_all_and_cache(self, filters: Filters = None):
+        params = {
+            'filters': json.dumps(filters) if filters else None
+        }
+        response = requests.get(url=f"{self.service}/{self.model}/", params=params)
 
         if not response.ok:
             raise GraphQLError(f"Upstream API responded: {response.text}")
@@ -31,8 +41,16 @@ class SingleDataLoader(DataLoader):
 
         return result
 
-    def get_all_paged(self, start=1, limit=20, desc=False, sortingColumn="id"):
-        response = requests.get(self.url_for_paged(start, limit, desc, sortingColumn))
+    def get_all_paged(self, start: int = 1, limit: int = 20, desc: bool = False,
+                      sortingColumn: str = "id", filters: Filters = None):
+        params = {
+            'start': start,
+            'limit': limit,
+            'desc': desc,
+            'sortingColumn': sortingColumn,
+            'filters': json.dumps(filters) if filters else None
+        }
+        response = requests.get(url=f"{self.service}/{self.model}/", params=params)
 
         if not response.ok:
             raise GraphQLError(f"Upstream API responded: {response.text}")
@@ -88,10 +106,18 @@ class ListDataLoader(DataLoader):
                 objects[item[self.index]].append(item)
         return [objects.get(key, []) for key in keys]
 
-    def get_all_paged(self, keys, start=1, limit=20, desc=False, sortingColumn="id"):
-        url = f"{self.service}/{self.model}/?{self.filter_item}={','.join([str(k) for k in keys])}&start={start}&limit={limit}&desc={desc}&sortingColumn={sortingColumn}"
+    def get_all_paged(self, keys, start: int = 1, limit: int = 20, desc: bool = False,
+                      sortingColumn: str = "id", filters: Filters = None):
+        params = {
+            f'{self.filter_item}': ','.join([str(k) for k in keys]),
+            'start': start,
+            'limit': limit,
+            'desc': desc,
+            'sortingColumn': sortingColumn,
+            'filters': json.dumps(filters) if filters else None
+        }
+        response = requests.get(url=f"{self.service}/{self.model}/", params=params)
 
-        response = requests.get(url)
         if not response.ok:
             raise GraphQLError(f"Upstream API responded: {response.text}")
         result = response.json()["data"]

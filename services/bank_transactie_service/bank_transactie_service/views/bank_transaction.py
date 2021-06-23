@@ -1,7 +1,4 @@
 """ MethodView for /customerstatementmessages/ path """
-import json
-import logging
-
 from flask import request, abort, make_response
 from sqlalchemy import func
 

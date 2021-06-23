@@ -1,9 +1,14 @@
+import json
 import re
+from typing import Dict, Union, List
 
 from flask import request, abort, make_response
+from sqlalchemy import sql
 from sqlalchemy.orm import joinedload
+from sqlalchemy.sql.expression import ColumnElement
 
 from core_service.utils import row2dict
+from core_service.consts import AndOrOperator, ComparisonOperator, ListAppearanceOperator, RangeOperator
 
 
 class HHBQuery():
@@ -60,6 +65,109 @@ class HHBQuery():
                     ]}, 400))
 
         self.query = self.query.filter(self.hhb_model.id.in_(ids))
+
+    def filter_results(self):
+        """
+        Prepares complex filter query building.
+        Expects a JSON-stringified dictionary under the key "filters".
+        """
+        filter_kwargs_str = request.args.get('filters', '{}')
+        try:
+            filter_kwargs = json.loads(filter_kwargs_str)
+            if filter_kwargs:
+                filters = self.__parse_filter_kwargs(filter_kwargs=filter_kwargs)
+                self.query = self.query.filter(*filters)
+        except ValueError as e:
+            abort(make_response({"errors": [f"Failed to parse filters: {e}"]}, 400))
+
+    def __parse_filter_kwargs(self, filter_kwargs: Dict[str, Union[str, int, bool]],
+                              col_name: str = None) -> List[ColumnElement]:
+        """
+        Dynamically builds complex filter queries.
+
+        Based on the dict filter_kwargs, a SQLAlchemy filter list is created on which the desired data
+        should be filtered.
+        For supported operators, see consts in ../consts.py.
+
+        example:
+        query {
+            bankTransactionsPaged(
+              start: 1, limit: 50, filters: {
+                OR: {
+                  bedrag: {
+                    IN: [39100, 166912]
+                  }
+                  bedrag: {
+                    BETWEEN: [0, 200]
+                  }
+                  AND: {
+                    isGeboekt: false,
+                    isCredit: true,
+                    bedrag: {
+                      GT: 30000
+                    }
+                  }
+
+                }
+              }
+            ) {
+                banktransactions{
+                id
+                isGeboekt
+                isCredit
+                bedrag
+              }
+            }
+        }
+        """
+        sqlalchemy_filters = []
+        for key, value in filter_kwargs.items():
+            if isinstance(value, dict):
+                if (operator := AndOrOperator.get(key, None)):
+                    # value is dict with one or more filters
+                    op = getattr(sql, operator.value)
+                    filter = op(*self.__parse_filter_kwargs(filter_kwargs=value))
+                    sqlalchemy_filters.append(filter)
+                else:
+                    # key is column name, value is operator. Pass col_name so it is remembered
+                    filters = self.__parse_filter_kwargs(filter_kwargs=value, col_name=key)
+                    sqlalchemy_filters.append(*filters)
+            elif col_name:
+                # existence of col_name indicates a nested comparison with an operator
+                db_column = getattr(self.hhb_model, col_name)
+
+                if (operator := ComparisonOperator.get(key, None)):
+                    filter = operator.value(db_column, value)
+                    sqlalchemy_filters.append(filter)
+
+                elif (operator := RangeOperator.get(key, None)):
+                    if not isinstance(value, list):
+                        raise ValueError(f"Incorrect input for BETWEEN operator: "
+                                         f"value should be list ({value =})")
+                    elif len(value) != 2:
+                        raise ValueError(f"Incorrect input for BETWEEN operator: "
+                                         f"value list should contain 2 values (min and max) ({value =})")
+                    column_operator = getattr(db_column, operator.value)
+                    filter = column_operator(*value, symmetric=True)
+                    sqlalchemy_filters.append(filter)
+
+                elif (operator := ListAppearanceOperator.get(key, None)):
+                    if not isinstance(value, list):
+                        raise ValueError(f"Incorrect syntax for BETWEEN operator: "
+                                         f"value should be list ({key =} - {value =})")
+                    column_operator = getattr(db_column, operator.value)
+                    filter = column_operator(value)
+                    sqlalchemy_filters.append(filter)
+                else:
+                    raise ValueError(f"Incorrect syntax in filter_kwargs: "
+                                     f"expected to find operator for key but could not find one "
+                                     f"({key =}  {value =})")
+            else:
+                # just a simple equation
+                filter = getattr(self.hhb_model, key) == value
+                sqlalchemy_filters.append(filter)
+
+        return sqlalchemy_filters
 
     def get_result_single(self, row_id):
         """ Get a single result from the current query """

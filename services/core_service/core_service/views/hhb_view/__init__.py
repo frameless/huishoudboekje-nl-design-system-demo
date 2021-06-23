@@ -75,6 +75,7 @@ class HHBView(MethodView):
             400 {"errors": ["Input for columns is not correct, '...' is not a column."]}
         """
         object_id = self.get_object_id_from_kwargs(**kwargs)
+        self.hhb_query.filter_results()
         self.hhb_query.add_filter_columns()
         self.hhb_query.add_filter_ids(object_id)
         self.extend_get(**kwargs)
