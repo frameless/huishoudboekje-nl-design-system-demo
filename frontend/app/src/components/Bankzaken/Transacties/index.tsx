@@ -1,5 +1,6 @@
 import {ChevronDownIcon} from "@chakra-ui/icons";
 import {
+	Box,
 	Button,
 	ButtonGroup,
 	Checkbox,
@@ -124,8 +125,6 @@ const Transactions = () => {
 						<MenuItem onClick={onClickStartBoekenButton}>{t("actions.startBoeken")}</MenuItem>
 					</MenuList>
 				</Menu>
-			)} right={(
-				<Button size={"sm"} colorScheme={"primary"} onClick={() => filterModal.onOpen()}>{t("sections.filterOptions.title")}</Button>
 			)}>
 				<Modal isOpen={filterModal.isOpen} onClose={filterModal.onClose}>
 					<ModalOverlay />
@@ -199,9 +198,6 @@ const Transactions = () => {
 				</Modal>
 
 				<Section spacing={5}>
-					<HStack justify={"center"}>
-						<PaginationButtons />
-					</HStack>
 					<Queryable query={$transactions} children={(data) => {
 						const transacties = data?.bankTransactionsPaged?.banktransactions || [];
 
@@ -212,9 +208,15 @@ const Transactions = () => {
 							);
 						}
 
-						return (
+						return (<>
+							<HStack justify={"flex-end"}>
+								<Button size={"sm"} colorScheme={"primary"} variant={"outline"} onClick={() => filterModal.onOpen()}>{t("sections.filterOptions.title")}</Button>
+							</HStack>
 							<TransactiesList transacties={transacties} />
-						);
+							<HStack justify={"center"}>
+								<Box><PaginationButtons /></Box>
+							</HStack>
+						</>);
 					}} />
 				</Section>
 			</Page>

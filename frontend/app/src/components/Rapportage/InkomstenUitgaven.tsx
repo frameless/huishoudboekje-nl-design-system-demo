@@ -5,7 +5,6 @@ import ChakraChart from "../../config/theme/custom/Chart";
 import {BankTransaction} from "../../generated/graphql";
 import {prepareChartData} from "../../utils/things";
 import {FormLeft} from "../Layouts/Forms";
-import Section from "../Layouts/Section";
 import {createAggregation} from "./Aggregator";
 import {RapportageContext} from "./context";
 
@@ -35,25 +34,23 @@ const InkomstenUitgaven: React.FC<BoxProps & {transactions: BankTransaction[]}> 
 		...chartData(chartTemplate, aggregation),
 	];
 
-	return (
-		<Section>
-			<FormLeft title={t("charts.inkomstenUitgaven.title")} helperText={t("charts.inkomstenUitgaven.helperText")} />
+	return (<>
+		<FormLeft title={t("charts.inkomstenUitgaven.title")} helperText={t("charts.inkomstenUitgaven.helperText")} />
 
-			<ChakraChart
-				chartType="AreaChart"
-				loader={<Spinner />}
-				data={data}
-				options={{
-					chartArea: {width: "90%", height: "80%"},
-					legend: {position: "top"},
-					colors: [colorInkomsten, colorUitgaven],
-					lineWidth: 1,
-					pointSize: 5,
-				}}
-				// rootProps={{"data-testid": "1"}}
-			/>
-		</Section>
-	);
+		<ChakraChart
+			chartType="AreaChart"
+			loader={<Spinner />}
+			data={data}
+			options={{
+				chartArea: {width: "90%", height: "80%"},
+				legend: {position: "top"},
+				colors: [colorInkomsten, colorUitgaven],
+				lineWidth: 1,
+				pointSize: 5,
+			}}
+			// rootProps={{"data-testid": "1"}}
+		/>
+	</>);
 };
 
 export default InkomstenUitgaven;

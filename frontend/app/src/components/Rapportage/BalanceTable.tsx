@@ -5,7 +5,6 @@ import {BankTransaction, Burger} from "../../generated/graphql";
 import d from "../../utils/dayjs";
 import {currencyFormat2, formatBurgerName, humanJoin} from "../../utils/things";
 import {FormLeft, FormRight} from "../Layouts/Forms";
-import Section from "../Layouts/Section";
 import {createAggregation, Type} from "./Aggregator";
 
 type BalanceTableProps = {transactions: BankTransaction[], selectedBurgers: Burger[], startDate: string, endDate: string};
@@ -21,7 +20,7 @@ const BalanceTable: React.FC<BalanceTableProps> = ({transactions, selectedBurger
 	};
 
 	return (
-		<Section direction={["column", "row"]}>
+		<Stack direction={["column", "row"]}>
 			<FormLeft title={t("balance")} helperText={selectedBurgers.length > 0 ? humanJoin(burgerNamesList) : t("allBurgers")} />
 			<FormRight>
 				<Stack spacing={4}>
@@ -77,7 +76,7 @@ const BalanceTable: React.FC<BalanceTableProps> = ({transactions, selectedBurger
 					</Stack>
 				</Stack>
 			</FormRight>
-		</Section>
+		</Stack>
 	);
 };
 

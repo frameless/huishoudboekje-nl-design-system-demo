@@ -5,7 +5,6 @@ import ChakraChart, {chartProps} from "../../config/theme/custom/Chart";
 import {BankTransaction} from "../../generated/graphql";
 import {prepareChartData} from "../../utils/things";
 import {FormLeft} from "../Layouts/Forms";
-import Section from "../Layouts/Section";
 import {createAggregation} from "./Aggregator";
 import {RapportageContext} from "./context";
 
@@ -37,32 +36,29 @@ const Saldo: React.FC<BoxProps & {transactions: BankTransaction[]}> = ({transact
 		...chartData(chartTemplate, aggregation),
 	];
 
-	return (
-		<Section>
-			<FormLeft title={t("charts.saldo.title")} helperText={t("charts.saldo.helperText")} />
-
-			<ChakraChart
-				height={"500px"}
-				chartType="AreaChart"
-				loader={<Spinner />}
-				data={data}
-				options={{
-					hAxis: {
-						title: t("interval.month", {count: 2}),
-					},
-					chartArea: {width: "90%", height: "80%"},
-					legend: {position: "top"},
-					colors: [colorSaldo],
-					lineWidth: 1,
-					pointSize: 5,
-					// onLoad: console.log
-				}}
-				// For tests
-				rootProps={{"data-testid": "1"}}
-				{...chartProps}
-			/>
-		</Section>
-	);
+	return (<>
+		<FormLeft title={t("charts.saldo.title")} helperText={t("charts.saldo.helperText")} />
+		<ChakraChart
+			height={"500px"}
+			chartType="AreaChart"
+			loader={<Spinner />}
+			data={data}
+			options={{
+				hAxis: {
+					title: t("interval.month", {count: 2}),
+				},
+				chartArea: {width: "90%", height: "80%"},
+				legend: {position: "top"},
+				colors: [colorSaldo],
+				lineWidth: 1,
+				pointSize: 5,
+				// onLoad: console.log
+			}}
+			// For tests
+			rootProps={{"data-testid": "1"}}
+			{...chartProps}
+		/>
+	</>);
 };
 
 export default Saldo;
