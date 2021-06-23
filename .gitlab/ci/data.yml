@@ -1,0 +1,24 @@
+load-sample-data:
+  stage: data
+  environment:
+    name: review/$CI_COMMIT_REF_SLUG
+  image:
+    name: ${DOCKER_PROXY}node:lts-alpine
+  variables:
+    NPM_CACHE_DIR: "${CI_PROJECT_DIR}/.cache/npm"
+    CYPRESS_INSTALL_BINARY: "0"
+  tags:
+    - cg
+    - docker
+  when: manual
+  needs:
+    - job: deploy-review
+      artifacts: true
+    - job: cypress-token-review
+      artifacts: true
+  script:
+    - export BASE_URL="https://`cat $CI_PROJECT_DIR/ci_review_hostname.txt`"
+    - export PROXY_AUTHORIZATION=`cat $CI_PROJECT_DIR/ci_cypress_token.txt`
+    - cd ./sampleData
+    - npm ci
+    - npm start

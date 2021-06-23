@@ -19,7 +19,7 @@ stages:
   - test
   - deploy
   - e2e
-  - sample-data
+  - data
   - maintenance
 
 include:
@@ -27,4 +27,5 @@ include:
   - '/.gitlab/ci/deploy.yml'
   - '/.gitlab/ci/test.yml'
   - '/.gitlab/ci/e2e.yml'
+  - '/.gitlab/ci/data.yml'
   - '/.gitlab/ci/maintenance.yml'
