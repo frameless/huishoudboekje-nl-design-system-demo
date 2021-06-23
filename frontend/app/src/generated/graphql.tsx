@@ -26,6 +26,8 @@ export type Scalars = {
    * [iso8601](https://en.wikipedia.org/wiki/ISO_8601).
    */
   DateTime: any;
+  /** Accepts dates, datetimes, ints and strings. */
+  DynamicType: any;
   /**
    * Create scalar that ignores normal serialization/deserialization, since
    * that will be handled by the multipart request spec
@@ -87,6 +89,18 @@ export type BankTransaction = {
   suggesties?: Maybe<Array<Maybe<Afspraak>>>;
 };
 
+export type BankTransactionFilter = {
+  OR?: Maybe<BankTransactionFilter>;
+  AND?: Maybe<BankTransactionFilter>;
+  isGeboekt?: Maybe<Scalars['Boolean']>;
+  isCredit?: Maybe<Scalars['Boolean']>;
+  id?: Maybe<ComplexFilterType>;
+  bedrag?: Maybe<ComplexBedragFilterType>;
+  tegenRekening?: Maybe<ComplexFilterType>;
+  statementLine?: Maybe<ComplexFilterType>;
+  transactieDatum?: Maybe<ComplexFilterType>;
+};
+
 export type BankTransactionsPaged = {
   banktransactions?: Maybe<Array<Maybe<BankTransaction>>>;
   pageInfo?: Maybe<PageInfo>;
@@ -138,6 +152,30 @@ export type Burger = {
 export type BurgersPaged = {
   burgers?: Maybe<Array<Maybe<Burger>>>;
   pageInfo?: Maybe<PageInfo>;
+};
+
+export type ComplexBedragFilterType = {
+  EQ?: Maybe<Scalars['Bedrag']>;
+  NEQ?: Maybe<Scalars['Bedrag']>;
+  GT?: Maybe<Scalars['Bedrag']>;
+  GTE?: Maybe<Scalars['Bedrag']>;
+  LT?: Maybe<Scalars['Bedrag']>;
+  LTE?: Maybe<Scalars['Bedrag']>;
+  IN?: Maybe<Array<Maybe<Scalars['Bedrag']>>>;
+  NOTIN?: Maybe<Array<Maybe<Scalars['Bedrag']>>>;
+  BETWEEN?: Maybe<Array<Maybe<Scalars['Bedrag']>>>;
+};
+
+export type ComplexFilterType = {
+  EQ?: Maybe<Scalars['DynamicType']>;
+  NEQ?: Maybe<Scalars['DynamicType']>;
+  GT?: Maybe<Scalars['DynamicType']>;
+  GTE?: Maybe<Scalars['DynamicType']>;
+  LT?: Maybe<Scalars['DynamicType']>;
+  LTE?: Maybe<Scalars['DynamicType']>;
+  IN?: Maybe<Array<Maybe<Scalars['DynamicType']>>>;
+  NOTIN?: Maybe<Array<Maybe<Scalars['DynamicType']>>>;
+  BETWEEN?: Maybe<Array<Maybe<Scalars['DynamicType']>>>;
 };
 
 export type Configuratie = {
@@ -343,6 +381,7 @@ export type DeleteRubriek = {
   ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Rubriek>;
 };
+
 
 /** GraphQL Export model  */
 export type Export = {
@@ -800,8 +839,7 @@ export type RootQueryBankTransactionArgs = {
 
 /** The root of all queries  */
 export type RootQueryBankTransactionsArgs = {
-  csms?: Maybe<Array<Maybe<Scalars['Int']>>>;
-  ids?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  filters?: Maybe<BankTransactionFilter>;
 };
 
 
@@ -809,7 +847,7 @@ export type RootQueryBankTransactionsArgs = {
 export type RootQueryBankTransactionsPagedArgs = {
   start?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
-  csms?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  filters?: Maybe<BankTransactionFilter>;
 };
 
 
@@ -1537,6 +1575,7 @@ export type GetTransactionItemFormDataQuery = { rubrieken?: Maybe<Array<Maybe<(
 export type GetTransactiesQueryVariables = Exact<{
   offset: Scalars['Int'];
   limit: Scalars['Int'];
+  filters?: Maybe<BankTransactionFilter>;
 }>;
 
 
@@ -3608,8 +3647,8 @@ export type GetTransactionItemFormDataQueryHookResult = ReturnType<typeof useGet
 export type GetTransactionItemFormDataLazyQueryHookResult = ReturnType<typeof useGetTransactionItemFormDataLazyQuery>;
 export type GetTransactionItemFormDataQueryResult = Apollo.QueryResult<GetTransactionItemFormDataQuery, GetTransactionItemFormDataQueryVariables>;
 export const GetTransactiesDocument = gql`
-    query getTransacties($offset: Int!, $limit: Int!) {
-  bankTransactionsPaged(start: $offset, limit: $limit) {
+    query getTransacties($offset: Int!, $limit: Int!, $filters: BankTransactionFilter) {
+  bankTransactionsPaged(start: $offset, limit: $limit, filters: $filters) {
     banktransactions {
       ...BankTransaction
       journaalpost {
@@ -3659,6 +3698,7 @@ ${GrootboekrekeningFragmentDoc}`;
  *   variables: {
  *      offset: // value for 'offset'
  *      limit: // value for 'limit'
+ *      filters: // value for 'filters'
  *   },
  * });
  */

@@ -29,7 +29,7 @@
             "successMessage": "Transacties worden nu afgeletterd. Dit kan even duren."
         },
         "transactions": {
-            "addHint": "Voeg transacties toe door een bankafschrift te importeren."
+            "noResults": "Er zijn geen banktransacties gevonden. Let op: er kunnen filteropties actief zijn waardoor er geen resultaten worden weergegeven."
         },
         "journals": {
             "createSuccessMessage": "Transactie succesvol afgeletterd."
@@ -175,6 +175,7 @@
                 "time": "Tijd",
                 "startDate": "Startdatum",
                 "endDate": "Einddatum",
+                "period": "Periode",
                 "date": "Datum"
             }
         },
@@ -391,6 +392,28 @@
     },
     "van": "Van",
     "tot": "Tot",
+    "filters": {
+        "transactions": {
+            "isCredit": {
+                "all": "Alle",
+                "income": "Inkomsten",
+                "expenses": "Uitgaven",
+                "title": "Betaalrichting",
+                "choose": "- Kies een betaalrichting -"
+            },
+            "type": {
+                "title": "Soort",
+                "onlyUnbooked": "Niet-afgeletterd"
+            },
+            "pageSize": "Aantal transacties per pagina"
+        }
+    },
+    "sections": {
+        "filterOptions": {
+            "title": "Filteropties",
+            "helperText": "Selecteer een tijdsperiode, burger en/of rubriek om specifiekere gegevens in te zien."
+        }
+    },
     "words": {
         "afspraak": "Afspraak"
     },
@@ -539,12 +562,6 @@
         "daily": "Dag",
         "weekly": "Week",
         "monthly": "Maand"
-    },
-    "sections": {
-        "filterOptions": {
-            "title": "Filteropties",
-            "helperText": "Selecteer een tijdsperiode, burger en/of rubriek om specifiekere gegevens in te zien."
-        }
     },
     "interval": {
         "period": "Periode",

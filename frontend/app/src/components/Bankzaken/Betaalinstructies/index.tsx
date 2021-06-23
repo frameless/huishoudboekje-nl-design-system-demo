@@ -1,14 +1,13 @@
 import {DownloadIcon} from "@chakra-ui/icons";
 import {Box, Button, Divider, FormControl, FormLabel, IconButton, Input, Stack, Table, Tbody, Td, Text, Th, Thead, Tr} from "@chakra-ui/react";
-import React from "react";
+import React, {useState} from "react";
 import DatePicker from "react-datepicker";
-import {useInput} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import Routes from "../../../config/routes";
 import {Export, useCreateExportOverschrijvingenMutation, useGetExportsQuery} from "../../../generated/graphql";
+import {DateRange} from "../../../models/models";
 import d from "../../../utils/dayjs";
 import Queryable from "../../../utils/Queryable";
-import {Regex} from "../../../utils/things";
 import useHandleMutation from "../../../utils/useHandleMutation";
 import {FormLeft, FormRight} from "../../Layouts/Forms";
 import Section from "../../Layouts/Section";
@@ -16,52 +15,28 @@ import Section from "../../Layouts/Section";
 const Betaalinstructies = () => {
 	const {t} = useTranslation();
 	const handleMutation = useHandleMutation();
-
 	const $exports = useGetExportsQuery();
 	const [createExportOverschrijvingen, $createExportOverschrijvingen] = useCreateExportOverschrijvingenMutation();
 
-	const startDatum = useInput({
-		defaultValue: d().startOf("day").format("L"),
-		placeholder: d().startOf("day").format("L"),
-		validate: [
-			(v: string) => new RegExp(Regex.Date).test(v),
-			(v: string) => d(v, "L").isValid(),
-		],
-	});
-	const eindDatum = useInput({
-		defaultValue: d().endOf("day").format("L"),
-		placeholder: d().endOf("day").format("L"),
-		validate: [
-			(v: string) => new RegExp(Regex.Date).test(v),
-			(v: string) => d(v, "L").isValid(),
-		],
+	const [dateRange, setDateRange] = useState<DateRange>({
+		from: d().startOf("day").toDate(),
+		through: d().endOf("day").toDate(),
 	});
 
 	const onClickExportButton = () => {
 		handleMutation(createExportOverschrijvingen({
 			variables: {
-				startDatum: d(startDatum.value, "L").format("YYYY-MM-DD"),
-				eindDatum: d(eindDatum.value, "L").format("YYYY-MM-DD"),
+				startDatum: d(dateRange.from).format("YYYY-MM-DD"),
+				eindDatum: d(dateRange.through).format("YYYY-MM-DD"),
 			},
 		}), t("messages.exports.createSuccessMessage"), () => $exports.refetch());
 	};
 
-	const onChangeStartDate = (value: Date) => {
-		if (value) {
-			startDatum.setValue(d(value).format("L"));
-			if (d(value).isAfter(d(eindDatum.value, "L"))) {
-				eindDatum.setValue(d(value).format("L"));
-			}
-		}
-	};
-
-	const onChangeEndDate = (value: Date) => {
-		if (value) {
-			eindDatum.setValue(d(value).format("L"));
-			if (d(value).isBefore(d(startDatum.value, "L"))) {
-				startDatum.setValue(d(value).format("L"));
-			}
-		}
+	const onChangeStartDate = (value: [Date, Date]) => {
+		const [from, through] = value;
+		setDateRange(() => ({
+			from, through,
+		}));
 	};
 
 	return (
@@ -71,17 +46,13 @@ const Betaalinstructies = () => {
 				<FormRight>
 					<Stack direction={["column", "row"]} alignItems={"flex-end"}>
 						<FormControl flex={1}>
-							<FormLabel>{t("forms.common.fields.startDate")}</FormLabel>
-							<DatePicker selected={d(startDatum.value, "L").isValid() ? d(startDatum.value, "L").toDate() : null} dateFormat={"dd-MM-yyyy"}
-								onChange={onChangeStartDate} customInput={<Input type="text" isInvalid={!d(startDatum.value, "L").isValid()} {...startDatum.bind} />} />
+							<FormLabel>{t("forms.common.fields.period")}</FormLabel>
+							<DatePicker dateFormat={"dd-MM-yyyy"} selectsRange={true} isClearable={true}
+								startDate={dateRange.from} endDate={dateRange.through}
+								onChange={onChangeStartDate} customInput={<Input />} />
 						</FormControl>
 						<FormControl flex={1}>
-							<FormLabel>{t("forms.common.fields.endDate")}</FormLabel>
-							<DatePicker selected={d(eindDatum.value, "L").isValid() ? d(eindDatum.value, "L").toDate() : null} dateFormat={"dd-MM-yyyy"}
-								onChange={onChangeEndDate} customInput={<Input type="text" isInvalid={!d(eindDatum.value, "L").isValid()} {...eindDatum.bind} />} />
-						</FormControl>
-						<FormControl flex={1}>
-							<Button colorScheme={"primary"} isLoading={$createExportOverschrijvingen.loading} onClick={onClickExportButton}>{t("actions.export")}</Button>
+							<Button colorScheme={"primary"} isLoading={$createExportOverschrijvingen.loading} isDisabled={!(dateRange.from && dateRange.through)} onClick={onClickExportButton}>{t("actions.export")}</Button>
 						</FormControl>
 					</Stack>
 

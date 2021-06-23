@@ -4,7 +4,7 @@ import DatePicker from "react-datepicker";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
 import {Afspraak, Betaalinstructie, BetaalinstructieInput, DayOfWeek} from "../../../generated/graphql";
-import {RepeatType} from "../../../models/RepeatType";
+import {RepeatType} from "../../../models/models";
 import d from "../../../utils/dayjs";
 import {useReactSelectStyles} from "../../../utils/things";
 import useForm from "../../../utils/useForm";

@@ -3,8 +3,8 @@ import {GrootboekrekeningFragment} from "../fragments/GrootboekrekeningFragment"
 import {TransactieFragment} from "../fragments/TransactieFragment";
 
 export const GetTransactiesQuery = gql`
-    query getTransacties($offset: Int!, $limit: Int!) {
-        bankTransactionsPaged(start: $offset, limit: $limit){
+    query getTransacties($offset: Int!, $limit: Int!, $filters: BankTransactionFilter) {
+        bankTransactionsPaged(start: $offset, limit: $limit, filters: $filters){
             banktransactions{
                 ...BankTransaction
                 journaalpost {
