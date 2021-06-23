@@ -21,7 +21,7 @@ repo/%-$(COMPONENT_VERSION).tgz: charts/% repo
 repo/robots.txt: repo
 	echo "User-Agent: *\nDisallow: /" > repo/robots.txt
 
-repo/index.yaml: repo/robots.txt repo/huishoudboekje-$(COMPONENT_VERSION).tgz repo/sample-data-$(COMPONENT_VERSION).tgz
+repo/index.yaml: repo/robots.txt repo/huishoudboekje-$(COMPONENT_VERSION).tgz
 	helm repo index --url $${CI_PAGES_URL:-http://localhost:5000} repo
 
 repo: init dependencies lint charts/huishoudboekje/theme.yaml
