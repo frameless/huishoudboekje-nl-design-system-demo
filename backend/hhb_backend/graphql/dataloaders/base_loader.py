@@ -7,6 +7,10 @@ from aiodataloader import DataLoader
 from hhb_backend.graphql import settings
 
 
+# Possible formats:
+#   {"<column_name>": <str|int|bool>}
+#   {"<column_name>": {"<Operator>": <str|int|bool>}}
+#   {"<AND|OR>": {...}
 Filters = Dict[str, Union['Filters', str, int, bool]]
 
 
