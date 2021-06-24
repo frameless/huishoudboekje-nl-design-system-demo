@@ -11,9 +11,13 @@ const Loading = () => (
 
 const Queryable: React.FC<{query: QueryResult | LazyQueryResult<any, any>, loading?, error?, children}> = ({query, loading, error, children}) => {
 	const {t} = useTranslation();
-	const {data: _data, loading: _loading, error: _error} = query;
+	const {data: _data, loading: _loading, error: _error, previousData} = query;
 
 	if (_loading) {
+		if(previousData){
+			return children(previousData);
+		}
+
 		return loading || <Loading />;
 	}
 
