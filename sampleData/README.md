@@ -16,7 +16,13 @@ To install dependencies run:
 npm install
 ```
 
-If the backend required authorization, please make sure that you have the following environment variables set:
+Tell the application where your backend is running by setting the following environment variables:
+
+```shell
+GRAPHQL_API_URL=https://hhb-your-environment.nlx.reviews/api/graphql
+```
+
+If the backend required authorization, please make sure that you have the following environment variable set:
 
 ```shell
 PROXY_AUTHORIZATION={YOUR_TOKEN}
@@ -25,17 +31,10 @@ PROXY_AUTHORIZATION={YOUR_TOKEN}
 ### Usage
 
 Please make sure that you have both your frontend and backend running.
-By default it expects the GraphQL API to be available on `http://localhost:3000/api/graphql`.
+It expects the GraphQL API to be available on whatever value `GRAPHQL_API_URL` has.
 
 To import all the sample data, just start the application:
 
 ```shell
 npm start
-```
-
-If you want to run this during deployment or against a remote backend, it will need the following environment variables:
-
-```shell
-PROXY_AUTHORIZATION={YOUR_TOKEN}
-BASE_URL=https://hhb-your-environment.nlx.reviews
 ```

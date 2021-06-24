@@ -17,7 +17,7 @@ load-sample-data:
     - job: cypress-token-review
       artifacts: true
   script:
-    - export BASE_URL="https://`cat $CI_PROJECT_DIR/ci_review_hostname.txt`"
+    - export GRAPHQL_API_URL="https://`cat $CI_PROJECT_DIR/ci_review_hostname.txt`/api/graphql"
     - export PROXY_AUTHORIZATION=`cat $CI_PROJECT_DIR/ci_cypress_token.txt`
     - cd ./sampleData
     - npm ci

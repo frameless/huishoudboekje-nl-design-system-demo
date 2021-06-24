@@ -6,15 +6,13 @@ import fetch from "node-fetch";
 
 dotenv.config();
 
-const baseURL = process.env.BASE_URL || "http://localhost:3000";
+const graphQlApiUrl = process.env.GRAPHQL_API_URL;
 const authBearer = process.env.PROXY_AUTHORIZATION;
 
-if (!baseURL) {
-	throw new Error("BASE_URL not set.");
+if (!graphQlApiUrl) {
+	throw new Error("GRAPHQL_API_URL not set.");
 }
 
-const GraphqlApiUrl = baseURL + "/api/graphql/";
-const GraphqlApiUrlUpload = baseURL + "/api/graphql/";
 const headers = {
 	...authBearer && {
 		"Authorization": `Bearer ${authBearer}`,
@@ -22,7 +20,7 @@ const headers = {
 };
 
 const defaultLink = new BatchHttpLink({
-	uri: GraphqlApiUrl,
+	uri: graphQlApiUrl,
 	batchMax: 50,
 	batchInterval: 500,
 	batchDebounce: true,
@@ -31,7 +29,7 @@ const defaultLink = new BatchHttpLink({
 });
 
 const uploadLink = createUploadLink({
-	uri: GraphqlApiUrlUpload,
+	uri: graphQlApiUrl,
 	fetch: fetch,
 	headers,
 });
