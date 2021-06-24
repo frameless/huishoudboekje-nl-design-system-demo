@@ -6,7 +6,7 @@ import fetch from "node-fetch";
 
 dotenv.config();
 
-const graphQlApiUrl = process.env.GRAPHQL_API_URL;
+export const graphQlApiUrl = process.env.GRAPHQL_API_URL;
 const authBearer = process.env.PROXY_AUTHORIZATION;
 
 if (!graphQlApiUrl) {

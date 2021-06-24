@@ -2,15 +2,27 @@
  * This script will dump a bunch of sample data in a Huishoudboekje instance through the GraphQL API.
  * You will find data files in ./data/*.json.
  */
+import gql from "graphql-tag";
 import {burgers, configuraties, organisaties, rubrieken} from "./data";
 import {Afspraak, Organisatie, OrganisatieKvK, Rubriek} from "./graphql";
-import apolloClient from "./graphql-client";
+import apolloClient, {graphQlApiUrl} from "./graphql-client";
 import {getSdkApollo} from "./graphql-requester";
 import {handleErrors} from "./handleErrors";
 
-const graphql = getSdkApollo(apolloClient);
-
 const main = async () => {
+	console.log(`Controleren of de GraphQL API bereikbaar is op ${graphQlApiUrl}...`);
+	await apolloClient.query({query: gql(`{ __schema{ types{ name }}}`)})
+		.then(() => {
+			console.log(`De GraphQL API is bereikbaar op ${graphQlApiUrl}.`);
+		})
+		.catch((err) => {
+			console.error(`(!) De GraphQL API is niet bereikbaar op ${graphQlApiUrl}.`);
+			process.exit(0);
+		});
+
+	console.log();
+
+	const graphql = getSdkApollo(apolloClient);
 	const {
 		createConfiguratie,
 		createRubriek,
@@ -30,7 +42,14 @@ const main = async () => {
 			value: c.waarde,
 		}).then(result => {
 			console.log(`Configuratie ${result.createConfiguratie?.configuratie?.id} met waarde ${result.createConfiguratie?.configuratie?.waarde} toegevoegd.`);
-		}).catch(handleErrors);
+		}).catch(err => {
+			if (err.message.includes("already exists")) {
+				console.log(`(!) Configuratie ${c.id} bestaat al.`);
+			}
+			else {
+				console.error(err);
+			}
+		});
 	});
 
 	/* Add rubrieken */
@@ -41,7 +60,14 @@ const main = async () => {
 			grootboekrekening: r.grootboekrekening,
 		}).then(result => {
 			console.log(`Rubriek ${result.createRubriek?.rubriek?.naam} voor grootboekrekening ${result.createRubriek?.rubriek?.grootboekrekening?.naam} toegevoegd.`);
-		}).catch(handleErrors);
+		}).catch(err => {
+			if (err.message.includes("already exists")) {
+				console.log(`(!) Rubriek ${r.naam} (${r.grootboekrekening}) bestaat al.`);
+			}
+			else {
+				console.error(err);
+			}
+		});
 	});
 
 	await Promise.all([qConfiguraties, qRubrieken]).finally(() => {
@@ -73,13 +99,20 @@ const main = async () => {
 					rekening: r,
 				}).then(r => {
 					console.log(`Rekening ${r.createOrganisatieRekening?.rekening?.iban} op naam van ${r.createOrganisatieRekening?.rekening?.rekeninghouder}.`);
-				}).catch(handleErrors);
+				});
 			});
 
 			return await Promise.all(mRekeningen).finally(() => {
 				console.log(`Rekeningen voor ${r.createOrganisatie?.organisatie?.weergaveNaam} (${r.createOrganisatie?.organisatie?.id}) toegevoegd.`);
 			});
-		}).catch(handleErrors);
+		}).catch(err => {
+			if (err.message.includes("already exists")) {
+				console.log(`(!) Organisatie ${weergaveNaam} (${kvkNummer}) bestaat al.`);
+			}
+			else {
+				console.error(err);
+			}
+		});
 	});
 
 	await Promise.all(mOrganisaties).finally(() => {
@@ -144,8 +177,8 @@ const main = async () => {
 							tegenRekeningId: _orgFirstRekening.id,
 						},
 					}).then(result => {
-						console.log(`Afspraak voor burger ${burgerName} met ${result.createAfspraak?.afspraak?.organisatie?.weergaveNaam}.`);
-					}).catch(handleErrors);
+						console.log(`Afspraak voor burger ${burgerName} met ${result.createAfspraak?.afspraak?.organisatie?.weergaveNaam} toegevoegd.`);
+					});
 				}
 			});
 
@@ -153,7 +186,7 @@ const main = async () => {
 				console.log(`Alle afspraken voor burger ${burgerName} toegevoegd.`);
 				console.log();
 			});
-		}).catch(handleErrors);
+		});
 	});
 
 	await Promise.all(mBurgers).finally(() => {
@@ -163,8 +196,12 @@ const main = async () => {
 };
 
 main()
-	.finally(() => {
+	.then(() => {
 		console.log("Voorbeelddata toegevoegd.");
+	})
+	.catch(errs => {
+		handleErrors(errs);
+		process.exit(1);
 	});
 
 export {};
