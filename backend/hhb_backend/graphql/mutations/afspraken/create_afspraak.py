@@ -23,6 +23,7 @@ class CreateAfspraakInput(graphene.InputObjectType):
     omschrijving = graphene.String(required=True)
     bedrag = graphene.Argument(Bedrag, required=True)
     valid_from = graphene.String()
+    valid_through = graphene.String()
 
 
 class CreateAfspraak(graphene.Mutation):
