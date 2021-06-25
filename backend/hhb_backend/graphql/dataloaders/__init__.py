@@ -21,6 +21,7 @@ from .overschrijving_loader import (OverschrijvingByAfspraakLoader, Overschrijvi
 from .rekeningen_loader import (RekeningenByBurgerLoader, RekeningenByIbanLoader, RekeningenByIdLoader,
                                 RekeningenByOrganisatieLoader)
 from .rubrieken_loader import RubriekByGrootboekrekeningLoader, RubriekByIdLoader
+from .huishouden_loader import HuishoudensByIdLoader
 
 
 class HHBDataLoader:
@@ -76,6 +77,9 @@ class HHBDataLoader:
         self.gebruikersactiviteiten_by_afspraken = (
             GebruikersActiviteitenByAfsprakenLoader(loop=loop)
         )
+
+        # Huishoudens
+        self.huishoudens_by_id = HuishoudensByIdLoader(loop=loop)
 
     def __getitem__(self, item: str):
         return getattr(self, item)

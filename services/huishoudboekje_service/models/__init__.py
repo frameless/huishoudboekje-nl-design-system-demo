@@ -9,3 +9,4 @@ from .rubriek import Rubriek
 from .configuratie import Configuratie
 from .overschrijving import Overschrijving
 from .export import Export
+from .huishouden import Huishouden

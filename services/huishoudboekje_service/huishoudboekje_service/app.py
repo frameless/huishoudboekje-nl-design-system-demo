@@ -15,6 +15,7 @@ from huishoudboekje_service.views import (
     ConfiguratieView,
     OverschrijvingView,
     ExportView,
+    HuishoudenView,
 )
 from core_service import database
 
@@ -58,6 +59,8 @@ def create_app(config_name=os.getenv('APP_SETTINGS', 'huishoudboekje_service.con
         {"path": "/overschrijvingen/<object_id>", "view": OverschrijvingView, "name": "overschrijving_detail_view"},
         {"path": "/export", "view": ExportView, "name": "export_view"},
         {"path": "/export/<object_id>", "view": ExportView, "name": "export_detail_view"},
+        {"path": "/huishoudens", "view": HuishoudenView, "name": "huishouden_view"},
+        {"path": "/huishoudens/<object_id>", "view": HuishoudenView, "name": "huishouden_detail_view"},
     ]
     for route in routes:
         app.add_url_rule(

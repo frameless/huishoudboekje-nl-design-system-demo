@@ -2,15 +2,18 @@
 import json
 
 
-def test_burgers_post_success(app):
+def test_burgers_post_success(app, huishouden_factory):
     """ Test succesfull post of new burger"""
+    huishouden = huishouden_factory.createHuishouden()
     burger_data = {
         "email": "a@b.c",
         "telefoonnummer": "0612345678",
-        "geboortedatum": "2020-01-01"
+        "geboortedatum": "2020-01-01",
+        "huishouden_id": huishouden.id,
     }
     response = app.test_client().post('/burgers',
                                       data=json.dumps(burger_data), content_type='application/json')
+
     assert response.status_code == 201
     assert response.json["data"] == {'achternaam': None,
                                      'email': 'a@b.c',
@@ -23,7 +26,8 @@ def test_burgers_post_success(app):
                                      'telefoonnummer': '0612345678',
                                      'voorletters': None,
                                      'voornamen': None,
-                                     'plaatsnaam': None}
+                                     'plaatsnaam': None,
+                                     'huishouden_id': huishouden.id}
 
 
 def test_burgers_post_input_json_validation_invalid_geboortedatum(app):

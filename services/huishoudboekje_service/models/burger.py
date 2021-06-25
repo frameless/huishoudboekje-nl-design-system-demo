@@ -1,5 +1,5 @@
 from core_service.database import db
-from sqlalchemy import Column, Integer, String, Sequence, Date
+from sqlalchemy import Column, ForeignKey, Integer, String, Sequence, Date
 from sqlalchemy.orm import relationship
 
 
@@ -25,9 +25,13 @@ class Burger(db.Model):
     geboortedatum = Column(Date)
     iban = Column(String)
 
+    huishouden_id = Column(Integer, ForeignKey("huishoudens.id"), nullable=False)
+
     # Relations from other models
     rekeningen = relationship("RekeningBurger",
         back_populates="burger",
         cascade="all, delete" # cascade only deletes relationship, not the rekening
     )
     afspraken = relationship("Afspraak")
+    huishouden = relationship("Huishouden", back_populates="burgers")
+

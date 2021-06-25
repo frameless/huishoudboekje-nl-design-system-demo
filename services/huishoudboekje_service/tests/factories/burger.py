@@ -9,7 +9,8 @@ from models.burger import Burger
 class BurgerFactory():
     """ Factory for Burger objects """
 
-    def __init__(self, session):
+    def __init__(self, session, huishouden_factory):
+        self.huishouden_factory = huishouden_factory
         self.dbsession = session
 
     def createBurger(
@@ -25,7 +26,14 @@ class BurgerFactory():
             huisnummer: str = "5",
             postcode: str = "1234AB",
             plaatsnaam: str = "Hoofddorp",
+            huishouden_id: int = None
     ):
+        if not huishouden_id:
+            huishouden = self.huishouden_factory.createHuishouden()
+            self.dbsession.add(huishouden)
+            self.dbsession.flush()
+            huishouden_id = huishouden.id
+
         burger = Burger(
             telefoonnummer=telefoonnummer,
             email=email,
@@ -37,7 +45,8 @@ class BurgerFactory():
             straatnaam=straatnaam,
             huisnummer=huisnummer,
             postcode=postcode,
-            plaatsnaam=plaatsnaam
+            plaatsnaam=plaatsnaam,
+            huishouden_id=huishouden_id,
         )
         self.dbsession.add(burger)
         self.dbsession.flush()
@@ -45,8 +54,8 @@ class BurgerFactory():
 
 
 @pytest.fixture(scope="function")
-def burger_factory(session, request):
+def burger_factory(session, request, huishouden_factory):
     """
     creates an instance of the BurgerFactory with function scope dbsession
     """
-    return BurgerFactory(session)
+    return BurgerFactory(session, huishouden_factory)
