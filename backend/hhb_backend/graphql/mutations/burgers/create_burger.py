@@ -4,11 +4,14 @@ import json
 import graphene
 import requests
 from graphql import GraphQLError
+
 from hhb_backend.graphql.models.burger import Burger
 
 import hhb_backend.graphql.mutations.rekeningen.rekening_input as rekening_input
+import hhb_backend.graphql.mutations.huishoudens.huishouden_input as huishouden_input
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.mutations.rekeningen.utils import create_burger_rekening
+from hhb_backend.graphql.mutations.huishoudens.utils import create_huishouden_if_not_exists
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     gebruikers_activiteit_entities,
     log_gebruikers_activiteit,
@@ -30,6 +33,7 @@ class CreateBurgerInput(graphene.InputObjectType):
     voorletters = graphene.String()
     voornamen = graphene.String()
     plaatsnaam = graphene.String()
+    huishouden = graphene.Field(huishouden_input.HuishoudenInput)
 
 
 class CreateBurger(graphene.Mutation):
@@ -56,6 +60,11 @@ class CreateBurger(graphene.Mutation):
     async def mutate(_root, _info, input):
         """ Create the new Gebruiker/Burger """
         rekeningen = input.pop("rekeningen", None)
+
+        if (huishouden_input := input.pop("huishouden", None)):
+            existing_huishouden = create_huishouden_if_not_exists(huishouden=huishouden_input)
+            input["huishouden_id"] = existing_huishouden["id"]
+
         response = requests.post(
             f"{settings.HHB_SERVICES_URL}/burgers/",
             data=json.dumps(input, default=str),

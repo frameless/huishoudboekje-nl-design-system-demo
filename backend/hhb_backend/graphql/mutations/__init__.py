@@ -13,6 +13,7 @@ from .burgers.update_burger import UpdateBurger
 from .configuraties.configuraties import CreateConfiguratie, DeleteConfiguratie, UpdateConfiguratie
 from .customer_statement_messages.create_customer_statement_message import CreateCustomerStatementMessage
 from .customer_statement_messages.delete_customer_statement_message import DeleteCustomerStatementMessage
+from .huishoudens.delete_huishouden import DeleteHuishouden
 from .journaalposten.create_journaalpost import CreateJournaalpostAfspraak, CreateJournaalpostGrootboekrekening, \
     CreateJournaalpostPerAfspraak
 from .journaalposten.delete_journaalpost import DeleteJournaalpost
@@ -30,6 +31,7 @@ from .rekeningen.update_rekening import UpdateRekening
 from .rubrieken.create_rubriek import CreateRubriek
 from .rubrieken.delete_rubriek import DeleteRubriek
 from .rubrieken.update_rubriek import UpdateRubriek
+from .huishoudens.create_huishouden import CreateHuishouden
 
 
 class RootMutation(graphene.ObjectType):
@@ -74,3 +76,6 @@ class RootMutation(graphene.ObjectType):
 
     createExportOverschrijvingen = CreateExportOverschrijvingen.Field()
     startAutomatischBoeken = StartAutomatischBoeken.Field()
+
+    createHuishouden = CreateHuishouden.Field()
+    deleteHuishouden = DeleteHuishouden.Field()

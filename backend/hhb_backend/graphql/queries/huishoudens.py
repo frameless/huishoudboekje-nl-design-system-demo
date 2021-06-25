@@ -1,0 +1,46 @@
+import graphene
+from flask import request
+
+import hhb_backend.graphql.models.huishouden as huishouden
+from hhb_backend.graphql.utils.gebruikersactiviteiten import (
+    gebruikers_activiteit_entities,
+    log_gebruikers_activiteit,
+)
+
+
+class HuishoudenQuery:
+    return_type = graphene.Field(huishouden.Huishouden, id=graphene.Int(required=True))
+
+    @classmethod
+    def gebruikers_activiteit(cls, _root, info, id, *_args, **_kwargs):
+        return dict(
+            action=info.field_name,
+            entities=gebruikers_activiteit_entities(entity_type="huishouden", result=id),
+        )
+
+    @classmethod
+    @log_gebruikers_activiteit
+    async def resolver(cls, _root, _info, id):
+        return await request.dataloader.huishoudens_by_id.load(id)
+
+
+class HuishoudensQuery:
+    return_type = graphene.List(
+        huishouden.Huishouden,
+        ids=graphene.List(graphene.Int, default_value=[])
+    )
+
+    @classmethod
+    def gebruikers_activiteit(cls, _root, info, ids, *_args, **_kwargs):
+        return dict(
+            action=info.field_name,
+            entities=gebruikers_activiteit_entities(entity_type="huishouden", result=ids),
+        )
+
+    @classmethod
+    @log_gebruikers_activiteit
+    async def resolver(cls, _root, _info, ids=None):
+        if ids:
+            return await request.dataloader.huishoudens_by_id.load_many(ids)
+        return request.dataloader.huishoudens_by_id.get_all_and_cache()
+
