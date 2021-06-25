@@ -1,5 +1,6 @@
 import graphene
 from flask import request
+from graphql import GraphQLError
 
 import hhb_backend.graphql.models.huishouden as huishouden
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
@@ -44,3 +45,33 @@ class HuishoudensQuery:
             return await request.dataloader.huishoudens_by_id.load_many(ids)
         return request.dataloader.huishoudens_by_id.get_all_and_cache()
 
+
+class HuishoudensPagedQuery:
+    return_type = graphene.Field(
+        huishouden.HuishoudensPaged,
+        start=graphene.Int(),
+        limit=graphene.Int(),
+    )
+
+    @classmethod
+    def gebruikers_activiteit(cls, _root, info, *_args, **kwargs):
+        return dict(
+            action=info.field_name,
+            entities=gebruikers_activiteit_entities(
+                entity_type="huishouden",
+                result=kwargs["result"] if "result" in kwargs else None,
+            ),
+        )
+
+    @classmethod
+    @log_gebruikers_activiteit
+    async def resolver(cls, _root, _info, **kwargs):
+        if "start" in kwargs and "limit" in kwargs:
+            return request.dataloader.huishoudens_by_id.get_all_paged(
+                start=kwargs["start"],
+                limit=kwargs["limit"],
+                desc=True,
+                sortingColumn="id",
+            )
+        else:
+            raise GraphQLError(f"Query needs params 'start', 'limit'. ")
