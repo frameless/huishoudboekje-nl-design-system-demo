@@ -12,7 +12,7 @@ class Huishouden(graphene.ObjectType):
     burgers = graphene.List(lambda: burger.Burger)
 
     async def resolve_burgers(root, info):
-        burgers = await request.dataloader.burgers_by_id.load_many(root.get('burgers'))
+        burgers = await request.dataloader.burgers_by_huishouden.load(root.get('id'))
         return burgers
 
 

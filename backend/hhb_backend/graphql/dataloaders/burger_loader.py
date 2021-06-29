@@ -7,3 +7,10 @@ class BurgersByIdLoader(SingleDataLoader):
 
     model = "burgers"
     service = settings.HHB_SERVICES_URL
+
+
+class BurgersByHuishoudenLoader(SingleDataLoader):
+    """Load burgers using huishouden"""
+
+    model = "burgers"
+    filter_item = "huishouden_id"

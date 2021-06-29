@@ -7,7 +7,7 @@ from .bank_transactions_loader import (BankTransactionByCsmLoader, BankTransacti
 from .configuratie_loader import ConfiguratieByIdLoader
 from .csm_loader import CSMsByIdLoader
 from .exports_loader import ExportsByIdLoader
-from .burger_loader import BurgersByIdLoader
+from .burger_loader import BurgersByHuishoudenLoader, BurgersByIdLoader
 from .gebruikersactiviteit_loader import (GebruikersActiviteitenByAfsprakenLoader,
                                           GebruikersActiviteitenByBurgersLoader, GebruikersActiviteitenByIdLoader)
 from .grootboekrekening_loader import GrootboekrekeningenByIdLoader
@@ -30,6 +30,7 @@ class HHBDataLoader:
     def __init__(self, loop):
         # Burgers
         self.burgers_by_id = BurgersByIdLoader(loop=loop)
+        self.burgers_by_huishouden = BurgersByHuishoudenLoader(loop=loop)
 
         # Organisaties
         self.organisaties_by_id = OrganisatieByIdLoader(loop=loop)

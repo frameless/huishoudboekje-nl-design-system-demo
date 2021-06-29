@@ -5,9 +5,9 @@ import requests
 from graphql import GraphQLError
 
 from hhb_backend.graphql import settings
+from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.huishouden import Huishouden
 from hhb_backend.graphql.mutations.burgers.utils import (
-    get_burger_by_id,
     update_existing_burger,
 )
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
@@ -49,19 +49,16 @@ class CreateHuishouden(graphene.Mutation):
         huishouden = response.json()["data"]
 
         for burger_id in input.burger_ids:
-            burger = await get_burger_by_id(id=burger_id)
+            burger = await hhb_dataloader().burgers_by_id.load(burger_id)
             if not burger:
                 raise GraphQLError(
                     f"Upstream API responded: burger with id {burger_id} does not exist"
                 )
-
             burger["huishouden_id"] = huishouden["id"]
 
             # TODO: remove this check as it should not be necessary
             burger["iban"] = burger["iban"] if burger["iban"] else ""
 
             await update_existing_burger(burger=burger)
-
-        # TODO: write check to prevent huishouden orphanage
 
         return CreateHuishouden(huishouden=huishouden, ok=True)

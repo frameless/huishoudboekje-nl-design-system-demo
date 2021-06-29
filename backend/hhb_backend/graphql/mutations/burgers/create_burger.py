@@ -61,9 +61,8 @@ class CreateBurger(graphene.Mutation):
         """ Create the new Gebruiker/Burger """
         rekeningen = input.pop("rekeningen", None)
 
-        if (huishouden_input := input.pop("huishouden", None)):
-            existing_huishouden = create_huishouden_if_not_exists(huishouden=huishouden_input)
-            input["huishouden_id"] = existing_huishouden["id"]
+        huishouden = await create_huishouden_if_not_exists(huishouden=input.pop("huishouden", {}))
+        input["huishouden_id"] = huishouden["id"]
 
         response = requests.post(
             f"{settings.HHB_SERVICES_URL}/burgers/",

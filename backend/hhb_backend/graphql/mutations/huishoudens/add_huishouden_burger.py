@@ -7,7 +7,6 @@ from graphql import GraphQLError
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models import huishouden
-from hhb_backend.graphql.mutations.huishoudens.utils import get_huishouden_by_id
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     gebruikers_activiteit_entities,
     log_gebruikers_activiteit,
@@ -58,6 +57,6 @@ class AddHuishoudenBurger(graphene.Mutation):
                 raise GraphQLError(f"Upstream API responded: {response.text}")
         return AddHuishoudenBurger(
             ok=True,
-            huishouden=get_huishouden_by_id(id=huishouden_id),
+            huishouden=await hhb_dataloader().huishoudens_by_id.load(huishouden_id),
             previous=previous,
         )

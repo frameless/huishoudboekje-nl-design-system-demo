@@ -5,25 +5,15 @@ import requests
 from graphql import GraphQLError
 
 from hhb_backend.graphql import settings
+from hhb_backend.graphql.dataloaders import hhb_dataloader
 
 
-def create_huishouden_if_not_exists(huishouden: Dict) -> Dict:
-    existing_huishouden = get_huishouden_by_id(id=huishouden["id"])
-    if existing_huishouden:
-        return existing_huishouden
-    else:
-        return create_new_huishouden(huishouden=huishouden)
-
-
-def get_huishouden_by_id(id: int) -> Dict:
-    huishouden = requests.get(
-        f"{settings.HHB_SERVICES_URL}/huishoudens/",
-        params={"filter_ids": id},
-        headers={"Content-type": "application/json"},
-    )
-    if huishouden.status_code != 200:
-        raise GraphQLError(f"Upstream API responded: {huishouden.text}")
-    return next(iter(huishouden.json()["data"]), None)
+async def create_huishouden_if_not_exists(huishouden: Dict) -> Dict:
+    if "id" in huishouden:
+        existing_huishouden = await hhb_dataloader().huishoudens_by_id.load(huishouden["id"]),
+        if existing_huishouden:
+            return existing_huishouden[0]
+    return create_new_huishouden(huishouden=huishouden)
 
 
 def create_new_huishouden(huishouden: Dict = None):

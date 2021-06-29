@@ -7,9 +7,11 @@ from graphql import GraphQLError
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models import huishouden
-from hhb_backend.graphql.mutations.huishoudens.utils import create_huishouden_if_not_exists, create_new_huishouden,\
-    get_huishouden_by_id
-from hhb_backend.graphql.utils.gebruikersactiviteiten import gebruikers_activiteit_entities, log_gebruikers_activiteit
+from hhb_backend.graphql.mutations.huishoudens.utils import create_new_huishouden
+from hhb_backend.graphql.utils.gebruikersactiviteiten import (
+    gebruikers_activiteit_entities,
+    log_gebruikers_activiteit,
+)
 
 
 class DeleteHuishoudenBurger(graphene.Mutation):
@@ -27,7 +29,7 @@ class DeleteHuishoudenBurger(graphene.Mutation):
             entities=gebruikers_activiteit_entities(
                 entity_type="burger", result=self, key="burger_id"
             )
-                     + gebruikers_activiteit_entities(
+            + gebruikers_activiteit_entities(
                 entity_type="huishouden", result=self.huishouden, key="huishouden"
             ),
             before=dict(huishouden=self.previous),
