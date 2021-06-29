@@ -3,6 +3,7 @@ from flask import request
 from graphql import GraphQLError
 
 import hhb_backend.graphql.models.huishouden as huishouden
+from hhb_backend.graphql.filters.burgers import BurgerFilter
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     gebruikers_activiteit_entities,
     log_gebruikers_activiteit,
@@ -28,7 +29,8 @@ class HuishoudenQuery:
 class HuishoudensQuery:
     return_type = graphene.List(
         huishouden.Huishouden,
-        ids=graphene.List(graphene.Int, default_value=[])
+        ids=graphene.List(graphene.Int, default_value=[]),
+        filters=BurgerFilter(),
     )
 
     @classmethod
@@ -40,10 +42,12 @@ class HuishoudensQuery:
 
     @classmethod
     @log_gebruikers_activiteit
-    async def resolver(cls, _root, _info, ids=None):
+    async def resolver(cls, _root, _info, ids=None, **kwargs):
         if ids:
             return await request.dataloader.huishoudens_by_id.load_many(ids)
-        return request.dataloader.huishoudens_by_id.get_all_and_cache()
+        return request.dataloader.huishoudens_by_id.get_all_and_cache(
+            filters=kwargs.get("filters", None)
+        )
 
 
 class HuishoudensPagedQuery:
@@ -51,6 +55,7 @@ class HuishoudensPagedQuery:
         huishouden.HuishoudensPaged,
         start=graphene.Int(),
         limit=graphene.Int(),
+        filters=BurgerFilter()
     )
 
     @classmethod
@@ -72,6 +77,7 @@ class HuishoudensPagedQuery:
                 limit=kwargs["limit"],
                 desc=True,
                 sortingColumn="id",
+                filters=kwargs.get("filters")
             )
         else:
             raise GraphQLError(f"Query needs params 'start', 'limit'. ")
