@@ -1,0 +1,46 @@
+[
+  {
+	"naam": "Inkomsten",
+	"grootboekrekening": "WOmzNooNdo"
+  },
+  {
+	"naam": "Toeslagen",
+	"grootboekrekening": "WOvbOrsOsuSro"
+  },
+  {
+	"naam": "Uitkeringen",
+	"grootboekrekening": "WOvbOrsOsuSov"
+  },
+  {
+	"naam": "Subsidies",
+	"grootboekrekening": "WOvbOrsOsuSpo"
+  },
+  {
+	"naam": "Huur of hypotheek",
+	"grootboekrekening": "WBedHuiBeh"
+  },
+  {
+	"naam": "Gas en elektriciteit",
+	"grootboekrekening": "WBedHuiGweElk"
+  },
+  {
+	"naam": "Water",
+	"grootboekrekening": "WBedHuiGweWat"
+  },
+  {
+	"naam": "Lokale lasten",
+	"grootboekrekening": "WBedHuiMez"
+  },
+  {
+	"naam": "Telefoon, internet en televisie",
+	"grootboekrekening": "WBedKanTef"
+  },
+  {
+	"naam": "Verzekeringen",
+	"grootboekrekening": "WBedAssOva"
+  },
+  {
+	"naam": "Privé-opname",
+	"grootboekrekening": "BEivKapProPok"
+  }
+]

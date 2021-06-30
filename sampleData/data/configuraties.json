@@ -1,0 +1,14 @@
+[
+    {
+      "id": "derdengeldenrekening_rekeninghouder",
+      "waarde": "Gemeente Sloothuizen Huishoudboekje"
+    },
+    {
+      "id": "derdengeldenrekening_iban",
+      "waarde": "NL36ABNA5632579034"
+    },
+    {
+      "id": "derdengeldenrekening_bic",
+      "waarde": "ABNANL2A"
+    }
+]

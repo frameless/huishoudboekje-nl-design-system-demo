@@ -1,0 +1,341 @@
+[
+  {
+	"voorletters": "F.S.",
+	"voornamen": "Fien Sandra",
+	"achternaam": "de Jager",
+	"huisnummer": "14",
+	"postcode": "9999ZZ",
+	"straatnaam": "Winkelstraat",
+	"plaatsnaam": "Sloothuizen",
+	"geboortedatum": "1987-06-18",
+	"email": "fien.de.jager@sloothuizen.nl",
+	"telefoonnummer": "0612345678",
+	"rekeningen": [
+	  {"iban": "NL84INGB2266765221", "rekeninghouder": "F. de Jager"}
+	],
+	"afspraken": [
+	  {
+		"rubriek": {
+		  "naam": "Inkomsten"
+		},
+		"omschrijving": "Loon",
+		"organisatie": {
+		  "kvkNummer": "35012085"
+		},
+		"bedrag": 765.32,
+		"credit": true,
+		"validFrom": "2021-01-01",
+		"zoektermen": [
+		  "Loon",
+		  "ZOEKTERMPERSONA1"
+		]
+	  },
+	  {
+		"rubriek": {"naam": "Uitkeringen"},
+		"omschrijving": "Aanvullende uitkering",
+		"organisatie": {
+		  "kvkNummer": "30280353"
+		},
+		"bedrag": 147.84,
+		"credit": true,
+		"validFrom": "2019-01-07",
+		"zoektermen": [
+		  "Aanvullende uitkering",
+		  "ZOEKTERMPERSONA1"
+		]
+	  },
+	  {
+		"rubriek": {"naam": "Toeslagen"},
+		"omschrijving": "Voorschot kindgebonden budget",
+		"organisatie": {
+		  "kvkNummer": "27365323"
+		},
+		"bedrag": 391.00,
+		"credit": true,
+		"validFrom": "2019-01-20",
+		"zoektermen": [
+		  "123456781",
+		  "VOORSCHOT KIT/Kgb"
+		]
+	  },
+	  {
+		"rubriek": {"naam": "Toeslagen"},
+		"omschrijving": "Voorschot huurtoeslag",
+		"organisatie": {
+		  "kvkNummer": "27365323"
+		},
+		"bedrag": 322.00,
+		"credit": true,
+		"validFrom": "2019-01-20",
+		"zoektermen": [
+		  "123456781",
+		  "VOORSCHOT HUURTOESLAG"
+		]
+	  },
+	  {
+		"rubriek": {"naam": "Toeslagen"},
+		"omschrijving": "Voorschot zorgtoeslag",
+		"organisatie": {
+		  "kvkNummer": "27365323"
+		},
+		"bedrag": 107.00,
+		"credit": true,
+		"validFrom": "2019-01-20",
+		"zoektermen": [
+		  "123456781",
+		  "VOORSCHOT ZORGTOESLAG"
+		]
+	  },
+	  {
+		"rubriek": {"naam": "Huur of hypotheek"},
+		"omschrijving": "Huur",
+		"organisatie": {
+		  "kvkNummer": "30038487"
+		},
+		"bedrag": 647.35,
+		"credit": false,
+		"validFrom": "2019-01-01",
+		"zoektermen": [
+		  "Betaalde huur",
+		  "ZOEKTERMPERSONA1"
+		]
+	  },
+	  {
+		"rubriek": {"naam": "Gas en elektriciteit"},
+		"omschrijving": "Elektriciteit",
+		"organisatie": {
+		  "kvkNummer": "05082820"
+		},
+		"bedrag": 132.00,
+		"credit": false,
+		"validFrom": "2019-01-01",
+		"zoektermen": [
+		  "Elektriciteit",
+		  "ZOEKTERMPERSONA1"
+		]
+	  },
+	  {
+		"rubriek": {"naam": "Water"},
+		"omschrijving": "Water",
+		"organisatie": {
+		  "kvkNummer": "05069581"
+		},
+		"bedrag": 41.61,
+		"credit": false,
+		"validFrom": "2021-01-01",
+		"zoektermen": [
+		  "Water",
+		  "ZOEKTERMPERSONA1"
+		]
+	  },
+	  {
+		"rubriek": {"naam": "Privé-opname"},
+		"omschrijving": "Leefgeld",
+		"bedrag": 939.94,
+		"credit": false,
+		"validFrom": "2021-01-01",
+		"zoektermen": [
+		  "Leefgeld",
+		  "ZOEKTERMPERSONA1"
+		]
+	  }
+	]
+  },
+  {
+	"voorletters": "H.J.",
+	"voornamen": "Henk-Jan",
+	"achternaam": "Poortvliet",
+	"huisnummer": "37B",
+	"postcode": "9999ZZ",
+	"straatnaam": "Spoorlaan",
+	"plaatsnaam": "Sloothuizen",
+	"geboortedatum": "1964-08-14",
+	"email": "fien.de.jager@sloothuizen.nl",
+	"telefoonnummer": "0612345678",
+	"rekeningen": [
+	  {"iban": "NL83ABNA1927261899", "rekeninghouder": "H.J. Winkel"},
+	  {"iban": "NL58INGB5228863516", "rekeninghouder": "H.J. Winkel en/of A.B. Zee"}
+	],
+	"afspraken": [
+	  {
+		"rubriek": {"naam": "Uitkeringen"},
+		"omschrijving": "Aanvullende uitkering minus terugvordering",
+		"organisatie": {
+		  "kvkNummer": "30280353"
+		},
+		"bedrag": 104.85,
+		"credit": true,
+		"validFrom": "2019-01-07",
+		"zoektermen": [
+		  "Aanvullende uitkering",
+		  "ZOEKTERMPERSONA2"
+		]
+	  },
+	  {
+		"rubriek": {"naam": "Inkomsten"},
+		"omschrijving": "Loon",
+		"organisatie": {
+		  "kvkNummer": "35012085"
+		},
+		"bedrag": 1669.12,
+		"credit": true,
+		"validFrom": "2021-01-01",
+		"zoektermen": [
+		  "Loon",
+		  "ZOEKTERMPERSONA2"
+		]
+	  },
+	  {
+		"rubriek": {"naam": "Toeslagen"},
+		"omschrijving": "Voorschot huurtoeslag",
+		"organisatie": {
+		  "kvkNummer": "27365323"
+		},
+		"bedrag": 286.00,
+		"credit": true,
+		"validFrom": "2019-01-20",
+		"zoektermen": [
+		  "123456782",
+		  "VOORSCHOT HUURTOESLAG"
+		]
+	  },
+	  {
+		"rubriek": {"naam": "Toeslagen"},
+		"omschrijving": "Voorschot zorgtoeslag",
+		"organisatie": {
+		  "kvkNummer": "27365323"
+		},
+		"bedrag": 107.00,
+		"credit": true,
+		"validFrom": "2019-01-20",
+		"zoektermen": [
+		  "123456782",
+		  "VOORSCHOT ZORGTOESLAG"
+		]
+	  },
+	  {
+		"rubriek": {"naam": "Inkomsten"},
+		"omschrijving": "Bijdrage Vaste Lasten Pakket",
+		"organisatie": {
+		  "kvkNummer": "73834238"
+		},
+		"bedrag": 30.00,
+		"credit": true,
+		"validFrom": "2021-01-01",
+		"zoektermen": [
+		  "Vaste Lasten Pakket",
+		  "ZOEKTERMPERSONA2"
+		]
+	  },
+	  {
+		"rubriek": {"naam": "Huur of hypotheek"},
+		"omschrijving": "Huur",
+		"organisatie": {
+		  "kvkNummer": "30038487"
+		},
+		"bedrag": 570.77,
+		"credit": false,
+		"validFrom": "2019-01-01",
+		"zoektermen": [
+		  "Betaalde huur",
+		  "ZOEKTERMPERSONA2"
+		]
+	  },
+	  {
+		"rubriek": {"naam": "Gas en elektriciteit"},
+		"omschrijving": "Elektriciteit",
+		"organisatie": {
+		  "kvkNummer": "24324527"
+		},
+		"bedrag": 122.00,
+		"credit": false,
+		"validFrom": "2019-01-01",
+		"zoektermen": [
+		  "Elektriciteit",
+		  "ZOEKTERMPERSONA2"
+		]
+	  },
+	  {
+		"rubriek": {"naam": "Verzekeringen"},
+		"omschrijving": "Zorgverzekering",
+		"organisatie": {
+		  "kvkNummer": "41168265"
+		},
+		"bedrag": 181.34,
+		"credit": false,
+		"validFrom": "2019-01-01",
+		"zoektermen": [
+		  "Zorgverzekering",
+		  "ZOEKTERMPERSONA2"
+		]
+	  },
+	  {
+		"rubriek": {"naam": "Water"},
+		"omschrijving": "Water",
+		"organisatie": {
+		  "kvkNummer": "05069581"
+		},
+		"bedrag": 45.77,
+		"credit": false,
+		"validFrom": "2019-01-01",
+		"zoektermen": [
+		  "Water",
+		  "ZOEKTERMPERSONA2"
+		]
+	  },
+	  {
+		"rubriek": {"naam": "Privé-opname"},
+		"omschrijving": "Leefgeld",
+		"bedrag": 1195.20,
+		"credit": false,
+		"validFrom": "2019-01-01",
+		"zoektermen": [
+		  "Leefgeld",
+		  "ZOEKTERMPERSONA2"
+		]
+	  },
+	  {
+		"rubriek": {"naam": "Verzekeringen"},
+		"omschrijving": "Inboedelverzekering",
+		"organisatie": {
+		  "kvkNummer": "69653852"
+		},
+		"bedrag": 19.52,
+		"credit": false,
+		"validFrom": "2019-01-01",
+		"zoektermen": [
+		  "Inboedelverzekering",
+		  "ZOEKTERMPERSONA2"
+		]
+	  },
+	  {
+		"rubriek": {"naam": "Telefoon, internet en televisie"},
+		"omschrijving": "Vaste telefonie en internet",
+		"organisatie": {
+		  "kvkNummer": "27124701"
+		},
+		"bedrag": 62.88,
+		"credit": false,
+		"validFrom": "2019-01-01",
+		"zoektermen": [
+		  "Vaste telefonie en internet",
+		  "ZOEKTERMPERSONA2"
+		]
+	  },
+	  {
+		"rubriek": {"naam": "Telefoon, internet en televisie"},
+		"omschrijving": "Mobiele telefonie",
+		"organisatie": {
+		  "kvkNummer": "14052264"
+		},
+		"bedrag": 30.00,
+		"credit": false,
+		"validFrom": "2019-01-01",
+		"zoektermen": [
+		  "Mobiele telefonie",
+		  "ZOEKTERMPERSONA2"
+		]
+	  }
+	]
+  }
+]

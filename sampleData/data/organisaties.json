@@ -1,0 +1,459 @@
+[
+  {
+    "weergaveNaam": "Belastingdienst",
+    "kvkDetails": {
+      "nummer": "27365323",
+      "naam": "Belastingdienst Toeslagen",
+      "straatnaam": "Graadt van Roggenweg",
+      "huisnummer": "500",
+      "postcode": "3531AH",
+      "plaatsnaam": "Utrecht"
+    },
+    "rekeningen": [
+      {
+        "iban": "NL86INGB0002445588",
+        "rekeninghouder": "Belastingdienst"
+      },
+      {
+        "iban": "NL36INGB0003445588",
+        "rekeninghouder": "Belastingdienst"
+      }
+    ]
+  },
+  {
+    "weergaveNaam": "Beschermd wonen",
+    "kvkDetails": {
+      "nummer": "56806787",
+      "naam": "CAK",
+      "straatnaam": "Prinses Beatrixlaan",
+      "huisnummer": "7",
+      "postcode": "2595AK",
+      "plaatsnaam": "'s-Gravenhage"
+    },
+    "rekeningen": [
+      {
+        "iban": "NL38ABNA0435930001",
+        "rekeninghouder": "CAK"
+      }
+    ]
+  },
+  {
+    "weergaveNaam": "DUO",
+    "kvkDetails": {
+      "nummer": "50973029",
+      "naam": "Dienst Uitvoering Onderwijs",
+      "straatnaam": "Postbus",
+      "huisnummer": "30155",
+      "postcode": "9700LG",
+      "plaatsnaam": "Groningen"
+    },
+    "rekeningen": [
+      {
+        "iban": "NL45INGB0705001903",
+        "rekeninghouder": "DUO"
+      }
+    ]
+  },
+  {
+    "weergaveNaam": "Gemeente Utrecht",
+    "kvkDetails": {
+      "nummer": "30280353",
+      "naam": "Gemeente Utrecht",
+      "straatnaam": "Postbus",
+      "huisnummer": "16200",
+      "postcode": "3500CE",
+      "plaatsnaam": "Utrecht"
+    },
+    "rekeningen": [
+      {
+        "iban": "NL71ABNA0411065785",
+        "rekeninghouder": "GEMEENTE UTRECHT"
+      },
+      {
+        "iban": "NL92BNGH0285178601",
+        "rekeninghouder": " "
+      },
+      {
+        "iban": "NL76BNGH0285178598",
+        "rekeninghouder": "GEM UTRECHT WENI"
+      },
+      {
+        "iban": "NL49BNGH0285171712",
+        "rekeninghouder": "Gemeente Utrecht Huishoudboekje"
+      }
+    ]
+  },
+  {
+    "weergaveNaam": "Sociale Verzekeringsbank Utrecht",
+    "kvkDetails": {
+      "nummer": "34366008",
+      "naam": "Sociale Verzekeringsbank",
+      "straatnaam": "Graadt van Roggenweg",
+      "huisnummer": "400",
+      "postcode": "3531AH",
+      "plaatsnaam": "Utrecht"
+    },
+    "rekeningen": [
+      {
+        "iban": "NL29RABO0317344927",
+        "rekeninghouder": "SVB Utrecht"
+      }
+    ]
+  },
+  {
+    "weergaveNaam": "UWV Utrecht",
+    "kvkDetails": {
+      "nummer": "34360247",
+      "naam": "UWV Utrecht",
+      "straatnaam": "Postbus",
+      "huisnummer": "69254",
+      "postcode": "1060CH",
+      "plaatsnaam": "Amsterdam"
+    },
+    "rekeningen": [
+      {
+        "iban": "NL58INGB0702712760",
+        "rekeninghouder": "UWV"
+      },
+      {
+        "iban": "NL27INGB0702712736",
+        "rekeninghouder": "UWV"
+      },
+      {
+        "iban": "NL02INGB0702712701",
+        "rekeninghouder": "UWV"
+      },
+      {
+        "iban": "NL49INGB0702712728",
+        "rekeninghouder": "UWV"
+      }
+    ]
+  },
+  {
+    "weergaveNaam": "Stichting Vaste Lasten Pakket",
+    "kvkDetails": {
+      "nummer": "73834238",
+      "naam": "Stichting Vaste Lasten Pakket",
+      "straatnaam": "Arthur van Schendelstraat",
+      "huisnummer": "650",
+      "postcode": "3511MJ",
+      "plaatsnaam": "Utrecht"
+    },
+    "rekeningen": [
+      {
+        "iban": "NL95RABO4545747078",
+        "rekeninghouder": "Stichting Vaste Lasten Pakket"
+      }
+    ]
+  },
+  {
+    "weergaveNaam": "Vitens N.V.",
+    "kvkDetails": {
+      "nummer": "05069581",
+      "naam": "Vitens N.V.",
+      "straatnaam": "Postbus",
+      "huisnummer": "1205",
+      "postcode": "8001BE",
+      "plaatsnaam": "Zwolle"
+    },
+    "rekeningen": [
+      {
+        "iban": "NL94INGB0000869000",
+        "rekeninghouder": "VITENS NV"
+      }
+    ]
+  },
+  {
+    "weergaveNaam": "Stichting Mitros",
+    "kvkDetails": {
+      "nummer": "30136131",
+      "naam": "Stichting Mitros",
+      "straatnaam": "Postbus",
+      "huisnummer": "8217",
+      "postcode": "3503RE",
+      "plaatsnaam": "Utrecht"
+    },
+    "rekeningen": [
+      {
+        "iban": "NL81ABNA0479270961",
+        "rekeninghouder": "STICHTING MITROS"
+      },
+      {
+        "iban": "NL28INGB0668690550",
+        "rekeninghouder": "STICHTING MITROS"
+      }
+    ]
+  },
+  {
+    "weergaveNaam": "Stichting Portaal",
+    "kvkDetails": {
+      "nummer": "30038487",
+      "naam": "Stichting Portaal",
+      "straatnaam": "Postbus",
+      "huisnummer": "2211",
+      "postcode": "3500GE",
+      "plaatsnaam": "Utrecht"
+    },
+    "rekeningen": [
+      {
+        "iban": "NL15BNGH0285162624",
+        "rekeninghouder": "Portaal"
+      }
+    ]
+  },
+  {
+    "weergaveNaam": "Budget Energie",
+    "kvkDetails": {
+      "nummer": "34297646",
+      "naam": "De Nederlandse Energie Maatschappij",
+      "straatnaam": "Aert van Nesstraat",
+      "huisnummer": "45",
+      "postcode": "3012CA",
+      "plaatsnaam": "Rotterdam"
+    },
+    "rekeningen": [
+      {
+        "iban": "NL86ABNA0511919131",
+        "rekeninghouder": "Budget Energie"
+      }
+    ]
+  },
+  {
+    "weergaveNaam": "Eneco Consumenten",
+    "kvkDetails": {
+      "nummer": "24324527",
+      "naam": "Eneco Consumenten B.V.",
+      "straatnaam": "Marten Meesweg",
+      "huisnummer": "5",
+      "postcode": "3068AV",
+      "plaatsnaam": "Rotterdam"
+    },
+    "rekeningen": [
+      {
+        "iban": "NL10ABNA0240120000",
+        "rekeninghouder": "Eneco Services"
+      }
+    ]
+  },
+  {
+    "weergaveNaam": "Energiedirect B.V.",
+    "kvkDetails": {
+      "nummer": "17146989",
+      "naam": "Energiedirect B.V.",
+      "straatnaam": "Willemsplein",
+      "huisnummer": "4",
+      "postcode": "5211AK",
+      "plaatsnaam": "'s-Hertogenbosch"
+    },
+    "rekeningen": [
+      {
+        "iban": "NL71ABNA0629639183",
+        "rekeninghouder": "Energiedirect BV"
+      }
+    ]
+  },
+  {
+    "weergaveNaam": "ENGIE Nederland Retail B.V.",
+    "kvkDetails": {
+      "nummer": "05082820",
+      "naam": "ENGIE Nederland Retail B.V.",
+      "straatnaam": "Grote Voort",
+      "huisnummer": "291",
+      "postcode": "8041BL",
+      "plaatsnaam": "Zwolle"
+    },
+    "rekeningen": [
+      {
+        "iban": "NL54INGB0661901246",
+        "rekeninghouder": "ENGIE Nederland RETAIL B.V."
+      }
+    ]
+  },
+  {
+    "weergaveNaam": "Essent Retail Energie B.V.",
+    "kvkDetails": {
+      "nummer": "13041611",
+      "naam": "Essent Retail Energie B.V.",
+      "straatnaam": "Willemsplein",
+      "huisnummer": "4",
+      "postcode": "5211AK",
+      "plaatsnaam": "'s-Hertogenbosch"
+    },
+    "rekeningen": [
+      {
+        "iban": "NL32ABNA0242244777",
+        "rekeninghouder": "ESSENT RETAIL ENERG"
+      }
+    ]
+  },
+  {
+    "weergaveNaam": "Anderzorg",
+    "kvkDetails": {
+      "nummer": "50544403",
+      "naam": "Anderzorg N.V.",
+      "straatnaam": "Winschoterdiep",
+      "huisnummer": "70",
+      "postcode": "9723AB",
+      "plaatsnaam": "Groningen"
+    },
+    "rekeningen": [
+      {
+        "iban": "NL87INGB0676416217",
+        "rekeninghouder": "Anderzorg N.V."
+      }
+    ]
+  },
+  {
+    "weergaveNaam": "Bewuzt",
+    "kvkDetails": {
+      "nummer": "10029718",
+      "naam": "Coöperatie VGZ",
+      "straatnaam": "Winschoterdiep",
+      "huisnummer": "70",
+      "postcode": "9723AB",
+      "plaatsnaam": "Groningen"
+    },
+    "rekeningen": [
+      {
+        "iban": "NL87INGB0000717127",
+        "rekeninghouder": "Bewuzt"
+      }
+    ]
+  },
+  {
+    "weergaveNaam": "CZ Groep Zorgverzekeraar",
+    "kvkDetails": {
+      "nummer": "18028752",
+      "naam": "CZ Groep Aanvullende Verzekering Zorgverzekeraar",
+      "straatnaam": "Ringbaan-West",
+      "huisnummer": "236",
+      "postcode": "5038KE",
+      "plaatsnaam": "Tilburg"
+    },
+    "rekeningen": [
+      {
+        "iban": "NL85INGB0668339063",
+        "rekeninghouder": "CZ Groep Zorgverzekeraar"
+      }
+    ]
+  },
+  {
+    "weergaveNaam": "DSW Ziektekostenverzekeringen",
+    "kvkDetails": {
+      "nummer": "24230430",
+      "naam": "DSW Ziektekostenverzekeringen N.V.",
+      "straatnaam": "Postbus",
+      "huisnummer": "173",
+      "postcode": "3100AD",
+      "plaatsnaam": "Schiedam"
+    },
+    "rekeningen": [
+      {
+        "iban": "NL11RABO0343685310",
+        "rekeninghouder": "DSW Ziektekostenverzekeringen"
+      }
+    ]
+  },
+  {
+    "weergaveNaam": "FBTO Zorgverzekeringen N.V.",
+    "kvkDetails": {
+      "nummer": "30208631",
+      "naam": "FBTO Zorgverzekeringen N.V.",
+      "straatnaam": "Postbus",
+      "huisnummer": "318",
+      "postcode": "8901BC",
+      "plaatsnaam": "Leeuwarden"
+    },
+    "rekeningen": [
+      {
+        "iban": "NL47INGB0000003054",
+        "rekeninghouder": "FBTO ZORGVERZEKERINGEN NV"
+      }
+    ]
+  },
+  {
+    "weergaveNaam": "Stichting Zorg en Zekerheid",
+    "kvkDetails": {
+      "nummer": "41168265",
+      "naam": "Stichting Zorg en Zekerheid",
+      "straatnaam": "Postbus",
+      "huisnummer": "400",
+      "postcode": "2300AK",
+      "plaatsnaam": "Leiden"
+    },
+    "rekeningen": [
+      {
+        "iban": "NL28INGB0000128526",
+        "rekeninghouder": "Zorgverzekeraar Zorg en Zekerheid"
+      }
+    ]
+  },
+  {
+    "weergaveNaam": "RISK Direct",
+    "kvkDetails": {
+      "nummer": "69653852",
+      "naam": "RISK Direct B.V.",
+      "straatnaam": "Postbus",
+      "huisnummer": "1006",
+      "postcode": "3430BA",
+      "plaatsnaam": "Nieuwegein"
+    },
+    "rekeningen": [
+      {
+        "iban": "NL62INGB2650400811",
+        "rekeninghouder": "RISK Direct"
+      }
+    ]
+  },
+  {
+    "weergaveNaam": "Albert Heijn",
+    "kvkDetails": {
+      "nummer": "35012085",
+      "naam": "Albert Heijn B.V.",
+      "straatnaam": "Postbus",
+      "huisnummer": "3000",
+      "postcode": "1500HA",
+      "plaatsnaam": "Zaandam"
+    },
+    "rekeningen": [
+      {
+        "iban": "NL09INGB4826953240",
+        "rekeninghouder": "Albert Heijn B.V."
+      }
+    ]
+  },
+  {
+    "weergaveNaam": "KPN",
+    "kvkDetails": {
+      "nummer": "27124701",
+      "naam": "KPN B.V.",
+      "straatnaam": "Postbus",
+      "huisnummer": "30000",
+      "postcode": "2500GA",
+      "plaatsnaam": "Den Haag"
+    },
+    "rekeningen": [
+      {
+        "iban": "NL45INGB0670984779",
+        "rekeninghouder": "KPN"
+      }
+    ]
+  },
+  {
+    "weergaveNaam": "Vodafone",
+    "kvkDetails": {
+      "nummer": "14052264",
+      "naam": "Vodafone Libertel B.V.",
+      "straatnaam": "Avenue Ceramique",
+      "huisnummer": "300",
+      "postcode": "6221KX",
+      "plaatsnaam": "Maastricht"
+    },
+    "rekeningen": [
+      {
+        "iban": "NL93INGB0007939833",
+        "rekeninghouder": "Vodafone Libertel B.V. te Maastricht"
+      }
+    ]
+  }
+]
