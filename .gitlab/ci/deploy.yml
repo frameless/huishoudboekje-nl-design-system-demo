@@ -28,7 +28,7 @@
     name: test
     url: https://test.$BASE_DOMAIN/
   only:
-    - develop@commonground/huishoudboekje/app-new
+    - develop
 
 .acceptance: &acceptance
   variables:
@@ -42,7 +42,7 @@
     name: acc
     url: https://acc.$BASE_DOMAIN/
   only:
-    - acceptance@commonground/huishoudboekje/app-new
+    - acceptance
 
 .master: &master
   variables:
@@ -155,7 +155,6 @@ destroy-review:
   variables:
     NAMESPACE: "hhb-$CI_COMMIT_REF_SLUG"
     GIT_STRATEGY: none
-
   script:
     - kubectl delete namespace $NAMESPACE
   when: manual
@@ -174,7 +173,7 @@ deploy-review:
     name: review/$CI_COMMIT_REF_SLUG
     url: https://hhb-$CI_COMMIT_REF_SLUG.$BASE_DOMAIN/
     on_stop: destroy-review
-    auto_stop_in: 10 days
+    auto_stop_in: 7 days
 
 deploy-develop:
   <<: *deploy

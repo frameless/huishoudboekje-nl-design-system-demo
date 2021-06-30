@@ -13,14 +13,14 @@ const main = async () => {
 	console.log(`Controleren of de GraphQL API bereikbaar is op ${graphQlApiUrl}...`);
 	await apolloClient.query({query: gql(`{ __schema{ types{ name }}}`)})
 		.then(() => {
-			console.log(`De GraphQL API is bereikbaar op ${graphQlApiUrl}.`);
+			console.log(`De GraphQL API is bereikbaar.`);
 		})
 		.catch((err) => {
-			console.error(`(!) De GraphQL API is niet bereikbaar op ${graphQlApiUrl}.`);
+			console.error(`(!) De GraphQL API is niet bereikbaar.`);
+			console.log("Dit betekent of dat de API niet online is, of dat het gebruikte token niet geldig is.");
+			console.log("Token", process.env.PROXY_AUTHORIZATION);
 			process.exit(0);
 		});
-
-	console.log();
 
 	const graphql = getSdkApollo(apolloClient);
 	const {
