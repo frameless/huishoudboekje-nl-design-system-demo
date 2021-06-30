@@ -1,5 +1,9 @@
+import pytest
 import requests_mock
 from requests_mock import Adapter
+
+from hhb_backend.graphql import settings
+from tests import post_echo
 
 
 class MockResponse():
@@ -34,7 +38,7 @@ def create_mock_adapter() -> Adapter:
     return adapter
 
 
-# @pytest.fixture
+@pytest.fixture
 def create_huishouden(client):
     response = client.post(
         "/graphql",
@@ -203,24 +207,47 @@ def test_create_burger_with_new_rekening_invalid_success(client):
         assert response.json['errors'][0]['message'] == "Foutieve IBAN: 33BUKB20201555555555"
 
 
+def create_mock_huishouden_id_success_adapter() -> Adapter:
+    adapter = requests_mock.Adapter()
+
+    def test_matcher(request):
+        if request.path == "/rekeningen/" and request.query == "filter_ibans=33bukb20201555555555":
+            return MockResponse({'data': ""}, 200)
+        elif request.path == "/burgers/":
+            return MockResponse({'data': {'id': 1}}, 201)
+        elif request.path == "/burgers/1/rekeningen/":
+            return MockResponse({'data': "{'id': 1}"}, 201)
+        elif request.path == "/huishoudens/":
+            return MockResponse({'data': {'id': 1}}, 201)
+        elif request.path == "/huishoudens/" and request.query == "filter_ids=1":
+            return MockResponse({'data': [{'id': 1}]}, 200)
+
+    adapter.add_matcher(test_matcher)
+    return adapter
+
+
 # TODO: Fix this test!!!
 #   For some reason, this test fails with the following response:
+#   -----
 #   {'data': {'createBurger': None},
 #  'errors': [{'locations': [{'column': 19, 'line': 3}],
 #              'message': "'MockResponse' object has no attribute 'ok'",
 #              'path': ['createBurger']}]
-# def test_create_burger_with_huishouden_id_success(client):
+#   -----
+#   It seems to have to do something with the relationship between burgers and huishoudens.
+#   See also: test_create_huishouden.py/test_create_huishouden_with_burger_ids_success
+# def test_create_burger_with_huishouden_id_success(client, create_huishouden):
 #     with requests_mock.Mocker() as mock:
-#         mock._adapter = create_mock_adapter()
-#
-#         huishouden = create_huishouden(client)
-#
-#         huishoudens_post = mock.register_uri(
+#         get_any = mock.get(requests_mock.ANY, status_code=404)
+#         post_any = mock.post(requests_mock.ANY, status_code=404)
+#         log_post = mock.register_uri(
 #             "POST",
-#             f"{settings.HHB_SERVICES_URL}/huishoudens/",
-#             json={"data": {"huishoudens": [{"id": huishouden['id']}]}},
-#             status_code=201,
+#             f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/",
+#             status_code=200,
+#             json=post_echo,
 #         )
+#
+#         mock._adapter = create_mock_huishouden_id_success_adapter()
 #
 #         response = client.post(
 #             "/graphql",
@@ -255,5 +282,17 @@ def test_create_burger_with_new_rekening_invalid_success(client):
 #             content_type='application/json'
 #         )
 #
+#         from pprint import pprint
+#         print()
+#         print()
+#         pprint(response.json)
+#         print()
+#         print()
+#
 #         assert mock._adapter.call_count == 5
 #         assert response.json["data"]["createBurger"]["ok"] is True
+#
+#         # No leftover calls
+#         assert log_post.called_once
+#         assert not post_any.called
+#         assert not get_any.called
