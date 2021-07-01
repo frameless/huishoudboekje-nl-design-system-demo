@@ -66,13 +66,12 @@ const Transactions = () => {
 	const handleMutation = useHandleMutation();
 	const filterModal = useDisclosure();
 
-
 	const $transactions = useGetTransactiesQuery({
 		variables: {
 			offset,
 			limit: customPageSize,
 			filters: {
-				isGeboekt: filters.onlyUnbooked ? false : undefined,
+				// isGeboekt: filters.onlyUnbooked ? false : undefined,
 				isCredit: {
 					all: undefined,
 					income: true,
@@ -133,13 +132,13 @@ const Transactions = () => {
 						<ModalCloseButton />
 						<ModalBody>
 							<Stack>
-								<FormControl>
-									<FormLabel>{t("filters.transactions.type.title")}</FormLabel>
-									<Checkbox isChecked={filters.onlyUnbooked} onChange={e => setFilters(f => ({
-										...f,
-										onlyUnbooked: e.target.checked,
-									}))}>{t("filters.transactions.type.onlyUnbooked")}</Checkbox>
-								</FormControl>
+								{/*<FormControl>*/}
+								{/*	<FormLabel>{t("filters.transactions.type.title")}</FormLabel>*/}
+								{/*	<Checkbox isChecked={filters.onlyUnbooked} onChange={e => setFilters(f => ({*/}
+								{/*		...f,*/}
+								{/*		onlyUnbooked: e.target.checked,*/}
+								{/*	}))}>{t("filters.transactions.type.onlyUnbooked")}</Checkbox>*/}
+								{/*</FormControl>*/}
 
 								<FormControl>
 									<FormLabel>{t("filters.transactions.isCredit.title")}</FormLabel>
