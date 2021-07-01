@@ -3,7 +3,6 @@ import {
 	Box,
 	Button,
 	ButtonGroup,
-	Checkbox,
 	FormControl,
 	FormLabel,
 	HStack,
@@ -66,13 +65,12 @@ const Transactions = () => {
 	const handleMutation = useHandleMutation();
 	const filterModal = useDisclosure();
 
-
 	const $transactions = useGetTransactiesQuery({
 		variables: {
 			offset,
 			limit: customPageSize,
 			filters: {
-				isGeboekt: filters.onlyUnbooked ? false : undefined,
+				// isGeboekt: filters.onlyUnbooked ? false : undefined,
 				isCredit: {
 					all: undefined,
 					income: true,
@@ -133,13 +131,13 @@ const Transactions = () => {
 						<ModalCloseButton />
 						<ModalBody>
 							<Stack>
-								<FormControl>
-									<FormLabel>{t("filters.transactions.type.title")}</FormLabel>
-									<Checkbox isChecked={filters.onlyUnbooked} onChange={e => setFilters(f => ({
-										...f,
-										onlyUnbooked: e.target.checked,
-									}))}>{t("filters.transactions.type.onlyUnbooked")}</Checkbox>
-								</FormControl>
+								{/*<FormControl>*/}
+								{/*	<FormLabel>{t("filters.transactions.type.title")}</FormLabel>*/}
+								{/*	<Checkbox isChecked={filters.onlyUnbooked} onChange={e => setFilters(f => ({*/}
+								{/*		...f,*/}
+								{/*		onlyUnbooked: e.target.checked,*/}
+								{/*	}))}>{t("filters.transactions.type.onlyUnbooked")}</Checkbox>*/}
+								{/*</FormControl>*/}
 
 								<FormControl>
 									<FormLabel>{t("filters.transactions.isCredit.title")}</FormLabel>
@@ -201,18 +199,15 @@ const Transactions = () => {
 					<Queryable query={$transactions} children={(data) => {
 						const transacties = data?.bankTransactionsPaged?.banktransactions || [];
 
-						/* If no transacties were found */
-						if (transacties.length === 0) {
-							return (
-								<DeadEndPage message={t("messages.transactions.noResults")} />
-							);
-						}
-
 						return (<>
 							<HStack justify={"flex-end"}>
 								<Button size={"sm"} colorScheme={"primary"} variant={"outline"} onClick={() => filterModal.onOpen()}>{t("sections.filterOptions.title")}</Button>
 							</HStack>
-							<TransactiesList transacties={transacties} />
+							{transacties.length > 0 ? (
+								<TransactiesList transacties={transacties} />
+							) : (
+								<DeadEndPage message={t("messages.transactions.noResults")} />
+							)}
 							<HStack justify={"center"}>
 								<Box><PaginationButtons /></Box>
 							</HStack>
