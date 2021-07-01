@@ -17,6 +17,7 @@ export const auditLogTexts = (values, components, action) => {
 		burger: () => <Trans i18nKey={"auditLog.viewBurger"} values={values} components={components} />,
 		burgers: () => <Trans i18nKey={"auditLog.viewBurgers"} values={values} components={components} />,
 		customerStatementMessages: () => <Trans i18nKey={"auditLog.viewCustomerStatementMessages"} values={values} components={components} />,
+		bankTransaction: () => <Trans i18nKey={"auditLog.viewTransaction"} values={values} components={components} />,
 		bankTransactions: () => <Trans i18nKey={"auditLog.viewTransactions"} values={values} components={components} />,
 		bankTransactionsPaged: () => <Trans i18nKey={"auditLog.viewTransactions"} values={values} components={components} />,
 		exports: () => <Trans i18nKey={"auditLog.viewExports"} values={values} components={components} />,
