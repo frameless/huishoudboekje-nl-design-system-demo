@@ -3,7 +3,6 @@ import {
 	Box,
 	Button,
 	ButtonGroup,
-	Checkbox,
 	FormControl,
 	FormLabel,
 	HStack,
@@ -200,18 +199,15 @@ const Transactions = () => {
 					<Queryable query={$transactions} children={(data) => {
 						const transacties = data?.bankTransactionsPaged?.banktransactions || [];
 
-						/* If no transacties were found */
-						if (transacties.length === 0) {
-							return (
-								<DeadEndPage message={t("messages.transactions.noResults")} />
-							);
-						}
-
 						return (<>
 							<HStack justify={"flex-end"}>
 								<Button size={"sm"} colorScheme={"primary"} variant={"outline"} onClick={() => filterModal.onOpen()}>{t("sections.filterOptions.title")}</Button>
 							</HStack>
-							<TransactiesList transacties={transacties} />
+							{transacties.length > 0 ? (
+								<TransactiesList transacties={transacties} />
+							) : (
+								<DeadEndPage message={t("messages.transactions.noResults")} />
+							)}
 							<HStack justify={"center"}>
 								<Box><PaginationButtons /></Box>
 							</HStack>
