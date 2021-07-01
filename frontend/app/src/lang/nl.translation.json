@@ -494,6 +494,7 @@
         "viewBurger": "{{gebruiker}} bekeek <linkBurger>{{burger}}</linkBurger>.",
         "viewBurgers": "{{gebruiker}} bekeek alle <strong>burgers</strong>.",
         "viewCustomerStatementMessages": "{{gebruiker}} bekeek alle <strong>bankafschriften</strong>.",
+        "viewTransaction": "{{gebruiker}} bekeek banktransactie <strong>{{transactieId}}</strong>.",
         "viewTransactions": "{{gebruiker}} bekeek alle <strong>banktransacties</strong>.",
         "viewExports": "{{gebruiker}} bekeek alle <strong>betaalinstructies</strong>.",
         "viewConfiguraties": "{{gebruiker}} bekeek de <strong>configuratie</strong>.",
