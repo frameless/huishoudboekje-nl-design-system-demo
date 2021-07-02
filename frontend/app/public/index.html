@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1" name="viewport"/>
-    <link href="%PUBLIC_URL%/manifest.json" rel="manifest"/>
-    <title>Huishoudboekje</title>
-    <script src="%PUBLIC_URL%/theme/theme.js"></script>
+	<head>
+		<meta charset="utf-8" />
+		<meta content="width=device-width, initial-scale=1" name="viewport" />
+		<link href="%PUBLIC_URL%/manifest.json" rel="manifest" />
+		<title>Huishoudboekje</title>
+		<script src="%PUBLIC_URL%/theme/theme.js"></script>
 		<script type="text/javascript">
-			if(window.location.href.includes("test.huishoudboekje.demoground.nl")){
+			if(["test.huishoudboekje.demoground.nl", "hhb-93.nlx.reviews"].some(x => window.location.href.includes(x))){
+				/* Matomo */
 				var _paq = window._paq = window._paq || [];
 				/* tracker methods like "setCustomDimension" should be called before "trackPageView" */
 				_paq.push(["trackPageView"]);
@@ -22,11 +23,20 @@
 					g.src = u + "matomo.js";
 					s.parentNode.insertBefore(g, s);
 				})();
+
+				/* Matomo Tag Manager */
+				var _mtm = window._mtm = window._mtm || [];
+				_mtm.push({"mtm.startTime": (new Date().getTime()), "event": "mtm.Start"});
+				var d = document, g = d.createElement("script"), s = d.getElementsByTagName("script")[0];
+				g.type = "text/javascript";
+				g.async = true;
+				g.src = "https://matomo.sloothuizen.nl/js/container_XVp9RhVt.js";
+				s.parentNode.insertBefore(g, s);
 			}
 		</script>
 	</head>
-<body>
-<noscript>You need to enable JavaScript to run this app.</noscript>
-<div id="root"></div>
-</body>
+	<body>
+		<noscript>You need to enable JavaScript to run this app.</noscript>
+		<div id="root"></div>
+	</body>
 </html>
