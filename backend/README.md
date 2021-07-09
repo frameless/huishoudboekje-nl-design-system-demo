@@ -31,6 +31,7 @@ python3 setup.py install
     export ORGANISATIE_SERVICE_URL=http://localhost:8001
     export TRANSACTIE_SERVICE_URL=http://localhost:8002
     export GROOTBOEK_SERVICE_URL=http://localhost:8003
+    export LOG_SERVICE_URL=http://localhost:8004
     ```
 
 - in `hbb_backend/app.py` for the function `auth_graphql()`, change `MEDEWERKER_ROLENAME` into `ANONYMOUS_ROLENAME` \
