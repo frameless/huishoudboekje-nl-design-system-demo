@@ -1,14 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1" name="viewport"/>
-    <link href="%PUBLIC_URL%/manifest.json" rel="manifest"/>
-    <title>Huishoudboekje</title>
-    <script src="%PUBLIC_URL%/theme/theme.js"></script>
-</head>
-<body>
-<noscript>You need to enable JavaScript to run this app.</noscript>
-<div id="root"></div>
-</body>
+	<head>
+		<meta charset="utf-8" />
+		<meta content="width=device-width, initial-scale=1" name="viewport" />
+		<link href="%PUBLIC_URL%/manifest.json" rel="manifest" />
+		<title>Huishoudboekje</title>
+		<script src="%PUBLIC_URL%/theme/theme.js"></script>
+		<script type="text/javascript">
+			if(["localhost", "127.0.0.1"].every(x => !window.location.href.includes(x))){
+				/* Matomo Tag Manager */
+				var _mtm = window._mtm = window._mtm || [];
+				_mtm.push({"mtm.startTime": (new Date().getTime()), "event": "mtm.Start"});
+				var d = document, g = d.createElement("script"), s = d.getElementsByTagName("script")[0];
+				g.type = "text/javascript";
+				g.async = true;
+				g.src = "https://matomo.sloothuizen.nl/js/container_XVp9RhVt.js";
+				s.parentNode.insertBefore(g, s);
+			}
+		</script>
+	</head>
+	<body>
+		<noscript>You need to enable JavaScript to run this app.</noscript>
+		<div id="root"></div>
+	</body>
 </html>
