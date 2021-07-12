@@ -1,4 +1,4 @@
-# Transactie Service
+# Log Service
 
 This service contains the functionality needed to access data from the application logging
  
@@ -13,10 +13,10 @@ This service contains the functionality needed to access data from the applicati
     ```shell
     export PATH=/Applications/Postgres.app/Contents/Versions/13/bin:$PATH
     export FLASK_APP="log_service.app"
-    export FLASK_RUN_PORT="8002"
+    export FLASK_RUN_PORT="8004"
     export FLASK_ENV="development"
     export HHB_SECRET="local-secret"
-    export TRANSACTIE_DATABASE_URL="postgresql://logservice:logservice@localhost/logservice"
+    export LOG_DATABASE_URL="postgresql://logservice:logservice@localhost/logservice"
     export APP_SETTINGS="log_service.config.DevelopmentConfig"
     ```
 
