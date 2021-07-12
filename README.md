@@ -40,6 +40,10 @@ If you are on a Mac, make sure you have [Brew](https://brew.sh/) installed.
 2. To make dealing with environment variables as easy as possible, install [direnv](https://direnv.net/).
 3. For setting up a service, see the README in the service's subdirectory.
 
+If you are on Windows, you need python virtual environments
+1. Install a local PostgreSQL database and pgAdmin
+2. Set up the services and backend in python virtual environments.
+
 ### 2. Docker & Docker Compose
 Coming soon
 
