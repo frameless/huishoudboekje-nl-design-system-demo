@@ -1,8 +1,8 @@
-# Transactie Service
+# Transactieservice
 
-This service contains the functionality needed to access data from banktransactions
+This service contains the functionality needed to access data from banktransactions.
  
-## Setup
+## Setup development (Mac and Unix)
 
 - Install dependencies
     ```shell
@@ -34,21 +34,98 @@ This service contains the functionality needed to access data from banktransacti
     ```
 
 
+## Setup development (Windows)
+- Make sure you have a symbolic link to core_services
+    Execute a shell as administrator
+
+    ```shell
+    mklink /D "core_service" ..\\core_service\\core_service
+    ```
+
+
+- Install a virtual environment
+
+    make sure your working directory is ~\backend
+
+    ```shell
+    cd ..\
+    virtualenv bank_transactie_service
+    cd bank_transacties_service
+    Scripts\\activate
+    ```
+
+- Install dependencies in the virtual environment
+    ```shell
+    pip install -e .
+    ```
+    or
+    ```shell
+    pip install -r requirements.txt
+    ```
+
+- Deactivate the virtual environment
+    ```shell
+    deactivate
+    ```
+
+- Put in `Scripts\activate.bat`:
+    ```shell
+    set PATH=/Applications/Postgres.app/Contents/Versions/13/bin;%PATH%
+    set FLASK_APP=bank_transactie_service.app
+    set FLASK_RUN_PORT=8002
+    set FLASK_ENV="development"
+    set HHB_SECRET="local-secret"
+    set TRANSACTIE_DATABASE_URL=postgresql://transactieservice:transactieservice@localhost/transactieservice
+    set APP_SETTINGS=bank_transactie_service.config.DevelopmentConfig
+    ```
+
+- Activate the virtual environment
+    ```shell
+    Scripts\\activate
+    ```
+
+- setup db (make sure you have a PostgreSQL database up and running. See [root README](../../README.md) on how to do this)
+
+- Using [pgAdmin](https://www.pgadmin.org/):
+  - Create login/Group ROLE:
+    ```text
+    Name = transactieservice
+    Password = transactieservice
+    Privileges: Can login ON
+                Superuser ON
+    ```
+
+  - Create Database:
+    ```text
+    name = transactieservice
+    Owner = transactieservice
+    ```
+
+- Run database upgrade
+    ```shell
+    py manage.py db upgrade
+    ```
+
+- run app
+    ```shell script
+    flask run
+    ```
+
+
 ## Project Layout
 
 ### Layer 1 (database)
 
-#### models
-Contains ORM models for the Transaction Service
+#### Models
+Contains ORM models for the Transactionservice
 
-#### migrations
+#### Migrations
 Database migration schema
 
 ##### Create new migration
 ```shell script
 python manage.py db migrate
 ```
-
 
 ### Layer 2 (services)
 

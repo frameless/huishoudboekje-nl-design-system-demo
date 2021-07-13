@@ -1,8 +1,8 @@
-# Huishoudboekje Service
+# Huishoudboekjeservice
 
 This service contains the functionality needed to access data that belongs to the Huishoudboekje processes.
  
-## Setup
+## Setup development (Mac and Unix)
 
 - Install dependencies
     ```shell
@@ -33,15 +33,90 @@ This service contains the functionality needed to access data that belongs to th
     flask run
     ```
 
+## Setup development (Windows)
+- Make sure you have a symbolic link to core_services \
+    delete the core_service file \
+    Execute a shell as administrator
+
+    ```shell
+    mklink /D "core_service" ..\\core_service\\core_service
+    ```
+
+
+- Install a virtual environment \
+    make sure your working directory is ~\backend
+
+    ```shell
+    cd ..\
+    virtualenv huishoudboekje_service
+    cd huishoudboekje_service
+    Scripts\\activate
+    ```
+
+- Install dependencies in the virtual environment
+    ```shell
+    pip install -e .
+    ```
+    or
+    ```shell
+    pip install -r requirements.txt
+    ```
+
+- Deactivate the virtual environment
+    ```shell
+    deactivate
+    ```
+
+- Put in `Scripts\activate.bat`:
+    ```shell
+    set PATH=/Applications/Postgres.app/Contents/Versions/13/bin;%PATH%
+    set FLASK_APP=huishoudboekje_service.app
+    set FLASK_RUN_PORT=8000
+    set FLASK_ENV="development"
+    set HHB_SECRET="local-secret"
+    set HHB_DATABASE_URL=postgresql://huishoudboekjeservice:huishoudboekjeservice@localhost/huishoudboekjeservice
+    set APP_SETTINGS=huishoudboekje_service.config.DevelopmentConfig
+    ```
+
+- Activate the virtual environment
+    ```shell
+    Scripts\\activate
+    ```
+
+- setup db (make sure you have a PostgreSQL database up and running. See [root README](../../README.md) on how to do this)
+
+- Using [pgAdmin](https://www.pgadmin.org/):
+  - Create login/Group ROLE:
+    ```text  
+    Name = huishoudboekjeservice
+    Password = huishoudboekjeservice
+    Privileges: Can login ON
+                Superuser ON
+    ```
+    - Create Database:
+    ```text
+    name = huishoudboekjeservice
+    Owner = huishoudboekjeservice
+    ```
+    
+- Run database upgrade
+    ```shell
+    py manage.py db upgrade
+    ```
+
+- run app
+    ```shell script
+    flask run
+    ```
 
 ## Project Layout
 
 ### Layer 1 (database)
 
-#### models
+#### Models
 Contains ORM models for Huishoudboekje Service
 
-#### migrations
+#### Migrations
 Database migration schema
 
 ##### Create new migration

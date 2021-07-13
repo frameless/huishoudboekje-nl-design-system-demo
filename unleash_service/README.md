@@ -1,4 +1,4 @@
-# Welcome to unleash-service 👋
+# Welcome to the unleash service 👋
 
 A little Node.js REST API that can provide feature flags through Unleash. Please refer to the [GitLab docs on Feature Flags](https://docs.gitlab.com/ee/operations/feature_flags.html).
 
@@ -54,6 +54,6 @@ Content-Type: application/json
 ```json
 {
   "somefeature": true,
-  "anotherFeature": false,
+  "anotherFeature": false
 }
 ```

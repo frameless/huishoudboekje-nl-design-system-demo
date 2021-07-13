@@ -26,7 +26,7 @@ The data models are managed using Alembic migration scripts that are executed us
 
 
 ## Development
-For the frontend, see the [Frontend README](./frontend/app/README.md).\
+For the frontend, see the [Frontend README](./frontend/app/README.md). \
 For the backend, there are a few different ways you can set up your local backend development environment:
 
 ### 1. Local setup
@@ -36,14 +36,10 @@ If you are on a Mac, make sure you have [Brew](https://brew.sh/) installed.
 
 1. Install a local PostgreSQL database.  
    On MacOS, you can use [Postgres.app](https://postgresapp.com/). Run `brew install libpq` to be able to use `psql`.  
-   (TO DO: add solution for Windows users)
 2. To make dealing with environment variables as easy as possible, install [direnv](https://direnv.net/).
 3. For setting up a service, see the README in the service's subdirectory.
 
-### 2. Docker & Docker Compose
-Coming soon
-
-### 3. Minikube
+### 2. Minikube
 It is also possible to run the entire stack in a local [Kubernetes](https://kubernetes.io/) cluster with the help of 
 [minikube](https://minikube.sigs.k8s.io/docs/). \
 See the [installation instructions here](https://gitlab.com/commonground/huishoudboekje/app-new/-/wikis/Ontwikkeling/Minikube).
