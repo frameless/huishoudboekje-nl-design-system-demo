@@ -1,8 +1,8 @@
-# Organisatie Service
+# Organisatieservice
 
 This service contains the functionality needed to access data that belongs to the Organisatie processes.
  
-## Setup
+## Setup development (Mac and Unix)
 
 - Install dependencies
     ```shell
@@ -33,33 +33,9 @@ This service contains the functionality needed to access data that belongs to th
     flask run
     ```
 
-
-## Project Layout
-
-### Layer 1 (database)
-
-#### models
-Contains ORM models for Organisatie Service
-
-#### migrations
-Database migration schema
-
-##### Create new migration
-```shell script
-python manage.py db migrate
-```
-
-
-### Layer 2 (services)
-
-#### organisatie_service
-[API documentation](docs/openapi.yaml)
-
-## Setup Windows
-- Make sure you have a symbolic link to core_services
-
-    delete the core_service file
-
+## Setup development (Windows)
+- Make sure you have a symbolic link to core_services \
+    delete the core_service file \
     Execute a shell as administrator
 
     ```shell
@@ -67,8 +43,7 @@ python manage.py db migrate
     ```
 
 
-- Install a virtual environment
-
+- Install a virtual environment \
     make sure your working directory is ~\backend
 
     ```shell
@@ -92,7 +67,7 @@ python manage.py db migrate
     deactivate
     ```
 
-- Put in Scripts\activate.bat:
+- Put in `Scripts\activate.bat`:
     ```shell
     set PATH=/Applications/Postgres.app/Contents/Versions/13/bin;%PATH%
     set FLASK_APP=organisatie_service.app
@@ -110,16 +85,19 @@ python manage.py db migrate
 
 - setup db (make sure you have a PostgreSQL database up and running. See [root README](../../README.md) on how to do this)
 
-- Using pgAdmin:
-    - Create login/Group ROLE:
+- Using [pgAdmin](https://www.pgadmin.org/):
+  - Create login/Group ROLE:
+    ```text
     Name = organisatieservice
     Password = organisatieservice
-    Priviliges: Can login ON
+    Privileges: Can login ON
                 Superuser ON
-
-    - Create Database:
+    ```
+  - Create Database:
+    ```text  
     name = organisatieservice
     Owner = organisatieservice
+    ```
 
 - Run database upgrade
     ```shell
@@ -136,7 +114,7 @@ python manage.py db migrate
 ### Layer 1 (database)
 
 #### models
-Contains ORM models for Organisatie Service
+Contains ORM models for Organisatieservice
 
 #### migrations
 Database migration schema

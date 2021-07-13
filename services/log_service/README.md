@@ -1,17 +1,8 @@
-# Log Service
+# Logservice
 
-This service contains the functionality needed to access data from the application logging
+This service contains the functionality needed to access data from the application logging.
  
-## Setup Not Windows (Windows Below)
-
-- On windows: make a directory symbolic link to core_service
-
-    First delete the core-service file
-
-    Then
-    ```shell
-    mklink /D "core_service" "..\core_service\core_service"
-    ```
+## Setup development (Mac and Unix)
 
 - Install dependencies
     ```shell
@@ -42,30 +33,7 @@ This service contains the functionality needed to access data from the applicati
     flask run
     ```
 
-
-## Project Layout
-
-### Layer 1 (database)
-
-#### models
-Contains ORM models for the Log Service
-
-#### migrations
-Database migration schema
-
-##### Create new migration
-```shell script
-python manage.py db migrate
-```
-
-
-### Layer 2 (services)
-
-#### log_service
-[API documentation](docs/openapi.yaml)
-
-
-## Setup Windows
+## Setup development (Windows)
 - Make sure you have a symbolic link to core_services
 
     delete the core_service file
@@ -102,7 +70,7 @@ python manage.py db migrate
     deactivate
     ```
 
-- Put in Scripts\activate.bat:
+- Put in `Scripts\activate.bat`:
     ```shell
     set PATH=/Applications/Postgres.app/Contents/Versions/13/bin;%PATH%
     set FLASK_APP=log_service.app
@@ -120,16 +88,19 @@ python manage.py db migrate
 
 - setup db (make sure you have a PostgreSQL database up and running. See [root README](../../README.md) on how to do this)
 
-- Using pgAdmin:
-    - Create login/Group ROLE:
+- Using [pgAdmin](https://www.pgadmin.org/):
+  - Create login/Group ROLE:
+    ```text  
     Name = logservice
     Password = logservice
-    Priviliges: Can login ON
+    Privileges: Can login ON
                 Superuser ON
-
+    ```
     - Create Database:
+    ```text
     name = logservice
     Owner = logservice
+    ```
 
 - Run database upgrade
     ```shell
@@ -145,10 +116,10 @@ python manage.py db migrate
 
 ### Layer 1 (database)
 
-#### models
-Contains ORM models for the Log Service
+#### Models
+Contains ORM models for the Logservice
 
-#### migrations
+#### Migrations
 Database migration schema
 
 ##### Create new migration

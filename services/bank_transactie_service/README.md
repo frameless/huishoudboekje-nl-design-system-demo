@@ -1,8 +1,8 @@
-# Transactie Service
+# Transactieservice
 
-This service contains the functionality needed to access data from banktransactions
+This service contains the functionality needed to access data from banktransactions.
  
-## Setup Not Windows (Windows below)
+## Setup development (Mac and Unix)
 
 - Install dependencies
     ```shell
@@ -34,29 +34,7 @@ This service contains the functionality needed to access data from banktransacti
     ```
 
 
-## Project Layout
-
-### Layer 1 (database)
-
-#### models
-Contains ORM models for the Transaction Service
-
-#### migrations
-Database migration schema
-
-##### Create new migration
-```shell script
-python manage.py db migrate
-```
-
-
-### Layer 2 (services)
-
-#### bank_transactie_service
-[API documentation](docs/openapi.yaml)
-
-
-## Setup Windows
+## Setup development (Windows)
 - Make sure you have a symbolic link to core_services
     Execute a shell as administrator
 
@@ -90,7 +68,7 @@ python manage.py db migrate
     deactivate
     ```
 
-- Put in Scripts\activate.bat:
+- Put in `Scripts\activate.bat`:
     ```shell
     set PATH=/Applications/Postgres.app/Contents/Versions/13/bin;%PATH%
     set FLASK_APP=bank_transactie_service.app
@@ -108,16 +86,20 @@ python manage.py db migrate
 
 - setup db (make sure you have a PostgreSQL database up and running. See [root README](../../README.md) on how to do this)
 
-- Using pgAdmin:
-    - Create login/Group ROLE:
+- Using [pgAdmin](https://www.pgadmin.org/):
+  - Create login/Group ROLE:
+    ```text
     Name = transactieservice
     Password = transactieservice
-    Priviliges: Can login ON
+    Privileges: Can login ON
                 Superuser ON
+    ```
 
-    - Create Database:
+  - Create Database:
+    ```text
     name = transactieservice
     Owner = transactieservice
+    ```
 
 - Run database upgrade
     ```shell
@@ -134,17 +116,16 @@ python manage.py db migrate
 
 ### Layer 1 (database)
 
-#### models
-Contains ORM models for the Transaction Service
+#### Models
+Contains ORM models for the Transactionservice
 
-#### migrations
+#### Migrations
 Database migration schema
 
 ##### Create new migration
 ```shell script
 python manage.py db migrate
 ```
-
 
 ### Layer 2 (services)
 

@@ -1,8 +1,8 @@
-# Grootboek Service
+# Grootboekservice
 
-This service contains the functionality needed to access data from grootboeken
+This service contains the functionality needed to access data from grootboeken.
  
-## Setup Not Windows
+## Setup development (Mac and Unix)
 
 - Install dependencies
     ```shell
@@ -33,30 +33,7 @@ This service contains the functionality needed to access data from grootboeken
     flask run
     ```
 
-
-## Project Layout
-
-### Layer 1 (database)
-
-#### models
-Contains ORM models for the Grootboek Service
-
-#### migrations
-Database migration schema
-
-##### Create new migration
-```shell script
-python manage.py db migrate
-```
-
-
-### Layer 2 (services)
-
-#### grootboek_service
-[API documentation](docs/openapi.yaml)
-
-
-## Setup Windows
+## Setup development (Windows)
 - Make sure you have a symbolic link to core_services
 
     delete the core_service file
@@ -93,7 +70,7 @@ python manage.py db migrate
     deactivate
     ```
 
-- Put in Scripts\activate.bat:
+- Put in `Scripts\activate.bat`:
     ```shell
     set PATH=/Applications/Postgres.app/Contents/Versions/13/bin;%PATH%
     set FLASK_APP=grootboek_service.app
@@ -111,17 +88,20 @@ python manage.py db migrate
 
 - setup db (make sure you have a PostgreSQL database up and running. See [root README](../../README.md) on how to do this)
 
-- Using pgAdmin:
-    - Create login/Group ROLE:
+- Using [pgAdmin](https://www.pgadmin.org/):
+  - Create login/Group ROLE:
+    ```text
     Name = grootbroekservice
     Password = grootboekservice
-    Priviliges: Can login ON
-                Superuser ON
-
-    - Create Database:
+    Privileges: Can login ON
+                Superuser ON 
+    ```
+  - Create Database:
+    ```text
     name = grootboekservice
     Owner = grootboekservice
-
+    ```
+    
 - Run database upgrade
     ```shell
     py manage.py db upgrade
@@ -132,15 +112,14 @@ python manage.py db migrate
     flask run
     ```
 
-
 ## Project Layout
 
 ### Layer 1 (database)
 
-#### models
-Contains ORM models for the Grootboek Service
+#### Models
+Contains ORM models for the Grootboekservice
 
-#### migrations
+#### Migrations
 Database migration schema
 
 ##### Create new migration
