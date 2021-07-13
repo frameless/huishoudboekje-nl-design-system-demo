@@ -8,12 +8,11 @@ from hhb_backend.graphql.models.pageinfo import PageInfo
 class Huishouden(graphene.ObjectType):
     """ GraphQL Huishouden model """
     id = graphene.Int()
-
     burgers = graphene.List(lambda: burger.Burger)
 
     async def resolve_burgers(root, info):
-        burgers = await request.dataloader.burgers_by_huishouden.load(root.get('id'))
-        return burgers
+        return await request.dataloader.burgers_by_huishouden.load(root.get('id')) or []
+
 
 
 class HuishoudensPaged(graphene.ObjectType):

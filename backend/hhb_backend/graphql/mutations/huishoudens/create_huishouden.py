@@ -57,7 +57,7 @@ class CreateHuishouden(graphene.Mutation):
             burger["huishouden_id"] = huishouden["id"]
 
             # TODO: remove this check as it should not be necessary
-            burger["iban"] = burger["iban"] if burger["iban"] else ""
+            # burger["iban"] = burger["iban"] if burger["iban"] else ""
 
             await update_existing_burger(burger=burger)
 

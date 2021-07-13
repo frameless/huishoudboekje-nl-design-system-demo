@@ -42,11 +42,10 @@ class Burger(graphene.ObjectType):
         return await request.dataloader.afspraken_by_burger.load(root.get('id')) or []
 
     async def resolve_gebruikersactiviteiten(root, info):
-        return request.dataloader.gebruikersactiviteiten_by_gebruikers.get_by_id(root.get('id')) or []
+        return request.dataloader.gebruikersactiviteiten_by_burgers.get_by_id(root.get('id')) or []
 
     async def resolve_huishouden(root, info):
         return await request.dataloader.huishoudens_by_id.load(root.get('huishouden_id'))
-
 
 class BurgersPaged(graphene.ObjectType):
     burgers = graphene.List(

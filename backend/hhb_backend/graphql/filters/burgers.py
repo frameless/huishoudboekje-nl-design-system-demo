@@ -18,4 +18,4 @@ class BurgerFilter(graphene.InputObjectType):
     voorletters = ComplexFilterType()
     voornamen = ComplexFilterType()
     plaatsnaam = ComplexFilterType()
-    huishouden = ComplexFilterType()
+    huishouden_id = ComplexFilterType()

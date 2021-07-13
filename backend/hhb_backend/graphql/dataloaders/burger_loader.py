@@ -1,5 +1,5 @@
 from hhb_backend.graphql import settings
-from hhb_backend.graphql.dataloaders.base_loader import SingleDataLoader
+from hhb_backend.graphql.dataloaders.base_loader import SingleDataLoader, ListDataLoader
 
 
 class BurgersByIdLoader(SingleDataLoader):
@@ -9,8 +9,9 @@ class BurgersByIdLoader(SingleDataLoader):
     service = settings.HHB_SERVICES_URL
 
 
-class BurgersByHuishoudenLoader(SingleDataLoader):
+class BurgersByHuishoudenLoader(ListDataLoader):
     """Load burgers using huishouden"""
 
     model = "burgers"
-    filter_item = "huishouden_id"
+    filter_item = "filter_huishoudens"
+    index = "huishouden_id"
