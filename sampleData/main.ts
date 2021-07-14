@@ -17,8 +17,8 @@ const main = async () => {
 		})
 		.catch((err) => {
 			console.error(`(!) De GraphQL API is niet bereikbaar.`);
-			console.log("Dit betekent of dat de API niet online is, of dat het gebruikte token niet geldig is.");
-			console.log("Token", process.env.PROXY_AUTHORIZATION);
+			console.error("Dit betekent of dat de API niet online is, of dat het gebruikte token niet geldig is.");
+			console.error("Token", process.env.PROXY_AUTHORIZATION);
 			process.exit(0);
 		});
 
@@ -47,7 +47,7 @@ const main = async () => {
 				console.log(`(!) Configuratie ${c.id} bestaat al.`);
 			}
 			else {
-				console.error(err);
+				console.error("(!) Kon configuraties niet toevoegen:", err);
 			}
 		});
 	});
@@ -65,7 +65,7 @@ const main = async () => {
 				console.log(`(!) Rubriek ${r.naam} (${r.grootboekrekening}) bestaat al.`);
 			}
 			else {
-				console.error(err);
+				console.error("(!)", err);
 			}
 		});
 	});
@@ -99,6 +99,8 @@ const main = async () => {
 					rekening: r,
 				}).then(r => {
 					console.log(`Rekening ${r.createOrganisatieRekening?.rekening?.iban} op naam van ${r.createOrganisatieRekening?.rekening?.rekeninghouder}.`);
+				}).catch(err => {
+					console.error("(!) Kon rekening niet aanmaken voor organisatie:", err);
 				});
 			});
 
@@ -110,7 +112,7 @@ const main = async () => {
 				console.log(`(!) Organisatie ${weergaveNaam} (${kvkNummer}) bestaat al.`);
 			}
 			else {
-				console.error(err);
+				console.error("(!)", err);
 			}
 		});
 	});
@@ -126,6 +128,10 @@ const main = async () => {
 		.then(result => {
 			console.log(`Alle organisaties opgehaald. Het zijn er ${result.organisaties?.length}.`);
 			return result.organisaties || [];
+		})
+		.catch(err => {
+			console.error("(!) Kon niet alle organisaties ophalen:", err);
+			return [];
 		});
 
 	/* Fetch all rubrieken */
@@ -134,6 +140,10 @@ const main = async () => {
 		.then(result => {
 			console.log(`Alle rubrieken opgehaald. Het zijn er ${result.rubrieken?.length}.`);
 			return result.rubrieken || [];
+		})
+		.catch(err => {
+			console.error("(!) Kon niet alle rubrieken ophalen:", err);
+			return [];
 		});
 
 	const [allOrganisaties, allRubrieken] = await Promise.all([getAllOrganisaties, getAllRubrieken]).finally(() => {
@@ -178,6 +188,8 @@ const main = async () => {
 						},
 					}).then(result => {
 						console.log(`Afspraak voor burger ${burgerName} met ${result.createAfspraak?.afspraak?.organisatie?.weergaveNaam} toegevoegd.`);
+					}).catch(err => {
+						console.error(`(!) Kon afspraak voor burger ${burgerName} niet toevoegen:`, err);
 					});
 				}
 			});
@@ -186,6 +198,9 @@ const main = async () => {
 				console.log(`Alle afspraken voor burger ${burgerName} toegevoegd.`);
 				console.log();
 			});
+		}).catch(err => {
+			const burgerName = [voorletters, achternaam].join(" ");
+			console.log(`(!) Kon burger ${burgerName} niet toevoegen:`, err);
 		});
 	});
 
