@@ -1,5 +1,5 @@
 import {gql} from "@apollo/client";
-import {BurgerFragment} from "../fragments/BurgerFragment";
+import {BurgerFragment} from "../fragments/Burger";
 
 export const GetBurgerQuery = gql`
     query getBurger($id: Int!) {

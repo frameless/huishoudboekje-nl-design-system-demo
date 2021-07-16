@@ -1,8 +1,8 @@
 import {gql} from "@apollo/client";
-import {BetaalinstructieFragment} from "./BetaalinstructieFragment";
-import {OrganisatieFragment} from "./OrganisatieFragment";
-import {RekeningFragment} from "./RekeningFragment";
-import {RubriekFragment} from "./RubriekFragment";
+import {BetaalinstructieFragment} from "./Betaalinstructie";
+import {OrganisatieFragment} from "./Organisatie";
+import {RekeningFragment} from "./Rekening";
+import {RubriekFragment} from "./Rubriek";
 
 export const AfspraakFragment = gql`
     fragment Afspraak on Afspraak {

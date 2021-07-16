@@ -1,6 +1,6 @@
 import {gql} from "@apollo/client";
-import {GrootboekrekeningFragment} from "../fragments/GrootboekrekeningFragment";
-import {TransactieFragment} from "../fragments/TransactieFragment";
+import {GrootboekrekeningFragment} from "../fragments/Grootboekrekening";
+import {TransactieFragment} from "../fragments/Transactie";
 
 export const GetTransactiesQuery = gql`
     query getTransacties($offset: Int!, $limit: Int!, $filters: BankTransactionFilter) {

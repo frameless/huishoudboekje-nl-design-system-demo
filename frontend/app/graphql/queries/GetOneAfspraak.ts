@@ -1,5 +1,5 @@
 import {gql} from "@apollo/client";
-import {AfspraakFragment} from "../fragments/AfspraakFragment";
+import {AfspraakFragment} from "../fragments/Afspraak";
 
 export const GetAfspraakQuery = gql`
     query getAfspraak($id: Int!) {
