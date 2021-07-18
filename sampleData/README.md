@@ -11,6 +11,9 @@ The objects in these files is exactly what gets loaded into the API.
 
 Please make sure that you have Node.js installed.
 
+Make sure that your databases are clean. If the sample data does not work
+delete all tables and run the 'py manage.py db upgrade/migrate' commands again.
+
 To install dependencies run:
 ```shell
 npm install
