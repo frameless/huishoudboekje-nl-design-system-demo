@@ -1,9 +1,7 @@
 # Grootboekservice
-
 This service contains the functionality needed to access data from grootboeken.
  
 ## Setup development (Mac and Unix)
-
 - Install dependencies
     ```shell
     pip install -r requirements.txt
@@ -20,7 +18,7 @@ This service contains the functionality needed to access data from grootboeken.
     export APP_SETTINGS="grootboek_service.config.DevelopmentConfig"
     ```
 
-- setup db (make sure you have a PostgreSQL database up and running. See [root README](../../README.md) on how to do this)
+- Setup your database (make sure you have a PostgreSQL database up and running. See [root README](../../README.md) on how to do this)
     ```shell
     createuser --echo --login --host localhost --username postgres grootboekservice
     createdb --echo --owner grootboekservice --host localhost --username postgres grootboekservice
@@ -28,20 +26,15 @@ This service contains the functionality needed to access data from grootboeken.
     python manage.py db upgrade
     ```
 
-- run app
+- Start the app
     ```shell script
     flask run
     ```
 
 ## Setup development (Windows)
-- If the symbolic link to core_services does not work, go back to [Readme](../../README.md) and read the windows
-  local installation steps.
 - Install a virtual environment
 
-    make sure your working directory is ~\grootboek_service
-
     ```shell
-    cd ..\
     virtualenv grootboek_service
     cd grootboek_service
     Scripts\\activate
@@ -77,7 +70,7 @@ This service contains the functionality needed to access data from grootboeken.
     Scripts\\activate
     ```
 
-- setup db (make sure you have a PostgreSQL database up and running. See [root README](../../README.md) on how to do this)
+- Setup your database (make sure you have a PostgreSQL database up and running. See [root README](../../README.md) on how to do this)
 
 - Using [pgAdmin](https://www.pgadmin.org/):
   - Create login/Group ROLE:
@@ -98,7 +91,7 @@ This service contains the functionality needed to access data from grootboeken.
     py manage.py db upgrade
     ```
 
-- run app
+- Start the app
     ```shell script
     flask run
     ```

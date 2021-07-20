@@ -1,9 +1,7 @@
 # Organisatieservice
-
 This service contains the functionality needed to access data that belongs to the Organisatie processes.
  
 ## Setup development (Mac and Unix)
-
 - Install dependencies
     ```shell
     pip install -r requirements.txt
@@ -20,7 +18,7 @@ This service contains the functionality needed to access data that belongs to th
     export APP_SETTINGS="organisatie_service.config.DevelopmentConfig"
     ```
 
-- setup db (make sure you have a PostgreSQL database up and running. See [root README](../../README.md) on how to do this)
+- Setup your database (make sure you have a PostgreSQL database up and running. See [root README](../../README.md) on how to do this)
     ```shell
     createuser --echo --login --host localhost --username postgres organisatieservice
     createdb --echo --owner organisatieservice --host localhost --username postgres organisatieservice
@@ -28,20 +26,14 @@ This service contains the functionality needed to access data that belongs to th
     python manage.py db upgrade
     ```
 
-- run app
+- Start the app
     ```shell script
     flask run
     ```
 
 ## Setup development (Windows)
-- If the symbolic link to core_services does not work, go back to [Readme](../../README.md) and read the windows
-  local installation steps.
-
 - Install a virtual environment \
-    make sure your working directory is ~\organisatie_service
-
     ```shell
-    cd ..\
     virtualenv organisatie_service
     cd organisatie_service
     Scripts\\activate
@@ -77,7 +69,7 @@ This service contains the functionality needed to access data that belongs to th
     Scripts\\activate
     ```
 
-- setup db (make sure you have a PostgreSQL database up and running. See [root README](../../README.md) on how to do this)
+- Setup your database (make sure you have a PostgreSQL database up and running. See [root README](../../README.md) on how to do this)
 
 - Using [pgAdmin](https://www.pgadmin.org/):
   - Create login/Group ROLE:
@@ -98,7 +90,7 @@ This service contains the functionality needed to access data that belongs to th
     py manage.py db upgrade
     ```
 
-- run app
+- Start the app
     ```shell script
     flask run
     ```
