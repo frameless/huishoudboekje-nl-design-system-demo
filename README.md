@@ -39,25 +39,21 @@ If you are on a Mac, make sure you have [Brew](https://brew.sh/) installed.
 2. To make dealing with environment variables as easy as possible, install [direnv](https://direnv.net/).
 3. For setting up a service, see the README in the service's subdirectory.
 
-### 1.B Local setup windows
-For now, the easiest way to set up the backend is to run the database locally and run the backend and services 
-in separate virtual environments. \
-If you are on windows, you need python virtualenv and an ubuntu shell with zsh
+#### Windows
+#### Requirements
+You need python virtualenv and an ubuntu shell with zsh
 
-1. Instal a local PostgreSQL database by downloading postgreSQL, make sure to add pgAdmin to the installation
-2. Then you need to make virtual environments for the services and the backend, further instructions are in those readme's
+1. Install [PostgreSQL](https://www.postgresql.org/download/windows/) to setup a local database. Make sure to also install pgAdmin as well, if you need a web client to manage your databases.
+2. Create virtual environments for the services and the backend. Please see their `README.md` for instructions.
 3. For the frontend you need to use the ubuntu zsh shell
 4. For setting up dex you need ubuntu
 
-### 2. Setting up dex locally
-To log in locally you need to run dex locally as well. On windows you need ubuntu.
+### 2. Setting up Dex locally
+To authorize against your local running backend service, you'll need to run an instance of [Dex](https://github.com/dexidp/dex#readme).
 
-1. download dex from [dex](https://dexidp.io/)
+1. Download and install Dex from [https://dexidp.io/](https://dexidp.io/)
 2. Make sure you are able to run the dex command
-3. make sure you are at you home directory and excute:
-```shell
-   /dex/bin/dex serve {aboslute path to app-new/dex.dev.yaml}
-```
+3. To launch Dex run `dex serve /dex.dev.yaml`
 
 ### 3. Minikube
 It is also possible to run the entire stack in a local [Kubernetes](https://kubernetes.io/) cluster with the help of 
