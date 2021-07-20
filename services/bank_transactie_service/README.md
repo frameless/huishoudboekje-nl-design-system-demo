@@ -1,9 +1,7 @@
 # Transactieservice
-
 This service contains the functionality needed to access data from banktransactions.
  
 ## Setup development (Mac and Unix)
-
 - Install dependencies
     ```shell
     pip install -r requirements.txt
@@ -20,7 +18,7 @@ This service contains the functionality needed to access data from banktransacti
     export APP_SETTINGS="bank_transactie_service.config.DevelopmentConfig"
     ```
 
-- setup db (make sure you have a PostgreSQL database up and running. See [root README](../../README.md) on how to do this)
+- Setup your database (make sure you have a PostgreSQL database up and running. See [root README](../../README.md) on how to do this)
     ```shell
     createuser --echo --login --host localhost --username postgres transactieservice
     createdb --echo --owner transactieservice --host localhost --username postgres transactieservice
@@ -28,27 +26,15 @@ This service contains the functionality needed to access data from banktransacti
     python manage.py db upgrade
     ```
 
-- run app
+- Start the app
     ```shell script
     flask run
     ```
 
-
 ## Setup development (Windows)
-- Make sure you have a symbolic link to core_services
-    Execute a shell as administrator
-
-    ```shell
-    mklink /D "core_service" ..\\core_service\\core_service
-    ```
-
-
 - Install a virtual environment
 
-    make sure your working directory is ~\backend
-
     ```shell
-    cd ..\
     virtualenv bank_transactie_service
     cd bank_transacties_service
     Scripts\\activate
@@ -84,7 +70,7 @@ This service contains the functionality needed to access data from banktransacti
     Scripts\\activate
     ```
 
-- setup db (make sure you have a PostgreSQL database up and running. See [root README](../../README.md) on how to do this)
+- Setup your database (make sure you have a PostgreSQL database up and running. See [root README](../../README.md) on how to do this)
 
 - Using [pgAdmin](https://www.pgadmin.org/):
   - Create login/Group ROLE:
@@ -106,11 +92,10 @@ This service contains the functionality needed to access data from banktransacti
     py manage.py db upgrade
     ```
 
-- run app
+- Start the app
     ```shell script
     flask run
     ```
-
 
 ## Project Layout
 
