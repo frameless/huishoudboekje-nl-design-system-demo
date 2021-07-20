@@ -10,6 +10,7 @@ import Transactions from "./components/Bankzaken/Transacties";
 import Burgers from "./components/Burgers";
 import Configuratie from "./components/Configuratie";
 import Gebeurtenissen from "./components/Gebeurtenissen";
+import Huishoudens from "./components/Huishoudens";
 import TwoColumns from "./components/Layouts/TwoColumns";
 import UserStatus from "./components/Layouts/UserStatus";
 import Organisaties from "./components/Organisaties";
@@ -83,6 +84,7 @@ const App = () => {
 
 					<Switch>
 						<Route exact path={Routes.Home} component={() => <Redirect to={Routes.Burgers} />} />
+						<Route path={Routes.Huishoudens} component={Huishoudens} />
 						<Route path={Routes.Burgers} component={Burgers} />
 						<Route path={Routes.Organisaties} component={Organisaties} />
 						<Route path={Routes.Afspraken} component={AfspraakRouter} />

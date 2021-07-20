@@ -1,5 +1,5 @@
 import {AddIcon} from "@chakra-ui/icons";
-import {Avatar, Box, BoxProps, Button, Grid, Stack, Text, useBreakpointValue} from "@chakra-ui/react";
+import {Avatar, Box, Button, Grid, Stack, Text, useBreakpointValue} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {useHistory} from "react-router-dom";
@@ -8,7 +8,12 @@ import {Burger} from "../../generated/graphql";
 import {formatBurgerName} from "../../utils/things";
 import GridCard from "../Layouts/GridCard";
 
-const BurgerListView: React.FC<BoxProps & {burgers: Burger[], showAddButton?: boolean}> = ({burgers, showAddButton = false, ...props}) => {
+type BurgerListViewProps = {
+	burgers: Burger[],
+	showAddButton?: boolean
+};
+
+const BurgerListView: React.FC<BurgerListViewProps> = ({burgers, showAddButton = false}) => {
 	const {t} = useTranslation();
 	const {push} = useHistory();
 	const isMobile = useBreakpointValue([true, null, null, false]);
@@ -17,8 +22,8 @@ const BurgerListView: React.FC<BoxProps & {burgers: Burger[], showAddButton?: bo
 		<Grid maxWidth={"100%"} gridTemplateColumns={["repeat(1, 1fr)", "repeat(2, 1fr)", "repeat(3, 1fr)", "repeat(4, 1fr)", "repeat(6, 1fr)"]} gap={5}>
 			{showAddButton && (
 				<Box>
-					<Button colorScheme={"primary"} borderStyle={"dashed"} variant={"outline"} leftIcon={<AddIcon />} w="100%" h="100%" onClick={() => push(Routes.CreateBurger)}
-						borderRadius={5} p={5}>{t("actions.add")}</Button>
+					<Button colorScheme={"primary"} borderStyle={"dashed"} variant={"outline"} leftIcon={<AddIcon />}
+						w={"100%"} h={"100%"} onClick={() => push(Routes.CreateBurger)} borderRadius={5} p={5}>{t("actions.add")}</Button>
 				</Box>
 			)}
 			{burgers.map((g, i) => (

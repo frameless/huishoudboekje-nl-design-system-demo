@@ -5,7 +5,7 @@ import {useInput, Validators} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {useHistory} from "react-router-dom";
 import Routes from "../../config/routes";
-import {useCreateBurgerMutation} from "../../generated/graphql";
+import {GetBurgersDocument, GetHuishoudensDocument, useCreateBurgerMutation} from "../../generated/graphql";
 import d from "../../utils/dayjs";
 import {Regex} from "../../utils/things";
 import useToaster from "../../utils/useToaster";
@@ -113,6 +113,10 @@ const CreateBurger = () => {
 					email: mail.value,
 				},
 			},
+			refetchQueries: [
+				{ query: GetHuishoudensDocument },
+				{ query: GetBurgersDocument }
+			]
 		}).then(result => {
 			toast({
 				success: t("messages.burgers.createSuccessMessage"),

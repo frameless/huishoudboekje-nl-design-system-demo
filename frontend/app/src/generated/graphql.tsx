@@ -1241,6 +1241,11 @@ export type GrootboekrekeningFragment = (
   & { rubriek?: Maybe<Pick<Rubriek, 'id' | 'naam'>> }
 );
 
+export type HuishoudenFragment = (
+  Pick<Huishouden, 'id'>
+  & { burgers?: Maybe<Array<Maybe<BurgerFragment>>> }
+);
+
 export type JournaalpostFragment = Pick<Journaalpost, 'id'>;
 
 export type OrganisatieFragment = (
@@ -1276,6 +1281,14 @@ export type AddAfspraakZoektermMutation = { addAfspraakZoekterm?: Maybe<(
       & { burger?: Maybe<Pick<Burger, 'id' | 'voorletters' | 'voornamen' | 'achternaam'>>, tegenRekening?: Maybe<Pick<Rekening, 'rekeninghouder' | 'iban'>> }
     )>>> }
   )> };
+
+export type AddHuishoudenBurgerMutationVariables = Exact<{
+  huishoudenId: Scalars['Int'];
+  burgerIds: Array<Maybe<Scalars['Int']>> | Maybe<Scalars['Int']>;
+}>;
+
+
+export type AddHuishoudenBurgerMutation = { addHuishoudenBurger?: Maybe<Pick<AddHuishoudenBurger, 'ok'>> };
 
 export type CreateAfspraakMutationVariables = Exact<{
   input: CreateAfspraakInput;
@@ -1461,6 +1474,14 @@ export type DeleteCustomerStatementMessageMutationVariables = Exact<{
 
 export type DeleteCustomerStatementMessageMutation = { deleteCustomerStatementMessage?: Maybe<Pick<DeleteCustomerStatementMessage, 'ok'>> };
 
+export type DeleteHuishoudenBurgerMutationVariables = Exact<{
+  huishoudenId: Scalars['Int'];
+  burgerIds: Array<Maybe<Scalars['Int']>> | Maybe<Scalars['Int']>;
+}>;
+
+
+export type DeleteHuishoudenBurgerMutation = { deleteHuishoudenBurger?: Maybe<Pick<DeleteHuishoudenBurger, 'ok'>> };
+
 export type DeleteJournaalpostMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -1495,14 +1516,6 @@ export type StartAutomatischBoekenMutation = { startAutomatischBoeken?: Maybe<(
     & { journaalposten?: Maybe<Array<Maybe<Pick<Journaalpost, 'id'>>>> }
   )> };
 
-export type UpdateAfspraakBetaalinstructieMutationVariables = Exact<{
-  id: Scalars['Int'];
-  betaalinstructie: BetaalinstructieInput;
-}>;
-
-
-export type UpdateAfspraakBetaalinstructieMutation = { updateAfspraakBetaalinstructie?: Maybe<Pick<UpdateAfspraakBetaalinstructie, 'ok'>> };
-
 export type UpdateAfspraakMutationVariables = Exact<{
   id: Scalars['Int'];
   input: UpdateAfspraakInput;
@@ -1513,6 +1526,14 @@ export type UpdateAfspraakMutation = { updateAfspraak?: Maybe<(
     Pick<UpdateAfspraak, 'ok'>
     & { afspraak?: Maybe<AfspraakFragment> }
   )> };
+
+export type UpdateAfspraakBetaalinstructieMutationVariables = Exact<{
+  id: Scalars['Int'];
+  betaalinstructie: BetaalinstructieInput;
+}>;
+
+
+export type UpdateAfspraakBetaalinstructieMutation = { updateAfspraakBetaalinstructie?: Maybe<Pick<UpdateAfspraakBetaalinstructie, 'ok'>> };
 
 export type UpdateBurgerMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -1595,6 +1616,13 @@ export type GetAfsprakenQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetAfsprakenQuery = { afspraken?: Maybe<Array<Maybe<AfspraakFragment>>> };
 
+export type GetBurgerQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type GetBurgerQuery = { burger?: Maybe<BurgerFragment> };
+
 export type GetBurgerAfsprakenQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -1610,13 +1638,6 @@ export type GetBurgerGebeurtenissenQueryVariables = Exact<{
 
 
 export type GetBurgerGebeurtenissenQuery = { gebruikersactiviteitenPaged?: Maybe<{ gebruikersactiviteiten?: Maybe<Array<Maybe<GebruikersactiviteitFragment>>>, pageInfo?: Maybe<Pick<PageInfo, 'count'>> }> };
-
-export type GetBurgerQueryVariables = Exact<{
-  id: Scalars['Int'];
-}>;
-
-
-export type GetBurgerQuery = { burger?: Maybe<BurgerFragment> };
 
 export type GetBurgersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1660,6 +1681,18 @@ export type GetGebruikerQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetGebruikerQuery = { gebruiker?: Maybe<GebruikerFragment> };
+
+export type GetHuishoudenQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type GetHuishoudenQuery = { huishouden?: Maybe<HuishoudenFragment> };
+
+export type GetHuishoudensQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetHuishoudensQuery = { huishoudens?: Maybe<Array<Maybe<HuishoudenFragment>>> };
 
 export type GetAfspraakQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -1737,22 +1770,44 @@ export type GetTransactiesQuery = { bankTransactionsPaged?: Maybe<{ banktransact
       & BankTransactionFragment
     )>>>, pageInfo?: Maybe<Pick<PageInfo, 'count' | 'limit' | 'start'>> }> };
 
+export const CustomerStatementMessageFragmentDoc = gql`
+    fragment CustomerStatementMessage on CustomerStatementMessage {
+  id
+  filename
+  uploadDate
+  accountIdentification
+  closingAvailableFunds
+  closingBalance
+  forwardAvailableBalance
+  openingBalance
+  relatedReference
+  sequenceNumber
+  transactionReferenceNumber
+}
+    `;
+export const ExportFragmentDoc = gql`
+    fragment Export on Export {
+  id
+  naam
+  timestamp
+  startDatum
+  eindDatum
+  sha256
+  overschrijvingen {
+    id
+  }
+}
+    `;
+export const GebruikerFragmentDoc = gql`
+    fragment Gebruiker on Gebruiker {
+  email
+}
+    `;
 export const RekeningFragmentDoc = gql`
     fragment Rekening on Rekening {
   id
   iban
   rekeninghouder
-}
-    `;
-export const BetaalinstructieFragmentDoc = gql`
-    fragment Betaalinstructie on Betaalinstructie {
-  byDay
-  byMonth
-  byMonthDay
-  exceptDates
-  repeatFrequency
-  startDate
-  endDate
 }
     `;
 export const KvkFragmentDoc = gql`
@@ -1779,6 +1834,65 @@ export const OrganisatieFragmentDoc = gql`
 }
     ${RekeningFragmentDoc}
 ${KvkFragmentDoc}`;
+export const GebruikersactiviteitFragmentDoc = gql`
+    fragment Gebruikersactiviteit on GebruikersActiviteit {
+  id
+  timestamp
+  gebruikerId
+  action
+  entities {
+    entityType
+    entityId
+    burger {
+      id
+      voorletters
+      voornamen
+      achternaam
+    }
+    organisatie {
+      ...Organisatie
+    }
+    afspraak {
+      id
+      organisatie {
+        ...Organisatie
+      }
+    }
+    rekening {
+      id
+      iban
+      rekeninghouder
+    }
+    customerStatementMessage {
+      id
+      filename
+      bankTransactions {
+        id
+      }
+    }
+    configuratie {
+      id
+      waarde
+    }
+  }
+  meta {
+    userAgent
+    ip
+    applicationVersion
+  }
+}
+    ${OrganisatieFragmentDoc}`;
+export const BetaalinstructieFragmentDoc = gql`
+    fragment Betaalinstructie on Betaalinstructie {
+  byDay
+  byMonth
+  byMonthDay
+  exceptDates
+  repeatFrequency
+  startDate
+  endDate
+}
+    `;
 export const GrootboekrekeningFragmentDoc = gql`
     fragment Grootboekrekening on Grootboekrekening {
   id
@@ -1877,87 +1991,14 @@ export const BurgerFragmentDoc = gql`
 }
     ${RekeningFragmentDoc}
 ${AfspraakFragmentDoc}`;
-export const CustomerStatementMessageFragmentDoc = gql`
-    fragment CustomerStatementMessage on CustomerStatementMessage {
+export const HuishoudenFragmentDoc = gql`
+    fragment Huishouden on Huishouden {
   id
-  filename
-  uploadDate
-  accountIdentification
-  closingAvailableFunds
-  closingBalance
-  forwardAvailableBalance
-  openingBalance
-  relatedReference
-  sequenceNumber
-  transactionReferenceNumber
-}
-    `;
-export const ExportFragmentDoc = gql`
-    fragment Export on Export {
-  id
-  naam
-  timestamp
-  startDatum
-  eindDatum
-  sha256
-  overschrijvingen {
-    id
+  burgers {
+    ...Burger
   }
 }
-    `;
-export const GebruikerFragmentDoc = gql`
-    fragment Gebruiker on Gebruiker {
-  email
-}
-    `;
-export const GebruikersactiviteitFragmentDoc = gql`
-    fragment Gebruikersactiviteit on GebruikersActiviteit {
-  id
-  timestamp
-  gebruikerId
-  action
-  entities {
-    entityType
-    entityId
-    burger {
-      id
-      voorletters
-      voornamen
-      achternaam
-    }
-    organisatie {
-      ...Organisatie
-    }
-    afspraak {
-      id
-      organisatie {
-        ...Organisatie
-      }
-    }
-    rekening {
-      id
-      iban
-      rekeninghouder
-    }
-    customerStatementMessage {
-      id
-      filename
-      bankTransactions {
-        id
-      }
-    }
-    configuratie {
-      id
-      waarde
-    }
-  }
-  meta {
-    userAgent
-    ip
-    applicationVersion
-  }
-}
-    ${OrganisatieFragmentDoc}`;
+    ${BurgerFragmentDoc}`;
 export const JournaalpostFragmentDoc = gql`
     fragment Journaalpost on Journaalpost {
   id
@@ -2027,6 +2068,40 @@ export function useAddAfspraakZoektermMutation(baseOptions?: Apollo.MutationHook
 export type AddAfspraakZoektermMutationHookResult = ReturnType<typeof useAddAfspraakZoektermMutation>;
 export type AddAfspraakZoektermMutationResult = Apollo.MutationResult<AddAfspraakZoektermMutation>;
 export type AddAfspraakZoektermMutationOptions = Apollo.BaseMutationOptions<AddAfspraakZoektermMutation, AddAfspraakZoektermMutationVariables>;
+export const AddHuishoudenBurgerDocument = gql`
+    mutation addHuishoudenBurger($huishoudenId: Int!, $burgerIds: [Int]!) {
+  addHuishoudenBurger(huishoudenId: $huishoudenId, burgerIds: $burgerIds) {
+    ok
+  }
+}
+    `;
+export type AddHuishoudenBurgerMutationFn = Apollo.MutationFunction<AddHuishoudenBurgerMutation, AddHuishoudenBurgerMutationVariables>;
+
+/**
+ * __useAddHuishoudenBurgerMutation__
+ *
+ * To run a mutation, you first call `useAddHuishoudenBurgerMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddHuishoudenBurgerMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addHuishoudenBurgerMutation, { data, loading, error }] = useAddHuishoudenBurgerMutation({
+ *   variables: {
+ *      huishoudenId: // value for 'huishoudenId'
+ *      burgerIds: // value for 'burgerIds'
+ *   },
+ * });
+ */
+export function useAddHuishoudenBurgerMutation(baseOptions?: Apollo.MutationHookOptions<AddHuishoudenBurgerMutation, AddHuishoudenBurgerMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddHuishoudenBurgerMutation, AddHuishoudenBurgerMutationVariables>(AddHuishoudenBurgerDocument, options);
+      }
+export type AddHuishoudenBurgerMutationHookResult = ReturnType<typeof useAddHuishoudenBurgerMutation>;
+export type AddHuishoudenBurgerMutationResult = Apollo.MutationResult<AddHuishoudenBurgerMutation>;
+export type AddHuishoudenBurgerMutationOptions = Apollo.BaseMutationOptions<AddHuishoudenBurgerMutation, AddHuishoudenBurgerMutationVariables>;
 export const CreateAfspraakDocument = gql`
     mutation createAfspraak($input: CreateAfspraakInput!) {
   createAfspraak(input: $input) {
@@ -2696,6 +2771,40 @@ export function useDeleteCustomerStatementMessageMutation(baseOptions?: Apollo.M
 export type DeleteCustomerStatementMessageMutationHookResult = ReturnType<typeof useDeleteCustomerStatementMessageMutation>;
 export type DeleteCustomerStatementMessageMutationResult = Apollo.MutationResult<DeleteCustomerStatementMessageMutation>;
 export type DeleteCustomerStatementMessageMutationOptions = Apollo.BaseMutationOptions<DeleteCustomerStatementMessageMutation, DeleteCustomerStatementMessageMutationVariables>;
+export const DeleteHuishoudenBurgerDocument = gql`
+    mutation deleteHuishoudenBurger($huishoudenId: Int!, $burgerIds: [Int]!) {
+  deleteHuishoudenBurger(huishoudenId: $huishoudenId, burgerIds: $burgerIds) {
+    ok
+  }
+}
+    `;
+export type DeleteHuishoudenBurgerMutationFn = Apollo.MutationFunction<DeleteHuishoudenBurgerMutation, DeleteHuishoudenBurgerMutationVariables>;
+
+/**
+ * __useDeleteHuishoudenBurgerMutation__
+ *
+ * To run a mutation, you first call `useDeleteHuishoudenBurgerMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteHuishoudenBurgerMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteHuishoudenBurgerMutation, { data, loading, error }] = useDeleteHuishoudenBurgerMutation({
+ *   variables: {
+ *      huishoudenId: // value for 'huishoudenId'
+ *      burgerIds: // value for 'burgerIds'
+ *   },
+ * });
+ */
+export function useDeleteHuishoudenBurgerMutation(baseOptions?: Apollo.MutationHookOptions<DeleteHuishoudenBurgerMutation, DeleteHuishoudenBurgerMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteHuishoudenBurgerMutation, DeleteHuishoudenBurgerMutationVariables>(DeleteHuishoudenBurgerDocument, options);
+      }
+export type DeleteHuishoudenBurgerMutationHookResult = ReturnType<typeof useDeleteHuishoudenBurgerMutation>;
+export type DeleteHuishoudenBurgerMutationResult = Apollo.MutationResult<DeleteHuishoudenBurgerMutation>;
+export type DeleteHuishoudenBurgerMutationOptions = Apollo.BaseMutationOptions<DeleteHuishoudenBurgerMutation, DeleteHuishoudenBurgerMutationVariables>;
 export const DeleteJournaalpostDocument = gql`
     mutation deleteJournaalpost($id: Int!) {
   deleteJournaalpost(id: $id) {
@@ -2835,43 +2944,6 @@ export function useStartAutomatischBoekenMutation(baseOptions?: Apollo.MutationH
 export type StartAutomatischBoekenMutationHookResult = ReturnType<typeof useStartAutomatischBoekenMutation>;
 export type StartAutomatischBoekenMutationResult = Apollo.MutationResult<StartAutomatischBoekenMutation>;
 export type StartAutomatischBoekenMutationOptions = Apollo.BaseMutationOptions<StartAutomatischBoekenMutation, StartAutomatischBoekenMutationVariables>;
-export const UpdateAfspraakBetaalinstructieDocument = gql`
-    mutation updateAfspraakBetaalinstructie($id: Int!, $betaalinstructie: BetaalinstructieInput!) {
-  updateAfspraakBetaalinstructie(
-    afspraakId: $id
-    betaalinstructie: $betaalinstructie
-  ) {
-    ok
-  }
-}
-    `;
-export type UpdateAfspraakBetaalinstructieMutationFn = Apollo.MutationFunction<UpdateAfspraakBetaalinstructieMutation, UpdateAfspraakBetaalinstructieMutationVariables>;
-
-/**
- * __useUpdateAfspraakBetaalinstructieMutation__
- *
- * To run a mutation, you first call `useUpdateAfspraakBetaalinstructieMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateAfspraakBetaalinstructieMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateAfspraakBetaalinstructieMutation, { data, loading, error }] = useUpdateAfspraakBetaalinstructieMutation({
- *   variables: {
- *      id: // value for 'id'
- *      betaalinstructie: // value for 'betaalinstructie'
- *   },
- * });
- */
-export function useUpdateAfspraakBetaalinstructieMutation(baseOptions?: Apollo.MutationHookOptions<UpdateAfspraakBetaalinstructieMutation, UpdateAfspraakBetaalinstructieMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateAfspraakBetaalinstructieMutation, UpdateAfspraakBetaalinstructieMutationVariables>(UpdateAfspraakBetaalinstructieDocument, options);
-      }
-export type UpdateAfspraakBetaalinstructieMutationHookResult = ReturnType<typeof useUpdateAfspraakBetaalinstructieMutation>;
-export type UpdateAfspraakBetaalinstructieMutationResult = Apollo.MutationResult<UpdateAfspraakBetaalinstructieMutation>;
-export type UpdateAfspraakBetaalinstructieMutationOptions = Apollo.BaseMutationOptions<UpdateAfspraakBetaalinstructieMutation, UpdateAfspraakBetaalinstructieMutationVariables>;
 export const UpdateAfspraakDocument = gql`
     mutation updateAfspraak($id: Int!, $input: UpdateAfspraakInput!) {
   updateAfspraak(id: $id, input: $input) {
@@ -2909,6 +2981,43 @@ export function useUpdateAfspraakMutation(baseOptions?: Apollo.MutationHookOptio
 export type UpdateAfspraakMutationHookResult = ReturnType<typeof useUpdateAfspraakMutation>;
 export type UpdateAfspraakMutationResult = Apollo.MutationResult<UpdateAfspraakMutation>;
 export type UpdateAfspraakMutationOptions = Apollo.BaseMutationOptions<UpdateAfspraakMutation, UpdateAfspraakMutationVariables>;
+export const UpdateAfspraakBetaalinstructieDocument = gql`
+    mutation updateAfspraakBetaalinstructie($id: Int!, $betaalinstructie: BetaalinstructieInput!) {
+  updateAfspraakBetaalinstructie(
+    afspraakId: $id
+    betaalinstructie: $betaalinstructie
+  ) {
+    ok
+  }
+}
+    `;
+export type UpdateAfspraakBetaalinstructieMutationFn = Apollo.MutationFunction<UpdateAfspraakBetaalinstructieMutation, UpdateAfspraakBetaalinstructieMutationVariables>;
+
+/**
+ * __useUpdateAfspraakBetaalinstructieMutation__
+ *
+ * To run a mutation, you first call `useUpdateAfspraakBetaalinstructieMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateAfspraakBetaalinstructieMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateAfspraakBetaalinstructieMutation, { data, loading, error }] = useUpdateAfspraakBetaalinstructieMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      betaalinstructie: // value for 'betaalinstructie'
+ *   },
+ * });
+ */
+export function useUpdateAfspraakBetaalinstructieMutation(baseOptions?: Apollo.MutationHookOptions<UpdateAfspraakBetaalinstructieMutation, UpdateAfspraakBetaalinstructieMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateAfspraakBetaalinstructieMutation, UpdateAfspraakBetaalinstructieMutationVariables>(UpdateAfspraakBetaalinstructieDocument, options);
+      }
+export type UpdateAfspraakBetaalinstructieMutationHookResult = ReturnType<typeof useUpdateAfspraakBetaalinstructieMutation>;
+export type UpdateAfspraakBetaalinstructieMutationResult = Apollo.MutationResult<UpdateAfspraakBetaalinstructieMutation>;
+export type UpdateAfspraakBetaalinstructieMutationOptions = Apollo.BaseMutationOptions<UpdateAfspraakBetaalinstructieMutation, UpdateAfspraakBetaalinstructieMutationVariables>;
 export const UpdateBurgerDocument = gql`
     mutation updateBurger($id: Int!, $bsn: Int, $voorletters: String, $voornamen: String, $achternaam: String, $geboortedatum: String, $straatnaam: String, $huisnummer: String, $postcode: String, $plaatsnaam: String, $telefoonnummer: String, $email: String) {
   updateBurger(
@@ -3215,6 +3324,41 @@ export function useGetAfsprakenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type GetAfsprakenQueryHookResult = ReturnType<typeof useGetAfsprakenQuery>;
 export type GetAfsprakenLazyQueryHookResult = ReturnType<typeof useGetAfsprakenLazyQuery>;
 export type GetAfsprakenQueryResult = Apollo.QueryResult<GetAfsprakenQuery, GetAfsprakenQueryVariables>;
+export const GetBurgerDocument = gql`
+    query getBurger($id: Int!) {
+  burger(id: $id) {
+    ...Burger
+  }
+}
+    ${BurgerFragmentDoc}`;
+
+/**
+ * __useGetBurgerQuery__
+ *
+ * To run a query within a React component, call `useGetBurgerQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBurgerQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetBurgerQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetBurgerQuery(baseOptions: Apollo.QueryHookOptions<GetBurgerQuery, GetBurgerQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetBurgerQuery, GetBurgerQueryVariables>(GetBurgerDocument, options);
+      }
+export function useGetBurgerLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBurgerQuery, GetBurgerQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetBurgerQuery, GetBurgerQueryVariables>(GetBurgerDocument, options);
+        }
+export type GetBurgerQueryHookResult = ReturnType<typeof useGetBurgerQuery>;
+export type GetBurgerLazyQueryHookResult = ReturnType<typeof useGetBurgerLazyQuery>;
+export type GetBurgerQueryResult = Apollo.QueryResult<GetBurgerQuery, GetBurgerQueryVariables>;
 export const GetBurgerAfsprakenDocument = gql`
     query getBurgerAfspraken($id: Int!) {
   burger(id: $id) {
@@ -3294,41 +3438,6 @@ export function useGetBurgerGebeurtenissenLazyQuery(baseOptions?: Apollo.LazyQue
 export type GetBurgerGebeurtenissenQueryHookResult = ReturnType<typeof useGetBurgerGebeurtenissenQuery>;
 export type GetBurgerGebeurtenissenLazyQueryHookResult = ReturnType<typeof useGetBurgerGebeurtenissenLazyQuery>;
 export type GetBurgerGebeurtenissenQueryResult = Apollo.QueryResult<GetBurgerGebeurtenissenQuery, GetBurgerGebeurtenissenQueryVariables>;
-export const GetBurgerDocument = gql`
-    query getBurger($id: Int!) {
-  burger(id: $id) {
-    ...Burger
-  }
-}
-    ${BurgerFragmentDoc}`;
-
-/**
- * __useGetBurgerQuery__
- *
- * To run a query within a React component, call `useGetBurgerQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetBurgerQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetBurgerQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useGetBurgerQuery(baseOptions: Apollo.QueryHookOptions<GetBurgerQuery, GetBurgerQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetBurgerQuery, GetBurgerQueryVariables>(GetBurgerDocument, options);
-      }
-export function useGetBurgerLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBurgerQuery, GetBurgerQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetBurgerQuery, GetBurgerQueryVariables>(GetBurgerDocument, options);
-        }
-export type GetBurgerQueryHookResult = ReturnType<typeof useGetBurgerQuery>;
-export type GetBurgerLazyQueryHookResult = ReturnType<typeof useGetBurgerLazyQuery>;
-export type GetBurgerQueryResult = Apollo.QueryResult<GetBurgerQuery, GetBurgerQueryVariables>;
 export const GetBurgersDocument = gql`
     query getBurgers {
   burgers {
@@ -3591,6 +3700,75 @@ export function useGetGebruikerLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type GetGebruikerQueryHookResult = ReturnType<typeof useGetGebruikerQuery>;
 export type GetGebruikerLazyQueryHookResult = ReturnType<typeof useGetGebruikerLazyQuery>;
 export type GetGebruikerQueryResult = Apollo.QueryResult<GetGebruikerQuery, GetGebruikerQueryVariables>;
+export const GetHuishoudenDocument = gql`
+    query getHuishouden($id: Int!) {
+  huishouden(id: $id) {
+    ...Huishouden
+  }
+}
+    ${HuishoudenFragmentDoc}`;
+
+/**
+ * __useGetHuishoudenQuery__
+ *
+ * To run a query within a React component, call `useGetHuishoudenQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetHuishoudenQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetHuishoudenQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetHuishoudenQuery(baseOptions: Apollo.QueryHookOptions<GetHuishoudenQuery, GetHuishoudenQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetHuishoudenQuery, GetHuishoudenQueryVariables>(GetHuishoudenDocument, options);
+      }
+export function useGetHuishoudenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetHuishoudenQuery, GetHuishoudenQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetHuishoudenQuery, GetHuishoudenQueryVariables>(GetHuishoudenDocument, options);
+        }
+export type GetHuishoudenQueryHookResult = ReturnType<typeof useGetHuishoudenQuery>;
+export type GetHuishoudenLazyQueryHookResult = ReturnType<typeof useGetHuishoudenLazyQuery>;
+export type GetHuishoudenQueryResult = Apollo.QueryResult<GetHuishoudenQuery, GetHuishoudenQueryVariables>;
+export const GetHuishoudensDocument = gql`
+    query getHuishoudens {
+  huishoudens {
+    ...Huishouden
+  }
+}
+    ${HuishoudenFragmentDoc}`;
+
+/**
+ * __useGetHuishoudensQuery__
+ *
+ * To run a query within a React component, call `useGetHuishoudensQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetHuishoudensQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetHuishoudensQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetHuishoudensQuery(baseOptions?: Apollo.QueryHookOptions<GetHuishoudensQuery, GetHuishoudensQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetHuishoudensQuery, GetHuishoudensQueryVariables>(GetHuishoudensDocument, options);
+      }
+export function useGetHuishoudensLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetHuishoudensQuery, GetHuishoudensQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetHuishoudensQuery, GetHuishoudensQueryVariables>(GetHuishoudensDocument, options);
+        }
+export type GetHuishoudensQueryHookResult = ReturnType<typeof useGetHuishoudensQuery>;
+export type GetHuishoudensLazyQueryHookResult = ReturnType<typeof useGetHuishoudensLazyQuery>;
+export type GetHuishoudensQueryResult = Apollo.QueryResult<GetHuishoudensQuery, GetHuishoudensQueryVariables>;
 export const GetAfspraakDocument = gql`
     query getAfspraak($id: Int!) {
   afspraak(id: $id) {

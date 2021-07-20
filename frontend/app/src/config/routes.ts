@@ -1,6 +1,7 @@
 export enum RouteNames {
 	notFound = "404",
 	login = "inloggen",
+	huishoudens = "huishoudens",
 	burgers = "burgers",
 	afspraken = "afspraken",
 	organisaties = "organisaties",
@@ -25,6 +26,9 @@ export enum RouteNames {
 const Routes = {
 	Home: "/",
 	Login: `/${RouteNames.login}`,
+
+	Huishoudens: `/${RouteNames.huishoudens}`,
+	Huishouden: (id?: number) => `/${RouteNames.huishoudens}/${id || ":id(\\d+)"}`,
 
 	Burgers: `/${RouteNames.burgers}`,
 	Burger: (id?: number) => `/${RouteNames.burgers}/${id || ":id(\\d+)"}`,

@@ -51,6 +51,20 @@
             "createSuccess": "Configuratie succesvol opgeslagen.",
             "alreadyExists": "Deze configuratie bestaat al."
         },
+        "addHuishoudenBurger": {
+            "noOptionsSelectedError": "Er zijn geen burgers geselecteerd. Selecteer minimaal een burger om toe te voegen aan dit huishouden.",
+            "success": "{{names}} is toegevoegd aan dit huishouden.",
+            "success_plural": "{{names}} zijn toegevoegd aan dit huishouden."
+        },
+        "deleteHuishoudenBurger": {
+            "noOptionsSelectedError": "Er zijn geen burgers geselecteerd. Selecteer minimaal een burger om te verwijderen uit dit huishouden.",
+            "success": "{{names}} is verwijderd uit dit huishouden.",
+            "success_plural": "{{names}} zijn verwijderd uit dit huishouden."
+        },
+        "huishoudens": {
+            "addHint": "Voeg huishoudens toe door te klikken op de knop {{buttonLabel}}.",
+            "noSearchResults": "Geen huishoudens gevonden. Gebruik een andere zoekterm."
+        },
         "organizations": {
             "invalidFormMessage": "Er is een fout opgetreden. Controleer de ingevulde gegevens en probeer het opnieuw.",
             "createSuccessMessage": "Nieuwe organisatie succesvol opgeslagen.",
@@ -96,6 +110,8 @@
         "backToList": "Terug naar overzicht",
         "brievenExport": "Exporteer gegevens voor brieven",
         "clearSearch": "Zoekopdracht wissen",
+        "addBurgers": "Burgers toevoegen",
+        "deleteBurgers": "Burgers verwijderen",
         "back": "Terug",
         "backToHome": "Terug naar de hoofdpagina",
         "clickToEdit": "Klik om te wijzigen"
@@ -244,6 +260,15 @@
             "fields": {
                 "id": "Sleutel",
                 "waarde": "Waarde"
+            }
+        },
+        "huishoudens": {
+            "addBurger": {
+                "title": "Burger toevoegen aan huishouden"
+            },
+            "findBurger": "Zoek burgers",
+            "deleteBurger": {
+                "title": "Burger verwijderen uit huishouden"
             }
         },
         "createOrganisatie": {
@@ -466,6 +491,7 @@
     },
     "sidebar": {
         "rapportage": "Rapportage",
+        "huishoudens": "Huishoudens",
         "burgers": "Burgers",
         "organisaties": "Organisaties",
         "bankzaken": "Bankzaken",
@@ -533,6 +559,10 @@
         "createExportOverschrijvingen": "{{gebruiker}} creëerde betaalinstructies.",
         "createOrganisatieRekening": "{{gebruiker}} voegde <strong>{{iban}}</strong> op naam van <strong>{{rekeninghouder}}</strong> toe aan <linkOrganisatie>{{organisatie}}</linkOrganisatie>.",
         "deleteOrganisatieRekening": "{{gebruiker}} verwijderde <strong>{{iban}}</strong> op naam van <strong>{{rekeninghouder}}</strong> bij <linkOrganisatie>{{organisatie}}</linkOrganisatie>."
+    },
+    "huishoudenName": "Huishouden {{name}}",
+    "huishoudens": {
+        "title": "Huishoudens"
     },
     "suggestion": "Suggestie",
     "organizations": {

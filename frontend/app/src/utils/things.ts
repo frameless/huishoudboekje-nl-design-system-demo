@@ -5,7 +5,7 @@ import currency from "currency.js";
 import {friendlyFormatIBAN} from "ibantools";
 import {createContext} from "react";
 import {Granularity, periodFormatForGranularity} from "../components/Rapportage/Aggregator";
-import {Afspraak, BankTransaction, Burger, GebruikersActiviteit, Organisatie, Rubriek} from "../generated/graphql";
+import {Afspraak, BankTransaction, Burger, GebruikersActiviteit, Huishouden, Organisatie, Rubriek} from "../generated/graphql";
 import d from "./dayjs";
 
 const HHB_NUMMER_FORMAT = "HHB000000";
@@ -61,13 +61,21 @@ export const sortBankTransactions = (a: BankTransaction, b: BankTransaction) => 
 	return b.bedrag - a.bedrag;
 };
 
-export const formatBurgerName = (burger: Burger | undefined, fullName = true) => {
+export const formatBurgerName = (burger: Burger | undefined, fullName = true): string => {
 	if (fullName) {
 		return [burger?.voornamen, burger?.achternaam].join(" ");
 	}
 
 	const voorletters = burger?.voorletters?.replace(/\./g, "").split("").join(". ") + ".";
 	return [voorletters, burger?.achternaam].join(" ");
+};
+
+export const formatHuishoudenName = (huishouden: Huishouden): string => {
+	const allBurgers = (huishouden.burgers || []).map(b => b.achternaam);
+
+	/* Filter out double last names. */
+	const burgerLastNames = Array.from(new Set(allBurgers));
+	return burgerLastNames.join("-");
 };
 
 export const formatIBAN = (iban?: string) => {
