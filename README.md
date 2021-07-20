@@ -41,12 +41,16 @@ If you are on a Mac, make sure you have [Brew](https://brew.sh/) installed.
 
 #### Windows
 #### Requirements
-You need python virtualenv and an ubuntu shell with zsh
+You need python virtualenv, an ubuntu shell with zsh and you need to make sure your symlinks work correctly.
 
-1. Install [PostgreSQL](https://www.postgresql.org/download/windows/) to setup a local database. Make sure to also install pgAdmin as well, if you need a web client to manage your databases.
-2. Create virtual environments for the services and the backend. Please see their `README.md` for instructions.
-3. For the frontend you need to use the ubuntu zsh shell
-4. For setting up dex you need ubuntu
+1. To fix the symlinks:
+   1. Make sure your git installation had enabled symbolic links.
+   2. Run a git bash as administator and run this command: `git clone -c core.symlinks=true https://gitlab.com/commonground/huishoudboekje/app-new.git`
+   3. The symlinks should now work.
+2. Install [PostgreSQL](https://www.postgresql.org/download/windows/) to setup a local database. Make sure to also install pgAdmin as well, if you need a web client to manage your databases.
+3. Create virtual environments for the services and the backend. Please see their `README.md` for instructions.
+4. For the frontend you need to use the ubuntu zsh shell.
+5. Setting up dex should be done in ubuntu.
 
 ### 2. Setting up Dex locally
 To authorize against your local running backend service, you'll need to run an instance of [Dex](https://github.com/dexidp/dex#readme).

@@ -34,20 +34,12 @@ This service contains the functionality needed to access data from the applicati
     ```
 
 ## Setup development (Windows)
-- Make sure you have a symbolic link to core_services
-
-    delete the core_service file
-
-    Execute a shell as administrator
-
-    ```shell
-    mklink /D "core_service" ..\\core_service\\core_service
-    ```
-
+- If the symbolic link to core_services does not work, go back to [Readme](../../README.md) and read the windows
+  local installation steps.
 
 - Install a virtual environment
 
-    make sure your working directory is ~\backend
+    make sure your working directory is ~\log_service
 
     ```shell
     cd ..\

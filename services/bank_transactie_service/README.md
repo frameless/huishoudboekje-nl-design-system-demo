@@ -35,17 +35,11 @@ This service contains the functionality needed to access data from banktransacti
 
 
 ## Setup development (Windows)
-- Make sure you have a symbolic link to core_services
-    Execute a shell as administrator
-
-    ```shell
-    mklink /D "core_service" ..\\core_service\\core_service
-    ```
-
-
+- If the symbolic link to core_services does not work, go back to [Readme](../../README.md) and read the windows
+  local installation steps.
 - Install a virtual environment
 
-    make sure your working directory is ~\backend
+    make sure your working directory is ~\bank_transactie_service
 
     ```shell
     cd ..\
