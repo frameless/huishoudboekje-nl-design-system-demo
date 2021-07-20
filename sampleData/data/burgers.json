@@ -155,8 +155,8 @@
 	"email": "fien.de.jager@sloothuizen.nl",
 	"telefoonnummer": "0612345678",
 	"rekeningen": [
-	  {"iban": "NL83ABNA1927261899", "rekeninghouder": "H.J. Winkel"},
-	  {"iban": "NL58INGB5228863516", "rekeninghouder": "H.J. Winkel en/of A.B. Zee"}
+	  {"iban": "NL83ABNA1927261899", "rekeninghouder": "H.J. Poortvliet"},
+	  {"iban": "NL58INGB5228863516", "rekeninghouder": "H.J. Poortvliet en/of A.B. Zee"}
 	],
 	"afspraken": [
 	  {
@@ -336,6 +336,290 @@
 		"zoektermen": [
 		  "Mobiele telefonie",
 		  "ZOEKTERMPERSONA2"
+		]
+	  }
+	]
+  },
+  {
+	"voorletters": "K.R.D.",
+	"voornamen": "Kristel Ramona Davina",
+	"achternaam": "Poortvliet",
+	"huisnummer": "37B",
+	"postcode": "9999ZZ",
+	"straatnaam": "Spoorlaan",
+	"plaatsnaam": "Sloothuizen",
+	"geboortedatum": "1994-08-14",
+	"email": "krdpoortvliet@sloothuizen.nl",
+	"telefoonnummer": "0685236971",
+	"rekeningen": [
+	  {"iban": "NL05ABNA1578530261", "rekeninghouder": "K.R.D. Poortvliet"}
+	],
+	"afspraken": [
+	  {
+		"rubriek": {
+		  "naam": "Inkomsten"
+		},
+		"omschrijving": "Loon",
+		"organisatie": {
+		  "kvkNummer": "35012085"
+		},
+		"bedrag": 765.32,
+		"credit": true,
+		"validFrom": "2021-01-01",
+		"zoektermen": [
+		  "Loon",
+		  "ZOEKTERMPERSONA1"
+		]
+	  },
+	  {
+		"rubriek": {"naam": "Uitkeringen"},
+		"omschrijving": "Aanvullende uitkering",
+		"organisatie": {
+		  "kvkNummer": "30280353"
+		},
+		"bedrag": 147.84,
+		"credit": true,
+		"validFrom": "2019-01-07",
+		"zoektermen": [
+		  "Aanvullende uitkering",
+		  "ZOEKTERMPERSONA1"
+		]
+	  },
+	  {
+		"rubriek": {"naam": "Toeslagen"},
+		"omschrijving": "Voorschot kindgebonden budget",
+		"organisatie": {
+		  "kvkNummer": "27365323"
+		},
+		"bedrag": 391.00,
+		"credit": true,
+		"validFrom": "2019-01-20",
+		"zoektermen": [
+		  "123456781",
+		  "VOORSCHOT KIT/Kgb"
+		]
+	  },
+	  {
+		"rubriek": {"naam": "Toeslagen"},
+		"omschrijving": "Voorschot huurtoeslag",
+		"organisatie": {
+		  "kvkNummer": "27365323"
+		},
+		"bedrag": 322.00,
+		"credit": true,
+		"validFrom": "2019-01-20",
+		"zoektermen": [
+		  "123456781",
+		  "VOORSCHOT HUURTOESLAG"
+		]
+	  },
+	  {
+		"rubriek": {"naam": "Toeslagen"},
+		"omschrijving": "Voorschot zorgtoeslag",
+		"organisatie": {
+		  "kvkNummer": "27365323"
+		},
+		"bedrag": 107.00,
+		"credit": true,
+		"validFrom": "2019-01-20",
+		"zoektermen": [
+		  "123456781",
+		  "VOORSCHOT ZORGTOESLAG"
+		]
+	  },
+	  {
+		"rubriek": {"naam": "Huur of hypotheek"},
+		"omschrijving": "Huur",
+		"organisatie": {
+		  "kvkNummer": "30038487"
+		},
+		"bedrag": 647.35,
+		"credit": false,
+		"validFrom": "2019-01-01",
+		"zoektermen": [
+		  "Betaalde huur",
+		  "ZOEKTERMPERSONA1"
+		]
+	  },
+	  {
+		"rubriek": {"naam": "Gas en elektriciteit"},
+		"omschrijving": "Elektriciteit",
+		"organisatie": {
+		  "kvkNummer": "05082820"
+		},
+		"bedrag": 132.00,
+		"credit": false,
+		"validFrom": "2019-01-01",
+		"zoektermen": [
+		  "Elektriciteit",
+		  "ZOEKTERMPERSONA1"
+		]
+	  },
+	  {
+		"rubriek": {"naam": "Water"},
+		"omschrijving": "Water",
+		"organisatie": {
+		  "kvkNummer": "05069581"
+		},
+		"bedrag": 41.61,
+		"credit": false,
+		"validFrom": "2021-01-01",
+		"zoektermen": [
+		  "Water",
+		  "ZOEKTERMPERSONA1"
+		]
+	  },
+	  {
+		"rubriek": {"naam": "Privé-opname"},
+		"omschrijving": "Leefgeld",
+		"bedrag": 939.94,
+		"credit": false,
+		"validFrom": "2021-01-01",
+		"zoektermen": [
+		  "Leefgeld",
+		  "ZOEKTERMPERSONA1"
+		]
+	  }
+	]
+  },
+  {
+	"voorletters": "C.",
+	"voornamen": "Chris",
+	"achternaam": "de Burg",
+	"huisnummer": "91",
+	"postcode": "9999ZZ",
+	"straatnaam": "Het Laantje",
+	"plaatsnaam": "Sloothuizen",
+	"geboortedatum": "1982-04-11",
+	"email": "chrisdeburg@sloothuizen.nl",
+	"telefoonnummer": "069685250014",
+	"rekeningen": [
+	  {"iban": "NL56ABNA3971204384", "rekeninghouder": "C. de Burg"}
+	],
+	"afspraken": [
+	  {
+		"rubriek": {
+		  "naam": "Inkomsten"
+		},
+		"omschrijving": "Loon",
+		"organisatie": {
+		  "kvkNummer": "35012085"
+		},
+		"bedrag": 765.32,
+		"credit": true,
+		"validFrom": "2021-01-01",
+		"zoektermen": [
+		  "Loon",
+		  "ZOEKTERMPERSONA1"
+		]
+	  },
+	  {
+		"rubriek": {"naam": "Uitkeringen"},
+		"omschrijving": "Aanvullende uitkering",
+		"organisatie": {
+		  "kvkNummer": "30280353"
+		},
+		"bedrag": 147.84,
+		"credit": true,
+		"validFrom": "2019-01-07",
+		"zoektermen": [
+		  "Aanvullende uitkering",
+		  "ZOEKTERMPERSONA1"
+		]
+	  },
+	  {
+		"rubriek": {"naam": "Toeslagen"},
+		"omschrijving": "Voorschot kindgebonden budget",
+		"organisatie": {
+		  "kvkNummer": "27365323"
+		},
+		"bedrag": 391.00,
+		"credit": true,
+		"validFrom": "2019-01-20",
+		"zoektermen": [
+		  "123456781",
+		  "VOORSCHOT KIT/Kgb"
+		]
+	  },
+	  {
+		"rubriek": {"naam": "Toeslagen"},
+		"omschrijving": "Voorschot huurtoeslag",
+		"organisatie": {
+		  "kvkNummer": "27365323"
+		},
+		"bedrag": 322.00,
+		"credit": true,
+		"validFrom": "2019-01-20",
+		"zoektermen": [
+		  "123456781",
+		  "VOORSCHOT HUURTOESLAG"
+		]
+	  },
+	  {
+		"rubriek": {"naam": "Toeslagen"},
+		"omschrijving": "Voorschot zorgtoeslag",
+		"organisatie": {
+		  "kvkNummer": "27365323"
+		},
+		"bedrag": 107.00,
+		"credit": true,
+		"validFrom": "2019-01-20",
+		"zoektermen": [
+		  "123456781",
+		  "VOORSCHOT ZORGTOESLAG"
+		]
+	  },
+	  {
+		"rubriek": {"naam": "Huur of hypotheek"},
+		"omschrijving": "Huur",
+		"organisatie": {
+		  "kvkNummer": "30038487"
+		},
+		"bedrag": 647.35,
+		"credit": false,
+		"validFrom": "2019-01-01",
+		"zoektermen": [
+		  "Betaalde huur",
+		  "ZOEKTERMPERSONA1"
+		]
+	  },
+	  {
+		"rubriek": {"naam": "Gas en elektriciteit"},
+		"omschrijving": "Elektriciteit",
+		"organisatie": {
+		  "kvkNummer": "05082820"
+		},
+		"bedrag": 132.00,
+		"credit": false,
+		"validFrom": "2019-01-01",
+		"zoektermen": [
+		  "Elektriciteit",
+		  "ZOEKTERMPERSONA1"
+		]
+	  },
+	  {
+		"rubriek": {"naam": "Water"},
+		"omschrijving": "Water",
+		"organisatie": {
+		  "kvkNummer": "05069581"
+		},
+		"bedrag": 41.61,
+		"credit": false,
+		"validFrom": "2021-01-01",
+		"zoektermen": [
+		  "Water",
+		  "ZOEKTERMPERSONA1"
+		]
+	  },
+	  {
+		"rubriek": {"naam": "Privé-opname"},
+		"omschrijving": "Leefgeld",
+		"bedrag": 939.94,
+		"credit": false,
+		"validFrom": "2021-01-01",
+		"zoektermen": [
+		  "Leefgeld",
+		  "ZOEKTERMPERSONA1"
 		]
 	  }
 	]
