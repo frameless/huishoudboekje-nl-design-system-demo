@@ -69,4 +69,9 @@ staticPasswords:
   name: Chieling Yueh
   userID: ptn38526-0g8d-vnk8-nsv3-sdnvj294fjvn
   hash: $2y$12$xWWlTptiMyPJbuPo7WwBgefl/sj3vz8iNJn5fPwVWQcBcZh1HsC.W # demo
+- username: arjan.de.weerd@topicus.nl
+  email: arjan.de.weerd@topicus.nl
+  name: Arjan de Weerd
+  userID: fie8wndt-dj49-2n5v-9mgt-8djdknei8456
+  hash: $2y$12$xWWlTptiMyPJbuPo7WwBgefl/sj3vz8iNJn5fPwVWQcBcZh1HsC.W # demo
 

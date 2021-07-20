@@ -29,7 +29,7 @@ The data models are managed using Alembic migration scripts that are executed us
 For the frontend, see the [Frontend README](./frontend/app/README.md). \
 For the backend, there are a few different ways you can set up your local backend development environment:
 
-### 1. Local setup
+### 1. Local setup (MacOS)
 For now, the easiest way to set up the backend is to run the database locally and run the backend and services 
 in separate virtual environments. \
 If you are on a Mac, make sure you have [Brew](https://brew.sh/) installed. 
