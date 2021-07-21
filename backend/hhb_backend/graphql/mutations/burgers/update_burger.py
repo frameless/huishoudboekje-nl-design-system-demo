@@ -8,6 +8,7 @@ from graphql import GraphQLError
 
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.models.burger import Burger
+from hhb_backend.graphql.mutations.huishoudens import huishouden_input as huishouden_input
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     gebruikers_activiteit_entities,
     log_gebruikers_activiteit,
@@ -30,6 +31,7 @@ class UpdateBurger(graphene.Mutation):
         voorletters = graphene.String()
         voornamen = graphene.String()
         plaatsnaam = graphene.String()
+        huishouden = graphene.Argument(lambda: huishouden_input.HuishoudenInput)
 
     ok = graphene.Boolean()
     burger = graphene.Field(lambda: Burger)

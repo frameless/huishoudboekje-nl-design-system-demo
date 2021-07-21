@@ -111,7 +111,7 @@ class AfspraakView(HHBView):
             cb(ids)
 
     def add_filter_filter_burger(self):
-        """ Add filter_burger filter based on the kvk of the organisatie model """
+        """ Add filter_burger filter based on the id of burger """
 
         def add_filter(ids):
             self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.burger_id.in_(ids))

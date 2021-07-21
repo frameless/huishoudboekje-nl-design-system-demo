@@ -5,6 +5,7 @@ from flask import request
 import hhb_backend.graphql.models.afspraak as afspraak
 import hhb_backend.graphql.models.rekening as rekening
 import hhb_backend.graphql.models.gebruikersactiviteit as gebruikersactiviteit
+import hhb_backend.graphql.models.huishouden as huishouden
 from hhb_backend.graphql.models.pageinfo import PageInfo
 
 
@@ -25,6 +26,7 @@ class Burger(graphene.ObjectType):
     rekeningen = graphene.List(lambda: rekening.Rekening)
     afspraken = graphene.List(lambda: afspraak.Afspraak)
     gebruikersactiviteiten = graphene.List(lambda: gebruikersactiviteit.GebruikersActiviteit)
+    huishouden = graphene.Field(lambda: huishouden.Huishouden)
 
     def resolve_iban(root, info):
         rekeningen = Burger.resolve_rekeningen(root, info)
@@ -40,8 +42,10 @@ class Burger(graphene.ObjectType):
         return await request.dataloader.afspraken_by_burger.load(root.get('id')) or []
 
     async def resolve_gebruikersactiviteiten(root, info):
-        return request.dataloader.gebruikersactiviteiten_by_gebruikers.get_by_id(root.get('id')) or []
+        return request.dataloader.gebruikersactiviteiten_by_burgers.get_by_id(root.get('id')) or []
 
+    async def resolve_huishouden(root, info):
+        return await request.dataloader.huishoudens_by_id.load(root.get('huishouden_id'))
 
 class BurgersPaged(graphene.ObjectType):
     burgers = graphene.List(

@@ -7,7 +7,7 @@ from .bank_transactions_loader import (BankTransactionByCsmLoader, BankTransacti
 from .configuratie_loader import ConfiguratieByIdLoader
 from .csm_loader import CSMsByIdLoader
 from .exports_loader import ExportsByIdLoader
-from .burger_loader import BurgersByIdLoader
+from .burger_loader import BurgersByHuishoudenLoader, BurgersByIdLoader
 from .gebruikersactiviteit_loader import (GebruikersActiviteitenByAfsprakenLoader,
                                           GebruikersActiviteitenByBurgersLoader, GebruikersActiviteitenByIdLoader)
 from .grootboekrekening_loader import GrootboekrekeningenByIdLoader
@@ -21,6 +21,7 @@ from .overschrijving_loader import (OverschrijvingByAfspraakLoader, Overschrijvi
 from .rekeningen_loader import (RekeningenByBurgerLoader, RekeningenByIbanLoader, RekeningenByIdLoader,
                                 RekeningenByOrganisatieLoader)
 from .rubrieken_loader import RubriekByGrootboekrekeningLoader, RubriekByIdLoader
+from .huishouden_loader import HuishoudensByIdLoader
 
 
 class HHBDataLoader:
@@ -29,6 +30,7 @@ class HHBDataLoader:
     def __init__(self, loop):
         # Burgers
         self.burgers_by_id = BurgersByIdLoader(loop=loop)
+        self.burgers_by_huishouden = BurgersByHuishoudenLoader(loop=loop)
 
         # Organisaties
         self.organisaties_by_id = OrganisatieByIdLoader(loop=loop)
@@ -76,6 +78,9 @@ class HHBDataLoader:
         self.gebruikersactiviteiten_by_afspraken = (
             GebruikersActiviteitenByAfsprakenLoader(loop=loop)
         )
+
+        # Huishoudens
+        self.huishoudens_by_id = HuishoudensByIdLoader(loop=loop)
 
     def __getitem__(self, item: str):
         return getattr(self, item)

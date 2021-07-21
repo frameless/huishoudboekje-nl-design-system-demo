@@ -10,3 +10,4 @@ from .rubrieken import RubriekView
 from .configuratie import ConfiguratieView
 from .overschrijvingen import OverschrijvingView
 from .exports import ExportView
+from .huishoudens import HuishoudenView

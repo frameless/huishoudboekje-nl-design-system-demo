@@ -10,3 +10,4 @@ from .rubriek import rubriek_factory
 from .configuratie import configuratie_factory
 from .export import export_factory
 from .overschrijving import overschrijving_factory
+from .huishouden import huishouden_factory

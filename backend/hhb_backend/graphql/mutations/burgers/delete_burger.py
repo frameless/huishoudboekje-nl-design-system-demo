@@ -8,8 +8,8 @@ from graphql import GraphQLError
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.models.burger import Burger
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    log_gebruikers_activiteit,
     gebruikers_activiteit_entities,
+    log_gebruikers_activiteit,
 )
 
 
@@ -33,9 +33,11 @@ class DeleteBurger(graphene.Mutation):
     @staticmethod
     @log_gebruikers_activiteit
     async def mutate(_root, info, id):
-        """ Delete current burger """
+        """Delete current burger"""
 
-        previous = await request.dataloader.burgers_by_id.load(id)
+        existing_burger = await request.dataloader.burgers_by_id.load(id)
+        if not existing_burger:
+            raise GraphQLError(f"Burger with id {id} not found")
 
         response = requests.delete(f"{settings.HHB_SERVICES_URL}/burgers/{id}")
         if response.status_code != 204:
@@ -43,4 +45,4 @@ class DeleteBurger(graphene.Mutation):
 
         request.dataloader.burgers_by_id.clear(id)
 
-        return DeleteBurger(ok=True, previous=previous)
+        return DeleteBurger(ok=True, previous=existing_burger)
