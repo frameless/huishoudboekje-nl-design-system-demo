@@ -1,6 +1,7 @@
 import {gql} from "@apollo/client";
-import {AfspraakFragment} from "./AfspraakFragment";
-import {RekeningFragment} from "./RekeningFragment";
+import {AfspraakFragment} from "./Afspraak";
+import {HuishoudenFragment} from "./HuishoudenFragment";
+import {RekeningFragment} from "./Rekening";
 
 export const BurgerFragment = gql`
     fragment Burger on Burger {
@@ -22,7 +23,14 @@ export const BurgerFragment = gql`
         afspraken {
             ...Afspraak
         }
+        huishouden {
+            id
+            burgers {
+                id
+            }
+        }
     }
+    ${HuishoudenFragment}
     ${AfspraakFragment}
     ${RekeningFragment}
 `;

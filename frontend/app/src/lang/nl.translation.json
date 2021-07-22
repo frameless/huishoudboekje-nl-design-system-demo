@@ -62,7 +62,6 @@
             "success_plural": "{{names}} zijn verwijderd uit dit huishouden."
         },
         "huishoudens": {
-            "addHint": "Voeg huishoudens toe door te klikken op de knop {{buttonLabel}}.",
             "noSearchResults": "Geen huishoudens gevonden. Gebruik een andere zoekterm."
         },
         "organizations": {
@@ -501,11 +500,13 @@
         "gebeurtenissen": "Gebeurtenissen",
         "configuratie": "Configuratie"
     },
+    "showHuishouden": "Bekijk huishouden",
     "burgers": {
         "burgers": "Burgers"
     },
     "configuratie": "Configuratie",
     "unknownGebruiker": "Onbekende gebruiker",
+    "unknownHuishouden": "Onbekend huishouden",
     "unknownBurger": "Onbekende burger",
     "unknownOrganisatie": "Onbekende organisatie",
     "unknownAfspraak": "Onbekende afspraak",
@@ -523,6 +524,8 @@
         "viewRubrieken": "{{gebruiker}} bekeek alle <strong>rubrieken</strong>.",
         "viewBurger": "{{gebruiker}} bekeek <linkBurger>{{burger}}</linkBurger>.",
         "viewBurgers": "{{gebruiker}} bekeek alle <strong>burgers</strong>.",
+        "viewHuishouden": "{{gebruiker}} bekeek <linkHuishouden>{{huishouden}}</linkHuishouden>.",
+        "viewHuishoudens": "{{gebruiker}} bekeek alle <strong>huishoudens</strong>.",
         "viewCustomerStatementMessages": "{{gebruiker}} bekeek alle <strong>bankafschriften</strong>.",
         "viewTransaction": "{{gebruiker}} bekeek banktransactie <strong>{{transactieId}}</strong>.",
         "viewTransactions": "{{gebruiker}} bekeek alle <strong>banktransacties</strong>.",
@@ -558,7 +561,9 @@
         "updateAfspraakBetaalinstructie": "{{gebruiker}} stelde een betaalinstructie in voor een <linkAfspraak>afspraak</linkAfspraak> met <linkBurger>{{burger}}</linkBurger>.",
         "createExportOverschrijvingen": "{{gebruiker}} creëerde betaalinstructies.",
         "createOrganisatieRekening": "{{gebruiker}} voegde <strong>{{iban}}</strong> op naam van <strong>{{rekeninghouder}}</strong> toe aan <linkOrganisatie>{{organisatie}}</linkOrganisatie>.",
-        "deleteOrganisatieRekening": "{{gebruiker}} verwijderde <strong>{{iban}}</strong> op naam van <strong>{{rekeninghouder}}</strong> bij <linkOrganisatie>{{organisatie}}</linkOrganisatie>."
+        "deleteOrganisatieRekening": "{{gebruiker}} verwijderde <strong>{{iban}}</strong> op naam van <strong>{{rekeninghouder}}</strong> bij <linkOrganisatie>{{organisatie}}</linkOrganisatie>.",
+        "addHuishoudenBurger": "{{gebruiker}} voegde een of meerdere burgers toe aan <linkHuishouden>{{huishouden}}</linkHuishouden>.",
+        "deleteHuishoudenBurger": "{{gebruiker}} verwijderde een of meerdere burgers uit <linkHuishouden>{{huishouden}}</linkHuishouden>."
     },
     "huishoudenName": "Huishouden {{name}}",
     "huishoudens": {

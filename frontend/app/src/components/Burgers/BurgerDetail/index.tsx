@@ -82,6 +82,7 @@ const BurgerDetail = () => {
 						<MenuList>
 							<Link href={Routes.BrievenExport(parseInt(id))} target={"_blank"}><MenuItem>{t("actions.brievenExport")}</MenuItem></Link>
 							<NavLink to={Routes.RapportageBurger([parseInt(id)])}><MenuItem>{t("sidebar.rapportage")}</MenuItem></NavLink>
+							{(burger.huishouden?.burgers || []).length > 1 && <NavLink to={Routes.Huishouden(burger.huishouden?.id)}><MenuItem>{t("showHuishouden")}</MenuItem></NavLink>}
 							<Divider />
 							<NavLink to={Routes.EditBurger(parseInt(id))}><MenuItem>{t("actions.edit")}</MenuItem></NavLink>
 							<MenuItem onClick={onClickDeleteMenuItem}>{t("actions.delete")}</MenuItem>

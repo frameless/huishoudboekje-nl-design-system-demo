@@ -16,6 +16,8 @@ export const auditLogTexts = (values, components, action) => {
 		rubrieken: () => <Trans i18nKey={"auditLog.viewRubrieken"} values={values} components={components} />,
 		burger: () => <Trans i18nKey={"auditLog.viewBurger"} values={values} components={components} />,
 		burgers: () => <Trans i18nKey={"auditLog.viewBurgers"} values={values} components={components} />,
+		huishouden: () => <Trans i18nKey={"auditLog.viewHuishouden"} values={values} components={components} />,
+		huishoudens: () => <Trans i18nKey={"auditLog.viewHuishoudens"} values={values} components={components} />,
 		customerStatementMessages: () => <Trans i18nKey={"auditLog.viewCustomerStatementMessages"} values={values} components={components} />,
 		bankTransaction: () => <Trans i18nKey={"auditLog.viewTransaction"} values={values} components={components} />,
 		bankTransactions: () => <Trans i18nKey={"auditLog.viewTransactions"} values={values} components={components} />,
@@ -56,6 +58,8 @@ export const auditLogTexts = (values, components, action) => {
 		createExportOverschrijvingen: () => <Trans i18nKey={"auditLog.createExportOverschrijvingen"} values={values} components={components} />,
 		createOrganisatieRekening: () => <Trans i18nKey={"auditLog.createOrganisatieRekening"} values={values} components={components} />,
 		deleteOrganisatieRekening: () => <Trans i18nKey={"auditLog.deleteOrganisatieRekening"} values={values} components={components} />,
+		addHuishoudenBurger: () => <Trans i18nKey={"auditLog.addHuishoudenBurger"} values={values} components={components} />,
+		deleteHuishoudenBurger: () => <Trans i18nKey={"auditLog.deleteHuishoudenBurger"} values={values} components={components} />,
 	};
 
 	return texts[action];

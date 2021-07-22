@@ -1210,7 +1210,10 @@ export type BetaalinstructieFragment = Pick<Betaalinstructie, 'byDay' | 'byMonth
 
 export type BurgerFragment = (
   Pick<Burger, 'id' | 'bsn' | 'email' | 'telefoonnummer' | 'voorletters' | 'voornamen' | 'achternaam' | 'geboortedatum' | 'straatnaam' | 'huisnummer' | 'postcode' | 'plaatsnaam'>
-  & { rekeningen?: Maybe<Array<Maybe<RekeningFragment>>>, afspraken?: Maybe<Array<Maybe<AfspraakFragment>>> }
+  & { rekeningen?: Maybe<Array<Maybe<RekeningFragment>>>, afspraken?: Maybe<Array<Maybe<AfspraakFragment>>>, huishouden?: Maybe<(
+    Pick<Huishouden, 'id'>
+    & { burgers?: Maybe<Array<Maybe<Pick<Burger, 'id'>>>> }
+  )> }
 );
 
 export type CustomerStatementMessageFragment = Pick<CustomerStatementMessage, 'id' | 'filename' | 'uploadDate' | 'accountIdentification' | 'closingAvailableFunds' | 'closingBalance' | 'forwardAvailableBalance' | 'openingBalance' | 'relatedReference' | 'sequenceNumber' | 'transactionReferenceNumber'>;
@@ -1987,6 +1990,12 @@ export const BurgerFragmentDoc = gql`
   }
   afspraken {
     ...Afspraak
+  }
+  huishouden {
+    id
+    burgers {
+      id
+    }
   }
 }
     ${RekeningFragmentDoc}
