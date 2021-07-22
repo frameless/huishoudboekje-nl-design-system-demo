@@ -2,7 +2,8 @@ import {ChevronDownIcon} from "@chakra-ui/icons";
 import {Heading, IconButton, Menu, MenuButton, MenuItem, MenuList, useDisclosure} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {useParams} from "react-router-dom";
+import {NavLink, useParams} from "react-router-dom";
+import Routes from "../../../config/routes";
 import {Huishouden, useGetHuishoudenQuery} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import {formatHuishoudenName} from "../../../utils/things";
@@ -27,6 +28,8 @@ const HuishoudenDetails = () => {
 				return <PageNotFound />;
 			}
 
+			const burgerIds: number[] = (huishouden.burgers || []).map(b => b.id!);
+
 			return (
 				<Page title={t("huishoudenName", {name: formatHuishoudenName(huishouden)})} menu={(
 					<Menu>
@@ -34,6 +37,7 @@ const HuishoudenDetails = () => {
 						<MenuList>
 							<MenuItem onClick={() => addBurgersModal.onOpen()}>{t("actions.addBurgers")}</MenuItem>
 							<MenuItem onClick={() => deleteBurgersModal.onOpen()}>{t("actions.deleteBurgers")}</MenuItem>
+							<NavLink to={Routes.RapportageBurger(burgerIds)}><MenuItem>{t("sidebar.rapportage")}</MenuItem></NavLink>
 						</MenuList>
 					</Menu>
 				)}>
