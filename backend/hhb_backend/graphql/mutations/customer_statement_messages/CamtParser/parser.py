@@ -1,5 +1,5 @@
 import os
-
+from datetime import datetime
 import xml.etree.ElementTree as ET
 
 def parse(src, encoding=None):
@@ -87,11 +87,43 @@ class Statement:
 
 
 class Transaction:
-    def __init__(self, ntryData, namespaces):
-        self.data = self.transactionDict(ntryData, namespaces)
+    def __init__(self, ntry, namespaces):
+        self.data = self.transactionDict(ntry, namespaces)
 
-    def transactionDict(self, ntryData, namespaces):
+    def transactionDict(self, ntry, namespaces):
         transaction = {}
+        transaction["transaction_details"] = ntry.find(".//AddtlNtryInf", namespaces=namespaces)
+        transaction["date"] = datetime.strptime(ntry.findtext("./ValDt/Dt", namespaces=namespaces), '%Y-%m-%d')
+        if ntry.findtext("./CdtDbtInd", namespaces=namespaces) == 'CRDT':
+            transaction["status"] = 'C'
+        else:
+            transaction["status"] = 'D'
+        transaction["amount"] = Amount(float(ntry.findtext("./Amt", namespaces=namespaces)),
+                                       ntry.find("./Amt", namespaces=namespaces).attrib["Ccy"],
+                                       transaction["status"])
+        transaction["id"] = ntry.findtext("./BkTxCd/Prtry/Cd", namespaces=namespaces)
+        if ntry.findtext(".//EndToEndId", namespaces=namespaces):
+            transaction["customer_reference"] = ntry.findtext(".//EndToEndId", namespaces=namespaces)
+        else:
+            transaction["customer_reference"] = ""
+        if ntry.findtext("./AcctSvcrRef", namespaces=namespaces):
+            extratemp1 = ntry.findtext("./AcctSvcrRef", namespaces=namespaces)
+        else:
+            extratemp1 = ""
+        if ntry.findtext("./NtryDtls/AddtlTxInf", namespaces=namespaces):
+            extratemp2 = ntry.findtext("./NtryDtls/AddtlTxInf", namespaces=namespaces)
+        else:
+            extratemp2 = ""
+        transaction["extra_details"] = extratemp1 + extratemp2
 
 
         return transaction
+
+
+class Amount():
+    def __init__(self, amnt, crncy, status):
+        self.amount = amnt
+        self.currency = crncy
+
+        if status == 'D':
+            self.amount = -self.amount
