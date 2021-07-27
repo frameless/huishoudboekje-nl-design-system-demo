@@ -12,6 +12,7 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     gebruikers_activiteit_entities,
     log_gebruikers_activiteit,
 )
+from hhb_backend.graphql.models import burger
 
 
 class DeleteHuishoudenBurger(graphene.Mutation):
@@ -22,15 +23,16 @@ class DeleteHuishoudenBurger(graphene.Mutation):
     ok = graphene.Boolean()
     huishouden = graphene.List(lambda: huishouden.Huishouden)
     previous = graphene.Field(lambda: huishouden.Huishouden)
+    burgerIds = graphene.List(lambda: burger.Burger)
 
     def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
         return dict(
             action=info.field_name,
             entities=gebruikers_activiteit_entities(
-                entity_type="burger", result=self, key="burger_id"
+                entity_type="burger", result=self.burgerIds, key="burgers"
             )
             + gebruikers_activiteit_entities(
-                entity_type="huishouden", result=self.huishouden, key="huishouden"
+                entity_type="huishouden", result=self.previous["id"], key="huishouden"
             ),
             before=dict(huishouden=self.previous),
             after=dict(huishouden=self.huishouden),
@@ -55,7 +57,6 @@ class DeleteHuishoudenBurger(graphene.Mutation):
 
             # assign burger to new huishouden
             params = {"huishouden_id": new_huishouden["id"]}
-
             response = requests.post(
                 f"{settings.HHB_SERVICES_URL}/burgers/{burger_id}",
                 json=params,
@@ -68,4 +69,5 @@ class DeleteHuishoudenBurger(graphene.Mutation):
             ok=True,
             huishouden=new_huishoudens,
             previous=previous,
+            burgerIds=burger_ids,
         )

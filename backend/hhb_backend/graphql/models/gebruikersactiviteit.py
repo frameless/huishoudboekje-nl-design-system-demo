@@ -16,6 +16,7 @@ import hhb_backend.graphql.models.organisatie as organisatie
 import hhb_backend.graphql.models.rekening as rekening
 import hhb_backend.graphql.models.rubriek as rubriek
 from hhb_backend.graphql.models.pageinfo import PageInfo
+import hhb_backend.graphql.models.huishouden as huishouden
 
 
 class GebruikersActiviteitMeta(graphene.ObjectType):
@@ -40,6 +41,7 @@ class GebruikersActiviteitSnapshot(graphene.ObjectType):
     organisatie = graphene.Field(lambda: organisatie.Organisatie)
     rubriek = graphene.Field(lambda: rubriek.Rubriek)
     transaction = graphene.Field(lambda: bank_transaction.BankTransaction)
+    huishouden = graphene.Field(lambda: huishouden.Huishouden)
 
     @classmethod
     def _resolve_snapshot(cls, root, entity_type: str, Model):
@@ -96,6 +98,10 @@ class GebruikersActiviteitSnapshot(graphene.ObjectType):
     def resolve_transaction(cls, root, _info):
         return cls._resolve_snapshot(root, "transaction", bank_transaction.BankTransaction)
 
+    @classmethod
+    def resolve_huishouden(cls, root, _info):
+        return cls._resolve_snapshot(root, "huishouden", huishouden.Huishouden)
+
 
 class GebruikersActiviteitEntity(graphene.ObjectType):
     entityType = graphene.String()
@@ -112,6 +118,7 @@ class GebruikersActiviteitEntity(graphene.ObjectType):
     rekening = graphene.Field(lambda: rekening.Rekening)
     rubriek = graphene.Field(lambda: rubriek.Rubriek)
     transaction = graphene.Field(lambda: bank_transaction.BankTransaction)
+    huishouden = graphene.Field(lambda: huishouden.Huishouden)
 
     @classmethod
     async def _resolve_entity(cls, root, entity_type: str, dataloader_name: str):
@@ -186,6 +193,12 @@ class GebruikersActiviteitEntity(graphene.ObjectType):
     async def resolve_transactie(cls, root, _info):
         return await cls._resolve_entity(
             root, entity_type="transactie", dataloader_name="bank_transactions_by_id"
+        )
+
+    @classmethod
+    async def resolve_huishouden(cls, root, _info):
+        return await cls._resolve_entity(
+            root, entity_type="huishouden", dataloader_name="huishoudens_by_id"
         )
 
 

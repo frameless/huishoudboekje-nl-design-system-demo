@@ -67,3 +67,27 @@ class GebruikersActiviteitenByAfsprakenLoader(SingleDataLoader):
                       "limit": response.json()["limit"]}
 
         return {self.model: response.json()["data"], "page_info": page_info}
+
+class GebruikersActiviteitenByHuishoudenLoader(SingleDataLoader):
+    model = "gebruikersactiviteiten"
+    service = settings.LOG_SERVICE_URL
+    filter_item = "filter_huishouden"
+
+    def get_by_ids(self, ids):
+        url = f"{self.service}/{self.model}/?{self.filter_item}={','.join([str(k) for k in ids])}"
+        response = requests.get(url)
+        if not response.ok:
+            raise GraphQLError(f"Upstream API responded: {response.text}")
+
+        return response.json()["data"]
+
+    def get_by_ids_paged(self, ids, start=1, limit=20, desc=False, sortingColumn="id"):
+        url = f"{self.service}/{self.model}/?{self.filter_item}={','.join([str(k) for k in ids])}&start={start}&limit={limit}&desc={desc}&sortingColumn={sortingColumn}"
+        response = requests.get(url)
+        if not response.ok:
+            raise GraphQLError(f"Upstream API responded: {response.text}")
+
+        page_info = {"count": response.json()["count"], "start": response.json()["start"],
+                      "limit": response.json()["limit"]}
+
+        return {self.model: response.json()["data"], "page_info": page_info}
