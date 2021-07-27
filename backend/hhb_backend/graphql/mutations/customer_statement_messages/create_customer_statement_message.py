@@ -29,7 +29,7 @@ class CreateCustomerStatementMessage(graphene.Mutation):
         file = Upload(required=True)
 
     ok = graphene.Boolean()
-    customerStatementMessages = graphene. List(lambda: CustomerStatementMessage)
+    customerStatementMessage = graphene. List(lambda: CustomerStatementMessage)
     journaalposten = graphene.List(lambda: journaalpost.Journaalpost)
 
     def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
@@ -42,10 +42,10 @@ class CreateCustomerStatementMessage(graphene.Mutation):
             )
             + gebruikers_activiteit_entities(
                 entity_type="transaction",
-                result=self.customerStatementMessages,
+                result=self.customerStatementMessage,
                 key="bank_transactions",
             ),
-            after=dict(customerStatementMessage=self.customerStatementMessages),
+            after=dict(customerStatementMessage=self.customerStatementMessage),
         )
 
     @staticmethod
@@ -58,7 +58,7 @@ class CreateCustomerStatementMessage(graphene.Mutation):
         except:
             csm_files = [mt940.parse(content)]
 
-        customerStatementMessages = []
+        customerStatementMessage = []
         journaalposten = []
 
         for csm_file in csm_files:
@@ -116,21 +116,21 @@ class CreateCustomerStatementMessage(graphene.Mutation):
             if post_response.status_code != 201:
                 raise GraphQLError(f"Upstream API responded: {post_response.text}")
 
-            customerStatementMessage = post_response.json()["data"]
+            customerStatementMessagetemp = post_response.json()["data"]
 
-            customerStatementMessage["bank_transactions"] = process_transactions(
-                customerStatementMessage["id"], csm_file.transactions
+            customerStatementMessagetemp["bank_transactions"] = process_transactions(
+                customerStatementMessagetemp["id"], csm_file.transactions
             )
 
-            customerStatementMessages.append(customerStatementMessage)
+            customerStatementMessage.append(customerStatementMessagetemp)
 
             # Try, if possible, to match banktransaction
-            journaalpostentemp = await automatisch_boeken.automatisch_boeken(customerStatementMessage["id"])
+            journaalpostentemp = await automatisch_boeken.automatisch_boeken(customerStatementMessagetemp["id"])
             journaalposten.extend(journaalpostentemp)
 
         return CreateCustomerStatementMessage(
             journaalposten=journaalposten,
-            customerStatementMessage=customerStatementMessages,
+            customerStatementMessage=customerStatementMessage,
             ok=True
         )
 
