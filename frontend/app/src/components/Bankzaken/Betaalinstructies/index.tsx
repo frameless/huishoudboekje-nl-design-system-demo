@@ -1,22 +1,28 @@
 import {DownloadIcon} from "@chakra-ui/icons";
-import {Box, Button, Divider, FormControl, FormLabel, IconButton, Input, Stack, Table, Tbody, Td, Text, Th, Thead, Tr} from "@chakra-ui/react";
+import {Box, Button, FormControl, FormLabel, HStack, Input, Stack, Text, useBreakpointValue} from "@chakra-ui/react";
 import React, {useState} from "react";
 import DatePicker from "react-datepicker";
 import {useTranslation} from "react-i18next";
 import Routes from "../../../config/routes";
-import {Export, useCreateExportOverschrijvingenMutation, useGetExportsQuery} from "../../../generated/graphql";
+import {Export, GetExportsDocument, useCreateExportOverschrijvingenMutation, useGetExportsQuery} from "../../../generated/graphql";
 import {DateRange} from "../../../models/models";
 import d from "../../../utils/dayjs";
 import Queryable from "../../../utils/Queryable";
 import useHandleMutation from "../../../utils/useHandleMutation";
 import {FormLeft, FormRight} from "../../Layouts/Forms";
+import Page from "../../Layouts/Page";
 import Section from "../../Layouts/Section";
 
 const Betaalinstructies = () => {
 	const {t} = useTranslation();
 	const handleMutation = useHandleMutation();
 	const $exports = useGetExportsQuery();
-	const [createExportOverschrijvingen, $createExportOverschrijvingen] = useCreateExportOverschrijvingenMutation();
+	const isMobile = useBreakpointValue([true, null, null, false]);
+	const [createExportOverschrijvingen, $createExportOverschrijvingen] = useCreateExportOverschrijvingenMutation({
+		refetchQueries: [
+			{query: GetExportsDocument},
+		],
+	});
 
 	const [dateRange, setDateRange] = useState<DateRange>({
 		from: d().startOf("day").toDate(),
@@ -29,7 +35,7 @@ const Betaalinstructies = () => {
 				startDatum: d(dateRange.from).format("YYYY-MM-DD"),
 				eindDatum: d(dateRange.through).format("YYYY-MM-DD"),
 			},
-		}), t("messages.exports.createSuccessMessage"), () => $exports.refetch());
+		}), t("messages.exports.createSuccessMessage"));
 	};
 
 	const onChangeStartDate = (value: [Date, Date]) => {
@@ -40,81 +46,80 @@ const Betaalinstructies = () => {
 	};
 
 	return (
-		<Section>
-			<Stack direction={["column", "row"]} spacing={5}>
+		<Page title={t("banking.exports.title")}>
+			<Section>
+				<Stack spacing={5}>
+					<FormLeft title={t("banking.createExport.title")} helperText={t("banking.createExport.helperText")} />
+					<FormRight>
+						<Stack direction={["column", "row"]} alignItems={"flex-end"}>
+							<FormControl flex={1}>
+								<FormLabel>{t("forms.common.fields.period")}</FormLabel>
+								<DatePicker dateFormat={"dd-MM-yyyy"} selectsRange={true} isClearable={true}
+									startDate={dateRange.from} endDate={dateRange.through} onChange={onChangeStartDate} customInput={<Input />} />
+							</FormControl>
+							<FormControl flex={1}>
+								<Button colorScheme={"primary"} isLoading={$createExportOverschrijvingen.loading} isDisabled={!(dateRange.from && dateRange.through)} onClick={onClickExportButton}>{t("actions.export")}</Button>
+							</FormControl>
+						</Stack>
+					</FormRight>
+				</Stack>
+			</Section>
+
+			<Section>
 				<FormLeft title={t("banking.exports.title")} helperText={t("banking.exports.helperText")} />
 				<FormRight>
-					<Stack direction={["column", "row"]} alignItems={"flex-end"}>
-						<FormControl flex={1}>
-							<FormLabel>{t("forms.common.fields.period")}</FormLabel>
-							<DatePicker dateFormat={"dd-MM-yyyy"} selectsRange={true} isClearable={true}
-								startDate={dateRange.from} endDate={dateRange.through}
-								onChange={onChangeStartDate} customInput={<Input />} />
-						</FormControl>
-						<FormControl flex={1}>
-							<Button colorScheme={"primary"} isLoading={$createExportOverschrijvingen.loading} isDisabled={!(dateRange.from && dateRange.through)} onClick={onClickExportButton}>{t("actions.export")}</Button>
-						</FormControl>
-					</Stack>
+					<Stack spacing={5}>
+						<Queryable query={$exports} children={(data) => {
+							const exports: Export[] = [...data.exports || []].sort((a: Export, b: Export) => {
+								return (a.timestamp && b.timestamp) ? (a.timestamp >= b.timestamp ? -1 : 1) : -1;
+							});
 
-					<Divider />
-
-					<Queryable query={$exports} children={(data) => {
-						const exports: Export[] = [...data.exports || []].sort((a: Export, b: Export) => {
-							return (a.timestamp && b.timestamp) ? (a.timestamp >= b.timestamp ? -1 : 1) : 1;
-						});
-
-						return (
-							<Table variant={"noLeftPadding"}>
-								<Thead>
-									<Tr>
-										<Th>{t("exports.period")}</Th>
-										<Th>{t("exports.nTransacties")}</Th>
-										<Th>{t("exports.dateCreated")}</Th>
-										<Th />
-									</Tr>
-								</Thead>
-								<Tbody>
-									{exports.map(e => {
+							return (
+								<Stack spacing={4}>
+									{exports.map((e) => {
 										const href = Routes.Export(e.id!);
 
 										return (
-											<Tr key={e.id} _hover={{bg: "gray.100"}}>
-												<Stack as={Td} direction={"row"} alignItems={"center"}>
-													<Stack fontSize={"sm"} flex={2} spacing={0}>
+											<HStack justify={"space-between"} key={e.id}>
+												<Stack>
+													<Stack flex={2} spacing={0}>
 														<Stack direction={"row"}>
-															<FormLabel>{t("van")}</FormLabel>
-															<Text>{d(e.startDatum).format("L")}</Text>
+															<FormLabel>{t("exports.dateCreated")}</FormLabel>
+															<Text fontSize={"sm"}>{d(e.timestamp).format("L LT")}</Text>
 														</Stack>
 														<Stack direction={"row"}>
-															<FormLabel>{t("tot")}</FormLabel>
-															<Text>{d(e.eindDatum).format("L")}</Text>
+															<FormLabel>{t("exports.period")}</FormLabel>
+															<Text fontSize={"sm"}>{d(e.startDatum).format("L")} - {d(e.eindDatum).format("L")}</Text>
+														</Stack>
+														<Stack direction={"row"}>
+															<FormLabel>{t("export.nOverschrijvingen")}</FormLabel>
+															<Text fontSize={"sm"}>{(e.overschrijvingen || []).length}</Text>
+														</Stack>
+														<Stack direction={"row"}>
+															<FormLabel>{t("checksum.sha265")}</FormLabel>
+															<Text fontSize={"sm"} maxWidth={["170px", "300px", "100%"]}>{e.sha256}</Text>
 														</Stack>
 													</Stack>
 												</Stack>
-												<Td>
-													<Box flex={1}>
-														{(e.overschrijvingen || []).length}
-													</Box>
-												</Td>
-												<Td>
-													<Box flex={1}>{d(e.timestamp).format("L LT")}</Box>
-												</Td>
-												<Td>
-													<Box flex={0}>
-														<IconButton size={"sm"} variant={"ghost"} icon={
-															<DownloadIcon />} aria-label={t("actions.download")} as={"a"} target={"_blank"} href={href} download={href} />
-													</Box>
-												</Td>
-											</Tr>
+												<Stack>
+													{!isMobile && (
+														<Box flex={0}>
+															<Button size={"sm"} leftIcon={<DownloadIcon />} as={"a"} target={"_blank"} href={href} download={href}>
+																{t("actions.download")}
+															</Button>
+														</Box>
+													)}
+												</Stack>
+											</HStack>
 										);
 									})}
-								</Tbody>
-							</Table>
-						);
-					}} />
+								</Stack>
+							);
+						}} />
+					</Stack>
 				</FormRight>
-			</Stack>
-		</Section>
+			</Section>
+		</Page>
 	);
 };
 

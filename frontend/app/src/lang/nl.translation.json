@@ -173,10 +173,9 @@
         "common": {
             "fields": {
                 "time": "Tijd",
-                "startDate": "Startdatum",
-                "endDate": "Einddatum",
                 "period": "Periode",
-                "date": "Datum"
+                "date": "Datum",
+                "startDate": "Startdatum"
             }
         },
         "burgers": {
@@ -366,7 +365,6 @@
     "burger": "Burger",
     "exports": {
         "period": "Periode",
-        "nTransacties": "Overschrijvingen",
         "dateCreated": "Aanmaakdatum"
     },
     "errors": {
@@ -387,11 +385,19 @@
         },
         "exports": {
             "title": "Betaalinstructies",
+            "helperText": "Overzicht met eerder gemaakte betaalinstructies. De nieuwste staat bovenaan."
+        },
+        "createExport": {
+            "title": "Nieuwe betaalinstructie",
             "helperText": "Exporteer een bestand met betaalinstructies voor verwerking in een bankierenapplicatie."
         }
     },
-    "van": "Van",
-    "tot": "Tot",
+    "export": {
+        "nOverschrijvingen": "Overschrijvingen"
+    },
+    "checksum": {
+        "sha265": "Controlegetal (SHA-265)"
+    },
     "filters": {
         "transactions": {
             "isCredit": {
@@ -401,17 +407,12 @@
                 "title": "Betaalrichting",
                 "choose": "- Kies een betaalrichting -"
             },
-            "type": {
-                "title": "Soort",
-                "onlyUnbooked": "Niet-afgeletterd"
-            },
             "pageSize": "Aantal transacties per pagina"
         }
     },
     "sections": {
         "filterOptions": {
-            "title": "Filteropties",
-            "helperText": "Selecteer een tijdsperiode, burger en/of rubriek om specifiekere gegevens in te zien."
+            "title": "Filteropties"
         }
     },
     "words": {
