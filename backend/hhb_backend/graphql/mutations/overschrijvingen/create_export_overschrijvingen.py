@@ -14,6 +14,7 @@ from hhb_backend.processen.overschrijvingen_planner import (
     PlannedOverschijvingenInput,
     get_planned_overschrijvingen,
 )
+import hashlib
 
 
 def create_json_payload_overschrijving(future_overschrijving, export_id) -> dict:
@@ -145,6 +146,12 @@ class CreateExportOverschrijvingen(graphene.Mutation):
                         tegen_rekeningen,
                         config_values,
                     ).decode(),
+                    "sha256": hashlib.sha256(create_export_string(
+                        future_overschrijvingen,
+                        afspraken,
+                        tegen_rekeningen,
+                        config_values,
+                    ).decode().encode()).hexdigest()
                 }
             ),
             headers={"Content-type": "application/json"},
