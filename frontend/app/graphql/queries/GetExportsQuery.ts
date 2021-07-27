@@ -1,16 +1,11 @@
 import {gql} from "@apollo/client";
+import {ExportFragment} from "../fragments/ExportFragment";
 
 export const GetExportsQuery = gql`
     query getExports {
         exports {
-            id
-            naam
-            timestamp
-            startDatum
-            eindDatum
-            overschrijvingen{
-                id
-            }
+            ...Export
         }
     }
+    ${ExportFragment}
 `;

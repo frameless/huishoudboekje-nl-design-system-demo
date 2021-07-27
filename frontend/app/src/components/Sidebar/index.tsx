@@ -22,7 +22,7 @@ const Sidebar: React.FC<BoxProps> = (props) => {
 						<Stack spacing={1} borderLeft={"1px solid"} borderLeftColor={"gray.400"} pl={"21px"}>
 							<SidebarLink size={"sm"} to={Routes.Transacties}>{t("sidebar.transacties")}</SidebarLink>
 							<SidebarLink size={"sm"} to={Routes.Bankafschriften}>{t("sidebar.bankafschriften")}</SidebarLink>
-							<SidebarLink size={"sm"} to={Routes.Overschrijvingen}>{t("sidebar.betaalinstructies")}</SidebarLink>
+							<SidebarLink size={"sm"} to={Routes.Betaalinstructies}>{t("sidebar.betaalinstructies")}</SidebarLink>
 						</Stack>
 					</Box>
 				</Stack>

@@ -89,7 +89,7 @@ const App = () => {
 						<Route exact path={Routes.Bankzaken} component={() => <Redirect to={Routes.Transacties} />} />
 						<Route path={Routes.Transacties} component={Transactions} />
 						<Route path={Routes.Bankafschriften} component={CustomerStatementMessages} />
-						<Route path={Routes.Overschrijvingen} component={Betaalinstructies} />
+						<Route path={Routes.Betaalinstructies} component={Betaalinstructies} />
 						<Route path={Routes.Configuratie} component={Configuratie} />
 						<Route path={Routes.Rapportage} component={Rapportage} />
 						<Route path={Routes.Gebeurtenissen} component={Gebeurtenissen} />

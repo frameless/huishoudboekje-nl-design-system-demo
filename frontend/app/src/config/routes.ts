@@ -6,12 +6,12 @@ export enum RouteNames {
 	organisaties = "organisaties",
 	bankzaken = "bankzaken",
 	transacties = "transacties",
-	overschrijvingen = "overschrijvingen",
+	betaalinstructie = "betaalinstructie",
+	betaalinstructies = "betaalinstructies",
 	bankafschriften = "bankafschriften",
 	rapportage = "rapportage",
 	gebeurtenissen = "gebeurtenissen",
 	configuratie = "configuratie",
-	betaalinstructie = "betaalinstructie",
 	status = "status",
 
 	// Sub routes
@@ -48,7 +48,7 @@ const Routes = {
 	Bankzaken: `/${RouteNames.bankzaken}`,
 	Transacties: `/${RouteNames.bankzaken}/${RouteNames.transacties}`,
 	Bankafschriften: `/${RouteNames.bankzaken}/${RouteNames.bankafschriften}`,
-	Overschrijvingen: `/${RouteNames.bankzaken}/${RouteNames.overschrijvingen}/${RouteNames.export}`,
+	Betaalinstructies: `/${RouteNames.bankzaken}/${RouteNames.betaalinstructies}/${RouteNames.export}`,
 	Configuratie: `/${RouteNames.configuratie}`,
 	Rapportage: `/${RouteNames.rapportage}`,
 	RapportageBurger: (burgerIds: number[]) => `/${RouteNames.rapportage}?burgerId=${burgerIds.join(",")}`,

@@ -45,6 +45,12 @@ export type AddAfspraakZoekterm = {
   matchingAfspraken?: Maybe<Array<Maybe<Afspraak>>>;
 };
 
+export type AddHuishoudenBurger = {
+  ok?: Maybe<Scalars['Boolean']>;
+  huishouden?: Maybe<Huishouden>;
+  previous?: Maybe<Huishouden>;
+};
+
 /** GraphQL Afspraak model  */
 export type Afspraak = {
   id?: Maybe<Scalars['Int']>;
@@ -147,6 +153,25 @@ export type Burger = {
   rekeningen?: Maybe<Array<Maybe<Rekening>>>;
   afspraken?: Maybe<Array<Maybe<Afspraak>>>;
   gebruikersactiviteiten?: Maybe<Array<Maybe<GebruikersActiviteit>>>;
+  huishouden?: Maybe<Huishouden>;
+};
+
+export type BurgerFilter = {
+  OR?: Maybe<BurgerFilter>;
+  AND?: Maybe<BurgerFilter>;
+  id?: Maybe<ComplexFilterType>;
+  telefoonnummer?: Maybe<ComplexFilterType>;
+  email?: Maybe<ComplexFilterType>;
+  geboortedatum?: Maybe<ComplexFilterType>;
+  iban?: Maybe<ComplexFilterType>;
+  achternaam?: Maybe<ComplexFilterType>;
+  huisnummer?: Maybe<ComplexFilterType>;
+  postcode?: Maybe<ComplexFilterType>;
+  straatnaam?: Maybe<ComplexFilterType>;
+  voorletters?: Maybe<ComplexFilterType>;
+  voornamen?: Maybe<ComplexFilterType>;
+  plaatsnaam?: Maybe<ComplexFilterType>;
+  huishoudenId?: Maybe<ComplexFilterType>;
 };
 
 export type BurgersPaged = {
@@ -202,6 +227,7 @@ export type CreateAfspraakInput = {
   omschrijving: Scalars['String'];
   bedrag: Scalars['Bedrag'];
   validFrom?: Maybe<Scalars['String']>;
+  validThrough?: Maybe<Scalars['String']>;
 };
 
 export type CreateBurger = {
@@ -221,6 +247,7 @@ export type CreateBurgerInput = {
   voorletters?: Maybe<Scalars['String']>;
   voornamen?: Maybe<Scalars['String']>;
   plaatsnaam?: Maybe<Scalars['String']>;
+  huishouden?: Maybe<HuishoudenInput>;
 };
 
 export type CreateBurgerRekening = {
@@ -242,6 +269,15 @@ export type CreateCustomerStatementMessage = {
 export type CreateExportOverschrijvingen = {
   ok?: Maybe<Scalars['Boolean']>;
   export?: Maybe<Export>;
+};
+
+export type CreateHuishouden = {
+  ok?: Maybe<Scalars['Boolean']>;
+  huishouden?: Maybe<Huishouden>;
+};
+
+export type CreateHuishoudenInput = {
+  burgerIds?: Maybe<Array<Maybe<Scalars['Int']>>>;
 };
 
 /** Create a Journaalpost with an Afspraak */
@@ -361,6 +397,17 @@ export type DeleteCustomerStatementMessage = {
   previous?: Maybe<CustomerStatementMessage>;
 };
 
+export type DeleteHuishouden = {
+  ok?: Maybe<Scalars['Boolean']>;
+  previous?: Maybe<Huishouden>;
+};
+
+export type DeleteHuishoudenBurger = {
+  ok?: Maybe<Scalars['Boolean']>;
+  huishouden?: Maybe<Array<Maybe<Huishouden>>>;
+  previous?: Maybe<Huishouden>;
+};
+
 /** Delete journaalpost by id  */
 export type DeleteJournaalpost = {
   ok?: Maybe<Scalars['Boolean']>;
@@ -392,6 +439,7 @@ export type Export = {
   xmldata?: Maybe<Scalars['String']>;
   startDatum?: Maybe<Scalars['String']>;
   eindDatum?: Maybe<Scalars['String']>;
+  sha256?: Maybe<Scalars['String']>;
 };
 
 export type Gebruiker = {
@@ -461,6 +509,21 @@ export type Grootboekrekening = {
   parent?: Maybe<Grootboekrekening>;
   children?: Maybe<Array<Maybe<Grootboekrekening>>>;
   rubriek?: Maybe<Rubriek>;
+};
+
+/** GraphQL Huishouden model  */
+export type Huishouden = {
+  id?: Maybe<Scalars['Int']>;
+  burgers?: Maybe<Array<Maybe<Burger>>>;
+};
+
+export type HuishoudenInput = {
+  id?: Maybe<Scalars['Int']>;
+};
+
+export type HuishoudensPaged = {
+  huishoudens?: Maybe<Array<Maybe<Huishouden>>>;
+  pageInfo?: Maybe<PageInfo>;
 };
 
 /** Journaalpost model */
@@ -568,6 +631,10 @@ export type RootMutation = {
   deleteConfiguratie?: Maybe<DeleteConfiguratie>;
   createExportOverschrijvingen?: Maybe<CreateExportOverschrijvingen>;
   startAutomatischBoeken?: Maybe<StartAutomatischBoeken>;
+  createHuishouden?: Maybe<CreateHuishouden>;
+  deleteHuishouden?: Maybe<DeleteHuishouden>;
+  addHuishoudenBurger?: Maybe<AddHuishoudenBurger>;
+  deleteHuishoudenBurger?: Maybe<DeleteHuishoudenBurger>;
 };
 
 
@@ -588,6 +655,7 @@ export type RootMutationUpdateBurgerArgs = {
   achternaam?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
   geboortedatum?: Maybe<Scalars['String']>;
+  huishouden?: Maybe<HuishoudenInput>;
   huisnummer?: Maybe<Scalars['String']>;
   id: Scalars['Int'];
   plaatsnaam?: Maybe<Scalars['String']>;
@@ -786,6 +854,32 @@ export type RootMutationCreateExportOverschrijvingenArgs = {
   startDatum?: Maybe<Scalars['String']>;
 };
 
+
+/** The root of all mutations  */
+export type RootMutationCreateHuishoudenArgs = {
+  input?: Maybe<CreateHuishoudenInput>;
+};
+
+
+/** The root of all mutations  */
+export type RootMutationDeleteHuishoudenArgs = {
+  id: Scalars['Int'];
+};
+
+
+/** The root of all mutations  */
+export type RootMutationAddHuishoudenBurgerArgs = {
+  burgerIds: Array<Maybe<Scalars['Int']>>;
+  huishoudenId: Scalars['Int'];
+};
+
+
+/** The root of all mutations  */
+export type RootMutationDeleteHuishoudenBurgerArgs = {
+  burgerIds: Array<Maybe<Scalars['Int']>>;
+  huishoudenId: Scalars['Int'];
+};
+
 /** The root of all queries  */
 export type RootQuery = {
   afspraak?: Maybe<Afspraak>;
@@ -816,6 +910,9 @@ export type RootQuery = {
   gebruikersactiviteiten?: Maybe<Array<Maybe<GebruikersActiviteit>>>;
   gebruikersactiviteitenPaged?: Maybe<GebruikersActiviteitenPaged>;
   gebruiker?: Maybe<Gebruiker>;
+  huishouden?: Maybe<Huishouden>;
+  huishoudens?: Maybe<Array<Maybe<Huishouden>>>;
+  huishoudensPaged?: Maybe<HuishoudensPaged>;
 };
 
 
@@ -990,6 +1087,27 @@ export type RootQueryGebruikersactiviteitenPagedArgs = {
   afsprakenIds?: Maybe<Array<Maybe<Scalars['Int']>>>;
 };
 
+
+/** The root of all queries  */
+export type RootQueryHuishoudenArgs = {
+  id: Scalars['Int'];
+};
+
+
+/** The root of all queries  */
+export type RootQueryHuishoudensArgs = {
+  ids?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  filters?: Maybe<BurgerFilter>;
+};
+
+
+/** The root of all queries  */
+export type RootQueryHuishoudensPagedArgs = {
+  start?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+  filters?: Maybe<BurgerFilter>;
+};
+
 /** GraphQL Rubriek model */
 export type Rubriek = {
   id?: Maybe<Scalars['Int']>;
@@ -1090,6 +1208,11 @@ export type BurgerFragment = (
 );
 
 export type CustomerStatementMessageFragment = Pick<CustomerStatementMessage, 'id' | 'filename' | 'uploadDate' | 'accountIdentification' | 'closingAvailableFunds' | 'closingBalance' | 'forwardAvailableBalance' | 'openingBalance' | 'relatedReference' | 'sequenceNumber' | 'transactionReferenceNumber'>;
+
+export type ExportFragment = (
+  Pick<Export, 'id' | 'naam' | 'timestamp' | 'startDatum' | 'eindDatum' | 'sha256'>
+  & { overschrijvingen?: Maybe<Array<Maybe<Pick<Overschrijving, 'id'>>>> }
+);
 
 export type GebruikerFragment = Pick<Gebruiker, 'email'>;
 
@@ -1256,6 +1379,20 @@ export type CreateOrganisatieRekeningMutationVariables = Exact<{
 export type CreateOrganisatieRekeningMutation = { createOrganisatieRekening?: Maybe<(
     Pick<CreateOrganisatieRekening, 'ok'>
     & { rekening?: Maybe<RekeningFragment> }
+  )> };
+
+export type CreateRubriekMutationVariables = Exact<{
+  naam?: Maybe<Scalars['String']>;
+  grootboekrekening?: Maybe<Scalars['String']>;
+}>;
+
+
+export type CreateRubriekMutation = { createRubriek?: Maybe<(
+    Pick<CreateRubriek, 'ok'>
+    & { rubriek?: Maybe<(
+      Pick<Rubriek, 'id' | 'naam'>
+      & { grootboekrekening?: Maybe<GrootboekrekeningFragment> }
+    )> }
   )> };
 
 export type DeleteOrganisatieMutationVariables = Exact<{
@@ -1499,10 +1636,7 @@ export type GetCsmsQuery = { customerStatementMessages?: Maybe<Array<Maybe<Custo
 export type GetExportsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetExportsQuery = { exports?: Maybe<Array<Maybe<(
-    Pick<Export, 'id' | 'naam' | 'timestamp' | 'startDatum' | 'eindDatum'>
-    & { overschrijvingen?: Maybe<Array<Maybe<Pick<Overschrijving, 'id'>>>> }
-  )>>> };
+export type GetExportsQuery = { exports?: Maybe<Array<Maybe<ExportFragment>>> };
 
 export type GetGebeurtenissenQueryVariables = Exact<{
   limit: Scalars['Int'];
@@ -1725,6 +1859,19 @@ export const CustomerStatementMessageFragmentDoc = gql`
   relatedReference
   sequenceNumber
   transactionReferenceNumber
+}
+    `;
+export const ExportFragmentDoc = gql`
+    fragment Export on Export {
+  id
+  naam
+  timestamp
+  startDatum
+  eindDatum
+  sha256
+  overschrijvingen {
+    id
+  }
 }
     `;
 export const GebruikerFragmentDoc = gql`
@@ -2251,6 +2398,47 @@ export function useCreateOrganisatieRekeningMutation(baseOptions?: Apollo.Mutati
 export type CreateOrganisatieRekeningMutationHookResult = ReturnType<typeof useCreateOrganisatieRekeningMutation>;
 export type CreateOrganisatieRekeningMutationResult = Apollo.MutationResult<CreateOrganisatieRekeningMutation>;
 export type CreateOrganisatieRekeningMutationOptions = Apollo.BaseMutationOptions<CreateOrganisatieRekeningMutation, CreateOrganisatieRekeningMutationVariables>;
+export const CreateRubriekDocument = gql`
+    mutation createRubriek($naam: String, $grootboekrekening: String) {
+  createRubriek(naam: $naam, grootboekrekeningId: $grootboekrekening) {
+    ok
+    rubriek {
+      id
+      naam
+      grootboekrekening {
+        ...Grootboekrekening
+      }
+    }
+  }
+}
+    ${GrootboekrekeningFragmentDoc}`;
+export type CreateRubriekMutationFn = Apollo.MutationFunction<CreateRubriekMutation, CreateRubriekMutationVariables>;
+
+/**
+ * __useCreateRubriekMutation__
+ *
+ * To run a mutation, you first call `useCreateRubriekMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateRubriekMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createRubriekMutation, { data, loading, error }] = useCreateRubriekMutation({
+ *   variables: {
+ *      naam: // value for 'naam'
+ *      grootboekrekening: // value for 'grootboekrekening'
+ *   },
+ * });
+ */
+export function useCreateRubriekMutation(baseOptions?: Apollo.MutationHookOptions<CreateRubriekMutation, CreateRubriekMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateRubriekMutation, CreateRubriekMutationVariables>(CreateRubriekDocument, options);
+      }
+export type CreateRubriekMutationHookResult = ReturnType<typeof useCreateRubriekMutation>;
+export type CreateRubriekMutationResult = Apollo.MutationResult<CreateRubriekMutation>;
+export type CreateRubriekMutationOptions = Apollo.BaseMutationOptions<CreateRubriekMutation, CreateRubriekMutationVariables>;
 export const DeleteOrganisatieDocument = gql`
     mutation deleteOrganisatie($id: Int!) {
   deleteOrganisatie(id: $id) {
@@ -3286,17 +3474,10 @@ export type GetCsmsQueryResult = Apollo.QueryResult<GetCsmsQuery, GetCsmsQueryVa
 export const GetExportsDocument = gql`
     query getExports {
   exports {
-    id
-    naam
-    timestamp
-    startDatum
-    eindDatum
-    overschrijvingen {
-      id
-    }
+    ...Export
   }
 }
-    `;
+    ${ExportFragmentDoc}`;
 
 /**
  * __useGetExportsQuery__
