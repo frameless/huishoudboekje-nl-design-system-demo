@@ -132,6 +132,12 @@ class CreateExportOverschrijvingen(graphene.Mutation):
         }
 
         today = datetime.now(tz=tz.tzlocal()).replace(microsecond=0)
+        xml_string = create_export_string(
+                        future_overschrijvingen,
+                        afspraken,
+                        tegen_rekeningen,
+                        config_values,
+                    ).decode()
         export_response = requests.post(
             f"{settings.HHB_SERVICES_URL}/export/",
             data=json.dumps(
@@ -140,18 +146,8 @@ class CreateExportOverschrijvingen(graphene.Mutation):
                     "timestamp": today.isoformat(),
                     "start_datum": start_datum_str,
                     "eind_datum": eind_datum_str,
-                    "xmldata": create_export_string(
-                        future_overschrijvingen,
-                        afspraken,
-                        tegen_rekeningen,
-                        config_values,
-                    ).decode(),
-                    "sha256": hashlib.sha256(create_export_string(
-                        future_overschrijvingen,
-                        afspraken,
-                        tegen_rekeningen,
-                        config_values,
-                    ).decode().encode()).hexdigest()
+                    "xmldata": xml_string,
+                    "sha256": hashlib.sha256(xml_string.encode()).hexdigest()
                 }
             ),
             headers={"Content-type": "application/json"},
