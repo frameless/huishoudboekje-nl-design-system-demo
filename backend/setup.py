@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name='backend',
     version='0.1.0',
-    packages=['hhb_backend'],
+    packages=['hhb_backend', 'camtParser'],
     scripts=[],
     url='',
     description='HuishoudBoekje GraphQL backend',
