@@ -2,8 +2,8 @@ import {AddIcon, CheckIcon, WarningIcon} from "@chakra-ui/icons";
 import {Box, Button, HStack, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spinner, Stack, Text} from "@chakra-ui/react";
 import React, {useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
-import { IoMdHourglass } from "react-icons/io";
-import {useCreateCustomerStatementMessageMutation} from "../../../generated/graphql";
+import {IoMdHourglass} from "react-icons/io";
+import {GetCsmsDocument, useCreateCustomerStatementMessageMutation} from "../../../generated/graphql";
 import {truncateText} from "../../../utils/things";
 
 enum UploadState {
@@ -30,6 +30,9 @@ const CsmUploadModal: React.FC<CsmUploadModalProps> = ({onClose}) => {
 		context: {
 			method: "fileUpload",
 		},
+		refetchQueries: [
+			{query: GetCsmsDocument},
+		],
 		onCompleted: (options) => {
 			console.info("Done uploading", options.createCustomerStatementMessage?.customerStatementMessage?.filename);
 		},
