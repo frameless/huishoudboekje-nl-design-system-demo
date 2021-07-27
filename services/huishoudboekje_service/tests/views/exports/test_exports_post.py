@@ -79,7 +79,8 @@ def test_exports_post_new_export(client, session):
 		</PmtInf>
 	</CstmrCdtTrfInitn>
 </Document>
-'''
+''',
+    "sha256":"88d84d6df3eba23d5e494e8b84c364d194bd6232ead459a1711124e60d983aba"
     }
     response = client.post('/export/', json=export_dict)
     assert response.status_code == 201

@@ -16,6 +16,7 @@ class Export(graphene.ObjectType):
     xmldata = graphene.String()
     start_datum = graphene.String()
     eind_datum = graphene.String()
+    sha256 = graphene.String()
 
     def resolve_timestamp(root, info):
         value = root.get('timestamp')

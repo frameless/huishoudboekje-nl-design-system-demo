@@ -13,6 +13,7 @@ class Export(db.Model):
     xmldata = Column(Text)
     start_datum = Column(Date)
     eind_datum = Column(Date)
+    sha256 = Column(String)
 
     overschrijvingen = relationship("Overschrijving", back_populates="export")
 
