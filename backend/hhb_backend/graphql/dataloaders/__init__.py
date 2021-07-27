@@ -32,7 +32,6 @@ class HHBDataLoader:
         # Burgers
         self.burgers_by_id = BurgersByIdLoader(loop=loop)
         self.burgers_by_huishouden = BurgersByHuishoudenLoader(loop=loop)
-        self.burgers_by_ids = BurgersByIdsLoader(loop=loop)
 
         # Organisaties
         self.organisaties_by_id = OrganisatieByIdLoader(loop=loop)

@@ -1,7 +1,7 @@
 """ Rekening model as used in GraphQL queries """
 import graphene
 from flask import request
-import hhb_backend.graphql.models.burger as burger
+from hhb_backend.graphql.models import burger
 import hhb_backend.graphql.models.organisatie as organisatie
 import hhb_backend.graphql.models.afspraak as afspraak
 
