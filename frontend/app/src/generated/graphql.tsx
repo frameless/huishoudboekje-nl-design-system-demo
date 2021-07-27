@@ -1235,7 +1235,10 @@ export type GebruikersactiviteitFragment = (
     )>, rekening?: Maybe<Pick<Rekening, 'id' | 'iban' | 'rekeninghouder'>>, customerStatementMessage?: Maybe<(
       Pick<CustomerStatementMessage, 'id' | 'filename'>
       & { bankTransactions?: Maybe<Array<Maybe<Pick<BankTransaction, 'id'>>>> }
-    )>, configuratie?: Maybe<Pick<Configuratie, 'id' | 'waarde'>> }
+    )>, configuratie?: Maybe<Pick<Configuratie, 'id' | 'waarde'>>, rubriek?: Maybe<(
+      Pick<Rubriek, 'id' | 'naam'>
+      & { grootboekrekening?: Maybe<Pick<Grootboekrekening, 'naam'>> }
+    )> }
   )>>>, meta?: Maybe<Pick<GebruikersActiviteitMeta, 'userAgent' | 'ip' | 'applicationVersion'>> }
 );
 
@@ -1876,6 +1879,13 @@ export const GebruikersactiviteitFragmentDoc = gql`
     configuratie {
       id
       waarde
+    }
+    rubriek {
+      id
+      naam
+      grootboekrekening {
+        naam
+      }
     }
   }
   meta {

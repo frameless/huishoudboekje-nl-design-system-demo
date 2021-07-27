@@ -41,6 +41,13 @@ export const GebruikersactiviteitFragment = gql`
                 id 
                 waarde
             }
+            rubriek {
+                id
+                naam
+                grootboekrekening {
+                    naam
+                }
+            }
         }
 #       snapshotBefore{
 #           burger{id}

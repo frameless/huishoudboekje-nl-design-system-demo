@@ -514,6 +514,7 @@
     "unknownCount": "een onbekend aantal",
     "unknownIban": "Onbekende IBAN",
     "unknownRekeninghouder": "Onbekende rekeninghouder",
+    "unknownRubriek": "Onbekende rubriek",
     "auditLog": {
         "unknown": "Onbekende gebeurtenis",
         "viewOrganisatie": "{{gebruiker}} bekeek <linkOrganisatie>{{organisatie}}</linkOrganisatie>.",
@@ -545,9 +546,9 @@
         "createJournaalpostGrootboekrekening": "{{gebruiker}} letterde een transactie af op <strong>{{rubriek}}</strong>",
         "updateJournaalpostGrootboekrekening": "{{gebruiker}} wijzigde een op een rubriek afgeletterde transactie. Nieuwe rubriek: <strong>{{rubriek}}</strong>",
         "deleteJournaalpost": "{{gebruiker}} maakte een aflettering ongedaan.",
-        "createRubriek": "{{gebruiker}} voegde <strong>{{rubriek}}</strong> toe.",
-        "updateRubriek": "{{gebruiker}} wijzigde <strong>{{rubriek}}</strong>.",
-        "deleteRubriek": "{{gebruiker}} verwijderde <strong>{{rubriek}}</strong>.",
+        "createRubriek": "{{gebruiker}} voegde rubriek <strong>{{rubriek}}</strong> toe.",
+        "updateRubriek": "{{gebruiker}} wijzigde rubriek <strong>{{rubriek}}</strong>.",
+        "deleteRubriek": "{{gebruiker}} verwijderde rubriek <strong>{{rubriek}}</strong>.",
         "createConfiguratie": "{{gebruiker}} voegde configuratie <strong>{{configuratieId}}</strong> met waarde <strong>{{configuratieWaarde}}</strong> toe.",
         "updateConfiguratie": "{{gebruiker}} wijzigde configuratie <strong>{{configuratieId}}</strong> naar waarde <strong>{{configuratieWaarde}}</strong>.",
         "deleteConfiguratie": "{{gebruiker}} verwijderde configuratie <strong>{{configuratieId}}</strong>.",
@@ -565,6 +566,8 @@
         "addHuishoudenBurger": "{{gebruiker}} voegde een of meerdere burgers toe aan <linkHuishouden>{{huishouden}}</linkHuishouden>.",
         "deleteHuishoudenBurger": "{{gebruiker}} verwijderde een of meerdere burgers uit <linkHuishouden>{{huishouden}}</linkHuishouden>."
     },
+    "unknownOs": "Onbekend besturingssysteem",
+    "unknownBrowser": "Onbekende browser",
     "huishoudenName": "Huishouden {{name}}",
     "huishoudens": {
         "title": "Huishoudens"

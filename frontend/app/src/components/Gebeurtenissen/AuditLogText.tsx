@@ -21,6 +21,7 @@ const AuditLogText: React.FC<TextProps & {g: GebruikersActiviteit}> = ({g, ...pr
 	const csmId = entities.find(e => e.entityType ==="customerStatementMessage")?.entityId;
 	const rekening = entities.find(e => e.entityType === "rekening")?.rekening;
 	const configuratie = entities.find(e => e.entityType === "configuratie")?.configuratie;
+	const rubriek = entities.find(e => e.entityType === "rubriek")?.rubriek;
 
 	const burgerName = formatBurgerName(burger);
 	const components = {
@@ -47,6 +48,7 @@ const AuditLogText: React.FC<TextProps & {g: GebruikersActiviteit}> = ({g, ...pr
 		rekeninghouder: rekening?.rekeninghouder || t("unknownRekeninghouder"),
 		configuratieId: configuratie?.id || t("unknown"),
 		configuratieWaarde: configuratie?.waarde || t("unknown"),
+		rubriek: rubriek?.naam || t("unknownRubriek"),
 	};
 
 	const auditLogTextElement = auditLogTexts(values, components, action);
