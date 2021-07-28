@@ -8,7 +8,7 @@ import requests
 from graphene_file_upload.scalars import Upload
 import mt940
 from graphql import GraphQLError
-import camtParser
+from hhb_backend.camtParser import parser
 
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.models.customer_statement_message import (
@@ -54,7 +54,7 @@ class CreateCustomerStatementMessage(graphene.Mutation):
         content = file.stream.read()
 
         if file.filename.lower().endswith('.xml'):
-            csm_files = camtParser.parse(content)
+            csm_files = parser.parse(content)
         else:
             csm_files = [mt940.parse(content)]
 
