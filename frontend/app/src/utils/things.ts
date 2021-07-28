@@ -62,16 +62,24 @@ export const sortBankTransactions = (a: BankTransaction, b: BankTransaction) => 
 };
 
 export const formatBurgerName = (burger: Burger | undefined, fullName = true): string => {
-	if (fullName) {
-		return [burger?.voornamen, burger?.achternaam].join(" ");
+	if(!burger){
+		return "?";
 	}
 
-	const voorletters = burger?.voorletters?.replace(/\./g, "").split("").join(". ") + ".";
-	return [voorletters, burger?.achternaam].join(" ");
+	const {voornamen, achternaam, voorletters} = burger;
+
+	if (fullName) {
+		return [voornamen, achternaam].join(" ");
+	}
+
+	return [
+		voorletters?.replace(/\./g, "").split("").join(". ") + ".",
+		achternaam
+	].join(" ");
 };
 
-export const formatHuishoudenName = (huishouden: Huishouden): string => {
-	const allBurgers = (huishouden.burgers || []).map(b => b.achternaam);
+export const formatHuishoudenName = (huishouden: Huishouden | undefined): string => {
+	const allBurgers = (huishouden?.burgers || []).map(b => b.achternaam);
 
 	/* Filter out double last names. */
 	const burgerLastNames = Array.from(new Set(allBurgers));

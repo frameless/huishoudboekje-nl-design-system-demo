@@ -1229,7 +1229,10 @@ export type GebruikersactiviteitFragment = (
   Pick<GebruikersActiviteit, 'id' | 'timestamp' | 'gebruikerId' | 'action'>
   & { entities?: Maybe<Array<Maybe<(
     Pick<GebruikersActiviteitEntity, 'entityType' | 'entityId'>
-    & { burger?: Maybe<Pick<Burger, 'id' | 'voorletters' | 'voornamen' | 'achternaam'>>, organisatie?: Maybe<OrganisatieFragment>, afspraak?: Maybe<(
+    & { huishouden?: Maybe<(
+      Pick<Huishouden, 'id'>
+      & { burgers?: Maybe<Array<Maybe<Pick<Burger, 'id' | 'voorletters' | 'voornamen' | 'achternaam'>>>> }
+    )>, burger?: Maybe<Pick<Burger, 'id' | 'voorletters' | 'voornamen' | 'achternaam'>>, organisatie?: Maybe<OrganisatieFragment>, afspraak?: Maybe<(
       Pick<Afspraak, 'id'>
       & { organisatie?: Maybe<OrganisatieFragment> }
     )>, rekening?: Maybe<Pick<Rekening, 'id' | 'iban' | 'rekeninghouder'>>, customerStatementMessage?: Maybe<(
@@ -1849,6 +1852,15 @@ export const GebruikersactiviteitFragmentDoc = gql`
   entities {
     entityType
     entityId
+    huishouden {
+      id
+      burgers {
+        id
+        voorletters
+        voornamen
+        achternaam
+      }
+    }
     burger {
       id
       voorletters

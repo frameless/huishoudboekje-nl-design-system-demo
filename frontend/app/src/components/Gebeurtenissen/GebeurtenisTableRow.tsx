@@ -1,4 +1,4 @@
-import {HStack, Stack, Td, Text, Tooltip, Tr} from "@chakra-ui/react";
+import {HStack, Stack, Td, Text, Tr} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {FiActivity} from "react-icons/all";
@@ -19,19 +19,17 @@ const GebeurtenisTableRow: React.FC<{gebeurtenis: GebruikersActiviteit}> = ({geb
 	return (
 		<Tr alignItems={"center"} key={g.id}>
 			<Td>
-				<Tooltip label={`${g.id}`} placement={"left"} hasArrow>
-					<HStack>
-						<RoundIcon display={["none", null, "flex"]}>
-							<FiActivity />
-						</RoundIcon>
-						<Stack spacing={1}>
-							<AuditLogText g={g} />
-							<Text fontSize={"sm"} color={"gray.500"}>
-								{[d(g.timestamp).format("LL LT"), osLabel, browserLabel].join(" - ")}
-							</Text>
-						</Stack>
-					</HStack>
-				</Tooltip>
+				<HStack>
+					<RoundIcon display={["none", null, "flex"]}>
+						<FiActivity />
+					</RoundIcon>
+					<Stack spacing={1}>
+						<AuditLogText g={g} />
+						<Text fontSize={"sm"} color={"gray.500"}>
+							{["#" + g.id, d(g.timestamp).format("LL LT"), osLabel, browserLabel].join(" - ")}
+						</Text>
+					</Stack>
+				</HStack>
 			</Td>
 		</Tr>
 	);

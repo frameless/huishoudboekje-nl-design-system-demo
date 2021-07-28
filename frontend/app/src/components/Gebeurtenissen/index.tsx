@@ -12,7 +12,7 @@ import GebeurtenissenTableView from "./GebeurtenissenTableView";
 const Gebeurtenissen = () => {
 	const {t} = useTranslation();
 	const {setTotal, pageSize, offset, PaginationButtons} = usePagination({
-		pageSize: 50
+		pageSize: 25
 	});
 
 	const $gebeurtenissen = useGetGebeurtenissenQuery({

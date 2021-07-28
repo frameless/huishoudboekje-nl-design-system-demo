@@ -23,6 +23,7 @@ export const auditLogTexts = (values, components, action) => {
 		bankTransactions: () => <Trans i18nKey={"auditLog.viewTransactions"} values={values} components={components} />,
 		bankTransactionsPaged: () => <Trans i18nKey={"auditLog.viewTransactions"} values={values} components={components} />,
 		exports: () => <Trans i18nKey={"auditLog.viewExports"} values={values} components={components} />,
+		exportBrieven: () => <Trans i18nKey={"auditLog.exportBrieven"} values={values} components={components} />,
 		configuraties: () => <Trans i18nKey={"auditLog.viewConfiguraties"} values={values} components={components} />,
 
 		// Mutations

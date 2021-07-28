@@ -10,6 +10,15 @@ export const GebruikersactiviteitFragment = gql`
         entities {
             entityType
             entityId
+            huishouden {
+                id
+                burgers {
+                    id
+                    voorletters
+                    voornamen
+                    achternaam
+                }
+            }
             burger {
                 id
                 voorletters
