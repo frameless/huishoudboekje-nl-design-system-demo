@@ -11,6 +11,7 @@ ING_CSM_FILE = os.path.join(os.path.dirname(__file__), "ING.txt")
 ABN_CSM_FILE = os.path.join(os.path.dirname(__file__), "ABN.txt")
 BNG_CSM_FILE = os.path.join(os.path.dirname(__file__), "BNG.txt")
 INCORRECT_CSM_FILE = os.path.join(os.path.dirname(__file__), "incorrect.txt")
+ABN_CAMT_CSM_FILE = os.path.join(os.path.dirname(__file__), "CAMT_ABN.xml")
 
 
 class MockResponse:
@@ -128,6 +129,41 @@ def test_create_csm_with_bng_file(client, mocker: MockerFixture):
             assert response.json.get("errors") is None
             assert response.status_code == 200
 
+def test_create_csm_with_abn_camt_file(client, mocker: MockerFixture):
+    adapter = create_mock_adapter(mocker)
+
+    with open(ABN_CAMT_CSM_FILE, "rb") as testfile:
+        with requests_mock.Mocker() as m:
+            m._adapter = adapter
+            m.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json={"data": {"id": 1}})
+            response = do_csm_post(client, testfile)
+
+            # Customer Statement Message
+            assert (
+                adapter.request_history[0].json()["account_identification"]
+                == "NL77ABNA0574908765"
+            )
+            assert adapter.request_history[0].json()["closing_available_funds"] == 10001
+            assert adapter.request_history[0].json()["closing_balance"] == 10001
+            assert (
+                adapter.request_history[0].json()["forward_available_balance"] == 10001
+            )
+            assert adapter.request_history[0].json()["opening_balance"] == 100001
+            assert (
+                adapter.request_history[0].json()["transaction_reference_number"]
+                == "0574908765.2013-04-02"
+            )
+            # Bank transaction
+            assert (
+                adapter.request_history[2].json()["tegen_rekening"]
+                == "NL46ABNA0499998748"
+            )
+            assert adapter.request_history[2].json()["bedrag"] == 100
+            assert adapter.request_history[2].json()["transactie_datum"] == "2013-04-02"
+            # Overall response
+            assert adapter.call_count == 15
+            assert response.json.get("errors") is None
+            assert response.status_code == 200
 
 def test_create_csm_with_incorrect_file(client):
     with open(INCORRECT_CSM_FILE, "rb") as testfile:

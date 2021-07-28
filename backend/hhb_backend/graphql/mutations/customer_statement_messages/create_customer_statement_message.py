@@ -53,10 +53,11 @@ class CreateCustomerStatementMessage(graphene.Mutation):
     async def mutate(_root, _info, file):
         content = file.stream.read()
 
-        try:
-            csm_files = camtParser.parse(file)
-        except:
+        if file.filename.lower().endswith('.xml'):
+            csm_files = camtParser.parse(content)
+        else:
             csm_files = [mt940.parse(content)]
+
 
         customerStatementMessage = []
         journaalposten = []
@@ -158,7 +159,7 @@ def process_transactions(csm_id, transactions):
             + t.data["customer_reference"]
             + t.data["extra_details"]
         )
-        transactionModel["transactie_datum"] = str(t.data["date"])
+        transactionModel["transactie_datum"] = str(t.data["date"].strftime("%Y-%m-%d"))
         transactionModel["tegen_rekening"] = retrieve_iban(
             t.data["transaction_details"]
         )
