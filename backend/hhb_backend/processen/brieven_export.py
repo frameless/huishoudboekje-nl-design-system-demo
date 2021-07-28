@@ -96,7 +96,7 @@ def create_brieven_export(burger_id):
     )
 
     gebruikers_activiteit = {
-        "action": "export brieven",
+        "action": "exportBrieven",
         "entities": [{"entityType": "burger", "entityId": burger_id}]
     }
 
