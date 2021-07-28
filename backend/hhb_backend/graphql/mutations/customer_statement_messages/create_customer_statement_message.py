@@ -127,7 +127,8 @@ class CreateCustomerStatementMessage(graphene.Mutation):
 
             # Try, if possible, to match banktransaction
             journaalpostentemp = await automatisch_boeken.automatisch_boeken(customerStatementMessagetemp["id"])
-            journaalposten.extend(journaalpostentemp)
+            if journaalpostentemp:
+                journaalposten.extend(journaalpostentemp)
 
         return CreateCustomerStatementMessage(
             journaalposten=journaalposten,
