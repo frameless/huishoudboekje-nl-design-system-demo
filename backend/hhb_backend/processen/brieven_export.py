@@ -7,6 +7,12 @@ import requests
 from flask import jsonify
 
 from hhb_backend.graphql import settings
+import logging
+from hhb_backend.graphql.utils.gebruikersactiviteiten import (
+    gebruikers_activiteit_entities)
+from dateutil import tz
+from flask import request, g
+from hhb_backend.version import load_version
 
 
 class HHBCsvDialect(csv.Dialect):
@@ -87,6 +93,34 @@ def create_brieven_export(burger_id):
             dict_keys_subset_builder(brieven_fields),
             data,
         )
+    )
+
+    gebruikers_activiteit = {
+        "action": "exportBrieven",
+        "entities": [{"entityType": "burger", "entityId": burger_id}]
+    }
+
+    json = {
+        "timestamp": datetime.now(tz=tz.tzlocal())
+            .replace(microsecond=0)
+            .isoformat(),
+        "meta": {
+            "userAgent": str(request.user_agent) if request else None,
+            "ip": ",".join(request.access_route) if request else None,
+            "applicationVersion": load_version().version,  # Read version.json
+        },
+        "gebruiker_id": g.oidc_id_token["email"]
+        if g and g.oidc_id_token is not None
+        else None,
+        **(gebruikers_activiteit),
+    }
+    # TODO use a Queue and asyncio.run_task
+    logging.debug(
+        f"logging gebruikersactiviteit {json}"
+    )
+    requests.post(
+        f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/",
+        json=json,
     )
 
     return iowriter.getvalue(), csv_filename
