@@ -11,6 +11,7 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     gebruikers_activiteit_entities,
     log_gebruikers_activiteit,
 )
+from hhb_backend.graphql.models import burger
 
 
 class AddHuishoudenBurger(graphene.Mutation):
@@ -21,15 +22,15 @@ class AddHuishoudenBurger(graphene.Mutation):
     ok = graphene.Boolean()
     huishouden = graphene.Field(lambda: huishouden.Huishouden)
     previous = graphene.Field(lambda: huishouden.Huishouden)
+    burgerIds = graphene.Field(lambda: burger.Burger)
 
     def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
         return dict(
             action=info.field_name,
             entities=gebruikers_activiteit_entities(
-                entity_type="burger", result=self, key="burger_id"
-            )
-            + gebruikers_activiteit_entities(
-                entity_type="huishouden", result=self.huishouden, key="huishouden"
+                entity_type="huishouden", result=self, key="huishouden"
+            ) + gebruikers_activiteit_entities(
+                entity_type="burger", result=self.burgerIds, key="burgers"
             ),
             before=dict(huishouden=self.previous),
             after=dict(huishouden=self.huishouden),
@@ -59,4 +60,5 @@ class AddHuishoudenBurger(graphene.Mutation):
             ok=True,
             huishouden=await hhb_dataloader().huishoudens_by_id.load(huishouden_id),
             previous=previous,
+            burgerIds=burger_ids,
         )

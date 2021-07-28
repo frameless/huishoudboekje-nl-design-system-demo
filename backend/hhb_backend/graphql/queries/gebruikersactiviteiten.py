@@ -20,6 +20,7 @@ class GebruikersActiviteitenQuery:
         ids=graphene.List(graphene.Int, default_value=[]),
         burgerIds=graphene.List(graphene.Int, default_value=[]),
         afsprakenIds=graphene.List(graphene.Int, default_value=[]),
+        huishoudenIds=graphene.List(graphene.Int, default_value=[]),
     )
 
     @staticmethod
@@ -28,6 +29,7 @@ class GebruikersActiviteitenQuery:
                 not kwargs["ids"]
                 and not kwargs["burgerIds"]
                 and not kwargs["afsprakenIds"]
+                and not kwargs["huishoudenIds"]
         ):
             gebruikersactiviteiten = (
                 request.dataloader.gebruikersactiviteiten_by_id.get_all_and_cache()
@@ -58,6 +60,15 @@ class GebruikersActiviteitenQuery:
                 gebruikersactiviteiten.extend(
                     x for x in ids_list if x not in gebruikersactiviteiten
                 )
+            if kwargs["huishoudenIds"]:
+                afspraken_list = (
+                    request.dataloader.gebruikersactiviteiten_by_huishouden.get_by_ids(
+                        kwargs["huishoudenIds"]
+                    )
+                )
+                gebruikersactiviteiten.extend(
+                    x for x in afspraken_list if x not in gebruikersactiviteiten
+                )
 
         return gebruikersactiviteiten
 
@@ -68,24 +79,28 @@ class GebruikersActiviteitenPagedQuery:
         start=graphene.Int(),
         limit=graphene.Int(),
         burgerIds=graphene.List(graphene.Int, default_value=[]),
-        afsprakenIds=graphene.List(graphene.Int, default_value=[])
+        afsprakenIds=graphene.List(graphene.Int, default_value=[]),
+        huishoudenIds=graphene.List(graphene.Int, default_value=[]),
     )
 
     @staticmethod
     async def resolver(root, info, **kwargs):
         if "start" in kwargs and "limit" in kwargs:
-            if not kwargs["burgerIds"] and not kwargs["afsprakenIds"]:
+            if not kwargs["burgerIds"] and not kwargs["afsprakenIds"] and not kwargs["huishoudenIds"]:
                 return request.dataloader.gebruikersactiviteiten_by_id.get_all_paged \
                     (start=kwargs["start"], limit=kwargs["limit"], desc=True, sortingColumn="timestamp")
             else:
-                if kwargs["burgerIds"] and kwargs["afsprakenIds"]:
-                    raise GraphQLError(f"Only burgerIds or afsprakenIds is supported. ")
+                if kwargs["burgerIds"] and kwargs["afsprakenIds"] and kwargs["huishoudenIds"]:
+                    raise GraphQLError(f"Only burgerIds, afsprakenIds or huishoudenIds is supported. ")
                 if kwargs["burgerIds"]:
                     return request.dataloader.gebruikersactiviteiten_by_burgers.get_by_ids_paged(
                             kwargs["burgerIds"], start=kwargs["start"], limit=kwargs["limit"], desc=True, sortingColumn="timestamp")
                 if kwargs["afsprakenIds"]:
                     return request.dataloader.gebruikersactiviteiten_by_afspraken.get_by_ids_paged(
                             kwargs["afsprakenIds"], start=kwargs["start"], limit=kwargs["limit"], desc=True, sortingColumn="timestamp")
+                if kwargs["huishoudenIds"]:
+                    return request.dataloader.gebruikersactiviteiten_by_huishouden.get_by_ids_paged(
+                            kwargs["huishoudenIds"], start=kwargs["start"], limit=kwargs["limit"], desc=True, sortingColumn="timestamp")
         else:
             raise GraphQLError(f"Query needs params 'start', 'limit'. ")
 

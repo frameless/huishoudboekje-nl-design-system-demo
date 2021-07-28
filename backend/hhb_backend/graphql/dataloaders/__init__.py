@@ -9,7 +9,8 @@ from .csm_loader import CSMsByIdLoader
 from .exports_loader import ExportsByIdLoader
 from .burger_loader import BurgersByHuishoudenLoader, BurgersByIdLoader
 from .gebruikersactiviteit_loader import (GebruikersActiviteitenByAfsprakenLoader,
-                                          GebruikersActiviteitenByBurgersLoader, GebruikersActiviteitenByIdLoader)
+                                          GebruikersActiviteitenByBurgersLoader, GebruikersActiviteitenByIdLoader,
+                                          GebruikersActiviteitenByHuishoudenLoader)
 from .grootboekrekening_loader import GrootboekrekeningenByIdLoader
 from .journaalpost_loader import (
     JournaalpostenByIdLoader,
@@ -77,6 +78,9 @@ class HHBDataLoader:
         )
         self.gebruikersactiviteiten_by_afspraken = (
             GebruikersActiviteitenByAfsprakenLoader(loop=loop)
+        )
+        self.gebruikersactiviteiten_by_huishouden = (
+            GebruikersActiviteitenByHuishoudenLoader(loop=loop)
         )
 
         # Huishoudens
