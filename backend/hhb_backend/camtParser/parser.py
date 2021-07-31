@@ -1,23 +1,16 @@
 import os
 from io import StringIO
-import re
 from datetime import datetime
 import xml.etree.ElementTree as ET
 
 
 def parse(src, encoding=None):
     '''
-    Parses CAMT.053 data and returns Camt object
+    Parses CAMT.053 data and returns list of Statement objects
 
     :param src: file handler to read, filename to read or raw data as string
     :return: list of statement objects
     '''
-
-    # print(src)
-    # print(type(src))
-    # print(src.filename)
-    # print(hasattr(src.read(), 'decode'))
-    # print(src.read().decode('utf-8'))
 
     def safe_is_file(filename):
         try:
@@ -55,6 +48,7 @@ def parse(src, encoding=None):
 
     return result
 
+
 def parsexml(data):
     '''
     Parses an XML document in Camt.053 style and returns a list of statement objects ready to be processed by
@@ -85,38 +79,11 @@ class Statement:
         stmtDict = {}
         stmtDict["transaction_reference"] = stmt.findtext('Id', namespaces=namespaces)
         stmtDict["account_identification"] = stmt.findtext('Acct/Id/IBAN', namespaces=namespaces)
-        stmtDict["sequence_number"] = stmt.findtext('EltrncSeqNb', namespaces=namespaces)
-
-        if stmt.find("Bal/Tp/CdOrPrtry/[Cd='PRCD']/../..", namespaces=namespaces).findtext("CdtDbtInd", namespaces=namespaces) == 'CRDT':
-            statustemp = 'C'
-        else:
-            statustemp = 'D'
-        stmtDict["final_opening_balance"] = Balance(float(stmt.find("Bal/Tp/CdOrPrtry/[Cd='PRCD']/../..", namespaces=namespaces).findtext('Amt', namespaces=namespaces)),
-                                                    stmt.find("Bal/Tp/CdOrPrtry/[Cd='PRCD']/../..", namespaces=namespaces).find('Amt', namespaces=namespaces).attrib["Ccy"],
-                                                    statustemp)
-
-        if stmt.find("Bal/Tp/CdOrPrtry/[Cd='CLBD']/../..", namespaces=namespaces).findtext("CdtDbtInd", namespaces=namespaces) == 'CRDT':
-            statustemp = 'C'
-        else:
-            statustemp = 'D'
-        stmtDict["final_closing_balance"] = Balance(float(stmt.find("Bal/Tp/CdOrPrtry/[Cd='CLBD']/../..", namespaces=namespaces).findtext('Amt', namespaces=namespaces)),
-                                                    stmt.find("Bal/Tp/CdOrPrtry/[Cd='CLBD']/../..", namespaces=namespaces).find('Amt', namespaces=namespaces).attrib["Ccy"],
-                                                    statustemp)
-        if stmt.find("Bal/Tp/CdOrPrtry/[Cd='CLAV']/../..", namespaces=namespaces).findtext("CdtDbtInd", namespaces=namespaces) == 'CRDT':
-            statustemp = 'C'
-        else:
-            statustemp = 'D'
-        stmtDict["available_balance"] = Balance(float(stmt.find("Bal/Tp/CdOrPrtry/[Cd='CLAV']/../..", namespaces=namespaces).findtext('Amt', namespaces=namespaces)),
-                                                stmt.find("Bal/Tp/CdOrPrtry/[Cd='CLAV']/../..", namespaces=namespaces).find('Amt', namespaces=namespaces).attrib["Ccy"],
-                                                statustemp)
-        if stmt.find("Bal/Tp/CdOrPrtry/[Cd='FWAV']/../..", namespaces=namespaces).findtext("CdtDbtInd", namespaces=namespaces) == 'CRDT':
-            statustemp = 'C'
-        else:
-            statustemp = 'D'
-        stmtDict["forward_available_balance"] = Balance(float(stmt.findall("Bal/Tp/CdOrPrtry/[Cd='FWAV']/../..", namespaces=namespaces)[-1].findtext('Amt', namespaces=namespaces)),
-                                                        stmt.findall("Bal/Tp/CdOrPrtry/[Cd='FWAV']/../..",
-                                                                     namespaces=namespaces)[-1].find('Amt', namespaces=namespaces).attrib["Ccy"],
-                                                        statustemp)
+        stmtDict["sequence_number"] = stmt.findtext('ElctrncSeqNb', namespaces=namespaces)
+        stmtDict["final_opening_balance"] = self.get_final_opening_balance(stmt, namespaces)
+        stmtDict["final_closing_balance"] = self.get_balance(stmt, namespaces, "'CLBD'")
+        stmtDict["available_balance"] = self.get_balance(stmt, namespaces, "'CLAV'")
+        stmtDict["forward_available_balance"] = self.get_forward_balance(stmt, namespaces, "'FWAV'")
 
         return stmtDict
 
@@ -126,6 +93,61 @@ class Statement:
             transactions[i] = Transaction(transactions[i], namespaces)
 
         return transactions
+
+    def get_forward_balance(self, stmt, namespaces, balanceString):
+        if stmt.findall(f"Bal/Tp/CdOrPrtry/[Cd={balanceString}]/../..", namespaces=namespaces)[-1].findtext("CdtDbtInd",
+                                                                                                     namespaces=namespaces) == 'CRDT':
+            statustemp = 'C'
+        else:
+            statustemp = 'D'
+        balance = Balance(float(
+            stmt.findall(f"Bal/Tp/CdOrPrtry/[Cd={balanceString}]/../..", namespaces=namespaces)[-1].findtext('Amt',
+                                                                                                      namespaces=namespaces)),
+                          stmt.findall(f"Bal/Tp/CdOrPrtry/[Cd={balanceString}]/../..", namespaces=namespaces)[-1].find('Amt',
+                                                                                                                namespaces=namespaces).attrib["Ccy"],
+                          statustemp)
+
+        return balance
+
+    def get_balance(self, stmt, namespaces, balanceString):
+        if stmt.find(f"Bal/Tp/CdOrPrtry/[Cd={balanceString}]/../..", namespaces=namespaces).findtext("CdtDbtInd",
+                                                                                                     namespaces=namespaces) == 'CRDT':
+            statustemp = 'C'
+        else:
+            statustemp = 'D'
+        balance = Balance(float(
+            stmt.find(f"Bal/Tp/CdOrPrtry/[Cd={balanceString}]/../..", namespaces=namespaces).findtext('Amt',
+                                                                                                      namespaces=namespaces)),
+                          stmt.find(f"Bal/Tp/CdOrPrtry/[Cd={balanceString}]/../..", namespaces=namespaces).find('Amt',
+                                                                                                                namespaces=namespaces).attrib["Ccy"],
+                          statustemp)
+
+        return balance
+
+    def get_final_opening_balance(self, stmt, namespaces):
+
+        if stmt.find("Bal/Tp/CdOrPrtry/[Cd='PRCD']/../..", namespaces=namespaces):
+            statustemp = stmt.find("Bal/Tp/CdOrPrtry/[Cd='PRCD']/../..", namespaces=namespaces).findtext("CdtDbtInd",
+                                                                                                         namespaces=namespaces)
+            balance = Balance(float(
+                stmt.find("Bal/Tp/CdOrPrtry/[Cd='PRCD']/../..", namespaces=namespaces).findtext('Amt',
+                                                                                                namespaces=namespaces)),
+                stmt.find("Bal/Tp/CdOrPrtry/[Cd='PRCD']/../..", namespaces=namespaces).find('Amt',
+                                                                                            namespaces=namespaces).attrib[
+                    "Ccy"],
+                statustemp)
+        elif stmt.find("Bal/Tp/CdOrPrtry/[Cd='OPBD']/../..", namespaces=namespaces):
+            statustemp = stmt.find("Bal/Tp/CdOrPrtry/[Cd='OPBD']/../..", namespaces=namespaces).findtext("CdtDbtInd",
+                                                                                                         namespaces=namespaces)
+            balance = Balance(float(
+                stmt.find("Bal/Tp/CdOrPrtry/[Cd='OPBD']/../..", namespaces=namespaces).findtext('Amt',
+                                                                                                namespaces=namespaces)),
+                stmt.find("Bal/Tp/CdOrPrtry/[Cd='OPBD']/../..", namespaces=namespaces).find('Amt',
+                                                                                            namespaces=namespaces).attrib[
+                    "Ccy"],
+                statustemp)
+
+        return balance
 
 
 class Transaction:
@@ -160,10 +182,12 @@ class Transaction:
 
         return transaction
 
+
 class Balance():
     def __init__(self, amnt, crncy, status):
         self.amount = Amount(amnt, crncy, status)
         self.currency = crncy
+
 
 class Amount():
     def __init__(self, amnt, crncy, status):
