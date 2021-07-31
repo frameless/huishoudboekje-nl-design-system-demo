@@ -1,4 +1,5 @@
 import os
+from io import StringIO
 import re
 from datetime import datetime
 import xml.etree.ElementTree as ET
@@ -50,15 +51,9 @@ def parse(src, encoding=None):
         else:
             raise exception  # pragma: no cover
 
-    print(data)
-
     result = parsexml(data)
 
     return result
-
-def namespace(element):
-    m = re.match(r'\{.*\}', element.tag)
-    return m.group(0) if m else ''
 
 def parsexml(data):
     '''
@@ -66,11 +61,12 @@ def parsexml(data):
     the csm mutate function.
     '''
     root = ET.fromstring(data)
-    #root = tree.getroot()
 
-    my_namespaces = {
-        '': 'urn:iso:std:iso:20022:tech:xsd:camt.053.001.02',
-        'xsi':  'http://www.w3.org/2001/XMLSchema-instance'}
+    my_namespaces = dict([
+        node for _, node in ET.iterparse(
+            StringIO(data), events=['start-ns']
+        )
+    ])
 
     statements = root.findall('.//Stmt', my_namespaces)
 
