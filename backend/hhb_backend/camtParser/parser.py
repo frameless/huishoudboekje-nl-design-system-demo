@@ -1,6 +1,7 @@
 import os
 from io import StringIO
 from datetime import datetime
+from graphql import GraphQLError
 import xml.etree.ElementTree as ET
 
 
@@ -54,7 +55,11 @@ def parsexml(data):
     Parses an XML document in Camt.053 style and returns a list of statement objects ready to be processed by
     the csm mutate function.
     '''
-    root = ET.fromstring(data)
+
+    try:
+        root = ET.fromstring(data)
+    except:
+        raise GraphQLError('XML is not formatted correctly')
 
     my_namespaces = dict([
         node for _, node in ET.iterparse(
@@ -76,14 +81,17 @@ class Statement:
         self.transactions = self.transactions(stmt.findall('.//Ntry', namespaces), namespaces)
 
     def statementDict(self, stmt, namespaces):
+        '''
+            Extract statement info
+        '''
         stmtDict = {}
-        stmtDict["transaction_reference"] = stmt.findtext('Id', namespaces=namespaces)
-        stmtDict["account_identification"] = stmt.findtext('Acct/Id/IBAN', namespaces=namespaces)
-        stmtDict["sequence_number"] = stmt.findtext('ElctrncSeqNb', namespaces=namespaces)
+        stmtDict["transaction_reference"] = self.get_text(stmt, namespaces, 'Id')
+        stmtDict["account_identification"] = self.get_text(stmt, namespaces, 'Acct/Id/IBAN')
+        stmtDict["sequence_number"] = self.get_text(stmt, namespaces, 'ElctrncSeqNb')
         stmtDict["final_opening_balance"] = self.get_final_opening_balance(stmt, namespaces)
         stmtDict["final_closing_balance"] = self.get_balance(stmt, namespaces, "'CLBD'")
         stmtDict["available_balance"] = self.get_balance(stmt, namespaces, "'CLAV'")
-        stmtDict["forward_available_balance"] = self.get_forward_balance(stmt, namespaces, "'FWAV'")
+        stmtDict["forward_available_balance"] = self.get_forward_balance(stmt, namespaces)
 
         return stmtDict
 
@@ -94,58 +102,61 @@ class Statement:
 
         return transactions
 
-    def get_forward_balance(self, stmt, namespaces, balanceString):
-        if stmt.findall(f"Bal/Tp/CdOrPrtry/[Cd={balanceString}]/../..", namespaces=namespaces)[-1].findtext("CdtDbtInd",
-                                                                                                     namespaces=namespaces) == 'CRDT':
+    def get_text(self, obj, namespaces, search):
+        return obj.findtext(search, namespaces=namespaces)
+
+    def get_forward_balance(self, stmt, namespaces):
+        if stmt.find("Bal/Tp/CdOrPrtry/[Cd='FWAV']", namespaces=namespaces):
+            balanceString = "'FWAV'"
+        else:
+            balanceString = "'CLAV'"
+
+        balanceObject = stmt.findall(f"Bal/Tp/CdOrPrtry/[Cd={balanceString}]/../..", namespaces=namespaces)[-1]
+
+        if self.get_text(balanceObject,
+                         namespaces,
+                         "CdtDbtInd") == 'CRDT':
             statustemp = 'C'
         else:
             statustemp = 'D'
         balance = Balance(float(
-            stmt.findall(f"Bal/Tp/CdOrPrtry/[Cd={balanceString}]/../..", namespaces=namespaces)[-1].findtext('Amt',
-                                                                                                      namespaces=namespaces)),
-                          stmt.findall(f"Bal/Tp/CdOrPrtry/[Cd={balanceString}]/../..", namespaces=namespaces)[-1].find('Amt',
-                                                                                                                namespaces=namespaces).attrib["Ccy"],
+            self.get_text(balanceObject, namespaces, 'Amt')),
+                          balanceObject.find('Amt', namespaces=namespaces).attrib["Ccy"],
                           statustemp)
 
         return balance
 
     def get_balance(self, stmt, namespaces, balanceString):
-        if stmt.find(f"Bal/Tp/CdOrPrtry/[Cd={balanceString}]/../..", namespaces=namespaces).findtext("CdtDbtInd",
-                                                                                                     namespaces=namespaces) == 'CRDT':
+        balanceObject = stmt.find(f"Bal/Tp/CdOrPrtry/[Cd={balanceString}]/../..", namespaces=namespaces)
+        if self.get_text(balanceObject, namespaces, "CdtDbtInd") == 'CRDT':
             statustemp = 'C'
         else:
             statustemp = 'D'
         balance = Balance(float(
-            stmt.find(f"Bal/Tp/CdOrPrtry/[Cd={balanceString}]/../..", namespaces=namespaces).findtext('Amt',
-                                                                                                      namespaces=namespaces)),
-                          stmt.find(f"Bal/Tp/CdOrPrtry/[Cd={balanceString}]/../..", namespaces=namespaces).find('Amt',
-                                                                                                                namespaces=namespaces).attrib["Ccy"],
+            self.get_text(balanceObject, namespaces, 'Amt')),
+                          balanceObject.find('Amt', namespaces=namespaces).attrib["Ccy"],
                           statustemp)
 
         return balance
 
     def get_final_opening_balance(self, stmt, namespaces):
+        prcd = stmt.find("Bal/Tp/CdOrPrtry/[Cd='PRCD']/../..", namespaces=namespaces)
+        opbd = stmt.find("Bal/Tp/CdOrPrtry/[Cd='OPBD']/../..", namespaces=namespaces)
 
-        if stmt.find("Bal/Tp/CdOrPrtry/[Cd='PRCD']/../..", namespaces=namespaces):
-            statustemp = stmt.find("Bal/Tp/CdOrPrtry/[Cd='PRCD']/../..", namespaces=namespaces).findtext("CdtDbtInd",
-                                                                                                         namespaces=namespaces)
-            balance = Balance(float(
-                stmt.find("Bal/Tp/CdOrPrtry/[Cd='PRCD']/../..", namespaces=namespaces).findtext('Amt',
-                                                                                                namespaces=namespaces)),
-                stmt.find("Bal/Tp/CdOrPrtry/[Cd='PRCD']/../..", namespaces=namespaces).find('Amt',
-                                                                                            namespaces=namespaces).attrib[
-                    "Ccy"],
+        if prcd:
+            statustemp = self.get_text(prcd, namespaces, "CdtDbtInd")
+            balance = Balance(
+                float(self.get_text(prcd, namespaces, 'Amt')),
+                prcd.find('Amt', namespaces=namespaces).attrib["Ccy"],
                 statustemp)
-        elif stmt.find("Bal/Tp/CdOrPrtry/[Cd='OPBD']/../..", namespaces=namespaces):
-            statustemp = stmt.find("Bal/Tp/CdOrPrtry/[Cd='OPBD']/../..", namespaces=namespaces).findtext("CdtDbtInd",
-                                                                                                         namespaces=namespaces)
-            balance = Balance(float(
-                stmt.find("Bal/Tp/CdOrPrtry/[Cd='OPBD']/../..", namespaces=namespaces).findtext('Amt',
-                                                                                                namespaces=namespaces)),
-                stmt.find("Bal/Tp/CdOrPrtry/[Cd='OPBD']/../..", namespaces=namespaces).find('Amt',
-                                                                                            namespaces=namespaces).attrib[
-                    "Ccy"],
+        elif opbd:
+            statustemp = self.get_text(opbd, namespaces, "CdtDbtInd")
+            balance = Balance(
+                float(self.get_text(opbd, namespaces, 'Amt')),
+                opbd.find('Amt', namespaces=namespaces).attrib["Ccy"],
                 statustemp)
+        else:
+            balance = None
 
         return balance
 
@@ -155,8 +166,18 @@ class Transaction:
         self.data = self.transactionDict(ntry, namespaces)
 
     def transactionDict(self, ntry, namespaces):
+        '''
+            extract transaction info
+        '''
         transaction = {}
-        transaction["transaction_details"] = ntry.findtext(".//AddtlNtryInf", namespaces=namespaces)
+        if ntry.findtext("./NtryDtls/TxDtls/RltdPties/DbtrAcct/Id/IBAN", namespaces=namespaces):
+            transaction["tegen_rekening"] = ntry.findtext("./NtryDtls/TxDtls/RltdPties/DbtrAcct/Id/IBAN", namespaces=namespaces)
+        else:
+            transaction["tegen_rekening"] = ntry.findtext("./NtryDtls/TxDtls/RltdPties/CdtrAcct/Id/IBAN", namespaces=namespaces)
+        if ntry.findtext(".//AddtlNtryInf", namespaces=namespaces):
+            transaction["transaction_details"] = ntry.findtext(".//AddtlNtryInf", namespaces=namespaces)
+        else:
+            transaction["transaction_details"] = ""
         transaction["date"] = datetime.strptime(ntry.findtext("./ValDt/Dt", namespaces=namespaces), '%Y-%m-%d')
         if ntry.findtext("./CdtDbtInd", namespaces=namespaces) == 'CRDT':
             transaction["status"] = 'C'

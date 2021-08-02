@@ -75,7 +75,7 @@ class CreateCustomerStatementMessage(graphene.Mutation):
                     "transaction_reference"
                 ]
             else:
-                raise GraphQLError(f"Incorrect file, missing tag 20 transaction reference")
+                raise GraphQLError(f"Incorrect file, missing tag 20 transaction reference or misplaced/missing Id tag")
 
             # csmServiceModel.related_reference = csm_file.data['??']
             if csm_file.data.get("account_identification", False):
@@ -83,7 +83,7 @@ class CreateCustomerStatementMessage(graphene.Mutation):
                     "account_identification"
                 ]
             else:
-                raise GraphQLError(f"Incorrect file, missing tag 25 account identification")
+                raise GraphQLError(f"Incorrect file, missing tag 25 account identification or misplaced/missing IBAN tag")
 
             if csm_file.data.get("sequence_number", False):
                 csmServiceModel["sequence_number"] = csm_file.data["sequence_number"]
@@ -137,11 +137,16 @@ class CreateCustomerStatementMessage(graphene.Mutation):
         )
 
 
-def retrieve_iban(transaction_details: str) -> str:
-    result = re.search(IBAN_REGEX, transaction_details)
-    if result is None:
-        return ""
-    return result.group()
+def retrieve_iban(transaction_details: dict) -> str:
+    if transaction_details.get('tegen_rekening',False):
+        result = transaction_details['tegen_rekening']
+    else:
+        result = re.search(IBAN_REGEX, transaction_details['transaction_details'])
+        if result is None:
+            return ""
+        else:
+            result = result.group()
+    return result
 
 
 def process_transactions(csm_id, transactions):
@@ -162,7 +167,7 @@ def process_transactions(csm_id, transactions):
         )
         transactionModel["transactie_datum"] = str(t.data["date"].strftime("%Y-%m-%d"))
         transactionModel["tegen_rekening"] = retrieve_iban(
-            t.data["transaction_details"]
+            t.data
         )
         transactionModel["is_credit"] = t.data["status"] == "C"
         transactionModel["bedrag"] = int(t.data["amount"].amount * 100)

@@ -12,6 +12,8 @@ ABN_CSM_FILE = os.path.join(os.path.dirname(__file__), "ABN.txt")
 BNG_CSM_FILE = os.path.join(os.path.dirname(__file__), "BNG.txt")
 INCORRECT_CSM_FILE = os.path.join(os.path.dirname(__file__), "incorrect.txt")
 ABN_CAMT_CSM_FILE = os.path.join(os.path.dirname(__file__), "CAMT_ABN.xml")
+RABO_CAMT_CSM_FILE = os.path.join(os.path.dirname(__file__), "CAMT_RABO.xml")
+ING_CAMT_CSM_FILE = os.path.join(os.path.dirname(__file__), "CAMT_ING.xml")
 
 
 class MockResponse:
@@ -162,6 +164,78 @@ def test_create_csm_with_abn_camt_file(client, mocker: MockerFixture):
             assert adapter.request_history[2].json()["transactie_datum"] == "2013-04-02"
             # Overall response
             assert adapter.call_count == 15
+            assert response.json.get("errors") is None
+            assert response.status_code == 200
+
+def test_create_csm_with_rabo_camt_file(client, mocker: MockerFixture):
+    adapter = create_mock_adapter(mocker)
+
+    with open(RABO_CAMT_CSM_FILE, "rb") as testfile:
+        with requests_mock.Mocker() as m:
+            m._adapter = adapter
+            m.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json={"data": {"id": 1}})
+            response = do_csm_post(client, testfile)
+
+            # Customer Statement Message
+            assert (
+                adapter.request_history[0].json()["account_identification"]
+                == 'NL44RABO0123456789'
+            )
+            assert adapter.request_history[0].json()["closing_available_funds"] == 83
+            assert adapter.request_history[0].json()["closing_balance"] == 67
+            assert (
+                adapter.request_history[0].json()["forward_available_balance"] == 67
+            )
+            assert adapter.request_history[0].json()["opening_balance"] == 83
+            assert (
+                adapter.request_history[0].json()["transaction_reference_number"]
+                == 'CAMT0532015012200001'
+            )
+            # Bank transaction
+            assert (
+                adapter.request_history[2].json()["tegen_rekening"]
+                == ""
+            )
+            assert adapter.request_history[2].json()["bedrag"] == -3
+            assert adapter.request_history[2].json()["transactie_datum"] == "2015-01-23"
+            # Overall response
+            assert adapter.call_count == 8
+            assert response.json.get("errors") is None
+            assert response.status_code == 200
+
+def test_create_csm_with_ing_camt_file(client, mocker: MockerFixture):
+    adapter = create_mock_adapter(mocker)
+
+    with open(ING_CAMT_CSM_FILE, "rb") as testfile:
+        with requests_mock.Mocker() as m:
+            m._adapter = adapter
+            m.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json={"data": {"id": 1}})
+            response = do_csm_post(client, testfile)
+
+            # Customer Statement Message
+            assert (
+                adapter.request_history[0].json()["account_identification"]
+                == 'NL08INGB0000001234'
+            )
+            assert adapter.request_history[0].json()["closing_available_funds"] == 160500
+            assert adapter.request_history[0].json()["closing_balance"] == 160500
+            assert (
+                adapter.request_history[0].json()["forward_available_balance"] == 160500
+            )
+            assert adapter.request_history[0].json()["opening_balance"] == 100000
+            assert (
+                adapter.request_history[0].json()["transaction_reference_number"]
+                == '201401030009999'
+            )
+            # Bank transaction
+            assert (
+                adapter.request_history[2].json()["tegen_rekening"]
+                == "NL20INGB0001234567"
+            )
+            assert adapter.request_history[2].json()["bedrag"] == 12500
+            assert adapter.request_history[2].json()["transactie_datum"] == "2014-01-03"
+            # Overall response
+            assert adapter.call_count == 11
             assert response.json.get("errors") is None
             assert response.status_code == 200
 
