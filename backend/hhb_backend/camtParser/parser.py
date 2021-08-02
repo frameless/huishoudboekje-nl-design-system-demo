@@ -69,6 +69,9 @@ def parsexml(data):
 
     statements = root.findall('.//Stmt', my_namespaces)
 
+    if len(statements) == 0:
+        raise GraphQLError("Wrong XML schema, incorrect file or file contains no statements")
+
     for i in range(len(statements)):
         statements[i] = Statement(statements[i], my_namespaces)
 
