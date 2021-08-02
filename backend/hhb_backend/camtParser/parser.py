@@ -70,7 +70,7 @@ def parsexml(data):
     statements = root.findall('.//Stmt', my_namespaces)
 
     if len(statements) == 0:
-        raise GraphQLError("File contains no statements")
+        raise GraphQLError("File contains no statements!")
 
     for i in range(len(statements)):
         statements[i] = Statement(statements[i], my_namespaces)
