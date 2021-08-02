@@ -119,6 +119,9 @@ class CreateCustomerStatementMessage(graphene.Mutation):
 
             customerStatementMessagetemp = post_response.json()["data"]
 
+            if len(csm_file.transactions) == 0:
+                raise GraphQLError("No transactions in file")
+
             customerStatementMessagetemp["bank_transactions"] = process_transactions(
                 customerStatementMessagetemp["id"], csm_file.transactions
             )
