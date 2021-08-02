@@ -170,39 +170,36 @@ class Transaction:
             extract transaction info
         '''
         transaction = {}
-        if ntry.findtext("./NtryDtls/TxDtls/RltdPties/DbtrAcct/Id/IBAN", namespaces=namespaces):
-            transaction["tegen_rekening"] = ntry.findtext("./NtryDtls/TxDtls/RltdPties/DbtrAcct/Id/IBAN", namespaces=namespaces)
-        else:
-            transaction["tegen_rekening"] = ntry.findtext("./NtryDtls/TxDtls/RltdPties/CdtrAcct/Id/IBAN", namespaces=namespaces)
-        if ntry.findtext(".//AddtlNtryInf", namespaces=namespaces):
-            transaction["transaction_details"] = ntry.findtext(".//AddtlNtryInf", namespaces=namespaces)
-        else:
-            transaction["transaction_details"] = ""
+        transaction["tegen_rekening"] = self.get_or_empty(ntry, "./NtryDtls/TxDtls/RltdPties/DbtrAcct/Id/IBAN", namespaces)
+        transaction["transaction_details"] = self.get_or_empty(ntry, ".//AddtlNtryInf", namespaces)
         transaction["date"] = datetime.strptime(ntry.findtext("./ValDt/Dt", namespaces=namespaces), '%Y-%m-%d')
+
         if ntry.findtext("./CdtDbtInd", namespaces=namespaces) == 'CRDT':
             transaction["status"] = 'C'
         else:
             transaction["status"] = 'D'
+
         transaction["amount"] = Amount(float(ntry.findtext("./Amt", namespaces=namespaces)),
                                        ntry.find("./Amt", namespaces=namespaces).attrib["Ccy"],
                                        transaction["status"])
+
         transaction["id"] = ntry.findtext("./BkTxCd/Prtry/Cd", namespaces=namespaces)
-        if ntry.findtext(".//EndToEndId", namespaces=namespaces):
-            transaction["customer_reference"] = ntry.findtext(".//EndToEndId", namespaces=namespaces)
-        else:
-            transaction["customer_reference"] = ""
-        if ntry.findtext("./AcctSvcrRef", namespaces=namespaces):
-            extratemp1 = ntry.findtext("./AcctSvcrRef", namespaces=namespaces)
-        else:
-            extratemp1 = ""
-        if ntry.findtext("./NtryDtls/AddtlTxInf", namespaces=namespaces):
-            extratemp2 = ntry.findtext("./NtryDtls/AddtlTxInf", namespaces=namespaces)
-        else:
-            extratemp2 = ""
+        transaction["customer_reference"] = self.get_or_empty(ntry, ".//EndToEndId", namespaces)
+
+        extratemp1 = self.get_or_empty(ntry, "./AcctSvcrRef", namespaces)
+        extratemp2 = self.get_or_empty(ntry, "./NtryDtls/AddtlTxInf", namespaces)
         transaction["extra_details"] = extratemp1 + extratemp2
 
         return transaction
 
+    def get_or_empty(self,ntry, search_string, namespaces):
+        temp = ntry.findtext(search_string, namespaces=namespaces)
+        if temp:
+            result = temp
+        else:
+            result = ""
+
+        return result
 
 class Balance():
     def __init__(self, amnt, crncy, status):
