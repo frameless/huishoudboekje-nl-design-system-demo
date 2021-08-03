@@ -10,6 +10,7 @@ def test_burgers_post_success(app, huishouden_factory):
         "telefoonnummer": "0612345678",
         "geboortedatum": "2020-01-01",
         "huishouden_id": huishouden.id,
+        "bsn": 123456789,
     }
     response = app.test_client().post('/burgers',
                                       data=json.dumps(burger_data), content_type='application/json')
@@ -28,7 +29,7 @@ def test_burgers_post_success(app, huishouden_factory):
                                      'voornamen': None,
                                      'plaatsnaam': None,
                                      'huishouden_id': huishouden.id,
-                                     'bsn': None,}
+                                     'bsn': 123456789,}
 
 
 def test_burgers_post_input_json_validation_invalid_geboortedatum(app):
