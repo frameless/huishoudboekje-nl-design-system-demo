@@ -19,6 +19,7 @@ class CreateOrganisatieInput(graphene.InputObjectType):
     kvk_nummer = graphene.String(required=True)
     weergave_naam = graphene.String(required=True)
     rekeningen = graphene.List(lambda: rekening_input.RekeningInput)
+    vestigingsnummer = graphene.Int()
 
     # org_service elements (optional)
     naam = graphene.String()
@@ -52,6 +53,7 @@ class CreateOrganisatie(graphene.Mutation):
 
         hhb_service_data = {
             "kvk_nummer": input["kvk_nummer"],
+            "vestigingsnummer": input["vestigingsnummer"],
             "weergave_naam": input.pop("weergave_naam"),
         }
         hhb_service_response = requests.post(

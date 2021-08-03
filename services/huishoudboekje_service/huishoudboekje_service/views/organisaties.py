@@ -16,6 +16,9 @@ class OrganisatieView(HHBView):
             "weergave_naam": {
                 "type": "string",
             },
+            "vestigingsnummer": {
+                "type": "integer",
+            },
         },
         "required": []
     }

@@ -19,6 +19,7 @@ class UpdateOrganisatie(graphene.Mutation):
         id = graphene.Int(required=True)
         weergave_naam = graphene.String()
         kvk_nummer = graphene.String()
+        vestigingsnummer = graphene.Int()
 
         # org_service elements
         naam = graphene.String()
@@ -59,6 +60,8 @@ class UpdateOrganisatie(graphene.Mutation):
             hhb_service_data["weergave_naam"] = kwargs.pop("weergave_naam")
         if "kvk_nummer" in kwargs:
             hhb_service_data["kvk_nummer"] = kwargs["kvk_nummer"]
+        if "vestigingsnummer" in kwargs:
+            hhb_service_data["vestigingsnummer"] = kwargs["vestigingsnummer"]
 
         # Try update of huishoudboekje service
         hhb_service_response = requests.post(

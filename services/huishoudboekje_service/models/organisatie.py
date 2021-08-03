@@ -11,6 +11,8 @@ class Organisatie(db.Model):
     weergave_naam = Column(String)
     kvk_nummer = Column(String, unique=True)
 
+    vestigingsnummer = Column(Integer)
+
     rekeningen = relationship("RekeningOrganisatie",
         back_populates="organisatie",
         cascade="all, delete" # cascade only deletes relationship, not the rekening
