@@ -45,6 +45,9 @@ class BurgerView(HHBView):
             },
             "huishouden_id": {
                 "type": "integer",
+            },
+            "bsn": {
+                "type": "integer",
             }
         },
         "required": []

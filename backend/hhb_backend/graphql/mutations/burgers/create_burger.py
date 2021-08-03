@@ -35,6 +35,7 @@ class CreateBurgerInput(graphene.InputObjectType):
     plaatsnaam = graphene.String()
     huishouden = graphene.Field(huishouden_input.HuishoudenInput)
 
+    bsn = graphene.Int()
 
 class CreateBurger(graphene.Mutation):
     class Arguments:

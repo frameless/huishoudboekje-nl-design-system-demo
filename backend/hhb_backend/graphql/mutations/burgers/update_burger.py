@@ -33,6 +33,8 @@ class UpdateBurger(graphene.Mutation):
         plaatsnaam = graphene.String()
         huishouden = graphene.Argument(lambda: huishouden_input.HuishoudenInput)
 
+        bsn = graphene.Int()
+
     ok = graphene.Boolean()
     burger = graphene.Field(lambda: Burger)
     previous = graphene.Field(lambda: Burger)

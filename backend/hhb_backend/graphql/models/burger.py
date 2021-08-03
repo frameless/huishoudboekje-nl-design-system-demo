@@ -28,6 +28,8 @@ class Burger(graphene.ObjectType):
     gebruikersactiviteiten = graphene.List(lambda: gebruikersactiviteit.GebruikersActiviteit)
     huishouden = graphene.Field(lambda: huishouden.Huishouden)
 
+    bsn = graphene.Int()
+
     def resolve_iban(root, info):
         rekeningen = Burger.resolve_rekeningen(root, info)
         if rekeningen:

@@ -29,6 +29,8 @@ class Burger(db.Model):
 
     huishouden_id = Column(Integer, ForeignKey("huishoudens.id"), nullable=False)
 
+    bsn = Column(Integer)
+
     # Relations from other models
     rekeningen = relationship(
         "RekeningBurger",
