@@ -14,7 +14,7 @@ INCORRECT_CSM_FILE = os.path.join(os.path.dirname(__file__), "incorrect.txt")
 ABN_CAMT_CSM_FILE = os.path.join(os.path.dirname(__file__), "CAMT_ABN.xml")
 RABO_CAMT_CSM_FILE = os.path.join(os.path.dirname(__file__), "CAMT_RABO.xml")
 ING_CAMT_CSM_FILE = os.path.join(os.path.dirname(__file__), "CAMT_ING.xml")
-
+INCORRECT_CAMT_FILE = os.path.join(os.path.dirname(__file__), "incorrect.xml")
 
 class MockResponse:
     history = None
@@ -241,6 +241,12 @@ def test_create_csm_with_ing_camt_file(client, mocker: MockerFixture):
 
 def test_create_csm_with_incorrect_file(client):
     with open(INCORRECT_CSM_FILE, "rb") as testfile:
+        response = do_csm_post(client, testfile)
+        assert response.json["errors"] is not None
+        assert response.status_code == 200
+
+def test_create_camt_with_incorrect_file(client):
+    with open(INCORRECT_CAMT_FILE, "rb") as testfile:
         response = do_csm_post(client, testfile)
         assert response.json["errors"] is not None
         assert response.status_code == 200
