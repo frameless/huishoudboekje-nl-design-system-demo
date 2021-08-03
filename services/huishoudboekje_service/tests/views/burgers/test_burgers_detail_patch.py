@@ -10,6 +10,7 @@ def test_burgers_detail_patch_success(client, burger_factory):
     burger = burger_factory.createBurger()
     edited_burger = burger
     edited_burger.geboortedatum = date(1990, 1, 1)
+    edited_burger.bsn = 223456789
     response = client.post('/burgers/1',
                            data=json.dumps(row2dict(edited_burger)), content_type='application/json')
     assert response.status_code == 200
