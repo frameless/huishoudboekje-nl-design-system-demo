@@ -20,12 +20,11 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import (
 
 class CreateBurgerInput(graphene.InputObjectType):
     # burger arguments
+    bsn = graphene.Int()
     email = graphene.String()
     geboortedatum = graphene.Date()
     telefoonnummer = graphene.String()
     rekeningen = graphene.List(lambda: rekening_input.RekeningInput)
-
-    # burger arguments
     achternaam = graphene.String()
     huisnummer = graphene.String()
     postcode = graphene.String()
@@ -34,8 +33,6 @@ class CreateBurgerInput(graphene.InputObjectType):
     voornamen = graphene.String()
     plaatsnaam = graphene.String()
     huishouden = graphene.Field(huishouden_input.HuishoudenInput)
-
-    bsn = graphene.Int()
 
 class CreateBurger(graphene.Mutation):
     class Arguments:

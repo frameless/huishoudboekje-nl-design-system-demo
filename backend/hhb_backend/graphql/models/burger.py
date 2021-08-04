@@ -12,6 +12,7 @@ from hhb_backend.graphql.models.pageinfo import PageInfo
 class Burger(graphene.ObjectType):
     """ GraphQL Burger model """
     id = graphene.Int()
+    bsn = graphene.Int()
     telefoonnummer = graphene.String()
     email = graphene.String()
     geboortedatum = graphene.String()
@@ -27,8 +28,6 @@ class Burger(graphene.ObjectType):
     afspraken = graphene.List(lambda: afspraak.Afspraak)
     gebruikersactiviteiten = graphene.List(lambda: gebruikersactiviteit.GebruikersActiviteit)
     huishouden = graphene.Field(lambda: huishouden.Huishouden)
-
-    bsn = graphene.Int()
 
     def resolve_iban(root, info):
         rekeningen = Burger.resolve_rekeningen(root, info)

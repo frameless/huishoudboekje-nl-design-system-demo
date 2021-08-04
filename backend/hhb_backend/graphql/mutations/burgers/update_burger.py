@@ -19,11 +19,10 @@ class UpdateBurger(graphene.Mutation):
     class Arguments:
         # burger arguments
         id = graphene.Int(required=True)
+        bsn = graphene.Int()
         email = graphene.String()
         geboortedatum = graphene.String()
         telefoonnummer = graphene.String()
-
-        # burger arguments
         achternaam = graphene.String()
         huisnummer = graphene.String()
         postcode = graphene.String()
@@ -32,8 +31,6 @@ class UpdateBurger(graphene.Mutation):
         voornamen = graphene.String()
         plaatsnaam = graphene.String()
         huishouden = graphene.Argument(lambda: huishouden_input.HuishoudenInput)
-
-        bsn = graphene.Int()
 
     ok = graphene.Boolean()
     burger = graphene.Field(lambda: Burger)
