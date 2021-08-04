@@ -201,6 +201,7 @@
             },
             "fields": {
                 "hhbId": "Identificatienummer",
+                "bsn": "Burgerservicenummer",
                 "initials": "Initialen",
                 "firstName": "Voornamen",
                 "lastName": "Achternaam",

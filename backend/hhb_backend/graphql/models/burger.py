@@ -12,6 +12,7 @@ from hhb_backend.graphql.models.pageinfo import PageInfo
 class Burger(graphene.ObjectType):
     """ GraphQL Burger model """
     id = graphene.Int()
+    bsn = graphene.Int()
     telefoonnummer = graphene.String()
     email = graphene.String()
     geboortedatum = graphene.String()

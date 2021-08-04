@@ -14,9 +14,15 @@ const BurgerProfileView: React.FC<StackProps & {burger: Burger}> = ({burger, ...
 			<Stack spacing={2} direction={["column", null, "row"]} {...props}>
 				<FormLeft title={t("forms.burgers.sections.personal.title")} helperText={t("forms.burgers.sections.personal.detailText")} />
 				<FormRight>
-					<Stack spacing={1} flex={1}>
-						<FormLabel>{t("forms.burgers.fields.hhbId")}</FormLabel>
-						<Text>{getBurgerHhbId(burger)}</Text>
+					<Stack spacing={2} mb={1} direction={["column", "row"]}>
+						<Stack spacing={1} flex={1}>
+							<FormLabel>{t("forms.burgers.fields.hhbId")}</FormLabel>
+							<Text>{getBurgerHhbId(burger)}</Text>
+						</Stack>
+						<Stack spacing={1} flex={1}>
+							<FormLabel>{t("forms.burgers.fields.bsn")}</FormLabel>
+							<Text>{burger.bsn}</Text>
+						</Stack>
 					</Stack>
 					<Stack spacing={2} mb={1} direction={["column", "row"]}>
 						<Stack direction={["column", "row"]} spacing={1} flex={1}>

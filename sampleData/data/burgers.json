@@ -1,5 +1,6 @@
 [
   {
+	"bsn": "999111222",
 	"voorletters": "F.S.",
 	"voornamen": "Fien Sandra",
 	"achternaam": "de Jager",
@@ -142,6 +143,7 @@
 	]
   },
   {
+	"bsn": "999111333",
 	"voorletters": "H.J.",
 	"voornamen": "Henk-Jan",
 	"achternaam": "Poortvliet",

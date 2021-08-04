@@ -21,6 +21,10 @@ const CreateBurger = () => {
 	const toast = useToaster();
 	const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
+	const bsn = useInput({
+		defaultValue: "",
+		validate: [Validators.required],
+	});
 	const voorletters = useInput({
 		defaultValue: "",
 		validate: [Validators.required],
@@ -73,6 +77,7 @@ const CreateBurger = () => {
 		setIsSubmitted(true);
 
 		const isFormValid = [
+			bsn,
 			voorletters,
 			voornamen,
 			achternaam,
@@ -95,6 +100,7 @@ const CreateBurger = () => {
 		createBurger({
 			variables: {
 				input: {
+					bsn: parseInt(bsn.value),
 					voorletters: voorletters.value,
 					voornamen: voornamen.value,
 					achternaam: achternaam.value,
@@ -133,6 +139,14 @@ const CreateBurger = () => {
 					<Stack direction={["column", "row"]} spacing={2}>
 						<FormLeft title={t("forms.burgers.sections.personal.title")} helperText={t("forms.burgers.sections.personal.helperText")} />
 						<FormRight>
+							<Stack spacing={2} direction={["column", "row"]}>
+								<FormControl id={"bsn"} isRequired={true}>
+									<Stack spacing={1} flex={1}>
+										<FormLabel>{t("forms.burgers.fields.bsn")}</FormLabel>
+										<Input isRequired={true} isInvalid={isInvalid(bsn)} {...bsn.bind} />
+									</Stack>
+								</FormControl>
+							</Stack>
 							<Stack spacing={2} direction={["column", "row"]}>
 								<FormControl id={"voorletters"} isRequired={true}>
 									<Stack spacing={1} flex={1}>

@@ -44,6 +44,13 @@ type AddAfspraakZoekterm {
   matchingAfspraken: [Afspraak]
 }
 
+type AddHuishoudenBurger {
+  ok: Boolean
+  huishouden: Huishouden
+  previous: Huishouden
+  burgerIds: Burger
+}
+
 """GraphQL Afspraak model """
 type Afspraak {
   id: Int
@@ -78,6 +85,18 @@ type BankTransaction {
   isGeboekt: Boolean
   journaalpost: Journaalpost
   suggesties: [Afspraak]
+}
+
+input BankTransactionFilter {
+  OR: BankTransactionFilter
+  AND: BankTransactionFilter
+  isGeboekt: Boolean
+  isCredit: Boolean
+  id: ComplexFilterType
+  bedrag: ComplexBedragFilterType
+  tegenRekening: ComplexFilterType
+  statementLine: ComplexFilterType
+  transactieDatum: ComplexFilterType
 }
 
 type BankTransactionsPaged {
@@ -127,11 +146,55 @@ type Burger {
   rekeningen: [Rekening]
   afspraken: [Afspraak]
   gebruikersactiviteiten: [GebruikersActiviteit]
+  huishouden: Huishouden
+  bsn: Int
+}
+
+input BurgerFilter {
+  OR: BurgerFilter
+  AND: BurgerFilter
+  id: ComplexFilterType
+  telefoonnummer: ComplexFilterType
+  email: ComplexFilterType
+  geboortedatum: ComplexFilterType
+  iban: ComplexFilterType
+  achternaam: ComplexFilterType
+  huisnummer: ComplexFilterType
+  postcode: ComplexFilterType
+  straatnaam: ComplexFilterType
+  voorletters: ComplexFilterType
+  voornamen: ComplexFilterType
+  plaatsnaam: ComplexFilterType
+  huishoudenId: ComplexFilterType
 }
 
 type BurgersPaged {
   burgers: [Burger]
   pageInfo: PageInfo
+}
+
+input ComplexBedragFilterType {
+  EQ: Bedrag
+  NEQ: Bedrag
+  GT: Bedrag
+  GTE: Bedrag
+  LT: Bedrag
+  LTE: Bedrag
+  IN: [Bedrag]
+  NOTIN: [Bedrag]
+  BETWEEN: [Bedrag]
+}
+
+input ComplexFilterType {
+  EQ: DynamicType
+  NEQ: DynamicType
+  GT: DynamicType
+  GTE: DynamicType
+  LT: DynamicType
+  LTE: DynamicType
+  IN: [DynamicType]
+  NOTIN: [DynamicType]
+  BETWEEN: [DynamicType]
 }
 
 type Configuratie {
@@ -158,6 +221,7 @@ input CreateAfspraakInput {
   omschrijving: String!
   bedrag: Bedrag!
   validFrom: String
+  validThrough: String
 }
 
 type CreateBurger {
@@ -177,6 +241,8 @@ input CreateBurgerInput {
   voorletters: String
   voornamen: String
   plaatsnaam: String
+  huishouden: HuishoudenInput
+  bsn: Int
 }
 
 type CreateBurgerRekening {
@@ -198,6 +264,15 @@ type CreateCustomerStatementMessage {
 type CreateExportOverschrijvingen {
   ok: Boolean
   export: Export
+}
+
+type CreateHuishouden {
+  ok: Boolean
+  huishouden: Huishouden
+}
+
+input CreateHuishoudenInput {
+  burgerIds: [Int] = []
 }
 
 """Create a Journaalpost with an Afspraak"""
@@ -329,6 +404,18 @@ type DeleteCustomerStatementMessage {
   previous: CustomerStatementMessage
 }
 
+type DeleteHuishouden {
+  ok: Boolean
+  previous: Huishouden
+}
+
+type DeleteHuishoudenBurger {
+  ok: Boolean
+  huishouden: [Huishouden]
+  previous: Huishouden
+  burgerIds: [Burger]
+}
+
 """Delete journaalpost by id """
 type DeleteJournaalpost {
   ok: Boolean
@@ -350,6 +437,9 @@ type DeleteRubriek {
   previous: Rubriek
 }
 
+"""Accepts dates, datetimes, ints and strings."""
+scalar DynamicType
+
 """GraphQL Export model """
 type Export {
   id: Int
@@ -359,6 +449,7 @@ type Export {
   xmldata: String
   startDatum: String
   eindDatum: String
+  sha256: String
 }
 
 type Gebruiker {
@@ -397,6 +488,7 @@ type GebruikersActiviteitEntity {
   rekening: Rekening
   rubriek: Rubriek
   transaction: BankTransaction
+  huishouden: Huishouden
 }
 
 type GebruikersActiviteitMeta {
@@ -416,6 +508,7 @@ type GebruikersActiviteitSnapshot {
   organisatie: Organisatie
   rubriek: Rubriek
   transaction: BankTransaction
+  huishouden: Huishouden
 }
 
 """Grootboekrekening model """
@@ -428,6 +521,21 @@ type Grootboekrekening {
   parent: Grootboekrekening
   children: [Grootboekrekening]
   rubriek: Rubriek
+}
+
+"""GraphQL Huishouden model """
+type Huishouden {
+  id: Int
+  burgers: [Burger]
+}
+
+input HuishoudenInput {
+  id: Int
+}
+
+type HuishoudensPaged {
+  huishoudens: [Huishouden]
+  pageInfo: PageInfo
 }
 
 """Journaalpost model"""
@@ -500,7 +608,7 @@ input RekeningInput {
 type RootMutation {
   createBurger(input: CreateBurgerInput): CreateBurger
   deleteBurger(id: Int!): DeleteBurger
-  updateBurger(achternaam: String, email: String, geboortedatum: String, huisnummer: String, id: Int!, plaatsnaam: String, postcode: String, straatnaam: String, telefoonnummer: String, voorletters: String, voornamen: String): UpdateBurger
+  updateBurger(achternaam: String, bsn: Int, email: String, geboortedatum: String, huishouden: HuishoudenInput, huisnummer: String, id: Int!, plaatsnaam: String, postcode: String, straatnaam: String, telefoonnummer: String, voorletters: String, voornamen: String): UpdateBurger
   createAfspraak(input: CreateAfspraakInput!): CreateAfspraak
   updateAfspraak(id: Int!, input: UpdateAfspraakInput!): UpdateAfspraak
   deleteAfspraak(id: Int!): DeleteAfspraak
@@ -540,6 +648,10 @@ type RootMutation {
   deleteConfiguratie(id: String!): DeleteConfiguratie
   createExportOverschrijvingen(eindDatum: String, startDatum: String): CreateExportOverschrijvingen
   startAutomatischBoeken: StartAutomatischBoeken
+  createHuishouden(input: CreateHuishoudenInput): CreateHuishouden
+  deleteHuishouden(id: Int!): DeleteHuishouden
+  addHuishoudenBurger(burgerIds: [Int]!, huishoudenId: Int!): AddHuishoudenBurger
+  deleteHuishoudenBurger(burgerIds: [Int]!, huishoudenId: Int!): DeleteHuishoudenBurger
 }
 
 """The root of all queries """
@@ -547,8 +659,8 @@ type RootQuery {
   afspraak(id: Int!): Afspraak
   afspraken(ids: [Int] = []): [Afspraak]
   bankTransaction(id: Int!): BankTransaction
-  bankTransactions(csms: [Int] = [], ids: [Int] = []): [BankTransaction]
-  bankTransactionsPaged(start: Int, limit: Int, csms: [Int] = []): BankTransactionsPaged
+  bankTransactions(filters: BankTransactionFilter): [BankTransaction]
+  bankTransactionsPaged(start: Int, limit: Int, filters: BankTransactionFilter): BankTransactionsPaged
   customerStatementMessage(id: Int!): CustomerStatementMessage
   customerStatementMessages(ids: [Int] = []): [CustomerStatementMessage]
   export(id: Int!): Export
@@ -569,9 +681,12 @@ type RootQuery {
   configuratie(id: String!): Configuratie
   configuraties(ids: [String] = []): [Configuratie]
   gebruikersactiviteit(id: Int!): GebruikersActiviteit
-  gebruikersactiviteiten(ids: [Int] = [], burgerIds: [Int] = [], afsprakenIds: [Int] = []): [GebruikersActiviteit]
-  gebruikersactiviteitenPaged(start: Int, limit: Int, burgerIds: [Int] = [], afsprakenIds: [Int] = []): GebruikersActiviteitenPaged
+  gebruikersactiviteiten(ids: [Int] = [], burgerIds: [Int] = [], afsprakenIds: [Int] = [], huishoudenIds: [Int] = []): [GebruikersActiviteit]
+  gebruikersactiviteitenPaged(start: Int, limit: Int, burgerIds: [Int] = [], afsprakenIds: [Int] = [], huishoudenIds: [Int] = []): GebruikersActiviteitenPaged
   gebruiker: Gebruiker
+  huishouden(id: Int!): Huishouden
+  huishoudens(ids: [Int] = [], filters: BurgerFilter): [Huishouden]
+  huishoudensPaged(start: Int, limit: Int, filters: BurgerFilter): HuishoudensPaged
 }
 
 """GraphQL Rubriek model"""

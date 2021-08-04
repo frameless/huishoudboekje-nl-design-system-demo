@@ -154,10 +154,10 @@ const main = async () => {
 	/* Add burgers */
 	console.log("Burgers toevoegen...");
 	const mBurgers = burgers.map(async b => {
-		const {achternaam, voorletters, voornamen, email, geboortedatum, huisnummer, plaatsnaam, postcode, straatnaam, telefoonnummer, rekeningen} = b;
+		const {bsn, achternaam, voorletters, voornamen, email, geboortedatum, huisnummer, plaatsnaam, postcode, straatnaam, telefoonnummer, rekeningen} = b;
 
 		return await createBurger({
-			input: {achternaam, email, geboortedatum, huisnummer, plaatsnaam, postcode, straatnaam, telefoonnummer, voorletters, voornamen, rekeningen},
+			input: {bsn, achternaam, email, geboortedatum, huisnummer, plaatsnaam, postcode, straatnaam, telefoonnummer, voorletters, voornamen, rekeningen},
 		}).then(async r => {
 			const burger = r.createBurger?.burger;
 			const voorletters = burger?.voorletters?.replace(/\./g, "").split("").join(". ") + ".";

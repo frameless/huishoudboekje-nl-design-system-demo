@@ -4,6 +4,7 @@ import {BurgerFragment} from "../fragments/BurgerFragment";
 export const UpdateBurgerMutation = gql`
     mutation updateBurger(
         $id: Int!
+        $bsn: Int
         $voorletters: String
         $voornamen: String
         $achternaam: String
@@ -17,6 +18,7 @@ export const UpdateBurgerMutation = gql`
     ){
         updateBurger(
             id: $id
+            bsn: $bsn
             voorletters: $voorletters
             voornamen: $voornamen
             achternaam: $achternaam

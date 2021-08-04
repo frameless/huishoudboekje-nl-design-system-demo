@@ -25,6 +25,8 @@ export type Scalars = {
    * [iso8601](https://en.wikipedia.org/wiki/ISO_8601).
    */
   DateTime: any;
+  /** Accepts dates, datetimes, ints and strings. */
+  DynamicType: any;
   /**
    * Create scalar that ignores normal serialization/deserialization, since
    * that will be handled by the multipart request spec
@@ -40,6 +42,13 @@ export type AddAfspraakZoekterm = {
   afspraak?: Maybe<Afspraak>;
   previous?: Maybe<Afspraak>;
   matchingAfspraken?: Maybe<Array<Maybe<Afspraak>>>;
+};
+
+export type AddHuishoudenBurger = {
+  ok?: Maybe<Scalars['Boolean']>;
+  huishouden?: Maybe<Huishouden>;
+  previous?: Maybe<Huishouden>;
+  burgerIds?: Maybe<Burger>;
 };
 
 /** GraphQL Afspraak model  */
@@ -84,6 +93,18 @@ export type BankTransaction = {
   isGeboekt?: Maybe<Scalars['Boolean']>;
   journaalpost?: Maybe<Journaalpost>;
   suggesties?: Maybe<Array<Maybe<Afspraak>>>;
+};
+
+export type BankTransactionFilter = {
+  OR?: Maybe<BankTransactionFilter>;
+  AND?: Maybe<BankTransactionFilter>;
+  isGeboekt?: Maybe<Scalars['Boolean']>;
+  isCredit?: Maybe<Scalars['Boolean']>;
+  id?: Maybe<ComplexFilterType>;
+  bedrag?: Maybe<ComplexBedragFilterType>;
+  tegenRekening?: Maybe<ComplexFilterType>;
+  statementLine?: Maybe<ComplexFilterType>;
+  transactieDatum?: Maybe<ComplexFilterType>;
 };
 
 export type BankTransactionsPaged = {
@@ -132,11 +153,55 @@ export type Burger = {
   rekeningen?: Maybe<Array<Maybe<Rekening>>>;
   afspraken?: Maybe<Array<Maybe<Afspraak>>>;
   gebruikersactiviteiten?: Maybe<Array<Maybe<GebruikersActiviteit>>>;
+  huishouden?: Maybe<Huishouden>;
+  bsn?: Maybe<Scalars['Int']>;
+};
+
+export type BurgerFilter = {
+  OR?: Maybe<BurgerFilter>;
+  AND?: Maybe<BurgerFilter>;
+  id?: Maybe<ComplexFilterType>;
+  telefoonnummer?: Maybe<ComplexFilterType>;
+  email?: Maybe<ComplexFilterType>;
+  geboortedatum?: Maybe<ComplexFilterType>;
+  iban?: Maybe<ComplexFilterType>;
+  achternaam?: Maybe<ComplexFilterType>;
+  huisnummer?: Maybe<ComplexFilterType>;
+  postcode?: Maybe<ComplexFilterType>;
+  straatnaam?: Maybe<ComplexFilterType>;
+  voorletters?: Maybe<ComplexFilterType>;
+  voornamen?: Maybe<ComplexFilterType>;
+  plaatsnaam?: Maybe<ComplexFilterType>;
+  huishoudenId?: Maybe<ComplexFilterType>;
 };
 
 export type BurgersPaged = {
   burgers?: Maybe<Array<Maybe<Burger>>>;
   pageInfo?: Maybe<PageInfo>;
+};
+
+export type ComplexBedragFilterType = {
+  EQ?: Maybe<Scalars['Bedrag']>;
+  NEQ?: Maybe<Scalars['Bedrag']>;
+  GT?: Maybe<Scalars['Bedrag']>;
+  GTE?: Maybe<Scalars['Bedrag']>;
+  LT?: Maybe<Scalars['Bedrag']>;
+  LTE?: Maybe<Scalars['Bedrag']>;
+  IN?: Maybe<Array<Maybe<Scalars['Bedrag']>>>;
+  NOTIN?: Maybe<Array<Maybe<Scalars['Bedrag']>>>;
+  BETWEEN?: Maybe<Array<Maybe<Scalars['Bedrag']>>>;
+};
+
+export type ComplexFilterType = {
+  EQ?: Maybe<Scalars['DynamicType']>;
+  NEQ?: Maybe<Scalars['DynamicType']>;
+  GT?: Maybe<Scalars['DynamicType']>;
+  GTE?: Maybe<Scalars['DynamicType']>;
+  LT?: Maybe<Scalars['DynamicType']>;
+  LTE?: Maybe<Scalars['DynamicType']>;
+  IN?: Maybe<Array<Maybe<Scalars['DynamicType']>>>;
+  NOTIN?: Maybe<Array<Maybe<Scalars['DynamicType']>>>;
+  BETWEEN?: Maybe<Array<Maybe<Scalars['DynamicType']>>>;
 };
 
 export type Configuratie = {
@@ -163,6 +228,7 @@ export type CreateAfspraakInput = {
   omschrijving: Scalars['String'];
   bedrag: Scalars['Bedrag'];
   validFrom?: Maybe<Scalars['String']>;
+  validThrough?: Maybe<Scalars['String']>;
 };
 
 export type CreateBurger = {
@@ -182,6 +248,8 @@ export type CreateBurgerInput = {
   voorletters?: Maybe<Scalars['String']>;
   voornamen?: Maybe<Scalars['String']>;
   plaatsnaam?: Maybe<Scalars['String']>;
+  huishouden?: Maybe<HuishoudenInput>;
+  bsn?: Maybe<Scalars['Int']>;
 };
 
 export type CreateBurgerRekening = {
@@ -203,6 +271,15 @@ export type CreateCustomerStatementMessage = {
 export type CreateExportOverschrijvingen = {
   ok?: Maybe<Scalars['Boolean']>;
   export?: Maybe<Export>;
+};
+
+export type CreateHuishouden = {
+  ok?: Maybe<Scalars['Boolean']>;
+  huishouden?: Maybe<Huishouden>;
+};
+
+export type CreateHuishoudenInput = {
+  burgerIds?: Maybe<Array<Maybe<Scalars['Int']>>>;
 };
 
 /** Create a Journaalpost with an Afspraak */
@@ -322,6 +399,18 @@ export type DeleteCustomerStatementMessage = {
   previous?: Maybe<CustomerStatementMessage>;
 };
 
+export type DeleteHuishouden = {
+  ok?: Maybe<Scalars['Boolean']>;
+  previous?: Maybe<Huishouden>;
+};
+
+export type DeleteHuishoudenBurger = {
+  ok?: Maybe<Scalars['Boolean']>;
+  huishouden?: Maybe<Array<Maybe<Huishouden>>>;
+  previous?: Maybe<Huishouden>;
+  burgerIds?: Maybe<Array<Maybe<Burger>>>;
+};
+
 /** Delete journaalpost by id  */
 export type DeleteJournaalpost = {
   ok?: Maybe<Scalars['Boolean']>;
@@ -343,6 +432,7 @@ export type DeleteRubriek = {
   previous?: Maybe<Rubriek>;
 };
 
+
 /** GraphQL Export model  */
 export type Export = {
   id?: Maybe<Scalars['Int']>;
@@ -352,6 +442,7 @@ export type Export = {
   xmldata?: Maybe<Scalars['String']>;
   startDatum?: Maybe<Scalars['String']>;
   eindDatum?: Maybe<Scalars['String']>;
+  sha256?: Maybe<Scalars['String']>;
 };
 
 export type Gebruiker = {
@@ -385,6 +476,7 @@ export type GebruikersActiviteitEntity = {
   rekening?: Maybe<Rekening>;
   rubriek?: Maybe<Rubriek>;
   transaction?: Maybe<BankTransaction>;
+  huishouden?: Maybe<Huishouden>;
 };
 
 export type GebruikersActiviteitMeta = {
@@ -404,6 +496,7 @@ export type GebruikersActiviteitSnapshot = {
   organisatie?: Maybe<Organisatie>;
   rubriek?: Maybe<Rubriek>;
   transaction?: Maybe<BankTransaction>;
+  huishouden?: Maybe<Huishouden>;
 };
 
 export type GebruikersActiviteitenPaged = {
@@ -421,6 +514,21 @@ export type Grootboekrekening = {
   parent?: Maybe<Grootboekrekening>;
   children?: Maybe<Array<Maybe<Grootboekrekening>>>;
   rubriek?: Maybe<Rubriek>;
+};
+
+/** GraphQL Huishouden model  */
+export type Huishouden = {
+  id?: Maybe<Scalars['Int']>;
+  burgers?: Maybe<Array<Maybe<Burger>>>;
+};
+
+export type HuishoudenInput = {
+  id?: Maybe<Scalars['Int']>;
+};
+
+export type HuishoudensPaged = {
+  huishoudens?: Maybe<Array<Maybe<Huishouden>>>;
+  pageInfo?: Maybe<PageInfo>;
 };
 
 /** Journaalpost model */
@@ -528,6 +636,10 @@ export type RootMutation = {
   deleteConfiguratie?: Maybe<DeleteConfiguratie>;
   createExportOverschrijvingen?: Maybe<CreateExportOverschrijvingen>;
   startAutomatischBoeken?: Maybe<StartAutomatischBoeken>;
+  createHuishouden?: Maybe<CreateHuishouden>;
+  deleteHuishouden?: Maybe<DeleteHuishouden>;
+  addHuishoudenBurger?: Maybe<AddHuishoudenBurger>;
+  deleteHuishoudenBurger?: Maybe<DeleteHuishoudenBurger>;
 };
 
 
@@ -546,8 +658,10 @@ export type RootMutationDeleteBurgerArgs = {
 /** The root of all mutations  */
 export type RootMutationUpdateBurgerArgs = {
   achternaam?: Maybe<Scalars['String']>;
+  bsn?: Maybe<Scalars['Int']>;
   email?: Maybe<Scalars['String']>;
   geboortedatum?: Maybe<Scalars['String']>;
+  huishouden?: Maybe<HuishoudenInput>;
   huisnummer?: Maybe<Scalars['String']>;
   id: Scalars['Int'];
   plaatsnaam?: Maybe<Scalars['String']>;
@@ -746,6 +860,32 @@ export type RootMutationCreateExportOverschrijvingenArgs = {
   startDatum?: Maybe<Scalars['String']>;
 };
 
+
+/** The root of all mutations  */
+export type RootMutationCreateHuishoudenArgs = {
+  input?: Maybe<CreateHuishoudenInput>;
+};
+
+
+/** The root of all mutations  */
+export type RootMutationDeleteHuishoudenArgs = {
+  id: Scalars['Int'];
+};
+
+
+/** The root of all mutations  */
+export type RootMutationAddHuishoudenBurgerArgs = {
+  burgerIds: Array<Maybe<Scalars['Int']>>;
+  huishoudenId: Scalars['Int'];
+};
+
+
+/** The root of all mutations  */
+export type RootMutationDeleteHuishoudenBurgerArgs = {
+  burgerIds: Array<Maybe<Scalars['Int']>>;
+  huishoudenId: Scalars['Int'];
+};
+
 /** The root of all queries  */
 export type RootQuery = {
   afspraak?: Maybe<Afspraak>;
@@ -776,6 +916,9 @@ export type RootQuery = {
   gebruikersactiviteiten?: Maybe<Array<Maybe<GebruikersActiviteit>>>;
   gebruikersactiviteitenPaged?: Maybe<GebruikersActiviteitenPaged>;
   gebruiker?: Maybe<Gebruiker>;
+  huishouden?: Maybe<Huishouden>;
+  huishoudens?: Maybe<Array<Maybe<Huishouden>>>;
+  huishoudensPaged?: Maybe<HuishoudensPaged>;
 };
 
 
@@ -799,8 +942,7 @@ export type RootQueryBankTransactionArgs = {
 
 /** The root of all queries  */
 export type RootQueryBankTransactionsArgs = {
-  csms?: Maybe<Array<Maybe<Scalars['Int']>>>;
-  ids?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  filters?: Maybe<BankTransactionFilter>;
 };
 
 
@@ -808,7 +950,7 @@ export type RootQueryBankTransactionsArgs = {
 export type RootQueryBankTransactionsPagedArgs = {
   start?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
-  csms?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  filters?: Maybe<BankTransactionFilter>;
 };
 
 
@@ -940,6 +1082,7 @@ export type RootQueryGebruikersactiviteitenArgs = {
   ids?: Maybe<Array<Maybe<Scalars['Int']>>>;
   burgerIds?: Maybe<Array<Maybe<Scalars['Int']>>>;
   afsprakenIds?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  huishoudenIds?: Maybe<Array<Maybe<Scalars['Int']>>>;
 };
 
 
@@ -949,6 +1092,28 @@ export type RootQueryGebruikersactiviteitenPagedArgs = {
   limit?: Maybe<Scalars['Int']>;
   burgerIds?: Maybe<Array<Maybe<Scalars['Int']>>>;
   afsprakenIds?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  huishoudenIds?: Maybe<Array<Maybe<Scalars['Int']>>>;
+};
+
+
+/** The root of all queries  */
+export type RootQueryHuishoudenArgs = {
+  id: Scalars['Int'];
+};
+
+
+/** The root of all queries  */
+export type RootQueryHuishoudensArgs = {
+  ids?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  filters?: Maybe<BurgerFilter>;
+};
+
+
+/** The root of all queries  */
+export type RootQueryHuishoudensPagedArgs = {
+  start?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+  filters?: Maybe<BurgerFilter>;
 };
 
 /** GraphQL Rubriek model */
@@ -1051,6 +1216,11 @@ export type BurgerFragment = (
 );
 
 export type CustomerStatementMessageFragment = Pick<CustomerStatementMessage, 'id' | 'filename' | 'uploadDate' | 'accountIdentification' | 'closingAvailableFunds' | 'closingBalance' | 'forwardAvailableBalance' | 'openingBalance' | 'relatedReference' | 'sequenceNumber' | 'transactionReferenceNumber'>;
+
+export type ExportFragment = (
+  Pick<Export, 'id' | 'naam' | 'timestamp' | 'startDatum' | 'eindDatum' | 'sha256'>
+  & { overschrijvingen?: Maybe<Array<Maybe<Pick<Overschrijving, 'id'>>>> }
+);
 
 export type GebruikerFragment = Pick<Gebruiker, 'email'>;
 
@@ -1474,10 +1644,7 @@ export type GetCsmsQuery = { customerStatementMessages?: Maybe<Array<Maybe<Custo
 export type GetExportsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetExportsQuery = { exports?: Maybe<Array<Maybe<(
-    Pick<Export, 'id' | 'naam' | 'timestamp' | 'startDatum' | 'eindDatum'>
-    & { overschrijvingen?: Maybe<Array<Maybe<Pick<Overschrijving, 'id'>>>> }
-  )>>> };
+export type GetExportsQuery = { exports?: Maybe<Array<Maybe<ExportFragment>>> };
 
 export type GetGebeurtenissenQueryVariables = Exact<{
   limit: Scalars['Int'];
@@ -1550,6 +1717,7 @@ export type GetTransactionItemFormDataQuery = { rubrieken?: Maybe<Array<Maybe<(
 export type GetTransactiesQueryVariables = Exact<{
   offset: Scalars['Int'];
   limit: Scalars['Int'];
+  filters?: Maybe<BankTransactionFilter>;
 }>;
 
 
@@ -1699,6 +1867,19 @@ export const CustomerStatementMessageFragmentDoc = gql`
   relatedReference
   sequenceNumber
   transactionReferenceNumber
+}
+    `;
+export const ExportFragmentDoc = gql`
+    fragment Export on Export {
+  id
+  naam
+  timestamp
+  startDatum
+  eindDatum
+  sha256
+  overschrijvingen {
+    id
+  }
 }
     `;
 export const GebruikerFragmentDoc = gql`
@@ -2230,17 +2411,10 @@ export const GetCsmsDocument = gql`
 export const GetExportsDocument = gql`
     query getExports {
   exports {
-    id
-    naam
-    timestamp
-    startDatum
-    eindDatum
-    overschrijvingen {
-      id
-    }
+    ...Export
   }
 }
-    `;
+    ${ExportFragmentDoc}`;
 export const GetGebeurtenissenDocument = gql`
     query GetGebeurtenissen($limit: Int!, $offset: Int!) {
   gebruikersactiviteitenPaged(start: $offset, limit: $limit) {
@@ -2344,8 +2518,8 @@ export const GetTransactionItemFormDataDocument = gql`
     ${RubriekFragmentDoc}
 ${AfspraakFragmentDoc}`;
 export const GetTransactiesDocument = gql`
-    query getTransacties($offset: Int!, $limit: Int!) {
-  bankTransactionsPaged(start: $offset, limit: $limit) {
+    query getTransacties($offset: Int!, $limit: Int!, $filters: BankTransactionFilter) {
+  bankTransactionsPaged(start: $offset, limit: $limit, filters: $filters) {
     banktransactions {
       ...BankTransaction
       journaalpost {

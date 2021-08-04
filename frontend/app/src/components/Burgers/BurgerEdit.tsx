@@ -22,6 +22,9 @@ const BurgerEdit = () => {
 	const toast = useToaster();
 	const {push} = useHistory();
 
+	const bsn = useInput({
+		validate: [Validators.required],
+	});
 	const voorletters = useInput({
 		validate: [Validators.required],
 	});
@@ -62,6 +65,7 @@ const BurgerEdit = () => {
 		variables: {id: parseInt(id)},
 		onCompleted: ({burger}) => {
 			if (burger) {
+				bsn.setValue(String(burger.bsn));
 				voorletters.setValue(burger.voorletters || "");
 				voornamen.setValue(burger.voornamen || "");
 				achternaam.setValue(burger.achternaam || "");
@@ -82,6 +86,7 @@ const BurgerEdit = () => {
 		e.preventDefault();
 
 		const isFormValid = [
+			bsn,
 			voorletters,
 			voornamen,
 			achternaam,
@@ -103,6 +108,7 @@ const BurgerEdit = () => {
 		updateBurger({
 			variables: {
 				id: parseInt(id),
+				bsn: parseInt(bsn.value),
 				voorletters: voorletters.value,
 				voornamen: voornamen.value,
 				achternaam: achternaam.value,
@@ -138,6 +144,14 @@ const BurgerEdit = () => {
 							<Stack direction={["column", "row"]} spacing={2}>
 								<FormLeft title={t("forms.burgers.sections.personal.title")} helperText={t("forms.burgers.sections.personal.helperText")} />
 								<FormRight>
+									<Stack spacing={2} direction={["column", "row"]}>
+										<FormControl id={"bsn"} isRequired={true}>
+											<Stack spacing={1} flex={1}>
+												<FormLabel>{t("forms.burgers.fields.bsn")}</FormLabel>
+												<Input isInvalid={bsn.dirty && !bsn.isValid} {...bsn.bind} />
+											</Stack>
+										</FormControl>
+									</Stack>
 									<Stack spacing={2} direction={["column", "row"]}>
 										<FormControl id={"voorletters"} isRequired={true}>
 											<Stack spacing={1} flex={1}>

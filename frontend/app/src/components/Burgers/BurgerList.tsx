@@ -35,6 +35,7 @@ const BurgerList = () => {
 			const filteredBurgers = burgers.filter(b => {
 				return [
 					searchFields(search, [
+						String(b.bsn),
 						b.achternaam || "",
 						b.voornamen || "",
 						...(b.afspraken || []).flatMap(a => [
