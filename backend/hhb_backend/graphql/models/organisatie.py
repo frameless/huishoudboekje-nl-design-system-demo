@@ -20,7 +20,6 @@ class OrganisatieKvK(graphene.ObjectType):
 class Organisatie(graphene.ObjectType):
     """ GraphQL Organisatie model """
     id = graphene.Int()
-    weergave_naam = graphene.String()
     rekeningen = graphene.List(lambda: rekening.Rekening)
     kvk_nummer = graphene.String()
     kvk_details = graphene.Field(OrganisatieKvK)

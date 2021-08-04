@@ -8,9 +8,7 @@ class Organisatie(db.Model):
     __tablename__ = 'organisaties'
 
     id = Column(Integer, Sequence('organisaties_id_seq'), primary_key=True)
-    weergave_naam = Column(String)
     kvk_nummer = Column(String, unique=True)
-
     vestigingsnummer = Column(Integer)
 
     rekeningen = relationship("RekeningOrganisatie",
@@ -22,6 +20,6 @@ class Organisatie(db.Model):
     def to_dict(self):
         return {
             "id": self.id,
-            "weergave_naam": self.weergave_naam,
-            "kvk_nummer": self.kvk_nummer
+            "kvk_nummer": self.kvk_nummer,
+            "vestigingsnummer": self.vestigingsnummer
         }

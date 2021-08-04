@@ -10,11 +10,11 @@ class OrganisatieFactory():
     def createOrganisatie(
         self,
         kvk_nummer: int = 12345,
-        weergave_naam: str = "Test Organisatie",
+        vestigingsnummer: int = 1
     ):
         organisatie = Organisatie(
             kvk_nummer=kvk_nummer,
-            weergave_naam=weergave_naam,
+            vestigingsnummer=vestigingsnummer
         )
         self.dbsession.add(organisatie)
         self.dbsession.flush()
