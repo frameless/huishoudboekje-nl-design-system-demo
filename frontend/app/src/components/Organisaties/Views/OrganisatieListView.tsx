@@ -25,7 +25,7 @@ const OrganisatieListView: React.FC<BoxProps & {organisaties: Organisatie[], sho
 					push(Routes.Organisatie(o.id));
 				}}>
 					<Stack spacing={1}>
-						<Text fontSize={"md"} overflowX={"hidden"} textOverflow={"ellipsis"} width={"100%"} maxW={["300px", "250px"]} title={o.weergaveNaam}><strong>{o.weergaveNaam}</strong></Text>
+						<Text fontSize={"md"} overflowX={"hidden"} textOverflow={"ellipsis"} width={"100%"} maxW={["300px", "250px"]} title={o.kvkDetails?.naam}><strong>{o.kvkDetails?.naam}</strong></Text>
 						<Text fontSize={"md"} color={"gray.400"}>{o.kvkDetails?.plaatsnaam}</Text>
 					</Stack>
 				</GridCard>

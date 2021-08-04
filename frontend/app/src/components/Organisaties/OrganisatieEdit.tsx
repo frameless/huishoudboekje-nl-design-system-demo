@@ -24,11 +24,11 @@ const OrganisatieEdit = () => {
 		defaultValue: "",
 		validate: [Validators.required, (v) => new RegExp(/^[0-9]{8}$/).test(v)],
 	});
-	const bedrijfsnaam = useInput({
+	const vestigingsnummer = useInput({
 		defaultValue: "",
 		validate: [Validators.required],
 	});
-	const weergavenaam = useInput({
+	const bedrijfsnaam = useInput({
 		defaultValue: "",
 		validate: [Validators.required],
 	});
@@ -55,8 +55,8 @@ const OrganisatieEdit = () => {
 		onCompleted: ({organisatie}) => {
 			if (organisatie) {
 				kvkNummer.setValue(organisatie.kvkNummer?.toString() || "");
+				vestigingsnummer.setValue(organisatie.vestigingsnummer || "");
 				bedrijfsnaam.setValue(organisatie.kvkDetails?.naam || "");
-				weergavenaam.setValue(organisatie.weergaveNaam || "");
 				straatnaam.setValue(organisatie.kvkDetails?.straatnaam || "");
 				huisnummer.setValue(organisatie.kvkDetails?.huisnummer || "");
 				postcode.setValue(organisatie.kvkDetails?.postcode || "");
@@ -71,8 +71,8 @@ const OrganisatieEdit = () => {
 
 		const isFormValid = [
 			kvkNummer,
+			vestigingsnummer,
 			bedrijfsnaam,
-			weergavenaam,
 			straatnaam,
 			huisnummer,
 			postcode,
@@ -89,8 +89,8 @@ const OrganisatieEdit = () => {
 			variables: {
 				id: parseInt(id),
 				kvkNummer: kvkNummer.value,
+				vestigingsnummer: vestigingsnummer.value,
 				naam: bedrijfsnaam.value,
-				weergaveNaam: weergavenaam.value,
 				straatnaam: straatnaam.value,
 				huisnummer: huisnummer.value,
 				postcode: postcode.value,
@@ -113,7 +113,7 @@ const OrganisatieEdit = () => {
 
 	return (
 		<Queryable query={$organisatie} error={<Redirect to={Routes.NotFound} />}>{({organisatie}: {organisatie: Organisatie}) => (
-			<Page backButton={<BackButton to={Routes.Organisatie(parseInt(id))} />} title={organisatie.weergaveNaam || ""}>
+			<Page backButton={<BackButton to={Routes.Organisatie(parseInt(id))} />} title={organisatie.kvkDetails?.naam || ""}>
 				<Box as={"form"} onSubmit={onSubmit}>
 					<Section>
 						<Stack direction={["column", "row"]} spacing={2}>
@@ -136,10 +136,10 @@ const OrganisatieEdit = () => {
 									</FormControl>
 								</Stack>
 								<Stack spacing={2} direction={["column", "row"]}>
-									<FormControl isRequired={true} id={"weergavenaam"}>
+									<FormControl isRequired={true} id={"vestigingsnummer"}>
 										<Stack spacing={1} flex={1}>
-											<FormLabel>{t("forms.organizations.fields.weergavenaam")}</FormLabel>
-											<Input isInvalid={isInvalid(weergavenaam)} {...weergavenaam.bind} />
+											<FormLabel>{t("forms.organizations.fields.vestigingsnummer")}</FormLabel>
+											<Input isInvalid={isInvalid(vestigingsnummer)} {...vestigingsnummer.bind} />
 										</Stack>
 									</FormControl>
 								</Stack>

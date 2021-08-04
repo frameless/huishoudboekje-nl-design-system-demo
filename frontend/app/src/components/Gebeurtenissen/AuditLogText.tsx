@@ -24,18 +24,18 @@ const AuditLogText: React.FC<TextProps & {g: GebruikersActiviteit}> = ({g, ...pr
 
 	const components = {
 		linkBurger: burger?.id ? <AuditLogLink to={Routes.Burger(burger.id)}>{formatBurgerName(burger)}</AuditLogLink> : t("unknownBurger"),
-		linkOrganisatie: organisatie?.id ? <AuditLogLink to={Routes.Organisatie(organisatie.id)}>{organisatie.weergaveNaam}</AuditLogLink> : t("unknownOrganisatie"),
+		linkOrganisatie: organisatie?.id ? <AuditLogLink to={Routes.Organisatie(organisatie.id)}>{organisatie.kvkDetails?.naam}</AuditLogLink> : t("unknownOrganisatie"),
 		linkAfspraak: afspraak?.id ? <AuditLogLink to={Routes.ViewAfspraak(afspraak.id)} /> : t("unknownAfspraak"),
 		linkAfspraakOrganisatie: afspraak?.organisatie?.id ?
-			<AuditLogLink to={Routes.Organisatie(afspraak?.organisatie?.id)}>{afspraak?.organisatie.weergaveNaam}</AuditLogLink> : t("unknownOrganisatie"),
+			<AuditLogLink to={Routes.Organisatie(afspraak?.organisatie?.id)}>{afspraak?.organisatie.kvkDetails?.naam}</AuditLogLink> : t("unknownOrganisatie"),
 		strong: <strong />,
 	};
 
 	const values = {
 		gebruiker,
 		burger: burgerName,
-		organisatie: organisatie?.weergaveNaam || t("unknownOrganisatie"),
-		afspraakOrganisatie: afspraak?.organisatie?.weergaveNaam,
+		organisatie: organisatie?.kvkDetails?.naam || t("unknownOrganisatie"),
+		afspraakOrganisatie: afspraak?.organisatie?.kvkDetails?.naam,
 		customerStatementMessage: customerStatementMessage?.entityId || "?",
 		nTransactions: transactions.length || t("unknown"),
 		transactieId: transactions?.[0]?.entityId || t("unknown"),

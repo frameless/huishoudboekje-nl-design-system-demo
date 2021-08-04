@@ -24,11 +24,11 @@ const CreateOrganisatie = () => {
 		defaultValue: "",
 		validate: [Validators.required, (v) => new RegExp(/^[0-9]{8}$/).test(v)],
 	});
-	const bedrijfsnaam = useInput({
+	const vestigingsnummer = useInput({
 		defaultValue: "",
 		validate: [Validators.required],
 	});
-	const weergavenaam = useInput({
+	const bedrijfsnaam = useInput({
 		defaultValue: "",
 		validate: [Validators.required],
 	});
@@ -58,8 +58,8 @@ const CreateOrganisatie = () => {
 
 		const isFormValid = [
 			kvknummer,
+			vestigingsnummer,
 			bedrijfsnaam,
-			weergavenaam,
 			straatnaam,
 			huisnummer,
 			postcode,
@@ -81,7 +81,7 @@ const CreateOrganisatie = () => {
 				plaatsnaam: plaatsnaam.value,
 				postcode: postcode.value,
 				straatnaam: straatnaam.value,
-				weergaveNaam: weergavenaam.value,
+				vestigingsnummer: vestigingsnummer.value,
 			},
 		}).then(result => {
 			toast({
@@ -118,18 +118,18 @@ const CreateOrganisatie = () => {
 										</Tooltip>
 									</Stack>
 								</FormControl>
-								<FormControl id={"bedrijfsnaam"} isRequired={true}>
-									<Stack spacing={1} flex={2}>
-										<FormLabel>{t("forms.organizations.fields.bedrijfsnaam")}</FormLabel>
-										<Input isInvalid={isInvalid(bedrijfsnaam)} {...bedrijfsnaam.bind} />
+								<FormControl id={"vestigingsnummer"} isRequired={true}>
+									<Stack spacing={1} flex={1}>
+										<FormLabel>{t("forms.organizations.fields.vestigingsnummer")}</FormLabel>
+										<Input isInvalid={isInvalid(vestigingsnummer)} {...vestigingsnummer.bind} />
 									</Stack>
 								</FormControl>
 							</Stack>
 							<Stack spacing={2} direction={["column", "row"]}>
-								<FormControl id={"weergavenaam"} isRequired={true}>
-									<Stack spacing={1} flex={1}>
-										<FormLabel>{t("forms.organizations.fields.weergavenaam")}</FormLabel>
-										<Input isInvalid={isInvalid(weergavenaam)} {...weergavenaam.bind} />
+								<FormControl id={"bedrijfsnaam"} isRequired={true}>
+									<Stack spacing={1} flex={2}>
+										<FormLabel>{t("forms.organizations.fields.bedrijfsnaam")}</FormLabel>
+										<Input isInvalid={isInvalid(bedrijfsnaam)} {...bedrijfsnaam.bind} />
 									</Stack>
 								</FormControl>
 							</Stack>

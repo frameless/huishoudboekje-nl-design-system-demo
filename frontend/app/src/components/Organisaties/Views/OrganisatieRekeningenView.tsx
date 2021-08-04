@@ -44,7 +44,7 @@ const OrganisatieRekeningenView: React.FC<BoxProps & {organisatie: Organisatie}>
 						{rekeningen.length > 0 && <Divider />}
 
 						<RekeningForm rekening={{
-							rekeninghouder: organisatie.weergaveNaam,
+							rekeninghouder: organisatie.kvkDetails?.naam,
 						}} onSave={onSaveRekening} onCancel={() => toggleForm(false)} />
 					</>) : (
 						<Box>

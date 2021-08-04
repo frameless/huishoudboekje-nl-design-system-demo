@@ -1,5 +1,6 @@
 import {gql} from "@apollo/client";
 import {BetaalinstructieFragment} from "./BetaalinstructieFragment";
+import {OrganisatieFragment} from "./OrganisatieFragment";
 import {RekeningFragment} from "./RekeningFragment";
 import {RubriekFragment} from "./RubriekFragment";
 
@@ -9,7 +10,7 @@ export const AfspraakFragment = gql`
         omschrijving
         bedrag
         credit
-        betaalinstructie{
+        betaalinstructie {
             ...Betaalinstructie
         }
         zoektermen
@@ -29,12 +30,7 @@ export const AfspraakFragment = gql`
             ...Rekening
         }
         organisatie {
-            id
-            weergaveNaam
-            kvkDetails {
-                naam
-                plaatsnaam
-            }
+            ...Organisatie
         }
         rubriek {
             ...Rubriek
@@ -42,7 +38,7 @@ export const AfspraakFragment = gql`
         matchingAfspraken {
             id
             credit
-            burger{
+            burger {
                 voorletters
                 voornamen
                 achternaam
@@ -58,6 +54,7 @@ export const AfspraakFragment = gql`
         }
     }
     ${RekeningFragment}
+    ${OrganisatieFragment}
     ${RubriekFragment}
     ${BetaalinstructieFragment}
 `;
