@@ -49,6 +49,7 @@ export type AddHuishoudenBurger = {
   ok?: Maybe<Scalars['Boolean']>;
   huishouden?: Maybe<Huishouden>;
   previous?: Maybe<Huishouden>;
+  burgerIds?: Maybe<Burger>;
 };
 
 /** GraphQL Afspraak model  */
@@ -154,6 +155,7 @@ export type Burger = {
   afspraken?: Maybe<Array<Maybe<Afspraak>>>;
   gebruikersactiviteiten?: Maybe<Array<Maybe<GebruikersActiviteit>>>;
   huishouden?: Maybe<Huishouden>;
+  bsn?: Maybe<Scalars['Int']>;
 };
 
 export type BurgerFilter = {
@@ -248,6 +250,7 @@ export type CreateBurgerInput = {
   voornamen?: Maybe<Scalars['String']>;
   plaatsnaam?: Maybe<Scalars['String']>;
   huishouden?: Maybe<HuishoudenInput>;
+  bsn?: Maybe<Scalars['Int']>;
 };
 
 export type CreateBurgerRekening = {
@@ -406,6 +409,7 @@ export type DeleteHuishoudenBurger = {
   ok?: Maybe<Scalars['Boolean']>;
   huishouden?: Maybe<Array<Maybe<Huishouden>>>;
   previous?: Maybe<Huishouden>;
+  burgerIds?: Maybe<Array<Maybe<Burger>>>;
 };
 
 /** Delete journaalpost by id  */
@@ -473,6 +477,7 @@ export type GebruikersActiviteitEntity = {
   rekening?: Maybe<Rekening>;
   rubriek?: Maybe<Rubriek>;
   transaction?: Maybe<BankTransaction>;
+  huishouden?: Maybe<Huishouden>;
 };
 
 export type GebruikersActiviteitMeta = {
@@ -492,6 +497,7 @@ export type GebruikersActiviteitSnapshot = {
   organisatie?: Maybe<Organisatie>;
   rubriek?: Maybe<Rubriek>;
   transaction?: Maybe<BankTransaction>;
+  huishouden?: Maybe<Huishouden>;
 };
 
 export type GebruikersActiviteitenPaged = {
@@ -653,6 +659,7 @@ export type RootMutationDeleteBurgerArgs = {
 /** The root of all mutations  */
 export type RootMutationUpdateBurgerArgs = {
   achternaam?: Maybe<Scalars['String']>;
+  bsn?: Maybe<Scalars['Int']>;
   email?: Maybe<Scalars['String']>;
   geboortedatum?: Maybe<Scalars['String']>;
   huishouden?: Maybe<HuishoudenInput>;
@@ -1076,6 +1083,7 @@ export type RootQueryGebruikersactiviteitenArgs = {
   ids?: Maybe<Array<Maybe<Scalars['Int']>>>;
   burgerIds?: Maybe<Array<Maybe<Scalars['Int']>>>;
   afsprakenIds?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  huishoudenIds?: Maybe<Array<Maybe<Scalars['Int']>>>;
 };
 
 
@@ -1085,6 +1093,7 @@ export type RootQueryGebruikersactiviteitenPagedArgs = {
   limit?: Maybe<Scalars['Int']>;
   burgerIds?: Maybe<Array<Maybe<Scalars['Int']>>>;
   afsprakenIds?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  huishoudenIds?: Maybe<Array<Maybe<Scalars['Int']>>>;
 };
 
 
@@ -1203,7 +1212,7 @@ export type AfspraakFragment = (
 export type BetaalinstructieFragment = Pick<Betaalinstructie, 'byDay' | 'byMonth' | 'byMonthDay' | 'exceptDates' | 'repeatFrequency' | 'startDate' | 'endDate'>;
 
 export type BurgerFragment = (
-  Pick<Burger, 'id' | 'email' | 'telefoonnummer' | 'voorletters' | 'voornamen' | 'achternaam' | 'geboortedatum' | 'straatnaam' | 'huisnummer' | 'postcode' | 'plaatsnaam'>
+  Pick<Burger, 'id' | 'bsn' | 'email' | 'telefoonnummer' | 'voorletters' | 'voornamen' | 'achternaam' | 'geboortedatum' | 'straatnaam' | 'huisnummer' | 'postcode' | 'plaatsnaam'>
   & { rekeningen?: Maybe<Array<Maybe<RekeningFragment>>>, afspraken?: Maybe<Array<Maybe<AfspraakFragment>>> }
 );
 
@@ -1507,6 +1516,7 @@ export type UpdateAfspraakMutation = { updateAfspraak?: Maybe<(
 
 export type UpdateBurgerMutationVariables = Exact<{
   id: Scalars['Int'];
+  bsn?: Maybe<Scalars['Int']>;
   voorletters?: Maybe<Scalars['String']>;
   voornamen?: Maybe<Scalars['String']>;
   achternaam?: Maybe<Scalars['String']>;
@@ -1827,6 +1837,7 @@ ${RubriekFragmentDoc}`;
 export const BurgerFragmentDoc = gql`
     fragment Burger on Burger {
   id
+  bsn
   email
   telefoonnummer
   voorletters
@@ -2901,9 +2912,10 @@ export type UpdateAfspraakMutationHookResult = ReturnType<typeof useUpdateAfspra
 export type UpdateAfspraakMutationResult = Apollo.MutationResult<UpdateAfspraakMutation>;
 export type UpdateAfspraakMutationOptions = Apollo.BaseMutationOptions<UpdateAfspraakMutation, UpdateAfspraakMutationVariables>;
 export const UpdateBurgerDocument = gql`
-    mutation updateBurger($id: Int!, $voorletters: String, $voornamen: String, $achternaam: String, $geboortedatum: String, $straatnaam: String, $huisnummer: String, $postcode: String, $plaatsnaam: String, $telefoonnummer: String, $email: String) {
+    mutation updateBurger($id: Int!, $bsn: Int, $voorletters: String, $voornamen: String, $achternaam: String, $geboortedatum: String, $straatnaam: String, $huisnummer: String, $postcode: String, $plaatsnaam: String, $telefoonnummer: String, $email: String) {
   updateBurger(
     id: $id
+    bsn: $bsn
     voorletters: $voorletters
     voornamen: $voornamen
     achternaam: $achternaam
@@ -2938,6 +2950,7 @@ export type UpdateBurgerMutationFn = Apollo.MutationFunction<UpdateBurgerMutatio
  * const [updateBurgerMutation, { data, loading, error }] = useUpdateBurgerMutation({
  *   variables: {
  *      id: // value for 'id'
+ *      bsn: // value for 'bsn'
  *      voorletters: // value for 'voorletters'
  *      voornamen: // value for 'voornamen'
  *      achternaam: // value for 'achternaam'

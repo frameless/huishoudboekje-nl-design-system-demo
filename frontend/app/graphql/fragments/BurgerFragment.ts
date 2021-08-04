@@ -5,6 +5,7 @@ import {RekeningFragment} from "./RekeningFragment";
 export const BurgerFragment = gql`
     fragment Burger on Burger {
         id
+        bsn
         email
         telefoonnummer
         voorletters
