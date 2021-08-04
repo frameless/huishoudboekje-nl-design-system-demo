@@ -16,7 +16,7 @@ const AuditLogText: React.FC<TextProps & {g: GebruikersActiviteit}> = ({g, ...pr
 	const afspraak = entities.find(e => e.entityType === "afspraak")?.afspraak;
 	const organisatie = entities.find(e => e.entityType === "organisatie")?.organisatie;
 	const transactions = entities.filter(e => e.entityType === "transactie");
-	const customerStatementMessage = entities.find(e => e.entityType === "customerStatementMessage");
+	const customerStatementMessage = entities.find(e => e.entityType === "customerStatementMessage")?.customerStatementMessage;
 	const rekening = entities.find(e => e.entityType === "rekening")?.rekening;
 	const configuratie = entities.find(e => e.entityType === "configuratie")?.configuratie;
 
@@ -36,8 +36,9 @@ const AuditLogText: React.FC<TextProps & {g: GebruikersActiviteit}> = ({g, ...pr
 		burger: burgerName,
 		organisatie: organisatie?.kvkDetails?.naam || t("unknownOrganisatie"),
 		afspraakOrganisatie: afspraak?.organisatie?.kvkDetails?.naam,
-		customerStatementMessage: customerStatementMessage?.entityId || "?",
-		nTransactions: transactions.length || t("unknown"),
+		customerStatementMessage: customerStatementMessage?.filename || t("unknownCsm"),
+		nTransactions: transactions.length || t("unknownCount"),
+		nCsmTransactions: customerStatementMessage?.bankTransactions?.length || t("unknownCount"),
 		transactieId: transactions?.[0]?.entityId || t("unknown"),
 		iban: rekening?.iban || t("unknownIban"),
 		rekeninghouder: rekening?.rekeninghouder || t("unknownRekeninghouder"),
