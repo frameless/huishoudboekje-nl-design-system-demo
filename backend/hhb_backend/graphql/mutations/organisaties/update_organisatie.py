@@ -18,7 +18,7 @@ class UpdateOrganisatie(graphene.Mutation):
         # hhb_service elements
         id = graphene.Int(required=True)
         kvk_nummer = graphene.String()
-        vestigingsnummer = graphene.Int()
+        vestigingsnummer = graphene.String()
 
         # org_service elements
         naam = graphene.String()

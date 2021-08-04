@@ -7,7 +7,7 @@ def test_organisaties_post_new_organisation(client, session):
     assert session.query(Organisatie).count() == 0
     organisatie_dict = {
         "kvk_nummer": "1",
-        "vestigingsnummer": 1
+        "vestigingsnummer": "1"
     }
     response = client.post(
         '/organisaties/',
@@ -24,7 +24,7 @@ def test_organisaties_post_update_organisatie(client, session, organisatie_facto
     organisation = organisatie_factory.createOrganisatie(kvk_nummer=1, vestigingsnummer=2)
     update_dict = {
         "kvk_nummer": "2",
-        "vestigingsnummer": 2
+        "vestigingsnummer": "2"
     }
     response = client.post(
         f'/organisaties/{organisation.id}',
@@ -50,7 +50,7 @@ def test_organisaties_post_bad_requests(client):
         content_type='application/json'
     )
     assert response.status_code == 400
-    bad_data2 = {"vestigingsnummer": "12345"}
+    bad_data2 = {"vestigingsnummer": 12345}
     response = client.post(
         f'/organisaties/',
         data=json.dumps(bad_data2),

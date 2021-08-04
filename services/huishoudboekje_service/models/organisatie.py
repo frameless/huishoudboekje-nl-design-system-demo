@@ -9,7 +9,7 @@ class Organisatie(db.Model):
 
     id = Column(Integer, Sequence('organisaties_id_seq'), primary_key=True)
     kvk_nummer = Column(String, unique=True)
-    vestigingsnummer = Column(Integer)
+    vestigingsnummer = Column(String)
 
     rekeningen = relationship("RekeningOrganisatie",
         back_populates="organisatie",

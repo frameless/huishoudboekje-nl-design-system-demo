@@ -18,7 +18,7 @@ class CreateOrganisatieInput(graphene.InputObjectType):
     # hhb_service elements (required)
     kvk_nummer = graphene.String(required=True)
     rekeningen = graphene.List(lambda: rekening_input.RekeningInput)
-    vestigingsnummer = graphene.Int()
+    vestigingsnummer = graphene.String()
 
     # org_service elements (optional)
     naam = graphene.String()

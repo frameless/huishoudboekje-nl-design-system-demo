@@ -25,7 +25,7 @@ class Organisatie(graphene.ObjectType):
     kvk_details = graphene.Field(OrganisatieKvK)
     afspraken =  graphene.List(lambda: afspraak.Afspraak)
 
-    vestigingsnummer = graphene.Int()
+    vestigingsnummer = graphene.String()
 
     async def resolve_kvk_details(root, info):
         """ Get KvK Details when requested """

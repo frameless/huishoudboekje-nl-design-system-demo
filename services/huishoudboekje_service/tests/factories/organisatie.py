@@ -10,7 +10,7 @@ class OrganisatieFactory():
     def createOrganisatie(
         self,
         kvk_nummer: int = 12345,
-        vestigingsnummer: int = 1
+        vestigingsnummer: int = "1"
     ):
         organisatie = Organisatie(
             kvk_nummer=kvk_nummer,
