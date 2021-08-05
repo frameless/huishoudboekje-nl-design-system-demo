@@ -17,6 +17,7 @@ const AuditLogText: React.FC<TextProps & {g: GebruikersActiviteit}> = ({g, ...pr
 	const organisatie = entities.find(e => e.entityType === "organisatie")?.organisatie;
 	const transactions = entities.filter(e => e.entityType === "transactie");
 	const customerStatementMessage = entities.find(e => e.entityType === "customerStatementMessage")?.customerStatementMessage;
+	const csmId = entities.find(e => e.entityType ==="customerStatementMessage")?.entityId;
 	const rekening = entities.find(e => e.entityType === "rekening")?.rekening;
 	const configuratie = entities.find(e => e.entityType === "configuratie")?.configuratie;
 
@@ -37,6 +38,7 @@ const AuditLogText: React.FC<TextProps & {g: GebruikersActiviteit}> = ({g, ...pr
 		organisatie: organisatie?.kvkDetails?.naam || t("unknownOrganisatie"),
 		afspraakOrganisatie: afspraak?.organisatie?.kvkDetails?.naam,
 		customerStatementMessage: customerStatementMessage?.filename || t("unknownCsm"),
+		csmId,
 		nTransactions: transactions.length || t("unknownCount"),
 		nCsmTransactions: customerStatementMessage?.bankTransactions?.length || t("unknownCount"),
 		transactieId: transactions?.[0]?.entityId || t("unknown"),
