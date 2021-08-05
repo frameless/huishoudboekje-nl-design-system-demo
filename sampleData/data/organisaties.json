@@ -1,6 +1,6 @@
 [
   {
-    "weergaveNaam": "Belastingdienst",
+    "vestigingsnummer": "000000000001",
     "kvkDetails": {
       "nummer": "27365323",
       "naam": "Belastingdienst Toeslagen",
@@ -21,7 +21,7 @@
     ]
   },
   {
-    "weergaveNaam": "Beschermd wonen",
+    "vestigingsnummer": "000000000002",
     "kvkDetails": {
       "nummer": "56806787",
       "naam": "CAK",
@@ -38,7 +38,7 @@
     ]
   },
   {
-    "weergaveNaam": "DUO",
+    "vestigingsnummer": "000000000003",
     "kvkDetails": {
       "nummer": "50973029",
       "naam": "Dienst Uitvoering Onderwijs",
@@ -55,7 +55,7 @@
     ]
   },
   {
-    "weergaveNaam": "Gemeente Utrecht",
+    "vestigingsnummer": "000000000004",
     "kvkDetails": {
       "nummer": "30280353",
       "naam": "Gemeente Utrecht",
@@ -84,7 +84,7 @@
     ]
   },
   {
-    "weergaveNaam": "Sociale Verzekeringsbank Utrecht",
+    "vestigingsnummer": "000000000005",
     "kvkDetails": {
       "nummer": "34366008",
       "naam": "Sociale Verzekeringsbank",
@@ -101,7 +101,7 @@
     ]
   },
   {
-    "weergaveNaam": "UWV Utrecht",
+    "vestigingsnummer": "000000000006",
     "kvkDetails": {
       "nummer": "34360247",
       "naam": "UWV Utrecht",
@@ -130,7 +130,7 @@
     ]
   },
   {
-    "weergaveNaam": "Stichting Vaste Lasten Pakket",
+    "vestigingsnummer": "000000000007",
     "kvkDetails": {
       "nummer": "73834238",
       "naam": "Stichting Vaste Lasten Pakket",
@@ -147,7 +147,7 @@
     ]
   },
   {
-    "weergaveNaam": "Vitens N.V.",
+    "vestigingsnummer": "000000000008",
     "kvkDetails": {
       "nummer": "05069581",
       "naam": "Vitens N.V.",
@@ -164,7 +164,7 @@
     ]
   },
   {
-    "weergaveNaam": "Stichting Mitros",
+    "vestigingsnummer": "000000000009",
     "kvkDetails": {
       "nummer": "30136131",
       "naam": "Stichting Mitros",
@@ -185,7 +185,7 @@
     ]
   },
   {
-    "weergaveNaam": "Stichting Portaal",
+    "vestigingsnummer": "000000000010",
     "kvkDetails": {
       "nummer": "30038487",
       "naam": "Stichting Portaal",
@@ -202,7 +202,7 @@
     ]
   },
   {
-    "weergaveNaam": "Budget Energie",
+    "vestigingsnummer": "000000000011",
     "kvkDetails": {
       "nummer": "34297646",
       "naam": "De Nederlandse Energie Maatschappij",
@@ -219,7 +219,7 @@
     ]
   },
   {
-    "weergaveNaam": "Eneco Consumenten",
+    "vestigingsnummer": "000000000012",
     "kvkDetails": {
       "nummer": "24324527",
       "naam": "Eneco Consumenten B.V.",
@@ -236,7 +236,7 @@
     ]
   },
   {
-    "weergaveNaam": "Energiedirect B.V.",
+    "vestigingsnummer": "000000000013",
     "kvkDetails": {
       "nummer": "17146989",
       "naam": "Energiedirect B.V.",
@@ -253,7 +253,7 @@
     ]
   },
   {
-    "weergaveNaam": "ENGIE Nederland Retail B.V.",
+    "vestigingsnummer": "000000000014",
     "kvkDetails": {
       "nummer": "05082820",
       "naam": "ENGIE Nederland Retail B.V.",
@@ -270,7 +270,7 @@
     ]
   },
   {
-    "weergaveNaam": "Essent Retail Energie B.V.",
+    "vestigingsnummer": "000000000015",
     "kvkDetails": {
       "nummer": "13041611",
       "naam": "Essent Retail Energie B.V.",
@@ -287,7 +287,7 @@
     ]
   },
   {
-    "weergaveNaam": "Anderzorg",
+    "vestigingsnummer": "000000000016",
     "kvkDetails": {
       "nummer": "50544403",
       "naam": "Anderzorg N.V.",
@@ -304,7 +304,7 @@
     ]
   },
   {
-    "weergaveNaam": "Bewuzt",
+    "vestigingsnummer": "000000000017",
     "kvkDetails": {
       "nummer": "10029718",
       "naam": "Coöperatie VGZ",
@@ -321,7 +321,7 @@
     ]
   },
   {
-    "weergaveNaam": "CZ Groep Zorgverzekeraar",
+    "vestigingsnummer": "000000000018",
     "kvkDetails": {
       "nummer": "18028752",
       "naam": "CZ Groep Aanvullende Verzekering Zorgverzekeraar",
@@ -338,7 +338,7 @@
     ]
   },
   {
-    "weergaveNaam": "DSW Ziektekostenverzekeringen",
+    "vestigingsnummer": "000000000019",
     "kvkDetails": {
       "nummer": "24230430",
       "naam": "DSW Ziektekostenverzekeringen N.V.",
@@ -355,7 +355,7 @@
     ]
   },
   {
-    "weergaveNaam": "FBTO Zorgverzekeringen N.V.",
+    "vestigingsnummer": "000000000020",
     "kvkDetails": {
       "nummer": "30208631",
       "naam": "FBTO Zorgverzekeringen N.V.",
@@ -372,7 +372,7 @@
     ]
   },
   {
-    "weergaveNaam": "Stichting Zorg en Zekerheid",
+    "vestigingsnummer": "000000000021",
     "kvkDetails": {
       "nummer": "41168265",
       "naam": "Stichting Zorg en Zekerheid",
@@ -389,7 +389,7 @@
     ]
   },
   {
-    "weergaveNaam": "RISK Direct",
+    "vestigingsnummer": "000000000022",
     "kvkDetails": {
       "nummer": "69653852",
       "naam": "RISK Direct B.V.",
@@ -406,7 +406,7 @@
     ]
   },
   {
-    "weergaveNaam": "Albert Heijn",
+    "vestigingsnummer": "000000000023",
     "kvkDetails": {
       "nummer": "35012085",
       "naam": "Albert Heijn B.V.",
@@ -423,7 +423,7 @@
     ]
   },
   {
-    "weergaveNaam": "KPN",
+    "vestigingsnummer": "000000000024",
     "kvkDetails": {
       "nummer": "27124701",
       "naam": "KPN B.V.",
@@ -440,7 +440,7 @@
     ]
   },
   {
-    "weergaveNaam": "Vodafone",
+    "vestigingsnummer": "000000000025",
     "kvkDetails": {
       "nummer": "14052264",
       "naam": "Vodafone Libertel B.V.",

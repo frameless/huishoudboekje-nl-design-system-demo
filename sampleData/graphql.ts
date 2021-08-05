@@ -138,6 +138,7 @@ export type BetaalinstructieInput = {
 /** GraphQL Burger model  */
 export type Burger = {
   id?: Maybe<Scalars['Int']>;
+  bsn?: Maybe<Scalars['Int']>;
   telefoonnummer?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
   geboortedatum?: Maybe<Scalars['String']>;
@@ -154,7 +155,6 @@ export type Burger = {
   afspraken?: Maybe<Array<Maybe<Afspraak>>>;
   gebruikersactiviteiten?: Maybe<Array<Maybe<GebruikersActiviteit>>>;
   huishouden?: Maybe<Huishouden>;
-  bsn?: Maybe<Scalars['Int']>;
 };
 
 export type BurgerFilter = {
@@ -237,6 +237,7 @@ export type CreateBurger = {
 };
 
 export type CreateBurgerInput = {
+  bsn?: Maybe<Scalars['Int']>;
   email?: Maybe<Scalars['String']>;
   geboortedatum?: Maybe<Scalars['Date']>;
   telefoonnummer?: Maybe<Scalars['String']>;
@@ -249,7 +250,6 @@ export type CreateBurgerInput = {
   voornamen?: Maybe<Scalars['String']>;
   plaatsnaam?: Maybe<Scalars['String']>;
   huishouden?: Maybe<HuishoudenInput>;
-  bsn?: Maybe<Scalars['Int']>;
 };
 
 export type CreateBurgerRekening = {
@@ -319,8 +319,8 @@ export type CreateOrganisatie = {
 
 export type CreateOrganisatieInput = {
   kvkNummer: Scalars['String'];
-  weergaveNaam: Scalars['String'];
   rekeningen?: Maybe<Array<Maybe<RekeningInput>>>;
+  vestigingsnummer?: Maybe<Scalars['String']>;
   naam?: Maybe<Scalars['String']>;
   straatnaam?: Maybe<Scalars['String']>;
   huisnummer?: Maybe<Scalars['String']>;
@@ -543,11 +543,11 @@ export type Journaalpost = {
 /** GraphQL Organisatie model  */
 export type Organisatie = {
   id?: Maybe<Scalars['Int']>;
-  weergaveNaam?: Maybe<Scalars['String']>;
   rekeningen?: Maybe<Array<Maybe<Rekening>>>;
   kvkNummer?: Maybe<Scalars['String']>;
   kvkDetails?: Maybe<OrganisatieKvK>;
   afspraken?: Maybe<Array<Maybe<Afspraak>>>;
+  vestigingsnummer?: Maybe<Scalars['String']>;
 };
 
 export type OrganisatieKvK = {
@@ -728,7 +728,7 @@ export type RootMutationUpdateOrganisatieArgs = {
   plaatsnaam?: Maybe<Scalars['String']>;
   postcode?: Maybe<Scalars['String']>;
   straatnaam?: Maybe<Scalars['String']>;
-  weergaveNaam?: Maybe<Scalars['String']>;
+  vestigingsnummer?: Maybe<Scalars['String']>;
 };
 
 
@@ -1199,10 +1199,7 @@ export type AfspraakFragment = (
   & { betaalinstructie?: Maybe<BetaalinstructieFragment>, burger?: Maybe<(
     Pick<Burger, 'id' | 'voornamen' | 'voorletters' | 'achternaam' | 'plaatsnaam'>
     & { rekeningen?: Maybe<Array<Maybe<RekeningFragment>>> }
-  )>, tegenRekening?: Maybe<RekeningFragment>, organisatie?: Maybe<(
-    Pick<Organisatie, 'id' | 'weergaveNaam'>
-    & { kvkDetails?: Maybe<Pick<OrganisatieKvK, 'naam' | 'plaatsnaam'>> }
-  )>, rubriek?: Maybe<RubriekFragment>, matchingAfspraken?: Maybe<Array<Maybe<(
+  )>, tegenRekening?: Maybe<RekeningFragment>, organisatie?: Maybe<OrganisatieFragment>, rubriek?: Maybe<RubriekFragment>, matchingAfspraken?: Maybe<Array<Maybe<(
     Pick<Afspraak, 'id' | 'credit' | 'zoektermen' | 'bedrag' | 'omschrijving'>
     & { burger?: Maybe<Pick<Burger, 'voorletters' | 'voornamen' | 'achternaam'>>, tegenRekening?: Maybe<Pick<Rekening, 'id' | 'iban' | 'rekeninghouder'>> }
   )>>> }
@@ -1211,7 +1208,7 @@ export type AfspraakFragment = (
 export type BetaalinstructieFragment = Pick<Betaalinstructie, 'byDay' | 'byMonth' | 'byMonthDay' | 'exceptDates' | 'repeatFrequency' | 'startDate' | 'endDate'>;
 
 export type BurgerFragment = (
-  Pick<Burger, 'id' | 'email' | 'telefoonnummer' | 'voorletters' | 'voornamen' | 'achternaam' | 'geboortedatum' | 'straatnaam' | 'huisnummer' | 'postcode' | 'plaatsnaam'>
+  Pick<Burger, 'id' | 'bsn' | 'email' | 'telefoonnummer' | 'voorletters' | 'voornamen' | 'achternaam' | 'geboortedatum' | 'straatnaam' | 'huisnummer' | 'postcode' | 'plaatsnaam'>
   & { rekeningen?: Maybe<Array<Maybe<RekeningFragment>>>, afspraken?: Maybe<Array<Maybe<AfspraakFragment>>> }
 );
 
@@ -1228,10 +1225,13 @@ export type GebruikersactiviteitFragment = (
   Pick<GebruikersActiviteit, 'id' | 'timestamp' | 'gebruikerId' | 'action'>
   & { entities?: Maybe<Array<Maybe<(
     Pick<GebruikersActiviteitEntity, 'entityType' | 'entityId'>
-    & { burger?: Maybe<Pick<Burger, 'id' | 'voorletters' | 'voornamen' | 'achternaam'>>, organisatie?: Maybe<Pick<Organisatie, 'id' | 'weergaveNaam'>>, afspraak?: Maybe<(
+    & { burger?: Maybe<Pick<Burger, 'id' | 'voorletters' | 'voornamen' | 'achternaam'>>, organisatie?: Maybe<OrganisatieFragment>, afspraak?: Maybe<(
       Pick<Afspraak, 'id'>
-      & { organisatie?: Maybe<Pick<Organisatie, 'id' | 'weergaveNaam'>> }
-    )>, rekening?: Maybe<Pick<Rekening, 'id' | 'iban' | 'rekeninghouder'>>, customerStatementMessage?: Maybe<Pick<CustomerStatementMessage, 'id'>>, configuratie?: Maybe<Pick<Configuratie, 'id' | 'waarde'>> }
+      & { organisatie?: Maybe<OrganisatieFragment> }
+    )>, rekening?: Maybe<Pick<Rekening, 'id' | 'iban' | 'rekeninghouder'>>, customerStatementMessage?: Maybe<(
+      Pick<CustomerStatementMessage, 'id' | 'filename'>
+      & { bankTransactions?: Maybe<Array<Maybe<Pick<BankTransaction, 'id'>>>> }
+    )>, configuratie?: Maybe<Pick<Configuratie, 'id' | 'waarde'>> }
   )>>>, meta?: Maybe<Pick<GebruikersActiviteitMeta, 'userAgent' | 'ip' | 'applicationVersion'>> }
 );
 
@@ -1243,7 +1243,7 @@ export type GrootboekrekeningFragment = (
 export type JournaalpostFragment = Pick<Journaalpost, 'id'>;
 
 export type OrganisatieFragment = (
-  Pick<Organisatie, 'id' | 'kvkNummer' | 'weergaveNaam'>
+  Pick<Organisatie, 'id' | 'kvkNummer' | 'vestigingsnummer'>
   & { rekeningen?: Maybe<Array<Maybe<RekeningFragment>>> }
   & KvkFragment
 );
@@ -1365,11 +1365,11 @@ export type CreateJournaalpostGrootboekrekeningMutation = { createJournaalpostGr
 export type CreateOrganisatieMutationVariables = Exact<{
   huisnummer?: Maybe<Scalars['String']>;
   kvkNummer: Scalars['String'];
+  vestigingsnummer: Scalars['String'];
   naam?: Maybe<Scalars['String']>;
   plaatsnaam?: Maybe<Scalars['String']>;
   postcode?: Maybe<Scalars['String']>;
   straatnaam?: Maybe<Scalars['String']>;
-  weergaveNaam: Scalars['String'];
 }>;
 
 
@@ -1515,6 +1515,7 @@ export type UpdateAfspraakMutation = { updateAfspraak?: Maybe<(
 
 export type UpdateBurgerMutationVariables = Exact<{
   id: Scalars['Int'];
+  bsn?: Maybe<Scalars['Int']>;
   voorletters?: Maybe<Scalars['String']>;
   voornamen?: Maybe<Scalars['String']>;
   achternaam?: Maybe<Scalars['String']>;
@@ -1556,11 +1557,11 @@ export type UpdateOrganisatieMutationVariables = Exact<{
   id: Scalars['Int'];
   huisnummer?: Maybe<Scalars['String']>;
   kvkNummer?: Maybe<Scalars['String']>;
+  vestigingsnummer?: Maybe<Scalars['String']>;
   naam?: Maybe<Scalars['String']>;
   plaatsnaam?: Maybe<Scalars['String']>;
   postcode?: Maybe<Scalars['String']>;
   straatnaam?: Maybe<Scalars['String']>;
-  weergaveNaam?: Maybe<Scalars['String']>;
 }>;
 
 
@@ -1753,6 +1754,30 @@ export const BetaalinstructieFragmentDoc = gql`
   endDate
 }
     `;
+export const KvkFragmentDoc = gql`
+    fragment Kvk on Organisatie {
+  kvkDetails {
+    huisnummer
+    naam
+    nummer
+    plaatsnaam
+    postcode
+    straatnaam
+  }
+}
+    `;
+export const OrganisatieFragmentDoc = gql`
+    fragment Organisatie on Organisatie {
+  id
+  kvkNummer
+  vestigingsnummer
+  rekeningen {
+    ...Rekening
+  }
+  ...Kvk
+}
+    ${RekeningFragmentDoc}
+${KvkFragmentDoc}`;
 export const GrootboekrekeningFragmentDoc = gql`
     fragment Grootboekrekening on Grootboekrekening {
   id
@@ -1801,12 +1826,7 @@ export const AfspraakFragmentDoc = gql`
     ...Rekening
   }
   organisatie {
-    id
-    weergaveNaam
-    kvkDetails {
-      naam
-      plaatsnaam
-    }
+    ...Organisatie
   }
   rubriek {
     ...Rubriek
@@ -1831,10 +1851,12 @@ export const AfspraakFragmentDoc = gql`
 }
     ${BetaalinstructieFragmentDoc}
 ${RekeningFragmentDoc}
+${OrganisatieFragmentDoc}
 ${RubriekFragmentDoc}`;
 export const BurgerFragmentDoc = gql`
     fragment Burger on Burger {
   id
+  bsn
   email
   telefoonnummer
   voorletters
@@ -1903,14 +1925,12 @@ export const GebruikersactiviteitFragmentDoc = gql`
       achternaam
     }
     organisatie {
-      id
-      weergaveNaam
+      ...Organisatie
     }
     afspraak {
       id
       organisatie {
-        id
-        weergaveNaam
+        ...Organisatie
       }
     }
     rekening {
@@ -1920,6 +1940,10 @@ export const GebruikersactiviteitFragmentDoc = gql`
     }
     customerStatementMessage {
       id
+      filename
+      bankTransactions {
+        id
+      }
     }
     configuratie {
       id
@@ -1932,36 +1956,12 @@ export const GebruikersactiviteitFragmentDoc = gql`
     applicationVersion
   }
 }
-    `;
+    ${OrganisatieFragmentDoc}`;
 export const JournaalpostFragmentDoc = gql`
     fragment Journaalpost on Journaalpost {
   id
 }
     `;
-export const KvkFragmentDoc = gql`
-    fragment Kvk on Organisatie {
-  kvkDetails {
-    huisnummer
-    naam
-    nummer
-    plaatsnaam
-    postcode
-    straatnaam
-  }
-}
-    `;
-export const OrganisatieFragmentDoc = gql`
-    fragment Organisatie on Organisatie {
-  id
-  kvkNummer
-  weergaveNaam
-  rekeningen {
-    ...Rekening
-  }
-  ...Kvk
-}
-    ${RekeningFragmentDoc}
-${KvkFragmentDoc}`;
 export const BankTransactionFragmentDoc = gql`
     fragment BankTransaction on BankTransaction {
   id
@@ -2085,9 +2085,9 @@ export const CreateJournaalpostGrootboekrekeningDocument = gql`
 }
     `;
 export const CreateOrganisatieDocument = gql`
-    mutation createOrganisatie($huisnummer: String, $kvkNummer: String!, $naam: String, $plaatsnaam: String, $postcode: String, $straatnaam: String, $weergaveNaam: String!) {
+    mutation createOrganisatie($huisnummer: String, $kvkNummer: String!, $vestigingsnummer: String!, $naam: String, $plaatsnaam: String, $postcode: String, $straatnaam: String) {
   createOrganisatie(
-    input: {huisnummer: $huisnummer, kvkNummer: $kvkNummer, naam: $naam, plaatsnaam: $plaatsnaam, postcode: $postcode, straatnaam: $straatnaam, weergaveNaam: $weergaveNaam}
+    input: {huisnummer: $huisnummer, kvkNummer: $kvkNummer, vestigingsnummer: $vestigingsnummer, naam: $naam, plaatsnaam: $plaatsnaam, postcode: $postcode, straatnaam: $straatnaam}
   ) {
     ok
     organisatie {
@@ -2239,9 +2239,10 @@ export const UpdateAfspraakDocument = gql`
 }
     ${AfspraakFragmentDoc}`;
 export const UpdateBurgerDocument = gql`
-    mutation updateBurger($id: Int!, $voorletters: String, $voornamen: String, $achternaam: String, $geboortedatum: String, $straatnaam: String, $huisnummer: String, $postcode: String, $plaatsnaam: String, $telefoonnummer: String, $email: String) {
+    mutation updateBurger($id: Int!, $bsn: Int, $voorletters: String, $voornamen: String, $achternaam: String, $geboortedatum: String, $straatnaam: String, $huisnummer: String, $postcode: String, $plaatsnaam: String, $telefoonnummer: String, $email: String) {
   updateBurger(
     id: $id
+    bsn: $bsn
     voorletters: $voorletters
     voornamen: $voornamen
     achternaam: $achternaam
@@ -2281,16 +2282,16 @@ export const UpdateJournaalpostGrootboekrekeningDocument = gql`
 }
     `;
 export const UpdateOrganisatieDocument = gql`
-    mutation updateOrganisatie($id: Int!, $huisnummer: String, $kvkNummer: String, $naam: String, $plaatsnaam: String, $postcode: String, $straatnaam: String, $weergaveNaam: String) {
+    mutation updateOrganisatie($id: Int!, $huisnummer: String, $kvkNummer: String, $vestigingsnummer: String, $naam: String, $plaatsnaam: String, $postcode: String, $straatnaam: String) {
   updateOrganisatie(
     id: $id
     huisnummer: $huisnummer
     kvkNummer: $kvkNummer
+    vestigingsnummer: $vestigingsnummer
     naam: $naam
     plaatsnaam: $plaatsnaam
     postcode: $postcode
     straatnaam: $straatnaam
-    weergaveNaam: $weergaveNaam
   ) {
     ok
     organisatie {
