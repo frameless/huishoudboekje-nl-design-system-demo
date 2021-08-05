@@ -39,7 +39,6 @@ const BurgerList = () => {
 						b.achternaam || "",
 						b.voornamen || "",
 						...(b.afspraken || []).flatMap(a => [
-							a.organisatie?.weergaveNaam || "",
 							a.organisatie?.kvkDetails?.naam || "",
 							...(a.zoektermen || [""]),
 						]),

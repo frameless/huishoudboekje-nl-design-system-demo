@@ -57,7 +57,7 @@ const OrganisatieDetail = () => {
 						.then(() => {
 							onCloseDeleteDialog();
 							toast({
-								success: t("messages.organizations.deleteConfirmMessage", {name: organisatie.weergaveNaam}),
+								success: t("messages.organizations.deleteConfirmMessage", {name: organisatie.kvkDetails?.naam}),
 							});
 							toggleDeleted(true);
 						})
@@ -77,14 +77,14 @@ const OrganisatieDetail = () => {
 
 				if (isDeleted) {
 					return (
-						<DeadEndPage message={t("messages.organizations.deleteConfirmMessage", {name: organisatie.weergaveNaam})}>
+						<DeadEndPage message={t("messages.organizations.deleteConfirmMessage", {name: organisatie.kvkDetails?.naam})}>
 							<Button colorScheme={"primary"} onClick={() => push(Routes.Organisaties)}>{t("actions.backToList")}</Button>
 						</DeadEndPage>
 					);
 				}
 
 				return (
-					<Page title={organisatie.weergaveNaam || ""} backButton={<BackButton to={Routes.Organisaties} />} menu={(
+					<Page title={organisatie.kvkDetails?.naam || ""} backButton={<BackButton to={Routes.Organisaties} />} menu={(
 						<Menu>
 							<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label="Open menu" />
 							<MenuList>
@@ -97,7 +97,7 @@ const OrganisatieDetail = () => {
 							<AlertDialogOverlay />
 							<AlertDialogContent>
 								<AlertDialogHeader fontSize="lg" fontWeight="bold">{t("messages.organizations.deleteTitle")}</AlertDialogHeader>
-								<AlertDialogBody>{t("messages.organizations.deleteQuestion", {name: organisatie.weergaveNaam})}</AlertDialogBody>
+								<AlertDialogBody>{t("messages.organizations.deleteQuestion", {name: organisatie.kvkDetails?.naam})}</AlertDialogBody>
 								<AlertDialogFooter>
 									<Button ref={cancelDeleteRef} onClick={onCloseDeleteDialog}>{t("actions.cancel")}</Button>
 									<Button isLoading={deleteLoading} colorScheme="red" onClick={onConfirmDeleteDialog} ml={3}>{t("actions.delete")}</Button>

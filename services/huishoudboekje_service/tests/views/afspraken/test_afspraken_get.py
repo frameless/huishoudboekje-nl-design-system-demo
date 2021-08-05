@@ -96,8 +96,8 @@ def test_afspraak_get_filter_burgers(client, afspraak_factory, burger_factory):
 
 
 def test_afspraak_get_filter_organisaties(client, afspraak_factory, organisatie_factory):
-    organisatie1 = organisatie_factory.createOrganisatie(kvk_nummer="1", weergave_naam="Organisatie1")
-    organisatie2 = organisatie_factory.createOrganisatie(kvk_nummer="2", weergave_naam="Organisatie2")
+    organisatie1 = organisatie_factory.createOrganisatie(kvk_nummer="1", vestigingsnummer=1)
+    organisatie2 = organisatie_factory.createOrganisatie(kvk_nummer="2", vestigingsnummer=2)
     afspraak1 = afspraak_factory.createAfspraak(organisatie_id=organisatie1.id, zoektermen="Afspraak1")
     afspraak2 = afspraak_factory.createAfspraak(organisatie_id=organisatie1.id, zoektermen="Afspraak2")
     afspraak3 = afspraak_factory.createAfspraak(organisatie_id=organisatie2.id, zoektermen="Afspraak3")

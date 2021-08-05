@@ -83,8 +83,8 @@ def test_rekeningen_get_filter_rekeninghouders(client, rekening_factory):
 
 def test_rekeningen_get_filter_organisaties(client, rekening_organisatie_factory, organisatie_factory):
     """ Test filter_rekeninghouders on rekeningen """
-    organisatie1 = organisatie_factory.createOrganisatie(kvk_nummer="1", weergave_naam="Test Bedrijf 1")
-    organisatie2 = organisatie_factory.createOrganisatie(kvk_nummer="2", weergave_naam="Test Bedrijf 2")
+    organisatie1 = organisatie_factory.createOrganisatie(kvk_nummer="1", vestigingsnummer=1)
+    organisatie2 = organisatie_factory.createOrganisatie(kvk_nummer="2", vestigingsnummer=2)
     rekening_organisatie1 = rekening_organisatie_factory.create_rekening_organisatie(organisatie=organisatie1)
     rekening_organisatie2 = rekening_organisatie_factory.create_rekening_organisatie(organisatie=organisatie2)
     assert rekening_organisatie1.rekening != rekening_organisatie2.rekening

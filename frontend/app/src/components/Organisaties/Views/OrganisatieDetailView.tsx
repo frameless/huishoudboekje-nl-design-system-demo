@@ -8,10 +8,6 @@ import Section from "../../Layouts/Section";
 const OrganisatieDetailView: React.FC<BoxProps & {organisatie: Organisatie}> = ({organisatie, ...props}) => {
 	const {t} = useTranslation();
 
-	if (!organisatie) {
-		return null;
-	}
-
 	return (
 		<Section {...props}>
 			<Stack spacing={2} direction={["column", "row"]}>
@@ -19,12 +15,18 @@ const OrganisatieDetailView: React.FC<BoxProps & {organisatie: Organisatie}> = (
 				<FormRight>
 					<Stack spacing={2} direction={["column", "row"]}>
 						<Stack spacing={1} flex={1}>
+							<FormLabel>{t("forms.organizations.fields.companyName")}</FormLabel>
+							<Text>{organisatie.kvkDetails?.naam}</Text>
+						</Stack>
+					</Stack>
+					<Stack spacing={2} direction={["column", "row"]}>
+						<Stack spacing={1} flex={1}>
 							<FormLabel>{t("forms.organizations.fields.kvkNumber")}</FormLabel>
 							<Text>{organisatie.kvkNummer}</Text>
 						</Stack>
 						<Stack spacing={1} flex={1}>
-							<FormLabel>{t("forms.organizations.fields.companyName")}</FormLabel>
-							<Text>{organisatie.kvkDetails?.naam}</Text>
+							<FormLabel>{t("forms.organizations.fields.vestigingsnummer")}</FormLabel>
+							<Text>{organisatie.vestigingsnummer}</Text>
 						</Stack>
 					</Stack>
 				</FormRight>

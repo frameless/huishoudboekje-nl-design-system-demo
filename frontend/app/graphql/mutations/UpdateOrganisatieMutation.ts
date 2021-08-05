@@ -6,21 +6,21 @@ export const UpdateOrganisatieMutation = gql`
         $id: Int!
         $huisnummer: String
         $kvkNummer: String
+        $vestigingsnummer: String
         $naam: String
         $plaatsnaam: String
         $postcode: String
         $straatnaam: String
-        $weergaveNaam: String
     ) {
         updateOrganisatie(
             id: $id
             huisnummer: $huisnummer
             kvkNummer: $kvkNummer
+            vestigingsnummer: $vestigingsnummer
             naam: $naam
             plaatsnaam: $plaatsnaam
             postcode: $postcode
             straatnaam: $straatnaam
-            weergaveNaam: $weergaveNaam
         ){
             ok
             organisatie {

@@ -13,7 +13,7 @@ class OrganisatieView(HHBView):
             "kvk_nummer": {
                 "type": "string",
             },
-            "weergave_naam": {
+            "vestigingsnummer": {
                 "type": "string",
             },
         },

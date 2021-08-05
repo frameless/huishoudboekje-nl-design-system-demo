@@ -165,7 +165,7 @@ def get_kvk_organisaties(hhb_orgs):
 
 def create_row(hhb_organisatie, kvk_organisatie, afspraak, burger, current_date_str):
     row = {}
-    row["organisatie.naam"] = hhb_organisatie["weergave_naam"] if "weergave_naam" in hhb_organisatie else ""
+    # row["organisatie.naam"] = hhb_organisatie["weergave_naam"] if "weergave_naam" in hhb_organisatie else ""
     row["organisatie.postadres.adresregel1"] = ""
     if "straatnaam" in kvk_organisatie and "huisnummer" in kvk_organisatie:
         row[

@@ -1,4 +1,5 @@
 import {gql} from "@apollo/client";
+import {OrganisatieFragment} from "./OrganisatieFragment";
 
 export const GebruikersactiviteitFragment = gql`
     fragment Gebruikersactiviteit on GebruikersActiviteit {
@@ -16,14 +17,12 @@ export const GebruikersactiviteitFragment = gql`
                 achternaam
             }
             organisatie {
-                id
-                weergaveNaam
+                ...Organisatie
             }
             afspraak {
                 id
                 organisatie {
-                    id
-                    weergaveNaam
+                    ...Organisatie
                 }
             }
             rekening {
@@ -57,4 +56,5 @@ export const GebruikersactiviteitFragment = gql`
             applicationVersion
         }
     }
+    ${OrganisatieFragment}
 `;
