@@ -1229,7 +1229,10 @@ export type GebruikersactiviteitFragment = (
     & { burger?: Maybe<Pick<Burger, 'id' | 'voorletters' | 'voornamen' | 'achternaam'>>, organisatie?: Maybe<OrganisatieFragment>, afspraak?: Maybe<(
       Pick<Afspraak, 'id'>
       & { organisatie?: Maybe<OrganisatieFragment> }
-    )>, rekening?: Maybe<Pick<Rekening, 'id' | 'iban' | 'rekeninghouder'>>, customerStatementMessage?: Maybe<Pick<CustomerStatementMessage, 'id'>>, configuratie?: Maybe<Pick<Configuratie, 'id' | 'waarde'>> }
+    )>, rekening?: Maybe<Pick<Rekening, 'id' | 'iban' | 'rekeninghouder'>>, customerStatementMessage?: Maybe<(
+      Pick<CustomerStatementMessage, 'id' | 'filename'>
+      & { bankTransactions?: Maybe<Array<Maybe<Pick<BankTransaction, 'id'>>>> }
+    )>, configuratie?: Maybe<Pick<Configuratie, 'id' | 'waarde'>> }
   )>>>, meta?: Maybe<Pick<GebruikersActiviteitMeta, 'userAgent' | 'ip' | 'applicationVersion'>> }
 );
 
@@ -1938,6 +1941,10 @@ export const GebruikersactiviteitFragmentDoc = gql`
     }
     customerStatementMessage {
       id
+      filename
+      bankTransactions {
+        id
+      }
     }
     configuratie {
       id

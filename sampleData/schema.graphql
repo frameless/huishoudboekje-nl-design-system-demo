@@ -132,6 +132,7 @@ input BetaalinstructieInput {
 """GraphQL Burger model """
 type Burger {
   id: Int
+  bsn: Int
   telefoonnummer: String
   email: String
   geboortedatum: String
@@ -147,7 +148,6 @@ type Burger {
   afspraken: [Afspraak]
   gebruikersactiviteiten: [GebruikersActiviteit]
   huishouden: Huishouden
-  bsn: Int
 }
 
 input BurgerFilter {
@@ -230,6 +230,7 @@ type CreateBurger {
 }
 
 input CreateBurgerInput {
+  bsn: Int
   email: String
   geboortedatum: Date
   telefoonnummer: String
@@ -242,7 +243,6 @@ input CreateBurgerInput {
   voornamen: String
   plaatsnaam: String
   huishouden: HuishoudenInput
-  bsn: Int
 }
 
 type CreateBurgerRekening {
@@ -312,8 +312,8 @@ type CreateOrganisatie {
 
 input CreateOrganisatieInput {
   kvkNummer: String!
-  weergaveNaam: String!
   rekeningen: [RekeningInput]
+  vestigingsnummer: String
   naam: String
   straatnaam: String
   huisnummer: String
@@ -550,11 +550,11 @@ type Journaalpost {
 """GraphQL Organisatie model """
 type Organisatie {
   id: Int
-  weergaveNaam: String
   rekeningen: [Rekening]
   kvkNummer: String
   kvkDetails: OrganisatieKvK
   afspraken: [Afspraak]
+  vestigingsnummer: String
 }
 
 type OrganisatieKvK {
@@ -616,7 +616,7 @@ type RootMutation {
   addAfspraakZoekterm(afspraakId: Int!, zoekterm: String!): AddAfspraakZoekterm
   deleteAfspraakZoekterm(afspraakId: Int!, zoekterm: String!): DeleteAfspraakZoekterm
   createOrganisatie(input: CreateOrganisatieInput): CreateOrganisatie
-  updateOrganisatie(huisnummer: String, id: Int!, kvkNummer: String, naam: String, plaatsnaam: String, postcode: String, straatnaam: String, weergaveNaam: String): UpdateOrganisatie
+  updateOrganisatie(huisnummer: String, id: Int!, kvkNummer: String, naam: String, plaatsnaam: String, postcode: String, straatnaam: String, vestigingsnummer: String): UpdateOrganisatie
   deleteOrganisatie(id: Int!): DeleteOrganisatie
   createBurgerRekening(burgerId: Int!, rekening: RekeningInput!): CreateBurgerRekening
   deleteBurgerRekening(burgerId: Int!, id: Int!): DeleteBurgerRekening

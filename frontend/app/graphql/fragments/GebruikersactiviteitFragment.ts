@@ -32,6 +32,10 @@ export const GebruikersactiviteitFragment = gql`
             }
             customerStatementMessage {
                 id
+                filename
+                bankTransactions {
+                    id
+                }
             }
             configuratie {
                 id 

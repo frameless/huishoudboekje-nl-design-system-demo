@@ -145,7 +145,7 @@ class GebruikersActiviteitEntity(graphene.ObjectType):
 
     @classmethod
     async def resolve_customer_statement_message(cls, root, _info):
-        if root.get("entityType") == "customer_statement_message":
+        if root.get("entityType") == "customerStatementMessage":
             return await request.dataloader["csms_by_id"].load(root.get("entityId"))
         return await cls._resolve_entity(
             root, entity_type="customer_statement_message", dataloader_name="csms_by_id"

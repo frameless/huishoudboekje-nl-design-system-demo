@@ -3,6 +3,7 @@
  * You will find data files in ./data/*.json.
  */
 import gql from "graphql-tag";
+import util from "util";
 import {burgers, configuraties, organisaties, rubrieken} from "./data";
 import {Afspraak, Organisatie, OrganisatieKvK, Rubriek} from "./graphql";
 import apolloClient, {graphQlApiUrl} from "./graphql-client";
@@ -78,15 +79,15 @@ const main = async () => {
 	/* Add organisaties and its rekeningen */
 	console.log("Organisaties toevoegen...");
 	const mOrganisaties = organisaties.map(async o => {
-		const {weergaveNaam, kvkDetails, rekeningen} = o as Required<Organisatie>;
+		const {vestigingsnummer, kvkDetails, rekeningen} = o as Required<Organisatie>;
 		const {straatnaam, huisnummer, postcode, plaatsnaam, nummer: kvkNummer, naam} = kvkDetails as Required<OrganisatieKvK>;
 
 		return createOrganisatie({
-			weergaveNaam, huisnummer, naam, kvkNummer, plaatsnaam, postcode, straatnaam,
+			vestigingsnummer, huisnummer, naam, kvkNummer, plaatsnaam, postcode, straatnaam,
 		}).then(async r => {
 			const org = r.createOrganisatie?.organisatie;
 
-			console.log(`Organisatie ${r.createOrganisatie?.organisatie?.weergaveNaam} (${r.createOrganisatie?.organisatie?.id}) toegevoegd.`);
+			console.log(`Organisatie ${r.createOrganisatie?.organisatie?.kvkDetails?.naam} (${r.createOrganisatie?.organisatie?.id}) toegevoegd.`);
 
 			if (!org?.id) {
 				return;
@@ -98,21 +99,22 @@ const main = async () => {
 					orgId: org.id!,
 					rekening: r,
 				}).then(r => {
-					console.log(`Rekening ${r.createOrganisatieRekening?.rekening?.iban} op naam van ${r.createOrganisatieRekening?.rekening?.rekeninghouder}.`);
+					console.log(`Rekening ${r.createOrganisatieRekening?.rekening?.iban} op naam van ${r.createOrganisatieRekening?.rekening?.rekeninghouder} toegevoegd.`);
 				}).catch(err => {
 					console.error("(!) Kon rekening niet aanmaken voor organisatie:", err);
+					console.log("(!)", util.inspect(err, false, null, true));
 				});
 			});
 
 			return await Promise.all(mRekeningen).finally(() => {
-				console.log(`Rekeningen voor ${r.createOrganisatie?.organisatie?.weergaveNaam} (${r.createOrganisatie?.organisatie?.id}) toegevoegd.`);
+				console.log(`${mRekeningen.length} rekeningen toegevoegd voor ${r.createOrganisatie?.organisatie?.kvkDetails?.naam} (${r.createOrganisatie?.organisatie?.id}).`);
 			});
 		}).catch(err => {
 			if (err.message.includes("already exists")) {
-				console.log(`(!) Organisatie ${weergaveNaam} (${kvkNummer}) bestaat al.`);
+				console.log(`(!) Organisatie ${naam} (${kvkNummer}) bestaat al.`);
 			}
 			else {
-				console.error("(!)", err);
+				console.log("(!)", util.inspect(err, false, null, true));
 			}
 		});
 	});
@@ -187,7 +189,7 @@ const main = async () => {
 							tegenRekeningId: _orgFirstRekening.id,
 						},
 					}).then(result => {
-						console.log(`Afspraak voor burger ${burgerName} met ${result.createAfspraak?.afspraak?.organisatie?.weergaveNaam} toegevoegd.`);
+						console.log(`Afspraak voor burger ${burgerName} met ${result.createAfspraak?.afspraak?.organisatie?.kvkDetails?.naam} toegevoegd.`);
 					}).catch(err => {
 						console.error(`(!) Kon afspraak voor burger ${burgerName} niet toevoegen:`, err);
 					});
