@@ -73,8 +73,7 @@ class SingleDataLoader(DataLoader):
             url = self.url_for(keys[i:i + self.batch_size])
             response = requests.get(url)
             if not response.ok:
-                raise GraphQLError(f"Upstream API responded: {response.text}")
-
+                raise GraphQLError(f"Upstream API responded: {response.json()}")
             for item in response.json()["data"]:
                 objects[item[self.index]] = item
         return [objects.get(key, None) for key in keys]
