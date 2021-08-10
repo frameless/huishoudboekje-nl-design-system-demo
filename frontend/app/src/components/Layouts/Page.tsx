@@ -4,8 +4,8 @@ import React from "react";
 type PageProps = Omit<Partial<StackProps>, "right"> & {
 	title: string,
 	backButton?: JSX.Element,
-	menu?: JSX.Element | null,
-	right?: JSX.Element | null
+	menu?: JSX.Element | null | false,
+	right?: JSX.Element | null | false
 };
 const Page: React.FC<PageProps> = ({title, backButton, menu, right, children, ...props}) => {
 	return (

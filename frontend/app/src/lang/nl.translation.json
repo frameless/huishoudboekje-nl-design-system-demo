@@ -105,9 +105,10 @@
         "undoAfletteren": "Afletteren ongedaan maken",
         "filter": "Filteren",
         "backToList": "Terug naar overzicht",
+        "viewBurgerHuishouden": "Bekijk huishouden",
         "brievenExport": "Exporteer gegevens voor brieven",
         "clearSearch": "Zoekopdracht wissen",
-        "deleteBurgers": "Burgers verwijderen",
+        "showReports": "Bekijk rapportage",
         "back": "Terug",
         "backToHome": "Terug naar de hoofdpagina",
         "clickToEdit": "Klik om te wijzigen"
@@ -486,6 +487,7 @@
             "description": "De pagina die je zoekt kan niet worden gevonden."
         }
     },
+    "backToBurgersList": "Terug naar alle burgers",
     "sidebar": {
         "rapportage": "Rapportage",
         "huishoudens": "Huishoudens",

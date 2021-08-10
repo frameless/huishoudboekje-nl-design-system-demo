@@ -94,13 +94,13 @@ const HuishoudenBurgerItem: React.FC<{huishouden: Huishouden, burger: Burger}> =
 			</AlertDialogOverlay>
 		</AlertDialog>
 
-		<GridCard as={NavLink} justifyContent={["flex-start", "center"]} to={Routes.Burger(burger.id)} position={"relative"}>
+		<GridCard as={NavLink} justify={["flex-start", "center"]} to={Routes.Burger(burger.id)} position={"relative"}>
 			{(huishouden.burgers || []).length > 1 && (
 				<Box position={"absolute"} top={1} right={1}>
 					<IconButton variant={"ghost"} size={"sm"} aria-label={t("action.options")} icon={<DeleteIcon />} onClick={onClickDeleteBurgerFromHuishouden} />
 				</Box>
 			)}
-			<Stack direction={["row", "column"]} spacing={5} align={"center"} justify={"center"}>
+			<Stack direction={["row", "column"]} spacing={5} align={"center"} justify={["flex-start", "center"]}>
 				<Avatar name={formatBurgerName(burger, true)} />
 				<Text fontSize={"md"} {...!isMobile && {textAlign: "center"}}>
 					<strong>{formatBurgerName(burger, true)}</strong>
