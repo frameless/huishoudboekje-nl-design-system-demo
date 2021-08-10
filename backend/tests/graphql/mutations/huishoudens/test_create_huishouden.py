@@ -53,7 +53,7 @@ def test_create_huishouden_success(client):
 def test_create_huishouden_with_burger_ids_success(client):
     with requests_mock.mock() as mock:
         post_adapter = mock.post(f"{settings.HHB_SERVICES_URL}/burgers/1",
-                                 status_code=200, json={"data": {"id": 1, "voornamen": "Fien Sandra"}})
+                                 status_code=200, json={"data": {"id": 1}})
         get_adapter = mock.get(
             f"{settings.HHB_SERVICES_URL}/burgers/?filter_ids=1",
             status_code=200,
