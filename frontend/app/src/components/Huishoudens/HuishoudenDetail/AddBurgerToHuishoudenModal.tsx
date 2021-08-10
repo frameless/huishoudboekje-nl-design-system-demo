@@ -4,12 +4,14 @@ import {useTranslation} from "react-i18next";
 import Select from "react-select";
 import {Burger, GetHuishoudenDocument, GetHuishoudensDocument, Huishouden, useAddHuishoudenBurgerMutation, useGetBurgersQuery} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
-import {formatBurgerName, humanJoin} from "../../../utils/things";
+import {formatBurgerName, humanJoin, useReactSelectStyles} from "../../../utils/things";
 import useToaster from "../../../utils/useToaster";
+import {MultiLineOption, MultiLineValueContainer} from "../../Layouts/ReactSelect/CustomComponents";
 
 const AddBurgerToHuishoudenModal: React.FC<{huishouden: Huishouden, isOpen: boolean, onClose: VoidFunction}> = ({huishouden, isOpen, onClose}) => {
 	const {t} = useTranslation();
 	const toast = useToaster();
+	const reactSelectStyles = useReactSelectStyles();
 	const [selectedBurgers, setSelectedBurgers] = useState<Burger[]>([]);
 	const $burgers = useGetBurgersQuery();
 	const [addHuishoudenBurger] = useAddHuishoudenBurgerMutation({
@@ -64,13 +66,13 @@ const AddBurgerToHuishoudenModal: React.FC<{huishouden: Huishouden, isOpen: bool
 								/* Only show burgers that are not already in this Huishouden yet. */
 								const options = burgers
 									.filter(b => !huishouden.burgers?.map(hb => hb.id).includes(b.id))
-									.map(b => ({key: b.id, value: b.id, label: formatBurgerName(b)}));
+									.map(b => ({key: b.id, value: b.id, label: [formatBurgerName(b), `${b.straatnaam} ${b.huisnummer}, ${b.postcode} ${b.plaatsnaam}`]}));
 
 								return (
-									<Select options={options} isMulti onChange={selectedOptions => {
-										const selectedBurgers = burgers.filter(b => selectedOptions.map(so => so.value).includes(b.id));
-										setSelectedBurgers(selectedBurgers);
-									}} />
+									<Select options={options} isClearable styles={reactSelectStyles.default} onChange={selectedOption => {
+										const selectedBurger: Burger = burgers.find(b => selectedOption?.value === b.id) as Burger;
+										setSelectedBurgers([selectedBurger]);
+									}} components={{Option: MultiLineOption, ValueContainer: MultiLineValueContainer}} />
 								);
 							}} />
 						</FormControl>
