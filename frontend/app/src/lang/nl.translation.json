@@ -57,9 +57,7 @@
             "success_plural": "{{names}} zijn toegevoegd aan dit huishouden."
         },
         "deleteHuishoudenBurger": {
-            "noOptionsSelectedError": "Er zijn geen burgers geselecteerd. Selecteer minimaal een burger om te verwijderen uit dit huishouden.",
-            "success": "{{names}} is verwijderd uit dit huishouden.",
-            "success_plural": "{{names}} zijn verwijderd uit dit huishouden."
+            "success": "{{burgerName}} is verwijderd uit dit huishouden."
         },
         "huishoudens": {
             "noSearchResults": "Geen huishoudens gevonden. Gebruik een andere zoekterm."
@@ -266,7 +264,8 @@
             },
             "findBurger": "Zoek burgers",
             "deleteBurger": {
-                "title": "Burger verwijderen uit huishouden"
+                "title": "Burger verwijderen uit huishouden",
+                "confirmQuestion": "Weet je zeker dat je {{burgerName}} wil verwijderen uit het huishouden {{huishoudenName}}?"
             }
         },
         "createOrganisatie": {
@@ -506,12 +505,10 @@
     "configuratie": "Configuratie",
     "unknownGebruiker": "Onbekende gebruiker",
     "unknownBurger": "Onbekende burger",
-    "unknownBurgers": "Onbekende burgers",
-    "countBurgers": "{{count}} burger",
-    "countBurgers_plural": "{{count}} burgers",
     "unknownHuishouden": "Onbekend huishouden",
     "unknownOrganisatie": "Onbekende organisatie",
     "unknownAfspraak": "Onbekende afspraak",
+    "unknownBurgers": "Onbekende burgers",
     "unknownCsm": "Onbekend bankafschrift",
     "unknownCount": "een onbekend aantal",
     "unknownIban": "Onbekende IBAN",

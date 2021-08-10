@@ -10,14 +10,12 @@ import {formatHuishoudenName} from "../../../utils/things";
 import Page from "../../Layouts/Page";
 import PageNotFound from "../../PageNotFound";
 import AddBurgerToHuishoudenModal from "./AddBurgerToHuishoudenModal";
-import DeleteBurgerFromHuishoudenModal from "./DeleteBurgerFromHuishoudenModal";
 import HuishoudenBurgersView from "./HuishoudenBurgersView";
 
 const HuishoudenDetails = () => {
 	const {t} = useTranslation();
 	const {id} = useParams<{id: string}>();
 	const addBurgersModal = useDisclosure();
-	const deleteBurgersModal = useDisclosure();
 	const $huishouden = useGetHuishoudenQuery({variables: {id: parseInt(id)}});
 
 	return (
@@ -35,15 +33,12 @@ const HuishoudenDetails = () => {
 					<Menu>
 						<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} data-cy={"actionsMenuButton"} />
 						<MenuList>
-							<MenuItem onClick={() => deleteBurgersModal.onOpen()}>{t("actions.deleteBurgers")}</MenuItem>
 							<NavLink to={Routes.RapportageBurger(burgerIds)}><MenuItem>{t("sidebar.rapportage")}</MenuItem></NavLink>
 						</MenuList>
 					</Menu>
 				)}>
 					<AddBurgerToHuishoudenModal huishouden={huishouden} onClose={addBurgersModal.onClose} isOpen={addBurgersModal.isOpen} />
-					<DeleteBurgerFromHuishoudenModal huishouden={huishouden} onClose={deleteBurgersModal.onClose} isOpen={deleteBurgersModal.isOpen} />
-
-					<HuishoudenBurgersView burgers={huishouden.burgers || []} onClickAddButton={() => addBurgersModal.onOpen()} />
+					<HuishoudenBurgersView huishouden={huishouden} onClickAddButton={() => addBurgersModal.onOpen()} />
 				</Page>
 			);
 		}} />
