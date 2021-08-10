@@ -21,6 +21,8 @@ import SidebarContainer from "./components/Sidebar/SidebarContainer";
 import StatusErrorPage from "./components/Status/StatusErrorPage";
 import StatusPage from "./components/Status/StatusPage";
 import Routes from "./config/routes";
+import Design from "./Design";
+import {isDev} from "./utils/things";
 import useAuth from "./utils/useAuth";
 
 const App = () => {
@@ -97,6 +99,7 @@ const App = () => {
 						<Route path={Routes.Gebeurtenissen} component={Gebeurtenissen} />
 						<Route exact path={Routes.Status} component={StatusPage} />
 						<Route exact path={Routes.NotFound} component={PageNotFound} />
+						{isDev && <Route exact path={"/design"} component={Design} />}
 						<Route component={PageNotFound} />
 					</Switch>
 				</Box>
