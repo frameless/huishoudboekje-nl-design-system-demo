@@ -83,7 +83,7 @@ const App = () => {
 					</Stack>
 
 					<Switch>
-						<Route exact path={Routes.Home} component={() => <Redirect to={Routes.Burgers} />} />
+						<Route exact path={Routes.Home} component={() => <Redirect to={Routes.Huishoudens} />} />
 						<Route path={Routes.Huishoudens} component={Huishoudens} />
 						<Route path={Routes.Burgers} component={Burgers} />
 						<Route path={Routes.Organisaties} component={Organisaties} />
