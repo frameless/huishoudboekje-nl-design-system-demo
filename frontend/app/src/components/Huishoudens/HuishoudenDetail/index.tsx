@@ -1,5 +1,5 @@
 import {ChevronDownIcon} from "@chakra-ui/icons";
-import {Heading, IconButton, Menu, MenuButton, MenuItem, MenuList, useDisclosure} from "@chakra-ui/react";
+import {IconButton, Menu, MenuButton, MenuItem, MenuList, useDisclosure} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {NavLink, useParams} from "react-router-dom";
@@ -44,10 +44,7 @@ const HuishoudenDetails = () => {
 					<AddBurgerToHuishoudenModal huishouden={huishouden} onClose={addBurgersModal.onClose} isOpen={addBurgersModal.isOpen} />
 					<DeleteBurgerFromHuishoudenModal huishouden={huishouden} onClose={deleteBurgersModal.onClose} isOpen={deleteBurgersModal.isOpen} />
 
-					<Heading size={"md"}>{t("burgers.burgers")}</Heading>
 					<HuishoudenBurgersView burgers={huishouden.burgers || []} />
-
-					{/*<pre>{JSON.stringify(huishouden, null, 2)}</pre>*/}
 				</Page>
 			);
 		}} />
