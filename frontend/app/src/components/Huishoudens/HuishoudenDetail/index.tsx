@@ -35,7 +35,6 @@ const HuishoudenDetails = () => {
 					<Menu>
 						<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} data-cy={"actionsMenuButton"} />
 						<MenuList>
-							<MenuItem onClick={() => addBurgersModal.onOpen()}>{t("actions.addBurgers")}</MenuItem>
 							<MenuItem onClick={() => deleteBurgersModal.onOpen()}>{t("actions.deleteBurgers")}</MenuItem>
 							<NavLink to={Routes.RapportageBurger(burgerIds)}><MenuItem>{t("sidebar.rapportage")}</MenuItem></NavLink>
 						</MenuList>
@@ -44,7 +43,7 @@ const HuishoudenDetails = () => {
 					<AddBurgerToHuishoudenModal huishouden={huishouden} onClose={addBurgersModal.onClose} isOpen={addBurgersModal.isOpen} />
 					<DeleteBurgerFromHuishoudenModal huishouden={huishouden} onClose={deleteBurgersModal.onClose} isOpen={deleteBurgersModal.isOpen} />
 
-					<HuishoudenBurgersView burgers={huishouden.burgers || []} />
+					<HuishoudenBurgersView burgers={huishouden.burgers || []} onClickAddButton={() => addBurgersModal.onOpen()} />
 				</Page>
 			);
 		}} />

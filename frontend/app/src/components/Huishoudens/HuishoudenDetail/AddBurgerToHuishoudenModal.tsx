@@ -1,4 +1,4 @@
-import {Box, Button, FormControl, FormLabel, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Stack} from "@chakra-ui/react";
+import {Button, FormControl, FormLabel, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack} from "@chakra-ui/react";
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
@@ -74,12 +74,11 @@ const AddBurgerToHuishoudenModal: React.FC<{huishouden: Huishouden, isOpen: bool
 								);
 							}} />
 						</FormControl>
-
-						<Box>
-							<Button colorScheme={"primary"} onClick={onClickSave}>{t("actions.save")}</Button>
-						</Box>
 					</Stack>
 				</ModalBody>
+				<ModalFooter>
+					<Button colorScheme={"primary"} onClick={onClickSave}>{t("actions.save")}</Button>
+				</ModalFooter>
 			</ModalContent>
 		</Modal>
 	);
