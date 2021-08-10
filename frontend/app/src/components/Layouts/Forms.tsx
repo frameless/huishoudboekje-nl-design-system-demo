@@ -8,7 +8,7 @@ type FormLeftProps = {
 
 export const FormLeft: React.FC<StackProps & FormLeftProps> = ({title, helperText, children, ...props}) => (
 	<Stack flex={1} alignItems={"flex-start"} {...props}>
-		{title && <Heading size={"md"}>{title}</Heading>}
+		{title && <Heading textTransform={"capitalize"} size={"md"}>{title}</Heading>}
 		{helperText && <Text fontSize={"md"} color={"gray.500"}>{helperText}</Text>}
 		{children}
 	</Stack>

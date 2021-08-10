@@ -600,9 +600,9 @@
         }
     },
     "balance": "Balans",
-    "allBurgers": "Alle burgers",
     "reports": {
-        "period": "Rapportageperiode: van <strong>{{from}}</strong> tot en met <strong>{{through}}</strong>."
+        "period": "Rapportageperiode: van <strong>{{from}}</strong> tot en met <strong>{{through}}</strong>.",
+        "title": "Rapportage"
     },
     "total": "Totaal",
     "saldo": "Saldo",
@@ -611,6 +611,7 @@
         "weekly": "Week",
         "monthly": "Maand"
     },
+    "allBurgers": "Alle burgers",
     "interval": {
         "period": "Periode",
         "month": "maand",

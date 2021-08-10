@@ -3,6 +3,7 @@ import {
 	Button,
 	FormControl,
 	FormLabel,
+	Heading,
 	Input,
 	Modal,
 	ModalBody,
@@ -29,7 +30,7 @@ import {DateRange} from "../../models/models";
 import Transaction from "../../models/Transaction";
 import d from "../../utils/dayjs";
 import Queryable from "../../utils/Queryable";
-import {formatBurgerName, useReactSelectStyles} from "../../utils/things";
+import {formatBurgerName, humanJoin, useReactSelectStyles} from "../../utils/things";
 import Page from "../Layouts/Page";
 import RadioButtonGroup from "../Layouts/RadioButtons/RadioButtonGroup";
 import Section from "../Layouts/Section";
@@ -81,11 +82,12 @@ const Rapportage = () => {
 				const selectedBurgers = burgers.filter(b => filterBurgerIds.includes(b.id!));
 
 				return (<>
-					<Page title={t("sidebar.rapportage")} position={"relative"} right={!$data.loading && (
-						<Box>
-							<Button size={"sm"} variant={"outline"} colorScheme={"primary"} onClick={() => filterModal.onOpen()}>{t("sections.filterOptions.title")}</Button>
-						</Box>
-					)}>
+					<Page title={t("reports.title")}
+						  position={"relative"} right={!$data.loading && (
+							<Box>
+								<Button size={"sm"} variant={"outline"} colorScheme={"primary"} onClick={() => filterModal.onOpen()}>{t("sections.filterOptions.title")}</Button>
+							</Box>
+						)}>
 						<Modal isOpen={filterModal.isOpen} onClose={filterModal.onClose}>
 							<ModalOverlay />
 							<ModalContent width={"100%"} maxWidth={500}>
@@ -159,6 +161,7 @@ const Rapportage = () => {
 							</ModalContent>
 						</Modal>
 
+						<Heading size={"sm"} fontWeight={"normal"}>{selectedBurgers.length > 0 ? humanJoin(selectedBurgers.map(b => formatBurgerName(b))) : t("allBurgers")}</Heading>
 						<Section>
 							<Tabs isLazy variant={"solid"} align={"start"} colorScheme={"primary"}>
 								<Stack direction={"row"} as={TabList} spacing={2}>
@@ -176,7 +179,7 @@ const Rapportage = () => {
 							</Tabs>
 						</Section>
 						<Section>
-							<BalanceTable transactions={filteredTransactions} startDate={d(dateRange.from).format("L")} endDate={d(dateRange.through).format("L")} selectedBurgers={selectedBurgers} />
+							<BalanceTable transactions={filteredTransactions} startDate={d(dateRange.from).format("L")} endDate={d(dateRange.through).format("L")} />
 						</Section>
 					</Page>
 				</>);
