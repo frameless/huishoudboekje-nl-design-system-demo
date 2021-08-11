@@ -1,5 +1,5 @@
 import {Box, Button, Heading, HStack, IconButton, Spinner, Stack, Text, useTheme, VStack} from "@chakra-ui/react";
-import React, {useEffect} from "react";
+import React from "react";
 import {useTranslation} from "react-i18next";
 import {FaLock} from "react-icons/fa";
 import {Redirect, Route, Switch, useLocation} from "react-router-dom";
@@ -22,6 +22,7 @@ import StatusErrorPage from "./components/Status/StatusErrorPage";
 import StatusPage from "./components/Status/StatusPage";
 import Routes from "./config/routes";
 import Design from "./Design";
+import {useMatomo} from "./utils/Matomo";
 import {isDev} from "./utils/things";
 import useAuth from "./utils/useAuth";
 
@@ -30,11 +31,7 @@ const App = () => {
 	const {user, error, loading, reset} = useAuth();
 	const location = useLocation();
 	const theme = useTheme();
-
-	useEffect(() => {
-		const _mtm = window["_mtm"] || [];
-		_mtm.push({ event: "PathChanged" });
-	}, [location.pathname]);
+	useMatomo();
 
 	const onClickLoginButton = () => {
 		/* Save the current user's page so that we can quickly navigate back after login. */
