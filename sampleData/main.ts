@@ -33,6 +33,7 @@ const main = async () => {
 		getRubrieken,
 		createBurger,
 		createAfspraak,
+		addAfspraakZoekterm,
 	} = graphql;
 
 	/* Add configuraties */
@@ -169,7 +170,10 @@ const main = async () => {
 
 			const mAfspraken = b.afspraken.map(a => {
 				const {bedrag, credit = true, omschrijving = "", validFrom, organisatie, rubriek, validThrough, zoektermen} = a as Required<Afspraak>;
+				// Find Organisatie by kvkNummer
 				const _org = allOrganisaties.find(o => o.kvkNummer === organisatie?.kvkNummer);
+
+				// Find Rubriek by naam
 				const _rubriek = allRubrieken.find(r => r.naam === rubriek?.naam);
 
 				// Todo: add ability to choose a rekening. Now we just assume the first rekening if it exists.
@@ -188,8 +192,25 @@ const main = async () => {
 							rubriekId: _rubriek.id,
 							tegenRekeningId: _orgFirstRekening.id,
 						},
-					}).then(result => {
+					}).then(async result => {
 						console.log(`Afspraak voor burger ${burgerName} met ${result.createAfspraak?.afspraak?.organisatie?.kvkDetails?.naam} toegevoegd.`);
+						const afspraakId = result.createAfspraak?.afspraak?.id;
+
+						if (afspraakId) {
+							const addZoektermen = zoektermen.map(z => {
+								return addAfspraakZoekterm({afspraakId, zoekterm: z})
+									.then(() => {
+										console.log(`Zoekterm ${z} toegevoegd aan afspraak ${afspraakId}.`);
+									})
+									.catch(err => {
+										console.error(`(!) Kon zoekterm ${z} niet toevoegen aan afspraak ${afspraakId}.`, err);
+									});
+							});
+
+							return await Promise.all(addZoektermen).finally(() => {
+								console.log(`Alle zoektermen voor afspraak ${afspraakId} toegevoegd.`);
+							});
+						}
 					}).catch(err => {
 						console.error(`(!) Kon afspraak voor burger ${burgerName} niet toevoegen:`, err);
 					});

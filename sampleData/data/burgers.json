@@ -368,7 +368,7 @@
 		"validFrom": "2021-01-01",
 		"zoektermen": [
 		  "Loon",
-		  "ZOEKTERMPERSONA1"
+		  "ZOEKTERMPERSONA3"
 		]
 	  },
 	  {
@@ -382,7 +382,7 @@
 		"validFrom": "2019-01-07",
 		"zoektermen": [
 		  "Aanvullende uitkering",
-		  "ZOEKTERMPERSONA1"
+		  "ZOEKTERMPERSONA3"
 		]
 	  },
 	  {
@@ -438,7 +438,7 @@
 		"validFrom": "2019-01-01",
 		"zoektermen": [
 		  "Betaalde huur",
-		  "ZOEKTERMPERSONA1"
+		  "ZOEKTERMPERSONA3"
 		]
 	  },
 	  {
@@ -452,7 +452,7 @@
 		"validFrom": "2019-01-01",
 		"zoektermen": [
 		  "Elektriciteit",
-		  "ZOEKTERMPERSONA1"
+		  "ZOEKTERMPERSONA3"
 		]
 	  },
 	  {
@@ -466,7 +466,7 @@
 		"validFrom": "2021-01-01",
 		"zoektermen": [
 		  "Water",
-		  "ZOEKTERMPERSONA1"
+		  "ZOEKTERMPERSONA3"
 		]
 	  },
 	  {
@@ -477,7 +477,7 @@
 		"validFrom": "2021-01-01",
 		"zoektermen": [
 		  "Leefgeld",
-		  "ZOEKTERMPERSONA1"
+		  "ZOEKTERMPERSONA3"
 		]
 	  }
 	]
@@ -510,7 +510,7 @@
 		"validFrom": "2021-01-01",
 		"zoektermen": [
 		  "Loon",
-		  "ZOEKTERMPERSONA1"
+		  "ZOEKTERMPERSONA4"
 		]
 	  },
 	  {
@@ -524,7 +524,7 @@
 		"validFrom": "2019-01-07",
 		"zoektermen": [
 		  "Aanvullende uitkering",
-		  "ZOEKTERMPERSONA1"
+		  "ZOEKTERMPERSONA4"
 		]
 	  },
 	  {
@@ -580,7 +580,7 @@
 		"validFrom": "2019-01-01",
 		"zoektermen": [
 		  "Betaalde huur",
-		  "ZOEKTERMPERSONA1"
+		  "ZOEKTERMPERSONA4"
 		]
 	  },
 	  {
@@ -594,7 +594,7 @@
 		"validFrom": "2019-01-01",
 		"zoektermen": [
 		  "Elektriciteit",
-		  "ZOEKTERMPERSONA1"
+		  "ZOEKTERMPERSONA4"
 		]
 	  },
 	  {
@@ -608,7 +608,7 @@
 		"validFrom": "2021-01-01",
 		"zoektermen": [
 		  "Water",
-		  "ZOEKTERMPERSONA1"
+		  "ZOEKTERMPERSONA4"
 		]
 	  },
 	  {
@@ -619,7 +619,7 @@
 		"validFrom": "2021-01-01",
 		"zoektermen": [
 		  "Leefgeld",
-		  "ZOEKTERMPERSONA1"
+		  "ZOEKTERMPERSONA4"
 		]
 	  }
 	]
