@@ -127,9 +127,15 @@ const CreateBurger = () => {
 				push(Routes.Burger(id));
 			}
 		}).catch(err => {
-			console.error("Error:", err);
+			console.error(err);
+
+			let message = err.message;
+			if (err.message.includes("already exists")) {
+				message = t("messages.burger.alreadyExists");
+			}
+
 			toast({
-				error: err.message,
+				error: message,
 			});
 		});
 	};
