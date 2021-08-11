@@ -1,5 +1,5 @@
 import {Box, Button, Heading, HStack, IconButton, Spinner, Stack, Text, useTheme, VStack} from "@chakra-ui/react";
-import React from "react";
+import React, {useEffect} from "react";
 import {useTranslation} from "react-i18next";
 import {FaLock} from "react-icons/fa";
 import {Redirect, Route, Switch, useLocation} from "react-router-dom";
@@ -30,6 +30,11 @@ const App = () => {
 	const {user, error, loading, reset} = useAuth();
 	const location = useLocation();
 	const theme = useTheme();
+
+	useEffect(() => {
+		const _mtm = window["_mtm"] || [];
+		_mtm.push({ event: "PathChanged" });
+	}, [location.pathname]);
 
 	const onClickLoginButton = () => {
 		/* Save the current user's page so that we can quickly navigate back after login. */
