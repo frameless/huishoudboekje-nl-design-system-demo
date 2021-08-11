@@ -3,7 +3,7 @@
  * You will find data files in ./data/*.json.
  */
 import gql from "graphql-tag";
-import util from "util";
+import * as util from "util";
 import {burgers, configuraties, organisaties, rubrieken} from "./data";
 import {Afspraak, Organisatie, OrganisatieKvK, Rubriek} from "./graphql";
 import apolloClient, {graphQlApiUrl} from "./graphql-client";
@@ -34,6 +34,8 @@ const main = async () => {
 		createBurger,
 		createAfspraak,
 		addAfspraakZoekterm,
+		getBurgers,
+		createHuishouden,
 	} = graphql;
 
 	/* Add configuraties */
@@ -49,7 +51,7 @@ const main = async () => {
 				console.log(`(!) Configuratie ${c.id} bestaat al.`);
 			}
 			else {
-				console.error("(!) Kon configuraties niet toevoegen:", err);
+				console.error("(!) Kon configuraties niet toevoegen:", util.inspect(err, false, null, true));
 			}
 		});
 	});
@@ -67,7 +69,7 @@ const main = async () => {
 				console.log(`(!) Rubriek ${r.naam} (${r.grootboekrekening}) bestaat al.`);
 			}
 			else {
-				console.error("(!)", err);
+				console.log("(!) Kon rubriek niet toevoegen.", util.inspect(err, false, null, true));
 			}
 		});
 	});
@@ -102,8 +104,7 @@ const main = async () => {
 				}).then(r => {
 					console.log(`Rekening ${r.createOrganisatieRekening?.rekening?.iban} op naam van ${r.createOrganisatieRekening?.rekening?.rekeninghouder} toegevoegd.`);
 				}).catch(err => {
-					console.error("(!) Kon rekening niet aanmaken voor organisatie:", err);
-					console.log("(!)", util.inspect(err, false, null, true));
+					console.error("(!) Kon rekening niet aanmaken voor organisatie:", util.inspect(err, false, null, true));
 				});
 			});
 
@@ -115,7 +116,7 @@ const main = async () => {
 				console.log(`(!) Organisatie ${naam} (${kvkNummer}) bestaat al.`);
 			}
 			else {
-				console.log("(!)", util.inspect(err, false, null, true));
+				console.log("(!) Kon organisatie niet toevoegen.", util.inspect(err, false, null, true));
 			}
 		});
 	});
@@ -133,7 +134,7 @@ const main = async () => {
 			return result.organisaties || [];
 		})
 		.catch(err => {
-			console.error("(!) Kon niet alle organisaties ophalen:", err);
+			console.error("(!) Kon niet alle organisaties ophalen:", util.inspect(err, false, null, true));
 			return [];
 		});
 
@@ -145,7 +146,7 @@ const main = async () => {
 			return result.rubrieken || [];
 		})
 		.catch(err => {
-			console.error("(!) Kon niet alle rubrieken ophalen:", err);
+			console.error("(!) Kon niet alle rubrieken ophalen:", util.inspect(err, false, null, true));
 			return [];
 		});
 
@@ -203,7 +204,7 @@ const main = async () => {
 										console.log(`Zoekterm ${z} toegevoegd aan afspraak ${afspraakId}.`);
 									})
 									.catch(err => {
-										console.error(`(!) Kon zoekterm ${z} niet toevoegen aan afspraak ${afspraakId}.`, err);
+										console.error(`(!) Kon zoekterm ${z} niet toevoegen aan afspraak ${afspraakId}.`, util.inspect(err, false, null, true));
 									});
 							});
 
@@ -212,7 +213,7 @@ const main = async () => {
 							});
 						}
 					}).catch(err => {
-						console.error(`(!) Kon afspraak voor burger ${burgerName} niet toevoegen:`, err);
+						console.error(`(!) Kon afspraak voor burger ${burgerName} niet toevoegen:`, util.inspect(err, false, null, true));
 					});
 				}
 			});
@@ -231,6 +232,32 @@ const main = async () => {
 		console.log("Burgers toegevoegd.");
 		console.log();
 	});
+
+	// console.log("Burgers ophalen...");
+	// const allBurgers = await getBurgers()
+	// 	.then(result => result.burgers)
+	// 	.finally(() => {
+	// 		console.log("Burgers opgehaald.");
+	// 		console.log();
+	// 	}) as Burger[];
+	//
+	// console.log("Huishoudens toevoegen...");
+	// const mHuishoudens = huishoudens.map(async h => {
+	// 	const burgersInHuishouden: Burger[] = h.burgers.map(bh => allBurgers.find(b => b.bsn === bh.bsn)).filter(b => b) as Burger[];
+	// 	const burgerIds: number[] = burgersInHuishouden.map(b => b.id).filter(b => b) as number[];
+	// 	return createHuishouden({burgerIds})
+	// 		.then(result => {
+	// 			console.log(`Burgers toegevoegd aan huishouden ${result.createHuishouden?.huishouden?.id}: ${burgersInHuishouden.map(b => `${b.voorletters} ${b.achternaam}`).join(", ")}`);
+	// 		})
+	// 		.catch(err => {
+	// 			console.log("(!) Huishouden kon niet worden aangemaakt.", util.inspect(err, false, null, true));
+	// 		});
+	// });
+	//
+	// await Promise.all(mHuishoudens).finally(() => {
+	// 	console.log("Huishoudens toegevoegd.");
+	// 	console.log();
+	// });
 };
 
 main()

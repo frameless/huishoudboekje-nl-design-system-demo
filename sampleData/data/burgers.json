@@ -1,6 +1,6 @@
 [
   {
-	"bsn": "999111222",
+	"bsn": "100000001",
 	"voorletters": "F.S.",
 	"voornamen": "Fien Sandra",
 	"achternaam": "de Jager",
@@ -10,7 +10,7 @@
 	"plaatsnaam": "Sloothuizen",
 	"geboortedatum": "1987-06-18",
 	"email": "fien.de.jager@sloothuizen.nl",
-	"telefoonnummer": "0612345678",
+	"telefoonnummer": "0687542132",
 	"rekeningen": [
 	  {"iban": "NL84INGB2266765221", "rekeninghouder": "F. de Jager"}
 	],
@@ -143,7 +143,7 @@
 	]
   },
   {
-	"bsn": "999111333",
+	"bsn": "100000002",
 	"voorletters": "H.J.",
 	"voornamen": "Henk-Jan",
 	"achternaam": "Poortvliet",
@@ -152,8 +152,8 @@
 	"straatnaam": "Spoorlaan",
 	"plaatsnaam": "Sloothuizen",
 	"geboortedatum": "1964-08-14",
-	"email": "fien.de.jager@sloothuizen.nl",
-	"telefoonnummer": "0612345678",
+	"email": "henkjanpoortvliet@sloothuizen.nl",
+	"telefoonnummer": "0698653212",
 	"rekeningen": [
 	  {"iban": "NL83ABNA1927261899", "rekeninghouder": "H.J. Poortvliet"},
 	  {"iban": "NL58INGB5228863516", "rekeninghouder": "H.J. Poortvliet en/of A.B. Zee"}
@@ -341,16 +341,17 @@
 	]
   },
   {
-	"voorletters": "K.R.D.",
-	"voornamen": "Kristel Ramona Davina",
+	"bsn": "100000003",
+	"voorletters": "C.R.D.",
+	"voornamen": "Christel Ramone Davina",
 	"achternaam": "Poortvliet",
 	"huisnummer": "37B",
 	"postcode": "9999ZZ",
 	"straatnaam": "Spoorlaan",
 	"plaatsnaam": "Sloothuizen",
-	"geboortedatum": "1994-08-14",
+	"geboortedatum": "1968-08-14",
 	"email": "krdpoortvliet@sloothuizen.nl",
-	"telefoonnummer": "0685236971",
+	"telefoonnummer": "0632659887",
 	"rekeningen": [
 	  {"iban": "NL05ABNA1578530261", "rekeninghouder": "K.R.D. Poortvliet"}
 	],
@@ -395,7 +396,7 @@
 		"credit": true,
 		"validFrom": "2019-01-20",
 		"zoektermen": [
-		  "123456781",
+		  "123456783",
 		  "VOORSCHOT KIT/Kgb"
 		]
 	  },
@@ -409,7 +410,7 @@
 		"credit": true,
 		"validFrom": "2019-01-20",
 		"zoektermen": [
-		  "123456781",
+		  "123456783",
 		  "VOORSCHOT HUURTOESLAG"
 		]
 	  },
@@ -423,7 +424,7 @@
 		"credit": true,
 		"validFrom": "2019-01-20",
 		"zoektermen": [
-		  "123456781",
+		  "123456783",
 		  "VOORSCHOT ZORGTOESLAG"
 		]
 	  },
@@ -483,6 +484,7 @@
 	]
   },
   {
+	"bsn": "100000004",
 	"voorletters": "C.",
 	"voornamen": "Chris",
 	"achternaam": "de Burg",
@@ -492,7 +494,7 @@
 	"plaatsnaam": "Sloothuizen",
 	"geboortedatum": "1982-04-11",
 	"email": "chrisdeburg@sloothuizen.nl",
-	"telefoonnummer": "069685250014",
+	"telefoonnummer": "0612456598",
 	"rekeningen": [
 	  {"iban": "NL56ABNA3971204384", "rekeninghouder": "C. de Burg"}
 	],
@@ -537,7 +539,7 @@
 		"credit": true,
 		"validFrom": "2019-01-20",
 		"zoektermen": [
-		  "123456781",
+		  "123456784",
 		  "VOORSCHOT KIT/Kgb"
 		]
 	  },
@@ -551,7 +553,7 @@
 		"credit": true,
 		"validFrom": "2019-01-20",
 		"zoektermen": [
-		  "123456781",
+		  "123456784",
 		  "VOORSCHOT HUURTOESLAG"
 		]
 	  },
@@ -565,7 +567,7 @@
 		"credit": true,
 		"validFrom": "2019-01-20",
 		"zoektermen": [
-		  "123456781",
+		  "123456784",
 		  "VOORSCHOT ZORGTOESLAG"
 		]
 	  },

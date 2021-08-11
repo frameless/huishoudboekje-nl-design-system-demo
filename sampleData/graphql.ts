@@ -1285,6 +1285,13 @@ export type CreateExportOverschrijvingenMutationVariables = Exact<{
 
 export type CreateExportOverschrijvingenMutation = { createExportOverschrijvingen?: Maybe<{ ok?: Maybe<boolean>, export?: Maybe<{ id?: Maybe<number> }> }> };
 
+export type CreateHuishoudenMutationVariables = Exact<{
+  burgerIds?: Maybe<Array<Maybe<Scalars['Int']>> | Maybe<Scalars['Int']>>;
+}>;
+
+
+export type CreateHuishoudenMutation = { createHuishouden?: Maybe<{ ok?: Maybe<boolean>, huishouden?: Maybe<{ id?: Maybe<number>, burgers?: Maybe<Array<Maybe<{ id?: Maybe<number>, bsn?: Maybe<number>, email?: Maybe<string>, telefoonnummer?: Maybe<string>, voorletters?: Maybe<string>, voornamen?: Maybe<string>, achternaam?: Maybe<string>, geboortedatum?: Maybe<string>, straatnaam?: Maybe<string>, huisnummer?: Maybe<string>, postcode?: Maybe<string>, plaatsnaam?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>>, afspraken?: Maybe<Array<Maybe<{ id?: Maybe<number>, omschrijving?: Maybe<string>, bedrag?: Maybe<any>, credit?: Maybe<boolean>, zoektermen?: Maybe<Array<Maybe<string>>>, validFrom?: Maybe<any>, validThrough?: Maybe<any>, betaalinstructie?: Maybe<{ byDay?: Maybe<Array<Maybe<DayOfWeek>>>, byMonth?: Maybe<Array<Maybe<number>>>, byMonthDay?: Maybe<Array<Maybe<number>>>, exceptDates?: Maybe<Array<Maybe<string>>>, repeatFrequency?: Maybe<string>, startDate?: Maybe<string>, endDate?: Maybe<string> }>, burger?: Maybe<{ id?: Maybe<number>, voornamen?: Maybe<string>, voorletters?: Maybe<string>, achternaam?: Maybe<string>, plaatsnaam?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>> }>, tegenRekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>, organisatie?: Maybe<{ id?: Maybe<number>, kvkNummer?: Maybe<string>, vestigingsnummer?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>>, kvkDetails?: Maybe<{ huisnummer?: Maybe<string>, naam?: Maybe<string>, nummer?: Maybe<string>, plaatsnaam?: Maybe<string>, postcode?: Maybe<string>, straatnaam?: Maybe<string> }> }>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string>, grootboekrekening?: Maybe<{ id: string, naam?: Maybe<string>, credit?: Maybe<boolean>, omschrijving?: Maybe<string>, referentie?: Maybe<string>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string> }> }> }>, matchingAfspraken?: Maybe<Array<Maybe<{ id?: Maybe<number>, credit?: Maybe<boolean>, zoektermen?: Maybe<Array<Maybe<string>>>, bedrag?: Maybe<any>, omschrijving?: Maybe<string>, burger?: Maybe<{ voorletters?: Maybe<string>, voornamen?: Maybe<string>, achternaam?: Maybe<string> }>, tegenRekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }> }>>> }>>>, huishouden?: Maybe<{ id?: Maybe<number>, burgers?: Maybe<Array<Maybe<{ id?: Maybe<number> }>>> }> }>>> }> }> };
+
 export type CreateJournaalpostAfspraakMutationVariables = Exact<{
   transactionId: Scalars['Int'];
   afspraakId: Scalars['Int'];
@@ -1982,6 +1989,16 @@ export const CreateExportOverschrijvingenDocument = gql`
   }
 }
     `;
+export const CreateHuishoudenDocument = gql`
+    mutation createHuishouden($burgerIds: [Int] = []) {
+  createHuishouden(input: {burgerIds: $burgerIds}) {
+    ok
+    huishouden {
+      ...Huishouden
+    }
+  }
+}
+    ${HuishoudenFragmentDoc}`;
 export const CreateJournaalpostAfspraakDocument = gql`
     mutation createJournaalpostAfspraak($transactionId: Int!, $afspraakId: Int!, $isAutomatischGeboekt: Boolean = false) {
   createJournaalpostAfspraak(
@@ -2524,6 +2541,9 @@ export function getSdk<C>(requester: Requester<C>) {
     },
     createExportOverschrijvingen(variables: CreateExportOverschrijvingenMutationVariables, options?: C): Promise<CreateExportOverschrijvingenMutation> {
       return requester<CreateExportOverschrijvingenMutation, CreateExportOverschrijvingenMutationVariables>(CreateExportOverschrijvingenDocument, variables, options);
+    },
+    createHuishouden(variables?: CreateHuishoudenMutationVariables, options?: C): Promise<CreateHuishoudenMutation> {
+      return requester<CreateHuishoudenMutation, CreateHuishoudenMutationVariables>(CreateHuishoudenDocument, variables, options);
     },
     createJournaalpostAfspraak(variables: CreateJournaalpostAfspraakMutationVariables, options?: C): Promise<CreateJournaalpostAfspraakMutation> {
       return requester<CreateJournaalpostAfspraakMutation, CreateJournaalpostAfspraakMutationVariables>(CreateJournaalpostAfspraakDocument, variables, options);
