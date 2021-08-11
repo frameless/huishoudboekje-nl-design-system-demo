@@ -29,7 +29,7 @@ class Burger(db.Model):
 
     huishouden_id = Column(Integer, ForeignKey("huishoudens.id"), nullable=False)
 
-    bsn = Column(Integer)
+    bsn = Column(Integer, unique=True)
 
     # Relations from other models
     rekeningen = relationship(
