@@ -1,7 +1,7 @@
-import {Stack, useDisclosure} from "@chakra-ui/react";
+import {Button, useDisclosure} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {useParams} from "react-router-dom";
+import {NavLink, useParams} from "react-router-dom";
 import Routes from "../../../config/routes";
 import {Huishouden, useGetHuishoudenQuery} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
@@ -29,11 +29,8 @@ const HuishoudenDetails = () => {
 			const burgerIds: number[] = (huishouden.burgers || []).map(b => b.id!);
 
 			return (
-				<Page title={t("huishoudenName", {name: formatHuishoudenName(huishouden)})} backButton={(
-					<Stack direction={["column", "row"]} spacing={[2, 5]}>
-						<BackButton to={Routes.Huishoudens} />
-						<BackButton to={Routes.RapportageBurger(burgerIds)} label={t("actions.showReports")} />
-					</Stack>
+				<Page title={t("huishoudenName", {name: formatHuishoudenName(huishouden)})} backButton={(<BackButton to={Routes.Huishoudens} />)} right={(
+					<Button size={"sm"} colorScheme={"primary"} as={NavLink} to={Routes.RapportageBurger(burgerIds)}>{t("actions.showReports")}</Button>
 				)}>
 					<AddBurgerToHuishoudenModal huishouden={huishouden} onClose={addBurgersModal.onClose} isOpen={addBurgersModal.isOpen} />
 					<HuishoudenBurgersView huishouden={huishouden} onClickAddButton={() => addBurgersModal.onOpen()} />
