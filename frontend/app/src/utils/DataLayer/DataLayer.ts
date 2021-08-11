@@ -1,4 +1,3 @@
-import {DataLayerEvent} from "./DataLayerEvent";
 import {EventArray} from "./EventArray";
 
 class DataLayer {
@@ -8,10 +7,10 @@ class DataLayer {
 		this.eventArray = eventArray;
 	}
 
-	push(event: DataLayerEvent, payload = {}) {
+	push(event: string, payload = {}) {
 		this.eventArray.push({
 			event,
-			...payload && {payload},
+			...payload && {...payload},
 		});
 	}
 }
