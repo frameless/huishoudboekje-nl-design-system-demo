@@ -1,6 +1,6 @@
 import {gql} from "@apollo/client";
-import {OrganisatieKvkDetailsFragment} from "./OrganisatieKvkDetailsFragment";
-import {RekeningFragment} from "./RekeningFragment";
+import {OrganisatieKvkDetailsFragment} from "./OrganisatieKvkDetails";
+import {RekeningFragment} from "./Rekening";
 
 export const OrganisatieFragment = gql`
     fragment Organisatie on Organisatie {

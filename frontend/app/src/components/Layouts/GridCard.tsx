@@ -9,6 +9,12 @@ const GridCard = chakra(Stack, {
 		p: 5,
 		cursor: "pointer",
 		userSelect: "none",
+		borderWidth: "2px",
+		borderColor: "transparent",
+		transition: "background 200ms, border 200ms",
+		_hover: {
+			borderColor: "primary.500",
+		},
 	},
 });
 

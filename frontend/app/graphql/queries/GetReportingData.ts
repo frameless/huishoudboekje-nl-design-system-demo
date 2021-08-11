@@ -1,7 +1,7 @@
 import {gql} from "@apollo/client";
-import {BurgerFragment} from "../fragments/BurgerFragment";
-import {GrootboekrekeningFragment} from "../fragments/GrootboekrekeningFragment";
-import {TransactieFragment} from "../fragments/TransactieFragment";
+import {BurgerFragment} from "../fragments/Burger";
+import {GrootboekrekeningFragment} from "../fragments/Grootboekrekening";
+import {TransactieFragment} from "../fragments/Transactie";
 
 export const GetReportingDataQuery = gql`
     query getReportingData {
@@ -34,7 +34,6 @@ export const GetReportingDataQuery = gql`
             naam
         }
     }
-
     ${TransactieFragment}
     ${GrootboekrekeningFragment}
     ${BurgerFragment}

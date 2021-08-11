@@ -1,5 +1,5 @@
 import {gql} from "@apollo/client";
-import {GrootboekrekeningFragment} from "./GrootboekrekeningFragment";
+import {GrootboekrekeningFragment} from "./Grootboekrekening";
 
 export const RubriekFragment = gql`
     fragment Rubriek on Rubriek {

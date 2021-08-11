@@ -3,10 +3,10 @@ import React, {useContext, useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
 import {Organisatie, Rekening, Rubriek, UpdateAfspraakInput} from "../../generated/graphql";
-import {currencyFormat, useReactSelectStyles} from "../../utils/things";
+import {currencyFormat, formatIBAN, useReactSelectStyles} from "../../utils/things";
 import useToaster from "../../utils/useToaster";
 import zod from "../../utils/zod";
-import {RekeningOption, RekeningValueContainer} from "../Layouts/ReactSelect/RekeningOption";
+import {ReverseMultiLineOption, ReverseMultiLineValueContainer} from "../Layouts/ReactSelect/CustomComponents";
 import AfspraakFormContext from "./EditAfspraak/context";
 
 const bedragInputValidator = zod.string().regex(/^[^.]*$/);
@@ -58,9 +58,9 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 		...burgerRekeningen.map(r => ({
 			key: `burger-${r.id}`,
 			value: r.id,
-			label: `${r.iban} (${r.rekeninghouder})`,
+			label: [formatIBAN(r.iban), r.rekeninghouder],
 			context: {
-				iban: r.iban,
+				iban: formatIBAN(r.iban),
 				rekeninghouder: r.rekeninghouder,
 			},
 		})),
@@ -69,7 +69,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 			const rekeningen = (o.rekeningen || []).map(r => ({
 				key: `${o.id}-${r.id}`,
 				value: r.id,
-				label: `${r.iban} (${r.rekeninghouder})`,
+				label: [formatIBAN(r.iban), r.rekeninghouder],
 				context: {
 					iban: r.iban,
 					rekeninghouder: r.rekeninghouder,
@@ -86,8 +86,8 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 	const rekeningSelectProps = {
 		styles: isValid("tegenRekeningId") ? reactSelectStyles.default : reactSelectStyles.error,
 		components: {
-			Option: RekeningOption,
-			ValueContainer: RekeningValueContainer,
+			Option: ReverseMultiLineOption,
+			ValueContainer: ReverseMultiLineValueContainer,
 		},
 	};
 

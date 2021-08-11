@@ -1,5 +1,5 @@
 import {gql} from "@apollo/client";
-import {RubriekFragment} from "../fragments/RubriekFragment";
+import {RubriekFragment} from "../fragments/Rubriek";
 
 export const GetRubriekenQuery = gql`
     query getRubrieken {

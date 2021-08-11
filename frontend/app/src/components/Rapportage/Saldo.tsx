@@ -44,9 +44,6 @@ const Saldo: React.FC<BoxProps & {transactions: BankTransaction[]}> = ({transact
 			loader={<Spinner />}
 			data={data}
 			options={{
-				hAxis: {
-					title: t("interval.month", {count: 2}),
-				},
 				chartArea: {width: "90%", height: "80%"},
 				legend: {position: "top"},
 				colors: [colorSaldo],

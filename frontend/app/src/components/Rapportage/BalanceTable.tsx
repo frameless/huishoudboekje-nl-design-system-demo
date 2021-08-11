@@ -1,17 +1,16 @@
 import {Box, Divider, HStack, Stack, Text} from "@chakra-ui/react";
 import React from "react";
 import {Trans, useTranslation} from "react-i18next";
-import {BankTransaction, Burger} from "../../generated/graphql";
+import {BankTransaction} from "../../generated/graphql";
 import d from "../../utils/dayjs";
-import {currencyFormat2, formatBurgerName, humanJoin} from "../../utils/things";
+import {currencyFormat2} from "../../utils/things";
 import {FormLeft, FormRight} from "../Layouts/Forms";
 import {createAggregation, Type} from "./Aggregator";
 
-type BalanceTableProps = {transactions: BankTransaction[], selectedBurgers: Burger[], startDate: string, endDate: string};
+type BalanceTableProps = {transactions: BankTransaction[], startDate: string, endDate: string};
 
-const BalanceTable: React.FC<BalanceTableProps> = ({transactions, selectedBurgers, startDate, endDate}) => {
+const BalanceTable: React.FC<BalanceTableProps> = ({transactions, startDate, endDate}) => {
 	const {t} = useTranslation();
-	const burgerNamesList: string[] = selectedBurgers.map(b => formatBurgerName(b));
 	const [, aggregationByOrganisatie, saldo] = createAggregation(transactions);
 
 	const translatedCategory = {
@@ -21,7 +20,7 @@ const BalanceTable: React.FC<BalanceTableProps> = ({transactions, selectedBurger
 
 	return (
 		<Stack direction={["column", "row"]}>
-			<FormLeft title={t("balance")} helperText={selectedBurgers.length > 0 ? humanJoin(burgerNamesList) : t("allBurgers")} />
+			<FormLeft title={t("balance")} />
 			<FormRight>
 				<Stack spacing={4}>
 					<Text>

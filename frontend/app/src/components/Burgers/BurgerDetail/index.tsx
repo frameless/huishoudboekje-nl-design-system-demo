@@ -1,5 +1,5 @@
 import {ChevronDownIcon} from "@chakra-ui/icons";
-import {Button, Divider, IconButton, Link, Menu, MenuButton, MenuItem, MenuList} from "@chakra-ui/react";
+import {Button, Divider, IconButton, Link, Menu, MenuButton, MenuItem, MenuList, Stack} from "@chakra-ui/react";
 import React from "react";
 import {useToggle} from "react-grapple";
 import {useTranslation} from "react-i18next";
@@ -9,9 +9,9 @@ import {Burger, useDeleteBurgerMutation, useGetBurgerQuery} from "../../../gener
 import Queryable from "../../../utils/Queryable";
 import {formatBurgerName} from "../../../utils/things";
 import useToaster from "../../../utils/useToaster";
-import BackButton from "../../Layouts/BackButton";
 import DeadEndPage from "../../DeadEndPage";
 import Alert from "../../Layouts/Alert";
+import BackButton from "../../Layouts/BackButton";
 import Page from "../../Layouts/Page";
 import Section from "../../Layouts/Section";
 import PageNotFound from "../../PageNotFound";
@@ -76,12 +76,20 @@ const BurgerDetail = () => {
 					{t("messages.burgers.deleteQuestion", {name: `${burger.voornamen} ${burger.achternaam}`})}
 				</Alert>}
 
-				<Page title={formatBurgerName(burger)} backButton={<BackButton to={Routes.Burgers} />} menu={(
+				<Page title={formatBurgerName(burger)} backButton={(
+					<Stack direction={["column", "row"]} spacing={[2, 5]}>
+						<BackButton label={t("backToBurgersList")} to={Routes.Burgers} />
+						{burger.huishouden?.id && <BackButton label={t("actions.viewBurgerHuishouden")} to={Routes.Huishouden(burger.huishouden?.id)} />}
+					</Stack>
+				)} menu={(
 					<Menu>
 						<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} data-cy={"actionsMenuButton"} />
 						<MenuList>
 							<Link href={Routes.BrievenExport(parseInt(id))} target={"_blank"}><MenuItem>{t("actions.brievenExport")}</MenuItem></Link>
 							<NavLink to={Routes.RapportageBurger([parseInt(id)])}><MenuItem>{t("sidebar.rapportage")}</MenuItem></NavLink>
+							{(burger.huishouden?.burgers || []).length > 1 && (
+								<NavLink to={Routes.Huishouden(burger.huishouden?.id)}><MenuItem>{t("showHuishouden")}</MenuItem></NavLink>
+							)}
 							<Divider />
 							<NavLink to={Routes.EditBurger(parseInt(id))}><MenuItem>{t("actions.edit")}</MenuItem></NavLink>
 							<MenuItem onClick={onClickDeleteMenuItem}>{t("actions.delete")}</MenuItem>

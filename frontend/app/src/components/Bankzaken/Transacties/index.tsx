@@ -26,7 +26,7 @@ import React, {useState} from "react";
 import DatePicker from "react-datepicker";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
-import {useGetTransactiesQuery, useStartAutomatischBoekenMutation} from "../../../generated/graphql";
+import {GetTransactiesDocument, useGetTransactiesQuery, useStartAutomatischBoekenMutation} from "../../../generated/graphql";
 import {DateRange} from "../../../models/models";
 import d from "../../../utils/dayjs";
 import Queryable from "../../../utils/Queryable";
@@ -65,34 +65,37 @@ const Transactions = () => {
 	const handleMutation = useHandleMutation();
 	const filterModal = useDisclosure();
 
-	const $transactions = useGetTransactiesQuery({
-		variables: {
-			offset,
-			limit: customPageSize,
-			filters: {
-				// isGeboekt: filters.onlyUnbooked ? false : undefined,
-				isCredit: {
-					all: undefined,
-					income: true,
-					expenses: false,
-				}[filters.isCredit],
-				...filters.dateRange && filters.dateRange.from && filters.dateRange.through && {
-					transactieDatum: {
-						BETWEEN: [d(filters.dateRange.from).format("YYYY-MM-DD"), d(filters.dateRange.through).format("YYYY-MM-DD") || undefined],
-					},
+	const transactionsQueryVariables = {
+		offset,
+		limit: customPageSize,
+		filters: {
+			// isGeboekt: filters.onlyUnbooked ? false : undefined,
+			isCredit: {
+				all: undefined,
+				income: true,
+				expenses: false,
+			}[filters.isCredit],
+			...filters.dateRange && filters.dateRange.from && filters.dateRange.through && {
+				transactieDatum: {
+					BETWEEN: [d(filters.dateRange.from).format("YYYY-MM-DD"), d(filters.dateRange.through).format("YYYY-MM-DD") || undefined],
 				},
-				...filters.tegenrekeningIban && {
-					tegenRekening: {
-						EQ: filters.tegenrekeningIban,
-					},
+			},
+			...filters.tegenrekeningIban && {
+				tegenRekening: {
+					EQ: filters.tegenrekeningIban,
 				},
-				...filters.bedragRange && {
-					bedrag: {
-						BETWEEN: filters.bedragRange,
-					},
+			},
+			...filters.bedragRange && {
+				bedrag: {
+					BETWEEN: filters.bedragRange,
 				},
 			},
 		},
+	};
+
+	const $transactions = useGetTransactiesQuery({
+		variables: transactionsQueryVariables,
+		fetchPolicy: "no-cache",
 		onCompleted: data => {
 			if (data && total !== data.bankTransactionsPaged?.pageInfo?.count) {
 				setTotal(data.bankTransactionsPaged?.pageInfo?.count);
@@ -100,12 +103,14 @@ const Transactions = () => {
 			}
 		},
 	});
+	const [startAutomatischBoeken] = useStartAutomatischBoekenMutation({
+		refetchQueries: [
+			{query: GetTransactiesDocument, variables: transactionsQueryVariables},
+		],
+	});
 
-	const [startAutomatischBoeken] = useStartAutomatischBoekenMutation();
 	const onClickStartBoekenButton = () => {
-		handleMutation(startAutomatischBoeken(), t("messages.automatischBoeken.successMessage"), () => {
-			$transactions.refetch();
-		});
+		handleMutation(startAutomatischBoeken(), t("messages.automatischBoeken.successMessage"));
 	};
 
 	const isCreditSelectOptions = [

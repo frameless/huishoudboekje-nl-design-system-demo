@@ -2,7 +2,7 @@ import {AddIcon} from "@chakra-ui/icons";
 import {Box, Button, FormLabel, Stack, Table, Tbody, Th, Thead, Tr, useDisclosure} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {useDeleteCustomerStatementMessageMutation, useGetCsmsQuery} from "../../../generated/graphql";
+import {CustomerStatementMessage, GetCsmsDocument, useDeleteCustomerStatementMessageMutation, useGetCsmsQuery} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import useToaster from "../../../utils/useToaster";
 import DeadEndPage from "../../DeadEndPage";
@@ -17,11 +17,12 @@ const CustomerStatementMessages = () => {
 	const {isOpen, onClose, onOpen} = useDisclosure();
 	const toast = useToaster();
 
-	const $customerStatementMessages = useGetCsmsQuery({
-		fetchPolicy: "no-cache",
+	const $customerStatementMessages = useGetCsmsQuery();
+	const [deleteCustomerStatementMessage] = useDeleteCustomerStatementMessageMutation({
+		refetchQueries: [
+			{query: GetCsmsDocument},
+		],
 	});
-
-	const [deleteCustomerStatementMessage] = useDeleteCustomerStatementMessageMutation();
 
 	const onDelete = (id: number) => {
 		deleteCustomerStatementMessage({
@@ -30,7 +31,6 @@ const CustomerStatementMessages = () => {
 			toast({
 				success: t("messages.customerStatementMessages.deleteSuccess"),
 			});
-			$customerStatementMessages.refetch();
 		}).catch(err => {
 			console.error(err);
 			toast({
@@ -42,14 +42,11 @@ const CustomerStatementMessages = () => {
 	return (
 		<Page title={t("banking.customerStatementMessages.title")}>
 			{isOpen && (
-				<CsmUploadModal onClose={() => {
-					$customerStatementMessages.refetch();
-					onClose();
-				}} />
+				<CsmUploadModal onClose={() => onClose()} />
 			)}
-			<Queryable query={$customerStatementMessages}>{data => {
+			<Queryable query={$customerStatementMessages}>{(data) => {
 				/* Sort CSMs so that the newest appears first */
-				const csms = [...data.customerStatementMessages].sort((a, b) => a.uploadDate <= b.uploadDate ? 1 : -1);
+				const csms: CustomerStatementMessage[] = [...data.customerStatementMessages || []].sort((a, b) => a.uploadDate <= b.uploadDate ? 1 : -1);
 
 				if (csms.length === 0) {
 					return (

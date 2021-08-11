@@ -1,7 +1,7 @@
 import {Box, BoxProps, Divider, Stack} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {AiTwotoneExperiment, FaRegBuilding, FiActivity, GrGraphQl, MdCreditCard, RiBarChartFill, RiUserLine, TiCog} from "react-icons/all";
+import {AiTwotoneExperiment, BsFillHouseDoorFill, FaRegBuilding, FiActivity, GrGraphQl, MdCreditCard, RiBarChartFill, TiCog} from "react-icons/all";
 import Routes from "../../config/routes";
 import {useFeatureFlag} from "../../utils/features";
 import {isDev} from "../../utils/things";
@@ -14,7 +14,14 @@ const Sidebar: React.FC<BoxProps> = (props) => {
 	return (<>
 		<Stack spacing={5} p={5} alignSelf={"center"} borderRadius={5} bg={"white"} divider={<Divider />} {...props} width={"100%"}>
 			<Stack spacing={5}>
-				<SidebarLink to={Routes.Burgers} icon={RiUserLine}>{t("sidebar.burgers")}</SidebarLink>
+				<Stack>
+					<SidebarLink to={Routes.Huishoudens} icon={BsFillHouseDoorFill}>{t("sidebar.huishoudens")}</SidebarLink>
+					<Box pl={"27px"}>
+						<Stack spacing={1} borderLeft={"1px solid"} borderLeftColor={"gray.400"} pl={"21px"}>
+							<SidebarLink size={"sm"} to={Routes.Burgers}>{t("sidebar.burgers")}</SidebarLink>
+						</Stack>
+					</Box>
+				</Stack>
 				<SidebarLink to={Routes.Organisaties} icon={FaRegBuilding}>{t("sidebar.organisaties")}</SidebarLink>
 				<Stack>
 					<SidebarLink exactMatch to={Routes.Bankzaken} icon={MdCreditCard}>{t("sidebar.bankzaken")}</SidebarLink>

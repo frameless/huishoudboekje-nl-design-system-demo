@@ -11,7 +11,9 @@ import GebeurtenissenTableView from "./GebeurtenissenTableView";
 
 const Gebeurtenissen = () => {
 	const {t} = useTranslation();
-	const {setTotal, pageSize, offset, PaginationButtons} = usePagination();
+	const {setTotal, pageSize, offset, PaginationButtons} = usePagination({
+		pageSize: 25
+	});
 
 	const $gebeurtenissen = useGetGebeurtenissenQuery({
 		fetchPolicy: "cache-and-network",
@@ -25,16 +27,16 @@ const Gebeurtenissen = () => {
 	return (
 		<Page title={t("pages.gebeurtenissen.title")}>
 			<Section>
-				<Stack direction={["column", "row"]}>
+				<Stack>
 					<FormLeft title={t("pages.gebeurtenissen.title")} helperText={t("pages.gebeurtenissen.helperText")} flex={1} />
 					<Queryable query={$gebeurtenissen} children={data => {
 						const gs: GebruikersActiviteit[] = data.gebruikersactiviteitenPaged?.gebruikersactiviteiten || [];
 						return (
 							<FormRight flex={4}>
+								<GebeurtenissenTableView gebeurtenissen={gs} />
 								<HStack justify={"center"}>
 									<PaginationButtons />
 								</HStack>
-								<GebeurtenissenTableView gebeurtenissen={gs} />
 							</FormRight>
 						);
 					}} />

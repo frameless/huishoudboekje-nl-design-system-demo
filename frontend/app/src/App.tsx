@@ -10,6 +10,7 @@ import Transactions from "./components/Bankzaken/Transacties";
 import Burgers from "./components/Burgers";
 import Configuratie from "./components/Configuratie";
 import Gebeurtenissen from "./components/Gebeurtenissen";
+import Huishoudens from "./components/Huishoudens";
 import TwoColumns from "./components/Layouts/TwoColumns";
 import UserStatus from "./components/Layouts/UserStatus";
 import Organisaties from "./components/Organisaties";
@@ -20,6 +21,8 @@ import SidebarContainer from "./components/Sidebar/SidebarContainer";
 import StatusErrorPage from "./components/Status/StatusErrorPage";
 import StatusPage from "./components/Status/StatusPage";
 import Routes from "./config/routes";
+import Design from "./Design";
+import {isDev} from "./utils/things";
 import useAuth from "./utils/useAuth";
 
 const App = () => {
@@ -82,7 +85,8 @@ const App = () => {
 					</Stack>
 
 					<Switch>
-						<Route exact path={Routes.Home} component={() => <Redirect to={Routes.Burgers} />} />
+						<Route exact path={Routes.Home} component={() => <Redirect to={Routes.Huishoudens} />} />
+						<Route path={Routes.Huishoudens} component={Huishoudens} />
 						<Route path={Routes.Burgers} component={Burgers} />
 						<Route path={Routes.Organisaties} component={Organisaties} />
 						<Route path={Routes.Afspraken} component={AfspraakRouter} />
@@ -95,6 +99,7 @@ const App = () => {
 						<Route path={Routes.Gebeurtenissen} component={Gebeurtenissen} />
 						<Route exact path={Routes.Status} component={StatusPage} />
 						<Route exact path={Routes.NotFound} component={PageNotFound} />
+						{isDev && <Route exact path={"/design"} component={Design} />}
 						<Route component={PageNotFound} />
 					</Switch>
 				</Box>

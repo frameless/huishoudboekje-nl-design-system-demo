@@ -22,8 +22,7 @@ registerLocale("nl", nl);
 setDefaultLocale("nl");
 
 const featureFlags = [
-	"follow-up-zoektermen-opslaan",
-	"batch-bankafschriften",
+	"auditlogmodals",
 ];
 
 ReactDOM.render(
