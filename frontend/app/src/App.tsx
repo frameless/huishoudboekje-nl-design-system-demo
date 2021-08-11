@@ -22,7 +22,8 @@ import StatusErrorPage from "./components/Status/StatusErrorPage";
 import StatusPage from "./components/Status/StatusPage";
 import Routes from "./config/routes";
 import Design from "./Design";
-import {useMatomo} from "./utils/Matomo";
+import useOnPathChanged from "./utils/DataLayer/hooks/useOnPathChanged";
+import useDataLayer from "./utils/DataLayer/useDataLayer";
 import {isDev} from "./utils/things";
 import useAuth from "./utils/useAuth";
 
@@ -31,7 +32,9 @@ const App = () => {
 	const {user, error, loading, reset} = useAuth();
 	const location = useLocation();
 	const theme = useTheme();
-	useMatomo();
+	useDataLayer(window["_mtm"] || [], [
+		useOnPathChanged,
+	]);
 
 	const onClickLoginButton = () => {
 		/* Save the current user's page so that we can quickly navigate back after login. */
