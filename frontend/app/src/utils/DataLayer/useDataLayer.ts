@@ -1,9 +1,13 @@
-import { useMemo } from "react";
+import {useMemo} from "react";
 import DataLayer from "./DataLayer";
 
-const useDataLayer = (eventArray: Array<any>, hooks: ((dataLayer: DataLayer) => void)[]) => {
+type DataLayerHook = (dataLayer: DataLayer) => void;
+
+const useDataLayer = (hooks: DataLayerHook[], eventArray: Array<any> = []) => {
 	const dataLayer = useMemo(() => new DataLayer(eventArray), [eventArray]);
-	hooks.forEach(h => h(dataLayer));
+	hooks.forEach(h => {
+		h(dataLayer);
+	});
 };
 
 export default useDataLayer;

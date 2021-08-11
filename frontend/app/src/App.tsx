@@ -32,9 +32,9 @@ const App = () => {
 	const {user, error, loading, reset} = useAuth();
 	const location = useLocation();
 	const theme = useTheme();
-	useDataLayer(window["_mtm"] || [], [
+	useDataLayer([
 		useOnPathChanged,
-	]);
+	], window["_mtm"]);
 
 	const onClickLoginButton = () => {
 		/* Save the current user's page so that we can quickly navigate back after login. */
