@@ -45,6 +45,9 @@
             "noSearchResults": "Geen burgers gevonden. Gebruik een andere zoekterm.",
             "createSuccessMessage": "Nieuwe burger succesvol opgeslagen."
         },
+        "burger": {
+            "alreadyExists": "Er bestaat al een burger met dit burgerservicenummer."
+        },
         "configuratie": {
             "updateSuccess": "Configuratie succesvol opgeslagen.",
             "deleteSuccess": "Configuratie is verwijderd.",
@@ -71,6 +74,9 @@
             "updateSuccessMessage": "Gegevens succesvol gewijzigd.",
             "addHint": "Voeg organisaties toe door te klikken op de knop {{buttonLabel}}.",
             "noSearchResults": "Geen organisaties gevonden. Gebruik een andere zoekterm."
+        },
+        "organisatie": {
+            "alreadyExists": "Er bestaat al een organisatie met dit KvK-nummer."
         },
         "formInputError": {
             "description": "Er is een fout opgetreden. Controleer de invoer."

@@ -94,8 +94,14 @@ const CreateOrganisatie = () => {
 			}
 		}).catch(err => {
 			console.error(err);
+
+			let message = err.message;
+			if (err.message.includes("already exists")) {
+				message = t("messages.organisatie.alreadyExists");
+			}
+
 			toast({
-				error: err.message,
+				error: message,
 			});
 		});
 	};
