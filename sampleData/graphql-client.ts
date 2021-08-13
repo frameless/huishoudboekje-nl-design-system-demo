@@ -21,8 +21,8 @@ const headers = {
 
 const defaultLink = new BatchHttpLink({
 	uri: graphQlApiUrl,
-	batchMax: 50,
-	batchInterval: 500,
+	batchMax: 100,
+	batchInterval: 2000,
 	batchDebounce: true,
 	fetch: fetch,
 	headers,
