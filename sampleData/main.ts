@@ -4,8 +4,8 @@
  */
 import gql from "graphql-tag";
 import * as util from "util";
-import {burgers, configuraties, organisaties, rubrieken} from "./data";
-import {Afspraak, Organisatie, OrganisatieKvK, Rubriek} from "./graphql";
+import {burgers, configuraties, huishoudens, organisaties, rubrieken} from "./data";
+import {Afspraak, BetaalinstructieInput, Burger, Organisatie, OrganisatieKvK, Rubriek} from "./graphql";
 import apolloClient, {graphQlApiUrl} from "./graphql-client";
 import {getSdkApollo} from "./graphql-requester";
 import {handleErrors} from "./handleErrors";
@@ -36,6 +36,7 @@ const main = async () => {
 		addAfspraakZoekterm,
 		getBurgers,
 		createHuishouden,
+		updateAfspraakBetaalinstructie,
 	} = graphql;
 
 	/* Add configuraties */
@@ -171,6 +172,8 @@ const main = async () => {
 
 			const mAfspraken = b.afspraken.map(a => {
 				const {bedrag, credit = true, omschrijving = "", validFrom, organisatie, rubriek, validThrough, zoektermen} = a as Required<Afspraak>;
+				const betaalinstructie = a.betaalinstructie as BetaalinstructieInput;
+
 				// Find Organisatie by kvkNummer
 				const _org = allOrganisaties.find(o => o.kvkNummer === organisatie?.kvkNummer);
 
@@ -187,14 +190,16 @@ const main = async () => {
 				if (_org?.id && _orgFirstRekening?.id && _rubriek?.id) {
 					return createAfspraak({
 						input: {
-							bedrag, credit, omschrijving, validFrom,
+							bedrag, credit, omschrijving, validFrom, validThrough,
 							burgerId: burger.id,
 							organisatieId: _org.id,
 							rubriekId: _rubriek.id,
 							tegenRekeningId: _orgFirstRekening.id,
 						},
-					}).then(async result => {
+					}).then(result => {
 						console.log(`Afspraak voor burger ${burgerName} met ${result.createAfspraak?.afspraak?.organisatie?.kvkDetails?.naam} toegevoegd.`);
+						return result;
+					}).then(async result => {
 						const afspraakId = result.createAfspraak?.afspraak?.id;
 
 						if (afspraakId) {
@@ -207,6 +212,17 @@ const main = async () => {
 										console.error(`(!) Kon zoekterm ${z} niet toevoegen aan afspraak ${afspraakId}.`, util.inspect(err, false, null, true));
 									});
 							});
+
+							if (!credit && betaalinstructie) {
+								await updateAfspraakBetaalinstructie({
+									id: afspraakId,
+									betaalinstructie: betaalinstructie,
+								}).then(() => {
+									console.log(`Betaalinstructie toegevoegd aan afspraak ${afspraakId}.`);
+								}).catch(err => {
+									console.error(`(!) Kon betaalinstructie niet toevoegen aan afspraak ${afspraakId}.`, util.inspect(err, false, null, true));
+								});
+							}
 
 							return await Promise.all(addZoektermen).finally(() => {
 								console.log(`Alle zoektermen voor afspraak ${afspraakId} toegevoegd.`);
@@ -233,31 +249,31 @@ const main = async () => {
 		console.log();
 	});
 
-	// console.log("Burgers ophalen...");
-	// const allBurgers = await getBurgers()
-	// 	.then(result => result.burgers)
-	// 	.finally(() => {
-	// 		console.log("Burgers opgehaald.");
-	// 		console.log();
-	// 	}) as Burger[];
-	//
-	// console.log("Huishoudens toevoegen...");
-	// const mHuishoudens = huishoudens.map(async h => {
-	// 	const burgersInHuishouden: Burger[] = h.burgers.map(bh => allBurgers.find(b => b.bsn === bh.bsn)).filter(b => b) as Burger[];
-	// 	const burgerIds: number[] = burgersInHuishouden.map(b => b.id).filter(b => b) as number[];
-	// 	return createHuishouden({burgerIds})
-	// 		.then(result => {
-	// 			console.log(`Burgers toegevoegd aan huishouden ${result.createHuishouden?.huishouden?.id}: ${burgersInHuishouden.map(b => `${b.voorletters} ${b.achternaam}`).join(", ")}`);
-	// 		})
-	// 		.catch(err => {
-	// 			console.log("(!) Huishouden kon niet worden aangemaakt.", util.inspect(err, false, null, true));
-	// 		});
-	// });
-	//
-	// await Promise.all(mHuishoudens).finally(() => {
-	// 	console.log("Huishoudens toegevoegd.");
-	// 	console.log();
-	// });
+	console.log("Burgers ophalen...");
+	const allBurgers = await getBurgers()
+		.then(result => result.burgers)
+		.finally(() => {
+			console.log("Burgers opgehaald.");
+			console.log();
+		}) as Burger[];
+
+	console.log("Huishoudens toevoegen...");
+	const mHuishoudens = huishoudens.map(async h => {
+		const burgersInHuishouden: Burger[] = h.burgers.map(bh => allBurgers.find(b => b.bsn === bh.bsn)).filter(b => b) as Burger[];
+		const burgerIds: number[] = burgersInHuishouden.map(b => b.id).filter(b => b) as number[];
+		return createHuishouden({burgerIds})
+			.then(result => {
+				console.log(`Burgers toegevoegd aan huishouden ${result.createHuishouden?.huishouden?.id}: ${burgersInHuishouden.map(b => `${b.voorletters} ${b.achternaam}`).join(", ")}`);
+			})
+			.catch(err => {
+				console.log("(!) Huishouden kon niet worden aangemaakt.", util.inspect(err, false, null, true));
+			});
+	});
+
+	await Promise.all(mHuishoudens).finally(() => {
+		console.log("Huishoudens toegevoegd.");
+		console.log();
+	});
 };
 
 main()
