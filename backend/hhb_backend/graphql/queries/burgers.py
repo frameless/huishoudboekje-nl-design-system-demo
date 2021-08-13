@@ -9,6 +9,7 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import (
 )
 from hhb_backend.graphql.filters.burgers import BurgerFilter
 import hhb_backend.graphql.models.afspraak as afspraak
+from hhb_backend.graphql.scalars.dynamic_types import DynamicType
 
 class BurgerQuery:
     return_type = graphene.Field(burger.Burger, id=graphene.Int(required=True))
@@ -30,7 +31,7 @@ class BurgersQuery:
     return_type = graphene.List(
         burger.Burger,
         ids=graphene.List(graphene.Int, default_value=[]),
-        filters=BurgerFilter()
+        search=DynamicType()
     )
 
     @classmethod
@@ -46,39 +47,36 @@ class BurgersQuery:
         if kwargs["ids"]:
             return await request.dataloader.burgers_by_id.load_many(kwargs["ids"])
 
-        if "filters" in kwargs:
-            if "bedrag" in kwargs['filters'] or "tegen_rekening_id" in kwargs['filters']  or "zoektermen" in kwargs['filters'] :
-                afspraken = request.dataloader.afspraken_by_id.get_all_and_cache(filters=kwargs.get("filters", None))
-                burger_ids = set([afspraak_dict['burger_id'] for afspraak_dict in afspraken if "burger_id" in afspraak_dict])
-                return await request.dataloader.burgers_by_id.load_many(list(burger_ids))
+        if "search" in kwargs:
+            burger_ids = set()
+            afspraken_ids = set()
 
-            if "iban" in kwargs['filters'] or "rekeninghouder" in kwargs['filters']:
-                rekeningen = request.dataloader.rekeningen_by_id.get_all_and_cache(filters=kwargs.get("filters", None))
+            burgers = request.dataloader.burgers_by_id.get_all_and_cache(filters=kwargs.get("filters", None))
+            for burger in burgers:
+                if str(kwargs["search"]).lower() in str(burger['achternaam']).lower() or\
+                        str(kwargs["search"]).lower() in str(burger['voornamen']).lower() or\
+                        str(kwargs["search"]).lower() in str(burger['bsn']).lower():
+                    burger_ids.add(burger["id"])
 
-                burger_ids = set()
-                organisatie_ids = set()
-                afspraken_ids = set()
-                for rekening_dict in rekeningen:
-                    if "burgers" in rekening_dict:
-                        burger_ids.update(rekening_dict['burgers'])
-                    if "organisaties" in rekening_dict:
-                        organisatie_ids.update(rekening_dict['organisaties'])
-                    if "afspraken" in rekening_dict:
-                        afspraken_ids.update(rekening_dict['afspraken'])
+            rekeningen = request.dataloader.rekeningen_by_id.get_all_and_cache(filters=kwargs.get("filters", None))
+            for rekening in rekeningen:
+                if str(kwargs["search"]).lower() in str(rekening['iban']).lower() or \
+                        str(kwargs["search"]).lower() in str(rekening['rekeninghouder']).lower():
+                    for burger_id in rekening["burgers"]:
+                        burger_ids.add(burger_id)
+                    for afspraak_id in rekening["afspraken"]:
+                        afspraken_ids.add(afspraak_id)
 
-                if burger_ids:
-                    return await request.dataloader.burgers_by_id.load_many(list(burger_ids))
-                if afspraken_ids:
-                    afspraken = await request.dataloader.afspraken_by_id.load_many(list(afspraken_ids))
-                    burger_ids = set([afspraak_dict['burger_id'] for afspraak_dict in afspraken if "burger_id" in afspraak_dict])
-                    return await request.dataloader.burgers_by_id.load_many(burger_ids)
-                if organisatie_ids:
-                    organisaties = await request.dataloader.organisaties_by_id.load_many(list(organisatie_ids))
-                    afspraken = await request.dataloader.afspraken_by_id.load_many(organisaties[0]['afspraken'])
-                    burger_ids = set([afspraak_dict['burger_id'] for afspraak_dict in afspraken if "burger_id" in afspraak_dict])
-                    return await request.dataloader.burgers_by_id.load_many(burger_ids)
+            afspraken = request.dataloader.afspraken_by_id.get_all_and_cache(filters=kwargs.get("filters", None))
+            for afspraak in afspraken:
+                if str(kwargs["search"]).lower() in str(afspraak['zoektermen']).lower():
+                    burger_ids.add(afspraak["burger_id"])
 
-                return await request.dataloader.burgers_by_id.load_many(burger_ids)
+            afspraken = await request.dataloader.afspraken_by_id.load_many(list(afspraken_ids))
+            for afspraak in afspraken:
+                burger_ids.add(afspraak["burger_id"])
+
+            return await request.dataloader.burgers_by_id.load_many(list(burger_ids))
 
         return request.dataloader.burgers_by_id.get_all_and_cache(filters=kwargs.get("filters", None))
 
