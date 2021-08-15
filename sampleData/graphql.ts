@@ -1194,73 +1194,35 @@ export type UpdateRubriek = {
 };
 
 
-export type AfspraakFragment = (
-  Pick<Afspraak, 'id' | 'omschrijving' | 'bedrag' | 'credit' | 'zoektermen' | 'validFrom' | 'validThrough'>
-  & { betaalinstructie?: Maybe<BetaalinstructieFragment>, burger?: Maybe<(
-    Pick<Burger, 'id' | 'voornamen' | 'voorletters' | 'achternaam' | 'plaatsnaam'>
-    & { rekeningen?: Maybe<Array<Maybe<RekeningFragment>>> }
-  )>, tegenRekening?: Maybe<RekeningFragment>, organisatie?: Maybe<OrganisatieFragment>, rubriek?: Maybe<RubriekFragment>, matchingAfspraken?: Maybe<Array<Maybe<(
-    Pick<Afspraak, 'id' | 'credit' | 'zoektermen' | 'bedrag' | 'omschrijving'>
-    & { burger?: Maybe<Pick<Burger, 'voorletters' | 'voornamen' | 'achternaam'>>, tegenRekening?: Maybe<Pick<Rekening, 'id' | 'iban' | 'rekeninghouder'>> }
-  )>>> }
-);
+export type AfspraakFragment = { id?: Maybe<number>, omschrijving?: Maybe<string>, bedrag?: Maybe<any>, credit?: Maybe<boolean>, zoektermen?: Maybe<Array<Maybe<string>>>, validFrom?: Maybe<any>, validThrough?: Maybe<any>, betaalinstructie?: Maybe<{ byDay?: Maybe<Array<Maybe<DayOfWeek>>>, byMonth?: Maybe<Array<Maybe<number>>>, byMonthDay?: Maybe<Array<Maybe<number>>>, exceptDates?: Maybe<Array<Maybe<string>>>, repeatFrequency?: Maybe<string>, startDate?: Maybe<string>, endDate?: Maybe<string> }>, burger?: Maybe<{ id?: Maybe<number>, voornamen?: Maybe<string>, voorletters?: Maybe<string>, achternaam?: Maybe<string>, plaatsnaam?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>> }>, tegenRekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>, organisatie?: Maybe<{ id?: Maybe<number>, kvkNummer?: Maybe<string>, vestigingsnummer?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>>, kvkDetails?: Maybe<{ huisnummer?: Maybe<string>, naam?: Maybe<string>, nummer?: Maybe<string>, plaatsnaam?: Maybe<string>, postcode?: Maybe<string>, straatnaam?: Maybe<string> }> }>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string>, grootboekrekening?: Maybe<{ id: string, naam?: Maybe<string>, credit?: Maybe<boolean>, omschrijving?: Maybe<string>, referentie?: Maybe<string>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string> }> }> }>, matchingAfspraken?: Maybe<Array<Maybe<{ id?: Maybe<number>, credit?: Maybe<boolean>, zoektermen?: Maybe<Array<Maybe<string>>>, bedrag?: Maybe<any>, omschrijving?: Maybe<string>, burger?: Maybe<{ voorletters?: Maybe<string>, voornamen?: Maybe<string>, achternaam?: Maybe<string> }>, tegenRekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }> }>>> };
 
-export type BetaalinstructieFragment = Pick<Betaalinstructie, 'byDay' | 'byMonth' | 'byMonthDay' | 'exceptDates' | 'repeatFrequency' | 'startDate' | 'endDate'>;
+export type BetaalinstructieFragment = { byDay?: Maybe<Array<Maybe<DayOfWeek>>>, byMonth?: Maybe<Array<Maybe<number>>>, byMonthDay?: Maybe<Array<Maybe<number>>>, exceptDates?: Maybe<Array<Maybe<string>>>, repeatFrequency?: Maybe<string>, startDate?: Maybe<string>, endDate?: Maybe<string> };
 
-export type BurgerFragment = (
-  Pick<Burger, 'id' | 'bsn' | 'email' | 'telefoonnummer' | 'voorletters' | 'voornamen' | 'achternaam' | 'geboortedatum' | 'straatnaam' | 'huisnummer' | 'postcode' | 'plaatsnaam'>
-  & { rekeningen?: Maybe<Array<Maybe<RekeningFragment>>>, afspraken?: Maybe<Array<Maybe<AfspraakFragment>>> }
-);
+export type BurgerFragment = { id?: Maybe<number>, bsn?: Maybe<number>, email?: Maybe<string>, telefoonnummer?: Maybe<string>, voorletters?: Maybe<string>, voornamen?: Maybe<string>, achternaam?: Maybe<string>, geboortedatum?: Maybe<string>, straatnaam?: Maybe<string>, huisnummer?: Maybe<string>, postcode?: Maybe<string>, plaatsnaam?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>>, afspraken?: Maybe<Array<Maybe<{ id?: Maybe<number>, omschrijving?: Maybe<string>, bedrag?: Maybe<any>, credit?: Maybe<boolean>, zoektermen?: Maybe<Array<Maybe<string>>>, validFrom?: Maybe<any>, validThrough?: Maybe<any>, betaalinstructie?: Maybe<{ byDay?: Maybe<Array<Maybe<DayOfWeek>>>, byMonth?: Maybe<Array<Maybe<number>>>, byMonthDay?: Maybe<Array<Maybe<number>>>, exceptDates?: Maybe<Array<Maybe<string>>>, repeatFrequency?: Maybe<string>, startDate?: Maybe<string>, endDate?: Maybe<string> }>, burger?: Maybe<{ id?: Maybe<number>, voornamen?: Maybe<string>, voorletters?: Maybe<string>, achternaam?: Maybe<string>, plaatsnaam?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>> }>, tegenRekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>, organisatie?: Maybe<{ id?: Maybe<number>, kvkNummer?: Maybe<string>, vestigingsnummer?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>>, kvkDetails?: Maybe<{ huisnummer?: Maybe<string>, naam?: Maybe<string>, nummer?: Maybe<string>, plaatsnaam?: Maybe<string>, postcode?: Maybe<string>, straatnaam?: Maybe<string> }> }>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string>, grootboekrekening?: Maybe<{ id: string, naam?: Maybe<string>, credit?: Maybe<boolean>, omschrijving?: Maybe<string>, referentie?: Maybe<string>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string> }> }> }>, matchingAfspraken?: Maybe<Array<Maybe<{ id?: Maybe<number>, credit?: Maybe<boolean>, zoektermen?: Maybe<Array<Maybe<string>>>, bedrag?: Maybe<any>, omschrijving?: Maybe<string>, burger?: Maybe<{ voorletters?: Maybe<string>, voornamen?: Maybe<string>, achternaam?: Maybe<string> }>, tegenRekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }> }>>> }>>>, huishouden?: Maybe<{ id?: Maybe<number>, burgers?: Maybe<Array<Maybe<{ id?: Maybe<number> }>>> }> };
 
-export type CustomerStatementMessageFragment = Pick<CustomerStatementMessage, 'id' | 'filename' | 'uploadDate' | 'accountIdentification' | 'closingAvailableFunds' | 'closingBalance' | 'forwardAvailableBalance' | 'openingBalance' | 'relatedReference' | 'sequenceNumber' | 'transactionReferenceNumber'>;
+export type CustomerStatementMessageFragment = { id?: Maybe<number>, filename?: Maybe<string>, uploadDate?: Maybe<any>, accountIdentification?: Maybe<string>, closingAvailableFunds?: Maybe<number>, closingBalance?: Maybe<number>, forwardAvailableBalance?: Maybe<number>, openingBalance?: Maybe<number>, relatedReference?: Maybe<string>, sequenceNumber?: Maybe<string>, transactionReferenceNumber?: Maybe<string> };
 
-export type ExportFragment = (
-  Pick<Export, 'id' | 'naam' | 'timestamp' | 'startDatum' | 'eindDatum' | 'sha256'>
-  & { overschrijvingen?: Maybe<Array<Maybe<Pick<Overschrijving, 'id'>>>> }
-);
+export type ExportFragment = { id?: Maybe<number>, naam?: Maybe<string>, timestamp?: Maybe<any>, startDatum?: Maybe<string>, eindDatum?: Maybe<string>, sha256?: Maybe<string>, overschrijvingen?: Maybe<Array<Maybe<{ id?: Maybe<number> }>>> };
 
-export type GebruikerFragment = Pick<Gebruiker, 'email'>;
+export type GebruikerFragment = { email?: Maybe<string> };
 
-export type GebruikersactiviteitFragment = (
-  Pick<GebruikersActiviteit, 'id' | 'timestamp' | 'gebruikerId' | 'action'>
-  & { entities?: Maybe<Array<Maybe<(
-    Pick<GebruikersActiviteitEntity, 'entityType' | 'entityId'>
-    & { burger?: Maybe<Pick<Burger, 'id' | 'voorletters' | 'voornamen' | 'achternaam'>>, organisatie?: Maybe<OrganisatieFragment>, afspraak?: Maybe<(
-      Pick<Afspraak, 'id'>
-      & { organisatie?: Maybe<OrganisatieFragment> }
-    )>, rekening?: Maybe<Pick<Rekening, 'id' | 'iban' | 'rekeninghouder'>>, customerStatementMessage?: Maybe<(
-      Pick<CustomerStatementMessage, 'id' | 'filename'>
-      & { bankTransactions?: Maybe<Array<Maybe<Pick<BankTransaction, 'id'>>>> }
-    )>, configuratie?: Maybe<Pick<Configuratie, 'id' | 'waarde'>> }
-  )>>>, meta?: Maybe<Pick<GebruikersActiviteitMeta, 'userAgent' | 'ip' | 'applicationVersion'>> }
-);
+export type GebruikersactiviteitFragment = { id?: Maybe<number>, timestamp?: Maybe<any>, gebruikerId?: Maybe<string>, action?: Maybe<string>, entities?: Maybe<Array<Maybe<{ entityType?: Maybe<string>, entityId?: Maybe<string>, huishouden?: Maybe<{ id?: Maybe<number>, burgers?: Maybe<Array<Maybe<{ id?: Maybe<number>, voorletters?: Maybe<string>, voornamen?: Maybe<string>, achternaam?: Maybe<string> }>>> }>, burger?: Maybe<{ id?: Maybe<number>, voorletters?: Maybe<string>, voornamen?: Maybe<string>, achternaam?: Maybe<string> }>, organisatie?: Maybe<{ id?: Maybe<number>, kvkNummer?: Maybe<string>, vestigingsnummer?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>>, kvkDetails?: Maybe<{ huisnummer?: Maybe<string>, naam?: Maybe<string>, nummer?: Maybe<string>, plaatsnaam?: Maybe<string>, postcode?: Maybe<string>, straatnaam?: Maybe<string> }> }>, afspraak?: Maybe<{ id?: Maybe<number>, organisatie?: Maybe<{ id?: Maybe<number>, kvkNummer?: Maybe<string>, vestigingsnummer?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>>, kvkDetails?: Maybe<{ huisnummer?: Maybe<string>, naam?: Maybe<string>, nummer?: Maybe<string>, plaatsnaam?: Maybe<string>, postcode?: Maybe<string>, straatnaam?: Maybe<string> }> }> }>, rekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>, customerStatementMessage?: Maybe<{ id?: Maybe<number>, filename?: Maybe<string>, bankTransactions?: Maybe<Array<Maybe<{ id?: Maybe<number> }>>> }>, configuratie?: Maybe<{ id?: Maybe<string>, waarde?: Maybe<string> }>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string>, grootboekrekening?: Maybe<{ naam?: Maybe<string> }> }> }>>>, meta?: Maybe<{ userAgent?: Maybe<string>, ip?: Maybe<Array<Maybe<string>>>, applicationVersion?: Maybe<string> }> };
 
-export type GrootboekrekeningFragment = (
-  Pick<Grootboekrekening, 'id' | 'naam' | 'credit' | 'omschrijving' | 'referentie'>
-  & { rubriek?: Maybe<Pick<Rubriek, 'id' | 'naam'>> }
-);
+export type GrootboekrekeningFragment = { id: string, naam?: Maybe<string>, credit?: Maybe<boolean>, omschrijving?: Maybe<string>, referentie?: Maybe<string>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string> }> };
 
-export type JournaalpostFragment = Pick<Journaalpost, 'id'>;
+export type HuishoudenFragment = { id?: Maybe<number>, burgers?: Maybe<Array<Maybe<{ id?: Maybe<number>, bsn?: Maybe<number>, email?: Maybe<string>, telefoonnummer?: Maybe<string>, voorletters?: Maybe<string>, voornamen?: Maybe<string>, achternaam?: Maybe<string>, geboortedatum?: Maybe<string>, straatnaam?: Maybe<string>, huisnummer?: Maybe<string>, postcode?: Maybe<string>, plaatsnaam?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>>, afspraken?: Maybe<Array<Maybe<{ id?: Maybe<number>, omschrijving?: Maybe<string>, bedrag?: Maybe<any>, credit?: Maybe<boolean>, zoektermen?: Maybe<Array<Maybe<string>>>, validFrom?: Maybe<any>, validThrough?: Maybe<any>, betaalinstructie?: Maybe<{ byDay?: Maybe<Array<Maybe<DayOfWeek>>>, byMonth?: Maybe<Array<Maybe<number>>>, byMonthDay?: Maybe<Array<Maybe<number>>>, exceptDates?: Maybe<Array<Maybe<string>>>, repeatFrequency?: Maybe<string>, startDate?: Maybe<string>, endDate?: Maybe<string> }>, burger?: Maybe<{ id?: Maybe<number>, voornamen?: Maybe<string>, voorletters?: Maybe<string>, achternaam?: Maybe<string>, plaatsnaam?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>> }>, tegenRekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>, organisatie?: Maybe<{ id?: Maybe<number>, kvkNummer?: Maybe<string>, vestigingsnummer?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>>, kvkDetails?: Maybe<{ huisnummer?: Maybe<string>, naam?: Maybe<string>, nummer?: Maybe<string>, plaatsnaam?: Maybe<string>, postcode?: Maybe<string>, straatnaam?: Maybe<string> }> }>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string>, grootboekrekening?: Maybe<{ id: string, naam?: Maybe<string>, credit?: Maybe<boolean>, omschrijving?: Maybe<string>, referentie?: Maybe<string>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string> }> }> }>, matchingAfspraken?: Maybe<Array<Maybe<{ id?: Maybe<number>, credit?: Maybe<boolean>, zoektermen?: Maybe<Array<Maybe<string>>>, bedrag?: Maybe<any>, omschrijving?: Maybe<string>, burger?: Maybe<{ voorletters?: Maybe<string>, voornamen?: Maybe<string>, achternaam?: Maybe<string> }>, tegenRekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }> }>>> }>>>, huishouden?: Maybe<{ id?: Maybe<number>, burgers?: Maybe<Array<Maybe<{ id?: Maybe<number> }>>> }> }>>> };
 
-export type OrganisatieFragment = (
-  Pick<Organisatie, 'id' | 'kvkNummer' | 'vestigingsnummer'>
-  & { rekeningen?: Maybe<Array<Maybe<RekeningFragment>>> }
-  & KvkFragment
-);
+export type JournaalpostFragment = { id?: Maybe<number> };
 
-export type KvkFragment = { kvkDetails?: Maybe<Pick<OrganisatieKvK, 'huisnummer' | 'naam' | 'nummer' | 'plaatsnaam' | 'postcode' | 'straatnaam'>> };
+export type OrganisatieFragment = { id?: Maybe<number>, kvkNummer?: Maybe<string>, vestigingsnummer?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>>, kvkDetails?: Maybe<{ huisnummer?: Maybe<string>, naam?: Maybe<string>, nummer?: Maybe<string>, plaatsnaam?: Maybe<string>, postcode?: Maybe<string>, straatnaam?: Maybe<string> }> };
 
-export type RekeningFragment = Pick<Rekening, 'id' | 'iban' | 'rekeninghouder'>;
+export type KvkFragment = { kvkDetails?: Maybe<{ huisnummer?: Maybe<string>, naam?: Maybe<string>, nummer?: Maybe<string>, plaatsnaam?: Maybe<string>, postcode?: Maybe<string>, straatnaam?: Maybe<string> }> };
 
-export type RubriekFragment = (
-  Pick<Rubriek, 'id' | 'naam'>
-  & { grootboekrekening?: Maybe<GrootboekrekeningFragment> }
-);
+export type RekeningFragment = { id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> };
 
-export type BankTransactionFragment = (
-  Pick<BankTransaction, 'id' | 'informationToAccountOwner' | 'statementLine' | 'bedrag' | 'isCredit' | 'tegenRekeningIban' | 'transactieDatum'>
-  & { tegenRekening?: Maybe<Pick<Rekening, 'iban' | 'rekeninghouder'>> }
-);
+export type RubriekFragment = { id?: Maybe<number>, naam?: Maybe<string>, grootboekrekening?: Maybe<{ id: string, naam?: Maybe<string>, credit?: Maybe<boolean>, omschrijving?: Maybe<string>, referentie?: Maybe<string>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string> }> }> };
+
+export type BankTransactionFragment = { id?: Maybe<number>, informationToAccountOwner?: Maybe<string>, statementLine?: Maybe<string>, bedrag?: Maybe<any>, isCredit?: Maybe<boolean>, tegenRekeningIban?: Maybe<string>, transactieDatum?: Maybe<any>, tegenRekening?: Maybe<{ iban?: Maybe<string>, rekeninghouder?: Maybe<string> }> };
 
 export type AddAfspraakZoektermMutationVariables = Exact<{
   afspraakId: Scalars['Int'];
@@ -1268,33 +1230,29 @@ export type AddAfspraakZoektermMutationVariables = Exact<{
 }>;
 
 
-export type AddAfspraakZoektermMutation = { addAfspraakZoekterm?: Maybe<(
-    Pick<AddAfspraakZoekterm, 'ok'>
-    & { matchingAfspraken?: Maybe<Array<Maybe<(
-      Pick<Afspraak, 'id' | 'zoektermen' | 'bedrag'>
-      & { burger?: Maybe<Pick<Burger, 'id' | 'voorletters' | 'voornamen' | 'achternaam'>>, tegenRekening?: Maybe<Pick<Rekening, 'rekeninghouder' | 'iban'>> }
-    )>>> }
-  )> };
+export type AddAfspraakZoektermMutation = { addAfspraakZoekterm?: Maybe<{ ok?: Maybe<boolean>, matchingAfspraken?: Maybe<Array<Maybe<{ id?: Maybe<number>, zoektermen?: Maybe<Array<Maybe<string>>>, bedrag?: Maybe<any>, burger?: Maybe<{ id?: Maybe<number>, voorletters?: Maybe<string>, voornamen?: Maybe<string>, achternaam?: Maybe<string> }>, tegenRekening?: Maybe<{ rekeninghouder?: Maybe<string>, iban?: Maybe<string> }> }>>> }> };
+
+export type AddHuishoudenBurgerMutationVariables = Exact<{
+  huishoudenId: Scalars['Int'];
+  burgerIds: Array<Maybe<Scalars['Int']>> | Maybe<Scalars['Int']>;
+}>;
+
+
+export type AddHuishoudenBurgerMutation = { addHuishoudenBurger?: Maybe<{ ok?: Maybe<boolean> }> };
 
 export type CreateAfspraakMutationVariables = Exact<{
   input: CreateAfspraakInput;
 }>;
 
 
-export type CreateAfspraakMutation = { createAfspraak?: Maybe<(
-    Pick<CreateAfspraak, 'ok'>
-    & { afspraak?: Maybe<AfspraakFragment> }
-  )> };
+export type CreateAfspraakMutation = { createAfspraak?: Maybe<{ ok?: Maybe<boolean>, afspraak?: Maybe<{ id?: Maybe<number>, omschrijving?: Maybe<string>, bedrag?: Maybe<any>, credit?: Maybe<boolean>, zoektermen?: Maybe<Array<Maybe<string>>>, validFrom?: Maybe<any>, validThrough?: Maybe<any>, betaalinstructie?: Maybe<{ byDay?: Maybe<Array<Maybe<DayOfWeek>>>, byMonth?: Maybe<Array<Maybe<number>>>, byMonthDay?: Maybe<Array<Maybe<number>>>, exceptDates?: Maybe<Array<Maybe<string>>>, repeatFrequency?: Maybe<string>, startDate?: Maybe<string>, endDate?: Maybe<string> }>, burger?: Maybe<{ id?: Maybe<number>, voornamen?: Maybe<string>, voorletters?: Maybe<string>, achternaam?: Maybe<string>, plaatsnaam?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>> }>, tegenRekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>, organisatie?: Maybe<{ id?: Maybe<number>, kvkNummer?: Maybe<string>, vestigingsnummer?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>>, kvkDetails?: Maybe<{ huisnummer?: Maybe<string>, naam?: Maybe<string>, nummer?: Maybe<string>, plaatsnaam?: Maybe<string>, postcode?: Maybe<string>, straatnaam?: Maybe<string> }> }>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string>, grootboekrekening?: Maybe<{ id: string, naam?: Maybe<string>, credit?: Maybe<boolean>, omschrijving?: Maybe<string>, referentie?: Maybe<string>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string> }> }> }>, matchingAfspraken?: Maybe<Array<Maybe<{ id?: Maybe<number>, credit?: Maybe<boolean>, zoektermen?: Maybe<Array<Maybe<string>>>, bedrag?: Maybe<any>, omschrijving?: Maybe<string>, burger?: Maybe<{ voorletters?: Maybe<string>, voornamen?: Maybe<string>, achternaam?: Maybe<string> }>, tegenRekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }> }>>> }> }> };
 
 export type CreateBurgerMutationVariables = Exact<{
   input?: Maybe<CreateBurgerInput>;
 }>;
 
 
-export type CreateBurgerMutation = { createBurger?: Maybe<(
-    Pick<CreateBurger, 'ok'>
-    & { burger?: Maybe<BurgerFragment> }
-  )> };
+export type CreateBurgerMutation = { createBurger?: Maybe<{ ok?: Maybe<boolean>, burger?: Maybe<{ id?: Maybe<number>, bsn?: Maybe<number>, email?: Maybe<string>, telefoonnummer?: Maybe<string>, voorletters?: Maybe<string>, voornamen?: Maybe<string>, achternaam?: Maybe<string>, geboortedatum?: Maybe<string>, straatnaam?: Maybe<string>, huisnummer?: Maybe<string>, postcode?: Maybe<string>, plaatsnaam?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>>, afspraken?: Maybe<Array<Maybe<{ id?: Maybe<number>, omschrijving?: Maybe<string>, bedrag?: Maybe<any>, credit?: Maybe<boolean>, zoektermen?: Maybe<Array<Maybe<string>>>, validFrom?: Maybe<any>, validThrough?: Maybe<any>, betaalinstructie?: Maybe<{ byDay?: Maybe<Array<Maybe<DayOfWeek>>>, byMonth?: Maybe<Array<Maybe<number>>>, byMonthDay?: Maybe<Array<Maybe<number>>>, exceptDates?: Maybe<Array<Maybe<string>>>, repeatFrequency?: Maybe<string>, startDate?: Maybe<string>, endDate?: Maybe<string> }>, burger?: Maybe<{ id?: Maybe<number>, voornamen?: Maybe<string>, voorletters?: Maybe<string>, achternaam?: Maybe<string>, plaatsnaam?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>> }>, tegenRekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>, organisatie?: Maybe<{ id?: Maybe<number>, kvkNummer?: Maybe<string>, vestigingsnummer?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>>, kvkDetails?: Maybe<{ huisnummer?: Maybe<string>, naam?: Maybe<string>, nummer?: Maybe<string>, plaatsnaam?: Maybe<string>, postcode?: Maybe<string>, straatnaam?: Maybe<string> }> }>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string>, grootboekrekening?: Maybe<{ id: string, naam?: Maybe<string>, credit?: Maybe<boolean>, omschrijving?: Maybe<string>, referentie?: Maybe<string>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string> }> }> }>, matchingAfspraken?: Maybe<Array<Maybe<{ id?: Maybe<number>, credit?: Maybe<boolean>, zoektermen?: Maybe<Array<Maybe<string>>>, bedrag?: Maybe<any>, omschrijving?: Maybe<string>, burger?: Maybe<{ voorletters?: Maybe<string>, voornamen?: Maybe<string>, achternaam?: Maybe<string> }>, tegenRekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }> }>>> }>>>, huishouden?: Maybe<{ id?: Maybe<number>, burgers?: Maybe<Array<Maybe<{ id?: Maybe<number> }>>> }> }> }> };
 
 export type CreateBurgerRekeningMutationVariables = Exact<{
   burgerId: Scalars['Int'];
@@ -1302,10 +1260,7 @@ export type CreateBurgerRekeningMutationVariables = Exact<{
 }>;
 
 
-export type CreateBurgerRekeningMutation = { createBurgerRekening?: Maybe<(
-    Pick<CreateBurgerRekening, 'ok'>
-    & { rekening?: Maybe<RekeningFragment> }
-  )> };
+export type CreateBurgerRekeningMutation = { createBurgerRekening?: Maybe<{ ok?: Maybe<boolean>, rekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }> }> };
 
 export type CreateConfiguratieMutationVariables = Exact<{
   key: Scalars['String'];
@@ -1313,20 +1268,14 @@ export type CreateConfiguratieMutationVariables = Exact<{
 }>;
 
 
-export type CreateConfiguratieMutation = { createConfiguratie?: Maybe<(
-    Pick<CreateConfiguratie, 'ok'>
-    & { configuratie?: Maybe<Pick<Configuratie, 'id' | 'waarde'>> }
-  )> };
+export type CreateConfiguratieMutation = { createConfiguratie?: Maybe<{ ok?: Maybe<boolean>, configuratie?: Maybe<{ id?: Maybe<string>, waarde?: Maybe<string> }> }> };
 
 export type CreateCustomerStatementMessageMutationVariables = Exact<{
   file: Scalars['Upload'];
 }>;
 
 
-export type CreateCustomerStatementMessageMutation = { createCustomerStatementMessage?: Maybe<(
-    Pick<CreateCustomerStatementMessage, 'ok'>
-    & { customerStatementMessage?: Maybe<CustomerStatementMessageFragment> }
-  )> };
+export type CreateCustomerStatementMessageMutation = { createCustomerStatementMessage?: Maybe<{ ok?: Maybe<boolean>, customerStatementMessage?: Maybe<{ id?: Maybe<number>, filename?: Maybe<string>, uploadDate?: Maybe<any>, accountIdentification?: Maybe<string>, closingAvailableFunds?: Maybe<number>, closingBalance?: Maybe<number>, forwardAvailableBalance?: Maybe<number>, openingBalance?: Maybe<number>, relatedReference?: Maybe<string>, sequenceNumber?: Maybe<string>, transactionReferenceNumber?: Maybe<string> }> }> };
 
 export type CreateExportOverschrijvingenMutationVariables = Exact<{
   startDatum: Scalars['String'];
@@ -1334,10 +1283,14 @@ export type CreateExportOverschrijvingenMutationVariables = Exact<{
 }>;
 
 
-export type CreateExportOverschrijvingenMutation = { createExportOverschrijvingen?: Maybe<(
-    Pick<CreateExportOverschrijvingen, 'ok'>
-    & { export?: Maybe<Pick<Export, 'id'>> }
-  )> };
+export type CreateExportOverschrijvingenMutation = { createExportOverschrijvingen?: Maybe<{ ok?: Maybe<boolean>, export?: Maybe<{ id?: Maybe<number> }> }> };
+
+export type CreateHuishoudenMutationVariables = Exact<{
+  burgerIds?: Maybe<Array<Maybe<Scalars['Int']>> | Maybe<Scalars['Int']>>;
+}>;
+
+
+export type CreateHuishoudenMutation = { createHuishouden?: Maybe<{ ok?: Maybe<boolean>, huishouden?: Maybe<{ id?: Maybe<number>, burgers?: Maybe<Array<Maybe<{ id?: Maybe<number>, bsn?: Maybe<number>, email?: Maybe<string>, telefoonnummer?: Maybe<string>, voorletters?: Maybe<string>, voornamen?: Maybe<string>, achternaam?: Maybe<string>, geboortedatum?: Maybe<string>, straatnaam?: Maybe<string>, huisnummer?: Maybe<string>, postcode?: Maybe<string>, plaatsnaam?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>>, afspraken?: Maybe<Array<Maybe<{ id?: Maybe<number>, omschrijving?: Maybe<string>, bedrag?: Maybe<any>, credit?: Maybe<boolean>, zoektermen?: Maybe<Array<Maybe<string>>>, validFrom?: Maybe<any>, validThrough?: Maybe<any>, betaalinstructie?: Maybe<{ byDay?: Maybe<Array<Maybe<DayOfWeek>>>, byMonth?: Maybe<Array<Maybe<number>>>, byMonthDay?: Maybe<Array<Maybe<number>>>, exceptDates?: Maybe<Array<Maybe<string>>>, repeatFrequency?: Maybe<string>, startDate?: Maybe<string>, endDate?: Maybe<string> }>, burger?: Maybe<{ id?: Maybe<number>, voornamen?: Maybe<string>, voorletters?: Maybe<string>, achternaam?: Maybe<string>, plaatsnaam?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>> }>, tegenRekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>, organisatie?: Maybe<{ id?: Maybe<number>, kvkNummer?: Maybe<string>, vestigingsnummer?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>>, kvkDetails?: Maybe<{ huisnummer?: Maybe<string>, naam?: Maybe<string>, nummer?: Maybe<string>, plaatsnaam?: Maybe<string>, postcode?: Maybe<string>, straatnaam?: Maybe<string> }> }>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string>, grootboekrekening?: Maybe<{ id: string, naam?: Maybe<string>, credit?: Maybe<boolean>, omschrijving?: Maybe<string>, referentie?: Maybe<string>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string> }> }> }>, matchingAfspraken?: Maybe<Array<Maybe<{ id?: Maybe<number>, credit?: Maybe<boolean>, zoektermen?: Maybe<Array<Maybe<string>>>, bedrag?: Maybe<any>, omschrijving?: Maybe<string>, burger?: Maybe<{ voorletters?: Maybe<string>, voornamen?: Maybe<string>, achternaam?: Maybe<string> }>, tegenRekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }> }>>> }>>>, huishouden?: Maybe<{ id?: Maybe<number>, burgers?: Maybe<Array<Maybe<{ id?: Maybe<number> }>>> }> }>>> }> }> };
 
 export type CreateJournaalpostAfspraakMutationVariables = Exact<{
   transactionId: Scalars['Int'];
@@ -1346,10 +1299,7 @@ export type CreateJournaalpostAfspraakMutationVariables = Exact<{
 }>;
 
 
-export type CreateJournaalpostAfspraakMutation = { createJournaalpostAfspraak?: Maybe<(
-    Pick<CreateJournaalpostAfspraak, 'ok'>
-    & { journaalpost?: Maybe<Pick<Journaalpost, 'id'>> }
-  )> };
+export type CreateJournaalpostAfspraakMutation = { createJournaalpostAfspraak?: Maybe<{ ok?: Maybe<boolean>, journaalpost?: Maybe<{ id?: Maybe<number> }> }> };
 
 export type CreateJournaalpostGrootboekrekeningMutationVariables = Exact<{
   transactionId: Scalars['Int'];
@@ -1357,10 +1307,7 @@ export type CreateJournaalpostGrootboekrekeningMutationVariables = Exact<{
 }>;
 
 
-export type CreateJournaalpostGrootboekrekeningMutation = { createJournaalpostGrootboekrekening?: Maybe<(
-    Pick<CreateJournaalpostGrootboekrekening, 'ok'>
-    & { journaalpost?: Maybe<Pick<Journaalpost, 'id'>> }
-  )> };
+export type CreateJournaalpostGrootboekrekeningMutation = { createJournaalpostGrootboekrekening?: Maybe<{ ok?: Maybe<boolean>, journaalpost?: Maybe<{ id?: Maybe<number> }> }> };
 
 export type CreateOrganisatieMutationVariables = Exact<{
   huisnummer?: Maybe<Scalars['String']>;
@@ -1373,10 +1320,7 @@ export type CreateOrganisatieMutationVariables = Exact<{
 }>;
 
 
-export type CreateOrganisatieMutation = { createOrganisatie?: Maybe<(
-    Pick<CreateOrganisatie, 'ok'>
-    & { organisatie?: Maybe<OrganisatieFragment> }
-  )> };
+export type CreateOrganisatieMutation = { createOrganisatie?: Maybe<{ ok?: Maybe<boolean>, organisatie?: Maybe<{ id?: Maybe<number>, kvkNummer?: Maybe<string>, vestigingsnummer?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>>, kvkDetails?: Maybe<{ huisnummer?: Maybe<string>, naam?: Maybe<string>, nummer?: Maybe<string>, plaatsnaam?: Maybe<string>, postcode?: Maybe<string>, straatnaam?: Maybe<string> }> }> }> };
 
 export type CreateOrganisatieRekeningMutationVariables = Exact<{
   orgId: Scalars['Int'];
@@ -1384,10 +1328,7 @@ export type CreateOrganisatieRekeningMutationVariables = Exact<{
 }>;
 
 
-export type CreateOrganisatieRekeningMutation = { createOrganisatieRekening?: Maybe<(
-    Pick<CreateOrganisatieRekening, 'ok'>
-    & { rekening?: Maybe<RekeningFragment> }
-  )> };
+export type CreateOrganisatieRekeningMutation = { createOrganisatieRekening?: Maybe<{ ok?: Maybe<boolean>, rekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }> }> };
 
 export type CreateRubriekMutationVariables = Exact<{
   naam?: Maybe<Scalars['String']>;
@@ -1395,27 +1336,21 @@ export type CreateRubriekMutationVariables = Exact<{
 }>;
 
 
-export type CreateRubriekMutation = { createRubriek?: Maybe<(
-    Pick<CreateRubriek, 'ok'>
-    & { rubriek?: Maybe<(
-      Pick<Rubriek, 'id' | 'naam'>
-      & { grootboekrekening?: Maybe<GrootboekrekeningFragment> }
-    )> }
-  )> };
+export type CreateRubriekMutation = { createRubriek?: Maybe<{ ok?: Maybe<boolean>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string>, grootboekrekening?: Maybe<{ id: string, naam?: Maybe<string>, credit?: Maybe<boolean>, omschrijving?: Maybe<string>, referentie?: Maybe<string>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string> }> }> }> }> };
 
 export type DeleteOrganisatieMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type DeleteOrganisatieMutation = { deleteOrganisatie?: Maybe<Pick<DeleteOrganisatie, 'ok'>> };
+export type DeleteOrganisatieMutation = { deleteOrganisatie?: Maybe<{ ok?: Maybe<boolean> }> };
 
 export type DeleteAfspraakMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type DeleteAfspraakMutation = { deleteAfspraak?: Maybe<Pick<DeleteAfspraak, 'ok'>> };
+export type DeleteAfspraakMutation = { deleteAfspraak?: Maybe<{ ok?: Maybe<boolean> }> };
 
 export type DeleteAfspraakZoektermMutationVariables = Exact<{
   afspraakId: Scalars['Int'];
@@ -1423,20 +1358,14 @@ export type DeleteAfspraakZoektermMutationVariables = Exact<{
 }>;
 
 
-export type DeleteAfspraakZoektermMutation = { deleteAfspraakZoekterm?: Maybe<(
-    Pick<DeleteAfspraakZoekterm, 'ok'>
-    & { matchingAfspraken?: Maybe<Array<Maybe<(
-      Pick<Afspraak, 'id' | 'zoektermen' | 'bedrag'>
-      & { burger?: Maybe<Pick<Burger, 'id' | 'voorletters' | 'voornamen' | 'achternaam'>>, tegenRekening?: Maybe<Pick<Rekening, 'rekeninghouder' | 'iban'>> }
-    )>>> }
-  )> };
+export type DeleteAfspraakZoektermMutation = { deleteAfspraakZoekterm?: Maybe<{ ok?: Maybe<boolean>, matchingAfspraken?: Maybe<Array<Maybe<{ id?: Maybe<number>, zoektermen?: Maybe<Array<Maybe<string>>>, bedrag?: Maybe<any>, burger?: Maybe<{ id?: Maybe<number>, voorletters?: Maybe<string>, voornamen?: Maybe<string>, achternaam?: Maybe<string> }>, tegenRekening?: Maybe<{ rekeninghouder?: Maybe<string>, iban?: Maybe<string> }> }>>> }> };
 
 export type DeleteBurgerMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type DeleteBurgerMutation = { deleteBurger?: Maybe<Pick<DeleteBurger, 'ok'>> };
+export type DeleteBurgerMutation = { deleteBurger?: Maybe<{ ok?: Maybe<boolean> }> };
 
 export type DeleteBurgerRekeningMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -1444,28 +1373,36 @@ export type DeleteBurgerRekeningMutationVariables = Exact<{
 }>;
 
 
-export type DeleteBurgerRekeningMutation = { deleteBurgerRekening?: Maybe<Pick<DeleteBurgerRekening, 'ok'>> };
+export type DeleteBurgerRekeningMutation = { deleteBurgerRekening?: Maybe<{ ok?: Maybe<boolean> }> };
 
 export type DeleteConfiguratieMutationVariables = Exact<{
   key: Scalars['String'];
 }>;
 
 
-export type DeleteConfiguratieMutation = { deleteConfiguratie?: Maybe<Pick<DeleteConfiguratie, 'ok'>> };
+export type DeleteConfiguratieMutation = { deleteConfiguratie?: Maybe<{ ok?: Maybe<boolean> }> };
 
 export type DeleteCustomerStatementMessageMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type DeleteCustomerStatementMessageMutation = { deleteCustomerStatementMessage?: Maybe<Pick<DeleteCustomerStatementMessage, 'ok'>> };
+export type DeleteCustomerStatementMessageMutation = { deleteCustomerStatementMessage?: Maybe<{ ok?: Maybe<boolean> }> };
+
+export type DeleteHuishoudenBurgerMutationVariables = Exact<{
+  huishoudenId: Scalars['Int'];
+  burgerIds: Array<Maybe<Scalars['Int']>> | Maybe<Scalars['Int']>;
+}>;
+
+
+export type DeleteHuishoudenBurgerMutation = { deleteHuishoudenBurger?: Maybe<{ ok?: Maybe<boolean> }> };
 
 export type DeleteJournaalpostMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type DeleteJournaalpostMutation = { deleteJournaalpost?: Maybe<Pick<DeleteJournaalpost, 'ok'>> };
+export type DeleteJournaalpostMutation = { deleteJournaalpost?: Maybe<{ ok?: Maybe<boolean> }> };
 
 export type DeleteOrganisatieRekeningMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -1473,7 +1410,7 @@ export type DeleteOrganisatieRekeningMutationVariables = Exact<{
 }>;
 
 
-export type DeleteOrganisatieRekeningMutation = { deleteOrganisatieRekening?: Maybe<Pick<DeleteOrganisatieRekening, 'ok'>> };
+export type DeleteOrganisatieRekeningMutation = { deleteOrganisatieRekening?: Maybe<{ ok?: Maybe<boolean> }> };
 
 export type EndAfspraakMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -1481,26 +1418,12 @@ export type EndAfspraakMutationVariables = Exact<{
 }>;
 
 
-export type EndAfspraakMutation = { updateAfspraak?: Maybe<(
-    Pick<UpdateAfspraak, 'ok'>
-    & { afspraak?: Maybe<AfspraakFragment> }
-  )> };
+export type EndAfspraakMutation = { updateAfspraak?: Maybe<{ ok?: Maybe<boolean>, afspraak?: Maybe<{ id?: Maybe<number>, omschrijving?: Maybe<string>, bedrag?: Maybe<any>, credit?: Maybe<boolean>, zoektermen?: Maybe<Array<Maybe<string>>>, validFrom?: Maybe<any>, validThrough?: Maybe<any>, betaalinstructie?: Maybe<{ byDay?: Maybe<Array<Maybe<DayOfWeek>>>, byMonth?: Maybe<Array<Maybe<number>>>, byMonthDay?: Maybe<Array<Maybe<number>>>, exceptDates?: Maybe<Array<Maybe<string>>>, repeatFrequency?: Maybe<string>, startDate?: Maybe<string>, endDate?: Maybe<string> }>, burger?: Maybe<{ id?: Maybe<number>, voornamen?: Maybe<string>, voorletters?: Maybe<string>, achternaam?: Maybe<string>, plaatsnaam?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>> }>, tegenRekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>, organisatie?: Maybe<{ id?: Maybe<number>, kvkNummer?: Maybe<string>, vestigingsnummer?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>>, kvkDetails?: Maybe<{ huisnummer?: Maybe<string>, naam?: Maybe<string>, nummer?: Maybe<string>, plaatsnaam?: Maybe<string>, postcode?: Maybe<string>, straatnaam?: Maybe<string> }> }>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string>, grootboekrekening?: Maybe<{ id: string, naam?: Maybe<string>, credit?: Maybe<boolean>, omschrijving?: Maybe<string>, referentie?: Maybe<string>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string> }> }> }>, matchingAfspraken?: Maybe<Array<Maybe<{ id?: Maybe<number>, credit?: Maybe<boolean>, zoektermen?: Maybe<Array<Maybe<string>>>, bedrag?: Maybe<any>, omschrijving?: Maybe<string>, burger?: Maybe<{ voorletters?: Maybe<string>, voornamen?: Maybe<string>, achternaam?: Maybe<string> }>, tegenRekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }> }>>> }> }> };
 
 export type StartAutomatischBoekenMutationVariables = Exact<{ [key: string]: never; }>;
 
 
-export type StartAutomatischBoekenMutation = { startAutomatischBoeken?: Maybe<(
-    Pick<StartAutomatischBoeken, 'ok'>
-    & { journaalposten?: Maybe<Array<Maybe<Pick<Journaalpost, 'id'>>>> }
-  )> };
-
-export type UpdateAfspraakBetaalinstructieMutationVariables = Exact<{
-  id: Scalars['Int'];
-  betaalinstructie: BetaalinstructieInput;
-}>;
-
-
-export type UpdateAfspraakBetaalinstructieMutation = { updateAfspraakBetaalinstructie?: Maybe<Pick<UpdateAfspraakBetaalinstructie, 'ok'>> };
+export type StartAutomatischBoekenMutation = { startAutomatischBoeken?: Maybe<{ ok?: Maybe<boolean>, journaalposten?: Maybe<Array<Maybe<{ id?: Maybe<number> }>>> }> };
 
 export type UpdateAfspraakMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -1508,10 +1431,15 @@ export type UpdateAfspraakMutationVariables = Exact<{
 }>;
 
 
-export type UpdateAfspraakMutation = { updateAfspraak?: Maybe<(
-    Pick<UpdateAfspraak, 'ok'>
-    & { afspraak?: Maybe<AfspraakFragment> }
-  )> };
+export type UpdateAfspraakMutation = { updateAfspraak?: Maybe<{ ok?: Maybe<boolean>, afspraak?: Maybe<{ id?: Maybe<number>, omschrijving?: Maybe<string>, bedrag?: Maybe<any>, credit?: Maybe<boolean>, zoektermen?: Maybe<Array<Maybe<string>>>, validFrom?: Maybe<any>, validThrough?: Maybe<any>, betaalinstructie?: Maybe<{ byDay?: Maybe<Array<Maybe<DayOfWeek>>>, byMonth?: Maybe<Array<Maybe<number>>>, byMonthDay?: Maybe<Array<Maybe<number>>>, exceptDates?: Maybe<Array<Maybe<string>>>, repeatFrequency?: Maybe<string>, startDate?: Maybe<string>, endDate?: Maybe<string> }>, burger?: Maybe<{ id?: Maybe<number>, voornamen?: Maybe<string>, voorletters?: Maybe<string>, achternaam?: Maybe<string>, plaatsnaam?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>> }>, tegenRekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>, organisatie?: Maybe<{ id?: Maybe<number>, kvkNummer?: Maybe<string>, vestigingsnummer?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>>, kvkDetails?: Maybe<{ huisnummer?: Maybe<string>, naam?: Maybe<string>, nummer?: Maybe<string>, plaatsnaam?: Maybe<string>, postcode?: Maybe<string>, straatnaam?: Maybe<string> }> }>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string>, grootboekrekening?: Maybe<{ id: string, naam?: Maybe<string>, credit?: Maybe<boolean>, omschrijving?: Maybe<string>, referentie?: Maybe<string>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string> }> }> }>, matchingAfspraken?: Maybe<Array<Maybe<{ id?: Maybe<number>, credit?: Maybe<boolean>, zoektermen?: Maybe<Array<Maybe<string>>>, bedrag?: Maybe<any>, omschrijving?: Maybe<string>, burger?: Maybe<{ voorletters?: Maybe<string>, voornamen?: Maybe<string>, achternaam?: Maybe<string> }>, tegenRekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }> }>>> }> }> };
+
+export type UpdateAfspraakBetaalinstructieMutationVariables = Exact<{
+  id: Scalars['Int'];
+  betaalinstructie: BetaalinstructieInput;
+}>;
+
+
+export type UpdateAfspraakBetaalinstructieMutation = { updateAfspraakBetaalinstructie?: Maybe<{ ok?: Maybe<boolean> }> };
 
 export type UpdateBurgerMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -1529,10 +1457,7 @@ export type UpdateBurgerMutationVariables = Exact<{
 }>;
 
 
-export type UpdateBurgerMutation = { updateBurger?: Maybe<(
-    Pick<UpdateBurger, 'ok'>
-    & { burger?: Maybe<BurgerFragment> }
-  )> };
+export type UpdateBurgerMutation = { updateBurger?: Maybe<{ ok?: Maybe<boolean>, burger?: Maybe<{ id?: Maybe<number>, bsn?: Maybe<number>, email?: Maybe<string>, telefoonnummer?: Maybe<string>, voorletters?: Maybe<string>, voornamen?: Maybe<string>, achternaam?: Maybe<string>, geboortedatum?: Maybe<string>, straatnaam?: Maybe<string>, huisnummer?: Maybe<string>, postcode?: Maybe<string>, plaatsnaam?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>>, afspraken?: Maybe<Array<Maybe<{ id?: Maybe<number>, omschrijving?: Maybe<string>, bedrag?: Maybe<any>, credit?: Maybe<boolean>, zoektermen?: Maybe<Array<Maybe<string>>>, validFrom?: Maybe<any>, validThrough?: Maybe<any>, betaalinstructie?: Maybe<{ byDay?: Maybe<Array<Maybe<DayOfWeek>>>, byMonth?: Maybe<Array<Maybe<number>>>, byMonthDay?: Maybe<Array<Maybe<number>>>, exceptDates?: Maybe<Array<Maybe<string>>>, repeatFrequency?: Maybe<string>, startDate?: Maybe<string>, endDate?: Maybe<string> }>, burger?: Maybe<{ id?: Maybe<number>, voornamen?: Maybe<string>, voorletters?: Maybe<string>, achternaam?: Maybe<string>, plaatsnaam?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>> }>, tegenRekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>, organisatie?: Maybe<{ id?: Maybe<number>, kvkNummer?: Maybe<string>, vestigingsnummer?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>>, kvkDetails?: Maybe<{ huisnummer?: Maybe<string>, naam?: Maybe<string>, nummer?: Maybe<string>, plaatsnaam?: Maybe<string>, postcode?: Maybe<string>, straatnaam?: Maybe<string> }> }>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string>, grootboekrekening?: Maybe<{ id: string, naam?: Maybe<string>, credit?: Maybe<boolean>, omschrijving?: Maybe<string>, referentie?: Maybe<string>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string> }> }> }>, matchingAfspraken?: Maybe<Array<Maybe<{ id?: Maybe<number>, credit?: Maybe<boolean>, zoektermen?: Maybe<Array<Maybe<string>>>, bedrag?: Maybe<any>, omschrijving?: Maybe<string>, burger?: Maybe<{ voorletters?: Maybe<string>, voornamen?: Maybe<string>, achternaam?: Maybe<string> }>, tegenRekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }> }>>> }>>>, huishouden?: Maybe<{ id?: Maybe<number>, burgers?: Maybe<Array<Maybe<{ id?: Maybe<number> }>>> }> }> }> };
 
 export type UpdateConfiguratieMutationVariables = Exact<{
   key: Scalars['String'];
@@ -1540,10 +1465,7 @@ export type UpdateConfiguratieMutationVariables = Exact<{
 }>;
 
 
-export type UpdateConfiguratieMutation = { updateConfiguratie?: Maybe<(
-    Pick<UpdateConfiguratie, 'ok'>
-    & { configuratie?: Maybe<Pick<Configuratie, 'id' | 'waarde'>> }
-  )> };
+export type UpdateConfiguratieMutation = { updateConfiguratie?: Maybe<{ ok?: Maybe<boolean>, configuratie?: Maybe<{ id?: Maybe<string>, waarde?: Maybe<string> }> }> };
 
 export type UpdateJournaalpostGrootboekrekeningMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -1551,7 +1473,7 @@ export type UpdateJournaalpostGrootboekrekeningMutationVariables = Exact<{
 }>;
 
 
-export type UpdateJournaalpostGrootboekrekeningMutation = { updateJournaalpostGrootboekrekening?: Maybe<Pick<UpdateJournaalpostGrootboekrekening, 'ok'>> };
+export type UpdateJournaalpostGrootboekrekeningMutation = { updateJournaalpostGrootboekrekening?: Maybe<{ ok?: Maybe<boolean> }> };
 
 export type UpdateOrganisatieMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -1565,10 +1487,7 @@ export type UpdateOrganisatieMutationVariables = Exact<{
 }>;
 
 
-export type UpdateOrganisatieMutation = { updateOrganisatie?: Maybe<(
-    Pick<UpdateOrganisatie, 'ok'>
-    & { organisatie?: Maybe<OrganisatieFragment> }
-  )> };
+export type UpdateOrganisatieMutation = { updateOrganisatie?: Maybe<{ ok?: Maybe<boolean>, organisatie?: Maybe<{ id?: Maybe<number>, kvkNummer?: Maybe<string>, vestigingsnummer?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>>, kvkDetails?: Maybe<{ huisnummer?: Maybe<string>, naam?: Maybe<string>, nummer?: Maybe<string>, plaatsnaam?: Maybe<string>, postcode?: Maybe<string>, straatnaam?: Maybe<string> }> }> }> };
 
 export type UpdateRekeningMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -1577,29 +1496,33 @@ export type UpdateRekeningMutationVariables = Exact<{
 }>;
 
 
-export type UpdateRekeningMutation = { updateRekening?: Maybe<Pick<UpdateRekening, 'ok'>> };
+export type UpdateRekeningMutation = { updateRekening?: Maybe<{ ok?: Maybe<boolean> }> };
 
 export type GetAfspraakFormDataQueryVariables = Exact<{
   afspraakId: Scalars['Int'];
 }>;
 
 
-export type GetAfspraakFormDataQuery = { afspraak?: Maybe<AfspraakFragment>, rubrieken?: Maybe<Array<Maybe<(
-    { grootboekrekening?: Maybe<Pick<Grootboekrekening, 'id' | 'naam' | 'credit'>> }
-    & RubriekFragment
-  )>>>, organisaties?: Maybe<Array<Maybe<OrganisatieFragment>>> };
+export type GetAfspraakFormDataQuery = { afspraak?: Maybe<{ id?: Maybe<number>, omschrijving?: Maybe<string>, bedrag?: Maybe<any>, credit?: Maybe<boolean>, zoektermen?: Maybe<Array<Maybe<string>>>, validFrom?: Maybe<any>, validThrough?: Maybe<any>, betaalinstructie?: Maybe<{ byDay?: Maybe<Array<Maybe<DayOfWeek>>>, byMonth?: Maybe<Array<Maybe<number>>>, byMonthDay?: Maybe<Array<Maybe<number>>>, exceptDates?: Maybe<Array<Maybe<string>>>, repeatFrequency?: Maybe<string>, startDate?: Maybe<string>, endDate?: Maybe<string> }>, burger?: Maybe<{ id?: Maybe<number>, voornamen?: Maybe<string>, voorletters?: Maybe<string>, achternaam?: Maybe<string>, plaatsnaam?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>> }>, tegenRekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>, organisatie?: Maybe<{ id?: Maybe<number>, kvkNummer?: Maybe<string>, vestigingsnummer?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>>, kvkDetails?: Maybe<{ huisnummer?: Maybe<string>, naam?: Maybe<string>, nummer?: Maybe<string>, plaatsnaam?: Maybe<string>, postcode?: Maybe<string>, straatnaam?: Maybe<string> }> }>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string>, grootboekrekening?: Maybe<{ id: string, naam?: Maybe<string>, credit?: Maybe<boolean>, omschrijving?: Maybe<string>, referentie?: Maybe<string>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string> }> }> }>, matchingAfspraken?: Maybe<Array<Maybe<{ id?: Maybe<number>, credit?: Maybe<boolean>, zoektermen?: Maybe<Array<Maybe<string>>>, bedrag?: Maybe<any>, omschrijving?: Maybe<string>, burger?: Maybe<{ voorletters?: Maybe<string>, voornamen?: Maybe<string>, achternaam?: Maybe<string> }>, tegenRekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }> }>>> }>, rubrieken?: Maybe<Array<Maybe<{ id?: Maybe<number>, naam?: Maybe<string>, grootboekrekening?: Maybe<{ id: string, naam?: Maybe<string>, credit?: Maybe<boolean>, omschrijving?: Maybe<string>, referentie?: Maybe<string>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string> }> }> }>>>, organisaties?: Maybe<Array<Maybe<{ id?: Maybe<number>, kvkNummer?: Maybe<string>, vestigingsnummer?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>>, kvkDetails?: Maybe<{ huisnummer?: Maybe<string>, naam?: Maybe<string>, nummer?: Maybe<string>, plaatsnaam?: Maybe<string>, postcode?: Maybe<string>, straatnaam?: Maybe<string> }> }>>> };
 
 export type GetAfsprakenQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAfsprakenQuery = { afspraken?: Maybe<Array<Maybe<AfspraakFragment>>> };
+export type GetAfsprakenQuery = { afspraken?: Maybe<Array<Maybe<{ id?: Maybe<number>, omschrijving?: Maybe<string>, bedrag?: Maybe<any>, credit?: Maybe<boolean>, zoektermen?: Maybe<Array<Maybe<string>>>, validFrom?: Maybe<any>, validThrough?: Maybe<any>, betaalinstructie?: Maybe<{ byDay?: Maybe<Array<Maybe<DayOfWeek>>>, byMonth?: Maybe<Array<Maybe<number>>>, byMonthDay?: Maybe<Array<Maybe<number>>>, exceptDates?: Maybe<Array<Maybe<string>>>, repeatFrequency?: Maybe<string>, startDate?: Maybe<string>, endDate?: Maybe<string> }>, burger?: Maybe<{ id?: Maybe<number>, voornamen?: Maybe<string>, voorletters?: Maybe<string>, achternaam?: Maybe<string>, plaatsnaam?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>> }>, tegenRekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>, organisatie?: Maybe<{ id?: Maybe<number>, kvkNummer?: Maybe<string>, vestigingsnummer?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>>, kvkDetails?: Maybe<{ huisnummer?: Maybe<string>, naam?: Maybe<string>, nummer?: Maybe<string>, plaatsnaam?: Maybe<string>, postcode?: Maybe<string>, straatnaam?: Maybe<string> }> }>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string>, grootboekrekening?: Maybe<{ id: string, naam?: Maybe<string>, credit?: Maybe<boolean>, omschrijving?: Maybe<string>, referentie?: Maybe<string>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string> }> }> }>, matchingAfspraken?: Maybe<Array<Maybe<{ id?: Maybe<number>, credit?: Maybe<boolean>, zoektermen?: Maybe<Array<Maybe<string>>>, bedrag?: Maybe<any>, omschrijving?: Maybe<string>, burger?: Maybe<{ voorletters?: Maybe<string>, voornamen?: Maybe<string>, achternaam?: Maybe<string> }>, tegenRekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }> }>>> }>>> };
+
+export type GetBurgerQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type GetBurgerQuery = { burger?: Maybe<{ id?: Maybe<number>, bsn?: Maybe<number>, email?: Maybe<string>, telefoonnummer?: Maybe<string>, voorletters?: Maybe<string>, voornamen?: Maybe<string>, achternaam?: Maybe<string>, geboortedatum?: Maybe<string>, straatnaam?: Maybe<string>, huisnummer?: Maybe<string>, postcode?: Maybe<string>, plaatsnaam?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>>, afspraken?: Maybe<Array<Maybe<{ id?: Maybe<number>, omschrijving?: Maybe<string>, bedrag?: Maybe<any>, credit?: Maybe<boolean>, zoektermen?: Maybe<Array<Maybe<string>>>, validFrom?: Maybe<any>, validThrough?: Maybe<any>, betaalinstructie?: Maybe<{ byDay?: Maybe<Array<Maybe<DayOfWeek>>>, byMonth?: Maybe<Array<Maybe<number>>>, byMonthDay?: Maybe<Array<Maybe<number>>>, exceptDates?: Maybe<Array<Maybe<string>>>, repeatFrequency?: Maybe<string>, startDate?: Maybe<string>, endDate?: Maybe<string> }>, burger?: Maybe<{ id?: Maybe<number>, voornamen?: Maybe<string>, voorletters?: Maybe<string>, achternaam?: Maybe<string>, plaatsnaam?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>> }>, tegenRekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>, organisatie?: Maybe<{ id?: Maybe<number>, kvkNummer?: Maybe<string>, vestigingsnummer?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>>, kvkDetails?: Maybe<{ huisnummer?: Maybe<string>, naam?: Maybe<string>, nummer?: Maybe<string>, plaatsnaam?: Maybe<string>, postcode?: Maybe<string>, straatnaam?: Maybe<string> }> }>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string>, grootboekrekening?: Maybe<{ id: string, naam?: Maybe<string>, credit?: Maybe<boolean>, omschrijving?: Maybe<string>, referentie?: Maybe<string>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string> }> }> }>, matchingAfspraken?: Maybe<Array<Maybe<{ id?: Maybe<number>, credit?: Maybe<boolean>, zoektermen?: Maybe<Array<Maybe<string>>>, bedrag?: Maybe<any>, omschrijving?: Maybe<string>, burger?: Maybe<{ voorletters?: Maybe<string>, voornamen?: Maybe<string>, achternaam?: Maybe<string> }>, tegenRekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }> }>>> }>>>, huishouden?: Maybe<{ id?: Maybe<number>, burgers?: Maybe<Array<Maybe<{ id?: Maybe<number> }>>> }> }> };
 
 export type GetBurgerAfsprakenQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type GetBurgerAfsprakenQuery = { burger?: Maybe<{ afspraken?: Maybe<Array<Maybe<AfspraakFragment>>> }> };
+export type GetBurgerAfsprakenQuery = { burger?: Maybe<{ afspraken?: Maybe<Array<Maybe<{ id?: Maybe<number>, omschrijving?: Maybe<string>, bedrag?: Maybe<any>, credit?: Maybe<boolean>, zoektermen?: Maybe<Array<Maybe<string>>>, validFrom?: Maybe<any>, validThrough?: Maybe<any>, betaalinstructie?: Maybe<{ byDay?: Maybe<Array<Maybe<DayOfWeek>>>, byMonth?: Maybe<Array<Maybe<number>>>, byMonthDay?: Maybe<Array<Maybe<number>>>, exceptDates?: Maybe<Array<Maybe<string>>>, repeatFrequency?: Maybe<string>, startDate?: Maybe<string>, endDate?: Maybe<string> }>, burger?: Maybe<{ id?: Maybe<number>, voornamen?: Maybe<string>, voorletters?: Maybe<string>, achternaam?: Maybe<string>, plaatsnaam?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>> }>, tegenRekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>, organisatie?: Maybe<{ id?: Maybe<number>, kvkNummer?: Maybe<string>, vestigingsnummer?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>>, kvkDetails?: Maybe<{ huisnummer?: Maybe<string>, naam?: Maybe<string>, nummer?: Maybe<string>, plaatsnaam?: Maybe<string>, postcode?: Maybe<string>, straatnaam?: Maybe<string> }> }>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string>, grootboekrekening?: Maybe<{ id: string, naam?: Maybe<string>, credit?: Maybe<boolean>, omschrijving?: Maybe<string>, referentie?: Maybe<string>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string> }> }> }>, matchingAfspraken?: Maybe<Array<Maybe<{ id?: Maybe<number>, credit?: Maybe<boolean>, zoektermen?: Maybe<Array<Maybe<string>>>, bedrag?: Maybe<any>, omschrijving?: Maybe<string>, burger?: Maybe<{ voorletters?: Maybe<string>, voornamen?: Maybe<string>, achternaam?: Maybe<string> }>, tegenRekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }> }>>> }>>> }> };
 
 export type GetBurgerGebeurtenissenQueryVariables = Exact<{
   ids: Array<Scalars['Int']> | Scalars['Int'];
@@ -1608,44 +1531,34 @@ export type GetBurgerGebeurtenissenQueryVariables = Exact<{
 }>;
 
 
-export type GetBurgerGebeurtenissenQuery = { gebruikersactiviteitenPaged?: Maybe<{ gebruikersactiviteiten?: Maybe<Array<Maybe<GebruikersactiviteitFragment>>>, pageInfo?: Maybe<Pick<PageInfo, 'count'>> }> };
-
-export type GetBurgerQueryVariables = Exact<{
-  id: Scalars['Int'];
-}>;
-
-
-export type GetBurgerQuery = { burger?: Maybe<BurgerFragment> };
+export type GetBurgerGebeurtenissenQuery = { gebruikersactiviteitenPaged?: Maybe<{ gebruikersactiviteiten?: Maybe<Array<Maybe<{ id?: Maybe<number>, timestamp?: Maybe<any>, gebruikerId?: Maybe<string>, action?: Maybe<string>, entities?: Maybe<Array<Maybe<{ entityType?: Maybe<string>, entityId?: Maybe<string>, huishouden?: Maybe<{ id?: Maybe<number>, burgers?: Maybe<Array<Maybe<{ id?: Maybe<number>, voorletters?: Maybe<string>, voornamen?: Maybe<string>, achternaam?: Maybe<string> }>>> }>, burger?: Maybe<{ id?: Maybe<number>, voorletters?: Maybe<string>, voornamen?: Maybe<string>, achternaam?: Maybe<string> }>, organisatie?: Maybe<{ id?: Maybe<number>, kvkNummer?: Maybe<string>, vestigingsnummer?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>>, kvkDetails?: Maybe<{ huisnummer?: Maybe<string>, naam?: Maybe<string>, nummer?: Maybe<string>, plaatsnaam?: Maybe<string>, postcode?: Maybe<string>, straatnaam?: Maybe<string> }> }>, afspraak?: Maybe<{ id?: Maybe<number>, organisatie?: Maybe<{ id?: Maybe<number>, kvkNummer?: Maybe<string>, vestigingsnummer?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>>, kvkDetails?: Maybe<{ huisnummer?: Maybe<string>, naam?: Maybe<string>, nummer?: Maybe<string>, plaatsnaam?: Maybe<string>, postcode?: Maybe<string>, straatnaam?: Maybe<string> }> }> }>, rekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>, customerStatementMessage?: Maybe<{ id?: Maybe<number>, filename?: Maybe<string>, bankTransactions?: Maybe<Array<Maybe<{ id?: Maybe<number> }>>> }>, configuratie?: Maybe<{ id?: Maybe<string>, waarde?: Maybe<string> }>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string>, grootboekrekening?: Maybe<{ naam?: Maybe<string> }> }> }>>>, meta?: Maybe<{ userAgent?: Maybe<string>, ip?: Maybe<Array<Maybe<string>>>, applicationVersion?: Maybe<string> }> }>>>, pageInfo?: Maybe<{ count?: Maybe<number> }> }> };
 
 export type GetBurgersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetBurgersQuery = { burgers?: Maybe<Array<Maybe<BurgerFragment>>> };
+export type GetBurgersQuery = { burgers?: Maybe<Array<Maybe<{ id?: Maybe<number>, bsn?: Maybe<number>, email?: Maybe<string>, telefoonnummer?: Maybe<string>, voorletters?: Maybe<string>, voornamen?: Maybe<string>, achternaam?: Maybe<string>, geboortedatum?: Maybe<string>, straatnaam?: Maybe<string>, huisnummer?: Maybe<string>, postcode?: Maybe<string>, plaatsnaam?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>>, afspraken?: Maybe<Array<Maybe<{ id?: Maybe<number>, omschrijving?: Maybe<string>, bedrag?: Maybe<any>, credit?: Maybe<boolean>, zoektermen?: Maybe<Array<Maybe<string>>>, validFrom?: Maybe<any>, validThrough?: Maybe<any>, betaalinstructie?: Maybe<{ byDay?: Maybe<Array<Maybe<DayOfWeek>>>, byMonth?: Maybe<Array<Maybe<number>>>, byMonthDay?: Maybe<Array<Maybe<number>>>, exceptDates?: Maybe<Array<Maybe<string>>>, repeatFrequency?: Maybe<string>, startDate?: Maybe<string>, endDate?: Maybe<string> }>, burger?: Maybe<{ id?: Maybe<number>, voornamen?: Maybe<string>, voorletters?: Maybe<string>, achternaam?: Maybe<string>, plaatsnaam?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>> }>, tegenRekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>, organisatie?: Maybe<{ id?: Maybe<number>, kvkNummer?: Maybe<string>, vestigingsnummer?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>>, kvkDetails?: Maybe<{ huisnummer?: Maybe<string>, naam?: Maybe<string>, nummer?: Maybe<string>, plaatsnaam?: Maybe<string>, postcode?: Maybe<string>, straatnaam?: Maybe<string> }> }>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string>, grootboekrekening?: Maybe<{ id: string, naam?: Maybe<string>, credit?: Maybe<boolean>, omschrijving?: Maybe<string>, referentie?: Maybe<string>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string> }> }> }>, matchingAfspraken?: Maybe<Array<Maybe<{ id?: Maybe<number>, credit?: Maybe<boolean>, zoektermen?: Maybe<Array<Maybe<string>>>, bedrag?: Maybe<any>, omschrijving?: Maybe<string>, burger?: Maybe<{ voorletters?: Maybe<string>, voornamen?: Maybe<string>, achternaam?: Maybe<string> }>, tegenRekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }> }>>> }>>>, huishouden?: Maybe<{ id?: Maybe<number>, burgers?: Maybe<Array<Maybe<{ id?: Maybe<number> }>>> }> }>>> };
 
 export type GetConfiguratieQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetConfiguratieQuery = { configuraties?: Maybe<Array<Maybe<Pick<Configuratie, 'id' | 'waarde'>>>> };
+export type GetConfiguratieQuery = { configuraties?: Maybe<Array<Maybe<{ id?: Maybe<string>, waarde?: Maybe<string> }>>> };
 
 export type GetCreateAfspraakFormDataQueryVariables = Exact<{
   burgerId: Scalars['Int'];
 }>;
 
 
-export type GetCreateAfspraakFormDataQuery = { burger?: Maybe<{ rekeningen?: Maybe<Array<Maybe<RekeningFragment>>> }>, rubrieken?: Maybe<Array<Maybe<(
-    { grootboekrekening?: Maybe<Pick<Grootboekrekening, 'id' | 'naam' | 'credit'>> }
-    & RubriekFragment
-  )>>>, organisaties?: Maybe<Array<Maybe<OrganisatieFragment>>> };
+export type GetCreateAfspraakFormDataQuery = { burger?: Maybe<{ rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>> }>, rubrieken?: Maybe<Array<Maybe<{ id?: Maybe<number>, naam?: Maybe<string>, grootboekrekening?: Maybe<{ id: string, naam?: Maybe<string>, credit?: Maybe<boolean>, omschrijving?: Maybe<string>, referentie?: Maybe<string>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string> }> }> }>>>, organisaties?: Maybe<Array<Maybe<{ id?: Maybe<number>, kvkNummer?: Maybe<string>, vestigingsnummer?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>>, kvkDetails?: Maybe<{ huisnummer?: Maybe<string>, naam?: Maybe<string>, nummer?: Maybe<string>, plaatsnaam?: Maybe<string>, postcode?: Maybe<string>, straatnaam?: Maybe<string> }> }>>> };
 
 export type GetCsmsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCsmsQuery = { customerStatementMessages?: Maybe<Array<Maybe<CustomerStatementMessageFragment>>> };
+export type GetCsmsQuery = { customerStatementMessages?: Maybe<Array<Maybe<{ id?: Maybe<number>, filename?: Maybe<string>, uploadDate?: Maybe<any>, accountIdentification?: Maybe<string>, closingAvailableFunds?: Maybe<number>, closingBalance?: Maybe<number>, forwardAvailableBalance?: Maybe<number>, openingBalance?: Maybe<number>, relatedReference?: Maybe<string>, sequenceNumber?: Maybe<string>, transactionReferenceNumber?: Maybe<string> }>>> };
 
 export type GetExportsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetExportsQuery = { exports?: Maybe<Array<Maybe<ExportFragment>>> };
+export type GetExportsQuery = { exports?: Maybe<Array<Maybe<{ id?: Maybe<number>, naam?: Maybe<string>, timestamp?: Maybe<any>, startDatum?: Maybe<string>, eindDatum?: Maybe<string>, sha256?: Maybe<string>, overschrijvingen?: Maybe<Array<Maybe<{ id?: Maybe<number> }>>> }>>> };
 
 export type GetGebeurtenissenQueryVariables = Exact<{
   limit: Scalars['Int'];
@@ -1653,67 +1566,58 @@ export type GetGebeurtenissenQueryVariables = Exact<{
 }>;
 
 
-export type GetGebeurtenissenQuery = { gebruikersactiviteitenPaged?: Maybe<{ gebruikersactiviteiten?: Maybe<Array<Maybe<GebruikersactiviteitFragment>>>, pageInfo?: Maybe<Pick<PageInfo, 'count'>> }> };
+export type GetGebeurtenissenQuery = { gebruikersactiviteitenPaged?: Maybe<{ gebruikersactiviteiten?: Maybe<Array<Maybe<{ id?: Maybe<number>, timestamp?: Maybe<any>, gebruikerId?: Maybe<string>, action?: Maybe<string>, entities?: Maybe<Array<Maybe<{ entityType?: Maybe<string>, entityId?: Maybe<string>, huishouden?: Maybe<{ id?: Maybe<number>, burgers?: Maybe<Array<Maybe<{ id?: Maybe<number>, voorletters?: Maybe<string>, voornamen?: Maybe<string>, achternaam?: Maybe<string> }>>> }>, burger?: Maybe<{ id?: Maybe<number>, voorletters?: Maybe<string>, voornamen?: Maybe<string>, achternaam?: Maybe<string> }>, organisatie?: Maybe<{ id?: Maybe<number>, kvkNummer?: Maybe<string>, vestigingsnummer?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>>, kvkDetails?: Maybe<{ huisnummer?: Maybe<string>, naam?: Maybe<string>, nummer?: Maybe<string>, plaatsnaam?: Maybe<string>, postcode?: Maybe<string>, straatnaam?: Maybe<string> }> }>, afspraak?: Maybe<{ id?: Maybe<number>, organisatie?: Maybe<{ id?: Maybe<number>, kvkNummer?: Maybe<string>, vestigingsnummer?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>>, kvkDetails?: Maybe<{ huisnummer?: Maybe<string>, naam?: Maybe<string>, nummer?: Maybe<string>, plaatsnaam?: Maybe<string>, postcode?: Maybe<string>, straatnaam?: Maybe<string> }> }> }>, rekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>, customerStatementMessage?: Maybe<{ id?: Maybe<number>, filename?: Maybe<string>, bankTransactions?: Maybe<Array<Maybe<{ id?: Maybe<number> }>>> }>, configuratie?: Maybe<{ id?: Maybe<string>, waarde?: Maybe<string> }>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string>, grootboekrekening?: Maybe<{ naam?: Maybe<string> }> }> }>>>, meta?: Maybe<{ userAgent?: Maybe<string>, ip?: Maybe<Array<Maybe<string>>>, applicationVersion?: Maybe<string> }> }>>>, pageInfo?: Maybe<{ count?: Maybe<number> }> }> };
 
 export type GetGebruikerQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetGebruikerQuery = { gebruiker?: Maybe<GebruikerFragment> };
+export type GetGebruikerQuery = { gebruiker?: Maybe<{ email?: Maybe<string> }> };
+
+export type GetHuishoudenQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type GetHuishoudenQuery = { huishouden?: Maybe<{ id?: Maybe<number>, burgers?: Maybe<Array<Maybe<{ id?: Maybe<number>, bsn?: Maybe<number>, email?: Maybe<string>, telefoonnummer?: Maybe<string>, voorletters?: Maybe<string>, voornamen?: Maybe<string>, achternaam?: Maybe<string>, geboortedatum?: Maybe<string>, straatnaam?: Maybe<string>, huisnummer?: Maybe<string>, postcode?: Maybe<string>, plaatsnaam?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>>, afspraken?: Maybe<Array<Maybe<{ id?: Maybe<number>, omschrijving?: Maybe<string>, bedrag?: Maybe<any>, credit?: Maybe<boolean>, zoektermen?: Maybe<Array<Maybe<string>>>, validFrom?: Maybe<any>, validThrough?: Maybe<any>, betaalinstructie?: Maybe<{ byDay?: Maybe<Array<Maybe<DayOfWeek>>>, byMonth?: Maybe<Array<Maybe<number>>>, byMonthDay?: Maybe<Array<Maybe<number>>>, exceptDates?: Maybe<Array<Maybe<string>>>, repeatFrequency?: Maybe<string>, startDate?: Maybe<string>, endDate?: Maybe<string> }>, burger?: Maybe<{ id?: Maybe<number>, voornamen?: Maybe<string>, voorletters?: Maybe<string>, achternaam?: Maybe<string>, plaatsnaam?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>> }>, tegenRekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>, organisatie?: Maybe<{ id?: Maybe<number>, kvkNummer?: Maybe<string>, vestigingsnummer?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>>, kvkDetails?: Maybe<{ huisnummer?: Maybe<string>, naam?: Maybe<string>, nummer?: Maybe<string>, plaatsnaam?: Maybe<string>, postcode?: Maybe<string>, straatnaam?: Maybe<string> }> }>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string>, grootboekrekening?: Maybe<{ id: string, naam?: Maybe<string>, credit?: Maybe<boolean>, omschrijving?: Maybe<string>, referentie?: Maybe<string>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string> }> }> }>, matchingAfspraken?: Maybe<Array<Maybe<{ id?: Maybe<number>, credit?: Maybe<boolean>, zoektermen?: Maybe<Array<Maybe<string>>>, bedrag?: Maybe<any>, omschrijving?: Maybe<string>, burger?: Maybe<{ voorletters?: Maybe<string>, voornamen?: Maybe<string>, achternaam?: Maybe<string> }>, tegenRekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }> }>>> }>>>, huishouden?: Maybe<{ id?: Maybe<number>, burgers?: Maybe<Array<Maybe<{ id?: Maybe<number> }>>> }> }>>> }> };
+
+export type GetHuishoudensQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetHuishoudensQuery = { huishoudens?: Maybe<Array<Maybe<{ id?: Maybe<number>, burgers?: Maybe<Array<Maybe<{ id?: Maybe<number>, bsn?: Maybe<number>, email?: Maybe<string>, telefoonnummer?: Maybe<string>, voorletters?: Maybe<string>, voornamen?: Maybe<string>, achternaam?: Maybe<string>, geboortedatum?: Maybe<string>, straatnaam?: Maybe<string>, huisnummer?: Maybe<string>, postcode?: Maybe<string>, plaatsnaam?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>>, afspraken?: Maybe<Array<Maybe<{ id?: Maybe<number>, omschrijving?: Maybe<string>, bedrag?: Maybe<any>, credit?: Maybe<boolean>, zoektermen?: Maybe<Array<Maybe<string>>>, validFrom?: Maybe<any>, validThrough?: Maybe<any>, betaalinstructie?: Maybe<{ byDay?: Maybe<Array<Maybe<DayOfWeek>>>, byMonth?: Maybe<Array<Maybe<number>>>, byMonthDay?: Maybe<Array<Maybe<number>>>, exceptDates?: Maybe<Array<Maybe<string>>>, repeatFrequency?: Maybe<string>, startDate?: Maybe<string>, endDate?: Maybe<string> }>, burger?: Maybe<{ id?: Maybe<number>, voornamen?: Maybe<string>, voorletters?: Maybe<string>, achternaam?: Maybe<string>, plaatsnaam?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>> }>, tegenRekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>, organisatie?: Maybe<{ id?: Maybe<number>, kvkNummer?: Maybe<string>, vestigingsnummer?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>>, kvkDetails?: Maybe<{ huisnummer?: Maybe<string>, naam?: Maybe<string>, nummer?: Maybe<string>, plaatsnaam?: Maybe<string>, postcode?: Maybe<string>, straatnaam?: Maybe<string> }> }>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string>, grootboekrekening?: Maybe<{ id: string, naam?: Maybe<string>, credit?: Maybe<boolean>, omschrijving?: Maybe<string>, referentie?: Maybe<string>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string> }> }> }>, matchingAfspraken?: Maybe<Array<Maybe<{ id?: Maybe<number>, credit?: Maybe<boolean>, zoektermen?: Maybe<Array<Maybe<string>>>, bedrag?: Maybe<any>, omschrijving?: Maybe<string>, burger?: Maybe<{ voorletters?: Maybe<string>, voornamen?: Maybe<string>, achternaam?: Maybe<string> }>, tegenRekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }> }>>> }>>>, huishouden?: Maybe<{ id?: Maybe<number>, burgers?: Maybe<Array<Maybe<{ id?: Maybe<number> }>>> }> }>>> }>>> };
 
 export type GetAfspraakQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type GetAfspraakQuery = { afspraak?: Maybe<AfspraakFragment> };
+export type GetAfspraakQuery = { afspraak?: Maybe<{ id?: Maybe<number>, omschrijving?: Maybe<string>, bedrag?: Maybe<any>, credit?: Maybe<boolean>, zoektermen?: Maybe<Array<Maybe<string>>>, validFrom?: Maybe<any>, validThrough?: Maybe<any>, betaalinstructie?: Maybe<{ byDay?: Maybe<Array<Maybe<DayOfWeek>>>, byMonth?: Maybe<Array<Maybe<number>>>, byMonthDay?: Maybe<Array<Maybe<number>>>, exceptDates?: Maybe<Array<Maybe<string>>>, repeatFrequency?: Maybe<string>, startDate?: Maybe<string>, endDate?: Maybe<string> }>, burger?: Maybe<{ id?: Maybe<number>, voornamen?: Maybe<string>, voorletters?: Maybe<string>, achternaam?: Maybe<string>, plaatsnaam?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>> }>, tegenRekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>, organisatie?: Maybe<{ id?: Maybe<number>, kvkNummer?: Maybe<string>, vestigingsnummer?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>>, kvkDetails?: Maybe<{ huisnummer?: Maybe<string>, naam?: Maybe<string>, nummer?: Maybe<string>, plaatsnaam?: Maybe<string>, postcode?: Maybe<string>, straatnaam?: Maybe<string> }> }>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string>, grootboekrekening?: Maybe<{ id: string, naam?: Maybe<string>, credit?: Maybe<boolean>, omschrijving?: Maybe<string>, referentie?: Maybe<string>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string> }> }> }>, matchingAfspraken?: Maybe<Array<Maybe<{ id?: Maybe<number>, credit?: Maybe<boolean>, zoektermen?: Maybe<Array<Maybe<string>>>, bedrag?: Maybe<any>, omschrijving?: Maybe<string>, burger?: Maybe<{ voorletters?: Maybe<string>, voornamen?: Maybe<string>, achternaam?: Maybe<string> }>, tegenRekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }> }>>> }> };
 
 export type GetOrganisatieQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type GetOrganisatieQuery = { organisatie?: Maybe<OrganisatieFragment> };
+export type GetOrganisatieQuery = { organisatie?: Maybe<{ id?: Maybe<number>, kvkNummer?: Maybe<string>, vestigingsnummer?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>>, kvkDetails?: Maybe<{ huisnummer?: Maybe<string>, naam?: Maybe<string>, nummer?: Maybe<string>, plaatsnaam?: Maybe<string>, postcode?: Maybe<string>, straatnaam?: Maybe<string> }> }> };
 
 export type GetOrganisatiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetOrganisatiesQuery = { organisaties?: Maybe<Array<Maybe<(
-    Pick<Organisatie, 'id'>
-    & OrganisatieFragment
-  )>>> };
+export type GetOrganisatiesQuery = { organisaties?: Maybe<Array<Maybe<{ id?: Maybe<number>, kvkNummer?: Maybe<string>, vestigingsnummer?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>>, kvkDetails?: Maybe<{ huisnummer?: Maybe<string>, naam?: Maybe<string>, nummer?: Maybe<string>, plaatsnaam?: Maybe<string>, postcode?: Maybe<string>, straatnaam?: Maybe<string> }> }>>> };
 
 export type GetReportingDataQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetReportingDataQuery = { burgers?: Maybe<Array<Maybe<BurgerFragment>>>, bankTransactions?: Maybe<Array<Maybe<(
-    { journaalpost?: Maybe<(
-      Pick<Journaalpost, 'id' | 'isAutomatischGeboekt'>
-      & { afspraak?: Maybe<(
-        { rubriek?: Maybe<Pick<Rubriek, 'id' | 'naam'>> }
-        & AfspraakFragment
-      )>, grootboekrekening?: Maybe<(
-        { rubriek?: Maybe<Pick<Rubriek, 'id' | 'naam'>> }
-        & GrootboekrekeningFragment
-      )> }
-    )> }
-    & BankTransactionFragment
-  )>>>, rubrieken?: Maybe<Array<Maybe<Pick<Rubriek, 'id' | 'naam'>>>> };
+export type GetReportingDataQuery = { burgers?: Maybe<Array<Maybe<{ id?: Maybe<number>, bsn?: Maybe<number>, email?: Maybe<string>, telefoonnummer?: Maybe<string>, voorletters?: Maybe<string>, voornamen?: Maybe<string>, achternaam?: Maybe<string>, geboortedatum?: Maybe<string>, straatnaam?: Maybe<string>, huisnummer?: Maybe<string>, postcode?: Maybe<string>, plaatsnaam?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>>, afspraken?: Maybe<Array<Maybe<{ id?: Maybe<number>, omschrijving?: Maybe<string>, bedrag?: Maybe<any>, credit?: Maybe<boolean>, zoektermen?: Maybe<Array<Maybe<string>>>, validFrom?: Maybe<any>, validThrough?: Maybe<any>, betaalinstructie?: Maybe<{ byDay?: Maybe<Array<Maybe<DayOfWeek>>>, byMonth?: Maybe<Array<Maybe<number>>>, byMonthDay?: Maybe<Array<Maybe<number>>>, exceptDates?: Maybe<Array<Maybe<string>>>, repeatFrequency?: Maybe<string>, startDate?: Maybe<string>, endDate?: Maybe<string> }>, burger?: Maybe<{ id?: Maybe<number>, voornamen?: Maybe<string>, voorletters?: Maybe<string>, achternaam?: Maybe<string>, plaatsnaam?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>> }>, tegenRekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>, organisatie?: Maybe<{ id?: Maybe<number>, kvkNummer?: Maybe<string>, vestigingsnummer?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>>, kvkDetails?: Maybe<{ huisnummer?: Maybe<string>, naam?: Maybe<string>, nummer?: Maybe<string>, plaatsnaam?: Maybe<string>, postcode?: Maybe<string>, straatnaam?: Maybe<string> }> }>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string>, grootboekrekening?: Maybe<{ id: string, naam?: Maybe<string>, credit?: Maybe<boolean>, omschrijving?: Maybe<string>, referentie?: Maybe<string>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string> }> }> }>, matchingAfspraken?: Maybe<Array<Maybe<{ id?: Maybe<number>, credit?: Maybe<boolean>, zoektermen?: Maybe<Array<Maybe<string>>>, bedrag?: Maybe<any>, omschrijving?: Maybe<string>, burger?: Maybe<{ voorletters?: Maybe<string>, voornamen?: Maybe<string>, achternaam?: Maybe<string> }>, tegenRekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }> }>>> }>>>, huishouden?: Maybe<{ id?: Maybe<number>, burgers?: Maybe<Array<Maybe<{ id?: Maybe<number> }>>> }> }>>>, bankTransactions?: Maybe<Array<Maybe<{ id?: Maybe<number>, informationToAccountOwner?: Maybe<string>, statementLine?: Maybe<string>, bedrag?: Maybe<any>, isCredit?: Maybe<boolean>, tegenRekeningIban?: Maybe<string>, transactieDatum?: Maybe<any>, journaalpost?: Maybe<{ id?: Maybe<number>, isAutomatischGeboekt?: Maybe<boolean>, afspraak?: Maybe<{ id?: Maybe<number>, omschrijving?: Maybe<string>, bedrag?: Maybe<any>, credit?: Maybe<boolean>, zoektermen?: Maybe<Array<Maybe<string>>>, validFrom?: Maybe<any>, validThrough?: Maybe<any>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string>, grootboekrekening?: Maybe<{ id: string, naam?: Maybe<string>, credit?: Maybe<boolean>, omschrijving?: Maybe<string>, referentie?: Maybe<string>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string> }> }> }>, betaalinstructie?: Maybe<{ byDay?: Maybe<Array<Maybe<DayOfWeek>>>, byMonth?: Maybe<Array<Maybe<number>>>, byMonthDay?: Maybe<Array<Maybe<number>>>, exceptDates?: Maybe<Array<Maybe<string>>>, repeatFrequency?: Maybe<string>, startDate?: Maybe<string>, endDate?: Maybe<string> }>, burger?: Maybe<{ id?: Maybe<number>, voornamen?: Maybe<string>, voorletters?: Maybe<string>, achternaam?: Maybe<string>, plaatsnaam?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>> }>, tegenRekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>, organisatie?: Maybe<{ id?: Maybe<number>, kvkNummer?: Maybe<string>, vestigingsnummer?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>>, kvkDetails?: Maybe<{ huisnummer?: Maybe<string>, naam?: Maybe<string>, nummer?: Maybe<string>, plaatsnaam?: Maybe<string>, postcode?: Maybe<string>, straatnaam?: Maybe<string> }> }>, matchingAfspraken?: Maybe<Array<Maybe<{ id?: Maybe<number>, credit?: Maybe<boolean>, zoektermen?: Maybe<Array<Maybe<string>>>, bedrag?: Maybe<any>, omschrijving?: Maybe<string>, burger?: Maybe<{ voorletters?: Maybe<string>, voornamen?: Maybe<string>, achternaam?: Maybe<string> }>, tegenRekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }> }>>> }>, grootboekrekening?: Maybe<{ id: string, naam?: Maybe<string>, credit?: Maybe<boolean>, omschrijving?: Maybe<string>, referentie?: Maybe<string>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string> }> }> }>, tegenRekening?: Maybe<{ iban?: Maybe<string>, rekeninghouder?: Maybe<string> }> }>>>, rubrieken?: Maybe<Array<Maybe<{ id?: Maybe<number>, naam?: Maybe<string> }>>> };
 
 export type GetRubriekenQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetRubriekenQuery = { rubrieken?: Maybe<Array<Maybe<(
-    { grootboekrekening?: Maybe<Pick<Grootboekrekening, 'id' | 'naam'>> }
-    & RubriekFragment
-  )>>> };
+export type GetRubriekenQuery = { rubrieken?: Maybe<Array<Maybe<{ id?: Maybe<number>, naam?: Maybe<string>, grootboekrekening?: Maybe<{ id: string, naam?: Maybe<string>, credit?: Maybe<boolean>, omschrijving?: Maybe<string>, referentie?: Maybe<string>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string> }> }> }>>> };
 
 export type GetTransactionItemFormDataQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetTransactionItemFormDataQuery = { rubrieken?: Maybe<Array<Maybe<(
-    { grootboekrekening?: Maybe<Pick<Grootboekrekening, 'id' | 'naam'>> }
-    & RubriekFragment
-  )>>>, afspraken?: Maybe<Array<Maybe<AfspraakFragment>>> };
+export type GetTransactionItemFormDataQuery = { rubrieken?: Maybe<Array<Maybe<{ id?: Maybe<number>, naam?: Maybe<string>, grootboekrekening?: Maybe<{ id: string, naam?: Maybe<string>, credit?: Maybe<boolean>, omschrijving?: Maybe<string>, referentie?: Maybe<string>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string> }> }> }>>>, afspraken?: Maybe<Array<Maybe<{ id?: Maybe<number>, omschrijving?: Maybe<string>, bedrag?: Maybe<any>, credit?: Maybe<boolean>, zoektermen?: Maybe<Array<Maybe<string>>>, validFrom?: Maybe<any>, validThrough?: Maybe<any>, betaalinstructie?: Maybe<{ byDay?: Maybe<Array<Maybe<DayOfWeek>>>, byMonth?: Maybe<Array<Maybe<number>>>, byMonthDay?: Maybe<Array<Maybe<number>>>, exceptDates?: Maybe<Array<Maybe<string>>>, repeatFrequency?: Maybe<string>, startDate?: Maybe<string>, endDate?: Maybe<string> }>, burger?: Maybe<{ id?: Maybe<number>, voornamen?: Maybe<string>, voorletters?: Maybe<string>, achternaam?: Maybe<string>, plaatsnaam?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>> }>, tegenRekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>, organisatie?: Maybe<{ id?: Maybe<number>, kvkNummer?: Maybe<string>, vestigingsnummer?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>>, kvkDetails?: Maybe<{ huisnummer?: Maybe<string>, naam?: Maybe<string>, nummer?: Maybe<string>, plaatsnaam?: Maybe<string>, postcode?: Maybe<string>, straatnaam?: Maybe<string> }> }>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string>, grootboekrekening?: Maybe<{ id: string, naam?: Maybe<string>, credit?: Maybe<boolean>, omschrijving?: Maybe<string>, referentie?: Maybe<string>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string> }> }> }>, matchingAfspraken?: Maybe<Array<Maybe<{ id?: Maybe<number>, credit?: Maybe<boolean>, zoektermen?: Maybe<Array<Maybe<string>>>, bedrag?: Maybe<any>, omschrijving?: Maybe<string>, burger?: Maybe<{ voorletters?: Maybe<string>, voornamen?: Maybe<string>, achternaam?: Maybe<string> }>, tegenRekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }> }>>> }>>> };
 
 export type GetTransactiesQueryVariables = Exact<{
   offset: Scalars['Int'];
@@ -1722,36 +1626,46 @@ export type GetTransactiesQueryVariables = Exact<{
 }>;
 
 
-export type GetTransactiesQuery = { bankTransactionsPaged?: Maybe<{ banktransactions?: Maybe<Array<Maybe<(
-      { journaalpost?: Maybe<(
-        Pick<Journaalpost, 'id' | 'isAutomatischGeboekt'>
-        & { afspraak?: Maybe<(
-          { rubriek?: Maybe<Pick<Rubriek, 'id' | 'naam'>> }
-          & AfspraakFragment
-        )>, grootboekrekening?: Maybe<(
-          { rubriek?: Maybe<Pick<Rubriek, 'id' | 'naam'>> }
-          & GrootboekrekeningFragment
-        )> }
-      )>, suggesties?: Maybe<Array<Maybe<AfspraakFragment>>> }
-      & BankTransactionFragment
-    )>>>, pageInfo?: Maybe<Pick<PageInfo, 'count' | 'limit' | 'start'>> }> };
+export type GetTransactiesQuery = { bankTransactionsPaged?: Maybe<{ banktransactions?: Maybe<Array<Maybe<{ id?: Maybe<number>, informationToAccountOwner?: Maybe<string>, statementLine?: Maybe<string>, bedrag?: Maybe<any>, isCredit?: Maybe<boolean>, tegenRekeningIban?: Maybe<string>, transactieDatum?: Maybe<any>, journaalpost?: Maybe<{ id?: Maybe<number>, isAutomatischGeboekt?: Maybe<boolean>, afspraak?: Maybe<{ id?: Maybe<number>, omschrijving?: Maybe<string>, bedrag?: Maybe<any>, credit?: Maybe<boolean>, zoektermen?: Maybe<Array<Maybe<string>>>, validFrom?: Maybe<any>, validThrough?: Maybe<any>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string>, grootboekrekening?: Maybe<{ id: string, naam?: Maybe<string>, credit?: Maybe<boolean>, omschrijving?: Maybe<string>, referentie?: Maybe<string>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string> }> }> }>, betaalinstructie?: Maybe<{ byDay?: Maybe<Array<Maybe<DayOfWeek>>>, byMonth?: Maybe<Array<Maybe<number>>>, byMonthDay?: Maybe<Array<Maybe<number>>>, exceptDates?: Maybe<Array<Maybe<string>>>, repeatFrequency?: Maybe<string>, startDate?: Maybe<string>, endDate?: Maybe<string> }>, burger?: Maybe<{ id?: Maybe<number>, voornamen?: Maybe<string>, voorletters?: Maybe<string>, achternaam?: Maybe<string>, plaatsnaam?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>> }>, tegenRekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>, organisatie?: Maybe<{ id?: Maybe<number>, kvkNummer?: Maybe<string>, vestigingsnummer?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>>, kvkDetails?: Maybe<{ huisnummer?: Maybe<string>, naam?: Maybe<string>, nummer?: Maybe<string>, plaatsnaam?: Maybe<string>, postcode?: Maybe<string>, straatnaam?: Maybe<string> }> }>, matchingAfspraken?: Maybe<Array<Maybe<{ id?: Maybe<number>, credit?: Maybe<boolean>, zoektermen?: Maybe<Array<Maybe<string>>>, bedrag?: Maybe<any>, omschrijving?: Maybe<string>, burger?: Maybe<{ voorletters?: Maybe<string>, voornamen?: Maybe<string>, achternaam?: Maybe<string> }>, tegenRekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }> }>>> }>, grootboekrekening?: Maybe<{ id: string, naam?: Maybe<string>, credit?: Maybe<boolean>, omschrijving?: Maybe<string>, referentie?: Maybe<string>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string> }> }> }>, suggesties?: Maybe<Array<Maybe<{ id?: Maybe<number>, omschrijving?: Maybe<string>, bedrag?: Maybe<any>, credit?: Maybe<boolean>, zoektermen?: Maybe<Array<Maybe<string>>>, validFrom?: Maybe<any>, validThrough?: Maybe<any>, betaalinstructie?: Maybe<{ byDay?: Maybe<Array<Maybe<DayOfWeek>>>, byMonth?: Maybe<Array<Maybe<number>>>, byMonthDay?: Maybe<Array<Maybe<number>>>, exceptDates?: Maybe<Array<Maybe<string>>>, repeatFrequency?: Maybe<string>, startDate?: Maybe<string>, endDate?: Maybe<string> }>, burger?: Maybe<{ id?: Maybe<number>, voornamen?: Maybe<string>, voorletters?: Maybe<string>, achternaam?: Maybe<string>, plaatsnaam?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>> }>, tegenRekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>, organisatie?: Maybe<{ id?: Maybe<number>, kvkNummer?: Maybe<string>, vestigingsnummer?: Maybe<string>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>>, kvkDetails?: Maybe<{ huisnummer?: Maybe<string>, naam?: Maybe<string>, nummer?: Maybe<string>, plaatsnaam?: Maybe<string>, postcode?: Maybe<string>, straatnaam?: Maybe<string> }> }>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string>, grootboekrekening?: Maybe<{ id: string, naam?: Maybe<string>, credit?: Maybe<boolean>, omschrijving?: Maybe<string>, referentie?: Maybe<string>, rubriek?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string> }> }> }>, matchingAfspraken?: Maybe<Array<Maybe<{ id?: Maybe<number>, credit?: Maybe<boolean>, zoektermen?: Maybe<Array<Maybe<string>>>, bedrag?: Maybe<any>, omschrijving?: Maybe<string>, burger?: Maybe<{ voorletters?: Maybe<string>, voornamen?: Maybe<string>, achternaam?: Maybe<string> }>, tegenRekening?: Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }> }>>> }>>>, tegenRekening?: Maybe<{ iban?: Maybe<string>, rekeninghouder?: Maybe<string> }> }>>>, pageInfo?: Maybe<{ count?: Maybe<number>, limit?: Maybe<number>, start?: Maybe<number> }> }> };
 
+export const CustomerStatementMessageFragmentDoc = gql`
+    fragment CustomerStatementMessage on CustomerStatementMessage {
+  id
+  filename
+  uploadDate
+  accountIdentification
+  closingAvailableFunds
+  closingBalance
+  forwardAvailableBalance
+  openingBalance
+  relatedReference
+  sequenceNumber
+  transactionReferenceNumber
+}
+    `;
+export const ExportFragmentDoc = gql`
+    fragment Export on Export {
+  id
+  naam
+  timestamp
+  startDatum
+  eindDatum
+  sha256
+  overschrijvingen {
+    id
+  }
+}
+    `;
+export const GebruikerFragmentDoc = gql`
+    fragment Gebruiker on Gebruiker {
+  email
+}
+    `;
 export const RekeningFragmentDoc = gql`
     fragment Rekening on Rekening {
   id
   iban
   rekeninghouder
-}
-    `;
-export const BetaalinstructieFragmentDoc = gql`
-    fragment Betaalinstructie on Betaalinstructie {
-  byDay
-  byMonth
-  byMonthDay
-  exceptDates
-  repeatFrequency
-  startDate
-  endDate
 }
     `;
 export const KvkFragmentDoc = gql`
@@ -1778,6 +1692,81 @@ export const OrganisatieFragmentDoc = gql`
 }
     ${RekeningFragmentDoc}
 ${KvkFragmentDoc}`;
+export const GebruikersactiviteitFragmentDoc = gql`
+    fragment Gebruikersactiviteit on GebruikersActiviteit {
+  id
+  timestamp
+  gebruikerId
+  action
+  entities {
+    entityType
+    entityId
+    huishouden {
+      id
+      burgers {
+        id
+        voorletters
+        voornamen
+        achternaam
+      }
+    }
+    burger {
+      id
+      voorletters
+      voornamen
+      achternaam
+    }
+    organisatie {
+      ...Organisatie
+    }
+    afspraak {
+      id
+      organisatie {
+        ...Organisatie
+      }
+    }
+    rekening {
+      id
+      iban
+      rekeninghouder
+    }
+    customerStatementMessage {
+      id
+      filename
+      bankTransactions {
+        id
+      }
+    }
+    configuratie {
+      id
+      waarde
+    }
+    rubriek {
+      id
+      naam
+      grootboekrekening {
+        naam
+      }
+    }
+  }
+  meta {
+    userAgent
+    ip
+    applicationVersion
+  }
+}
+    ${OrganisatieFragmentDoc}`;
+export const BetaalinstructieFragmentDoc = gql`
+    fragment Betaalinstructie on Betaalinstructie {
+  byDay
+  byMonth
+  byMonthDay
+  exceptDates
+  repeatFrequency
+  startDate
+  endDate
+}
+    `;
 export const GrootboekrekeningFragmentDoc = gql`
     fragment Grootboekrekening on Grootboekrekening {
   id
@@ -1873,90 +1862,23 @@ export const BurgerFragmentDoc = gql`
   afspraken {
     ...Afspraak
   }
+  huishouden {
+    id
+    burgers {
+      id
+    }
+  }
 }
     ${RekeningFragmentDoc}
 ${AfspraakFragmentDoc}`;
-export const CustomerStatementMessageFragmentDoc = gql`
-    fragment CustomerStatementMessage on CustomerStatementMessage {
+export const HuishoudenFragmentDoc = gql`
+    fragment Huishouden on Huishouden {
   id
-  filename
-  uploadDate
-  accountIdentification
-  closingAvailableFunds
-  closingBalance
-  forwardAvailableBalance
-  openingBalance
-  relatedReference
-  sequenceNumber
-  transactionReferenceNumber
-}
-    `;
-export const ExportFragmentDoc = gql`
-    fragment Export on Export {
-  id
-  naam
-  timestamp
-  startDatum
-  eindDatum
-  sha256
-  overschrijvingen {
-    id
+  burgers {
+    ...Burger
   }
 }
-    `;
-export const GebruikerFragmentDoc = gql`
-    fragment Gebruiker on Gebruiker {
-  email
-}
-    `;
-export const GebruikersactiviteitFragmentDoc = gql`
-    fragment Gebruikersactiviteit on GebruikersActiviteit {
-  id
-  timestamp
-  gebruikerId
-  action
-  entities {
-    entityType
-    entityId
-    burger {
-      id
-      voorletters
-      voornamen
-      achternaam
-    }
-    organisatie {
-      ...Organisatie
-    }
-    afspraak {
-      id
-      organisatie {
-        ...Organisatie
-      }
-    }
-    rekening {
-      id
-      iban
-      rekeninghouder
-    }
-    customerStatementMessage {
-      id
-      filename
-      bankTransactions {
-        id
-      }
-    }
-    configuratie {
-      id
-      waarde
-    }
-  }
-  meta {
-    userAgent
-    ip
-    applicationVersion
-  }
-}
-    ${OrganisatieFragmentDoc}`;
+    ${BurgerFragmentDoc}`;
 export const JournaalpostFragmentDoc = gql`
     fragment Journaalpost on Journaalpost {
   id
@@ -1996,6 +1918,13 @@ export const AddAfspraakZoektermDocument = gql`
         iban
       }
     }
+  }
+}
+    `;
+export const AddHuishoudenBurgerDocument = gql`
+    mutation addHuishoudenBurger($huishoudenId: Int!, $burgerIds: [Int]!) {
+  addHuishoudenBurger(huishoudenId: $huishoudenId, burgerIds: $burgerIds) {
+    ok
   }
 }
     `;
@@ -2060,6 +1989,16 @@ export const CreateExportOverschrijvingenDocument = gql`
   }
 }
     `;
+export const CreateHuishoudenDocument = gql`
+    mutation createHuishouden($burgerIds: [Int] = []) {
+  createHuishouden(input: {burgerIds: $burgerIds}) {
+    ok
+    huishouden {
+      ...Huishouden
+    }
+  }
+}
+    ${HuishoudenFragmentDoc}`;
 export const CreateJournaalpostAfspraakDocument = gql`
     mutation createJournaalpostAfspraak($transactionId: Int!, $afspraakId: Int!, $isAutomatischGeboekt: Boolean = false) {
   createJournaalpostAfspraak(
@@ -2184,6 +2123,13 @@ export const DeleteCustomerStatementMessageDocument = gql`
   }
 }
     `;
+export const DeleteHuishoudenBurgerDocument = gql`
+    mutation deleteHuishoudenBurger($huishoudenId: Int!, $burgerIds: [Int]!) {
+  deleteHuishoudenBurger(huishoudenId: $huishoudenId, burgerIds: $burgerIds) {
+    ok
+  }
+}
+    `;
 export const DeleteJournaalpostDocument = gql`
     mutation deleteJournaalpost($id: Int!) {
   deleteJournaalpost(id: $id) {
@@ -2218,16 +2164,6 @@ export const StartAutomatischBoekenDocument = gql`
   }
 }
     `;
-export const UpdateAfspraakBetaalinstructieDocument = gql`
-    mutation updateAfspraakBetaalinstructie($id: Int!, $betaalinstructie: BetaalinstructieInput!) {
-  updateAfspraakBetaalinstructie(
-    afspraakId: $id
-    betaalinstructie: $betaalinstructie
-  ) {
-    ok
-  }
-}
-    `;
 export const UpdateAfspraakDocument = gql`
     mutation updateAfspraak($id: Int!, $input: UpdateAfspraakInput!) {
   updateAfspraak(id: $id, input: $input) {
@@ -2238,6 +2174,16 @@ export const UpdateAfspraakDocument = gql`
   }
 }
     ${AfspraakFragmentDoc}`;
+export const UpdateAfspraakBetaalinstructieDocument = gql`
+    mutation updateAfspraakBetaalinstructie($id: Int!, $betaalinstructie: BetaalinstructieInput!) {
+  updateAfspraakBetaalinstructie(
+    afspraakId: $id
+    betaalinstructie: $betaalinstructie
+  ) {
+    ok
+  }
+}
+    `;
 export const UpdateBurgerDocument = gql`
     mutation updateBurger($id: Int!, $bsn: Int, $voorletters: String, $voornamen: String, $achternaam: String, $geboortedatum: String, $straatnaam: String, $huisnummer: String, $postcode: String, $plaatsnaam: String, $telefoonnummer: String, $email: String) {
   updateBurger(
@@ -2337,6 +2283,13 @@ export const GetAfsprakenDocument = gql`
   }
 }
     ${AfspraakFragmentDoc}`;
+export const GetBurgerDocument = gql`
+    query getBurger($id: Int!) {
+  burger(id: $id) {
+    ...Burger
+  }
+}
+    ${BurgerFragmentDoc}`;
 export const GetBurgerAfsprakenDocument = gql`
     query getBurgerAfspraken($id: Int!) {
   burger(id: $id) {
@@ -2358,13 +2311,6 @@ export const GetBurgerGebeurtenissenDocument = gql`
   }
 }
     ${GebruikersactiviteitFragmentDoc}`;
-export const GetBurgerDocument = gql`
-    query getBurger($id: Int!) {
-  burger(id: $id) {
-    ...Burger
-  }
-}
-    ${BurgerFragmentDoc}`;
 export const GetBurgersDocument = gql`
     query getBurgers {
   burgers {
@@ -2435,6 +2381,20 @@ export const GetGebruikerDocument = gql`
   }
 }
     ${GebruikerFragmentDoc}`;
+export const GetHuishoudenDocument = gql`
+    query getHuishouden($id: Int!) {
+  huishouden(id: $id) {
+    ...Huishouden
+  }
+}
+    ${HuishoudenFragmentDoc}`;
+export const GetHuishoudensDocument = gql`
+    query getHuishoudens {
+  huishoudens {
+    ...Huishouden
+  }
+}
+    ${HuishoudenFragmentDoc}`;
 export const GetAfspraakDocument = gql`
     query getAfspraak($id: Int!) {
   afspraak(id: $id) {
@@ -2561,6 +2521,9 @@ export function getSdk<C>(requester: Requester<C>) {
     addAfspraakZoekterm(variables: AddAfspraakZoektermMutationVariables, options?: C): Promise<AddAfspraakZoektermMutation> {
       return requester<AddAfspraakZoektermMutation, AddAfspraakZoektermMutationVariables>(AddAfspraakZoektermDocument, variables, options);
     },
+    addHuishoudenBurger(variables: AddHuishoudenBurgerMutationVariables, options?: C): Promise<AddHuishoudenBurgerMutation> {
+      return requester<AddHuishoudenBurgerMutation, AddHuishoudenBurgerMutationVariables>(AddHuishoudenBurgerDocument, variables, options);
+    },
     createAfspraak(variables: CreateAfspraakMutationVariables, options?: C): Promise<CreateAfspraakMutation> {
       return requester<CreateAfspraakMutation, CreateAfspraakMutationVariables>(CreateAfspraakDocument, variables, options);
     },
@@ -2578,6 +2541,9 @@ export function getSdk<C>(requester: Requester<C>) {
     },
     createExportOverschrijvingen(variables: CreateExportOverschrijvingenMutationVariables, options?: C): Promise<CreateExportOverschrijvingenMutation> {
       return requester<CreateExportOverschrijvingenMutation, CreateExportOverschrijvingenMutationVariables>(CreateExportOverschrijvingenDocument, variables, options);
+    },
+    createHuishouden(variables?: CreateHuishoudenMutationVariables, options?: C): Promise<CreateHuishoudenMutation> {
+      return requester<CreateHuishoudenMutation, CreateHuishoudenMutationVariables>(CreateHuishoudenDocument, variables, options);
     },
     createJournaalpostAfspraak(variables: CreateJournaalpostAfspraakMutationVariables, options?: C): Promise<CreateJournaalpostAfspraakMutation> {
       return requester<CreateJournaalpostAfspraakMutation, CreateJournaalpostAfspraakMutationVariables>(CreateJournaalpostAfspraakDocument, variables, options);
@@ -2615,6 +2581,9 @@ export function getSdk<C>(requester: Requester<C>) {
     deleteCustomerStatementMessage(variables: DeleteCustomerStatementMessageMutationVariables, options?: C): Promise<DeleteCustomerStatementMessageMutation> {
       return requester<DeleteCustomerStatementMessageMutation, DeleteCustomerStatementMessageMutationVariables>(DeleteCustomerStatementMessageDocument, variables, options);
     },
+    deleteHuishoudenBurger(variables: DeleteHuishoudenBurgerMutationVariables, options?: C): Promise<DeleteHuishoudenBurgerMutation> {
+      return requester<DeleteHuishoudenBurgerMutation, DeleteHuishoudenBurgerMutationVariables>(DeleteHuishoudenBurgerDocument, variables, options);
+    },
     deleteJournaalpost(variables: DeleteJournaalpostMutationVariables, options?: C): Promise<DeleteJournaalpostMutation> {
       return requester<DeleteJournaalpostMutation, DeleteJournaalpostMutationVariables>(DeleteJournaalpostDocument, variables, options);
     },
@@ -2627,11 +2596,11 @@ export function getSdk<C>(requester: Requester<C>) {
     startAutomatischBoeken(variables?: StartAutomatischBoekenMutationVariables, options?: C): Promise<StartAutomatischBoekenMutation> {
       return requester<StartAutomatischBoekenMutation, StartAutomatischBoekenMutationVariables>(StartAutomatischBoekenDocument, variables, options);
     },
-    updateAfspraakBetaalinstructie(variables: UpdateAfspraakBetaalinstructieMutationVariables, options?: C): Promise<UpdateAfspraakBetaalinstructieMutation> {
-      return requester<UpdateAfspraakBetaalinstructieMutation, UpdateAfspraakBetaalinstructieMutationVariables>(UpdateAfspraakBetaalinstructieDocument, variables, options);
-    },
     updateAfspraak(variables: UpdateAfspraakMutationVariables, options?: C): Promise<UpdateAfspraakMutation> {
       return requester<UpdateAfspraakMutation, UpdateAfspraakMutationVariables>(UpdateAfspraakDocument, variables, options);
+    },
+    updateAfspraakBetaalinstructie(variables: UpdateAfspraakBetaalinstructieMutationVariables, options?: C): Promise<UpdateAfspraakBetaalinstructieMutation> {
+      return requester<UpdateAfspraakBetaalinstructieMutation, UpdateAfspraakBetaalinstructieMutationVariables>(UpdateAfspraakBetaalinstructieDocument, variables, options);
     },
     updateBurger(variables: UpdateBurgerMutationVariables, options?: C): Promise<UpdateBurgerMutation> {
       return requester<UpdateBurgerMutation, UpdateBurgerMutationVariables>(UpdateBurgerDocument, variables, options);
@@ -2654,14 +2623,14 @@ export function getSdk<C>(requester: Requester<C>) {
     getAfspraken(variables?: GetAfsprakenQueryVariables, options?: C): Promise<GetAfsprakenQuery> {
       return requester<GetAfsprakenQuery, GetAfsprakenQueryVariables>(GetAfsprakenDocument, variables, options);
     },
+    getBurger(variables: GetBurgerQueryVariables, options?: C): Promise<GetBurgerQuery> {
+      return requester<GetBurgerQuery, GetBurgerQueryVariables>(GetBurgerDocument, variables, options);
+    },
     getBurgerAfspraken(variables: GetBurgerAfsprakenQueryVariables, options?: C): Promise<GetBurgerAfsprakenQuery> {
       return requester<GetBurgerAfsprakenQuery, GetBurgerAfsprakenQueryVariables>(GetBurgerAfsprakenDocument, variables, options);
     },
     GetBurgerGebeurtenissen(variables: GetBurgerGebeurtenissenQueryVariables, options?: C): Promise<GetBurgerGebeurtenissenQuery> {
       return requester<GetBurgerGebeurtenissenQuery, GetBurgerGebeurtenissenQueryVariables>(GetBurgerGebeurtenissenDocument, variables, options);
-    },
-    getBurger(variables: GetBurgerQueryVariables, options?: C): Promise<GetBurgerQuery> {
-      return requester<GetBurgerQuery, GetBurgerQueryVariables>(GetBurgerDocument, variables, options);
     },
     getBurgers(variables?: GetBurgersQueryVariables, options?: C): Promise<GetBurgersQuery> {
       return requester<GetBurgersQuery, GetBurgersQueryVariables>(GetBurgersDocument, variables, options);
@@ -2683,6 +2652,12 @@ export function getSdk<C>(requester: Requester<C>) {
     },
     getGebruiker(variables?: GetGebruikerQueryVariables, options?: C): Promise<GetGebruikerQuery> {
       return requester<GetGebruikerQuery, GetGebruikerQueryVariables>(GetGebruikerDocument, variables, options);
+    },
+    getHuishouden(variables: GetHuishoudenQueryVariables, options?: C): Promise<GetHuishoudenQuery> {
+      return requester<GetHuishoudenQuery, GetHuishoudenQueryVariables>(GetHuishoudenDocument, variables, options);
+    },
+    getHuishoudens(variables?: GetHuishoudensQueryVariables, options?: C): Promise<GetHuishoudensQuery> {
+      return requester<GetHuishoudensQuery, GetHuishoudensQueryVariables>(GetHuishoudensDocument, variables, options);
     },
     getAfspraak(variables: GetAfspraakQueryVariables, options?: C): Promise<GetAfspraakQuery> {
       return requester<GetAfspraakQuery, GetAfspraakQueryVariables>(GetAfspraakDocument, variables, options);

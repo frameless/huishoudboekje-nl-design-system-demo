@@ -1,6 +1,6 @@
 [
   {
-	"bsn": "999111222",
+	"bsn": "999999990",
 	"voorletters": "F.S.",
 	"voornamen": "Fien Sandra",
 	"achternaam": "de Jager",
@@ -10,7 +10,7 @@
 	"plaatsnaam": "Sloothuizen",
 	"geboortedatum": "1987-06-18",
 	"email": "fien.de.jager@sloothuizen.nl",
-	"telefoonnummer": "0612345678",
+	"telefoonnummer": "0687542132",
 	"rekeningen": [
 	  {"iban": "NL84INGB2266765221", "rekeninghouder": "F. de Jager"}
 	],
@@ -29,7 +29,13 @@
 		"zoektermen": [
 		  "Loon",
 		  "ZOEKTERMPERSONA1"
-		]
+		],
+		"betaalinstructie": {
+		  "byMonth": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+		  "byMonthDay": 26,
+		  "startDate": "2021-01-01",
+		  "endDate": "2021-12-31"
+		}
 	  },
 	  {
 		"rubriek": {"naam": "Uitkeringen"},
@@ -43,7 +49,12 @@
 		"zoektermen": [
 		  "Aanvullende uitkering",
 		  "ZOEKTERMPERSONA1"
-		]
+		],
+		"betaalinstructie": {
+		  "byMonth": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+		  "byMonthDay": 26,
+		  "startDate": "2019-01-01"
+		}
 	  },
 	  {
 		"rubriek": {"naam": "Toeslagen"},
@@ -55,7 +66,7 @@
 		"credit": true,
 		"validFrom": "2019-01-20",
 		"zoektermen": [
-		  "123456781",
+		  "999999990",
 		  "VOORSCHOT KIT/Kgb"
 		]
 	  },
@@ -69,7 +80,7 @@
 		"credit": true,
 		"validFrom": "2019-01-20",
 		"zoektermen": [
-		  "123456781",
+		  "999999990",
 		  "VOORSCHOT HUURTOESLAG"
 		]
 	  },
@@ -83,7 +94,7 @@
 		"credit": true,
 		"validFrom": "2019-01-20",
 		"zoektermen": [
-		  "123456781",
+		  "999999990",
 		  "VOORSCHOT ZORGTOESLAG"
 		]
 	  },
@@ -127,7 +138,12 @@
 		"zoektermen": [
 		  "Water",
 		  "ZOEKTERMPERSONA1"
-		]
+		],
+		"betaalinstructie": {
+		  "byMonth": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+		  "byMonthDay": 10,
+		  "startDate": "2021-01-01"
+		}
 	  },
 	  {
 		"rubriek": {"naam": "Privé-opname"},
@@ -143,7 +159,7 @@
 	]
   },
   {
-	"bsn": "999111333",
+	"bsn": "999999989",
 	"voorletters": "H.J.",
 	"voornamen": "Henk-Jan",
 	"achternaam": "Poortvliet",
@@ -152,8 +168,8 @@
 	"straatnaam": "Spoorlaan",
 	"plaatsnaam": "Sloothuizen",
 	"geboortedatum": "1964-08-14",
-	"email": "fien.de.jager@sloothuizen.nl",
-	"telefoonnummer": "0612345678",
+	"email": "henkjanpoortvliet@sloothuizen.nl",
+	"telefoonnummer": "0698653212",
 	"rekeningen": [
 	  {"iban": "NL83ABNA1927261899", "rekeninghouder": "H.J. Poortvliet"},
 	  {"iban": "NL58INGB5228863516", "rekeninghouder": "H.J. Poortvliet en/of A.B. Zee"}
@@ -197,7 +213,7 @@
 		"credit": true,
 		"validFrom": "2019-01-20",
 		"zoektermen": [
-		  "123456782",
+		  "999999989",
 		  "VOORSCHOT HUURTOESLAG"
 		]
 	  },
@@ -211,7 +227,7 @@
 		"credit": true,
 		"validFrom": "2019-01-20",
 		"zoektermen": [
-		  "123456782",
+		  "999999989",
 		  "VOORSCHOT ZORGTOESLAG"
 		]
 	  },
@@ -341,16 +357,17 @@
 	]
   },
   {
-	"voorletters": "K.R.D.",
-	"voornamen": "Kristel Ramona Davina",
+	"bsn": "999999977",
+	"voorletters": "C.R.D.",
+	"voornamen": "Christel Ramone Davina",
 	"achternaam": "Poortvliet",
 	"huisnummer": "37B",
 	"postcode": "9999ZZ",
 	"straatnaam": "Spoorlaan",
 	"plaatsnaam": "Sloothuizen",
-	"geboortedatum": "1994-08-14",
+	"geboortedatum": "1968-08-14",
 	"email": "krdpoortvliet@sloothuizen.nl",
-	"telefoonnummer": "0685236971",
+	"telefoonnummer": "0632659887",
 	"rekeningen": [
 	  {"iban": "NL05ABNA1578530261", "rekeninghouder": "K.R.D. Poortvliet"}
 	],
@@ -368,7 +385,7 @@
 		"validFrom": "2021-01-01",
 		"zoektermen": [
 		  "Loon",
-		  "ZOEKTERMPERSONA1"
+		  "ZOEKTERMPERSONA3"
 		]
 	  },
 	  {
@@ -382,7 +399,7 @@
 		"validFrom": "2019-01-07",
 		"zoektermen": [
 		  "Aanvullende uitkering",
-		  "ZOEKTERMPERSONA1"
+		  "ZOEKTERMPERSONA3"
 		]
 	  },
 	  {
@@ -395,7 +412,7 @@
 		"credit": true,
 		"validFrom": "2019-01-20",
 		"zoektermen": [
-		  "123456781",
+		  "999999977",
 		  "VOORSCHOT KIT/Kgb"
 		]
 	  },
@@ -409,7 +426,7 @@
 		"credit": true,
 		"validFrom": "2019-01-20",
 		"zoektermen": [
-		  "123456781",
+		  "999999977",
 		  "VOORSCHOT HUURTOESLAG"
 		]
 	  },
@@ -423,7 +440,7 @@
 		"credit": true,
 		"validFrom": "2019-01-20",
 		"zoektermen": [
-		  "123456781",
+		  "999999977",
 		  "VOORSCHOT ZORGTOESLAG"
 		]
 	  },
@@ -438,7 +455,7 @@
 		"validFrom": "2019-01-01",
 		"zoektermen": [
 		  "Betaalde huur",
-		  "ZOEKTERMPERSONA1"
+		  "ZOEKTERMPERSONA3"
 		]
 	  },
 	  {
@@ -452,7 +469,7 @@
 		"validFrom": "2019-01-01",
 		"zoektermen": [
 		  "Elektriciteit",
-		  "ZOEKTERMPERSONA1"
+		  "ZOEKTERMPERSONA3"
 		]
 	  },
 	  {
@@ -466,7 +483,7 @@
 		"validFrom": "2021-01-01",
 		"zoektermen": [
 		  "Water",
-		  "ZOEKTERMPERSONA1"
+		  "ZOEKTERMPERSONA3"
 		]
 	  },
 	  {
@@ -477,12 +494,13 @@
 		"validFrom": "2021-01-01",
 		"zoektermen": [
 		  "Leefgeld",
-		  "ZOEKTERMPERSONA1"
+		  "ZOEKTERMPERSONA3"
 		]
 	  }
 	]
   },
   {
+	"bsn": "999999965",
 	"voorletters": "C.",
 	"voornamen": "Chris",
 	"achternaam": "de Burg",
@@ -492,7 +510,7 @@
 	"plaatsnaam": "Sloothuizen",
 	"geboortedatum": "1982-04-11",
 	"email": "chrisdeburg@sloothuizen.nl",
-	"telefoonnummer": "069685250014",
+	"telefoonnummer": "0612456598",
 	"rekeningen": [
 	  {"iban": "NL56ABNA3971204384", "rekeninghouder": "C. de Burg"}
 	],
@@ -510,7 +528,7 @@
 		"validFrom": "2021-01-01",
 		"zoektermen": [
 		  "Loon",
-		  "ZOEKTERMPERSONA1"
+		  "ZOEKTERMPERSONA4"
 		]
 	  },
 	  {
@@ -524,7 +542,7 @@
 		"validFrom": "2019-01-07",
 		"zoektermen": [
 		  "Aanvullende uitkering",
-		  "ZOEKTERMPERSONA1"
+		  "ZOEKTERMPERSONA4"
 		]
 	  },
 	  {
@@ -537,7 +555,7 @@
 		"credit": true,
 		"validFrom": "2019-01-20",
 		"zoektermen": [
-		  "123456781",
+		  "999999965",
 		  "VOORSCHOT KIT/Kgb"
 		]
 	  },
@@ -551,7 +569,7 @@
 		"credit": true,
 		"validFrom": "2019-01-20",
 		"zoektermen": [
-		  "123456781",
+		  "999999965",
 		  "VOORSCHOT HUURTOESLAG"
 		]
 	  },
@@ -565,7 +583,7 @@
 		"credit": true,
 		"validFrom": "2019-01-20",
 		"zoektermen": [
-		  "123456781",
+		  "999999965",
 		  "VOORSCHOT ZORGTOESLAG"
 		]
 	  },
@@ -580,7 +598,7 @@
 		"validFrom": "2019-01-01",
 		"zoektermen": [
 		  "Betaalde huur",
-		  "ZOEKTERMPERSONA1"
+		  "ZOEKTERMPERSONA4"
 		]
 	  },
 	  {
@@ -594,7 +612,7 @@
 		"validFrom": "2019-01-01",
 		"zoektermen": [
 		  "Elektriciteit",
-		  "ZOEKTERMPERSONA1"
+		  "ZOEKTERMPERSONA4"
 		]
 	  },
 	  {
@@ -608,7 +626,7 @@
 		"validFrom": "2021-01-01",
 		"zoektermen": [
 		  "Water",
-		  "ZOEKTERMPERSONA1"
+		  "ZOEKTERMPERSONA4"
 		]
 	  },
 	  {
@@ -619,7 +637,7 @@
 		"validFrom": "2021-01-01",
 		"zoektermen": [
 		  "Leefgeld",
-		  "ZOEKTERMPERSONA1"
+		  "ZOEKTERMPERSONA4"
 		]
 	  }
 	]
