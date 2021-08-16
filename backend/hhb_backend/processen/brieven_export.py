@@ -182,6 +182,4 @@ def create_row(hhb_organisatie, kvk_organisatie, afspraak, burger, current_date_
     row["burger.postadres.plaats"] = burger["plaatsnaam"] if burger["plaatsnaam"] else ""
     row["betaalrichting"] = "credit" if afspraak["credit"] is True else "Debet"
     row["status.afspraak"] = afspraak["valid_through"] if afspraak["valid_through"] else ""
-    # row["afspraak.geldig.van"] = afspraak["valid_from"]
-    # row["afspraak.geldig.tot"] = afspraak["valid_through"] if afspraak["valid_through"] else ""
     return row
