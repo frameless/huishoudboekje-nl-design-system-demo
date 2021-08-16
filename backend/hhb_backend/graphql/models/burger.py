@@ -50,6 +50,7 @@ class Burger(graphene.ObjectType):
         return await request.dataloader.huishoudens_by_id.load(root.get('huishouden_id'))
 
     def bsn_length(self, bsn):
+        print(type(bsn), '!!!!!!!!!!!!!!')
         if len(str(bsn)) != 9 and len(str(bsn)) != 8 :
             raise GraphQLError(f"Upstream API responded: BSN is not valid.")
 

@@ -54,6 +54,7 @@ class UpdateBurger(graphene.Mutation):
     async def mutate(_root, _info, id, **kwargs):
         """ Update the current Gebruiker/Burger """
         previous = await request.dataloader.burgers_by_id.load(id)
+        print(previous, "PREV !!!!!!!!!!!!")
 
         response = requests.post(
             f"{settings.HHB_SERVICES_URL}/burgers/{id}",
@@ -66,6 +67,8 @@ class UpdateBurger(graphene.Mutation):
         request.dataloader.burgers_by_id.clear(id)
 
         burger = response.json()["data"]
+
+        print(burger, "BURGER !!!!!!!!!!!!")
 
         Burger().bsn_length(burger.get('bsn'))
         Burger().bsn_elf_proef(burger.get('bsn'))

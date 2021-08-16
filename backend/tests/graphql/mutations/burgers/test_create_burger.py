@@ -55,6 +55,7 @@ def test_create_burger_success(client):
           }
         }''',
                 "variables": {"input": {
+                    'bsn': 845233488,
                     'email': 'test@test.com',
                     'geboortedatum': "1999-10-10",
                     'telefoonnummer': "0612345678",
@@ -112,6 +113,7 @@ def test_create_burger_with_new_rekening_valid_success(client):
           }
         }''',
                 "variables": {"input": {
+                    'bsn': 845233488,
                     'email': 'test@test.com',
                     'geboortedatum': "1999-10-10",
                     'telefoonnummer': "0612345678",
@@ -164,6 +166,7 @@ def test_create_burger_with_new_rekening_invalid_success(client):
           }
         }''',
                 "variables": {"input": {
+                    'bsn': 845233488,
                     'email': 'test@test.com',
                     'geboortedatum': "1999-10-10",
                     'telefoonnummer': "0612345678",
@@ -224,6 +227,7 @@ def test_create_burger_with_huishouden_id_success(client):
                   }
                 }''',
                 "variables": {"input": {
+                    'bsn': 845233488,
                     'email': 'test@test.com',
                     'geboortedatum': "1999-10-10",
                     'telefoonnummer': "0612345678",
