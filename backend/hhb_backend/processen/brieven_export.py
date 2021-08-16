@@ -165,7 +165,7 @@ def get_kvk_organisaties(hhb_orgs):
 
 def create_row(hhb_organisatie, kvk_organisatie, afspraak, burger, current_date_str):
     row = {}
-    # row["organisatie.naam"] = hhb_organisatie["weergave_naam"] if "weergave_naam" in hhb_organisatie else ""
+    row["organisatie.naam"] = kvk_organisatie["naam"] if "naam" in kvk_organisatie else ""
     row["organisatie.postadres.adresregel1"] = ""
     if "straatnaam" in kvk_organisatie and "huisnummer" in kvk_organisatie:
         row[
@@ -181,6 +181,7 @@ def create_row(hhb_organisatie, kvk_organisatie, afspraak, burger, current_date_
     row["burger.postadres.postcode"] = burger["postcode"] if burger["postcode"] else ""
     row["burger.postadres.plaats"] = burger["plaatsnaam"] if burger["plaatsnaam"] else ""
     row["betaalrichting"] = "credit" if afspraak["credit"] is True else "Debet"
-    row["afspraak.geldig.van"] = afspraak["valid_from"]
-    row["afspraak.geldig.tot"] = afspraak["valid_through"] if afspraak["valid_through"] else ""
+    row["status.afspraak"] = afspraak["valid_through"] if afspraak["valid_through"] else ""
+    # row["afspraak.geldig.van"] = afspraak["valid_from"]
+    # row["afspraak.geldig.tot"] = afspraak["valid_through"] if afspraak["valid_through"] else ""
     return row
