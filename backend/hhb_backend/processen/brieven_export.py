@@ -180,6 +180,6 @@ def create_row(hhb_organisatie, kvk_organisatie, afspraak, burger, current_date_
         row["burger.postadres.adresregel1"] = f"{burger['straatnaam']} {burger['huisnummer']}"
     row["burger.postadres.postcode"] = burger["postcode"] if burger["postcode"] else ""
     row["burger.postadres.plaats"] = burger["plaatsnaam"] if burger["plaatsnaam"] else ""
-    row["betaalrichting"] = "credit" if afspraak["credit"] is True else "Debet"
+    row["betaalrichting"] = "credit" if afspraak["credit"] is True else "debet"
     row["status.afspraak"] = afspraak["valid_through"] if afspraak["valid_through"] else ""
     return row
