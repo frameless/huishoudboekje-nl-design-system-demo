@@ -33,7 +33,7 @@ def create_mock_adapter() -> Adapter:
             return MockResponse({'data': [{
                 "burgerId": 1, "credit": False, "organisatie_id": 1, "tegenRekeningId": 1,
                 "rubriekId": 1,"omschrijving": "Omschrijving", "bedrag": "0.00",
-                'zoektermen': "zoektest", 'valid_through':"2019-01-01"}]},200)
+                'zoektermen': {"zoektest"}, 'valid_through':"2019-01-01"}]},200)
         elif request.path == "/organisaties/" and request.query == "filter_ids=1":
             return MockResponse({'data': [{'id': 1, "kvk_nummer": 12345678}]},200)
         elif request.path == "/organisaties/" and request.query == "filter_kvks=12345678":
@@ -53,6 +53,6 @@ def test_create_export_brieven(client):
 
         response, filename = brieven_export.create_brieven_export(1)
 
-        assert response == 'organisatie.naam|organisatie.postadres.adresregel1|organisatie.postadres.postcode|organisatie.postadres.plaats|afspraak.id|nu.datum|burger.naam|burger.postadres.adresregel1|burger.postadres.postcode|burger.postadres.plaats|betaalrichting|status.afspraak\norganisatie1|teststraat 1|9999ZZ|testplaats|z o e k t e s t|2021-08-16|burgernaam burgerachternaam|burgerstraat 1|1234AB|burgerplaats|Debet|2019-01-01\n'
+        assert response == 'organisatie.naam|organisatie.postadres.adresregel1|organisatie.postadres.postcode|organisatie.postadres.plaats|afspraak.id|nu.datum|burger.naam|burger.postadres.adresregel1|burger.postadres.postcode|burger.postadres.plaats|betaalrichting|status.afspraak\norganisatie1|teststraat 1|9999ZZ|testplaats|zoektest|2021-08-16|burgernaam burgerachternaam|burgerstraat 1|1234AB|burgerplaats|Debet|2019-01-01\n'
 
 
