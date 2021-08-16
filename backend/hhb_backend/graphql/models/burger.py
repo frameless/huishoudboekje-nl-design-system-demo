@@ -50,9 +50,8 @@ class Burger(graphene.ObjectType):
         return await request.dataloader.huishoudens_by_id.load(root.get('huishouden_id'))
 
     def bsn_length(self, bsn):
-        print(type(bsn), '!!!!!!!!!!!!!!')
         if len(str(bsn)) != 9 and len(str(bsn)) != 8 :
-            raise GraphQLError(f"Upstream API responded: BSN is not valid.")
+            raise GraphQLError("BSN is not valid: BSN should consists of 8 or 9 digits.")
 
     def bsn_elf_proef(self, bsn):
         total_sum = 0
@@ -64,9 +63,7 @@ class Burger(graphene.ObjectType):
             else:
                 length = length - 1
         if total_sum % 11 != 0:
-            raise GraphQLError(f"Upstream API responded: BSN is not valid.")
-
-
+            raise GraphQLError("BSN is not valid: BSN does not meet the 11-proef requirement.")
 
 
 class BurgersPaged(graphene.ObjectType):
