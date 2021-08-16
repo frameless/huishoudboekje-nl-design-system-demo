@@ -2,7 +2,7 @@
 Cypress.Commands.add("login", () => {
 	cy.intercept("GET", "/api/me", {
 		body: {
-			email: "koen.brouwer@vng.nl",
+			email: "contact@kbrouwer.nl",
 			groups: {}
 		}
 	}).as("DexStub");
