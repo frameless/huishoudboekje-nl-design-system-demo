@@ -67,4 +67,7 @@ class UpdateBurger(graphene.Mutation):
 
         burger = response.json()["data"]
 
+        Burger().bsn_length(burger.get('bsn'))
+        Burger().bsn_elf_proef(burger.get('bsn'))
+
         return UpdateBurger(ok=True, burger=burger, previous=previous)

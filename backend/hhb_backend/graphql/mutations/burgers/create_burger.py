@@ -57,6 +57,10 @@ class CreateBurger(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(_root, _info, input):
         """ Create the new Gebruiker/Burger """
+
+        Burger().bsn_length(input.get('bsn'))
+        Burger().bsn_elf_proef(input.get('bsn'))
+
         rekeningen = input.pop("rekeningen", None)
 
         huishouden = await create_huishouden_if_not_exists(huishouden=input.pop("huishouden", {}))
