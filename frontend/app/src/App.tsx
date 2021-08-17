@@ -20,8 +20,11 @@ import Sidebar from "./components/Sidebar";
 import SidebarContainer from "./components/Sidebar/SidebarContainer";
 import StatusErrorPage from "./components/Status/StatusErrorPage";
 import StatusPage from "./components/Status/StatusPage";
+import {dataLayerOptions} from "./config/dataLayer";
 import Routes from "./config/routes";
 import Design from "./Design";
+import onPathChanged from "./utils/DataLayer/hooks/onPathChanged";
+import useDataLayer from "./utils/DataLayer/useDataLayer";
 import {isDev} from "./utils/things";
 import useAuth from "./utils/useAuth";
 
@@ -30,6 +33,8 @@ const App = () => {
 	const {user, error, loading, reset} = useAuth();
 	const location = useLocation();
 	const theme = useTheme();
+	const dataLayer = useDataLayer(dataLayerOptions);
+	dataLayer.addHook(onPathChanged("PathChanged"));
 
 	const onClickLoginButton = () => {
 		/* Save the current user's page so that we can quickly navigate back after login. */
