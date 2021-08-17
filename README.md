@@ -50,7 +50,7 @@ To authorize against your local running backend service, you'll need to run an i
 
 1. Download and install Dex from [https://dexidp.io/](https://dexidp.io/)
 2. Make sure you are able to run dex: [Getting started with dex](https://dexidp.io/docs/getting-started/)
-3. To launch Dex run `dex serve /dex.dev.yaml`
+3. To launch Dex run `dex serve dex.dev.yaml`
 4. Now you should be able to log in at http://localhost:3000 with a user from the dex.dev.yaml file.
 
 ### 3. Minikube

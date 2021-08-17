@@ -1,6 +1,6 @@
 import graphene
 
-from ..scalars.complex_filter import ComplexFilterType
+from ..scalars.complex_filter import ComplexFilterType, ComplexBedragFilterType
 
 
 class BurgerFilter(graphene.InputObjectType):
@@ -19,3 +19,9 @@ class BurgerFilter(graphene.InputObjectType):
     voornamen = ComplexFilterType()
     plaatsnaam = ComplexFilterType()
     huishouden_id = ComplexFilterType()
+
+    bedrag = ComplexBedragFilterType()
+    tegen_rekening_id = ComplexFilterType()
+    zoektermen = ComplexFilterType()
+    iban = ComplexFilterType()
+    rekeninghouder = ComplexFilterType()
