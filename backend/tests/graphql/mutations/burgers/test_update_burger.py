@@ -3,11 +3,24 @@ from requests_mock import Adapter
 from pydash import objects
 
 from hhb_backend.graphql import settings
+from graphql import GraphQLError
 
 
 def test_update_burger_success(client):
     with requests_mock.Mocker() as mock:
-        post_adapter = mock.post(f"{settings.HHB_SERVICES_URL}/burgers/1", status_code=200, json={"data": {"id": 1}})
+        post_adapter = mock.post(f"{settings.HHB_SERVICES_URL}/burgers/1", status_code=200, json={"data": {
+            "id": 1,
+            'bsn': 209437972,
+            'email': 'test@test.com',
+            'geboortedatum': "1999-10-10",
+            'telefoonnummer': "0612345678",
+            'achternaam': "Hulk",
+            'huisnummer': "13a",
+            'postcode': "9999ZZ",
+            'straatnaam': "Hoofdstraat",
+            'voorletters': "H",
+            'voornamen': "Hogan",
+            'plaatsnaam': "Dorp"}})
         get_adapter = mock.get(f"{settings.HHB_SERVICES_URL}/burgers/?filter_ids=1", status_code=200,
                                json={"data": [{"id": 1}]})
         log_adapter = mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json={'data': {'id': 1}}, status_code=201)
@@ -16,6 +29,7 @@ def test_update_burger_success(client):
             json={
                 "query": '''
         mutation updateBurger($id: Int!, 
+        $bsn: Int,
         $voorletters: String,
         $voornamen: String,
         $achternaam: String,
@@ -26,7 +40,7 @@ def test_update_burger_success(client):
         $plaatsnaam: String,
         $telefoonnummer: String,
         $email: String) {
-          updateBurger(id: $id, email:$email, geboortedatum: $geboortedatum, telefoonnummer: $telefoonnummer, 
+          updateBurger(id: $id, bsn: $bsn, email:$email, geboortedatum: $geboortedatum, telefoonnummer: $telefoonnummer, 
           achternaam: $achternaam, huisnummer: $huisnummer, postcode: $postcode, straatnaam: $straatnaam, voorletters: $voorletters, voornamen: $voornamen, plaatsnaam: $plaatsnaam) {
             ok
             burger {
@@ -35,6 +49,7 @@ def test_update_burger_success(client):
           }
         }''',
                 "variables": {"id": 1,
+                              'bsn': 209437972,
                               'email': 'test@test.com',
                               'geboortedatum': "1999-10-10",
                               'telefoonnummer': "0612345678",
@@ -46,6 +61,7 @@ def test_update_burger_success(client):
                               'voornamen': "Hogan",
                               'plaatsnaam': "Dorp"}},
         )
+
         assert get_adapter.called_once
         assert post_adapter.called_once
         assert log_adapter.called_once

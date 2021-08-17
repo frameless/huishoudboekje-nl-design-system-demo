@@ -7,6 +7,7 @@ import hhb_backend.graphql.models.rekening as rekening
 import hhb_backend.graphql.models.gebruikersactiviteit as gebruikersactiviteit
 import hhb_backend.graphql.models.huishouden as huishouden
 from hhb_backend.graphql.models.pageinfo import PageInfo
+from graphql import GraphQLError
 
 
 class Burger(graphene.ObjectType):
@@ -47,6 +48,23 @@ class Burger(graphene.ObjectType):
 
     async def resolve_huishouden(root, info):
         return await request.dataloader.huishoudens_by_id.load(root.get('huishouden_id'))
+
+    def bsn_length(self, bsn):
+        if len(str(bsn)) != 9 and len(str(bsn)) != 8 :
+            raise GraphQLError("BSN is not valid: BSN should consist of 8 or 9 digits.")
+
+    def bsn_elf_proef(self, bsn):
+        total_sum = 0
+        length = int(len(str(bsn)))
+        for digit in str(bsn):
+            total_sum = total_sum + (int(digit) * length)
+            if length == 2:
+                length = -1
+            else:
+                length = length - 1
+        if total_sum % 11 != 0:
+            raise GraphQLError("BSN is not valid: BSN does not meet the 11-proef requirement.")
+
 
 class BurgersPaged(graphene.ObjectType):
     burgers = graphene.List(
