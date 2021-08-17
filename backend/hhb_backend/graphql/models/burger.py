@@ -51,7 +51,7 @@ class Burger(graphene.ObjectType):
 
     def bsn_length(self, bsn):
         if len(str(bsn)) != 9 and len(str(bsn)) != 8 :
-            raise GraphQLError("BSN is not valid: BSN should consists of 8 or 9 digits.")
+            raise GraphQLError("BSN is not valid: BSN should consist of 8 or 9 digits.")
 
     def bsn_elf_proef(self, bsn):
         total_sum = 0
