@@ -9,12 +9,22 @@ const Loading = () => (
 	</Stack>
 );
 
-const Queryable: React.FC<{query: QueryResult | LazyQueryResult<any, any>, loading?, error?, children}> = ({query, loading, error, children}) => {
+type QueryableProps = {
+	query: QueryResult | LazyQueryResult<any, any>,
+	loading?,
+	error?,
+	options?: {
+		hidePreviousResults?: boolean
+	},
+	children
+};
+
+const Queryable: React.FC<QueryableProps> = ({query, loading, error, options = {}, children}) => {
 	const {t} = useTranslation();
 	const {data: _data, loading: _loading, error: _error, previousData} = query;
 
 	if (_loading) {
-		if(previousData){
+		if(!options.hidePreviousResults && previousData){
 			return children(previousData);
 		}
 
