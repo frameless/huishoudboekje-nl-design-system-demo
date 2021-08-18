@@ -16,6 +16,7 @@ const BurgerList = () => {
 	const [search, setSearch] = useState<string>("");
 	const searchRef = useRef<HTMLInputElement>(null);
 	const $burgers = useGetBurgersSearchQuery({
+		context: {debounceKey: "burgerSearch"},
 		variables: {search: search.trim()},
 	});
 

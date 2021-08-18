@@ -41,6 +41,7 @@
     "@iam4x/cypress-graphql-mock": "^0.0.1",
     "@koenbrouwer/find-path-by-value": "^1.0.0",
     "@types/react-datepicker": "^4.1.4",
+    "apollo-link-debounce": "^3.0.0",
     "apollo-upload-client": "^16.0.0",
     "array-to-sentence": "^2.0.0",
     "currency.js": "^2.0.4",
