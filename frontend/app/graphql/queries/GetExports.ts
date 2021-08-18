@@ -1,5 +1,5 @@
 import {gql} from "@apollo/client";
-import {ExportFragment} from "../fragments/ExportFragment";
+import {ExportFragment} from "../fragments/Export";
 
 export const GetExportsQuery = gql`
     query getExports {

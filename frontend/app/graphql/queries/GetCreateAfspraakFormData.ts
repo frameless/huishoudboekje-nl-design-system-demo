@@ -1,7 +1,7 @@
 import {gql} from "@apollo/client";
-import {OrganisatieFragment} from "../fragments/OrganisatieFragment";
-import {RekeningFragment} from "../fragments/RekeningFragment";
-import {RubriekFragment} from "../fragments/RubriekFragment";
+import {OrganisatieFragment} from "../fragments/Organisatie";
+import {RekeningFragment} from "../fragments/Rekening";
+import {RubriekFragment} from "../fragments/Rubriek";
 
 export const GetCreateAfspraakFormDataQuery = gql`
     query getCreateAfspraakFormData($burgerId: Int!) {

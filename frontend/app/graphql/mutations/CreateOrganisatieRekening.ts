@@ -1,5 +1,5 @@
 import {gql} from "@apollo/client";
-import {RekeningFragment} from "../fragments/RekeningFragment";
+import {RekeningFragment} from "../fragments/Rekening";
 
 export const CreateOrganisatieRekeningMutation = gql`
     mutation createOrganisatieRekening(

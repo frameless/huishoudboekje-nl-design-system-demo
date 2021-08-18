@@ -1,5 +1,5 @@
 import {gql} from "@apollo/client";
-import {GebruikersactiviteitFragment} from "../fragments/GebruikersactiviteitFragment";
+import {GebruikersactiviteitFragment} from "../fragments/Gebruikersactiviteit";
 
 export const GetGebeurtenissenQuery = gql`
     query GetGebeurtenissen($limit: Int!, $offset: Int!) {
