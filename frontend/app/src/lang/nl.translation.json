@@ -46,7 +46,9 @@
             "createSuccessMessage": "Nieuwe burger succesvol opgeslagen."
         },
         "burger": {
-            "alreadyExists": "Er bestaat al een burger met dit burgerservicenummer."
+            "alreadyExists": "Er bestaat al een burger met dit burgerservicenummer.",
+            "bsnLengthError": "Het burgerservicenummer moet bestaan uit 8 of 9 cijfers.",
+            "bsnElfProefError": "Dit geen geldig burgerservicenummer. Controleer de ingevulde gegevens en probeer het opnieuw."
         },
         "configuratie": {
             "updateSuccess": "Configuratie succesvol opgeslagen.",

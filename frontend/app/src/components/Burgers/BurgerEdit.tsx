@@ -1,5 +1,5 @@
 import {Box, Button, Divider, FormControl, FormLabel, Input, Stack, Tooltip, useBreakpointValue} from "@chakra-ui/react";
-import React from "react";
+import React, {useState} from "react";
 import DatePicker from "react-datepicker";
 import {useInput, Validators} from "react-grapple";
 import {useTranslation} from "react-i18next";
@@ -21,9 +21,17 @@ const BurgerEdit = () => {
 	const {id} = useParams<{id: string}>();
 	const toast = useToaster();
 	const {push} = useHistory();
+	const [isBsnValid, setBsnValid] = useState<boolean>(true);
 
 	const bsn = useInput({
-		validate: [Validators.required],
+		defaultValue: "",
+		validate: [
+			Validators.required,
+			(v: string) => {
+				return new RegExp(/^[0-9]{8,9}$/).test(v);
+			},
+			() => isBsnValid,
+		],
 	});
 	const voorletters = useInput({
 		validate: [Validators.required],
@@ -132,6 +140,14 @@ const BurgerEdit = () => {
 			if (err.message.includes("already exists")) {
 				message = t("messages.burger.alreadyExists");
 			}
+			if (err.message.includes("BSN should consist of 8 or 9 digits")) {
+				setBsnValid(false);
+				message = t("messages.burger.bsnLengthError");
+			}
+			if (err.message.includes("BSN does not meet the 11-proef requirement")) {
+				setBsnValid(false);
+				message = t("messages.burger.bsnElfProefError");
+			}
 
 			toast({
 				error: message,
@@ -154,7 +170,10 @@ const BurgerEdit = () => {
 										<FormControl id={"bsn"} isRequired={true}>
 											<Stack spacing={1} flex={1}>
 												<FormLabel>{t("forms.burgers.fields.bsn")}</FormLabel>
-												<Input isInvalid={bsn.dirty && !bsn.isValid} {...bsn.bind} />
+												<Input isInvalid={bsn.dirty && (!bsn.isValid || !isBsnValid)} {...bsn.bind} onFocus={() => setBsnValid(true)} onChange={e => {
+													setBsnValid(true);
+													bsn.onChange(e);
+												}} />
 											</Stack>
 										</FormControl>
 									</Stack>

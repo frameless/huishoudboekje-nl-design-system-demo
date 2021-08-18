@@ -20,10 +20,17 @@ const CreateBurger = () => {
 	const isMobile = useBreakpointValue([true, null, null, false]);
 	const toast = useToaster();
 	const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+	const [isBsnValid, setBsnValid] = useState<boolean>(false);
 
 	const bsn = useInput({
 		defaultValue: "",
-		validate: [Validators.required],
+		validate: [
+			Validators.required,
+			(v: string) => {
+				return new RegExp(/^[0-9]{8,9}$/).test(v);
+			},
+			() => isBsnValid
+		],
 	});
 	const voorletters = useInput({
 		defaultValue: "",
@@ -114,9 +121,9 @@ const CreateBurger = () => {
 				},
 			},
 			refetchQueries: [
-				{ query: GetHuishoudensDocument },
-				{ query: GetBurgersDocument }
-			]
+				{query: GetHuishoudensDocument},
+				{query: GetBurgersDocument},
+			],
 		}).then(result => {
 			toast({
 				success: t("messages.burgers.createSuccessMessage"),
@@ -132,6 +139,14 @@ const CreateBurger = () => {
 			let message = err.message;
 			if (err.message.includes("already exists")) {
 				message = t("messages.burger.alreadyExists");
+			}
+			if (err.message.includes("BSN should consist of 8 or 9 digits")) {
+				setBsnValid(false);
+				message = t("messages.burger.bsnLengthError");
+			}
+			if (err.message.includes("BSN does not meet the 11-proef requirement")) {
+				setBsnValid(false);
+				message = t("messages.burger.bsnElfProefError");
 			}
 
 			toast({
@@ -153,7 +168,10 @@ const CreateBurger = () => {
 								<FormControl id={"bsn"} isRequired={true}>
 									<Stack spacing={1} flex={1}>
 										<FormLabel>{t("forms.burgers.fields.bsn")}</FormLabel>
-										<Input isRequired={true} isInvalid={isInvalid(bsn)} {...bsn.bind} />
+										<Input isRequired={true} isInvalid={isInvalid(bsn) || !isBsnValid} {...bsn.bind} onFocus={() => setBsnValid(true)} onChange={e => {
+											setBsnValid(true);
+											bsn.onChange(e);
+										}} />
 									</Stack>
 								</FormControl>
 							</Stack>
