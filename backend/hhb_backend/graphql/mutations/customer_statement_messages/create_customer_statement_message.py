@@ -54,7 +54,7 @@ class CreateCustomerStatementMessage(graphene.Mutation):
         content = file.stream.read()
 
         if file.filename.lower().endswith('.xml'):
-            csm_files = parser.parse(content)
+            csm_files = parser.parse(content.encode("utf-8"))
         else:
             csm_files = [mt940.parse(content)]
 

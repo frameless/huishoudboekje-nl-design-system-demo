@@ -1,218 +1,345 @@
-import os
-from io import StringIO
-from datetime import datetime
-from graphql import GraphQLError
-import xml.etree.ElementTree as ET
+"""Class to parse camt files."""
+### Copyright 2013-2016 Therp BV <https://therp.nl>
+### Copyright 2017 Open Net Sàrl
+### License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
+### License AGPL v3.0, via https://github.com/OCA/bank-statement-import/blob/14.0/LICENSE
+### Thanks to Therp BV (2013-2016) and Open Net Sár (2017).
+# This parser is an altered version of the parser on
+### https://github.com/OCA/bank-statement-import/blob/14.0/account_statement_import_camt/models/parser.py
+'''The parts that weren't needed are commented out and when something was added
+    it is clearly stated that it was added by way of a comment.'''
+
+import re
+
+from lxml import etree
+
+#removed - from odoo import models
 
 
-def parse(src, encoding=None):
-    '''
-    Parses CAMT.053 data and returns list of Statement objects
+class CamtParser():     #removed - class CamtParser(models.AbstractModel):
+    _name = "account.statement.import.camt.parser"
+    _description = "Account Bank Statement Import CAMT parser"
 
-    :param src: file handler to read, filename to read or raw data as string
-    :return: list of statement objects
-    '''
+    def parse_amount(self, ns, node):
+        """Parse element that contains Amount and CreditDebitIndicator."""
+        if node is None:
+            return 0.0
+        sign = 1
+        amount = 0.0
+        sign_node = node.xpath("ns:CdtDbtInd", namespaces={"ns": ns})
+        if not sign_node:
+            sign_node = node.xpath("../../ns:CdtDbtInd", namespaces={"ns": ns})
+        if sign_node and sign_node[0].text == "DBIT":
+            sign = -1
+        amount_node = node.xpath("ns:Amt", namespaces={"ns": ns})
+        if not amount_node:
+            amount_node = node.xpath(
+                "./ns:AmtDtls/ns:TxAmt/ns:Amt", namespaces={"ns": ns}
+            )
+        if amount_node:
+            amount = sign * float(amount_node[0].text)
+        return amount
 
-    def safe_is_file(filename):
-        try:
-            return os.path.isfile(src)
-        except ValueError:  # pragma: no cover
-            return False
+    def add_value_from_node(self, ns, node, xpath_str, obj, attr_name, join_str=None):
+        """Add value to object from first or all nodes found with xpath.
 
-    if hasattr(src, 'read'):  # pragma: no branch
-        data = src.read()
-    elif safe_is_file(src):
-        with open(src, 'rb') as fh:
-            data = fh.read()
-    else:  # pragma: no cover
-        data = src
-
-    if hasattr(data, 'decode'):  # pragma: no branch
-        exception = None
-        encodings = [encoding, 'utf-8', 'cp852', 'iso8859-15', 'latin1']
-
-        for encoding in encodings:  # pragma: no cover
-            if not encoding:
-                continue
-
-            try:
-                data = data.decode(encoding)
+        If xpath_str is a list (or iterable), it will be seen as a series
+        of search path's in order of preference. The first item that results
+        in a found node will be used to set a value."""
+        if not isinstance(xpath_str, (list, tuple)):
+            xpath_str = [xpath_str]
+        for search_str in xpath_str:
+            found_node = node.xpath(search_str, namespaces={"ns": ns})
+            if found_node:
+                if isinstance(found_node[0], str):
+                    attr_value = found_node[0]
+                elif join_str is None:
+                    attr_value = found_node[0].text
+                else:
+                    attr_value = join_str.join([x.text for x in found_node])
+                obj[attr_name] = attr_value
                 break
-            except UnicodeDecodeError as e:
-                exception = e
-            except UnicodeEncodeError:
-                break
-        else:
-            raise exception  # pragma: no cover
 
-    result = parsexml(data)
-
-    return result
-
-
-def parsexml(data):
-    '''
-    Parses an XML document in Camt.053 style and returns a list of statement objects ready to be processed by
-    the csm mutate function.
-    '''
-
-    try:
-        root = ET.fromstring(data)
-    except:
-        raise GraphQLError('XML is not formatted correctly')
-
-    my_namespaces = dict([
-        node for _, node in ET.iterparse(
-            StringIO(data), events=['start-ns']
+    def parse_transaction_details(self, ns, node, transaction):
+        """Parse TxDtls node."""
+        # message
+        self.add_value_from_node(
+            ns,
+            node,
+            [
+                "./ns:RmtInf/ns:Ustrd|./ns:RtrInf/ns:AddtlInf",
+                "./ns:AddtlNtryInf",
+                "./ns:Refs/ns:InstrId",
+            ],
+            transaction,
+            "payment_ref",
+            join_str="\n",
         )
-    ])
+        # name
+        self.add_value_from_node(
+            ns, node, ["./ns:AddtlTxInf"], transaction, "payment_ref", join_str="\n"
+        )
+        # eref
+        self.add_value_from_node(
+            ns,
+            node,
+            [
+                "./ns:RmtInf/ns:Strd/ns:CdtrRefInf/ns:Ref",
+                "./ns:Refs/ns:EndToEndId",
+                "./ns:Ntry/ns:AcctSvcrRef",
+            ],
+            transaction,
+            "ref",
+        )
+        amount = self.parse_amount(ns, node)
+        if amount != 0.0:
+            transaction["amount"] = amount
+        # remote party values
+        party_type = "Dbtr"
+        party_type_node = node.xpath("../../ns:CdtDbtInd", namespaces={"ns": ns})
+        if party_type_node and party_type_node[0].text != "CRDT":
+            party_type = "Cdtr"
+        party_node = node.xpath(
+            "./ns:RltdPties/ns:%s" % party_type, namespaces={"ns": ns}
+        )
+        if party_node:
+            name_node = node.xpath(
+                "./ns:RltdPties/ns:%s/ns:Nm" % party_type, namespaces={"ns": ns}
+            )
+            if name_node:
+                self.add_value_from_node(
+                    ns, party_node[0], "./ns:Nm", transaction, "partner_name"
+                )
+            else:
+                self.add_value_from_node(
+                    ns,
+                    party_node[0],
+                    "./ns:PstlAdr/ns:AdrLine",
+                    transaction,
+                    "partner_name",
+                )
+        # Get remote_account from iban or from domestic account:
+        account_node = node.xpath(
+            "./ns:RltdPties/ns:%sAcct/ns:Id" % party_type, namespaces={"ns": ns}
+        )
+        if account_node:
+            iban_node = account_node[0].xpath("./ns:IBAN", namespaces={"ns": ns})
+            if iban_node:
+                transaction["account_number"] = iban_node[0].text
+            else:
+                self.add_value_from_node(
+                    ns,
+                    account_node[0],
+                    "./ns:Othr/ns:Id",
+                    transaction,
+                    "account_number",
+                )
 
-    statements = root.findall('.//Stmt', my_namespaces)
+    def parse_entry(self, ns, node):
+        """Parse an Ntry node and yield transactions"""
+        transaction = {"payment_ref": "/", "amount": 0}  # fallback defaults
+        self.add_value_from_node(ns, node, "./ns:BookgDt/ns:Dt", transaction, "date")
+        amount = self.parse_amount(ns, node)
+        if amount != 0.0:
+            transaction["amount"] = amount
+        self.add_value_from_node(
+            ns, node, "./ns:AddtlNtryInf", transaction, "narration"
+        )
+        '''This value has been added because we use it'''
+        self.add_value_from_node(
+            ns, node, "./BkTxCd/Prtry/Cd", transaction, "id"
+        )
+        self.add_value_from_node(
+            ns,
+            node,
+            [
+                "./ns:NtryDtls/ns:RmtInf/ns:Strd/ns:CdtrRefInf/ns:Ref",
+                "./ns:NtryDtls/ns:Btch/ns:PmtInfId",
+                "./ns:NtryDtls/ns:TxDtls/ns:Refs/ns:AcctSvcrRef",
+            ],
+            transaction,
+            "ref",
+        )
 
-    if len(statements) == 0:
-        raise GraphQLError("File contains no statements!")
+        details_nodes = node.xpath("./ns:NtryDtls/ns:TxDtls", namespaces={"ns": ns})
+        if len(details_nodes) == 0:
+            yield transaction
+            return
+        transaction_base = transaction
+        for node in details_nodes:
+            transaction = transaction_base.copy()
+            self.parse_transaction_details(ns, node, transaction)
+            yield transaction
 
-    for i in range(len(statements)):
-        statements[i] = Statement(statements[i], my_namespaces)
+    def get_balance_amounts(self, ns, node):
+        """Return opening and closing balance.
 
-    return statements
+        Depending on kind of balance and statement, the balance might be in a
+        different kind of node:
+        OPBD = OpeningBalance
+        PRCD = PreviousClosingBalance
+        ITBD = InterimBalance (first ITBD is start-, second is end-balance)
+        CLBD = ClosingBalance
 
+        Added:
+        CLAV = Closing Available Balance
+        FWAV = Forward Available Balance
+        """
+        start_balance_node = None
+        end_balance_node = None
+        for node_name in ["OPBD", "PRCD", "CLBD", "ITBD", "CLAV", "FWAV"]:
+            code_expr = (
+                './ns:Bal/ns:Tp/ns:CdOrPrtry/ns:Cd[text()="%s"]/../../..' % node_name
+            )
+            balance_node = node.xpath(code_expr, namespaces={"ns": ns})
+            if balance_node:
+                if node_name in ["OPBD", "PRCD"]:
+                    start_balance_node = balance_node[0]
+                elif node_name == "CLBD":
+                    end_balance_node = balance_node[0]
+                elif node_name == "CLAV":
+                    avail_balance_node = balance_node[0]
+                elif node_name == "FWAV":
+                    forward_balance_node = balance_node[0]
+                else:
+                    if not start_balance_node:
+                        start_balance_node = balance_node[0]
+                    if not end_balance_node:
+                        end_balance_node = balance_node[-1]
+        return (
+            Balance(self.parse_amount(ns, start_balance_node)),
+            Balance(self.parse_amount(ns, avail_balance_node)),
+            Balance(self.parse_amount(ns, end_balance_node)),
+            Balance(self.parse_amount(ns, forward_balance_node))
+        )
 
-class Statement:
-    def __init__(self, stmt, namespaces):
-        self.data = self.statementDict(stmt, namespaces)
-        self.transactions = self.transactions(stmt.findall('.//Ntry', namespaces), namespaces)
+    def parse_statement(self, ns, node):
+        """Parse a single Stmt node."""
+        result = {}
+        # removed -
+        # self.add_value_from_node(
+        #     ns,
+        #     node,
+        #     ["./ns:Acct/ns:Id/ns:IBAN", "./ns:Acct/ns:Id/ns:Othr/ns:Id"],
+        #     result,
+        #     "account_number",
+        # )
+        self.add_value_from_node(
+            ns,
+            node,
+            ["./ns:Acct/ns:Id/ns:IBAN", "./ns:Acct/ns:Id/ns:Othr/ns:Id"],
+            result,
+            "account_identification",
+        ) # Addition
 
-    def statementDict(self, stmt, namespaces):
-        '''
-            Extract statement info
-        '''
-        stmtDict = {}
-        stmtDict["transaction_reference"] = self.get_text(stmt, namespaces, 'Id')
-        stmtDict["account_identification"] = self.get_text(stmt, namespaces, 'Acct/Id/IBAN')
-        stmtDict["sequence_number"] = self.get_text(stmt, namespaces, 'ElctrncSeqNb')
-        stmtDict["final_opening_balance"] = self.get_final_opening_balance(stmt, namespaces)
-        stmtDict["final_closing_balance"] = self.get_balance(stmt, namespaces, "'CLBD'")
-        stmtDict["available_balance"] = self.get_balance(stmt, namespaces, "'CLAV'")
-        stmtDict["forward_available_balance"] = self.get_forward_balance(stmt, namespaces)
+        # removed - self.add_value_from_node(ns, node, "./ns:Id", result, "name")
+        self.add_value_from_node(ns, node, "./ns:Id", result, "transaction_reference") # Addition
 
-        return stmtDict
+        self.add_value_from_node(ns, node, './ElctrncSeqNb', result, "sequence_number")
 
-    def transactions(self, transactions, namespaces):
+        self.add_value_from_node(
+            ns, node, ["./ns:Acct/ns:Ccy", "./ns:Bal/ns:Amt/@Ccy"], result, "currency"
+        )
 
-        for i in range(len(transactions)):
-            transactions[i] = Transaction(transactions[i], namespaces)
+        # removed -
+        # result["balance_start"], result["balance_end_real"] = self.get_balance_amounts(
+        #     ns, node
+        # )
+        # Added -
+        result["final_opening_balance"], result["available_balance"], result["final_closing_balance"], result["forward_available_balance"] = \
+            self.get_balance_amounts(ns, node)
 
-        return transactions
-
-    def get_text(self, obj, namespaces, search):
-        return obj.findtext(search, namespaces=namespaces)
-
-    def get_forward_balance(self, stmt, namespaces):
-        if stmt.find("Bal/Tp/CdOrPrtry/[Cd='FWAV']", namespaces=namespaces):
-            balanceString = "'FWAV'"
-        else:
-            balanceString = "'CLAV'"
-
-        balanceObject = stmt.findall(f"Bal/Tp/CdOrPrtry/[Cd={balanceString}]/../..", namespaces=namespaces)[-1]
-
-        if self.get_text(balanceObject,
-                         namespaces,
-                         "CdtDbtInd") == 'CRDT':
-            statustemp = 'C'
-        else:
-            statustemp = 'D'
-        balance = Balance(float(
-            self.get_text(balanceObject, namespaces, 'Amt')),
-                          balanceObject.find('Amt', namespaces=namespaces).attrib["Ccy"],
-                          statustemp)
-
-        return balance
-
-    def get_balance(self, stmt, namespaces, balanceString):
-        balanceObject = stmt.find(f"Bal/Tp/CdOrPrtry/[Cd={balanceString}]/../..", namespaces=namespaces)
-        if self.get_text(balanceObject, namespaces, "CdtDbtInd") == 'CRDT':
-            statustemp = 'C'
-        else:
-            statustemp = 'D'
-        balance = Balance(float(
-            self.get_text(balanceObject, namespaces, 'Amt')),
-                          balanceObject.find('Amt', namespaces=namespaces).attrib["Ccy"],
-                          statustemp)
-
-        return balance
-
-    def get_final_opening_balance(self, stmt, namespaces):
-        prcd = stmt.find("Bal/Tp/CdOrPrtry/[Cd='PRCD']/../..", namespaces=namespaces)
-        opbd = stmt.find("Bal/Tp/CdOrPrtry/[Cd='OPBD']/../..", namespaces=namespaces)
-
-        if prcd:
-            statustemp = self.get_text(prcd, namespaces, "CdtDbtInd")
-            balance = Balance(
-                float(self.get_text(prcd, namespaces, 'Amt')),
-                prcd.find('Amt', namespaces=namespaces).attrib["Ccy"],
-                statustemp)
-        elif opbd:
-            statustemp = self.get_text(opbd, namespaces, "CdtDbtInd")
-            balance = Balance(
-                float(self.get_text(opbd, namespaces, 'Amt')),
-                opbd.find('Amt', namespaces=namespaces).attrib["Ccy"],
-                statustemp)
-        else:
-            balance = None
-
-        return balance
-
-
-class Transaction:
-    def __init__(self, ntry, namespaces):
-        self.data = self.transactionDict(ntry, namespaces)
-
-    def transactionDict(self, ntry, namespaces):
-        '''
-            extract transaction info
-        '''
-        transaction = {}
-        transaction["tegen_rekening"] = self.get_or_empty(ntry, "./NtryDtls/TxDtls/RltdPties/DbtrAcct/Id/IBAN", namespaces)
-        transaction["transaction_details"] = self.get_or_empty(ntry, ".//AddtlNtryInf", namespaces)
-        transaction["date"] = datetime.strptime(ntry.findtext("./ValDt/Dt", namespaces=namespaces), '%Y-%m-%d')
-
-        if ntry.findtext("./CdtDbtInd", namespaces=namespaces) == 'CRDT':
-            transaction["status"] = 'C'
-        else:
-            transaction["status"] = 'D'
-
-        transaction["amount"] = Amount(float(ntry.findtext("./Amt", namespaces=namespaces)),
-                                       ntry.find("./Amt", namespaces=namespaces).attrib["Ccy"],
-                                       transaction["status"])
-
-        transaction["id"] = ntry.findtext("./BkTxCd/Prtry/Cd", namespaces=namespaces)
-        transaction["customer_reference"] = self.get_or_empty(ntry, ".//EndToEndId", namespaces)
-
-        extratemp1 = self.get_or_empty(ntry, "./AcctSvcrRef", namespaces)
-        extratemp2 = self.get_or_empty(ntry, "./NtryDtls/AddtlTxInf", namespaces)
-        transaction["extra_details"] = extratemp1 + extratemp2
-
-        return transaction
-
-    def get_or_empty(self,ntry, search_string, namespaces):
-        temp = ntry.findtext(search_string, namespaces=namespaces)
-        if temp:
-            result = temp
-        else:
-            result = ""
-
+        entry_nodes = node.xpath("./ns:Ntry", namespaces={"ns": ns})
+        transactions = []
+        for entry_node in entry_nodes:
+            transactions.extend(self.parse_entry(ns, entry_node))
+        result["transactions"] = Transaction(transactions)
+        result["date"] = None
+        if transactions:
+            result["date"] = sorted(
+                transactions, key=lambda x: x["date"], reverse=True
+            )[0]["date"]
         return result
 
-class Balance():
-    def __init__(self, amnt, crncy, status):
-        self.amount = Amount(amnt, crncy, status)
-        self.currency = crncy
+    def check_version(self, ns, root):
+        """Validate validity of camt file."""
+        # Check whether it is camt at all:
+        re_camt = re.compile(r"(^urn:iso:std:iso:20022:tech:xsd:camt." r"|^ISO:camt.)")
+        if not re_camt.search(ns):
+            raise ValueError("no camt: " + ns)
+        # Check whether version 052 ,053 or 054:
+        re_camt_version = re.compile(
+            r"(^urn:iso:std:iso:20022:tech:xsd:camt.054."
+            r"|^urn:iso:std:iso:20022:tech:xsd:camt.053."
+            r"|^urn:iso:std:iso:20022:tech:xsd:camt.052."
+            r"|^ISO:camt.054."
+            r"|^ISO:camt.053."
+            r"|^ISO:camt.052.)"
+        )
+        if not re_camt_version.search(ns):
+            raise ValueError("no camt 052 or 053 or 054: " + ns)
+        # Check GrpHdr element:
+        root_0_0 = root[0][0].tag[len(ns) + 2 :]  # strip namespace
+        if root_0_0 != "GrpHdr":
+            raise ValueError("expected GrpHdr, got: " + root_0_0)
 
+    def parse(self, data):
+        """Parse a camt.052 or camt.053 or camt.054 file."""
+        try:
+            root = etree.fromstring(data, parser=etree.XMLParser(recover=True))
+        except etree.XMLSyntaxError:
+            try:
+                # ABNAmro is known to mix up encodings
+                root = etree.fromstring(data.decode("iso-8859-15").encode("utf-8"))
+            except etree.XMLSyntaxError:
+                root = None
+        if root is None:
+            raise ValueError("Not a valid xml file, or not an xml file at all.")
+        ns = root.tag[1 : root.tag.index("}")]
+        self.check_version(ns, root)
+        statements = []
+        currency = None
+        account_number = None
+        for node in root[0][1:]:
+            statement = self.parse_statement(ns, node)
+            if len(statement["transactions"].data):
+                if "currency" in statement:
+                    currency = statement.pop("currency")
+                if "account_number" in statement:
+                    account_number = statement.pop("account_number")
+                statements.append(statement)
+        return currency, account_number, statements
+
+### classes below have been added to better fit the parser to our code.
 
 class Amount():
-    def __init__(self, amnt, crncy, status):
+    def __init__(self, amnt):
         self.amount = amnt
 
-        if status == 'D':
-            self.amount = -self.amount
+class Balance():
+    def __init__(self, amnt):
+        self.amount = Amount(amnt)
+
+class Transaction:
+    def __init__(self, transactions):
+        self.data = self.transactionList(transactions)
+
+    def transactionList(self, transactions):
+        ### Edit and add keys for certain values for a better fit in our application
+        for i in range(len(transactions)):
+            print(transactions[i])
+            if transactions[i].get("account_number", False):
+                transactions[i]["tegen_rekening"] = transactions[i].pop("account_number")
+            transactions[i]["transaction_details"] = transactions[i].pop("narration")
+
+            if transactions[i]["amount"] < 0:
+                transactions[i]["status"] = 'D'
+            else:
+                transactions[i]["status"] = 'C'
+
+            transactions[i]["amount"] = Amount(transactions[i].pop("amount"))
+            if transactions[i].get("ref", False):
+                transactions[i]["customer_reference"] = transactions[i].pop("ref")
+            transactions[i]["extra_details"] = transactions[i].pop("payment_ref")
+
+        return transactions

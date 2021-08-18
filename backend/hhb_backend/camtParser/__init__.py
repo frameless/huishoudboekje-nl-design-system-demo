@@ -1,3 +1,3 @@
-from . import parser
+from . import CamtParser
 
-parse= parser.parse
+parse = CamtParser.parse
