@@ -1,6 +1,7 @@
 import requests_mock
 from requests_mock import Adapter
 from hhb_backend.processen import brieven_export
+from datetime import datetime
 
 class MockResponse():
     history = None
@@ -52,7 +53,8 @@ def test_create_export_brieven(client):
         mock._adapter = create_mock_adapter()
 
         response, filename = brieven_export.create_brieven_export(1)
+        current_date_str = datetime.now().strftime("%Y-%m-%d")
 
-        assert response == 'organisatie.naam|organisatie.postadres.adresregel1|organisatie.postadres.postcode|organisatie.postadres.plaats|afspraak.id|nu.datum|burger.naam|burger.postadres.adresregel1|burger.postadres.postcode|burger.postadres.plaats|betaalrichting|status.afspraak\norganisatie1|teststraat 1|9999ZZ|testplaats|zoektest|2021-08-16|burgernaam burgerachternaam|burgerstraat 1|1234AB|burgerplaats|debet|2019-01-01\n'
+        assert response == f'organisatie.naam|organisatie.postadres.adresregel1|organisatie.postadres.postcode|organisatie.postadres.plaats|afspraak.id|nu.datum|burger.naam|burger.postadres.adresregel1|burger.postadres.postcode|burger.postadres.plaats|betaalrichting|status.afspraak\norganisatie1|teststraat 1|9999ZZ|testplaats|zoektest|{current_date_str}|burgernaam burgerachternaam|burgerstraat 1|1234AB|burgerplaats|debet|2019-01-01\n'
 
 
