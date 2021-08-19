@@ -439,6 +439,10 @@
                 "title": "Betaalrichting",
                 "choose": "- Kies een betaalrichting -"
             },
+            "type": {
+                "title": "Soort",
+                "onlyUnbooked": "Niet-afgeletterd"
+            },
             "pageSize": "Aantal transacties per pagina"
         }
     },
