@@ -24,7 +24,7 @@ def create_app(config_name=os.getenv('APP_SETTINGS', 'organisatie_service.config
         strict_slashes=False
     )
     app.add_url_rule(
-        '/organisaties/<kvk_nummer>',
+        '/organisaties/<id>',
         view_func=OrganisatieView.as_view('organisatie_detail_view'),
         strict_slashes=False
     )

@@ -5,7 +5,7 @@ def test_organisaties_delete_success(client, dbsession, organisatie_factory):
     """ Test a succesfull DELETE on organisaties """
     organisatie = organisatie_factory.createOrganisatie()
     assert dbsession.query(Organisatie).count() == 1
-    response = client.delete(f'/organisaties/{organisatie.kvk_nummer}')
+    response = client.delete(f'/organisaties/{organisatie.id}')
     assert response.status_code == 204
     assert dbsession.query(Organisatie).count() == 0
 

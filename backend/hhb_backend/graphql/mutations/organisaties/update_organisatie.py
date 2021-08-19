@@ -60,6 +60,8 @@ class UpdateOrganisatie(graphene.Mutation):
         if "vestigingsnummer" in kwargs:
             hhb_service_data["vestigingsnummer"] = kwargs["vestigingsnummer"]
 
+        Organisatie().unique_kvk_vestigingsnummer(kwargs.get("kvk_nummer"), kwargs.get("vestigingsnummer"), id)
+
         # Try update of huishoudboekje service
         hhb_service_response = requests.post(
             f"{settings.HHB_SERVICES_URL}/organisaties/{id}",
@@ -71,7 +73,7 @@ class UpdateOrganisatie(graphene.Mutation):
         # Try update of organisatie service
         if kwargs:
             org_service_response = requests.post(
-                f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/{orgineel_kvk_nummer}",
+                f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/{id}",
                 json=kwargs,
             )
             if org_service_response.status_code != 200:
