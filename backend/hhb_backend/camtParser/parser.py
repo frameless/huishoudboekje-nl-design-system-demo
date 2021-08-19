@@ -15,6 +15,10 @@ from lxml import etree
 
 #removed - from odoo import models
 
+# Added -
+from datetime import datetime
+# -
+
 
 class CamtParser():     #removed - class CamtParser(models.AbstractModel):
     _name = "account.statement.import.camt.parser"
@@ -138,7 +142,15 @@ class CamtParser():     #removed - class CamtParser(models.AbstractModel):
     def parse_entry(self, ns, node):
         """Parse an Ntry node and yield transactions"""
         transaction = {"payment_ref": "/", "amount": 0}  # fallback defaults
-        self.add_value_from_node(ns, node, "./ns:BookgDt/ns:Dt", transaction, "date")
+
+        # removed -
+        #self.add_value_from_node(ns, node, "./ns:ValDt/ns:Dt", transaction, "date")
+        # -
+
+        # Added -
+        self.add_value_from_node(ns, node, "./ns:ValDt/ns:Dt", transaction, "date")
+        # -
+
         amount = self.parse_amount(ns, node)
         if amount != 0.0:
             transaction["amount"] = amount
@@ -187,6 +199,11 @@ class CamtParser():     #removed - class CamtParser(models.AbstractModel):
         """
         start_balance_node = None
         end_balance_node = None
+
+        # Added -
+        avail_balance_node = None
+        forward_balance_node = None
+
         for node_name in ["OPBD", "PRCD", "CLBD", "ITBD", "CLAV", "FWAV"]:
             code_expr = (
                 './ns:Bal/ns:Tp/ns:CdOrPrtry/ns:Cd[text()="%s"]/../../..' % node_name
@@ -206,6 +223,11 @@ class CamtParser():     #removed - class CamtParser(models.AbstractModel):
                         start_balance_node = balance_node[0]
                     if not end_balance_node:
                         end_balance_node = balance_node[-1]
+
+            # Added -
+            if not forward_balance_node:
+                forward_balance_node = end_balance_node
+
         return (
             Balance(self.parse_amount(ns, start_balance_node)),
             Balance(self.parse_amount(ns, avail_balance_node)),
@@ -253,13 +275,24 @@ class CamtParser():     #removed - class CamtParser(models.AbstractModel):
         transactions = []
         for entry_node in entry_nodes:
             transactions.extend(self.parse_entry(ns, entry_node))
-        result["transactions"] = Transaction(transactions)
+
+
+        transObject = []
+        for trans in transactions:
+            transObject.append(Transaction(trans))
+
+
         result["date"] = None
         if transactions:
             result["date"] = sorted(
                 transactions, key=lambda x: x["date"], reverse=True
             )[0]["date"]
-        return result
+
+        # removed -
+        # return result
+        # -
+
+        return Statement(result, transObject)
 
     def check_version(self, ns, root):
         """Validate validity of camt file."""
@@ -302,15 +335,26 @@ class CamtParser():     #removed - class CamtParser(models.AbstractModel):
         account_number = None
         for node in root[0][1:]:
             statement = self.parse_statement(ns, node)
-            if len(statement["transactions"].data):
-                if "currency" in statement:
-                    currency = statement.pop("currency")
-                if "account_number" in statement:
-                    account_number = statement.pop("account_number")
-                statements.append(statement)
-        return currency, account_number, statements
+            # removed -
+            # if len(statement["transactions"]):
+                # if "currency" in statement
+                #   currency = statement.pop("currency")
+                # Removed -
+                # if "account_number" in statement:
+                #     account_number = statement.pop("account_number")
+            # -
+
+            statements.append(statement)
+        # removed - return currency, account_number, statements
+        # Added -
+        return statements
 
 ### classes below have been added to better fit the parser to our code.
+
+class Statement():
+    def __init__(self, result, trans):
+        self.data = result
+        self.transactions = trans
 
 class Amount():
     def __init__(self, amnt):
@@ -321,25 +365,36 @@ class Balance():
         self.amount = Amount(amnt)
 
 class Transaction:
-    def __init__(self, transactions):
-        self.data = self.transactionList(transactions)
+    def __init__(self, transaction):
+        self.data = self.transactionDict(transaction)
 
-    def transactionList(self, transactions):
+    def transactionDict(self, transaction):
         ### Edit and add keys for certain values for a better fit in our application
-        for i in range(len(transactions)):
-            print(transactions[i])
-            if transactions[i].get("account_number", False):
-                transactions[i]["tegen_rekening"] = transactions[i].pop("account_number")
-            transactions[i]["transaction_details"] = transactions[i].pop("narration")
+        if transaction.get("account_number", False):
+            transaction["tegen_rekening"] = transaction.pop("account_number")
 
-            if transactions[i]["amount"] < 0:
-                transactions[i]["status"] = 'D'
-            else:
-                transactions[i]["status"] = 'C'
+        if transaction.get("narration", False):
+            transaction["transaction_details"] = transaction.pop("narration")
+        else:
+            transaction["transaction_details"] = ""
 
-            transactions[i]["amount"] = Amount(transactions[i].pop("amount"))
-            if transactions[i].get("ref", False):
-                transactions[i]["customer_reference"] = transactions[i].pop("ref")
-            transactions[i]["extra_details"] = transactions[i].pop("payment_ref")
+        if transaction["amount"] < 0:
+            transaction["status"] = 'D'
+        else:
+            transaction["status"] = 'C'
 
-        return transactions
+        transaction["amount"] = Amount(transaction.pop("amount"))
+
+        if transaction.get("ref", False):
+            transaction["customer_reference"] = transaction.pop("ref")
+        else:
+            transaction["customer_reference"] = ""
+
+        transaction["extra_details"] = transaction.pop("payment_ref")
+
+        transaction["date"] = datetime.strptime(transaction["date"], "%Y-%m-%d")
+
+        if not transaction.get("id", False):
+            transaction["id"] = ""
+
+        return transaction

@@ -163,7 +163,7 @@ def test_create_csm_with_abn_camt_file(client, mocker: MockerFixture):
             assert adapter.request_history[2].json()["bedrag"] == 100
             assert adapter.request_history[2].json()["transactie_datum"] == "2013-04-02"
             # Overall response
-            assert adapter.call_count == 15
+            assert adapter.call_count == 31
             assert response.json.get("errors") is None
             assert response.status_code == 200
 
