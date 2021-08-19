@@ -2,9 +2,8 @@
 ### Copyright 2013-2016 Therp BV <https://therp.nl>
 ### Copyright 2017 Open Net Sàrl
 ### License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
-### License AGPL v3.0, via https://github.com/OCA/bank-statement-import/blob/14.0/LICENSE
-### Thanks to Therp BV (2013-2016) and Open Net Sár (2017).
-# This parser is an altered version of the parser on
+
+### This parser is an altered version of the parser on
 ### https://github.com/OCA/bank-statement-import/blob/14.0/account_statement_import_camt/models/parser.py
 '''The parts that weren't needed are commented out and when something was added
     it is clearly stated that it was added by way of a comment.'''
