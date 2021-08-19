@@ -428,7 +428,7 @@
         "nOverschrijvingen": "Overschrijvingen"
     },
     "checksum": {
-        "sha265": "Controlegetal (SHA-265)"
+        "sha265": "Controlegetal (SHA-256)"
     },
     "filters": {
         "transactions": {
