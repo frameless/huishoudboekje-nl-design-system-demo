@@ -112,7 +112,7 @@ const Rapportage = () => {
 												</FormControl>
 											</Stack>
 
-											<Stack direction={["column", "row"]} spacing={5} flex={1}>
+											<Stack direction={"column"} spacing={5} flex={1}>
 												<FormControl as={Stack} flex={1}>
 													<FormLabel>{t("charts.filterBurgers")}</FormLabel>
 													<Queryable query={$data} children={data => {
