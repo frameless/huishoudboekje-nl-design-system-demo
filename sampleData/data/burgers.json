@@ -29,13 +29,7 @@
 		"zoektermen": [
 		  "Loon",
 		  "ZOEKTERMPERSONA1"
-		],
-		"betaalinstructie": {
-		  "byMonth": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-		  "byMonthDay": 26,
-		  "startDate": "2021-01-01",
-		  "endDate": "2021-12-31"
-		}
+		]
 	  },
 	  {
 		"rubriek": {"naam": "Uitkeringen"},
@@ -49,12 +43,7 @@
 		"zoektermen": [
 		  "Aanvullende uitkering",
 		  "ZOEKTERMPERSONA1"
-		],
-		"betaalinstructie": {
-		  "byMonth": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-		  "byMonthDay": 26,
-		  "startDate": "2019-01-01"
-		}
+		]
 	  },
 	  {
 		"rubriek": {"naam": "Toeslagen"},
@@ -138,12 +127,7 @@
 		"zoektermen": [
 		  "Water",
 		  "ZOEKTERMPERSONA1"
-		],
-		"betaalinstructie": {
-		  "byMonth": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-		  "byMonthDay": 10,
-		  "startDate": "2021-01-01"
-		}
+		]
 	  },
 	  {
 		"rubriek": {"naam": "Privé-opname"},
@@ -154,7 +138,12 @@
 		"zoektermen": [
 		  "Leefgeld",
 		  "ZOEKTERMPERSONA1"
-		]
+		],
+		"betaalinstructie": {
+		  "byMonth": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+		  "byMonthDay": 1,
+		  "startDate": "2021-01-01"
+		}
 	  }
 	]
   },
@@ -310,7 +299,12 @@
 		"zoektermen": [
 		  "Leefgeld",
 		  "ZOEKTERMPERSONA2"
-		]
+		],
+		"betaalinstructie": {
+		  "byMonth": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+		  "byMonthDay": 10,
+		  "startDate": "2019-01-01"
+		}
 	  },
 	  {
 		"rubriek": {"naam": "Verzekeringen"},
