@@ -204,10 +204,11 @@ const Transactions = () => {
 				<Section spacing={5}>
 					<Queryable query={$transactions} children={(data) => {
 						const transacties = data?.bankTransactionsPaged?.banktransactions || [];
+						const nFiltersActive = Object.values(queryVariables.filters).filter(q => ![null, undefined].includes(q as any)).length;
 
 						return (<>
 							<HStack justify={"flex-end"}>
-								<Button size={"sm"} colorScheme={"primary"} variant={"outline"} onClick={() => filterModal.onOpen()}>{t("sections.filterOptions.title")}</Button>
+								<Button size={"sm"} colorScheme={"primary"} variant={"outline"} onClick={() => filterModal.onOpen()}>{`${t("sections.filterOptions.title")} (${nFiltersActive})`}</Button>
 							</HStack>
 							{transacties.length > 0 ? (
 								<TransactiesList transacties={transacties} />
