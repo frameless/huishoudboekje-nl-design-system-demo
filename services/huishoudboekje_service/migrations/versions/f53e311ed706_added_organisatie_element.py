@@ -22,8 +22,7 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('weergave_naam', sa.String(), nullable=True),
     sa.Column('kvk_nummer', sa.String(), nullable=True),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('kvk_nummer')
+    sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###
 

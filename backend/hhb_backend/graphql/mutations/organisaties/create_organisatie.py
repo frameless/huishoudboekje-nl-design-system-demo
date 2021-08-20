@@ -17,8 +17,8 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import (
 class CreateOrganisatieInput(graphene.InputObjectType):
     # hhb_service elements (required)
     kvk_nummer = graphene.String(required=True)
-    rekeningen = graphene.List(lambda: rekening_input.RekeningInput)
     vestigingsnummer = graphene.String()
+    rekeningen = graphene.List(lambda: rekening_input.RekeningInput)
 
     # org_service elements (optional)
     naam = graphene.String()
@@ -49,6 +49,8 @@ class CreateOrganisatie(graphene.Mutation):
         """ Create the new Organisatie """
         input = kwargs.pop("input")
         rekeningen = input.pop("rekeningen", None)
+
+        Organisatie().unique_kvk_vestigingsnummer(input.get("kvk_nummer"), input.get("vestigingsnummer"))
 
         hhb_service_data = {
             "kvk_nummer": input["kvk_nummer"],

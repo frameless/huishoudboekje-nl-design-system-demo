@@ -37,10 +37,8 @@ class DeleteOrganisatie(graphene.Mutation):
         previous = await hhb_dataloader().organisaties_by_id.load(id)
         if not previous:
             raise GraphQLError("Organisatie not found")
-        kvk_nummer = previous["kvk_nummer"]
-        previous["kvk_details"] = await hhb_dataloader().organisaties_kvk_details.load(
-            kvk_nummer
-        )
+
+        previous["kvk_details"] = await hhb_dataloader().organisaties_kvk_details.load(id)
 
         response_hhb = requests.delete(
             os.path.join(settings.HHB_SERVICES_URL, f"organisaties/{id}")
@@ -50,10 +48,10 @@ class DeleteOrganisatie(graphene.Mutation):
 
         response_organisatie = requests.delete(
             os.path.join(
-                settings.ORGANISATIE_SERVICES_URL, f"organisaties/{kvk_nummer}"
+                settings.ORGANISATIE_SERVICES_URL, f"organisaties/{id}"
             )
         )
         if response_organisatie.status_code not in [204, 404]:
-            raise GraphQLError(f"Upstream API responded: {response_hhb.text}")
+            raise GraphQLError(f"Upstream API responded: {response_organisatie.text}")
 
         return DeleteOrganisatie(ok=True, previous=previous)

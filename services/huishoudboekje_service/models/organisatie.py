@@ -8,7 +8,7 @@ class Organisatie(db.Model):
     __tablename__ = 'organisaties'
 
     id = Column(Integer, Sequence('organisaties_id_seq'), primary_key=True)
-    kvk_nummer = Column(String, unique=True)
+    kvk_nummer = Column(String)
     vestigingsnummer = Column(String)
 
     rekeningen = relationship("RekeningOrganisatie",
