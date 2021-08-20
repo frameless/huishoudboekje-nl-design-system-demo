@@ -26,7 +26,7 @@ def create_mock_adapter() -> Adapter:
     def test_matcher(request):
         if request.path == "/afspraken/" and request.query == "valid_from=2020-10-10&valid_through=2020-12-31":
             return MockResponse({'data': [
-                {'aantal_betalingen': 12, 'automatische_incasso': False, 'bedrag': 120000,
+                {'aantal_betalingen': 12, 'bedrag': 120000,
                  'omschrijving': 'Leefgeld Hulleman', 'credit': True, 'valid_through': '2020-12-31', 'gebruiker_id': 1,
                  'id': 1, 'betaalinstructie': {
     "end_date": "2020-12-31",

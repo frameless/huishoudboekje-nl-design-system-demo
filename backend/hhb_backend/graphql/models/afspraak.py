@@ -69,8 +69,6 @@ class Afspraak(graphene.ObjectType):
     valid_from = graphene.Date()
     valid_through = graphene.Date()
 
-    automatische_incasso = graphene.Boolean(deprecation_reason='use betaalinstructie instead')
-
     async def resolve_overschrijvingen(root, info, **kwargs):
         if root.get("betaalinstructie") is None:
             return []

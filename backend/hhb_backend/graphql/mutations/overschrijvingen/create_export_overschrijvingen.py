@@ -64,7 +64,7 @@ class CreateExportOverschrijvingen(graphene.Mutation):
 
         afspraken = afspraken_response.json()["data"]
         afspraken = list(
-            filter(lambda o: o["automatische_incasso"] is False and o["betaalinstructie"], afspraken)
+            filter(lambda o: o["betaalinstructie"], afspraken)
         )
         afspraken_ids = [afspraak_result["id"] for afspraak_result in afspraken]
 

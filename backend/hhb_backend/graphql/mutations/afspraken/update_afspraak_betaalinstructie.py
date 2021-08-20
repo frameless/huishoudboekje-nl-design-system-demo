@@ -77,7 +77,6 @@ class UpdateAfspraakBetaalinstructie(graphene.Mutation):
 
         input = {
             **previous,
-            "automatische_incasso": False,
             "betaalinstructie": betaalinstructie
         }
 
