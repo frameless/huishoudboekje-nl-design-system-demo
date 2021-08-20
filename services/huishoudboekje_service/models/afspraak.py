@@ -25,7 +25,6 @@ class Afspraak(db.Model):
     bedrag = Column(Integer)
     credit = Column(Boolean)
     zoektermen = Column(ARRAY(String))
-    automatische_incasso = Column(Boolean)
     organisatie_id = Column(Integer, ForeignKey('organisaties.id'), index=True)
     organisatie = relationship("Organisatie", back_populates="afspraken")
     journaalposten = relationship("Journaalpost", back_populates="afspraak")

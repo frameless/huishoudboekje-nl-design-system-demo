@@ -2,658 +2,6 @@ schema {
   query: RootQuery
   mutation: RootMutation
 }
-
-"""
-Direct the client to resolve this field locally, either from the cache or local resolvers.
-"""
-directive @client(
-  """
-  When true, the client will never use the cache for this value. See
-  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
-  """
-  always: Boolean
-) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
-
-"""
-Export this locally resolved field as a variable to be used in the remainder of this query. See
-https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
-"""
-directive @export(
-  """The variable name to export this field as."""
-  as: String!
-) on FIELD
-
-"""
-Specify a custom store key for this result. See
-https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
-"""
-directive @connection(
-  """Specify the store key."""
-  key: String!
-
-  """
-  An array of query argument names to include in the generated custom store key.
-  """
-  filter: [String!]
-) on FIELD
-
-type AddAfspraakZoekterm {
-  ok: Boolean
-  afspraak: Afspraak
-  previous: Afspraak
-  matchingAfspraken: [Afspraak]
-}
-
-type AddHuishoudenBurger {
-  ok: Boolean
-  huishouden: Huishouden
-  previous: Huishouden
-  burgerIds: Burger
-}
-
-"""GraphQL Afspraak model """
-type Afspraak {
-  id: Int
-  burger: Burger
-  omschrijving: String
-  tegenRekening: Rekening
-  bedrag: Bedrag
-  credit: Boolean
-  zoektermen: [String]
-  betaalinstructie: Betaalinstructie
-  organisatie: Organisatie
-  journaalposten: [Journaalpost]
-  rubriek: Rubriek
-  overschrijvingen(startDatum: Date, eindDatum: Date): [Overschrijving]
-  matchingAfspraken: [Afspraak]
-  validFrom: Date
-  validThrough: Date
-  automatischeIncasso: Boolean @deprecated(reason: "use betaalinstructie instead")
-}
-
-"""BankTransaction model"""
-type BankTransaction {
-  id: Int
-  customerStatementMessage: CustomerStatementMessage
-  statementLine: String
-  informationToAccountOwner: String
-  bedrag: Bedrag
-  isCredit: Boolean
-  tegenRekening: Rekening
-  tegenRekeningIban: String
-  transactieDatum: Date
-  isGeboekt: Boolean
-  journaalpost: Journaalpost
-  suggesties: [Afspraak]
-}
-
-input BankTransactionFilter {
-  OR: BankTransactionFilter
-  AND: BankTransactionFilter
-  isGeboekt: Boolean
-  isCredit: Boolean
-  id: ComplexFilterType
-  bedrag: ComplexBedragFilterType
-  tegenRekening: ComplexFilterType
-  statementLine: ComplexFilterType
-  transactieDatum: ComplexFilterType
-}
-
-type BankTransactionsPaged {
-  banktransactions: [BankTransaction]
-  pageInfo: PageInfo
-}
-
-"""Decimaal Scalar Description"""
-scalar Bedrag
-
-"""Implementatie op basis van http://schema.org/Schedule"""
-type Betaalinstructie {
-  byDay: [DayOfWeek]
-  byMonth: [Int]
-  byMonthDay: [Int]
-  repeatFrequency: String
-  exceptDates: [String]
-  startDate: String
-  endDate: String
-}
-
-"""Implementatie op basis van http://schema.org/Schedule"""
-input BetaalinstructieInput {
-  byDay: [DayOfWeek]
-  byMonth: [Int]
-  byMonthDay: [Int]
-  repeatFrequency: String
-  exceptDates: [String]
-  startDate: String!
-  endDate: String
-}
-
-"""GraphQL Burger model """
-type Burger {
-  id: Int
-  bsn: Int
-  telefoonnummer: String
-  email: String
-  geboortedatum: String
-  iban: String @deprecated(reason: "Please use 'rekeningen'")
-  achternaam: String
-  huisnummer: String
-  postcode: String
-  straatnaam: String
-  voorletters: String
-  voornamen: String
-  plaatsnaam: String
-  rekeningen: [Rekening]
-  afspraken: [Afspraak]
-  gebruikersactiviteiten: [GebruikersActiviteit]
-  huishouden: Huishouden
-}
-
-input BurgerFilter {
-  OR: BurgerFilter
-  AND: BurgerFilter
-  id: ComplexFilterType
-  telefoonnummer: ComplexFilterType
-  email: ComplexFilterType
-  geboortedatum: ComplexFilterType
-  iban: ComplexFilterType
-  achternaam: ComplexFilterType
-  huisnummer: ComplexFilterType
-  postcode: ComplexFilterType
-  straatnaam: ComplexFilterType
-  voorletters: ComplexFilterType
-  voornamen: ComplexFilterType
-  plaatsnaam: ComplexFilterType
-  huishoudenId: ComplexFilterType
-}
-
-type BurgersPaged {
-  burgers: [Burger]
-  pageInfo: PageInfo
-}
-
-input ComplexBedragFilterType {
-  EQ: Bedrag
-  NEQ: Bedrag
-  GT: Bedrag
-  GTE: Bedrag
-  LT: Bedrag
-  LTE: Bedrag
-  IN: [Bedrag]
-  NOTIN: [Bedrag]
-  BETWEEN: [Bedrag]
-}
-
-input ComplexFilterType {
-  EQ: DynamicType
-  NEQ: DynamicType
-  GT: DynamicType
-  GTE: DynamicType
-  LT: DynamicType
-  LTE: DynamicType
-  IN: [DynamicType]
-  NOTIN: [DynamicType]
-  BETWEEN: [DynamicType]
-}
-
-type Configuratie {
-  id: String
-  waarde: String
-}
-
-input ConfiguratieInput {
-  id: String!
-  waarde: String
-}
-
-type CreateAfspraak {
-  ok: Boolean
-  afspraak: Afspraak
-}
-
-input CreateAfspraakInput {
-  burgerId: Int!
-  credit: Boolean!
-  organisatieId: Int
-  tegenRekeningId: Int!
-  rubriekId: Int!
-  omschrijving: String!
-  bedrag: Bedrag!
-  validFrom: String
-  validThrough: String
-}
-
-type CreateBurger {
-  ok: Boolean
-  burger: Burger
-}
-
-input CreateBurgerInput {
-  bsn: Int
-  email: String
-  geboortedatum: Date
-  telefoonnummer: String
-  rekeningen: [RekeningInput]
-  achternaam: String
-  huisnummer: String
-  postcode: String
-  straatnaam: String
-  voorletters: String
-  voornamen: String
-  plaatsnaam: String
-  huishouden: HuishoudenInput
-}
-
-type CreateBurgerRekening {
-  ok: Boolean
-  rekening: Rekening
-}
-
-type CreateConfiguratie {
-  ok: Boolean
-  configuratie: Configuratie
-}
-
-type CreateCustomerStatementMessage {
-  ok: Boolean
-  customerStatementMessage: CustomerStatementMessage
-  journaalposten: [Journaalpost]
-}
-
-type CreateExportOverschrijvingen {
-  ok: Boolean
-  export: Export
-}
-
-type CreateHuishouden {
-  ok: Boolean
-  huishouden: Huishouden
-}
-
-input CreateHuishoudenInput {
-  burgerIds: [Int] = []
-}
-
-"""Create a Journaalpost with an Afspraak"""
-type CreateJournaalpostAfspraak {
-  ok: Boolean
-  journaalpost: Journaalpost
-}
-
-input CreateJournaalpostAfspraakInput {
-  transactionId: Int!
-  afspraakId: Int!
-  isAutomatischGeboekt: Boolean!
-}
-
-"""Create a Journaalpost with a Grootboekrekening"""
-type CreateJournaalpostGrootboekrekening {
-  ok: Boolean
-  journaalpost: Journaalpost
-}
-
-input CreateJournaalpostGrootboekrekeningInput {
-  transactionId: Int!
-  grootboekrekeningId: String!
-  isAutomatischGeboekt: Boolean!
-}
-
-"""Create a Journaalpost with an Afspraak"""
-type CreateJournaalpostPerAfspraak {
-  ok: Boolean
-  journaalposten: [Journaalpost]
-}
-
-type CreateOrganisatie {
-  ok: Boolean
-  organisatie: Organisatie
-}
-
-input CreateOrganisatieInput {
-  kvkNummer: String!
-  rekeningen: [RekeningInput]
-  vestigingsnummer: String
-  naam: String
-  straatnaam: String
-  huisnummer: String
-  postcode: String
-  plaatsnaam: String
-}
-
-type CreateOrganisatieRekening {
-  ok: Boolean
-  rekening: Rekening
-}
-
-type CreateRubriek {
-  ok: Boolean
-  rubriek: Rubriek
-}
-
-"""GraphQL CustomerStatementMessage model"""
-type CustomerStatementMessage {
-  id: Int
-  uploadDate: DateTime
-  filename: String
-  transactionReferenceNumber: String
-  relatedReference: String
-  accountIdentification: String
-  sequenceNumber: String
-  openingBalance: Int
-  closingBalance: Int
-  closingAvailableFunds: Int
-  forwardAvailableBalance: Int
-  bankTransactions: [BankTransaction]
-}
-
-"""
-The `Date` scalar type represents a Date
-value as specified by
-[iso8601](https://en.wikipedia.org/wiki/ISO_8601).
-"""
-scalar Date
-
-"""
-The `DateTime` scalar type represents a DateTime
-value as specified by
-[iso8601](https://en.wikipedia.org/wiki/ISO_8601).
-"""
-scalar DateTime
-
-"""http://schema.org/DayOfWeek implementation"""
-enum DayOfWeek {
-  Monday
-  Tuesday
-  Wednesday
-  Thursday
-  Friday
-  Saturday
-  Sunday
-}
-
-type DeleteAfspraak {
-  ok: Boolean
-  previous: Afspraak
-}
-
-type DeleteAfspraakZoekterm {
-  ok: Boolean
-  afspraak: Afspraak
-  previous: Afspraak
-  matchingAfspraken: [Afspraak]
-}
-
-type DeleteBurger {
-  ok: Boolean
-  previous: Burger
-}
-
-type DeleteBurgerRekening {
-  ok: Boolean
-  previous: Rekening
-}
-
-type DeleteConfiguratie {
-  ok: Boolean
-  previous: Configuratie
-}
-
-type DeleteCustomerStatementMessage {
-  ok: Boolean
-  previous: CustomerStatementMessage
-}
-
-type DeleteHuishouden {
-  ok: Boolean
-  previous: Huishouden
-}
-
-type DeleteHuishoudenBurger {
-  ok: Boolean
-  huishouden: [Huishouden]
-  previous: Huishouden
-  burgerIds: [Burger]
-}
-
-"""Delete journaalpost by id """
-type DeleteJournaalpost {
-  ok: Boolean
-  previous: Journaalpost
-}
-
-type DeleteOrganisatie {
-  ok: Boolean
-  previous: Organisatie
-}
-
-type DeleteOrganisatieRekening {
-  ok: Boolean
-  previous: Rekening
-}
-
-type DeleteRubriek {
-  ok: Boolean
-  previous: Rubriek
-}
-
-"""Accepts dates, datetimes, ints and strings."""
-scalar DynamicType
-
-"""GraphQL Export model """
-type Export {
-  id: Int
-  naam: String
-  timestamp: DateTime
-  overschrijvingen: [Overschrijving]
-  xmldata: String
-  startDatum: String
-  eindDatum: String
-  sha256: String
-}
-
-type Gebruiker {
-  email: String
-  token: String
-}
-
-"""GebruikersActiviteit model"""
-type GebruikersActiviteit {
-  id: Int
-  timestamp: DateTime
-  gebruikerId: String
-  action: String
-  entities: [GebruikersActiviteitEntity]
-  snapshotBefore: GebruikersActiviteitSnapshot
-  snapshotAfter: GebruikersActiviteitSnapshot
-  meta: GebruikersActiviteitMeta
-}
-
-type GebruikersActiviteitenPaged {
-  gebruikersactiviteiten: [GebruikersActiviteit]
-  pageInfo: PageInfo
-}
-
-type GebruikersActiviteitEntity {
-  entityType: String
-  entityId: String
-  afspraak: Afspraak
-  burger: Burger
-  configuratie: Configuratie
-  customerStatementMessage: CustomerStatementMessage
-  export: Export
-  grootboekrekening: Grootboekrekening
-  journaalpost: Journaalpost
-  organisatie: Organisatie
-  rekening: Rekening
-  rubriek: Rubriek
-  transaction: BankTransaction
-  huishouden: Huishouden
-}
-
-type GebruikersActiviteitMeta {
-  userAgent: String
-  ip: [String]
-  applicationVersion: String
-}
-
-type GebruikersActiviteitSnapshot {
-  afspraak: Afspraak
-  burger: Burger
-  configuratie: Configuratie
-  customerStatementMessage: CustomerStatementMessage
-  export: Export
-  grootboekrekening: Grootboekrekening
-  journaalpost: Journaalpost
-  organisatie: Organisatie
-  rubriek: Rubriek
-  transaction: BankTransaction
-  huishouden: Huishouden
-}
-
-"""Grootboekrekening model """
-type Grootboekrekening {
-  id: String!
-  naam: String
-  referentie: String
-  omschrijving: String
-  credit: Boolean
-  parent: Grootboekrekening
-  children: [Grootboekrekening]
-  rubriek: Rubriek
-}
-
-"""GraphQL Huishouden model """
-type Huishouden {
-  id: Int
-  burgers: [Burger]
-}
-
-input HuishoudenInput {
-  id: Int
-}
-
-type HuishoudensPaged {
-  huishoudens: [Huishouden]
-  pageInfo: PageInfo
-}
-
-"""Journaalpost model"""
-type Journaalpost {
-  id: Int
-  afspraak: Afspraak
-  transaction: BankTransaction
-  grootboekrekening: Grootboekrekening
-  isAutomatischGeboekt: Boolean
-}
-
-"""GraphQL Organisatie model """
-type Organisatie {
-  id: Int
-  rekeningen: [Rekening]
-  kvkNummer: String
-  kvkDetails: OrganisatieKvK
-  afspraken: [Afspraak]
-  vestigingsnummer: String
-}
-
-type OrganisatieKvK {
-  nummer: String
-  naam: String
-  straatnaam: String
-  huisnummer: String
-  postcode: String
-  plaatsnaam: String
-}
-
-type Overschrijving {
-  id: Int
-  afspraak: Afspraak
-  export: Export
-  datum: String
-  bedrag: Bedrag
-  bankTransaction: BankTransaction
-  status: OverschrijvingStatus
-  afspraken: [Afspraak]
-}
-
-enum OverschrijvingStatus {
-  GEREED
-  IN_BEHANDELING
-  VERWACHTING
-}
-
-type PageInfo {
-  count: Int
-  start: Int
-  limit: Int
-}
-
-"""GraphQL Rekening model"""
-type Rekening {
-  id: Int
-  iban: String
-  rekeninghouder: String
-  burgers: [Burger]
-  organisaties: [Organisatie]
-  afspraken: [Afspraak]
-}
-
-input RekeningInput {
-  iban: String
-  rekeninghouder: String
-}
-
-"""The root of all mutations """
-type RootMutation {
-  createBurger(input: CreateBurgerInput): CreateBurger
-  deleteBurger(id: Int!): DeleteBurger
-  updateBurger(achternaam: String, bsn: Int, email: String, geboortedatum: String, huishouden: HuishoudenInput, huisnummer: String, id: Int!, plaatsnaam: String, postcode: String, straatnaam: String, telefoonnummer: String, voorletters: String, voornamen: String): UpdateBurger
-  createAfspraak(input: CreateAfspraakInput!): CreateAfspraak
-  updateAfspraak(id: Int!, input: UpdateAfspraakInput!): UpdateAfspraak
-  deleteAfspraak(id: Int!): DeleteAfspraak
-  updateAfspraakBetaalinstructie(afspraakId: Int!, betaalinstructie: BetaalinstructieInput!): UpdateAfspraakBetaalinstructie
-  addAfspraakZoekterm(afspraakId: Int!, zoekterm: String!): AddAfspraakZoekterm
-  deleteAfspraakZoekterm(afspraakId: Int!, zoekterm: String!): DeleteAfspraakZoekterm
-  createOrganisatie(input: CreateOrganisatieInput): CreateOrganisatie
-  updateOrganisatie(huisnummer: String, id: Int!, kvkNummer: String, naam: String, plaatsnaam: String, postcode: String, straatnaam: String, vestigingsnummer: String): UpdateOrganisatie
-  deleteOrganisatie(id: Int!): DeleteOrganisatie
-  createBurgerRekening(burgerId: Int!, rekening: RekeningInput!): CreateBurgerRekening
-  deleteBurgerRekening(burgerId: Int!, id: Int!): DeleteBurgerRekening
-  createOrganisatieRekening(organisatieId: Int!, rekening: RekeningInput!): CreateOrganisatieRekening
-  deleteOrganisatieRekening(organisatieId: Int!, rekeningId: Int!): DeleteOrganisatieRekening
-  updateRekening(id: Int!, rekening: RekeningInput!): UpdateRekening
-  deleteCustomerStatementMessage(id: Int!): DeleteCustomerStatementMessage
-  createCustomerStatementMessage(file: Upload!): CreateCustomerStatementMessage
-
-  """Create a Journaalpost with an Afspraak"""
-  createJournaalpostAfspraak(input: CreateJournaalpostAfspraakInput): CreateJournaalpostAfspraak
-
-  """Create a Journaalpost with an Afspraak"""
-  createJournaalpostPerAfspraak(input: [CreateJournaalpostAfspraakInput]!): CreateJournaalpostPerAfspraak
-
-  """Create a Journaalpost with a Grootboekrekening"""
-  createJournaalpostGrootboekrekening(input: CreateJournaalpostGrootboekrekeningInput): CreateJournaalpostGrootboekrekening
-
-  """Update a Journaalpost with a Grootboekrekening"""
-  updateJournaalpostGrootboekrekening(input: UpdateJournaalpostGrootboekrekeningInput): UpdateJournaalpostGrootboekrekening
-
-  """Delete journaalpost by id """
-  deleteJournaalpost(id: Int!): DeleteJournaalpost
-  createRubriek(grootboekrekeningId: String, naam: String): CreateRubriek
-  updateRubriek(grootboekrekeningId: String, id: Int!, naam: String): UpdateRubriek
-  deleteRubriek(id: Int!): DeleteRubriek
-  createConfiguratie(input: ConfiguratieInput): CreateConfiguratie
-  updateConfiguratie(input: ConfiguratieInput): UpdateConfiguratie
-  deleteConfiguratie(id: String!): DeleteConfiguratie
-  createExportOverschrijvingen(eindDatum: String, startDatum: String): CreateExportOverschrijvingen
-  startAutomatischBoeken: StartAutomatischBoeken
-  createHuishouden(input: CreateHuishoudenInput): CreateHuishouden
-  deleteHuishouden(id: Int!): DeleteHuishouden
-  addHuishoudenBurger(burgerIds: [Int]!, huishoudenId: Int!): AddHuishoudenBurger
-  deleteHuishoudenBurger(burgerIds: [Int]!, huishoudenId: Int!): DeleteHuishoudenBurger
-}
-
 """The root of all queries """
 type RootQuery {
   afspraak(id: Int!): Afspraak
@@ -666,7 +14,7 @@ type RootQuery {
   export(id: Int!): Export
   exports(ids: [Int], startDatum: Date, eindDatum: Date): [Export]
   burger(id: Int!): Burger
-  burgers(ids: [Int] = []): [Burger]
+  burgers(ids: [Int] = [], search: DynamicType): [Burger]
   burgersPaged(start: Int, limit: Int): BurgersPaged
   grootboekrekening(id: String!): Grootboekrekening
   grootboekrekeningen(ids: [String] = []): [Grootboekrekening]
@@ -688,31 +36,418 @@ type RootQuery {
   huishoudens(ids: [Int] = [], filters: BurgerFilter): [Huishouden]
   huishoudensPaged(start: Int, limit: Int, filters: BurgerFilter): HuishoudensPaged
 }
-
+"""GraphQL Afspraak model """
+type Afspraak {
+  id: Int
+  burger: Burger
+  omschrijving: String
+  tegenRekening: Rekening
+  bedrag: Bedrag
+  credit: Boolean
+  zoektermen: [String]
+  betaalinstructie: Betaalinstructie
+  organisatie: Organisatie
+  journaalposten: [Journaalpost]
+  rubriek: Rubriek
+  overschrijvingen(startDatum: Date, eindDatum: Date): [Overschrijving]
+  matchingAfspraken: [Afspraak]
+  validFrom: Date
+  validThrough: Date
+}
+"""GraphQL Burger model """
+type Burger {
+  id: Int
+  bsn: Int
+  telefoonnummer: String
+  email: String
+  geboortedatum: String
+  iban: String @deprecated(reason: "Please use 'rekeningen'")
+  achternaam: String
+  huisnummer: String
+  postcode: String
+  straatnaam: String
+  voorletters: String
+  voornamen: String
+  plaatsnaam: String
+  rekeningen: [Rekening]
+  afspraken: [Afspraak]
+  gebruikersactiviteiten: [GebruikersActiviteit]
+  huishouden: Huishouden
+}
+"""GraphQL Rekening model"""
+type Rekening {
+  id: Int
+  iban: String
+  rekeninghouder: String
+  burgers: [Burger]
+  organisaties: [Organisatie]
+  afspraken: [Afspraak]
+}
+"""GraphQL Organisatie model """
+type Organisatie {
+  id: Int
+  rekeningen: [Rekening]
+  kvkNummer: String
+  kvkDetails: OrganisatieKvK
+  afspraken: [Afspraak]
+  vestigingsnummer: String
+}
+type OrganisatieKvK {
+  nummer: String
+  naam: String
+  straatnaam: String
+  huisnummer: String
+  postcode: String
+  plaatsnaam: String
+}
+"""GebruikersActiviteit model"""
+type GebruikersActiviteit {
+  id: Int
+  timestamp: DateTime
+  gebruikerId: String
+  action: String
+  entities: [GebruikersActiviteitEntity]
+  snapshotBefore: GebruikersActiviteitSnapshot
+  snapshotAfter: GebruikersActiviteitSnapshot
+  meta: GebruikersActiviteitMeta
+}
+"""
+The `DateTime` scalar type represents a DateTime
+value as specified by
+[iso8601](https://en.wikipedia.org/wiki/ISO_8601).
+"""
+scalar DateTime
+type GebruikersActiviteitEntity {
+  entityType: String
+  entityId: String
+  afspraak: Afspraak
+  burger: Burger
+  configuratie: Configuratie
+  customerStatementMessage: CustomerStatementMessage
+  export: Export
+  grootboekrekening: Grootboekrekening
+  journaalpost: Journaalpost
+  organisatie: Organisatie
+  rekening: Rekening
+  rubriek: Rubriek
+  transaction: BankTransaction
+  huishouden: Huishouden
+}
+type Configuratie {
+  id: String
+  waarde: String
+}
+"""GraphQL CustomerStatementMessage model"""
+type CustomerStatementMessage {
+  id: Int
+  uploadDate: DateTime
+  filename: String
+  transactionReferenceNumber: String
+  relatedReference: String
+  accountIdentification: String
+  sequenceNumber: String
+  openingBalance: Int
+  closingBalance: Int
+  closingAvailableFunds: Int
+  forwardAvailableBalance: Int
+  bankTransactions: [BankTransaction]
+}
+"""BankTransaction model"""
+type BankTransaction {
+  id: Int
+  customerStatementMessage: CustomerStatementMessage
+  statementLine: String
+  informationToAccountOwner: String
+  bedrag: Bedrag
+  isCredit: Boolean
+  tegenRekening: Rekening
+  tegenRekeningIban: String
+  transactieDatum: Date
+  isGeboekt: Boolean
+  journaalpost: Journaalpost
+  suggesties: [Afspraak]
+}
+"""Decimaal Scalar Description"""
+scalar Bedrag
+"""
+The `Date` scalar type represents a Date
+value as specified by
+[iso8601](https://en.wikipedia.org/wiki/ISO_8601).
+"""
+scalar Date
+"""Journaalpost model"""
+type Journaalpost {
+  id: Int
+  afspraak: Afspraak
+  transaction: BankTransaction
+  grootboekrekening: Grootboekrekening
+  isAutomatischGeboekt: Boolean
+}
+"""Grootboekrekening model """
+type Grootboekrekening {
+  id: String!
+  naam: String
+  referentie: String
+  omschrijving: String
+  credit: Boolean
+  parent: Grootboekrekening
+  children: [Grootboekrekening]
+  rubriek: Rubriek
+}
 """GraphQL Rubriek model"""
 type Rubriek {
   id: Int
   naam: String
   grootboekrekening: Grootboekrekening
 }
-
-type StartAutomatischBoeken {
-  ok: Boolean
-  journaalposten: [Journaalpost]
+"""GraphQL Export model """
+type Export {
+  id: Int
+  naam: String
+  timestamp: DateTime
+  overschrijvingen: [Overschrijving]
+  xmldata: String
+  startDatum: String
+  eindDatum: String
+  sha256: String
 }
-
+type Overschrijving {
+  id: Int
+  afspraak: Afspraak
+  export: Export
+  datum: String
+  bedrag: Bedrag
+  bankTransaction: BankTransaction
+  status: OverschrijvingStatus
+  afspraken: [Afspraak]
+}
+enum OverschrijvingStatus {
+  GEREED
+  IN_BEHANDELING
+  VERWACHTING
+}
+"""GraphQL Huishouden model """
+type Huishouden {
+  id: Int
+  burgers: [Burger]
+}
+type GebruikersActiviteitSnapshot {
+  afspraak: Afspraak
+  burger: Burger
+  configuratie: Configuratie
+  customerStatementMessage: CustomerStatementMessage
+  export: Export
+  grootboekrekening: Grootboekrekening
+  journaalpost: Journaalpost
+  organisatie: Organisatie
+  rubriek: Rubriek
+  transaction: BankTransaction
+  huishouden: Huishouden
+}
+type GebruikersActiviteitMeta {
+  userAgent: String
+  ip: [String]
+  applicationVersion: String
+}
+"""Implementatie op basis van http://schema.org/Schedule"""
+type Betaalinstructie {
+  byDay: [DayOfWeek]
+  byMonth: [Int]
+  byMonthDay: [Int]
+  repeatFrequency: String
+  exceptDates: [String]
+  startDate: String
+  endDate: String
+}
+enum DayOfWeek {
+  Monday
+  Tuesday
+  Wednesday
+  Thursday
+  Friday
+  Saturday
+  Sunday
+}
+input BankTransactionFilter {
+  OR: BankTransactionFilter
+  AND: BankTransactionFilter
+  isGeboekt: Boolean
+  isCredit: Boolean
+  id: ComplexFilterType
+  bedrag: ComplexBedragFilterType
+  tegenRekening: ComplexFilterType
+  statementLine: ComplexFilterType
+  transactieDatum: ComplexFilterType
+}
+input ComplexFilterType {
+  EQ: DynamicType
+  NEQ: DynamicType
+  GT: DynamicType
+  GTE: DynamicType
+  LT: DynamicType
+  LTE: DynamicType
+  IN: [DynamicType]
+  NOTIN: [DynamicType]
+  BETWEEN: [DynamicType]
+}
+"""Accepts dates, datetimes, ints and strings."""
+scalar DynamicType
+input ComplexBedragFilterType {
+  EQ: Bedrag
+  NEQ: Bedrag
+  GT: Bedrag
+  GTE: Bedrag
+  LT: Bedrag
+  LTE: Bedrag
+  IN: [Bedrag]
+  NOTIN: [Bedrag]
+  BETWEEN: [Bedrag]
+}
+type BankTransactionsPaged {
+  banktransactions: [BankTransaction]
+  pageInfo: PageInfo
+}
+type PageInfo {
+  count: Int
+  start: Int
+  limit: Int
+}
+type BurgersPaged {
+  burgers: [Burger]
+  pageInfo: PageInfo
+}
+type GebruikersActiviteitenPaged {
+  gebruikersactiviteiten: [GebruikersActiviteit]
+  pageInfo: PageInfo
+}
+type Gebruiker {
+  email: String
+  token: String
+}
+input BurgerFilter {
+  OR: BurgerFilter
+  AND: BurgerFilter
+  id: ComplexFilterType
+  telefoonnummer: ComplexFilterType
+  email: ComplexFilterType
+  geboortedatum: ComplexFilterType
+  achternaam: ComplexFilterType
+  huisnummer: ComplexFilterType
+  postcode: ComplexFilterType
+  straatnaam: ComplexFilterType
+  voorletters: ComplexFilterType
+  voornamen: ComplexFilterType
+  plaatsnaam: ComplexFilterType
+  huishoudenId: ComplexFilterType
+  bedrag: ComplexBedragFilterType
+  tegenRekeningId: ComplexFilterType
+  zoektermen: ComplexFilterType
+  iban: ComplexFilterType
+  rekeninghouder: ComplexFilterType
+}
+type HuishoudensPaged {
+  huishoudens: [Huishouden]
+  pageInfo: PageInfo
+}
+"""The root of all mutations """
+type RootMutation {
+  createBurger(input: CreateBurgerInput): CreateBurger
+  deleteBurger(id: Int!): DeleteBurger
+  updateBurger(achternaam: String, bsn: Int, email: String, geboortedatum: String, huishouden: HuishoudenInput, huisnummer: String, id: Int!, plaatsnaam: String, postcode: String, straatnaam: String, telefoonnummer: String, voorletters: String, voornamen: String): UpdateBurger
+  createAfspraak(input: CreateAfspraakInput!): CreateAfspraak
+  updateAfspraak(id: Int!, input: UpdateAfspraakInput!): UpdateAfspraak
+  deleteAfspraak(id: Int!): DeleteAfspraak
+  updateAfspraakBetaalinstructie(afspraakId: Int!, betaalinstructie: BetaalinstructieInput!): UpdateAfspraakBetaalinstructie
+  addAfspraakZoekterm(afspraakId: Int!, zoekterm: String!): AddAfspraakZoekterm
+  deleteAfspraakZoekterm(afspraakId: Int!, zoekterm: String!): DeleteAfspraakZoekterm
+  createOrganisatie(input: CreateOrganisatieInput): CreateOrganisatie
+  updateOrganisatie(huisnummer: String, id: Int!, kvkNummer: String, naam: String, plaatsnaam: String, postcode: String, straatnaam: String, vestigingsnummer: String): UpdateOrganisatie
+  deleteOrganisatie(id: Int!): DeleteOrganisatie
+  createBurgerRekening(burgerId: Int!, rekening: RekeningInput!): CreateBurgerRekening
+  deleteBurgerRekening(burgerId: Int!, id: Int!): DeleteBurgerRekening
+  createOrganisatieRekening(organisatieId: Int!, rekening: RekeningInput!): CreateOrganisatieRekening
+  deleteOrganisatieRekening(organisatieId: Int!, rekeningId: Int!): DeleteOrganisatieRekening
+  updateRekening(id: Int!, rekening: RekeningInput!): UpdateRekening
+  deleteCustomerStatementMessage(id: Int!): DeleteCustomerStatementMessage
+  createCustomerStatementMessage(file: Upload!): CreateCustomerStatementMessage
+  """Create a Journaalpost with an Afspraak"""
+  createJournaalpostAfspraak(input: CreateJournaalpostAfspraakInput): CreateJournaalpostAfspraak
+  """Create a Journaalpost with an Afspraak"""
+  createJournaalpostPerAfspraak(input: [CreateJournaalpostAfspraakInput]!): CreateJournaalpostPerAfspraak
+  """Create a Journaalpost with a Grootboekrekening"""
+  createJournaalpostGrootboekrekening(input: CreateJournaalpostGrootboekrekeningInput): CreateJournaalpostGrootboekrekening
+  """Update a Journaalpost with a Grootboekrekening"""
+  updateJournaalpostGrootboekrekening(input: UpdateJournaalpostGrootboekrekeningInput): UpdateJournaalpostGrootboekrekening
+  """Delete journaalpost by id """
+  deleteJournaalpost(id: Int!): DeleteJournaalpost
+  createRubriek(grootboekrekeningId: String, naam: String): CreateRubriek
+  updateRubriek(grootboekrekeningId: String, id: Int!, naam: String): UpdateRubriek
+  deleteRubriek(id: Int!): DeleteRubriek
+  createConfiguratie(input: ConfiguratieInput): CreateConfiguratie
+  updateConfiguratie(input: ConfiguratieInput): UpdateConfiguratie
+  deleteConfiguratie(id: String!): DeleteConfiguratie
+  createExportOverschrijvingen(eindDatum: String, startDatum: String): CreateExportOverschrijvingen
+  startAutomatischBoeken: StartAutomatischBoeken
+  createHuishouden(input: CreateHuishoudenInput): CreateHuishouden
+  deleteHuishouden(id: Int!): DeleteHuishouden
+  addHuishoudenBurger(burgerIds: [Int]!, huishoudenId: Int!): AddHuishoudenBurger
+  deleteHuishoudenBurger(burgerIds: [Int]!, huishoudenId: Int!): DeleteHuishoudenBurger
+}
+type CreateBurger {
+  ok: Boolean
+  burger: Burger
+}
+input CreateBurgerInput {
+  bsn: Int
+  email: String
+  geboortedatum: Date
+  telefoonnummer: String
+  rekeningen: [RekeningInput]
+  achternaam: String
+  huisnummer: String
+  postcode: String
+  straatnaam: String
+  voorletters: String
+  voornamen: String
+  plaatsnaam: String
+  huishouden: HuishoudenInput
+}
+input RekeningInput {
+  iban: String
+  rekeninghouder: String
+}
+input HuishoudenInput {
+  id: Int
+}
+type DeleteBurger {
+  ok: Boolean
+  previous: Burger
+}
+type UpdateBurger {
+  ok: Boolean
+  burger: Burger
+  previous: Burger
+}
+type CreateAfspraak {
+  ok: Boolean
+  afspraak: Afspraak
+}
+input CreateAfspraakInput {
+  burgerId: Int!
+  credit: Boolean!
+  organisatieId: Int
+  tegenRekeningId: Int!
+  rubriekId: Int!
+  omschrijving: String!
+  bedrag: Bedrag!
+  validFrom: String
+  validThrough: String
+}
 type UpdateAfspraak {
   ok: Boolean
   afspraak: Afspraak
   previous: Afspraak
 }
-
-type UpdateAfspraakBetaalinstructie {
-  ok: Boolean
-  afspraak: Afspraak
-  previous: Afspraak
-}
-
 input UpdateAfspraakInput {
   burgerId: Int
   credit: Boolean
@@ -723,51 +458,193 @@ input UpdateAfspraakInput {
   bedrag: Bedrag
   validThrough: String
 }
-
-type UpdateBurger {
+type DeleteAfspraak {
   ok: Boolean
-  burger: Burger
-  previous: Burger
+  previous: Afspraak
 }
-
-type UpdateConfiguratie {
+type UpdateAfspraakBetaalinstructie {
   ok: Boolean
-  configuratie: Configuratie
-  previous: Configuratie
+  afspraak: Afspraak
+  previous: Afspraak
 }
-
+"""Implementatie op basis van http://schema.org/Schedule"""
+input BetaalinstructieInput {
+  byDay: [DayOfWeek]
+  byMonth: [Int]
+  byMonthDay: [Int]
+  repeatFrequency: String
+  exceptDates: [String]
+  startDate: String!
+  endDate: String
+}
+type AddAfspraakZoekterm {
+  ok: Boolean
+  afspraak: Afspraak
+  previous: Afspraak
+  matchingAfspraken: [Afspraak]
+}
+type DeleteAfspraakZoekterm {
+  ok: Boolean
+  afspraak: Afspraak
+  previous: Afspraak
+  matchingAfspraken: [Afspraak]
+}
+type CreateOrganisatie {
+  ok: Boolean
+  organisatie: Organisatie
+}
+input CreateOrganisatieInput {
+  kvkNummer: String!
+  vestigingsnummer: String
+  rekeningen: [RekeningInput]
+  naam: String
+  straatnaam: String
+  huisnummer: String
+  postcode: String
+  plaatsnaam: String
+}
+type UpdateOrganisatie {
+  ok: Boolean
+  organisatie: Organisatie
+  previous: Organisatie
+}
+type DeleteOrganisatie {
+  ok: Boolean
+  previous: Organisatie
+}
+type CreateBurgerRekening {
+  ok: Boolean
+  rekening: Rekening
+}
+type DeleteBurgerRekening {
+  ok: Boolean
+  previous: Rekening
+}
+type CreateOrganisatieRekening {
+  ok: Boolean
+  rekening: Rekening
+}
+type DeleteOrganisatieRekening {
+  ok: Boolean
+  previous: Rekening
+}
+type UpdateRekening {
+  ok: Boolean
+  rekening: Rekening
+  previous: Rekening
+}
+type DeleteCustomerStatementMessage {
+  ok: Boolean
+  previous: CustomerStatementMessage
+}
+type CreateCustomerStatementMessage {
+  ok: Boolean
+  customerStatementMessage: CustomerStatementMessage
+  journaalposten: [Journaalpost]
+}
+"""
+Create scalar that ignores normal serialization/deserialization, since
+that will be handled by the multipart request spec
+"""
+scalar Upload
+"""Create a Journaalpost with an Afspraak"""
+type CreateJournaalpostAfspraak {
+  ok: Boolean
+  journaalpost: Journaalpost
+}
+input CreateJournaalpostAfspraakInput {
+  transactionId: Int!
+  afspraakId: Int!
+  isAutomatischGeboekt: Boolean!
+}
+"""Create a Journaalpost with an Afspraak"""
+type CreateJournaalpostPerAfspraak {
+  ok: Boolean
+  journaalposten: [Journaalpost]
+}
+"""Create a Journaalpost with a Grootboekrekening"""
+type CreateJournaalpostGrootboekrekening {
+  ok: Boolean
+  journaalpost: Journaalpost
+}
+input CreateJournaalpostGrootboekrekeningInput {
+  transactionId: Int!
+  grootboekrekeningId: String!
+  isAutomatischGeboekt: Boolean!
+}
 """Update a Journaalpost with a Grootboekrekening"""
 type UpdateJournaalpostGrootboekrekening {
   ok: Boolean
   journaalpost: Journaalpost
   previous: Journaalpost
 }
-
 input UpdateJournaalpostGrootboekrekeningInput {
   id: Int!
   grootboekrekeningId: String!
 }
-
-type UpdateOrganisatie {
+"""Delete journaalpost by id """
+type DeleteJournaalpost {
   ok: Boolean
-  organisatie: Organisatie
-  previous: Organisatie
+  previous: Journaalpost
 }
-
-type UpdateRekening {
+type CreateRubriek {
   ok: Boolean
-  rekening: Rekening
-  previous: Rekening
+  rubriek: Rubriek
 }
-
 type UpdateRubriek {
   ok: Boolean
   rubriek: Rubriek
   previous: Rubriek
 }
-
-"""
-Create scalar that ignores normal serialization/deserialization, since
-that will be handled by the multipart request spec
-"""
-scalar Upload
+type DeleteRubriek {
+  ok: Boolean
+  previous: Rubriek
+}
+type CreateConfiguratie {
+  ok: Boolean
+  configuratie: Configuratie
+}
+input ConfiguratieInput {
+  id: String!
+  waarde: String
+}
+type UpdateConfiguratie {
+  ok: Boolean
+  configuratie: Configuratie
+  previous: Configuratie
+}
+type DeleteConfiguratie {
+  ok: Boolean
+  previous: Configuratie
+}
+type CreateExportOverschrijvingen {
+  ok: Boolean
+  export: Export
+}
+type StartAutomatischBoeken {
+  ok: Boolean
+  journaalposten: [Journaalpost]
+}
+type CreateHuishouden {
+  ok: Boolean
+  huishouden: Huishouden
+}
+input CreateHuishoudenInput {
+  burgerIds: [Int] = []
+}
+type DeleteHuishouden {
+  ok: Boolean
+  previous: Huishouden
+}
+type AddHuishoudenBurger {
+  ok: Boolean
+  huishouden: Huishouden
+  previous: Huishouden
+  burgerIds: Burger
+}
+type DeleteHuishoudenBurger {
+  ok: Boolean
+  huishouden: [Huishouden]
+  previous: Huishouden
+  burgerIds: [Burger]
+}

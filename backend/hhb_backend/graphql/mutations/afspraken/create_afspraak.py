@@ -56,8 +56,6 @@ class CreateAfspraak(graphene.Mutation):
         if "valid_from" not in input:
             input["valid_from"] = str(datetime.now().date())
 
-        input["automatische_incasso"] = None if input["credit"] else True
-
         response = requests.post(f"{settings.HHB_SERVICES_URL}/afspraken/", json=input)
         if response.status_code != 201:
             raise GraphQLError(f"Upstream API responded: {response.text}")
