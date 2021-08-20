@@ -14,7 +14,7 @@ type ActiveSwitch = {
 	inactive: boolean,
 }
 
-const BurgerAfsprakenView: React.FC<StackProps & {burger: Burger, refetch: VoidFunction}> = ({burger, refetch, ...props}) => {
+const BurgerAfsprakenView: React.FC<StackProps & {burger: Burger}> = ({burger, ...props}) => {
 	const {t} = useTranslation();
 	const isMobile = useBreakpointValue([true, null, null, false]);
 	const {id, afspraken = []} = burger;

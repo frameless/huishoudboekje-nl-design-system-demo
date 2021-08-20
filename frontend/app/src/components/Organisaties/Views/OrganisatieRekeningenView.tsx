@@ -1,20 +1,23 @@
 import {AddIcon} from "@chakra-ui/icons";
 import {Box, BoxProps, Button, Divider, Stack} from "@chakra-ui/react";
-import React, {useContext} from "react";
+import React from "react";
 import {useToggle} from "react-grapple";
 import {useTranslation} from "react-i18next";
-import {Organisatie, useCreateOrganisatieRekeningMutation} from "../../../generated/graphql";
+import {GetOrganisatieDocument, GetOrganisatiesDocument, Organisatie, useCreateOrganisatieRekeningMutation} from "../../../generated/graphql";
 import {FormLeft, FormRight} from "../../Layouts/Forms";
 import Section from "../../Layouts/Section";
 import RekeningForm from "../../Rekeningen/RekeningForm";
 import RekeningList from "../../Rekeningen/RekeningList";
-import {OrganizationDetailContext} from "../OrganisatieDetail";
 
 const OrganisatieRekeningenView: React.FC<BoxProps & {organisatie: Organisatie}> = ({organisatie, ...props}) => {
 	const {t} = useTranslation();
-	const {refresh} = useContext(OrganizationDetailContext);
 	const [showForm, toggleForm] = useToggle(false);
-	const [createRekeningForOrg] = useCreateOrganisatieRekeningMutation();
+	const [createRekeningForOrg] = useCreateOrganisatieRekeningMutation({
+		refetchQueries: [
+			{query: GetOrganisatiesDocument},
+			{query: GetOrganisatieDocument, variables: {id: organisatie.id}},
+		],
+	});
 	const onSaveRekening = (rekening, resetForm) => {
 		if (!organisatie.id) {
 			return null;
@@ -28,7 +31,6 @@ const OrganisatieRekeningenView: React.FC<BoxProps & {organisatie: Organisatie}>
 		}).then(() => {
 			resetForm();
 			toggleForm(false);
-			refresh();
 		});
 	};
 
@@ -39,7 +41,7 @@ const OrganisatieRekeningenView: React.FC<BoxProps & {organisatie: Organisatie}>
 			<Stack spacing={2} mb={1} direction={["column", "row"]}>
 				<FormLeft title={t("forms.organizations.sections.rekeningen.title")} helperText={t("forms.organizations.sections.rekeningen.detailText")} />
 				<FormRight justifyContent={"center"}>
-					<RekeningList rekeningen={rekeningen} onChange={() => refresh()} organisatie={organisatie} />
+					<RekeningList rekeningen={rekeningen} organisatie={organisatie} />
 					{showForm ? (<>
 						{rekeningen.length > 0 && <Divider />}
 

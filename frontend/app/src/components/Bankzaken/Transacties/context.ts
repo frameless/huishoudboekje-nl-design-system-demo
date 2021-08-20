@@ -1,9 +1,9 @@
 import {createContext} from "react";
 
 type TransactionsContextValue = {
-	refetch: VoidFunction,
+	queryVariables: object,
 };
 
 export const TransactionsContext = createContext<TransactionsContextValue>({
-	refetch: () => undefined,
+	queryVariables: {},
 });

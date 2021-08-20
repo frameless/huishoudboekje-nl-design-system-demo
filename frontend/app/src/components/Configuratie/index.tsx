@@ -2,7 +2,7 @@ import {Button, Divider, FormControl, FormLabel, Input, Stack} from "@chakra-ui/
 import React from "react";
 import {useInput, Validators} from "react-grapple";
 import {useTranslation} from "react-i18next";
-import {Configuratie as IConfiguratie, useCreateConfiguratieMutation, useGetConfiguratieQuery} from "../../generated/graphql";
+import {Configuratie as IConfiguratie, GetConfiguratieDocument, useCreateConfiguratieMutation, useGetConfiguratieQuery} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
 import useToaster from "../../utils/useToaster";
 import {FormLeft, FormRight} from "../Layouts/Forms";
@@ -13,7 +13,11 @@ import ConfiguratieItem from "./ConfiguratieItem";
 const Configuratie = () => {
 	const {t} = useTranslation();
 	const $configuraties = useGetConfiguratieQuery();
-	const [createConfiguratie] = useCreateConfiguratieMutation();
+	const [createConfiguratie] = useCreateConfiguratieMutation({
+		refetchQueries: [
+			{query: GetConfiguratieDocument},
+		],
+	});
 	const toast = useToaster();
 
 	const key = useInput({
@@ -35,7 +39,6 @@ const Configuratie = () => {
 
 		createConfiguratie({variables: {key: key.value, value: value.value}})
 			.then(() => {
-				$configuraties.refetch();
 				key.reset();
 				value.reset();
 				toast({
@@ -85,7 +88,7 @@ const Configuratie = () => {
 								return (
 									<Stack spacing={5}>
 										{configuraties.map(c => (
-											<ConfiguratieItem c={c} refetch={$configuraties.refetch} key={c.id} />
+											<ConfiguratieItem c={c} key={c.id} />
 										))}
 									</Stack>
 								);

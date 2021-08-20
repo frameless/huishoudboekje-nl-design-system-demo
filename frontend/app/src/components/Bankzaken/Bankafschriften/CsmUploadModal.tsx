@@ -33,9 +33,6 @@ const CsmUploadModal: React.FC<CsmUploadModalProps> = ({onClose}) => {
 		refetchQueries: [
 			{query: GetCsmsDocument},
 		],
-		onCompleted: (options) => {
-			console.info("Done uploading", options.createCustomerStatementMessage?.customerStatementMessage?.filename);
-		},
 	});
 
 	const onChangeFile = async (e: React.FormEvent<HTMLInputElement>) => {

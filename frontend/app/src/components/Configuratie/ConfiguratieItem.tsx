@@ -2,10 +2,10 @@ import {CheckIcon, CloseIcon, DeleteIcon} from "@chakra-ui/icons";
 import {Editable, EditableInput, EditablePreview, FormControl, FormControlProps, FormLabel, IconButton, Stack} from "@chakra-ui/react";
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
-import {Configuratie as IConfiguratie, useDeleteConfiguratieMutation, useUpdateConfiguratieMutation} from "../../generated/graphql";
+import {Configuratie as IConfiguratie, GetConfiguratieDocument, useDeleteConfiguratieMutation, useUpdateConfiguratieMutation} from "../../generated/graphql";
 import useToaster from "../../utils/useToaster";
 
-const ConfiguratieItem: React.FC<FormControlProps & {c: IConfiguratie, refetch: VoidFunction}> = ({c, refetch, ...props}) => {
+const ConfiguratieItem: React.FC<FormControlProps & {c: IConfiguratie}> = ({c, ...props}) => {
 	const toast = useToaster();
 	const {t} = useTranslation();
 	const [value, setValue] = useState(c.waarde);
@@ -15,8 +15,19 @@ const ConfiguratieItem: React.FC<FormControlProps & {c: IConfiguratie, refetch: 
 		setValue(e.target.value);
 	};
 
-	const [updateConfig] = useUpdateConfiguratieMutation();
-	const [deleteConfig] = useDeleteConfiguratieMutation({variables: {key: String(c.id)}});
+	const [updateConfig] = useUpdateConfiguratieMutation({
+		refetchQueries: [
+			{query: GetConfiguratieDocument},
+		],
+	});
+	const [deleteConfig] = useDeleteConfiguratieMutation({
+		variables: {
+			key: String(c.id),
+		},
+		refetchQueries: [
+			{query: GetConfiguratieDocument},
+		],
+	});
 
 	const onSubmit = () => {
 		if (isSubmitted) {
@@ -46,13 +57,14 @@ const ConfiguratieItem: React.FC<FormControlProps & {c: IConfiguratie, refetch: 
 	};
 
 	const onDelete = () => {
-		deleteConfig().then(() => {
-			refetch();
-			setDeleteConfirm(false);
-			toast.closeAll();
-			toast({
-				success: t("messages.configuratie.deleteSuccess"),
-			});
+		deleteConfig().then(result => {
+			if (result.data?.deleteConfiguratie?.ok) {
+				setDeleteConfirm(false);
+				toast.closeAll();
+				toast({
+					success: t("messages.configuratie.deleteSuccess"),
+				});
+			}
 		});
 	};
 

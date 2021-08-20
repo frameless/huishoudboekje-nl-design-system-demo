@@ -13,21 +13,19 @@ import {
 	MenuItem,
 	MenuList,
 } from "@chakra-ui/react";
-import React, {createContext, useRef} from "react";
+import React, {useRef} from "react";
 import {useToggle} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {Redirect, useHistory, useParams} from "react-router-dom";
 import Routes from "../../config/routes";
-import {Organisatie, useDeleteOrganisatieMutation, useGetOrganisatieQuery} from "../../generated/graphql";
+import {GetOrganisatiesDocument, Organisatie, useDeleteOrganisatieMutation, useGetOrganisatieQuery} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
 import useToaster from "../../utils/useToaster";
-import BackButton from "../Layouts/BackButton";
 import DeadEndPage from "../DeadEndPage";
+import BackButton from "../Layouts/BackButton";
 import Page from "../Layouts/Page";
 import OrganisatieDetailView from "./Views/OrganisatieDetailView";
 import OrganisatieRekeningenView from "./Views/OrganisatieRekeningenView";
-
-export const OrganizationDetailContext = createContext<any>({});
 
 const OrganisatieDetail = () => {
 	const {t} = useTranslation();
@@ -46,72 +44,74 @@ const OrganisatieDetail = () => {
 		fetchPolicy: "no-cache",
 		variables: {id: parseInt(id)},
 	});
-	const [deleteOrganization, {loading: deleteLoading}] = useDeleteOrganisatieMutation({variables: {id: parseInt(id)}});
+	const [deleteOrganization, {loading: deleteLoading}] = useDeleteOrganisatieMutation({
+		variables: {id: parseInt(id)},
+		refetchQueries: [
+			{query: GetOrganisatiesDocument},
+		],
+	});
 	const onCloseDeleteDialog = () => toggleDeleteDialog(false);
 
 	return (
-		<OrganizationDetailContext.Provider value={{refresh: $organisatie.refetch}}>
-			<Queryable query={$organisatie}>{({organisatie}: {organisatie: Organisatie}) => {
-				const onConfirmDeleteDialog = () => {
-					deleteOrganization()
-						.then(() => {
-							onCloseDeleteDialog();
-							toast({
-								success: t("messages.organizations.deleteConfirmMessage", {name: organisatie.kvkDetails?.naam}),
-							});
-							toggleDeleted(true);
-						})
-						.catch(err => {
-							console.error(err);
-							toast({
-								error: err.message,
-							});
+		<Queryable query={$organisatie} children={({organisatie}: {organisatie: Organisatie}) => {
+			const onConfirmDeleteDialog = () => {
+				deleteOrganization()
+					.then(() => {
+						onCloseDeleteDialog();
+						toast({
+							success: t("messages.organizations.deleteConfirmMessage", {name: organisatie.kvkDetails?.naam}),
 						});
-				};
+						toggleDeleted(true);
+					})
+					.catch(err => {
+						console.error(err);
+						toast({
+							error: err.message,
+						});
+					});
+			};
 
-				if (!organisatie) {
-					return (
-						<Redirect to={Routes.NotFound} />
-					);
-				}
-
-				if (isDeleted) {
-					return (
-						<DeadEndPage message={t("messages.organizations.deleteConfirmMessage", {name: organisatie.kvkDetails?.naam})}>
-							<Button colorScheme={"primary"} onClick={() => push(Routes.Organisaties)}>{t("actions.backToList")}</Button>
-						</DeadEndPage>
-					);
-				}
-
+			if (!organisatie) {
 				return (
-					<Page title={organisatie.kvkDetails?.naam || ""} backButton={<BackButton to={Routes.Organisaties} />} menu={(
-						<Menu>
-							<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label="Open menu" />
-							<MenuList>
-								<MenuItem onClick={onClickEdit}>{t("actions.edit")}</MenuItem>
-								<MenuItem onClick={onClickDelete}>{t("actions.delete")}</MenuItem>
-							</MenuList>
-						</Menu>
-					)}>
-						<AlertDialog isOpen={deleteDialogOpen} leastDestructiveRef={cancelDeleteRef} onClose={onCloseDeleteDialog}>
-							<AlertDialogOverlay />
-							<AlertDialogContent>
-								<AlertDialogHeader fontSize="lg" fontWeight="bold">{t("messages.organizations.deleteTitle")}</AlertDialogHeader>
-								<AlertDialogBody>{t("messages.organizations.deleteQuestion", {name: organisatie.kvkDetails?.naam})}</AlertDialogBody>
-								<AlertDialogFooter>
-									<Button ref={cancelDeleteRef} onClick={onCloseDeleteDialog}>{t("actions.cancel")}</Button>
-									<Button isLoading={deleteLoading} colorScheme="red" onClick={onConfirmDeleteDialog} ml={3}>{t("actions.delete")}</Button>
-								</AlertDialogFooter>
-							</AlertDialogContent>
-						</AlertDialog>
-
-						<OrganisatieDetailView organisatie={organisatie} />
-						<OrganisatieRekeningenView organisatie={organisatie} />
-					</Page>
+					<Redirect to={Routes.NotFound} />
 				);
-			}}
-			</Queryable>
-		</OrganizationDetailContext.Provider>
+			}
+
+			if (isDeleted) {
+				return (
+					<DeadEndPage message={t("messages.organizations.deleteConfirmMessage", {name: organisatie.kvkDetails?.naam})}>
+						<Button colorScheme={"primary"} onClick={() => push(Routes.Organisaties)}>{t("actions.backToList")}</Button>
+					</DeadEndPage>
+				);
+			}
+
+			return (
+				<Page title={organisatie.kvkDetails?.naam || ""} backButton={<BackButton to={Routes.Organisaties} />} menu={(
+					<Menu>
+						<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label="Open menu" />
+						<MenuList>
+							<MenuItem onClick={onClickEdit}>{t("actions.edit")}</MenuItem>
+							<MenuItem onClick={onClickDelete}>{t("actions.delete")}</MenuItem>
+						</MenuList>
+					</Menu>
+				)}>
+					<AlertDialog isOpen={deleteDialogOpen} leastDestructiveRef={cancelDeleteRef} onClose={onCloseDeleteDialog}>
+						<AlertDialogOverlay />
+						<AlertDialogContent>
+							<AlertDialogHeader fontSize="lg" fontWeight="bold">{t("messages.organizations.deleteTitle")}</AlertDialogHeader>
+							<AlertDialogBody>{t("messages.organizations.deleteQuestion", {name: organisatie.kvkDetails?.naam})}</AlertDialogBody>
+							<AlertDialogFooter>
+								<Button ref={cancelDeleteRef} onClick={onCloseDeleteDialog}>{t("actions.cancel")}</Button>
+								<Button isLoading={deleteLoading} colorScheme="red" onClick={onConfirmDeleteDialog} ml={3}>{t("actions.delete")}</Button>
+							</AlertDialogFooter>
+						</AlertDialogContent>
+					</AlertDialog>
+
+					<OrganisatieDetailView organisatie={organisatie} />
+					<OrganisatieRekeningenView organisatie={organisatie} />
+				</Page>
+			);
+		}} />
 	);
 };
 

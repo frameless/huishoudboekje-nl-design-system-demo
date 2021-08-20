@@ -3,18 +3,25 @@ import {Box, Button, Divider, Stack, StackProps} from "@chakra-ui/react";
 import React from "react";
 import {useToggle} from "react-grapple";
 import {useTranslation} from "react-i18next";
-import {Burger, useCreateBurgerRekeningMutation} from "../../../generated/graphql";
+import {Burger, GetBurgerDocument, useCreateBurgerRekeningMutation} from "../../../generated/graphql";
 import useToaster from "../../../utils/useToaster";
 import {FormLeft, FormRight} from "../../Layouts/Forms";
 import RekeningForm from "../../Rekeningen/RekeningForm";
 import RekeningList from "../../Rekeningen/RekeningList";
 
-const BurgerRekeningenView: React.FC<StackProps & {burger: Burger, refetch: VoidFunction}> = ({burger, refetch, ...props}) => {
+const BurgerRekeningenView: React.FC<StackProps & {burger: Burger}> = ({burger, ...props}) => {
 	const {t} = useTranslation();
 	const toast = useToaster();
-
 	const [showCreateRekeningForm, toggleCreateRekeningForm] = useToggle(false);
-	const [createBurgerRekening] = useCreateBurgerRekeningMutation();
+
+	const [createBurgerRekening] = useCreateBurgerRekeningMutation({
+		refetchQueries: [
+			{query: GetBurgerDocument, variables: {id: burger.id}},
+		],
+		onCompleted: () => {
+			toggleCreateRekeningForm(false);
+		},
+	});
 
 	const {id: burgerId, rekeningen = []} = burger;
 
@@ -22,7 +29,7 @@ const BurgerRekeningenView: React.FC<StackProps & {burger: Burger, refetch: Void
 		<Stack spacing={2} mb={1} direction={["column", "row"]} {...props}>
 			<FormLeft title={t("forms.burgers.sections.rekeningen.title")} helperText={t("forms.burgers.sections.rekeningen.detailText")} />
 			<FormRight justifyContent={"center"}>
-				<RekeningList rekeningen={rekeningen || []} burger={burger} onChange={() => refetch()} />
+				<RekeningList rekeningen={rekeningen || []} burger={burger} />
 
 				{burgerId && showCreateRekeningForm ? (<>
 					{rekeningen.length > 0 && <Divider />}
@@ -36,8 +43,6 @@ const BurgerRekeningenView: React.FC<StackProps & {burger: Burger, refetch: Void
 							},
 						}).then(() => {
 							resetForm();
-							toggleCreateRekeningForm(false);
-							refetch();
 						}).catch(err => {
 							let errorMessage = err.message;
 
@@ -53,8 +58,7 @@ const BurgerRekeningenView: React.FC<StackProps & {burger: Burger, refetch: Void
 					}} />
 				</>) : (
 					<Box>
-						<Button leftIcon={<AddIcon />} colorScheme={"primary"} size={"sm"}
-							onClick={() => toggleCreateRekeningForm(true)}>{t("actions.add")}</Button>
+						<Button leftIcon={<AddIcon />} colorScheme={"primary"} size={"sm"} onClick={() => toggleCreateRekeningForm(true)}>{t("actions.add")}</Button>
 					</Box>
 				)}
 			</FormRight>

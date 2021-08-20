@@ -66,7 +66,7 @@ const Transactions = () => {
 	const handleMutation = useHandleMutation();
 	const filterModal = useDisclosure();
 
-	const transactionsQueryVariables = {
+	const queryVariables = {
 		offset,
 		limit: customPageSize,
 		filters: {
@@ -95,8 +95,7 @@ const Transactions = () => {
 	};
 
 	const $transactions = useGetTransactiesQuery({
-		variables: transactionsQueryVariables,
-		fetchPolicy: "no-cache",
+		variables: queryVariables,
 		onCompleted: data => {
 			if (data && total !== data.bankTransactionsPaged?.pageInfo?.count) {
 				setTotal(data.bankTransactionsPaged?.pageInfo?.count);
@@ -106,7 +105,7 @@ const Transactions = () => {
 	});
 	const [startAutomatischBoeken] = useStartAutomatischBoekenMutation({
 		refetchQueries: [
-			{query: GetTransactiesDocument, variables: transactionsQueryVariables},
+			{query: GetTransactiesDocument, variables: queryVariables},
 		],
 	});
 
@@ -121,7 +120,7 @@ const Transactions = () => {
 	];
 
 	return (
-		<TransactionsContext.Provider value={{refetch: $transactions.refetch}}>
+		<TransactionsContext.Provider value={{ queryVariables }}>
 			<Page title={t("forms.banking.sections.transactions.title")} menu={(
 				<Menu>
 					<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} data-cy={"actionsMenuButton"} />
@@ -204,7 +203,7 @@ const Transactions = () => {
 				<Section spacing={5}>
 					<Queryable query={$transactions} children={(data) => {
 						const transacties = data?.bankTransactionsPaged?.banktransactions || [];
-						const nFiltersActive = Object.values(transactionsQueryVariables.filters).filter(q => ![null, undefined].includes(q as any)).length;
+						const nFiltersActive = Object.values(queryVariables.filters).filter(q => ![null, undefined].includes(q as any)).length;
 
 						return (<>
 							<HStack justify={"flex-end"}>
