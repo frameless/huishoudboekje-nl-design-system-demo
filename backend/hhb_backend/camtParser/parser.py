@@ -372,8 +372,8 @@ class Transaction:
         if transaction.get("account_number", False):
             transaction["tegen_rekening"] = transaction.pop("account_number")
 
-        if transaction.get("narration", False):
-            transaction["transaction_details"] = transaction.pop("narration")
+        if transaction.get("payment_ref", False):
+            transaction["transaction_details"] = transaction.pop("payment_ref")
         else:
             transaction["transaction_details"] = ""
 
@@ -389,7 +389,10 @@ class Transaction:
         else:
             transaction["customer_reference"] = ""
 
-        transaction["extra_details"] = transaction.pop("payment_ref")
+        if transaction.get("narration", False):
+            transaction["extra_details"] = transaction.pop("narration")
+        else:
+            transaction["extra_details"] = ""
 
         transaction["date"] = datetime.strptime(transaction["date"], "%Y-%m-%d")
 
