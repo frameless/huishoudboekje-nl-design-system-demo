@@ -34,9 +34,6 @@ export type Scalars = {
   Upload: any;
 };
 
-
-
-
 export type AddAfspraakZoekterm = {
   ok?: Maybe<Scalars['Boolean']>;
   afspraak?: Maybe<Afspraak>;
@@ -68,8 +65,6 @@ export type Afspraak = {
   matchingAfspraken?: Maybe<Array<Maybe<Afspraak>>>;
   validFrom?: Maybe<Scalars['Date']>;
   validThrough?: Maybe<Scalars['Date']>;
-  /** @deprecated use betaalinstructie instead */
-  automatischeIncasso?: Maybe<Scalars['Boolean']>;
 };
 
 
@@ -164,7 +159,6 @@ export type BurgerFilter = {
   telefoonnummer?: Maybe<ComplexFilterType>;
   email?: Maybe<ComplexFilterType>;
   geboortedatum?: Maybe<ComplexFilterType>;
-  iban?: Maybe<ComplexFilterType>;
   achternaam?: Maybe<ComplexFilterType>;
   huisnummer?: Maybe<ComplexFilterType>;
   postcode?: Maybe<ComplexFilterType>;
@@ -173,6 +167,11 @@ export type BurgerFilter = {
   voornamen?: Maybe<ComplexFilterType>;
   plaatsnaam?: Maybe<ComplexFilterType>;
   huishoudenId?: Maybe<ComplexFilterType>;
+  bedrag?: Maybe<ComplexBedragFilterType>;
+  tegenRekeningId?: Maybe<ComplexFilterType>;
+  zoektermen?: Maybe<ComplexFilterType>;
+  iban?: Maybe<ComplexFilterType>;
+  rekeninghouder?: Maybe<ComplexFilterType>;
 };
 
 export type BurgersPaged = {
@@ -319,8 +318,8 @@ export type CreateOrganisatie = {
 
 export type CreateOrganisatieInput = {
   kvkNummer: Scalars['String'];
-  rekeningen?: Maybe<Array<Maybe<RekeningInput>>>;
   vestigingsnummer?: Maybe<Scalars['String']>;
+  rekeningen?: Maybe<Array<Maybe<RekeningInput>>>;
   naam?: Maybe<Scalars['String']>;
   straatnaam?: Maybe<Scalars['String']>;
   huisnummer?: Maybe<Scalars['String']>;
@@ -356,7 +355,6 @@ export type CustomerStatementMessage = {
 
 
 
-/** http://schema.org/DayOfWeek implementation */
 export enum DayOfWeek {
   Monday = 'Monday',
   Tuesday = 'Tuesday',
@@ -989,6 +987,7 @@ export type RootQueryBurgerArgs = {
 /** The root of all queries  */
 export type RootQueryBurgersArgs = {
   ids?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  search?: Maybe<Scalars['DynamicType']>;
 };
 
 
