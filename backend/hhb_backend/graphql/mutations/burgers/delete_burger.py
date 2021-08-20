@@ -11,6 +11,7 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     gebruikers_activiteit_entities,
     log_gebruikers_activiteit,
 )
+from datetime import datetime
 
 
 class DeleteBurger(graphene.Mutation):
@@ -34,10 +35,24 @@ class DeleteBurger(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(_root, info, id):
         """Delete current burger"""
-
         existing_burger = await request.dataloader.burgers_by_id.load(id)
         if not existing_burger:
             raise GraphQLError(f"Burger with id {id} not found")
+
+        afspraken = await request.dataloader.afspraken_by_burger.load(id)
+        afspraken_ids = []
+        input = {'valid_through': datetime.now().strftime("%Y-%m-%d")}
+        for afspraak in afspraken:
+            response = requests.post(
+                f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak['id']}",
+                json=input,
+            )
+            try:
+                if not response.ok:
+                    raise GraphQLError(f"Upstream API responded: {response.text}")
+            except:
+                if response.status_code != 201:
+                    raise GraphQLError(f"Upstream API responded: {response.text}")
 
         response = requests.delete(f"{settings.HHB_SERVICES_URL}/burgers/{id}")
         if response.status_code != 204:

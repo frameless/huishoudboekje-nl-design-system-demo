@@ -94,8 +94,12 @@ class ListDataLoader(DataLoader):
     async def batch_load_fn(self, keys):
         url = f"{self.service}/{self.model}/?{self.filter_item}={','.join([str(k) for k in keys])}"
         response = requests.get(url)
-        if not response.ok:
-            raise GraphQLError(f"Upstream API responded: {response.text}")
+        try:
+            if not response.ok:
+                raise GraphQLError(f"Upstream API responded: {response.text}")
+        except:
+            if response.status_code != 200:
+                raise GraphQLError(f"Upstream API responded: {response.text}")
         objects = {}
         for item in response.json()["data"]:
             if self.is_list:
