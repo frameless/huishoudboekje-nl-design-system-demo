@@ -40,7 +40,6 @@ class DeleteBurger(graphene.Mutation):
             raise GraphQLError(f"Burger with id {id} not found")
 
         afspraken = await request.dataloader.afspraken_by_burger.load(id)
-        afspraken_ids = []
         input = {'valid_through': datetime.now().strftime("%Y-%m-%d")}
         for afspraak in afspraken:
             response = requests.post(
