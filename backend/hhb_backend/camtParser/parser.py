@@ -12,14 +12,19 @@ import re
 
 from lxml import etree
 
-#removed - from odoo import models
+# Removed -
+# from odoo import models
+# -
 
 # Added -
 from datetime import datetime
 # -
 
+# Removed -
+# class CamtParser(models.AbstractModel):
+# -
 
-class CamtParser():     #removed - class CamtParser(models.AbstractModel):
+class CamtParser():
     _name = "account.statement.import.camt.parser"
     _description = "Account Bank Statement Import CAMT parser"
 
@@ -142,7 +147,7 @@ class CamtParser():     #removed - class CamtParser(models.AbstractModel):
         """Parse an Ntry node and yield transactions"""
         transaction = {"payment_ref": "/", "amount": 0}  # fallback defaults
 
-        # removed -
+        # Removed -
         #self.add_value_from_node(ns, node, "./ns:ValDt/ns:Dt", transaction, "date")
         # -
 
@@ -156,10 +161,13 @@ class CamtParser():     #removed - class CamtParser(models.AbstractModel):
         self.add_value_from_node(
             ns, node, "./ns:AddtlNtryInf", transaction, "narration"
         )
-        '''This value has been added because we use it'''
+
+        # Added -
         self.add_value_from_node(
             ns, node, "./BkTxCd/Prtry/Cd", transaction, "id"
         )
+        # -
+
         self.add_value_from_node(
             ns,
             node,
@@ -192,9 +200,10 @@ class CamtParser():     #removed - class CamtParser(models.AbstractModel):
         ITBD = InterimBalance (first ITBD is start-, second is end-balance)
         CLBD = ClosingBalance
 
-        Added:
+        Added -
         CLAV = Closing Available Balance
         FWAV = Forward Available Balance
+        -
         """
         start_balance_node = None
         end_balance_node = None
@@ -202,8 +211,15 @@ class CamtParser():     #removed - class CamtParser(models.AbstractModel):
         # Added -
         avail_balance_node = None
         forward_balance_node = None
+        # -
 
+        # Removed -
+        # for node_name in ["OPBD", "PRCD", "CLBD", "ITBD"]:
+        # -
+
+        # Added -
         for node_name in ["OPBD", "PRCD", "CLBD", "ITBD", "CLAV", "FWAV"]:
+        # -
             code_expr = (
                 './ns:Bal/ns:Tp/ns:CdOrPrtry/ns:Cd[text()="%s"]/../../..' % node_name
             )
@@ -213,10 +229,14 @@ class CamtParser():     #removed - class CamtParser(models.AbstractModel):
                     start_balance_node = balance_node[0]
                 elif node_name == "CLBD":
                     end_balance_node = balance_node[0]
+
+                # Added -
                 elif node_name == "CLAV":
                     avail_balance_node = balance_node[0]
                 elif node_name == "FWAV":
                     forward_balance_node = balance_node[0]
+                # -
+
                 else:
                     if not start_balance_node:
                         start_balance_node = balance_node[0]
@@ -226,6 +246,14 @@ class CamtParser():     #removed - class CamtParser(models.AbstractModel):
             # Added -
             if not forward_balance_node:
                 forward_balance_node = end_balance_node
+            # -
+
+        # Removed -
+        # return (
+        #     self.parse_amount(ns, start_balance_node),
+        #     self.parse_amount(ns, end_balance_node),
+        # )
+
 
         return (
             Balance(self.parse_amount(ns, start_balance_node)),
@@ -237,7 +265,7 @@ class CamtParser():     #removed - class CamtParser(models.AbstractModel):
     def parse_statement(self, ns, node):
         """Parse a single Stmt node."""
         result = {}
-        # removed -
+        # Removed -
         # self.add_value_from_node(
         #     ns,
         #     node,
@@ -245,18 +273,26 @@ class CamtParser():     #removed - class CamtParser(models.AbstractModel):
         #     result,
         #     "account_number",
         # )
+        # -
+
+        # Added -
         self.add_value_from_node(
             ns,
             node,
             ["./ns:Acct/ns:Id/ns:IBAN", "./ns:Acct/ns:Id/ns:Othr/ns:Id"],
             result,
             "account_identification",
-        ) # Addition
+        )
+        # -
 
-        # removed - self.add_value_from_node(ns, node, "./ns:Id", result, "name")
-        self.add_value_from_node(ns, node, "./ns:Id", result, "transaction_reference") # Addition
+        # Removed -
+        # self.add_value_from_node(ns, node, "./ns:Id", result, "name")
+        # -
 
+        # Added -
+        self.add_value_from_node(ns, node, "./ns:Id", result, "transaction_reference")
         self.add_value_from_node(ns, node, './ElctrncSeqNb', result, "sequence_number")
+        # -
 
         self.add_value_from_node(
             ns, node, ["./ns:Acct/ns:Ccy", "./ns:Bal/ns:Amt/@Ccy"], result, "currency"
@@ -266,20 +302,27 @@ class CamtParser():     #removed - class CamtParser(models.AbstractModel):
         # result["balance_start"], result["balance_end_real"] = self.get_balance_amounts(
         #     ns, node
         # )
+        # -
+
         # Added -
         result["final_opening_balance"], result["available_balance"], result["final_closing_balance"], result["forward_available_balance"] = \
             self.get_balance_amounts(ns, node)
+        # -
 
         entry_nodes = node.xpath("./ns:Ntry", namespaces={"ns": ns})
         transactions = []
         for entry_node in entry_nodes:
             transactions.extend(self.parse_entry(ns, entry_node))
 
+        # Removed -
+        # result["transactions"] = transactions
+        # -
 
+        # Added -
         transObject = []
         for trans in transactions:
             transObject.append(Transaction(trans))
-
+        # -
 
         result["date"] = None
         if transactions:
@@ -334,19 +377,24 @@ class CamtParser():     #removed - class CamtParser(models.AbstractModel):
         account_number = None
         for node in root[0][1:]:
             statement = self.parse_statement(ns, node)
-            # removed -
+            # Removed -
             # if len(statement["transactions"]):
                 # if "currency" in statement
                 #   currency = statement.pop("currency")
                 # Removed -
                 # if "account_number" in statement:
                 #     account_number = statement.pop("account_number")
+                # statements.append(statement)
             # -
 
             statements.append(statement)
-        # removed - return currency, account_number, statements
+        # Removed -
+        # return currency, account_number, statements
+        # -
+
         # Added -
         return statements
+        # -
 
 ### classes below have been added to better fit the parser to our code.
 
@@ -365,38 +413,32 @@ class Balance():
 
 class Transaction:
     def __init__(self, transaction):
-        self.data = self.transactionDict(transaction)
+        self.data = self.transactionAdapt(transaction)
 
-    def transactionDict(self, transaction):
+    def transactionAdapt(self, transaction):
         ### Edit and add keys for certain values for a better fit in our application
-        if transaction.get("account_number", False):
-            transaction["tegen_rekening"] = transaction.pop("account_number")
+        self.searchAndReplace(transaction, "account_number", "tegen_rekening")
+        self.searchAndReplace(transaction, "payment_ref", "transaction_details")
+        self.searchAndReplace(transaction, "ref", "customer_reference")
+        self.searchAndReplace(transaction, "narration", "extra_details")
 
-        if transaction.get("payment_ref", False):
-            transaction["transaction_details"] = transaction.pop("payment_ref")
-        else:
-            transaction["transaction_details"] = ""
+        transaction["amount"] = Amount(transaction.pop("amount"))
+        transaction["date"] = datetime.strptime(transaction["date"], "%Y-%m-%d")
 
         if transaction["amount"] < 0:
             transaction["status"] = 'D'
         else:
             transaction["status"] = 'C'
 
-        transaction["amount"] = Amount(transaction.pop("amount"))
-
-        if transaction.get("ref", False):
-            transaction["customer_reference"] = transaction.pop("ref")
-        else:
-            transaction["customer_reference"] = ""
-
-        if transaction.get("narration", False):
-            transaction["extra_details"] = transaction.pop("narration")
-        else:
-            transaction["extra_details"] = ""
-
-        transaction["date"] = datetime.strptime(transaction["date"], "%Y-%m-%d")
-
         if not transaction.get("id", False):
             transaction["id"] = ""
 
         return transaction
+
+    def searchAndReplace(self, object, search_string, replace_string):
+        if object.get(search_string, False):
+            object[replace_string] = object.pop(search_string)
+        else:
+            object[replace_string] = ""
+
+        return object
