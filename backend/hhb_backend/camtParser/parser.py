@@ -422,13 +422,14 @@ class Transaction:
         self.searchAndReplace(transaction, "ref", "customer_reference")
         self.searchAndReplace(transaction, "narration", "extra_details")
 
-        transaction["amount"] = Amount(transaction.pop("amount"))
-        transaction["date"] = datetime.strptime(transaction["date"], "%Y-%m-%d")
-
         if transaction["amount"] < 0:
             transaction["status"] = 'D'
         else:
             transaction["status"] = 'C'
+        transaction["amount"] = Amount(transaction.pop("amount"))
+        transaction["date"] = datetime.strptime(transaction["date"], "%Y-%m-%d")
+
+
 
         if not transaction.get("id", False):
             transaction["id"] = ""
@@ -441,4 +442,4 @@ class Transaction:
         else:
             object[replace_string] = ""
 
-        return object
+        return
