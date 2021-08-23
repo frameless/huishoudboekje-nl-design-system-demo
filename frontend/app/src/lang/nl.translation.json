@@ -428,7 +428,7 @@
         "nOverschrijvingen": "Overschrijvingen"
     },
     "checksum": {
-        "sha265": "Controlegetal (SHA-265)"
+        "sha265": "Controlegetal (SHA-256)"
     },
     "filters": {
         "transactions": {
@@ -438,6 +438,10 @@
                 "expenses": "Uitgaven",
                 "title": "Betaalrichting",
                 "choose": "- Kies een betaalrichting -"
+            },
+            "type": {
+                "title": "Soort",
+                "onlyUnbooked": "Niet-afgeletterd"
             },
             "pageSize": "Aantal transacties per pagina"
         }

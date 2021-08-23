@@ -3,6 +3,7 @@ import {
 	Box,
 	Button,
 	ButtonGroup,
+	Checkbox,
 	FormControl,
 	FormLabel,
 	HStack,
@@ -69,7 +70,7 @@ const Transactions = () => {
 		offset,
 		limit: customPageSize,
 		filters: {
-			// isGeboekt: filters.onlyUnbooked ? false : undefined,
+			isGeboekt: filters.onlyUnbooked ? false : undefined,
 			isCredit: {
 				all: undefined,
 				income: true,
@@ -136,13 +137,13 @@ const Transactions = () => {
 						<ModalCloseButton />
 						<ModalBody>
 							<Stack>
-								{/*<FormControl>*/}
-								{/*	<FormLabel>{t("filters.transactions.type.title")}</FormLabel>*/}
-								{/*	<Checkbox isChecked={filters.onlyUnbooked} onChange={e => setFilters(f => ({*/}
-								{/*		...f,*/}
-								{/*		onlyUnbooked: e.target.checked,*/}
-								{/*	}))}>{t("filters.transactions.type.onlyUnbooked")}</Checkbox>*/}
-								{/*</FormControl>*/}
+								<FormControl>
+									<FormLabel>{t("filters.transactions.type.title")}</FormLabel>
+									<Checkbox isChecked={filters.onlyUnbooked} onChange={e => setFilters(f => ({
+										...f,
+										onlyUnbooked: e.target.checked,
+									}))}>{t("filters.transactions.type.onlyUnbooked")}</Checkbox>
+								</FormControl>
 
 								<FormControl>
 									<FormLabel>{t("filters.transactions.isCredit.title")}</FormLabel>
@@ -203,10 +204,11 @@ const Transactions = () => {
 				<Section spacing={5}>
 					<Queryable query={$transactions} children={(data) => {
 						const transacties = data?.bankTransactionsPaged?.banktransactions || [];
+						const nFiltersActive = Object.values(transactionsQueryVariables.filters).filter(q => ![null, undefined].includes(q as any)).length;
 
 						return (<>
 							<HStack justify={"flex-end"}>
-								<Button size={"sm"} colorScheme={"primary"} variant={"outline"} onClick={() => filterModal.onOpen()}>{t("sections.filterOptions.title")}</Button>
+								<Button size={"sm"} colorScheme={"primary"} variant={"outline"} onClick={() => filterModal.onOpen()}>{`${t("sections.filterOptions.title")} (${nFiltersActive})`}</Button>
 							</HStack>
 							{transacties.length > 0 ? (
 								<TransactiesList transacties={transacties} />
