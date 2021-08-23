@@ -45,18 +45,7 @@ export const useServices = () => {
 				isAlive: false,
 			}]);
 
-		const unleashService = fetch("/api/unleash/health")
-			.then(r => r.text())
-			.then(r => [{
-				serviceName: "unleash-service",
-				isAlive: r === "alive",
-			}])
-			.catch(() => [{
-				serviceName: "unleash-service",
-				isAlive: false,
-			}]);
-
-		Promise.all([backend, oidc, services, unleashService])
+		Promise.all([backend, oidc, services])
 			.then((result) => {
 				if (isMounted) {
 					setServices([...result].flatMap(r => r));
@@ -72,7 +61,7 @@ export const useServices = () => {
 	return {
 		services,
 		ready,
-		allAvailable: ready && services.length > 0 && services.filter(s => s.serviceName !== "unleash-service").every(s => s.isAlive === true),
+		allAvailable: ready && services.length > 0 && services.every(s => s.isAlive),
 	};
 };
 
@@ -82,7 +71,7 @@ export const ServicesProvider: React.FC<{loading, fallback, children}> = ({loadi
 	if (!ready) {
 		return loading;
 	}
-	else if(!allAvailable){
+	else if (!allAvailable) {
 		return fallback;
 	}
 
