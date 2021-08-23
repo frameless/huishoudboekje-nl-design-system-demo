@@ -8,14 +8,11 @@ import "react-datepicker/dist/react-datepicker.min.css";
 import ReactDOM from "react-dom";
 import {BrowserRouter as Router} from "react-router-dom";
 import App from "./App";
-import LoadingPage from "./components/LoadingPage";
-import StatusErrorPage from "./components/Status/StatusErrorPage";
 import "./config/i18n";
 import theme from "./config/theme";
 import "./global.scss";
 import apolloClient from "./services/graphql-client";
 import {FeatureProvider} from "./utils/features";
-import {ServicesProvider} from "./utils/Services";
 
 dayjs.locale("nl-nl");
 registerLocale("nl", nl);
@@ -30,11 +27,9 @@ ReactDOM.render(
 		<Router>
 			<ApolloProvider client={apolloClient}>
 				<ChakraProvider theme={theme}>
-					<ServicesProvider loading={<LoadingPage />} fallback={<StatusErrorPage />}>
-						<FeatureProvider flags={featureFlags}>
-							<App />
-						</FeatureProvider>
-					</ServicesProvider>
+					<FeatureProvider flags={featureFlags}>
+						<App />
+					</FeatureProvider>
 				</ChakraProvider>
 			</ApolloProvider>
 		</Router>
