@@ -1,6 +1,6 @@
 import {gql} from "@apollo/client";
 import {AfspraakFragment} from "./Afspraak";
-import {HuishoudenFragment} from "./HuishoudenFragment";
+import {HuishoudenFragment} from "./Huishouden";
 import {RekeningFragment} from "./Rekening";
 
 export const BurgerFragment = gql`

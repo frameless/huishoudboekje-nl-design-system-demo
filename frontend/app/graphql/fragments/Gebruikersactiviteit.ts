@@ -1,5 +1,5 @@
 import {gql} from "@apollo/client";
-import {OrganisatieFragment} from "./OrganisatieFragment";
+import {OrganisatieFragment} from "./Organisatie";
 
 export const GebruikersactiviteitFragment = gql`
     fragment Gebruikersactiviteit on GebruikersActiviteit {
