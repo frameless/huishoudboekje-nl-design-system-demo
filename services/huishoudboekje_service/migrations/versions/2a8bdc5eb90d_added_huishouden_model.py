@@ -22,12 +22,13 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
-    # ### First add this column with nullable, then update all
-    # ### values to default 0, and then alter to non-nullable
+    # ### First add this column with nullable, then update values, and then alter to non-nullable.
     # ### Ref https://stackoverflow.com/questions/33705697/alembic-integrityerror-column-contains-null-values-when-adding-non-nullable
     op.add_column('burgers', sa.Column('huishouden_id', sa.Integer(), nullable=True))
-    huishouden_id = table('burgers', column('huishouden_id'))
-    op.execute(huishouden_id.update().values(huishouden_id=0))
+
+    # TODO: For every burger having huishouden_id = null, create a new Huishouden, fill in the ID of the newly created Huishouden as the value of huishouden_id for that burger.
+
+    # ### And now make huishouden_id non-nullable.
     op.alter_column('burgers', 'huishouden_id', nullable=False)
     op.create_foreign_key(None, 'burgers', 'huishoudens', ['huishouden_id'], ['id'])
     # ### end Alembic commands ###
