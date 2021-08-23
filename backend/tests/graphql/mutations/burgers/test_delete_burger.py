@@ -3,12 +3,40 @@ import re
 import pytest
 import requests_mock
 from hhb_backend.graphql import settings
+from requests_mock import Adapter
 
+class MockResponse():
+    history = None
+    raw = None
+    is_redirect = None
+    content = None
+
+    def __init__(self, json_data, status_code):
+        self.json_data = json_data
+        self.status_code = status_code
+
+    def json(self):
+        return self.json_data
+
+def create_mock_adapter() -> Adapter:
+    adapter = requests_mock.Adapter()
+
+    def test_matcher(request):
+        if request.path == "/afspraken/" and request.query == "filter_burgers=1":
+            return MockResponse({'data': [{'id':1, 'burger_id': 1}]}, 200)
+        elif request.path == "/afspraken/1":
+            return MockResponse({'data': [{'id': 1, 'burger_id': 1}]}, 201)
+        elif request.path == "/burgers/":
+            return MockResponse({'data': [{'id': 1}]}, 200)
+        elif request.path == "/gebruikersactiviteiten/":
+            return MockResponse({'data': {'id': 1}}, 201)
+
+    adapter.add_matcher(test_matcher)
+    return adapter
 
 def test_delete_burger(client):
     with requests_mock.Mocker() as mock:
-        mock.get(f"{settings.HHB_SERVICES_URL}/burgers/?filter_ids=1", status_code=200, json={"data":[{"id": 1}]})
-        mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json={"data": {"id": 1}})
+        mock._adapter = create_mock_adapter()
         adapter = mock.delete(f"{settings.HHB_SERVICES_URL}/burgers/1", status_code=204)
 
         response = client.post(
@@ -30,6 +58,7 @@ mutation test($id: Int!) {
             }
         }}
         assert adapter.called_once
+        assert mock._adapter.call_count == 5
 
 
 def test_delete_burger_error(client):
