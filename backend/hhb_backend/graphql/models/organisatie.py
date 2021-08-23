@@ -53,16 +53,18 @@ class Organisatie(graphene.ObjectType):
             kvk_nummer = current['kvk_nummer']
 
         for organisatie in organisaties:
+            if id == organisatie['id']:
+                continue
             if kvk_nummer == organisatie['kvk_nummer']:
                 if vestigingsnummer == organisatie['vestigingsnummer']:
                     raise GraphQLError("Combination kvk-nummer and vestigingsnummer is not unique.")
 
     def unique_kvk_vestigingsnummer(self, kvk_nummer, vestigingsnummer, id=None):
         if vestigingsnummer and not id:
-            self.check_kvk_vestigingsnummer(kvk_nummer, vestigingsnummer)
+            self.check_kvk_vestigingsnummer(kvk_nummer, vestigingsnummer, id)
         elif id:
             if vestigingsnummer and kvk_nummer:
-                self.check_kvk_vestigingsnummer(kvk_nummer, vestigingsnummer)
+                self.check_kvk_vestigingsnummer(kvk_nummer, vestigingsnummer, id)
             elif vestigingsnummer:
                 self.check_kvk_vestigingsnummer(kvk_nummer, vestigingsnummer, id)
             elif kvk_nummer:
