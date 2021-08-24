@@ -7,6 +7,8 @@ Create Date: 2021-07-27 10:41:12.768008
 """
 from alembic import op
 import sqlalchemy as sa
+from sqlalchemy.sql import table, column
+from sqlalchemy import Sequence
 
 
 # revision identifiers, used by Alembic.
