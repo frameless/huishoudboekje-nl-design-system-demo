@@ -42,6 +42,7 @@ description:
       wordt een huishoudboekje vaak ingezet als hulpmiddel bij bezuinigingen.
     documentation: "https://gitlab.com/commonground/huishoudboekje/app-new/-/wikis/home"
     features:
+      - Huishoudens beheren
       - Burgers beheren
       - Bankrekeningen beheren
       - Afspraken beheren
@@ -66,7 +67,7 @@ maintenance:
   contacts:
     - name: Bauke Huijbers
       email: bauke.huijbers@vng.nl
-      affiliation: gemeenten Amsterdam, Nijmegen, Rotterdam en Utrecht
+      affiliation: Gemeenten Amsterdam, Nijmegen, Rotterdam en Utrecht
     - name: Jacco Brouwer
       email: jacco.brouwer@vng.nl
       affiliation: VNG Realisatie
