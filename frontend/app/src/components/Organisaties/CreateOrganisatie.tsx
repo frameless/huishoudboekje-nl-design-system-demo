@@ -5,7 +5,7 @@ import {UseInput} from "react-grapple/dist/hooks/useInput";
 import {useTranslation} from "react-i18next";
 import {useHistory} from "react-router-dom";
 import Routes from "../../config/routes";
-import {useCreateOrganisatieMutation} from "../../generated/graphql";
+import {GetOrganisatiesDocument, useCreateOrganisatieMutation} from "../../generated/graphql";
 import {Regex} from "../../utils/things";
 import useToaster from "../../utils/useToaster";
 import BackButton from "../Layouts/BackButton";
@@ -50,7 +50,11 @@ const CreateOrganisatie = () => {
 		validate: [Validators.required],
 	});
 
-	const [createOrganisatie, $createOrganisatie] = useCreateOrganisatieMutation();
+	const [createOrganisatie, $createOrganisatie] = useCreateOrganisatieMutation({
+		refetchQueries: [
+			{ query: GetOrganisatiesDocument }
+		]
+	});
 
 	const onSubmit = (e) => {
 		e.preventDefault();

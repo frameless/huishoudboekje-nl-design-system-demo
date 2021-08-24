@@ -4,7 +4,7 @@ import React, {useContext} from "react";
 import {useTranslation} from "react-i18next";
 import {NavLink} from "react-router-dom";
 import Routes from "../../../../config/routes";
-import {BankTransaction, useDeleteJournaalpostMutation} from "../../../../generated/graphql";
+import {BankTransaction, GetTransactiesDocument, useDeleteJournaalpostMutation} from "../../../../generated/graphql";
 import {currencyFormat2, formatBurgerName} from "../../../../utils/things";
 import useToaster from "../../../../utils/useToaster";
 import {TransactionsContext} from "../context";
@@ -12,8 +12,12 @@ import {TransactionsContext} from "../context";
 const BookingDetailsView: React.FC<{transactie: BankTransaction}> = ({transactie}) => {
 	const {t} = useTranslation();
 	const toast = useToaster();
-	const {refetch} = useContext(TransactionsContext);
-	const [deleteJournaalpost, $deleteJournaalpost] = useDeleteJournaalpostMutation();
+	const {queryVariables} = useContext(TransactionsContext);
+	const [deleteJournaalpost, $deleteJournaalpost] = useDeleteJournaalpostMutation({
+		refetchQueries: [
+			{query: GetTransactiesDocument, variables: queryVariables},
+		],
+	});
 
 	const journaalpostAfspraak = transactie.journaalpost?.afspraak;
 	const journaalpostRubriek = transactie.journaalpost?.grootboekrekening?.rubriek;
@@ -25,23 +29,10 @@ const BookingDetailsView: React.FC<{transactie: BankTransaction}> = ({transactie
 			deleteJournaalpost({
 				variables: {id},
 			}).then(() => {
-				toast({
-					status: "success",
-					title: t("messages.journals.createSuccessMessage"),
-					position: "top",
-					isClosable: true,
-				});
-				refetch();
+				toast({success: t("messages.journals.createSuccessMessage")});
 			}).catch(err => {
 				console.error(err);
-				toast({
-					position: "top",
-					status: "error",
-					variant: "solid",
-					title: t("messages.genericError.title"),
-					description: t("messages.genericError.description"),
-					isClosable: true,
-				});
+				toast({error: err.message});
 			});
 		}
 	};
@@ -84,10 +75,12 @@ const BookingDetailsView: React.FC<{transactie: BankTransaction}> = ({transactie
 				</Stack>
 				<Stack direction={"row"} spacing={5}>
 					<Box mb={3}>
-						<Button leftIcon={<ViewIcon />} colorScheme={"primary"} size={"sm"} as={NavLink} to={Routes.ViewAfspraak(journaalpostAfspraak.id)}>{t("actions.view")}</Button>
+						<Button leftIcon={
+							<ViewIcon />} colorScheme={"primary"} size={"sm"} as={NavLink} to={Routes.ViewAfspraak(journaalpostAfspraak.id)}>{t("actions.view")}</Button>
 					</Box>
 					<Box>
-						<Button leftIcon={<DeleteIcon />} variant={"ghost"} colorScheme={"red"} size={"sm"} onClick={onDelete} isLoading={$deleteJournaalpost.loading}>{t("actions.undoAfletteren")}</Button>
+						<Button leftIcon={
+							<DeleteIcon />} variant={"ghost"} colorScheme={"red"} size={"sm"} onClick={onDelete} isLoading={$deleteJournaalpost.loading}>{t("actions.undoAfletteren")}</Button>
 					</Box>
 				</Stack>
 			</Stack>
@@ -105,7 +98,8 @@ const BookingDetailsView: React.FC<{transactie: BankTransaction}> = ({transactie
 					</Box>
 				</Box>
 				<Box>
-					<Button leftIcon={<DeleteIcon />} variant={"ghost"} colorScheme={"red"} size={"sm"} onClick={onDelete} isLoading={$deleteJournaalpost.loading}>{t("actions.undoAfletteren")}</Button>
+					<Button leftIcon={
+						<DeleteIcon />} variant={"ghost"} colorScheme={"red"} size={"sm"} onClick={onDelete} isLoading={$deleteJournaalpost.loading}>{t("actions.undoAfletteren")}</Button>
 				</Box>
 			</Stack>
 		);

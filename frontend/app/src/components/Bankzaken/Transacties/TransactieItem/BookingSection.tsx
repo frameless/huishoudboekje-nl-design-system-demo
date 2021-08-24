@@ -2,7 +2,7 @@ import {FormControl, Heading, HStack, Stack, Tab, Table, TabList, TabPanel, TabP
 import React, {useContext} from "react";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
-import {Afspraak, Rubriek, useCreateJournaalpostAfspraakMutation, useCreateJournaalpostGrootboekrekeningMutation} from "../../../../generated/graphql";
+import {Afspraak, GetTransactiesDocument, Rubriek, useCreateJournaalpostAfspraakMutation, useCreateJournaalpostGrootboekrekeningMutation} from "../../../../generated/graphql";
 import {useReactSelectStyles} from "../../../../utils/things";
 import useToaster from "../../../../utils/useToaster";
 import SelectAfspraakOption from "../../../Layouts/SelectAfspraak/SelectAfspraakOption";
@@ -13,10 +13,18 @@ const BookingSection = ({transaction, rubrieken, afspraken}) => {
 	const toast = useToaster();
 	const {t} = useTranslation();
 	const suggesties: Afspraak[] = transaction.suggesties || [];
-	const {refetch} = useContext(TransactionsContext);
+	const {queryVariables} = useContext(TransactionsContext);
 
-	const [createJournaalpostAfspraak] = useCreateJournaalpostAfspraakMutation();
-	const [createJournaalpostGrootboekrekening] = useCreateJournaalpostGrootboekrekeningMutation();
+	const [createJournaalpostAfspraak] = useCreateJournaalpostAfspraakMutation({
+		refetchQueries: [
+			{query: GetTransactiesDocument, variables: queryVariables},
+		],
+	});
+	const [createJournaalpostGrootboekrekening] = useCreateJournaalpostGrootboekrekeningMutation({
+		refetchQueries: [
+			{query: GetTransactiesDocument, variables: queryVariables},
+		],
+	});
 
 	const options = {
 		suggesties: suggesties,
@@ -54,15 +62,10 @@ const BookingSection = ({transaction, rubrieken, afspraken}) => {
 			createJournaalpostGrootboekrekening({
 				variables: {transactionId, grootboekrekeningId},
 			}).then(() => {
-				toast({
-					success: t("messages.journals.createSuccessMessage"),
-				});
-				refetch();
+				toast({success: t("messages.journals.createSuccessMessage")});
 			}).catch(err => {
 				console.error(err);
-				toast({
-					error: err.message,
-				});
+				toast({error: err.message});
 			});
 		}
 	};
@@ -75,15 +78,10 @@ const BookingSection = ({transaction, rubrieken, afspraken}) => {
 			createJournaalpostAfspraak({
 				variables: {transactionId, afspraakId},
 			}).then(() => {
-				toast({
-					success: t("messages.journals.createSuccessMessage"),
-				});
-				refetch();
+				toast({success: t("messages.journals.createSuccessMessage")});
 			}).catch(err => {
 				console.error(err);
-				toast({
-					error: err.message,
-				});
+				toast({error: err.message});
 			});
 		}
 	};

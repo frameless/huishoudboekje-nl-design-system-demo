@@ -5,7 +5,7 @@ import {useToggle} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {NavLink, useHistory, useParams} from "react-router-dom";
 import Routes from "../../../config/routes";
-import {Burger, useDeleteBurgerMutation, useGetBurgerQuery} from "../../../generated/graphql";
+import {Burger, GetBurgersDocument, useDeleteBurgerMutation, useGetBurgerQuery} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import {formatBurgerName} from "../../../utils/things";
 import useToaster from "../../../utils/useToaster";
@@ -29,10 +29,18 @@ const BurgerDetail = () => {
 	const [isDeleted, toggleDeleted] = useToggle(false);
 
 	const $burger = useGetBurgerQuery({
-		fetchPolicy: "no-cache",
-		variables: {id: parseInt(id)},
+		variables: {
+			id: parseInt(id),
+		},
 	});
-	const [deleteBurger, $deleteBurger] = useDeleteBurgerMutation({variables: {id: parseInt(id)}});
+	const [deleteBurger, $deleteBurger] = useDeleteBurgerMutation({
+		variables: {
+			id: parseInt(id),
+		},
+		refetchQueries: [
+			{query: GetBurgersDocument}, // Todo: when implementing search, we need to refetch something like GetBurgersSearchDocument with search variables. (20-08-2021)
+		],
+	});
 
 	const onClickDeleteMenuItem = () => toggleAlert(true);
 
@@ -97,8 +105,8 @@ const BurgerDetail = () => {
 					</Menu>
 				)}>
 					<Section><BurgerProfileView burger={burger} /></Section>
-					<Section><BurgerRekeningenView burger={burger} refetch={$burger.refetch} /></Section>
-					<Section><BurgerAfsprakenView burger={burger} refetch={$burger.refetch} /></Section>
+					<Section><BurgerRekeningenView burger={burger} /></Section>
+					<Section><BurgerAfsprakenView burger={burger} /></Section>
 					<Section><BurgerGebeurtenissen burger={burger} /></Section>
 				</Page>
 			</>);

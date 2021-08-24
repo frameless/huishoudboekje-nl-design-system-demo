@@ -22,17 +22,17 @@ import {
 	useBreakpointValue,
 	VStack,
 } from "@chakra-ui/react";
-import React, {useContext, useState} from "react";
+import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {AiOutlineTag} from "react-icons/all";
 import {NavLink} from "react-router-dom";
 import Routes from "../../../config/routes";
-import {Afspraak, useEndAfspraakMutation} from "../../../generated/graphql";
+import {Afspraak, GetAfspraakDocument, useAddAfspraakZoektermMutation, useDeleteAfspraakZoektermMutation} from "../../../generated/graphql";
 import d from "../../../utils/dayjs";
 import {currencyFormat2, formatBurgerName, isAfspraakActive} from "../../../utils/things";
-import useHandleMutation from "../../../utils/useHandleMutation";
 import useScheduleHelper from "../../../utils/useScheduleHelper";
-import {zoektermValidator} from "../../../utils/zod";
+import useToaster from "../../../utils/useToaster";
+import zod, {containsZodErrorCode, zoektermValidator} from "../../../utils/zod";
 import BackButton from "../../Layouts/BackButton";
 import DataItem from "../../Layouts/DataItem";
 import {FormLeft, FormRight} from "../../Layouts/Forms";
@@ -41,39 +41,70 @@ import PrettyIban from "../../Layouts/PrettyIban";
 import Section from "../../Layouts/Section";
 import ZoektermenList from "../ZoektermenList";
 import AfspraakDetailMenu from "./AfspraakDetailMenu";
-import AfspraakDetailContext from "./context";
 
 const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	const isMobile = useBreakpointValue([true, null, null, false]);
 	const {t} = useTranslation();
-	const {deleteAfspraak, deleteAfspraakZoekterm, addAfspraakZoekterm, refetch} = useContext(AfspraakDetailContext);
+	const toast = useToaster();
 	const [zoekterm, setZoekterm] = useState<string>();
 	const [zoektermTouched, setZoektermTouched] = useState<boolean>(false);
-	const handleMutation = useHandleMutation();
 	const scheduleHelper = useScheduleHelper(afspraak.betaalinstructie);
+	const [addAfspraakZoekterm] = useAddAfspraakZoektermMutation({
+		refetchQueries: [
+			{query: GetAfspraakDocument, variables: {id: afspraak.id}},
+		],
+		onCompleted: () => {
+			setZoekterm("");
+			setZoektermTouched(false);
+		},
+	});
+	const [deleteAfspraakZoekterm] = useDeleteAfspraakZoektermMutation({
+		refetchQueries: [
+			{query: GetAfspraakDocument, variables: {id: afspraak.id}},
+		],
+	});
+
+	const onDeleteAfspraakZoekterm = (zoekterm: string) => {
+		deleteAfspraakZoekterm({
+			variables: {
+				afspraakId: afspraak.id!,
+				zoekterm,
+			},
+		}).then(result => {
+			if (result.data?.deleteAfspraakZoekterm?.ok) {
+				toast({success: t("messages.deleteAfspraakZoektermSuccess")});
+			}
+		});
+	};
 
 	const onAddAfspraakZoekterm = (e) => {
 		e.preventDefault();
 		setZoektermTouched(true);
-		addAfspraakZoekterm(zoekterm || "", () => {
-			setZoekterm("");
-			setZoektermTouched(false);
-		});
+
+		try {
+			const validatedZoekterm = zoektermValidator.parse(zoekterm || "");
+			addAfspraakZoekterm({
+				variables: {afspraakId: afspraak.id!, zoekterm: validatedZoekterm},
+			}).then(result => {
+				if (result.data?.addAfspraakZoekterm?.ok) {
+					toast({success: t("messages.addAfspraakZoektermSuccess")});
+				}
+			});
+		}
+		catch (err) {
+			let error = err.message;
+
+			if (err instanceof zod.ZodError) {
+				if (containsZodErrorCode(err, [zod.ZodIssueCode.too_small, zod.ZodIssueCode.invalid_type])) {
+					error = t("messages.zoektermLengthError");
+				}
+			}
+
+			toast({error});
+		}
 	};
 
-	const [endAfspraakMutation] = useEndAfspraakMutation();
-	const endAfspraak = (validThrough: Date) => {
-		handleMutation(endAfspraakMutation({
-			variables: {
-				id: afspraak.id!,
-				validThrough: d(validThrough).format("YYYY-MM-DD"),
-			},
-		}), t("endAfspraak.successMessage", {date: d(validThrough).format("L")}), () => {
-			refetch();
-		});
-	};
-
-	const menu = <AfspraakDetailMenu afspraak={afspraak} onDelete={() => deleteAfspraak()} onEndAfspraak={(validThrough: Date) => endAfspraak(validThrough)} />;
+	const menu = <AfspraakDetailMenu afspraak={afspraak} />;
 	const bedrag = afspraak.credit ? parseFloat(afspraak.bedrag) : (parseFloat(afspraak.bedrag) * -1);
 	const zoektermen = afspraak.zoektermen || [];
 	const matchingAfspraken = afspraak.matchingAfspraken || [];
@@ -177,7 +208,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 						) : (
 							<FormLabel>{t("afspraak.zoektermen")}</FormLabel>
 						)}
-						<ZoektermenList zoektermen={zoektermen} onDeleteZoekterm={isAfspraakActive(afspraak) ? (zoekterm: string) => deleteAfspraakZoekterm(zoekterm) : undefined} />
+						<ZoektermenList zoektermen={zoektermen} onDeleteZoekterm={isAfspraakActive(afspraak) ? (zoekterm: string) => onDeleteAfspraakZoekterm(zoekterm) : undefined} />
 					</Stack>
 
 					{zoektermen.length === 0 && (

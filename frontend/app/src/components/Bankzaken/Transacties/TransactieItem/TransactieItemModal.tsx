@@ -12,9 +12,7 @@ const TransactieItemModal = ({transactie, disclosure}) => {
 	const isMobile = useBreakpointValue([true, null, null, false]);
 	const {isOpen, onClose} = disclosure;
 
-	const $transactionItemFormData = useGetTransactionItemFormDataQuery({
-		fetchPolicy: "no-cache",
-	});
+	const $transactionItemFormData = useGetTransactionItemFormDataQuery();
 
 	return (
 		<Modal isOpen={!isMobile && isOpen} onClose={onClose}>

@@ -4,7 +4,7 @@ import {useInput, Validators} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {Redirect, useHistory, useParams} from "react-router-dom";
 import Routes from "../../config/routes";
-import {Organisatie, useGetOrganisatieQuery, useUpdateOrganisatieMutation} from "../../generated/graphql";
+import {GetOrganisatieDocument, GetOrganisatiesDocument, Organisatie, useGetOrganisatieQuery, useUpdateOrganisatieMutation} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
 import {Regex} from "../../utils/things";
 import useToaster from "../../utils/useToaster";
@@ -64,7 +64,12 @@ const OrganisatieEdit = () => {
 			}
 		},
 	});
-	const [updateOrganisatie, $updateOrganisatie] = useUpdateOrganisatieMutation();
+	const [updateOrganisatie, $updateOrganisatie] = useUpdateOrganisatieMutation({
+		refetchQueries: [
+			{query: GetOrganisatiesDocument},
+			{query: GetOrganisatieDocument, variables: {id: parseInt(id)}},
+		],
+	});
 
 	const onSubmit = (e) => {
 		e.preventDefault();
