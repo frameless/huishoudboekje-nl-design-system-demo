@@ -7,7 +7,8 @@ Create Date: 2021-06-23 12:08:02.220283
 """
 from alembic import op
 import sqlalchemy as sa
-
+from sqlalchemy.sql import table, column
+from sqlalchemy.orm.session import Session
 
 # revision identifiers, used by Alembic.
 revision = '2a8bdc5eb90d'
@@ -22,9 +23,43 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
-    op.add_column('burgers', sa.Column('huishouden_id', sa.Integer(), nullable=False))
-    op.create_foreign_key(None, 'burgers', 'huishoudens', ['huishouden_id'], ['id'])
-    # ### end Alembic commands ###
+
+    op.add_column('burgers',
+                  sa.Column('huishouden_id', sa.Integer(), nullable=True))
+    connection = op.get_bind()
+    t_burgers = sa.Table(
+        'burgers',
+        sa.MetaData(),
+        sa.Column('id', sa.INTEGER(), autoincrement=True, nullable=False),
+        sa.Column('huishouden_id', sa.Integer(), nullable=True),
+    )
+    session = Session(bind=op.get_bind())
+    rows = session.query(t_burgers.c.id).count()
+
+    results = connection.execute(sa.select([
+        t_burgers.c.id,
+        t_burgers.c.huishouden_id,
+    ])).fetchall()
+
+    i = 1
+    for id_, huishouden_id_ in results:
+        connection.execute(t_burgers.update().where(t_burgers.c.id == id_).values(
+            huishouden_id=i,
+        ))
+        i = i + 1
+
+    op.alter_column('burgers', 'huishouden_id', nullable=False)
+
+    t_huishoudens = sa.Table('huishoudens', sa.MetaData(),
+                             sa.Column('id', sa.Integer(), nullable=False))
+
+    for i in range(1, rows+1):
+        op.bulk_insert(t_huishoudens, [
+            {'id': i},
+        ])
+
+    op.create_foreign_key(None, 'burgers', 'huishoudens', ['huishouden_id'],
+                          ['id'])
 
 
 def downgrade():
