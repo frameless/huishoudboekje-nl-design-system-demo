@@ -48,6 +48,8 @@ def upgrade():
         ))
         i = i + 1
 
+    op.alter_column('burgers', 'huishouden_id', nullable=False)
+
     t_huishoudens = sa.Table('huishoudens', sa.MetaData(),
                              sa.Column('id', sa.Integer(), nullable=False))
 
