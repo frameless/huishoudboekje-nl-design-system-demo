@@ -108,8 +108,17 @@ const OrganisatieEdit = () => {
 			push(Routes.Organisatie(parseInt(id)));
 		}).catch(err => {
 			console.error(err);
+
+			let message = err.message;
+			if (err.message.includes("already exists")) {
+				message = t("messages.organisatie.alreadyExists");
+			}
+			if (err.message.includes("not unique")) {
+				message = t("messages.organisatie.alreadyExists");
+			}
+
 			toast({
-				error: err.message,
+				error: message,
 			});
 		});
 	};

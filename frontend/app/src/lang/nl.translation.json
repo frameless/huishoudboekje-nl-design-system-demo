@@ -78,7 +78,7 @@
             "noSearchResults": "Geen organisaties gevonden. Gebruik een andere zoekterm."
         },
         "organisatie": {
-            "alreadyExists": "Er bestaat al een organisatie met dit KvK-nummer."
+            "alreadyExists": "Er bestaat al een organisatie met dit KvK-nummer en vestigingsnummer."
         },
         "formInputError": {
             "description": "Er is een fout opgetreden. Controleer de invoer."

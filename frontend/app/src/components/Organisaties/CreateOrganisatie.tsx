@@ -103,6 +103,9 @@ const CreateOrganisatie = () => {
 			if (err.message.includes("already exists")) {
 				message = t("messages.organisatie.alreadyExists");
 			}
+			if (err.message.includes("not unique")) {
+				message = t("messages.organisatie.alreadyExists");
+			}
 
 			toast({
 				error: message,
