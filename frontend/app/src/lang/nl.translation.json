@@ -10,12 +10,12 @@
         },
         "updateAfspraakSuccess": "Afspraak is gewijzigd.",
         "createAfspraakSuccess": "Afspraak is opgeslagen.",
-        "automatischBoekenDisabled_noZoektermen": "Voeg een zoekterm toe die het systeem kan gebruiken om transacties automatisch af te letteren.",
-        "automatischBoekenDisabled_duplicatesFound": "Deze zoekterm of combinatie van zoektermen is niet uniek. Automatisch afletteren is daarom niet mogelijk. Maak een unieke combinatie van zoektermen.",
         "deleteAfspraakSuccess": "Afspraak is verwijderd.",
+        "deleteAfspraakZoektermSuccess": "Zoekterm is verwijderd.",
         "addAfspraakZoektermSuccess": "Zoekterm is opgeslagen.",
         "zoektermLengthError": "Zoekterm moet minimaal één teken lang zijn.",
-        "deleteAfspraakZoektermSuccess": "Zoekterm is verwijderd.",
+        "automatischBoekenDisabled_noZoektermen": "Voeg een zoekterm toe die het systeem kan gebruiken om transacties automatisch af te letteren.",
+        "automatischBoekenDisabled_duplicatesFound": "Deze zoekterm of combinatie van zoektermen is niet uniek. Automatisch afletteren is daarom niet mogelijk. Maak een unieke combinatie van zoektermen.",
         "customerStatementMessages": {
             "deleteSuccess": "Het bankafschrift is succesvol verwijderd."
         },
@@ -39,16 +39,28 @@
             "deleteConfirmMessage": "Gegevens van {{name}} zijn verwijderd.",
             "deleteTitle": "Burger verwijderen",
             "deleteQuestion": "Weet je zeker dat je de gegevens van {{name}} definitief wil verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
-            "invalidFormMessage": "Er is een fout opgetreden. Controleer de ingevulde gegevens en probeer het opnieuw.",
             "updateSuccessMessage": "Gegevens succesvol gewijzigd.",
-            "addHint": "Voeg burgers toe door te klikken op de knop {{buttonLabel}}.",
             "noSearchResults": "Geen burgers gevonden. Gebruik een andere zoekterm.",
+            "addHint": "Voeg burgers toe door te klikken op de knop {{buttonLabel}}.",
             "createSuccessMessage": "Nieuwe burger succesvol opgeslagen."
         },
         "burger": {
             "alreadyExists": "Er bestaat al een burger met dit burgerservicenummer.",
             "bsnLengthError": "Het burgerservicenummer moet bestaan uit 8 of 9 cijfers.",
             "bsnElfProefError": "Dit geen geldig burgerservicenummer. Controleer de ingevulde gegevens en probeer het opnieuw."
+        },
+        "burgerForm": {
+            "invalidBsn": "Vul een geldig BSN in. Een BSN is 8 of 9 tekens lang en moet voldoen aan de elfproef.",
+            "invalidVoorletters": "Vul minimaal één voorletter in. Voorletters zijn gescheiden met een punt. Voorbeeld: K.B.",
+            "invalidVoornamen": "Vul een voornaam in.",
+            "invalidAchternaam": "Vul een achternaam in.",
+            "invalidGeboortedatum": "Vul een geldige datum in. Voorbeeld: 01-01-1970.",
+            "invalidStraatnaam": "Vul een straatnaam in.",
+            "invalidHuisnummer": "Vul een huisnummer in.",
+            "invalidPostcode": "Vul een geldige postcode in. Voorbeeld: 1234AB.",
+            "invalidPlaatsnaam": "Vul een plaatsnaam in.",
+            "invalidTelefoonnummer": "Vul een telefoonnummer in. Voorbeeld: 0612345678.",
+            "invalidEmail": "Vul een geldig e-mailadres in."
         },
         "configuratie": {
             "updateSuccess": "Configuratie succesvol opgeslagen.",
