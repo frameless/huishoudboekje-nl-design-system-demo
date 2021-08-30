@@ -81,7 +81,7 @@ const Rapportage = () => {
 
 				const selectedBurgers = burgers.filter(b => filterBurgerIds.includes(b.id!));
 
-				return (<>
+				return (
 					<Page title={t("reports.title")}
 						  position={"relative"} right={!$data.loading && (
 							<Box>
@@ -182,7 +182,7 @@ const Rapportage = () => {
 							<BalanceTable transactions={filteredTransactions} startDate={d(dateRange.from).format("L")} endDate={d(dateRange.through).format("L")} />
 						</Section>
 					</Page>
-				</>);
+				);
 			}} />
 		</RapportageContext.Provider>
 	);

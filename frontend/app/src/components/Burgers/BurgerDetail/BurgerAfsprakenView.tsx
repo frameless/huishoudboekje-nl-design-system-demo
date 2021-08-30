@@ -48,7 +48,7 @@ const BurgerAfsprakenView: React.FC<StackProps & {burger: Burger}> = ({burger, .
 				)}
 			</FormLeft>
 			<FormRight justify={"start"}>
-				{sortedAfspraken.length > 0 && (<>
+				{sortedAfspraken.length > 0 && (
 					<Table size={"sm"} variant={"noLeftPadding"}>
 						<Thead>
 							<Tr>
@@ -71,7 +71,7 @@ const BurgerAfsprakenView: React.FC<StackProps & {burger: Burger}> = ({burger, .
 							))}
 						</Tbody>
 					</Table>
-				</>)}
+				)}
 
 				{id && (
 					<Box>

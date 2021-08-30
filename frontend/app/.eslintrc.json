@@ -73,7 +73,8 @@
 	  }
 	],
 	"react/no-unknown-property": ["warn"],
-	"no-constant-condition": ["warn", {"checkLoops": false}]
+	"no-constant-condition": ["warn", {"checkLoops": false}],
+	"react/jsx-no-useless-fragment": ["error", {"allowExpressions": true}]
   },
   "ignorePatterns": [
 	"node_modules",
