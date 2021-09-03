@@ -6,19 +6,11 @@ import {Organisatie, Rekening, Rubriek, UpdateAfspraakInput} from "../../generat
 import {currencyFormat, formatIBAN, useReactSelectStyles} from "../../utils/things";
 import useToaster from "../../utils/useToaster";
 import zod from "../../utils/zod";
+import AfspraakValidator from "../../validators/AfspraakValidator";
 import {ReverseMultiLineOption, ReverseMultiLineValueContainer} from "../Layouts/ReactSelect/CustomComponents";
 import AfspraakFormContext from "./EditAfspraak/context";
 
 const bedragInputValidator = zod.string().regex(/^[^.]*$/);
-
-const validator = zod.object({
-	rubriekId: zod.number().nonnegative(),
-	omschrijving: zod.string().nonempty(),
-	organisatieId: zod.number().nonnegative().optional(),
-	tegenRekeningId: zod.number().nonnegative(),
-	bedrag: zod.number().min(.01),
-	credit: zod.boolean(),
-});
 
 type AfspraakFormProps = {
 	burgerRekeningen: Rekening[],
@@ -38,7 +30,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 		rubrieken = [],
 	} = useContext(AfspraakFormContext);
 
-	const isValid = (fieldName: string) => validator.shape[fieldName]?.safeParse(data[fieldName]).success;
+	const isValid = (fieldName: string) => AfspraakValidator.shape[fieldName]?.safeParse(data[fieldName]).success;
 	const updateForm = (field: string, value: any) => {
 		setData(prevData => ({
 			...prevData,
@@ -94,7 +86,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 	const onSubmit = () => {
 		try {
 			bedragInputValidator.parse(bedragRef.current?.value);
-			const validatedData = validator.parse(data);
+			const validatedData = AfspraakValidator.parse(data);
 			onChange(validatedData);
 		}
 		catch (err) {
