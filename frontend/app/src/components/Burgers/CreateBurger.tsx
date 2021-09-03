@@ -40,10 +40,10 @@ const CreateBurger = () => {
 			if (err.message.includes("already exists")) {
 				message = t("messages.burger.alreadyExists");
 			}
-			if (err.message.includes("BSN should consist of 8 or 9 digits")) {
+			else if (err.message.includes("BSN should consist of 8 or 9 digits")) {
 				message = t("messages.burger.bsnLengthError");
 			}
-			if (err.message.includes("BSN does not meet the 11-proef requirement")) {
+			else if (err.message.includes("BSN does not meet the 11-proef requirement")) {
 				message = t("messages.burger.bsnElfProefError");
 			}
 

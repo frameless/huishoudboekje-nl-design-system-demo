@@ -34,7 +34,7 @@ const OrganisatieList = () => {
 		<Queryable query={$organisaties}>{({organisaties = []}: {organisaties: Organisatie[]}) => {
 			if (organisaties.length === 0) {
 				return (
-					<DeadEndPage message={t("messages.organizations.addHint", {buttonLabel: t("actions.add")})}>
+					<DeadEndPage message={t("messages.organisaties.addHint", {buttonLabel: t("actions.add")})}>
 						<Button size={"sm"} colorScheme={"primary"} variant={"solid"} leftIcon={
 							<AddIcon />} onClick={() => push(Routes.CreateOrganisatie)}>{t("actions.add")}</Button>
 					</DeadEndPage>
@@ -63,7 +63,7 @@ const OrganisatieList = () => {
 					</InputGroup>
 				)}>
 					{filteredOrganisaties.length === 0 ? (
-						<DeadEndPage message={t("messages.organizations.noSearchResults")}>
+						<DeadEndPage message={t("messages.organisaties.noSearchResults")}>
 							<Button size={"sm"} colorScheme={"primary"} onClick={onClickResetSearch}>{t("actions.clearSearch")}</Button>
 						</DeadEndPage>
 					) : (

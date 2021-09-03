@@ -79,18 +79,23 @@
         "huishoudens": {
             "noSearchResults": "Geen huishoudens gevonden. Gebruik een andere zoekterm."
         },
-        "organizations": {
-            "invalidFormMessage": "Er is een fout opgetreden. Controleer de ingevulde gegevens en probeer het opnieuw.",
+        "organisaties": {
             "createSuccessMessage": "Nieuwe organisatie succesvol opgeslagen.",
+            "alreadyExists": "Er bestaat al een organisatie met dit KvK-nummer en vestigingsnummer.",
             "deleteConfirmMessage": "Gegevens van {{name}} zijn verwijderd.",
             "deleteTitle": "Organisatie verwijderen",
             "deleteQuestion": "Weet je zeker dat je de gegevens van {{name}} definitief wil verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
+            "invalidFormMessage": "Er is een fout opgetreden. Controleer de ingevulde gegevens en probeer het opnieuw.",
             "updateSuccessMessage": "Gegevens succesvol gewijzigd.",
+            "invalidKvknummer": "Vul het KvK-nummer in. Het KvK-nummer bestaat uit 8 cijfers.",
+            "invalidVestigingsnummer": "Vul het vestigingsnummer in. Het vestigingsnummer bestaat uit 12 cijfers.",
+            "invalidNaam": "Vul de naam van de organisatie in.",
+            "invalidStraatnaam": "Vul de straatnaam in.",
+            "invalidHuisnummer": "Vul het huisnummer in.",
+            "invalidPostcode": "Vul de postcode in.",
+            "invalidPlaatsnaam": "Vul de plaatsnaam in.",
             "addHint": "Voeg organisaties toe door te klikken op de knop {{buttonLabel}}.",
             "noSearchResults": "Geen organisaties gevonden. Gebruik een andere zoekterm."
-        },
-        "organisatie": {
-            "alreadyExists": "Er bestaat al een organisatie met dit KvK-nummer en vestigingsnummer."
         },
         "formInputError": {
             "description": "Er is een fout opgetreden. Controleer de invoer."
@@ -309,12 +314,13 @@
             },
             "fields": {
                 "kvknummer": "KvK-nummer",
-                "vestigingsnummer": "Vestigingsnummer",
                 "bedrijfsnaam": "Bedrijfsnaam",
+                "vestigingsnummer": "Vestigingsnummer",
                 "straatnaam": "Straatnaam",
                 "huisnummer": "Huisnummer",
                 "postcode": "Postcode",
                 "plaatsnaam": "Plaatsnaam",
+                "naam": "Bedrijfsnaam",
                 "companyName": "Bedrijfsnaam",
                 "kvkNumber": "KvK-nummer",
                 "street": "Straatnaam",
