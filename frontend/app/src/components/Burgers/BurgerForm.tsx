@@ -6,7 +6,7 @@ import {Burger} from "../../generated/graphql";
 import d from "../../utils/dayjs";
 import {FormLeft, FormRight} from "../Layouts/Forms";
 import Section from "../Layouts/Section";
-import useBurgerForm from "./useBurgerForm";
+import useBurgerForm from "./utils/useBurgerForm";
 
 type BurgerFormProps = {
 	burger?: Burger,
