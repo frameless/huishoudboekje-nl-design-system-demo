@@ -12,7 +12,7 @@ import Page from "../Layouts/Page";
 import BurgerForm from "./BurgerForm";
 import SaveBurgerErrorHandler from "../../errorHandlers/SaveBurgerErrorHandler";
 
-const BurgerEdit = () => {
+const EditBurger = () => {
 	const {t} = useTranslation();
 	const {id} = useParams<{id: string}>();
 	const toast = useToaster();
@@ -54,4 +54,4 @@ const BurgerEdit = () => {
 	);
 };
 
-export default BurgerEdit;
+export default EditBurger;

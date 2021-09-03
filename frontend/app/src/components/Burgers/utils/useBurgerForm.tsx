@@ -46,7 +46,7 @@ const useBurgerForm = (burgerData?: BurgerFormData) => {
 		updateForm,
 		bind,
 		isValid: () => BurgerValidator.safeParse(data).success,
-		isFieldValid: (fieldName: keyof typeof data | string) => BurgerValidator.shape[fieldName].safeParse(data?.[fieldName]).success,
+		isFieldValid: (fieldName: string) => BurgerValidator.shape[fieldName].safeParse(data[fieldName]).success,
 		validator: BurgerValidator,
 	};
 };

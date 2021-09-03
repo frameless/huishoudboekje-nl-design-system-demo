@@ -4,6 +4,8 @@ import DatePicker from "react-datepicker";
 import {useTranslation} from "react-i18next";
 import {Burger} from "../../generated/graphql";
 import d from "../../utils/dayjs";
+import useToaster from "../../utils/useToaster";
+import BurgerValidator from "../../validators/BurgerValidator";
 import {FormLeft, FormRight} from "../Layouts/Forms";
 import Section from "../Layouts/Section";
 import useBurgerForm from "./utils/useBurgerForm";
@@ -17,6 +19,7 @@ type BurgerFormProps = {
 const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading}) => {
 	const {t} = useTranslation();
 	const isMobile = useBreakpointValue([true, null, null, false]);
+	const toast = useToaster();
 	const {bsn, voorletters, voornamen, achternaam, geboortedatum, email, huisnummer, postcode, straatnaam, plaatsnaam, telefoonnummer} = burger || {};
 	const {data, updateForm, bind, isFieldValid} = useBurgerForm({
 		bsn,
@@ -34,12 +37,22 @@ const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading}) =>
 
 	const onSubmitForm = (e) => {
 		e.preventDefault();
-		onSubmit(({
-			...data,
-			...burger?.id && {id: burger.id},
-			bsn: Number(data.bsn),
-			geboortedatum: d(data.geboortedatum, "L").format("YYYY-MM-DD"),
-		}));
+
+		try {
+			const validatedData = BurgerValidator.parse(data);
+			onSubmit(({
+				...validatedData,
+				...burger?.id && {id: burger.id},
+				bsn: Number(data.bsn),
+				geboortedatum: d(data.geboortedatum, "L").format("YYYY-MM-DD"),
+			}));
+		}
+		catch (err) {
+			toast.closeAll();
+			toast({
+				error: t("messages.formInputError"),
+			});
+		}
 	};
 
 	return (

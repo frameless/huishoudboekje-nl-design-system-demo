@@ -47,7 +47,7 @@ const BurgerAfsprakenView: React.FC<StackProps & {burger: Burger}> = ({burger, .
 					</FormControl>
 				)}
 			</FormLeft>
-			<FormRight justify={"start"}>
+			<FormRight justify={"center"}>
 				{sortedAfspraken.length > 0 && (
 					<Table size={"sm"} variant={"noLeftPadding"}>
 						<Thead>

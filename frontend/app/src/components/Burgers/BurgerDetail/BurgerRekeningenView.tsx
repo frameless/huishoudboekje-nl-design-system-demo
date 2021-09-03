@@ -50,7 +50,7 @@ const BurgerRekeningenView: React.FC<StackProps & {burger: Burger}> = ({burger, 
 
 				{burgerId && showCreateRekeningForm ? (<>
 					{rekeningen.length > 0 && <Divider />}
-					<RekeningForm rekening={{rekeninghouder: `${burger.voorletters} ${burger.achternaam}`}} onSave={onSaveRekening} onCancel={() => toggleCreateRekeningForm(false)} />
+					<RekeningForm rekening={{rekeninghouder: `${burger.voorletters} ${burger.achternaam}`}} onSubmit={onSaveRekening} onCancel={() => toggleCreateRekeningForm(false)} />
 				</>) : (
 					<Box>
 						<Button leftIcon={<AddIcon />} colorScheme={"primary"} size={"sm"} onClick={() => toggleCreateRekeningForm(true)}>{t("global.actions.add")}</Button>

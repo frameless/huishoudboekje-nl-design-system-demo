@@ -1,7 +1,7 @@
 import {useTranslation} from "react-i18next";
-import useToaster from "../../utils/useToaster";
+import useToaster from "../utils/useToaster";
 
-const useHandleSaveOrganisatieErrors = () => {
+const SaveOrganisatieErrorHandler = () => {
 	const {t} = useTranslation();
 	const toast = useToaster();
 
@@ -22,4 +22,4 @@ const useHandleSaveOrganisatieErrors = () => {
 	};
 };
 
-export default useHandleSaveOrganisatieErrors;
+export default SaveOrganisatieErrorHandler;

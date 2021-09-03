@@ -2,6 +2,8 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {Redirect, useHistory, useParams} from "react-router-dom";
 import Routes from "../../config/routes";
+import SaveOrganisatieErrorHandler from "../../errorHandlers/SaveOrganisatieErrorHandler";
+import useMutationErrorHandler from "../../errorHandlers/useMutationErrorHandler";
 import {
 	GetOrganisatieDocument,
 	GetOrganisatiesDocument,
@@ -15,14 +17,13 @@ import useToaster from "../../utils/useToaster";
 import BackButton from "../Layouts/BackButton";
 import Page from "../Layouts/Page";
 import OrganisatieForm from "./OrganisatieForm";
-import useHandleSaveOrganisatieErrors from "./useHandleSaveOrganisatieErrors";
 
 const EditOrganisatie = () => {
 	const {t} = useTranslation();
 	const {id} = useParams<{id: string}>();
 	const toast = useToaster();
 	const {push} = useHistory();
-	const handleSaveOrganisatieErrors = useHandleSaveOrganisatieErrors();
+	const handleSaveOrganisatieErrors = useMutationErrorHandler(SaveOrganisatieErrorHandler);
 
 	const $organisatie = useGetOrganisatieQuery({
 		variables: {id: parseInt(id)},

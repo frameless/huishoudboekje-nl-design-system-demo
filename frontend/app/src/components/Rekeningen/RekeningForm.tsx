@@ -3,14 +3,10 @@ import {friendlyFormatIBAN} from "ibantools";
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {Rekening, RekeningInput} from "../../generated/graphql";
-import {Regex, sanitizeIBAN} from "../../utils/things";
+import {sanitizeIBAN} from "../../utils/things";
 import useToaster from "../../utils/useToaster";
 import zod from "../../utils/zod";
-
-const validator = zod.object({
-	rekeninghouder: zod.string().nonempty().max(100),
-	iban: zod.string().regex(Regex.IbanNL),
-});
+import RekeningValidator from "../../validators/RekeningValidator";
 
 const useErrorMap = (t): zod.ZodErrorMap => (error, ctx) => {
 	if (error.path.includes("iban")) {
@@ -25,9 +21,9 @@ const useErrorMap = (t): zod.ZodErrorMap => (error, ctx) => {
 
 const RekeningForm: React.FC<{
 	rekening?: Rekening,
-	onSave: (rekening: RekeningInput, resetForm: VoidFunction) => void,
+	onSubmit: (rekening: RekeningInput, resetForm: VoidFunction) => void,
 	onCancel: VoidFunction,
-}> = ({rekening, onSave, onCancel}) => {
+}> = ({rekening, onSubmit, onCancel}) => {
 	const isMobile = useBreakpointValue([true, null, null, false]);
 	const {t} = useTranslation();
 	const toast = useToaster();
@@ -36,17 +32,17 @@ const RekeningForm: React.FC<{
 	const [rekeninghouder, setRekeninghouder] = useState<string>(rekening?.rekeninghouder || "");
 	const [iban, setIban] = useState<string>(rekening?.iban || "");
 
-	const isValid = (fieldName: string) => validator.shape[fieldName]?.safeParse(rekeninghouder).success;
+	const isValid = (fieldName: string) => RekeningValidator.shape[fieldName]?.safeParse(rekeninghouder).success;
 
-	const onSubmit = (e) => {
+	const onSubmitForm = (e) => {
 		e.preventDefault();
 
 		try {
 			const ibanNoSpaces = iban.trim().replaceAll(" ", "");
 			setIban(ibanNoSpaces);
 
-			const data = validator.parse({rekeninghouder, iban: ibanNoSpaces}, {errorMap});
-			onSave({
+			const data = RekeningValidator.parse({rekeninghouder, iban: ibanNoSpaces}, {errorMap});
+			onSubmit({
 				...(rekening || {}),
 				rekeninghouder: data.rekeninghouder,
 				iban: data.iban ? sanitizeIBAN(data.iban) : undefined,
@@ -56,14 +52,15 @@ const RekeningForm: React.FC<{
 			});
 		}
 		catch (err) {
+			toast.closeAll();
 			toast({
-				error: t("messages.rekeningen.formInputError"),
+				error: t("messages.formInputError"),
 			});
 		}
 	};
 
 	return (
-		<form onSubmit={onSubmit}>
+		<form onSubmit={onSubmitForm}>
 			<SimpleGrid minChildWidth={isMobile ? "100%" : 250} gridGap={2}>
 				<Stack spacing={1}>
 					<FormControl isInvalid={!isValid("rekeninghouder")} id={"rekeninghouder"}>
@@ -81,7 +78,7 @@ const RekeningForm: React.FC<{
 				</Stack>
 				<Stack direction={"row"} alignItems={"flex-end"}>
 					<Button type={"reset"} onClick={() => onCancel()}>{t("global.actions.cancel")}</Button>
-					<Button type={"submit"} colorScheme={"primary"} onClick={onSubmit}>{t("global.actions.save")}</Button>
+					<Button type={"submit"} colorScheme={"primary"} onClick={onSubmitForm}>{t("global.actions.save")}</Button>
 				</Stack>
 			</SimpleGrid>
 		</form>

@@ -2,18 +2,19 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {useHistory} from "react-router-dom";
 import Routes from "../../config/routes";
+import SaveOrganisatieErrorHandler from "../../errorHandlers/SaveOrganisatieErrorHandler";
+import useMutationErrorHandler from "../../errorHandlers/useMutationErrorHandler";
 import {CreateOrganisatieMutationVariables, GetOrganisatiesDocument, useCreateOrganisatieMutation} from "../../generated/graphql";
 import useToaster from "../../utils/useToaster";
 import BackButton from "../Layouts/BackButton";
 import Page from "../Layouts/Page";
 import OrganisatieForm from "./OrganisatieForm";
-import useHandleSaveOrganisatieErrors from "./useHandleSaveOrganisatieErrors";
 
 const CreateOrganisatie = () => {
 	const {t} = useTranslation();
 	const {push} = useHistory();
 	const toast = useToaster();
-	const handleSaveOrganisatieErrors = useHandleSaveOrganisatieErrors();
+	const handleSaveOrganisatieErrors = useMutationErrorHandler(SaveOrganisatieErrorHandler);
 
 	const [createOrganisatie, $createOrganisatie] = useCreateOrganisatieMutation({
 		refetchQueries: [

@@ -34,7 +34,6 @@
     },
     "rekeningen": {
       "createSuccess": "Bankrekening {{iban}} op naam van {{rekeninghouder}} is toegevoegd.",
-      "formInputError": "Er is een fout opgetreden. Controleer de invoer.",
       "deleteSuccess": "Bankrekening is verwijderd.",
       "updateSuccess": "Gegevens succesvol gewijzigd.",
       "deleteTitle": "Bankrekening verwijderen.",
@@ -45,7 +44,6 @@
       "deleteConfirmMessage": "Gegevens van {{name}} zijn verwijderd.",
       "deleteTitle": "Burger verwijderen",
       "deleteQuestion": "Weet je zeker dat je de gegevens van {{name}} definitief wil verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
-      "updateSuccessMessage": "Gegevens succesvol gewijzigd.",
       "invalidBsn": "Vul een geldig BSN in. Een BSN is 8 of 9 tekens lang en moet voldoen aan de elfproef.",
       "invalidVoorletters": "Vul minimaal één voorletter in. Voorletters zijn gescheiden met een punt. Voorbeeld: K.B.",
       "invalidVoornamen": "Vul een voornaam in.",
@@ -60,10 +58,12 @@
       "noSearchResults": "Geen burgers gevonden. Gebruik een andere zoekterm.",
       "addHint": "Voeg burgers toe door te klikken op de knop {{buttonLabel}}.",
       "createSuccessMessage": "Nieuwe burger succesvol opgeslagen.",
+      "updateSuccessMessage": "Gegevens succesvol gewijzigd.",
       "alreadyExists": "Er bestaat al een burger met dit burgerservicenummer.",
       "bsnLengthError": "Het burgerservicenummer moet bestaan uit 8 of 9 cijfers.",
       "bsnElfProefError": "Dit geen geldig burgerservicenummer. Controleer de ingevulde gegevens en probeer het opnieuw."
     },
+    "formInputError": "Er is een fout opgetreden. Controleer de invoer.",
     "configuratie": {
       "updateSuccess": "Configuratie succesvol opgeslagen.",
       "deleteSuccess": "Configuratie is verwijderd.",
