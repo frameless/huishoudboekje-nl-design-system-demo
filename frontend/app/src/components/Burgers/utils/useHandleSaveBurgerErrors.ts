@@ -10,13 +10,13 @@ const useHandleSaveBurgerErrors = () => {
 
 		let message = err.message;
 		if (err.message.includes("already exists")) {
-			message = t("messages.burger.alreadyExists");
+			message = t("messages.burgers.alreadyExists");
 		}
 		if (err.message.includes("BSN should consist of 8 or 9 digits")) {
-			message = t("messages.burger.bsnLengthError");
+			message = t("messages.burgers.bsnLengthError");
 		}
 		if (err.message.includes("BSN does not meet the 11-proef requirement")) {
-			message = t("messages.burger.bsnElfProefError");
+			message = t("messages.burgers.bsnElfProefError");
 		}
 
 		toast({

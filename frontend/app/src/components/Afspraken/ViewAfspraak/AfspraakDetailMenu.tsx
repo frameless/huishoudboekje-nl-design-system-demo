@@ -74,9 +74,9 @@ const AfspraakDetailMenu: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 		<Menu>
 			<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} data-cy={"actionsMenuButton"} />
 			<MenuList>
-				<NavLink to={Routes.EditAfspraak(afspraak.id)}><MenuItem>{t("actions.edit")}</MenuItem></NavLink>
-				<MenuItem onClick={endModal.onOpen}>{t("actions.end")}</MenuItem>
-				<MenuItem onClick={deleteModal.onOpen}>{t("actions.delete")}</MenuItem>
+				<NavLink to={Routes.EditAfspraak(afspraak.id)}><MenuItem>{t("global.actions.edit")}</MenuItem></NavLink>
+				<MenuItem onClick={endModal.onOpen}>{t("global.actions.end")}</MenuItem>
+				<MenuItem onClick={deleteModal.onOpen}>{t("global.actions.delete")}</MenuItem>
 			</MenuList>
 		</Menu>
 	</>);

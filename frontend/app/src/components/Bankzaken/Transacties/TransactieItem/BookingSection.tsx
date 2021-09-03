@@ -110,8 +110,8 @@ const BookingSection = ({transaction, rubrieken, afspraken}) => {
 									<Thead>
 										<Tr>
 											<Th>{t("burger")}</Th>
-											<Th>{t("afspraak.omschrijving")}</Th>
-											<Th>{t("afspraak.zoekterm")}</Th>
+											<Th>{t("afspraken.omschrijving")}</Th>
+											<Th>{t("afspraken.zoekterm")}</Th>
 											<Th />
 											<Th>{t("bedrag")}</Th>
 										</Tr>

@@ -55,9 +55,9 @@ const App = () => {
 					<Spinner size={"xl"} />
 				) : (
 					<Stack spacing={5} maxWidth={300} alignSelf={["center", null, null, "flex-start"]}>
-						<Heading size="sm">{t("messages.login.welcome", {tenantName: theme["tenantName"]})}</Heading>
-						<Text fontSize={"sm"}>{t("messages.login.clickHereToContinue")}</Text>
-						<Button colorScheme={"primary"} type={"submit"} onClick={onClickLoginButton}>{t("actions.login")}</Button>
+						<Heading size="sm">{t("messages.welcome", {tenantName: theme["tenantName"]})}</Heading>
+						<Text fontSize={"sm"}>{t("messages.clickHereToContinue")}</Text>
+						<Button colorScheme={"primary"} type={"submit"} onClick={onClickLoginButton}>{t("global.actions.login")}</Button>
 					</Stack>
 				)}
 			</TwoColumns>
@@ -85,7 +85,7 @@ const App = () => {
 						<HStack spacing={5} alignItems={"center"}>
 							<UserStatus name={user.email} />
 							<IconButton size={"14px"} icon={
-								<FaLock />} color={"gray.400"} _hover={{color: "primary.700"}} aria-label={t("actions.logout")} mr={3} onClick={reset} />
+								<FaLock />} color={"gray.400"} _hover={{color: "primary.700"}} aria-label={t("global.actions.logout")} mr={3} onClick={reset} />
 						</HStack>
 					</Stack>
 

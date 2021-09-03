@@ -42,9 +42,9 @@ const HuishoudensList = () => {
 
 			if (huishoudens.length === 0) {
 				return (
-					<DeadEndPage message={t("messages.burgers.addHint", {buttonLabel: t("actions.add")})}>
+					<DeadEndPage message={t("messages.burgers.addHint", {buttonLabel: t("global.actions.add")})}>
 						<Button size={"sm"} colorScheme={"primary"} variant={"solid"} leftIcon={<AddIcon />}
-							onClick={() => push(Routes.CreateBurger)}>{t("actions.add")}</Button>
+							onClick={() => push(Routes.CreateBurger)}>{t("global.actions.add")}</Button>
 					</DeadEndPage>
 				);
 			}
@@ -58,14 +58,14 @@ const HuishoudensList = () => {
 						<Input type={"text"} onChange={e => setSearch(e.target.value)} bg={"white"} onKeyDown={onKeyDownOnSearch} placeholder={t("forms.search.fields.search")} ref={searchRef} />
 						{search.length > 0 && (
 							<InputRightElement zIndex={0}>
-								<IconButton onClick={() => setSearch("")} size={"xs"} variant={"link"} icon={<CloseIcon />} aria-label={t("actions.cancel")} color={"gray.300"} />
+								<IconButton onClick={() => setSearch("")} size={"xs"} variant={"link"} icon={<CloseIcon />} aria-label={t("global.actions.cancel")} color={"gray.300"} />
 							</InputRightElement>
 						)}
 					</InputGroup>
 				)}>
 					{filteredHuishoudens.length === 0 ? (
-						<DeadEndPage message={t("messages.huishoudens.noSearchResults")}>
-							<Button size="sm" colorScheme="primary" onClick={onClickResetSearch}>{t("actions.clearSearch")}</Button>
+						<DeadEndPage message={t("messages.noHuishoudenSearchResults")}>
+							<Button size="sm" colorScheme="primary" onClick={onClickResetSearch}>{t("global.actions.clearSearch")}</Button>
 						</DeadEndPage>
 					) : (
 						<HuishoudensListView huishoudens={filteredHuishoudens} />

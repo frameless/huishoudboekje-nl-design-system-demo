@@ -50,7 +50,7 @@ const OrganisatieRekeningenView: React.FC<BoxProps & {organisatie: Organisatie}>
 						}} onSave={onSaveRekening} onCancel={() => toggleForm(false)} />
 					</>) : (
 						<Box>
-							<Button leftIcon={<AddIcon />} colorScheme={"primary"} size={"sm"} onClick={() => toggleForm(true)}>{t("actions.add")}</Button>
+							<Button leftIcon={<AddIcon />} colorScheme={"primary"} size={"sm"} onClick={() => toggleForm(true)}>{t("global.actions.add")}</Button>
 						</Box>
 					)}
 				</FormRight>

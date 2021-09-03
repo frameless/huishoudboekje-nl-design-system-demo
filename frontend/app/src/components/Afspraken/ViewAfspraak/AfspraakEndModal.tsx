@@ -75,8 +75,8 @@ const AfspraakEndModal = ({isOpen, onClose, onSubmit}) => {
 				</ModalBody>
 				<ModalFooter>
 					<HStack>
-						<Button variant={"ghost"} onClick={onClose}>{t("actions.cancel")}</Button>
-						<Button colorScheme={"primary"} onClick={onClickSubmit}>{t("actions.end")}</Button>
+						<Button variant={"ghost"} onClick={onClose}>{t("global.actions.cancel")}</Button>
+						<Button colorScheme={"primary"} onClick={onClickSubmit}>{t("global.actions.end")}</Button>
 					</HStack>
 				</ModalFooter>
 			</ModalContent>

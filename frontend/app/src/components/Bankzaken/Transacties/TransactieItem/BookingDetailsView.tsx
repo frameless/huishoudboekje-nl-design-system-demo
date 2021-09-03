@@ -76,11 +76,11 @@ const BookingDetailsView: React.FC<{transactie: BankTransaction}> = ({transactie
 				<Stack direction={"row"} spacing={5}>
 					<Box mb={3}>
 						<Button leftIcon={
-							<ViewIcon />} colorScheme={"primary"} size={"sm"} as={NavLink} to={Routes.ViewAfspraak(journaalpostAfspraak.id)}>{t("actions.view")}</Button>
+							<ViewIcon />} colorScheme={"primary"} size={"sm"} as={NavLink} to={Routes.ViewAfspraak(journaalpostAfspraak.id)}>{t("global.actions.view")}</Button>
 					</Box>
 					<Box>
 						<Button leftIcon={
-							<DeleteIcon />} variant={"ghost"} colorScheme={"red"} size={"sm"} onClick={onDelete} isLoading={$deleteJournaalpost.loading}>{t("actions.undoAfletteren")}</Button>
+							<DeleteIcon />} variant={"ghost"} colorScheme={"red"} size={"sm"} onClick={onDelete} isLoading={$deleteJournaalpost.loading}>{t("global.actions.undoAfletteren")}</Button>
 					</Box>
 				</Stack>
 			</Stack>
@@ -99,7 +99,7 @@ const BookingDetailsView: React.FC<{transactie: BankTransaction}> = ({transactie
 				</Box>
 				<Box>
 					<Button leftIcon={
-						<DeleteIcon />} variant={"ghost"} colorScheme={"red"} size={"sm"} onClick={onDelete} isLoading={$deleteJournaalpost.loading}>{t("actions.undoAfletteren")}</Button>
+						<DeleteIcon />} variant={"ghost"} colorScheme={"red"} size={"sm"} onClick={onDelete} isLoading={$deleteJournaalpost.loading}>{t("global.actions.undoAfletteren")}</Button>
 				</Box>
 			</Stack>
 		);

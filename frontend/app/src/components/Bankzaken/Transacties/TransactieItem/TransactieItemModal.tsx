@@ -18,7 +18,7 @@ const TransactieItemModal = ({transactie, disclosure}) => {
 		<Modal isOpen={!isMobile && isOpen} onClose={onClose}>
 			<ModalOverlay />
 			<ModalContent width={"100%"} maxWidth={1000}>
-				<ModalHeader>{t("forms.banking.sections.journal.title")}</ModalHeader>
+				<ModalHeader>{t("forms.bankzaken.sections.journal.title")}</ModalHeader>
 				<ModalCloseButton />
 				<ModalBody>
 					<Stack spacing={10}>

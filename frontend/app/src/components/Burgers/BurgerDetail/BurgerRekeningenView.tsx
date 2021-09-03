@@ -58,7 +58,7 @@ const BurgerRekeningenView: React.FC<StackProps & {burger: Burger}> = ({burger, 
 					}} />
 				</>) : (
 					<Box>
-						<Button leftIcon={<AddIcon />} colorScheme={"primary"} size={"sm"} onClick={() => toggleCreateRekeningForm(true)}>{t("actions.add")}</Button>
+						<Button leftIcon={<AddIcon />} colorScheme={"primary"} size={"sm"} onClick={() => toggleCreateRekeningForm(true)}>{t("global.actions.add")}</Button>
 					</Box>
 				)}
 			</FormRight>

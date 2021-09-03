@@ -98,7 +98,7 @@ const Rapportage = () => {
 										<Stack>
 											<Stack direction={["column", "row"]} spacing={5} flex={1}>
 												<FormControl as={Stack} flex={1} justifyContent={"flex-end"}>
-													<FormLabel>{t("forms.common.fields.startDate")}</FormLabel>
+													<FormLabel>{t("global.startDate")}</FormLabel>
 													<DatePicker selected={dateRange.from || null}
 														dateFormat={"dd-MM-yyyy"} startDate={dateRange.from} endDate={dateRange.through} isClearable={false} selectsRange={true}
 														onChange={(value: [Date, Date]) => {
@@ -156,7 +156,7 @@ const Rapportage = () => {
 									</Stack>
 								</ModalBody>
 								<ModalFooter>
-									<Button colorScheme={"primary"} onClick={filterModal.onClose}>{t("actions.close")}</Button>
+									<Button colorScheme={"primary"} onClick={filterModal.onClose}>{t("global.actions.close")}</Button>
 								</ModalFooter>
 							</ModalContent>
 						</Modal>

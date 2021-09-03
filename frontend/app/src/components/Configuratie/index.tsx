@@ -76,7 +76,7 @@ const Configuratie = () => {
 										<Input {...value.bind} />
 									</FormControl>
 									<FormControl>
-										<Button type={"submit"} colorScheme={"primary"}>{t("actions.add")}</Button>
+										<Button type={"submit"} colorScheme={"primary"}>{t("global.actions.add")}</Button>
 									</FormControl>
 								</Stack>
 							</form>

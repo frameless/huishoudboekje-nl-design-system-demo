@@ -111,7 +111,7 @@ const OrganisatieForm: React.FC<OrganisatieFormProps> = ({organisatie, onSubmit,
 					<FormLeft />
 					<FormRight>
 						<Stack direction={"row"} spacing={1} justifyContent={"flex-end"}>
-							<Button isLoading={isLoading} type={"submit"} colorScheme={"primary"} onClick={onSubmitForm}>{t("actions.save")}</Button>
+							<Button isLoading={isLoading} type={"submit"} colorScheme={"primary"} onClick={onSubmitForm}>{t("global.actions.save")}</Button>
 						</Stack>
 					</FormRight>
 				</Stack>

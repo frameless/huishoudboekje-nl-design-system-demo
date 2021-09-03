@@ -53,7 +53,7 @@ const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading}) =>
 								<Stack spacing={1} flex={1}>
 									<FormLabel>{t("forms.burgers.fields.bsn")}</FormLabel>
 									<Input onChange={bind("bsn")} value={data.bsn || ""} />
-									<FormErrorMessage>{t("messages.burgerForm.invalidBsn")}</FormErrorMessage>
+									<FormErrorMessage>{t("messages.burgers.invalidBsn")}</FormErrorMessage>
 								</Stack>
 							</FormControl>
 						</Stack>
@@ -62,21 +62,21 @@ const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading}) =>
 								<Stack spacing={1} flex={1}>
 									<FormLabel>{t("forms.burgers.fields.voorletters")}</FormLabel>
 									<Input onChange={bind("voorletters")} value={data.voorletters || ""} />
-									<FormErrorMessage>{t("messages.burgerForm.invalidVoorletters")}</FormErrorMessage>
+									<FormErrorMessage>{t("messages.burgers.invalidVoorletters")}</FormErrorMessage>
 								</Stack>
 							</FormControl>
 							<FormControl id={"voornamen"} isInvalid={!isFieldValid("voornamen")} isRequired={true}>
 								<Stack spacing={1} flex={3}>
 									<FormLabel>{t("forms.burgers.fields.voornamen")}</FormLabel>
 									<Input onChange={bind("voornamen")} value={data.voornamen || ""} />
-									<FormErrorMessage>{t("messages.burgerForm.invalidVoornamen")}</FormErrorMessage>
+									<FormErrorMessage>{t("messages.burgers.invalidVoornamen")}</FormErrorMessage>
 								</Stack>
 							</FormControl>
 							<FormControl id={"achternaam"} isInvalid={!isFieldValid("achternaam")} isRequired={true}>
 								<Stack spacing={1} flex={3}>
 									<FormLabel>{t("forms.burgers.fields.achternaam")}</FormLabel>
 									<Input onChange={bind("achternaam")} value={data.achternaam || ""} />
-									<FormErrorMessage>{t("messages.burgerForm.invalidAchternaam")}</FormErrorMessage>
+									<FormErrorMessage>{t("messages.burgers.invalidAchternaam")}</FormErrorMessage>
 								</Stack>
 							</FormControl>
 						</Stack>
@@ -88,7 +88,7 @@ const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading}) =>
 										updateForm("geboortedatum", d(value).format("L"));
 									}
 								}} customInput={<Input type="text" />} />
-								<FormErrorMessage>{t("messages.burgerForm.invalidGeboortedatum")}</FormErrorMessage>
+								<FormErrorMessage>{t("messages.burgers.invalidGeboortedatum")}</FormErrorMessage>
 							</Stack>
 						</FormControl>
 					</FormRight>
@@ -102,14 +102,14 @@ const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading}) =>
 								<Stack spacing={1} flex={2}>
 									<FormLabel>{t("forms.burgers.fields.straatnaam")}</FormLabel>
 									<Input onChange={bind("straatnaam")} value={data.straatnaam || ""} />
-									<FormErrorMessage>{t("messages.burgerForm.invalidStraatnaam")}</FormErrorMessage>
+									<FormErrorMessage>{t("messages.burgers.invalidStraatnaam")}</FormErrorMessage>
 								</Stack>
 							</FormControl>
 							<FormControl id={"huisnummer"} isInvalid={!isFieldValid("huisnummer")} isRequired={true}>
 								<Stack spacing={1} flex={1}>
 									<FormLabel>{t("forms.burgers.fields.huisnummer")}</FormLabel>
 									<Input onChange={bind("huisnummer")} value={data.huisnummer || ""} />
-									<FormErrorMessage>{t("messages.burgerForm.invalidHuisnummer")}</FormErrorMessage>
+									<FormErrorMessage>{t("messages.burgers.invalidHuisnummer")}</FormErrorMessage>
 								</Stack>
 							</FormControl>
 						</Stack>
@@ -120,14 +120,14 @@ const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading}) =>
 									<Tooltip label={t("forms.burgers.tooltips.postcode")} aria-label={t("forms.burgers.fields.postcode")} placement={isMobile ? "top" : "left"}>
 										<Input onChange={bind("postcode")} value={data.postcode || ""} />
 									</Tooltip>
-									<FormErrorMessage>{t("messages.burgerForm.invalidPostcode")}</FormErrorMessage>
+									<FormErrorMessage>{t("messages.burgers.invalidPostcode")}</FormErrorMessage>
 								</Stack>
 							</FormControl>
 							<FormControl id={"plaatsnaam"} isInvalid={!isFieldValid("plaatsnaam")} isRequired={true}>
 								<Stack spacing={1} flex={2}>
 									<FormLabel>{t("forms.burgers.fields.plaatsnaam")}</FormLabel>
 									<Input onChange={bind("plaatsnaam")} value={data.plaatsnaam || ""} />
-									<FormErrorMessage>{t("messages.burgerForm.invalidPlaatsnaam")}</FormErrorMessage>
+									<FormErrorMessage>{t("messages.burgers.invalidPlaatsnaam")}</FormErrorMessage>
 								</Stack>
 							</FormControl>
 						</Stack>
@@ -137,14 +137,14 @@ const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading}) =>
 								<Tooltip label={t("forms.burgers.tooltips.telefoonnummer")} aria-label={t("forms.burgers.tooltips.telefoonnummer")} placement={isMobile ? "top" : "left"}>
 									<Input onChange={bind("telefoonnummer")} value={data.telefoonnummer || ""} />
 								</Tooltip>
-								<FormErrorMessage>{t("messages.burgerForm.invalidTelefoonnummer")}</FormErrorMessage>
+								<FormErrorMessage>{t("messages.burgers.invalidTelefoonnummer")}</FormErrorMessage>
 							</Stack>
 						</FormControl>
 						<FormControl id={"mail"} isInvalid={!isFieldValid("email")} isRequired={true}>
 							<Stack spacing={1}>
 								<FormLabel>{t("forms.burgers.fields.mail")}</FormLabel>
 								<Input onChange={bind("email")} value={data.email || ""} />
-								<FormErrorMessage>{t("messages.burgerForm.invalidEmail")}</FormErrorMessage>
+								<FormErrorMessage>{t("messages.burgers.invalidEmail")}</FormErrorMessage>
 							</Stack>
 						</FormControl>
 					</FormRight>
@@ -154,7 +154,7 @@ const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading}) =>
 					<FormLeft />
 					<FormRight>
 						<Stack direction={"row"} spacing={1} justifyContent={"flex-end"}>
-							<Button isLoading={isLoading} type={"submit"} colorScheme={"primary"} onClick={onSubmitForm}>{t("actions.save")}</Button>
+							<Button isLoading={isLoading} type={"submit"} colorScheme={"primary"} onClick={onSubmitForm}>{t("global.actions.save")}</Button>
 						</Stack>
 					</FormRight>
 				</Stack>

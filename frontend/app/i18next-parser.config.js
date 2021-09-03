@@ -3,7 +3,7 @@ module.exports = {
 	createOldCatalogs: false,
 	defaultNamespace: "translation",
 	defaultValue: "__MISSING-TRANSLATION__",
-	indentation: 4,
+	indentation: 2,
 	keepRemoved: false,
 	keySeparator: ".",
 	lexers: {

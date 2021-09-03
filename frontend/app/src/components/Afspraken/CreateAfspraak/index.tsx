@@ -49,9 +49,9 @@ const CreateAfspraak: React.FC<{burgerId: number}> = ({burgerId}) => {
 			}
 
 			return (
-				<Page title={t("forms.agreements.titleCreate")} backButton={<BackButton to={Routes.Burger(burgerId)} />}>
+				<Page title={t("forms.afspraken.titleCreate")} backButton={<BackButton to={Routes.Burger(burgerId)} />}>
 					<Section direction={["column", "row"]}>
-						<FormLeft title={t("afspraakForm.section1.title")} helperText={t("afspraakForm.section1.helperText")} />
+						<FormLeft title={t("forms.afspraken.title")} helperText={t("forms.afspraken.helperText")} />
 						<FormRight spacing={5}>
 							<AfspraakFormContext.Provider value={ctxValue}>
 								<AfspraakForm burgerRekeningen={burger?.rekeningen || []} onChange={(data) => createAfspraak(data as CreateAfspraakMutationVariables["input"])} />

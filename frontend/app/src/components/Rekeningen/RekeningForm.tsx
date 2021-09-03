@@ -50,7 +50,7 @@ const RekeningForm: React.FC<{
 		}
 		catch (err) {
 			toast({
-				error: t("messages.formInputError.description"),
+				error: t("messages.rekeningen.formInputError"),
 			});
 		}
 	};
@@ -72,8 +72,8 @@ const RekeningForm: React.FC<{
 				</FormControl>
 			</Stack>
 			<Stack direction={"row"} alignItems={"flex-end"}>
-				<Button type={"reset"} onClick={() => onCancel()}>{t("actions.cancel")}</Button>
-				<Button type={"submit"} colorScheme={"primary"} onClick={onSubmit}>{t("actions.save")}</Button>
+				<Button type={"reset"} onClick={() => onCancel()}>{t("global.actions.cancel")}</Button>
+				<Button type={"submit"} colorScheme={"primary"} onClick={onSubmit}>{t("global.actions.save")}</Button>
 			</Stack>
 		</SimpleGrid>
 	);

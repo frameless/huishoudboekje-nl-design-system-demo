@@ -32,7 +32,7 @@ const BurgerAfsprakenView: React.FC<StackProps & {burger: Burger}> = ({burger, .
 			<FormLeft title={t("forms.burgers.sections.agreements.title")} helperText={t("forms.burgers.sections.agreements.detailText")}>
 				{afspraken.length > 0 && (
 					<FormControl>
-						<FormLabel>{t("actions.filter")}</FormLabel>
+						<FormLabel>{t("global.actions.filter")}</FormLabel>
 						<CheckboxGroup defaultValue={["active"]} onChange={(val) => {
 							setFilter(() => ({
 								active: val.includes("active"),
@@ -40,8 +40,8 @@ const BurgerAfsprakenView: React.FC<StackProps & {burger: Burger}> = ({burger, .
 							}));
 						}}>
 							<Stack>
-								<Checkbox value={"active"}>{t("afspraak.showActive")}</Checkbox>
-								<Checkbox value={"inactive"}>{t("afspraak.showInActive")}</Checkbox>
+								<Checkbox value={"active"}>{t("afspraken.showActive")}</Checkbox>
+								<Checkbox value={"inactive"}>{t("afspraken.showInActive")}</Checkbox>
 							</Stack>
 						</CheckboxGroup>
 					</FormControl>
@@ -76,7 +76,7 @@ const BurgerAfsprakenView: React.FC<StackProps & {burger: Burger}> = ({burger, .
 				{id && (
 					<Box>
 						<NavLink to={Routes.CreateBurgerAfspraken(id)}>
-							<Button leftIcon={<AddIcon />} colorScheme={"primary"} size={"sm"}>{t("actions.add")}</Button>
+							<Button leftIcon={<AddIcon />} colorScheme={"primary"} size={"sm"}>{t("global.actions.add")}</Button>
 						</NavLink>
 					</Box>
 				)}

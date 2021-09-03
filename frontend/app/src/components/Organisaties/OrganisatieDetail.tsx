@@ -80,7 +80,7 @@ const OrganisatieDetail = () => {
 			if (isDeleted) {
 				return (
 					<DeadEndPage message={t("messages.organisaties.deleteConfirmMessage", {name: organisatie.kvkDetails?.naam})}>
-						<Button colorScheme={"primary"} onClick={() => push(Routes.Organisaties)}>{t("actions.backToList")}</Button>
+						<Button colorScheme={"primary"} onClick={() => push(Routes.Organisaties)}>{t("global.actions.backToList")}</Button>
 					</DeadEndPage>
 				);
 			}
@@ -90,8 +90,8 @@ const OrganisatieDetail = () => {
 					<Menu>
 						<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label="Open menu" />
 						<MenuList>
-							<MenuItem onClick={onClickEdit}>{t("actions.edit")}</MenuItem>
-							<MenuItem onClick={onClickDelete}>{t("actions.delete")}</MenuItem>
+							<MenuItem onClick={onClickEdit}>{t("global.actions.edit")}</MenuItem>
+							<MenuItem onClick={onClickDelete}>{t("global.actions.delete")}</MenuItem>
 						</MenuList>
 					</Menu>
 				)}>
@@ -101,8 +101,8 @@ const OrganisatieDetail = () => {
 							<AlertDialogHeader fontSize="lg" fontWeight="bold">{t("messages.organisaties.deleteTitle")}</AlertDialogHeader>
 							<AlertDialogBody>{t("messages.organisaties.deleteQuestion", {name: organisatie.kvkDetails?.naam})}</AlertDialogBody>
 							<AlertDialogFooter>
-								<Button ref={cancelDeleteRef} onClick={onCloseDeleteDialog}>{t("actions.cancel")}</Button>
-								<Button isLoading={deleteLoading} colorScheme="red" onClick={onConfirmDeleteDialog} ml={3}>{t("actions.delete")}</Button>
+								<Button ref={cancelDeleteRef} onClick={onCloseDeleteDialog}>{t("global.actions.cancel")}</Button>
+								<Button isLoading={deleteLoading} colorScheme="red" onClick={onConfirmDeleteDialog} ml={3}>{t("global.actions.delete")}</Button>
 							</AlertDialogFooter>
 						</AlertDialogContent>
 					</AlertDialog>

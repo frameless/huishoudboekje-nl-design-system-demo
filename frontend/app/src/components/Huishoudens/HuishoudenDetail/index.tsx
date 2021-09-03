@@ -30,7 +30,7 @@ const HuishoudenDetails = () => {
 
 			return (
 				<Page title={t("huishoudenName", {name: formatHuishoudenName(huishouden)})} backButton={(<BackButton to={Routes.Huishoudens} />)} right={(
-					<Button size={"sm"} colorScheme={"primary"} as={NavLink} to={Routes.RapportageBurger(burgerIds)}>{t("actions.showReports")}</Button>
+					<Button size={"sm"} colorScheme={"primary"} as={NavLink} to={Routes.RapportageBurger(burgerIds)}>{t("global.actions.showReports")}</Button>
 				)}>
 					<AddBurgerToHuishoudenModal huishouden={huishouden} onClose={addBurgersModal.onClose} isOpen={addBurgersModal.isOpen} />
 					<HuishoudenBurgersView huishouden={huishouden} onClickAddButton={() => addBurgersModal.onOpen()} />
