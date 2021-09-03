@@ -7,11 +7,13 @@ import useToaster from "../../utils/useToaster";
 import BackButton from "../Layouts/BackButton";
 import Page from "../Layouts/Page";
 import BurgerForm from "./BurgerForm";
+import useHandleSaveBurgerErrors from "./utils/useHandleSaveBurgerErrors";
 
 const CreateBurger = () => {
 	const {t} = useTranslation();
 	const {push} = useHistory();
 	const toast = useToaster();
+	const handleSaveBurgerErrors = useHandleSaveBurgerErrors();
 	const [createBurger, $createBurger] = useCreateBurgerMutation({
 		refetchQueries: [
 			{query: GetHuishoudensDocument},
@@ -33,24 +35,7 @@ const CreateBurger = () => {
 			if (id) {
 				push(Routes.Burger(id));
 			}
-		}).catch(err => {
-			console.error(err);
-
-			let message = err.message;
-			if (err.message.includes("already exists")) {
-				message = t("messages.burger.alreadyExists");
-			}
-			else if (err.message.includes("BSN should consist of 8 or 9 digits")) {
-				message = t("messages.burger.bsnLengthError");
-			}
-			else if (err.message.includes("BSN does not meet the 11-proef requirement")) {
-				message = t("messages.burger.bsnElfProefError");
-			}
-
-			toast({
-				error: message,
-			});
-		});
+		}).catch(handleSaveBurgerErrors);
 	};
 
 	return (

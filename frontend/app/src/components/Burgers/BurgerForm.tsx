@@ -36,8 +36,9 @@ const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading}) =>
 		e.preventDefault();
 		onSubmit(({
 			...data,
+			...burger?.id && {id: burger.id},
 			bsn: Number(data.bsn),
-			geboortedatum: d(data.geboortedatum, "L").format("YYYY-MM-DD")
+			geboortedatum: d(data.geboortedatum, "L").format("YYYY-MM-DD"),
 		}));
 	};
 
