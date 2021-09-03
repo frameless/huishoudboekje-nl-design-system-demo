@@ -2,6 +2,7 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {Redirect, useHistory, useParams} from "react-router-dom";
 import Routes from "../../config/routes";
+import useMutationErrorHandler from "../../errorHandlers/useMutationErrorHandler";
 import {GetBurgerDocument, GetBurgersDocument, UpdateBurgerMutationVariables, useGetBurgerQuery, useUpdateBurgerMutation} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
 import {formatBurgerName} from "../../utils/things";
@@ -9,14 +10,14 @@ import useToaster from "../../utils/useToaster";
 import BackButton from "../Layouts/BackButton";
 import Page from "../Layouts/Page";
 import BurgerForm from "./BurgerForm";
-import useHandleSaveBurgerErrors from "./utils/useHandleSaveBurgerErrors";
+import SaveBurgerErrorHandler from "../../errorHandlers/SaveBurgerErrorHandler";
 
 const BurgerEdit = () => {
 	const {t} = useTranslation();
 	const {id} = useParams<{id: string}>();
 	const toast = useToaster();
 	const {push} = useHistory();
-	const handleSaveBurgerErrors = useHandleSaveBurgerErrors();
+	const handleSaveBurgerErrors = useMutationErrorHandler(SaveBurgerErrorHandler);
 
 	const [updateBurger, $updateBurger] = useUpdateBurgerMutation({
 		refetchQueries: [

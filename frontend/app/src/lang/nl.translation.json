@@ -32,7 +32,15 @@
     "journals": {
       "createSuccessMessage": "Transactie succesvol afgeletterd."
     },
-    "rekeningAlreadyExistsError": "Dit rekeningnummer is al gekoppeld.",
+    "rekeningen": {
+      "createSuccess": "Bankrekening {{iban}} op naam van {{rekeninghouder}} is toegevoegd.",
+      "formInputError": "Er is een fout opgetreden. Controleer de invoer.",
+      "deleteSuccess": "Bankrekening is verwijderd.",
+      "updateSuccess": "Gegevens succesvol gewijzigd.",
+      "deleteTitle": "Bankrekening verwijderen.",
+      "deleteQuestion": "Weet je zeker dat je bankrekening {{iban}} op naam van {{rekeninghouder}} wil verwijderen? Deze actie kan ongedaan worden gemaakt.",
+      "alreadyExistsError": "Dit bankrekeningnummer bestaat al bij deze burger."
+    },
     "burgers": {
       "deleteConfirmMessage": "Gegevens van {{name}} zijn verwijderd.",
       "deleteTitle": "Burger verwijderen",
@@ -85,13 +93,6 @@
       "addHint": "Voeg organisaties toe door te klikken op de knop {{buttonLabel}}.",
       "noSearchResults": "Geen organisaties gevonden. Gebruik een andere zoekterm.",
       "alreadyExists": "Er bestaat al een organisatie met dit KvK-nummer en vestigingsnummer."
-    },
-    "rekeningen": {
-      "formInputError": "Er is een fout opgetreden. Controleer de invoer.",
-      "deleteSuccess": "Rekening is verwijderd.",
-      "updateSuccess": "Gegevens succesvol gewijzigd.",
-      "deleteTitle": "Rekening verwijderen.",
-      "deleteQuestion": "Weet je zeker dat je rekening {{iban}} op naam van {{accountHolder}} wil verwijderen? Deze actie kan ongedaan worden gemaakt."
     },
     "backendError": "Er is een systeemfout opgetreden. Neem contact op met de applicatiebeheerder voor ondersteuning.",
     "genericToastErrorTitle": "Er is een fout opgetreden."

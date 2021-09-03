@@ -36,9 +36,16 @@ const RekeningForm: React.FC<{
 	const [rekeninghouder, setRekeninghouder] = useState<string>(rekening?.rekeninghouder || "");
 	const [iban, setIban] = useState<string>(rekening?.iban || "");
 
-	const onSubmit = () => {
+	const isValid = (fieldName: string) => validator.shape[fieldName]?.safeParse(rekeninghouder).success;
+
+	const onSubmit = (e) => {
+		e.preventDefault();
+
 		try {
-			const data = validator.parse({rekeninghouder, iban}, {errorMap});
+			const ibanNoSpaces = iban.trim().replaceAll(" ", "");
+			setIban(ibanNoSpaces);
+
+			const data = validator.parse({rekeninghouder, iban: ibanNoSpaces}, {errorMap});
 			onSave({
 				...(rekening || {}),
 				rekeninghouder: data.rekeninghouder,
@@ -56,26 +63,28 @@ const RekeningForm: React.FC<{
 	};
 
 	return (
-		<SimpleGrid minChildWidth={isMobile ? "100%" : 250} gridGap={2}>
-			<Stack spacing={1}>
-				<FormControl isInvalid={!validator.shape.rekeninghouder?.safeParse(rekeninghouder).success} id={"rekeninghouder"}>
-					<FormLabel>{t("forms.rekeningen.fields.accountHolder")}</FormLabel>
-					<Input onChange={e => setRekeninghouder(e.target.value)} value={rekeninghouder || ""} autoFocus={!(rekening?.rekeninghouder)} />
-					<FormErrorMessage>{t("errors.rekeninghouder.generalError")}</FormErrorMessage>
-				</FormControl>
-			</Stack>
-			<Stack spacing={1}>
-				<FormControl isInvalid={!validator.shape.iban?.safeParse(iban).success} id={"iban"}>
-					<FormLabel>{t("forms.rekeningen.fields.iban")}</FormLabel>
-					<Input onChange={e => setIban(e.target.value)} value={iban || ""} placeholder={friendlyFormatIBAN("NL00BANK0123456789") || ""} autoFocus={!!(rekening?.rekeninghouder)} />
-					<FormErrorMessage>{t("errors.iban.generalError")}</FormErrorMessage>
-				</FormControl>
-			</Stack>
-			<Stack direction={"row"} alignItems={"flex-end"}>
-				<Button type={"reset"} onClick={() => onCancel()}>{t("global.actions.cancel")}</Button>
-				<Button type={"submit"} colorScheme={"primary"} onClick={onSubmit}>{t("global.actions.save")}</Button>
-			</Stack>
-		</SimpleGrid>
+		<form onSubmit={onSubmit}>
+			<SimpleGrid minChildWidth={isMobile ? "100%" : 250} gridGap={2}>
+				<Stack spacing={1}>
+					<FormControl isInvalid={!isValid("rekeninghouder")} id={"rekeninghouder"}>
+						<FormLabel>{t("forms.rekeningen.fields.accountHolder")}</FormLabel>
+						<Input onChange={e => setRekeninghouder(e.target.value)} value={rekeninghouder || ""} autoFocus={!(rekening?.rekeninghouder)} />
+						<FormErrorMessage>{t("errors.rekeninghouder.generalError")}</FormErrorMessage>
+					</FormControl>
+				</Stack>
+				<Stack spacing={1}>
+					<FormControl isInvalid={!isValid("iban")} id={"iban"}>
+						<FormLabel>{t("forms.rekeningen.fields.iban")}</FormLabel>
+						<Input onChange={e => setIban(e.target.value)} value={iban || ""} placeholder={friendlyFormatIBAN("NL00BANK0123456789") || ""} autoFocus={!!(rekening?.rekeninghouder)} />
+						<FormErrorMessage>{t("errors.iban.generalError")}</FormErrorMessage>
+					</FormControl>
+				</Stack>
+				<Stack direction={"row"} alignItems={"flex-end"}>
+					<Button type={"reset"} onClick={() => onCancel()}>{t("global.actions.cancel")}</Button>
+					<Button type={"submit"} colorScheme={"primary"} onClick={onSubmit}>{t("global.actions.save")}</Button>
+				</Stack>
+			</SimpleGrid>
+		</form>
 	);
 };
 
