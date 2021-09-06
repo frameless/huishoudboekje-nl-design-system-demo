@@ -244,7 +244,7 @@ class CamtParser():
                         end_balance_node = balance_node[-1]
 
             # Added -
-            if forward_balance_node is not None:
+            if forward_balance_node is None:
                 forward_balance_node = end_balance_node
             # -
 
