@@ -244,7 +244,7 @@ class CamtParser():
                         end_balance_node = balance_node[-1]
 
             # Added -
-            if not forward_balance_node:
+            if forward_balance_node is not None:
                 forward_balance_node = end_balance_node
             # -
 
@@ -421,6 +421,9 @@ class Transaction:
         self.searchAndReplace(transaction, "payment_ref", "transaction_details")
         self.searchAndReplace(transaction, "ref", "customer_reference")
         self.searchAndReplace(transaction, "narration", "extra_details")
+
+        if transaction["transaction_details"] == "/":
+            transaction['transaction_details'] = transaction['extra_details']
 
         if transaction["amount"] < 0:
             transaction["status"] = 'D'
