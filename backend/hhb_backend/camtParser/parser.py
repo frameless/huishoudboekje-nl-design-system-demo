@@ -92,7 +92,7 @@ class CamtParser():
             ns,
             node,
             [
-                "./ns:AddtlNtryInf",
+                "../../ns:AddtlNtryInf",
                 "./ns:RmtInf/ns:Ustrd|./ns:RtrInf/ns:AddtlInf",
                 "./ns:Refs/ns:InstrId",
             ],
