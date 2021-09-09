@@ -1,11 +1,11 @@
 import {Box, Button, Divider, FormControl, FormLabel, Input, Stack, Tooltip, useBreakpointValue} from "@chakra-ui/react";
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import DatePicker from "react-datepicker";
 import {useInput, Validators} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {useHistory} from "react-router-dom";
 import Routes from "../../config/routes";
-import {GetBurgersDocument, GetHuishoudensDocument, useCreateBurgerMutation} from "../../generated/graphql";
+import {GetBurgersDocument, GetBurgersSearchDocument, GetHuishoudensDocument, useCreateBurgerMutation} from "../../generated/graphql";
 import d from "../../utils/dayjs";
 import {Regex} from "../../utils/things";
 import useToaster from "../../utils/useToaster";
@@ -13,6 +13,7 @@ import BackButton from "../Layouts/BackButton";
 import {FormLeft, FormRight} from "../Layouts/Forms";
 import Page from "../Layouts/Page";
 import Section from "../Layouts/Section";
+import BurgerSearchContext from "./BurgerSearchContext";
 
 const CreateBurger = () => {
 	const {t} = useTranslation();
@@ -29,7 +30,7 @@ const CreateBurger = () => {
 			(v: string) => {
 				return new RegExp(/^[0-9]{8,9}$/).test(v);
 			},
-			() => isBsnValid
+			() => isBsnValid,
 		],
 	});
 	const voorletters = useInput({
@@ -77,7 +78,14 @@ const CreateBurger = () => {
 		validate: [Validators.required, Validators.email],
 	});
 
-	const [createBurger, $createBurger] = useCreateBurgerMutation();
+	const [search] = useContext(BurgerSearchContext);
+	const [createBurger, $createBurger] = useCreateBurgerMutation({
+		refetchQueries: [
+			{query: GetHuishoudensDocument},
+			{query: GetBurgersDocument},
+			{query: GetBurgersSearchDocument, variables: {search}},
+		],
+	});
 
 	const onSubmit = (e) => {
 		e.preventDefault();
@@ -120,10 +128,6 @@ const CreateBurger = () => {
 					email: mail.value,
 				},
 			},
-			refetchQueries: [
-				{query: GetHuishoudensDocument},
-				{query: GetBurgersDocument},
-			],
 		}).then(result => {
 			toast({
 				success: t("messages.burgers.createSuccessMessage"),

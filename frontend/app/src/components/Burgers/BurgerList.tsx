@@ -1,6 +1,6 @@
 import {AddIcon, CloseIcon, SearchIcon} from "@chakra-ui/icons";
 import {Button, IconButton, Input, InputGroup, InputLeftElement, InputRightElement} from "@chakra-ui/react";
-import React, {useRef, useState} from "react";
+import React, {useContext, useRef} from "react";
 import {useTranslation} from "react-i18next";
 import {useHistory} from "react-router-dom";
 import Routes from "../../config/routes";
@@ -9,12 +9,14 @@ import Queryable from "../../utils/Queryable";
 import DeadEndPage from "../DeadEndPage";
 import Page from "../Layouts/Page";
 import BurgerListView from "./BurgerListView";
+import BurgerSearchContext from "./BurgerSearchContext";
 
 const BurgerList = () => {
 	const {t} = useTranslation();
 	const {push} = useHistory();
-	const [search, setSearch] = useState<string>("");
+	const [search, setSearch] = useContext(BurgerSearchContext);
 	const searchRef = useRef<HTMLInputElement>(null);
+
 	const $burgers = useGetBurgersSearchQuery({
 		context: {debounceKey: "burgerSearch"},
 		variables: {search: search.trim()},

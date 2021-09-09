@@ -1,11 +1,11 @@
 import {Box, Button, Divider, FormControl, FormLabel, Input, Stack, Tooltip, useBreakpointValue} from "@chakra-ui/react";
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import DatePicker from "react-datepicker";
 import {useInput, Validators} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {Redirect, useHistory, useParams} from "react-router-dom";
 import Routes from "../../config/routes";
-import {Burger, useGetBurgerQuery, useUpdateBurgerMutation} from "../../generated/graphql";
+import {Burger, GetBurgerDocument, GetBurgersDocument, GetBurgersSearchDocument, useGetBurgerQuery, useUpdateBurgerMutation} from "../../generated/graphql";
 import d from "../../utils/dayjs";
 import Queryable from "../../utils/Queryable";
 import {formatBurgerName, Regex} from "../../utils/things";
@@ -14,6 +14,7 @@ import BackButton from "../Layouts/BackButton";
 import {FormLeft, FormRight} from "../Layouts/Forms";
 import Page from "../Layouts/Page";
 import Section from "../Layouts/Section";
+import BurgerSearchContext from "./BurgerSearchContext";
 
 const BurgerEdit = () => {
 	const isMobile = useBreakpointValue([true, null, null, false]);
@@ -88,7 +89,14 @@ const BurgerEdit = () => {
 		},
 	});
 
-	const [updateBurger, $updateBurger] = useUpdateBurgerMutation();
+	const [search] = useContext(BurgerSearchContext);
+	const [updateBurger, $updateBurger] = useUpdateBurgerMutation({
+		refetchQueries: [
+			{query: GetBurgersDocument},
+			{query: GetBurgerDocument, variables: {id}},
+			{query: GetBurgersSearchDocument, variables: {search}},
+		]
+	});
 
 	const onSubmit = (e) => {
 		e.preventDefault();
