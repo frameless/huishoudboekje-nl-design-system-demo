@@ -1,4 +1,5 @@
 from sepaxml import SepaTransfer
+import uuid
 
 
 def create_export_string(overschrijvingen, afspraken, tegen_rekeningen, config_values):
@@ -21,7 +22,7 @@ def create_export_string(overschrijvingen, afspraken, tegen_rekeningen, config_v
             "amount": overschrijving['bedrag'],
             "execution_date": overschrijving['datum'],
             "description": afspraak['omschrijving'],
-            # "endtoend_id": str(uuid.uuid1())  # optional
+            "endtoend_id": str(uuid.uuid1())  # optional
         }
         sepa.add_payment(payment)
 
