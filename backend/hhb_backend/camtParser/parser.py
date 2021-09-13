@@ -265,6 +265,8 @@ class CamtParser():
             # Added -
             if forward_balance_node is None:
                 forward_balance_node = end_balance_node
+            if avail_balance_node is None:
+                avail_balance_node = end_balance_node
             # -
 
         # Removed -
