@@ -48,7 +48,7 @@
       "invalidVoorletters": "Vul minimaal één voorletter in. Voorletters zijn gescheiden met een punt. Voorbeeld: K.B.",
       "invalidVoornamen": "Vul een voornaam in.",
       "invalidAchternaam": "Vul een achternaam in.",
-      "invalidGeboortedatum": "Vul een geldige datum in. Voorbeeld: 01-01-1970.",
+      "invalidGeboortedatum": "Vul een geldige datum in. Een datum in de toekomst is niet geldig. Voorbeeld: 01-01-1970.",
       "invalidStraatnaam": "Vul een straatnaam in.",
       "invalidHuisnummer": "Vul een huisnummer in.",
       "invalidPostcode": "Vul een geldige postcode in. Voorbeeld: 1234AB.",
@@ -118,7 +118,6 @@
       "undoAfletteren": "Afletteren ongedaan maken",
       "filter": "Filteren",
       "backToList": "Terug naar overzicht",
-      "viewBurgerHuishouden": "Bekijk huishouden",
       "brievenExport": "Exporteer gegevens voor brieven",
       "clearSearch": "Zoekopdracht wissen",
       "options": "Opties",
@@ -493,6 +492,9 @@
     }
   },
   "backToBurgersList": "Terug naar alle burgers",
+  "actions": {
+    "viewBurgerHuishouden": "Bekijk huishouden"
+  },
   "sidebar": {
     "rapportage": "Rapportage",
     "huishoudens": "Huishoudens",
