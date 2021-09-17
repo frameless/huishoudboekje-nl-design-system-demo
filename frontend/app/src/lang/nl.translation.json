@@ -44,7 +44,7 @@
       "deleteConfirmMessage": "Gegevens van {{name}} zijn verwijderd.",
       "deleteTitle": "Burger verwijderen",
       "deleteQuestion": "Weet je zeker dat je de gegevens van {{name}} definitief wil verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
-      "invalidBsn": "Vul een geldig BSN in. Een BSN is 8 of 9 tekens lang en moet voldoen aan de elfproef.",
+      "invalidBsn": "Vul een geldig BSN in. Een BSN is 8 of 9 cijfers lang en moet voldoen aan de elfproef.",
       "invalidVoorletters": "Vul minimaal één voorletter in. Voorletters zijn gescheiden met een punt. Voorbeeld: K.B.",
       "invalidVoornamen": "Vul een voornaam in.",
       "invalidAchternaam": "Vul een achternaam in.",
@@ -88,7 +88,7 @@
       "invalidNaam": "Vul de naam van de organisatie in.",
       "invalidStraatnaam": "Vul de straatnaam in.",
       "invalidHuisnummer": "Vul het huisnummer in.",
-      "invalidPostcode": "Vul de postcode in.",
+      "invalidPostcode": "Vul een geldige postcode in. Invoer zonder spaties. Voorbeeld: 1234AB",
       "invalidPlaatsnaam": "Vul de plaatsnaam in.",
       "addHint": "Voeg organisaties toe door te klikken op de knop {{buttonLabel}}.",
       "noSearchResults": "Geen organisaties gevonden. Gebruik een andere zoekterm.",
@@ -225,7 +225,7 @@
         "contact": {
           "title": "Contact",
           "detailText": "Contactgegevens van de burger.",
-          "helperText": "Vul de contactgegevens van de burger in."
+          "helperText": "Vul het postadres en de contactgegevens van de burger in."
         },
         "rekeningen": {
           "title": "Rekeningen",
