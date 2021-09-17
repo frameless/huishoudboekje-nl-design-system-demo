@@ -22,7 +22,7 @@ def create_export_string(overschrijvingen, afspraken, tegen_rekeningen, config_v
             "amount": overschrijving['bedrag'],
             "execution_date": overschrijving['datum'],
             "description": afspraak['omschrijving'],
-            "endtoend_id": str(uuid.uuid1())[:34],  # optional
+            "endtoend_id": str(uuid.uuid1()).replace("-", ""),  # optional
         }
         sepa.add_payment(payment)
 
