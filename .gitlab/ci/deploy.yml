@@ -95,6 +95,8 @@
     # see https://stackoverflow.com/questions/53186601/re-use-persistentvolume-after-re-installing-a-helm-deployment
     - kubectl delete --namespace $NAMESPACE statefulsets.apps huishoudboekje-postgresql --cascade=false 2>&1 >/dev/null  || true
   script:
+    - helm repo add bitnami https://charts.bitnami.com/bitnami
+    - helm dependency build ./helm/contactcatalogus
     - |
       helm upgrade --install "huishoudboekje" helm/repo/huishoudboekje-${COMPONENT_VERSION}.tgz \
         ${HELM_DEBUG:+--debug} \
@@ -138,6 +140,7 @@
         --set "postgresql.postgresqlPassword=${DATABASE_PASSWORD}" \
         --set "postgresql.persistence.enabled=${DATABASE_PERSISTENCE}" \
         --render-subchart-notes
+    - helm upgrade hhb-contactcatalogus helm/contactcatalogus --install --namespace=$NAMESPACE ${CREATE_NAMESPACE:+--create-namespace} --set settings.env=prod,settings.debug=0,settings.cache=1
     - echo -e -n "${HHB_HOST}" > ci_review_hostname.txt
   artifacts:
     paths:
