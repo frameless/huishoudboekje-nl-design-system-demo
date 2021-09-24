@@ -184,3 +184,5 @@ export const isAfspraakActive = (afspraak: Afspraak) => {
 };
 
 export const getBurgerHhbId = (burger: Burger) => burger.id && String(burger.id).padStart(9, HHB_NUMMER_FORMAT);
+
+export const maxOrganisatieNaamLengthBreakpointValues = [25, 25, 35, 75];

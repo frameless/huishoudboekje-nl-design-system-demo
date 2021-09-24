@@ -11,7 +11,7 @@ import {
 	Menu,
 	MenuButton,
 	MenuItem,
-	MenuList,
+	MenuList, useBreakpointValue,
 } from "@chakra-ui/react";
 import React, {useRef} from "react";
 import {useToggle} from "react-grapple";
@@ -20,6 +20,7 @@ import {Redirect, useHistory, useParams} from "react-router-dom";
 import Routes from "../../config/routes";
 import {GetOrganisatiesDocument, Organisatie, useDeleteOrganisatieMutation, useGetOrganisatieQuery} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
+import {maxOrganisatieNaamLengthBreakpointValues, truncateText} from "../../utils/things";
 import useToaster from "../../utils/useToaster";
 import DeadEndPage from "../DeadEndPage";
 import BackButton from "../Layouts/BackButton";
@@ -32,6 +33,7 @@ const OrganisatieDetail = () => {
 	const {id} = useParams<{id: string}>();
 	const {push} = useHistory();
 	const toast = useToaster();
+	const maxOrganisatieNaamLength = useBreakpointValue(maxOrganisatieNaamLengthBreakpointValues);
 
 	const cancelDeleteRef = useRef(null);
 	const [deleteDialogOpen, toggleDeleteDialog] = useToggle(false);
@@ -86,7 +88,7 @@ const OrganisatieDetail = () => {
 			}
 
 			return (
-				<Page title={organisatie.kvkDetails?.naam || ""} backButton={<BackButton to={Routes.Organisaties} />} menu={(
+				<Page title={truncateText(organisatie.kvkDetails?.naam || "", maxOrganisatieNaamLength)} backButton={<BackButton to={Routes.Organisaties} />} menu={(
 					<Menu>
 						<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label="Open menu" />
 						<MenuList>
