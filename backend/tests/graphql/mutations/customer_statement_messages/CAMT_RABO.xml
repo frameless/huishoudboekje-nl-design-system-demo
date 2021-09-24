@@ -1,0 +1,448 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<Document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:iso:std:iso:20022:tech:xsd:camt.053.001.02">
+
+    <BkToCstmrStmt>
+        <GrpHdr>
+            <MsgId>CAMT05300000001</MsgId>
+            <CreDtTm>2015-01-25T12:22:43+01:00</CreDtTm>
+        </GrpHdr>
+        <Stmt>
+            <Id>CAMT0532015012200001</Id>
+            <ElctrncSeqNb>315</ElctrncSeqNb>
+            <CreDtTm>2015-01-22T00:00:00+01:00</CreDtTm>
+            <Acct>
+                <Id>
+                    <IBAN>NL44RABO0123456789</IBAN>
+                </Id>
+
+                <Ccy>EUR</Ccy>
+                <Nm>Example file CAMT053</Nm>
+            </Acct>
+            <Bal>
+                <Tp>
+                    <CdOrPrtry>
+                        <Cd>OPBD</Cd>
+                    </CdOrPrtry>
+                </Tp>
+                <Amt Ccy="EUR">0.83</Amt>
+                <CdtDbtInd>CRDT</CdtDbtInd>
+                <Dt>
+                    <Dt>2015-01-21</Dt>
+                </Dt>
+            </Bal>
+
+            <Bal>
+                <Tp>
+                    <CdOrPrtry>
+                        <Cd>CLBD</Cd>
+                    </CdOrPrtry>
+                </Tp>
+                <Amt Ccy="EUR">0.67</Amt>
+                <CdtDbtInd>CRDT</CdtDbtInd>
+                <Dt>
+                    <Dt>2015-01-22</Dt>
+                </Dt>
+            </Bal>
+            <Bal>
+                <Tp>
+                    <CdOrPrtry>
+                        <Cd>CLAV</Cd>
+                    </CdOrPrtry>
+                </Tp>
+                <Amt Ccy="EUR">0.83</Amt>
+                <CdtDbtInd>CRDT</CdtDbtInd>
+                <Dt>
+                    <Dt>2015-01-22</Dt>
+                </Dt>
+            </Bal>
+            <Bal>
+                <Tp>
+                    <CdOrPrtry>
+                        <Cd>FWAV</Cd>
+                    </CdOrPrtry>
+                </Tp>
+                <Amt Ccy="EUR">0.67</Amt>
+                <CdtDbtInd>CRDT</CdtDbtInd>
+                <Dt>
+                    <Dt>2015-01-23</Dt>
+                </Dt>
+            </Bal>
+
+            <Bal>
+                <Tp>
+                    <CdOrPrtry>
+                        <Cd>FWAV</Cd>
+                    </CdOrPrtry>
+                </Tp>
+                <Amt Ccy="EUR">0.67</Amt>
+                <CdtDbtInd>CRDT</CdtDbtInd>
+                <Dt>
+                    <Dt>2015-01-26</Dt>
+                </Dt>
+            </Bal>
+
+            <Bal>
+                <Tp>
+                    <CdOrPrtry>
+                        <Cd>FWAV</Cd>
+                    </CdOrPrtry>
+                </Tp>
+                <Amt Ccy="EUR">0.67</Amt>
+                <CdtDbtInd>CRDT</CdtDbtInd>
+                <Dt>
+                    <Dt>2015-01-27</Dt>
+                </Dt>
+            </Bal>
+
+            <Bal>
+                <Tp>
+                    <CdOrPrtry>
+                        <Cd>FWAV</Cd>
+                    </CdOrPrtry>
+                </Tp>
+                <Amt Ccy="EUR">0.67</Amt>
+                <CdtDbtInd>CRDT</CdtDbtInd>
+                <Dt>
+                    <Dt>2015-01-28</Dt>
+                </Dt>
+            </Bal>
+
+            <TxsSummry>
+                <TtlNtries>
+                    <NbOfNtries>6</NbOfNtries>
+                    <Sum>0.18</Sum>
+                    <TtlNetNtryAmt>0.16</TtlNetNtryAmt>
+                    <CdtDbtInd>DBIT</CdtDbtInd>
+                </TtlNtries>
+                <TtlCdtNtries>
+                    <NbOfNtries>1</NbOfNtries>
+                    <Sum>0.01</Sum>
+                </TtlCdtNtries>
+
+                <TtlDbtNtries>
+                    <NbOfNtries>5</NbOfNtries>
+                    <Sum>0.17</Sum>
+                </TtlDbtNtries>
+                <TtlNtriesPerBkTxCd>
+                    <NbOfNtries>1</NbOfNtries>
+                    <Sum>0.01</Sum>
+                    <TtlNetNtryAmt>0.01</TtlNetNtryAmt>
+                    <CdtDbtInd>CRDT</CdtDbtInd>
+                    <BkTxCd>
+                        <Prtry>
+                            <Cd>541</Cd>
+                        </Prtry>
+                    </BkTxCd>
+                </TtlNtriesPerBkTxCd>
+                <TtlNtriesPerBkTxCd>
+                    <NbOfNtries>1</NbOfNtries>
+                    <Sum>0.01</Sum>
+                    <TtlNetNtryAmt>0.01</TtlNetNtryAmt>
+                    <CdtDbtInd>DBIT</CdtDbtInd>
+                    <BkTxCd>
+                        <Prtry>
+                            <Cd>545</Cd>
+                        </Prtry>
+                    </BkTxCd>
+                </TtlNtriesPerBkTxCd>
+
+                <TtlNtriesPerBkTxCd>
+                    <NbOfNtries>4</NbOfNtries>
+                    <Sum>0.16</Sum>
+                    <TtlNetNtryAmt>0.16</TtlNetNtryAmt>
+                    <CdtDbtInd>DBIT</CdtDbtInd>
+                    <BkTxCd>
+                        <Prtry>
+                            <Cd>587</Cd>
+                        </Prtry>
+                    </BkTxCd>
+                </TtlNtriesPerBkTxCd>
+            </TxsSummry>
+
+            <Ntry>
+                <NtryRef>reference collection 00001</NtryRef>
+                <Amt Ccy="EUR">0.10</Amt>
+                <CdtDbtInd>DBIT</CdtDbtInd>
+                <Sts>BOOK</Sts>
+                <BookgDt>
+                    <Dt>2015-01-22</Dt>
+                </BookgDt>
+                <ValDt>
+                    <Dt>2015-01-23</Dt>
+                </ValDt>
+                <BkTxCd>
+                    <Prtry>
+                        <Cd>587</Cd>
+                    </Prtry>
+                </BkTxCd>
+                <NtryDtls>
+                    <Btch>
+                        <PmtInfId>>Unique paymentidentification orgininal batch 001</PmtInfId>
+                        <NbOfTxs>10</NbOfTxs>
+                    </Btch>
+                    <TxDtls>
+                        <Refs>
+                            <AcctSvcrRef>reference collection 00001</AcctSvcrRef>
+                        </Refs>
+                        <BkTxCd>
+                            <Prtry>
+                                <Cd>587</Cd>
+                            </Prtry>
+                        </BkTxCd>
+                        <RmtInf>
+                            <Ustrd>Europayment Batch-id:0001</Ustrd>
+                        </RmtInf>
+                        <RltdDts>
+                            <IntrBkSttlmDt>2015-01-23</IntrBkSttlmDt>
+                        </RltdDts>
+                    </TxDtls>
+                </NtryDtls>
+            </Ntry>
+
+            <Ntry>
+                <NtryRef>reference collection 00002</NtryRef>
+                <Amt Ccy="EUR">0.03</Amt>
+                <CdtDbtInd>DBIT</CdtDbtInd>
+                <Sts>BOOK</Sts>
+                <BookgDt>
+                    <Dt>2015-01-22</Dt>
+                </BookgDt>
+                <ValDt>
+                    <Dt>2015-01-23</Dt>
+                </ValDt>
+                <BkTxCd>
+                    <Prtry>
+                        <Cd>587</Cd>
+                    </Prtry>
+                </BkTxCd>
+                <NtryDtls>
+                    <Btch>
+                        <PmtInfId>>Unique paymentidentification orgininal batch 002</PmtInfId>
+                        <NbOfTxs>3</NbOfTxs>
+                    </Btch>
+                    <TxDtls>
+                        <Refs>
+                            <AcctSvcrRef>reference collection 00002</AcctSvcrRef>
+                        </Refs>
+                        <BkTxCd>
+                            <Prtry>
+                                <Cd>587</Cd>
+                            </Prtry>
+                        </BkTxCd>
+                        <RmtInf>
+                            <Ustrd>Europayment Batch-id:0002</Ustrd>
+                        </RmtInf>
+                        <RltdDts>
+                            <IntrBkSttlmDt>2015-01-23</IntrBkSttlmDt>
+                        </RltdDts>
+                    </TxDtls>
+                </NtryDtls>
+            </Ntry>
+
+            <Ntry>
+                <NtryRef>reference collection 00003</NtryRef>
+                <Amt Ccy="EUR">0.02</Amt>
+                <CdtDbtInd>DBIT</CdtDbtInd>
+                <Sts>BOOK</Sts>
+                <BookgDt>
+                    <Dt>2015-01-22</Dt>
+                </BookgDt>
+                <ValDt>
+                    <Dt>2015-01-23</Dt>
+                </ValDt>
+                <BkTxCd>
+                    <Prtry>
+                        <Cd>587</Cd>
+                    </Prtry>
+                </BkTxCd>
+                <NtryDtls>
+                    <Btch>
+                        <PmtInfId>>Unique paymentidentification orgininal batch 003</PmtInfId>
+                        <NbOfTxs>2</NbOfTxs>
+                    </Btch>
+                    <TxDtls>
+                        <Refs>
+                            <AcctSvcrRef>reference collection 00003</AcctSvcrRef>
+                        </Refs>
+                        <BkTxCd>
+                            <Prtry>
+                                <Cd>587</Cd>
+                            </Prtry>
+                        </BkTxCd>
+                        <RmtInf>
+                            <Ustrd>Europayment Batch-id:0003</Ustrd>
+                        </RmtInf>
+                        <RltdDts>
+                            <IntrBkSttlmDt>2015-01-23</IntrBkSttlmDt>
+                        </RltdDts>
+                    </TxDtls>
+                </NtryDtls>
+            </Ntry>
+            <Ntry>
+                <NtryRef>reference collection 00004</NtryRef>
+                <Amt Ccy="EUR">0.01</Amt>
+                <CdtDbtInd>DBIT</CdtDbtInd>
+                <Sts>BOOK</Sts>
+                <BookgDt>
+                    <Dt>2015-01-22</Dt>
+                </BookgDt>
+                <ValDt>
+                    <Dt>2015-01-22</Dt>
+                </ValDt>
+                <BkTxCd>
+                    <Prtry>
+                        <Cd>545</Cd>
+                    </Prtry>
+                </BkTxCd>
+                <NtryDtls>
+                    <TxDtls>
+                        <Refs>
+                            <AcctSvcrRef>reference collection 00001</AcctSvcrRef>
+                        </Refs>
+                        <BkTxCd>
+                            <Prtry>
+                                <Cd>545</Cd>
+                            </Prtry>
+                        </BkTxCd>
+                        <RltdPties>
+                            <Cdtr>
+                                <Nm>Rabobank International</Nm>
+                                <PstlAdr>
+                                    <AdrTp>ADDR</AdrTp>
+                                    <Ctry>NL</Ctry>
+                                    <AdrLine>Croeselaan 18</AdrLine>
+                                </PstlAdr>
+                                <Id>
+                                    <OrgId>
+                                        <BICOrBEI>RABONL2U</BICOrBEI>
+                                    </OrgId>
+                                </Id>
+                            </Cdtr>
+                            <CdtrAcct>
+                                <Id>
+                                    <IBAN>NL13TEST0123456789</IBAN>
+                                </Id>
+                            </CdtrAcct>
+                        </RltdPties>
+                        <RltdAgts>
+                            <CdtrAgt>
+                                <FinInstnId>
+                                    <BIC>RABONL2U</BIC>
+                                </FinInstnId>
+                            </CdtrAgt>
+                        </RltdAgts>
+                        <RmtInf>
+                            <Ustrd>140 posities voor uw omschrijving/Description tittle1</Ustrd>
+                        </RmtInf>
+                        <RltdDts>
+                            <IntrBkSttlmDt>2015-01-22</IntrBkSttlmDt>
+                        </RltdDts>
+                    </TxDtls>
+                </NtryDtls>
+            </Ntry>
+
+            <Ntry>
+                <NtryRef>reference collection 00005</NtryRef>
+                <Amt Ccy="EUR">0.01</Amt>
+                <CdtDbtInd>DBIT</CdtDbtInd>
+                <Sts>BOOK</Sts>
+                <BookgDt>
+                    <Dt>2015-01-22</Dt>
+                </BookgDt>
+                <ValDt>
+                    <Dt>2015-01-23</Dt>
+                </ValDt>
+                <BkTxCd>
+                    <Prtry>
+                        <Cd>587</Cd>
+                    </Prtry>
+                </BkTxCd>
+                <NtryDtls>
+                    <Btch>
+                        <PmtInfId>>Unique paymentidentification orgininal batch 005</PmtInfId>
+                        <NbOfTxs>1</NbOfTxs>
+                    </Btch>
+                    <TxDtls>
+                        <Refs>
+                            <AcctSvcrRef>reference collection 00005</AcctSvcrRef>
+                        </Refs>
+                        <BkTxCd>
+                            <Prtry>
+                                <Cd>587</Cd>
+                            </Prtry>
+                        </BkTxCd>
+                        <RmtInf>
+                            <Ustrd>Europayment Batch-id:0005</Ustrd>
+                        </RmtInf>
+                        <RltdDts>
+                            <IntrBkSttlmDt>2015-01-23</IntrBkSttlmDt>
+                        </RltdDts>
+                    </TxDtls>
+                </NtryDtls>
+            </Ntry>
+
+            <Ntry>
+                <NtryRef>reference collection 00001</NtryRef>
+                <Amt Ccy="EUR">0.01</Amt>
+                <CdtDbtInd>CRDT</CdtDbtInd>
+                <Sts>BOOK</Sts>
+                <BookgDt>
+                    <Dt>2015-01-22</Dt>
+                </BookgDt>
+                <ValDt>
+                    <Dt>2015-01-22</Dt>
+                </ValDt>
+                <BkTxCd>
+                    <Prtry>
+                        <Cd>541</Cd>
+                    </Prtry>
+                </BkTxCd>
+                <NtryDtls>
+                    <TxDtls>
+                        <Refs>
+                            <AcctSvcrRef>reference payment 00001</AcctSvcrRef>
+                        </Refs>
+                        <BkTxCd>
+                            <Prtry>
+                                <Cd>541</Cd>
+                            </Prtry>
+                        </BkTxCd>
+                        <RltdPties>
+                            <Dbtr>
+                                <Nm>PaymentServices</Nm>
+                                <PstlAdr>
+                                    <AdrTp>ADDR</AdrTp>
+                                    <Ctry>NL</Ctry>
+                                    <AdrLine>Postbus 17100 3500HG UTRECHT Nederland</AdrLine>
+                                </PstlAdr>
+                                <Id>
+                                    <OrgId>
+                                        <BICOrBEI>RABONL2U</BICOrBEI>
+                                    </OrgId>
+                                </Id>
+                            </Dbtr>
+                            <DbtrAcct>
+                                <Id>
+                                    <IBAN>NL13TEST0123456789</IBAN>
+                                </Id>
+                            </DbtrAcct>
+                        </RltdPties>
+                        <RltdAgts>
+                            <DbtrAgt>
+                                <FinInstnId>
+                                    <BIC>RABONL2U</BIC>
+                                </FinInstnId>
+                            </DbtrAgt>
+                        </RltdAgts>
+                        <RmtInf>
+                            <Ustrd>140 posities voor uw omschrijving/Description tittle2</Ustrd>
+                        </RmtInf>
+                        <RltdDts>
+                            <IntrBkSttlmDt>2015-01-22</IntrBkSttlmDt>
+                        </RltdDts>
+                    </TxDtls>
+                </NtryDtls>
+            </Ntry>
+        </Stmt>
+    </BkToCstmrStmt>
+</Document>

@@ -11,7 +11,11 @@ ING_CSM_FILE = os.path.join(os.path.dirname(__file__), "ING.txt")
 ABN_CSM_FILE = os.path.join(os.path.dirname(__file__), "ABN.txt")
 BNG_CSM_FILE = os.path.join(os.path.dirname(__file__), "BNG.txt")
 INCORRECT_CSM_FILE = os.path.join(os.path.dirname(__file__), "incorrect.txt")
-
+ABN_CAMT_CSM_FILE = os.path.join(os.path.dirname(__file__), "CAMT_ABN.xml")
+RABO_CAMT_CSM_FILE = os.path.join(os.path.dirname(__file__), "CAMT_RABO.xml")
+ING_CAMT_CSM_FILE = os.path.join(os.path.dirname(__file__), "CAMT_ING.xml")
+INCORRECT_CAMT_FILE = os.path.join(os.path.dirname(__file__), "incorrect.xml")
+ANONIEM_CSM_FILE = os.path.join(os.path.dirname(__file__), "Anoniem.xml")
 
 class MockResponse:
     history = None
@@ -128,9 +132,188 @@ def test_create_csm_with_bng_file(client, mocker: MockerFixture):
             assert response.json.get("errors") is None
             assert response.status_code == 200
 
+def test_create_csm_with_abn_camt_file(client, mocker: MockerFixture):
+    adapter = create_mock_adapter(mocker)
+
+    with open(ABN_CAMT_CSM_FILE, "rb") as testfile:
+        with requests_mock.Mocker() as m:
+            m._adapter = adapter
+            m.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json={"data": {"id": 1}})
+            response = do_csm_post(client, testfile)
+
+            # Customer Statement Message
+            assert (
+                adapter.request_history[0].json()["account_identification"]
+                == "NL77ABNA0574908765"
+            )
+            assert adapter.request_history[0].json()["closing_available_funds"] == 10001
+            assert adapter.request_history[0].json()["closing_balance"] == 10001
+            assert (
+                adapter.request_history[0].json()["forward_available_balance"] == 10001
+            )
+            assert adapter.request_history[0].json()["opening_balance"] == 100001
+            assert (
+                adapter.request_history[0].json()["transaction_reference_number"]
+                == "0574908765.2013-04-02"
+            )
+            # Bank transaction
+            assert (
+                adapter.request_history[2].json()["tegen_rekening"]
+                == "NL46ABNA0499998748"
+            )
+            assert(
+                adapter.request_history[2].json()["information_to_account_owner"]
+                == "/TRTP/SEPA OVERBOEKING/IBAN/NL46ABNA0499998748/BIC/ABNANL2A/NAME/NAAM/REMI/OMSCHRIJVING/EREF/NOTPROVIDED"
+            )
+            assert adapter.request_history[2].json()["bedrag"] == 100
+            assert adapter.request_history[2].json()["transactie_datum"] == "2013-04-02"
+
+            # Details from other transactions must be correct
+            assert(
+                adapter.request_history[3].json()["information_to_account_owner"]
+                == "/TRTP/SEPA ACCEPTGIRO/IBAN/NL46ABNA0499998748/BIC/ABNANL2A/NAME/NAAM/REMI//REMI/Issuer: CUR Ref: 1234567812345678/EREF/NOTPROVIDED"
+            )
+            assert (
+                adapter.request_history[4].json()["information_to_account_owner"]
+                == "/TRTP/SEPA ACCEPTGIRO BATCH/PREF/3095D4322561460S0PS/NRTX/10"
+            )
+            assert (
+                adapter.request_history[5].json()["information_to_account_owner"]
+                == "/TRTP/SEPA ACCEPTGIRO BATCH/PREF/3095D4322561460S0PS/NRTX/10"
+            )
+            assert (
+                adapter.request_history[28].json()["information_to_account_owner"]
+                == "/RTYP/SEPA Incasso niet uitgevoerd/MARF/123456789XXmandaat/RTRN/MS03/IBAN/NL27ABNA0562399340/NAME/Debtor/REMI/Levering maand mei, zie nota 1234556. Uw klantnummer 123455666/EREF/1234567X908303803"
+            )
+            # Overall response
+            assert adapter.call_count == 31
+            assert response.json.get("errors") is None
+            assert response.status_code == 200
+
+def test_create_csm_with_rabo_camt_file(client, mocker: MockerFixture):
+    adapter = create_mock_adapter(mocker)
+
+    with open(RABO_CAMT_CSM_FILE, "rb") as testfile:
+        with requests_mock.Mocker() as m:
+            m._adapter = adapter
+            m.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json={"data": {"id": 1}})
+            response = do_csm_post(client, testfile)
+
+            # Customer Statement Message
+            assert (
+                adapter.request_history[0].json()["account_identification"]
+                == 'NL44RABO0123456789'
+            )
+            assert adapter.request_history[0].json()["closing_available_funds"] == 83
+            assert adapter.request_history[0].json()["closing_balance"] == 67
+            assert (
+                adapter.request_history[0].json()["forward_available_balance"] == 67
+            )
+            assert adapter.request_history[0].json()["opening_balance"] == 83
+            assert (
+                adapter.request_history[0].json()["transaction_reference_number"]
+                == 'CAMT0532015012200001'
+            )
+            # Bank transaction
+            assert (
+                adapter.request_history[2].json()["tegen_rekening"]
+                == ""
+            )
+            assert adapter.request_history[2].json()["bedrag"] == -3
+            assert adapter.request_history[2].json()["transactie_datum"] == "2015-01-23"
+            assert adapter.request_history[2].json()["information_to_account_owner"] == "Europayment Batch-id:0002"
+            # Overall response
+            assert adapter.call_count == 8
+            assert response.json.get("errors") is None
+            assert response.status_code == 200
+
+def test_create_csm_with_ing_camt_file(client, mocker: MockerFixture):
+    adapter = create_mock_adapter(mocker)
+
+    with open(ING_CAMT_CSM_FILE, "rb") as testfile:
+        with requests_mock.Mocker() as m:
+            m._adapter = adapter
+            m.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json={"data": {"id": 1}})
+            response = do_csm_post(client, testfile)
+
+            # Customer Statement Message
+            assert (
+                adapter.request_history[0].json()["account_identification"]
+                == 'NL08INGB0000001234'
+            )
+            assert adapter.request_history[0].json()["closing_available_funds"] == 160500
+            assert adapter.request_history[0].json()["closing_balance"] == 160500
+            assert (
+                adapter.request_history[0].json()["forward_available_balance"] == 160500
+            )
+            assert adapter.request_history[0].json()["opening_balance"] == 100000
+            assert (
+                adapter.request_history[0].json()["transaction_reference_number"]
+                == '201401030009999'
+            )
+            # Bank transaction
+            assert (
+                adapter.request_history[2].json()["tegen_rekening"]
+                == "NL20INGB0001234567"
+            )
+            assert adapter.request_history[2].json()["bedrag"] == 12500
+            assert adapter.request_history[2].json()["transactie_datum"] == "2014-01-03"
+            assert adapter.request_history[2].json()["information_to_account_owner"] == 'UstrdRemi2014010323566INGBankNV'
+            assert adapter.request_history[3].json()["information_to_account_owner"] == "6390338414964113"
+            # Overall response
+            assert adapter.call_count == 11
+            assert response.json.get("errors") is None
+            assert response.status_code == 200
+
+def test_create_csm_with_anoniem_camt_file(client, mocker: MockerFixture):
+    adapter = create_mock_adapter(mocker)
+
+    with open(ANONIEM_CSM_FILE, "rb") as testfile:
+        with requests_mock.Mocker() as m:
+            m._adapter = adapter
+            m.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json={"data": {"id": 1}})
+            response = do_csm_post(client, testfile)
+
+            # Customer Statement Message
+            assert (
+                adapter.request_history[0].json()["account_identification"]
+                == 'NL49BNGH0285171712'
+            )
+            assert adapter.request_history[0].json()["closing_available_funds"] == 12097461
+            assert adapter.request_history[0].json()["closing_balance"] == 12097461
+            assert (
+                adapter.request_history[0].json()["forward_available_balance"] == 12097461
+            )
+            assert adapter.request_history[0].json()["opening_balance"] == 12470442
+            assert (
+                adapter.request_history[0].json()["transaction_reference_number"]
+                == '44280792'
+            )
+            # Bank transaction
+            assert (
+                adapter.request_history[2].json()["tegen_rekening"]
+                == 'NL54INGB0000000503'
+            )
+            assert adapter.request_history[2].json()["bedrag"] == 100997
+            assert adapter.request_history[2].json()["transactie_datum"] == "2021-08-16"
+            assert adapter.request_history[2].json()["information_to_account_owner"] == '''/TRTP/SEPA ontvangst/REMI/518303424874 Factnr 54005413523 BTW 137,11 Jaarafr 10.08.2021
+                    Klantnr 12345678 CRN 3014357265 Straatnaam 1 3531 PN UTRECHT
+                '''
+            assert adapter.request_history[3].json()["information_to_account_owner"] == '''/TRTP/SEPA ontvangst/REMI/MAAND AUG. NR. 123456789H1001 IB/PVV 2021 (ACHTER )
+                '''
+            # Overall response
+            assert adapter.call_count == 25
+            assert response.json.get("errors") is None
+            assert response.status_code == 200
 
 def test_create_csm_with_incorrect_file(client):
     with open(INCORRECT_CSM_FILE, "rb") as testfile:
+        response = do_csm_post(client, testfile)
+        assert response.json["errors"] is not None
+        assert response.status_code == 200
+
+def test_create_camt_with_incorrect_file(client):
+    with open(INCORRECT_CAMT_FILE, "rb") as testfile:
         response = do_csm_post(client, testfile)
         assert response.json["errors"] is not None
         assert response.status_code == 200

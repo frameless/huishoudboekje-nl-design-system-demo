@@ -8,6 +8,7 @@ import requests
 from graphene_file_upload.scalars import Upload
 import mt940
 from graphql import GraphQLError
+from hhb_backend.camtParser import parser
 
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.models.customer_statement_message import (
@@ -28,16 +29,16 @@ class CreateCustomerStatementMessage(graphene.Mutation):
         file = Upload(required=True)
 
     ok = graphene.Boolean()
-    customerStatementMessage = graphene.Field(lambda: CustomerStatementMessage)
+    customerStatementMessage = graphene. List(lambda: CustomerStatementMessage)
     journaalposten = graphene.List(lambda: journaalpost.Journaalpost)
 
     def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
         return dict(
             action=info.field_name,
             entities=gebruikers_activiteit_entities(
-                entity_type="customerStatementMessage",
+                entity_type="customerStatementMessages",
                 result=self,
-                key="customerStatementMessage",
+                key="customerStatementMessages",
             )
             + gebruikers_activiteit_entities(
                 entity_type="transaction",
@@ -51,69 +52,86 @@ class CreateCustomerStatementMessage(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(_root, _info, file):
         content = file.stream.read()
-        csm_file = mt940.parse(content)
-        # Fill the csm model
-        csmServiceModel = {
-            "upload_date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            "raw_data": content.decode("utf-8"),
-            "filename": file.filename
-        }
 
-        if csm_file.data.get("transaction_reference", False):
-            csmServiceModel["transaction_reference_number"] = csm_file.data[
-                "transaction_reference"
-            ]
+        if file.filename.lower().endswith('.xml'):
+            csm_files = parser.CamtParser().parse(content)
         else:
-            raise GraphQLError(f"Incorrect file, missing tag 20 transaction reference")
+            csm_files = [mt940.parse(content)]
 
-        # csmServiceModel.related_reference = csm_file.data['??']
-        if csm_file.data.get("account_identification", False):
-            csmServiceModel["account_identification"] = csm_file.data[
-                "account_identification"
-            ]
-        else:
-            raise GraphQLError(f"Incorrect file, missing tag 25 account identification")
 
-        if csm_file.data.get("sequence_number", False):
-            csmServiceModel["sequence_number"] = csm_file.data["sequence_number"]
+        customerStatementMessage = []
+        journaalposten = []
 
-        if csm_file.data.get("final_opening_balance", False):
-            csmServiceModel["opening_balance"] = int(
-                csm_file.data["final_opening_balance"].amount.amount * 100
+        for csm_file in csm_files:
+            # Fill the csm model
+            csmServiceModel = {
+                "upload_date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "raw_data": content.decode("utf-8"),
+                "filename": file.filename
+            }
+
+            if csm_file.data.get("transaction_reference", False):
+                csmServiceModel["transaction_reference_number"] = csm_file.data[
+                    "transaction_reference"
+                ]
+            else:
+                raise GraphQLError(f"Incorrect file, missing tag 20 transaction reference or misplaced/missing Id tag")
+
+            # csmServiceModel.related_reference = csm_file.data['??']
+            if csm_file.data.get("account_identification", False):
+                csmServiceModel["account_identification"] = csm_file.data[
+                    "account_identification"
+                ]
+            else:
+                raise GraphQLError(f"Incorrect file, missing tag 25 account identification or misplaced/missing IBAN tag")
+
+            if csm_file.data.get("sequence_number", False):
+                csmServiceModel["sequence_number"] = csm_file.data["sequence_number"]
+
+            if csm_file.data.get("final_opening_balance", False):
+                csmServiceModel["opening_balance"] = int(
+                    csm_file.data["final_opening_balance"].amount.amount * 100
+                )
+
+            if csm_file.data.get("final_closing_balance", False):
+                csmServiceModel["closing_balance"] = int(
+                    csm_file.data["final_closing_balance"].amount.amount * 100
+                )
+
+            if csm_file.data.get("available_balance", False):
+                csmServiceModel["closing_available_funds"] = int(
+                    csm_file.data["available_balance"].amount.amount * 100
+                )
+
+            if csm_file.data.get("forward_available_balance", False):
+                csmServiceModel["forward_available_balance"] = int(
+                    csm_file.data["forward_available_balance"].amount.amount * 100
+                )
+
+            # Send the model
+            post_response = requests.post(
+                f"{settings.TRANSACTIE_SERVICES_URL}/customerstatementmessages/",
+                data=json.dumps(csmServiceModel),
+                headers={"Content-type": "application/json"},
+            )
+            if post_response.status_code != 201:
+                raise GraphQLError(f"Upstream API responded: {post_response.text}")
+
+            customerStatementMessagetemp = post_response.json()["data"]
+
+            if len(csm_file.transactions) == 0:
+                raise GraphQLError("No transactions in file")
+
+            customerStatementMessagetemp["bank_transactions"] = process_transactions(
+                customerStatementMessagetemp["id"], csm_file.transactions
             )
 
-        if csm_file.data.get("final_closing_balance", False):
-            csmServiceModel["closing_balance"] = int(
-                csm_file.data["final_closing_balance"].amount.amount * 100
-            )
+            customerStatementMessage.append(customerStatementMessagetemp)
 
-        if csm_file.data.get("available_balance", False):
-            csmServiceModel["closing_available_funds"] = int(
-                csm_file.data["available_balance"].amount.amount * 100
-            )
-
-        if csm_file.data.get("forward_available_balance", False):
-            csmServiceModel["forward_available_balance"] = int(
-                csm_file.data["forward_available_balance"].amount.amount * 100
-            )
-
-        # Send the model
-        post_response = requests.post(
-            f"{settings.TRANSACTIE_SERVICES_URL}/customerstatementmessages/",
-            data=json.dumps(csmServiceModel),
-            headers={"Content-type": "application/json"},
-        )
-        if post_response.status_code != 201:
-            raise GraphQLError(f"Upstream API responded: {post_response.text}")
-
-        customerStatementMessage = post_response.json()["data"]
-
-        customerStatementMessage["bank_transactions"] = process_transactions(
-            customerStatementMessage["id"], csm_file.transactions
-        )
-
-        # Try, if possible, to match banktransaction
-        journaalposten = await automatisch_boeken.automatisch_boeken(customerStatementMessage["id"])
+            # Try, if possible, to match banktransaction
+            journaalpostentemp = await automatisch_boeken.automatisch_boeken(customerStatementMessagetemp["id"])
+            if journaalpostentemp:
+                journaalposten.extend(journaalpostentemp)
 
         return CreateCustomerStatementMessage(
             journaalposten=journaalposten,
@@ -122,11 +140,16 @@ class CreateCustomerStatementMessage(graphene.Mutation):
         )
 
 
-def retrieve_iban(transaction_details: str) -> str:
-    result = re.search(IBAN_REGEX, transaction_details)
-    if result is None:
-        return ""
-    return result.group()
+def retrieve_iban(transaction_details: dict) -> str:
+    if transaction_details.get('tegen_rekening',False):
+        result = transaction_details['tegen_rekening']
+    else:
+        result = re.search(IBAN_REGEX, transaction_details['transaction_details'])
+        if result is None:
+            return ""
+        else:
+            result = result.group()
+    return result
 
 
 def process_transactions(csm_id, transactions):
@@ -145,9 +168,9 @@ def process_transactions(csm_id, transactions):
             + t.data["customer_reference"]
             + t.data["extra_details"]
         )
-        transactionModel["transactie_datum"] = str(t.data["date"])
+        transactionModel["transactie_datum"] = str(t.data["date"].strftime("%Y-%m-%d"))
         transactionModel["tegen_rekening"] = retrieve_iban(
-            t.data["transaction_details"]
+            t.data
         )
         transactionModel["is_credit"] = t.data["status"] == "C"
         transactionModel["bedrag"] = int(t.data["amount"].amount * 100)
