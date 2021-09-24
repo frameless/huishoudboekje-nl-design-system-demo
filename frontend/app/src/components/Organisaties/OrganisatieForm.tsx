@@ -2,6 +2,8 @@ import {Box, Button, Divider, FormControl, FormErrorMessage, FormLabel, Input, S
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {Organisatie} from "../../generated/graphql";
+import useToaster from "../../utils/useToaster";
+import OrganisatieValidator from "../../validators/OrganisatieValidator";
 import {FormLeft, FormRight} from "../Layouts/Forms";
 import Section from "../Layouts/Section";
 import useOrganisatieForm from "./utils/useOrganisatieForm";
@@ -14,6 +16,7 @@ type OrganisatieFormProps = {
 
 const OrganisatieForm: React.FC<OrganisatieFormProps> = ({organisatie, onSubmit, isLoading = false}) => {
 	const {t} = useTranslation();
+	const toast = useToaster();
 	const isMobile = useBreakpointValue(([true, null, null, false]));
 	const {kvkNummer, vestigingsnummer, kvkDetails} = organisatie || {};
 	const {naam, straatnaam, huisnummer, postcode, plaatsnaam} = kvkDetails || {};
@@ -21,10 +24,22 @@ const OrganisatieForm: React.FC<OrganisatieFormProps> = ({organisatie, onSubmit,
 
 	const onSubmitForm = e => {
 		e.preventDefault();
-		onSubmit({
-			...organisatie?.id && {id: organisatie.id},
-			...data,
-		});
+
+		try {
+			const validatedData = OrganisatieValidator.parse(data);
+			onSubmit({
+				...organisatie?.id && {id: organisatie.id},
+				...validatedData,
+			});
+		}
+		catch (err) {
+			toast.closeAll();
+			toast({
+				error: t("messages.formInputError"),
+			});
+			return;
+		}
+
 	};
 
 	return (

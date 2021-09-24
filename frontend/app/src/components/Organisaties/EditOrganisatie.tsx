@@ -1,4 +1,4 @@
-import {Text, useBreakpointValue} from "@chakra-ui/react";
+import {useBreakpointValue} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {Redirect, useHistory, useParams} from "react-router-dom";
