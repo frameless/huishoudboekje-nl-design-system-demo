@@ -71,7 +71,7 @@
       "alreadyExists": "Deze configuratie bestaat al."
     },
     "huishoudenBurger": {
-      "noOptionsSelectedError": "Er zijn geen burgers geselecteerd. Selecteer minimaal een burger om toe te voegen aan dit huishouden.",
+      "noOptionsSelectedError": "Er zijn geen burgers gekozen. Kies minimaal een burger om toe te voegen aan dit huishouden.",
       "addSuccess": "{{names}} is toegevoegd aan dit huishouden.",
       "addSuccess_plural": "{{names}} zijn toegevoegd aan dit huishouden.",
       "deleteSuccess": "{{burgerName}} is verwijderd uit dit huishouden."
@@ -109,7 +109,7 @@
       "end": "Beëindigen",
       "add": "Toevoegen",
       "newBetaalinstructie": "Nieuwe betaalinstructie instellen",
-      "selectFile": "Selecteer een of meerdere bestanden",
+      "selectFile": "Kies een of meerdere bestanden",
       "close": "Sluiten",
       "actions": "Acties",
       "export": "Exporteren",
@@ -333,6 +333,10 @@
       }
     }
   },
+  "select": {
+    "placeholder": "Kies een optie...",
+    "noOptions": "Geen resultaten"
+  },
   "unknown": "Onbekend",
   "schedule": {
     "repeatType_day": "Dagelijks",
@@ -455,9 +459,6 @@
   },
   "bookingSection": {
     "noResults": "Er zijn geen afspraken gevonden. Voeg een afspraak toe, of kies een rubriek om deze transactie op af te letteren."
-  },
-  "select": {
-    "noOptions": "Geen resultaten"
   },
   "unbooked": "Niet afgeletterd",
   "transaction": "Transactie",

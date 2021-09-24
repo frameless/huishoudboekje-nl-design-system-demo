@@ -151,7 +151,7 @@ const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({
 											}));
 										}} value={repeatTypeOptions.find(r => r.value === repeatType)}
 										isClearable={false} noOptionsMessage={() => t("schedule.repeatTypeChoose")}
-										maxMenuHeight={200} options={repeatTypeOptions}
+										maxMenuHeight={200} options={repeatTypeOptions} placeholder={t("select.placeholder")}
 										styles={reactSelectStyles.default} />
 									</Box>
 									<FormErrorMessage>{t("schedule.invalidPeriodiekError")}</FormErrorMessage>
