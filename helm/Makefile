@@ -43,7 +43,7 @@ version:
 		xargs -n 1 yq --prettyPrint --inplace eval ".appVersion = \"$(COMPONENT_VERSION)\""
 
 .PHONY: dependencies
-dependencies: version $(shell find . -name 'Chart.lock')
+dependencies: version $(find . -name 'Chart.lock')
 
 .PHONY: touch-dependencies
 touch-dependencies:

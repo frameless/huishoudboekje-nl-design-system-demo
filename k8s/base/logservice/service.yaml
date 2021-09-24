@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: hhb-logservice
+  labels:
+    name: hhb-logservice
+  namespace: ${NAMESPACE}
+spec:
+  type: ClusterIP
+  selector:
+    name: hhb-logservice
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: http

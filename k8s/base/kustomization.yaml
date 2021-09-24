@@ -1,0 +1,33 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - namespace.yaml
+  - backend/deployment.yaml
+  - backend/ingress.yaml
+  - backend/secrets.yaml
+  - backend/service.yaml
+  - banktransactieservice/deployment.yaml
+  - banktransactieservice/service.yaml
+  - database/configmap.yaml
+  - database/deployment.yaml
+  - database/service.yaml
+  - database/volumes.yaml
+  - dex/configmap.yaml
+  - dex/deployment.yaml
+  - dex/ingress.yaml
+  - dex/service.yaml
+  - frontend/deployment.yaml
+  - frontend/ingress.yaml
+  - frontend/service.yaml
+  - frontend/theme.yaml
+  - grootboekservice/deployment.yaml
+  - grootboekservice/service.yaml
+  - huishoudboekjeservice/deployment.yaml
+  - huishoudboekjeservice/service.yaml
+  - logservice/deployment.yaml
+  - logservice/service.yaml
+  - organisatieservice/deployment.yaml
+  - organisatieservice/service.yaml
+  - unleashservice/deployment.yaml
+  - unleashservice/service.yaml
+  - unleashservice/ingress.yaml

@@ -1,0 +1,32 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: hhb-database-volume
+  namespace: ${NAMESPACE}
+  labels:
+    name: hhb-database-volume
+spec:
+  storageClassName: default
+  capacity:
+    storage: 512Mi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/mnt/data"
+
+---
+
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: hhb-database-volumeclaim
+  namespace: ${NAMESPACE}
+  labels:
+    name: hhb-database-volumeclaim
+spec:
+  storageClassName: default
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 512Mi

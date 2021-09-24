@@ -41,14 +41,14 @@ frontend-test:
 .Service Test:
   stage: test
   needs:
-    - build-shell-runner
+    - build
   tags:
     - docker
   retry:
     max: 2
     when: script_failure
   image:
-    name: $CI_REGISTRY_IMAGE/$PYTHON_POSTGRES:$IMAGE_TAG
+    name: $PYTHON_POSTGRES_IMAGE
   variables:
     PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
   cache:

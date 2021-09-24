@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: hhb-grootboekservice
+  labels:
+    name: hhb-grootboekservice
+  namespace: ${NAMESPACE}
+spec:
+  type: ClusterIP
+  selector:
+    name: hhb-grootboekservice
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: http

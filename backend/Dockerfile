@@ -1,20 +1,9 @@
 ARG DOCKER_PROXY=''
 
-# Create version.json
-FROM ${DOCKER_PROXY}alpine:latest AS version
-
-RUN apk add --update jq
-
-ARG COMPONENT_NAME=backend
-ARG COMPONENT_TAG=undefined
-ARG COMPONENT_COMMIT_HASH=undefined
-ARG COMPONENT_VERSION=undefined
-RUN jq -ncM '{tag: env.COMPONENT_TAG, commit: env.COMPONENT_COMMIT_HASH, component: env.COMPONENT_NAME, version: env.COMPONENT_VERSION}' | tee /version.json
-
 # Build
 FROM ${DOCKER_PROXY}python:3.8-slim-buster AS build
 
-# Timezone 
+# Timezone
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get -y install tzdata
 ENV TZ Europe/Amsterdam
@@ -33,8 +22,6 @@ COPY --chown=app:app ./ ./
 # install the package
 RUN python3 setup.py install --user --prefix=''
 
-COPY --from=version --chown=app:app /version.json /app/hhb_backend/version.json
-
 # Set gunicorn settings
 ENV GUNICORN_PORT="8000" \
     GUNICORN_WORKERS="2" \
@@ -47,9 +34,9 @@ ENV GUNICORN_PORT="8000" \
 
 # Runtime envrionment
 CMD ["bash", "-c", "exec gunicorn \
+  --bind=0.0.0.0:${GUNICORN_PORT} \
   --workers=${GUNICORN_WORKERS} \
   --threads=${GUNICORN_THREADS} \
-  --bind=0.0.0.0:${GUNICORN_PORT} \
   --log-level=${GUNICORN_LOGLEVEL} \
   --forwarded-allow-ips '*' \
   --capture-output \

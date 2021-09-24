@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: hhb-database
+  namespace: ${NAMESPACE}
+  labels:
+    name: hhb-database
+spec:
+  type: ClusterIP
+  ports:
+    - name: postgres
+      protocol: TCP
+      port: 5432
+      targetPort: 5432
+  selector:
+    name: hhb-database

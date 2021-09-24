@@ -1,7 +1,7 @@
 """Creation of organisaties table
 
 Revision ID: 6612f2dd5c5a
-Revises: 
+Revises:
 Create Date: 2020-10-12 12:17:28.467953
 
 """

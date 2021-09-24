@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-frontend
+  namespace: ${NAMESPACE}
+  labels:
+    name: hhb-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: hhb-frontend
+  template:
+    metadata:
+      labels:
+        name: hhb-frontend
+    spec:
+      containers:
+        - name: hhb-frontend
+          image: registry.gitlab.com/commonground/huishoudboekje/app-new/frontend:${IMAGE_TAG}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+#          resources:
+#            limits:
+#              cpu: 100m
+#              memory: 128Mi
+#            requests:
+#              cpu: 10m
+#              memory: 12Mi
+          volumeMounts:
+            - name: theme-volume
+              mountPath: /usr/share/nginx/html/theme
+      volumes:
+        - name: theme-volume
+          configMap:
+            name: hhb-theme

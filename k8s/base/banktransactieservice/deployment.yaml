@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-banktransactieservice
+  namespace: ${NAMESPACE}
+  labels:
+    name: hhb-banktransactieservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: hhb-banktransactieservice
+  template:
+    metadata:
+      labels:
+        name: hhb-banktransactieservice
+    spec:
+      initContainers:
+        - name: init1-wait-for-db
+          image: busybox
+          command: ["sh", "-c", "while true; do sleep 1; echo Waiting for database...; if nc -z hhb-database 5432; then echo Database is up!; exit 0; fi; done; echo Aint gonna wait for the database forever...; exit 1"]
+        - name: init2-prepare-db
+          image: postgres:13-alpine
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/sh"]
+          args:
+            - -c
+            - >-
+              export PGPASSWORD=postgres &&
+              sleep 15 &&
+              psql -h hhb-database -U postgres -c "CREATE USER bktsvc WITH PASSWORD 'bktsvc'" || true &&
+              psql -h hhb-database -U postgres -c "CREATE DATABASE banktransactieservice" || true &&
+              psql -h hhb-database -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE banktransactieservice TO bktsvc" || true;
+        - name: init3-migrate-db
+          image: registry.gitlab.com/commonground/huishoudboekje/app-new/banktransactieservice:${IMAGE_TAG}
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: HHB_SECRET
+              value: ${HHB_SECRET}
+            - name: TRANSACTIE_DATABASE_URL
+              value: "postgresql://bktsvc:bktsvc@hhb-database/banktransactieservice"
+          command: ["python"]
+          args: ["manage.py", "db", "upgrade"]
+      containers:
+        - name: hhb-banktransactieservice
+          image: registry.gitlab.com/commonground/huishoudboekje/app-new/banktransactieservice:${IMAGE_TAG}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+#          resources:
+#            limits:
+#              cpu: 1000m
+#              memory: 256Mi
+#            requests:
+#              cpu: 100m
+#              memory: 128Mi
+          env:
+            - name: HHB_SECRET
+              value: ${HHB_SECRET}
+            - name: TRANSACTIE_DATABASE_URL
+              value: "postgresql://bktsvc:bktsvc@hhb-database/banktransactieservice"

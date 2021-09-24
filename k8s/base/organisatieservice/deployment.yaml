@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-organisatieservice
+  namespace: ${NAMESPACE}
+  labels:
+    name: hhb-organisatieservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: hhb-organisatieservice
+  template:
+    metadata:
+      labels:
+        name: hhb-organisatieservice
+    spec:
+      initContainers:
+        - name: init1-wait-for-db
+          image: busybox
+          command: [ "sh", "-c", "while true; do sleep 1; echo Waiting for database...; if nc -z hhb-database 5432; then echo Database is up!; exit 0; fi; done; echo Aint gonna wait for the database forever...; exit 1" ]
+        - name: init2-prepare-db
+          image: postgres:13-alpine
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/sh"]
+          args:
+            - -c
+            - >-
+              export PGPASSWORD=postgres &&
+              psql -h hhb-database -U postgres -c "CREATE USER orgsvc WITH PASSWORD 'orgsvc'" || true &&
+              psql -h hhb-database -U postgres -c "CREATE DATABASE organisatieservice" || true &&
+              psql -h hhb-database -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE organisatieservice TO orgsvc" || true;
+        - name: init3-migrate-db
+          image: registry.gitlab.com/commonground/huishoudboekje/app-new/organisatieservice:${IMAGE_TAG}
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: HHB_SECRET
+              value: ${HHB_SECRET}
+            - name: ORGANISATIE_DATABASE_URL
+              value: "postgresql://orgsvc:orgsvc@hhb-database/organisatieservice"
+          command: ["python"]
+          args: ["manage.py", "db", "upgrade"]
+      containers:
+        - name: hhb-organisatieservice
+          image: registry.gitlab.com/commonground/huishoudboekje/app-new/organisatieservice:${IMAGE_TAG}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+#          resources:
+#            limits:
+#              cpu: 1000m
+#              memory: 256Mi
+#            requests:
+#              cpu: 100m
+#              memory: 128Mi
+          env:
+            - name: HHB_SECRET
+              value: ${HHB_SECRET}
+            - name: ORGANISATIE_DATABASE_URL
+              value: "postgresql://orgsvc:orgsvc@hhb-database/organisatieservice"
