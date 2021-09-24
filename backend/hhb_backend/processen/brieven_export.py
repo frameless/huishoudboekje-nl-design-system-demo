@@ -13,6 +13,7 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import (
 from dateutil import tz
 from flask import request, g
 from hhb_backend.version import load_version
+import pandas as pd
 
 
 class HHBCsvDialect(csv.Dialect):
@@ -123,7 +124,13 @@ def create_brieven_export(burger_id):
         json=json,
     )
 
-    return iowriter.getvalue(), csv_filename
+    xlsx_filename = f"{current_date_str}_{burger['voornamen']}_{burger['achternaam']}.xlsx"
+    df = pd.read_csv(iowriter.getvalue())
+    buffer = io.BytesIO()
+    with pd.ExcelWriter(buffer) as writer:
+        df.to_excel(writer)
+
+    return iowriter.getvalue(), csv_filename, buffer, xlsx_filename
 
 
 def get_burger_response(burger_id):
