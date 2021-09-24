@@ -13,13 +13,13 @@ import {FormLeft, FormRight} from "../../Layouts/Forms";
 import Section from "../../Layouts/Section";
 import PageNotFound from "../../PageNotFound";
 
-type EditAfspraakBetaalinstructieProps = {
+type AfspraakBetaalinstructieProps = {
 	afspraak: Afspraak,
 	values?: Betaalinstructie,
 	onChange: (data: BetaalinstructieInput) => void,
 }
 
-const EditAfspraakBetaalinstructieForm: React.FC<EditAfspraakBetaalinstructieProps> = ({afspraak, values, onChange}) => {
+const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({afspraak, values, onChange}) => {
 	const {id} = afspraak;
 	const {t} = useTranslation();
 	const reactSelectStyles = useReactSelectStyles();
@@ -73,12 +73,12 @@ const EditAfspraakBetaalinstructieForm: React.FC<EditAfspraakBetaalinstructiePro
 					<FormRight spacing={5}>
 
 						<Stack direction={["column", "row"]}>
-							<FormControl flex={1} isInvalid={typeof isPeriodiek !== "boolean"} isRequired>
+							<FormControl flex={1} isRequired>
 								<FormLabel>{t("afspraken.periodiek")}</FormLabel>
 								<RadioGroup onChange={e => {
 									setPeriodiek(e === "periodiek");
 									reset();
-								}} value={typeof isPeriodiek === "boolean" ? (isPeriodiek ? "periodiek" : "eenmalig") : undefined}>
+								}} value={isPeriodiek ? "periodiek" : "eenmalig"}>
 									<Stack>
 										<Radio value="eenmalig">{t("schedule.eenmalig")}</Radio>
 										<Radio value="periodiek">{t("schedule.periodiek")}</Radio>
@@ -88,7 +88,7 @@ const EditAfspraakBetaalinstructieForm: React.FC<EditAfspraakBetaalinstructiePro
 							</FormControl>
 						</Stack>
 
-						{isPeriodiek === false && ( /* Eenmalig */
+						{!isPeriodiek && ( /* Eenmalig */
 							<Stack direction={["column", "row"]}>
 								<FormControl flex={1} isInvalid={!isValid("startDate")} isRequired>
 									<FormLabel>{t("schedule.datum")}</FormLabel>
@@ -116,7 +116,10 @@ const EditAfspraakBetaalinstructieForm: React.FC<EditAfspraakBetaalinstructiePro
 									<FormLabel>{t("schedule.startDate")}</FormLabel>
 									<DatePicker selected={(data.startDate && d(data.startDate, "YYYY-MM-DD").isValid()) ? d(data.startDate, "YYYY-MM-DD").toDate() : null} dateFormat={"dd-MM-yyyy"}
 										onChange={(value: Date) => {
-											updateForm("startDate", value ? d(value).format("YYYY-MM-DD") : undefined);
+											updateForm("startDate", value ? d(value).format("YYYY-MM-DD") : undefined, x => ({
+												...x,
+												byMonthDay: x.byMonthDay || [d(value).date()],
+											}));
 										}} customInput={<Input type="text" />} />
 									<FormErrorMessage>{t("afspraakBetaalinstructie.invalidDateError")}</FormErrorMessage>
 								</FormControl>
@@ -202,7 +205,7 @@ const EditAfspraakBetaalinstructieForm: React.FC<EditAfspraakBetaalinstructiePro
 								<Stack direction={["column", "row"]}>
 									<FormControl flex={1} isInvalid={!isValid("byMonthDay")} isRequired>
 										<FormLabel>{t("schedule.byMonthDay")}</FormLabel>
-										<Input type={"number"} min={1} max={28} value={undefined} onChange={e => updateForm("byMonthDay", parseInt(e.target.value), newData => ({
+										<Input type={"number"} min={1} max={28} value={data.byMonthDay?.[0] || undefined} onChange={e => updateForm("byMonthDay", parseInt(e.target.value), newData => ({
 											...newData,
 											byDay: undefined,
 										}))} />
@@ -222,4 +225,4 @@ const EditAfspraakBetaalinstructieForm: React.FC<EditAfspraakBetaalinstructiePro
 	);
 };
 
-export default EditAfspraakBetaalinstructieForm;
+export default AfspraakBetaalinstructieForm;
