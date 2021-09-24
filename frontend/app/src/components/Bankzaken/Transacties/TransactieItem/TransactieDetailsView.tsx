@@ -15,7 +15,7 @@ const TransactieDetailsView: React.FC<StackProps & {transaction: BankTransaction
 
 			<Stack direction={"row"} spacing={5}>
 				<Box flex={1}>
-					<FormLabel>{t("forms.common.fields.date")}</FormLabel>
+					<FormLabel>{t("global.date")}</FormLabel>
 					<Box>
 						<Text>{d(bt.transactieDatum).format("L")}</Text>
 					</Box>
@@ -24,15 +24,15 @@ const TransactieDetailsView: React.FC<StackProps & {transaction: BankTransaction
 					<FormLabel>{t("form.common.fields.status")}</FormLabel>
 					{bt.journaalpost ? (bt.journaalpost.isAutomatischGeboekt ? (
 						<Box>
-							<Badge colorScheme={"green"}>{t("forms.agreements.fields.automatischGeboekt")}</Badge>
+							<Badge colorScheme={"green"}>{t("forms.afspraken.fields.automatischGeboekt")}</Badge>
 						</Box>
 					) : (
 						<Box>
-							<Badge colorScheme={"green"}>{t("forms.agreements.fields.handmatigGeboekt")}</Badge>
+							<Badge colorScheme={"green"}>{t("forms.afspraken.fields.handmatigGeboekt")}</Badge>
 						</Box>
 					)) : (
 						<Box>
-							<Badge colorScheme={"red"}>{t("forms.agreements.fields.ongeboekt")}</Badge>
+							<Badge colorScheme={"red"}>{t("forms.afspraken.fields.ongeboekt")}</Badge>
 						</Box>
 					)}
 				</Box>

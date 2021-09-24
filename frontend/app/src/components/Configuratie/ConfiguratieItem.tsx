@@ -82,13 +82,13 @@ const ConfiguratieItem: React.FC<FormControlProps & {c: IConfiguratie}> = ({c, .
 					<EditableInput onChange={onChange} name={c.id} id={c.id} />
 				</Editable>
 				{deleteConfirm ? (<>
-					<IconButton size={"sm"} flex={0} variant={"solid"} colorScheme={"red"} icon={<CheckIcon />} aria-label={t("actions.delete")}
+					<IconButton size={"sm"} flex={0} variant={"solid"} colorScheme={"red"} icon={<CheckIcon />} aria-label={t("global.actions.delete")}
 						onClick={() => onClickDelete()} />
-					<IconButton size={"sm"} flex={0} variant={"solid"} colorScheme={"gray"} icon={<CloseIcon />} aria-label={t("actions.cancel")}
+					<IconButton size={"sm"} flex={0} variant={"solid"} colorScheme={"gray"} icon={<CloseIcon />} aria-label={t("global.actions.cancel")}
 						onClick={() => setDeleteConfirm(false)} />
 				</>) : (
 					<IconButton size={"sm"} flex={0} variant={"ghost"} colorScheme={"gray"} icon={<DeleteIcon />}
-						aria-label={t("actions.delete")} onClick={() => setDeleteConfirm(true)} />
+						aria-label={t("global.actions.delete")} onClick={() => setDeleteConfirm(true)} />
 				)}
 			</Stack>
 		</FormControl>

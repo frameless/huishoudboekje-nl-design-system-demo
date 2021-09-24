@@ -23,7 +23,7 @@ const BurgerListView: React.FC<BurgerListViewProps> = ({burgers, showAddButton =
 			{showAddButton && (
 				<Box>
 					<Button colorScheme={"primary"} borderStyle={"dashed"} variant={"outline"} leftIcon={<AddIcon />}
-						w={"100%"} h={"100%"} onClick={() => push(Routes.CreateBurger)} borderRadius={5} p={5}>{t("actions.add")}</Button>
+						w={"100%"} h={"100%"} onClick={() => push(Routes.CreateBurger)} borderRadius={5} p={5}>{t("global.actions.add")}</Button>
 				</Box>
 			)}
 			{burgers.map((g, i) => (

@@ -47,10 +47,10 @@ const OrganisatieRekeningenView: React.FC<BoxProps & {organisatie: Organisatie}>
 
 						<RekeningForm rekening={{
 							rekeninghouder: organisatie.kvkDetails?.naam,
-						}} onSave={onSaveRekening} onCancel={() => toggleForm(false)} />
+						}} onSubmit={onSaveRekening} onCancel={() => toggleForm(false)} />
 					</>) : (
 						<Box>
-							<Button leftIcon={<AddIcon />} colorScheme={"primary"} size={"sm"} onClick={() => toggleForm(true)}>{t("actions.add")}</Button>
+							<Button leftIcon={<AddIcon />} colorScheme={"primary"} size={"sm"} onClick={() => toggleForm(true)}>{t("global.actions.add")}</Button>
 						</Box>
 					)}
 				</FormRight>

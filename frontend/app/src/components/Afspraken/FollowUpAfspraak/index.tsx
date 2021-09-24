@@ -89,21 +89,21 @@ const FollowUpAfspraak = () => {
 			};
 
 			return (
-				<Page title={t("afspraken.vervolg.pageTitle")} backButton={<BackButton to={Routes.ViewAfspraak(afspraak.id)} />}>
+				<Page title={t("afspraken.vervolgAfspraak.title")} backButton={<BackButton to={Routes.ViewAfspraak(afspraak.id)} />}>
 					<Section spacing={5}>
 						<Stack direction={["column", "row"]}>
-							<FormLeft title={t("afspraakForm.section1.title")} helperText={t("afspraakForm.section1.helperText")}>
+							<FormLeft title={t("forms.afspraken.title")} helperText={t("forms.afspraken.helperText")}>
 								<Divider />
 								<List spacing={2}>
 									<ListItem justify={"center"}>
 										<ListIcon as={MdCheckCircle} color="green.500" w={5} h={5} verticalAlign={"middle"} />
-										{t("afspraken.followUp.zoektermenHelperText")}
+										{t("afspraken.vervolgAfspraak.zoektermenHelperText")}
 										<ZoektermenList zoektermen={afspraak.zoektermen || []} />
 									</ListItem>
 									{afspraak.betaalinstructie && (
 										<ListItem justify={"center"}>
 											<ListIcon as={MdReportProblem} color="orange.500" w={5} h={5} verticalAlign={"middle"} />
-											{t("afspraken.followUp.betaalinstructieHelperText")}
+											{t("afspraken.vervolgAfspraak.betaalinstructieHelperText")}
 										</ListItem>
 									)}
 								</List>

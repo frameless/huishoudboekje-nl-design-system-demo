@@ -46,19 +46,19 @@ const Betaalinstructies = () => {
 	};
 
 	return (
-		<Page title={t("banking.exports.title")}>
+		<Page title={t("bankzaken.exports.title")}>
 			<Section>
 				<Stack spacing={5}>
-					<FormLeft title={t("banking.createExport.title")} helperText={t("banking.createExport.helperText")} />
+					<FormLeft title={t("bankzaken.createExport.title")} helperText={t("bankzaken.createExport.helperText")} />
 					<FormRight>
 						<Stack direction={["column", "row"]} alignItems={"flex-end"}>
 							<FormControl flex={1}>
-								<FormLabel>{t("forms.common.fields.period")}</FormLabel>
+								<FormLabel>{t("global.period")}</FormLabel>
 								<DatePicker dateFormat={"dd-MM-yyyy"} selectsRange={true} isClearable={true}
 									startDate={dateRange.from} endDate={dateRange.through} onChange={onChangeStartDate} customInput={<Input />} />
 							</FormControl>
 							<FormControl flex={1}>
-								<Button colorScheme={"primary"} isLoading={$createExportOverschrijvingen.loading} isDisabled={!(dateRange.from && dateRange.through)} onClick={onClickExportButton}>{t("actions.export")}</Button>
+								<Button colorScheme={"primary"} isLoading={$createExportOverschrijvingen.loading} isDisabled={!(dateRange.from && dateRange.through)} onClick={onClickExportButton}>{t("global.actions.export")}</Button>
 							</FormControl>
 						</Stack>
 					</FormRight>
@@ -66,7 +66,7 @@ const Betaalinstructies = () => {
 			</Section>
 
 			<Section>
-				<FormLeft title={t("banking.exports.title")} helperText={t("banking.exports.helperText")} />
+				<FormLeft title={t("bankzaken.exports.title")} helperText={t("bankzaken.exports.helperText")} />
 				<FormRight>
 					<Stack spacing={5}>
 						<Queryable query={$exports} children={(data) => {
@@ -105,7 +105,7 @@ const Betaalinstructies = () => {
 													{!isMobile && (
 														<Box flex={0}>
 															<Button size={"sm"} leftIcon={<DownloadIcon />} as={"a"} target={"_blank"} href={href} download={href}>
-																{t("actions.download")}
+																{t("global.actions.download")}
 															</Button>
 														</Box>
 													)}

@@ -23,7 +23,7 @@ const PageNotFound = () => {
 					<Button variant={"unstyled"} onClick={() => push(Routes.Home)}>
 						<Stack direction={"row"} alignItems={"center"}>
 							<Box as={MdArrowBack} w={"16px"} h={"16px"} mr={2} color={"gray.400"} />
-							<Text fontSize={"sm"} color={"gray.400"}>{t("actions.backToHome")}</Text>
+							<Text fontSize={"sm"} color={"gray.400"}>{t("global.actions.backToHome")}</Text>
 						</Stack>
 					</Button>
 				</Stack>

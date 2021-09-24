@@ -11,7 +11,7 @@ import {
 	Menu,
 	MenuButton,
 	MenuItem,
-	MenuList,
+	MenuList, useBreakpointValue,
 } from "@chakra-ui/react";
 import React, {useRef} from "react";
 import {useToggle} from "react-grapple";
@@ -20,6 +20,7 @@ import {Redirect, useHistory, useParams} from "react-router-dom";
 import Routes from "../../config/routes";
 import {GetOrganisatiesDocument, Organisatie, useDeleteOrganisatieMutation, useGetOrganisatieQuery} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
+import {maxOrganisatieNaamLengthBreakpointValues, truncateText} from "../../utils/things";
 import useToaster from "../../utils/useToaster";
 import DeadEndPage from "../DeadEndPage";
 import BackButton from "../Layouts/BackButton";
@@ -32,6 +33,7 @@ const OrganisatieDetail = () => {
 	const {id} = useParams<{id: string}>();
 	const {push} = useHistory();
 	const toast = useToaster();
+	const maxOrganisatieNaamLength = useBreakpointValue(maxOrganisatieNaamLengthBreakpointValues);
 
 	const cancelDeleteRef = useRef(null);
 	const [deleteDialogOpen, toggleDeleteDialog] = useToggle(false);
@@ -59,7 +61,7 @@ const OrganisatieDetail = () => {
 					.then(() => {
 						onCloseDeleteDialog();
 						toast({
-							success: t("messages.organizations.deleteConfirmMessage", {name: organisatie.kvkDetails?.naam}),
+							success: t("messages.organisaties.deleteConfirmMessage", {name: organisatie.kvkDetails?.naam}),
 						});
 						toggleDeleted(true);
 					})
@@ -79,30 +81,30 @@ const OrganisatieDetail = () => {
 
 			if (isDeleted) {
 				return (
-					<DeadEndPage message={t("messages.organizations.deleteConfirmMessage", {name: organisatie.kvkDetails?.naam})}>
-						<Button colorScheme={"primary"} onClick={() => push(Routes.Organisaties)}>{t("actions.backToList")}</Button>
+					<DeadEndPage message={t("messages.organisaties.deleteConfirmMessage", {name: organisatie.kvkDetails?.naam})}>
+						<Button colorScheme={"primary"} onClick={() => push(Routes.Organisaties)}>{t("global.actions.backToList")}</Button>
 					</DeadEndPage>
 				);
 			}
 
 			return (
-				<Page title={organisatie.kvkDetails?.naam || ""} backButton={<BackButton to={Routes.Organisaties} />} menu={(
+				<Page title={truncateText(organisatie.kvkDetails?.naam || "", maxOrganisatieNaamLength)} backButton={<BackButton to={Routes.Organisaties} />} menu={(
 					<Menu>
 						<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label="Open menu" />
 						<MenuList>
-							<MenuItem onClick={onClickEdit}>{t("actions.edit")}</MenuItem>
-							<MenuItem onClick={onClickDelete}>{t("actions.delete")}</MenuItem>
+							<MenuItem onClick={onClickEdit}>{t("global.actions.edit")}</MenuItem>
+							<MenuItem onClick={onClickDelete}>{t("global.actions.delete")}</MenuItem>
 						</MenuList>
 					</Menu>
 				)}>
 					<AlertDialog isOpen={deleteDialogOpen} leastDestructiveRef={cancelDeleteRef} onClose={onCloseDeleteDialog}>
 						<AlertDialogOverlay />
 						<AlertDialogContent>
-							<AlertDialogHeader fontSize="lg" fontWeight="bold">{t("messages.organizations.deleteTitle")}</AlertDialogHeader>
-							<AlertDialogBody>{t("messages.organizations.deleteQuestion", {name: organisatie.kvkDetails?.naam})}</AlertDialogBody>
+							<AlertDialogHeader fontSize="lg" fontWeight="bold">{t("messages.organisaties.deleteTitle")}</AlertDialogHeader>
+							<AlertDialogBody>{t("messages.organisaties.deleteQuestion", {name: organisatie.kvkDetails?.naam})}</AlertDialogBody>
 							<AlertDialogFooter>
-								<Button ref={cancelDeleteRef} onClick={onCloseDeleteDialog}>{t("actions.cancel")}</Button>
-								<Button isLoading={deleteLoading} colorScheme="red" onClick={onConfirmDeleteDialog} ml={3}>{t("actions.delete")}</Button>
+								<Button ref={cancelDeleteRef} onClick={onCloseDeleteDialog}>{t("global.actions.cancel")}</Button>
+								<Button isLoading={deleteLoading} colorScheme="red" onClick={onConfirmDeleteDialog} ml={3}>{t("global.actions.delete")}</Button>
 							</AlertDialogFooter>
 						</AlertDialogContent>
 					</AlertDialog>

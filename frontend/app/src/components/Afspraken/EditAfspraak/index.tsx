@@ -55,9 +55,9 @@ const EditAfspraak = () => {
 			};
 
 			return (
-				<Page title={t("forms.agreements.titleEdit")} backButton={<BackButton to={Routes.ViewAfspraak(afspraak.id)} />}>
+				<Page title={t("forms.afspraken.titleEdit")} backButton={<BackButton to={Routes.ViewAfspraak(afspraak.id)} />}>
 					<Section direction={["column", "row"]}>
-						<FormLeft title={t("afspraakForm.section1.title")} helperText={t("afspraakForm.section1.helperText")} />
+						<FormLeft title={t("forms.afspraken.title")} helperText={t("forms.afspraken.helperText")} />
 						<FormRight spacing={5}>
 							<AfspraakFormContext.Provider value={ctxValue}>
 								<AfspraakForm burgerRekeningen={afspraak.burger?.rekeningen || []} values={editAfspraakValues} onChange={updateAfspraak} />

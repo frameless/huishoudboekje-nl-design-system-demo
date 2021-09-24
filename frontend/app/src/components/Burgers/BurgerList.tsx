@@ -46,7 +46,7 @@ const BurgerList = () => {
 				<Input type={"text"} onChange={onChangeSearch} bg={"white"} onKeyDown={onKeyDownOnSearch} placeholder={t("forms.search.fields.search")} ref={searchRef} value={search || ""} />
 				{search.length > 0 && (
 					<InputRightElement zIndex={0}>
-						<IconButton onClick={onClickResetSearch} size={"xs"} variant={"link"} icon={<CloseIcon />} aria-label={t("actions.cancel")} color={"gray.300"} />
+						<IconButton onClick={onClickResetSearch} size={"xs"} variant={"link"} icon={<CloseIcon />} aria-label={t("global.actions.cancel")} color={"gray.300"} />
 					</InputRightElement>
 				)}
 			</InputGroup>
@@ -57,12 +57,12 @@ const BurgerList = () => {
 				if (burgers.length === 0) {
 					return search.length > 0 ? (
 						<DeadEndPage message={t("messages.burgers.noSearchResults")}>
-							<Button size={"sm"} colorScheme={"primary"} onClick={onClickResetSearch}>{t("actions.clearSearch")}</Button>
+							<Button size={"sm"} colorScheme={"primary"} onClick={onClickResetSearch}>{t("global.actions.clearSearch")}</Button>
 						</DeadEndPage>
 					) : (
-						<DeadEndPage message={t("messages.burgers.addHint", {buttonLabel: t("actions.add")})}>
+						<DeadEndPage message={t("messages.burgers.addHint", {buttonLabel: t("global.actions.add")})}>
 							<Button size={"sm"} colorScheme={"primary"} variant={"solid"} leftIcon={
-								<AddIcon />} onClick={() => push(Routes.CreateBurger)}>{t("actions.add")}</Button>
+								<AddIcon />} onClick={() => push(Routes.CreateBurger)}>{t("global.actions.add")}</Button>
 						</DeadEndPage>
 					);
 				}

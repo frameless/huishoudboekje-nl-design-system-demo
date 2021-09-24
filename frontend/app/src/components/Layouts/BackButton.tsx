@@ -11,7 +11,7 @@ const BackButton: React.FC<{to: string, label?: string}> = ({to, label}) => {
 		<Link color={"gray.500"} fontSize={"sm"} as={NavLink} to={to}>
 			<HStack>
 				<Box as={MdArrowBack} size={"16px"} />
-				<Text>{label || t("actions.back")}</Text>
+				<Text>{label || t("global.actions.back")}</Text>
 			</HStack>
 		</Link>
 	);

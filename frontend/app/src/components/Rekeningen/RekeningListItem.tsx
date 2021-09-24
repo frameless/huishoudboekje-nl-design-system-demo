@@ -58,7 +58,7 @@ const RekeningListItem: React.FC<RekeningListItemProps> = ({rekening, onDelete, 
 			},
 		}).then(() => {
 			toast({
-				success: t("messages.rekening.updateSuccess"),
+				success: t("messages.rekeningen.updateSuccess"),
 			});
 		}).catch(err => {
 			console.error(err);
@@ -88,10 +88,10 @@ const RekeningListItem: React.FC<RekeningListItemProps> = ({rekening, onDelete, 
 				<AlertDialogOverlay />
 				<AlertDialogContent>
 					<AlertDialogHeader fontSize="lg" fontWeight="bold">{t("messages.rekeningen.deleteTitle")}</AlertDialogHeader>
-					<AlertDialogBody>{t("messages.rekeningen.deleteQuestion", {iban: formatIBAN(rekening.iban), accountHolder: rekening.rekeninghouder})}</AlertDialogBody>
+					<AlertDialogBody>{t("messages.rekeningen.deleteQuestion", {iban: formatIBAN(rekening.iban), rekeninghouder: rekening.rekeninghouder})}</AlertDialogBody>
 					<AlertDialogFooter>
-						<Button ref={cancelDeleteRef} onClick={onCloseDeleteDialog}>{t("actions.cancel")}</Button>
-						<Button colorScheme="red" onClick={onConfirmDeleteDialog} ml={3}>{t("actions.delete")}</Button>
+						<Button ref={cancelDeleteRef} onClick={onCloseDeleteDialog}>{t("global.actions.cancel")}</Button>
+						<Button colorScheme="red" onClick={onConfirmDeleteDialog} ml={3}>{t("global.actions.delete")}</Button>
 					</AlertDialogFooter>
 				</AlertDialogContent>
 			</AlertDialog>
@@ -100,7 +100,7 @@ const RekeningListItem: React.FC<RekeningListItemProps> = ({rekening, onDelete, 
 		<Tr {...props}>
 			<Td>
 				<Editable defaultValue={(rekening.rekeninghouder || "").length > 0 ? rekening.rekeninghouder : t("unknown")} flex={1} submitOnBlur={true} onSubmit={onSubmit}>
-					<Tooltip label={t("actions.clickToEdit")} placement={"right"}>
+					<Tooltip label={t("global.actions.clickToEdit")} placement={"right"}>
 						<EditablePreview ref={editablePreviewRef} />
 					</Tooltip>
 					<EditableInput {...rekeninghouder.bind} name={"rekeningId"} id={"rekeningId"} />
@@ -110,7 +110,7 @@ const RekeningListItem: React.FC<RekeningListItemProps> = ({rekening, onDelete, 
 				<PrettyIban iban={rekening.iban} />
 			</Td>
 			<Td>{onDelete && (
-				<IconButton icon={<DeleteIcon />} size={"xs"} variant={"ghost"} onClick={() => toggleDeleteDialog(true)} aria-label={t("actions.delete")} />
+				<IconButton icon={<DeleteIcon />} size={"xs"} variant={"ghost"} onClick={() => toggleDeleteDialog(true)} aria-label={t("global.actions.delete")} />
 			)}</Td>
 		</Tr>
 	</>);

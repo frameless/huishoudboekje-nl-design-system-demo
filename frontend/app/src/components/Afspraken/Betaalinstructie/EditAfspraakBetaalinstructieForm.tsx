@@ -50,7 +50,7 @@ const EditAfspraakBetaalinstructieForm: React.FC<EditAfspraakBetaalinstructiePro
 
 		const isDataValid = Object.keys(data).filter(d => typeof data[d] !== "undefined").every(fieldName => isValid(fieldName));
 		if (!isDataValid) {
-			toast({error: t("genericInputErrorMessage")});
+			toast({error: t("global.formError")});
 			return;
 		}
 
@@ -74,7 +74,7 @@ const EditAfspraakBetaalinstructieForm: React.FC<EditAfspraakBetaalinstructiePro
 
 						<Stack direction={["column", "row"]}>
 							<FormControl flex={1} isInvalid={typeof isPeriodiek !== "boolean"} isRequired>
-								<FormLabel>{t("afspraak.periodiek")}</FormLabel>
+								<FormLabel>{t("afspraken.periodiek")}</FormLabel>
 								<RadioGroup onChange={e => {
 									setPeriodiek(e === "periodiek");
 									reset();
@@ -213,7 +213,7 @@ const EditAfspraakBetaalinstructieForm: React.FC<EditAfspraakBetaalinstructiePro
 						</>)}
 
 						<Box>
-							<Button type={"submit"} colorScheme={"primary"}>{t("actions.save")}</Button>
+							<Button type={"submit"} colorScheme={"primary"}>{t("global.actions.save")}</Button>
 						</Box>
 					</FormRight>
 				</Stack>

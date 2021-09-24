@@ -6,19 +6,11 @@ import {Organisatie, Rekening, Rubriek, UpdateAfspraakInput} from "../../generat
 import {currencyFormat, formatIBAN, useReactSelectStyles} from "../../utils/things";
 import useToaster from "../../utils/useToaster";
 import zod from "../../utils/zod";
+import AfspraakValidator from "../../validators/AfspraakValidator";
 import {ReverseMultiLineOption, ReverseMultiLineValueContainer} from "../Layouts/ReactSelect/CustomComponents";
 import AfspraakFormContext from "./EditAfspraak/context";
 
 const bedragInputValidator = zod.string().regex(/^[^.]*$/);
-
-const validator = zod.object({
-	rubriekId: zod.number().nonnegative(),
-	omschrijving: zod.string().nonempty(),
-	organisatieId: zod.number().nonnegative().optional(),
-	tegenRekeningId: zod.number().nonnegative(),
-	bedrag: zod.number().min(.01),
-	credit: zod.boolean(),
-});
 
 type AfspraakFormProps = {
 	burgerRekeningen: Rekening[],
@@ -38,7 +30,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 		rubrieken = [],
 	} = useContext(AfspraakFormContext);
 
-	const isValid = (fieldName: string) => validator.shape[fieldName]?.safeParse(data[fieldName]).success;
+	const isValid = (fieldName: string) => AfspraakValidator.shape[fieldName]?.safeParse(data[fieldName]).success;
 	const updateForm = (field: string, value: any) => {
 		setData(prevData => ({
 			...prevData,
@@ -94,11 +86,11 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 	const onSubmit = () => {
 		try {
 			bedragInputValidator.parse(bedragRef.current?.value);
-			const validatedData = validator.parse(data);
+			const validatedData = AfspraakValidator.parse(data);
 			onChange(validatedData);
 		}
 		catch (err) {
-			toast({error: t("genericInputErrorMessage"), title: t("messages.genericError.title")});
+			toast({error: t("global.formError"), title: t("messages.genericError.title")});
 		}
 	};
 
@@ -107,14 +99,14 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 
 			<Stack direction={["column", "row"]}>
 				<FormControl flex={1} isInvalid={!isValid("credit")} isRequired>
-					<FormLabel>{t("afspraak.betaalrichting")}</FormLabel>
+					<FormLabel>{t("afspraken.betaalrichting")}</FormLabel>
 					<RadioGroup colorScheme={"primary"} onChange={e => {
 						updateForm("credit", e === "inkomsten");
 						updateForm("rubriekId", undefined);
 					}} value={data.credit !== undefined ? (data.credit ? "inkomsten" : "uitgaven") : undefined}>
 						<Stack>
-							<Radio value="inkomsten">{t("afspraak.inkomsten")}</Radio>
-							<Radio value="uitgaven">{t("afspraak.uitgaven")}</Radio>
+							<Radio value="inkomsten">{t("afspraken.inkomsten")}</Radio>
+							<Radio value="uitgaven">{t("afspraken.uitgaven")}</Radio>
 						</Stack>
 					</RadioGroup>
 					<FormErrorMessage>{t("afspraakDetailView.invalidBetaalrichtingError")}</FormErrorMessage>
@@ -123,8 +115,8 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 
 			<Stack direction={["column", "row"]}>
 				<FormControl flex={1} isInvalid={!isValid("tegenRekeningId")} isRequired>
-					<FormLabel>{t("afspraak.tegenrekening")}</FormLabel>
-					<Select id="tegenrekening" isClearable={true} noOptionsMessage={() => t("forms.agreements.fields.bankAccountChoose")} maxMenuHeight={350}
+					<FormLabel>{t("afspraken.tegenrekening")}</FormLabel>
+					<Select id="tegenrekening" isClearable={true} noOptionsMessage={() => t("forms.afspraken.fields.bankAccountChoose")} maxMenuHeight={350}
 						options={tegenrekeningOptions} value={data.tegenRekeningId ? tegenrekeningOptions.find(o => o.value === data.tegenRekeningId) : null}
 						onChange={(result) => {
 							updateForm("tegenRekeningId", result?.value);
@@ -136,15 +128,15 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 
 			<Stack direction={["column", "row"]}>
 				<FormControl flex={1} isInvalid={!isValid("rubriekId")} isRequired>
-					<FormLabel>{t("afspraak.rubriek")}</FormLabel>
-					<Select id="rubriek" isClearable={true} noOptionsMessage={() => t("forms.agreements.fields.rubriekChoose")} maxMenuHeight={350}
+					<FormLabel>{t("afspraken.rubriek")}</FormLabel>
+					<Select id="rubriek" isClearable={true} noOptionsMessage={() => t("forms.afspraken.fields.rubriekChoose")} maxMenuHeight={350}
 						options={rubriekOptions} value={data.rubriekId ? rubriekOptions.find(r => r.value === data.rubriekId) : null}
 						onChange={(result) => updateForm("rubriekId", result?.value)} styles={isValid("rubriekId") ? reactSelectStyles.default : reactSelectStyles.error} />
 					<FormErrorMessage>{t("afspraakDetailView.invalidRubriekError")}</FormErrorMessage>
 				</FormControl>
 
 				<FormControl flex={1} isInvalid={!isValid("omschrijving")} isRequired={true}>
-					<FormLabel>{t("afspraak.omschrijving")}</FormLabel>
+					<FormLabel>{t("afspraken.omschrijving")}</FormLabel>
 					<Input value={data.omschrijving || ""} onChange={e => updateForm("omschrijving", e.target.value)} />
 					<FormErrorMessage>{t("afspraakDetailView.invalidOmschrijvingError")}</FormErrorMessage>
 				</FormControl>
@@ -152,7 +144,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 
 			<Stack direction={["column", "row"]}>
 				<FormControl flex={1} isInvalid={!isValid("bedrag") || (bedragRef.current?.value ? !bedragInputValidator.safeParse(bedragRef.current?.value).success : false)} isRequired>
-					<FormLabel>{t("afspraak.bedrag")}</FormLabel>
+					<FormLabel>{t("afspraken.bedrag")}</FormLabel>
 					<InputGroup>
 						<InputLeftElement zIndex={0}>&euro;</InputLeftElement>
 						<Input flex={3} ref={bedragRef} type={"text"} pattern={"^[^.]*$"} defaultValue={currencyFormat(data.bedrag || values?.bedrag || "").format() || ""} onChange={e => updateForm("bedrag", parseFloat(currencyFormat(e.target.value).toString()))} />
@@ -162,7 +154,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 			</Stack>
 
 			<Box>
-				<Button colorScheme={"primary"} onClick={onSubmit}>{t("actions.save")}</Button>
+				<Button colorScheme={"primary"} onClick={onSubmit}>{t("global.actions.save")}</Button>
 			</Box>
 
 		</Stack>

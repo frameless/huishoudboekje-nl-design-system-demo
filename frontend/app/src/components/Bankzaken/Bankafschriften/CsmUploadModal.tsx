@@ -123,13 +123,13 @@ const CsmUploadModal: React.FC<CsmUploadModalProps> = ({onClose}) => {
 
 						<Box>
 							<Input type={"file"} id={"fileUpload"} onChange={onChangeFile} ref={fileUploadInput} hidden multiple={true} />
-							<Button colorScheme={"primary"} size={"sm"} leftIcon={<AddIcon />} onClick={() => fileUploadInput.current?.click()}>{t("actions.selectFile")}</Button>
+							<Button colorScheme={"primary"} size={"sm"} leftIcon={<AddIcon />} onClick={() => fileUploadInput.current?.click()}>{t("global.actions.selectFile")}</Button>
 						</Box>
 					</Stack>
 				</ModalBody>
 				<ModalFooter>
 					<HStack>
-						<Button colorScheme={"primary"} onClick={onClose} isLoading={$createCSM.loading}>{t("actions.close")}</Button>
+						<Button colorScheme={"primary"} onClick={onClose} isLoading={$createCSM.loading}>{t("global.actions.close")}</Button>
 					</HStack>
 				</ModalFooter>
 			</ModalContent>

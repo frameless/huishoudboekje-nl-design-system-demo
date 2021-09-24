@@ -11,7 +11,7 @@ const Sidebar: React.FC<BoxProps> = (props) => {
 	const {t} = useTranslation();
 	const testPageEnabled = useFeatureFlag("testpage");
 
-	return (<>
+	return (
 		<Stack spacing={5} p={5} alignSelf={"center"} borderRadius={5} bg={"white"} divider={<Divider />} {...props} width={"100%"}>
 			<Stack spacing={5}>
 				<Stack>
@@ -45,8 +45,7 @@ const Sidebar: React.FC<BoxProps> = (props) => {
 				</Stack>
 			)}
 		</Stack>
-
-	</>);
+	);
 };
 
 export default Sidebar;

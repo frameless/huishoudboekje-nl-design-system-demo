@@ -121,11 +121,11 @@ const Transactions = () => {
 
 	return (
 		<TransactionsContext.Provider value={{ queryVariables }}>
-			<Page title={t("forms.banking.sections.transactions.title")} menu={(
+			<Page title={t("forms.bankzaken.sections.transactions.title")} menu={(
 				<Menu>
 					<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} data-cy={"actionsMenuButton"} />
 					<MenuList>
-						<MenuItem onClick={onClickStartBoekenButton}>{t("actions.startBoeken")}</MenuItem>
+						<MenuItem onClick={onClickStartBoekenButton}>{t("global.actions.startBoeken")}</MenuItem>
 					</MenuList>
 				</Menu>
 			)}>
@@ -158,7 +158,7 @@ const Transactions = () => {
 
 								<HStack>
 									<FormControl as={Stack} flex={1} justifyContent={"flex-end"}>
-										<FormLabel>{t("forms.common.fields.period")}</FormLabel>
+										<FormLabel>{t("global.period")}</FormLabel>
 										<DatePicker selected={filters.dateRange?.from || null}
 											dateFormat={"dd-MM-yyyy"} isClearable={true} selectsRange={true}
 											startDate={filters.dateRange?.from} endDate={filters.dateRange?.through}
@@ -195,7 +195,7 @@ const Transactions = () => {
 
 						</ModalBody>
 						<ModalFooter>
-							<Button colorScheme={"primary"} onClick={filterModal.onClose}>{t("actions.close")}</Button>
+							<Button colorScheme={"primary"} onClick={filterModal.onClose}>{t("global.actions.close")}</Button>
 						</ModalFooter>
 					</ModalContent>
 				</Modal>

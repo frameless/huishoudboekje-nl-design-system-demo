@@ -1,12 +1,14 @@
-import {BoxProps, Divider, FormLabel, Stack, Text} from "@chakra-ui/react";
+import {BoxProps, Divider, FormLabel, Stack, Text, useBreakpointValue} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {Organisatie} from "../../../generated/graphql";
+import {maxOrganisatieNaamLengthBreakpointValues, truncateText} from "../../../utils/things";
 import {FormLeft, FormRight} from "../../Layouts/Forms";
 import Section from "../../Layouts/Section";
 
 const OrganisatieDetailView: React.FC<BoxProps & {organisatie: Organisatie}> = ({organisatie, ...props}) => {
 	const {t} = useTranslation();
+	const maxOrganisatieNaamLength = useBreakpointValue(maxOrganisatieNaamLengthBreakpointValues);
 
 	return (
 		<Section {...props}>
@@ -16,7 +18,7 @@ const OrganisatieDetailView: React.FC<BoxProps & {organisatie: Organisatie}> = (
 					<Stack spacing={2} direction={["column", "row"]}>
 						<Stack spacing={1} flex={1}>
 							<FormLabel>{t("forms.organizations.fields.companyName")}</FormLabel>
-							<Text>{organisatie.kvkDetails?.naam}</Text>
+							<Text title={organisatie.kvkDetails?.naam || ""}>{truncateText(organisatie.kvkDetails?.naam || "", maxOrganisatieNaamLength)}</Text>
 						</Stack>
 					</Stack>
 					<Stack spacing={2} direction={["column", "row"]}>

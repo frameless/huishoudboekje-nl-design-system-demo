@@ -122,15 +122,15 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 								<HStack>
 									<Text>{formatBurgerName(afspraak.burger)}</Text>
 									<IconButton as={NavLink} to={Routes.Burger(afspraak.burger?.id)} variant={"ghost"} size={"sm"} icon={
-										<ViewIcon />} aria-label={t("actions.view")} />
+										<ViewIcon />} aria-label={t("global.actions.view")} />
 								</HStack>
 							</DataItem>
-							<DataItem label={t("afspraak.tegenrekening")}>
+							<DataItem label={t("afspraken.tegenrekening")}>
 								<HStack>
 									<Text>{afspraak.tegenRekening?.rekeninghouder}</Text>
 									{afspraak.organisatie?.id && (
 										<IconButton as={NavLink} to={Routes.Organisatie(afspraak.organisatie.id)} variant={"ghost"}
-											size={"sm"} icon={<ViewIcon />} aria-label={t("actions.view")} />
+											size={"sm"} icon={<ViewIcon />} aria-label={t("global.actions.view")} />
 									)}
 								</HStack>
 								<Text size={"sm"}><PrettyIban iban={afspraak.tegenRekening?.iban} /></Text>
@@ -149,11 +149,11 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 					<FormRight>
 
 						<Stack direction={["column", "row"]}>
-							<DataItem label={t("afspraak.rubriek")}>{afspraak.rubriek?.naam}</DataItem>
-							<DataItem label={t("afspraak.omschrijving")}>{afspraak.omschrijving}</DataItem>
+							<DataItem label={t("afspraken.rubriek")}>{afspraak.rubriek?.naam}</DataItem>
+							<DataItem label={t("afspraken.omschrijving")}>{afspraak.omschrijving}</DataItem>
 						</Stack>
 						<Stack direction={["column", "row"]}>
-							<DataItem label={t("afspraak.bedrag")}>
+							<DataItem label={t("afspraken.bedrag")}>
 								<Text color={bedrag < 0 ? "red.500" : "currentcolor"}>{currencyFormat2().format(bedrag)}</Text>
 							</DataItem>
 						</Stack>
@@ -170,13 +170,13 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 						<FormLeft />
 						<FormRight>
 							{isAfspraakActive(afspraak) ? (
-								<Text color={"red.500"}>{t("afspraak.willEndOn", {date: validThrough.format("L")})}</Text>
+								<Text color={"red.500"}>{t("afspraken.willEndOn", {date: validThrough.format("L")})}</Text>
 							) : (
-								<Text color={"gray.500"}>{t("afspraak.endedOn", {date: validThrough.format("L")})}</Text>
+								<Text color={"gray.500"}>{t("afspraken.endedOn", {date: validThrough.format("L")})}</Text>
 							)}
 							<Box>
 								<Button as={NavLink} to={Routes.FollowUpAfspraak(afspraak.id)} colorScheme={"primary"} size={"sm"} leftIcon={
-									<AddIcon />}>{t("afspraak.planFollowup")}</Button>
+									<AddIcon />}>{t("afspraken.planFollowup")}</Button>
 							</Box>
 						</FormRight>
 					</Stack>
@@ -192,28 +192,28 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 							<form onSubmit={onAddAfspraakZoekterm}>
 								<FormControl isInvalid={!zoektermValidator.safeParse(zoekterm).success && zoektermTouched}>
 									<Stack>
-										<FormLabel>{t("afspraak.zoektermen")}</FormLabel>
+										<FormLabel>{t("afspraken.zoektermen")}</FormLabel>
 										<InputGroup size={"md"}>
 											<InputLeftElement pointerEvents="none" color="gray.300" fontSize="1.2em">
 												<AiOutlineTag />
 											</InputLeftElement>
 											<Input id="zoektermen" onChange={e => setZoekterm(e.target.value)} value={zoekterm || ""} onFocus={() => setZoektermTouched(true)} onBlur={() => setZoektermTouched(true)} />
 											<InputRightElement width={"auto"} pr={1}>
-												<Button type={"submit"} size={"sm"} colorScheme={"primary"}>{t("actions.add")}</Button>
+												<Button type={"submit"} size={"sm"} colorScheme={"primary"}>{t("global.actions.add")}</Button>
 											</InputRightElement>
 										</InputGroup>
 									</Stack>
 								</FormControl>
 							</form>
 						) : (
-							<FormLabel>{t("afspraak.zoektermen")}</FormLabel>
+							<FormLabel>{t("afspraken.zoektermen")}</FormLabel>
 						)}
 						<ZoektermenList zoektermen={zoektermen} onDeleteZoekterm={isAfspraakActive(afspraak) ? (zoekterm: string) => onDeleteAfspraakZoekterm(zoekterm) : undefined} />
 					</Stack>
 
 					{zoektermen.length === 0 && (
 						<Text>
-							{t("messages.automatischBoekenDisabled_noZoektermen")}
+							{t("messages.automatischBoeken.noZoektermen")}
 						</Text>
 					)}
 
@@ -221,15 +221,15 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 						<Stack spacing={5}>
 							<Text color={"red.500"}>
 								<WarningTwoIcon mr={1} />
-								{t("messages.automatischBoekenDisabled_duplicatesFound")}
+								{t("messages.automatischBoeken.duplicatesFound")}
 							</Text>
 
 							<Table size={"sm"} variant={"noLeftPadding"}>
 								<Thead>
 									<Tr>
 										<Th>{t("burger")}</Th>
-										{!isMobile && <Th>{t("afspraak.zoektermen")}</Th>}
-										<Th textAlign={"right"}>{t("afspraak.bedrag")}</Th>
+										{!isMobile && <Th>{t("afspraken.zoektermen")}</Th>}
+										<Th textAlign={"right"}>{t("afspraken.bedrag")}</Th>
 										<Th />
 									</Tr>
 								</Thead>
@@ -250,7 +250,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 												</Td>
 												<Td>
 													<IconButton as={NavLink} to={Routes.ViewAfspraak(a.id)} variant={"ghost"} size={"sm"} icon={
-														<ViewIcon />} aria-label={t("actions.view")} title={t("actions.view")} />
+														<ViewIcon />} aria-label={t("global.actions.view")} title={t("global.actions.view")} />
 												</Td>
 											</Tr>
 										);
@@ -268,7 +268,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 					<FormRight spacing={5}>
 						{afspraak.betaalinstructie ? (<>
 							<Stack direction={["column", "row"]}>
-								<DataItem label={t("afspraak.periodiek")}>
+								<DataItem label={t("afspraken.periodiek")}>
 									<Text>{scheduleHelper.toString()}</Text>
 								</DataItem>
 								<DataItem label={t("exports.period")}>
@@ -281,14 +281,14 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 
 							<Box>
 								<Button colorScheme={"primary"} size={"sm"} leftIcon={
-									<EditIcon />} as={NavLink} to={Routes.AfspraakBetaalinstructie(afspraak.id!)}>{t("actions.newBetaalinstructie")}</Button>
+									<EditIcon />} as={NavLink} to={Routes.AfspraakBetaalinstructie(afspraak.id!)}>{t("global.actions.newBetaalinstructie")}</Button>
 							</Box>
 						</>) : (<>
 							<Text>{t("afspraakDetailView.noBetaalinstructie")}</Text>
 
 							<Stack direction={["column", "row"]}>
 								<Button colorScheme={"primary"} size={"sm"} leftIcon={<AddIcon />} as={NavLink} to={Routes.AfspraakBetaalinstructie(afspraak.id!)}>
-									{t("actions.add")}
+									{t("global.actions.add")}
 								</Button>
 							</Stack>
 						</>)}

@@ -41,10 +41,10 @@ const CsmTableRow: React.FC<CsmTableRowProps> = ({csm, onDelete}) => {
 			</Td>
 			<Td style={{width: "100px", textAlign: "right"}}>
 				<IconButton variant={deleteConfirm ? "solid" : "ghost"} size={"xs"} icon={deleteConfirm ? <CheckIcon /> : <DeleteIcon />}
-					colorScheme={deleteConfirm ? "red" : "gray"} aria-label={t("actions.delete")} onClick={onClickDeleteButton} />
+					colorScheme={deleteConfirm ? "red" : "gray"} aria-label={t("global.actions.delete")} onClick={onClickDeleteButton} />
 				{deleteConfirm && (
 					<IconButton variant={"solid"} size={"xs"} icon={
-						<CloseIcon />} colorScheme={"gray"} ml={2} aria-label={t("actions.delete")} onClick={onClickDeleteCancel} />
+						<CloseIcon />} colorScheme={"gray"} ml={2} aria-label={t("global.actions.delete")} onClick={onClickDeleteCancel} />
 				)}
 			</Td>
 		</Tr>

@@ -16,8 +16,8 @@ const AfspraakDeleteModal = ({isOpen, onClose, onSubmit}) => {
 				</ModalBody>
 				<ModalFooter>
 					<HStack>
-						<Button variant={"ghost"} onClick={onClose}>{t("actions.cancel")}</Button>
-						<Button colorScheme={"red"} onClick={onSubmit}>{t("actions.delete")}</Button>
+						<Button variant={"ghost"} onClick={onClose}>{t("global.actions.cancel")}</Button>
+						<Button colorScheme={"red"} onClick={onSubmit}>{t("global.actions.delete")}</Button>
 					</HStack>
 				</ModalFooter>
 			</ModalContent>

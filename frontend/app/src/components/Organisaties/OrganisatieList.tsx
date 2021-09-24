@@ -34,9 +34,9 @@ const OrganisatieList = () => {
 		<Queryable query={$organisaties}>{({organisaties = []}: {organisaties: Organisatie[]}) => {
 			if (organisaties.length === 0) {
 				return (
-					<DeadEndPage message={t("messages.organizations.addHint", {buttonLabel: t("actions.add")})}>
+					<DeadEndPage message={t("messages.organisaties.addHint", {buttonLabel: t("global.actions.add")})}>
 						<Button size={"sm"} colorScheme={"primary"} variant={"solid"} leftIcon={
-							<AddIcon />} onClick={() => push(Routes.CreateOrganisatie)}>{t("actions.add")}</Button>
+							<AddIcon />} onClick={() => push(Routes.CreateOrganisatie)}>{t("global.actions.add")}</Button>
 					</DeadEndPage>
 				);
 			}
@@ -57,14 +57,14 @@ const OrganisatieList = () => {
 						<Input type={"text"} bg={"white"} onChange={e => setSearch(e.target.value)} onKeyDown={onKeyDownOnSearchField} value={search || ""} placeholder={t("forms.search.fields.search")} ref={searchRef} />
 						{search.length > 0 && (
 							<InputRightElement>
-								<IconButton size={"xs"} variant={"link"} icon={<CloseIcon />} aria-label={t("actions.cancel")} color={"gray.300"} onClick={() => setSearch("")} />
+								<IconButton size={"xs"} variant={"link"} icon={<CloseIcon />} aria-label={t("global.actions.cancel")} color={"gray.300"} onClick={() => setSearch("")} />
 							</InputRightElement>
 						)}
 					</InputGroup>
 				)}>
 					{filteredOrganisaties.length === 0 ? (
-						<DeadEndPage message={t("messages.organizations.noSearchResults")}>
-							<Button size={"sm"} colorScheme={"primary"} onClick={onClickResetSearch}>{t("actions.clearSearch")}</Button>
+						<DeadEndPage message={t("messages.organisaties.noSearchResults")}>
+							<Button size={"sm"} colorScheme={"primary"} onClick={onClickResetSearch}>{t("global.actions.clearSearch")}</Button>
 						</DeadEndPage>
 					) : (
 						<OrganisatieListView organisaties={filteredOrganisaties} showAddButton={search.trim().length === 0} />

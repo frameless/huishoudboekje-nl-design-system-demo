@@ -53,7 +53,7 @@ const HuishoudenBurgerItem: React.FC<{huishouden: Huishouden, burger: Burger}> =
 			},
 		}).then(result => {
 			toast({
-				success: t("messages.deleteHuishoudenBurger.success", {burgerName: formatBurgerName(burger)}),
+				success: t("messages.huishoudenBurger.deleteSuccess", {burgerName: formatBurgerName(burger)}),
 			});
 			alert.onClose();
 
@@ -84,10 +84,10 @@ const HuishoudenBurgerItem: React.FC<{huishouden: Huishouden, burger: Burger}> =
 					</AlertDialogBody>
 					<AlertDialogFooter>
 						<Button ref={cancelRef} onClick={alert.onClose}>
-							{t("actions.cancel")}
+							{t("global.actions.cancel")}
 						</Button>
 						<Button colorScheme={"red"} onClick={onConfirmDeleteBurgerFromHuishouden} ml={3}>
-							{t("actions.delete")}
+							{t("global.actions.delete")}
 						</Button>
 					</AlertDialogFooter>
 				</AlertDialogContent>
@@ -97,7 +97,7 @@ const HuishoudenBurgerItem: React.FC<{huishouden: Huishouden, burger: Burger}> =
 		<GridCard as={NavLink} justify={["flex-start", "center"]} to={Routes.Burger(burger.id)} position={"relative"}>
 			{(huishouden.burgers || []).length > 1 && (
 				<Box position={"absolute"} top={1} right={1}>
-					<IconButton variant={"ghost"} size={"sm"} aria-label={t("action.options")} icon={<DeleteIcon />} onClick={onClickDeleteBurgerFromHuishouden} />
+					<IconButton variant={"ghost"} size={"sm"} aria-label={t("global.actions.options")} icon={<DeleteIcon />} onClick={onClickDeleteBurgerFromHuishouden} />
 				</Box>
 			)}
 			<Stack direction={["row", "column"]} spacing={5} align={"center"} justify={["flex-start", "center"]}>
@@ -119,7 +119,7 @@ const HuishoudenBurgersView: React.FC<{huishouden: Huishouden, onClickAddButton?
 			{onClickAddButton && (
 				<Box>
 					<Button colorScheme={"primary"} borderStyle={"dashed"} variant={"outline"} leftIcon={<AddIcon />}
-						w={"100%"} h={"100%"} borderRadius={5} p={5} onClick={onClickAddButton}>{t("actions.add")}</Button>
+						w={"100%"} h={"100%"} borderRadius={5} p={5} onClick={onClickAddButton}>{t("global.actions.add")}</Button>
 				</Box>
 			)}
 			{burgers.map((b, i) => {

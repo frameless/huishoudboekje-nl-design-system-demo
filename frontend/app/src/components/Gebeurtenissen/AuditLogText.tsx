@@ -118,7 +118,7 @@ const AuditLogText: React.FC<TextProps & {g: GebruikersActiviteit}> = ({g, ...pr
 				</ModalBody>
 
 				<ModalFooter>
-					<Button colorScheme={"primary"} onClick={onClose}>{t("actions.close")}</Button>
+					<Button colorScheme={"primary"} onClick={onClose}>{t("global.actions.close")}</Button>
 				</ModalFooter>
 			</ModalContent>
 		</Modal>

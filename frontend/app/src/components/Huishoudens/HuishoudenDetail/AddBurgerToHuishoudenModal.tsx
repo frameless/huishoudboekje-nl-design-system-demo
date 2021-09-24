@@ -28,7 +28,7 @@ const AddBurgerToHuishoudenModal: React.FC<{huishouden: Huishouden, isOpen: bool
 	const onClickSave = () => {
 		if (selectedBurgers && selectedBurgers.length === 0) {
 			toast({
-				error: t("messages.addHuishoudenBurger.noOptionsSelectedError"),
+				error: t("messages.huishoudenBurger.noOptionsSelectedError"),
 			});
 			return;
 		}
@@ -40,7 +40,7 @@ const AddBurgerToHuishoudenModal: React.FC<{huishouden: Huishouden, isOpen: bool
 			},
 		}).then(result => {
 			toast({
-				success: t("messages.addHuishoudenBurger.success", {names: humanJoin(selectedBurgers.map(b => formatBurgerName(b))), count: selectedBurgers.length}),
+				success: t("messages.huishoudenBurger.addSuccess", {names: humanJoin(selectedBurgers.map(b => formatBurgerName(b))), count: selectedBurgers.length}),
 			});
 		}).catch(err => {
 			console.error(err);
@@ -79,7 +79,7 @@ const AddBurgerToHuishoudenModal: React.FC<{huishouden: Huishouden, isOpen: bool
 					</Stack>
 				</ModalBody>
 				<ModalFooter>
-					<Button colorScheme={"primary"} onClick={onClickSave}>{t("actions.save")}</Button>
+					<Button colorScheme={"primary"} onClick={onClickSave}>{t("global.actions.save")}</Button>
 				</ModalFooter>
 			</ModalContent>
 		</Modal>

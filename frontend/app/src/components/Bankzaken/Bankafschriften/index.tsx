@@ -40,7 +40,7 @@ const CustomerStatementMessages = () => {
 	};
 
 	return (
-		<Page title={t("banking.customerStatementMessages.title")}>
+		<Page title={t("bankzaken.customerStatementMessages.title")}>
 			{isOpen && (
 				<CsmUploadModal onClose={() => onClose()} />
 			)}
@@ -50,9 +50,9 @@ const CustomerStatementMessages = () => {
 
 				if (csms.length === 0) {
 					return (
-						<DeadEndPage message={t("messages.csms.addHint", {buttonLabel: t("actions.add")})}>
+						<DeadEndPage message={t("messages.csms.addHint", {buttonLabel: t("global.actions.add")})}>
 							<Button colorScheme={"primary"} size={"sm"} leftIcon={<AddIcon />}
-								onClick={() => onOpen()}>{t("actions.add")}</Button>
+								onClick={() => onOpen()}>{t("global.actions.add")}</Button>
 						</DeadEndPage>
 					);
 				}
@@ -61,10 +61,10 @@ const CustomerStatementMessages = () => {
 					<Stack spacing={5}>
 						<Section>
 							<Stack direction={["column", "row"]} spacing={5}>
-								<FormLeft title={t("forms.banking.sections.customerStatementMessages.title")} helperText={t("forms.banking.sections.customerStatementMessages.detailText")} />
+								<FormLeft title={t("forms.bankzaken.sections.customerStatementMessages.title")} helperText={t("forms.bankzaken.sections.customerStatementMessages.detailText")} />
 								<FormRight>
 									<Box>
-										<Button colorScheme={"primary"} size={"sm"} leftIcon={<AddIcon />} onClick={() => onOpen()}>{t("actions.add")}</Button>
+										<Button colorScheme={"primary"} size={"sm"} leftIcon={<AddIcon />} onClick={() => onOpen()}>{t("global.actions.add")}</Button>
 									</Box>
 
 									{csms.length > 0 && (
@@ -72,13 +72,13 @@ const CustomerStatementMessages = () => {
 											<Thead>
 												<Tr>
 													<Th>
-														<FormLabel>{t("forms.banking.sections.customerStatementMessages.filename")}</FormLabel>
+														<FormLabel>{t("forms.bankzaken.sections.customerStatementMessages.filename")}</FormLabel>
 													</Th>
 													<Th>
-														<FormLabel>{t("forms.common.fields.time")}</FormLabel>
+														<FormLabel>{t("global.time")}</FormLabel>
 													</Th>
 													<Th isNumeric>
-														<FormLabel>{t("actions.actions")}</FormLabel>
+														<FormLabel>{t("global.actions.actions")}</FormLabel>
 													</Th>
 												</Tr>
 											</Thead>
