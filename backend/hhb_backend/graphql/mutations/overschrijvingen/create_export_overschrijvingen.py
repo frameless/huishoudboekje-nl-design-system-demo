@@ -142,7 +142,7 @@ class CreateExportOverschrijvingen(graphene.Mutation):
             f"{settings.HHB_SERVICES_URL}/export/",
             data=json.dumps(
                 {
-                    "naam": today.strftime("%Y-%m-%d_%H-%M-%S") + "-SEPA-EXPORT",
+                    "naam": "Huishoudboekje-" + today.strftime("%Y-%m-%d_%H-%M-%S") + "-SEPA-EXPORT",
                     "timestamp": today.isoformat(),
                     "start_datum": start_datum_str,
                     "eind_datum": eind_datum_str,
