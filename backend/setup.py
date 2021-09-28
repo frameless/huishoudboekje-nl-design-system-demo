@@ -30,6 +30,7 @@ setup(
         'sepaxml>=2.3.0,<3',
         'Jinja2>=2.11.3,<3',
         'itsdangerous>=1.1.0,<2',
-        'lxml>=4.6.3,<5'
+        'lxml>=4.6.3,<5',
+        'pandas==1.3.3'
     ],
 )
