@@ -20,6 +20,7 @@ const Design = () => {
 		props: {
 			isClearable: true,
 			styles: reactSelectStyles.default,
+			placeholder: "Selecteer..."
 		},
 	};
 

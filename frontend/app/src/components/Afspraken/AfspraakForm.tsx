@@ -116,7 +116,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 			<Stack direction={["column", "row"]}>
 				<FormControl flex={1} isInvalid={!isValid("tegenRekeningId")} isRequired>
 					<FormLabel>{t("afspraken.tegenrekening")}</FormLabel>
-					<Select id="tegenrekening" isClearable={true} noOptionsMessage={() => t("forms.afspraken.fields.bankAccountChoose")} maxMenuHeight={350}
+					<Select id="tegenrekening" isClearable={true} noOptionsMessage={() => t("forms.afspraken.fields.bankAccountChoose")} placeholder={t("select.placeholder")} maxMenuHeight={350}
 						options={tegenrekeningOptions} value={data.tegenRekeningId ? tegenrekeningOptions.find(o => o.value === data.tegenRekeningId) : null}
 						onChange={(result) => {
 							updateForm("tegenRekeningId", result?.value);
@@ -129,7 +129,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 			<Stack direction={["column", "row"]}>
 				<FormControl flex={1} isInvalid={!isValid("rubriekId")} isRequired>
 					<FormLabel>{t("afspraken.rubriek")}</FormLabel>
-					<Select id="rubriek" isClearable={true} noOptionsMessage={() => t("forms.afspraken.fields.rubriekChoose")} maxMenuHeight={350}
+					<Select id="rubriek" isClearable={true} noOptionsMessage={() => t("forms.afspraken.fields.rubriekChoose")} placeholder={t("select.placeholder")} maxMenuHeight={350}
 						options={rubriekOptions} value={data.rubriekId ? rubriekOptions.find(r => r.value === data.rubriekId) : null}
 						onChange={(result) => updateForm("rubriekId", result?.value)} styles={isValid("rubriekId") ? reactSelectStyles.default : reactSelectStyles.error} />
 					<FormErrorMessage>{t("afspraakDetailView.invalidRubriekError")}</FormErrorMessage>
