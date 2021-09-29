@@ -33,19 +33,19 @@ const main = async () => {
 		await LoadRubrieken();
 		await LoadOrganisaties();
 
-		const rubrieken: Rubriek[] = await graphql.getRubrieken().then(result => result.rubrieken as Rubriek[]);
-		console.log(`Alle ${rubrieken.length} rubrieken opgehaald.`);
-
-		const organisaties: Organisatie[] = await graphql.getOrganisaties().then(result => result.organisaties as Organisatie[]);
-		console.log(`Alle ${organisaties.length} organisaties opgehaald.`);
-
-		await LoadBurgers(rubrieken, organisaties);
-
-		const burgers: Burger[] = await graphql.getBurgers().then(result => result.burgers as Burger[]);
-		console.log(`Alle ${burgers.length} burgers opgehaald.`);
-
-		await LoadHuishoudens(burgers);
-
+		// const rubrieken: Rubriek[] = await graphql.getRubrieken().then(result => result.rubrieken as Rubriek[]);
+		// console.log(`Alle ${rubrieken.length} rubrieken opgehaald.`);
+		//
+		// const organisaties: Organisatie[] = await graphql.getOrganisaties().then(result => result.organisaties as Organisatie[]);
+		// console.log(`Alle ${organisaties.length} organisaties opgehaald.`);
+		//
+		// await LoadBurgers(rubrieken, organisaties);
+		//
+		// const burgers: Burger[] = await graphql.getBurgers().then(result => result.burgers as Burger[]);
+		// console.log(`Alle ${burgers.length} burgers opgehaald.`);
+		//
+		// await LoadHuishoudens(burgers);
+		//
 	} catch (err) {
 		console.log(err);
 	}

@@ -1825,6 +1825,7 @@ ${RekeningFragmentDoc}`;
 export const OrganisatieFragmentDoc = gql`
     fragment Organisatie on Organisatie {
   id
+      naam
   kvknummer
   vestigingsnummer
   afdelingen {

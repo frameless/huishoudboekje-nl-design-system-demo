@@ -8,7 +8,7 @@ const LoadOrganisaties = async () => {
 	const mOrganisaties = organisaties.map(o => {
 		return CreateOrganisatie(o).catch(err => {
 			if (err.message.includes("already exists")) {
-				console.log(`(!) Organisatie ${o.kvkDetails.naam} (${o.kvkDetails.nummer}) bestaat al.`);
+				console.log(`(!) Organisatie ${o.naam} (${o.kvknummer}) bestaat al.`);
 			}
 			else {
 				console.log("(!) Kon organisatie niet toevoegen.", util.inspect(err, false, null, true));
