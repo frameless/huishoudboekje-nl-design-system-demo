@@ -98,21 +98,15 @@ def create_brieven_export(burger_id):
         )
     )
 
-    # writer2 = csv.DictWriter(
-    #     iowriterExcel, fieldnames=brieven_fields, dialect="excel-tab"
-    # )
-    # writer2.writeheader()
-    # writer2.writerows(
-    #     map(
-    #         dict_keys_subset_builder(brieven_fields),
-    #         data,
-    #     )
-    # )
-
     df = pd.DataFrame.from_dict(data)
-    output_excel = io.StringIO()
+    print(df)
+    output_excel = io.BytesIO()
     writer2 = pd.ExcelWriter(output_excel, engine='xlsxwriter')
+
     df.to_excel(writer2, sheet_name='Sheet1')
+    writer2.save()
+    output_excel.seek(0)
+    data_excel = output_excel.read()
 
     gebruikers_activiteit = {
         "action": "exportBrieven",
@@ -142,7 +136,9 @@ def create_brieven_export(burger_id):
         json=json,
     )
 
-    return iowriter.getvalue(), csv_filename, output_excel.getvalue(), xlsx_filename
+    # raise ValueError('A very specific bad thing happened.')
+
+    return iowriter.getvalue(), csv_filename, data_excel, xlsx_filename
 
 
 def get_burger_response(burger_id):
