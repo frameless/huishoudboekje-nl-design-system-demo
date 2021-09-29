@@ -31,6 +31,8 @@ setup(
         'Jinja2>=2.11.3,<3',
         'itsdangerous>=1.1.0,<2',
         'lxml>=4.6.3,<5',
-        'pandas==1.3.3'
+        'pandas==1.3.3',
+        'XlsxWriter==3.0.1',
+        'StringIO'
     ],
 )

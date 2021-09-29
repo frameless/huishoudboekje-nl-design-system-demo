@@ -84,9 +84,9 @@ def create_brieven_export(burger_id):
         data.append(row)
 
     csv_filename = f"{current_date_str}_{burger['voornamen']}_{burger['achternaam']}.csv"
-    xlsx_filename = f"{current_date_str}_{burger['voornamen']}_{burger['achternaam']}.xls"
+    xlsx_filename = f"{current_date_str}_{burger['voornamen']}_{burger['achternaam']}.xlsx"
     iowriter = io.StringIO()
-    iowriterExcel = io.StringIO()
+    # iowriterExcel = io.StringIO()
     writer = csv.DictWriter(
         iowriter, fieldnames=brieven_fields, dialect=HHBCsvDialect
     )
@@ -98,16 +98,21 @@ def create_brieven_export(burger_id):
         )
     )
 
-    writer2 = csv.DictWriter(
-        iowriterExcel, fieldnames=brieven_fields, dialect="excel-tab"
-    )
-    writer2.writeheader()
-    writer2.writerows(
-        map(
-            dict_keys_subset_builder(brieven_fields),
-            data,
-        )
-    )
+    # writer2 = csv.DictWriter(
+    #     iowriterExcel, fieldnames=brieven_fields, dialect="excel-tab"
+    # )
+    # writer2.writeheader()
+    # writer2.writerows(
+    #     map(
+    #         dict_keys_subset_builder(brieven_fields),
+    #         data,
+    #     )
+    # )
+
+    df = pd.DataFrame.from_dict(data)
+    output_excel = io.StringIO()
+    writer2 = pd.ExcelWriter(output_excel, engine='xlsxwriter')
+    df.to_excel(writer2, sheet_name='Sheet1')
 
     gebruikers_activiteit = {
         "action": "exportBrieven",
@@ -137,7 +142,7 @@ def create_brieven_export(burger_id):
         json=json,
     )
 
-    return iowriter.getvalue(), csv_filename, iowriterExcel.getvalue(), xlsx_filename
+    return iowriter.getvalue(), csv_filename, output_excel.getvalue(), xlsx_filename
 
 
 def get_burger_response(burger_id):
