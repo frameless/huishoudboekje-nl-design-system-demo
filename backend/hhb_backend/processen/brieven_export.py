@@ -99,7 +99,7 @@ def create_brieven_export(burger_id):
     )
 
     writer2 = csv.DictWriter(
-        iowriterExcel, fieldnames=brieven_fields, dialect="excel"
+        iowriterExcel, fieldnames=brieven_fields, dialect="excel-tab"
     )
     writer2.writeheader()
     writer2.writerows(
