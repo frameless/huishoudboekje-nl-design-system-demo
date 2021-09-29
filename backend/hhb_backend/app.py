@@ -101,11 +101,14 @@ def create_app(
         if type == "excel":
             output = make_response(excel_data)
             output.headers["Content-Disposition"] = f"attachment; filename={excel_filename}"
-            output.headers["Content-type"] = "text/xlsx"
-        else:
+            output.headers["Content-type"] = "application/vnd.ms-excel"
+        elif type == "csv":
             output = make_response(data)
             output.headers["Content-Disposition"] = f"attachment; filename={csv_filename}"
             output.headers["Content-type"] = "text/csv"
+        else:
+            return data, 404
+
         return output
 
     @app.route("/services_health")

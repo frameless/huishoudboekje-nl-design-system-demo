@@ -84,7 +84,7 @@ def create_brieven_export(burger_id):
         data.append(row)
 
     csv_filename = f"{current_date_str}_{burger['voornamen']}_{burger['achternaam']}.csv"
-    xlsx_filename = f"{current_date_str}_{burger['voornamen']}_{burger['achternaam']}.xlsx"
+    xlsx_filename = f"{current_date_str}_{burger['voornamen']}_{burger['achternaam']}.xls"
     iowriter = io.StringIO()
     iowriterExcel = io.StringIO()
     writer = csv.DictWriter(
