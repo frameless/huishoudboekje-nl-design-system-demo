@@ -70,8 +70,98 @@
 	"vestigingsnummer": "000010718842",
 	"afdelingen": [
 	  {
-		"naam": "UWV Utrecht",
+		"naam": "UWV, afdeling WW",
+		"postadressen": [{"straatnaam": "Postbus", "huisnummer": "58195", "postcode": "1040HD", "plaatsnaam": "Amsterdam"}],
+		"rekeningen": [
+		  {"iban": "NL58INGB0702712760", "rekeninghouder": "UWV"},
+		  {"iban": "NL27INGB0702712736", "rekeninghouder": "UWV"},
+		  {"iban": "NL02INGB0702712701", "rekeninghouder": "UWV"},
+		  {"iban": "NL49INGB0702712728", "rekeninghouder": "UWV"}
+		]
+	  },
+    {
+		"naam": "UWV, afdeling Wajong",
+		"postadressen": [{"straatnaam": "Postbus", "huisnummer": "244", "postcode": "1000AE", "plaatsnaam": "Amsterdam"}],
+		"rekeningen": [
+		  {"iban": "NL58INGB0702712760", "rekeninghouder": "UWV"},
+		  {"iban": "NL27INGB0702712736", "rekeninghouder": "UWV"},
+		  {"iban": "NL02INGB0702712701", "rekeninghouder": "UWV"},
+		  {"iban": "NL49INGB0702712728", "rekeninghouder": "UWV"}
+		]
+    },
+    {
+		"naam": "UWV, afdeling WAO",
+		"postadressen": [{"straatnaam": "Postbus", "huisnummer": "245", "postcode": "1000AE", "plaatsnaam": "Amsterdam"}],
+		"rekeningen": [
+		  {"iban": "NL58INGB0702712760", "rekeninghouder": "UWV"},
+		  {"iban": "NL27INGB0702712736", "rekeninghouder": "UWV"},
+		  {"iban": "NL02INGB0702712701", "rekeninghouder": "UWV"},
+		  {"iban": "NL49INGB0702712728", "rekeninghouder": "UWV"}
+		]
+    },
+    {
+		"naam": "UWV, afdeling WAZ",
+		"postadressen": [{"straatnaam": "Postbus", "huisnummer": "246", "postcode": "1000AE", "plaatsnaam": "Amsterdam"}],
+		"rekeningen": [
+		  {"iban": "NL58INGB0702712760", "rekeninghouder": "UWV"},
+		  {"iban": "NL27INGB0702712736", "rekeninghouder": "UWV"},
+		  {"iban": "NL02INGB0702712701", "rekeninghouder": "UWV"},
+		  {"iban": "NL49INGB0702712728", "rekeninghouder": "UWV"}
+		]
+    },
+    {
+		"naam": "UWV, afdeling ZW",
+		"postadressen": [{"straatnaam": "Postbus", "huisnummer": "57015", "postcode": "1040CT", "plaatsnaam": "Amsterdam"}],
+		"rekeningen": [
+		  {"iban": "NL58INGB0702712760", "rekeninghouder": "UWV"},
+		  {"iban": "NL27INGB0702712736", "rekeninghouder": "UWV"},
+		  {"iban": "NL02INGB0702712701", "rekeninghouder": "UWV"},
+		  {"iban": "NL49INGB0702712728", "rekeninghouder": "UWV"}
+		]
+    },
+    {
+		"naam": "UWV, afdeling WAZO/ZEZ (tot 1-7-2019)",
+		"postadressen": [{"straatnaam": "Postbus", "huisnummer": "58018", "postcode": "1040HA", "plaatsnaam": "Amsterdam"}],
+		"rekeningen": [
+		  {"iban": "NL58INGB0702712760", "rekeninghouder": "UWV"},
+		  {"iban": "NL27INGB0702712736", "rekeninghouder": "UWV"},
+		  {"iban": "NL02INGB0702712701", "rekeninghouder": "UWV"},
+		  {"iban": "NL49INGB0702712728", "rekeninghouder": "UWV"}
+		]
+    },
+    {
+		"naam": "UWV, afdeling WAZO/ZEZ (vanaf 1-7-2019)",
+		"postadressen": [{"straatnaam": "Postbus", "huisnummer": "57015", "postcode": "1040CT", "plaatsnaam": "Amsterdam"}],
+		"rekeningen": [
+		  {"iban": "NL58INGB0702712760", "rekeninghouder": "UWV"},
+		  {"iban": "NL27INGB0702712736", "rekeninghouder": "UWV"},
+		  {"iban": "NL02INGB0702712701", "rekeninghouder": "UWV"},
+		  {"iban": "NL49INGB0702712728", "rekeninghouder": "UWV"}
+		]
+    },
+    {
+		"naam": "UWV, afdeling WIA",
 		"postadressen": [{"straatnaam": "Postbus", "huisnummer": "69254", "postcode": "1060CH", "plaatsnaam": "Amsterdam"}],
+		"rekeningen": [
+		  {"iban": "NL58INGB0702712760", "rekeninghouder": "UWV"},
+		  {"iban": "NL27INGB0702712736", "rekeninghouder": "UWV"},
+		  {"iban": "NL02INGB0702712701", "rekeninghouder": "UWV"},
+		  {"iban": "NL49INGB0702712728", "rekeninghouder": "UWV"}
+		]
+    },
+    {
+		"naam": "UWV, afdeling IOW",
+		"postadressen": [{"straatnaam": "Postbus", "huisnummer": "6111", "postcode": "1005EC", "plaatsnaam": "Amsterdam"}],
+		"rekeningen": [
+		  {"iban": "NL58INGB0702712760", "rekeninghouder": "UWV"},
+		  {"iban": "NL27INGB0702712736", "rekeninghouder": "UWV"},
+		  {"iban": "NL02INGB0702712701", "rekeninghouder": "UWV"},
+		  {"iban": "NL49INGB0702712728", "rekeninghouder": "UWV"}
+		]
+    },
+    {
+		"naam": "UWV, afdeling Beoordeling arbeidsvermogen",
+		"postadressen": [{"straatnaam": "Postbus", "huisnummer": "2441", "postcode": "1000CK", "plaatsnaam": "Amsterdam"}],
 		"rekeningen": [
 		  {"iban": "NL58INGB0702712760", "rekeninghouder": "UWV"},
 		  {"iban": "NL27INGB0702712736", "rekeninghouder": "UWV"},
