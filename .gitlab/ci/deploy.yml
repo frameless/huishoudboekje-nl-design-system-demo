@@ -140,7 +140,15 @@
         --set "postgresql.postgresqlPassword=${DATABASE_PASSWORD}" \
         --set "postgresql.persistence.enabled=${DATABASE_PERSISTENCE}" \
         --render-subchart-notes
-    - helm upgrade hhb-contactcatalogus helm/contactcatalogus --install --namespace=$NAMESPACE ${CREATE_NAMESPACE:+--create-namespace} --set settings.env=prod,settings.debug=0,settings.cache=1
+    - |
+      helm upgrade hhb-contactcatalogus helm/contactcatalogus --install \
+        --namespace=$NAMESPACE \
+        ${CREATE_NAMESPACE:+--create-namespace} \
+        --set settings.env=prod \
+        --set settings.debug=0 \
+        --set settings.cache=1
+    - sleep 30 # Todo: actually wait for the db to be ready
+    - kubectl exec $(kubectl get pods -l app.kubernetes.io/instance=hhb-contactcatalogus -n $NAMESPACE | grep php | cut -d' ' -f1 | head -n1) --namespace=$NAMESPACE -- bin/console doctrine:schema:update -f
     - echo -e -n "${HHB_HOST}" > ci_review_hostname.txt
   artifacts:
     paths:
