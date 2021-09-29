@@ -35,6 +35,10 @@ type RootQuery {
   huishouden(id: Int!): Huishouden
   huishoudens(ids: [Int] = [], filters: BurgerFilter): [Huishouden]
   huishoudensPaged(start: Int, limit: Int, filters: BurgerFilter): HuishoudensPaged
+  afdeling(id: Int!): Afdeling
+  afdelingen(ids: [Int] = []): [Afdeling]
+  postadres(id: String!): Postadres
+  postadressen(ids: [String] = []): [Postadres]
 }
 """GraphQL Afspraak model """
 type Afspraak {
@@ -46,7 +50,6 @@ type Afspraak {
   credit: Boolean
   zoektermen: [String]
   betaalinstructie: Betaalinstructie
-  organisatie: Organisatie
   journaalposten: [Journaalpost]
   rubriek: Rubriek
   overschrijvingen(startDatum: Date, eindDatum: Date): [Overschrijving]
@@ -80,24 +83,32 @@ type Rekening {
   iban: String
   rekeninghouder: String
   burgers: [Burger]
-  organisaties: [Organisatie]
+  afdelingen: [Afdeling]
   afspraken: [Afspraak]
+}
+"""GraphQL Afdeling model """
+type Afdeling {
+  id: Int
+  naam: String
+  organisatie: Organisatie
+  afspraken: [Afspraak]
+  rekeningen: [Rekening]
+  postadressen: [Postadres]
 }
 """GraphQL Organisatie model """
 type Organisatie {
   id: Int
-  rekeningen: [Rekening]
-  kvkNummer: String
-  kvkDetails: OrganisatieKvK
-  afspraken: [Afspraak]
+  kvknummer: String
   vestigingsnummer: String
-}
-type OrganisatieKvK {
-  nummer: String
   naam: String
-  straatnaam: String
+  afdelingen: [Afdeling]
+}
+"""GraphQL Burger model """
+type Postadres {
+  id: String
   huisnummer: String
   postcode: String
+  straatnaam: String
   plaatsnaam: String
 }
 """GebruikersActiviteit model"""
@@ -361,12 +372,12 @@ type RootMutation {
   addAfspraakZoekterm(afspraakId: Int!, zoekterm: String!): AddAfspraakZoekterm
   deleteAfspraakZoekterm(afspraakId: Int!, zoekterm: String!): DeleteAfspraakZoekterm
   createOrganisatie(input: CreateOrganisatieInput): CreateOrganisatie
-  updateOrganisatie(huisnummer: String, id: Int!, kvkNummer: String, naam: String, plaatsnaam: String, postcode: String, straatnaam: String, vestigingsnummer: String): UpdateOrganisatie
+  updateOrganisatie(id: Int!, kvknummer: String, naam: String, vestigingsnummer: String): UpdateOrganisatie
   deleteOrganisatie(id: Int!): DeleteOrganisatie
   createBurgerRekening(burgerId: Int!, rekening: RekeningInput!): CreateBurgerRekening
   deleteBurgerRekening(burgerId: Int!, id: Int!): DeleteBurgerRekening
-  createOrganisatieRekening(organisatieId: Int!, rekening: RekeningInput!): CreateOrganisatieRekening
-  deleteOrganisatieRekening(organisatieId: Int!, rekeningId: Int!): DeleteOrganisatieRekening
+  createAfdelingRekening(afdelingId: Int!, rekening: RekeningInput!): CreateAfdelingRekening
+  deleteAfdelingRekening(afdelingId: Int!, rekeningId: Int!): DeleteAfdelingRekening
   updateRekening(id: Int!, rekening: RekeningInput!): UpdateRekening
   deleteCustomerStatementMessage(id: Int!): DeleteCustomerStatementMessage
   createCustomerStatementMessage(file: Upload!): CreateCustomerStatementMessage
@@ -392,6 +403,12 @@ type RootMutation {
   deleteHuishouden(id: Int!): DeleteHuishouden
   addHuishoudenBurger(burgerIds: [Int]!, huishoudenId: Int!): AddHuishoudenBurger
   deleteHuishoudenBurger(burgerIds: [Int]!, huishoudenId: Int!): DeleteHuishoudenBurger
+  createAfdeling(input: CreateAfdelingInput): CreateAfdeling
+  updateAfdeling(id: Int!, naam: String, organisatieId: Int): UpdateAfdeling
+  deleteAfdeling(id: Int!): DeleteAfdeling
+  createPostadres(input: CreatePostadresInput): CreatePostadres
+  updatePostadres(huisnummer: String, id: String!, plaatsnaam: String, postcode: String, straatnaam: String): UpdatePostadres
+  deletePostadres(afdelingId: Int!, id: String!): DeletePostadres
 }
 type CreateBurger {
   ok: Boolean
@@ -435,7 +452,7 @@ type CreateAfspraak {
 input CreateAfspraakInput {
   burgerId: Int!
   credit: Boolean!
-  organisatieId: Int
+  afdelingId: Int
   tegenRekeningId: Int!
   rubriekId: Int!
   omschrijving: String!
@@ -451,7 +468,7 @@ type UpdateAfspraak {
 input UpdateAfspraakInput {
   burgerId: Int
   credit: Boolean
-  organisatieId: Int
+  afdelingId: Int
   tegenRekeningId: Int
   rubriekId: Int
   omschrijving: String
@@ -494,14 +511,9 @@ type CreateOrganisatie {
   organisatie: Organisatie
 }
 input CreateOrganisatieInput {
-  kvkNummer: String!
+  kvknummer: String!
   vestigingsnummer: String
-  rekeningen: [RekeningInput]
   naam: String
-  straatnaam: String
-  huisnummer: String
-  postcode: String
-  plaatsnaam: String
 }
 type UpdateOrganisatie {
   ok: Boolean
@@ -520,11 +532,11 @@ type DeleteBurgerRekening {
   ok: Boolean
   previous: Rekening
 }
-type CreateOrganisatieRekening {
+type CreateAfdelingRekening {
   ok: Boolean
   rekening: Rekening
 }
-type DeleteOrganisatieRekening {
+type DeleteAfdelingRekening {
   ok: Boolean
   previous: Rekening
 }
@@ -539,7 +551,7 @@ type DeleteCustomerStatementMessage {
 }
 type CreateCustomerStatementMessage {
   ok: Boolean
-  customerStatementMessage: CustomerStatementMessage
+  customerStatementMessage: [CustomerStatementMessage]
   journaalposten: [Journaalpost]
 }
 """
@@ -647,4 +659,45 @@ type DeleteHuishoudenBurger {
   huishouden: [Huishouden]
   previous: Huishouden
   burgerIds: [Burger]
+}
+type CreateAfdeling {
+  ok: Boolean
+  afdeling: Afdeling
+}
+input CreateAfdelingInput {
+  organisatieId: Int!
+  naam: String!
+  rekeningen: [RekeningInput]
+  postadressen: [CreatePostadresInput]
+}
+input CreatePostadresInput {
+  straatnaam: String!
+  huisnummer: String!
+  postcode: String!
+  plaatsnaam: String!
+  afdelingId: Int
+}
+type UpdateAfdeling {
+  ok: Boolean
+  afdeling: Afdeling
+  previous: Afdeling
+}
+type DeleteAfdeling {
+  ok: Boolean
+  previous: Afdeling
+}
+type CreatePostadres {
+  ok: Boolean
+  postadres: Postadres
+  afdeling: Afdeling
+}
+type UpdatePostadres {
+  ok: Boolean
+  postadres: Postadres
+  previous: Postadres
+}
+type DeletePostadres {
+  ok: Boolean
+  previous: Postadres
+  afdeling: Afdeling
 }

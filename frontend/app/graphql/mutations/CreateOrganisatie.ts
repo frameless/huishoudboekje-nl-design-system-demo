@@ -3,23 +3,23 @@ import {OrganisatieFragment} from "../fragments/Organisatie";
 
 export const CreateOrganisatieMutation = gql`
     mutation createOrganisatie(
-        $huisnummer: String
         $kvkNummer: String!
         $vestigingsnummer: String!
         $naam: String
-        $plaatsnaam: String
-        $postcode: String
-        $straatnaam: String
+#        $straatnaam: String
+#        $huisnummer: String
+#        $postcode: String
+#        $plaatsnaam: String
     ){
         createOrganisatie(
             input: {
-                huisnummer: $huisnummer
-                kvkNummer: $kvkNummer
+                kvknummer: $kvkNummer
                 vestigingsnummer: $vestigingsnummer
                 naam: $naam
-                plaatsnaam: $plaatsnaam
-                postcode: $postcode
-                straatnaam: $straatnaam
+#                straatnaam: $straatnaam
+#                huisnummer: $huisnummer
+#                postcode: $postcode
+#                plaatsnaam: $plaatsnaam
             }
         ){
             ok

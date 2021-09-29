@@ -29,10 +29,7 @@ export const GebruikersactiviteitFragment = gql`
                 ...Organisatie
             }
             afspraak {
-                id
-                organisatie {
-                    ...Organisatie
-                }
+                ...Afspraak
             }
             rekening {
                 id

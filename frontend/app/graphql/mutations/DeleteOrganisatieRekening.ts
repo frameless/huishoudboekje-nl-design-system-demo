@@ -1,11 +1,11 @@
 import {gql} from "@apollo/client";
 
-export const DeleteOrganisatieRekeningMutation = gql`
-    mutation deleteOrganisatieRekening(
+export const DeleteAfdelingRekeningMutation = gql`
+    mutation deleteAfdelingRekening(
         $id: Int!
-        $orgId: Int!
+        $afdelingId: Int!
     ){
-        deleteOrganisatieRekening(organisatieId: $orgId, rekeningId: $id){
+        deleteAfdelingRekening(afdelingId: $afdelingId, rekeningId: $id){
             ok
         }
     }
