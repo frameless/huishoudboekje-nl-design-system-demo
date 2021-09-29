@@ -84,12 +84,25 @@ def create_brieven_export(burger_id):
         data.append(row)
 
     csv_filename = f"{current_date_str}_{burger['voornamen']}_{burger['achternaam']}.csv"
+    xlsx_filename = f"{current_date_str}_{burger['voornamen']}_{burger['achternaam']}.xlsx"
     iowriter = io.StringIO()
+    iowriterExcel = io.StringIO()
     writer = csv.DictWriter(
         iowriter, fieldnames=brieven_fields, dialect=HHBCsvDialect
     )
     writer.writeheader()
     writer.writerows(
+        map(
+            dict_keys_subset_builder(brieven_fields),
+            data,
+        )
+    )
+
+    writer2 = csv.DictWriter(
+        iowriterExcel, fieldnames=brieven_fields, dialect="excel"
+    )
+    writer2.writeheader()
+    writer2.writerows(
         map(
             dict_keys_subset_builder(brieven_fields),
             data,
@@ -124,13 +137,7 @@ def create_brieven_export(burger_id):
         json=json,
     )
 
-    xlsx_filename = f"{current_date_str}_{burger['voornamen']}_{burger['achternaam']}.xlsx"
-    df = pd.read_csv(iowriter.getvalue())
-    buffer = io.BytesIO()
-    with pd.ExcelWriter(buffer) as writer:
-        df.to_excel(writer)
-
-    return iowriter.getvalue(), csv_filename, buffer, xlsx_filename
+    return iowriter.getvalue(), csv_filename, iowriterExcel.getvalue(), xlsx_filename
 
 
 def get_burger_response(burger_id):

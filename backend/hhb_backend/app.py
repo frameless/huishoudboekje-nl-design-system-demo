@@ -86,11 +86,11 @@ def create_app(
         ] = f'attachment; filename="{xml_filename}"'
         return response
 
-    @app.route("/brievenexport/<burger_id>")
+    @app.route("/brievenexport/<burger_id>/<type>")
     @auth.rbac.allow([MEDEWERKER_ROLENAME], methods=['GET'])
-    def export_afspraken(burger_id):
+    def export_afspraken(burger_id, type="excel"):
         """ Send csv with afspraken data to medewerker """
-        data, csv_filename_or_errorcode = brieven_export.create_brieven_export(burger_id)
+        data, csv_filename_or_errorcode, excel_data, excel_filename = brieven_export.create_brieven_export(burger_id)
 
         # If the filename is an int, its an error code.
         if isinstance(csv_filename_or_errorcode, int):
@@ -98,9 +98,14 @@ def create_app(
 
         csv_filename = csv_filename_or_errorcode
 
-        output = make_response(data)
-        output.headers["Content-Disposition"] = f"attachment; filename={csv_filename}"
-        output.headers["Content-type"] = "text/csv"
+        if type == "excel":
+            output = make_response(excel_data)
+            output.headers["Content-Disposition"] = f"attachment; filename={excel_filename}"
+            output.headers["Content-type"] = "text/xlsx"
+        else:
+            output = make_response(data)
+            output.headers["Content-Disposition"] = f"attachment; filename={csv_filename}"
+            output.headers["Content-type"] = "text/csv"
         return output
 
     @app.route("/services_health")
