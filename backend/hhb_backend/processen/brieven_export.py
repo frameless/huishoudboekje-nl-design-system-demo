@@ -101,7 +101,7 @@ def create_brieven_export(burger_id):
     df = pd.DataFrame.from_dict(data)
     print(df)
     output_excel = io.BytesIO()
-    writer2 = pd.ExcelWriter(output_excel, engine='xlsxwriter')
+    writer2 = pd.ExcelWriter(output_excel, engine='xlsxwriter', index=False)
 
     df.to_excel(writer2, sheet_name='Sheet1')
     writer2.save()
