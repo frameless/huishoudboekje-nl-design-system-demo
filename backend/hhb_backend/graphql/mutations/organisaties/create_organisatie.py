@@ -7,7 +7,6 @@ from hhb_backend.graphql import settings
 from hhb_backend.graphql.models.organisatie import Organisatie
 
 import hhb_backend.graphql.mutations.rekeningen.rekening_input as rekening_input
-from hhb_backend.graphql.mutations.rekeningen.utils import create_organisatie_rekening
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     gebruikers_activiteit_entities,
     log_gebruikers_activiteit,
@@ -15,17 +14,10 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import (
 
 
 class CreateOrganisatieInput(graphene.InputObjectType):
-    # hhb_service elements (required)
-    kvk_nummer = graphene.String(required=True)
+    # org_service elements (required)
+    kvknummer = graphene.String(required=True)
     vestigingsnummer = graphene.String()
-    rekeningen = graphene.List(lambda: rekening_input.RekeningInput)
-
-    # org_service elements (optional)
     naam = graphene.String()
-    straatnaam = graphene.String()
-    huisnummer = graphene.String()
-    postcode = graphene.String()
-    plaatsnaam = graphene.String()
 
 
 class CreateOrganisatie(graphene.Mutation):
@@ -48,21 +40,8 @@ class CreateOrganisatie(graphene.Mutation):
     async def mutate(root, _info, **kwargs):
         """ Create the new Organisatie """
         input = kwargs.pop("input")
-        rekeningen = input.pop("rekeningen", None)
 
-        Organisatie().unique_kvk_vestigingsnummer(input.get("kvk_nummer"), input.get("vestigingsnummer"))
-
-        hhb_service_data = {
-            "kvk_nummer": input["kvk_nummer"],
-            "vestigingsnummer": input["vestigingsnummer"],
-        }
-        hhb_service_response = requests.post(
-            f"{settings.HHB_SERVICES_URL}/organisaties/",
-            data=json.dumps(hhb_service_data),
-            headers={"Content-type": "application/json"},
-        )
-        if hhb_service_response.status_code != 201:
-            raise GraphQLError(f"Upstream API responded: {hhb_service_response.json()}")
+        Organisatie().unique_kvk_vestigingsnummer(input.get("kvknummer"), input.get("vestigingsnummer"))
 
         org_service_response = requests.post(
             f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/",
@@ -72,12 +51,6 @@ class CreateOrganisatie(graphene.Mutation):
         if org_service_response.status_code != 201:
             raise GraphQLError(f"Upstream API responded: {org_service_response.json()}")
 
-        result = hhb_service_response.json()["data"]
-
-        if rekeningen:
-            result["rekeningen"] = [
-                create_organisatie_rekening(result["id"], rekening)
-                for rekening in rekeningen
-            ]
+        result = org_service_response.json()["data"]
 
         return CreateOrganisatie(organisatie=result, ok=True)

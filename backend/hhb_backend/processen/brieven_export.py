@@ -76,8 +76,8 @@ def create_brieven_export(burger_id):
     for afspraak in afspraken:
         hhb_organisatie = next(filter(lambda x: x['id'] == afspraak['organisatie_id'], hhb_organisaties), {})
         kvk_organisatie = {}
-        if "kvk_nummer" in hhb_organisatie:
-            kvk_organisatie = next(filter(lambda x: x['kvk_nummer'] == hhb_organisatie['kvk_nummer'], kvk_organisaties),
+        if "kvknummer" in hhb_organisatie:
+            kvk_organisatie = next(filter(lambda x: x['kvknummer'] == hhb_organisatie['kvknummer'], kvk_organisaties),
                                    {})
 
         row = create_row(hhb_organisatie, kvk_organisatie, afspraak, burger, current_date_str)
@@ -165,8 +165,8 @@ def get_organisaties(afspraken):
 
 def get_kvk_organisaties(hhb_orgs):
     organisatie_kvks = list(
-        set([org["kvk_nummer"] for org in hhb_orgs if
-             org["kvk_nummer"]])
+        set([org["kvknummer"] for org in hhb_orgs if
+             org["kvknummer"]])
     )
 
     return requests.get(

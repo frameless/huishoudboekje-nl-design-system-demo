@@ -7,7 +7,7 @@ from pydash import objects
 from hhb_backend.graphql import settings
 from tests import post_echo, post_echo_with_id
 
-create_afspraak_input = {"burgerId": 1, "credit": False, "organisatieId": 1, "tegenRekeningId": 1,
+create_afspraak_input = {"burgerId": 1, "credit": False, "afdelingId": 1, "tegenRekeningId": 1,
                          "rubriekId": 1,
                          "omschrijving": "Omschrijving", "bedrag": "0.00"}
 
@@ -36,7 +36,7 @@ def test_create_afspraak_success(client):
                 "variables": {
                     "input": {"burgerId": 1,
                               "credit": 0,
-                              "organisatieId": 1,
+                              "afdelingId": 1,
                               "tegenRekeningId": 1,
                               "rubriekId": 1,
                               "omschrijving": "",
@@ -57,7 +57,7 @@ def test_create_afspraak_success(client):
 @pytest.mark.parametrize(["input", "error_message_contains"], [
     ("burgerId", 'In field "burgerId": Expected "Int!", found null.',),
     ("credit", 'In field "credit": Expected "Boolean!", found null.',),
-    ("organisatieId", 'In field "organisatieId": Expected "Int!", found null.',),
+    ("afdelingId", 'In field "afdelingId": Expected "Int!", found null.',),
     ("tegenRekeningId", 'In field "tegenRekeningId": Expected "Int!", found null.',),
     ("rubriekId", 'In field "rubriekId": Expected "Int!", found null.',),
     ("omschrijving", 'In field "omschrijving": Expected "String!", found null.',),

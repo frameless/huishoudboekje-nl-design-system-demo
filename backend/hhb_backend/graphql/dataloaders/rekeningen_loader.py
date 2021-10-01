@@ -14,11 +14,11 @@ class RekeningenByBurgerLoader(ListDataLoader):
     is_list = True
 
 
-class RekeningenByOrganisatieLoader(ListDataLoader):
-    """ Load rekeningen list for organisatie ids """
+class RekeningenByAfdelingLoader(ListDataLoader):
+    """ Load rekeningen list for afdelingen ids """
     model = "rekeningen"
-    filter_item = "filter_organisaties"
-    index = "organisaties"
+    filter_item = "filter_afdelingen"
+    index = "afdelingen"
     is_list = True
 
 

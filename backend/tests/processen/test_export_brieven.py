@@ -36,9 +36,9 @@ def create_mock_adapter() -> Adapter:
                 "rubriekId": 1,"omschrijving": "Omschrijving", "bedrag": "0.00",
                 'zoektermen': {"zoektest"}, 'valid_through':"2019-01-01"}]},200)
         elif request.path == "/organisaties/" and request.query == "filter_ids=1":
-            return MockResponse({'data': [{'id': 1, "kvk_nummer": 12345678}]},200)
+            return MockResponse({'data': [{'id': 1, "kvknummer": 12345678}]},200)
         elif request.path == "/organisaties/" and request.query == "filter_kvks=12345678":
-            return MockResponse({'data': [{'id': 1, 'kvk_nummer': 12345678,
+            return MockResponse({'data': [{'id': 1, 'kvknummer': 12345678,
                                            'naam': 'organisatie1', 'straatnaam': 'teststraat',
                                            'huisnummer': 1, 'postcode': '9999ZZ',
                                            'plaatsnaam': 'testplaats'}]},200)

@@ -32,7 +32,7 @@ class DeleteAfspraak(graphene.Mutation):
                 entity_type="burger", result=self.previous, key="burger_id"
             )
             + gebruikers_activiteit_entities(
-                entity_type="organisatie", result=self.previous, key="organisatie_id"
+                entity_type="afdeling", result=self.previous, key="afdeling_id"
             ),
             before=dict(afspraak=self.previous),
         )

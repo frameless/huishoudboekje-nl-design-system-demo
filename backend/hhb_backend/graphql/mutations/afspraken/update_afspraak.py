@@ -14,7 +14,7 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import (gebruikers_activit
 class UpdateAfspraakInput(graphene.InputObjectType):
     burger_id = graphene.Int()
     credit = graphene.Boolean()
-    organisatie_id = graphene.Int()
+    afdeling_id = graphene.Int()
     tegen_rekening_id = graphene.Int()
     rubriek_id = graphene.Int()
     omschrijving = graphene.String()
@@ -41,7 +41,7 @@ class UpdateAfspraak(graphene.Mutation):
                 entity_type="burger", result=self.afspraak, key="burger_id"
             )
             + gebruikers_activiteit_entities(
-                entity_type="organisatie", result=self.afspraak, key="organisatie_id"
+                entity_type="afdeling", result=self.afspraak, key="afdeling"
             ),
             before=dict(afspraak=self.previous),
             after=dict(afspraak=self.afspraak),

@@ -76,12 +76,9 @@ class AfspraakView(HHBView):
                     },
                 ]
             },
-            "organisatie_id": {
-                "oneOf": [
-                    {"type": "null"},
-                    {"type": "integer"},
-                ]
-            },
+            "afdeling_id": {
+                "type": "integer",
+            }
         },
         "required": []
     }
@@ -89,8 +86,8 @@ class AfspraakView(HHBView):
     def extend_get(self, **kwargs):
         """ Extend the get function with extra filter """
         self.add_filter_filter_burger()
-        self.add_filter_filter_organisaties()
         self.add_filter_filter_datums()
+        self.add_filter_filter_afdelingen()
         self.add_filter_filter_rekening()
         self.add_filter_filter_zoektermen()
         self.hhb_query.expose_many_relation("journaalposten", "id")
@@ -117,14 +114,6 @@ class AfspraakView(HHBView):
             self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.burger_id.in_(ids))
 
         AfspraakView.filter_in_string('filter_burgers', add_filter)
-
-    def add_filter_filter_organisaties(self):
-        """ Add filter_organisaties filter based on the id of the organisatie model """
-
-        def cb(ids):
-            self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.organisatie_id.in_(ids))
-
-        AfspraakView.filter_in_string('filter_organisaties', cb)
 
     def add_filter_filter_datums(self):
         """ Add filter_datums filter based on the valid_from and valid_through """
@@ -163,3 +152,11 @@ class AfspraakView(HHBView):
         if zoektermenen:
             for zoektermen in zoektermenen.split(","):
                 self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.zoektermen.contains(zoektermen))
+
+    def add_filter_filter_afdelingen(self):
+        """ Add filter_afdelingen filter based on the id of the afdeling model """
+
+        def cb(ids):
+            self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.afdeling_id.in_(ids))
+
+        AfspraakView.filter_in_string('filter_afdelingen', cb)

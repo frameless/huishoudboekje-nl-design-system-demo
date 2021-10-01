@@ -36,7 +36,7 @@ def test_afspraken_post_new_afspraak(client, session):
     afspraak_dict["id"] = 1
     afspraak_dict["burger_id"] = None
     afspraak_dict["tegen_rekening_id"] = None
-    afspraak_dict["organisatie_id"] = None
+    afspraak_dict["afdeling_id"] = None
     afspraak_dict["rubriek_id"] = None
     assert response.json["data"] == afspraak_dict
     assert session.query(Afspraak).count() == 1

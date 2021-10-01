@@ -7,7 +7,6 @@ from flask import request
 
 import hhb_backend.graphql.models.burger as burger
 import hhb_backend.graphql.models.journaalpost as journaalpost
-import hhb_backend.graphql.models.organisatie as organisatie
 import hhb_backend.graphql.models.overschrijving as overschrijving
 import hhb_backend.graphql.models.rekening as rekening
 import hhb_backend.graphql.models.rubriek as rubriek
@@ -57,7 +56,6 @@ class Afspraak(graphene.ObjectType):
     credit = graphene.Boolean()
     zoektermen = graphene.List(graphene.String)
     betaalinstructie = graphene.Field(lambda: Betaalinstructie)
-    organisatie = graphene.Field(lambda: organisatie.Organisatie)
     journaalposten = graphene.List(lambda: journaalpost.Journaalpost)
     rubriek = graphene.Field(lambda: rubriek.Rubriek)
     overschrijvingen = graphene.List(
@@ -122,13 +120,6 @@ class Afspraak(graphene.ObjectType):
     def resolve_valid_through(root, info):
         if value := root.get("valid_through"):
             return date.fromisoformat(value)
-
-    async def resolve_organisatie(root, info):
-        """ Get organisatie when requested """
-        if root.get("organisatie_id"):
-            return await request.dataloader.organisaties_by_id.load(
-                root.get("organisatie_id")
-            )
 
     async def resolve_journaalposten(root, info):
         """ Get organisatie when requested """

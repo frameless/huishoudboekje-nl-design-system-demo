@@ -29,15 +29,29 @@ class SingleDataLoader(DataLoader):
         params = {
             'filters': json.dumps(filters) if filters else None
         }
-        response = requests.get(url=f"{self.service}/{self.model}/", params=params)
+        if self.service == settings.CONTACTCATALOGUS_SERVICE_URL:
+            response = requests.get(url=f"{self.service}/{self.model}/",
+                                    params=params, headers={
+                    "Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845"})
+        else:
+            response = requests.get(url=f"{self.service}/{self.model}/",
+                                    params=params)
 
-        if not response.ok:
-            raise GraphQLError(f"Upstream API responded: {response.text}")
-        result = response.json()["data"]
+        try:
+            if not response.ok:
+                raise GraphQLError(f"Upstream API responded: {response.text}")
+        except:
+            if response.status_code != 201:
+                raise GraphQLError(f"Upstream API responded: {response.text}")
 
-        # Prime the cache with the complete result set to prevent unnecessary extra calls
-        for item in result:
-            self.prime(item[self.index], item)
+        if self.service == settings.CONTACTCATALOGUS_SERVICE_URL:
+            result = response.json()['hydra:member']
+        else:
+            result = response.json()["data"]
+
+            # Prime the cache with the complete result set to prevent unnecessary extra calls
+            for item in result:
+                self.prime(item[self.index], item)
 
         return result
 
@@ -82,6 +96,40 @@ class SingleDataLoader(DataLoader):
                 objects[item[self.index]] = item
         return [objects.get(key, None) for key in keys]
 
+    async def auth_load_many(self, keys):
+        if keys is None:
+            return
+        objects = {}
+        for i in keys:
+            url = f"""{self.service}/{self.model}/{f"{i}"}"""
+            response = requests.get(url, headers={
+                        "Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845"})
+            try:
+                if not response.ok:
+                    raise GraphQLError(f"Upstream API responded: {response.text}")
+            except:
+                if response.status_code != 200:
+                    raise GraphQLError(f"Upstream API responded: {response.text}")
+
+            result = response.json()
+            objects[i] = result
+
+        return [objects.get(key, None) for key in keys]
+
+
+    async def auth_load(self, key):
+        url = f"""{self.service}/{self.model}/{key}"""
+        response = requests.get(url, headers={"Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845"})
+        try:
+            if not response.ok:
+                raise GraphQLError(f"Upstream API responded: {response.text}")
+        except:
+            if response.status_code != 200:
+                raise GraphQLError(f"Upstream API responded: {response.text}")
+
+        result = response.json()
+
+        return result
 
 class ListDataLoader(DataLoader):
     """ Dataloader for when the result is a list of objects """
