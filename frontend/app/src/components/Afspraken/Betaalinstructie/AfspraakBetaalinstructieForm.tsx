@@ -116,10 +116,7 @@ const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({
 									<FormLabel>{t("schedule.startDate")}</FormLabel>
 									<DatePicker selected={(data.startDate && d(data.startDate, "YYYY-MM-DD").isValid()) ? d(data.startDate, "YYYY-MM-DD").toDate() : null} dateFormat={"dd-MM-yyyy"}
 										onChange={(value: Date) => {
-											updateForm("startDate", value ? d(value).format("YYYY-MM-DD") : undefined, x => ({
-												...x,
-												byMonthDay: x.byMonthDay || [d(value).date()],
-											}));
+											updateForm("startDate", value ? d(value).format("YYYY-MM-DD") : undefined);
 										}} customInput={<Input type="text" />} />
 									<FormErrorMessage>{t("afspraakBetaalinstructie.invalidDateError")}</FormErrorMessage>
 								</FormControl>
@@ -205,7 +202,7 @@ const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({
 								<Stack direction={["column", "row"]}>
 									<FormControl flex={1} isInvalid={!isValid("byMonthDay")} isRequired>
 										<FormLabel>{t("schedule.byMonthDay")}</FormLabel>
-										<Input type={"number"} min={1} max={28} value={data.byMonthDay?.[0] || undefined} onChange={e => updateForm("byMonthDay", parseInt(e.target.value), newData => ({
+										<Input type={"number"} min={1} max={28} value={undefined} onChange={e => updateForm("byMonthDay", parseInt(e.target.value), newData => ({
 											...newData,
 											byDay: undefined,
 										}))} />
