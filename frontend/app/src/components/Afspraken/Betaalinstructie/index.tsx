@@ -8,7 +8,7 @@ import useHandleMutation from "../../../utils/useHandleMutation";
 import BackButton from "../../Layouts/BackButton";
 import Page from "../../Layouts/Page";
 import PageNotFound from "../../PageNotFound";
-import AfspraakBetaalinstructieForm from "./EditAfspraakBetaalinstructieForm";
+import AfspraakBetaalinstructieForm from "./AfspraakBetaalinstructieForm";
 
 const BetaalinstructiePage = () => {
 	const {id} = useParams<{id: string}>();
