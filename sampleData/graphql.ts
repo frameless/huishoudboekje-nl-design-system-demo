@@ -62,6 +62,8 @@ export type Afdeling = {
 export type Afspraak = {
   id?: Maybe<Scalars['Int']>;
   burger?: Maybe<Burger>;
+  afdeling?: Maybe<Afdeling>;
+  postadres?: Maybe<Postadres>;
   omschrijving?: Maybe<Scalars['String']>;
   tegenRekening?: Maybe<Rekening>;
   bedrag?: Maybe<Scalars['Bedrag']>;
@@ -245,13 +247,14 @@ export type CreateAfspraak = {
 };
 
 export type CreateAfspraakInput = {
+  omschrijving: Scalars['String'];
   burgerId: Scalars['Int'];
   credit: Scalars['Boolean'];
-  afdelingId?: Maybe<Scalars['Int']>;
   tegenRekeningId: Scalars['Int'];
   rubriekId: Scalars['Int'];
-  omschrijving: Scalars['String'];
   bedrag: Scalars['Bedrag'];
+  afdelingId?: Maybe<Scalars['Int']>;
+  postadresId?: Maybe<Scalars['String']>;
   validFrom?: Maybe<Scalars['String']>;
   validThrough?: Maybe<Scalars['String']>;
 };
@@ -1366,6 +1369,16 @@ export type AddHuishoudenBurgerMutationVariables = Exact<{
 
 export type AddHuishoudenBurgerMutation = { addHuishoudenBurger?: Maybe<{ ok?: Maybe<boolean> }> };
 
+export type CreateAfdelingMutationVariables = Exact<{
+  naam: Scalars['String'];
+  organisatieId: Scalars['Int'];
+  postadressen?: Maybe<Array<Maybe<CreatePostadresInput>> | Maybe<CreatePostadresInput>>;
+  rekeningen?: Maybe<Array<Maybe<RekeningInput>> | Maybe<RekeningInput>>;
+}>;
+
+
+export type CreateAfdelingMutation = { createAfdeling?: Maybe<{ ok?: Maybe<boolean>, afdeling?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string>, organisatie?: Maybe<{ id?: Maybe<number>, kvknummer?: Maybe<string>, vestigingsnummer?: Maybe<string>, naam?: Maybe<string> }>, postadressen?: Maybe<Array<Maybe<{ id?: Maybe<string>, straatnaam?: Maybe<string>, huisnummer?: Maybe<string>, postcode?: Maybe<string>, plaatsnaam?: Maybe<string> }>>>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>> }> }> };
+
 export type CreateAfspraakMutationVariables = Exact<{
   input: CreateAfspraakInput;
 }>;
@@ -1443,16 +1456,6 @@ export type CreateOrganisatieMutationVariables = Exact<{
 
 
 export type CreateOrganisatieMutation = { createOrganisatie?: Maybe<{ ok?: Maybe<boolean>, organisatie?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string>, kvknummer?: Maybe<string>, vestigingsnummer?: Maybe<string>, afdelingen?: Maybe<Array<Maybe<{ id?: Maybe<number>, naam?: Maybe<string>, organisatie?: Maybe<{ id?: Maybe<number>, kvknummer?: Maybe<string>, vestigingsnummer?: Maybe<string>, naam?: Maybe<string> }>, postadressen?: Maybe<Array<Maybe<{ id?: Maybe<string>, straatnaam?: Maybe<string>, huisnummer?: Maybe<string>, postcode?: Maybe<string>, plaatsnaam?: Maybe<string> }>>>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>> }>>> }> }> };
-
-export type CreateAfdelingMutationVariables = Exact<{
-  naam: Scalars['String'];
-  organisatieId: Scalars['Int'];
-  postadressen?: Maybe<Array<Maybe<CreatePostadresInput>> | Maybe<CreatePostadresInput>>;
-  rekeningen?: Maybe<Array<Maybe<RekeningInput>> | Maybe<RekeningInput>>;
-}>;
-
-
-export type CreateAfdelingMutation = { createAfdeling?: Maybe<{ ok?: Maybe<boolean>, afdeling?: Maybe<{ id?: Maybe<number>, naam?: Maybe<string>, organisatie?: Maybe<{ id?: Maybe<number>, kvknummer?: Maybe<string>, vestigingsnummer?: Maybe<string>, naam?: Maybe<string> }>, postadressen?: Maybe<Array<Maybe<{ id?: Maybe<string>, straatnaam?: Maybe<string>, huisnummer?: Maybe<string>, postcode?: Maybe<string>, plaatsnaam?: Maybe<string> }>>>, rekeningen?: Maybe<Array<Maybe<{ id?: Maybe<number>, iban?: Maybe<string>, rekeninghouder?: Maybe<string> }>>> }> }> };
 
 export type CreateAfdelingRekeningMutationVariables = Exact<{
   afdelingId: Scalars['Int'];
@@ -2072,6 +2075,18 @@ export const AddHuishoudenBurgerDocument = gql`
   }
 }
     `;
+export const CreateAfdelingDocument = gql`
+    mutation createAfdeling($naam: String!, $organisatieId: Int!, $postadressen: [CreatePostadresInput], $rekeningen: [RekeningInput]) {
+  createAfdeling(
+    input: {naam: $naam, organisatieId: $organisatieId, postadressen: $postadressen, rekeningen: $rekeningen}
+  ) {
+    ok
+    afdeling {
+      ...Afdeling
+    }
+  }
+}
+    ${AfdelingFragmentDoc}`;
 export const CreateAfspraakDocument = gql`
     mutation createAfspraak($input: CreateAfspraakInput!) {
   createAfspraak(input: $input) {
@@ -2179,18 +2194,6 @@ export const CreateOrganisatieDocument = gql`
   }
 }
     ${OrganisatieFragmentDoc}`;
-export const CreateAfdelingDocument = gql`
-    mutation createAfdeling($naam: String!, $organisatieId: Int!, $postadressen: [CreatePostadresInput], $rekeningen: [RekeningInput]) {
-  createAfdeling(
-    input: {naam: $naam, organisatieId: $organisatieId, postadressen: $postadressen, rekeningen: $rekeningen}
-  ) {
-    ok
-    afdeling {
-      ...Afdeling
-    }
-  }
-}
-    ${AfdelingFragmentDoc}`;
 export const CreateAfdelingRekeningDocument = gql`
     mutation createAfdelingRekening($afdelingId: Int!, $rekening: RekeningInput!) {
   createAfdelingRekening(afdelingId: $afdelingId, rekening: $rekening) {
@@ -2683,6 +2686,9 @@ export function getSdk<C>(requester: Requester<C>) {
     addHuishoudenBurger(variables: AddHuishoudenBurgerMutationVariables, options?: C): Promise<AddHuishoudenBurgerMutation> {
       return requester<AddHuishoudenBurgerMutation, AddHuishoudenBurgerMutationVariables>(AddHuishoudenBurgerDocument, variables, options);
     },
+    createAfdeling(variables: CreateAfdelingMutationVariables, options?: C): Promise<CreateAfdelingMutation> {
+      return requester<CreateAfdelingMutation, CreateAfdelingMutationVariables>(CreateAfdelingDocument, variables, options);
+    },
     createAfspraak(variables: CreateAfspraakMutationVariables, options?: C): Promise<CreateAfspraakMutation> {
       return requester<CreateAfspraakMutation, CreateAfspraakMutationVariables>(CreateAfspraakDocument, variables, options);
     },
@@ -2712,9 +2718,6 @@ export function getSdk<C>(requester: Requester<C>) {
     },
     createOrganisatie(variables: CreateOrganisatieMutationVariables, options?: C): Promise<CreateOrganisatieMutation> {
       return requester<CreateOrganisatieMutation, CreateOrganisatieMutationVariables>(CreateOrganisatieDocument, variables, options);
-    },
-    createAfdeling(variables: CreateAfdelingMutationVariables, options?: C): Promise<CreateAfdelingMutation> {
-      return requester<CreateAfdelingMutation, CreateAfdelingMutationVariables>(CreateAfdelingDocument, variables, options);
     },
     createAfdelingRekening(variables: CreateAfdelingRekeningMutationVariables, options?: C): Promise<CreateAfdelingRekeningMutation> {
       return requester<CreateAfdelingRekeningMutation, CreateAfdelingRekeningMutationVariables>(CreateAfdelingRekeningDocument, variables, options);

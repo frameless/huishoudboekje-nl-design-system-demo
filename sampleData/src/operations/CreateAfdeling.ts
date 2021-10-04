@@ -5,12 +5,13 @@ import {getSdkApollo} from "../../graphql-requester";
 const graphql = getSdkApollo(apolloClient);
 
 export const CreateAfdeling = (organisatieId: number, afdeling: CreateAfdelingInput): Promise<Afdeling> => {
-	const {naam, postadressen, rekeningen} = afdeling;
+	const {naam, postadressen = [], rekeningen = []} = afdeling;
 
 	return graphql.createAfdeling({naam, organisatieId, postadressen, rekeningen})
 		.then(async result => {
 			const resultAfdeling = result.createAfdeling?.afdeling as Afdeling;
-			console.log(`Afdeling ${resultAfdeling.naam} onder organisatie ${resultAfdeling.organisatie?.naam} (${resultAfdeling.organisatie?.id}) aangemaakt, met ${resultAfdeling.rekeningen?.length} rekeningen en ${resultAfdeling.postadressen?.length} postadressen.`);
+			const {postadressen = [], rekeningen = []} = resultAfdeling;
+			console.log(`Afdeling ${resultAfdeling.naam} onder organisatie ${resultAfdeling.organisatie?.naam} (${resultAfdeling.organisatie?.id}) aangemaakt, met ${rekeningen.length} rekeningen en ${postadressen.length} postadressen.`);
 
 			return resultAfdeling;
 		});

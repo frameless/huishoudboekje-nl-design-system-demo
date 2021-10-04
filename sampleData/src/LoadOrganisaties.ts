@@ -7,7 +7,7 @@ const LoadOrganisaties = async () => {
 
 	const mOrganisaties = organisaties.map(o => {
 		return CreateOrganisatie(o).catch(err => {
-			if (err.message.includes("already exists")) {
+			if (err.message.includes("not unique")) {
 				console.log(`(!) Organisatie ${o.naam} (${o.kvknummer}) bestaat al.`);
 			}
 			else {

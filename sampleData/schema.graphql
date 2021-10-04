@@ -44,6 +44,8 @@ type RootQuery {
 type Afspraak {
   id: Int
   burger: Burger
+  afdeling: Afdeling
+  postadres: Postadres
   omschrijving: String
   tegenRekening: Rekening
   bedrag: Bedrag
@@ -450,13 +452,14 @@ type CreateAfspraak {
   afspraak: Afspraak
 }
 input CreateAfspraakInput {
+  omschrijving: String!
   burgerId: Int!
   credit: Boolean!
-  afdelingId: Int
   tegenRekeningId: Int!
   rubriekId: Int!
-  omschrijving: String!
   bedrag: Bedrag!
+  afdelingId: Int
+  postadresId: String
   validFrom: String
   validThrough: String
 }
