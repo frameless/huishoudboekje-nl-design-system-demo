@@ -59,7 +59,7 @@ const Routes = {
 	Gebeurtenissen: `/${RouteNames.gebeurtenissen}`,
 
 	Export: (id: number) => `/api/export/${id}`,
-	BrievenExport: (burgerId: number) => `/api/brievenexport/${burgerId}`,
+	BrievenExport: (burgerId: number, format: "excel" | "csv") => `/api/brievenexport/${burgerId}/${format}`,
 
 	Status: `/${RouteNames.status}`,
 	NotFound: `/${RouteNames.notFound}`,
