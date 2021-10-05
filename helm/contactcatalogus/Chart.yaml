@@ -1,0 +1,31 @@
+annotations:
+    artifacthub.io/containsSecurityUpdates: "true"
+apiVersion: v2
+appVersion: V1.0
+description: 'Het Contacten Component bevat lijsten van contactpersonen, hiermee heeft het vanuit bron perspectief doorgaans een aanvullende of vervangende taak ten opzichte van het BRP. Met andere woorden in het Contacten Component vinden we personen die we niet uit het BRP halen. Dat kan zijn, omdat deze personen niet in het BRP staan, we nog niet weten wat het BSN van een persoon is of omdat we simpelweg geen rechten of toegang hebben tot het BRP vanuit het proces waar we mee bezig zijn. Daarnaast fungeert het Contacten Component als een Common Ground variant van de contactpersonenlijst, zoals we die kennen vanuit een e-mail applicatie of telefoon. Het is dus ook mogelijk om personen op te nemen in een contactenlijst. Hiermee worden contact en functionaliteiten voor gebruikers (in application form) gerealiseerd. Als laatste biedt het Contacten Component de mogelijkheid om gegevens van organisaties op te slaan. Het component ondersteunt bewust alleen de persoonsgegevens, maar kan in samenwerking met het CMR en ORC een Customer Relation Management systeem vormen, waarbij het ORC de mogelijkheid biedt om bijvoorbeeld leads in kaart te brengen.'
+name: contactcatalogus
+version: 1.0.0
+home: https://www.conduction.nl
+icon: https://conductionnl.github.io/images/conduction_avatar_blue_on_transparant.svg
+sources:
+    - https://commonground.conduction.nl/
+    - https://www.commonground.nl/
+keywords:
+    - commonground
+    - haven
+    - nlx
+    - component
+maintainers:
+    - email: ruben@conduction.nl
+      name: Ruben van der Linde
+    - email: info@conduction.nl
+      name: Conduction
+dependencies:
+    - name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.1.1
+      condition: postgresql.enabled
+    - name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 12.7.7
+      condition: redis.enabled

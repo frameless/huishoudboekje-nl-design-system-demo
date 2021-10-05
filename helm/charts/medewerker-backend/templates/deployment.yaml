@@ -53,11 +53,13 @@ spec:
             - name: ORGANISATIE_SERVICE_URL
               value: {{ printf "http://%s" (include "medewerker-backend.organisatieServiceName" .) }}
             - name: TRANSACTIE_SERVICE_URL
-              value: {{ printf "http://%s" (include "medewerker-backend.bankTransactieServiceName" .) }}          
+              value: {{ printf "http://%s" (include "medewerker-backend.bankTransactieServiceName" .) }}
             - name: GROOTBOEK_SERVICE_URL
-              value: {{ printf "http://%s" (include "medewerker-backend.grootboekServiceName" .) }}    
+              value: {{ printf "http://%s" (include "medewerker-backend.grootboekServiceName" .) }}
             - name: LOG_SERVICE_URL
-              value: {{ printf "http://%s" (include "medewerker-backend.logServiceName" .) }}               
+              value: {{ printf "http://%s" (include "medewerker-backend.logServiceName" .) }}
+            - name: CONTACTCATALOGUS_SERVICE_URL
+              value: http://hhb-contactcatalogus
             - name: SECRET_KEY
               valueFrom:
                 secretKeyRef:
