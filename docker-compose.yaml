@@ -1,0 +1,180 @@
+# Todo: Add backend
+# Todo: Add volumes to source codes so that services are actually running active source code instead of whatever is in the containers.
+# Todo: Prepare a separate Dockerfile for the frontend to make it run in dev mode in docker.
+# Todo: Frontend listens by default to the backend on /api, but we're running on localhost on different ports now, so we need to change something in the setupProxy.js.
+# Todo: Frontend listens by default to the unleash service on /api/unleash, but we're running on localhost on different ports now, so we need to change something in the setupProxy.js.
+
+version: "3"
+services:
+  # OpenID connect provider
+  dex:
+    image: quay.io/dexidp/dex:v2.24.0
+    command: serve /app/config.yaml
+    ports:
+      - 6556:6556
+    volumes:
+      - ./dev-local/dex.yaml:/app/config.yaml
+    restart: unless-stopped
+
+# Todo: we now assume you have a PostgreSQL database running on your localhost.
+#  # PostgreSQL database
+#  db:
+#    image: postgres:13-alpine
+#    ports:
+#      - 5432:5432
+#    environment:
+#      POSTGRES_DB: postgres
+#      POSTGRES_USER: postgres
+#      POSTGRES_PASSWORD: postgres
+
+  # Database preparations
+  db-init:
+    image: postgres:13-alpine
+    command:
+      - /bin/sh
+      - -c
+      - >-
+        export PGPASSWORD=postgres &&
+        psql -h host.docker.internal -U postgres -c "CREATE USER hhb WITH PASSWORD 'hhb'" || true &&
+        psql -h host.docker.internal -U postgres -c "CREATE DATABASE huishoudboekjeservice" || true &&
+        psql -h host.docker.internal -U postgres -c "CREATE DATABASE organisatieservice" || true &&
+        psql -h host.docker.internal -U postgres -c "CREATE DATABASE banktransactieservice" || true &&
+        psql -h host.docker.internal -U postgres -c "CREATE DATABASE grootboekservice" || true &&
+        psql -h host.docker.internal -U postgres -c "CREATE DATABASE logservice" || true
+
+  # Huishoudboekjeservice
+  huishoudboekjeservice-init:
+    build:
+      dockerfile: ./huishoudboekje_service/Dockerfile
+      context: ./services
+    environment:
+      APP_SETTINGS: huishoudboekje_service.config.DevelopmentConfig
+      HHB_SECRET: koen
+      HHB_DATABASE_URL: "postgresql://hhb:hhb@host.docker.internal/huishoudboekjeservice"
+    command: ["python", "manage.py", "db", "upgrade"]
+    restart: "no"
+
+  huishoudboekjeservice:
+    build:
+      dockerfile: ./huishoudboekje_service/Dockerfile
+      context: ./services
+    environment:
+      APP_SETTINGS: huishoudboekje_service.config.DevelopmentConfig
+      HHB_SECRET: koen
+      HHB_DATABASE_URL: "postgresql://hhb:hhb@host.docker.internal/huishoudboekjeservice"
+    ports:
+      - 8001:8000
+    depends_on:
+      - huishoudboekjeservice-init
+
+  # Organisatieservice
+  organisatieservice-init:
+    build:
+      dockerfile: ./organisatie_service/Dockerfile
+      context: ./services
+    environment:
+      APP_SETTINGS: organisatie_service.config.DevelopmentConfig
+      HHB_SECRET: koen
+      ORGANISATIE_DATABASE_URL: "postgresql://hhb:hhb@host.docker.internal/organisatieservice"
+    command: ["python", "manage.py", "db", "upgrade"]
+    restart: "no"
+
+  organisatieservice:
+    build:
+      dockerfile: ./organisatie_service/Dockerfile
+      context: ./services
+    environment:
+      APP_SETTINGS: organisatie_service.config.DevelopmentConfig
+      HHB_SECRET: koen
+      ORGANISATIE_DATABASE_URL: "postgresql://hhb:hhb@host.docker.internal/organisatieservice"
+    ports:
+      - 8002:8000
+    depends_on:
+      - organisatieservice-init
+
+  # Banktransactieservice
+  banktransactieservice-init:
+    build:
+      dockerfile: ./bank_transactie_service/Dockerfile
+      context: ./services
+    environment:
+      APP_SETTINGS: bank_transactie_service.config.DevelopmentConfig
+      HHB_SECRET: koen
+      TRANSACTIE_DATABASE_URL: "postgresql://hhb:hhb@host.docker.internal/banktransactieservice"
+    command: ["python", "manage.py", "db", "upgrade"]
+    restart: "no"
+
+  banktransactieservice:
+    build:
+      dockerfile: ./bank_transactie_service/Dockerfile
+      context: ./services
+    environment:
+      APP_SETTINGS: bank_transactie_service.config.DevelopmentConfig
+      HHB_SECRET: koen
+      TRANSACTIE_DATABASE_URL: "postgresql://hhb:hhb@host.docker.internal/banktransactieservice"
+    ports:
+      - 8003:8000
+    depends_on:
+      - banktransactieservice-init
+
+  # Grootboekservice
+  grootboekservice-init:
+    build:
+      dockerfile: ./grootboek_service/Dockerfile
+      context: ./services
+    environment:
+      APP_SETTINGS: grootboek_service.config.DevelopmentConfig
+      HHB_SECRET: koen
+      GROOTBOEK_DATABASE_URL: "postgresql://hhb:hhb@host.docker.internal/grootboekservice"
+    command: ["python", "manage.py", "db", "upgrade"]
+    restart: "no"
+
+  grootboekservice:
+    build:
+      dockerfile: ./grootboek_service/Dockerfile
+      context: ./services
+    environment:
+      APP_SETTINGS: grootboek_service.config.DevelopmentConfig
+      HHB_SECRET: koen
+      GROOTBOEK_DATABASE_URL: "postgresql://hhb:hhb@host.docker.internal/grootboekservice"
+    ports:
+      - 8004:8000
+    depends_on:
+      - grootboekservice-init
+
+  # Logservice
+  logservice-init:
+    build:
+      dockerfile: ./log_service/Dockerfile
+      context: ./services
+    environment:
+      APP_SETTINGS: log_service.config.DevelopmentConfig
+      HHB_SECRET: koen
+      LOG_DATABASE_URL: "postgresql://hhb:hhb@host.docker.internal/logservice"
+    command: ["python", "manage.py", "db", "upgrade"]
+    restart: "no"
+
+  logservice:
+    build:
+      dockerfile: ./log_service/Dockerfile
+      context: ./services
+    environment:
+      APP_SETTINGS: log_service.config.DevelopmentConfig
+      HHB_SECRET: koen
+      LOG_DATABASE_URL: "postgresql://hhb:hhb@host.docker.internal/logservice"
+    ports:
+      - 8005:8000
+    depends_on:
+      - logservice-init
+
+  # Unleashservice
+  unleashservice:
+    build:
+      dockerfile: ./Dockerfile
+      context: ./unleash_service
+    environment:
+      UNLEASH_URL: https://gitlab.com/api/v4/feature_flags/unleash/20352213
+      UNLEASH_INSTANCEID: JbZyPux6M7xwejsESy9L
+      UNLEASH_APPNAME: huishoudboekje-frontend
+    ports:
+      - 8006:8080
