@@ -1,20 +1,48 @@
-# Todo: Add backend
-# Todo: Add volumes to source codes so that services are actually running active source code instead of whatever is in the containers.
 # Todo: Prepare a separate Dockerfile for the frontend to make it run in dev mode in docker.
 # Todo: Frontend listens by default to the backend on /api, but we're running on localhost on different ports now, so we need to change something in the setupProxy.js.
 # Todo: Frontend listens by default to the unleash service on /api/unleash, but we're running on localhost on different ports now, so we need to change something in the setupProxy.js.
 
 version: "3"
 services:
-  # OpenID connect provider
-  dex:
-    image: quay.io/dexidp/dex:v2.24.0
-    command: serve /app/config.yaml
-    ports:
-      - 6556:6556
+#  # OpenID connect provider
+#  dex:
+#    image: quay.io/dexidp/dex:v2.24.0
+#    command: serve /app/config.yaml
+#    ports:
+#      - 6556:6556
+#    volumes:
+#      - ./dev-local/dex.yaml:/app/config.yaml
+#    restart: unless-stopped
+
+  backend:
+    build:
+      dockerfile: ./Dockerfile
+      context: ./backend
     volumes:
-      - ./dev-local/dex.yaml:/app/config.yaml
-    restart: unless-stopped
+      - ./backend:/app/hhb_backend
+    environment:
+      APP_SETTINGS: hhb_backend.config.LocalConfig
+      HHB_SECRET: koen
+#     AUTH_AUDIENCE: None
+#     AUTH_TOKEN_SECRET: koen
+      OIDC_CLIENT_SECRETS: /app/hhb_backend/etc/client_secrets.json
+      OIDC_CLOCK_SKEW: "600"
+      PREFIX: "/api"
+      HHB_SERVICE_URL: "http://huishoudboekjeservice:8000"
+      ORGANISATIE_SERVICE_URL: "http://organisatieservice:8000"
+      TRANSACTIE_SERVICE_URL: "http://banktransactieservice:8000"
+      GROOTBOEK_SERVICE_URL: "http://grootboekservice:8000"
+      LOG_SERVICE_URL: "http://logservice:8000"
+      SECRET_KEY: koen
+    ports:
+      - 5000:8000
+    command:
+      - /bin/sh
+      - -c
+      - >-
+        python3 setup.py install &&
+        pip install -e . &&
+        flask run
 
 # Todo: we now assume you have a PostgreSQL database running on your localhost.
 #  # PostgreSQL database
@@ -26,7 +54,7 @@ services:
 #      POSTGRES_DB: postgres
 #      POSTGRES_USER: postgres
 #      POSTGRES_PASSWORD: postgres
-
+#
   # Database preparations
   db-init:
     image: postgres:13-alpine
@@ -47,6 +75,8 @@ services:
     build:
       dockerfile: ./huishoudboekje_service/Dockerfile
       context: ./services
+    volumes:
+      - ./services/huishoudboekje_service:/app
     environment:
       APP_SETTINGS: huishoudboekje_service.config.DevelopmentConfig
       HHB_SECRET: koen
@@ -58,6 +88,8 @@ services:
     build:
       dockerfile: ./huishoudboekje_service/Dockerfile
       context: ./services
+    volumes:
+      - ./services/huishoudboekje_service:/app
     environment:
       APP_SETTINGS: huishoudboekje_service.config.DevelopmentConfig
       HHB_SECRET: koen
@@ -72,6 +104,8 @@ services:
     build:
       dockerfile: ./organisatie_service/Dockerfile
       context: ./services
+    volumes:
+      - ./services/organisatie_service:/app
     environment:
       APP_SETTINGS: organisatie_service.config.DevelopmentConfig
       HHB_SECRET: koen
@@ -83,6 +117,8 @@ services:
     build:
       dockerfile: ./organisatie_service/Dockerfile
       context: ./services
+    volumes:
+      - ./services/organisatie_service:/app
     environment:
       APP_SETTINGS: organisatie_service.config.DevelopmentConfig
       HHB_SECRET: koen
@@ -97,6 +133,8 @@ services:
     build:
       dockerfile: ./bank_transactie_service/Dockerfile
       context: ./services
+    volumes:
+      - ./services/bank_transactie_service:/app
     environment:
       APP_SETTINGS: bank_transactie_service.config.DevelopmentConfig
       HHB_SECRET: koen
@@ -108,6 +146,8 @@ services:
     build:
       dockerfile: ./bank_transactie_service/Dockerfile
       context: ./services
+    volumes:
+      - ./services/bank_transactie_service:/app
     environment:
       APP_SETTINGS: bank_transactie_service.config.DevelopmentConfig
       HHB_SECRET: koen
@@ -122,6 +162,8 @@ services:
     build:
       dockerfile: ./grootboek_service/Dockerfile
       context: ./services
+    volumes:
+      - ./services/grootboek_service:/app
     environment:
       APP_SETTINGS: grootboek_service.config.DevelopmentConfig
       HHB_SECRET: koen
@@ -133,6 +175,8 @@ services:
     build:
       dockerfile: ./grootboek_service/Dockerfile
       context: ./services
+    volumes:
+      - ./services/grootboek_service:/app
     environment:
       APP_SETTINGS: grootboek_service.config.DevelopmentConfig
       HHB_SECRET: koen
@@ -147,6 +191,8 @@ services:
     build:
       dockerfile: ./log_service/Dockerfile
       context: ./services
+    volumes:
+      - ./services/log_service:/app
     environment:
       APP_SETTINGS: log_service.config.DevelopmentConfig
       HHB_SECRET: koen
@@ -158,6 +204,8 @@ services:
     build:
       dockerfile: ./log_service/Dockerfile
       context: ./services
+    volumes:
+      - ./services/log_service:/app
     environment:
       APP_SETTINGS: log_service.config.DevelopmentConfig
       HHB_SECRET: koen
@@ -172,6 +220,8 @@ services:
     build:
       dockerfile: ./Dockerfile
       context: ./unleash_service
+    volumes:
+      - ./unleash_service:/app
     environment:
       UNLEASH_URL: https://gitlab.com/api/v4/feature_flags/unleash/20352213
       UNLEASH_INSTANCEID: JbZyPux6M7xwejsESy9L
