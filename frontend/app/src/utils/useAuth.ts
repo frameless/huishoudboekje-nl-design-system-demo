@@ -1,5 +1,6 @@
 import {useCallback, useEffect, useMemo, useState} from "react";
 import {useToggle} from "react-grapple";
+import {isDev} from "./things";
 
 const useAuth = () => {
 	const [user, setUser] = useState<{email: string}>();
@@ -19,11 +20,16 @@ const useAuth = () => {
 	}, [setError]);
 
 	useEffect(() => {
+		if (isDev) {
+			setUser({email: "developer@sloothuizen.nl"});
+			toggleLoading(false);
+			return;
+		}
+
 		fetch("/api/me")
 			.then(result => result.json())
 			.then(result => {
 				if (result.email) {
-					setUser(result);
 				}
 				toggleLoading(false);
 			})
