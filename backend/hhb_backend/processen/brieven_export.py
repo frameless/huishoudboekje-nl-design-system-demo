@@ -86,7 +86,6 @@ def create_brieven_export(burger_id):
     csv_filename = f"{current_date_str}_{burger['voornamen']}_{burger['achternaam']}.csv"
     xlsx_filename = f"{current_date_str}_{burger['voornamen']}_{burger['achternaam']}.xlsx"
     iowriter = io.StringIO()
-    # iowriterExcel = io.StringIO()
     writer = csv.DictWriter(
         iowriter, fieldnames=brieven_fields, dialect=HHBCsvDialect
     )
@@ -135,8 +134,6 @@ def create_brieven_export(burger_id):
         f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/",
         json=json,
     )
-
-    # raise ValueError('A very specific bad thing happened.')
 
     return iowriter.getvalue(), csv_filename, data_excel, xlsx_filename
 
