@@ -29,15 +29,15 @@ services:
 #    command:
 #      - npm install && npm start
 
-  # OpenID connect provider
-  dex:
-    image: quay.io/dexidp/dex:v2.24.0
-    command: serve /config.yaml
-    ports:
-      - 6556:6556
-    volumes:
-      - ./dev-local/dex.yaml:/config.yaml
-    restart: unless-stopped
+#  # OpenID connect provider
+#  dex:
+#    image: quay.io/dexidp/dex:v2.24.0
+#    command: serve /config.yaml
+#    ports:
+#      - 6556:6556
+#    volumes:
+#      - ./dev-local/dex.yaml:/config.yaml
+#    restart: unless-stopped
 
   backend:
     build:
@@ -47,12 +47,11 @@ services:
       - ./backend:/app
     environment:
       APP_SETTINGS: hhb_backend.config.LocalConfig
-      HHB_SECRET: koen
 #     AUTH_AUDIENCE: None
 #     AUTH_TOKEN_SECRET: koen
       OIDC_CLIENT_SECRETS: /app/etc/client_secrets.json
 #     OIDC_CLOCK_SKEW: "600"
-      PREFIX: "/api"
+      PREFIX: /api
       HHB_SERVICE_URL: "http://huishoudboekjeservice:8000"
       ORGANISATIE_SERVICE_URL: "http://organisatieservice:8000"
       TRANSACTIE_SERVICE_URL: "http://banktransactieservice:8000"
@@ -64,8 +63,8 @@ services:
 
   huishoudboekjeservice:
     build:
-      dockerfile: ./services/huishoudboekje_service/dev.Dockerfile
-      context: .
+      dockerfile: ./huishoudboekje_service/dev.Dockerfile
+      context: ./services
     volumes:
       - ./services/huishoudboekje_service:/app
       - ./services/core_service/core_service:/app/core_service
@@ -76,8 +75,8 @@ services:
 
   organisatieservice:
     build:
-      dockerfile: ./services/organisatie_service/dev.Dockerfile
-      context: .
+      dockerfile: ./organisatie_service/dev.Dockerfile
+      context: ./services
     volumes:
       - ./services/organisatie_service:/app
       - ./services/core_service/core_service:/app/core_service
@@ -88,8 +87,8 @@ services:
 
   banktransactieservice:
     build:
-      dockerfile: ./services/bank_transactie_service/dev.Dockerfile
-      context: .
+      dockerfile: ./bank_transactie_service/dev.Dockerfile
+      context: ./services
     volumes:
       - ./services/bank_transactie_service:/app
       - ./services/core_service/core_service:/app/core_service
@@ -100,8 +99,8 @@ services:
 
   grootboekservice:
     build:
-      dockerfile: ./services/grootboek_service/dev.Dockerfile
-      context: .
+      dockerfile: ./grootboek_service/dev.Dockerfile
+      context: ./services
     volumes:
       - ./services/grootboek_service:/app
       - ./services/core_service/core_service:/app/core_service
@@ -112,8 +111,8 @@ services:
 
   logservice:
     build:
-      dockerfile: ./services/log_service/dev.Dockerfile
-      context: .
+      dockerfile: ./log_service/dev.Dockerfile
+      context: ./services
     volumes:
       - ./services/log_service:/app
       - ./services/core_service/core_service:/app/core_service
