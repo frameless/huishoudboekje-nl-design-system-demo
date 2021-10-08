@@ -1,7 +1,10 @@
 # Huishoudboekjeservice
 This service contains the functionality needed to access data that belongs to the Huishoudboekje processes.
- 
-## Setup development (Mac and Unix)
+
+## Setup development with Docker Compose
+- This service will automatically start when running `docker-compose up`.
+
+## Manual setup of a development environment (Mac and UNIX)
 - Install dependencies
     ```shell
     pip install -r requirements.txt
@@ -31,7 +34,7 @@ This service contains the functionality needed to access data that belongs to th
     flask run
     ```
 
-## Setup development (Windows)
+## Manual setup of a development environment (Windows)
 - Install a virtual environment \
     ```shell
     virtualenv huishoudboekje_service

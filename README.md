@@ -14,6 +14,7 @@ These are:
 - [Medewerker Frontend](frontend/)
 - [Medewerker Backend](backend/)
 - [Huishoudboekje Services](services/)
+- [Unleash Service](unleash_service/)
 
 ### Database
 All data for our own services is stored in a single PostgreSQL server. 
@@ -27,7 +28,14 @@ The data models are managed using Alembic migration scripts that are executed us
 For the frontend, see the [Frontend README](./frontend/app/README.md). \
 For the backend, there are a few different ways you can set up your local backend development environment:
 
-### Local setup (MacOS and Unix)
+## Setup development with Docker Compose
+- Please set up a local running PostgreSQL that is available on `localhost:5432` and has a user `postgres` with password `postgres`.
+- Please make sure you have `docker-compose` installed.
+- Run `docker-compose run db-init` to initialize the databases.
+- Run `docker-compose up` to launch all the services and the backend.
+- It's best to run the frontend-application natively on your system because of performace issues with running a development setup in Docker. For instructions see [frontend/app/README.md](./frontend/app/README.md)
+
+### Manual local setup (MacOS and Unix)
 For now, the easiest way to set up the backend is to run the database locally and run the backend and services 
 in separate virtual environments.
 
@@ -36,7 +44,7 @@ in separate virtual environments.
 1. To make dealing with environment variables as easy as possible, install [direnv](https://direnv.net/).
 1. For setting up a service, see the README in the service's subdirectory.
 
-### Local setup (Windows)
+### Manual local setup (Windows)
 You need python virtualenv, a Ubuntu shell with `zsh` and you need to make sure your symlinks work correctly.
 
 1. To make sure your git installation had enabled symbolic links, run `git clone -c core.symlinks=true https://gitlab.com/commonground/huishoudboekje/app-new.git`.
@@ -45,15 +53,7 @@ You need python virtualenv, a Ubuntu shell with `zsh` and you need to make sure 
 1. For the frontend you need to use the ubuntu zsh shell.
 1. Setting up dex should be done in ubuntu.
 
-### 2. Setting up Dex locally
-To authorize against your local running backend service, you'll need to run an instance of [Dex](https://github.com/dexidp/dex#readme).
-
-1. Download and install Dex from [https://dexidp.io/](https://dexidp.io/)
-2. Make sure you are able to run dex: [Getting started with dex](https://dexidp.io/docs/getting-started/)
-3. To launch Dex run `dex serve dex.dev.yaml`
-4. Now you should be able to log in at http://localhost:3000 with a user from the dex.dev.yaml file.
-
-### 3. Minikube
+### 2. Minikube
 It is also possible to run the entire stack in a local [Kubernetes](https://kubernetes.io/) cluster with the help of 
 [minikube](https://minikube.sigs.k8s.io/docs/). \
 See the [installation instructions here](https://gitlab.com/commonground/huishoudboekje/app-new/-/wikis/Ontwikkeling/Minikube).
