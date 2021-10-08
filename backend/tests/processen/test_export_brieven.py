@@ -52,9 +52,9 @@ def test_create_export_brieven(client):
     with requests_mock.Mocker() as mock:
         mock._adapter = create_mock_adapter()
 
-        response, filename = brieven_export.create_brieven_export(1)
+        response_csv, filename_csv, data_excel, filename_excel = brieven_export.create_brieven_export(1)
         current_date_str = datetime.now().strftime("%Y-%m-%d")
 
-        assert response == f'organisatie.naam|organisatie.postadres.adresregel1|organisatie.postadres.postcode|organisatie.postadres.plaats|afspraak.id|nu.datum|burger.naam|burger.postadres.adresregel1|burger.postadres.postcode|burger.postadres.plaats|betaalrichting|status.afspraak\norganisatie1|teststraat 1|9999ZZ|testplaats|zoektest|{current_date_str}|burgernaam burgerachternaam|burgerstraat 1|1234AB|burgerplaats|debet|2019-01-01\n'
+        assert response_csv == f'organisatie.naam|organisatie.postadres.adresregel1|organisatie.postadres.postcode|organisatie.postadres.plaats|afspraak.id|nu.datum|burger.naam|burger.postadres.adresregel1|burger.postadres.postcode|burger.postadres.plaats|betaalrichting|status.afspraak\norganisatie1|teststraat 1|9999ZZ|testplaats|zoektest|{current_date_str}|burgernaam burgerachternaam|burgerstraat 1|1234AB|burgerplaats|debet|2019-01-01\n'
 
 
