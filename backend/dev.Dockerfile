@@ -10,7 +10,6 @@ RUN pip install -e .
 ENV FLASK_APP="hhb_backend.app"
 ENV FLASK_ENV="development"
 ENV FLASK_RUN_PORT="8000"
-ENV APP_SETTINGS=hhb_backend.config.LocalConfig
 ENV HHB_SECRET=koen
 ENV AUTH_AUDIENCE=None
 ENV AUTH_TOKEN_SECRET=koen

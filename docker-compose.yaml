@@ -46,7 +46,7 @@ services:
     volumes:
       - ./backend:/app
     environment:
-      APP_SETTINGS: hhb_backend.config.LocalConfig
+      APP_SETTINGS: hhb_backend.config.DevelopmentConfig
 #     AUTH_AUDIENCE: None
 #     AUTH_TOKEN_SECRET: koen
       OIDC_CLIENT_SECRETS: /app/etc/client_secrets.json
