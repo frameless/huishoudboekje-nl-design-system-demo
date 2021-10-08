@@ -29,6 +29,16 @@ services:
 #    command:
 #      - npm install && npm start
 
+  # OpenID connect provider
+  dex:
+    image: quay.io/dexidp/dex:v2.24.0
+    command: serve /config.yaml
+    ports:
+      - 6556:6556
+    volumes:
+      - ./dev-local/dex.yaml:/config.yaml
+    restart: unless-stopped
+
   backend:
     build:
       dockerfile: ./backend/dev.Dockerfile
