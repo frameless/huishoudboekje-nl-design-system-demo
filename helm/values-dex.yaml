@@ -48,15 +48,10 @@ dex:
         name: Nerds Company
         userID: da072226-ce83-11eb-b8bc-0242ac130003
         hash: $2y$12$xWWlTptiMyPJbuPo7WwBgefl/sj3vz8iNJn5fPwVWQcBcZh1HsC.W # demo
-      - username: chieling.yueh@topicus.nl
-        email: chieling.yueh@topicus.nl
-        name: Chieling Yueh
+      - username: wouter.brunekreeft@topicus.nl
+        email: wouter.brunekreeft@topicus.nl
+        name: Wouter Brunekreeft
         userID: ptn38526-0g8d-vnk8-nsv3-sdnvj294fjvn
-        hash: $2y$12$xWWlTptiMyPJbuPo7WwBgefl/sj3vz8iNJn5fPwVWQcBcZh1HsC.W # demo
-      - username: arjan.de.weerd@topicus.nl
-        email: arjan.de.weerd@topicus.nl
-        name: Arjan de Weerd
-        userID: fie8wndt-dj49-2n5v-9mgt-8djdknei8456
         hash: $2y$12$xWWlTptiMyPJbuPo7WwBgefl/sj3vz8iNJn5fPwVWQcBcZh1HsC.W # demo
     oauth2:
       skipApprovalScreen: true
