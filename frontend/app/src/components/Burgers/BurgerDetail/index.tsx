@@ -1,5 +1,5 @@
 import {ChevronDownIcon} from "@chakra-ui/icons";
-import {Button, Divider, HStack, IconButton, Link, Menu, MenuButton, MenuItem, MenuList, Stack, Text} from "@chakra-ui/react";
+import {Button, Divider, IconButton, Link, Menu, MenuButton, MenuItem, MenuList, Stack} from "@chakra-ui/react";
 import React from "react";
 import {useToggle} from "react-grapple";
 import {useTranslation} from "react-i18next";
@@ -93,13 +93,7 @@ const BurgerDetail = () => {
 					<Menu>
 						<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} data-cy={"actionsMenuButton"} />
 						<MenuList>
-							<MenuItem onClick={() => window.location.href = Routes.BrievenExport(parseInt(id), "excel")}>
-								<HStack>
-									<Text>{t("global.actions.brievenExport")}</Text>
-									<Button as={Link} href={Routes.BrievenExport(parseInt(id), "excel")} target={"_blank"} colorScheme={"primary"} size={"xs"}>Excel</Button>
-									<Button as={Link} href={Routes.BrievenExport(parseInt(id), "csv")} target={"_blank"} colorScheme={"primary"} size={"xs"}>CSV</Button>
-								</HStack>
-							</MenuItem>
+							<Link href={Routes.BrievenExport(parseInt(id), "excel")} target={"_blank"}><MenuItem>{t("global.actions.brievenExport")}</MenuItem></Link>
 							<NavLink to={Routes.RapportageBurger([parseInt(id)])}><MenuItem>{t("sidebar.rapportage")}</MenuItem></NavLink>
 							<NavLink to={Routes.Huishouden(burger.huishouden?.id)}><MenuItem>{t("showHuishouden")}</MenuItem></NavLink>
 							<Divider />
