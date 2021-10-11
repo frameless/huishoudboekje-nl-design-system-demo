@@ -1,5 +1,16 @@
 version: "3"
 services:
+  # Database
+  db:
+    image: postgres:13-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /data/postgres
+    ports:
+      - 5432:5432
+    restart: unless-stopped
+
   # Database preparations
   db-init:
     image: postgres:13-alpine
@@ -8,12 +19,14 @@ services:
       - -c
       - >-
         export PGPASSWORD=postgres &&
-        psql -h host.docker.internal -U postgres -c "CREATE USER hhb WITH PASSWORD 'hhb'" || true &&
-        psql -h host.docker.internal -U postgres -c "CREATE DATABASE huishoudboekjeservice" || true &&
-        psql -h host.docker.internal -U postgres -c "CREATE DATABASE organisatieservice" || true &&
-        psql -h host.docker.internal -U postgres -c "CREATE DATABASE banktransactieservice" || true &&
-        psql -h host.docker.internal -U postgres -c "CREATE DATABASE grootboekservice" || true &&
-        psql -h host.docker.internal -U postgres -c "CREATE DATABASE logservice" || true
+        psql -h db -U postgres -c "CREATE USER hhb WITH PASSWORD 'hhb'" || true &&
+        psql -h db -U postgres -c "CREATE DATABASE huishoudboekjeservice" || true &&
+        psql -h db -U postgres -c "CREATE DATABASE organisatieservice" || true &&
+        psql -h db -U postgres -c "CREATE DATABASE banktransactieservice" || true &&
+        psql -h db -U postgres -c "CREATE DATABASE grootboekservice" || true &&
+        psql -h db -U postgres -c "CREATE DATABASE logservice" || true
+    depends_on:
+      - db
 
 #  # Frontend # Todo: super slow, doesn't work yet.
 #  frontend:
@@ -69,7 +82,7 @@ services:
       - ./services/huishoudboekje_service:/app
       - ./services/core_service/core_service:/app/core_service
     environment:
-      HHB_DATABASE_URL: "postgresql://hhb:hhb@host.docker.internal/huishoudboekjeservice"
+      HHB_DATABASE_URL: "postgresql://hhb:hhb@db/huishoudboekjeservice"
     ports:
       - 8001:8000
 
@@ -81,7 +94,7 @@ services:
       - ./services/organisatie_service:/app
       - ./services/core_service/core_service:/app/core_service
     environment:
-      ORGANISATIE_DATABASE_URL: "postgresql://hhb:hhb@host.docker.internal/organisatieservice"
+      ORGANISATIE_DATABASE_URL: "postgresql://hhb:hhb@db/organisatieservice"
     ports:
       - 8002:8000
 
@@ -93,7 +106,7 @@ services:
       - ./services/bank_transactie_service:/app
       - ./services/core_service/core_service:/app/core_service
     environment:
-      ORGANISATIE_DATABASE_URL: "postgresql://hhb:hhb@host.docker.internal/banktransactieservice"
+      ORGANISATIE_DATABASE_URL: "postgresql://hhb:hhb@db/banktransactieservice"
     ports:
       - 8003:8000
 
@@ -105,7 +118,7 @@ services:
       - ./services/grootboek_service:/app
       - ./services/core_service/core_service:/app/core_service
     environment:
-      ORGANISATIE_DATABASE_URL: "postgresql://hhb:hhb@host.docker.internal/grootboekservice"
+      ORGANISATIE_DATABASE_URL: "postgresql://hhb:hhb@db/grootboekservice"
     ports:
       - 8004:8000
 
@@ -117,6 +130,6 @@ services:
       - ./services/log_service:/app
       - ./services/core_service/core_service:/app/core_service
     environment:
-      ORGANISATIE_DATABASE_URL: "postgresql://hhb:hhb@host.docker.internal/logservice"
+      ORGANISATIE_DATABASE_URL: "postgresql://hhb:hhb@db/logservice"
     ports:
       - 8005:8000
