@@ -1,7 +1,10 @@
 # Grootboekservice
 This service contains the functionality needed to access data from grootboeken.
- 
-## Setup development (Mac and Unix)
+
+## Setup development with Docker Compose
+- This service will automatically start when running `docker-compose up`.
+
+## Manual setup of a development environment (Mac and UNIX)
 - Install dependencies
     ```shell
     pip install -r requirements.txt
@@ -31,7 +34,7 @@ This service contains the functionality needed to access data from grootboeken.
     flask run
     ```
 
-## Setup development (Windows)
+## Manual setup of a development environment (Windows)
 - Install a virtual environment
 
     ```shell

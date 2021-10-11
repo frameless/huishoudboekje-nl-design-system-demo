@@ -8,7 +8,10 @@ Normal installation
 python3 setup.py install
 ```
 
-## Setup development (Mac and UNIX)
+## Setup development with Docker Compose
+- The backend will automatically start when running `docker-compose up`.
+
+## Manual setup of a development environment (Mac and UNIX)
 - Install dependencies
   ```shell
   pip install -e .
@@ -32,15 +35,12 @@ python3 setup.py install
     export LOG_SERVICE_URL=http://localhost:8004
     ```
 
-- in `hbb_backend/app.py` for the function `auth_graphql()`, change `MEDEWERKER_ROLENAME` into `ANONYMOUS_ROLENAME` \
-  (__WARNING__: make sure to not check in this change!)
-
 - run app
   ```shell script
   flask run
   ```
 
-## Setup development (Windows)
+## Manual setup of a development environment (Windows)
 
 ### Local
 - Install a virtual environment
@@ -87,20 +87,11 @@ Make sure your working directory is ~\backend
   Scripts\\activate
   ```
 
-- in `hbb_backend/app.py` for the function `auth_graphql()`, change `MEDEWERKER_ROLENAME` into `ANONYMOUS_ROLENAME` \
-(__WARNING__: make sure to not check in this change!)
-
 - run app
   ```shell script
   flask run
   ```
 
-### With docker
-
-```shell script
-docker run --rm -it -v `pwd`/etc:/app/etc registry.gitlab.com/commonground/huishoudboekje/app-new/backend:dev
-```
- 
 ### Adding Packages
 
 Dependencies have to be defined in `setup.py`.

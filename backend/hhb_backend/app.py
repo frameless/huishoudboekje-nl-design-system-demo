@@ -12,10 +12,6 @@ from hhb_backend.graphql import settings
 from hhb_backend.processen import brieven_export
 from hhb_backend.reverse_proxy import ReverseProxied
 
-ANONYMOUS_ROLENAME = 'anonymous'
-MEDEWERKER_ROLENAME = 'medewerker'
-
-
 def create_app(
         config_name=os.getenv("APP_SETTINGS", None)
                     or "hhb_backend.config.DevelopmentConfig",
@@ -23,6 +19,9 @@ def create_app(
 ):
     app = Flask(__name__)
     app.config.from_object(config_name)
+
+    ANONYMOUS_ROLENAME = 'anonymous'
+    MEDEWERKER_ROLENAME = 'anonymous' if app.config["DEVELOPMENT"] else 'medewerker'
 
     logging.basicConfig(level=app.config["LOG_LEVEL"])
     app.logger = logger = logging.getLogger(__name__)
