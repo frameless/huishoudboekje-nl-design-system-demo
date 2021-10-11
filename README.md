@@ -29,16 +29,14 @@ For the frontend, see the [Frontend README](./frontend/app/README.md). \
 For the backend, there are a few different ways you can set up your local backend development environment:
 
 ## Setup development with Docker Compose
-- Please set up a local running PostgreSQL that is available on `localhost:5432` and has a user `postgres` with password `postgres`.
 - Please make sure you have `docker-compose` installed.
-- Run `docker-compose up db` to start the datase.
-- Run `docker-compose up db-init` to setup the database.
-- Run `docker-compose up` to launch all the services and the backend.
+- Run `docker-compose up db` to start the datase. (Tip: you can use `docker-compose up -d db` to start up services in detached mode.)
+- Run `docker-compose up db-init` to create a required user, schemas and databases.
+- Run `docker-compose up` to launch all the services and the backend. This might take a few moments as the services might execute some migrations on the database.
 - It's best to run the frontend-application natively on your system because of performace issues with running a development setup in Docker. For instructions see [frontend/app/README.md](./frontend/app/README.md)
 
 ### Manual local setup (MacOS and Unix)
-For now, the easiest way to set up the backend is to run the database locally and run the backend and services 
-in separate virtual environments.
+To set up the backend manually you could also run the database locally and run the backend and services in separate virtual environments.
 
 1. Install a local PostgreSQL database.  
    On MacOS, you can use [Postgres.app](https://postgresapp.com/). Run `brew install libpq` to be able to use `psql`.  
