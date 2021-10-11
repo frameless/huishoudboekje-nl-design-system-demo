@@ -31,7 +31,8 @@ For the backend, there are a few different ways you can set up your local backen
 ## Setup development with Docker Compose
 - Please set up a local running PostgreSQL that is available on `localhost:5432` and has a user `postgres` with password `postgres`.
 - Please make sure you have `docker-compose` installed.
-- Run `docker-compose up db` to setup the database.
+- Run `docker-compose up db` to start the datase.
+- Run `docker-compose up db-init` to setup the database.
 - Run `docker-compose up` to launch all the services and the backend.
 - It's best to run the frontend-application natively on your system because of performace issues with running a development setup in Docker. For instructions see [frontend/app/README.md](./frontend/app/README.md)
 
