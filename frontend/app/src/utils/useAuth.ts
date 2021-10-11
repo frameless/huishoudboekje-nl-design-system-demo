@@ -30,6 +30,7 @@ const useAuth = () => {
 			.then(result => result.json())
 			.then(result => {
 				if (result.email) {
+					setUser(result);
 				}
 				toggleLoading(false);
 			})
