@@ -2,7 +2,14 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {useHistory, useParams} from "react-router-dom";
 import Routes from "../../../config/routes";
-import {Afspraak, UpdateAfspraakBetaalinstructieMutationVariables, useGetAfspraakQuery, useUpdateAfspraakBetaalinstructieMutation} from "../../../generated/graphql";
+import {
+	Afspraak,
+	GetAfspraakDocument,
+	GetAfsprakenDocument,
+	UpdateAfspraakBetaalinstructieMutationVariables,
+	useGetAfspraakQuery,
+	useUpdateAfspraakBetaalinstructieMutation,
+} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import useHandleMutation from "../../../utils/useHandleMutation";
 import BackButton from "../../Layouts/BackButton";
@@ -17,7 +24,12 @@ const BetaalinstructiePage = () => {
 	const handleMutation = useHandleMutation();
 
 	const $afspraak = useGetAfspraakQuery({variables: {id: parseInt(id)}});
-	const [updateAfspraakBetaalinstructieMutation] = useUpdateAfspraakBetaalinstructieMutation();
+	const [updateAfspraakBetaalinstructieMutation] = useUpdateAfspraakBetaalinstructieMutation({
+		refetchQueries: [
+			{query: GetAfsprakenDocument},
+			{query: GetAfspraakDocument, variables: {id: parseInt(id)}},
+		],
+	});
 	const updateAfspraakBetaalinstructie = (data: UpdateAfspraakBetaalinstructieMutationVariables["betaalinstructie"]) => handleMutation(updateAfspraakBetaalinstructieMutation({
 		variables: {
 			id: parseInt(id),

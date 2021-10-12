@@ -27,7 +27,7 @@ import {useTranslation} from "react-i18next";
 import {AiOutlineTag} from "react-icons/all";
 import {NavLink} from "react-router-dom";
 import Routes from "../../../config/routes";
-import {Afspraak, GetAfspraakDocument, useAddAfspraakZoektermMutation, useDeleteAfspraakZoektermMutation} from "../../../generated/graphql";
+import {Afspraak, GetAfspraakDocument, GetAfsprakenDocument, useAddAfspraakZoektermMutation, useDeleteAfspraakZoektermMutation} from "../../../generated/graphql";
 import d from "../../../utils/dayjs";
 import {currencyFormat2, formatBurgerName, isAfspraakActive} from "../../../utils/things";
 import useScheduleHelper from "../../../utils/useScheduleHelper";
@@ -51,6 +51,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	const scheduleHelper = useScheduleHelper(afspraak.betaalinstructie);
 	const [addAfspraakZoekterm] = useAddAfspraakZoektermMutation({
 		refetchQueries: [
+			{query: GetAfsprakenDocument},
 			{query: GetAfspraakDocument, variables: {id: afspraak.id}},
 		],
 		onCompleted: () => {
@@ -60,6 +61,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	});
 	const [deleteAfspraakZoekterm] = useDeleteAfspraakZoektermMutation({
 		refetchQueries: [
+			{query: GetAfsprakenDocument},
 			{query: GetAfspraakDocument, variables: {id: afspraak.id}},
 		],
 	});
@@ -129,8 +131,8 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 								<HStack>
 									<Text>{afspraak.tegenRekening?.rekeninghouder}</Text>
 									{afspraak.organisatie?.id && (
-										<IconButton as={NavLink} to={Routes.Organisatie(afspraak.organisatie.id)} variant={"ghost"}
-											size={"sm"} icon={<ViewIcon />} aria-label={t("global.actions.view")} />
+										<IconButton as={NavLink} to={Routes.Organisatie(afspraak.organisatie.id)} variant={"ghost"} size={"sm"}
+											aria-label={t("global.actions.view")} icon={<ViewIcon />} />
 									)}
 								</HStack>
 								<Text size={"sm"}><PrettyIban iban={afspraak.tegenRekening?.iban} /></Text>
