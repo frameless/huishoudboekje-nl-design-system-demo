@@ -1,10 +1,10 @@
+---
 apiVersion: v1
 kind: Service
 metadata:
   name: hhb-grootboekservice
   labels:
     name: hhb-grootboekservice
-  namespace: ${NAMESPACE}
 spec:
   type: ClusterIP
   selector:

@@ -1,8 +1,8 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: hhb-backend
-  namespace: ${NAMESPACE}
   labels:
     name: hhb-backend
 spec:
@@ -17,32 +17,32 @@ spec:
     spec:
       containers:
         - name: hhb-backend
-          image: registry.gitlab.com/commonground/huishoudboekje/app-new/backend:${IMAGE_TAG}
-          imagePullPolicy: IfNotPresent
+          image: backend
+          imagePullPolicy: Always
           ports:
             - name: http
               containerPort: 8000
               protocol: TCP
-#          livenessProbe:
-#            httpGet:
-#              path: /api/health
-#              port: http
-#          readinessProbe:
-#            httpGet:
-#              path: /api/health
-#              port: http
-#          resources:
-#            limits:
-#              cpu: 1000m
-#              memory: 256Mi
-#            requests:
-#              cpu: 100m
-#              memory: 128Mi
+          #          livenessProbe:
+          #            httpGet:
+          #              path: /api/health
+          #              port: http
+          #          readinessProbe:
+          #            httpGet:
+          #              path: /api/health
+          #              port: http
+          #          resources:
+          #            limits:
+          #              cpu: 1000m
+          #              memory: 256Mi
+          #            requests:
+          #              cpu: 100m
+          #              memory: 128Mi
           env:
             - name: APP_SETTINGS
-              value: "hhb_backend.config.LocalConfig"
+              value: "hhb_backend.config.LocalConfig" # dit moet ProductionConfig worden
             - name: AUTH_AUDIENCE
-              value: "http://${HHB_HOST}"
+              value: "must be changed with env_patch.yaml"
             - name: AUTH_TOKEN_SECRET
               valueFrom:
                 secretKeyRef:

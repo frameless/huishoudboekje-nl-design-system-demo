@@ -1,0 +1,28 @@
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: hhb-database-volume
+  labels:
+    name: hhb-database-volume
+spec:
+  capacity:
+    storage: 512Mi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/data/hhb-database-volume"
+
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: hhb-database-volumeclaim
+  labels:
+    name: hhb-database-volumeclaim
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 512Mi

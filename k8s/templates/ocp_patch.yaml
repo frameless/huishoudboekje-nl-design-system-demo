@@ -1,0 +1,35 @@
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: hhb-backend-route
+spec:
+  host: ${HHB_FRONTEND_DNS}
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: hhb-dex-route
+spec:
+  host: ${HHB_DEX_DNS}
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: hhb-frontend-route
+spec:
+  host: ${HHB_FRONTEND_DNS}
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: hhb-unleashservice-route
+spec:
+  host: ${HHB_FRONTEND_DNS}
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: hhb-database-volumeclaim
+spec:
+  storageClassName: ${STORAGECLASSNAME}

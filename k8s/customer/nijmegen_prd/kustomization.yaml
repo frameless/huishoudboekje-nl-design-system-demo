@@ -1,0 +1,16 @@
+---
+# all base components nijmegen is using
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - frontend/theme.yaml
+  - ../../base/backend
+  - ../../base/banktransactieservice
+  - ../../base/database
+  - ../../base/dex
+  - ../../base/frontend
+  - ../../base/grootboekservice
+  - ../../base/huishoudboekjeservice
+  - ../../base/logservice
+  - ../../base/organisatieservice
+  - ../../base/unleashservice

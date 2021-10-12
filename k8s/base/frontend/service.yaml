@@ -1,10 +1,10 @@
+---
 apiVersion: v1
 kind: Service
 metadata:
   name: hhb-frontend
   labels:
     name: hhb-frontend
-  namespace: ${NAMESPACE}
 spec:
   ports:
     - port: 80

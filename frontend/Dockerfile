@@ -15,20 +15,11 @@ VOLUME /app/public/theme
 RUN npm run build
 
 # Set up production environment using nginx
-FROM ${DOCKER_PROXY}nginx:1.21.1-alpine as webserver
+FROM ${DOCKER_PROXY}bitnami/nginx:latest as webserver
 
-# Add non-privileged user
-RUN adduser -D -u 1001 appuser
-
-# Set ownership nginx.pid and cache folder in order to run nginx as non-root user
-RUN touch /run/nginx.pid && \
-    chown -R appuser /run/nginx.pid && \
-    chown -R appuser /var/cache/nginx
-
-USER appuser
 EXPOSE 8080
 
 # Copy nginx configuration
-COPY ./docker/nginx.default.conf /etc/nginx/conf.d/default.conf
-COPY ./docker/nginx.conf  /etc/nginx/nginx.conf
-COPY --from=builder /app/build /usr/share/nginx/html
+COPY ./docker/nginx.default.conf /opt/bitnami/nginx/conf/server_blocks/default.conf
+COPY ./docker/nginx.conf  /opt/bitnami/nginx/conf/nginx.conf
+COPY --from=builder /app/build /opt/bitnami/apps/html

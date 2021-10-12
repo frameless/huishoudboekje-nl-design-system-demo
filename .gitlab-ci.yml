@@ -106,8 +106,8 @@ build-deployment-review:
     - build-app-review
     - build-deployment-review
   script:
-    - cd k8s
-    - kubectl apply -k dist
+    - kubectl apply -f k8s/dist/namespace.yaml
+    - kubectl apply -f k8s/dist/deploy_build.yaml
     - echo -e Deployment is done! Go check out the running app at https://${HHB_HOST}
 
 .destroy: &destroy

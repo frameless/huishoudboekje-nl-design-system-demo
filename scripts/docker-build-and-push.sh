@@ -1,3 +1,6 @@
+#!/bin/bash
+
+set -e
 # This file requires envvars CI_REGISTRY_IMAGE, IMAGE_TAG and DOCKER_PROXY to be set.
 # If you are using GitLab, $CI_REGISTRY_IMAGE should already be set.
 

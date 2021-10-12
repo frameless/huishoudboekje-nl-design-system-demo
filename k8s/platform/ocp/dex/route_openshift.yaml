@@ -1,0 +1,20 @@
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  annotations:
+    openshift.io/host.generated: "true"
+  labels:
+    name: hhb-dex-route
+  name: hhb-dex-route
+spec:
+  host: ${HHB_DEX_DNS}
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+  to:
+    kind: Service
+    name: hhb-dex
+    weight: 100
+  wildcardPolicy: None

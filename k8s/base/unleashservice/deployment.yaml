@@ -1,8 +1,8 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: hhb-unleashservice
-  namespace: ${NAMESPACE}
   labels:
     name: hhb-unleashservice
 spec:
@@ -17,8 +17,8 @@ spec:
     spec:
       containers:
         - name: hhb-unleashservice
-          image: registry.gitlab.com/commonground/huishoudboekje/app-new/unleashservice:${IMAGE_TAG}
-          imagePullPolicy: IfNotPresent
+          image: unleashservice
+          imagePullPolicy: Always
           ports:
             - name: http
               containerPort: 8080
@@ -27,21 +27,23 @@ spec:
             httpGet:
               path: /health
               port: http
+            initialDelaySeconds: 60
           readinessProbe:
             httpGet:
               path: /health
               port: http
-#          resources:
-#            limits:
-#              cpu: 1000m
-#              memory: 256Mi
-#            requests:
-#              cpu: 100m
-#              memory: 128Mi
+            initialDelaySeconds: 60
+          #          resources:
+          #            limits:
+          #              cpu: 1000m
+          #              memory: 256Mi
+          #            requests:
+          #              cpu: 100m
+          #              memory: 128Mi
           env:
-            - name: UNLEASH_URL
-              value: ${CI_API_V4_URL}/feature_flags/unleash/${CI_PROJECT_ID}
-            - name: UNLEASH_INSTANCEID
-              value: JbZyPux6M7xwejsESy9L
-            - name: UNLEASH_APPNAME
-              value: huishoudboekje-frontend
+            - name: PORT
+              value: "8080"
+      volumes:
+        - name: unleashservice-config-volume
+          configMap:
+            name: hhb-unleashservice-config

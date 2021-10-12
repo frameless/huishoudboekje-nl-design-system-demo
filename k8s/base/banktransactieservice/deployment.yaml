@@ -1,8 +1,8 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: hhb-banktransactieservice
-  namespace: ${NAMESPACE}
   labels:
     name: hhb-banktransactieservice
 spec:
@@ -18,33 +18,69 @@ spec:
       initContainers:
         - name: init1-wait-for-db
           image: busybox
-          command: ["sh", "-c", "while true; do sleep 1; echo Waiting for database...; if nc -z hhb-database 5432; then echo Database is up!; exit 0; fi; done; echo Aint gonna wait for the database forever...; exit 1"]
+          command:
+            [
+              "sh",
+              "-c",
+              "while true; do sleep 1; echo Waiting for database...; if nc -z hhb-database 5432; then echo Database is up!; exit 0; fi; done; echo Aint gonna wait for the database forever...; exit 1",
+            ]
         - name: init2-prepare-db
-          image: postgres:13-alpine
-          imagePullPolicy: IfNotPresent
+          image: bitnami/postgresql:13
+          imagePullPolicy: Always
+          envFrom:
+            - configMapRef:
+                name: postgres-config
+          env:
+            - name: POSTGRESQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: hhb-database-secrets
+                  key: POSTGRESQL_PASSWORD
+            - name: POSTGRESQL_PASSWORD_BKTSVC
+              valueFrom:
+                secretKeyRef:
+                  name: hhb-database-secrets
+                  key: POSTGRESQL_PASSWORD_BKTSVC
           command: ["/bin/sh"]
           args:
             - -c
             - >-
-              export PGPASSWORD=postgres &&
+              export PGPASSWORD=$POSTGRESQL_PASSWORD &&
               sleep 15 &&
-              psql -h hhb-database -U postgres -c "CREATE USER bktsvc WITH PASSWORD 'bktsvc'" || true &&
-              psql -h hhb-database -U postgres -c "CREATE DATABASE banktransactieservice" || true &&
-              psql -h hhb-database -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE banktransactieservice TO bktsvc" || true;
+              psql -h hhb-database -U $POSTGRESQL_USERNAME -c "CREATE USER bktsvc WITH PASSWORD '$POSTGRESQL_PASSWORD_BKTSVC'" || true &&
+              psql -h hhb-database -U $POSTGRESQL_USERNAME -c "CREATE DATABASE banktransactieservice" || true &&
+              psql -h hhb-database -U $POSTGRESQL_USERNAME -c "GRANT ALL PRIVILEGES ON DATABASE banktransactieservice TO bktsvc" || true
         - name: init3-migrate-db
-          image: registry.gitlab.com/commonground/huishoudboekje/app-new/banktransactieservice:${IMAGE_TAG}
-          imagePullPolicy: IfNotPresent
+          image: banktransactieservice
+          imagePullPolicy: Always
+          envFrom:
+            - configMapRef:
+                name: postgres-config
           env:
-            - name: HHB_SECRET
-              value: ${HHB_SECRET}
             - name: TRANSACTIE_DATABASE_URL
-              value: "postgresql://bktsvc:bktsvc@hhb-database/banktransactieservice"
+              valueFrom:
+                secretKeyRef:
+                  name: hhb-database-secrets
+                  key: TRANSACTIE_DATABASE_URL
+            - name: HHB_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: hhb-client-secrets
+                  key: SECRET_KEY
+            - name: POSTGRESQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: hhb-database-secrets
+                  key: POSTGRESQL_PASSWORD
           command: ["python"]
           args: ["manage.py", "db", "upgrade"]
       containers:
         - name: hhb-banktransactieservice
-          image: registry.gitlab.com/commonground/huishoudboekje/app-new/banktransactieservice:${IMAGE_TAG}
-          imagePullPolicy: IfNotPresent
+          image: banktransactieservice
+          imagePullPolicy: Always
+          envFrom:
+            - configMapRef:
+                name: postgres-config
           ports:
             - name: http
               containerPort: 8000
@@ -57,15 +93,21 @@ spec:
             httpGet:
               path: /health
               port: http
-#          resources:
-#            limits:
-#              cpu: 1000m
-#              memory: 256Mi
-#            requests:
-#              cpu: 100m
-#              memory: 128Mi
+          #          resources:
+          #            limits:
+          #              cpu: 1000m
+          #              memory: 256Mi
+          #            requests:
+          #              cpu: 100m
+          #              memory: 128Mi
           env:
             - name: HHB_SECRET
-              value: ${HHB_SECRET}
+              valueFrom:
+                secretKeyRef:
+                  name: hhb-client-secrets
+                  key: SECRET_KEY
             - name: TRANSACTIE_DATABASE_URL
-              value: "postgresql://bktsvc:bktsvc@hhb-database/banktransactieservice"
+              valueFrom:
+                secretKeyRef:
+                  name: hhb-database-secrets
+                  key: TRANSACTIE_DATABASE_URL

@@ -1,26 +1,22 @@
 ARG DOCKER_PROXY=''
 
 # Build
-FROM ${DOCKER_PROXY}python:3.8-slim-buster AS build
+FROM ${DOCKER_PROXY}bitnami/python:3.8 AS build
 
 # Timezone
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get -y install tzdata
 ENV TZ Europe/Amsterdam
 
-# set the working directory in the container
-RUN useradd --home-dir /app --create-home --shell /bin/bash app
-USER app
 WORKDIR /app
 
-# install the dependencies only for fast rebuilds
-COPY --chown=app:app setup.py ./
-RUN mkdir -p hhb_backend/ && python3 setup.py install --user --prefix=''
+COPY setup.py /app
 
-# copy the content of the local src directory to the working directory
-COPY --chown=app:app ./ ./
-# install the package
-RUN python3 setup.py install --user --prefix=''
+RUN mkdir -p hhb_backend/ && python3 setup.py install 
+
+COPY . /app
+
+RUN python3 setup.py install 
 
 # Set gunicorn settings
 ENV GUNICORN_PORT="8000" \

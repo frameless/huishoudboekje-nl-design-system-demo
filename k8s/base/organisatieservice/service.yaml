@@ -1,10 +1,10 @@
+---
 apiVersion: v1
 kind: Service
 metadata:
   name: hhb-organisatieservice
   labels:
     name: hhb-organisatieservice
-  namespace: ${NAMESPACE}
 spec:
   type: ClusterIP
   selector:

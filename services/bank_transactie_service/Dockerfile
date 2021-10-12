@@ -1,7 +1,7 @@
 ARG DOCKER_PROXY=''
 
 #Build
-FROM ${DOCKER_PROXY}python:3.8-slim-buster
+FROM ${DOCKER_PROXY}bitnami/python:3.8 AS build
 
 # Timezone
 ENV DEBIAN_FRONTEND=noninteractive
@@ -9,21 +9,19 @@ RUN apt-get -y install tzdata
 ENV TZ Europe/Amsterdam
 
 # set the working directory in the container
-RUN useradd --home-dir /app --create-home --shell /bin/bash app
-USER app
 WORKDIR /app
 
 # install the dependencies only for fast rebuilds
-COPY --chown=app:app bank_transactie_service/setup.py ./
+COPY ./bank_transactie_service/setup.py /app
 RUN mkdir -p core_service bank_transactie_service models && \
-    python3 setup.py install --user --prefix=''
+    python3 setup.py install
 
 # copy the content of the local src directory to the working directory
-COPY --chown=app:app ./bank_transactie_service ./
-COPY --chown=app:app ./core_service/core_service /app/core_service
+COPY ./bank_transactie_service /app
+COPY ./core_service/core_service /app/core_service
 
 # install the package
-RUN python3 setup.py install --user --prefix=''
+RUN python3 setup.py install
 
 # Set gunicorn settings
 ENV GUNICORN_PORT="8000" \

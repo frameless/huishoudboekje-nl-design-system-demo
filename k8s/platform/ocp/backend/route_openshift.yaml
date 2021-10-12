@@ -1,0 +1,21 @@
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  annotations:
+    openshift.io/host.generated: "true"
+  labels:
+    name: hhb-backend-route
+  name: hhb-backend-route
+spec:
+  host: ${HHB_FRONTEND_DNS}
+  path: /api
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+  to:
+    kind: Service
+    name: hhb-backend
+    weight: 100
+  wildcardPolicy: None
