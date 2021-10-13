@@ -17,7 +17,7 @@ variables:
     when: script_failure
 
 .deployer: &deployer
-  image: registry.gitlab.com/commonground/core/review-app-deployer:latest
+  image: registry.gitlab.com/commonground/huishoudboekje/review-app-deployer:latest
   tags:
     - cg
     - docker
@@ -88,12 +88,13 @@ build-app-review:
     - branches@commonground/huishoudboekje/app-new
 
 build-deployment-review:
+  <<: *deployer
   <<: *vars-review
   extends:
     - .build-deployment
   tags:
     - cg
-    - shell
+    - docker
   only:
     - branches@commonground/huishoudboekje/app-new
 

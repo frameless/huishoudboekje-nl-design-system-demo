@@ -1,7 +1,7 @@
 .deployer:
   environment:
     name: review/$CI_COMMIT_REF_SLUG
-  image: registry.gitlab.com/commonground/core/review-app-deployer:latest
+  image: registry.gitlab.com/commonground/huishoudboekje/review-app-deployer:latest
   tags:
     - cg
     - docker

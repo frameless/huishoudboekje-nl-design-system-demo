@@ -61,7 +61,7 @@
 #    when: script_failure
 #
 #.deployer: &deployer
-#  image: registry.gitlab.com/commonground/core/review-app-deployer:latest
+#  image: registry.gitlab.com/commonground/huishoudboekje/review-app-deployer:latest
 #  tags:
 #    - cg
 #    - docker
