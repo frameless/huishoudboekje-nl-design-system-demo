@@ -10,155 +10,69 @@ variables:
   IMAGE_TAG: $CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
   HHB_SECRET: "koen"
 
-# Templates
-.retry: &retry
-  retry:
-    max: 2
-    when: script_failure
-
-.deployer: &deployer
-  image: registry.gitlab.com/commonground/huishoudboekje/review-app-deployer:latest
-  tags:
-    - cg
-    - docker
-
-.vars-review: &vars-review
-  variables:
-    HHB_HOST: "hhb-$CI_COMMIT_REF_SLUG.nlx.reviews"
-    BASE_DOMAIN: "nlx.reviews"
-    NAMESPACE: "hhb-$CI_COMMIT_REF_SLUG"
-
-.review: &review
-  variables:
-    HHB_HOST: "hhb-$CI_COMMIT_REF_SLUG.nlx.reviews"
-    BASE_DOMAIN: "nlx.reviews"
-    NAMESPACE: "hhb-$CI_COMMIT_REF_SLUG"
-    INGRESS_ANNOTATIONS: "=null"
-  environment:
-    name: review/$CI_COMMIT_REF_SLUG
-    url: https://hhb-$CI_COMMIT_REF_SLUG.$BASE_DOMAIN/
-  only:
-    - branches@commonground/huishoudboekje/app-new
-  except:
-    - master
-    - develop
-    - acceptance
-
-# Build
-.build-app:
-  <<: *retry
-  stage: build
-  needs: []
-  variables:
-    DOCKER_TLS_CERTDIR: "/certs"
-    CYPRESS_INSTALL_BINARY: "0"
-  script:
-    - export DOCKER_CONFIG=/tmp/docker-config-$CI_JOB_ID
-    - mkdir -p $DOCKER_CONFIG && echo $DOCKER_AUTH_CONFIG > $DOCKER_CONFIG/config.json
-    - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY --username $CI_REGISTRY_USER --password-stdin
-    - sh ./scripts/docker-build-and-push.sh
-  artifacts:
-    paths:
-      - k8s/dist
-  only:
-    - branches@commonground/huishoudboekje/app-new
-
-.build-deployment:
-  <<: *retry
-  stage: build
-  needs: []
-  variables:
-    CYPRESS_INSTALL_BINARY: "0"
-  script:
-    - sh ./k8s/build.sh
-  artifacts:
-    paths:
-      - k8s/dist
-  only:
-    - branches@commonground/huishoudboekje/app-new
-
-build-app-review:
-  <<: *vars-review
-  extends:
-    - .build-app
-  tags:
-    - cg
-    - shell
-  only:
-    - branches@commonground/huishoudboekje/app-new
-
-build-deployment-review:
-  <<: *deployer
-  <<: *vars-review
-  extends:
-    - .build-deployment
-  tags:
-    - cg
-    - docker
-  only:
-    - branches@commonground/huishoudboekje/app-new
-
-# Deploy
-.deploy: &deploy
-  <<: *deployer
-  <<: *retry
-  stage: deploy
-  needs:
-    - build-app-review
-    - build-deployment-review
-  script:
-    - kubectl apply -f k8s/dist/namespace.yaml
-    - kubectl apply -f k8s/dist/deploy_build.yaml
-    - echo -e Deployment is done! Go check out the running app at https://${HHB_HOST}
-
-.destroy: &destroy
-  <<: *deployer
-  stage: deploy
-  needs: []
-  script:
-    - kubectl delete namespace ${NAMESPACE}
-
-deploy-review:
-  <<: *deploy
-  <<: *review
-  environment:
-    name: review/$CI_COMMIT_REF_SLUG
-    url: https://hhb-$CI_COMMIT_REF_SLUG.$BASE_DOMAIN/
-    on_stop: destroy-review
-    auto_stop_in: 7 days
-  artifacts:
-    paths:
-      - k8s/dist
-
-# Shut down app
-destroy-review:
-  <<: *destroy
-  <<: *review
-  environment:
-    name: review/$CI_COMMIT_REF_SLUG
-    action: stop
-  variables:
-    NAMESPACE: "hhb-$CI_COMMIT_REF_SLUG"
-    GIT_STRATEGY: none
-  script:
-    - kubectl delete namespace $NAMESPACE
-  when: manual
-
-# Debug
-inspect-envs:
-  stage: deploy
-  needs: [ ]
-  script:
-    - env -0 | sort -z | tr '\0' '\n'
-  when: manual
-
 stages:
   - build
-  - deploy
-# - test
-# - e2e
-# - data
-# - maintenance
+# Todo - deploy
+# Todo - test
+# Todo - data
+# Todo - maintenance
+
+include:
+  - /.gitlab/ci/stage-build.yaml
+
+## Deploy
+#.deploy: &deploy
+#  <<: *deployer
+#  <<: *retry
+#  stage: deploy
+#  needs:
+#    - build-app-review
+#    - build-deployment-review
+#  script:
+#    - kubectl apply -f k8s/dist/namespace.yaml
+#    - kubectl apply -f k8s/dist/single_deploy_file.yaml --namespace=${NAMESPACE}
+#    - echo -e Deployment is done! Go check out the running app at https://${HHB_HOST}
+#
+#.destroy: &destroy
+#  <<: *deployer
+#  stage: deploy
+#  needs: []
+#  script:
+#    - kubectl delete namespace ${NAMESPACE}
+#
+#deploy-review:
+#  <<: *deploy
+#  <<: *review
+#  environment:
+#    name: review/$CI_COMMIT_REF_SLUG
+#    url: https://hhb-$CI_COMMIT_REF_SLUG.$BASE_DOMAIN/
+#    on_stop: destroy-review
+#    auto_stop_in: 7 days
+#  artifacts:
+#    paths:
+#      - k8s/dist
+#
+## Shut down app
+#destroy-review:
+#  <<: *destroy
+#  <<: *review
+#  environment:
+#    name: review/$CI_COMMIT_REF_SLUG
+#    action: stop
+#  variables:
+#    NAMESPACE: "hhb-$CI_COMMIT_REF_SLUG"
+#    GIT_STRATEGY: none
+#  script:
+#    - kubectl delete namespace $NAMESPACE
+#  when: manual
+#
+## Debug
+#inspect-envs:
+#  stage: deploy
+#  needs: [ ]
+#  script:
+#    - env -0 | sort -z | tr '\0' '\n'
+#  when: manual
 
 #include:
 #  - '/.gitlab/ci/build.yml'
