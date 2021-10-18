@@ -29,3 +29,4 @@ class Afspraak(db.Model):
     overschrijvingen = relationship("Overschrijving", back_populates="afspraken")
     afdeling_id = Column(Integer, ForeignKey("afdelingen.id"))
     afdelingen = relationship("Afdeling", back_populates="afspraken")
+    postadres_id = Column(String)

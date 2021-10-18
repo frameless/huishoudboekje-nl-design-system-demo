@@ -78,6 +78,9 @@ class AfspraakView(HHBView):
             },
             "afdeling_id": {
                 "type": "integer",
+            },
+            "postadres_id": {
+                "type": "string",
             }
         },
         "required": []
@@ -88,6 +91,7 @@ class AfspraakView(HHBView):
         self.add_filter_filter_burger()
         self.add_filter_filter_datums()
         self.add_filter_filter_afdelingen()
+        self.add_filter_filter_postadressen()
         self.add_filter_filter_rekening()
         self.add_filter_filter_zoektermen()
         self.hhb_query.expose_many_relation("journaalposten", "id")
@@ -158,5 +162,13 @@ class AfspraakView(HHBView):
 
         def cb(ids):
             self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.afdeling_id.in_(ids))
+
+        AfspraakView.filter_in_string('filter_afdelingen', cb)
+
+    def add_filter_filter_postadressen(self):
+        """ Add filter_postadressen filter based on the id of the postadres model """
+
+        def cb(ids):
+            self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.postadres_id.in_(ids))
 
         AfspraakView.filter_in_string('filter_afdelingen', cb)

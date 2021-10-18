@@ -1,11 +1,15 @@
 """ Afspraak model as used in GraphQL queries """
 from datetime import date
+import logging
 
 import graphene
 from dateutil.parser import isoparse
 from flask import request
 
 import hhb_backend.graphql.models.burger as burger
+import hhb_backend.graphql.models.afspraak as afspraak
+import hhb_backend.graphql.models.afdeling as afdeling
+import hhb_backend.graphql.models.postadres as postadres
 import hhb_backend.graphql.models.journaalpost as journaalpost
 import hhb_backend.graphql.models.overschrijving as overschrijving
 import hhb_backend.graphql.models.rekening as rekening
@@ -50,6 +54,9 @@ class Afspraak(graphene.ObjectType):
 
     id = graphene.Int()
     burger = graphene.Field(lambda: burger.Burger)
+    afdeling = graphene.Field(lambda: afdeling.Afdeling)
+    postadres = graphene.Field(lambda: postadres.Postadres)
+
     omschrijving = graphene.String()
     tegen_rekening = graphene.Field(lambda: rekening.Rekening)
     bedrag = graphene.Field(Bedrag)
@@ -104,6 +111,27 @@ class Afspraak(graphene.ObjectType):
         if root.get("burger_id"):
             return await request.dataloader.burgers_by_id.load(
                 root.get("burger_id")
+            )
+
+    async def resolve_rekening(root, info):
+        """ Get rekening when requested """
+        if root.get("rekening_id"):
+            return await request.dataloader.rekeningen_by_id.load(
+                root.get("rekening_id")
+            )
+
+    async def resolve_postadres(root, info):
+        """ Get postadres when requested """
+        if root.get("postadres_id"):
+            return await request.dataloader.postadressen_by_id.load(
+                root.get("postadres_id")
+            )
+
+    async def resolve_afdeling(root, info):
+        """ Get afdeling when requested """
+        if root.get("afdeling_id"):
+            return await request.dataloader.afdelingen_by_id.load(
+                root.get("afdeling_id")
             )
 
     async def resolve_tegen_rekening(root, info):

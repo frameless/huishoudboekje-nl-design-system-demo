@@ -7,7 +7,7 @@ class PostadressenByIdLoader(SingleDataLoader):
     service = settings.CONTACTCATALOGUS_SERVICE_URL
 
 class PostadressenByAfdelingLoader(ListDataLoader):
-    """ Load postadressen from organisatieservice using adeling id"""
+    """ Load postadressen from organisatieservice using afdeling id"""
     model = "postadressen"
     service = settings.ORGANISATIE_SERVICES_URL
     filter_item = "filter_afdeling"

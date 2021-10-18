@@ -1,13 +1,17 @@
 """ GraphQL mutation for creating a new Afspraak """
 from datetime import datetime
 
+
 import graphene
 import requests
 from graphql import GraphQLError
 
+from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.models.afspraak import Afspraak
 from hhb_backend.graphql.scalars.bedrag import Bedrag
+from hhb_backend.graphql.models.postadres import Postadres
+from hhb_backend.graphql.models.rekening import Rekening
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     log_gebruikers_activiteit,
     gebruikers_activiteit_entities,
@@ -17,7 +21,8 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import (
 class CreateAfspraakInput(graphene.InputObjectType):
     burger_id = graphene.Int(required=True)
     credit = graphene.Boolean(required=True)
-    afdeling_id = graphene.Int()
+    afdeling_id = graphene.Int(required=True)
+    postadres_id = graphene.String(required=True)
     tegen_rekening_id = graphene.Int(required=True)
     rubriek_id = graphene.Int(required=True)
     omschrijving = graphene.String(required=True)
@@ -55,6 +60,28 @@ class CreateAfspraak(graphene.Mutation):
 
         if "valid_from" not in input:
             input["valid_from"] = str(datetime.now().date())
+
+        print(input)
+
+        # Check rekening
+        rekening_id = input.get("tegen_rekening_id")
+        rekening: Rekening = (
+            await hhb_dataloader().rekeningen_by_id.load(
+                rekening_id
+            )
+        )
+        if not rekening:
+            raise GraphQLError("rekening not found")
+
+        # Check postadres
+        postadres_id = input.get("postadres_id")
+        postadres: Postadres = (
+            await hhb_dataloader().postadressen_by_id.load(
+                postadres_id
+            )
+        )
+        if not postadres:
+            raise GraphQLError("postadres not found")
 
         response = requests.post(f"{settings.HHB_SERVICES_URL}/afspraken/", json=input)
         if response.status_code != 201:
