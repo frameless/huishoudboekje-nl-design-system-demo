@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {useState} from "react";
 import {CreateOrganisatieMutationVariables} from "../../../generated/graphql";
 import zod from "../../../utils/zod";

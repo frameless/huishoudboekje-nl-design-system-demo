@@ -11,7 +11,8 @@ import {
 	Menu,
 	MenuButton,
 	MenuItem,
-	MenuList, useBreakpointValue,
+	MenuList,
+	useBreakpointValue,
 } from "@chakra-ui/react";
 import React, {useRef} from "react";
 import {useToggle} from "react-grapple";
@@ -26,7 +27,6 @@ import DeadEndPage from "../DeadEndPage";
 import BackButton from "../Layouts/BackButton";
 import Page from "../Layouts/Page";
 import OrganisatieDetailView from "./Views/OrganisatieDetailView";
-import OrganisatieRekeningenView from "./Views/OrganisatieRekeningenView";
 
 const OrganisatieDetail = () => {
 	const {t} = useTranslation();
@@ -61,7 +61,7 @@ const OrganisatieDetail = () => {
 					.then(() => {
 						onCloseDeleteDialog();
 						toast({
-							success: t("messages.organisaties.deleteConfirmMessage", {name: organisatie.kvkDetails?.naam}),
+							success: t("messages.organisaties.deleteConfirmMessage", {name: organisatie.naam}),
 						});
 						toggleDeleted(true);
 					})
@@ -81,14 +81,14 @@ const OrganisatieDetail = () => {
 
 			if (isDeleted) {
 				return (
-					<DeadEndPage message={t("messages.organisaties.deleteConfirmMessage", {name: organisatie.kvkDetails?.naam})}>
+					<DeadEndPage message={t("messages.organisaties.deleteConfirmMessage", {name: organisatie.naam})}>
 						<Button colorScheme={"primary"} onClick={() => push(Routes.Organisaties)}>{t("global.actions.backToList")}</Button>
 					</DeadEndPage>
 				);
 			}
 
 			return (
-				<Page title={truncateText(organisatie.kvkDetails?.naam || "", maxOrganisatieNaamLength)} backButton={<BackButton to={Routes.Organisaties} />} menu={(
+				<Page title={truncateText(organisatie.naam || "", maxOrganisatieNaamLength)} backButton={<BackButton to={Routes.Organisaties} />} menu={(
 					<Menu>
 						<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label="Open menu" />
 						<MenuList>
@@ -101,7 +101,7 @@ const OrganisatieDetail = () => {
 						<AlertDialogOverlay />
 						<AlertDialogContent>
 							<AlertDialogHeader fontSize="lg" fontWeight="bold">{t("messages.organisaties.deleteTitle")}</AlertDialogHeader>
-							<AlertDialogBody>{t("messages.organisaties.deleteQuestion", {name: organisatie.kvkDetails?.naam})}</AlertDialogBody>
+							<AlertDialogBody>{t("messages.organisaties.deleteQuestion", {name: organisatie.naam})}</AlertDialogBody>
 							<AlertDialogFooter>
 								<Button ref={cancelDeleteRef} onClick={onCloseDeleteDialog}>{t("global.actions.cancel")}</Button>
 								<Button isLoading={deleteLoading} colorScheme="red" onClick={onConfirmDeleteDialog} ml={3}>{t("global.actions.delete")}</Button>
@@ -110,7 +110,6 @@ const OrganisatieDetail = () => {
 					</AlertDialog>
 
 					<OrganisatieDetailView organisatie={organisatie} />
-					<OrganisatieRekeningenView organisatie={organisatie} />
 				</Page>
 			);
 		}} />

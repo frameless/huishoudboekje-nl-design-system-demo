@@ -47,10 +47,10 @@ const AuditLogText: React.FC<TextProps & {g: GebruikersActiviteit}> = ({g, ...pr
 		linkBurger: burger?.id ? <AuditLogLink to={Routes.Burger(burger.id)}>{formatBurgerName(burger)}</AuditLogLink> : t("unknownBurger"),
 		linkHuishouden: (huishouden && huishouden?.id) ?
 			<AuditLogLink to={Routes.Huishouden(huishouden.id)}>{formatHuishoudenName(huishouden)}</AuditLogLink> : t("unknownHuishouden"),
-		linkOrganisatie: organisatie?.id ? <AuditLogLink to={Routes.Organisatie(organisatie.id)}>{organisatie.kvkDetails?.naam}</AuditLogLink> : t("unknownOrganisatie"),
+		linkOrganisatie: organisatie?.id ? <AuditLogLink to={Routes.Organisatie(organisatie.id)}>{organisatie.naam}</AuditLogLink> : t("unknownOrganisatie"),
 		linkAfspraak: afspraak?.id ? <AuditLogLink to={Routes.ViewAfspraak(afspraak.id)} /> : t("unknownAfspraak"),
-		linkAfspraakOrganisatie: afspraak?.organisatie?.id ?
-			<AuditLogLink to={Routes.Organisatie(afspraak?.organisatie?.id)}>{afspraak?.organisatie.kvkDetails?.naam}</AuditLogLink> : t("unknownOrganisatie"),
+		linkAfspraakOrganisatie: afspraak?.afdeling?.organisatie?.id ?
+			<AuditLogLink to={Routes.Organisatie(afspraak?.afdeling?.organisatie?.id)}>{afspraak?.afdeling?.organisatie?.naam}</AuditLogLink> : t("unknownOrganisatie"),
 		strong: <strong />,
 	};
 
@@ -60,8 +60,8 @@ const AuditLogText: React.FC<TextProps & {g: GebruikersActiviteit}> = ({g, ...pr
 		// Todo: Find a solution for humanJoining an array of AuditLogLinks.
 		listBurgers: (burgers && burgers.length > 0) ? humanJoin(burgers.map(b => formatBurgerName(b))) : t("unknownBurgers"),
 		huishouden: huishouden && formatHuishoudenName(huishouden),
-		organisatie: organisatie?.kvkDetails?.naam || t("unknownOrganisatie"),
-		afspraakOrganisatie: afspraak?.organisatie?.kvkDetails?.naam,
+		organisatie: organisatie?.naam || t("unknownOrganisatie"),
+		afspraakOrganisatie: afspraak?.afdeling?.organisatie?.naam,
 		customerStatementMessage: customerStatementMessage?.filename || t("unknownCsm"),
 		csmId,
 		nTransactions: transactions.length || t("unknownCount"),

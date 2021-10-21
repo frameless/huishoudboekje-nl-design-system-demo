@@ -130,8 +130,8 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 							<DataItem label={t("afspraken.tegenrekening")}>
 								<HStack>
 									<Text>{afspraak.tegenRekening?.rekeninghouder}</Text>
-									{afspraak.organisatie?.id && (
-										<IconButton as={NavLink} to={Routes.Organisatie(afspraak.organisatie.id)} variant={"ghost"} size={"sm"}
+									{afspraak.afdeling?.organisatie?.id && (
+										<IconButton as={NavLink} to={Routes.Organisatie(afspraak.afdeling.organisatie.id)} variant={"ghost"} size={"sm"}
 											aria-label={t("global.actions.view")} icon={<ViewIcon />} />
 									)}
 								</HStack>

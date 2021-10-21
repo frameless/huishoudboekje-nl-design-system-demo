@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {Box, Button, Divider, FormControl, FormErrorMessage, FormLabel, Input, Stack, Tooltip, useBreakpointValue} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";

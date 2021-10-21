@@ -60,17 +60,17 @@ const FollowUpAfspraak = () => {
 
 					// This is why we use BatchHttpLink in src/services/graphql-client.ts, so that all of these will be sent in one HTTP request.
 					Promise.all(addZoektermen)
-						.then(() => {
-							toast({
-								success: t("messages.createAfspraakSuccess"),
-							});
-							push(Routes.ViewAfspraak(createdAfspraakId));
-						})
-						.catch(err => {
-							toast({
-								error: err.message,
-							});
-						});
+						   .then(() => {
+							   toast({
+								   success: t("messages.createAfspraakSuccess"),
+							   });
+							   push(Routes.ViewAfspraak(createdAfspraakId));
+						   })
+						   .catch(err => {
+							   toast({
+								   error: err.message,
+							   });
+						   });
 				}
 			};
 
@@ -79,7 +79,7 @@ const FollowUpAfspraak = () => {
 				credit: afspraak.credit,
 				rubriekId: afspraak.rubriek?.id,
 				omschrijving: afspraak.omschrijving,
-				organisatieId: afspraak.organisatie?.id,
+				afdelingId: afspraak.afdeling?.id,
 				tegenRekeningId: afspraak.tegenRekening?.id,
 			};
 

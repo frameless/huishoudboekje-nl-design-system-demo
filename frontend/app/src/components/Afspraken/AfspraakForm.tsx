@@ -1,3 +1,4 @@
+// @ts-disable Todo
 import {Box, Button, FormControl, FormErrorMessage, FormLabel, Input, InputGroup, InputLeftElement, Radio, RadioGroup, Stack} from "@chakra-ui/react";
 import React, {useContext, useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
@@ -58,16 +59,17 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 		})),
 		// @ts-ignore Todo: for some reason this throws an error, while this works perfectly fine. (31-03-2021)
 		...organisaties.reduce((options, o: Organisatie) => {
-			const rekeningen = (o.rekeningen || []).map(r => ({
-				key: `${o.id}-${r.id}`,
-				value: r.id,
-				label: [formatIBAN(r.iban), r.rekeninghouder],
-				context: {
-					iban: r.iban,
-					rekeninghouder: r.rekeninghouder,
-					organisatieId: o.id,
-				},
-			}));
+			const rekeningen = [];
+			// const rekeningen = (o.rekeningen || []).map(r => ({
+			// 	key: `${o.id}-${r.id}`,
+			// 	value: r.id,
+			// 	label: [formatIBAN(r.iban), r.rekeninghouder],
+			// 	context: {
+			// 		iban: r.iban,
+			// 		rekeninghouder: r.rekeninghouder,
+			// 		organisatieId: o.id,
+			// 	},
+			// }));
 			return [
 				...options,
 				...rekeningen,
@@ -120,7 +122,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 						options={tegenrekeningOptions} value={data.tegenRekeningId ? tegenrekeningOptions.find(o => o.value === data.tegenRekeningId) : null}
 						onChange={(result) => {
 							updateForm("tegenRekeningId", result?.value);
-							updateForm("organisatieId", result?.context.organisatieId);
+							// updateForm("organisatieId", result?.context.organisatieId); Todo
 						}} {...rekeningSelectProps} />
 					<FormErrorMessage>{t("afspraakDetailView.invalidTegenrekeningError")}</FormErrorMessage>
 				</FormControl>
