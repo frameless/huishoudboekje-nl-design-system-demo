@@ -1,4 +1,70 @@
-version: "3"
+version: "3.7"
+
+x-backend: &x-backend
+  build:
+    dockerfile: ./backend/dev.Dockerfile
+    context: .
+  volumes:
+    - ./backend:/app
+
+x-huishoudboekjeservice: &x-huishoudboekjeservice
+  build:
+    dockerfile: ./huishoudboekje_service/dev.Dockerfile
+    context: ./services
+  volumes:
+    - ./services/huishoudboekje_service:/app
+    - ./services/core_service/core_service:/app/core_service
+  environment:
+    HHB_DATABASE_URL: "postgresql://hhb:hhb@db/huishoudboekjeservice"
+
+x-organisatieservice: &x-organisatieservice
+  build:
+    dockerfile: ./organisatie_service/dev.Dockerfile
+    context: ./services
+  volumes:
+    - ./services/organisatie_service:/app
+    - ./services/core_service/core_service:/app/core_service
+  environment:
+    ORGANISATIE_DATABASE_URL: "postgresql://hhb:hhb@db/organisatieservice"
+
+x-grootboekservice: &x-grootboekservice
+  build:
+    dockerfile: ./grootboek_service/dev.Dockerfile
+    context: ./services
+  volumes:
+    - ./services/grootboek_service:/app
+    - ./services/core_service/core_service:/app/core_service
+  environment:
+    GROOTBOEK_DATABASE_URL: "postgresql://hhb:hhb@db/grootboekservice"
+
+x-banktransactieservice: &x-banktransactieservice
+  build:
+    dockerfile: ./bank_transactie_service/dev.Dockerfile
+    context: ./services
+  volumes:
+    - ./services/bank_transactie_service:/app
+    - ./services/core_service/core_service:/app/core_service
+  environment:
+    GROOTBOEK_DATABASE_URL: "postgresql://hhb:hhb@db/banktransactieservice"
+
+x-logservice: &x-logservice
+  build:
+    dockerfile: ./log_service/dev.Dockerfile
+    context: ./services
+  volumes:
+    - ./services/log_service:/app
+    - ./services/core_service/core_service:/app/core_service
+  environment:
+    GROOTBOEK_DATABASE_URL: "postgresql://hhb:hhb@db/logservice"
+
+x-tests: &x-tests
+  profiles:
+    - tests
+  entrypoint:
+    - /bin/sh
+    - -c
+    - pytest tests
+
 services:
   # Database
   db:
@@ -42,22 +108,8 @@ services:
 #    command:
 #      - npm install && npm start
 
-#  # OpenID connect provider
-#  dex:
-#    image: quay.io/dexidp/dex:v2.24.0
-#    command: serve /config.yaml
-#    ports:
-#      - 6556:6556
-#    volumes:
-#      - ./dev-local/dex.yaml:/config.yaml
-#    restart: unless-stopped
-
   backend:
-    build:
-      dockerfile: ./backend/dev.Dockerfile
-      context: .
-    volumes:
-      - ./backend:/app
+    <<: *x-backend
     environment:
       APP_SETTINGS: hhb_backend.config.DevelopmentConfig
 #     AUTH_AUDIENCE: None
@@ -74,62 +126,61 @@ services:
     ports:
       - 5000:8000
 
+  backend-test:
+    <<: *x-backend
+    <<: *x-tests
+
   huishoudboekjeservice:
-    build:
-      dockerfile: ./huishoudboekje_service/dev.Dockerfile
-      context: ./services
-    volumes:
-      - ./services/huishoudboekje_service:/app
-      - ./services/core_service/core_service:/app/core_service
+    <<: *x-huishoudboekjeservice
     environment:
       HHB_DATABASE_URL: "postgresql://hhb:hhb@db/huishoudboekjeservice"
     ports:
       - 8001:8000
 
+  huishoudboekjeservice-test:
+    <<: *x-huishoudboekjeservice
+    <<: *x-tests
+
   organisatieservice:
-    build:
-      dockerfile: ./organisatie_service/dev.Dockerfile
-      context: ./services
-    volumes:
-      - ./services/organisatie_service:/app
-      - ./services/core_service/core_service:/app/core_service
+    <<: *x-organisatieservice
     environment:
       ORGANISATIE_DATABASE_URL: "postgresql://hhb:hhb@db/organisatieservice"
     ports:
       - 8002:8000
 
+  organisatieservice-test:
+    <<: *x-organisatieservice
+    <<: *x-tests
+
   banktransactieservice:
-    build:
-      dockerfile: ./bank_transactie_service/dev.Dockerfile
-      context: ./services
-    volumes:
-      - ./services/bank_transactie_service:/app
-      - ./services/core_service/core_service:/app/core_service
+    <<: *x-banktransactieservice
     environment:
-      ORGANISATIE_DATABASE_URL: "postgresql://hhb:hhb@db/banktransactieservice"
+      TRANSACTIE_DATABASE_URL: "postgresql://hhb:hhb@db/banktransactieservice"
     ports:
       - 8003:8000
 
+  banktransactieservice-test:
+    <<: *x-banktransactieservice
+    <<: *x-tests
+
   grootboekservice:
-    build:
-      dockerfile: ./grootboek_service/dev.Dockerfile
-      context: ./services
-    volumes:
-      - ./services/grootboek_service:/app
-      - ./services/core_service/core_service:/app/core_service
+    <<: *x-grootboekservice
     environment:
-      ORGANISATIE_DATABASE_URL: "postgresql://hhb:hhb@db/grootboekservice"
+      GROOTBOEK_DATABASE_URL: "postgresql://hhb:hhb@db/grootboekservice"
     ports:
       - 8004:8000
 
+  grootboekservice-test:
+    <<: *x-organisatieservice
+    <<: *x-tests
+
   logservice:
-    build:
-      dockerfile: ./log_service/dev.Dockerfile
-      context: ./services
-    volumes:
-      - ./services/log_service:/app
-      - ./services/core_service/core_service:/app/core_service
+    <<: *x-logservice
     environment:
-      ORGANISATIE_DATABASE_URL: "postgresql://hhb:hhb@db/logservice"
+      LOG_DATABASE_URL: "postgresql://hhb:hhb@db/logservice"
     ports:
       - 8005:8000
+
+  logservice-test:
+    <<: *x-logservice
+    <<: *x-tests
