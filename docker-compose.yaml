@@ -122,6 +122,8 @@ services:
       TRANSACTIE_SERVICE_URL: "http://banktransactieservice:8000"
       GROOTBOEK_SERVICE_URL: "http://grootboekservice:8000"
       LOG_SERVICE_URL: "http://logservice:8000"
+      # The contact catalogus is another component that is in a separate docker-compose, where you need to change the port it runs on to 8006.
+      CONTACTCATALOGUS_SERVICE_URL: "http://host.docker.internal:8006"
       SECRET_KEY: koen
     ports:
       - 5000:8000
