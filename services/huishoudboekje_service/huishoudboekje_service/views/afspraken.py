@@ -7,7 +7,6 @@ from werkzeug.exceptions import BadRequest
 from models.afspraak import Afspraak
 from core_service.views.hhb_view import HHBView
 
-
 def get_date_from_request(request, key):
     value = request.args.get(key)
     if value:
@@ -77,10 +76,16 @@ class AfspraakView(HHBView):
                 ]
             },
             "afdeling_id": {
-                "type": "integer",
+                "oneOf": [
+                    {"type": "integer"},
+                    {"type": "null"},
+                ]
             },
             "postadres_id": {
-                "type": "string",
+                "oneOf": [
+                    {"type": "string"},
+                    {"type": "null"},
+                ]
             }
         },
         "required": []
@@ -111,13 +116,19 @@ class AfspraakView(HHBView):
                         400))
             cb(ids)
 
-    def add_filter_filter_burger(self):
-        """ Add filter_burger filter based on the id of burger """
-
-        def add_filter(ids):
-            self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.burger_id.in_(ids))
-
-        AfspraakView.filter_in_string('filter_burgers', add_filter)
+    @staticmethod
+    def filter_in_string_(name, cb):
+        filter_string = request.args.get(name)
+        if filter_string:
+            ids = []
+            for raw_id in filter_string.split(","):
+                try:
+                    ids.append(str(raw_id))
+                except ValueError:
+                    abort(make_response(
+                        {"errors": [f"Input for {name} is not correct, '{raw_id}' is not a string."]},
+                        400))
+            cb(ids)
 
     def add_filter_filter_datums(self):
         """ Add filter_datums filter based on the valid_from and valid_through """
@@ -142,6 +153,16 @@ class AfspraakView(HHBView):
                 )
             )
 
+    def add_filter_filter_burger(self):
+        """ Add filter_burger filter based on the id of burger """
+
+        def add_filter(ids):
+            self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.burger_id.in_(ids))
+
+        AfspraakView.filter_in_string('filter_burgers', add_filter)
+
+    # rubriek
+
     def add_filter_filter_rekening(self):
         """ Add filter_rekening filter"""
 
@@ -159,16 +180,14 @@ class AfspraakView(HHBView):
 
     def add_filter_filter_afdelingen(self):
         """ Add filter_afdelingen filter based on the id of the afdeling model """
-
-        def cb(ids):
+        def cb(ids): # not mandetory, make optional
             self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.afdeling_id.in_(ids))
 
         AfspraakView.filter_in_string('filter_afdelingen', cb)
 
     def add_filter_filter_postadressen(self):
         """ Add filter_postadressen filter based on the id of the postadres model """
-
-        def cb(ids):
+        def cb(ids): # not mandetory, make optional
             self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.postadres_id.in_(ids))
 
-        AfspraakView.filter_in_string('filter_afdelingen', cb)
+        AfspraakView.filter_in_string_('filter_postadressen', cb)

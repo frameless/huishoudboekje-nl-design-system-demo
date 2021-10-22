@@ -11,7 +11,6 @@ from hhb_backend.graphql.models import afspraak
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (gebruikers_activiteit_entities, log_gebruikers_activiteit)
 from hhb_backend.processen.automatisch_boeken import find_matching_afspraken_by_afspraak
 
-
 class AddAfspraakZoekterm(graphene.Mutation):
     class Arguments:
         afspraak_id = graphene.Int(required=True)

@@ -26,4 +26,5 @@ class Afdeling(graphene.ObjectType):
         return await request.dataloader.postadressen_by_id.auth_load_many(root.get('postadressen_ids')) or []
 
     async def resolve_afspraken(root, info):
-        return await request.dataloader.afspraken_by_afdeling.load(root.get('id')) or []
+        afdeling_id = root.get('id')
+        return await request.dataloader.afspraken_by_afdeling.load(afdeling_id) or []

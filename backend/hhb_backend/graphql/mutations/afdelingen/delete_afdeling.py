@@ -13,7 +13,6 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     log_gebruikers_activiteit,
 )
 
-
 class DeleteAfdeling(graphene.Mutation):
     class Arguments:
         # afdeling arguments
@@ -38,11 +37,14 @@ class DeleteAfdeling(graphene.Mutation):
         if not previous:
             raise GraphQLError("Afdeling not found")
 
-        response_hhb = requests.delete(
-            f"{settings.HHB_SERVICES_URL}/afdelingen/{id}"
-        )
-        if response_hhb.status_code != 204:
-            raise GraphQLError(f"Upstream API responded: {response_hhb.text}")
+        postadressen = previous.get("postadressen_ids")
+        for postadres_id in postadressen:
+            response_ContactCatalogus = requests.delete(
+                f"{settings.CONTACTCATALOGUS_SERVICE_URL}/addresses/{postadres_id}",
+                headers={"Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845"}
+            )
+            if response_ContactCatalogus.status_code != 204:
+                raise GraphQLError(f"Upstream API responded: {response_ContactCatalogus.text}")
 
         response_organisatie = requests.delete(
             f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/{id}"
@@ -50,15 +52,10 @@ class DeleteAfdeling(graphene.Mutation):
         if response_organisatie.status_code != 204:
             raise GraphQLError(f"Upstream API responded: {response_organisatie.text}")
 
-        postadressen = previous.get("postadressen_ids")
-        for postadres in postadressen:
-            post_id = postadres.get("id")
-            response_ContactCatalogus = requests.delete(
-                f"{settings.CONTACTCATALOGUS_SERVICE_URL}/addresses/{post_id}",
-                headers={"Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845"}
-            )
-            if response_ContactCatalogus.status_code != 204:
-                raise GraphQLError(f"Upstream API responded: {response_ContactCatalogus.text}")
-
+        response_hhb = requests.delete(
+            f"{settings.HHB_SERVICES_URL}/afdelingen/{id}"
+        )
+        if response_hhb.status_code != 204:
+            raise GraphQLError(f"Upstream API responded: {response_hhb.text}")
 
         return DeleteAfdeling(ok=True, previous=previous)

@@ -15,6 +15,7 @@ class UpdateAfspraakInput(graphene.InputObjectType):
     burger_id = graphene.Int()
     credit = graphene.Boolean()
     afdeling_id = graphene.Int()
+    postadres_id = graphene.String()
     tegen_rekening_id = graphene.Int()
     rubriek_id = graphene.Int()
     omschrijving = graphene.String()

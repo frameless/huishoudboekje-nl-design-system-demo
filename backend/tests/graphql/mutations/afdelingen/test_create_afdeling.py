@@ -1,8 +1,6 @@
 import pytest
 import requests_mock
 from requests_mock import Adapter
-
-
 class MockResponse():
     history = None
     raw = None
@@ -20,25 +18,29 @@ class MockResponse():
 def create_mock_adapter() -> Adapter:
     adapter = requests_mock.Adapter()
 
-    def test_matcher(request):
-        if request.path == "/afdelingen/":
-            return MockResponse({'data': {'id': 1}}, 201)
-        elif request.path == "/organisaties/" and request.query == "filter_ids=1":
+    def test_matcher(request):      
+        if request.path == "/organisaties/" and request.query == "filter_ids=1":
             return MockResponse({'data': [{'id': 1}]}, 200)
+
+        elif request.path == "/afdelingen/": #2 calls
+            return MockResponse({'data': {'id': 1, }}, 201)
+
         elif request.path == "/rekeningen/" and request.query == "filter_ibans=gb33bukb20201555555555":
             return MockResponse({'data': [{'id': 1}]}, 200)
+
         elif request.path == "/afdelingen/1/rekeningen/":
-            return MockResponse({'data': " "}, 201)
+            return MockResponse({'data': {'iban': 'GB33BUKB20201555555555', 'rekeninghouder': 'testrekeninghouder'}}, 201)
+
         elif request.path == "/addresses":
             return MockResponse({'id': 'test_postadres_id_post',
                                  'houseNumber': '52B',
                                  'street': 'testStraat',
                                  'postalCode': '9999ZZ',
                                  'locality': 'testPlaats'}, 201)
-        elif str(request) == "POST http://localhost:8001/afdelingen/1":
-            return MockResponse({'data': {'id': 1}}, 200)
+                    
         elif request.path == "/afdelingen/1":
-            return MockResponse({'data': {'id': 1, 'postadressen_ids': [{'id': 'test_postadres_id'}]}}, 201)
+            return MockResponse({ 'data': { 'id': 1, 'postadressen_ids' : ['test_postadres_id_post']}}, 200)
+
         elif request.path == "/gebruikersactiviteiten/":
             return MockResponse({'data': {'id': 1}}, 201)
 
@@ -49,7 +51,7 @@ def create_mock_adapter() -> Adapter:
 def test_create_afdeling_succes(client):
     with requests_mock.Mocker() as mock:
         mock._adapter = create_mock_adapter()
-
+        
         response = client.post(
             "/graphql",
             json={
@@ -85,26 +87,31 @@ def create_mock_adapter_new_rekening() -> Adapter:
     adapter = requests_mock.Adapter()
 
     def test_matcher(request):
-        if request.path == "/afdelingen/":
-            return MockResponse({'data': {'id': 1}}, 201)
-        elif request.path == "/organisaties/" and request.query == "filter_ids=1":
+        if request.path == "/organisaties/" and request.query == "filter_ids=1":
             return MockResponse({'data': [{'id': 1}]}, 200)
+        
+        elif request.path == "/afdelingen/": #1 organisatieservice #2 huishoudboekjeservice
+            return MockResponse({'data': {'id': 1}}, 201)
+        
         elif request.path == "/rekeningen/" and request.query == "filter_ibans=gb33bukb20201555555555":
             return MockResponse({'data': ""}, 200)
+
         elif request.path == "/rekeningen/":
             return MockResponse({'data': {'id': 10}}, 201)
+
         elif request.path == "/afdelingen/1/rekeningen/":
             return MockResponse({'data': "{'id': 1}"}, 201)
+
         elif request.path == "/addresses":
             return MockResponse({'id': 'test_postadres_id_post',
                                  'houseNumber': '52B',
                                  'street': 'testStraat',
                                  'postalCode': '9999ZZ',
                                  'locality': 'testPlaats'}, 201)
-        elif str(request) == "POST http://localhost:8001/afdelingen/1":
-            return MockResponse({'data': {'id': 1}}, 200)
-        elif request.path == "/afdelingen/1":
-            return MockResponse({'data': {'id': 1, 'postadressen_ids': [{'id': 'test_postadres_id'}]}}, 201)
+
+        elif request.path == "/afdelingen/1": #1 get #2 post
+            return MockResponse({ 'data': { 'id': 1, 'postadressen_ids' : ['test_postadres_id_post']}}, 200)
+
         elif request.path == "/gebruikersactiviteiten/":
             return MockResponse({'data': {'id': 1}}, 201)
 

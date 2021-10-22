@@ -23,7 +23,7 @@ def create_mock_adapter() -> Adapter:
 
     def test_matcher(request):
         if request.path == "/afdelingen/" and request.query == "filter_ids=1":
-            return MockResponse({'data': [{'id': 1, 'postadressen_ids': [{'id': 'test_postadres_id'}]}]}, 200)
+            return MockResponse({'data': [{'id': 1, 'postadressen_ids': [ 'test_postadres_id' ]}]}, 200)
         elif request.path == "/gebruikersactiviteiten/":
             return MockResponse({'data': {'id': 1}}, 201)
         elif request.path == "/afdelingen/1":
@@ -37,19 +37,20 @@ def create_mock_adapter() -> Adapter:
 def test_delete_afdeling(client):
     with requests_mock.Mocker() as mock:
         mock._adapter = create_mock_adapter()
-        adapter_hhb = mock.delete(f"{settings.HHB_SERVICES_URL}/afdelingen/1", status_code=204)
+        adapter_contact = mock.delete(f"{settings.CONTACTCATALOGUS_SERVICE_URL}/addresses/test_postadres_id", status_code=204)
         adapter_org_serv = mock.delete(f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/1", status_code=204)
+        adapter_hhb = mock.delete(f"{settings.HHB_SERVICES_URL}/afdelingen/1", status_code=204)
 
         response = client.post(
             "/graphql",
             json={
                 "query": '''
-mutation test($id: Int!) {
-  deleteAfdeling(id: $id) {
-    ok
-  }
-}
-''',
+                    mutation test($id: Int!) {
+                    deleteAfdeling(id: $id) {
+                        ok
+                    }
+                    }
+                    ''',
                 "variables": {"id": 1}},
             content_type='application/json'
         )
@@ -59,6 +60,7 @@ mutation test($id: Int!) {
             }
         }}
 
+        assert adapter_contact.called_once
         assert adapter_hhb.called_once
         assert adapter_org_serv.called_once
         assert mock._adapter.call_count == 5

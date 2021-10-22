@@ -1,14 +1,15 @@
 """ Test DELETE /afdelingen/(<afdeling_id>/) """
 from models.afdeling import Afdeling
 
-
 def test_afdelingen_delete_success(client, dbsession, afdeling_factory):
     """ Test a succesfull DELETE on afdelingen """
-    afdeling = afdeling_factory.createafdeling()
-    assert dbsession.query(afdeling).count() == 1
+    assert dbsession.query(Afdeling).count() == 0
+    afdeling = afdeling_factory.createAfdeling()
+    assert dbsession.query(Afdeling).count() == 1
+
     response = client.delete(f'/afdelingen/{afdeling.id}')
     assert response.status_code == 204
-    assert dbsession.query(afdeling).count() == 0
+    assert dbsession.query(Afdeling).count() == 0
 
 
 def test_afdelingen_delete_bad_request(client):

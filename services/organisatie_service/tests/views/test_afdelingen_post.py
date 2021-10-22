@@ -1,14 +1,21 @@
 """ Test POST /afdelingen/(<afdeling_id>/) """
 import json
 from models.afdeling import Afdeling
+from models.organisatie import Organisatie
 
-
-def test_afdelingen_post_new_organisation(client, dbsession):
+def test_afdelingen_post_new_organisation(client, dbsession, organisatie_factory):
     """ Test /afdelingen/ path """
     assert dbsession.query(Afdeling).count() == 0
+    assert dbsession.query(Organisatie).count() == 0
+
+    organisatie = organisatie_factory.createOrganisatie()
+    assert dbsession.query(Organisatie).count() == 1
+    assert organisatie.id == 1
+
+    
     afdeling_dict = {
-        "organisatie_id": 1,
-        "naam": "testbedrijf"
+        "organisatie_id": organisatie.id,
+        "naam": "testbedrijf",
     }
     response = client.post(
         '/afdelingen/',
@@ -23,7 +30,7 @@ def test_afdelingen_post_new_organisation(client, dbsession):
 
 def test_afdelingen_post_update_afdeling(client, afdeling_factory):
     """ Test /afdelingen/<afdeling_id> path """
-    afdeling = afdeling_factory.createafdeling(organisatie_id= 1)
+    afdeling = afdeling_factory.createAfdeling()
     update_dict = {
         "naam": "testbedrijf"
     }
