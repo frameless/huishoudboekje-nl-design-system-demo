@@ -1266,6 +1266,7 @@ export type UpdateAfspraakInput = {
   burgerId?: Maybe<Scalars['Int']>;
   credit?: Maybe<Scalars['Boolean']>;
   afdelingId?: Maybe<Scalars['Int']>;
+  postadresId?: Maybe<Scalars['String']>;
   tegenRekeningId?: Maybe<Scalars['Int']>;
   rubriekId?: Maybe<Scalars['Int']>;
   omschrijving?: Maybe<Scalars['String']>;
@@ -1480,6 +1481,13 @@ export type DeleteOrganisatieMutationVariables = Exact<{
 
 
 export type DeleteOrganisatieMutation = { deleteOrganisatie?: Maybe<{ ok?: Maybe<boolean> }> };
+
+export type DeleteAfdelingMutationVariables = Exact<{
+  afdelingId: Scalars['Int'];
+}>;
+
+
+export type DeleteAfdelingMutation = { deleteAfdeling?: Maybe<{ ok?: Maybe<boolean> }> };
 
 export type DeleteAfspraakMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -2661,6 +2669,39 @@ export function useDeleteOrganisatieMutation(baseOptions?: Apollo.MutationHookOp
 export type DeleteOrganisatieMutationHookResult = ReturnType<typeof useDeleteOrganisatieMutation>;
 export type DeleteOrganisatieMutationResult = Apollo.MutationResult<DeleteOrganisatieMutation>;
 export type DeleteOrganisatieMutationOptions = Apollo.BaseMutationOptions<DeleteOrganisatieMutation, DeleteOrganisatieMutationVariables>;
+export const DeleteAfdelingDocument = gql`
+    mutation deleteAfdeling($afdelingId: Int!) {
+  deleteAfdeling(id: $afdelingId) {
+    ok
+  }
+}
+    `;
+export type DeleteAfdelingMutationFn = Apollo.MutationFunction<DeleteAfdelingMutation, DeleteAfdelingMutationVariables>;
+
+/**
+ * __useDeleteAfdelingMutation__
+ *
+ * To run a mutation, you first call `useDeleteAfdelingMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteAfdelingMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteAfdelingMutation, { data, loading, error }] = useDeleteAfdelingMutation({
+ *   variables: {
+ *      afdelingId: // value for 'afdelingId'
+ *   },
+ * });
+ */
+export function useDeleteAfdelingMutation(baseOptions?: Apollo.MutationHookOptions<DeleteAfdelingMutation, DeleteAfdelingMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteAfdelingMutation, DeleteAfdelingMutationVariables>(DeleteAfdelingDocument, options);
+      }
+export type DeleteAfdelingMutationHookResult = ReturnType<typeof useDeleteAfdelingMutation>;
+export type DeleteAfdelingMutationResult = Apollo.MutationResult<DeleteAfdelingMutation>;
+export type DeleteAfdelingMutationOptions = Apollo.BaseMutationOptions<DeleteAfdelingMutation, DeleteAfdelingMutationVariables>;
 export const DeleteAfspraakDocument = gql`
     mutation deleteAfspraak($id: Int!) {
   deleteAfspraak(id: $id) {

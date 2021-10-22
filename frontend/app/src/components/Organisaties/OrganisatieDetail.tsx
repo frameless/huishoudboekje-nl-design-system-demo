@@ -26,6 +26,8 @@ import useToaster from "../../utils/useToaster";
 import DeadEndPage from "../DeadEndPage";
 import BackButton from "../Layouts/BackButton";
 import Page from "../Layouts/Page";
+import Section from "../Layouts/Section";
+import AfdelingenList from "./AfdelingenList";
 import OrganisatieDetailView from "./Views/OrganisatieDetailView";
 
 const OrganisatieDetail = () => {
@@ -43,10 +45,9 @@ const OrganisatieDetail = () => {
 	const onClickDelete = () => toggleDeleteDialog();
 
 	const $organisatie = useGetOrganisatieQuery({
-		fetchPolicy: "no-cache",
 		variables: {id: parseInt(id)},
 	});
-	const [deleteOrganization, {loading: deleteLoading}] = useDeleteOrganisatieMutation({
+	const [deleteOrganisatie, {loading: deleteLoading}] = useDeleteOrganisatieMutation({
 		variables: {id: parseInt(id)},
 		refetchQueries: [
 			{query: GetOrganisatiesDocument},
@@ -57,7 +58,7 @@ const OrganisatieDetail = () => {
 	return (
 		<Queryable query={$organisatie} children={({organisatie}: {organisatie: Organisatie}) => {
 			const onConfirmDeleteDialog = () => {
-				deleteOrganization()
+				deleteOrganisatie()
 					.then(() => {
 						onCloseDeleteDialog();
 						toast({
@@ -109,7 +110,13 @@ const OrganisatieDetail = () => {
 						</AlertDialogContent>
 					</AlertDialog>
 
-					<OrganisatieDetailView organisatie={organisatie} />
+					<Section>
+						<OrganisatieDetailView organisatie={organisatie} />
+					</Section>
+
+					{(organisatie.afdelingen || []).length > 0 && (
+						<AfdelingenList afdelingen={organisatie.afdelingen || []} />
+					)}
 				</Page>
 			);
 		}} />

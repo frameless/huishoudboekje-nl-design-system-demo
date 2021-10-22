@@ -1,4 +1,3 @@
-// @ts-nocheck
 import {useBreakpointValue} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
@@ -52,7 +51,7 @@ const EditOrganisatie = () => {
 
 	return (
 		<Queryable query={$organisatie} error={<Redirect to={Routes.NotFound} />}>{({organisatie}: {organisatie: Organisatie}) => (
-			<Page backButton={<BackButton to={Routes.Organisatie(parseInt(id))} />} title={truncateText(organisatie.kvkDetails?.naam || "", maxOrganisatieNaamLength)}>
+			<Page backButton={<BackButton to={Routes.Organisatie(parseInt(id))} />} title={truncateText(organisatie.naam || "", maxOrganisatieNaamLength)}>
 				<OrganisatieForm onSubmit={onSubmit} isLoading={$updateOrganisatie.loading} organisatie={organisatie} />
 			</Page>
 		)}

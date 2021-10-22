@@ -37,7 +37,7 @@
       "deleteSuccess": "Bankrekening is verwijderd.",
       "updateSuccess": "Gegevens succesvol gewijzigd.",
       "deleteTitle": "Bankrekening verwijderen.",
-      "deleteQuestion": "Weet je zeker dat je bankrekening {{iban}} op naam van {{rekeninghouder}} wil verwijderen? Deze actie kan ongedaan worden gemaakt.",
+      "deleteQuestion": "Weet je zeker dat je bankrekening {{iban}} op naam van {{rekeninghouder}} wil verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
       "alreadyExistsError": "Dit bankrekeningnummer bestaat al bij deze burger."
     },
     "burgers": {
@@ -72,11 +72,12 @@
     },
     "huishoudenBurger": {
       "noOptionsSelectedError": "Er zijn geen burgers gekozen. Kies minimaal een burger om toe te voegen aan dit huishouden.",
-      "addSuccess": "{{names}} is toegevoegd aan dit huishouden.",
-      "addSuccess_plural": "{{names}} zijn toegevoegd aan dit huishouden.",
+      "addSuccess_one": "{{names}} is toegevoegd aan dit huishouden.",
+      "addSuccess_other": "{{names}} zijn toegevoegd aan dit huishouden.",
       "deleteSuccess": "{{burgerName}} is verwijderd uit dit huishouden."
     },
     "noHuishoudenSearchResults": "Geen huishoudens gevonden. Gebruik een andere zoekterm.",
+    "deleteAfdelingSuccess": "Afdeling {{name}} succesvol verwijderd.",
     "organisaties": {
       "createSuccessMessage": "Nieuwe organisatie succesvol opgeslagen.",
       "updateSuccessMessage": "Gegevens succesvol gewijzigd.",
@@ -86,10 +87,6 @@
       "invalidKvknummer": "Vul het KvK-nummer in. Het KvK-nummer bestaat uit 8 cijfers.",
       "invalidVestigingsnummer": "Vul het vestigingsnummer in. Het vestigingsnummer bestaat uit 12 cijfers.",
       "invalidNaam": "Vul de naam van de organisatie in.",
-      "invalidStraatnaam": "Vul de straatnaam in.",
-      "invalidHuisnummer": "Vul het huisnummer in.",
-      "invalidPostcode": "Vul een geldige postcode in. Invoer zonder spaties. Voorbeeld: 1234AB",
-      "invalidPlaatsnaam": "Vul de plaatsnaam in.",
       "addHint": "Voeg organisaties toe door te klikken op de knop {{buttonLabel}}.",
       "noSearchResults": "Geen organisaties gevonden. Gebruik een andere zoekterm.",
       "alreadyExists": "Er bestaat al een organisatie met dit KvK-nummer en vestigingsnummer."
@@ -118,6 +115,7 @@
       "undoAfletteren": "Afletteren ongedaan maken",
       "filter": "Filteren",
       "backToList": "Terug naar overzicht",
+      "viewBurgerHuishouden": "Bekijk huishouden",
       "brievenExport": "Exporteer gegevens voor brieven",
       "clearSearch": "Zoekopdracht wissen",
       "options": "Opties",
@@ -297,10 +295,6 @@
           "title": "Organisatie",
           "helperText": "Vul de gegevens van de organisatie in."
         },
-        "contact": {
-          "title": "Contact",
-          "helperText": "Vul de contactgegevens van de organisatie in."
-        },
         "rekeningen": {
           "title": "Rekeningen",
           "detailText": "Rekeningen van de organisatie."
@@ -310,20 +304,10 @@
         "kvknummer": "KvK-nummer",
         "vestigingsnummer": "Vestigingsnummer",
         "naam": "Bedrijfsnaam",
-        "straatnaam": "Straatnaam",
-        "huisnummer": "Huisnummer",
-        "postcode": "Postcode",
-        "plaatsnaam": "Plaatsnaam",
-        "companyName": "Bedrijfsnaam",
-        "kvkNumber": "KvK-nummer",
-        "street": "Straatnaam",
-        "houseNumber": "Huisnummer",
-        "zipcode": "Postcode",
-        "city": "Plaatsnaam"
+        "kvkNumber": "KvK-nummer"
       },
       "tooltips": {
-        "kvknummer": "Het KvK-nummer bestaat uit acht cijfers. Voorbeeld: 27348329",
-        "postcode": "Invoer zonder spaties. Voorbeeld: 1234AB"
+        "kvknummer": "Het KvK-nummer bestaat uit acht cijfers. Voorbeeld: 27348329"
       }
     },
     "rekeningen": {
@@ -493,9 +477,6 @@
     }
   },
   "backToBurgersList": "Terug naar alle burgers",
-  "actions": {
-    "viewBurgerHuishouden": "Bekijk huishouden"
-  },
   "sidebar": {
     "rapportage": "Rapportage",
     "huishoudens": "Huishoudens",
@@ -583,6 +564,11 @@
     "title": "Huishoudens"
   },
   "suggestion": "Suggestie",
+  "afdeling": "Afdeling",
+  "departments": {
+    "addresses": "Postadressen",
+    "rekeningen": "Rekeningen"
+  },
   "organizations": {
     "organizations": "Organisaties"
   },
@@ -619,8 +605,8 @@
   "allBurgers": "Alle burgers",
   "interval": {
     "period": "Periode",
-    "month": "maand",
-    "month_plural": "maanden"
+    "month_one": "maand",
+    "month_other": "maanden"
   },
   "statuspage": {
     "title": "Status",
