@@ -29,7 +29,7 @@ def create_mock_adapter() -> Adapter:
         elif request.path == "/gebruikersactiviteiten/":
             return MockResponse({'data': {'id': 1}}, 201)
         elif request.path == "/afdelingen/" and request.query == "filter_organisaties=1":
-            return MockResponse({'data': [{'id': 1, 'organisatie_id': 1, 'postadressen_ids': [{'id': 'test_postadres_id'}]}]}, 200)
+            return MockResponse({'data': [{'id': 1, 'organisatie_id': 1, 'postadressen_ids': ['test_postadres_id']}]}, 200)
         elif request.path == "/addresses/test_postadres_id":
             return MockResponse({'id': 'test_postadres_id'}, 204)
         elif request.path == "/afdelingen/1":

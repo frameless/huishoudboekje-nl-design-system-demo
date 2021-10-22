@@ -16,10 +16,9 @@ def delete_afdeling_util(afdeling):
         raise GraphQLError(f"Upstream API responded: {response_organisatie.text}")
 
     postadressen = afdeling.get("postadressen_ids")
-    for postadres in postadressen:
-        post_id = postadres.get("id")
+    for postadres_id in postadressen:
         response_ContactCatalogus = requests.delete(
-            f"{settings.CONTACTCATALOGUS_SERVICE_URL}/addresses/{post_id}",
+            f"{settings.CONTACTCATALOGUS_SERVICE_URL}/addresses/{postadres_id}",
             headers={"Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845"}
         )
         if response_ContactCatalogus.status_code != 204:
