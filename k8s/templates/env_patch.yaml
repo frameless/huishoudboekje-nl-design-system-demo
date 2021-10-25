@@ -1,4 +1,148 @@
 ---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hhb-backend
+spec:
+  minReplicas: ${DEFAULT_REPLICAS}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    name: hhb-backend
+  name: hhb-backend
+spec:
+  replicas: ${DEFAULT_REPLICAS}
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hhb-banktransactieservice
+spec:
+  minReplicas: ${DEFAULT_REPLICAS}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    name: hhb-banktransactieservice
+  name: hhb-banktransactieservice
+spec:
+  replicas: ${DEFAULT_REPLICAS}
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hhb-frontend
+spec:
+  minReplicas: ${DEFAULT_REPLICAS}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    name: hhb-frontend
+  name: hhb-frontend
+spec:
+  replicas: ${DEFAULT_REPLICAS}
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hhb-grootboekservice
+spec:
+  minReplicas: ${DEFAULT_REPLICAS}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    name: hhb-grootboekservice
+  name: hhb-grootboekservice
+spec:
+  replicas: ${DEFAULT_REPLICAS}
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hhb-huishoudboekjeservice
+spec:
+  minReplicas: ${DEFAULT_REPLICAS}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    name: hhb-huishoudboekjeservice
+  name: hhb-huishoudboekjeservice
+spec:
+  replicas: ${DEFAULT_REPLICAS}
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hhb-logservice
+spec:
+  minReplicas: ${DEFAULT_REPLICAS}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    name: hhb-logservice
+  name: hhb-logservice
+spec:
+  replicas: ${DEFAULT_REPLICAS}
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hhb-organisatieservice
+spec:
+  minReplicas: ${DEFAULT_REPLICAS}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    name: hhb-organisatieservice
+  name: hhb-organisatieservice
+spec:
+  replicas: ${DEFAULT_REPLICAS}
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hhb-unleashservice
+spec:
+  minReplicas: ${DEFAULT_REPLICAS}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    name: hhb-unleashservice
+  name: hhb-unleashservice
+spec:
+  replicas: ${DEFAULT_REPLICAS}
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hhb-database
+spec:
+  minReplicas: ${DEFAULT_REPLICAS}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    name: hhb-database
+  name: hhb-database
+spec:
+  replicas: ${DEFAULT_REPLICAS}
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:

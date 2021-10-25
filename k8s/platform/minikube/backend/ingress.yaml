@@ -1,8 +1,0 @@
----
-#https://kubernetes.io/docs/tasks/access-application-cluster/ingress-minikube/
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: hhb-backend-ingress
-  labels:
-    name: hhb-backend-ingress

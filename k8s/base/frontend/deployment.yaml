@@ -24,20 +24,22 @@ spec:
               containerPort: 8080
               protocol: TCP
           livenessProbe:
+            initialDelaySeconds: 60
             httpGet:
               path: /
               port: http
           readinessProbe:
+            initialDelaySeconds: 60
             httpGet:
               path: /
               port: http
-          #          resources:
-          #            limits:
-          #              cpu: 100m
-          #              memory: 128Mi
-          #            requests:
-          #              cpu: 10m
-          #              memory: 12Mi
+          resources:
+            limits:
+              cpu: 100m
+              memory: 128Mi
+            requests:
+              cpu: 10m
+              memory: 12Mi
           volumeMounts:
             - name: theme-volume
               mountPath: /opt/bitnami/apps/html/theme

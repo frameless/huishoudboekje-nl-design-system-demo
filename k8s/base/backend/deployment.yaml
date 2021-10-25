@@ -23,24 +23,26 @@ spec:
             - name: http
               containerPort: 8000
               protocol: TCP
-          #          livenessProbe:
-          #            httpGet:
-          #              path: /api/health
-          #              port: http
-          #          readinessProbe:
-          #            httpGet:
-          #              path: /api/health
-          #              port: http
-          #          resources:
-          #            limits:
-          #              cpu: 1000m
-          #              memory: 256Mi
-          #            requests:
-          #              cpu: 100m
-          #              memory: 128Mi
+          livenessProbe:
+            initialDelaySeconds: 60
+            httpGet:
+              path: /api/health
+              port: http
+          readinessProbe:
+            initialDelaySeconds: 60
+            httpGet:
+              path: /api/health
+              port: http
+          resources:
+            limits:
+              cpu: "1"
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
           env:
             - name: APP_SETTINGS
-              value: "hhb_backend.config.LocalConfig" # dit moet ProductionConfig worden
+              value: "hhb_backend.config.ProductionConfig"
             - name: AUTH_AUDIENCE
               value: "must be changed with env_patch.yaml"
             - name: AUTH_TOKEN_SECRET

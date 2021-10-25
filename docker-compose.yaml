@@ -144,7 +144,7 @@ services:
     environment:
       APP_SETTINGS: hhb_backend.config.DevelopmentConfig
 #     AUTH_AUDIENCE: None
-#     AUTH_TOKEN_SECRET: koen
+#     AUTH_TOKEN_SECRET: test
       OIDC_CLIENT_SECRETS: /app/etc/client_secrets.json
 #     OIDC_CLOCK_SKEW: "600"
       PREFIX: /api

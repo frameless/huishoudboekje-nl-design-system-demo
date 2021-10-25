@@ -1,9 +1,0 @@
----
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-resources:
-  - backend/route_openshift.yaml
-  - database/volumes.yaml
-  - dex/route_openshift.yaml
-  - frontend/route_openshift.yaml
-  - unleashservice/route_openshift.yaml

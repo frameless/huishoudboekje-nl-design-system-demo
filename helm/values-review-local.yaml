@@ -1,6 +1,0 @@
-medewerker-backend:
-  serviceChartPrefix: huishoudboekje
-  oidc:
-    redirectUris:
-      - prefix: http://hhb.minikube
-        callback: http://hhb.minikube/api/oidc_callback

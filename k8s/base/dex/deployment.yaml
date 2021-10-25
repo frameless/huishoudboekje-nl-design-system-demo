@@ -27,20 +27,22 @@ spec:
             - name: http
               containerPort: 5556
               protocol: TCP
-          #          resources:
-          #            limits:
-          #              cpu: '1'
-          #              memory: 1Gi
-          #            requests:
-          #              cpu: 100m
-          #              memory: 512Mi
+          resources:
+            limits:
+              cpu: "1"
+              memory: 1Gi
+            requests:
+              cpu: 100m
+              memory: 512Mi
           livenessProbe:
+            initialDelaySeconds: 60
             httpGet:
-              path: /healthz
+              path: /dex/healthz
               port: http
           readinessProbe:
+            initialDelaySeconds: 60
             httpGet:
-              path: /healthz
+              path: /dex/healthz
               port: http
           volumeMounts:
             - name: dex-config-volume

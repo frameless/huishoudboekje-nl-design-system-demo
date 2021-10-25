@@ -1,9 +1,0 @@
----
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-resources:
-  - backend/ingress.yaml
-  - database/volumes.yaml
-  - dex/ingress.yaml
-  - frontend/ingress.yaml
-  - unleashservice/ingress.yaml

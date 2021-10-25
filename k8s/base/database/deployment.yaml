@@ -24,6 +24,13 @@ spec:
           envFrom:
             - configMapRef:
                 name: postgres-config
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 3
+              memory: 256Mi
           env:
             - name: POSTGRESQL_PASSWORD
               valueFrom:

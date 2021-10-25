@@ -1,0 +1,101 @@
+.retry: &retry
+  retry:
+    max: 2
+    when: script_failure
+
+.deployer: &deployer
+  image: registry.gitlab.com/commonground/huishoudboekje/review-app-deployer:latest
+  tags:
+    - cg
+    - docker
+
+# Deploy template for all environments
+.deploy: &deploy
+  <<: *deployer
+  <<: *retry
+  stage: deploy
+  needs:
+    - build-docker-images
+  script:
+    - sh ./k8s/build.sh
+    - kubectl apply -f k8s/dist/namespace.yaml
+    - sh ./k8s/deploy.sh
+    - echo -e Deployment is done! Go check out the running app at https://${HHB_HOST}
+
+deploy-deployment-master:
+  <<: *deploy
+  environment:
+    name: demo
+    url: https://demo.huishoudboekje.demoground.nl/
+  variables:
+    HHB_HOST: "demo.huishoudboekje.demoground.nl"
+    NAMESPACE: "hhb-demo"
+    USE_PLATFORM: "azure_tad" # azure - test acc demo
+  only:
+    - master@commonground/huishoudboekje/app-new
+
+deploy-deployment-acceptance:
+  <<: *deploy
+  environment:
+    name: acc
+    url: https://acc.huishoudboekje.demoground.nl/
+  variables:
+    HHB_HOST: "acc.huishoudboekje.demoground.nl"
+    NAMESPACE: "hhb-acc"
+    USE_PLATFORM: "azure_tad" # azure - test acc demo
+  only:
+    - acceptance
+
+deploy-deployment-test:
+  <<: *deploy
+  environment:
+    name: test
+    url: https://test.huishoudboekje.demoground.nl/
+  variables:
+    DEFAULT_REPLICAS: 2 # test acc and demo 2 replica's
+    HHB_HOST: "test.huishoudboekje.demoground.nl"
+    NAMESPACE: "hhb-test"
+    USE_PLATFORM: "azure_tad" # azure - test acc demo
+  only:
+    - develop
+
+# Deploy for review cluster
+deploy-deployment-review:
+  <<: *deploy
+  environment:
+    name: review/$CI_COMMIT_REF_SLUG
+    url: https://hhb-$CI_COMMIT_REF_SLUG.$BASE_DOMAIN/
+    on_stop: destroy-review
+    auto_stop_in: 7 days
+  variables:
+    HHB_HOST: "hhb-$CI_COMMIT_REF_SLUG.nlx.reviews"
+    NAMESPACE: "hhb-$CI_COMMIT_REF_SLUG"
+    USE_PLATFORM: "azure_review"
+  only:
+    - branches@commonground/huishoudboekje/app-new
+  except:
+    - master
+    - develop
+    - acceptance
+
+## Destroy app (only review cluster)
+destroy-review:
+  <<: *deployer
+  stage: maintenance
+  needs:
+    - deploy-deployment-review
+  script:
+    - kubectl delete namespace ${NAMESPACE}
+  environment:
+    name: review/$CI_COMMIT_REF_SLUG
+    action: stop
+  variables:
+    GIT_STRATEGY: none # the runner won’t try to check out the code after the branch is deleted.
+    NAMESPACE: "hhb-$CI_COMMIT_REF_SLUG"
+  when: manual
+  only:
+    - branches@commonground/huishoudboekje/app-new
+  except:
+    - master
+    - develop
+    - acceptance

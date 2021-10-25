@@ -1,0 +1,122 @@
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: hhb-database-volume-${NAMESPACE}
+  labels:
+    name: hhb-database-volume-${NAMESPACE}
+spec:
+  storageClassName: default
+  capacity:
+    storage: 512Mi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data"
+
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: hhb-database-volumeclaim
+  labels:
+    name: hhb-database-volumeclaim
+spec:
+  storageClassName: default
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 512Mi
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hhb-dex-ingress
+  labels:
+    name: hhb-dex-ingress
+spec:
+  tls:
+    - hosts:
+        - ${HHB_FRONTEND_DNS}
+      secretName: medewerker-frontend-ingress-tls
+  rules:
+    - host: ${HHB_FRONTEND_DNS}
+      http:
+        paths:
+          - path: /dex
+            pathType: Prefix
+            backend:
+              service:
+                name: hhb-dex
+                port:
+                  number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hhb-frontend-ingress
+  labels:
+    name: hhb-frontend-ingress
+spec:
+  tls:
+    - hosts:
+        - ${HHB_FRONTEND_DNS}
+      secretName: medewerker-frontend-ingress-tls
+  rules:
+    - host: ${HHB_FRONTEND_DNS}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: hhb-frontend
+                port:
+                  number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hhb-backend-ingress
+  labels:
+    name: hhb-backend-ingress
+spec:
+  tls:
+    - hosts: 
+        - ${HHB_FRONTEND_DNS}
+      secretName: medewerker-frontend-ingress-tls
+  rules:
+    - host: ${HHB_FRONTEND_DNS}
+      http:
+        paths:
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: hhb-backend
+                port:
+                  number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hhb-unleashservice
+  labels:
+    name: hhb-unleashservice
+spec:
+  tls:
+    - hosts:
+        - ${HHB_HOST}
+      secretName: medewerker-frontend-ingress-tls
+  rules:
+    - host: ${HHB_HOST}
+      http:
+        paths:
+          - path: /api/unleash
+            pathType: Prefix
+            backend:
+              service:
+                name: hhb-unleashservice
+                port:
+                  number: 80

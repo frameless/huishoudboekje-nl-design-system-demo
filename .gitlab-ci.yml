@@ -1,3 +1,4 @@
+---
 # Some clarification on terminology:
 # BE = Backend (The API)
 # FE = Frontend (The UI)
@@ -8,76 +9,23 @@
 # Hence we only need a pipeline for T, A and P, not for D.
 variables:
   IMAGE_TAG: $CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
-  HHB_SECRET: "koen"
+  HHB_SECRET: "test"
+  CI_API_V4_URL: https://gitlab.com/api/v4
+  CI_PROJECT_ID: 20352213
+  UNLEASH_INSTANCEID: JbZyPux6M7xwejsESy9L
+  PYTHON_POSTGRES: python-postgres
+  UNLEASH_APPNAME: huishoudboekje-frontend
 
 stages:
   - build
-# Todo - deploy
-# Todo - test
-# Todo - data
-# Todo - maintenance
+  - deploy
+  - test
+  - data
+  - maintenance
 
 include:
-  - /.gitlab/ci/stage-build.yaml
-
-## Deploy
-#.deploy: &deploy
-#  <<: *deployer
-#  <<: *retry
-#  stage: deploy
-#  needs:
-#    - build-app-review
-#    - build-deployment-review
-#  script:
-#    - kubectl apply -f k8s/dist/namespace.yaml
-#    - kubectl apply -f k8s/dist/single_deploy_file.yaml --namespace=${NAMESPACE}
-#    - echo -e Deployment is done! Go check out the running app at https://${HHB_HOST}
-#
-#.destroy: &destroy
-#  <<: *deployer
-#  stage: deploy
-#  needs: []
-#  script:
-#    - kubectl delete namespace ${NAMESPACE}
-#
-#deploy-review:
-#  <<: *deploy
-#  <<: *review
-#  environment:
-#    name: review/$CI_COMMIT_REF_SLUG
-#    url: https://hhb-$CI_COMMIT_REF_SLUG.$BASE_DOMAIN/
-#    on_stop: destroy-review
-#    auto_stop_in: 7 days
-#  artifacts:
-#    paths:
-#      - k8s/dist
-#
-## Shut down app
-#destroy-review:
-#  <<: *destroy
-#  <<: *review
-#  environment:
-#    name: review/$CI_COMMIT_REF_SLUG
-#    action: stop
-#  variables:
-#    NAMESPACE: "hhb-$CI_COMMIT_REF_SLUG"
-#    GIT_STRATEGY: none
-#  script:
-#    - kubectl delete namespace $NAMESPACE
-#  when: manual
-#
-## Debug
-#inspect-envs:
-#  stage: deploy
-#  needs: [ ]
-#  script:
-#    - env -0 | sort -z | tr '\0' '\n'
-#  when: manual
-
-#include:
-#  - '/.gitlab/ci/build.yml'
-#  - '/.gitlab/ci/deploy.yml'
-#  - '/.gitlab/ci/test.yml'
-#  - '/.gitlab/ci/e2e.yml'
-#  - '/.gitlab/ci/data.yml'
-#  - '/.gitlab/ci/maintenance.yml'
+  - /.gitlab/ci/build.yaml
+  - /.gitlab/ci/deploy.yaml
+  - /.gitlab/ci/test.yaml
+  - /.gitlab/ci/data.yaml
+  - /.gitlab/ci/maintenance.yaml

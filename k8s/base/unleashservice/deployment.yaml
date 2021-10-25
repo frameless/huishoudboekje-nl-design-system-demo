@@ -33,13 +33,13 @@ spec:
               path: /health
               port: http
             initialDelaySeconds: 60
-          #          resources:
-          #            limits:
-          #              cpu: 1000m
-          #              memory: 256Mi
-          #            requests:
-          #              cpu: 100m
-          #              memory: 128Mi
+          resources:
+            limits:
+              cpu: "1"
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
           env:
             - name: PORT
               value: "8080"
