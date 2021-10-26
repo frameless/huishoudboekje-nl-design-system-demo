@@ -7,6 +7,8 @@ import {
 	AlertDialogHeader,
 	AlertDialogOverlay,
 	Button,
+	Grid,
+	Heading,
 	IconButton,
 	Menu,
 	MenuButton,
@@ -19,7 +21,7 @@ import {useToggle} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {Redirect, useHistory, useParams} from "react-router-dom";
 import Routes from "../../config/routes";
-import {GetOrganisatiesDocument, Organisatie, useDeleteOrganisatieMutation, useGetOrganisatieQuery} from "../../generated/graphql";
+import {Afdeling, GetOrganisatiesDocument, Organisatie, useDeleteOrganisatieMutation, useGetOrganisatieQuery} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
 import {maxOrganisatieNaamLengthBreakpointValues, truncateText} from "../../utils/things";
 import useToaster from "../../utils/useToaster";
@@ -27,7 +29,7 @@ import DeadEndPage from "../DeadEndPage";
 import BackButton from "../Layouts/BackButton";
 import Page from "../Layouts/Page";
 import Section from "../Layouts/Section";
-import AfdelingenList from "./AfdelingenList";
+import AfdelingListItem from "./AfdelingListItem";
 import OrganisatieDetailView from "./Views/OrganisatieDetailView";
 
 const OrganisatieDetail = () => {
@@ -57,6 +59,7 @@ const OrganisatieDetail = () => {
 
 	return (
 		<Queryable query={$organisatie} children={({organisatie}: {organisatie: Organisatie}) => {
+			const afdelingen: Afdeling[] = organisatie.afdelingen || [];
 			const onConfirmDeleteDialog = () => {
 				deleteOrganisatie()
 					.then(() => {
@@ -114,9 +117,21 @@ const OrganisatieDetail = () => {
 						<OrganisatieDetailView organisatie={organisatie} />
 					</Section>
 
-					{(organisatie.afdelingen || []).length > 0 && (
-						<AfdelingenList afdelingen={organisatie.afdelingen || []} />
-					)}
+					{afdelingen.length > 0 && (<>
+						<Heading size={"md"}>{t("afdelingen")}</Heading>
+						<Grid maxWidth={"100%"} gridTemplateColumns={["repeat(1, 1fr)", "repeat(2, 1fr)", "repeat(3, 1fr)"]} gap={5}>
+							{/*{showAddButton && (*/}
+							{/*	<Box>*/}
+							{/*		<Button colorScheme={"primary"} borderStyle={"dashed"} variant={"outline"} leftIcon={<AddIcon />}*/}
+							{/*			w="100%" h="100%" onClick={() => push(Routes.CreateOrganisatie)} borderRadius={5}*/}
+							{/*			p={5}>{t("global.actions.add")}</Button>*/}
+							{/*	</Box>*/}
+							{/*)}*/}
+							{afdelingen.map(afdeling => (
+								<AfdelingListItem key={afdeling.id} afdeling={afdeling} />
+							))}
+						</Grid>
+					</>)}
 				</Page>
 			);
 		}} />

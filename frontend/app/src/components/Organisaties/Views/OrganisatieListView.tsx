@@ -20,13 +20,13 @@ const OrganisatieListView: React.FC<BoxProps & {organisaties: Organisatie[], sho
 						p={5}>{t("global.actions.add")}</Button>
 				</Box>
 			)}
-			{organisaties.map((o, i) => (
-				<GridCard key={i} justifyContent={"center"} onClick={() => {
+			{organisaties.map(o => (
+				<GridCard key={o.id} justifyContent={"center"} onClick={() => {
 					push(Routes.Organisatie(o.id));
 				}}>
 					<Stack spacing={1}>
 						<Text fontSize={"md"} overflowX={"hidden"} textOverflow={"ellipsis"} width={"100%"} maxW={["300px", "250px"]} title={o.naam}>
-							{o.naam}
+							<strong>{o.naam}</strong>
 						</Text>
 					</Stack>
 				</GridCard>

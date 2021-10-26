@@ -77,7 +77,13 @@
       "deleteSuccess": "{{burgerName}} is verwijderd uit dit huishouden."
     },
     "noHuishoudenSearchResults": "Geen huishoudens gevonden. Gebruik een andere zoekterm.",
-    "deleteAfdelingSuccess": "Afdeling {{name}} succesvol verwijderd.",
+    "postadressen": {
+      "createSuccess": "Postadres toegevoegd.",
+      "deleteSuccess": "Postadres verwijderd.",
+      "updateSuccess": "Postadres gewijzigd.",
+      "deleteTitle": "Postadres verwijderen",
+      "deleteQuestion": "Weet je zeker dat je dit postadres wil verwijderen?"
+    },
     "organisaties": {
       "createSuccessMessage": "Nieuwe organisatie succesvol opgeslagen.",
       "updateSuccessMessage": "Gegevens succesvol gewijzigd.",
@@ -91,6 +97,7 @@
       "noSearchResults": "Geen organisaties gevonden. Gebruik een andere zoekterm.",
       "alreadyExists": "Er bestaat al een organisatie met dit KvK-nummer en vestigingsnummer."
     },
+    "deleteAfdelingSuccess": "Afdeling {{name}} succesvol verwijderd.",
     "backendError": "Er is een systeemfout opgetreden. Neem contact op met de applicatiebeheerder voor ondersteuning.",
     "genericToastErrorTitle": "Er is een fout opgetreden."
   },
@@ -134,6 +141,7 @@
     "betaalrichting": "Betaalrichting",
     "inkomsten": "Inkomsten",
     "uitgaven": "Uitgaven",
+    "isAfspraakWithOrganisatie": "Wie is de tegenpartij?",
     "tegenrekening": "Tegenrekening",
     "rubriek": "Rubriek",
     "omschrijving": "Omschrijving",
@@ -156,6 +164,7 @@
   },
   "afspraakDetailView": {
     "invalidBetaalrichtingError": "Kies een betaalrichting.",
+    "invalidOrganisatieError": "Kies een organisatie.",
     "invalidTegenrekeningError": "Kies een tegenrekening.",
     "invalidRubriekError": "Kies een rubriek.",
     "invalidOmschrijvingError": "Vul een omschrijving in.",
@@ -179,9 +188,12 @@
     },
     "noBetaalinstructie": "Er is geen betaalinstructie ingesteld."
   },
+  "burger": "Burger",
+  "organisatie": "Organisatie",
   "forms": {
     "afspraken": {
       "fields": {
+        "organisatieChoose": "Kies een organisatie",
         "bankAccountChoose": "Kies een bankrekening",
         "rubriekChoose": "Kies een rubriek",
         "automatischGeboekt": "Automatisch afgeletterd",
@@ -310,6 +322,14 @@
         "kvknummer": "Het KvK-nummer bestaat uit acht cijfers. Voorbeeld: 27348329"
       }
     },
+    "postadressen": {
+      "fields": {
+        "straatnaam": "Straatnaam",
+        "huisnummer": "Huisnummer",
+        "postcode": "Postcode",
+        "plaatsnaam": "Plaatsnaam"
+      }
+    },
     "rekeningen": {
       "fields": {
         "accountHolder": "Rekeninghouder",
@@ -374,7 +394,6 @@
     "confirmModalTitle": "Afspraak beëindigen",
     "confirmModalBody": "Vanaf welke datum wordt deze afspraak beëindigd?"
   },
-  "burger": "Burger",
   "exports": {
     "period": "Periode",
     "dateCreated": "Aanmaakdatum"
@@ -386,6 +405,18 @@
     },
     "rekeninghouder": {
       "generalError": "Vul een rekeninghouder in. De naam mag niet langer zijn dan 100 tekens."
+    },
+    "straatnaam": {
+      "generalError": "Vul een straatnaam in."
+    },
+    "huisnummer": {
+      "generalError": "Vul een huisnummer in."
+    },
+    "postcode": {
+      "generalError": "Vul een geldige Nederlandse postcode in."
+    },
+    "plaatsnaam": {
+      "generalError": "Vul een plaatsnaam in."
     }
   },
   "uploadCsmModal": {
@@ -564,11 +595,13 @@
     "title": "Huishoudens"
   },
   "suggestion": "Suggestie",
-  "afdeling": "Afdeling",
-  "departments": {
-    "addresses": "Postadressen",
-    "rekeningen": "Rekeningen"
+  "postadressen": "Postadressen",
+  "rekeningen": "Rekeningen",
+  "deleteAfspraakModal": {
+    "title": "Afdeling verwijderen",
+    "confirmModalBody": "Weet je zeker dat je de afdeling {{afdeling}} wil verwijderen?"
   },
+  "afdelingen": "Afdelingen",
   "organizations": {
     "organizations": "Organisaties"
   },

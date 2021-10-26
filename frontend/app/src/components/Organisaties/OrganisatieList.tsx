@@ -44,7 +44,7 @@ const OrganisatieList = () => {
 			const filteredOrganisaties = organisaties.filter(o => {
 				return [
 					searchFields(search, [o.naam || ""]),
-					// searchFields(search.replaceAll(" ", ""), [...(o.rekeningen || []).map(r => r.iban || "")]), Todo enable searching through afdelingen and rekeningen
+					// searchFields(search.replaceAll(" ", ""), [...(o.rekeningen || []).map(r => r.iban || "")]), // Todo enable searching through afdelingen and rekeningen
 				].some(t => t);
 			});
 

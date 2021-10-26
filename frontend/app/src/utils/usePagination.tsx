@@ -23,7 +23,7 @@ const usePagination = (options?: Partial<typeof defaultOptions>) => {
 	const pagesAround = isMobile ? 1 : _options.pagesAround;
 	const [pageSize, setPageSize] = useState<number>(_options.pageSize);
 	const [page, setPage] = useState<number>(1);
-	const [total, setTotal] = useState<number>();
+	const [total, setTotal] = useState<number | null | undefined>();
 	const nPages = total ? Math.ceil(total / pageSize) : 0;
 
 	const fn = {

@@ -1,9 +1,8 @@
-// @ts-disable Todo
 import {Box, Button, FormControl, FormErrorMessage, FormLabel, Input, InputGroup, InputLeftElement, Radio, RadioGroup, Stack} from "@chakra-ui/react";
 import React, {useContext, useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
-import {Organisatie, Rekening, Rubriek, UpdateAfspraakInput} from "../../generated/graphql";
+import {Afdeling, Organisatie, Rekening, Rubriek, UpdateAfspraakInput} from "../../generated/graphql";
 import {currencyFormat, formatIBAN, useReactSelectStyles} from "../../utils/things";
 import useToaster from "../../utils/useToaster";
 import zod from "../../utils/zod";
@@ -25,6 +24,8 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 	const [data, setData] = useState(values || {} as UpdateAfspraakInput);
 	const reactSelectStyles = useReactSelectStyles();
 	const bedragRef = useRef<HTMLInputElement>(null);
+	const [isAfspraakWithOrganisatie, setAfspraakWithOrganisatie] = useState<boolean>(false);
+	const [selectedOrganisatie, setSelectedOrganisatie] = useState<Organisatie | undefined>(undefined);
 
 	const {
 		organisaties = [],
@@ -59,17 +60,22 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 		})),
 		// @ts-ignore Todo: for some reason this throws an error, while this works perfectly fine. (31-03-2021)
 		...organisaties.reduce((options, o: Organisatie) => {
-			const rekeningen = [];
-			// const rekeningen = (o.rekeningen || []).map(r => ({
-			// 	key: `${o.id}-${r.id}`,
-			// 	value: r.id,
-			// 	label: [formatIBAN(r.iban), r.rekeninghouder],
-			// 	context: {
-			// 		iban: r.iban,
-			// 		rekeninghouder: r.rekeninghouder,
-			// 		organisatieId: o.id,
-			// 	},
-			// }));
+			const afdelingen: Afdeling[] = o.afdelingen || [];
+
+			const organisatieRekeningen: Rekening[] = afdelingen.reduce((allRekeningen: Rekening[], a) => {
+				const afdelingRekeningen: Rekening[] = a.rekeningen || [];
+				return [allRekeningen, ...afdelingRekeningen] as Rekening[];
+			}, []);
+
+			const rekeningen = organisatieRekeningen.map(r => ({
+				key: r.id,
+				value: r.id,
+				label: [formatIBAN(r.iban), r.rekeninghouder],
+				context: {
+					iban: r.iban,
+					rekeninghouder: r.rekeninghouder,
+				},
+			}));
 			return [
 				...options,
 				...rekeningen,
@@ -77,13 +83,23 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 		}, []),
 	];
 
+	const components = {
+		Option: ReverseMultiLineOption,
+		ValueContainer: ReverseMultiLineValueContainer,
+	};
+
+	const genericSelectProps = {
+		components,
+	}
+
 	const rekeningSelectProps = {
 		styles: isValid("tegenRekeningId") ? reactSelectStyles.default : reactSelectStyles.error,
-		components: {
-			Option: ReverseMultiLineOption,
-			ValueContainer: ReverseMultiLineValueContainer,
-		},
+		components,
 	};
+
+	const organisatieOptions = organisaties.reduce((list: any[] = [], o: Organisatie) => { // Todo: fix list: any[]
+		return [...list, {key: o.id, value: o.id, label: o.naam}];
+	}, []);
 
 	const onSubmit = () => {
 		try {
@@ -116,17 +132,48 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 			</Stack>
 
 			<Stack direction={["column", "row"]}>
-				<FormControl flex={1} isInvalid={!isValid("tegenRekeningId")} isRequired>
-					<FormLabel>{t("afspraken.tegenrekening")}</FormLabel>
-					<Select id="tegenrekening" isClearable={true} noOptionsMessage={() => t("forms.afspraken.fields.bankAccountChoose")} placeholder={t("select.placeholder")} maxMenuHeight={350}
-						options={tegenrekeningOptions} value={data.tegenRekeningId ? tegenrekeningOptions.find(o => o.value === data.tegenRekeningId) : null}
-						onChange={(result) => {
-							updateForm("tegenRekeningId", result?.value);
-							// updateForm("organisatieId", result?.context.organisatieId); Todo
-						}} {...rekeningSelectProps} />
-					<FormErrorMessage>{t("afspraakDetailView.invalidTegenrekeningError")}</FormErrorMessage>
+				<FormControl flex={1} isRequired>
+					<FormLabel>{t("afspraken.isAfspraakWithOrganisatie")}</FormLabel>
+					<RadioGroup colorScheme={"primary"} onChange={result => {
+						setAfspraakWithOrganisatie(result === "organisatie");
+						updateForm("afdelingId", undefined);
+						updateForm("tegenrekeningId", undefined);
+					}} value={isAfspraakWithOrganisatie ? "organisatie" : "burger"}>
+						<Stack>
+							<Radio value="burger">{t("burger")}</Radio>
+							<Radio value="organisatie">{t("organisatie")}</Radio>
+						</Stack>
+					</RadioGroup>
 				</FormControl>
 			</Stack>
+
+			{isAfspraakWithOrganisatie && (<>
+				<Stack direction={["column", "row"]}>
+					<FormControl flex={1} isInvalid={selectedOrganisatie !== undefined} isRequired>
+						<FormLabel>{t("organisatie")}</FormLabel>
+						<Select id="organisatie" isClearable={true} noOptionsMessage={() => t("forms.afspraken.fields.organisatieChoose")} placeholder={t("select.placeholder")} maxMenuHeight={350}
+							options={organisatieOptions} value={selectedOrganisatie ? organisatieOptions.find(o => o.value === selectedOrganisatie.id) : null}
+							onChange={(result) => {
+								const findOrganisatie = organisaties.find(o => o.id === result.value);
+								setSelectedOrganisatie(findOrganisatie);
+							}} {...genericSelectProps} />
+						<FormErrorMessage>{t("afspraakDetailView.invalidOrganisatieError")}</FormErrorMessage>
+					</FormControl>
+				</Stack>
+
+				<Stack direction={["column", "row"]}>
+					<FormControl flex={1} isInvalid={!isValid("tegenRekeningId")} isRequired>
+						<FormLabel>{t("afspraken.tegenrekening")}</FormLabel>
+						<Select id="tegenrekening" isClearable={true} noOptionsMessage={() => t("forms.afspraken.fields.bankAccountChoose")} placeholder={t("select.placeholder")} maxMenuHeight={350}
+							options={tegenrekeningOptions} value={data.tegenRekeningId ? tegenrekeningOptions.find(o => o.value === data.tegenRekeningId) : null}
+							onChange={(result) => {
+								updateForm("tegenRekeningId", result?.value);
+								updateForm("afdelingId", result?.context.afdelingId);
+							}} {...rekeningSelectProps} />
+						<FormErrorMessage>{t("afspraakDetailView.invalidTegenrekeningError")}</FormErrorMessage>
+					</FormControl>
+				</Stack>
+			</>)}
 
 			<Stack direction={["column", "row"]}>
 				<FormControl flex={1} isInvalid={!isValid("rubriekId")} isRequired>
