@@ -97,7 +97,7 @@ const HuishoudenBurgerItem: React.FC<{huishouden: Huishouden, burger: Burger}> =
 		<GridCard as={NavLink} justify={["flex-start", "center"]} to={Routes.Burger(burger.id)} position={"relative"}>
 			{(huishouden.burgers || []).length > 1 && (
 				<Box position={"absolute"} top={1} right={1}>
-					<IconButton variant={"ghost"} size={"sm"} aria-label={t("global.actions.options")} icon={<DeleteIcon />} onClick={onClickDeleteBurgerFromHuishouden} />
+					<IconButton variant={"ghost"} size={"sm"} aria-label={t("global.actions.delete")} icon={<DeleteIcon />} onClick={onClickDeleteBurgerFromHuishouden} />
 				</Box>
 			)}
 			<Stack direction={["row", "column"]} spacing={5} align={"center"} justify={["flex-start", "center"]}>

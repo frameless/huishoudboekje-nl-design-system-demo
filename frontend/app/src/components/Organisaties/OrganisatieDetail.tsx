@@ -1,4 +1,4 @@
-import {ChevronDownIcon} from "@chakra-ui/icons";
+import {AddIcon, ChevronDownIcon} from "@chakra-ui/icons";
 import {
 	AlertDialog,
 	AlertDialogBody,
@@ -6,6 +6,7 @@ import {
 	AlertDialogFooter,
 	AlertDialogHeader,
 	AlertDialogOverlay,
+	Box,
 	Button,
 	Grid,
 	Heading,
@@ -117,21 +118,17 @@ const OrganisatieDetail = () => {
 						<OrganisatieDetailView organisatie={organisatie} />
 					</Section>
 
-					{afdelingen.length > 0 && (<>
-						<Heading size={"md"}>{t("afdelingen")}</Heading>
-						<Grid maxWidth={"100%"} gridTemplateColumns={["repeat(1, 1fr)", "repeat(2, 1fr)", "repeat(3, 1fr)"]} gap={5}>
-							{/*{showAddButton && (*/}
-							{/*	<Box>*/}
-							{/*		<Button colorScheme={"primary"} borderStyle={"dashed"} variant={"outline"} leftIcon={<AddIcon />}*/}
-							{/*			w="100%" h="100%" onClick={() => push(Routes.CreateOrganisatie)} borderRadius={5}*/}
-							{/*			p={5}>{t("global.actions.add")}</Button>*/}
-							{/*	</Box>*/}
-							{/*)}*/}
-							{afdelingen.map(afdeling => (
-								<AfdelingListItem key={afdeling.id} afdeling={afdeling} />
-							))}
-						</Grid>
-					</>)}
+					<Heading size={"md"}>{t("afdelingen")}</Heading>
+					<Grid maxWidth={"100%"} gridTemplateColumns={["repeat(1, 1fr)", "repeat(2, 1fr)", "repeat(3, 1fr)"]} gap={5}>
+						<Box>
+							<Button colorScheme={"primary"} borderStyle={"dashed"} variant={"outline"} leftIcon={<AddIcon />}
+								w="100%" h="100%" onClick={() => push(Routes.CreateAfdeling(organisatie.id))} borderRadius={5}
+								p={5}>{t("global.actions.add")}</Button>
+						</Box>
+						{afdelingen.map(afdeling => (
+							<AfdelingListItem key={afdeling.id} afdeling={afdeling} />
+						))}
+					</Grid>
 				</Page>
 			);
 		}} />

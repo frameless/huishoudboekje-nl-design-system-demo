@@ -77,6 +77,11 @@
       "deleteSuccess": "{{burgerName}} is verwijderd uit dit huishouden."
     },
     "noHuishoudenSearchResults": "Geen huishoudens gevonden. Gebruik een andere zoekterm.",
+    "afdelingen": {
+      "deleteSuccess": "Afdeling verwijderd.",
+      "createSuccessMessage": "Nieuwe afdeling succesvol opgeslagen.",
+      "alreadyExistsError": "Deze afdeling bestaat al."
+    },
     "postadressen": {
       "createSuccess": "Postadres toegevoegd.",
       "deleteSuccess": "Postadres verwijderd.",
@@ -125,7 +130,6 @@
       "viewBurgerHuishouden": "Bekijk huishouden",
       "brievenExport": "Exporteer gegevens voor brieven",
       "clearSearch": "Zoekopdracht wissen",
-      "options": "Opties",
       "showReports": "Bekijk rapportage",
       "back": "Terug",
       "backToHome": "Terug naar de hoofdpagina",
@@ -186,7 +190,8 @@
       "title": "Betaalinstructie",
       "helperText": "Instellingen voor een betaalinstructie."
     },
-    "noBetaalinstructie": "Er is geen betaalinstructie ingesteld."
+    "noBetaalinstructie": "Er is geen betaalinstructie ingesteld.",
+    "invalidNaamError": "Vul een naam voor de afdeling in."
   },
   "burger": "Burger",
   "organisatie": "Organisatie",
@@ -296,6 +301,16 @@
       "deleteBurger": {
         "title": "Burger verwijderen uit huishouden",
         "confirmQuestion": "Weet je zeker dat je {{burgerName}} wil verwijderen uit het huishouden {{huishoudenName}}?"
+      }
+    },
+    "createAfdeling": {
+      "naam": "Naam",
+      "title": "Afdeling toevoegen"
+    },
+    "afdelingen": {
+      "deleteAfdeling": {
+        "title": "Afdeling verwijderen",
+        "confirmQuestion": "Weet je zeker dat je afdeling {{name}} wil verwijderen?"
       }
     },
     "createOrganisatie": {

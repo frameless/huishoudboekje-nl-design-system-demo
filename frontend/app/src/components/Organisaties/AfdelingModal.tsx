@@ -56,6 +56,7 @@ const AfdelingModal: React.FC<{afdeling: Afdeling, disclosure: UseDisclosureRetu
 			toast({
 				success: t("messages.rekeningen.createSuccess", {...rekening}),
 			});
+			toggleCreateRekeningForm(false);
 			resetForm();
 		}).catch(handleSaveAfdelingRekening);
 	};
@@ -82,7 +83,7 @@ const AfdelingModal: React.FC<{afdeling: Afdeling, disclosure: UseDisclosureRetu
 				<ModalHeader>{afdeling.naam}</ModalHeader>
 				<ModalCloseButton />
 				<ModalBody>
-					<Stack divider={<Divider />}>
+					<Stack divider={<Divider />} spacing={5}>
 						<Stack>
 							<Heading size={"md"}>{t("postadressen")}</Heading>
 							<PostadresList postadressen={postadressen} afdeling={afdeling} />
@@ -114,8 +115,8 @@ const AfdelingModal: React.FC<{afdeling: Afdeling, disclosure: UseDisclosureRetu
 					</Stack>
 				</ModalBody>
 				<ModalFooter>
-					<Button colorScheme="blue" mr={3} onClick={disclosure.onClose}>
-						Close
+					<Button colorScheme={"primary"} mr={3} onClick={disclosure.onClose}>
+						{t("global.actions.close")}
 					</Button>
 				</ModalFooter>
 			</ModalContent>
