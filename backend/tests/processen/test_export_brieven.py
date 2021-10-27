@@ -2,6 +2,7 @@ import requests_mock
 from requests_mock import Adapter
 from hhb_backend.processen import brieven_export
 from datetime import datetime
+from hhb_backend.graphql import settings
 
 class MockResponse():
     history = None
@@ -22,9 +23,6 @@ class MockResponse():
 
 def create_mock_adapter() -> Adapter:
     adapter = requests_mock.Adapter()
-
-    def test_matcher(request):
-
         if request.path == "/burgers/1":
             return MockResponse({'data': {'id': 1, 'voornamen': "burgernaam",
                                           'achternaam': 'burgerachternaam',
