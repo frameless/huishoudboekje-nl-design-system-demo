@@ -15,7 +15,6 @@ from flask import request, g
 from hhb_backend.version import load_version
 import pandas as pd
 
-
 class HHBCsvDialect(csv.Dialect):
     delimiter = "|"
     quoting = QUOTE_MINIMAL
@@ -38,7 +37,6 @@ brieven_fields = [
     "status.afspraak"
 ]
 
-
 def dict_keys_subset_builder(match_keys: list):
     """only include items with a matching key"""
     return lambda actual_dict: dict(
@@ -57,30 +55,51 @@ def create_brieven_export(burger_id):
         return jsonify(message=afspraken_response.reason), afspraken_response.status_code
     afspraken = afspraken_response.json()["data"]
 
-    if not afspraken:
-        return jsonify(message="Geen afspraken gevonden voor burger."), 200
+    afspraak_postadressen_response = get_postadres(afspraken)
+    if afspraak_postadressen_response.status_code != 200:
+        return jsonify(message=afspraak_postadressen_response.reason), afspraak_postadressen_response.status_code
+    afspraak_postadressen = afspraak_postadressen_response.json()["hydra:member"]
 
-    hhb_organisatie_reponse = get_organisaties(afspraken)
-    if hhb_organisatie_reponse.status_code != 200:
-        return jsonify(message=hhb_organisatie_reponse.reason), hhb_organisatie_reponse.status_code
-    hhb_organisaties = hhb_organisatie_reponse.json()["data"]
+    for afspraak in afspraken:
+        postadres_id = afspraak.get("postadres_id")
+        for postadres in afspraak_postadressen:
+            if postadres.get("id") == postadres_id:
+                afspraak["postadres"] = postadres
 
-    kvk_organisatie_reponse = get_kvk_organisaties(hhb_organisaties)
-    if kvk_organisatie_reponse.status_code != 200:
-        return jsonify(message=kvk_organisatie_reponse.reason), kvk_organisatie_reponse.status_code
-    kvk_organisaties = kvk_organisatie_reponse.json()["data"]
+    afdelingen_response = get_afdelingen(afspraken)
+    if afdelingen_response.status_code != 200:
+        return jsonify(message=afdelingen_response.reason), afdelingen_response.status_code
+    afdelingen = afdelingen_response.json()["data"]
+
+    postadressen_response = get_postadressen(afdelingen)
+    if postadressen_response.status_code != 200:
+        return jsonify(message=postadressen_response.reason), postadressen_response.status_code
+    postadressen = postadressen_response.json()["hydra:member"]
+
+    organisatie_reponse = get_organisaties(afdelingen)
+    if organisatie_reponse.status_code != 200:
+        return jsonify(message=organisatie_reponse.reason), organisatie_reponse.status_code
+    organisaties = organisatie_reponse.json()["data"]
+
+    for afdeling in afdelingen:
+        organisatie_id = afdeling.get("organisatie_id", {})
+        for organisatie in organisaties:
+            if organisatie["id"] == organisatie_id:
+                afdeling["organisatie"] = organisatie
+        for postadres in postadressen:
+            single_postadres_id = postadres.get("id")
+            afdeling_postadres_ids = afdeling.get('postadressen_ids')
+            afdeling["postadressen"] = []
+            if single_postadres_id in afdeling_postadres_ids:
+                afdeling["postadressen"].append(postadres)
 
     current_date_str = datetime.now().strftime("%Y-%m-%d")
 
     data = []
     for afspraak in afspraken:
-        hhb_organisatie = next(filter(lambda x: x['id'] == afspraak['organisatie_id'], hhb_organisaties), {})
-        kvk_organisatie = {}
-        if "kvknummer" in hhb_organisatie:
-            kvk_organisatie = next(filter(lambda x: x['kvknummer'] == hhb_organisatie['kvknummer'], kvk_organisaties),
-                                   {})
-
-        row = create_row(hhb_organisatie, kvk_organisatie, afspraak, burger, current_date_str)
+        afdeling_id = afspraak["afdeling_id"]
+        afdeling = next(filter(lambda x: x['id'] == afdeling_id, afdelingen), {})
+        row = create_row(afdeling, afspraak, burger, current_date_str)
         data.append(row)
 
     csv_filename = f"{current_date_str}_{burger['voornamen']}_{burger['achternaam']}.csv"
@@ -137,13 +156,11 @@ def create_brieven_export(burger_id):
 
     return iowriter.getvalue(), csv_filename, data_excel, xlsx_filename
 
-
 def get_burger_response(burger_id):
     return requests.get(
         f"{settings.HHB_SERVICES_URL}/burgers/{burger_id}",
         headers={"Content-type": "application/json"},
     )
-
 
 def get_afspraken_response(burger_id):
     return requests.get(
@@ -151,39 +168,67 @@ def get_afspraken_response(burger_id):
         headers={"Content-type": "application/json"},
     )
 
+def get_afdelingen(afspraken):
+    afdeling_ids = list(
+        set([afspraak["afdeling_id"] for afspraak in afspraken if
+             afspraak["afdeling_id"]])
+    )
+    return requests.get(f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/?filter_ids={','.join(str(x) for x in afdeling_ids)}",
+        headers={"Content-type": "application/json"},
+    )
 
-def get_organisaties(afspraken):
+def get_postadressen(afdelingen):
+    ids= []
+    for afdeling in afdelingen:
+        postadres_ids = afdeling.get("postadressen_ids")
+        if postadres_ids:
+            for postadres_id in postadres_ids:
+                ids.append(postadres_id)
+
+    ids = ','.join(str(x) for x in ids)
+    return requests.get(f"{settings.CONTACTCATALOGUS_SERVICE_URL}/addresses/?filter_ids={ids}",
+        headers={"Content-type": "application/json", "Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845"},
+    )
+
+def get_postadres(afspraken):
+    ids= []
+    for afspraak in afspraken:
+        postadres_id = afspraak.get("postadres_id", None)
+        if postadres_id:
+            ids.append(postadres_id)
+
+    ids = ','.join(str(x) for x in ids)
+    return requests.get(f"{settings.CONTACTCATALOGUS_SERVICE_URL}/addresses/?filter_ids={ids}",
+        headers={"Content-type": "application/json", "Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845"},
+    )
+
+def get_organisaties(afdelingen):
     organisatie_ids = list(
-        set([afspraak_result["organisatie_id"] for afspraak_result in afspraken if
-             afspraak_result["organisatie_id"]])
+        set([afdeling_result["organisatie_id"] for afdeling_result in afdelingen if
+             afdeling_result["organisatie_id"]])
     )
     return requests.get(
-        f"{settings.HHB_SERVICES_URL}/organisaties/?filter_ids={','.join(str(x) for x in organisatie_ids)}",
+        f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/?filter_ids={','.join(str(x) for x in organisatie_ids)}",
         headers={"Content-type": "application/json"},
     )
 
+def create_row(afdeling, afspraak, burger, current_date_str):
+    organisatie = afdeling.get("organisatie", {})
+    adres = afspraak.get("postadres", {})
 
-def get_kvk_organisaties(hhb_orgs):
-    organisatie_kvks = list(
-        set([org["kvknummer"] for org in hhb_orgs if
-             org["kvknummer"]])
-    )
+    postcode = adres["postalCode"]
+    plaats = adres["locality"]
+    straat = adres["street"]
+    huisnummer = adres["houseNumber"]
 
-    return requests.get(
-        f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/?filter_kvks={','.join(str(x) for x in organisatie_kvks)}",
-        headers={"Content-type": "application/json"},
-    )
-
-
-def create_row(hhb_organisatie, kvk_organisatie, afspraak, burger, current_date_str):
     row = {}
-    row["organisatie.naam"] = kvk_organisatie["naam"] if "naam" in kvk_organisatie else ""
+    row["organisatie.naam"] = organisatie["naam"] if "naam" in organisatie else ""
     row["organisatie.postadres.adresregel1"] = ""
-    if "straatnaam" in kvk_organisatie and "huisnummer" in kvk_organisatie:
+    if straat and huisnummer:
         row[
-            "organisatie.postadres.adresregel1"] = f"{kvk_organisatie['straatnaam']} {kvk_organisatie['huisnummer']}"
-    row["organisatie.postadres.postcode"] = kvk_organisatie["postcode"] if "postcode" in kvk_organisatie else ""
-    row["organisatie.postadres.plaats"] = kvk_organisatie["plaatsnaam"] if "plaatsnaam" in kvk_organisatie else ""
+            "organisatie.postadres.adresregel1"] = f"{straat} {huisnummer}"
+    row["organisatie.postadres.postcode"] = postcode if postcode else ""
+    row["organisatie.postadres.plaats"] = plaats if plaats else ""
     row["afspraak.id"] = ' '.join(afspraak["zoektermen"]) if afspraak["zoektermen"] else ""
     row["nu.datum"] = current_date_str
     row["burger.naam"] = f"{burger['voornamen']} {burger['achternaam']}"
@@ -194,4 +239,5 @@ def create_row(hhb_organisatie, kvk_organisatie, afspraak, burger, current_date_
     row["burger.postadres.plaats"] = burger["plaatsnaam"] if burger["plaatsnaam"] else ""
     row["betaalrichting"] = "credit" if afspraak["credit"] is True else "debet"
     row["status.afspraak"] = afspraak["valid_through"] if afspraak["valid_through"] else ""
+
     return row
