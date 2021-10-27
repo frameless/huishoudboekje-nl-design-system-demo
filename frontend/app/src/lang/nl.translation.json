@@ -168,8 +168,6 @@
   },
   "afspraakDetailView": {
     "invalidBetaalrichtingError": "Kies een betaalrichting.",
-    "invalidOrganisatieError": "Kies een organisatie.",
-    "invalidTegenrekeningError": "Kies een tegenrekening.",
     "invalidRubriekError": "Kies een rubriek.",
     "invalidOmschrijvingError": "Vul een omschrijving in.",
     "invalidBedragError": "Vul een geldig bedrag in.",
@@ -196,10 +194,19 @@
   "burger": "Burger",
   "organisatie": "Organisatie",
   "forms": {
+    "afspraak": {
+      "invalidOrganisatieError": "Kies een organisatie.",
+      "invalidAfdelingError": "Kies een afdeling.",
+      "invalidPostadresError": "Kies een postadres.",
+      "invalidRekeningError": "Kies een rekening."
+    },
     "afspraken": {
+      "select": {
+        "noAfdelingenOptionsMessage": "Geen afdelingen gevonden.",
+        "noPostadressenOptionsMessage": "Geen postadressen gevonden.",
+        "noRekeningenOptionsMessage": "Geen rekeningen gevonden."
+      },
       "fields": {
-        "organisatieChoose": "Kies een organisatie",
-        "bankAccountChoose": "Kies een bankrekening",
         "rubriekChoose": "Kies een rubriek",
         "automatischGeboekt": "Automatisch afgeletterd",
         "handmatigGeboekt": "Handmatig afgeletterd",
@@ -350,8 +357,15 @@
         "accountHolder": "Rekeninghouder",
         "iban": "IBAN"
       }
+    },
+    "generic": {
+      "fields": {
+        "noOptionsMessage": "Geen opties beschikbaar."
+      }
     }
   },
+  "afdeling": "Afdeling",
+  "postadres": "Postadres",
   "select": {
     "placeholder": "Kies een optie...",
     "noOptions": "Geen resultaten"

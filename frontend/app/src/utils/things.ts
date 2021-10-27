@@ -88,10 +88,8 @@ export const formatHuishoudenName = (huishouden: Huishouden | undefined): string
 	return burgerLastNames.join("-");
 };
 
-export const formatIBAN = (iban?: string) => {
-	if (iban) {
-		return friendlyFormatIBAN(iban);
-	}
+export const formatIBAN = (iban?: string): string => {
+	return friendlyFormatIBAN(iban) || "";
 };
 
 export const useReactSelectStyles = () => {

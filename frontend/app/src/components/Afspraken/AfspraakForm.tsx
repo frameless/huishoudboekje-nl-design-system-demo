@@ -1,13 +1,13 @@
 import {Box, Button, FormControl, FormErrorMessage, FormLabel, Input, InputGroup, InputLeftElement, Radio, RadioGroup, Stack} from "@chakra-ui/react";
-import React, {useContext, useRef, useState} from "react";
+import React, {useContext, useEffect, useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
-import {Afdeling, Organisatie, Rekening, Rubriek, UpdateAfspraakInput} from "../../generated/graphql";
-import {currencyFormat, formatIBAN, useReactSelectStyles} from "../../utils/things";
+import {Afdeling, Organisatie, Rekening, UpdateAfspraakInput} from "../../generated/graphql";
+import {currencyFormat, useReactSelectStyles} from "../../utils/things";
+import useSelectProps from "../../utils/useSelectProps";
 import useToaster from "../../utils/useToaster";
 import zod from "../../utils/zod";
 import AfspraakValidator from "../../validators/AfspraakValidator";
-import {ReverseMultiLineOption, ReverseMultiLineValueContainer} from "../Layouts/ReactSelect/CustomComponents";
 import AfspraakFormContext from "./EditAfspraak/context";
 
 const bedragInputValidator = zod.string().regex(/^[^.]*$/);
@@ -21,18 +21,36 @@ type AfspraakFormProps = {
 const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, onChange}) => {
 	const toast = useToaster();
 	const {t} = useTranslation();
-	const [data, setData] = useState(values || {} as UpdateAfspraakInput);
+	const [data, setData] = useState<UpdateAfspraakInput>(values || {} as UpdateAfspraakInput);
 	const reactSelectStyles = useReactSelectStyles();
 	const bedragRef = useRef<HTMLInputElement>(null);
 	const [isAfspraakWithOrganisatie, setAfspraakWithOrganisatie] = useState<boolean>(false);
 	const [selectedOrganisatie, setSelectedOrganisatie] = useState<Organisatie | undefined>(undefined);
+	const [selectedAfdeling, setSelectedAfdeling] = useState<Afdeling | undefined>(undefined);
+	const {
+		defaultProps,
+		components,
+		createSelectOptionsFromRekeningen,
+		createSelectOptionsFromRubrieken,
+		createSelectOptionsFromOrganisaties,
+		createSelectOptionsFromAfdelingen,
+		createSelectOptionsFromPostadressen,
+	} = useSelectProps();
+	const isValid = (fieldName: string) => AfspraakValidator.shape[fieldName]?.safeParse(data[fieldName]).success;
 
 	const {
 		organisaties = [],
 		rubrieken = [],
 	} = useContext(AfspraakFormContext);
+	const afdelingen = selectedOrganisatie?.afdelingen || [];
+	const rekeningen = selectedAfdeling?.rekeningen || [];
+	const postadressen = selectedAfdeling?.postadressen || [];
 
-	const isValid = (fieldName: string) => AfspraakValidator.shape[fieldName]?.safeParse(data[fieldName]).success;
+	useEffect(() => {
+		setSelectedOrganisatie(organisaties.find(o => o.afdelingen?.find(a => values?.afdelingId === a.id)));
+		setAfspraakWithOrganisatie(!!values?.afdelingId);
+	}, [values, organisaties]);
+
 	const updateForm = (field: string, value: any) => {
 		setData(prevData => ({
 			...prevData,
@@ -40,66 +58,11 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 		}));
 	};
 
-	const rubriekOptions = rubrieken.filter(r => r.grootboekrekening?.credit === data.credit).sort((a: Rubriek, b: Rubriek) => {
-		return (a.naam && b.naam) && a.naam < b.naam ? -1 : 1;
-	}).map((r: Rubriek) => ({
-		key: r.id,
-		value: r.id,
-		label: r.naam,
-	}));
-
-	const tegenrekeningOptions = [
-		...burgerRekeningen.map(r => ({
-			key: `burger-${r.id}`,
-			value: r.id,
-			label: [formatIBAN(r.iban), r.rekeninghouder],
-			context: {
-				iban: formatIBAN(r.iban),
-				rekeninghouder: r.rekeninghouder,
-			},
-		})),
-		// @ts-ignore Todo: for some reason this throws an error, while this works perfectly fine. (31-03-2021)
-		...organisaties.reduce((options, o: Organisatie) => {
-			const afdelingen: Afdeling[] = o.afdelingen || [];
-
-			const organisatieRekeningen: Rekening[] = afdelingen.reduce((allRekeningen: Rekening[], a) => {
-				const afdelingRekeningen: Rekening[] = a.rekeningen || [];
-				return [allRekeningen, ...afdelingRekeningen] as Rekening[];
-			}, []);
-
-			const rekeningen = organisatieRekeningen.map(r => ({
-				key: r.id,
-				value: r.id,
-				label: [formatIBAN(r.iban), r.rekeninghouder],
-				context: {
-					iban: r.iban,
-					rekeninghouder: r.rekeninghouder,
-				},
-			}));
-			return [
-				...options,
-				...rekeningen,
-			];
-		}, []),
-	];
-
-	const components = {
-		Option: ReverseMultiLineOption,
-		ValueContainer: ReverseMultiLineValueContainer,
-	};
-
-	const genericSelectProps = {
-		components,
-	}
-
-	const rekeningSelectProps = {
-		styles: isValid("tegenRekeningId") ? reactSelectStyles.default : reactSelectStyles.error,
-		components,
-	};
-
-	const organisatieOptions = organisaties.reduce((list: any[] = [], o: Organisatie) => { // Todo: fix list: any[]
-		return [...list, {key: o.id, value: o.id, label: o.naam}];
-	}, []);
+	const rubriekOptions = createSelectOptionsFromRubrieken(rubrieken.filter(r => r.grootboekrekening?.credit === data.credit));
+	const organisatieOptions = createSelectOptionsFromOrganisaties(organisaties);
+	const afdelingOptions = createSelectOptionsFromAfdelingen(afdelingen);
+	const rekeningOptions = createSelectOptionsFromRekeningen(isAfspraakWithOrganisatie ? rekeningen : burgerRekeningen);
+	const postadresOptions = createSelectOptionsFromPostadressen(postadressen);
 
 	const onSubmit = () => {
 		try {
@@ -111,6 +74,23 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 			toast({error: t("global.formError"), title: t("messages.genericError.title")});
 		}
 	};
+
+	useEffect(() => {
+		// If the selected organisatie has only one afdeling, preselect it, otherwise, leave the option open.
+		setSelectedAfdeling(selectedOrganisatie?.afdelingen?.length === 1 ? selectedOrganisatie.afdelingen[0] : undefined);
+	}, [selectedOrganisatie]);
+
+	useEffect(() => {
+		// If the selected organisatie has only one afdeling, preselect it, otherwise, leave the option open.
+		if (!data.tegenRekeningId) {
+			updateForm("tegenRekeningId", selectedAfdeling?.rekeningen?.length === 1 ? selectedAfdeling.rekeningen[0]?.id : undefined);
+		}
+
+		// If the selected organisatie has only one postadres, preselect it, otherwise, leave the option open.
+		if (!data.postadresId) {
+			updateForm("postadresId", selectedAfdeling?.postadressen?.length === 1 ? selectedAfdeling.postadressen[0]?.id : undefined);
+		}
+	}, [selectedAfdeling, data.tegenRekeningId, data.postadresId]);
 
 	return (
 		<Stack spacing={5}>
@@ -136,8 +116,10 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 					<FormLabel>{t("afspraken.isAfspraakWithOrganisatie")}</FormLabel>
 					<RadioGroup colorScheme={"primary"} onChange={result => {
 						setAfspraakWithOrganisatie(result === "organisatie");
-						updateForm("afdelingId", undefined);
-						updateForm("tegenrekeningId", undefined);
+						setSelectedOrganisatie(undefined);
+						setSelectedAfdeling(undefined);
+						updateForm("tegenRekeningId", undefined);
+						updateForm("postadresId", undefined);
 					}} value={isAfspraakWithOrganisatie ? "organisatie" : "burger"}>
 						<Stack>
 							<Radio value="burger">{t("burger")}</Radio>
@@ -149,31 +131,57 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 
 			{isAfspraakWithOrganisatie && (<>
 				<Stack direction={["column", "row"]}>
-					<FormControl flex={1} isInvalid={selectedOrganisatie !== undefined} isRequired>
+					<FormControl flex={1} isInvalid={!selectedOrganisatie} isRequired>
 						<FormLabel>{t("organisatie")}</FormLabel>
-						<Select id="organisatie" isClearable={true} noOptionsMessage={() => t("forms.afspraken.fields.organisatieChoose")} placeholder={t("select.placeholder")} maxMenuHeight={350}
-							options={organisatieOptions} value={selectedOrganisatie ? organisatieOptions.find(o => o.value === selectedOrganisatie.id) : null}
+						<Select {...defaultProps} id="organisatie" options={organisatieOptions}
+							value={selectedOrganisatie ? organisatieOptions.find(o => o.value === selectedOrganisatie.id) : null}
 							onChange={(result) => {
-								const findOrganisatie = organisaties.find(o => o.id === result.value);
+								const findOrganisatie = organisaties.find(o => o.id === result?.value);
 								setSelectedOrganisatie(findOrganisatie);
-							}} {...genericSelectProps} />
-						<FormErrorMessage>{t("afspraakDetailView.invalidOrganisatieError")}</FormErrorMessage>
+							}} />
+						<FormErrorMessage>{t("forms.afspraak.invalidOrganisatieError")}</FormErrorMessage>
 					</FormControl>
 				</Stack>
 
 				<Stack direction={["column", "row"]}>
-					<FormControl flex={1} isInvalid={!isValid("tegenRekeningId")} isRequired>
-						<FormLabel>{t("afspraken.tegenrekening")}</FormLabel>
-						<Select id="tegenrekening" isClearable={true} noOptionsMessage={() => t("forms.afspraken.fields.bankAccountChoose")} placeholder={t("select.placeholder")} maxMenuHeight={350}
-							options={tegenrekeningOptions} value={data.tegenRekeningId ? tegenrekeningOptions.find(o => o.value === data.tegenRekeningId) : null}
+					<FormControl flex={1} isInvalid={!isValid("afdelingId")} isRequired>
+						<FormLabel>{t("afdeling")}</FormLabel>
+						<Select {...defaultProps} id="afdeling" noOptionsMessage={() => t("forms.afspraken.select.noAfdelingenOptionsMessage")} options={afdelingOptions}
+							value={data.afdelingId ? afdelingOptions.find(o => o.value === data.afdelingId) : null}
 							onChange={(result) => {
-								updateForm("tegenRekeningId", result?.value);
-								updateForm("afdelingId", result?.context.afdelingId);
-							}} {...rekeningSelectProps} />
-						<FormErrorMessage>{t("afspraakDetailView.invalidTegenrekeningError")}</FormErrorMessage>
+								const findAfdeling = afdelingen.find(o => o.id === result?.value);
+								setSelectedAfdeling(findAfdeling);
+								updateForm("afdelingId", findAfdeling?.id);
+							}} />
+						<FormErrorMessage>{t("forms.afspraak.invalidAfdelingError")}</FormErrorMessage>
+					</FormControl>
+				</Stack>
+
+				<Stack direction={["column", "row"]}>
+					<FormControl flex={1} isInvalid={!isValid("postadresId")} isRequired>
+						<FormLabel>{t("postadres")}</FormLabel>
+						<Select {...defaultProps} id="postadres" noOptionsMessage={() => t("forms.afspraken.select.noPostadressenOptionsMessage")} options={postadresOptions}
+							value={data.postadresId ? postadresOptions.find(o => o.value === data.postadresId) : null}
+							onChange={(result) => {
+								const findPostadres = postadressen.find(o => o.id === result?.value);
+								updateForm("postadresId", findPostadres?.id);
+							}} />
+						<FormErrorMessage>{t("forms.afspraak.invalidPostadresError")}</FormErrorMessage>
 					</FormControl>
 				</Stack>
 			</>)}
+
+			<Stack direction={["column", "row"]}>
+				<FormControl flex={1} isInvalid={!isValid("tegenRekeningId")} isRequired>
+					<FormLabel>{t("afspraken.tegenrekening")}</FormLabel>
+					<Select {...defaultProps} id="tegenrekening" components={components.ReverseMultiLine} noOptionsMessage={() => t("forms.afspraken.select.noRekeningenOptionsMessage")} options={rekeningOptions}
+						value={data.tegenRekeningId ? rekeningOptions.find(o => o.value === data.tegenRekeningId) : null}
+						onChange={(result) => {
+							updateForm("tegenRekeningId", result?.value);
+						}} styles={isValid("tegenRekeningId") ? reactSelectStyles.default : reactSelectStyles.error} />
+					<FormErrorMessage>{t("forms.afspraak.invalidRekeningError")}</FormErrorMessage>
+				</FormControl>
+			</Stack>
 
 			<Stack direction={["column", "row"]}>
 				<FormControl flex={1} isInvalid={!isValid("rubriekId")} isRequired>

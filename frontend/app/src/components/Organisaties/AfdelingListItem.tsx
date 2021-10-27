@@ -5,7 +5,7 @@ import {
 	AlertDialogContent,
 	AlertDialogFooter,
 	AlertDialogHeader,
-	AlertDialogOverlay, Avatar,
+	AlertDialogOverlay,
 	Box,
 	Button,
 	IconButton,
@@ -15,10 +15,9 @@ import {
 } from "@chakra-ui/react";
 import React, {useRef} from "react";
 import {useTranslation} from "react-i18next";
-import {NavLink, useHistory} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 import Routes from "../../config/routes";
 import {Afdeling, GetOrganisatieDocument, GetOrganisatiesDocument, useDeleteAfdelingMutation} from "../../generated/graphql";
-import {formatBurgerName} from "../../utils/things";
 import useToaster from "../../utils/useToaster";
 import GridCard from "../Layouts/GridCard";
 import AfdelingModal from "./AfdelingModal";
@@ -39,6 +38,7 @@ const AfdelingListItem: React.FC<{afdeling: Afdeling}> = ({afdeling}) => {
 	});
 
 	const onClickDeleteAfdeling = (e) => {
+		// This will prevent a click event on the parent on which e was emitted and modal.onOpen will not be called.
 		e.stopPropagation();
 		e.preventDefault();
 		alert.onOpen();

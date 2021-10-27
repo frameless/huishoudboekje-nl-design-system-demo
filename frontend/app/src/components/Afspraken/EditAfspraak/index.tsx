@@ -40,6 +40,8 @@ const EditAfspraak = () => {
 				rubriekId: afspraak.rubriek?.id,
 				omschrijving: afspraak.omschrijving,
 				tegenRekeningId: afspraak.tegenRekening?.id,
+				afdelingId: afspraak.afdeling?.id,
+				postadresId: afspraak.postadres?.id,
 			};
 
 			const updateAfspraak = (data: UpdateAfspraakMutationVariables["input"]) => handleMutation(updateAfspraakMutation({
