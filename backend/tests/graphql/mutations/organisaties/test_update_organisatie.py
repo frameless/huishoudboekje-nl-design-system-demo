@@ -1,5 +1,8 @@
 import requests_mock
 from requests_mock import Adapter
+from hhb_backend.graphql import settings
+
+import logging
 
 class MockResponse():
     history = None
@@ -19,6 +22,7 @@ def create_mock_adapter() -> Adapter:
     adapter = requests_mock.Adapter()
 
     def test_matcher(request):
+        logging.getLogger(f"wouter-logger").warning(f"[{request}] || {request.method} {request.path} {request.query}")
         if request.method == "GET" and request.path == "/organisaties/" and request.query == "filter_ids=1":
             return MockResponse({'data': [{"id": 1, "kvknummer": "123456789", "vestigingsnummer": "012345678912", "naam": "test_organisatie"}]}, 200)
         elif request.method == "GET" and request.path == "/organisaties/":
@@ -36,6 +40,19 @@ def test_update_organisatie_success(client):
     with requests_mock.Mocker() as mock:
         mock._adapter = create_mock_adapter()
         organisatie_to_update = {"id": 1, "kvknummer": "123456789", "vestigingsnummer": "012345678912", "naam": "test_organisatie"}
+
+        # TODO make this work        
+        # fallback = mock.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
+        # org_1 = mock.get(f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/?filter_ids=1", status_code=200, json={'data': [{"id": 1, "kvknummer": "123456789", "vestigingsnummer": "012345678912", "naam": "test_organisatie"}]})
+        # org_2 = mock.get(f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/", status_code=201, json={'data': [{'id': 1}]})
+        # org_3 = mock.post(f"http://organisatieservice:8000/organisaties/1", status_code=200, json={'data': {'id': 1}})
+        # act_1 = mock.post(f"http://logservice:8000/gebruikersactiviteiten/", status_code=201, json={'data': {'id': 1}})
+
+        #actual calls made
+        # [GET http://organisatieservice:8000/organisaties/?filter_ids=1] || GET /organisaties/ filter_ids=1
+        # [GET http://organisatieservice:8000/organisaties/] || GET /organisaties/
+        # [POST http://organisatieservice:8000/organisaties/1] || POST /organisaties/1
+        # [POST http://logservice:8000/gebruikersactiviteiten/] || POST /gebruikersactiviteiten/
 
         response = client.post(
             "/graphql",
@@ -56,7 +73,14 @@ def test_update_organisatie_success(client):
         )
 
         assert response.json == {"data": {"updateOrganisatie": {"ok": True, "organisatie": {"id": 1}}}}
-        assert mock._adapter.call_count == 4
+
+        assert org_1.called_once
+        # assert org_2.called_once
+        # assert org_3.called_once
+        # assert act_1.called_once
+
+        assert mock._adapter.call_count == 5
+
 
 def create_mock_adapter2() -> Adapter:
     adapter = requests_mock.Adapter()

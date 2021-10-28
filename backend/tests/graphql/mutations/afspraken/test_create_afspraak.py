@@ -5,8 +5,6 @@ import requests_mock
 from requests_mock import Adapter
 from pydash import objects
 
-import logging
-
 from hhb_backend.graphql import settings
 from tests import post_echo, post_echo_with_id
 class MockResponse():
