@@ -4,7 +4,6 @@ from flask import request
 from graphql import GraphQLError
 import hhb_backend.graphql.models.afdeling as afdeling
 
-
 class Organisatie(graphene.ObjectType):
     """ GraphQL Organisatie model """
     id = graphene.Int()
@@ -18,7 +17,6 @@ class Organisatie(graphene.ObjectType):
 
     def check_kvk_vestigingsnummer(self, kvknummer, vestigingsnummer, id=None):
         organisaties = request.dataloader.organisaties_by_id.get_all_and_cache()
-
         if kvknummer and not vestigingsnummer:
             for organisatie in organisaties:
                 if id == organisatie.get('id'):
@@ -33,8 +31,8 @@ class Organisatie(graphene.ObjectType):
         for organisatie in organisaties:
             if id == organisatie['id']:
                 continue
-            if int(kvknummer) == int(organisatie['kvknummer']):
-                if int(vestigingsnummer) == int(organisatie['vestigingsnummer']):
+            if str(kvknummer) == str(organisatie['kvknummer']):
+                if str(vestigingsnummer) == str(organisatie['vestigingsnummer']):
                     raise GraphQLError("Combination kvk-nummer and vestigingsnummer is not unique.")
 
     def unique_kvk_vestigingsnummer(self, kvknummer, vestigingsnummer, id=None):

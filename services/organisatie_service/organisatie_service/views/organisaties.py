@@ -12,7 +12,7 @@ class OrganisatieView(HHBView):
    "type": "object",
    "properties": {
         "id": {
-            "type": "integer",
+            "type": "string",
         },
         "kvknummer": {
             "type": "string",

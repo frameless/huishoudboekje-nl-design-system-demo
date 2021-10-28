@@ -1,10 +1,5 @@
-import re
-
-import pytest
 import requests_mock
-from hhb_backend.graphql import settings
 from requests_mock import Adapter
-
 
 class MockResponse():
     history = None
@@ -24,13 +19,13 @@ def create_mock_adapter() -> Adapter:
     adapter = requests_mock.Adapter()
 
     def test_matcher(request):
-        if request.path == "/organisaties/" and request.query == "filter_ids=1":
+        if request.method == "GET" and request.path == "/organisaties/" and request.query == "filter_ids=1":
             return MockResponse({'data': [{"id": 1, "kvknummer": "123456789", "vestigingsnummer": "012345678912", "naam": "test_organisatie"}]}, 200)
-        elif request.path == "/organisaties/":
+        elif request.method == "GET" and request.path == "/organisaties/":
             return MockResponse({'data': [{'id': 1}]}, 201)
-        elif request.path == "/organisaties/1":
+        elif request.method == "POST" and  request.path == "/organisaties/1":
             return MockResponse({'data': {'id': 1}}, 200)
-        elif request.path == "/gebruikersactiviteiten/":
+        elif request.method == "POST" and request.path == "/gebruikersactiviteiten/":
             return MockResponse({'data': {'id': 1}}, 201)
 
     adapter.add_matcher(test_matcher)
@@ -40,6 +35,7 @@ def create_mock_adapter() -> Adapter:
 def test_update_organisatie_success(client):
     with requests_mock.Mocker() as mock:
         mock._adapter = create_mock_adapter()
+        organisatie_to_update = {"id": 1, "kvknummer": "123456789", "vestigingsnummer": "012345678912", "naam": "test_organisatie"}
 
         response = client.post(
             "/graphql",
@@ -56,10 +52,7 @@ def test_update_organisatie_success(client):
                     }
                   }
                 }''',
-                "variables": {"id": 1,
-                              "kvknummer": "123456789",
-                              "vestigingsnummer": "012345678912",
-                              "naam": "test_organisatie"}},
+                "variables": organisatie_to_update},
         )
 
         assert response.json == {"data": {"updateOrganisatie": {"ok": True, "organisatie": {"id": 1}}}}
