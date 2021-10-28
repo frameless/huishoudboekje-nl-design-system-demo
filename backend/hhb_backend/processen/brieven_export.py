@@ -56,42 +56,42 @@ def create_brieven_export(burger_id):
     afspraken = afspraken_response.json()["data"]
 
     afspraak_postadressen_response = get_postadres(afspraken)
-    if afspraak_postadressen_response.status_code != 200:
-        return jsonify(message=afspraak_postadressen_response.reason), afspraak_postadressen_response.status_code
-    afspraak_postadressen = afspraak_postadressen_response.json()["hydra:member"]
-
-    for afspraak in afspraken:
-        postadres_id = afspraak.get("postadres_id")
-        for postadres in afspraak_postadressen:
-            if postadres.get("id") == postadres_id:
-                afspraak["postadres"] = postadres
+    if afspraak_postadressen_response.status_code == 200:
+        afspraak_postadressen = afspraak_postadressen_response.json()["hydra:member"]
+        for afspraak in afspraken:
+            postadres_id = afspraak.get("postadres_id")
+            for postadres in afspraak_postadressen:
+                if postadres.get("id") == postadres_id:
+                    afspraak["postadres"] = postadres
+    # else:
+    #     return jsonify(message=afspraak_postadressen_response.reason), afspraak_postadressen_response.status_code
 
     afdelingen_response = get_afdelingen(afspraken)
-    if afdelingen_response.status_code != 200:
-        return jsonify(message=afdelingen_response.reason), afdelingen_response.status_code
-    afdelingen = afdelingen_response.json()["data"]
+    if afdelingen_response.status_code == 200:
+        afdelingen = afdelingen_response.json()["data"]
+        postadressen_response = get_postadressen(afdelingen)
+        if postadressen_response.status_code != 200:
+            return jsonify(message=postadressen_response.reason), postadressen_response.status_code
+        postadressen = postadressen_response.json()["hydra:member"]
 
-    postadressen_response = get_postadressen(afdelingen)
-    if postadressen_response.status_code != 200:
-        return jsonify(message=postadressen_response.reason), postadressen_response.status_code
-    postadressen = postadressen_response.json()["hydra:member"]
+        organisatie_reponse = get_organisaties(afdelingen)
+        if organisatie_reponse.status_code != 200:
+            return jsonify(message=organisatie_reponse.reason), organisatie_reponse.status_code
+        organisaties = organisatie_reponse.json()["data"]
 
-    organisatie_reponse = get_organisaties(afdelingen)
-    if organisatie_reponse.status_code != 200:
-        return jsonify(message=organisatie_reponse.reason), organisatie_reponse.status_code
-    organisaties = organisatie_reponse.json()["data"]
-
-    for afdeling in afdelingen:
-        organisatie_id = afdeling.get("organisatie_id", {})
-        for organisatie in organisaties:
-            if organisatie["id"] == organisatie_id:
-                afdeling["organisatie"] = organisatie
-        for postadres in postadressen:
-            single_postadres_id = postadres.get("id")
-            afdeling_postadres_ids = afdeling.get('postadressen_ids')
-            afdeling["postadressen"] = []
-            if single_postadres_id in afdeling_postadres_ids:
-                afdeling["postadressen"].append(postadres)
+        for afdeling in afdelingen:
+            organisatie_id = afdeling.get("organisatie_id", {})
+            for organisatie in organisaties:
+                if organisatie["id"] == organisatie_id:
+                    afdeling["organisatie"] = organisatie
+            for postadres in postadressen:
+                single_postadres_id = postadres.get("id")
+                afdeling_postadres_ids = afdeling.get('postadressen_ids')
+                afdeling["postadressen"] = []
+                if single_postadres_id in afdeling_postadres_ids:
+                    afdeling["postadressen"].append(postadres)
+    # else:
+    #     return jsonify(message=afdelingen_response.reason), afdelingen_response.status_code
 
     current_date_str = datetime.now().strftime("%Y-%m-%d")
 
@@ -216,10 +216,10 @@ def create_row(afdeling, afspraak, burger, current_date_str):
     organisatie = afdeling.get("organisatie", {})
     adres = afspraak.get("postadres", {})
 
-    postcode = adres["postalCode"]
-    plaats = adres["locality"]
-    straat = adres["street"]
-    huisnummer = adres["houseNumber"]
+    postcode = adres.get("postalCode", {})
+    plaats = adres.get("locality", {})
+    straat = adres.get("street", {})
+    huisnummer = adres.get("houseNumber",{})
 
     row = {}
     row["organisatie.naam"] = organisatie["naam"] if "naam" in organisatie else ""
