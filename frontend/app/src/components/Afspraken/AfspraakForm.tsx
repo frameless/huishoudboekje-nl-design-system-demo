@@ -2,7 +2,7 @@ import {Box, Button, FormControl, FormErrorMessage, FormLabel, Input, InputGroup
 import React, {useContext, useEffect, useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
-import {Afdeling, Organisatie, Rekening, UpdateAfspraakInput} from "../../generated/graphql";
+import {Organisatie, Rekening, UpdateAfspraakInput} from "../../generated/graphql";
 import {currencyFormat, useReactSelectStyles} from "../../utils/things";
 import useSelectProps from "../../utils/useSelectProps";
 import useToaster from "../../utils/useToaster";
@@ -26,7 +26,6 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 	const bedragRef = useRef<HTMLInputElement>(null);
 	const [isAfspraakWithOrganisatie, setAfspraakWithOrganisatie] = useState<boolean>(false);
 	const [selectedOrganisatie, setSelectedOrganisatie] = useState<Organisatie | undefined>(undefined);
-	const [selectedAfdeling, setSelectedAfdeling] = useState<Afdeling | undefined>(undefined);
 	const {
 		defaultProps,
 		components,
@@ -43,8 +42,8 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 		rubrieken = [],
 	} = useContext(AfspraakFormContext);
 	const afdelingen = selectedOrganisatie?.afdelingen || [];
-	const rekeningen = selectedAfdeling?.rekeningen || [];
-	const postadressen = selectedAfdeling?.postadressen || [];
+	const rekeningen = afdelingen.find(a => a.id === data.afdelingId)?.rekeningen || [];
+	const postadressen = afdelingen.find(a => a.id === data.afdelingId)?.postadressen || [];
 
 	useEffect(() => {
 		setSelectedOrganisatie(organisaties.find(o => o.afdelingen?.find(a => values?.afdelingId === a.id)));
@@ -77,10 +76,12 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 
 	useEffect(() => {
 		// If the selected organisatie has only one afdeling, preselect it, otherwise, leave the option open.
-		setSelectedAfdeling(selectedOrganisatie?.afdelingen?.length === 1 ? selectedOrganisatie.afdelingen[0] : undefined);
+		updateForm("afspraakId", selectedOrganisatie?.afdelingen?.length === 1 ? selectedOrganisatie.afdelingen[0] : undefined);
 	}, [selectedOrganisatie]);
 
 	useEffect(() => {
+		const selectedAfdeling = afdelingen.find(a => a.id === data.afdelingId);
+
 		// If the selected organisatie has only one afdeling, preselect it, otherwise, leave the option open.
 		if (!data.tegenRekeningId) {
 			updateForm("tegenRekeningId", selectedAfdeling?.rekeningen?.length === 1 ? selectedAfdeling.rekeningen[0]?.id : undefined);
@@ -90,7 +91,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 		if (!data.postadresId) {
 			updateForm("postadresId", selectedAfdeling?.postadressen?.length === 1 ? selectedAfdeling.postadressen[0]?.id : undefined);
 		}
-	}, [selectedAfdeling, data.tegenRekeningId, data.postadresId]);
+	}, [afdelingen, data.tegenRekeningId, data.postadresId, data.afdelingId]);
 
 	return (
 		<Stack spacing={5}>
@@ -117,7 +118,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 					<RadioGroup colorScheme={"primary"} onChange={result => {
 						setAfspraakWithOrganisatie(result === "organisatie");
 						setSelectedOrganisatie(undefined);
-						setSelectedAfdeling(undefined);
+						updateForm("afdelingId", undefined);
 						updateForm("tegenRekeningId", undefined);
 						updateForm("postadresId", undefined);
 					}} value={isAfspraakWithOrganisatie ? "organisatie" : "burger"}>
@@ -150,7 +151,6 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 							value={data.afdelingId ? afdelingOptions.find(o => o.value === data.afdelingId) : null}
 							onChange={(result) => {
 								const findAfdeling = afdelingen.find(o => o.id === result?.value);
-								setSelectedAfdeling(findAfdeling);
 								updateForm("afdelingId", findAfdeling?.id);
 							}} />
 						<FormErrorMessage>{t("forms.afspraak.invalidAfdelingError")}</FormErrorMessage>

@@ -10,14 +10,16 @@ export type SelectOption = {
 	context?: any
 }
 
+const sortByField = (fieldName: string) => {
+	return (a, b) => (a[fieldName] && b[fieldName]) && a[fieldName] < b[fieldName] ? -1 : 1;
+};
+
 const createSelectOptionsFromRubrieken = (rubrieken: Rubriek[] = []): SelectOption[] => {
-	return rubrieken.sort((a: Rubriek, b: Rubriek) => {
-		return (a.naam && b.naam) && a.naam < b.naam ? -1 : 1;
-	}).map((r: Rubriek): SelectOption => ({
+	return rubrieken.map((r: Rubriek): SelectOption => ({
 		key: r.id!,
 		value: r.id,
 		label: r.naam!,
-	}));
+	})).sort(sortByField("label"));
 };
 
 const createSelectOptionsFromRekeningen = (rekeningen: Rekening[] = []): SelectOption[] => {
@@ -29,7 +31,7 @@ const createSelectOptionsFromRekeningen = (rekeningen: Rekening[] = []): SelectO
 			iban: formatIBAN(r.iban),
 			rekeninghouder: r.rekeninghouder,
 		},
-	}));
+	})).sort(sortByField("label"));
 };
 
 const createSelectOptionsFromOrganisaties = (organisaties: Organisatie[] = []): SelectOption[] => {
@@ -37,7 +39,7 @@ const createSelectOptionsFromOrganisaties = (organisaties: Organisatie[] = []): 
 		key: o.id!,
 		value: o.id,
 		label: o.naam || "",
-	}));
+	})).sort(sortByField("label"));
 };
 
 const createSelectOptionsFromAfdelingen = (afdelingen: Afdeling[] = []): SelectOption[] => {
@@ -45,7 +47,7 @@ const createSelectOptionsFromAfdelingen = (afdelingen: Afdeling[] = []): SelectO
 		key: a.id!,
 		value: a.id!,
 		label: a.naam || "",
-	}));
+	})).sort(sortByField("label"));
 };
 
 const createSelectOptionsFromPostadressen = (postadressen: Postadres[] = []): SelectOption[] => {
@@ -53,7 +55,7 @@ const createSelectOptionsFromPostadressen = (postadressen: Postadres[] = []): Se
 		key: a.id!,
 		value: a.id!,
 		label: `${a.straatnaam} ${a.huisnummer}, ${a.postcode} ${a.plaatsnaam}`,
-	}));
+	})).sort(sortByField("label"));
 };
 
 const useSelectProps = () => {
