@@ -1,6 +1,4 @@
 """ GraphQL mutation for deleting a Afdeling """
-import os
-
 import graphene
 import requests
 from graphql import GraphQLError
@@ -38,23 +36,20 @@ class DeleteAfdeling(graphene.Mutation):
             raise GraphQLError("Afdeling not found")
 
         postadressen = previous.get("postadressen_ids")
-        for postadres_id in postadressen:
-            response_ContactCatalogus = requests.delete(
-                f"{settings.CONTACTCATALOGUS_SERVICE_URL}/addresses/{postadres_id}",
-                headers={"Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845"}
-            )
-            if response_ContactCatalogus.status_code != 204:
-                raise GraphQLError(f"Upstream API responded: {response_ContactCatalogus.text}")
+        if postadressen is not None and len(postadressen) >= 1:
+            for postadres_id in postadressen:
+                response_ContactCatalogus = requests.delete(
+                    f"{settings.CONTACTCATALOGUS_SERVICE_URL}/addresses/{postadres_id}",
+                    headers={"Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845"}
+                )
+                if response_ContactCatalogus.status_code != 204:
+                    raise GraphQLError(f"Upstream API responded: {response_ContactCatalogus.text}")
 
-        response_organisatie = requests.delete(
-            f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/{id}"
-        )
+        response_organisatie = requests.delete(f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/{id}")
         if response_organisatie.status_code != 204:
             raise GraphQLError(f"Upstream API responded: {response_organisatie.text}")
 
-        response_hhb = requests.delete(
-            f"{settings.HHB_SERVICES_URL}/afdelingen/{id}"
-        )
+        response_hhb = requests.delete(f"{settings.HHB_SERVICES_URL}/afdelingen/{id}")
         if response_hhb.status_code != 204:
             raise GraphQLError(f"Upstream API responded: {response_hhb.text}")
 
