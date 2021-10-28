@@ -1,6 +1,7 @@
 import {gql} from "@apollo/client";
 import {AfdelingFragment} from "./Afdeling";
 import {BetaalinstructieFragment} from "./Betaalinstructie";
+import {PostadresFragment} from "./Postadres";
 import {RekeningFragment} from "./Rekening";
 import {RubriekFragment} from "./Rubriek";
 
@@ -29,6 +30,9 @@ export const AfspraakFragment = gql`
         afdeling {
             ...Afdeling
         }
+        postadres {
+            ...Postadres
+        }
         tegenRekening {
             ...Rekening
         }
@@ -55,6 +59,7 @@ export const AfspraakFragment = gql`
     }
     ${RekeningFragment}
     ${AfdelingFragment}
+    ${PostadresFragment}
     ${RubriekFragment}
     ${BetaalinstructieFragment}
 `;

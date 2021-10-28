@@ -141,66 +141,16 @@
     "date": "Datum",
     "startDate": "Startdatum"
   },
-  "afspraken": {
-    "betaalrichting": "Betaalrichting",
-    "inkomsten": "Inkomsten",
-    "uitgaven": "Uitgaven",
-    "isAfspraakWithOrganisatie": "Wie is de tegenpartij?",
-    "tegenrekening": "Tegenrekening",
-    "rubriek": "Rubriek",
-    "omschrijving": "Omschrijving",
-    "bedrag": "Bedrag",
-    "periodiek": "Periodiek",
-    "vervolgAfspraak": {
-      "title": "Vervolgafspraak toevoegen",
-      "zoektermenHelperText": "De volgende zoektermen worden overgenomen bij de vervolgafspraak:",
-      "betaalinstructieHelperText": "Let op: voor een vervolgafspraak moet een nieuwe betaalinstructie worden ingesteld."
-    },
-    "willEndOn": "Deze afspraak eindigt op {{date}}.",
-    "endedOn": "Deze afspraak is beëindigd per {{date}}.",
-    "planFollowup": "Vervolgafspraak toevoegen",
-    "zoektermen": "Zoektermen",
-    "zoekterm": "Zoekterm",
-    "showActive": "Actieve afspraken",
-    "showInActive": "Beëindigde afspraken",
-    "tegenpartij": "Tegenpartij",
-    "noResults": "Er zijn geen afspraken gevonden."
-  },
-  "afspraakDetailView": {
-    "invalidBetaalrichtingError": "Kies een betaalrichting.",
-    "invalidRubriekError": "Kies een rubriek.",
-    "invalidOmschrijvingError": "Vul een omschrijving in.",
-    "invalidBedragError": "Vul een geldig bedrag in.",
-    "title": "Afspraak bekijken",
-    "section1": {
-      "title": "Partijen",
-      "helperText": "Burger en/of organisatie."
-    },
-    "section2": {
-      "title": "Betaling",
-      "helperText": "Gegevens over de betaling."
-    },
-    "section3": {
-      "title": "Afletteren",
-      "helperText": "Voeg zoektermen toe voor het automatisch afletteren van geïmporteerde banktransacties."
-    },
-    "betaalinstructie": {
-      "title": "Betaalinstructie",
-      "helperText": "Instellingen voor een betaalinstructie."
-    },
-    "noBetaalinstructie": "Er is geen betaalinstructie ingesteld.",
-    "invalidNaamError": "Vul een naam voor de afdeling in."
-  },
-  "burger": "Burger",
-  "organisatie": "Organisatie",
   "forms": {
-    "afspraak": {
-      "invalidOrganisatieError": "Kies een organisatie.",
-      "invalidAfdelingError": "Kies een afdeling.",
-      "invalidPostadresError": "Kies een postadres.",
-      "invalidRekeningError": "Kies een rekening."
-    },
     "afspraken": {
+      "section1": {
+        "title": "Partijen",
+        "helperText": "Vul hier in met wie de afspraak wordt gemaakt."
+      },
+      "section2": {
+        "title": "Betaling",
+        "helperText": "Vul hier de betaalgegevens in."
+      },
       "select": {
         "noAfdelingenOptionsMessage": "Geen afdelingen gevonden.",
         "noPostadressenOptionsMessage": "Geen postadressen gevonden.",
@@ -216,6 +166,12 @@
       "title": "Tegenpartij en betaling",
       "helperText": "Vul hier alle gegevens over de afspraak in.",
       "titleEdit": "Afspraak wijzigen"
+    },
+    "afspraak": {
+      "invalidOrganisatieError": "Kies een organisatie.",
+      "invalidAfdelingError": "Kies een afdeling.",
+      "invalidPostadresError": "Kies een postadres.",
+      "invalidRekeningError": "Kies een rekening."
     },
     "bankzaken": {
       "sections": {
@@ -363,6 +319,58 @@
         "noOptionsMessage": "Geen opties beschikbaar."
       }
     }
+  },
+  "afspraken": {
+    "isAfspraakWithOrganisatie": "Partij",
+    "betaalrichting": "Betaalrichting",
+    "inkomsten": "Inkomsten",
+    "uitgaven": "Uitgaven",
+    "tegenrekening": "Tegenrekening",
+    "rubriek": "Rubriek",
+    "omschrijving": "Omschrijving",
+    "bedrag": "Bedrag",
+    "periodiek": "Periodiek",
+    "vervolgAfspraak": {
+      "title": "Vervolgafspraak toevoegen",
+      "zoektermenHelperText": "De volgende zoektermen worden overgenomen bij de vervolgafspraak:",
+      "betaalinstructieHelperText": "Let op: voor een vervolgafspraak moet een nieuwe betaalinstructie worden ingesteld."
+    },
+    "willEndOn": "Deze afspraak eindigt op {{date}}.",
+    "endedOn": "Deze afspraak is beëindigd per {{date}}.",
+    "planFollowup": "Vervolgafspraak toevoegen",
+    "zoektermen": "Zoektermen",
+    "zoekterm": "Zoekterm",
+    "showActive": "Actieve afspraken",
+    "showInActive": "Beëindigde afspraken",
+    "tegenpartij": "Tegenpartij",
+    "noResults": "Er zijn geen afspraken gevonden."
+  },
+  "burger": "Burger",
+  "organisatie": "Organisatie",
+  "afspraakDetailView": {
+    "invalidBetaalrichtingError": "Kies een betaalrichting.",
+    "invalidRubriekError": "Kies een rubriek.",
+    "invalidOmschrijvingError": "Vul een omschrijving in.",
+    "invalidBedragError": "Vul een geldig bedrag in.",
+    "title": "Afspraak bekijken",
+    "section1": {
+      "title": "Partijen",
+      "helperText": "Burger en/of organisatie."
+    },
+    "section2": {
+      "title": "Betaling",
+      "helperText": "Gegevens over de betaling."
+    },
+    "section3": {
+      "title": "Afletteren",
+      "helperText": "Voeg zoektermen toe voor het automatisch afletteren van geïmporteerde banktransacties."
+    },
+    "betaalinstructie": {
+      "title": "Betaalinstructie",
+      "helperText": "Instellingen voor een betaalinstructie."
+    },
+    "noBetaalinstructie": "Er is geen betaalinstructie ingesteld.",
+    "invalidNaamError": "Vul een naam voor de afdeling in."
   },
   "afdeling": "Afdeling",
   "postadres": "Postadres",

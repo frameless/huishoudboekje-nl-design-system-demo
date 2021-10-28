@@ -1,4 +1,4 @@
-import {Divider, List, ListIcon, ListItem, Stack} from "@chakra-ui/react";
+import {List, ListIcon, ListItem} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {MdCheckCircle, MdReportProblem} from "react-icons/md";
@@ -9,7 +9,6 @@ import d from "../../../utils/dayjs";
 import Queryable from "../../../utils/Queryable";
 import useToaster from "../../../utils/useToaster";
 import BackButton from "../../Layouts/BackButton";
-import {FormLeft, FormRight} from "../../Layouts/Forms";
 import Page from "../../Layouts/Page";
 import Section from "../../Layouts/Section";
 import PageNotFound from "../../PageNotFound";
@@ -81,6 +80,7 @@ const FollowUpAfspraak = () => {
 				omschrijving: afspraak.omschrijving,
 				afdelingId: afspraak.afdeling?.id,
 				tegenRekeningId: afspraak.tegenRekening?.id,
+				postadresId: afspraak.postadres?.id,
 			};
 
 			const ctxValue: FollowUpAfspraakFormContextType = {
@@ -90,31 +90,25 @@ const FollowUpAfspraak = () => {
 
 			return (
 				<Page title={t("afspraken.vervolgAfspraak.title")} backButton={<BackButton to={Routes.ViewAfspraak(afspraak.id)} />}>
-					<Section spacing={5}>
-						<Stack direction={["column", "row"]}>
-							<FormLeft title={t("forms.afspraken.title")} helperText={t("forms.afspraken.helperText")}>
-								<Divider />
-								<List spacing={2}>
-									<ListItem justify={"center"}>
-										<ListIcon as={MdCheckCircle} color="green.500" w={5} h={5} verticalAlign={"middle"} />
-										{t("afspraken.vervolgAfspraak.zoektermenHelperText")}
-										<ZoektermenList zoektermen={afspraak.zoektermen || []} />
-									</ListItem>
-									{afspraak.betaalinstructie && (
-										<ListItem justify={"center"}>
-											<ListIcon as={MdReportProblem} color="orange.500" w={5} h={5} verticalAlign={"middle"} />
-											{t("afspraken.vervolgAfspraak.betaalinstructieHelperText")}
-										</ListItem>
-									)}
-								</List>
-							</FormLeft>
-							<FormRight spacing={5}>
-								<AfspraakFormContext.Provider value={ctxValue}>
-									<AfspraakForm burgerRekeningen={afspraak.burger?.rekeningen || []} values={values} onChange={createFollowupAfspraak} />
-								</AfspraakFormContext.Provider>
-							</FormRight>
-						</Stack>
+					<Section>
+						<List spacing={2}>
+							<ListItem justify={"center"}>
+								<ListIcon as={MdCheckCircle} color="green.500" w={5} h={5} verticalAlign={"middle"} />
+								{t("afspraken.vervolgAfspraak.zoektermenHelperText")}
+								<ZoektermenList zoektermen={afspraak.zoektermen || []} />
+							</ListItem>
+							{afspraak.betaalinstructie && (
+								<ListItem justify={"center"}>
+									<ListIcon as={MdReportProblem} color="orange.500" w={5} h={5} verticalAlign={"middle"} />
+									{t("afspraken.vervolgAfspraak.betaalinstructieHelperText")}
+								</ListItem>
+							)}
+						</List>
 					</Section>
+
+					<AfspraakFormContext.Provider value={ctxValue}>
+						<AfspraakForm burgerRekeningen={afspraak.burger?.rekeningen || []} values={values} onChange={createFollowupAfspraak} />
+					</AfspraakFormContext.Provider>
 				</Page>
 			);
 		}} />
