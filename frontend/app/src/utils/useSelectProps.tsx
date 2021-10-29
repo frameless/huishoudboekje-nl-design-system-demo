@@ -27,10 +27,6 @@ const createSelectOptionsFromRekeningen = (rekeningen: Rekening[] = []): SelectO
 		key: r.id!,
 		value: r.id,
 		label: [formatIBAN(r.iban), r.rekeninghouder || ""],
-		context: {
-			iban: formatIBAN(r.iban),
-			rekeninghouder: r.rekeninghouder,
-		},
 	})).sort(sortByField("label"));
 };
 
