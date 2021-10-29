@@ -3,11 +3,7 @@ import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {CreateAfdelingInput, Organisatie} from "../../generated/graphql";
 import useToaster from "../../utils/useToaster";
-import zod from "../../utils/zod";
-
-const AfdelingValidator = zod.object({
-	naam: zod.string().nonempty(),
-});
+import AfdelingValidator from "../../validators/AfdelingValidator";
 
 type AfdelingFormProps = {
 	organisatie: Organisatie,
@@ -47,7 +43,7 @@ const AfdelingForm: React.FC<AfdelingFormProps> = ({values, organisatie, onChang
 		<form onSubmit={onSubmit}>
 			<Stack spacing={5}>
 
-				<Stack direction={["column", "row"]}>
+				<Stack>
 					<FormControl flex={1} isInvalid={!isValid("naam")} isRequired={true}>
 						<FormLabel>{t("forms.createAfdeling.naam")}</FormLabel>
 						<Input value={data.naam || ""} onChange={e => updateForm("naam", e.target.value)} />

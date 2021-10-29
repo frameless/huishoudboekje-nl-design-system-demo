@@ -1587,6 +1587,15 @@ export type StartAutomatischBoekenMutationVariables = Exact<{ [key: string]: nev
 
 export type StartAutomatischBoekenMutation = { startAutomatischBoeken?: { ok?: boolean | null | undefined, journaalposten?: Array<{ id?: number | null | undefined } | null | undefined> | null | undefined } | null | undefined };
 
+export type UpdateAfdelingMutationVariables = Exact<{
+  id: Scalars['Int'];
+  naam?: Maybe<Scalars['String']>;
+  organisatieId?: Maybe<Scalars['Int']>;
+}>;
+
+
+export type UpdateAfdelingMutation = { updateAfdeling?: { ok?: boolean | null | undefined, afdeling?: { id?: number | null | undefined, naam?: string | null | undefined, organisatie?: { id?: number | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, naam?: string | null | undefined } | null | undefined, postadressen?: Array<{ id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined> | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined } | null | undefined };
+
 export type UpdateAfspraakMutationVariables = Exact<{
   id: Scalars['Int'];
   input: UpdateAfspraakInput;
@@ -3217,6 +3226,44 @@ export function useStartAutomatischBoekenMutation(baseOptions?: Apollo.MutationH
 export type StartAutomatischBoekenMutationHookResult = ReturnType<typeof useStartAutomatischBoekenMutation>;
 export type StartAutomatischBoekenMutationResult = Apollo.MutationResult<StartAutomatischBoekenMutation>;
 export type StartAutomatischBoekenMutationOptions = Apollo.BaseMutationOptions<StartAutomatischBoekenMutation, StartAutomatischBoekenMutationVariables>;
+export const UpdateAfdelingDocument = gql`
+    mutation updateAfdeling($id: Int!, $naam: String, $organisatieId: Int) {
+  updateAfdeling(id: $id, naam: $naam, organisatieId: $organisatieId) {
+    ok
+    afdeling {
+      ...Afdeling
+    }
+  }
+}
+    ${AfdelingFragmentDoc}`;
+export type UpdateAfdelingMutationFn = Apollo.MutationFunction<UpdateAfdelingMutation, UpdateAfdelingMutationVariables>;
+
+/**
+ * __useUpdateAfdelingMutation__
+ *
+ * To run a mutation, you first call `useUpdateAfdelingMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateAfdelingMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateAfdelingMutation, { data, loading, error }] = useUpdateAfdelingMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      naam: // value for 'naam'
+ *      organisatieId: // value for 'organisatieId'
+ *   },
+ * });
+ */
+export function useUpdateAfdelingMutation(baseOptions?: Apollo.MutationHookOptions<UpdateAfdelingMutation, UpdateAfdelingMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateAfdelingMutation, UpdateAfdelingMutationVariables>(UpdateAfdelingDocument, options);
+      }
+export type UpdateAfdelingMutationHookResult = ReturnType<typeof useUpdateAfdelingMutation>;
+export type UpdateAfdelingMutationResult = Apollo.MutationResult<UpdateAfdelingMutation>;
+export type UpdateAfdelingMutationOptions = Apollo.BaseMutationOptions<UpdateAfdelingMutation, UpdateAfdelingMutationVariables>;
 export const UpdateAfspraakDocument = gql`
     mutation updateAfspraak($id: Int!, $input: UpdateAfspraakInput!) {
   updateAfspraak(id: $id, input: $input) {
