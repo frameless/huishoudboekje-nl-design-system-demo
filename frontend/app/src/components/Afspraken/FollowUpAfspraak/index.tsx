@@ -90,21 +90,25 @@ const FollowUpAfspraak = () => {
 
 			return (
 				<Page title={t("afspraken.vervolgAfspraak.title")} backButton={<BackButton to={Routes.ViewAfspraak(afspraak.id)} />}>
-					<Section>
-						<List spacing={2}>
-							<ListItem justify={"center"}>
-								<ListIcon as={MdCheckCircle} color="green.500" w={5} h={5} verticalAlign={"middle"} />
-								{t("afspraken.vervolgAfspraak.zoektermenHelperText")}
-								<ZoektermenList zoektermen={afspraak.zoektermen || []} />
-							</ListItem>
-							{afspraak.betaalinstructie && (
-								<ListItem justify={"center"}>
-									<ListIcon as={MdReportProblem} color="orange.500" w={5} h={5} verticalAlign={"middle"} />
-									{t("afspraken.vervolgAfspraak.betaalinstructieHelperText")}
-								</ListItem>
-							)}
-						</List>
-					</Section>
+					{((afspraak.zoektermen && afspraak.zoektermen.length > 0) || afspraak.betaalinstructie) && (
+						<Section>
+							<List spacing={2}>
+								{afspraak.zoektermen && afspraak.zoektermen.length > 0 && (
+									<ListItem justify={"center"}>
+										<ListIcon as={MdCheckCircle} color="green.500" w={5} h={5} verticalAlign={"middle"} />
+										{t("afspraken.vervolgAfspraak.zoektermenHelperText")}
+										<ZoektermenList zoektermen={afspraak.zoektermen || []} />
+									</ListItem>
+								)}
+								{afspraak.betaalinstructie && (
+									<ListItem justify={"center"}>
+										<ListIcon as={MdReportProblem} color="orange.500" w={5} h={5} verticalAlign={"middle"} />
+										{t("afspraken.vervolgAfspraak.betaalinstructieHelperText")}
+									</ListItem>
+								)}
+							</List>
+						</Section>
+					)}
 
 					<AfspraakFormContext.Provider value={ctxValue}>
 						<AfspraakForm burgerRekeningen={afspraak.burger?.rekeningen || []} values={values} onChange={createFollowupAfspraak} />
