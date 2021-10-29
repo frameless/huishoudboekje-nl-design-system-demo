@@ -15,7 +15,7 @@ const EditAfspraak = () => {
 	const {id} = useParams<{id: string}>();
 	const {t} = useTranslation();
 	const handleMutation = useHandleMutation();
-	const [updateAfspraakMutation] = useUpdateAfspraakMutation({
+	const [updateAfspraakMutation, $updateAfspraakMutation] = useUpdateAfspraakMutation({
 		refetchQueries: [
 			{query: GetAfspraakDocument, variables: {id: parseInt(id)}},
 		],
@@ -61,7 +61,7 @@ const EditAfspraak = () => {
 			return (
 				<Page title={t("forms.afspraken.titleEdit")} backButton={<BackButton to={Routes.ViewAfspraak(afspraak.id)} />}>
 					<AfspraakFormContext.Provider value={ctxValue}>
-						<AfspraakForm burgerRekeningen={afspraak.burger?.rekeningen || []} values={editAfspraakValues} onChange={updateAfspraak} />
+						<AfspraakForm burgerRekeningen={afspraak.burger?.rekeningen || []} values={editAfspraakValues} onChange={updateAfspraak} isLoading={$updateAfspraakMutation.loading} />
 					</AfspraakFormContext.Provider>
 				</Page>
 			);

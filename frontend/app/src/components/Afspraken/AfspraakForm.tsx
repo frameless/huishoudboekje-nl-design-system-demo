@@ -1,4 +1,4 @@
-import {Box, Button, FormControl, FormErrorMessage, FormLabel, Input, InputGroup, InputLeftElement, Radio, RadioGroup, Stack} from "@chakra-ui/react";
+import {Box, Button, FormControl, FormErrorMessage, FormLabel, Input, InputGroup, InputLeftElement, Radio, RadioGroup, Spinner, Stack} from "@chakra-ui/react";
 import React, {useContext, useEffect, useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
@@ -18,9 +18,10 @@ type AfspraakFormProps = {
 	burgerRekeningen: Rekening[],
 	onChange: (values) => void,
 	values?: UpdateAfspraakInput,
+	isLoading?: boolean
 };
 
-const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, onChange}) => {
+const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, onChange, isLoading = false}) => {
 	const toast = useToaster();
 	const {t} = useTranslation();
 	const [data, setData] = useState<UpdateAfspraakInput>(values || {} as UpdateAfspraakInput);
@@ -37,7 +38,8 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 		createSelectOptionsFromAfdelingen,
 		createSelectOptionsFromPostadressen,
 	} = useSelectProps();
-	const isValid = (fieldName: string) => AfspraakValidator.shape[fieldName]?.safeParse(data[fieldName]).success;
+	const validator = AfspraakValidator(isAfspraakWithOrganisatie ? "organisatie" : "burger");
+	const isValid = (fieldName: string) => validator.shape[fieldName]?.safeParse(data[fieldName]).success;
 
 	const {
 		organisaties = [],
@@ -49,7 +51,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 
 	useEffect(() => {
 		setSelectedOrganisatie(organisaties.find(o => o.afdelingen?.find(a => values?.afdelingId === a.id)));
-		if(values) {
+		if (values) {
 			setAfspraakWithOrganisatie(!!values?.afdelingId);
 		}
 	}, [values, organisaties]);
@@ -70,8 +72,12 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 	const onSubmit = () => {
 		try {
 			bedragInputValidator.parse(bedragRef.current?.value);
-			const validatedData = AfspraakValidator.parse(data);
-			onChange(validatedData);
+			const validatedData = validator.parse(data);
+			onChange({
+				...validatedData,
+				afdelingId: validatedData.afdelingId || null, // Explicitly pass to make it null.
+				postadresId: validatedData.postadresId || null, // Explicitly pass to make it null.
+			});
 		}
 		catch (err) {
 			toast({error: t("global.formError"), title: t("messages.genericError.title")});
@@ -122,7 +128,11 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 		tryAutofillFields(findAfdeling);
 	};
 
-	return (
+	return isLoading ? (
+		<Stack justify={"center"} align={"center"}>
+			<Spinner />
+		</Stack>
+	) : (
 		<Stack spacing={5}>
 			<Section direction={["column", "row"]}>
 				<FormLeft title={t("forms.afspraken.section1.title")} helperText={t("forms.afspraken.section1.helperText")} />
@@ -152,7 +162,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 								<FormLabel>{t("organisatie")}</FormLabel>
 								<Select {...defaultProps} id="organisatie" options={organisatieOptions}
 									value={selectedOrganisatie ? organisatieOptions.find(o => o.value === selectedOrganisatie.id) : null}
-									onChange={onChangeOrganisatie} />
+									onChange={onChangeOrganisatie} styles={selectedOrganisatie ? reactSelectStyles.default : reactSelectStyles.error} />
 								<FormErrorMessage>{t("forms.afspraak.invalidOrganisatieError")}</FormErrorMessage>
 							</FormControl>
 						</Stack>
@@ -162,7 +172,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 								<FormLabel>{t("afdeling")}</FormLabel>
 								<Select {...defaultProps} id="afdeling" noOptionsMessage={() => t("forms.afspraken.select.noAfdelingenOptionsMessage")} options={afdelingOptions}
 									value={data.afdelingId ? afdelingOptions.find(o => o.value === data.afdelingId) : null}
-									onChange={onChangeAfdeling} />
+									onChange={onChangeAfdeling} styles={isValid("afdelingId") ? reactSelectStyles.default : reactSelectStyles.error} />
 								<FormErrorMessage>{t("forms.afspraak.invalidAfdelingError")}</FormErrorMessage>
 							</FormControl>
 						</Stack>
@@ -175,7 +185,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 									onChange={(result) => {
 										const findPostadres = postadressen.find(o => o.id === result?.value);
 										updateForm("postadresId", findPostadres?.id);
-									}} />
+									}} styles={isValid("postadresId") ? reactSelectStyles.default : reactSelectStyles.error} />
 								<FormErrorMessage>{t("forms.afspraak.invalidPostadresError")}</FormErrorMessage>
 							</FormControl>
 						</Stack>
