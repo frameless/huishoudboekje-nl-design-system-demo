@@ -127,17 +127,28 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 										<ViewIcon />} aria-label={t("global.actions.view")} />
 								</HStack>
 							</DataItem>
-							<DataItem label={t("afspraken.tegenrekening")}>
-								<HStack>
-									<Text>{afspraak.tegenRekening?.rekeninghouder}</Text>
-									{afspraak.afdeling?.organisatie?.id && (
-										<IconButton as={NavLink} to={Routes.Organisatie(afspraak.afdeling.organisatie.id)} variant={"ghost"} size={"sm"}
-											aria-label={t("global.actions.view")} icon={<ViewIcon />} />
-									)}
-								</HStack>
-								<Text size={"sm"}><PrettyIban iban={afspraak.tegenRekening?.iban} /></Text>
-							</DataItem>
+							{afspraak.tegenRekening && (
+								<DataItem label={t("afspraken.tegenrekening")}>
+									<HStack>
+										<Text>{afspraak.tegenRekening.rekeninghouder}</Text>
+										{afspraak.afdeling?.organisatie?.id && (
+											<IconButton as={NavLink} to={Routes.Organisatie(afspraak.afdeling.organisatie.id)} variant={"ghost"} size={"sm"}
+												aria-label={t("global.actions.view")} icon={<ViewIcon />} />
+										)}
+									</HStack>
+									<Text size={"sm"}><PrettyIban iban={afspraak.tegenRekening.iban} /></Text>
+								</DataItem>
+							)}
 						</Stack>
+
+						{afspraak.postadres && (
+							<Stack direction={["column", "row"]}>
+								<DataItem label={t("postadres")}>
+									<Text>{afspraak.postadres.straatnaam} {afspraak.postadres.huisnummer}</Text>
+									<Text>{afspraak.postadres.postcode} {afspraak.postadres.plaatsnaam}</Text>
+								</DataItem>
+							</Stack>
+						)}
 
 					</FormRight>
 				</Stack>
