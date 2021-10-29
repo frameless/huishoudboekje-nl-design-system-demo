@@ -22,7 +22,7 @@ const LoadBurgers = async () => {
 	const existingBurgers: Burger[] = await graphql.getBurgers().then(result => result.burgers as Burger[]);
 	console.log(`Er bestaan al ${existingBurgers.length} burgers.`);
 
-	const createBurgers = burgers.slice(0, 1 /* Todo: remove this */).map(async b => {
+	const createBurgers = burgers.map(async b => {
 		const burgerName = formatBurgerName(b);
 
 		// Create Burger
