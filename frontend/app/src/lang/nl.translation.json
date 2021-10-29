@@ -77,17 +77,18 @@
       "deleteSuccess": "{{burgerName}} is verwijderd uit dit huishouden."
     },
     "noHuishoudenSearchResults": "Geen huishoudens gevonden. Gebruik een andere zoekterm.",
-    "afdelingen": {
-      "deleteSuccess": "Afdeling verwijderd.",
-      "createSuccessMessage": "Nieuwe afdeling succesvol opgeslagen.",
-      "alreadyExistsError": "Deze afdeling bestaat al."
-    },
     "postadressen": {
       "createSuccess": "Postadres toegevoegd.",
       "deleteSuccess": "Postadres verwijderd.",
       "updateSuccess": "Postadres gewijzigd.",
       "deleteTitle": "Postadres verwijderen",
       "deleteQuestion": "Weet je zeker dat je dit postadres wil verwijderen?"
+    },
+    "afdelingen": {
+      "deleteSuccess": "Afdeling verwijderd.",
+      "createSuccessMessage": "Nieuwe afdeling succesvol opgeslagen.",
+      "updateSuccess": "Afdeling gewijzigd.",
+      "alreadyExistsError": "Deze afdeling bestaat al."
     },
     "organisaties": {
       "createSuccessMessage": "Nieuwe organisatie succesvol opgeslagen.",
@@ -132,6 +133,7 @@
       "clearSearch": "Zoekopdracht wissen",
       "showReports": "Bekijk rapportage",
       "back": "Terug",
+      "options": "Opties",
       "backToHome": "Terug naar de hoofdpagina",
       "clickToEdit": "Klik om te wijzigen"
     },
@@ -147,14 +149,14 @@
         "title": "Partijen",
         "helperText": "Vul hier in met wie de afspraak wordt gemaakt."
       },
-      "section2": {
-        "title": "Betaling",
-        "helperText": "Vul hier de betaalgegevens in."
-      },
       "select": {
         "noAfdelingenOptionsMessage": "Geen afdelingen gevonden.",
         "noPostadressenOptionsMessage": "Geen postadressen gevonden.",
         "noRekeningenOptionsMessage": "Geen rekeningen gevonden."
+      },
+      "section2": {
+        "title": "Betaling",
+        "helperText": "Vul hier de betaalgegevens in."
       },
       "fields": {
         "rubriekChoose": "Kies een rubriek",
@@ -163,8 +165,6 @@
         "ongeboekt": "Niet afgeletterd"
       },
       "titleCreate": "Afspraak toevoegen",
-      "title": "Tegenpartij en betaling",
-      "helperText": "Vul hier alle gegevens over de afspraak in.",
       "titleEdit": "Afspraak wijzigen"
     },
     "afspraak": {
@@ -322,10 +322,10 @@
   },
   "afspraken": {
     "isAfspraakWithOrganisatie": "Partij",
+    "tegenrekening": "Tegenrekening",
     "betaalrichting": "Betaalrichting",
     "inkomsten": "Inkomsten",
     "uitgaven": "Uitgaven",
-    "tegenrekening": "Tegenrekening",
     "rubriek": "Rubriek",
     "omschrijving": "Omschrijving",
     "bedrag": "Bedrag",
@@ -345,8 +345,10 @@
     "tegenpartij": "Tegenpartij",
     "noResults": "Er zijn geen afspraken gevonden."
   },
-  "burger": "Burger",
   "organisatie": "Organisatie",
+  "burger": "Burger",
+  "afdeling": "Afdeling",
+  "postadres": "Postadres",
   "afspraakDetailView": {
     "invalidBetaalrichtingError": "Kies een betaalrichting.",
     "invalidRubriekError": "Kies een rubriek.",
@@ -372,8 +374,6 @@
     "noBetaalinstructie": "Er is geen betaalinstructie ingesteld.",
     "invalidNaamError": "Vul een naam voor de afdeling in."
   },
-  "afdeling": "Afdeling",
-  "postadres": "Postadres",
   "select": {
     "placeholder": "Kies een optie...",
     "noOptions": "Geen resultaten"
@@ -647,6 +647,11 @@
   "afdelingen": "Afdelingen",
   "organizations": {
     "organizations": "Organisaties"
+  },
+  "modal": {
+    "updateAfdeling": {
+      "title": "Afdeling wijzigen"
+    }
   },
   "charts": {
     "inkomstenUitgaven": {
