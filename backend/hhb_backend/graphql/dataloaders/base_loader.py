@@ -1,6 +1,5 @@
 import json
 from typing import Dict, Union
-
 import requests
 from graphql import GraphQLError
 from aiodataloader import DataLoader

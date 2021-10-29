@@ -1,7 +1,5 @@
 """ Afspraak model as used in GraphQL queries """
 from datetime import date
-import logging
-
 import graphene
 from dateutil.parser import isoparse
 from flask import request
@@ -109,9 +107,7 @@ class Afspraak(graphene.ObjectType):
     async def resolve_burger(root, info):
         """ Get burger when requested """
         if root.get("burger_id"):
-            return await request.dataloader.burgers_by_id.load(
-                root.get("burger_id")
-            )
+            return await request.dataloader.burgers_by_id.load(root.get("burger_id"))
 
     async def resolve_rekening(root, info):
         """ Get rekening when requested """
@@ -122,24 +118,20 @@ class Afspraak(graphene.ObjectType):
 
     async def resolve_postadres(root, info):
         """ Get postadres when requested """
-        if root.get("postadres_id"):
-            return await request.dataloader.postadressen_by_id.load(
-                root.get("postadres_id")
-            )
+        postadres_id = root.get("postadres_id", None)
+        if postadres_id:
+            postadres = await request.dataloader.postadressen_by_id.load(postadres_id)
+            return postadres
 
     async def resolve_afdeling(root, info):
         """ Get afdeling when requested """
         if root.get("afdeling_id"):
-            return await request.dataloader.afdelingen_by_id.load(
-                root.get("afdeling_id")
-            )
+            return await request.dataloader.afdelingen_by_id.load(root.get("afdeling_id"))
 
     async def resolve_tegen_rekening(root, info):
         """ Get tegen_rekening when requested """
         if root.get("tegen_rekening_id"):
-            return await request.dataloader.rekeningen_by_id.load(
-                root.get("tegen_rekening_id")
-            )
+            return await request.dataloader.rekeningen_by_id.load(root.get("tegen_rekening_id"))
 
     def resolve_valid_from(root, info):
         if value := root.get("valid_from"):

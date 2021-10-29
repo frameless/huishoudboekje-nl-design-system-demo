@@ -64,46 +64,37 @@ class CreateAfspraak(graphene.Mutation):
 
         # check burger_id
         burger_id = input.get("burger_id")
-        burger: Burger = (
-            await hhb_dataloader().burgers_by_id.load(burger_id)
-        )
+        burger: Burger = (await hhb_dataloader().burgers_by_id.load(burger_id))
         if not burger:
             raise GraphQLError("burger not found")
 
         # Check tegen_rekening_id
         rekening_id = input.get("tegen_rekening_id")
-        rekening: Rekening = (
-            await hhb_dataloader().rekeningen_by_id.load(rekening_id)
-        )
+        rekening: Rekening = (await hhb_dataloader().rekeningen_by_id.load(rekening_id))
         if not rekening:
             raise GraphQLError("rekening not found")
 
         # check rubriek_id
         rubriek_id = input.get("rubriek_id")
-        rubriek: Rubriek = (
-            await hhb_dataloader().rubrieken_by_id.load(rubriek_id)
-        )
+        rubriek: Rubriek = (await hhb_dataloader().rubrieken_by_id.load(rubriek_id))
         if not rubriek:
             raise GraphQLError("rubriek not found")
 
         # check afdeling_id - optional
         afdeling_id = input.get("afdeling_id")
         if afdeling_id is not None:
-            afdeling: Afdeling = (
-                await hhb_dataloader().afdelingen_by_id.load(afdeling_id)
-            )
+            afdeling: Afdeling = (await hhb_dataloader().afdelingen_by_id.load(afdeling_id))
             if not afdeling:
                 raise GraphQLError("afdeling not found")
 
         # Check postadres_id - optional
         postadres_id = input.get("postadres_id")
         if postadres_id is not None:
-            postadres: Postadres = (
-                await hhb_dataloader().postadressen_by_id.load(postadres_id)
-            )
+            postadres: Postadres = (await hhb_dataloader().postadressen_by_id.load(postadres_id))
             if not postadres:
                 raise GraphQLError("postadres not found")
 
+        # final create call
         response = requests.post(f"{settings.HHB_SERVICES_URL}/afspraken/", json=input)
         if response.status_code != 201:
             raise GraphQLError(f"Upstream API responded: {response.text}")

@@ -3,7 +3,6 @@ from dateutil import parser
 from flask import request, abort, make_response
 from sqlalchemy import or_, and_
 from werkzeug.exceptions import BadRequest
-
 from models.afspraak import Afspraak
 from core_service.views.hhb_view import HHBView
 

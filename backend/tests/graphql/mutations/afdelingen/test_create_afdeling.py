@@ -1,6 +1,7 @@
-import pytest
+from requests.adapters import Response
 import requests_mock
 from requests_mock import Adapter
+
 class MockResponse():
     history = None
     raw = None
@@ -18,20 +19,20 @@ class MockResponse():
 def create_mock_adapter() -> Adapter:
     adapter = requests_mock.Adapter()
 
-    def test_matcher(request):      
-        if request.path == "/organisaties/" and request.query == "filter_ids=1":
+    def test_matcher(request):
+        if request.method == "GET" and request.path == "/organisaties/" and request.query == "filter_ids=1":
             return MockResponse({'data': [{'id': 1}]}, 200)
 
-        elif request.path == "/afdelingen/": #2 calls
+        elif request.method == "POST" and request.path == "/afdelingen/": #2 calls
             return MockResponse({'data': {'id': 1, }}, 201)
 
-        elif request.path == "/rekeningen/" and request.query == "filter_ibans=gb33bukb20201555555555":
+        elif request.method == "GET" and  request.path == "/rekeningen/" and request.query == "filter_ibans=gb33bukb20201555555555":
             return MockResponse({'data': [{'id': 1}]}, 200)
 
-        elif request.path == "/afdelingen/1/rekeningen/":
+        elif request.method == "POST" and  request.path == "/afdelingen/1/rekeningen/":
             return MockResponse({'data': {'iban': 'GB33BUKB20201555555555', 'rekeninghouder': 'testrekeninghouder'}}, 201)
 
-        elif request.path == "/addresses":
+        elif request.method == "POST" and request.path == "/addresses":
             return MockResponse({'id': 'test_postadres_id_post',
                                  'houseNumber': '52B',
                                  'street': 'testStraat',
@@ -41,12 +42,11 @@ def create_mock_adapter() -> Adapter:
         elif request.path == "/afdelingen/1":
             return MockResponse({ 'data': { 'id': 1, 'postadressen_ids' : ['test_postadres_id_post']}}, 200)
 
-        elif request.path == "/gebruikersactiviteiten/":
+        elif request.method == "GET" and  request.path == "/gebruikersactiviteiten/":
             return MockResponse({'data': {'id': 1}}, 201)
 
     adapter.add_matcher(test_matcher)
     return adapter
-
 
 def test_create_afdeling_succes(client):
     with requests_mock.Mocker() as mock:
