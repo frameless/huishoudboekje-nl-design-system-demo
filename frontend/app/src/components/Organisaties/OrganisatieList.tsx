@@ -70,7 +70,9 @@ const OrganisatieList = () => {
 							<Button size={"sm"} colorScheme={"primary"} onClick={onClickResetSearch}>{t("global.actions.clearSearch")}</Button>
 						</DeadEndPage>
 					) : (
-						<OrganisatieListView organisaties={filteredOrganisaties} showAddButton={search.trim().length === 0} />
+						<OrganisatieListView organisaties={[...filteredOrganisaties].sort((a, b) => {
+							return (a.naam || "") < (b.naam || "") ? -1 : 1
+						})} showAddButton={search.trim().length === 0} />
 					)}
 				</Page>
 			);

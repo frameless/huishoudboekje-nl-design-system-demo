@@ -60,7 +60,6 @@ const OrganisatieDetail = () => {
 
 	return (
 		<Queryable query={$organisatie} children={({organisatie}: {organisatie: Organisatie}) => {
-			const afdelingen: Afdeling[] = organisatie.afdelingen || [];
 			const onConfirmDeleteDialog = () => {
 				deleteOrganisatie()
 					.then(() => {
@@ -92,6 +91,7 @@ const OrganisatieDetail = () => {
 				);
 			}
 
+			const afdelingen: Afdeling[] = organisatie.afdelingen || [];
 			return (
 				<Page title={truncateText(organisatie.naam || "", maxOrganisatieNaamLength)} backButton={<BackButton to={Routes.Organisaties} />} menu={(
 					<Menu>
@@ -125,7 +125,10 @@ const OrganisatieDetail = () => {
 								w="100%" h="100%" onClick={() => push(Routes.CreateAfdeling(organisatie.id))} borderRadius={5}
 								p={5}>{t("global.actions.add")}</Button>
 						</Box>
-						{afdelingen.map(afdeling => (
+
+						{[...afdelingen].sort((a, b) => { // Sort ascending by name
+							return (a.naam || "") < (b.naam || "") ? -1 : 1
+						}).map(afdeling => (
 							<AfdelingListItem key={afdeling.id} afdeling={afdeling} />
 						))}
 					</Grid>
