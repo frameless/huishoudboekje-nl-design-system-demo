@@ -53,13 +53,11 @@ const LoadBurgers = async () => {
 			const organisatie: Organisatie | undefined = organisaties.find(o => o.kvknummer === organisatieData?.kvknummer);
 			const afdeling = organisatie?.afdelingen?.[0];
 			const afdelingId = afdeling?.id;
-
 			const postadresId: string = afdeling?.postadressen?.[0]?.id!;
+
 			if(afdeling && !postadresId){
 				throw new Error("(!) De afdeling voor deze afspraak heeft geen postadres.")
 			}
-
-			console.log(b, b.rekeningen);
 
 			let tegenRekeningId = afdeling?.rekeningen?.[0]?.id || createdBurger.rekeningen?.[0]?.id;
 			if(!tegenRekeningId){
@@ -75,7 +73,7 @@ const LoadBurgers = async () => {
 
 			return CreateAfspraak(
 				{bedrag, credit, omschrijving, afdelingId, postadresId, validFrom, validThrough, tegenRekeningId},
-				{burger: createdBurger, rubriek: _rubriek!, organisatie: organisatie, zoektermen, betaalinstructie},
+				{burger: createdBurger, rubriek: _rubriek, organisatie: organisatie, zoektermen, betaalinstructie},
 			).catch(err => {
 				console.error(`(!) Kon afspraak voor burger ${burgerName} niet toevoegen:`, util.inspect(err, false, null, true));
 			}) as Afspraak;

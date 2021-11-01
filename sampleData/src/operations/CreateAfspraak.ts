@@ -54,7 +54,6 @@ const CreateAfspraak = async (afspraak: Omit<CreateAfspraakInput, "burgerId" | "
 		await AddAfspraakBetaalinstructie(resultAfspraak, betaalinstructie)
 		.catch(err => {
 			console.error(`(!) Kon betaalinstructie niet toevoegen voor afspraak ${resultAfspraak.id}:`, util.inspect(err, false, null, true));
-			console.log({afspraak: resultAfspraak, betaalinstructie});
 		});
 
 		return resultAfspraak;
