@@ -29,12 +29,20 @@ const RekeningForm: React.FC<{
 	const {t} = useTranslation();
 	const toast = useToaster();
 	const errorMap = useErrorMap(t);
-	const [formData, {updateForm, reset}] = useForm<keyof RekeningInput, string | undefined>({iban: rekening?.iban, rekeninghouder: rekening?.rekeninghouder});
+	const [formData, {updateForm, reset, isSubmitted, toggleSubmitted}] = useForm<keyof RekeningInput, string | undefined>({
+		iban: rekening?.iban,
+		rekeninghouder: rekening?.rekeninghouder,
+	});
 
 	const isValid = (fieldName: string) => RekeningValidator.shape[fieldName]?.safeParse(formData[fieldName]).success;
 
 	const onSubmitForm = (e) => {
 		e.preventDefault();
+
+		if (isSubmitted) {
+			return;
+		}
+		toggleSubmitted(true);
 
 		try {
 			const ibanNoSpaces = formData.iban?.trim().replaceAll(" ", "");
@@ -47,9 +55,11 @@ const RekeningForm: React.FC<{
 				iban: data.iban ? sanitizeIBAN(data.iban) : undefined,
 			}, () => {
 				reset();
+				toggleSubmitted(false);
 			});
 		}
 		catch (err) {
+			toggleSubmitted(false);
 			toast.closeAll();
 			toast({
 				error: t("messages.formInputError"),
@@ -76,7 +86,7 @@ const RekeningForm: React.FC<{
 				</Stack>
 				<Stack direction={"row"} alignItems={"flex-end"}>
 					<Button type={"reset"} onClick={() => onCancel()}>{t("global.actions.cancel")}</Button>
-					<Button type={"submit"} colorScheme={"primary"} onClick={onSubmitForm}>{t("global.actions.save")}</Button>
+					<Button type={"submit"} colorScheme={"primary"} onClick={onSubmitForm} isDisabled={isSubmitted}>{t("global.actions.save")}</Button>
 				</Stack>
 			</SimpleGrid>
 		</form>

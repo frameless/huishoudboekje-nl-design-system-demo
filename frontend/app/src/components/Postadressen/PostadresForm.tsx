@@ -27,7 +27,7 @@ const PostadresForm: React.FC<{
 	const {t} = useTranslation();
 	const toast = useToaster();
 	const errorMap = useErrorMap(t);
-	const [formData, {updateForm, reset}] = useForm<keyof Omit<CreatePostadresInput, "afdelingId">, string | undefined>({
+	const [formData, {updateForm, reset, toggleSubmitted, isSubmitted}] = useForm<keyof Omit<CreatePostadresInput, "afdelingId">, string | undefined>({
 		huisnummer: postadres?.huisnummer,
 		plaatsnaam: postadres?.plaatsnaam,
 		postcode: postadres?.plaatsnaam,
@@ -39,6 +39,12 @@ const PostadresForm: React.FC<{
 	const onSubmitForm = (e) => {
 		e.preventDefault();
 
+		if (isSubmitted) {
+			return;
+		}
+
+		toggleSubmitted(true);
+
 		try {
 			const data = PostadresValidator.parse(formData, {errorMap});
 			onSubmit({
@@ -46,6 +52,7 @@ const PostadresForm: React.FC<{
 				...data,
 			}, () => {
 				reset();
+				toggleSubmitted(false);
 			});
 		}
 		catch (err) {
@@ -53,6 +60,7 @@ const PostadresForm: React.FC<{
 			toast({
 				error: t("messages.formInputError"),
 			});
+			toggleSubmitted(false);
 		}
 	};
 
@@ -89,7 +97,7 @@ const PostadresForm: React.FC<{
 				</Stack>
 				<Stack direction={"row"} alignItems={"flex-end"}>
 					<Button type={"reset"} onClick={() => onCancel()}>{t("global.actions.cancel")}</Button>
-					<Button type={"submit"} colorScheme={"primary"} onClick={onSubmitForm}>{t("global.actions.save")}</Button>
+					<Button type={"submit"} colorScheme={"primary"} onClick={onSubmitForm} isDisabled={isSubmitted}>{t("global.actions.save")}</Button>
 				</Stack>
 			</SimpleGrid>
 		</form>
