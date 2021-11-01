@@ -25,7 +25,6 @@ class CreateAfdelingInput(graphene.InputObjectType):
     rekeningen = graphene.List(lambda: rekening_input.RekeningInput)
     postadressen = graphene.List(lambda: create_postadres.CreatePostadresInput)
 
-
 class CreateAfdeling(graphene.Mutation):
     class Arguments:
         input = graphene.Argument(CreateAfdelingInput)
@@ -49,13 +48,13 @@ class CreateAfdeling(graphene.Mutation):
         rekeningen = input.pop("rekeningen", None)
         postadressen = input.pop("postadressen", None)
 
-        previous = await hhb_dataloader().organisaties_by_id.load(input['organisatie_id'])
-        if not previous:
-            raise GraphQLError("Organisatie not found")
-
         hhb_service_data = {
             "organisatie_id": input["organisatie_id"],
         }
+
+        previous = await hhb_dataloader().organisaties_by_id.load(input['organisatie_id'])
+        if not previous:
+            raise GraphQLError("Organisatie not found")
 
         hhb_service_response = requests.post(
             f"{settings.HHB_SERVICES_URL}/afdelingen/",
@@ -74,13 +73,22 @@ class CreateAfdeling(graphene.Mutation):
             raise GraphQLError(f"Upstream API responded: {org_service_response.json()}")
 
         result = org_service_response.json()["data"]
+        afdeling_id = result["id"]
 
         # rekeningen maken en meegeven aan result
         if rekeningen:
-            result["rekeningen"] = [
-                create_afdeling_rekening(result["id"], rekening)
-                for rekening in rekeningen
-            ]
+            rekening_ids = []
+            for rekening in rekeningen:
+                created_rekening = create_afdeling_rekening(afdeling_id, rekening)
+                rekening_ids.append(created_rekening.get("id"))
+            # update afdeling with rekening
+            update_response = requests.post(
+                f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/{afdeling_id}",
+                json={"rekeningen_ids": [','.join(map(str, rekening_ids))]},
+                headers={"Content-type": "application/json"},
+            )
+            if update_response.status_code != 200:
+                raise GraphQLError(f"Upstream API responded: {org_service_response.json()}")
 
         # postadressen maken en meegeven aan result
         if postadressen:

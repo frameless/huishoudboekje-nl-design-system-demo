@@ -17,6 +17,7 @@ class UpdateAfdeling(graphene.Mutation):
     class Arguments:
         # hhb_service elements
         id = graphene.Int(required=True)
+        
 
         # org_service elements
         naam = graphene.String()

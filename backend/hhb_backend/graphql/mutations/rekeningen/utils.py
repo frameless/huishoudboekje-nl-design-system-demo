@@ -7,7 +7,6 @@ from schwifty.exceptions import SchwiftyException
 
 from hhb_backend.graphql import settings
 
-
 def get_rekening(rekening_id):
     rekeningen_response = requests.get(
         f"{settings.HHB_SERVICES_URL}/rekeningen/{rekening_id}",
@@ -73,17 +72,27 @@ def get_rekening_by_iban(iban):
         raise GraphQLError(f"Upstream API responded: {rekeningen.text}")
     return next(iter(rekeningen.json()["data"]), None)
 
-
 def cleanup_rekening_when_orphaned(rekening_id):
+    used_by = rekening_used_check(rekening_id)
+    if len(used_by) == 0:
+        requests.delete(f"{settings.HHB_SERVICES_URL}/rekeningen/{rekening_id}")
+
+def rekening_used_check(rekening_id):
     rekening_response = requests.get(
         f"{settings.HHB_SERVICES_URL}/rekeningen/{rekening_id}",
         headers={"Content-type": "application/json"},
     )
-    if rekening_response == 200:
+
+    used = []
+    if rekening_response.status_code == 200:
         rekening = rekening_response.json()["data"]
-        if (
-            not rekening["afspraken"]
-            and not rekening["burgers"]
-            and not rekening["organisaties"]
-        ):
-            requests.delete(f"{settings.HHB_SERVICES_URL}/rekeningen/{rekening_id}")
+        if rekening.get("afspraken", None):
+            used.append("afspraken")
+        if rekening.get("burgers", None):
+            used.append("burgers")
+        if rekening.get("afdelingen", None):
+            used.append("afdelingen")
+    else:
+        raise GraphQLError(f"Upstream API responded: {rekeningen.text}")
+            
+    return used

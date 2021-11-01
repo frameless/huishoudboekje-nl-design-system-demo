@@ -10,6 +10,9 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     gebruikers_activiteit_entities,
     log_gebruikers_activiteit,
 )
+from hhb_backend.graphql.mutations.rekeningen.utils import (
+    cleanup_rekening_when_orphaned
+)
 
 class DeleteAfdeling(graphene.Mutation):
     class Arguments:
@@ -52,5 +55,10 @@ class DeleteAfdeling(graphene.Mutation):
         response_hhb = requests.delete(f"{settings.HHB_SERVICES_URL}/afdelingen/{id}")
         if response_hhb.status_code != 204:
             raise GraphQLError(f"Upstream API responded: {response_hhb.text}")
+
+        rekeningen = previous.get("rekeningen_ids")
+        if rekeningen:
+            for rekening in rekeningen:
+                cleanup_rekening_when_orphaned(rekening)
 
         return DeleteAfdeling(ok=True, previous=previous)

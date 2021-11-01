@@ -106,7 +106,7 @@ services:
   #   depends_on:
   #     - db
 
-  # # Database teardown
+  # # # Database teardown
   # db-teardown:
   #   image: postgres:13-alpine
   #   command:

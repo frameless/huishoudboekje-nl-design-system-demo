@@ -19,7 +19,7 @@ class CreatePostadresInput(graphene.InputObjectType):
     huisnummer = graphene.String(required=True)
     postcode = graphene.String(required=True)
     plaatsnaam = graphene.String(required=True)
-    afdeling_id = graphene.Int()
+    afdeling_id = graphene.Int(required=True)
 
 class CreatePostadres(graphene.Mutation):
     class Arguments:

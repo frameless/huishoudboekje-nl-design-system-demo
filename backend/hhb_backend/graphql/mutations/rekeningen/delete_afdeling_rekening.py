@@ -1,21 +1,16 @@
 """ GraphQL mutation for deleting a Rekening from an Organisatie """
-import json
-
 import graphene
 import requests
 from graphql import GraphQLError
 
-from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
-from hhb_backend.graphql.models import afdeling, rekening
+from hhb_backend.graphql.models import rekening
 from hhb_backend.graphql.mutations.rekeningen.utils import (
-    cleanup_rekening_when_orphaned,
+    cleanup_rekening_when_orphaned
 )
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    gebruikers_activiteit_entities,
     log_gebruikers_activiteit,
 )
-
 
 class DeleteAfdelingRekening(graphene.Mutation):
     class Arguments:
@@ -43,13 +38,7 @@ class DeleteAfdelingRekening(graphene.Mutation):
         """ Delete rekening associations with an afdeling """
         previous = await hhb_dataloader().rekeningen_by_id.load(rekening_id)
 
-        delete_response = requests.delete(
-            f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/{afdeling_id}/rekeningen/",
-            json={"rekening_id": rekening_id},
-        )
-        if delete_response.status_code != 202:
-            raise GraphQLError(f"Upstream API responded: {delete_response.json()}")
-
+        # only delete rekening if it is not used by: burger, afdeling or sfspraak
         cleanup_rekening_when_orphaned(rekening_id)
 
         return DeleteAfdelingRekening(ok=True, previous=previous)
