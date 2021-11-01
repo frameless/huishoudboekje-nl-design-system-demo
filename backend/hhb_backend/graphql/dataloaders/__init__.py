@@ -1,7 +1,7 @@
 # TODO unify naming, filenames are singular, loader names are plural
 from flask import request
 
-from .afspraken_loader import AfsprakenByBurgerLoader, AfsprakenByIdLoader, AfsprakenByRekeningLoader
+from .afspraken_loader import AfsprakenByBurgerLoader, AfsprakenByIdLoader, AfsprakenByRekeningLoader, AfsprakenByAfdelingLoader
 from .bank_transactions_loader import (BankTransactionByCsmLoader, BankTransactionByIdLoader,
                                        BankTransactionByIsGeboektLoader)
 from .configuratie_loader import ConfiguratieByIdLoader
@@ -16,13 +16,15 @@ from .journaalpost_loader import (
     JournaalpostenByIdLoader,
     JournaalpostenByTransactionLoader,
 )
-from .organisatie_loader import KvKDetailsLoader, OrganisatieByIdLoader
+from .organisatie_loader import OrganisatieByIdLoader # KvKDetailsLoader,
 from .overschrijving_loader import (OverschrijvingByAfspraakLoader, OverschrijvingByExportLoader,
                                     OverschrijvingByIdLoader)
 from .rekeningen_loader import (RekeningenByBurgerLoader, RekeningenByIbanLoader, RekeningenByIdLoader,
-                                RekeningenByOrganisatieLoader)
+                                RekeningenByAfdelingLoader)
 from .rubrieken_loader import RubriekByGrootboekrekeningLoader, RubriekByIdLoader
 from .huishouden_loader import HuishoudensByIdLoader
+from .afdeling_loader import AfdelingenByIdLoader, AfdelingenByOrganisatieLoader
+from .postadressen_loader import PostadressenByIdLoader, PostadressenByAfdelingLoader
 
 
 class HHBDataLoader:
@@ -35,12 +37,11 @@ class HHBDataLoader:
 
         # Organisaties
         self.organisaties_by_id = OrganisatieByIdLoader(loop=loop)
-        self.organisaties_kvk_details = KvKDetailsLoader(loop=loop)
-
         # Afspraken
         self.afspraken_by_id = AfsprakenByIdLoader(loop=loop)
         self.afspraken_by_burger = AfsprakenByBurgerLoader(loop=loop)
         self.afspraken_by_rekening = AfsprakenByRekeningLoader(loop=loop)
+        self.afspraken_by_afdeling = AfsprakenByAfdelingLoader(loop=loop)
         self.rubrieken_by_id = RubriekByIdLoader(loop=loop)
         self.rubrieken_by_grootboekrekening = RubriekByGrootboekrekeningLoader(
             loop=loop
@@ -52,7 +53,7 @@ class HHBDataLoader:
         # Rekeningen
         self.rekeningen_by_id = RekeningenByIdLoader(loop=loop)
         self.rekeningen_by_burger = RekeningenByBurgerLoader(loop=loop)
-        self.rekeningen_by_organisatie = RekeningenByOrganisatieLoader(loop=loop)
+        self.rekeningen_by_afdeling = RekeningenByAfdelingLoader(loop=loop)
         self.rekeningen_by_iban = RekeningenByIbanLoader(loop=loop)
 
         # Transaction Service
@@ -85,6 +86,14 @@ class HHBDataLoader:
 
         # Huishoudens
         self.huishoudens_by_id = HuishoudensByIdLoader(loop=loop)
+
+        # Afdelingen
+        self.afdelingen_by_id = AfdelingenByIdLoader(loop=loop)
+        self.afdelingen_by_organisatie = AfdelingenByOrganisatieLoader(loop=loop)
+
+        # Postadressen
+        self.postadressen_by_id = PostadressenByIdLoader(loop=loop)
+        self.postadressen_by_afdeling = PostadressenByAfdelingLoader(loop=loop)
 
     def __getitem__(self, item: str):
         return getattr(self, item)

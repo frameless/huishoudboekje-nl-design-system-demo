@@ -76,7 +76,6 @@ class UpdateAfspraakBetaalinstructie(graphene.Mutation):
             raise GraphQLError("Startdatum kan niet voor einddatum liggen.")
 
         input = {
-            **previous,
             "betaalinstructie": betaalinstructie
         }
 

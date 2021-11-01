@@ -6,22 +6,16 @@ class Organisatie(db.Model):
     __tablename__ = 'organisaties'
 
     id = Column(Integer, Sequence('organisaties_id_seq'), primary_key=True)
-    kvk_nummer = Column(String)
+    kvknummer = Column(String)
     vestigingsnummer = Column(String)
     naam = Column(String)
-    straatnaam = Column(String)
-    huisnummer = Column(String)
-    postcode = Column(String)
-    plaatsnaam = Column(String)
+
+    afdelingen = relationship("Afdeling", back_populates="organisaties")
 
     def to_dict(self):
         return {
             "id": self.id,
-            "kvk_nummer": self.kvk_nummer,
+            "kvknummer": self.kvknummer,
             "vestigingsnummer": self.vestigingsnummer,
-            "naam": self.naam,
-            "straatnaam": self.straatnaam,
-            "huisnummer": self.huisnummer,
-            "postcode": self.postcode,
-            "plaatsnaam": self.plaatsnaam
+            "naam": self.naam
         }

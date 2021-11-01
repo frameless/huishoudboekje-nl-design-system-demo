@@ -22,8 +22,8 @@ def create_burger_rekening(burger_id, rekening):
     return create_connected_rekening(burger_id, "burgers", rekening)
 
 
-def create_organisatie_rekening(organisatie_id, rekening):
-    return create_connected_rekening(organisatie_id, "organisaties", rekening)
+def create_afdeling_rekening(afdeling_id, rekening):
+    return create_connected_rekening(afdeling_id, "afdelingen", rekening)
 
 
 def create_connected_rekening(object_id, object_type, rekening):

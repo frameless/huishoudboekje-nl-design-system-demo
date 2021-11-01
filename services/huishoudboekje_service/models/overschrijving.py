@@ -8,7 +8,7 @@ class Overschrijving(db.Model):
 
     id = Column(Integer, Sequence('overschrijvingen_id_seq'), primary_key=True)
     afspraak_id = Column(Integer, ForeignKey('afspraken.id'))
-    afspraak = relationship("Afspraak", back_populates="overschrijvingen")
+    afspraken = relationship("Afspraak", back_populates="overschrijvingen")
     export_id = Column(Integer, ForeignKey('export.id', name='overschrijvingen_export_id_fkey'))
     export = relationship("Export", back_populates="overschrijvingen")
     datum = Column(Date)

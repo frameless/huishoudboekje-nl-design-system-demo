@@ -2,7 +2,7 @@
 from flask import request, make_response, abort
 from models.rekening import Rekening
 from models.rekening_burger import RekeningBurger
-from models.rekening_organisatie import RekeningOrganisatie
+from models.rekening_afdeling import RekeningAfdeling
 from core_service.views.hhb_view import HHBView
 
 
@@ -26,7 +26,7 @@ class RekeningView(HHBView):
 
     def extend_get(self, **kwargs):
         self.add_filter_burgers()
-        self.add_filter_organisaties()
+        self.add_filter_afdelingen()
         self.add_filter_ibans()
         self.add_filter_rekeninghouders()
         self.add_relations()
@@ -43,17 +43,20 @@ class RekeningView(HHBView):
             except ValueError: 
                 abort(make_response({"errors": [f"Input for filter_burgers is not correct."]}, 400))
 
-    def add_filter_organisaties(self):
-        filter_organisaties = request.args.get('filter_organisaties')
-        if filter_organisaties:
+    def add_filter_afdelingen(self):
+        filter_afdelingen = request.args.get('filter_afdelingen')
+        if filter_afdelingen:
             try:
-                self.hhb_query.query = self.hhb_query.query.\
-                    join(Rekening.organisaties).\
+                self.hhb_query.query = self.hhb_query.query. \
+                    join(Rekening.afdelingen). \
                     filter(
-                        RekeningOrganisatie.organisatie_id.in_([int(organisatie) for organisatie in filter_organisaties.split(",")])
-                    )
-            except ValueError: 
-                abort(make_response({"errors": [f"Input for filter_organisaties is not correct."]}, 400))
+                    RekeningAfdeling.afdeling_id.in_(
+                        [int(afdeling) for afdeling in
+                         filter_afdelingen.split(",")])
+                )
+            except ValueError:
+                abort(make_response({"errors": [
+                    f"Input for filter_afdelingen is not correct."]}, 400))
 
     def add_filter_ibans(self):
         filter_ibans = request.args.get('filter_ibans')
@@ -71,5 +74,5 @@ class RekeningView(HHBView):
 
     def add_relations(self, **kwargs):
         self.hhb_query.expose_many_relation("burgers", "burger_id")
-        self.hhb_query.expose_many_relation("organisaties", "organisatie_id")
         self.hhb_query.expose_many_relation("afspraken", "id")
+        self.hhb_query.expose_many_relation("afdelingen", "afdeling_id")

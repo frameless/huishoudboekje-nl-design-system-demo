@@ -28,13 +28,19 @@ from .organisaties.update_organisatie import UpdateOrganisatie
 from .overschrijvingen.create_export_overschrijvingen import CreateExportOverschrijvingen
 from .overschrijvingen.start_automatisch_boeken import StartAutomatischBoeken
 from .rekeningen.create_burger_rekening import CreateBurgerRekening
-from .rekeningen.create_organisatie_rekening import CreateOrganisatieRekening
+from .rekeningen.create_afdeling_rekening import CreateAfdelingRekening
 from .rekeningen.delete_burger_rekening import DeleteBurgerRekening
-from .rekeningen.delete_organisatie_rekening import DeleteOrganisatieRekening
+from .rekeningen.delete_afdeling_rekening import DeleteAfdelingRekening
 from .rekeningen.update_rekening import UpdateRekening
 from .rubrieken.create_rubriek import CreateRubriek
 from .rubrieken.delete_rubriek import DeleteRubriek
 from .rubrieken.update_rubriek import UpdateRubriek
+from .afdelingen.create_afdeling import CreateAfdeling
+from .afdelingen.update_afdeling import UpdateAfdeling
+from .afdelingen.delete_afdeling import DeleteAfdeling
+from .postadressen.create_postadres import CreatePostadres
+from .postadressen.update_postadres import UpdatePostadres
+from .postadressen.delete_postadres import DeletePostadres
 
 
 class RootMutation(graphene.ObjectType):
@@ -56,8 +62,8 @@ class RootMutation(graphene.ObjectType):
 
     createBurgerRekening = CreateBurgerRekening.Field()
     deleteBurgerRekening = DeleteBurgerRekening.Field()
-    createOrganisatieRekening = CreateOrganisatieRekening.Field()
-    deleteOrganisatieRekening = DeleteOrganisatieRekening.Field()
+    createAfdelingRekening = CreateAfdelingRekening.Field()
+    deleteAfdelingRekening = DeleteAfdelingRekening.Field()
     updateRekening = UpdateRekening.Field()
 
     deleteCustomerStatementMessage = DeleteCustomerStatementMessage.Field()
@@ -84,3 +90,11 @@ class RootMutation(graphene.ObjectType):
     deleteHuishouden = DeleteHuishouden.Field()
     addHuishoudenBurger = AddHuishoudenBurger.Field()
     deleteHuishoudenBurger = DeleteHuishoudenBurger.Field()
+
+    createAfdeling = CreateAfdeling.Field()
+    updateAfdeling = UpdateAfdeling.Field()
+    deleteAfdeling = DeleteAfdeling.Field()
+
+    createPostadres = CreatePostadres.Field()
+    updatePostadres = UpdatePostadres.Field()
+    deletePostadres = DeletePostadres.Field()

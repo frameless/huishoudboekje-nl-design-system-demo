@@ -1,90 +1,57 @@
-""" MethodView for /gebruiker/ path """
-from flask.views import MethodView
-from flask import request
-from flask_inputs import Inputs
-from flask_inputs.validators import JsonSchema
-from sqlalchemy.orm.exc import NoResultFound
+""" HHBView for /organisaties/ path """
 from models.organisatie import Organisatie
-from core_service.database import db
+from core_service.views.hhb_view import HHBView
+from flask import request, abort, make_response
 
-organisatie_schema = {
+
+class OrganisatieView(HHBView):
+    """ Methods for /organisaties/ path """
+    hhb_model = Organisatie
+
+    validation_data = {
    "type": "object",
    "properties": {
+        "id": {
+            "type": "string",
+        },
+        "kvknummer": {
+            "type": "string",
+        },
+        "vestigingsnummer": {
+            "type": "string",
+        },
        "naam": {
            "type": "string",
-       },
-        "straatnaam": {
-            "type": "string",
-        },
-        "huisnummer": {
-            "type": "string",
-        },
-        "postcode": {
-            "type": "string",
-        },
-        "plaatsnaam": {
-            "type": "string",
-        }
+       }
    },
    "required": []
 }
 
-class OrganisatieInputs(Inputs):
-    """ JSON validator for creating a new Gebruiker """
-    json = [JsonSchema(schema=organisatie_schema)]
+    def extend_get(self, **kwargs):
+        """ Extend the get function with extra filter """
+        self.add_filter_filter_afdelingen()
 
-class OrganisatieView(MethodView):
-    """ Methods for /organisaties/ path """
+    @staticmethod
+    def filter_in_string(name, cb):
+        filter_string = request.args.get(name)
+        if filter_string:
+            ids = []
+            for raw_id in filter_string.split(","):
+                try:
+                    ids.append(int(raw_id))
+                except ValueError:
+                    abort(make_response(
+                        {"errors": [
+                            f"Input for {name} is not correct, '{raw_id}' is not a number."]},
+                        400))
+            cb(ids)
 
-    def get(self, id=None):
-        """ Return a list of all Organisaties """
-        if id:
-            # /organisaties/<id>/
-            try:
-                organisatie = Organisatie.query.filter(Organisatie.id==id).one()
-            except NoResultFound:
-                return {"errors": ["Organisatie not found."]}, 404
-            return {"data": organisatie.to_dict()}, 200
+    def add_filter_filter_afdelingen(self):
+        """ Add filter_afdelingen filter based on the id of the organisatie model """
 
-        # /organisaties/
-        filter_ids = request.args.get('filter_ids')
-        organisaties = Organisatie.query
-        if filter_ids:
-            organisaties = organisaties.filter(
-                Organisatie.id.in_([id for id in filter_ids.split(",")])
-            )
-        return {"data": [o.to_dict() for o in organisaties.all()]}
+        def add_filter(ids):
+            self.hhb_query.query = self.hhb_query.query.filter(
+                self.hhb_model.afdeling_id.in_(ids))
 
-    def post(self, id=None):
-        """ Create or update an Organisatie """
-        inputs = OrganisatieInputs(request)
-        if not inputs.validate():
-            return {"errors": inputs.errors}, 400
+        OrganisatieView.filter_in_string('filter_afdelingen', add_filter)
 
-        if id:
-            try:
-                organisatie = Organisatie.query.filter(Organisatie.id==id).one()
-            except NoResultFound:
-                return {"errors": ["Organisatie not found."]}, 404
-            response_code = 200
-        else:
-            organisatie = Organisatie()
-            db.session.add(organisatie)
-            response_code = 201
-
-        for key, value in request.json.items():
-            setattr(organisatie, key, value)
-        db.session.commit()
-        return {"data": organisatie.to_dict()}, response_code
-
-    def delete(self, id=None):
-        """ Delete an Organisatie """
-        if not id:
-            return {"errors": ["Delete method requires an id"]}, 400
-        try:
-            organisatie = Organisatie.query.filter(Organisatie.id==id).one()
-        except NoResultFound:
-            return {"errors": ["Organisatie not found."]}, 404
-        db.session.delete(organisatie)
-        db.session.commit()
-        return {}, 204

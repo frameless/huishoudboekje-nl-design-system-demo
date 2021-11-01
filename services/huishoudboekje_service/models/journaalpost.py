@@ -8,7 +8,7 @@ class Journaalpost(db.Model):
 
     id = Column(Integer, Sequence('journaalposten_id_seq'), primary_key=True)
     afspraak_id = Column(Integer, ForeignKey('afspraken.id'))
-    afspraak = relationship("Afspraak", back_populates="journaalposten")
+    afspraken = relationship("Afspraak", back_populates="journaalposten")
     transaction_id = Column(Integer, index=True)
     grootboekrekening_id = Column(String)
     is_automatisch_geboekt = Column(Boolean)

@@ -2,6 +2,7 @@
 import os
 from flask import Flask, Response
 from organisatie_service.views.organisaties import OrganisatieView
+from organisatie_service.views.afdelingen import AfdelingView
 from core_service import database
 from organisatie_service import config
 db = database.db
@@ -17,18 +18,19 @@ def create_app(config_name=os.getenv('APP_SETTINGS', 'organisatie_service.config
     def health():
         return Response()
 
-    # Views
-    app.add_url_rule(
-        '/organisaties',
-        view_func=OrganisatieView.as_view('organisatie_view'),
-        strict_slashes=False
-    )
-    app.add_url_rule(
-        '/organisaties/<id>',
-        view_func=OrganisatieView.as_view('organisatie_detail_view'),
-        strict_slashes=False
-    )
+    routes = [
+        {"path": "/organisaties", "view": OrganisatieView, "name": "organisatie_view"},
+        {"path": "/organisaties/<object_id>", "view": OrganisatieView, "name": "organisatie_detail_view"},
+        {"path": "/afdelingen", "view": AfdelingView,"name": "afdeling_view"},
+        {"path": "/afdelingen/<object_id>", "view": AfdelingView, "name": "afdeling_detail_view"},
+    ]
 
+    for route in routes:
+        app.add_url_rule(
+            route["path"],
+            view_func=route["view"].as_view(route["name"]),
+            strict_slashes=False
+        )
     return app
 
 if __name__ == '__main__':

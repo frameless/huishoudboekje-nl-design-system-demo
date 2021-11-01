@@ -1,27 +1,70 @@
 from datetime import datetime
-
+from typing import Text
 import pytest
 import requests_mock
+from requests_mock import Adapter
 from pydash import objects
 
 from hhb_backend.graphql import settings
 from tests import post_echo, post_echo_with_id
+class MockResponse():
+    history = None
+    raw = None
+    is_redirect = None
+    content = None
 
-create_afspraak_input = {"burgerId": 1, "credit": False, "organisatieId": 1, "tegenRekeningId": 1,
-                         "rubriekId": 1,
-                         "omschrijving": "Omschrijving", "bedrag": "0.00"}
+    def __init__(self, json_data, status_code):
+        self.json_data = json_data
+        self.status_code = status_code
 
+    def json(self):
+        return self.json_data
+
+create_afspraak_input = {
+  "omschrijving": "test afspraak", 
+  "burgerId": 1, 
+  "credit": False, 
+  "afdelingId": 1, 
+  "postadresId": "76d67e32-a29c-476c-b3be-cd2cbf2ee437", 
+  "tegenRekeningId": 1,
+  "rubriekId": 1,
+  "bedrag": "0.00",
+  "validFrom": "2021-01-01"
+}
+
+def create_mock_adapter() -> Adapter:
+    adapter = requests_mock.Adapter()
+
+    def test_matcher(request): 
+        if request.path == "/burgers/" and request.query == "filter_ids=1":
+          return MockResponse({'data': [{'id': 1}]}, 200)
+
+        elif request.path == "/rekeningen/" and request.query == "filter_ids=1":
+          return MockResponse({'data': [{'id': 1, 'iban': 'gb33bukb20201555555555', 'rekeninghouder': 'john'}]}, 200)
+        
+        elif request.path == "/rubrieken/" and request.query == "filter_ids=1":
+          return MockResponse({'data': [{'id': 1}]}, 200)
+
+        elif request.path == "/afdelingen/" and request.query == "filter_ids=1":
+          return MockResponse({'data': [{'id': 1}]}, 200)
+
+        elif request.path == "/addresses/" and request.query == "filter_ids=76d67e32-a29c-476c-b3be-cd2cbf2ee437":
+          return MockResponse({'hydra:member': [{'id': '76d67e32-a29c-476c-b3be-cd2cbf2ee437'}]}, 200)
+
+        elif request.path == "/afspraken/": # post
+          return MockResponse({'data': { 'id': 100 }}, 201)
+
+        elif request.path == "/gebruikersactiviteiten/": #post
+          return MockResponse({'data': {'id': 1}}, 201)
+
+    adapter.add_matcher(test_matcher)
+    return adapter
 
 def test_create_afspraak_success(client):
     with requests_mock.mock() as mock:
-        get_any = mock.get(requests_mock.ANY, status_code=404)
-        post_any = mock.post(requests_mock.ANY, status_code=404)
-        log_post = mock.register_uri('POST', f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=200,
-                                     json=post_echo)
-        afspraken_post = mock.register_uri('POST', f"{settings.HHB_SERVICES_URL}/afspraken/",
-                                           json=post_echo_with_id(0),
-                                           status_code=201)
-        response = client.post(
+      mock._adapter = create_mock_adapter()
+
+      response = client.post(
             "/graphql",
             json={
                 "query": '''
@@ -34,30 +77,36 @@ def test_create_afspraak_success(client):
               }
             }''',
                 "variables": {
-                    "input": {"burgerId": 1,
-                              "credit": 0,
-                              "organisatieId": 1,
-                              "tegenRekeningId": 1,
-                              "rubriekId": 1,
-                              "omschrijving": "",
-                              "bedrag": "0.00",
-                              "validFrom": '2021-01-01'
-                              }}},
+                    "input": {
+                      "omschrijving": "test afspraak",
+                      "burgerId": 1,
+                      "credit": 0,
+                      "afdelingId": 1,
+                      "postadresId" : "76d67e32-a29c-476c-b3be-cd2cbf2ee437",
+                      "tegenRekeningId": 1,
+                      "rubriekId": 1,
+                      "bedrag": "0.00",
+                      "validFrom": '2021-01-01'
+                      }
+                      }},
         )
-        assert objects.get(response.json, 'errors') == None
-        assert response.json == {"data": {"createAfspraak": {'ok': True, 'afspraak': {'id': 1}}}}
-        assert afspraken_post.called_once
 
-        # No leftover calls
-        assert log_post.called_once
-        assert not post_any.called
-        assert not get_any.called
+      assert mock._adapter.call_count == 7
+      assert response.json["data"]["createAfspraak"]["ok"] is True
 
+def create_mock_adapter_not_found() -> Adapter:
+    adapter = requests_mock.Adapter()
 
-@pytest.mark.parametrize(["input", "error_message_contains"], [
+    def test_matcher(request): 
+        return MockResponse({'text': 'Not found'}, 404)
+
+    adapter.add_matcher(test_matcher)
+    return adapter
+
+@pytest.mark.parametrize(["field", "error_message_contains"], [
     ("burgerId", 'In field "burgerId": Expected "Int!", found null.',),
     ("credit", 'In field "credit": Expected "Boolean!", found null.',),
-    ("organisatieId", 'In field "organisatieId": Expected "Int!", found null.',),
+    ("afdelingId", 'In field "afdelingId": Expected "Int!", found null.',),
     ("tegenRekeningId", 'In field "tegenRekeningId": Expected "Int!", found null.',),
     ("rubriekId", 'In field "rubriekId": Expected "Int!", found null.',),
     ("omschrijving", 'In field "omschrijving": Expected "String!", found null.',),
@@ -65,10 +114,10 @@ def test_create_afspraak_success(client):
 ])
 def test_create_afspraak_validation(client, field: str, error_message_contains: str):
     with requests_mock.mock() as mock:
-        get_any = mock.get(requests_mock.ANY, status_code=404)
-        post_any = mock.post(requests_mock.ANY, status_code=404)
+      get_any = mock.get(requests_mock.ANY, status_code=404)
+      post_any = mock.post(requests_mock.ANY, status_code=404)
 
-        response = client.post(
+      response = client.post(
             "/graphql",
             json={
                 "query": '''
@@ -81,16 +130,17 @@ def test_create_afspraak_validation(client, field: str, error_message_contains: 
               }
             }''',
                 "variables": {
-                    "input": objects.omit(create_afspraak_input, [field])}},
+                  "input": objects.omit(create_afspraak_input, [field])}},
         )
-        assert error_message_contains in objects.get(response.json, 'errors[0].message')
 
-        # No leftover calls
-        assert not post_any.called
-        assert not get_any.called
-
-
-@pytest.mark.parametrize(["post_status", "post_message", "error_message_contains"], [
+      assert error_message_contains in objects.get(response.json, 'errors[0].message')
+      assert not post_any.called
+      assert not get_any.called
+      
+@pytest.mark.parametrize([
+  "post_status", "post_message", "error_message_contains"], [
+    (400, 'Bad request', 'Upstream API responded: Bad request',),
+    (400, 'Bad request', 'Upstream API responded: Bad request',),
     (409, 'Database error', 'Upstream API responded: Database error',),
     (400, 'Bad request', 'Upstream API responded: Bad request',),
 ])
@@ -98,13 +148,15 @@ def test_create_afspraak_validation(client, post_status: int, post_message: str,
     with requests_mock.mock() as mock:
         get_any = mock.get(requests_mock.ANY, status_code=404)
         post_any = mock.post(requests_mock.ANY, status_code=404)
-
-        log_post = mock.register_uri('POST', f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=200,
-                                     json=post_echo)
-        afspraken_post = mock.register_uri('POST', f"{settings.HHB_SERVICES_URL}/afspraken/",
-                                           status_code=post_status,
-                                           text=post_message,
-                                           )
+       
+        burgers = mock.register_uri("GET", f"{settings.HHB_SERVICES_URL}/burgers/?filter_ids=1", text=post_message, status_code=post_status,)
+        rekeningen = mock.register_uri("GET", f"{settings.HHB_SERVICES_URL}/rekeningen/?filter_ids=1", text=post_message, status_code=post_status,)
+        rubrieken = mock.register_uri("GET", f"{settings.HHB_SERVICES_URL}/rubrieken/?filter_ids=1", text=post_message, status_code=post_status,)
+        afdelingen = mock.register_uri("GET", f"{settings.HHB_SERVICES_URL}/afdelingen/?filter_ids=1", text=post_message, status_code=post_status,)
+        postaddressen = mock.register_uri("GET", f"{settings.HHB_SERVICES_URL}/addresses/?filter_ids=76d67e32-a29c-476c-b3be-cd2cbf2ee437", text=post_message, status_code=post_status,)
+        
+        log_post = mock.register_uri('POST', f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=200, json=post_echo)
+        afspraken_post = mock.register_uri('POST', f"{settings.HHB_SERVICES_URL}/afspraken/", status_code=post_status, text=post_message,)
 
         response = client.post(
             "/graphql",
@@ -121,11 +173,14 @@ def test_create_afspraak_validation(client, post_status: int, post_message: str,
                 "variables": {
                     "input": create_afspraak_input}},
         )
-        assert error_message_contains in objects.get(response.json, 'errors[0].message')
-        assert afspraken_post.called_once
 
-        # No leftover calls
-        assert not log_post.called
+        assert error_message_contains in objects.get(response.json, 'errors[0].message')
+        
+        # TODO think of a way to validate what's get called how many times
+        # rekeningen
+        # postaddressen
+        # assert not log_post.called
+        # assert afspraken_post.called_once
         assert not post_any.called
         assert not get_any.called
 

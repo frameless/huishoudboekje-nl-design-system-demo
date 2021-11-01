@@ -6,7 +6,8 @@ def test_organisaties_post_new_organisation(client, dbsession):
     """ Test /organisaties/ path """
     assert dbsession.query(Organisatie).count() == 0
     organisatie_dict = {
-        "kvk_nummer": "1",
+        "kvknummer": "12345678",
+        "vestigingsnummer": "1234",
         "naam": "testbedrijf"
     }
     response = client.post(
@@ -15,18 +16,20 @@ def test_organisaties_post_new_organisation(client, dbsession):
         content_type='application/json'
     )
     assert response.status_code == 201
-    assert response.json["data"]["kvk_nummer"] == organisatie_dict["kvk_nummer"]
+
+    assert response.json["data"]["kvknummer"] == organisatie_dict["kvknummer"]
+    assert response.json["data"]["vestigingsnummer"] == organisatie_dict["vestigingsnummer"]
     assert response.json["data"]["naam"] == organisatie_dict["naam"]
     assert dbsession.query(Organisatie).count() == 1
 
 def test_organisaties_post_update_organisatie(client, organisatie_factory):
     """ Test /organisaties/<organisatie_id> path """
-    organisation = organisatie_factory.createOrganisatie(kvk_nummer="1")
+    organisation = organisatie_factory.createOrganisatie(kvknummer="1")
     update_dict = {
         "naam": "testbedrijf"
     }
     response = client.post(
-        f'/organisaties/{organisation.kvk_nummer}',
+        f'/organisaties/{organisation.kvknummer}',
         data=json.dumps(update_dict),
         content_type='application/json'
     )
