@@ -12,6 +12,7 @@
     "deleteAfspraakZoektermSuccess": "De zoekterm is verwijderd.",
     "addAfspraakZoektermSuccess": "De zoekterm is opgeslagen.",
     "zoektermLengthError": "Een zoekterm moet minimaal één teken lang zijn.",
+    "zoektermAlreadyExistsError": "Deze zoekterm bestaat al.",
     "automatischBoeken": {
       "noZoektermen": "Voeg een zoekterm toe die het systeem kan gebruiken om transacties automatisch af te letteren.",
       "duplicatesFound": "Deze zoekterm of combinatie van zoektermen is niet uniek. Automatisch afletteren is daarom niet mogelijk. Maak een unieke combinatie van zoektermen.",

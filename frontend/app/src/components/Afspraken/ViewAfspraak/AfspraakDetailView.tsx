@@ -79,19 +79,19 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 		});
 	};
 
-	const onAddAfspraakZoekterm = (e) => {
+	const onAddAfspraakZoekterm = async (e) => {
 		e.preventDefault();
 		setZoektermTouched(true);
 
 		try {
 			const validatedZoekterm = zoektermValidator.parse(zoekterm || "");
-			addAfspraakZoekterm({
+			const result = await addAfspraakZoekterm({
 				variables: {afspraakId: afspraak.id!, zoekterm: validatedZoekterm},
-			}).then(result => {
-				if (result.data?.addAfspraakZoekterm?.ok) {
-					toast({success: t("messages.addAfspraakZoektermSuccess")});
-				}
 			});
+
+			if (result.data?.addAfspraakZoekterm?.ok) {
+				toast({success: t("messages.addAfspraakZoektermSuccess")});
+			}
 		}
 		catch (err) {
 			let error = err.message;
@@ -101,7 +101,11 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 					error = t("messages.zoektermLengthError");
 				}
 			}
+			else if (error.includes("Zoekterm already in zoektermen")) {
+				error = t("messages.zoektermAlreadyExistsError");
+			}
 
+			toast.closeAll();
 			toast({error});
 		}
 	};
