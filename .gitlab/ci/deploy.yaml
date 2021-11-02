@@ -32,7 +32,7 @@ deploy-deployment-master:
     NAMESPACE: "hhb-demo"
     USE_PLATFORM: "azure_tad" # azure - test acc demo
   only:
-    - master@commonground/huishoudboekje/app-new
+    - master
 
 deploy-deployment-acceptance:
   <<: *deploy
@@ -81,7 +81,7 @@ deploy-deployment-review:
 ## Destroy app (only review cluster)
 destroy-review:
   <<: *deployer
-  stage: maintenance
+  stage: deploy
   needs:
     - deploy-deployment-review
   script:

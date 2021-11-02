@@ -71,7 +71,7 @@ patchesStrategicMerge:
 
 EOF
 
-echo "Generate env_patch/${USE_PLATFORM}_patch.yaml with envsubst"
+echo "Generate env_patch.yaml / ${USE_PLATFORM}_patch.yaml and ${USE_PLATFORM}_add.yaml with envsubst"
 envsubst < ../templates/env_patch.yaml > env_patch.yaml
 envsubst < ../templates/platform/${USE_PLATFORM}/patch.yaml > ${USE_PLATFORM}_patch.yaml
 envsubst < ../templates/platform/${USE_PLATFORM}/add.yaml > ${USE_PLATFORM}_add.yaml
@@ -102,5 +102,5 @@ echo "Applying envvars and create namespace.yaml"
 envsubst < k8s/namespace.yaml > k8s/$DEPLOYMENT_DIST_DIR/namespace.yaml
 
 echo "You will find your files in $DEPLOYMENT_DIST_DIR. "
-echo "make napespace if it doesn't exist yet 'kubectl apply -f k8s/$DEPLOYMENT_DIST_DIR/namespace.yaml'"
+echo "make namespace if it doesn't exist yet 'kubectl apply -f k8s/$DEPLOYMENT_DIST_DIR/namespace.yaml'"
 echo "you can run 'sh k8s/deploy.sh'"

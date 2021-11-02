@@ -20,6 +20,14 @@ Here are the customers of `huishoudboekje` with their own Kustomization.yaml in 
 
 For all files in this folder the files are transformed by means of `envsubst`. This means that `os-variable` can be used here. Note this if you want to use the `$` sign.
 
+* templates/env_patch.yaml -> project variable which will be different for each deploy environment
+* templates/secrets.yaml -> secrets in project variable, this can optionally be included with build.sh
+
+Each "platform" should have the following template files. These can be empty, but the files must be there (build script expects them)
+
+* templates/platform/[platform-name]/add.yaml -> will be added as a resource [example](https://github.com/kubernetes-sigs/kustomize/blob/master/examples/mySql/README.md#add-the-resources)
+* templates/platform/[platform-name]/patch.yaml -> will be added as a (merge)patch [example](https://kubernetes.io/docs/tasks/manage-kubernetes-objects/kustomization/#customizing)
+
 ## Deploy
 
 Running releases manually is possible for the following platforms
