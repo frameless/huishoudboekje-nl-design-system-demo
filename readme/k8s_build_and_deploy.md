@@ -8,6 +8,8 @@ We use Kustomize for our deploys in k8s. We support different platforms, which a
 
 The structure of the directories is divided into a few parts.
 
+All the variables of the build can be found in `k8s/build.sh`. To 'reset' all variable use `k8s/reset.sh`
+
 ### Directory k8s/base
 
 Here all components are separate from each other and all have a separate Kustomization.yaml. It contains all the resources of that component
@@ -30,7 +32,7 @@ Each "platform" should have the following template files. These can be empty, bu
 
 ## Deploy
 
-Running releases manually is possible for the following platforms
+Running releases manually is possible for the following platforms:
 
 ### OCP
 

@@ -19,18 +19,29 @@ export HHB_HOST=${HHB_HOST:-hhb.minikube}
 # Use the provided PULL_REPO_IMAGE or "registry.gitlab.com/commonground/huishoudboekje/app-new" as the default
 export PULL_REPO_IMAGE=${PULL_REPO_IMAGE:-registry.gitlab.com/commonground/huishoudboekje/app-new}
 
+# platform to use true/ocp/azure_review/azure_tad
 export USE_PLATFORM=${USE_PLATFORM:-"true"}
+
+# default replicas (number of pods)
 export DEFAULT_REPLICAS=${DEFAULT_REPLICAS:-"1"}
+
+# generete secrets in single kustomize file
 export GENERATE_SECRETS=${GENERATE_SECRETS:-"true"}
-export HHB_SECRET=${SECRET_KEY:-"test"}
-export CERT_MANAGER_ISSUER=${CERT_MANAGER_ISSUER:-"letsencrypt-prod"} # only for true-platform
+
+# if you are using lets encrypt or other cert-manager
+export CERT_MANAGER_ISSUER=${CERT_MANAGER_ISSUER:-"letsencrypt-prod"}
 export HHB_APP_HOST=${HHB_APP_HOST:-$HHB_HOST}
 
+# default dns of hhb
 export HHB_FRONTEND_DNS=${HHB_FRONTEND_DNS:-"$HHB_HOST"}
+# default endpoint of hhb
 export HHB_FRONTEND_ENDPOINT=${HHB_FRONTEND_ENDPOINT:-"https://$HHB_FRONTEND_DNS"}
+# default endpoint of hhb-api
 export HHB_API_ENDPOINT=${HHB_API_ENDPOINT:-"$HHB_FRONTEND_ENDPOINT/api"}
+# AUTH_AUDIENCE
 export AUTH_AUDIENCE=${AUTH_AUDIENCE:-$HHB_FRONTEND_ENDPOINT}
 
+# Passwords for databases
 export POSTGRESQL_PASSWORD=${POSTGRESQL_PASSWORD:-"postgres"}
 export POSTGRESQL_PASSWORD_BKTSVC=${POSTGRESQL_PASSWORD_BKTSVC:-"bktsvc"}
 export POSTGRESQL_PASSWORD_GRBSVC=${POSTGRESQL_PASSWORD_GRBSVC:-"grbsvc"}
@@ -38,9 +49,29 @@ export POSTGRESQL_PASSWORD_HHBSVC=${POSTGRESQL_PASSWORD_HHBSVC:-"hhbsvc"}
 export POSTGRESQL_PASSWORD_LOGSVC=${POSTGRESQL_PASSWORD_LOGSVC:-"logsvc"}
 export POSTGRESQL_PASSWORD_ORGSVC=${POSTGRESQL_PASSWORD_ORGSVC:-"orgsvc"}
 
+# default secret FOR JWT
+export HHB_SECRET=${SECRET_KEY:-"test"}
+
+# Settings for OpenID Connect
+export OIDC_ISSUER=${OIDC_ISSUER:-"https://$HHB_FRONTEND_DNS/dex"}
+export OIDC_CLIENT_ID=${OIDC_CLIENT_ID:-"huishoudboekje"}
+export OIDC_AUTHORIZATION_ENDPOINT=${OIDC_AUTHORIZATION_ENDPOINT:-"https://$HHB_FRONTEND_DNS/dex/auth"}
+export OIDC_TOKEN_ENDPOINT=${OIDC_TOKEN_ENDPOINT:-"https://$HHB_FRONTEND_DNS/dex/token"}
+export OIDC_TOKENINFO_ENDPOINT=${OIDC_TOKENINFO_ENDPOINT:-"https://$HHB_FRONTEND_DNS/dex/tokeninfo"}
+export OIDC_USERINFO_ENDPOINT=${OIDC_USERINFO_ENDPOINT:-"https://$HHB_FRONTEND_DNS/dex/userinfo"}
+
+
 # Create a temporary directory to put the dist files in.
 export DEPLOYMENT_DIST_DIR="dist"
+
+# customer
 export CUSTOMER_BUILD=${CUSTOMER_BUILD:-"sloothuizen"}
+
+# remove dex objects in patch
+export REMOVE_DEX=${REMOVE_DEX:-"false"}
+
+# so you can use ${DOLLAR} as $ sign in files with will be using envsubst for transformation
+export DOLLAR='$'
 
 # Debugging
 echo CI_COMMIT_REF_SLUG = $CI_COMMIT_REF_SLUG
@@ -75,6 +106,16 @@ echo "Generate env_patch.yaml / ${USE_PLATFORM}_patch.yaml and ${USE_PLATFORM}_a
 envsubst < ../templates/env_patch.yaml > env_patch.yaml
 envsubst < ../templates/platform/${USE_PLATFORM}/patch.yaml > ${USE_PLATFORM}_patch.yaml
 envsubst < ../templates/platform/${USE_PLATFORM}/add.yaml > ${USE_PLATFORM}_add.yaml
+
+if [ $REMOVE_DEX == "true" ]
+then
+  echo 'hoi'
+  if [ -f "../templates/platform/${USE_PLATFORM}/remove_dex_patch.yaml" ]; then
+    echo "Generate patch remove_dex_patch.yaml with envsubst"
+    envsubst < ../templates/platform/${USE_PLATFORM}/remove_dex_patch.yaml > remove_dex_patch.yaml
+    echo '- remove_dex_patch.yaml' >> kustomization.yaml
+  fi
+fi
 
 if [ $GENERATE_SECRETS == "true" ]
 then
