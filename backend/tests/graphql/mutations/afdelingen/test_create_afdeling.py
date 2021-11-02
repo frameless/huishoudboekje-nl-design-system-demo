@@ -1,5 +1,6 @@
 from requests.adapters import Response
 import requests_mock
+from hhb_backend.graphql import settings
 
 class MockResponse():
     history = None
@@ -26,12 +27,12 @@ def test_create_afdeling_minimal_succes(client):
                 "rekeningen_ids": []
             }
         }
-
+        
         fallback = mock.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        e1 = mock.get(f"http://organisatieservice:8000/organisaties/?filter_ids=1", status_code=200, json={'data': [{'id': 1}]})
-        e2 = mock.post(f"http://huishoudboekjeservice:8000/afdelingen/", status_code=201, json={'data': [{'id': 1, "postadressen_ids": [], "rekeningen_ids": []}]})
-        e3 = mock.post(f"http://organisatieservice:8000/afdelingen/", status_code=201, json=afdeling_result)
-        e9 = mock.post(f"http://logservice:8000/gebruikersactiviteiten/", status_code=200, json={'data': {'id': 1}})
+        e1 = mock.get(f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/?filter_ids=1", status_code=200, json={'data': [{'id': 1}]})
+        e2 = mock.post(f"{settings.HHB_SERVICES_URL}/afdelingen/", status_code=201, json={'data': [{'id': 1, "postadressen_ids": [], "rekeningen_ids": []}]})
+        e3 = mock.post(f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/", status_code=201, json=afdeling_result)
+        e9 = mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=200, json={'data': {'id': 1}})
 
         # act
         response = client.post(
@@ -84,19 +85,19 @@ def test_create_afdeling_full_succes(client):
         }
 
         fallback = mock.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        e1 = mock.get(f"http://organisatieservice:8000/organisaties/?filter_ids=1", status_code=200, json={'data': [{'id': 1}]})
-        e2 = mock.post(f"http://huishoudboekjeservice:8000/afdelingen/", status_code=201, json={'data': [{'id': 1, "postadressen_ids": [], "rekeningen_ids": []}]})
-        e3 = mock.post(f"http://organisatieservice:8000/afdelingen/", status_code=201, json=afdeling_result)
+        e1 = mock.get(f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/?filter_ids=1", status_code=200, json={'data': [{'id': 1}]})
+        e2 = mock.post(f"{settings.HHB_SERVICES_URL}/afdelingen/", status_code=201, json={'data': [{'id': 1, "postadressen_ids": [], "rekeningen_ids": []}]})
+        e3 = mock.post(f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/", status_code=201, json=afdeling_result)
         # rekening
-        e4 = mock.get(f"http://huishoudboekjeservice:8000/rekeningen/?filter_ibans=GB33BUKB20201555555555", status_code=200, json={'data': [{'id': 1}]})
-        e5 = mock.post(f"http://huishoudboekjeservice:8000/afdelingen/1/rekeningen/", status_code=201, json={'data': rekeningen})
+        e4 = mock.get(f"{settings.HHB_SERVICES_URL}/rekeningen/?filter_ibans=GB33BUKB20201555555555", status_code=200, json={'data': [{'id': 1}]})
+        e5 = mock.post(f"{settings.HHB_SERVICES_URL}/afdelingen/1/rekeningen/", status_code=201, json={'data': rekeningen})
         # both rekening and postadres
-        e6 = mock.post(f"http://organisatieservice:8000/afdelingen/1", status_code=200, json={'data': [{'id': 1, "postadressen_ids": [], "rekeningen_ids": []}]})
+        e6 = mock.post(f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/1", status_code=200, json={'data': [{'id': 1, "postadressen_ids": [], "rekeningen_ids": []}]})
         # postadres
-        e7 = mock.post(f"http://localhost:8005/addresses", status_code=201, json={'id': "7426aa95-03c0-453d-b9ff-11a5442ab959", 'houseNumber': '52B', 'postalCode': '9999ZZ', 'street': 'teststraat', 'locality': 'testplaats'})
-        e8 = mock.get(f"http://organisatieservice:8000/afdelingen/1", status_code=200, json={ 'data': { 'id': 1, }}) # 2
+        e7 = mock.post(f"{settings.CONTACTCATALOGUS_SERVICE_URL}/addresses", status_code=201, json={'id': "7426aa95-03c0-453d-b9ff-11a5442ab959", 'houseNumber': '52B', 'postalCode': '9999ZZ', 'street': 'teststraat', 'locality': 'testplaats'})
+        e8 = mock.get(f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/1", status_code=200, json={ 'data': { 'id': 1, }}) # 2
         
-        e9 = mock.post(f"http://logservice:8000/gebruikersactiviteiten/", status_code=200, json={'data': {'id': 1}})
+        e9 = mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=200, json={'data': {'id': 1}})
 
         # act
         response = client.post(
@@ -160,10 +161,10 @@ def test_create_afdeling_foutieve_rekening_succes(client):
 
 
         fallback = mock.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        e1 = mock.get(f"http://organisatieservice:8000/organisaties/?filter_ids=1", status_code=200, json={'data': [{'id': 1}]})
-        e2 = mock.post(f"http://huishoudboekjeservice:8000/afdelingen/", status_code=201, json={'data': [{'id': 1, "postadressen_ids": [], "rekeningen_ids": []}]})
-        e3 = mock.post(f"http://organisatieservice:8000/afdelingen/", status_code=201, json=afdeling_result)
-        e4 = mock.get(f"http://huishoudboekjeservice:8000/rekeningen/?filter_ibans=33bukb20201555555555", status_code=200, json={'data': []})
+        e1 = mock.get(f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/?filter_ids=1", status_code=200, json={'data': [{'id': 1}]})
+        e2 = mock.post(f"{settings.HHB_SERVICES_URL}/afdelingen/", status_code=201, json={'data': [{'id': 1, "postadressen_ids": [], "rekeningen_ids": []}]})
+        e3 = mock.post(f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/", status_code=201, json=afdeling_result)
+        e4 = mock.get(f"{settings.HHB_SERVICES_URL}/rekeningen/?filter_ibans=33bukb20201555555555", status_code=200, json={'data': []})
 
         # act
         response = client.post(
