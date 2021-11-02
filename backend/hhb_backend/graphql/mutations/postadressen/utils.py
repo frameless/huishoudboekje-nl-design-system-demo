@@ -27,7 +27,7 @@ def create_afdeling_postadres(input, afdeling_id):
         headers={"Content-type": "application/json"}
     ).json()['data']
 
-    if previous_afdeling["postadressen_ids"]:
+    if previous_afdeling.get("postadressen_ids"):
         postadressen_ids = list(previous_afdeling["postadressen_ids"])
     else:
         postadressen_ids = list()

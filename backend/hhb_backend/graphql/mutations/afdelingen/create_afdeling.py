@@ -88,12 +88,12 @@ class CreateAfdeling(graphene.Mutation):
                 headers={"Content-type": "application/json"},
             )
             if update_response.status_code != 200:
-                raise GraphQLError(f"Upstream API responded: {org_service_response.json()}")
+                raise GraphQLError(f"Upstream API responded: {update_response.json()}")
 
         # postadressen maken en meegeven aan result
         if postadressen:
             result["postadressen_ids"] = [
-                create_afdeling_postadres(postadres, result["id"])["id"]
+                create_afdeling_postadres(postadres, afdeling_id)["id"]
                 for postadres in postadressen
             ]
 

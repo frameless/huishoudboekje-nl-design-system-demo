@@ -1,6 +1,5 @@
 from requests.adapters import Response
 import requests_mock
-from requests_mock import Adapter
 
 class MockResponse():
     history = None
@@ -16,202 +15,189 @@ class MockResponse():
         return self.json_data
 
 
-def create_mock_adapter() -> Adapter:
-    adapter = requests_mock.Adapter()
-
-    def test_matcher(request):
-        if request.method == "GET" and request.path == "/organisaties/" and request.query == "filter_ids=1":
-            return MockResponse({'data': [{'id': 1}]}, 200)
-
-        elif request.method == "POST" and request.path == "/afdelingen/": #2 calls
-            return MockResponse({'data': {'id': 1, }}, 201)
-
-        elif request.method == "GET" and  request.path == "/rekeningen/" and request.query == "filter_ibans=gb33bukb20201555555555":
-            return MockResponse({'data': [{'id': 1}]}, 200)
-
-        elif request.method == "POST" and  request.path == "/afdelingen/1/rekeningen/":
-            return MockResponse({'data': {'iban': 'GB33BUKB20201555555555', 'rekeninghouder': 'testrekeninghouder'}}, 201)
-
-        elif request.method == "POST" and request.path == "/addresses":
-            return MockResponse({'id': 'test_postadres_id_post',
-                                 'houseNumber': '52B',
-                                 'street': 'testStraat',
-                                 'postalCode': '9999ZZ',
-                                 'locality': 'testPlaats'}, 201)
-                    
-        elif request.path == "/afdelingen/1":
-            return MockResponse({ 'data': { 'id': 1, 'postadressen_ids' : ['test_postadres_id_post']}}, 200)
-
-        elif request.method == "GET" and  request.path == "/gebruikersactiviteiten/":
-            return MockResponse({'data': {'id': 1}}, 201)
-
-    adapter.add_matcher(test_matcher)
-    return adapter
-
-def test_create_afdeling_succes(client):
+def test_create_afdeling_minimal_succes(client):
     with requests_mock.Mocker() as mock:
-        mock._adapter = create_mock_adapter()
-        
+        # arrange
+        afdeling_result = {
+            "data" : {
+                "id" : 1,
+                "naam": "testAfdeling",
+                "postadressen_ids": [], 
+                "rekeningen_ids": []
+            }
+        }
+
+        fallback = mock.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
+        e1 = mock.get(f"http://organisatieservice:8000/organisaties/?filter_ids=1", status_code=200, json={'data': [{'id': 1}]})
+        e2 = mock.post(f"http://huishoudboekjeservice:8000/afdelingen/", status_code=201, json={'data': [{'id': 1, "postadressen_ids": [], "rekeningen_ids": []}]})
+        e3 = mock.post(f"http://organisatieservice:8000/afdelingen/", status_code=201, json=afdeling_result)
+        e9 = mock.post(f"http://logservice:8000/gebruikersactiviteiten/", status_code=200, json={'data': {'id': 1}})
+
+        # act
         response = client.post(
             "/graphql",
             json={
                 "query": '''
-        mutation test($input:CreateAfdelingInput!) {
-            createAfdeling(input:$input) {
-              ok
-              afdeling {
-                id
+                    mutation test($input:CreateAfdelingInput!) {
+                        createAfdeling(input:$input) {
+                            ok
+                            afdeling {
+                                id
+                            }
+                        }
+                    }''',
+                "variables": {
+                    "input": {
+                        "organisatieId": 1,
+                        "naam": "testAfdeling",
+                    }
                 }
-            }
-        }''',
-                "variables": {"input": {
-                    'organisatieId': 1,
-                    'postadressen': [{
-                        'straatnaam': 'testStraat',
-                        'huisnummer': '52B',
-                        'postcode': '9999ZZ',
-                        'plaatsnaam': 'testplaats'
-                    }],
-                    'naam': 'testAfdeling',
-                    'rekeningen': [{
-                        'iban': 'GB33BUKB20201555555555',
-                        'rekeninghouder': 'testrekeninghouder'
-                    }]}}},
+            },
             content_type='application/json'
         )
 
-        assert mock._adapter.call_count == 9
+        # assert
+        assert fallback.call_count == 0
+        assert e1.called_once
+        assert e2.called_once
+        assert e3.called_once
+        assert e9.called_once
         assert response.json["data"]["createAfdeling"]["ok"] is True
 
-def create_mock_adapter_new_rekening() -> Adapter:
-    adapter = requests_mock.Adapter()
 
-    def test_matcher(request):
-        if request.path == "/organisaties/" and request.query == "filter_ids=1":
-            return MockResponse({'data': [{'id': 1}]}, 200)
-        
-        elif request.path == "/afdelingen/": #1 organisatieservice #2 huishoudboekjeservice
-            return MockResponse({'data': {'id': 1}}, 201)
-        
-        elif request.path == "/rekeningen/" and request.query == "filter_ibans=gb33bukb20201555555555":
-            return MockResponse({'data': ""}, 200)
-
-        elif request.path == "/rekeningen/":
-            return MockResponse({'data': {'id': 10}}, 201)
-
-        elif request.path == "/afdelingen/1/rekeningen/":
-            return MockResponse({'data': "{'id': 1}"}, 201)
-
-        elif request.path == "/addresses":
-            return MockResponse({'id': 'test_postadres_id_post',
-                                 'houseNumber': '52B',
-                                 'street': 'testStraat',
-                                 'postalCode': '9999ZZ',
-                                 'locality': 'testPlaats'}, 201)
-
-        elif request.path == "/afdelingen/1": #1 get #2 post
-            return MockResponse({ 'data': { 'id': 1, 'postadressen_ids' : ['test_postadres_id_post']}}, 200)
-
-        elif request.path == "/gebruikersactiviteiten/":
-            return MockResponse({'data': {'id': 1}}, 201)
-
-    adapter.add_matcher(test_matcher)
-    return adapter
-
-def test_create_afdeling_with_new_rekening_succes(client):
+def test_create_afdeling_full_succes(client):
     with requests_mock.Mocker() as mock:
-        mock._adapter = create_mock_adapter_new_rekening()
+        # arrange
+        rekeningen = {
+            "id": 1,
+            "iban": "GB33BUKB20201555555555",
+            "rekeninghouder": "testrekeninghouder"
+        }
 
+        afdeling_result = {
+            "data" : {
+                "id" : 1,
+                "naam": "testAfdeling",
+                "postadressen_ids": [], 
+                "rekeningen_ids": []
+            }
+        }
+
+        fallback = mock.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
+        e1 = mock.get(f"http://organisatieservice:8000/organisaties/?filter_ids=1", status_code=200, json={'data': [{'id': 1}]})
+        e2 = mock.post(f"http://huishoudboekjeservice:8000/afdelingen/", status_code=201, json={'data': [{'id': 1, "postadressen_ids": [], "rekeningen_ids": []}]})
+        e3 = mock.post(f"http://organisatieservice:8000/afdelingen/", status_code=201, json=afdeling_result)
+        # rekening
+        e4 = mock.get(f"http://huishoudboekjeservice:8000/rekeningen/?filter_ibans=GB33BUKB20201555555555", status_code=200, json={'data': [{'id': 1}]})
+        e5 = mock.post(f"http://huishoudboekjeservice:8000/afdelingen/1/rekeningen/", status_code=201, json={'data': rekeningen})
+        # both rekening and postadres
+        e6 = mock.post(f"http://organisatieservice:8000/afdelingen/1", status_code=200, json={'data': [{'id': 1, "postadressen_ids": [], "rekeningen_ids": []}]})
+        # postadres
+        e7 = mock.post(f"http://localhost:8005/addresses", status_code=201, json={'id': "7426aa95-03c0-453d-b9ff-11a5442ab959", 'houseNumber': '52B', 'postalCode': '9999ZZ', 'street': 'teststraat', 'locality': 'testplaats'})
+        e8 = mock.get(f"http://organisatieservice:8000/afdelingen/1", status_code=200, json={ 'data': { 'id': 1, }}) # 2
+        
+        e9 = mock.post(f"http://logservice:8000/gebruikersactiviteiten/", status_code=200, json={'data': {'id': 1}})
+
+        # act
         response = client.post(
             "/graphql",
             json={
                 "query": '''
-        mutation test($input:CreateAfdelingInput!) {
-            createAfdeling(input:$input) {
-              ok
-              afdeling {
-                id
+                    mutation test($input:CreateAfdelingInput!) {
+                        createAfdeling(input:$input) {
+                            ok
+                            afdeling {
+                                id
+                            }
+                        }
+                    }''',
+                "variables": {
+                    "input": {
+                        "organisatieId": 1,
+                        "naam": "testAfdeling",
+                        "postadressen": [{
+                            "straatnaam": "testStraat",
+                            "huisnummer": "52B",
+                            "postcode": "9999ZZ",
+                            "plaatsnaam": "testplaats"
+                        }],
+                        "rekeningen": [{
+                            "iban": "GB33BUKB20201555555555",
+                            "rekeninghouder": "testrekeninghouder"
+                        }]
+                    }
                 }
-            }
-        }''',
-                "variables": {"input": {
-                    'organisatieId': 1,
-                    'postadressen': [{
-                        'straatnaam': 'testStraat',
-                        'huisnummer': '52B',
-                        'postcode': '9999ZZ',
-                        'plaatsnaam': 'testplaats'
-                    }],
-                    'naam': 'testAfdeling',
-                    'rekeningen': [{
-                        'iban': 'GB33BUKB20201555555555',
-                        'rekeninghouder': 'testrekeninghouder'
-                    }]}}},
+            },
             content_type='application/json'
         )
 
-        assert mock._adapter.call_count == 10
+        # assert
+        assert fallback.call_count == 0
+        assert e1.called_once
+        assert e2.called_once
+        assert e3.called_once
+        # rekeningen
+        assert e4.called_once
+        assert e5.called_once
+        assert e6.call_count == 2
+        # postadressen
+        assert e7.called_once
+        assert e8.called_once
+        assert e9.called_once
         assert response.json["data"]["createAfdeling"]["ok"] is True
-
-def create_mock_adapter_new_rekening_invalid() -> Adapter:
-    adapter = requests_mock.Adapter()
-
-    def test_matcher(request):
-        if request.path == "/afdelingen/":
-            return MockResponse({'data': {'id': 1}}, 201)
-        elif request.path == "/organisaties/" and request.query == "filter_ids=1":
-            return MockResponse({'data': [{'id': 1}]}, 200)
-        elif request.path == "/rekeningen/" and request.query == "filter_ibans=33bukb20201555555555":
-            return MockResponse({'data': ""}, 200)
-        elif request.path == "/afdelingen/1/rekeningen/":
-            return MockResponse({'data': "{'id': 1}"}, 201)
-        elif request.path == "/addresses":
-            return MockResponse({'id': 'test_postadres_id_post',
-                                 'houseNumber': '52B',
-                                 'street': 'testStraat',
-                                 'postalCode': '9999ZZ',
-                                 'locality': 'testPlaats'}, 201)
-        elif str(request) == "POST http://localhost:8001/afdelingen/1":
-            return MockResponse({'data': {'id': 1}}, 200)
-        elif request.path == "/afdelingen/1":
-            return MockResponse({'data': {'id': 1, 'postadressen_ids': [{'id': 'test_postadres_id'}]}}, 201)
-        elif request.path == "/gebruikersactiviteiten/":
-            return MockResponse({'data': {'id': 1}}, 201)
-
-    adapter.add_matcher(test_matcher)
-    return adapter
-
-def test_create_afdeling_with_new_rekening_invalid_succes(client):
+        
+def test_create_afdeling_foutieve_rekening_succes(client):
     with requests_mock.Mocker() as mock:
-        mock._adapter = create_mock_adapter_new_rekening_invalid()
+        # arrange
+        afdeling_result = {
+            "data" : {
+                "id" : 1,
+                "naam": "testAfdeling",
+                "postadressen_ids": [], 
+                "rekeningen_ids": []
+            }
+        }
 
+
+        fallback = mock.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
+        e1 = mock.get(f"http://organisatieservice:8000/organisaties/?filter_ids=1", status_code=200, json={'data': [{'id': 1}]})
+        e2 = mock.post(f"http://huishoudboekjeservice:8000/afdelingen/", status_code=201, json={'data': [{'id': 1, "postadressen_ids": [], "rekeningen_ids": []}]})
+        e3 = mock.post(f"http://organisatieservice:8000/afdelingen/", status_code=201, json=afdeling_result)
+        e4 = mock.get(f"http://huishoudboekjeservice:8000/rekeningen/?filter_ibans=33bukb20201555555555", status_code=200, json={'data': []})
+
+        # act
         response = client.post(
             "/graphql",
             json={
                 "query": '''
-        mutation test($input:CreateAfdelingInput!) {
-            createAfdeling(input:$input) {
-              ok
-              afdeling {
-                id
+                    mutation test($input:CreateAfdelingInput!) {
+                        createAfdeling(input:$input) {
+                            ok
+                            afdeling {
+                                id
+                            }
+                        }
+                    }''',
+                "variables": {
+                    "input": {
+                        "organisatieId": 1,
+                        "naam": "testAfdeling",
+                        "rekeningen": [{
+                            "iban": "33bukb20201555555555",
+                            "rekeninghouder": "testrekeninghouder"
+                        }]
+                    }
                 }
-            }
-        }''',
-                "variables": {"input": {
-                    'organisatieId': 1,
-                    'postadressen': [{
-                        'straatnaam': 'testStraat',
-                        'huisnummer': '52B',
-                        'postcode': '9999ZZ',
-                        'plaatsnaam': 'testplaats'
-                    }],
-                    'naam': 'testAfdeling',
-                    'rekeningen': [{
-                        'iban': '33BUKB20201555555555',
-                        'rekeninghouder': 'testrekeninghouder'
-                    }]}}},
+            },
             content_type='application/json'
         )
 
-        assert mock._adapter.call_count == 4
-        assert response.json['errors'][0]['message'] == "Foutieve IBAN: 33BUKB20201555555555"
+        # assert
+        assert fallback.call_count == 0
+        assert e1.called_once
+        assert e2.called_once
+        assert e3.called_once
+        # rekeningen
+        assert e4.called_once
+        assert response.json['errors'][0]['message'] == "Foutieve IBAN: 33bukb20201555555555"
+
