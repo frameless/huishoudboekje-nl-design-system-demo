@@ -87,7 +87,7 @@ const BurgerDetail = () => {
 				<Page title={formatBurgerName(burger)} backButton={(
 					<Stack direction={["column", "row"]} spacing={[2, 5]}>
 						<BackButton label={t("backToBurgersList")} to={Routes.Burgers} />
-						<BackButton label={t("actions.viewBurgerHuishouden")} to={Routes.Huishouden(burger.huishouden?.id)} />
+						<BackButton label={t("global.actions.viewBurgerHuishouden")} to={Routes.Huishouden(burger.huishouden?.id)} />
 					</Stack>
 				)} menu={(
 					<Menu>

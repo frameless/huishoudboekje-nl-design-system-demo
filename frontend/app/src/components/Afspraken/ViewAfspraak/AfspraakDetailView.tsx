@@ -79,19 +79,19 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 		});
 	};
 
-	const onAddAfspraakZoekterm = (e) => {
+	const onAddAfspraakZoekterm = async (e) => {
 		e.preventDefault();
 		setZoektermTouched(true);
 
 		try {
 			const validatedZoekterm = zoektermValidator.parse(zoekterm || "");
-			addAfspraakZoekterm({
+			const result = await addAfspraakZoekterm({
 				variables: {afspraakId: afspraak.id!, zoekterm: validatedZoekterm},
-			}).then(result => {
-				if (result.data?.addAfspraakZoekterm?.ok) {
-					toast({success: t("messages.addAfspraakZoektermSuccess")});
-				}
 			});
+
+			if (result.data?.addAfspraakZoekterm?.ok) {
+				toast({success: t("messages.addAfspraakZoektermSuccess")});
+			}
 		}
 		catch (err) {
 			let error = err.message;
@@ -101,7 +101,11 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 					error = t("messages.zoektermLengthError");
 				}
 			}
+			else if (error.includes("Zoekterm already in zoektermen")) {
+				error = t("messages.zoektermAlreadyExistsError");
+			}
 
+			toast.closeAll();
 			toast({error});
 		}
 	};
@@ -127,17 +131,28 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 										<ViewIcon />} aria-label={t("global.actions.view")} />
 								</HStack>
 							</DataItem>
-							<DataItem label={t("afspraken.tegenrekening")}>
-								<HStack>
-									<Text>{afspraak.tegenRekening?.rekeninghouder}</Text>
-									{afspraak.organisatie?.id && (
-										<IconButton as={NavLink} to={Routes.Organisatie(afspraak.organisatie.id)} variant={"ghost"} size={"sm"}
-											aria-label={t("global.actions.view")} icon={<ViewIcon />} />
-									)}
-								</HStack>
-								<Text size={"sm"}><PrettyIban iban={afspraak.tegenRekening?.iban} /></Text>
-							</DataItem>
+							{afspraak.tegenRekening && (
+								<DataItem label={t("afspraken.tegenrekening")}>
+									<HStack>
+										<Text>{afspraak.tegenRekening.rekeninghouder}</Text>
+										{afspraak.afdeling?.organisatie?.id && (
+											<IconButton as={NavLink} to={Routes.Organisatie(afspraak.afdeling.organisatie.id)} variant={"ghost"} size={"sm"}
+												aria-label={t("global.actions.view")} icon={<ViewIcon />} />
+										)}
+									</HStack>
+									<Text size={"sm"}><PrettyIban iban={afspraak.tegenRekening.iban} /></Text>
+								</DataItem>
+							)}
 						</Stack>
+
+						{afspraak.postadres && (
+							<Stack direction={["column", "row"]}>
+								<DataItem label={t("postadres")}>
+									<Text>{afspraak.postadres.straatnaam} {afspraak.postadres.huisnummer}</Text>
+									<Text>{afspraak.postadres.postcode} {afspraak.postadres.plaatsnaam}</Text>
+								</DataItem>
+							</Stack>
+						)}
 
 					</FormRight>
 				</Stack>

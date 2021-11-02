@@ -1,4 +1,4 @@
-import {ChevronDownIcon} from "@chakra-ui/icons";
+import {AddIcon, ChevronDownIcon} from "@chakra-ui/icons";
 import {
 	AlertDialog,
 	AlertDialogBody,
@@ -6,27 +6,32 @@ import {
 	AlertDialogFooter,
 	AlertDialogHeader,
 	AlertDialogOverlay,
+	Box,
 	Button,
+	Grid,
+	Heading,
 	IconButton,
 	Menu,
 	MenuButton,
 	MenuItem,
-	MenuList, useBreakpointValue,
+	MenuList,
+	useBreakpointValue,
 } from "@chakra-ui/react";
 import React, {useRef} from "react";
 import {useToggle} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {Redirect, useHistory, useParams} from "react-router-dom";
 import Routes from "../../config/routes";
-import {GetOrganisatiesDocument, Organisatie, useDeleteOrganisatieMutation, useGetOrganisatieQuery} from "../../generated/graphql";
+import {Afdeling, GetOrganisatiesDocument, Organisatie, useDeleteOrganisatieMutation, useGetOrganisatieQuery} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
 import {maxOrganisatieNaamLengthBreakpointValues, truncateText} from "../../utils/things";
 import useToaster from "../../utils/useToaster";
 import DeadEndPage from "../DeadEndPage";
 import BackButton from "../Layouts/BackButton";
 import Page from "../Layouts/Page";
+import Section from "../Layouts/Section";
+import AfdelingListItem from "./AfdelingListItem";
 import OrganisatieDetailView from "./Views/OrganisatieDetailView";
-import OrganisatieRekeningenView from "./Views/OrganisatieRekeningenView";
 
 const OrganisatieDetail = () => {
 	const {t} = useTranslation();
@@ -43,10 +48,9 @@ const OrganisatieDetail = () => {
 	const onClickDelete = () => toggleDeleteDialog();
 
 	const $organisatie = useGetOrganisatieQuery({
-		fetchPolicy: "no-cache",
 		variables: {id: parseInt(id)},
 	});
-	const [deleteOrganization, {loading: deleteLoading}] = useDeleteOrganisatieMutation({
+	const [deleteOrganisatie, {loading: deleteLoading}] = useDeleteOrganisatieMutation({
 		variables: {id: parseInt(id)},
 		refetchQueries: [
 			{query: GetOrganisatiesDocument},
@@ -57,11 +61,11 @@ const OrganisatieDetail = () => {
 	return (
 		<Queryable query={$organisatie} children={({organisatie}: {organisatie: Organisatie}) => {
 			const onConfirmDeleteDialog = () => {
-				deleteOrganization()
+				deleteOrganisatie()
 					.then(() => {
 						onCloseDeleteDialog();
 						toast({
-							success: t("messages.organisaties.deleteConfirmMessage", {name: organisatie.kvkDetails?.naam}),
+							success: t("messages.organisaties.deleteConfirmMessage", {name: organisatie.naam}),
 						});
 						toggleDeleted(true);
 					})
@@ -81,14 +85,15 @@ const OrganisatieDetail = () => {
 
 			if (isDeleted) {
 				return (
-					<DeadEndPage message={t("messages.organisaties.deleteConfirmMessage", {name: organisatie.kvkDetails?.naam})}>
+					<DeadEndPage message={t("messages.organisaties.deleteConfirmMessage", {name: organisatie.naam})}>
 						<Button colorScheme={"primary"} onClick={() => push(Routes.Organisaties)}>{t("global.actions.backToList")}</Button>
 					</DeadEndPage>
 				);
 			}
 
+			const afdelingen: Afdeling[] = organisatie.afdelingen || [];
 			return (
-				<Page title={truncateText(organisatie.kvkDetails?.naam || "", maxOrganisatieNaamLength)} backButton={<BackButton to={Routes.Organisaties} />} menu={(
+				<Page title={truncateText(organisatie.naam || "", maxOrganisatieNaamLength)} backButton={<BackButton to={Routes.Organisaties} />} menu={(
 					<Menu>
 						<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label="Open menu" />
 						<MenuList>
@@ -101,7 +106,7 @@ const OrganisatieDetail = () => {
 						<AlertDialogOverlay />
 						<AlertDialogContent>
 							<AlertDialogHeader fontSize="lg" fontWeight="bold">{t("messages.organisaties.deleteTitle")}</AlertDialogHeader>
-							<AlertDialogBody>{t("messages.organisaties.deleteQuestion", {name: organisatie.kvkDetails?.naam})}</AlertDialogBody>
+							<AlertDialogBody>{t("messages.organisaties.deleteQuestion", {name: organisatie.naam})}</AlertDialogBody>
 							<AlertDialogFooter>
 								<Button ref={cancelDeleteRef} onClick={onCloseDeleteDialog}>{t("global.actions.cancel")}</Button>
 								<Button isLoading={deleteLoading} colorScheme="red" onClick={onConfirmDeleteDialog} ml={3}>{t("global.actions.delete")}</Button>
@@ -109,8 +114,24 @@ const OrganisatieDetail = () => {
 						</AlertDialogContent>
 					</AlertDialog>
 
-					<OrganisatieDetailView organisatie={organisatie} />
-					<OrganisatieRekeningenView organisatie={organisatie} />
+					<Section>
+						<OrganisatieDetailView organisatie={organisatie} />
+					</Section>
+
+					<Heading size={"md"}>{t("afdelingen")}</Heading>
+					<Grid maxWidth={"100%"} gridTemplateColumns={["repeat(1, 1fr)", "repeat(2, 1fr)", "repeat(3, 1fr)"]} gap={5}>
+						<Box>
+							<Button colorScheme={"primary"} borderStyle={"dashed"} variant={"outline"} leftIcon={<AddIcon />}
+								w="100%" h="100%" onClick={() => push(Routes.CreateAfdeling(organisatie.id))} borderRadius={5}
+								p={5}>{t("global.actions.add")}</Button>
+						</Box>
+
+						{[...afdelingen].sort((a, b) => { // Sort ascending by name
+							return (a.naam || "") < (b.naam || "") ? -1 : 1
+						}).map(afdeling => (
+							<AfdelingListItem key={afdeling.id} afdeling={afdeling} />
+						))}
+					</Grid>
 				</Page>
 			);
 		}} />

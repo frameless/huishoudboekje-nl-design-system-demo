@@ -4,6 +4,7 @@ export enum RouteNames {
 	huishoudens = "huishoudens",
 	burgers = "burgers",
 	afspraken = "afspraken",
+	afdelingen = "afdelingen",
 	organisaties = "organisaties",
 	bankzaken = "bankzaken",
 	transacties = "transacties",
@@ -48,6 +49,7 @@ const Routes = {
 	Organisatie: (id?: number) => `/${RouteNames.organisaties}/${id || ":id(\\d+)"}`,
 	CreateOrganisatie: `/${RouteNames.organisaties}/${RouteNames.add}`,
 	EditOrganisatie: (id: number) => `/${RouteNames.organisaties}/${id}/${RouteNames.edit}`,
+	CreateAfdeling: (organisatieId?: number) => `/${RouteNames.organisaties}/${organisatieId || ":organisatieId(\\d+)"}/${RouteNames.afdelingen}/${RouteNames.add}`,
 
 	Bankzaken: `/${RouteNames.bankzaken}`,
 	Transacties: `/${RouteNames.bankzaken}/${RouteNames.transacties}`,

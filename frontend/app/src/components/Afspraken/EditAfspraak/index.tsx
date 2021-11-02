@@ -2,13 +2,11 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {useHistory, useParams} from "react-router-dom";
 import Routes from "../../../config/routes";
-import {Afspraak, UpdateAfspraakMutationVariables, useGetAfspraakFormDataQuery, useUpdateAfspraakMutation} from "../../../generated/graphql";
+import {Afspraak, GetAfspraakDocument, UpdateAfspraakMutationVariables, useGetAfspraakFormDataQuery, useUpdateAfspraakMutation} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import useHandleMutation from "../../../utils/useHandleMutation";
 import BackButton from "../../Layouts/BackButton";
-import {FormLeft, FormRight} from "../../Layouts/Forms";
 import Page from "../../Layouts/Page";
-import Section from "../../Layouts/Section";
 import PageNotFound from "../../PageNotFound";
 import AfspraakForm from "../AfspraakForm";
 import AfspraakFormContext, {AfspraakFormContextType} from "./context";
@@ -17,7 +15,11 @@ const EditAfspraak = () => {
 	const {id} = useParams<{id: string}>();
 	const {t} = useTranslation();
 	const handleMutation = useHandleMutation();
-	const [updateAfspraakMutation] = useUpdateAfspraakMutation();
+	const [updateAfspraakMutation, $updateAfspraakMutation] = useUpdateAfspraakMutation({
+		refetchQueries: [
+			{query: GetAfspraakDocument, variables: {id: parseInt(id)}},
+		],
+	});
 	const {push} = useHistory();
 
 	const $afspraak = useGetAfspraakFormDataQuery({
@@ -40,6 +42,8 @@ const EditAfspraak = () => {
 				rubriekId: afspraak.rubriek?.id,
 				omschrijving: afspraak.omschrijving,
 				tegenRekeningId: afspraak.tegenRekening?.id,
+				afdelingId: afspraak.afdeling?.id,
+				postadresId: afspraak.postadres?.id,
 			};
 
 			const updateAfspraak = (data: UpdateAfspraakMutationVariables["input"]) => handleMutation(updateAfspraakMutation({
@@ -56,14 +60,9 @@ const EditAfspraak = () => {
 
 			return (
 				<Page title={t("forms.afspraken.titleEdit")} backButton={<BackButton to={Routes.ViewAfspraak(afspraak.id)} />}>
-					<Section direction={["column", "row"]}>
-						<FormLeft title={t("forms.afspraken.title")} helperText={t("forms.afspraken.helperText")} />
-						<FormRight spacing={5}>
-							<AfspraakFormContext.Provider value={ctxValue}>
-								<AfspraakForm burgerRekeningen={afspraak.burger?.rekeningen || []} values={editAfspraakValues} onChange={updateAfspraak} />
-							</AfspraakFormContext.Provider>
-						</FormRight>
-					</Section>
+					<AfspraakFormContext.Provider value={ctxValue}>
+						<AfspraakForm burgerRekeningen={afspraak.burger?.rekeningen || []} values={editAfspraakValues} onChange={updateAfspraak} isLoading={$updateAfspraakMutation.loading} />
+					</AfspraakFormContext.Provider>
 				</Page>
 			);
 		}} />

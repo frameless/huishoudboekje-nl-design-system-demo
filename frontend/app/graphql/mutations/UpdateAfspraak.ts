@@ -11,7 +11,7 @@ export const UpdateAfspraakMutation = gql`
             input: $input
         ){
             ok
-            afspraak{
+            afspraak {
                 ...Afspraak
             }
         }

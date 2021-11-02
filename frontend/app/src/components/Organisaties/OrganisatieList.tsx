@@ -43,8 +43,10 @@ const OrganisatieList = () => {
 
 			const filteredOrganisaties = organisaties.filter(o => {
 				return [
-					searchFields(search, [o.kvkDetails?.naam || ""]),
-					searchFields(search.replaceAll(" ", ""), [...(o.rekeningen || []).map(r => r.iban || "")])
+					searchFields(search, [o.naam || ""]),
+					searchFields(search.replaceAll(" ", ""), [
+						...(o.afdelingen || []).flatMap(a => (a.rekeningen || []).flatMap(r => [r.rekeninghouder || "", r.iban || "", a.naam || ""])),
+					]),
 				].some(t => t);
 			});
 
@@ -57,7 +59,8 @@ const OrganisatieList = () => {
 						<Input type={"text"} bg={"white"} onChange={e => setSearch(e.target.value)} onKeyDown={onKeyDownOnSearchField} value={search || ""} placeholder={t("forms.search.fields.search")} ref={searchRef} />
 						{search.length > 0 && (
 							<InputRightElement>
-								<IconButton size={"xs"} variant={"link"} icon={<CloseIcon />} aria-label={t("global.actions.cancel")} color={"gray.300"} onClick={() => setSearch("")} />
+								<IconButton size={"xs"} variant={"link"} icon={<CloseIcon />}
+									aria-label={t("global.actions.cancel")} color={"gray.300"} onClick={() => setSearch("")} />
 							</InputRightElement>
 						)}
 					</InputGroup>
@@ -67,7 +70,9 @@ const OrganisatieList = () => {
 							<Button size={"sm"} colorScheme={"primary"} onClick={onClickResetSearch}>{t("global.actions.clearSearch")}</Button>
 						</DeadEndPage>
 					) : (
-						<OrganisatieListView organisaties={filteredOrganisaties} showAddButton={search.trim().length === 0} />
+						<OrganisatieListView organisaties={[...filteredOrganisaties].sort((a, b) => {
+							return (a.naam || "") < (b.naam || "") ? -1 : 1
+						})} showAddButton={search.trim().length === 0} />
 					)}
 				</Page>
 			);
