@@ -16,7 +16,7 @@
         jwt sign \
         --expiresIn "1 week" \
         --subject "cypress@${HHB_HOST}" \
-        --issuer "https://${HHB_HOST}" \
+        --issuer "https://$HHB_HOST/auth" \
         --audience "https://${HHB_HOST}" \
         --jwtid "$(LC_CTYPE=C tr -dc 'A-F0-9' < /dev/urandom | head -c32)" \
         --noCopy \
@@ -34,6 +34,7 @@ load-data-review:
     name: review/$CI_COMMIT_REF_SLUG
   variables:
     HHB_HOST: "hhb-$CI_COMMIT_REF_SLUG.nlx.reviews"
+    SESSION_SECRET: test
   needs:
     - deploy-deployment-review
   only:
