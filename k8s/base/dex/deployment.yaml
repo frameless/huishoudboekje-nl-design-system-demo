@@ -37,12 +37,12 @@ spec:
           livenessProbe:
             initialDelaySeconds: 60
             httpGet:
-              path: /dex/healthz
+              path: /auth/healthz
               port: http
           readinessProbe:
             initialDelaySeconds: 60
             httpGet:
-              path: /dex/healthz
+              path: /auth/healthz
               port: http
           volumeMounts:
             - name: dex-config-volume

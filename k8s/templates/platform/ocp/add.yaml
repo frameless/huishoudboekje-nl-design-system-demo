@@ -45,7 +45,7 @@ metadata:
   name: hhb-dex-route
 spec:
   host: ${HHB_FRONTEND_DNS}
-  path: /dex
+  path: /auth
   port:
     targetPort: http
   tls:

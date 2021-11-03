@@ -28,7 +28,7 @@ spec:
     - host: ${HHB_FRONTEND_DNS}
       http:
         paths:
-          - path: /dex
+          - path: /auth
             pathType: Prefix
             backend:
               service:

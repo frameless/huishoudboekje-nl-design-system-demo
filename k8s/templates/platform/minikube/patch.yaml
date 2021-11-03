@@ -24,18 +24,18 @@ stringData:
     {
       "web": {
         "mark": true,
-        "auth_uri": "http://${HHB_APP_HOST}/dex/auth",
+        "auth_uri": "http://${HHB_APP_HOST}/auth/auth",
         "client_id": "huishoudboekje",
         "client_secret": "test",
-        "issuer": "http://${HHB_APP_HOST}/dex",
+        "issuer": "http://${HHB_APP_HOST}/auth",
         "redirect_uris":
           [
               "http://${HHB_APP_HOST}/api/oidc_callback",
               "http://hhb-backend/oidc_callback"
           ],
-        "token_uri": "http://hhb-dex/dex/token",
-        "token_introspection_uri": "http://hhb-dex/dex/tokeninfo",
-        "userinfo_uri": "http://hhb-dex/dex/userinfo"
+        "token_uri": "http://hhb-dex/auth/token",
+        "token_introspection_uri": "http://hhb-dex/auth/tokeninfo",
+        "userinfo_uri": "http://hhb-dex/auth/userinfo"
       }
     }
 ---
@@ -45,7 +45,7 @@ metadata:
   name: hhb-dex-secrets
 stringData:
   config.yaml: |-
-    issuer: http://${HHB_APP_HOST}/dex
+    issuer: http://${HHB_APP_HOST}/auth
     storage:
       config:
         file: ':memory:'
@@ -59,12 +59,12 @@ stringData:
       alwaysShowLoginScreen: false
       skipApprovalScreen: true
     staticClients:
-      - id: huishoudboekje
+      - id: ${OIDC_CLIENT_ID}
         name: Huishoudboekje Schaalbaar
         redirectURIs:
           - "http://${HHB_APP_HOST}/api/oidc_callback"
           - "http://hhb-backend/oidc_callback"
-        secret: test
+        secret: ${OIDC_CLIENT_SECRET}
     staticPasswords:
     - userID: "08a8684b-db88-4b73-90a9-3cd1661f5466"
       username: "koen@openweb.nl"
