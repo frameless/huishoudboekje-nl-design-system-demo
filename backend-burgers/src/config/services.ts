@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const services = {
-	burgers: process.env.BURGERSERVICE_URL,
+	burgers: process.env.HUISHOUDBOEKJESERVICE_URL,
 };
 
 export const createServiceUrl = (serviceName: string, endpoint: string) => {

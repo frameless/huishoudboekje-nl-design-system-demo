@@ -7,6 +7,13 @@ x-backend: &x-backend
   volumes:
     - ./backend:/app
 
+x-backend-burgers: &x-backend-burgers
+  build:
+    dockerfile: ./dev.Dockerfile
+    context: ./backend-burgers
+  volumes:
+    - ./backend-burgers:/app
+
 x-huishoudboekjeservice: &x-huishoudboekjeservice
   build:
     dockerfile: ./huishoudboekje_service/dev.Dockerfile
@@ -163,6 +170,24 @@ services:
     <<: *x-resource-limit
     <<: *x-backend
     <<: *x-tests
+
+  backend-burgers:
+    <<: *x-resource-limit
+    <<: *x-backend-burgers
+    environment:
+      HUISHOUDBOEKJESERVICE_URL: "http://huishoudboekjeservice:8000"
+    ports:
+      - 9000:8080
+
+  backend-burgers-test:
+    <<: *x-resource-limit
+    <<: *x-backend-burgers
+    profiles:
+      - tests
+    entrypoint:
+      - /bin/sh
+      - -c
+      - npm run test
 
   huishoudboekjeservice:
     <<: *x-resource-limit
