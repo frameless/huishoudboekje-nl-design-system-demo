@@ -289,10 +289,14 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 									<Text>{scheduleHelper.toString()}</Text>
 								</DataItem>
 								<DataItem label={t("exports.period")}>
-									<Text>{t("schedule.fromThrough", {
-										from: d(afspraak.betaalinstructie.startDate, "YYYY-MM-DD").format("L"),
-										through: afspraak.betaalinstructie.endDate ? d(afspraak.betaalinstructie.endDate, "YYYY-MM-DD").format("L") : "∞",
-									})}</Text>
+									{d(afspraak.betaalinstructie.startDate).isSame(afspraak.betaalinstructie.endDate) ? (
+										<Text>{d(afspraak.betaalinstructie.startDate, "YYYY-MM-DD").format("L")}</Text>
+									) : (
+										<Text>{t("schedule.fromThrough", {
+											from: d(afspraak.betaalinstructie.startDate, "YYYY-MM-DD").format("L"),
+											through: afspraak.betaalinstructie.endDate ? d(afspraak.betaalinstructie.endDate, "YYYY-MM-DD").format("L") : "∞",
+										})}</Text>
+									)}
 								</DataItem>
 							</Stack>
 
