@@ -8,7 +8,53 @@ We use Kustomize for our deploys in k8s. We support different platforms, which a
 
 The structure of the directories is divided into a few parts.
 
-All the variables of the build can be found in `k8s/build.sh`. To 'reset' all variable use `k8s/reset.sh`
+All the variables of the build can be found in `k8s/build.sh`.
+
+## Reset
+
+Reset all varaible, run:
+
+```bash
+#!/bin/bash
+
+set -e
+
+unset AUTH_AUDIENCE
+unset BRANCH_NAME
+unset CERT_MANAGER_ISSUER
+unset COMMIT_SHA
+unset CUSTOMER_BUILD
+unset DEFAULT_REPLICAS
+unset DEPLOYMENT_DIST_DIR
+unset GENERATE_SECRETS
+unset HHB_API_ENDPOINT
+unset HHB_APP_HOST
+unset HHB_FRONTEND_DNS
+unset HHB_FRONTEND_ENDPOINT
+unset HHB_HOST
+unset HHB_SECRET
+unset IMAGE_TAG
+unset NAMESPACE
+unset OIDC_AUTHORIZATION_ENDPOINT
+unset OIDC_CLIENT_ID
+unset OIDC_ISSUER
+unset OIDC_TOKEN_ENDPOINT
+unset OIDC_TOKENINFO_ENDPOINT
+unset OIDC_USERINFO_ENDPOINT
+unset POSTGRESQL_PASSWORD
+unset POSTGRESQL_PASSWORD_BKTSVC
+unset POSTGRESQL_PASSWORD_GRBSVC
+unset POSTGRESQL_PASSWORD_HHBSVC
+unset POSTGRESQL_PASSWORD_LOGSVC
+unset POSTGRESQL_PASSWORD_ORGSVC
+unset PULL_REPO_IMAGE
+unset REMOVE_DEX
+unset USE_PLATFORM
+
+# Create a temporary directory to put the dist files in.
+export DEPLOYMENT_DIST_DIR="dist"
+rm -f k8s/$DEPLOYMENT_DIST_DIR/*.yaml
+```
 
 ### Directory k8s/base
 
