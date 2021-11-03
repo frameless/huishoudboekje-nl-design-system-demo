@@ -49,7 +49,8 @@ spec:
               sleep 15 &&
               psql -h hhb-database -U $POSTGRESQL_USERNAME -c "CREATE USER bktsvc WITH PASSWORD '$POSTGRESQL_PASSWORD_BKTSVC'" || true &&
               psql -h hhb-database -U $POSTGRESQL_USERNAME -c "CREATE DATABASE banktransactieservice" || true &&
-              psql -h hhb-database -U $POSTGRESQL_USERNAME -c "GRANT ALL PRIVILEGES ON DATABASE banktransactieservice TO bktsvc" || true
+              psql -h hhb-database -U $POSTGRESQL_USERNAME -c "GRANT ALL PRIVILEGES ON DATABASE banktransactieservice TO bktsvc" || true &&
+              psql -h hhb-database -U $POSTGRESQL_USERNAME -c "ALTER USER bktsvc WITH PASSWORD '$POSTGRESQL_PASSWORD_BKTSVC'" || true;
         - name: init3-migrate-db
           image: banktransactieservice
           imagePullPolicy: Always

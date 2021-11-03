@@ -48,7 +48,8 @@ spec:
               export PGPASSWORD=$POSTGRESQL_PASSWORD &&
               psql -h hhb-database -U $POSTGRESQL_USERNAME -c "CREATE USER logsvc WITH PASSWORD '$POSTGRESQL_PASSWORD_LOGSVC'" || true &&
               psql -h hhb-database -U $POSTGRESQL_USERNAME -c "CREATE DATABASE logservice" || true &&
-              psql -h hhb-database -U $POSTGRESQL_USERNAME -c "GRANT ALL PRIVILEGES ON DATABASE logservice TO logsvc" || true;
+              psql -h hhb-database -U $POSTGRESQL_USERNAME -c "GRANT ALL PRIVILEGES ON DATABASE logservice TO logsvc" || true &&
+              psql -h hhb-database -U $POSTGRESQL_USERNAME -c "ALTER USER logsvc WITH PASSWORD '$POSTGRESQL_PASSWORD_LOGSVC'" || true;
         - name: init3-migrate-db
           image: logservice
           imagePullPolicy: Always

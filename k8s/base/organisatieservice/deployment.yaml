@@ -48,7 +48,8 @@ spec:
               export PGPASSWORD=$POSTGRESQL_PASSWORD &&
               psql -h hhb-database -U $POSTGRESQL_USERNAME -c "CREATE USER orgsvc WITH PASSWORD '$POSTGRESQL_PASSWORD_ORGSVC'" || true &&
               psql -h hhb-database -U $POSTGRESQL_USERNAME -c "CREATE DATABASE organisatieservice" || true &&
-              psql -h hhb-database -U $POSTGRESQL_USERNAME -c "GRANT ALL PRIVILEGES ON DATABASE organisatieservice TO orgsvc" || true;
+              psql -h hhb-database -U $POSTGRESQL_USERNAME -c "GRANT ALL PRIVILEGES ON DATABASE organisatieservice TO orgsvc" || true &&
+              psql -h hhb-database -U $POSTGRESQL_USERNAME -c "ALTER USER orgsvc WITH PASSWORD '$POSTGRESQL_PASSWORD_ORGSVC'" || true;
         - name: init3-migrate-db
           image: organisatieservice
           imagePullPolicy: Always
