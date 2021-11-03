@@ -25,6 +25,15 @@ kubectl config use-context minikube
 export USE_PLATFORM='minikube'
 export HHB_HOST='hhb.minikube'
 export NAMESPACE='huishoudboekje'
+
+# http not https
+export HHB_FRONTEND_ENDPOINT="http://${HHB_HOST}"
+export OIDC_ISSUER="http://$HHB_HOST/auth"
+export OIDC_AUTHORIZATION_ENDPOINT="http://${HHB_HOST}/auth/auth"
+export OIDC_TOKEN_ENDPOINT="http://hhb-dex/auth/token"
+export OIDC_TOKENINFO_ENDPOINT="http://hhb-dex/auth/tokeninfo"
+export OIDC_USERINFO_ENDPOINT="http://hhb-dex/auth/userinfo"
+
 export CI_API_V4_URL=https://gitlab.com/api/v4
 export CI_PROJECT_ID=20352213
 export UNLEASH_INSTANCEID=JbZyPux6M7xwejsESy9L
