@@ -21,12 +21,12 @@ class Burger(graphene.ObjectType):
     
     telefoonnummer = graphene.String()
     email = graphene.String()
-    postcode = graphene.String()
-    plaatsnaam = graphene.String()
+
     straatnaam = graphene.String()
     huisnummer = graphene.String()
+    postcode = graphene.String()
+    plaatsnaam = graphene.String()
     
-    iban = graphene.String(deprecation_reason="Please use 'rekeningen'")
     rekeningen = graphene.List(lambda: rekening.Rekening)
     afspraken = graphene.List(lambda: afspraak.Afspraak)
     huishouden = graphene.Field(lambda: huishouden.Huishouden)

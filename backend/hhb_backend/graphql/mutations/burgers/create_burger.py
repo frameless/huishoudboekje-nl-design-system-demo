@@ -25,13 +25,12 @@ class CreateBurgerInput(graphene.InputObjectType):
     voornamen = graphene.String()
     achternaam = graphene.String()
     geboortedatum = graphene.Date()
-
     telefoonnummer = graphene.String()
     email = graphene.String()
-    postcode = graphene.String()
-    plaatsnaam = graphene.String()
     straatnaam = graphene.String()
     huisnummer = graphene.String()
+    postcode = graphene.String()
+    plaatsnaam = graphene.String()
     rekeningen = graphene.List(lambda: rekening_input.RekeningInput)
     huishouden = graphene.Field(huishouden_input.HuishoudenInput)
 

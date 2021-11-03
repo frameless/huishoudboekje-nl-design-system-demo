@@ -15,10 +15,10 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import (
 
 class CreatePostadresInput(graphene.InputObjectType):
     # hhb_service elements (required)
-    postcode = graphene.String(required=True)
-    plaatsnaam = graphene.String(required=True)
     straatnaam = graphene.String(required=True)
     huisnummer = graphene.String(required=True)
+    postcode = graphene.String(required=True)
+    plaatsnaam = graphene.String(required=True)
     afdeling_id = graphene.Int()
 
 class CreatePostadres(graphene.Mutation):
