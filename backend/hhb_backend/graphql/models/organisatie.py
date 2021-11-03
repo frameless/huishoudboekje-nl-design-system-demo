@@ -7,9 +7,9 @@ import hhb_backend.graphql.models.afdeling as afdeling
 class Organisatie(graphene.ObjectType):
     """ GraphQL Organisatie model """
     id = graphene.Int()
+    naam = graphene.String()
     kvknummer = graphene.String()
     vestigingsnummer = graphene.String()
-    naam = graphene.String()
     afdelingen = graphene.List(lambda: afdeling.Afdeling)
 
     async def resolve_afdelingen(root, info):

@@ -5,10 +5,10 @@ import graphene
 class Postadres(graphene.ObjectType):
     """ GraphQL Burger model """
     id = graphene.String()
-    huisnummer = graphene.String()
     postcode = graphene.String()
-    straatnaam = graphene.String()
     plaatsnaam = graphene.String()
+    straatnaam = graphene.String()
+    huisnummer = graphene.String()
 
     def resolve_huisnummer(root, info):
         return root.get("houseNumber")

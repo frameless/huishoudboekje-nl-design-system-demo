@@ -51,18 +51,17 @@ class Afspraak(graphene.ObjectType):
     """ GraphQL Afspraak model """
 
     id = graphene.Int()
+    omschrijving = graphene.String()
+    bedrag = graphene.Field(Bedrag)
+    credit = graphene.Boolean()
+    rubriek = graphene.Field(lambda: rubriek.Rubriek)
+    zoektermen = graphene.List(graphene.String)
     burger = graphene.Field(lambda: burger.Burger)
     afdeling = graphene.Field(lambda: afdeling.Afdeling)
     postadres = graphene.Field(lambda: postadres.Postadres)
-
-    omschrijving = graphene.String()
     tegen_rekening = graphene.Field(lambda: rekening.Rekening)
-    bedrag = graphene.Field(Bedrag)
-    credit = graphene.Boolean()
-    zoektermen = graphene.List(graphene.String)
     betaalinstructie = graphene.Field(lambda: Betaalinstructie)
     journaalposten = graphene.List(lambda: journaalpost.Journaalpost)
-    rubriek = graphene.Field(lambda: rubriek.Rubriek)
     overschrijvingen = graphene.List(
         lambda: overschrijving.Overschrijving,
         start_datum=graphene.Date(),

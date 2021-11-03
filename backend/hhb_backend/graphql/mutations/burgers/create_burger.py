@@ -21,17 +21,18 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import (
 class CreateBurgerInput(graphene.InputObjectType):
     # burger arguments
     bsn = graphene.Int()
-    email = graphene.String()
-    geboortedatum = graphene.Date()
-    telefoonnummer = graphene.String()
-    rekeningen = graphene.List(lambda: rekening_input.RekeningInput)
-    achternaam = graphene.String()
-    huisnummer = graphene.String()
-    postcode = graphene.String()
-    straatnaam = graphene.String()
     voorletters = graphene.String()
     voornamen = graphene.String()
+    achternaam = graphene.String()
+    geboortedatum = graphene.Date()
+
+    telefoonnummer = graphene.String()
+    email = graphene.String()
+    postcode = graphene.String()
     plaatsnaam = graphene.String()
+    straatnaam = graphene.String()
+    huisnummer = graphene.String()
+    rekeningen = graphene.List(lambda: rekening_input.RekeningInput)
     huishouden = graphene.Field(huishouden_input.HuishoudenInput)
 
 class CreateBurger(graphene.Mutation):

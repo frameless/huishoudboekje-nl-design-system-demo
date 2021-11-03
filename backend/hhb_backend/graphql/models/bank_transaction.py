@@ -16,16 +16,15 @@ from hhb_backend.processen import automatisch_boeken
 class BankTransaction(graphene.ObjectType):
     """BankTransaction model"""
     id = graphene.Int()
-    customer_statement_message = graphene.Field(lambda: customer_statement_message_model.CustomerStatementMessage)
-    statement_line = graphene.String()
-    information_to_account_owner = graphene.String()
     bedrag = graphene.Field(Bedrag)
     is_credit = graphene.Boolean()
-    tegen_rekening = graphene.Field(lambda: rekening.Rekening)
     tegen_rekening_iban = graphene.String()
+    tegen_rekening = graphene.Field(lambda: rekening.Rekening)
     transactie_datum = graphene.Date()
+    statement_line = graphene.String()
+    customer_statement_message = graphene.Field(lambda: customer_statement_message_model.CustomerStatementMessage)
     is_geboekt = graphene.Boolean()
-
+    information_to_account_owner = graphene.String()
     journaalpost = graphene.Field(lambda: journaalpost.Journaalpost)
     suggesties = graphene.List(lambda: afspraak.Afspraak)
 
