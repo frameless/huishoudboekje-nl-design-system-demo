@@ -94,42 +94,43 @@ services:
       - 5432:5432
     restart: unless-stopped
 
-  ## uncomment below for first execustion or database purge
+  # Database preparations
+  db-init:
+   image: postgres:13-alpine
+   command:
+     - /bin/sh
+     - -c
+     - >-
+       export PGPASSWORD=postgres &&
+       psql -h db -U postgres -c "CREATE USER hhb WITH PASSWORD 'hhb'" || true &&
+       psql -h db -U postgres -c "CREATE DATABASE huishoudboekjeservice" || true &&
+       psql -h db -U postgres -c "CREATE DATABASE organisatieservice" || true &&
+       psql -h db -U postgres -c "CREATE DATABASE banktransactieservice" || true &&
+       psql -h db -U postgres -c "CREATE DATABASE grootboekservice" || true &&
+       psql -h db -U postgres -c "CREATE DATABASE logservice" || true
+   profiles:
+     - db
+   depends_on:
+     - db
 
-  # # Database preparations
-  # db-init:
-  #   image: postgres:13-alpine
-  #   command:
-  #     - /bin/sh
-  #     - -c
-  #     - >-
-  #       export PGPASSWORD=postgres &&
-  #       psql -h db -U postgres -c "CREATE USER hhb WITH PASSWORD 'hhb'" || true &&
-  #       psql -h db -U postgres -c "CREATE DATABASE huishoudboekjeservice" || true &&
-  #       psql -h db -U postgres -c "CREATE DATABASE organisatieservice" || true &&
-  #       psql -h db -U postgres -c "CREATE DATABASE banktransactieservice" || true &&
-  #       psql -h db -U postgres -c "CREATE DATABASE grootboekservice" || true &&
-  #       psql -h db -U postgres -c "CREATE DATABASE logservice" || true
-  #   depends_on:
-  #     - db
-
-  # # # Database teardown
-  # db-teardown:
-  #   image: postgres:13-alpine
-  #   command:
-  #     - /bin/sh
-  #     - -c
-  #     - >-
-  #       export PGPASSWORD=postgres &&
-  #       psql -h db -U postgres -c "drop database IF EXISTS huishoudboekjeservice" &&
-  #       psql -h db -U postgres -c "drop database IF EXISTS organisatieservice" &&
-  #       psql -h db -U postgres -c "drop database IF EXISTS banktransactieservice" &&
-  #       psql -h db -U postgres -c "drop database IF EXISTS grootboekservice" &&
-  #       psql -h db -U postgres -c "drop database IF EXISTS logservice" &&
-  #       psql -h db -U postgres -c "drop role IF EXISTS hhb"
-  #   depends_on:
-  #     - db
-
+   # Database teardown
+  db-teardown:
+   image: postgres:13-alpine
+   command:
+     - /bin/sh
+     - -c
+     - >-
+       export PGPASSWORD=postgres &&
+       psql -h db -U postgres -c "drop database IF EXISTS huishoudboekjeservice" &&
+       psql -h db -U postgres -c "drop database IF EXISTS organisatieservice" &&
+       psql -h db -U postgres -c "drop database IF EXISTS banktransactieservice" &&
+       psql -h db -U postgres -c "drop database IF EXISTS grootboekservice" &&
+       psql -h db -U postgres -c "drop database IF EXISTS logservice" &&
+       psql -h db -U postgres -c "drop role IF EXISTS hhb"
+   profiles:
+     - db
+   depends_on:
+     - db
 
 #  # Frontend # Todo: super slow, doesn't work yet.
 #  frontend:
