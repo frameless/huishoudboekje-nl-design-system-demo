@@ -1,4 +1,4 @@
-import {intArg} from "@nexus/schema";
+import {intArg} from "nexus";
 import BurgerLoader from "../dataloaders/burgers";
 import Burger from "../models/Burger";
 

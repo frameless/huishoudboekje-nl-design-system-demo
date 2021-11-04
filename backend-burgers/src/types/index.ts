@@ -1,4 +1,4 @@
-import {objectType} from "@nexus/schema";
+import {objectType} from "nexus";
 import Afspraak from "../models/Afspraak";
 import Burger from "../models/Burger";
 import burger from "../queries/burger";
