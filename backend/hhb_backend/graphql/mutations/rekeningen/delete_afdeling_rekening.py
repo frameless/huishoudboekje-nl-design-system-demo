@@ -6,7 +6,8 @@ from graphql import GraphQLError
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models import rekening
 from hhb_backend.graphql.mutations.rekeningen.utils import (
-    cleanup_rekening_when_orphaned
+    disconnect_afdeling_rekening,
+    delete_rekening
 )
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     log_gebruikers_activiteit,
@@ -39,6 +40,7 @@ class DeleteAfdelingRekening(graphene.Mutation):
         previous = await hhb_dataloader().rekeningen_by_id.load(rekening_id)
 
         # only delete rekening if it is not used by: burger, afdeling or sfspraak
-        cleanup_rekening_when_orphaned(rekening_id)
+        disconnect_afdeling_rekening(afdeling_id, rekening_id)
+        delete_rekening(rekening_id)
 
         return DeleteAfdelingRekening(ok=True, previous=previous)
