@@ -3,9 +3,9 @@
 from datetime import date
 
 import pytest
+from sqlalchemy.sql.sqltypes import String
 
 from models.afspraak import Afspraak
-
 
 class AfspraakFactory():
     """ Factory for Afspraak objects """
@@ -35,7 +35,8 @@ class AfspraakFactory():
         bedrag: float = 13.37,
         credit: bool = True,
         zoektermen = ["ABC1234"],
-        organisatie_id: int = None,
+        afdeling_id: int = None,
+        postadres_id: String = None,
         rubriek_id: int = None
     ):
         if not burger:
@@ -55,8 +56,10 @@ class AfspraakFactory():
             rubriek_id=rubriek_id,
             tegen_rekening=tegen_rekening
         )
-        if organisatie_id:
-            afspraak.organisatie_id = organisatie_id
+        if afdeling_id:
+            afspraak.afdeling_id = afdeling_id
+        if postadres_id:
+            afspraak.postadres_id = postadres_id
             
         self.dbsession.add(afspraak)
         self.dbsession.flush()

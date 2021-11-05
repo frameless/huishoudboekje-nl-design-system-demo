@@ -13,12 +13,12 @@ class OverschrijvingStatus(graphene.Enum):
 
 class Overschrijving(graphene.ObjectType):
     id = graphene.Int()
+    bedrag = graphene.Field(Bedrag)
+    datum = graphene.String()
+    status = graphene.Field(OverschrijvingStatus)
     afspraak = graphene.Field(lambda: afspraak.Afspraak)
     export = graphene.Field(lambda: export.Export)
-    datum = graphene.String()
-    bedrag = graphene.Field(Bedrag)
     bankTransaction = graphene.Field(lambda: bank_transaction.BankTransaction)
-    status = graphene.Field(OverschrijvingStatus)
     afspraken = graphene.List(lambda: afspraak.Afspraak)
 
     async def resolve_afspraak(root, info):

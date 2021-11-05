@@ -16,6 +16,8 @@ from .gebruikersactiviteiten import GebruikersActiviteitQuery, GebruikersActivit
     GebruikersActiviteitenPagedQuery
 from .gebruiker import GebruikerQuery
 from .huishoudens import HuishoudenQuery, HuishoudensQuery, HuishoudensPagedQuery
+from .afdelingen import AfdelingQuery, AfdelingenQuery
+from .postadressen import PostadressenQuery, PostadresQuery
 
 
 class RootQuery(graphene.ObjectType):
@@ -51,6 +53,10 @@ class RootQuery(graphene.ObjectType):
     huishouden = HuishoudenQuery.return_type
     huishoudens = HuishoudensQuery.return_type
     huishoudens_paged = HuishoudensPagedQuery.return_type
+    afdeling = AfdelingQuery.return_type
+    afdelingen = AfdelingenQuery.return_type
+    postadres = PostadresQuery.return_type
+    postadressen = PostadressenQuery.return_type
 
     async def resolve_burger(root, info, **kwargs):
         return await BurgerQuery.resolver(root, info, **kwargs)
@@ -144,6 +150,18 @@ class RootQuery(graphene.ObjectType):
 
     async def resolve_huishoudens_paged(root, info, **kwargs):
         return await HuishoudensPagedQuery.resolver(root, info, **kwargs)
+
+    async def resolve_afdeling(root, info, **kwargs):
+        return await AfdelingQuery.resolver(root, info, **kwargs)
+
+    async def resolve_afdelingen(root, info, **kwargs):
+        return await AfdelingenQuery.resolver(root, info, **kwargs)
+
+    async def resolve_postadres(root, info, **kwargs):
+        return await PostadresQuery.resolver(root, info, **kwargs)
+
+    async def resolve_postadressen(root, info, **kwargs):
+        return await PostadressenQuery.resolver(root, info, **kwargs)
         
     @staticmethod
     async def resolve_gebruiker(root, info, **kwargs):

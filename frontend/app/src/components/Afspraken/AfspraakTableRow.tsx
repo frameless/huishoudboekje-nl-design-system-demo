@@ -16,7 +16,7 @@ const AfspraakTableRow: React.FC<TableRowProps & {afspraak: Afspraak}> = ({afspr
 
 	return (
 		<Tr color={!isActive ? "gray.400" : undefined} {...props}>
-			<Td>{afspraak.organisatie?.kvkDetails?.naam || afspraak.tegenRekening?.rekeninghouder || t("unknown")}</Td>
+			<Td>{afspraak.afdeling?.organisatie?.naam || afspraak.tegenRekening?.rekeninghouder || t("unknown")}</Td>
 			{!isMobile && (<Td>
 				<Text>{afspraak.omschrijving}</Text>
 			</Td>)}

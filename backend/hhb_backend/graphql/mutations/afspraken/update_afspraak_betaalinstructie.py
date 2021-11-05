@@ -69,14 +69,13 @@ class UpdateAfspraakBetaalinstructie(graphene.Mutation):
         previous = pydash.omit(previous, 'journaalposten', 'overschrijvingen')
 
         if previous.get("credit") == True:
-            raise GraphQLError("betaalinstructie is alleen mogelijk bij uitgaven")
+            raise GraphQLError("Betaalinstructie is alleen mogelijk bij uitgaven")
         if (betaalinstructie.by_day and betaalinstructie.by_month_day) or (not betaalinstructie.by_day and not betaalinstructie.by_month_day):
             raise GraphQLError("Betaalinstructie: 'by_day' of 'by_month_day' moet zijn ingevuld.")
-        if betaalinstructie.end_date and betaalinstructie.end_date <= betaalinstructie.start_date:
-            raise GraphQLError("Startdatum kan niet voor einddatum liggen.")
+        if betaalinstructie.end_date and betaalinstructie.end_date < betaalinstructie.start_date:
+            raise GraphQLError("Begindatum moet voor einddatum liggen.")
 
         input = {
-            **previous,
             "betaalinstructie": betaalinstructie
         }
 

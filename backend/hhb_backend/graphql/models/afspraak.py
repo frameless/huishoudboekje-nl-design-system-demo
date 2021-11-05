@@ -1,13 +1,14 @@
 """ Afspraak model as used in GraphQL queries """
 from datetime import date
-
 import graphene
 from dateutil.parser import isoparse
 from flask import request
 
 import hhb_backend.graphql.models.burger as burger
+import hhb_backend.graphql.models.afspraak as afspraak
+import hhb_backend.graphql.models.afdeling as afdeling
+import hhb_backend.graphql.models.postadres as postadres
 import hhb_backend.graphql.models.journaalpost as journaalpost
-import hhb_backend.graphql.models.organisatie as organisatie
 import hhb_backend.graphql.models.overschrijving as overschrijving
 import hhb_backend.graphql.models.rekening as rekening
 import hhb_backend.graphql.models.rubriek as rubriek
@@ -50,16 +51,17 @@ class Afspraak(graphene.ObjectType):
     """ GraphQL Afspraak model """
 
     id = graphene.Int()
-    burger = graphene.Field(lambda: burger.Burger)
     omschrijving = graphene.String()
-    tegen_rekening = graphene.Field(lambda: rekening.Rekening)
     bedrag = graphene.Field(Bedrag)
     credit = graphene.Boolean()
-    zoektermen = graphene.List(graphene.String)
-    betaalinstructie = graphene.Field(lambda: Betaalinstructie)
-    organisatie = graphene.Field(lambda: organisatie.Organisatie)
-    journaalposten = graphene.List(lambda: journaalpost.Journaalpost)
     rubriek = graphene.Field(lambda: rubriek.Rubriek)
+    zoektermen = graphene.List(graphene.String)
+    burger = graphene.Field(lambda: burger.Burger)
+    afdeling = graphene.Field(lambda: afdeling.Afdeling)
+    postadres = graphene.Field(lambda: postadres.Postadres)
+    tegen_rekening = graphene.Field(lambda: rekening.Rekening)
+    betaalinstructie = graphene.Field(lambda: Betaalinstructie)
+    journaalposten = graphene.List(lambda: journaalpost.Journaalpost)
     overschrijvingen = graphene.List(
         lambda: overschrijving.Overschrijving,
         start_datum=graphene.Date(),
@@ -104,16 +106,31 @@ class Afspraak(graphene.ObjectType):
     async def resolve_burger(root, info):
         """ Get burger when requested """
         if root.get("burger_id"):
-            return await request.dataloader.burgers_by_id.load(
-                root.get("burger_id")
+            return await request.dataloader.burgers_by_id.load(root.get("burger_id"))
+
+    async def resolve_rekening(root, info):
+        """ Get rekening when requested """
+        if root.get("rekening_id"):
+            return await request.dataloader.rekeningen_by_id.load(
+                root.get("rekening_id")
             )
+
+    async def resolve_postadres(root, info):
+        """ Get postadres when requested """
+        postadres_id = root.get("postadres_id", None)
+        if postadres_id:
+            postadres = await request.dataloader.postadressen_by_id.load(postadres_id)
+            return postadres
+
+    async def resolve_afdeling(root, info):
+        """ Get afdeling when requested """
+        if root.get("afdeling_id"):
+            return await request.dataloader.afdelingen_by_id.load(root.get("afdeling_id"))
 
     async def resolve_tegen_rekening(root, info):
         """ Get tegen_rekening when requested """
         if root.get("tegen_rekening_id"):
-            return await request.dataloader.rekeningen_by_id.load(
-                root.get("tegen_rekening_id")
-            )
+            return await request.dataloader.rekeningen_by_id.load(root.get("tegen_rekening_id"))
 
     def resolve_valid_from(root, info):
         if value := root.get("valid_from"):
@@ -122,13 +139,6 @@ class Afspraak(graphene.ObjectType):
     def resolve_valid_through(root, info):
         if value := root.get("valid_through"):
             return date.fromisoformat(value)
-
-    async def resolve_organisatie(root, info):
-        """ Get organisatie when requested """
-        if root.get("organisatie_id"):
-            return await request.dataloader.organisaties_by_id.load(
-                root.get("organisatie_id")
-            )
 
     async def resolve_journaalposten(root, info):
         """ Get organisatie when requested """

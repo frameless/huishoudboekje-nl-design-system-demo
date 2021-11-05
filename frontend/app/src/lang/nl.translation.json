@@ -12,6 +12,7 @@
     "deleteAfspraakZoektermSuccess": "De zoekterm is verwijderd.",
     "addAfspraakZoektermSuccess": "De zoekterm is opgeslagen.",
     "zoektermLengthError": "Een zoekterm moet minimaal één teken lang zijn.",
+    "zoektermAlreadyExistsError": "Deze zoekterm bestaat al.",
     "automatischBoeken": {
       "noZoektermen": "Voeg een zoekterm toe die het systeem kan gebruiken om transacties automatisch af te letteren.",
       "duplicatesFound": "Deze zoekterm of combinatie van zoektermen is niet uniek. Automatisch afletteren is daarom niet mogelijk. Maak een unieke combinatie van zoektermen.",
@@ -37,8 +38,8 @@
       "deleteSuccess": "Bankrekening is verwijderd.",
       "updateSuccess": "Gegevens succesvol gewijzigd.",
       "deleteTitle": "Bankrekening verwijderen.",
-      "deleteQuestion": "Weet je zeker dat je bankrekening {{iban}} op naam van {{rekeninghouder}} wil verwijderen? Deze actie kan ongedaan worden gemaakt.",
-      "alreadyExistsError": "Dit bankrekeningnummer bestaat al bij deze burger."
+      "deleteQuestion": "Weet je zeker dat je bankrekening {{iban}} op naam van {{rekeninghouder}} wil verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
+      "alreadyExistsError": "Dit bankrekeningnummer wordt al gebruikt."
     },
     "burgers": {
       "deleteConfirmMessage": "Gegevens van {{name}} zijn verwijderd.",
@@ -72,11 +73,24 @@
     },
     "huishoudenBurger": {
       "noOptionsSelectedError": "Er zijn geen burgers gekozen. Kies minimaal een burger om toe te voegen aan dit huishouden.",
-      "addSuccess": "{{names}} is toegevoegd aan dit huishouden.",
-      "addSuccess_plural": "{{names}} zijn toegevoegd aan dit huishouden.",
+      "addSuccess_one": "{{names}} is toegevoegd aan dit huishouden.",
+      "addSuccess_other": "{{names}} zijn toegevoegd aan dit huishouden.",
       "deleteSuccess": "{{burgerName}} is verwijderd uit dit huishouden."
     },
     "noHuishoudenSearchResults": "Geen huishoudens gevonden. Gebruik een andere zoekterm.",
+    "postadressen": {
+      "createSuccess": "Postadres toegevoegd.",
+      "deleteSuccess": "Postadres verwijderd.",
+      "updateSuccess": "Postadres gewijzigd.",
+      "deleteTitle": "Postadres verwijderen",
+      "deleteQuestion": "Weet je zeker dat je dit postadres wil verwijderen?"
+    },
+    "afdelingen": {
+      "deleteSuccess": "Afdeling verwijderd.",
+      "createSuccessMessage": "Nieuwe afdeling succesvol opgeslagen.",
+      "updateSuccess": "Afdeling gewijzigd.",
+      "alreadyExistsError": "Deze afdeling bestaat al."
+    },
     "organisaties": {
       "createSuccessMessage": "Nieuwe organisatie succesvol opgeslagen.",
       "updateSuccessMessage": "Gegevens succesvol gewijzigd.",
@@ -86,14 +100,11 @@
       "invalidKvknummer": "Vul het KvK-nummer in. Het KvK-nummer bestaat uit 8 cijfers.",
       "invalidVestigingsnummer": "Vul het vestigingsnummer in. Het vestigingsnummer bestaat uit 12 cijfers.",
       "invalidNaam": "Vul de naam van de organisatie in.",
-      "invalidStraatnaam": "Vul de straatnaam in.",
-      "invalidHuisnummer": "Vul het huisnummer in.",
-      "invalidPostcode": "Vul een geldige postcode in. Invoer zonder spaties. Voorbeeld: 1234AB",
-      "invalidPlaatsnaam": "Vul de plaatsnaam in.",
       "addHint": "Voeg organisaties toe door te klikken op de knop {{buttonLabel}}.",
       "noSearchResults": "Geen organisaties gevonden. Gebruik een andere zoekterm.",
       "alreadyExists": "Er bestaat al een organisatie met dit KvK-nummer en vestigingsnummer."
     },
+    "deleteAfdelingSuccess": "Afdeling {{name}} succesvol verwijderd.",
     "backendError": "Er is een systeemfout opgetreden. Neem contact op met de applicatiebeheerder voor ondersteuning.",
     "genericToastErrorTitle": "Er is een fout opgetreden."
   },
@@ -118,11 +129,12 @@
       "undoAfletteren": "Afletteren ongedaan maken",
       "filter": "Filteren",
       "backToList": "Terug naar overzicht",
+      "viewBurgerHuishouden": "Bekijk huishouden",
       "brievenExport": "Exporteer gegevens voor brieven",
       "clearSearch": "Zoekopdracht wissen",
-      "options": "Opties",
       "showReports": "Bekijk rapportage",
       "back": "Terug",
+      "options": "Opties",
       "backToHome": "Terug naar de hoofdpagina",
       "clickToEdit": "Klik om te wijzigen"
     },
@@ -132,68 +144,35 @@
     "date": "Datum",
     "startDate": "Startdatum"
   },
-  "afspraken": {
-    "betaalrichting": "Betaalrichting",
-    "inkomsten": "Inkomsten",
-    "uitgaven": "Uitgaven",
-    "tegenrekening": "Tegenrekening",
-    "rubriek": "Rubriek",
-    "omschrijving": "Omschrijving",
-    "bedrag": "Bedrag",
-    "periodiek": "Periodiek",
-    "vervolgAfspraak": {
-      "title": "Vervolgafspraak toevoegen",
-      "zoektermenHelperText": "De volgende zoektermen worden overgenomen bij de vervolgafspraak:",
-      "betaalinstructieHelperText": "Let op: voor een vervolgafspraak moet een nieuwe betaalinstructie worden ingesteld."
-    },
-    "willEndOn": "Deze afspraak eindigt op {{date}}.",
-    "endedOn": "Deze afspraak is beëindigd per {{date}}.",
-    "planFollowup": "Vervolgafspraak toevoegen",
-    "zoektermen": "Zoektermen",
-    "zoekterm": "Zoekterm",
-    "showActive": "Actieve afspraken",
-    "showInActive": "Beëindigde afspraken",
-    "tegenpartij": "Tegenpartij",
-    "noResults": "Er zijn geen afspraken gevonden."
-  },
-  "afspraakDetailView": {
-    "invalidBetaalrichtingError": "Kies een betaalrichting.",
-    "invalidTegenrekeningError": "Kies een tegenrekening.",
-    "invalidRubriekError": "Kies een rubriek.",
-    "invalidOmschrijvingError": "Vul een omschrijving in.",
-    "invalidBedragError": "Vul een geldig bedrag in.",
-    "title": "Afspraak bekijken",
-    "section1": {
-      "title": "Partijen",
-      "helperText": "Burger en/of organisatie."
-    },
-    "section2": {
-      "title": "Betaling",
-      "helperText": "Gegevens over de betaling."
-    },
-    "section3": {
-      "title": "Afletteren",
-      "helperText": "Voeg zoektermen toe voor het automatisch afletteren van geïmporteerde banktransacties."
-    },
-    "betaalinstructie": {
-      "title": "Betaalinstructie",
-      "helperText": "Instellingen voor een betaalinstructie."
-    },
-    "noBetaalinstructie": "Er is geen betaalinstructie ingesteld."
-  },
   "forms": {
     "afspraken": {
+      "section1": {
+        "title": "Partijen",
+        "helperText": "Vul hier in met wie de afspraak wordt gemaakt."
+      },
+      "select": {
+        "noAfdelingenOptionsMessage": "Geen afdelingen gevonden.",
+        "noPostadressenOptionsMessage": "Geen postadressen gevonden.",
+        "noRekeningenOptionsMessage": "Geen rekeningen gevonden."
+      },
+      "section2": {
+        "title": "Betaling",
+        "helperText": "Vul hier de betaalgegevens in."
+      },
       "fields": {
-        "bankAccountChoose": "Kies een bankrekening",
         "rubriekChoose": "Kies een rubriek",
         "automatischGeboekt": "Automatisch afgeletterd",
         "handmatigGeboekt": "Handmatig afgeletterd",
         "ongeboekt": "Niet afgeletterd"
       },
       "titleCreate": "Afspraak toevoegen",
-      "title": "Tegenpartij en betaling",
-      "helperText": "Vul hier alle gegevens over de afspraak in.",
       "titleEdit": "Afspraak wijzigen"
+    },
+    "afspraak": {
+      "invalidOrganisatieError": "Kies een organisatie.",
+      "invalidAfdelingError": "Kies een afdeling.",
+      "invalidPostadresError": "Kies een postadres.",
+      "invalidRekeningError": "Kies een rekening."
     },
     "bankzaken": {
       "sections": {
@@ -288,6 +267,16 @@
         "confirmQuestion": "Weet je zeker dat je {{burgerName}} wil verwijderen uit het huishouden {{huishoudenName}}?"
       }
     },
+    "createAfdeling": {
+      "naam": "Naam",
+      "title": "Afdeling toevoegen"
+    },
+    "afdelingen": {
+      "deleteAfdeling": {
+        "title": "Afdeling verwijderen",
+        "confirmQuestion": "Weet je zeker dat je afdeling {{name}} wil verwijderen?"
+      }
+    },
     "createOrganisatie": {
       "title": "Organisatie toevoegen"
     },
@@ -296,10 +285,6 @@
         "organizational": {
           "title": "Organisatie",
           "helperText": "Vul de gegevens van de organisatie in."
-        },
-        "contact": {
-          "title": "Contact",
-          "helperText": "Vul de contactgegevens van de organisatie in."
         },
         "rekeningen": {
           "title": "Rekeningen",
@@ -310,20 +295,18 @@
         "kvknummer": "KvK-nummer",
         "vestigingsnummer": "Vestigingsnummer",
         "naam": "Bedrijfsnaam",
+        "kvkNumber": "KvK-nummer"
+      },
+      "tooltips": {
+        "kvknummer": "Het KvK-nummer bestaat uit acht cijfers. Voorbeeld: 27348329"
+      }
+    },
+    "postadressen": {
+      "fields": {
         "straatnaam": "Straatnaam",
         "huisnummer": "Huisnummer",
         "postcode": "Postcode",
-        "plaatsnaam": "Plaatsnaam",
-        "companyName": "Bedrijfsnaam",
-        "kvkNumber": "KvK-nummer",
-        "street": "Straatnaam",
-        "houseNumber": "Huisnummer",
-        "zipcode": "Postcode",
-        "city": "Plaatsnaam"
-      },
-      "tooltips": {
-        "kvknummer": "Het KvK-nummer bestaat uit acht cijfers. Voorbeeld: 27348329",
-        "postcode": "Invoer zonder spaties. Voorbeeld: 1234AB"
+        "plaatsnaam": "Plaatsnaam"
       }
     },
     "rekeningen": {
@@ -331,7 +314,66 @@
         "accountHolder": "Rekeninghouder",
         "iban": "IBAN"
       }
+    },
+    "generic": {
+      "fields": {
+        "noOptionsMessage": "Geen opties beschikbaar."
+      }
     }
+  },
+  "afspraken": {
+    "isAfspraakWithOrganisatie": "Partij",
+    "tegenrekening": "Tegenrekening",
+    "betaalrichting": "Betaalrichting",
+    "inkomsten": "Inkomsten",
+    "uitgaven": "Uitgaven",
+    "rubriek": "Rubriek",
+    "omschrijving": "Omschrijving",
+    "bedrag": "Bedrag",
+    "periodiek": "Periodiek",
+    "vervolgAfspraak": {
+      "title": "Vervolgafspraak toevoegen",
+      "zoektermenHelperText": "De volgende zoektermen worden overgenomen bij de vervolgafspraak:",
+      "betaalinstructieHelperText": "Let op: voor een vervolgafspraak moet een nieuwe betaalinstructie worden ingesteld."
+    },
+    "willEndOn": "Deze afspraak eindigt op {{date}}.",
+    "endedOn": "Deze afspraak is beëindigd per {{date}}.",
+    "planFollowup": "Vervolgafspraak toevoegen",
+    "zoektermen": "Zoektermen",
+    "zoekterm": "Zoekterm",
+    "showActive": "Actieve afspraken",
+    "showInActive": "Beëindigde afspraken",
+    "tegenpartij": "Tegenpartij",
+    "noResults": "Er zijn geen afspraken gevonden."
+  },
+  "organisatie": "Organisatie",
+  "burger": "Burger",
+  "afdeling": "Afdeling",
+  "postadres": "Postadres",
+  "afspraakDetailView": {
+    "invalidBetaalrichtingError": "Kies een betaalrichting.",
+    "invalidRubriekError": "Kies een rubriek.",
+    "invalidOmschrijvingError": "Vul een omschrijving in.",
+    "invalidBedragError": "Vul een geldig bedrag in.",
+    "title": "Afspraak bekijken",
+    "section1": {
+      "title": "Partijen",
+      "helperText": "Burger en/of organisatie."
+    },
+    "section2": {
+      "title": "Betaling",
+      "helperText": "Gegevens over de betaling."
+    },
+    "section3": {
+      "title": "Afletteren",
+      "helperText": "Voeg zoektermen toe voor het automatisch afletteren van geïmporteerde banktransacties."
+    },
+    "betaalinstructie": {
+      "title": "Betaalinstructie",
+      "helperText": "Instellingen voor een betaalinstructie."
+    },
+    "noBetaalinstructie": "Er is geen betaalinstructie ingesteld.",
+    "invalidNaamError": "Vul een naam voor de afdeling in."
   },
   "select": {
     "placeholder": "Kies een optie...",
@@ -390,7 +432,6 @@
     "confirmModalTitle": "Afspraak beëindigen",
     "confirmModalBody": "Vanaf welke datum wordt deze afspraak beëindigd?"
   },
-  "burger": "Burger",
   "exports": {
     "period": "Periode",
     "dateCreated": "Aanmaakdatum"
@@ -402,6 +443,18 @@
     },
     "rekeninghouder": {
       "generalError": "Vul een rekeninghouder in. De naam mag niet langer zijn dan 100 tekens."
+    },
+    "straatnaam": {
+      "generalError": "Vul een straatnaam in."
+    },
+    "huisnummer": {
+      "generalError": "Vul een huisnummer in."
+    },
+    "postcode": {
+      "generalError": "Vul een geldige Nederlandse postcode in."
+    },
+    "plaatsnaam": {
+      "generalError": "Vul een plaatsnaam in."
     }
   },
   "uploadCsmModal": {
@@ -493,9 +546,6 @@
     }
   },
   "backToBurgersList": "Terug naar alle burgers",
-  "actions": {
-    "viewBurgerHuishouden": "Bekijk huishouden"
-  },
   "sidebar": {
     "rapportage": "Rapportage",
     "huishoudens": "Huishoudens",
@@ -518,12 +568,14 @@
   "unknownHuishouden": "Onbekend huishouden",
   "unknownOrganisatie": "Onbekende organisatie",
   "unknownAfspraak": "Onbekende afspraak",
+  "unknownAfdeling": "Onbekende afdeling",
   "unknownBurgers": "Onbekende burgers",
   "unknownCsm": "Onbekend bankafschrift",
   "unknownCount": "een onbekend aantal",
   "unknownIban": "Onbekende IBAN",
   "unknownRekeninghouder": "Onbekende rekeninghouder",
   "unknownRubriek": "Onbekende rubriek",
+  "unknownPostadres": "Onbekend postadres",
   "auditLog": {
     "unknown": "Onbekende gebeurtenis",
     "viewOrganisatie": "{{gebruiker}} bekeek <linkOrganisatie>{{organisatie}}</linkOrganisatie>.",
@@ -542,6 +594,7 @@
     "viewExports": "{{gebruiker}} bekeek alle <strong>betaalinstructies</strong>.",
     "exportBrieven": "{{gebruiker}} exporteerde gegevens voor <linkBurger>{{burger}}</linkBurger>.",
     "viewConfiguraties": "{{gebruiker}} bekeek de <strong>configuratie</strong>.",
+    "viewRekening": "{{gebruiker}} bekeek rekening <strong>{{iban}}</strong> op naam van <strong>{{rekeninghouder}}</strong>.",
     "createBurger": "{{gebruiker}} voegde <linkBurger>{{burger}}</linkBurger> toe.",
     "updateBurger": "{{gebruiker}} wijzigde <linkBurger>{{burger}}</linkBurger>.",
     "deleteBurger": "{{gebruiker}} verwijderde <linkBurger>{{burger}}</linkBurger}}.",
@@ -571,10 +624,13 @@
     "startAutomatischBoeken": "{{gebruiker}} startte het afletteren van transacties.",
     "updateAfspraakBetaalinstructie": "{{gebruiker}} stelde een betaalinstructie in voor een <linkAfspraak>afspraak</linkAfspraak> met <linkBurger>{{burger}}</linkBurger>.",
     "createExportOverschrijvingen": "{{gebruiker}} creëerde betaalinstructies.",
-    "createOrganisatieRekening": "{{gebruiker}} voegde <strong>{{iban}}</strong> op naam van <strong>{{rekeninghouder}}</strong> toe aan <linkOrganisatie>{{organisatie}}</linkOrganisatie>.",
-    "deleteOrganisatieRekening": "{{gebruiker}} verwijderde <strong>{{iban}}</strong> op naam van <strong>{{rekeninghouder}}</strong> bij <linkOrganisatie>{{organisatie}}</linkOrganisatie>.",
     "addHuishoudenBurger": "{{gebruiker}} voegde <strong>{{listBurgers}}</strong> toe aan huishouden <linkHuishouden>{{huishouden}}</linkHuishouden>.",
-    "deleteHuishoudenBurger": "{{gebruiker}} verwijderde <strong>{{listBurgers}}</strong> uit huishouden <linkHuishouden>{{huishouden}}</linkHuishouden>."
+    "deleteHuishoudenBurger": "{{gebruiker}} verwijderde <strong>{{listBurgers}}</strong> uit huishouden <linkHuishouden>{{huishouden}}</linkHuishouden>.",
+    "createHuishouden": "{{gebruiker}} voegde een <linkHuishouden>huishouden</linkHuishouden> toe.",
+    "createAfdelingRekening": "{{gebruiker}} voegde <strong>{{iban}}</strong> op naam van <strong>{{rekeninghouder}}</strong> toe aan afdeling <linkAfdeling>{{afdeling}}</linkAfdeling>.",
+    "deleteAfdelingRekening": "{{gebruiker}} verwijderde <strong>{{iban}}</strong> op naam van <strong>{{rekeninghouder}}</strong> van afdeling <linkAfdeling>{{afdeling}}</linkAfdeling>.",
+    "createPostadres": "{{gebruiker}} voegde een postadres toe aan <linkAfdeling>{{afdeling}}</linkAfdeling>.",
+    "createAfdeling": "{{gebruiker}} voegde afdeling <linkAfdeling>{{afdeling}}</linkAfdeling> toe aan <linkAfdeling>{{afdeling}}</linkAfdeling>."
   },
   "unknownOs": "Onbekend besturingssysteem",
   "unknownBrowser": "Onbekende browser",
@@ -583,8 +639,20 @@
     "title": "Huishoudens"
   },
   "suggestion": "Suggestie",
+  "postadressen": "Postadressen",
+  "rekeningen": "Rekeningen",
+  "deleteAfspraakModal": {
+    "title": "Afdeling verwijderen",
+    "confirmModalBody": "Weet je zeker dat je de afdeling {{afdeling}} wil verwijderen?"
+  },
+  "afdelingen": "Afdelingen",
   "organizations": {
     "organizations": "Organisaties"
+  },
+  "modal": {
+    "updateAfdeling": {
+      "title": "Afdeling wijzigen"
+    }
   },
   "charts": {
     "inkomstenUitgaven": {
@@ -619,8 +687,8 @@
   "allBurgers": "Alle burgers",
   "interval": {
     "period": "Periode",
-    "month": "maand",
-    "month_plural": "maanden"
+    "month_one": "maand",
+    "month_other": "maanden"
   },
   "statuspage": {
     "title": "Status",

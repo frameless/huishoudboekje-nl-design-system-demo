@@ -6,9 +6,7 @@ import {CreateAfspraakMutationVariables, useCreateAfspraakMutation, useGetCreate
 import Queryable from "../../../utils/Queryable";
 import useHandleMutation from "../../../utils/useHandleMutation";
 import BackButton from "../../Layouts/BackButton";
-import {FormLeft, FormRight} from "../../Layouts/Forms";
 import Page from "../../Layouts/Page";
-import Section from "../../Layouts/Section";
 import PageNotFound from "../../PageNotFound";
 import AfspraakForm from "../AfspraakForm";
 import AfspraakFormContext, {AfspraakFormContextType} from "../EditAfspraak/context";
@@ -50,14 +48,9 @@ const CreateAfspraak: React.FC<{burgerId: number}> = ({burgerId}) => {
 
 			return (
 				<Page title={t("forms.afspraken.titleCreate")} backButton={<BackButton to={Routes.Burger(burgerId)} />}>
-					<Section direction={["column", "row"]}>
-						<FormLeft title={t("forms.afspraken.title")} helperText={t("forms.afspraken.helperText")} />
-						<FormRight spacing={5}>
-							<AfspraakFormContext.Provider value={ctxValue}>
-								<AfspraakForm burgerRekeningen={burger?.rekeningen || []} onChange={(data) => createAfspraak(data as CreateAfspraakMutationVariables["input"])} />
-							</AfspraakFormContext.Provider>
-						</FormRight>
-					</Section>
+					<AfspraakFormContext.Provider value={ctxValue}>
+						<AfspraakForm burgerRekeningen={burger?.rekeningen || []} onChange={(data) => createAfspraak(data as CreateAfspraakMutationVariables["input"])} />
+					</AfspraakFormContext.Provider>
 				</Page>
 			);
 		}} />

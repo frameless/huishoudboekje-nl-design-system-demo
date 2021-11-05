@@ -26,7 +26,7 @@ const CreateBurger = async (burger: Burger): Promise<Burger> => {
 		input: {bsn, voorletters, voornamen, achternaam, email, geboortedatum, huisnummer, plaatsnaam, postcode, straatnaam, telefoonnummer, rekeningen},
 	}).then((result) => {
 		const resultBurger = result.createBurger?.burger as Burger;
-		console.log(`Burger ${burgerName} toegevoegd.`);
+		console.log(`Burger ${burgerName} (${resultBurger.id}) toegevoegd.`);
 		return resultBurger;
 	});
 };

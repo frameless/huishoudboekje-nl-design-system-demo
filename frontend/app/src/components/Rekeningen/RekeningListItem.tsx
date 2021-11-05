@@ -19,7 +19,7 @@ import {
 import React, {useEffect, useRef} from "react";
 import {useInput, useToggle} from "react-grapple";
 import {useTranslation} from "react-i18next";
-import {Rekening, useUpdateRekeningMutation} from "../../generated/graphql";
+import {GetRekeningDocument, Rekening, useUpdateRekeningMutation} from "../../generated/graphql";
 import {formatIBAN, truncateText} from "../../utils/things";
 import useToaster from "../../utils/useToaster";
 import PrettyIban from "../Layouts/PrettyIban";
@@ -39,7 +39,11 @@ const RekeningListItem: React.FC<RekeningListItemProps> = ({rekening, onDelete, 
 		defaultValue: rekening.rekeninghouder,
 	});
 
-	const [updateRekening] = useUpdateRekeningMutation();
+	const [updateRekening] = useUpdateRekeningMutation({
+		refetchQueries: [
+			{query: GetRekeningDocument, variables: { id: rekening.id! }}
+		]
+	});
 
 	const onConfirmDeleteDialog = () => {
 		if (onDelete) {

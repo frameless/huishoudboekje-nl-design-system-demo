@@ -65,6 +65,16 @@ x-tests: &x-tests
     - -c
     - pytest tests
 
+x-resource-limit: &x-resource-limit
+  deploy:
+    resources:
+      limits:
+        cpus: '0.20'   #20% of a single core
+        memory: 250M  # 250mb of memory
+      reservations:
+        cpus: '0.05'  # 5% of a single core
+        memory: 100M  # 200mb of memory
+
 services:
   # Database
   db:
@@ -77,22 +87,42 @@ services:
       - 5432:5432
     restart: unless-stopped
 
-  # Database preparations
-  db-init:
-    image: postgres:13-alpine
-    command:
-      - /bin/sh
-      - -c
-      - >-
-        export PGPASSWORD=postgres &&
-        psql -h db -U postgres -c "CREATE USER hhb WITH PASSWORD 'hhb'" || true &&
-        psql -h db -U postgres -c "CREATE DATABASE huishoudboekjeservice" || true &&
-        psql -h db -U postgres -c "CREATE DATABASE organisatieservice" || true &&
-        psql -h db -U postgres -c "CREATE DATABASE banktransactieservice" || true &&
-        psql -h db -U postgres -c "CREATE DATABASE grootboekservice" || true &&
-        psql -h db -U postgres -c "CREATE DATABASE logservice" || true
-    depends_on:
-      - db
+  ## uncomment below for first execustion or database purge
+
+  # # Database preparations
+  # db-init:
+  #   image: postgres:13-alpine
+  #   command:
+  #     - /bin/sh
+  #     - -c
+  #     - >-
+  #       export PGPASSWORD=postgres &&
+  #       psql -h db -U postgres -c "CREATE USER hhb WITH PASSWORD 'hhb'" || true &&
+  #       psql -h db -U postgres -c "CREATE DATABASE huishoudboekjeservice" || true &&
+  #       psql -h db -U postgres -c "CREATE DATABASE organisatieservice" || true &&
+  #       psql -h db -U postgres -c "CREATE DATABASE banktransactieservice" || true &&
+  #       psql -h db -U postgres -c "CREATE DATABASE grootboekservice" || true &&
+  #       psql -h db -U postgres -c "CREATE DATABASE logservice" || true
+  #   depends_on:
+  #     - db
+
+  # # # Database teardown
+  # db-teardown:
+  #   image: postgres:13-alpine
+  #   command:
+  #     - /bin/sh
+  #     - -c
+  #     - >-
+  #       export PGPASSWORD=postgres &&
+  #       psql -h db -U postgres -c "drop database IF EXISTS huishoudboekjeservice" &&
+  #       psql -h db -U postgres -c "drop database IF EXISTS organisatieservice" &&
+  #       psql -h db -U postgres -c "drop database IF EXISTS banktransactieservice" &&
+  #       psql -h db -U postgres -c "drop database IF EXISTS grootboekservice" &&
+  #       psql -h db -U postgres -c "drop database IF EXISTS logservice" &&
+  #       psql -h db -U postgres -c "drop role IF EXISTS hhb"
+  #   depends_on:
+  #     - db
+
 
 #  # Frontend # Todo: super slow, doesn't work yet.
 #  frontend:
@@ -109,6 +139,7 @@ services:
 #      - npm install && npm start
 
   backend:
+    <<: *x-resource-limit
     <<: *x-backend
     environment:
       APP_SETTINGS: hhb_backend.config.DevelopmentConfig
@@ -129,10 +160,12 @@ services:
       - 5000:8000
 
   backend-test:
+    <<: *x-resource-limit
     <<: *x-backend
     <<: *x-tests
 
   huishoudboekjeservice:
+    <<: *x-resource-limit
     <<: *x-huishoudboekjeservice
     environment:
       HHB_DATABASE_URL: "postgresql://hhb:hhb@db/huishoudboekjeservice"
@@ -140,10 +173,12 @@ services:
       - 8001:8000
 
   huishoudboekjeservice-test:
+    <<: *x-resource-limit
     <<: *x-huishoudboekjeservice
     <<: *x-tests
 
   organisatieservice:
+    <<: *x-resource-limit
     <<: *x-organisatieservice
     environment:
       ORGANISATIE_DATABASE_URL: "postgresql://hhb:hhb@db/organisatieservice"
@@ -151,10 +186,12 @@ services:
       - 8002:8000
 
   organisatieservice-test:
+    <<: *x-resource-limit
     <<: *x-organisatieservice
     <<: *x-tests
 
   banktransactieservice:
+    <<: *x-resource-limit
     <<: *x-banktransactieservice
     environment:
       TRANSACTIE_DATABASE_URL: "postgresql://hhb:hhb@db/banktransactieservice"
@@ -162,10 +199,12 @@ services:
       - 8003:8000
 
   banktransactieservice-test:
+    <<: *x-resource-limit
     <<: *x-banktransactieservice
     <<: *x-tests
 
   grootboekservice:
+    <<: *x-resource-limit
     <<: *x-grootboekservice
     environment:
       GROOTBOEK_DATABASE_URL: "postgresql://hhb:hhb@db/grootboekservice"
@@ -173,10 +212,12 @@ services:
       - 8004:8000
 
   grootboekservice-test:
+    <<: *x-resource-limit
     <<: *x-organisatieservice
     <<: *x-tests
 
   logservice:
+    <<: *x-resource-limit
     <<: *x-logservice
     environment:
       LOG_DATABASE_URL: "postgresql://hhb:hhb@db/logservice"
@@ -184,5 +225,6 @@ services:
       - 8005:8000
 
   logservice-test:
+    <<: *x-resource-limit
     <<: *x-logservice
     <<: *x-tests

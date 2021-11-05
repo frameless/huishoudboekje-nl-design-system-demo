@@ -8,11 +8,7 @@ type OrganisatieFormData = CreateOrganisatieMutationVariables;
 const useOrganisatieForm = (organisatieData?: Partial<OrganisatieFormData>) => {
 	const initialData: OrganisatieFormData = {
 		naam: "",
-		kvkNummer: "",
-		straatnaam: "",
-		huisnummer: "",
-		postcode: "",
-		plaatsnaam: "",
+		kvknummer: "",
 		vestigingsnummer: "",
 	};
 

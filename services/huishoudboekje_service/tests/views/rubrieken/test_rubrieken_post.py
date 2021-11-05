@@ -2,7 +2,6 @@
 import json
 
 from models import Rubriek
-from models.organisatie import Organisatie
 
 
 def test_rubrieken_post_new_rubriek(client, session):

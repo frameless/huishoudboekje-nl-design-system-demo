@@ -29,10 +29,7 @@ export const GebruikersactiviteitFragment = gql`
                 ...Organisatie
             }
             afspraak {
-                id
-                organisatie {
-                    ...Organisatie
-                }
+                ...Afspraak
             }
             rekening {
                 id
@@ -47,7 +44,7 @@ export const GebruikersactiviteitFragment = gql`
                 }
             }
             configuratie {
-                id 
+                id
                 waarde
             }
             rubriek {
@@ -57,19 +54,30 @@ export const GebruikersactiviteitFragment = gql`
                     naam
                 }
             }
+            afdeling {
+                id
+                naam
+                organisatie {
+                    id
+                    naam
+                }
+            }
+            postadres {
+                id
+            }
         }
-#       snapshotBefore{
-#           burger{id}
-#           organisatie{id}
-#           afspraak{id}
-#           journaalpost{id}
-#       }
-#       snapshotAfter{
-#           burger{id}
-#           organisatie{id}
-#           afspraak{id}
-#           journaalpost{id}
-#       }
+        #       snapshotBefore{
+        #           burger{id}
+        #           organisatie{id}
+        #           afspraak{id}
+        #           journaalpost{id}
+        #       }
+        #       snapshotAfter{
+        #           burger{id}
+        #           organisatie{id}
+        #           afspraak{id}
+        #           journaalpost{id}
+        #       }
         meta {
             userAgent
             ip

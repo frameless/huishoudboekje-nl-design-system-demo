@@ -61,7 +61,9 @@ const AfspraakDetailMenu: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 			},
 		}).then(result => {
 			if (result.data?.updateAfspraak?.ok) {
-				t("endAfspraak.successMessage", {date: d(validThrough).format("L")});
+				toast({
+					success: t("endAfspraak.successMessage", {date: d(validThrough).format("L")}),
+				});
 				endModal.onClose();
 			}
 		});

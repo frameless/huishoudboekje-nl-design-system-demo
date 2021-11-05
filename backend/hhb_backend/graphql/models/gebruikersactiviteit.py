@@ -17,7 +17,8 @@ import hhb_backend.graphql.models.rekening as rekening
 import hhb_backend.graphql.models.rubriek as rubriek
 from hhb_backend.graphql.models.pageinfo import PageInfo
 import hhb_backend.graphql.models.huishouden as huishouden
-
+import hhb_backend.graphql.models.afdeling as afdeling
+import hhb_backend.graphql.models.postadres as postadres
 
 class GebruikersActiviteitMeta(graphene.ObjectType):
     userAgent = graphene.String()
@@ -42,6 +43,8 @@ class GebruikersActiviteitSnapshot(graphene.ObjectType):
     rubriek = graphene.Field(lambda: rubriek.Rubriek)
     transaction = graphene.Field(lambda: bank_transaction.BankTransaction)
     huishouden = graphene.Field(lambda: huishouden.Huishouden)
+    afdeling = graphene.Field(lambda: afdeling.Afdeling)
+    postadres = graphene.Field(lambda: postadres.Postadres)
 
     @classmethod
     def _resolve_snapshot(cls, root, entity_type: str, Model):
@@ -55,6 +58,15 @@ class GebruikersActiviteitSnapshot(graphene.ObjectType):
                     bad_key = str(e).split("'")[1]
                     value.pop(bad_key)
                     continue
+
+                
+    @classmethod
+    def resolve_afdeling(cls, root, _info):
+        return cls._resolve_snapshot(root, "afdeling", afdeling.Afdeling)
+
+    @classmethod
+    def resolve_postadres(cls, root, _info):
+        return cls._resolve_snapshot(root, "postadres", postadres.Postadres)
 
     @classmethod
     def resolve_afspraak(cls, root, _info):
@@ -70,9 +82,7 @@ class GebruikersActiviteitSnapshot(graphene.ObjectType):
 
     @classmethod
     def resolve_customer_statement_message(cls, root, _info):
-        return cls._resolve_snapshot(
-            root, "customer_statement_message", customer_statement_message.CustomerStatementMessage
-        )
+        return cls._resolve_snapshot(root, "customer_statement_message", customer_statement_message.CustomerStatementMessage)
 
     @classmethod
     def resolve_export(cls, root, _info):
@@ -107,6 +117,8 @@ class GebruikersActiviteitEntity(graphene.ObjectType):
     entityType = graphene.String()
     entityId = graphene.String()
 
+    afdeling = graphene.Field(lambda: afdeling.Afdeling)
+    postadres = graphene.Field(lambda: postadres.Postadres)
     afspraak = graphene.Field(lambda: afspraak.Afspraak)
     burger = graphene.Field(lambda: burger.Burger)
     configuratie = graphene.Field(lambda: configuratie.Configuratie)
@@ -124,6 +136,17 @@ class GebruikersActiviteitEntity(graphene.ObjectType):
     async def _resolve_entity(cls, root, entity_type: str, dataloader_name: str):
         if root.get("entityType") == entity_type:
             return await request.dataloader[dataloader_name].load(root.get("entityId"))
+    @classmethod
+    async def resolve_afdeling(cls, root, _info):
+        return await cls._resolve_entity(
+            root, entity_type="afdeling", dataloader_name="afdelingen_by_id"
+        )
+    
+    @classmethod
+    async def resolve_postadres(cls, root, _info):
+        return await cls._resolve_entity(
+            root, entity_type="postadres", dataloader_name="postadressen_by_id"
+        )
 
     @classmethod
     async def resolve_afspraak(cls, root, _info):

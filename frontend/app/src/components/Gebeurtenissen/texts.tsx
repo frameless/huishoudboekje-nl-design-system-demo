@@ -25,6 +25,7 @@ export const auditLogTexts = (values, components, action) => {
 		exports: () => <Trans i18nKey={"auditLog.viewExports"} values={values} components={components} />,
 		exportBrieven: () => <Trans i18nKey={"auditLog.exportBrieven"} values={values} components={components} />,
 		configuraties: () => <Trans i18nKey={"auditLog.viewConfiguraties"} values={values} components={components} />,
+		rekening: () => <Trans i18nKey={"auditLog.viewRekening"} values={values} components={components} />,
 
 		// Mutations
 		createBurger: () => <Trans i18nKey={"auditLog.createBurger"} values={values} components={components} />,
@@ -57,10 +58,13 @@ export const auditLogTexts = (values, components, action) => {
 		startAutomatischBoeken: () => <Trans i18nKey={"auditLog.startAutomatischBoeken"} values={values} components={components} />,
 		updateAfspraakBetaalinstructie: () => <Trans i18nKey={"auditLog.updateAfspraakBetaalinstructie"} values={values} components={components} />,
 		createExportOverschrijvingen: () => <Trans i18nKey={"auditLog.createExportOverschrijvingen"} values={values} components={components} />,
-		createOrganisatieRekening: () => <Trans i18nKey={"auditLog.createOrganisatieRekening"} values={values} components={components} />,
-		deleteOrganisatieRekening: () => <Trans i18nKey={"auditLog.deleteOrganisatieRekening"} values={values} components={components} />,
 		addHuishoudenBurger: () => <Trans i18nKey={"auditLog.addHuishoudenBurger"} values={values} components={components} />,
 		deleteHuishoudenBurger: () => <Trans i18nKey={"auditLog.deleteHuishoudenBurger"} values={values} components={components} />,
+		createHuishouden: () => <Trans i18nKey={"auditLog.createHuishouden"} values={values} components={components} />,
+		createAfdelingRekening: () => <Trans i18nKey={"auditLog.createAfdelingRekening"} values={values} components={components} />,
+		deleteAfdelingRekening: () => <Trans i18nKey={"auditLog.deleteAfdelingRekening"} values={values} components={components} />,
+		createPostadres: () => <Trans i18nKey={"auditLog.createPostadres"} values={values} components={components} />,
+		createAfdeling: () => <Trans i18nKey={"auditLog.createAfdeling"} values={values} components={components} />,
 	};
 
 	return texts[action];

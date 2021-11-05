@@ -15,17 +15,11 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import (
 
 class UpdateOrganisatie(graphene.Mutation):
     class Arguments:
-        # hhb_service elements
-        id = graphene.Int(required=True)
-        kvk_nummer = graphene.String()
-        vestigingsnummer = graphene.String()
-
         # org_service elements
+        id = graphene.Int(required=True)
+        kvknummer = graphene.String()
+        vestigingsnummer = graphene.String()
         naam = graphene.String()
-        straatnaam = graphene.String()
-        huisnummer = graphene.String()
-        postcode = graphene.String()
-        plaatsnaam = graphene.String()
 
     ok = graphene.Boolean()
     organisatie = graphene.Field(lambda: Organisatie)
@@ -49,26 +43,7 @@ class UpdateOrganisatie(graphene.Mutation):
         if not previous:
             raise GraphQLError("Organisatie not found")
 
-        orgineel_kvk_nummer = previous["kvk_nummer"]
-        previous["kvk_details"] = await hhb_dataloader().organisaties_kvk_details.load(
-            orgineel_kvk_nummer
-        )
-
-        hhb_service_data = {}
-        if "kvk_nummer" in kwargs:
-            hhb_service_data["kvk_nummer"] = kwargs["kvk_nummer"]
-        if "vestigingsnummer" in kwargs:
-            hhb_service_data["vestigingsnummer"] = kwargs["vestigingsnummer"]
-
-        Organisatie().unique_kvk_vestigingsnummer(kwargs.get("kvk_nummer"), kwargs.get("vestigingsnummer"), id)
-
-        # Try update of huishoudboekje service
-        hhb_service_response = requests.post(
-            f"{settings.HHB_SERVICES_URL}/organisaties/{id}",
-            json=hhb_service_data,
-        )
-        if hhb_service_response.status_code != 200:
-            raise GraphQLError(f"Upstream API responded: {hhb_service_response.text}")
+        Organisatie().unique_kvk_vestigingsnummer(kwargs.get("kvknummer"), kwargs.get("vestigingsnummer"), id)
 
         # Try update of organisatie service
         if kwargs:
@@ -78,10 +53,9 @@ class UpdateOrganisatie(graphene.Mutation):
             )
             if org_service_response.status_code != 200:
                 raise GraphQLError(
-                    f"Upstream API responded: {org_service_response.text}"
+                    f"Upstream API responded: {org_service_response}"
                 )
 
-        organisatie = hhb_service_response.json()["data"]
-        organisatie["kvk_details"] = org_service_response.json()["data"]
+            organisatie = org_service_response.json()["data"]
 
         return UpdateOrganisatie(organisatie=organisatie, previous=previous, ok=True)

@@ -2,21 +2,21 @@ import {Table, TableProps, Tbody, Th, Thead, Tr} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {
+	Afdeling,
 	Burger,
 	GetBurgerDocument,
 	GetBurgersDocument,
 	GetOrganisatieDocument,
 	GetOrganisatiesDocument,
-	Organisatie,
 	Rekening,
+	useDeleteAfdelingRekeningMutation,
 	useDeleteBurgerRekeningMutation,
-	useDeleteOrganisatieRekeningMutation,
 } from "../../generated/graphql";
 import useToaster from "../../utils/useToaster";
 import RekeningListItem from "./RekeningListItem";
 
-type RekeningListProps = {rekeningen: Rekening[], burger?: Burger, organisatie?: Organisatie};
-const RekeningList: React.FC<TableProps & RekeningListProps> = ({rekeningen, burger, organisatie, ...props}) => {
+type RekeningListProps = {rekeningen: Rekening[], burger?: Burger, afdeling?: Afdeling};
+const RekeningList: React.FC<TableProps & RekeningListProps> = ({rekeningen, burger, afdeling, ...props}) => {
 	const {t} = useTranslation();
 	const toast = useToaster();
 	const [deleteBurgerRekening] = useDeleteBurgerRekeningMutation({
@@ -25,10 +25,10 @@ const RekeningList: React.FC<TableProps & RekeningListProps> = ({rekeningen, bur
 			{query: GetBurgerDocument, variables: {id: burger?.id}},
 		],
 	});
-	const [deleteOrganisatieRekening] = useDeleteOrganisatieRekeningMutation({
+	const [deleteAfdelingRekening] = useDeleteAfdelingRekeningMutation({
 		refetchQueries: [
 			{query: GetOrganisatiesDocument},
-			{query: GetOrganisatieDocument, variables: {id: organisatie?.id}},
+			{query: GetOrganisatieDocument, variables: {id: afdeling?.id}},
 		],
 	});
 
@@ -51,9 +51,9 @@ const RekeningList: React.FC<TableProps & RekeningListProps> = ({rekeningen, bur
 		}
 	};
 
-	const onDeleteOrganisatieRekening = (id?: number, orgId?: number) => {
-		if (id && orgId) {
-			handleMutation(deleteOrganisatieRekening({variables: {id, orgId}}));
+	const onDeleteAfdelingRekening = (rekeningId?: number, afdelingId?: number) => {
+		if (rekeningId && afdelingId) {
+			handleMutation(deleteAfdelingRekening({variables: {id: rekeningId, afdelingId}}));
 		}
 	};
 
@@ -74,8 +74,8 @@ const RekeningList: React.FC<TableProps & RekeningListProps> = ({rekeningen, bur
 				{rekeningen.map((r, i) => (
 					<RekeningListItem key={i} rekening={r} {...burger && {
 						onDelete: () => onDeleteBurgerRekening(r.id, burger.id),
-					}} {...organisatie && {
-						onDelete: () => onDeleteOrganisatieRekening(r.id, organisatie.id),
+					}} {...afdeling && {
+						onDelete: () => onDeleteAfdelingRekening(r.id, afdeling.id),
 					}} />
 				))}
 			</Tbody>

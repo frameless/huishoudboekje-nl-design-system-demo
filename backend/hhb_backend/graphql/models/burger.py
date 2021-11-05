@@ -14,21 +14,23 @@ class Burger(graphene.ObjectType):
     """ GraphQL Burger model """
     id = graphene.Int()
     bsn = graphene.Int()
-    telefoonnummer = graphene.String()
-    email = graphene.String()
-    geboortedatum = graphene.String()
-    iban = graphene.String(deprecation_reason="Please use 'rekeningen'")
-    achternaam = graphene.String()
-    huisnummer = graphene.String()
-    postcode = graphene.String()
-    straatnaam = graphene.String()
     voorletters = graphene.String()
     voornamen = graphene.String()
+    achternaam = graphene.String()
+    geboortedatum = graphene.String()
+    
+    telefoonnummer = graphene.String()
+    email = graphene.String()
+
+    straatnaam = graphene.String()
+    huisnummer = graphene.String()
+    postcode = graphene.String()
     plaatsnaam = graphene.String()
+    
     rekeningen = graphene.List(lambda: rekening.Rekening)
     afspraken = graphene.List(lambda: afspraak.Afspraak)
-    gebruikersactiviteiten = graphene.List(lambda: gebruikersactiviteit.GebruikersActiviteit)
     huishouden = graphene.Field(lambda: huishouden.Huishouden)
+    gebruikersactiviteiten = graphene.List(lambda: gebruikersactiviteit.GebruikersActiviteit)
 
     def resolve_iban(root, info):
         rekeningen = Burger.resolve_rekeningen(root, info)

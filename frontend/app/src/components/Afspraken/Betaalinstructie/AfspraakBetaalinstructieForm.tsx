@@ -100,7 +100,7 @@ const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({
 													byMonth: [d(value).month() + 1],
 													byMonthDay: [d(value).date()],
 													startDate: d(value).format("YYYY-MM-DD"),
-													endDate: d(value).add(1, "day").format("YYYY-MM-DD"),
+													endDate: d(value).format("YYYY-MM-DD"),
 												}));
 											}
 										}} customInput={<Input type="text" />} />

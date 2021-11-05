@@ -5,17 +5,17 @@ from flask import Flask, Response
 
 from huishoudboekje_service.views import (
     BurgerView,
-    OrganisatieView,
     AfspraakView,
     RekeningView,
     RekeningBurgerView,
-    RekeningOrganisatieView,
+    RekeningAfdelingView,
     JournaalpostView,
     RubriekView,
     ConfiguratieView,
     OverschrijvingView,
     ExportView,
     HuishoudenView,
+    AfdelingView,
 )
 from core_service import database
 
@@ -41,10 +41,6 @@ def create_app(config_name=os.getenv('APP_SETTINGS', 'huishoudboekje_service.con
         {"path": "/burgers/<object_id>", "view": BurgerView, "name": "burger_detail_view"},
         {"path": "/burgers/<object_id>/rekeningen", "view": RekeningBurgerView,
          "name": "burger_rekeningen_view"},
-        {"path": "/organisaties", "view": OrganisatieView, "name": "organisatie_view"},
-        {"path": "/organisaties/<object_id>", "view": OrganisatieView, "name": "organisatie_detail_view"},
-        {"path": "/organisaties/<object_id>/rekeningen", "view": RekeningOrganisatieView,
-         "name": "organisatie_rekeningen_view"},
         {"path": "/afspraken", "view": AfspraakView, "name": "afspraak_view"},
         {"path": "/afspraken/<object_id>", "view": AfspraakView, "name": "afspraak_detail_view"},
         {"path": "/rekeningen", "view": RekeningView, "name": "rekening_view"},
@@ -61,6 +57,10 @@ def create_app(config_name=os.getenv('APP_SETTINGS', 'huishoudboekje_service.con
         {"path": "/export/<object_id>", "view": ExportView, "name": "export_detail_view"},
         {"path": "/huishoudens", "view": HuishoudenView, "name": "huishouden_view"},
         {"path": "/huishoudens/<object_id>", "view": HuishoudenView, "name": "huishouden_detail_view"},
+        {"path": "/afdelingen", "view": AfdelingView, "name": "afdeling_view"},
+        {"path": "/afdelingen/<object_id>", "view": AfdelingView, "name": "afdeling_detail_view"},
+        {"path": "/afdelingen/<object_id>/rekeningen", "view": RekeningAfdelingView,
+         "name": "afdeling_rekeningen_view"},
     ]
     for route in routes:
         app.add_url_rule(

@@ -12,7 +12,7 @@ class Rekening(db.Model):
     rekeninghouder = Column(String(length=100), nullable=False)
 
     burgers = relationship("RekeningBurger", back_populates="rekening")
-    organisaties = relationship("RekeningOrganisatie", back_populates="rekening")
+    afdelingen = relationship("RekeningAfdeling", back_populates="rekening")
     afspraken = relationship("Afspraak", back_populates="tegen_rekening")
 
     @classmethod

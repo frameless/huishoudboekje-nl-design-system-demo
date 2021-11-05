@@ -2,9 +2,6 @@ import pytest
 import requests_mock
 from requests_mock import Adapter
 
-from hhb_backend.graphql import settings
-from tests import post_echo
-
 
 class MockResponse():
     history = None

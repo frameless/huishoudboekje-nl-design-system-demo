@@ -39,18 +39,16 @@ def test_afspraak_resolvers(client):
     ],
     "except_dates": []
 },
-            'organisatie_id': 1,
             'journaalposten': [1, 2]
 
         }]})
         rm.get(f"{settings.HHB_SERVICES_URL}/rubrieken/", json={'data': [{'id': 1}]})
         rm.get(f"{settings.HHB_SERVICES_URL}/burgers/", json={'data': [{'id': 1}]})
         rm.get(f"{settings.HHB_SERVICES_URL}/rekeningen/", json={'data': [{'id': 1}]})
-        rm.get(f"{settings.HHB_SERVICES_URL}/organisaties/", json={'data': [{'id': 1}]})
         rm.get(f"{settings.HHB_SERVICES_URL}/journaalposten/", json={'data': [{'id': 1}, {'id': 2}]})
         response = client.post(
             "/graphql",
-            data='{"query": "{ afspraak(id:1) { rubriek { id } burger { id } tegenRekening { id } organisatie { id } journaalposten { id } validFrom validThrough betaalinstructie { byMonthDay endDate startDate exceptDates }} }"}',
+            data='{"query": "{ afspraak(id:1) { rubriek { id } burger { id } tegenRekening { id } journaalposten { id } validFrom validThrough betaalinstructie { byMonthDay endDate startDate exceptDates }} }"}',
             content_type='application/json'
         )
         assert response.json == {'data': {'afspraak': {'betaalinstructie': {'byMonthDay': [1],
@@ -59,7 +57,6 @@ def test_afspraak_resolvers(client):
                                             'startDate': '2020-01-01'},
                        'burger': {'id': 1},
                        'journaalposten': [{'id': 1}, {'id': 2}],
-                       'organisatie': {'id': 1},
                        'rubriek': {'id': 1},
                        'tegenRekening': {'id': 1},
                        'validFrom': '2020-10-01',

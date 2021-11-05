@@ -32,7 +32,7 @@ paths:
     post:
       description: Voeg nieuw organisatie toe
       parameters:
-        - name: kvk_nummer
+        - name: kvknummer
           required: true
           in: query
           schema:
@@ -75,7 +75,7 @@ paths:
         '5XX':
           description: Unexpected error.
 
-  /organisaties/<kvk_nummer/:
+  /organisaties/<kvknummer/:
     get:
       description: Data van enkele organisatie
       responses:
@@ -99,7 +99,7 @@ paths:
     delete:
       description: Verwijder organisatie uit organisatie service
       parameters:
-        - name: kvk_nummer
+        - name: kvknummer
           required: true
           in: query
           schema:
@@ -123,7 +123,7 @@ components:
         naam:
           type: string
           example: "Test Organisatie"
-        kvk_nummer:
+        kvknummer:
           type: integer
           example: 12345        
         straatnaam:
