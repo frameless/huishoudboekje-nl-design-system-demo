@@ -1,7 +1,23 @@
 # Huishoudboekje
 
-## Development
+## Notice for Windows users:
+We use symbolic links to include logic from the `core_service` into other services. 
+Git can automatically create symlinks, though on Windows, you need to make sure you have some configuration set.
 
+```bash
+git config core.symlinks true
+```
+
+Also, all files work with Line Feed (LF) line endings. Windows works with Carriage Return Line Feed (CRLF) line endings by default, so we need to change a setting in Git.
+Just run these commands and you're good to go.
+
+```bash
+git config core.autocrlf false
+git config core.eol lf
+```
+
+
+## Development
 The frontend component requires the latest version of Node.js.
 
 - `npm install` will install all dependencies that are required to run the app.
@@ -14,14 +30,6 @@ The frontend component requires the latest version of Node.js.
 ### Windows
 - To install a theme, copy any theme from `../theme/{yourThemeName}` to `public/theme`. The default theme is `../theme/sloothuizen`.
 - `npm start --ignore-scripts` runs the application in development mode, without the prestart script, as this is currently only working on Unix based CLIs. 
-
-
-Command to run before pulling:
-```bash
-git config core.autocrlf false
-git config core.eol lf
-git config core.symlinks true
-```
 
 Please note that for ESLint to work, you will need to put the following lines in your `.env` file:
 
