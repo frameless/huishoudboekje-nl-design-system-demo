@@ -1,6 +1,5 @@
 import {objectType} from "nexus";
-import AfsprakenLoader from "../dataloaders/afspraken";
-import Afspraak from "./Afspraak";
+import DataLoader from "../dataloaders/dataloader";
 
 const Burger = objectType({
 	name: "Burger",
@@ -22,11 +21,47 @@ const Burger = objectType({
 		t.string("huisnummer");
 		t.string("postcode");
 		t.string("plaatsnaam");
-		t.list.field("afspraken", {
-			type: Afspraak,
+		t.list.field("rekeningen", {
+			type: "Rekening",
 			resolve: (root, args, ctx) => {
 				const {id} = root;
-				return AfsprakenLoader.findAllByBurgerId(id);
+
+				if (!id) {
+					return [];
+				}
+
+				return DataLoader.getRekeningenByBurgerId(id);
+			},
+		});
+		t.list.field("afspraken", {
+			type: "Afspraak",
+			resolve: (root, args, ctx) => {
+				const {id} = root;
+
+				if (!id) {
+					return [];
+				}
+
+				return DataLoader.getAfsprakenByBurgerId(id);
+			},
+		});
+		t.list.field("banktransacties", {
+			type: "Banktransactie",
+			resolve: async (root, args, ctx) => {
+				const {id} = root;
+
+				if (!id) {
+					return [];
+				}
+
+				const transacties = await DataLoader.getBanktransactiesByBurgerId(id);
+				return transacties.map(t => ({
+					...t,
+					informationToAccountOwner: t.information_to_account_owner,
+					isCredit: t.is_credit,
+					tegenrekeningIban: t.tegen_rekening,
+					transactiedatum: t.transactie_datum
+				}))
 			},
 		});
 	},

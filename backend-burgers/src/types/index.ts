@@ -1,22 +1,24 @@
 import {objectType} from "nexus";
-import Afspraak from "../models/Afspraak";
-import Burger from "../models/Burger";
+import * as models from "../models";
 import burger from "../queries/burger";
-import burgers from "../queries/burgers";
+import BedragScalar from "./Bedrag";
+import DayOfWeek from "./DayOfWeek";
+import JSONScalar from "./JSONScalar";
 
 const Query = objectType({
 	name: "Query",
 	description: "GraphQL Query",
 	definition: t => {
-		burgers(t);
 		burger(t);
 	},
 });
 
 const types = {
+	DayOfWeek,
+	BedragScalar,
+	JSONScalar,
 	Query,
-	Burger,
-	Afspraak,
+	...models,
 };
 
 export default types;

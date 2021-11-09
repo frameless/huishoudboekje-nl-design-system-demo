@@ -1,22 +1,27 @@
 import {config} from "dotenv";
+
 config();
 
-const getHuishoudboekjeserviceUrl = () => {
-	const defaultUrl = "http://localhost:8000";
-	let url = process.env.HUISHOUDBOEKJESERVICE_URL;
+export type AvailableServices = "huishoudboekje" | "organisaties" | "banktransacties";
+
+const getServiceUrl = (envName: string, defaultUrl: string) => {
+	let url = process.env[envName];
+
 	if (!url) {
-		console.warn(`HUISHOUDBOEKJESERVICE_URL not set. Assuming Huishoudboekjeservice it is running on ${defaultUrl}.`);
+		console.warn(`${envName} not set. Assuming it is running on ${defaultUrl}.`);
 		url = defaultUrl;
 	}
 
 	return url;
 };
 
-const services = {
-	burgers: getHuishoudboekjeserviceUrl(),
+const services: Record<AvailableServices, string> = {
+	huishoudboekje: getServiceUrl("HUISHOUDBOEKJESERVICE_URL", "http://localhost:8001"),
+	organisaties: getServiceUrl("ORGANISATIESERVICE_URL", "http://localhost:8002"),
+	banktransacties: getServiceUrl("BANKTRANSACTIESERVICE_URL", "http://localhost:8003"),
 };
 
-export const createServiceUrl = (serviceName: string, endpoint: string) => {
+export const createServiceUrl = (serviceName: AvailableServices, endpoint: string) => {
 	return services[serviceName] + endpoint;
 };
 

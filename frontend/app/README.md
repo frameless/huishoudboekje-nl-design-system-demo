@@ -15,6 +15,14 @@ The frontend component requires the latest version of Node.js.
 - To install a theme, copy any theme from `../theme/{yourThemeName}` to `public/theme`. The default theme is `../theme/sloothuizen`.
 - `npm start --ignore-scripts` runs the application in development mode, without the prestart script, as this is currently only working on Unix based CLIs. 
 
+
+Command to run before pulling:
+```bash
+git config core.autocrlf false
+git config core.eol lf
+git config core.symlinks true
+```
+
 Please note that for ESLint to work, you will need to put the following lines in your `.env` file:
 
 ```bash

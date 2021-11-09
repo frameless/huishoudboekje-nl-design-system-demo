@@ -1,0 +1,35 @@
+fragment Burger on Burger {
+    id
+    voorletters
+    achternaam
+    afspraken {
+        id
+        omschrijving
+        bedrag
+        credit
+        betaalinstructie{
+            byDay
+            byMonth
+            byMonthDay
+            startDate
+            endDate
+            exceptDates
+            repeatFrequency
+        }
+        validFrom
+        validThrough
+        afdeling
+        tegenRekening
+    }
+    rekeningen {
+        id
+        iban
+        rekeninghouder
+    }
+}
+
+query x{
+    burger(id:2) {
+        ...Burger
+    }
+}

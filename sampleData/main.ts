@@ -33,8 +33,8 @@ const main = async () => {
 		await LoadConfiguraties();
 		await LoadRubrieken();
 		await LoadOrganisaties();
-		await LoadBurgers();
-		await LoadHuishoudens();
+		// await LoadBurgers();
+		// await LoadHuishoudens();
 	}
 	catch (err) {
 		console.log(err);

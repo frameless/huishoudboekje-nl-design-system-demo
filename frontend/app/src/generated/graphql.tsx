@@ -151,8 +151,6 @@ export type Burger = {
   gebruikersactiviteiten?: Maybe<Array<Maybe<GebruikersActiviteit>>>;
   huishouden?: Maybe<Huishouden>;
   huisnummer?: Maybe<Scalars['String']>;
-  /** @deprecated Please use 'rekeningen' */
-  iban?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['Int']>;
   plaatsnaam?: Maybe<Scalars['String']>;
   postcode?: Maybe<Scalars['String']>;
@@ -1788,6 +1786,11 @@ export type GetOrganisatiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetOrganisatiesQuery = { organisaties?: Array<{ id?: number | null | undefined, naam?: string | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, afdelingen?: Array<{ id?: number | null | undefined, naam?: string | null | undefined, organisatie?: { id?: number | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, naam?: string | null | undefined } | null | undefined, postadressen?: Array<{ id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined> | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined> | null | undefined } | null | undefined> | null | undefined };
+
+export type GetSimpleOrganisatiesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetSimpleOrganisatiesQuery = { organisaties?: Array<{ id?: number | null | undefined, naam?: string | null | undefined } | null | undefined> | null | undefined };
 
 export type GetRekeningQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -4264,6 +4267,41 @@ export function useGetOrganisatiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOp
 export type GetOrganisatiesQueryHookResult = ReturnType<typeof useGetOrganisatiesQuery>;
 export type GetOrganisatiesLazyQueryHookResult = ReturnType<typeof useGetOrganisatiesLazyQuery>;
 export type GetOrganisatiesQueryResult = Apollo.QueryResult<GetOrganisatiesQuery, GetOrganisatiesQueryVariables>;
+export const GetSimpleOrganisatiesDocument = gql`
+    query getSimpleOrganisaties {
+  organisaties {
+    id
+    naam
+  }
+}
+    `;
+
+/**
+ * __useGetSimpleOrganisatiesQuery__
+ *
+ * To run a query within a React component, call `useGetSimpleOrganisatiesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetSimpleOrganisatiesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetSimpleOrganisatiesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetSimpleOrganisatiesQuery(baseOptions?: Apollo.QueryHookOptions<GetSimpleOrganisatiesQuery, GetSimpleOrganisatiesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetSimpleOrganisatiesQuery, GetSimpleOrganisatiesQueryVariables>(GetSimpleOrganisatiesDocument, options);
+      }
+export function useGetSimpleOrganisatiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetSimpleOrganisatiesQuery, GetSimpleOrganisatiesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetSimpleOrganisatiesQuery, GetSimpleOrganisatiesQueryVariables>(GetSimpleOrganisatiesDocument, options);
+        }
+export type GetSimpleOrganisatiesQueryHookResult = ReturnType<typeof useGetSimpleOrganisatiesQuery>;
+export type GetSimpleOrganisatiesLazyQueryHookResult = ReturnType<typeof useGetSimpleOrganisatiesLazyQuery>;
+export type GetSimpleOrganisatiesQueryResult = Apollo.QueryResult<GetSimpleOrganisatiesQuery, GetSimpleOrganisatiesQueryVariables>;
 export const GetRekeningDocument = gql`
     query getRekening($id: Int!) {
   rekening(id: $id) {
