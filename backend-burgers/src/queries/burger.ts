@@ -1,4 +1,4 @@
-import {intArg} from "nexus";
+import {intArg, list} from "nexus";
 import DataLoader from "../dataloaders/dataloader";
 import Burger from "../models/Burger";
 import {isDev} from "../utils/things";
@@ -14,16 +14,26 @@ const burger = (t) => {
 		},
 	});
 
-	if(!isDev) {
+	if (!isDev) {
 		return;
 	}
 
 	/* Fields below here are only available when an envvar NODE_ENV="development". */
 
 	t.list.field("burgers", {
-		type: Burger,
+		type: "Burger",
 		resolve: (root, args) => {
 			return DataLoader.getAllBurgers();
+		},
+	});
+
+	t.list.field("organisaties", {
+		type: "Organisatie",
+		args: {
+			ids: list(intArg()),
+		},
+		resolve: (root, args) => {
+			return DataLoader.getOrganisatiesById(args.ids);
 		},
 	});
 };

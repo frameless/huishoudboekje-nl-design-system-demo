@@ -4,7 +4,9 @@ const Organisatie = objectType({
 	name: "Organisatie",
 	definition: t => {
 		t.int("id");
-		t.int("naam");
+		t.string("naam");
+		t.string("kvknummer");
+		t.string("vestigingsnummer");
 	},
 });
 

@@ -85,13 +85,16 @@ type Journaalpost {
 
 type Organisatie {
   id: Int
-  naam: Int
+  kvknummer: String
+  naam: String
+  vestigingsnummer: String
 }
 
 """GraphQL Query"""
 type Query {
   burger(id: Int): Burger
   burgers: [Burger]
+  organisaties(ids: [Int]): [Organisatie]
 }
 
 """"""

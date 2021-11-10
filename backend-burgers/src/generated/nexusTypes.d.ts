@@ -75,7 +75,9 @@ export interface NexusGenObjects {
   }
   Organisatie: { // root type
     id?: number | null; // Int
-    naam?: number | null; // Int
+    kvknummer?: string | null; // String
+    naam?: string | null; // String
+    vestigingsnummer?: string | null; // String
   }
   Query: {};
   Rekening: { // root type
@@ -150,11 +152,14 @@ export interface NexusGenFieldTypes {
   }
   Organisatie: { // field return type
     id: number | null; // Int
-    naam: number | null; // Int
+    kvknummer: string | null; // String
+    naam: string | null; // String
+    vestigingsnummer: string | null; // String
   }
   Query: { // field return type
     burger: NexusGenRootTypes['Burger'] | null; // Burger
     burgers: Array<NexusGenRootTypes['Burger'] | null> | null; // [Burger]
+    organisaties: Array<NexusGenRootTypes['Organisatie'] | null> | null; // [Organisatie]
   }
   Rekening: { // field return type
     iban: string | null; // String
@@ -218,11 +223,14 @@ export interface NexusGenFieldTypeNames {
   }
   Organisatie: { // field return type name
     id: 'Int'
-    naam: 'Int'
+    kvknummer: 'String'
+    naam: 'String'
+    vestigingsnummer: 'String'
   }
   Query: { // field return type name
     burger: 'Burger'
     burgers: 'Burger'
+    organisaties: 'Organisatie'
   }
   Rekening: { // field return type name
     iban: 'String'
@@ -235,6 +243,9 @@ export interface NexusGenArgTypes {
   Query: {
     burger: { // args
       id?: number | null; // Int
+    }
+    organisaties: { // args
+      ids?: Array<number | null> | null; // [Int]
     }
   }
 }

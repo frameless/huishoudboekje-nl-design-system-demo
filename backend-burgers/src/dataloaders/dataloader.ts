@@ -85,8 +85,12 @@ const DataLoader = {
 	},
 
 	// Organisatie (Organisatieservice)
-	getOrganisatieById: async (organisatieId: number) => {
-		throw new Error("Not implemented.");
+	getOrganisatiesById: async (ids?: number[]) => {
+		let filters = "";
+		if (ids && ids.length > 0) {
+			filters = `?filter_ids=${ids.join(",")}`;
+		}
+		return await fetch(createServiceUrl("organisaties", `/organisaties` + filters)).then(r => r.json()).then(r => r.data || []);
 	},
 
 	// Betaalinstructie (Huishoudboekjeservice)
