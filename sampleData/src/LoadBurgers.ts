@@ -56,6 +56,7 @@ const LoadBurgers = async () => {
 			const postadresId: string = afdeling?.postadressen?.[0]?.id!;
 
 			if(afdeling && !postadresId){
+				console.log({afdelingId, postadresId});
 				throw new Error("(!) De afdeling voor deze afspraak heeft geen postadres.")
 			}
 
