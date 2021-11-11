@@ -85,6 +85,7 @@ x-resource-limit: &x-resource-limit
 services:
   # Database
   db:
+    container_name: database
     image: postgres:13-alpine
     environment:
       POSTGRES_USER: postgres
@@ -96,41 +97,23 @@ services:
 
   # Database preparations
   db-init:
-   image: postgres:13-alpine
-   command:
-     - /bin/sh
-     - -c
-     - >-
-       export PGPASSWORD=postgres &&
-       psql -h db -U postgres -c "CREATE USER hhb WITH PASSWORD 'hhb'" || true &&
-       psql -h db -U postgres -c "CREATE DATABASE huishoudboekjeservice" || true &&
-       psql -h db -U postgres -c "CREATE DATABASE organisatieservice" || true &&
-       psql -h db -U postgres -c "CREATE DATABASE banktransactieservice" || true &&
-       psql -h db -U postgres -c "CREATE DATABASE grootboekservice" || true &&
-       psql -h db -U postgres -c "CREATE DATABASE logservice" || true
-   profiles:
-     - db
-   depends_on:
-     - db
-
-   # Database teardown
-  db-teardown:
-   image: postgres:13-alpine
-   command:
-     - /bin/sh
-     - -c
-     - >-
-       export PGPASSWORD=postgres &&
-       psql -h db -U postgres -c "drop database IF EXISTS huishoudboekjeservice" &&
-       psql -h db -U postgres -c "drop database IF EXISTS organisatieservice" &&
-       psql -h db -U postgres -c "drop database IF EXISTS banktransactieservice" &&
-       psql -h db -U postgres -c "drop database IF EXISTS grootboekservice" &&
-       psql -h db -U postgres -c "drop database IF EXISTS logservice" &&
-       psql -h db -U postgres -c "drop role IF EXISTS hhb"
-   profiles:
-     - db
-   depends_on:
-     - db
+    container_name: database_init
+    image: postgres:13-alpine
+    command:
+      - /bin/sh
+      - -c
+      - >-
+        export PGPASSWORD=postgres &&
+        psql -h db -U postgres -c "CREATE USER hhb WITH PASSWORD 'hhb'" || true &&
+        psql -h db -U postgres -c "CREATE DATABASE huishoudboekjeservice" || true &&
+        psql -h db -U postgres -c "CREATE DATABASE organisatieservice" || true &&
+        psql -h db -U postgres -c "CREATE DATABASE banktransactieservice" || true &&
+        psql -h db -U postgres -c "CREATE DATABASE grootboekservice" || true &&
+        psql -h db -U postgres -c "CREATE DATABASE logservice" || true
+    profiles:
+      - db
+    depends_on:
+      - db
 
 #  # Frontend # Todo: super slow, doesn't work yet.
 #  frontend:
@@ -149,6 +132,7 @@ services:
   backend:
     <<: *x-resource-limit
     <<: *x-backend
+    container_name: backend
     environment:
       APP_SETTINGS: hhb_backend.config.DevelopmentConfig
 #     AUTH_AUDIENCE: None
@@ -193,6 +177,7 @@ services:
   huishoudboekjeservice:
     <<: *x-resource-limit
     <<: *x-huishoudboekjeservice
+    container_name: huishoudboekjeservice
     environment:
       HHB_DATABASE_URL: "postgresql://hhb:hhb@db/huishoudboekjeservice"
     ports:
@@ -206,6 +191,7 @@ services:
   organisatieservice:
     <<: *x-resource-limit
     <<: *x-organisatieservice
+    container_name: organisatieservice
     environment:
       ORGANISATIE_DATABASE_URL: "postgresql://hhb:hhb@db/organisatieservice"
     ports:
@@ -219,6 +205,7 @@ services:
   banktransactieservice:
     <<: *x-resource-limit
     <<: *x-banktransactieservice
+    container_name: banktransactieservice
     environment:
       TRANSACTIE_DATABASE_URL: "postgresql://hhb:hhb@db/banktransactieservice"
     ports:
@@ -232,6 +219,7 @@ services:
   grootboekservice:
     <<: *x-resource-limit
     <<: *x-grootboekservice
+    container_name: grootboekservice
     environment:
       GROOTBOEK_DATABASE_URL: "postgresql://hhb:hhb@db/grootboekservice"
     ports:
@@ -245,6 +233,7 @@ services:
   logservice:
     <<: *x-resource-limit
     <<: *x-logservice
+    container_name: logservice
     environment:
       LOG_DATABASE_URL: "postgresql://hhb:hhb@db/logservice"
     ports:
