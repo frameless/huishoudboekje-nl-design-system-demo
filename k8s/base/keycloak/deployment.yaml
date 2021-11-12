@@ -1,0 +1,60 @@
+---
+# TODO aan database koppelen
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-keycloak
+  labels:
+    name: hhb-keycloak
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: hhb-keycloak
+  template:
+    metadata:
+      labels:
+        name: hhb-keycloak
+    spec:
+      containers:
+        - name: hhb-keycloak
+          image: "quay.io/keycloak/keycloak:15.0.2"
+          imagePullPolicy: "Always"
+          env:
+            - name: KEYCLOAK_USER
+              valueFrom:
+                secretKeyRef:
+                  name: hhb-keycloak-secrets
+                  key: KEYCLOAK_AUTH_USERNAME
+            - name: KEYCLOAK_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: hhb-keycloak-secrets
+                  key: KEYCLOAK_AUTH_PASSWORD
+            - name: PROXY_ADDRESS_FORWARDING
+              value: "true"
+            - name: REDIRECT_SOCKET
+              value: "proxy-https"
+            - name: KEYCLOAK_FRONTEND_URL
+              value: "https://keycloak.yourdomain.com/auth"
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          resources:
+            limits:
+              cpu: "1"
+              memory: 1Gi
+            requests:
+              cpu: 100m
+              memory: 512Mi
+          livenessProbe:
+            initialDelaySeconds: 60
+            httpGet:
+              path: /auth
+              port: http
+          readinessProbe:
+            initialDelaySeconds: 60
+            httpGet:
+              path: /auth
+              port: http

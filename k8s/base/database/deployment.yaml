@@ -18,7 +18,7 @@ spec:
       containers:
         - name: hhb-database
           image: bitnami/postgresql:13
-          imagePullPolicy: "Always"
+          imagePullPolicy: "IfNotPresent"
           ports:
             - containerPort: 5432
           envFrom:

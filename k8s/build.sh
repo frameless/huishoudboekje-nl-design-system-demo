@@ -56,14 +56,25 @@ export POSTGRESQL_PASSWORD_HHBSVC=${POSTGRESQL_PASSWORD_HHBSVC:-"hhbsvc"}
 export POSTGRESQL_PASSWORD_LOGSVC=${POSTGRESQL_PASSWORD_LOGSVC:-"logsvc"}
 export POSTGRESQL_PASSWORD_ORGSVC=${POSTGRESQL_PASSWORD_ORGSVC:-"orgsvc"}
 
-# Settings for OpenID Connect
-export OIDC_ISSUER=${OIDC_ISSUER:-"https://$HHB_FRONTEND_DNS/auth"}
-export OIDC_CLIENT_ID=${OIDC_CLIENT_ID:-"huishoudboekje"}
-export OIDC_CLIENT_SECRET=${OIDC_CLIENT_SECRET:-"test"}
-export OIDC_AUTHORIZATION_ENDPOINT=${OIDC_AUTHORIZATION_ENDPOINT:-"https://$HHB_FRONTEND_DNS/auth/auth"}
-export OIDC_TOKEN_ENDPOINT=${OIDC_TOKEN_ENDPOINT:-"https://$HHB_FRONTEND_DNS/auth/token"}
-export OIDC_TOKENINFO_ENDPOINT=${OIDC_TOKENINFO_ENDPOINT:-"https://$HHB_FRONTEND_DNS/auth/tokeninfo"}
-export OIDC_USERINFO_ENDPOINT=${OIDC_USERINFO_ENDPOINT:-"https://$HHB_FRONTEND_DNS/auth/userinfo"}
+# Default secret FOR JWTs
+export HHB_SECRET=${SECRET_KEY:-"test"}
+
+# Keycloak Settings
+export OIDC_ISSUER="https://$HHB_FRONTEND_DNS/auth/realms/hhb"
+export OIDC_CLIENT_ID="hhb"
+export OIDC_CLIENT_SECRET="fc36d31f-f720-4914-a750-b83c7b0dd61c"
+export OIDC_AUTHORIZATION_ENDPOINT="https://$HHB_FRONTEND_DNS/auth/realms/hhb/protocol/openid-connect/auth"
+export OIDC_TOKEN_ENDPOINT="https://$HHB_FRONTEND_DNS/auth/realms/hhb/protocol/openid-connect/token"
+export OIDC_TOKENINFO_ENDPOINT="https://$HHB_FRONTEND_DNS/auth/realms/hhb/protocol/openid-connect/token/introspect"
+export OIDC_USERINFO_ENDPOINT="https://$HHB_FRONTEND_DNS/auth/realms/hhb/protocol/openid-connect/userinfo"
+
+# Keycloak Settings for OpenID Connect
+export KEYCLOAK_AUTH_USERNAME=${KEYCLOAK_AUTH_USERNAME:-"admin"}
+export KEYCLOAK_AUTH_PASSWORD=${KEYCLOAK_AUTH_PASSWORD:-"testtest"}
+export KEYCLOAK_AUTH_KEYCLOAK_URL=${KEYCLOAK_AUTH_KEYCLOAK_URL:-"https://$HHB_FRONTEND_DNS/auth/"}
+export KEYCLOAK_CLIENT_ROOT_URL=${KEYCLOAK_CLIENT_ROOT_URL:-"https://$HHB_FRONTEND_DNS/"}
+export KEYCLOAK_CLIENT_SECRET=${KEYCLOAK_CLIENT_SECRET:-"fc36d31f-f720-4914-a750-b83c7b0dd61c"}
+export KEYCLOAK_CLIENT_USERS=${KEYCLOAK_CLIENT_USERS:-"magre,bas.magre@topicus.nl,Bas,Magre,testtest:basje,bas3@topicus.nl,Sebastiaan,Magre,testtest"}
 
 # Create a temporary directory to put the dist files in.
 export DEPLOYMENT_DIST_DIR="dist"
@@ -71,11 +82,19 @@ export DEPLOYMENT_DIST_DIR="dist"
 # Customer to use (see `k8s/customer`).
 export CUSTOMER_BUILD=${CUSTOMER_BUILD:-"sloothuizen"}
 
-# If we don't need Dex (defaults to false).
-export REMOVE_DEX=${REMOVE_DEX:-"false"}
-
-# We use envsubst which checks $ characters and replaces them, please use ${DOLLAR} as literal $ character.
+# so you can use ${DOLLAR} as $ sign in files with will be using envsubst for transformation
 export DOLLAR='$'
+
+# Debugging
+echo CI_COMMIT_REF_SLUG = $CI_COMMIT_REF_SLUG
+echo CI_COMMIT_SHORT_SHA = $CI_COMMIT_SHORT_SHA
+echo BRANCH_NAME = $BRANCH_NAME
+echo COMMIT_SHA = $COMMIT_SHA
+echo IMAGE_TAG = $IMAGE_TAG
+echo NAMESPACE = $NAMESPACE
+echo HHB_HOST = $HHB_HOST
+echo HHB_APP_HOST = $HHB_APP_HOST # App host can be diffrent (ocp)
+echo DEPLOYMENT_DIST_DIR = $DEPLOYMENT_DIST_DIR
 
 # Create directory to store the dist files for the deployment in
 mkdir -p k8s/$DEPLOYMENT_DIST_DIR
@@ -92,34 +111,44 @@ kind: Kustomization
 
 patchesStrategicMerge:
 - env_patch.yaml
-- ${USE_PLATFORM}_patch.yaml
-
+- platform_patch.yaml
+- use_sso_patch.yaml
 EOF
 
-echo "Generate env_patch.yaml / ${USE_PLATFORM}_patch.yaml and ${USE_PLATFORM}_add.yaml with envsubst"
+echo "Generate env_patch.yaml / ${USE_PLATFORM}_patch.yaml and ${USE_PLATFORM}_add.yaml"
 envsubst < ../templates/env_patch.yaml > env_patch.yaml
-envsubst < ../templates/platform/${USE_PLATFORM}/patch.yaml > ${USE_PLATFORM}_patch.yaml
-envsubst < ../templates/platform/${USE_PLATFORM}/add.yaml > ${USE_PLATFORM}_add.yaml
+envsubst < ../templates/platform/${USE_PLATFORM}/patch.yaml > platform_patch.yaml
+envsubst < ../templates/platform/${USE_PLATFORM}/add.yaml > platform_add.yaml
 
-if [ $REMOVE_DEX == "true" ]
-then
-  if [ -f "../templates/platform/${USE_PLATFORM}/remove_dex_patch.yaml" ]; then
-    echo "Generate patch remove_dex_patch.yaml with envsubst"
-    envsubst < ../templates/platform/${USE_PLATFORM}/remove_dex_patch.yaml > remove_dex_patch.yaml
-    echo '- remove_dex_patch.yaml' >> kustomization.yaml
-  fi
-fi
+echo "Generate patch use_sso_patch.yaml with envsubst"
+envsubst < ../templates/use_sso_keycloak_patch.yaml > use_sso_patch.yaml
+echo "Generate patch use_sso_add.yaml with envsubst"
+envsubst < ../templates/platform/${USE_PLATFORM}/use_sso_keycloak_add.yaml > use_sso_add.yaml
+echo "add resource ../base/keycloak"
+kustomize edit add resource ../base/keycloak
+echo "add resource use_sso_add.yaml"
+kustomize edit add resource use_sso_add.yaml
 
 if [ $GENERATE_SECRETS == "true" ]
 then
   echo "Generate secrets.yaml with envsubst"
   envsubst < ../templates/secrets.yaml > secrets.yaml
-  echo "Adding secrets to kustomization.yaml"
+  echo "add resource secrets.yaml"
   kustomize edit add resource secrets.yaml
+  if [ keycloak != "none" ]
+  then
+    echo "Generate patch use_sso_secrets.yaml with envsubst"
+    envsubst < ../templates/use_sso_keycloak_secrets.yaml > use_sso_secrets.yaml
+    echo "add resource use_sso_secrets.yaml"
+    kustomize edit add resource use_sso_secrets.yaml
+  fi
 fi
 
-kustomize edit add resource ${USE_PLATFORM}_add.yaml
+echo "add resource ../customer/$CUSTOMER_BUILD"
 kustomize edit add resource ../customer/$CUSTOMER_BUILD
+echo "add resource platform_add.yaml"
+kustomize edit add resource platform_add.yaml
+echo "set images"
 kustomize edit set image backend=${PULL_REPO_IMAGE}/backend:${IMAGE_TAG}
 kustomize edit set image banktransactieservice=${PULL_REPO_IMAGE}/banktransactieservice:${IMAGE_TAG}
 kustomize edit set image frontend=${PULL_REPO_IMAGE}/frontend:${IMAGE_TAG}
