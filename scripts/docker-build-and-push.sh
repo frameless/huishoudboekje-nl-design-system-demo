@@ -7,6 +7,7 @@ set -e
 # Build docker images for frontend, backend and the unleash service.
 docker build -t $CI_REGISTRY_IMAGE/frontend:$IMAGE_TAG               --build-arg "DOCKER_PROXY=$DOCKER_PROXY"   ./frontend
 docker build -t $CI_REGISTRY_IMAGE/backend:$IMAGE_TAG                --build-arg "DOCKER_PROXY=$DOCKER_PROXY"   ./backend
+docker build -t $CI_REGISTRY_IMAGE/backendburgers:$IMAGE_TAG         --build-arg "DOCKER_PROXY=$DOCKER_PROXY"   ./backend-burgers
 docker build -t $CI_REGISTRY_IMAGE/unleashservice:$IMAGE_TAG         --build-arg "DOCKER_PROXY=$DOCKER_PROXY"   ./unleash_service
 docker build -t $CI_REGISTRY_IMAGE/python-postgres:$IMAGE_TAG        --build-arg "DOCKER_PROXY=$DOCKER_PROXY"   ./python-postgres
 
@@ -20,6 +21,7 @@ docker build -t $CI_REGISTRY_IMAGE/organisatieservice:$IMAGE_TAG     --build-arg
 # Push all docker images to the registry
 docker push $CI_REGISTRY_IMAGE/frontend:$IMAGE_TAG
 docker push $CI_REGISTRY_IMAGE/backend:$IMAGE_TAG
+docker push $CI_REGISTRY_IMAGE/backendburgers:$IMAGE_TAG
 docker push $CI_REGISTRY_IMAGE/unleashservice:$IMAGE_TAG
 docker push $CI_REGISTRY_IMAGE/python-postgres:$IMAGE_TAG
 
