@@ -64,7 +64,7 @@ deploy-deployment-review:
   <<: *deploy
   environment:
     name: review/$CI_COMMIT_REF_SLUG
-    url: https://hhb-$CI_COMMIT_REF_SLUG.$BASE_DOMAIN/
+    url: https://hhb-$CI_COMMIT_REF_SLUG.nlx.reviews/
     on_stop: destroy-review
     auto_stop_in: 7 days
   variables:
