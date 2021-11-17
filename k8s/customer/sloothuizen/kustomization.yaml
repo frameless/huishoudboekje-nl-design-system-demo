@@ -5,6 +5,7 @@ kind: Kustomization
 resources:
   - frontend/theme.yaml
   - ../../base/backend
+  - ../../base/backendburgers
   - ../../base/banktransactieservice
   - ../../base/database
   - ../../base/frontend

@@ -15,6 +15,15 @@ metadata:
 spec:
   replicas: ${DEFAULT_REPLICAS}
 ---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    name: hhb-backendburgers
+  name: hhb-backendburgers
+spec:
+  replicas: ${DEFAULT_REPLICAS}
+---
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
