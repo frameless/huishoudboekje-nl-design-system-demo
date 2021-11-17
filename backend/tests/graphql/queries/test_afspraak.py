@@ -224,7 +224,7 @@ def test_afspraak_overschrijvingen_planner_no_einddatum(client):
                 "query": '''{ afspraken(ids:[1]) { overschrijvingen(startDatum: "2020-01-01") { datum bedrag status } } }'''},
             content_type='application/json'
         )
-        print(response.json)
+
         assert response.json['data']['afspraken'][0]['overschrijvingen'] == [
             {'datum': '2020-01-01', 'bedrag': '1.01', 'status': 'GEREED'}
         ]
@@ -270,7 +270,7 @@ def test_afspraak_overschrijvingen_planner_doorlopened(client):
                 "query": '''{ afspraken(ids:[1]) { overschrijvingen(startDatum: "2020-02-01", eindDatum: "2021-01-01") { datum bedrag status } } }'''},
             content_type='application/json'
         )
-        print(response.json)
+
         assert response.json['data']['afspraken'][0]['overschrijvingen'] == [
             {'datum': '2020-02-01', 'bedrag': '1.01', 'status': 'IN_BEHANDELING'},
             {'datum': '2020-03-01', 'bedrag': '1.01', 'status': 'VERWACHTING'},

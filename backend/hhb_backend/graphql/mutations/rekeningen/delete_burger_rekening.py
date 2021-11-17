@@ -18,6 +18,7 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import (
 
 
 class DeleteBurgerRekening(graphene.Mutation):
+    """Mutatie om een rekening bij een burger te verwijderen."""
     class Arguments:
         id = graphene.Int(required=True)
         burger_id = graphene.Int(required=True)

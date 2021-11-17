@@ -12,6 +12,7 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import (gebruikers_activit
 from hhb_backend.processen.automatisch_boeken import find_matching_afspraken_by_afspraak
 
 class AddAfspraakZoekterm(graphene.Mutation):
+    """Mutatie om een zoekterm aan een afspraak toe te voegen."""
     class Arguments:
         afspraak_id = graphene.Int(required=True)
         zoekterm = graphene.String(required=True)

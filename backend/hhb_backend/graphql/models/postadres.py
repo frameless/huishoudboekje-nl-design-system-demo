@@ -1,9 +1,7 @@
 """ Postadres model as used in GraphQL queries """
 import graphene
 
-
 class Postadres(graphene.ObjectType):
-    """ GraphQL Burger model """
     id = graphene.String()
     straatnaam = graphene.String()
     huisnummer = graphene.String()

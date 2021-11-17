@@ -82,9 +82,9 @@ def test_delete_afdeling_without_postadres(client):
             json={
                 "query": '''
                     mutation test($id: Int!) {
-                    deleteAfdeling(id: $id) {
-                        ok
-                    }
+                        deleteAfdeling(id: $id) {
+                            ok
+                        }
                     }
                     ''',
                 "variables": {"id": 1}},

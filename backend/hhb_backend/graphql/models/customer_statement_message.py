@@ -7,12 +7,11 @@ from hhb_backend.graphql.dataloaders import hhb_dataloader
 
 
 class CustomerStatementMessage(graphene.ObjectType):
-    """GraphQL CustomerStatementMessage model"""
+    """Model van een bankafschrift."""
 
     id = graphene.Int()
     upload_date = graphene.DateTime()
     filename = graphene.String()
-
     transaction_reference_number = graphene.String()
     related_reference = graphene.String()
     account_identification = graphene.String()

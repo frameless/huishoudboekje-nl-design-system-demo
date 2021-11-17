@@ -5,7 +5,6 @@ from graphql import GraphQLError
 import hhb_backend.graphql.models.afdeling as afdeling
 
 class Organisatie(graphene.ObjectType):
-    """ GraphQL Organisatie model """
     id = graphene.Int()
     naam = graphene.String()
     kvknummer = graphene.String()

@@ -11,22 +11,18 @@ from graphql import GraphQLError
 
 
 class Burger(graphene.ObjectType):
-    """ GraphQL Burger model """
     id = graphene.Int()
     bsn = graphene.Int()
     voorletters = graphene.String()
     voornamen = graphene.String()
     achternaam = graphene.String()
     geboortedatum = graphene.String()
-    
     telefoonnummer = graphene.String()
     email = graphene.String()
-
     straatnaam = graphene.String()
     huisnummer = graphene.String()
     postcode = graphene.String()
     plaatsnaam = graphene.String()
-    
     rekeningen = graphene.List(lambda: rekening.Rekening)
     afspraken = graphene.List(lambda: afspraak.Afspraak)
     huishouden = graphene.Field(lambda: huishouden.Huishouden)

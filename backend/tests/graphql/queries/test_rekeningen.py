@@ -1,7 +1,7 @@
 import requests_mock
 from hhb_backend.graphql import settings
 
-def test_rekening(client):
+def test_rekeningen_byId(client):
     with requests_mock.Mocker() as rm:
         rm.get(f"{settings.HHB_SERVICES_URL}/rekeningen/?filter_ids=1",
                json={'data': [{'id': 1, 'iban': "NL02ABNA0123456789", 'rekeninghouder':'Piet', 'afdelingen': [1], 'afspraken':[1], 'burgers':[1]}]})
@@ -43,7 +43,7 @@ def test_rekening(client):
                                                         'afspraken': [{'id': 1, "omschrijving": "Loon"}]}}}
 
 
-def test_rekeningen(client):
+def test_rekeningen_all(client):
     with requests_mock.Mocker() as rm:
         rm.get(f"{settings.HHB_SERVICES_URL}/rekeningen/",
                json={'data': [{'id': 1, 'iban': "NL02ABNA0123456789",

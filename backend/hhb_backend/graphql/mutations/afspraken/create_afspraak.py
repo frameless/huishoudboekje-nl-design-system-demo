@@ -20,12 +20,12 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import (
 )
 
 class CreateAfspraakInput(graphene.InputObjectType):
-    omschrijving = graphene.String(required=True)
     burger_id = graphene.Int(required=True)
-    credit = graphene.Boolean(required=True)
     tegen_rekening_id = graphene.Int(required=True)
     rubriek_id = graphene.Int(required=True)
+    omschrijving = graphene.String(required=True)
     bedrag = graphene.Argument(Bedrag, required=True)
+    credit = graphene.Boolean(required=True)
     afdeling_id = graphene.Int()
     postadres_id = graphene.String()
     valid_from = graphene.String()

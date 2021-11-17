@@ -7,7 +7,7 @@ import hhb_backend.graphql.models.afspraak as afspraak
 
 
 class Journaalpost(graphene.ObjectType):
-    """Journaalpost model"""
+    """Model van een afgeletterde banktransactie."""
     id = graphene.Int()
     afspraak = graphene.Field(lambda: afspraak.Afspraak)
     transaction = graphene.Field(lambda: bank_transaction.BankTransaction)

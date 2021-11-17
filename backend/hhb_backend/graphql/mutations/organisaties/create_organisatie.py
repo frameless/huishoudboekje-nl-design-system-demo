@@ -15,9 +15,9 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import (
 
 class CreateOrganisatieInput(graphene.InputObjectType):
     # org_service elements (required)
+    naam = graphene.String()
     kvknummer = graphene.String(required=True)
     vestigingsnummer = graphene.String()
-    naam = graphene.String()
 
 
 class CreateOrganisatie(graphene.Mutation):

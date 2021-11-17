@@ -30,6 +30,7 @@ class BetaalinstructieInput(graphene.InputObjectType):
 
 
 class UpdateAfspraakBetaalinstructie(graphene.Mutation):
+    """Mutatie voor het instellen van een nieuwe betaalinstructie voor een afspraak."""
     class Arguments:
         afspraak_id = graphene.Int(required=True)
         betaalinstructie = graphene.Argument(lambda: BetaalinstructieInput, required=True)

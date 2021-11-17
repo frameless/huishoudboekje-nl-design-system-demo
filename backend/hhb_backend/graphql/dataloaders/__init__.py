@@ -24,7 +24,7 @@ from .rekeningen_loader import (RekeningenByBurgerLoader, RekeningenByIbanLoader
 from .rubrieken_loader import RubriekByGrootboekrekeningLoader, RubriekByIdLoader
 from .huishouden_loader import HuishoudensByIdLoader
 from .afdeling_loader import AfdelingenByIdLoader, AfdelingenByOrganisatieLoader
-from .postadressen_loader import PostadressenByIdLoader, PostadressenByAfdelingLoader
+from .postadressen_loader import PostadressenByIdLoader, PostadressenByAfdelingLoader, PostadressenByIdsLoader
 
 
 class HHBDataLoader:
@@ -94,6 +94,7 @@ class HHBDataLoader:
         # Postadressen
         self.postadressen_by_id = PostadressenByIdLoader(loop=loop)
         self.postadressen_by_afdeling = PostadressenByAfdelingLoader(loop=loop)
+        self.postadressen_by_ids = PostadressenByIdsLoader(loop=loop)
 
     def __getitem__(self, item: str):
         return getattr(self, item)

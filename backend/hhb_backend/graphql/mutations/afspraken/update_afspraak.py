@@ -11,12 +11,12 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import (gebruikers_activit
 
 class UpdateAfspraakInput(graphene.InputObjectType):
     burger_id = graphene.Int()
-    credit = graphene.Boolean()
     afdeling_id = graphene.Int()
     postadres_id = graphene.String()
     tegen_rekening_id = graphene.Int()
     rubriek_id = graphene.Int()
     omschrijving = graphene.String()
+    credit = graphene.Boolean()
     bedrag = graphene.Argument(Bedrag)
     valid_through = graphene.String()
 

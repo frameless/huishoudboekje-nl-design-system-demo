@@ -4,16 +4,16 @@ import hhb_backend.graphql.models.afspraak as afspraak
 import hhb_backend.graphql.models.organisatie as organisatie
 import hhb_backend.graphql.models.rekening as rekening
 import hhb_backend.graphql.models.postadres as postadres
-from graphql import GraphQLError
+from hhb_backend.graphql import settings
+import requests
 
-class Afdeling(graphene.ObjectType):
-    """ GraphQL Afdeling model """
+class Afdeling(graphene.ObjectType): 
     id = graphene.Int()
     naam = graphene.String()
     organisatie = graphene.Field(lambda: organisatie.Organisatie)
-    afspraken = graphene.List(lambda: afspraak.Afspraak)
     rekeningen = graphene.List(lambda: rekening.Rekening)
     postadressen = graphene.List(lambda: postadres.Postadres)
+    afspraken = graphene.List(lambda: afspraak.Afspraak)
 
     async def resolve_rekeningen(root, info):
         """ Get rekeningen when requested """
@@ -23,7 +23,20 @@ class Afdeling(graphene.ObjectType):
         return await request.dataloader.organisaties_by_id.load(root.get('organisatie_id'))
 
     async def resolve_postadressen(root, info):
-        return await request.dataloader.postadressen_by_id.auth_load_many(root.get('postadressen_ids')) or []
+        ids = root.get('postadressen_ids')
+        if not ids:
+            return []
+        querystring = f"?id[]={'&id[]='.join([str(k) for k in ids])}" if ids else ''
+        url = f"""{settings.CONTACTCATALOGUS_SERVICE_URL}/addresses/{querystring}"""
+        response = requests.get(url, headers={"Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845"})
+
+        iterable = []
+        for post in response.json().get("hydra:member"):
+            iterable.append(post)
+        return iterable
+
+        # return await request.dataloader.postadressen_by_id.auth_load_many(ids) or []
+        
 
     async def resolve_afspraken(root, info):
         afdeling_id = root.get('id')

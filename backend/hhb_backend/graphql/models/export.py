@@ -8,15 +8,14 @@ import hhb_backend.graphql.models.overschrijving as overschrijving
 
 
 class Export(graphene.ObjectType):
-    """ GraphQL Export model """
     id = graphene.Int()
     naam = graphene.String()
     timestamp = graphene.DateTime()
-    overschrijvingen = graphene.List(lambda: overschrijving.Overschrijving)
-    xmldata = graphene.String()
     start_datum = graphene.String()
     eind_datum = graphene.String()
     sha256 = graphene.String()
+    xmldata = graphene.String()
+    overschrijvingen = graphene.List(lambda: overschrijving.Overschrijving)
 
     def resolve_timestamp(root, info):
         value = root.get('timestamp')

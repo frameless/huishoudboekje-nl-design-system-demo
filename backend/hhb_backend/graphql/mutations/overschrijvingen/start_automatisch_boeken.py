@@ -7,6 +7,8 @@ from hhb_backend.processen import automatisch_boeken
 
 
 class StartAutomatischBoeken(graphene.Mutation):
+    """Mutatie om niet afgeletterde banktransacties af te letteren."""
+    
     ok = graphene.Boolean()
     journaalposten = graphene.List(lambda: journaalpost.Journaalpost)
 

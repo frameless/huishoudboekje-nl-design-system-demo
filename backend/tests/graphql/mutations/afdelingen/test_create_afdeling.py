@@ -15,7 +15,6 @@ class MockResponse():
     def json(self):
         return self.json_data
 
-
 def test_create_afdeling_minimal_succes(client):
     with requests_mock.Mocker() as mock:
         # arrange
@@ -105,29 +104,38 @@ def test_create_afdeling_full_succes(client):
         }
 
         postadres_result = {
-            "id": "7426aa95-03c0-453d-b9ff-11a5442ab959",
-            "street": "teststraat",
-            "houseNumber": "52B",
-            "postalCode": "9999ZZ",
-            "locality": "testplaats",
+            "hydra:member": [
+                    {
+                        "@id": "/addresses/7426aa95-03c0-453d-b9ff-11a5442ab959",
+                        "@type": "Address",
+                        "id": "7426aa95-03c0-453d-b9ff-11a5442ab959",
+                        "name": None,
+                        "bagnummeraanduiding": None,
+                        "street": "teststraat",
+                        "houseNumber": "52B",
+                        "houseNumberSuffix": None,
+                        "postalCode": "9999ZZ",
+                        "region": None,
+                        "locality": "testplaats",
+                        "country": None,
+                        "postOfficeBoxNumber": None,
+                        "dateCreated": "2021-11-09T12:01:05+00:00",
+                        "dateModified": "2021-11-09T12:01:05+00:00"
+                    }]
         }
 
         fallback = mock.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
         e1 = mock.get(f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/?filter_ids=1", status_code=200, json={'data': [{'id': 1}]})
         e2 = mock.post(f"{settings.HHB_SERVICES_URL}/afdelingen/", status_code=201, json={'data': [{'id': 1, "postadressen_ids": [], "rekeningen_ids": []}]})
         e3 = mock.post(f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/", status_code=201, json=afdeling_result)
-        # rekening
         e4 = mock.get(f"{settings.HHB_SERVICES_URL}/rekeningen/?filter_ibans=GB33BUKB20201555555555", status_code=200, json={'data': [{'id': 1}]})
         e5 = mock.post(f"{settings.HHB_SERVICES_URL}/afdelingen/1/rekeningen/", status_code=201, json={'data': rekeningen})
-        # both rekening and postadres
         e6 = mock.post(f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/1", status_code=200, json={'data': [{'id': 1, "postadressen_ids": [], "rekeningen_ids": []}]})
-        # postadres
         e7 = mock.post(f"{settings.CONTACTCATALOGUS_SERVICE_URL}/addresses", status_code=201, json={'id': "7426aa95-03c0-453d-b9ff-11a5442ab959", 'houseNumber': '52B', 'postalCode': '9999ZZ', 'street': 'teststraat', 'locality': 'testplaats'})
         e8 = mock.get(f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/1", status_code=200, json={ 'data': { 'id': 1, }}) # 2
-        
         e9 = mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=200, json={'data': {'id': 1}})
         e10 = mock.get(f"{settings.HHB_SERVICES_URL}/rekeningen/?filter_afdelingen=1", status_code=200, json=rekening_result)
-        e11 = mock.get(f"{settings.CONTACTCATALOGUS_SERVICE_URL}/addresses/7426aa95-03c0-453d-b9ff-11a5442ab959", status_code=200, json=postadres_result)
+        e11 = mock.get(f"{settings.CONTACTCATALOGUS_SERVICE_URL}/addresses/?id[]=7426aa95-03c0-453d-b9ff-11a5442ab959", status_code=200, json=postadres_result)
 
         # act
         response = client.post(
@@ -168,26 +176,27 @@ def test_create_afdeling_full_succes(client):
             content_type='application/json'
         )
 
+        for call in fallback.request_history:
+            print(f"> > > > fallback: {call.method} {call.url} ") #{call.qs}
+
         # assert
         assert e1.called_once
         assert e2.called_once
         assert e3.called_once
-        # rekeningen
         assert e4.called_once
         assert e5.called_once
         assert e6.call_count == 2
-        # postadressen
         assert e7.called_once
         assert e8.called_once
         assert e9.called_once
         assert e10.called_once
         assert e11.called_once
-        print(f">>>> {fallback.last_request}")
         assert fallback.call_count == 0
         assert response.json["data"]["createAfdeling"]["ok"] is True
         assert response.json["data"]["createAfdeling"]["afdeling"]["postadressen"] == [{'id': '7426aa95-03c0-453d-b9ff-11a5442ab959'}]
         assert response.json["data"]["createAfdeling"]["afdeling"]["rekeningen"] == [{'id': 1}]
         
+
 def test_create_afdeling_foutieve_rekening_succes(client):
     with requests_mock.Mocker() as mock:
         # arrange
@@ -199,7 +208,6 @@ def test_create_afdeling_foutieve_rekening_succes(client):
                 "rekeningen_ids": []
             }
         }
-
 
         fallback = mock.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
         e1 = mock.get(f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/?filter_ids=1", status_code=200, json={'data': [{'id': 1}]})

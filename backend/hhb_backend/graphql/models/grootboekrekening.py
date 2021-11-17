@@ -4,7 +4,6 @@ from flask import request
 from hhb_backend.graphql.models.rubriek import Rubriek
 
 class Grootboekrekening(graphene.ObjectType):
-    """ Grootboekrekening model """
     id = graphene.String(required=True)
     naam = graphene.String()
     referentie = graphene.String()

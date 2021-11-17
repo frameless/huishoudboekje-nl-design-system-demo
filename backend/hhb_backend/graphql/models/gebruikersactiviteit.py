@@ -32,19 +32,19 @@ class GebruikersActiviteitMeta(graphene.ObjectType):
 
 
 class GebruikersActiviteitSnapshot(graphene.ObjectType):
+    afdeling = graphene.Field(lambda: afdeling.Afdeling)
     afspraak = graphene.Field(lambda: afspraak.Afspraak)
     burger = graphene.Field(lambda: burger.Burger)
     configuratie = graphene.Field(lambda: configuratie.Configuratie)
     customer_statement_message = graphene.Field(lambda: customer_statement_message.CustomerStatementMessage)
     export = graphene.Field(lambda: export.Export)
     grootboekrekening = graphene.Field(lambda: grootboekrekening.Grootboekrekening)
+    huishouden = graphene.Field(lambda: huishouden.Huishouden)
     journaalpost = graphene.Field(lambda: journaalpost.Journaalpost)
     organisatie = graphene.Field(lambda: organisatie.Organisatie)
+    postadres = graphene.Field(lambda: postadres.Postadres)
     rubriek = graphene.Field(lambda: rubriek.Rubriek)
     transaction = graphene.Field(lambda: bank_transaction.BankTransaction)
-    huishouden = graphene.Field(lambda: huishouden.Huishouden)
-    afdeling = graphene.Field(lambda: afdeling.Afdeling)
-    postadres = graphene.Field(lambda: postadres.Postadres)
 
     @classmethod
     def _resolve_snapshot(cls, root, entity_type: str, Model):
@@ -114,6 +114,7 @@ class GebruikersActiviteitSnapshot(graphene.ObjectType):
 
 
 class GebruikersActiviteitEntity(graphene.ObjectType):
+    """Dit model beschrijft de wijzingen die een gebruiker heeft gedaan."""
     entityType = graphene.String()
     entityId = graphene.String()
 
@@ -226,7 +227,7 @@ class GebruikersActiviteitEntity(graphene.ObjectType):
 
 
 class GebruikersActiviteit(graphene.ObjectType):
-    """GebruikersActiviteit model"""
+    """Model dat een actie van een gebruiker beschrijft."""
 
     id = graphene.Int()
     timestamp = graphene.DateTime()

@@ -1,7 +1,7 @@
 import requests_mock
 from hhb_backend.graphql import settings
 
-def test_organisatie(client):
+def test_organisatie_by_id(client):
     with requests_mock.Mocker() as rm:
         rm.get(f"{settings.HHB_SERVICES_URL}/rekeningen/?filter_afdelingen=1",
                json={'data': [{'id': 1, 'iban': "NL02ABNA0123456789", 'afdelingen': [1]}]})
@@ -32,7 +32,7 @@ def test_organisatie(client):
                                                            'kvknummer': '123', 'vestigingsnummer': "321"}}}
 
 
-def test_organisaties(client):
+def test_organisaties_all(client):
     with requests_mock.Mocker() as rm:
         rm.get(f"{settings.HHB_SERVICES_URL}/rekeningen/?filter_afdelingen=1",
                json={'data': [

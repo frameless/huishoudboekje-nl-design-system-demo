@@ -7,7 +7,7 @@ from graphql.language import ast
 
 
 class Bedrag(Scalar):
-    """Decimaal Scalar Description"""
+    """Bedrag (bijvoorbeeld: 99.99) n"""
 
     VALID_BEDRAG = re.compile("^\s*\d+\.\d\d$") # any sequence of numbers followed by a `.` and two numbers
 

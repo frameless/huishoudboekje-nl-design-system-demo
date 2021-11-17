@@ -10,7 +10,6 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import (gebruikers_activit
 
 
 class DeleteJournaalpost(graphene.Mutation):
-    """ Delete journaalpost by id """
 
     class Arguments:
         id = graphene.Int(required=True)

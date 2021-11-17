@@ -16,9 +16,7 @@ MIN_INT = -2147483648
 
 
 class DynamicType(Scalar):
-    """
-    Accepts dates, datetimes, ints and strings.
-    """
+    """Accepteert datum, datum en tijd, ints en strings en wordt gebruikt bij ComplexFilterType."""
 
     @staticmethod
     def serialize(value):

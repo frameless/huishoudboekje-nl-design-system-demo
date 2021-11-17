@@ -33,6 +33,7 @@ class DeleteRubriek(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(_root, _info, **_kwargs):
         """ Delete current rubriek """
+        id = _kwargs.get("id")
         previous = await hhb_dataloader().rubrieken_by_id.load(id)
         delete_response = requests.delete(f"{settings.HHB_SERVICES_URL}/rubrieken/{id}")
         if delete_response.status_code != 204:
