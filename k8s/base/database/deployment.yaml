@@ -1,0 +1,46 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-database
+  labels:
+    name: hhb-database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: hhb-database
+  template:
+    metadata:
+      labels:
+        name: hhb-database
+    spec:
+      containers:
+        - name: hhb-database
+          image: bitnami/postgresql:13
+          imagePullPolicy: "Always"
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - configMapRef:
+                name: postgres-config
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 3
+              memory: 256Mi
+          env:
+            - name: POSTGRESQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: hhb-database-secrets
+                  key: POSTGRESQL_PASSWORD
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: hhb-database-volume
+      volumes:
+        - name: hhb-database-volume
+          persistentVolumeClaim:
+            claimName: hhb-database-volumeclaim

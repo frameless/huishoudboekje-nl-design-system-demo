@@ -1,0 +1,49 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-unleashservice
+  labels:
+    name: hhb-unleashservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: hhb-unleashservice
+  template:
+    metadata:
+      labels:
+        name: hhb-unleashservice
+    spec:
+      containers:
+        - name: hhb-unleashservice
+          image: unleashservice
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 60
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 60
+          resources:
+            limits:
+              cpu: "1"
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          env:
+            - name: PORT
+              value: "8080"
+      volumes:
+        - name: unleashservice-config-volume
+          configMap:
+            name: hhb-unleashservice-config

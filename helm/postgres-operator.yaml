@@ -1,3 +1,0 @@
-configKubernetes:
-  watched_namespace: ""
-  pod_environment_configmap: "postgres-pod-env"

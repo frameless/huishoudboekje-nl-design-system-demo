@@ -1,0 +1,99 @@
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  annotations:
+    openshift.io/host.generated: "true"
+  labels:
+    name: hhb-backend-route
+  name: hhb-backend-route
+spec:
+  host: ${HHB_FRONTEND_DNS}
+  path: /api
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+  to:
+    kind: Service
+    name: hhb-backend
+    weight: 100
+  wildcardPolicy: None
+---
+# only a PersistentVolumeClaim, no PersistentVolume
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: hhb-database-volumeclaim
+  labels:
+    name: hhb-database-volumeclaim
+spec:
+  storageClassName: glusterfs-storage
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 512Mi
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  annotations:
+    openshift.io/host.generated: "true"
+  labels:
+    name: hhb-dex-route
+  name: hhb-dex-route
+spec:
+  host: ${HHB_FRONTEND_DNS}
+  path: /auth
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+  to:
+    kind: Service
+    name: hhb-dex
+    weight: 100
+  wildcardPolicy: None
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  annotations:
+    openshift.io/host.generated: "true"
+  labels:
+    name: hhb-frontend-route
+  name: hhb-frontend-route
+spec:
+  host: ${HHB_FRONTEND_DNS}
+  path: /
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+  to:
+    kind: Service
+    name: hhb-frontend
+    weight: 100
+  wildcardPolicy: None
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  annotations:
+    openshift.io/host.generated: "true"
+  labels:
+    name: hhb-unleashservice-route
+  name: hhb-unleashservice-route
+spec:
+  host: ${HHB_FRONTEND_DNS}
+  path: /api/unleash
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+  to:
+    kind: Service
+    name: hhb-unleashservice
+    weight: 100
+  wildcardPolicy: None

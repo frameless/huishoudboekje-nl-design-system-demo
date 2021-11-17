@@ -1,0 +1,53 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-frontend
+  labels:
+    name: hhb-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: hhb-frontend
+  template:
+    metadata:
+      labels:
+        name: hhb-frontend
+    spec:
+      containers:
+        - name: hhb-frontend
+          image: frontend
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            initialDelaySeconds: 60
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            initialDelaySeconds: 60
+            httpGet:
+              path: /
+              port: http
+          resources:
+            limits:
+              cpu: 100m
+              memory: 128Mi
+            requests:
+              cpu: 10m
+              memory: 12Mi
+          volumeMounts:
+            - name: theme-volume
+              mountPath: /opt/bitnami/apps/html/theme
+      volumes:
+        - emptyDir: {}
+          name: frontend-cache
+        - emptyDir: {}
+          name: frontend-run
+        - name: theme-volume
+          configMap:
+            name: hhb-theme

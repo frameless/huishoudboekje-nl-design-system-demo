@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hhb-frontend
+  labels:
+    name: hhb-frontend
+spec:
+  ports:
+    - port: 80
+      name: http
+      targetPort: http
+      protocol: TCP
+  selector:
+    name: hhb-frontend

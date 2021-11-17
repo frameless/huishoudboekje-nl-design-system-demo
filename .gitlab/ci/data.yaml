@@ -1,0 +1,56 @@
+.load-sample-data: &load-sample-data
+  stage: data
+  image:
+    name: ${DOCKER_PROXY}node:lts-alpine
+  variables:
+    NPM_CACHE_DIR: "${CI_PROJECT_DIR}/.cache/npm"
+    CYPRESS_INSTALL_BINARY: "0"
+  tags:
+    - cg
+    - docker
+  when: manual
+  script:
+    - echo "Generating API key..."
+    - |
+      export PROXY_AUTHORIZATION=`npx --yes --quiet --package '@clarketm/jwt-cli' \
+        jwt sign \
+        --expiresIn "1 week" \
+        --subject "cypress@${HHB_HOST}" \
+        --issuer "https://$HHB_HOST/auth" \
+        --audience "https://${HHB_HOST}" \
+        --jwtid "$(LC_CTYPE=C tr -dc 'A-F0-9' < /dev/urandom | head -c32)" \
+        --noCopy \
+        "{}" "${HHB_SECRET:-$SESSION_SECRET}"`
+    - echo JWT $PROXY_AUTHORIZATION
+    - export GRAPHQL_API_URL=https://${HHB_HOST}/api/graphql
+    - echo API_URL ${GRAPHQL_API_URL}
+    - cd ./sampleData
+    - npm ci
+    - npm start
+
+load-data-review:
+  <<: *load-sample-data
+  environment:
+    name: review/$CI_COMMIT_REF_SLUG
+  variables:
+    HHB_HOST: "hhb-$CI_COMMIT_REF_SLUG.nlx.reviews"
+    HHB_SECRET: test
+  needs:
+    - deploy-deployment-review
+  only:
+    - branches@commonground/huishoudboekje/app-new
+  except:
+    - master
+    - develop
+    - acceptance
+
+load-data-develop:
+  <<: *load-sample-data
+  environment:
+    name: test
+  variables:
+    HHB_HOST: "test.huishoudboekje.demoground.nl"
+  needs:
+    - deploy-deployment-test
+  only:
+    - develop

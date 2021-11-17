@@ -1,0 +1,108 @@
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: data-huishoudboekje-postgresql-0
+  labels:
+    name: data-huishoudboekje-postgresql-0
+spec:
+  storageClassName: default
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hhb-dex-ingress
+  labels:
+    name: hhb-dex-ingress
+spec:
+  tls:
+    - hosts:
+        - ${HHB_FRONTEND_DNS}
+      secretName: medewerker-frontend-ingress-tls
+  rules:
+    - host: ${HHB_FRONTEND_DNS}
+      http:
+        paths:
+          - path: /auth
+            pathType: Prefix
+            backend:
+              service:
+                name: hhb-dex
+                port:
+                  number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hhb-frontend-ingress
+  labels:
+    name: hhb-frontend-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: ${CERT_MANAGER_ISSUER}
+spec:
+  tls:
+    - hosts:
+        - ${HHB_FRONTEND_DNS}
+      secretName: medewerker-frontend-ingress-tls
+  rules:
+    - host: ${HHB_FRONTEND_DNS}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: hhb-frontend
+                port:
+                  number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hhb-backend-ingress
+  labels:
+    name: hhb-backend-ingress
+spec:
+  tls:
+    - hosts: 
+        - ${HHB_FRONTEND_DNS}
+      secretName: medewerker-frontend-ingress-tls
+  rules:
+    - host: ${HHB_FRONTEND_DNS}
+      http:
+        paths:
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: hhb-backend
+                port:
+                  number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hhb-unleashservice
+  labels:
+    name: hhb-unleashservice
+spec:
+  tls:
+    - hosts:
+        - ${HHB_HOST}
+      secretName: medewerker-frontend-ingress-tls
+  rules:
+    - host: ${HHB_HOST}
+      http:
+        paths:
+          - path: /api/unleash
+            pathType: Prefix
+            backend:
+              service:
+                name: hhb-unleashservice
+                port:
+                  number: 80

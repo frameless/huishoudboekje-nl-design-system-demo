@@ -1,3 +1,4 @@
+---
 # Some clarification on terminology:
 # BE = Backend (The API)
 # FE = Frontend (The UI)
@@ -6,26 +7,23 @@
 # We use a DTAP setup (Develop, Test, Acceptance, Production)
 # where FE-D runs locally but talks BE-T. FE-T, FE-A and FE-P are talking to to BE-T, BE-A and BE-P respectively.
 # Hence we only need a pipeline for T, A and P, not for D.
-
 variables:
-  IMAGE_PREFIX: "$CI_REGISTRY/$CI_PROJECT_PATH"
-  IMAGE_TAG: $CI_COMMIT_SHA
+  IMAGE_TAG: $CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
+  HHB_SECRET: "test"
+  CI_API_V4_URL: https://gitlab.com/api/v4
+  CI_PROJECT_ID: 20352213
+  UNLEASH_INSTANCEID: JbZyPux6M7xwejsESy9L
   PYTHON_POSTGRES: python-postgres
-  COMPONENT_VERSION: "0.20.0"
-  HELM_DEBUG: "yes please"
+  UNLEASH_APPNAME: huishoudboekje-frontend
 
 stages:
   - build
-  - test
   - deploy
-  - e2e
+  - test
   - data
-  - maintenance
 
 include:
-  - '/.gitlab/ci/build.yml'
-  - '/.gitlab/ci/deploy.yml'
-  - '/.gitlab/ci/test.yml'
-  - '/.gitlab/ci/e2e.yml'
-  - '/.gitlab/ci/data.yml'
-  - '/.gitlab/ci/maintenance.yml'
+  - /.gitlab/ci/build.yaml
+  - /.gitlab/ci/deploy.yaml
+  - /.gitlab/ci/test.yaml
+  - /.gitlab/ci/data.yaml

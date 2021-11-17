@@ -1,0 +1,16 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hhb-backend
+  labels:
+    name: hhb-backend
+spec:
+  type: ClusterIP
+  selector:
+    name: hhb-backend
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: http

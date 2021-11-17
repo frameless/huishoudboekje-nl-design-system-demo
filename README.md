@@ -4,6 +4,7 @@ Huishoudboekje is developed based on the vision of [Common Ground](https://commo
 
 ## Technical Stack
 Huishoudboekje uses the following technical stack
+
 - React (CRA)
 - Python Flask
 - Docker
@@ -11,6 +12,7 @@ Huishoudboekje uses the following technical stack
 ### Components
 Huishoudboekje consists of several independent software components, packages as Docker containers.\
 These are:
+
 - [Medewerker Frontend](frontend/)
 - [Medewerker Backend](backend/)
 - [Huishoudboekje Services](services/)
@@ -55,8 +57,7 @@ You need python virtualenv, a Ubuntu shell with `zsh` and you need to make sure 
 
 ### 2. Minikube
 It is also possible to run the entire stack in a local [Kubernetes](https://kubernetes.io/) cluster with the help of 
-[minikube](https://minikube.sigs.k8s.io/docs/). \
-See the [installation instructions here](https://gitlab.com/commonground/huishoudboekje/app-new/-/wikis/Ontwikkeling/Minikube).
+[minikube](https://minikube.sigs.k8s.io/docs/). Please follow [these instructions](k8s/README.md).
 
 ### Production-like installation
-To install Huishoudboekje in production, follow [these installation instructions](https://gitlab.com/commonground/huishoudboekje/app-new/-/wikis/Handleidingen/Installatie).
+To install Huishoudboekje in production, follow [these instructions](k8s/README.md).
