@@ -70,11 +70,12 @@ export OIDC_USERINFO_ENDPOINT="https://$HHB_FRONTEND_DNS/auth/realms/hhb/protoco
 
 # Keycloak Settings for OpenID Connect
 export KEYCLOAK_AUTH_USERNAME=${KEYCLOAK_AUTH_USERNAME:-"admin"}
-export KEYCLOAK_AUTH_PASSWORD=${KEYCLOAK_AUTH_PASSWORD:-"testtest"}
+export KEYCLOAK_AUTH_PASSWORD=${KEYCLOAK_AUTH_PASSWORD:-"CcEyf8Zut9kHyFRp_B9k@Fx3F_d6W4Ut"}
 export KEYCLOAK_AUTH_KEYCLOAK_URL=${KEYCLOAK_AUTH_KEYCLOAK_URL:-"https://$HHB_FRONTEND_DNS/auth/"}
 export KEYCLOAK_CLIENT_ROOT_URL=${KEYCLOAK_CLIENT_ROOT_URL:-"https://$HHB_FRONTEND_DNS/"}
 export KEYCLOAK_CLIENT_SECRET=${KEYCLOAK_CLIENT_SECRET:-"fc36d31f-f720-4914-a750-b83c7b0dd61c"}
-export KEYCLOAK_CLIENT_USERS=${KEYCLOAK_CLIENT_USERS:-"magre,bas.magre@topicus.nl,Bas,Magre,testtest:basje,bas3@topicus.nl,Sebastiaan,Magre,testtest"}
+# --------------------------------------------------- "username,e@ma.il,Firstname,Lastname,password" separated by :
+export KEYCLOAK_CLIENT_USERS=${KEYCLOAK_CLIENT_USERS:-"koenbrouwer,koen@openweb.nl,Koen,Brouwer,demo:baukehuijbers,bauke.huijbers@vng.nl,Bauke,Huijbers,demo:henkpoortvliet,henk.poortvliet@sloothuizen.nl,Henk,Poortvliet,demo"}
 
 # Create a temporary directory to put the dist files in.
 export DEPLOYMENT_DIST_DIR="dist"
@@ -150,6 +151,7 @@ echo "add resource platform_add.yaml"
 kustomize edit add resource platform_add.yaml
 echo "set images"
 kustomize edit set image backend=${PULL_REPO_IMAGE}/backend:${IMAGE_TAG}
+kustomize edit set image backendburgers=${PULL_REPO_IMAGE}/backendburgers:${IMAGE_TAG}
 kustomize edit set image banktransactieservice=${PULL_REPO_IMAGE}/banktransactieservice:${IMAGE_TAG}
 kustomize edit set image frontend=${PULL_REPO_IMAGE}/frontend:${IMAGE_TAG}
 kustomize edit set image grootboekservice=${PULL_REPO_IMAGE}/grootboekservice:${IMAGE_TAG}
