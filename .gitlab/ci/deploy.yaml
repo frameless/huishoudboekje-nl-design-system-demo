@@ -28,6 +28,7 @@ deploy-deployment-master:
     name: demo
     url: https://demo.huishoudboekje.demoground.nl/
   variables:
+    DEFAULT_REPLICAS: 1
     HHB_HOST: "demo.huishoudboekje.demoground.nl"
     NAMESPACE: "hhb-demo"
     USE_PLATFORM: "azure_tad" # azure - test acc demo
@@ -40,6 +41,7 @@ deploy-deployment-acceptance:
     name: acc
     url: https://acc.huishoudboekje.demoground.nl/
   variables:
+    DEFAULT_REPLICAS: 1
     HHB_HOST: "acc.huishoudboekje.demoground.nl"
     NAMESPACE: "hhb-acc"
     USE_PLATFORM: "azure_tad" # azure - test acc demo
@@ -52,7 +54,7 @@ deploy-deployment-test:
     name: test
     url: https://test.huishoudboekje.demoground.nl/
   variables:
-    DEFAULT_REPLICAS: 2 # test acc and demo 2 replica's
+    DEFAULT_REPLICAS: 1
     HHB_HOST: "test.huishoudboekje.demoground.nl"
     NAMESPACE: "hhb-test"
     USE_PLATFORM: "azure_tad" # azure - test acc demo
