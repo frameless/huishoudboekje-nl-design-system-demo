@@ -56,6 +56,7 @@ class BurgerView(HHBView):
     def extend_get(self, **kwargs):
         """ Extend the get function with extra filter """
         self.add_filter_filter_huishouden()
+        self.add_filter_filter_bsn()
 
     @staticmethod
     def filter_in_string(name, cb):
@@ -80,3 +81,13 @@ class BurgerView(HHBView):
                 self.hhb_model.huishouden_id.in_(ids))
 
         BurgerView.filter_in_string('filter_huishoudens', add_filter)
+
+
+    def add_filter_filter_bsn(self):
+        """ Add filter_bsn filter based on the bsn of a burger """
+
+        def add_filter(bsn):
+            self.hhb_query.query = self.hhb_query.query.filter(
+                self.hhb_model.bsn.in_(bsn))
+
+        BurgerView.filter_in_string('filter_bsn', add_filter)
