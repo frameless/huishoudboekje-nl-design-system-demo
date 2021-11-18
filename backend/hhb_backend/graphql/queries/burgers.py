@@ -50,18 +50,19 @@ class BurgersQuery:
         if "search" in kwargs:
             burger_ids = set()
             afspraken_ids = set()
+            search = str(kwargs["search"]).lower()
 
             burgers = request.dataloader.burgers_by_id.get_all_and_cache(filters=kwargs.get("filters", None))
             for burger in burgers:
-                if str(kwargs["search"]).lower() in str(burger['achternaam']).lower() or\
-                        str(kwargs["search"]).lower() in str(burger['voornamen']).lower() or\
-                        str(kwargs["search"]).lower() in str(burger['bsn']).lower():
+                if search in str(burger['achternaam']).lower() or\
+                        search in str(burger['voornamen']).lower() or\
+                        search in str(burger['bsn']).lower():
                     burger_ids.add(burger["id"])
 
             rekeningen = request.dataloader.rekeningen_by_id.get_all_and_cache(filters=kwargs.get("filters", None))
             for rekening in rekeningen:
-                if str(kwargs["search"]).lower() in str(rekening['iban']).lower() or \
-                        str(kwargs["search"]).lower() in str(rekening['rekeninghouder']).lower():
+                if search in str(rekening['iban']).lower() or \
+                        search in str(rekening['rekeninghouder']).lower():
                     for burger_id in rekening["burgers"]:
                         burger_ids.add(burger_id)
                     for afspraak_id in rekening["afspraken"]:
@@ -69,7 +70,7 @@ class BurgersQuery:
 
             afspraken = request.dataloader.afspraken_by_id.get_all_and_cache(filters=kwargs.get("filters", None))
             for afspraak in afspraken:
-                if str(kwargs["search"]).lower() in str(afspraak['zoektermen']).lower():
+                if search in str(afspraak['zoektermen']).lower():
                     burger_ids.add(afspraak["burger_id"])
 
             afspraken = await request.dataloader.afspraken_by_id.load_many(list(afspraken_ids))

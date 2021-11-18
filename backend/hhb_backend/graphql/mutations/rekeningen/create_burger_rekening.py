@@ -14,6 +14,7 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import (
 
 
 class CreateBurgerRekening(graphene.Mutation):
+    """Mutatie om een rekening aan een burger toe te voegen."""
     class Arguments:
         burger_id = graphene.Int(required=True)
         rekening = graphene.Argument(

@@ -48,12 +48,12 @@ class Betaalinstructie(graphene.ObjectType):
 
 
 class Afspraak(graphene.ObjectType):
-    """ GraphQL Afspraak model """
-
     id = graphene.Int()
     omschrijving = graphene.String()
     bedrag = graphene.Field(Bedrag)
     credit = graphene.Boolean()
+    valid_from = graphene.Date()
+    valid_through = graphene.Date()
     rubriek = graphene.Field(lambda: rubriek.Rubriek)
     zoektermen = graphene.List(graphene.String)
     burger = graphene.Field(lambda: burger.Burger)
@@ -68,8 +68,7 @@ class Afspraak(graphene.ObjectType):
         eind_datum=graphene.Date(),
     )
     matching_afspraken = graphene.List(lambda: Afspraak)
-    valid_from = graphene.Date()
-    valid_through = graphene.Date()
+
 
     async def resolve_overschrijvingen(root, info, **kwargs):
         if root.get("betaalinstructie") is None:

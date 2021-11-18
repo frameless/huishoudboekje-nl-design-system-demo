@@ -16,6 +16,8 @@ from hhb_backend.graphql.models import burger
 
 
 class DeleteHuishoudenBurger(graphene.Mutation):
+    """Mutatie om een burger uit een huishouden te verwijderen."""
+
     class Arguments:
         huishouden_id = graphene.Int(required=True)
         burger_ids = graphene.List(graphene.Int, required=True)

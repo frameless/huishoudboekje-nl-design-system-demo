@@ -1,7 +1,7 @@
 import graphene
 import requests
 from graphql import GraphQLError
-
+from deprecated import deprecated
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.journaalpost import Journaalpost
@@ -12,10 +12,9 @@ class UpdateJournaalpostGrootboekrekeningInput(graphene.InputObjectType):
     id = graphene.Int(required=True)
     grootboekrekening_id = graphene.String(required=True)
 
-
+@deprecated("No longer used")
 class UpdateJournaalpostGrootboekrekening(graphene.Mutation):
-    """Update a Journaalpost with a Grootboekrekening"""
-
+    """deprecated"""
     class Arguments:
         input = graphene.Argument(UpdateJournaalpostGrootboekrekeningInput)
 

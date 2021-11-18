@@ -33,5 +33,6 @@ setup(
         'lxml>=4.6.3,<5',
         'pandas==1.3.3',
         'XlsxWriter==3.0.1',
+        'Deprecated==1.2.13'
     ],
 )

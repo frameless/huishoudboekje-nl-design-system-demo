@@ -15,6 +15,8 @@ from hhb_backend.graphql.models import burger
 
 
 class AddHuishoudenBurger(graphene.Mutation):
+    """Mutatie om een burger aan een huishouden toe te voegen."""
+
     class Arguments:
         huishouden_id = graphene.Int(required=True)
         burger_ids = graphene.List(graphene.Int, required=True)
@@ -56,9 +58,11 @@ class AddHuishoudenBurger(graphene.Mutation):
             )
             if not response.ok:
                 raise GraphQLError(f"Upstream API responded: {response.text}")
+
+        loaded_huishouden = await hhb_dataloader().huishoudens_by_id.load(huishouden_id)
         return AddHuishoudenBurger(
             ok=True,
-            huishouden=await hhb_dataloader().huishoudens_by_id.load(huishouden_id),
+            huishouden=loaded_huishouden,
             previous=previous,
             burgerIds=burger_ids,
         )

@@ -14,6 +14,7 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import (
 )
 
 class DeleteAfdelingRekening(graphene.Mutation):
+    """Mutatie om een rekening van een afdeling te verwijderen."""
     class Arguments:
         rekening_id = graphene.Int(required=True)
         afdeling_id = graphene.Int(required=True)

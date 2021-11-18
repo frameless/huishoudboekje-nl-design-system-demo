@@ -40,6 +40,8 @@ def get_config_value(config_id) -> str:
 
 
 class CreateExportOverschrijvingen(graphene.Mutation):
+    """Mutatie om een betaalinstructie te genereren."""
+    
     class Arguments:
         startDatum = graphene.String()
         eindDatum = graphene.String()

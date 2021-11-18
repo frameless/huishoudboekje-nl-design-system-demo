@@ -3,7 +3,6 @@
 import graphene
 import requests
 from graphql import GraphQLError
-
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.afspraak import Afspraak
@@ -15,7 +14,7 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     gebruikers_activiteit_entities,
     log_gebruikers_activiteit,
 )
-
+from deprecated import deprecated
 
 class CreateJournaalpostAfspraakInput(graphene.InputObjectType):
     transaction_id = graphene.Int(required=True)
@@ -30,7 +29,7 @@ class CreateJournaalpostGrootboekrekeningInput(graphene.InputObjectType):
 
 
 class CreateJournaalpostAfspraak(graphene.Mutation):
-    """Create a Journaalpost with an Afspraak"""
+    """Mutatie om een banktransactie af te letteren op een afspraak."""
 
     class Arguments:
         input = graphene.Argument(CreateJournaalpostAfspraakInput)
@@ -104,9 +103,9 @@ class CreateJournaalpostAfspraak(graphene.Mutation):
         return CreateJournaalpostAfspraak(journaalpost=journaalpost, ok=True)
 
 
+@deprecated("Gebruik createJournaalpostAfspraak")
 class CreateJournaalpostPerAfspraak(graphene.Mutation):
-    """Create a Journaalpost with an Afspraak"""
-
+    """deprecated"""
     class Arguments:
         input = graphene.List(CreateJournaalpostAfspraakInput, required=True)
 
@@ -182,7 +181,7 @@ class CreateJournaalpostPerAfspraak(graphene.Mutation):
 
 
 class CreateJournaalpostGrootboekrekening(graphene.Mutation):
-    """Create a Journaalpost with a Grootboekrekening"""
+    """Mutatie om een banktransactie af te letteren op een grootboekrekening."""
 
     class Arguments:
         input = graphene.Argument(CreateJournaalpostGrootboekrekeningInput)

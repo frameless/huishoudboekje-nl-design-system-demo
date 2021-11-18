@@ -16,7 +16,6 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import (
 class UpdatePostadres(graphene.Mutation):
     class Arguments:
         id = graphene.String(required=True)
-
         straatnaam = graphene.String()
         huisnummer = graphene.String()
         postcode = graphene.String()

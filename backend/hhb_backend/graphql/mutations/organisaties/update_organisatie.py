@@ -17,9 +17,9 @@ class UpdateOrganisatie(graphene.Mutation):
     class Arguments:
         # org_service elements
         id = graphene.Int(required=True)
+        naam = graphene.String()
         kvknummer = graphene.String()
         vestigingsnummer = graphene.String()
-        naam = graphene.String()
 
     ok = graphene.Boolean()
     organisatie = graphene.Field(lambda: Organisatie)
@@ -57,5 +57,6 @@ class UpdateOrganisatie(graphene.Mutation):
                 )
 
             organisatie = org_service_response.json()["data"]
-
+        else:
+            organisatie=previous
         return UpdateOrganisatie(organisatie=organisatie, previous=previous, ok=True)

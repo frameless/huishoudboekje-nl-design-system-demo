@@ -6,7 +6,6 @@ import hhb_backend.graphql.models.afdeling as afdeling
 import hhb_backend.graphql.models.afspraak as afspraak
 
 class Rekening(graphene.ObjectType):
-    """GraphQL Rekening model"""
     id = graphene.Int()
     iban = graphene.String()
     rekeninghouder = graphene.String()

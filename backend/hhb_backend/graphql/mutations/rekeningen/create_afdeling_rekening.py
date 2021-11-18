@@ -12,6 +12,7 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import (
 
 
 class CreateAfdelingRekening(graphene.Mutation):
+    """Mutatie om een rekening aan een afdeling toe te voegen."""
     class Arguments:
         afdeling_id = graphene.Int(required=True)
         rekening = graphene.Argument(

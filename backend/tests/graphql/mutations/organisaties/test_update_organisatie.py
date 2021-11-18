@@ -1,128 +1,210 @@
 import requests_mock
-from requests_mock import Adapter
 from hhb_backend.graphql import settings
 
-import logging
+organisatie = {
+    "id": 1,
+    "naam": "query test organisation",
+    "kvknummer": "98765432",
+    "vestigingsnummer": "9876"
+}
 
-class MockResponse():
-    history = None
-    raw = None
-    is_redirect = None
-    content = None
-
-    def __init__(self, json_data, status_code):
-        self.json_data = json_data
-        self.status_code = status_code
-
-    def json(self):
-        return self.json_data
-
-
-def create_mock_adapter() -> Adapter:
-    adapter = requests_mock.Adapter()
-
-    def test_matcher(request):
-        logging.getLogger(f"wouter-logger").warning(f"[{request}] || {request.method} {request.path} {request.query}")
-        if request.method == "GET" and request.path == "/organisaties/" and request.query == "filter_ids=1":
-            return MockResponse({'data': [{"id": 1, "kvknummer": "123456789", "vestigingsnummer": "012345678912", "naam": "test_organisatie"}]}, 200)
-        elif request.method == "GET" and request.path == "/organisaties/":
-            return MockResponse({'data': [{'id': 1}]}, 201)
-        elif request.method == "POST" and  request.path == "/organisaties/1":
-            return MockResponse({'data': {'id': 1}}, 200)
-        elif request.method == "POST" and request.path == "/gebruikersactiviteiten/":
-            return MockResponse({'data': {'id': 1}}, 201)
-
-    adapter.add_matcher(test_matcher)
-    return adapter
-
+updated_organisatie = {
+    "id": 1,
+    "naam": "test",
+    "kvknummer": "23456789",
+    "vestigingsnummer": "6789"
+}
 
 def test_update_organisatie_success(client):
-    with requests_mock.Mocker() as mock:
-        mock._adapter = create_mock_adapter()
-        organisatie_to_update = {"id": 1, "kvknummer": "123456789", "vestigingsnummer": "012345678912", "naam": "test_organisatie"}
-
-        # TODO make this work        
-        # fallback = mock.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        # org_1 = mock.get(f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/?filter_ids=1", status_code=200, json={'data': [{"id": 1, "kvknummer": "123456789", "vestigingsnummer": "012345678912", "naam": "test_organisatie"}]})
-        # org_2 = mock.get(f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/", status_code=201, json={'data': [{'id': 1}]})
-        # org_3 = mock.post(f"http://organisatieservice:8000/organisaties/1", status_code=200, json={'data': {'id': 1}})
-        # act_1 = mock.post(f"http://logservice:8000/gebruikersactiviteiten/", status_code=201, json={'data': {'id': 1}})
-
-        #actual calls made
-        # [GET http://organisatieservice:8000/organisaties/?filter_ids=1] || GET /organisaties/ filter_ids=1
-        # [GET http://organisatieservice:8000/organisaties/] || GET /organisaties/
-        # [POST http://organisatieservice:8000/organisaties/1] || POST /organisaties/1
-        # [POST http://logservice:8000/gebruikersactiviteiten/] || POST /gebruikersactiviteiten/
-
-        response = client.post(
-            "/graphql",
-            json={
-                "query": '''
-                mutation updateOrganisatie($id: Int!,
-                $kvknummer: String,
-                $vestigingsnummer: String,
-                $naam: String) {
-                  updateOrganisatie(id: $id, kvknummer: $kvknummer, vestigingsnummer: $vestigingsnummer, naam: $naam) {
-                    ok
-                    organisatie {
-                      id
+     with requests_mock.Mocker() as rm:
+        # arrange
+        request = {
+            "query": '''
+                mutation test($id:Int!, $naam:String, $kvknummer:String, $vestigingsnummer:String) {
+                    updateOrganisatie(id:$id, naam:$naam, kvknummer:$kvknummer, vestigingsnummer:$vestigingsnummer) {
+                        ok
+                        organisatie {
+                            id
+                            naam
+                            kvknummer
+                            vestigingsnummer
+                        }
                     }
-                  }
                 }''',
-                "variables": organisatie_to_update},
-        )
-
-        assert response.json == {"data": {"updateOrganisatie": {"ok": True, "organisatie": {"id": 1}}}}
-
-        # assert org_1.called_once
-        # assert org_2.called_once
-        # assert org_3.called_once
-        # assert act_1.called_once
-
-        assert mock._adapter.call_count == 4
-
-
-def create_mock_adapter2() -> Adapter:
-    adapter = requests_mock.Adapter()
-
-    def test_matcher(request):
-        if request.path == "/organisaties/" and request.query == "filter_ids=1":
-            return MockResponse({'data': [{"id": 1, "kvknummer": "123456789", "vestigingsnummer": "012345678912", "naam": "test_organisatie"}]}, 200)
-        if request.path == "/organisaties/":
-            return MockResponse({'data': [{'id': 1, 'kvknummer': "123", 'vestigingsnummer': "123"},
-                                          {'id': 2, 'kvknummer': "123", 'vestigingsnummer': "123"}]}, 201)
-        elif request.path == "/organisaties/1":
-            return MockResponse({'data': {'id': 1}}, 200)
-        elif request.path == "/gebruikersactiviteiten/":
-            return MockResponse({'data': {'id': 1}}, 201)
-
-    adapter.add_matcher(test_matcher)
-    return adapter
+            "variables": {
+                'id': 1,
+                'naam': 'test',
+                'kvknummer': "23456789",
+                'vestigingsnummer': "6789"
+            }}
+        expected = {'data': {'updateOrganisatie': {'ok': True, 'organisatie': {'id': 1, 'naam': 'test', 'kvknummer': '23456789', 'vestigingsnummer': '6789'}}}}
+        fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
+        rm1 = rm.get(f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/", status_code=200, json={"data":[organisatie]})
+        rm2 = rm.post(f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/1", status_code=200, json={"data":updated_organisatie})
+        rm3 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=200)
 
 
-def test_update_organisatie_unique_fail(client):
-    with requests_mock.Mocker() as mock:
-        mock._adapter = create_mock_adapter2()
+        # act
+        response = client.post("/graphql", json=request, content_type='application/json')
 
-        response = client.post(
-            "/graphql",
-            json={
-                "query": '''
-        mutation updateOrganisatie($id: Int!, $kvknummer: String, $vestigingsnummer: String,$naam: String) 
-        { updateOrganisatie(id: $id, kvknummer: $kvknummer, vestigingsnummer: $vestigingsnummer, naam: $naam)  {
-              ok
-              organisatie {
-                id
-                }
-            }
-        }''',
-                "variables": {
-                    'id': 1,
-                    'kvknummer': '123',
-                    'vestigingsnummer': '123',
-                    'naam': 'testOrganisatie'}},
-            content_type='application/json'
-        )
 
-        assert mock._adapter.call_count == 2
-        assert response.json["errors"][0]["message"] == "Combination kvk-nummer and vestigingsnummer is not unique."
+        # assert
+        assert rm1.call_count == 2
+        assert rm2.called_once
+        assert rm3.called_once
+        assert fallback.call_count == 0
+        assert response.json == expected
+
+def test_update_organisatie_success_limited(client):
+     with requests_mock.Mocker() as rm:
+        # arrange
+        request = {
+            "query": '''
+                mutation test($id:Int!, $naam:String, $kvknummer:String) {
+                    updateOrganisatie(id:$id, naam:$naam, kvknummer:$kvknummer) {
+                        ok
+                        organisatie {
+                            id
+                            naam
+                            kvknummer
+                            vestigingsnummer
+                        }
+                    }
+                }''',
+            "variables": {
+                'id': 1,
+                'naam': 'test',
+                'kvknummer': "23456789"
+            }}
+        expected = {'data': {'updateOrganisatie': {'ok': True, 'organisatie': {'id': 1, 'naam': 'test', 'kvknummer': '23456789', 'vestigingsnummer': '9876'}}}}
+        fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
+        rm1 = rm.get(f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/", status_code=200, json={"data":[organisatie]})
+        rm2 = rm.post(f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/1", status_code=200, json={"data":{'id': 1, 'naam': 'test', 'kvknummer': '23456789', 'vestigingsnummer': '9876'}})
+        rm3 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=200)
+
+
+        # act
+        response = client.post("/graphql", json=request, content_type='application/json')
+
+
+        # assert
+        assert rm1.call_count == 2
+        assert rm2.called_once
+        assert rm3.called_once
+        assert fallback.call_count == 0
+        assert response.json == expected
+
+
+        # arrange
+        request = {
+            "query": '''
+                mutation test($id:Int!, $naam:String, $vestigingsnummer:String) {
+                    updateOrganisatie(id:$id, naam:$naam, vestigingsnummer:$vestigingsnummer) {
+                        ok
+                        organisatie {
+                            id
+                            naam
+                            kvknummer
+                            vestigingsnummer
+                        }
+                    }
+                }''',
+            "variables": {
+                'id': 1,
+                'naam': 'test',
+                'vestigingsnummer': "23456789"
+            }}
+        expected = {'data': {'updateOrganisatie': {'ok': True, 'organisatie': {'id': 1, 'naam': 'test', 'kvknummer': '23456789', 'vestigingsnummer': '23456789'}}}}
+        fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
+        rm1 = rm.get(f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/", status_code=200, json={"data":[organisatie]})
+        rm2 = rm.post(f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/1", status_code=200, json={"data":{'id': 1, 'naam': 'test', 'kvknummer': '23456789', 'vestigingsnummer': '23456789'}})
+        rm3 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=200)
+
+
+        # act
+        response = client.post("/graphql", json=request, content_type='application/json')
+
+
+        # assert
+        assert rm1.call_count == 2
+        assert rm2.called_once
+        assert rm3.called_once
+        assert fallback.call_count == 0
+        assert response.json == expected
+
+def test_update_organisatie_success_no_update(client):
+     with requests_mock.Mocker() as rm:
+        # arrange
+        request = {
+            "query": '''
+                mutation test($id:Int!) {
+                    updateOrganisatie(id:$id) {
+                        ok
+                        organisatie {
+                            id
+                            naam
+                            kvknummer
+                            vestigingsnummer
+                        }
+                    }
+                }''',
+            "variables": {
+                'id': 1
+            }}
+        expected = {'data': {'updateOrganisatie': {'ok': True, 'organisatie': organisatie}}}
+        fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
+        rm1 = rm.get(f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/?filter_ids=1", status_code=200, json={"data":[organisatie]})
+        rm2 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=200)
+
+
+        # act
+        response = client.post("/graphql", json=request, content_type='application/json')
+
+
+        # assert
+        assert rm1.called_once
+        assert rm2.called_once
+        assert fallback.call_count == 0
+        assert response.json == expected
+
+def test_update_organisatie_fail(client):
+     with requests_mock.Mocker() as rm:
+        # arrange
+        organisatie_2 = {
+            "id": 2,
+            "naam": "test",
+            "kvknummer": "23456789",
+            "vestigingsnummer": "6789"
+        }
+        request = {
+            "query": '''
+                mutation test($id:Int!, $naam:String, $kvknummer:String, $vestigingsnummer:String) {
+                    updateOrganisatie(id:$id, naam:$naam, kvknummer:$kvknummer, vestigingsnummer:$vestigingsnummer) {
+                        ok
+                        organisatie {
+                            id
+                            naam
+                            kvknummer
+                            vestigingsnummer
+                        }
+                    }
+                }''',
+            "variables": {
+                'id': 1,
+                'naam': 'test',
+                'kvknummer': "23456789",
+                'vestigingsnummer': "6789"
+            }}
+        expected = "Combination kvk-nummer and vestigingsnummer is not unique."
+        fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
+        rm1 = rm.get(f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/", status_code=200, json={"data":[organisatie, organisatie_2]})
+
+
+        # act
+        response = client.post("/graphql", json=request, content_type='application/json')
+
+
+        # assert
+        assert rm1.call_count == 2
+        assert fallback.call_count == 0
+        assert response.json["errors"][0]["message"] == expected

@@ -13,6 +13,7 @@ from hhb_backend.processen.automatisch_boeken import find_matching_afspraken_by_
 
 
 class DeleteAfspraakZoekterm(graphene.Mutation):
+    """Mutatie om een zoekterm bij een afspraak te verwijderen."""
     class Arguments:
         afspraak_id = graphene.Int(required=True)
         zoekterm = graphene.String(required=True)
@@ -52,11 +53,7 @@ class DeleteAfspraakZoekterm(graphene.Mutation):
         # them here.
         previous = pydash.omit(previous, 'journaalposten', 'overschrijvingen')
 
-        if previous["zoektermen"]:
-            zoektermen = list(previous["zoektermen"])
-        else:
-            zoektermen = list()
-
+        zoektermen = list(previous.get("zoektermen", []))
         if zoekterm.lower() in (zk.lower() for zk in zoektermen):
             zoektermen.remove(zoekterm)
         else:

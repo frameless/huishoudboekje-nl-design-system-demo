@@ -6,7 +6,6 @@ from hhb_backend.graphql.models.pageinfo import PageInfo
 
 
 class Huishouden(graphene.ObjectType):
-    """ GraphQL Huishouden model """
     id = graphene.Int()
     burgers = graphene.List(lambda: burger.Burger)
 

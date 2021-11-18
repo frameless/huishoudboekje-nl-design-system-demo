@@ -26,6 +26,8 @@ class CreateAfdelingInput(graphene.InputObjectType):
     postadressen = graphene.List(lambda: create_postadres.CreatePostadresInput)
 
 class CreateAfdeling(graphene.Mutation):
+    """Mutatie om een afdeling aan een organisatie toe te voegen."""
+
     class Arguments:
         input = graphene.Argument(CreateAfdelingInput)
 
