@@ -242,7 +242,7 @@ export interface NexusGenFieldTypeNames {
 export interface NexusGenArgTypes {
   Query: {
     burger: { // args
-      id?: number | null; // Int
+      bsn?: number | null; // Int
     }
     organisaties: { // args
       ids?: Array<number | null> | null; // [Int]

@@ -92,7 +92,7 @@ type Organisatie {
 
 """GraphQL Query"""
 type Query {
-  burger(id: Int): Burger
+  burger(bsn: Int): Burger
   burgers: [Burger]
   organisaties(ids: [Int]): [Organisatie]
 }

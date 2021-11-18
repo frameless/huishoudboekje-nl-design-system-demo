@@ -15,6 +15,10 @@ const DataLoader = {
 		return await fetch(createServiceUrl("huishoudboekje", `/burgers/${id}`)).then(r => r.json()).then(r => r.data);
 	},
 
+	getBurgersByBsn: async (bsn: number) => {
+		return await fetch(createServiceUrl("huishoudboekje", `/burgers?filter_bsn=${bsn}`)).then(r => r.json()).then(r => r.data || []);
+	},
+
 	// Afspraken
 	getAfsprakenByBurgerId: async (id: number) => {
 		return await fetch(createServiceUrl("huishoudboekje", `/afspraken?filter_burgers=${id}`)).then(r => r.json()).then(r => r.data || []);
@@ -63,14 +67,8 @@ const DataLoader = {
 		const banktransactieIds = journaalposten.map(j => j.transaction_id);
 		// const ibans = journaalposten.map(j => j.tegen_rekening);
 
-		console.log({banktransactieIds});
-
 		return await DataLoader
 			.getBanktransactiesById(banktransactieIds)
-			.then(result => {
-				console.log(result);
-				return result;
-			})
 			.then(transacties => transacties.map(t => ({
 				...t,
 

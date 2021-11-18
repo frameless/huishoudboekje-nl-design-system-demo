@@ -6,11 +6,11 @@ import {isDev} from "../utils/things";
 const burger = (t) => {
 	t.field("burger", {
 		args: {
-			id: intArg(),
+			bsn: intArg(),
 		},
 		type: Burger,
-		resolve: (root, args) => {
-			return DataLoader.getBurgerById(args.id);
+		resolve: async (root, args) => {
+			return DataLoader.getBurgersByBsn(args.bsn).then(r => r.shift());
 		},
 	});
 
