@@ -86,7 +86,7 @@ class CreateAfdeling(graphene.Mutation):
             # update afdeling with rekening
             update_response = requests.post(
                 f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/{afdeling_id}",
-                json={"rekeningen_ids": [','.join(map(str, rekening_ids))]},
+                json={"rekeningen_ids": rekening_ids},
                 headers={"Content-type": "application/json"},
             )
             if update_response.status_code != 200:
