@@ -90,8 +90,10 @@ class CreateAfspraak(graphene.Mutation):
         # Check postadres_id - optional
         postadres_id = input.get("postadres_id")
         if postadres_id is not None:
-            postadres: Postadres = (await hhb_dataloader().postadressen_by_id.load(postadres_id))
-            if not postadres:
+            querystring = f"?id[]={postadres_id}"
+            url = f"""{settings.CONTACTCATALOGUS_SERVICE_URL}/addresses/{querystring}"""
+            response = requests.get(url, headers={"Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845", "accept": "application/json"})
+            if len(response) < 1:
                 raise GraphQLError("postadres not found")
 
         # final create call
