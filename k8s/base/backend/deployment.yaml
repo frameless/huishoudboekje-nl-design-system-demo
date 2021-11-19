@@ -66,6 +66,8 @@ spec:
               value: "http://hhb-grootboekservice"
             - name: LOG_SERVICE_URL
               value: "http://hhb-logservice"
+            - name: CONTACTCATALOGUS_SERVICE_URL
+              value: "http://hhb-contactcatalogus"
             - name: SECRET_KEY
               valueFrom:
                 secretKeyRef:
