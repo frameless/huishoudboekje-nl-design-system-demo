@@ -1,0 +1,21 @@
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  annotations:
+    openshift.io/host.generated: "true"
+  labels:
+    name: hhb-keycloak-route
+  name: hhb-keycloak-route
+spec:
+  host: ${HHB_FRONTEND_DNS}
+  path: /auth
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+  to:
+    kind: Service
+    name: hhb-keycloak
+    weight: 100
+  wildcardPolicy: None

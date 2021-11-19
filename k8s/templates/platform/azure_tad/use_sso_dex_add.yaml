@@ -1,0 +1,23 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hhb-dex-ingress
+  labels:
+    name: hhb-dex-ingress
+spec:
+  tls:
+    - hosts:
+        - ${HHB_FRONTEND_DNS}
+      secretName: medewerker-frontend-ingress-tls
+  rules:
+    - host: ${HHB_FRONTEND_DNS}
+      http:
+        paths:
+          - path: /auth
+            pathType: Prefix
+            backend:
+              service:
+                name: hhb-dex
+                port:
+                  number: 80

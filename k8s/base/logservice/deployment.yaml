@@ -26,7 +26,7 @@ spec:
             ]
         - name: init2-prepare-db
           image: bitnami/postgresql:13
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           env:
             - name: POSTGRESQL_PASSWORD
               valueFrom:

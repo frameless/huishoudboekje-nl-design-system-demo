@@ -1,5 +1,5 @@
 ---
-# all base components nijmegen is using
+# all base components nijmegen is using (without sso, that will be added in build.sh)
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
@@ -7,7 +7,6 @@ resources:
   - ../../base/backend
   - ../../base/banktransactieservice
   - ../../base/database
-  # - ../../base/dex
   - ../../base/frontend
   - ../../base/grootboekservice
   - ../../base/huishoudboekjeservice
