@@ -47,14 +47,14 @@ const CreateAfspraak = async (afspraak: Omit<CreateAfspraakInput, "burgerId" | "
 		console.log(`Afspraak voor burger ${formatBurgerName(burger)} met ${resultAfspraak.tegenRekening?.iban} op naam van ${resultAfspraak.tegenRekening?.rekeninghouder} toegevoegd.`);
 
 		await AddAfspraakZoektermen(resultAfspraak, zoektermen)
-		.catch(err => {
-			console.error(`(!) Kon zoektermen ${zoektermen.join(", ")} niet toevoegen voor afspraak ${resultAfspraak.id}:`, util.inspect(err, false, null, true));
-		});
+			.catch(err => {
+				console.error(`(!) Kon zoektermen ${zoektermen.join(", ")} niet toevoegen voor afspraak ${resultAfspraak.id}:`, util.inspect(err, false, null, true));
+			});
 
 		await AddAfspraakBetaalinstructie(resultAfspraak, betaalinstructie)
-		.catch(err => {
-			console.error(`(!) Kon betaalinstructie niet toevoegen voor afspraak ${resultAfspraak.id}:`, util.inspect(err, false, null, true));
-		});
+			.catch(err => {
+				console.error(`(!) Kon betaalinstructie niet toevoegen voor afspraak ${resultAfspraak.id}:`, util.inspect(err, false, null, true));
+			});
 
 		return resultAfspraak;
 	});
