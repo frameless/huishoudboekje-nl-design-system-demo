@@ -31,12 +31,11 @@ def test_postadres(client):
 def test_postadressen(client):
     with requests_mock.Mocker() as rm:
         rm.get(f"{settings.CONTACTCATALOGUS_SERVICE_URL}/addresses/",
-               json={"hydra:member": [{'id': 'test_id',
-                                       'street': 'teststraat',
-                                       'houseNumber': '52B',
-                                       'postalCode': '9999ZZ',
-                                       'locality': 'testplaats'}]
-                     })
+               json=[{'id': 'test_id',
+                    'street': 'teststraat',
+                    'houseNumber': '52B',
+                    'postalCode': '9999ZZ',
+                    'locality': 'testplaats'}])
         response = client.post(
             "/graphql",
             data='{"query": "{ postadressen { huisnummer straatnaam plaatsnaam postcode}}"}',

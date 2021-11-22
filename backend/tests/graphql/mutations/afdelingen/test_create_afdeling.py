@@ -103,26 +103,23 @@ def test_create_afdeling_full_succes(client):
            }]
         }
 
-        postadres_result = {
-            "hydra:member": [
-                    {
-                        "@id": "/addresses/7426aa95-03c0-453d-b9ff-11a5442ab959",
-                        "@type": "Address",
-                        "id": "7426aa95-03c0-453d-b9ff-11a5442ab959",
-                        "name": None,
-                        "bagnummeraanduiding": None,
-                        "street": "teststraat",
-                        "houseNumber": "52B",
-                        "houseNumberSuffix": None,
-                        "postalCode": "9999ZZ",
-                        "region": None,
-                        "locality": "testplaats",
-                        "country": None,
-                        "postOfficeBoxNumber": None,
-                        "dateCreated": "2021-11-09T12:01:05+00:00",
-                        "dateModified": "2021-11-09T12:01:05+00:00"
-                    }]
-        }
+        postadres_result = [{
+            "@id": "/addresses/7426aa95-03c0-453d-b9ff-11a5442ab959",
+            "@type": "Address",
+            "id": "7426aa95-03c0-453d-b9ff-11a5442ab959",
+            "name": None,
+            "bagnummeraanduiding": None,
+            "street": "teststraat",
+            "houseNumber": "52B",
+            "houseNumberSuffix": None,
+            "postalCode": "9999ZZ",
+            "region": None,
+            "locality": "testplaats",
+            "country": None,
+            "postOfficeBoxNumber": None,
+            "dateCreated": "2021-11-09T12:01:05+00:00",
+            "dateModified": "2021-11-09T12:01:05+00:00"
+        }]
 
         fallback = mock.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
         e1 = mock.get(f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/?filter_ids=1", status_code=200, json={'data': [{'id': 1}]})

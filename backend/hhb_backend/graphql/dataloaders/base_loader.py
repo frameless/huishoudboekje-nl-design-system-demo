@@ -31,7 +31,8 @@ class SingleDataLoader(DataLoader):
         if self.service == settings.CONTACTCATALOGUS_SERVICE_URL:
             response = requests.get(url=f"{self.service}/{self.model}/",
                                     params=params, headers={
-                    "Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845"})
+                                        "Accept" : "application/json",
+                                        "Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845"})
         else:
             response = requests.get(url=f"{self.service}/{self.model}/",
                                     params=params)
@@ -44,7 +45,7 @@ class SingleDataLoader(DataLoader):
                 raise GraphQLError(f"Upstream API responded: {response.text}")
 
         if self.service == settings.CONTACTCATALOGUS_SERVICE_URL:
-            result = response.json()['hydra:member']
+            result = response.json()
         else:
             result = response.json()["data"]
 
@@ -85,7 +86,7 @@ class SingleDataLoader(DataLoader):
         for i in range(0, len(keys), self.batch_size):
             url = self.url_for(keys[i:i + self.batch_size])
             if self.service == settings.CONTACTCATALOGUS_SERVICE_URL:
-                response = requests.get(url, headers={ "Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845" })
+                response = requests.get(url, headers={ "Accept" : "application/json", "Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845" })
             else:
                 response = requests.get(url)
             try:
@@ -95,7 +96,7 @@ class SingleDataLoader(DataLoader):
                 if response.status_code != 200:
                     raise GraphQLError(f"Upstream API responded: {response.text}")
             if self.service == settings.CONTACTCATALOGUS_SERVICE_URL:
-                for item in response.json()["hydra:member"]:
+                for item in response.json():
                     objects[item[self.index]] = item
             else:
                 for item in response.json()["data"]:
