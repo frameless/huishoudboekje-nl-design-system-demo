@@ -61,15 +61,18 @@ class CreateAfdeling(graphene.Mutation):
         hhb_service_response = requests.post(
             f"{settings.HHB_SERVICES_URL}/afdelingen/",
             json=hhb_service_data,
-            headers={"Content-type": "application/json"},
+            headers={"Accept": "application/json", "Content-type": "application/json"},
         )
         if hhb_service_response.status_code != 201:
             raise GraphQLError(f"Upstream API responded: {hhb_service_response.json()}")
 
+        print(f">>>>>>>>>>>>>>>")
+        print(f">>>>>>>>>>>>>>> {input}")
+        print(f">>>>>>>>>>>>>>>")
         org_service_response = requests.post(
             f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/",
-            data=json.dumps(input),
-            headers={"Content-type": "application/json"},
+            json=input,
+            headers={"Accept": "application/json", "Content-type": "application/json"},
         )
         if org_service_response.status_code != 201:
             raise GraphQLError(f"Upstream API responded: {org_service_response.json()}")
@@ -86,7 +89,7 @@ class CreateAfdeling(graphene.Mutation):
             # update afdeling with rekening
             update_response = requests.post(
                 f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/{afdeling_id}",
-                json={"rekeningen_ids": rekening_ids},
+                json={"Accept": "application/json", "rekeningen_ids": rekening_ids},
                 headers={"Content-type": "application/json"},
             )
             if update_response.status_code != 200:

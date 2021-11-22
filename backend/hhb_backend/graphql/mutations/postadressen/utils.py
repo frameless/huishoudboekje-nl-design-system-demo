@@ -14,7 +14,7 @@ def create_afdeling_postadres(input, afdeling_id):
 
     contactCatalogus_response = requests.post(
         f"{settings.CONTACTCATALOGUS_SERVICE_URL}/addresses",
-        data=json.dumps(contactCatalogus_input),
+        json=contactCatalogus_input,
         headers={"Accept": "application/json", "Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845"}
     )
     if contactCatalogus_response.status_code != 201:
