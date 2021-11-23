@@ -17,6 +17,7 @@ spec:
       containers:
         - name: init1-wait-for-keycloak
           image: busybox
+          imagePullPolicy: IfNotPresent
           command: ["/bin/sh"]
           args:
             - -c
