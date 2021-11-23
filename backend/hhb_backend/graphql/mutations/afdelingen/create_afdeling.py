@@ -66,9 +66,6 @@ class CreateAfdeling(graphene.Mutation):
         if hhb_service_response.status_code != 201:
             raise GraphQLError(f"Upstream API responded: {hhb_service_response.json()}")
 
-        print(f">>>>>>>>>>>>>>>")
-        print(f">>>>>>>>>>>>>>> {input}")
-        print(f">>>>>>>>>>>>>>>")
         org_service_response = requests.post(
             f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/",
             json=input,

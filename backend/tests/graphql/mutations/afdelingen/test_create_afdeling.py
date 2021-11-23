@@ -173,9 +173,6 @@ def test_create_afdeling_full_succes(client):
             content_type='application/json'
         )
 
-        for call in fallback.request_history:
-            print(f"> > > > fallback: {call.method} {call.url} ") #{call.qs}
-
         # assert
         assert e1.called_once
         assert e2.called_once
