@@ -1,0 +1,72 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: hhb-keycloak-init
+  labels:
+    name: hhb-keycloak-init
+spec:
+  template:
+    spec:
+      volumes:
+        - name: keycloak-init-env
+          emptyDir: {}
+        - name: keycloak-init-script
+          configMap:
+            name: hhb-keycloak-init-script
+      restartPolicy: Never
+      containers:
+        - name: init1-wait-for-keycloak
+          image: busybox
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/sh"]
+          args:
+            - -c
+            - while true; do sleep 1; echo Waiting for Keycloak to be up...; if nc -z hhb-keycloak 80; then echo Keycloak is up!; exit 0; fi; done; echo Aint gonna wait for Keycloak forever...; exit 1
+        - name: init2-import-keycloak-settings
+          image: bitnami/python:3.8
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/bash"]
+          args:
+            - -c
+            - >-
+              cd env &&
+              virtualenv keycloak_init -p python3 &&
+              source keycloak_init/bin/activate &&
+              python3 -m pip install -r ../script/requirements.txt &&
+              python3 ../script/keycloak_hhb.py
+          env:
+            - name: KEYCLOAK_AUTH_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: hhb-keycloak-secrets
+                  key: KEYCLOAK_AUTH_USERNAME
+            - name: KEYCLOAK_AUTH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: hhb-keycloak-secrets
+                  key: KEYCLOAK_AUTH_PASSWORD
+            - name: KEYCLOAK_AUTH_KEYCLOAK_URL
+              valueFrom:
+                secretKeyRef:
+                  name: hhb-keycloak-secrets
+                  key: KEYCLOAK_AUTH_KEYCLOAK_URL
+            - name: KEYCLOAK_CLIENT_ROOT_URL
+              valueFrom:
+                secretKeyRef:
+                  name: hhb-keycloak-secrets
+                  key: KEYCLOAK_CLIENT_ROOT_URL
+            - name: KEYCLOAK_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: hhb-keycloak-secrets
+                  key: KEYCLOAK_CLIENT_SECRET
+            - name: KEYCLOAK_CLIENT_USERS
+              valueFrom:
+                secretKeyRef:
+                  name: hhb-keycloak-secrets
+                  key: KEYCLOAK_CLIENT_USERS
+          volumeMounts:
+            - name: keycloak-init-script
+              mountPath: /app/script
+            - name: keycloak-init-env
+              mountPath: /app/env

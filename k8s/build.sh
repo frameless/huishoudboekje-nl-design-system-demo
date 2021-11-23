@@ -20,7 +20,7 @@ export HHB_HOST=${HHB_HOST:-hhb.minikube}
 # Use the provided PULL_REPO_IMAGE or "registry.gitlab.com/commonground/huishoudboekje/app-new" as the default
 export PULL_REPO_IMAGE=${PULL_REPO_IMAGE:-registry.gitlab.com/commonground/huishoudboekje/app-new}
 
-# Platform to use. Options are azure_review or azure_tad, true or ocp.
+# Platform to use. Options are minikube, azure_review, azure_tad, true or ocp.
 export USE_PLATFORM=${USE_PLATFORM:-"true"}
 
 # Number of pods that should be running. Default is just 1, change if you wish to scale up by default.
@@ -161,6 +161,7 @@ kustomize edit set image organisatieservice=${PULL_REPO_IMAGE}/organisatieservic
 kustomize edit set image unleashservice=${PULL_REPO_IMAGE}/unleashservice:${IMAGE_TAG}
 cd ../../
 
+echo "Building Kustomize..."
 kustomize build k8s/$DEPLOYMENT_DIST_DIR > k8s/$DEPLOYMENT_DIST_DIR/single_deploy_file.yaml
 
 echo "Applying envvars and create namespace.yaml"
