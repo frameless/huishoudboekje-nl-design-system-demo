@@ -248,6 +248,8 @@ services:
     ports:
       - 8005:8000
 
+  # Contactcatalogus is running on 8006, but needs to be upped from docker-compose file.
+
   postadressenservice:
     <<: *x-resource-limit
     <<: *x-postadressenservice
