@@ -78,7 +78,7 @@ def test_create_export_brieven(client):
         # assert postadres_endpoint_1.called_once
         # assert postadres_endpoint_2.called_once
 
-        assert response_csv == f'organisatie.naam|organisatie.postadres.adresregel1|organisatie.postadres.postcode|organisatie.postadres.plaats|afspraak.id|nu.datum|burger.naam|burger.postadres.adresregel1|burger.postadres.postcode|burger.postadres.plaats|betaalrichting|status.afspraak\ntest organisatie 1|test straat 2 test huisnummer 2|test postcode 2|test plaats 2|stuff, things, test#1, com bi na ti|2021-11-22|John Do|burger test straat 15a|1234AB|burger test plaats|credit|2021-12-01\n'
+        assert response_csv == f'organisatie.naam|organisatie.postadres.adresregel1|organisatie.postadres.postcode|organisatie.postadres.plaats|afspraak.id|nu.datum|burger.naam|burger.postadres.adresregel1|burger.postadres.postcode|burger.postadres.plaats|betaalrichting|status.afspraak\ntest organisatie 1|test straat 2 test huisnummer 2|test postcode 2|test plaats 2|stuff, things, test#1, com bi na ti|{current_date_str}|John Do|burger test straat 15a|1234AB|burger test plaats|credit|2021-12-01\n'
 
         assert fallback.call_count == 0
 
