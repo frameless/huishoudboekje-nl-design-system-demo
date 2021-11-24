@@ -68,6 +68,8 @@ spec:
               value: "http://hhb-logservice"
             - name: CONTACTCATALOGUS_SERVICE_URL
               value: "http://hhb-contactcatalogus"
+            - name: POSTADRESSENSERVICE_URL
+              value: "http://hhb-postadressenservice"
             - name: SECRET_KEY
               valueFrom:
                 secretKeyRef:
