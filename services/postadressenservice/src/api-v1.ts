@@ -13,13 +13,25 @@ app.get("/health", healthRouter);
 app.get("/version", (req, res) => res.send(pkg.version));
 
 app.get("/", async (req, res) => {
-	const data = await db.address.findMany({});
-	res.json(data);
+	const filterIds: string = req.query.filter_ids as string || "";
+
+	// Split by , and filter out empty strings.
+	const ids = filterIds.trim().split(",").filter(s => s);
+
+	const data = await db.address.findMany({
+		where: {
+			...ids.length > 0 ? {
+				id: {
+					in: ids,
+				},
+			} : {},
+		},
+	});
+	return res.json(data);
 });
 
 app.post("/", (req, res, next) => {
 	const data = req.body;
-	console.log({data});
 
 	// Create the address
 	db.address.create({
@@ -61,8 +73,8 @@ app.put("/:id", (req, res, next) => {
 
 		// Update entity
 		return db.address.update({
-			where: { id },
-			data
+			where: {id},
+			data,
 		});
 	}).then(result => {
 		return res.status(200).json(result);
@@ -88,7 +100,7 @@ app.delete("/:id", (req, res, next) => {
 
 		// Delete entity
 		return db.address.delete({
-			where: { id },
+			where: {id},
 		});
 	}).then(result => {
 		console.log({result});
