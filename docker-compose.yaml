@@ -64,6 +64,15 @@ x-logservice: &x-logservice
   environment:
     GROOTBOEK_DATABASE_URL: "postgresql://hhb:hhb@db/logservice"
 
+x-postadressenservice: &x-postadressenservice
+  build:
+    context: ./services/postadressenservice
+    dockerfile: ./dev.Dockerfile
+  volumes:
+    - ./services/postadressenservice:/app
+  environment:
+    DATABASE_URL: "postgresql://hhb:hhb@db/postadressenservice"
+
 x-tests: &x-tests
   profiles:
     - tests
@@ -78,9 +87,6 @@ x-resource-limit: &x-resource-limit
       limits:
         cpus: '0.20'   #20% of a single core
         memory: 250M  # 250mb of memory
-      reservations:
-        cpus: '0.05'  # 5% of a single core
-        memory: 100M  # 200mb of memory
 
 services:
   # Database
@@ -109,7 +115,8 @@ services:
         psql -h db -U postgres -c "CREATE DATABASE organisatieservice" || true &&
         psql -h db -U postgres -c "CREATE DATABASE banktransactieservice" || true &&
         psql -h db -U postgres -c "CREATE DATABASE grootboekservice" || true &&
-        psql -h db -U postgres -c "CREATE DATABASE logservice" || true
+        psql -h db -U postgres -c "CREATE DATABASE logservice" || true &&
+        psql -h db -U postgres -c "CREATE DATABASE postadressenservice" || true
     profiles:
       - db
     depends_on:
@@ -147,6 +154,7 @@ services:
       LOG_SERVICE_URL: "http://logservice:8000"
       # The contact catalogus is another component that is in a separate docker-compose, where you need to change the port it runs on to 8006.
       CONTACTCATALOGUS_SERVICE_URL: "http://host.docker.internal:8006"
+      POSTADRESSENSERVICE_URL: "http://postadressenservice:8080"
       SECRET_KEY: koen
     ports:
       - 5000:8000
@@ -159,6 +167,7 @@ services:
   backend-burgers:
     <<: *x-resource-limit
     <<: *x-backend-burgers
+    container_name: backend-burgers
     environment:
       HUISHOUDBOEKJESERVICE_URL: "http://huishoudboekjeservice:8000"
     ports:
@@ -238,6 +247,15 @@ services:
       LOG_DATABASE_URL: "postgresql://hhb:hhb@db/logservice"
     ports:
       - 8005:8000
+
+  postadressenservice:
+    <<: *x-resource-limit
+    <<: *x-postadressenservice
+    container_name: postadressenservice
+    environment:
+      DATABASE_URL: "postgresql://hhb:hhb@db/postadressenservice"
+    ports:
+      - 8007:8080
 
   logservice-test:
     <<: *x-resource-limit
