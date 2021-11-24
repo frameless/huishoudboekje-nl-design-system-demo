@@ -76,3 +76,24 @@ spec:
     name: hhb-unleashservice
     weight: 100
   wildcardPolicy: None
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  annotations:
+    openshift.io/host.generated: "true"
+  labels:
+    name: hhb-backendburgers-route
+  name: hhb-backendburgers-route
+spec:
+  host: ${HHB_FRONTEND_DNS}
+  path: /api/burgers
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+  to:
+    kind: Service
+    name: hhb-backendburgers
+    weight: 100
+  wildcardPolicy: None

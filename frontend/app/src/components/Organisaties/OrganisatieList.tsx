@@ -4,7 +4,7 @@ import React, {useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {useHistory} from "react-router-dom";
 import Routes from "../../config/routes";
-import {Organisatie, useGetOrganisatiesQuery} from "../../generated/graphql";
+import {Organisatie, useGetSimpleOrganisatiesQuery} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
 import {searchFields} from "../../utils/things";
 import DeadEndPage from "../DeadEndPage";
@@ -16,8 +16,7 @@ const OrganisatieList = () => {
 	const {push} = useHistory();
 	const [search, setSearch] = useState<string>("");
 	const searchRef = useRef<HTMLInputElement>(null);
-
-	const $organisaties = useGetOrganisatiesQuery();
+	const $organisaties = useGetSimpleOrganisatiesQuery();
 
 	const onKeyDownOnSearchField = (e) => {
 		if (e.key === "Escape") {
@@ -71,7 +70,7 @@ const OrganisatieList = () => {
 						</DeadEndPage>
 					) : (
 						<OrganisatieListView organisaties={[...filteredOrganisaties].sort((a, b) => {
-							return (a.naam || "") < (b.naam || "") ? -1 : 1
+							return (a.naam || "") < (b.naam || "") ? -1 : 1;
 						})} showAddButton={search.trim().length === 0} />
 					)}
 				</Page>

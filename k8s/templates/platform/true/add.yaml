@@ -103,7 +103,7 @@ metadata:
     kubernetes.io/ingress.class: nginx
 spec:
   tls:
-    - hosts: 
+    - hosts:
         - ${HHB_FRONTEND_DNS}
       secretName: hhb-frontend-ingress-tls
   rules:
@@ -121,9 +121,9 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: hhb-unleashservice
+  name: hhb-unleashservice-ingress
   labels:
-    name: hhb-unleashservice
+    name: hhb-unleashservice-ingress
   annotations:
     kubernetes.io/ingress.class: nginx
 spec:
@@ -140,5 +140,30 @@ spec:
             backend:
               service:
                 name: hhb-unleashservice
+                port:
+                  number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hhb-backendburgers-ingress
+  labels:
+    name: hhb-backendburgers-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  tls:
+    - hosts:
+        - ${HHB_HOST}
+      secretName: hhb-frontend-ingress-tls
+  rules:
+    - host: ${HHB_HOST}
+      http:
+        paths:
+          - path: /api/burgers
+            pathType: Prefix
+            backend:
+              service:
+                name: hhb-backendburgers
                 port:
                   number: 80
