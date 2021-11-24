@@ -3,7 +3,7 @@ from hhb_backend.graphql import settings
 
 def test_postadres(client):
     with requests_mock.Mocker() as rm:
-        rm.get(f"{settings.CONTACTCATALOGUS_SERVICE_URL}/addresses/test_id",
+        rm.get(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/test_id",
                json={'id': "test_id",
                    'street': 'teststraat',
                    'houseNumber': '52B',
@@ -30,7 +30,7 @@ def test_postadres(client):
 
 def test_postadressen(client):
     with requests_mock.Mocker() as rm:
-        rm.get(f"{settings.CONTACTCATALOGUS_SERVICE_URL}/addresses/",
+        rm.get(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/",
                json=[{'id': 'test_id',
                     'street': 'teststraat',
                     'houseNumber': '52B',

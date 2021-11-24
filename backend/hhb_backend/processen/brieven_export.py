@@ -184,9 +184,10 @@ def get_postadressen(afdelingen):
             for postadres_id in postadres_ids:
                 ids.append(postadres_id)
 
-    querystring = f"?id[]={'&id[]='.join([str(k) for k in ids])}" if ids else ''
-    url = f"""{settings.CONTACTCATALOGUS_SERVICE_URL}/addresses/{querystring}"""
-    return requests.get(url, headers={"Accept": "application/json", "Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845"})
+    ids = ','.join(str(x) for x in ids)
+    return requests.get(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/?filter_ids={ids}",
+        headers={"Content-type": "application/json", "Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845"},
+    )
 
 def get_postadres(afspraken):
     ids= []
@@ -195,9 +196,10 @@ def get_postadres(afspraken):
         if postadres_id:
             ids.append(postadres_id)
 
-    querystring = f"?id[]={'&id[]='.join([str(k) for k in ids])}" if ids else ''
-    url = f"""{settings.CONTACTCATALOGUS_SERVICE_URL}/addresses/{querystring}"""
-    return requests.get(url, headers={"Accept": "application/json", "Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845"})
+    ids = ','.join(str(x) for x in ids)
+    return requests.get(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/?filter_ids={ids}",
+        headers={"Content-type": "application/json", "Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845"},
+    )
 
 def get_organisaties(afdelingen):
     organisatie_ids = list(

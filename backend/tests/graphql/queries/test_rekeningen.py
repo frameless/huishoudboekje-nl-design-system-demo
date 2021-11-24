@@ -14,7 +14,7 @@ def test_rekeningen_byId(client):
                json={'data': [{'id': 1, "omschrijving": "Loon"}]})
         rm.get(f"{settings.HHB_SERVICES_URL}/burgers/?filter_ids=1",
                json={'data':[{'id': 1, 'voornamen': "Piet"}]})
-        rm.get(f"{settings.CONTACTCATALOGUS_SERVICE_URL}/addresses/test_id",
+        rm.get(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/test_id",
                json={'id': "test_id",
                      'street': 'teststraat',
                      'houseNumber': '52B',
@@ -58,7 +58,7 @@ def test_rekeningen_all(client):
                json={'data': [{'id': 1, "omschrijving": "Loon"}]})
         rm.get(f"{settings.HHB_SERVICES_URL}/burgers/?filter_ids=1",
                json={'data': [{'id': 1, 'voornamen': "Piet"}]})
-        rm.get(f"{settings.CONTACTCATALOGUS_SERVICE_URL}/addresses/test_id",
+        rm.get(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/test_id",
                json={'id': "test_id",
                      'street': 'teststraat',
                      'houseNumber': '52B',

@@ -35,9 +35,21 @@ def create_mock_adapter() -> Adapter:
 
 
 def test_update_organisatie_success(client):
-    with requests_mock.Mocker() as mock:
-        mock._adapter = create_mock_adapter()
+    with requests_mock.Mocker() as rm:
+        # arrange
+        expected = {"data": {"updatePostadres": {"ok": True, "postadres": {"id": "test_id"}}}}
+        postadres_input = {"id": "test_id", "huisnummer": "52B", "plaatsnaam": "testplaats", "straatnaam": "teststraat", "postcode": "9999ZZ"}
+        
+        postadres ={"id": "test_id", "houseNumber": "52", "locality": "testplaats1", "street": "teststraat1", "postalCode": "9999AA"}
+        postadres_updated={"id": "test_id", "houseNumber": "52B", "locality": "testplaats", "street": "teststraat", "postalCode": "9999ZZ"}
 
+        fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
+        rm1 = rm.get(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/test_id", status_code=200, json=postadres)
+        rm2 = rm.put(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/test_id", status_code=200, json=postadres_updated)
+        rm3 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=200)
+
+
+        # act
         response = client.post(
             "/graphql",
             json={
@@ -54,12 +66,13 @@ def test_update_organisatie_success(client):
                     }
                   }
                 }''',
-                "variables": {"id": "test_id",
-                              "huisnummer": "52B",
-                              "plaatsnaam": "testplaats",
-                              "straatnaam": "teststraat",
-                              "postcode": "9999ZZ"}},
+                "variables": postadres_input},
         )
 
-        assert response.json == {"data": {"updatePostadres": {"ok": True, "postadres": {"id": "test_id"}}}}
-        assert mock._adapter.call_count == 3
+
+        # assert 
+        assert rm1.called_once
+        assert rm2.called_once
+        assert rm3.called_once
+        assert fallback.call_count == 0
+        assert response.json == expected

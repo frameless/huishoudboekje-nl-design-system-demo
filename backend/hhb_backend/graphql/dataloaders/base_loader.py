@@ -45,6 +45,8 @@ class SingleDataLoader(DataLoader):
                 raise GraphQLError(f"Upstream API responded: {response.text}")
 
         if self.service == settings.CONTACTCATALOGUS_SERVICE_URL:
+            result = response.json()['hydra:member']
+        elif self.service == settings.POSTADRESSEN_SERVICE_URL:
             result = response.json()
         else:
             result = response.json()["data"]

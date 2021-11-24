@@ -4,7 +4,7 @@ from hhb_backend.graphql import settings
 class PostadressenByIdLoader(SingleDataLoader):
     """ Load postadressen contactcatalogus using ids"""
     model = "addresses"
-    service = settings.CONTACTCATALOGUS_SERVICE_URL
+    service = settings.POSTADRESSEN_SERVICE_URL
 
 class PostadressenByIdsLoader(SingleDataLoader):
     """ Load postadressen from organisatieservice using afdeling id"""

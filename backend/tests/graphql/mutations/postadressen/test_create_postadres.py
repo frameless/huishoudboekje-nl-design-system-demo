@@ -35,9 +35,12 @@ def create_mock_adapter() -> Adapter:
 
 
 def test_create_postadres_succes(client):
-    with requests_mock.Mocker() as mock:
-        mock._adapter = create_mock_adapter()
+    with requests_mock.Mocker() as rm:
+        # arrange
+        fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
 
+
+        # act
         response = client.post(
             "/graphql",
             json={
@@ -59,6 +62,12 @@ def test_create_postadres_succes(client):
             content_type='application/json'
         )
 
-        assert mock._adapter.call_count == 4
+
+        # assert
+        print(f">> >> >> >> response: {response.json} ")
+        for call in rm.request_history:
+            print(f">> >> >> >> fallback: {call.method} {call.url} ")
+
+        assert fallback.call_count == 0
         assert response.json["data"]["createPostadres"]["ok"] is True
 

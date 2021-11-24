@@ -52,7 +52,7 @@ class UpdatePostadres(graphene.Mutation):
 
         # Try update of contactCatalogus service
         contactCatalogus_response = requests.put(
-            f"{settings.CONTACTCATALOGUS_SERVICE_URL}/addresses/{id}",
+            f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/{id}",
             json=contactCatalogus_input,
             headers={"Accept": "application/json", "Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845"},
         )

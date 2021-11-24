@@ -47,8 +47,8 @@ class DeleteAfdeling(graphene.Mutation):
         if postadressen_ids:
             for postadres_id in postadressen_ids:
                 response_ContactCatalogus = requests.delete(
-                    f"{settings.CONTACTCATALOGUS_SERVICE_URL}/addresses/{postadres_id}",
-                    headers={"Accept" : "application/json", "Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845"}
+                    f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/{postadres_id}",
+                    headers={"Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845"}
                 )
                 if response_ContactCatalogus.status_code != 204:
                     raise GraphQLError(f"Upstream API responded: {response_ContactCatalogus.text}")
