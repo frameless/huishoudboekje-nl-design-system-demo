@@ -128,7 +128,7 @@ def test_create_afdeling_full_succes(client):
         e4 = mock.get(f"{settings.HHB_SERVICES_URL}/rekeningen/?filter_ibans=GB33BUKB20201555555555", status_code=200, json={'data': [{'id': 1}]})
         e5 = mock.post(f"{settings.HHB_SERVICES_URL}/afdelingen/1/rekeningen/", status_code=201, json={'data': rekeningen})
         e6 = mock.post(f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/1", status_code=200, json={'data': [{'id': 1, "postadressen_ids": [], "rekeningen_ids": []}]})
-        e7 = mock.post(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses", status_code=201, json={'id': "7426aa95-03c0-453d-b9ff-11a5442ab959", 'houseNumber': '52B', 'postalCode': '9999ZZ', 'street': 'teststraat', 'locality': 'testplaats'})
+        e7 = mock.post(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses", status_code=201, json={'address': {'id': "7426aa95-03c0-453d-b9ff-11a5442ab959", 'houseNumber': '52B', 'postalCode': '9999ZZ', 'street': 'teststraat', 'locality': 'testplaats'}})
         e8 = mock.get(f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/1", status_code=200, json={ 'data': { 'id': 1, }}) # 2
         e9 = mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=200, json={'data': {'id': 1}})
         e10 = mock.get(f"{settings.HHB_SERVICES_URL}/rekeningen/?filter_afdelingen=1", status_code=200, json=rekening_result)

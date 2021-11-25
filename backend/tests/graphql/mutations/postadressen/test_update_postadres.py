@@ -55,10 +55,10 @@ def test_update_organisatie_success(client):
             json={
                 "query": '''
                 mutation updatePostadres($id: String!,
-                $huisnummer: String,
-                $plaatsnaam: String,
-                $straatnaam: String,
-                $postcode: String) {
+                    $huisnummer: String,
+                    $plaatsnaam: String,
+                    $straatnaam: String,
+                    $postcode: String) {
                   updatePostadres(id: $id, huisnummer: $huisnummer, plaatsnaam: $plaatsnaam, straatnaam: $straatnaam, postcode: $postcode) {
                     ok
                     postadres {

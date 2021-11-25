@@ -61,9 +61,18 @@ def create_mock_adapter() -> Adapter:
     return adapter
 
 def test_create_afspraak_success(client):
-    with requests_mock.mock() as mock:
-      mock._adapter = create_mock_adapter()
+    with requests_mock.mock() as rm:
+      # arrange
+      fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
+      rm1 = rm.get(f"{settings.HHB_SERVICES_URL}/burgers/?filter_ids=1", status_code=200, json={'data': [{'id': 1}]})
+      rm2 = rm.get(f"{settings.HHB_SERVICES_URL}/rekeningen/?filter_ids=1", status_code=200, json={'data': [{'id': 1, 'iban': 'gb33bukb20201555555555', 'rekeninghouder': 'john'}]})
+      rm3 = rm.get(f"{settings.HHB_SERVICES_URL}/rubrieken/?filter_ids=1", status_code=200, json={'data': [{'id': 1}]})
+      rm4 = rm.get(f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/?filter_ids=1", status_code=200, json={'data': [{'id': 1}]})
+      rm5 = rm.get(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/76d67e32-a29c-476c-b3be-cd2cbf2ee437", status_code=200, json=[{'id': '76d67e32-a29c-476c-b3be-cd2cbf2ee437'}])
+      rm6 = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/", status_code=201, json={'data': { 'id': 100 }})
+      rm7 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
 
+      # act
       response = client.post(
             "/graphql",
             json={
@@ -87,11 +96,20 @@ def test_create_afspraak_success(client):
                       "rubriekId": 1,
                       "bedrag": "0.00",
                       "validFrom": '2021-01-01'
-                      }
-                      }},
+                    }
+                  }},
         )
 
-      assert mock._adapter.call_count == 7
+
+      # assert
+      assert rm1.called_once
+      assert rm2.called_once
+      assert rm3.called_once
+      assert rm4.called_once
+      assert rm5.called_once
+      assert rm6.called_once
+      assert rm7.called_once
+      assert fallback.called == 0
       assert response.json["data"]["createAfspraak"]["ok"] is True
 
 def create_mock_adapter_not_found() -> Adapter:
