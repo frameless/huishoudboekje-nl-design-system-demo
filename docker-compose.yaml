@@ -152,8 +152,6 @@ services:
       TRANSACTIE_SERVICE_URL: "http://banktransactieservice:8000"
       GROOTBOEK_SERVICE_URL: "http://grootboekservice:8000"
       LOG_SERVICE_URL: "http://logservice:8000"
-      # The contact catalogus is another component that is in a separate docker-compose, where you need to change the port it runs on to 8006.
-      CONTACTCATALOGUS_SERVICE_URL: "http://host.docker.internal:8006"
       POSTADRESSENSERVICE_URL: "http://postadressenservice:8080"
       SECRET_KEY: koen
     ports:
@@ -248,7 +246,7 @@ services:
     ports:
       - 8005:8000
 
-  # Contactcatalogus is running on 8006, but needs to be upped from docker-compose file.
+  # 8006 used to be in use by the contactcatalogus, but we deprecated this service in favor of the postadressenservice.
 
   postadressenservice:
     <<: *x-resource-limit
