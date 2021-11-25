@@ -100,6 +100,9 @@ class SingleDataLoader(DataLoader):
             if self.service == settings.CONTACTCATALOGUS_SERVICE_URL:
                 for item in response.json():
                     objects[item[self.index]] = item
+            elif self.service == settings.POSTADRESSEN_SERVICE_URL:
+                for item in response.json():
+                    objects[item[self.index]] = item
             else:
                 for item in response.json()["data"]:
                     objects[item[self.index]] = item
