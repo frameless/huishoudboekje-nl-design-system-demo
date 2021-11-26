@@ -7,32 +7,38 @@ import {CreateAfdeling} from "./CreateAfdeling";
 
 const graphql = getSdkApollo(apolloClient);
 
-export const CreateOrganisatie = (organisatie: Required<Organisatie>): Promise<Organisatie> => {
+export const CreateOrganisatie = async (organisatie: Required<Organisatie>): Promise<Organisatie> => {
 	const {vestigingsnummer, kvknummer, naam, afdelingen} = organisatie;
 
-	return graphql.createOrganisatie({kvknummer, vestigingsnummer, naam})
-		.then(async result => {
-			const resultOrganisatie = result.createOrganisatie?.organisatie as Organisatie;
-			console.log(`Organisatie ${resultOrganisatie?.naam} (${resultOrganisatie?.id}) toegevoegd.`);
+	const result = await graphql.createOrganisatie({kvknummer, vestigingsnummer, naam}).then(result => {
+		console.log(`Organisatie ${result.createOrganisatie?.organisatie?.naam} toegevoegd.`);
+		return result;
+	});
 
-			const createAfdelingen = afdelingen.map(afdeling => {
-				const {naam, postadressen, rekeningen} = afdeling as Required<Afdeling>;
-				const postadressenInput: CreatePostadresInput[] = postadressen.map(p => ({...p} as CreatePostadresInput));
-				const afdelingInput: CreateAfdelingInput = {
-					naam, postadressen: postadressenInput, rekeningen, organisatieId: resultOrganisatie.id!,
-				};
+	const resultOrganisatie = result.createOrganisatie?.organisatie as Organisatie;
 
-				return CreateAfdeling(resultOrganisatie.id!, afdelingInput).catch(err => {
-					console.error(`(!) Kon afdeling niet aanmaken voor organisatie ${resultOrganisatie.naam}:`, util.inspect(err, false, null, true));
-				});
+	const createAfdelingen = afdelingen.map(afdeling => {
+		const {naam, postadressen, rekeningen} = afdeling as Required<Afdeling>;
+		const postadressenInput: CreatePostadresInput[] = postadressen.map(p => ({...p} as CreatePostadresInput));
+		const afdelingInput: CreateAfdelingInput = {
+			naam, postadressen: postadressenInput, rekeningen, organisatieId: resultOrganisatie.id!,
+		};
+
+		return CreateAfdeling(resultOrganisatie.id!, afdelingInput)
+			.then(result => {
+				console.log(`Afdeling ${result.naam} voor organisatie ${resultOrganisatie.naam} aangemaakt.`);
+				return result;
+			})
+			.catch(err => {
+				console.error(`(!) Kon afdeling niet aanmaken voor organisatie ${resultOrganisatie.naam}:`, util.inspect(err, false, null, true));
 			});
+	});
 
-			for(let a of createAfdelingen){
-				await a.then(() => {
-					console.log(`${createAfdelingen.length} afdelingen voor organisatie ${resultOrganisatie.naam} toegevoegd.`);
-				}).catch(err => handleErrors(err));
-			}
+	await Promise.all(createAfdelingen)
+				 .catch(err => handleErrors(err))
+				 .finally(() => {
+					 console.log(`${createAfdelingen.length} ${createAfdelingen.length === 1 ? "afdeling" : "afdelingen"} voor organisatie ${resultOrganisatie.naam} toegevoegd.`);
+				 });
 
-			return resultOrganisatie;
-		});
+	return resultOrganisatie;
 };

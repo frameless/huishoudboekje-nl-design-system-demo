@@ -9,7 +9,7 @@ const graphql = getSdkApollo(apolloClient);
 const LoadHuishoudens = async () => {
 	console.log("Huishoudens toevoegen...");
 
-	const burgers: Burger[] = await graphql.getBurgers().then(result => result.burgers as Burger[]);
+	const burgers: Burger[] = await graphql.getSimpleBurgers().then(result => result.burgers as Burger[]);
 	console.log(`Alle ${burgers.length} burgers opgehaald.`);
 
 	const mHuishoudens = huishoudens.map(huishouden => {

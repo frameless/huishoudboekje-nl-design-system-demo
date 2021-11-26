@@ -156,10 +156,6 @@ def test_delete_afspraak_zoekterm_niet_gevonden(client):
         )
 
         # assert
-        print(f">> >> >> >> response: {response.json['errors']} ")
-        for call in rm.request_history:
-            print(f">> >> >> >> fallback: {call.method} {call.url} ")
-
         assert rm1.called_once
         assert fallback.called == 0
         assert expected in response.json['errors'][0]['message']

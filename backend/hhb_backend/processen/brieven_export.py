@@ -54,25 +54,24 @@ def create_brieven_export(burger_id):
     if afspraken_response.status_code != 200:
         return jsonify(message=afspraken_response.reason), afspraken_response.status_code
     afspraken = afspraken_response.json()["data"]
-
     afspraak_postadressen_response = get_postadres(afspraken)
+
     if afspraak_postadressen_response.status_code == 200:
-        afspraak_postadressen = afspraak_postadressen_response.json()["hydra:member"]
+        afspraak_postadressen = afspraak_postadressen_response.json()
         for afspraak in afspraken:
             postadres_id = afspraak.get("postadres_id")
             for postadres in afspraak_postadressen:
                 if postadres.get("id") == postadres_id:
                     afspraak["postadres"] = postadres
-    # else:
-    #     return jsonify(message=afspraak_postadressen_response.reason), afspraak_postadressen_response.status_code
-
+    
     afdelingen_response = get_afdelingen(afspraken)
     if afdelingen_response.status_code == 200:
         afdelingen = afdelingen_response.json()["data"]
         postadressen_response = get_postadressen(afdelingen)
         if postadressen_response.status_code != 200:
             return jsonify(message=postadressen_response.reason), postadressen_response.status_code
-        postadressen = postadressen_response.json()["hydra:member"]
+        postadressen = postadressen_response.json()
+
 
         organisatie_reponse = get_organisaties(afdelingen)
         if organisatie_reponse.status_code != 200:
@@ -90,8 +89,8 @@ def create_brieven_export(burger_id):
                 afdeling["postadressen"] = []
                 if single_postadres_id in afdeling_postadres_ids:
                     afdeling["postadressen"].append(postadres)
-    # else:
-    #     return jsonify(message=afdelingen_response.reason), afdelingen_response.status_code
+
+
 
     current_date_str = datetime.now().strftime("%Y-%m-%d")
 
@@ -186,7 +185,7 @@ def get_postadressen(afdelingen):
                 ids.append(postadres_id)
 
     ids = ','.join(str(x) for x in ids)
-    return requests.get(f"{settings.CONTACTCATALOGUS_SERVICE_URL}/addresses/?filter_ids={ids}",
+    return requests.get(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/?filter_ids={ids}",
         headers={"Content-type": "application/json", "Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845"},
     )
 
@@ -198,7 +197,7 @@ def get_postadres(afspraken):
             ids.append(postadres_id)
 
     ids = ','.join(str(x) for x in ids)
-    return requests.get(f"{settings.CONTACTCATALOGUS_SERVICE_URL}/addresses/?filter_ids={ids}",
+    return requests.get(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/?filter_ids={ids}",
         headers={"Content-type": "application/json", "Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845"},
     )
 

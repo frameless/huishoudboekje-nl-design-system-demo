@@ -83,4 +83,3 @@ dependsOn:
     - name: Node.js
     - name: npm
     - name: Python
-    - name: contact-catalogus/contactcatalogus

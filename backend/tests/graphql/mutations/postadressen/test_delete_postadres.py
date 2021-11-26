@@ -36,37 +36,48 @@ def create_mock_adapter() -> Adapter:
     return adapter
 
 def test_delete_postadres(client):
-    with requests_mock.Mocker() as mock:
-        mock._adapter = create_mock_adapter()
-        adapter = mock.delete(f"{settings.CONTACTCATALOGUS_SERVICE_URL}/addresses/test_id", status_code=204)
+    with requests_mock.Mocker() as rm:
+        # arrange
+        expected = {"data": { "deletePostadres": { "ok": True,}}}
+        postadres_existing = {"id": "test_id", "houseNumber": "52", "locality": "testplaats1", "street": "teststraat1", "postalCode": "9999AA"}
+        fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
+        rm1 = rm.get(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/test_id", status_code=200, json=postadres_existing)
+        rm2 = rm.delete(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/test_id", status_code=204)
+        rm3 = rm.get(f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/?filter_ids=1", status_code=200, json={'data': [{'id': 1, 'postadressen_ids': ['test_id']}]})
+        rm4 = rm.post(f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/1", status_code=200, json={'data': [{'id': 1}]})
+        rm5 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=200)
 
+
+        # act
         response = client.post(
             "/graphql",
             json={
                 "query": '''
-mutation test($id: String!,
-                $afdeling_id: Int!) {
-  deletePostadres(id: $id, afdelingId: $afdeling_id) {
-    ok
-  }
-}
-''',
+                    mutation test($id: String!,
+                                    $afdeling_id: Int!) {
+                                    deletePostadres(id: $id, afdelingId: $afdeling_id) {
+                                    ok
+                                }
+                            }
+                    ''',
                 "variables": {"id": "test_id",
                               "afdeling_id": 1}},
             content_type='application/json'
         )
-        assert response.json == {"data": {
-            "deletePostadres": {
-                "ok": True,
-            }
-        }}
 
-        assert adapter.called_once
-        assert mock._adapter.call_count == 5
+
+        # assert
+        assert rm1.called_once
+        assert rm2.called_once
+        assert rm3.called_once
+        assert rm4.called_once
+        assert rm5.called_once
+        assert fallback.call_count == 0
+        assert response.json == expected
 
 def test_delete_postadres_error(client):
     with requests_mock.Mocker() as mock:
-        adapter = mock.get(f"{settings.CONTACTCATALOGUS_SERVICE_URL}/addresses/test_id", status_code=404, text="Not found")
+        adapter = mock.get(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/test_id", status_code=404, text="Not found")
 
         response = client.post(
             "/graphql",

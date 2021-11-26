@@ -55,13 +55,13 @@ const LoadBurgers = async () => {
 			const afdelingId = afdeling?.id;
 			const postadresId: string = afdeling?.postadressen?.[0]?.id!;
 
-			if(afdeling && !postadresId){
-				throw new Error("(!) De afdeling voor deze afspraak heeft geen postadres.")
+			if (afdeling && !postadresId) {
+				throw new Error("(!) De afdeling voor deze afspraak heeft geen postadres.");
 			}
 
 			let tegenRekeningId = afdeling?.rekeningen?.[0]?.id || createdBurger.rekeningen?.[0]?.id;
-			if(!tegenRekeningId){
-				throw new Error("(!) De afdeling voor deze afspraak heeft geen tegenrekening.")
+			if (!tegenRekeningId) {
+				throw new Error("(!) De afdeling voor deze afspraak heeft geen tegenrekening.");
 			}
 
 			// Find Rubriek by naam

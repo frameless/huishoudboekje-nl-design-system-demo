@@ -19,7 +19,7 @@ def delete_afdeling_util(afdeling):
     if postadressen and len(postadressen) > 0:
         for postadres_id in postadressen:
             response_ContactCatalogus = requests.delete(
-                f"{settings.CONTACTCATALOGUS_SERVICE_URL}/addresses/{postadres_id}",
+                f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/{postadres_id}",
                 headers={"Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845"}
             )
             if response_ContactCatalogus.status_code != 204:

@@ -14,7 +14,6 @@ from hhb_backend.graphql.mutations.rekeningen.utils import (
     disconnect_afdeling_rekening,
     delete_rekening,
 )
-import logging
 
 class DeleteAfdeling(graphene.Mutation):
     """Mutatie om een afdeling van een organisatie te verwijderen."""
@@ -47,7 +46,7 @@ class DeleteAfdeling(graphene.Mutation):
         if postadressen_ids:
             for postadres_id in postadressen_ids:
                 response_ContactCatalogus = requests.delete(
-                    f"{settings.CONTACTCATALOGUS_SERVICE_URL}/addresses/{postadres_id}",
+                    f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/{postadres_id}",
                     headers={"Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845"}
                 )
                 if response_ContactCatalogus.status_code != 204:
@@ -56,10 +55,8 @@ class DeleteAfdeling(graphene.Mutation):
         # remove attached rekeningen
         rekeningen_ids = previous.get("rekeningen_ids")
         afdeling_id = previous.get("id")
-        logging.getLogger(f"wouter-logger").warning(f"-->>>> rekeningen to remove: {rekeningen_ids} for afdeling: {afdeling_id}")
         if rekeningen_ids and afdeling_id:
             for rekening_id in rekeningen_ids:
-                logging.getLogger(f"wouter-logger").warning(f"-->>>> disconnect afdeling:{afdeling_id} and rekening:{rekening_id}")
                 disconnect_afdeling_rekening(afdeling_id, rekening_id)
                 delete_rekening(rekening_id)
 

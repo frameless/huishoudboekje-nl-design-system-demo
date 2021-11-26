@@ -2,7 +2,7 @@ import {ApolloClient, ApolloLink, InMemoryCache} from "@apollo/client/core";
 import {BatchHttpLink} from "@apollo/client/link/batch-http";
 import {createUploadLink} from "apollo-upload-client";
 import dotenv from "dotenv";
-import fetch from "node-fetch";
+import fetch from "cross-fetch";
 
 dotenv.config();
 
@@ -24,13 +24,13 @@ const defaultLink = new BatchHttpLink({
 	batchMax: 100,
 	batchInterval: 2000,
 	batchDebounce: true,
-	fetch: fetch,
+	fetch,
 	headers,
 });
 
 const uploadLink = createUploadLink({
 	uri: graphQlApiUrl,
-	fetch: fetch,
+	fetch,
 	headers,
 });
 

@@ -271,10 +271,6 @@ def test_update_afspraak_invalid_date_range(client):
 
 
         # assert
-        print(f">> >> >> >> response: {response.json} ")
-        for call in rm.request_history:
-            print(f">> >> >> >> fallback: {call.method} {call.url} ")
-        
         assert rm1.called_once
         assert fallback.called == 0
         assert expected in response.json['errors'][0]['message']

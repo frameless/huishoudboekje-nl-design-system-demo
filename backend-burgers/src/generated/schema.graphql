@@ -93,8 +93,6 @@ type Organisatie {
 """GraphQL Query"""
 type Query {
   burger(bsn: Int): Burger
-  burgers: [Burger]
-  organisaties(ids: [Int]): [Organisatie]
 }
 
 """"""

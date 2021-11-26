@@ -3,7 +3,6 @@
  * You will find data files in JSON-format in ./data/.
  */
 import gql from "graphql-tag";
-import {getSdk} from "./graphql";
 import apolloClient, {graphQlApiUrl} from "./graphql-client";
 import {getSdkApollo} from "./graphql-requester";
 import {handleErrors} from "./handleErrors";
@@ -12,7 +11,6 @@ import LoadConfiguraties from "./src/LoadConfiguraties";
 import LoadHuishoudens from "./src/LoadHuishoudens";
 import LoadOrganisaties from "./src/LoadOrganisaties";
 import LoadRubrieken from "./src/LoadRubrieken";
-import CreateAfspraak from "./src/operations/CreateAfspraak";
 
 const graphql = getSdkApollo(apolloClient);
 
@@ -33,8 +31,8 @@ const main = async () => {
 		await LoadConfiguraties();
 		await LoadRubrieken();
 		await LoadOrganisaties();
-		// await LoadBurgers();
-		// await LoadHuishoudens();
+		await LoadBurgers();
+		await LoadHuishoudens();
 	}
 	catch (err) {
 		console.log(err);

@@ -30,8 +30,6 @@ def create_mock_adapter() -> Adapter:
             return MockResponse({'data': {'id': 1}}, 201)
         elif request.path == "/afdelingen/" and request.query == "filter_organisaties=1":
             return MockResponse({'data': [{'id': 1, 'organisatie_id': 1, 'postadressen_ids': ['test_postadres_id']}]}, 200)
-        elif request.path == "/addresses/test_postadres_id":
-            return MockResponse({'id': 'test_postadres_id'}, 204)
         elif request.path == "/afdelingen/1":
             return MockResponse({'id': 1}, 204)
 
@@ -41,6 +39,7 @@ def create_mock_adapter() -> Adapter:
 def test_delete_organisatie(client):
     with requests_mock.Mocker() as mock:
         mock._adapter = create_mock_adapter()
+        rm1 = mock.delete(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/test_postadres_id", status_code=204)
         adapter = mock.delete(f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/1", status_code=204)
 
         response = client.post(
@@ -62,6 +61,7 @@ mutation test($id: Int!) {
             }
         }}
 
+        assert rm1.called_once
         assert adapter.called_once
         assert mock._adapter.call_count == 7
 

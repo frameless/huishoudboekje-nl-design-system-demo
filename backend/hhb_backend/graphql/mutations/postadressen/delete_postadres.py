@@ -43,7 +43,7 @@ class DeletePostadres(graphene.Mutation):
             raise GraphQLError("postadres not found")
 
         response_ContactCatalogus = requests.delete(
-            f"{settings.CONTACTCATALOGUS_SERVICE_URL}/addresses/{id}",
+            f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/{id}",
             headers={"Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845"}
         )
         if response_ContactCatalogus.status_code != 204:
