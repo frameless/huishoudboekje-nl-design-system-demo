@@ -48,7 +48,7 @@ def create_mock_adapter() -> Adapter:
         elif request.path == "/afdelingen/" and request.query == "filter_ids=1":
           return MockResponse({'data': [{'id': 1}]}, 200)
 
-        elif request.path == "/addresses/" and request.query == "id[]=76d67e32-a29c-476c-b3be-cd2cbf2ee437":
+        elif request.path == "/addresses/" and request.query == "filter_ids=76d67e32-a29c-476c-b3be-cd2cbf2ee437":
           return MockResponse([{'id': '76d67e32-a29c-476c-b3be-cd2cbf2ee437'}], 200)
 
         elif request.path == "/afspraken/": # post
@@ -68,10 +68,9 @@ def test_create_afspraak_success(client):
       rm2 = rm.get(f"{settings.HHB_SERVICES_URL}/rekeningen/?filter_ids=1", status_code=200, json={'data': [{'id': 1, 'iban': 'gb33bukb20201555555555', 'rekeninghouder': 'john'}]})
       rm3 = rm.get(f"{settings.HHB_SERVICES_URL}/rubrieken/?filter_ids=1", status_code=200, json={'data': [{'id': 1}]})
       rm4 = rm.get(f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/?filter_ids=1", status_code=200, json={'data': [{'id': 1}]})
-      rm5 = rm.get(f"{settings.CONTACTCATALOGUS_SERVICE_URL}/addresses/76d67e32-a29c-476c-b3be-cd2cbf2ee437", status_code=200, json=[{'id': '76d67e32-a29c-476c-b3be-cd2cbf2ee437'}])
+      rm5 = rm.get(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/76d67e32-a29c-476c-b3be-cd2cbf2ee437", status_code=200, json=[{'id': '76d67e32-a29c-476c-b3be-cd2cbf2ee437'}])
       rm6 = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/", status_code=201, json={'data': { 'id': 100 }})
-      rm7 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=200)
-
+      rm7 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
 
       # act
       response = client.post(
@@ -98,7 +97,7 @@ def test_create_afspraak_success(client):
                       "bedrag": "0.00",
                       "validFrom": '2021-01-01'
                     }
-                }},
+                  }},
         )
 
 
@@ -110,7 +109,7 @@ def test_create_afspraak_success(client):
       assert rm5.called_once
       assert rm6.called_once
       assert rm7.called_once
-      assert fallback.call_count == 0
+      assert fallback.called == 0
       assert response.json["data"]["createAfspraak"]["ok"] is True
 
 def create_mock_adapter_not_found() -> Adapter:

@@ -26,15 +26,14 @@ class Afdeling(graphene.ObjectType):
         ids = root.get('postadressen_ids')
         if not ids:
             return []
-        querystring = f"?id[]={'&id[]='.join([str(k) for k in ids])}" if ids else ''
-        url = f"""{settings.CONTACTCATALOGUS_SERVICE_URL}/addresses/{querystring}"""
-        response = requests.get(url, headers={"Accept" : "application/json", "Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845"})
+        querystring = f"?filter_ids={','.join([str(k) for k in ids])}" if ids else ''
+        url = f"""{settings.POSTADRESSEN_SERVICE_URL}/addresses/{querystring}"""
+        response = requests.get(url, headers={"accept": "application/json", "Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845"})
 
         iterable = []
         for post in response.json():
             iterable.append(post)
         return iterable
-       
 
     async def resolve_afspraken(root, info):
         afdeling_id = root.get('id')

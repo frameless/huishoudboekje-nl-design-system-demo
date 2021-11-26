@@ -14,14 +14,11 @@ import hhb_backend.graphql.models.rekening as rekening
 import hhb_backend.graphql.models.rubriek as rubriek
 from hhb_backend.graphql.scalars.bedrag import Bedrag
 from hhb_backend.graphql.scalars.day_of_week import DayOfWeek
-from hhb_backend.graphql.utils.interval import convert_hhb_interval_to_dict, convert_iso_duration_to_schedule_by_day, \
-    convert_iso_duration_to_schedule_by_month
 from hhb_backend.processen.automatisch_boeken import find_matching_afspraken_by_afspraak
 from hhb_backend.processen.overschrijvingen_planner import (
     PlannedOverschijvingenInput,
     get_planned_overschrijvingen,
 )
-
 
 class Interval(graphene.ObjectType):
     jaren = graphene.Int()

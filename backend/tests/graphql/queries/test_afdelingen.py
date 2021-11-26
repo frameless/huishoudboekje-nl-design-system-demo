@@ -15,7 +15,7 @@ def test_afdeling(client):
                      })
         rm3 = rm.get(f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/?filter_ids=1",
                json={'data': [{'id': 1}]})
-        rm4 = rm.get(f"{settings.CONTACTCATALOGUS_SERVICE_URL}/addresses/?id[]=test_id",
+        rm4 = rm.get(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/?filter_ids=test_id",
                json=[{
                         "@id": "/addresses/test_id",
                         "@type": "Address",
@@ -77,7 +77,7 @@ def test_afdelingen(client):
         rm3 = rm.get(
             f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/?filter_ids=1",
             json={'data': [{'id': 1}]})
-        rm4 = rm.get(f"{settings.CONTACTCATALOGUS_SERVICE_URL}/addresses/?id[]=test_id",
+        rm4 = rm.get(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/?filter_ids=test_id",
                json=[{
                         "@id": "/addresses/test_id",
                         "@type": "Address",

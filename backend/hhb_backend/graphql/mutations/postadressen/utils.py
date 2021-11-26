@@ -13,14 +13,14 @@ def create_afdeling_postadres(input, afdeling_id):
     }
 
     contactCatalogus_response = requests.post(
-        f"{settings.CONTACTCATALOGUS_SERVICE_URL}/addresses",
-        json=contactCatalogus_input,
-        headers={"Accept": "application/json", "Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845"}
+        f"{settings.POSTADRESSEN_SERVICE_URL}/addresses",
+        data=json.dumps(contactCatalogus_input),
+        headers={"Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845", "Content-type": "application/json"}
     )
     if contactCatalogus_response.status_code != 201:
         raise GraphQLError(f"Upstream API responded: {contactCatalogus_response.json()}")
 
-    result = contactCatalogus_response.json()
+    result = contactCatalogus_response.json()['address']
 
     previous_afdeling = requests.get(
         f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/{afdeling_id}",

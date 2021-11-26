@@ -28,13 +28,7 @@ class SingleDataLoader(DataLoader):
         params = {
             'filters': json.dumps(filters) if filters else None
         }
-        if self.service == settings.CONTACTCATALOGUS_SERVICE_URL:
-            response = requests.get(url=f"{self.service}/{self.model}/",
-                                    params=params, headers={
-                                        "Accept" : "application/json",
-                                        "Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845"})
-        else:
-            response = requests.get(url=f"{self.service}/{self.model}/",
+        response = requests.get(url=f"{self.service}/{self.model}/",
                                     params=params)
 
         try:
@@ -44,7 +38,7 @@ class SingleDataLoader(DataLoader):
             if response.status_code != 201:
                 raise GraphQLError(f"Upstream API responded: {response.text}")
 
-        if self.service == settings.CONTACTCATALOGUS_SERVICE_URL:
+        if self.service == settings.POSTADRESSEN_SERVICE_URL:
             result = response.json()
         else:
             result = response.json()["data"]
@@ -85,17 +79,14 @@ class SingleDataLoader(DataLoader):
         objects = {}
         for i in range(0, len(keys), self.batch_size):
             url = self.url_for(keys[i:i + self.batch_size])
-            if self.service == settings.CONTACTCATALOGUS_SERVICE_URL:
-                response = requests.get(url, headers={ "Accept" : "application/json", "Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845" })
-            else:
-                response = requests.get(url)
+            response = requests.get(url)
             try:
                 if not response.ok:
                     raise GraphQLError(f"Upstream API responded: {response.text}")
             except:
                 if response.status_code != 200:
                     raise GraphQLError(f"Upstream API responded: {response.text}")
-            if self.service == settings.CONTACTCATALOGUS_SERVICE_URL:
+            if self.service == settings.POSTADRESSEN_SERVICE_URL:
                 for item in response.json():
                     objects[item[self.index]] = item
             else:

@@ -174,6 +174,3 @@ sh k8s/deploy.sh
 ```
 
 You now have Huishoudboekje running on your cluster.
-
-# Known limitations:
-- OpenShift requires Docker images to run rootless. Huishoudboekje has one component "Contactcatalogus" that currently doesn't support this.
