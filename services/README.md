@@ -1,17 +1,15 @@
 # Service Components
-Huishoudboekje uses independent service components, packages as Docker containers.\
-These are:
-- [Banktransactieservice](bank_transactie_service/)
-- [Grootboekservice](grootboek_service/)
-- [Huishoudboekjeservice](huishoudboekje_service/)
-- [Logservice](log_service/)
-- [Organisatieservice](organisatie_service/)
 
-Services above are all dependent on the core service through symbolic links.
-- [Core Service](core_service/)
+Huishoudboekje uses independent service components, packages as Docker containers.
 
-## Setup development with Docker Compose
-- Please set up a local running PostgreSQL that is available on `localhost:5432` and has a user `postgres` with password `postgres`.
-- Please make sure you have `docker-compose` installed.
-- Run `docker-compose run db-init` to initialize the databases.
-- Run `docker-compose up` to launch all the services.
+- [Banktransactieservice](bank_transactie_service/)*
+- [Grootboekservice](grootboek_service/)*
+- [Huishoudboekjeservice](huishoudboekje_service/)*
+- [Logservice](log_service/)*
+- [Organisatieservice](organisatie_service/)*
+- [Postadressenservice](postadressenservice/)
+- [Unleashservice](unleashservice/)
+
+Services above marked with an asterisk (*) are all dependent on the core service through symbolic links because they share various logic.
+
+- [Coreservice](core_service/)
