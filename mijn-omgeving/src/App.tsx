@@ -1,18 +1,21 @@
 import React from "react";
-import Huishoudboekje from "./lib/Huishoudboekje";
+import Huishoudboekje, {HuishoudboekjeUser} from "./lib/Huishoudboekje";
 
 const App = () => {
-	const user = {
+	const user: HuishoudboekjeUser = {
 		bsn: 999999990,
+		// bsn: 123,
 	};
 
 	return (
 		<div style={{
-			width: "700px",
+			width: "600px",
 			margin: "0 auto",
 		}}>
 
-			<Huishoudboekje user={user} />
+			<Huishoudboekje user={user} config={{
+				apiUrl: "https://test.huishoudboekje.demoground.nl/api/burgers",
+			}} />
 
 		</div>
 	);

@@ -15,7 +15,7 @@
   ],
   "scripts": {
 	"start": "react-scripts --openssl-legacy-provider start",
-	"build": "rm -rf dist && tsc",
+	"build": "rm -rf dist && tsc --project tsconfig.build.json",
 	"test": "react-scripts test",
 	"get-schema": "npx --yes -p @apollo/rover rover graph introspect ${PROXY_AUTHORIZATION:+--header \"${PROXY_AUTHORIZATION}\"} ${BASE_URL:-https://test.huishoudboekje.demoground.nl}/api/burgers > schema.graphql",
 	"pregen-types": "npm run get-schema",

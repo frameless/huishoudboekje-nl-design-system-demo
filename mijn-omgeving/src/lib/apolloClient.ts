@@ -1,19 +1,23 @@
 import {ApolloClient, InMemoryCache} from "@apollo/client";
 import {BatchHttpLink} from "@apollo/client/link/batch-http";
 
-// Todo: get this from ENV or whatever.
-const GraphqlApiUrl = "https://test.huishoudboekje.demoground.nl/api/burgers";
+type HuishoudboekjeApolloClientSettings = {
+	apiUrl: string
+}
 
-const link = new BatchHttpLink({
-	uri: GraphqlApiUrl,
-	batchMax: 20,
-	batchInterval: 250,
-	batchDebounce: true,
-});
+const createApolloClient = ({apiUrl}: HuishoudboekjeApolloClientSettings) => {
+	// Todo: get this from ENV or whatever.
+	const link = new BatchHttpLink({
+		uri: apiUrl,
+		batchMax: 20,
+		batchInterval: 250,
+		batchDebounce: true,
+	});
 
-const apolloClient = new ApolloClient({
-	cache: new InMemoryCache(),
-	link,
-});
+	return new ApolloClient({
+		cache: new InMemoryCache(),
+		link,
+	});
+};
 
-export default apolloClient;
+export default createApolloClient;
