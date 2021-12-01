@@ -44,10 +44,6 @@ spec:
             - name: theme-volume
               mountPath: /opt/bitnami/apps/html/theme
       volumes:
-        - emptyDir: {}
-          name: frontend-cache
-        - emptyDir: {}
-          name: frontend-run
         - name: theme-volume
           configMap:
             name: hhb-theme

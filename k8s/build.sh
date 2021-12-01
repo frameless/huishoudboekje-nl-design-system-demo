@@ -23,6 +23,9 @@ export PULL_REPO_IMAGE=${PULL_REPO_IMAGE:-registry.gitlab.com/commonground/huish
 # Platform to use. Options are minikube, azure_review, azure_tad, true or ocp.
 export USE_PLATFORM=${USE_PLATFORM:-"true"}
 
+# If using Keycloak is not necessary, because for example a customer has its own OIDC IDP, set this to false and Keycloak won't be deployed.
+export USE_KEYCLOAK=${USE_KEYCLOAK:-"true"}
+
 # Number of pods that should be running. Default is just 1, change if you wish to scale up by default.
 export DEFAULT_REPLICAS=${DEFAULT_REPLICAS:-"1"}
 
@@ -60,14 +63,14 @@ export POSTGRESQL_PASSWORD_PADSVC=${POSTGRESQL_PASSWORD_PADSVC:-"padsvc"}
 # Default secret FOR JWTs
 export HHB_SECRET=${SECRET_KEY:-"test"}
 
-# Keycloak Settings
-export OIDC_ISSUER="https://$HHB_FRONTEND_DNS/auth/realms/hhb"
-export OIDC_CLIENT_ID="hhb"
-export OIDC_CLIENT_SECRET="fc36d31f-f720-4914-a750-b83c7b0dd61c"
-export OIDC_AUTHORIZATION_ENDPOINT="https://$HHB_FRONTEND_DNS/auth/realms/hhb/protocol/openid-connect/auth"
-export OIDC_TOKEN_ENDPOINT="https://$HHB_FRONTEND_DNS/auth/realms/hhb/protocol/openid-connect/token"
-export OIDC_TOKENINFO_ENDPOINT="https://$HHB_FRONTEND_DNS/auth/realms/hhb/protocol/openid-connect/token/introspect"
-export OIDC_USERINFO_ENDPOINT="https://$HHB_FRONTEND_DNS/auth/realms/hhb/protocol/openid-connect/userinfo"
+# OIDC Settings
+export OIDC_ISSUER=${OIDC_ISSUER:-"https://$HHB_FRONTEND_DNS/auth/realms/hhb"}
+export OIDC_CLIENT_ID=${OIDC_CLIENT_ID:-"hhb"}
+export OIDC_CLIENT_SECRET=${OIDC_CLIENT_SECRET:-"fc36d31f-f720-4914-a750-b83c7b0dd61c"}
+export OIDC_AUTHORIZATION_ENDPOINT=${OIDC_AUTHORIZATION_ENDPOINT:-"https://$HHB_FRONTEND_DNS/auth/realms/hhb/protocol/openid-connect/auth"}
+export OIDC_TOKEN_ENDPOINT=${OIDC_TOKEN_ENDPOINT:-"https://$HHB_FRONTEND_DNS/auth/realms/hhb/protocol/openid-connect/token"}
+export OIDC_TOKENINFO_ENDPOINT=${OIDC_TOKENINFO_ENDPOINT:-"https://$HHB_FRONTEND_DNS/auth/realms/hhb/protocol/openid-connect/token/introspect"}
+export OIDC_USERINFO_ENDPOINT=${OIDC_USERINFO_ENDPOINT:-"https://$HHB_FRONTEND_DNS/auth/realms/hhb/protocol/openid-connect/userinfo"}
 
 # Keycloak Settings for OpenID Connect
 export KEYCLOAK_AUTH_USERNAME=${KEYCLOAK_AUTH_USERNAME:-"admin"}
@@ -97,6 +100,7 @@ echo NAMESPACE = $NAMESPACE
 echo HHB_HOST = $HHB_HOST
 echo HHB_APP_HOST = $HHB_APP_HOST # App host can be diffrent (ocp)
 echo DEPLOYMENT_DIST_DIR = $DEPLOYMENT_DIST_DIR
+echo USE_KEYCLOAK = $USE_KEYCLOAK
 
 # Create directory to store the dist files for the deployment in
 mkdir -p k8s/$DEPLOYMENT_DIST_DIR
@@ -105,7 +109,9 @@ echo "Generate kustomization.yaml for $CUSTOMER_BUILD."
 cd k8s/$DEPLOYMENT_DIST_DIR
 
 # Create final Kustomization for the patches.
-cat << EOF > kustomization.yaml
+if [ $USE_KEYCLOAK != "true" ]
+then
+  cat << EOF > kustomization.yaml
 ---
 # generated yaml file
 apiVersion: kustomize.config.k8s.io/v1beta1
@@ -114,22 +120,38 @@ kind: Kustomization
 patchesStrategicMerge:
 - env_patch.yaml
 - platform_patch.yaml
-- use_sso_patch.yaml
 EOF
+else
+  cat << EOF > kustomization.yaml
+---
+# generated yaml file
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+patchesStrategicMerge:
+- env_patch.yaml
+- use_sso_patch.yaml
+- platform_patch.yaml
+EOF
+
+fi
 
 echo "Generate env_patch.yaml / ${USE_PLATFORM}_patch.yaml and ${USE_PLATFORM}_add.yaml"
 envsubst < ../templates/env_patch.yaml > env_patch.yaml
 envsubst < ../templates/platform/${USE_PLATFORM}/patch.yaml > platform_patch.yaml
 envsubst < ../templates/platform/${USE_PLATFORM}/add.yaml > platform_add.yaml
 
-echo "Generate patch use_sso_patch.yaml with envsubst"
-envsubst < ../templates/use_sso_keycloak_patch.yaml > use_sso_patch.yaml
-echo "Generate patch use_sso_add.yaml with envsubst"
-envsubst < ../templates/platform/${USE_PLATFORM}/use_sso_keycloak_add.yaml > use_sso_add.yaml
-echo "add resource ../base/keycloak"
-kustomize edit add resource ../base/keycloak
-echo "add resource use_sso_add.yaml"
-kustomize edit add resource use_sso_add.yaml
+if [ $USE_KEYCLOAK != "false" ]
+then
+  echo "Generate patch use_sso_patch.yaml with envsubst"
+  envsubst < ../templates/use_sso_keycloak_patch.yaml > use_sso_patch.yaml
+  echo "Generate patch use_sso_add.yaml with envsubst"
+  envsubst < ../templates/platform/${USE_PLATFORM}/use_sso_keycloak_add.yaml > use_sso_add.yaml
+  echo "add resource ../base/keycloak"
+  kustomize edit add resource ../base/keycloak
+  echo "add resource use_sso_add.yaml"
+  kustomize edit add resource use_sso_add.yaml
+fi
 
 if [ $GENERATE_SECRETS == "true" ]
 then
@@ -137,7 +159,7 @@ then
   envsubst < ../templates/secrets.yaml > secrets.yaml
   echo "add resource secrets.yaml"
   kustomize edit add resource secrets.yaml
-  if [ keycloak != "none" ]
+  if [ $USE_KEYCLOAK == "true" ]
   then
     echo "Generate patch use_sso_secrets.yaml with envsubst"
     envsubst < ../templates/use_sso_keycloak_secrets.yaml > use_sso_secrets.yaml
