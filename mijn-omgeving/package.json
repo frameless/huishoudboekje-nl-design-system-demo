@@ -2,14 +2,13 @@
   "name": "@huishoudboekje/mijn-omgeving",
   "version": "0.1.0",
   "description": "Dit component kan als plugin worden gebruikt in een Mijn Gemeente-omgeving.",
-  "private": true,
   "author": {
 	"name": "Koen Brouwer",
 	"email": "contact@kbrouwer.nl",
 	"url": "https://twitter.com/KoenBrouwer"
   },
-  "main": "dist/lib/index.js",
-  "module": "dist/lib/index.js",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
   "files": [
 	"dist",
 	"README.md"
@@ -20,10 +19,8 @@
 	"test": "react-scripts test",
 	"get-schema": "npx --yes -p @apollo/rover rover graph introspect ${PROXY_AUTHORIZATION:+--header \"${PROXY_AUTHORIZATION}\"} ${BASE_URL:-https://test.huishoudboekje.demoground.nl}/api/burgers > schema.graphql",
 	"pregen-types": "npm run get-schema",
-	"gen-types": "graphql-codegen --config codegen.json"
-  },
-  "publishConfig": {
-	"registry": "https://gitlab.com/api/v4/projects/20352213/packages/npm"
+	"gen-types": "graphql-codegen --config codegen.json",
+	"prepublish": "npm run build"
   },
   "license": "SEE LICENSE IN LICENSE.md",
   "dependencies": {

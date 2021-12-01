@@ -1,0 +1,22 @@
+# Build the "Mijn Omgeving" package so that it can be published to an NPM registry.
+ship-mijn-omgeving:
+  stage: ship
+  image:
+    name: ${DOCKER_PROXY}node:lts-alpine
+  needs: [ ]
+  tags:
+    - cg
+    - docker
+  retry:
+    max: 2
+    when: script_failure
+  before_script:
+    - cd ./mijn-omgeving
+    - npm ci --prefer-offline --no-progress --color=false --quiet
+    # Confgure npm so that it will publish to our own package registry
+    - npm config set @huishoudboekje:registry ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/npm/
+    - npm config set ${CI_API_V4_URL#https?}/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=${CI_JOB_TOKEN}
+  script:
+    - npm publish
+  only:
+    - branches@commonground/huishoudboekje/app-new

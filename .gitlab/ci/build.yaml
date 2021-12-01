@@ -1,4 +1,3 @@
----
 # Build docker images
 build-docker-images:
   retry:
@@ -6,7 +5,7 @@ build-docker-images:
     when: script_failure
   stage: build
   image: registry.gitlab.com/commonground/huishoudboekje/review-app-deployer:latest
-  needs: []
+  needs: [ ]
   tags:
     - cg
     - shell

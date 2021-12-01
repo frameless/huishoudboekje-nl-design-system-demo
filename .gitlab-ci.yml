@@ -1,4 +1,3 @@
----
 # Some clarification on terminology:
 # BE = Backend (The API)
 # FE = Frontend (The UI)
@@ -18,11 +17,13 @@ variables:
 
 stages:
   - build
+  - ship
   - deploy
   - test
   - data
 
 include:
+  - /.gitlab/ci/ship.yaml
   - /.gitlab/ci/build.yaml
   - /.gitlab/ci/deploy.yaml
   - /.gitlab/ci/test.yaml
