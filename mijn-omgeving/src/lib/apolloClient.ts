@@ -6,7 +6,6 @@ type HuishoudboekjeApolloClientSettings = {
 }
 
 const createApolloClient = ({apiUrl}: HuishoudboekjeApolloClientSettings) => {
-	// Todo: get this from ENV or whatever.
 	const link = new BatchHttpLink({
 		uri: apiUrl,
 		batchMax: 20,
