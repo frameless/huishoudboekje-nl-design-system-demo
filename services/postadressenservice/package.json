@@ -12,8 +12,9 @@
   "author": {
 	"name": "Koen Brouwer",
 	"email": "contact@kbrouwer.nl",
-	"url": "https://twitter.com/KoenBrouwer"
+	"url": "https://gitlab.com/koenbrouwer"
   },
+  "license": "SEE LICENSE IN LICENSE.md",
   "dependencies": {
 	"@prisma/client": "^3.5.0",
 	"cors": "^2.8.5",
@@ -30,6 +31,5 @@
 	"prisma": "^3.5.0",
 	"nodemon": "^2.0.15"
   },
-  "keywords": [],
-  "license": "ISC"
+  "keywords": []
 }
