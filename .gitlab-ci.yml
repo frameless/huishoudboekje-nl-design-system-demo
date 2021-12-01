@@ -23,8 +23,8 @@ stages:
   - data
 
 include:
-  - /.gitlab/ci/ship.yaml
   - /.gitlab/ci/build.yaml
+  - /.gitlab/ci/ship.yaml
   - /.gitlab/ci/deploy.yaml
   - /.gitlab/ci/test.yaml
   - /.gitlab/ci/data.yaml

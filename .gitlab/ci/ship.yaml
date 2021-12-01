@@ -23,6 +23,7 @@ ship-mijn-omgeving:
     - npm config set @huishoudboekje:registry ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/npm/
     - npm config set ${CI_API_V4_URL#https?}/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=${CI_JOB_TOKEN}
   script:
-    - npm publish
+    - npm publish --tag latest
   only:
     - branches@commonground/huishoudboekje/app-new
+  when: manual
