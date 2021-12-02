@@ -9,7 +9,7 @@ const App = () => {
 
 	return (
 		<div style={{
-			width: "600px",
+			width: 800,
 			margin: "0 auto",
 		}}>
 
