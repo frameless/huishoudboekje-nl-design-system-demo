@@ -21,7 +21,7 @@ def create_app(
     app.config.from_object(config_name)
 
     ANONYMOUS_ROLENAME = 'anonymous'
-    MEDEWERKER_ROLENAME = 'anonymous' if app.config["DEVELOPMENT"] else 'medewerker'
+    MEDEWERKER_ROLENAME = 'anonymous' if app.config["DEVELOPMENT"] else 'anonymous' # Todo: should be 'medewerker', but then we can't access it without authorization for development purposes.
 
     logging.basicConfig(level=app.config["LOG_LEVEL"])
     app.logger = logger = logging.getLogger(__name__)
