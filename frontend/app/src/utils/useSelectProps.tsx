@@ -1,6 +1,6 @@
 import {useTranslation} from "react-i18next";
 import {MultiLineOption, MultiLineValueContainer, ReverseMultiLineOption, ReverseMultiLineValueContainer} from "../components/Layouts/ReactSelect/CustomComponents";
-import {Afdeling, Organisatie, Postadres, Rekening, Rubriek} from "../generated/graphql";
+import {Afdeling, Grootboekrekening, Organisatie, Postadres, Rekening, Rubriek} from "../generated/graphql";
 import {formatIBAN} from "./things";
 
 export type SelectOption = {
@@ -54,6 +54,14 @@ const createSelectOptionsFromPostadressen = (postadressen: Postadres[] = []): Se
 	})).sort(sortByField("label"));
 };
 
+const createSelectOptionsFromGrootboekrekeningen = (grootboekrekeningen: Grootboekrekening[] = []): SelectOption[] => {
+	return grootboekrekeningen.map(g => ({
+		key: g.id!,
+		value: g.id!,
+		label: [g.naam!, g.id!],
+	})).sort(sortByField("label"));
+};
+
 const useSelectProps = () => {
 	const {t} = useTranslation();
 
@@ -82,7 +90,8 @@ const useSelectProps = () => {
 		createSelectOptionsFromRubrieken,
 		createSelectOptionsFromOrganisaties,
 		createSelectOptionsFromAfdelingen,
-		createSelectOptionsFromPostadressen
+		createSelectOptionsFromPostadressen,
+		createSelectOptionsFromGrootboekrekeningen,
 	};
 };
 

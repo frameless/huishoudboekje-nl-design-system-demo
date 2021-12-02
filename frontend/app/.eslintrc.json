@@ -74,7 +74,9 @@
 	],
 	"react/no-unknown-property": ["warn"],
 	"no-constant-condition": ["warn", {"checkLoops": false}],
-	"react/jsx-no-useless-fragment": ["error", {"allowExpressions": true}]
+	"react/jsx-no-useless-fragment": ["error", {"allowExpressions": true}],
+	"no-redeclare": ["off"],
+	"@typescript-eslint/no-redeclare": ["off"]
   },
   "ignorePatterns": [
 	"node_modules",

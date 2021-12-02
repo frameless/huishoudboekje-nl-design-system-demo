@@ -1,6 +1,7 @@
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T;
+export type InputMaybe<T> = T;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
@@ -12,7 +13,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** Decimaal Scalar Description */
+  /** Bedrag (bijvoorbeeld: 99.99) n */
   Bedrag: any;
   /**
    * The `Date` scalar type represents a Date
@@ -26,7 +27,7 @@ export type Scalars = {
    * [iso8601](https://en.wikipedia.org/wiki/ISO_8601).
    */
   DateTime: any;
-  /** Accepts dates, datetimes, ints and strings. */
+  /** Accepteert datum, datum en tijd, ints en strings en wordt gebruikt bij ComplexFilterType. */
   DynamicType: any;
   /**
    * Create scalar that ignores normal serialization/deserialization, since
@@ -35,6 +36,7 @@ export type Scalars = {
   Upload: any;
 };
 
+/** Mutatie om een zoekterm aan een afspraak toe te voegen. */
 export type AddAfspraakZoekterm = {
   afspraak?: Maybe<Afspraak>;
   matchingAfspraken?: Maybe<Array<Maybe<Afspraak>>>;
@@ -42,6 +44,7 @@ export type AddAfspraakZoekterm = {
   previous?: Maybe<Afspraak>;
 };
 
+/** Mutatie om een burger aan een huishouden toe te voegen. */
 export type AddHuishoudenBurger = {
   burgerIds?: Maybe<Burger>;
   huishouden?: Maybe<Huishouden>;
@@ -49,7 +52,6 @@ export type AddHuishoudenBurger = {
   previous?: Maybe<Huishouden>;
 };
 
-/** GraphQL Afdeling model  */
 export type Afdeling = {
   afspraken?: Maybe<Array<Maybe<Afspraak>>>;
   id?: Maybe<Scalars['Int']>;
@@ -59,7 +61,6 @@ export type Afdeling = {
   rekeningen?: Maybe<Array<Maybe<Rekening>>>;
 };
 
-/** GraphQL Afspraak model  */
 export type Afspraak = {
   afdeling?: Maybe<Afdeling>;
   bedrag?: Maybe<Scalars['Bedrag']>;
@@ -80,13 +81,11 @@ export type Afspraak = {
 };
 
 
-/** GraphQL Afspraak model  */
 export type AfspraakOverschrijvingenArgs = {
-  eindDatum?: Maybe<Scalars['Date']>;
-  startDatum?: Maybe<Scalars['Date']>;
+  eindDatum?: InputMaybe<Scalars['Date']>;
+  startDatum?: InputMaybe<Scalars['Date']>;
 };
 
-/** BankTransaction model */
 export type BankTransaction = {
   bedrag?: Maybe<Scalars['Bedrag']>;
   customerStatementMessage?: Maybe<CustomerStatementMessage>;
@@ -103,15 +102,15 @@ export type BankTransaction = {
 };
 
 export type BankTransactionFilter = {
-  AND?: Maybe<BankTransactionFilter>;
-  OR?: Maybe<BankTransactionFilter>;
-  bedrag?: Maybe<ComplexBedragFilterType>;
-  id?: Maybe<ComplexFilterType>;
-  isCredit?: Maybe<Scalars['Boolean']>;
-  isGeboekt?: Maybe<Scalars['Boolean']>;
-  statementLine?: Maybe<ComplexFilterType>;
-  tegenRekening?: Maybe<ComplexFilterType>;
-  transactieDatum?: Maybe<ComplexFilterType>;
+  AND?: InputMaybe<BankTransactionFilter>;
+  OR?: InputMaybe<BankTransactionFilter>;
+  bedrag?: InputMaybe<ComplexBedragFilterType>;
+  id?: InputMaybe<ComplexFilterType>;
+  isCredit?: InputMaybe<Scalars['Boolean']>;
+  isGeboekt?: InputMaybe<Scalars['Boolean']>;
+  statementLine?: InputMaybe<ComplexFilterType>;
+  tegenRekening?: InputMaybe<ComplexFilterType>;
+  transactieDatum?: InputMaybe<ComplexFilterType>;
 };
 
 export type BankTransactionsPaged = {
@@ -132,16 +131,15 @@ export type Betaalinstructie = {
 
 /** Implementatie op basis van http://schema.org/Schedule */
 export type BetaalinstructieInput = {
-  byDay?: Maybe<Array<Maybe<DayOfWeek>>>;
-  byMonth?: Maybe<Array<Maybe<Scalars['Int']>>>;
-  byMonthDay?: Maybe<Array<Maybe<Scalars['Int']>>>;
-  endDate?: Maybe<Scalars['String']>;
-  exceptDates?: Maybe<Array<Maybe<Scalars['String']>>>;
-  repeatFrequency?: Maybe<Scalars['String']>;
+  byDay?: InputMaybe<Array<InputMaybe<DayOfWeek>>>;
+  byMonth?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  byMonthDay?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  endDate?: InputMaybe<Scalars['String']>;
+  exceptDates?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  repeatFrequency?: InputMaybe<Scalars['String']>;
   startDate: Scalars['String'];
 };
 
-/** GraphQL Burger model  */
 export type Burger = {
   achternaam?: Maybe<Scalars['String']>;
   afspraken?: Maybe<Array<Maybe<Afspraak>>>;
@@ -162,25 +160,25 @@ export type Burger = {
 };
 
 export type BurgerFilter = {
-  AND?: Maybe<BurgerFilter>;
-  OR?: Maybe<BurgerFilter>;
-  achternaam?: Maybe<ComplexFilterType>;
-  bedrag?: Maybe<ComplexBedragFilterType>;
-  email?: Maybe<ComplexFilterType>;
-  geboortedatum?: Maybe<ComplexFilterType>;
-  huishoudenId?: Maybe<ComplexFilterType>;
-  huisnummer?: Maybe<ComplexFilterType>;
-  iban?: Maybe<ComplexFilterType>;
-  id?: Maybe<ComplexFilterType>;
-  plaatsnaam?: Maybe<ComplexFilterType>;
-  postcode?: Maybe<ComplexFilterType>;
-  rekeninghouder?: Maybe<ComplexFilterType>;
-  straatnaam?: Maybe<ComplexFilterType>;
-  tegenRekeningId?: Maybe<ComplexFilterType>;
-  telefoonnummer?: Maybe<ComplexFilterType>;
-  voorletters?: Maybe<ComplexFilterType>;
-  voornamen?: Maybe<ComplexFilterType>;
-  zoektermen?: Maybe<ComplexFilterType>;
+  AND?: InputMaybe<BurgerFilter>;
+  OR?: InputMaybe<BurgerFilter>;
+  achternaam?: InputMaybe<ComplexFilterType>;
+  bedrag?: InputMaybe<ComplexBedragFilterType>;
+  email?: InputMaybe<ComplexFilterType>;
+  geboortedatum?: InputMaybe<ComplexFilterType>;
+  huishoudenId?: InputMaybe<ComplexFilterType>;
+  huisnummer?: InputMaybe<ComplexFilterType>;
+  iban?: InputMaybe<ComplexFilterType>;
+  id?: InputMaybe<ComplexFilterType>;
+  plaatsnaam?: InputMaybe<ComplexFilterType>;
+  postcode?: InputMaybe<ComplexFilterType>;
+  rekeninghouder?: InputMaybe<ComplexFilterType>;
+  straatnaam?: InputMaybe<ComplexFilterType>;
+  tegenRekeningId?: InputMaybe<ComplexFilterType>;
+  telefoonnummer?: InputMaybe<ComplexFilterType>;
+  voorletters?: InputMaybe<ComplexFilterType>;
+  voornamen?: InputMaybe<ComplexFilterType>;
+  zoektermen?: InputMaybe<ComplexFilterType>;
 };
 
 export type BurgersPaged = {
@@ -189,27 +187,27 @@ export type BurgersPaged = {
 };
 
 export type ComplexBedragFilterType = {
-  BETWEEN?: Maybe<Array<Maybe<Scalars['Bedrag']>>>;
-  EQ?: Maybe<Scalars['Bedrag']>;
-  GT?: Maybe<Scalars['Bedrag']>;
-  GTE?: Maybe<Scalars['Bedrag']>;
-  IN?: Maybe<Array<Maybe<Scalars['Bedrag']>>>;
-  LT?: Maybe<Scalars['Bedrag']>;
-  LTE?: Maybe<Scalars['Bedrag']>;
-  NEQ?: Maybe<Scalars['Bedrag']>;
-  NOTIN?: Maybe<Array<Maybe<Scalars['Bedrag']>>>;
+  BETWEEN?: InputMaybe<Array<InputMaybe<Scalars['Bedrag']>>>;
+  EQ?: InputMaybe<Scalars['Bedrag']>;
+  GT?: InputMaybe<Scalars['Bedrag']>;
+  GTE?: InputMaybe<Scalars['Bedrag']>;
+  IN?: InputMaybe<Array<InputMaybe<Scalars['Bedrag']>>>;
+  LT?: InputMaybe<Scalars['Bedrag']>;
+  LTE?: InputMaybe<Scalars['Bedrag']>;
+  NEQ?: InputMaybe<Scalars['Bedrag']>;
+  NOTIN?: InputMaybe<Array<InputMaybe<Scalars['Bedrag']>>>;
 };
 
 export type ComplexFilterType = {
-  BETWEEN?: Maybe<Array<Maybe<Scalars['DynamicType']>>>;
-  EQ?: Maybe<Scalars['DynamicType']>;
-  GT?: Maybe<Scalars['DynamicType']>;
-  GTE?: Maybe<Scalars['DynamicType']>;
-  IN?: Maybe<Array<Maybe<Scalars['DynamicType']>>>;
-  LT?: Maybe<Scalars['DynamicType']>;
-  LTE?: Maybe<Scalars['DynamicType']>;
-  NEQ?: Maybe<Scalars['DynamicType']>;
-  NOTIN?: Maybe<Array<Maybe<Scalars['DynamicType']>>>;
+  BETWEEN?: InputMaybe<Array<InputMaybe<Scalars['DynamicType']>>>;
+  EQ?: InputMaybe<Scalars['DynamicType']>;
+  GT?: InputMaybe<Scalars['DynamicType']>;
+  GTE?: InputMaybe<Scalars['DynamicType']>;
+  IN?: InputMaybe<Array<InputMaybe<Scalars['DynamicType']>>>;
+  LT?: InputMaybe<Scalars['DynamicType']>;
+  LTE?: InputMaybe<Scalars['DynamicType']>;
+  NEQ?: InputMaybe<Scalars['DynamicType']>;
+  NOTIN?: InputMaybe<Array<InputMaybe<Scalars['DynamicType']>>>;
 };
 
 export type Configuratie = {
@@ -219,9 +217,10 @@ export type Configuratie = {
 
 export type ConfiguratieInput = {
   id: Scalars['String'];
-  waarde?: Maybe<Scalars['String']>;
+  waarde?: InputMaybe<Scalars['String']>;
 };
 
+/** Mutatie om een afdeling aan een organisatie toe te voegen. */
 export type CreateAfdeling = {
   afdeling?: Maybe<Afdeling>;
   ok?: Maybe<Scalars['Boolean']>;
@@ -230,10 +229,11 @@ export type CreateAfdeling = {
 export type CreateAfdelingInput = {
   naam: Scalars['String'];
   organisatieId: Scalars['Int'];
-  postadressen?: Maybe<Array<Maybe<CreatePostadresInput>>>;
-  rekeningen?: Maybe<Array<Maybe<RekeningInput>>>;
+  postadressen?: InputMaybe<Array<InputMaybe<CreatePostadresInput>>>;
+  rekeningen?: InputMaybe<Array<InputMaybe<RekeningInput>>>;
 };
 
+/** Mutatie om een rekening aan een afdeling toe te voegen. */
 export type CreateAfdelingRekening = {
   ok?: Maybe<Scalars['Boolean']>;
   rekening?: Maybe<Rekening>;
@@ -245,16 +245,16 @@ export type CreateAfspraak = {
 };
 
 export type CreateAfspraakInput = {
-  afdelingId?: Maybe<Scalars['Int']>;
+  afdelingId?: InputMaybe<Scalars['Int']>;
   bedrag: Scalars['Bedrag'];
   burgerId: Scalars['Int'];
   credit: Scalars['Boolean'];
   omschrijving: Scalars['String'];
-  postadresId?: Maybe<Scalars['String']>;
+  postadresId?: InputMaybe<Scalars['String']>;
   rubriekId: Scalars['Int'];
   tegenRekeningId: Scalars['Int'];
-  validFrom?: Maybe<Scalars['String']>;
-  validThrough?: Maybe<Scalars['String']>;
+  validFrom?: InputMaybe<Scalars['String']>;
+  validThrough?: InputMaybe<Scalars['String']>;
 };
 
 export type CreateBurger = {
@@ -263,21 +263,22 @@ export type CreateBurger = {
 };
 
 export type CreateBurgerInput = {
-  achternaam?: Maybe<Scalars['String']>;
-  bsn?: Maybe<Scalars['Int']>;
-  email?: Maybe<Scalars['String']>;
-  geboortedatum?: Maybe<Scalars['Date']>;
-  huishouden?: Maybe<HuishoudenInput>;
-  huisnummer?: Maybe<Scalars['String']>;
-  plaatsnaam?: Maybe<Scalars['String']>;
-  postcode?: Maybe<Scalars['String']>;
-  rekeningen?: Maybe<Array<Maybe<RekeningInput>>>;
-  straatnaam?: Maybe<Scalars['String']>;
-  telefoonnummer?: Maybe<Scalars['String']>;
-  voorletters?: Maybe<Scalars['String']>;
-  voornamen?: Maybe<Scalars['String']>;
+  achternaam?: InputMaybe<Scalars['String']>;
+  bsn?: InputMaybe<Scalars['Int']>;
+  email?: InputMaybe<Scalars['String']>;
+  geboortedatum?: InputMaybe<Scalars['Date']>;
+  huishouden?: InputMaybe<HuishoudenInput>;
+  huisnummer?: InputMaybe<Scalars['String']>;
+  plaatsnaam?: InputMaybe<Scalars['String']>;
+  postcode?: InputMaybe<Scalars['String']>;
+  rekeningen?: InputMaybe<Array<InputMaybe<RekeningInput>>>;
+  straatnaam?: InputMaybe<Scalars['String']>;
+  telefoonnummer?: InputMaybe<Scalars['String']>;
+  voorletters?: InputMaybe<Scalars['String']>;
+  voornamen?: InputMaybe<Scalars['String']>;
 };
 
+/** Mutatie om een rekening aan een burger toe te voegen. */
 export type CreateBurgerRekening = {
   ok?: Maybe<Scalars['Boolean']>;
   rekening?: Maybe<Rekening>;
@@ -294,6 +295,7 @@ export type CreateCustomerStatementMessage = {
   ok?: Maybe<Scalars['Boolean']>;
 };
 
+/** Mutatie om een betaalinstructie te genereren. */
 export type CreateExportOverschrijvingen = {
   export?: Maybe<Export>;
   ok?: Maybe<Scalars['Boolean']>;
@@ -305,10 +307,10 @@ export type CreateHuishouden = {
 };
 
 export type CreateHuishoudenInput = {
-  burgerIds?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  burgerIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
 };
 
-/** Create a Journaalpost with an Afspraak */
+/** Mutatie om een banktransactie af te letteren op een afspraak. */
 export type CreateJournaalpostAfspraak = {
   journaalpost?: Maybe<Journaalpost>;
   ok?: Maybe<Scalars['Boolean']>;
@@ -320,7 +322,7 @@ export type CreateJournaalpostAfspraakInput = {
   transactionId: Scalars['Int'];
 };
 
-/** Create a Journaalpost with a Grootboekrekening */
+/** Mutatie om een banktransactie af te letteren op een grootboekrekening. */
 export type CreateJournaalpostGrootboekrekening = {
   journaalpost?: Maybe<Journaalpost>;
   ok?: Maybe<Scalars['Boolean']>;
@@ -332,7 +334,7 @@ export type CreateJournaalpostGrootboekrekeningInput = {
   transactionId: Scalars['Int'];
 };
 
-/** Create a Journaalpost with an Afspraak */
+/** deprecated */
 export type CreateJournaalpostPerAfspraak = {
   journaalposten?: Maybe<Array<Maybe<Journaalpost>>>;
   ok?: Maybe<Scalars['Boolean']>;
@@ -345,8 +347,8 @@ export type CreateOrganisatie = {
 
 export type CreateOrganisatieInput = {
   kvknummer: Scalars['String'];
-  naam?: Maybe<Scalars['String']>;
-  vestigingsnummer?: Maybe<Scalars['String']>;
+  naam?: InputMaybe<Scalars['String']>;
+  vestigingsnummer?: InputMaybe<Scalars['String']>;
 };
 
 export type CreatePostadres = {
@@ -356,7 +358,7 @@ export type CreatePostadres = {
 };
 
 export type CreatePostadresInput = {
-  afdelingId?: Maybe<Scalars['Int']>;
+  afdelingId?: InputMaybe<Scalars['Int']>;
   huisnummer: Scalars['String'];
   plaatsnaam: Scalars['String'];
   postcode: Scalars['String'];
@@ -368,7 +370,7 @@ export type CreateRubriek = {
   rubriek?: Maybe<Rubriek>;
 };
 
-/** GraphQL CustomerStatementMessage model */
+/** Model van een bankafschrift. */
 export type CustomerStatementMessage = {
   accountIdentification?: Maybe<Scalars['String']>;
   bankTransactions?: Maybe<Array<Maybe<BankTransaction>>>;
@@ -394,11 +396,13 @@ export enum DayOfWeek {
   Wednesday = 'Wednesday'
 }
 
+/** Mutatie om een afdeling van een organisatie te verwijderen. */
 export type DeleteAfdeling = {
   ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Afdeling>;
 };
 
+/** Mutatie om een rekening van een afdeling te verwijderen. */
 export type DeleteAfdelingRekening = {
   ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Rekening>;
@@ -409,6 +413,7 @@ export type DeleteAfspraak = {
   previous?: Maybe<Afspraak>;
 };
 
+/** Mutatie om een zoekterm bij een afspraak te verwijderen. */
 export type DeleteAfspraakZoekterm = {
   afspraak?: Maybe<Afspraak>;
   matchingAfspraken?: Maybe<Array<Maybe<Afspraak>>>;
@@ -421,6 +426,7 @@ export type DeleteBurger = {
   previous?: Maybe<Burger>;
 };
 
+/** Mutatie om een rekening bij een burger te verwijderen. */
 export type DeleteBurgerRekening = {
   ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Rekening>;
@@ -441,6 +447,7 @@ export type DeleteHuishouden = {
   previous?: Maybe<Huishouden>;
 };
 
+/** Mutatie om een burger uit een huishouden te verwijderen. */
 export type DeleteHuishoudenBurger = {
   burgerIds?: Maybe<Array<Maybe<Burger>>>;
   huishouden?: Maybe<Array<Maybe<Huishouden>>>;
@@ -448,7 +455,6 @@ export type DeleteHuishoudenBurger = {
   previous?: Maybe<Huishouden>;
 };
 
-/** Delete journaalpost by id  */
 export type DeleteJournaalpost = {
   ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Journaalpost>;
@@ -470,7 +476,6 @@ export type DeleteRubriek = {
   previous?: Maybe<Rubriek>;
 };
 
-/** GraphQL Export model  */
 export type Export = {
   eindDatum?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['Int']>;
@@ -487,7 +492,7 @@ export type Gebruiker = {
   token?: Maybe<Scalars['String']>;
 };
 
-/** GebruikersActiviteit model */
+/** Model dat een actie van een gebruiker beschrijft. */
 export type GebruikersActiviteit = {
   action?: Maybe<Scalars['String']>;
   entities?: Maybe<Array<Maybe<GebruikersActiviteitEntity>>>;
@@ -499,6 +504,7 @@ export type GebruikersActiviteit = {
   timestamp?: Maybe<Scalars['DateTime']>;
 };
 
+/** Dit model beschrijft de wijzingen die een gebruiker heeft gedaan. */
 export type GebruikersActiviteitEntity = {
   afdeling?: Maybe<Afdeling>;
   afspraak?: Maybe<Afspraak>;
@@ -545,7 +551,6 @@ export type GebruikersActiviteitenPaged = {
   pageInfo?: Maybe<PageInfo>;
 };
 
-/** Grootboekrekening model  */
 export type Grootboekrekening = {
   children?: Maybe<Array<Maybe<Grootboekrekening>>>;
   credit?: Maybe<Scalars['Boolean']>;
@@ -557,14 +562,13 @@ export type Grootboekrekening = {
   rubriek?: Maybe<Rubriek>;
 };
 
-/** GraphQL Huishouden model  */
 export type Huishouden = {
   burgers?: Maybe<Array<Maybe<Burger>>>;
   id?: Maybe<Scalars['Int']>;
 };
 
 export type HuishoudenInput = {
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
 };
 
 export type HuishoudensPaged = {
@@ -572,7 +576,7 @@ export type HuishoudensPaged = {
   pageInfo?: Maybe<PageInfo>;
 };
 
-/** Journaalpost model */
+/** Model van een afgeletterde banktransactie. */
 export type Journaalpost = {
   afspraak?: Maybe<Afspraak>;
   grootboekrekening?: Maybe<Grootboekrekening>;
@@ -581,7 +585,6 @@ export type Journaalpost = {
   transaction?: Maybe<BankTransaction>;
 };
 
-/** GraphQL Organisatie model  */
 export type Organisatie = {
   afdelingen?: Maybe<Array<Maybe<Afdeling>>>;
   id?: Maybe<Scalars['Int']>;
@@ -613,7 +616,6 @@ export type PageInfo = {
   start?: Maybe<Scalars['Int']>;
 };
 
-/** GraphQL Burger model  */
 export type Postadres = {
   huisnummer?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['String']>;
@@ -622,7 +624,6 @@ export type Postadres = {
   straatnaam?: Maybe<Scalars['String']>;
 };
 
-/** GraphQL Rekening model */
 export type Rekening = {
   afdelingen?: Maybe<Array<Maybe<Afdeling>>>;
   afspraken?: Maybe<Array<Maybe<Afspraak>>>;
@@ -633,54 +634,66 @@ export type Rekening = {
 };
 
 export type RekeningInput = {
-  iban?: Maybe<Scalars['String']>;
-  rekeninghouder?: Maybe<Scalars['String']>;
+  iban?: InputMaybe<Scalars['String']>;
+  rekeninghouder?: InputMaybe<Scalars['String']>;
 };
 
 /** The root of all mutations  */
 export type RootMutation = {
+  /** Mutatie om een zoekterm aan een afspraak toe te voegen. */
   addAfspraakZoekterm?: Maybe<AddAfspraakZoekterm>;
+  /** Mutatie om een burger aan een huishouden toe te voegen. */
   addHuishoudenBurger?: Maybe<AddHuishoudenBurger>;
+  /** Mutatie om een afdeling aan een organisatie toe te voegen. */
   createAfdeling?: Maybe<CreateAfdeling>;
+  /** Mutatie om een rekening aan een afdeling toe te voegen. */
   createAfdelingRekening?: Maybe<CreateAfdelingRekening>;
   createAfspraak?: Maybe<CreateAfspraak>;
   createBurger?: Maybe<CreateBurger>;
+  /** Mutatie om een rekening aan een burger toe te voegen. */
   createBurgerRekening?: Maybe<CreateBurgerRekening>;
   createConfiguratie?: Maybe<CreateConfiguratie>;
   createCustomerStatementMessage?: Maybe<CreateCustomerStatementMessage>;
+  /** Mutatie om een betaalinstructie te genereren. */
   createExportOverschrijvingen?: Maybe<CreateExportOverschrijvingen>;
   createHuishouden?: Maybe<CreateHuishouden>;
-  /** Create a Journaalpost with an Afspraak */
+  /** Mutatie om een banktransactie af te letteren op een afspraak. */
   createJournaalpostAfspraak?: Maybe<CreateJournaalpostAfspraak>;
-  /** Create a Journaalpost with a Grootboekrekening */
+  /** Mutatie om een banktransactie af te letteren op een grootboekrekening. */
   createJournaalpostGrootboekrekening?: Maybe<CreateJournaalpostGrootboekrekening>;
-  /** Create a Journaalpost with an Afspraak */
+  /** deprecated */
   createJournaalpostPerAfspraak?: Maybe<CreateJournaalpostPerAfspraak>;
   createOrganisatie?: Maybe<CreateOrganisatie>;
   createPostadres?: Maybe<CreatePostadres>;
   createRubriek?: Maybe<CreateRubriek>;
+  /** Mutatie om een afdeling van een organisatie te verwijderen. */
   deleteAfdeling?: Maybe<DeleteAfdeling>;
+  /** Mutatie om een rekening van een afdeling te verwijderen. */
   deleteAfdelingRekening?: Maybe<DeleteAfdelingRekening>;
   deleteAfspraak?: Maybe<DeleteAfspraak>;
+  /** Mutatie om een zoekterm bij een afspraak te verwijderen. */
   deleteAfspraakZoekterm?: Maybe<DeleteAfspraakZoekterm>;
   deleteBurger?: Maybe<DeleteBurger>;
+  /** Mutatie om een rekening bij een burger te verwijderen. */
   deleteBurgerRekening?: Maybe<DeleteBurgerRekening>;
   deleteConfiguratie?: Maybe<DeleteConfiguratie>;
   deleteCustomerStatementMessage?: Maybe<DeleteCustomerStatementMessage>;
   deleteHuishouden?: Maybe<DeleteHuishouden>;
+  /** Mutatie om een burger uit een huishouden te verwijderen. */
   deleteHuishoudenBurger?: Maybe<DeleteHuishoudenBurger>;
-  /** Delete journaalpost by id  */
   deleteJournaalpost?: Maybe<DeleteJournaalpost>;
   deleteOrganisatie?: Maybe<DeleteOrganisatie>;
   deletePostadres?: Maybe<DeletePostadres>;
   deleteRubriek?: Maybe<DeleteRubriek>;
+  /** Mutatie om niet afgeletterde banktransacties af te letteren. */
   startAutomatischBoeken?: Maybe<StartAutomatischBoeken>;
   updateAfdeling?: Maybe<UpdateAfdeling>;
   updateAfspraak?: Maybe<UpdateAfspraak>;
+  /** Mutatie voor het instellen van een nieuwe betaalinstructie voor een afspraak. */
   updateAfspraakBetaalinstructie?: Maybe<UpdateAfspraakBetaalinstructie>;
   updateBurger?: Maybe<UpdateBurger>;
   updateConfiguratie?: Maybe<UpdateConfiguratie>;
-  /** Update a Journaalpost with a Grootboekrekening */
+  /** deprecated */
   updateJournaalpostGrootboekrekening?: Maybe<UpdateJournaalpostGrootboekrekening>;
   updateOrganisatie?: Maybe<UpdateOrganisatie>;
   updatePostadres?: Maybe<UpdatePostadres>;
@@ -698,14 +711,14 @@ export type RootMutationAddAfspraakZoektermArgs = {
 
 /** The root of all mutations  */
 export type RootMutationAddHuishoudenBurgerArgs = {
-  burgerIds: Array<Maybe<Scalars['Int']>>;
+  burgerIds: Array<InputMaybe<Scalars['Int']>>;
   huishoudenId: Scalars['Int'];
 };
 
 
 /** The root of all mutations  */
 export type RootMutationCreateAfdelingArgs = {
-  input?: Maybe<CreateAfdelingInput>;
+  input?: InputMaybe<CreateAfdelingInput>;
 };
 
 
@@ -724,7 +737,7 @@ export type RootMutationCreateAfspraakArgs = {
 
 /** The root of all mutations  */
 export type RootMutationCreateBurgerArgs = {
-  input?: Maybe<CreateBurgerInput>;
+  input?: InputMaybe<CreateBurgerInput>;
 };
 
 
@@ -737,7 +750,7 @@ export type RootMutationCreateBurgerRekeningArgs = {
 
 /** The root of all mutations  */
 export type RootMutationCreateConfiguratieArgs = {
-  input?: Maybe<ConfiguratieInput>;
+  input?: InputMaybe<ConfiguratieInput>;
 };
 
 
@@ -749,51 +762,51 @@ export type RootMutationCreateCustomerStatementMessageArgs = {
 
 /** The root of all mutations  */
 export type RootMutationCreateExportOverschrijvingenArgs = {
-  eindDatum?: Maybe<Scalars['String']>;
-  startDatum?: Maybe<Scalars['String']>;
+  eindDatum?: InputMaybe<Scalars['String']>;
+  startDatum?: InputMaybe<Scalars['String']>;
 };
 
 
 /** The root of all mutations  */
 export type RootMutationCreateHuishoudenArgs = {
-  input?: Maybe<CreateHuishoudenInput>;
+  input?: InputMaybe<CreateHuishoudenInput>;
 };
 
 
 /** The root of all mutations  */
 export type RootMutationCreateJournaalpostAfspraakArgs = {
-  input?: Maybe<CreateJournaalpostAfspraakInput>;
+  input?: InputMaybe<CreateJournaalpostAfspraakInput>;
 };
 
 
 /** The root of all mutations  */
 export type RootMutationCreateJournaalpostGrootboekrekeningArgs = {
-  input?: Maybe<CreateJournaalpostGrootboekrekeningInput>;
+  input?: InputMaybe<CreateJournaalpostGrootboekrekeningInput>;
 };
 
 
 /** The root of all mutations  */
 export type RootMutationCreateJournaalpostPerAfspraakArgs = {
-  input: Array<Maybe<CreateJournaalpostAfspraakInput>>;
+  input: Array<InputMaybe<CreateJournaalpostAfspraakInput>>;
 };
 
 
 /** The root of all mutations  */
 export type RootMutationCreateOrganisatieArgs = {
-  input?: Maybe<CreateOrganisatieInput>;
+  input?: InputMaybe<CreateOrganisatieInput>;
 };
 
 
 /** The root of all mutations  */
 export type RootMutationCreatePostadresArgs = {
-  input?: Maybe<CreatePostadresInput>;
+  input?: InputMaybe<CreatePostadresInput>;
 };
 
 
 /** The root of all mutations  */
 export type RootMutationCreateRubriekArgs = {
-  grootboekrekeningId?: Maybe<Scalars['String']>;
-  naam?: Maybe<Scalars['String']>;
+  grootboekrekeningId?: InputMaybe<Scalars['String']>;
+  naam?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -856,7 +869,7 @@ export type RootMutationDeleteHuishoudenArgs = {
 
 /** The root of all mutations  */
 export type RootMutationDeleteHuishoudenBurgerArgs = {
-  burgerIds: Array<Maybe<Scalars['Int']>>;
+  burgerIds: Array<InputMaybe<Scalars['Int']>>;
   huishoudenId: Scalars['Int'];
 };
 
@@ -889,8 +902,8 @@ export type RootMutationDeleteRubriekArgs = {
 /** The root of all mutations  */
 export type RootMutationUpdateAfdelingArgs = {
   id: Scalars['Int'];
-  naam?: Maybe<Scalars['String']>;
-  organisatieId?: Maybe<Scalars['Int']>;
+  naam?: InputMaybe<Scalars['String']>;
+  organisatieId?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -910,50 +923,50 @@ export type RootMutationUpdateAfspraakBetaalinstructieArgs = {
 
 /** The root of all mutations  */
 export type RootMutationUpdateBurgerArgs = {
-  achternaam?: Maybe<Scalars['String']>;
-  bsn?: Maybe<Scalars['Int']>;
-  email?: Maybe<Scalars['String']>;
-  geboortedatum?: Maybe<Scalars['String']>;
-  huishouden?: Maybe<HuishoudenInput>;
-  huisnummer?: Maybe<Scalars['String']>;
+  achternaam?: InputMaybe<Scalars['String']>;
+  bsn?: InputMaybe<Scalars['Int']>;
+  email?: InputMaybe<Scalars['String']>;
+  geboortedatum?: InputMaybe<Scalars['String']>;
+  huishouden?: InputMaybe<HuishoudenInput>;
+  huisnummer?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
-  plaatsnaam?: Maybe<Scalars['String']>;
-  postcode?: Maybe<Scalars['String']>;
-  straatnaam?: Maybe<Scalars['String']>;
-  telefoonnummer?: Maybe<Scalars['String']>;
-  voorletters?: Maybe<Scalars['String']>;
-  voornamen?: Maybe<Scalars['String']>;
+  plaatsnaam?: InputMaybe<Scalars['String']>;
+  postcode?: InputMaybe<Scalars['String']>;
+  straatnaam?: InputMaybe<Scalars['String']>;
+  telefoonnummer?: InputMaybe<Scalars['String']>;
+  voorletters?: InputMaybe<Scalars['String']>;
+  voornamen?: InputMaybe<Scalars['String']>;
 };
 
 
 /** The root of all mutations  */
 export type RootMutationUpdateConfiguratieArgs = {
-  input?: Maybe<ConfiguratieInput>;
+  input?: InputMaybe<ConfiguratieInput>;
 };
 
 
 /** The root of all mutations  */
 export type RootMutationUpdateJournaalpostGrootboekrekeningArgs = {
-  input?: Maybe<UpdateJournaalpostGrootboekrekeningInput>;
+  input?: InputMaybe<UpdateJournaalpostGrootboekrekeningInput>;
 };
 
 
 /** The root of all mutations  */
 export type RootMutationUpdateOrganisatieArgs = {
   id: Scalars['Int'];
-  kvknummer?: Maybe<Scalars['String']>;
-  naam?: Maybe<Scalars['String']>;
-  vestigingsnummer?: Maybe<Scalars['String']>;
+  kvknummer?: InputMaybe<Scalars['String']>;
+  naam?: InputMaybe<Scalars['String']>;
+  vestigingsnummer?: InputMaybe<Scalars['String']>;
 };
 
 
 /** The root of all mutations  */
 export type RootMutationUpdatePostadresArgs = {
-  huisnummer?: Maybe<Scalars['String']>;
+  huisnummer?: InputMaybe<Scalars['String']>;
   id: Scalars['String'];
-  plaatsnaam?: Maybe<Scalars['String']>;
-  postcode?: Maybe<Scalars['String']>;
-  straatnaam?: Maybe<Scalars['String']>;
+  plaatsnaam?: InputMaybe<Scalars['String']>;
+  postcode?: InputMaybe<Scalars['String']>;
+  straatnaam?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -966,9 +979,9 @@ export type RootMutationUpdateRekeningArgs = {
 
 /** The root of all mutations  */
 export type RootMutationUpdateRubriekArgs = {
-  grootboekrekeningId?: Maybe<Scalars['String']>;
+  grootboekrekeningId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
-  naam?: Maybe<Scalars['String']>;
+  naam?: InputMaybe<Scalars['String']>;
 };
 
 /** The root of all queries  */
@@ -1019,7 +1032,7 @@ export type RootQueryAfdelingArgs = {
 
 /** The root of all queries  */
 export type RootQueryAfdelingenArgs = {
-  ids?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
 };
 
 
@@ -1031,7 +1044,7 @@ export type RootQueryAfspraakArgs = {
 
 /** The root of all queries  */
 export type RootQueryAfsprakenArgs = {
-  ids?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
 };
 
 
@@ -1043,15 +1056,15 @@ export type RootQueryBankTransactionArgs = {
 
 /** The root of all queries  */
 export type RootQueryBankTransactionsArgs = {
-  filters?: Maybe<BankTransactionFilter>;
+  filters?: InputMaybe<BankTransactionFilter>;
 };
 
 
 /** The root of all queries  */
 export type RootQueryBankTransactionsPagedArgs = {
-  filters?: Maybe<BankTransactionFilter>;
-  limit?: Maybe<Scalars['Int']>;
-  start?: Maybe<Scalars['Int']>;
+  filters?: InputMaybe<BankTransactionFilter>;
+  limit?: InputMaybe<Scalars['Int']>;
+  start?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -1063,15 +1076,15 @@ export type RootQueryBurgerArgs = {
 
 /** The root of all queries  */
 export type RootQueryBurgersArgs = {
-  ids?: Maybe<Array<Maybe<Scalars['Int']>>>;
-  search?: Maybe<Scalars['DynamicType']>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  search?: InputMaybe<Scalars['DynamicType']>;
 };
 
 
 /** The root of all queries  */
 export type RootQueryBurgersPagedArgs = {
-  limit?: Maybe<Scalars['Int']>;
-  start?: Maybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  start?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -1083,7 +1096,7 @@ export type RootQueryConfiguratieArgs = {
 
 /** The root of all queries  */
 export type RootQueryConfiguratiesArgs = {
-  ids?: Maybe<Array<Maybe<Scalars['String']>>>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 
@@ -1095,7 +1108,7 @@ export type RootQueryCustomerStatementMessageArgs = {
 
 /** The root of all queries  */
 export type RootQueryCustomerStatementMessagesArgs = {
-  ids?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
 };
 
 
@@ -1107,9 +1120,9 @@ export type RootQueryExportArgs = {
 
 /** The root of all queries  */
 export type RootQueryExportsArgs = {
-  eindDatum?: Maybe<Scalars['Date']>;
-  ids?: Maybe<Array<Maybe<Scalars['Int']>>>;
-  startDatum?: Maybe<Scalars['Date']>;
+  eindDatum?: InputMaybe<Scalars['Date']>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  startDatum?: InputMaybe<Scalars['Date']>;
 };
 
 
@@ -1121,20 +1134,20 @@ export type RootQueryGebruikersactiviteitArgs = {
 
 /** The root of all queries  */
 export type RootQueryGebruikersactiviteitenArgs = {
-  afsprakenIds?: Maybe<Array<Maybe<Scalars['Int']>>>;
-  burgerIds?: Maybe<Array<Maybe<Scalars['Int']>>>;
-  huishoudenIds?: Maybe<Array<Maybe<Scalars['Int']>>>;
-  ids?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  afsprakenIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  burgerIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  huishoudenIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
 };
 
 
 /** The root of all queries  */
 export type RootQueryGebruikersactiviteitenPagedArgs = {
-  afsprakenIds?: Maybe<Array<Maybe<Scalars['Int']>>>;
-  burgerIds?: Maybe<Array<Maybe<Scalars['Int']>>>;
-  huishoudenIds?: Maybe<Array<Maybe<Scalars['Int']>>>;
-  limit?: Maybe<Scalars['Int']>;
-  start?: Maybe<Scalars['Int']>;
+  afsprakenIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  burgerIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  huishoudenIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  start?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -1146,7 +1159,7 @@ export type RootQueryGrootboekrekeningArgs = {
 
 /** The root of all queries  */
 export type RootQueryGrootboekrekeningenArgs = {
-  ids?: Maybe<Array<Maybe<Scalars['String']>>>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 
@@ -1158,16 +1171,16 @@ export type RootQueryHuishoudenArgs = {
 
 /** The root of all queries  */
 export type RootQueryHuishoudensArgs = {
-  filters?: Maybe<BurgerFilter>;
-  ids?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  filters?: InputMaybe<BurgerFilter>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
 };
 
 
 /** The root of all queries  */
 export type RootQueryHuishoudensPagedArgs = {
-  filters?: Maybe<BurgerFilter>;
-  limit?: Maybe<Scalars['Int']>;
-  start?: Maybe<Scalars['Int']>;
+  filters?: InputMaybe<BurgerFilter>;
+  limit?: InputMaybe<Scalars['Int']>;
+  start?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -1179,7 +1192,7 @@ export type RootQueryJournaalpostArgs = {
 
 /** The root of all queries  */
 export type RootQueryJournaalpostenArgs = {
-  ids?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
 };
 
 
@@ -1191,7 +1204,7 @@ export type RootQueryOrganisatieArgs = {
 
 /** The root of all queries  */
 export type RootQueryOrganisatiesArgs = {
-  ids?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
 };
 
 
@@ -1203,7 +1216,7 @@ export type RootQueryPostadresArgs = {
 
 /** The root of all queries  */
 export type RootQueryPostadressenArgs = {
-  ids?: Maybe<Array<Maybe<Scalars['String']>>>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 
@@ -1215,7 +1228,7 @@ export type RootQueryRekeningArgs = {
 
 /** The root of all queries  */
 export type RootQueryRekeningenArgs = {
-  ids?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
 };
 
 
@@ -1227,16 +1240,16 @@ export type RootQueryRubriekArgs = {
 
 /** The root of all queries  */
 export type RootQueryRubriekenArgs = {
-  ids?: Maybe<Array<Maybe<Scalars['String']>>>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
-/** GraphQL Rubriek model */
 export type Rubriek = {
   grootboekrekening?: Maybe<Grootboekrekening>;
   id?: Maybe<Scalars['Int']>;
   naam?: Maybe<Scalars['String']>;
 };
 
+/** Mutatie om niet afgeletterde banktransacties af te letteren. */
 export type StartAutomatischBoeken = {
   journaalposten?: Maybe<Array<Maybe<Journaalpost>>>;
   ok?: Maybe<Scalars['Boolean']>;
@@ -1254,6 +1267,7 @@ export type UpdateAfspraak = {
   previous?: Maybe<Afspraak>;
 };
 
+/** Mutatie voor het instellen van een nieuwe betaalinstructie voor een afspraak. */
 export type UpdateAfspraakBetaalinstructie = {
   afspraak?: Maybe<Afspraak>;
   ok?: Maybe<Scalars['Boolean']>;
@@ -1261,15 +1275,15 @@ export type UpdateAfspraakBetaalinstructie = {
 };
 
 export type UpdateAfspraakInput = {
-  afdelingId?: Maybe<Scalars['Int']>;
-  bedrag?: Maybe<Scalars['Bedrag']>;
-  burgerId?: Maybe<Scalars['Int']>;
-  credit?: Maybe<Scalars['Boolean']>;
-  omschrijving?: Maybe<Scalars['String']>;
-  postadresId?: Maybe<Scalars['String']>;
-  rubriekId?: Maybe<Scalars['Int']>;
-  tegenRekeningId?: Maybe<Scalars['Int']>;
-  validThrough?: Maybe<Scalars['String']>;
+  afdelingId?: InputMaybe<Scalars['Int']>;
+  bedrag?: InputMaybe<Scalars['Bedrag']>;
+  burgerId?: InputMaybe<Scalars['Int']>;
+  credit?: InputMaybe<Scalars['Boolean']>;
+  omschrijving?: InputMaybe<Scalars['String']>;
+  postadresId?: InputMaybe<Scalars['String']>;
+  rubriekId?: InputMaybe<Scalars['Int']>;
+  tegenRekeningId?: InputMaybe<Scalars['Int']>;
+  validThrough?: InputMaybe<Scalars['String']>;
 };
 
 export type UpdateBurger = {
@@ -1284,7 +1298,7 @@ export type UpdateConfiguratie = {
   previous?: Maybe<Configuratie>;
 };
 
-/** Update a Journaalpost with a Grootboekrekening */
+/** deprecated */
 export type UpdateJournaalpostGrootboekrekening = {
   journaalpost?: Maybe<Journaalpost>;
   ok?: Maybe<Scalars['Boolean']>;
@@ -1320,37 +1334,37 @@ export type UpdateRubriek = {
   rubriek?: Maybe<Rubriek>;
 };
 
-export type AfdelingFragment = { id?: number | null | undefined, naam?: string | null | undefined, organisatie?: { id?: number | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, naam?: string | null | undefined } | null | undefined, postadressen?: Array<{ id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined> | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined };
+export type AfdelingFragment = { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> };
 
-export type AfspraakFragment = { id?: number | null | undefined, omschrijving?: string | null | undefined, bedrag?: any | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, validFrom?: any | null | undefined, validThrough?: any | null | undefined, betaalinstructie?: { byDay?: Array<DayOfWeek | null | undefined> | null | undefined, byMonth?: Array<number | null | undefined> | null | undefined, byMonthDay?: Array<number | null | undefined> | null | undefined, exceptDates?: Array<string | null | undefined> | null | undefined, repeatFrequency?: string | null | undefined, startDate?: string | null | undefined, endDate?: string | null | undefined } | null | undefined, burger?: { id?: number | null | undefined, voornamen?: string | null | undefined, voorletters?: string | null | undefined, achternaam?: string | null | undefined, plaatsnaam?: string | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, afdeling?: { id?: number | null | undefined, naam?: string | null | undefined, organisatie?: { id?: number | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, naam?: string | null | undefined } | null | undefined, postadressen?: Array<{ id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined> | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, postadres?: { id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined, grootboekrekening?: { id: string, naam?: string | null | undefined, credit?: boolean | null | undefined, omschrijving?: string | null | undefined, referentie?: string | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined, matchingAfspraken?: Array<{ id?: number | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, bedrag?: any | null | undefined, omschrijving?: string | null | undefined, burger?: { voorletters?: string | null | undefined, voornamen?: string | null | undefined, achternaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined };
+export type AfspraakFragment = { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> };
 
-export type BetaalinstructieFragment = { byDay?: Array<DayOfWeek | null | undefined> | null | undefined, byMonth?: Array<number | null | undefined> | null | undefined, byMonthDay?: Array<number | null | undefined> | null | undefined, exceptDates?: Array<string | null | undefined> | null | undefined, repeatFrequency?: string | null | undefined, startDate?: string | null | undefined, endDate?: string | null | undefined };
+export type BetaalinstructieFragment = { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string };
 
-export type BurgerFragment = { id?: number | null | undefined, bsn?: number | null | undefined, email?: string | null | undefined, telefoonnummer?: string | null | undefined, voorletters?: string | null | undefined, voornamen?: string | null | undefined, achternaam?: string | null | undefined, geboortedatum?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined, afspraken?: Array<{ id?: number | null | undefined, omschrijving?: string | null | undefined, bedrag?: any | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, validFrom?: any | null | undefined, validThrough?: any | null | undefined, betaalinstructie?: { byDay?: Array<DayOfWeek | null | undefined> | null | undefined, byMonth?: Array<number | null | undefined> | null | undefined, byMonthDay?: Array<number | null | undefined> | null | undefined, exceptDates?: Array<string | null | undefined> | null | undefined, repeatFrequency?: string | null | undefined, startDate?: string | null | undefined, endDate?: string | null | undefined } | null | undefined, burger?: { id?: number | null | undefined, voornamen?: string | null | undefined, voorletters?: string | null | undefined, achternaam?: string | null | undefined, plaatsnaam?: string | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, afdeling?: { id?: number | null | undefined, naam?: string | null | undefined, organisatie?: { id?: number | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, naam?: string | null | undefined } | null | undefined, postadressen?: Array<{ id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined> | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, postadres?: { id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined, grootboekrekening?: { id: string, naam?: string | null | undefined, credit?: boolean | null | undefined, omschrijving?: string | null | undefined, referentie?: string | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined, matchingAfspraken?: Array<{ id?: number | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, bedrag?: any | null | undefined, omschrijving?: string | null | undefined, burger?: { voorletters?: string | null | undefined, voornamen?: string | null | undefined, achternaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined } | null | undefined> | null | undefined, huishouden?: { id?: number | null | undefined, burgers?: Array<{ id?: number | null | undefined } | null | undefined> | null | undefined } | null | undefined };
+export type BurgerFragment = { id?: number, bsn?: number, email?: string, telefoonnummer?: string, voorletters?: string, voornamen?: string, achternaam?: string, geboortedatum?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }>, afspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }>, huishouden?: { id?: number, burgers?: Array<{ id?: number }> } };
 
-export type CustomerStatementMessageFragment = { id?: number | null | undefined, filename?: string | null | undefined, uploadDate?: any | null | undefined, accountIdentification?: string | null | undefined, closingAvailableFunds?: number | null | undefined, closingBalance?: number | null | undefined, forwardAvailableBalance?: number | null | undefined, openingBalance?: number | null | undefined, relatedReference?: string | null | undefined, sequenceNumber?: string | null | undefined, transactionReferenceNumber?: string | null | undefined };
+export type CustomerStatementMessageFragment = { id?: number, filename?: string, uploadDate?: any, accountIdentification?: string, closingAvailableFunds?: number, closingBalance?: number, forwardAvailableBalance?: number, openingBalance?: number, relatedReference?: string, sequenceNumber?: string, transactionReferenceNumber?: string };
 
-export type ExportFragment = { id?: number | null | undefined, naam?: string | null | undefined, timestamp?: any | null | undefined, startDatum?: string | null | undefined, eindDatum?: string | null | undefined, sha256?: string | null | undefined, overschrijvingen?: Array<{ id?: number | null | undefined } | null | undefined> | null | undefined };
+export type ExportFragment = { id?: number, naam?: string, timestamp?: any, startDatum?: string, eindDatum?: string, sha256?: string, overschrijvingen?: Array<{ id?: number }> };
 
-export type GebruikerFragment = { email?: string | null | undefined };
+export type GebruikerFragment = { email?: string };
 
-export type GebruikersactiviteitFragment = { id?: number | null | undefined, timestamp?: any | null | undefined, gebruikerId?: string | null | undefined, action?: string | null | undefined, entities?: Array<{ entityType?: string | null | undefined, entityId?: string | null | undefined, huishouden?: { id?: number | null | undefined, burgers?: Array<{ id?: number | null | undefined, voorletters?: string | null | undefined, voornamen?: string | null | undefined, achternaam?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, burger?: { id?: number | null | undefined, voorletters?: string | null | undefined, voornamen?: string | null | undefined, achternaam?: string | null | undefined } | null | undefined, organisatie?: { id?: number | null | undefined, naam?: string | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, afdelingen?: Array<{ id?: number | null | undefined, naam?: string | null | undefined, organisatie?: { id?: number | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, naam?: string | null | undefined } | null | undefined, postadressen?: Array<{ id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined> | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined> | null | undefined } | null | undefined, afspraak?: { id?: number | null | undefined, omschrijving?: string | null | undefined, bedrag?: any | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, validFrom?: any | null | undefined, validThrough?: any | null | undefined, betaalinstructie?: { byDay?: Array<DayOfWeek | null | undefined> | null | undefined, byMonth?: Array<number | null | undefined> | null | undefined, byMonthDay?: Array<number | null | undefined> | null | undefined, exceptDates?: Array<string | null | undefined> | null | undefined, repeatFrequency?: string | null | undefined, startDate?: string | null | undefined, endDate?: string | null | undefined } | null | undefined, burger?: { id?: number | null | undefined, voornamen?: string | null | undefined, voorletters?: string | null | undefined, achternaam?: string | null | undefined, plaatsnaam?: string | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, afdeling?: { id?: number | null | undefined, naam?: string | null | undefined, organisatie?: { id?: number | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, naam?: string | null | undefined } | null | undefined, postadressen?: Array<{ id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined> | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, postadres?: { id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined, grootboekrekening?: { id: string, naam?: string | null | undefined, credit?: boolean | null | undefined, omschrijving?: string | null | undefined, referentie?: string | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined, matchingAfspraken?: Array<{ id?: number | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, bedrag?: any | null | undefined, omschrijving?: string | null | undefined, burger?: { voorletters?: string | null | undefined, voornamen?: string | null | undefined, achternaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined } | null | undefined, rekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined, customerStatementMessage?: { id?: number | null | undefined, filename?: string | null | undefined, bankTransactions?: Array<{ id?: number | null | undefined } | null | undefined> | null | undefined } | null | undefined, configuratie?: { id?: string | null | undefined, waarde?: string | null | undefined } | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined, grootboekrekening?: { naam?: string | null | undefined } | null | undefined } | null | undefined, afdeling?: { id?: number | null | undefined, naam?: string | null | undefined, organisatie?: { id?: number | null | undefined, naam?: string | null | undefined } | null | undefined } | null | undefined, postadres?: { id?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined, meta?: { userAgent?: string | null | undefined, ip?: Array<string | null | undefined> | null | undefined, applicationVersion?: string | null | undefined } | null | undefined };
+export type GebruikersactiviteitFragment = { id?: number, timestamp?: any, gebruikerId?: string, action?: string, entities?: Array<{ entityType?: string, entityId?: string, huishouden?: { id?: number, burgers?: Array<{ id?: number, voorletters?: string, voornamen?: string, achternaam?: string }> }, burger?: { id?: number, voorletters?: string, voornamen?: string, achternaam?: string }, organisatie?: { id?: number, naam?: string, kvknummer?: string, vestigingsnummer?: string, afdelingen?: Array<{ id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }> }, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }, rekening?: { id?: number, iban?: string, rekeninghouder?: string }, customerStatementMessage?: { id?: number, filename?: string, bankTransactions?: Array<{ id?: number }> }, configuratie?: { id?: string, waarde?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { naam?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, naam?: string } }, postadres?: { id?: string } }>, meta?: { userAgent?: string, ip?: Array<string>, applicationVersion?: string } };
 
-export type GrootboekrekeningFragment = { id: string, naam?: string | null | undefined, credit?: boolean | null | undefined, omschrijving?: string | null | undefined, referentie?: string | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined } | null | undefined };
+export type GrootboekrekeningFragment = { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } };
 
-export type HuishoudenFragment = { id?: number | null | undefined, burgers?: Array<{ id?: number | null | undefined, bsn?: number | null | undefined, email?: string | null | undefined, telefoonnummer?: string | null | undefined, voorletters?: string | null | undefined, voornamen?: string | null | undefined, achternaam?: string | null | undefined, geboortedatum?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined, afspraken?: Array<{ id?: number | null | undefined, omschrijving?: string | null | undefined, bedrag?: any | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, validFrom?: any | null | undefined, validThrough?: any | null | undefined, betaalinstructie?: { byDay?: Array<DayOfWeek | null | undefined> | null | undefined, byMonth?: Array<number | null | undefined> | null | undefined, byMonthDay?: Array<number | null | undefined> | null | undefined, exceptDates?: Array<string | null | undefined> | null | undefined, repeatFrequency?: string | null | undefined, startDate?: string | null | undefined, endDate?: string | null | undefined } | null | undefined, burger?: { id?: number | null | undefined, voornamen?: string | null | undefined, voorletters?: string | null | undefined, achternaam?: string | null | undefined, plaatsnaam?: string | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, afdeling?: { id?: number | null | undefined, naam?: string | null | undefined, organisatie?: { id?: number | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, naam?: string | null | undefined } | null | undefined, postadressen?: Array<{ id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined> | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, postadres?: { id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined, grootboekrekening?: { id: string, naam?: string | null | undefined, credit?: boolean | null | undefined, omschrijving?: string | null | undefined, referentie?: string | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined, matchingAfspraken?: Array<{ id?: number | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, bedrag?: any | null | undefined, omschrijving?: string | null | undefined, burger?: { voorletters?: string | null | undefined, voornamen?: string | null | undefined, achternaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined } | null | undefined> | null | undefined, huishouden?: { id?: number | null | undefined, burgers?: Array<{ id?: number | null | undefined } | null | undefined> | null | undefined } | null | undefined } | null | undefined> | null | undefined };
+export type HuishoudenFragment = { id?: number, burgers?: Array<{ id?: number, bsn?: number, email?: string, telefoonnummer?: string, voorletters?: string, voornamen?: string, achternaam?: string, geboortedatum?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }>, afspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }>, huishouden?: { id?: number, burgers?: Array<{ id?: number }> } }> };
 
-export type JournaalpostFragment = { id?: number | null | undefined };
+export type JournaalpostFragment = { id?: number };
 
-export type OrganisatieFragment = { id?: number | null | undefined, naam?: string | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, afdelingen?: Array<{ id?: number | null | undefined, naam?: string | null | undefined, organisatie?: { id?: number | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, naam?: string | null | undefined } | null | undefined, postadressen?: Array<{ id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined> | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined> | null | undefined };
+export type OrganisatieFragment = { id?: number, naam?: string, kvknummer?: string, vestigingsnummer?: string, afdelingen?: Array<{ id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }> };
 
-export type PostadresFragment = { id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined };
+export type PostadresFragment = { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string };
 
-export type RekeningFragment = { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined };
+export type RekeningFragment = { id?: number, iban?: string, rekeninghouder?: string };
 
-export type RubriekFragment = { id?: number | null | undefined, naam?: string | null | undefined, grootboekrekening?: { id: string, naam?: string | null | undefined, credit?: boolean | null | undefined, omschrijving?: string | null | undefined, referentie?: string | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined } | null | undefined } | null | undefined };
+export type RubriekFragment = { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } };
 
-export type BankTransactionFragment = { id?: number | null | undefined, informationToAccountOwner?: string | null | undefined, statementLine?: string | null | undefined, bedrag?: any | null | undefined, isCredit?: boolean | null | undefined, tegenRekeningIban?: string | null | undefined, transactieDatum?: any | null | undefined, tegenRekening?: { iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined };
+export type BankTransactionFragment = { id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, tegenRekeningIban?: string, transactieDatum?: any, tegenRekening?: { iban?: string, rekeninghouder?: string } };
 
 export type AddAfspraakZoektermMutationVariables = Exact<{
   afspraakId: Scalars['Int'];
@@ -1358,39 +1372,39 @@ export type AddAfspraakZoektermMutationVariables = Exact<{
 }>;
 
 
-export type AddAfspraakZoektermMutation = { addAfspraakZoekterm?: { ok?: boolean | null | undefined, matchingAfspraken?: Array<{ id?: number | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, bedrag?: any | null | undefined, burger?: { id?: number | null | undefined, voorletters?: string | null | undefined, voornamen?: string | null | undefined, achternaam?: string | null | undefined } | null | undefined, tegenRekening?: { rekeninghouder?: string | null | undefined, iban?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined } | null | undefined };
+export type AddAfspraakZoektermMutation = { addAfspraakZoekterm?: { ok?: boolean, matchingAfspraken?: Array<{ id?: number, zoektermen?: Array<string>, bedrag?: any, burger?: { id?: number, voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { rekeninghouder?: string, iban?: string } }> } };
 
 export type AddHuishoudenBurgerMutationVariables = Exact<{
   huishoudenId: Scalars['Int'];
-  burgerIds: Array<Maybe<Scalars['Int']>> | Maybe<Scalars['Int']>;
+  burgerIds: Array<InputMaybe<Scalars['Int']>> | InputMaybe<Scalars['Int']>;
 }>;
 
 
-export type AddHuishoudenBurgerMutation = { addHuishoudenBurger?: { ok?: boolean | null | undefined } | null | undefined };
+export type AddHuishoudenBurgerMutation = { addHuishoudenBurger?: { ok?: boolean } };
 
 export type CreateAfdelingMutationVariables = Exact<{
   naam: Scalars['String'];
   organisatieId: Scalars['Int'];
-  postadressen?: Maybe<Array<Maybe<CreatePostadresInput>> | Maybe<CreatePostadresInput>>;
-  rekeningen?: Maybe<Array<Maybe<RekeningInput>> | Maybe<RekeningInput>>;
+  postadressen?: InputMaybe<Array<InputMaybe<CreatePostadresInput>> | InputMaybe<CreatePostadresInput>>;
+  rekeningen?: InputMaybe<Array<InputMaybe<RekeningInput>> | InputMaybe<RekeningInput>>;
 }>;
 
 
-export type CreateAfdelingMutation = { createAfdeling?: { ok?: boolean | null | undefined, afdeling?: { id?: number | null | undefined, naam?: string | null | undefined, organisatie?: { id?: number | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, naam?: string | null | undefined } | null | undefined, postadressen?: Array<{ id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined> | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined } | null | undefined };
+export type CreateAfdelingMutation = { createAfdeling?: { ok?: boolean, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> } } };
 
 export type CreateAfspraakMutationVariables = Exact<{
   input: CreateAfspraakInput;
 }>;
 
 
-export type CreateAfspraakMutation = { createAfspraak?: { ok?: boolean | null | undefined, afspraak?: { id?: number | null | undefined, omschrijving?: string | null | undefined, bedrag?: any | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, validFrom?: any | null | undefined, validThrough?: any | null | undefined, betaalinstructie?: { byDay?: Array<DayOfWeek | null | undefined> | null | undefined, byMonth?: Array<number | null | undefined> | null | undefined, byMonthDay?: Array<number | null | undefined> | null | undefined, exceptDates?: Array<string | null | undefined> | null | undefined, repeatFrequency?: string | null | undefined, startDate?: string | null | undefined, endDate?: string | null | undefined } | null | undefined, burger?: { id?: number | null | undefined, voornamen?: string | null | undefined, voorletters?: string | null | undefined, achternaam?: string | null | undefined, plaatsnaam?: string | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, afdeling?: { id?: number | null | undefined, naam?: string | null | undefined, organisatie?: { id?: number | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, naam?: string | null | undefined } | null | undefined, postadressen?: Array<{ id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined> | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, postadres?: { id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined, grootboekrekening?: { id: string, naam?: string | null | undefined, credit?: boolean | null | undefined, omschrijving?: string | null | undefined, referentie?: string | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined, matchingAfspraken?: Array<{ id?: number | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, bedrag?: any | null | undefined, omschrijving?: string | null | undefined, burger?: { voorletters?: string | null | undefined, voornamen?: string | null | undefined, achternaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined } | null | undefined } | null | undefined };
+export type CreateAfspraakMutation = { createAfspraak?: { ok?: boolean, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> } } };
 
 export type CreateBurgerMutationVariables = Exact<{
-  input?: Maybe<CreateBurgerInput>;
+  input?: InputMaybe<CreateBurgerInput>;
 }>;
 
 
-export type CreateBurgerMutation = { createBurger?: { ok?: boolean | null | undefined, burger?: { id?: number | null | undefined, bsn?: number | null | undefined, email?: string | null | undefined, telefoonnummer?: string | null | undefined, voorletters?: string | null | undefined, voornamen?: string | null | undefined, achternaam?: string | null | undefined, geboortedatum?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined, afspraken?: Array<{ id?: number | null | undefined, omschrijving?: string | null | undefined, bedrag?: any | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, validFrom?: any | null | undefined, validThrough?: any | null | undefined, betaalinstructie?: { byDay?: Array<DayOfWeek | null | undefined> | null | undefined, byMonth?: Array<number | null | undefined> | null | undefined, byMonthDay?: Array<number | null | undefined> | null | undefined, exceptDates?: Array<string | null | undefined> | null | undefined, repeatFrequency?: string | null | undefined, startDate?: string | null | undefined, endDate?: string | null | undefined } | null | undefined, burger?: { id?: number | null | undefined, voornamen?: string | null | undefined, voorletters?: string | null | undefined, achternaam?: string | null | undefined, plaatsnaam?: string | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, afdeling?: { id?: number | null | undefined, naam?: string | null | undefined, organisatie?: { id?: number | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, naam?: string | null | undefined } | null | undefined, postadressen?: Array<{ id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined> | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, postadres?: { id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined, grootboekrekening?: { id: string, naam?: string | null | undefined, credit?: boolean | null | undefined, omschrijving?: string | null | undefined, referentie?: string | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined, matchingAfspraken?: Array<{ id?: number | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, bedrag?: any | null | undefined, omschrijving?: string | null | undefined, burger?: { voorletters?: string | null | undefined, voornamen?: string | null | undefined, achternaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined } | null | undefined> | null | undefined, huishouden?: { id?: number | null | undefined, burgers?: Array<{ id?: number | null | undefined } | null | undefined> | null | undefined } | null | undefined } | null | undefined } | null | undefined };
+export type CreateBurgerMutation = { createBurger?: { ok?: boolean, burger?: { id?: number, bsn?: number, email?: string, telefoonnummer?: string, voorletters?: string, voornamen?: string, achternaam?: string, geboortedatum?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }>, afspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }>, huishouden?: { id?: number, burgers?: Array<{ id?: number }> } } } };
 
 export type CreateBurgerRekeningMutationVariables = Exact<{
   burgerId: Scalars['Int'];
@@ -1398,7 +1412,7 @@ export type CreateBurgerRekeningMutationVariables = Exact<{
 }>;
 
 
-export type CreateBurgerRekeningMutation = { createBurgerRekening?: { ok?: boolean | null | undefined, rekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined } | null | undefined };
+export type CreateBurgerRekeningMutation = { createBurgerRekening?: { ok?: boolean, rekening?: { id?: number, iban?: string, rekeninghouder?: string } } };
 
 export type CreateConfiguratieMutationVariables = Exact<{
   key: Scalars['String'];
@@ -1406,14 +1420,14 @@ export type CreateConfiguratieMutationVariables = Exact<{
 }>;
 
 
-export type CreateConfiguratieMutation = { createConfiguratie?: { ok?: boolean | null | undefined, configuratie?: { id?: string | null | undefined, waarde?: string | null | undefined } | null | undefined } | null | undefined };
+export type CreateConfiguratieMutation = { createConfiguratie?: { ok?: boolean, configuratie?: { id?: string, waarde?: string } } };
 
 export type CreateCustomerStatementMessageMutationVariables = Exact<{
   file: Scalars['Upload'];
 }>;
 
 
-export type CreateCustomerStatementMessageMutation = { createCustomerStatementMessage?: { ok?: boolean | null | undefined, customerStatementMessage?: Array<{ id?: number | null | undefined, filename?: string | null | undefined, uploadDate?: any | null | undefined, accountIdentification?: string | null | undefined, closingAvailableFunds?: number | null | undefined, closingBalance?: number | null | undefined, forwardAvailableBalance?: number | null | undefined, openingBalance?: number | null | undefined, relatedReference?: string | null | undefined, sequenceNumber?: string | null | undefined, transactionReferenceNumber?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined };
+export type CreateCustomerStatementMessageMutation = { createCustomerStatementMessage?: { ok?: boolean, customerStatementMessage?: Array<{ id?: number, filename?: string, uploadDate?: any, accountIdentification?: string, closingAvailableFunds?: number, closingBalance?: number, forwardAvailableBalance?: number, openingBalance?: number, relatedReference?: string, sequenceNumber?: string, transactionReferenceNumber?: string }> } };
 
 export type CreateExportOverschrijvingenMutationVariables = Exact<{
   startDatum: Scalars['String'];
@@ -1421,23 +1435,23 @@ export type CreateExportOverschrijvingenMutationVariables = Exact<{
 }>;
 
 
-export type CreateExportOverschrijvingenMutation = { createExportOverschrijvingen?: { ok?: boolean | null | undefined, export?: { id?: number | null | undefined } | null | undefined } | null | undefined };
+export type CreateExportOverschrijvingenMutation = { createExportOverschrijvingen?: { ok?: boolean, export?: { id?: number } } };
 
 export type CreateHuishoudenMutationVariables = Exact<{
-  burgerIds?: Maybe<Array<Maybe<Scalars['Int']>> | Maybe<Scalars['Int']>>;
+  burgerIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>> | InputMaybe<Scalars['Int']>>;
 }>;
 
 
-export type CreateHuishoudenMutation = { createHuishouden?: { ok?: boolean | null | undefined, huishouden?: { id?: number | null | undefined, burgers?: Array<{ id?: number | null | undefined, bsn?: number | null | undefined, email?: string | null | undefined, telefoonnummer?: string | null | undefined, voorletters?: string | null | undefined, voornamen?: string | null | undefined, achternaam?: string | null | undefined, geboortedatum?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined, afspraken?: Array<{ id?: number | null | undefined, omschrijving?: string | null | undefined, bedrag?: any | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, validFrom?: any | null | undefined, validThrough?: any | null | undefined, betaalinstructie?: { byDay?: Array<DayOfWeek | null | undefined> | null | undefined, byMonth?: Array<number | null | undefined> | null | undefined, byMonthDay?: Array<number | null | undefined> | null | undefined, exceptDates?: Array<string | null | undefined> | null | undefined, repeatFrequency?: string | null | undefined, startDate?: string | null | undefined, endDate?: string | null | undefined } | null | undefined, burger?: { id?: number | null | undefined, voornamen?: string | null | undefined, voorletters?: string | null | undefined, achternaam?: string | null | undefined, plaatsnaam?: string | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, afdeling?: { id?: number | null | undefined, naam?: string | null | undefined, organisatie?: { id?: number | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, naam?: string | null | undefined } | null | undefined, postadressen?: Array<{ id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined> | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, postadres?: { id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined, grootboekrekening?: { id: string, naam?: string | null | undefined, credit?: boolean | null | undefined, omschrijving?: string | null | undefined, referentie?: string | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined, matchingAfspraken?: Array<{ id?: number | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, bedrag?: any | null | undefined, omschrijving?: string | null | undefined, burger?: { voorletters?: string | null | undefined, voornamen?: string | null | undefined, achternaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined } | null | undefined> | null | undefined, huishouden?: { id?: number | null | undefined, burgers?: Array<{ id?: number | null | undefined } | null | undefined> | null | undefined } | null | undefined } | null | undefined> | null | undefined } | null | undefined } | null | undefined };
+export type CreateHuishoudenMutation = { createHuishouden?: { ok?: boolean, huishouden?: { id?: number, burgers?: Array<{ id?: number, bsn?: number, email?: string, telefoonnummer?: string, voorletters?: string, voornamen?: string, achternaam?: string, geboortedatum?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }>, afspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }>, huishouden?: { id?: number, burgers?: Array<{ id?: number }> } }> } } };
 
 export type CreateJournaalpostAfspraakMutationVariables = Exact<{
   transactionId: Scalars['Int'];
   afspraakId: Scalars['Int'];
-  isAutomatischGeboekt?: Maybe<Scalars['Boolean']>;
+  isAutomatischGeboekt?: InputMaybe<Scalars['Boolean']>;
 }>;
 
 
-export type CreateJournaalpostAfspraakMutation = { createJournaalpostAfspraak?: { ok?: boolean | null | undefined, journaalpost?: { id?: number | null | undefined } | null | undefined } | null | undefined };
+export type CreateJournaalpostAfspraakMutation = { createJournaalpostAfspraak?: { ok?: boolean, journaalpost?: { id?: number } } };
 
 export type CreateJournaalpostGrootboekrekeningMutationVariables = Exact<{
   transactionId: Scalars['Int'];
@@ -1445,16 +1459,16 @@ export type CreateJournaalpostGrootboekrekeningMutationVariables = Exact<{
 }>;
 
 
-export type CreateJournaalpostGrootboekrekeningMutation = { createJournaalpostGrootboekrekening?: { ok?: boolean | null | undefined, journaalpost?: { id?: number | null | undefined } | null | undefined } | null | undefined };
+export type CreateJournaalpostGrootboekrekeningMutation = { createJournaalpostGrootboekrekening?: { ok?: boolean, journaalpost?: { id?: number } } };
 
 export type CreateOrganisatieMutationVariables = Exact<{
   kvknummer: Scalars['String'];
   vestigingsnummer: Scalars['String'];
-  naam?: Maybe<Scalars['String']>;
+  naam?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type CreateOrganisatieMutation = { createOrganisatie?: { ok?: boolean | null | undefined, organisatie?: { id?: number | null | undefined, naam?: string | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, afdelingen?: Array<{ id?: number | null | undefined, naam?: string | null | undefined, organisatie?: { id?: number | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, naam?: string | null | undefined } | null | undefined, postadressen?: Array<{ id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined> | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined> | null | undefined } | null | undefined } | null | undefined };
+export type CreateOrganisatieMutation = { createOrganisatie?: { ok?: boolean, organisatie?: { id?: number, naam?: string, kvknummer?: string, vestigingsnummer?: string, afdelingen?: Array<{ id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }> } } };
 
 export type CreateAfdelingRekeningMutationVariables = Exact<{
   afdelingId: Scalars['Int'];
@@ -1462,7 +1476,7 @@ export type CreateAfdelingRekeningMutationVariables = Exact<{
 }>;
 
 
-export type CreateAfdelingRekeningMutation = { createAfdelingRekening?: { ok?: boolean | null | undefined, rekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined } | null | undefined };
+export type CreateAfdelingRekeningMutation = { createAfdelingRekening?: { ok?: boolean, rekening?: { id?: number, iban?: string, rekeninghouder?: string } } };
 
 export type CreateAfdelingPostadresMutationVariables = Exact<{
   afdelingId: Scalars['Int'];
@@ -1473,29 +1487,29 @@ export type CreateAfdelingPostadresMutationVariables = Exact<{
 }>;
 
 
-export type CreateAfdelingPostadresMutation = { createPostadres?: { ok?: boolean | null | undefined, postadres?: { id?: string | null | undefined } | null | undefined } | null | undefined };
+export type CreateAfdelingPostadresMutation = { createPostadres?: { ok?: boolean, postadres?: { id?: string } } };
 
 export type CreateRubriekMutationVariables = Exact<{
-  naam?: Maybe<Scalars['String']>;
-  grootboekrekening?: Maybe<Scalars['String']>;
+  naam?: InputMaybe<Scalars['String']>;
+  grootboekrekening?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type CreateRubriekMutation = { createRubriek?: { ok?: boolean | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined, grootboekrekening?: { id: string, naam?: string | null | undefined, credit?: boolean | null | undefined, omschrijving?: string | null | undefined, referentie?: string | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined } | null | undefined };
+export type CreateRubriekMutation = { createRubriek?: { ok?: boolean, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } } } };
 
 export type DeleteOrganisatieMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type DeleteOrganisatieMutation = { deleteOrganisatie?: { ok?: boolean | null | undefined } | null | undefined };
+export type DeleteOrganisatieMutation = { deleteOrganisatie?: { ok?: boolean } };
 
 export type DeleteAfdelingMutationVariables = Exact<{
   afdelingId: Scalars['Int'];
 }>;
 
 
-export type DeleteAfdelingMutation = { deleteAfdeling?: { ok?: boolean | null | undefined } | null | undefined };
+export type DeleteAfdelingMutation = { deleteAfdeling?: { ok?: boolean } };
 
 export type DeleteAfdelingPostadresMutationVariables = Exact<{
   id: Scalars['String'];
@@ -1503,14 +1517,14 @@ export type DeleteAfdelingPostadresMutationVariables = Exact<{
 }>;
 
 
-export type DeleteAfdelingPostadresMutation = { deletePostadres?: { ok?: boolean | null | undefined } | null | undefined };
+export type DeleteAfdelingPostadresMutation = { deletePostadres?: { ok?: boolean } };
 
 export type DeleteAfspraakMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type DeleteAfspraakMutation = { deleteAfspraak?: { ok?: boolean | null | undefined } | null | undefined };
+export type DeleteAfspraakMutation = { deleteAfspraak?: { ok?: boolean } };
 
 export type DeleteAfspraakZoektermMutationVariables = Exact<{
   afspraakId: Scalars['Int'];
@@ -1518,14 +1532,14 @@ export type DeleteAfspraakZoektermMutationVariables = Exact<{
 }>;
 
 
-export type DeleteAfspraakZoektermMutation = { deleteAfspraakZoekterm?: { ok?: boolean | null | undefined, matchingAfspraken?: Array<{ id?: number | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, bedrag?: any | null | undefined, burger?: { id?: number | null | undefined, voorletters?: string | null | undefined, voornamen?: string | null | undefined, achternaam?: string | null | undefined } | null | undefined, tegenRekening?: { rekeninghouder?: string | null | undefined, iban?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined } | null | undefined };
+export type DeleteAfspraakZoektermMutation = { deleteAfspraakZoekterm?: { ok?: boolean, matchingAfspraken?: Array<{ id?: number, zoektermen?: Array<string>, bedrag?: any, burger?: { id?: number, voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { rekeninghouder?: string, iban?: string } }> } };
 
 export type DeleteBurgerMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type DeleteBurgerMutation = { deleteBurger?: { ok?: boolean | null | undefined } | null | undefined };
+export type DeleteBurgerMutation = { deleteBurger?: { ok?: boolean } };
 
 export type DeleteBurgerRekeningMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -1533,36 +1547,36 @@ export type DeleteBurgerRekeningMutationVariables = Exact<{
 }>;
 
 
-export type DeleteBurgerRekeningMutation = { deleteBurgerRekening?: { ok?: boolean | null | undefined } | null | undefined };
+export type DeleteBurgerRekeningMutation = { deleteBurgerRekening?: { ok?: boolean } };
 
 export type DeleteConfiguratieMutationVariables = Exact<{
   key: Scalars['String'];
 }>;
 
 
-export type DeleteConfiguratieMutation = { deleteConfiguratie?: { ok?: boolean | null | undefined } | null | undefined };
+export type DeleteConfiguratieMutation = { deleteConfiguratie?: { ok?: boolean } };
 
 export type DeleteCustomerStatementMessageMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type DeleteCustomerStatementMessageMutation = { deleteCustomerStatementMessage?: { ok?: boolean | null | undefined } | null | undefined };
+export type DeleteCustomerStatementMessageMutation = { deleteCustomerStatementMessage?: { ok?: boolean } };
 
 export type DeleteHuishoudenBurgerMutationVariables = Exact<{
   huishoudenId: Scalars['Int'];
-  burgerIds: Array<Maybe<Scalars['Int']>> | Maybe<Scalars['Int']>;
+  burgerIds: Array<InputMaybe<Scalars['Int']>> | InputMaybe<Scalars['Int']>;
 }>;
 
 
-export type DeleteHuishoudenBurgerMutation = { deleteHuishoudenBurger?: { ok?: boolean | null | undefined } | null | undefined };
+export type DeleteHuishoudenBurgerMutation = { deleteHuishoudenBurger?: { ok?: boolean } };
 
 export type DeleteJournaalpostMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type DeleteJournaalpostMutation = { deleteJournaalpost?: { ok?: boolean | null | undefined } | null | undefined };
+export type DeleteJournaalpostMutation = { deleteJournaalpost?: { ok?: boolean } };
 
 export type DeleteAfdelingRekeningMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -1570,7 +1584,14 @@ export type DeleteAfdelingRekeningMutationVariables = Exact<{
 }>;
 
 
-export type DeleteAfdelingRekeningMutation = { deleteAfdelingRekening?: { ok?: boolean | null | undefined } | null | undefined };
+export type DeleteAfdelingRekeningMutation = { deleteAfdelingRekening?: { ok?: boolean } };
+
+export type DeleteRubriekMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type DeleteRubriekMutation = { deleteRubriek?: { ok?: boolean } };
 
 export type EndAfspraakMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -1578,21 +1599,21 @@ export type EndAfspraakMutationVariables = Exact<{
 }>;
 
 
-export type EndAfspraakMutation = { updateAfspraak?: { ok?: boolean | null | undefined, afspraak?: { id?: number | null | undefined, omschrijving?: string | null | undefined, bedrag?: any | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, validFrom?: any | null | undefined, validThrough?: any | null | undefined, betaalinstructie?: { byDay?: Array<DayOfWeek | null | undefined> | null | undefined, byMonth?: Array<number | null | undefined> | null | undefined, byMonthDay?: Array<number | null | undefined> | null | undefined, exceptDates?: Array<string | null | undefined> | null | undefined, repeatFrequency?: string | null | undefined, startDate?: string | null | undefined, endDate?: string | null | undefined } | null | undefined, burger?: { id?: number | null | undefined, voornamen?: string | null | undefined, voorletters?: string | null | undefined, achternaam?: string | null | undefined, plaatsnaam?: string | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, afdeling?: { id?: number | null | undefined, naam?: string | null | undefined, organisatie?: { id?: number | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, naam?: string | null | undefined } | null | undefined, postadressen?: Array<{ id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined> | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, postadres?: { id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined, grootboekrekening?: { id: string, naam?: string | null | undefined, credit?: boolean | null | undefined, omschrijving?: string | null | undefined, referentie?: string | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined, matchingAfspraken?: Array<{ id?: number | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, bedrag?: any | null | undefined, omschrijving?: string | null | undefined, burger?: { voorletters?: string | null | undefined, voornamen?: string | null | undefined, achternaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined } | null | undefined } | null | undefined };
+export type EndAfspraakMutation = { updateAfspraak?: { ok?: boolean, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> } } };
 
 export type StartAutomatischBoekenMutationVariables = Exact<{ [key: string]: never; }>;
 
 
-export type StartAutomatischBoekenMutation = { startAutomatischBoeken?: { ok?: boolean | null | undefined, journaalposten?: Array<{ id?: number | null | undefined } | null | undefined> | null | undefined } | null | undefined };
+export type StartAutomatischBoekenMutation = { startAutomatischBoeken?: { ok?: boolean, journaalposten?: Array<{ id?: number }> } };
 
 export type UpdateAfdelingMutationVariables = Exact<{
   id: Scalars['Int'];
-  naam?: Maybe<Scalars['String']>;
-  organisatieId?: Maybe<Scalars['Int']>;
+  naam?: InputMaybe<Scalars['String']>;
+  organisatieId?: InputMaybe<Scalars['Int']>;
 }>;
 
 
-export type UpdateAfdelingMutation = { updateAfdeling?: { ok?: boolean | null | undefined, afdeling?: { id?: number | null | undefined, naam?: string | null | undefined, organisatie?: { id?: number | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, naam?: string | null | undefined } | null | undefined, postadressen?: Array<{ id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined> | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined } | null | undefined };
+export type UpdateAfdelingMutation = { updateAfdeling?: { ok?: boolean, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> } } };
 
 export type UpdateAfspraakMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -1600,7 +1621,7 @@ export type UpdateAfspraakMutationVariables = Exact<{
 }>;
 
 
-export type UpdateAfspraakMutation = { updateAfspraak?: { ok?: boolean | null | undefined, afspraak?: { id?: number | null | undefined, omschrijving?: string | null | undefined, bedrag?: any | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, validFrom?: any | null | undefined, validThrough?: any | null | undefined, betaalinstructie?: { byDay?: Array<DayOfWeek | null | undefined> | null | undefined, byMonth?: Array<number | null | undefined> | null | undefined, byMonthDay?: Array<number | null | undefined> | null | undefined, exceptDates?: Array<string | null | undefined> | null | undefined, repeatFrequency?: string | null | undefined, startDate?: string | null | undefined, endDate?: string | null | undefined } | null | undefined, burger?: { id?: number | null | undefined, voornamen?: string | null | undefined, voorletters?: string | null | undefined, achternaam?: string | null | undefined, plaatsnaam?: string | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, afdeling?: { id?: number | null | undefined, naam?: string | null | undefined, organisatie?: { id?: number | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, naam?: string | null | undefined } | null | undefined, postadressen?: Array<{ id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined> | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, postadres?: { id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined, grootboekrekening?: { id: string, naam?: string | null | undefined, credit?: boolean | null | undefined, omschrijving?: string | null | undefined, referentie?: string | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined, matchingAfspraken?: Array<{ id?: number | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, bedrag?: any | null | undefined, omschrijving?: string | null | undefined, burger?: { voorletters?: string | null | undefined, voornamen?: string | null | undefined, achternaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined } | null | undefined } | null | undefined };
+export type UpdateAfspraakMutation = { updateAfspraak?: { ok?: boolean, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> } } };
 
 export type UpdateAfspraakBetaalinstructieMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -1608,25 +1629,25 @@ export type UpdateAfspraakBetaalinstructieMutationVariables = Exact<{
 }>;
 
 
-export type UpdateAfspraakBetaalinstructieMutation = { updateAfspraakBetaalinstructie?: { ok?: boolean | null | undefined } | null | undefined };
+export type UpdateAfspraakBetaalinstructieMutation = { updateAfspraakBetaalinstructie?: { ok?: boolean } };
 
 export type UpdateBurgerMutationVariables = Exact<{
   id: Scalars['Int'];
-  bsn?: Maybe<Scalars['Int']>;
-  voorletters?: Maybe<Scalars['String']>;
-  voornamen?: Maybe<Scalars['String']>;
-  achternaam?: Maybe<Scalars['String']>;
-  geboortedatum?: Maybe<Scalars['String']>;
-  straatnaam?: Maybe<Scalars['String']>;
-  huisnummer?: Maybe<Scalars['String']>;
-  postcode?: Maybe<Scalars['String']>;
-  plaatsnaam?: Maybe<Scalars['String']>;
-  telefoonnummer?: Maybe<Scalars['String']>;
-  email?: Maybe<Scalars['String']>;
+  bsn?: InputMaybe<Scalars['Int']>;
+  voorletters?: InputMaybe<Scalars['String']>;
+  voornamen?: InputMaybe<Scalars['String']>;
+  achternaam?: InputMaybe<Scalars['String']>;
+  geboortedatum?: InputMaybe<Scalars['String']>;
+  straatnaam?: InputMaybe<Scalars['String']>;
+  huisnummer?: InputMaybe<Scalars['String']>;
+  postcode?: InputMaybe<Scalars['String']>;
+  plaatsnaam?: InputMaybe<Scalars['String']>;
+  telefoonnummer?: InputMaybe<Scalars['String']>;
+  email?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type UpdateBurgerMutation = { updateBurger?: { ok?: boolean | null | undefined, burger?: { id?: number | null | undefined, bsn?: number | null | undefined, email?: string | null | undefined, telefoonnummer?: string | null | undefined, voorletters?: string | null | undefined, voornamen?: string | null | undefined, achternaam?: string | null | undefined, geboortedatum?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined, afspraken?: Array<{ id?: number | null | undefined, omschrijving?: string | null | undefined, bedrag?: any | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, validFrom?: any | null | undefined, validThrough?: any | null | undefined, betaalinstructie?: { byDay?: Array<DayOfWeek | null | undefined> | null | undefined, byMonth?: Array<number | null | undefined> | null | undefined, byMonthDay?: Array<number | null | undefined> | null | undefined, exceptDates?: Array<string | null | undefined> | null | undefined, repeatFrequency?: string | null | undefined, startDate?: string | null | undefined, endDate?: string | null | undefined } | null | undefined, burger?: { id?: number | null | undefined, voornamen?: string | null | undefined, voorletters?: string | null | undefined, achternaam?: string | null | undefined, plaatsnaam?: string | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, afdeling?: { id?: number | null | undefined, naam?: string | null | undefined, organisatie?: { id?: number | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, naam?: string | null | undefined } | null | undefined, postadressen?: Array<{ id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined> | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, postadres?: { id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined, grootboekrekening?: { id: string, naam?: string | null | undefined, credit?: boolean | null | undefined, omschrijving?: string | null | undefined, referentie?: string | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined, matchingAfspraken?: Array<{ id?: number | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, bedrag?: any | null | undefined, omschrijving?: string | null | undefined, burger?: { voorletters?: string | null | undefined, voornamen?: string | null | undefined, achternaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined } | null | undefined> | null | undefined, huishouden?: { id?: number | null | undefined, burgers?: Array<{ id?: number | null | undefined } | null | undefined> | null | undefined } | null | undefined } | null | undefined } | null | undefined };
+export type UpdateBurgerMutation = { updateBurger?: { ok?: boolean, burger?: { id?: number, bsn?: number, email?: string, telefoonnummer?: string, voorletters?: string, voornamen?: string, achternaam?: string, geboortedatum?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }>, afspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }>, huishouden?: { id?: number, burgers?: Array<{ id?: number }> } } } };
 
 export type UpdateConfiguratieMutationVariables = Exact<{
   key: Scalars['String'];
@@ -1634,7 +1655,7 @@ export type UpdateConfiguratieMutationVariables = Exact<{
 }>;
 
 
-export type UpdateConfiguratieMutation = { updateConfiguratie?: { ok?: boolean | null | undefined, configuratie?: { id?: string | null | undefined, waarde?: string | null | undefined } | null | undefined } | null | undefined };
+export type UpdateConfiguratieMutation = { updateConfiguratie?: { ok?: boolean, configuratie?: { id?: string, waarde?: string } } };
 
 export type UpdateJournaalpostGrootboekrekeningMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -1642,63 +1663,72 @@ export type UpdateJournaalpostGrootboekrekeningMutationVariables = Exact<{
 }>;
 
 
-export type UpdateJournaalpostGrootboekrekeningMutation = { updateJournaalpostGrootboekrekening?: { ok?: boolean | null | undefined } | null | undefined };
+export type UpdateJournaalpostGrootboekrekeningMutation = { updateJournaalpostGrootboekrekening?: { ok?: boolean } };
 
 export type UpdateOrganisatieMutationVariables = Exact<{
   id: Scalars['Int'];
-  kvknummer?: Maybe<Scalars['String']>;
-  vestigingsnummer?: Maybe<Scalars['String']>;
-  naam?: Maybe<Scalars['String']>;
+  kvknummer?: InputMaybe<Scalars['String']>;
+  vestigingsnummer?: InputMaybe<Scalars['String']>;
+  naam?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type UpdateOrganisatieMutation = { updateOrganisatie?: { ok?: boolean | null | undefined, organisatie?: { id?: number | null | undefined, naam?: string | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, afdelingen?: Array<{ id?: number | null | undefined, naam?: string | null | undefined, organisatie?: { id?: number | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, naam?: string | null | undefined } | null | undefined, postadressen?: Array<{ id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined> | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined> | null | undefined } | null | undefined } | null | undefined };
+export type UpdateOrganisatieMutation = { updateOrganisatie?: { ok?: boolean, organisatie?: { id?: number, naam?: string, kvknummer?: string, vestigingsnummer?: string, afdelingen?: Array<{ id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }> } } };
 
 export type UpdatePostadresMutationVariables = Exact<{
   id: Scalars['String'];
-  straatnaam?: Maybe<Scalars['String']>;
-  huisnummer?: Maybe<Scalars['String']>;
-  postcode?: Maybe<Scalars['String']>;
-  plaatsnaam?: Maybe<Scalars['String']>;
+  straatnaam?: InputMaybe<Scalars['String']>;
+  huisnummer?: InputMaybe<Scalars['String']>;
+  postcode?: InputMaybe<Scalars['String']>;
+  plaatsnaam?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type UpdatePostadresMutation = { updatePostadres?: { ok?: boolean | null | undefined } | null | undefined };
+export type UpdatePostadresMutation = { updatePostadres?: { ok?: boolean } };
 
 export type UpdateRekeningMutationVariables = Exact<{
   id: Scalars['Int'];
-  iban?: Maybe<Scalars['String']>;
-  rekeninghouder?: Maybe<Scalars['String']>;
+  iban?: InputMaybe<Scalars['String']>;
+  rekeninghouder?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type UpdateRekeningMutation = { updateRekening?: { ok?: boolean | null | undefined } | null | undefined };
+export type UpdateRekeningMutation = { updateRekening?: { ok?: boolean } };
+
+export type UpdateRubriekMutationVariables = Exact<{
+  id: Scalars['Int'];
+  naam: Scalars['String'];
+  grootboekrekeningId: Scalars['String'];
+}>;
+
+
+export type UpdateRubriekMutation = { updateRubriek?: { ok?: boolean } };
 
 export type GetAfspraakFormDataQueryVariables = Exact<{
   afspraakId: Scalars['Int'];
 }>;
 
 
-export type GetAfspraakFormDataQuery = { afspraak?: { id?: number | null | undefined, omschrijving?: string | null | undefined, bedrag?: any | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, validFrom?: any | null | undefined, validThrough?: any | null | undefined, betaalinstructie?: { byDay?: Array<DayOfWeek | null | undefined> | null | undefined, byMonth?: Array<number | null | undefined> | null | undefined, byMonthDay?: Array<number | null | undefined> | null | undefined, exceptDates?: Array<string | null | undefined> | null | undefined, repeatFrequency?: string | null | undefined, startDate?: string | null | undefined, endDate?: string | null | undefined } | null | undefined, burger?: { id?: number | null | undefined, voornamen?: string | null | undefined, voorletters?: string | null | undefined, achternaam?: string | null | undefined, plaatsnaam?: string | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, afdeling?: { id?: number | null | undefined, naam?: string | null | undefined, organisatie?: { id?: number | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, naam?: string | null | undefined } | null | undefined, postadressen?: Array<{ id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined> | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, postadres?: { id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined, grootboekrekening?: { id: string, naam?: string | null | undefined, credit?: boolean | null | undefined, omschrijving?: string | null | undefined, referentie?: string | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined, matchingAfspraken?: Array<{ id?: number | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, bedrag?: any | null | undefined, omschrijving?: string | null | undefined, burger?: { voorletters?: string | null | undefined, voornamen?: string | null | undefined, achternaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined } | null | undefined, rubrieken?: Array<{ id?: number | null | undefined, naam?: string | null | undefined, grootboekrekening?: { id: string, naam?: string | null | undefined, credit?: boolean | null | undefined, omschrijving?: string | null | undefined, referentie?: string | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined> | null | undefined, organisaties?: Array<{ id?: number | null | undefined, naam?: string | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, afdelingen?: Array<{ id?: number | null | undefined, naam?: string | null | undefined, organisatie?: { id?: number | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, naam?: string | null | undefined } | null | undefined, postadressen?: Array<{ id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined> | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined> | null | undefined } | null | undefined> | null | undefined };
+export type GetAfspraakFormDataQuery = { afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }, rubrieken?: Array<{ id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }>, organisaties?: Array<{ id?: number, naam?: string, kvknummer?: string, vestigingsnummer?: string, afdelingen?: Array<{ id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }> }> };
 
 export type GetAfsprakenQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAfsprakenQuery = { afspraken?: Array<{ id?: number | null | undefined, omschrijving?: string | null | undefined, bedrag?: any | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, validFrom?: any | null | undefined, validThrough?: any | null | undefined, betaalinstructie?: { byDay?: Array<DayOfWeek | null | undefined> | null | undefined, byMonth?: Array<number | null | undefined> | null | undefined, byMonthDay?: Array<number | null | undefined> | null | undefined, exceptDates?: Array<string | null | undefined> | null | undefined, repeatFrequency?: string | null | undefined, startDate?: string | null | undefined, endDate?: string | null | undefined } | null | undefined, burger?: { id?: number | null | undefined, voornamen?: string | null | undefined, voorletters?: string | null | undefined, achternaam?: string | null | undefined, plaatsnaam?: string | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, afdeling?: { id?: number | null | undefined, naam?: string | null | undefined, organisatie?: { id?: number | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, naam?: string | null | undefined } | null | undefined, postadressen?: Array<{ id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined> | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, postadres?: { id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined, grootboekrekening?: { id: string, naam?: string | null | undefined, credit?: boolean | null | undefined, omschrijving?: string | null | undefined, referentie?: string | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined, matchingAfspraken?: Array<{ id?: number | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, bedrag?: any | null | undefined, omschrijving?: string | null | undefined, burger?: { voorletters?: string | null | undefined, voornamen?: string | null | undefined, achternaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined } | null | undefined> | null | undefined };
+export type GetAfsprakenQuery = { afspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }> };
 
 export type GetBurgerQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type GetBurgerQuery = { burger?: { id?: number | null | undefined, bsn?: number | null | undefined, email?: string | null | undefined, telefoonnummer?: string | null | undefined, voorletters?: string | null | undefined, voornamen?: string | null | undefined, achternaam?: string | null | undefined, geboortedatum?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined, afspraken?: Array<{ id?: number | null | undefined, omschrijving?: string | null | undefined, bedrag?: any | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, validFrom?: any | null | undefined, validThrough?: any | null | undefined, betaalinstructie?: { byDay?: Array<DayOfWeek | null | undefined> | null | undefined, byMonth?: Array<number | null | undefined> | null | undefined, byMonthDay?: Array<number | null | undefined> | null | undefined, exceptDates?: Array<string | null | undefined> | null | undefined, repeatFrequency?: string | null | undefined, startDate?: string | null | undefined, endDate?: string | null | undefined } | null | undefined, burger?: { id?: number | null | undefined, voornamen?: string | null | undefined, voorletters?: string | null | undefined, achternaam?: string | null | undefined, plaatsnaam?: string | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, afdeling?: { id?: number | null | undefined, naam?: string | null | undefined, organisatie?: { id?: number | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, naam?: string | null | undefined } | null | undefined, postadressen?: Array<{ id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined> | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, postadres?: { id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined, grootboekrekening?: { id: string, naam?: string | null | undefined, credit?: boolean | null | undefined, omschrijving?: string | null | undefined, referentie?: string | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined, matchingAfspraken?: Array<{ id?: number | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, bedrag?: any | null | undefined, omschrijving?: string | null | undefined, burger?: { voorletters?: string | null | undefined, voornamen?: string | null | undefined, achternaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined } | null | undefined> | null | undefined, huishouden?: { id?: number | null | undefined, burgers?: Array<{ id?: number | null | undefined } | null | undefined> | null | undefined } | null | undefined } | null | undefined };
+export type GetBurgerQuery = { burger?: { id?: number, bsn?: number, email?: string, telefoonnummer?: string, voorletters?: string, voornamen?: string, achternaam?: string, geboortedatum?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }>, afspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }>, huishouden?: { id?: number, burgers?: Array<{ id?: number }> } } };
 
 export type GetBurgerAfsprakenQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type GetBurgerAfsprakenQuery = { burger?: { afspraken?: Array<{ id?: number | null | undefined, omschrijving?: string | null | undefined, bedrag?: any | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, validFrom?: any | null | undefined, validThrough?: any | null | undefined, betaalinstructie?: { byDay?: Array<DayOfWeek | null | undefined> | null | undefined, byMonth?: Array<number | null | undefined> | null | undefined, byMonthDay?: Array<number | null | undefined> | null | undefined, exceptDates?: Array<string | null | undefined> | null | undefined, repeatFrequency?: string | null | undefined, startDate?: string | null | undefined, endDate?: string | null | undefined } | null | undefined, burger?: { id?: number | null | undefined, voornamen?: string | null | undefined, voorletters?: string | null | undefined, achternaam?: string | null | undefined, plaatsnaam?: string | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, afdeling?: { id?: number | null | undefined, naam?: string | null | undefined, organisatie?: { id?: number | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, naam?: string | null | undefined } | null | undefined, postadressen?: Array<{ id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined> | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, postadres?: { id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined, grootboekrekening?: { id: string, naam?: string | null | undefined, credit?: boolean | null | undefined, omschrijving?: string | null | undefined, referentie?: string | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined, matchingAfspraken?: Array<{ id?: number | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, bedrag?: any | null | undefined, omschrijving?: string | null | undefined, burger?: { voorletters?: string | null | undefined, voornamen?: string | null | undefined, achternaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined } | null | undefined> | null | undefined } | null | undefined };
+export type GetBurgerAfsprakenQuery = { burger?: { afspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }> } };
 
 export type GetBurgerGebeurtenissenQueryVariables = Exact<{
   ids: Array<Scalars['Int']> | Scalars['Int'];
@@ -1707,41 +1737,41 @@ export type GetBurgerGebeurtenissenQueryVariables = Exact<{
 }>;
 
 
-export type GetBurgerGebeurtenissenQuery = { gebruikersactiviteitenPaged?: { gebruikersactiviteiten?: Array<{ id?: number | null | undefined, timestamp?: any | null | undefined, gebruikerId?: string | null | undefined, action?: string | null | undefined, entities?: Array<{ entityType?: string | null | undefined, entityId?: string | null | undefined, huishouden?: { id?: number | null | undefined, burgers?: Array<{ id?: number | null | undefined, voorletters?: string | null | undefined, voornamen?: string | null | undefined, achternaam?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, burger?: { id?: number | null | undefined, voorletters?: string | null | undefined, voornamen?: string | null | undefined, achternaam?: string | null | undefined } | null | undefined, organisatie?: { id?: number | null | undefined, naam?: string | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, afdelingen?: Array<{ id?: number | null | undefined, naam?: string | null | undefined, organisatie?: { id?: number | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, naam?: string | null | undefined } | null | undefined, postadressen?: Array<{ id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined> | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined> | null | undefined } | null | undefined, afspraak?: { id?: number | null | undefined, omschrijving?: string | null | undefined, bedrag?: any | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, validFrom?: any | null | undefined, validThrough?: any | null | undefined, betaalinstructie?: { byDay?: Array<DayOfWeek | null | undefined> | null | undefined, byMonth?: Array<number | null | undefined> | null | undefined, byMonthDay?: Array<number | null | undefined> | null | undefined, exceptDates?: Array<string | null | undefined> | null | undefined, repeatFrequency?: string | null | undefined, startDate?: string | null | undefined, endDate?: string | null | undefined } | null | undefined, burger?: { id?: number | null | undefined, voornamen?: string | null | undefined, voorletters?: string | null | undefined, achternaam?: string | null | undefined, plaatsnaam?: string | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, afdeling?: { id?: number | null | undefined, naam?: string | null | undefined, organisatie?: { id?: number | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, naam?: string | null | undefined } | null | undefined, postadressen?: Array<{ id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined> | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, postadres?: { id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined, grootboekrekening?: { id: string, naam?: string | null | undefined, credit?: boolean | null | undefined, omschrijving?: string | null | undefined, referentie?: string | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined, matchingAfspraken?: Array<{ id?: number | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, bedrag?: any | null | undefined, omschrijving?: string | null | undefined, burger?: { voorletters?: string | null | undefined, voornamen?: string | null | undefined, achternaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined } | null | undefined, rekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined, customerStatementMessage?: { id?: number | null | undefined, filename?: string | null | undefined, bankTransactions?: Array<{ id?: number | null | undefined } | null | undefined> | null | undefined } | null | undefined, configuratie?: { id?: string | null | undefined, waarde?: string | null | undefined } | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined, grootboekrekening?: { naam?: string | null | undefined } | null | undefined } | null | undefined, afdeling?: { id?: number | null | undefined, naam?: string | null | undefined, organisatie?: { id?: number | null | undefined, naam?: string | null | undefined } | null | undefined } | null | undefined, postadres?: { id?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined, meta?: { userAgent?: string | null | undefined, ip?: Array<string | null | undefined> | null | undefined, applicationVersion?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined, pageInfo?: { count?: number | null | undefined } | null | undefined } | null | undefined };
+export type GetBurgerGebeurtenissenQuery = { gebruikersactiviteitenPaged?: { gebruikersactiviteiten?: Array<{ id?: number, timestamp?: any, gebruikerId?: string, action?: string, entities?: Array<{ entityType?: string, entityId?: string, huishouden?: { id?: number, burgers?: Array<{ id?: number, voorletters?: string, voornamen?: string, achternaam?: string }> }, burger?: { id?: number, voorletters?: string, voornamen?: string, achternaam?: string }, organisatie?: { id?: number, naam?: string, kvknummer?: string, vestigingsnummer?: string, afdelingen?: Array<{ id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }> }, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }, rekening?: { id?: number, iban?: string, rekeninghouder?: string }, customerStatementMessage?: { id?: number, filename?: string, bankTransactions?: Array<{ id?: number }> }, configuratie?: { id?: string, waarde?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { naam?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, naam?: string } }, postadres?: { id?: string } }>, meta?: { userAgent?: string, ip?: Array<string>, applicationVersion?: string } }>, pageInfo?: { count?: number } } };
 
 export type GetBurgersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetBurgersQuery = { burgers?: Array<{ id?: number | null | undefined, bsn?: number | null | undefined, email?: string | null | undefined, telefoonnummer?: string | null | undefined, voorletters?: string | null | undefined, voornamen?: string | null | undefined, achternaam?: string | null | undefined, geboortedatum?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined, afspraken?: Array<{ id?: number | null | undefined, omschrijving?: string | null | undefined, bedrag?: any | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, validFrom?: any | null | undefined, validThrough?: any | null | undefined, betaalinstructie?: { byDay?: Array<DayOfWeek | null | undefined> | null | undefined, byMonth?: Array<number | null | undefined> | null | undefined, byMonthDay?: Array<number | null | undefined> | null | undefined, exceptDates?: Array<string | null | undefined> | null | undefined, repeatFrequency?: string | null | undefined, startDate?: string | null | undefined, endDate?: string | null | undefined } | null | undefined, burger?: { id?: number | null | undefined, voornamen?: string | null | undefined, voorletters?: string | null | undefined, achternaam?: string | null | undefined, plaatsnaam?: string | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, afdeling?: { id?: number | null | undefined, naam?: string | null | undefined, organisatie?: { id?: number | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, naam?: string | null | undefined } | null | undefined, postadressen?: Array<{ id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined> | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, postadres?: { id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined, grootboekrekening?: { id: string, naam?: string | null | undefined, credit?: boolean | null | undefined, omschrijving?: string | null | undefined, referentie?: string | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined, matchingAfspraken?: Array<{ id?: number | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, bedrag?: any | null | undefined, omschrijving?: string | null | undefined, burger?: { voorletters?: string | null | undefined, voornamen?: string | null | undefined, achternaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined } | null | undefined> | null | undefined, huishouden?: { id?: number | null | undefined, burgers?: Array<{ id?: number | null | undefined } | null | undefined> | null | undefined } | null | undefined } | null | undefined> | null | undefined };
+export type GetBurgersQuery = { burgers?: Array<{ id?: number, bsn?: number, email?: string, telefoonnummer?: string, voorletters?: string, voornamen?: string, achternaam?: string, geboortedatum?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }>, afspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }>, huishouden?: { id?: number, burgers?: Array<{ id?: number }> } }> };
 
 export type GetBurgersSearchQueryVariables = Exact<{
-  search?: Maybe<Scalars['DynamicType']>;
+  search?: InputMaybe<Scalars['DynamicType']>;
 }>;
 
 
-export type GetBurgersSearchQuery = { burgers?: Array<{ id?: number | null | undefined, bsn?: number | null | undefined, email?: string | null | undefined, telefoonnummer?: string | null | undefined, voorletters?: string | null | undefined, voornamen?: string | null | undefined, achternaam?: string | null | undefined, geboortedatum?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined, afspraken?: Array<{ id?: number | null | undefined, omschrijving?: string | null | undefined, bedrag?: any | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, validFrom?: any | null | undefined, validThrough?: any | null | undefined, betaalinstructie?: { byDay?: Array<DayOfWeek | null | undefined> | null | undefined, byMonth?: Array<number | null | undefined> | null | undefined, byMonthDay?: Array<number | null | undefined> | null | undefined, exceptDates?: Array<string | null | undefined> | null | undefined, repeatFrequency?: string | null | undefined, startDate?: string | null | undefined, endDate?: string | null | undefined } | null | undefined, burger?: { id?: number | null | undefined, voornamen?: string | null | undefined, voorletters?: string | null | undefined, achternaam?: string | null | undefined, plaatsnaam?: string | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, afdeling?: { id?: number | null | undefined, naam?: string | null | undefined, organisatie?: { id?: number | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, naam?: string | null | undefined } | null | undefined, postadressen?: Array<{ id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined> | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, postadres?: { id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined, grootboekrekening?: { id: string, naam?: string | null | undefined, credit?: boolean | null | undefined, omschrijving?: string | null | undefined, referentie?: string | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined, matchingAfspraken?: Array<{ id?: number | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, bedrag?: any | null | undefined, omschrijving?: string | null | undefined, burger?: { voorletters?: string | null | undefined, voornamen?: string | null | undefined, achternaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined } | null | undefined> | null | undefined, huishouden?: { id?: number | null | undefined, burgers?: Array<{ id?: number | null | undefined } | null | undefined> | null | undefined } | null | undefined } | null | undefined> | null | undefined };
+export type GetBurgersSearchQuery = { burgers?: Array<{ id?: number, bsn?: number, email?: string, telefoonnummer?: string, voorletters?: string, voornamen?: string, achternaam?: string, geboortedatum?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }>, afspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }>, huishouden?: { id?: number, burgers?: Array<{ id?: number }> } }> };
 
 export type GetConfiguratieQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetConfiguratieQuery = { configuraties?: Array<{ id?: string | null | undefined, waarde?: string | null | undefined } | null | undefined> | null | undefined };
+export type GetConfiguratieQuery = { configuraties?: Array<{ id?: string, waarde?: string }> };
 
 export type GetCreateAfspraakFormDataQueryVariables = Exact<{
   burgerId: Scalars['Int'];
 }>;
 
 
-export type GetCreateAfspraakFormDataQuery = { burger?: { rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, rubrieken?: Array<{ id?: number | null | undefined, naam?: string | null | undefined, grootboekrekening?: { id: string, naam?: string | null | undefined, credit?: boolean | null | undefined, omschrijving?: string | null | undefined, referentie?: string | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined> | null | undefined, organisaties?: Array<{ id?: number | null | undefined, naam?: string | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, afdelingen?: Array<{ id?: number | null | undefined, naam?: string | null | undefined, organisatie?: { id?: number | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, naam?: string | null | undefined } | null | undefined, postadressen?: Array<{ id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined> | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined> | null | undefined } | null | undefined> | null | undefined };
+export type GetCreateAfspraakFormDataQuery = { burger?: { rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, rubrieken?: Array<{ id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }>, organisaties?: Array<{ id?: number, naam?: string, kvknummer?: string, vestigingsnummer?: string, afdelingen?: Array<{ id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }> }> };
 
 export type GetCsmsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCsmsQuery = { customerStatementMessages?: Array<{ id?: number | null | undefined, filename?: string | null | undefined, uploadDate?: any | null | undefined, accountIdentification?: string | null | undefined, closingAvailableFunds?: number | null | undefined, closingBalance?: number | null | undefined, forwardAvailableBalance?: number | null | undefined, openingBalance?: number | null | undefined, relatedReference?: string | null | undefined, sequenceNumber?: string | null | undefined, transactionReferenceNumber?: string | null | undefined } | null | undefined> | null | undefined };
+export type GetCsmsQuery = { customerStatementMessages?: Array<{ id?: number, filename?: string, uploadDate?: any, accountIdentification?: string, closingAvailableFunds?: number, closingBalance?: number, forwardAvailableBalance?: number, openingBalance?: number, relatedReference?: string, sequenceNumber?: string, transactionReferenceNumber?: string }> };
 
 export type GetExportsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetExportsQuery = { exports?: Array<{ id?: number | null | undefined, naam?: string | null | undefined, timestamp?: any | null | undefined, startDatum?: string | null | undefined, eindDatum?: string | null | undefined, sha256?: string | null | undefined, overschrijvingen?: Array<{ id?: number | null | undefined } | null | undefined> | null | undefined } | null | undefined> | null | undefined };
+export type GetExportsQuery = { exports?: Array<{ id?: number, naam?: string, timestamp?: any, startDatum?: string, eindDatum?: string, sha256?: string, overschrijvingen?: Array<{ id?: number }> }> };
 
 export type GetGebeurtenissenQueryVariables = Exact<{
   limit: Scalars['Int'];
@@ -1749,79 +1779,89 @@ export type GetGebeurtenissenQueryVariables = Exact<{
 }>;
 
 
-export type GetGebeurtenissenQuery = { gebruikersactiviteitenPaged?: { gebruikersactiviteiten?: Array<{ id?: number | null | undefined, timestamp?: any | null | undefined, gebruikerId?: string | null | undefined, action?: string | null | undefined, entities?: Array<{ entityType?: string | null | undefined, entityId?: string | null | undefined, huishouden?: { id?: number | null | undefined, burgers?: Array<{ id?: number | null | undefined, voorletters?: string | null | undefined, voornamen?: string | null | undefined, achternaam?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, burger?: { id?: number | null | undefined, voorletters?: string | null | undefined, voornamen?: string | null | undefined, achternaam?: string | null | undefined } | null | undefined, organisatie?: { id?: number | null | undefined, naam?: string | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, afdelingen?: Array<{ id?: number | null | undefined, naam?: string | null | undefined, organisatie?: { id?: number | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, naam?: string | null | undefined } | null | undefined, postadressen?: Array<{ id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined> | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined> | null | undefined } | null | undefined, afspraak?: { id?: number | null | undefined, omschrijving?: string | null | undefined, bedrag?: any | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, validFrom?: any | null | undefined, validThrough?: any | null | undefined, betaalinstructie?: { byDay?: Array<DayOfWeek | null | undefined> | null | undefined, byMonth?: Array<number | null | undefined> | null | undefined, byMonthDay?: Array<number | null | undefined> | null | undefined, exceptDates?: Array<string | null | undefined> | null | undefined, repeatFrequency?: string | null | undefined, startDate?: string | null | undefined, endDate?: string | null | undefined } | null | undefined, burger?: { id?: number | null | undefined, voornamen?: string | null | undefined, voorletters?: string | null | undefined, achternaam?: string | null | undefined, plaatsnaam?: string | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, afdeling?: { id?: number | null | undefined, naam?: string | null | undefined, organisatie?: { id?: number | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, naam?: string | null | undefined } | null | undefined, postadressen?: Array<{ id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined> | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, postadres?: { id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined, grootboekrekening?: { id: string, naam?: string | null | undefined, credit?: boolean | null | undefined, omschrijving?: string | null | undefined, referentie?: string | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined, matchingAfspraken?: Array<{ id?: number | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, bedrag?: any | null | undefined, omschrijving?: string | null | undefined, burger?: { voorletters?: string | null | undefined, voornamen?: string | null | undefined, achternaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined } | null | undefined, rekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined, customerStatementMessage?: { id?: number | null | undefined, filename?: string | null | undefined, bankTransactions?: Array<{ id?: number | null | undefined } | null | undefined> | null | undefined } | null | undefined, configuratie?: { id?: string | null | undefined, waarde?: string | null | undefined } | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined, grootboekrekening?: { naam?: string | null | undefined } | null | undefined } | null | undefined, afdeling?: { id?: number | null | undefined, naam?: string | null | undefined, organisatie?: { id?: number | null | undefined, naam?: string | null | undefined } | null | undefined } | null | undefined, postadres?: { id?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined, meta?: { userAgent?: string | null | undefined, ip?: Array<string | null | undefined> | null | undefined, applicationVersion?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined, pageInfo?: { count?: number | null | undefined } | null | undefined } | null | undefined };
+export type GetGebeurtenissenQuery = { gebruikersactiviteitenPaged?: { gebruikersactiviteiten?: Array<{ id?: number, timestamp?: any, gebruikerId?: string, action?: string, entities?: Array<{ entityType?: string, entityId?: string, huishouden?: { id?: number, burgers?: Array<{ id?: number, voorletters?: string, voornamen?: string, achternaam?: string }> }, burger?: { id?: number, voorletters?: string, voornamen?: string, achternaam?: string }, organisatie?: { id?: number, naam?: string, kvknummer?: string, vestigingsnummer?: string, afdelingen?: Array<{ id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }> }, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }, rekening?: { id?: number, iban?: string, rekeninghouder?: string }, customerStatementMessage?: { id?: number, filename?: string, bankTransactions?: Array<{ id?: number }> }, configuratie?: { id?: string, waarde?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { naam?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, naam?: string } }, postadres?: { id?: string } }>, meta?: { userAgent?: string, ip?: Array<string>, applicationVersion?: string } }>, pageInfo?: { count?: number } } };
 
 export type GetGebruikerQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetGebruikerQuery = { gebruiker?: { email?: string | null | undefined } | null | undefined };
+export type GetGebruikerQuery = { gebruiker?: { email?: string } };
 
 export type GetHuishoudenQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type GetHuishoudenQuery = { huishouden?: { id?: number | null | undefined, burgers?: Array<{ id?: number | null | undefined, bsn?: number | null | undefined, email?: string | null | undefined, telefoonnummer?: string | null | undefined, voorletters?: string | null | undefined, voornamen?: string | null | undefined, achternaam?: string | null | undefined, geboortedatum?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined, afspraken?: Array<{ id?: number | null | undefined, omschrijving?: string | null | undefined, bedrag?: any | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, validFrom?: any | null | undefined, validThrough?: any | null | undefined, betaalinstructie?: { byDay?: Array<DayOfWeek | null | undefined> | null | undefined, byMonth?: Array<number | null | undefined> | null | undefined, byMonthDay?: Array<number | null | undefined> | null | undefined, exceptDates?: Array<string | null | undefined> | null | undefined, repeatFrequency?: string | null | undefined, startDate?: string | null | undefined, endDate?: string | null | undefined } | null | undefined, burger?: { id?: number | null | undefined, voornamen?: string | null | undefined, voorletters?: string | null | undefined, achternaam?: string | null | undefined, plaatsnaam?: string | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, afdeling?: { id?: number | null | undefined, naam?: string | null | undefined, organisatie?: { id?: number | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, naam?: string | null | undefined } | null | undefined, postadressen?: Array<{ id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined> | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, postadres?: { id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined, grootboekrekening?: { id: string, naam?: string | null | undefined, credit?: boolean | null | undefined, omschrijving?: string | null | undefined, referentie?: string | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined, matchingAfspraken?: Array<{ id?: number | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, bedrag?: any | null | undefined, omschrijving?: string | null | undefined, burger?: { voorletters?: string | null | undefined, voornamen?: string | null | undefined, achternaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined } | null | undefined> | null | undefined, huishouden?: { id?: number | null | undefined, burgers?: Array<{ id?: number | null | undefined } | null | undefined> | null | undefined } | null | undefined } | null | undefined> | null | undefined } | null | undefined };
+export type GetHuishoudenQuery = { huishouden?: { id?: number, burgers?: Array<{ id?: number, bsn?: number, email?: string, telefoonnummer?: string, voorletters?: string, voornamen?: string, achternaam?: string, geboortedatum?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }>, afspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }>, huishouden?: { id?: number, burgers?: Array<{ id?: number }> } }> } };
 
 export type GetHuishoudensQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetHuishoudensQuery = { huishoudens?: Array<{ id?: number | null | undefined, burgers?: Array<{ id?: number | null | undefined, bsn?: number | null | undefined, email?: string | null | undefined, telefoonnummer?: string | null | undefined, voorletters?: string | null | undefined, voornamen?: string | null | undefined, achternaam?: string | null | undefined, geboortedatum?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined, afspraken?: Array<{ id?: number | null | undefined, omschrijving?: string | null | undefined, bedrag?: any | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, validFrom?: any | null | undefined, validThrough?: any | null | undefined, betaalinstructie?: { byDay?: Array<DayOfWeek | null | undefined> | null | undefined, byMonth?: Array<number | null | undefined> | null | undefined, byMonthDay?: Array<number | null | undefined> | null | undefined, exceptDates?: Array<string | null | undefined> | null | undefined, repeatFrequency?: string | null | undefined, startDate?: string | null | undefined, endDate?: string | null | undefined } | null | undefined, burger?: { id?: number | null | undefined, voornamen?: string | null | undefined, voorletters?: string | null | undefined, achternaam?: string | null | undefined, plaatsnaam?: string | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, afdeling?: { id?: number | null | undefined, naam?: string | null | undefined, organisatie?: { id?: number | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, naam?: string | null | undefined } | null | undefined, postadressen?: Array<{ id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined> | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, postadres?: { id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined, grootboekrekening?: { id: string, naam?: string | null | undefined, credit?: boolean | null | undefined, omschrijving?: string | null | undefined, referentie?: string | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined, matchingAfspraken?: Array<{ id?: number | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, bedrag?: any | null | undefined, omschrijving?: string | null | undefined, burger?: { voorletters?: string | null | undefined, voornamen?: string | null | undefined, achternaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined } | null | undefined> | null | undefined, huishouden?: { id?: number | null | undefined, burgers?: Array<{ id?: number | null | undefined } | null | undefined> | null | undefined } | null | undefined } | null | undefined> | null | undefined } | null | undefined> | null | undefined };
+export type GetHuishoudensQuery = { huishoudens?: Array<{ id?: number, burgers?: Array<{ id?: number, bsn?: number, email?: string, telefoonnummer?: string, voorletters?: string, voornamen?: string, achternaam?: string, geboortedatum?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }>, afspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }>, huishouden?: { id?: number, burgers?: Array<{ id?: number }> } }> }> };
 
 export type GetAfspraakQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type GetAfspraakQuery = { afspraak?: { id?: number | null | undefined, omschrijving?: string | null | undefined, bedrag?: any | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, validFrom?: any | null | undefined, validThrough?: any | null | undefined, betaalinstructie?: { byDay?: Array<DayOfWeek | null | undefined> | null | undefined, byMonth?: Array<number | null | undefined> | null | undefined, byMonthDay?: Array<number | null | undefined> | null | undefined, exceptDates?: Array<string | null | undefined> | null | undefined, repeatFrequency?: string | null | undefined, startDate?: string | null | undefined, endDate?: string | null | undefined } | null | undefined, burger?: { id?: number | null | undefined, voornamen?: string | null | undefined, voorletters?: string | null | undefined, achternaam?: string | null | undefined, plaatsnaam?: string | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, afdeling?: { id?: number | null | undefined, naam?: string | null | undefined, organisatie?: { id?: number | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, naam?: string | null | undefined } | null | undefined, postadressen?: Array<{ id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined> | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, postadres?: { id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined, grootboekrekening?: { id: string, naam?: string | null | undefined, credit?: boolean | null | undefined, omschrijving?: string | null | undefined, referentie?: string | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined, matchingAfspraken?: Array<{ id?: number | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, bedrag?: any | null | undefined, omschrijving?: string | null | undefined, burger?: { voorletters?: string | null | undefined, voornamen?: string | null | undefined, achternaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined } | null | undefined };
+export type GetAfspraakQuery = { afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> } };
 
 export type GetOrganisatieQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type GetOrganisatieQuery = { organisatie?: { id?: number | null | undefined, naam?: string | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, afdelingen?: Array<{ id?: number | null | undefined, naam?: string | null | undefined, organisatie?: { id?: number | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, naam?: string | null | undefined } | null | undefined, postadressen?: Array<{ id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined> | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined> | null | undefined } | null | undefined };
+export type GetOrganisatieQuery = { organisatie?: { id?: number, naam?: string, kvknummer?: string, vestigingsnummer?: string, afdelingen?: Array<{ id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }> } };
 
 export type GetOrganisatiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetOrganisatiesQuery = { organisaties?: Array<{ id?: number | null | undefined, naam?: string | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, afdelingen?: Array<{ id?: number | null | undefined, naam?: string | null | undefined, organisatie?: { id?: number | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, naam?: string | null | undefined } | null | undefined, postadressen?: Array<{ id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined> | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined> | null | undefined } | null | undefined> | null | undefined };
+export type GetOrganisatiesQuery = { organisaties?: Array<{ id?: number, naam?: string, kvknummer?: string, vestigingsnummer?: string, afdelingen?: Array<{ id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }> }> };
 
 export type GetSimpleOrganisatiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetSimpleOrganisatiesQuery = { organisaties?: Array<{ id?: number | null | undefined, naam?: string | null | undefined } | null | undefined> | null | undefined };
+export type GetSimpleOrganisatiesQuery = { organisaties?: Array<{ id?: number, naam?: string }> };
 
 export type GetRekeningQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type GetRekeningQuery = { rekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined };
+export type GetRekeningQuery = { rekening?: { id?: number, iban?: string, rekeninghouder?: string } };
 
 export type GetReportingDataQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetReportingDataQuery = { burgers?: Array<{ id?: number | null | undefined, bsn?: number | null | undefined, email?: string | null | undefined, telefoonnummer?: string | null | undefined, voorletters?: string | null | undefined, voornamen?: string | null | undefined, achternaam?: string | null | undefined, geboortedatum?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined, afspraken?: Array<{ id?: number | null | undefined, omschrijving?: string | null | undefined, bedrag?: any | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, validFrom?: any | null | undefined, validThrough?: any | null | undefined, betaalinstructie?: { byDay?: Array<DayOfWeek | null | undefined> | null | undefined, byMonth?: Array<number | null | undefined> | null | undefined, byMonthDay?: Array<number | null | undefined> | null | undefined, exceptDates?: Array<string | null | undefined> | null | undefined, repeatFrequency?: string | null | undefined, startDate?: string | null | undefined, endDate?: string | null | undefined } | null | undefined, burger?: { id?: number | null | undefined, voornamen?: string | null | undefined, voorletters?: string | null | undefined, achternaam?: string | null | undefined, plaatsnaam?: string | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, afdeling?: { id?: number | null | undefined, naam?: string | null | undefined, organisatie?: { id?: number | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, naam?: string | null | undefined } | null | undefined, postadressen?: Array<{ id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined> | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, postadres?: { id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined, grootboekrekening?: { id: string, naam?: string | null | undefined, credit?: boolean | null | undefined, omschrijving?: string | null | undefined, referentie?: string | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined, matchingAfspraken?: Array<{ id?: number | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, bedrag?: any | null | undefined, omschrijving?: string | null | undefined, burger?: { voorletters?: string | null | undefined, voornamen?: string | null | undefined, achternaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined } | null | undefined> | null | undefined, huishouden?: { id?: number | null | undefined, burgers?: Array<{ id?: number | null | undefined } | null | undefined> | null | undefined } | null | undefined } | null | undefined> | null | undefined, bankTransactions?: Array<{ id?: number | null | undefined, informationToAccountOwner?: string | null | undefined, statementLine?: string | null | undefined, bedrag?: any | null | undefined, isCredit?: boolean | null | undefined, tegenRekeningIban?: string | null | undefined, transactieDatum?: any | null | undefined, journaalpost?: { id?: number | null | undefined, isAutomatischGeboekt?: boolean | null | undefined, afspraak?: { id?: number | null | undefined, omschrijving?: string | null | undefined, bedrag?: any | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, validFrom?: any | null | undefined, validThrough?: any | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined, grootboekrekening?: { id: string, naam?: string | null | undefined, credit?: boolean | null | undefined, omschrijving?: string | null | undefined, referentie?: string | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined, betaalinstructie?: { byDay?: Array<DayOfWeek | null | undefined> | null | undefined, byMonth?: Array<number | null | undefined> | null | undefined, byMonthDay?: Array<number | null | undefined> | null | undefined, exceptDates?: Array<string | null | undefined> | null | undefined, repeatFrequency?: string | null | undefined, startDate?: string | null | undefined, endDate?: string | null | undefined } | null | undefined, burger?: { id?: number | null | undefined, voornamen?: string | null | undefined, voorletters?: string | null | undefined, achternaam?: string | null | undefined, plaatsnaam?: string | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, afdeling?: { id?: number | null | undefined, naam?: string | null | undefined, organisatie?: { id?: number | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, naam?: string | null | undefined } | null | undefined, postadressen?: Array<{ id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined> | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, postadres?: { id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined, matchingAfspraken?: Array<{ id?: number | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, bedrag?: any | null | undefined, omschrijving?: string | null | undefined, burger?: { voorletters?: string | null | undefined, voornamen?: string | null | undefined, achternaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined } | null | undefined, grootboekrekening?: { id: string, naam?: string | null | undefined, credit?: boolean | null | undefined, omschrijving?: string | null | undefined, referentie?: string | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined, tegenRekening?: { iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined, rubrieken?: Array<{ id?: number | null | undefined, naam?: string | null | undefined } | null | undefined> | null | undefined };
+export type GetReportingDataQuery = { burgers?: Array<{ id?: number, bsn?: number, email?: string, telefoonnummer?: string, voorletters?: string, voornamen?: string, achternaam?: string, geboortedatum?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }>, afspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }>, huishouden?: { id?: number, burgers?: Array<{ id?: number }> } }>, bankTransactions?: Array<{ id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, tegenRekeningIban?: string, transactieDatum?: any, journaalpost?: { id?: number, isAutomatischGeboekt?: boolean, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, tegenRekening?: { iban?: string, rekeninghouder?: string } }>, rubrieken?: Array<{ id?: number, naam?: string }> };
 
 export type GetRubriekenQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetRubriekenQuery = { rubrieken?: Array<{ id?: number | null | undefined, naam?: string | null | undefined, grootboekrekening?: { id: string, naam?: string | null | undefined, credit?: boolean | null | undefined, omschrijving?: string | null | undefined, referentie?: string | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined> | null | undefined };
+export type GetRubriekenQuery = { rubrieken?: Array<{ id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }> };
+
+export type GetRubriekenConfiguratieQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetRubriekenConfiguratieQuery = { rubrieken?: Array<{ id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, omschrijving?: string } }>, grootboekrekeningen?: Array<{ id: string, naam?: string, omschrijving?: string }> };
+
+export type GetSimpleBurgersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetSimpleBurgersQuery = { burgers?: Array<{ id?: number, bsn?: number, voorletters?: string, achternaam?: string }> };
 
 export type GetTransactionItemFormDataQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetTransactionItemFormDataQuery = { rubrieken?: Array<{ id?: number | null | undefined, naam?: string | null | undefined, grootboekrekening?: { id: string, naam?: string | null | undefined, credit?: boolean | null | undefined, omschrijving?: string | null | undefined, referentie?: string | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined> | null | undefined, afspraken?: Array<{ id?: number | null | undefined, omschrijving?: string | null | undefined, bedrag?: any | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, validFrom?: any | null | undefined, validThrough?: any | null | undefined, betaalinstructie?: { byDay?: Array<DayOfWeek | null | undefined> | null | undefined, byMonth?: Array<number | null | undefined> | null | undefined, byMonthDay?: Array<number | null | undefined> | null | undefined, exceptDates?: Array<string | null | undefined> | null | undefined, repeatFrequency?: string | null | undefined, startDate?: string | null | undefined, endDate?: string | null | undefined } | null | undefined, burger?: { id?: number | null | undefined, voornamen?: string | null | undefined, voorletters?: string | null | undefined, achternaam?: string | null | undefined, plaatsnaam?: string | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, afdeling?: { id?: number | null | undefined, naam?: string | null | undefined, organisatie?: { id?: number | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, naam?: string | null | undefined } | null | undefined, postadressen?: Array<{ id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined> | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, postadres?: { id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined, grootboekrekening?: { id: string, naam?: string | null | undefined, credit?: boolean | null | undefined, omschrijving?: string | null | undefined, referentie?: string | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined, matchingAfspraken?: Array<{ id?: number | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, bedrag?: any | null | undefined, omschrijving?: string | null | undefined, burger?: { voorletters?: string | null | undefined, voornamen?: string | null | undefined, achternaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined } | null | undefined> | null | undefined };
+export type GetTransactionItemFormDataQuery = { rubrieken?: Array<{ id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }>, afspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }> };
 
 export type GetTransactiesQueryVariables = Exact<{
   offset: Scalars['Int'];
   limit: Scalars['Int'];
-  filters?: Maybe<BankTransactionFilter>;
+  filters?: InputMaybe<BankTransactionFilter>;
 }>;
 
 
-export type GetTransactiesQuery = { bankTransactionsPaged?: { banktransactions?: Array<{ id?: number | null | undefined, informationToAccountOwner?: string | null | undefined, statementLine?: string | null | undefined, bedrag?: any | null | undefined, isCredit?: boolean | null | undefined, tegenRekeningIban?: string | null | undefined, transactieDatum?: any | null | undefined, journaalpost?: { id?: number | null | undefined, isAutomatischGeboekt?: boolean | null | undefined, afspraak?: { id?: number | null | undefined, omschrijving?: string | null | undefined, bedrag?: any | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, validFrom?: any | null | undefined, validThrough?: any | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined, grootboekrekening?: { id: string, naam?: string | null | undefined, credit?: boolean | null | undefined, omschrijving?: string | null | undefined, referentie?: string | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined, betaalinstructie?: { byDay?: Array<DayOfWeek | null | undefined> | null | undefined, byMonth?: Array<number | null | undefined> | null | undefined, byMonthDay?: Array<number | null | undefined> | null | undefined, exceptDates?: Array<string | null | undefined> | null | undefined, repeatFrequency?: string | null | undefined, startDate?: string | null | undefined, endDate?: string | null | undefined } | null | undefined, burger?: { id?: number | null | undefined, voornamen?: string | null | undefined, voorletters?: string | null | undefined, achternaam?: string | null | undefined, plaatsnaam?: string | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, afdeling?: { id?: number | null | undefined, naam?: string | null | undefined, organisatie?: { id?: number | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, naam?: string | null | undefined } | null | undefined, postadressen?: Array<{ id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined> | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, postadres?: { id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined, matchingAfspraken?: Array<{ id?: number | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, bedrag?: any | null | undefined, omschrijving?: string | null | undefined, burger?: { voorletters?: string | null | undefined, voornamen?: string | null | undefined, achternaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined } | null | undefined, grootboekrekening?: { id: string, naam?: string | null | undefined, credit?: boolean | null | undefined, omschrijving?: string | null | undefined, referentie?: string | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined, suggesties?: Array<{ id?: number | null | undefined, omschrijving?: string | null | undefined, bedrag?: any | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, validFrom?: any | null | undefined, validThrough?: any | null | undefined, betaalinstructie?: { byDay?: Array<DayOfWeek | null | undefined> | null | undefined, byMonth?: Array<number | null | undefined> | null | undefined, byMonthDay?: Array<number | null | undefined> | null | undefined, exceptDates?: Array<string | null | undefined> | null | undefined, repeatFrequency?: string | null | undefined, startDate?: string | null | undefined, endDate?: string | null | undefined } | null | undefined, burger?: { id?: number | null | undefined, voornamen?: string | null | undefined, voorletters?: string | null | undefined, achternaam?: string | null | undefined, plaatsnaam?: string | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, afdeling?: { id?: number | null | undefined, naam?: string | null | undefined, organisatie?: { id?: number | null | undefined, kvknummer?: string | null | undefined, vestigingsnummer?: string | null | undefined, naam?: string | null | undefined } | null | undefined, postadressen?: Array<{ id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined> | null | undefined, rekeningen?: Array<{ id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined> | null | undefined } | null | undefined, postadres?: { id?: string | null | undefined, straatnaam?: string | null | undefined, huisnummer?: string | null | undefined, postcode?: string | null | undefined, plaatsnaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined, grootboekrekening?: { id: string, naam?: string | null | undefined, credit?: boolean | null | undefined, omschrijving?: string | null | undefined, referentie?: string | null | undefined, rubriek?: { id?: number | null | undefined, naam?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined, matchingAfspraken?: Array<{ id?: number | null | undefined, credit?: boolean | null | undefined, zoektermen?: Array<string | null | undefined> | null | undefined, bedrag?: any | null | undefined, omschrijving?: string | null | undefined, burger?: { voorletters?: string | null | undefined, voornamen?: string | null | undefined, achternaam?: string | null | undefined } | null | undefined, tegenRekening?: { id?: number | null | undefined, iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined } | null | undefined> | null | undefined, tegenRekening?: { iban?: string | null | undefined, rekeninghouder?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined, pageInfo?: { count?: number | null | undefined, limit?: number | null | undefined, start?: number | null | undefined } | null | undefined } | null | undefined };
+export type GetTransactiesQuery = { bankTransactionsPaged?: { banktransactions?: Array<{ id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, tegenRekeningIban?: string, transactieDatum?: any, journaalpost?: { id?: number, isAutomatischGeboekt?: boolean, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, suggesties?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }>, tegenRekening?: { iban?: string, rekeninghouder?: string } }>, pageInfo?: { count?: number, limit?: number, start?: number } } };
 
 export const CustomerStatementMessageFragmentDoc = gql`
     fragment CustomerStatementMessage on CustomerStatementMessage {
@@ -3157,6 +3197,39 @@ export function useDeleteAfdelingRekeningMutation(baseOptions?: Apollo.MutationH
 export type DeleteAfdelingRekeningMutationHookResult = ReturnType<typeof useDeleteAfdelingRekeningMutation>;
 export type DeleteAfdelingRekeningMutationResult = Apollo.MutationResult<DeleteAfdelingRekeningMutation>;
 export type DeleteAfdelingRekeningMutationOptions = Apollo.BaseMutationOptions<DeleteAfdelingRekeningMutation, DeleteAfdelingRekeningMutationVariables>;
+export const DeleteRubriekDocument = gql`
+    mutation deleteRubriek($id: Int!) {
+  deleteRubriek(id: $id) {
+    ok
+  }
+}
+    `;
+export type DeleteRubriekMutationFn = Apollo.MutationFunction<DeleteRubriekMutation, DeleteRubriekMutationVariables>;
+
+/**
+ * __useDeleteRubriekMutation__
+ *
+ * To run a mutation, you first call `useDeleteRubriekMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteRubriekMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteRubriekMutation, { data, loading, error }] = useDeleteRubriekMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteRubriekMutation(baseOptions?: Apollo.MutationHookOptions<DeleteRubriekMutation, DeleteRubriekMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteRubriekMutation, DeleteRubriekMutationVariables>(DeleteRubriekDocument, options);
+      }
+export type DeleteRubriekMutationHookResult = ReturnType<typeof useDeleteRubriekMutation>;
+export type DeleteRubriekMutationResult = Apollo.MutationResult<DeleteRubriekMutation>;
+export type DeleteRubriekMutationOptions = Apollo.BaseMutationOptions<DeleteRubriekMutation, DeleteRubriekMutationVariables>;
 export const EndAfspraakDocument = gql`
     mutation endAfspraak($id: Int!, $validThrough: String!) {
   updateAfspraak(id: $id, input: {validThrough: $validThrough}) {
@@ -3600,6 +3673,41 @@ export function useUpdateRekeningMutation(baseOptions?: Apollo.MutationHookOptio
 export type UpdateRekeningMutationHookResult = ReturnType<typeof useUpdateRekeningMutation>;
 export type UpdateRekeningMutationResult = Apollo.MutationResult<UpdateRekeningMutation>;
 export type UpdateRekeningMutationOptions = Apollo.BaseMutationOptions<UpdateRekeningMutation, UpdateRekeningMutationVariables>;
+export const UpdateRubriekDocument = gql`
+    mutation updateRubriek($id: Int!, $naam: String!, $grootboekrekeningId: String!) {
+  updateRubriek(id: $id, naam: $naam, grootboekrekeningId: $grootboekrekeningId) {
+    ok
+  }
+}
+    `;
+export type UpdateRubriekMutationFn = Apollo.MutationFunction<UpdateRubriekMutation, UpdateRubriekMutationVariables>;
+
+/**
+ * __useUpdateRubriekMutation__
+ *
+ * To run a mutation, you first call `useUpdateRubriekMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateRubriekMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateRubriekMutation, { data, loading, error }] = useUpdateRubriekMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      naam: // value for 'naam'
+ *      grootboekrekeningId: // value for 'grootboekrekeningId'
+ *   },
+ * });
+ */
+export function useUpdateRubriekMutation(baseOptions?: Apollo.MutationHookOptions<UpdateRubriekMutation, UpdateRubriekMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateRubriekMutation, UpdateRubriekMutationVariables>(UpdateRubriekDocument, options);
+      }
+export type UpdateRubriekMutationHookResult = ReturnType<typeof useUpdateRubriekMutation>;
+export type UpdateRubriekMutationResult = Apollo.MutationResult<UpdateRubriekMutation>;
+export type UpdateRubriekMutationOptions = Apollo.BaseMutationOptions<UpdateRubriekMutation, UpdateRubriekMutationVariables>;
 export const GetAfspraakFormDataDocument = gql`
     query getAfspraakFormData($afspraakId: Int!) {
   afspraak(id: $afspraakId) {
@@ -4439,6 +4547,88 @@ export function useGetRubriekenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type GetRubriekenQueryHookResult = ReturnType<typeof useGetRubriekenQuery>;
 export type GetRubriekenLazyQueryHookResult = ReturnType<typeof useGetRubriekenLazyQuery>;
 export type GetRubriekenQueryResult = Apollo.QueryResult<GetRubriekenQuery, GetRubriekenQueryVariables>;
+export const GetRubriekenConfiguratieDocument = gql`
+    query getRubriekenConfiguratie {
+  rubrieken {
+    id
+    naam
+    grootboekrekening {
+      id
+      naam
+      omschrijving
+    }
+  }
+  grootboekrekeningen {
+    id
+    naam
+    omschrijving
+  }
+}
+    `;
+
+/**
+ * __useGetRubriekenConfiguratieQuery__
+ *
+ * To run a query within a React component, call `useGetRubriekenConfiguratieQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetRubriekenConfiguratieQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetRubriekenConfiguratieQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetRubriekenConfiguratieQuery(baseOptions?: Apollo.QueryHookOptions<GetRubriekenConfiguratieQuery, GetRubriekenConfiguratieQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetRubriekenConfiguratieQuery, GetRubriekenConfiguratieQueryVariables>(GetRubriekenConfiguratieDocument, options);
+      }
+export function useGetRubriekenConfiguratieLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetRubriekenConfiguratieQuery, GetRubriekenConfiguratieQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetRubriekenConfiguratieQuery, GetRubriekenConfiguratieQueryVariables>(GetRubriekenConfiguratieDocument, options);
+        }
+export type GetRubriekenConfiguratieQueryHookResult = ReturnType<typeof useGetRubriekenConfiguratieQuery>;
+export type GetRubriekenConfiguratieLazyQueryHookResult = ReturnType<typeof useGetRubriekenConfiguratieLazyQuery>;
+export type GetRubriekenConfiguratieQueryResult = Apollo.QueryResult<GetRubriekenConfiguratieQuery, GetRubriekenConfiguratieQueryVariables>;
+export const GetSimpleBurgersDocument = gql`
+    query getSimpleBurgers {
+  burgers {
+    id
+    bsn
+    voorletters
+    achternaam
+  }
+}
+    `;
+
+/**
+ * __useGetSimpleBurgersQuery__
+ *
+ * To run a query within a React component, call `useGetSimpleBurgersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetSimpleBurgersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetSimpleBurgersQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetSimpleBurgersQuery(baseOptions?: Apollo.QueryHookOptions<GetSimpleBurgersQuery, GetSimpleBurgersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetSimpleBurgersQuery, GetSimpleBurgersQueryVariables>(GetSimpleBurgersDocument, options);
+      }
+export function useGetSimpleBurgersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetSimpleBurgersQuery, GetSimpleBurgersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetSimpleBurgersQuery, GetSimpleBurgersQueryVariables>(GetSimpleBurgersDocument, options);
+        }
+export type GetSimpleBurgersQueryHookResult = ReturnType<typeof useGetSimpleBurgersQuery>;
+export type GetSimpleBurgersLazyQueryHookResult = ReturnType<typeof useGetSimpleBurgersLazyQuery>;
+export type GetSimpleBurgersQueryResult = Apollo.QueryResult<GetSimpleBurgersQuery, GetSimpleBurgersQueryVariables>;
 export const GetTransactionItemFormDataDocument = gql`
     query getTransactionItemFormData {
   rubrieken {

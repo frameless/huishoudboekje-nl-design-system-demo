@@ -1,5 +1,5 @@
 import {CheckIcon, CloseIcon, DeleteIcon} from "@chakra-ui/icons";
-import {Editable, EditableInput, EditablePreview, FormControl, FormControlProps, FormLabel, IconButton, Stack} from "@chakra-ui/react";
+import {Editable, EditableInput, EditablePreview, FormControlProps, HStack, IconButton, Td, Tr} from "@chakra-ui/react";
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {Configuratie as IConfiguratie, GetConfiguratieDocument, useDeleteConfiguratieMutation, useUpdateConfiguratieMutation} from "../../generated/graphql";
@@ -74,24 +74,28 @@ const ConfiguratieItem: React.FC<FormControlProps & {c: IConfiguratie}> = ({c, .
 	};
 
 	return (
-		<FormControl key={c.id} {...props}>
-			<FormLabel>{c.id}</FormLabel>
-			<Stack direction={"row"} alignItems={"center"}>
+		<Tr>
+			<Td>{c.id}</Td>
+			<Td>
 				<Editable defaultValue={c.waarde} flex={1} submitOnBlur={true} onSubmit={onSubmit} onFocus={onFocus}>
 					<EditablePreview />
 					<EditableInput onChange={onChange} name={c.id} id={c.id} />
 				</Editable>
-				{deleteConfirm ? (<>
-					<IconButton size={"sm"} flex={0} variant={"solid"} colorScheme={"red"} icon={<CheckIcon />} aria-label={t("global.actions.delete")}
-						onClick={() => onClickDelete()} />
-					<IconButton size={"sm"} flex={0} variant={"solid"} colorScheme={"gray"} icon={<CloseIcon />} aria-label={t("global.actions.cancel")}
-						onClick={() => setDeleteConfirm(false)} />
-				</>) : (
-					<IconButton size={"sm"} flex={0} variant={"ghost"} colorScheme={"gray"} icon={<DeleteIcon />}
-						aria-label={t("global.actions.delete")} onClick={() => setDeleteConfirm(true)} />
-				)}
-			</Stack>
-		</FormControl>
+			</Td>
+			<Td>
+				<HStack>
+					{deleteConfirm ? (<>
+						<IconButton size={"sm"} flex={0} variant={"solid"} colorScheme={"red"} icon={<CheckIcon />} aria-label={t("global.actions.delete")}
+							onClick={() => onClickDelete()} />
+						<IconButton size={"sm"} flex={0} variant={"solid"} colorScheme={"gray"} icon={<CloseIcon />} aria-label={t("global.actions.cancel")}
+							onClick={() => setDeleteConfirm(false)} />
+					</>) : (
+						<IconButton size={"sm"} flex={0} variant={"ghost"} colorScheme={"gray"} icon={<DeleteIcon />}
+							aria-label={t("global.actions.delete")} onClick={() => setDeleteConfirm(true)} />
+					)}
+				</HStack>
+			</Td>
+		</Tr>
 	);
 };
 

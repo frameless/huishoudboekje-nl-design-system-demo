@@ -71,6 +71,11 @@
 	  "createSuccess": "Configuratie succesvol opgeslagen.",
 	  "alreadyExists": "Deze configuratie bestaat al."
 	},
+	"rubrieken": {
+	  "createSuccess": "Rubriek succesvol toegevoegd.",
+	  "updateSuccess": "Rubriek is gewijzigd.",
+	  "deleteSuccess": "Rubriek is verwijderd."
+	},
 	"huishoudenBurger": {
 	  "noOptionsSelectedError": "Er zijn geen burgers gekozen. Kies minimaal een burger om toe te voegen aan dit huishouden.",
 	  "addSuccess_one": "{{names}} is toegevoegd aan dit huishouden.",
@@ -249,12 +254,22 @@
 	},
 	"configuratie": {
 	  "sections": {
-		"title": "Configuratie",
+		"title": "Parameters",
 		"helperText": "Stel hier de benodigde parameters in. Dit is belangrijk voor de werking van Huishoudboekje."
 	  },
 	  "fields": {
 		"id": "Sleutel",
 		"waarde": "Waarde"
+	  }
+	},
+	"rubrieken": {
+	  "sections": {
+		"title": "Rubrieken",
+		"helperText": "Stel hier de juiste rubrieken in die in de boekhouding worden gebruikt."
+	  },
+	  "fields": {
+		"grootboekrekening": "Grootboekrekening",
+		"naam": "Naam"
 	  }
 	},
 	"huishoudens": {
@@ -563,6 +578,7 @@
 	"burgers": "Burgers"
   },
   "configuratie": "Configuratie",
+  "rubrieken": "Rubrieken",
   "unknownGebruiker": "Onbekende gebruiker",
   "unknownBurger": "Onbekende burger",
   "unknownHuishouden": "Onbekend huishouden",
