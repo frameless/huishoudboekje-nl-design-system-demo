@@ -176,7 +176,7 @@ class KeyCloakApi:
             if self.is_client_role_connected(role_id, client_id, role_name):
                 return False
             composite_role_payload = self.get_composite_payload(client_id, role['id'], role['name'])
-            
+
             post_response = self.keycloak_admin.raw_post(
                 "admin/realms/{realm}/roles-by-id/{role_id}/composites".format(**params_path), data=json.dumps(composite_role_payload))
             if post_response.status_code == 204:
@@ -196,7 +196,7 @@ class KeyCloakApi:
         for role in list_roles:
             if not self.is_client_role_connected(role_id, client_id, role_name):
                 return False
-            
+
             composite_role_payload = self.get_composite_payload(client_id, role['id'], role['name'])
 
             post_response = self.keycloak_admin.raw_delete(
@@ -405,8 +405,8 @@ class KeyCloakApi:
                         self.keycloak_admin.delete_mapper_from_client_scope(client_scope_id, client_protocol_mapper['id'])
                         self.keycloak_admin.add_mapper_to_client_scope(client_scope_id, protocol_mapper)
                         changed = True
-            if not existing:      
-                # add the mapper if it doesn't exist already     
+            if not existing:
+                # add the mapper if it doesn't exist already
                 self.keycloak_admin.add_mapper_to_client_scope(client_scope_id, protocol_mapper)
                 changed = True
         return changed
@@ -433,7 +433,7 @@ class KeyCloakApi:
         client_scope_response = self.keycloak_admin.raw_get('admin/realms/{realm}/clients/{client_id}/default-client-scopes'.format(**params_path))
         client_scopes = json.loads(client_scope_response.text)
         return client_scopes
-    
+
     def is_clientscope_present(self, client_name, client_scope_name):
         default_client_scopes = self.get_current_default_client_scopes(client_name)
         for default_client_scope in default_client_scopes:
@@ -515,29 +515,12 @@ class KeyCloakApi:
             if realm_role['name'] in role_names:
                 new_realm_roles.append({'name': realm_role['name'], 'id': realm_role['id']})
 
-        payloads = []        
+        payloads = []
         for new_realm_role in new_realm_roles:
-            #Because get_composite_payload return a array with a single entry we need to combine the arrays instead of appending 
+            #Because get_composite_payload return a array with a single entry we need to combine the arrays instead of appending
             payloads += self.get_composite_payload(realm_id, new_realm_role['id'], new_realm_role['name'], False, True)
-        
+
         return payloads
-
-# export KEYCLOAK_AUTH_USERNAME=bas
-# export KEYCLOAK_AUTH_PASSWORD=testtest
-# maak hier intern url van met http
-# export KEYCLOAK_AUTH_KEYCLOAK_URL=http://hhb.minikube/auth/
-# extern adres
-# export KEYCLOAK_CLIENT_ROOT_URL=https://hhb.minikube/
-# export KEYCLOAK_CLIENT_SECRET=fc36d31f-f720-4914-a750-b83c7b0dd61c
-# export KEYCLOAK_CLIENT_USERS=magre,bas.magre@topicus.nl,Bas,Magre,testtest:basje,bas3@topicus.nl,Sebastiaan,Magre,testtest
-
-
-# export KEYCLOAK_AUTH_USERNAME=admin
-# export KEYCLOAK_AUTH_PASSWORD=testtest
-# export KEYCLOAK_AUTH_KEYCLOAK_URL=https://hhb-dex-or-keycloak.nlx.reviews/auth
-# export KEYCLOAK_CLIENT_ROOT_URL=https://hhb-dex-or-keycloak.nlx.reviews/
-# export KEYCLOAK_CLIENT_SECRET=fc36d31f-f720-4914-a750-b83c7b0dd61c
-# export KEYCLOAK_CLIENT_USERS=magre,bas.magre@topicus.nl,Bas,Magre,testtest:basje,bas3@topicus.nl,Sebastiaan,Magre,testtest
 
 http_200 = False
 
@@ -566,9 +549,8 @@ realm = "hhb"
 auth_client_id = 'admin-cli'
 keyCloakApi = KeyCloakApi(auth_username,auth_password,auth_realm,auth_keycloak_url,auth_client_id,realm,False)
 
-# TODO
-# - Bruteforce protection aanzetten voor ream master
-# - Bruteforce protection aanzetten voor ream hhb
+# TODO Bruteforce protection aanzetten voor realm master
+# TODO Bruteforce protection aanzetten voor realm hhb
 
 payload_realm = {'enabled': True,'realm': realm}
 payload_client = { 'redirectUris': [auth_client_root_url+'*'], 'clientId': 'hhb', 'rootUrl': auth_client_root_url, 'enabled': True, 'directAccessGrantsEnabled': True, 'standardFlowEnabled': True, 'clientAuthenticatorType': 'client-secret', 'secret': auth_client_secret }
