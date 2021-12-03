@@ -2,23 +2,23 @@
   "name": "huishoudboekje",
   "version": "1.0.0-beta.2",
   "author": {
-    "name": "Koen Brouwer",
-    "email": "contact@kbrouwer.nl",
-    "url": "https://gitlab.com/koenbrouwer"
+	"name": "Koen Brouwer",
+	"email": "contact@kbrouwer.nl",
+	"url": "https://gitlab.com/koenbrouwer"
   },
   "private": true,
   "license": "SEE LICENSE IN LICENSE.md",
   "repository": {
-    "type": "git",
-    "url": "https://gitlab.com/commonground/huishoudboekje/app-new"
+	"type": "git",
+	"url": "https://gitlab.com/commonground/huishoudboekje/app-new"
   },
   "bugs": {
-    "url": "https://gitlab.com/commonground/huishoudboekje/app-new/-/issues"
+	"url": "https://gitlab.com/commonground/huishoudboekje/app-new/-/issues"
   },
   "scripts": {
     "postinstall": "node version.js",
     "prestart": "sh ./prestart.sh",
-    "start": "react-scripts start",
+    "start": "react-scripts --openssl-legacy-provider start",
     "build": "react-scripts build",
     "pretest": "npm run i18n-migrate",
     "test": "react-scripts test",
@@ -48,7 +48,6 @@
     "date-fns": "^2.27.0",
     "dayjs": "^1.10.7",
     "dayjs-recur": "^1.0.0",
-    "eslint": "^7.11.0",
     "eslint-config-react-app": "^6.0.0",
     "fill-range": "^7.0.1",
     "framer-motion": "^4.1.17",
@@ -102,13 +101,13 @@
     "jest-junit": "^13.0.0"
   },
   "browserslist": [
-    "> 0.5%",
-    "not ie 11"
+	"> 0.5%",
+	"not ie 11"
   ],
   "jest": {
-    "coverageReporters": [
-      "text",
-      "cobertura"
-    ]
+	"coverageReporters": [
+	  "text",
+	  "cobertura"
+	]
   }
 }
