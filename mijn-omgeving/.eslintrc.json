@@ -1,0 +1,65 @@
+{
+  "extends": [
+	"eslint:recommended",
+	"react-app"
+  ],
+  "plugins": [
+	"react"
+  ],
+  "rules": {
+	"@typescript-eslint/no-use-before-define": ["off"],
+	"import/no-anonymous-default-export": ["off"],
+	"react/prop-types": ["off"],
+	"indent": [
+	  "warn",
+	  "tab",
+	  {
+		"SwitchCase": 2
+	  }
+	],
+	"brace-style": ["warn", "stroustrup"],
+	"linebreak-style": ["warn", "unix"],
+	"quotes": ["warn", "double"],
+	"no-mixed-spaces-and-tabs": ["warn", "smart-tabs"],
+	"no-trailing-spaces": ["warn"],
+	"eol-last": ["warn", "never"],
+	"no-empty": ["warn"],
+	"no-console": [
+	  "warn",
+	  {
+		"allow": [
+		  "error",
+		  "info"
+		]
+	  }
+	],
+	"react/self-closing-comp": [
+	  "warn",
+	  {
+		"component": true,
+		"html": false
+	  }
+	],
+	"react/no-multi-comp": [
+	  "warn",
+	  {
+		"ignoreStateless": true
+	  }
+	],
+	"react/function-component-definition": [
+	  "warn",
+	  {
+		"namedComponents": "arrow-function",
+		"unnamedComponents": "arrow-function"
+	  }
+	],
+	"react/no-unknown-property": ["warn"],
+	"no-constant-condition": ["warn", {"checkLoops": false}],
+	"react/jsx-no-useless-fragment": ["error", {"allowExpressions": true}]
+  },
+  "ignorePatterns": [
+	"node_modules",
+	"build",
+	"src/lib/generated/**"
+  ]
+}

@@ -10,9 +10,9 @@
   },
   "keywords": [],
   "author": {
-	"name": "Koen Brouwer",
-	"email": "contact@kbrouwer.nl",
-	"url": "https://gitlab.com/koenbrouwer"
+    "name": "Koen Brouwer",
+    "email": "contact@kbrouwer.nl",
+    "url": "https://twitter.com/KoenBrouwer"
   },
   "license": "SEE LICENSE IN LICENSE.md",
   "dependencies": {
