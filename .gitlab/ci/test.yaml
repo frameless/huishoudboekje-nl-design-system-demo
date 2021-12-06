@@ -97,7 +97,7 @@ backend-burgers-test:
     paths:
       - backend-burgers/coverage
     reports:
-      clover: backend-burgers/coverage/clover.xml
+      junit: backend-burgers/junit.xml
   when: on_success
 
 backend-test:
