@@ -1,6 +1,6 @@
 import fetch from "node-fetch";
 import sampleBurgers from "../sampleData/burger.json";
-import {createFetchMock} from "../test-utils";
+import {createMockedFetch} from "../test-utils";
 import DataLoader from "./dataloader";
 
 jest.mock("node-fetch");
@@ -9,7 +9,7 @@ describe("Testing BurgerLoader", () => {
 
 	it("loads one burger", async () => {
 		// Create a mocked response
-		const jestFn = createFetchMock(fetch, sampleBurgers[0]);
+		const jestFn = createMockedFetch(fetch, sampleBurgers[0]);
 
 		// Make the call
 		const burger = await DataLoader.getBurgerById(sampleBurgers[0].id);
@@ -21,7 +21,7 @@ describe("Testing BurgerLoader", () => {
 
 	it("loads all afspraken for one burger", async () => {
 		// Create a mocked response
-		const jestFn = createFetchMock(fetch, sampleBurgers[0]);
+		const jestFn = createMockedFetch(fetch, sampleBurgers[0].afspraken);
 		const afspraken = await DataLoader.getAfsprakenByBurgerId(sampleBurgers[0].id);
 
 		// Assertions
