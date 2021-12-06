@@ -4,35 +4,35 @@
   "description": "",
   "main": "main.ts",
   "scripts": {
-    "dev": "nodemon",
-    "start": "ts-node main.ts",
-    "test": "jest",
-    "test:coverage": "npm run test -- --coverage --reporters=default --reporters=jest-junit"
+	"dev": "nodemon",
+	"start": "ts-node main.ts",
+	"test": "jest",
+	"test:coverage": "npm run test -- --coverage --reporters=default --reporters=jest-junit"
   },
   "keywords": [],
   "author": {
-    "name": "Koen Brouwer",
-    "email": "contact@kbrouwer.nl",
-    "url": "https://twitter.com/KoenBrouwer"
+	"name": "Koen Brouwer",
+	"email": "contact@kbrouwer.nl",
+	"url": "https://twitter.com/KoenBrouwer"
   },
   "license": "SEE LICENSE IN LICENSE.md",
   "dependencies": {
-    "apollo-server": "^3.4.0",
-    "dotenv": "^10.0.0",
-    "graphql": "^15.7.2",
-    "jest-junit": "^13.0.0",
-    "jsonwebtoken": "^8.5.1",
-    "nexus": "^1.1.0",
-    "typescript": "^4.4.4"
+	"apollo-server": "^3.4.0",
+	"dotenv": "^10.0.0",
+	"graphql": "^15.7.2",
+	"jest-junit": "^13.0.0",
+	"jsonwebtoken": "^8.5.1",
+	"nexus": "^1.1.0",
+	"typescript": "^4.4.4"
   },
   "devDependencies": {
-    "@types/express": "^4.17.13",
-    "@types/jest": "^27.0.2",
-    "@types/jsonwebtoken": "^8.5.5",
-    "@types/node": "^16.11.6",
-    "jest": "^27.0.7",
-    "nodemon": "^2.0.14",
-    "ts-jest": "^27.0.7",
-    "ts-node-dev": "^1.1.8"
+	"@types/express": "^4.17.13",
+	"@types/jest": "^27.0.2",
+	"@types/jsonwebtoken": "^8.5.5",
+	"@types/node": "^16.11.6",
+	"jest": "^27.0.7",
+	"nodemon": "^2.0.14",
+	"ts-jest": "^27.0.7",
+	"ts-node-dev": "^1.1.8"
   }
 }
