@@ -1,5 +1,6 @@
 .frontend:
   stage: test
+  needs: [ ]
   image:
     name: ${DOCKER_PROXY}node:lts-alpine
   variables:
@@ -70,6 +71,7 @@ frontend-test:
 
 backend-burgers-test:
   stage: test
+  needs: [ ]
   image:
     name: ${DOCKER_PROXY}node:lts-alpine
   variables:
