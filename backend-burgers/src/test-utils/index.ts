@@ -1,4 +1,4 @@
-export const createFetchMock = (fetch, data: any) => {
+export const createMockedFetch = (fetch, data: any) => {
 	const jestFn = jest.fn(() => ({
 		data,
 	}));
