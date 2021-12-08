@@ -27,6 +27,7 @@ export const auditLogTexts = (values, components, action) => {
 		exportBrieven: () => <Trans i18nKey={"auditLog.exportBrieven"} values={values} components={components} />,
 		configuraties: () => <Trans i18nKey={"auditLog.viewConfiguraties"} values={values} components={components} />,
 		rekening: () => <Trans i18nKey={"auditLog.viewRekening"} values={values} components={components} />,
+		grootboekrekeningen: () => <Trans i18nKey={"auditLog.viewGrootboekrekeningen"} values={values} components={components} />,
 
 		// Mutations
 		createBurger: () => <Trans i18nKey={"auditLog.createBurger"} values={values} components={components} />,
