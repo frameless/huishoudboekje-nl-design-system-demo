@@ -23,7 +23,7 @@
 deploy-deployment-master:
   <<: *deploy
   needs:
-    - build-tagged-images
+    - build-images-dev
   environment:
     name: demo
     url: https://demo.huishoudboekje.demoground.nl/
