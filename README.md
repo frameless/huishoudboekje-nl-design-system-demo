@@ -62,7 +62,6 @@ You need python virtualenv, a Ubuntu shell with `zsh` and you need to make sure 
    databases.
 1. Create virtual environments for the services and the backend. Please see their `README.md` for instructions.
 1. For the frontend you need to use the ubuntu zsh shell.
-1. Setting up dex should be done in ubuntu.
 
 ### 2. Minikube
 

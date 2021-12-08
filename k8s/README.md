@@ -56,9 +56,9 @@ export NAMESPACE="huishoudboekje"
 export HHB_FRONTEND_ENDPOINT="http://${HHB_HOST}"
 export OIDC_ISSUER="http://$HHB_HOST/auth"
 export OIDC_AUTHORIZATION_ENDPOINT="http://${HHB_HOST}/auth/auth"
-export OIDC_TOKEN_ENDPOINT="http://hhb-dex/auth/token"
-export OIDC_TOKENINFO_ENDPOINT="http://hhb-dex/auth/tokeninfo"
-export OIDC_USERINFO_ENDPOINT="http://hhb-dex/auth/userinfo"
+export OIDC_TOKEN_ENDPOINT="http://${HHB_HOST}/auth/token"
+export OIDC_TOKENINFO_ENDPOINT="http://${HHB_HOST}/auth/tokeninfo"
+export OIDC_USERINFO_ENDPOINT="http://${HHB_HOST}/auth/userinfo"
 
 export CI_API_V4_URL="https://gitlab.com/api/v4"
 export CI_PROJECT_ID="20352213"
@@ -86,7 +86,6 @@ export NAMESPACE="huishoudboekje-acc" # huishoudboekje for production
 export CERT_MANAGER_ISSUER="letsencrypt-prod"
 
 # We use login.microsoftonline.com
-export REMOVE_DEX="true"
 export NIJMEGEN_OIDC_TENANT_ID="changeme"
 export OIDC_CLIENT_ID="changeme"
 export OIDC_CLIENT_SECRET="changeme"
