@@ -14,8 +14,6 @@
   <<: *deployer
   <<: *retry
   stage: deploy
-  needs:
-    - build-docker-images
   script:
     - sh ./k8s/build.sh
     - kubectl apply -f k8s/dist/namespace.yaml
@@ -24,6 +22,8 @@
 
 deploy-deployment-master:
   <<: *deploy
+  needs:
+    - build-tagged-images
   environment:
     name: demo
     url: https://demo.huishoudboekje.demoground.nl/
@@ -37,6 +37,8 @@ deploy-deployment-master:
 
 deploy-deployment-acceptance:
   <<: *deploy
+  needs:
+    - build-images-dev
   environment:
     name: acc
     url: https://acc.huishoudboekje.demoground.nl/
@@ -50,6 +52,8 @@ deploy-deployment-acceptance:
 
 deploy-deployment-test:
   <<: *deploy
+  needs:
+    - build-images-dev
   environment:
     name: test
     url: https://test.huishoudboekje.demoground.nl/
@@ -64,6 +68,8 @@ deploy-deployment-test:
 # Deploy for review cluster
 deploy-deployment-review:
   <<: *deploy
+  needs:
+    - build-images-dev
   environment:
     name: review/$CI_COMMIT_REF_SLUG
     url: https://hhb-$CI_COMMIT_REF_SLUG.nlx.reviews/
