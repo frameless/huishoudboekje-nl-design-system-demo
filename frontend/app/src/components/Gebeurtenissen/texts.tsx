@@ -7,6 +7,7 @@ export const auditLogTexts = (values, components, action) => {
 		organisatie: () => <Trans i18nKey={"auditLog.viewOrganisatie"} values={values} components={components} />,
 		organisaties: () => <Trans i18nKey={"auditLog.viewOrganisaties"} values={values} components={components} />,
 		afspraak: () => {
+			// This can not be shorthanded (values.AfspraakOrganisatie ? "auditLog.viewAfspraak" : "auditLog.afspraakBurger") because while testing the i18n then the translation key will not be found.
 			if (!values.afspraakOrganisatie) {
 				return (<Trans i18nKey={"auditLog.viewAfspraakBurger"} values={values} components={components} />);
 			}
@@ -64,7 +65,11 @@ export const auditLogTexts = (values, components, action) => {
 		createAfdelingRekening: () => <Trans i18nKey={"auditLog.createAfdelingRekening"} values={values} components={components} />,
 		deleteAfdelingRekening: () => <Trans i18nKey={"auditLog.deleteAfdelingRekening"} values={values} components={components} />,
 		createPostadres: () => <Trans i18nKey={"auditLog.createPostadres"} values={values} components={components} />,
+		updatePostadres: () => <Trans i18nKey={"auditLog.updatePostadres"} values={values} components={components} />,
+		deletePostadres: () => <Trans i18nKey={"auditLog.deletePostadres"} values={values} components={components} />,
 		createAfdeling: () => <Trans i18nKey={"auditLog.createAfdeling"} values={values} components={components} />,
+		updateAfdeling: () => <Trans i18nKey={"auditLog.updateAfdeling"} values={values} components={components} />,
+		deleteAfdeling: () => <Trans i18nKey={"auditLog.deleteAfdeling"} values={values} components={components} />,
 	};
 
 	return texts[action];
