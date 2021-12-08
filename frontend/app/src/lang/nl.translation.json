@@ -630,7 +630,11 @@
 	"createAfdelingRekening": "{{gebruiker}} voegde <strong>{{iban}}</strong> op naam van <strong>{{rekeninghouder}}</strong> toe aan afdeling <linkAfdeling>{{afdeling}}</linkAfdeling>.",
 	"deleteAfdelingRekening": "{{gebruiker}} verwijderde <strong>{{iban}}</strong> op naam van <strong>{{rekeninghouder}}</strong> van afdeling <linkAfdeling>{{afdeling}}</linkAfdeling>.",
 	"createPostadres": "{{gebruiker}} voegde een postadres toe aan <linkAfdeling>{{afdeling}}</linkAfdeling>.",
-	"createAfdeling": "{{gebruiker}} voegde afdeling <linkAfdeling>{{afdeling}}</linkAfdeling> toe aan <linkAfdeling>{{afdeling}}</linkAfdeling>."
+	"updatePostadres": "{{gebruiker}} wijzigde een postadres.",
+	"deletePostadres": "{{gebruiker}} verwijderde een postadres bij <linkAfdeling>{{afdeling}}</linkAfdeling>.",
+	"createAfdeling": "{{gebruiker}} voegde afdeling <linkAfdeling>{{afdeling}}</linkAfdeling> toe aan <linkOrganisatie>{{organisatie}}</linkOrganisatie>.",
+	"updateAfdeling": "{{gebruiker}} wijzigde afdeling <linkAfdeling>{{afdeling}}</linkAfdeling>.",
+	"deleteAfdeling": "{{gebruiker}} verwijderde een afdeling."
   },
   "unknownOs": "Onbekend besturingssysteem",
   "unknownBrowser": "Onbekende browser",
