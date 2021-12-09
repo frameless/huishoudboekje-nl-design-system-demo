@@ -10,11 +10,11 @@ from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models import burger, rekening
 from hhb_backend.graphql.mutations.rekeningen.utils import (
     cleanup_rekening_when_orphaned,
+    rekening_used_check,
+    delete_rekening,
+    disconnect_burger_rekening
 )
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    gebruikers_activiteit_entities,
-    log_gebruikers_activiteit,
-)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import (log_gebruikers_activiteit)
 
 
 class DeleteBurgerRekening(graphene.Mutation):
@@ -42,13 +42,20 @@ class DeleteBurgerRekening(graphene.Mutation):
         """ Delete rekening associations with either burger or organisation """
         previous = await hhb_dataloader().rekeningen_by_id.load(id)
 
-        delete_response = requests.delete(
-            f"{settings.HHB_SERVICES_URL}/burgers/{burger_id}/rekeningen/",
-            json={"rekening_id": id},
-        )
-        if delete_response.status_code != 202:
-            raise GraphQLError(f"Upstream API responded: {delete_response.text}")
+        # check uses, if used in afspraak - stop
+        usedBy = rekening_used_check(id)
+        afdeling_rekeningen = usedBy.get("afdelingen", [])
+        burger_rekeningen = usedBy.get("burgers", [])
+        afspraak_rekeningen = usedBy.get("afspraken", [])
+        if len(afspraak_rekeningen) == 1:
+            raise GraphQLError(f"Rekening wordt gebruikt in een afspraak - verwijderen is niet mogelijk.")
+            
+        # if used by burger, disconnect
+        if burger_rekeningen:
+            disconnect_burger_rekening(burger_id, id)
 
-        cleanup_rekening_when_orphaned(id)
+        # if not used - remove completely
+        if len(burger_rekeningen) == 1 and len(afdeling_rekeningen) <= 0 and len(afspraak_rekeningen) <= 0:
+            delete_rekening(id)
 
         return DeleteBurgerRekening(ok=True, previous=previous)
