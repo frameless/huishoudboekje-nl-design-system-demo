@@ -32,28 +32,55 @@ const RekeningList: React.FC<TableProps & RekeningListProps> = ({rekeningen, bur
 		],
 	});
 
-	const handleMutation = (mutation: Promise<any>) => {
-		mutation.then(() => {
-			toast({
-				success: t("messages.rekeningen.deleteSuccess"),
-			});
-		}).catch(err => {
-			console.error(err);
-			toast({
-				error: err.message,
-			});
-		});
-	};
-
 	const onDeleteBurgerRekening = (id?: number, burgerId?: number) => {
 		if (id && burgerId) {
-			handleMutation(deleteBurgerRekening({variables: {id, burgerId}}));
+			deleteBurgerRekening({
+				variables: {
+					id,
+					burgerId,
+				},
+			}).then(() => {
+				toast({
+					success: t("messages.rekeningen.deleteSuccess"),
+				});
+			}).catch(err => {
+				console.error(err);
+
+				let error = err.message;
+				if(err.message.includes("wordt gebruikt")){
+					error = t("messages.rekeningen.inUseDeleteError");
+				}
+
+				toast({
+					error,
+				});
+			});
 		}
 	};
 
 	const onDeleteAfdelingRekening = (rekeningId?: number, afdelingId?: number) => {
 		if (rekeningId && afdelingId) {
-			handleMutation(deleteAfdelingRekening({variables: {id: rekeningId, afdelingId}}));
+			deleteAfdelingRekening({
+				variables: {
+					id: rekeningId,
+					afdelingId,
+				},
+			}).then(() => {
+				toast({
+					success: t("messages.rekeningen.deleteSuccess"),
+				});
+			}).catch(err => {
+				console.error(err);
+
+				let error = err.message;
+				if(err.message.includes("wordt gebruikt")){
+					error = t("messages.rekeningen.inUseDeleteError");
+				}
+
+				toast({
+					error,
+				});
+			});
 		}
 	};
 

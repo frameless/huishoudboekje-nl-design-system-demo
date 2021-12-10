@@ -85,6 +85,16 @@ def disconnect_afdeling_rekening(afdeling_id: int, rekening_id: int):
     if afdeling_rekening_resp.status_code != 202:
         raise GraphQLError(f"Failure to disconnect afdeling:{afdeling_id} rekening:{rekening_id}")
 
+def disconnect_burger_rekening(burger_id: int, rekening_id: int):
+    # remove rekening reference from burger
+    burger_rekening_resp = requests.delete(
+        f"{settings.HHB_SERVICES_URL}/burgers/{burger_id}/rekeningen",
+        json={"rekening_id": rekening_id},
+        headers={"Content-type": "application/json"},
+    )
+    if burger_rekening_resp.status_code != 202:
+        raise GraphQLError(f"Failure to disconnect burger:{burger_id} rekening:{rekening_id}")
+
 def delete_rekening(rekening_id: int):
     rekening_delete_response = requests.delete(f"{settings.HHB_SERVICES_URL}/rekeningen/{rekening_id}")
     if rekening_delete_response.status_code != 204:
