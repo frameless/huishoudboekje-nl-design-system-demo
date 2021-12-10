@@ -1,8 +1,6 @@
 """ GraphQL mutation for deleting a Rekening from an Organisatie """
 import graphene
-import requests
 from graphql import GraphQLError
-
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models import rekening
 from hhb_backend.graphql.mutations.rekeningen.utils import (
@@ -40,6 +38,8 @@ class DeleteAfdelingRekening(graphene.Mutation):
     async def mutate(_root, _info, rekening_id, afdeling_id):
         """ Delete rekening associations with an afdeling """
         previous = await hhb_dataloader().rekeningen_by_id.load(rekening_id)
+        if not previous:
+            raise GraphQLError("Rekening bestaat niet")
 
         # check uses, if used in afspraak - stop
         usedBy = rekening_used_check(rekening_id)
@@ -50,8 +50,10 @@ class DeleteAfdelingRekening(graphene.Mutation):
             raise GraphQLError(f"Rekening wordt gebruikt in een afspraak - verwijderen is niet mogelijk.")
 
         # if used by afdeling, disconnect
-        if afdeling_rekeningen:
+        if len(afdeling_rekeningen) >= 1 and afdeling_id in afdeling_rekeningen:
             disconnect_afdeling_rekening(afdeling_id, rekening_id)
+        elif afdeling_id not in afdeling_rekeningen:
+            raise GraphQLError(f"Opgegeven afdeling beschikt niet over de opgegeven rekening.")
 
         # if not used - remove completely
         if len(afdeling_rekeningen) == 1 and len(burger_rekeningen) <= 0 and len(afspraak_rekeningen) <= 0:
