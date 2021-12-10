@@ -36,7 +36,7 @@
     "rekeningen": {
       "createSuccess": "Bankrekening {{iban}} op naam van {{rekeninghouder}} is toegevoegd.",
       "deleteSuccess": "Bankrekening is verwijderd.",
-      "inUseDeleteError": "Deze bankrekening is in gebruik en kan niet worden verwijerd.",
+      "inUseDeleteError": "Deze bankrekening is in gebruik en kan niet worden verwijderd.",
       "updateSuccess": "Gegevens succesvol gewijzigd.",
       "deleteTitle": "Bankrekening verwijderen.",
       "deleteQuestion": "Weet je zeker dat je bankrekening {{iban}} op naam van {{rekeninghouder}} wil verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
