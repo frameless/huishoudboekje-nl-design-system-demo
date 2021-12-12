@@ -1525,6 +1525,8 @@ export type AfdelingFragment = { id?: number, naam?: string, organisatie?: { id?
 
 export type AfspraakFragment = { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> };
 
+export type AlarmFragment = { id?: string, bedrag?: any, bedragMargin?: any, datum?: string, datumMargin?: number, gebruikerEmail?: string, isActive?: boolean, afspraak?: { id?: number } };
+
 export type BetaalinstructieFragment = { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string };
 
 export type BurgerFragment = { id?: number, bsn?: number, email?: string, telefoonnummer?: string, voorletters?: string, voornamen?: string, achternaam?: string, geboortedatum?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }>, afspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }>, huishouden?: { id?: number, burgers?: Array<{ id?: number }> } };
@@ -1585,6 +1587,13 @@ export type CreateAfspraakMutationVariables = Exact<{
 
 
 export type CreateAfspraakMutation = { createAfspraak?: { ok?: boolean, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> } } };
+
+export type CreateAlarmMutationVariables = Exact<{
+  input: CreateAlarmInput;
+}>;
+
+
+export type CreateAlarmMutation = { createAlarm?: { ok?: boolean, alarm?: { id?: string, bedrag?: any, bedragMargin?: any, datum?: string, datumMargin?: number, gebruikerEmail?: string, isActive?: boolean, afspraak?: { id?: number } } } };
 
 export type CreateBurgerMutationVariables = Exact<{
   input?: InputMaybe<CreateBurgerInput>;
@@ -1721,6 +1730,13 @@ export type DeleteAfspraakZoektermMutationVariables = Exact<{
 
 export type DeleteAfspraakZoektermMutation = { deleteAfspraakZoekterm?: { ok?: boolean, matchingAfspraken?: Array<{ id?: number, zoektermen?: Array<string>, bedrag?: any, burger?: { id?: number, voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { rekeninghouder?: string, iban?: string } }> } };
 
+export type DeleteAlarmMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type DeleteAlarmMutation = { deleteAlarm?: { ok?: boolean } };
+
 export type DeleteBurgerMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -1817,6 +1833,14 @@ export type UpdateAfspraakBetaalinstructieMutationVariables = Exact<{
 
 
 export type UpdateAfspraakBetaalinstructieMutation = { updateAfspraakBetaalinstructie?: { ok?: boolean } };
+
+export type UpdateAlarmMutationVariables = Exact<{
+  id: Scalars['String'];
+  input: UpdateAlarmInput;
+}>;
+
+
+export type UpdateAlarmMutation = { updateAlarm?: { ok?: boolean, alarm?: { id?: string, bedrag?: any, bedragMargin?: any, datum?: string, datumMargin?: number, gebruikerEmail?: string, isActive?: boolean, afspraak?: { id?: number } } } };
 
 export type UpdateBurgerMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -1916,6 +1940,18 @@ export type GetAfsprakenQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetAfsprakenQuery = { afspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }> };
+
+export type GetAlarmQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type GetAlarmQuery = { alarm?: { id?: string, bedrag?: any, bedragMargin?: any, datum?: string, datumMargin?: number, gebruikerEmail?: string, isActive?: boolean, afspraak?: { id?: number } } };
+
+export type GetAlarmenQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAlarmenQuery = { alarmen?: Array<{ id?: string, bedrag?: any, bedragMargin?: any, datum?: string, datumMargin?: number, gebruikerEmail?: string, isActive?: boolean, afspraak?: { id?: number } }> };
 
 export type GetBurgerQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -2057,6 +2093,20 @@ export type GetTransactiesQueryVariables = Exact<{
 
 export type GetTransactiesQuery = { bankTransactionsPaged?: { banktransactions?: Array<{ id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, tegenRekeningIban?: string, transactieDatum?: any, journaalpost?: { id?: number, isAutomatischGeboekt?: boolean, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, suggesties?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }>, tegenRekening?: { iban?: string, rekeninghouder?: string } }>, pageInfo?: { count?: number, limit?: number, start?: number } } };
 
+export const AlarmFragmentDoc = gql`
+    fragment Alarm on Alarm {
+  id
+  bedrag
+  bedragMargin
+  datum
+  datumMargin
+  gebruikerEmail
+  isActive
+  afspraak {
+    id
+  }
+}
+    `;
 export const CustomerStatementMessageFragmentDoc = gql`
     fragment CustomerStatementMessage on CustomerStatementMessage {
   id
@@ -2517,6 +2567,42 @@ export function useCreateAfspraakMutation(baseOptions?: Apollo.MutationHookOptio
 export type CreateAfspraakMutationHookResult = ReturnType<typeof useCreateAfspraakMutation>;
 export type CreateAfspraakMutationResult = Apollo.MutationResult<CreateAfspraakMutation>;
 export type CreateAfspraakMutationOptions = Apollo.BaseMutationOptions<CreateAfspraakMutation, CreateAfspraakMutationVariables>;
+export const CreateAlarmDocument = gql`
+    mutation createAlarm($input: CreateAlarmInput!) {
+  createAlarm(input: $input) {
+    ok
+    alarm {
+      ...Alarm
+    }
+  }
+}
+    ${AlarmFragmentDoc}`;
+export type CreateAlarmMutationFn = Apollo.MutationFunction<CreateAlarmMutation, CreateAlarmMutationVariables>;
+
+/**
+ * __useCreateAlarmMutation__
+ *
+ * To run a mutation, you first call `useCreateAlarmMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateAlarmMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createAlarmMutation, { data, loading, error }] = useCreateAlarmMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateAlarmMutation(baseOptions?: Apollo.MutationHookOptions<CreateAlarmMutation, CreateAlarmMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateAlarmMutation, CreateAlarmMutationVariables>(CreateAlarmDocument, options);
+      }
+export type CreateAlarmMutationHookResult = ReturnType<typeof useCreateAlarmMutation>;
+export type CreateAlarmMutationResult = Apollo.MutationResult<CreateAlarmMutation>;
+export type CreateAlarmMutationOptions = Apollo.BaseMutationOptions<CreateAlarmMutation, CreateAlarmMutationVariables>;
 export const CreateBurgerDocument = gql`
     mutation createBurger($input: CreateBurgerInput) {
   createBurger(input: $input) {
@@ -3158,6 +3244,39 @@ export function useDeleteAfspraakZoektermMutation(baseOptions?: Apollo.MutationH
 export type DeleteAfspraakZoektermMutationHookResult = ReturnType<typeof useDeleteAfspraakZoektermMutation>;
 export type DeleteAfspraakZoektermMutationResult = Apollo.MutationResult<DeleteAfspraakZoektermMutation>;
 export type DeleteAfspraakZoektermMutationOptions = Apollo.BaseMutationOptions<DeleteAfspraakZoektermMutation, DeleteAfspraakZoektermMutationVariables>;
+export const DeleteAlarmDocument = gql`
+    mutation deleteAlarm($id: String!) {
+  deleteAlarm(id: $id) {
+    ok
+  }
+}
+    `;
+export type DeleteAlarmMutationFn = Apollo.MutationFunction<DeleteAlarmMutation, DeleteAlarmMutationVariables>;
+
+/**
+ * __useDeleteAlarmMutation__
+ *
+ * To run a mutation, you first call `useDeleteAlarmMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteAlarmMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteAlarmMutation, { data, loading, error }] = useDeleteAlarmMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteAlarmMutation(baseOptions?: Apollo.MutationHookOptions<DeleteAlarmMutation, DeleteAlarmMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteAlarmMutation, DeleteAlarmMutationVariables>(DeleteAlarmDocument, options);
+      }
+export type DeleteAlarmMutationHookResult = ReturnType<typeof useDeleteAlarmMutation>;
+export type DeleteAlarmMutationResult = Apollo.MutationResult<DeleteAlarmMutation>;
+export type DeleteAlarmMutationOptions = Apollo.BaseMutationOptions<DeleteAlarmMutation, DeleteAlarmMutationVariables>;
 export const DeleteBurgerDocument = gql`
     mutation deleteBurger($id: Int!) {
   deleteBurger(id: $id) {
@@ -3609,6 +3728,43 @@ export function useUpdateAfspraakBetaalinstructieMutation(baseOptions?: Apollo.M
 export type UpdateAfspraakBetaalinstructieMutationHookResult = ReturnType<typeof useUpdateAfspraakBetaalinstructieMutation>;
 export type UpdateAfspraakBetaalinstructieMutationResult = Apollo.MutationResult<UpdateAfspraakBetaalinstructieMutation>;
 export type UpdateAfspraakBetaalinstructieMutationOptions = Apollo.BaseMutationOptions<UpdateAfspraakBetaalinstructieMutation, UpdateAfspraakBetaalinstructieMutationVariables>;
+export const UpdateAlarmDocument = gql`
+    mutation updateAlarm($id: String!, $input: UpdateAlarmInput!) {
+  updateAlarm(id: $id, input: $input) {
+    ok
+    alarm {
+      ...Alarm
+    }
+  }
+}
+    ${AlarmFragmentDoc}`;
+export type UpdateAlarmMutationFn = Apollo.MutationFunction<UpdateAlarmMutation, UpdateAlarmMutationVariables>;
+
+/**
+ * __useUpdateAlarmMutation__
+ *
+ * To run a mutation, you first call `useUpdateAlarmMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateAlarmMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateAlarmMutation, { data, loading, error }] = useUpdateAlarmMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateAlarmMutation(baseOptions?: Apollo.MutationHookOptions<UpdateAlarmMutation, UpdateAlarmMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateAlarmMutation, UpdateAlarmMutationVariables>(UpdateAlarmDocument, options);
+      }
+export type UpdateAlarmMutationHookResult = ReturnType<typeof useUpdateAlarmMutation>;
+export type UpdateAlarmMutationResult = Apollo.MutationResult<UpdateAlarmMutation>;
+export type UpdateAlarmMutationOptions = Apollo.BaseMutationOptions<UpdateAlarmMutation, UpdateAlarmMutationVariables>;
 export const UpdateBurgerDocument = gql`
     mutation updateBurger($id: Int!, $bsn: Int, $voorletters: String, $voornamen: String, $achternaam: String, $geboortedatum: String, $straatnaam: String, $huisnummer: String, $postcode: String, $plaatsnaam: String, $telefoonnummer: String, $email: String) {
   updateBurger(
@@ -4055,6 +4211,75 @@ export function useGetAfsprakenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type GetAfsprakenQueryHookResult = ReturnType<typeof useGetAfsprakenQuery>;
 export type GetAfsprakenLazyQueryHookResult = ReturnType<typeof useGetAfsprakenLazyQuery>;
 export type GetAfsprakenQueryResult = Apollo.QueryResult<GetAfsprakenQuery, GetAfsprakenQueryVariables>;
+export const GetAlarmDocument = gql`
+    query getAlarm($id: String!) {
+  alarm(id: $id) {
+    ...Alarm
+  }
+}
+    ${AlarmFragmentDoc}`;
+
+/**
+ * __useGetAlarmQuery__
+ *
+ * To run a query within a React component, call `useGetAlarmQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAlarmQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAlarmQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetAlarmQuery(baseOptions: Apollo.QueryHookOptions<GetAlarmQuery, GetAlarmQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAlarmQuery, GetAlarmQueryVariables>(GetAlarmDocument, options);
+      }
+export function useGetAlarmLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAlarmQuery, GetAlarmQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAlarmQuery, GetAlarmQueryVariables>(GetAlarmDocument, options);
+        }
+export type GetAlarmQueryHookResult = ReturnType<typeof useGetAlarmQuery>;
+export type GetAlarmLazyQueryHookResult = ReturnType<typeof useGetAlarmLazyQuery>;
+export type GetAlarmQueryResult = Apollo.QueryResult<GetAlarmQuery, GetAlarmQueryVariables>;
+export const GetAlarmenDocument = gql`
+    query getAlarmen {
+  alarmen {
+    ...Alarm
+  }
+}
+    ${AlarmFragmentDoc}`;
+
+/**
+ * __useGetAlarmenQuery__
+ *
+ * To run a query within a React component, call `useGetAlarmenQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAlarmenQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAlarmenQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetAlarmenQuery(baseOptions?: Apollo.QueryHookOptions<GetAlarmenQuery, GetAlarmenQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAlarmenQuery, GetAlarmenQueryVariables>(GetAlarmenDocument, options);
+      }
+export function useGetAlarmenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAlarmenQuery, GetAlarmenQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAlarmenQuery, GetAlarmenQueryVariables>(GetAlarmenDocument, options);
+        }
+export type GetAlarmenQueryHookResult = ReturnType<typeof useGetAlarmenQuery>;
+export type GetAlarmenLazyQueryHookResult = ReturnType<typeof useGetAlarmenLazyQuery>;
+export type GetAlarmenQueryResult = Apollo.QueryResult<GetAlarmenQuery, GetAlarmenQueryVariables>;
 export const GetBurgerDocument = gql`
     query getBurger($id: Int!) {
   burger(id: $id) {
