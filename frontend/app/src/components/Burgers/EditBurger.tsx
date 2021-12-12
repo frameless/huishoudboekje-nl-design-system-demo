@@ -1,7 +1,8 @@
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {Redirect, useHistory, useParams} from "react-router-dom";
-import Routes from "../../config/routes";
+import {Navigate, useNavigate, useParams} from "react-router-dom";
+import {AppRoutes} from "../../config/routes";
+import SaveBurgerErrorHandler from "../../errorHandlers/SaveBurgerErrorHandler";
 import useMutationErrorHandler from "../../errorHandlers/useMutationErrorHandler";
 import {GetBurgerDocument, GetBurgersDocument, UpdateBurgerMutationVariables, useGetBurgerQuery, useUpdateBurgerMutation} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
@@ -10,13 +11,12 @@ import useToaster from "../../utils/useToaster";
 import BackButton from "../Layouts/BackButton";
 import Page from "../Layouts/Page";
 import BurgerForm from "./BurgerForm";
-import SaveBurgerErrorHandler from "../../errorHandlers/SaveBurgerErrorHandler";
 
 const EditBurger = () => {
 	const {t} = useTranslation();
-	const {id} = useParams<{id: string}>();
+	const {id = ""} = useParams<{id: string}>();
 	const toast = useToaster();
-	const {push} = useHistory();
+	const navigate = useNavigate();
 	const handleSaveBurgerErrors = useMutationErrorHandler(SaveBurgerErrorHandler);
 
 	const [updateBurger, $updateBurger] = useUpdateBurgerMutation({
@@ -36,16 +36,16 @@ const EditBurger = () => {
 			toast({
 				success: t("messages.burgers.updateSuccessMessage"),
 			});
-			push(Routes.Burger(parseInt(id)));
+			navigate(AppRoutes.Burger(parseInt(id)));
 		}).catch(handleSaveBurgerErrors);
 	};
 
 	return (
-		<Queryable query={$burger} error={<Redirect to={Routes.NotFound} />}>{(data) => {
+		<Queryable query={$burger} error={<Navigate to={AppRoutes.NotFound} replace />}>{(data) => {
 			const burger = data.burger;
 
 			return (
-				<Page title={formatBurgerName(burger)} backButton={<BackButton to={Routes.Burger(burger?.id)} />}>
+				<Page title={formatBurgerName(burger)} backButton={<BackButton to={AppRoutes.Burger(burger?.id)} />}>
 					<BurgerForm burger={burger} onSubmit={onSubmit} isLoading={$burger.loading || $updateBurger.loading} />
 				</Page>
 			);

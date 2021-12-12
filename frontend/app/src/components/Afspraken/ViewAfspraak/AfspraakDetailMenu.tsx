@@ -2,8 +2,8 @@ import {ChevronDownIcon} from "@chakra-ui/icons";
 import {IconButton, Menu, MenuButton, MenuItem, MenuList, useDisclosure} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {NavLink, useHistory} from "react-router-dom";
-import Routes from "../../../config/routes";
+import {NavLink, useNavigate} from "react-router-dom";
+import {AppRoutes} from "../../../config/routes";
 import {Afspraak, GetAfspraakDocument, GetBurgerDocument, GetBurgersDocument, useDeleteAfspraakMutation, useEndAfspraakMutation} from "../../../generated/graphql";
 import d from "../../../utils/dayjs";
 import useToaster from "../../../utils/useToaster";
@@ -12,7 +12,7 @@ import AfspraakEndModal from "./AfspraakEndModal";
 
 const AfspraakDetailMenu: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	const {t} = useTranslation();
-	const {push} = useHistory();
+	const navigate = useNavigate();
 	const deleteModal = useDisclosure();
 	const endModal = useDisclosure();
 	const toast = useToaster();
@@ -30,7 +30,7 @@ const AfspraakDetailMenu: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 		],
 		onCompleted: () => {
 			if (afspraak.burger?.id) {
-				push(Routes.Burger(afspraak.burger.id));
+				navigate(AppRoutes.Burger(afspraak.burger.id));
 			}
 		},
 	});
@@ -76,7 +76,7 @@ const AfspraakDetailMenu: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 		<Menu>
 			<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} data-cy={"actionsMenuButton"} />
 			<MenuList>
-				<NavLink to={Routes.EditAfspraak(afspraak.id)}><MenuItem>{t("global.actions.edit")}</MenuItem></NavLink>
+				<NavLink to={AppRoutes.EditAfspraak(afspraak.id)}><MenuItem>{t("global.actions.edit")}</MenuItem></NavLink>
 				<MenuItem onClick={endModal.onOpen}>{t("global.actions.end")}</MenuItem>
 				<MenuItem onClick={deleteModal.onOpen}>{t("global.actions.delete")}</MenuItem>
 			</MenuList>

@@ -1,55 +1,49 @@
 export enum RouteNames {
-	notFound = "404",
 	login = "inloggen",
 	huishoudens = "huishoudens",
 	burgers = "burgers",
 	afspraken = "afspraken",
-	afdelingen = "afdelingen",
 	organisaties = "organisaties",
+	afdelingen = "afdelingen",
 	bankzaken = "bankzaken",
 	transacties = "transacties",
-	betaalinstructie = "betaalinstructie",
-	betaalinstructies = "betaalinstructies",
 	bankafschriften = "bankafschriften",
+	betaalinstructies = "betaalinstructies",
 	rapportage = "rapportage",
 	gebeurtenissen = "gebeurtenissen",
 	configuratie = "configuratie",
+	export = "export",
 	status = "status",
+	notFound = "404",
 
-	// Sub routes
-	view = "bekijken",
+	// Subroutes
 	add = "toevoegen",
 	edit = "wijzigen",
-	export = "exporteren",
 	followUp = "vervolg",
+	betaalinstructie = "betaalinstructie",
 }
 
-const Routes = {
+export const AppRoutes = {
 	Home: "/",
-	Login: `/${RouteNames.login}`,
+	Huishoudens: () => `/${RouteNames.huishoudens}`,
+	Huishouden: (id) => `/${RouteNames.huishoudens}/${id}`,
 
-	Huishoudens: `/${RouteNames.huishoudens}`,
-	Huishouden: (id?: number) => `/${RouteNames.huishoudens}/${id || ":id(\\d+)"}`,
+	Burgers: () => `/${RouteNames.burgers}`,
+	Burger: (id) => `/${RouteNames.burgers}/${id}`,
+	CreateBurger: () => `/${RouteNames.burgers}/${RouteNames.add}`,
+	EditBurger: (id) => `/${RouteNames.burgers}/${id}/${RouteNames.edit}`,
+	CreateBurgerAfspraak: (burgerId) => `/${RouteNames.burgers}/${burgerId}/${RouteNames.afspraken}/${RouteNames.add}`,
 
-	Burgers: `/${RouteNames.burgers}`,
-	Burger: (id?: number) => `/${RouteNames.burgers}/${id || ":id(\\d+)"}`,
-	CreateBurger: `/${RouteNames.burgers}/${RouteNames.add}`,
-	EditBurger: (id: number) => `/${RouteNames.burgers}/${id}/${RouteNames.edit}`,
-
-	BurgerAfspraken: (id?: number) => `/${RouteNames.burgers}/${id || ":burgerId(\\d+)"}/${RouteNames.afspraken}`,
-	CreateBurgerAfspraken: (burgerId: number) => `/${RouteNames.burgers}/${burgerId}/${RouteNames.afspraken}/${RouteNames.add}`,
-
-	Afspraken: `/${RouteNames.afspraken}`,
-	ViewAfspraak: (id?: number) => `/${RouteNames.afspraken}/${id || ":id(\\d+)"}/${RouteNames.view}`,
-	EditAfspraak: (id?: number) => `/${RouteNames.afspraken}/${id || ":id(\\d+)"}/${RouteNames.edit}`,
-	FollowUpAfspraak: (id?: number) => `/${RouteNames.afspraken}/${id || ":id(\\d+)"}/${RouteNames.followUp}`,
-	AfspraakBetaalinstructie: (id?: number) => `/${RouteNames.afspraken}/${id || ":id(\\d+)"}/${RouteNames.betaalinstructie}`,
+	ViewAfspraak: (id) => `/${RouteNames.afspraken}/${id}`,
+	EditAfspraak: (id) => `/${RouteNames.afspraken}/${id}/${RouteNames.edit}`,
+	FollowUpAfspraak: (id) => `/${RouteNames.afspraken}/${id}/${RouteNames.followUp}`,
+	AfspraakBetaalinstructie: (id) => `/${RouteNames.afspraken}/${id}/${RouteNames.betaalinstructie}`,
 
 	Organisaties: `/${RouteNames.organisaties}`,
-	Organisatie: (id?: number) => `/${RouteNames.organisaties}/${id || ":id(\\d+)"}`,
+	Organisatie: (id) => `/${RouteNames.organisaties}/${id}`,
 	CreateOrganisatie: `/${RouteNames.organisaties}/${RouteNames.add}`,
-	EditOrganisatie: (id: number) => `/${RouteNames.organisaties}/${id}/${RouteNames.edit}`,
-	CreateAfdeling: (organisatieId?: number) => `/${RouteNames.organisaties}/${organisatieId || ":organisatieId(\\d+)"}/${RouteNames.afdelingen}/${RouteNames.add}`,
+	EditOrganisatie: (id) => `/${RouteNames.organisaties}/${id}/${RouteNames.edit}`,
+	CreateAfdeling: (organisatieId) => `/${RouteNames.organisaties}/${organisatieId}/${RouteNames.afdelingen}/${RouteNames.add}`,
 
 	Bankzaken: `/${RouteNames.bankzaken}`,
 	Transacties: `/${RouteNames.bankzaken}/${RouteNames.transacties}`,
@@ -60,15 +54,9 @@ const Routes = {
 	RapportageBurger: (burgerIds: number[]) => `/${RouteNames.rapportage}?burgerId=${burgerIds.join(",")}`,
 	Gebeurtenissen: `/${RouteNames.gebeurtenissen}`,
 
-	Export: (id: number) => `/api/export/${id}`,
-	BrievenExport: (burgerId: number, format: "excel" | "csv") => `/api/brievenexport/${burgerId}/${format}`,
+	Export: (id) => `/api/export/${id}`,
+	BrievenExport: (burgerId, format: "excel" | "csv") => `/api/brievenexport/${burgerId}/${format}`,
 
 	Status: `/${RouteNames.status}`,
 	NotFound: `/${RouteNames.notFound}`,
-
-	// Dev things
-	GraphiQL: "/api/graphql",
-	TestPage: "/test",
 };
-
-export default Routes;

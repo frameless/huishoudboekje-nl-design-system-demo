@@ -3,7 +3,7 @@ import {Box, Button, FormLabel, Heading, Stack, Text} from "@chakra-ui/react";
 import React, {useContext} from "react";
 import {useTranslation} from "react-i18next";
 import {NavLink} from "react-router-dom";
-import Routes from "../../../../config/routes";
+import {AppRoutes} from "../../../../config/routes";
 import {BankTransaction, GetTransactiesDocument, useDeleteJournaalpostMutation} from "../../../../generated/graphql";
 import {currencyFormat2, formatBurgerName} from "../../../../utils/things";
 import useToaster from "../../../../utils/useToaster";
@@ -76,7 +76,7 @@ const BookingDetailsView: React.FC<{transactie: BankTransaction}> = ({transactie
 				<Stack direction={"row"} spacing={5}>
 					<Box mb={3}>
 						<Button leftIcon={
-							<ViewIcon />} colorScheme={"primary"} size={"sm"} as={NavLink} to={Routes.ViewAfspraak(journaalpostAfspraak.id)}>{t("global.actions.view")}</Button>
+							<ViewIcon />} colorScheme={"primary"} size={"sm"} as={NavLink} to={AppRoutes.ViewAfspraak(journaalpostAfspraak.id)}>{t("global.actions.view")}</Button>
 					</Box>
 					<Box>
 						<Button leftIcon={

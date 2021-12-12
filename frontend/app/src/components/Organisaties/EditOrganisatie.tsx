@@ -1,8 +1,8 @@
 import {useBreakpointValue} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {Redirect, useHistory, useParams} from "react-router-dom";
-import Routes from "../../config/routes";
+import {Navigate, useNavigate, useParams} from "react-router-dom";
+import {AppRoutes} from "../../config/routes";
 import SaveOrganisatieErrorHandler from "../../errorHandlers/SaveOrganisatieErrorHandler";
 import useMutationErrorHandler from "../../errorHandlers/useMutationErrorHandler";
 import {
@@ -22,9 +22,9 @@ import OrganisatieForm from "./OrganisatieForm";
 
 const EditOrganisatie = () => {
 	const {t} = useTranslation();
-	const {id} = useParams<{id: string}>();
+	const {id = ""} = useParams<{id: string}>();
 	const toast = useToaster();
-	const {push} = useHistory();
+	const navigate = useNavigate();
 	const handleSaveOrganisatieErrors = useMutationErrorHandler(SaveOrganisatieErrorHandler);
 	const maxOrganisatieNaamLength = useBreakpointValue(maxOrganisatieNaamLengthBreakpointValues);
 
@@ -45,13 +45,13 @@ const EditOrganisatie = () => {
 			toast({
 				success: t("messages.organisaties.updateSuccessMessage"),
 			});
-			push(Routes.Organisatie(parseInt(id)));
+			navigate(AppRoutes.Organisatie(parseInt(id)));
 		}).catch(handleSaveOrganisatieErrors);
 	};
 
 	return (
-		<Queryable query={$organisatie} error={<Redirect to={Routes.NotFound} />}>{({organisatie}: {organisatie: Organisatie}) => (
-			<Page backButton={<BackButton to={Routes.Organisatie(parseInt(id))} />} title={truncateText(organisatie.naam || "", maxOrganisatieNaamLength)}>
+		<Queryable query={$organisatie} error={<Navigate to={AppRoutes.NotFound} replace />}>{({organisatie}: {organisatie: Organisatie}) => (
+			<Page backButton={<BackButton to={AppRoutes.Organisatie(parseInt(id))} />} title={truncateText(organisatie.naam || "", maxOrganisatieNaamLength)}>
 				<OrganisatieForm onSubmit={onSubmit} isLoading={$updateOrganisatie.loading} organisatie={organisatie} />
 			</Page>
 		)}

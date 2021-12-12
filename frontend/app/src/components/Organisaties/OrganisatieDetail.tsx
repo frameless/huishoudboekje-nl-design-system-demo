@@ -20,8 +20,8 @@ import {
 import React, {useRef} from "react";
 import {useToggle} from "react-grapple";
 import {useTranslation} from "react-i18next";
-import {Redirect, useHistory, useParams} from "react-router-dom";
-import Routes from "../../config/routes";
+import {Navigate, useNavigate, useParams} from "react-router-dom";
+import {AppRoutes} from "../../config/routes";
 import {Afdeling, GetOrganisatiesDocument, Organisatie, useDeleteOrganisatieMutation, useGetOrganisatieQuery} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
 import {maxOrganisatieNaamLengthBreakpointValues, truncateText} from "../../utils/things";
@@ -35,8 +35,8 @@ import OrganisatieDetailView from "./Views/OrganisatieDetailView";
 
 const OrganisatieDetail = () => {
 	const {t} = useTranslation();
-	const {id} = useParams<{id: string}>();
-	const {push} = useHistory();
+	const {id = ""} = useParams<{id: string}>();
+	const navigate = useNavigate();
 	const toast = useToaster();
 	const maxOrganisatieNaamLength = useBreakpointValue(maxOrganisatieNaamLengthBreakpointValues);
 
@@ -44,7 +44,7 @@ const OrganisatieDetail = () => {
 	const [deleteDialogOpen, toggleDeleteDialog] = useToggle(false);
 	const [isDeleted, toggleDeleted] = useToggle(false);
 
-	const onClickEdit = () => push(Routes.EditOrganisatie(parseInt(id)));
+	const onClickEdit = () => navigate(AppRoutes.EditOrganisatie(parseInt(id)));
 	const onClickDelete = () => toggleDeleteDialog();
 
 	const $organisatie = useGetOrganisatieQuery({
@@ -79,21 +79,21 @@ const OrganisatieDetail = () => {
 
 			if (!organisatie) {
 				return (
-					<Redirect to={Routes.NotFound} />
+					<Navigate to={AppRoutes.NotFound} replace />
 				);
 			}
 
 			if (isDeleted) {
 				return (
 					<DeadEndPage message={t("messages.organisaties.deleteConfirmMessage", {name: organisatie.naam})}>
-						<Button colorScheme={"primary"} onClick={() => push(Routes.Organisaties)}>{t("global.actions.backToList")}</Button>
+						<Button colorScheme={"primary"} onClick={() => navigate(AppRoutes.Organisaties)}>{t("global.actions.backToList")}</Button>
 					</DeadEndPage>
 				);
 			}
 
 			const afdelingen: Afdeling[] = organisatie.afdelingen || [];
 			return (
-				<Page title={truncateText(organisatie.naam || "", maxOrganisatieNaamLength)} backButton={<BackButton to={Routes.Organisaties} />} menu={(
+				<Page title={truncateText(organisatie.naam || "", maxOrganisatieNaamLength)} backButton={<BackButton to={AppRoutes.Organisaties} />} menu={(
 					<Menu>
 						<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label="Open menu" />
 						<MenuList>
@@ -122,12 +122,12 @@ const OrganisatieDetail = () => {
 					<Grid maxWidth={"100%"} gridTemplateColumns={["repeat(1, 1fr)", "repeat(2, 1fr)", "repeat(3, 1fr)"]} gap={5}>
 						<Box>
 							<Button colorScheme={"primary"} borderStyle={"dashed"} variant={"outline"} leftIcon={<AddIcon />}
-								w="100%" h="100%" onClick={() => push(Routes.CreateAfdeling(organisatie.id))} borderRadius={5}
+								w="100%" h="100%" onClick={() => navigate(AppRoutes.CreateAfdeling(organisatie.id))} borderRadius={5}
 								p={5}>{t("global.actions.add")}</Button>
 						</Box>
 
 						{[...afdelingen].sort((a, b) => { // Sort ascending by name
-							return (a.naam || "") < (b.naam || "") ? -1 : 1
+							return (a.naam || "") < (b.naam || "") ? -1 : 1;
 						}).map(afdeling => (
 							<AfdelingListItem key={afdeling.id} afdeling={afdeling} />
 						))}

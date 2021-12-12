@@ -3,7 +3,7 @@ import {Box, Button, Checkbox, CheckboxGroup, FormControl, FormLabel, Stack, Sta
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {NavLink} from "react-router-dom";
-import Routes from "../../../config/routes";
+import {AppRoutes} from "../../../config/routes";
 import {Burger} from "../../../generated/graphql";
 import {isAfspraakActive} from "../../../utils/things";
 import AfspraakTableRow from "../../Afspraken/AfspraakTableRow";
@@ -75,7 +75,7 @@ const BurgerAfsprakenView: React.FC<StackProps & {burger: Burger}> = ({burger, .
 
 				{id && (
 					<Box>
-						<NavLink to={Routes.CreateBurgerAfspraken(id)}>
+						<NavLink to={AppRoutes.CreateBurgerAfspraak(id)}>
 							<Button leftIcon={<AddIcon />} colorScheme={"primary"} size={"sm"}>{t("global.actions.add")}</Button>
 						</NavLink>
 					</Box>

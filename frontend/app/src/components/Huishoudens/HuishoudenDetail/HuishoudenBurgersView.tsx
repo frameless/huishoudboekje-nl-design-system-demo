@@ -18,15 +18,15 @@ import {
 } from "@chakra-ui/react";
 import React, {useRef} from "react";
 import {useTranslation} from "react-i18next";
-import {NavLink, useHistory} from "react-router-dom";
-import Routes from "../../../config/routes";
+import {NavLink, useNavigate} from "react-router-dom";
+import {AppRoutes} from "../../../config/routes";
 import {Burger, GetHuishoudenDocument, GetHuishoudensDocument, Huishouden, useDeleteHuishoudenBurgerMutation} from "../../../generated/graphql";
 import {formatBurgerName, formatHuishoudenName} from "../../../utils/things";
 import useToaster from "../../../utils/useToaster";
 import GridCard from "../../Layouts/GridCard";
 
 const HuishoudenBurgerItem: React.FC<{huishouden: Huishouden, burger: Burger}> = ({huishouden, burger}) => {
-	const {push} = useHistory();
+	const navigate = useNavigate();
 	const isMobile = useBreakpointValue([true, null, null, false]);
 	const alert = useDisclosure();
 	const cancelRef = useRef<any>(null);
@@ -59,7 +59,7 @@ const HuishoudenBurgerItem: React.FC<{huishouden: Huishouden, burger: Burger}> =
 
 			/* Check if all burgers were removed from this Huishouden */
 			if (huishouden.burgers?.filter(b => b.id !== burger.id).length === 0) {
-				push(Routes.Huishoudens);
+				navigate(AppRoutes.Huishoudens());
 			}
 		}).catch(err => {
 			console.error(err);
@@ -94,7 +94,7 @@ const HuishoudenBurgerItem: React.FC<{huishouden: Huishouden, burger: Burger}> =
 			</AlertDialogOverlay>
 		</AlertDialog>
 
-		<GridCard as={NavLink} justify={["flex-start", "center"]} to={Routes.Burger(burger.id)} position={"relative"}>
+		<GridCard as={NavLink} justify={["flex-start", "center"]} to={AppRoutes.Burger(burger.id)} position={"relative"}>
 			{(huishouden.burgers || []).length > 1 && (
 				<Box position={"absolute"} top={1} right={1}>
 					<IconButton variant={"ghost"} size={"sm"} aria-label={t("global.actions.delete")} icon={<DeleteIcon />} onClick={onClickDeleteBurgerFromHuishouden} />

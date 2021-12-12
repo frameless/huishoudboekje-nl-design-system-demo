@@ -1,7 +1,7 @@
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {useHistory} from "react-router-dom";
-import Routes from "../../config/routes";
+import {useNavigate} from "react-router-dom";
+import {AppRoutes} from "../../config/routes";
 import SaveOrganisatieErrorHandler from "../../errorHandlers/SaveOrganisatieErrorHandler";
 import useMutationErrorHandler from "../../errorHandlers/useMutationErrorHandler";
 import {CreateOrganisatieMutationVariables, GetOrganisatiesDocument, useCreateOrganisatieMutation} from "../../generated/graphql";
@@ -12,7 +12,7 @@ import OrganisatieForm from "./OrganisatieForm";
 
 const CreateOrganisatie = () => {
 	const {t} = useTranslation();
-	const {push} = useHistory();
+	const navigate = useNavigate();
 	const toast = useToaster();
 	const handleSaveOrganisatieErrors = useMutationErrorHandler(SaveOrganisatieErrorHandler);
 
@@ -32,13 +32,13 @@ const CreateOrganisatie = () => {
 
 			const {id} = result?.data?.createOrganisatie?.organisatie || {};
 			if (id) {
-				push(Routes.Organisatie(id));
+				navigate(AppRoutes.Organisatie(id));
 			}
 		}).catch(handleSaveOrganisatieErrors);
 	};
 
 	return (
-		<Page title={t("forms.createOrganisatie.title")} backButton={<BackButton to={Routes.Organisaties} />}>
+		<Page title={t("forms.createOrganisatie.title")} backButton={<BackButton to={AppRoutes.Organisaties} />}>
 			<OrganisatieForm onSubmit={onSubmit} isLoading={$createOrganisatie.loading} />
 		</Page>
 	);

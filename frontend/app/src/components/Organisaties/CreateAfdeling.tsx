@@ -1,7 +1,7 @@
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {useHistory, useParams} from "react-router-dom";
-import Routes from "../../config/routes";
+import {useNavigate, useParams} from "react-router-dom";
+import {AppRoutes} from "../../config/routes";
 import SaveAfdelingErrorHandler from "../../errorHandlers/SaveAfdelingErrorHandler";
 import useMutationErrorHandler from "../../errorHandlers/useMutationErrorHandler";
 import {
@@ -20,9 +20,9 @@ import Section from "../Layouts/Section";
 import AfdelingForm from "./AfdelingForm";
 
 const CreateAfdeling = () => {
-	const {organisatieId} = useParams<{organisatieId: string}>();
+	const {id: organisatieId = ""} = useParams<{id: string}>();
 	const {t} = useTranslation();
-	const {push} = useHistory();
+	const navigate = useNavigate();
 	const toast = useToaster();
 	const handleSaveAfdelingErrors = useMutationErrorHandler(SaveAfdelingErrorHandler);
 
@@ -41,7 +41,7 @@ const CreateAfdeling = () => {
 				success: t("messages.afdelingen.createSuccessMessage"),
 			});
 
-			push(Routes.Organisatie(parseInt(organisatieId)));
+			navigate(AppRoutes.Organisatie(parseInt(organisatieId)));
 		}).catch(handleSaveAfdelingErrors);
 	};
 
@@ -52,7 +52,7 @@ const CreateAfdeling = () => {
 	});
 
 	return (
-		<Page title={t("forms.createAfdeling.title")} backButton={<BackButton to={Routes.Organisatie(parseInt(organisatieId))} />}>
+		<Page title={t("forms.createAfdeling.title")} backButton={<BackButton to={AppRoutes.Organisatie(parseInt(organisatieId))} />}>
 			<Queryable query={$organisatie} children={data => {
 				const organisatie: Organisatie = data.organisatie || {};
 

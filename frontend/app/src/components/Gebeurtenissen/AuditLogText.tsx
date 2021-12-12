@@ -16,7 +16,7 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
-import Routes from "../../config/routes";
+import {AppRoutes} from "../../config/routes";
 import {Burger, GebruikersActiviteit} from "../../generated/graphql";
 import {useFeatureFlag} from "../../utils/features";
 import {formatBurgerName, formatHuishoudenName, humanJoin} from "../../utils/things";
@@ -46,14 +46,15 @@ const AuditLogText: React.FC<TextProps & {g: GebruikersActiviteit}> = ({g, ...pr
 
 	const burgerName = formatBurgerName(burger);
 	const components = {
-		linkBurger: burger?.id ? <AuditLogLink to={Routes.Burger(burger.id)}>{formatBurgerName(burger)}</AuditLogLink> : t("unknownBurger"),
+		linkBurger: burger?.id ? <AuditLogLink to={AppRoutes.Burger(burger.id)}>{formatBurgerName(burger)}</AuditLogLink> : t("unknownBurger"),
 		linkHuishouden: (huishouden && huishouden?.id) ?
-			<AuditLogLink to={Routes.Huishouden(huishouden.id)}>{formatHuishoudenName(huishouden)}</AuditLogLink> : t("unknownHuishouden"),
-		linkOrganisatie: organisatie?.id ? <AuditLogLink to={Routes.Organisatie(organisatie.id)}>{organisatie.naam}</AuditLogLink> : t("unknownOrganisatie"),
-		linkAfspraak: afspraak?.id ? <AuditLogLink to={Routes.ViewAfspraak(afspraak.id)} /> : t("unknownAfspraak"),
+			<AuditLogLink to={AppRoutes.Huishouden(huishouden.id)}>{formatHuishoudenName(huishouden)}</AuditLogLink> : t("unknownHuishouden"),
+		linkOrganisatie: organisatie?.id ? <AuditLogLink to={AppRoutes.Organisatie(organisatie.id)}>{organisatie.naam}</AuditLogLink> : t("unknownOrganisatie"),
+		linkAfspraak: afspraak?.id ? <AuditLogLink to={AppRoutes.ViewAfspraak(afspraak.id)} /> : t("unknownAfspraak"),
 		linkAfspraakOrganisatie: afspraak?.afdeling?.organisatie?.id ?
-			<AuditLogLink to={Routes.Organisatie(afspraak?.afdeling?.organisatie?.id)}>{afspraak?.afdeling?.organisatie?.naam}</AuditLogLink> : t("unknownOrganisatie"),
-		linkAfdeling: afdeling?.organisatie?.id && afdeling?.naam ? <AuditLogLink to={Routes.Organisatie(afdeling.organisatie.id)}>{afdeling.naam}</AuditLogLink> : t("unknownAfdeling"),
+			<AuditLogLink to={AppRoutes.Organisatie(afspraak?.afdeling?.organisatie?.id)}>{afspraak?.afdeling?.organisatie?.naam}</AuditLogLink> : t("unknownOrganisatie"),
+		linkAfdeling: afdeling?.organisatie?.id && afdeling?.naam ?
+			<AuditLogLink to={AppRoutes.Organisatie(afdeling.organisatie.id)}>{afdeling.naam}</AuditLogLink> : t("unknownAfdeling"),
 		strong: <strong />,
 	};
 

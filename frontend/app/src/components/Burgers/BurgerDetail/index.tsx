@@ -3,8 +3,8 @@ import {Button, Divider, IconButton, Link, Menu, MenuButton, MenuItem, MenuList,
 import React from "react";
 import {useToggle} from "react-grapple";
 import {useTranslation} from "react-i18next";
-import {NavLink, useHistory, useParams} from "react-router-dom";
-import Routes from "../../../config/routes";
+import {NavLink, useNavigate, useParams} from "react-router-dom";
+import {AppRoutes} from "../../../config/routes";
 import {Burger, GetBurgersDocument, useDeleteBurgerMutation, useGetBurgerQuery} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import {formatBurgerName} from "../../../utils/things";
@@ -21,10 +21,10 @@ import BurgerProfileView from "./BurgerProfileView";
 import BurgerRekeningenView from "./BurgerRekeningenView";
 
 const BurgerDetail = () => {
-	const {id} = useParams<{id: string}>();
+	const {id = ""} = useParams<{id: string}>();
 	const {t} = useTranslation();
 	const toast = useToaster();
-	const {push} = useHistory();
+	const navigate = useNavigate();
 	const [isAlertOpen, toggleAlert] = useToggle(false);
 	const [isDeleted, toggleDeleted] = useToggle(false);
 
@@ -72,7 +72,7 @@ const BurgerDetail = () => {
 			if (isDeleted) {
 				return (
 					<DeadEndPage message={t("messages.burgers.deleteConfirmMessage", {name: `${burger.voornamen} ${burger.achternaam}`})}>
-						<Button colorScheme={"primary"} onClick={() => push(Routes.Burgers)}>{t("global.actions.backToList")}</Button>
+						<Button colorScheme={"primary"} onClick={() => navigate(AppRoutes.Burgers())}>{t("global.actions.backToList")}</Button>
 					</DeadEndPage>
 				);
 			}
@@ -86,18 +86,18 @@ const BurgerDetail = () => {
 
 				<Page title={formatBurgerName(burger)} backButton={(
 					<Stack direction={["column", "row"]} spacing={[2, 5]}>
-						<BackButton label={t("backToBurgersList")} to={Routes.Burgers} />
-						<BackButton label={t("global.actions.viewBurgerHuishouden")} to={Routes.Huishouden(burger.huishouden?.id)} />
+						<BackButton label={t("backToBurgersList")} to={AppRoutes.Burgers()} />
+						<BackButton label={t("global.actions.viewBurgerHuishouden")} to={AppRoutes.Huishouden(burger.huishouden?.id)} />
 					</Stack>
 				)} menu={(
 					<Menu>
 						<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} data-cy={"actionsMenuButton"} />
 						<MenuList>
-							<Link href={Routes.BrievenExport(parseInt(id), "excel")} target={"_blank"}><MenuItem>{t("global.actions.brievenExport")}</MenuItem></Link>
-							<NavLink to={Routes.RapportageBurger([parseInt(id)])}><MenuItem>{t("sidebar.rapportage")}</MenuItem></NavLink>
-							<NavLink to={Routes.Huishouden(burger.huishouden?.id)}><MenuItem>{t("showHuishouden")}</MenuItem></NavLink>
+							<Link href={AppRoutes.BrievenExport(id, "excel")} target={"_blank"}><MenuItem>{t("global.actions.brievenExport")}</MenuItem></Link>
+							<NavLink to={AppRoutes.RapportageBurger([parseInt(id)])}><MenuItem>{t("sidebar.rapportage")}</MenuItem></NavLink>
+							<NavLink to={AppRoutes.Huishouden(burger.huishouden?.id)}><MenuItem>{t("showHuishouden")}</MenuItem></NavLink>
 							<Divider />
-							<NavLink to={Routes.EditBurger(parseInt(id))}><MenuItem>{t("global.actions.edit")}</MenuItem></NavLink>
+							<NavLink to={AppRoutes.EditBurger(id)}><MenuItem>{t("global.actions.edit")}</MenuItem></NavLink>
 							<MenuItem onClick={onClickDeleteMenuItem}>{t("global.actions.delete")}</MenuItem>
 						</MenuList>
 					</Menu>
