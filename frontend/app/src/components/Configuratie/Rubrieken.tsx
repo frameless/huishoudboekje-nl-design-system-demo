@@ -17,21 +17,6 @@ import useToaster from "../../utils/useToaster";
 import {FormLeft, FormRight} from "../Layouts/Forms";
 import RubriekItem from "./RubriekItem";
 
-/*
-grootboekrekeningId: "WOmzNooNdo"       naam: "Inkomsten"
-grootboekrekeningId: "WOvbOrsOsuSro"    naam: "Toeslagen"
-grootboekrekeningId: "WOvbOrsOsuSov"    naam: "Uitkeringen"
-grootboekrekeningId: "WOvbOrsOsuSpo"    naam: "Subsidies"
-grootboekrekeningId: "WBedHuiBeh"       naam: "Huur of hypotheek"
-grootboekrekeningId: "WBedHuiGweElk"    naam: "Gas en elektriciteit"
-grootboekrekeningId: "WBedHuiGweWat"    naam: "Water"
-grootboekrekeningId: "WBedHuiMez"       naam: "Lokale lasten"
-grootboekrekeningId: "WBedKanTef"       naam: "Telefoon, internet en televisie"
-grootboekrekeningId: "WBedAssOva"       naam: "Verzekeringen"
-grootboekrekeningId: "BEivKapProPok"    naam: "Privé-opname"
-
-* */
-
 const Rubrieken = () => {
 	const toast = useToaster();
 	const {t} = useTranslation();
@@ -89,7 +74,7 @@ const Rubrieken = () => {
 									</Thead>
 									<Tbody>
 										{rubrieken.map((r) => (
-											<RubriekItem rubriek={r} />
+											<RubriekItem rubriek={r} key={r.id} />
 										))}
 									</Tbody>
 								</Table>
