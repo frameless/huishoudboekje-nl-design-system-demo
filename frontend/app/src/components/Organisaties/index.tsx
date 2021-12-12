@@ -1,19 +1,33 @@
 import React from "react";
 import {Route, Switch} from "react-router-dom";
 import Routes, {RouteNames} from "../../config/routes";
+import PageNotFound from "../PageNotFound";
 import CreateAfdeling from "./CreateAfdeling";
 import CreateOrganisatie from "./CreateOrganisatie";
-import OrganisatieDetail from "./OrganisatieDetail";
 import EditOrganisatie from "./EditOrganisatie";
+import OrganisatieDetail from "./OrganisatieDetail";
 import OrganisatieList from "./OrganisatieList";
 
 const Organisaties = () => (
 	<Switch>
-		<Route exact path={Routes.Organisaties} component={OrganisatieList} />
-		<Route path={Routes.Organisatie() + "/" + RouteNames.edit} component={EditOrganisatie} />
-		<Route path={Routes.CreateOrganisatie} exact component={CreateOrganisatie} />
-		<Route path={Routes.CreateAfdeling()} exact component={CreateAfdeling} />
-		<Route path={Routes.Organisatie()} component={OrganisatieDetail} />
+		<Route exact path={Routes.Organisaties}>
+			<OrganisatieList />
+		</Route>
+		<Route path={`${Routes.Organisatie()}/${RouteNames.edit}`}>
+			<EditOrganisatie />
+		</Route>
+		<Route exact path={Routes.CreateOrganisatie}>
+			<CreateOrganisatie />
+		</Route>
+		<Route exact path={Routes.CreateAfdeling()}>
+			<CreateAfdeling />
+		</Route>
+		<Route path={Routes.Organisatie()}>
+			<OrganisatieDetail />
+		</Route>
+		<Route>
+			<PageNotFound />
+		</Route>
 	</Switch>
 );
 

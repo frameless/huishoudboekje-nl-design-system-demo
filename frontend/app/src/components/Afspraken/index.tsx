@@ -12,11 +12,21 @@ const AfspraakRouter = () => {
 
 	return (
 		<Switch>
-			<Route path={Routes.AfspraakBetaalinstructie()} component={BetaalinstructiePage} />
-			<Route path={Routes.CreateBurgerAfspraken(parseInt(burgerId))} render={(props) => <CreateAfspraak burgerId={parseInt(burgerId)} {...props} />} />
-			<Route path={Routes.EditAfspraak()} component={EditAfspraak} />
-			<Route path={Routes.ViewAfspraak()} component={ViewAfspraak} />
-			<Route path={Routes.FollowUpAfspraak()} component={FollowUpAfspraak} />
+			<Route path={Routes.AfspraakBetaalinstructie()}>
+				<BetaalinstructiePage />
+			</Route>
+			<Route path={Routes.CreateBurgerAfspraken(parseInt(burgerId))}>
+				<CreateAfspraak burgerId={parseInt(burgerId)} />
+			</Route>
+			<Route path={Routes.EditAfspraak()}>
+				<EditAfspraak />
+			</Route>
+			<Route path={Routes.ViewAfspraak()}>
+				<ViewAfspraak />
+			</Route>
+			<Route path={Routes.FollowUpAfspraak()}>
+				<FollowUpAfspraak />
+			</Route>
 		</Switch>
 	);
 };

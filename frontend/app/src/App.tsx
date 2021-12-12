@@ -88,21 +88,51 @@ const App = () => {
 					</Stack>
 
 					<Switch>
-						<Route exact path={Routes.Home} component={() => <Redirect to={Routes.Huishoudens} />} />
-						<Route path={Routes.Huishoudens} component={Huishoudens} />
-						<Route path={Routes.Burgers} component={Burgers} />
-						<Route path={Routes.Organisaties} component={Organisaties} />
-						<Route path={Routes.Afspraken} component={AfspraakRouter} />
-						<Route exact path={Routes.Bankzaken} component={() => <Redirect to={Routes.Transacties} />} />
-						<Route path={Routes.Transacties} component={Transactions} />
-						<Route path={Routes.Bankafschriften} component={CustomerStatementMessages} />
-						<Route path={Routes.Betaalinstructies} component={Betaalinstructies} />
-						<Route path={Routes.Configuratie} component={Configuratie} />
-						<Route path={Routes.Rapportage} component={Rapportage} />
-						<Route path={Routes.Gebeurtenissen} component={Gebeurtenissen} />
-						<Route exact path={Routes.Status} component={StatusPage} />
-						<Route exact path={Routes.NotFound} component={PageNotFound} />
-						<Route component={PageNotFound} />
+						<Route exact path={Routes.Home}>
+							<Redirect to={Routes.Huishoudens} />
+						</Route>
+						<Route path={Routes.Huishoudens}>
+							<Huishoudens />
+						</Route>
+						<Route path={Routes.Burgers}>
+							<Burgers />
+						</Route>
+						<Route exact path={Routes.Bankzaken}>
+							<Redirect to={Routes.Transacties} />
+						</Route>
+						<Route path={Routes.Organisaties}>
+							<Organisaties />
+						</Route>
+						<Route path={Routes.Afspraken}>
+							<AfspraakRouter />
+						</Route>
+						<Route path={Routes.Transacties}>
+							<Transactions />
+						</Route>
+						<Route path={Routes.Bankafschriften}>
+							<CustomerStatementMessages />
+						</Route>
+						<Route path={Routes.Betaalinstructies}>
+							<Betaalinstructies />
+						</Route>
+						<Route path={Routes.Configuratie}>
+							<Configuratie />
+						</Route>
+						<Route path={Routes.Rapportage}>
+							<Rapportage />
+						</Route>
+						<Route path={Routes.Gebeurtenissen}>
+							<Gebeurtenissen />
+						</Route>
+						<Route exact path={Routes.Status}>
+							<StatusPage />
+						</Route>
+						<Route exact path={Routes.NotFound}>
+							<PageNotFound />
+						</Route>
+						<Route>
+							<PageNotFound />
+						</Route>
 					</Switch>
 				</Box>
 			</HStack>

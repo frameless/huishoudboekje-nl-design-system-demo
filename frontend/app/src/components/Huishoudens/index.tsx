@@ -8,9 +8,15 @@ import HuishoudensList from "./HuishoudensList";
 const Huishoudens = () => {
 	return (
 		<Switch>
-			<Route exact path={Routes.Huishoudens} component={HuishoudensList} />
-			<Route path={Routes.Huishouden()} component={HuishoudenDetails} />
-			<Route component={PageNotFound} />
+			<Route exact path={Routes.Huishoudens}>
+				<HuishoudensList />
+			</Route>
+			<Route path={Routes.Huishouden()}>
+				<HuishoudenDetails />
+			</Route>
+			<Route>
+				<PageNotFound />
+			</Route>
 		</Switch>
 	);
 };
