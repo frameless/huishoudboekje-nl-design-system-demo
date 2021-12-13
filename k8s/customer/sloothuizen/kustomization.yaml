@@ -16,3 +16,4 @@ resources:
   - ../../base/unleashservice
   - ../../base/postadressenservice
   - ../../base/alarmenservice
+  - ../../base/signalenservice
