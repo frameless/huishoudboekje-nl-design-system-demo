@@ -1,13 +1,11 @@
 import asyncio
 
-import nest_asyncio
 from flask import Blueprint, request
 from graphene_file_upload.flask import FileUploadGraphQLView
 from graphql.execution.executors.asyncio import AsyncioExecutor
-
+import nest_asyncio
 from hhb_backend.graphql import schema
 from hhb_backend.graphql.dataloaders import HHBDataLoader
-
 
 def create_blueprint(loop=None):
     if not loop:

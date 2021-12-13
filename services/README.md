@@ -7,8 +7,9 @@ Huishoudboekje uses independent service components, packages as Docker container
 - [Huishoudboekjeservice](huishoudboekje_service/)*
 - [Logservice](log_service/)*
 - [Organisatieservice](organisatie_service/)*
-- [Postadressenservice](postadressenservice/)
 - [Unleashservice](unleashservice/)
+- [Postadressenservice](postadressenservice/)
+- [Alarmenservice](alarmenservice/)
 
 Services above marked with an asterisk (*) are all dependent on the core service through symbolic links because they share various logic.
 

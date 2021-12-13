@@ -1,3 +1,4 @@
+# Todo: frontend in docker-compose is super slow, doesn't work yet.
 version: "3.7"
 
 x-backend: &x-backend
@@ -73,6 +74,15 @@ x-postadressenservice: &x-postadressenservice
   environment:
     DATABASE_URL: "postgresql://hhb:hhb@db/postadressenservice"
 
+x-alarmenservice: &x-alarmenservice
+  build:
+    context: ./services/alarmenservice
+    dockerfile: ./dev.Dockerfile
+  volumes:
+    - ./services/alarmenservice:/app
+  environment:
+    DATABASE_URL: "postgresql://hhb:hhb@db/alarmenservice"
+
 x-tests: &x-tests
   profiles:
     - tests
@@ -111,30 +121,39 @@ services:
       - >-
         export PGPASSWORD=postgres &&
         psql -h db -U postgres -c "CREATE USER hhb WITH PASSWORD 'hhb'" || true &&
+        psql -h db -U postgres -c "ALTER USER hhb WITH SUPERUSER" || true &&
         psql -h db -U postgres -c "CREATE DATABASE huishoudboekjeservice" || true &&
         psql -h db -U postgres -c "CREATE DATABASE organisatieservice" || true &&
         psql -h db -U postgres -c "CREATE DATABASE banktransactieservice" || true &&
         psql -h db -U postgres -c "CREATE DATABASE grootboekservice" || true &&
         psql -h db -U postgres -c "CREATE DATABASE logservice" || true &&
-        psql -h db -U postgres -c "CREATE DATABASE postadressenservice" || true
+        psql -h db -U postgres -c "CREATE DATABASE postadressenservice" || true &&
+        psql -h db -U postgres -c "CREATE DATABASE alarmenservice" || true
     profiles:
       - db
     depends_on:
       - db
 
-#  # Frontend # Todo: super slow, doesn't work yet.
-#  frontend:
-#    build:
-#      dockerfile: ./frontend/dev.Dockerfile
-#      context: .
-#    environment:
-#      PROXY: http://localhost:5000
-#    volumes:
-#      - ./frontend:/app
-#    ports:
-#      - 3000:3000
-#    command:
-#      - npm install && npm start
+  # Database teardown
+  db-teardown:
+    image: postgres:13-alpine
+    command:
+      - /bin/sh
+      - -c
+      - >-
+        export PGPASSWORD=postgres &&
+        psql -h db -U postgres -c "drop database IF EXISTS huishoudboekjeservice" &&
+        psql -h db -U postgres -c "drop database IF EXISTS organisatieservice" &&
+        psql -h db -U postgres -c "drop database IF EXISTS banktransactieservice" &&
+        psql -h db -U postgres -c "drop database IF EXISTS grootboekservice" &&
+        psql -h db -U postgres -c "drop database IF EXISTS logservice" &&
+        psql -h db -U postgres -c "drop database IF EXISTS postadressenservice" &&
+        psql -h db -U postgres -c "drop database IF EXISTS alarmenservice" &&
+        psql -h db -U postgres -c "drop role IF EXISTS hhb"
+    profiles:
+      - db
+    depends_on:
+      - db
 
   backend:
     <<: *x-resource-limit
@@ -142,10 +161,10 @@ services:
     container_name: backend
     environment:
       APP_SETTINGS: hhb_backend.config.DevelopmentConfig
-#     AUTH_AUDIENCE: None
-#     AUTH_TOKEN_SECRET: test
+      #     AUTH_AUDIENCE: None
+      #     AUTH_TOKEN_SECRET: test
       OIDC_CLIENT_SECRETS: /app/etc/client_secrets.json
-#     OIDC_CLOCK_SKEW: "600"
+      #     OIDC_CLOCK_SKEW: "600"
       PREFIX: /api
       HHB_SERVICE_URL: "http://huishoudboekjeservice:8000"
       ORGANISATIE_SERVICE_URL: "http://organisatieservice:8000"
@@ -153,6 +172,7 @@ services:
       GROOTBOEK_SERVICE_URL: "http://grootboekservice:8000"
       LOG_SERVICE_URL: "http://logservice:8000"
       POSTADRESSENSERVICE_URL: "http://postadressenservice:8080"
+      ALARMENSERVICE_URL: "http://alarmenservice:8080"
       SECRET_KEY: koen
     ports:
       - 5000:8000
@@ -246,7 +266,7 @@ services:
     ports:
       - 8005:8000
 
-  # 8006 used to be in use by the contactcatalogus, but we deprecated this service in favor of the postadressenservice.
+  # Trail of history: port 8006 used to be in use by the contactcatalogus, but we deprecated this service in favor of the postadressenservice.
 
   postadressenservice:
     <<: *x-resource-limit
@@ -256,6 +276,15 @@ services:
       DATABASE_URL: "postgresql://hhb:hhb@db/postadressenservice"
     ports:
       - 8007:8080
+
+  alarmenservice:
+    <<: *x-resource-limit
+    <<: *x-alarmenservice
+    container_name: alarmenservice
+    environment:
+      DATABASE_URL: "postgresql://hhb:hhb@db/alarmenservice"
+    ports:
+      - 8008:8080
 
   logservice-test:
     <<: *x-resource-limit
