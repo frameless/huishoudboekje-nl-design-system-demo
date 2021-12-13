@@ -1,3 +1,7 @@
+.only-on-branches: &only-on-branches
+  only:
+    - branches@commonground/huishoudboekje/app-new
+
 .frontend:
   stage: test
   needs: [ ]
@@ -20,6 +24,7 @@
     when: script_failure
 
 frontend-test:
+  <<: *only-on-branches
   extends: .frontend
   script:
     - npm run lint
@@ -70,6 +75,7 @@ frontend-test:
   when: on_success
 
 backend-burgers-test:
+  <<: *only-on-branches
   stage: test
   needs: [ ]
   image:
@@ -102,36 +108,43 @@ backend-burgers-test:
   when: on_success
 
 backend-test:
+  <<: *only-on-branches
   extends: .Service Test
   variables:
     DIRECTORY: backend
 
 core-service-test:
+  <<: *only-on-branches
   extends: .Service Test
   variables:
     DIRECTORY: services/core_service
 
 huishoudboekje-service-test:
+  <<: *only-on-branches
   extends: .Service Test
   variables:
     DIRECTORY: services/huishoudboekje_service
 
 organisatie-service-test:
+  <<: *only-on-branches
   extends: .Service Test
   variables:
     DIRECTORY: services/organisatie_service
 
 bank-transactie-service-test:
+  <<: *only-on-branches
   extends: .Service Test
   variables:
     DIRECTORY: services/bank_transactie_service
 
 grootboek-service-test:
+  <<: *only-on-branches
   extends: .Service Test
   variables:
     DIRECTORY: services/grootboek_service
 
 log-service-test:
+  <<: *only-on-branches
   extends: .Service Test
   variables:
     DIRECTORY: services/log_service
