@@ -1,0 +1,18 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Signal {
+	id 					String		@id @default(uuid())
+	alarmId				String
+	isActive			Boolean
+	type				String
+	actions				String[]
+	context				Json?
+	timeCreated			DateTime	@default(now())
+}

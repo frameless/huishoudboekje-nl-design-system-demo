@@ -83,6 +83,15 @@ x-alarmenservice: &x-alarmenservice
   environment:
     DATABASE_URL: "postgresql://hhb:hhb@db/alarmenservice"
 
+x-signalenservice: &x-signalenservice
+  build:
+    context: ./services/signalenservice
+    dockerfile: ./dev.Dockerfile
+  volumes:
+    - ./services/signalenservice:/app
+  environment:
+    DATABASE_URL: "postgresql://hhb:hhb@db/signalenservice"
+
 x-tests: &x-tests
   profiles:
     - tests
@@ -266,6 +275,11 @@ services:
     ports:
       - 8005:8000
 
+  logservice-test:
+    <<: *x-resource-limit
+    <<: *x-logservice
+    <<: *x-tests
+
   # Trail of history: port 8006 used to be in use by the contactcatalogus, but we deprecated this service in favor of the postadressenservice.
 
   postadressenservice:
@@ -286,7 +300,11 @@ services:
     ports:
       - 8008:8080
 
-  logservice-test:
+  signalenservice:
     <<: *x-resource-limit
-    <<: *x-logservice
-    <<: *x-tests
+    <<: *x-signalenservice
+    container_name: signalenservice
+    environment:
+      DATABASE_URL: "postgresql://hhb:hhb@db/signalenservice"
+    ports:
+      - 8009:8080

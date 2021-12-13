@@ -60,6 +60,7 @@ export POSTGRESQL_PASSWORD_LOGSVC=${POSTGRESQL_PASSWORD_LOGSVC:-"logsvc"}
 export POSTGRESQL_PASSWORD_ORGSVC=${POSTGRESQL_PASSWORD_ORGSVC:-"orgsvc"}
 export POSTGRESQL_PASSWORD_PADSVC=${POSTGRESQL_PASSWORD_PADSVC:-"padsvc"}
 export POSTGRESQL_PASSWORD_ALMSVC=${POSTGRESQL_PASSWORD_ALMSVC:-"almsvc"}
+export POSTGRESQL_PASSWORD_SIGSVC=${POSTGRESQL_PASSWORD_SIGSVC:-"sigsvc"}
 
 # Default secret FOR JWTs
 export HHB_SECRET=${SECRET_KEY:-"test"}
@@ -185,6 +186,7 @@ kustomize edit set image organisatieservice=${PULL_REPO_IMAGE}/organisatieservic
 kustomize edit set image unleashservice=${PULL_REPO_IMAGE}/unleashservice:${IMAGE_TAG}
 kustomize edit set image postadressenservice=${PULL_REPO_IMAGE}/postadressenservice:${IMAGE_TAG}
 kustomize edit set image alarmenservice=${PULL_REPO_IMAGE}/alarmenservice:${IMAGE_TAG}
+kustomize edit set image signalenservice=${PULL_REPO_IMAGE}/signalenservice:${IMAGE_TAG}
 cd ../../
 
 echo "Building Kustomize..."
