@@ -1,5 +1,5 @@
 ARG DOCKER_PROXY=''
-FROM ${DOCKER_PROXY}bitnami/node:14 as webserver
+FROM ${DOCKER_PROXY}bitnami/node:14
 WORKDIR /app
 COPY ./package*.json /app/
 RUN npm ci

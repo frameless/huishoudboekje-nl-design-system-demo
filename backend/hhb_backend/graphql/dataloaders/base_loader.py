@@ -5,7 +5,6 @@ from graphql import GraphQLError
 from aiodataloader import DataLoader
 from hhb_backend.graphql import settings
 
-
 # Possible formats:
 #   {"<column_name>": <str|int|bool>}
 #   {"<column_name>": {"<Operator>": <str|int|bool>}}
@@ -138,6 +137,7 @@ class ListDataLoader(DataLoader):
     is_list = False  # elements in the result list are lists as well (1-n vs n-n)
 
     async def batch_load_fn(self, keys):
+
         url = f"{self.service}/{self.model}/?{self.filter_item}={','.join([str(k) for k in keys])}"
         response = requests.get(url)
         try:

@@ -1,6 +1,6 @@
 """ GraphQL schema queries module """
 import graphene
-
+from .alarmen import AlarmenQuery, AlarmQuery
 from .afspraken import AfspraakQuery, AfsprakenQuery
 from .bank_transactions import BankTransactionQuery, BankTransactionsQuery, BankTransactionsPagedQuery
 from .customer_statement_messages import CustomerStatementMessageQuery, CustomerStatementMessagesQuery
@@ -57,6 +57,9 @@ class RootQuery(graphene.ObjectType):
     afdelingen = AfdelingenQuery.return_type
     postadres = PostadresQuery.return_type
     postadressen = PostadressenQuery.return_type
+
+    alarm = AlarmQuery.return_type
+    alarmen = AlarmenQuery.return_type
 
     async def resolve_burger(root, info, **kwargs):
         return await BurgerQuery.resolver(root, info, **kwargs)
@@ -162,6 +165,12 @@ class RootQuery(graphene.ObjectType):
 
     async def resolve_postadressen(root, info, **kwargs):
         return await PostadressenQuery.resolver(root, info, **kwargs)
+
+    async def resolve_alarm(root, info, **kwargs):
+        return await AlarmQuery.resolver(root, info, **kwargs)
+
+    async def resolve_alarmen(root, info, **kwargs):
+        return await AlarmenQuery.resolver(root, info, **kwargs)
         
     @staticmethod
     async def resolve_gebruiker(root, info, **kwargs):

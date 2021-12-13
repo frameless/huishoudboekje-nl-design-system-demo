@@ -5,7 +5,8 @@
   "main": "main.ts",
   "scripts": {
 	"dev": "nodemon -r dotenv/config",
-	"db:migrate": "npx prisma db push",
+	"db:push": "npx prisma db push",
+	"db:migrate": "npx prisma migrate dev",
 	"prestart": "npx prisma generate",
 	"start": "ts-node -r dotenv/config main.ts"
   },

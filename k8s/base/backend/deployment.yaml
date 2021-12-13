@@ -1,4 +1,3 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -68,6 +67,8 @@ spec:
               value: "http://hhb-logservice"
             - name: POSTADRESSENSERVICE_URL
               value: "http://hhb-postadressenservice"
+            - name: ALARMENSERVICE_URL
+              value: "http://hhb-alarmenservice"
             - name: SECRET_KEY
               valueFrom:
                 secretKeyRef:

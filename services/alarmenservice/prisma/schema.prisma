@@ -1,0 +1,19 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Alarm {
+	id 					String		@id @default(uuid())
+	gebruikerEmail		String
+	afspraakId			Int
+	isActive			Boolean
+	datum				String
+	datumMargin			Int
+	bedrag				Int
+	bedragMargin		Int
+}

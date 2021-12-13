@@ -1,0 +1,107 @@
+// @no-log
+GET http://localhost:8080/v1/alarms/e7fb948f-b589-4dfe-9c05-d51f11a88e64
+Accept: application/json
+Content-Type: application/json
+
+###
+
+// @no-log
+GET http://localhost:8080/v1/alarms/deze-bestaat-zeker-niet
+Accept: application/json
+Content-Type: application/json
+
+###
+
+// @no-log
+GET http://localhost:8080/v1/alarms
+Accept: application/json
+Content-Type: application/json
+
+###
+
+// @no-log
+GET http://localhost:8080/v1/alarms?filter_ids=119be6cf-d7db-4d06-9604-175226fe2b85,567634fd-bb4e-4c97-a0ec-26f072d711d9,dezeisnietgevonden
+Accept: application/json
+Content-Type: application/json
+
+###
+
+// @no-log
+POST http://localhost:8080/v1/alarms
+Accept: application/json
+Content-Type: application/json
+
+{
+    "gebruikerEmail": "test@mail.nl",
+    "schema": {
+        "byMonth": [1,2,3,4,5,6,7,8,9,10,11,12],
+        "byMonthDay": [3],
+        "startDate": "2020-12-04T07:10:02.627Z"
+    },
+    "rule": {
+        "metric": "test metric",
+        "operator": "test operator",
+        "value": "test value",
+        "margin": "test margin"
+    }
+}
+
+###
+
+// @no-log
+PUT http://localhost:8080/v1/alarms/e7fb948f-b589-4dfe-9c05-d51f11a88e64
+Accept: application/json
+Content-Type: application/json
+
+{
+    "gebruikerEmail": "test@mail.nl",
+    "schema": {
+        "byMonth": [1,2,3,4,5,6,7,8,9,10],
+        "byMonthDay": [3],
+        "startDate": "2020-01-01T12:00:00.000Z"
+    },
+    "rule": {
+        "metric": "test metric 1",
+        "operator": "test operator 1",
+        "value": "test value 1",
+        "margin": "test margin 1"
+    }
+}
+
+###
+
+// @no-log
+PUT http://localhost:8080/v1/alarms/deze-bestaat-niet
+Accept: application/json
+Content-Type: application/json
+
+{
+    "gebruikerEmail": "test@mail.nl",
+    "schema": {
+        "byMonth": [1,2,3,4,5,6,7,8,9,10],
+        "byMonthDay": [3],
+        "startDate": "2020-01-01T12:00:00.000Z"
+    },
+    "rule": {
+        "metric": "test metric 1",
+        "operator": "test operator 1",
+        "value": "test value 1",
+        "margin": "test margin 1"
+    }
+}
+
+###
+
+// @no-log
+DELETE http://localhost:8080/v1/alarms/deze-bestaat-niet
+Accept: application/json
+Content-Type: application/json
+
+###
+
+// @no-log
+DELETE http://localhost:8080/v1/alarms/e7fb948f-b589-4dfe-9c05-d51f11a88e64
+Accept: application/json
+Content-Type: application/json
+
+###

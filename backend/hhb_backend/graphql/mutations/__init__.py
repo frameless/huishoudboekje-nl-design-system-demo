@@ -41,7 +41,10 @@ from .afdelingen.delete_afdeling import DeleteAfdeling
 from .postadressen.create_postadres import CreatePostadres
 from .postadressen.update_postadres import UpdatePostadres
 from .postadressen.delete_postadres import DeletePostadres
-
+from .alarmen.create_alarm import CreateAlarm
+from .alarmen.update_alarm import UpdateAlarm
+from .alarmen.delete_alarm import DeleteAlarm
+from .alarmen.evaluate_alarm import EvaluateAlarm
 
 class RootMutation(graphene.ObjectType):
     """ The root of all mutations """
@@ -98,3 +101,7 @@ class RootMutation(graphene.ObjectType):
     createPostadres = CreatePostadres.Field()
     updatePostadres = UpdatePostadres.Field()
     deletePostadres = DeletePostadres.Field()
+
+    createAlarm = CreateAlarm.Field()
+    updateAlarm = UpdateAlarm.Field()
+    deleteAlarm = DeleteAlarm.Field()

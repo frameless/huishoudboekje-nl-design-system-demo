@@ -6,3 +6,4 @@ TRANSACTIE_SERVICES_URL = os.getenv('TRANSACTIE_SERVICE_URL', "http://localhost:
 GROOTBOEK_SERVICE_URL = os.getenv('GROOTBOEK_SERVICE_URL', "http://localhost:8004")
 LOG_SERVICE_URL = os.getenv('LOG_SERVICE_URL', "http://localhost:8005")
 POSTADRESSEN_SERVICE_URL = os.getenv('POSTADRESSENSERVICE_URL', "http://localhost:8007") + '/v1'
+ALARMENSERVICE_URL = os.getenv('ALARMENSERVICE_URL', "http://localhost:8008") + '/v1'
