@@ -1,8 +1,8 @@
 import {PrismaClient} from "@prisma/client";
 import express from "express";
+import pkg from "../package.json";
 import {NotFoundError} from "./errorHandlers";
 import healthRouter from "./health";
-import pkg from "../package.json";
 
 const db = new PrismaClient();
 
@@ -24,32 +24,31 @@ app.get("/", async (request, response) => {
 					in: ids,
 				},
 			} : {},
-		}
+		},
 	});
-	return response.status(200).json({
-		data: data,
-	});
+
+	return response.status(200).json({data});
 });
 
 app.post("/", (request, response, next) => {
-	const requestBody = request.body;
+	const data = request.body;
 
-	let alarmProm = db.alarm.create({
-		data: requestBody
+	db.alarm.create({
+		data,
 	}).then(result => {
 		return response.status(201).json({
 			ok: true,
 			data: result,
 		});
 	}).catch(err => {
-		throw err;
+		next(err);
 	});
 });
 
 app.get("/:id", async (request, response, next) => {
 	const {id} = request.params;
 	const data = await db.alarm.findFirst({
-		where: {id}
+		where: {id},
 	});
 
 	if (!data) {
@@ -62,9 +61,8 @@ app.get("/:id", async (request, response, next) => {
 app.put("/:id", (request, response, next) => {
 	const {id} = request.params;
 
-	const requestBody = request.body;
+	const data = request.body;
 
-	// Find the address
 	db.alarm.findFirst({
 		where: {id},
 	}).then(result => {
@@ -72,27 +70,23 @@ app.put("/:id", (request, response, next) => {
 			throw new NotFoundError();
 		}
 
-		const alarmProm = db.alarm.update({
+		return db.alarm.update({
 			where: {id},
-			data: requestBody,
-		}).then(result => {
-			return response.status(200).json({
-				ok: true,
-				data: result,
-			});
-		}).catch(err => {
-			next(err);
+			data,
 		});
-
+	}).then(result => {
+		return response.status(200).json({
+			ok: true,
+			data: result,
+		});
 	}).catch(err => {
-		throw err;
+		next(err);
 	});
 });
 
 app.delete("/:id", (request, response, next) => {
 	const {id} = request.params;
 
-	// Find the address
 	db.alarm.findFirst({
 		where: {id},
 	}).then(result => {
@@ -100,14 +94,13 @@ app.delete("/:id", (request, response, next) => {
 			throw new NotFoundError();
 		}
 
-		// Delete entity
 		return db.alarm.delete({
 			where: {id},
 		});
-	}).then(result => {
+	}).then(() => {
 		return response.status(204).end();
 	}).catch(err => {
-		throw err;
+		next(err);
 	});
 });
 
