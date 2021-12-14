@@ -1,20 +1,10 @@
 import React from "react";
-import {Route, Switch} from "react-router-dom";
-import Routes, {RouteNames} from "../../config/routes";
-import CreateAfdeling from "./CreateAfdeling";
-import CreateOrganisatie from "./CreateOrganisatie";
-import OrganisatieDetail from "./OrganisatieDetail";
-import EditOrganisatie from "./EditOrganisatie";
-import OrganisatieList from "./OrganisatieList";
+import {Outlet} from "react-router-dom";
+
+// Todo: remove, not used since react-router v6
 
 const Organisaties = () => (
-	<Switch>
-		<Route exact path={Routes.Organisaties} component={OrganisatieList} />
-		<Route path={Routes.Organisatie() + "/" + RouteNames.edit} component={EditOrganisatie} />
-		<Route path={Routes.CreateOrganisatie} exact component={CreateOrganisatie} />
-		<Route path={Routes.CreateAfdeling()} exact component={CreateAfdeling} />
-		<Route path={Routes.Organisatie()} component={OrganisatieDetail} />
-	</Switch>
+	<Outlet />
 );
 
 export default Organisaties;

@@ -1,4 +1,4 @@
-import {Button, Divider, FormControl, FormLabel, Input, Stack, Table, Th, Thead} from "@chakra-ui/react";
+import {Button, Divider, FormControl, FormLabel, Input, Stack, Table, Tbody, Th, Thead, Tr} from "@chakra-ui/react";
 import React from "react";
 import {useInput, Validators} from "react-grapple";
 import {useTranslation} from "react-i18next";
@@ -6,7 +6,7 @@ import {Configuratie as IConfiguratie, GetConfiguratieDocument, useCreateConfigu
 import Queryable from "../../utils/Queryable";
 import useToaster from "../../utils/useToaster";
 import {FormLeft, FormRight} from "../Layouts/Forms";
-import ConfiguratieItem from "./ConfiguratieItem";
+import ParameterItem from "./ParameterItem";
 
 const Parameters = () => {
 	const {t} = useTranslation();
@@ -66,13 +66,17 @@ const Parameters = () => {
 							{configuraties.length > 0 && (
 								<Table size={"sm"} variant={"noLeftPadding"}>
 									<Thead>
-										<Th>{t("forms.configuratie.fields.id")}</Th>
-										<Th>{t("forms.configuratie.fields.waarde")}</Th>
-										<Th w={100} />
+										<Tr>
+											<Th>{t("forms.configuratie.fields.id")}</Th>
+											<Th>{t("forms.configuratie.fields.waarde")}</Th>
+											<Th w={100} />
+										</Tr>
 									</Thead>
-									{configuraties.map(c => (
-										<ConfiguratieItem c={c} key={c.id} />
-									))}
+									<Tbody>
+										{configuraties.map(c => (
+											<ParameterItem c={c} key={c.id} />
+										))}
+									</Tbody>
 								</Table>
 							)}
 

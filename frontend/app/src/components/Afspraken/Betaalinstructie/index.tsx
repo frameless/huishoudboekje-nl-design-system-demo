@@ -1,7 +1,7 @@
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {useHistory, useParams} from "react-router-dom";
-import Routes from "../../../config/routes";
+import {useNavigate, useParams} from "react-router-dom";
+import {AppRoutes} from "../../../config/routes";
 import {
 	Afspraak,
 	GetAfspraakDocument,
@@ -18,9 +18,9 @@ import PageNotFound from "../../PageNotFound";
 import AfspraakBetaalinstructieForm from "./AfspraakBetaalinstructieForm";
 
 const BetaalinstructiePage = () => {
-	const {id} = useParams<{id: string}>();
+	const {id = ""} = useParams<{id: string}>();
 	const {t} = useTranslation();
-	const {push} = useHistory();
+	const navigate = useNavigate();
 	const handleMutation = useHandleMutation();
 
 	const $afspraak = useGetAfspraakQuery({variables: {id: parseInt(id)}});
@@ -35,10 +35,10 @@ const BetaalinstructiePage = () => {
 			id: parseInt(id),
 			betaalinstructie: data,
 		},
-	}), t("messages.updateAfspraakSuccess"), () => push(Routes.ViewAfspraak(parseInt(id))));
+	}), t("messages.updateAfspraakSuccess"), () => navigate(AppRoutes.ViewAfspraak(parseInt(id))));
 
 	return (
-		<Page title={t("afspraakBetaalinstructie.title")} backButton={<BackButton to={Routes.ViewAfspraak(parseInt(id))} />}>
+		<Page title={t("afspraakBetaalinstructie.title")} backButton={<BackButton to={AppRoutes.ViewAfspraak(parseInt(id))} />}>
 			<Queryable query={$afspraak} children={data => {
 				const afspraak: Afspraak = data.afspraak;
 

@@ -2,8 +2,8 @@ import {AddIcon, CloseIcon, SearchIcon} from "@chakra-ui/icons";
 import {Button, IconButton, Input, InputGroup, InputLeftElement, InputRightElement} from "@chakra-ui/react";
 import React, {useContext, useRef} from "react";
 import {useTranslation} from "react-i18next";
-import {useHistory} from "react-router-dom";
-import Routes from "../../config/routes";
+import {useNavigate} from "react-router-dom";
+import {AppRoutes} from "../../config/routes";
 import {Burger, useGetBurgersSearchQuery} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
 import DeadEndPage from "../DeadEndPage";
@@ -13,7 +13,7 @@ import BurgerSearchContext from "./BurgerSearchContext";
 
 const BurgerList = () => {
 	const {t} = useTranslation();
-	const {push} = useHistory();
+	const navigate = useNavigate();
 	const [search, setSearch] = useContext(BurgerSearchContext);
 	const searchRef = useRef<HTMLInputElement>(null);
 
@@ -62,7 +62,7 @@ const BurgerList = () => {
 					) : (
 						<DeadEndPage message={t("messages.burgers.addHint", {buttonLabel: t("global.actions.add")})}>
 							<Button size={"sm"} colorScheme={"primary"} variant={"solid"} leftIcon={
-								<AddIcon />} onClick={() => push(Routes.CreateBurger)}>{t("global.actions.add")}</Button>
+								<AddIcon />} onClick={() => navigate(AppRoutes.CreateBurger())}>{t("global.actions.add")}</Button>
 						</DeadEndPage>
 					);
 				}

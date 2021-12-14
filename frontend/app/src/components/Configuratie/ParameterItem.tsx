@@ -5,7 +5,7 @@ import {useTranslation} from "react-i18next";
 import {Configuratie as IConfiguratie, GetConfiguratieDocument, useDeleteConfiguratieMutation, useUpdateConfiguratieMutation} from "../../generated/graphql";
 import useToaster from "../../utils/useToaster";
 
-const ConfiguratieItem: React.FC<FormControlProps & {c: IConfiguratie}> = ({c, ...props}) => {
+const ParameterItem: React.FC<FormControlProps & {c: IConfiguratie}> = ({c, ...props}) => {
 	const toast = useToaster();
 	const {t} = useTranslation();
 	const [value, setValue] = useState(c.waarde);
@@ -99,4 +99,4 @@ const ConfiguratieItem: React.FC<FormControlProps & {c: IConfiguratie}> = ({c, .
 	);
 };
 
-export default ConfiguratieItem;
+export default ParameterItem;

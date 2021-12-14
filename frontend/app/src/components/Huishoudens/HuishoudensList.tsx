@@ -2,8 +2,8 @@ import {AddIcon, CloseIcon, SearchIcon} from "@chakra-ui/icons";
 import {Button, IconButton, Input, InputGroup, InputLeftElement, InputRightElement} from "@chakra-ui/react";
 import React, {useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
-import {useHistory} from "react-router-dom";
-import Routes from "../../config/routes";
+import {Outlet, useNavigate} from "react-router-dom";
+import {AppRoutes} from "../../config/routes";
 import {Huishouden, useGetHuishoudensQuery} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
 import {searchFields} from "../../utils/things";
@@ -13,7 +13,7 @@ import HuishoudensListView from "./HuishoudensListView";
 
 const HuishoudensList = () => {
 	const {t} = useTranslation();
-	const {push} = useHistory();
+	const navigate = useNavigate();
 	const [search, setSearch] = useState<string>("");
 	const searchRef = useRef<HTMLInputElement>(null);
 	const $huishoudens = useGetHuishoudensQuery();
@@ -44,7 +44,7 @@ const HuishoudensList = () => {
 				return (
 					<DeadEndPage message={t("messages.burgers.addHint", {buttonLabel: t("global.actions.add")})}>
 						<Button size={"sm"} colorScheme={"primary"} variant={"solid"} leftIcon={<AddIcon />}
-							onClick={() => push(Routes.CreateBurger)}>{t("global.actions.add")}</Button>
+							onClick={() => navigate(AppRoutes.CreateBurger())}>{t("global.actions.add")}</Button>
 					</DeadEndPage>
 				);
 			}
@@ -58,7 +58,8 @@ const HuishoudensList = () => {
 						<Input type={"text"} onChange={e => setSearch(e.target.value)} bg={"white"} onKeyDown={onKeyDownOnSearch} placeholder={t("forms.search.fields.search")} ref={searchRef} />
 						{search.length > 0 && (
 							<InputRightElement zIndex={0}>
-								<IconButton onClick={() => setSearch("")} size={"xs"} variant={"link"} icon={<CloseIcon />} aria-label={t("global.actions.cancel")} color={"gray.300"} />
+								<IconButton onClick={() => setSearch("")} size={"xs"} variant={"link"} icon={
+									<CloseIcon />} aria-label={t("global.actions.cancel")} color={"gray.300"} />
 							</InputRightElement>
 						)}
 					</InputGroup>
@@ -70,6 +71,7 @@ const HuishoudensList = () => {
 					) : (
 						<HuishoudensListView huishoudens={filteredHuishoudens} />
 					)}
+					<Outlet />
 				</Page>
 			);
 		}} />

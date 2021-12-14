@@ -2,8 +2,8 @@ import {List, ListIcon, ListItem} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {MdCheckCircle, MdReportProblem} from "react-icons/md";
-import {useHistory, useParams} from "react-router-dom";
-import Routes from "../../../config/routes";
+import {useNavigate, useParams} from "react-router-dom";
+import {AppRoutes} from "../../../config/routes";
 import {Afspraak, CreateAfspraakMutationVariables, useAddAfspraakZoektermMutation, useCreateAfspraakMutation, useGetAfspraakFormDataQuery} from "../../../generated/graphql";
 import d from "../../../utils/dayjs";
 import Queryable from "../../../utils/Queryable";
@@ -18,12 +18,12 @@ import ZoektermenList from "../ZoektermenList";
 import {FollowUpAfspraakFormContextType} from "./context";
 
 const FollowUpAfspraak = () => {
-	const {id} = useParams<{id: string}>();
+	const {id = ""} = useParams<{id: string}>();
 	const {t} = useTranslation();
 	const toast = useToaster();
 	const [createAfspraak] = useCreateAfspraakMutation();
 	const [addAfspraakZoekterm] = useAddAfspraakZoektermMutation();
-	const {push} = useHistory();
+	const navigate = useNavigate();
 
 	const $afspraak = useGetAfspraakFormDataQuery({
 		variables: {
@@ -63,7 +63,7 @@ const FollowUpAfspraak = () => {
 							   toast({
 								   success: t("messages.createAfspraakSuccess"),
 							   });
-							   push(Routes.ViewAfspraak(createdAfspraakId));
+							   navigate(AppRoutes.ViewAfspraak(createdAfspraakId));
 						   })
 						   .catch(err => {
 							   toast({
@@ -89,7 +89,7 @@ const FollowUpAfspraak = () => {
 			};
 
 			return (
-				<Page title={t("afspraken.vervolgAfspraak.title")} backButton={<BackButton to={Routes.ViewAfspraak(afspraak.id)} />}>
+				<Page title={t("afspraken.vervolgAfspraak.title")} backButton={<BackButton to={AppRoutes.ViewAfspraak(afspraak.id)} />}>
 					{((afspraak.zoektermen && afspraak.zoektermen.length > 0) || afspraak.betaalinstructie) && (
 						<Section>
 							<List spacing={2}>

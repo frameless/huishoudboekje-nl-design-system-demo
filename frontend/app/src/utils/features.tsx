@@ -28,7 +28,9 @@ export const FeatureProvider = ({flags, children}) => {
 	}, [setFeatures, user, flags]);
 
 	return (
-		<FeatureContext.Provider value={{features, setFeatures}} children={children} />
+		<FeatureContext.Provider value={{features, setFeatures}}>
+			{children}
+		</FeatureContext.Provider>
 	);
 };
 

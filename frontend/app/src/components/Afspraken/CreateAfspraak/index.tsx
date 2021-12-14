@@ -1,7 +1,7 @@
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {useHistory} from "react-router-dom";
-import Routes from "../../../config/routes";
+import {useNavigate, useParams} from "react-router-dom";
+import {AppRoutes} from "../../../config/routes";
 import {CreateAfspraakMutationVariables, useCreateAfspraakMutation, useGetCreateAfspraakFormDataQuery} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import useHandleMutation from "../../../utils/useHandleMutation";
@@ -11,21 +11,22 @@ import PageNotFound from "../../PageNotFound";
 import AfspraakForm from "../AfspraakForm";
 import AfspraakFormContext, {AfspraakFormContextType} from "../EditAfspraak/context";
 
-const CreateAfspraak: React.FC<{burgerId: number}> = ({burgerId}) => {
+const CreateAfspraak = () => {
+	const {id} = useParams();
 	const {t} = useTranslation();
-	const {push} = useHistory();
+	const navigate = useNavigate();
 	const handleMutation = useHandleMutation();
 
 	const [createAfspraakMutation] = useCreateAfspraakMutation();
 	const $createAfspraakFormData = useGetCreateAfspraakFormDataQuery({
-		variables: {burgerId},
+		variables: {burgerId: parseInt(id!)},
 	});
 
 	const createAfspraak = (input: Omit<CreateAfspraakMutationVariables["input"], "burgerId">) => handleMutation(
 		createAfspraakMutation({
 			variables: {
 				input: {
-					burgerId,
+					burgerId: parseInt(id!),
 					...input,
 				},
 			},
@@ -33,7 +34,7 @@ const CreateAfspraak: React.FC<{burgerId: number}> = ({burgerId}) => {
 		t("messages.createAfspraakSuccess"),
 		(data) => {
 			if (data.data?.createAfspraak?.afspraak?.id) {
-				push(Routes.ViewAfspraak(data.data.createAfspraak.afspraak.id));
+				navigate(AppRoutes.ViewAfspraak(data.data.createAfspraak.afspraak.id));
 			}
 		});
 
@@ -47,7 +48,7 @@ const CreateAfspraak: React.FC<{burgerId: number}> = ({burgerId}) => {
 			}
 
 			return (
-				<Page title={t("forms.afspraken.titleCreate")} backButton={<BackButton to={Routes.Burger(burgerId)} />}>
+				<Page title={t("forms.afspraken.titleCreate")} backButton={<BackButton to={AppRoutes.Burger(parseInt(id!))} />}>
 					<AfspraakFormContext.Provider value={ctxValue}>
 						<AfspraakForm burgerRekeningen={burger?.rekeningen || []} onChange={(data) => createAfspraak(data as CreateAfspraakMutationVariables["input"])} />
 					</AfspraakFormContext.Provider>

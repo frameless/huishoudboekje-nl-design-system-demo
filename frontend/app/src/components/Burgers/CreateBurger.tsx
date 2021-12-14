@@ -1,18 +1,18 @@
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {useHistory} from "react-router-dom";
-import Routes from "../../config/routes";
+import {useNavigate} from "react-router-dom";
+import {AppRoutes} from "../../config/routes";
+import SaveBurgerErrorHandler from "../../errorHandlers/SaveBurgerErrorHandler";
 import useMutationErrorHandler from "../../errorHandlers/useMutationErrorHandler";
 import {CreateBurgerInput, GetBurgersDocument, GetHuishoudensDocument, useCreateBurgerMutation} from "../../generated/graphql";
 import useToaster from "../../utils/useToaster";
 import BackButton from "../Layouts/BackButton";
 import Page from "../Layouts/Page";
 import BurgerForm from "./BurgerForm";
-import SaveBurgerErrorHandler from "../../errorHandlers/SaveBurgerErrorHandler";
 
 const CreateBurger = () => {
 	const {t} = useTranslation();
-	const {push} = useHistory();
+	const navigate = useNavigate();
 	const toast = useToaster();
 	const handleSaveBurgerErrors = useMutationErrorHandler(SaveBurgerErrorHandler);
 	const [createBurger, $createBurger] = useCreateBurgerMutation({
@@ -34,13 +34,13 @@ const CreateBurger = () => {
 
 			const {id} = result?.data?.createBurger?.burger || {};
 			if (id) {
-				push(Routes.Burger(id));
+				navigate(AppRoutes.Burger(id));
 			}
 		}).catch(handleSaveBurgerErrors);
 	};
 
 	return (
-		<Page title={t("forms.createBurger.title")} backButton={<BackButton to={Routes.Burgers} />}>
+		<Page title={t("forms.createBurger.title")} backButton={<BackButton to={AppRoutes.Burgers()} />}>
 			<BurgerForm isLoading={$createBurger.loading} onSubmit={onSubmit} />
 		</Page>
 	);

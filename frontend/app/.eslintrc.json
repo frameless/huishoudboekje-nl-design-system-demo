@@ -76,7 +76,8 @@
 	"no-constant-condition": ["warn", {"checkLoops": false}],
 	"react/jsx-no-useless-fragment": ["error", {"allowExpressions": true}],
 	"no-redeclare": ["off"],
-	"@typescript-eslint/no-redeclare": ["off"]
+	"@typescript-eslint/no-redeclare": ["off"],
+	"react/no-children-prop": ["warn", {"allowFunctions": true}]
   },
   "ignorePatterns": [
 	"node_modules",

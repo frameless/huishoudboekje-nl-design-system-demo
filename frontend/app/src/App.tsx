@@ -2,18 +2,30 @@ import {Box, Button, Heading, HStack, IconButton, Spinner, Stack, Text, useTheme
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {FaLock} from "react-icons/fa";
-import {Redirect, Route, Switch, useLocation} from "react-router-dom";
-import AfspraakRouter from "./components/Afspraken";
+import {Navigate, Outlet, Route, Routes, useLocation} from "react-router-dom";
+import BetaalinstructiePage from "./components/Afspraken/Betaalinstructie";
+import CreateAfspraak from "./components/Afspraken/CreateAfspraak";
+import EditAfspraak from "./components/Afspraken/EditAfspraak";
+import FollowUpAfspraak from "./components/Afspraken/FollowUpAfspraak";
+import ViewAfspraak from "./components/Afspraken/ViewAfspraak";
 import CustomerStatementMessages from "./components/Bankzaken/Bankafschriften";
 import Betaalinstructies from "./components/Bankzaken/Betaalinstructies";
 import Transactions from "./components/Bankzaken/Transacties";
-import Burgers from "./components/Burgers";
+import BurgerDetail from "./components/Burgers/BurgerDetail";
+import BurgerList from "./components/Burgers/BurgerList";
+import CreateBurger from "./components/Burgers/CreateBurger";
+import EditBurger from "./components/Burgers/EditBurger";
 import Configuratie from "./components/Configuratie";
 import Gebeurtenissen from "./components/Gebeurtenissen";
-import Huishoudens from "./components/Huishoudens";
+import HuishoudenDetails from "./components/Huishoudens/HuishoudenDetail";
+import HuishoudensList from "./components/Huishoudens/HuishoudensList";
 import TwoColumns from "./components/Layouts/TwoColumns";
 import UserStatus from "./components/Layouts/UserStatus";
-import Organisaties from "./components/Organisaties";
+import CreateAfdeling from "./components/Organisaties/CreateAfdeling";
+import CreateOrganisatie from "./components/Organisaties/CreateOrganisatie";
+import EditOrganisatie from "./components/Organisaties/EditOrganisatie";
+import OrganisatieDetail from "./components/Organisaties/OrganisatieDetail";
+import OrganisatieList from "./components/Organisaties/OrganisatieList";
 import PageNotFound from "./components/PageNotFound";
 import Rapportage from "./components/Rapportage";
 import Sidebar from "./components/Sidebar";
@@ -21,7 +33,7 @@ import SidebarContainer from "./components/Sidebar/SidebarContainer";
 import StatusErrorPage from "./components/Status/StatusErrorPage";
 import StatusPage from "./components/Status/StatusPage";
 import {dataLayerOptions} from "./config/dataLayer";
-import Routes from "./config/routes";
+import {RouteNames} from "./config/routes";
 import onPathChanged from "./utils/DataLayer/hooks/onPathChanged";
 import useDataLayer from "./utils/DataLayer/useDataLayer";
 import useAuth from "./utils/useAuth";
@@ -67,7 +79,7 @@ const App = () => {
 		const referer = localStorage.getItem("hhb-referer");
 		if (referer) {
 			localStorage.removeItem("hhb-referer");
-			return (<Redirect to={referer} />);
+			return (<Navigate to={referer} />);
 		}
 	}
 
@@ -87,23 +99,45 @@ const App = () => {
 						</HStack>
 					</Stack>
 
-					<Switch>
-						<Route exact path={Routes.Home} component={() => <Redirect to={Routes.Huishoudens} />} />
-						<Route path={Routes.Huishoudens} component={Huishoudens} />
-						<Route path={Routes.Burgers} component={Burgers} />
-						<Route path={Routes.Organisaties} component={Organisaties} />
-						<Route path={Routes.Afspraken} component={AfspraakRouter} />
-						<Route exact path={Routes.Bankzaken} component={() => <Redirect to={Routes.Transacties} />} />
-						<Route path={Routes.Transacties} component={Transactions} />
-						<Route path={Routes.Bankafschriften} component={CustomerStatementMessages} />
-						<Route path={Routes.Betaalinstructies} component={Betaalinstructies} />
-						<Route path={Routes.Configuratie} component={Configuratie} />
-						<Route path={Routes.Rapportage} component={Rapportage} />
-						<Route path={Routes.Gebeurtenissen} component={Gebeurtenissen} />
-						<Route exact path={Routes.Status} component={StatusPage} />
-						<Route exact path={Routes.NotFound} component={PageNotFound} />
-						<Route component={PageNotFound} />
-					</Switch>
+					<Routes>
+						<Route index element={<Navigate to={RouteNames.huishoudens} replace />} />
+						<Route path={RouteNames.huishoudens} element={<Outlet />}>
+							<Route index element={<HuishoudensList />} />
+							<Route path={":id"} element={<HuishoudenDetails />} />
+						</Route>
+						<Route path={RouteNames.burgers} element={<Outlet />}>
+							<Route index element={<BurgerList />} />
+							<Route path={RouteNames.add} element={<CreateBurger />} />
+							<Route path={":id"} element={<BurgerDetail />} />
+							<Route path={`:id/${RouteNames.edit}`} element={<EditBurger />} />
+							<Route path={`:id/${RouteNames.afspraken}/${RouteNames.add}`} element={<CreateAfspraak />} />
+						</Route>
+						<Route path={RouteNames.afspraken} element={<Outlet />}>
+							<Route path={":id"} element={<ViewAfspraak />} />
+							<Route path={`:id/${RouteNames.edit}`} element={<EditAfspraak />} />
+							<Route path={`:id/${RouteNames.betaalinstructie}`} element={<BetaalinstructiePage />} />
+							<Route path={`:id/${RouteNames.followUp}`} element={<FollowUpAfspraak />} />
+						</Route>
+						<Route path={RouteNames.organisaties} element={<Outlet />}>
+							<Route index element={<OrganisatieList />} />
+							<Route path={RouteNames.add} element={<CreateOrganisatie />} />
+							<Route path={":id"} element={<OrganisatieDetail />} />
+							<Route path={`:id/${RouteNames.edit}`} element={<EditOrganisatie />} />
+							<Route path={`:id/${RouteNames.afdelingen}/${RouteNames.add}`} element={<CreateAfdeling />} />
+						</Route>
+						<Route path={RouteNames.bankzaken} element={<Outlet />}>
+							<Route index element={<Navigate to={RouteNames.transacties} replace />} />
+							<Route path={RouteNames.transacties} element={<Transactions />} />
+							<Route path={RouteNames.bankafschriften} element={<CustomerStatementMessages />} />
+							<Route path={RouteNames.betaalinstructies} element={<Betaalinstructies />} />
+						</Route>
+						<Route path={RouteNames.rapportage} element={<Rapportage />} />
+						<Route path={RouteNames.gebeurtenissen} element={<Gebeurtenissen />} />
+						<Route path={RouteNames.configuratie} element={<Configuratie />} />
+						<Route path={RouteNames.status} element={<StatusPage />} />
+						<Route path={RouteNames.notFound} element={<PageNotFound />} />
+						<Route path={"*"} element={<PageNotFound />} />
+					</Routes>
 				</Box>
 			</HStack>
 		</VStack>

@@ -30,8 +30,8 @@ import {
 } from "@chakra-ui/react";
 import React, {useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
-import {useHistory} from "react-router-dom";
-import Routes from "../../config/routes";
+import {useNavigate} from "react-router-dom";
+import {AppRoutes} from "../../config/routes";
 import SaveAfdelingPostadresErrorHandler from "../../errorHandlers/SaveAfdelingPostadresErrorHandler";
 import SaveAfdelingRekeningErrorHandler from "../../errorHandlers/SaveAfdelingRekeningErrorHandler";
 import useMutationErrorHandler from "../../errorHandlers/useMutationErrorHandler";
@@ -58,7 +58,7 @@ const AfdelingListItemModal: React.FC<{afdeling: Afdeling, disclosure: UseDisclo
 	const alert = useDisclosure();
 	const updateModal = useDisclosure();
 	const cancelRef = useRef(null);
-	const {push} = useHistory();
+	const navigate = useNavigate();
 	const [showCreateRekeningForm, toggleCreateRekeningForm] = useState<boolean>(false);
 	const [showCreatePostadresForm, toggleCreatePostadresForm] = useState<boolean>(false);
 	const [createAfdelingRekening] = useCreateAfdelingRekeningMutation({
@@ -138,7 +138,7 @@ const AfdelingListItemModal: React.FC<{afdeling: Afdeling, disclosure: UseDisclo
 			});
 			alert.onClose();
 			disclosure.onClose();
-			push(Routes.Organisatie(afdeling.organisatie?.id));
+			navigate(AppRoutes.Organisatie(afdeling.organisatie?.id));
 		}).catch(err => {
 			console.error(err);
 			toast({

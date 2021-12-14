@@ -3,7 +3,7 @@ import {Box, Button, FormControl, FormLabel, HStack, Input, Stack, Text, useBrea
 import React, {useState} from "react";
 import DatePicker from "react-datepicker";
 import {useTranslation} from "react-i18next";
-import Routes from "../../../config/routes";
+import {AppRoutes} from "../../../config/routes";
 import {Export, GetExportsDocument, useCreateExportOverschrijvingenMutation, useGetExportsQuery} from "../../../generated/graphql";
 import {DateRange} from "../../../models/models";
 import d from "../../../utils/dayjs";
@@ -77,7 +77,7 @@ const Betaalinstructies = () => {
 							return (
 								<Stack spacing={4}>
 									{exports.map((e) => {
-										const href = Routes.Export(e.id!);
+										const href = AppRoutes.Export(e.id);
 
 										return (
 											<HStack justify={"space-between"} key={e.id}>

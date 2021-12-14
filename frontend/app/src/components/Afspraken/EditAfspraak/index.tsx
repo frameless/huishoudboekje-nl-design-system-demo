@@ -1,7 +1,7 @@
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {useHistory, useParams} from "react-router-dom";
-import Routes from "../../../config/routes";
+import {useNavigate, useParams} from "react-router-dom";
+import {AppRoutes} from "../../../config/routes";
 import {Afspraak, GetAfspraakDocument, UpdateAfspraakMutationVariables, useGetAfspraakFormDataQuery, useUpdateAfspraakMutation} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import useHandleMutation from "../../../utils/useHandleMutation";
@@ -12,7 +12,7 @@ import AfspraakForm from "../AfspraakForm";
 import AfspraakFormContext, {AfspraakFormContextType} from "./context";
 
 const EditAfspraak = () => {
-	const {id} = useParams<{id: string}>();
+	const {id = ""} = useParams<{id: string}>();
 	const {t} = useTranslation();
 	const handleMutation = useHandleMutation();
 	const [updateAfspraakMutation, $updateAfspraakMutation] = useUpdateAfspraakMutation({
@@ -20,7 +20,7 @@ const EditAfspraak = () => {
 			{query: GetAfspraakDocument, variables: {id: parseInt(id)}},
 		],
 	});
-	const {push} = useHistory();
+	const navigate = useNavigate();
 
 	const $afspraak = useGetAfspraakFormDataQuery({
 		variables: {
@@ -51,7 +51,7 @@ const EditAfspraak = () => {
 					id: afspraak.id!,
 					input: data,
 				},
-			}), t("messages.updateAfspraakSuccess"), () => push(Routes.ViewAfspraak(afspraak.id)));
+			}), t("messages.updateAfspraakSuccess"), () => navigate(AppRoutes.ViewAfspraak(afspraak.id)));
 
 			const ctxValue: AfspraakFormContextType = {
 				rubrieken: data.rubrieken || [],
@@ -59,7 +59,7 @@ const EditAfspraak = () => {
 			};
 
 			return (
-				<Page title={t("forms.afspraken.titleEdit")} backButton={<BackButton to={Routes.ViewAfspraak(afspraak.id)} />}>
+				<Page title={t("forms.afspraken.titleEdit")} backButton={<BackButton to={AppRoutes.ViewAfspraak(afspraak.id)} />}>
 					<AfspraakFormContext.Provider value={ctxValue}>
 						<AfspraakForm burgerRekeningen={afspraak.burger?.rekeningen || []} values={editAfspraakValues} onChange={updateAfspraak} isLoading={$updateAfspraakMutation.loading} />
 					</AfspraakFormContext.Provider>

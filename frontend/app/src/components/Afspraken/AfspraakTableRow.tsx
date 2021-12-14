@@ -3,7 +3,7 @@ import {Box, IconButton, Stack, TableRowProps, Td, Text, Tr, useBreakpointValue}
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {NavLink} from "react-router-dom";
-import Routes from "../../config/routes";
+import {AppRoutes} from "../../config/routes";
 import {Afspraak} from "../../generated/graphql";
 import {currencyFormat2, isAfspraakActive} from "../../utils/things";
 
@@ -26,7 +26,7 @@ const AfspraakTableRow: React.FC<TableRowProps & {afspraak: Afspraak}> = ({afspr
 				</Stack>
 			</Td>
 			<Td>
-				<IconButton as={NavLink} to={Routes.ViewAfspraak(afspraak.id)} variant={"ghost"} size={"sm"} icon={
+				<IconButton as={NavLink} to={AppRoutes.ViewAfspraak(afspraak.id)} variant={"ghost"} size={"sm"} icon={
 					<ViewIcon />} aria-label={t("global.actions.view")} title={t("global.actions.view")} />
 			</Td>
 		</Tr>

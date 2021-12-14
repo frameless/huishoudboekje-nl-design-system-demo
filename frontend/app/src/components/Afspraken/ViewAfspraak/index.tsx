@@ -6,7 +6,7 @@ import PageNotFound from "../../PageNotFound";
 import AfspraakDetailView from "./AfspraakDetailView";
 
 const ViewAfspraak = () => {
-	const {id} = useParams<{id: string}>();
+	const {id = ""} = useParams<{id: string}>();
 
 	const $afspraak = useGetAfspraakQuery({
 		variables: {

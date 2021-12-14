@@ -26,7 +26,7 @@ import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {AiOutlineTag} from "react-icons/all";
 import {NavLink} from "react-router-dom";
-import Routes from "../../../config/routes";
+import {AppRoutes} from "../../../config/routes";
 import {Afspraak, GetAfspraakDocument, GetAfsprakenDocument, useAddAfspraakZoektermMutation, useDeleteAfspraakZoektermMutation} from "../../../generated/graphql";
 import d from "../../../utils/dayjs";
 import {currencyFormat2, formatBurgerName, isAfspraakActive} from "../../../utils/things";
@@ -117,7 +117,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	const validThrough = d(afspraak.validThrough, "YYYY-MM-DD");
 
 	return (
-		<Page title={t("afspraakDetailView.title")} backButton={<BackButton to={Routes.Burger(afspraak.burger?.id)} />} menu={menu}>
+		<Page title={t("afspraakDetailView.title")} backButton={<BackButton to={AppRoutes.Burger(afspraak.burger?.id)} />} menu={menu}>
 			<Section>
 				<Stack direction={["column", "row"]}>
 					<FormLeft title={t("afspraakDetailView.section1.title")} helperText={t("afspraakDetailView.section1.helperText")} />
@@ -127,7 +127,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 							<DataItem label={t("burger")}>
 								<HStack>
 									<Text>{formatBurgerName(afspraak.burger)}</Text>
-									<IconButton as={NavLink} to={Routes.Burger(afspraak.burger?.id)} variant={"ghost"} size={"sm"} icon={
+									<IconButton as={NavLink} to={AppRoutes.Burger(afspraak.burger?.id)} variant={"ghost"} size={"sm"} icon={
 										<ViewIcon />} aria-label={t("global.actions.view")} />
 								</HStack>
 							</DataItem>
@@ -136,7 +136,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 									<HStack>
 										<Text>{afspraak.tegenRekening.rekeninghouder}</Text>
 										{afspraak.afdeling?.organisatie?.id && (
-											<IconButton as={NavLink} to={Routes.Organisatie(afspraak.afdeling.organisatie.id)} variant={"ghost"} size={"sm"}
+											<IconButton as={NavLink} to={AppRoutes.Organisatie(afspraak.afdeling.organisatie.id)} variant={"ghost"} size={"sm"}
 												aria-label={t("global.actions.view")} icon={<ViewIcon />} />
 										)}
 									</HStack>
@@ -192,8 +192,8 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 								<Text color={"gray.500"}>{t("afspraken.endedOn", {date: validThrough.format("L")})}</Text>
 							)}
 							<Box>
-								<Button as={NavLink} to={Routes.FollowUpAfspraak(afspraak.id)} colorScheme={"primary"} size={"sm"} leftIcon={
-									<AddIcon />}>{t("afspraken.planFollowup")}</Button>
+								<Button as={NavLink} to={AppRoutes.FollowUpAfspraak(afspraak.id)} colorScheme={"primary"} size={"sm"}
+									leftIcon={<AddIcon />}>{t("afspraken.planFollowup")}</Button>
 							</Box>
 						</FormRight>
 					</Stack>
@@ -266,7 +266,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 													</Stack>
 												</Td>
 												<Td>
-													<IconButton as={NavLink} to={Routes.ViewAfspraak(a.id)} variant={"ghost"} size={"sm"} icon={
+													<IconButton as={NavLink} to={AppRoutes.ViewAfspraak(a.id)} variant={"ghost"} size={"sm"} icon={
 														<ViewIcon />} aria-label={t("global.actions.view")} title={t("global.actions.view")} />
 												</Td>
 											</Tr>
@@ -302,13 +302,13 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 
 							<Box>
 								<Button colorScheme={"primary"} size={"sm"} leftIcon={
-									<EditIcon />} as={NavLink} to={Routes.AfspraakBetaalinstructie(afspraak.id!)}>{t("global.actions.newBetaalinstructie")}</Button>
+									<EditIcon />} as={NavLink} to={AppRoutes.AfspraakBetaalinstructie(afspraak.id)}>{t("global.actions.newBetaalinstructie")}</Button>
 							</Box>
 						</>) : (<>
 							<Text>{t("afspraakDetailView.noBetaalinstructie")}</Text>
 
 							<Stack direction={["column", "row"]}>
-								<Button colorScheme={"primary"} size={"sm"} leftIcon={<AddIcon />} as={NavLink} to={Routes.AfspraakBetaalinstructie(afspraak.id!)}>
+								<Button colorScheme={"primary"} size={"sm"} leftIcon={<AddIcon />} as={NavLink} to={AppRoutes.AfspraakBetaalinstructie(afspraak.id)}>
 									{t("global.actions.add")}
 								</Button>
 							</Stack>
