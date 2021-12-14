@@ -86,6 +86,18 @@ export type AfspraakOverschrijvingenArgs = {
   startDatum?: InputMaybe<Scalars['Date']>;
 };
 
+/** Model om vast te stellen op basis van welke regels een signaal aangemaakt moet worden  */
+export type Alarm = {
+  afspraak?: Maybe<Afspraak>;
+  bedrag?: Maybe<Scalars['Bedrag']>;
+  bedragMargin?: Maybe<Scalars['Bedrag']>;
+  datum?: Maybe<Scalars['String']>;
+  datumMargin?: Maybe<Scalars['Int']>;
+  gebruikerEmail?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']>;
+  isActive?: Maybe<Scalars['Boolean']>;
+};
+
 export type BankTransaction = {
   bedrag?: Maybe<Scalars['Bedrag']>;
   customerStatementMessage?: Maybe<CustomerStatementMessage>;
@@ -257,6 +269,21 @@ export type CreateAfspraakInput = {
   validThrough?: InputMaybe<Scalars['String']>;
 };
 
+export type CreateAlarm = {
+  alarm?: Maybe<Alarm>;
+  ok?: Maybe<Scalars['Boolean']>;
+};
+
+export type CreateAlarmInput = {
+  afspraakId?: InputMaybe<Scalars['Int']>;
+  bedrag?: InputMaybe<Scalars['Bedrag']>;
+  bedragMargin?: InputMaybe<Scalars['Bedrag']>;
+  datum?: InputMaybe<Scalars['String']>;
+  datumMargin?: InputMaybe<Scalars['Int']>;
+  gebruikerEmail?: InputMaybe<Scalars['String']>;
+  isActive?: InputMaybe<Scalars['Boolean']>;
+};
+
 export type CreateBurger = {
   burger?: Maybe<Burger>;
   ok?: Maybe<Scalars['Boolean']>;
@@ -419,6 +446,11 @@ export type DeleteAfspraakZoekterm = {
   matchingAfspraken?: Maybe<Array<Maybe<Afspraak>>>;
   ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Afspraak>;
+};
+
+export type DeleteAlarm = {
+  ok?: Maybe<Scalars['Boolean']>;
+  previous?: Maybe<Alarm>;
 };
 
 export type DeleteBurger = {
@@ -649,6 +681,7 @@ export type RootMutation = {
   /** Mutatie om een rekening aan een afdeling toe te voegen. */
   createAfdelingRekening?: Maybe<CreateAfdelingRekening>;
   createAfspraak?: Maybe<CreateAfspraak>;
+  createAlarm?: Maybe<CreateAlarm>;
   createBurger?: Maybe<CreateBurger>;
   /** Mutatie om een rekening aan een burger toe te voegen. */
   createBurgerRekening?: Maybe<CreateBurgerRekening>;
@@ -673,6 +706,7 @@ export type RootMutation = {
   deleteAfspraak?: Maybe<DeleteAfspraak>;
   /** Mutatie om een zoekterm bij een afspraak te verwijderen. */
   deleteAfspraakZoekterm?: Maybe<DeleteAfspraakZoekterm>;
+  deleteAlarm?: Maybe<DeleteAlarm>;
   deleteBurger?: Maybe<DeleteBurger>;
   /** Mutatie om een rekening bij een burger te verwijderen. */
   deleteBurgerRekening?: Maybe<DeleteBurgerRekening>;
@@ -691,6 +725,7 @@ export type RootMutation = {
   updateAfspraak?: Maybe<UpdateAfspraak>;
   /** Mutatie voor het instellen van een nieuwe betaalinstructie voor een afspraak. */
   updateAfspraakBetaalinstructie?: Maybe<UpdateAfspraakBetaalinstructie>;
+  updateAlarm?: Maybe<UpdateAlarm>;
   updateBurger?: Maybe<UpdateBurger>;
   updateConfiguratie?: Maybe<UpdateConfiguratie>;
   /** deprecated */
@@ -732,6 +767,12 @@ export type RootMutationCreateAfdelingRekeningArgs = {
 /** The root of all mutations  */
 export type RootMutationCreateAfspraakArgs = {
   input: CreateAfspraakInput;
+};
+
+
+/** The root of all mutations  */
+export type RootMutationCreateAlarmArgs = {
+  input: CreateAlarmInput;
 };
 
 
@@ -837,6 +878,12 @@ export type RootMutationDeleteAfspraakZoektermArgs = {
 
 
 /** The root of all mutations  */
+export type RootMutationDeleteAlarmArgs = {
+  id: Scalars['String'];
+};
+
+
+/** The root of all mutations  */
 export type RootMutationDeleteBurgerArgs = {
   id: Scalars['Int'];
 };
@@ -922,6 +969,13 @@ export type RootMutationUpdateAfspraakBetaalinstructieArgs = {
 
 
 /** The root of all mutations  */
+export type RootMutationUpdateAlarmArgs = {
+  id: Scalars['String'];
+  input: UpdateAlarmInput;
+};
+
+
+/** The root of all mutations  */
 export type RootMutationUpdateBurgerArgs = {
   achternaam?: InputMaybe<Scalars['String']>;
   bsn?: InputMaybe<Scalars['Int']>;
@@ -990,6 +1044,8 @@ export type RootQuery = {
   afdelingen?: Maybe<Array<Maybe<Afdeling>>>;
   afspraak?: Maybe<Afspraak>;
   afspraken?: Maybe<Array<Maybe<Afspraak>>>;
+  alarm?: Maybe<Alarm>;
+  alarmen?: Maybe<Array<Maybe<Alarm>>>;
   bankTransaction?: Maybe<BankTransaction>;
   bankTransactions?: Maybe<Array<Maybe<BankTransaction>>>;
   bankTransactionsPaged?: Maybe<BankTransactionsPaged>;
@@ -1045,6 +1101,18 @@ export type RootQueryAfspraakArgs = {
 /** The root of all queries  */
 export type RootQueryAfsprakenArgs = {
   ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+};
+
+
+/** The root of all queries  */
+export type RootQueryAlarmArgs = {
+  id: Scalars['String'];
+};
+
+
+/** The root of all queries  */
+export type RootQueryAlarmenArgs = {
+  ids?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 
@@ -1284,6 +1352,22 @@ export type UpdateAfspraakInput = {
   rubriekId?: InputMaybe<Scalars['Int']>;
   tegenRekeningId?: InputMaybe<Scalars['Int']>;
   validThrough?: InputMaybe<Scalars['String']>;
+};
+
+export type UpdateAlarm = {
+  alarm?: Maybe<Alarm>;
+  ok?: Maybe<Scalars['Boolean']>;
+  previous?: Maybe<Alarm>;
+};
+
+export type UpdateAlarmInput = {
+  afspraakId?: InputMaybe<Scalars['Int']>;
+  bedrag?: InputMaybe<Scalars['Bedrag']>;
+  bedragMargin?: InputMaybe<Scalars['Bedrag']>;
+  datum?: InputMaybe<Scalars['String']>;
+  datumMargin?: InputMaybe<Scalars['Int']>;
+  gebruikerEmail?: InputMaybe<Scalars['String']>;
+  isActive?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type UpdateBurger = {
@@ -1704,6 +1788,20 @@ export type UpdateRubriekMutationVariables = Exact<{
 
 export type UpdateRubriekMutation = { updateRubriek?: { ok?: boolean } };
 
+export type GetAfdelingQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type GetAfdelingQuery = { afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> } };
+
+export type GetAfspraakQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type GetAfspraakQuery = { afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> } };
+
 export type GetAfspraakFormDataQueryVariables = Exact<{
   afspraakId: Scalars['Int'];
 }>;
@@ -1797,13 +1895,6 @@ export type GetHuishoudensQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetHuishoudensQuery = { huishoudens?: Array<{ id?: number, burgers?: Array<{ id?: number, bsn?: number, email?: string, telefoonnummer?: string, voorletters?: string, voornamen?: string, achternaam?: string, geboortedatum?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }>, afspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }>, huishouden?: { id?: number, burgers?: Array<{ id?: number }> } }> }> };
-
-export type GetAfspraakQueryVariables = Exact<{
-  id: Scalars['Int'];
-}>;
-
-
-export type GetAfspraakQuery = { afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> } };
 
 export type GetOrganisatieQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -3708,6 +3799,76 @@ export function useUpdateRubriekMutation(baseOptions?: Apollo.MutationHookOption
 export type UpdateRubriekMutationHookResult = ReturnType<typeof useUpdateRubriekMutation>;
 export type UpdateRubriekMutationResult = Apollo.MutationResult<UpdateRubriekMutation>;
 export type UpdateRubriekMutationOptions = Apollo.BaseMutationOptions<UpdateRubriekMutation, UpdateRubriekMutationVariables>;
+export const GetAfdelingDocument = gql`
+    query getAfdeling($id: Int!) {
+  afdeling(id: $id) {
+    ...Afdeling
+  }
+}
+    ${AfdelingFragmentDoc}`;
+
+/**
+ * __useGetAfdelingQuery__
+ *
+ * To run a query within a React component, call `useGetAfdelingQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAfdelingQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAfdelingQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetAfdelingQuery(baseOptions: Apollo.QueryHookOptions<GetAfdelingQuery, GetAfdelingQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAfdelingQuery, GetAfdelingQueryVariables>(GetAfdelingDocument, options);
+      }
+export function useGetAfdelingLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAfdelingQuery, GetAfdelingQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAfdelingQuery, GetAfdelingQueryVariables>(GetAfdelingDocument, options);
+        }
+export type GetAfdelingQueryHookResult = ReturnType<typeof useGetAfdelingQuery>;
+export type GetAfdelingLazyQueryHookResult = ReturnType<typeof useGetAfdelingLazyQuery>;
+export type GetAfdelingQueryResult = Apollo.QueryResult<GetAfdelingQuery, GetAfdelingQueryVariables>;
+export const GetAfspraakDocument = gql`
+    query getAfspraak($id: Int!) {
+  afspraak(id: $id) {
+    ...Afspraak
+  }
+}
+    ${AfspraakFragmentDoc}`;
+
+/**
+ * __useGetAfspraakQuery__
+ *
+ * To run a query within a React component, call `useGetAfspraakQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAfspraakQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAfspraakQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetAfspraakQuery(baseOptions: Apollo.QueryHookOptions<GetAfspraakQuery, GetAfspraakQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAfspraakQuery, GetAfspraakQueryVariables>(GetAfspraakDocument, options);
+      }
+export function useGetAfspraakLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAfspraakQuery, GetAfspraakQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAfspraakQuery, GetAfspraakQueryVariables>(GetAfspraakDocument, options);
+        }
+export type GetAfspraakQueryHookResult = ReturnType<typeof useGetAfspraakQuery>;
+export type GetAfspraakLazyQueryHookResult = ReturnType<typeof useGetAfspraakLazyQuery>;
+export type GetAfspraakQueryResult = Apollo.QueryResult<GetAfspraakQuery, GetAfspraakQueryVariables>;
 export const GetAfspraakFormDataDocument = gql`
     query getAfspraakFormData($afspraakId: Int!) {
   afspraak(id: $afspraakId) {
@@ -4270,41 +4431,6 @@ export function useGetHuishoudensLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
 export type GetHuishoudensQueryHookResult = ReturnType<typeof useGetHuishoudensQuery>;
 export type GetHuishoudensLazyQueryHookResult = ReturnType<typeof useGetHuishoudensLazyQuery>;
 export type GetHuishoudensQueryResult = Apollo.QueryResult<GetHuishoudensQuery, GetHuishoudensQueryVariables>;
-export const GetAfspraakDocument = gql`
-    query getAfspraak($id: Int!) {
-  afspraak(id: $id) {
-    ...Afspraak
-  }
-}
-    ${AfspraakFragmentDoc}`;
-
-/**
- * __useGetAfspraakQuery__
- *
- * To run a query within a React component, call `useGetAfspraakQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetAfspraakQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetAfspraakQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useGetAfspraakQuery(baseOptions: Apollo.QueryHookOptions<GetAfspraakQuery, GetAfspraakQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetAfspraakQuery, GetAfspraakQueryVariables>(GetAfspraakDocument, options);
-      }
-export function useGetAfspraakLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAfspraakQuery, GetAfspraakQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetAfspraakQuery, GetAfspraakQueryVariables>(GetAfspraakDocument, options);
-        }
-export type GetAfspraakQueryHookResult = ReturnType<typeof useGetAfspraakQuery>;
-export type GetAfspraakLazyQueryHookResult = ReturnType<typeof useGetAfspraakLazyQuery>;
-export type GetAfspraakQueryResult = Apollo.QueryResult<GetAfspraakQuery, GetAfspraakQueryVariables>;
 export const GetOrganisatieDocument = gql`
     query getOrganisatie($id: Int!) {
   organisatie(id: $id) {

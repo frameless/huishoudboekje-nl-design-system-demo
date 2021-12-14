@@ -42,9 +42,7 @@ const CreateAfdelingModal: React.FC<CreateAfdelingModalProps> = ({organisatie, o
 				<ModalHeader>{t("modals.addAfdeling.title")}</ModalHeader>
 				<ModalCloseButton />
 				<ModalBody>
-
 					<AfdelingForm onChange={onSubmit} organisatie={organisatie} />
-
 				</ModalBody>
 				<ModalFooter />
 			</ModalContent>
