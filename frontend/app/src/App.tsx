@@ -21,7 +21,6 @@ import HuishoudenDetails from "./components/Huishoudens/HuishoudenDetail";
 import HuishoudensList from "./components/Huishoudens/HuishoudensList";
 import TwoColumns from "./components/Layouts/TwoColumns";
 import UserStatus from "./components/Layouts/UserStatus";
-import CreateAfdeling from "./components/Organisaties/CreateAfdeling";
 import CreateOrganisatie from "./components/Organisaties/CreateOrganisatie";
 import EditOrganisatie from "./components/Organisaties/EditOrganisatie";
 import OrganisatieDetail from "./components/Organisaties/OrganisatieDetail";
@@ -123,7 +122,6 @@ const App = () => {
 							<Route path={RouteNames.add} element={<CreateOrganisatie />} />
 							<Route path={":id"} element={<OrganisatieDetail />} />
 							<Route path={`:id/${RouteNames.edit}`} element={<EditOrganisatie />} />
-							<Route path={`:id/${RouteNames.afdelingen}/${RouteNames.add}`} element={<CreateAfdeling />} />
 						</Route>
 						<Route path={RouteNames.bankzaken} element={<Outlet />}>
 							<Route index element={<Navigate to={RouteNames.transacties} replace />} />

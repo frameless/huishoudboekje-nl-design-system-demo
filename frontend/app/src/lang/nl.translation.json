@@ -284,8 +284,7 @@
       }
     },
     "createAfdeling": {
-      "naam": "Naam",
-      "title": "Afdeling toevoegen"
+      "naam": "Naam"
     },
     "afdelingen": {
       "deleteAfdeling": {
@@ -663,6 +662,14 @@
   "suggestion": "Suggestie",
   "postadressen": "Postadressen",
   "rekeningen": "Rekeningen",
+  "modals": {
+    "addAfdeling": {
+      "title": "Afdeling toevoegen"
+    },
+    "addRekening": {
+      "title": "Rekening toevoegen"
+    }
+  },
   "deleteAfspraakModal": {
     "title": "Afdeling verwijderen",
     "confirmModalBody": "Weet je zeker dat je de afdeling {{afdeling}} wil verwijderen?"
@@ -711,11 +718,6 @@
     "period": "Periode",
     "month_one": "maand",
     "month_other": "maanden"
-  },
-  "modals": {
-    "addRekening": {
-      "title": "Rekening toevoegen"
-    }
   },
   "statuspage": {
     "title": "Status",

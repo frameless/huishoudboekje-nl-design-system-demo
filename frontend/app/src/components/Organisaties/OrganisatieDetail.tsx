@@ -16,6 +16,7 @@ import {
 	MenuItem,
 	MenuList,
 	useBreakpointValue,
+	useDisclosure,
 } from "@chakra-ui/react";
 import React, {useRef} from "react";
 import {useToggle} from "react-grapple";
@@ -31,6 +32,7 @@ import BackButton from "../Layouts/BackButton";
 import Page from "../Layouts/Page";
 import Section from "../Layouts/Section";
 import AfdelingListItem from "./AfdelingListItem";
+import CreateAfdelingModal from "./CreateAfdelingModal";
 import OrganisatieDetailView from "./Views/OrganisatieDetailView";
 
 const OrganisatieDetail = () => {
@@ -38,6 +40,7 @@ const OrganisatieDetail = () => {
 	const {id = ""} = useParams<{id: string}>();
 	const navigate = useNavigate();
 	const toast = useToaster();
+	const addAfdelingModal = useDisclosure();
 	const maxOrganisatieNaamLength = useBreakpointValue(maxOrganisatieNaamLengthBreakpointValues);
 
 	const cancelDeleteRef = useRef(null);
@@ -102,6 +105,10 @@ const OrganisatieDetail = () => {
 						</MenuList>
 					</Menu>
 				)}>
+					{addAfdelingModal.isOpen && (
+						<CreateAfdelingModal organisatie={organisatie} onClose={addAfdelingModal.onClose} />
+					)}
+
 					<AlertDialog isOpen={deleteDialogOpen} leastDestructiveRef={cancelDeleteRef} onClose={onCloseDeleteDialog}>
 						<AlertDialogOverlay />
 						<AlertDialogContent>
@@ -122,7 +129,7 @@ const OrganisatieDetail = () => {
 					<Grid maxWidth={"100%"} gridTemplateColumns={["repeat(1, 1fr)", "repeat(2, 1fr)", "repeat(3, 1fr)"]} gap={5}>
 						<Box>
 							<Button colorScheme={"primary"} borderStyle={"dashed"} variant={"outline"} leftIcon={<AddIcon />}
-								w="100%" h="100%" onClick={() => navigate(AppRoutes.CreateAfdeling(organisatie.id))} borderRadius={5}
+								w="100%" h="100%" onClick={() => addAfdelingModal.onOpen()} borderRadius={5}
 								p={5}>{t("global.actions.add")}</Button>
 						</Box>
 
