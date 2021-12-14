@@ -712,6 +712,11 @@
     "month_one": "maand",
     "month_other": "maanden"
   },
+  "modals": {
+    "addRekening": {
+      "title": "Rekening toevoegen"
+    }
+  },
   "statuspage": {
     "title": "Status",
     "services": {

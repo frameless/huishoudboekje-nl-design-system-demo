@@ -84,7 +84,7 @@ const RekeningForm: React.FC<{
 						<FormErrorMessage>{t("errors.iban.generalError")}</FormErrorMessage>
 					</FormControl>
 				</Stack>
-				<Stack direction={"row"} alignItems={"flex-end"}>
+				<Stack direction={"row"} justify={"flex-end"}>
 					<Button type={"reset"} onClick={() => onCancel()}>{t("global.actions.cancel")}</Button>
 					<Button type={"submit"} colorScheme={"primary"} onClick={onSubmitForm} isDisabled={isSubmitted}>{t("global.actions.save")}</Button>
 				</Stack>
