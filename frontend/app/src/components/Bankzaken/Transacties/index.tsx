@@ -120,7 +120,7 @@ const Transactions = () => {
 	];
 
 	return (
-		<TransactionsContext.Provider value={{ queryVariables }}>
+		<TransactionsContext.Provider value={{queryVariables}}>
 			<Page title={t("forms.bankzaken.sections.transactions.title")} menu={(
 				<Menu>
 					<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} data-cy={"actionsMenuButton"} />

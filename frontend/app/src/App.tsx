@@ -11,7 +11,7 @@ import ViewAfspraak from "./components/Afspraken/ViewAfspraak";
 import CustomerStatementMessages from "./components/Bankzaken/Bankafschriften";
 import Betaalinstructies from "./components/Bankzaken/Betaalinstructies";
 import Transactions from "./components/Bankzaken/Transacties";
-import BurgerDetail from "./components/Burgers/BurgerDetail";
+import BurgerDetailPage from "./components/Burgers/BurgerDetail";
 import BurgerList from "./components/Burgers/BurgerList";
 import CreateBurger from "./components/Burgers/CreateBurger";
 import EditBurger from "./components/Burgers/EditBurger";
@@ -21,10 +21,10 @@ import HuishoudenDetails from "./components/Huishoudens/HuishoudenDetail";
 import HuishoudensList from "./components/Huishoudens/HuishoudensList";
 import TwoColumns from "./components/Layouts/TwoColumns";
 import UserStatus from "./components/Layouts/UserStatus";
-import CreateAfdeling from "./components/Organisaties/CreateAfdeling";
+import {AfdelingDetailPage} from "./components/Organisaties/AfdelingDetailPage";
 import CreateOrganisatie from "./components/Organisaties/CreateOrganisatie";
 import EditOrganisatie from "./components/Organisaties/EditOrganisatie";
-import OrganisatieDetail from "./components/Organisaties/OrganisatieDetail";
+import OrganisatieDetailPage from "./components/Organisaties/OrganisatieDetailPage";
 import OrganisatieList from "./components/Organisaties/OrganisatieList";
 import PageNotFound from "./components/PageNotFound";
 import Rapportage from "./components/Rapportage";
@@ -108,7 +108,7 @@ const App = () => {
 						<Route path={RouteNames.burgers} element={<Outlet />}>
 							<Route index element={<BurgerList />} />
 							<Route path={RouteNames.add} element={<CreateBurger />} />
-							<Route path={":id"} element={<BurgerDetail />} />
+							<Route path={":id"} element={<BurgerDetailPage />} />
 							<Route path={`:id/${RouteNames.edit}`} element={<EditBurger />} />
 							<Route path={`:id/${RouteNames.afspraken}/${RouteNames.add}`} element={<CreateAfspraak />} />
 						</Route>
@@ -121,9 +121,9 @@ const App = () => {
 						<Route path={RouteNames.organisaties} element={<Outlet />}>
 							<Route index element={<OrganisatieList />} />
 							<Route path={RouteNames.add} element={<CreateOrganisatie />} />
-							<Route path={":id"} element={<OrganisatieDetail />} />
+							<Route path={":id"} element={<OrganisatieDetailPage />} />
 							<Route path={`:id/${RouteNames.edit}`} element={<EditOrganisatie />} />
-							<Route path={`:id/${RouteNames.afdelingen}/${RouteNames.add}`} element={<CreateAfdeling />} />
+							<Route path={`:organisatieId/${RouteNames.afdelingen}/:id`} element={<AfdelingDetailPage />} />
 						</Route>
 						<Route path={RouteNames.bankzaken} element={<Outlet />}>
 							<Route index element={<Navigate to={RouteNames.transacties} replace />} />

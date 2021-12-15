@@ -1,5 +1,4 @@
 import {Button, FormControl, FormErrorMessage, FormLabel, Input, SimpleGrid, Stack, useBreakpointValue} from "@chakra-ui/react";
-import {friendlyFormatIBAN} from "ibantools";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {Rekening, RekeningInput} from "../../generated/graphql";
@@ -80,11 +79,11 @@ const RekeningForm: React.FC<{
 				<Stack spacing={1}>
 					<FormControl isInvalid={!isValid("iban")} id={"iban"}>
 						<FormLabel>{t("forms.rekeningen.fields.iban")}</FormLabel>
-						<Input onChange={e => updateForm("iban", e.target.value)} value={formData.iban || ""} placeholder={friendlyFormatIBAN("NL00BANK0123456789") || ""} autoFocus={!!(rekening?.rekeninghouder)} />
+						<Input onChange={e => updateForm("iban", e.target.value)} value={formData.iban || ""} placeholder={"NL00BANK0123456789"} autoFocus={!!(rekening?.rekeninghouder)} />
 						<FormErrorMessage>{t("errors.iban.generalError")}</FormErrorMessage>
 					</FormControl>
 				</Stack>
-				<Stack direction={"row"} alignItems={"flex-end"}>
+				<Stack direction={"row"} justify={"flex-end"}>
 					<Button type={"reset"} onClick={() => onCancel()}>{t("global.actions.cancel")}</Button>
 					<Button type={"submit"} colorScheme={"primary"} onClick={onSubmitForm} isDisabled={isSubmitted}>{t("global.actions.save")}</Button>
 				</Stack>

@@ -43,7 +43,7 @@ export const AppRoutes = {
 	Organisatie: (id) => `/${RouteNames.organisaties}/${id}`,
 	CreateOrganisatie: `/${RouteNames.organisaties}/${RouteNames.add}`,
 	EditOrganisatie: (id) => `/${RouteNames.organisaties}/${id}/${RouteNames.edit}`,
-	CreateAfdeling: (organisatieId) => `/${RouteNames.organisaties}/${organisatieId}/${RouteNames.afdelingen}/${RouteNames.add}`,
+	Afdeling: (organisatieId, afdelingId) => `/${RouteNames.organisaties}/${organisatieId}/${RouteNames.afdelingen}/${afdelingId}`,
 
 	Bankzaken: `/${RouteNames.bankzaken}`,
 	Transacties: `/${RouteNames.bankzaken}/${RouteNames.transacties}`,

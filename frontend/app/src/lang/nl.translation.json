@@ -84,18 +84,18 @@
       "deleteSuccess": "{{burgerName}} is verwijderd uit dit huishouden."
     },
     "noHuishoudenSearchResults": "Geen huishoudens gevonden. Gebruik een andere zoekterm.",
+    "afdelingen": {
+      "deleteSuccess": "Afdeling verwijderd.",
+      "createSuccessMessage": "Nieuwe afdeling succesvol opgeslagen.",
+      "updateSuccess": "Afdeling gewijzigd.",
+      "alreadyExistsError": "Deze afdeling bestaat al."
+    },
     "postadressen": {
       "createSuccess": "Postadres toegevoegd.",
       "deleteSuccess": "Postadres verwijderd.",
       "updateSuccess": "Postadres gewijzigd.",
       "deleteTitle": "Postadres verwijderen",
       "deleteQuestion": "Weet je zeker dat je dit postadres wil verwijderen?"
-    },
-    "afdelingen": {
-      "deleteSuccess": "Afdeling verwijderd.",
-      "createSuccessMessage": "Nieuwe afdeling succesvol opgeslagen.",
-      "updateSuccess": "Afdeling gewijzigd.",
-      "alreadyExistsError": "Deze afdeling bestaat al."
     },
     "organisaties": {
       "createSuccessMessage": "Nieuwe organisatie succesvol opgeslagen.",
@@ -283,15 +283,14 @@
         "confirmQuestion": "Weet je zeker dat je {{burgerName}} wil verwijderen uit het huishouden {{huishoudenName}}?"
       }
     },
-    "createAfdeling": {
-      "naam": "Naam",
-      "title": "Afdeling toevoegen"
-    },
     "afdelingen": {
       "deleteAfdeling": {
         "title": "Afdeling verwijderen",
         "confirmQuestion": "Weet je zeker dat je afdeling {{name}} wil verwijderen?"
       }
+    },
+    "createAfdeling": {
+      "naam": "Naam"
     },
     "createOrganisatie": {
       "title": "Organisatie toevoegen"
@@ -555,6 +554,16 @@
       "activity": "Activiteit",
       "helperText": "Dit is een lijst met gebruikersactiviteiten."
     },
+    "afdelingDetails": {
+      "sectionPostadressen": {
+        "title": "Postadressen",
+        "helperText": "Deze afdeling heeft de volgende postadressen."
+      },
+      "sectionRekeningen": {
+        "title": "Rekeningen",
+        "helperText": "Deze afdeling heeft de volgende rekeningen."
+      }
+    },
     "notFound": {
       "title": "404",
       "subTitle": "Pagina niet beschikbaar",
@@ -663,6 +672,17 @@
   "suggestion": "Suggestie",
   "postadressen": "Postadressen",
   "rekeningen": "Rekeningen",
+  "modals": {
+    "addPostadres": {
+      "modalTitle": "Postadres toevoegen"
+    },
+    "addAfdeling": {
+      "title": "Afdeling toevoegen"
+    },
+    "addRekening": {
+      "title": "Rekening toevoegen"
+    }
+  },
   "deleteAfspraakModal": {
     "title": "Afdeling verwijderen",
     "confirmModalBody": "Weet je zeker dat je de afdeling {{afdeling}} wil verwijderen?"
