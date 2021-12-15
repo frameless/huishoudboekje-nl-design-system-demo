@@ -20,7 +20,7 @@ import BurgerGebeurtenissen from "./BurgerGebeurtenissen";
 import BurgerProfileView from "./BurgerProfileView";
 import BurgerRekeningenView from "./BurgerRekeningenView";
 
-const BurgerDetail = () => {
+const BurgerDetailPage = () => {
 	const {id = ""} = useParams<{id: string}>();
 	const {t} = useTranslation();
 	const toast = useToaster();
@@ -113,4 +113,4 @@ const BurgerDetail = () => {
 	);
 };
 
-export default BurgerDetail;
+export default BurgerDetailPage;

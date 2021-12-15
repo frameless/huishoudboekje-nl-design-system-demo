@@ -7,7 +7,7 @@ import {Afdeling, GetAfdelingDocument, GetOrganisatieDocument, useCreateAfdeling
 import useToaster from "../../utils/useToaster";
 import PostadresForm from "../Postadressen/PostadresForm";
 
-const AddPostadresModal: React.FC<{afdeling: Afdeling, disclosure: UseDisclosureReturn}> = ({afdeling, disclosure}) => {
+const AddAfdelingPostadresModal: React.FC<{afdeling: Afdeling, disclosure: UseDisclosureReturn}> = ({afdeling, disclosure}) => {
 	const {t} = useTranslation();
 	const toast = useToaster();
 	const handleSaveAfdelingPostadres = useMutationErrorHandler(SaveAfdelingPostadresErrorHandler);
@@ -47,4 +47,4 @@ const AddPostadresModal: React.FC<{afdeling: Afdeling, disclosure: UseDisclosure
 	);
 };
 
-export default AddPostadresModal;
+export default AddAfdelingPostadresModal;

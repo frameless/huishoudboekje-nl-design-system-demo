@@ -35,7 +35,7 @@ import AfdelingListItem from "./AfdelingListItem";
 import CreateAfdelingModal from "./CreateAfdelingModal";
 import OrganisatieDetailView from "./Views/OrganisatieDetailView";
 
-const OrganisatieDetail = () => {
+const OrganisatieDetailPage = () => {
 	const {t} = useTranslation();
 	const {id = ""} = useParams<{id: string}>();
 	const navigate = useNavigate();
@@ -145,4 +145,4 @@ const OrganisatieDetail = () => {
 	);
 };
 
-export default OrganisatieDetail;
+export default OrganisatieDetailPage;
