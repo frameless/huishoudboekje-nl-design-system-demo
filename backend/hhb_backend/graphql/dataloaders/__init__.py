@@ -1,6 +1,8 @@
 # TODO unify naming, filenames are singular, loader names are plural
 from flask import request
 
+from .signaal_loader import SignaalByIdLoader
+
 from .alarm_loader import AlarmByIdLoader
 
 from .afspraken_loader import AfsprakenByBurgerLoader, AfsprakenByIdLoader, AfsprakenByRekeningLoader, AfsprakenByAfdelingLoader
@@ -100,6 +102,9 @@ class HHBDataLoader:
 
         # Alarmen
         self.alarmen_by_id = AlarmByIdLoader(loop=loop)
+
+        # Signalen
+        self.signalen_by_id = SignaalByIdLoader(loop=loop)
 
     def __getitem__(self, item: str):
         return getattr(self, item)

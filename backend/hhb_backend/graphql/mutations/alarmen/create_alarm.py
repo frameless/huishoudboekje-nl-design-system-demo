@@ -1,4 +1,5 @@
 """ GraphQL mutatie voor het aanmaken van een Alarm """
+from hhb_backend import graphql
 import graphene
 from hhb_backend.graphql.models.Alarm import Alarm
 from hhb_backend.graphql.scalars.bedrag import Bedrag
@@ -47,11 +48,20 @@ class CreateAlarm(graphene.Mutation):
         afspraak_response = requests.get(f"{settings.HHB_SERVICES_URL}/afspraken/{input.afspraakId}", headers={"Content-type": "application/json"})
         if afspraak_response.status_code != 200:
             raise GraphQLError(f"Afspraak bestaat niet.")
+        afspraak = afspraak_response.json()["data"]
+
+        if afspraak.get("credit") != False:
+            raise GraphQLError(f"Alarm is enkel mogelijk voor uitgaven.")
+            # vanwege de betaalinstructie
 
         create_alarm_response = requests.post(f"{settings.ALARMENSERVICE_URL}/alarms/", json=input, headers={"Content-type": "application/json"})
         if create_alarm_response.status_code != 201:
             raise GraphQLError(f"Aanmaken van het alarm is niet gelukt.")
-
         response_alarm = create_alarm_response.json()["data"]
+
+        afspraak.update({"alarm_id": response_alarm.get("id")})
+        update_afspraak_response = requests.post(f"{settings.HHB_SERVICES_URL}/afspraken/{input.afspraakId}", json=afspraak, headers={"Content-type": "application/json"})
+        if update_afspraak_response.status_code != 200:
+            raise GraphQLError(f"Updaten van afspraak met het nieuwe alarm is niet gelukt.")
 
         return CreateAlarm(alarm=response_alarm, ok=True)

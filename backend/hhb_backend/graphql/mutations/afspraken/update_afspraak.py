@@ -1,5 +1,6 @@
 """ GraphQL mutation for updating an Afspraak """
 
+from hhb_backend.graphql.models import Alarm
 import graphene
 import requests
 from graphql import GraphQLError
@@ -13,6 +14,7 @@ class UpdateAfspraakInput(graphene.InputObjectType):
     burger_id = graphene.Int()
     afdeling_id = graphene.Int()
     postadres_id = graphene.String()
+    alarm_id = graphene.String()
     tegen_rekening_id = graphene.Int()
     rubriek_id = graphene.Int()
     omschrijving = graphene.String()
@@ -85,6 +87,13 @@ class UpdateAfspraak(graphene.Mutation):
             postadres: Postadres = (await hhb_dataloader().postadressen_by_id.load(postadres_id))
             if not postadres:
                 raise GraphQLError("postadres not found")
+
+        # check alarm_id - optional
+        alarm_id = input.get("alarm_id")
+        if alarm_id is not None:
+            alarm: Alarm = (await hhb_dataloader().alarmen_by_id.load(alarm_id))
+            if not alarm:
+                raise GraphQLError("alarm not found")
 
         # final update call
         response = requests.post(f"{settings.HHB_SERVICES_URL}/afspraken/{id}", json=input,)

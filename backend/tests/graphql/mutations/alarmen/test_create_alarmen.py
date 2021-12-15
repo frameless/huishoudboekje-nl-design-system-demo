@@ -28,14 +28,18 @@ def test_create_alarm(client):
             "bedragMargin": "1034"
         }
         afspraak = {
-            "id": afspraak_id
+            "id": afspraak_id,
+            "credit": False,
+            "bedrag": 76532,
+            "valid_from": "2021-01-01",
+            "alarm_id": "bd6222e7-bfab-46bc-b0bc-2b30b76228d4"
         }
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        rm0 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/19", status_code=200)
+        rm0 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/19", status_code=200, json={"data": afspraak})
         rm1 = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={ "ok":True, "data": alarm})
-        rm2 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
-        rm3 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=19", status_code=200, json={"data": [afspraak]})
-
+        rm2 = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/19", status_code=200)
+        rm3 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
+        rm4 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=19", status_code=200, json={"data": [afspraak]})
 
         # act
         response = client.post(
@@ -66,12 +70,12 @@ def test_create_alarm(client):
             content_type='application/json'
         )
 
-
         # assert
         assert rm0.called_once
         assert rm1.called_once
         assert rm2.called_once
         assert rm3.called_once
+        assert rm4.called_once
         assert fallback.called == 0
         assert response.json == expected
 
@@ -140,7 +144,6 @@ def test_create_alarm_failure_afspraak_does_not_exist(client):
             "bedragMargin": "10.34"
         }
         expected = "Afspraak bestaat niet."
-
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
         rm0 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/19", status_code=404)
 

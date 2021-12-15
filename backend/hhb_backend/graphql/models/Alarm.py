@@ -1,8 +1,10 @@
 """ Alarm model zoals deze gebruikt word in de GraphQL queries """
 import graphene
 from flask import request
+import hhb_backend.graphql.models.signaal as signal
+import hhb_backend.graphql.models.afspraak as afspraak
 from hhb_backend.graphql.scalars.bedrag import Bedrag
-from hhb_backend.graphql.models.afspraak import Afspraak
+
 
 
 class Alarm(graphene.ObjectType):
@@ -11,11 +13,12 @@ class Alarm(graphene.ObjectType):
     id = graphene.String()
     isActive = graphene.Boolean()
     gebruikerEmail = graphene.String()
-    afspraak = graphene.Field(Afspraak)
+    afspraak = graphene.Field(lambda: afspraak.Afspraak)
+    signaal = graphene.Field(lambda: signal.Signal)
     datum = graphene.String()
     datumMargin = graphene.Int()
-    bedrag = graphene.Field(Bedrag)
-    bedragMargin = graphene.Field(Bedrag)
+    bedrag = graphene.Field(lambda: Bedrag)
+    bedragMargin = graphene.Field(lambda: Bedrag)
 
     async def resolve_afspraak(root, info):
         return await request.dataloader.afspraken_by_id.load(root.get("afspraakId"))

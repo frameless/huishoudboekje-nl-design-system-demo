@@ -28,6 +28,7 @@ class CreateAfspraakInput(graphene.InputObjectType):
     credit = graphene.Boolean(required=True)
     afdeling_id = graphene.Int()
     postadres_id = graphene.String()
+    alarm_id = graphene.String()
     valid_from = graphene.String()
     valid_through = graphene.String()
 
@@ -94,6 +95,14 @@ class CreateAfspraak(graphene.Mutation):
             response = requests.get(url, headers={"Accept": "application/json", "Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845"})
             if response.status_code != 200:
                 raise GraphQLError("postadres not found")
+
+        # Check alarm_id - optional
+        alarm_id = input.get("alarm_id")
+        if alarm_id is not None:
+            url = f"""{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}"""
+            response = requests.get(url, headers={"Accept": "application/json"})
+            if response.status_code != 200:
+                raise GraphQLError("alarm not found")
 
         # final create call
         response = requests.post(f"{settings.HHB_SERVICES_URL}/afspraken/", json=input)

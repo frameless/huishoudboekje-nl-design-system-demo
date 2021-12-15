@@ -1,27 +1,22 @@
-""" TODO """
-
 from hhb_backend.graphql.models.Alarm import Alarm
+from hhb_backend.graphql.models.signaal import Signal
 from hhb_backend.graphql.models.afspraak import Afspraak
-from hhb_backend.graphql.models.bank_transaction import BankTransaction, Bedrag
-
+from hhb_backend.graphql.models.bank_transaction import Bedrag
 import graphene
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (log_gebruikers_activiteit, gebruikers_activiteit_entities)
 import requests
 from graphql import GraphQLError
 from hhb_backend.graphql import settings
 from datetime import *
-from dateutil.rrule import rrule, MONTHLY, YEARLY, WEEKLY
+from dateutil.rrule import rrule, MONTHLY, YEARLY
 import calendar
 from dateutil.relativedelta import *
 import dateutil.parser
 
-import json
-import logging
-
 class AlarmTriggerResult(graphene.ObjectType):
     alarm = graphene.Field(lambda: Alarm)
-    nextAlarmDate = graphene.Date()
-    signaalTriggered = graphene.Boolean()
+    nextAlarm = graphene.Field(lambda: Alarm)
+    Signal = graphene.Field(lambda: Signal)
 
 class EvaluateAlarm(graphene.Mutation):
     alarmTriggerResult = graphene.List(lambda: AlarmTriggerResult)
@@ -39,7 +34,7 @@ class EvaluateAlarm(graphene.Mutation):
     @staticmethod
     @log_gebruikers_activiteit
     async def mutate(_root, _info):
-        """ TODO """
+        """ Mutatie voor de evaluatie van een alarm wat kan resulteren in een signaal en/of een nieuw alarm in de reeks. """
         triggered_alarms = []
         alarms = EvaluateAlarm.getAlarms()
         for alarm in alarms:
@@ -49,25 +44,97 @@ class EvaluateAlarm(graphene.Mutation):
             journaalIds = afspraak.get("journaalposten", [])
             transacties = EvaluateAlarm.getBanktransactiesByJournaalIds(journaalIds)
 
-            nextAlarmDate = EvaluateAlarm.generateNextAlarmInSequence(afspraak)
+            # might generate 'alarm date' if it is greater then 'utc today'
+            str_alarm_date = alarm.get("datum")
+            alarm_check_date = dateutil.parser.isoparse(str_alarm_date).date()
+            nextAlarmDate = EvaluateAlarm.generateNextAlarmInSequence(afspraak, alarm_check_date)
+            alarm = EvaluateAlarm.disableAlarm(alarm_check_date, alarm)
 
-            createSignaal = EvaluateAlarm.shouldCreateSignaal(alarm, transacties)
+            nextAlarmAlreadyExists = EvaluateAlarm.doesNextAlarmExist(nextAlarmDate, alarm, alarms)
+            
+            newAlarm = None
+            if nextAlarmAlreadyExists == True:
+                nextAlarmDate = None
+            elif nextAlarmAlreadyExists == False:
+                newAlarm = EvaluateAlarm.createAlarm(alarm, nextAlarmDate)
+
+            createSignaal = None
+            if EvaluateAlarm.shouldCheckAlarm(alarm):
+                createSignaal = EvaluateAlarm.shouldCreateSignaal(alarm, transacties)
 
             triggered_alarms.append({
                 "alarm": alarm,
-                "nextAlarmDate": nextAlarmDate,
-                "signaalTriggered": createSignaal
+                "nextAlarm": newAlarm,
+                "Signal": createSignaal
             })
 
-
         return EvaluateAlarm(alarmTriggerResult=triggered_alarms)
+
+    def disableAlarm(alarmDate: date, alarm: Alarm) -> Alarm:
+        utc_now_date = (datetime.now(timezone.utc)).date()
+        if alarmDate < utc_now_date:
+            alarm["isActive"] = False
+        return alarm
+
+    def doesNextAlarmExist(nextAlarmDate: date, alarm: Alarm, alarms: list) -> bool:
+        afspraakId = alarm.get('afspraakId')
+        for check in alarms:
+            str_alarm_date = check.get("datum")
+            checkAfspraakId = check.get("afspraakId")
+            checkId = check.get("id")
+            alarmId = alarm.get("id")
+            alarm_check_date = dateutil.parser.isoparse(str_alarm_date).date()
+
+            if alarmId == checkId:
+                continue
+            elif checkAfspraakId == afspraakId and nextAlarmDate == alarm_check_date:
+                return True
+        
+        return False
+
+    def createAlarm(alarm: Alarm, alarmDate: datetime) -> Alarm:
+        newAlarm = {
+            "isActive": True,
+            "gebruikerEmail": alarm.get("gebruikerEmail"),
+            "afspraakId": int(alarm.get("afspraakId")),
+            "datum": alarmDate.isoformat(),
+            "datumMargin": int(alarm.get("datumMargin")),
+            "bedrag": alarm.get("bedrag"),
+            "bedragMargin": alarm.get("bedragMargin")
+        }
+
+        alarm_response = requests.post(f"{settings.ALARMENSERVICE_URL}/alarms/", json=newAlarm, headers={"Content-type": "application/json"})
+        if alarm_response.status_code != 201:
+            raise GraphQLError(f"Upstream API responded: {alarm_response.json()}")
+        newAlarm = alarm_response.json()["data"]
+
+        return newAlarm
+
+    def shouldCheckAlarm(alarm: Alarm) -> bool:
+        # is the alarm active
+        alarm_status = alarm.get("isActive")
+        if alarm_status == False:
+            return False
+        elif alarm_status != False and alarm_status != True:
+            return False
+
+        # is the alarm set in the past, or the future
+        str_alarm_date = alarm.get("datum")
+        alarm_date = dateutil.parser.isoparse(str_alarm_date).date()
+        utc_now_date = (datetime.now(timezone.utc)).date()
+        if alarm_date < utc_now_date:
+            return False
+        elif alarm_date > utc_now_date:
+            return False
+
+        # past all checks so the it passes the base validation
+        return True
 
     def getAlarms() -> list:
         alarm_response = requests.get(f"{settings.ALARMENSERVICE_URL}/alarms/", headers={"Content-type": "application/json"})
         if alarm_response.status_code != 200:
             raise GraphQLError(f"Upstream API responded: {alarm_response.json()}")
         alarms = alarm_response.json()["data"]
-        # logging.getLogger(f"wouter-logger").warning(f"\n\n alarms: {json.dumps(alarms)} \n")
 
         return alarms
 
@@ -77,7 +144,6 @@ class EvaluateAlarm(graphene.Mutation):
         if afspraak_response.status_code != 200:
             raise GraphQLError(f"Upstream API responded: {afspraak_response.json()}")
         afspraak = afspraak_response.json()['data']
-        # logging.getLogger(f"wouter-logger").warning(f"\n\n afspraak: {json.dumps(afspraak)} \n")
 
         return afspraak
         # return {
@@ -97,7 +163,7 @@ class EvaluateAlarm(graphene.Mutation):
         # }
 
 
-    def getBanktransactiesByJournaalIds(journaalIds):
+    def getBanktransactiesByJournaalIds(journaalIds) -> list:
         journaalposts = []
         transacties = []
         for journaalpostId in journaalIds:
@@ -116,7 +182,6 @@ class EvaluateAlarm(graphene.Mutation):
             banktransaction = banktransactions_response.json()['data']
             transacties.append(banktransaction)
 
-        logging.getLogger(f"wouter-logger").warning(f"\n\n transacties: {json.dumps(transacties)} \n")
         return transacties
         # return [
         #     {
@@ -133,7 +198,7 @@ class EvaluateAlarm(graphene.Mutation):
         # ]
 
 
-    def generateNextAlarmInSequence(afspraak: Afspraak) -> datetime:
+    def generateNextAlarmInSequence(afspraak: Afspraak, alarmDate:datetime) -> datetime:
         # Create next Alarm in the sequence based on the 'Afspraak'
         betaalinstructie = afspraak.get("betaalinstructie")
         byDay = betaalinstructie.get("by_day")
@@ -142,16 +207,14 @@ class EvaluateAlarm(graphene.Mutation):
 
         # add one day so it doesnt return the same day
         current_date_utc = (datetime.now(timezone.utc) + timedelta(days=1)).date()
+        future = max(alarmDate + timedelta(days=1), current_date_utc)
         # https://dateutil.readthedocs.io/en/latest/examples.html#rrule-examples
         if byDay is not None and byMonth is None and byMonthDay is None:        # weekly
             weekday_indexes = MyLittleHelper.weekday_names_to_indexes(byDay)
-            # logging.getLogger(f"wouter-logger").warning(f"\n\n names:{byDay} index:{weekday_indexes}  \n")
-            next_alarm_dates = list(rrule(MONTHLY, dtstart=current_date_utc, count=1, byweekday=weekday_indexes))
+            next_alarm_dates = list(rrule(MONTHLY, dtstart=future, count=1, byweekday=weekday_indexes))
         elif byMonth is not None and byMonthDay is not None and byDay is None:                              # maandelijk/jaarlijks
-            # logging.getLogger(f"wouter-logger").warning(f"\n\n afspraak is montly/yearly  \n")
-            next_alarm_dates = list(rrule(YEARLY, dtstart=current_date_utc, count=1, bymonth=byMonth, bymonthday=byMonthDay))
+            next_alarm_dates = list(rrule(YEARLY, dtstart=future, count=1, bymonth=byMonth, bymonthday=byMonthDay))
         else:
-            logging.getLogger(f"wouter-logger").warning(f"-->>>> >>>> Unsupported 'betaalinstructie' \n")
             raise GraphQLError(f"Niet ondersteunde combinatie van betaalinstructies.")
 
         next_alarm_date: date = next_alarm_dates[0].date()
@@ -159,18 +222,7 @@ class EvaluateAlarm(graphene.Mutation):
         return next_alarm_date
 
 
-    def shouldCreateSignaal(alarm: Alarm, transacties) -> bool:
-        # Base check if this Alarm if active, else we dont even need to check
-        alarm_status = alarm.get("isActive")
-        if alarm_status == True:
-            logging.getLogger(f"wouter-logger").warning(f"-->>>> >>>> Alarm is active \n")
-        elif alarm_status == False:
-            logging.getLogger(f"wouter-logger").warning(f"-->>>> >>>> Alarm is not active \n")
-            return False
-        else:
-            logging.getLogger(f"wouter-logger").warning(f"-->>>> >>>> Alarm status is unknown \n")
-            raise GraphQLError(f"Niet ondersteunde waarde voor alarm status.")
-
+    def shouldCreateSignaal(alarm: Alarm, transacties) -> Signal:
         datum_margin = int(alarm.get("datumMargin"))
         str_expect_date = alarm.get("datum")
         expect_date = dateutil.parser.isoparse(str_expect_date).date()
@@ -186,61 +238,39 @@ class EvaluateAlarm(graphene.Mutation):
             expected_alarm_bedrag = int(alarm.get("bedrag"))
             actual_transaction_bedrag = Bedrag.parse_value(transaction.get("bedrag"))
 
-            # logging.getLogger(f"wouter-logger").warning(f"-->>>> >>>> Look for transaction: {left_date_window} > {transaction_date} < {right_date_window} \n")
             if left_date_window <= transaction_date <= right_date_window:
-                # logging.getLogger(f"wouter-logger").warning(f"-->>>> >>>> Found transaction in alarm date margin \n")
                 left_monetary_window = expected_alarm_bedrag - monetary_margin
                 right_monetary_window = expected_alarm_bedrag + monetary_margin
-                # logging.getLogger(f"wouter-logger").warning(f"-->>>> >>>> \n\n {left_monetary_window} <= {actual_transaction_bedrag} <= {right_monetary_window} \n")
                 if left_monetary_window <= actual_transaction_bedrag <= right_monetary_window:
                     transaction_in_scope.append(transaction)
-                    # logging.getLogger(f"wouter-logger").warning(f"-->>>> >>>> Found transaction within alarm monetary margin \n")
-                # else:
-                #     logging.getLogger(f"wouter-logger").warning(f"-->>>> >>>> Bedrag was not within alarm margin - creating signaal! \n")
-            # else:
-            #     logging.getLogger(f"wouter-logger").warning(f"-->>>> >>>> No transaction found in given timeframe - creating signaal! \n")
 
         if len(transaction_in_scope) <= 0:
-            return True
+            alarm_id = alarm.get("id")
+            newSignal = {
+                "alarmId": alarm_id,
+                "isActive": True,
+                "type": "default"
+                # "context": None
+            }
+            signaal_response = requests.post(f"{settings.SIGNALENSERVICE_URL}/signals/", json=newSignal, headers={"Content-type": "application/json"})
+            if signaal_response.status_code != 201:
+                raise GraphQLError(f"Fout bij het aanmaken van het signaal. {signaal_response.json()}")
+            newSignal = signaal_response.json()["data"]
+            print(f"\n newSignal: {newSignal} \n")
+
+            alarm.update({"signaalId": newSignal.get("id")})
+            print(f"\n alarm_update: {alarm} \n")
+            alarm_response = requests.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", json=alarm, headers={"Content-type": "application/json"})
+            if alarm_response.status_code != 200:
+                raise GraphQLError(f"Fout bij het update van het alarm met het signaal. {alarm_response.json()}")
+            alarm = alarm_response.json()["data"]
+            
+            return newSignal
         else:
-            return False
+            return None
 
 
 class MyLittleHelper:
-
-    @staticmethod
-    def find_closest_date(origin_date: datetime, weekdays) -> datetime: # weekdays => is a 'list' of 'str' > being weekdays eg Monday, Friday
-        date_options = []
-        for index, str_weekday in enumerate(weekdays):
-            next_date_for_weekday = MyLittleHelper.next_date_for_weekday(origin_date, str_weekday)
-            date_options.append(next_date_for_weekday)
-        first_date = min(date_options)
-        return first_date
-
-    @staticmethod
-    def next_date_for_weekday(origin_date: datetime, str_weekday: str) -> datetime:
-        weekday_index = MyLittleHelper.weekday_name_to_index(str_weekday)
-        next_date_for_weekday = MyLittleHelper.next_weekday(origin_date, weekday_index)
-        return next_date_for_weekday
-
-    # weekday => 0 = Monday, 1=Tuesday, 2=Wednesday
-    @staticmethod
-    def next_weekday(origin_date: datetime, weekday: int) -> datetime:
-        current_day_of_week = MyLittleHelper.get_weekday(origin_date)
-        days_ahead = weekday - origin_date.weekday()
-        if days_ahead <= 0: # Target day already happened this week
-            days_ahead += 7
-        next_date_same_weekday = origin_date + timedelta(days_ahead)
-        return next_date_same_weekday
-
-    @staticmethod
-    def get_weekday(datetime: datetime) -> str:
-        return datetime.strftime("%A")
-
-    @staticmethod
-    def int_to_weekday(weekday_index: int) -> str:
-        weekday_collection = list(calendar.day_name)
-        return weekday_collection[weekday_index]
 
     @staticmethod
     def weekday_names_to_indexes(weekday_names) -> list:
@@ -253,7 +283,6 @@ class MyLittleHelper:
     @staticmethod
     def weekday_name_to_index(weekday_name: str) -> int:
         weekday_collection = list(calendar.day_name)
-        # logging.getLogger(f"wouter-logger").warning(f"\n\n weekday_collection:{weekday_collection}  \n")
         for index, weekday in enumerate(weekday_collection):
             if weekday == weekday_name:
                 return index

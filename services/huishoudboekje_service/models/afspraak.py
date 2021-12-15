@@ -30,3 +30,4 @@ class Afspraak(db.Model):
     afdeling_id = Column(Integer, ForeignKey("afdelingen.id"))
     afdelingen = relationship("Afdeling", back_populates="afspraken")
     postadres_id = Column(String)
+    alarm_id = Column(String)
