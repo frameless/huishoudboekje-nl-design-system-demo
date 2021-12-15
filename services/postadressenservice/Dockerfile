@@ -1,6 +1,10 @@
 ARG DOCKER_PROXY=''
 FROM ${DOCKER_PROXY}bitnami/node:14
+RUN groupadd --gid 1001 node \
+  && useradd --uid 1001 --gid node --shell /bin/bash --create-home node
+RUN chown node:node /app
 WORKDIR /app
+USER node
 COPY ./package*.json /app/
 RUN npm ci
 COPY . /app
