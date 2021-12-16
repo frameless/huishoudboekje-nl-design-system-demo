@@ -36,7 +36,7 @@ class EvaluateAlarm(graphene.Mutation):
     async def mutate(_root, _info):
         """ Mutatie voor de evaluatie van een alarm wat kan resulteren in een signaal en/of een nieuw alarm in de reeks. """
         triggered_alarms = []
-        alarms = EvaluateAlarm.getAlarms()
+        alarms = EvaluateAlarm.getActiveAlarms()
         for alarm in alarms:
             afspraakId = alarm.get('afspraakId')
             afspraak = EvaluateAlarm.getAfspraakById(afspraakId)
@@ -47,7 +47,7 @@ class EvaluateAlarm(graphene.Mutation):
             # might generate 'alarm date' if it is greater then 'utc today'
             str_alarm_date = alarm.get("datum")
             alarm_check_date = dateutil.parser.isoparse(str_alarm_date).date()
-            nextAlarmDate = EvaluateAlarm.generateNextAlarmInSequence(afspraak, alarm_check_date)
+            nextAlarmDate = EvaluateAlarm.generateNextAlarmInSequence(alarm, alarm_check_date)
             alarm = EvaluateAlarm.disableAlarm(alarm_check_date, alarm)
 
             nextAlarmAlreadyExists = EvaluateAlarm.doesNextAlarmExist(nextAlarmDate, alarm, alarms)
@@ -112,10 +112,8 @@ class EvaluateAlarm(graphene.Mutation):
 
     def shouldCheckAlarm(alarm: Alarm) -> bool:
         # is the alarm active
-        alarm_status = alarm.get("isActive")
+        alarm_status: bool = alarm.get("isActive")
         if alarm_status == False:
-            return False
-        elif alarm_status != False and alarm_status != True:
             return False
 
         # is the alarm set in the past, or the future
@@ -130,7 +128,7 @@ class EvaluateAlarm(graphene.Mutation):
         # past all checks so the it passes the base validation
         return True
 
-    def getAlarms() -> list:
+    def getActiveAlarms() -> list:
         alarm_response = requests.get(f"{settings.ALARMENSERVICE_URL}/alarms/", headers={"Content-type": "application/json"})
         if alarm_response.status_code != 200:
             raise GraphQLError(f"Upstream API responded: {alarm_response.json()}")
@@ -198,16 +196,16 @@ class EvaluateAlarm(graphene.Mutation):
         # ]
 
 
-    def generateNextAlarmInSequence(afspraak: Afspraak, alarmDate:datetime) -> datetime:
+    # get ByDay, ByMonth and ByMonthDay from alarm
+    def generateNextAlarmInSequence(alarm: Alarm, alarmDate:datetime) -> datetime:
         # Create next Alarm in the sequence based on the 'Afspraak'
-        betaalinstructie = afspraak.get("betaalinstructie")
-        byDay = betaalinstructie.get("by_day")
-        byMonth = betaalinstructie.get("by_month")
-        byMonthDay = betaalinstructie.get("by_month_day")
+        byDay = alarm.get("byDay")
+        byMonth = alarm.get("byMonth")
+        byMonthDay = alarm.get("byMonthDay")
 
         # add one day so it doesnt return the same day
-        current_date_utc = (datetime.now(timezone.utc) + timedelta(days=1)).date()
-        future = max(alarmDate + timedelta(days=1), current_date_utc)
+        tommorrow_utc = (datetime.now(timezone.utc) + timedelta(days=1)).date()
+        future = max(alarmDate + timedelta(days=1), tommorrow_utc)
         # https://dateutil.readthedocs.io/en/latest/examples.html#rrule-examples
         if byDay is not None and byMonth is None and byMonthDay is None:        # weekly
             weekday_indexes = MyLittleHelper.weekday_names_to_indexes(byDay)

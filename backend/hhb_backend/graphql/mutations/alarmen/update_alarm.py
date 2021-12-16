@@ -9,6 +9,7 @@ from hhb_backend.graphql import settings
 from graphql import GraphQLError
 from dateutil import parser
 from datetime import date
+from hhb_backend.graphql.scalars.day_of_week import DayOfWeek
 
 class UpdateAlarmInput(graphene.InputObjectType):
     isActive = graphene.Boolean()
@@ -18,6 +19,10 @@ class UpdateAlarmInput(graphene.InputObjectType):
     datumMargin = graphene.Int()
     bedrag = graphene.Field(Bedrag)
     bedragMargin = graphene.Field(Bedrag)
+    byDay = graphene.List(DayOfWeek, default_value=[])
+    byMonth = graphene.List(graphene.Int, default_value=[])
+    byMonthDay = graphene.List(graphene.Int, default_value=[])
+
 
 class UpdateAlarm(graphene.Mutation):
     class Arguments:
@@ -48,6 +53,10 @@ class UpdateAlarm(graphene.Mutation):
             utc_now = date.today()
             if alarm_date < utc_now:
                 raise GraphQLError(f"Alarm datum is in het verleden.")
+
+        if (input.byDay is None and input.byMonth is None and input.byMonthDay is None) or (
+            len(input.byDay) <= 0 and len(input.byMonth) <=0 and len(input.byMonthDay) <= 0):
+            raise GraphQLError(f"Voor het updaten van het alarm is byDay of ByMonth en byMonthDay verplicht.")
 
         # previous = request.dataloader.alarmen_by_id.load(id) # stalls and waits forever if alarm does not exist
         previous_response = requests.get(f"{settings.ALARMENSERVICE_URL}/alarms/{id}", headers={"Content-type": "application/json"}) 

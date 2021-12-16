@@ -18,7 +18,8 @@ alarm = {
     "datum":"2021-12-06",
     "datumMargin": 5,
     "bedrag": "12500",
-    "bedragMargin":"1000"
+    "bedragMargin":"1000",
+    "byDay": ["Wednesday", "Friday"]
 }
 nextAlarm = {
     "id": "33738845-7f23-4c8f-8424-2b560a944884",
@@ -73,37 +74,31 @@ signal = {
 }
 @freeze_time("2021-12-01")
 @pytest.mark.parametrize(
-    ["expected", "betaalinstructie", "alarmDate"], [
-    (datetime(2021,12, 6), {"by_day": ["Monday"]}, (datetime(2021,12, 1))),
-    (datetime(2021,12, 7), {"by_day": ["Tuesday"]}, (datetime(2021,12, 1))),
-    (datetime(2021,12, 8), {"by_day": ["Wednesday"]}, (datetime(2021,12, 1))),
-    (datetime(2021,12, 2), {"by_day": ["Thursday"]}, (datetime(2021,12, 1))),
-    (datetime(2021,12, 3), {"by_day": ["Friday"]}, (datetime(2021,12, 1))),
-    (datetime(2021,12, 4), {"by_day": ["Saturday"]}, (datetime(2021,12, 1))),
-    (datetime(2021,12, 5), {"by_day": ["Sunday"]}, (datetime(2021,12, 1))),
+    ["expected", "alarm", "alarmDate"], [
+    (datetime(2021,12, 6), {"byDay": ["Monday"]}, (datetime(2021,12, 1))),
+    (datetime(2021,12, 7), {"byDay": ["Tuesday"]}, (datetime(2021,12, 1))),
+    (datetime(2021,12, 8), {"byDay": ["Wednesday"]}, (datetime(2021,12, 1))),
+    (datetime(2021,12, 2), {"byDay": ["Thursday"]}, (datetime(2021,12, 1))),
+    (datetime(2021,12, 3), {"byDay": ["Friday"]}, (datetime(2021,12, 1))),
+    (datetime(2021,12, 4), {"byDay": ["Saturday"]}, (datetime(2021,12, 1))),
+    (datetime(2021,12, 5), {"byDay": ["Sunday"]}, (datetime(2021,12, 1))),
 ])
-def test_generateNextAlarmDate_weekly(expected: datetime, betaalinstructie, alarmDate):
-    afspraak = {
-        "betaalinstructie": betaalinstructie
-    }
-    next_alarm_date = EvaluateAlarm.generateNextAlarmInSequence(afspraak, alarmDate)
+def test_generateNextAlarmDate_weekly(expected: datetime, alarm, alarmDate):
+    next_alarm_date = EvaluateAlarm.generateNextAlarmInSequence(alarm, alarmDate)
     assert next_alarm_date == expected.date()
 
 @freeze_time("2021-12-01")
 @pytest.mark.parametrize(
-    ["expected", "betaalinstructie", "alarmDate"], [
-    (datetime(2022,1, 1), {"by_month": [1], "by_month_day": [1]}, (datetime(2021,12, 1))),
-    (datetime(2022,3, 10), {"by_month": [3], "by_month_day": [10, 15, 30]}, (datetime(2021,12, 1))),
-    (datetime(2022,12, 1), {"by_month": [12], "by_month_day": [1]}, (datetime(2021,12, 1))),
-    (datetime(2022,3, 1), {"by_month": [3,4,5,6,7,8,9,10], "by_month_day": [1]}, (datetime(2021,12, 1))),
-    (datetime(2022,11, 30), {"by_month": [11], "by_month_day": [30]}, (datetime(2021,12, 1))),
-    (datetime(2021,12, 2), {"by_month": [12], "by_month_day": [1,2,3,4,5]}, (datetime(2021,12, 1))),
+    ["expected", "alarm", "alarmDate"], [
+    (datetime(2022,1, 1), {"byMonth": [1], "byMonthDay": [1]}, (datetime(2021,12, 1))),
+    (datetime(2022,3, 10), {"byMonth": [3], "byMonthDay": [10, 15, 30]}, (datetime(2021,12, 1))),
+    (datetime(2022,12, 1), {"byMonth": [12], "byMonthDay": [1]}, (datetime(2021,12, 1))),
+    (datetime(2022,3, 1), {"byMonth": [3,4,5,6,7,8,9,10], "byMonthDay": [1]}, (datetime(2021,12, 1))),
+    (datetime(2022,11, 30), {"byMonth": [11], "byMonthDay": [30]}, (datetime(2021,12, 1))),
+    (datetime(2021,12, 2), {"byMonth": [12], "byMonthDay": [1,2,3,4,5]}, (datetime(2021,12, 1))),
 ])
-def test_generateNextAlarmDate_monthly(expected: datetime, betaalinstructie, alarmDate: datetime):
-    afspraak = {
-        "betaalinstructie": betaalinstructie
-    }
-    next_alarm_date = EvaluateAlarm.generateNextAlarmInSequence(afspraak, alarmDate)
+def test_generateNextAlarmDate_monthly(expected: datetime, alarm, alarmDate: datetime):
+    next_alarm_date = EvaluateAlarm.generateNextAlarmInSequence(alarm, alarmDate)
     assert next_alarm_date == expected.date()
 
 @freeze_time("2021-12-01")
@@ -191,7 +186,8 @@ def test_evaluate_alarm_inactive(client):
             "datum":"2021-12-06",
             "datumMargin": 5,
             "bedrag": "12500",
-            "bedragMargin":"1000"
+            "bedragMargin":"1000",
+            "by_day": ["Wednesday", "Friday"]
         }
         expected = {'data': {'evaluateAlarm': {'alarmTriggerResult': [{'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9'}, 'nextAlarm': {'id': '33738845-7f23-4c8f-8424-2b560a944884'}, 'Signal': None}]}}}
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
@@ -296,7 +292,8 @@ def test_evaluate_alarm_signal_date(client):
             "datum":"2021-12-06",
             "datumMargin": 1,
             "bedrag": "12500",
-            "bedragMargin":"1000"
+            "bedragMargin":"1000",
+            "by_day": ["Wednesday", "Friday"]
         }
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
         rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=200, json={'data': [alarm]})
@@ -414,7 +411,8 @@ def test_evaluate_alarm_next_alarm_in_sequence_already_exists(client):
             "datum":"2021-12-06",
             "datumMargin": 1,
             "bedrag": "12500",
-            "bedragMargin":"1000"
+            "bedragMargin":"1000",
+            "by_day": ["Wednesday", "Friday"]
         }
         next_alarm = {
             "id": "10943958-8b93-4617-aa43-669a9016aad9",
@@ -424,7 +422,8 @@ def test_evaluate_alarm_next_alarm_in_sequence_already_exists(client):
             "datum":"2021-12-08",
             "datumMargin": 1,
             "bedrag": "12500",
-            "bedragMargin":"1000"
+            "bedragMargin":"1000",
+            "by_day": ["Wednesday", "Friday"]
         }
         banktransactie = {
             "id": banktransactie_id,
