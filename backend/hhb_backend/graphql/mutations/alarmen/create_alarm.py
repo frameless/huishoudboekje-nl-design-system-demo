@@ -47,7 +47,7 @@ class CreateAlarm(graphene.Mutation):
         alarm_date = parser.parse(input.datum).date()
         utc_now = date.today()
         if alarm_date < utc_now:
-            raise GraphQLError(f"Alarm datum is in het verleden.")
+            raise GraphQLError(f"De alarmdatum moet in de toekomst liggen.")
 
         if (input.byDay is None and input.byMonth is None and input.byMonthDay is None) or (
             len(input.byDay) <= 0 and len(input.byMonth) <=0 and len(input.byMonthDay) <= 0):

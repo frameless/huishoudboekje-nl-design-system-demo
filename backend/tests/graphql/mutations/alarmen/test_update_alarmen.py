@@ -122,7 +122,7 @@ def test_update_alarm_failure_cant_set_alarm_in_past(client):
             "byDay": ["Thursday"]
         }
         alarm_id = "bd6222e7-bfab-46bc-b0bc-2b30b76228d4"
-        expected = "Alarm datum is in het verleden."
+        expected = "De alarmdatum moet in de toekomst liggen."
 
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
 

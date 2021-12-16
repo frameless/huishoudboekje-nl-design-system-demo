@@ -100,7 +100,7 @@ def test_create_alarm_failure_cant_create_alarm_in_past(client):
             "bedragMargin": "10.34",
             "byDay": ["Wednesday"]
         }
-        expected = "Alarm datum is in het verleden."
+        expected = "De alarmdatum moet in de toekomst liggen."
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
 
         # act
