@@ -246,7 +246,7 @@ class EvaluateAlarm(graphene.Mutation):
                 if left_monetary_window <= actual_transaction_bedrag <= right_monetary_window:
                     transaction_in_scope.append(transaction)
 
-        if len(transaction_in_scope) <= 0:
+        if len(transaction_in_scope) <= 0 or len(transaction_in_scope) <= 0:
             alarm_id = alarm.get("id")
             newSignal = {
                 "alarmId": alarm_id,
