@@ -14,6 +14,5 @@ class Signal(graphene.ObjectType):
 
     async def resolve_alarm(root, info):
         alarm_id = root.get("alarmId")
-        print(f"\n >> alarm:{root} <<\n")
         if alarm_id is not None:
             return await request.dataloader.alarmen_by_id.load(alarm_id)

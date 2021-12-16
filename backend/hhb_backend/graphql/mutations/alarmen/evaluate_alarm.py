@@ -1,3 +1,4 @@
+from inspect import signature
 from hhb_backend.graphql.models.Alarm import Alarm
 from hhb_backend.graphql.models.signaal import Signal
 from hhb_backend.graphql.models.afspraak import Afspraak
@@ -36,31 +37,36 @@ class EvaluateAlarm(graphene.Mutation):
     async def mutate(_root, _info):
         """ Mutatie voor de evaluatie van een alarm wat kan resulteren in een signaal en/of een nieuw alarm in de reeks. """
         triggered_alarms = []
-        alarms = EvaluateAlarm.getActiveAlarms()
-        for alarm in alarms:
-            afspraakId = alarm.get('afspraakId')
-            afspraak = EvaluateAlarm.getAfspraakById(afspraakId)
+        activeAlarms = EvaluateAlarm.getActiveAlarms()
+        for alarm in activeAlarms:
+            print(f"\n current alarm: {alarm} \n\n")
 
+            # get data from afspraak and transactions (by journaalpost reference)
+            afspraak = EvaluateAlarm.getAfspraakById(alarm.get('afspraakId'))
             journaalIds = afspraak.get("journaalposten", [])
             transacties = EvaluateAlarm.getBanktransactiesByJournaalIds(journaalIds)
 
-            # might generate 'alarm date' if it is greater then 'utc today'
-            str_alarm_date = alarm.get("datum")
-            alarm_check_date = dateutil.parser.isoparse(str_alarm_date).date()
+            # generate next alarm in the sequence
+            alarm_check_date = dateutil.parser.isoparse(alarm.get("datum")).date()
             nextAlarmDate = EvaluateAlarm.generateNextAlarmInSequence(alarm, alarm_check_date)
             alarm = EvaluateAlarm.disableAlarm(alarm_check_date, alarm)
 
-            nextAlarmAlreadyExists = EvaluateAlarm.doesNextAlarmExist(nextAlarmDate, alarm, alarms)
-            
+            # add new alarm in sequence if it does not exist yet
+            nextAlarmAlreadyExists = EvaluateAlarm.doesNextAlarmExist(nextAlarmDate, alarm, activeAlarms)
             newAlarm = None
             if nextAlarmAlreadyExists == True:
                 nextAlarmDate = None
             elif nextAlarmAlreadyExists == False:
                 newAlarm = EvaluateAlarm.createAlarm(alarm, nextAlarmDate)
+            print(f"\n next alarm in sequence {newAlarm}\n\n")
 
+            # check if there are transaction within the alarm specified margins
             createSignaal = None
             if EvaluateAlarm.shouldCheckAlarm(alarm):
                 createSignaal = EvaluateAlarm.shouldCreateSignaal(alarm, transacties)
+            else:
+                print(f"\n dont generate signal based on alarm:{alarm} and transacties:{transacties}\n\n")
+            print(f"\n signaal: {createSignaal}\n\n")
 
             triggered_alarms.append({
                 "alarm": alarm,
@@ -111,11 +117,6 @@ class EvaluateAlarm(graphene.Mutation):
         return newAlarm
 
     def shouldCheckAlarm(alarm: Alarm) -> bool:
-        # is the alarm active
-        alarm_status: bool = alarm.get("isActive")
-        if alarm_status == False:
-            return False
-
         # is the alarm set in the past, or the future
         str_alarm_date = alarm.get("datum")
         alarm_date = dateutil.parser.isoparse(str_alarm_date).date()
@@ -134,8 +135,14 @@ class EvaluateAlarm(graphene.Mutation):
             raise GraphQLError(f"Upstream API responded: {alarm_response.json()}")
         alarms = alarm_response.json()["data"]
 
-        return alarms
+        activeAlarms = []
+        for alarm in alarms:
+            # is the alarm active
+            alarm_status: bool = alarm.get("isActive")
+            if alarm_status == True:
+                activeAlarms.append(alarm)
 
+        return activeAlarms
 
     def getAfspraakById(afspraakId: int) -> Afspraak:
         afspraak_response = requests.get(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraakId}", headers={"Content-type": "application/json"})
@@ -159,7 +166,6 @@ class EvaluateAlarm(graphene.Mutation):
         #     "id": 19,
         #     "journaalposten": [1]
         # }
-
 
     def getBanktransactiesByJournaalIds(journaalIds) -> list:
         journaalposts = []
@@ -195,7 +201,6 @@ class EvaluateAlarm(graphene.Mutation):
         #     }
         # ]
 
-
     # get ByDay, ByMonth and ByMonthDay from alarm
     def generateNextAlarmInSequence(alarm: Alarm, alarmDate:datetime) -> datetime:
         # Create next Alarm in the sequence based on the 'Afspraak'
@@ -219,7 +224,6 @@ class EvaluateAlarm(graphene.Mutation):
 
         return next_alarm_date
 
-
     def shouldCreateSignaal(alarm: Alarm, transacties) -> Signal:
         datum_margin = int(alarm.get("datumMargin"))
         str_expect_date = alarm.get("datum")
@@ -230,6 +234,7 @@ class EvaluateAlarm(graphene.Mutation):
         # Evaluate Alarm
         transaction_in_scope = []
         for transaction in transacties:
+            print(f"\n transaction: {transaction}\n\n")
             str_transactie_datum=transaction.get("transactie_datum")
             transaction_date = dateutil.parser.isoparse(str_transactie_datum).date()
             monetary_margin = int(alarm.get("bedragMargin"))
@@ -252,21 +257,25 @@ class EvaluateAlarm(graphene.Mutation):
             }
             signaal_response = requests.post(f"{settings.SIGNALENSERVICE_URL}/signals/", json=newSignal, headers={"Content-type": "application/json"})
             if signaal_response.status_code != 201:
+                print(f"Fout bij het aanmaken van het signaal. {signaal_response.json()}")
                 raise GraphQLError(f"Fout bij het aanmaken van het signaal. {signaal_response.json()}")
             newSignal = signaal_response.json()["data"]
-            print(f"\n newSignal: {newSignal} \n")
 
-            alarm.update({"signaalId": newSignal.get("id")})
-            print(f"\n alarm_update: {alarm} \n")
+            alarm_update = alarm
+            alarm_update.update({"signaalId": newSignal.get("id")})
+            alarm_update.update({"bedrag": int(alarm.get("bedrag"))})
+            alarm_update.update({"bedragMargin": int(alarm.get("bedragMargin"))})
+
+            print(f"\n updating alarm with: {alarm}\n\n")
             alarm_response = requests.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", json=alarm, headers={"Content-type": "application/json"})
             if alarm_response.status_code != 200:
+                print(f"Fout bij het update van het alarm met het signaal. {alarm_response.json()}")
                 raise GraphQLError(f"Fout bij het update van het alarm met het signaal. {alarm_response.json()}")
             alarm = alarm_response.json()["data"]
             
             return newSignal
         else:
             return None
-
 
 class MyLittleHelper:
 

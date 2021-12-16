@@ -122,7 +122,6 @@ class Afspraak(graphene.ObjectType):
 
     async def resolve_alarm(root, info):
         """ Get alarm when requested """
-        print(f"\n\n afspraak resolving alarm {root}\n\n")
         alarm_id = root.get("alarm_id")
         if alarm_id:
             alarm = await request.dataloader.alarmen_by_id.load(alarm_id)

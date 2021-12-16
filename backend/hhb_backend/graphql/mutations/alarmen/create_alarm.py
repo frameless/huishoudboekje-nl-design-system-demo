@@ -51,16 +51,12 @@ class CreateAlarm(graphene.Mutation):
 
         if (input.byDay is None and input.byMonth is None and input.byMonthDay is None) or (
             len(input.byDay) <= 0 and len(input.byMonth) <=0 and len(input.byMonthDay) <= 0):
-            raise GraphQLError(f"Voor het aanmaken van het alarm is byDay of ByMonth en byMonthDay verplicht.")
+            raise GraphQLError(f"Voor het aanmaken van een alarm is byDay of byMonth en byMonthDay verplicht.")
 
         afspraak_response = requests.get(f"{settings.HHB_SERVICES_URL}/afspraken/{input.afspraakId}", headers={"Content-type": "application/json"})
         if afspraak_response.status_code != 200:
             raise GraphQLError(f"Afspraak bestaat niet.")
         afspraak = afspraak_response.json()["data"]
-
-        if afspraak.get("credit") != False:
-            raise GraphQLError(f"Alarm is enkel mogelijk voor uitgaven.")
-            # vanwege de betaalinstructie
 
         create_alarm_response = requests.post(f"{settings.ALARMENSERVICE_URL}/alarms/", json=input, headers={"Content-type": "application/json"})
         if create_alarm_response.status_code != 201:

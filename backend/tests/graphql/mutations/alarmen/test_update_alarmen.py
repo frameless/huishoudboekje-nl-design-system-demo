@@ -280,7 +280,7 @@ def test_update_alarm_failure_byday_bymonth_bymonthday(client):
         }
         alarm_id = "bd6222e7-bfab-46bc-b0bc-2b30b76228d4"
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        expected = "Voor het updaten van het alarm is byDay of ByMonth en byMonthDay verplicht."
+        expected = "Voor het updaten van een alarm is byDay of byMonth en byMonthDay verplichte invoer."
 
         # act
         response = client.post(
