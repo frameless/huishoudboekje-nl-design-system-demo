@@ -99,7 +99,10 @@ class EvaluateAlarm(graphene.Mutation):
             "datum": alarmDate.isoformat(),
             "datumMargin": int(alarm.get("datumMargin")),
             "bedrag": alarm.get("bedrag"),
-            "bedragMargin": alarm.get("bedragMargin")
+            "bedragMargin": alarm.get("bedragMargin"),
+            "byDay": alarm.get("byDay"),
+            "byMonth": alarm.get("byMonth"),
+            "byMonthDay": alarm.get("byMonthDay")
         }
 
         alarm_response = requests.post(f"{settings.ALARMENSERVICE_URL}/alarms/", json=newAlarm, headers={"Content-type": "application/json"})
