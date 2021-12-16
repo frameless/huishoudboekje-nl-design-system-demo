@@ -215,7 +215,7 @@ class EvaluateAlarm(graphene.Mutation):
         elif isMontly:    # maandelijk/jaarlijks
             next_alarm_dates = list(rrule(YEARLY, dtstart=future, count=1, bymonth=byMonth, bymonthday=byMonthDay))
         else:
-            raise GraphQLError(f"Niet ondersteunde combinatie van alarm herhaal instructies.")
+            raise GraphQLError(f"Niet ondersteunde combinatie van alarm herhaal instructies. isWeekly:{isWeekly} isMonthly:{isMontly} byDay:{byDay} byMonth:{byMonth} byMonthDay:{byMonthDay}")
 
         next_alarm_date: date = next_alarm_dates[0].date()
 
