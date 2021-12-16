@@ -12,11 +12,16 @@ if (!DATABASE_URL) {
 	throw new Error("Unknown database. Please provide the database connection string in DATABASE_URL in the environment.");
 }
 
-const logger = () => (res, req, next) => {
-	console.log("[EVENT]", `Incoming request: ${res.method} ${res.url}`);
-	if (res.body) {
-		console.log("[EVENT]", "Body:", res.body);
+const requestLogger = () => (req, res, next) => {
+	console.log("[EVENT]", `Incoming request: ${req.method} ${req.url}`);
+	if (req.body) {
+		console.log("[EVENT]", "Body:", req.body);
 	}
+
+	res.on("finish", () => {
+		console.log("[EVENT]", `Outgoing response: ${res.statusCode} ${res.statusMessage}`);
+	});
+
 	next();
 };
 
@@ -24,7 +29,7 @@ const logger = () => (res, req, next) => {
 app.use(cors());
 // @ts-ignore Typescript is complaining, but it actually works just fine.
 app.use(express.json());
-app.use(logger());
+app.use(requestLogger());
 
 app.get("/health", healthRouter);
 app.use("/v1/signals", apiV1Router);
