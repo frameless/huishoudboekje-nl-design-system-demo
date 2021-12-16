@@ -1,4 +1,3 @@
-from inspect import signature
 from hhb_backend.graphql.models.Alarm import Alarm
 from hhb_backend.graphql.models.signaal import Signal
 from hhb_backend.graphql.models.afspraak import Afspraak
@@ -39,8 +38,6 @@ class EvaluateAlarm(graphene.Mutation):
         triggered_alarms = []
         activeAlarms = EvaluateAlarm.getActiveAlarms()
         for alarm in activeAlarms:
-            print(f"\n current alarm: {alarm} \n\n")
-
             # get data from afspraak and transactions (by journaalpost reference)
             afspraak = EvaluateAlarm.getAfspraakById(alarm.get('afspraakId'))
             journaalIds = afspraak.get("journaalposten", [])
@@ -58,16 +55,12 @@ class EvaluateAlarm(graphene.Mutation):
                 nextAlarmDate = None
             elif nextAlarmAlreadyExists == False:
                 newAlarm = EvaluateAlarm.createAlarm(alarm, nextAlarmDate)
-            print(f"\n next alarm in sequence {newAlarm}\n\n")
 
             # check if there are transaction within the alarm specified margins
             createSignaal = None
             if EvaluateAlarm.shouldCheckAlarm(alarm):
                 createSignaal = EvaluateAlarm.shouldCreateSignaal(alarm, transacties)
-            else:
-                print(f"\n dont generate signal based on alarm:{alarm} and transacties:{transacties}\n\n")
-            print(f"\n signaal: {createSignaal}\n\n")
-
+            
             triggered_alarms.append({
                 "alarm": alarm,
                 "nextAlarm": newAlarm,
@@ -203,22 +196,26 @@ class EvaluateAlarm(graphene.Mutation):
 
     # get ByDay, ByMonth and ByMonthDay from alarm
     def generateNextAlarmInSequence(alarm: Alarm, alarmDate:datetime) -> datetime:
-        # Create next Alarm in the sequence based on the 'Afspraak'
-        byDay = alarm.get("byDay")
-        byMonth = alarm.get("byMonth")
-        byMonthDay = alarm.get("byMonthDay")
+        # Create next Alarm in the sequence based on byDay, byMonth, byMonthDay cycle
+        byDay = alarm.get("byDay", [])
+        byMonth = alarm.get("byMonth", [])
+        byMonthDay = alarm.get("byMonthDay", [])
 
         # add one day so it doesnt return the same day
         tommorrow_utc = (datetime.now(timezone.utc) + timedelta(days=1)).date()
         future = max(alarmDate + timedelta(days=1), tommorrow_utc)
         # https://dateutil.readthedocs.io/en/latest/examples.html#rrule-examples
-        if byDay is not None and byMonth is None and byMonthDay is None:        # weekly
+        # isWeekly1 = (byDay is not None and byMonth is None and byMonthDay is None)
+        isWeekly = (len(byDay) >= 1 and len(byMonth) <= 0 and len(byMonthDay) <=0)
+        # isMontly1 = (byMonth is not None and byMonthDay is not None and byDay is None)
+        isMontly = (len(byDay) <= 0 and len(byMonth) >= 1 and len(byMonthDay) >= 1)
+        if isWeekly:   # weekly
             weekday_indexes = MyLittleHelper.weekday_names_to_indexes(byDay)
             next_alarm_dates = list(rrule(MONTHLY, dtstart=future, count=1, byweekday=weekday_indexes))
-        elif byMonth is not None and byMonthDay is not None and byDay is None:                              # maandelijk/jaarlijks
+        elif isMontly:    # maandelijk/jaarlijks
             next_alarm_dates = list(rrule(YEARLY, dtstart=future, count=1, bymonth=byMonth, bymonthday=byMonthDay))
         else:
-            raise GraphQLError(f"Niet ondersteunde combinatie van betaalinstructies.")
+            raise GraphQLError(f"Niet ondersteunde combinatie van alarm herhaal instructies.")
 
         next_alarm_date: date = next_alarm_dates[0].date()
 
@@ -234,7 +231,6 @@ class EvaluateAlarm(graphene.Mutation):
         # Evaluate Alarm
         transaction_in_scope = []
         for transaction in transacties:
-            print(f"\n transaction: {transaction}\n\n")
             str_transactie_datum=transaction.get("transactie_datum")
             transaction_date = dateutil.parser.isoparse(str_transactie_datum).date()
             monetary_margin = int(alarm.get("bedragMargin"))
@@ -257,22 +253,16 @@ class EvaluateAlarm(graphene.Mutation):
             }
             signaal_response = requests.post(f"{settings.SIGNALENSERVICE_URL}/signals/", json=newSignal, headers={"Content-type": "application/json"})
             if signaal_response.status_code != 201:
-                print(f"Fout bij het aanmaken van het signaal. {signaal_response.json()}")
                 raise GraphQLError(f"Fout bij het aanmaken van het signaal. {signaal_response.json()}")
             newSignal = signaal_response.json()["data"]
 
-            alarm_update = alarm
-            alarm_update.update({"signaalId": newSignal.get("id")})
-            alarm_update.update({"bedrag": int(alarm.get("bedrag"))})
-            alarm_update.update({"bedragMargin": int(alarm.get("bedragMargin"))})
-
-            print(f"\n updating alarm with: {alarm}\n\n")
+            newSignalId = newSignal.get("id")
+            alarm["signaalId"] = newSignalId
             alarm_response = requests.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", json=alarm, headers={"Content-type": "application/json"})
             if alarm_response.status_code != 200:
-                print(f"Fout bij het update van het alarm met het signaal. {alarm_response.json()}")
                 raise GraphQLError(f"Fout bij het update van het alarm met het signaal. {alarm_response.json()}")
             alarm = alarm_response.json()["data"]
-            
+
             return newSignal
         else:
             return None

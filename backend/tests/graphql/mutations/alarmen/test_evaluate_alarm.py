@@ -131,7 +131,7 @@ def test_evaluate_alarm_illigal_betaalinstructie_combination(client):
                 "by_month": [1],
                 "by_month_day": [1],
         }
-        expected = "Niet ondersteunde combinatie van betaalinstructies."
+        expected = "Niet ondersteunde combinatie van alarm herhaal instructies."
 
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
         rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=200, json={'data': [alarm]})
@@ -221,10 +221,6 @@ def test_evaluate_alarm_inactive(client):
         )
 
         # assert
-        print(f">> >> >> >> response: {response.json} ")
-        for call in rm.request_history:
-            print(f">> >> >> >> fallback: {call.method} {call.url} ")
-
         assert rm1.called_once
         assert rm2.called_once
         assert fallback.called == 0
@@ -268,10 +264,6 @@ def test_evaluate_alarm_no_signal(client):
         )
 
         # assert
-        print(f">> >> >> >> response: {response.json} ")
-        for call in rm.request_history:
-            print(f">> >> >> >> fallback: {call.method} {call.url} ")
-
         assert rm1.called_once
         assert rm2.called_once
         assert rm3.called_once
@@ -285,17 +277,16 @@ def test_evaluate_alarm_no_signal(client):
 def test_evaluate_alarm_signal_date(client):
     with requests_mock.Mocker() as rm:
         # arrange
-        expected = {'data': {'evaluateAlarm': {'alarmTriggerResult': [{'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9'}, 'nextAlarm': {'id': '33738845-7f23-4c8f-8424-2b560a944884'}, 'Signal': {'id': 'e2b282d9-b31f-451e-9242-11f86c902b35'}}]}}}
-        alarm = {
-            "id": alarm_id,
-            "isActive": True,
-            "gebruikerEmail":"other@mail.nl",
-            "afspraakId": 19,
-            "datum":"2021-12-06",
-            "datumMargin": 1,
-            "bedrag": "12500",
-            "bedragMargin":"1000",
-            "by_day": ["Wednesday", "Friday"]
+        banktransactie = {
+            "id": banktransactie_id,
+            "bedrag": 150,
+            "customer_statement_message_id": 15,
+            "information_to_account_owner": "NL83ABNA1927261899               Leefgeld ZOEKTERMPERSONA2 januari 2019",
+            "is_credit": False,
+            "is_geboekt": True,
+            "statement_line": "190101D-1195.20NMSC028",
+            "tegen_rekening": "NL83ABNA1927261899",
+            "transactie_datum": "2021-11-11"
         }
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
         rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=200, json={'data': [alarm]})
@@ -304,7 +295,9 @@ def test_evaluate_alarm_signal_date(client):
         rm4 = rm.get(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/{transaction_id}", status_code=200, json={"data": banktransactie})
         rm5 = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={ "ok":True, "data": nextAlarm})
         rm6 = rm.post(f"{settings.SIGNALENSERVICE_URL}/signals/", status_code=201, json={"data": signal})
-        rm7 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
+        rm7 = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", status_code=200, json={ "ok":True, "data": nextAlarm})
+        rm8 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
+        expected = {'data': {'evaluateAlarm': {'alarmTriggerResult': [{'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9'}, 'nextAlarm': {'id': '33738845-7f23-4c8f-8424-2b560a944884'}, 'Signal': {'id': 'e2b282d9-b31f-451e-9242-11f86c902b35'}}]}}}
 
         # act
         response = client.post(
@@ -331,10 +324,6 @@ def test_evaluate_alarm_signal_date(client):
         )
 
         # assert
-        print(f">> >> >> >> response: {response.json} ")
-        for call in rm.request_history:
-            print(f">> >> >> >> fallback: {call.method} {call.url} ")
-
         assert rm1.called_once
         assert rm2.called_once
         assert rm3.called_once
@@ -342,6 +331,7 @@ def test_evaluate_alarm_signal_date(client):
         assert rm5.called_once
         assert rm6.called_once
         assert rm7.called_once
+        assert rm8.called_once
         assert fallback.called == 0
         assert response.json == expected
 
@@ -349,7 +339,6 @@ def test_evaluate_alarm_signal_date(client):
 def test_evaluate_alarm_signal_monetary(client):
     with requests_mock.Mocker() as rm:
         # arrange
-        expected = {'data': {'evaluateAlarm': {'alarmTriggerResult': [{'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9'}, 'nextAlarm': {'id': '33738845-7f23-4c8f-8424-2b560a944884'}, 'Signal': {'id': 'e2b282d9-b31f-451e-9242-11f86c902b35'}}]}}}
         banktransactie = {
             "id": banktransactie_id,
             "bedrag": 150,
@@ -368,7 +357,9 @@ def test_evaluate_alarm_signal_monetary(client):
         rm4 = rm.get(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/{transaction_id}", status_code=200, json={"data": banktransactie})
         rm5 = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={ "ok":True, "data": nextAlarm})
         rm6 = rm.post(f"{settings.SIGNALENSERVICE_URL}/signals/", status_code=201, json={"data": signal})
-        rm7 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
+        rm7 = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", status_code=200, json={ "ok":True, "data": nextAlarm})
+        rm8 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
+        expected = {'data': {'evaluateAlarm': {'alarmTriggerResult': [{'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9'}, 'nextAlarm': {'id': '33738845-7f23-4c8f-8424-2b560a944884'}, 'Signal': {'id': 'e2b282d9-b31f-451e-9242-11f86c902b35'}}]}}}
 
         # act
         response = client.post(
@@ -395,10 +386,6 @@ def test_evaluate_alarm_signal_monetary(client):
         )
 
         # assert
-        print(f">> >> >> >> response: {response.json} ")
-        for call in rm.request_history:
-            print(f">> >> >> >> fallback: {call.method} {call.url} ")
-
         assert rm1.called_once
         assert rm2.called_once
         assert rm3.called_once
@@ -406,6 +393,7 @@ def test_evaluate_alarm_signal_monetary(client):
         assert rm5.called_once
         assert rm6.called_once
         assert rm7.called_once
+        assert rm8.called_once
         assert fallback.called == 0
         assert response.json == expected
 
@@ -480,10 +468,6 @@ def test_evaluate_alarm_next_alarm_in_sequence_already_exists(client):
         )
 
         # assert
-        print(f">> >> >> >> response: {response.json} ")
-        for call in rm.request_history:
-            print(f">> >> >> >> fallback: {call.method} {call.url} ")
-
         assert rm1.call_count == 1
         assert rm2.call_count == 2
         assert rm3.call_count == 2
@@ -560,10 +544,6 @@ def test_evaluate_alarm_disabled_because_its_in_the_past(client):
         )
 
         # assert
-        print(f">> >> >> >> response: {response.json} ")
-        for call in rm.request_history:
-            print(f">> >> >> >> fallback: {call.method} {call.url} ")
-
         assert rm1.called_once
         assert rm2.called_once
         assert rm3.called_once
