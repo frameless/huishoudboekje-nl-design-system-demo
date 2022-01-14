@@ -69,6 +69,13 @@ spec:
                   key: POSTADRESSEN_DATABASE_URL
           command: ["npm"]
           args: ["run", "db:push"]
+          volumeMounts:
+            - mountPath: /app/node_modules/.prisma
+              name: prisma-postadressenservice-init-3
+            - mountPath: /app/node_modules/prisma
+              name: app-node-modules-prisma-postadressenservice-init-3
+            - mountPath: /.npm
+              name: npm-postadressenservice-init-3
       containers:
         - name: hhb-postadressenservice
           image: postadressenservice
@@ -100,3 +107,23 @@ spec:
                 secretKeyRef:
                   name: hhb-database-secrets
                   key: POSTADRESSEN_DATABASE_URL
+          volumeMounts:
+            - mountPath: /app/node_modules/.prisma
+              name: prisma-postadressenservice
+            - mountPath: /.npm
+              name: npm-postadressenservice
+            - mountPath: /app/node_modules/prisma
+              name: app-node-modules-prisma-postadressenservice
+      volumes:
+        - emptyDir: {}
+          name: prisma-postadressenservice-init-3
+        - emptyDir: {}
+          name: prisma-postadressenservice
+        - emptyDir: {}
+          name: app-node-modules-prisma-postadressenservice-init-3
+        - emptyDir: {}
+          name: app-node-modules-prisma-postadressenservice
+        - emptyDir: {}
+          name: npm-postadressenservice-init-3
+        - emptyDir: {}
+          name: npm-postadressenservice

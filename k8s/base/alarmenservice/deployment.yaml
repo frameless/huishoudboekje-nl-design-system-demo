@@ -68,6 +68,13 @@ spec:
                   key: ALARMENSERVICE_DATABASE_URL
           command: ["npm"]
           args: ["run", "db:push"]
+          volumeMounts:
+            - mountPath: /app/node_modules/.prisma
+              name: prisma-alarmenservice-init-3
+            - mountPath: /app/node_modules/prisma
+              name: app-node-modules-prisma-alarmenservice-init-3
+            - mountPath: /.npm
+              name: npm-alarmenservice-init-3
       containers:
         - name: hhb-alarmenservice
           image: alarmenservice
@@ -99,3 +106,23 @@ spec:
                 secretKeyRef:
                   name: hhb-database-secrets
                   key: ALARMENSERVICE_DATABASE_URL
+          volumeMounts:
+            - mountPath: /app/node_modules/.prisma
+              name: prisma-alarmenservice
+            - mountPath: /.npm
+              name: npm-alarmenservice
+            - mountPath: /app/node_modules/prisma
+              name: app-node-modules-prisma-alarmenservice
+      volumes:
+        - emptyDir: {}
+          name: prisma-alarmenservice-init-3
+        - emptyDir: {}
+          name: prisma-alarmenservice
+        - emptyDir: {}
+          name: app-node-modules-prisma-alarmenservice-init-3
+        - emptyDir: {}
+          name: app-node-modules-prisma-alarmenservice
+        - emptyDir: {}
+          name: npm-alarmenservice-init-3
+        - emptyDir: {}
+          name: npm-alarmenservice
