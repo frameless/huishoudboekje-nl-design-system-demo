@@ -74,7 +74,11 @@ export OIDC_TOKEN_ENDPOINT=${OIDC_TOKEN_ENDPOINT:-"https://$HHB_FRONTEND_DNS/aut
 export OIDC_TOKENINFO_ENDPOINT=${OIDC_TOKENINFO_ENDPOINT:-"https://$HHB_FRONTEND_DNS/auth/realms/hhb/protocol/openid-connect/token/introspect"}
 export OIDC_USERINFO_ENDPOINT=${OIDC_USERINFO_ENDPOINT:-"https://$HHB_FRONTEND_DNS/auth/realms/hhb/protocol/openid-connect/userinfo"}
 
-# Keycloak Settings for OpenID Connect
+# Keycloak Settings
+export KEYCLOAK_DB_DATABASE=${KEYCLOAK_DB_DATABASE:-"keycloak"}
+export KEYCLOAK_DB_USER=${KEYCLOAK_DB_USER:-"keyclk"}
+export KEYCLOAK_DB_SCHEMA=${KEYCLOAK_DB_SCHEMA:-"public"}
+export KEYCLOAK_DB_PASSWORD=${KEYCLOAK_DB_PASSWORD:-"keyclk"}
 export KEYCLOAK_AUTH_USERNAME=${KEYCLOAK_AUTH_USERNAME:-"admin"}
 export KEYCLOAK_AUTH_PASSWORD=${KEYCLOAK_AUTH_PASSWORD:-"CcEyf8Zut9kHyFRp_B9k@Fx3F_d6W4Ut"}
 export KEYCLOAK_AUTH_KEYCLOAK_URL=${KEYCLOAK_AUTH_KEYCLOAK_URL:-"https://$HHB_FRONTEND_DNS/auth/"}

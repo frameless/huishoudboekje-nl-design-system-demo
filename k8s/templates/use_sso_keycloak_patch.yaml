@@ -11,3 +11,14 @@ spec:
           env:
             - name: KEYCLOAK_FRONTEND_URL
               value: "https://${HHB_FRONTEND_DNS}/auth"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: keycloak-config
+  labels:
+    name: keycloak-config
+data:
+  DB_DATABASE: ${KEYCLOAK_DB_DATABASE}
+  DB_USER: ${KEYCLOAK_DB_USER}
+  DB_SCHEMA: ${KEYCLOAK_DB_SCHEMA}
