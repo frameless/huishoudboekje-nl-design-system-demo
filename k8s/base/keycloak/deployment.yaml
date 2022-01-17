@@ -1,5 +1,4 @@
 ---
-# TODO aan database koppelen
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -16,10 +15,53 @@ spec:
       labels:
         name: hhb-keycloak
     spec:
+      initContainers:
+        - name: init1-wait-for-db
+          image: busybox
+          envFrom:
+            - configMapRef:
+                name: postgres-config
+          command:
+            [
+                "sh",
+                "-c",
+                "while true; do sleep 1; echo Waiting for database...; if nc -z $POSTGRESQL_HOSTNAME 5432; then echo Database is up!; exit 0; fi; done; echo Aint gonna wait for the database forever...; exit 1",
+            ]
+        - name: init2-prepare-db
+          image: bitnami/postgresql:13
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: postgres-config
+            - configMapRef:
+                name: keycloak-config
+          env:
+            - name: POSTGRESQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: hhb-database-secrets
+                  key: POSTGRESQL_PASSWORD
+            - name: KEYCLOAK_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: hhb-keycloak-secrets
+                  key: KEYCLOAK_DB_PASSWORD
+          command: [ "/bin/sh" ]
+          args:
+            - -c
+            - >-
+              export PGPASSWORD=$POSTGRESQL_PASSWORD &&
+              psql -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -c "CREATE USER $DB_USER WITH PASSWORD '$KEYCLOAK_DB_PASSWORD'" || true &&
+              psql -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -c "CREATE DATABASE $DB_DATABASE" || true &&
+              psql -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -c "GRANT ALL PRIVILEGES ON DATABASE keycloak TO $DB_USER" || true &&
+              psql -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -c "ALTER USER $DB_USER WITH PASSWORD '$KEYCLOAK_DB_PASSWORD'" || true;
       containers:
         - name: hhb-keycloak
           image: "quay.io/keycloak/keycloak:15.0.2"
           imagePullPolicy: "Always"
+          envFrom:
+            - configMapRef:
+                name: keycloak-config
           env:
             - name: KEYCLOAK_USER
               valueFrom:
@@ -31,6 +73,16 @@ spec:
                 secretKeyRef:
                   name: hhb-keycloak-secrets
                   key: KEYCLOAK_AUTH_PASSWORD
+            - name: DB_ADDR
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: POSTGRESQL_HOSTNAME
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: hhb-keycloak-secrets
+                  key: KEYCLOAK_DB_PASSWORD
             - name: PROXY_ADDRESS_FORWARDING
               value: "true"
             - name: REDIRECT_SOCKET

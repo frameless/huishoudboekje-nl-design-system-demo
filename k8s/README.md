@@ -110,6 +110,9 @@ export POSTGRESQL_PASSWORD_LOGSVC="changeme"
 export POSTGRESQL_PASSWORD_ORGSVC="changeme"
 export POSTGRESQL_PASSWORD_PADSVC="changeme"
 export POSTGRESQL_PASSWORD_ALMSVC="changeme"
+export POSTGRESQL_PASSWORD_SIGSVC="changeme"
+
+export KEYCLOAK_DB_PASSWORD="changeme"
 
 # allways change secret FOR JWT
 export HHB_SECRET="changeme"
