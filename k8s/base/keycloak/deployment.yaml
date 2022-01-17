@@ -101,12 +101,12 @@ spec:
               cpu: 100m
               memory: 512Mi
           livenessProbe:
-            initialDelaySeconds: 60
+            initialDelaySeconds: 120
             httpGet:
               path: /auth
               port: http
           readinessProbe:
-            initialDelaySeconds: 60
+            initialDelaySeconds: 120
             httpGet:
               path: /auth
               port: http
