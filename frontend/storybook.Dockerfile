@@ -5,7 +5,6 @@ WORKDIR /app
 COPY ./app/package*.json ./app/version.js ./
 RUN npm ci
 COPY ./app .
-RUN ls -la /app/.storybook
 RUN npm run build-storybook
 
 FROM bitnami/nginx:latest as webserver

@@ -71,6 +71,25 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
+  name: hhb-storybook-ingress
+  labels:
+    name: hhb-storybook-ingress
+spec:
+  rules:
+    - host: ${HHB_FRONTEND_DNS}
+      http:
+        paths:
+          - path: /storybook
+            pathType: Prefix
+            backend:
+              service:
+                name: hhb-storybook
+                port:
+                  number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
   name: hhb-unleashservice-ingress
   labels:
     name: hhb-unleashservice-ingress
