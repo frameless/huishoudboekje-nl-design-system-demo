@@ -1,14 +1,15 @@
-FROM node:16-alpine
+ARG DOCKER_PROXY=''
+FROM ${DOCKER_PROXY}node:lts-alpine as builder
+ENV CYPRESS_INSTALL_BINARY=0
+WORKDIR /app
+COPY ./app/package*.json ./app/version.js ./
+RUN npm ci
+COPY ./app .
+RUN ls -la /app/.storybook
+RUN npm run build-storybook
 
-COPY ./frontend/app/package.json /app/app/package.json
-COPY ./frontend/app/package-lock.json /app/app/package-lock.json
-COPY ./frontend/app/version.js /app/app/version.js
-COPY ./frontend/theme /app/theme
-VOLUME /app
-WORKDIR /app/app
-RUN npm install
-COPY ./frontend /app
-
-EXPOSE 3000
-
-CMD ["npm", "start"]
+FROM bitnami/nginx:latest as webserver
+COPY ./docker/nginx.default.conf /opt/bitnami/nginx/conf/server_blocks/default.conf
+COPY ./docker/nginx.conf  /opt/bitnami/nginx/conf/nginx.conf
+COPY --from=builder /app/storybook-static /opt/bitnami/apps/html
+EXPOSE 8080
