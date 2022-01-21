@@ -76,10 +76,10 @@ metadata:
     name: hhb-storybook-ingress
 spec:
   rules:
-    - host: ${HHB_FRONTEND_DNS}
+    - host: sb.${HHB_FRONTEND_DNS}
       http:
         paths:
-          - path: /storybook
+          - path: /
             pathType: Prefix
             backend:
               service:
