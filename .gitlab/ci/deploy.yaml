@@ -54,6 +54,7 @@ deploy-deployment-test:
   <<: *deploy
   needs:
     - build-images-dev
+    - build-storybook
   environment:
     name: test
     url: https://test.huishoudboekje.demoground.nl/
@@ -70,6 +71,7 @@ deploy-deployment-review:
   <<: *deploy
   needs:
     - build-images-dev
+    - build-storybook
   environment:
     name: review/$CI_COMMIT_REF_SLUG
     url: https://hhb-$CI_COMMIT_REF_SLUG.nlx.reviews/

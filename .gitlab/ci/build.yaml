@@ -1,7 +1,10 @@
-.build-docker-images: &build-docker-images
+.retry: &retry
   retry:
     max: 2
     when: script_failure
+
+.build-docker-images: &build-docker-images
+  <<: *retry
   stage: build
   image: registry.gitlab.com/commonground/huishoudboekje/review-app-deployer:latest
   needs: [ ]
@@ -16,6 +19,32 @@
     - mkdir -p $DOCKER_CONFIG && echo $DOCKER_AUTH_CONFIG > $DOCKER_CONFIG/config.json
     - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY --username $CI_REGISTRY_USER --password-stdin
     - sh ./scripts/docker-build-and-push.sh
+
+.build-storybook: &build-storybook
+  <<: *retry
+  stage: build
+  image: registry.gitlab.com/commonground/huishoudboekje/review-app-deployer:latest
+  needs: [ ]
+  tags:
+    - cg
+    - shell
+  variables:
+    DOCKER_TLS_CERTDIR: "/certs"
+  script:
+    - export DOCKER_CONFIG=/tmp/docker-config-$CI_JOB_ID
+    - mkdir -p $DOCKER_CONFIG && echo $DOCKER_AUTH_CONFIG > $DOCKER_CONFIG/config.json
+    - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY --username $CI_REGISTRY_USER --password-stdin
+    - docker build -t $CI_REGISTRY_IMAGE/storybook:$IMAGE_TAG --build-arg "DOCKER_PROXY=$DOCKER_PROXY" --file=./frontend/storybook.Dockerfile frontend
+    - docker push $CI_REGISTRY_IMAGE/storybook:$IMAGE_TAG
+
+# Build the Storybook docker image
+build-storybook:
+  <<: *build-storybook
+  only:
+    - branches@commonground/huishoudboekje/app-new
+  except:
+    - master
+    - acceptance
 
 # Build docker images with default tag ("branchName-commitSha").
 build-images-dev:
