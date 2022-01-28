@@ -1,6 +1,8 @@
 import {Button, HStack, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, UseDisclosureReturn} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
+import { useNavigate } from "react-router-dom";
+import {AppRoutes} from "../../config/routes";
 import {Afdeling, GetOrganisatieDocument, GetOrganisatiesDocument, useDeleteAfdelingMutation} from "../../generated/graphql";
 import useToaster from "../../utils/useToaster";
 
@@ -8,6 +10,7 @@ const DeleteAfdelingModal: React.FC<{afdeling: Afdeling, disclosure: UseDisclosu
 	const {isOpen, onClose} = disclosure;
 	const {t} = useTranslation();
 	const toast = useToaster();
+	const navigate = useNavigate();
 
 	const [deleteAfdeling] = useDeleteAfdelingMutation({
 		refetchQueries: [
@@ -23,6 +26,13 @@ const DeleteAfdelingModal: React.FC<{afdeling: Afdeling, disclosure: UseDisclosu
 			toast({
 				success: t("messages.deleteAfdelingSuccess", {name: afdeling.naam}),
 			});
+
+			if(afdeling.organisatie?.id){
+				navigate(AppRoutes.Organisatie(afdeling.organisatie?.id));
+			}
+			else{
+				navigate(AppRoutes.Organisaties);
+			}
 		}).catch(err => {
 			toast({
 				error: err.message,
@@ -42,7 +52,7 @@ const DeleteAfdelingModal: React.FC<{afdeling: Afdeling, disclosure: UseDisclosu
 				<ModalFooter>
 					<HStack>
 						<Button variant={"ghost"} onClick={onClose}>{t("global.actions.cancel")}</Button>
-						<Button colorScheme={"primary"} onClick={onClickSubmit}>{t("global.actions.delete")}</Button>
+						<Button colorScheme={"red"} onClick={onClickSubmit}>{t("global.actions.delete")}</Button>
 					</HStack>
 				</ModalFooter>
 			</ModalContent>

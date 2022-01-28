@@ -12,12 +12,14 @@ import PostadresList from "../Postadressen/PostadresList";
 import AddAfdelingRekeningModal from "../Rekeningen/AddAfdelingRekeningModal";
 import RekeningList from "../Rekeningen/RekeningList";
 import AddAfdelingPostadresModal from "./AddAfdelingPostadresModal";
+import DeleteAfdelingModal from "./DeleteAfdelingModal";
 import UpdateAfdelingModal from "./UpdateAfdelingModal";
 
 const AfdelingDetailView: React.FC<{afdeling: Afdeling}> = ({afdeling}) => {
 	const organisatieId: number = afdeling.organisatie?.id!;
 	const {t} = useTranslation();
 	const updateAfdelingModal = useDisclosure();
+	const deleteAfdelingModal = useDisclosure();
 	const addPostadresModal = useDisclosure();
 	const addRekeningModal = useDisclosure();
 	const postadressen: Postadres[] = afdeling.postadressen || [];
@@ -25,6 +27,7 @@ const AfdelingDetailView: React.FC<{afdeling: Afdeling}> = ({afdeling}) => {
 
 	return (<>
 		<UpdateAfdelingModal afdeling={afdeling} disclosure={updateAfdelingModal} />
+		<DeleteAfdelingModal afdeling={afdeling} disclosure={deleteAfdelingModal} />
 		<AddAfdelingPostadresModal afdeling={afdeling} disclosure={addPostadresModal} />
 		<AddAfdelingRekeningModal afdeling={afdeling} disclosure={addRekeningModal} />
 
@@ -33,6 +36,7 @@ const AfdelingDetailView: React.FC<{afdeling: Afdeling}> = ({afdeling}) => {
 				<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} />
 				<MenuList>
 					<MenuItem onClick={() => updateAfdelingModal.onOpen()}>{t("global.actions.edit")}</MenuItem>
+					<MenuItem onClick={() => deleteAfdelingModal.onOpen()}>{t("global.actions.delete")}</MenuItem>
 				</MenuList>
 			</Menu>
 		)}>
