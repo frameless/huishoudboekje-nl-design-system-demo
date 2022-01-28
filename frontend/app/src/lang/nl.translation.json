@@ -33,15 +33,6 @@
     "journals": {
       "createSuccessMessage": "Transactie succesvol afgeletterd."
     },
-    "rekeningen": {
-      "createSuccess": "Bankrekening {{iban}} op naam van {{rekeninghouder}} is toegevoegd.",
-      "deleteSuccess": "Bankrekening is verwijderd.",
-      "inUseDeleteError": "Deze bankrekening is in gebruik en kan niet worden verwijderd.",
-      "updateSuccess": "Gegevens succesvol gewijzigd.",
-      "deleteTitle": "Bankrekening verwijderen.",
-      "deleteQuestion": "Weet je zeker dat je bankrekening {{iban}} op naam van {{rekeninghouder}} wil verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
-      "alreadyExistsError": "Dit bankrekeningnummer wordt al gebruikt."
-    },
     "burgers": {
       "deleteConfirmMessage": "Gegevens van {{name}} zijn verwijderd.",
       "deleteTitle": "Burger verwijderen",
@@ -84,18 +75,17 @@
       "deleteSuccess": "{{burgerName}} is verwijderd uit dit huishouden."
     },
     "noHuishoudenSearchResults": "Geen huishoudens gevonden. Gebruik een andere zoekterm.",
-    "afdelingen": {
-      "deleteSuccess": "Afdeling verwijderd.",
-      "createSuccessMessage": "Nieuwe afdeling succesvol opgeslagen.",
-      "updateSuccess": "Afdeling gewijzigd.",
-      "alreadyExistsError": "Deze afdeling bestaat al."
-    },
     "postadressen": {
       "createSuccess": "Postadres toegevoegd.",
       "deleteSuccess": "Postadres verwijderd.",
       "updateSuccess": "Postadres gewijzigd.",
       "deleteTitle": "Postadres verwijderen",
       "deleteQuestion": "Weet je zeker dat je dit postadres wil verwijderen?"
+    },
+    "afdelingen": {
+      "createSuccessMessage": "Nieuwe afdeling succesvol opgeslagen.",
+      "updateSuccess": "Afdeling gewijzigd.",
+      "alreadyExistsError": "Deze afdeling bestaat al."
     },
     "organisaties": {
       "createSuccessMessage": "Nieuwe organisatie succesvol opgeslagen.",
@@ -111,6 +101,15 @@
       "alreadyExists": "Er bestaat al een organisatie met dit KvK-nummer en vestigingsnummer."
     },
     "deleteAfdelingSuccess": "Afdeling {{name}} succesvol verwijderd.",
+    "rekeningen": {
+      "createSuccess": "Bankrekening {{iban}} op naam van {{rekeninghouder}} is toegevoegd.",
+      "deleteSuccess": "Bankrekening is verwijderd.",
+      "inUseDeleteError": "Deze bankrekening is in gebruik en kan niet worden verwijderd.",
+      "updateSuccess": "Gegevens succesvol gewijzigd.",
+      "deleteTitle": "Bankrekening verwijderen.",
+      "deleteQuestion": "Weet je zeker dat je bankrekening {{iban}} op naam van {{rekeninghouder}} wil verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
+      "alreadyExistsError": "Dit bankrekeningnummer wordt al gebruikt."
+    },
     "backendError": "Er is een systeemfout opgetreden. Neem contact op met de applicatiebeheerder voor ondersteuning.",
     "genericToastErrorTitle": "Er is een fout opgetreden."
   },
@@ -140,7 +139,6 @@
       "clearSearch": "Zoekopdracht wissen",
       "showReports": "Bekijk rapportage",
       "back": "Terug",
-      "options": "Opties",
       "backToHome": "Terug naar de hoofdpagina",
       "clickToEdit": "Klik om te wijzigen"
     },
@@ -281,12 +279,6 @@
       "deleteBurger": {
         "title": "Burger verwijderen uit huishouden",
         "confirmQuestion": "Weet je zeker dat je {{burgerName}} wil verwijderen uit het huishouden {{huishoudenName}}?"
-      }
-    },
-    "afdelingen": {
-      "deleteAfdeling": {
-        "title": "Afdeling verwijderen",
-        "confirmQuestion": "Weet je zeker dat je afdeling {{name}} wil verwijderen?"
       }
     },
     "createAfdeling": {
@@ -670,8 +662,6 @@
     "title": "Huishoudens"
   },
   "suggestion": "Suggestie",
-  "postadressen": "Postadressen",
-  "rekeningen": "Rekeningen",
   "modals": {
     "addPostadres": {
       "modalTitle": "Postadres toevoegen"
@@ -683,6 +673,8 @@
       "title": "Rekening toevoegen"
     }
   },
+  "postadressen": "Postadressen",
+  "rekeningen": "Rekeningen",
   "deleteAfspraakModal": {
     "title": "Afdeling verwijderen",
     "confirmModalBody": "Weet je zeker dat je de afdeling {{afdeling}} wil verwijderen?"
