@@ -1,11 +1,12 @@
 import {Table, TableProps, Tbody, Th, Thead, Tr} from "@chakra-ui/react";
-import React from "react";
+import React, {useContext} from "react";
 import {useTranslation} from "react-i18next";
 import {
 	Afdeling,
 	Burger,
 	GetBurgerDocument,
 	GetBurgersDocument,
+	GetBurgersSearchDocument,
 	GetOrganisatieDocument,
 	GetOrganisatiesDocument,
 	Rekening,
@@ -13,16 +14,19 @@ import {
 	useDeleteBurgerRekeningMutation,
 } from "../../generated/graphql";
 import useToaster from "../../utils/useToaster";
+import {BurgerSearchContext} from "../Burgers/BurgerSearchContext";
 import RekeningListItem from "./RekeningListItem";
 
 type RekeningListProps = {rekeningen: Rekening[], burger?: Burger, afdeling?: Afdeling};
 const RekeningList: React.FC<TableProps & RekeningListProps> = ({rekeningen, burger, afdeling, ...props}) => {
 	const {t} = useTranslation();
 	const toast = useToaster();
+	const {search} = useContext(BurgerSearchContext);
 	const [deleteBurgerRekening] = useDeleteBurgerRekeningMutation({
 		refetchQueries: [
 			{query: GetBurgersDocument},
 			{query: GetBurgerDocument, variables: {id: burger?.id}},
+			{query: GetBurgersSearchDocument, variables: {search}},
 		],
 	});
 	const [deleteAfdelingRekening] = useDeleteAfdelingRekeningMutation({
@@ -47,7 +51,7 @@ const RekeningList: React.FC<TableProps & RekeningListProps> = ({rekeningen, bur
 				console.error(err);
 
 				let error = err.message;
-				if(err.message.includes("wordt gebruikt")){
+				if (err.message.includes("wordt gebruikt")) {
 					error = t("messages.rekeningen.inUseDeleteError");
 				}
 
@@ -73,7 +77,7 @@ const RekeningList: React.FC<TableProps & RekeningListProps> = ({rekeningen, bur
 				console.error(err);
 
 				let error = err.message;
-				if(err.message.includes("wordt gebruikt")){
+				if (err.message.includes("wordt gebruikt")) {
 					error = t("messages.rekeningen.inUseDeleteError");
 				}
 

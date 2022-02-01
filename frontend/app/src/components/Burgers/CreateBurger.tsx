@@ -1,24 +1,27 @@
-import React from "react";
+import React, {useContext} from "react";
 import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router-dom";
 import {AppRoutes} from "../../config/routes";
 import SaveBurgerErrorHandler from "../../errorHandlers/SaveBurgerErrorHandler";
 import useMutationErrorHandler from "../../errorHandlers/useMutationErrorHandler";
-import {CreateBurgerInput, GetBurgersDocument, GetHuishoudensDocument, useCreateBurgerMutation} from "../../generated/graphql";
+import {CreateBurgerInput, GetBurgersDocument, GetBurgersSearchDocument, GetHuishoudensDocument, useCreateBurgerMutation} from "../../generated/graphql";
 import useToaster from "../../utils/useToaster";
 import BackButton from "../Layouts/BackButton";
 import Page from "../Layouts/Page";
 import BurgerForm from "./BurgerForm";
+import {BurgerSearchContext} from "./BurgerSearchContext";
 
 const CreateBurger = () => {
 	const {t} = useTranslation();
 	const navigate = useNavigate();
 	const toast = useToaster();
 	const handleSaveBurgerErrors = useMutationErrorHandler(SaveBurgerErrorHandler);
+	const {search} = useContext(BurgerSearchContext);
 	const [createBurger, $createBurger] = useCreateBurgerMutation({
 		refetchQueries: [
 			{query: GetHuishoudensDocument},
 			{query: GetBurgersDocument},
+			{query: GetBurgersSearchDocument, variables: {search}},
 		],
 	});
 
