@@ -23,7 +23,9 @@ export const parameters = {
 	locales: {
 		nl_NL: {title: "Nederlands", right: "NL"},
 	},
-	actions: {argTypesRegex: "^on[A-Z].*"},
+	actions: {
+		argTypesRegex: "^on[A-Z].*"
+	},
 	controls: {
 		matchers: {
 			color: /(background|color)$/i,
@@ -32,5 +34,5 @@ export const parameters = {
 	},
 	chakra: {
 		theme,
-	}
+	},
 };
