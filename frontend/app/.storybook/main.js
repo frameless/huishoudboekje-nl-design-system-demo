@@ -6,10 +6,10 @@ module.exports = {
 		// in storybook
 		config.resolve.alias = {
 			...(config.resolve.alias ?? {}),
-			'@emotion/react': path.resolve('./node_modules/@emotion/react'),
-			'@emotion/styled': path.resolve('./node_modules/@emotion/styled'),
-			'@emotion/core': path.resolve('./node_modules/@emotion/react'),
-			'emotion-theming': path.resolve('./node_modules/@emotion/react'),
+			"@emotion/react": path.resolve("./node_modules/@emotion/react"),
+			"@emotion/styled": path.resolve("./node_modules/@emotion/styled"),
+			"@emotion/core": path.resolve("./node_modules/@emotion/react"),
+			"emotion-theming": path.resolve("./node_modules/@emotion/react"),
 		};
 
 		return config;

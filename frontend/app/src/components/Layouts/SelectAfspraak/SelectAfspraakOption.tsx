@@ -1,10 +1,9 @@
 import {CheckIcon} from "@chakra-ui/icons";
-import {TableRowProps, Tag, TagLabel, TagLeftIcon, Td, Text, Tr} from "@chakra-ui/react";
+import {Stack, TableRowProps, Tag, TagLabel, TagLeftIcon, Td, Text, Tr} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {Afspraak} from "../../../generated/graphql";
-import {formatBurgerName} from "../../../utils/things";
-import Currency from "../Currency";
+import {currencyFormat2, formatBurgerName} from "../../../utils/things";
 
 type SelectAfspraakOptionProps = TableRowProps & {
 	afspraak: Afspraak,
@@ -37,7 +36,10 @@ const SelectAfspraakOption: React.FC<SelectAfspraakOptionProps> = ({afspraak, is
 				)}
 			</Td>
 			<Td isNumeric>
-				<Currency value={(afspraak.bedrag * (afspraak.credit ? 1 : -1))} />
+				<Stack direction={"row"} justifyContent={"space-between"}>
+					<Text>&euro;</Text>
+					<Text>{currencyFormat2(false).format(afspraak.bedrag * (afspraak.credit ? 1 : -1))}</Text>
+				</Stack>
 			</Td>
 		</Tr>
 	);

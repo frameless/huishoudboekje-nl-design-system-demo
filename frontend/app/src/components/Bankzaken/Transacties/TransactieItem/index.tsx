@@ -3,8 +3,7 @@ import {Box, BoxProps, Flex, Stack, Tag, TagLabel, TagLeftIcon, Text, Tooltip, u
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {BankTransaction} from "../../../../generated/graphql";
-import {formatIBAN} from "../../../../utils/things";
-import Currency from "../../../Layouts/Currency";
+import {currencyFormat2, formatIBAN} from "../../../../utils/things";
 import PrettyIban from "../../../Layouts/PrettyIban";
 import TransactieItemModal from "./TransactieItemModal";
 
@@ -58,7 +57,10 @@ const TransactieItem: React.FC<BoxProps & {transactie: BankTransaction}> = ({tra
 				)}
 
 				<Box flex={0} minWidth={120}>
-					<Currency minWidth={120} value={bt.bedrag} />
+					<Stack direction={"row"} justifyContent={"space-between"}>
+						<Text>&euro;</Text>
+						<Text>{currencyFormat2(false).format(bt.bedrag)}</Text>
+					</Stack>
 				</Box>
 
 			</Stack>
