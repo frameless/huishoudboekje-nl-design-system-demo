@@ -4,6 +4,8 @@ import {Trans} from "react-i18next";
 export const auditLogTexts = (values, components, action) => {
 	const texts = {
 		// Queries
+		afdeling: () => <Trans i18nKey={"auditLog.viewAfdeling"} values={values} components={components} />,
+		afdelingen: () => <Trans i18nKey={"auditLog.viewAfdelingen"} values={values} components={components} />,
 		organisatie: () => <Trans i18nKey={"auditLog.viewOrganisatie"} values={values} components={components} />,
 		organisaties: () => <Trans i18nKey={"auditLog.viewOrganisaties"} values={values} components={components} />,
 		afspraak: () => {

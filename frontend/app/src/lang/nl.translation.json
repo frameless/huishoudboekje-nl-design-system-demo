@@ -596,6 +596,8 @@
   "unknownPostadres": "Onbekend postadres",
   "auditLog": {
     "unknown": "Onbekende gebeurtenis",
+    "viewAfdeling": "{{gebruiker}} bekeek afdeling <linkAfdeling>{{afdeling}}</linkAfdeling>.",
+    "viewAfdelingen": "{{gebruiker}} bekeek alle <strong>afdelingen</strong>.",
     "viewOrganisatie": "{{gebruiker}} bekeek <linkOrganisatie>{{organisatie}}</linkOrganisatie>.",
     "viewOrganisaties": "{{gebruiker}} bekeek alle <strong>organisaties</strong>.",
     "viewAfspraakBurger": "{{gebruiker}} bekeek een <linkAfspraak>afspraak</linkAfspraak> met <linkBurger>{{burger}}</linkBurger>.",
