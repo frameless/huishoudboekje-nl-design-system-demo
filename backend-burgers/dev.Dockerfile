@@ -1,5 +1,5 @@
 ARG DOCKER_PROXY=''
-FROM ${DOCKER_PROXY}bitnami/node:14
+FROM ${DOCKER_PROXY}bitnami/node:16
 ENV HUISHOUDBOEKJESERVICE_URL="http://huishoudboekjeservice:8000"
 ENV ORGANISATIESERVICE_URL="http://organisatieservice:8002"
 ENV BANKTRANSACTIESERVICE_URL="http://banktransactieservice:8003"
