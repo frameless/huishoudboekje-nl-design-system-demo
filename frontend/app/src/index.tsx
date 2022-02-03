@@ -8,6 +8,7 @@ import "react-datepicker/dist/react-datepicker.min.css";
 import ReactDOM from "react-dom";
 import {BrowserRouter as Router} from "react-router-dom";
 import App from "./App";
+import BurgerSearchProvider from "./components/Burgers/BurgerSearchContext";
 import "./config/i18n";
 import theme from "./config/theme";
 import "./global.scss";
@@ -28,7 +29,9 @@ ReactDOM.render(
 			<ApolloProvider client={apolloClient}>
 				<ChakraProvider theme={theme}>
 					<FeatureProvider flags={featureFlags}>
-						<App />
+						<BurgerSearchProvider>
+							<App />
+						</BurgerSearchProvider>
 					</FeatureProvider>
 				</ChakraProvider>
 			</ApolloProvider>

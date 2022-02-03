@@ -133,12 +133,12 @@
       "startBoeken": "Alle transacties afletteren",
       "undoAfletteren": "Afletteren ongedaan maken",
       "filter": "Filteren",
-      "backToList": "Terug naar overzicht",
       "viewBurgerHuishouden": "Bekijk huishouden",
       "brievenExport": "Exporteer gegevens voor brieven",
       "clearSearch": "Zoekopdracht wissen",
       "showReports": "Bekijk rapportage",
       "back": "Terug",
+      "backToList": "Terug naar overzicht",
       "backToHome": "Terug naar de hoofdpagina",
       "clickToEdit": "Klik om te wijzigen"
     },
@@ -662,6 +662,7 @@
     "title": "Huishoudens"
   },
   "suggestion": "Suggestie",
+  "version": "Versie {{version}}",
   "modals": {
     "addPostadres": {
       "modalTitle": "Postadres toevoegen"

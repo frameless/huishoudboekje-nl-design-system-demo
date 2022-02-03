@@ -9,32 +9,26 @@ import Queryable from "../../utils/Queryable";
 import DeadEndPage from "../DeadEndPage";
 import Page from "../Layouts/Page";
 import BurgerListView from "./BurgerListView";
-import BurgerSearchContext from "./BurgerSearchContext";
+import {BurgerSearchContext} from "./BurgerSearchContext";
 
 const BurgerList = () => {
 	const {t} = useTranslation();
 	const navigate = useNavigate();
-	const [search, setSearch] = useContext(BurgerSearchContext);
+	const {search, setSearch} = useContext(BurgerSearchContext);
 	const searchRef = useRef<HTMLInputElement>(null);
 
 	const $burgers = useGetBurgersSearchQuery({
 		context: {debounceKey: "burgerSearch"},
-		variables: {search: search.trim()},
+		variables: {search},
 	});
 
-	const onKeyDownOnSearch = (e) => {
-		if (e.key === "Escape") {
-			setSearch("");
-		}
+	const onChangeSearch = (e) => {
+		setSearch(e.target.value);
 	};
 
 	const onClickResetSearch = () => {
 		setSearch("");
 		searchRef.current!.focus();
-	};
-
-	const onChangeSearch = e => {
-		setSearch(e.target.value);
 	};
 
 	return (
@@ -43,7 +37,7 @@ const BurgerList = () => {
 				<InputLeftElement>
 					<SearchIcon color={"gray.300"} />
 				</InputLeftElement>
-				<Input type={"text"} onChange={onChangeSearch} bg={"white"} onKeyDown={onKeyDownOnSearch} placeholder={t("forms.search.fields.search")} ref={searchRef} value={search || ""} />
+				<Input type={"text"} onChange={onChangeSearch} bg={"white"} placeholder={t("forms.search.fields.search")} ref={searchRef} value={search || ""} />
 				{search.length > 0 && (
 					<InputRightElement zIndex={0}>
 						<IconButton onClick={onClickResetSearch} size={"xs"} variant={"link"} icon={<CloseIcon />} aria-label={t("global.actions.cancel")} color={"gray.300"} />
@@ -68,7 +62,7 @@ const BurgerList = () => {
 				}
 
 				return (
-					<BurgerListView burgers={burgers} showAddButton={search.trim().length === 0} />
+					<BurgerListView burgers={burgers} showAddButton={search.length === 0} />
 				);
 			}} />
 		</Page>

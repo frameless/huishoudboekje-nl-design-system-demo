@@ -1,20 +1,19 @@
 import {ChevronDownIcon} from "@chakra-ui/icons";
-import {Button, Divider, IconButton, Link, Menu, MenuButton, MenuItem, MenuList, Stack} from "@chakra-ui/react";
-import React from "react";
-import {useToggle} from "react-grapple";
+import {Button, Divider, IconButton, Link, Menu, MenuButton, MenuItem, MenuList, Stack, useDisclosure} from "@chakra-ui/react";
+import React, {useContext} from "react";
 import {useTranslation} from "react-i18next";
 import {NavLink, useNavigate, useParams} from "react-router-dom";
 import {AppRoutes} from "../../../config/routes";
-import {Burger, GetBurgersDocument, useDeleteBurgerMutation, useGetBurgerQuery} from "../../../generated/graphql";
+import {Burger, GetBurgersDocument, GetBurgersSearchDocument, GetHuishoudensDocument, useDeleteBurgerMutation, useGetBurgerQuery} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import {formatBurgerName} from "../../../utils/things";
 import useToaster from "../../../utils/useToaster";
-import DeadEndPage from "../../DeadEndPage";
 import Alert from "../../Layouts/Alert";
 import BackButton from "../../Layouts/BackButton";
 import Page from "../../Layouts/Page";
 import Section from "../../Layouts/Section";
 import PageNotFound from "../../PageNotFound";
+import {BurgerSearchContext} from "../BurgerSearchContext";
 import BurgerAfsprakenView from "./BurgerAfsprakenView";
 import BurgerGebeurtenissen from "./BurgerGebeurtenissen";
 import BurgerProfileView from "./BurgerProfileView";
@@ -25,8 +24,8 @@ const BurgerDetailPage = () => {
 	const {t} = useTranslation();
 	const toast = useToaster();
 	const navigate = useNavigate();
-	const [isAlertOpen, toggleAlert] = useToggle(false);
-	const [isDeleted, toggleDeleted] = useToggle(false);
+	const deleteAlert = useDisclosure();
+	const {search} = useContext(BurgerSearchContext);
 
 	const $burger = useGetBurgerQuery({
 		variables: {
@@ -38,11 +37,13 @@ const BurgerDetailPage = () => {
 			id: parseInt(id),
 		},
 		refetchQueries: [
-			{query: GetBurgersDocument}, // Todo: when implementing search, we need to refetch something like GetBurgersSearchDocument with search variables. (20-08-2021)
+			{query: GetBurgersSearchDocument, variables: {search}},
+			{query: GetBurgersDocument},
+			{query: GetHuishoudensDocument},
 		],
 	});
 
-	const onClickDeleteMenuItem = () => toggleAlert(true);
+	const onClickDeleteMenuItem = () => deleteAlert.onOpen();
 
 	return (
 		<Queryable query={$burger}>{(data) => {
@@ -55,11 +56,11 @@ const BurgerDetailPage = () => {
 			const onConfirmDelete = () => {
 				deleteBurger()
 					.then(() => {
-						toggleAlert(false);
 						toast({
 							success: t("messages.burgers.deleteConfirmMessage", {name: `${burger.voornamen} ${burger.achternaam}`}),
 						});
-						toggleDeleted(true);
+						deleteAlert.onClose();
+						navigate(AppRoutes.Burgers());
 					})
 					.catch(err => {
 						console.error(err);
@@ -69,16 +70,8 @@ const BurgerDetailPage = () => {
 					});
 			};
 
-			if (isDeleted) {
-				return (
-					<DeadEndPage message={t("messages.burgers.deleteConfirmMessage", {name: `${burger.voornamen} ${burger.achternaam}`})}>
-						<Button colorScheme={"primary"} onClick={() => navigate(AppRoutes.Burgers())}>{t("global.actions.backToList")}</Button>
-					</DeadEndPage>
-				);
-			}
-
 			return (<>
-				{isAlertOpen && <Alert title={t("messages.burgers.deleteTitle")} cancelButton={true} onClose={() => toggleAlert(false)} confirmButton={(
+				{deleteAlert.isOpen && <Alert title={t("messages.burgers.deleteTitle")} cancelButton={true} onClose={() => deleteAlert.onClose()} confirmButton={(
 					<Button isLoading={$deleteBurger.loading} colorScheme="red" onClick={onConfirmDelete} ml={3} data-cy={"inModal"}>{t("global.actions.delete")}</Button>
 				)}>
 					{t("messages.burgers.deleteQuestion", {name: `${burger.voornamen} ${burger.achternaam}`})}
