@@ -3,11 +3,13 @@ import React from "react";
 import PageNotFound from "../components/PageNotFound";
 
 export default {
-	title: "Huishoudboekje/Componenten/PageNotFound",
+	title: "Huishoudboekje/Components/PageNotFound",
 	component: PageNotFound,
+	argTypes: {},
+	args: {},
 } as ComponentMeta<typeof PageNotFound>;
 
-const Template: ComponentStory<typeof PageNotFound> = (args) => <PageNotFound />;
+const Template: ComponentStory<typeof PageNotFound> = () => <PageNotFound />;
 
 export const Default = Template.bind({});
 Default.args = {};

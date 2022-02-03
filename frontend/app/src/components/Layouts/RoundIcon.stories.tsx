@@ -4,7 +4,7 @@ import {FiActivity, FiLock, FiPhone, FiUser} from "react-icons/all";
 import RoundIcon from "./RoundIcon";
 
 export default {
-	title: "Huishoudboekje/Componenten/RoundIcon",
+	title: "Huishoudboekje/Components/RoundIcon",
 	component: RoundIcon,
 };
 

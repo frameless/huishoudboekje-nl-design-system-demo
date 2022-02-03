@@ -4,7 +4,7 @@ import React from "react";
 import Section from "./Section";
 
 export default {
-	title: "Huishoudboekje/Componenten/Section",
+	title: "Huishoudboekje/Components/Section",
 	component: Section,
 	argTypes: {
 		children: {},

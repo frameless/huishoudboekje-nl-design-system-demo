@@ -24,7 +24,7 @@ export const parameters = {
 		nl_NL: {title: "Nederlands", right: "NL"},
 	},
 	actions: {
-		argTypesRegex: "^on[A-Z].*"
+		argTypesRegex: "^on[A-Z].*",
 	},
 	controls: {
 		matchers: {

@@ -3,7 +3,7 @@ import React from "react";
 import DeleteConfirmButton from "../components/DeleteConfirmButton";
 
 export default {
-	title: "Huishoudboekje/Componenten/DeleteConfirmButton",
+	title: "Huishoudboekje/Components/DeleteConfirmButton",
 	component: DeleteConfirmButton,
 	argTypes: {
 		onConfirm: {
@@ -16,7 +16,7 @@ export default {
 	},
 } as ComponentMeta<typeof DeleteConfirmButton>;
 
-const Template: ComponentStory<typeof DeleteConfirmButton> = (args) => <DeleteConfirmButton {...args} />;
+const Template: ComponentStory<typeof DeleteConfirmButton> = ({onConfirm}) => <DeleteConfirmButton onConfirm={onConfirm} />;
 
 export const Default = Template.bind({});
 Default.args = {};

@@ -1,10 +1,13 @@
 import {CloseIcon} from "@chakra-ui/icons";
-import {Tag, TagLabel, TagRightIcon, Wrap, WrapItem, WrapProps} from "@chakra-ui/react";
+import {Tag, TagLabel, TagRightIcon, Wrap, WrapItem} from "@chakra-ui/react";
 import React from "react";
 
-type ZoektermenListProps = WrapProps & {zoektermen: string[], onDeleteZoekterm?: (zoekterm) => void};
+type ZoektermenListProps = {
+	zoektermen: string[],
+	onDeleteZoekterm?: (zoekterm) => void
+};
 
-const ZoektermenList: React.FC<ZoektermenListProps> = ({zoektermen, onDeleteZoekterm, ...props}) => {
+const ZoektermenList: React.FC<ZoektermenListProps> = ({zoektermen, onDeleteZoekterm}) => {
 	const styles = {
 		cursor: onDeleteZoekterm ? "pointer" : "default",
 		...onDeleteZoekterm && {
@@ -15,7 +18,7 @@ const ZoektermenList: React.FC<ZoektermenListProps> = ({zoektermen, onDeleteZoek
 	};
 
 	return (
-		<Wrap spacing={1} {...props}>
+		<Wrap spacing={1}>
 			{zoektermen.map((z, i) => (
 				<WrapItem key={i}>
 					<Tag {...styles}>
