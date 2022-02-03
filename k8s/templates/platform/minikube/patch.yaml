@@ -13,3 +13,18 @@ spec:
               value: "hhb_backend.config.LocalConfig" # OIDC_ID_TOKEN_COOKIE_SECURE = False
             - name: AUTH_AUDIENCE
               value: http://${HHB_APP_HOST} # http not https
+---
+# minikube max 1 cpu
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-database
+spec:
+  template:
+    spec:
+      containers:
+        - name: hhb-database
+          resources:
+            limits:
+              cpu: "1"
+              memory: 256Mi
