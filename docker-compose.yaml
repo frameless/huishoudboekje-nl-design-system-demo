@@ -100,13 +100,6 @@ x-tests: &x-tests
     - -c
     - pytest tests
 
-x-resource-limit: &x-resource-limit
-  deploy:
-    resources:
-      limits:
-        cpus: '0.20'   #20% of a single core
-        memory: 250M  # 250mb of memory
-
 services:
   # Database
   db:
@@ -165,7 +158,6 @@ services:
       - db
 
   backend:
-    <<: *x-resource-limit
     <<: *x-backend
     container_name: backend
     environment:
@@ -187,12 +179,10 @@ services:
       - 5000:8000
 
   backend-test:
-    <<: *x-resource-limit
     <<: *x-backend
     <<: *x-tests
 
   backend-burgers:
-    <<: *x-resource-limit
     <<: *x-backend-burgers
     container_name: backend-burgers
     environment:
@@ -201,7 +191,6 @@ services:
       - 9000:8080
 
   backend-burgers-test:
-    <<: *x-resource-limit
     <<: *x-backend-burgers
     profiles:
       - tests
@@ -211,7 +200,6 @@ services:
       - npm run test
 
   huishoudboekjeservice:
-    <<: *x-resource-limit
     <<: *x-huishoudboekjeservice
     container_name: huishoudboekjeservice
     environment:
@@ -220,12 +208,10 @@ services:
       - 8001:8000
 
   huishoudboekjeservice-test:
-    <<: *x-resource-limit
     <<: *x-huishoudboekjeservice
     <<: *x-tests
 
   organisatieservice:
-    <<: *x-resource-limit
     <<: *x-organisatieservice
     container_name: organisatieservice
     environment:
@@ -234,12 +220,10 @@ services:
       - 8002:8000
 
   organisatieservice-test:
-    <<: *x-resource-limit
     <<: *x-organisatieservice
     <<: *x-tests
 
   banktransactieservice:
-    <<: *x-resource-limit
     <<: *x-banktransactieservice
     container_name: banktransactieservice
     environment:
@@ -248,12 +232,10 @@ services:
       - 8003:8000
 
   banktransactieservice-test:
-    <<: *x-resource-limit
     <<: *x-banktransactieservice
     <<: *x-tests
 
   grootboekservice:
-    <<: *x-resource-limit
     <<: *x-grootboekservice
     container_name: grootboekservice
     environment:
@@ -262,12 +244,10 @@ services:
       - 8004:8000
 
   grootboekservice-test:
-    <<: *x-resource-limit
     <<: *x-organisatieservice
     <<: *x-tests
 
   logservice:
-    <<: *x-resource-limit
     <<: *x-logservice
     container_name: logservice
     environment:
@@ -276,14 +256,12 @@ services:
       - 8005:8000
 
   logservice-test:
-    <<: *x-resource-limit
     <<: *x-logservice
     <<: *x-tests
 
   # Trail of history: port 8006 used to be in use by the contactcatalogus, but we deprecated this service in favor of the postadressenservice.
 
   postadressenservice:
-    <<: *x-resource-limit
     <<: *x-postadressenservice
     container_name: postadressenservice
     environment:
@@ -292,7 +270,6 @@ services:
       - 8007:8080
 
   alarmenservice:
-    <<: *x-resource-limit
     <<: *x-alarmenservice
     container_name: alarmenservice
     environment:
@@ -301,7 +278,6 @@ services:
       - 8008:8080
 
   signalenservice:
-    <<: *x-resource-limit
     <<: *x-signalenservice
     container_name: signalenservice
     environment:

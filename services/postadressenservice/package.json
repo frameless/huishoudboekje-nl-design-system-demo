@@ -15,6 +15,9 @@
 	"email": "contact@kbrouwer.nl",
 	"url": "https://gitlab.com/koenbrouwer"
   },
+  "engines": {
+	"node": ">=16"
+  },
   "license": "SEE LICENSE IN LICENSE.md",
   "dependencies": {
 	"@prisma/client": "^3.5.0",
