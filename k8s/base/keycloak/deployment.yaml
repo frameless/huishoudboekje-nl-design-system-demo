@@ -57,7 +57,7 @@ spec:
               psql -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -c "ALTER USER $DB_USER WITH PASSWORD '$KEYCLOAK_DB_PASSWORD'" || true;
       containers:
         - name: hhb-keycloak
-          image: "quay.io/keycloak/keycloak:15.0.2"
+          image: "quay.io/keycloak/keycloak:15.1.1"
           imagePullPolicy: "Always"
           envFrom:
             - configMapRef:
