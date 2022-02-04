@@ -6,6 +6,22 @@ metadata:
   labels:
     name: postgres-config
 data:
-  POSTGRESQL_USERNAME: postgres
-  POSTGRESQL_DATABASE: postgres
-  POSTGRESQL_HOSTNAME: hhb-database
+  POSTGRESQL_DATABASE: "must be changed with env_patch.yaml"
+  POSTGRESQL_DATABASE_NAME_BKTSVC: "must be changed with env_patch.yaml"
+  POSTGRESQL_DATABASE_NAME_GRBSVC: "must be changed with env_patch.yaml"
+  POSTGRESQL_DATABASE_NAME_HHBSVC: "must be changed with env_patch.yaml"
+  POSTGRESQL_DATABASE_NAME_LOGSVC: "must be changed with env_patch.yaml"
+  POSTGRESQL_DATABASE_NAME_ORGSVC: "must be changed with env_patch.yaml"
+  POSTGRESQL_DATABASE_NAME_PADSVC: "must be changed with env_patch.yaml"
+  POSTGRESQL_DATABASE_NAME_ALMSVC: "must be changed with env_patch.yaml"
+  POSTGRESQL_DATABASE_NAME_SIGSVC: "must be changed with env_patch.yaml"
+  POSTGRESQL_HOSTNAME: "must be changed with env_patch.yaml"
+  POSTGRESQL_USERNAME: "must be changed with env_patch.yaml"
+  POSTGRESQL_USERNAME_BKTSVC: "must be changed with env_patch.yaml"
+  POSTGRESQL_USERNAME_GRBSVC: "must be changed with env_patch.yaml"
+  POSTGRESQL_USERNAME_HHBSVC: "must be changed with env_patch.yaml"
+  POSTGRESQL_USERNAME_LOGSVC: "must be changed with env_patch.yaml"
+  POSTGRESQL_USERNAME_ORGSVC: "must be changed with env_patch.yaml"
+  POSTGRESQL_USERNAME_PADSVC: "must be changed with env_patch.yaml"
+  POSTGRESQL_USERNAME_ALMSVC: "must be changed with env_patch.yaml"
+  POSTGRESQL_USERNAME_SIGSVC: "must be changed with env_patch.yaml"

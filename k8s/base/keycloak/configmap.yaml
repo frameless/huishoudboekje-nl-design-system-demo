@@ -544,16 +544,12 @@ data:
 
     # export KEYCLOAK_AUTH_USERNAME=bas
     # export KEYCLOAK_AUTH_PASSWORD=testtest
-    # maak hier intern url van met http
-    # export KEYCLOAK_AUTH_KEYCLOAK_URL=http://hhb.minikube/auth/
-    # extern adres
-    # export KEYCLOAK_CLIENT_ROOT_URL=https://hhb.minikube/
+    # export KEYCLOAK_CLIENT_ROOT_URL=http://hhb.minikube/
     # export KEYCLOAK_CLIENT_SECRET=fc36d31f-f720-4914-a750-b83c7b0dd61c
     # export KEYCLOAK_CLIENT_USERS=magre,bas.magre@topicus.nl,Bas,Magre,testtest:basje,bas3@topicus.nl,Sebastiaan,Magre,testtest
 
     # export KEYCLOAK_AUTH_USERNAME=bas
     # export KEYCLOAK_AUTH_PASSWORD=testtest
-    # export KEYCLOAK_AUTH_KEYCLOAK_URL=https://hhb-bas-speeltuin.lcm-apps.topicusfinance.nl/auth/
     # export KEYCLOAK_CLIENT_ROOT_URL=https://hhb-bas-speeltuin.lcm-apps.topicusfinance.nl/
     # export KEYCLOAK_CLIENT_SECRET=fc36d31f-f720-4914-a750-b83c7b0dd61c
     # export KEYCLOAK_CLIENT_USERS=magre,bas.magre@topicus.nl,Bas,Magre,testtest:basje,bas3@topicus.nl,Sebastiaan,Magre,testtest
@@ -562,7 +558,7 @@ data:
 
     auth_username = os.environ['KEYCLOAK_AUTH_USERNAME']
     auth_password = os.environ['KEYCLOAK_AUTH_PASSWORD']
-    auth_keycloak_url = os.environ['KEYCLOAK_AUTH_KEYCLOAK_URL']
+    auth_keycloak_url = "http://hhb-keycloak/auth/" #intern url
     auth_client_root_url = os.environ['KEYCLOAK_CLIENT_ROOT_URL']
     auth_client_secret = os.environ['KEYCLOAK_CLIENT_SECRET']
     client_users = os.environ['KEYCLOAK_CLIENT_USERS']

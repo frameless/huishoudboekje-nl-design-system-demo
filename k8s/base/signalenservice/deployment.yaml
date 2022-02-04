@@ -17,11 +17,14 @@ spec:
       initContainers:
         - name: init1-wait-for-db
           image: busybox
+          envFrom:
+            - configMapRef:
+                name: postgres-config
           command:
             [
                 "sh",
                 "-c",
-                "while true; do sleep 1; echo Waiting for database...; if nc -z hhb-database 5432; then echo Database is up!; exit 0; fi; done; echo Aint gonna wait for the database forever...; exit 1",
+                "while true; do sleep 1; echo Waiting for database...; if nc -z $POSTGRESQL_HOSTNAME $POSTGRESQL_PORT; then echo Database is up!; exit 0; fi; done; echo Aint gonna wait for the database forever...; exit 1",
             ]
         - name: init2-prepare-db
           image: bitnami/postgresql:13
@@ -45,10 +48,11 @@ spec:
             - -c
             - >-
               export PGPASSWORD=$POSTGRESQL_PASSWORD &&
-              psql -h hhb-database -U $POSTGRESQL_USERNAME -c "CREATE USER sigsvc WITH PASSWORD '$POSTGRESQL_PASSWORD_SIGSVC'" || true &&
-              psql -h hhb-database -U $POSTGRESQL_USERNAME -c "CREATE DATABASE signalenservice" || true &&
-              psql -h hhb-database -U $POSTGRESQL_USERNAME -c "GRANT ALL PRIVILEGES ON DATABASE signalenservice TO sigsvc" || true &&
-              psql -h hhb-database -U $POSTGRESQL_USERNAME -c "ALTER USER sigsvc WITH PASSWORD '$POSTGRESQL_PASSWORD_SIGSVC'" || true;
+              export PGPORT=$POSTGRESQL_PORT &&
+              psql -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -c "CREATE USER $POSTGRESQL_USERNAME_SIGSVC WITH PASSWORD '$POSTGRESQL_PASSWORD_SIGSVC'" || true &&
+              psql -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -c "CREATE DATABASE $POSTGRESQL_DATABASE_NAME_SIGSVC" || true &&
+              psql -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -c "GRANT ALL PRIVILEGES ON DATABASE $POSTGRESQL_DATABASE_NAME_SIGSVC TO $POSTGRESQL_USERNAME_SIGSVC" || true &&
+              psql -h $POSTGRESQL_HOSTNAME -U $POSTGRESQL_USERNAME -c "ALTER USER $POSTGRESQL_USERNAME_SIGSVC WITH PASSWORD '$POSTGRESQL_PASSWORD_SIGSVC'" || true;
         - name: init3-migrate-db
           image: signalenservice
           imagePullPolicy: Always

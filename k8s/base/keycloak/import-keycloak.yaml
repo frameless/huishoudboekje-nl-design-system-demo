@@ -34,27 +34,15 @@ spec:
               source keycloak_init/bin/activate &&
               python3 -m pip install -r ../script/requirements.txt &&
               python3 ../script/keycloak_hhb.py
+          envFrom:
+            - configMapRef:
+                name: keycloak-config
           env:
-            - name: KEYCLOAK_AUTH_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: hhb-keycloak-secrets
-                  key: KEYCLOAK_AUTH_USERNAME
             - name: KEYCLOAK_AUTH_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: hhb-keycloak-secrets
                   key: KEYCLOAK_AUTH_PASSWORD
-            - name: KEYCLOAK_AUTH_KEYCLOAK_URL
-              valueFrom:
-                secretKeyRef:
-                  name: hhb-keycloak-secrets
-                  key: KEYCLOAK_AUTH_KEYCLOAK_URL
-            - name: KEYCLOAK_CLIENT_ROOT_URL
-              valueFrom:
-                secretKeyRef:
-                  name: hhb-keycloak-secrets
-                  key: KEYCLOAK_CLIENT_ROOT_URL
             - name: KEYCLOAK_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:

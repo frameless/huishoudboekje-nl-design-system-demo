@@ -51,6 +51,37 @@ export AUTH_AUDIENCE=${AUTH_AUDIENCE:-$HHB_FRONTEND_ENDPOINT}
 # Secret that is used for JWTs.
 export HHB_SECRET=${SECRET_KEY:-"test"}
 
+# Use external database
+export POSTGRESQL_USE_EXTERNAL=${POSTGRESQL_USE_EXTERNAL:-"false"}
+export POSTGRESQL_CREATE_DATABASES=${POSTGRESQL_CREATE_DATABASES:-"true"}
+
+# Database hostname
+export POSTGRESQL_HOSTNAME=${POSTGRESQL_HOSTNAME:-"hhb-database"}
+
+export POSTGRESQL_PORT=${POSTGRESQL_PORT:-"5432"}
+
+# Database names
+export POSTGRESQL_DATABASE=${POSTGRESQL_DATABASE_NAME_BKTSVC:-"postgres"}
+export POSTGRESQL_DATABASE_NAME_BKTSVC=${POSTGRESQL_DATABASE_NAME_BKTSVC:-"banktransactieservice"}
+export POSTGRESQL_DATABASE_NAME_GRBSVC=${POSTGRESQL_DATABASE_NAME_GRBSVC:-"grootboekservice"}
+export POSTGRESQL_DATABASE_NAME_HHBSVC=${POSTGRESQL_DATABASE_NAME_HHBSVC:-"huishoudboekjeservice"}
+export POSTGRESQL_DATABASE_NAME_LOGSVC=${POSTGRESQL_DATABASE_NAME_LOGSVC:-"logservice"}
+export POSTGRESQL_DATABASE_NAME_ORGSVC=${POSTGRESQL_DATABASE_NAME_ORGSVC:-"organisatieservice"}
+export POSTGRESQL_DATABASE_NAME_PADSVC=${POSTGRESQL_DATABASE_NAME_PADSVC:-"postadressenservice"}
+export POSTGRESQL_DATABASE_NAME_ALMSVC=${POSTGRESQL_DATABASE_NAME_ALMSVC:-"alarmenservice"}
+export POSTGRESQL_DATABASE_NAME_SIGSVC=${POSTGRESQL_DATABASE_NAME_SIGSVC:-"signalenservice"}
+
+# Database usernames
+export POSTGRESQL_USERNAME=${POSTGRESQL_USERNAME:-"postgres"}
+export POSTGRESQL_USERNAME_BKTSVC=${POSTGRESQL_USERNAME_BKTSVC:-"bktsvc"}
+export POSTGRESQL_USERNAME_GRBSVC=${POSTGRESQL_USERNAME_GRBSVC:-"grbsvc"}
+export POSTGRESQL_USERNAME_HHBSVC=${POSTGRESQL_USERNAME_HHBSVC:-"hhbsvc"}
+export POSTGRESQL_USERNAME_LOGSVC=${POSTGRESQL_USERNAME_LOGSVC:-"logsvc"}
+export POSTGRESQL_USERNAME_ORGSVC=${POSTGRESQL_USERNAME_ORGSVC:-"orgsvc"}
+export POSTGRESQL_USERNAME_PADSVC=${POSTGRESQL_USERNAME_PADSVC:-"padsvc"}
+export POSTGRESQL_USERNAME_ALMSVC=${POSTGRESQL_USERNAME_ALMSVC:-"almsvc"}
+export POSTGRESQL_USERNAME_SIGSVC=${POSTGRESQL_USERNAME_SIGSVC:-"sigsvc"}
+
 # Passwords for databases
 export POSTGRESQL_PASSWORD=${POSTGRESQL_PASSWORD:-"postgres"}
 export POSTGRESQL_PASSWORD_BKTSVC=${POSTGRESQL_PASSWORD_BKTSVC:-"bktsvc"}
@@ -114,43 +145,40 @@ mkdir -p k8s/$DEPLOYMENT_DIST_DIR
 echo "Generate kustomization.yaml for $CUSTOMER_BUILD."
 cd k8s/$DEPLOYMENT_DIST_DIR
 
-# Create final Kustomization for the patches.
-if [ $USE_KEYCLOAK != "true" ]
+# Create final kustomization.yaml
+cat << EOF > kustomization.yaml
+---
+# generated yaml file
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+patchesStrategicMerge:
+- env_patch.yaml
+- platform_patch.yaml
+EOF
+
+if [ $POSTGRESQL_USE_EXTERNAL != "false" ]
 then
-  cat << EOF > kustomization.yaml
----
-# generated yaml file
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-patchesStrategicMerge:
-- env_patch.yaml
-- platform_patch.yaml
-EOF
-else
-  cat << EOF > kustomization.yaml
----
-# generated yaml file
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-patchesStrategicMerge:
-- env_patch.yaml
-- use_sso_patch.yaml
-- platform_patch.yaml
-EOF
-
+  echo "Generate patch use_external_database_patch.yaml with envsubst"
+  envsubst < ../templates/use_external_database_patch.yaml > use_external_database_patch.yaml
+  echo "add patchesStrategicMerge to kustomization.yaml use_external_database_patch.yaml"
+  echo '- use_external_database_patch.yaml' >> kustomization.yaml
 fi
 
-echo "Generate env_patch.yaml / ${USE_PLATFORM}_patch.yaml and ${USE_PLATFORM}_add.yaml"
-envsubst < ../templates/env_patch.yaml > env_patch.yaml
-envsubst < ../templates/platform/${USE_PLATFORM}/patch.yaml > platform_patch.yaml
-envsubst < ../templates/platform/${USE_PLATFORM}/add.yaml > platform_add.yaml
+if [ $POSTGRESQL_CREATE_DATABASES != "true" ]
+then
+  echo "Generate patch create_no_databases_patch.yaml with envsubst"
+  envsubst < ../templates/create_no_databases_patch.yaml > create_no_databases_patch.yaml
+  echo "add patchesStrategicMerge to kustomization.yaml create_no_databases_patch.yaml"
+  echo '- create_no_databases_patch.yaml' >> kustomization.yaml
+fi
 
-if [ $USE_KEYCLOAK != "false" ]
+if [ $USE_KEYCLOAK == "true" ]
 then
   echo "Generate patch use_sso_patch.yaml with envsubst"
   envsubst < ../templates/use_sso_keycloak_patch.yaml > use_sso_patch.yaml
+  echo "add patchesStrategicMerge to kustomization.yaml use_sso_patch.yaml"
+  echo '- use_sso_patch.yaml' >> kustomization.yaml
   echo "Generate patch use_sso_add.yaml with envsubst"
   envsubst < ../templates/platform/${USE_PLATFORM}/use_sso_keycloak_add.yaml > use_sso_add.yaml
   echo "add resource ../base/keycloak"
@@ -158,6 +186,11 @@ then
   echo "add resource use_sso_add.yaml"
   kustomize edit add resource use_sso_add.yaml
 fi
+
+echo "Generate env_patch.yaml / ${USE_PLATFORM}_patch.yaml and ${USE_PLATFORM}_add.yaml"
+envsubst < ../templates/env_patch.yaml > env_patch.yaml
+envsubst < ../templates/platform/${USE_PLATFORM}/patch.yaml > platform_patch.yaml
+envsubst < ../templates/platform/${USE_PLATFORM}/add.yaml > platform_add.yaml
 
 if [ $GENERATE_SECRETS == "true" ]
 then
