@@ -1,0 +1,117 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-alarmenservice
+spec:
+  template:
+    spec:
+      initContainers:
+        - name: init1-wait-for-db
+          ${DOLLAR}patch: delete
+        - name: init2-prepare-db
+          ${DOLLAR}patch: delete
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-banktransactieservice
+spec:
+  template:
+    spec:
+      initContainers:
+        - name: init1-wait-for-db
+          ${DOLLAR}patch: delete
+        - name: init2-prepare-db
+          ${DOLLAR}patch: delete
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-grootboekservice
+spec:
+  template:
+    spec:
+      initContainers:
+        - name: init1-wait-for-db
+          ${DOLLAR}patch: delete
+        - name: init2-prepare-db
+          ${DOLLAR}patch: delete
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-huishoudboekjeservice
+spec:
+  template:
+    spec:
+      initContainers:
+        - name: init1-wait-for-db
+          ${DOLLAR}patch: delete
+        - name: init2-prepare-db
+          ${DOLLAR}patch: delete
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-keycloak
+spec:
+  template:
+    spec:
+      initContainers:
+        - name: init1-wait-for-db
+          ${DOLLAR}patch: delete
+        - name: init2-prepare-db
+          ${DOLLAR}patch: delete
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-logservice
+spec:
+  template:
+    spec:
+      initContainers:
+        - name: init1-wait-for-db
+          ${DOLLAR}patch: delete
+        - name: init2-prepare-db
+          ${DOLLAR}patch: delete
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-organisatieservice
+spec:
+  template:
+    spec:
+      initContainers:
+        - name: init1-wait-for-db
+          ${DOLLAR}patch: delete
+        - name: init2-prepare-db
+          ${DOLLAR}patch: delete
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-postadressenservice
+spec:
+  template:
+    spec:
+      initContainers:
+        - name: init1-wait-for-db
+          ${DOLLAR}patch: delete
+        - name: init2-prepare-db
+          ${DOLLAR}patch: delete
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-signalenservice
+spec:
+  template:
+    spec:
+      initContainers:
+        - name: init1-wait-for-db
+          ${DOLLAR}patch: delete
+        - name: init2-prepare-db
+          ${DOLLAR}patch: delete

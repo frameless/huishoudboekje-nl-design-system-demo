@@ -45,6 +45,14 @@ Each platform should have the following files. These can be empty, but the build
 [patch.yaml example](https://kubernetes.io/docs/tasks/manage-kubernetes-objects/kustomization/#customizing)
 
 ### Building for Minikube
+- Find the IP address of your local Minikube: `minikube ip`
+- Add a record to your `/etc/hosts` file, with hostname `hhb.minikube` and the IP-address of your local minikube.
+    ```shell
+    # Example for /etc/hosts
+    
+    192.168.49.2 hhb.minikube
+    ```
+
 The build script needs to know you are targeting Minikube, therefor, we need the following environment variables:
 
 ```bash
@@ -54,11 +62,15 @@ export NAMESPACE="huishoudboekje"
 
 # We don't use SSL locally, so we use http.
 export HHB_FRONTEND_ENDPOINT="http://${HHB_HOST}"
-export OIDC_ISSUER="http://$HHB_HOST/auth"
-export OIDC_AUTHORIZATION_ENDPOINT="http://${HHB_HOST}/auth/auth"
-export OIDC_TOKEN_ENDPOINT="http://${HHB_HOST}/auth/token"
-export OIDC_TOKENINFO_ENDPOINT="http://${HHB_HOST}/auth/tokeninfo"
-export OIDC_USERINFO_ENDPOINT="http://${HHB_HOST}/auth/userinfo"
+export OIDC_ISSUER="http://$HHB_HOST/auth/realms/hhb"
+export OIDC_AUTHORIZATION_ENDPOINT="http://$HHB_HOST/auth/realms/hhb/protocol/openid-connect/auth"
+# intern url hhb.minibuke (hhb.minibuke does not exist in cluster), (http) is posible only for minikube see: k8s/templates/platform/minikube/patch.yaml
+export OIDC_TOKEN_ENDPOINT="http://hhb-keycloak/auth/realms/hhb/protocol/openid-connect/token" 
+export OIDC_TOKENINFO_ENDPOINT="http://hhb-keycloak/auth/realms/hhb/protocol/openid-connect/token/introspect"
+export OIDC_USERINFO_ENDPOINT="http://hhb-keycloak/auth/realms/hhb/protocol/openid-connect/userinfo"
+
+export KEYCLOAK_AUTH_KEYCLOAK_URL="http://$HHB_HOST/auth/"
+export KEYCLOAK_CLIENT_ROOT_URL="http://$HHB_HOST/"
 
 export CI_API_V4_URL="https://gitlab.com/api/v4"
 export CI_PROJECT_ID="20352213"
