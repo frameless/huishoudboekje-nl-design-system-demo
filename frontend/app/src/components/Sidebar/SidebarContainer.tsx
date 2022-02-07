@@ -38,7 +38,9 @@ const SidebarContainer = ({children}) => {
 					<DrawerContent>
 						<DrawerCloseButton />
 						<DrawerHeader>
-							<Logo as={Flex} maxWidth={350} marginX={"auto"} />
+							<Flex maxWidth={350} marginX={"auto"}>
+								<Logo />
+							</Flex>
 						</DrawerHeader>
 
 						<DrawerBody p={0} overflowY={"auto"}>
@@ -57,7 +59,9 @@ const SidebarContainer = ({children}) => {
 	) : (
 		<Stack justifyContent={"space-between"} p={5} maxWidth={320} minHeight="100vh" height={"100%"} width={"100%"}>
 			<Box>
-				<Logo mb={5} />
+				<Box mb={5}>
+					<Logo />
+				</Box>
 
 				<Stack width={"100%"} justifyContent={"space-between"}>
 					<Stack width={"100%"} spacing={5}>

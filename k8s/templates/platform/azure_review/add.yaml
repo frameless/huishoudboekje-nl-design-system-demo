@@ -55,12 +55,35 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
+  name: hhb-storybook-ingress
+  labels:
+    name: hhb-storybook-ingress
+spec:
+  tls:
+    - hosts:
+        - sb-${HHB_FRONTEND_DNS}
+      secretName: medewerker-frontend-ingress-tls
+  rules:
+    - host: sb-${HHB_FRONTEND_DNS}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: hhb-storybook
+                port:
+                  number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
   name: hhb-backend-ingress
   labels:
     name: hhb-backend-ingress
 spec:
   tls:
-    - hosts: 
+    - hosts:
         - ${HHB_FRONTEND_DNS}
       secretName: medewerker-frontend-ingress-tls
   rules:

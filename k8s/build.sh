@@ -224,6 +224,7 @@ kustomize edit set image unleashservice=${PULL_REPO_IMAGE}/unleashservice:${IMAG
 kustomize edit set image postadressenservice=${PULL_REPO_IMAGE}/postadressenservice:${IMAGE_TAG}
 kustomize edit set image alarmenservice=${PULL_REPO_IMAGE}/alarmenservice:${IMAGE_TAG}
 kustomize edit set image signalenservice=${PULL_REPO_IMAGE}/signalenservice:${IMAGE_TAG}
+kustomize edit set image storybook=${PULL_REPO_IMAGE}/storybook:${IMAGE_TAG}
 cd ../../
 
 echo "Building Kustomize..."

@@ -9,6 +9,6 @@ node_modules
 public/theme
 src/version.ts
 schema.graphql
-
 cypress/videos
 cypress/screenshots
+storybook-static/

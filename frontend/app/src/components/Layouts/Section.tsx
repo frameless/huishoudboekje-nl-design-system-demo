@@ -1,7 +1,7 @@
-import {Stack, useStyleConfig} from "@chakra-ui/react";
+import {Stack, StackProps, useStyleConfig} from "@chakra-ui/react";
 import React from "react";
 
-const Section = (props) => {
+const Section: React.FC<StackProps> = (props) => {
 	const styles = useStyleConfig("Section");
 	return (
 		<Stack sx={styles} {...props} />

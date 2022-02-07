@@ -3,7 +3,7 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {BankTransaction} from "../../../../generated/graphql";
 import d from "../../../../utils/dayjs";
-import Currency from "../../../Layouts/Currency";
+import {currencyFormat2} from "../../../../utils/things";
 import PrettyIban from "../../../Layouts/PrettyIban";
 
 const TransactieDetailsView: React.FC<StackProps & {transaction: BankTransaction}> = ({transaction: bt, ...props}) => {
@@ -55,7 +55,10 @@ const TransactieDetailsView: React.FC<StackProps & {transaction: BankTransaction
 				<Box flex={1}>
 					<FormLabel>{t("transactions.amount")}</FormLabel>
 					<Box>
-						<Currency justifyContent={"flex-start"} value={bt.bedrag} />
+						<Stack direction={"row"} justifyContent={"space-between"}>
+							<Text>&euro;</Text>
+							<Text>{currencyFormat2(false).format(bt.bedrag)}</Text>
+						</Stack>
 					</Box>
 				</Box>
 			</Stack>
