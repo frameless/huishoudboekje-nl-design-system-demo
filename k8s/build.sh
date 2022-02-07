@@ -116,7 +116,7 @@ export KEYCLOAK_AUTH_KEYCLOAK_URL=${KEYCLOAK_AUTH_KEYCLOAK_URL:-"https://$HHB_FR
 export KEYCLOAK_CLIENT_ROOT_URL=${KEYCLOAK_CLIENT_ROOT_URL:-"https://$HHB_FRONTEND_DNS/"}
 export KEYCLOAK_CLIENT_SECRET=${KEYCLOAK_CLIENT_SECRET:-"fc36d31f-f720-4914-a750-b83c7b0dd61c"}
 # --------------------------------------------------- "username,e@ma.il,Firstname,Lastname,password" separated by :
-export KEYCLOAK_CLIENT_USERS=${KEYCLOAK_CLIENT_USERS:-"dirkverbeek,dirk.verbeek@topicus.nl,Dirk,Verbeek,demo:koenbrouwer,koen@openweb.nl,Koen,Brouwer,demo:baukehuijbers,bauke.huijbers@vng.nl,Bauke,Huijbers,demo:henkpoortvliet,henk.poortvliet@sloothuizen.nl,Henk,Poortvliet,demo:huishoudboekje010,huishoudboekje010@rotterdam.nl,Gemeente,Rotterdam,demo:huishoudboekje030,huishoudboekje@utrecht.nl,Gemeente,Utrecht,demo:chantalledenhertog,chantalle.den.hertog@topicus.nl,Chantalle,denHertog,demo"}
+export KEYCLOAK_CLIENT_USERS=${KEYCLOAK_CLIENT_USERS:-"anitavanhengel,anita.van.hengel@topicus.nl,Anita,vanHengel,demo:dirkverbeek,dirk.verbeek@topicus.nl,Dirk,Verbeek,demo:koenbrouwer,koen@openweb.nl,Koen,Brouwer,demo:baukehuijbers,bauke.huijbers@vng.nl,Bauke,Huijbers,demo:henkpoortvliet,henk.poortvliet@sloothuizen.nl,Henk,Poortvliet,demo:huishoudboekje010,huishoudboekje010@rotterdam.nl,Gemeente,Rotterdam,demo:huishoudboekje030,huishoudboekje@utrecht.nl,Gemeente,Utrecht,demo:chantalledenhertog,chantalle.den.hertog@topicus.nl,Chantalle,denHertog,demo"}
 
 # Create a temporary directory to put the dist files in.
 export DEPLOYMENT_DIST_DIR="dist"
