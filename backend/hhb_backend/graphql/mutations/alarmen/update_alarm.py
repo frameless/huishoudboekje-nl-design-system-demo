@@ -43,23 +43,25 @@ class UpdateAlarm(graphene.Mutation):
     async def mutate(_root, _info, id: str, input: UpdateAlarmInput):
         """ Mutatie voor het wijzigen van een bestaand Alarm """
 
-        alarm_date = parser.parse(input.datum).date()
-        utc_now = date.today()
-        if alarm_date < utc_now:
-            raise GraphQLError(f"Alarm datum is in het verleden.")
+        if input.datum:
+            alarm_date = parser.parse(input.datum).date()
+            utc_now = date.today()
+            if alarm_date < utc_now:
+                raise GraphQLError(f"Alarm datum is in het verleden.")
 
         # previous = request.dataloader.alarmen_by_id.load(id) # stalls and waits forever if alarm does not exist
-        previous_response = requests.get(f"{settings.ALARMENSERVICE_URL}/alarms/{id}", headers={"Content-type": "application/json"})
+        previous_response = requests.get(f"{settings.ALARMENSERVICE_URL}/alarms/{id}", headers={"Content-type": "application/json"}) 
         if previous_response.status_code != 200:
             raise GraphQLError(f"Alarm bestaat niet.")
 
         previous = previous_response.json()
 
-        afspraak_response = requests.get(f"{settings.HHB_SERVICES_URL}/afspraken/{input.afspraakId}", headers={"Content-type": "application/json"})
-        if afspraak_response.status_code != 200:
-            raise GraphQLError(f"Afspraak bestaat niet.")
+        if input.afspraakId:
+            afspraak_response = requests.get(f"{settings.HHB_SERVICES_URL}/afspraken/{input.afspraakId}", headers={"Content-type": "application/json"})
+            if afspraak_response.status_code != 200:
+                raise GraphQLError(f"Afspraak bestaat niet.")
 
-        response = requests.put(f"{settings.ALARMENSERVICE_URL}/alarms/{id}", json=input, headers={"Content-type": "application/json"})
+        response = requests.put(f"{settings.ALARMENSERVICE_URL}/alarms/{id}", json=input, headers={"Content-type": "application/json"}) 
         if response.status_code != 200:
             raise GraphQLError(f"Upstream API responded: {response.json()}")
         response_alarm = response.json()['data']
