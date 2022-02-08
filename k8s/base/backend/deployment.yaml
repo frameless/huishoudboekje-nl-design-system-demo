@@ -69,6 +69,8 @@ spec:
               value: "http://hhb-postadressenservice"
             - name: ALARMENSERVICE_URL
               value: "http://hhb-alarmenservice"
+            - name: SIGNALENSERVICE_URL
+              value: "http://hhb-signalenservice"
             - name: SECRET_KEY
               valueFrom:
                 secretKeyRef:
