@@ -1,4 +1,4 @@
-import {Button, Divider, FormControl, FormLabel, Input, Stack, Table, Tbody, Th, Thead, Tr} from "@chakra-ui/react";
+import {Divider, FormControl, FormLabel, Input, Stack, Table, Tbody, Th, Thead, Tr} from "@chakra-ui/react";
 import React from "react";
 import {useInput, Validators} from "react-grapple";
 import {useTranslation} from "react-i18next";
@@ -6,6 +6,7 @@ import {Configuratie as IConfiguratie, GetConfiguratieDocument, useCreateConfigu
 import Queryable from "../../utils/Queryable";
 import useToaster from "../../utils/useToaster";
 import {FormLeft, FormRight} from "../Layouts/Forms";
+import AddButton from "../shared/AddButton";
 import ParameterItem from "./ParameterItem";
 
 const Parameters = () => {
@@ -91,7 +92,7 @@ const Parameters = () => {
 										<Input {...value.bind} />
 									</FormControl>
 									<FormControl>
-										<Button type={"submit"} colorScheme={"primary"}>{t("global.actions.add")}</Button>
+										<AddButton type={"submit"} />
 									</FormControl>
 								</Stack>
 							</form>

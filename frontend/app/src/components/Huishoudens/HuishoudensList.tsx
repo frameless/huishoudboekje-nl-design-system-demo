@@ -1,4 +1,4 @@
-import {AddIcon, CloseIcon, SearchIcon} from "@chakra-ui/icons";
+import {CloseIcon, SearchIcon} from "@chakra-ui/icons";
 import {Button, IconButton, Input, InputGroup, InputLeftElement, InputRightElement} from "@chakra-ui/react";
 import React, {useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
@@ -9,6 +9,7 @@ import Queryable from "../../utils/Queryable";
 import {searchFields} from "../../utils/things";
 import DeadEndPage from "../DeadEndPage";
 import Page from "../Layouts/Page";
+import AddButton from "../shared/AddButton";
 import HuishoudensListView from "./HuishoudensListView";
 
 const HuishoudensList = () => {
@@ -43,8 +44,7 @@ const HuishoudensList = () => {
 			if (huishoudens.length === 0) {
 				return (
 					<DeadEndPage message={t("messages.burgers.addHint", {buttonLabel: t("global.actions.add")})}>
-						<Button size={"sm"} colorScheme={"primary"} variant={"solid"} leftIcon={<AddIcon />}
-							onClick={() => navigate(AppRoutes.CreateBurger())}>{t("global.actions.add")}</Button>
+						<AddButton onClick={() => navigate(AppRoutes.CreateBurger())} />
 					</DeadEndPage>
 				);
 			}

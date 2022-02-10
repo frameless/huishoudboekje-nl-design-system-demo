@@ -1,10 +1,11 @@
-import {AddIcon, CheckIcon, WarningIcon} from "@chakra-ui/icons";
+import {CheckIcon, WarningIcon} from "@chakra-ui/icons";
 import {Box, Button, HStack, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spinner, Stack, Text} from "@chakra-ui/react";
 import React, {useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {IoMdHourglass} from "react-icons/io";
 import {GetCsmsDocument, useCreateCustomerStatementMessageMutation} from "../../../generated/graphql";
 import {truncateText} from "../../../utils/things";
+import AddButton from "../../shared/AddButton";
 
 enum UploadState {
 	QUEUED,
@@ -123,7 +124,7 @@ const CsmUploadModal: React.FC<CsmUploadModalProps> = ({onClose}) => {
 
 						<Box>
 							<Input type={"file"} id={"fileUpload"} onChange={onChangeFile} ref={fileUploadInput} hidden multiple={true} />
-							<Button colorScheme={"primary"} size={"sm"} leftIcon={<AddIcon />} onClick={() => fileUploadInput.current?.click()}>{t("global.actions.selectFile")}</Button>
+							<AddButton onClick={() => fileUploadInput.current?.click()}>{t("global.actions.selectFile")}</AddButton>
 						</Box>
 					</Stack>
 				</ModalBody>

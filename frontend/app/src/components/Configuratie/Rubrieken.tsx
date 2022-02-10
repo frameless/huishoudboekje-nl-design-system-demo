@@ -1,4 +1,4 @@
-import {Button, Divider, FormControl, FormLabel, Input, Stack, Table, Tbody, Th, Thead, Tr} from "@chakra-ui/react";
+import {Divider, FormControl, FormLabel, Input, Stack, Table, Tbody, Th, Thead, Tr} from "@chakra-ui/react";
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
@@ -15,6 +15,7 @@ import {useReactSelectStyles} from "../../utils/things";
 import useSelectProps from "../../utils/useSelectProps";
 import useToaster from "../../utils/useToaster";
 import {FormLeft, FormRight} from "../Layouts/Forms";
+import AddButton from "../shared/AddButton";
 import RubriekItem from "./RubriekItem";
 
 const Rubrieken = () => {
@@ -106,7 +107,7 @@ const Rubrieken = () => {
 										/>
 									</FormControl>
 									<FormControl>
-										<Button type={"submit"} colorScheme={"primary"} isLoading={loading} isDisabled={called}>{t("global.actions.add")}</Button>
+										<AddButton type={"submit"} isLoading={loading} isDisabled={called} />
 									</FormControl>
 								</Stack>
 							</form>
