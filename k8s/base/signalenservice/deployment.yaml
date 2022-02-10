@@ -22,9 +22,9 @@ spec:
                 name: postgres-config
           command:
             [
-                "sh",
-                "-c",
-                "while true; do sleep 1; echo Waiting for database...; if nc -z $POSTGRESQL_HOSTNAME $POSTGRESQL_PORT; then echo Database is up!; exit 0; fi; done; echo Aint gonna wait for the database forever...; exit 1",
+              "sh",
+              "-c",
+              "while true; do sleep 1; echo Waiting for database...; if nc -z $POSTGRESQL_HOSTNAME $POSTGRESQL_PORT; then echo Database is up!; exit 0; fi; done; echo Aint gonna wait for the database forever...; exit 1",
             ]
         - name: init2-prepare-db
           image: bitnami/postgresql:13
@@ -72,13 +72,6 @@ spec:
                   key: SIGNALENSERVICE_DATABASE_URL
           command: [ "npm" ]
           args: [ "run", "db:push" ]
-          volumeMounts:
-            - mountPath: /app/node_modules/.prisma
-              name: prisma-signalenservice-init-3
-            - mountPath: /app/node_modules/prisma
-              name: app-node-modules-prisma-signalenservice-init-3
-            - mountPath: /.npm
-              name: npm-signalenservice-init-3
       containers:
         - name: hhb-signalenservice
           image: signalenservice
@@ -110,23 +103,3 @@ spec:
                 secretKeyRef:
                   name: hhb-database-secrets
                   key: SIGNALENSERVICE_DATABASE_URL
-          volumeMounts:
-            - mountPath: /app/node_modules/.prisma
-              name: prisma-signalenservice
-            - mountPath: /.npm
-              name: npm-signalenservice
-            - mountPath: /app/node_modules/prisma
-              name: app-node-modules-prisma-signalenservice
-      volumes:
-        - emptyDir: {}
-          name: prisma-signalenservice-init-3
-        - emptyDir: {}
-          name: prisma-signalenservice
-        - emptyDir: {}
-          name: app-node-modules-prisma-signalenservice-init-3
-        - emptyDir: {}
-          name: app-node-modules-prisma-signalenservice
-        - emptyDir: {}
-          name: npm-signalenservice-init-3
-        - emptyDir: {}
-          name: npm-signalenservice
