@@ -4,11 +4,11 @@ import {useTranslation} from "react-i18next";
 import {CustomerStatementMessage, GetCsmsDocument, useDeleteCustomerStatementMessageMutation, useGetCsmsQuery} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import useToaster from "../../../utils/useToaster";
-import DeadEndPage from "../../DeadEndPage";
-import {FormLeft, FormRight} from "../../Layouts/Forms";
-import Page from "../../Layouts/Page";
-import Section from "../../Layouts/Section";
+import Page from "../../shared/Page";
 import AddButton from "../../shared/AddButton";
+import DeadEndPage from "../../shared/DeadEndPage";
+import {FormLeft, FormRight} from "../../shared/Forms";
+import Section from "../../shared/Section";
 import CsmTableRow from "./CsmTableRow";
 import CsmUploadModal from "./CsmUploadModal";
 

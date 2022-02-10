@@ -31,9 +31,9 @@ import Transaction from "../../models/Transaction";
 import d from "../../utils/dayjs";
 import Queryable from "../../utils/Queryable";
 import {formatBurgerName, humanJoin, useReactSelectStyles} from "../../utils/things";
-import Page from "../Layouts/Page";
+import Page from "../shared/Page";
 import RadioButtonGroup from "../Layouts/RadioButtons/RadioButtonGroup";
-import Section from "../Layouts/Section";
+import Section from "../shared/Section";
 import {Granularity} from "./Aggregator";
 import BalanceTable from "./BalanceTable";
 import {RapportageContext} from "./context";
@@ -83,7 +83,7 @@ const Rapportage = () => {
 
 				return (
 					<Page title={t("reports.title")}
-						  position={"relative"} right={!$data.loading && (
+						position={"relative"} right={!$data.loading && (
 							<Box>
 								<Button size={"sm"} variant={"outline"} colorScheme={"primary"} onClick={() => filterModal.onOpen()}>{t("sections.filterOptions.title")}</Button>
 							</Box>

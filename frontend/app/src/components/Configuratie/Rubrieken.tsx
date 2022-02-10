@@ -14,7 +14,7 @@ import Queryable from "../../utils/Queryable";
 import {useReactSelectStyles} from "../../utils/things";
 import useSelectProps from "../../utils/useSelectProps";
 import useToaster from "../../utils/useToaster";
-import {FormLeft, FormRight} from "../Layouts/Forms";
+import {FormLeft, FormRight} from "../shared/Forms";
 import AddButton from "../shared/AddButton";
 import RubriekItem from "./RubriekItem";
 

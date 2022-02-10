@@ -2,7 +2,7 @@ import {BoxProps, Divider, FormLabel, Stack, Text} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {Organisatie} from "../../../generated/graphql";
-import {FormLeft, FormRight} from "../../Layouts/Forms";
+import {FormLeft, FormRight} from "../../shared/Forms";
 
 const OrganisatieDetailView: React.FC<BoxProps & {organisatie: Organisatie}> = ({organisatie}) => {
 	const {t} = useTranslation();

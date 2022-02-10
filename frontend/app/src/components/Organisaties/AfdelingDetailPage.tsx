@@ -2,7 +2,7 @@ import React from "react";
 import {useParams} from "react-router-dom";
 import {Afdeling, useGetAfdelingQuery} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
-import PageNotFound from "../PageNotFound";
+import PageNotFound from "../shared/PageNotFound";
 import AfdelingDetailView from "./AfdelingDetailView";
 
 export const AfdelingDetailPage = () => {

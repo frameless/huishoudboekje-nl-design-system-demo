@@ -7,8 +7,8 @@ import {AppRoutes} from "../../config/routes";
 import {Huishouden, useGetHuishoudensQuery} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
 import {searchFields} from "../../utils/things";
-import DeadEndPage from "../DeadEndPage";
-import Page from "../Layouts/Page";
+import DeadEndPage from "../shared/DeadEndPage";
+import Page from "../shared/Page";
 import AddButton from "../shared/AddButton";
 import HuishoudensListView from "./HuishoudensListView";
 

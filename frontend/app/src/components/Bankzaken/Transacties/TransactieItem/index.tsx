@@ -4,7 +4,7 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {BankTransaction} from "../../../../generated/graphql";
 import {currencyFormat2, formatIBAN} from "../../../../utils/things";
-import PrettyIban from "../../../Layouts/PrettyIban";
+import PrettyIban from "../../../shared/PrettyIban";
 import TransactieItemModal from "./TransactieItemModal";
 
 const hoverStyles = {

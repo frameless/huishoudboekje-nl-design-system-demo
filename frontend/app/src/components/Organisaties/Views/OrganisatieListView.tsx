@@ -5,7 +5,7 @@ import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router-dom";
 import {AppRoutes} from "../../../config/routes";
 import {Organisatie} from "../../../generated/graphql";
-import GridCard from "../../Layouts/GridCard";
+import GridCard from "../../shared/GridCard";
 
 const OrganisatieListView: React.FC<BoxProps & {organisaties: Organisatie[], showAddButton?: boolean}> = ({organisaties, showAddButton = false, ...props}) => {
 	const {t} = useTranslation();

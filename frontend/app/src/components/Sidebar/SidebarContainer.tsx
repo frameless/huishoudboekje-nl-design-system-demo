@@ -16,7 +16,7 @@ import {
 import React, {useRef} from "react";
 import {GiHamburgerMenu} from "react-icons/all";
 import {DrawerContext} from "../../utils/things";
-import Logo from "../Logo";
+import Logo from "../shared/Logo";
 import SidebarFooter from "./SidebarFooter";
 
 const SidebarContainer = ({children}) => {

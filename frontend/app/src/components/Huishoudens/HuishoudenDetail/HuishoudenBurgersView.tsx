@@ -23,7 +23,7 @@ import {AppRoutes} from "../../../config/routes";
 import {Burger, GetHuishoudenDocument, GetHuishoudensDocument, Huishouden, useDeleteHuishoudenBurgerMutation} from "../../../generated/graphql";
 import {formatBurgerName, formatHuishoudenName} from "../../../utils/things";
 import useToaster from "../../../utils/useToaster";
-import GridCard from "../../Layouts/GridCard";
+import GridCard from "../../shared/GridCard";
 
 const HuishoudenBurgerItem: React.FC<{huishouden: Huishouden, burger: Burger}> = ({huishouden, burger}) => {
 	const navigate = useNavigate();

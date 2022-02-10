@@ -4,8 +4,8 @@ import {useTranslation} from "react-i18next";
 import {Organisatie} from "../../generated/graphql";
 import useToaster from "../../utils/useToaster";
 import OrganisatieValidator from "../../validators/OrganisatieValidator";
-import {FormLeft, FormRight} from "../Layouts/Forms";
-import Section from "../Layouts/Section";
+import {FormLeft, FormRight} from "../shared/Forms";
+import Section from "../shared/Section";
 import useOrganisatieForm from "./utils/useOrganisatieForm";
 
 type OrganisatieFormProps = {

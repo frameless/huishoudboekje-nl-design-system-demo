@@ -1,6 +1,6 @@
 import {Flex, Stack} from "@chakra-ui/react";
 import React from "react";
-import Logo from "../Logo";
+import Logo from "./Logo";
 
 const TwoColumns = ({children}) => {
 	return (

@@ -1,4 +1,4 @@
-import { Heading, StackProps, Stack, Text } from "@chakra-ui/react";
+import {Heading, Stack, StackProps, Text} from "@chakra-ui/react";
 import React from "react";
 
 type FormLeftProps = {

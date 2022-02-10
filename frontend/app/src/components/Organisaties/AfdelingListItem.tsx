@@ -3,7 +3,7 @@ import React from "react";
 import {NavLink} from "react-router-dom";
 import {AppRoutes} from "../../config/routes";
 import {Afdeling} from "../../generated/graphql";
-import GridCard from "../Layouts/GridCard";
+import GridCard from "../shared/GridCard";
 
 const AfdelingListItem: React.FC<{afdeling: Afdeling}> = ({afdeling}) => {
 	const detailsModal = useDisclosure();

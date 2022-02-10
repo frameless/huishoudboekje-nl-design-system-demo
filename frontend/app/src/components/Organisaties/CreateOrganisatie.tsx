@@ -6,8 +6,8 @@ import SaveOrganisatieErrorHandler from "../../errorHandlers/SaveOrganisatieErro
 import useMutationErrorHandler from "../../errorHandlers/useMutationErrorHandler";
 import {CreateOrganisatieMutationVariables, GetOrganisatiesDocument, useCreateOrganisatieMutation} from "../../generated/graphql";
 import useToaster from "../../utils/useToaster";
-import BackButton from "../Layouts/BackButton";
-import Page from "../Layouts/Page";
+import Page from "../shared/Page";
+import BackButton from "../shared/BackButton";
 import OrganisatieForm from "./OrganisatieForm";
 
 const CreateOrganisatie = () => {

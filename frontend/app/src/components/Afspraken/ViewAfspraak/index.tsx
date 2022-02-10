@@ -2,7 +2,7 @@ import React from "react";
 import {useParams} from "react-router-dom";
 import {Afspraak, useGetAfspraakQuery} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
-import PageNotFound from "../../PageNotFound";
+import PageNotFound from "../../shared/PageNotFound";
 import AfspraakDetailView from "./AfspraakDetailView";
 
 const ViewAfspraak = () => {

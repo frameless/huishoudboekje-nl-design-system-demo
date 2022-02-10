@@ -34,9 +34,9 @@ import Queryable from "../../../utils/Queryable";
 import {useReactSelectStyles} from "../../../utils/things";
 import useHandleMutation from "../../../utils/useHandleMutation";
 import usePagination from "../../../utils/usePagination";
-import DeadEndPage from "../../DeadEndPage";
-import Page from "../../Layouts/Page";
-import Section from "../../Layouts/Section";
+import Page from "../../shared/Page";
+import DeadEndPage from "../../shared/DeadEndPage";
+import Section from "../../shared/Section";
 import {TransactionsContext} from "./context";
 import TransactiesList from "./TransactiesList";
 

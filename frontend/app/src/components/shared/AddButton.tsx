@@ -5,8 +5,7 @@ import {useTranslation} from "react-i18next";
 
 type AddButtonProps = ButtonProps & {
 	onClick?: VoidFunction,
-	// Todo: replace any with actual type
-	children?: any
+	children?: JSX.Element | string
 };
 
 const AddButton: React.FC<AddButtonProps> = ({onClick, children, ...props}) => {

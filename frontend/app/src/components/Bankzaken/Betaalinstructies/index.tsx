@@ -9,9 +9,9 @@ import {DateRange} from "../../../models/models";
 import d from "../../../utils/dayjs";
 import Queryable from "../../../utils/Queryable";
 import useHandleMutation from "../../../utils/useHandleMutation";
-import {FormLeft, FormRight} from "../../Layouts/Forms";
-import Page from "../../Layouts/Page";
-import Section from "../../Layouts/Section";
+import Page from "../../shared/Page";
+import {FormLeft, FormRight} from "../../shared/Forms";
+import Section from "../../shared/Section";
 
 const Betaalinstructies = () => {
 	const {t} = useTranslation();

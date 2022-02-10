@@ -5,9 +5,9 @@ import {AppRoutes} from "../../../config/routes";
 import {CreateAfspraakMutationVariables, useCreateAfspraakMutation, useGetCreateAfspraakFormDataQuery} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import useHandleMutation from "../../../utils/useHandleMutation";
-import BackButton from "../../Layouts/BackButton";
-import Page from "../../Layouts/Page";
-import PageNotFound from "../../PageNotFound";
+import Page from "../../shared/Page";
+import PageNotFound from "../../shared/PageNotFound";
+import BackButton from "../../shared/BackButton";
 import AfspraakForm from "../AfspraakForm";
 import AfspraakFormContext, {AfspraakFormContextType} from "../EditAfspraak/context";
 

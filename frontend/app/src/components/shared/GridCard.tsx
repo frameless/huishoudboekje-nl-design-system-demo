@@ -17,5 +17,4 @@ const GridCard = chakra(Stack, {
 		},
 	},
 });
-
 export default GridCard;

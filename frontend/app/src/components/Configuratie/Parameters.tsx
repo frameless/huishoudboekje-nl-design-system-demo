@@ -5,7 +5,7 @@ import {useTranslation} from "react-i18next";
 import {Configuratie as IConfiguratie, GetConfiguratieDocument, useCreateConfiguratieMutation, useGetConfiguratieQuery} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
 import useToaster from "../../utils/useToaster";
-import {FormLeft, FormRight} from "../Layouts/Forms";
+import {FormLeft, FormRight} from "../shared/Forms";
 import AddButton from "../shared/AddButton";
 import ParameterItem from "./ParameterItem";
 

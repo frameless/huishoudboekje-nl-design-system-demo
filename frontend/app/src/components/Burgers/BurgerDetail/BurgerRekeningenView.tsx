@@ -2,7 +2,7 @@ import {Box, Stack, StackProps, useDisclosure} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {Burger} from "../../../generated/graphql";
-import {FormLeft, FormRight} from "../../Layouts/Forms";
+import {FormLeft, FormRight} from "../../shared/Forms";
 import AddBurgerRekeningModal from "../../Rekeningen/AddBurgerRekeningModal";
 import RekeningList from "../../Rekeningen/RekeningList";
 import AddButton from "../../shared/AddButton";

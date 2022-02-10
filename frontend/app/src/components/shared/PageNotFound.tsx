@@ -3,8 +3,8 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {MdArrowBack} from "react-icons/all";
 import {useNavigate} from "react-router-dom";
-import {AppRoutes} from "../config/routes";
-import NotFoundIllustration from "./Illustrations/NotFoundIllustration";
+import {AppRoutes} from "../../config/routes";
+import NotFoundIllustration from "../Illustrations/NotFoundIllustration";
 
 const PageNotFound = () => {
 	const isMobile = useBreakpointValue([true, null, null, false]);

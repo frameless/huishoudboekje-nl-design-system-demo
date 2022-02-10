@@ -4,15 +4,15 @@ import {useTranslation} from "react-i18next";
 import {GebruikersActiviteit, useGetGebeurtenissenQuery} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
 import usePagination from "../../utils/usePagination";
-import {FormLeft, FormRight} from "../Layouts/Forms";
-import Page from "../Layouts/Page";
-import Section from "../Layouts/Section";
+import Page from "../shared/Page";
+import {FormLeft, FormRight} from "../shared/Forms";
+import Section from "../shared/Section";
 import GebeurtenissenTableView from "./GebeurtenissenTableView";
 
 const Gebeurtenissen = () => {
 	const {t} = useTranslation();
 	const {setTotal, pageSize, offset, PaginationButtons} = usePagination({
-		pageSize: 25
+		pageSize: 25,
 	});
 
 	const $gebeurtenissen = useGetGebeurtenissenQuery({

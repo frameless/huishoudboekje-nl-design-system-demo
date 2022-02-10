@@ -5,7 +5,7 @@ import {FiActivity} from "react-icons/all";
 import UAParser from "ua-parser-js";
 import {GebruikersActiviteit} from "../../generated/graphql";
 import d from "../../utils/dayjs";
-import RoundIcon from "../Layouts/RoundIcon";
+import RoundIcon from "../shared/RoundIcon";
 import AuditLogText from "./AuditLogText";
 
 const GebeurtenisTableRow: React.FC<{gebeurtenis: GebruikersActiviteit}> = ({gebeurtenis: g}) => {

@@ -9,9 +9,9 @@ import d from "../../../utils/dayjs";
 import {useReactSelectStyles} from "../../../utils/things";
 import useForm from "../../../utils/useForm";
 import useToaster from "../../../utils/useToaster";
-import {FormLeft, FormRight} from "../../Layouts/Forms";
-import Section from "../../Layouts/Section";
-import PageNotFound from "../../PageNotFound";
+import {FormLeft, FormRight} from "../../shared/Forms";
+import PageNotFound from "../../shared/PageNotFound";
+import Section from "../../shared/Section";
 
 type AfspraakBetaalinstructieProps = {
 	afspraak: Afspraak,
