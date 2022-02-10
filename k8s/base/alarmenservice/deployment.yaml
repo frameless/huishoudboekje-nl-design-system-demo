@@ -22,9 +22,9 @@ spec:
                 name: postgres-config
           command:
             [
-                "sh",
-                "-c",
-                "while true; do sleep 1; echo Waiting for database...; if nc -z $POSTGRESQL_HOSTNAME $POSTGRESQL_PORT; then echo Database is up!; exit 0; fi; done; echo Aint gonna wait for the database forever...; exit 1",
+              "sh",
+              "-c",
+              "while true; do sleep 1; echo Waiting for database...; if nc -z $POSTGRESQL_HOSTNAME $POSTGRESQL_PORT; then echo Database is up!; exit 0; fi; done; echo Aint gonna wait for the database forever...; exit 1",
             ]
         - name: init2-prepare-db
           image: bitnami/postgresql:13
@@ -70,15 +70,8 @@ spec:
                 secretKeyRef:
                   name: hhb-database-secrets
                   key: ALARMENSERVICE_DATABASE_URL
-          command: ["npm"]
-          args: ["run", "db:push"]
-          volumeMounts:
-            - mountPath: /app/node_modules/.prisma
-              name: prisma-alarmenservice-init-3
-            - mountPath: /app/node_modules/prisma
-              name: app-node-modules-prisma-alarmenservice-init-3
-            - mountPath: /.npm
-              name: npm-alarmenservice-init-3
+          command: [ "npm" ]
+          args: [ "run", "db:push" ]
       containers:
         - name: hhb-alarmenservice
           image: alarmenservice
@@ -110,23 +103,3 @@ spec:
                 secretKeyRef:
                   name: hhb-database-secrets
                   key: ALARMENSERVICE_DATABASE_URL
-          volumeMounts:
-            - mountPath: /app/node_modules/.prisma
-              name: prisma-alarmenservice
-            - mountPath: /.npm
-              name: npm-alarmenservice
-            - mountPath: /app/node_modules/prisma
-              name: app-node-modules-prisma-alarmenservice
-      volumes:
-        - emptyDir: {}
-          name: prisma-alarmenservice-init-3
-        - emptyDir: {}
-          name: prisma-alarmenservice
-        - emptyDir: {}
-          name: app-node-modules-prisma-alarmenservice-init-3
-        - emptyDir: {}
-          name: app-node-modules-prisma-alarmenservice
-        - emptyDir: {}
-          name: npm-alarmenservice-init-3
-        - emptyDir: {}
-          name: npm-alarmenservice
