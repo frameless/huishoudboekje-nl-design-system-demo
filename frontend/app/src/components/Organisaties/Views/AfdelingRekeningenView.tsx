@@ -4,7 +4,7 @@ import React from "react";
 import {useToggle} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {Afdeling, GetOrganisatieDocument, GetOrganisatiesDocument, useCreateAfdelingRekeningMutation} from "../../../generated/graphql";
-import {FormLeft, FormRight} from "../../Layouts/Forms";
+import {FormLeft, FormRight} from "../../shared/Forms";
 import RekeningForm from "../../Rekeningen/RekeningForm";
 import RekeningList from "../../Rekeningen/RekeningList";
 

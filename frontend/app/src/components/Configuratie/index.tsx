@@ -1,8 +1,8 @@
 import {Stack} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
-import Page from "../Layouts/Page";
-import Section from "../Layouts/Section";
+import Page from "../shared/Page";
+import Section from "../shared/Section";
 import Parameters from "./Parameters";
 import Rubrieken from "./Rubrieken";
 

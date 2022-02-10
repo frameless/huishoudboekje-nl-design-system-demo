@@ -1,13 +1,13 @@
-import {AddIcon} from "@chakra-ui/icons";
-import {Box, Button, Checkbox, CheckboxGroup, FormControl, FormLabel, Stack, StackProps, Table, Tbody, Td, Text, Th, Thead, Tr, useBreakpointValue} from "@chakra-ui/react";
+import {Box, Checkbox, CheckboxGroup, FormControl, FormLabel, Stack, StackProps, Table, Tbody, Td, Text, Th, Thead, Tr, useBreakpointValue} from "@chakra-ui/react";
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
-import {NavLink} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {AppRoutes} from "../../../config/routes";
 import {Burger} from "../../../generated/graphql";
 import {isAfspraakActive} from "../../../utils/things";
 import AfspraakTableRow from "../../Afspraken/AfspraakTableRow";
-import {FormLeft, FormRight} from "../../Layouts/Forms";
+import {FormLeft, FormRight} from "../../shared/Forms";
+import AddButton from "../../shared/AddButton";
 
 type ActiveSwitch = {
 	active: boolean,
@@ -19,6 +19,7 @@ const BurgerAfsprakenView: React.FC<StackProps & {burger: Burger}> = ({burger, .
 	const isMobile = useBreakpointValue([true, null, null, false]);
 	const {id, afspraken = []} = burger;
 	const [filter, setFilter] = useState<ActiveSwitch>({active: true, inactive: false});
+	const navigate = useNavigate();
 
 	const sortedAfspraken = [
 		...afspraken.filter(a => filter.active && isAfspraakActive(a) && !a.credit).sort((a, b) => parseFloat(a.bedrag) >= parseFloat(b.bedrag) ? -1 : 1),
@@ -75,9 +76,7 @@ const BurgerAfsprakenView: React.FC<StackProps & {burger: Burger}> = ({burger, .
 
 				{id && (
 					<Box>
-						<NavLink to={AppRoutes.CreateBurgerAfspraak(id)}>
-							<Button leftIcon={<AddIcon />} colorScheme={"primary"} size={"sm"}>{t("global.actions.add")}</Button>
-						</NavLink>
+						<AddButton onClick={() => navigate(AppRoutes.CreateBurgerAfspraak(id))} />
 					</Box>
 				)}
 			</FormRight>

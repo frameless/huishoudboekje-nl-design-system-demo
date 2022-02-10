@@ -16,8 +16,8 @@ import {
 import Queryable from "../../utils/Queryable";
 import {maxOrganisatieNaamLengthBreakpointValues, truncateText} from "../../utils/things";
 import useToaster from "../../utils/useToaster";
-import BackButton from "../Layouts/BackButton";
-import Page from "../Layouts/Page";
+import Page from "../shared/Page";
+import BackButton from "../shared/BackButton";
 import OrganisatieForm from "./OrganisatieForm";
 
 const EditOrganisatie = () => {

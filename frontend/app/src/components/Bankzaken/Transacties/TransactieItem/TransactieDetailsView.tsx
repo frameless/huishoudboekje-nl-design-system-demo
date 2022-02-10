@@ -4,7 +4,7 @@ import {useTranslation} from "react-i18next";
 import {BankTransaction} from "../../../../generated/graphql";
 import d from "../../../../utils/dayjs";
 import {currencyFormat2} from "../../../../utils/things";
-import PrettyIban from "../../../Layouts/PrettyIban";
+import PrettyIban from "../../../shared/PrettyIban";
 
 const TransactieDetailsView: React.FC<StackProps & {transaction: BankTransaction}> = ({transaction: bt, ...props}) => {
 	const {t} = useTranslation();

@@ -6,8 +6,8 @@ import {Burger} from "../../generated/graphql";
 import d from "../../utils/dayjs";
 import useToaster from "../../utils/useToaster";
 import BurgerValidator from "../../validators/BurgerValidator";
-import {FormLeft, FormRight} from "../Layouts/Forms";
-import Section from "../Layouts/Section";
+import {FormLeft, FormRight} from "../shared/Forms";
+import Section from "../shared/Section";
 import useBurgerForm from "./utils/useBurgerForm";
 
 type BurgerFormProps = {

@@ -22,7 +22,7 @@ import {useTranslation} from "react-i18next";
 import {GetRekeningDocument, Rekening, useUpdateRekeningMutation} from "../../generated/graphql";
 import {formatIBAN, truncateText} from "../../utils/things";
 import useToaster from "../../utils/useToaster";
-import PrettyIban from "../Layouts/PrettyIban";
+import PrettyIban from "../shared/PrettyIban";
 
 type RekeningListItemProps = TableRowProps & {
 	rekening: Rekening,
@@ -41,8 +41,8 @@ const RekeningListItem: React.FC<RekeningListItemProps> = ({rekening, onDelete, 
 
 	const [updateRekening] = useUpdateRekeningMutation({
 		refetchQueries: [
-			{query: GetRekeningDocument, variables: { id: rekening.id! }}
-		]
+			{query: GetRekeningDocument, variables: {id: rekening.id!}},
+		],
 	});
 
 	const onConfirmDeleteDialog = () => {

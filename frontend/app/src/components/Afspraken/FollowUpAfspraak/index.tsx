@@ -8,10 +8,10 @@ import {Afspraak, CreateAfspraakMutationVariables, useAddAfspraakZoektermMutatio
 import d from "../../../utils/dayjs";
 import Queryable from "../../../utils/Queryable";
 import useToaster from "../../../utils/useToaster";
-import BackButton from "../../Layouts/BackButton";
-import Page from "../../Layouts/Page";
-import Section from "../../Layouts/Section";
-import PageNotFound from "../../PageNotFound";
+import Page from "../../shared/Page";
+import BackButton from "../../shared/BackButton";
+import PageNotFound from "../../shared/PageNotFound";
+import Section from "../../shared/Section";
 import AfspraakForm from "../AfspraakForm";
 import AfspraakFormContext from "../EditAfspraak/context";
 import ZoektermenList from "../ZoektermenList";

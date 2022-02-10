@@ -1,8 +1,8 @@
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {FormLeft, FormRight} from "../Layouts/Forms";
-import Page from "../Layouts/Page";
-import Section from "../Layouts/Section";
+import Page from "../shared/Page";
+import {FormLeft, FormRight} from "../shared/Forms";
+import Section from "../shared/Section";
 import {ServicesStatus} from "./ServicesStatus";
 
 const StatusPage = () => {

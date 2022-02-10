@@ -27,10 +27,10 @@ import {Afdeling, GetOrganisatiesDocument, Organisatie, useDeleteOrganisatieMuta
 import Queryable from "../../utils/Queryable";
 import {maxOrganisatieNaamLengthBreakpointValues, truncateText} from "../../utils/things";
 import useToaster from "../../utils/useToaster";
-import DeadEndPage from "../DeadEndPage";
-import BackButton from "../Layouts/BackButton";
-import Page from "../Layouts/Page";
-import Section from "../Layouts/Section";
+import Page from "../shared/Page";
+import BackButton from "../shared/BackButton";
+import DeadEndPage from "../shared/DeadEndPage";
+import Section from "../shared/Section";
 import AfdelingListItem from "./AfdelingListItem";
 import CreateAfdelingModal from "./CreateAfdelingModal";
 import OrganisatieDetailView from "./Views/OrganisatieDetailView";

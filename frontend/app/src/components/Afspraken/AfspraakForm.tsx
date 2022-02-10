@@ -8,8 +8,8 @@ import useSelectProps, {SelectOption} from "../../utils/useSelectProps";
 import useToaster from "../../utils/useToaster";
 import zod from "../../utils/zod";
 import AfspraakValidator from "../../validators/AfspraakValidator";
-import {FormLeft, FormRight} from "../Layouts/Forms";
-import Section from "../Layouts/Section";
+import {FormLeft, FormRight} from "../shared/Forms";
+import Section from "../shared/Section";
 import AfspraakFormContext from "./EditAfspraak/context";
 
 const bedragInputValidator = zod.string().regex(/^[^.]*$/);

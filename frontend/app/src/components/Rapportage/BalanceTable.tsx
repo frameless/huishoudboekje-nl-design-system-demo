@@ -4,7 +4,7 @@ import {Trans, useTranslation} from "react-i18next";
 import {BankTransaction} from "../../generated/graphql";
 import d from "../../utils/dayjs";
 import {currencyFormat2} from "../../utils/things";
-import {FormLeft, FormRight} from "../Layouts/Forms";
+import {FormLeft, FormRight} from "../shared/Forms";
 import {createAggregation, Type} from "./Aggregator";
 
 type BalanceTableProps = {transactions: BankTransaction[], startDate: string, endDate: string};

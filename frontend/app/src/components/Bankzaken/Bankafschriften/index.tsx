@@ -1,14 +1,14 @@
-import {AddIcon} from "@chakra-ui/icons";
-import {Box, Button, FormLabel, Stack, Table, Tbody, Th, Thead, Tr, useDisclosure} from "@chakra-ui/react";
+import {Box, FormLabel, Stack, Table, Tbody, Th, Thead, Tr, useDisclosure} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {CustomerStatementMessage, GetCsmsDocument, useDeleteCustomerStatementMessageMutation, useGetCsmsQuery} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import useToaster from "../../../utils/useToaster";
-import DeadEndPage from "../../DeadEndPage";
-import {FormLeft, FormRight} from "../../Layouts/Forms";
-import Page from "../../Layouts/Page";
-import Section from "../../Layouts/Section";
+import Page from "../../shared/Page";
+import AddButton from "../../shared/AddButton";
+import DeadEndPage from "../../shared/DeadEndPage";
+import {FormLeft, FormRight} from "../../shared/Forms";
+import Section from "../../shared/Section";
 import CsmTableRow from "./CsmTableRow";
 import CsmUploadModal from "./CsmUploadModal";
 
@@ -51,8 +51,7 @@ const CustomerStatementMessages = () => {
 				if (csms.length === 0) {
 					return (
 						<DeadEndPage message={t("messages.csms.addHint", {buttonLabel: t("global.actions.add")})}>
-							<Button colorScheme={"primary"} size={"sm"} leftIcon={<AddIcon />}
-								onClick={() => onOpen()}>{t("global.actions.add")}</Button>
+							<AddButton onClick={() => onOpen()} />
 						</DeadEndPage>
 					);
 				}
@@ -64,7 +63,7 @@ const CustomerStatementMessages = () => {
 								<FormLeft title={t("forms.bankzaken.sections.customerStatementMessages.title")} helperText={t("forms.bankzaken.sections.customerStatementMessages.detailText")} />
 								<FormRight>
 									<Box>
-										<Button colorScheme={"primary"} size={"sm"} leftIcon={<AddIcon />} onClick={() => onOpen()}>{t("global.actions.add")}</Button>
+										<AddButton onClick={() => onOpen()} />
 									</Box>
 
 									{csms.length > 0 && (

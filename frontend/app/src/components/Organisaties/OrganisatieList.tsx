@@ -1,4 +1,4 @@
-import {AddIcon, CloseIcon, SearchIcon} from "@chakra-ui/icons";
+import {CloseIcon, SearchIcon} from "@chakra-ui/icons";
 import {Button, IconButton, Input, InputGroup, InputLeftElement, InputRightElement} from "@chakra-ui/react";
 import React, {useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
@@ -7,8 +7,9 @@ import {AppRoutes} from "../../config/routes";
 import {Organisatie, useGetSimpleOrganisatiesQuery} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
 import {searchFields} from "../../utils/things";
-import DeadEndPage from "../DeadEndPage";
-import Page from "../Layouts/Page";
+import DeadEndPage from "../shared/DeadEndPage";
+import Page from "../shared/Page";
+import AddButton from "../shared/AddButton";
 import OrganisatieListView from "./Views/OrganisatieListView";
 
 const OrganisatieList = () => {
@@ -34,8 +35,7 @@ const OrganisatieList = () => {
 			if (organisaties.length === 0) {
 				return (
 					<DeadEndPage message={t("messages.organisaties.addHint", {buttonLabel: t("global.actions.add")})}>
-						<Button size={"sm"} colorScheme={"primary"} variant={"solid"} leftIcon={
-							<AddIcon />} onClick={() => navigate(AppRoutes.CreateOrganisatie)}>{t("global.actions.add")}</Button>
+						<AddButton onClick={() => navigate(AppRoutes.CreateOrganisatie)} />
 					</DeadEndPage>
 				);
 			}

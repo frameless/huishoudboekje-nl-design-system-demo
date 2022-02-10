@@ -8,11 +8,11 @@ import {Burger, GetBurgersDocument, GetBurgersSearchDocument, GetHuishoudensDocu
 import Queryable from "../../../utils/Queryable";
 import {formatBurgerName} from "../../../utils/things";
 import useToaster from "../../../utils/useToaster";
-import Alert from "../../Layouts/Alert";
-import BackButton from "../../Layouts/BackButton";
-import Page from "../../Layouts/Page";
-import Section from "../../Layouts/Section";
-import PageNotFound from "../../PageNotFound";
+import Page from "../../shared/Page";
+import Alert from "../../shared/Alert";
+import BackButton from "../../shared/BackButton";
+import PageNotFound from "../../shared/PageNotFound";
+import Section from "../../shared/Section";
 import {BurgerSearchContext} from "../BurgerSearchContext";
 import BurgerAfsprakenView from "./BurgerAfsprakenView";
 import BurgerGebeurtenissen from "./BurgerGebeurtenissen";

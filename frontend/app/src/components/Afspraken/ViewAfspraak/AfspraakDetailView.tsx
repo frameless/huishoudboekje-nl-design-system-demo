@@ -33,12 +33,12 @@ import {currencyFormat2, formatBurgerName, isAfspraakActive} from "../../../util
 import useScheduleHelper from "../../../utils/useScheduleHelper";
 import useToaster from "../../../utils/useToaster";
 import zod, {containsZodErrorCode, zoektermValidator} from "../../../utils/zod";
-import BackButton from "../../Layouts/BackButton";
-import DataItem from "../../Layouts/DataItem";
-import {FormLeft, FormRight} from "../../Layouts/Forms";
-import Page from "../../Layouts/Page";
-import PrettyIban from "../../Layouts/PrettyIban";
-import Section from "../../Layouts/Section";
+import Page from "../../shared/Page";
+import BackButton from "../../shared/BackButton";
+import DataItem from "../../shared/DataItem";
+import {FormLeft, FormRight} from "../../shared/Forms";
+import PrettyIban from "../../shared/PrettyIban";
+import Section from "../../shared/Section";
 import ZoektermenList from "../ZoektermenList";
 import AfspraakDetailMenu from "./AfspraakDetailMenu";
 

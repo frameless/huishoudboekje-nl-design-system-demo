@@ -5,7 +5,7 @@ import {Burger, GebruikersActiviteit, useGetBurgerGebeurtenissenQuery} from "../
 import Queryable from "../../../utils/Queryable";
 import usePagination from "../../../utils/usePagination";
 import GebeurtenissenTableView from "../../Gebeurtenissen/GebeurtenissenTableView";
-import {FormLeft, FormRight} from "../../Layouts/Forms";
+import {FormLeft, FormRight} from "../../shared/Forms";
 
 const BurgerGebeurtenissen: React.FC<StackProps & {burger: Burger}> = ({burger, ...props}) => {
 	const {t} = useTranslation();

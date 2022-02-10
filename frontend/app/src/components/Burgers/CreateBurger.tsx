@@ -6,8 +6,8 @@ import SaveBurgerErrorHandler from "../../errorHandlers/SaveBurgerErrorHandler";
 import useMutationErrorHandler from "../../errorHandlers/useMutationErrorHandler";
 import {CreateBurgerInput, GetBurgersDocument, GetBurgersSearchDocument, GetHuishoudensDocument, useCreateBurgerMutation} from "../../generated/graphql";
 import useToaster from "../../utils/useToaster";
-import BackButton from "../Layouts/BackButton";
-import Page from "../Layouts/Page";
+import Page from "../shared/Page";
+import BackButton from "../shared/BackButton";
 import BurgerForm from "./BurgerForm";
 import {BurgerSearchContext} from "./BurgerSearchContext";
 

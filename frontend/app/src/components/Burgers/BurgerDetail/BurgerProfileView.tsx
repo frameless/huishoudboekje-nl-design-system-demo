@@ -4,7 +4,7 @@ import {useTranslation} from "react-i18next";
 import {Burger} from "../../../generated/graphql";
 import d from "../../../utils/dayjs";
 import {getBurgerHhbId} from "../../../utils/things";
-import {FormLeft, FormRight} from "../../Layouts/Forms";
+import {FormLeft, FormRight} from "../../shared/Forms";
 
 const BurgerProfileView: React.FC<StackProps & {burger: Burger}> = ({burger, ...props}) => {
 	const {t} = useTranslation();

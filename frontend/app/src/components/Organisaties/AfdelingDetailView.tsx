@@ -1,16 +1,17 @@
-import {AddIcon, ChevronDownIcon} from "@chakra-ui/icons";
-import {Box, Button, Heading, IconButton, Menu, MenuButton, MenuItem, MenuList, Stack, useDisclosure} from "@chakra-ui/react";
+import {ChevronDownIcon} from "@chakra-ui/icons";
+import {Box, Heading, IconButton, Menu, MenuButton, MenuItem, MenuList, Stack, useDisclosure} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {AppRoutes} from "../../config/routes";
 import {Afdeling, Postadres, Rekening} from "../../generated/graphql";
-import BackButton from "../Layouts/BackButton";
-import {FormLeft, FormRight} from "../Layouts/Forms";
-import Page from "../Layouts/Page";
-import Section from "../Layouts/Section";
+import Page from "../shared/Page";
 import PostadresList from "../Postadressen/PostadresList";
 import AddAfdelingRekeningModal from "../Rekeningen/AddAfdelingRekeningModal";
 import RekeningList from "../Rekeningen/RekeningList";
+import AddButton from "../shared/AddButton";
+import BackButton from "../shared/BackButton";
+import {FormLeft, FormRight} from "../shared/Forms";
+import Section from "../shared/Section";
 import AddAfdelingPostadresModal from "./AddAfdelingPostadresModal";
 import DeleteAfdelingModal from "./DeleteAfdelingModal";
 import UpdateAfdelingModal from "./UpdateAfdelingModal";
@@ -49,8 +50,7 @@ const AfdelingDetailView: React.FC<{afdeling: Afdeling}> = ({afdeling}) => {
 							<Heading size={"md"}>{t("postadressen")}</Heading>
 							<PostadresList postadressen={postadressen} afdeling={afdeling} />
 							<Box>
-								<Button leftIcon={<AddIcon />} colorScheme={"primary"} size={"sm"}
-									onClick={() => addPostadresModal.onOpen()}>{t("global.actions.add")}</Button>
+								<AddButton onClick={() => addPostadresModal.onOpen()} />
 							</Box>
 						</Stack>
 					</FormRight>
@@ -65,8 +65,7 @@ const AfdelingDetailView: React.FC<{afdeling: Afdeling}> = ({afdeling}) => {
 							<Heading size={"md"}>{t("rekeningen")}</Heading>
 							<RekeningList rekeningen={rekeningen} afdeling={afdeling} />
 							<Box>
-								<Button leftIcon={<AddIcon />} colorScheme={"primary"} size={"sm"}
-									onClick={() => addRekeningModal.onOpen()}>{t("global.actions.add")}</Button>
+								<AddButton onClick={() => addRekeningModal.onOpen()} />
 							</Box>
 						</Stack>
 					</FormRight>

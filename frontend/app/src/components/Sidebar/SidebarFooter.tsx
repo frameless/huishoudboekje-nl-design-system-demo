@@ -1,6 +1,6 @@
 import {Box, Heading} from "@chakra-ui/react";
 import React from "react";
-import VersionTag from "../Layouts/VersionTag";
+import VersionTag from "../shared/VersionTag";
 
 const SidebarFooter = () => (
 	<Box textAlign={"center"}>

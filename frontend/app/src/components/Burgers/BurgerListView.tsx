@@ -6,7 +6,7 @@ import {useNavigate} from "react-router-dom";
 import {AppRoutes} from "../../config/routes";
 import {Burger} from "../../generated/graphql";
 import {formatBurgerName} from "../../utils/things";
-import GridCard from "../Layouts/GridCard";
+import GridCard from "../shared/GridCard";
 
 type BurgerListViewProps = {
 	burgers: Burger[],

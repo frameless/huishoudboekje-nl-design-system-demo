@@ -1,6 +1,6 @@
 import {ComponentMeta, ComponentStory} from "@storybook/react";
 import React from "react";
-import DeleteConfirmButton from "../components/DeleteConfirmButton";
+import DeleteConfirmButton from "./DeleteConfirmButton";
 
 export default {
 	title: "Huishoudboekje/Components/DeleteConfirmButton",

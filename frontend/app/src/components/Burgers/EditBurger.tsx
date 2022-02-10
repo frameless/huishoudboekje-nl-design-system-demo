@@ -8,8 +8,8 @@ import {GetBurgerDocument, GetBurgersDocument, GetBurgersSearchDocument, UpdateB
 import Queryable from "../../utils/Queryable";
 import {formatBurgerName} from "../../utils/things";
 import useToaster from "../../utils/useToaster";
-import BackButton from "../Layouts/BackButton";
-import Page from "../Layouts/Page";
+import Page from "../shared/Page";
+import BackButton from "../shared/BackButton";
 import BurgerForm from "./BurgerForm";
 import {BurgerSearchContext} from "./BurgerSearchContext";
 
