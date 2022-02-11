@@ -2,8 +2,8 @@
 
 This package will connect to your GraphQL API and shoot a bunch of sample data into it.
 
-⚠️ This application is not designed to run in a production environment, we are currently just using it in our own CI as it's honestly too expensive to have us sitting there
-inputting the same data all the time when the robots can do it for us. 😄
+⚠️ This application is not designed to run in a production environment! We are currently just using it in our own CI and on our own local development environments as it's 
+honestly too expensive to have us sitting there inputting the same data all the time when the robots can do it for us. 😄
 
 ### Sample data
 
