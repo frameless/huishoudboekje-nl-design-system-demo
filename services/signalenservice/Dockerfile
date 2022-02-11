@@ -8,5 +8,6 @@ USER node
 COPY ./package*.json /app/
 RUN npm ci
 COPY . /app
+RUN chmod -R 777 /app/node_modules
 EXPOSE 8080
 CMD ["npm", "run", "start"]
