@@ -785,6 +785,11 @@
     "invalidPeriodiekError": "Kies een periodiek."
   },
   "version": "Versie {{version}}",
+  "signalen": {
+    "status": "Status",
+    "context": "Context",
+    "contextMessage": "Alarm dat behoort bij {{omschrijving}} met betrekking tot bedrag {{bedrag}} op {{datum}}."
+  },
   "statuspage": {
     "title": "Status",
     "services": {
