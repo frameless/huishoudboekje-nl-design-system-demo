@@ -3,7 +3,7 @@ import React from "react";
 import BackButton from "./BackButton";
 
 export default {
-	title: "Huishoudboekje/Components/BackButton",
+	title: "Huishoudboekje/BackButton",
 	component: BackButton,
 	argTypes: {
 		to: {

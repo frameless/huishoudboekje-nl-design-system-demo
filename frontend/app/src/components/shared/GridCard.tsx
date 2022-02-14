@@ -1,6 +1,6 @@
 import {chakra, Stack} from "@chakra-ui/react";
 
-const GridCard = chakra(Stack, {
+const BaseGridCard = chakra(Stack, {
 	baseStyle: {
 		direction: "column",
 		width: "100",
@@ -17,4 +17,9 @@ const GridCard = chakra(Stack, {
 		},
 	},
 });
+
+const GridCard = (props) => (
+	<BaseGridCard {...props} />
+);
+
 export default GridCard;

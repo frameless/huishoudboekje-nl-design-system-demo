@@ -4,7 +4,7 @@ import React from "react";
 import TwoColumns from "./TwoColumns";
 
 export default {
-	title: "Huishoudboekje/Components/TwoColumns",
+	title: "Huishoudboekje/TwoColumns",
 	component: TwoColumns,
 	argTypes: {},
 } as ComponentMeta<typeof TwoColumns>;

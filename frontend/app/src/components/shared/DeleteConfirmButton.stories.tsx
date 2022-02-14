@@ -3,7 +3,7 @@ import React from "react";
 import DeleteConfirmButton from "./DeleteConfirmButton";
 
 export default {
-	title: "Huishoudboekje/Components/DeleteConfirmButton",
+	title: "Huishoudboekje/DeleteConfirmButton",
 	component: DeleteConfirmButton,
 	argTypes: {
 		onConfirm: {
