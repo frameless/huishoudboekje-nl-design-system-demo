@@ -18,6 +18,7 @@ import BurgerAfsprakenView from "./BurgerAfsprakenView";
 import BurgerGebeurtenissen from "./BurgerGebeurtenissen";
 import BurgerProfileView from "./BurgerProfileView";
 import BurgerRekeningenView from "./BurgerRekeningenView";
+import BurgerSignalenView from "./BurgerSignalenView";
 
 const BurgerDetailPage = () => {
 	const {id = ""} = useParams<{id: string}>();
@@ -103,6 +104,7 @@ const BurgerDetailPage = () => {
 				)}>
 					<Section><BurgerProfileView burger={burger} /></Section>
 					<Section><BurgerRekeningenView burger={burger} /></Section>
+					<Section><BurgerSignalenView burger={burger}/></Section>
 					<Section><BurgerAfsprakenView burger={burger} /></Section>
 					<Section><BurgerGebeurtenissen burger={burger} /></Section>
 				</Page>
