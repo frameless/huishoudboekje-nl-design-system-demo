@@ -49,9 +49,9 @@ class CreateAlarm(graphene.Mutation):
         if alarm_date < utc_now:
             raise GraphQLError(f"De alarmdatum moet in de toekomst liggen.")
 
-        if (input.byDay is None and input.byMonth is None and input.byMonthDay is None) or (
-            len(input.byDay) <= 0 and len(input.byMonth) <=0 and len(input.byMonthDay) <= 0):
-            raise GraphQLError(f"Voor het aanmaken van een alarm is byDay of byMonth en byMonthDay verplicht.")
+        if ((input.byMonth is not None and input.byMonthDay is None) or (input.byMonth is None and input.byMonthDay is not None)) or (
+            (len(input.byMonth) >= 1 and len(input.byMonthDay) <= 0) or (len(input.byMonth) <= 0 and len(input.byMonthDay) >= 1)):
+            raise GraphQLError(f"Vul zowel byMonth als byMonthDay in, of geen van beide.")
 
         afspraak_response = requests.get(f"{settings.HHB_SERVICES_URL}/afspraken/{input.afspraakId}", headers={"Content-type": "application/json"})
         if afspraak_response.status_code != 200:

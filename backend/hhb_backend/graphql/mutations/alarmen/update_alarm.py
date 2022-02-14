@@ -19,9 +19,9 @@ class UpdateAlarmInput(graphene.InputObjectType):
     datumMargin = graphene.Int()
     bedrag = graphene.Field(Bedrag)
     bedragMargin = graphene.Field(Bedrag)
-    byDay = graphene.List(DayOfWeek, default_value=[])
-    byMonth = graphene.List(graphene.Int, default_value=[])
-    byMonthDay = graphene.List(graphene.Int, default_value=[])
+    byDay = graphene.List(DayOfWeek)
+    byMonth = graphene.List(graphene.Int)
+    byMonthDay = graphene.List(graphene.Int)
 
 
 class UpdateAlarm(graphene.Mutation):
@@ -53,10 +53,6 @@ class UpdateAlarm(graphene.Mutation):
             utc_now = date.today()
             if alarm_date < utc_now:
                 raise GraphQLError(f"Alarm datum is in het verleden.")
-
-        if (input.byDay is None and input.byMonth is None and input.byMonthDay is None) or (
-            len(input.byDay) <= 0 and len(input.byMonth) <=0 and len(input.byMonthDay) <= 0):
-            raise GraphQLError(f"Voor het updaten van een alarm is byDay of byMonth en byMonthDay verplichte invoer.")
 
         # previous = request.dataloader.alarmen_by_id.load(id) # stalls and waits forever if alarm does not exist
         previous_response = requests.get(f"{settings.ALARMENSERVICE_URL}/alarms/{id}", headers={"Content-type": "application/json"}) 

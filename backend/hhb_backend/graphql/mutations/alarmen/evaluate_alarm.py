@@ -43,18 +43,21 @@ class EvaluateAlarm(graphene.Mutation):
             journaalIds = afspraak.get("journaalposten", [])
             transacties = EvaluateAlarm.getBanktransactiesByJournaalIds(journaalIds)
 
-            # generate next alarm in the sequence
             alarm_check_date = dateutil.parser.isoparse(alarm.get("datum")).date()
-            nextAlarmDate = EvaluateAlarm.generateNextAlarmInSequence(alarm, alarm_check_date)
             alarm = EvaluateAlarm.disableAlarm(alarm_check_date, alarm)
-
-            # add new alarm in sequence if it does not exist yet
-            nextAlarmAlreadyExists = EvaluateAlarm.doesNextAlarmExist(nextAlarmDate, alarm, activeAlarms)
             newAlarm = None
-            if nextAlarmAlreadyExists == True:
-                nextAlarmDate = None
-            elif nextAlarmAlreadyExists == False:
-                newAlarm = EvaluateAlarm.createAlarm(alarm, nextAlarmDate)
+
+            # only generate next alarm if byDay, byMonth, byMonthDay is present
+            if (len(alarm.get("byDay", [])) >= 1 or len(alarm.get("byMonth", [])) >= 1 or len(alarm.get("byMonthDay", [])) >= 1): 
+                # generate next alarm in the sequence
+                nextAlarmDate = EvaluateAlarm.generateNextAlarmInSequence(alarm, alarm_check_date) 
+
+                # add new alarm in sequence if it does not exist yet
+                nextAlarmAlreadyExists = EvaluateAlarm.doesNextAlarmExist(nextAlarmDate, alarm, activeAlarms)
+                if nextAlarmAlreadyExists == True:
+                    nextAlarmDate = None
+                elif nextAlarmAlreadyExists == False:
+                    newAlarm = EvaluateAlarm.createAlarm(alarm, nextAlarmDate)
 
             # check if there are transaction within the alarm specified margins
             createSignaal = None
