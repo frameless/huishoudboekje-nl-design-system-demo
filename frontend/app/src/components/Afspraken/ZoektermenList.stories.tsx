@@ -3,7 +3,7 @@ import React from "react";
 import ZoektermenList from "./ZoektermenList";
 
 export default {
-	title: "Huishoudboekje/Components/ZoektermenList",
+	title: "Huishoudboekje/ZoektermenList",
 	component: ZoektermenList,
 	argTypes: {
 		zoektermen: {

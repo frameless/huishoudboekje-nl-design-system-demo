@@ -3,7 +3,7 @@ import React from "react";
 import AddButton from "./AddButton";
 
 export default {
-	title: "Huishoudboekje/Components/AddButton",
+	title: "Huishoudboekje/AddButton",
 	component: AddButton,
 	argTypes: {
 		onClick: {
@@ -11,7 +11,7 @@ export default {
 				name: "function",
 				required: false,
 			},
-			description: "A function that does whatever it needs to do after clicking on this button.",
+			description: "A function that does something after clicking on this button.",
 		},
 	},
 } as ComponentMeta<typeof AddButton>;
@@ -23,5 +23,5 @@ DefaultLabel.args = {};
 
 export const CustomLabel = Template.bind({});
 CustomLabel.args = {
-	children: "Nieuwe toevoegen",
+	children: "Kies een of meerdere bestanden",
 };

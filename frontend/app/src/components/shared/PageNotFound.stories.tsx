@@ -3,7 +3,7 @@ import React from "react";
 import PageNotFound from "./PageNotFound";
 
 export default {
-	title: "Huishoudboekje/Components/PageNotFound",
+	title: "Huishoudboekje/PageNotFound",
 	component: PageNotFound,
 	argTypes: {},
 	args: {},

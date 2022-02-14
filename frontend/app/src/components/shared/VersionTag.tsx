@@ -8,7 +8,7 @@ const VersionTag = () => {
 
 	return (
 		<Stack spacing={2} fontSize={"xs"} textAlign={"center"}>
-			<Text color={"gray.400"}>{t("version", { version: VERSION })}</Text>
+			<Text color={"gray.400"}>{t("version", {version: VERSION})}</Text>
 		</Stack>
 	);
 };
