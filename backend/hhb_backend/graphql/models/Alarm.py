@@ -25,4 +25,8 @@ class Alarm(graphene.ObjectType):
     async def resolve_afspraak(root, info):
         return await request.dataloader.afspraken_by_id.load(root.get("afspraakId"))
 
+    async def resolve_signaal(root, info):
+        if root.get("signaalId"):
+            return await request.dataloader.signalen_by_id.load(root.get("signaalId"))
+
 
