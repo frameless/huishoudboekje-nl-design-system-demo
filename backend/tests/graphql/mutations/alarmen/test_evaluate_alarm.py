@@ -127,11 +127,11 @@ def test_evaluate_alarm_illigal_betaalinstructie_combination(client):
             "datumMargin": 5,
             "bedrag": "12500",
             "bedragMargin":"1000",
-                "by_day": ["Wednesday", "Friday"],
-                "by_month": [1],
-                "by_month_day": [1],
+            "by_day": ["Wednesday", "Friday"],
+            "by_month": [1],
+            "by_month_day": [1],
         }
-        expected = "Niet ondersteunde combinatie van alarm herhaal instructies."
+        expected = "Niet ondersteunde combinatie van alarm herhaal instructies. isWeekly:{isWeekly} isMonthly:{isMontly} byDay:{byDay} byMonth:{byMonth} byMonthDay:{byMonthDay}"
 
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
         rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=200, json={'data': [alarm]})
