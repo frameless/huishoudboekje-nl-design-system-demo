@@ -19,7 +19,7 @@ const SignalenList: React.FC<{ signalen: Signal[] }> = ({signalen}) => {
 				{signalen.map((s, i) => (
 					<Tr>
 						<Td textAlign={"right"}>
-							<GoPrimitiveDot color="green" size="25" />
+							<GoPrimitiveDot color={s.isActive ? "green" : "red"} size="25" />
 						</Td>
 						<Td>
 							<Text>{t("signalen.contextMessage", {
