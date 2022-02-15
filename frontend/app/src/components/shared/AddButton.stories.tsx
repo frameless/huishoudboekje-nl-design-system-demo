@@ -16,7 +16,11 @@ export default {
 	},
 } as ComponentMeta<typeof AddButton>;
 
-const Template: ComponentStory<typeof AddButton> = ({onClick, children}) => <AddButton onClick={onClick}>{children}</AddButton>;
+const Template: ComponentStory<typeof AddButton> = ({onClick, children}) => (
+	<AddButton onClick={onClick}>
+		{children}
+	</AddButton>
+);
 
 export const DefaultLabel = Template.bind({});
 DefaultLabel.args = {};
