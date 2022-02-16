@@ -1,13 +1,11 @@
-import React, {useContext} from "react";
+import React, {useContext, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router-dom";
 import {AppRoutes} from "../../config/routes";
-import SaveBurgerErrorHandler from "../../errorHandlers/SaveBurgerErrorHandler";
-import useMutationErrorHandler from "../../errorHandlers/useMutationErrorHandler";
 import {CreateBurgerInput, GetBurgersDocument, GetBurgersSearchDocument, GetHuishoudensDocument, useCreateBurgerMutation} from "../../generated/graphql";
 import useToaster from "../../utils/useToaster";
-import Page from "../shared/Page";
 import BackButton from "../shared/BackButton";
+import Page from "../shared/Page";
 import BurgerForm from "./BurgerForm";
 import {BurgerSearchContext} from "./BurgerSearchContext";
 
@@ -15,7 +13,25 @@ const CreateBurger = () => {
 	const {t} = useTranslation();
 	const navigate = useNavigate();
 	const toast = useToaster();
-	const handleSaveBurgerErrors = useMutationErrorHandler(SaveBurgerErrorHandler);
+	const [isBsnValid, setBsnValid] = useState(true);
+	const handleSaveBurgerErrors = (t) => (err) => {
+		let message = err.message;
+		if (err.message.includes("already exists")) {
+			message = t("messages.burgers.alreadyExists");
+		}
+		if (err.message.includes("BSN should consist of 8 or 9 digits")) {
+			message = t("messages.burgers.bsnLengthError");
+			setBsnValid(false);
+		}
+		if (err.message.includes("BSN does not meet the 11-proef requirement")) {
+			message = t("messages.burgers.bsnElfProefError");
+			setBsnValid(false);
+		}
+
+		toast({
+			error: message,
+		});
+	};
 	const {search} = useContext(BurgerSearchContext);
 	const [createBurger, $createBurger] = useCreateBurgerMutation({
 		refetchQueries: [
@@ -26,6 +42,7 @@ const CreateBurger = () => {
 	});
 
 	const onSubmit = (burgerData: CreateBurgerInput) => {
+		setBsnValid(true);
 		createBurger({
 			variables: {
 				input: burgerData,
@@ -39,12 +56,12 @@ const CreateBurger = () => {
 			if (id) {
 				navigate(AppRoutes.Burger(id));
 			}
-		}).catch(handleSaveBurgerErrors);
+		}).catch(handleSaveBurgerErrors(t));
 	};
 
 	return (
 		<Page title={t("forms.createBurger.title")} backButton={<BackButton to={AppRoutes.Burgers()} />}>
-			<BurgerForm isLoading={$createBurger.loading} onSubmit={onSubmit} />
+			<BurgerForm isLoading={$createBurger.loading} onSubmit={onSubmit} isBsnValid={isBsnValid} />
 		</Page>
 	);
 };

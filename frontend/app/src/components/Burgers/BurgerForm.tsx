@@ -4,55 +4,61 @@ import DatePicker from "react-datepicker";
 import {useTranslation} from "react-i18next";
 import {Burger} from "../../generated/graphql";
 import d from "../../utils/dayjs";
+import useForm from "../../utils/useForm2";
 import useToaster from "../../utils/useToaster";
+import zod from "../../utils/zod";
 import BurgerValidator from "../../validators/BurgerValidator";
 import {FormLeft, FormRight} from "../shared/Forms";
 import Section from "../shared/Section";
-import useBurgerForm from "./utils/useBurgerForm";
 
 type BurgerFormProps = {
 	burger?: Burger,
 	onSubmit: Function,
 	isLoading: boolean,
+	isBsnValid?: boolean,
 }
 
-const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading}) => {
+const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading, isBsnValid = true}) => {
 	const {t} = useTranslation();
 	const isMobile = useBreakpointValue([true, null, null, false]);
 	const toast = useToaster();
 	const {bsn, voorletters, voornamen, achternaam, geboortedatum, email, huisnummer, postcode, straatnaam, plaatsnaam, telefoonnummer} = burger || {};
-	const {data, updateForm, bind, isFieldValid} = useBurgerForm({
-		bsn,
-		voorletters,
-		voornamen,
-		achternaam,
-		geboortedatum,
-		email,
-		huisnummer,
-		postcode,
-		straatnaam,
-		plaatsnaam,
-		telefoonnummer,
+
+	const [form, {updateForm, toggleSubmitted, isValid, isFieldValid}] = useForm<zod.infer<typeof BurgerValidator>>({
+		validator: BurgerValidator,
+		initialValue: {
+			bsn: bsn?.toString(),
+			voorletters,
+			voornamen,
+			achternaam,
+			geboortedatum: d(geboortedatum, "YYYY-MM-DD").format("L"),
+			email,
+			huisnummer,
+			postcode,
+			straatnaam,
+			plaatsnaam,
+			telefoonnummer,
+		},
 	});
 
 	const onSubmitForm = (e) => {
 		e.preventDefault();
+		toggleSubmitted(true);
 
-		try {
-			const validatedData = BurgerValidator.parse(data);
+		if (isValid()) {
 			onSubmit(({
-				...validatedData,
-				...burger?.id && {id: burger.id},
-				bsn: Number(data.bsn),
-				geboortedatum: d(data.geboortedatum, "L").format("YYYY-MM-DD"),
+				...form,
+				...burger?.id && {id: burger?.id},
+				bsn: Number(form.bsn),
+				geboortedatum: d(form.geboortedatum, "L").format("YYYY-MM-DD"),
 			}));
+			return;
 		}
-		catch (err) {
-			toast.closeAll();
-			toast({
-				error: t("messages.formInputError"),
-			});
-		}
+
+		toast.closeAll();
+		toast({
+			error: t("messages.formInputError"),
+		});
 	};
 
 	return (
@@ -62,10 +68,10 @@ const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading}) =>
 					<FormLeft title={t("forms.burgers.sections.personal.title")} helperText={t("forms.burgers.sections.personal.helperText")} />
 					<FormRight>
 						<Stack spacing={2} direction={["column", "row"]}>
-							<FormControl id={"bsn"} isInvalid={!isFieldValid("bsn")} isRequired={true}>
+							<FormControl id={"bsn"} isInvalid={!isFieldValid("bsn") || !isBsnValid} isRequired={true}>
 								<Stack spacing={1} flex={1}>
 									<FormLabel>{t("forms.burgers.fields.bsn")}</FormLabel>
-									<Input onChange={bind("bsn")} value={data.bsn || ""} />
+									<Input onChange={e => updateForm("bsn", e.target.value)} value={form.bsn || ""} />
 									<FormErrorMessage>{t("messages.burgers.invalidBsn")}</FormErrorMessage>
 								</Stack>
 							</FormControl>
@@ -74,21 +80,21 @@ const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading}) =>
 							<FormControl id={"voorletters"} isInvalid={!isFieldValid("voorletters")} isRequired={true}>
 								<Stack spacing={1} flex={1}>
 									<FormLabel>{t("forms.burgers.fields.voorletters")}</FormLabel>
-									<Input onChange={bind("voorletters")} value={data.voorletters || ""} />
+									<Input onChange={e => updateForm("voorletters", e.target.value)} value={form.voorletters || ""} />
 									<FormErrorMessage>{t("messages.burgers.invalidVoorletters")}</FormErrorMessage>
 								</Stack>
 							</FormControl>
 							<FormControl id={"voornamen"} isInvalid={!isFieldValid("voornamen")} isRequired={true}>
 								<Stack spacing={1} flex={3}>
 									<FormLabel>{t("forms.burgers.fields.voornamen")}</FormLabel>
-									<Input onChange={bind("voornamen")} value={data.voornamen || ""} />
+									<Input onChange={e => updateForm("voornamen", e.target.value)} value={form.voornamen || ""} />
 									<FormErrorMessage>{t("messages.burgers.invalidVoornamen")}</FormErrorMessage>
 								</Stack>
 							</FormControl>
 							<FormControl id={"achternaam"} isInvalid={!isFieldValid("achternaam")} isRequired={true}>
 								<Stack spacing={1} flex={3}>
 									<FormLabel>{t("forms.burgers.fields.achternaam")}</FormLabel>
-									<Input onChange={bind("achternaam")} value={data.achternaam || ""} />
+									<Input onChange={e => updateForm("achternaam", e.target.value)} value={form.achternaam || ""} />
 									<FormErrorMessage>{t("messages.burgers.invalidAchternaam")}</FormErrorMessage>
 								</Stack>
 							</FormControl>
@@ -96,7 +102,7 @@ const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading}) =>
 						<FormControl id={"geboortedatum"} isInvalid={!isFieldValid("geboortedatum")} isRequired={true}>
 							<Stack spacing={1}>
 								<FormLabel>{t("forms.burgers.fields.geboortedatum")}</FormLabel>
-								<DatePicker selected={d(data.geboortedatum, "L").isValid() ? d(data.geboortedatum, "L").toDate() : null} dateFormat={"dd-MM-yyyy"} onChange={(value: Date) => {
+								<DatePicker selected={d(form.geboortedatum, "L").isValid() ? d(form.geboortedatum, "L").toDate() : null} dateFormat={"dd-MM-yyyy"} onChange={(value: Date) => {
 									if (value) {
 										updateForm("geboortedatum", d(value).format("L"));
 									}
@@ -114,14 +120,14 @@ const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading}) =>
 							<FormControl id={"straatnaam"} isInvalid={!isFieldValid("straatnaam")} isRequired={true}>
 								<Stack spacing={1} flex={2}>
 									<FormLabel>{t("forms.burgers.fields.straatnaam")}</FormLabel>
-									<Input onChange={bind("straatnaam")} value={data.straatnaam || ""} />
+									<Input onChange={e => updateForm("straatnaam", e.target.value)} value={form.straatnaam || ""} />
 									<FormErrorMessage>{t("messages.burgers.invalidStraatnaam")}</FormErrorMessage>
 								</Stack>
 							</FormControl>
 							<FormControl id={"huisnummer"} isInvalid={!isFieldValid("huisnummer")} isRequired={true}>
 								<Stack spacing={1} flex={1}>
 									<FormLabel>{t("forms.burgers.fields.huisnummer")}</FormLabel>
-									<Input onChange={bind("huisnummer")} value={data.huisnummer || ""} />
+									<Input onChange={e => updateForm("huisnummer", e.target.value)} value={form.huisnummer || ""} />
 									<FormErrorMessage>{t("messages.burgers.invalidHuisnummer")}</FormErrorMessage>
 								</Stack>
 							</FormControl>
@@ -131,7 +137,7 @@ const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading}) =>
 								<Stack spacing={1} flex={1}>
 									<FormLabel>{t("forms.burgers.fields.postcode")}</FormLabel>
 									<Tooltip label={t("forms.burgers.tooltips.postcode")} aria-label={t("forms.burgers.fields.postcode")} placement={isMobile ? "top" : "left"}>
-										<Input onChange={bind("postcode")} value={data.postcode || ""} />
+										<Input onChange={e => updateForm("postcode", e.target.value)} value={form.postcode || ""} />
 									</Tooltip>
 									<FormErrorMessage>{t("messages.burgers.invalidPostcode")}</FormErrorMessage>
 								</Stack>
@@ -139,7 +145,7 @@ const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading}) =>
 							<FormControl id={"plaatsnaam"} isInvalid={!isFieldValid("plaatsnaam")} isRequired={true}>
 								<Stack spacing={1} flex={2}>
 									<FormLabel>{t("forms.burgers.fields.plaatsnaam")}</FormLabel>
-									<Input onChange={bind("plaatsnaam")} value={data.plaatsnaam || ""} />
+									<Input onChange={e => updateForm("plaatsnaam", e.target.value)} value={form.plaatsnaam || ""} />
 									<FormErrorMessage>{t("messages.burgers.invalidPlaatsnaam")}</FormErrorMessage>
 								</Stack>
 							</FormControl>
@@ -148,7 +154,7 @@ const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading}) =>
 							<Stack spacing={1}>
 								<FormLabel>{t("forms.burgers.fields.telefoonnummer")}</FormLabel>
 								<Tooltip label={t("forms.burgers.tooltips.telefoonnummer")} aria-label={t("forms.burgers.tooltips.telefoonnummer")} placement={isMobile ? "top" : "left"}>
-									<Input onChange={bind("telefoonnummer")} value={data.telefoonnummer || ""} />
+									<Input onChange={e => updateForm("telefoonnummer", e.target.value)} value={form.telefoonnummer || ""} />
 								</Tooltip>
 								<FormErrorMessage>{t("messages.burgers.invalidTelefoonnummer")}</FormErrorMessage>
 							</Stack>
@@ -156,7 +162,7 @@ const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading}) =>
 						<FormControl id={"mail"} isInvalid={!isFieldValid("email")} isRequired={true}>
 							<Stack spacing={1}>
 								<FormLabel>{t("forms.burgers.fields.mail")}</FormLabel>
-								<Input onChange={bind("email")} value={data.email || ""} />
+								<Input onChange={e => updateForm("email", e.target.value)} value={form.email || ""} />
 								<FormErrorMessage>{t("messages.burgers.invalidEmail")}</FormErrorMessage>
 							</Stack>
 						</FormControl>
