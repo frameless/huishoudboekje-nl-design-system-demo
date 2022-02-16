@@ -1,42 +1,42 @@
 import {Box, Button, FormControl, FormErrorMessage, FormLabel, Input, Stack} from "@chakra-ui/react";
-import React, {useState} from "react";
+import React from "react";
 import {useTranslation} from "react-i18next";
 import {CreateAfdelingInput, Organisatie} from "../../generated/graphql";
+import useForm from "../../utils/useForm2";
 import useToaster from "../../utils/useToaster";
-import AfdelingValidator from "../../validators/AfdelingValidator";
+import zod from "../../utils/zod";
+
+const validator = zod.object({
+	naam: zod.string().nonempty(),
+});
 
 type AfdelingFormProps = {
 	organisatie: Organisatie,
 	onChange: (values) => void,
-	values?: CreateAfdelingInput,
+	values?: Partial<CreateAfdelingInput>,
 };
 
 const AfdelingForm: React.FC<AfdelingFormProps> = ({values, organisatie, onChange}) => {
 	const toast = useToaster();
 	const {t} = useTranslation();
-	const [data, setData] = useState(values || {} as CreateAfdelingInput);
-
-	const isValid = (fieldName: string) => AfdelingValidator.shape[fieldName]?.safeParse(data[fieldName]).success;
-	const updateForm = (field: string, value: any) => {
-		setData(prevData => ({
-			...prevData,
-			[field]: value,
-		}));
-	};
+	const [form, {updateForm, toggleSubmitted, isFieldValid, isValid}] = useForm<zod.infer<typeof validator>>({
+		validator,
+		initialValue: values,
+	});
 
 	const onSubmit = (e) => {
 		e.preventDefault();
+		toggleSubmitted(true);
 
-		try {
-			const validatedData = AfdelingValidator.parse(data);
+		if (isValid()) {
 			onChange({
-				...validatedData,
+				...form,
 				organisatieId: organisatie.id,
 			});
+			return;
 		}
-		catch (err) {
-			toast({error: t("global.formError"), title: t("messages.genericError.title")});
-		}
+
+		toast({error: t("global.formError"), title: t("messages.genericError.title")});
 	};
 
 	return (
@@ -44,14 +44,14 @@ const AfdelingForm: React.FC<AfdelingFormProps> = ({values, organisatie, onChang
 			<Stack spacing={5}>
 
 				<Stack>
-					<FormControl flex={1} isInvalid={!isValid("naam")} isRequired={true}>
+					<FormControl flex={1} isInvalid={!isFieldValid("naam")} isRequired={true}>
 						<FormLabel>{t("forms.createAfdeling.naam")}</FormLabel>
-						<Input value={data.naam || ""} onChange={e => updateForm("naam", e.target.value)} />
+						<Input value={form.naam || ""} onChange={e => updateForm("naam", e.target.value)} />
 						<FormErrorMessage>{t("afspraakDetailView.invalidNaamError")}</FormErrorMessage>
 					</FormControl>
 				</Stack>
 
-				<Box>
+				<Box align={"right"}>
 					<Button type={"submit"} colorScheme={"primary"}>{t("global.actions.save")}</Button>
 				</Box>
 
