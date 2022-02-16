@@ -1,10 +1,11 @@
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider      = "postgresql"
+  url           = env("DATABASE_URL")
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl", "linux-arm64-openssl-1.1.x"]
 }
 
 model Alarm {

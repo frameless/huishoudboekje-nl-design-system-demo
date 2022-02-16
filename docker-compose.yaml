@@ -130,32 +130,24 @@ services:
         psql -h db -U postgres -c "CREATE DATABASE grootboekservice" || true &&
         psql -h db -U postgres -c "CREATE DATABASE logservice" || true &&
         psql -h db -U postgres -c "CREATE DATABASE postadressenservice" || true &&
-        psql -h db -U postgres -c "CREATE DATABASE alarmenservice" || true
+        psql -h db -U postgres -c "CREATE DATABASE alarmenservice" || true &&
+        psql -h db -U postgres -c "CREATE DATABASE signalenservice" || true
     profiles:
       - db
     depends_on:
       - db
 
-  # Database teardown
-  db-teardown:
-    image: postgres:13-alpine
-    command:
-      - /bin/sh
-      - -c
-      - >-
-        export PGPASSWORD=postgres &&
-        psql -h db -U postgres -c "drop database IF EXISTS huishoudboekjeservice" &&
-        psql -h db -U postgres -c "drop database IF EXISTS organisatieservice" &&
-        psql -h db -U postgres -c "drop database IF EXISTS banktransactieservice" &&
-        psql -h db -U postgres -c "drop database IF EXISTS grootboekservice" &&
-        psql -h db -U postgres -c "drop database IF EXISTS logservice" &&
-        psql -h db -U postgres -c "drop database IF EXISTS postadressenservice" &&
-        psql -h db -U postgres -c "drop database IF EXISTS alarmenservice" &&
-        psql -h db -U postgres -c "drop role IF EXISTS hhb"
+  sampledata:
+    build:
+      dockerfile: ./sampleData/dev.Dockerfile
+      context: .
+    container_name: sampledata
+    environment:
+      GRAPHQL_API_URL: http://backend:8000/graphql
+    volumes:
+      - ./sampleData:/app
     profiles:
-      - db
-    depends_on:
-      - db
+      - sampledata
 
   backend:
     <<: *x-backend
@@ -188,7 +180,7 @@ services:
     environment:
       HUISHOUDBOEKJESERVICE_URL: "http://huishoudboekjeservice:8000"
     ports:
-      - 9000:8080
+      - 5001:8080
 
   backend-burgers-test:
     <<: *x-backend-burgers
@@ -206,6 +198,8 @@ services:
       HHB_DATABASE_URL: "postgresql://hhb:hhb@db/huishoudboekjeservice"
     ports:
       - 8001:8000
+    depends_on:
+      - db
 
   huishoudboekjeservice-test:
     <<: *x-huishoudboekjeservice
@@ -218,6 +212,8 @@ services:
       ORGANISATIE_DATABASE_URL: "postgresql://hhb:hhb@db/organisatieservice"
     ports:
       - 8002:8000
+    depends_on:
+      - db
 
   organisatieservice-test:
     <<: *x-organisatieservice
@@ -230,6 +226,8 @@ services:
       TRANSACTIE_DATABASE_URL: "postgresql://hhb:hhb@db/banktransactieservice"
     ports:
       - 8003:8000
+    depends_on:
+      - db
 
   banktransactieservice-test:
     <<: *x-banktransactieservice
@@ -242,6 +240,8 @@ services:
       GROOTBOEK_DATABASE_URL: "postgresql://hhb:hhb@db/grootboekservice"
     ports:
       - 8004:8000
+    depends_on:
+      - db
 
   grootboekservice-test:
     <<: *x-organisatieservice
@@ -254,6 +254,8 @@ services:
       LOG_DATABASE_URL: "postgresql://hhb:hhb@db/logservice"
     ports:
       - 8005:8000
+    depends_on:
+      - db
 
   logservice-test:
     <<: *x-logservice
@@ -265,22 +267,28 @@ services:
     <<: *x-postadressenservice
     container_name: postadressenservice
     environment:
-      DATABASE_URL: "postgresql://hhb:hhb@db/postadressenservice"
+      DATABASE_URL: "postgresql://hhb:hhb@db/postadressenservice?connect_timeout=300"
     ports:
       - 8007:8080
+    depends_on:
+      - db
 
   alarmenservice:
     <<: *x-alarmenservice
     container_name: alarmenservice
     environment:
-      DATABASE_URL: "postgresql://hhb:hhb@db/alarmenservice"
+      DATABASE_URL: "postgresql://hhb:hhb@db/alarmenservice?connect_timeout=300"
     ports:
       - 8008:8080
+    depends_on:
+      - db
 
   signalenservice:
     <<: *x-signalenservice
     container_name: signalenservice
     environment:
-      DATABASE_URL: "postgresql://hhb:hhb@db/signalenservice"
+      DATABASE_URL: "postgresql://hhb:hhb@db/signalenservice?connect_timeout=300"
     ports:
       - 8009:8080
+    depends_on:
+      - db

@@ -27,7 +27,7 @@ All data for our own services is stored in a single PostgreSQL server.
 Every service receives its own user and database to keep the data separated. \
 The credentials are stored in secrets and can be mounted to build the connection.
 
-The data models are managed using Alembic migration scripts that are executed using init containers.
+The data models are managed using Alembic and Prisma migration scripts and that are executed using init containers.
 
 ## Development
 
@@ -43,6 +43,7 @@ For the backend, there are a few different ways you can set up your local backen
   see [frontend/app/README.md](./frontend/app/README.md)
 - Run `docker-compose --profile tests up` to run all tests.
 - Run `docker-compose huishoudboekjeservice-test up` to run only tests for the huishoudboekjeservice. You can put any service here.
+- Run `docker-compose up sampledata` to insert a small dataset into your system. Make sure you have all your services, a database and the backend running.
 
 ### Manual local setup (MacOS and Unix)
 
