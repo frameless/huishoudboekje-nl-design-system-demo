@@ -678,7 +678,7 @@
   },
   "postadressen": "Postadressen",
   "rekeningen": "Rekeningen",
-  "deleteAfspraakModal": {
+  "deleteAfspraakAlert": {
     "title": "Afdeling verwijderen",
     "confirmModalBody": "Weet je zeker dat je de afdeling {{afdeling}} wil verwijderen?"
   },
