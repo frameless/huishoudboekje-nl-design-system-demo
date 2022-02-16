@@ -8,8 +8,20 @@ export default {
 	title: "Huishoudboekje/DataItem",
 	component: DataItem,
 	argTypes: {
-		children: {},
-		label: {},
+		children: {
+			type: {
+				name: "string",
+				required: true,
+			},
+			description: "Shows information from the burger",
+		},
+		label: {
+			type: {
+				name: "string",
+				required: false
+			},
+			description: "This is provides information on what information you get from the children",
+		},
 	},
 	args: {},
 } as ComponentMeta<typeof DataItem>;

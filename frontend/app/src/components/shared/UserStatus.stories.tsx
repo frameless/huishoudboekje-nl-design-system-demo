@@ -6,7 +6,13 @@ export default {
 	title: "Huishoudboekje/UserStatus",
 	component: UserStatus,
 	argTypes: {
-		name: {},
+		name: {
+			type: {
+				name: "string",
+				required: false,
+			},
+			description: "This will provide the e-mail of the user.",
+		},
 	},
 } as ComponentMeta<typeof UserStatus>;
 

@@ -12,7 +12,15 @@ export default {
 				name: "string",
 				required: false,
 			},
+			description: "This is de message that is shown on the page.",
 		},
+		children: {
+			type: {
+				name: "other",
+				required: false,
+			},
+			description: "Here you can add extra components for example an AddButton",
+		}
 	},
 } as ComponentMeta<typeof DeadEndPage>;
 

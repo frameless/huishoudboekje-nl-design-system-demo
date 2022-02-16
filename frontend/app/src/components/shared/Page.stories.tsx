@@ -9,11 +9,34 @@ export default {
 	title: "Huishoudboekje/Page",
 	component: Page,
 	argTypes: {
-		title: {},
-		backButton: {},
-		menu: {},
-		right: {},
-		children: {},
+		title: {
+			type: {
+				name: "string",
+				required: false,
+			},
+			description: "This is the title of the page.",
+		},
+		backButton: {
+			type: {
+				name: "string",
+				required: false,
+			},
+			description: "With this button you can go one page back(depending on your function).",
+		},
+		menu: {
+			type: {
+				name: "string",
+				required: false,
+			},
+			description: "This will show an meny with extra options.",
+		},
+		right: {
+			type: {
+				name: "string",
+				required: false,
+			},
+			description: "Here you can place anythink you would like to display on the right",
+		},
 	},
 } as ComponentMeta<typeof Page>;
 
