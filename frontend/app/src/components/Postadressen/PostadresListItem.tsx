@@ -55,7 +55,7 @@ const PostadresListItem: React.FC<PostadresListItemProps> = ({postadres, onDelet
 				title={t("messages.postadressen.deleteTitle")}
 				cancelButton={true}
 				confirmButton={
-					<Button colorScheme="red" onClick={onConfirmDelete} ml={3}>
+					<Button colorScheme={"red"} onClick={onConfirmDelete} ml={3}>
 						{t("global.actions.delete")}
 					</Button>
 				}

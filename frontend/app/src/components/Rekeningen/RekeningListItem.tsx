@@ -74,7 +74,7 @@ const RekeningListItem: React.FC<RekeningListItemProps> = ({rekening, onDelete})
 				title={t("messages.rekeningen.deleteTitle")}
 				cancelButton={true}
 				confirmButton={
-					<Button colorScheme="red" onClick={onConfirmDeleteDialog} ml={3}>
+					<Button colorScheme={"red"} onClick={onConfirmDeleteDialog} ml={3}>
 						{t("global.actions.delete")}
 					</Button>
 				}

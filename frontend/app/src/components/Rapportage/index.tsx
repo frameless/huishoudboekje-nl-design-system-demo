@@ -31,8 +31,8 @@ import Transaction from "../../models/Transaction";
 import d from "../../utils/dayjs";
 import Queryable from "../../utils/Queryable";
 import {formatBurgerName, humanJoin, useReactSelectStyles} from "../../utils/things";
-import Page from "../shared/Page";
 import RadioButtonGroup from "../Layouts/RadioButtons/RadioButtonGroup";
+import Page from "../shared/Page";
 import Section from "../shared/Section";
 import {Granularity} from "./Aggregator";
 import BalanceTable from "./BalanceTable";
@@ -82,12 +82,11 @@ const Rapportage = () => {
 				const selectedBurgers = burgers.filter(b => filterBurgerIds.includes(b.id!));
 
 				return (
-					<Page title={t("reports.title")}
-						position={"relative"} right={!$data.loading && (
-							<Box>
-								<Button size={"sm"} variant={"outline"} colorScheme={"primary"} onClick={() => filterModal.onOpen()}>{t("sections.filterOptions.title")}</Button>
-							</Box>
-						)}>
+					<Page title={t("reports.title")} right={!$data.loading && (
+						<Box>
+							<Button size={"sm"} variant={"outline"} colorScheme={"primary"} onClick={() => filterModal.onOpen()}>{t("sections.filterOptions.title")}</Button>
+						</Box>
+					)}>
 						<Modal isOpen={filterModal.isOpen} onClose={filterModal.onClose}>
 							<ModalOverlay />
 							<ModalContent width={"100%"} maxWidth={500}>

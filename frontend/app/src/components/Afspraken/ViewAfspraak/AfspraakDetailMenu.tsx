@@ -84,7 +84,7 @@ const AfspraakDetailMenu: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 		{endModal.isOpen && <AfspraakEndModal onSubmit={onSubmitEndAfspraak} onClose={endModal.onClose} />}
 
 		<Menu>
-			<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} data-cy={"actionsMenuButton"} />
+			<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} />
 			<MenuList>
 				<NavLink to={AppRoutes.EditAfspraak(afspraak.id)}><MenuItem>{t("global.actions.edit")}</MenuItem></NavLink>
 				<MenuItem onClick={endModal.onOpen}>{t("global.actions.end")}</MenuItem>

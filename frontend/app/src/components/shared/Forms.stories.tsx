@@ -32,7 +32,7 @@ export const Gebeurtenissen = () => {
 				<Stack spacing={2} direction={["column", "row"]}>
 					<FormControl id={"bsn"} isRequired={true}>
 						<Stack spacing={1} flex={1}>
-							<FormLabel>{"Burgerservicenummer"}</FormLabel>
+							<FormLabel>Burgerservicenummer</FormLabel>
 							<Input />
 						</Stack>
 					</FormControl>

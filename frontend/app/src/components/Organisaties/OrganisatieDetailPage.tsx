@@ -81,7 +81,7 @@ const OrganisatieDetailPage = () => {
 				<Page title={truncateText(organisatie.naam || "", maxOrganisatieNaamLength)} backButton={<BackButton to={AppRoutes.Organisaties} />}
 					menu={(
 						<Menu>
-							<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label="Open menu" />
+							<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} />
 							<MenuList>
 								<MenuItem onClick={onClickEdit}>{t("global.actions.edit")}</MenuItem>
 								<MenuItem onClick={onClickDelete}>{t("global.actions.delete")}</MenuItem>
@@ -96,7 +96,7 @@ const OrganisatieDetailPage = () => {
 							title={t("messages.organisaties.deleteTitle")}
 							cancelButton={true}
 							confirmButton={(
-								<Button isLoading={deleteLoading} colorScheme="red" onClick={onConfirmDeleteDialog} ml={3}>
+								<Button isLoading={deleteLoading} colorScheme={"red"} onClick={onConfirmDeleteDialog} ml={3}>
 									{t("global.actions.delete")}
 								</Button>
 							)}
@@ -114,7 +114,7 @@ const OrganisatieDetailPage = () => {
 					<Grid maxWidth={"100%"} gridTemplateColumns={["repeat(1, 1fr)", "repeat(2, 1fr)", "repeat(3, 1fr)"]} gap={5}>
 						<Box>
 							<Button colorScheme={"primary"} borderStyle={"dashed"} variant={"outline"} leftIcon={<AddIcon />}
-								w="100%" h="100%" onClick={() => addAfdelingModal.onOpen()} borderRadius={5}
+								w={"100%"} h={"100%"} onClick={() => addAfdelingModal.onOpen()} borderRadius={5}
 								p={5}>{t("global.actions.add")}</Button>
 						</Box>
 

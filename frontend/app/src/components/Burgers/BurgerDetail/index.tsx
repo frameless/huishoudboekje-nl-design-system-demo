@@ -75,7 +75,7 @@ const BurgerDetailPage = () => {
 						cancelButton={true}
 						onClose={() => deleteAlert.onClose()}
 						confirmButton={(
-							<Button isLoading={$deleteBurger.loading} colorScheme="red" onClick={onConfirmDelete} ml={3}>
+							<Button isLoading={$deleteBurger.loading} colorScheme={"red"} onClick={onConfirmDelete} ml={3}>
 								{t("global.actions.delete")}
 							</Button>
 						)}
