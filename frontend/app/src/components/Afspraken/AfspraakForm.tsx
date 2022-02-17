@@ -4,7 +4,7 @@ import {useTranslation} from "react-i18next";
 import Select from "react-select";
 import {Afdeling, Organisatie, Postadres, Rekening, UpdateAfspraakInput} from "../../generated/graphql";
 import {useReactSelectStyles} from "../../utils/things";
-import useForm from "../../utils/useForm2";
+import useForm from "../../utils/useForm";
 import useSelectProps from "../../utils/useSelectProps";
 import useToaster from "../../utils/useToaster";
 import zod from "../../utils/zod";
@@ -266,7 +266,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 								<FormLabel>{t("afspraken.tegenrekening")}</FormLabel>
 								<Select
 									{...defaultProps}
-									id="tegenrekening"
+									id={"tegenrekening"}
 									components={components.ReverseMultiLine}
 									noOptionsMessage={() => t("forms.afspraken.select.noRekeningenOptionsMessage")}
 									options={rekeningOptions}
@@ -285,7 +285,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 								<FormLabel>{t("afspraken.tegenrekening")}</FormLabel>
 								<Select
 									{...defaultProps}
-									id="tegenrekening"
+									id={"tegenrekening"}
 									components={components.ReverseMultiLine}
 									noOptionsMessage={() => t("forms.afspraken.select.noRekeningenOptionsMessage")}
 									options={rekeningOptions}
@@ -325,7 +325,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 							<Stack direction={["column", "row"]}>
 								<FormControl flex={1} isInvalid={!isFieldValid("rubriekId")} isRequired>
 									<FormLabel>{t("afspraken.rubriek")}</FormLabel>
-									<Select id="rubriek" isClearable={true} noOptionsMessage={() => t("forms.afspraken.fields.rubriekChoose")} placeholder={t("select.placeholder")} maxMenuHeight={350}
+									<Select id={"rubriek"} isClearable={true} noOptionsMessage={() => t("forms.afspraken.fields.rubriekChoose")} placeholder={t("select.placeholder")} maxMenuHeight={350}
 										options={rubriekOptions} value={form.rubriekId ? rubriekOptions.find(r => r.value === form.rubriekId) : null}
 										onChange={(result) => updateForm("rubriekId", result?.value)} styles={isFieldValid("rubriekId") ? reactSelectStyles.default : reactSelectStyles.error} />
 									<FormErrorMessage>{t("afspraakDetailView.invalidRubriekError")}</FormErrorMessage>

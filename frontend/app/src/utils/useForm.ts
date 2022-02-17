@@ -1,18 +1,47 @@
 import {Dispatch, SetStateAction, useState} from "react";
+import {ZodSchema} from "zod";
 
-export type UseFormMethods<K extends keyof any = string, T = any> = {
-	setForm: Dispatch<SetStateAction<Record<K, T>>>,
-	updateForm: (field: K, value: T, callback?: (data) => Record<K, T>) => void,
+export type FormData = Record<string, any>;
+
+export type UseFormResult<T extends FormData> = [T | Partial<T>, {
+	setForm: Dispatch<SetStateAction<T | Partial<T>>>,
+	updateForm: (field: keyof T, value: any, callback?: (data) => T) => void,
 	reset: VoidFunction,
 	isSubmitted: boolean,
-	toggleSubmitted: Dispatch<SetStateAction<boolean>>
+	toggleSubmitted: Dispatch<SetStateAction<boolean>>,
+	isFieldValid: (field: string) => boolean,
+	isValid: () => boolean,
+}];
+
+interface UseFormParams<T extends FormData> {
+	initialValue?: T | Partial<T>;
+	validator?: ZodSchema<T | Partial<T>>;
 }
 
-const useForm = <K extends keyof any = string, T = any>(initialValue: Record<K, T>): [Record<K, T>, UseFormMethods<K, T>] => {
-	const [form, setForm] = useState<Record<K, T>>(initialValue);
+const useForm = <T extends FormData>({initialValue = {}, validator}: UseFormParams<T>): UseFormResult<T> => {
+	const [form, setForm] = useState<T | Partial<T>>(initialValue);
 	const [isSubmitted, toggleSubmitted] = useState<boolean>(false);
+	const isFieldValid = (field: string) => {
+		if (!validator) {
+			return true;
+		}
 
-	const updateForm = (field: K, value: T, callback?: (data) => Record<K, T>) => {
+		const parsed = validator.safeParse(form);
+		if (!isSubmitted) {
+			return true;
+		}
+
+		return parsed.success || !parsed.error.issues.find(issue => issue.path?.[0] === field);
+	};
+	const isValid = () => {
+		if (!validator) {
+			return true;
+		}
+
+		return validator.safeParse(form).success;
+	};
+
+	const updateForm = (field: keyof T, value: T, callback?: (data) => T) => {
 		setForm(prevData => {
 			let newData = {
 				...prevData,
@@ -29,15 +58,23 @@ const useForm = <K extends keyof any = string, T = any>(initialValue: Record<K, 
 		});
 	};
 
-	const reset = () => setForm({} as Record<K, T>);
+	const reset = () => {
+		setForm(initialValue);
+		toggleSubmitted(false);
+	};
 
-	return [form, {
-		setForm,
-		updateForm,
-		reset,
-		isSubmitted,
-		toggleSubmitted,
-	}];
+	return [
+		form,
+		{
+			setForm,
+			updateForm,
+			reset,
+			isSubmitted,
+			toggleSubmitted,
+			isFieldValid,
+			isValid,
+		},
+	];
 };
 
 export default useForm;

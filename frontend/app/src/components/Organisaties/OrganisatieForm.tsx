@@ -3,7 +3,7 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {Organisatie} from "../../generated/graphql";
 import {Regex} from "../../utils/things";
-import useForm from "../../utils/useForm2";
+import useForm from "../../utils/useForm";
 import useToaster from "../../utils/useToaster";
 import zod from "../../utils/zod";
 import {FormLeft, FormRight} from "../shared/Forms";

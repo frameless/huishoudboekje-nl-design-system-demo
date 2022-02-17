@@ -7,7 +7,7 @@ import {Afspraak, Betaalinstructie, BetaalinstructieInput, DayOfWeek} from "../.
 import {RepeatType} from "../../../models/models";
 import d from "../../../utils/dayjs";
 import {useReactSelectStyles} from "../../../utils/things";
-import useForm from "../../../utils/useForm2";
+import useForm from "../../../utils/useForm";
 import useToaster from "../../../utils/useToaster";
 import zod from "../../../utils/zod";
 import {FormLeft, FormRight} from "../../shared/Forms";
@@ -133,8 +133,8 @@ const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({
 									});
 								}}>
 									<Stack>
-										<Radio value="eenmalig">{t("schedule.eenmalig")}</Radio>
-										<Radio value="periodiek">{t("schedule.periodiek")}</Radio>
+										<Radio value={"eenmalig"}>{t("schedule.eenmalig")}</Radio>
+										<Radio value={"periodiek"}>{t("schedule.periodiek")}</Radio>
 									</Stack>
 								</RadioGroup>
 								<FormErrorMessage>{t("afspraakBetaalinstructie.invalidPeriodiekError")}</FormErrorMessage>
@@ -160,7 +160,7 @@ const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({
 												}));
 											}
 										}}
-										customInput={<Input type="text" />}
+										customInput={<Input type={"text"} />}
 									/>
 									<FormErrorMessage>{t("afspraakBetaalinstructie.invalidDateError")}</FormErrorMessage>
 								</FormControl>
@@ -176,7 +176,7 @@ const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({
 										dateFormat={"dd-MM-yyyy"}
 										selected={form.startDate}
 										onChange={(value: Date) => updateForm("startDate", value)}
-										customInput={<Input type="text" />}
+										customInput={<Input type={"text"} />}
 										isClearable={true}
 									/>
 									<FormErrorMessage>{t("afspraakBetaalinstructie.invalidDateError")}</FormErrorMessage>
@@ -188,7 +188,7 @@ const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({
 										dateFormat={"dd-MM-yyyy"}
 										selected={form.endDate ? d(form.endDate).endOf("day").toDate() : null}
 										onChange={(value: Date) => updateForm("endDate", value)}
-										customInput={<Input type="text" />}
+										customInput={<Input type={"text"} />}
 										isClearable={true}
 									/>
 									<FormErrorMessage>{t("afspraakBetaalinstructie.invalidDateError")}</FormErrorMessage>

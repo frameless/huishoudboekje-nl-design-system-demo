@@ -4,7 +4,7 @@ import DatePicker from "react-datepicker";
 import {useTranslation} from "react-i18next";
 import {Burger} from "../../generated/graphql";
 import d from "../../utils/dayjs";
-import useForm from "../../utils/useForm2";
+import useForm from "../../utils/useForm";
 import useToaster from "../../utils/useToaster";
 import zod from "../../utils/zod";
 import BurgerValidator from "../../validators/BurgerValidator";

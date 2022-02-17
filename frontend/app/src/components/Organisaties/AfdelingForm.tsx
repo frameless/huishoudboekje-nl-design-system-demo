@@ -2,7 +2,7 @@ import {Box, Button, FormControl, FormErrorMessage, FormLabel, Input, Stack} fro
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {CreateAfdelingInput, Organisatie} from "../../generated/graphql";
-import useForm from "../../utils/useForm2";
+import useForm from "../../utils/useForm";
 import useToaster from "../../utils/useToaster";
 import zod from "../../utils/zod";
 
