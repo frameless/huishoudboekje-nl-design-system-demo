@@ -40,7 +40,7 @@ const Saldo: React.FC<BoxProps & {transactions: BankTransaction[]}> = ({transact
 		<FormLeft title={t("charts.saldo.title")} helperText={t("charts.saldo.helperText")} />
 		<ChakraChart
 			height={"500px"}
-			chartType="AreaChart"
+			chartType={"AreaChart"}
 			loader={<Spinner />}
 			data={data}
 			options={{
@@ -51,8 +51,6 @@ const Saldo: React.FC<BoxProps & {transactions: BankTransaction[]}> = ({transact
 				pointSize: 5,
 				// onLoad: console.log
 			}}
-			// For tests
-			rootProps={{"data-testid": "1"}}
 			{...chartProps}
 		/>
 	</>);

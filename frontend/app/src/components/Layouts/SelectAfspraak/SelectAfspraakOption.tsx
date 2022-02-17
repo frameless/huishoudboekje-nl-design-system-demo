@@ -30,7 +30,7 @@ const SelectAfspraakOption: React.FC<SelectAfspraakOptionProps> = ({afspraak, is
 			<Td>
 				{isSuggestion && (
 					<Tag colorScheme={"green"} size={"sm"} variant={"subtle"}>
-						<TagLeftIcon boxSize="12px" as={CheckIcon} />
+						<TagLeftIcon boxSize={"12px"} as={CheckIcon} />
 						<TagLabel>{t("suggestion")}</TagLabel>
 					</Tag>
 				)}

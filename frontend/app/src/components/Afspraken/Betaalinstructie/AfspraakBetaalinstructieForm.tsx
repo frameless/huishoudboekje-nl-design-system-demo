@@ -3,7 +3,7 @@ import React, {useState} from "react";
 import DatePicker from "react-datepicker";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
-import {Afspraak, Betaalinstructie, BetaalinstructieInput, DayOfWeek} from "../../../generated/graphql";
+import {Afspraak, BetaalinstructieInput, DayOfWeek} from "../../../generated/graphql";
 import {RepeatType} from "../../../models/models";
 import d from "../../../utils/dayjs";
 import {useReactSelectStyles} from "../../../utils/things";
@@ -15,11 +15,10 @@ import Section from "../../shared/Section";
 
 type AfspraakBetaalinstructieProps = {
 	afspraak: Afspraak,
-	values?: Betaalinstructie,
 	onChange: (data: BetaalinstructieInput) => void,
 }
 
-const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({afspraak, values, onChange}) => {
+const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({afspraak, onChange}) => {
 	const {id} = afspraak;
 	const {t} = useTranslation();
 	const reactSelectStyles = useReactSelectStyles();
@@ -80,8 +79,8 @@ const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({
 									reset();
 								}} value={isPeriodiek ? "periodiek" : "eenmalig"}>
 									<Stack>
-										<Radio value="eenmalig">{t("schedule.eenmalig")}</Radio>
-										<Radio value="periodiek">{t("schedule.periodiek")}</Radio>
+										<Radio value={"eenmalig"}>{t("schedule.eenmalig")}</Radio>
+										<Radio value={"periodiek"}>{t("schedule.periodiek")}</Radio>
 									</Stack>
 								</RadioGroup>
 								<FormErrorMessage>{t("afspraakBetaalinstructie.invalidPeriodiekError")}</FormErrorMessage>
@@ -103,7 +102,7 @@ const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({
 													endDate: d(value).format("YYYY-MM-DD"),
 												}));
 											}
-										}} customInput={<Input type="text" />} />
+										}} customInput={<Input type={"text"} />} />
 									<FormErrorMessage>{t("afspraakBetaalinstructie.invalidDateError")}</FormErrorMessage>
 								</FormControl>
 							</Stack>
@@ -117,7 +116,7 @@ const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({
 									<DatePicker selected={(data.startDate && d(data.startDate, "YYYY-MM-DD").isValid()) ? d(data.startDate, "YYYY-MM-DD").toDate() : null} dateFormat={"dd-MM-yyyy"}
 										onChange={(value: Date) => {
 											updateForm("startDate", value ? d(value).format("YYYY-MM-DD") : undefined);
-										}} customInput={<Input type="text" />} />
+										}} customInput={<Input type={"text"} />} />
 									<FormErrorMessage>{t("afspraakBetaalinstructie.invalidDateError")}</FormErrorMessage>
 								</FormControl>
 
@@ -126,7 +125,7 @@ const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({
 									<DatePicker selected={(data.endDate && d(data.endDate, "YYYY-MM-DD").isValid()) ? d(data.endDate, "YYYY-MM-DD").endOf("day").toDate() : null} dateFormat={"dd-MM-yyyy"}
 										onChange={(value: Date) => {
 											updateForm("endDate", value ? d(value).format("YYYY-MM-DD") : undefined);
-										}} customInput={<Input type="text" />} isClearable={true} />
+										}} customInput={<Input type={"text"} />} isClearable={true} />
 									<FormErrorMessage>{t("afspraakBetaalinstructie.invalidDateError")}</FormErrorMessage>
 								</FormControl>
 
@@ -136,20 +135,26 @@ const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({
 								<FormControl flex={1} isInvalid={repeatType === undefined} isRequired>
 									<FormLabel>{t("schedule.repeatType")}</FormLabel>
 									<Box flex={1}>
-										<Select onChange={(val) => {
-											setRepeatType(val?.value);
+										<Select
+											onChange={(val) => {
+												setRepeatType(val?.value);
 
-											const allMonths = Array.from({length: 12}).map((x, i) => i + 1);
-											setForm(data => ({
-												...data,
-												byDay: undefined,
-												byMonth: val?.value === RepeatType.Month ? allMonths : undefined,
-												byMonthDay: (data.byMonthDay && repeatType === RepeatType.Week) ? data.byMonthDay : undefined,
-											}));
-										}} value={repeatTypeOptions.find(r => r.value === repeatType)}
-										isClearable={false} noOptionsMessage={() => t("schedule.repeatTypeChoose")}
-										maxMenuHeight={200} options={repeatTypeOptions} placeholder={t("select.placeholder")}
-										styles={reactSelectStyles.default} />
+												const allMonths = Array.from({length: 12}).map((x, i) => i + 1);
+												setForm(data => ({
+													...data,
+													byDay: undefined,
+													byMonth: val?.value === RepeatType.Month ? allMonths : undefined,
+													byMonthDay: (data.byMonthDay && repeatType === RepeatType.Week) ? data.byMonthDay : undefined,
+												}));
+											}}
+											value={repeatTypeOptions.find(r => r.value === repeatType)}
+											isClearable={false}
+											noOptionsMessage={() => t("schedule.repeatTypeChoose")}
+											maxMenuHeight={200}
+											options={repeatTypeOptions}
+											placeholder={t("select.placeholder")}
+											styles={reactSelectStyles.default}
+										/>
 									</Box>
 									<FormErrorMessage>{t("schedule.invalidPeriodiekError")}</FormErrorMessage>
 								</FormControl>

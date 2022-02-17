@@ -68,7 +68,7 @@ const AfspraakEndModal = ({isOpen, onClose, onSubmit}) => {
 									if (value) {
 										setDate(d(value).startOf("day").toDate());
 									}
-								}} customInput={<Input type="text" isInvalid={!isValid()} />} />
+								}} customInput={<Input type={"text"} isInvalid={!isValid()} />} />
 							<FormErrorMessage>{t("errors.invalidDateError")}</FormErrorMessage>
 						</FormControl>
 					</Stack>

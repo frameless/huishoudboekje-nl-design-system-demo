@@ -75,7 +75,7 @@ const UpdateAfdelingModal: React.FC<{afdeling: Afdeling, disclosure: UseDisclosu
 							<Button colorScheme={"gray"} onClick={disclosure.onClose}>
 								{t("global.actions.cancel")}
 							</Button>
-							<Button colorScheme={"primary"} type="submit">
+							<Button colorScheme={"primary"} type={"submit"}>
 								{t("global.actions.save")}
 							</Button>
 						</HStack>

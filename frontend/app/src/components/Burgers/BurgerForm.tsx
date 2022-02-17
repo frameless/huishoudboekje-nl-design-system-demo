@@ -100,7 +100,7 @@ const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading}) =>
 									if (value) {
 										updateForm("geboortedatum", d(value).format("L"));
 									}
-								}} customInput={<Input type="text" />} />
+								}} customInput={<Input type={"text"} />} />
 								<FormErrorMessage>{t("messages.burgers.invalidGeboortedatum")}</FormErrorMessage>
 							</Stack>
 						</FormControl>

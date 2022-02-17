@@ -16,7 +16,7 @@ const OrganisatieListView: React.FC<BoxProps & {organisaties: Organisatie[], sho
 			{showAddButton && (
 				<Box>
 					<Button colorScheme={"primary"} borderStyle={"dashed"} variant={"outline"} leftIcon={<AddIcon />}
-						w="100%" h="100%" onClick={() => navigate(AppRoutes.CreateOrganisatie)} borderRadius={5}
+						w={"100%"} h={"100%"} onClick={() => navigate(AppRoutes.CreateOrganisatie)} borderRadius={5}
 						p={5}>{t("global.actions.add")}</Button>
 				</Box>
 			)}

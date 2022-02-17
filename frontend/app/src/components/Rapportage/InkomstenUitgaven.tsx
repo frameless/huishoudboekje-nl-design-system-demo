@@ -38,7 +38,7 @@ const InkomstenUitgaven: React.FC<BoxProps & {transactions: BankTransaction[]}> 
 		<FormLeft title={t("charts.inkomstenUitgaven.title")} helperText={t("charts.inkomstenUitgaven.helperText")} />
 
 		<ChakraChart
-			chartType="AreaChart"
+			chartType={"AreaChart"}
 			loader={<Spinner />}
 			data={data}
 			options={{

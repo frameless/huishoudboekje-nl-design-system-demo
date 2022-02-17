@@ -47,7 +47,7 @@ const TransactieItem: React.FC<BoxProps & {transactie: BankTransaction}> = ({tra
 							<Text fontSize={"sm"}>{bt.journaalpost.afspraak?.rubriek?.naam || bt.journaalpost.grootboekrekening?.rubriek?.naam}</Text>
 						) : (
 							<Tag colorScheme={"red"} size={"sm"} variant={"subtle"}>
-								<TagLeftIcon boxSize="12px" as={WarningIcon} />
+								<TagLeftIcon boxSize={"12px"} as={WarningIcon} />
 								<TagLabel>
 									{t("unbooked")}
 								</TagLabel>

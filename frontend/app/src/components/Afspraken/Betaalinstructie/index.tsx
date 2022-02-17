@@ -12,9 +12,9 @@ import {
 } from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import useHandleMutation from "../../../utils/useHandleMutation";
+import BackButton from "../../shared/BackButton";
 import Page from "../../shared/Page";
 import PageNotFound from "../../shared/PageNotFound";
-import BackButton from "../../shared/BackButton";
 import AfspraakBetaalinstructieForm from "./AfspraakBetaalinstructieForm";
 
 const BetaalinstructiePage = () => {
@@ -47,7 +47,7 @@ const BetaalinstructiePage = () => {
 				}
 
 				return (
-					<AfspraakBetaalinstructieForm afspraak={afspraak} values={afspraak.betaalinstructie} onChange={updateAfspraakBetaalinstructie} />
+					<AfspraakBetaalinstructieForm afspraak={afspraak} onChange={updateAfspraakBetaalinstructie} />
 				);
 			}} />
 		</Page>

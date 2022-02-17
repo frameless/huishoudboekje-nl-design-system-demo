@@ -144,8 +144,8 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 								updateForm("postadresId", undefined);
 							}} value={isAfspraakWithOrganisatie ? "organisatie" : "burger"}>
 								<Stack>
-									<Radio value="organisatie">{t("organisatie")}</Radio>
-									<Radio value="burger">{t("burger")}</Radio>
+									<Radio value={"organisatie"}>{t("organisatie")}</Radio>
+									<Radio value={"burger"}>{t("burger")}</Radio>
 								</Stack>
 							</RadioGroup>
 						</FormControl>
@@ -157,7 +157,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 								<FormLabel>{t("organisatie")}</FormLabel>
 								<Select
 									{...defaultProps}
-									id="organisatie"
+									id={"organisatie"}
 									options={organisatieOptions}
 									value={selectedOrganisatie ? organisatieOptions.find(o => o.value === selectedOrganisatie.id) : null}
 									onChange={onChangeOrganisatie}
@@ -172,7 +172,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 								<FormLabel>{t("afdeling")}</FormLabel>
 								<Select
 									{...defaultProps}
-									id="afdeling"
+									id={"afdeling"}
 									noOptionsMessage={() => t("forms.afspraken.select.noAfdelingenOptionsMessage")}
 									options={afdelingOptions}
 									value={data.afdelingId ? afdelingOptions.find(o => o.value === data.afdelingId) : null}
@@ -191,7 +191,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 								<FormLabel>{t("postadres")}</FormLabel>
 								<Select
 									{...defaultProps}
-									id="postadres"
+									id={"postadres"}
 									noOptionsMessage={() => t("forms.afspraken.select.noPostadressenOptionsMessage")}
 									options={postadresOptions}
 									value={data.postadresId ? postadresOptions.find(o => o.value === data.postadresId) : null}
@@ -211,7 +211,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 							<FormLabel>{t("afspraken.tegenrekening")}</FormLabel>
 							<Select
 								{...defaultProps}
-								id="tegenrekening"
+								id={"tegenrekening"}
 								components={components.ReverseMultiLine}
 								noOptionsMessage={() => t("forms.afspraken.select.noRekeningenOptionsMessage")}
 								options={rekeningOptions}
@@ -239,8 +239,8 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 									updateForm("rubriekId", undefined);
 								}} value={data.credit !== undefined ? (data.credit ? "inkomsten" : "uitgaven") : undefined}>
 									<Stack>
-										<Radio value="inkomsten">{t("afspraken.inkomsten")}</Radio>
-										<Radio value="uitgaven">{t("afspraken.uitgaven")}</Radio>
+										<Radio value={"inkomsten"}>{t("afspraken.inkomsten")}</Radio>
+										<Radio value={"uitgaven"}>{t("afspraken.uitgaven")}</Radio>
 									</Stack>
 								</RadioGroup>
 								<FormErrorMessage>{t("afspraakDetailView.invalidBetaalrichtingError")}</FormErrorMessage>
@@ -250,7 +250,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 						<Stack direction={["column", "row"]}>
 							<FormControl flex={1} isInvalid={!isValid("rubriekId")} isRequired>
 								<FormLabel>{t("afspraken.rubriek")}</FormLabel>
-								<Select id="rubriek" isClearable={true} noOptionsMessage={() => t("forms.afspraken.fields.rubriekChoose")} placeholder={t("select.placeholder")} maxMenuHeight={350}
+								<Select id={"rubriek"} isClearable={true} noOptionsMessage={() => t("forms.afspraken.fields.rubriekChoose")} placeholder={t("select.placeholder")} maxMenuHeight={350}
 									options={rubriekOptions} value={data.rubriekId ? rubriekOptions.find(r => r.value === data.rubriekId) : null}
 									onChange={(result) => updateForm("rubriekId", result?.value)} styles={isValid("rubriekId") ? reactSelectStyles.default : reactSelectStyles.error} />
 								<FormErrorMessage>{t("afspraakDetailView.invalidRubriekError")}</FormErrorMessage>

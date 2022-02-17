@@ -211,10 +211,10 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 									<Stack>
 										<FormLabel>{t("afspraken.zoektermen")}</FormLabel>
 										<InputGroup size={"md"}>
-											<InputLeftElement pointerEvents="none" color="gray.300" fontSize="1.2em">
+											<InputLeftElement pointerEvents={"none"} color={"gray.300"} fontSize={"1.2em"}>
 												<AiOutlineTag />
 											</InputLeftElement>
-											<Input id="zoektermen" onChange={e => setZoekterm(e.target.value)} value={zoekterm || ""} onFocus={() => setZoektermTouched(true)} onBlur={() => setZoektermTouched(true)} />
+											<Input id={"zoektermen"} onChange={e => setZoekterm(e.target.value)} value={zoekterm || ""} onFocus={() => setZoektermTouched(true)} onBlur={() => setZoektermTouched(true)} />
 											<InputRightElement width={"auto"} pr={1}>
 												<Button type={"submit"} size={"sm"} colorScheme={"primary"}>{t("global.actions.add")}</Button>
 											</InputRightElement>
