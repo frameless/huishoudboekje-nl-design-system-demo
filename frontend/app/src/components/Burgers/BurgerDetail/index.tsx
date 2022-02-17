@@ -4,7 +4,14 @@ import React, {useContext} from "react";
 import {useTranslation} from "react-i18next";
 import {NavLink, useNavigate, useParams} from "react-router-dom";
 import {AppRoutes} from "../../../config/routes";
-import {Burger, GetBurgersDocument, GetBurgersSearchDocument, GetHuishoudensDocument, useDeleteBurgerMutation, useGetBurgerQuery} from "../../../generated/graphql";
+import {
+	Burger,
+	GetBurgersDocument,
+	GetBurgersSearchDocument,
+	GetHuishoudensDocument,
+	useDeleteBurgerMutation,
+	useGetBurgerQuery
+} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import {formatBurgerName} from "../../../utils/things";
 import useToaster from "../../../utils/useToaster";
@@ -20,7 +27,7 @@ import BurgerProfileView from "./BurgerProfileView";
 import BurgerRekeningenView from "./BurgerRekeningenView";
 
 const BurgerDetailPage = () => {
-	const {id = ""} = useParams<{id: string}>();
+	const {id = ""} = useParams<{ id: string }>();
 	const {t} = useTranslation();
 	const toast = useToaster();
 	const navigate = useNavigate();
@@ -43,7 +50,8 @@ const BurgerDetailPage = () => {
 		],
 	});
 
-	const onClickDeleteMenuItem = () => deleteAlert.onOpen();
+	const onClickDeleteMenuItem = () =>
+		deleteAlert.onOpen();
 
 	return (
 		<Queryable query={$burger}>{(data) => {
@@ -71,11 +79,20 @@ const BurgerDetailPage = () => {
 			};
 
 			return (<>
-				{deleteAlert.isOpen && <Alert title={t("messages.burgers.deleteTitle")} cancelButton={true} onClose={() => deleteAlert.onClose()} confirmButton={(
-					<Button isLoading={$deleteBurger.loading} colorScheme={"red"} onClick={onConfirmDelete} ml={3} data-cy={"inModal"}>{t("global.actions.delete")}</Button>
-				)}>
-					{t("messages.burgers.deleteQuestion", {name: `${burger.voornamen} ${burger.achternaam}`})}
-				</Alert>}
+				{deleteAlert.isOpen && (
+					<Alert
+						title={t("messages.burgers.deleteTitle")}
+						cancelButton={true}
+						onClose={() => deleteAlert.onClose()}
+						confirmButton={(
+							<Button isLoading={$deleteBurger.loading} colorScheme="red" onClick={onConfirmDelete} ml={3} data-cy={"inModal"}>
+								{t("global.actions.delete")}
+							</Button>
+						)}
+					>
+						{t("messages.burgers.deleteQuestion", {name: `${burger.voornamen} ${burger.achternaam}`})}
+					</Alert>
+				)}
 
 				<Page title={formatBurgerName(burger)} backButton={(
 					<Stack direction={["column", "row"]} spacing={[2, 5]}>
@@ -84,9 +101,11 @@ const BurgerDetailPage = () => {
 					</Stack>
 				)} menu={(
 					<Menu>
-						<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} data-cy={"actionsMenuButton"} />
+						<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"}
+							data-cy={"actionsMenuButton"} />
 						<MenuList>
-							<Link href={AppRoutes.BrievenExport(id, "excel")} target={"_blank"}><MenuItem>{t("global.actions.brievenExport")}</MenuItem></Link>
+							<Link href={AppRoutes.BrievenExport(id, "excel")}
+								target={"_blank"}><MenuItem>{t("global.actions.brievenExport")}</MenuItem></Link>
 							<NavLink to={AppRoutes.RapportageBurger([parseInt(id)])}><MenuItem>{t("sidebar.rapportage")}</MenuItem></NavLink>
 							<NavLink to={AppRoutes.Huishouden(burger.huishouden?.id)}><MenuItem>{t("showHuishouden")}</MenuItem></NavLink>
 							<Divider />

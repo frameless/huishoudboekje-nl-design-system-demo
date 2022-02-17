@@ -4,28 +4,20 @@ import React, {useContext} from "react";
 import {useTranslation} from "react-i18next";
 import {NavLink, useNavigate} from "react-router-dom";
 import {AppRoutes} from "../../../config/routes";
-import {
-	Afspraak,
-	GetAfspraakDocument,
-	GetBurgerDocument,
-	GetBurgersDocument,
-	GetBurgersSearchDocument,
-	useDeleteAfspraakMutation,
-	useEndAfspraakMutation,
-} from "../../../generated/graphql";
+import {Afspraak, GetAfspraakDocument, GetBurgerDocument, GetBurgersDocument, GetBurgersSearchDocument, useDeleteAfspraakMutation, useEndAfspraakMutation,} from "../../../generated/graphql";
 import d from "../../../utils/dayjs";
 import useToaster from "../../../utils/useToaster";
 import {BurgerSearchContext} from "../../Burgers/BurgerSearchContext";
-import AfspraakDeleteModal from "./AfspraakDeleteModal";
+import AfspraakDeleteAlert from "./AfspraakDeleteAlert";
 import AfspraakEndModal from "./AfspraakEndModal";
 
-const AfspraakDetailMenu: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
+const AfspraakDetailMenu: React.FC<{ afspraak: Afspraak }> = ({afspraak}) => {
 	const {t} = useTranslation();
 	const navigate = useNavigate();
-	const deleteModal = useDisclosure();
 	const endModal = useDisclosure();
 	const toast = useToaster();
 	const {search} = useContext(BurgerSearchContext);
+	const disclosure = useDisclosure();
 
 	const [endAfspraakMutation] = useEndAfspraakMutation({
 		refetchQueries: [
@@ -47,9 +39,9 @@ const AfspraakDetailMenu: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	});
 
 	const onClickDelete = () => {
-		if (!deleteModal.isOpen) {
+		if (!disclosure.isOpen) {
 			endModal.onClose();
-			deleteModal.onOpen();
+			disclosure.onOpen();
 		}
 		else if (afspraak.id) {
 			deleteAfspraak({
@@ -81,7 +73,7 @@ const AfspraakDetailMenu: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	};
 
 	return (<>
-		<AfspraakDeleteModal onSubmit={onClickDelete} isOpen={deleteModal.isOpen} onClose={deleteModal.onClose} />
+		<AfspraakDeleteAlert onSubmit={onClickDelete} isOpen={endModal.isOpen} onClose={endModal.onClose} disclosure={disclosure} />
 		<AfspraakEndModal onSubmit={onSubmitEndAfspraak} isOpen={endModal.isOpen} onClose={endModal.onClose} />
 
 		<Menu>
@@ -89,7 +81,7 @@ const AfspraakDetailMenu: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 			<MenuList>
 				<NavLink to={AppRoutes.EditAfspraak(afspraak.id)}><MenuItem>{t("global.actions.edit")}</MenuItem></NavLink>
 				<MenuItem onClick={endModal.onOpen}>{t("global.actions.end")}</MenuItem>
-				<MenuItem onClick={deleteModal.onOpen}>{t("global.actions.delete")}</MenuItem>
+				<MenuItem onClick={disclosure.onOpen}>{t("global.actions.delete")}</MenuItem>
 			</MenuList>
 		</Menu>
 	</>);

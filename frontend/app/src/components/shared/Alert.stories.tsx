@@ -50,12 +50,16 @@ export var BasicUsage = () => {
 	return (
 		<>
 			<Button onClick={onOpen}>Open</Button>
-			{isOpen && <Alert
-				title={"Burger verwijderen uit huishouden"}
-				children={"Weet je zeker dat je Chris de Burg wil verwijderen uit het huishouden de Jager-de Burg?"}
-				confirmButton={<Button colorScheme="red" ml={3}>Verwijderen</Button>}
-				cancelButton={true}
-				onClose={onClose} />}
+			{isOpen && (
+				<Alert
+					title={"Burger verwijderen uit huishouden"}
+					confirmButton={<Button colorScheme="red" ml={3}>Verwijderen</Button>}
+					cancelButton={true}
+					onClose={onClose}
+				>
+					{"Weet je zeker dat je Chris de Burg wil verwijderen uit het huishouden de Jager-de Burg?"}
+				</Alert>
+			)}
 		</>
 	)
 }
@@ -65,13 +69,15 @@ export var WithoutCancelButton = () => {
 	return (
 		<>
 			<Button onClick={onOpen}>Open</Button>
-			{isOpen && <Alert
+			{isOpen && (<Alert
 				title={"Burger verwijderen uit huishouden"}
-				children={"Weet je zeker dat je Chris de Burg wil verwijderen uit het huishouden de Jager-de Burg?"}
 				confirmButton={<Button colorScheme="red" ml={3}>Verwijderen</Button>}
 				cancelButton={false}
-				onClose={onClose} />
-			}
+				onClose={onClose}
+			>
+				{"Weet je zeker dat je Chris de Burg wil verwijderen uit het huishouden de Jager-de Burg?"}
+			</Alert>
+			)}
 		</>
 	)
 }
