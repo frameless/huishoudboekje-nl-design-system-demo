@@ -95,14 +95,14 @@ const FollowUpAfspraak = () => {
 							<List spacing={2}>
 								{afspraak.zoektermen && afspraak.zoektermen.length > 0 && (
 									<ListItem justify={"center"}>
-										<ListIcon as={MdCheckCircle} color="green.500" w={5} h={5} verticalAlign={"middle"} />
+										<ListIcon as={MdCheckCircle} color={"green.500"} w={5} h={5} verticalAlign={"middle"} />
 										{t("afspraken.vervolgAfspraak.zoektermenHelperText")}
 										<ZoektermenList zoektermen={afspraak.zoektermen || []} />
 									</ListItem>
 								)}
 								{afspraak.betaalinstructie && (
 									<ListItem justify={"center"}>
-										<ListIcon as={MdReportProblem} color="orange.500" w={5} h={5} verticalAlign={"middle"} />
+										<ListIcon as={MdReportProblem} color={"orange.500"} w={5} h={5} verticalAlign={"middle"} />
 										{t("afspraken.vervolgAfspraak.betaalinstructieHelperText")}
 									</ListItem>
 								)}

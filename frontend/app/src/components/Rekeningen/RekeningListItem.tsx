@@ -91,11 +91,11 @@ const RekeningListItem: React.FC<RekeningListItemProps> = ({rekening, onDelete, 
 			<AlertDialog isOpen={deleteDialogOpen} leastDestructiveRef={cancelDeleteRef} onClose={onCloseDeleteDialog}>
 				<AlertDialogOverlay />
 				<AlertDialogContent>
-					<AlertDialogHeader fontSize="lg" fontWeight="bold">{t("messages.rekeningen.deleteTitle")}</AlertDialogHeader>
+					<AlertDialogHeader fontSize={"lg"} fontWeight={"bold"}>{t("messages.rekeningen.deleteTitle")}</AlertDialogHeader>
 					<AlertDialogBody>{t("messages.rekeningen.deleteQuestion", {iban: formatIBAN(rekening.iban), rekeninghouder: rekening.rekeninghouder})}</AlertDialogBody>
 					<AlertDialogFooter>
 						<Button ref={cancelDeleteRef} onClick={onCloseDeleteDialog}>{t("global.actions.cancel")}</Button>
-						<Button colorScheme="red" onClick={onConfirmDeleteDialog} ml={3}>{t("global.actions.delete")}</Button>
+						<Button colorScheme={"red"} onClick={onConfirmDeleteDialog} ml={3}>{t("global.actions.delete")}</Button>
 					</AlertDialogFooter>
 				</AlertDialogContent>
 			</AlertDialog>

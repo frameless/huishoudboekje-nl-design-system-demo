@@ -10,7 +10,7 @@ const Alert = ({title, children, confirmButton, cancelButton = true, onClose}) =
 		<AlertDialog isOpen={true} leastDestructiveRef={cancelDeleteRef} onClose={onClose}>
 			<AlertDialogOverlay />
 			<AlertDialogContent>
-				<AlertDialogHeader fontSize="lg" fontWeight="bold">{title}</AlertDialogHeader>
+				<AlertDialogHeader fontSize={"lg"} fontWeight={"bold"}>{title}</AlertDialogHeader>
 				<AlertDialogBody>{children}</AlertDialogBody>
 				<AlertDialogFooter>
 					{cancelButton && <Button ref={cancelDeleteRef} onClick={onClose} data-cy={"inModal"}>{t("global.actions.cancel")}</Button>}

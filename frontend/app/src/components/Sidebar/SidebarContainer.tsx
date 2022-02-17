@@ -33,7 +33,7 @@ const SidebarContainer = ({children}) => {
 			</Box>
 
 			<DrawerContext.Provider value={{onClose}}>
-				<Drawer isOpen={isOpen} placement="left" onClose={onClose} size={"md"}>
+				<Drawer isOpen={isOpen} placement={"left"} onClose={onClose} size={"md"}>
 					<DrawerOverlay />
 					<DrawerContent>
 						<DrawerCloseButton />
@@ -57,7 +57,7 @@ const SidebarContainer = ({children}) => {
 			</DrawerContext.Provider>
 		</>
 	) : (
-		<Stack justifyContent={"space-between"} p={5} maxWidth={320} minHeight="100vh" height={"100%"} width={"100%"}>
+		<Stack justifyContent={"space-between"} p={5} maxWidth={320} minHeight={"100vh"} height={"100%"} width={"100%"}>
 			<Box>
 				<Box mb={5}>
 					<Logo />

@@ -79,11 +79,11 @@ const PostadresListItem: React.FC<PostadresListItemProps> = ({postadres, onDelet
 			<AlertDialog isOpen={deleteDialogOpen} leastDestructiveRef={cancelDeleteRef} onClose={onCloseDeleteDialog}>
 				<AlertDialogOverlay />
 				<AlertDialogContent>
-					<AlertDialogHeader fontSize="lg" fontWeight="bold">{t("messages.postadressen.deleteTitle")}</AlertDialogHeader>
+					<AlertDialogHeader fontSize={"lg"} fontWeight={"bold"}>{t("messages.postadressen.deleteTitle")}</AlertDialogHeader>
 					<AlertDialogBody>{t("messages.postadressen.deleteQuestion")}</AlertDialogBody>
 					<AlertDialogFooter>
 						<Button ref={cancelDeleteRef} onClick={onCloseDeleteDialog}>{t("global.actions.cancel")}</Button>
-						<Button colorScheme="red" onClick={onConfirmDeleteDialog} ml={3}>{t("global.actions.delete")}</Button>
+						<Button colorScheme={"red"} onClick={onConfirmDeleteDialog} ml={3}>{t("global.actions.delete")}</Button>
 					</AlertDialogFooter>
 				</AlertDialogContent>
 			</AlertDialog>

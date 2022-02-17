@@ -8,8 +8,8 @@ const UserStatus: React.FC<UserStatusProps> = ({name, role, ...props}) => {
 		<Stack spacing={5} direction={"row"} alignItems={"center"} {...props}>
 			<Avatar name={name} bg={"primary.100"} />
 			<Stack alignItems={"flex-start"} spacing={0}>
-				<Text fontWeight="bold">{name}</Text>
-				{role && <Text fontSize="sm">{role}</Text>}
+				<Text fontWeight={"bold"}>{name}</Text>
+				{role && <Text fontSize={"sm"}>{role}</Text>}
 			</Stack>
 		</Stack>
 	);

@@ -66,7 +66,7 @@ const HuishoudensList = () => {
 				)}>
 					{filteredHuishoudens.length === 0 ? (
 						<DeadEndPage message={t("messages.noHuishoudenSearchResults")}>
-							<Button size="sm" colorScheme="primary" onClick={onClickResetSearch}>{t("global.actions.clearSearch")}</Button>
+							<Button size={"sm"} colorScheme={"primary"} onClick={onClickResetSearch}>{t("global.actions.clearSearch")}</Button>
 						</DeadEndPage>
 					) : (
 						<HuishoudensListView huishoudens={filteredHuishoudens} />

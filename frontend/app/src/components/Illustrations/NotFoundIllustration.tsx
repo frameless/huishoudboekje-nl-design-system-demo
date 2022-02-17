@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-curly-brace-presence */
 import {Box, BoxProps, useTheme} from "@chakra-ui/react";
 import React from "react";
 

@@ -72,7 +72,7 @@ const BurgerDetailPage = () => {
 
 			return (<>
 				{deleteAlert.isOpen && <Alert title={t("messages.burgers.deleteTitle")} cancelButton={true} onClose={() => deleteAlert.onClose()} confirmButton={(
-					<Button isLoading={$deleteBurger.loading} colorScheme="red" onClick={onConfirmDelete} ml={3} data-cy={"inModal"}>{t("global.actions.delete")}</Button>
+					<Button isLoading={$deleteBurger.loading} colorScheme={"red"} onClick={onConfirmDelete} ml={3} data-cy={"inModal"}>{t("global.actions.delete")}</Button>
 				)}>
 					{t("messages.burgers.deleteQuestion", {name: `${burger.voornamen} ${burger.achternaam}`})}
 				</Alert>}

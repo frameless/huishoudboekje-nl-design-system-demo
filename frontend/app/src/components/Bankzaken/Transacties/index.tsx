@@ -146,7 +146,7 @@ const Transactions = () => {
 
 								<FormControl>
 									<FormLabel>{t("filters.transactions.isCredit.title")}</FormLabel>
-									<Select id="tegenrekening" isClearable={true} noOptionsMessage={() => t("filters.transactions.isCredit.choose")} maxMenuHeight={350}
+									<Select id={"tegenrekening"} isClearable={true} noOptionsMessage={() => t("filters.transactions.isCredit.choose")} maxMenuHeight={350}
 										options={isCreditSelectOptions} value={filters.isCredit ? isCreditSelectOptions.find(o => o.value === filters.isCredit) : null}
 										onChange={(result) => {
 											setFilters(f => ({
