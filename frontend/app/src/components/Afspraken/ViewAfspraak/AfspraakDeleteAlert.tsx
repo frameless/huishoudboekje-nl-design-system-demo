@@ -3,26 +3,28 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import Alert from "../../shared/Alert";
 
-const AfspraakDeleteAlert = ({isOpen, onClose, onSubmit, disclosure}) => {
+type AfspraakDeleteAlertProps = {
+	onClose: VoidFunction,
+	onConfirm: VoidFunction
+};
+
+const AfspraakDeleteAlert: React.FC<AfspraakDeleteAlertProps> = ({onClose, onConfirm}) => {
 	const {t} = useTranslation();
 
-	return (<>
-		{disclosure.isOpen && (
-			<Alert
-				title={t("deleteAfspraak.confirmModalTitle")}
-				cancelButton={true}
-				confirmButton={
-					<Button colorScheme={"red"} ml={3} onClick={onSubmit}>
-						{t("global.actions.delete")}
-					</Button>
-				}
-				onClose={disclosure.onClose}
-			>
-				{t("deleteAfspraak.confirmModalBody")}
-			</Alert>
-		)
-		}
-	</>);
+	return (
+		<Alert
+			title={t("deleteAfspraak.confirmModalTitle")}
+			cancelButton={true}
+			onClose={onClose}
+			confirmButton={(
+				<Button colorScheme={"red"} ml={3} onClick={onConfirm}>
+					{t("global.actions.delete")}
+				</Button>
+			)}
+		>
+			{t("deleteAfspraak.confirmModalBody")}
+		</Alert>
+	);
 };
 
 export default AfspraakDeleteAlert;

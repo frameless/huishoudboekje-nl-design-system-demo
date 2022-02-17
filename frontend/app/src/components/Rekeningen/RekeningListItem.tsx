@@ -1,25 +1,25 @@
 import {DeleteIcon} from "@chakra-ui/icons";
-import {Button, Editable, EditableInput, EditablePreview, IconButton, TableRowProps, Td, Tooltip, Tr, useDisclosure,} from "@chakra-ui/react";
+import {Button, Editable, EditableInput, EditablePreview, IconButton, Td, Tooltip, Tr, useDisclosure} from "@chakra-ui/react";
 import React, {useEffect, useRef} from "react";
 import {useInput} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {GetRekeningDocument, Rekening, useUpdateRekeningMutation} from "../../generated/graphql";
 import {formatIBAN, truncateText} from "../../utils/things";
 import useToaster from "../../utils/useToaster";
-import PrettyIban from "../shared/PrettyIban";
 import Alert from "../shared/Alert";
+import PrettyIban from "../shared/PrettyIban";
 
-type RekeningListItemProps = TableRowProps & {
-    rekening: Rekening,
-    onDelete?: VoidFunction
+type RekeningListItemProps = {
+	rekening: Rekening,
+	onDelete?: VoidFunction
 };
 
-const RekeningListItem: React.FC<RekeningListItemProps> = ({rekening, onDelete, ...props}) => {
+const RekeningListItem: React.FC<RekeningListItemProps> = ({rekening, onDelete}) => {
 	const {t} = useTranslation();
 	const toast = useToaster();
-	const deleteDialog = useDisclosure();
-
-	const rekeninghouder = useInput({
+	const deleteAlert = useDisclosure();
+	const editablePreviewRef = useRef<HTMLSpanElement>(null);
+	const rekeninghouder = useInput({ // Todo: refactor useInput to useForm (17-02-2022)
 		defaultValue: rekening.rekeninghouder,
 	});
 
@@ -34,7 +34,7 @@ const RekeningListItem: React.FC<RekeningListItemProps> = ({rekening, onDelete, 
 			onDelete();
 		}
 	};
-	const onCloseDeleteDialog = () => deleteDialog.onClose();
+	const onCloseDeleteDialog = () => deleteAlert.onClose();
 
 	const onSubmit = () => {
 		updateRekening({
@@ -55,8 +55,6 @@ const RekeningListItem: React.FC<RekeningListItemProps> = ({rekening, onDelete, 
 		});
 	};
 
-	const editablePreviewRef = useRef<HTMLSpanElement>(null);
-
 	/* Truncate the length of the text if EditablePreview's value gets too long. */
 	useEffect(() => {
 		if (editablePreviewRef.current) {
@@ -71,7 +69,7 @@ const RekeningListItem: React.FC<RekeningListItemProps> = ({rekening, onDelete, 
 
 	return (<>
 
-		{deleteDialog.isOpen && (
+		{deleteAlert.isOpen && (
 			<Alert
 				title={t("messages.rekeningen.deleteTitle")}
 				cancelButton={true}
@@ -84,15 +82,14 @@ const RekeningListItem: React.FC<RekeningListItemProps> = ({rekening, onDelete, 
 			>
 				{t("messages.rekeningen.deleteQuestion", {
 					iban: formatIBAN(rekening.iban),
-					rekeninghouder: rekening.rekeninghouder
+					rekeninghouder: rekening.rekeninghouder,
 				})}
 			</Alert>)
 		}
 
-		<Tr {...props}>
+		<Tr>
 			<Td>
-				<Editable defaultValue={(rekening.rekeninghouder || "").length > 0 ? rekening.rekeninghouder : t("unknown")} flex={1}
-					submitOnBlur={true} onSubmit={onSubmit}>
+				<Editable defaultValue={(rekening.rekeninghouder || "").length > 0 ? rekening.rekeninghouder : t("unknown")} flex={1} submitOnBlur={true} onSubmit={onSubmit}>
 					<Tooltip label={t("global.actions.clickToEdit")} placement={"right"}>
 						<EditablePreview ref={editablePreviewRef} />
 					</Tooltip>
@@ -103,8 +100,7 @@ const RekeningListItem: React.FC<RekeningListItemProps> = ({rekening, onDelete, 
 				<PrettyIban iban={rekening.iban} />
 			</Td>
 			<Td>{onDelete && (
-				<IconButton icon={<DeleteIcon />} size={"xs"} variant={"ghost"} onClick={() => deleteDialog.onOpen()}
-					aria-label={t("global.actions.delete")} />
+				<IconButton icon={<DeleteIcon />} size={"xs"} variant={"ghost"} onClick={() => deleteAlert.onOpen()} aria-label={t("global.actions.delete")} />
 			)}</Td>
 		</Tr>
 	</>);

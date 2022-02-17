@@ -4,20 +4,13 @@ import React, {useContext} from "react";
 import {useTranslation} from "react-i18next";
 import {NavLink, useNavigate, useParams} from "react-router-dom";
 import {AppRoutes} from "../../../config/routes";
-import {
-	Burger,
-	GetBurgersDocument,
-	GetBurgersSearchDocument,
-	GetHuishoudensDocument,
-	useDeleteBurgerMutation,
-	useGetBurgerQuery
-} from "../../../generated/graphql";
+import {Burger, GetBurgersDocument, GetBurgersSearchDocument, GetHuishoudensDocument, useDeleteBurgerMutation, useGetBurgerQuery} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import {formatBurgerName} from "../../../utils/things";
 import useToaster from "../../../utils/useToaster";
-import Page from "../../shared/Page";
 import Alert from "../../shared/Alert";
 import BackButton from "../../shared/BackButton";
+import Page from "../../shared/Page";
 import PageNotFound from "../../shared/PageNotFound";
 import Section from "../../shared/Section";
 import {BurgerSearchContext} from "../BurgerSearchContext";
@@ -27,7 +20,7 @@ import BurgerProfileView from "./BurgerProfileView";
 import BurgerRekeningenView from "./BurgerRekeningenView";
 
 const BurgerDetailPage = () => {
-	const {id = ""} = useParams<{ id: string }>();
+	const {id = ""} = useParams<{id: string}>();
 	const {t} = useTranslation();
 	const toast = useToaster();
 	const navigate = useNavigate();
@@ -49,9 +42,6 @@ const BurgerDetailPage = () => {
 			{query: GetHuishoudensDocument},
 		],
 	});
-
-	const onClickDeleteMenuItem = () =>
-		deleteAlert.onOpen();
 
 	return (
 		<Queryable query={$burger}>{(data) => {
@@ -85,7 +75,7 @@ const BurgerDetailPage = () => {
 						cancelButton={true}
 						onClose={() => deleteAlert.onClose()}
 						confirmButton={(
-							<Button isLoading={$deleteBurger.loading} colorScheme="red" onClick={onConfirmDelete} ml={3} data-cy={"inModal"}>
+							<Button isLoading={$deleteBurger.loading} colorScheme="red" onClick={onConfirmDelete} ml={3}>
 								{t("global.actions.delete")}
 							</Button>
 						)}
@@ -101,16 +91,14 @@ const BurgerDetailPage = () => {
 					</Stack>
 				)} menu={(
 					<Menu>
-						<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"}
-							data-cy={"actionsMenuButton"} />
+						<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} />
 						<MenuList>
-							<Link href={AppRoutes.BrievenExport(id, "excel")}
-								target={"_blank"}><MenuItem>{t("global.actions.brievenExport")}</MenuItem></Link>
+							<Link href={AppRoutes.BrievenExport(id, "excel")} target={"_blank"}><MenuItem>{t("global.actions.brievenExport")}</MenuItem></Link>
 							<NavLink to={AppRoutes.RapportageBurger([parseInt(id)])}><MenuItem>{t("sidebar.rapportage")}</MenuItem></NavLink>
 							<NavLink to={AppRoutes.Huishouden(burger.huishouden?.id)}><MenuItem>{t("showHuishouden")}</MenuItem></NavLink>
 							<Divider />
 							<NavLink to={AppRoutes.EditBurger(id)}><MenuItem>{t("global.actions.edit")}</MenuItem></NavLink>
-							<MenuItem onClick={onClickDeleteMenuItem}>{t("global.actions.delete")}</MenuItem>
+							<MenuItem onClick={() => deleteAlert.onOpen()}>{t("global.actions.delete")}</MenuItem>
 						</MenuList>
 					</Menu>
 				)}>

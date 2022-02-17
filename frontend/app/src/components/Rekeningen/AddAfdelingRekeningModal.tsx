@@ -1,4 +1,4 @@
-import {Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, UseDisclosureReturn} from "@chakra-ui/react";
+import {Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import SaveAfdelingRekeningErrorHandler from "../../errorHandlers/SaveAfdelingRekeningErrorHandler";
@@ -9,10 +9,10 @@ import RekeningForm from "./RekeningForm";
 
 type AddAfdelingRekeningModalProps = {
 	afdeling: Afdeling,
-	disclosure: UseDisclosureReturn,
+	onClose: VoidFunction
 };
 
-const AddAfdelingRekeningModal: React.FC<AddAfdelingRekeningModalProps> = ({afdeling, disclosure}) => {
+const AddAfdelingRekeningModal: React.FC<AddAfdelingRekeningModalProps> = ({afdeling, onClose}) => {
 	const {t} = useTranslation();
 	const toast = useToaster();
 	const handleSaveAfdelingRekening = useMutationErrorHandler(SaveAfdelingRekeningErrorHandler);
@@ -33,18 +33,18 @@ const AddAfdelingRekeningModal: React.FC<AddAfdelingRekeningModalProps> = ({afde
 			toast({
 				success: t("messages.rekeningen.createSuccess", {...rekening}),
 			});
-			disclosure.onClose();
+			onClose();
 		}).catch(handleSaveAfdelingRekening);
 	};
 
 	return (
-		<Modal isOpen={disclosure.isOpen} onClose={() => disclosure.onClose()}>
+		<Modal isOpen={true} onClose={() => onClose()}>
 			<ModalOverlay />
 			<ModalContent>
 				<ModalHeader>{t("modals.addRekening.title")}</ModalHeader>
 				<ModalCloseButton />
 				<ModalBody>
-					<RekeningForm rekening={{rekeninghouder: afdeling.naam}} onSubmit={onSaveRekening} onCancel={() => disclosure.onClose()} />
+					<RekeningForm rekening={{rekeninghouder: afdeling.naam}} onSubmit={onSaveRekening} onCancel={() => onClose()} />
 				</ModalBody>
 				<ModalFooter />
 			</ModalContent>

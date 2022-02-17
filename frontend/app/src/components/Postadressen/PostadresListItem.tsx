@@ -1,5 +1,5 @@
 import {DeleteIcon} from "@chakra-ui/icons";
-import {Button, Editable, EditableInput, EditablePreview, IconButton, TableRowProps, Td, Tooltip, Tr, useDisclosure,} from "@chakra-ui/react";
+import {Button, Editable, EditableInput, EditablePreview, IconButton, Td, Tooltip, Tr, useDisclosure} from "@chakra-ui/react";
 import React, {useEffect, useRef} from "react";
 import {useTranslation} from "react-i18next";
 import {Postadres, useUpdatePostadresMutation} from "../../generated/graphql";
@@ -7,24 +7,23 @@ import {truncateText} from "../../utils/things";
 import useToaster from "../../utils/useToaster";
 import Alert from "../shared/Alert";
 
-type PostadresListItemProps = TableRowProps & {
-    postadres: Postadres,
-    onDelete?: VoidFunction
+type PostadresListItemProps = {
+	postadres: Postadres,
+	onDelete?: VoidFunction
 };
 
-const PostadresListItem: React.FC<PostadresListItemProps> = ({postadres, onDelete, ...props}) => {
+const PostadresListItem: React.FC<PostadresListItemProps> = ({postadres, onDelete}) => {
 	const {t} = useTranslation();
 	const toast = useToaster();
-	const deleteDialog = useDisclosure();
+	const deleteAlert = useDisclosure();
 	const [updatePostadres] = useUpdatePostadresMutation();
+	const editablePreviewRef = useRef<HTMLSpanElement>(null);
 
-	const onConfirmDeleteDialog = () => {
+	const onConfirmDelete = () => {
 		if (onDelete) {
 			onDelete();
 		}
 	};
-	const onCloseDeleteDialog = () => deleteDialog.onClose();
-
 	const onSubmit = (field: keyof Postadres, value: any) => {
 		updatePostadres({
 			variables: {
@@ -43,8 +42,6 @@ const PostadresListItem: React.FC<PostadresListItemProps> = ({postadres, onDelet
 		});
 	};
 
-	const editablePreviewRef = useRef<HTMLSpanElement>(null);
-
 	/* Truncate the length of the text if EditablePreview's value gets too long. */
 	useEffect(() => {
 		if (editablePreviewRef.current) {
@@ -52,27 +49,23 @@ const PostadresListItem: React.FC<PostadresListItemProps> = ({postadres, onDelet
 		}
 	});
 
-	if (!postadres) {
-		return null;
-	}
-
 	return (<>
-		{deleteDialog.isOpen && (
+		{deleteAlert.isOpen && (
 			<Alert
 				title={t("messages.postadressen.deleteTitle")}
 				cancelButton={true}
 				confirmButton={
-					<Button colorScheme="red" onClick={onConfirmDeleteDialog} ml={3}>
+					<Button colorScheme="red" onClick={onConfirmDelete} ml={3}>
 						{t("global.actions.delete")}
 					</Button>
 				}
-				onClose={onCloseDeleteDialog}
+				onClose={() => deleteAlert.onClose()}
 			>
 				{t("messages.postadressen.deleteQuestion")}
 			</Alert>
 		)}
 
-		<Tr {...props}>
+		<Tr>
 			<Td>
 				<Editable defaultValue={(postadres.straatnaam || "").length > 0 ? postadres.straatnaam : t("unknown")} flex={1} submitOnBlur={true}
 					onSubmit={value => onSubmit("straatnaam", value)}>
@@ -105,7 +98,7 @@ const PostadresListItem: React.FC<PostadresListItemProps> = ({postadres, onDelet
 			</Td>
 			<Td>
 				{onDelete && (
-					<IconButton icon={<DeleteIcon />} size={"xs"} variant={"ghost"} onClick={() => deleteDialog.onOpen()}
+					<IconButton icon={<DeleteIcon />} size={"xs"} variant={"ghost"} onClick={() => deleteAlert.onOpen()}
 						aria-label={t("global.actions.delete")} />
 				)}
 			</Td>

@@ -4,19 +4,19 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {AppRoutes} from "../../config/routes";
 import {Afdeling, Postadres, Rekening} from "../../generated/graphql";
-import Page from "../shared/Page";
 import PostadresList from "../Postadressen/PostadresList";
 import AddAfdelingRekeningModal from "../Rekeningen/AddAfdelingRekeningModal";
 import RekeningList from "../Rekeningen/RekeningList";
 import AddButton from "../shared/AddButton";
 import BackButton from "../shared/BackButton";
 import {FormLeft, FormRight} from "../shared/Forms";
+import Page from "../shared/Page";
 import Section from "../shared/Section";
 import AddAfdelingPostadresModal from "./AddAfdelingPostadresModal";
 import DeleteAfdelingAlert from "./DeleteAfdelingAlert";
 import UpdateAfdelingModal from "./UpdateAfdelingModal";
 
-const AfdelingDetailView: React.FC<{ afdeling: Afdeling }> = ({afdeling}) => {
+const AfdelingDetailView: React.FC<{afdeling: Afdeling}> = ({afdeling}) => {
 	const organisatieId: number = afdeling.organisatie?.id!;
 	const {t} = useTranslation();
 	const updateAfdelingModal = useDisclosure();
@@ -27,10 +27,10 @@ const AfdelingDetailView: React.FC<{ afdeling: Afdeling }> = ({afdeling}) => {
 	const rekeningen: Rekening[] = afdeling.rekeningen || [];
 
 	return (<>
-		<UpdateAfdelingModal afdeling={afdeling} disclosure={updateAfdelingModal} />
-		<DeleteAfdelingAlert afdeling={afdeling} disclosure={deleteAfdelingAlert} />
-		<AddAfdelingPostadresModal afdeling={afdeling} disclosure={addPostadresModal} />
-		<AddAfdelingRekeningModal afdeling={afdeling} disclosure={addRekeningModal} />
+		{updateAfdelingModal.isOpen && <UpdateAfdelingModal afdeling={afdeling} onClose={updateAfdelingModal.onClose} />}
+		{deleteAfdelingAlert.isOpen && <DeleteAfdelingAlert afdeling={afdeling} onClose={deleteAfdelingAlert.onClose} />}
+		{addPostadresModal.isOpen && <AddAfdelingPostadresModal afdeling={afdeling} onClose={addPostadresModal.onClose} />}
+		{addRekeningModal.isOpen && <AddAfdelingRekeningModal afdeling={afdeling} onClose={addRekeningModal.onClose} />}
 
 		<Page title={afdeling.naam || t("afdeling")} backButton={<BackButton to={AppRoutes.Organisatie(organisatieId)} />} menu={(
 			<Menu>
@@ -44,8 +44,7 @@ const AfdelingDetailView: React.FC<{ afdeling: Afdeling }> = ({afdeling}) => {
 
 			<Section>
 				<Stack direction={["column", "row"]}>
-					<FormLeft title={t("pages.afdelingDetails.sectionPostadressen.title")}
-						helperText={t("pages.afdelingDetails.sectionPostadressen.helperText")} />
+					<FormLeft title={t("pages.afdelingDetails.sectionPostadressen.title")} helperText={t("pages.afdelingDetails.sectionPostadressen.helperText")} />
 					<FormRight>
 						<Stack>
 							<Heading size={"md"}>{t("postadressen")}</Heading>

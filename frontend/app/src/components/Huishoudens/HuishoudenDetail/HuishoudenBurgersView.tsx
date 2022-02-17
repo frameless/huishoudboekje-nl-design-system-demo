@@ -1,5 +1,5 @@
 import {AddIcon, DeleteIcon} from "@chakra-ui/icons";
-import {Avatar, Box, Button, Grid, IconButton, Stack, Text, useBreakpointValue, useDisclosure,} from "@chakra-ui/react";
+import {Avatar, Box, Button, Grid, IconButton, Stack, Text, useBreakpointValue, useDisclosure} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {NavLink, useNavigate} from "react-router-dom";
@@ -7,13 +7,13 @@ import {AppRoutes} from "../../../config/routes";
 import {Burger, GetHuishoudenDocument, GetHuishoudensDocument, Huishouden, useDeleteHuishoudenBurgerMutation} from "../../../generated/graphql";
 import {formatBurgerName, formatHuishoudenName} from "../../../utils/things";
 import useToaster from "../../../utils/useToaster";
-import GridCard from "../../shared/GridCard";
 import Alert from "../../shared/Alert";
+import GridCard from "../../shared/GridCard";
 
-const HuishoudenBurgerItem: React.FC<{ huishouden: Huishouden, burger: Burger }> = ({huishouden, burger}) => {
+const HuishoudenBurgerItem: React.FC<{huishouden: Huishouden, burger: Burger}> = ({huishouden, burger}) => {
 	const navigate = useNavigate();
 	const isMobile = useBreakpointValue([true, null, null, false]);
-	const alert = useDisclosure();
+	const deleteHuishoudenBurgerAlert = useDisclosure();
 	const toast = useToaster();
 	const {t} = useTranslation();
 
@@ -26,7 +26,7 @@ const HuishoudenBurgerItem: React.FC<{ huishouden: Huishouden, burger: Burger }>
 
 	const onClickDeleteBurgerFromHuishouden = (e) => {
 		e.preventDefault();
-		alert.onOpen();
+		deleteHuishoudenBurgerAlert.onOpen();
 	};
 
 	const onConfirmDeleteBurgerFromHuishouden = () => {
@@ -39,7 +39,7 @@ const HuishoudenBurgerItem: React.FC<{ huishouden: Huishouden, burger: Burger }>
 			toast({
 				success: t("messages.huishoudenBurger.deleteSuccess", {burgerName: formatBurgerName(burger)}),
 			});
-			alert.onClose();
+			deleteHuishoudenBurgerAlert.onClose();
 
 			/* Check if all burgers were removed from this Huishouden */
 			if (huishouden.burgers?.filter(b => b.id !== burger.id).length === 0) {
@@ -54,8 +54,7 @@ const HuishoudenBurgerItem: React.FC<{ huishouden: Huishouden, burger: Burger }>
 	};
 
 	return (<>
-
-		{alert.isOpen && (
+		{deleteHuishoudenBurgerAlert.isOpen && (
 			<Alert
 				title={t("forms.huishoudens.deleteBurger.title")}
 				cancelButton={true}
@@ -64,14 +63,14 @@ const HuishoudenBurgerItem: React.FC<{ huishouden: Huishouden, burger: Burger }>
 						{t("global.actions.delete")}
 					</Button>
 				}
-				onClose={alert.onClose}
+				onClose={deleteHuishoudenBurgerAlert.onClose}
 			>
 				{t("forms.huishoudens.deleteBurger.confirmQuestion", {
 					burgerName: formatBurgerName(burger),
 					huishoudenName: formatHuishoudenName(huishouden),
 				})}
-			</Alert>)
-		}
+			</Alert>
+		)}
 
 		<GridCard as={NavLink} justify={["flex-start", "center"]} to={AppRoutes.Burger(burger.id)} position={"relative"}>
 			{(huishouden.burgers || []).length > 1 && (
@@ -90,13 +89,12 @@ const HuishoudenBurgerItem: React.FC<{ huishouden: Huishouden, burger: Burger }>
 	</>);
 };
 
-const HuishoudenBurgersView: React.FC<{ huishouden: Huishouden, onClickAddButton?: VoidFunction }> = ({huishouden, onClickAddButton}) => {
+const HuishoudenBurgersView: React.FC<{huishouden: Huishouden, onClickAddButton?: VoidFunction}> = ({huishouden, onClickAddButton}) => {
 	const {t} = useTranslation();
 	const burgers: Burger[] = huishouden.burgers || [];
 
 	return (
-		<Grid maxWidth={"100%"} gridTemplateColumns={["repeat(1, 1fr)", "repeat(2, 1fr)", "repeat(3, 1fr)", "repeat(4, 1fr)", "repeat(6, 1fr)"]}
-			gap={5}>
+		<Grid maxWidth={"100%"} gridTemplateColumns={["repeat(1, 1fr)", "repeat(2, 1fr)", "repeat(3, 1fr)", "repeat(4, 1fr)", "repeat(6, 1fr)"]} gap={5}>
 			{onClickAddButton && (
 				<Box>
 					<Button colorScheme={"primary"} borderStyle={"dashed"} variant={"outline"} leftIcon={<AddIcon />}

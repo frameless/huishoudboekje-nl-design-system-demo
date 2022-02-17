@@ -119,12 +119,12 @@
       "logout": "Uitloggen",
       "save": "Opslaan",
       "view": "Bekijken",
-      "cancel": "Annuleren",
       "delete": "Verwijderen",
       "edit": "Wijzigen",
       "end": "Beëindigen",
       "add": "Toevoegen",
       "newBetaalinstructie": "Nieuwe betaalinstructie instellen",
+      "cancel": "Annuleren",
       "selectFile": "Kies een of meerdere bestanden",
       "close": "Sluiten",
       "actions": "Acties",
@@ -137,10 +137,10 @@
       "brievenExport": "Exporteer gegevens voor brieven",
       "clearSearch": "Zoekopdracht wissen",
       "showReports": "Bekijk rapportage",
-      "back": "Terug",
       "backToList": "Terug naar overzicht",
-      "backToHome": "Terug naar de hoofdpagina",
-      "clickToEdit": "Klik om te wijzigen"
+      "clickToEdit": "Klik om te wijzigen",
+      "back": "Terug",
+      "backToHome": "Terug naar de hoofdpagina"
     },
     "formError": "Er is een fout opgetreden. Controleer de invoer en probeer het nog eens.",
     "time": "Tijd",
@@ -664,7 +664,6 @@
     "title": "Huishoudens"
   },
   "suggestion": "Suggestie",
-  "version": "Versie {{version}}",
   "modals": {
     "addPostadres": {
       "modalTitle": "Postadres toevoegen"
@@ -678,7 +677,7 @@
   },
   "postadressen": "Postadressen",
   "rekeningen": "Rekeningen",
-  "deleteAfspraakAlert": {
+  "deleteAfdelingModal": {
     "title": "Afdeling verwijderen",
     "confirmModalBody": "Weet je zeker dat je de afdeling {{afdeling}} wil verwijderen?"
   },
@@ -727,6 +726,7 @@
     "month_one": "maand",
     "month_other": "maanden"
   },
+  "version": "Versie {{version}}",
   "statuspage": {
     "title": "Status",
     "services": {

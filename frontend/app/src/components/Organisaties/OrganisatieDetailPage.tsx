@@ -1,5 +1,5 @@
 import {AddIcon, ChevronDownIcon} from "@chakra-ui/icons";
-import {Box, Button, Grid, Heading, IconButton, Menu, MenuButton, MenuItem, MenuList, useBreakpointValue, useDisclosure,} from "@chakra-ui/react";
+import {Box, Button, Grid, Heading, IconButton, Menu, MenuButton, MenuItem, MenuList, useBreakpointValue, useDisclosure} from "@chakra-ui/react";
 import React from "react";
 import {useToggle} from "react-grapple";
 import {useTranslation} from "react-i18next";
@@ -9,28 +9,28 @@ import {Afdeling, GetOrganisatiesDocument, Organisatie, useDeleteOrganisatieMuta
 import Queryable from "../../utils/Queryable";
 import {maxOrganisatieNaamLengthBreakpointValues, truncateText} from "../../utils/things";
 import useToaster from "../../utils/useToaster";
-import Page from "../shared/Page";
+import Alert from "../shared/Alert";
 import BackButton from "../shared/BackButton";
 import DeadEndPage from "../shared/DeadEndPage";
+import Page from "../shared/Page";
 import Section from "../shared/Section";
 import AfdelingListItem from "./AfdelingListItem";
 import CreateAfdelingModal from "./CreateAfdelingModal";
 import OrganisatieDetailView from "./Views/OrganisatieDetailView";
-import Alert from "../shared/Alert";
 
 const OrganisatieDetailPage = () => {
 	const {t} = useTranslation();
-	const {id = ""} = useParams<{ id: string }>();
+	const {id = ""} = useParams<{id: string}>();
 	const navigate = useNavigate();
 	const toast = useToaster();
 	const addAfdelingModal = useDisclosure();
+	const deleteAlert = useDisclosure();
 	const maxOrganisatieNaamLength = useBreakpointValue(maxOrganisatieNaamLengthBreakpointValues);
 
-	const deleteDialog = useDisclosure();
 	const [isDeleted, toggleDeleted] = useToggle(false);
 
 	const onClickEdit = () => navigate(AppRoutes.EditOrganisatie(parseInt(id)));
-	const onClickDelete = () => deleteDialog.onOpen();
+	const onClickDelete = () => deleteAlert.onOpen();
 
 	const $organisatie = useGetOrganisatieQuery({
 		variables: {id: parseInt(id)},
@@ -41,10 +41,10 @@ const OrganisatieDetailPage = () => {
 			{query: GetOrganisatiesDocument},
 		],
 	});
-	const onCloseDeleteDialog = () => deleteDialog.onClose();
+	const onCloseDeleteDialog = () => deleteAlert.onClose();
 
 	return (
-		<Queryable query={$organisatie} children={({organisatie}: { organisatie: Organisatie }) => {
+		<Queryable query={$organisatie} children={({organisatie}: {organisatie: Organisatie}) => {
 			const onConfirmDeleteDialog = () => {
 				deleteOrganisatie()
 					.then(() => {
@@ -91,16 +91,15 @@ const OrganisatieDetailPage = () => {
 					{addAfdelingModal.isOpen && (
 						<CreateAfdelingModal organisatie={organisatie} onClose={addAfdelingModal.onClose} />
 					)}
-
-					{deleteDialog.isOpen && (
+					{deleteAlert.isOpen && (
 						<Alert
 							title={t("messages.organisaties.deleteTitle")}
 							cancelButton={true}
-							confirmButton={
+							confirmButton={(
 								<Button isLoading={deleteLoading} colorScheme="red" onClick={onConfirmDeleteDialog} ml={3}>
 									{t("global.actions.delete")}
 								</Button>
-							}
+							)}
 							onClose={onCloseDeleteDialog}
 						>
 							{t("messages.organisaties.deleteQuestion", {name: organisatie.naam})}

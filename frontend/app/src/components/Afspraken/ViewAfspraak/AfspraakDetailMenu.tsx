@@ -4,32 +4,39 @@ import React, {useContext} from "react";
 import {useTranslation} from "react-i18next";
 import {NavLink, useNavigate} from "react-router-dom";
 import {AppRoutes} from "../../../config/routes";
-import {Afspraak, GetAfspraakDocument, GetBurgerDocument, GetBurgersDocument, GetBurgersSearchDocument, useDeleteAfspraakMutation, useEndAfspraakMutation,} from "../../../generated/graphql";
+import {
+	Afspraak,
+	GetAfspraakDocument,
+	GetBurgerDocument,
+	GetBurgersDocument,
+	GetBurgersSearchDocument,
+	useDeleteAfspraakMutation,
+	useEndAfspraakMutation,
+} from "../../../generated/graphql";
 import d from "../../../utils/dayjs";
 import useToaster from "../../../utils/useToaster";
 import {BurgerSearchContext} from "../../Burgers/BurgerSearchContext";
 import AfspraakDeleteAlert from "./AfspraakDeleteAlert";
 import AfspraakEndModal from "./AfspraakEndModal";
 
-const AfspraakDetailMenu: React.FC<{ afspraak: Afspraak }> = ({afspraak}) => {
+const AfspraakDetailMenu: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	const {t} = useTranslation();
 	const navigate = useNavigate();
 	const endModal = useDisclosure();
 	const toast = useToaster();
 	const {search} = useContext(BurgerSearchContext);
-	const disclosure = useDisclosure();
+	const deleteAlert = useDisclosure();
 
 	const [endAfspraakMutation] = useEndAfspraakMutation({
 		refetchQueries: [
 			{query: GetAfspraakDocument, variables: {id: afspraak.id}},
 		],
 	});
-
 	const [deleteAfspraak] = useDeleteAfspraakMutation({
 		refetchQueries: [
 			{query: GetBurgersDocument},
 			{query: GetBurgerDocument, variables: {id: afspraak.burger?.id}},
-			{query: GetBurgersSearchDocument, variables: {search}}
+			{query: GetBurgersSearchDocument, variables: {search}},
 		],
 		onCompleted: () => {
 			if (afspraak.burger?.id) {
@@ -39,9 +46,9 @@ const AfspraakDetailMenu: React.FC<{ afspraak: Afspraak }> = ({afspraak}) => {
 	});
 
 	const onClickDelete = () => {
-		if (!disclosure.isOpen) {
+		if (!deleteAlert.isOpen) {
 			endModal.onClose();
-			disclosure.onOpen();
+			deleteAlert.onOpen();
 		}
 		else if (afspraak.id) {
 			deleteAfspraak({
@@ -73,15 +80,15 @@ const AfspraakDetailMenu: React.FC<{ afspraak: Afspraak }> = ({afspraak}) => {
 	};
 
 	return (<>
-		<AfspraakDeleteAlert onSubmit={onClickDelete} isOpen={endModal.isOpen} onClose={endModal.onClose} disclosure={disclosure} />
-		<AfspraakEndModal onSubmit={onSubmitEndAfspraak} isOpen={endModal.isOpen} onClose={endModal.onClose} />
+		{deleteAlert.isOpen && <AfspraakDeleteAlert onConfirm={onClickDelete} onClose={deleteAlert.onClose} />}
+		{endModal.isOpen && <AfspraakEndModal onSubmit={onSubmitEndAfspraak} onClose={endModal.onClose} />}
 
 		<Menu>
 			<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} data-cy={"actionsMenuButton"} />
 			<MenuList>
 				<NavLink to={AppRoutes.EditAfspraak(afspraak.id)}><MenuItem>{t("global.actions.edit")}</MenuItem></NavLink>
 				<MenuItem onClick={endModal.onOpen}>{t("global.actions.end")}</MenuItem>
-				<MenuItem onClick={disclosure.onOpen}>{t("global.actions.delete")}</MenuItem>
+				<MenuItem onClick={deleteAlert.onOpen}>{t("global.actions.delete")}</MenuItem>
 			</MenuList>
 		</Menu>
 	</>);
