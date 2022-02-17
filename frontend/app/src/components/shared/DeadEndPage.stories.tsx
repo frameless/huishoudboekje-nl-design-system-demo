@@ -19,8 +19,7 @@ export default {
 				name: "other",
 				required: false,
 			},
-			description: "Here you can add extra components for example an AddButton",
-		}
+		},
 	},
 } as ComponentMeta<typeof DeadEndPage>;
 

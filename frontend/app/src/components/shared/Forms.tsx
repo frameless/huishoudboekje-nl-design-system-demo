@@ -1,12 +1,12 @@
 import {Heading, Stack, StackProps, Text} from "@chakra-ui/react";
 import React from "react";
 
-type FormLeftProps = {
+type FormLeftProps = StackProps & {
 	title?: string,
 	helperText?: string,
 }
 
-export const FormLeft: React.FC<StackProps & FormLeftProps> = ({title, helperText, children, ...props}) => (
+export const FormLeft: React.FC<FormLeftProps> = ({title, helperText, children, ...props}) => (
 	<Stack flex={1} alignItems={"flex-start"} {...props}>
 		{title && <Heading size={"md"}>{title}</Heading>}
 		{helperText && <Text fontSize={"md"} color={"gray.500"}>{helperText}</Text>}

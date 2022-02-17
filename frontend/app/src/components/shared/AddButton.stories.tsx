@@ -9,9 +9,16 @@ export default {
 		onClick: {
 			type: {
 				name: "function",
+				required: true,
+			},
+			description: "A function that will execute when this button is clicked.",
+		},
+		children: {
+			type: {
+				name: "string",
 				required: false,
 			},
-			description: "A function that does something after clicking on this button.",
+			description: "This will override the button label.",
 		},
 	},
 } as ComponentMeta<typeof AddButton>;
@@ -22,8 +29,8 @@ const Template: ComponentStory<typeof AddButton> = ({onClick, children}) => (
 	</AddButton>
 );
 
-export const DefaultLabel = Template.bind({});
-DefaultLabel.args = {};
+export const Default = Template.bind({});
+Default.args = {};
 
 export const CustomLabel = Template.bind({});
 CustomLabel.args = {

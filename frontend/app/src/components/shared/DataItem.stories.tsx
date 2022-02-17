@@ -10,17 +10,17 @@ export default {
 	argTypes: {
 		children: {
 			type: {
-				name: "string",
+				name: "other",
 				required: true,
 			},
-			description: "Shows information from the burger",
+			description: "The information that needs to be displayed.",
 		},
 		label: {
 			type: {
 				name: "string",
-				required: false
+				required: true,
 			},
-			description: "This is provides information on what information you get from the children",
+			description: "This is provides information on what information you get from the children.",
 		},
 	},
 	args: {},

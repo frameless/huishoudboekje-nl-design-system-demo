@@ -9,18 +9,31 @@ export default {
 		name: {
 			type: {
 				name: "string",
+				required: true,
+			},
+			description: "The name of the user.",
+		},
+		role: {
+			type: {
+				name: "string",
 				required: false,
 			},
-			description: "This will provide the e-mail of the user.",
+			description: "The user's role in the application.",
 		},
 	},
 } as ComponentMeta<typeof UserStatus>;
 
-const Template: ComponentStory<typeof UserStatus> = ({name}) => (
-	<UserStatus name={name} />
+const Template: ComponentStory<typeof UserStatus> = ({name, role}) => (
+	<UserStatus name={name} role={role} />
 );
 
 export const Default = Template.bind({});
 Default.args = {
-	name: "fien.de.jager@sloothuizen.nl",
+	name: "medewerker@utrecht.nl",
+};
+
+export const WithRole = Template.bind({});
+WithRole.args = {
+	name: "medewerker@utrecht.nl",
+	role: "Applicatiebeheerder",
 };

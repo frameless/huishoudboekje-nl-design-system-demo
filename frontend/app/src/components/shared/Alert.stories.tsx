@@ -1,7 +1,7 @@
+import {Button, useDisclosure} from "@chakra-ui/react";
 import {ComponentMeta} from "@storybook/react";
 import React from "react";
 import Alert from "./Alert";
-import {Button, useDisclosure} from "@chakra-ui/react";
 
 export default {
 	title: "Huishoudboekje/Alert",
@@ -12,72 +12,73 @@ export default {
 				name: "string",
 				required: true,
 			},
-			description: "This is the title of the modal.",
+			description: "This is the title of the alert.",
 		},
 		children: {
 			type: {
-				name: "string",
+				name: "other",
 				required: true,
 			},
-			description: "This is information what is shown on the modal.",
+			description: "This is information what is shown in the alert.",
 		},
 		confirmButton: {
 			type: {
 				name: "function",
 				required: true,
 			},
-			description: "This button will do the action.",
+			description: "When this button is clicked, the action will be executed.",
 		},
 		cancelButton: {
 			type: {
 				name: "boolean",
 				required: true,
 			},
-			description: "This button will stop the action.",
+			description: "When this button is clicked, the action will not be executed and the alert will be closed.",
 		},
 		onClose: {
 			type: {
 				name: "function",
 				required: true,
 			},
-			description: "This function will close the modal",
-		}
+			description: "A function that will close the alert.",
+		},
 	},
 } as ComponentMeta<typeof Alert>;
 
-export var BasicUsage = () => {
-	const {isOpen, onOpen, onClose} = useDisclosure()
+export const Default = () => {
+	const {isOpen, onOpen, onClose} = useDisclosure();
 	return (
 		<>
 			<Button onClick={onOpen}>Open</Button>
 			{isOpen && (
 				<Alert
 					title={"Burger verwijderen uit huishouden"}
-					confirmButton={<Button colorScheme="red" ml={3}>Verwijderen</Button>}
+					confirmButton={<Button colorScheme={"red"} ml={3}>Verwijderen</Button>}
 					cancelButton={true}
 					onClose={onClose}
 				>
-					{"Weet je zeker dat je Chris de Burg wil verwijderen uit het huishouden de Jager-de Burg?"}
+					Weet je zeker dat je Chris de Burg wil verwijderen uit het huishouden de Jager-de Burg?
 				</Alert>
 			)}
 		</>
-	)
-}
+	);
+};
 
-export var WithoutCancelButton = () => {
-	const {isOpen, onOpen, onClose} = useDisclosure()
+export const WithoutCancelButton = () => {
+	const {isOpen, onOpen, onClose} = useDisclosure();
 	return (
 		<>
 			<Button onClick={onOpen}>Open</Button>
-			{isOpen && (<Alert
-				title={"Burger verwijderen uit huishouden"}
-				confirmButton={<Button colorScheme="red" ml={3}>Verwijderen</Button>}
-				cancelButton={false}
-				onClose={onClose}
-			>
-				{"Weet je zeker dat je Chris de Burg wil verwijderen uit het huishouden de Jager-de Burg?"}
-			</Alert>
+			{isOpen && (
+				<Alert
+					title={"Burger verwijderen uit huishouden"}
+					confirmButton={<Button colorScheme={"red"} ml={3}>Verwijderen</Button>}
+					cancelButton={false}
+					onClose={onClose}
+				>
+					Weet je zeker dat je Chris de Burg wil verwijderen uit het huishouden de Jager-de Burg?
+				</Alert>
 			)}
 		</>
-	)
-}
+	);
+};

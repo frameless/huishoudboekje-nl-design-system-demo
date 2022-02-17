@@ -3,7 +3,7 @@ import {Button, ButtonProps} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 
-type AddButtonProps = ButtonProps & {
+type AddButtonProps = Pick<ButtonProps, "type" | "isLoading" | "isDisabled"> & {
 	onClick?: VoidFunction,
 	children?: JSX.Element | string
 };

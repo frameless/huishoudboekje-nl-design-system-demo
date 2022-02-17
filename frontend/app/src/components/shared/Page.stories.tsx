@@ -1,9 +1,9 @@
+import {ChevronDownIcon, CloseIcon, SearchIcon} from "@chakra-ui/icons";
+import {IconButton, Input, InputGroup, InputLeftElement, InputRightElement, Menu, MenuButton, MenuItem, MenuList, Stack} from "@chakra-ui/react";
 import {ComponentMeta, ComponentStory} from "@storybook/react";
 import React from "react";
-import Page from "./Page";
 import BackButton from "./BackButton";
-import {IconButton, Input, InputGroup, InputLeftElement, InputRightElement, Menu, MenuButton, MenuItem, MenuList, Stack} from "@chakra-ui/react";
-import {ChevronDownIcon, CloseIcon, SearchIcon} from "@chakra-ui/icons";
+import Page from "./Page";
 
 export default {
 	title: "Huishoudboekje/Page",
@@ -12,7 +12,7 @@ export default {
 		title: {
 			type: {
 				name: "string",
-				required: false,
+				required: true,
 			},
 			description: "This is the title of the page.",
 		},
@@ -21,21 +21,21 @@ export default {
 				name: "string",
 				required: false,
 			},
-			description: "With this button you can go one page back(depending on your function).",
+			description: "Add a button at the top of the page to navigate elsewhere.",
 		},
 		menu: {
 			type: {
 				name: "string",
 				required: false,
 			},
-			description: "This will show an meny with extra options.",
+			description: "This will show an menu with options.",
 		},
 		right: {
 			type: {
 				name: "string",
 				required: false,
 			},
-			description: "Here you can place anythink you would like to display on the right",
+			description: "This will show whatever you put in here on the top right of the page.",
 		},
 	},
 } as ComponentMeta<typeof Page>;
@@ -44,65 +44,71 @@ const Template: ComponentStory<typeof Page> = ({title, backButton, menu, right})
 	<Page title={title} backButton={backButton} menu={menu} right={right} />
 );
 
-export const Title = Template.bind({});
-Title.args = {
+export const Default = Template.bind({});
+Default.args = {
 	title: "Bankafschriften",
 };
 
-export const TitleAndBackButton = Template.bind({});
-TitleAndBackButton.args = {
+export const WithBackButton = Template.bind({});
+WithBackButton.args = {
 	title: "Huishouden de Jager-de Burg",
-	backButton: <BackButton to={"Terug"} />,
+	backButton: (
+		<BackButton label={"Terug naar overzicht"} to={"/huishoudens"} />
+	),
 };
 
-export const TitleAndDoubleBackButton = Template.bind({});
-TitleAndDoubleBackButton.args = {
+export const WithMultipleBackButtons = Template.bind({});
+WithMultipleBackButtons.args = {
 	title: "Huishouden de Jager-de Burg",
-	backButton:
-        <Stack direction={["column", "row"]} spacing={[2, 5]}>
-        	<BackButton label={"Terug naar alle burgers"} to={""} />
-        	<BackButton label={"Bekijk huishouden"} to={""} />
-        </Stack>
+	backButton: (
+		<Stack direction={["column", "row"]}>
+			<BackButton label={"Terug naar alle burgers"} to={"/burgers"} />
+			<BackButton label={"Bekijk huishouden"} to={"/huishoudens/1"} />
+		</Stack>
+	),
 };
 
-export const TitleBackButtonAndMenu = Template.bind({});
-TitleBackButtonAndMenu.args = {
-	title: "Afspraak bekijken",
-	backButton: <BackButton to={"Terug"} />,
-	menu:
-        <Menu>
-        	<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} data-cy={"actionsMenuButton"} />
-        	<MenuList>
-        		<MenuItem>Wijzigen</MenuItem>
-        		<MenuItem>Beeindigen</MenuItem>
-        		<MenuItem>Verwijderen</MenuItem>
-        	</MenuList>
-        </Menu>
-};
-
-export const TitleAndMenu = Template.bind({});
-TitleAndMenu.args = {
+export const WithMenu = Template.bind({});
+WithMenu.args = {
 	title: "Transacties",
-	menu:
-        <Menu>
-        	<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} data-cy={"actionsMenuButton"} />
-        	<MenuList>
-        		<MenuItem>Alle transacties afletteren</MenuItem>
-        	</MenuList>
-        </Menu>
+	menu: (
+		<Menu>
+			<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} />
+			<MenuList>
+				<MenuItem>Alle transacties afletteren</MenuItem>
+			</MenuList>
+		</Menu>
+	),
 };
 
-export const TitleAndRight = Template.bind({});
-TitleAndRight.args = {
-	title: "Burger",
-	right:
-        <InputGroup>
-        	<InputLeftElement>
-        		<SearchIcon color={"gray.300"} />
-        	</InputLeftElement>
-        	<Input type={"text"} bg={"white"} placeholder={"zoeken"} />
-        	{(<InputRightElement zIndex={0}>
-        		<IconButton size={"xs"} variant={"link"} icon={<CloseIcon />} aria-label={"Zoeken"} color={"gray.300"} />
-        	</InputRightElement>)}
-        </InputGroup>
+export const WithBackButtonAndMenu = Template.bind({});
+WithBackButtonAndMenu.args = {
+	title: "Afspraak bekijken",
+	backButton: <BackButton label={"Terug"} to={"/"} />,
+	menu: (
+		<Menu>
+			<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} />
+			<MenuList>
+				<MenuItem>Wijzigen</MenuItem>
+				<MenuItem>Beeindigen</MenuItem>
+				<MenuItem>Verwijderen</MenuItem>
+			</MenuList>
+		</Menu>
+	),
+};
+
+export const WithSearchRight = Template.bind({});
+WithSearchRight.args = {
+	title: "Burgers",
+	right: (
+		<InputGroup>
+			<InputLeftElement>
+				<SearchIcon color={"gray.300"} />
+			</InputLeftElement>
+			<Input type={"text"} bg={"white"} placeholder={"zoeken"} />
+			<InputRightElement>
+				<IconButton size={"xs"} variant={"link"} icon={<CloseIcon />} aria-label={"Zoeken"} color={"gray.300"} />
+			</InputRightElement>
+		</InputGroup>
+	),
 };
