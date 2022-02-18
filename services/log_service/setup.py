@@ -19,5 +19,6 @@ setup(
         "gunicorn>=20.0.4,<21",
         "jsonschema>=3.2.0,<4",
         "psycopg2-binary>=2.8.6,<3",
+        'MarkupSafe==2.0.1'
     ],
 )

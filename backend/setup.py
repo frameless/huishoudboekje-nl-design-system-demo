@@ -28,11 +28,12 @@ setup(
         'requests>=2.24.0,<3',
         'schwifty>=2021.01.0',
         'sepaxml>=2.3.0,<3',
-        'Jinja2>=2.11.3,<3',
+        'Jinja2==2.11.3',
         'itsdangerous>=1.1.0,<2',
         'lxml>=4.6.3,<5',
         'pandas==1.3.3',
         'XlsxWriter==3.0.1',
-        'Deprecated==1.2.13'
+        'Deprecated==1.2.13',
+        'MarkupSafe==2.0.1'
     ],
 )
