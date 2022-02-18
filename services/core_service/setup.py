@@ -17,5 +17,6 @@ setup(
         "Flask-Inputs>=0.3.0,<1",
         "jsonschema>=3.2.0,<4",
         'Werkzeug>=1.0.1,<2',
+        'MarkupSafe==2.0.1'
     ],
 )

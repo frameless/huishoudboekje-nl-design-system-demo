@@ -19,5 +19,6 @@ setup(
         "jsonschema>=3.2.0,<4",
         'gunicorn>=20.0.4,<21',
         'Werkzeug>=1.0.1,<2',
+        'MarkupSafe==2.0.1'
     ],
 )
