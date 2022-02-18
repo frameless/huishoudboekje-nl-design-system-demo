@@ -13,4 +13,3 @@ export const reactRouterDomMock = () => ({
 		// Don't do anything
 	},
 });
-

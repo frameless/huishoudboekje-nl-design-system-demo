@@ -50,11 +50,11 @@
       "invalidEmail": "Vul een geldig e-mailadres in.",
       "noSearchResults": "Geen burgers gevonden. Gebruik een andere zoekterm.",
       "addHint": "Voeg burgers toe door te klikken op de knop {{buttonLabel}}.",
-      "createSuccessMessage": "Nieuwe burger succesvol opgeslagen.",
-      "updateSuccessMessage": "Gegevens succesvol gewijzigd.",
       "alreadyExists": "Er bestaat al een burger met dit burgerservicenummer.",
       "bsnLengthError": "Het burgerservicenummer moet bestaan uit 8 of 9 cijfers.",
-      "bsnElfProefError": "Dit geen geldig burgerservicenummer. Controleer de ingevulde gegevens en probeer het opnieuw."
+      "bsnElfProefError": "Dit geen geldig burgerservicenummer. Controleer de ingevulde gegevens en probeer het opnieuw.",
+      "createSuccessMessage": "Nieuwe burger succesvol opgeslagen.",
+      "updateSuccessMessage": "Gegevens succesvol gewijzigd."
     },
     "formInputError": "Er is een fout opgetreden. Controleer de invoer.",
     "configuratie": {
@@ -103,12 +103,13 @@
     "deleteAfdelingSuccess": "Afdeling {{name}} succesvol verwijderd.",
     "rekeningen": {
       "createSuccess": "Bankrekening {{iban}} op naam van {{rekeninghouder}} is toegevoegd.",
+      "alreadyExistsError": "Dit bankrekeningnummer wordt al gebruikt.",
+      "invalidIbanError": "Het IBAN is niet geldig. Vul een geldig IBAN in.",
       "deleteSuccess": "Bankrekening is verwijderd.",
       "inUseDeleteError": "Deze bankrekening is in gebruik en kan niet worden verwijderd.",
       "updateSuccess": "Gegevens succesvol gewijzigd.",
-      "deleteTitle": "Bankrekening verwijderen.",
-      "deleteQuestion": "Weet je zeker dat je bankrekening {{iban}} op naam van {{rekeninghouder}} wil verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
-      "alreadyExistsError": "Dit bankrekeningnummer wordt al gebruikt."
+      "deleteTitle": "Bankrekening verwijderen",
+      "deleteQuestion": "Weet je zeker dat je bankrekening <strong>{{iban}}</strong> op naam van <strong>{{rekeninghouder}}</strong> wil verwijderen? Deze actie kan niet ongedaan worden gemaakt."
     },
     "backendError": "Er is een systeemfout opgetreden. Neem contact op met de applicatiebeheerder voor ondersteuning.",
     "genericToastErrorTitle": "Er is een fout opgetreden."
@@ -355,6 +356,9 @@
   },
   "organisatie": "Organisatie",
   "burger": "Burger",
+  "afspraakForm": {
+    "invalidTypeError": "Kies met wie de afspraak wordt gemaakt."
+  },
   "afdeling": "Afdeling",
   "postadres": "Postadres",
   "afspraakDetailView": {
@@ -430,6 +434,20 @@
     "invalidPeriodiekError": "Kies een periodiek.",
     "invalidDateError": "Vul een juiste datum in."
   },
+  "months": {
+    "jan": "januari",
+    "feb": "februari",
+    "mrt": "maart",
+    "apr": "april",
+    "may": "mei",
+    "jun": "juni",
+    "jul": "juli",
+    "aug": "augustus",
+    "sep": "september",
+    "oct": "oktober",
+    "nov": "november",
+    "dec": "december"
+  },
   "deleteAfspraak": {
     "confirmModalTitle": "Afspraak verwijderen",
     "confirmModalBody": "Weet je zeker dat je deze afspraak wil verwijderen? Je kunt ook een vervolgafspraak maken, beëindig dan eerst deze afspraak."
@@ -445,12 +463,6 @@
   },
   "errors": {
     "invalidDateError": "Vul een geldige datum in.",
-    "iban": {
-      "generalError": "Vul een geldig IBAN in."
-    },
-    "rekeninghouder": {
-      "generalError": "Vul een rekeninghouder in. De naam mag niet langer zijn dan 100 tekens."
-    },
     "straatnaam": {
       "generalError": "Vul een straatnaam in."
     },
@@ -462,6 +474,12 @@
     },
     "plaatsnaam": {
       "generalError": "Vul een plaatsnaam in."
+    },
+    "rekeninghouder": {
+      "generalError": "Vul een rekeninghouder in. De naam mag niet langer zijn dan 100 tekens."
+    },
+    "iban": {
+      "generalError": "Vul een geldig IBAN in."
     }
   },
   "uploadCsmModal": {
@@ -677,7 +695,7 @@
   },
   "postadressen": "Postadressen",
   "rekeningen": "Rekeningen",
-  "deleteAfdelingModal": {
+  "deleteAfdelingAlert": {
     "title": "Afdeling verwijderen",
     "confirmModalBody": "Weet je zeker dat je de afdeling {{afdeling}} wil verwijderen?"
   },
@@ -733,20 +751,6 @@
       "title": "Services",
       "helperText": "Bekijk hier of alle services beschikbaar zijn."
     }
-  },
-  "months": {
-    "jan": "januari",
-    "feb": "februari",
-    "mrt": "maart",
-    "apr": "april",
-    "may": "mei",
-    "jun": "juni",
-    "jul": "juli",
-    "aug": "augustus",
-    "sep": "september",
-    "oct": "oktober",
-    "nov": "november",
-    "dec": "december"
   },
   "pagination": {
     "first": "Eerste",

@@ -1,15 +1,13 @@
-import React, {useContext} from "react";
+import React, {useContext, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {Navigate, useNavigate, useParams} from "react-router-dom";
 import {AppRoutes} from "../../config/routes";
-import SaveBurgerErrorHandler from "../../errorHandlers/SaveBurgerErrorHandler";
-import useMutationErrorHandler from "../../errorHandlers/useMutationErrorHandler";
 import {GetBurgerDocument, GetBurgersDocument, GetBurgersSearchDocument, UpdateBurgerMutationVariables, useGetBurgerQuery, useUpdateBurgerMutation} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
 import {formatBurgerName} from "../../utils/things";
 import useToaster from "../../utils/useToaster";
-import Page from "../shared/Page";
 import BackButton from "../shared/BackButton";
+import Page from "../shared/Page";
 import BurgerForm from "./BurgerForm";
 import {BurgerSearchContext} from "./BurgerSearchContext";
 
@@ -18,8 +16,27 @@ const EditBurger = () => {
 	const {id = ""} = useParams<{id: string}>();
 	const toast = useToaster();
 	const navigate = useNavigate();
-	const handleSaveBurgerErrors = useMutationErrorHandler(SaveBurgerErrorHandler);
+	const handleSaveBurgerErrors = (t) => (err) => {
+		let message = err.message;
+		if (err.message.includes("already exists")) {
+			message = t("messages.burgers.alreadyExists");
+		}
+		if (err.message.includes("BSN should consist of 8 or 9 digits")) {
+			message = t("messages.burgers.bsnLengthError");
+			setBsnValid(false);
+		}
+		if (err.message.includes("BSN does not meet the 11-proef requirement")) {
+			message = t("messages.burgers.bsnElfProefError");
+			setBsnValid(false);
+		}
+
+		toast({
+			error: message,
+		});
+	};
+
 	const {search} = useContext(BurgerSearchContext);
+	const [isBsnValid, setBsnValid] = useState(true);
 
 	const [updateBurger, $updateBurger] = useUpdateBurgerMutation({
 		refetchQueries: [
@@ -33,6 +50,7 @@ const EditBurger = () => {
 	});
 
 	const onSubmit = (burgerData: UpdateBurgerMutationVariables) => {
+		setBsnValid(false);
 		updateBurger({
 			variables: burgerData,
 		}).then(() => {
@@ -40,7 +58,7 @@ const EditBurger = () => {
 				success: t("messages.burgers.updateSuccessMessage"),
 			});
 			navigate(AppRoutes.Burger(parseInt(id)));
-		}).catch(handleSaveBurgerErrors);
+		}).catch(handleSaveBurgerErrors(t));
 	};
 
 	return (
@@ -49,7 +67,7 @@ const EditBurger = () => {
 
 			return (
 				<Page title={formatBurgerName(burger)} backButton={<BackButton to={AppRoutes.Burger(burger?.id)} />}>
-					<BurgerForm burger={burger} onSubmit={onSubmit} isLoading={$burger.loading || $updateBurger.loading} />
+					<BurgerForm burger={burger} onSubmit={onSubmit} isLoading={$burger.loading || $updateBurger.loading} isBsnValid={isBsnValid} />
 				</Page>
 			);
 		}}

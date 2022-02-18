@@ -2,7 +2,7 @@ import {DeleteIcon} from "@chakra-ui/icons";
 import {Button, Editable, EditableInput, EditablePreview, IconButton, Td, Tooltip, Tr, useDisclosure} from "@chakra-ui/react";
 import React, {useEffect, useRef} from "react";
 import {useInput} from "react-grapple";
-import {useTranslation} from "react-i18next";
+import {Trans, useTranslation} from "react-i18next";
 import {GetRekeningDocument, Rekening, useUpdateRekeningMutation} from "../../generated/graphql";
 import {formatIBAN, truncateText} from "../../utils/things";
 import useToaster from "../../utils/useToaster";
@@ -80,10 +80,12 @@ const RekeningListItem: React.FC<RekeningListItemProps> = ({rekening, onDelete})
 				}
 				onClose={onCloseDeleteDialog}
 			>
-				{t("messages.rekeningen.deleteQuestion", {
+				<Trans i18nKey={"messages.rekeningen.deleteQuestion"} values={{
 					iban: formatIBAN(rekening.iban),
 					rekeninghouder: rekening.rekeninghouder,
-				})}
+				}} components={{
+					strong: <strong />,
+				}} />
 			</Alert>)
 		}
 

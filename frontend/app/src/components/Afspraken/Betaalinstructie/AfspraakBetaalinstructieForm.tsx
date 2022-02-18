@@ -1,60 +1,113 @@
 import {Box, Button, Checkbox, CheckboxGroup, FormControl, FormErrorMessage, FormLabel, Input, Radio, RadioGroup, Stack, Wrap, WrapItem} from "@chakra-ui/react";
-import React, {useState} from "react";
+import React from "react";
 import DatePicker from "react-datepicker";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
-import {Afspraak, BetaalinstructieInput, DayOfWeek} from "../../../generated/graphql";
+import {Afspraak, Betaalinstructie, BetaalinstructieInput, DayOfWeek} from "../../../generated/graphql";
 import {RepeatType} from "../../../models/models";
 import d from "../../../utils/dayjs";
 import {useReactSelectStyles} from "../../../utils/things";
 import useForm from "../../../utils/useForm";
 import useToaster from "../../../utils/useToaster";
+import zod from "../../../utils/zod";
 import {FormLeft, FormRight} from "../../shared/Forms";
 import PageNotFound from "../../shared/PageNotFound";
 import Section from "../../shared/Section";
 
+const validator2 = zod.object({
+	byDay: zod.array(zod.nativeEnum(DayOfWeek)).min(1),
+	byMonth: zod.array(zod.number()).min(1),
+	byMonthDay: zod.array(zod.number()).min(1),
+});
+
+const validator = zod.object({
+	type: zod.enum(["eenmalig", "periodiek"]),
+	startDate: zod.date(),
+	endDate: zod.date().optional(),
+	repeatType: zod.nativeEnum(RepeatType).optional(),
+	byDay: zod.array(zod.nativeEnum(DayOfWeek)).optional(),
+	byMonth: zod.array(zod.number()).optional(),
+	byMonthDay: zod.array(zod.number()).optional(),
+}).superRefine((data, ctx) => {
+	// If "Periodiek" is selected, repeatType is required.
+	if (data.type === "periodiek") {
+		const parsed = zod.nativeEnum(RepeatType).safeParse(data.repeatType);
+		if (!parsed.success) {
+			parsed.error.issues.map(i => ctx.addIssue({
+				...i,
+				path: ["repeatType"],
+			}));
+		}
+	}
+
+	// When "Weekly" is selected, byDay is required.
+	if (data.repeatType === RepeatType.Week) {
+		const parsed = validator2.shape.byDay.safeParse(data.byDay);
+		if (!parsed.success) {
+			parsed.error.issues.map(i => ctx.addIssue({
+				...i,
+				path: ["byDay"],
+			}));
+		}
+	}
+	// When "Monthly" or "Yearly" is selected, byMonth and byMonthDay are required.
+	else if (data.repeatType && [RepeatType.Month, RepeatType.Year].includes(data.repeatType)) {
+		const parsedByMonth = validator2.shape.byMonth.safeParse(data.byMonth);
+		const parsedByMonthDay = validator2.shape.byMonthDay.safeParse(data.byMonthDay);
+		if (!parsedByMonth.success) {
+			parsedByMonth.error.issues.map(i => ctx.addIssue({
+				...i,
+				path: ["byDay"],
+			}));
+		}
+		if (!parsedByMonthDay.success) {
+			parsedByMonthDay.error.issues.map(i => ctx.addIssue({
+				...i,
+				path: ["byDay"],
+			}));
+		}
+	}
+});
+
 type AfspraakBetaalinstructieProps = {
 	afspraak: Afspraak,
+	values?: Betaalinstructie,
 	onChange: (data: BetaalinstructieInput) => void,
 }
 
-const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({afspraak, onChange}) => {
+const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({afspraak, values, onChange}) => {
 	const {id} = afspraak;
 	const {t} = useTranslation();
 	const reactSelectStyles = useReactSelectStyles();
 	const toast = useToaster();
 
-	const [isPeriodiek, setPeriodiek] = useState<boolean>(true);
-	const [repeatType, setRepeatType] = useState<RepeatType | undefined>(undefined);
-	const [data, {setForm, updateForm, reset}] = useForm<string, any>({});
+	const [form, {setForm, updateForm, toggleSubmitted, isFieldValid, isValid}] = useForm<zod.infer<typeof validator>>({
+		validator,
+	});
+	const isFieldValid2 = (field: string) => validator2.shape[field].safeParse(form[field]).success;
 
 	if (!id) {
 		return <PageNotFound />;
 	}
 
-	const isValid = (fieldName: string) => {
-		const validators = {
-			startDate: d(data.startDate, "YYYY-MM-DD").isValid(),
-			endDate: data.endDate ? d(data.endDate, "YYYY-MM-DD").isValid() : true,
-			byDay: (data.byDay || []).length > 0,
-			byMonth: (data.byMonth || []).length > 0,
-			byMonthDay: data.byMonthDay && parseInt(data.byMonthDay) >= 1 && parseInt(data.byMonthDay) <= (isPeriodiek ? 28 : 31),
-		};
-
-		return validators[fieldName] || false;
-	};
-
 	const onSubmit = e => {
 		e.preventDefault();
+		toggleSubmitted(true);
 
-		const isDataValid = Object.keys(data).filter(d => typeof data[d] !== "undefined").every(fieldName => isValid(fieldName));
-		if (!isDataValid) {
-			toast({error: t("global.formError")});
+		if (isValid()) {
+			const {startDate, endDate, byDay, byMonth, byMonthDay} = form;
+			onChange({
+				startDate: d(startDate).format("YYYY-MM-DD"),
+				endDate: endDate ? d(endDate).format("YYYY-MM-DD") : undefined,
+				byDay,
+				byMonth,
+				byMonthDay,
+				repeatFrequency: "", // Not in use, but this needs to be passed a an empty string.
+			});
 			return;
 		}
 
-		const {startDate, endDate, byDay, byMonth, byMonthDay} = data;
-		onChange({startDate, endDate, byDay, byMonth, byMonthDay, repeatFrequency: ""});
+		toast({error: t("global.formError")});
 	};
 
 	const repeatTypeOptions = [
@@ -72,12 +125,13 @@ const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({
 					<FormRight spacing={5}>
 
 						<Stack direction={["column", "row"]}>
-							<FormControl flex={1} isRequired>
+							<FormControl flex={1} isInvalid={!isFieldValid("type")} isRequired>
 								<FormLabel>{t("afspraken.periodiek")}</FormLabel>
-								<RadioGroup onChange={e => {
-									setPeriodiek(e === "periodiek");
-									reset();
-								}} value={isPeriodiek ? "periodiek" : "eenmalig"}>
+								<RadioGroup value={form.type} onChange={(value: "periodiek" | "eenmalig") => {
+									setForm({
+										type: value,
+									});
+								}}>
 									<Stack>
 										<Radio value={"eenmalig"}>{t("schedule.eenmalig")}</Radio>
 										<Radio value={"periodiek"}>{t("schedule.periodiek")}</Radio>
@@ -87,84 +141,95 @@ const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({
 							</FormControl>
 						</Stack>
 
-						{!isPeriodiek && ( /* Eenmalig */
+						{form.type === "eenmalig" && (
 							<Stack direction={["column", "row"]}>
-								<FormControl flex={1} isInvalid={!isValid("startDate")} isRequired>
+								<FormControl flex={1} isInvalid={!isFieldValid("startDate")} isRequired>
 									<FormLabel>{t("schedule.datum")}</FormLabel>
-									<DatePicker selected={data.startDate ? d(data.startDate, "YYYY-MM-DD").startOf("day").toDate() : null} dateFormat={"dd-MM-yyyy"}
+									<DatePicker
+										dateFormat={"dd-MM-yyyy"}
+										selected={form.startDate ? d(form.startDate).startOf("day").toDate() : null}
 										onChange={(value: Date) => {
 											if (value) {
-												updateForm("startDate", d(value).format("YYYY-MM-DD"), x => ({
+												updateForm("startDate", value);
+												setForm(x => ({
 													...x,
 													byMonth: [d(value).month() + 1],
 													byMonthDay: [d(value).date()],
-													startDate: d(value).format("YYYY-MM-DD"),
-													endDate: d(value).format("YYYY-MM-DD"),
+													startDate: d(value).toDate(),
+													endDate: d(value).toDate(),
 												}));
 											}
-										}} customInput={<Input type={"text"} />} />
+										}}
+										customInput={<Input type={"text"} />}
+									/>
 									<FormErrorMessage>{t("afspraakBetaalinstructie.invalidDateError")}</FormErrorMessage>
 								</FormControl>
 							</Stack>
 						)}
 
-						{isPeriodiek && ( /* Periodiek */ <>
+						{form.type === "periodiek" && (<>
 							<Stack direction={["column", "row"]}>
 
-								<FormControl flex={1} isInvalid={!isValid("startDate")} isRequired>
+								<FormControl flex={1} isInvalid={!isFieldValid("startDate")} isRequired>
 									<FormLabel>{t("schedule.startDate")}</FormLabel>
-									<DatePicker selected={(data.startDate && d(data.startDate, "YYYY-MM-DD").isValid()) ? d(data.startDate, "YYYY-MM-DD").toDate() : null} dateFormat={"dd-MM-yyyy"}
-										onChange={(value: Date) => {
-											updateForm("startDate", value ? d(value).format("YYYY-MM-DD") : undefined);
-										}} customInput={<Input type={"text"} />} />
+									<DatePicker
+										dateFormat={"dd-MM-yyyy"}
+										selected={form.startDate}
+										onChange={(value: Date) => updateForm("startDate", value)}
+										customInput={<Input type={"text"} />}
+										isClearable={true}
+									/>
 									<FormErrorMessage>{t("afspraakBetaalinstructie.invalidDateError")}</FormErrorMessage>
 								</FormControl>
 
-								<FormControl flex={1} isInvalid={!isValid("endDate")}>
+								<FormControl flex={1} isInvalid={!isFieldValid("endDate")}>
 									<FormLabel>{t("schedule.endDate")}</FormLabel>
-									<DatePicker selected={(data.endDate && d(data.endDate, "YYYY-MM-DD").isValid()) ? d(data.endDate, "YYYY-MM-DD").endOf("day").toDate() : null} dateFormat={"dd-MM-yyyy"}
-										onChange={(value: Date) => {
-											updateForm("endDate", value ? d(value).format("YYYY-MM-DD") : undefined);
-										}} customInput={<Input type={"text"} />} isClearable={true} />
+									<DatePicker
+										dateFormat={"dd-MM-yyyy"}
+										selected={form.endDate ? d(form.endDate).endOf("day").toDate() : null}
+										onChange={(value: Date) => updateForm("endDate", value)}
+										customInput={<Input type={"text"} />}
+										isClearable={true}
+									/>
 									<FormErrorMessage>{t("afspraakBetaalinstructie.invalidDateError")}</FormErrorMessage>
 								</FormControl>
 
 							</Stack>
 
 							<Stack direction={["column", "row"]}>
-								<FormControl flex={1} isInvalid={repeatType === undefined} isRequired>
+								<FormControl flex={1} isInvalid={!isFieldValid("repeatType")} isRequired>
 									<FormLabel>{t("schedule.repeatType")}</FormLabel>
 									<Box flex={1}>
 										<Select
+											value={repeatTypeOptions.find(r => r.value === form.repeatType)}
+											isClearable={true}
+											noOptionsMessage={() => t("schedule.repeatTypeChoose")}
+											maxMenuHeight={200}
+											options={repeatTypeOptions}
+											placeholder={t("select.placeholder")}
+											styles={isFieldValid("repeatType") ? reactSelectStyles.default : reactSelectStyles.error}
 											onChange={(val) => {
-												setRepeatType(val?.value);
+												updateForm("repeatType", val?.value);
 
 												const allMonths = Array.from({length: 12}).map((x, i) => i + 1);
 												setForm(data => ({
 													...data,
 													byDay: undefined,
 													byMonth: val?.value === RepeatType.Month ? allMonths : undefined,
-													byMonthDay: (data.byMonthDay && repeatType === RepeatType.Week) ? data.byMonthDay : undefined,
+													byMonthDay: (data.byMonthDay && form.repeatType === RepeatType.Week) ? data.byMonthDay : undefined,
 												}));
 											}}
-											value={repeatTypeOptions.find(r => r.value === repeatType)}
-											isClearable={false}
-											noOptionsMessage={() => t("schedule.repeatTypeChoose")}
-											maxMenuHeight={200}
-											options={repeatTypeOptions}
-											placeholder={t("select.placeholder")}
-											styles={reactSelectStyles.default}
 										/>
 									</Box>
 									<FormErrorMessage>{t("schedule.invalidPeriodiekError")}</FormErrorMessage>
 								</FormControl>
 							</Stack>
 
-							{repeatType === RepeatType.Week && ( /* Wekelijks */
+							{form.repeatType === RepeatType.Week && ( /* Wekelijks */
 								<Stack direction={["column", "row"]}>
-									<FormControl flex={1} isInvalid={!isValid("byDay")}>
+									<FormControl flex={1} isInvalid={!isFieldValid("byDay") || !isFieldValid2("byDay")} isRequired>
 										<FormLabel>{t("schedule.byDay")}</FormLabel>
-										<CheckboxGroup colorScheme={"primary"} defaultValue={[]} value={data.byDay || []} onChange={(val: string[]) => updateForm("byDay", val)}>
+										<CheckboxGroup colorScheme={"primary"} defaultValue={[]} value={form.byDay || []} onChange={(val: string[]) => updateForm("byDay", val)}>
 											<Wrap>
 												<WrapItem><Checkbox value={String(DayOfWeek.Monday)}>Maandag</Checkbox></WrapItem>
 												<WrapItem><Checkbox value={String(DayOfWeek.Tuesday)}>Dinsdag</Checkbox></WrapItem>
@@ -180,24 +245,24 @@ const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({
 								</Stack>
 							)}
 
-							{repeatType && [RepeatType.Month, RepeatType.Year].includes(repeatType) && (/* Maandelijks / Jaarlijks */ <>
+							{form.repeatType && [RepeatType.Month, RepeatType.Year].includes(form.repeatType) && (/* Maandelijks / Jaarlijks */ <>
 								<Stack direction={["column", "row"]}>
-									<FormControl flex={1} isInvalid={!isValid("byMonth")}>
+									<FormControl flex={1} isInvalid={!isFieldValid("byMonth") || !isFieldValid2("byMonth")} isRequired>
 										<FormLabel>{t("schedule.byMonth")}</FormLabel>
-										<CheckboxGroup colorScheme={"primary"} defaultValue={[]} value={(data.byMonth || [])?.map(x => String(x)) || []} onChange={(val: string[]) => updateForm("byMonth", val.map(x => parseInt(x)))}>
+										<CheckboxGroup colorScheme={"primary"} defaultValue={[]} value={(form.byMonth || [])?.map(x => String(x)) || []} onChange={(val: string[]) => updateForm("byMonth", val.map(x => parseInt(x)))}>
 											<Wrap>
-												<WrapItem><Checkbox value={String(1)}> Januari </Checkbox></WrapItem>
-												<WrapItem><Checkbox value={String(2)}> Februari </Checkbox></WrapItem>
-												<WrapItem><Checkbox value={String(3)}> Maart </Checkbox></WrapItem>
-												<WrapItem><Checkbox value={String(4)}> April </Checkbox></WrapItem>
-												<WrapItem><Checkbox value={String(5)}> Mei </Checkbox></WrapItem>
-												<WrapItem><Checkbox value={String(6)}> Juni </Checkbox></WrapItem>
-												<WrapItem><Checkbox value={String(7)}> Juli </Checkbox></WrapItem>
-												<WrapItem><Checkbox value={String(8)}> Augustus </Checkbox></WrapItem>
-												<WrapItem><Checkbox value={String(9)}> September </Checkbox></WrapItem>
-												<WrapItem><Checkbox value={String(10)}> Oktober </Checkbox></WrapItem>
-												<WrapItem><Checkbox value={String(11)}> November </Checkbox></WrapItem>
-												<WrapItem><Checkbox value={String(12)}> December </Checkbox></WrapItem>
+												<WrapItem><Checkbox value={String(1)}>{t("months.jan")}</Checkbox></WrapItem>
+												<WrapItem><Checkbox value={String(2)}>{t("months.feb")}</Checkbox></WrapItem>
+												<WrapItem><Checkbox value={String(3)}>{t("months.mrt")}</Checkbox></WrapItem>
+												<WrapItem><Checkbox value={String(4)}>{t("months.apr")}</Checkbox></WrapItem>
+												<WrapItem><Checkbox value={String(5)}>{t("months.may")}</Checkbox></WrapItem>
+												<WrapItem><Checkbox value={String(6)}>{t("months.jun")}</Checkbox></WrapItem>
+												<WrapItem><Checkbox value={String(7)}>{t("months.jul")}</Checkbox></WrapItem>
+												<WrapItem><Checkbox value={String(8)}>{t("months.aug")}</Checkbox></WrapItem>
+												<WrapItem><Checkbox value={String(9)}>{t("months.sep")}</Checkbox></WrapItem>
+												<WrapItem><Checkbox value={String(10)}>{t("months.oct")}</Checkbox></WrapItem>
+												<WrapItem><Checkbox value={String(11)}>{t("months.nov")}</Checkbox></WrapItem>
+												<WrapItem><Checkbox value={String(12)}>{t("months.dec")}</Checkbox></WrapItem>
 											</Wrap>
 										</CheckboxGroup>
 										<FormErrorMessage>{t("schedule.invalidByMonthError")}</FormErrorMessage>
@@ -205,9 +270,9 @@ const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({
 								</Stack>
 
 								<Stack direction={["column", "row"]}>
-									<FormControl flex={1} isInvalid={!isValid("byMonthDay")} isRequired>
+									<FormControl flex={1} isInvalid={!isFieldValid("byMonthDay") || !isFieldValid2("byMonthDay")} isRequired>
 										<FormLabel>{t("schedule.byMonthDay")}</FormLabel>
-										<Input type={"number"} min={1} max={28} value={undefined} onChange={e => updateForm("byMonthDay", parseInt(e.target.value), newData => ({
+										<Input type={"number"} min={1} max={28} value={String(form.byMonthDay?.[0] || "")} onChange={e => updateForm("byMonthDay", [parseInt(e.target.value)], newData => ({
 											...newData,
 											byDay: undefined,
 										}))} />

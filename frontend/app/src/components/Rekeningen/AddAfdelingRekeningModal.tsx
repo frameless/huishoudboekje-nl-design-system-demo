@@ -1,8 +1,6 @@
 import {Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay} from "@chakra-ui/react";
-import React from "react";
+import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
-import SaveAfdelingRekeningErrorHandler from "../../errorHandlers/SaveAfdelingRekeningErrorHandler";
-import useMutationErrorHandler from "../../errorHandlers/useMutationErrorHandler";
 import {Afdeling, GetAfdelingDocument, GetOrganisatieDocument, useCreateAfdelingRekeningMutation} from "../../generated/graphql";
 import useToaster from "../../utils/useToaster";
 import RekeningForm from "./RekeningForm";
@@ -15,15 +13,16 @@ type AddAfdelingRekeningModalProps = {
 const AddAfdelingRekeningModal: React.FC<AddAfdelingRekeningModalProps> = ({afdeling, onClose}) => {
 	const {t} = useTranslation();
 	const toast = useToaster();
-	const handleSaveAfdelingRekening = useMutationErrorHandler(SaveAfdelingRekeningErrorHandler);
 	const [createAfdelingRekening] = useCreateAfdelingRekeningMutation({
 		refetchQueries: [
 			{query: GetOrganisatieDocument, variables: {id: afdeling?.organisatie?.id}},
 			{query: GetAfdelingDocument, variables: {id: afdeling?.id}},
 		],
 	});
+	const [isIbanValid, setIbanValid] = useState(true);
 
 	const onSaveRekening = (rekening) => {
+		setIbanValid(true);
 		createAfdelingRekening({
 			variables: {
 				afdelingId: afdeling.id!,
@@ -34,7 +33,21 @@ const AddAfdelingRekeningModal: React.FC<AddAfdelingRekeningModalProps> = ({afde
 				success: t("messages.rekeningen.createSuccess", {...rekening}),
 			});
 			onClose();
-		}).catch(handleSaveAfdelingRekening);
+		}).catch((err) => {
+			let errorMessage = err.message;
+
+			if (err.message.includes("already exists")) {
+				errorMessage = t("messages.rekeningen.alreadyExistsError");
+			}
+			if (err.message.includes("Foutieve IBAN")) {
+				errorMessage = t("messages.rekeningen.invalidIbanError");
+				setIbanValid(false);
+			}
+
+			toast({
+				error: errorMessage,
+			});
+		});
 	};
 
 	return (
@@ -44,7 +57,7 @@ const AddAfdelingRekeningModal: React.FC<AddAfdelingRekeningModalProps> = ({afde
 				<ModalHeader>{t("modals.addRekening.title")}</ModalHeader>
 				<ModalCloseButton />
 				<ModalBody>
-					<RekeningForm rekening={{rekeninghouder: afdeling.naam}} onSubmit={onSaveRekening} onCancel={() => onClose()} />
+					<RekeningForm rekening={{rekeninghouder: afdeling.naam}} isIbanValid={isIbanValid} onSubmit={onSaveRekening} onCancel={() => onClose()} />
 				</ModalBody>
 				<ModalFooter />
 			</ModalContent>
