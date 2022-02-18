@@ -3,13 +3,32 @@ import React from "react";
 import DatePicker from "react-datepicker";
 import {useTranslation} from "react-i18next";
 import {Burger} from "../../generated/graphql";
+import dayjs from "../../utils/dayjs";
 import d from "../../utils/dayjs";
+import {Regex} from "../../utils/things";
 import useForm from "../../utils/useForm";
 import useToaster from "../../utils/useToaster";
 import zod from "../../utils/zod";
-import BurgerValidator from "../../validators/BurgerValidator";
 import {FormLeft, FormRight} from "../shared/Forms";
 import Section from "../shared/Section";
+
+// t("messages.burgers.invalidGeboortedatum")
+const validator = zod.object({
+	bsn: zod.string().regex(/^([0-9]{8,9})$/),
+	voorletters: zod.string().regex(/^([A-Z]\.)+$/),
+	voornamen: zod.string().nonempty().refine(v => v.trim().length > 0).transform(v => v.trim()),
+	achternaam: zod.string().nonempty().refine(v => v.trim().length > 0).transform(v => v.trim()),
+	geboortedatum: zod.string().regex(Regex.Date).refine(strval => dayjs(strval, "L").isSameOrBefore(dayjs()), {message: "messages.burgers.invalidGeboortedatum"}),
+	email: zod.string().nonempty().email(),
+	straatnaam: zod.string().nonempty().refine(v => v.trim().length > 0).transform(v => v.trim()),
+	huisnummer: zod.string().nonempty().refine(v => v.trim().length > 0).transform(v => v.trim()),
+	postcode: zod.string().regex(Regex.ZipcodeNL),
+	plaatsnaam: zod.string().nonempty().refine(v => v.trim().length > 0).transform(v => v.trim()),
+	telefoonnummer: zod.union([
+		zod.string().regex(Regex.MobilePhoneNL),
+		zod.string().regex(Regex.PhoneNumberNL),
+	]),
+});
 
 type BurgerFormProps = {
 	burger?: Burger,
@@ -24,8 +43,8 @@ const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading, isB
 	const toast = useToaster();
 	const {bsn, voorletters, voornamen, achternaam, geboortedatum, email, huisnummer, postcode, straatnaam, plaatsnaam, telefoonnummer} = burger || {};
 
-	const [form, {updateForm, toggleSubmitted, isValid, isFieldValid}] = useForm<zod.infer<typeof BurgerValidator>>({
-		validator: BurgerValidator,
+	const [form, {updateForm, toggleSubmitted, isValid, isFieldValid}] = useForm<zod.infer<typeof validator>>({
+		validator: validator,
 		initialValue: {
 			bsn: bsn?.toString(),
 			voorletters,
