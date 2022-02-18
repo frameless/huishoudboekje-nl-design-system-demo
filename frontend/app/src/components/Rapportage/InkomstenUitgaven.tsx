@@ -48,7 +48,6 @@ const InkomstenUitgaven: React.FC<BoxProps & {transactions: BankTransaction[]}> 
 				lineWidth: 1,
 				pointSize: 5,
 			}}
-			// rootProps={{"data-testid": "1"}}
 		/>
 	</>);
 };

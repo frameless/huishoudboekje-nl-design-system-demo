@@ -1,35 +1,19 @@
 import {AddIcon, DeleteIcon} from "@chakra-ui/icons";
-import {
-	AlertDialog,
-	AlertDialogBody,
-	AlertDialogContent,
-	AlertDialogFooter,
-	AlertDialogHeader,
-	AlertDialogOverlay,
-	Avatar,
-	Box,
-	Button,
-	Grid,
-	IconButton,
-	Stack,
-	Text,
-	useBreakpointValue,
-	useDisclosure,
-} from "@chakra-ui/react";
-import React, {useRef} from "react";
+import {Avatar, Box, Button, Grid, IconButton, Stack, Text, useBreakpointValue, useDisclosure} from "@chakra-ui/react";
+import React from "react";
 import {useTranslation} from "react-i18next";
 import {NavLink, useNavigate} from "react-router-dom";
 import {AppRoutes} from "../../../config/routes";
 import {Burger, GetHuishoudenDocument, GetHuishoudensDocument, Huishouden, useDeleteHuishoudenBurgerMutation} from "../../../generated/graphql";
 import {formatBurgerName, formatHuishoudenName} from "../../../utils/things";
 import useToaster from "../../../utils/useToaster";
+import Alert from "../../shared/Alert";
 import GridCard from "../../shared/GridCard";
 
 const HuishoudenBurgerItem: React.FC<{huishouden: Huishouden, burger: Burger}> = ({huishouden, burger}) => {
 	const navigate = useNavigate();
 	const isMobile = useBreakpointValue([true, null, null, false]);
-	const alert = useDisclosure();
-	const cancelRef = useRef<any>(null);
+	const deleteHuishoudenBurgerAlert = useDisclosure();
 	const toast = useToaster();
 	const {t} = useTranslation();
 
@@ -42,7 +26,7 @@ const HuishoudenBurgerItem: React.FC<{huishouden: Huishouden, burger: Burger}> =
 
 	const onClickDeleteBurgerFromHuishouden = (e) => {
 		e.preventDefault();
-		alert.onOpen();
+		deleteHuishoudenBurgerAlert.onOpen();
 	};
 
 	const onConfirmDeleteBurgerFromHuishouden = () => {
@@ -55,7 +39,7 @@ const HuishoudenBurgerItem: React.FC<{huishouden: Huishouden, burger: Burger}> =
 			toast({
 				success: t("messages.huishoudenBurger.deleteSuccess", {burgerName: formatBurgerName(burger)}),
 			});
-			alert.onClose();
+			deleteHuishoudenBurgerAlert.onClose();
 
 			/* Check if all burgers were removed from this Huishouden */
 			if (huishouden.burgers?.filter(b => b.id !== burger.id).length === 0) {
@@ -70,34 +54,29 @@ const HuishoudenBurgerItem: React.FC<{huishouden: Huishouden, burger: Burger}> =
 	};
 
 	return (<>
-		<AlertDialog isOpen={alert.isOpen} onClose={alert.onClose} leastDestructiveRef={cancelRef}>
-			<AlertDialogOverlay>
-				<AlertDialogContent>
-					<AlertDialogHeader fontSize={"lg"} fontWeight={"bold"}>
-						{t("forms.huishoudens.deleteBurger.title")}
-					</AlertDialogHeader>
-					<AlertDialogBody>
-						{t("forms.huishoudens.deleteBurger.confirmQuestion", {
-							burgerName: formatBurgerName(burger),
-							huishoudenName: formatHuishoudenName(huishouden),
-						})}
-					</AlertDialogBody>
-					<AlertDialogFooter>
-						<Button ref={cancelRef} onClick={alert.onClose}>
-							{t("global.actions.cancel")}
-						</Button>
-						<Button colorScheme={"red"} onClick={onConfirmDeleteBurgerFromHuishouden} ml={3}>
-							{t("global.actions.delete")}
-						</Button>
-					</AlertDialogFooter>
-				</AlertDialogContent>
-			</AlertDialogOverlay>
-		</AlertDialog>
+		{deleteHuishoudenBurgerAlert.isOpen && (
+			<Alert
+				title={t("forms.huishoudens.deleteBurger.title")}
+				cancelButton={true}
+				confirmButton={
+					<Button colorScheme={"red"} onClick={onConfirmDeleteBurgerFromHuishouden} ml={3}>
+						{t("global.actions.delete")}
+					</Button>
+				}
+				onClose={deleteHuishoudenBurgerAlert.onClose}
+			>
+				{t("forms.huishoudens.deleteBurger.confirmQuestion", {
+					burgerName: formatBurgerName(burger),
+					huishoudenName: formatHuishoudenName(huishouden),
+				})}
+			</Alert>
+		)}
 
 		<GridCard as={NavLink} justify={["flex-start", "center"]} to={AppRoutes.Burger(burger.id)} position={"relative"}>
 			{(huishouden.burgers || []).length > 1 && (
 				<Box position={"absolute"} top={1} right={1}>
-					<IconButton variant={"ghost"} size={"sm"} aria-label={t("global.actions.delete")} icon={<DeleteIcon />} onClick={onClickDeleteBurgerFromHuishouden} />
+					<IconButton variant={"ghost"} size={"sm"} aria-label={t("global.actions.delete")} icon={<DeleteIcon />}
+						onClick={onClickDeleteBurgerFromHuishouden} />
 				</Box>
 			)}
 			<Stack direction={["row", "column"]} spacing={5} align={"center"} justify={["flex-start", "center"]}>

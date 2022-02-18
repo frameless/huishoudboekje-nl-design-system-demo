@@ -1,4 +1,4 @@
-import {Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, UseDisclosureReturn} from "@chakra-ui/react";
+import {Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import SaveAfdelingPostadresErrorHandler from "../../errorHandlers/SaveAfdelingPostadresErrorHandler";
@@ -7,7 +7,12 @@ import {Afdeling, GetAfdelingDocument, GetOrganisatieDocument, useCreateAfdeling
 import useToaster from "../../utils/useToaster";
 import PostadresForm from "../Postadressen/PostadresForm";
 
-const AddAfdelingPostadresModal: React.FC<{afdeling: Afdeling, disclosure: UseDisclosureReturn}> = ({afdeling, disclosure}) => {
+type AddAfdelingPostadresModalProps = {
+	afdeling: Afdeling,
+	onClose: VoidFunction
+};
+
+const AddAfdelingPostadresModal: React.FC<AddAfdelingPostadresModalProps> = ({afdeling, onClose}) => {
 	const {t} = useTranslation();
 	const toast = useToaster();
 	const handleSaveAfdelingPostadres = useMutationErrorHandler(SaveAfdelingPostadresErrorHandler);
@@ -28,18 +33,18 @@ const AddAfdelingPostadresModal: React.FC<{afdeling: Afdeling, disclosure: UseDi
 			toast({
 				success: t("messages.postadressen.createSuccess"),
 			});
-			disclosure.onClose();
+			onClose();
 		}).catch(handleSaveAfdelingPostadres);
 	};
 
 	return (
-		<Modal isOpen={disclosure.isOpen} onClose={() => disclosure.onClose()}>
+		<Modal isOpen={true} onClose={() => onClose()}>
 			<ModalOverlay />
 			<ModalContent>
 				<ModalHeader>{t("modals.addPostadres.modalTitle")}</ModalHeader>
 				<ModalCloseButton />
 				<ModalBody>
-					<PostadresForm onSubmit={(data) => onSavePostadres(afdeling.id!, data)} onCancel={() => disclosure.onClose()} />
+					<PostadresForm onSubmit={(data) => onSavePostadres(afdeling.id!, data)} onCancel={() => onClose()} />
 				</ModalBody>
 				<ModalFooter />
 			</ModalContent>

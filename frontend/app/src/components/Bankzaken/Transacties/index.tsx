@@ -34,8 +34,8 @@ import Queryable from "../../../utils/Queryable";
 import {useReactSelectStyles} from "../../../utils/things";
 import useHandleMutation from "../../../utils/useHandleMutation";
 import usePagination from "../../../utils/usePagination";
-import Page from "../../shared/Page";
 import DeadEndPage from "../../shared/DeadEndPage";
+import Page from "../../shared/Page";
 import Section from "../../shared/Section";
 import {TransactionsContext} from "./context";
 import TransactiesList from "./TransactiesList";
@@ -123,7 +123,7 @@ const Transactions = () => {
 		<TransactionsContext.Provider value={{queryVariables}}>
 			<Page title={t("forms.bankzaken.sections.transactions.title")} menu={(
 				<Menu>
-					<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} data-cy={"actionsMenuButton"} />
+					<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} />
 					<MenuList>
 						<MenuItem onClick={onClickStartBoekenButton}>{t("global.actions.startBoeken")}</MenuItem>
 					</MenuList>

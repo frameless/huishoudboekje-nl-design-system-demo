@@ -1,15 +1,15 @@
-import {Box, Heading, Stack, StackProps} from "@chakra-ui/react";
+import {Box, Heading, Stack} from "@chakra-ui/react";
 import React from "react";
 
-type PageProps = Omit<Partial<StackProps>, "right"> & {
+type PageProps = {
 	title: string,
 	backButton?: JSX.Element,
 	menu?: JSX.Element | null | false,
 	right?: JSX.Element | null | false
 };
-const Page: React.FC<PageProps> = ({title, backButton, menu, right, children, ...props}) => {
+const Page: React.FC<PageProps> = ({title, backButton, menu, right, children}) => {
 	return (
-		<Stack spacing={5} {...props}>
+		<Stack spacing={5}>
 			{backButton && <Box>{backButton}</Box>}
 
 			<Stack direction={"row"} justifyContent={"space-between"} alignItems={"center"}>

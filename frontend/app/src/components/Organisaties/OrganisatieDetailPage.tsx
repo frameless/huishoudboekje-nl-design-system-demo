@@ -1,24 +1,6 @@
 import {AddIcon, ChevronDownIcon} from "@chakra-ui/icons";
-import {
-	AlertDialog,
-	AlertDialogBody,
-	AlertDialogContent,
-	AlertDialogFooter,
-	AlertDialogHeader,
-	AlertDialogOverlay,
-	Box,
-	Button,
-	Grid,
-	Heading,
-	IconButton,
-	Menu,
-	MenuButton,
-	MenuItem,
-	MenuList,
-	useBreakpointValue,
-	useDisclosure,
-} from "@chakra-ui/react";
-import React, {useRef} from "react";
+import {Box, Button, Grid, Heading, IconButton, Menu, MenuButton, MenuItem, MenuList, useBreakpointValue, useDisclosure} from "@chakra-ui/react";
+import React from "react";
 import {useToggle} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {Navigate, useNavigate, useParams} from "react-router-dom";
@@ -27,9 +9,10 @@ import {Afdeling, GetOrganisatiesDocument, Organisatie, useDeleteOrganisatieMuta
 import Queryable from "../../utils/Queryable";
 import {maxOrganisatieNaamLengthBreakpointValues, truncateText} from "../../utils/things";
 import useToaster from "../../utils/useToaster";
-import Page from "../shared/Page";
+import Alert from "../shared/Alert";
 import BackButton from "../shared/BackButton";
 import DeadEndPage from "../shared/DeadEndPage";
+import Page from "../shared/Page";
 import Section from "../shared/Section";
 import AfdelingListItem from "./AfdelingListItem";
 import CreateAfdelingModal from "./CreateAfdelingModal";
@@ -41,14 +24,13 @@ const OrganisatieDetailPage = () => {
 	const navigate = useNavigate();
 	const toast = useToaster();
 	const addAfdelingModal = useDisclosure();
+	const deleteAlert = useDisclosure();
 	const maxOrganisatieNaamLength = useBreakpointValue(maxOrganisatieNaamLengthBreakpointValues);
 
-	const cancelDeleteRef = useRef(null);
-	const [deleteDialogOpen, toggleDeleteDialog] = useToggle(false);
 	const [isDeleted, toggleDeleted] = useToggle(false);
 
 	const onClickEdit = () => navigate(AppRoutes.EditOrganisatie(parseInt(id)));
-	const onClickDelete = () => toggleDeleteDialog();
+	const onClickDelete = () => deleteAlert.onOpen();
 
 	const $organisatie = useGetOrganisatieQuery({
 		variables: {id: parseInt(id)},
@@ -59,7 +41,7 @@ const OrganisatieDetailPage = () => {
 			{query: GetOrganisatiesDocument},
 		],
 	});
-	const onCloseDeleteDialog = () => toggleDeleteDialog(false);
+	const onCloseDeleteDialog = () => deleteAlert.onClose();
 
 	return (
 		<Queryable query={$organisatie} children={({organisatie}: {organisatie: Organisatie}) => {
@@ -96,30 +78,33 @@ const OrganisatieDetailPage = () => {
 
 			const afdelingen: Afdeling[] = organisatie.afdelingen || [];
 			return (
-				<Page title={truncateText(organisatie.naam || "", maxOrganisatieNaamLength)} backButton={<BackButton to={AppRoutes.Organisaties} />} menu={(
-					<Menu>
-						<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} />
-						<MenuList>
-							<MenuItem onClick={onClickEdit}>{t("global.actions.edit")}</MenuItem>
-							<MenuItem onClick={onClickDelete}>{t("global.actions.delete")}</MenuItem>
-						</MenuList>
-					</Menu>
-				)}>
+				<Page title={truncateText(organisatie.naam || "", maxOrganisatieNaamLength)} backButton={<BackButton to={AppRoutes.Organisaties} />}
+					menu={(
+						<Menu>
+							<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} />
+							<MenuList>
+								<MenuItem onClick={onClickEdit}>{t("global.actions.edit")}</MenuItem>
+								<MenuItem onClick={onClickDelete}>{t("global.actions.delete")}</MenuItem>
+							</MenuList>
+						</Menu>
+					)}>
 					{addAfdelingModal.isOpen && (
 						<CreateAfdelingModal organisatie={organisatie} onClose={addAfdelingModal.onClose} />
 					)}
-
-					<AlertDialog isOpen={deleteDialogOpen} leastDestructiveRef={cancelDeleteRef} onClose={onCloseDeleteDialog}>
-						<AlertDialogOverlay />
-						<AlertDialogContent>
-							<AlertDialogHeader fontSize={"lg"} fontWeight={"bold"}>{t("messages.organisaties.deleteTitle")}</AlertDialogHeader>
-							<AlertDialogBody>{t("messages.organisaties.deleteQuestion", {name: organisatie.naam})}</AlertDialogBody>
-							<AlertDialogFooter>
-								<Button ref={cancelDeleteRef} onClick={onCloseDeleteDialog}>{t("global.actions.cancel")}</Button>
-								<Button isLoading={deleteLoading} colorScheme={"red"} onClick={onConfirmDeleteDialog} ml={3}>{t("global.actions.delete")}</Button>
-							</AlertDialogFooter>
-						</AlertDialogContent>
-					</AlertDialog>
+					{deleteAlert.isOpen && (
+						<Alert
+							title={t("messages.organisaties.deleteTitle")}
+							cancelButton={true}
+							confirmButton={(
+								<Button isLoading={deleteLoading} colorScheme={"red"} onClick={onConfirmDeleteDialog} ml={3}>
+									{t("global.actions.delete")}
+								</Button>
+							)}
+							onClose={onCloseDeleteDialog}
+						>
+							{t("messages.organisaties.deleteQuestion", {name: organisatie.naam})}
+						</Alert>
+					)}
 
 					<Section>
 						<OrganisatieDetailView organisatie={organisatie} />

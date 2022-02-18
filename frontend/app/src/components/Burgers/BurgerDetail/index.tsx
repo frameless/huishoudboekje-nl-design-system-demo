@@ -8,9 +8,9 @@ import {Burger, GetBurgersDocument, GetBurgersSearchDocument, GetHuishoudensDocu
 import Queryable from "../../../utils/Queryable";
 import {formatBurgerName} from "../../../utils/things";
 import useToaster from "../../../utils/useToaster";
-import Page from "../../shared/Page";
 import Alert from "../../shared/Alert";
 import BackButton from "../../shared/BackButton";
+import Page from "../../shared/Page";
 import PageNotFound from "../../shared/PageNotFound";
 import Section from "../../shared/Section";
 import {BurgerSearchContext} from "../BurgerSearchContext";
@@ -43,8 +43,6 @@ const BurgerDetailPage = () => {
 		],
 	});
 
-	const onClickDeleteMenuItem = () => deleteAlert.onOpen();
-
 	return (
 		<Queryable query={$burger}>{(data) => {
 			const burger: Burger = data.burger;
@@ -71,11 +69,20 @@ const BurgerDetailPage = () => {
 			};
 
 			return (<>
-				{deleteAlert.isOpen && <Alert title={t("messages.burgers.deleteTitle")} cancelButton={true} onClose={() => deleteAlert.onClose()} confirmButton={(
-					<Button isLoading={$deleteBurger.loading} colorScheme={"red"} onClick={onConfirmDelete} ml={3} data-cy={"inModal"}>{t("global.actions.delete")}</Button>
-				)}>
-					{t("messages.burgers.deleteQuestion", {name: `${burger.voornamen} ${burger.achternaam}`})}
-				</Alert>}
+				{deleteAlert.isOpen && (
+					<Alert
+						title={t("messages.burgers.deleteTitle")}
+						cancelButton={true}
+						onClose={() => deleteAlert.onClose()}
+						confirmButton={(
+							<Button isLoading={$deleteBurger.loading} colorScheme={"red"} onClick={onConfirmDelete} ml={3}>
+								{t("global.actions.delete")}
+							</Button>
+						)}
+					>
+						{t("messages.burgers.deleteQuestion", {name: `${burger.voornamen} ${burger.achternaam}`})}
+					</Alert>
+				)}
 
 				<Page title={formatBurgerName(burger)} backButton={(
 					<Stack direction={["column", "row"]} spacing={[2, 5]}>
@@ -84,14 +91,14 @@ const BurgerDetailPage = () => {
 					</Stack>
 				)} menu={(
 					<Menu>
-						<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} data-cy={"actionsMenuButton"} />
+						<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} />
 						<MenuList>
 							<Link href={AppRoutes.BrievenExport(id, "excel")} target={"_blank"}><MenuItem>{t("global.actions.brievenExport")}</MenuItem></Link>
 							<NavLink to={AppRoutes.RapportageBurger([parseInt(id)])}><MenuItem>{t("sidebar.rapportage")}</MenuItem></NavLink>
 							<NavLink to={AppRoutes.Huishouden(burger.huishouden?.id)}><MenuItem>{t("showHuishouden")}</MenuItem></NavLink>
 							<Divider />
 							<NavLink to={AppRoutes.EditBurger(id)}><MenuItem>{t("global.actions.edit")}</MenuItem></NavLink>
-							<MenuItem onClick={onClickDeleteMenuItem}>{t("global.actions.delete")}</MenuItem>
+							<MenuItem onClick={() => deleteAlert.onOpen()}>{t("global.actions.delete")}</MenuItem>
 						</MenuList>
 					</Menu>
 				)}>

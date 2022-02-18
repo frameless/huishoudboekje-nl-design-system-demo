@@ -2,7 +2,8 @@ import {
 	Button,
 	FormControl,
 	FormErrorMessage,
-	FormLabel, HStack,
+	FormLabel,
+	HStack,
 	Input,
 	Modal,
 	ModalBody,
@@ -12,7 +13,6 @@ import {
 	ModalHeader,
 	ModalOverlay,
 	Stack,
-	UseDisclosureReturn,
 } from "@chakra-ui/react";
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
@@ -20,7 +20,12 @@ import {Afdeling, GetOrganisatieDocument, UpdateAfdelingMutationVariables, useUp
 import useToaster from "../../utils/useToaster";
 import AfdelingValidator from "../../validators/AfdelingValidator";
 
-const UpdateAfdelingModal: React.FC<{afdeling: Afdeling, disclosure: UseDisclosureReturn}> = ({afdeling, disclosure}) => {
+type UpdateAfdelingModalProps = {
+	afdeling: Afdeling,
+	onClose: VoidFunction
+};
+
+const UpdateAfdelingModal: React.FC<UpdateAfdelingModalProps> = ({afdeling, onClose}) => {
 	const {t} = useTranslation();
 	const toast = useToaster();
 	const [data, setData] = useState<Partial<UpdateAfdelingMutationVariables>>({
@@ -44,7 +49,7 @@ const UpdateAfdelingModal: React.FC<{afdeling: Afdeling, disclosure: UseDisclosu
 			toast({
 				success: t("messages.afdelingen.updateSuccess"),
 			});
-			disclosure.onClose();
+			onClose();
 		}).catch(err => {
 			toast({
 				error: err.message,
@@ -55,7 +60,7 @@ const UpdateAfdelingModal: React.FC<{afdeling: Afdeling, disclosure: UseDisclosu
 	const isValid = (fieldName: string) => AfdelingValidator.shape[fieldName].safeParse(data[fieldName]).success;
 
 	return (
-		<Modal isOpen={disclosure.isOpen} onClose={disclosure.onClose}>
+		<Modal isOpen={true} onClose={onClose}>
 			<form onSubmit={onSubmit}>
 				<ModalOverlay />
 				<ModalContent>
@@ -72,7 +77,7 @@ const UpdateAfdelingModal: React.FC<{afdeling: Afdeling, disclosure: UseDisclosu
 					</ModalBody>
 					<ModalFooter>
 						<HStack>
-							<Button colorScheme={"gray"} onClick={disclosure.onClose}>
+							<Button colorScheme={"gray"} onClick={onClose}>
 								{t("global.actions.cancel")}
 							</Button>
 							<Button colorScheme={"primary"} type={"submit"}>

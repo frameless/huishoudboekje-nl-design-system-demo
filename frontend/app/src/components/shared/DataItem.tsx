@@ -1,7 +1,11 @@
 import {FormLabel, Stack, Text} from "@chakra-ui/react";
 import React from "react";
 
-const DataItem: React.FC<{label?: string}> = ({label, children}) => {
+type DataItemProps = {
+	label: string
+};
+
+const DataItem: React.FC<DataItemProps> = ({label, children}) => {
 	return (
 		<Stack spacing={0} flex={1}>
 			<FormLabel mb={0}>{label}</FormLabel>

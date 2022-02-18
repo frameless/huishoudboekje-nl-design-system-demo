@@ -1,41 +1,25 @@
 import {DeleteIcon} from "@chakra-ui/icons";
-import {
-	AlertDialog,
-	AlertDialogBody,
-	AlertDialogContent,
-	AlertDialogFooter,
-	AlertDialogHeader,
-	AlertDialogOverlay,
-	Button,
-	Editable,
-	EditableInput,
-	EditablePreview,
-	IconButton,
-	TableRowProps,
-	Td,
-	Tooltip,
-	Tr,
-} from "@chakra-ui/react";
+import {Button, Editable, EditableInput, EditablePreview, IconButton, Td, Tooltip, Tr, useDisclosure} from "@chakra-ui/react";
 import React, {useEffect, useRef} from "react";
-import {useInput, useToggle} from "react-grapple";
+import {useInput} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {GetRekeningDocument, Rekening, useUpdateRekeningMutation} from "../../generated/graphql";
 import {formatIBAN, truncateText} from "../../utils/things";
 import useToaster from "../../utils/useToaster";
+import Alert from "../shared/Alert";
 import PrettyIban from "../shared/PrettyIban";
 
-type RekeningListItemProps = TableRowProps & {
+type RekeningListItemProps = {
 	rekening: Rekening,
 	onDelete?: VoidFunction
 };
 
-const RekeningListItem: React.FC<RekeningListItemProps> = ({rekening, onDelete, ...props}) => {
+const RekeningListItem: React.FC<RekeningListItemProps> = ({rekening, onDelete}) => {
 	const {t} = useTranslation();
 	const toast = useToaster();
-	const [deleteDialogOpen, toggleDeleteDialog] = useToggle(false);
-	const cancelDeleteRef = useRef(null);
-
-	const rekeninghouder = useInput({
+	const deleteAlert = useDisclosure();
+	const editablePreviewRef = useRef<HTMLSpanElement>(null);
+	const rekeninghouder = useInput({ // Todo: refactor useInput to useForm (17-02-2022)
 		defaultValue: rekening.rekeninghouder,
 	});
 
@@ -48,10 +32,9 @@ const RekeningListItem: React.FC<RekeningListItemProps> = ({rekening, onDelete, 
 	const onConfirmDeleteDialog = () => {
 		if (onDelete) {
 			onDelete();
-			toggleDeleteDialog(false);
 		}
 	};
-	const onCloseDeleteDialog = () => toggleDeleteDialog(false);
+	const onCloseDeleteDialog = () => deleteAlert.onClose();
 
 	const onSubmit = () => {
 		updateRekening({
@@ -72,8 +55,6 @@ const RekeningListItem: React.FC<RekeningListItemProps> = ({rekening, onDelete, 
 		});
 	};
 
-	const editablePreviewRef = useRef<HTMLSpanElement>(null);
-
 	/* Truncate the length of the text if EditablePreview's value gets too long. */
 	useEffect(() => {
 		if (editablePreviewRef.current) {
@@ -87,21 +68,26 @@ const RekeningListItem: React.FC<RekeningListItemProps> = ({rekening, onDelete, 
 	}
 
 	return (<>
-		{onDelete && (
-			<AlertDialog isOpen={deleteDialogOpen} leastDestructiveRef={cancelDeleteRef} onClose={onCloseDeleteDialog}>
-				<AlertDialogOverlay />
-				<AlertDialogContent>
-					<AlertDialogHeader fontSize={"lg"} fontWeight={"bold"}>{t("messages.rekeningen.deleteTitle")}</AlertDialogHeader>
-					<AlertDialogBody>{t("messages.rekeningen.deleteQuestion", {iban: formatIBAN(rekening.iban), rekeninghouder: rekening.rekeninghouder})}</AlertDialogBody>
-					<AlertDialogFooter>
-						<Button ref={cancelDeleteRef} onClick={onCloseDeleteDialog}>{t("global.actions.cancel")}</Button>
-						<Button colorScheme={"red"} onClick={onConfirmDeleteDialog} ml={3}>{t("global.actions.delete")}</Button>
-					</AlertDialogFooter>
-				</AlertDialogContent>
-			</AlertDialog>
-		)}
 
-		<Tr {...props}>
+		{deleteAlert.isOpen && (
+			<Alert
+				title={t("messages.rekeningen.deleteTitle")}
+				cancelButton={true}
+				confirmButton={
+					<Button colorScheme={"red"} onClick={onConfirmDeleteDialog} ml={3}>
+						{t("global.actions.delete")}
+					</Button>
+				}
+				onClose={onCloseDeleteDialog}
+			>
+				{t("messages.rekeningen.deleteQuestion", {
+					iban: formatIBAN(rekening.iban),
+					rekeninghouder: rekening.rekeninghouder,
+				})}
+			</Alert>)
+		}
+
+		<Tr>
 			<Td>
 				<Editable defaultValue={(rekening.rekeninghouder || "").length > 0 ? rekening.rekeninghouder : t("unknown")} flex={1} submitOnBlur={true} onSubmit={onSubmit}>
 					<Tooltip label={t("global.actions.clickToEdit")} placement={"right"}>
@@ -114,7 +100,7 @@ const RekeningListItem: React.FC<RekeningListItemProps> = ({rekening, onDelete, 
 				<PrettyIban iban={rekening.iban} />
 			</Td>
 			<Td>{onDelete && (
-				<IconButton icon={<DeleteIcon />} size={"xs"} variant={"ghost"} onClick={() => toggleDeleteDialog(true)} aria-label={t("global.actions.delete")} />
+				<IconButton icon={<DeleteIcon />} size={"xs"} variant={"ghost"} onClick={() => deleteAlert.onOpen()} aria-label={t("global.actions.delete")} />
 			)}</Td>
 		</Tr>
 	</>);

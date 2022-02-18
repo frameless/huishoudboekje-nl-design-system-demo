@@ -7,7 +7,12 @@ export default {
 	title: "Huishoudboekje/Section",
 	component: Section,
 	argTypes: {
-		children: {},
+		children: {
+			type: {
+				name: "other",
+				required: true,
+			},
+		},
 	},
 } as ComponentMeta<typeof Section>;
 

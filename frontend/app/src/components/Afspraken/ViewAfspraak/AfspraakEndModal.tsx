@@ -24,7 +24,12 @@ import zod from "../../../utils/zod";
 
 const validator = zod.string().regex(new RegExp(/^\d{4}-\d{2}-\d{2}$/));
 
-const AfspraakEndModal = ({isOpen, onClose, onSubmit}) => {
+type AfspraakEndModalProps = {
+	onClose: VoidFunction,
+	onSubmit: (validThrough: Date) => void
+};
+
+const AfspraakEndModal: React.FC<AfspraakEndModalProps> = ({onClose, onSubmit}) => {
 	const {t} = useTranslation();
 	const toast = useToaster();
 	const [date, setDate] = useState<Date>(d().toDate());
@@ -42,9 +47,7 @@ const AfspraakEndModal = ({isOpen, onClose, onSubmit}) => {
 
 	const onClickSubmit = () => {
 		try {
-			const stringDate = d(date).format("YYYY-MM-DD");
-			validator.parse(stringDate);
-			onSubmit(stringDate);
+			onSubmit(date);
 		}
 		catch (e) {
 			toast({error: t("errors.invalidDateError")});
@@ -52,7 +55,7 @@ const AfspraakEndModal = ({isOpen, onClose, onSubmit}) => {
 	};
 
 	return (
-		<Modal isOpen={isOpen} onClose={onClose}>
+		<Modal isOpen={true} onClose={onClose}>
 			<ModalOverlay />
 			<ModalContent>
 				<ModalHeader>{t("endAfspraak.confirmModalTitle")}</ModalHeader>
