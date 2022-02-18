@@ -48,7 +48,7 @@ const DeleteAfdelingAlert: React.FC<DeleteAfdelingAlertProps> = ({afdeling, onCl
 
 	return (
 		<Alert
-			title={t("deleteAfdelingModal.title")}
+			title={t("deleteAfdelingAlert.title")}
 			cancelButton={true}
 			confirmButton={
 				<Button colorScheme={"red"} ml={3} onClick={onClickSubmit}>
@@ -57,7 +57,7 @@ const DeleteAfdelingAlert: React.FC<DeleteAfdelingAlertProps> = ({afdeling, onCl
 			}
 			onClose={onClose}
 		>
-			{t("deleteAfdelingModal.confirmModalBody", {afdeling: afdeling.naam})}
+			{t("deleteAfdelingAlert.confirmModalBody", {afdeling: afdeling.naam})}
 		</Alert>
 	);
 };

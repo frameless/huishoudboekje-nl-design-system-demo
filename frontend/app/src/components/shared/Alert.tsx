@@ -10,8 +10,7 @@ const Alert = ({title, children, confirmButton, cancelButton = true, onClose}) =
 		<AlertDialog isOpen={true} leastDestructiveRef={cancelDeleteRef} onClose={onClose}>
 			<AlertDialogOverlay />
 			<AlertDialogContent>
-				{/*<AlertDialogHeader fontSize="lg" fontWeight="bold">{title}</AlertDialogHeader>*/}
-				<AlertDialogHeader fontSize={"lg"} fontWeight={"bold"}>Titel</AlertDialogHeader>
+				<AlertDialogHeader fontSize={"lg"} fontWeight={"bold"}>{title}</AlertDialogHeader>
 				<AlertDialogCloseButton />
 				<AlertDialogBody>{children}</AlertDialogBody>
 				<AlertDialogFooter>
