@@ -9,6 +9,8 @@
     "updateAfspraakSuccess": "De afspraak is gewijzigd.",
     "createAfspraakSuccess": "De afspraak is opgeslagen.",
     "deleteAfspraakSuccess": "De afspraak is verwijderd.",
+    "updateAlarmSuccess": "Het alarm is gewijzigd.",
+    "deleteAlarmSuccess": "Het alarm is verwijderd.",
     "deleteAfspraakZoektermSuccess": "De zoekterm is verwijderd.",
     "addAfspraakZoektermSuccess": "De zoekterm is opgeslagen.",
     "zoektermLengthError": "Een zoekterm moet minimaal één teken lang zijn.",
@@ -101,12 +103,12 @@
     "rekeningen": {
       "createSuccess": "Bankrekening {{iban}} op naam van {{rekeninghouder}} is toegevoegd.",
       "alreadyExistsError": "Dit bankrekeningnummer wordt al gebruikt.",
-      "invalidIbanError": "Het IBAN is niet geldig. Vul een geldig IBAN in.",
+      "invalidIbanError": "Er is een onjuiste IBAN ingevuld. Vul een geldige IBAN in.",
       "deleteSuccess": "Bankrekening is verwijderd.",
       "inUseDeleteError": "Deze bankrekening is in gebruik en kan niet worden verwijderd.",
       "updateSuccess": "Gegevens succesvol gewijzigd.",
-      "deleteTitle": "Bankrekening verwijderen",
-      "deleteQuestion": "Weet je zeker dat je bankrekening <strong>{{iban}}</strong> op naam van <strong>{{rekeninghouder}}</strong> wil verwijderen? Deze actie kan niet ongedaan worden gemaakt."
+      "deleteTitle": "Bankrekening verwijderen.",
+      "deleteQuestion": "Weet je zeker dat je bankrekening {{iban}} op naam van {{rekeninghouder}} wil verwijderen? Deze actie kan niet ongedaan worden gemaakt."
     },
     "backendError": "Er is een systeemfout opgetreden. Neem contact op met de applicatiebeheerder voor ondersteuning.",
     "genericToastErrorTitle": "Er is een fout opgetreden."
@@ -117,14 +119,12 @@
       "logout": "Uitloggen",
       "save": "Opslaan",
       "view": "Bekijken",
+      "cancel": "Annuleren",
       "delete": "Verwijderen",
       "edit": "Wijzigen",
       "end": "Beëindigen",
-      "empty": "__MISSING-TRANSLATION__",
       "newBetaalinstructie": "Nieuwe betaalinstructie instellen",
       "add": "Toevoegen",
-      "cancel": "Annuleren",
-      "selectFile": "Kies een of meerdere bestanden",
       "close": "Sluiten",
       "export": "Exporteren",
       "download": "Downloaden",
@@ -141,9 +141,10 @@
       "backToHome": "Terug naar de hoofdpagina"
     },
     "formError": "Er is een fout opgetreden. Controleer de invoer en probeer het nog eens.",
+    "date": "Datum",
+    "isActive": "Actief",
     "time": "Tijd",
     "period": "Periode",
-    "date": "Datum",
     "startDate": "Startdatum"
   },
   "forms": {
@@ -180,7 +181,7 @@
       "sections": {
         "customerStatementMessages": {
           "title": "Bankafschriften",
-          "helperText": "Importeer een bestand met afschriften in MT940-formaat of CAMT.053-formaat om bij- en afschrijvingen in te laden.",
+          "helperText": "Hier is het mogelijk om bij- en afschrijvingen uit een MT940-bestand te importeren.",
           "filename": "Bestandsnaam"
         },
         "transactions": {
@@ -355,7 +356,7 @@
   "organisatie": "Organisatie",
   "burger": "Burger",
   "afspraakForm": {
-    "invalidTypeError": "Kies met wie de afspraak wordt gemaakt."
+    "invalidTypeError": "Maak een keuze."
   },
   "afdeling": "Afdeling",
   "postadres": "Postadres",
@@ -382,6 +383,11 @@
       "helperText": "Instellingen voor een betaalinstructie."
     },
     "noBetaalinstructie": "Er is geen betaalinstructie ingesteld.",
+    "alarm": {
+      "title": "Alarm",
+      "helperText": "Stel een alarm in om een signaal te krijgen als het bedrag van een betaling afwijkt van de verwachting."
+    },
+    "noAlarm": "Er is geen alarm ingesteld.",
     "invalidNaamError": "Vul een naam voor de afdeling in."
   },
   "select": {
@@ -395,7 +401,7 @@
     "repeatType_month": "Maandelijks",
     "repeatType_year": "Jaarlijks",
     "eenmalig": "Eenmalig",
-    "periodiek": "Periodiek",
+    "periodiek": "Herhalend",
     "datum": "Datum",
     "startDate": "Startdatum",
     "endDate": "Einddatum",
@@ -404,7 +410,7 @@
     "invalidPeriodiekError": "Kies een periodiek.",
     "byDay": "Weekdag",
     "invalidByDayError": "Kies minimaal één weekdag.",
-    "byMonth": "Maand(en)",
+    "byMonth": "Maanden",
     "invalidByMonthError": "Kies minimaal één maand.",
     "byMonthDay": "Dag van de maand (1-28)",
     "invalidByMonthDayError": "Vul de dag van de maand in.",
@@ -446,6 +452,25 @@
     "nov": "november",
     "dec": "december"
   },
+  "addAlarmModal": {
+    "title": "Alarm toevoegen",
+    "helperText": "Stel een alarm in om een signaal te krijgen wanneer een betaling uitblijft.",
+    "signaalInfoText": "Na {{date}} ontvang je een signaal als er nog geen betaling is afgeletterd met deze afspraak."
+  },
+  "alarmForm": {
+    "date": "Datum verwachte betaling",
+    "errors": {
+      "invalidDateError": "Vul een geldige datum in. De datum moet in de toekomst liggen.",
+      "invalidDatumMarginError": "Vul een aantal dagen in.",
+      "invalidMonthDayError": "Vul een dag van de maand in. Bijvoorbeeld: 24.",
+      "invalidBedragError": "Vul een bedrag in.",
+      "invalidBedragMarginError": "Vul een bedrag in."
+    },
+    "datumMargin": "Toegestane afwijking in dagen",
+    "byMonthDay": "Dag in de maand",
+    "bedrag": "Bedrag verwachte betaling",
+    "bedragMargin": "Toegestane afwijking bedrag (in euro's)"
+  },
   "deleteAfspraak": {
     "confirmModalTitle": "Afspraak verwijderen",
     "confirmModalBody": "Weet je zeker dat je deze afspraak wil verwijderen? Je kunt ook een vervolgafspraak maken, beëindig dan eerst deze afspraak."
@@ -459,6 +484,14 @@
   "exports": {
     "period": "Periode",
     "dateCreated": "Aanmaakdatum"
+  },
+  "bedrag": "Bedrag",
+  "afspraak": {
+    "alarm": {
+      "bedrag": "Bedrag",
+      "datum": "Datum",
+      "setByUser": "Ingesteld door"
+    }
   },
   "errors": {
     "invalidDateError": "Vul een geldige datum in.",
@@ -532,7 +565,6 @@
   },
   "omschrijving": "Omschrijving",
   "rubriek": "Rubriek",
-  "bedrag": "Bedrag",
   "transactieAfletteren": {
     "title": "Afletteren",
     "helperText": "Kies een afspraak om deze transactie op af te letteren."
@@ -745,6 +777,10 @@
     "period": "Periode",
     "month_one": "maand",
     "month_other": "maanden"
+  },
+  "periodiekSelector": {
+    "periodiek": "Periodiek",
+    "invalidPeriodiekError": "Kies een periodiek."
   },
   "version": "Versie {{version}}",
   "statuspage": {

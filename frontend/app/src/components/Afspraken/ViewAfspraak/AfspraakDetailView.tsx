@@ -1,30 +1,34 @@
-import {AddIcon, EditIcon, ViewIcon, WarningTwoIcon} from "@chakra-ui/icons";
-import {Box, Button, Divider, FormControl, FormLabel, HStack, IconButton, Input, InputGroup, InputLeftElement, InputRightElement, Stack, Table, Tbody, Td, Text, Th, Thead, Tr, useBreakpointValue, VStack, Wrap, WrapItem} from "@chakra-ui/react";
+import {AddIcon, CheckIcon, CloseIcon, DeleteIcon, EditIcon, ViewIcon, WarningTwoIcon} from "@chakra-ui/icons";
+import {Badge, Box, Button, Divider, FormControl, FormLabel, HStack, IconButton, Input, InputGroup, InputLeftElement, InputRightElement, Stack, Table, Tbody, Td, Text, Th, Thead, Tr, useBreakpointValue, useDisclosure, VStack} from "@chakra-ui/react";
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {AiOutlineTag} from "react-icons/all";
 import {NavLink} from "react-router-dom";
 import {AppRoutes} from "../../../config/routes";
-import {Afspraak, GetAfspraakDocument, GetAfsprakenDocument, useAddAfspraakZoektermMutation, useDeleteAfspraakZoektermMutation} from "../../../generated/graphql";
+import {Afspraak, GetAfspraakDocument, GetAfsprakenDocument, useAddAfspraakZoektermMutation, useCreateAlarmMutation, useDeleteAfspraakZoektermMutation, useDeleteAlarmMutation, useUpdateAlarmMutation} from "../../../generated/graphql";
 import d from "../../../utils/dayjs";
 import {currencyFormat2, formatBurgerName, getBurgerHhbId, isAfspraakActive} from "../../../utils/things";
 import useScheduleHelper from "../../../utils/useScheduleHelper";
 import useToaster from "../../../utils/useToaster";
 import zod, {containsZodErrorCode, zoektermValidator} from "../../../utils/zod";
+import AddButton from "../../shared/AddButton";
 import BackButton from "../../shared/BackButton";
 import DataItem from "../../shared/DataItem";
 import {FormLeft, FormRight} from "../../shared/Forms";
 import Page from "../../shared/Page";
 import PrettyIban from "../../shared/PrettyIban";
 import Section from "../../shared/Section";
-import ZoektermenList from "../../shared/ZoektermenList";
+import ZoektermenList from "../ZoektermenList";
+import AddAlarmModal from "./AddAlarmModal";
 import AfspraakDetailMenu from "./AfspraakDetailMenu";
 
 const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	const isMobile = useBreakpointValue([true, null, null, false]);
 	const {t} = useTranslation();
 	const toast = useToaster();
+	const addAlarmModal = useDisclosure();
 	const [zoekterm, setZoekterm] = useState<string>();
+	const [confirmDeleteAlarm, setConfirmDeleteAlarm] = useState<boolean>(false);
 	const [zoektermTouched, setZoektermTouched] = useState<boolean>(false);
 	const scheduleHelper = useScheduleHelper(afspraak.betaalinstructie);
 	const [addAfspraakZoekterm] = useAddAfspraakZoektermMutation({
@@ -43,6 +47,55 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 			{query: GetAfspraakDocument, variables: {id: afspraak.id}},
 		],
 	});
+	const [createAlarm] = useCreateAlarmMutation({
+		refetchQueries: [
+			{query: GetAfsprakenDocument},
+			{query: GetAfspraakDocument, variables: {id: afspraak.id}},
+		],
+	});
+	const [updateAlarm] = useUpdateAlarmMutation({
+		refetchQueries: [
+			{query: GetAfsprakenDocument},
+			{query: GetAfspraakDocument, variables: {id: afspraak.id}},
+		],
+	});
+	const [deleteAlarm] = useDeleteAlarmMutation({
+		refetchQueries: [
+			{query: GetAfsprakenDocument},
+			{query: GetAfspraakDocument, variables: {id: afspraak.id}},
+		],
+	});
+
+	const toggleAlarmActive = () => {
+		const isActive = !afspraak.alarm?.isActive;
+
+		updateAlarm({
+			variables: {
+				id: afspraak.alarm?.id!,
+				input: {
+					isActive,
+				},
+			},
+		}).then(() => {
+			toast({success: t("messages.updateAlarmSuccess")});
+		}).catch(err => {
+			toast.closeAll();
+			toast({error: err.message});
+		});
+	};
+
+	const onDeleteAlarm = () => {
+		deleteAlarm({
+			variables: {
+				id: afspraak.alarm?.id!,
+			},
+		}).then(() => {
+			toast({success: t("messages.deleteAlarmSuccess")});
+		}).catch(err => {
+			toast.closeAll();
+			toast({error: err.message});
+		});
+	};
 
 	const onDeleteAfspraakZoekterm = (zoekterm: string) => {
 		deleteAfspraakZoekterm({
@@ -88,6 +141,28 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 		}
 	};
 
+	const onCreateAlarm = (data) => {
+		createAlarm({
+			variables: {
+				input: {
+					...data,
+					gebruikerEmail: "",
+				},
+			},
+		}).then(result => {
+			if (result.data?.createAlarm?.ok) {
+				toast({
+					success: t("messages.addAfspraakAlarmSuccess"),
+				});
+			}
+		}).catch(err => {
+			toast.closeAll();
+			toast({
+				error: err.message,
+			});
+		});
+	};
+
 	const bedrag = afspraak.credit ? parseFloat(afspraak.bedrag) : (parseFloat(afspraak.bedrag) * -1);
 	const zoektermen = afspraak.zoektermen || [];
 	const matchingAfspraken = afspraak.matchingAfspraken || [];
@@ -117,12 +192,15 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	}
 
 	return (
-		<Page title={t("afspraakDetailView.title")} backButton={<BackButton to={AppRoutes.Burger(afspraak.burger?.id)} />} menu={<AfspraakDetailMenu afspraak={afspraak} />}>
+		<Page title={t("afspraakDetailView.title")} backButton={<BackButton to={AppRoutes.Burger(afspraak.burger?.id)} />} menu={(
+			<AfspraakDetailMenu afspraak={afspraak} />
+		)}>
+			{addAlarmModal.isOpen && <AddAlarmModal afspraak={afspraak} onClose={addAlarmModal.onClose} onSubmit={data => onCreateAlarm(data)} />}
+
 			<Section>
 				<Stack direction={["column", "row"]}>
 					<FormLeft title={t("afspraakDetailView.section1.title")} helperText={t("afspraakDetailView.section1.helperText")} />
 					<FormRight>
-
 						<Stack direction={["column", "row"]}>
 							<DataItem label={t("burger")}>
 								<HStack>
@@ -152,7 +230,6 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 								</DataItem>
 							</Stack>
 						)}
-
 					</FormRight>
 				</Stack>
 
@@ -306,8 +383,8 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 							</Stack>
 
 							<Box>
-								<Button colorScheme={"primary"} size={"sm"} leftIcon={
-									<EditIcon />} as={NavLink} to={AppRoutes.AfspraakBetaalinstructie(afspraak.id)}>{t("global.actions.newBetaalinstructie")}</Button>
+								<Button colorScheme={"primary"} size={"sm"} leftIcon={<EditIcon />}
+									as={NavLink} to={AppRoutes.AfspraakBetaalinstructie(afspraak.id)}>{t("global.actions.newBetaalinstructie")}</Button>
 							</Box>
 						</>) : (<>
 							<Text>{t("afspraakDetailView.noBetaalinstructie")}</Text>
@@ -325,17 +402,50 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 			<Section direction={["column", "row"]}>
 				<FormLeft title={t("afspraakDetailView.alarm.title")} helperText={t("afspraakDetailView.alarm.helperText")} />
 				<FormRight>
-					<Stack>
-
-						{/*
-						Queryable getAfspraak
-						List of alarmen
-							Edit
-							Delete
-							Create new
-						*/}
-
-					</Stack>
+					{afspraak.alarm ? (
+						<Stack>
+							<DataItem label={t("bedrag")}>
+								<Text>{t("afspraak.alarm.bedrag", {
+									amount: currencyFormat2().format(afspraak.alarm?.bedrag),
+									diff: currencyFormat2().format(afspraak.alarm?.bedragMargin),
+								})}</Text>
+							</DataItem>
+							<DataItem label={t("global.date")}>
+								<Text>{t("afspraak.alarm.datum", {date: d(afspraak.alarm?.datum, "YYYY-MM-DD").format("L"), diff: afspraak.alarm?.datumMargin})}</Text>
+							</DataItem>
+							<DataItem label={t("global.isActive")}>
+								<Box>
+									<Badge colorScheme={afspraak.alarm?.isActive ? "green" : "gray"} onClick={() => toggleAlarmActive()}>
+										{afspraak.alarm?.isActive ? "ingeschakeld" : "uitgeschakeld"}
+									</Badge>
+								</Box>
+							</DataItem>
+							<DataItem label={t("afspraak.alarm.setByUser")}>
+								<Text>{afspraak.alarm?.gebruikerEmail}</Text>
+							</DataItem>
+							<Box>
+								{confirmDeleteAlarm ? (
+									<HStack>
+										<IconButton icon={<CheckIcon />} size={"sm"} colorScheme={"red"} onClick={() => onDeleteAlarm()} aria-label={t("global.actions.delete")} />
+										<IconButton icon={
+											<CloseIcon />} size={"sm"} colorScheme={"gray"} onClick={() => setConfirmDeleteAlarm(false)} aria-label={t("global.actions.cancel")} />
+									</HStack>
+								) : (
+									<HStack>
+										<IconButton icon={
+											<DeleteIcon />} size={"sm"} colorScheme={"red"} onClick={() => setConfirmDeleteAlarm(true)} aria-label={t("global.actions.delete")} />
+									</HStack>
+								)}
+							</Box>
+						</Stack>
+					) : (
+						<Stack>
+							<Text>{t("afspraakDetailView.noAlarm")}</Text>
+							<Box>
+								<AddButton onClick={() => addAlarmModal.onOpen()} />
+							</Box>
+						</Stack>
+					)}
 				</FormRight>
 			</Section>
 		</Page>
