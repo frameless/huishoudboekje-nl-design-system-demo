@@ -9,12 +9,13 @@
     "updateAfspraakSuccess": "De afspraak is gewijzigd.",
     "createAfspraakSuccess": "De afspraak is opgeslagen.",
     "deleteAfspraakSuccess": "De afspraak is verwijderd.",
-    "updateAlarmSuccess": "Het alarm is gewijzigd.",
+    "updateAlarmSuccess": "Het alarm is opgeslagen.",
     "deleteAlarmSuccess": "Het alarm is verwijderd.",
     "deleteAfspraakZoektermSuccess": "De zoekterm is verwijderd.",
     "addAfspraakZoektermSuccess": "De zoekterm is opgeslagen.",
     "zoektermLengthError": "Een zoekterm moet minimaal één teken lang zijn.",
     "zoektermAlreadyExistsError": "Deze zoekterm bestaat al.",
+    "addAfspraakAlarmSuccess": "Het alarm is opgeslagen.",
     "automatischBoeken": {
       "noZoektermen": "Voeg een zoekterm toe die het systeem kan gebruiken om transacties automatisch af te letteren.",
       "duplicatesFound": "Deze zoekterm of combinatie van zoektermen is niet uniek. Automatisch afletteren is daarom niet mogelijk. Maak een unieke combinatie van zoektermen.",
@@ -401,7 +402,7 @@
     "repeatType_month": "Maandelijks",
     "repeatType_year": "Jaarlijks",
     "eenmalig": "Eenmalig",
-    "periodiek": "Herhalend",
+    "periodiek": "Periodiek",
     "datum": "Datum",
     "startDate": "Startdatum",
     "endDate": "Einddatum",
@@ -410,7 +411,7 @@
     "invalidPeriodiekError": "Kies een periodiek.",
     "byDay": "Weekdag",
     "invalidByDayError": "Kies minimaal één weekdag.",
-    "byMonth": "Maanden",
+    "byMonth": "Maand(en)",
     "invalidByMonthError": "Kies minimaal één maand.",
     "byMonthDay": "Dag van de maand (1-28)",
     "invalidByMonthDayError": "Vul de dag van de maand in.",
@@ -460,13 +461,13 @@
   "alarmForm": {
     "date": "Datum verwachte betaling",
     "errors": {
-      "invalidDateError": "Vul een geldige datum in. De datum moet in de toekomst liggen.",
+      "invalidDateError": "Vul een geldige datum in.",
       "invalidDatumMarginError": "Vul een aantal dagen in.",
       "invalidMonthDayError": "Vul een dag van de maand in. Bijvoorbeeld: 24.",
       "invalidBedragError": "Vul een bedrag in.",
       "invalidBedragMarginError": "Vul een bedrag in."
     },
-    "datumMargin": "Toegestane afwijking in dagen",
+    "datumMargin": "Toegestane afwijking (in dagen)",
     "byMonthDay": "Dag in de maand",
     "bedrag": "Bedrag verwachte betaling",
     "bedragMargin": "Toegestane afwijking bedrag (in euro's)"
