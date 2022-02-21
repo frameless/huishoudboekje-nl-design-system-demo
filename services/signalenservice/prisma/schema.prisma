@@ -15,5 +15,5 @@ model Signal {
 	type				String
 	actions				String[]
 	context				Json?
-	timeCreated			DateTime	@default(now())
+	timeUpdated			DateTime	@updatedAt
 }
