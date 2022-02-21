@@ -114,6 +114,7 @@ def test_shouldCheckAlarm(expected: bool, alarm):
     actual = EvaluateAlarm.shouldCheckAlarm(alarm)
     assert actual == expected
 
+# @TODO Ik denk dat er al eerder moet worden getest of het allemaal goed is, dus al bij creatie testen of byDay of byMonth en byMonthDay is ingevuld, niet pas bij het evalueren.
 @freeze_time("2021-12-06")
 def test_evaluate_alarm_illigal_betaalinstructie_combination(client):
     with requests_mock.Mocker() as rm:

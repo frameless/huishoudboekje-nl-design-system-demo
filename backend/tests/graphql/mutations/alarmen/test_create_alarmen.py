@@ -187,3 +187,107 @@ def test_create_alarm_failure_afspraak_does_not_exist(client):
         assert rm0.called_once
         assert fallback.called == 0
         assert response.json["errors"][0]["message"] == expected
+
+
+# cant create alarm with only byMonth
+@freeze_time("2021-12-01")
+def test_create_alarm_failure_only_byMonth_defined(client):
+    with requests_mock.Mocker() as rm:
+        # arrange
+        input = {
+            "isActive": True,
+            "gebruikerEmail":"test_1@mail.nl",
+            "afspraakId": 19,
+            "datum":"2021-12-01",
+            "datumMargin": 5,
+            "bedrag":"120.12",
+            "bedragMargin": "10.34",
+            "byMonth": [1]
+        }
+        expected = "Vul zowel byMonth als byMonthDay in, of geen van beide."
+        fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
+
+        # act
+        response = client.post(
+            "/graphql",
+            json={
+                "query": '''
+                    mutation test($input:CreateAlarmInput!) {
+                        createAlarm(input:$input) {
+                            ok
+                            alarm{
+                                id
+                                isActive
+                                gebruikerEmail
+                                afspraak{
+                                    id
+                                }
+                                datum
+                                datumMargin
+                                bedrag
+                                bedragMargin
+                            }
+                        }
+                    }''',
+                "variables": {
+                    "input": input
+                }
+            },
+            content_type='application/json'
+        )
+
+        # assert
+        assert fallback.called == 0
+        assert response.json["errors"][0]["message"] == expected
+
+        
+# cant create alarm with only byMonthDay
+@freeze_time("2021-12-01")
+def test_create_alarm_failure_only_byMonth_defined(client):
+    with requests_mock.Mocker() as rm:
+        # arrange
+        input = {
+            "isActive": True,
+            "gebruikerEmail":"test_1@mail.nl",
+            "afspraakId": 19,
+            "datum":"2021-12-01",
+            "datumMargin": 5,
+            "bedrag":"120.12",
+            "bedragMargin": "10.34",
+            "byMonthDay": [1]
+        }
+        expected = "Vul zowel byMonth als byMonthDay in, of geen van beide."
+        fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
+
+        # act
+        response = client.post(
+            "/graphql",
+            json={
+                "query": '''
+                    mutation test($input:CreateAlarmInput!) {
+                        createAlarm(input:$input) {
+                            ok
+                            alarm{
+                                id
+                                isActive
+                                gebruikerEmail
+                                afspraak{
+                                    id
+                                }
+                                datum
+                                datumMargin
+                                bedrag
+                                bedragMargin
+                            }
+                        }
+                    }''',
+                "variables": {
+                    "input": input
+                }
+            },
+            content_type='application/json'
+        )
+
+        # assert
+        assert fallback.called == 0
+        assert response.json["errors"][0]["message"] == expected
