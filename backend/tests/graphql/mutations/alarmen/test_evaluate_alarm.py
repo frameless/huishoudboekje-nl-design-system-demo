@@ -127,18 +127,17 @@ def test_evaluate_alarm_illigal_betaalinstructie_combination(client):
             "datumMargin": 5,
             "bedrag": "12500",
             "bedragMargin":"1000",
-            "by_day": ["Wednesday", "Friday"],
-            "by_month": [1],
-            "by_month_day": [1],
+            "byDay": ["Wednesday", "Friday"],
+            "byMonth": [1],
+            "byMonthDay": [1],
         }
-        expected = "Niet ondersteunde combinatie van alarm herhaal instructies. isWeekly:{isWeekly} isMonthly:{isMontly} byDay:{byDay} byMonth:{byMonth} byMonthDay:{byMonthDay}"
+        expected = "Niet ondersteunde combinatie van alarm herhaal instructies. isWeekly:False isMonthly:False byDay:['Wednesday', 'Friday'] byMonth:[1] byMonthDay:[1]"
 
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
         rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=200, json={'data': [alarm]})
         rm2 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}", status_code=200, json={"data":afspraak})
         rm3 = rm.get(f"{settings.HHB_SERVICES_URL}/journaalposten/{journaalpost_id}", status_code=200, json={"data": journaalpost})
         rm4 = rm.get(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/{transaction_id}", status_code=200, json={"data": banktransactie})
-
 
         # act
         response = client.post(
@@ -189,7 +188,7 @@ def test_evaluate_alarm_inactive(client):
             "datumMargin": 5,
             "bedrag": "12500",
             "bedragMargin":"1000",
-            "by_day": ["Wednesday", "Friday"]
+            "byDay": ["Wednesday", "Friday"]
         }
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
         rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=200, json={'data': [alarm]})
