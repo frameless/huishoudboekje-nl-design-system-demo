@@ -45,29 +45,18 @@ class EvaluateAlarm(graphene.Mutation):
 
             alarm_check_date = dateutil.parser.isoparse(alarm.get("datum")).date()
             alarm = EvaluateAlarm.disableAlarm(alarm_check_date, alarm)
-            newAlarm = None
-
-            # only generate next alarm if byDay, byMonth, byMonthDay is present
-            if (len(alarm.get("byDay", [])) >= 1 or len(alarm.get("byMonth", [])) >= 1 or len(alarm.get("byMonthDay", [])) >= 1): 
-                # generate next alarm in the sequence
-                nextAlarmDate = EvaluateAlarm.generateNextAlarmInSequence(alarm, alarm_check_date) 
-
-                # add new alarm in sequence if it does not exist yet
-                nextAlarmAlreadyExists = EvaluateAlarm.doesNextAlarmExist(nextAlarmDate, alarm, activeAlarms)
-                if nextAlarmAlreadyExists == True:
-                    nextAlarmDate = None
-                elif nextAlarmAlreadyExists == False:
-                    newAlarm = EvaluateAlarm.createAlarm(alarm, nextAlarmDate)
-
+            
             # check if there are transaction within the alarm specified margins
-            createSignaal = None
+            newAlarm = None
+            createdSignaal = None
             if EvaluateAlarm.shouldCheckAlarm(alarm):
-                createSignaal = EvaluateAlarm.shouldCreateSignaal(alarm, transacties)
+                newAlarm = EvaluateAlarm.shouldCreateNextAlarm(alarm, alarm_check_date, activeAlarms)
+                createdSignaal = EvaluateAlarm.shouldCreateSignaal(alarm, transacties)
             
             triggered_alarms.append({
                 "alarm": alarm,
                 "nextAlarm": newAlarm,
-                "Signal": createSignaal
+                "Signal": createdSignaal
             })
 
         return EvaluateAlarm(alarmTriggerResult=triggered_alarms)
@@ -93,6 +82,23 @@ class EvaluateAlarm(graphene.Mutation):
                 return True
         
         return False
+
+    def shouldCreateNextAlarm(alarm: Alarm, alarm_check_date: datetime, activeAlarms: list) -> Alarm:
+        newAlarm = None
+        
+        # only generate next alarm if byDay, byMonth, and/or byMonthDay is present
+        if (len(alarm.get("byDay", [])) >= 1 or len(alarm.get("byMonth", [])) >= 1 or len(alarm.get("byMonthDay", [])) >= 1): 
+            # generate next alarm in the sequence
+            nextAlarmDate = EvaluateAlarm.generateNextAlarmInSequence(alarm, alarm_check_date) 
+
+            # add new alarm in sequence if it does not exist yet
+            nextAlarmAlreadyExists = EvaluateAlarm.doesNextAlarmExist(nextAlarmDate, alarm, activeAlarms)
+            if nextAlarmAlreadyExists == True:
+                nextAlarmDate = None
+            elif nextAlarmAlreadyExists == False:
+                newAlarm = EvaluateAlarm.createAlarm(alarm, nextAlarmDate)
+
+        return newAlarm
 
     def createAlarm(alarm: Alarm, alarmDate: datetime) -> Alarm:
         newAlarm = {

@@ -397,6 +397,7 @@ def test_evaluate_alarm_signal_monetary(client):
         assert fallback.called == 0
         assert response.json == expected
 
+# Tests if alarm next in sequence already exists and that an alarm in the future does not create a next in sequence alarm yet.
 @freeze_time("2021-12-06")
 def test_evaluate_alarm_next_alarm_in_sequence_already_exists(client):
     with requests_mock.Mocker() as rm:
@@ -440,8 +441,7 @@ def test_evaluate_alarm_next_alarm_in_sequence_already_exists(client):
         rm3 = rm.get(f"{settings.HHB_SERVICES_URL}/journaalposten/{journaalpost_id}", status_code=200, json={"data": journaalpost})
         rm4 = rm.get(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/{transaction_id}", status_code=200, json={"data": banktransactie})
         rm5 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
-        rm6 = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={ "ok":True, "data": nextAlarm})
-        expected = {'data': {'evaluateAlarm': {'alarmTriggerResult': [{'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9'}, 'nextAlarm': None, 'Signal': None}, {'alarm': {'id': '10943958-8b93-4617-aa43-669a9016aad9'}, 'nextAlarm': {'id': '33738845-7f23-4c8f-8424-2b560a944884'}, 'Signal': None}]}}}
+        expected = {'data': {'evaluateAlarm': {'alarmTriggerResult': [{'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9'}, 'nextAlarm': None, 'Signal': None}, {'alarm': {'id': '10943958-8b93-4617-aa43-669a9016aad9'}, 'nextAlarm': None, 'Signal': None}]}}}
 
         # act
         response = client.post(
@@ -467,16 +467,20 @@ def test_evaluate_alarm_next_alarm_in_sequence_already_exists(client):
             content_type='application/json'
         )
 
+        print(f">> >> >> response: {response.json} ")
+
         # assert
         assert rm1.call_count == 1
         assert rm2.call_count == 2
         assert rm3.call_count == 2
         assert rm4.call_count == 2
         assert rm5.call_count == 1
-        assert rm6.call_count == 1
         assert fallback.call_count == 0
         assert response.json == expected
 
+# Test if an alarm in the past gets disabled. 
+# Note: It also does not create a next in sequence.
+# Note 2: This test will change again when taking margins into account properly... That is why there are still some commented stuff
 @freeze_time("2021-12-10")
 def test_evaluate_alarm_disabled_because_its_in_the_past(client):
     with requests_mock.Mocker() as rm:
@@ -488,8 +492,14 @@ def test_evaluate_alarm_disabled_because_its_in_the_past(client):
         rm4 = rm.get(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/{transaction_id}", status_code=200, json={"data": banktransactie})
         rm5 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
         rm6 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", status_code=200, json={"data": [afspraak]})
-        rm7 = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={ "ok":True, "data": nextAlarm})
-        expected = {'data': {'evaluateAlarm': {'alarmTriggerResult': [{'alarm': {'isActive': False, 'gebruikerEmail': 'other@mail.nl', 'afspraak': {'id': 19, 'omschrijving': 'this is a test afspraak', 'betaalinstructie': {'byDay': ['Wednesday', 'Friday'], 'byMonth': [], 'byMonthDay': []}}, 'datum': '2021-12-06', 'datumMargin': 5, 'bedrag': '125.00', 'bedragMargin': '10.00'}, 'nextAlarm': {'isActive': True, 'gebruikerEmail': 'other@mail.nl', 'afspraak': {'id': 19, 'omschrijving': 'this is a test afspraak', 'betaalinstructie': {'byDay': ['Wednesday', 'Friday'], 'byMonth': [], 'byMonthDay': []}}, 'datum': '2021-12-08', 'datumMargin': 5, 'bedrag': '125.00', 'bedragMargin': '10.00'}, 'Signal': None}]}}}
+        # rm7 = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={ "ok":True, "data": nextAlarm})
+        expected = {'data': {'evaluateAlarm': {'alarmTriggerResult': 
+        [{'alarm': {'isActive': False, 'gebruikerEmail': 'other@mail.nl', 'afspraak': {'id': 19, 'omschrijving': 'this is a test afspraak', 'betaalinstructie': {'byDay': ['Wednesday', 'Friday'], 'byMonth': [], 'byMonthDay': []}}, 'datum': '2021-12-06', 'datumMargin': 5, 'bedrag': '125.00', 'bedragMargin': '10.00'}, 
+        'nextAlarm': None, 'Signal': None}]}}}
+        # expected = {'data': {'evaluateAlarm': {'alarmTriggerResult': 
+        # [{'alarm': {'isActive': False, 'gebruikerEmail': 'other@mail.nl', 'afspraak': {'id': 19, 'omschrijving': 'this is a test afspraak', 'betaalinstructie': {'byDay': ['Wednesday', 'Friday'], 'byMonth': [], 'byMonthDay': []}}, 'datum': '2021-12-06', 'datumMargin': 5, 'bedrag': '125.00', 'bedragMargin': '10.00'}, 
+        # 'nextAlarm': {'isActive': True, 'gebruikerEmail': 'other@mail.nl', 'afspraak': {'id': 19, 'omschrijving': 'this is a test afspraak', 'betaalinstructie': {'byDay': ['Wednesday', 'Friday'], 'byMonth': [], 'byMonthDay': []}}, 'datum': '2021-12-08', 'datumMargin': 5, 'bedrag': '125.00', 'bedragMargin': '10.00'}, 
+        # 'Signal': None}]}}}
 
         # act
         response = client.post(
@@ -543,6 +553,8 @@ def test_evaluate_alarm_disabled_because_its_in_the_past(client):
             content_type='application/json'
         )
 
+        print(f">> >> >> response {response.json} ")
+
         # assert
         assert rm1.called_once
         assert rm2.called_once
@@ -550,6 +562,6 @@ def test_evaluate_alarm_disabled_because_its_in_the_past(client):
         assert rm4.called_once
         assert rm5.called_once
         assert rm6.called_once
-        assert rm7.called_once
+        # assert rm7.called_once
         assert fallback.called == 0
         assert response.json == expected
