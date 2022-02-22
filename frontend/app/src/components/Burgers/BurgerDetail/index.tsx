@@ -16,8 +16,6 @@ import PageNotFound from "../../shared/PageNotFound";
 import Section from "../../shared/Section";
 import BurgerAfsprakenView from "./BurgerAfsprakenView";
 import BurgerGebeurtenissen from "./BurgerGebeurtenissen";
-import BurgerProfileView from "./BurgerProfileView";
-import BurgerRekeningenView from "./BurgerRekeningenView";
 import BurgerSignalenView from "./BurgerSignalenView";
 
 const BurgerDetailPage = () => {
@@ -94,17 +92,15 @@ const BurgerDetailPage = () => {
 						<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} />
 						<MenuList>
 							<Link href={AppRoutes.BrievenExport(id, "excel")} target={"_blank"}><MenuItem>{t("global.actions.brievenExport")}</MenuItem></Link>
-							<NavLink to={AppRoutes.RapportageBurger([parseInt(id)])}><MenuItem>{t("sidebar.rapportage")}</MenuItem></NavLink>
-							<NavLink to={AppRoutes.Huishouden(burger.huishouden?.id)}><MenuItem>{t("showHuishouden")}</MenuItem></NavLink>
+							<NavLink to={AppRoutes.RapportageBurger([parseInt(id)])}><MenuItem>{t("global.actions.showReports")}</MenuItem></NavLink>
+							<NavLink to={AppRoutes.BurgerPersonalDetails(burger.id)}><MenuItem>{t("global.actions.showPersonalDetails")}</MenuItem></NavLink>
+							<NavLink to={AppRoutes.Huishouden(burger.huishouden?.id)}><MenuItem>{t("global.actions.showHuishouden")}</MenuItem></NavLink>
 							<Divider />
-							<NavLink to={AppRoutes.EditBurger(id)}><MenuItem>{t("global.actions.edit")}</MenuItem></NavLink>
 							<MenuItem onClick={() => deleteAlert.onOpen()}>{t("global.actions.delete")}</MenuItem>
 						</MenuList>
 					</Menu>
 				)}>
-					<Section><BurgerProfileView burger={burger} /></Section>
-					<Section><BurgerRekeningenView burger={burger} /></Section>
-					<Section><BurgerSignalenView burger={burger}/></Section>
+					<Section><BurgerSignalenView burger={burger} /></Section>
 					<Section><BurgerAfsprakenView burger={burger} /></Section>
 					<Section><BurgerGebeurtenissen burger={burger} /></Section>
 				</Page>

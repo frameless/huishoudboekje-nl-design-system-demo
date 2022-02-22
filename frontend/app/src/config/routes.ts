@@ -2,6 +2,7 @@ export enum RouteNames {
 	login = "inloggen",
 	huishoudens = "huishoudens",
 	burgers = "burgers",
+	personal = "persoonlijk",
 	afspraken = "afspraken",
 	organisaties = "organisaties",
 	afdelingen = "afdelingen",
@@ -30,6 +31,7 @@ export const AppRoutes = {
 
 	Burgers: () => `/${RouteNames.burgers}`,
 	Burger: (id) => `/${RouteNames.burgers}/${id}`,
+	BurgerPersonalDetails: (id) => `/${RouteNames.burgers}/${id}/${RouteNames.personal}`,
 	CreateBurger: () => `/${RouteNames.burgers}/${RouteNames.add}`,
 	EditBurger: (id) => `/${RouteNames.burgers}/${id}/${RouteNames.edit}`,
 	CreateBurgerAfspraak: (burgerId) => `/${RouteNames.burgers}/${burgerId}/${RouteNames.afspraken}/${RouteNames.add}`,

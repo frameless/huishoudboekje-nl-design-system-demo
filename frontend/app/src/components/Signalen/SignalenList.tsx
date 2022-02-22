@@ -16,7 +16,7 @@ const SignalenList: React.FC<{signalen: Signaal[]}> = ({signalen}) => {
 	return (
 		<Table size={"sm"} variant={"noLeftPadding"}>
 			<Tbody>
-				{signalen.map((s, i) => (
+				{signalen.length > 0 ? signalen.map((s, i) => (
 					<Tr key={i}>
 						<Td>
 							<Stack spacing={1} width={"100%"}>
@@ -39,14 +39,14 @@ const SignalenList: React.FC<{signalen: Signaal[]}> = ({signalen}) => {
 						</Td>
 						<Td textAlign={"center"}>
 							<IconButton icon={s.isActive ? <CheckIcon /> : <BellIcon />} size={"sm"} aria-label={s.isActive ? t("actions.disable") : t("actions.enable")} onClick={() => {
-								toast({
-									description: "Deze functionaliteit wordt nog ontwikkeld.",
-									status: "info",
-								});
+								toast.closeAll();
+								toast({title: "Deze functionaliteit wordt nog ontwikkeld.", status: "info"});
 							}} />
 						</Td>
 					</Tr>
-				))}
+				)) : (
+					<Text>{t("signalen.noResults")}</Text>
+				)}
 			</Tbody>
 		</Table>
 	);
