@@ -105,17 +105,19 @@ def test_generateNextAlarmDate_monthly(expected: datetime, alarm, alarmDate: dat
 @freeze_time("2021-12-01")
 @pytest.mark.parametrize(
     ["expected", "alarm"], [
-    (True, { "isActive": True, "datum":"2021-12-01" }),
-    (True, { "isActive": True, "datum":"2021-12-01" }),
-    (False, { "isActive": True, "datum":"2021-11-30" }),
-    (False, { "isActive": True, "datum":"2021-12-02" }),
+    (False, { "isActive": True, "datum":"2021-12-01", "datumMargin":0 }),
+    (False, { "isActive": True, "datum":"2021-12-01", "datumMargin":5  }),
+    (True, { "isActive": True, "datum":"2021-11-30", "datumMargin":0 }),
+    (False, { "isActive": True, "datum":"2021-11-30", "datumMargin":5  }),
+    (False, { "isActive": True, "datum":"2021-12-02", "datumMargin":5  }),
+    (True, { "isActive": True, "datum":"2021-11-25", "datumMargin":5 })
 ])
 def test_shouldCheckAlarm(expected: bool, alarm):
     actual = EvaluateAlarm.shouldCheckAlarm(alarm)
     assert actual == expected
 
 # @TODO Ik denk dat er al eerder moet worden getest of het allemaal goed is, dus al bij creatie testen of byDay of byMonth en byMonthDay is ingevuld, niet pas bij het evalueren.
-@freeze_time("2021-12-06")
+@freeze_time("2021-12-12")
 def test_evaluate_alarm_illigal_betaalinstructie_combination(client):
     with requests_mock.Mocker() as rm:
         # arrange
@@ -176,7 +178,7 @@ def test_evaluate_alarm_illigal_betaalinstructie_combination(client):
         assert fallback.called == 0
         assert response.json.get("errors")[0].get("message") == expected
 
-@freeze_time("2021-12-06")
+@freeze_time("2021-12-12")
 def test_evaluate_alarm_inactive(client):
     with requests_mock.Mocker() as rm:
         # arrange
@@ -226,7 +228,7 @@ def test_evaluate_alarm_inactive(client):
         assert fallback.called == 0
         assert response.json == expected
 
-@freeze_time("2021-12-06")
+@freeze_time("2021-12-12")
 def test_evaluate_alarm_no_signal(client):
     with requests_mock.Mocker() as rm:
         # arrange
@@ -273,7 +275,7 @@ def test_evaluate_alarm_no_signal(client):
         assert fallback.called == 0
         assert response.json == expected
 
-@freeze_time("2021-12-06")
+@freeze_time("2021-12-12")
 def test_evaluate_alarm_signal_date(client):
     with requests_mock.Mocker() as rm:
         # arrange
@@ -335,7 +337,7 @@ def test_evaluate_alarm_signal_date(client):
         assert fallback.called == 0
         assert response.json == expected
 
-@freeze_time("2021-12-06")
+@freeze_time("2021-12-12")
 def test_evaluate_alarm_signal_monetary(client):
     with requests_mock.Mocker() as rm:
         # arrange
@@ -398,7 +400,7 @@ def test_evaluate_alarm_signal_monetary(client):
         assert response.json == expected
 
 # Tests if alarm next in sequence already exists and that an alarm in the future does not create a next in sequence alarm yet.
-@freeze_time("2021-12-06")
+@freeze_time("2021-12-08")
 def test_evaluate_alarm_next_alarm_in_sequence_already_exists(client):
     with requests_mock.Mocker() as rm:
         # arrange
@@ -418,7 +420,7 @@ def test_evaluate_alarm_next_alarm_in_sequence_already_exists(client):
             "isActive": True,
             "gebruikerEmail":"other@mail.nl",
             "afspraakId": 19,
-            "datum":"2021-12-08",
+            "datum":"2021-12-10",
             "datumMargin": 1,
             "bedrag": "12500",
             "bedragMargin":"1000",
@@ -480,8 +482,7 @@ def test_evaluate_alarm_next_alarm_in_sequence_already_exists(client):
 
 # Test if an alarm in the past gets disabled. 
 # Note: It also does not create a next in sequence.
-# Note 2: This test will change again when taking margins into account properly... That is why there are still some commented stuff
-@freeze_time("2021-12-10")
+@freeze_time("2021-12-13")
 def test_evaluate_alarm_disabled_because_its_in_the_past(client):
     with requests_mock.Mocker() as rm:
         # arrange

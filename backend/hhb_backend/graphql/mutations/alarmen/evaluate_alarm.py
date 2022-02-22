@@ -43,7 +43,7 @@ class EvaluateAlarm(graphene.Mutation):
             journaalIds = afspraak.get("journaalposten", [])
             transacties = EvaluateAlarm.getBanktransactiesByJournaalIds(journaalIds)
 
-            alarm_check_date = dateutil.parser.isoparse(alarm.get("datum")).date()
+            alarm_check_date = dateutil.parser.isoparse(alarm.get("datum")).date() + timedelta(days=(alarm.get("datumMargin") + 1))
             alarm = EvaluateAlarm.disableAlarm(alarm_check_date, alarm)
             
             # check if there are transaction within the alarm specified margins
@@ -61,9 +61,9 @@ class EvaluateAlarm(graphene.Mutation):
 
         return EvaluateAlarm(alarmTriggerResult=triggered_alarms)
 
-    def disableAlarm(alarmDate: date, alarm: Alarm) -> Alarm:
+    def disableAlarm(alarmCheckDate: date, alarm: Alarm) -> Alarm:
         utc_now_date = (datetime.now(timezone.utc)).date()
-        if alarmDate < utc_now_date:
+        if alarmCheckDate < utc_now_date:
             alarm["isActive"] = False
         return alarm
 
@@ -125,10 +125,12 @@ class EvaluateAlarm(graphene.Mutation):
         # is the alarm set in the past, or the future
         str_alarm_date = alarm.get("datum")
         alarm_date = dateutil.parser.isoparse(str_alarm_date).date()
+        date_margin = int(alarm.get("datumMargin"))                       
+        day_after_expected_window = alarm_date + timedelta(days=(date_margin + 1))   # plus one to make sure the alarm is checked after the expected date range.
         utc_now_date = (datetime.now(timezone.utc)).date()
-        if alarm_date < utc_now_date:
+        if day_after_expected_window < utc_now_date:
             return False
-        elif alarm_date > utc_now_date:
+        elif day_after_expected_window > utc_now_date:
             return False
 
         # past all checks so the it passes the base validation
@@ -222,7 +224,7 @@ class EvaluateAlarm(graphene.Mutation):
         # isMontly1 = (byMonth is not None and byMonthDay is not None and byDay is None)
         isMontly = (len(byDay) <= 0 and len(byMonth) >= 1 and len(byMonthDay) >= 1)
         if isWeekly:   # weekly
-            weekday_indexes = MyLittleHelper.weekday_names_to_indexes(byDay)
+            weekday_indexes = WeekdayHelper.weekday_names_to_indexes(byDay)
             next_alarm_dates = list(rrule(MONTHLY, dtstart=future, count=1, byweekday=weekday_indexes))
         elif isMontly:    # maandelijk/jaarlijks
             next_alarm_dates = list(rrule(YEARLY, dtstart=future, count=1, bymonth=byMonth, bymonthday=byMonthDay))
@@ -238,7 +240,7 @@ class EvaluateAlarm(graphene.Mutation):
         str_expect_date = alarm.get("datum")
         expect_date = dateutil.parser.isoparse(str_expect_date).date()
         left_date_window = expect_date - timedelta(days=datum_margin)
-        right_date_window = (datetime.now(timezone.utc)).date()
+        right_date_window = expect_date + timedelta(days=datum_margin)
 
         # Evaluate Alarm
         transaction_in_scope = []
@@ -255,7 +257,7 @@ class EvaluateAlarm(graphene.Mutation):
                 if left_monetary_window <= actual_transaction_bedrag <= right_monetary_window:
                     transaction_in_scope.append(transaction)
 
-        if len(transaction_in_scope) <= 0 or len(transaction_in_scope) <= 0:
+        if len(transaction_in_scope) <= 0: 
             alarm_id = alarm.get("id")
             newSignal = {
                 "alarmId": alarm_id,
@@ -279,13 +281,13 @@ class EvaluateAlarm(graphene.Mutation):
         else:
             return None
 
-class MyLittleHelper:
+class WeekdayHelper:
 
     @staticmethod
     def weekday_names_to_indexes(weekday_names) -> list:
         indexes = []
         for weekday_name in weekday_names:
-            index = MyLittleHelper.weekday_name_to_index(weekday_name)
+            index = WeekdayHelper.weekday_name_to_index(weekday_name)
             indexes.append(index)
         return indexes
 
