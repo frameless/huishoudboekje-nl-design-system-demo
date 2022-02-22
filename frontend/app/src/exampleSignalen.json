@@ -1,0 +1,44 @@
+[
+  {
+	"id": "10039f40-efe9-45af-ac56-e1ba5b50e6c7",
+	"alarm": {
+	  "id": "f5283f61-c770-453c-b609-89e3416ad5b0",
+	  "isActive": true,
+	  "gebruikerEmail": "developer@sloothuizen.nl",
+	  "afspraak": {
+		"id": 9,
+		"bedrag": "939.94",
+		"credit": false,
+		"omschrijving": "Leefgeld"
+	  }
+	},
+	"isActive": true,
+	"type": "default",
+	"actions": [],
+	"context": {
+	  "bedrag": "100.80"
+	},
+	"timeUpdated": "2022-02-21T17:31:24.005Z"
+  },
+  {
+	"id": "20039f40-efe9-45af-ac56-e1ba5b50e6c7",
+	"alarm": {
+	  "id": "a3283f61-c770-453c-b609-89e3416ad5b0",
+	  "isActive": true,
+	  "gebruikerEmail": "developer@sloothuizen.nl",
+	  "afspraak": {
+		"id": 1,
+		"bedrag": "153.66",
+		"credit": false,
+		"omschrijving": "Loon"
+	  }
+	},
+	"isActive": false,
+	"type": "default",
+	"actions": [],
+	"context": {
+	  "bedrag": "11.22"
+	},
+	"timeUpdated": "2022-02-14T09:54:24.005Z"
+  }
+]
