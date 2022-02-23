@@ -1,15 +1,15 @@
-import React, {useContext, useState} from "react";
+import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {Navigate, useNavigate, useParams} from "react-router-dom";
 import {AppRoutes} from "../../config/routes";
 import {GetBurgerDocument, GetBurgersDocument, GetBurgersSearchDocument, UpdateBurgerMutationVariables, useGetBurgerQuery, useUpdateBurgerMutation} from "../../generated/graphql";
+import {useStore} from "../../store";
 import Queryable from "../../utils/Queryable";
 import {formatBurgerName} from "../../utils/things";
 import useToaster from "../../utils/useToaster";
 import BackButton from "../shared/BackButton";
 import Page from "../shared/Page";
 import BurgerForm from "./BurgerForm";
-import {BurgerSearchContext} from "./BurgerSearchContext";
 
 const EditBurger = () => {
 	const {t} = useTranslation();
@@ -34,15 +34,14 @@ const EditBurger = () => {
 			error: message,
 		});
 	};
-
-	const {search} = useContext(BurgerSearchContext);
+	const {store} = useStore();
 	const [isBsnValid, setBsnValid] = useState(true);
 
 	const [updateBurger, $updateBurger] = useUpdateBurgerMutation({
 		refetchQueries: [
 			{query: GetBurgerDocument, variables: {id: parseInt(id)}},
 			{query: GetBurgersDocument},
-			{query: GetBurgersSearchDocument, variables: {search}},
+			{query: GetBurgersSearchDocument, variables: {search: store.burgerSearch}},
 		],
 	});
 	const $burger = useGetBurgerQuery({

@@ -1,10 +1,11 @@
 import {ChevronDownIcon} from "@chakra-ui/icons";
 import {Button, Divider, IconButton, Link, Menu, MenuButton, MenuItem, MenuList, Stack, useDisclosure} from "@chakra-ui/react";
-import React, {useContext} from "react";
+import React from "react";
 import {useTranslation} from "react-i18next";
 import {NavLink, useNavigate, useParams} from "react-router-dom";
 import {AppRoutes} from "../../../config/routes";
 import {Burger, GetBurgersDocument, GetBurgersSearchDocument, GetHuishoudensDocument, useDeleteBurgerMutation, useGetBurgerQuery} from "../../../generated/graphql";
+import {useStore} from "../../../store";
 import Queryable from "../../../utils/Queryable";
 import {formatBurgerName} from "../../../utils/things";
 import useToaster from "../../../utils/useToaster";
@@ -13,7 +14,6 @@ import BackButton from "../../shared/BackButton";
 import Page from "../../shared/Page";
 import PageNotFound from "../../shared/PageNotFound";
 import Section from "../../shared/Section";
-import {BurgerSearchContext} from "../BurgerSearchContext";
 import BurgerAfsprakenView from "./BurgerAfsprakenView";
 import BurgerGebeurtenissen from "./BurgerGebeurtenissen";
 import BurgerProfileView from "./BurgerProfileView";
@@ -25,8 +25,7 @@ const BurgerDetailPage = () => {
 	const toast = useToaster();
 	const navigate = useNavigate();
 	const deleteAlert = useDisclosure();
-	const {search} = useContext(BurgerSearchContext);
-
+	const {store} = useStore();
 	const $burger = useGetBurgerQuery({
 		variables: {
 			id: parseInt(id),
@@ -37,7 +36,7 @@ const BurgerDetailPage = () => {
 			id: parseInt(id),
 		},
 		refetchQueries: [
-			{query: GetBurgersSearchDocument, variables: {search}},
+			{query: GetBurgersSearchDocument, variables: {search: store.burgerSearch}},
 			{query: GetBurgersDocument},
 			{query: GetHuishoudensDocument},
 		],

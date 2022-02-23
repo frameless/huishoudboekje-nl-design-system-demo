@@ -1,21 +1,13 @@
 import {ChevronDownIcon} from "@chakra-ui/icons";
 import {IconButton, Menu, MenuButton, MenuItem, MenuList, useDisclosure} from "@chakra-ui/react";
-import React, {useContext} from "react";
+import React from "react";
 import {useTranslation} from "react-i18next";
 import {NavLink, useNavigate} from "react-router-dom";
 import {AppRoutes} from "../../../config/routes";
-import {
-	Afspraak,
-	GetAfspraakDocument,
-	GetBurgerDocument,
-	GetBurgersDocument,
-	GetBurgersSearchDocument,
-	useDeleteAfspraakMutation,
-	useEndAfspraakMutation,
-} from "../../../generated/graphql";
+import {Afspraak, GetAfspraakDocument, GetBurgerDocument, GetBurgersDocument, GetBurgersSearchDocument, useDeleteAfspraakMutation, useEndAfspraakMutation} from "../../../generated/graphql";
+import {useStore} from "../../../store";
 import d from "../../../utils/dayjs";
 import useToaster from "../../../utils/useToaster";
-import {BurgerSearchContext} from "../../Burgers/BurgerSearchContext";
 import AfspraakDeleteAlert from "./AfspraakDeleteAlert";
 import AfspraakEndModal from "./AfspraakEndModal";
 
@@ -24,7 +16,7 @@ const AfspraakDetailMenu: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	const navigate = useNavigate();
 	const endModal = useDisclosure();
 	const toast = useToaster();
-	const {search} = useContext(BurgerSearchContext);
+	const {store} = useStore();
 	const deleteAlert = useDisclosure();
 
 	const [endAfspraakMutation] = useEndAfspraakMutation({
@@ -36,7 +28,7 @@ const AfspraakDetailMenu: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 		refetchQueries: [
 			{query: GetBurgersDocument},
 			{query: GetBurgerDocument, variables: {id: afspraak.burger?.id}},
-			{query: GetBurgersSearchDocument, variables: {search}},
+			{query: GetBurgersSearchDocument, variables: {search: store.burgerSearch}},
 		],
 		onCompleted: () => {
 			if (afspraak.burger?.id) {

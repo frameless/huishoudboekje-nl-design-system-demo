@@ -1,28 +1,5 @@
 import {ChevronDownIcon} from "@chakra-ui/icons";
-import {
-	Box,
-	Button,
-	ButtonGroup,
-	Checkbox,
-	FormControl,
-	FormLabel,
-	HStack,
-	IconButton,
-	Input,
-	Menu,
-	MenuButton,
-	MenuItem,
-	MenuList,
-	Modal,
-	ModalBody,
-	ModalCloseButton,
-	ModalContent,
-	ModalFooter,
-	ModalHeader,
-	ModalOverlay,
-	Stack,
-	useDisclosure,
-} from "@chakra-ui/react";
+import {Box, Button, ButtonGroup, Checkbox, FormControl, FormLabel, HStack, IconButton, Input, Menu, MenuButton, MenuItem, MenuList, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack, useDisclosure} from "@chakra-ui/react";
 import React, {useState} from "react";
 import DatePicker from "react-datepicker";
 import {useTranslation} from "react-i18next";
@@ -52,10 +29,6 @@ const defaultFilters: Filters = {
 	onlyUnbooked: true,
 	isCredit: "all",
 };
-
-/**
- * Todo: Wanneer er een filter actief is, niet de hint "Voeg transacties toe".
- */
 
 const Transactions = () => {
 	const {t} = useTranslation();
