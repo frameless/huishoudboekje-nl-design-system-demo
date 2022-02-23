@@ -1,7 +1,8 @@
-import {createContext, useContext, useState} from "react";
+import {createContext, useCallback, useContext, useState} from "react";
 
-type StoreValue = Record<string, any> & {
-	burgerSearch: string
+type StoreValue = {
+	burgerSearch: string,
+	banktransactieFilters: Record<string, any>,
 };
 
 type StoreContextValue = {
@@ -11,6 +12,7 @@ type StoreContextValue = {
 
 const initialState: StoreValue = {
 	burgerSearch: "",
+	banktransactieFilters: {},
 };
 
 const StoreContext = createContext<StoreContextValue>({
@@ -30,14 +32,15 @@ export const useStore = () => {
 const StoreProvider = ({children}) => {
 	const [store, setStore] = useState<StoreContextValue["store"]>(initialState);
 
-	const updateStore = (field: string, value: any) => {
+	const updateStore = useCallback((field: string, value: any) => {
+		console.info("updateStore", {field, value});
 		setStore(prevStore => {
 			return {
 				...prevStore,
 				[field]: value,
 			};
 		});
-	};
+	}, []);
 
 	return (
 		<StoreContext.Provider value={{store, updateStore}}>

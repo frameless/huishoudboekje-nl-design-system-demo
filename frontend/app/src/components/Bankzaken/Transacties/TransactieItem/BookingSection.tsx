@@ -1,28 +1,28 @@
 import {FormControl, Heading, HStack, Stack, Tab, Table, TabList, TabPanel, TabPanels, Tabs, Tbody, Text, Th, Thead, Tr} from "@chakra-ui/react";
-import React, {useContext} from "react";
+import React from "react";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
 import {Afspraak, GetTransactiesDocument, Rubriek, useCreateJournaalpostAfspraakMutation, useCreateJournaalpostGrootboekrekeningMutation} from "../../../../generated/graphql";
+import {useStore} from "../../../../store";
 import {useReactSelectStyles} from "../../../../utils/things";
 import useToaster from "../../../../utils/useToaster";
 import SelectAfspraakOption from "../../../Layouts/SelectAfspraak/SelectAfspraakOption";
-import {TransactionsContext} from "../context";
 
 const BookingSection = ({transaction, rubrieken, afspraken}) => {
 	const reactSelectStyles = useReactSelectStyles();
 	const toast = useToaster();
 	const {t} = useTranslation();
+	const {store} = useStore();
 	const suggesties: Afspraak[] = transaction.suggesties || [];
-	const {queryVariables} = useContext(TransactionsContext);
 
 	const [createJournaalpostAfspraak] = useCreateJournaalpostAfspraakMutation({
 		refetchQueries: [
-			{query: GetTransactiesDocument, variables: queryVariables},
+			{query: GetTransactiesDocument, variables: store.banktransactieFilters},
 		],
 	});
 	const [createJournaalpostGrootboekrekening] = useCreateJournaalpostGrootboekrekeningMutation({
 		refetchQueries: [
-			{query: GetTransactiesDocument, variables: queryVariables},
+			{query: GetTransactiesDocument, variables: store.banktransactieFilters},
 		],
 	});
 
