@@ -3,32 +3,20 @@ import {Box, Button, ButtonGroup, Checkbox, FormControl, FormLabel, HStack, Icon
 import React, {useEffect, useState} from "react";
 import DatePicker from "react-datepicker";
 import {useTranslation} from "react-i18next";
+import {GoPrimitiveDot} from "react-icons/all";
 import Select from "react-select";
 import {GetTransactiesDocument, useGetTransactiesQuery, useStartAutomatischBoekenMutation} from "../../../generated/graphql";
-import {DateRange} from "../../../models/models";
+import {BanktransactieFilters} from "../../../models/models";
 import {useStore} from "../../../store";
-import d from "../../../utils/dayjs";
 import Queryable from "../../../utils/Queryable";
-import {useReactSelectStyles} from "../../../utils/things";
+import {createQueryParamsFromFilters, useReactSelectStyles} from "../../../utils/things";
 import useHandleMutation from "../../../utils/useHandleMutation";
 import usePagination from "../../../utils/usePagination";
 import DeadEndPage from "../../shared/DeadEndPage";
 import Page from "../../shared/Page";
 import Section from "../../shared/Section";
+import {defaultBanktransactieFilters} from "./defaultBanktransactieFilters";
 import TransactiesList from "./TransactiesList";
-
-type Filters = {
-	onlyUnbooked?: boolean,
-	isCredit: "income" | "expenses" | "all",
-	dateRange?: DateRange,
-	bedragRange?: [number, number],
-	tegenrekeningIban?: string,
-}
-
-const defaultFilters: Filters = {
-	onlyUnbooked: true,
-	isCredit: "all",
-};
 
 const Transactions = () => {
 	const {t} = useTranslation();
@@ -38,42 +26,19 @@ const Transactions = () => {
 	const handleMutation = useHandleMutation();
 	const filterModal = useDisclosure();
 	const {store, updateStore} = useStore();
-	const {banktransactieFilters: filters} = store;
+	const banktransactieFilters: BanktransactieFilters = store.banktransactieFilters || defaultBanktransactieFilters;
 
 	useEffect(() => {
 		// If no filters are set at all, reset to default filters.
-		if (Object.keys(store.banktransactieFilters).length === 0) {
-			updateStore("banktransactieFilters", defaultFilters);
+		if (Object.keys(banktransactieFilters).length === 0) {
+			updateStore("banktransactieFilters", defaultBanktransactieFilters);
 		}
-	}, [updateStore, store.banktransactieFilters]);
-
+	}, [updateStore, banktransactieFilters]);
 
 	const queryVariables = {
 		offset,
 		limit: customPageSize,
-		filters: {
-			isGeboekt: filters.onlyUnbooked ? false : undefined,
-			isCredit: {
-				all: undefined,
-				income: true,
-				expenses: false,
-			}[filters.isCredit],
-			...filters.dateRange && filters.dateRange.from && filters.dateRange.through && {
-				transactieDatum: {
-					BETWEEN: [d(filters.dateRange.from).format("YYYY-MM-DD"), d(filters.dateRange.through).format("YYYY-MM-DD") || undefined],
-				},
-			},
-			...filters.tegenrekeningIban && {
-				tegenRekening: {
-					EQ: filters.tegenrekeningIban,
-				},
-			},
-			...filters.bedragRange && {
-				bedrag: {
-					BETWEEN: filters.bedragRange,
-				},
-			},
-		},
+		filters: createQueryParamsFromFilters(banktransactieFilters),
 	};
 
 	const $transactions = useGetTransactiesQuery({
@@ -119,8 +84,8 @@ const Transactions = () => {
 						<Stack>
 							<FormControl>
 								<FormLabel>{t("filters.transactions.type.title")}</FormLabel>
-								<Checkbox isChecked={filters.onlyUnbooked} onChange={e => updateStore("banktransactieFilters", {
-									...filters,
+								<Checkbox isChecked={banktransactieFilters.onlyUnbooked} onChange={e => updateStore("banktransactieFilters", {
+									...banktransactieFilters,
 									onlyUnbooked: e.target.checked,
 								})}>{t("filters.transactions.type.onlyUnbooked")}</Checkbox>
 							</FormControl>
@@ -128,11 +93,11 @@ const Transactions = () => {
 							<FormControl>
 								<FormLabel>{t("filters.transactions.isCredit.title")}</FormLabel>
 								<Select id={"tegenrekening"} isClearable={true} noOptionsMessage={() => t("filters.transactions.isCredit.choose")} maxMenuHeight={350}
-									options={isCreditSelectOptions} value={filters.isCredit ? isCreditSelectOptions.find(o => o.value === filters.isCredit) : null}
+									options={isCreditSelectOptions} value={banktransactieFilters.isCredit ? isCreditSelectOptions.find(o => o.value === banktransactieFilters.isCredit) : null}
 									onChange={(result) => {
 										updateStore("banktransactieFilters", {
-											...filters,
-											isCredit: result?.value as Filters["isCredit"],
+											...banktransactieFilters,
+											isCredit: result?.value as BanktransactieFilters["isCredit"],
 										});
 									}} styles={reactSelectStyles.default} />
 							</FormControl>
@@ -140,21 +105,21 @@ const Transactions = () => {
 							<HStack>
 								<FormControl as={Stack} flex={1} justifyContent={"flex-end"}>
 									<FormLabel>{t("global.period")}</FormLabel>
-									<DatePicker selected={filters.dateRange?.from || null}
+									<DatePicker selected={banktransactieFilters.dateRange?.from || null}
 										dateFormat={"dd-MM-yyyy"} isClearable={true} selectsRange={true}
-										startDate={filters.dateRange?.from} endDate={filters.dateRange?.through}
+										startDate={banktransactieFilters.dateRange?.from} endDate={banktransactieFilters.dateRange?.through}
 										onChange={(value: [Date, Date]) => {
 											if (value) {
 												const [from, through] = value;
 												if (!from && !through) {
 													updateStore("banktransactieFilters", {
-														...filters,
+														...banktransactieFilters,
 														dateRange: undefined,
 													});
 												}
 												else {
 													updateStore("banktransactieFilters", {
-														...filters,
+														...banktransactieFilters,
 														dateRange: {from, through},
 													});
 												}
@@ -184,11 +149,16 @@ const Transactions = () => {
 			<Section spacing={5}>
 				<Queryable query={$transactions} children={(data) => {
 					const transacties = data?.bankTransactionsPaged?.banktransactions || [];
-					const nFiltersActive = Object.values(queryVariables.filters).filter(q => ![null, undefined].includes(q as any)).length;
+					const filtersActive = Object.values(queryVariables.filters).filter(q => ![null, undefined].includes(q as any)).length > 0;
 
 					return (<>
 						<HStack justify={"flex-end"}>
-							<Button size={"sm"} colorScheme={"primary"} variant={"outline"} onClick={() => filterModal.onOpen()}>{`${t("sections.filterOptions.title")} (${nFiltersActive})`}</Button>
+							<Button size={"sm"} colorScheme={"primary"} variant={"outline"} onClick={() => filterModal.onOpen()}>{t("sections.filterOptions.title")}</Button>
+							{filtersActive && (
+								<Box>
+									<GoPrimitiveDot color={"green"} />
+								</Box>
+							)}
 						</HStack>
 						{transacties.length > 0 ? (
 							<TransactiesList transacties={transacties} />

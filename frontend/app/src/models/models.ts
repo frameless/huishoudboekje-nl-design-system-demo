@@ -33,3 +33,23 @@ export type DateRange = {
 	from?: Date,
 	through?: Date,
 }
+
+export type BanktransactieFilters = {
+	onlyUnbooked?: boolean,
+	isCredit: "income" | "expenses" | "all",
+	dateRange?: DateRange,
+	bedragRange?: [number, number],
+	tegenrekeningIban?: string,
+}
+
+export enum UploadState {
+	QUEUED,
+	LOADING,
+	DONE
+}
+
+export type FileUpload = {
+	file: File,
+	state: UploadState,
+	error?: Error,
+}

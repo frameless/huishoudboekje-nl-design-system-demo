@@ -1,19 +1,21 @@
 import {createContext, useCallback, useContext, useState} from "react";
+import {defaultBanktransactieFilters} from "../components/Bankzaken/Transacties/defaultBanktransactieFilters";
+import {BanktransactieFilters} from "../models/models";
 
 type StoreValue = {
 	burgerSearch: string,
-	banktransactieFilters: Record<string, any>,
+	banktransactieFilters?: BanktransactieFilters,
+};
+
+const initialState: StoreValue = {
+	burgerSearch: "",
+	banktransactieFilters: defaultBanktransactieFilters,
 };
 
 type StoreContextValue = {
 	store: StoreValue,
 	updateStore: (field: keyof StoreValue, value: any) => void
 }
-
-const initialState: StoreValue = {
-	burgerSearch: "",
-	banktransactieFilters: {},
-};
 
 const StoreContext = createContext<StoreContextValue>({
 	store: initialState,

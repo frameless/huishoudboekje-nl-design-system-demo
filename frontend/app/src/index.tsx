@@ -39,3 +39,4 @@ ReactDOM.render(
 	</React.StrictMode>,
 	document.getElementById("root"),
 );
+export {createQueryParamsFromFilters} from "./utils/things";

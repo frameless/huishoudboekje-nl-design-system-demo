@@ -4,20 +4,9 @@ import React, {useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {IoMdHourglass} from "react-icons/io";
 import {GetCsmsDocument, useCreateCustomerStatementMessageMutation} from "../../../generated/graphql";
+import {FileUpload, UploadState} from "../../../models/models";
 import {truncateText} from "../../../utils/things";
 import AddButton from "../../shared/AddButton";
-
-enum UploadState {
-	QUEUED,
-	LOADING,
-	DONE
-}
-
-type FileUpload = {
-	file: File,
-	state: UploadState,
-	error?: Error,
-}
 
 type CsmUploadModalProps = {
 	onClose: VoidFunction,
@@ -33,6 +22,9 @@ const CsmUploadModal: React.FC<CsmUploadModalProps> = ({onClose}) => {
 		},
 		refetchQueries: [
 			{query: GetCsmsDocument},
+			// We would actually like to refetch GetTransactiesDocument, but at this moment we can't because we don't have access to pagination settings that are set only when the page itself is built.
+			// An idea could be to store the pagination settings in the store, so that they can be accessed from there, and put in place here. (24-02-2022)
+			// {query: GetTransactiesDocument, variables: { *** }}
 		],
 	});
 
