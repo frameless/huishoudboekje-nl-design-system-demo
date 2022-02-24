@@ -1,5 +1,5 @@
-import {AddIcon, CheckIcon, CloseIcon, DeleteIcon, EditIcon, ViewIcon, WarningTwoIcon} from "@chakra-ui/icons";
-import {Badge, Box, Button, Divider, FormControl, FormLabel, HStack, IconButton, Input, InputGroup, InputLeftElement, InputRightElement, Stack, Table, Tbody, Td, Text, Th, Thead, Tr, useBreakpointValue, useDisclosure, VStack} from "@chakra-ui/react";
+import {AddIcon, EditIcon, ViewIcon, WarningTwoIcon} from "@chakra-ui/icons";
+import {Box, Button, Divider, FormControl, FormLabel, HStack, IconButton, Input, InputGroup, InputLeftElement, InputRightElement, Stack, Switch, Table, Tbody, Td, Text, Th, Thead, Tr, useBreakpointValue, useDisclosure, VStack} from "@chakra-ui/react";
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {AiOutlineTag} from "react-icons/all";
@@ -14,6 +14,7 @@ import zod, {containsZodErrorCode, zoektermValidator} from "../../../utils/zod";
 import AddButton from "../../shared/AddButton";
 import BackButton from "../../shared/BackButton";
 import DataItem from "../../shared/DataItem";
+import DeleteConfirmButton from "../../shared/DeleteConfirmButton";
 import {FormLeft, FormRight} from "../../shared/Forms";
 import Page from "../../shared/Page";
 import PrettyIban from "../../shared/PrettyIban";
@@ -28,7 +29,6 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	const toast = useToaster();
 	const addAlarmModal = useDisclosure();
 	const [zoekterm, setZoekterm] = useState<string>();
-	const [confirmDeleteAlarm, setConfirmDeleteAlarm] = useState<boolean>(false);
 	const [zoektermTouched, setZoektermTouched] = useState<boolean>(false);
 	const scheduleHelper = useScheduleHelper(afspraak.betaalinstructie);
 	const [addAfspraakZoekterm] = useAddAfspraakZoektermMutation({
@@ -76,8 +76,14 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 					isActive,
 				},
 			},
-		}).then(() => {
-			toast({success: t("messages.updateAlarmSuccess")});
+		}).then((result) => {
+			const isActive = result.data?.updateAlarm?.alarm?.isActive;
+			if (isActive) {
+				toast({success: t("messages.enableAlarmSuccess")});
+			}
+			else {
+				toast({success: t("messages.disableAlarmSuccess")});
+			}
 		}).catch(err => {
 			toast.closeAll();
 			toast({error: err.message});
@@ -403,43 +409,33 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 			<Section direction={["column", "row"]}>
 				<FormLeft title={t("afspraakDetailView.alarm.title")} helperText={t("afspraakDetailView.alarm.helperText")} />
 				<FormRight>
-					{afspraak.alarm ? (
-						<Stack>
+					{afspraak.alarm ? (<>
+						<Stack direction={["column", null, null, "row"]}>
 							<DataItem label={t("bedrag")}>
-								<Text>{t("afspraak.alarm.bedrag", {
-									amount: currencyFormat2().format(afspraak.alarm?.bedrag),
-									diff: currencyFormat2().format(afspraak.alarm?.bedragMargin),
-								})}</Text>
+								<HStack>
+									<Text>{currencyFormat2().format(afspraak.alarm?.bedrag)}</Text>
+									<Text color={"gray.500"} fontSize={"sm"}>+/- {currencyFormat2().format(afspraak.alarm?.bedragMargin)}</Text>
+								</HStack>
 							</DataItem>
 							<DataItem label={t("global.date")}>
-								<Text>{t("afspraak.alarm.datum", {date: d(afspraak.alarm?.datum, "YYYY-MM-DD").format("L"), diff: afspraak.alarm?.datumMargin})}</Text>
+								<HStack>
+									<Text>{d(afspraak.alarm?.datum, "YYYY-MM-DD").format("L")}</Text>
+									<Text color={"gray.500"} fontSize={"sm"}>+{t("afspraak.alarm.datumMargin", {count: afspraak.alarm?.datumMargin})}</Text>
+								</HStack>
 							</DataItem>
-							<DataItem label={t("global.isActive")}>
-								<Box>
-									<Badge colorScheme={afspraak.alarm?.isActive ? "green" : "gray"} onClick={() => toggleAlarmActive()}>
-										{afspraak.alarm?.isActive ? "ingeschakeld" : "uitgeschakeld"}
-									</Badge>
-								</Box>
-							</DataItem>
-							<DataItem label={t("afspraak.alarm.setByUser")}>
-								<Text>{afspraak.alarm?.gebruikerEmail}</Text>
-							</DataItem>
-							<Box>
-								{confirmDeleteAlarm ? (
-									<HStack>
-										<IconButton icon={<CheckIcon />} size={"sm"} colorScheme={"red"} onClick={() => onDeleteAlarm()} aria-label={t("global.actions.delete")} />
-										<IconButton icon={
-											<CloseIcon />} size={"sm"} colorScheme={"gray"} onClick={() => setConfirmDeleteAlarm(false)} aria-label={t("global.actions.cancel")} />
-									</HStack>
-								) : (
-									<HStack>
-										<IconButton icon={
-											<DeleteIcon />} size={"sm"} colorScheme={"red"} onClick={() => setConfirmDeleteAlarm(true)} aria-label={t("global.actions.delete")} />
-									</HStack>
-								)}
-							</Box>
 						</Stack>
-					) : (
+						<Stack direction={["column", null, null, "row"]}>
+							<DataItem label={t("afspraak.alarm.setByUser")}>
+								<Text>{afspraak.alarm?.gebruikerEmail || t("unknownGebruiker")}</Text>
+							</DataItem>
+							<DataItem label={t("afspraak.alarm.options")}>
+								<HStack>
+									<Switch size={"sm"} isChecked={!!(afspraak.alarm?.isActive)} onChange={() => toggleAlarmActive()} />
+									<DeleteConfirmButton onConfirm={() => onDeleteAlarm()} />
+								</HStack>
+							</DataItem>
+						</Stack>
+					</>) : (
 						<Stack>
 							<Text>{t("afspraakDetailView.noAlarm")}</Text>
 							<Box>

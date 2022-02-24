@@ -9,7 +9,8 @@
     "updateAfspraakSuccess": "De afspraak is gewijzigd.",
     "createAfspraakSuccess": "De afspraak is opgeslagen.",
     "deleteAfspraakSuccess": "De afspraak is verwijderd.",
-    "updateAlarmSuccess": "Het alarm is opgeslagen.",
+    "enableAlarmSuccess": "Het alarm is ingeschakeld.",
+    "disableAlarmSuccess": "Het alarm is uitgeschakeld.",
     "deleteAlarmSuccess": "Het alarm is verwijderd.",
     "deleteAfspraakZoektermSuccess": "De zoekterm is verwijderd.",
     "addAfspraakZoektermSuccess": "De zoekterm is opgeslagen.",
@@ -143,7 +144,6 @@
     },
     "formError": "Er is een fout opgetreden. Controleer de invoer en probeer het nog eens.",
     "date": "Datum",
-    "isActive": "Actief",
     "time": "Tijd",
     "period": "Periode",
     "startDate": "Startdatum"
@@ -489,11 +489,13 @@
   "bedrag": "Bedrag",
   "afspraak": {
     "alarm": {
-      "bedrag": "Bedrag",
-      "datum": "Datum",
-      "setByUser": "Ingesteld door"
+      "datumMargin_one": "1 dag",
+      "datumMargin_other": "{{count}} dagen",
+      "setByUser": "Ingesteld door",
+      "options": "Opties"
     }
   },
+  "unknownGebruiker": "Onbekende gebruiker",
   "errors": {
     "invalidDateError": "Vul een geldige datum in.",
     "straatnaam": {
@@ -634,7 +636,6 @@
   },
   "configuratie": "Configuratie",
   "rubrieken": "Rubrieken",
-  "unknownGebruiker": "Onbekende gebruiker",
   "unknownBurger": "Onbekende burger",
   "unknownHuishouden": "Onbekend huishouden",
   "unknownOrganisatie": "Onbekende organisatie",
