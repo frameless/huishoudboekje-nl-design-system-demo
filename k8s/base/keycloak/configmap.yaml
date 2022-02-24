@@ -564,6 +564,8 @@ data:
     client_users = os.environ['KEYCLOAK_CLIENT_USERS']
 
     # wait for keycloak to startup
+    print("Waiting for Keycloak to startup...")
+
     while (http_200 == False):
         print("Try to connect to {0}".format(auth_keycloak_url))
         try:
