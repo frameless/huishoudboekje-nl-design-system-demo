@@ -1,7 +1,6 @@
 # Huishoudboekje
 
-The scalable version of Huishoudboekje the software, usable for all Dutch municipalities. Huishoudboekje is developed based on the vision
-of [Common Ground](https://commonground.nl).
+The scalable version of Huishoudboekje the software, usable for all Dutch municipalities. Huishoudboekje is developed based on the vision of [Common Ground](https://commonground.nl).
 
 ## Technical Stack
 
@@ -31,16 +30,22 @@ The data models are managed using Alembic and Prisma migration scripts and that 
 
 ## Development
 
-For the frontend, see the [Frontend README](./frontend/app/README.md). \
-For the backend, there are a few different ways you can set up your local backend development environment:
+> ### ⚠️ Note to Windows users
+> Huishoudboekje uses symbolic links. If you're working on Windows, you need to explicitly enable symbolic links in Git,
+> otherwise these links will just appear as text files and things will not work as expected.
+>
+> Once symbolic links are enabled, please use `git clone -c core.symlinks=true` when you clone this repository, and symlinks should be working.
+> ![afbeelding](https://gitlab.com/commonground/huishoudboekje/app-new/uploads/faccef92aea1ada494d3384de02103d8/afbeelding.png)
+
+To setup the frontend application, see the [Frontend README](./frontend/app/README.md). \
+To setup the backend applications, there are a few different ways you can set up your local backend development environment:
 
 ## Setup development with Docker Compose
 
 - Please make sure you have `docker-compose` installed.
 - Run `docker-compose up -d db` to start the database.
 - Run `docker-compose up` to launch all the services and the backend. This might take a few moments as the services might execute some migrations on the database.
-- It's best to run the frontend-application natively on your system because of performace issues with running a development setup in Docker. For instructions
-  see [frontend/app/README.md](./frontend/app/README.md)
+- It's best to run the frontend-application natively on your system because of performace issues with running a development setup in Docker. For instructions see [frontend/app/README.md](./frontend/app/README.md)
 - Run `docker-compose --profile tests up` to run all tests.
 - Run `docker-compose huishoudboekjeservice-test up` to run only tests for the huishoudboekjeservice. You can put any service here.
 - Run `docker-compose up sampledata` to insert a small dataset into your system. Make sure you have all your services, a database and the backend running.
@@ -59,8 +64,7 @@ To set up the backend manually you could also run the database locally and run t
 You need python virtualenv, a Ubuntu shell with `zsh` and you need to make sure your symlinks work correctly.
 
 1. To make sure your git installation had enabled symbolic links, run `git clone -c core.symlinks=true https://gitlab.com/commonground/huishoudboekje/app-new.git`.
-1. Install [PostgreSQL](https://www.postgresql.org/download/windows/) to setup a local database. Make sure to also install pgAdmin as well, if you need a web client to manage your
-   databases.
+1. Install [PostgreSQL](https://www.postgresql.org/download/windows/) to setup a local database. Make sure to also install a database management application like [pgAdmin](https://www.pgadmin.org/), if you need a web client to manage your databases.
 1. Create virtual environments for the services and the backend. Please see their `README.md` for instructions.
 1. For the frontend you need to use the ubuntu zsh shell.
 
