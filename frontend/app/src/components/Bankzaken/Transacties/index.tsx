@@ -42,6 +42,7 @@ const Transactions = () => {
 	};
 
 	const $transactions = useGetTransactiesQuery({
+		fetchPolicy: "no-cache", // This "no-cache" is to make sure the list is refreshed after uploading a Bankafschrift in CsmUploadModal.tsx (24-02-2022)
 		variables: queryVariables,
 		onCompleted: data => {
 			if (data && total !== data.bankTransactionsPaged?.pageInfo?.count) {
