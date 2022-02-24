@@ -154,6 +154,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 				toast({
 					success: t("messages.addAfspraakAlarmSuccess"),
 				});
+				addAlarmModal.onClose();
 			}
 		}).catch(err => {
 			toast.closeAll();
