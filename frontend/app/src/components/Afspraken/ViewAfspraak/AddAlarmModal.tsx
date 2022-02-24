@@ -96,14 +96,6 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 					<ModalCloseButton />
 					<ModalBody>
 						<Stack>
-							<pre>{JSON.stringify({
-								form,
-								isPeriodiek: form.isPeriodiek,
-								isValid: isValid(),
-								isSubmitted,
-								validation: validator.safeParse(form),
-							}, null, 2)}</pre>
-
 							<Text>{t("addAlarmModal.helperText")}</Text>
 
 							<PeriodiekSelector value={form.isPeriodiek} isInvalid={!isFieldValid("isPeriodiek")} onChange={p => {
