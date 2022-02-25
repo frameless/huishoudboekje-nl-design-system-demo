@@ -402,7 +402,7 @@
     "repeatType_month": "Maandelijks",
     "repeatType_year": "Jaarlijks",
     "eenmalig": "Eenmalig",
-    "periodiek": "Periodiek",
+    "periodiek": "Herhalend",
     "datum": "Datum",
     "startDate": "Startdatum",
     "endDate": "Einddatum",
@@ -411,7 +411,7 @@
     "invalidPeriodiekError": "Kies een periodiek.",
     "byDay": "Weekdag",
     "invalidByDayError": "Kies minimaal één weekdag.",
-    "byMonth": "Maand(en)",
+    "byMonth": "Maanden",
     "invalidByMonthError": "Kies minimaal één maand.",
     "byMonthDay": "Dag van de maand (1-28)",
     "invalidByMonthDayError": "Vul de dag van de maand in.",
@@ -467,7 +467,7 @@
       "invalidBedragError": "Vul een bedrag in.",
       "invalidBedragMarginError": "Vul een bedrag in."
     },
-    "datumMargin": "Toegestane afwijking (in dagen)",
+    "datumMargin": "Toegestane afwijking in dagen",
     "byMonthDay": "Dag in de maand",
     "bedrag": "Bedrag verwachte betaling",
     "bedragMargin": "Toegestane afwijking bedrag (in euro's)"
