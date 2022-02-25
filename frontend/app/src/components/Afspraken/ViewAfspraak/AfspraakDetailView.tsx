@@ -321,6 +321,23 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 					</FormRight>
 				</Section>
 			)}
+
+			<Section direction={["column", "row"]}>
+				<FormLeft title={t("afspraakDetailView.alarm.title")} helperText={t("afspraakDetailView.alarm.helperText")} />
+				<FormRight>
+					<Stack>
+
+						{/*
+						Queryable getAfspraak
+						List of alarmen
+							Edit
+							Delete
+							Create new
+						*/}
+
+					</Stack>
+				</FormRight>
+			</Section>
 		</Page>
 	);
 };

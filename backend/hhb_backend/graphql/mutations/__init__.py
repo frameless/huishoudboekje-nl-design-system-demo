@@ -45,6 +45,9 @@ from .alarmen.create_alarm import CreateAlarm
 from .alarmen.update_alarm import UpdateAlarm
 from .alarmen.delete_alarm import DeleteAlarm
 from .alarmen.evaluate_alarm import EvaluateAlarm
+from .signalen.create_signaal import CreateSignaal
+from .signalen.update_signaal import UpdateSignaal
+from .signalen.delete_signaal import DeleteSignaal
 
 class RootMutation(graphene.ObjectType):
     """ The root of all mutations """
@@ -105,3 +108,8 @@ class RootMutation(graphene.ObjectType):
     createAlarm = CreateAlarm.Field()
     updateAlarm = UpdateAlarm.Field()
     deleteAlarm = DeleteAlarm.Field()
+    evaluateAlarm = EvaluateAlarm.Field()
+
+    createSignaal = CreateSignaal.Field()
+    updateSignaal = UpdateSignaal.Field()
+    deleteSignaal = DeleteSignaal.Field()

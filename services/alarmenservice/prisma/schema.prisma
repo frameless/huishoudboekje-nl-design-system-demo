@@ -8,13 +8,27 @@ generator client {
   binaryTargets = ["native", "linux-musl", "linux-arm64-openssl-1.1.x"]
 }
 
+enum DayOfWeek {
+  Monday
+  Tuesday
+  Wednesday
+  Thursday
+  Friday
+  Saturday
+  Sunday
+}
+
 model Alarm {
 	id 					String		@id @default(uuid())
 	gebruikerEmail		String
 	afspraakId			Int
+	signaalId			String?
 	isActive			Boolean
 	datum				String
 	datumMargin			Int
-	bedrag				Int
-	bedragMargin		Int
+	bedrag				Float
+	bedragMargin		Float
+	byDay				DayOfWeek[]
+	byMonth				Int[]
+	byMonthDay			Int[]
 }

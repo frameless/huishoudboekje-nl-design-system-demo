@@ -166,6 +166,7 @@ services:
       LOG_SERVICE_URL: "http://logservice:8000"
       POSTADRESSENSERVICE_URL: "http://postadressenservice:8080"
       ALARMENSERVICE_URL: "http://alarmenservice:8080"
+      SIGNALENSERVICE_URL: "http://signalenservice:8080"
       SECRET_KEY: koen
     ports:
       - 5000:8000

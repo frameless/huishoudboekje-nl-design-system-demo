@@ -9,6 +9,7 @@ from hhb_backend.graphql import settings
 from graphql import GraphQLError
 from dateutil import parser
 from datetime import date
+from hhb_backend.graphql.scalars.day_of_week import DayOfWeek
 
 class UpdateAlarmInput(graphene.InputObjectType):
     isActive = graphene.Boolean()
@@ -18,6 +19,10 @@ class UpdateAlarmInput(graphene.InputObjectType):
     datumMargin = graphene.Int()
     bedrag = graphene.Field(Bedrag)
     bedragMargin = graphene.Field(Bedrag)
+    byDay = graphene.List(DayOfWeek)
+    byMonth = graphene.List(graphene.Int)
+    byMonthDay = graphene.List(graphene.Int)
+
 
 class UpdateAlarm(graphene.Mutation):
     class Arguments:

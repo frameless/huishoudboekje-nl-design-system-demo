@@ -37,6 +37,7 @@ def test_afspraken_post_new_afspraak_minimum(client, session):
     afspraak_dict_min["tegen_rekening_id"] = None
     afspraak_dict_min["afdeling_id"] = None
     afspraak_dict_min["postadres_id"] = None
+    afspraak_dict_min["alarm_id"] = None
     afspraak_dict_min["rubriek_id"] = None
     assert response.json["data"] == afspraak_dict_min
     assert session.query(Afspraak).count() == 1
@@ -70,6 +71,7 @@ def test_afspraken_post_new_afspraak_full(client, session,
         # overschrijvingen
         # "afdeling_id": 1,
         "postadres_id": "38d25c77-8cd5-4bbe-9a73-633ec7847794",
+        "alarm_id": "38d25c77-8cd5-4bbe-9a73-633ec7847795",
         "betaalinstructie": {
             "byDay": [1,2],
             "byMonth": [3,4],
@@ -94,6 +96,7 @@ def test_afspraken_post_new_afspraak_full(client, session,
     afspraak_dict_full["tegen_rekening_id"] = 1
     afspraak_dict_full["afdeling_id"] = None
     afspraak_dict_full["postadres_id"] = "38d25c77-8cd5-4bbe-9a73-633ec7847794"
+    afspraak_dict_full["alarm_id"] = "38d25c77-8cd5-4bbe-9a73-633ec7847795"
     assert response.json["data"] == afspraak_dict_full
     assert session.query(Afspraak).count() == 1
 
