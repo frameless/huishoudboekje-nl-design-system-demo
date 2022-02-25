@@ -461,7 +461,7 @@
   "alarmForm": {
     "date": "Datum verwachte betaling",
     "errors": {
-      "invalidDateError": "Vul een geldige datum in.",
+      "invalidDateError": "Vul een geldige datum in. De datum moet in de toekomst liggen.",
       "invalidDatumMarginError": "Vul een aantal dagen in.",
       "invalidMonthDayError": "Vul een dag van de maand in. Bijvoorbeeld: 24.",
       "invalidBedragError": "Vul een bedrag in.",
