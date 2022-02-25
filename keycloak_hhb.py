@@ -532,12 +532,15 @@ auth_client_secret = os.environ['KEYCLOAK_CLIENT_SECRET']
 client_users = os.environ['KEYCLOAK_CLIENT_USERS']
 
 # wait for keycloak to startup
+print("Waiting for Keycloak to startup...")
+
 while (http_200 == False):
     print("Try to connect to {0}".format(auth_keycloak_url))
     try:
         response = requests.get(auth_keycloak_url, timeout=5)
         if response.status_code == 200:
             http_200 = True
+		    print("Keycloak is online. Running script now...")
         else:
             print("Error status_code:{0}, reason:{1}".format(response.status_code, response.reason))
     except:
