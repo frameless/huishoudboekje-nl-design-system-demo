@@ -1,32 +1,21 @@
 import {Table, TableProps, Tbody, Th, Thead, Tr} from "@chakra-ui/react";
-import React, {useContext} from "react";
+import React from "react";
 import {useTranslation} from "react-i18next";
-import {
-	Afdeling,
-	Burger,
-	GetBurgerDocument,
-	GetBurgersDocument,
-	GetBurgersSearchDocument,
-	GetOrganisatieDocument,
-	GetOrganisatiesDocument,
-	Rekening,
-	useDeleteAfdelingRekeningMutation,
-	useDeleteBurgerRekeningMutation,
-} from "../../generated/graphql";
+import {Afdeling, Burger, GetBurgerDocument, GetBurgersDocument, GetBurgersSearchDocument, GetOrganisatieDocument, GetOrganisatiesDocument, Rekening, useDeleteAfdelingRekeningMutation, useDeleteBurgerRekeningMutation} from "../../generated/graphql";
+import {useStore} from "../../store";
 import useToaster from "../../utils/useToaster";
-import {BurgerSearchContext} from "../Burgers/BurgerSearchContext";
 import RekeningListItem from "./RekeningListItem";
 
 type RekeningListProps = {rekeningen: Rekening[], burger?: Burger, afdeling?: Afdeling};
 const RekeningList: React.FC<TableProps & RekeningListProps> = ({rekeningen, burger, afdeling, ...props}) => {
 	const {t} = useTranslation();
 	const toast = useToaster();
-	const {search} = useContext(BurgerSearchContext);
+	const {store} = useStore();
 	const [deleteBurgerRekening] = useDeleteBurgerRekeningMutation({
 		refetchQueries: [
 			{query: GetBurgersDocument},
 			{query: GetBurgerDocument, variables: {id: burger?.id}},
-			{query: GetBurgersSearchDocument, variables: {search}},
+			{query: GetBurgersSearchDocument, variables: {search: store.burgerSearch}},
 		],
 	});
 	const [deleteAfdelingRekening] = useDeleteAfdelingRekeningMutation({

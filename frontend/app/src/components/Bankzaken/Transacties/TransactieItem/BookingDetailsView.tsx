@@ -1,21 +1,21 @@
 import {DeleteIcon, ViewIcon} from "@chakra-ui/icons";
 import {Box, Button, FormLabel, Heading, Stack, Text} from "@chakra-ui/react";
-import React, {useContext} from "react";
+import React from "react";
 import {useTranslation} from "react-i18next";
 import {NavLink} from "react-router-dom";
 import {AppRoutes} from "../../../../config/routes";
 import {BankTransaction, GetTransactiesDocument, useDeleteJournaalpostMutation} from "../../../../generated/graphql";
+import {useStore} from "../../../../store";
 import {currencyFormat2, formatBurgerName} from "../../../../utils/things";
 import useToaster from "../../../../utils/useToaster";
-import {TransactionsContext} from "../context";
 
 const BookingDetailsView: React.FC<{transactie: BankTransaction}> = ({transactie}) => {
 	const {t} = useTranslation();
 	const toast = useToaster();
-	const {queryVariables} = useContext(TransactionsContext);
+	const {store} = useStore();
 	const [deleteJournaalpost, $deleteJournaalpost] = useDeleteJournaalpostMutation({
 		refetchQueries: [
-			{query: GetTransactiesDocument, variables: queryVariables},
+			{query: GetTransactiesDocument, variables: store.banktransactieFilters},
 		],
 	});
 

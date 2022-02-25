@@ -8,11 +8,11 @@ import "react-datepicker/dist/react-datepicker.min.css";
 import ReactDOM from "react-dom";
 import {BrowserRouter as Router} from "react-router-dom";
 import App from "./App";
-import BurgerSearchProvider from "./components/Burgers/BurgerSearchContext";
 import "./config/i18n";
 import theme from "./config/theme";
 import "./global.scss";
 import apolloClient from "./services/graphql-client";
+import StoreProvider from "./store";
 import {FeatureProvider} from "./utils/features";
 
 dayjs.locale("nl-nl");
@@ -29,9 +29,9 @@ ReactDOM.render(
 			<ApolloProvider client={apolloClient}>
 				<ChakraProvider theme={theme}>
 					<FeatureProvider flags={featureFlags}>
-						<BurgerSearchProvider>
+						<StoreProvider>
 							<App />
-						</BurgerSearchProvider>
+						</StoreProvider>
 					</FeatureProvider>
 				</ChakraProvider>
 			</ApolloProvider>
@@ -39,3 +39,4 @@ ReactDOM.render(
 	</React.StrictMode>,
 	document.getElementById("root"),
 );
+export {createQueryParamsFromFilters} from "./utils/things";

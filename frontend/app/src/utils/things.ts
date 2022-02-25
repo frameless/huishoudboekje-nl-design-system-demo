@@ -4,8 +4,10 @@ import arrayToSentence from "array-to-sentence";
 import currency from "currency.js";
 import {friendlyFormatIBAN} from "ibantools";
 import {createContext} from "react";
+import {defaultBanktransactieFilters} from "../components/Bankzaken/Transacties/defaultBanktransactieFilters";
 import {Granularity, periodFormatForGranularity} from "../components/Rapportage/Aggregator";
 import {Afspraak, BankTransaction, Burger, GebruikersActiviteit, Huishouden, Organisatie, Rubriek} from "../generated/graphql";
+import {BanktransactieFilters} from "../models/models";
 import d from "./dayjs";
 
 const HHB_NUMMER_FORMAT = "HHB000000";
@@ -184,3 +186,34 @@ export const isAfspraakActive = (afspraak: Afspraak) => {
 export const getBurgerHhbId = (burger: Burger) => burger.id && String(burger.id).padStart(9, HHB_NUMMER_FORMAT);
 
 export const maxOrganisatieNaamLengthBreakpointValues = [25, 25, 35, 75];
+
+export const createQueryParamsFromFilters = (filters: Partial<BanktransactieFilters>) => {
+	const _filters = {
+		...defaultBanktransactieFilters,
+		...filters
+	};
+
+	return {
+		isGeboekt: _filters.onlyUnbooked ? false : undefined,
+		isCredit: {
+			all: undefined,
+			income: true,
+			expenses: false,
+		}[_filters.isCredit || defaultBanktransactieFilters.isCredit],
+		..._filters.dateRange && _filters.dateRange.from && _filters.dateRange.through && {
+			transactieDatum: {
+				BETWEEN: [d(_filters.dateRange.from).format("YYYY-MM-DD"), d(_filters.dateRange.through).format("YYYY-MM-DD") || undefined],
+			},
+		},
+		..._filters.tegenrekeningIban && {
+			tegenRekening: {
+				EQ: _filters.tegenrekeningIban,
+			},
+		},
+		..._filters.bedragRange && {
+			bedrag: {
+				BETWEEN: _filters.bedragRange,
+			},
+		},
+	};
+};
