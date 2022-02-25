@@ -159,6 +159,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 										<FormErrorMessage>{t("alarmForm.errors.invalidDatumMarginError")}</FormErrorMessage>
 									</FormControl>
 								</>)}
+
 								{form.repeatType === RepeatType.Month && (<>
 									<FormControl flex={1} isInvalid={!isFieldValid("byMonthDay")} isRequired>
 										<FormLabel>{t("alarmForm.byMonthDay")}</FormLabel>
@@ -180,15 +181,6 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 							</>)}
 
 							{form.isPeriodiek !== undefined && (<>
-
-								{form.datum && (
-									<Text>{t("addAlarmModal.signaalInfoText", {date: d(form.datum).add(form.datumMargin || 0, "days").format("L")})}</Text>
-								)}
-
-								{/* Uiterlijk op datum + marge ontvang je een melding als er nog geen betaling is geweest. */}
-								{/* Bij wekelijks maximaal 6 dagen marge. */}
-								{/* Periodiek kiezen: eenmalig en periodiek maandelijks is datum + marge (max 27), wekelijk is weekdag + marge (max 6). */}
-
 								<FormControl flex={1} isInvalid={!isFieldValid("bedrag")} isRequired>
 									<FormLabel>{t("alarmForm.bedrag")}</FormLabel>
 									<InputGroup>
