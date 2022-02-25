@@ -50,7 +50,9 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 	const reactSelectStyles = useReactSelectStyles();
 	const [form, {setForm, updateForm, toggleSubmitted, isSubmitted, isFieldValid, isValid, reset}] = useForm<zod.infer<typeof validator>>({
 		validator,
-		initialValue: {},
+		initialValue: {
+			bedrag: afspraak.bedrag,
+		},
 	});
 	const isFieldValid2 = (field: string) => {
 		if (!isSubmitted) {
