@@ -4,7 +4,7 @@ import {useTranslation} from "react-i18next";
 import exampleSignalen from "../../../exampleSignalen.json"; // Todo: remove this once we can grab the signalen from the API
 import {Burger, Signal} from "../../../generated/graphql";
 import {FormLeft, FormRight} from "../../shared/Forms";
-import SignalenList from "../../Signalen/SignalenList";
+import SignalenListView from "../../Signalen/SignalenListView";
 
 // Todo: remove this temporary type once "Signal" has been renamed to "Signaal" and context was changed.
 export type Signaal = Omit<Signal, "context"> & {
@@ -49,7 +49,7 @@ const BurgerSignalenView: React.FC<StackProps & {burger: Burger}> = ({burger, ..
 				)}
 			</FormLeft>
 			<FormRight>
-				<SignalenList signalen={filteredSignalen} />
+				<SignalenListView signalen={filteredSignalen} />
 			</FormRight>
 		</Stack>
 	);

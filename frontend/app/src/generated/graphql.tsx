@@ -1553,6 +1553,8 @@ export type RekeningFragment = { id?: number, iban?: string, rekeninghouder?: st
 
 export type RubriekFragment = { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } };
 
+export type SignaalFragment = { id?: string, isActive?: boolean, type?: string, actions?: Array<string>, context?: string, timeCreated?: string, alarm?: { id?: string } };
+
 export type BankTransactionFragment = { id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, tegenRekeningIban?: string, transactieDatum?: any, tegenRekening?: { iban?: string, rekeninghouder?: string } };
 
 export type AddAfspraakZoektermMutationVariables = Exact<{
@@ -2074,6 +2076,11 @@ export type GetRubriekenConfiguratieQueryVariables = Exact<{ [key: string]: neve
 
 export type GetRubriekenConfiguratieQuery = { rubrieken?: Array<{ id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, omschrijving?: string } }>, grootboekrekeningen?: Array<{ id: string, naam?: string, omschrijving?: string }> };
 
+export type GetSignalenQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetSignalenQuery = { signalen?: Array<{ id?: string, isActive?: boolean, type?: string, actions?: Array<string>, context?: string, timeCreated?: string, alarm?: { id?: string } }> };
+
 export type GetSimpleBurgersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -2394,6 +2401,19 @@ export const HuishoudenFragmentDoc = gql`
 export const JournaalpostFragmentDoc = gql`
     fragment Journaalpost on Journaalpost {
   id
+}
+    `;
+export const SignaalFragmentDoc = gql`
+    fragment Signaal on Signal {
+  id
+  isActive
+  type
+  actions
+  context
+  alarm {
+    id
+  }
+  timeCreated
 }
     `;
 export const BankTransactionFragmentDoc = gql`
@@ -5051,6 +5071,41 @@ export function useGetRubriekenConfiguratieLazyQuery(baseOptions?: Apollo.LazyQu
 export type GetRubriekenConfiguratieQueryHookResult = ReturnType<typeof useGetRubriekenConfiguratieQuery>;
 export type GetRubriekenConfiguratieLazyQueryHookResult = ReturnType<typeof useGetRubriekenConfiguratieLazyQuery>;
 export type GetRubriekenConfiguratieQueryResult = Apollo.QueryResult<GetRubriekenConfiguratieQuery, GetRubriekenConfiguratieQueryVariables>;
+export const GetSignalenDocument = gql`
+    query getSignalen {
+  signalen {
+    id
+    ...Signaal
+  }
+}
+    ${SignaalFragmentDoc}`;
+
+/**
+ * __useGetSignalenQuery__
+ *
+ * To run a query within a React component, call `useGetSignalenQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetSignalenQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetSignalenQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetSignalenQuery(baseOptions?: Apollo.QueryHookOptions<GetSignalenQuery, GetSignalenQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetSignalenQuery, GetSignalenQueryVariables>(GetSignalenDocument, options);
+      }
+export function useGetSignalenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetSignalenQuery, GetSignalenQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetSignalenQuery, GetSignalenQueryVariables>(GetSignalenDocument, options);
+        }
+export type GetSignalenQueryHookResult = ReturnType<typeof useGetSignalenQuery>;
+export type GetSignalenLazyQueryHookResult = ReturnType<typeof useGetSignalenLazyQuery>;
+export type GetSignalenQueryResult = Apollo.QueryResult<GetSignalenQuery, GetSignalenQueryVariables>;
 export const GetSimpleBurgersDocument = gql`
     query getSimpleBurgers {
   burgers {

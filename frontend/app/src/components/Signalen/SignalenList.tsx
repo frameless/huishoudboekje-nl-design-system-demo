@@ -1,54 +1,33 @@
-import {BellIcon, CheckIcon} from "@chakra-ui/icons";
-import {Badge, IconButton, Stack, Table, Tbody, Td, Text, Tr} from "@chakra-ui/react";
 import React from "react";
-import {Trans, useTranslation} from "react-i18next";
-import {AppRoutes} from "../../config/routes";
-import d from "../../utils/dayjs";
-import {currencyFormat2} from "../../utils/things";
-import {useToaster} from "../../utils/useToaster";
+import {useTranslation} from "react-i18next";
+import {useGetSignalenQuery} from "../../generated/graphql";
+import Queryable from "../../utils/Queryable";
 import {Signaal} from "../Burgers/BurgerDetail/BurgerSignalenView";
-import AuditLogLink from "../Gebeurtenissen/AuditLogLink";
+import DeadEndPage from "../shared/DeadEndPage";
+import Page from "../shared/Page";
+import SignalenListView from "./SignalenListView";
 
-const SignalenList: React.FC<{signalen: Signaal[]}> = ({signalen}) => {
+const SignalenList = () => {
 	const {t} = useTranslation();
-	const toast = useToaster();
+	const $signalen = useGetSignalenQuery();
 
 	return (
-		<Table size={"sm"} variant={"noLeftPadding"}>
-			<Tbody>
-				{signalen.length > 0 ? signalen.map((s, i) => (
-					<Tr key={i}>
-						<Td>
-							<Stack spacing={1} width={"100%"}>
-								<Text>
-									<Trans i18nKey={"signalen.contextMessage"} values={{
-										afspraak: (s.alarm?.afspraak?.omschrijving),
-										bedrag: currencyFormat2(true).format(parseFloat(s.context?.bedrag)),
-									}} components={{
-										strong: <strong />,
-										linkAfspraak: <AuditLogLink to={AppRoutes.ViewAfspraak(s.alarm?.afspraak?.id)}>{s.alarm?.afspraak?.omschrijving}</AuditLogLink>,
-									}} />
-								</Text>
-								<Text fontSize={"sm"} color={"gray.500"}>
-									{d(s.timeUpdated).format("LL LT")}
-								</Text>
-							</Stack>
-						</Td>
-						<Td textAlign={"center"}>
-							<Badge colorScheme={s.isActive ? "green" : "gray"}>{s.isActive ? t("enabled") : t("disabled")}</Badge>
-						</Td>
-						<Td textAlign={"center"}>
-							<IconButton icon={s.isActive ? <CheckIcon /> : <BellIcon />} size={"sm"} aria-label={s.isActive ? t("actions.disable") : t("actions.enable")} onClick={() => {
-								toast.closeAll();
-								toast({title: "Deze functionaliteit wordt nog ontwikkeld.", status: "info"});
-							}} />
-						</Td>
-					</Tr>
-				)) : (
-					<Text>{t("signalen.noResults")}</Text>
-				)}
-			</Tbody>
-		</Table>
+		<Queryable query={$signalen}>{data => {
+			const signalen: Signaal[] = data.signalen || [];
+
+			if (signalen.length === 0) {
+				return (
+					<DeadEndPage message={t("messages.signalen.noResults")} />
+				);
+			}
+
+			return (
+				<Page title={t("organizations.organizations")}>
+					<SignalenListView signalen={signalen} />
+				</Page>
+			);
+		}}
+		</Queryable>
 	);
 };
 

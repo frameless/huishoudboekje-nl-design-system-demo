@@ -10,6 +10,7 @@ export enum RouteNames {
 	transacties = "transacties",
 	bankafschriften = "bankafschriften",
 	betaalinstructies = "betaalinstructies",
+	signalen = "signalen",
 	rapportage = "rapportage",
 	gebeurtenissen = "gebeurtenissen",
 	configuratie = "configuratie",

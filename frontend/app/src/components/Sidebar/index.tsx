@@ -1,7 +1,7 @@
 import {Box, Divider, Stack} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {BsFillHouseDoorFill, FaRegBuilding, FiActivity, GrGraphQl, MdCreditCard, RiBarChartFill, TiCog} from "react-icons/all";
+import {BsFillHouseDoorFill, FaRegBuilding, FiActivity, GrGraphQl, MdBusAlert, MdCreditCard, RiBarChartFill, TiCog} from "react-icons/all";
 import {RouteNames} from "../../config/routes";
 import {useFeatureFlag} from "../../utils/features";
 import {isDev} from "../../utils/things";
@@ -14,6 +14,7 @@ const Sidebar = () => {
 	return (
 		<Stack spacing={5} p={5} alignSelf={"center"} borderRadius={5} bg={"white"} divider={<Divider />} width={"100%"}>
 			<Stack spacing={5}>
+				<SidebarLink to={RouteNames.signalen} icon={MdBusAlert}>{t("sidebar.signalen")}</SidebarLink>
 				<Stack>
 					<SidebarLink to={RouteNames.huishoudens} icon={BsFillHouseDoorFill}>{t("sidebar.huishoudens")}</SidebarLink>
 					<Box pl={"27px"}>

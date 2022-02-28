@@ -31,6 +31,7 @@ import TwoColumns from "./components/shared/TwoColumns";
 import UserStatus from "./components/shared/UserStatus";
 import Sidebar from "./components/Sidebar";
 import SidebarContainer from "./components/Sidebar/SidebarContainer";
+import SignalenList from "./components/Signalen/SignalenList";
 import StatusErrorPage from "./components/Status/StatusErrorPage";
 import StatusPage from "./components/Status/StatusPage";
 import {dataLayerOptions} from "./config/dataLayer";
@@ -133,6 +134,7 @@ const App = () => {
 							<Route path={RouteNames.bankafschriften} element={<CustomerStatementMessages />} />
 							<Route path={RouteNames.betaalinstructies} element={<Betaalinstructies />} />
 						</Route>
+						<Route path={RouteNames.signalen} element={<SignalenList />} />
 						<Route path={RouteNames.rapportage} element={<Rapportage />} />
 						<Route path={RouteNames.gebeurtenissen} element={<Gebeurtenissen />} />
 						<Route path={RouteNames.configuratie} element={<Configuratie />} />
