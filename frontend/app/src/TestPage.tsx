@@ -1,11 +1,10 @@
 import {createIcon} from "@chakra-ui/icon";
-import {Button, ButtonGroup, Heading, IconButton, Menu, MenuButton, MenuItem, MenuList, Stack, Text} from "@chakra-ui/react";
+import {Button, ButtonGroup, Checkbox, CheckboxGroup, FormControl, FormLabel, IconButton, Menu, MenuButton, MenuItem, MenuList, Stack, Text} from "@chakra-ui/react";
 import React from "react";
 import {NavLink} from "react-router-dom";
 import BackButton from "./components/shared/BackButton";
-import {FormLeft, FormRight} from "./components/shared/Forms";
 import Page from "./components/shared/Page";
-import Section from "./components/shared/Section";
+import {ModernSection as Section} from "./components/shared/Section";
 
 const MenuIcon = createIcon({
 	// Taken from HiDotsVertical from react-icons/hi
@@ -35,36 +34,35 @@ const TestPage = () => {
 				</ButtonGroup>
 			)}>
 
-			<Section>
-				<Stack direction={"row"}>
-					<FormLeft title={"Sectietitel"} helperText={"Ondersteunende tekst"} />
-					<FormRight>
-						<Text>Content</Text>
-					</FormRight>
-				</Stack>
+			<Section
+				title={"Sectietitel"}
+				helperText={"Ondersteunende tekst"}
+				menu={(
+					<Menu>
+						<IconButton as={MenuButton} icon={<MenuIcon />} variant={"ghost"} size={"sm"} aria-label={"Open menu"} />
+						<MenuList>
+							<MenuItem as={NavLink} to={"#"}>Wijzigen</MenuItem>
+							<MenuItem>Toevoegen</MenuItem>
+							<MenuItem>Verwijderen</MenuItem>
+						</MenuList>
+					</Menu>
+				)}
+				left={(
+					<FormControl>
+						<FormLabel>Filter</FormLabel>
+						<CheckboxGroup defaultValue={["active"]}>
+							<Stack>
+								<Checkbox value={"active"}>Actieve signalen</Checkbox>
+								<Checkbox value={"inactive"}>Inactieve signalen</Checkbox>
+							</Stack>
+						</CheckboxGroup>
+					</FormControl>
+				)}
+				right={(
+					<Button colorScheme={"primary"} variant={"outline"} size={"sm"}>Actie</Button>
+				)}>
+				<Text>Content</Text>
 			</Section>
-
-			<Section>
-				<FormLeft title={"Sectietitel"} helperText={"Ondersteunende tekst"} />
-				<FormRight>
-					<Text>Content</Text>
-				</FormRight>
-			</Section>
-
-			<Section>
-				<Stack direction={["column", "row"]} justify={"flex-start"} align={"flex-start"}>
-					<Stack flex={1} alignItems={"flex-start"}>
-						<Heading size={"md"}>Titel</Heading>
-						<Text fontSize={"md"} color={"gray.500"}>Ondersteunende tekst</Text>
-
-						<Text>Filteropties</Text>
-					</Stack>
-					<Stack flex={3}>
-						<Text>Content</Text>
-					</Stack>
-				</Stack>
-			</Section>
-
 		</Page>
 	);
 };
