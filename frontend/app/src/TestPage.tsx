@@ -1,16 +1,10 @@
-import {createIcon} from "@chakra-ui/icon";
 import {Button, ButtonGroup, Checkbox, CheckboxGroup, FormControl, FormLabel, IconButton, Menu, MenuButton, MenuItem, MenuList, Stack, Text} from "@chakra-ui/react";
 import React from "react";
 import {NavLink} from "react-router-dom";
 import BackButton from "./components/shared/BackButton";
+import MenuIcon from "./components/shared/MenuIcon";
 import Page from "./components/shared/Page";
 import Section from "./components/shared/Section";
-
-const MenuIcon = createIcon({
-	// Taken from HiDotsVertical from react-icons/hi
-	displayName: "HiDotsVertical",
-	d: "M10 6a2 2 0 110-4 2 2 0 010 4z M10 12a2 2 0 110-4 2 2 0 010 4z M10 18a2 2 0 110-4 2 2 0 010 4z",
-});
 
 const TestPage = () => {
 	return (
