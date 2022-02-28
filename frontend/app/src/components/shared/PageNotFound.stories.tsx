@@ -1,4 +1,4 @@
-import {ComponentMeta, ComponentStory} from "@storybook/react";
+import {ComponentMeta} from "@storybook/react";
 import React from "react";
 import PageNotFound from "./PageNotFound";
 
@@ -6,10 +6,11 @@ export default {
 	title: "Huishoudboekje/PageNotFound",
 	component: PageNotFound,
 	argTypes: {},
-	args: {},
 } as ComponentMeta<typeof PageNotFound>;
 
-const Template: ComponentStory<typeof PageNotFound> = () => <PageNotFound />;
-
-export const Default = Template.bind({});
+export const Default = () => {
+	return (
+		<PageNotFound />
+	);
+};
 Default.args = {};
