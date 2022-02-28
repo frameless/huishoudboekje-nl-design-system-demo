@@ -10,7 +10,7 @@ import {formatBurgerName} from "../../utils/things";
 import BackButton from "../shared/BackButton";
 import Page from "../shared/Page";
 import PageNotFound from "../shared/PageNotFound";
-import Section from "../shared/Section";
+import {DeprecatedSection} from "../shared/Section";
 import BurgerProfileView from "./BurgerDetail/BurgerProfileView";
 import BurgerRekeningenView from "./BurgerDetail/BurgerRekeningenView";
 
@@ -45,8 +45,8 @@ const BurgerPersonalDetailsPage = () => {
 						</MenuList>
 					</Menu>
 				)}>
-					<Section><BurgerProfileView burger={burger} /></Section>
-					<Section><BurgerRekeningenView burger={burger} /></Section>
+					<DeprecatedSection><BurgerProfileView burger={burger} /></DeprecatedSection>
+					<DeprecatedSection><BurgerRekeningenView burger={burger} /></DeprecatedSection>
 				</Page>
 			);
 		}}

@@ -11,7 +11,7 @@ import useToaster from "../../utils/useToaster";
 import zod from "../../utils/zod";
 import Asterisk from "../shared/Asterisk";
 import {FormLeft, FormRight} from "../shared/Forms";
-import Section from "../shared/Section";
+import {DeprecatedSection} from "../shared/Section";
 
 // t("messages.burgers.invalidGeboortedatum")
 const validator = zod.object({
@@ -83,7 +83,7 @@ const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading, isB
 
 	return (
 		<Box as={"form"} onSubmit={onSubmitForm}>
-			<Section divider={<Divider />}>
+			<DeprecatedSection divider={<Divider />}>
 				<Stack direction={["column", "row"]} spacing={2}>
 					<FormLeft title={t("forms.burgers.sections.personal.title")} helperText={t("forms.burgers.sections.personal.helperText")} />
 					<FormRight>
@@ -195,7 +195,7 @@ const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading, isB
 						</Stack>
 					</FormRight>
 				</Stack>
-			</Section>
+			</DeprecatedSection>
 		</Box>
 	);
 };

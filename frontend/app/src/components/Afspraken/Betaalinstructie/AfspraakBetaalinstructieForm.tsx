@@ -13,7 +13,7 @@ import zod from "../../../utils/zod";
 import Asterisk from "../../shared/Asterisk";
 import {FormLeft, FormRight} from "../../shared/Forms";
 import PageNotFound from "../../shared/PageNotFound";
-import Section from "../../shared/Section";
+import {DeprecatedSection} from "../../shared/Section";
 
 const validator2 = zod.object({
 	byDay: zod.array(zod.nativeEnum(DayOfWeek)).min(1),
@@ -119,7 +119,7 @@ const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({
 	];
 
 	return (
-		<Section>
+		<DeprecatedSection>
 			<form onSubmit={onSubmit}>
 				<Stack direction={["column", "row"]}>
 					<FormLeft title={t("afspraakBetaalinstructie.title")} helperText={t("afspraakBetaalinstructie.helperText")} />
@@ -290,7 +290,7 @@ const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({
 					</FormRight>
 				</Stack>
 			</form>
-		</Section>
+		</DeprecatedSection>
 	);
 };
 

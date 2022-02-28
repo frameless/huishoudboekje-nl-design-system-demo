@@ -4,7 +4,7 @@ import React from "react";
 import {NavLink} from "react-router-dom";
 import BackButton from "./components/shared/BackButton";
 import Page from "./components/shared/Page";
-import {ModernSection as Section} from "./components/shared/Section";
+import Section from "./components/shared/Section";
 
 const MenuIcon = createIcon({
 	// Taken from HiDotsVertical from react-icons/hi
@@ -33,7 +33,6 @@ const TestPage = () => {
 					<Button colorScheme={"primary"} variant={"outline"} size={"sm"}>Actie</Button>
 				</ButtonGroup>
 			)}>
-
 			<Section
 				title={"Sectietitel"}
 				helperText={"Ondersteunende tekst"}

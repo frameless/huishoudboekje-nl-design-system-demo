@@ -14,7 +14,7 @@ import useHandleMutation from "../../../utils/useHandleMutation";
 import usePagination from "../../../utils/usePagination";
 import DeadEndPage from "../../shared/DeadEndPage";
 import Page from "../../shared/Page";
-import Section from "../../shared/Section";
+import {DeprecatedSection} from "../../shared/Section";
 import {defaultBanktransactieFilters} from "./defaultBanktransactieFilters";
 import TransactiesList from "./TransactiesList";
 
@@ -147,7 +147,7 @@ const Transactions = () => {
 				</ModalContent>
 			</Modal>
 
-			<Section spacing={5}>
+			<DeprecatedSection spacing={5}>
 				<Queryable query={$transactions} children={(data) => {
 					const transacties = data?.bankTransactionsPaged?.banktransactions || [];
 					const filtersActive = Object.values(queryVariables.filters).filter(q => ![null, undefined].includes(q as any)).length > 0;
@@ -171,7 +171,7 @@ const Transactions = () => {
 						</HStack>
 					</>);
 				}} />
-			</Section>
+			</DeprecatedSection>
 		</Page>
 	);
 };

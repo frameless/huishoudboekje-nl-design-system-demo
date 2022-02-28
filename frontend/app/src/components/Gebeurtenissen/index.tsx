@@ -4,9 +4,9 @@ import {useTranslation} from "react-i18next";
 import {GebruikersActiviteit, useGetGebeurtenissenQuery} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
 import usePagination from "../../utils/usePagination";
-import Page from "../shared/Page";
 import {FormLeft, FormRight} from "../shared/Forms";
-import Section from "../shared/Section";
+import Page from "../shared/Page";
+import {DeprecatedSection} from "../shared/Section";
 import GebeurtenissenTableView from "./GebeurtenissenTableView";
 
 const Gebeurtenissen = () => {
@@ -26,7 +26,7 @@ const Gebeurtenissen = () => {
 
 	return (
 		<Page title={t("pages.gebeurtenissen.title")}>
-			<Section>
+			<DeprecatedSection>
 				<Stack>
 					<FormLeft title={t("pages.gebeurtenissen.title")} helperText={t("pages.gebeurtenissen.helperText")} flex={1} />
 					<Queryable query={$gebeurtenissen} children={data => {
@@ -41,7 +41,7 @@ const Gebeurtenissen = () => {
 						);
 					}} />
 				</Stack>
-			</Section>
+			</DeprecatedSection>
 		</Page>
 	);
 };

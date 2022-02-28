@@ -1,15 +1,18 @@
 import {Box, Divider, Heading, HStack, Stack, StackProps, Text, useStyleConfig} from "@chakra-ui/react";
 import React from "react";
+import deprecatedComponent from "../../utils/Deprecated";
 import {FormLeft, FormRight} from "./Forms";
 
-const Section: React.FC<StackProps> = ({...props}) => {
+const _DeprecatedSection_ = (props) => {
 	const styles = useStyleConfig("Section");
 	return (
 		<Stack sx={styles} {...props} />
 	);
 };
 
-type ModernSectionProps = Omit<StackProps, "left" | "right"> & {
+export const DeprecatedSection = deprecatedComponent(_DeprecatedSection_, "Please refactor this component to the new Section component.");
+
+type SectionProps = Omit<StackProps, "left" | "right"> & {
 	title?: string,
 	helperText?: string,
 	left?: JSX.Element | null | string,
@@ -17,7 +20,7 @@ type ModernSectionProps = Omit<StackProps, "left" | "right"> & {
 	menu?: JSX.Element | null | string,
 }
 
-export const ModernSection: React.FC<ModernSectionProps> = ({
+export const Section: React.FC<SectionProps> = ({
 	title,
 	helperText,
 	left,
@@ -27,6 +30,7 @@ export const ModernSection: React.FC<ModernSectionProps> = ({
 	...props
 }) => {
 	const styles = useStyleConfig("Section");
+
 	return (
 		<Stack sx={styles} {...props}>
 			{(title || helperText || right || menu) && (<>
@@ -42,7 +46,6 @@ export const ModernSection: React.FC<ModernSectionProps> = ({
 				</Stack>
 				<Divider />
 			</>)}
-
 
 			{left ? (
 				<Stack direction={["column", "row"]}>

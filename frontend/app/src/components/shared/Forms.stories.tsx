@@ -1,4 +1,4 @@
-import {FormControl, FormLabel, Heading, Input, Stack, StackProps, Text} from "@chakra-ui/react";
+import {FormControl, FormLabel, Input, Stack} from "@chakra-ui/react";
 import {ComponentMeta} from "@storybook/react";
 import React from "react";
 import {FormLeft, FormRight} from "./Forms";
