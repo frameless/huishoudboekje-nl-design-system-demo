@@ -28,7 +28,7 @@ export default {
 				name: "string",
 				required: false,
 			},
-			description: "This will show an menu with options.",
+			description: "This will show a menu with options.",
 		},
 		right: {
 			type: {
