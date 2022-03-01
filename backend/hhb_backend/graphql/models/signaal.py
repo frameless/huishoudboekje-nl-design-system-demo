@@ -1,4 +1,4 @@
-""" signaal om kenbaar te maken wanneer een alarm is afgegaan """
+""" Signaal om kenbaar te maken wanneer een alarm is afgegaan """
 import graphene
 from flask import request
 import hhb_backend.graphql.models.Alarm as alarm
@@ -10,7 +10,7 @@ class Signaal(graphene.ObjectType):
     type = graphene.String()
     actions = graphene.List(graphene.String, default_value=[])
     context = graphene.String()
-    timeCreated = graphene.String()
+    timeUpdated = graphene.String()
 
     async def resolve_alarm(root, info):
         alarm_id = root.get("alarmId")

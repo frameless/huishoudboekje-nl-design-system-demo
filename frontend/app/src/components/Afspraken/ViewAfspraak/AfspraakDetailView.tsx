@@ -1,5 +1,5 @@
 import {AddIcon, EditIcon, ViewIcon, WarningTwoIcon} from "@chakra-ui/icons";
-import {Box, Button, Divider, FormControl, FormLabel, HStack, IconButton, Input, InputGroup, InputLeftElement, InputRightElement, Stack, Switch, Table, Tbody, Td, Text, Th, Thead, Tr, useBreakpointValue, useDisclosure, VStack} from "@chakra-ui/react";
+import {Box, Button, Divider, FormControl, FormLabel, HStack, IconButton, Input, InputGroup, InputLeftElement, InputRightElement, Stack, Switch, Table, Tbody, Td, Text, Th, Thead, Tr, useBreakpointValue, useDisclosure, VStack, Wrap, WrapItem} from "@chakra-ui/react";
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {AiOutlineTag} from "react-icons/all";
@@ -19,7 +19,7 @@ import {FormLeft, FormRight} from "../../shared/Forms";
 import Page from "../../shared/Page";
 import PrettyIban from "../../shared/PrettyIban";
 import Section from "../../shared/Section";
-import ZoektermenList from "../ZoektermenList";
+import ZoektermenList from "../../shared/ZoektermenList";
 import AddAlarmModal from "./AddAlarmModal";
 import AfspraakDetailMenu from "./AfspraakDetailMenu";
 
