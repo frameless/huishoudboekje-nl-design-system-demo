@@ -128,13 +128,9 @@ class EvaluateAlarm(graphene.Mutation):
         date_margin = int(alarm.get("datumMargin"))                       
         day_after_expected_window = alarm_date + timedelta(days=(date_margin + 1))   # plus one to make sure the alarm is checked after the expected date range.
         utc_now_date = (datetime.now(timezone.utc)).date()
-        if day_after_expected_window < utc_now_date:
-            return False
-        elif day_after_expected_window > utc_now_date:
-            return False
-
-        # past all checks so the it passes the base validation
-        return True
+        
+        # if now or in the past, it should be checked
+        return day_after_expected_window <= utc_now_date
 
     def getActiveAlarms() -> list:
         alarm_response = requests.get(f"{settings.ALARMENSERVICE_URL}/alarms/", headers={"Content-type": "application/json"})
