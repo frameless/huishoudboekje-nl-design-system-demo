@@ -12,5 +12,8 @@ export const AlarmFragment = gql`
         afspraak {
             id
         }
+        signaal {
+            id
+        }
     }
 `;

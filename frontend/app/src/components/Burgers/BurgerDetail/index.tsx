@@ -4,7 +4,7 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {NavLink, useNavigate, useParams} from "react-router-dom";
 import {AppRoutes} from "../../../config/routes";
-import {Burger, GetBurgersDocument, GetBurgersSearchDocument, GetHuishoudensDocument, useDeleteBurgerMutation, useGetBurgerQuery} from "../../../generated/graphql";
+import {Burger, GetBurgerDocument, GetBurgersDocument, GetBurgersSearchDocument, GetHuishoudensDocument, useDeleteBurgerMutation, useDeleteHuishoudenBurgerMutation, useGetBurgerQuery} from "../../../generated/graphql";
 import {useStore} from "../../../store";
 import Queryable from "../../../utils/Queryable";
 import {formatBurgerName} from "../../../utils/things";
@@ -24,11 +24,20 @@ const BurgerDetailPage = () => {
 	const toast = useToaster();
 	const navigate = useNavigate();
 	const deleteAlert = useDisclosure();
+	const deleteHuishoudenBurgerAlert = useDisclosure();
 	const {store} = useStore();
 	const $burger = useGetBurgerQuery({
 		variables: {
 			id: parseInt(id),
 		},
+	});
+	const [deleteHuishoudenBurger, $deleteHuishoudenBurger] = useDeleteHuishoudenBurgerMutation({
+		refetchQueries: [
+			{query: GetBurgersSearchDocument, variables: {search: store.burgerSearch}},
+			{query: GetBurgersDocument},
+			{query: GetBurgerDocument, variables: {id: parseInt(id)}},
+			{query: GetHuishoudensDocument},
+		],
 	});
 	const [deleteBurger, $deleteBurger] = useDeleteBurgerMutation({
 		variables: {
@@ -48,6 +57,25 @@ const BurgerDetailPage = () => {
 			if (!burger) {
 				return <PageNotFound />;
 			}
+
+			const onConfirmDeleteHuishoudenBurger = () => {
+				deleteHuishoudenBurger({
+					variables: {
+						huishoudenId: burger.huishouden?.id!,
+						burgerIds: [parseInt(id)],
+					},
+				}).then(() => {
+					deleteHuishoudenBurgerAlert.onClose();
+					toast({
+						success: t("messages.burgers.deleteFromHuishoudenConfirmMessage", {name: `${burger.voornamen} ${burger.achternaam}`}),
+					});
+				}).catch(err => {
+					console.error(err);
+					toast({
+						error: err.message,
+					});
+				});
+			};
 
 			const onConfirmDelete = () => {
 				deleteBurger()
@@ -81,6 +109,20 @@ const BurgerDetailPage = () => {
 						{t("messages.burgers.deleteQuestion", {name: `${burger.voornamen} ${burger.achternaam}`})}
 					</Alert>
 				)}
+				{deleteHuishoudenBurgerAlert.isOpen && (
+					<Alert
+						title={t("messages.burgers.deleteFromHuishoudenTitle")}
+						cancelButton={true}
+						onClose={() => deleteHuishoudenBurgerAlert.onClose()}
+						confirmButton={(
+							<Button isLoading={$deleteHuishoudenBurger.loading} colorScheme={"red"} onClick={onConfirmDeleteHuishoudenBurger} ml={3}>
+								{t("global.actions.delete")}
+							</Button>
+						)}
+					>
+						{t("messages.burgers.deleteFromHuishoudenQuestion", {name: `${burger.voornamen} ${burger.achternaam}`})}
+					</Alert>
+				)}
 
 				<Page title={formatBurgerName(burger)} backButton={(
 					<Stack direction={["column", "row"]} spacing={[2, 5]}>
@@ -96,6 +138,7 @@ const BurgerDetailPage = () => {
 							<NavLink to={AppRoutes.BurgerPersonalDetails(burger.id)}><MenuItem>{t("global.actions.showPersonalDetails")}</MenuItem></NavLink>
 							<NavLink to={AppRoutes.Huishouden(burger.huishouden?.id)}><MenuItem>{t("global.actions.showHuishouden")}</MenuItem></NavLink>
 							<Divider />
+							<MenuItem onClick={() => deleteHuishoudenBurgerAlert.onOpen()}>{t("global.actions.deleteBurgerFromHuishouden")}</MenuItem>
 							<MenuItem onClick={() => deleteAlert.onOpen()}>{t("global.actions.delete")}</MenuItem>
 						</MenuList>
 					</Menu>

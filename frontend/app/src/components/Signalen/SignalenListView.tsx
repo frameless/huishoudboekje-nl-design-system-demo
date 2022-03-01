@@ -9,7 +9,7 @@ import {useToaster} from "../../utils/useToaster";
 import {Signaal2 as Signaal} from "../Burgers/BurgerDetail/BurgerSignalenView";
 import AuditLogLink from "../Gebeurtenissen/AuditLogLink";
 
-const SignalenListView: React.FC<{signalen: Signaal[]}> = ({signalen = []}) => {
+const SignalenListView: React.FC<{ signalen: Signaal[] }> = ({signalen = []}) => {
 	const {t} = useTranslation();
 	const toast = useToaster();
 
@@ -19,11 +19,17 @@ const SignalenListView: React.FC<{signalen: Signaal[]}> = ({signalen = []}) => {
 		);
 	}
 
+	const count = signalen.filter(s => s.isActive).length
+
 	return (
+
 		<Table size={"sm"} variant={"noLeftPadding"}>
 			<Tbody>
 				{signalen.map((s, i) => (
 					<Tr key={i}>
+						<Td>
+							<Badge fontSize={"0.9rem"} p={1} colorScheme={"primary"} variant={"outline"}>{count}</Badge>
+						</Td>
 						<Td>
 							<Stack spacing={1} width={"100%"}>
 								<Text>
@@ -36,7 +42,7 @@ const SignalenListView: React.FC<{signalen: Signaal[]}> = ({signalen = []}) => {
 									}} />
 								</Text>
 								<Text fontSize={"sm"} color={"gray.500"}>
-									{d(s.timeCreated).format("LL LT")}
+									{d(s.timeUpdated).format("LL LT")}
 								</Text>
 							</Stack>
 						</Td>

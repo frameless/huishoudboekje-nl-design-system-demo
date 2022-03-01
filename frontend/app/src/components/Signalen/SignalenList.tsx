@@ -1,9 +1,10 @@
 import {Checkbox, CheckboxGroup, FormControl, FormLabel, Stack} from "@chakra-ui/react";
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
+import exampleSignalen from "../../exampleSignalen.json";
 import {useGetSignalenQuery} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
-import {ActiveSwitch, Signaal2, Signaal2 as Signaal} from "../Burgers/BurgerDetail/BurgerSignalenView";
+import {ActiveSwitch, Signaal2} from "../Burgers/BurgerDetail/BurgerSignalenView";
 import DeadEndPage from "../shared/DeadEndPage";
 import {FormLeft, FormRight} from "../shared/Forms";
 import Page from "../shared/Page";
@@ -18,7 +19,9 @@ const SignalenList = () => {
 
 	return (
 		<Queryable query={$signalen}>{data => {
-			const signalen: Signaal[] = data.signalen || [];
+			// const signalen: Signaal[] = data.signalen || [];
+			const signalen: Signaal2[] = exampleSignalen as Signaal2[];
+
 			const filteredSignalen: Signaal2[] = [
 				...signalen.filter(a => filter.active && a.isActive),
 				...signalen.filter(a => filter.inactive && !a.isActive),
