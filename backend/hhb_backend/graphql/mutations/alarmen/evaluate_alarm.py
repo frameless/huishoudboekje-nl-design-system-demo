@@ -1,5 +1,5 @@
 from hhb_backend.graphql.models.Alarm import Alarm
-from hhb_backend.graphql.models.signaal import Signal
+from hhb_backend.graphql.models.signaal import Signaal
 from hhb_backend.graphql.models.afspraak import Afspraak
 from hhb_backend.graphql.models.bank_transaction import Bedrag
 import graphene
@@ -16,7 +16,7 @@ import dateutil.parser
 class AlarmTriggerResult(graphene.ObjectType):
     alarm = graphene.Field(lambda: Alarm)
     nextAlarm = graphene.Field(lambda: Alarm)
-    Signal = graphene.Field(lambda: Signal)
+    signaal = graphene.Field(lambda: Signaal)
 
 class EvaluateAlarm(graphene.Mutation):
     alarmTriggerResult = graphene.List(lambda: AlarmTriggerResult)
@@ -56,7 +56,7 @@ class EvaluateAlarm(graphene.Mutation):
             triggered_alarms.append({
                 "alarm": alarm,
                 "nextAlarm": newAlarm,
-                "Signal": createdSignaal
+                "signaal": createdSignaal
             })
 
         return EvaluateAlarm(alarmTriggerResult=triggered_alarms)
@@ -235,7 +235,7 @@ class EvaluateAlarm(graphene.Mutation):
 
         return next_alarm_date
 
-    def shouldCreateSignaal(alarm: Alarm, transacties) -> Signal:
+    def shouldCreateSignaal(alarm: Alarm, transacties) -> Signaal:
         datum_margin = int(alarm.get("datumMargin"))
         str_expect_date = alarm.get("datum")
         expect_date = dateutil.parser.isoparse(str_expect_date).date()

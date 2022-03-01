@@ -3,7 +3,7 @@ import graphene
 from flask import request
 import hhb_backend.graphql.models.Alarm as alarm
 
-class Signal(graphene.ObjectType):
+class Signaal(graphene.ObjectType):
     id = graphene.String()
     alarm = graphene.Field(lambda: alarm.Alarm)
     isActive = graphene.Boolean()

@@ -64,7 +64,7 @@ banktransactie = {
     "tegen_rekening": "NL83ABNA1927261899",
     "transactie_datum": "2021-12-01"
 }
-signal = {
+signaal = {
     "id": "e2b282d9-b31f-451e-9242-11f86c902b35",
     "alarmId": alarm_id,
     "isActive": True,
@@ -156,7 +156,7 @@ def test_evaluate_alarm_illigal_betaalinstructie_combination(client):
                                 nextAlarm{
                                     id
                                 }
-                                Signal{
+                                signaal{
                                     id
                                 }
                             }
@@ -212,7 +212,7 @@ def test_evaluate_alarm_inactive(client):
                                 nextAlarm{
                                     id
                                 }
-                                Signal{
+                                signaal{
                                     id
                                 }
                             }
@@ -232,7 +232,7 @@ def test_evaluate_alarm_inactive(client):
 def test_evaluate_alarm_no_signal(client):
     with requests_mock.Mocker() as rm:
         # arrange
-        expected = {'data': {'evaluateAlarm': {'alarmTriggerResult': [{'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9'}, 'nextAlarm': {'id': '33738845-7f23-4c8f-8424-2b560a944884'}, 'Signal': None}]}}}
+        expected = {'data': {'evaluateAlarm': {'alarmTriggerResult': [{'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9'}, 'nextAlarm': {'id': '33738845-7f23-4c8f-8424-2b560a944884'}, 'signaal': None}]}}}
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
         rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=200, json={'data': [alarm]})
         rm2 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}", status_code=200, json={"data":afspraak})
@@ -255,7 +255,7 @@ def test_evaluate_alarm_no_signal(client):
                                 nextAlarm{
                                     id
                                 }
-                                Signal{
+                                signaal{
                                     id
                                 }
                             }
@@ -296,10 +296,10 @@ def test_evaluate_alarm_signal_date(client):
         rm3 = rm.get(f"{settings.HHB_SERVICES_URL}/journaalposten/{journaalpost_id}", status_code=200, json={"data": journaalpost})
         rm4 = rm.get(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/{transaction_id}", status_code=200, json={"data": banktransactie})
         rm5 = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={ "ok":True, "data": nextAlarm})
-        rm6 = rm.post(f"{settings.SIGNALENSERVICE_URL}/signals/", status_code=201, json={"data": signal})
+        rm6 = rm.post(f"{settings.SIGNALENSERVICE_URL}/signals/", status_code=201, json={"data": signaal})
         rm7 = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", status_code=200, json={ "ok":True, "data": nextAlarm})
         rm8 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
-        expected = {'data': {'evaluateAlarm': {'alarmTriggerResult': [{'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9'}, 'nextAlarm': {'id': '33738845-7f23-4c8f-8424-2b560a944884'}, 'Signal': {'id': 'e2b282d9-b31f-451e-9242-11f86c902b35'}}]}}}
+        expected = {'data': {'evaluateAlarm': {'alarmTriggerResult': [{'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9'}, 'nextAlarm': {'id': '33738845-7f23-4c8f-8424-2b560a944884'}, 'signaal': {'id': 'e2b282d9-b31f-451e-9242-11f86c902b35'}}]}}}
 
         # act
         response = client.post(
@@ -315,7 +315,7 @@ def test_evaluate_alarm_signal_date(client):
                                 nextAlarm{
                                     id
                                 }
-                                Signal{
+                                signaal{
                                     id
                                 }
                             }
@@ -358,10 +358,10 @@ def test_evaluate_alarm_signal_monetary(client):
         rm3 = rm.get(f"{settings.HHB_SERVICES_URL}/journaalposten/{journaalpost_id}", status_code=200, json={"data": journaalpost})
         rm4 = rm.get(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/{transaction_id}", status_code=200, json={"data": banktransactie})
         rm5 = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={ "ok":True, "data": nextAlarm})
-        rm6 = rm.post(f"{settings.SIGNALENSERVICE_URL}/signals/", status_code=201, json={"data": signal})
+        rm6 = rm.post(f"{settings.SIGNALENSERVICE_URL}/signals/", status_code=201, json={"data": signaal})
         rm7 = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", status_code=200, json={ "ok":True, "data": nextAlarm})
         rm8 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
-        expected = {'data': {'evaluateAlarm': {'alarmTriggerResult': [{'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9'}, 'nextAlarm': {'id': '33738845-7f23-4c8f-8424-2b560a944884'}, 'Signal': {'id': 'e2b282d9-b31f-451e-9242-11f86c902b35'}}]}}}
+        expected = {'data': {'evaluateAlarm': {'alarmTriggerResult': [{'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9'}, 'nextAlarm': {'id': '33738845-7f23-4c8f-8424-2b560a944884'}, 'signaal': {'id': 'e2b282d9-b31f-451e-9242-11f86c902b35'}}]}}}
 
         # act
         response = client.post(
@@ -377,7 +377,7 @@ def test_evaluate_alarm_signal_monetary(client):
                                 nextAlarm{
                                     id
                                 }
-                                Signal{
+                                signaal{
                                     id
                                 }
                             }
@@ -443,7 +443,7 @@ def test_evaluate_alarm_next_alarm_in_sequence_already_exists(client):
         rm3 = rm.get(f"{settings.HHB_SERVICES_URL}/journaalposten/{journaalpost_id}", status_code=200, json={"data": journaalpost})
         rm4 = rm.get(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/{transaction_id}", status_code=200, json={"data": banktransactie})
         rm5 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
-        expected = {'data': {'evaluateAlarm': {'alarmTriggerResult': [{'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9'}, 'nextAlarm': None, 'Signal': None}, {'alarm': {'id': '10943958-8b93-4617-aa43-669a9016aad9'}, 'nextAlarm': None, 'Signal': None}]}}}
+        expected = {'data': {'evaluateAlarm': {'alarmTriggerResult': [{'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9'}, 'nextAlarm': None, 'signaal': None}, {'alarm': {'id': '10943958-8b93-4617-aa43-669a9016aad9'}, 'nextAlarm': None, 'signaal': None}]}}}
 
         # act
         response = client.post(
@@ -459,7 +459,7 @@ def test_evaluate_alarm_next_alarm_in_sequence_already_exists(client):
                                 nextAlarm{
                                     id
                                 }
-                                Signal{
+                                signaal{
                                     id
                                 }
                             }
@@ -496,11 +496,11 @@ def test_evaluate_alarm_disabled_because_its_in_the_past(client):
         # rm7 = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={ "ok":True, "data": nextAlarm})
         expected = {'data': {'evaluateAlarm': {'alarmTriggerResult': 
         [{'alarm': {'isActive': False, 'gebruikerEmail': 'other@mail.nl', 'afspraak': {'id': 19, 'omschrijving': 'this is a test afspraak', 'betaalinstructie': {'byDay': ['Wednesday', 'Friday'], 'byMonth': [], 'byMonthDay': []}}, 'datum': '2021-12-06', 'datumMargin': 5, 'bedrag': '125.00', 'bedragMargin': '10.00'}, 
-        'nextAlarm': None, 'Signal': None}]}}}
+        'nextAlarm': None, 'signaal': None}]}}}
         # expected = {'data': {'evaluateAlarm': {'alarmTriggerResult': 
         # [{'alarm': {'isActive': False, 'gebruikerEmail': 'other@mail.nl', 'afspraak': {'id': 19, 'omschrijving': 'this is a test afspraak', 'betaalinstructie': {'byDay': ['Wednesday', 'Friday'], 'byMonth': [], 'byMonthDay': []}}, 'datum': '2021-12-06', 'datumMargin': 5, 'bedrag': '125.00', 'bedragMargin': '10.00'}, 
         # 'nextAlarm': {'isActive': True, 'gebruikerEmail': 'other@mail.nl', 'afspraak': {'id': 19, 'omschrijving': 'this is a test afspraak', 'betaalinstructie': {'byDay': ['Wednesday', 'Friday'], 'byMonth': [], 'byMonthDay': []}}, 'datum': '2021-12-08', 'datumMargin': 5, 'bedrag': '125.00', 'bedragMargin': '10.00'}, 
-        # 'Signal': None}]}}}
+        # 'signaal': None}]}}}
 
         # act
         response = client.post(
@@ -544,7 +544,7 @@ def test_evaluate_alarm_disabled_because_its_in_the_past(client):
                                     bedrag
                                     bedragMargin
                                 }
-                                Signal{
+                                signaal{
                                     id
                                 }
                             }

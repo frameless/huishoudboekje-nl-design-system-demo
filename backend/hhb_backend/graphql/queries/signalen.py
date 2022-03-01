@@ -1,11 +1,11 @@
 """ GraphQL Signalen query """
 import graphene
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (gebruikers_activiteit_entities, log_gebruikers_activiteit)
-from hhb_backend.graphql.models.signaal import Signal
+from hhb_backend.graphql.models.signaal import Signaal
 from flask import request
 
 class SignaalQuery:
-    return_type = graphene.Field(Signal, id=graphene.String(required=True))
+    return_type = graphene.Field(Signaal, id=graphene.String(required=True))
 
     @classmethod
     def gebruikers_activiteit(cls, _root, info, id, *_args, **_kwargs):
@@ -23,7 +23,7 @@ class SignaalQuery:
 
 
 class SignalenQuery:
-    return_type = graphene.List(Signal, ids=graphene.List(graphene.String, default_value=[]))
+    return_type = graphene.List(Signaal, ids=graphene.List(graphene.String, default_value=[]))
 
     @classmethod
     def gebruikers_activiteit(cls, _root, info, ids, *_args, **_kwargs):
