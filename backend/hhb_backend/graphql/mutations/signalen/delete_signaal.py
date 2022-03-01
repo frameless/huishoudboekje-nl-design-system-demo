@@ -1,6 +1,6 @@
 """ GraphQl Mutatie voor het verwijderen van een Signaal """
 import graphene
-from hhb_backend.graphql.models.signaal import Signal
+from hhb_backend.graphql.models.signaal import Signaal
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (gebruikers_activiteit_entities, log_gebruikers_activiteit)
 import requests
 from flask import request
@@ -12,7 +12,7 @@ class DeleteSignaal(graphene.Mutation):
         id = graphene.String(required=True)
 
     ok = graphene.Boolean()
-    previous = graphene.Field(lambda: Signal)
+    previous = graphene.Field(lambda: Signaal)
 
     def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
         return dict(

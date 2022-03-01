@@ -1,7 +1,7 @@
 """ GraphQL mutatie voor het aanmaken van een Signaal """
 from hhb_backend.graphql.models import signaal
 import graphene
-from hhb_backend.graphql.models.signaal import Signal
+from hhb_backend.graphql.models.signaal import Signaal
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (log_gebruikers_activiteit, gebruikers_activiteit_entities)
 import requests
 from graphql import GraphQLError
@@ -19,7 +19,7 @@ class CreateSignaal(graphene.Mutation):
         input = graphene.Argument(CreateSignaalInput, required=True)
 
     ok = graphene.Boolean()
-    signaal = graphene.Field(lambda: Signal)
+    signaal = graphene.Field(lambda: Signaal)
 
     def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
         return dict(

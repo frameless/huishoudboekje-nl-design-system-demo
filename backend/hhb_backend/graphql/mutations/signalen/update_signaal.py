@@ -1,6 +1,6 @@
 """ GraphQl Mutatie voor het aanpassen van een Alarm """
 import graphene
-from hhb_backend.graphql.models.signaal import Signal
+from hhb_backend.graphql.models.signaal import Signaal
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (gebruikers_activiteit_entities, log_gebruikers_activiteit)
 import requests
 from hhb_backend.graphql import settings
@@ -19,8 +19,8 @@ class UpdateSignaal(graphene.Mutation):
         input = graphene.Argument(UpdateSignaalInput, required=True)
 
     ok = graphene.Boolean()
-    signaal = graphene.Field(lambda: Signal)
-    previous = graphene.Field(lambda: Signal)
+    signaal = graphene.Field(lambda: Signaal)
+    previous = graphene.Field(lambda: Signaal)
 
     def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
         return dict(
