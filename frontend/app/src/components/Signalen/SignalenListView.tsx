@@ -6,17 +6,23 @@ import {AppRoutes} from "../../config/routes";
 import d from "../../utils/dayjs";
 import {currencyFormat2} from "../../utils/things";
 import {useToaster} from "../../utils/useToaster";
-import {Signaal} from "../Burgers/BurgerDetail/BurgerSignalenView";
+import {Signaal2 as Signaal} from "../Burgers/BurgerDetail/BurgerSignalenView";
 import AuditLogLink from "../Gebeurtenissen/AuditLogLink";
 
-const SignalenListView: React.FC<{signalen: Signaal[]}> = ({signalen}) => {
+const SignalenListView: React.FC<{signalen: Signaal[]}> = ({signalen = []}) => {
 	const {t} = useTranslation();
 	const toast = useToaster();
+
+	if (signalen.length === 0) {
+		return (
+			<Text>{t("signalen.noResults")}</Text>
+		);
+	}
 
 	return (
 		<Table size={"sm"} variant={"noLeftPadding"}>
 			<Tbody>
-				{signalen.length > 0 ? signalen.map((s, i) => (
+				{signalen.map((s, i) => (
 					<Tr key={i}>
 						<Td>
 							<Stack spacing={1} width={"100%"}>
@@ -30,7 +36,7 @@ const SignalenListView: React.FC<{signalen: Signaal[]}> = ({signalen}) => {
 									}} />
 								</Text>
 								<Text fontSize={"sm"} color={"gray.500"}>
-									{d(s.timeUpdated).format("LL LT")}
+									{d(s.timeCreated).format("LL LT")}
 								</Text>
 							</Stack>
 						</Td>
@@ -44,9 +50,7 @@ const SignalenListView: React.FC<{signalen: Signaal[]}> = ({signalen}) => {
 							}} />
 						</Td>
 					</Tr>
-				)) : (
-					<Text>{t("signalen.noResults")}</Text>
-				)}
+				))}
 			</Tbody>
 		</Table>
 	);
