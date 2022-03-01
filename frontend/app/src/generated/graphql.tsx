@@ -1553,7 +1553,7 @@ export type RekeningFragment = { id?: number, iban?: string, rekeninghouder?: st
 
 export type RubriekFragment = { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } };
 
-export type SignaalFragment = { id?: string, isActive?: boolean, type?: string, actions?: Array<string>, context?: string, timeCreated?: string, alarm?: { id?: string } };
+export type SignaalFragment = { id?: string, isActive?: boolean, type?: string, actions?: Array<string>, context?: string, timeUpdated?: string, alarm?: { id?: string } };
 
 export type BankTransactionFragment = { id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, tegenRekeningIban?: string, transactieDatum?: any, tegenRekening?: { iban?: string, rekeninghouder?: string } };
 
@@ -2079,7 +2079,7 @@ export type GetRubriekenConfiguratieQuery = { rubrieken?: Array<{ id?: number, n
 export type GetSignalenQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetSignalenQuery = { signalen?: Array<{ id?: string, isActive?: boolean, type?: string, actions?: Array<string>, context?: string, timeCreated?: string, alarm?: { id?: string } }> };
+export type GetSignalenQuery = { signalen?: Array<{ id?: string, isActive?: boolean, type?: string, actions?: Array<string>, context?: string, timeUpdated?: string, alarm?: { id?: string } }> };
 
 export type GetSimpleBurgersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2404,7 +2404,7 @@ export const JournaalpostFragmentDoc = gql`
 }
     `;
 export const SignaalFragmentDoc = gql`
-    fragment Signaal on Signal {
+    fragment Signaal on Signaal {
   id
   isActive
   type
@@ -2413,7 +2413,7 @@ export const SignaalFragmentDoc = gql`
   alarm {
     id
   }
-  timeCreated
+  timeUpdated
 }
     `;
 export const BankTransactionFragmentDoc = gql`

@@ -1,7 +1,7 @@
 import {gql} from "@apollo/client";
 
 export const SignaalFragment = gql`
-    fragment Signaal on Signal {
+    fragment Signaal on Signaal {
         id
         isActive
         type
@@ -10,6 +10,6 @@ export const SignaalFragment = gql`
         alarm {
             id
         }
-        timeCreated
+        timeUpdated
     }
 `;
