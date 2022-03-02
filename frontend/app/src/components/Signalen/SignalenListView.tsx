@@ -28,7 +28,7 @@ const SignalenListView: React.FC<{ signalen: Signaal[] }> = ({signalen = []}) =>
 				{signalen.map((s, i) => (
 					<Tr key={i}>
 						<Td>
-							<Badge fontSize={"0.9rem"} p={1} colorScheme={"primary"} variant={"outline"}>{count}</Badge>
+							<Badge fontSize={"sm"} p={1} colorScheme={"secondary"}>{count}</Badge>
 						</Td>
 						<Td>
 							<Stack spacing={1} width={"100%"}>

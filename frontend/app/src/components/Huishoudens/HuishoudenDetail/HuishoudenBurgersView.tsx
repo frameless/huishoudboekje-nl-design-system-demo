@@ -8,7 +8,7 @@ import {Burger, Huishouden} from "../../../generated/graphql";
 import {formatBurgerName} from "../../../utils/things";
 import GridCard from "../../shared/GridCard";
 
-const HuishoudenBurgerItem: React.FC<{huishouden: Huishouden, burger: Burger}> = ({huishouden, burger}) => {
+const HuishoudenBurgerItem: React.FC<{ huishouden: Huishouden, burger: Burger }> = ({huishouden, burger}) => {
 	const signalen = (burger.afspraken || [])
 		.map(a => a.alarm)
 		.map(a => a?.signaal)
@@ -19,7 +19,7 @@ const HuishoudenBurgerItem: React.FC<{huishouden: Huishouden, burger: Burger}> =
 		<GridCard as={NavLink} justify={["flex-start", "center"]} to={AppRoutes.Burger(burger.id)} position={"relative"}>
 			{signalen.length > 0 && (
 				<Box position={"absolute"} top={1} right={1}>
-					<Badge fontSize={"sm"} p={1} colorScheme={"primary"} variant={"outline"}>
+					<Badge fontSize={"sm"} p={1} colorScheme={"secondary"}>
 						{signalen.length}
 					</Badge>
 				</Box>
@@ -34,7 +34,7 @@ const HuishoudenBurgerItem: React.FC<{huishouden: Huishouden, burger: Burger}> =
 	);
 };
 
-const HuishoudenBurgersView: React.FC<{huishouden: Huishouden, onClickAddButton?: VoidFunction}> = ({huishouden, onClickAddButton}) => {
+const HuishoudenBurgersView: React.FC<{ huishouden: Huishouden, onClickAddButton?: VoidFunction }> = ({huishouden, onClickAddButton}) => {
 	const {t} = useTranslation();
 	const burgers: Burger[] = huishouden.burgers || [];
 

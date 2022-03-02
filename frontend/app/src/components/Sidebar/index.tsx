@@ -6,22 +6,18 @@ import {RouteNames} from "../../config/routes";
 import {useFeatureFlag} from "../../utils/features";
 import {isDev} from "../../utils/things";
 import SidebarLink from "./SidebarLink";
-import {useLocation} from "react-router-dom";
 
 const Sidebar = (to, exactMatch?) => {
 	const {t} = useTranslation();
 	const testPageEnabled = useFeatureFlag("testpage");
-
-	const location = useLocation();
-	const isActive = exactMatch ? location.pathname === to : location.pathname.includes(to);
 
 	return (
 		<Stack spacing={5} p={5} alignSelf={"center"} borderRadius={5} bg={"white"} divider={<Divider />} width={"100%"}>
 			<Stack spacing={5}>
 				<SidebarLink to={RouteNames.signalen} icon={MdBusAlert}>
 					<HStack justify={"space-between"} w={"100%"}>
-						<Text>{t("sidebar.signalen")} </Text>
-						<Badge fontSize={"0.9rem"} p={1} colorScheme={isActive ? "primary" : "white"} variant={"outline"}>99+</Badge>
+						<Text>{t("sidebar.signalen")}</Text>
+						<Badge fontSize={"sm"} p={1} colorScheme={"secondary"}>99+</Badge>
 					</HStack>
 				</SidebarLink>
 				<Stack>

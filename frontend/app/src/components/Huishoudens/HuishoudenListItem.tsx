@@ -6,7 +6,7 @@ import {Burger, Huishouden, Signaal} from "../../generated/graphql";
 import {formatBurgerName} from "../../utils/things";
 import GridCard from "../shared/GridCard";
 
-const HuishoudenListItem: React.FC<{huishouden: Huishouden}> = ({huishouden}) => {
+const HuishoudenListItem: React.FC<{ huishouden: Huishouden }> = ({huishouden}) => {
 
 	const signalen = (huishouden.burgers || []).reduce((list, burger: Burger) => {
 		const signalen = (burger.afspraken || [])
@@ -23,7 +23,7 @@ const HuishoudenListItem: React.FC<{huishouden: Huishouden}> = ({huishouden}) =>
 		<GridCard justify={"flex-start"} position={"relative"} as={NavLink} to={AppRoutes.Huishouden(huishouden.id)}>
 			{signalen.length > 0 && (
 				<Box position={"absolute"} top={1} right={1}>
-					<Badge fontSize={"sm"} p={1} colorScheme={"primary"} variant={"outline"}>
+					<Badge fontSize={"sm"} p={1} colorScheme={"secondary"}>
 						{signalen.length}
 					</Badge>
 				</Box>
