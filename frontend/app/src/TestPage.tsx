@@ -1,4 +1,4 @@
-import {Button, ButtonGroup, Checkbox, CheckboxGroup, FormControl, FormLabel, IconButton, Menu, MenuButton, MenuItem, MenuList, Stack, Text} from "@chakra-ui/react";
+import {Badge, Button, ButtonGroup, Checkbox, CheckboxGroup, FormControl, FormLabel, HStack, IconButton, Menu, MenuButton, MenuItem, MenuList, Stack, Text} from "@chakra-ui/react";
 import React from "react";
 import {NavLink} from "react-router-dom";
 import BackButton from "./components/shared/BackButton";
@@ -28,7 +28,12 @@ const TestPage = () => {
 				</ButtonGroup>
 			)}>
 			<Section
-				title={"Sectietitel"}
+				title={(
+					<HStack>
+						<Text>Sectietitel</Text>
+						<Badge colorScheme={"primary"}>1</Badge>
+					</HStack>
+				)}
 				helperText={"Ondersteunende tekst"}
 				menu={(
 					<Menu>

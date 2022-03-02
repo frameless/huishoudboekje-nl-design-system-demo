@@ -19,7 +19,7 @@ import {FormLeft, FormRight} from "../../shared/Forms";
 import Page from "../../shared/Page";
 import PrettyIban from "../../shared/PrettyIban";
 import {DeprecatedSection} from "../../shared/Section";
-import ZoektermenList from "../ZoektermenList";
+import ZoektermenList from "../../shared/ZoektermenList";
 import AddAlarmModal from "./AddAlarmModal";
 import AfspraakDetailMenu from "./AfspraakDetailMenu";
 
@@ -196,7 +196,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	const zoektermSuggesties = generateZoektermSuggesties();
 	const onClickZoektermSuggestie = z => {
 		setZoekterm(z);
-	}
+	};
 
 	return (
 		<Page title={t("afspraakDetailView.title")} backButton={<BackButton to={AppRoutes.Burger(afspraak.burger?.id)} />} menu={(

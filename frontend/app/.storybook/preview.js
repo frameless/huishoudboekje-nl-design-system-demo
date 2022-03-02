@@ -1,4 +1,3 @@
-import {addDecorator} from "@storybook/react";
 import "./theme.js";
 import theme from "../src/config/theme";
 import {ChakraProvider} from "@chakra-ui/react";
@@ -7,15 +6,17 @@ import i18n from "../src/config/i18n";
 import "react-datepicker/dist/react-datepicker.min.css";
 import "../src/global.scss";
 
-addDecorator(story => {
-	return (
-		<Router>
-			<ChakraProvider theme={theme}>
-				{story()}
-			</ChakraProvider>
-		</Router>
-	);
-});
+export const decorators = [
+	story => {
+		return (
+			<Router>
+				<ChakraProvider theme={theme}>
+					{story()}
+				</ChakraProvider>
+			</Router>
+		);
+	},
+];
 
 export const parameters = {
 	i18n,

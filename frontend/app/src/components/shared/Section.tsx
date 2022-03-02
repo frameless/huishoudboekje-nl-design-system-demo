@@ -1,7 +1,6 @@
 import {Box, Divider, Heading, HStack, Stack, StackProps, Text, useStyleConfig} from "@chakra-ui/react";
 import React from "react";
 import deprecatedComponent from "../../utils/Deprecated";
-import {FormLeft, FormRight} from "./Forms";
 
 const _DeprecatedSection_ = (props) => {
 	const styles = useStyleConfig("Section");
@@ -12,10 +11,10 @@ const _DeprecatedSection_ = (props) => {
 
 export const DeprecatedSection = deprecatedComponent(_DeprecatedSection_, "Please refactor this component to the new Section component.");
 
-type SectionProps = Omit<StackProps, "left" | "right"> & {
-	title?: string,
+type SectionProps = Omit<StackProps, "title" | "left" | "right"> & {
+	title?: JSX.Element | null | string,
 	helperText?: string,
-	left?: JSX.Element | null | string,
+	left?: JSX.Element | null | string | boolean,
 	right?: JSX.Element | null | string,
 	menu?: JSX.Element | null | string,
 }
@@ -48,13 +47,13 @@ export const Section: React.FC<SectionProps> = ({
 			</>)}
 
 			{left ? (
-				<Stack direction={["column", "row"]}>
-					<FormLeft>
-						{left}
-					</FormLeft>
-					<FormRight>
+				<Stack direction={["column", null, "row"]}>
+					<Stack flex={1} alignItems={"flex-start"}>
+						{typeof left !== "boolean" && left}
+					</Stack>
+					<Stack flex={[1, 2, 3]} alignItems={"flex-start"}>
 						{children}
-					</FormRight>
+					</Stack>
 				</Stack>
 			) : children}
 		</Stack>

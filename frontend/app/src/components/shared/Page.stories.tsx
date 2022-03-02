@@ -6,7 +6,7 @@ import BackButton from "./BackButton";
 import Page from "./Page";
 
 export default {
-	title: "Huishoudboekje/Page",
+	title: "Huishoudboekje/Page_old",
 	component: Page,
 	argTypes: {
 		title: {
