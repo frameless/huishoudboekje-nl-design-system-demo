@@ -1917,6 +1917,14 @@ export type UpdateRubriekMutationVariables = Exact<{
 
 export type UpdateRubriekMutation = { updateRubriek?: { ok?: boolean } };
 
+export type UpdateSignaalMutationVariables = Exact<{
+  id: Scalars['String'];
+  input: UpdateSignaalInput;
+}>;
+
+
+export type UpdateSignaalMutation = { updateSignaal?: { ok?: boolean, signaal?: { id?: string, isActive?: boolean, type?: string, actions?: Array<string>, context?: string, timeUpdated?: string, alarm?: { id?: string } } } };
+
 export type GetAfdelingQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -4086,6 +4094,43 @@ export function useUpdateRubriekMutation(baseOptions?: Apollo.MutationHookOption
 export type UpdateRubriekMutationHookResult = ReturnType<typeof useUpdateRubriekMutation>;
 export type UpdateRubriekMutationResult = Apollo.MutationResult<UpdateRubriekMutation>;
 export type UpdateRubriekMutationOptions = Apollo.BaseMutationOptions<UpdateRubriekMutation, UpdateRubriekMutationVariables>;
+export const UpdateSignaalDocument = gql`
+    mutation updateSignaal($id: String!, $input: UpdateSignaalInput!) {
+  updateSignaal(id: $id, input: $input) {
+    ok
+    signaal {
+      ...Signaal
+    }
+  }
+}
+    ${SignaalFragmentDoc}`;
+export type UpdateSignaalMutationFn = Apollo.MutationFunction<UpdateSignaalMutation, UpdateSignaalMutationVariables>;
+
+/**
+ * __useUpdateSignaalMutation__
+ *
+ * To run a mutation, you first call `useUpdateSignaalMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateSignaalMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateSignaalMutation, { data, loading, error }] = useUpdateSignaalMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateSignaalMutation(baseOptions?: Apollo.MutationHookOptions<UpdateSignaalMutation, UpdateSignaalMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateSignaalMutation, UpdateSignaalMutationVariables>(UpdateSignaalDocument, options);
+      }
+export type UpdateSignaalMutationHookResult = ReturnType<typeof useUpdateSignaalMutation>;
+export type UpdateSignaalMutationResult = Apollo.MutationResult<UpdateSignaalMutation>;
+export type UpdateSignaalMutationOptions = Apollo.BaseMutationOptions<UpdateSignaalMutation, UpdateSignaalMutationVariables>;
 export const GetAfdelingDocument = gql`
     query getAfdeling($id: Int!) {
   afdeling(id: $id) {

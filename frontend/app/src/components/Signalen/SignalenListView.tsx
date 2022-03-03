@@ -1,5 +1,4 @@
-import {BellIcon, CheckIcon} from "@chakra-ui/icons";
-import {Badge, IconButton, Stack, Table, Tbody, Td, Text, Tr} from "@chakra-ui/react";
+import {Badge, Stack, Switch, Table, Tbody, Td, Text, Tr} from "@chakra-ui/react";
 import React from "react";
 import {Trans, useTranslation} from "react-i18next";
 import {AppRoutes} from "../../config/routes";
@@ -8,18 +7,47 @@ import {currencyFormat2} from "../../utils/things";
 import {useToaster} from "../../utils/useToaster";
 import {Signaal2 as Signaal} from "../Burgers/BurgerDetail/BurgerSignalenView";
 import AuditLogLink from "../Gebeurtenissen/AuditLogLink";
+import {GetSignalenDocument, useUpdateSignaalMutation} from "../../generated/graphql";
+
 
 const SignalenListView: React.FC<{ signalen: Signaal[] }> = ({signalen = []}) => {
 	const {t} = useTranslation();
 	const toast = useToaster();
 
+	const [updateSignaal] = useUpdateSignaalMutation({
+		refetchQueries: [
+			{query: GetSignalenDocument}
+		]
+	})
+
 	if (signalen.length === 0) {
 		return (
 			<Text>{t("signalen.noResults")}</Text>
-		);
+		)
 	}
 
-	// const count = signalen.filter(s => s.isActive).length
+	const toggleSignaalActive = (id: string, newActive: boolean) => {
+		updateSignaal({
+			variables: {
+				id,
+				input: {
+					isActive: newActive
+				},
+			},
+		}).then((result) => {
+			const isActive = result.data?.updateSignaal?.signaal?.isActive;
+			if (isActive) {
+				toast({success: t("messages.enableSignaalSuccess")});
+			}
+			else {
+				toast({success: t("messages.disableSignaalSuccess")});
+			}
+		}).catch(err => {
+			toast.closeAll();
+			toast({error: err.message});
+		});
+	};
+
 
 	return (
 
@@ -47,10 +75,7 @@ const SignalenListView: React.FC<{ signalen: Signaal[] }> = ({signalen = []}) =>
 							<Badge colorScheme={s.isActive ? "green" : "gray"}>{s.isActive ? t("enabled") : t("disabled")}</Badge>
 						</Td>
 						<Td textAlign={"center"}>
-							<IconButton icon={s.isActive ? <CheckIcon /> : <BellIcon />} size={"sm"} aria-label={s.isActive ? t("actions.disable") : t("actions.enable")} onClick={() => {
-								toast.closeAll();
-								toast({title: "Deze functionaliteit wordt nog ontwikkeld.", status: "info"});
-							}} />
+							<Switch size={"sm"} isChecked={s.isActive} onChange={() => toggleSignaalActive(s.id!, !s.isActive)} />
 						</Td>
 					</Tr>
 				))}
