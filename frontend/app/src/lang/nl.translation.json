@@ -35,9 +35,12 @@
       "createSuccessMessage": "Transactie succesvol afgeletterd."
     },
     "burgers": {
+      "deleteFromHuishoudenConfirmMessage": "{{name}} is uit het huishouden verwijderd.",
       "deleteConfirmMessage": "Gegevens van {{name}} zijn verwijderd.",
       "deleteTitle": "Burger verwijderen",
       "deleteQuestion": "Weet je zeker dat je de gegevens van {{name}} definitief wil verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
+      "deleteFromHuishoudenTitle": "Burger uit huishouden verwijderen",
+      "deleteFromHuishoudenQuestion": "Weet je zeker dat je {{name}} uit het huishouden wil verwijderen? {{name}} vormt dan een nieuw huishouden.",
       "invalidGeboortedatum": "Vul een geldige datum in. Een datum in de toekomst is niet geldig. Voorbeeld: 01-01-1970.",
       "invalidBsn": "Vul een geldig BSN in. Een BSN is 8 of 9 cijfers lang en moet voldoen aan de elfproef.",
       "invalidVoorletters": "Vul minimaal één voorletter in. Voorletters zijn gescheiden met een punt. Voorbeeld: K.B.",
@@ -72,8 +75,7 @@
     "huishoudenBurger": {
       "noOptionsSelectedError": "Er zijn geen burgers gekozen. Kies minimaal een burger om toe te voegen aan dit huishouden.",
       "addSuccess_one": "{{names}} is toegevoegd aan dit huishouden.",
-      "addSuccess_other": "{{names}} zijn toegevoegd aan dit huishouden.",
-      "deleteSuccess": "{{burgerName}} is verwijderd uit dit huishouden."
+      "addSuccess_other": "{{names}} zijn toegevoegd aan dit huishouden."
     },
     "noHuishoudenSearchResults": "Geen huishoudens gevonden. Gebruik een andere zoekterm.",
     "postadressen": {
@@ -112,6 +114,11 @@
       "deleteTitle": "Bankrekening verwijderen.",
       "deleteQuestion": "Weet je zeker dat je bankrekening {{iban}} op naam van {{rekeninghouder}} wil verwijderen? Deze actie kan niet ongedaan worden gemaakt."
     },
+    "signalen": {
+      "noResults": "Er zijn geen signalen gevonden."
+    },
+    "enableSignaalSuccess": "Het signaal is ingeschakeld.",
+    "disableSignaalSuccess": "Het alarm is uitgeschakeld.",
     "backendError": "Er is een systeemfout opgetreden. Neem contact op met de applicatiebeheerder voor ondersteuning.",
     "genericToastErrorTitle": "Er is een fout opgetreden."
   },
@@ -135,8 +142,11 @@
       "filter": "Filteren",
       "viewBurgerHuishouden": "Bekijk huishouden",
       "brievenExport": "Exporteer gegevens voor brieven",
-      "clearSearch": "Zoekopdracht wissen",
       "showReports": "Bekijk rapportage",
+      "showPersonalDetails": "Bekijk persoonsgegevens",
+      "showHuishouden": "Bekijk huishouden",
+      "deleteBurgerFromHuishouden": "Verwijder burger van huishouden",
+      "clearSearch": "Zoekopdracht wissen",
       "backToList": "Terug naar overzicht",
       "clickToEdit": "Klik om te wijzigen",
       "back": "Terug",
@@ -212,6 +222,10 @@
         "rekeningen": {
           "title": "Rekeningen",
           "detailText": "Rekeningen van de burger."
+        },
+        "signalen": {
+          "title": "Signalen",
+          "detailText": "Signalen van de burger."
         }
       },
       "fields": {
@@ -275,11 +289,7 @@
       "addBurger": {
         "title": "Burger toevoegen aan huishouden"
       },
-      "findBurger": "Zoek burgers",
-      "deleteBurger": {
-        "title": "Burger verwijderen uit huishouden",
-        "confirmQuestion": "Weet je zeker dat je {{burgerName}} wil verwijderen uit het huishouden {{huishoudenName}}?"
-      }
+      "findBurger": "Zoek burgers"
     },
     "createAfdeling": {
       "naam": "Naam"
@@ -402,7 +412,7 @@
     "repeatType_month": "Maandelijks",
     "repeatType_year": "Jaarlijks",
     "eenmalig": "Eenmalig",
-    "periodiek": "Herhalend",
+    "periodiek": "Periodiek",
     "datum": "Datum",
     "startDate": "Startdatum",
     "endDate": "Einddatum",
@@ -411,7 +421,7 @@
     "invalidPeriodiekError": "Kies een periodiek.",
     "byDay": "Weekdag",
     "invalidByDayError": "Kies minimaal één weekdag.",
-    "byMonth": "Maanden",
+    "byMonth": "Maand(en)",
     "invalidByMonthError": "Kies minimaal één maand.",
     "byMonthDay": "Dag van de maand (1-28)",
     "invalidByMonthDayError": "Vul de dag van de maand in.",
@@ -455,19 +465,18 @@
   },
   "addAlarmModal": {
     "title": "Alarm toevoegen",
-    "helperText": "Stel een alarm in om een signaal te krijgen wanneer een betaling uitblijft.",
-    "signaalInfoText": "Na {{date}} ontvang je een signaal als er nog geen betaling is afgeletterd met deze afspraak."
+    "helperText": "Stel een alarm in om een signaal te krijgen wanneer een betaling uitblijft."
   },
   "alarmForm": {
     "date": "Datum verwachte betaling",
     "errors": {
-      "invalidDateError": "Vul een geldige datum in. De datum moet in de toekomst liggen.",
+      "invalidDateError": "Vul een geldige datum in.",
       "invalidDatumMarginError": "Vul een aantal dagen in.",
       "invalidMonthDayError": "Vul een dag van de maand in. Bijvoorbeeld: 24.",
       "invalidBedragError": "Vul een bedrag in.",
       "invalidBedragMarginError": "Vul een bedrag in."
     },
-    "datumMargin": "Toegestane afwijking in dagen",
+    "datumMargin": "Toegestane afwijking (in dagen)",
     "byMonthDay": "Dag in de maand",
     "bedrag": "Bedrag verwachte betaling",
     "bedragMargin": "Toegestane afwijking bedrag (in euro's)"
@@ -617,20 +626,16 @@
       "description": "De pagina die je zoekt kan niet worden gevonden."
     }
   },
-  "backToBurgersList": "Terug naar alle burgers",
-  "sidebar": {
-    "rapportage": "Rapportage",
-    "huishoudens": "Huishoudens",
-    "burgers": "Burgers",
-    "organisaties": "Organisaties",
-    "bankzaken": "Bankzaken",
-    "transacties": "Transacties",
-    "bankafschriften": "Bankafschriften",
-    "betaalinstructies": "Betaalinstructies",
-    "gebeurtenissen": "Gebeurtenissen",
-    "configuratie": "Configuratie"
+  "signalen": {
+    "showActive": "Ingeschakelde signalen",
+    "showInActive": "Uitgeschakelde signalen",
+    "signalen": "Signalen",
+    "title": "Signalen",
+    "helperText": "Alle signalen van alle burgers.",
+    "noResults": "Er zijn geen signalen gevonden.",
+    "contextMessage": "Er is een afwijking gesignaleerd bij afspraak <linkAfspraak>{{afspraak}}</linkAfspraak> van <strong>{{bedrag}}</strong>."
   },
-  "showHuishouden": "Bekijk huishouden",
+  "backToBurgersList": "Terug naar alle burgers",
   "burgers": {
     "burgers": "Burgers"
   },
@@ -785,11 +790,21 @@
     "invalidPeriodiekError": "Kies een periodiek."
   },
   "version": "Versie {{version}}",
-  "signalen": {
-    "status": "Status",
-    "context": "Context",
-    "contextMessage": "Alarm dat behoort bij {{omschrijving}} met betrekking tot bedrag {{bedrag}} op {{datum}}."
+  "sidebar": {
+    "signalen": "Signalen",
+    "huishoudens": "Huishoudens",
+    "burgers": "Burgers",
+    "organisaties": "Organisaties",
+    "bankzaken": "Bankzaken",
+    "transacties": "Transacties",
+    "bankafschriften": "Bankafschriften",
+    "betaalinstructies": "Betaalinstructies",
+    "rapportage": "Rapportage",
+    "gebeurtenissen": "Gebeurtenissen",
+    "configuratie": "Configuratie"
   },
+  "enabled": "Ingeschakeld",
+  "disabled": "Uitgeschakeld",
   "statuspage": {
     "title": "Status",
     "services": {
