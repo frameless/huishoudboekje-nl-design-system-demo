@@ -1,10 +1,9 @@
-import {CheckIcon, CloseIcon, DeleteIcon} from "@chakra-ui/icons";
-import {IconButton, Td, Text, Tr} from "@chakra-ui/react";
-import React, {useState} from "react";
-import {useTranslation} from "react-i18next";
+import {Td, Text, Tr} from "@chakra-ui/react";
+import React from "react";
 import {CustomerStatementMessage} from "../../../generated/graphql";
 import d from "../../../utils/dayjs";
 import {truncateText} from "../../../utils/things";
+import DeleteConfirmButton from "../../shared/DeleteConfirmButton";
 
 type CsmTableRowProps = {
 	csm: CustomerStatementMessage,
@@ -12,25 +11,6 @@ type CsmTableRowProps = {
 };
 
 const CsmTableRow: React.FC<CsmTableRowProps> = ({csm, onDelete}) => {
-	const {t} = useTranslation();
-	const [deleteConfirm, setDeleteConfirm] = useState<boolean>(false);
-
-	const onClickDeleteButton = () => {
-		if (onDelete && csm.id) {
-			if (!deleteConfirm) {
-				setDeleteConfirm(true);
-				return;
-			}
-
-			onDelete(csm.id);
-			setDeleteConfirm(false);
-		}
-	};
-
-	const onClickDeleteCancel = () => {
-		setDeleteConfirm(false);
-	};
-
 	return (
 		<Tr>
 			<Td>
@@ -39,14 +19,15 @@ const CsmTableRow: React.FC<CsmTableRowProps> = ({csm, onDelete}) => {
 			<Td>
 				<Text fontSize={"sm"} color={"gray.500"}>{d(csm.uploadDate).format("L LT")}</Text>
 			</Td>
-			<Td style={{width: "100px", textAlign: "right"}}>
-				<IconButton variant={deleteConfirm ? "solid" : "ghost"} size={"xs"} icon={deleteConfirm ? <CheckIcon /> : <DeleteIcon />}
-					colorScheme={deleteConfirm ? "red" : "gray"} aria-label={t("global.actions.delete")} onClick={onClickDeleteButton} />
-				{deleteConfirm && (
-					<IconButton variant={"solid"} size={"xs"} icon={
-						<CloseIcon />} colorScheme={"gray"} ml={2} aria-label={t("global.actions.delete")} onClick={onClickDeleteCancel} />
-				)}
-			</Td>
+			{onDelete && (
+				<Td style={{width: "100px", textAlign: "right"}}>
+					<DeleteConfirmButton onConfirm={() => {
+						if (csm.id) {
+							onDelete(csm.id);
+						}
+					}} />
+				</Td>
+			)}
 		</Tr>
 	);
 };
