@@ -109,13 +109,17 @@ spec:
             requests:
               cpu: 100m
               memory: 512Mi
+          startupProbe:
+            failureThreshold: 60
+            periodSeconds: 10
+            httpGet:
+              path: /auth
+              port: http
           livenessProbe:
-            initialDelaySeconds: 240
             httpGet:
               path: /auth
               port: http
           readinessProbe:
-            initialDelaySeconds: 240
             httpGet:
               path: /auth
               port: http
