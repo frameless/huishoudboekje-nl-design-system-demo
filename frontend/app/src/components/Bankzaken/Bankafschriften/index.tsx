@@ -1,7 +1,6 @@
-import {Box, Divider, FormLabel, List, ListIcon, ListItem, Stack, Table, Tbody, Text, Th, Thead, Tr, useDisclosure} from "@chakra-ui/react";
+import {Box, Divider, FormLabel, Stack, Table, Tbody, Text, Th, Thead, Tr, useDisclosure} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {MdCheckCircle} from "react-icons/md";
 import {CustomerStatementMessage, GetCsmsDocument, useDeleteCustomerStatementMessageMutation, useGetCsmsQuery} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import useToaster from "../../../utils/useToaster";
@@ -52,13 +51,7 @@ const CustomerStatementMessages = () => {
 					<Stack spacing={5}>
 						<Section>
 							<Stack direction={["column", "row"]} spacing={5}>
-								<FormLeft title={t("forms.bankzaken.sections.customerStatementMessages.title")} helperText={t("forms.bankzaken.sections.customerStatementMessages.helperText")}>
-									<Text>{t("customerStatementMessages.formats.title")}</Text>
-									<List>
-										<ListItem> <ListIcon as={MdCheckCircle} color={"green.500"} /> {t("customerStatementMessages.formats.mt940")}</ListItem>
-										<ListItem> <ListIcon as={MdCheckCircle} color={"green.500"} /> {t("customerStatementMessages.formats.camt")}</ListItem>
-									</List>
-								</FormLeft>
+								<FormLeft title={t("forms.bankzaken.sections.customerStatementMessages.title")} helperText={t("forms.bankzaken.sections.customerStatementMessages.helperText")} />
 								<FormRight>
 									<Stack>
 										<Box>

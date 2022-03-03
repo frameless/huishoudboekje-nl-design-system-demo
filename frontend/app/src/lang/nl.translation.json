@@ -179,7 +179,7 @@
 	  "sections": {
 		"customerStatementMessages": {
 		  "title": "Bankafschriften",
-		  "helperText": "Hier is het mogelijk om bij- en afschrijvingen uit een bankafschrift te importeren.",
+		  "helperText": "Importeer een bestand met afschriften in MT940-formaat of CAMT.053-formaat om bij- en afschrijvingen in te laden.",
 		  "filename": "Bestandsnaam"
 		},
 		"transactions": {
@@ -495,11 +495,6 @@
 	}
   },
   "customerStatementMessages": {
-	"formats": {
-	  "title": "De volgende formaten worden ondersteund:",
-	  "mt940": "MT940",
-	  "camt": "ISO 20022 Payment Messages (CAMT.053)"
-	},
 	"noResults": "Er zijn geen bankafschriften gevonden."
   },
   "export": {
