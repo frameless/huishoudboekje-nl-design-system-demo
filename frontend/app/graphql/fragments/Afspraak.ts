@@ -19,6 +19,7 @@ export const AfspraakFragment = gql`
         validThrough
         burger {
             id
+            bsn
             voornamen
             voorletters
             achternaam

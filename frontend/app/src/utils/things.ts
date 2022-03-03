@@ -190,7 +190,7 @@ export const maxOrganisatieNaamLengthBreakpointValues = [25, 25, 35, 75];
 export const createQueryParamsFromFilters = (filters: Partial<BanktransactieFilters>) => {
 	const _filters = {
 		...defaultBanktransactieFilters,
-		...filters
+		...filters,
 	};
 
 	return {
