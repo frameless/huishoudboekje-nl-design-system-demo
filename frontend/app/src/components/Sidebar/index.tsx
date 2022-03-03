@@ -15,7 +15,7 @@ const SignalenBadge = () => {
 	});
 
 	return (
-		<Queryable query={$signalen} loading={<Box></Box>}>{(data) => {
+		<Queryable query={$signalen} loading={<Box />}>{(data) => {
 			const signalen: Signaal[] = data.signalen;
 			const nActiveSignalen = signalen.filter(s => s.isActive).length;
 			return nActiveSignalen > 0 ? (
