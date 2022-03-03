@@ -55,10 +55,7 @@ const TransactieDetailsView: React.FC<StackProps & {transaction: BankTransaction
 				<Box flex={1}>
 					<FormLabel>{t("transactions.amount")}</FormLabel>
 					<Box>
-						<Stack direction={"row"} justifyContent={"space-between"}>
-							<Text>&euro;</Text>
-							<Text>{currencyFormat2(false).format(bt.bedrag)}</Text>
-						</Stack>
+						<Text>{currencyFormat2().format(bt.bedrag)}</Text>
 					</Box>
 				</Box>
 			</Stack>
