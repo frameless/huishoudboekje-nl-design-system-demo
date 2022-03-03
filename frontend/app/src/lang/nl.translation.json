@@ -497,9 +497,10 @@
   "customerStatementMessages": {
 	"formats": {
 	  "title": "De volgende formaten worden ondersteund:",
-	  "camt": "ISO 20022 Payment Messages (CAMT.053)",
-	  "mt940": "MT940"
-	}
+	  "mt940": "MT940",
+	  "camt": "ISO 20022 Payment Messages (CAMT.053)"
+	},
+	"noResults": "Er zijn geen bankafschriften gevonden."
   },
   "export": {
 	"nOverschrijvingen": "Overschrijvingen"

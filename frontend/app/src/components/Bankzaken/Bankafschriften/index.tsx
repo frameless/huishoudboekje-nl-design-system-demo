@@ -1,4 +1,4 @@
-import {Box, FormLabel, List, ListIcon, ListItem, Stack, Table, Tbody, Text, Th, Thead, Tr, useDisclosure} from "@chakra-ui/react";
+import {Box, Divider, FormLabel, List, ListIcon, ListItem, Stack, Table, Tbody, Text, Th, Thead, Tr, useDisclosure} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {MdCheckCircle} from "react-icons/md";
@@ -60,30 +60,36 @@ const CustomerStatementMessages = () => {
 									</List>
 								</FormLeft>
 								<FormRight>
-									<Box>
-										<AddButton onClick={() => addCsmModal.onOpen()} />
-									</Box>
+									<Stack>
+										<Box>
+											<AddButton onClick={() => addCsmModal.onOpen()} />
+										</Box>
 
-									{csms.length > 0 && (
-										<Table variant={"noLeftPadding"} size={"sm"}>
-											<Thead>
-												<Tr>
-													<Th>
-														<FormLabel>{t("forms.bankzaken.sections.customerStatementMessages.filename")}</FormLabel>
-													</Th>
-													<Th>
-														<FormLabel>{t("global.time")}</FormLabel>
-													</Th>
-													<Th isNumeric />
-												</Tr>
-											</Thead>
-											<Tbody>
-												{csms.map(csm => (
-													<CsmTableRow key={csm.id} csm={csm} onDelete={onDelete} />
-												))}
-											</Tbody>
-										</Table>
-									)}
+										<Divider />
+
+										{csms.length === 0 ? (
+											<Text>{t("customerStatementMessages.noResults")}</Text>
+										) : (
+											<Table variant={"noLeftPadding"} size={"sm"}>
+												<Thead>
+													<Tr>
+														<Th>
+															<FormLabel>{t("forms.bankzaken.sections.customerStatementMessages.filename")}</FormLabel>
+														</Th>
+														<Th>
+															<FormLabel>{t("global.time")}</FormLabel>
+														</Th>
+														<Th isNumeric />
+													</Tr>
+												</Thead>
+												<Tbody>
+													{csms.map(csm => (
+														<CsmTableRow key={csm.id} csm={csm} onDelete={onDelete} />
+													))}
+												</Tbody>
+											</Table>
+										)}
+									</Stack>
 								</FormRight>
 							</Stack>
 						</Section>
