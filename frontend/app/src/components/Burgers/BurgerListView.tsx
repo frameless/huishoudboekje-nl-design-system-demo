@@ -45,7 +45,7 @@ const BurgerListView: React.FC<BurgerListViewProps> = ({burgers, showAddButton =
 					{signalen.length > 0 && (
 						<Box position={"absolute"} top={1} right={1}>
 							<Badge fontSize={"0.8rem"} p={1} colorScheme={"secondary"}>
-								{signalen.length}
+								{signalen.length > 99 ? "99+" : signalen.length}
 							</Badge>
 						</Box>
 					)}
