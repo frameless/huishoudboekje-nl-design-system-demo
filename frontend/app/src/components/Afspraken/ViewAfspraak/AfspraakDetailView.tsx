@@ -97,9 +97,6 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 		if (afspraak.burger?.bsn) {
 			result.push(String(afspraak.burger?.bsn));
 		}
-		if (afspraak.burger?.voornamen) {
-			result.push(...afspraak.burger.voornamen.split(" "));
-		}
 		if (afspraak.burger?.achternaam) {
 			result.push(afspraak.burger.achternaam);
 		}
