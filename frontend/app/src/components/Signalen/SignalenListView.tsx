@@ -19,7 +19,7 @@ const SignalenListView: React.FC<{ signalen: Signaal[] }> = ({signalen = []}) =>
 		);
 	}
 
-	const count = signalen.filter(s => s.isActive).length
+	// const count = signalen.filter(s => s.isActive).length
 
 	return (
 
@@ -27,9 +27,6 @@ const SignalenListView: React.FC<{ signalen: Signaal[] }> = ({signalen = []}) =>
 			<Tbody>
 				{signalen.map((s, i) => (
 					<Tr key={i}>
-						<Td>
-							<Badge fontSize={"sm"} p={1} colorScheme={"secondary"}>{count}</Badge>
-						</Td>
 						<Td>
 							<Stack spacing={1} width={"100%"}>
 								<Text>
