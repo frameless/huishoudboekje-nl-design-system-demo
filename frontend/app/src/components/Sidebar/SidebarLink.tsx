@@ -25,9 +25,9 @@ const SidebarLink: React.FC<ButtonProps & { icon?, to: string, exactMatch?: bool
 		<IconContext.Provider value={{color: "blue"}}>
 			<Button as={NavLink} justifyContent={"flex-start"} to={to} onClick={() => drawerContext.onClose()} variant={isActive ? "solid" : "ghost"} colorScheme={isActive ? "primary" : "gray"}
 				color={isActive ? "white" : "primary"} width={"100%"} _focus={{outline: "none", boxShadow: "none"}} {...props}>
-				<Flex alignItems={"center"} width={"100%"}>
+				<Flex alignItems={"center"} width={"100%"} color={linkColor}>
 					{icon && <LinkIcon mr={5} fontSize={"24px"} />}
-					{typeof children === "string" ? <Text color={linkColor}>{children}</Text> : children}
+					{typeof children === "string" ? <Text>{children}</Text> : children}
 				</Flex>
 			</Button>
 		</IconContext.Provider>
