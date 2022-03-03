@@ -1,11 +1,30 @@
 import {Badge, Box, Divider, HStack, Stack, Text} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {BsFillHouseDoorFill, FaRegBuilding, FiActivity, GrGraphQl, MdBusAlert, MdCreditCard, RiBarChartFill, TiCog} from "react-icons/all";
+import {BsFillHouseDoorFill, FaRegBuilding, FiActivity, FiBell, GrGraphQl, MdCreditCard, RiBarChartFill, TiCog} from "react-icons/all";
 import {RouteNames} from "../../config/routes";
+import {Signaal, useGetSignalenQuery} from "../../generated/graphql";
 import {useFeatureFlag} from "../../utils/features";
+import Queryable from "../../utils/Queryable";
 import {isDev} from "../../utils/things";
 import SidebarLink from "./SidebarLink";
+
+const SignalenBadge = () => {
+	const $signalen = useGetSignalenQuery({
+		pollInterval: (300 * 1000) // Every 5 minutes
+	});
+
+	return (
+		<Queryable query={$signalen} loading={<Box></Box>}>{(data) => {
+			const signalen: Signaal[] = data.signalen;
+			const nActiveSignalen = signalen.filter(s => s.isActive).length;
+			return nActiveSignalen > 0 ? (
+				<Badge fontSize={"sm"} p={1} colorScheme={"secondary"}>{nActiveSignalen > 99 ? "99+" : nActiveSignalen}</Badge>
+			): null;
+		}}
+		</Queryable>
+	);
+};
 
 const Sidebar = (to, exactMatch?) => {
 	const {t} = useTranslation();
@@ -14,10 +33,10 @@ const Sidebar = (to, exactMatch?) => {
 	return (
 		<Stack spacing={5} p={5} alignSelf={"center"} borderRadius={5} bg={"white"} divider={<Divider />} width={"100%"}>
 			<Stack spacing={5}>
-				<SidebarLink to={RouteNames.signalen} icon={MdBusAlert}>
+				<SidebarLink to={RouteNames.signalen} icon={FiBell}>
 					<HStack justify={"space-between"} w={"100%"}>
 						<Text>{t("sidebar.signalen")}</Text>
-						<Badge fontSize={"sm"} p={1} colorScheme={"secondary"}>99+</Badge>
+						<SignalenBadge />
 					</HStack>
 				</SidebarLink>
 				<Stack>
