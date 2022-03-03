@@ -70,17 +70,17 @@ const BookingDetailsView: React.FC<{transactie: BankTransaction}> = ({transactie
 					)}
 					<Box flex={1}>
 						<FormLabel>{t("bedrag")}</FormLabel>
-						<Box color={journaalpostAfspraak.bedrag < 0 ? "red.500" : undefined}>{currencyFormat2().format(journaalpostAfspraak.bedrag)}</Box>
+						<Box color={journaalpostAfspraak.bedrag < 0 ? "red.500" : undefined}>
+							<Text>{currencyFormat2().format(journaalpostAfspraak.bedrag * (journaalpostAfspraak.credit ? 1 : -1))}</Text>
+						</Box>
 					</Box>
 				</Stack>
 				<Stack direction={"row"} spacing={5}>
 					<Box mb={3}>
-						<Button leftIcon={
-							<ViewIcon />} colorScheme={"primary"} size={"sm"} as={NavLink} to={AppRoutes.ViewAfspraak(journaalpostAfspraak.id)}>{t("global.actions.view")}</Button>
+						<Button leftIcon={<ViewIcon />} colorScheme={"primary"} size={"sm"} as={NavLink} to={AppRoutes.ViewAfspraak(journaalpostAfspraak.id)}>{t("global.actions.view")}</Button>
 					</Box>
 					<Box>
-						<Button leftIcon={
-							<DeleteIcon />} variant={"ghost"} colorScheme={"red"} size={"sm"} onClick={onDelete} isLoading={$deleteJournaalpost.loading}>{t("global.actions.undoAfletteren")}</Button>
+						<Button leftIcon={<DeleteIcon />} variant={"ghost"} colorScheme={"red"} size={"sm"} onClick={onDelete} isLoading={$deleteJournaalpost.loading}>{t("global.actions.undoAfletteren")}</Button>
 					</Box>
 				</Stack>
 			</Stack>
