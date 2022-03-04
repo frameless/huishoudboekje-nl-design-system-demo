@@ -1,27 +1,5 @@
 import {AddIcon, EditIcon, ViewIcon, WarningTwoIcon} from "@chakra-ui/icons";
-import {
-	Box,
-	Button,
-	Divider,
-	FormControl,
-	FormLabel,
-	HStack,
-	IconButton,
-	Input,
-	InputGroup,
-	InputLeftElement,
-	InputRightElement,
-	Stack,
-	Table,
-	Tbody,
-	Td,
-	Text,
-	Th,
-	Thead,
-	Tr,
-	useBreakpointValue,
-	VStack,
-} from "@chakra-ui/react";
+import {Box, Button, Divider, FormControl, FormLabel, HStack, IconButton, Input, InputGroup, InputLeftElement, InputRightElement, Stack, Table, Tbody, Td, Text, Th, Thead, Tr, useBreakpointValue, VStack, Wrap, WrapItem} from "@chakra-ui/react";
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {AiOutlineTag} from "react-icons/all";
@@ -29,17 +7,17 @@ import {NavLink} from "react-router-dom";
 import {AppRoutes} from "../../../config/routes";
 import {Afspraak, GetAfspraakDocument, GetAfsprakenDocument, useAddAfspraakZoektermMutation, useDeleteAfspraakZoektermMutation} from "../../../generated/graphql";
 import d from "../../../utils/dayjs";
-import {currencyFormat2, formatBurgerName, isAfspraakActive} from "../../../utils/things";
+import {currencyFormat2, formatBurgerName, getBurgerHhbId, isAfspraakActive} from "../../../utils/things";
 import useScheduleHelper from "../../../utils/useScheduleHelper";
 import useToaster from "../../../utils/useToaster";
 import zod, {containsZodErrorCode, zoektermValidator} from "../../../utils/zod";
-import Page from "../../shared/Page";
 import BackButton from "../../shared/BackButton";
 import DataItem from "../../shared/DataItem";
 import {FormLeft, FormRight} from "../../shared/Forms";
+import Page from "../../shared/Page";
 import PrettyIban from "../../shared/PrettyIban";
 import Section from "../../shared/Section";
-import ZoektermenList from "../ZoektermenList";
+import ZoektermenList from "../../shared/ZoektermenList";
 import AfspraakDetailMenu from "./AfspraakDetailMenu";
 
 const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
@@ -110,14 +88,36 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 		}
 	};
 
-	const menu = <AfspraakDetailMenu afspraak={afspraak} />;
 	const bedrag = afspraak.credit ? parseFloat(afspraak.bedrag) : (parseFloat(afspraak.bedrag) * -1);
 	const zoektermen = afspraak.zoektermen || [];
 	const matchingAfspraken = afspraak.matchingAfspraken || [];
 	const validThrough = d(afspraak.validThrough, "YYYY-MM-DD");
+	const generateZoektermSuggesties = (): string[] => {
+		const result: string[] = [];
+		if (afspraak.burger?.bsn) {
+			result.push(String(afspraak.burger?.bsn));
+		}
+		if (afspraak.burger?.achternaam) {
+			result.push(afspraak.burger.achternaam);
+		}
+		if (afspraak.burger) {
+			const hhbId = getBurgerHhbId(afspraak.burger);
+			if (hhbId) {
+				result.push(hhbId);
+			}
+		}
+		if (afspraak.omschrijving) {
+			result.push(afspraak.omschrijving);
+		}
+		return result.filter(z => !zoektermen.includes(z));
+	};
+	const zoektermSuggesties = generateZoektermSuggesties();
+	const onClickZoektermSuggestie = z => {
+		setZoekterm(z);
+	}
 
 	return (
-		<Page title={t("afspraakDetailView.title")} backButton={<BackButton to={AppRoutes.Burger(afspraak.burger?.id)} />} menu={menu}>
+		<Page title={t("afspraakDetailView.title")} backButton={<BackButton to={AppRoutes.Burger(afspraak.burger?.id)} />} menu={<AfspraakDetailMenu afspraak={afspraak} />}>
 			<Section>
 				<Stack direction={["column", "row"]}>
 					<FormLeft title={t("afspraakDetailView.section1.title")} helperText={t("afspraakDetailView.section1.helperText")} />
@@ -127,8 +127,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 							<DataItem label={t("burger")}>
 								<HStack>
 									<Text>{formatBurgerName(afspraak.burger)}</Text>
-									<IconButton as={NavLink} to={AppRoutes.Burger(afspraak.burger?.id)} variant={"ghost"} size={"sm"} icon={
-										<ViewIcon />} aria-label={t("global.actions.view")} />
+									<IconButton as={NavLink} to={AppRoutes.Burger(afspraak.burger?.id)} variant={"ghost"} size={"sm"} icon={<ViewIcon />} aria-label={t("global.actions.view")} />
 								</HStack>
 							</DataItem>
 							{afspraak.tegenRekening && (
@@ -210,13 +209,19 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 								<FormControl isInvalid={!zoektermValidator.safeParse(zoekterm).success && zoektermTouched}>
 									<Stack>
 										<FormLabel>{t("afspraken.zoektermen")}</FormLabel>
+										{zoektermSuggesties.length > 0 && (
+											<Wrap>
+												<WrapItem><Text>{t("zoektermSuggesties")}:</Text></WrapItem>
+												<ZoektermenList zoektermen={zoektermSuggesties} onClick={(z) => onClickZoektermSuggestie(z)} />
+											</Wrap>
+										)}
 										<InputGroup size={"md"}>
 											<InputLeftElement pointerEvents={"none"} color={"gray.300"} fontSize={"1.2em"}>
 												<AiOutlineTag />
 											</InputLeftElement>
 											<Input id={"zoektermen"} onChange={e => setZoekterm(e.target.value)} value={zoekterm || ""} onFocus={() => setZoektermTouched(true)} onBlur={() => setZoektermTouched(true)} />
 											<InputRightElement width={"auto"} pr={1}>
-												<Button type={"submit"} size={"sm"} colorScheme={"primary"}>{t("global.actions.add")}</Button>
+												<Button type={"submit"} size={"sm"} colorScheme={"primary"}>{t("global.actions.save")}</Button>
 											</InputRightElement>
 										</InputGroup>
 									</Stack>
@@ -225,7 +230,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 						) : (
 							<FormLabel>{t("afspraken.zoektermen")}</FormLabel>
 						)}
-						<ZoektermenList zoektermen={zoektermen} onDeleteZoekterm={isAfspraakActive(afspraak) ? (zoekterm: string) => onDeleteAfspraakZoekterm(zoekterm) : undefined} />
+						<ZoektermenList zoektermen={zoektermen} onClickDelete={isAfspraakActive(afspraak) ? (zoekterm: string) => onDeleteAfspraakZoekterm(zoekterm) : undefined} />
 					</Stack>
 
 					{zoektermen.length === 0 && (

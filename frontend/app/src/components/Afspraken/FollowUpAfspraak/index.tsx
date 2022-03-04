@@ -8,13 +8,13 @@ import {Afspraak, CreateAfspraakMutationVariables, useAddAfspraakZoektermMutatio
 import d from "../../../utils/dayjs";
 import Queryable from "../../../utils/Queryable";
 import useToaster from "../../../utils/useToaster";
-import Page from "../../shared/Page";
 import BackButton from "../../shared/BackButton";
+import Page from "../../shared/Page";
 import PageNotFound from "../../shared/PageNotFound";
 import Section from "../../shared/Section";
+import ZoektermenList from "../../shared/ZoektermenList";
 import AfspraakForm from "../AfspraakForm";
 import AfspraakFormContext from "../EditAfspraak/context";
-import ZoektermenList from "../ZoektermenList";
 import {FollowUpAfspraakFormContextType} from "./context";
 
 const FollowUpAfspraak = () => {
