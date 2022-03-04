@@ -1,25 +1,4 @@
-import {
-	Box,
-	Button,
-	FormControl,
-	FormLabel,
-	Heading,
-	Input,
-	Modal,
-	ModalBody,
-	ModalCloseButton,
-	ModalContent,
-	ModalFooter,
-	ModalHeader,
-	ModalOverlay,
-	Stack,
-	Tab,
-	TabList,
-	TabPanel,
-	TabPanels,
-	Tabs,
-	useDisclosure,
-} from "@chakra-ui/react";
+import {Box, Button, FormControl, FormLabel, Heading, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, useDisclosure} from "@chakra-ui/react";
 import React, {useState} from "react";
 import DatePicker from "react-datepicker";
 import {useTranslation} from "react-i18next";
@@ -33,7 +12,7 @@ import Queryable from "../../utils/Queryable";
 import {formatBurgerName, humanJoin, useReactSelectStyles} from "../../utils/things";
 import RadioButtonGroup from "../Layouts/RadioButtons/RadioButtonGroup";
 import Page from "../shared/Page";
-import Section from "../shared/Section";
+import {DeprecatedSection} from "../shared/Section";
 import {Granularity} from "./Aggregator";
 import BalanceTable from "./BalanceTable";
 import {RapportageContext} from "./context";
@@ -161,7 +140,7 @@ const Rapportage = () => {
 						</Modal>
 
 						<Heading size={"sm"} fontWeight={"normal"}>{selectedBurgers.length > 0 ? humanJoin(selectedBurgers.map(b => formatBurgerName(b))) : t("allBurgers")}</Heading>
-						<Section>
+						<DeprecatedSection>
 							<Tabs isLazy variant={"solid"} align={"start"} colorScheme={"primary"}>
 								<Stack direction={"row"} as={TabList} spacing={2}>
 									<Tab>{t("charts.saldo.title")}</Tab>
@@ -176,10 +155,10 @@ const Rapportage = () => {
 									</TabPanel>
 								</TabPanels>
 							</Tabs>
-						</Section>
-						<Section>
+						</DeprecatedSection>
+						<DeprecatedSection>
 							<BalanceTable transactions={filteredTransactions} startDate={d(dateRange.from).format("L")} endDate={d(dateRange.through).format("L")} />
-						</Section>
+						</DeprecatedSection>
 					</Page>
 				);
 			}} />

@@ -11,7 +11,7 @@ import AddButton from "../shared/AddButton";
 import BackButton from "../shared/BackButton";
 import {FormLeft, FormRight} from "../shared/Forms";
 import Page from "../shared/Page";
-import Section from "../shared/Section";
+import {DeprecatedSection} from "../shared/Section";
 import AddAfdelingPostadresModal from "./AddAfdelingPostadresModal";
 import DeleteAfdelingAlert from "./DeleteAfdelingAlert";
 import UpdateAfdelingModal from "./UpdateAfdelingModal";
@@ -42,7 +42,7 @@ const AfdelingDetailView: React.FC<{afdeling: Afdeling}> = ({afdeling}) => {
 			</Menu>
 		)}>
 
-			<Section>
+			<DeprecatedSection>
 				<Stack direction={["column", "row"]}>
 					<FormLeft title={t("pages.afdelingDetails.sectionPostadressen.title")} helperText={t("pages.afdelingDetails.sectionPostadressen.helperText")} />
 					<FormRight>
@@ -55,9 +55,9 @@ const AfdelingDetailView: React.FC<{afdeling: Afdeling}> = ({afdeling}) => {
 						</Stack>
 					</FormRight>
 				</Stack>
-			</Section>
+			</DeprecatedSection>
 
-			<Section>
+			<DeprecatedSection>
 				<Stack direction={["column", "row"]}>
 					<FormLeft title={t("pages.afdelingDetails.sectionRekeningen.title")} helperText={t("pages.afdelingDetails.sectionRekeningen.helperText")} />
 					<FormRight>
@@ -70,7 +70,7 @@ const AfdelingDetailView: React.FC<{afdeling: Afdeling}> = ({afdeling}) => {
 						</Stack>
 					</FormRight>
 				</Stack>
-			</Section>
+			</DeprecatedSection>
 		</Page>
 	</>);
 };

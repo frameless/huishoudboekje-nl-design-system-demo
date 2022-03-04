@@ -1,8 +1,8 @@
 import React from "react";
 import {useTranslation} from "react-i18next";
-import Page from "../shared/Page";
 import {FormLeft, FormRight} from "../shared/Forms";
-import Section from "../shared/Section";
+import Page from "../shared/Page";
+import {DeprecatedSection} from "../shared/Section";
 import {ServicesStatus} from "./ServicesStatus";
 
 const StatusPage = () => {
@@ -10,12 +10,12 @@ const StatusPage = () => {
 
 	return (
 		<Page title={t("statuspage.title")}>
-			<Section direction={["column", "row"]}>
+			<DeprecatedSection direction={["column", "row"]}>
 				<FormLeft title={t("statuspage.services.title")} helperText={t("statuspage.services.helperText")} />
 				<FormRight>
 					<ServicesStatus />
 				</FormRight>
-			</Section>
+			</DeprecatedSection>
 		</Page>
 	);
 };

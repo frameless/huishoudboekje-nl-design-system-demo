@@ -36,6 +36,7 @@ import StatusErrorPage from "./components/Status/StatusErrorPage";
 import StatusPage from "./components/Status/StatusPage";
 import {dataLayerOptions} from "./config/dataLayer";
 import {RouteNames} from "./config/routes";
+import TestPage from "./TestPage";
 import onPathChanged from "./utils/DataLayer/hooks/onPathChanged";
 import useDataLayer from "./utils/DataLayer/useDataLayer";
 import useAuth from "./utils/useAuth";
@@ -141,6 +142,7 @@ const App = () => {
 						<Route path={RouteNames.status} element={<StatusPage />} />
 						<Route path={RouteNames.notFound} element={<PageNotFound />} />
 						<Route path={"*"} element={<PageNotFound />} />
+						<Route path={"/test"} element={<TestPage />} />
 					</Routes>
 				</Box>
 			</HStack>

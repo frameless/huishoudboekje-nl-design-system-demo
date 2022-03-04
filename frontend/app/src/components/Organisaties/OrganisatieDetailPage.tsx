@@ -13,7 +13,7 @@ import Alert from "../shared/Alert";
 import BackButton from "../shared/BackButton";
 import DeadEndPage from "../shared/DeadEndPage";
 import Page from "../shared/Page";
-import Section from "../shared/Section";
+import {DeprecatedSection} from "../shared/Section";
 import AfdelingListItem from "./AfdelingListItem";
 import CreateAfdelingModal from "./CreateAfdelingModal";
 import OrganisatieDetailView from "./Views/OrganisatieDetailView";
@@ -106,9 +106,9 @@ const OrganisatieDetailPage = () => {
 						</Alert>
 					)}
 
-					<Section>
+					<DeprecatedSection>
 						<OrganisatieDetailView organisatie={organisatie} />
-					</Section>
+					</DeprecatedSection>
 
 					<Heading size={"md"}>{t("afdelingen")}</Heading>
 					<Grid maxWidth={"100%"} gridTemplateColumns={["repeat(1, 1fr)", "repeat(2, 1fr)", "repeat(3, 1fr)"]} gap={5}>

@@ -18,7 +18,7 @@ import DeleteConfirmButton from "../../shared/DeleteConfirmButton";
 import {FormLeft, FormRight} from "../../shared/Forms";
 import Page from "../../shared/Page";
 import PrettyIban from "../../shared/PrettyIban";
-import Section from "../../shared/Section";
+import {DeprecatedSection} from "../../shared/Section";
 import ZoektermenList from "../../shared/ZoektermenList";
 import AddAlarmModal from "./AddAlarmModal";
 import AfspraakDetailMenu from "./AfspraakDetailMenu";
@@ -196,7 +196,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	const zoektermSuggesties = generateZoektermSuggesties();
 	const onClickZoektermSuggestie = z => {
 		setZoekterm(z);
-	}
+	};
 
 	return (
 		<Page title={t("afspraakDetailView.title")} backButton={<BackButton to={AppRoutes.Burger(afspraak.burger?.id)} />} menu={(
@@ -204,7 +204,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 		)}>
 			{addAlarmModal.isOpen && <AddAlarmModal afspraak={afspraak} onClose={addAlarmModal.onClose} onSubmit={data => onCreateAlarm(data)} />}
 
-			<Section>
+			<DeprecatedSection>
 				<Stack direction={["column", "row"]}>
 					<FormLeft title={t("afspraakDetailView.section1.title")} helperText={t("afspraakDetailView.section1.helperText")} />
 					<FormRight>
@@ -281,9 +281,9 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 						</FormRight>
 					</Stack>
 				</>)}
-			</Section>
+			</DeprecatedSection>
 
-			<Section direction={["column", "row"]}>
+			<DeprecatedSection direction={["column", "row"]}>
 				<FormLeft title={t("afspraakDetailView.section3.title")} helperText={t("afspraakDetailView.section3.helperText")} />
 				<FormRight>
 
@@ -366,10 +366,10 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 						</Stack>
 					)}
 				</FormRight>
-			</Section>
+			</DeprecatedSection>
 
 			{!afspraak.credit && (
-				<Section direction={["column", "row"]}>
+				<DeprecatedSection direction={["column", "row"]}>
 					<FormLeft title={t("afspraakDetailView.betaalinstructie.title")} helperText={t("afspraakDetailView.betaalinstructie.helperText")} />
 					<FormRight spacing={5}>
 						{afspraak.betaalinstructie ? (<>
@@ -403,10 +403,10 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 							</Stack>
 						</>)}
 					</FormRight>
-				</Section>
+				</DeprecatedSection>
 			)}
 
-			<Section direction={["column", "row"]}>
+			<DeprecatedSection direction={["column", "row"]}>
 				<FormLeft title={t("afspraakDetailView.alarm.title")} helperText={t("afspraakDetailView.alarm.helperText")} />
 				<FormRight>
 					{afspraak.alarm ? (<>
@@ -444,7 +444,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 						</Stack>
 					)}
 				</FormRight>
-			</Section>
+			</DeprecatedSection>
 		</Page>
 	);
 };

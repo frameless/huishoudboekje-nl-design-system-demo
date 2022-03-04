@@ -10,7 +10,7 @@ import useToaster from "../../utils/useToaster";
 import zod from "../../utils/zod";
 import Asterisk from "../shared/Asterisk";
 import {FormLeft, FormRight} from "../shared/Forms";
-import Section from "../shared/Section";
+import {DeprecatedSection} from "../shared/Section";
 import AfspraakFormContext from "./EditAfspraak/context";
 
 /**
@@ -167,7 +167,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 		</Stack>
 	) : (
 		<Stack spacing={5}>
-			<Section direction={["column", "row"]}>
+			<DeprecatedSection direction={["column", "row"]}>
 				<FormLeft title={t("forms.afspraken.section1.title")} helperText={t("forms.afspraken.section1.helperText")} />
 				<FormRight spacing={5}>
 
@@ -299,8 +299,8 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 						</Stack>
 					)}
 				</FormRight>
-			</Section>
-			<Section direction={["column", "row"]}>
+			</DeprecatedSection>
+			<DeprecatedSection direction={["column", "row"]}>
 				<FormLeft title={t("forms.afspraken.section2.title")} helperText={t("forms.afspraken.section2.helperText")} />
 				<FormRight spacing={5}>
 
@@ -359,7 +359,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 					</Stack>
 
 				</FormRight>
-			</Section>
+			</DeprecatedSection>
 		</Stack>
 	);
 };

@@ -9,9 +9,9 @@ import {DateRange} from "../../../models/models";
 import d from "../../../utils/dayjs";
 import Queryable from "../../../utils/Queryable";
 import useHandleMutation from "../../../utils/useHandleMutation";
-import Page from "../../shared/Page";
 import {FormLeft, FormRight} from "../../shared/Forms";
-import Section from "../../shared/Section";
+import Page from "../../shared/Page";
+import {DeprecatedSection} from "../../shared/Section";
 
 const Betaalinstructies = () => {
 	const {t} = useTranslation();
@@ -47,7 +47,7 @@ const Betaalinstructies = () => {
 
 	return (
 		<Page title={t("bankzaken.exports.title")}>
-			<Section>
+			<DeprecatedSection>
 				<Stack spacing={5}>
 					<FormLeft title={t("bankzaken.createExport.title")} helperText={t("bankzaken.createExport.helperText")} />
 					<FormRight>
@@ -63,9 +63,9 @@ const Betaalinstructies = () => {
 						</Stack>
 					</FormRight>
 				</Stack>
-			</Section>
+			</DeprecatedSection>
 
-			<Section>
+			<DeprecatedSection>
 				<FormLeft title={t("bankzaken.exports.title")} helperText={t("bankzaken.exports.helperText")} />
 				<FormRight>
 					<Stack spacing={5}>
@@ -118,7 +118,7 @@ const Betaalinstructies = () => {
 						}} />
 					</Stack>
 				</FormRight>
-			</Section>
+			</DeprecatedSection>
 		</Page>
 	);
 };

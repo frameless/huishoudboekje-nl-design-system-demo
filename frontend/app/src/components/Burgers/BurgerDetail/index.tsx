@@ -13,7 +13,7 @@ import Alert from "../../shared/Alert";
 import BackButton from "../../shared/BackButton";
 import Page from "../../shared/Page";
 import PageNotFound from "../../shared/PageNotFound";
-import Section from "../../shared/Section";
+import {DeprecatedSection} from "../../shared/Section";
 import BurgerAfsprakenView from "./BurgerAfsprakenView";
 import BurgerGebeurtenissen from "./BurgerGebeurtenissen";
 import BurgerSignalenView from "./BurgerSignalenView";
@@ -143,9 +143,9 @@ const BurgerDetailPage = () => {
 						</MenuList>
 					</Menu>
 				)}>
-					<Section><BurgerSignalenView burger={burger} /></Section>
-					<Section><BurgerAfsprakenView burger={burger} /></Section>
-					<Section><BurgerGebeurtenissen burger={burger} /></Section>
+					<DeprecatedSection><BurgerSignalenView burger={burger} /></DeprecatedSection>
+					<DeprecatedSection><BurgerAfsprakenView burger={burger} /></DeprecatedSection>
+					<DeprecatedSection><BurgerGebeurtenissen burger={burger} /></DeprecatedSection>
 				</Page>
 			</>);
 		}}
