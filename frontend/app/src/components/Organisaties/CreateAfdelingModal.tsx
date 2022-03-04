@@ -8,8 +8,8 @@ import useToaster from "../../utils/useToaster";
 import AfdelingForm from "./AfdelingForm";
 
 type CreateAfdelingModalProps = {
-	organisatie: Organisatie,
-	onClose: VoidFunction
+    organisatie: Organisatie,
+    onClose: VoidFunction
 };
 
 const CreateAfdelingModal: React.FC<CreateAfdelingModalProps> = ({organisatie, onClose}) => {
@@ -42,7 +42,7 @@ const CreateAfdelingModal: React.FC<CreateAfdelingModalProps> = ({organisatie, o
 				<ModalHeader>{t("modals.addAfdeling.title")}</ModalHeader>
 				<ModalCloseButton />
 				<ModalBody>
-					<AfdelingForm onChange={onSubmit} organisatie={organisatie} />
+					<AfdelingForm onChange={onSubmit} organisatie={organisatie} onCancel={onClose} />
 				</ModalBody>
 				<ModalFooter />
 			</ModalContent>

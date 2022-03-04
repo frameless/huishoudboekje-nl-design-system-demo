@@ -1,4 +1,4 @@
-import {Button, FormControl, FormLabel, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack} from "@chakra-ui/react";
+import {Button, FormControl, FormLabel, HStack, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack} from "@chakra-ui/react";
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
@@ -7,6 +7,7 @@ import Queryable from "../../../utils/Queryable";
 import {formatBurgerName, humanJoin, useReactSelectStyles} from "../../../utils/things";
 import useToaster from "../../../utils/useToaster";
 import {MultiLineOption, MultiLineValueContainer} from "../../Layouts/ReactSelect/CustomComponents";
+import Asterisk from "../../shared/Asterisk";
 
 const AddBurgerToHuishoudenModal: React.FC<{huishouden: Huishouden, isOpen: boolean, onClose: VoidFunction}> = ({huishouden, isOpen, onClose}) => {
 	const {t} = useTranslation();
@@ -58,7 +59,7 @@ const AddBurgerToHuishoudenModal: React.FC<{huishouden: Huishouden, isOpen: bool
 				<ModalCloseButton />
 				<ModalBody>
 					<Stack>
-						<FormControl>
+						<FormControl isRequired={true}>
 							<FormLabel>{t("forms.huishoudens.findBurger")}</FormLabel>
 							<Queryable query={$burgers} children={data => {
 								const burgers: Burger[] = data.burgers || [];
@@ -79,7 +80,13 @@ const AddBurgerToHuishoudenModal: React.FC<{huishouden: Huishouden, isOpen: bool
 					</Stack>
 				</ModalBody>
 				<ModalFooter>
-					<Button colorScheme={"primary"} onClick={onClickSave}>{t("global.actions.save")}</Button>
+					<Stack align={"flex-end"}>
+						<HStack justify={"flex-end"}>
+							<Button onClick={onClose}>{t("global.actions.cancel")}</Button>
+							<Button colorScheme={"primary"} onClick={onClickSave}>{t("global.actions.save")}</Button>
+						</HStack>
+						<Asterisk />
+					</Stack>
 				</ModalFooter>
 			</ModalContent>
 		</Modal>

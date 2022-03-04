@@ -10,6 +10,7 @@ import {useReactSelectStyles} from "../../../utils/things";
 import useForm from "../../../utils/useForm";
 import useToaster from "../../../utils/useToaster";
 import zod from "../../../utils/zod";
+import Asterisk from "../../shared/Asterisk";
 import {FormLeft, FormRight} from "../../shared/Forms";
 import PageNotFound from "../../shared/PageNotFound";
 import Section from "../../shared/Section";
@@ -282,9 +283,10 @@ const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({
 							</>)}
 						</>)}
 
-						<Box>
+						<Stack align={"flex-end"}>
 							<Button type={"submit"} colorScheme={"primary"}>{t("global.actions.save")}</Button>
-						</Box>
+							<Asterisk />
+						</Stack>
 					</FormRight>
 				</Stack>
 			</form>

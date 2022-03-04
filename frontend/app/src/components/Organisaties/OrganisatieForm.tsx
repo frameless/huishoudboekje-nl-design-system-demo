@@ -8,6 +8,7 @@ import useToaster from "../../utils/useToaster";
 import zod from "../../utils/zod";
 import {FormLeft, FormRight} from "../shared/Forms";
 import Section from "../shared/Section";
+import Asterisk from "../shared/Asterisk";
 
 const validator = zod.object({
 	kvknummer: zod.string().regex(Regex.KvkNummer),
@@ -17,9 +18,9 @@ const validator = zod.object({
 
 
 type OrganisatieFormProps = {
-	organisatie?: Organisatie,
-	onSubmit: Function,
-	isLoading: boolean,
+    organisatie?: Organisatie,
+    onSubmit: Function,
+    isLoading: boolean,
 };
 
 const OrganisatieForm: React.FC<OrganisatieFormProps> = ({organisatie, onSubmit, isLoading = false}) => {
@@ -88,7 +89,10 @@ const OrganisatieForm: React.FC<OrganisatieFormProps> = ({organisatie, onSubmit,
 							</FormControl>
 						</Stack>
 						<Stack direction={"row"} spacing={1} justifyContent={"flex-end"}>
-							<Button isLoading={isLoading} type={"submit"} colorScheme={"primary"} onClick={onSubmitForm}>{t("global.actions.save")}</Button>
+							<Stack>
+								<Button isLoading={isLoading} type={"submit"} colorScheme={"primary"} onClick={onSubmitForm}>{t("global.actions.save")}</Button>
+								<Asterisk />
+							</Stack>
 						</Stack>
 					</FormRight>
 				</Stack>

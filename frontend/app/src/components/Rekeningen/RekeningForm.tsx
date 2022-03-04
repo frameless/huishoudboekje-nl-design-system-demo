@@ -1,4 +1,4 @@
-import {Button, FormControl, FormErrorMessage, FormLabel, Input, Stack} from "@chakra-ui/react";
+import {Button, FormControl, FormErrorMessage, FormLabel, HStack, Input, Stack} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {Rekening} from "../../generated/graphql";
@@ -6,6 +6,7 @@ import {Regex, sanitizeIBAN} from "../../utils/things";
 import useForm from "../../utils/useForm";
 import useToaster from "../../utils/useToaster";
 import zod from "../../utils/zod";
+import Asterisk from "../shared/Asterisk";
 
 const validator = zod.object({
 	rekeninghouder: zod.string().nonempty().max(100),
@@ -53,19 +54,22 @@ const RekeningForm: React.FC<{
 	return (
 		<form onSubmit={onSubmitForm}>
 			<Stack>
-				<FormControl isInvalid={!isFieldValid("rekeninghouder")} id={"rekeninghouder"}>
+				<FormControl isInvalid={!isFieldValid("rekeninghouder")} id={"rekeninghouder"} isRequired={true}>
 					<FormLabel>{t("forms.rekeningen.fields.accountHolder")}</FormLabel>
 					<Input onChange={e => updateForm("rekeninghouder", e.target.value)} value={form.rekeninghouder || ""} autoFocus={!(rekening?.rekeninghouder)} />
 					<FormErrorMessage>{t("errors.rekeninghouder.generalError")}</FormErrorMessage>
 				</FormControl>
-				<FormControl isInvalid={!isFieldValid("iban") || !isIbanValid} id={"iban"}>
+				<FormControl isInvalid={!isFieldValid("iban") || !isIbanValid} id={"iban"} isRequired={true}>
 					<FormLabel>{t("forms.rekeningen.fields.iban")}</FormLabel>
 					<Input onChange={e => updateForm("iban", e.target.value)} value={form.iban || ""} placeholder={"NL00BANK0123456789"} autoFocus={!!(rekening?.rekeninghouder)} />
 					<FormErrorMessage>{t("errors.iban.generalError")}</FormErrorMessage>
 				</FormControl>
-				<Stack direction={"row"} justify={"flex-end"}>
-					<Button type={"reset"} onClick={() => onCancel()}>{t("global.actions.cancel")}</Button>
-					<Button type={"submit"} colorScheme={"primary"} onClick={onSubmitForm}>{t("global.actions.save")}</Button>
+				<Stack align={"flex-end"}>
+					<HStack justify={"flex-end"}>
+						<Button type={"reset"} onClick={() => onCancel()}>{t("global.actions.cancel")}</Button>
+						<Button type={"submit"} colorScheme={"primary"} onClick={onSubmitForm}>{t("global.actions.save")}</Button>
+					</HStack>
+					<Asterisk />
 				</Stack>
 			</Stack>
 		</form>

@@ -1,4 +1,4 @@
-import {Box, Button, FormControl, FormErrorMessage, FormLabel, Input, InputGroup, InputLeftElement, Radio, RadioGroup, Spinner, Stack} from "@chakra-ui/react";
+import {Button, FormControl, FormErrorMessage, FormLabel, Input, InputGroup, InputLeftElement, Radio, RadioGroup, Spinner, Stack} from "@chakra-ui/react";
 import React, {useContext, useEffect} from "react";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
@@ -8,6 +8,7 @@ import useForm from "../../utils/useForm";
 import useSelectProps from "../../utils/useSelectProps";
 import useToaster from "../../utils/useToaster";
 import zod from "../../utils/zod";
+import Asterisk from "../shared/Asterisk";
 import {FormLeft, FormRight} from "../shared/Forms";
 import Section from "../shared/Section";
 import AfspraakFormContext from "./EditAfspraak/context";
@@ -350,9 +351,10 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 							</Stack>
 						</>)}
 
-						<Box>
+						<Stack align={"flex-end"}>
 							<Button colorScheme={"primary"} onClick={onSubmit}>{t("global.actions.save")}</Button>
-						</Box>
+							<Asterisk />
+						</Stack>
 
 					</Stack>
 

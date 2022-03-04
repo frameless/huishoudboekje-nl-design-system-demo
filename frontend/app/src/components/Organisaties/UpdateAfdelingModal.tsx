@@ -6,8 +6,8 @@ import useToaster from "../../utils/useToaster";
 import AfdelingForm from "./AfdelingForm";
 
 type UpdateAfdelingModalProps = {
-	afdeling: Afdeling,
-	onClose: VoidFunction
+    afdeling: Afdeling,
+    onClose: VoidFunction
 };
 
 const UpdateAfdelingModal: React.FC<UpdateAfdelingModalProps> = ({afdeling, onClose}) => {
@@ -44,7 +44,7 @@ const UpdateAfdelingModal: React.FC<UpdateAfdelingModalProps> = ({afdeling, onCl
 				<ModalHeader>{t("modal.updateAfdeling.title")}</ModalHeader>
 				<ModalCloseButton />
 				<ModalBody>
-					<AfdelingForm onChange={onSubmit} organisatie={afdeling.organisatie!} values={{
+					<AfdelingForm onChange={onSubmit} onCancel={onClose} organisatie={afdeling.organisatie!} values={{
 						naam: afdeling.naam,
 					}} />
 				</ModalBody>
