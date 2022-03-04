@@ -1,19 +1,17 @@
-import {Box, Divider, FormLabel, Stack, Table, Tbody, Text, Th, Thead, Tr, useDisclosure} from "@chakra-ui/react";
+import {Divider, FormLabel, Stack, Table, Tbody, Text, Th, Thead, Tr} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {CustomerStatementMessage, GetCsmsDocument, useDeleteCustomerStatementMessageMutation, useGetCsmsQuery} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import useToaster from "../../../utils/useToaster";
-import AddButton from "../../shared/AddButton";
 import {FormLeft, FormRight} from "../../shared/Forms";
 import Page from "../../shared/Page";
 import Section from "../../shared/Section";
 import CsmTableRow from "./CsmTableRow";
-import CsmUploadModal from "./CsmUploadModal";
+import CsmUpload from "./CsmUpload";
 
 const CustomerStatementMessages = () => {
 	const {t} = useTranslation();
-	const addCsmModal = useDisclosure();
 	const toast = useToaster();
 
 	const $customerStatementMessages = useGetCsmsQuery();
@@ -40,9 +38,6 @@ const CustomerStatementMessages = () => {
 
 	return (
 		<Page title={t("bankzaken.customerStatementMessages.title")}>
-			{addCsmModal.isOpen && (
-				<CsmUploadModal onClose={() => addCsmModal.onClose()} />
-			)}
 			<Queryable query={$customerStatementMessages}>{(data) => {
 				/* Sort CSMs so that the newest appears first */
 				const csms: CustomerStatementMessage[] = [...data.customerStatementMessages || []].sort((a, b) => a.uploadDate <= b.uploadDate ? 1 : -1);
@@ -54,9 +49,7 @@ const CustomerStatementMessages = () => {
 								<FormLeft title={t("forms.bankzaken.sections.customerStatementMessages.title")} helperText={t("forms.bankzaken.sections.customerStatementMessages.helperText")} />
 								<FormRight>
 									<Stack>
-										<Box>
-											<AddButton onClick={() => addCsmModal.onOpen()} />
-										</Box>
+										<CsmUpload />
 
 										<Divider />
 

@@ -1,5 +1,5 @@
 import {CheckIcon, WarningIcon} from "@chakra-ui/icons";
-import {Box, Button, HStack, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spinner, Stack, Text} from "@chakra-ui/react";
+import {Box, Button, HStack, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spinner, Stack, Text, useDisclosure} from "@chakra-ui/react";
 import React, {useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {IoMdHourglass} from "react-icons/io";
@@ -8,12 +8,9 @@ import {FileUpload, UploadState} from "../../../models/models";
 import {truncateText} from "../../../utils/things";
 import AddButton from "../../shared/AddButton";
 
-type CsmUploadModalProps = {
-	onClose: VoidFunction,
-}
-
-const CsmUploadModal: React.FC<CsmUploadModalProps> = ({onClose}) => {
+const CsmUpload = () => {
 	const {t} = useTranslation();
+	const modal = useDisclosure();
 	const fileUploadInput = useRef<HTMLInputElement>(null);
 	const [uploads, setUploads] = useState<FileUpload[]>([]);
 	const [createCSM, $createCSM] = useCreateCustomerStatementMessageMutation({
@@ -29,6 +26,7 @@ const CsmUploadModal: React.FC<CsmUploadModalProps> = ({onClose}) => {
 	});
 
 	const onChangeFile = async (e: React.FormEvent<HTMLInputElement>) => {
+		modal.onOpen();
 		const files = e.currentTarget.files;
 
 		if (files && files.length > 0) {
@@ -40,7 +38,7 @@ const CsmUploadModal: React.FC<CsmUploadModalProps> = ({onClose}) => {
 				state: UploadState.QUEUED,
 			}));
 
-			setUploads(u => [...u, ...newUploads]);
+			setUploads(newUploads);
 
 			for (const nu of newUploads) {
 				setUploads(prevUploads => ([
@@ -83,8 +81,8 @@ const CsmUploadModal: React.FC<CsmUploadModalProps> = ({onClose}) => {
 		}
 	};
 
-	return (
-		<Modal isOpen={true} onClose={onClose}>
+	return (<>
+		<Modal isOpen={modal.isOpen} onClose={modal.onClose}>
 			<ModalOverlay />
 			<ModalContent minWidth={["90%", null, "800px"]}>
 				<ModalHeader>{t("uploadCsmModal.title")}</ModalHeader>
@@ -113,21 +111,21 @@ const CsmUploadModal: React.FC<CsmUploadModalProps> = ({onClose}) => {
 								)}
 							</HStack>
 						))}
-
-						<Box>
-							<Input type={"file"} id={"fileUpload"} onChange={onChangeFile} ref={fileUploadInput} hidden multiple={true} />
-							<AddButton onClick={() => fileUploadInput.current?.click()}>{t("global.actions.selectFile")}</AddButton>
-						</Box>
 					</Stack>
 				</ModalBody>
 				<ModalFooter>
 					<HStack>
-						<Button colorScheme={"primary"} onClick={onClose} isLoading={$createCSM.loading}>{t("global.actions.close")}</Button>
+						<Button colorScheme={"primary"} onClick={() => modal.onClose()} isLoading={$createCSM.loading}>{t("global.actions.close")}</Button>
 					</HStack>
 				</ModalFooter>
 			</ModalContent>
 		</Modal>
-	);
+
+		<Box>
+			<Input type={"file"} id={"fileUpload"} onChange={onChangeFile} ref={fileUploadInput} hidden multiple={true} />
+			<AddButton onClick={() => fileUploadInput.current?.click()}>{t("global.actions.add")}</AddButton>
+		</Box>
+	</>);
 };
 
-export default CsmUploadModal;
+export default CsmUpload;
