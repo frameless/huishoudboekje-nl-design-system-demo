@@ -10,10 +10,10 @@ import {useReactSelectStyles} from "../../../utils/things";
 import useForm from "../../../utils/useForm";
 import useToaster from "../../../utils/useToaster";
 import zod from "../../../utils/zod";
+import Asterisk from "../../shared/Asterisk";
 import {FormLeft, FormRight} from "../../shared/Forms";
 import PageNotFound from "../../shared/PageNotFound";
 import Section from "../../shared/Section";
-import Asterisk from "../../shared/Asterisk";
 
 const validator2 = zod.object({
 	byDay: zod.array(zod.nativeEnum(DayOfWeek)).min(1),
@@ -71,9 +71,9 @@ const validator = zod.object({
 });
 
 type AfspraakBetaalinstructieProps = {
-    afspraak: Afspraak,
-    values?: Betaalinstructie,
-    onChange: (data: BetaalinstructieInput) => void,
+	afspraak: Afspraak,
+	values?: Betaalinstructie,
+	onChange: (data: BetaalinstructieInput) => void,
 }
 
 const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({afspraak, values, onChange}) => {
@@ -283,11 +283,8 @@ const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({
 							</>)}
 						</>)}
 
-
-						<Stack direction={"row"} justify={"flex-end"}>
+						<Stack align={"flex-end"}>
 							<Button type={"submit"} colorScheme={"primary"}>{t("global.actions.save")}</Button>
-						</Stack>
-						<Stack direction={"row"} justify={"flex-end"}>
 							<Asterisk />
 						</Stack>
 					</FormRight>

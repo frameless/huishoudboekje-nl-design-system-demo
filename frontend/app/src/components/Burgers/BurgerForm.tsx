@@ -9,9 +9,9 @@ import {Regex} from "../../utils/things";
 import useForm from "../../utils/useForm";
 import useToaster from "../../utils/useToaster";
 import zod from "../../utils/zod";
+import Asterisk from "../shared/Asterisk";
 import {FormLeft, FormRight} from "../shared/Forms";
 import Section from "../shared/Section";
-import Asterisk from "../shared/Asterisk";
 
 // t("messages.burgers.invalidGeboortedatum")
 const validator = zod.object({
@@ -32,10 +32,10 @@ const validator = zod.object({
 });
 
 type BurgerFormProps = {
-    burger?: Burger,
-    onSubmit: Function,
-    isLoading: boolean,
-    isBsnValid?: boolean,
+	burger?: Burger,
+	onSubmit: Function,
+	isLoading: boolean,
+	isBsnValid?: boolean,
 }
 
 const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading, isBsnValid = true}) => {
@@ -136,64 +136,59 @@ const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading, isB
 				<Stack direction={["column", "row"]} spacing={2}>
 					<FormLeft title={t("forms.burgers.sections.contact.title")} helperText={t("forms.burgers.sections.contact.helperText")} />
 					<FormRight>
-						<Stack spacing={2} direction={["column", "row"]}>
-							<FormControl id={"straatnaam"} isInvalid={!isFieldValid("straatnaam")} isRequired={true}>
-								<Stack spacing={1} flex={2}>
-									<FormLabel>{t("forms.burgers.fields.straatnaam")}</FormLabel>
-									<Input onChange={e => updateForm("straatnaam", e.target.value)} value={form.straatnaam || ""} />
-									<FormErrorMessage>{t("messages.burgers.invalidStraatnaam")}</FormErrorMessage>
-								</Stack>
-							</FormControl>
-							<FormControl id={"huisnummer"} isInvalid={!isFieldValid("huisnummer")} isRequired={true}>
-								<Stack spacing={1} flex={1}>
-									<FormLabel>{t("forms.burgers.fields.huisnummer")}</FormLabel>
-									<Input onChange={e => updateForm("huisnummer", e.target.value)} value={form.huisnummer || ""} />
-									<FormErrorMessage>{t("messages.burgers.invalidHuisnummer")}</FormErrorMessage>
-								</Stack>
-							</FormControl>
-						</Stack>
-						<Stack spacing={2} direction={["column", "row"]}>
-							<FormControl id={"postcode"} isInvalid={!isFieldValid("postcode")} isRequired={true}>
-								<Stack spacing={1} flex={1}>
-									<FormLabel>{t("forms.burgers.fields.postcode")}</FormLabel>
-									<Tooltip label={t("forms.burgers.tooltips.postcode")} aria-label={t("forms.burgers.fields.postcode")} placement={isMobile ? "top" : "left"}>
-										<Input onChange={e => updateForm("postcode", e.target.value)} value={form.postcode || ""} />
+						<Stack>
+							<Stack spacing={2} direction={["column", "row"]}>
+								<FormControl id={"straatnaam"} isInvalid={!isFieldValid("straatnaam")} isRequired={true}>
+									<Stack spacing={1} flex={2}>
+										<FormLabel>{t("forms.burgers.fields.straatnaam")}</FormLabel>
+										<Input onChange={e => updateForm("straatnaam", e.target.value)} value={form.straatnaam || ""} />
+										<FormErrorMessage>{t("messages.burgers.invalidStraatnaam")}</FormErrorMessage>
+									</Stack>
+								</FormControl>
+								<FormControl id={"huisnummer"} isInvalid={!isFieldValid("huisnummer")} isRequired={true}>
+									<Stack spacing={1} flex={1}>
+										<FormLabel>{t("forms.burgers.fields.huisnummer")}</FormLabel>
+										<Input onChange={e => updateForm("huisnummer", e.target.value)} value={form.huisnummer || ""} />
+										<FormErrorMessage>{t("messages.burgers.invalidHuisnummer")}</FormErrorMessage>
+									</Stack>
+								</FormControl>
+							</Stack>
+							<Stack spacing={2} direction={["column", "row"]}>
+								<FormControl id={"postcode"} isInvalid={!isFieldValid("postcode")} isRequired={true}>
+									<Stack spacing={1} flex={1}>
+										<FormLabel>{t("forms.burgers.fields.postcode")}</FormLabel>
+										<Tooltip label={t("forms.burgers.tooltips.postcode")} aria-label={t("forms.burgers.fields.postcode")} placement={isMobile ? "top" : "left"}>
+											<Input onChange={e => updateForm("postcode", e.target.value)} value={form.postcode || ""} />
+										</Tooltip>
+										<FormErrorMessage>{t("messages.burgers.invalidPostcode")}</FormErrorMessage>
+									</Stack>
+								</FormControl>
+								<FormControl id={"plaatsnaam"} isInvalid={!isFieldValid("plaatsnaam")} isRequired={true}>
+									<Stack spacing={1} flex={2}>
+										<FormLabel>{t("forms.burgers.fields.plaatsnaam")}</FormLabel>
+										<Input onChange={e => updateForm("plaatsnaam", e.target.value)} value={form.plaatsnaam || ""} />
+										<FormErrorMessage>{t("messages.burgers.invalidPlaatsnaam")}</FormErrorMessage>
+									</Stack>
+								</FormControl>
+							</Stack>
+							<FormControl id={"telefoonnummer"} isInvalid={!isFieldValid("telefoonnummer")} isRequired={true}>
+								<Stack spacing={1}>
+									<FormLabel>{t("forms.burgers.fields.telefoonnummer")}</FormLabel>
+									<Tooltip label={t("forms.burgers.tooltips.telefoonnummer")} aria-label={t("forms.burgers.tooltips.telefoonnummer")} placement={isMobile ? "top" : "left"}>
+										<Input onChange={e => updateForm("telefoonnummer", e.target.value)} value={form.telefoonnummer || ""} />
 									</Tooltip>
-									<FormErrorMessage>{t("messages.burgers.invalidPostcode")}</FormErrorMessage>
+									<FormErrorMessage>{t("messages.burgers.invalidTelefoonnummer")}</FormErrorMessage>
 								</Stack>
 							</FormControl>
-							<FormControl id={"plaatsnaam"} isInvalid={!isFieldValid("plaatsnaam")} isRequired={true}>
-								<Stack spacing={1} flex={2}>
-									<FormLabel>{t("forms.burgers.fields.plaatsnaam")}</FormLabel>
-									<Input onChange={e => updateForm("plaatsnaam", e.target.value)} value={form.plaatsnaam || ""} />
-									<FormErrorMessage>{t("messages.burgers.invalidPlaatsnaam")}</FormErrorMessage>
+							<FormControl id={"mail"} isInvalid={!isFieldValid("email")} isRequired={true}>
+								<Stack spacing={1}>
+									<FormLabel>{t("forms.burgers.fields.mail")}</FormLabel>
+									<Input onChange={e => updateForm("email", e.target.value)} value={form.email || ""} />
+									<FormErrorMessage>{t("messages.burgers.invalidEmail")}</FormErrorMessage>
 								</Stack>
 							</FormControl>
-						</Stack>
-						<FormControl id={"telefoonnummer"} isInvalid={!isFieldValid("telefoonnummer")} isRequired={true}>
-							<Stack spacing={1}>
-								<FormLabel>{t("forms.burgers.fields.telefoonnummer")}</FormLabel>
-								<Tooltip label={t("forms.burgers.tooltips.telefoonnummer")} aria-label={t("forms.burgers.tooltips.telefoonnummer")} placement={isMobile ? "top" : "left"}>
-									<Input onChange={e => updateForm("telefoonnummer", e.target.value)} value={form.telefoonnummer || ""} />
-								</Tooltip>
-								<FormErrorMessage>{t("messages.burgers.invalidTelefoonnummer")}</FormErrorMessage>
-							</Stack>
-						</FormControl>
-						<FormControl id={"mail"} isInvalid={!isFieldValid("email")} isRequired={true}>
-							<Stack spacing={1}>
-								<FormLabel>{t("forms.burgers.fields.mail")}</FormLabel>
-								<Input onChange={e => updateForm("email", e.target.value)} value={form.email || ""} />
-								<FormErrorMessage>{t("messages.burgers.invalidEmail")}</FormErrorMessage>
-							</Stack>
-						</FormControl>
-					</FormRight>
-				</Stack>
 
-				<Stack direction={["column", "row"]} spacing={2}>
-					<FormLeft />
-					<FormRight>
-						<Stack direction={"row"} spacing={1} justifyContent={"flex-end"}>
-							<Stack>
+							<Stack align={"flex-end"}>
 								<Button isLoading={isLoading} type={"submit"} colorScheme={"primary"} onClick={onSubmitForm}>{t("global.actions.save")}</Button>
 								<Asterisk />
 							</Stack>

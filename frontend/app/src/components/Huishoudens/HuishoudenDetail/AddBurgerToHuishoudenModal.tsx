@@ -1,4 +1,4 @@
-import {Button, FormControl, FormLabel, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack} from "@chakra-ui/react";
+import {Button, FormControl, FormLabel, HStack, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack} from "@chakra-ui/react";
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
@@ -9,7 +9,7 @@ import useToaster from "../../../utils/useToaster";
 import {MultiLineOption, MultiLineValueContainer} from "../../Layouts/ReactSelect/CustomComponents";
 import Asterisk from "../../shared/Asterisk";
 
-const AddBurgerToHuishoudenModal: React.FC<{ huishouden: Huishouden, isOpen: boolean, onClose: VoidFunction }> = ({huishouden, isOpen, onClose}) => {
+const AddBurgerToHuishoudenModal: React.FC<{huishouden: Huishouden, isOpen: boolean, onClose: VoidFunction}> = ({huishouden, isOpen, onClose}) => {
 	const {t} = useTranslation();
 	const toast = useToaster();
 	const reactSelectStyles = useReactSelectStyles();
@@ -80,14 +80,12 @@ const AddBurgerToHuishoudenModal: React.FC<{ huishouden: Huishouden, isOpen: boo
 					</Stack>
 				</ModalBody>
 				<ModalFooter>
-					<Stack>
-						<Stack direction={"row"} justify={"flex-end"}>
+					<Stack align={"flex-end"}>
+						<HStack justify={"flex-end"}>
 							<Button onClick={onClose}>{t("global.actions.cancel")}</Button>
 							<Button colorScheme={"primary"} onClick={onClickSave}>{t("global.actions.save")}</Button>
-						</Stack>
-						<Stack direction={"row"} justify={"flex-end"}>
-							<Asterisk />
-						</Stack>
+						</HStack>
+						<Asterisk />
 					</Stack>
 				</ModalFooter>
 			</ModalContent>

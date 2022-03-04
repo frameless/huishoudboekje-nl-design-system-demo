@@ -1,4 +1,4 @@
-import {Button, FormControl, FormErrorMessage, FormLabel, Input, Stack} from "@chakra-ui/react";
+import {Button, FormControl, FormErrorMessage, FormLabel, HStack, Input, Stack} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {Rekening} from "../../generated/graphql";
@@ -14,10 +14,10 @@ const validator = zod.object({
 });
 
 const RekeningForm: React.FC<{
-    rekening?: Rekening,
-    onSubmit: Function,
-    onCancel: VoidFunction,
-    isIbanValid?: boolean,
+	rekening?: Rekening,
+	onSubmit: Function,
+	onCancel: VoidFunction,
+	isIbanValid?: boolean,
 }> = ({rekening, onSubmit, onCancel, isIbanValid = true}) => {
 	const {t} = useTranslation();
 	const toast = useToaster();
@@ -54,7 +54,7 @@ const RekeningForm: React.FC<{
 	return (
 		<form onSubmit={onSubmitForm}>
 			<Stack>
-				<FormControl isInvalid={!isFieldValid("rekeninghouder")} id={"rekeninghouder"}>
+				<FormControl isInvalid={!isFieldValid("rekeninghouder")} id={"rekeninghouder"} isRequired={true}>
 					<FormLabel>{t("forms.rekeningen.fields.accountHolder")}</FormLabel>
 					<Input onChange={e => updateForm("rekeninghouder", e.target.value)} value={form.rekeninghouder || ""} autoFocus={!(rekening?.rekeninghouder)} />
 					<FormErrorMessage>{t("errors.rekeninghouder.generalError")}</FormErrorMessage>
@@ -64,11 +64,11 @@ const RekeningForm: React.FC<{
 					<Input onChange={e => updateForm("iban", e.target.value)} value={form.iban || ""} placeholder={"NL00BANK0123456789"} autoFocus={!!(rekening?.rekeninghouder)} />
 					<FormErrorMessage>{t("errors.iban.generalError")}</FormErrorMessage>
 				</FormControl>
-				<Stack direction={"row"} justify={"flex-end"}>
-					<Button type={"reset"} onClick={() => onCancel()}>{t("global.actions.cancel")}</Button>
-					<Button type={"submit"} colorScheme={"primary"} onClick={onSubmitForm}>{t("global.actions.save")}</Button>
-				</Stack>
-				<Stack direction={"row"} justify={"flex-end"}>
+				<Stack align={"flex-end"}>
+					<HStack justify={"flex-end"}>
+						<Button type={"reset"} onClick={() => onCancel()}>{t("global.actions.cancel")}</Button>
+						<Button type={"submit"} colorScheme={"primary"} onClick={onSubmitForm}>{t("global.actions.save")}</Button>
+					</HStack>
 					<Asterisk />
 				</Stack>
 			</Stack>

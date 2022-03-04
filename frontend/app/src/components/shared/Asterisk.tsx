@@ -5,9 +5,9 @@ import {useTranslation} from "react-i18next";
 const Asterisk = () => {
 	const {t} = useTranslation();
 	return (
-		<HStack>
+		<HStack spacing={1}>
 			<Text color={"red.500"}>*</Text>
-			<Text>{t("forms.Asterisk")}</Text>
+			<Text>{t("forms.asterisk")}</Text>
 		</HStack>
 	);
 };

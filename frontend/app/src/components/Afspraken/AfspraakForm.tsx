@@ -8,10 +8,10 @@ import useForm from "../../utils/useForm";
 import useSelectProps from "../../utils/useSelectProps";
 import useToaster from "../../utils/useToaster";
 import zod from "../../utils/zod";
+import Asterisk from "../shared/Asterisk";
 import {FormLeft, FormRight} from "../shared/Forms";
 import Section from "../shared/Section";
 import AfspraakFormContext from "./EditAfspraak/context";
-import Asterisk from "../shared/Asterisk";
 
 /**
  * This validator2 is required because Zod doesn't execute the superRefine directly, but only after the initial set of rules all pass.
@@ -50,10 +50,10 @@ const validator = zod.object({
 });
 
 type AfspraakFormProps = {
-    burgerRekeningen: Rekening[],
-    onChange: (values) => void,
-    values?: UpdateAfspraakInput,
-    isLoading?: boolean
+	burgerRekeningen: Rekening[],
+	onChange: (values) => void,
+	values?: UpdateAfspraakInput,
+	isLoading?: boolean
 };
 
 const createInitialValues = (data, organisaties: Organisatie[]): Partial<zod.infer<typeof validator>> => {
@@ -351,11 +351,9 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 							</Stack>
 						</>)}
 
-						<Stack direction={"row"} justifyContent={"flex-end"}>
-							<Stack>
-								<Button colorScheme={"primary"} onClick={onSubmit}>{t("global.actions.save")}</Button>
-								<Asterisk />
-							</Stack>
+						<Stack align={"flex-end"}>
+							<Button colorScheme={"primary"} onClick={onSubmit}>{t("global.actions.save")}</Button>
+							<Asterisk />
 						</Stack>
 
 					</Stack>

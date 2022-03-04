@@ -1,4 +1,4 @@
-import {Button, FormControl, FormErrorMessage, FormLabel, Input, Stack} from "@chakra-ui/react";
+import {Button, FormControl, FormErrorMessage, FormLabel, HStack, Input, Stack} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {CreateAfdelingInput, Organisatie} from "../../generated/graphql";
@@ -12,10 +12,10 @@ const validator = zod.object({
 });
 
 type AfdelingFormProps = {
-    organisatie: Organisatie,
-    onChange: (values) => void,
-    onCancel: VoidFunction,
-    values?: Partial<CreateAfdelingInput>,
+	organisatie: Organisatie,
+	onChange: (values) => void,
+	onCancel: VoidFunction,
+	values?: Partial<CreateAfdelingInput>,
 };
 
 const AfdelingForm: React.FC<AfdelingFormProps> = ({values, organisatie, onChange, onCancel}) => {
@@ -44,7 +44,6 @@ const AfdelingForm: React.FC<AfdelingFormProps> = ({values, organisatie, onChang
 	return (
 		<form onSubmit={onSubmit}>
 			<Stack spacing={5}>
-
 				<Stack>
 					<FormControl flex={1} isInvalid={!isFieldValid("naam")} isRequired={true}>
 						<FormLabel>{t("forms.createAfdeling.naam")}</FormLabel>
@@ -53,11 +52,11 @@ const AfdelingForm: React.FC<AfdelingFormProps> = ({values, organisatie, onChang
 					</FormControl>
 				</Stack>
 
-				<Stack direction={"row"} justify={"flex-end"}>
-					<Button type={"reset"} onClick={() => onCancel()}>{t("global.actions.cancel")}</Button>
-					<Button type={"submit"} colorScheme={"primary"}>{t("global.actions.save")}</Button>
-				</Stack>
-				<Stack direction={"row"} justify={"flex-end"}>
+				<Stack align={"flex-end"}>
+					<HStack justify={"flex-end"}>
+						<Button type={"reset"} onClick={() => onCancel()}>{t("global.actions.cancel")}</Button>
+						<Button type={"submit"} colorScheme={"primary"}>{t("global.actions.save")}</Button>
+					</HStack>
 					<Asterisk />
 				</Stack>
 			</Stack>
