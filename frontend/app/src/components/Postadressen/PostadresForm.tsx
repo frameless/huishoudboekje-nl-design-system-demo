@@ -6,6 +6,7 @@ import {Regex} from "../../utils/things";
 import useForm from "../../utils/useForm";
 import useToaster from "../../utils/useToaster";
 import zod from "../../utils/zod";
+import Asterisk from "../shared/Asterisk";
 
 const validator = zod.object({
 	straatnaam: zod.string().nonempty(),
@@ -15,9 +16,9 @@ const validator = zod.object({
 });
 
 type PostadresFormProps = {
-	postadres?: Postadres,
-	onSubmit: Function,
-	onCancel: VoidFunction,
+    postadres?: Postadres,
+    onSubmit: Function,
+    onCancel: VoidFunction,
 };
 
 const PostadresForm: React.FC<PostadresFormProps> = ({postadres, onSubmit, onCancel}) => {
@@ -51,35 +52,37 @@ const PostadresForm: React.FC<PostadresFormProps> = ({postadres, onSubmit, onCan
 		<form onSubmit={onSubmitForm}>
 			<Stack>
 
-				<FormControl isInvalid={!isFieldValid("straatnaam")} id={"straatnaam"}>
+				<FormControl isInvalid={!isFieldValid("straatnaam")} id={"straatnaam"} isRequired={true}>
 					<FormLabel>{t("forms.postadressen.fields.straatnaam")}</FormLabel>
 					<Input onChange={e => updateForm("straatnaam", e.target.value)} value={form.straatnaam || ""} autoFocus />
 					<FormErrorMessage>{t("errors.straatnaam.generalError")}</FormErrorMessage>
 				</FormControl>
 
-				<FormControl isInvalid={!isFieldValid("huisnummer")} id={"huisnummer"}>
+				<FormControl isInvalid={!isFieldValid("huisnummer")} id={"huisnummer"} isRequired={true}>
 					<FormLabel>{t("forms.postadressen.fields.huisnummer")}</FormLabel>
 					<Input onChange={e => updateForm("huisnummer", e.target.value)} value={form.huisnummer || ""} />
 					<FormErrorMessage>{t("errors.huisnummer.generalError")}</FormErrorMessage>
 				</FormControl>
 
-				<FormControl isInvalid={!isFieldValid("postcode")} id={"postcode"}>
+				<FormControl isInvalid={!isFieldValid("postcode")} id={"postcode"} isRequired={true}>
 					<FormLabel>{t("forms.postadressen.fields.postcode")}</FormLabel>
 					<Input onChange={e => updateForm("postcode", e.target.value)} value={form.postcode || ""} />
 					<FormErrorMessage>{t("errors.postcode.generalError")}</FormErrorMessage>
 				</FormControl>
 
-				<FormControl isInvalid={!isFieldValid("plaatsnaam")} id={"plaatsnaam"}>
+				<FormControl isInvalid={!isFieldValid("plaatsnaam")} id={"plaatsnaam"} isRequired={true}>
 					<FormLabel>{t("forms.postadressen.fields.plaatsnaam")}</FormLabel>
 					<Input onChange={e => updateForm("plaatsnaam", e.target.value)} value={form.plaatsnaam || ""} />
 					<FormErrorMessage>{t("errors.plaatsnaam.generalError")}</FormErrorMessage>
 				</FormControl>
 
-				<Stack direction={"row"} alignItems={"flex-end"}>
+				<Stack direction={"row"} justify={"flex-end"}>
 					<Button type={"reset"} onClick={() => onCancel()}>{t("global.actions.cancel")}</Button>
 					<Button type={"submit"} colorScheme={"primary"} onClick={onSubmitForm}>{t("global.actions.save")}</Button>
 				</Stack>
-
+				<Stack direction={"row"} justify={"flex-end"}>
+					<Asterisk />
+				</Stack>
 			</Stack>
 		</form>
 	);

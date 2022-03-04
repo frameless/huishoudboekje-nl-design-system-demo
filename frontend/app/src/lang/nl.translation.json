@@ -320,6 +320,7 @@
         "iban": "IBAN"
       }
     },
+    "Asterisk": "Verplichte velden",
     "generic": {
       "fields": {
         "noOptionsMessage": "Geen opties beschikbaar."

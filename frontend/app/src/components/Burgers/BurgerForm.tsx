@@ -11,6 +11,7 @@ import useToaster from "../../utils/useToaster";
 import zod from "../../utils/zod";
 import {FormLeft, FormRight} from "../shared/Forms";
 import Section from "../shared/Section";
+import Asterisk from "../shared/Asterisk";
 
 // t("messages.burgers.invalidGeboortedatum")
 const validator = zod.object({
@@ -31,10 +32,10 @@ const validator = zod.object({
 });
 
 type BurgerFormProps = {
-	burger?: Burger,
-	onSubmit: Function,
-	isLoading: boolean,
-	isBsnValid?: boolean,
+    burger?: Burger,
+    onSubmit: Function,
+    isLoading: boolean,
+    isBsnValid?: boolean,
 }
 
 const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading, isBsnValid = true}) => {
@@ -192,7 +193,10 @@ const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading, isB
 					<FormLeft />
 					<FormRight>
 						<Stack direction={"row"} spacing={1} justifyContent={"flex-end"}>
-							<Button isLoading={isLoading} type={"submit"} colorScheme={"primary"} onClick={onSubmitForm}>{t("global.actions.save")}</Button>
+							<Stack>
+								<Button isLoading={isLoading} type={"submit"} colorScheme={"primary"} onClick={onSubmitForm}>{t("global.actions.save")}</Button>
+								<Asterisk />
+							</Stack>
 						</Stack>
 					</FormRight>
 				</Stack>

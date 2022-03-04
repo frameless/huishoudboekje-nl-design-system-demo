@@ -1,4 +1,4 @@
-import {Box, Button, FormControl, FormErrorMessage, FormLabel, Input, InputGroup, InputLeftElement, Radio, RadioGroup, Spinner, Stack} from "@chakra-ui/react";
+import {Button, FormControl, FormErrorMessage, FormLabel, Input, InputGroup, InputLeftElement, Radio, RadioGroup, Spinner, Stack} from "@chakra-ui/react";
 import React, {useContext, useEffect} from "react";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
@@ -11,6 +11,7 @@ import zod from "../../utils/zod";
 import {FormLeft, FormRight} from "../shared/Forms";
 import Section from "../shared/Section";
 import AfspraakFormContext from "./EditAfspraak/context";
+import Asterisk from "../shared/Asterisk";
 
 /**
  * This validator2 is required because Zod doesn't execute the superRefine directly, but only after the initial set of rules all pass.
@@ -49,10 +50,10 @@ const validator = zod.object({
 });
 
 type AfspraakFormProps = {
-	burgerRekeningen: Rekening[],
-	onChange: (values) => void,
-	values?: UpdateAfspraakInput,
-	isLoading?: boolean
+    burgerRekeningen: Rekening[],
+    onChange: (values) => void,
+    values?: UpdateAfspraakInput,
+    isLoading?: boolean
 };
 
 const createInitialValues = (data, organisaties: Organisatie[]): Partial<zod.infer<typeof validator>> => {
@@ -350,9 +351,12 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 							</Stack>
 						</>)}
 
-						<Box>
-							<Button colorScheme={"primary"} onClick={onSubmit}>{t("global.actions.save")}</Button>
-						</Box>
+						<Stack direction={"row"} justifyContent={"flex-end"}>
+							<Stack>
+								<Button colorScheme={"primary"} onClick={onSubmit}>{t("global.actions.save")}</Button>
+								<Asterisk />
+							</Stack>
+						</Stack>
 
 					</Stack>
 
