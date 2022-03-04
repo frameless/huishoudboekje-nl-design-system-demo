@@ -7,8 +7,9 @@ import Queryable from "../../../utils/Queryable";
 import {formatBurgerName, humanJoin, useReactSelectStyles} from "../../../utils/things";
 import useToaster from "../../../utils/useToaster";
 import {MultiLineOption, MultiLineValueContainer} from "../../Layouts/ReactSelect/CustomComponents";
+import Asterisk from "../../shared/Asterisk";
 
-const AddBurgerToHuishoudenModal: React.FC<{huishouden: Huishouden, isOpen: boolean, onClose: VoidFunction}> = ({huishouden, isOpen, onClose}) => {
+const AddBurgerToHuishoudenModal: React.FC<{ huishouden: Huishouden, isOpen: boolean, onClose: VoidFunction }> = ({huishouden, isOpen, onClose}) => {
 	const {t} = useTranslation();
 	const toast = useToaster();
 	const reactSelectStyles = useReactSelectStyles();
@@ -58,7 +59,7 @@ const AddBurgerToHuishoudenModal: React.FC<{huishouden: Huishouden, isOpen: bool
 				<ModalCloseButton />
 				<ModalBody>
 					<Stack>
-						<FormControl>
+						<FormControl isRequired={true}>
 							<FormLabel>{t("forms.huishoudens.findBurger")}</FormLabel>
 							<Queryable query={$burgers} children={data => {
 								const burgers: Burger[] = data.burgers || [];
@@ -79,7 +80,15 @@ const AddBurgerToHuishoudenModal: React.FC<{huishouden: Huishouden, isOpen: bool
 					</Stack>
 				</ModalBody>
 				<ModalFooter>
-					<Button colorScheme={"primary"} onClick={onClickSave}>{t("global.actions.save")}</Button>
+					<Stack>
+						<Stack direction={"row"} justify={"flex-end"}>
+							<Button onClick={onClose}>{t("global.actions.cancel")}</Button>
+							<Button colorScheme={"primary"} onClick={onClickSave}>{t("global.actions.save")}</Button>
+						</Stack>
+						<Stack direction={"row"} justify={"flex-end"}>
+							<Asterisk />
+						</Stack>
+					</Stack>
 				</ModalFooter>
 			</ModalContent>
 		</Modal>
