@@ -13,6 +13,7 @@ import Betaalinstructies from "./components/Bankzaken/Betaalinstructies";
 import Transactions from "./components/Bankzaken/Transacties";
 import BurgerDetailPage from "./components/Burgers/BurgerDetail";
 import BurgerList from "./components/Burgers/BurgerList";
+import BurgerPersonalDetailsPage from "./components/Burgers/BurgerPersonalDetailsPage";
 import CreateBurger from "./components/Burgers/CreateBurger";
 import EditBurger from "./components/Burgers/EditBurger";
 import Configuratie from "./components/Configuratie";
@@ -30,6 +31,7 @@ import TwoColumns from "./components/shared/TwoColumns";
 import UserStatus from "./components/shared/UserStatus";
 import Sidebar from "./components/Sidebar";
 import SidebarContainer from "./components/Sidebar/SidebarContainer";
+import SignalenList from "./components/Signalen/SignalenList";
 import StatusErrorPage from "./components/Status/StatusErrorPage";
 import StatusPage from "./components/Status/StatusPage";
 import {dataLayerOptions} from "./config/dataLayer";
@@ -109,6 +111,7 @@ const App = () => {
 							<Route index element={<BurgerList />} />
 							<Route path={RouteNames.add} element={<CreateBurger />} />
 							<Route path={":id"} element={<BurgerDetailPage />} />
+							<Route path={`:id/${RouteNames.personal}`} element={<BurgerPersonalDetailsPage />} />
 							<Route path={`:id/${RouteNames.edit}`} element={<EditBurger />} />
 							<Route path={`:id/${RouteNames.afspraken}/${RouteNames.add}`} element={<CreateAfspraak />} />
 						</Route>
@@ -131,6 +134,7 @@ const App = () => {
 							<Route path={RouteNames.bankafschriften} element={<CustomerStatementMessages />} />
 							<Route path={RouteNames.betaalinstructies} element={<Betaalinstructies />} />
 						</Route>
+						<Route path={RouteNames.signalen} element={<SignalenList />} />
 						<Route path={RouteNames.rapportage} element={<Rapportage />} />
 						<Route path={RouteNames.gebeurtenissen} element={<Gebeurtenissen />} />
 						<Route path={RouteNames.configuratie} element={<Configuratie />} />

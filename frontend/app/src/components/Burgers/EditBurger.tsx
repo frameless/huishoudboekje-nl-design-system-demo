@@ -56,7 +56,7 @@ const EditBurger = () => {
 			toast({
 				success: t("messages.burgers.updateSuccessMessage"),
 			});
-			navigate(AppRoutes.Burger(parseInt(id)));
+			navigate(AppRoutes.BurgerPersonalDetails(parseInt(id)));
 		}).catch(handleSaveBurgerErrors(t));
 	};
 

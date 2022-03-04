@@ -1,10 +1,11 @@
-import {Box, Divider, Stack} from "@chakra-ui/react";
+import {Box, Divider, HStack, Stack, Text} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {BsFillHouseDoorFill, FaRegBuilding, FiActivity, GrGraphQl, MdCreditCard, RiBarChartFill, TiCog} from "react-icons/all";
+import {BsFillHouseDoorFill, FaRegBuilding, FiActivity, FiBell, GrGraphQl, MdCreditCard, RiBarChartFill, TiCog} from "react-icons/all";
 import {RouteNames} from "../../config/routes";
 import {useFeatureFlag} from "../../utils/features";
 import {isDev} from "../../utils/things";
+import SignalenBadge from "../shared/SignalenBadge";
 import SidebarLink from "./SidebarLink";
 
 const Sidebar = () => {
@@ -14,6 +15,12 @@ const Sidebar = () => {
 	return (
 		<Stack spacing={5} p={5} alignSelf={"center"} borderRadius={5} bg={"white"} divider={<Divider />} width={"100%"}>
 			<Stack spacing={5}>
+				<SidebarLink to={RouteNames.signalen} icon={FiBell}>
+					<HStack justify={"space-between"} w={"100%"}>
+						<Text>{t("sidebar.signalen")}</Text>
+						<SignalenBadge />
+					</HStack>
+				</SidebarLink>
 				<Stack>
 					<SidebarLink to={RouteNames.huishoudens} icon={BsFillHouseDoorFill}>{t("sidebar.huishoudens")}</SidebarLink>
 					<Box pl={"27px"}>
