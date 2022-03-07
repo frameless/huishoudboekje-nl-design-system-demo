@@ -3,14 +3,19 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {BsFillHouseDoorFill, FaRegBuilding, FiActivity, FiBell, GrGraphQl, MdCreditCard, RiBarChartFill, TiCog} from "react-icons/all";
 import {RouteNames} from "../../config/routes";
+import {Signaal, useGetSignalenQuery} from "../../generated/graphql";
 import {useFeatureFlag} from "../../utils/features";
+import Queryable from "../../utils/Queryable";
 import {isDev} from "../../utils/things";
-import SignalenBadge from "../shared/SignalenBadge";
+import NumberBadge from "../shared/NumberBadge";
 import SidebarLink from "./SidebarLink";
 
 const Sidebar = () => {
 	const {t} = useTranslation();
 	const testPageEnabled = useFeatureFlag("testpage");
+	const $signalen = useGetSignalenQuery({
+		pollInterval: (300 * 1000), // Every 5 minutes
+	});
 
 	return (
 		<Stack spacing={5} p={5} alignSelf={"center"} borderRadius={5} bg={"white"} divider={<Divider />} width={"100%"}>
@@ -18,7 +23,15 @@ const Sidebar = () => {
 				<SidebarLink to={RouteNames.signalen} icon={FiBell}>
 					<HStack justify={"space-between"} w={"100%"}>
 						<Text>{t("sidebar.signalen")}</Text>
-						<SignalenBadge />
+						<Queryable query={$signalen} loading={false} error={false}>
+							{(data) => {
+								const signalen: Signaal[] = data.signalen;
+								const nActiveSignalen = signalen.filter(s => s.isActive).length;
+								return nActiveSignalen > 0 ? (
+									<NumberBadge count={nActiveSignalen} />
+								) : null;
+							}}
+						</Queryable>
 					</HStack>
 				</SidebarLink>
 				<Stack>
