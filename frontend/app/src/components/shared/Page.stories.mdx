@@ -1,8 +1,9 @@
-import React from "react";
-import BackButton from "./BackButton";
-import Page from "./Page";
+import {Canvas, Meta, Story} from "@storybook/addon-docs";
+import Page from "./Page"; import BackButton from "./BackButton";
+import {ChevronDownIcon, CloseIcon, SearchIcon} from "@chakra-ui/icons";
+import {IconButton, Input, InputGroup, InputLeftElement, InputRightElement, Menu, MenuButton, MenuItem, MenuList} from "@chakra-ui/react";
 
-<Meta title={"Huishoudboekje/Page"} component={Page} argTypes={{
+<Meta title="Huishoudboekje/Page" component={Page} argTypes={{
 	title: {
 		type: {
 			name: "string",
@@ -33,16 +34,97 @@ import Page from "./Page";
 	},
 }} />
 
-<Canvas>
-	<Story name={"Default"}>
-		<Page title={"Bankafschriften"}>
-			This is a page for Bankafschriften.
-		</Page>
-	</Story>
+export const Template = ({title, backButton, menu, right}) => (
+	<Page title={title} backButton={backButton} menu={menu} right={right} />
+);
 
-	<Story name={"WithBackButton"}>
-		<Page title={"Huishouden de Jager-de Burg"} backButton={<BackButton label={"Terug naar overzicht"} to={"/huishoudens"} />}>
-			This is a page for one Huishouden.
-		</Page>
+# Page
+
+Met het Page-component kun je een pagina opbouwen.
+
+<Canvas>
+	<Story name="Default" args={{
+		title: "Bankafschriften"
+	}}>
+		{Template.bind({})}
+	</Story>
+</Canvas>
+
+<Canvas>
+	<Story name="WithBackButton" args={{
+		title: "Huishouden de Jager-de Burg",
+		backButton: (
+			<BackButton label={"Terug naar overzicht"} to={"/huishoudens"} />
+		),
+	}}>
+		{Template.bind({})}
+	</Story>
+</Canvas>
+
+<Canvas>
+	<Story name="WithMultipleBackButtons" args={{
+		title: "Huishouden de Jager-de Burg",
+		backButton: (
+			<Stack direction={["column", "row"]}>
+				<BackButton label={"Terug naar alle burgers"} to={"/burgers"} />
+				<BackButton label={"Bekijk huishouden"} to={"/huishoudens/1"} />
+			</Stack>
+		),
+	}}>
+		{Template.bind({})}
+	</Story>
+</Canvas>
+
+<Canvas>
+	<Story name="WithMenu" args={{
+		title: "Transacties",
+		menu: (
+			<Menu>
+				<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} />
+				<MenuList>
+					<MenuItem>Alle transacties afletteren</MenuItem>
+				</MenuList>
+			</Menu>
+		),
+	}}>
+		{Template.bind({})}
+	</Story>
+</Canvas>
+
+<Canvas>
+	<Story name="WithBackButtonAndMenu" args={{
+		title: "Afspraak bekijken",
+		backButton: <BackButton label={"Terug"} to={"/"} />,
+		menu: (
+			<Menu>
+				<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} />
+				<MenuList>
+					<MenuItem>Wijzigen</MenuItem>
+					<MenuItem>Beeindigen</MenuItem>
+					<MenuItem>Verwijderen</MenuItem>
+				</MenuList>
+			</Menu>
+		),
+	}}>
+		{Template.bind({})}
+	</Story>
+</Canvas>
+
+<Canvas>
+	<Story name="WithSearchRight" args={{
+		title: "Burgers",
+		right: (
+			<InputGroup>
+				<InputLeftElement>
+					<SearchIcon color={"gray.300"} />
+				</InputLeftElement>
+				<Input type={"text"} bg={"white"} placeholder={"zoeken"} />
+				<InputRightElement>
+					<IconButton size={"xs"} variant={"link"} icon={<CloseIcon />} aria-label={"Zoeken"} color={"gray.300"} />
+				</InputRightElement>
+			</InputGroup>
+		),
+	}}>
+		{Template.bind({})}
 	</Story>
 </Canvas>

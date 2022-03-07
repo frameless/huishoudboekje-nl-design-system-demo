@@ -1,6 +1,6 @@
 import {ComponentStory} from "@storybook/react";
 import React from "react";
-import {FiActivity, FiLock, FiPhone, FiUser} from "react-icons/all";
+import {FiActivity, FiLock, FiPhone, FiUser} from "react-icons/fi";
 import RoundIcon from "./RoundIcon";
 
 export default {

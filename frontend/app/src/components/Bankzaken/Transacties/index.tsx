@@ -3,7 +3,7 @@ import {Box, Button, ButtonGroup, Checkbox, FormControl, FormLabel, HStack, Icon
 import React, {useEffect, useState} from "react";
 import DatePicker from "react-datepicker";
 import {useTranslation} from "react-i18next";
-import {GoPrimitiveDot} from "react-icons/all";
+import {GoPrimitiveDot} from "react-icons/go";
 import Select from "react-select";
 import {GetTransactiesDocument, useGetTransactiesQuery, useStartAutomatischBoekenMutation} from "../../../generated/graphql";
 import {BanktransactieFilters} from "../../../models/models";

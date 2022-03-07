@@ -1,13 +1,19 @@
-import {Divider, FormControl, FormLabel, Input, Stack, Table, Tbody, Th, Thead, Tr} from "@chakra-ui/react";
+import {Divider, FormControl, FormErrorMessage, FormLabel, Input, Stack, Table, Tbody, Th, Thead, Tr} from "@chakra-ui/react";
 import React from "react";
-import {useInput, Validators} from "react-grapple";
 import {useTranslation} from "react-i18next";
 import {Configuratie as IConfiguratie, GetConfiguratieDocument, useCreateConfiguratieMutation, useGetConfiguratieQuery} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
+import useForm from "../../utils/useForm";
 import useToaster from "../../utils/useToaster";
-import {FormLeft, FormRight} from "../shared/Forms";
+import zod from "../../utils/zod";
 import AddButton from "../shared/AddButton";
+import {FormLeft, FormRight} from "../shared/Forms";
 import ParameterItem from "./ParameterItem";
+
+const validator = zod.object({
+	key: zod.string().nonempty(),
+	value: zod.string().nonempty(),
+});
 
 const Parameters = () => {
 	const {t} = useTranslation();
@@ -18,28 +24,33 @@ const Parameters = () => {
 		],
 	});
 	const toast = useToaster();
-
-	const key = useInput({
-		validate: [Validators.required],
-	});
-	const value = useInput({
-		validate: [Validators.required],
+	const [form, {updateForm, isValid, isFieldValid, reset, toggleSubmitted}] = useForm({
+		validator,
+		initialValue: {
+			key: "",
+			value: "",
+		},
 	});
 
 	const onSubmit = (e) => {
 		e.preventDefault();
+		toggleSubmitted(true);
 
-		if (!(key.isValid && value.isValid)) {
+		if (!isValid()) {
 			toast({
 				error: t("messages.genericError.description"),
 			});
 			return;
 		}
 
-		createConfiguratie({variables: {key: key.value, value: value.value}})
+		createConfiguratie({
+			variables: {
+				key: form.key!,
+				value: form.value!,
+			},
+		})
 			.then(() => {
-				key.reset();
-				value.reset();
+				reset();
 				toast({
 					success: t("messages.configuratie.createSuccess"),
 				});
@@ -83,13 +94,15 @@ const Parameters = () => {
 
 							<form onSubmit={onSubmit}>
 								<Stack direction={"column"} alignItems={"flex-end"}>
-									<FormControl>
+									<FormControl isInvalid={!isFieldValid("key")}>
 										<FormLabel>{t("forms.configuratie.fields.id")}</FormLabel>
-										<Input {...key.bind} />
+										<Input onChange={e => updateForm("key", e.target.value)} />
+										<FormErrorMessage>{t("configuratieForm.emptyKeyError")}</FormErrorMessage>
 									</FormControl>
-									<FormControl>
+									<FormControl isInvalid={!isFieldValid("value")}>
 										<FormLabel>{t("forms.configuratie.fields.waarde")}</FormLabel>
-										<Input {...value.bind} />
+										<Input onChange={e => updateForm("value", e.target.value)} />
+										<FormErrorMessage>{t("configuratieForm.emptyValueError")}</FormErrorMessage>
 									</FormControl>
 									<FormControl>
 										<AddButton type={"submit"} />

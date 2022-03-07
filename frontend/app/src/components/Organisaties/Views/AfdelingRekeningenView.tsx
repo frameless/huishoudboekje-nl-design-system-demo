@@ -1,16 +1,15 @@
 import {AddIcon} from "@chakra-ui/icons";
 import {Box, BoxProps, Button, Divider, Stack} from "@chakra-ui/react";
-import React from "react";
-import {useToggle} from "react-grapple";
+import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {Afdeling, GetOrganisatieDocument, GetOrganisatiesDocument, useCreateAfdelingRekeningMutation} from "../../../generated/graphql";
-import {FormLeft, FormRight} from "../../shared/Forms";
 import RekeningForm from "../../Rekeningen/RekeningForm";
 import RekeningList from "../../Rekeningen/RekeningList";
+import {FormLeft, FormRight} from "../../shared/Forms";
 
 const AfdelingRekeningenView: React.FC<BoxProps & {afdeling: Afdeling}> = ({afdeling, ...props}) => {
 	const {t} = useTranslation();
-	const [showForm, toggleForm] = useToggle(false);
+	const [showForm, toggleForm] = useState(false);
 	const [createAfdelingRekening] = useCreateAfdelingRekeningMutation({
 		refetchQueries: [
 			{query: GetOrganisatiesDocument},

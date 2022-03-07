@@ -1,7 +1,6 @@
 import {AddIcon, ChevronDownIcon} from "@chakra-ui/icons";
 import {Box, Button, Grid, Heading, IconButton, Menu, MenuButton, MenuItem, MenuList, useBreakpointValue, useDisclosure} from "@chakra-ui/react";
-import React from "react";
-import {useToggle} from "react-grapple";
+import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {Navigate, useNavigate, useParams} from "react-router-dom";
 import {AppRoutes} from "../../config/routes";
@@ -27,7 +26,7 @@ const OrganisatieDetailPage = () => {
 	const deleteAlert = useDisclosure();
 	const maxOrganisatieNaamLength = useBreakpointValue(maxOrganisatieNaamLengthBreakpointValues);
 
-	const [isDeleted, toggleDeleted] = useToggle(false);
+	const [isDeleted, toggleDeleted] = useState(false);
 
 	const onClickEdit = () => navigate(AppRoutes.EditOrganisatie(parseInt(id)));
 	const onClickDelete = () => deleteAlert.onOpen();

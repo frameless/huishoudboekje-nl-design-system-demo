@@ -1,7 +1,7 @@
 import {Box, HStack, Link, Text} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {MdArrowBack} from "react-icons/all";
+import {MdArrowBack} from "react-icons/md";
 import {NavLink} from "react-router-dom";
 
 const BackButton: React.FC<{to: string, label?: string}> = ({to, label}) => {

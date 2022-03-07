@@ -2,7 +2,7 @@ import {AddIcon, EditIcon, ViewIcon, WarningTwoIcon} from "@chakra-ui/icons";
 import {Box, Button, Divider, FormControl, FormLabel, HStack, IconButton, Input, InputGroup, InputLeftElement, InputRightElement, Stack, Switch, Table, Tbody, Td, Text, Th, Thead, Tr, useBreakpointValue, useDisclosure, VStack, Wrap, WrapItem} from "@chakra-ui/react";
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
-import {AiOutlineTag} from "react-icons/all";
+import {AiOutlineTag} from "react-icons/ai";
 import {NavLink} from "react-router-dom";
 import {AppRoutes} from "../../../config/routes";
 import {Afspraak, GetAfspraakDocument, GetAfsprakenDocument, useAddAfspraakZoektermMutation, useCreateAlarmMutation, useDeleteAfspraakZoektermMutation, useDeleteAlarmMutation, useUpdateAlarmMutation} from "../../../generated/graphql";

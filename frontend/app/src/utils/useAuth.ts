@@ -1,11 +1,10 @@
 import {useCallback, useEffect, useMemo, useState} from "react";
-import {useToggle} from "react-grapple";
 import {isDev} from "./things";
 
 const useAuth = () => {
 	const [user, setUser] = useState<{email: string}>();
-	const [error, setError] = useToggle(false);
-	const [loading, toggleLoading] = useToggle(true);
+	const [error, setError] = useState(false);
+	const [loading, toggleLoading] = useState(true);
 
 	const reset = useCallback(() => {
 		fetch("/api/logout")

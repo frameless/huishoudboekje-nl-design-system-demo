@@ -1,10 +1,10 @@
 import {DeleteIcon} from "@chakra-ui/icons";
 import {Button, Editable, EditableInput, EditablePreview, IconButton, Td, Tooltip, Tr, useDisclosure} from "@chakra-ui/react";
 import React, {useEffect, useRef} from "react";
-import {useInput} from "react-grapple";
 import {Trans, useTranslation} from "react-i18next";
 import {GetRekeningDocument, Rekening, useUpdateRekeningMutation} from "../../generated/graphql";
 import {formatIBAN, truncateText} from "../../utils/things";
+import useForm from "../../utils/useForm";
 import useToaster from "../../utils/useToaster";
 import Alert from "../shared/Alert";
 import PrettyIban from "../shared/PrettyIban";
@@ -19,8 +19,10 @@ const RekeningListItem: React.FC<RekeningListItemProps> = ({rekening, onDelete})
 	const toast = useToaster();
 	const deleteAlert = useDisclosure();
 	const editablePreviewRef = useRef<HTMLSpanElement>(null);
-	const rekeninghouder = useInput({ // Todo: refactor useInput to useForm (17-02-2022)
-		defaultValue: rekening.rekeninghouder,
+	const [form, {updateForm}] = useForm({
+		initialValue: {
+			rekeninghouder: rekening.rekeninghouder,
+		},
 	});
 
 	const [updateRekening] = useUpdateRekeningMutation({
@@ -41,7 +43,7 @@ const RekeningListItem: React.FC<RekeningListItemProps> = ({rekening, onDelete})
 			variables: {
 				id: rekening.id!,
 				iban: rekening.iban,
-				rekeninghouder: rekeninghouder.value,
+				rekeninghouder: form.rekeninghouder,
 			},
 		}).then(() => {
 			toast({
@@ -95,7 +97,7 @@ const RekeningListItem: React.FC<RekeningListItemProps> = ({rekening, onDelete})
 					<Tooltip label={t("global.actions.clickToEdit")} placement={"right"}>
 						<EditablePreview ref={editablePreviewRef} />
 					</Tooltip>
-					<EditableInput {...rekeninghouder.bind} name={"rekeningId"} id={"rekeningId"} />
+					<EditableInput value={form.rekeninghouder || ""} onChange={e => updateForm("rekeninghouder", e.target.value)} name={"rekeningId"} id={"rekeningId"} />
 				</Editable>
 			</Td>
 			<Td>
