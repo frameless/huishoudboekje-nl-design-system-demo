@@ -145,7 +145,7 @@
 	  "showReports": "Bekijk rapportage",
 	  "showPersonalDetails": "Bekijk persoonsgegevens",
 	  "showHuishouden": "Bekijk huishouden",
-	  "deleteBurgerFromHuishouden": "Verwijder burger van huishouden",
+	  "deleteBurgerFromHuishouden": "Verwijder burger uit huishouden",
 	  "clearSearch": "Zoekopdracht wissen",
 	  "backToList": "Terug naar overzicht",
 	  "clickToEdit": "Klik om te wijzigen",
@@ -571,6 +571,10 @@
 	"filterOptions": {
 	  "title": "Filteropties"
 	}
+  },
+  "transactionsPage": {
+	"title": "Banktransacties",
+	"helperText": "Dit is een lijst van alle banktransacties in het Huishoudboekje."
   },
   "words": {
 	"afspraak": "Afspraak"

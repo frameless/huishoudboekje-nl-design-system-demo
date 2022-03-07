@@ -9,8 +9,8 @@ import useSelectProps from "../../utils/useSelectProps";
 import useToaster from "../../utils/useToaster";
 import zod from "../../utils/zod";
 import Asterisk from "../shared/Asterisk";
-import {FormLeft, FormRight} from "../shared/Forms";
-import {DeprecatedSection} from "../shared/Section";
+import {Section} from "../shared/Section";
+import SectionContainer from "../shared/SectionContainer";
 import AfspraakFormContext from "./EditAfspraak/context";
 
 /**
@@ -167,143 +167,139 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 		</Stack>
 	) : (
 		<Stack spacing={5}>
-			<DeprecatedSection direction={["column", "row"]}>
-				<FormLeft title={t("forms.afspraken.section1.title")} helperText={t("forms.afspraken.section1.helperText")} />
-				<FormRight spacing={5}>
+			<SectionContainer>
+				<Section title={t("forms.afspraken.section1.title")} helperText={t("forms.afspraken.section1.helperText")}>
+					<Stack spacing={5}>
+						<Stack direction={["column", "row"]}>
+							<FormControl flex={1} isInvalid={!isFieldValid("type")} isRequired>
+								<FormLabel>{t("afspraken.isAfspraakWithOrganisatie")}</FormLabel>
+								<RadioGroup colorScheme={"primary"} value={form.type || ""} onChange={result => {
+									updateForm("type", result);
+									updateForm("organisatieId", undefined);
+									updateForm("afdelingId", undefined);
+									updateForm("tegenRekeningId", undefined);
+									updateForm("postadresId", undefined);
+								}}>
+									<Stack>
+										<Radio value={"organisatie"}>{t("organisatie")}</Radio>
+										<Radio value={"burger"}>{t("burger")}</Radio>
+									</Stack>
+								</RadioGroup>
+								<FormErrorMessage>{t("afspraakForm.invalidTypeError")}</FormErrorMessage>
+							</FormControl>
+						</Stack>
 
-					<Stack direction={["column", "row"]}>
-						<FormControl flex={1} isInvalid={!isFieldValid("type")} isRequired>
-							<FormLabel>{t("afspraken.isAfspraakWithOrganisatie")}</FormLabel>
-							<RadioGroup colorScheme={"primary"} value={form.type || ""} onChange={result => {
-								updateForm("type", result);
-								updateForm("organisatieId", undefined);
-								updateForm("afdelingId", undefined);
-								updateForm("tegenRekeningId", undefined);
-								updateForm("postadresId", undefined);
-							}}>
-								<Stack>
-									<Radio value={"organisatie"}>{t("organisatie")}</Radio>
-									<Radio value={"burger"}>{t("burger")}</Radio>
-								</Stack>
-							</RadioGroup>
-							<FormErrorMessage>{t("afspraakForm.invalidTypeError")}</FormErrorMessage>
-						</FormControl>
+						{form.type === "organisatie" && (<>
+							<Stack direction={["column", "row"]}>
+								<FormControl flex={1} isInvalid={!isFieldValid("organisatieId") || !isFieldValid2("organisatieId")} isRequired>
+									<FormLabel>{t("organisatie")}</FormLabel>
+									<Select
+										{...defaultProps}
+										id={"organisatie"}
+										options={organisatieOptions}
+										value={selectedOrganisatie ? organisatieOptions.find(o => o.value === selectedOrganisatie.id) : null}
+										styles={(isFieldValid("organisatieId") && isFieldValid2("organisatieId")) ? reactSelectStyles.default : reactSelectStyles.error}
+										onChange={result => {
+											const organisatieId = result?.value;
+											const organisatie = organisaties.find(o => o.id === organisatieId);
+											updateForm("organisatieId", organisatie?.id);
+											updateForm("afdelingId", undefined);
+											updateForm("postadresId", undefined);
+											updateForm("tegenRekeningId", undefined);
+
+											if (!organisatie) {
+												return;
+											}
+
+											/* If the organisatie has only one afdeling, fill it in */
+											const afdelingen: Afdeling[] = organisatie?.afdelingen || [];
+											if (afdelingen.length === 1) {
+												tryAutofillFields(afdelingen[0]);
+											}
+										}}
+									/>
+									<FormErrorMessage>{t("forms.afspraak.invalidOrganisatieError")}</FormErrorMessage>
+								</FormControl>
+							</Stack>
+
+							<Stack direction={["column", "row"]}>
+								<FormControl flex={1} isInvalid={!isFieldValid("afdelingId") || !isFieldValid2("afdelingId")} isRequired>
+									<FormLabel>{t("afdeling")}</FormLabel>
+									<Select
+										{...defaultProps}
+										id={"afdeling"}
+										noOptionsMessage={() => t("forms.afspraken.select.noAfdelingenOptionsMessage")}
+										options={afdelingOptions}
+										value={form.afdelingId ? afdelingOptions.find(o => o.value === form.afdelingId) : null}
+										styles={(isFieldValid("afdelingId") && isFieldValid2("afdelingId")) ? reactSelectStyles.default : reactSelectStyles.error}
+										onChange={result => {
+											const findAfdeling = afdelingen.find(o => o.id === result?.value);
+											updateForm("afdelingId", findAfdeling?.id);
+											tryAutofillFields(findAfdeling);
+										}}
+									/>
+									<FormErrorMessage>{t("forms.afspraak.invalidAfdelingError")}</FormErrorMessage>
+								</FormControl>
+							</Stack>
+
+							<Stack direction={["column", "row"]}>
+								<FormControl flex={1} isInvalid={!isFieldValid("postadresId") || !isFieldValid2("postadresId")} isRequired>
+									<FormLabel>{t("postadres")}</FormLabel>
+									<Select
+										{...defaultProps}
+										id={"postadres"}
+										noOptionsMessage={() => t("forms.afspraken.select.noPostadressenOptionsMessage")}
+										options={postadresOptions}
+										value={form.postadresId ? postadresOptions.find(o => o.value === form.postadresId) : null}
+										styles={(isFieldValid("postadresId") && isFieldValid2("postadresId")) ? reactSelectStyles.default : reactSelectStyles.error}
+										onChange={(result) => {
+											const findPostadres = postadressen.find(o => o.id === result?.value);
+											updateForm("postadresId", findPostadres?.id);
+										}}
+									/>
+									<FormErrorMessage>{t("forms.afspraak.invalidPostadresError")}</FormErrorMessage>
+								</FormControl>
+							</Stack>
+
+							<Stack direction={["column", "row"]}>
+								<FormControl flex={1} isInvalid={!isFieldValid("tegenRekeningId")} isRequired>
+									<FormLabel>{t("afspraken.tegenrekening")}</FormLabel>
+									<Select
+										{...defaultProps}
+										id={"tegenrekening"}
+										components={components.ReverseMultiLine}
+										noOptionsMessage={() => t("forms.afspraken.select.noRekeningenOptionsMessage")}
+										options={rekeningOptions}
+										value={form.tegenRekeningId ? rekeningOptions.find(o => o.value === form.tegenRekeningId) : rekeningOptions.find(o => o.value === "empty")}
+										styles={isFieldValid("tegenRekeningId") ? reactSelectStyles.default : reactSelectStyles.error}
+										onChange={(result) => updateForm("tegenRekeningId", result?.value)}
+									/>
+									<FormErrorMessage>{t("forms.afspraak.invalidRekeningError")}</FormErrorMessage>
+								</FormControl>
+							</Stack>
+						</>)}
+
+						{form.type === "burger" && (
+							<Stack direction={["column", "row"]}>
+								<FormControl flex={1} isInvalid={!isFieldValid("tegenRekeningId")} isRequired>
+									<FormLabel>{t("afspraken.tegenrekening")}</FormLabel>
+									<Select
+										{...defaultProps}
+										id={"tegenrekening"}
+										components={components.ReverseMultiLine}
+										noOptionsMessage={() => t("forms.afspraken.select.noRekeningenOptionsMessage")}
+										options={rekeningOptions}
+										value={form.tegenRekeningId ? rekeningOptions.find(o => o.value === form.tegenRekeningId) : rekeningOptions.find(o => o.value === "empty")}
+										styles={isFieldValid("tegenRekeningId") ? reactSelectStyles.default : reactSelectStyles.error}
+										onChange={(result) => updateForm("tegenRekeningId", result?.value)}
+									/>
+									<FormErrorMessage>{t("forms.afspraak.invalidRekeningError")}</FormErrorMessage>
+								</FormControl>
+							</Stack>
+						)}
 					</Stack>
-
-					{form.type === "organisatie" && (<>
-						<Stack direction={["column", "row"]}>
-							<FormControl flex={1} isInvalid={!isFieldValid("organisatieId") || !isFieldValid2("organisatieId")} isRequired>
-								<FormLabel>{t("organisatie")}</FormLabel>
-								<Select
-									{...defaultProps}
-									id={"organisatie"}
-									options={organisatieOptions}
-									value={selectedOrganisatie ? organisatieOptions.find(o => o.value === selectedOrganisatie.id) : null}
-									styles={(isFieldValid("organisatieId") && isFieldValid2("organisatieId")) ? reactSelectStyles.default : reactSelectStyles.error}
-									onChange={result => {
-										const organisatieId = result?.value;
-										const organisatie = organisaties.find(o => o.id === organisatieId);
-										updateForm("organisatieId", organisatie?.id);
-										updateForm("afdelingId", undefined);
-										updateForm("postadresId", undefined);
-										updateForm("tegenRekeningId", undefined);
-
-										if (!organisatie) {
-											return;
-										}
-
-										/* If the organisatie has only one afdeling, fill it in */
-										const afdelingen: Afdeling[] = organisatie?.afdelingen || [];
-										if (afdelingen.length === 1) {
-											tryAutofillFields(afdelingen[0]);
-										}
-									}}
-								/>
-								<FormErrorMessage>{t("forms.afspraak.invalidOrganisatieError")}</FormErrorMessage>
-							</FormControl>
-						</Stack>
-
-						<Stack direction={["column", "row"]}>
-							<FormControl flex={1} isInvalid={!isFieldValid("afdelingId") || !isFieldValid2("afdelingId")} isRequired>
-								<FormLabel>{t("afdeling")}</FormLabel>
-								<Select
-									{...defaultProps}
-									id={"afdeling"}
-									noOptionsMessage={() => t("forms.afspraken.select.noAfdelingenOptionsMessage")}
-									options={afdelingOptions}
-									value={form.afdelingId ? afdelingOptions.find(o => o.value === form.afdelingId) : null}
-									styles={(isFieldValid("afdelingId") && isFieldValid2("afdelingId")) ? reactSelectStyles.default : reactSelectStyles.error}
-									onChange={result => {
-										const findAfdeling = afdelingen.find(o => o.id === result?.value);
-										updateForm("afdelingId", findAfdeling?.id);
-										tryAutofillFields(findAfdeling);
-									}}
-								/>
-								<FormErrorMessage>{t("forms.afspraak.invalidAfdelingError")}</FormErrorMessage>
-							</FormControl>
-						</Stack>
-
-						<Stack direction={["column", "row"]}>
-							<FormControl flex={1} isInvalid={!isFieldValid("postadresId") || !isFieldValid2("postadresId")} isRequired>
-								<FormLabel>{t("postadres")}</FormLabel>
-								<Select
-									{...defaultProps}
-									id={"postadres"}
-									noOptionsMessage={() => t("forms.afspraken.select.noPostadressenOptionsMessage")}
-									options={postadresOptions}
-									value={form.postadresId ? postadresOptions.find(o => o.value === form.postadresId) : null}
-									styles={(isFieldValid("postadresId") && isFieldValid2("postadresId")) ? reactSelectStyles.default : reactSelectStyles.error}
-									onChange={(result) => {
-										const findPostadres = postadressen.find(o => o.id === result?.value);
-										updateForm("postadresId", findPostadres?.id);
-									}}
-								/>
-								<FormErrorMessage>{t("forms.afspraak.invalidPostadresError")}</FormErrorMessage>
-							</FormControl>
-						</Stack>
-
-						<Stack direction={["column", "row"]}>
-							<FormControl flex={1} isInvalid={!isFieldValid("tegenRekeningId")} isRequired>
-								<FormLabel>{t("afspraken.tegenrekening")}</FormLabel>
-								<Select
-									{...defaultProps}
-									id={"tegenrekening"}
-									components={components.ReverseMultiLine}
-									noOptionsMessage={() => t("forms.afspraken.select.noRekeningenOptionsMessage")}
-									options={rekeningOptions}
-									value={form.tegenRekeningId ? rekeningOptions.find(o => o.value === form.tegenRekeningId) : rekeningOptions.find(o => o.value === "empty")}
-									styles={isFieldValid("tegenRekeningId") ? reactSelectStyles.default : reactSelectStyles.error}
-									onChange={(result) => updateForm("tegenRekeningId", result?.value)}
-								/>
-								<FormErrorMessage>{t("forms.afspraak.invalidRekeningError")}</FormErrorMessage>
-							</FormControl>
-						</Stack>
-					</>)}
-
-					{form.type === "burger" && (
-						<Stack direction={["column", "row"]}>
-							<FormControl flex={1} isInvalid={!isFieldValid("tegenRekeningId")} isRequired>
-								<FormLabel>{t("afspraken.tegenrekening")}</FormLabel>
-								<Select
-									{...defaultProps}
-									id={"tegenrekening"}
-									components={components.ReverseMultiLine}
-									noOptionsMessage={() => t("forms.afspraken.select.noRekeningenOptionsMessage")}
-									options={rekeningOptions}
-									value={form.tegenRekeningId ? rekeningOptions.find(o => o.value === form.tegenRekeningId) : rekeningOptions.find(o => o.value === "empty")}
-									styles={isFieldValid("tegenRekeningId") ? reactSelectStyles.default : reactSelectStyles.error}
-									onChange={(result) => updateForm("tegenRekeningId", result?.value)}
-								/>
-								<FormErrorMessage>{t("forms.afspraak.invalidRekeningError")}</FormErrorMessage>
-							</FormControl>
-						</Stack>
-					)}
-				</FormRight>
-			</DeprecatedSection>
-			<DeprecatedSection direction={["column", "row"]}>
-				<FormLeft title={t("forms.afspraken.section2.title")} helperText={t("forms.afspraken.section2.helperText")} />
-				<FormRight spacing={5}>
-
+				</Section>
+				<Section title={t("forms.afspraken.section2.title")} helperText={t("forms.afspraken.section2.helperText")}>
 					<Stack spacing={5}>
 
 						<Stack direction={["column", "row"]}>
@@ -357,9 +353,8 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 						</Stack>
 
 					</Stack>
-
-				</FormRight>
-			</DeprecatedSection>
+				</Section>
+			</SectionContainer>
 		</Stack>
 	);
 };

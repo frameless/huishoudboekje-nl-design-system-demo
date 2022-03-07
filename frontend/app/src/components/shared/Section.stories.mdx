@@ -1,0 +1,213 @@
+import {Canvas, Meta, Story} from "@storybook/addon-docs";
+import Section from "./Section";
+import SectionContainer from "./SectionContainer";
+import {Button, Checkbox, CheckboxGroup, FormControl, FormLabel, HStack, IconButton, Menu, MenuButton, MenuItem, MenuList, Stack} from "@chakra-ui/react";
+import {ChevronDownIcon} from "@chakra-ui/icons";
+
+<Meta title="Huishoudboekje/Section" argTypes={{
+	title: {
+		type: {
+			name: "string",
+			required: false,
+		},
+		description: "This is the title of the section.",
+	},
+	helperText: {
+		type: {
+			name: "string",
+			required: false,
+		},
+		description: "This is the subtitle of the section.",
+	},
+	menu: {
+		type: {
+			name: "string",
+			required: false,
+		},
+		description: "This will show a menu with options.",
+	},
+	right: {
+		type: {
+			name: "string",
+			required: false,
+		},
+		description: "This will show whatever you put in here on the top right of the page.",
+	},
+}} />
+
+export const Lipsum = () => (
+	<Stack spacing={5}>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci blanditiis, consequatur cumque, iusto nesciunt nostrum perspiciatis qui quisquam quod sint vitae, voluptatem? Dignissimos doloremque enim fuga nisi quaerat temporibus ut.</p>
+		<p>Blanditiis cum deleniti, et ex excepturi explicabo hic illo ipsum nisi nulla possimus quis, quisquam quos. Alias architecto ipsam obcaecati omnis possimus, sint! Ad dignissimos, labore quidem sapiente tenetur voluptatem?</p>
+		<p>At numquam quia quisquam. Aliquam consequatur distinctio dolores et eveniet, facere fugiat iste laborum libero natus nesciunt odio pariatur perspiciatis quaerat, quam quibusdam quis quos sapiente similique sunt totam voluptates.</p>
+	</Stack>
+);
+
+# Section
+
+You can use the Section-component to design a page. To have the white background with the rounded borders, wrap it in a SectionContainer:
+
+	<SectionContainer>
+		<Section>
+			<Lipsum />
+		</Section>
+	</SectionContainer>
+
+## Bare Section
+<Canvas>
+	<Story name="Bare">
+		<SectionContainer>
+			<Section>
+				<Lipsum />
+			</Section>
+		</SectionContainer>
+	</Story>
+</Canvas>
+
+## With titles
+<Canvas>
+	<Story name="With titles">
+		<SectionContainer>
+			<Section title="Persoonlijk" helperText="Persoonlijke gegevens van de burger.">
+				<Lipsum />
+			</Section>
+		</SectionContainer>
+	</Story>
+</Canvas>
+
+## With options in the top bar
+<Canvas>
+	<Story name="With top bar">
+		<SectionContainer>
+			<Section
+				title="Persoonlijk"
+				helperText="Persoonlijke gegevens van de burger."
+				menu={(
+					<Menu>
+						<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} size={"sm"} aria-label={"Open menu"} />
+						<MenuList>
+							<MenuItem>Bekijk rapportage</MenuItem>
+							<MenuItem>Wijzigen</MenuItem>
+							<MenuItem>Verwijderen</MenuItem>
+						</MenuList>
+					</Menu>
+				)}
+				right={(
+					<HStack>
+						<Button colorScheme={"gray"} size={"sm"}>Wijzigen</Button>
+						<Button colorScheme={"red"} variant={"outline"} size={"sm"}>Verwijderen</Button>
+					</HStack>
+				)}
+			>
+				<Lipsum />
+			</Section>
+		</SectionContainer>
+	</Story>
+</Canvas>
+
+## With content on the left
+<Canvas>
+	<Story name="With title and options on the left">
+		<SectionContainer>
+			<Section
+				title="Persoonlijk"
+				helperText="Persoonlijke gegevens van de burger."
+				left={(
+					<FormControl>
+						<FormLabel>Filter</FormLabel>
+						<CheckboxGroup defaultValue={["active"]}>
+							<Stack>
+								<Checkbox value={"active"}>Actieve signalen</Checkbox>
+								<Checkbox value={"inactive"}>Inactieve signalen</Checkbox>
+							</Stack>
+						</CheckboxGroup>
+					</FormControl>
+				)}
+			>
+				<Lipsum />
+			</Section>
+		</SectionContainer>
+	</Story>
+</Canvas>
+
+## With options in the top bar and content on the left
+<Canvas>
+	<Story name="With top bar and options on the left">
+		<SectionContainer>
+			<Section
+				title="Persoonlijk"
+				helperText="Persoonlijke gegevens van de burger."
+				menu={(
+					<Menu>
+						<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} size={"sm"} aria-label={"Open menu"} />
+						<MenuList>
+							<MenuItem>Bekijk rapportage</MenuItem>
+							<MenuItem>Wijzigen</MenuItem>
+							<MenuItem>Verwijderen</MenuItem>
+						</MenuList>
+					</Menu>
+				)}
+				right={(
+					<HStack>
+						<Button colorScheme={"gray"} size={"sm"}>Wijzigen</Button>
+						<Button colorScheme={"red"} variant={"outline"} size={"sm"}>Verwijderen</Button>
+					</HStack>
+				)}
+				left={(
+					<FormControl>
+						<FormLabel>Filter</FormLabel>
+						<CheckboxGroup defaultValue={["active"]}>
+							<Stack>
+								<Checkbox value={"active"}>Actieve signalen</Checkbox>
+								<Checkbox value={"inactive"}>Inactieve signalen</Checkbox>
+							</Stack>
+						</CheckboxGroup>
+					</FormControl>
+				)}
+			>
+				<Lipsum />
+			</Section>
+		</SectionContainer>
+	</Story>
+</Canvas>
+
+## Multiple sections
+<Canvas>
+	<Story name="Mulitple sections">
+		<SectionContainer>
+			<Section title="Persoonlijk" helperText="Persoonlijke gegevens van de burger.">
+				<Lipsum />
+			</Section>
+			<Section title="Contact" helperText="Contactgegevens van de burger."
+				menu={(
+					<Menu>
+						<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} size={"sm"} aria-label={"Open menu"} />
+						<MenuList>
+							<MenuItem>Bekijk rapportage</MenuItem>
+							<MenuItem>Wijzigen</MenuItem>
+							<MenuItem>Verwijderen</MenuItem>
+						</MenuList>
+					</Menu>
+				)}
+				right={(
+					<HStack>
+						<Button colorScheme={"gray"} size={"sm"}>Wijzigen</Button>
+						<Button colorScheme={"red"} variant={"outline"} size={"sm"}>Verwijderen</Button>
+					</HStack>
+				)}
+				left={(
+					<FormControl>
+						<FormLabel>Filter</FormLabel>
+						<CheckboxGroup defaultValue={["active"]}>
+							<Stack>
+								<Checkbox value={"active"}>Actieve signalen</Checkbox>
+								<Checkbox value={"inactive"}>Inactieve signalen</Checkbox>
+							</Stack>
+						</CheckboxGroup>
+					</FormControl>
+				)}>
+				<Lipsum />
+			</Section>
+		</SectionContainer>
+	</Story>
+</Canvas>

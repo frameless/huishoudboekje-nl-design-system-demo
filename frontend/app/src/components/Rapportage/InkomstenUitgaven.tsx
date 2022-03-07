@@ -1,10 +1,9 @@
-import {BoxProps, Spinner, useToken} from "@chakra-ui/react";
+import {BoxProps, Heading, Spinner, Stack, Text, useToken} from "@chakra-ui/react";
 import React, {useContext} from "react";
 import {useTranslation} from "react-i18next";
 import ChakraChart from "../../config/theme/custom/Chart";
 import {BankTransaction} from "../../generated/graphql";
 import {prepareChartData} from "../../utils/things";
-import {FormLeft} from "../shared/Forms";
 import {createAggregation} from "./Aggregator";
 import {RapportageContext} from "./context";
 
@@ -34,22 +33,25 @@ const InkomstenUitgaven: React.FC<BoxProps & {transactions: BankTransaction[]}> 
 		...chartData(chartTemplate, aggregation),
 	];
 
-	return (<>
-		<FormLeft title={t("charts.inkomstenUitgaven.title")} helperText={t("charts.inkomstenUitgaven.helperText")} />
+	return (
+		<Stack>
+			<Heading size={"md"}>{t("charts.inkomstenUitgaven.title")}</Heading>
+			<Text fontSize={"md"} color={"gray.500"}>{t("charts.inkomstenUitgaven.helperText")}</Text>
 
-		<ChakraChart
-			chartType={"AreaChart"}
-			loader={<Spinner />}
-			data={data}
-			options={{
-				chartArea: {width: "90%", height: "80%"},
-				legend: {position: "top"},
-				colors: [colorInkomsten, colorUitgaven],
-				lineWidth: 1,
-				pointSize: 5,
-			}}
-		/>
-	</>);
+			<ChakraChart
+				chartType={"AreaChart"}
+				loader={<Spinner />}
+				data={data}
+				options={{
+					chartArea: {width: "90%", height: "80%"},
+					legend: {position: "top"},
+					colors: [colorInkomsten, colorUitgaven],
+					lineWidth: 1,
+					pointSize: 5,
+				}}
+			/>
+		</Stack>
+	);
 };
 
 export default InkomstenUitgaven;

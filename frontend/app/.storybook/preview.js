@@ -36,4 +36,21 @@ export const parameters = {
 	chakra: {
 		theme,
 	},
+	backgrounds: {
+		default: "Default",
+		values: [
+			{
+				name: "Default",
+				value: "#AAA",
+			},
+			{
+				name: "Dark",
+				value: "#333",
+			},
+			{
+				name: "Black",
+				value: "#111",
+			},
+		],
+	},
 };

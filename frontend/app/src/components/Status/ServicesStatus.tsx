@@ -1,7 +1,7 @@
 import {Circle, HStack, Stack, Text} from "@chakra-ui/react";
 import {useServices} from "../../utils/Services";
 
-export const ServicesStatus = () => {
+const ServicesStatus = () => {
 	const {services} = useServices();
 
 	return (
@@ -15,3 +15,5 @@ export const ServicesStatus = () => {
 		</Stack>
 	);
 };
+
+export default ServicesStatus;

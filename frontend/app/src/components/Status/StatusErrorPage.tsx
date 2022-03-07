@@ -3,7 +3,7 @@ import {Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel
 import React from "react";
 import {useTranslation} from "react-i18next";
 import TwoColumns from "../shared/TwoColumns";
-import {ServicesStatus} from "./ServicesStatus";
+import ServicesStatus from "./ServicesStatus";
 
 const StatusErrorPage = () => {
 	const {t} = useTranslation();

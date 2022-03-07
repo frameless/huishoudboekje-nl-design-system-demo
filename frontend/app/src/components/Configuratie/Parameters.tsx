@@ -1,4 +1,4 @@
-import {Divider, FormControl, FormErrorMessage, FormLabel, Input, Stack, Table, Tbody, Th, Thead, Tr} from "@chakra-ui/react";
+import {Button, Divider, FormControl, FormErrorMessage, FormLabel, Input, Stack, Table, Tbody, Th, Thead, Tr} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {Configuratie as IConfiguratie, GetConfiguratieDocument, useCreateConfiguratieMutation, useGetConfiguratieQuery} from "../../generated/graphql";
@@ -6,8 +6,8 @@ import Queryable from "../../utils/Queryable";
 import useForm from "../../utils/useForm";
 import useToaster from "../../utils/useToaster";
 import zod from "../../utils/zod";
-import AddButton from "../shared/AddButton";
-import {FormLeft, FormRight} from "../shared/Forms";
+import Section from "../shared/Section";
+import SectionContainer from "../shared/SectionContainer";
 import ParameterItem from "./ParameterItem";
 
 const validator = zod.object({
@@ -18,7 +18,7 @@ const validator = zod.object({
 const Parameters = () => {
 	const {t} = useTranslation();
 	const $configuraties = useGetConfiguratieQuery();
-	const [createConfiguratie] = useCreateConfiguratieMutation({
+	const [createConfiguratie, {loading}] = useCreateConfiguratieMutation({
 		refetchQueries: [
 			{query: GetConfiguratieDocument},
 		],
@@ -26,10 +26,6 @@ const Parameters = () => {
 	const toast = useToaster();
 	const [form, {updateForm, isValid, isFieldValid, reset, toggleSubmitted}] = useForm({
 		validator,
-		initialValue: {
-			key: "",
-			value: "",
-		},
 	});
 
 	const onSubmit = (e) => {
@@ -71,9 +67,8 @@ const Parameters = () => {
 		<Queryable query={$configuraties} children={data => {
 			const configuraties = data.configuraties as IConfiguratie[];
 			return (
-				<Stack direction={["column", "row"]}>
-					<FormLeft title={t("forms.configuratie.sections.title")} helperText={t("forms.configuratie.sections.helperText")} />
-					<FormRight>
+				<SectionContainer>
+					<Section title={t("forms.configuratie.sections.title")} helperText={t("forms.configuratie.sections.helperText")}>
 						<Stack spacing={5} divider={<Divider />}>
 							{configuraties.length > 0 && (
 								<Table size={"sm"} variant={"noLeftPadding"}>
@@ -96,22 +91,20 @@ const Parameters = () => {
 								<Stack direction={"column"} alignItems={"flex-end"}>
 									<FormControl isInvalid={!isFieldValid("key")}>
 										<FormLabel>{t("forms.configuratie.fields.id")}</FormLabel>
-										<Input onChange={e => updateForm("key", e.target.value)} />
+										<Input onChange={e => updateForm("key", e.target.value)} value={form.key || ""} />
 										<FormErrorMessage>{t("configuratieForm.emptyKeyError")}</FormErrorMessage>
 									</FormControl>
 									<FormControl isInvalid={!isFieldValid("value")}>
 										<FormLabel>{t("forms.configuratie.fields.waarde")}</FormLabel>
-										<Input onChange={e => updateForm("value", e.target.value)} />
+										<Input onChange={e => updateForm("value", e.target.value)} value={form.value || ""} />
 										<FormErrorMessage>{t("configuratieForm.emptyValueError")}</FormErrorMessage>
 									</FormControl>
-									<FormControl>
-										<AddButton type={"submit"} />
-									</FormControl>
+									<Button type={"submit"} colorScheme={"primary"} isLoading={loading}>{t("global.actions.save")}</Button>
 								</Stack>
 							</form>
 						</Stack>
-					</FormRight>
-				</Stack>
+					</Section>
+				</SectionContainer>
 			);
 		}} />
 	);

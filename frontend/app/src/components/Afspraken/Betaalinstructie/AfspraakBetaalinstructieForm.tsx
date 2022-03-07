@@ -11,9 +11,9 @@ import useForm from "../../../utils/useForm";
 import useToaster from "../../../utils/useToaster";
 import zod from "../../../utils/zod";
 import Asterisk from "../../shared/Asterisk";
-import {FormLeft, FormRight} from "../../shared/Forms";
 import PageNotFound from "../../shared/PageNotFound";
-import {DeprecatedSection} from "../../shared/Section";
+import Section from "../../shared/Section";
+import SectionContainer from "../../shared/SectionContainer";
 
 const validator2 = zod.object({
 	byDay: zod.array(zod.nativeEnum(DayOfWeek)).min(1),
@@ -119,11 +119,10 @@ const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({
 	];
 
 	return (
-		<DeprecatedSection>
-			<form onSubmit={onSubmit}>
-				<Stack direction={["column", "row"]}>
-					<FormLeft title={t("afspraakBetaalinstructie.title")} helperText={t("afspraakBetaalinstructie.helperText")} />
-					<FormRight spacing={5}>
+		<SectionContainer>
+			<Section title={t("afspraakBetaalinstructie.title")} helperText={t("afspraakBetaalinstructie.helperText")}>
+				<form onSubmit={onSubmit}>
+					<Stack spacing={5}>
 
 						<Stack direction={["column", "row"]}>
 							<FormControl flex={1} isInvalid={!isFieldValid("type")} isRequired>
@@ -287,10 +286,10 @@ const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({
 							<Button type={"submit"} colorScheme={"primary"}>{t("global.actions.save")}</Button>
 							<Asterisk />
 						</Stack>
-					</FormRight>
-				</Stack>
-			</form>
-		</DeprecatedSection>
+					</Stack>
+				</form>
+			</Section>
+		</SectionContainer>
 	);
 };
 
