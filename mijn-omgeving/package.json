@@ -17,19 +17,32 @@
     "start": "react-scripts start",
     "build": "rm -rf dist && tsc --project tsconfig.build.json",
     "test": "react-scripts test",
+    "pretest": "npm run i18n-migrate",
     "get-schema": "npx --yes -p @apollo/rover rover graph introspect ${PROXY_AUTHORIZATION:+--header \"${PROXY_AUTHORIZATION}\"} ${BASE_URL:-https://test.huishoudboekje.demoground.nl}/api/burgers > schema.graphql",
     "pregen-types": "npm run get-schema",
     "gen-types": "graphql-codegen --config codegen.json",
-    "prepublish": "npm run build"
+    "prepublish": "npm run build",
+    "i18n-migrate": "i18next 'src/**/*.{ts,tsx}' [-oc]"
   },
   "license": "SEE LICENSE IN LICENSE.md",
   "dependencies": {
     "@apollo/client": "^3.5.10",
+    "@chakra-ui/react": "^1.8.6",
+    "@emotion/react": "^11.8.1",
+    "@emotion/styled": "^11.8.1",
+    "@gemeente-denhaag/components-react": "^0.1.1-alpha.59",
+    "@gemeente-denhaag/design-tokens-components": "^0.2.3-alpha.121",
     "@react-keycloak/web": "^3.4.0",
     "@utrecht/components": "^1.0.0-alpha.147",
+    "dayjs": "^1.10.8",
+    "dayjs-recur": "^1.0.0",
+    "framer-motion": "^4.1.17",
     "graphql": "^16.0.1",
+    "i18next": "^21.6.13",
+    "i18next-browser-languagedetector": "^6.1.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-i18next": "^11.15.5",
     "react-scripts": "4.0.3",
     "typescript": "^4.6.2",
     "web-vitals": "^2.1.4"
@@ -54,7 +67,8 @@
     "eslint-plugin-react": "^7.29.3",
     "eslint-plugin-react-app": "^6.2.2",
     "eslint-plugin-react-hooks": "^4.3.0",
-    "graphql-tools": "^8.2.0"
+    "graphql-tools": "^8.2.0",
+    "i18next-parser": "^5.4.0"
   },
   "browserslist": [
     "> 0.5%",
