@@ -8,6 +8,7 @@ from graphql import GraphQLError
 
 class UpdateSignaalInput(graphene.InputObjectType):
     alarmId = graphene.String()
+    banktransactieIds = graphene.List(graphene.Int)
     isActive = graphene.Boolean()
     type = graphene.String()
     actions = graphene.List(graphene.String, default_value=[])

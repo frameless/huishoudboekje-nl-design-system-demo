@@ -11,6 +11,7 @@ generator client {
 model Signal {
 	id 					String		@id @default(uuid())
 	alarmId				String
+	banktransactieIds	Int[]
 	isActive			Boolean
 	type				String
 	actions				String[]

@@ -2,6 +2,7 @@
 CREATE TABLE "Signal" (
     "id" TEXT NOT NULL,
     "alarmId" TEXT NOT NULL,
+    "banktransactieIds" INT[],
     "isActive" BOOLEAN NOT NULL,
     "type" TEXT NOT NULL,
     "actions" TEXT[],

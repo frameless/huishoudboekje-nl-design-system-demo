@@ -240,6 +240,7 @@ class EvaluateAlarm(graphene.Mutation):
 
         # Evaluate Alarm
         transaction_in_scope = []
+        monetary_deviated_transaction_ids = []
         for transaction in transacties:
             str_transactie_datum=transaction.get("transactie_datum")
             transaction_date = dateutil.parser.isoparse(str_transactie_datum).date()
@@ -252,11 +253,16 @@ class EvaluateAlarm(graphene.Mutation):
                 right_monetary_window = expected_alarm_bedrag + monetary_margin
                 if left_monetary_window <= actual_transaction_bedrag <= right_monetary_window:
                     transaction_in_scope.append(transaction)
+                else:
+                    id = transaction.get("id")
+                    if id:
+                        monetary_deviated_transaction_ids.append(id)
 
         if len(transaction_in_scope) <= 0: 
             alarm_id = alarm.get("id")
             newSignal = {
                 "alarmId": alarm_id,
+                "banktransactieIds": monetary_deviated_transaction_ids,
                 "isActive": True,
                 "type": "default"
                 # "context": None

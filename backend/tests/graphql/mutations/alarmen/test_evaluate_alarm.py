@@ -400,6 +400,85 @@ def test_evaluate_alarm_signal_monetary(client):
         assert fallback.called == 0
         assert response.json == expected
 
+# Tried making a test to retrieve the bank transactions in the created signal, but it is not working...
+# @freeze_time("2021-12-08")
+# def test_evaluate_alarm_signal_monetary_multiple_transactions(client):
+#     with requests_mock.Mocker() as rm:
+#         # arrange
+#         banktransactie = {
+#             "id": banktransactie_id,
+#             "bedrag": 150,
+#             "customer_statement_message_id": 15,
+#             "information_to_account_owner": "NL83ABNA1927261899               Leefgeld ZOEKTERMPERSONA2 januari 2019",
+#             "is_credit": False,
+#             "is_geboekt": True,
+#             "statement_line": "190101D-1195.20NMSC028",
+#             "tegen_rekening": "NL83ABNA1927261899",
+#             "transactie_datum": "2021-12-05"
+#         }
+#         signaal = {
+#             "id": "e2b282d9-b31f-451e-9242-11f86c902b35",
+#             "alarmId": alarm_id,
+#             "banktransactieIds": [banktransactie_id],
+#             "isActive": True,
+#             "type": "default",
+#             "actions": [],
+#             "context": None,
+#             "timeCreated": "2021-12-13T13:20:40.784Z"
+#         }
+#         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
+#         rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=200, json={'data': [alarm]})
+#         rm2 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}", status_code=200, json={"data":afspraak})
+#         rm3 = rm.get(f"{settings.HHB_SERVICES_URL}/journaalposten/{journaalpost_id}", status_code=200, json={"data": journaalpost})
+#         rm4 = rm.get(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/{transaction_id}", status_code=200, json={"data": banktransactie})
+#         rm5 = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={ "ok":True, "data": nextAlarm})
+#         rm6 = rm.post(f"{settings.SIGNALENSERVICE_URL}/signals/", status_code=201, json={"data": signaal})
+#         rm7 = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", status_code=200, json={ "ok":True, "data": nextAlarm})
+#         rm8 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
+#         expected = {'data': {'evaluateAlarm': {'alarmTriggerResult': [{'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9'}, 'nextAlarm': {'id': '33738845-7f23-4c8f-8424-2b560a944884'}, 
+#         'signaal': {'id': 'e2b282d9-b31f-451e-9242-11f86c902b35', 'bankTransactions': [{'id': "10"}]}}]}}}
+
+#         # act
+#         response = client.post(
+#             "/graphql",
+#             json={
+#                 "query": '''
+#                     mutation test {
+#                         evaluateAlarm {
+#                             alarmTriggerResult {
+#                                 alarm {
+#                                     id
+#                                 }
+#                                 nextAlarm{
+#                                     id
+#                                 }
+#                                 signaal{
+#                                     id
+#                                     bankTransactions {
+#                                         id
+#                                     }
+#                                 }
+#                             }
+#                         }
+#                     }''',
+#             },
+#             content_type='application/json'
+#         )
+
+#         print(f">> >> >> response {response.json} ")
+
+#         # assert
+#         assert rm1.called_once
+#         assert rm2.called_once
+#         assert rm3.called_once
+#         assert rm4.called_once
+#         assert rm5.called_once
+#         assert rm6.called_once
+#         assert rm7.called_once
+#         assert rm8.called_once
+#         assert fallback.called == 0
+#         assert response.json == expected
+
 # Tests if alarm next in sequence already exists and that an alarm in the future does not create a next in sequence alarm yet.
 @freeze_time("2021-12-08")
 def test_evaluate_alarm_next_alarm_in_sequence_already_exists(client):
