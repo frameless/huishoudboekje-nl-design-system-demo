@@ -13,9 +13,9 @@ def test_update_alarm(client):
             "datum":"2021-12-02",
             "datumMargin": 1,
             "bedrag": "12.34",
-            "bedragMargin":"56.78"
+            "bedragMargin":"56.78",
+            "byDay": ["Thursday"]
         }
-        expected = {'data': {'updateAlarm': {'ok': True, 'previous': {'id': 'bd6222e7-bfab-46bc-b0bc-2b30b76228d4', 'isActive': True, 'gebruikerEmail': 'test@mail.nl', 'afspraak': None, 'datum': '2021-12-07', 'datumMargin': 5, 'bedrag': '1800.12', 'bedragMargin': '10.00'}, 'alarm': {'id': 'bd6222e7-bfab-46bc-b0bc-2b30b76228d4', 'isActive': False, 'gebruikerEmail': 'other@mail.nl', 'afspraak': {'id': 20}, 'datum': '2021-12-02', 'datumMargin': 1, 'bedrag': '12.34', 'bedragMargin': '56.78'}}}}
         alarm_id = "bd6222e7-bfab-46bc-b0bc-2b30b76228d4"
         alarm1 = {
             "id": alarm_id,
@@ -25,7 +25,8 @@ def test_update_alarm(client):
             "datum": "2021-12-07",
             "datumMargin": 5,
             "bedrag": "180012",
-            "bedragMargin": "1000"
+            "bedragMargin": "1000",
+            "byDay": ["Wednesday"]
         }
         afspraak = {
             "id": 20
@@ -38,7 +39,8 @@ def test_update_alarm(client):
             "datum":"2021-12-02",
             "datumMargin": 1,
             "bedrag": "1234",
-            "bedragMargin":"5678"
+            "bedragMargin":"5678",
+            "byDay": ["Thursday"]
         }
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
         rm0 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/20", status_code=200)
@@ -46,7 +48,7 @@ def test_update_alarm(client):
         rm2 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", status_code=200, json=alarm1)
         rm3 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
         rm4 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=19,20", status_code=200, json={"data": [afspraak]})
-
+        expected = {'data': {'updateAlarm': {'ok': True, 'previous': {'id': 'bd6222e7-bfab-46bc-b0bc-2b30b76228d4', 'isActive': True, 'gebruikerEmail': 'test@mail.nl', 'afspraak': None, 'datum': '2021-12-07', 'datumMargin': 5, 'bedrag': '1800.12', 'bedragMargin': '10.00', 'byDay': ['Wednesday'], 'byMonth': [], 'byMonthDay': []}, 'alarm': {'id': 'bd6222e7-bfab-46bc-b0bc-2b30b76228d4', 'isActive': False, 'gebruikerEmail': 'other@mail.nl', 'afspraak': {'id': 20}, 'datum': '2021-12-02', 'datumMargin': 1, 'bedrag': '12.34', 'bedragMargin': '56.78', 'byDay': ['Thursday'], 'byMonth': [], 'byMonthDay': []}}}}
 
         # act
         response = client.post(
@@ -67,6 +69,9 @@ def test_update_alarm(client):
                                 datumMargin
                                 bedrag
                                 bedragMargin
+                                byDay
+                                byMonth
+                                byMonthDay
                             }
                             alarm {
                                 id
@@ -79,6 +84,9 @@ def test_update_alarm(client):
                                 datumMargin
                                 bedrag
                                 bedragMargin
+                                byDay
+                                byMonth
+                                byMonthDay
                             }
                         }
                     }''',
@@ -90,7 +98,6 @@ def test_update_alarm(client):
             content_type='application/json'
         )
 
-
         # assert
         assert rm0.called_once
         assert rm1.called_once
@@ -99,7 +106,6 @@ def test_update_alarm(client):
         assert rm4.called_once
         assert fallback.called == 0
         assert response.json == expected
-
 
 @freeze_time("2021-12-01")
 def test_update_alarm_failure_cant_set_alarm_in_past(client):
@@ -112,11 +118,11 @@ def test_update_alarm_failure_cant_set_alarm_in_past(client):
             "datum":"2021-01-01",
             "datumMargin": 1,
             "bedrag": "12.34",
-            "bedragMargin":"56.78"
+            "bedragMargin":"56.78",
+            "byDay": ["Thursday"]
         }
         alarm_id = "bd6222e7-bfab-46bc-b0bc-2b30b76228d4"
-        expected = "Alarm datum is in het verleden."
-        alarm_id = "bd6222e7-bfab-46bc-b0bc-2b30b76228d4"
+        expected = "Alarm datum is in het verleden." 
 
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
 
@@ -139,6 +145,9 @@ def test_update_alarm_failure_cant_set_alarm_in_past(client):
                                 datumMargin
                                 bedrag
                                 bedragMargin
+                                byDay
+                                byMonth
+                                byMonthDay
                             }
                             alarm {
                                 id
@@ -151,6 +160,9 @@ def test_update_alarm_failure_cant_set_alarm_in_past(client):
                                 datumMargin
                                 bedrag
                                 bedragMargin
+                                byDay
+                                byMonth
+                                byMonthDay
                             }
                         }
                     }''',
@@ -178,7 +190,8 @@ def test_update_alarm_failure_cant_set_alarm_to_non_existing_afspraak(client):
             "datum":"2021-12-02",
             "datumMargin": 1,
             "bedrag": "12.34",
-            "bedragMargin":"56.78"
+            "bedragMargin":"56.78",
+            "byDay": ["Thursday"]
         }
         expected = "Afspraak bestaat niet."
         alarm_id = "bd6222e7-bfab-46bc-b0bc-2b30b76228d4"
@@ -190,7 +203,8 @@ def test_update_alarm_failure_cant_set_alarm_to_non_existing_afspraak(client):
             "datum": "2021-12-07",
             "datumMargin": 5,
             "bedrag": "180012",
-            "bedragMargin": "1000"
+            "bedragMargin": "1000",
+            "byDay": ["Thursday"]
         }
 
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
@@ -216,6 +230,9 @@ def test_update_alarm_failure_cant_set_alarm_to_non_existing_afspraak(client):
                                 datumMargin
                                 bedrag
                                 bedragMargin
+                                byDay
+                                byMonth
+                                byMonthDay
                             }
                             alarm {
                                 id
@@ -228,6 +245,9 @@ def test_update_alarm_failure_cant_set_alarm_to_non_existing_afspraak(client):
                                 datumMargin
                                 bedrag
                                 bedragMargin
+                                byDay
+                                byMonth
+                                byMonthDay
                             }
                         }
                     }''',
@@ -238,7 +258,6 @@ def test_update_alarm_failure_cant_set_alarm_to_non_existing_afspraak(client):
             },
             content_type='application/json'
         )
-
 
         # assert
         assert rm0.called_once

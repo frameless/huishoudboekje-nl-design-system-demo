@@ -6,7 +6,7 @@ import BackButton from "./BackButton";
 import Page from "./Page";
 
 export default {
-	title: "Huishoudboekje/Page",
+	title: "Huishoudboekje/Page_old",
 	component: Page,
 	argTypes: {
 		title: {
@@ -28,7 +28,7 @@ export default {
 				name: "string",
 				required: false,
 			},
-			description: "This will show an menu with options.",
+			description: "This will show a menu with options.",
 		},
 		right: {
 			type: {

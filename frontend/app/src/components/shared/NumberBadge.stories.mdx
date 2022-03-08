@@ -1,0 +1,36 @@
+import {Canvas, Meta, Story} from "@storybook/addon-docs";
+import NumberBadge from "./NumberBadge";
+
+<Meta title="Huishoudboekje/NumberBadge" argTypes={{
+	count: {
+		type: {
+			name: "number",
+			required: true,
+		},
+		defaultValue: undefined,
+		description: "The number that the badge should display.",
+	},
+}} />
+
+export const Template = ({count}) => <NumberBadge count={count} />;
+
+# NumberBadge
+NumberBadge shows a number. It's fully compatible with Chakra UI's Badge component, so it can take all of Badge's props.
+
+## Any number
+When count is anywhere between 0 and 99, that number will be visible.
+
+<Canvas>
+	<Story name="Any number" args={{count: 42}}>
+		{Template.bind({})}
+	</Story>
+</Canvas>
+
+## More than 99
+When count is more than 99, it will show "99+". There is currently only an upper limit, no lower limit.
+
+<Canvas>
+	<Story name="More than 99" args={{count: 3009}}>
+		{Template.bind({})}
+	</Story>
+</Canvas>

@@ -37,6 +37,7 @@ class AfspraakFactory():
         zoektermen = ["ABC1234"],
         afdeling_id: int = None,
         postadres_id: String = None,
+        alarm_id: String = None,
         rubriek_id: int = None
     ):
         if not burger:
@@ -60,6 +61,8 @@ class AfspraakFactory():
             afspraak.afdeling_id = afdeling_id
         if postadres_id:
             afspraak.postadres_id = postadres_id
+        if alarm_id:
+            afspraak.alarm_id = alarm_id
             
         self.dbsession.add(afspraak)
         self.dbsession.flush()

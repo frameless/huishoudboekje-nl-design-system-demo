@@ -6,7 +6,7 @@ import Queryable from "../../../utils/Queryable";
 import useToaster from "../../../utils/useToaster";
 import {FormLeft, FormRight} from "../../shared/Forms";
 import Page from "../../shared/Page";
-import Section from "../../shared/Section";
+import {DeprecatedSection} from "../../shared/Section";
 import CsmTableRow from "./CsmTableRow";
 import CsmUpload from "./CsmUpload";
 
@@ -44,7 +44,7 @@ const CustomerStatementMessages = () => {
 
 				return (
 					<Stack spacing={5}>
-						<Section>
+						<DeprecatedSection>
 							<Stack direction={["column", "row"]} spacing={5}>
 								<FormLeft title={t("forms.bankzaken.sections.customerStatementMessages.title")} helperText={t("forms.bankzaken.sections.customerStatementMessages.helperText")} />
 								<FormRight>
@@ -78,7 +78,7 @@ const CustomerStatementMessages = () => {
 									</Stack>
 								</FormRight>
 							</Stack>
-						</Section>
+						</DeprecatedSection>
 					</Stack>
 				);
 			}}

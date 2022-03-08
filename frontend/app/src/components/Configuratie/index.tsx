@@ -2,7 +2,7 @@ import {Stack} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import Page from "../shared/Page";
-import Section from "../shared/Section";
+import {DeprecatedSection} from "../shared/Section";
 import Parameters from "./Parameters";
 import Rubrieken from "./Rubrieken";
 
@@ -12,12 +12,12 @@ const Configuratie = () => {
 	return (
 		<Page title={t("configuratie")}>
 			<Stack spacing={5}>
-				<Section title={t("configuratie")}>
+				<DeprecatedSection title={t("configuratie")}>
 					<Parameters />
-				</Section>
-				<Section title={t("rubrieken")}>
+				</DeprecatedSection>
+				<DeprecatedSection title={t("rubrieken")}>
 					<Rubrieken />
-				</Section>
+				</DeprecatedSection>
 			</Stack>
 		</Page>
 	);

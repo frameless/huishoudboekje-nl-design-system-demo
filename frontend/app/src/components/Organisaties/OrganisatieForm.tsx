@@ -7,7 +7,7 @@ import useForm from "../../utils/useForm";
 import useToaster from "../../utils/useToaster";
 import zod from "../../utils/zod";
 import {FormLeft, FormRight} from "../shared/Forms";
-import Section from "../shared/Section";
+import {DeprecatedSection} from "../shared/Section";
 import Asterisk from "../shared/Asterisk";
 
 const validator = zod.object({
@@ -57,7 +57,7 @@ const OrganisatieForm: React.FC<OrganisatieFormProps> = ({organisatie, onSubmit,
 
 	return (
 		<Box as={"form"} onSubmit={onSubmitForm}>
-			<Section>
+			<DeprecatedSection>
 				<Stack direction={["column", "row"]} spacing={2}>
 					<FormLeft title={t("forms.organizations.sections.organizational.title")} helperText={t("forms.organizations.sections.organizational.helperText")} />
 					<FormRight>
@@ -96,7 +96,7 @@ const OrganisatieForm: React.FC<OrganisatieFormProps> = ({organisatie, onSubmit,
 						</Stack>
 					</FormRight>
 				</Stack>
-			</Section>
+			</DeprecatedSection>
 		</Box>
 	);
 };

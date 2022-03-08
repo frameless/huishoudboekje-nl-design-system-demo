@@ -11,7 +11,7 @@ import useToaster from "../../../utils/useToaster";
 import BackButton from "../../shared/BackButton";
 import Page from "../../shared/Page";
 import PageNotFound from "../../shared/PageNotFound";
-import Section from "../../shared/Section";
+import {DeprecatedSection} from "../../shared/Section";
 import ZoektermenList from "../../shared/ZoektermenList";
 import AfspraakForm from "../AfspraakForm";
 import AfspraakFormContext from "../EditAfspraak/context";
@@ -91,7 +91,7 @@ const FollowUpAfspraak = () => {
 			return (
 				<Page title={t("afspraken.vervolgAfspraak.title")} backButton={<BackButton to={AppRoutes.ViewAfspraak(afspraak.id)} />}>
 					{((afspraak.zoektermen && afspraak.zoektermen.length > 0) || afspraak.betaalinstructie) && (
-						<Section>
+						<DeprecatedSection>
 							<List spacing={2}>
 								{afspraak.zoektermen && afspraak.zoektermen.length > 0 && (
 									<ListItem justify={"center"}>
@@ -107,7 +107,7 @@ const FollowUpAfspraak = () => {
 									</ListItem>
 								)}
 							</List>
-						</Section>
+						</DeprecatedSection>
 					)}
 
 					<AfspraakFormContext.Provider value={ctxValue}>

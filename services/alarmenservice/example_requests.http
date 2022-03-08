@@ -32,18 +32,16 @@ Accept: application/json
 Content-Type: application/json
 
 {
-    "gebruikerEmail": "test@mail.nl",
-    "schema": {
-        "byMonth": [1,2,3,4,5,6,7,8,9,10,11,12],
-        "byMonthDay": [3],
-        "startDate": "2020-12-04T07:10:02.627Z"
-    },
-    "rule": {
-        "metric": "test metric",
-        "operator": "test operator",
-        "value": "test value",
-        "margin": "test margin"
-    }
+  "gebruikerEmail": "iemand@sloothuizen.nl",
+  "byDay": ["Monday", "Tuesday"],
+  "byMonth": [1, 2, 3, 4, 11, 12],
+  "byMonthDay": [3],
+  "afspraakId": 1,
+  "isActive": true,
+  "datum": "2021-12-18",
+  "datumMargin": 3,
+  "bedrag": 1200.12,
+  "bedragMargin": 75.25
 }
 
 ###
@@ -54,18 +52,16 @@ Accept: application/json
 Content-Type: application/json
 
 {
-    "gebruikerEmail": "test@mail.nl",
-    "schema": {
-        "byMonth": [1,2,3,4,5,6,7,8,9,10],
-        "byMonthDay": [3],
-        "startDate": "2020-01-01T12:00:00.000Z"
-    },
-    "rule": {
-        "metric": "test metric 1",
-        "operator": "test operator 1",
-        "value": "test value 1",
-        "margin": "test margin 1"
-    }
+  "gebruikerEmail": "iemand@sloothuizen.nl",
+  "byDay": ["Monday", "Tuesday"],
+  "byMonth": [1, 2, 3, 4, 11, 12],
+  "byMonthDay": [3],
+  "afspraakId": 1,
+  "isActive": true,
+  "datum": "2021-12-18",
+  "datumMargin": 3,
+  "bedrag": 1200.12,
+  "bedragMargin": 75.25
 }
 
 ###
@@ -76,18 +72,16 @@ Accept: application/json
 Content-Type: application/json
 
 {
-    "gebruikerEmail": "test@mail.nl",
-    "schema": {
-        "byMonth": [1,2,3,4,5,6,7,8,9,10],
-        "byMonthDay": [3],
-        "startDate": "2020-01-01T12:00:00.000Z"
-    },
-    "rule": {
-        "metric": "test metric 1",
-        "operator": "test operator 1",
-        "value": "test value 1",
-        "margin": "test margin 1"
-    }
+  "gebruikerEmail": "iemand@sloothuizen.nl",
+  "byDay": ["Monday", "Tuesday"],
+  "byMonth": [1, 2, 3, 4, 11, 12],
+  "byMonthDay": [3],
+  "afspraakId": 1,
+  "isActive": true,
+  "datum": "2021-12-18",
+  "datumMargin": 3,
+  "bedrag": 1200.12,
+  "bedragMargin": 75.25
 }
 
 ###

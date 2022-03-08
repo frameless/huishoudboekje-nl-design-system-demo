@@ -8,6 +8,7 @@ import hhb_backend.graphql.models.burger as burger
 import hhb_backend.graphql.models.afspraak as afspraak
 import hhb_backend.graphql.models.afdeling as afdeling
 import hhb_backend.graphql.models.postadres as postadres
+import hhb_backend.graphql.models.Alarm as alarm
 import hhb_backend.graphql.models.journaalpost as journaalpost
 import hhb_backend.graphql.models.overschrijving as overschrijving
 import hhb_backend.graphql.models.rekening as rekening
@@ -56,6 +57,7 @@ class Afspraak(graphene.ObjectType):
     burger = graphene.Field(lambda: burger.Burger)
     afdeling = graphene.Field(lambda: afdeling.Afdeling)
     postadres = graphene.Field(lambda: postadres.Postadres)
+    alarm = graphene.Field(lambda: alarm.Alarm)
     tegen_rekening = graphene.Field(lambda: rekening.Rekening)
     betaalinstructie = graphene.Field(lambda: Betaalinstructie)
     journaalposten = graphene.List(lambda: journaalpost.Journaalpost)
@@ -117,6 +119,13 @@ class Afspraak(graphene.ObjectType):
         if postadres_id:
             postadres = await request.dataloader.postadressen_by_id.load(postadres_id)
             return postadres
+
+    async def resolve_alarm(root, info):
+        """ Get alarm when requested """
+        alarm_id = root.get("alarm_id")
+        if alarm_id:
+            alarm = await request.dataloader.alarmen_by_id.load(alarm_id)
+            return alarm
 
     async def resolve_afdeling(root, info):
         """ Get afdeling when requested """

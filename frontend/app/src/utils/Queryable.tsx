@@ -11,8 +11,8 @@ const Loading = () => (
 
 type QueryableProps = {
 	query: QueryResult | LazyQueryResult<any, any>,
-	loading?,
-	error?,
+	loading?: JSX.Element | null | boolean,
+	error?: JSX.Element | null | boolean,
 	options?: {
 		hidePreviousResults?: boolean
 	},
@@ -28,11 +28,11 @@ const Queryable: React.FC<QueryableProps> = ({query, loading, error, options = {
 			return children(previousData);
 		}
 
-		return loading || <Loading />;
+		return loading !== false ? (loading || <Loading />) : null;
 	}
 
 	if (_error) {
-		return error || <Box>{t("messages.genericError.description")}</Box>;
+		return error !== false ? (error || <Box>{t("messages.genericError.description")}</Box>) : null;
 	}
 
 	return children(_data);

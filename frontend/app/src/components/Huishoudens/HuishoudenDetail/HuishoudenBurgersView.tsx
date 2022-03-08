@@ -1,95 +1,40 @@
-import {AddIcon, DeleteIcon} from "@chakra-ui/icons";
-import {Avatar, Box, Button, Grid, IconButton, Stack, Text, useBreakpointValue, useDisclosure} from "@chakra-ui/react";
+import {AddIcon} from "@chakra-ui/icons";
+import {Avatar, Badge, Box, Button, Grid, Stack, Text} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {NavLink, useNavigate} from "react-router-dom";
+import {NavLink} from "react-router-dom";
 import {AppRoutes} from "../../../config/routes";
-import {Burger, GetHuishoudenDocument, GetHuishoudensDocument, Huishouden, useDeleteHuishoudenBurgerMutation} from "../../../generated/graphql";
-import {formatBurgerName, formatHuishoudenName} from "../../../utils/things";
-import useToaster from "../../../utils/useToaster";
-import Alert from "../../shared/Alert";
+import {Burger, Huishouden} from "../../../generated/graphql";
+import {formatBurgerName} from "../../../utils/things";
 import GridCard from "../../shared/GridCard";
 
-const HuishoudenBurgerItem: React.FC<{huishouden: Huishouden, burger: Burger}> = ({huishouden, burger}) => {
-	const navigate = useNavigate();
-	const isMobile = useBreakpointValue([true, null, null, false]);
-	const deleteHuishoudenBurgerAlert = useDisclosure();
-	const toast = useToaster();
-	const {t} = useTranslation();
+const HuishoudenBurgerItem: React.FC<{ huishouden: Huishouden, burger: Burger }> = ({huishouden, burger}) => {
+	const signalen = (burger.afspraken || [])
+		.map(a => a.alarm)
+		.map(a => a?.signaal)
+		.filter(s => s?.isActive)
+		.filter(s => s !== undefined);
 
-	const [deleteHuishoudenBurger] = useDeleteHuishoudenBurgerMutation({
-		refetchQueries: [
-			{query: GetHuishoudenDocument, variables: {id: huishouden.id!}},
-			{query: GetHuishoudensDocument},
-		],
-	});
-
-	const onClickDeleteBurgerFromHuishouden = (e) => {
-		e.preventDefault();
-		deleteHuishoudenBurgerAlert.onOpen();
-	};
-
-	const onConfirmDeleteBurgerFromHuishouden = () => {
-		deleteHuishoudenBurger({
-			variables: {
-				huishoudenId: huishouden.id!,
-				burgerIds: [burger.id!],
-			},
-		}).then(result => {
-			toast({
-				success: t("messages.huishoudenBurger.deleteSuccess", {burgerName: formatBurgerName(burger)}),
-			});
-			deleteHuishoudenBurgerAlert.onClose();
-
-			/* Check if all burgers were removed from this Huishouden */
-			if (huishouden.burgers?.filter(b => b.id !== burger.id).length === 0) {
-				navigate(AppRoutes.Huishoudens());
-			}
-		}).catch(err => {
-			console.error(err);
-			toast({
-				error: err.message,
-			});
-		});
-	};
-
-	return (<>
-		{deleteHuishoudenBurgerAlert.isOpen && (
-			<Alert
-				title={t("forms.huishoudens.deleteBurger.title")}
-				cancelButton={true}
-				confirmButton={
-					<Button colorScheme={"red"} onClick={onConfirmDeleteBurgerFromHuishouden} ml={3}>
-						{t("global.actions.delete")}
-					</Button>
-				}
-				onClose={deleteHuishoudenBurgerAlert.onClose}
-			>
-				{t("forms.huishoudens.deleteBurger.confirmQuestion", {
-					burgerName: formatBurgerName(burger),
-					huishoudenName: formatHuishoudenName(huishouden),
-				})}
-			</Alert>
-		)}
-
+	return (
 		<GridCard as={NavLink} justify={["flex-start", "center"]} to={AppRoutes.Burger(burger.id)} position={"relative"}>
-			{(huishouden.burgers || []).length > 1 && (
+			{signalen.length > 0 && (
 				<Box position={"absolute"} top={1} right={1}>
-					<IconButton variant={"ghost"} size={"sm"} aria-label={t("global.actions.delete")} icon={<DeleteIcon />}
-						onClick={onClickDeleteBurgerFromHuishouden} />
+					<Badge fontSize={"sm"} p={1} colorScheme={"secondary"}>
+						{signalen.length > 99 ? "99+" : signalen.length}
+					</Badge>
 				</Box>
 			)}
 			<Stack direction={["row", "column"]} spacing={5} align={"center"} justify={["flex-start", "center"]}>
 				<Avatar name={formatBurgerName(burger, true)} />
-				<Text fontSize={"md"} {...!isMobile && {textAlign: "center"}}>
+				<Text fontSize={"md"} textAlign={["left", "center"]}>
 					<strong>{formatBurgerName(burger, true)}</strong>
 				</Text>
 			</Stack>
 		</GridCard>
-	</>);
+	);
 };
 
-const HuishoudenBurgersView: React.FC<{huishouden: Huishouden, onClickAddButton?: VoidFunction}> = ({huishouden, onClickAddButton}) => {
+const HuishoudenBurgersView: React.FC<{ huishouden: Huishouden, onClickAddButton?: VoidFunction }> = ({huishouden, onClickAddButton}) => {
 	const {t} = useTranslation();
 	const burgers: Burger[] = huishouden.burgers || [];
 

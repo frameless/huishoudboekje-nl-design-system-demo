@@ -4,7 +4,7 @@ import {IconContext} from "react-icons";
 import {NavLink, useLocation} from "react-router-dom";
 import {DrawerContext} from "../../utils/things";
 
-const SidebarLink: React.FC<ButtonProps & {icon?, to: string, exactMatch?: boolean, target?: string}> = ({icon, to, children, exactMatch = false, ...props}) => {
+const SidebarLink: React.FC<ButtonProps & { icon?, to: string, exactMatch?: boolean, target?: string }> = ({icon, to, children, exactMatch = false, ...props}) => {
 	const location = useLocation();
 	const isActive = exactMatch ? location.pathname === to : location.pathname.includes(to);
 	const drawerContext = useContext(DrawerContext);
@@ -25,9 +25,9 @@ const SidebarLink: React.FC<ButtonProps & {icon?, to: string, exactMatch?: boole
 		<IconContext.Provider value={{color: "blue"}}>
 			<Button as={NavLink} justifyContent={"flex-start"} to={to} onClick={() => drawerContext.onClose()} variant={isActive ? "solid" : "ghost"} colorScheme={isActive ? "primary" : "gray"}
 				color={isActive ? "white" : "primary"} width={"100%"} _focus={{outline: "none", boxShadow: "none"}} {...props}>
-				<Flex alignItems={"center"}>
+				<Flex alignItems={"center"} width={"100%"} color={linkColor}>
 					{icon && <LinkIcon mr={5} fontSize={"24px"} />}
-					<Text color={linkColor}>{children}</Text>
+					{typeof children === "string" ? <Text>{children}</Text> : children}
 				</Flex>
 			</Button>
 		</IconContext.Provider>

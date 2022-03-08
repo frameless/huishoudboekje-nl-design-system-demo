@@ -1,19 +1,39 @@
-import {Box, Divider, Stack} from "@chakra-ui/react";
+import {Box, Divider, HStack, Stack, Text} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {BsFillHouseDoorFill, FaRegBuilding, FiActivity, GrGraphQl, MdCreditCard, RiBarChartFill, TiCog} from "react-icons/all";
+import {BsFillHouseDoorFill, FaRegBuilding, FiActivity, FiBell, GrGraphQl, MdCreditCard, RiBarChartFill, TiCog} from "react-icons/all";
 import {RouteNames} from "../../config/routes";
+import {Signaal, useGetSignalenQuery} from "../../generated/graphql";
 import {useFeatureFlag} from "../../utils/features";
+import Queryable from "../../utils/Queryable";
 import {isDev} from "../../utils/things";
+import NumberBadge from "../shared/NumberBadge";
 import SidebarLink from "./SidebarLink";
 
 const Sidebar = () => {
 	const {t} = useTranslation();
 	const testPageEnabled = useFeatureFlag("testpage");
+	const $signalen = useGetSignalenQuery({
+		pollInterval: (300 * 1000), // Every 5 minutes
+	});
 
 	return (
 		<Stack spacing={5} p={5} alignSelf={"center"} borderRadius={5} bg={"white"} divider={<Divider />} width={"100%"}>
 			<Stack spacing={5}>
+				<SidebarLink to={RouteNames.signalen} icon={FiBell}>
+					<HStack justify={"space-between"} w={"100%"}>
+						<Text>{t("sidebar.signalen")}</Text>
+						<Queryable query={$signalen} loading={false} error={false}>
+							{(data) => {
+								const signalen: Signaal[] = data.signalen;
+								const nActiveSignalen = signalen.filter(s => s.isActive).length;
+								return nActiveSignalen > 0 ? (
+									<NumberBadge count={nActiveSignalen} />
+								) : null;
+							}}
+						</Queryable>
+					</HStack>
+				</SidebarLink>
 				<Stack>
 					<SidebarLink to={RouteNames.huishoudens} icon={BsFillHouseDoorFill}>{t("sidebar.huishoudens")}</SidebarLink>
 					<Box pl={"27px"}>

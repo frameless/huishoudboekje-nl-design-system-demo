@@ -85,6 +85,12 @@ class AfspraakView(HHBView):
                     {"type": "string"},
                     {"type": "null"},
                 ]
+            },
+            "alarm_id": {
+                "oneOf": [
+                    {"type": "string"},
+                    {"type": "null"},
+                ]
             }
         },
         "required": []
@@ -96,6 +102,7 @@ class AfspraakView(HHBView):
         self.add_filter_filter_datums()
         self.add_filter_filter_afdelingen()
         self.add_filter_filter_postadressen()
+        self.add_filter_filter_alarmen()
         self.add_filter_filter_rekening()
         self.add_filter_filter_zoektermen()
         self.hhb_query.expose_many_relation("journaalposten", "id")
@@ -190,3 +197,10 @@ class AfspraakView(HHBView):
             self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.postadres_id.in_(ids))
 
         AfspraakView.filter_in_string_('filter_postadressen', cb)
+
+    def add_filter_filter_alarmen(self):
+        """ Add filter_alarmen filter based on the id of the alarm model """
+        def cb(ids): # not mandetory, make optional
+            self.hhb_query.query = self.hhb_query.query.filter(self.hhb_model.alarm_id.in_(ids))
+
+        AfspraakView.filter_in_string_('filter_alarmen', cb)
