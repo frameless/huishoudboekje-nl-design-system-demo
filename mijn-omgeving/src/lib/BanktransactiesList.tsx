@@ -1,33 +1,66 @@
+import {Box, FormLabel, Stack, Text} from "@chakra-ui/react";
 import "@utrecht/components/dist/heading-1/bem.css";
 import "@utrecht/components/dist/table/bem.css";
 import React from "react";
+import {useTranslation} from "react-i18next";
+import d from "../utils/dayjs";
 import BanktransactieListItem from "./BanktransactieListItem";
 import {Banktransactie} from "./generated/graphql";
 
 const BanktransactiesList: React.FC<{transacties: Banktransactie[]}> = ({transacties}) => {
+	const {t} = useTranslation();
+
+	const bt = transacties.reduce((result, t) => {
+		const trDateAsString = d(t.transactiedatum).format("YYYY-MM-DD");
+		return {
+			...result,
+			[trDateAsString]: [
+				...(result[trDateAsString] || []),
+				t,
+			],
+		};
+	}, {});
+
+	const dateString = (date: Date): string => {
+		const _date = d(date).startOf("day");
+		const today = d().startOf("day");
+
+		if(_date.isSame(today)){
+			return t("date.today");
+		}
+
+		if(_date.isSame(today.subtract(1, "day"))){
+			return t("date.yesterday");
+		}
+
+		const format = _date.year() !== d().year() ? "dddd D MMMM YYYY" : "dddd D MMMM";
+		return d(date).format(format);
+	};
+
 	return (<>
 		<h1 className={"utrecht-heading-1"}>Uw Huishoudboekje</h1>
 
 		{transacties.length > 0 ? (
-			<table className={"utrecht-table"} style={{width: "100%"}}>
-				<thead style={{
-					textAlign: "left",
-				}}>
-					<tr>
-						<th>Datum</th>
-						<th>Tegenrekening</th>
-						<th>Bedrag</th>
-					</tr>
-				</thead>
-				<tbody>
-					{transacties.map(transactie => {
-						return <BanktransactieListItem transactie={transactie} />;
-					})}
-				</tbody>
-			</table>
+			<Stack>
+				{Object.keys(bt).map((transactionDate, i) => {
+					return (
+						<Stack key={i}>
+							<Box>
+								<FormLabel>{dateString(d(transactionDate, "YYYY-MM-DD").toDate())}</FormLabel>
+							</Box>
+							<Stack>
+								{bt[transactionDate].map((transactie, i) => {
+									return <BanktransactieListItem transactie={transactie} key={i} />;
+								})}
+							</Stack>
+						</Stack>
+					);
+				})}
+			</Stack>
+
 		) : (
-			<span>Er zijn geen transacties gevonden.</span>
-		)}
+			<Text>Er zijn geen transacties gevonden.</Text>
+		)};
 	</>);
 };
 

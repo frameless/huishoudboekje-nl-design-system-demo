@@ -10,6 +10,9 @@
 	"@typescript-eslint/no-use-before-define": ["off"],
 	"import/no-anonymous-default-export": ["off"],
 	"react/prop-types": ["off"],
+	"react/jsx-no-useless-fragment": ["error", {"allowExpressions": true}],
+	"react/jsx-curly-brace-presence": ["warn", {"props": "always", "children": "never"}],
+	"no-var": ["error"],
 	"indent": [
 	  "warn",
 	  "tab",
@@ -55,7 +58,9 @@
 	],
 	"react/no-unknown-property": ["warn"],
 	"no-constant-condition": ["warn", {"checkLoops": false}],
-	"react/jsx-no-useless-fragment": ["error", {"allowExpressions": true}]
+	"no-redeclare": ["off"],
+	"@typescript-eslint/no-redeclare": ["off"],
+	"react/no-children-prop": ["warn", {"allowFunctions": true}]
   },
   "ignorePatterns": [
 	"node_modules",
