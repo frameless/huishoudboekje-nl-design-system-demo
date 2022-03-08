@@ -1,22 +1,21 @@
+import {Box, HStack, Text} from "@chakra-ui/react";
 import React from "react";
+import {currencyFormat} from "../utils/numberFormat";
 import {Banktransactie} from "./generated/graphql";
-import {Box, Flex, Spacer, Text} from "@chakra-ui/react";
+import PrettyIban from "./PrettyIban";
 
-const nf = new Intl.NumberFormat("nl-NL", {style: "currency", currency: "EUR"});
-
-const BanktransactieListItem: React.FC<{ transactie: Banktransactie }> = ({transactie}) => {
-	const bedrag = transactie.bedrag * (transactie.isCredit ? 1 : -1);
-
+const BanktransactieListItem: React.FC<{transactie: Banktransactie}> = ({transactie}) => {
 	return (
-		<Flex>
+		<HStack justify={"space-between"}>
 			<Box>
-				<Text>{transactie.tegenrekening?.rekeninghouder}</Text>
+				<Text>{transactie.tegenrekening?.rekeninghouder || (
+					<PrettyIban iban={transactie.tegenrekeningIban} />
+				)}</Text>
 			</Box>
-			<Spacer />
 			<Box>
-				<Text>{nf.format(bedrag)}</Text>
+				<Text color={transactie.bedrag < 0 ? "currentcolor" : "green.500"}>{currencyFormat.format(transactie.bedrag)}</Text>
 			</Box>
-		</Flex>
+		</HStack>
 	);
 };
 

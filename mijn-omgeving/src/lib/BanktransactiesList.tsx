@@ -1,41 +1,41 @@
+import {Box, FormLabel, Stack, Text} from "@chakra-ui/react";
 import "@utrecht/components/dist/heading-1/bem.css";
 import "@utrecht/components/dist/table/bem.css";
 import React from "react";
-import {Banktransactie} from "./generated/graphql";
-import d from "../utils/dayjs";
 import {useTranslation} from "react-i18next";
-import {Box, FormLabel, Stack, Text} from "@chakra-ui/react";
+import d from "../utils/dayjs";
 import BanktransactieListItem from "./BanktransactieListItem";
+import {Banktransactie} from "./generated/graphql";
 
-const BanktransactiesList: React.FC<{ transacties: Banktransactie[] }> = ({transacties}) => {
+const BanktransactiesList: React.FC<{transacties: Banktransactie[]}> = ({transacties}) => {
 	const {t} = useTranslation();
 
-	const current = new Date();
-	const today = current.getFullYear() + "-" + ("0" + (current.getMonth() + 1)).slice(-2) + "-" + ("0" + current.getDate()).slice(-2);
-	const yesterday = current.getFullYear() + "-" + ("0" + (current.getMonth() + 1)).slice(-2) + "-" + ("0" + (current.getDate() - 1)).slice(-2);
-
 	const bt = transacties.reduce((result, t) => {
-		if (d(t.transactiedatum).year() === d().year()) {
-			const trDateAsString = d(t.transactiedatum).format("dddd DD MMMM");
-			return {
-				...result,
-				[trDateAsString]: [
-					...(result[trDateAsString] || []),
-					t,
-				],
-			};
-		}
-		else {
-			const trDateAsString = d(t.transactiedatum).format("dddd LL");
-			return {
-				...result,
-				[trDateAsString]: [
-					...(result[trDateAsString] || []),
-					t,
-				],
-			};
-		}
+		const trDateAsString = d(t.transactiedatum).format("YYYY-MM-DD");
+		return {
+			...result,
+			[trDateAsString]: [
+				...(result[trDateAsString] || []),
+				t,
+			],
+		};
 	}, {});
+
+	const dateString = (date: Date): string => {
+		const _date = d(date).startOf("day");
+		const today = d().startOf("day");
+
+		if(_date.isSame(today)){
+			return t("date.today");
+		}
+
+		if(_date.isSame(today.subtract(1, "day"))){
+			return t("date.yesterday");
+		}
+
+		const format = _date.year() !== d().year() ? "dddd D MMMM YYYY" : "dddd D MMMM";
+		return d(date).format(format);
+	};
 
 	return (<>
 		<h1 className={"utrecht-heading-1"}>Uw Huishoudboekje</h1>
@@ -46,11 +46,7 @@ const BanktransactiesList: React.FC<{ transacties: Banktransactie[] }> = ({trans
 					return (
 						<Stack key={i}>
 							<Box>
-								<FormLabel>{
-									transactionDate === today ? <Text>{t("date.today")}</Text>
-										: transactionDate === yesterday ? <Text>{t("date.yesterday")}</Text>
-											: transactionDate}
-								</FormLabel>
+								<FormLabel>{dateString(d(transactionDate, "YYYY-MM-DD").toDate())}</FormLabel>
 							</Box>
 							<Stack>
 								{bt[transactionDate].map((transactie, i) => {
