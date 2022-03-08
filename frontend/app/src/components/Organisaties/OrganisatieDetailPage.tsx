@@ -1,6 +1,6 @@
 import {AddIcon} from "@chakra-ui/icons";
 import {Box, Button, Grid, Heading, IconButton, Menu, MenuButton, MenuItem, MenuList, useBreakpointValue, useDisclosure} from "@chakra-ui/react";
-import React, {useState} from "react";
+import React from "react";
 import {useTranslation} from "react-i18next";
 import {Navigate, useNavigate, useParams} from "react-router-dom";
 import {AppRoutes} from "../../config/routes";
@@ -25,7 +25,6 @@ const OrganisatieDetailPage = () => {
 	const addAfdelingModal = useDisclosure();
 	const deleteAlert = useDisclosure();
 	const maxOrganisatieNaamLength = useBreakpointValue(maxOrganisatieNaamLengthBreakpointValues);
-	const [isDeleted, toggleDeleted] = useState(false);
 	const $organisatie = useGetOrganisatieQuery({
 		variables: {id: parseInt(id)},
 	});
@@ -43,9 +42,9 @@ const OrganisatieDetailPage = () => {
 					.then(() => {
 						deleteAlert.onClose();
 						toast({
-							success: t("messages.organisaties.deleteConfirmMessage", {name: organisatie.naam}),
+							success: t("messages.organisaties.deleteConfirmMessage"),
 						});
-						toggleDeleted(true);
+						navigate(AppRoutes.Organisaties);
 					})
 					.catch(err => {
 						console.error(err);
@@ -58,14 +57,6 @@ const OrganisatieDetailPage = () => {
 			if (!organisatie) {
 				return (
 					<Navigate to={AppRoutes.NotFound} replace />
-				);
-			}
-
-			if (isDeleted) {
-				return (
-					<DeadEndPage message={t("messages.organisaties.deleteConfirmMessage", {name: organisatie.naam})}>
-						<Button colorScheme={"primary"} onClick={() => navigate(AppRoutes.Organisaties)}>{t("global.actions.backToList")}</Button>
-					</DeadEndPage>
 				);
 			}
 
