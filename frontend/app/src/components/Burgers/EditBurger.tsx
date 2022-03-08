@@ -17,6 +17,8 @@ const EditBurger = () => {
 	const toast = useToaster();
 	const navigate = useNavigate();
 	const handleSaveBurgerErrors = (t) => (err) => {
+		setBsnValid(true);
+
 		let message = err.message;
 		if (err.message.includes("already exists")) {
 			message = t("messages.burgers.alreadyExists");
@@ -49,7 +51,6 @@ const EditBurger = () => {
 	});
 
 	const onSubmit = (burgerData: UpdateBurgerMutationVariables) => {
-		setBsnValid(false);
 		updateBurger({
 			variables: burgerData,
 		}).then(() => {
