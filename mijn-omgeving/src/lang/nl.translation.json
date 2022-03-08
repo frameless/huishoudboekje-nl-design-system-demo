@@ -1,5 +1,9 @@
 {
   "message": {
     "welcome": "Welcome"
+  },
+  "date": {
+    "today": "Vandaag",
+    "yesterday": "Gisteren"
   }
 }
