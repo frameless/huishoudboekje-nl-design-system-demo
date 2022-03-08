@@ -1,5 +1,4 @@
-import {ChevronDownIcon} from "@chakra-ui/icons";
-import {Box, Button, ButtonGroup, Checkbox, FormControl, FormLabel, HStack, IconButton, Input, Menu, MenuButton, MenuItem, MenuList, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack, Text, useDisclosure} from "@chakra-ui/react";
+import {Box, Button, ButtonGroup, Checkbox, FormControl, FormLabel, HStack, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack, Text, useDisclosure} from "@chakra-ui/react";
 import React, {useEffect, useState} from "react";
 import DatePicker from "react-datepicker";
 import {useTranslation} from "react-i18next";
@@ -68,13 +67,8 @@ const Transactions = () => {
 	];
 
 	return (
-		<Page title={t("forms.bankzaken.sections.transactions.title")} menu={(
-			<Menu>
-				<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} />
-				<MenuList>
-					<MenuItem onClick={onClickStartBoekenButton}>{t("global.actions.startBoeken")}</MenuItem>
-				</MenuList>
-			</Menu>
+		<Page title={t("forms.bankzaken.sections.transactions.title")} right={(
+			<Button size={"sm"} variant={"outline"} colorScheme={"primary"} onClick={onClickStartBoekenButton}>{t("global.actions.startBoeken")}</Button>
 		)}>
 			<Modal isOpen={filterModal.isOpen} onClose={filterModal.onClose}>
 				<ModalOverlay />

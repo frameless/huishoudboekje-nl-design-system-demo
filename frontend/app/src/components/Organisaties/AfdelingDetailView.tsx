@@ -1,4 +1,3 @@
-import {ChevronDownIcon} from "@chakra-ui/icons";
 import {Box, IconButton, Menu, MenuButton, MenuItem, MenuList, Stack, useDisclosure} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
@@ -9,6 +8,7 @@ import AddAfdelingRekeningModal from "../Rekeningen/AddAfdelingRekeningModal";
 import RekeningList from "../Rekeningen/RekeningList";
 import AddButton from "../shared/AddButton";
 import BackButton from "../shared/BackButton";
+import MenuIcon from "../shared/MenuIcon";
 import Page from "../shared/Page";
 import Section from "../shared/Section";
 import SectionContainer from "../shared/SectionContainer";
@@ -34,7 +34,7 @@ const AfdelingDetailView: React.FC<{afdeling: Afdeling}> = ({afdeling}) => {
 
 		<Page title={afdeling.naam || t("afdeling")} backButton={<BackButton to={AppRoutes.Organisatie(organisatieId)} />} menu={(
 			<Menu>
-				<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} />
+				<IconButton as={MenuButton} icon={<MenuIcon />} variant={"solid"} aria-label={"Open menu"} />
 				<MenuList>
 					<MenuItem onClick={() => updateAfdelingModal.onOpen()}>{t("global.actions.edit")}</MenuItem>
 					<MenuItem onClick={() => deleteAfdelingAlert.onOpen()}>{t("global.actions.delete")}</MenuItem>

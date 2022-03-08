@@ -2,7 +2,7 @@ import {Canvas, Meta, Story} from "@storybook/addon-docs";
 import Section from "./Section";
 import SectionContainer from "./SectionContainer";
 import {Button, Checkbox, CheckboxGroup, FormControl, FormLabel, HStack, IconButton, Menu, MenuButton, MenuItem, MenuList, Stack} from "@chakra-ui/react";
-import {ChevronDownIcon} from "@chakra-ui/icons";
+import MenuIcon from "../shared/MenuIcon";
 
 <Meta title="Huishoudboekje/Section" argTypes={{
 	title: {
@@ -84,7 +84,7 @@ You can use the Section-component to design a page. To have the white background
 				helperText="Persoonlijke gegevens van de burger."
 				menu={(
 					<Menu>
-						<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} size={"sm"} aria-label={"Open menu"} />
+						<IconButton as={MenuButton} size={"sm"} icon={<MenuIcon />} variant={"solid"} aria-label={"Open menu"} />
 						<MenuList>
 							<MenuItem>Bekijk rapportage</MenuItem>
 							<MenuItem>Wijzigen</MenuItem>
@@ -139,7 +139,7 @@ You can use the Section-component to design a page. To have the white background
 				helperText="Persoonlijke gegevens van de burger."
 				menu={(
 					<Menu>
-						<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} size={"sm"} aria-label={"Open menu"} />
+						<IconButton as={MenuButton} size={"sm"} icon={<MenuIcon />} variant={"solid"} aria-label={"Open menu"} />
 						<MenuList>
 							<MenuItem>Bekijk rapportage</MenuItem>
 							<MenuItem>Wijzigen</MenuItem>
@@ -181,7 +181,7 @@ You can use the Section-component to design a page. To have the white background
 			<Section title="Contact" helperText="Contactgegevens van de burger."
 				menu={(
 					<Menu>
-						<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} size={"sm"} aria-label={"Open menu"} />
+						<IconButton as={MenuButton} size={"sm"} icon={<MenuIcon />} variant={"solid"} aria-label={"Open menu"} />
 						<MenuList>
 							<MenuItem>Bekijk rapportage</MenuItem>
 							<MenuItem>Wijzigen</MenuItem>

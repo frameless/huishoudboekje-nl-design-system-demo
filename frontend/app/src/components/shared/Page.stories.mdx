@@ -1,7 +1,8 @@
 import {Canvas, Meta, Story} from "@storybook/addon-docs";
 import Page from "./Page"; import BackButton from "./BackButton";
-import {ChevronDownIcon, CloseIcon, SearchIcon} from "@chakra-ui/icons";
+import {CloseIcon, SearchIcon} from "@chakra-ui/icons";
 import {IconButton, Input, InputGroup, InputLeftElement, InputRightElement, Menu, MenuButton, MenuItem, MenuList} from "@chakra-ui/react";
+import MenuIcon from "../shared/MenuIcon";
 
 <Meta title="Huishoudboekje/Page" component={Page} argTypes={{
 	title: {
@@ -80,7 +81,7 @@ Met het Page-component kun je een pagina opbouwen.
 		title: "Transacties",
 		menu: (
 			<Menu>
-				<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} />
+				<IconButton as={MenuButton} icon={<MenuIcon />} variant={"solid"} aria-label={"Open menu"} />
 				<MenuList>
 					<MenuItem>Alle transacties afletteren</MenuItem>
 				</MenuList>
@@ -97,7 +98,7 @@ Met het Page-component kun je een pagina opbouwen.
 		backButton: <BackButton label={"Terug"} to={"/"} />,
 		menu: (
 			<Menu>
-				<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} />
+				<IconButton as={MenuButton} icon={<MenuIcon />} variant={"solid"} aria-label={"Open menu"} />
 				<MenuList>
 					<MenuItem>Wijzigen</MenuItem>
 					<MenuItem>Beeindigen</MenuItem>

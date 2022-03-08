@@ -1,4 +1,4 @@
-import {AddIcon, ChevronDownIcon} from "@chakra-ui/icons";
+import {AddIcon} from "@chakra-ui/icons";
 import {Box, Button, Grid, Heading, IconButton, Menu, MenuButton, MenuItem, MenuList, useBreakpointValue, useDisclosure} from "@chakra-ui/react";
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
@@ -11,6 +11,7 @@ import useToaster from "../../utils/useToaster";
 import Alert from "../shared/Alert";
 import BackButton from "../shared/BackButton";
 import DeadEndPage from "../shared/DeadEndPage";
+import MenuIcon from "../shared/MenuIcon";
 import Page from "../shared/Page";
 import AfdelingListItem from "./AfdelingListItem";
 import CreateAfdelingModal from "./CreateAfdelingModal";
@@ -73,7 +74,7 @@ const OrganisatieDetailPage = () => {
 				<Page title={truncateText(organisatie.naam || "", maxOrganisatieNaamLength)} backButton={<BackButton to={AppRoutes.Organisaties} />}
 					menu={(
 						<Menu>
-							<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} />
+							<IconButton as={MenuButton} icon={<MenuIcon />} variant={"solid"} aria-label={"Open menu"} />
 							<MenuList>
 								<MenuItem onClick={() => navigate(AppRoutes.EditOrganisatie(parseInt(id)))}>{t("global.actions.edit")}</MenuItem>
 								<MenuItem onClick={() => deleteAlert.onOpen()}>{t("global.actions.delete")}</MenuItem>

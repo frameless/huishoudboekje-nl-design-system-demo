@@ -1,4 +1,3 @@
-import {ChevronDownIcon} from "@chakra-ui/icons";
 import {Button, Divider, IconButton, Link, Menu, MenuButton, MenuItem, MenuList, Stack, useDisclosure} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
@@ -11,6 +10,7 @@ import {formatBurgerName} from "../../../utils/things";
 import useToaster from "../../../utils/useToaster";
 import Alert from "../../shared/Alert";
 import BackButton from "../../shared/BackButton";
+import MenuIcon from "../../shared/MenuIcon";
 import Page from "../../shared/Page";
 import PageNotFound from "../../shared/PageNotFound";
 import BurgerAfsprakenView from "./BurgerAfsprakenView";
@@ -130,7 +130,7 @@ const BurgerDetailPage = () => {
 					</Stack>
 				)} menu={(
 					<Menu>
-						<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} />
+						<IconButton as={MenuButton} icon={<MenuIcon />} variant={"solid"} aria-label={"Open menu"} />
 						<MenuList>
 							<Link href={AppRoutes.BrievenExport(id, "excel")} target={"_blank"}><MenuItem>{t("global.actions.brievenExport")}</MenuItem></Link>
 							<NavLink to={AppRoutes.RapportageBurger([parseInt(id)])}><MenuItem>{t("global.actions.showReports")}</MenuItem></NavLink>
