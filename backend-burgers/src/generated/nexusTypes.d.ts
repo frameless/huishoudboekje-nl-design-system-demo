@@ -158,6 +158,8 @@ export interface NexusGenFieldTypes {
   }
   Query: { // field return type
     burger: NexusGenRootTypes['Burger'] | null; // Burger
+    burgers: Array<NexusGenRootTypes['Burger'] | null> | null; // [Burger]
+    organisaties: Array<NexusGenRootTypes['Organisatie'] | null> | null; // [Organisatie]
   }
   Rekening: { // field return type
     iban: string | null; // String
@@ -227,6 +229,8 @@ export interface NexusGenFieldTypeNames {
   }
   Query: { // field return type name
     burger: 'Burger'
+    burgers: 'Burger'
+    organisaties: 'Organisatie'
   }
   Rekening: { // field return type name
     iban: 'String'
@@ -239,6 +243,9 @@ export interface NexusGenArgTypes {
   Query: {
     burger: { // args
       bsn?: number | null; // Int
+    }
+    organisaties: { // args
+      ids?: Array<number | null> | null; // [Int]
     }
   }
 }

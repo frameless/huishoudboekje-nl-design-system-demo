@@ -38,11 +38,18 @@ const Afspraak = objectType({
 		// });
 		t.field("tegenrekening", {
 			type: "Rekening",
-			resolve: (root) => {
+			resolve: (root: any) => {
+				console.log(root);
+				const {tegen_rekening_id} = root;
+
+				if (!tegen_rekening_id) {
+					return null;
+				}
+
 				return DataLoader
-					.getRekeningenByIbans(root.tegenrekeningIban)
+					.getRekeningenByIds([tegen_rekening_id])
 					.then(r => r.shift());
-			}
+			},
 		});
 		t.list.field("journaalposten", {
 			type: "Journaalpost",
