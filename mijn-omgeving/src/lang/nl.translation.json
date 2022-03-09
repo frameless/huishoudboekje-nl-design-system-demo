@@ -1,9 +1,10 @@
 {
-  "message": {
-    "welcome": "Welcome"
-  },
   "date": {
     "today": "Vandaag",
     "yesterday": "Gisteren"
-  }
+  },
+  "message": {
+    "zeroTransactions": "Er zijn geen transacties gevonden."
+  },
+  "unknown": "Onbekend"
 }
