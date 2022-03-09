@@ -1,4 +1,4 @@
-import {Box, FormLabel, Stack, Text} from "@chakra-ui/react";
+import {Box, Stack, Text} from "@chakra-ui/react";
 import "@utrecht/components/dist/heading-1/bem.css";
 import "@utrecht/components/dist/table/bem.css";
 import React from "react";
@@ -6,8 +6,9 @@ import {useTranslation} from "react-i18next";
 import d from "../utils/dayjs";
 import BanktransactieListItem from "./BanktransactieListItem";
 import {Banktransactie} from "./generated/graphql";
+import Divider from "@gemeente-denhaag/divider";
 
-const BanktransactiesList: React.FC<{transacties: Banktransactie[]}> = ({transacties}) => {
+const BanktransactiesList: React.FC<{ transacties: Banktransactie[] }> = ({transacties}) => {
 	const {t} = useTranslation();
 
 	const bt = transacties.reduce((result, t) => {
@@ -25,11 +26,11 @@ const BanktransactiesList: React.FC<{transacties: Banktransactie[]}> = ({transac
 		const _date = d(date).startOf("day");
 		const today = d().startOf("day");
 
-		if(_date.isSame(today)){
+		if (_date.isSame(today)) {
 			return t("date.today");
 		}
 
-		if(_date.isSame(today.subtract(1, "day"))){
+		if (_date.isSame(today.subtract(1, "day"))) {
 			return t("date.yesterday");
 		}
 
@@ -38,28 +39,27 @@ const BanktransactiesList: React.FC<{transacties: Banktransactie[]}> = ({transac
 	};
 
 	return (<>
-		<h1 className={"utrecht-heading-1"}>Uw Huishoudboekje</h1>
-
 		{transacties.length > 0 ? (
 			<Stack>
 				{Object.keys(bt).map((transactionDate, i) => {
 					return (
 						<Stack key={i}>
 							<Box>
-								<FormLabel>{dateString(d(transactionDate, "YYYY-MM-DD").toDate())}</FormLabel>
+								<Text color={"gray"} fontSize={"sm"}>{dateString(d(transactionDate, "YYYY-MM-DD").toDate())}</Text>
 							</Box>
 							<Stack>
 								{bt[transactionDate].map((transactie, i) => {
 									return <BanktransactieListItem transactie={transactie} key={i} />;
 								})}
 							</Stack>
+							<Divider orientation={"horizontal"} />
 						</Stack>
 					);
 				})}
 			</Stack>
 
 		) : (
-			<Text>Er zijn geen transacties gevonden.</Text>
+			<Text>{t("message.zeroTransactions")}</Text>
 		)};
 	</>);
 };
