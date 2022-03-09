@@ -18,15 +18,15 @@ import SidebarLink from "./SidebarLink";
 
 const Sidebar = () => {
 	const {t} = useTranslation();
+	const isSignalenEnabled = useFeatureFlag("signalen");
 	const $signalen = useGetSignalenQuery({
 		pollInterval: (300 * 1000), // Every 5 minutes
+		skip: !isSignalenEnabled, // Do not execute when signalen featureflag is off.
 	});
-	const isSignalenEnabled = useFeatureFlag("signalen");
 
 	return (
 		<Stack spacing={5} p={5} alignSelf={"center"} borderRadius={5} bg={"white"} divider={<Divider />} width={"100%"}>
 			<Stack spacing={5}>
-				<pre>{JSON.stringify(isSignalenEnabled, null, 2)}</pre>
 				{isSignalenEnabled && (
 					<SidebarLink to={RouteNames.signalen} icon={FiBell}>
 						<HStack justify={"space-between"} w={"100%"}>
