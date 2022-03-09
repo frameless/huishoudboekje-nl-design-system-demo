@@ -20,6 +20,29 @@ const BurgerFragment = gql`
             tegenrekeningIban
             transactiedatum
         }
+        rekeningen {
+            id
+            iban
+            rekeninghouder
+        }
+        afspraken {
+            id
+            betaalinstructie {
+                byDay
+                byMonth
+                byMonthDay
+                startDate
+                endDate
+            }
+            bedrag
+            credit
+            omschrijving
+            tegenrekening {
+                id
+                iban
+                rekeninghouder
+            }
+        }
     }
 `;
 

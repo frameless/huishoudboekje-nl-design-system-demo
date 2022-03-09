@@ -4,6 +4,9 @@ import createApolloClient from "./apolloClient";
 import BanktransactiesList from "./Banktransacties/BanktransactiesList";
 import {useGetBurgerQuery} from "../generated/graphql";
 import Queryable from "./Queryable";
+import Navigation from "./Navigation";
+import {Route, Routes} from "react-router-dom";
+import Toekomst from "./Toekomst/Toekomst";
 
 export type HuishoudboekjeUser = {
     bsn: number
@@ -34,7 +37,17 @@ const Huishoudboekje: React.FC<{ user: HuishoudboekjeUser, config: Huishoudboekj
 	const {apiUrl} = config;
 	return (
 		<ApolloProvider client={createApolloClient({apiUrl})}>
-			<HuishoudboekjePage bsn={user.bsn} />
+
+			<div className={"container"}>
+				<Navigation />
+			</div>
+
+			<Routes>
+				<Route path={"/"} element={<HuishoudboekjePage bsn={user.bsn} />} />
+				<Route path={"/toekomst"} element={(
+					<Toekomst bsn={user.bsn} />
+				)} />
+			</Routes>
 		</ApolloProvider>
 	);
 };
