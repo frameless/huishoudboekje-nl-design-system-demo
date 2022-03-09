@@ -1,22 +1,31 @@
-import {Box, HStack} from "@chakra-ui/react";
+import {Box, HStack, Stack} from "@chakra-ui/react";
 import React from "react";
-import {Rekening} from "../../generated/graphql";
+import {Afspraak} from "../../generated/graphql";
 
 
-const ToekomstListItem: React.FC<{ rekening: Rekening }> = ({rekening}) => {
+const ToekomstListItem: React.FC<{ afspraak: Afspraak }> = ({afspraak}) => {
 	return (
-		<HStack justify={"space-between"}>
-			<Box>
-				{rekening.rekeninghouder}
-			</Box>
-			<Box>
-				{rekening.id}
-			</Box>
-			<Box>
-				{rekening.iban}
-			</Box>
-		</HStack>
-	);
+		<Stack>
+			<HStack justify={"space-between"}>
+				<Box>
+					{afspraak.id}
+				</Box>
+				<Box>
+					{afspraak.betaalinstructie?.byMonthDay}
+				</Box>
+				<Box>
+					{afspraak.omschrijving}
+				</Box>
+				<Box>
+					{afspraak.bedrag}
+				</Box>
+				<Box>
+					{afspraak.tegenrekening?.iban}
+				</Box>
+			</HStack>
+		</Stack>
+	)
+
 };
 
 export default ToekomstListItem;

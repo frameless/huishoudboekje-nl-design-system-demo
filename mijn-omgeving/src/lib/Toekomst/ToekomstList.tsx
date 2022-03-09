@@ -1,14 +1,15 @@
 import React from "react";
-import {Rekening} from "../../generated/graphql";
+import {Afspraak, Rekening} from "../../generated/graphql";
 import {Stack} from "@chakra-ui/react";
 import ToekomstListItem from "./ToekomstListItem";
 
-const ToekomstList: React.FC<{ rekeningen: Rekening [] }> = ({rekeningen}) => {
+const ToekomstList: React.FC<{ rekeningen: Rekening [], afspraken: Afspraak [] }> = ({rekeningen, afspraken}) => {
+
 
 	return (
 		<Stack>
-			{rekeningen.map((rekening, i) => {
-				return <ToekomstListItem rekening={rekening} key={i} />
+			{afspraken.map((afspraak, i) => {
+				return <ToekomstListItem afspraak={afspraak} key={i} />
 			})}
 		</Stack>
 	);

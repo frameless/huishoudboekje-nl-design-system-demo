@@ -11,10 +11,10 @@ const Toekomst: React.FC<{ bsn: number }> = ({bsn}) => {
 	return (
 		<Queryable query={$burger} render={data => {
 			const {rekeningen} = data.burger || {};
-			// const {afspraken} = data.burger || {};
+			const {afspraken} = data.burger || {};
 
 			// return (<pre> {JSON.stringify(rekeningen, null, 2)}</pre>)
-			return (<ToekomstList rekeningen={rekeningen} />)
+			return (<ToekomstList rekeningen={rekeningen} afspraken={afspraken} />)
 		}} />
 	);
 };
