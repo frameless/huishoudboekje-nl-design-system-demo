@@ -13,26 +13,19 @@ import theme from "./config/theme";
 import "./global.scss";
 import apolloClient from "./services/graphql-client";
 import StoreProvider from "./store";
-import {FeatureProvider} from "./utils/features";
 
 dayjs.locale("nl-nl");
 registerLocale("nl", nl);
 setDefaultLocale("nl");
-
-const featureFlags = [
-	"auditlogmodals",
-];
 
 ReactDOM.render(
 	<React.StrictMode>
 		<Router>
 			<ApolloProvider client={apolloClient}>
 				<ChakraProvider theme={theme}>
-					<FeatureProvider flags={featureFlags}>
-						<StoreProvider>
-							<App />
-						</StoreProvider>
-					</FeatureProvider>
+					<StoreProvider>
+						<App />
+					</StoreProvider>
 				</ChakraProvider>
 			</ApolloProvider>
 		</Router>

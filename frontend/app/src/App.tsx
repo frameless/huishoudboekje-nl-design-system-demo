@@ -39,7 +39,10 @@ import {RouteNames} from "./config/routes";
 import TestPage from "./TestPage";
 import onPathChanged from "./utils/DataLayer/hooks/onPathChanged";
 import useDataLayer from "./utils/DataLayer/useDataLayer";
+import {useInitializeFeatureFlags} from "./utils/features";
 import useAuth from "./utils/useAuth";
+
+const featureFlags = ["signalen"];
 
 const App = () => {
 	const {t} = useTranslation();
@@ -48,6 +51,7 @@ const App = () => {
 	const theme = useTheme();
 	const dataLayer = useDataLayer(dataLayerOptions);
 	dataLayer.addHook(onPathChanged("PathChanged"));
+	useInitializeFeatureFlags(featureFlags);
 
 	const onClickLoginButton = () => {
 		/* Save the current user's page so that we can quickly navigate back after login. */
