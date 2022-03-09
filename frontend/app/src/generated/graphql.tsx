@@ -420,6 +420,7 @@ export type CreateSignaal = {
 export type CreateSignaalInput = {
   actions?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   alarmId?: InputMaybe<Scalars['String']>;
+  banktransactieIds?: Array<InputMaybe<Scalars['Int']>>;
   context?: InputMaybe<Scalars['String']>;
   isActive?: InputMaybe<Scalars['Boolean']>;
   type?: InputMaybe<Scalars['String']>;
@@ -1516,6 +1517,7 @@ export type UpdateSignaal = {
 export type UpdateSignaalInput = {
   actions?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   alarmId?: InputMaybe<Scalars['String']>;
+  banktransactieIds?: Array<InputMaybe<Scalars['Int']>>;
   context?: InputMaybe<Scalars['String']>;
   isActive?: InputMaybe<Scalars['Boolean']>;
   type?: InputMaybe<Scalars['String']>;

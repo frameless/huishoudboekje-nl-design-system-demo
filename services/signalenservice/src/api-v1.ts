@@ -45,11 +45,12 @@ app.get("/:id", async (request, response, next) => {
 
 app.post("/", (request, response, next) => {
 	const data = request.body;
-	const {alarmId, isActive, type, context, actions} = data;
+	const {alarmId, banktransactieIds, isActive, type, context, actions} = data;
 
 	db.signal.create({
 		data: {
 			alarmId,
+			banktransactieIds,
 			isActive,
 			type,
 			context,

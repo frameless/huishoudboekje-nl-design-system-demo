@@ -10,6 +10,9 @@ export const SignaalFragment = gql`
         alarm {
             id
         }
+        bankTransactions {
+            id
+        }
         timeUpdated
     }
 `;

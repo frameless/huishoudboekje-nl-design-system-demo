@@ -9,6 +9,7 @@ from hhb_backend.graphql import settings
 
 class CreateSignaalInput(graphene.InputObjectType):
     alarmId = graphene.String()
+    banktransactieIds = graphene.List(graphene.Int) 
     isActive = graphene.Boolean()
     type = graphene.String()
     actions = graphene.List(graphene.String, default_value=[])
