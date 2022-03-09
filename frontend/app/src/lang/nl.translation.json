@@ -133,8 +133,8 @@
 	  "edit": "Wijzigen",
 	  "end": "Beëindigen",
 	  "newBetaalinstructie": "Nieuwe betaalinstructie instellen",
-	  "add": "Toevoegen",
 	  "close": "Sluiten",
+	  "add": "Toevoegen",
 	  "export": "Exporteren",
 	  "download": "Downloaden",
 	  "startBoeken": "Alle transacties afletteren",
@@ -569,7 +569,8 @@
   },
   "sections": {
 	"filterOptions": {
-	  "title": "Filteropties"
+	  "title": "Filteropties",
+	  "filtersActiveWarning": "Let op: er zijn filters actief!"
 	}
   },
   "transactionsPage": {
@@ -644,7 +645,6 @@
 	"burgers": "Burgers"
   },
   "configuratie": "Configuratie",
-  "rubrieken": "Rubrieken",
   "configuratieForm": {
 	"emptyKeyError": "Vul een waarde in voor de sleutel.",
 	"emptyValueError": "Vul een waarde in."
@@ -683,6 +683,7 @@
 	"viewConfiguraties": "{{gebruiker}} bekeek de <strong>configuratie</strong>.",
 	"viewRekening": "{{gebruiker}} bekeek rekening <strong>{{iban}}</strong> op naam van <strong>{{rekeninghouder}}</strong>.",
 	"viewGrootboekrekeningen": "{{gebruiker}} bekeek alle grootboekrekeningen.",
+	"viewSignalen": "{{gebruiker}} bekeek alle signalen.",
 	"createBurger": "{{gebruiker}} voegde <linkBurger>{{burger}}</linkBurger> toe.",
 	"updateBurger": "{{gebruiker}} wijzigde <linkBurger>{{burger}}</linkBurger>.",
 	"deleteBurger": "{{gebruiker}} verwijderde <linkBurger>{{burger}}</linkBurger}}.",
@@ -742,8 +743,6 @@
 	  "title": "Rekening toevoegen"
 	}
   },
-  "postadressen": "Postadressen",
-  "rekeningen": "Rekeningen",
   "deleteAfdelingAlert": {
 	"title": "Afdeling verwijderen",
 	"confirmModalBody": "Weet je zeker dat je de afdeling {{afdeling}} wil verwijderen?"
