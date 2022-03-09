@@ -9,8 +9,8 @@ export const auditLogTexts = (values, components, action) => {
 		organisatie: () => <Trans i18nKey={"auditLog.viewOrganisatie"} values={values} components={components} />,
 		organisaties: () => <Trans i18nKey={"auditLog.viewOrganisaties"} values={values} components={components} />,
 		afspraak: () => {
-			// This can not be shorthanded (values.AfspraakOrganisatie ? "auditLog.viewAfspraak" : "auditLog.afspraakBurger") because while testing the i18n then the translation key will not be found.
-			if (!values.afspraakOrganisatie) {
+			// This can not be shorthanded (values.isAfspraakWithBurger ? "auditLog.viewAfspraak" : "auditLog.afspraakBurger") because then the translation key will not be found.
+			if (values.isAfspraakWithBurger) {
 				return (<Trans i18nKey={"auditLog.viewAfspraakBurger"} values={values} components={components} />);
 			}
 			return (<Trans i18nKey={"auditLog.viewAfspraak"} values={values} components={components} />);

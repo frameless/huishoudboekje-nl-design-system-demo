@@ -45,10 +45,11 @@ const AuditLogText: React.FC<TextProps & {g: GebruikersActiviteit}> = ({g, ...pr
 	const values = {
 		gebruiker,
 		burger: burgerName,
-		// Todo: Find a solution for humanJoining an array of AuditLogLinks.
+		// Todo: Find a solution for humanJoining an array of AuditLogLinks (10-08-2021)
 		listBurgers: (burgers && burgers.length > 0) ? humanJoin(burgers.map(b => formatBurgerName(b))) : t("unknownBurgers"),
 		huishouden: huishouden && formatHuishoudenName(huishouden),
 		organisatie: organisatie?.naam || t("unknownOrganisatie"),
+		isAfspraakWithBurger: !afspraak?.afdeling?.organisatie?.naam,
 		afspraakOrganisatie: afspraak?.afdeling?.organisatie?.naam || t("unknownOrganisatie"),
 		customerStatementMessage: customerStatementMessage?.filename || t("unknownCsm"),
 		csmId,

@@ -667,7 +667,7 @@
 	"viewAfdelingen": "{{gebruiker}} bekeek alle <strong>afdelingen</strong>.",
 	"viewOrganisatie": "{{gebruiker}} bekeek <linkOrganisatie>{{organisatie}}</linkOrganisatie>.",
 	"viewOrganisaties": "{{gebruiker}} bekeek alle <strong>organisaties</strong>.",
-	"viewAfspraakBurger": "{{gebruiker}} bekeek een <linkAfspraak>afspraak</linkAfspraak> met <linkBurger>{{burger}}</linkBurger>.",
+	"viewAfspraakBurger": "{{gebruiker}} bekeek een <linkAfspraak>afspraak</linkAfspraak> van <linkBurger>{{burger}}</linkBurger> met <linkBurger>{{burger}}</linkBurger>.",
 	"viewAfspraak": "{{gebruiker}} bekeek een <linkAfspraak>afspraak</linkAfspraak> van <linkBurger>{{burger}}</linkBurger> met <linkAfspraakOrganisatie>{{afspraakOrganisatie}}</linkAfspraakOrganisatie>.",
 	"viewAfspraken": "{{gebruiker}} bekeek alle <strong>afspraken</strong>.",
 	"viewRubrieken": "{{gebruiker}} bekeek alle <strong>rubrieken</strong>.",
@@ -725,6 +725,7 @@
 	"updateAfdeling": "{{gebruiker}} wijzigde afdeling <linkAfdeling>{{afdeling}}</linkAfdeling>.",
 	"deleteAfdeling": "{{gebruiker}} verwijderde een afdeling."
   },
+  "unknownUser": "Onbekende gebruiker",
   "unknownOs": "Onbekend besturingssysteem",
   "unknownBrowser": "Onbekende browser",
   "huishoudenName": "Huishouden {{name}}",
