@@ -1,10 +1,10 @@
 import {Box, HStack, Text} from "@chakra-ui/react";
 import React from "react";
-import {currencyFormat} from "../utils/numberFormat";
-import {Banktransactie} from "./generated/graphql";
-import PrettyIban from "./PrettyIban";
+import {currencyFormat} from "../../utils/numberFormat";
+import {Banktransactie} from "../generated/graphql";
+import PrettyIban from "../PrettyIban";
 
-const BanktransactieListItem: React.FC<{transactie: Banktransactie}> = ({transactie}) => {
+const BanktransactieListItem: React.FC<{ transactie: Banktransactie }> = ({transactie}) => {
 	return (
 		<HStack justify={"space-between"}>
 			<Box>

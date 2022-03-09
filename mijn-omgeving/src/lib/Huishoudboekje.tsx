@@ -1,19 +1,19 @@
 import {ApolloProvider} from "@apollo/client";
 import React from "react";
 import createApolloClient from "./apolloClient";
-import BanktransactiesList from "./BanktransactiesList";
+import BanktransactiesList from "./Banktransacties/BanktransactiesList";
 import {useGetBurgerQuery} from "./generated/graphql";
 import Queryable from "./Queryable";
 
 export type HuishoudboekjeUser = {
-	bsn: number
+    bsn: number
 }
 
 export type HuishoudboekjeConfig = {
-	apiUrl: string,
+    apiUrl: string,
 }
 
-const HuishoudboekjePage: React.FC<{bsn: number}> = ({bsn}) => {
+const HuishoudboekjePage: React.FC<{ bsn: number }> = ({bsn}) => {
 	const $burger = useGetBurgerQuery({
 		variables: {bsn},
 	});
@@ -30,7 +30,7 @@ const HuishoudboekjePage: React.FC<{bsn: number}> = ({bsn}) => {
 	);
 };
 
-const Huishoudboekje: React.FC<{user: HuishoudboekjeUser, config: HuishoudboekjeConfig}> = ({user, config}) => {
+const Huishoudboekje: React.FC<{ user: HuishoudboekjeUser, config: HuishoudboekjeConfig }> = ({user, config}) => {
 	const {apiUrl} = config;
 	return (
 		<ApolloProvider client={createApolloClient({apiUrl})}>
