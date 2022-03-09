@@ -34,12 +34,12 @@ const DataLoader = {
 		return await fetch(createServiceUrl("huishoudboekje", `/burgers/${id}/rekeningen`)).then(r => r.json()).then(r => r.data || []);
 	},
 
-	getRekeningById: async (id: number) => {
+	getRekeningenByIds: async (ids: number[] = []) => {
 		// Todo we need make sure that based on the Burger that is requesting this, we never return any Afspraken that are not linked to other burgers.
-		return await fetch(createServiceUrl("huishoudboekje", `/rekeningen/?filter_ids=${id}`)).then(r => r.json()).then(r => r.data);
+		return await fetch(createServiceUrl("huishoudboekje", `/rekeningen/?filter_ids=${ids.join(",")}`)).then(r => r.json()).then(r => r.data);
 	},
 
-	getRekeningenByIbans: async (ibans: string[]) => {
+	getRekeningenByIbans: async (ibans: string[] = []) => {
 		// Todo we need make sure that based on the Burger that is requesting this, we never return any Afspraken that are not linked to other burgers.
 		return await fetch(createServiceUrl("huishoudboekje", `/rekeningen/?filter_ibans=${ibans.join(",")}`)).then(r => r.json()).then(r => r.data || []);
 	},

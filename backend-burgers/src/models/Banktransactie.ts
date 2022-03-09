@@ -6,7 +6,7 @@ const Banktransactie = objectType({
 	definition: t => {
 		t.int("id");
 		t.field("bedrag", {
-			type: "Bedrag"
+			type: "Bedrag",
 		});
 		t.boolean("isCredit");
 		t.string("tegenrekeningIban");
@@ -31,7 +31,6 @@ const Banktransactie = objectType({
 				const afspraak = await DataLoader.getAfspraakById(afspraakId);
 				return ({
 					...afspraak,
-
 				});
 			},
 		});
