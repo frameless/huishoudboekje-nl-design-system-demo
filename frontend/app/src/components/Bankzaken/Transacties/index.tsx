@@ -1,8 +1,7 @@
-import {Box, Button, ButtonGroup, Checkbox, FormControl, FormLabel, HStack, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack, Text, useDisclosure} from "@chakra-ui/react";
+import {Button, ButtonGroup, Checkbox, FormControl, FormLabel, HStack, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack, Text, useDisclosure} from "@chakra-ui/react";
 import React, {useEffect, useState} from "react";
 import DatePicker from "react-datepicker";
 import {useTranslation} from "react-i18next";
-import {GoPrimitiveDot} from "react-icons/go";
 import Select from "react-select";
 import {GetTransactiesDocument, useGetTransactiesQuery, useStartAutomatischBoekenMutation} from "../../../generated/graphql";
 import {BanktransactieFilters} from "../../../models/models";
@@ -148,13 +147,13 @@ const Transactions = () => {
 
 					return (
 						<Section title={t("transactionsPage.title")} helperText={t("transactionsPage.helperText")} right={(
-							<HStack justify={"flex-end"}>
-								<Button size={"sm"} colorScheme={"primary"} variant={"outline"} onClick={() => filterModal.onOpen()}>{t("sections.filterOptions.title")}</Button>
+							<HStack justify={"flex-end"} spacing={3}>
 								{filtersActive && (
-									<Box>
-										<GoPrimitiveDot color={"green"} />
-									</Box>
+									<Text fontSize={"sm"}>{t("sections.filterOptions.filtersActiveWarning")}</Text>
 								)}
+								<Button size={"sm"} colorScheme={"primary"} variant={"outline"} onClick={() => filterModal.onOpen()}>
+									{t("sections.filterOptions.title")}
+								</Button>
 							</HStack>
 						)}>
 							{transacties.length > 0 ? (
