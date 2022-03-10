@@ -32,7 +32,7 @@ scalar Bedrag
 type Betaalinstructie {
   byDay: [DayOfWeek]
   byMonth: [Int]
-  byMonthDay: [String]
+  byMonthDay: [Int]
   endDate: String
   exceptDates: [String]
   repeatFrequency: String

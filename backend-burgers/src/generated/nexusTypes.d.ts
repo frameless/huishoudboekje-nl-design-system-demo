@@ -50,7 +50,7 @@ export interface NexusGenObjects {
   Betaalinstructie: { // root type
     byDay?: Array<NexusGenEnums['DayOfWeek'] | null> | null; // [DayOfWeek]
     byMonth?: Array<number | null> | null; // [Int]
-    byMonthDay?: Array<string | null> | null; // [String]
+    byMonthDay?: Array<number | null> | null; // [Int]
     endDate?: string | null; // String
     exceptDates?: Array<string | null> | null; // [String]
     repeatFrequency?: string | null; // String
@@ -122,7 +122,7 @@ export interface NexusGenFieldTypes {
   Betaalinstructie: { // field return type
     byDay: Array<NexusGenEnums['DayOfWeek'] | null> | null; // [DayOfWeek]
     byMonth: Array<number | null> | null; // [Int]
-    byMonthDay: Array<string | null> | null; // [String]
+    byMonthDay: Array<number | null> | null; // [Int]
     endDate: string | null; // String
     exceptDates: Array<string | null> | null; // [String]
     repeatFrequency: string | null; // String
@@ -193,7 +193,7 @@ export interface NexusGenFieldTypeNames {
   Betaalinstructie: { // field return type name
     byDay: 'DayOfWeek'
     byMonth: 'Int'
-    byMonthDay: 'String'
+    byMonthDay: 'Int'
     endDate: 'String'
     exceptDates: 'String'
     repeatFrequency: 'String'
