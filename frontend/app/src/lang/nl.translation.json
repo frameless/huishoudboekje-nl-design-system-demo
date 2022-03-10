@@ -92,8 +92,8 @@
 	},
 	"organisaties": {
 	  "createSuccessMessage": "Nieuwe organisatie succesvol opgeslagen.",
-	  "updateSuccessMessage": "Gegevens succesvol gewijzigd.",
-	  "deleteConfirmMessage": "Gegevens van {{name}} zijn verwijderd.",
+	  "updateSuccessMessage": "Organisatie succesvol gewijzigd.",
+	  "deleteConfirmMessage": "Organisatie is verwijderd.",
 	  "deleteTitle": "Organisatie verwijderen",
 	  "deleteQuestion": "Weet je zeker dat je de gegevens van {{name}} definitief wil verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
 	  "invalidKvknummer": "Vul het KvK-nummer in. Het KvK-nummer bestaat uit 8 cijfers.",
