@@ -39,7 +39,10 @@ import {RouteNames} from "./config/routes";
 import TestPage from "./TestPage";
 import onPathChanged from "./utils/DataLayer/hooks/onPathChanged";
 import useDataLayer from "./utils/DataLayer/useDataLayer";
+import {useFeatureFlag, useInitializeFeatureFlags} from "./utils/features";
 import useAuth from "./utils/useAuth";
+
+const featureFlags = ["signalen"];
 
 const App = () => {
 	const {t} = useTranslation();
@@ -48,6 +51,8 @@ const App = () => {
 	const theme = useTheme();
 	const dataLayer = useDataLayer(dataLayerOptions);
 	dataLayer.addHook(onPathChanged("PathChanged"));
+	useInitializeFeatureFlags(featureFlags);
+	const isSignalenEnabled = useFeatureFlag("signalen");
 
 	const onClickLoginButton = () => {
 		/* Save the current user's page so that we can quickly navigate back after login. */
@@ -135,7 +140,9 @@ const App = () => {
 							<Route path={RouteNames.bankafschriften} element={<CustomerStatementMessages />} />
 							<Route path={RouteNames.betaalinstructies} element={<Betaalinstructies />} />
 						</Route>
-						<Route path={RouteNames.signalen} element={<SignalenList />} />
+						{isSignalenEnabled && (
+							<Route path={RouteNames.signalen} element={<SignalenList />} />
+						)}
 						<Route path={RouteNames.rapportage} element={<Rapportage />} />
 						<Route path={RouteNames.gebeurtenissen} element={<Gebeurtenissen />} />
 						<Route path={RouteNames.configuratie} element={<Configuratie />} />

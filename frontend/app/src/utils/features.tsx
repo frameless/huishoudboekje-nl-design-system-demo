@@ -1,17 +1,10 @@
-import React, {createContext, Dispatch, useContext, useEffect, useState} from "react";
+import {useEffect} from "react";
+import {useStore} from "../store";
 import useAuth from "./useAuth";
 
-type FeatureContextValue = {
-	features: Record<string, boolean>,
-	setFeatures: Record<string, boolean> | Dispatch<Record<string, boolean>>,
-};
-const FeatureContext = createContext<FeatureContextValue>({
-	features: {}, setFeatures: () => ({}),
-});
-
-export const FeatureProvider = ({flags, children}) => {
-	const [features, setFeatures] = useState<Record<string, boolean>>({});
+export const useInitializeFeatureFlags = (flags: string[]) => {
 	const {user} = useAuth();
+	const {updateStore} = useStore();
 
 	useEffect(() => {
 		fetch(`/api/unleash/${flags.join(",")}`, {
@@ -23,17 +16,13 @@ export const FeatureProvider = ({flags, children}) => {
 		})
 			.then(result => result.json())
 			.then(result => {
-				setFeatures(result);
+				updateStore("featureFlags", result);
 			});
-	}, [setFeatures, user, flags]);
-
-	return (
-		<FeatureContext.Provider value={{features, setFeatures}}>
-			{children}
-		</FeatureContext.Provider>
-	);
+	}, [updateStore, user, flags]);
 };
 
 export const useFeatureFlag = (feature: string): boolean => {
-	return (useContext(FeatureContext).features)[feature] || false;
+	const {store} = useStore();
+	const ff = store.featureFlags;
+	return ff[feature] || false;
 };

@@ -5,11 +5,13 @@ import {BanktransactieFilters} from "../models/models";
 type StoreValue = {
 	burgerSearch: string,
 	banktransactieFilters?: BanktransactieFilters,
+	featureFlags: Record<string, boolean>,
 };
 
 const initialState: StoreValue = {
 	burgerSearch: "",
 	banktransactieFilters: defaultBanktransactieFilters,
+	featureFlags: {},
 };
 
 type StoreContextValue = {
@@ -35,7 +37,6 @@ const StoreProvider = ({children}) => {
 	const [store, setStore] = useState<StoreContextValue["store"]>(initialState);
 
 	const updateStore = useCallback((field: string, value: any) => {
-		console.info("updateStore", {field, value});
 		setStore(prevStore => {
 			return {
 				...prevStore,
