@@ -1,4 +1,4 @@
-import {Box, Checkbox, CheckboxGroup, FormControl, FormLabel, Stack, StackProps, Table, Tbody, Td, Text, Th, Thead, Tr, useBreakpointValue} from "@chakra-ui/react";
+import {Box, Checkbox, CheckboxGroup, FormControl, FormLabel, Stack, Table, Tbody, Td, Text, Th, Thead, Tr, useBreakpointValue} from "@chakra-ui/react";
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router-dom";
@@ -7,14 +7,15 @@ import {Burger} from "../../../generated/graphql";
 import {isAfspraakActive} from "../../../utils/things";
 import AfspraakTableRow from "../../Afspraken/AfspraakTableRow";
 import AddButton from "../../shared/AddButton";
-import {FormLeft, FormRight} from "../../shared/Forms";
+import Section from "../../shared/Section";
+import SectionContainer from "../../shared/SectionContainer";
 
 type ActiveSwitch = {
 	active: boolean,
 	inactive: boolean,
 }
 
-const BurgerAfsprakenView: React.FC<StackProps & {burger: Burger}> = ({burger, ...props}) => {
+const BurgerAfsprakenView: React.FC<{burger: Burger}> = ({burger}) => {
 	const {t} = useTranslation();
 	const isMobile = useBreakpointValue([true, null, null, false]);
 	const {id, afspraken = []} = burger;
@@ -29,26 +30,23 @@ const BurgerAfsprakenView: React.FC<StackProps & {burger: Burger}> = ({burger, .
 	];
 
 	return (
-		<Stack direction={["column", "row"]} {...props}>
-			<FormLeft title={t("forms.burgers.sections.agreements.title")} helperText={t("forms.burgers.sections.agreements.detailText")}>
-				{afspraken.length > 0 && (
-					<FormControl>
-						<FormLabel>{t("global.actions.filter")}</FormLabel>
-						<CheckboxGroup defaultValue={["active"]} onChange={(val) => {
-							setFilter(() => ({
-								active: val.includes("active"),
-								inactive: val.includes("inactive"),
-							}));
-						}}>
-							<Stack>
-								<Checkbox value={"active"}>{t("afspraken.showActive")}</Checkbox>
-								<Checkbox value={"inactive"}>{t("afspraken.showInActive")}</Checkbox>
-							</Stack>
-						</CheckboxGroup>
-					</FormControl>
-				)}
-			</FormLeft>
-			<FormRight justify={"center"}>
+		<SectionContainer>
+			<Section title={t("forms.burgers.sections.agreements.title")} helperText={t("forms.burgers.sections.agreements.detailText")} left={afspraken.length > 0 && (
+				<FormControl>
+					<FormLabel>{t("global.actions.filter")}</FormLabel>
+					<CheckboxGroup defaultValue={["active"]} onChange={(val) => {
+						setFilter(() => ({
+							active: val.includes("active"),
+							inactive: val.includes("inactive"),
+						}));
+					}}>
+						<Stack>
+							<Checkbox value={"active"}>{t("afspraken.showActive")}</Checkbox>
+							<Checkbox value={"inactive"}>{t("afspraken.showInActive")}</Checkbox>
+						</Stack>
+					</CheckboxGroup>
+				</FormControl>
+			)}>
 				{sortedAfspraken.length > 0 && (
 					<Table size={"sm"} variant={"noLeftPadding"}>
 						<Thead>
@@ -79,8 +77,8 @@ const BurgerAfsprakenView: React.FC<StackProps & {burger: Burger}> = ({burger, .
 						<AddButton onClick={() => navigate(AppRoutes.CreateBurgerAfspraak(id))} />
 					</Box>
 				)}
-			</FormRight>
-		</Stack>
+			</Section>
+		</SectionContainer>
 	);
 };
 

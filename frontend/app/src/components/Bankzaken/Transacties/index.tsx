@@ -1,9 +1,7 @@
-import {ChevronDownIcon} from "@chakra-ui/icons";
-import {Box, Button, ButtonGroup, Checkbox, FormControl, FormLabel, HStack, IconButton, Input, Menu, MenuButton, MenuItem, MenuList, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack, useDisclosure} from "@chakra-ui/react";
+import {Button, ButtonGroup, Checkbox, FormControl, FormLabel, HStack, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack, Text, useDisclosure} from "@chakra-ui/react";
 import React, {useEffect, useState} from "react";
 import DatePicker from "react-datepicker";
 import {useTranslation} from "react-i18next";
-import {GoPrimitiveDot} from "react-icons/all";
 import Select from "react-select";
 import {GetTransactiesDocument, useGetTransactiesQuery, useStartAutomatischBoekenMutation} from "../../../generated/graphql";
 import {BanktransactieFilters} from "../../../models/models";
@@ -12,9 +10,9 @@ import Queryable from "../../../utils/Queryable";
 import {createQueryParamsFromFilters, useReactSelectStyles} from "../../../utils/things";
 import useHandleMutation from "../../../utils/useHandleMutation";
 import usePagination from "../../../utils/usePagination";
-import DeadEndPage from "../../shared/DeadEndPage";
 import Page from "../../shared/Page";
-import {DeprecatedSection} from "../../shared/Section";
+import Section from "../../shared/Section";
+import SectionContainer from "../../shared/SectionContainer";
 import {defaultBanktransactieFilters} from "./defaultBanktransactieFilters";
 import TransactiesList from "./TransactiesList";
 
@@ -68,13 +66,8 @@ const Transactions = () => {
 	];
 
 	return (
-		<Page title={t("forms.bankzaken.sections.transactions.title")} menu={(
-			<Menu>
-				<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} />
-				<MenuList>
-					<MenuItem onClick={onClickStartBoekenButton}>{t("global.actions.startBoeken")}</MenuItem>
-				</MenuList>
-			</Menu>
+		<Page title={t("forms.bankzaken.sections.transactions.title")} right={(
+			<Button size={"sm"} variant={"outline"} colorScheme={"primary"} onClick={onClickStartBoekenButton}>{t("global.actions.startBoeken")}</Button>
 		)}>
 			<Modal isOpen={filterModal.isOpen} onClose={filterModal.onClose}>
 				<ModalOverlay />
@@ -147,31 +140,36 @@ const Transactions = () => {
 				</ModalContent>
 			</Modal>
 
-			<DeprecatedSection spacing={5}>
+			<SectionContainer>
 				<Queryable query={$transactions} children={(data) => {
 					const transacties = data?.bankTransactionsPaged?.banktransactions || [];
 					const filtersActive = Object.values(queryVariables.filters).filter(q => ![null, undefined].includes(q as any)).length > 0;
 
-					return (<>
-						<HStack justify={"flex-end"}>
-							<Button size={"sm"} colorScheme={"primary"} variant={"outline"} onClick={() => filterModal.onOpen()}>{t("sections.filterOptions.title")}</Button>
-							{filtersActive && (
-								<Box>
-									<GoPrimitiveDot color={"green"} />
-								</Box>
+					return (
+						<Section title={t("transactionsPage.title")} helperText={t("transactionsPage.helperText")} right={(
+							<HStack justify={"flex-end"} spacing={3}>
+								{filtersActive && (
+									<Text fontSize={"sm"}>{t("sections.filterOptions.filtersActiveWarning")}</Text>
+								)}
+								<Button size={"sm"} colorScheme={"primary"} variant={"outline"} onClick={() => filterModal.onOpen()}>
+									{t("sections.filterOptions.title")}
+								</Button>
+							</HStack>
+						)}>
+							{transacties.length > 0 ? (
+								<Stack>
+									<TransactiesList transacties={transacties} />
+									<HStack justify={"center"}>
+										<PaginationButtons />
+									</HStack>
+								</Stack>
+							) : (
+								<Text>{t("messages.transactions.noResults")}</Text>
 							)}
-						</HStack>
-						{transacties.length > 0 ? (
-							<TransactiesList transacties={transacties} />
-						) : (
-							<DeadEndPage message={t("messages.transactions.noResults")} />
-						)}
-						<HStack justify={"center"}>
-							<Box><PaginationButtons /></Box>
-						</HStack>
-					</>);
+						</Section>
+					);
 				}} />
-			</DeprecatedSection>
+			</SectionContainer>
 		</Page>
 	);
 };

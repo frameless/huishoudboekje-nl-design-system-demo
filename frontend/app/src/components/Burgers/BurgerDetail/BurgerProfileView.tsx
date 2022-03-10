@@ -1,19 +1,23 @@
-import {Divider, FormLabel, Stack, StackProps, Text} from "@chakra-ui/react";
+import {Button, FormLabel, Stack, Text} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
+import {NavLink} from "react-router-dom";
+import {AppRoutes} from "../../../config/routes";
 import {Burger} from "../../../generated/graphql";
 import d from "../../../utils/dayjs";
 import {getBurgerHhbId} from "../../../utils/things";
-import {FormLeft, FormRight} from "../../shared/Forms";
+import Section from "../../shared/Section";
+import SectionContainer from "../../shared/SectionContainer";
 
-const BurgerProfileView: React.FC<StackProps & {burger: Burger}> = ({burger, ...props}) => {
+const BurgerProfileView: React.FC<{burger: Burger}> = ({burger}) => {
 	const {t} = useTranslation();
 
 	return (
-		<>
-			<Stack spacing={2} direction={["column", null, "row"]} {...props}>
-				<FormLeft title={t("forms.burgers.sections.personal.title")} helperText={t("forms.burgers.sections.personal.detailText")} />
-				<FormRight>
+		<SectionContainer>
+			<Section title={t("forms.burgers.sections.personal.title")} helperText={t("forms.burgers.sections.personal.detailText")} right={(
+				<Button colorScheme={"primary"} variant={"outline"} size={"sm"} as={NavLink} to={AppRoutes.EditBurger(burger.id)}>{t("global.actions.edit")}</Button>
+			)}>
+				<Stack>
 					<Stack spacing={2} mb={1} direction={["column", "row"]}>
 						<Stack spacing={1} flex={1}>
 							<FormLabel>{t("forms.burgers.fields.hhbId")}</FormLabel>
@@ -50,47 +54,42 @@ const BurgerProfileView: React.FC<StackProps & {burger: Burger}> = ({burger, ...
 							<Text>{d().diff(d(burger.geboortedatum), "year")}</Text>
 						</Stack>
 					</Stack>
-				</FormRight>
-			</Stack>
+				</Stack>
+			</Section>
 
-			<Divider />
-
-			<Stack spacing={2} direction={["column", null, "row"]} {...props}>
-				<FormLeft title={t("forms.burgers.sections.contact.title")} helperText={t("forms.burgers.sections.contact.detailText")} />
-				<FormRight>
-					<Stack spacing={2} mb={1} direction={["column", "row"]}>
-						<Stack spacing={1} flex={1}>
-							<FormLabel>{t("forms.burgers.fields.street")}</FormLabel>
-							<Text>{burger.straatnaam}</Text>
-						</Stack>
-						<Stack spacing={1} flex={1}>
-							<FormLabel>{t("forms.burgers.fields.houseNumber")}</FormLabel>
-							<Text>{burger.huisnummer}</Text>
-						</Stack>
+			<Section title={t("forms.burgers.sections.contact.title")} helperText={t("forms.burgers.sections.contact.detailText")}>
+				<Stack spacing={2} mb={1} direction={["column", "row"]}>
+					<Stack spacing={1} flex={1}>
+						<FormLabel>{t("forms.burgers.fields.street")}</FormLabel>
+						<Text>{burger.straatnaam}</Text>
 					</Stack>
-					<Stack spacing={2} mb={1} direction={["column", "row"]}>
-						<Stack spacing={1} flex={1}>
-							<FormLabel>{t("forms.burgers.fields.zipcode")}</FormLabel>
-							<Text>{burger.postcode}</Text>
-						</Stack>
-						<Stack spacing={1} flex={1}>
-							<FormLabel>{t("forms.burgers.fields.city")}</FormLabel>
-							<Text>{burger.plaatsnaam}</Text>
-						</Stack>
+					<Stack spacing={1} flex={1}>
+						<FormLabel>{t("forms.burgers.fields.houseNumber")}</FormLabel>
+						<Text>{burger.huisnummer}</Text>
 					</Stack>
-					<Stack spacing={2} mb={1} direction={["column", "row"]}>
-						<Stack spacing={1} flex={1}>
-							<FormLabel>{t("forms.burgers.fields.phoneNumber")}</FormLabel>
-							<Text>{burger.telefoonnummer}</Text>
-						</Stack>
-						<Stack spacing={1} flex={1}>
-							<FormLabel>{t("forms.burgers.fields.mail")}</FormLabel>
-							<Text>{burger.email}</Text>
-						</Stack>
+				</Stack>
+				<Stack spacing={2} mb={1} direction={["column", "row"]}>
+					<Stack spacing={1} flex={1}>
+						<FormLabel>{t("forms.burgers.fields.zipcode")}</FormLabel>
+						<Text>{burger.postcode}</Text>
 					</Stack>
-				</FormRight>
-			</Stack>
-		</>
+					<Stack spacing={1} flex={1}>
+						<FormLabel>{t("forms.burgers.fields.city")}</FormLabel>
+						<Text>{burger.plaatsnaam}</Text>
+					</Stack>
+				</Stack>
+				<Stack spacing={2} mb={1} direction={["column", "row"]}>
+					<Stack spacing={1} flex={1}>
+						<FormLabel>{t("forms.burgers.fields.phoneNumber")}</FormLabel>
+						<Text>{burger.telefoonnummer}</Text>
+					</Stack>
+					<Stack spacing={1} flex={1}>
+						<FormLabel>{t("forms.burgers.fields.mail")}</FormLabel>
+						<Text>{burger.email}</Text>
+					</Stack>
+				</Stack>
+			</Section>
+		</SectionContainer>
 	);
 };
 

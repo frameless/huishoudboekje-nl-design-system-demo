@@ -1,31 +1,25 @@
-import {Divider, FormControl, FormLabel, Input, Stack, Table, Tbody, Th, Thead, Tr} from "@chakra-ui/react";
-import React, {useState} from "react";
+import {Button, Divider, FormControl, FormLabel, Input, Stack, Table, Tbody, Th, Thead, Tr} from "@chakra-ui/react";
+import React from "react";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
-import {
-	CreateRubriekMutationVariables,
-	GetRubriekenConfiguratieDocument,
-	Grootboekrekening,
-	Rubriek,
-	useCreateRubriekMutation,
-	useGetRubriekenConfiguratieQuery,
-} from "../../generated/graphql";
+import {GetRubriekenConfiguratieDocument, Grootboekrekening, Rubriek, useCreateRubriekMutation, useGetRubriekenConfiguratieQuery} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
 import {useReactSelectStyles} from "../../utils/things";
+import useForm from "../../utils/useForm";
 import useSelectProps from "../../utils/useSelectProps";
 import useToaster from "../../utils/useToaster";
-import {FormLeft, FormRight} from "../shared/Forms";
-import AddButton from "../shared/AddButton";
+import Section from "../shared/Section";
+import SectionContainer from "../shared/SectionContainer";
 import RubriekItem from "./RubriekItem";
 
 const Rubrieken = () => {
 	const toast = useToaster();
 	const {t} = useTranslation();
-	const [form, setForm] = useState<CreateRubriekMutationVariables>({});
+	const [form, {updateForm, reset}] = useForm({});
 	const $rubriekenConfiguratie = useGetRubriekenConfiguratieQuery();
 	const reactSelectStyles = useReactSelectStyles();
 	const selectProps = useSelectProps();
-	const [createRubriek, {loading, called, reset}] = useCreateRubriekMutation({
+	const [createRubriek, {loading}] = useCreateRubriekMutation({
 		refetchQueries: [
 			{query: GetRubriekenConfiguratieDocument},
 		],
@@ -47,7 +41,6 @@ const Rubrieken = () => {
 			toast({
 				success: t("messages.rubrieken.createSuccess"),
 			});
-			setForm(() => ({}));
 			reset();
 		});
 	};
@@ -60,9 +53,8 @@ const Rubrieken = () => {
 			const grootboekrekeningenOptions = selectProps.createSelectOptionsFromGrootboekrekeningen(grootboekrekeningen);
 
 			return (
-				<Stack direction={["column", "row"]}>
-					<FormLeft title={t("forms.rubrieken.sections.title")} helperText={t("forms.rubrieken.sections.helperText")} />
-					<FormRight>
+				<SectionContainer>
+					<Section title={t("forms.rubrieken.sections.title")} helperText={t("forms.rubrieken.sections.helperText")}>
 						<Stack spacing={5} divider={<Divider />}>
 							{rubrieken.length > 0 && (
 								<Table size={"sm"} variant={"noLeftPadding"}>
@@ -85,10 +77,7 @@ const Rubrieken = () => {
 								<Stack direction={["column"]} alignItems={"flex-end"}>
 									<FormControl>
 										<FormLabel>{t("forms.rubrieken.fields.naam")}</FormLabel>
-										<Input onChange={v => setForm(f => ({
-											...f,
-											naam: v.target.value,
-										}))} value={form.naam || ""} />
+										<Input onChange={v => updateForm("naam", v.target.value)} value={form.naam || ""} />
 									</FormControl>
 									<FormControl>
 										<FormLabel>{t("forms.rubrieken.fields.grootboekrekening")}</FormLabel>
@@ -97,23 +86,16 @@ const Rubrieken = () => {
 											components={selectProps.components.MultiLine}
 											options={grootboekrekeningenOptions}
 											styles={reactSelectStyles.default}
-											onChange={(result) => {
-												setForm(f => ({
-													...f,
-													grootboekrekening: result?.value,
-												}));
-											}}
+											onChange={(result) => updateForm("grootboekrekening", result?.value)}
 											value={form.grootboekrekening ? grootboekrekeningenOptions.find(g => g.value === form.grootboekrekening) : null}
 										/>
 									</FormControl>
-									<FormControl>
-										<AddButton type={"submit"} isLoading={loading} isDisabled={called} />
-									</FormControl>
+									<Button type={"submit"} colorScheme={"primary"} isLoading={loading}>{t("global.actions.save")}</Button>
 								</Stack>
 							</form>
 						</Stack>
-					</FormRight>
-				</Stack>
+					</Section>
+				</SectionContainer>
 			);
 		}} />
 	);

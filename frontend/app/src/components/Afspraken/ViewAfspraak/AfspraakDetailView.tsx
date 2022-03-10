@@ -1,9 +1,9 @@
-import {AddIcon, EditIcon, ViewIcon, WarningTwoIcon} from "@chakra-ui/icons";
-import {Box, Button, Divider, FormControl, FormLabel, HStack, IconButton, Input, InputGroup, InputLeftElement, InputRightElement, Stack, Switch, Table, Tbody, Td, Text, Th, Thead, Tr, useBreakpointValue, useDisclosure, VStack, Wrap, WrapItem} from "@chakra-ui/react";
+import {ViewIcon, WarningTwoIcon} from "@chakra-ui/icons";
+import {Alert, AlertDescription, AlertIcon, AlertTitle, Box, Button, FormControl, FormLabel, HStack, IconButton, Input, InputGroup, InputLeftElement, InputRightElement, Stack, Switch, Table, Tbody, Td, Text, Th, Thead, Tr, useBreakpointValue, useDisclosure, Wrap, WrapItem} from "@chakra-ui/react";
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
-import {AiOutlineTag} from "react-icons/all";
-import {NavLink} from "react-router-dom";
+import {AiOutlineTag} from "react-icons/ai";
+import {NavLink, useNavigate} from "react-router-dom";
 import {AppRoutes} from "../../../config/routes";
 import {Afspraak, GetAfspraakDocument, GetAfsprakenDocument, useAddAfspraakZoektermMutation, useCreateAlarmMutation, useDeleteAfspraakZoektermMutation, useDeleteAlarmMutation, useUpdateAlarmMutation} from "../../../generated/graphql";
 import d from "../../../utils/dayjs";
@@ -15,10 +15,10 @@ import AddButton from "../../shared/AddButton";
 import BackButton from "../../shared/BackButton";
 import DataItem from "../../shared/DataItem";
 import DeleteConfirmButton from "../../shared/DeleteConfirmButton";
-import {FormLeft, FormRight} from "../../shared/Forms";
 import Page from "../../shared/Page";
 import PrettyIban from "../../shared/PrettyIban";
-import {DeprecatedSection} from "../../shared/Section";
+import Section from "../../shared/Section";
+import SectionContainer from "../../shared/SectionContainer";
 import ZoektermenList from "../../shared/ZoektermenList";
 import AddAlarmModal from "./AddAlarmModal";
 import AfspraakDetailMenu from "./AfspraakDetailMenu";
@@ -27,6 +27,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	const isMobile = useBreakpointValue([true, null, null, false]);
 	const {t} = useTranslation();
 	const toast = useToaster();
+	const navigate = useNavigate();
 	const addAlarmModal = useDisclosure();
 	const [zoekterm, setZoekterm] = useState<string>();
 	const [zoektermTouched, setZoektermTouched] = useState<boolean>(false);
@@ -204,10 +205,23 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 		)}>
 			{addAlarmModal.isOpen && <AddAlarmModal afspraak={afspraak} onClose={addAlarmModal.onClose} onSubmit={data => onCreateAlarm(data)} />}
 
-			<DeprecatedSection>
-				<Stack direction={["column", "row"]}>
-					<FormLeft title={t("afspraakDetailView.section1.title")} helperText={t("afspraakDetailView.section1.helperText")} />
-					<FormRight>
+			{afspraak.validThrough && (
+				<Alert status={"info"} colorScheme={"skyblue"}>
+					<AlertIcon />
+					<AlertTitle mr={2}>
+						{isAfspraakActive(afspraak) ? t("afspraken.willEndOn", {date: validThrough.format("L")}) : t("afspraken.endedOn", {date: validThrough.format("L")})}
+					</AlertTitle>
+					<AlertDescription>
+						<AddButton onClick={() => navigate(AppRoutes.FollowUpAfspraak(afspraak.id))}>
+							{t("afspraken.planFollowup")}
+						</AddButton>
+					</AlertDescription>
+				</Alert>
+			)}
+
+			<SectionContainer>
+				<Section title={t("afspraakDetailView.section1.title")} helperText={t("afspraakDetailView.section1.helperText")} left>
+					<Stack>
 						<Stack direction={["column", "row"]}>
 							<DataItem label={t("burger")}>
 								<HStack>
@@ -237,17 +251,13 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 								</DataItem>
 							</Stack>
 						)}
-					</FormRight>
-				</Stack>
+					</Stack>
+				</Section>
+			</SectionContainer>
 
-				<VStack py={3}>
-					<Divider />
-				</VStack>
-
-				<Stack direction={["column", "row"]}>
-					<FormLeft title={t("afspraakDetailView.section2.title")} helperText={t("afspraakDetailView.section2.helperText")} />
-					<FormRight>
-
+			<SectionContainer>
+				<Section title={t("afspraakDetailView.section2.title")} helperText={t("afspraakDetailView.section2.helperText")} left>
+					<Stack>
 						<Stack direction={["column", "row"]}>
 							<DataItem label={t("afspraken.rubriek")}>{afspraak.rubriek?.naam}</DataItem>
 							<DataItem label={t("afspraken.omschrijving")}>{afspraak.omschrijving}</DataItem>
@@ -257,36 +267,12 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 								<Text color={bedrag < 0 ? "red.500" : "currentcolor"}>{currencyFormat2().format(bedrag)}</Text>
 							</DataItem>
 						</Stack>
-
-					</FormRight>
-				</Stack>
-
-				{afspraak.validThrough && (<>
-					<VStack py={3}>
-						<Divider />
-					</VStack>
-
-					<Stack direction={["column", "row"]}>
-						<FormLeft />
-						<FormRight>
-							{isAfspraakActive(afspraak) ? (
-								<Text color={"red.500"}>{t("afspraken.willEndOn", {date: validThrough.format("L")})}</Text>
-							) : (
-								<Text color={"gray.500"}>{t("afspraken.endedOn", {date: validThrough.format("L")})}</Text>
-							)}
-							<Box>
-								<Button as={NavLink} to={AppRoutes.FollowUpAfspraak(afspraak.id)} colorScheme={"primary"} size={"sm"}
-									leftIcon={<AddIcon />}>{t("afspraken.planFollowup")}</Button>
-							</Box>
-						</FormRight>
 					</Stack>
-				</>)}
-			</DeprecatedSection>
+				</Section>
+			</SectionContainer>
 
-			<DeprecatedSection direction={["column", "row"]}>
-				<FormLeft title={t("afspraakDetailView.section3.title")} helperText={t("afspraakDetailView.section3.helperText")} />
-				<FormRight>
-
+			<SectionContainer>
+				<Section title={t("afspraakDetailView.section3.title")} helperText={t("afspraakDetailView.section3.helperText")}>
 					<Stack>
 						{isAfspraakActive(afspraak) ? (
 							<form onSubmit={onAddAfspraakZoekterm}>
@@ -365,50 +351,51 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 							</Table>
 						</Stack>
 					)}
-				</FormRight>
-			</DeprecatedSection>
+				</Section>
+			</SectionContainer>
 
 			{!afspraak.credit && (
-				<DeprecatedSection direction={["column", "row"]}>
-					<FormLeft title={t("afspraakDetailView.betaalinstructie.title")} helperText={t("afspraakDetailView.betaalinstructie.helperText")} />
-					<FormRight spacing={5}>
-						{afspraak.betaalinstructie ? (<>
-							<Stack direction={["column", "row"]}>
-								<DataItem label={t("afspraken.periodiek")}>
-									<Text>{scheduleHelper.toString()}</Text>
-								</DataItem>
-								<DataItem label={t("exports.period")}>
-									{d(afspraak.betaalinstructie.startDate).isSame(afspraak.betaalinstructie.endDate) ? (
-										<Text>{d(afspraak.betaalinstructie.startDate, "YYYY-MM-DD").format("L")}</Text>
-									) : (
-										<Text>{t("schedule.fromThrough", {
-											from: d(afspraak.betaalinstructie.startDate, "YYYY-MM-DD").format("L"),
-											through: afspraak.betaalinstructie.endDate ? d(afspraak.betaalinstructie.endDate, "YYYY-MM-DD").format("L") : "∞",
-										})}</Text>
-									)}
-								</DataItem>
-							</Stack>
+				<SectionContainer>
+					<Section title={t("afspraakDetailView.betaalinstructie.title")} helperText={t("afspraakDetailView.betaalinstructie.helperText")}>
+						{afspraak.betaalinstructie ? (
+							<Stack>
+								<Stack direction={["column", "row"]}>
+									<DataItem label={t("afspraken.periodiek")}>
+										<Text>{scheduleHelper.toString()}</Text>
+									</DataItem>
+									<DataItem label={t("exports.period")}>
+										{d(afspraak.betaalinstructie.startDate).isSame(afspraak.betaalinstructie.endDate) ? (
+											<Text>{d(afspraak.betaalinstructie.startDate, "YYYY-MM-DD").format("L")}</Text>
+										) : (
+											<Text>{t("schedule.fromThrough", {
+												from: d(afspraak.betaalinstructie.startDate, "YYYY-MM-DD").format("L"),
+												through: afspraak.betaalinstructie.endDate ? d(afspraak.betaalinstructie.endDate, "YYYY-MM-DD").format("L") : "∞",
+											})}</Text>
+										)}
+									</DataItem>
+								</Stack>
 
-							<Box>
-								<Button colorScheme={"primary"} size={"sm"} leftIcon={<EditIcon />}
-									as={NavLink} to={AppRoutes.AfspraakBetaalinstructie(afspraak.id)}>{t("global.actions.newBetaalinstructie")}</Button>
-							</Box>
-						</>) : (<>
-							<Text>{t("afspraakDetailView.noBetaalinstructie")}</Text>
-
-							<Stack direction={["column", "row"]}>
-								<Button colorScheme={"primary"} size={"sm"} leftIcon={<AddIcon />} as={NavLink} to={AppRoutes.AfspraakBetaalinstructie(afspraak.id)}>
-									{t("global.actions.add")}
-								</Button>
+								<Box>
+									<AddButton onClick={() => navigate(AppRoutes.AfspraakBetaalinstructie(afspraak.id))}>
+										{t("global.actions.newBetaalinstructie")}
+									</AddButton>
+								</Box>
 							</Stack>
-						</>)}
-					</FormRight>
-				</DeprecatedSection>
+						) : (
+							<Stack>
+								<Text>{t("afspraakDetailView.noBetaalinstructie")}</Text>
+
+								<Box>
+									<AddButton onClick={() => navigate(AppRoutes.AfspraakBetaalinstructie(afspraak.id))} />
+								</Box>
+							</Stack>
+						)}
+					</Section>
+				</SectionContainer>
 			)}
 
-			<DeprecatedSection direction={["column", "row"]}>
-				<FormLeft title={t("afspraakDetailView.alarm.title")} helperText={t("afspraakDetailView.alarm.helperText")} />
-				<FormRight>
+			<SectionContainer>
+				<Section title={t("afspraakDetailView.alarm.title")} helperText={t("afspraakDetailView.alarm.helperText")}>
 					{afspraak.alarm ? (<>
 						<Stack direction={["column", null, null, "row"]}>
 							<DataItem label={t("bedrag")}>
@@ -443,8 +430,8 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 							</Box>
 						</Stack>
 					)}
-				</FormRight>
-			</DeprecatedSection>
+				</Section>
+			</SectionContainer>
 		</Page>
 	);
 };

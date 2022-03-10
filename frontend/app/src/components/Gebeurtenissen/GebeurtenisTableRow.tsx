@@ -1,7 +1,7 @@
 import {HStack, Stack, Td, Text, Tr} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {FiActivity} from "react-icons/all";
+import {FiActivity} from "react-icons/fi";
 import UAParser from "ua-parser-js";
 import {GebruikersActiviteit} from "../../generated/graphql";
 import d from "../../utils/dayjs";

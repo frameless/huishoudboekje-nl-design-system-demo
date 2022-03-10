@@ -14,7 +14,7 @@ import {
 	useDisclosure,
 } from "@chakra-ui/react";
 import React, {useRef} from "react";
-import {GiHamburgerMenu} from "react-icons/all";
+import {GiHamburgerMenu} from "react-icons/gi";
 import {DrawerContext} from "../../utils/things";
 import Logo from "../shared/Logo";
 import SidebarFooter from "./SidebarFooter";

@@ -1,10 +1,9 @@
-import {BoxProps, Spinner, useToken} from "@chakra-ui/react";
+import {BoxProps, Heading, Spinner, Stack, Text, useToken} from "@chakra-ui/react";
 import React, {useContext} from "react";
 import {useTranslation} from "react-i18next";
 import ChakraChart, {chartProps} from "../../config/theme/custom/Chart";
 import {BankTransaction} from "../../generated/graphql";
 import {prepareChartData} from "../../utils/things";
-import {FormLeft} from "../shared/Forms";
 import {createAggregation} from "./Aggregator";
 import {RapportageContext} from "./context";
 
@@ -36,24 +35,27 @@ const Saldo: React.FC<BoxProps & {transactions: BankTransaction[]}> = ({transact
 		...chartData(chartTemplate, aggregation),
 	];
 
-	return (<>
-		<FormLeft title={t("charts.saldo.title")} helperText={t("charts.saldo.helperText")} />
-		<ChakraChart
-			height={"500px"}
-			chartType={"AreaChart"}
-			loader={<Spinner />}
-			data={data}
-			options={{
-				chartArea: {width: "90%", height: "80%"},
-				legend: {position: "top"},
-				colors: [colorSaldo],
-				lineWidth: 1,
-				pointSize: 5,
-				// onLoad: console.log
-			}}
-			{...chartProps}
-		/>
-	</>);
+	return (
+		<Stack>
+			<Heading size={"md"}>{t("charts.saldo.title")}</Heading>
+			<Text fontSize={"md"} color={"gray.500"}>{t("charts.saldo.helperText")}</Text>
+
+			<ChakraChart
+				height={"500px"}
+				chartType={"AreaChart"}
+				loader={<Spinner />}
+				data={data}
+				options={{
+					chartArea: {width: "90%", height: "80%"},
+					legend: {position: "top"},
+					colors: [colorSaldo],
+					lineWidth: 1,
+					pointSize: 5,
+				}}
+				{...chartProps}
+			/>
+		</Stack>
+	);
 };
 
 export default Saldo;

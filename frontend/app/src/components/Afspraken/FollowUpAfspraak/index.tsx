@@ -11,7 +11,7 @@ import useToaster from "../../../utils/useToaster";
 import BackButton from "../../shared/BackButton";
 import Page from "../../shared/Page";
 import PageNotFound from "../../shared/PageNotFound";
-import {DeprecatedSection} from "../../shared/Section";
+import SectionContainer from "../../shared/SectionContainer";
 import ZoektermenList from "../../shared/ZoektermenList";
 import AfspraakForm from "../AfspraakForm";
 import AfspraakFormContext from "../EditAfspraak/context";
@@ -91,23 +91,23 @@ const FollowUpAfspraak = () => {
 			return (
 				<Page title={t("afspraken.vervolgAfspraak.title")} backButton={<BackButton to={AppRoutes.ViewAfspraak(afspraak.id)} />}>
 					{((afspraak.zoektermen && afspraak.zoektermen.length > 0) || afspraak.betaalinstructie) && (
-						<DeprecatedSection>
+						<SectionContainer>
 							<List spacing={2}>
 								{afspraak.zoektermen && afspraak.zoektermen.length > 0 && (
-									<ListItem justify={"center"}>
+									<ListItem justifyContent={"center"}>
 										<ListIcon as={MdCheckCircle} color={"green.500"} w={5} h={5} verticalAlign={"middle"} />
 										{t("afspraken.vervolgAfspraak.zoektermenHelperText")}
 										<ZoektermenList zoektermen={afspraak.zoektermen || []} />
 									</ListItem>
 								)}
 								{afspraak.betaalinstructie && (
-									<ListItem justify={"center"}>
+									<ListItem justifyContent={"center"}>
 										<ListIcon as={MdReportProblem} color={"orange.500"} w={5} h={5} verticalAlign={"middle"} />
 										{t("afspraken.vervolgAfspraak.betaalinstructieHelperText")}
 									</ListItem>
 								)}
 							</List>
-						</DeprecatedSection>
+						</SectionContainer>
 					)}
 
 					<AfspraakFormContext.Provider value={ctxValue}>

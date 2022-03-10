@@ -9,9 +9,9 @@ import {DateRange} from "../../../models/models";
 import d from "../../../utils/dayjs";
 import Queryable from "../../../utils/Queryable";
 import useHandleMutation from "../../../utils/useHandleMutation";
-import {FormLeft, FormRight} from "../../shared/Forms";
 import Page from "../../shared/Page";
-import {DeprecatedSection} from "../../shared/Section";
+import Section from "../../shared/Section";
+import SectionContainer from "../../shared/SectionContainer";
 
 const Betaalinstructies = () => {
 	const {t} = useTranslation();
@@ -47,10 +47,9 @@ const Betaalinstructies = () => {
 
 	return (
 		<Page title={t("bankzaken.exports.title")}>
-			<DeprecatedSection>
-				<Stack spacing={5}>
-					<FormLeft title={t("bankzaken.createExport.title")} helperText={t("bankzaken.createExport.helperText")} />
-					<FormRight>
+			<SectionContainer>
+				<Section title={t("bankzaken.createExport.title")} helperText={t("bankzaken.createExport.helperText")}>
+					<Stack spacing={5}>
 						<Stack direction={["column", "row"]} alignItems={"flex-end"}>
 							<FormControl flex={1}>
 								<FormLabel>{t("global.period")}</FormLabel>
@@ -61,13 +60,12 @@ const Betaalinstructies = () => {
 								<Button colorScheme={"primary"} isLoading={$createExportOverschrijvingen.loading} isDisabled={!(dateRange.from && dateRange.through)} onClick={onClickExportButton}>{t("global.actions.export")}</Button>
 							</FormControl>
 						</Stack>
-					</FormRight>
-				</Stack>
-			</DeprecatedSection>
+					</Stack>
+				</Section>
+			</SectionContainer>
 
-			<DeprecatedSection>
-				<FormLeft title={t("bankzaken.exports.title")} helperText={t("bankzaken.exports.helperText")} />
-				<FormRight>
+			<SectionContainer>
+				<Section title={t("bankzaken.exports.title")} helperText={t("bankzaken.exports.helperText")}>
 					<Stack spacing={5}>
 						<Queryable query={$exports} children={(data) => {
 							const exports: Export[] = [...data.exports || []].sort((a: Export, b: Export) => {
@@ -117,8 +115,8 @@ const Betaalinstructies = () => {
 							);
 						}} />
 					</Stack>
-				</FormRight>
-			</DeprecatedSection>
+				</Section>
+			</SectionContainer>
 		</Page>
 	);
 };

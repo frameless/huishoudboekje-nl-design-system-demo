@@ -1,7 +1,13 @@
 import {Box, Divider, HStack, Stack, Text} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {BsFillHouseDoorFill, FaRegBuilding, FiActivity, FiBell, GrGraphQl, MdCreditCard, RiBarChartFill, TiCog} from "react-icons/all";
+import {BsFillHouseDoorFill} from "react-icons/bs";
+import {FaRegBuilding} from "react-icons/fa";
+import {FiActivity, FiBell} from "react-icons/fi";
+import { GrGraphQl } from "react-icons/gr";
+import {MdCreditCard} from "react-icons/md";
+import {RiBarChartFill} from "react-icons/ri";
+import {TiCog} from "react-icons/ti";
 import {RouteNames} from "../../config/routes";
 import {Signaal, useGetSignalenQuery} from "../../generated/graphql";
 import {useFeatureFlag} from "../../utils/features";

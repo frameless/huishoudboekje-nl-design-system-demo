@@ -1,20 +1,21 @@
-import {Checkbox, CheckboxGroup, FormControl, FormLabel, Stack, StackProps} from "@chakra-ui/react";
+import {Checkbox, CheckboxGroup, FormControl, FormLabel, Stack} from "@chakra-ui/react";
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {Burger, Signaal} from "../../../generated/graphql";
-import {FormLeft, FormRight} from "../../shared/Forms";
+import Section from "../../shared/Section";
+import SectionContainer from "../../shared/SectionContainer";
 import SignalenListView from "../../Signalen/SignalenListView";
 
 export type ActiveSwitch = {
-    active: boolean,
-    inactive: boolean,
+	active: boolean,
+	inactive: boolean,
 }
 
 export type Signaal2 = Omit<Signaal, "context"> & {
-    context: any
+	context: any
 }
 
-const BurgerSignalenView: React.FC<StackProps & { burger: Burger }> = ({burger, ...props}) => {
+const BurgerSignalenView: React.FC<{burger: Burger}> = ({burger}) => {
 	const {t} = useTranslation();
 	const [filter, setFilter] = useState<ActiveSwitch>({active: true, inactive: false});
 
@@ -25,29 +26,26 @@ const BurgerSignalenView: React.FC<StackProps & { burger: Burger }> = ({burger, 
 	];
 
 	return (
-		<Stack spacing={2} mb={1} direction={["column", "row"]} {...props}>
-			<FormLeft title={t("forms.burgers.sections.signalen.title")} helperText={t("forms.burgers.sections.signalen.detailText")}>
-				{signalen.length > 0 && (
-					<FormControl>
-						<FormLabel>{t("global.actions.filter")}</FormLabel>
-						<CheckboxGroup defaultValue={["active"]} onChange={(val) => {
-							setFilter(() => ({
-								active: val.includes("active"),
-								inactive: val.includes("inactive"),
-							}));
-						}}>
-							<Stack>
-								<Checkbox value={"active"}>{t("signalen.showActive")}</Checkbox>
-								<Checkbox value={"inactive"}>{t("signalen.showInActive")}</Checkbox>
-							</Stack>
-						</CheckboxGroup>
-					</FormControl>
-				)}
-			</FormLeft>
-			<FormRight>
+		<SectionContainer>
+			<Section title={t("forms.burgers.sections.signalen.title")} helperText={t("forms.burgers.sections.signalen.detailText")} left={signalen.length > 0 && (
+				<FormControl>
+					<FormLabel>{t("global.actions.filter")}</FormLabel>
+					<CheckboxGroup defaultValue={["active"]} onChange={(val) => {
+						setFilter(() => ({
+							active: val.includes("active"),
+							inactive: val.includes("inactive"),
+						}));
+					}}>
+						<Stack>
+							<Checkbox value={"active"}>{t("signalen.showActive")}</Checkbox>
+							<Checkbox value={"inactive"}>{t("signalen.showInActive")}</Checkbox>
+						</Stack>
+					</CheckboxGroup>
+				</FormControl>
+			)}>
 				<SignalenListView signalen={filteredSignalen} />
-			</FormRight>
-		</Stack>
+			</Section>
+		</SectionContainer>
 	);
 };
 

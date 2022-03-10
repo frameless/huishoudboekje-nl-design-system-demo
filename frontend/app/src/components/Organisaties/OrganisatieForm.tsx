@@ -6,9 +6,9 @@ import {Regex} from "../../utils/things";
 import useForm from "../../utils/useForm";
 import useToaster from "../../utils/useToaster";
 import zod from "../../utils/zod";
-import {FormLeft, FormRight} from "../shared/Forms";
-import {DeprecatedSection} from "../shared/Section";
 import Asterisk from "../shared/Asterisk";
+import Section from "../shared/Section";
+import SectionContainer from "../shared/SectionContainer";
 
 const validator = zod.object({
 	kvknummer: zod.string().regex(Regex.KvkNummer),
@@ -18,9 +18,9 @@ const validator = zod.object({
 
 
 type OrganisatieFormProps = {
-    organisatie?: Organisatie,
-    onSubmit: Function,
-    isLoading: boolean,
+	organisatie?: Organisatie,
+	onSubmit: Function,
+	isLoading: boolean,
 };
 
 const OrganisatieForm: React.FC<OrganisatieFormProps> = ({organisatie, onSubmit, isLoading = false}) => {
@@ -57,10 +57,9 @@ const OrganisatieForm: React.FC<OrganisatieFormProps> = ({organisatie, onSubmit,
 
 	return (
 		<Box as={"form"} onSubmit={onSubmitForm}>
-			<DeprecatedSection>
-				<Stack direction={["column", "row"]} spacing={2}>
-					<FormLeft title={t("forms.organizations.sections.organizational.title")} helperText={t("forms.organizations.sections.organizational.helperText")} />
-					<FormRight>
+			<SectionContainer>
+				<Section title={t("forms.organizations.sections.organizational.title")} helperText={t("forms.organizations.sections.organizational.helperText")}>
+					<Stack>
 						<Stack spacing={2} direction={["column", "row"]}>
 							<FormControl isInvalid={!isFieldValid("kvknummer")} id={"kvknummer"} isRequired={true}>
 								<Stack spacing={1} flex={1}>
@@ -94,9 +93,9 @@ const OrganisatieForm: React.FC<OrganisatieFormProps> = ({organisatie, onSubmit,
 								<Asterisk />
 							</Stack>
 						</Stack>
-					</FormRight>
-				</Stack>
-			</DeprecatedSection>
+					</Stack>
+				</Section>
+			</SectionContainer>
 		</Box>
 	);
 };

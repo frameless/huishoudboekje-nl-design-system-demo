@@ -51,6 +51,7 @@ const HuishoudensList = () => {
 
 			return (
 				<Page title={t("huishoudens.title")} right={(
+					// Todo: put this search field in it's own component (07-03-2022)
 					<InputGroup>
 						<InputLeftElement>
 							<SearchIcon color={"gray.300"} />

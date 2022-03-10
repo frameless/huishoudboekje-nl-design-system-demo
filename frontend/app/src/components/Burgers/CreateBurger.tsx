@@ -15,6 +15,8 @@ const CreateBurger = () => {
 	const toast = useToaster();
 	const [isBsnValid, setBsnValid] = useState(true);
 	const handleSaveBurgerErrors = (t) => (err) => {
+		setBsnValid(true);
+
 		let message = err.message;
 		if (err.message.includes("already exists")) {
 			message = t("messages.burgers.alreadyExists");
@@ -42,7 +44,6 @@ const CreateBurger = () => {
 	});
 
 	const onSubmit = (burgerData: CreateBurgerInput) => {
-		setBsnValid(true);
 		createBurger({
 			variables: {
 				input: burgerData,

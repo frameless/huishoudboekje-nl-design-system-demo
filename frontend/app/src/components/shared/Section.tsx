@@ -1,15 +1,5 @@
-import {Box, Divider, Heading, HStack, Stack, StackProps, Text, useStyleConfig} from "@chakra-ui/react";
+import {Box, Divider, Heading, HStack, Stack, StackProps, Text, useBreakpointValue} from "@chakra-ui/react";
 import React from "react";
-import deprecatedComponent from "../../utils/Deprecated";
-
-const _DeprecatedSection_ = (props) => {
-	const styles = useStyleConfig("Section");
-	return (
-		<Stack sx={styles} {...props} />
-	);
-};
-
-export const DeprecatedSection = deprecatedComponent(_DeprecatedSection_, "Please refactor this component to the new Section component.");
 
 type SectionProps = Omit<StackProps, "title" | "left" | "right"> & {
 	title?: JSX.Element | null | string,
@@ -28,34 +18,43 @@ export const Section: React.FC<SectionProps> = ({
 	children,
 	...props
 }) => {
-	const styles = useStyleConfig("Section");
+	const hasLeft = (title || helperText || left);
+	const hasTopbar = (right || menu);
+	const isMobile = useBreakpointValue([true, true, false]);
+
+	const TopBar = ({menu, right}) => (
+		<HStack justify={"flex-end"}>
+			{right && <Box>{right}</Box>}
+			{menu}
+		</HStack>
+	);
 
 	return (
-		<Stack sx={styles} {...props}>
-			{(title || helperText || right || menu) && (<>
-				<Stack direction={"row"} justifyContent={"space-between"} alignItems={"center"}>
-					<Stack alignItems={"flex-start"}>
+		<Stack direction={["column", "column", "row"]} spacing={[2, 2, 4]} {...props}>
+			{(isMobile && hasTopbar) && (
+				<Box mb={2}>
+					<TopBar menu={menu} right={right} />
+				</Box>
+			)}
+			{hasLeft && (
+				<Stack flex={1}>
+					<Stack align={"flex-start"}>
 						{title && <Heading size={"md"}>{title}</Heading>}
 						{helperText && <Text fontSize={"md"} color={"gray.500"}>{helperText}</Text>}
 					</Stack>
-					<HStack>
-						{right && <Box>{right}</Box>}
-						{menu}
-					</HStack>
-				</Stack>
-				<Divider />
-			</>)}
-
-			{left ? (
-				<Stack direction={["column", null, "row"]}>
-					<Stack flex={1} alignItems={"flex-start"}>
-						{typeof left !== "boolean" && left}
-					</Stack>
-					<Stack flex={[1, 2, 3]} alignItems={"flex-start"}>
-						{children}
+					<Stack align={"flex-start"}>
+						{left}
 					</Stack>
 				</Stack>
-			) : children}
+			)}
+			<Stack flex={[1, 3, 3]} spacing={[2, 2, 4]} divider={<Divider />}>
+				{(!isMobile && hasTopbar) && (
+					<TopBar menu={menu} right={right} />
+				)}
+				<Box>
+					{children}
+				</Box>
+			</Stack>
 		</Stack>
 	);
 };

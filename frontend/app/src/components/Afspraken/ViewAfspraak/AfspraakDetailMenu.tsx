@@ -1,4 +1,3 @@
-import {ChevronDownIcon} from "@chakra-ui/icons";
 import {IconButton, Menu, MenuButton, MenuItem, MenuList, useDisclosure} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
@@ -8,6 +7,7 @@ import {Afspraak, GetAfspraakDocument, GetBurgerDocument, GetBurgersDocument, Ge
 import {useStore} from "../../../store";
 import d from "../../../utils/dayjs";
 import useToaster from "../../../utils/useToaster";
+import MenuIcon from "../../shared/MenuIcon";
 import AfspraakDeleteAlert from "./AfspraakDeleteAlert";
 import AfspraakEndModal from "./AfspraakEndModal";
 
@@ -76,7 +76,7 @@ const AfspraakDetailMenu: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 		{endModal.isOpen && <AfspraakEndModal onSubmit={onSubmitEndAfspraak} onClose={endModal.onClose} />}
 
 		<Menu>
-			<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} />
+			<IconButton as={MenuButton} icon={<MenuIcon />} variant={"solid"} aria-label={"Open menu"} />
 			<MenuList>
 				<NavLink to={AppRoutes.EditAfspraak(afspraak.id)}><MenuItem>{t("global.actions.edit")}</MenuItem></NavLink>
 				<MenuItem onClick={endModal.onOpen}>{t("global.actions.end")}</MenuItem>

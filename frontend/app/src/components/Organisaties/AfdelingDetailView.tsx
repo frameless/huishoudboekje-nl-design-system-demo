@@ -1,5 +1,4 @@
-import {ChevronDownIcon} from "@chakra-ui/icons";
-import {Box, Heading, IconButton, Menu, MenuButton, MenuItem, MenuList, Stack, useDisclosure} from "@chakra-ui/react";
+import {Box, IconButton, Menu, MenuButton, MenuItem, MenuList, Stack, useDisclosure} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {AppRoutes} from "../../config/routes";
@@ -9,9 +8,10 @@ import AddAfdelingRekeningModal from "../Rekeningen/AddAfdelingRekeningModal";
 import RekeningList from "../Rekeningen/RekeningList";
 import AddButton from "../shared/AddButton";
 import BackButton from "../shared/BackButton";
-import {FormLeft, FormRight} from "../shared/Forms";
+import MenuIcon from "../shared/MenuIcon";
 import Page from "../shared/Page";
-import {DeprecatedSection} from "../shared/Section";
+import Section from "../shared/Section";
+import SectionContainer from "../shared/SectionContainer";
 import AddAfdelingPostadresModal from "./AddAfdelingPostadresModal";
 import DeleteAfdelingAlert from "./DeleteAfdelingAlert";
 import UpdateAfdelingModal from "./UpdateAfdelingModal";
@@ -34,7 +34,7 @@ const AfdelingDetailView: React.FC<{afdeling: Afdeling}> = ({afdeling}) => {
 
 		<Page title={afdeling.naam || t("afdeling")} backButton={<BackButton to={AppRoutes.Organisatie(organisatieId)} />} menu={(
 			<Menu>
-				<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} />
+				<IconButton as={MenuButton} icon={<MenuIcon />} variant={"solid"} aria-label={"Open menu"} />
 				<MenuList>
 					<MenuItem onClick={() => updateAfdelingModal.onOpen()}>{t("global.actions.edit")}</MenuItem>
 					<MenuItem onClick={() => deleteAfdelingAlert.onOpen()}>{t("global.actions.delete")}</MenuItem>
@@ -42,35 +42,25 @@ const AfdelingDetailView: React.FC<{afdeling: Afdeling}> = ({afdeling}) => {
 			</Menu>
 		)}>
 
-			<DeprecatedSection>
-				<Stack direction={["column", "row"]}>
-					<FormLeft title={t("pages.afdelingDetails.sectionPostadressen.title")} helperText={t("pages.afdelingDetails.sectionPostadressen.helperText")} />
-					<FormRight>
-						<Stack>
-							<Heading size={"md"}>{t("postadressen")}</Heading>
-							<PostadresList postadressen={postadressen} afdeling={afdeling} />
-							<Box>
-								<AddButton onClick={() => addPostadresModal.onOpen()} />
-							</Box>
-						</Stack>
-					</FormRight>
-				</Stack>
-			</DeprecatedSection>
+			<SectionContainer>
+				<Section title={t("pages.afdelingDetails.sectionPostadressen.title")} helperText={t("pages.afdelingDetails.sectionPostadressen.helperText")}>
+					<Stack>
+						<PostadresList postadressen={postadressen} afdeling={afdeling} />
+						<Box>
+							<AddButton onClick={() => addPostadresModal.onOpen()} />
+						</Box>
+					</Stack>
+				</Section>
 
-			<DeprecatedSection>
-				<Stack direction={["column", "row"]}>
-					<FormLeft title={t("pages.afdelingDetails.sectionRekeningen.title")} helperText={t("pages.afdelingDetails.sectionRekeningen.helperText")} />
-					<FormRight>
-						<Stack>
-							<Heading size={"md"}>{t("rekeningen")}</Heading>
-							<RekeningList rekeningen={rekeningen} afdeling={afdeling} />
-							<Box>
-								<AddButton onClick={() => addRekeningModal.onOpen()} />
-							</Box>
-						</Stack>
-					</FormRight>
-				</Stack>
-			</DeprecatedSection>
+				<Section title={t("pages.afdelingDetails.sectionRekeningen.title")} helperText={t("pages.afdelingDetails.sectionRekeningen.helperText")}>
+					<Stack>
+						<RekeningList rekeningen={rekeningen} afdeling={afdeling} />
+						<Box>
+							<AddButton onClick={() => addRekeningModal.onOpen()} />
+						</Box>
+					</Stack>
+				</Section>
+			</SectionContainer>
 		</Page>
 	</>);
 };

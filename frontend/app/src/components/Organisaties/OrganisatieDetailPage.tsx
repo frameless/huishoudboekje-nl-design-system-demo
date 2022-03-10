@@ -1,7 +1,6 @@
-import {AddIcon, ChevronDownIcon} from "@chakra-ui/icons";
+import {AddIcon} from "@chakra-ui/icons";
 import {Box, Button, Grid, Heading, IconButton, Menu, MenuButton, MenuItem, MenuList, useBreakpointValue, useDisclosure} from "@chakra-ui/react";
-import React from "react";
-import {useToggle} from "react-grapple";
+import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {Navigate, useNavigate, useParams} from "react-router-dom";
 import {AppRoutes} from "../../config/routes";
@@ -12,8 +11,8 @@ import useToaster from "../../utils/useToaster";
 import Alert from "../shared/Alert";
 import BackButton from "../shared/BackButton";
 import DeadEndPage from "../shared/DeadEndPage";
+import MenuIcon from "../shared/MenuIcon";
 import Page from "../shared/Page";
-import {DeprecatedSection} from "../shared/Section";
 import AfdelingListItem from "./AfdelingListItem";
 import CreateAfdelingModal from "./CreateAfdelingModal";
 import OrganisatieDetailView from "./Views/OrganisatieDetailView";
@@ -26,12 +25,7 @@ const OrganisatieDetailPage = () => {
 	const addAfdelingModal = useDisclosure();
 	const deleteAlert = useDisclosure();
 	const maxOrganisatieNaamLength = useBreakpointValue(maxOrganisatieNaamLengthBreakpointValues);
-
-	const [isDeleted, toggleDeleted] = useToggle(false);
-
-	const onClickEdit = () => navigate(AppRoutes.EditOrganisatie(parseInt(id)));
-	const onClickDelete = () => deleteAlert.onOpen();
-
+	const [isDeleted, toggleDeleted] = useState(false);
 	const $organisatie = useGetOrganisatieQuery({
 		variables: {id: parseInt(id)},
 	});
@@ -41,14 +35,13 @@ const OrganisatieDetailPage = () => {
 			{query: GetOrganisatiesDocument},
 		],
 	});
-	const onCloseDeleteDialog = () => deleteAlert.onClose();
 
 	return (
 		<Queryable query={$organisatie} children={({organisatie}: {organisatie: Organisatie}) => {
 			const onConfirmDeleteDialog = () => {
 				deleteOrganisatie()
 					.then(() => {
-						onCloseDeleteDialog();
+						deleteAlert.onClose();
 						toast({
 							success: t("messages.organisaties.deleteConfirmMessage", {name: organisatie.naam}),
 						});
@@ -81,10 +74,10 @@ const OrganisatieDetailPage = () => {
 				<Page title={truncateText(organisatie.naam || "", maxOrganisatieNaamLength)} backButton={<BackButton to={AppRoutes.Organisaties} />}
 					menu={(
 						<Menu>
-							<IconButton as={MenuButton} icon={<ChevronDownIcon />} variant={"solid"} aria-label={"Open menu"} />
+							<IconButton as={MenuButton} icon={<MenuIcon />} variant={"solid"} aria-label={"Open menu"} />
 							<MenuList>
-								<MenuItem onClick={onClickEdit}>{t("global.actions.edit")}</MenuItem>
-								<MenuItem onClick={onClickDelete}>{t("global.actions.delete")}</MenuItem>
+								<MenuItem onClick={() => navigate(AppRoutes.EditOrganisatie(parseInt(id)))}>{t("global.actions.edit")}</MenuItem>
+								<MenuItem onClick={() => deleteAlert.onOpen()}>{t("global.actions.delete")}</MenuItem>
 							</MenuList>
 						</Menu>
 					)}>
@@ -100,15 +93,13 @@ const OrganisatieDetailPage = () => {
 									{t("global.actions.delete")}
 								</Button>
 							)}
-							onClose={onCloseDeleteDialog}
+							onClose={() => deleteAlert.onClose()}
 						>
 							{t("messages.organisaties.deleteQuestion", {name: organisatie.naam})}
 						</Alert>
 					)}
 
-					<DeprecatedSection>
-						<OrganisatieDetailView organisatie={organisatie} />
-					</DeprecatedSection>
+					<OrganisatieDetailView organisatie={organisatie} />
 
 					<Heading size={"md"}>{t("afdelingen")}</Heading>
 					<Grid maxWidth={"100%"} gridTemplateColumns={["repeat(1, 1fr)", "repeat(2, 1fr)", "repeat(3, 1fr)"]} gap={5}>

@@ -1,13 +1,13 @@
-import {HStack, Stack, StackProps} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {Burger, GebruikersActiviteit, useGetBurgerGebeurtenissenQuery} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import usePagination from "../../../utils/usePagination";
 import GebeurtenissenTableView from "../../Gebeurtenissen/GebeurtenissenTableView";
-import {FormLeft, FormRight} from "../../shared/Forms";
+import Section from "../../shared/Section";
+import SectionContainer from "../../shared/SectionContainer";
 
-const BurgerGebeurtenissen: React.FC<StackProps & {burger: Burger}> = ({burger, ...props}) => {
+const BurgerGebeurtenissen: React.FC<{burger: Burger}> = ({burger}) => {
 	const {t} = useTranslation();
 	const {setTotal, pageSize, offset, PaginationButtons} = usePagination();
 	const $gebeurtenissen = useGetBurgerGebeurtenissenQuery({
@@ -20,20 +20,16 @@ const BurgerGebeurtenissen: React.FC<StackProps & {burger: Burger}> = ({burger, 
 	});
 
 	return (
-		<Stack direction={["column", "row"]} {...props}>
-			<FormLeft title={t("pages.gebeurtenissen.title")} helperText={t("pages.gebeurtenissen.helperTextBurger")} />
+		<SectionContainer>
 			<Queryable query={$gebeurtenissen} children={data => {
 				const gs: GebruikersActiviteit[] = data.gebruikersactiviteitenPaged?.gebruikersactiviteiten || [];
 				return (
-					<FormRight>
-						<HStack justify={"center"}>
-							<PaginationButtons />
-						</HStack>
+					<Section title={t("pages.gebeurtenissen.title")} helperText={t("pages.gebeurtenissen.helperTextBurger")} right={<PaginationButtons />}>
 						<GebeurtenissenTableView gebeurtenissen={gs} />
-					</FormRight>
+					</Section>
 				);
 			}} />
-		</Stack>
+		</SectionContainer>
 	);
 };
 

@@ -1,25 +1,10 @@
-import {
-	Box,
-	Button,
-	FormLabel,
-	Modal,
-	ModalBody,
-	ModalCloseButton,
-	ModalContent,
-	ModalFooter,
-	ModalHeader,
-	ModalOverlay,
-	Stack,
-	Text,
-	TextProps,
-	useDisclosure,
-} from "@chakra-ui/react";
+import {Box, Button, Divider, HStack, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack, Text, TextProps, useDisclosure} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {AppRoutes} from "../../config/routes";
 import {Burger, GebruikersActiviteit} from "../../generated/graphql";
-import {useFeatureFlag} from "../../utils/features";
 import {formatBurgerName, formatHuishoudenName, humanJoin} from "../../utils/things";
+import DataItem from "../shared/DataItem";
 import AuditLogLink from "./AuditLogLink";
 import {auditLogTexts} from "./texts";
 
@@ -27,7 +12,6 @@ const AuditLogText: React.FC<TextProps & {g: GebruikersActiviteit}> = ({g, ...pr
 	const {t} = useTranslation();
 	const {action, entities = []} = g;
 	const {isOpen, onClose, onOpen} = useDisclosure();
-	const isModalEnabled = useFeatureFlag("auditlogmodals");
 
 	const gebruiker = g.gebruikerId || t("unknownGebruiker");
 	const burger = entities.find(e => e.entityType === "burger")?.burger;
@@ -61,10 +45,11 @@ const AuditLogText: React.FC<TextProps & {g: GebruikersActiviteit}> = ({g, ...pr
 	const values = {
 		gebruiker,
 		burger: burgerName,
-		// Todo: Find a solution for humanJoining an array of AuditLogLinks.
+		// Todo: Find a solution for humanJoining an array of AuditLogLinks (10-08-2021)
 		listBurgers: (burgers && burgers.length > 0) ? humanJoin(burgers.map(b => formatBurgerName(b))) : t("unknownBurgers"),
 		huishouden: huishouden && formatHuishoudenName(huishouden),
 		organisatie: organisatie?.naam || t("unknownOrganisatie"),
+		isAfspraakWithBurger: !afspraak?.afdeling?.organisatie?.naam,
 		afspraakOrganisatie: afspraak?.afdeling?.organisatie?.naam || t("unknownOrganisatie"),
 		customerStatementMessage: customerStatementMessage?.filename || t("unknownCsm"),
 		csmId,
@@ -82,43 +67,40 @@ const AuditLogText: React.FC<TextProps & {g: GebruikersActiviteit}> = ({g, ...pr
 
 	const auditLogTextElement = auditLogTexts(values, components, action);
 
-	const openModal = () => {
-		// Modal is hidden behind a feature flag.
-		if (isModalEnabled) {
-			onOpen();
-		}
-	};
-
-	const context = [
-		g.gebruikerId,
+	const context = {
 		action,
-		...entities.reduce<string[]>((result, e) => ([
+		gebruiker: g.gebruikerId,
+		entities: entities.reduce<string[]>((result, e) => ([
 			...result,
 			`${e.entityType} (${e.entityId})`,
 		]), []),
-	];
+	};
 
 	return (<>
 		<Modal isOpen={isOpen} onClose={onClose}>
 			<ModalOverlay />
 			<ModalContent maxW={"780px"} w={"100%"}>
-				<ModalHeader>{g.id}</ModalHeader>
 				<ModalCloseButton />
+				<ModalHeader>Gebeurtenis #{g.id}</ModalHeader>
 				<ModalBody>
 					<Stack>
 						<Stack>
-							<FormLabel>Sjabloon</FormLabel>
-							{auditLogTextElement ? (
-								<Text {...props}>{auditLogTextElement()}</Text>
-							) : (<>
-								<Text>{t("auditLog.unknown")}</Text>
-								<Text fontSize={"sm"}>{context.join(", ")}</Text>
-							</>)}
-						</Stack>
+							<DataItem label={"Sjabloon"}>
+								<Text>
+									{auditLogTextElement?.() || t("auditLog.unknown")}
+								</Text>
+							</DataItem>
 
-						<Stack>
-							<FormLabel>Ruwe data</FormLabel>
-							<Box as={"pre"} p={2} bg={"gray.100"} maxWidth={"100%"} overflowX={"auto"}>{JSON.stringify({action, values, entities}, null, 2)}</Box>
+							<Divider />
+
+							<DataItem label={"Actie"}>{context.action}</DataItem>
+							<DataItem label={"Gebruiker"}>{context.gebruiker ?? t("unknownUser")}</DataItem>
+							<DataItem label={"Entiteiten"}>
+								<Box as={"pre"} p={2} bg={"gray.100"} maxWidth={"100%"} overflowX={"auto"}>{JSON.stringify(context.entities, null, 2)}</Box>
+							</DataItem>
+							<DataItem label={"Waarden"}>
+								<Box as={"pre"} p={2} bg={"gray.100"} maxWidth={"100%"} overflowX={"auto"}>{JSON.stringify(values, null, 2)}</Box>
+							</DataItem>
 						</Stack>
 					</Stack>
 				</ModalBody>
@@ -129,14 +111,14 @@ const AuditLogText: React.FC<TextProps & {g: GebruikersActiviteit}> = ({g, ...pr
 			</ModalContent>
 		</Modal>
 
-		<Stack onClick={openModal}>
+		<HStack onDoubleClick={() => onOpen()}>
 			{auditLogTextElement ? (
 				<Text {...props}>{auditLogTextElement()}</Text>
 			) : (<>
 				<Text color={"red.500"}>{t("auditLog.unknown")}</Text>
-				<Text fontSize={"sm"}>{context.join(", ")}</Text>
+				<Text fontSize={"sm"}>{action}</Text>
 			</>)}
-		</Stack>
+		</HStack>
 	</>);
 };
 
