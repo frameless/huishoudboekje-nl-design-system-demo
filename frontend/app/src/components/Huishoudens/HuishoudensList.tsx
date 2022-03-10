@@ -7,9 +7,9 @@ import {AppRoutes} from "../../config/routes";
 import {Huishouden, useGetHuishoudensQuery} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
 import {searchFields} from "../../utils/things";
+import AddButton from "../shared/AddButton";
 import DeadEndPage from "../shared/DeadEndPage";
 import Page from "../shared/Page";
-import AddButton from "../shared/AddButton";
 import HuishoudensListView from "./HuishoudensListView";
 
 const HuishoudensList = () => {
@@ -43,9 +43,11 @@ const HuishoudensList = () => {
 
 			if (huishoudens.length === 0) {
 				return (
-					<DeadEndPage message={t("messages.burgers.addHint", {buttonLabel: t("global.actions.add")})}>
-						<AddButton onClick={() => navigate(AppRoutes.CreateBurger())} />
-					</DeadEndPage>
+					<Page title={t("huishoudens.title")}>
+						<DeadEndPage message={t("messages.burgers.addHint", {buttonLabel: t("global.actions.add")})}>
+							<AddButton onClick={() => navigate(AppRoutes.CreateBurger())} />
+						</DeadEndPage>
+					</Page>
 				);
 			}
 
