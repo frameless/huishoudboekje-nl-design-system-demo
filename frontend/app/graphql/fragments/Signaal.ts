@@ -1,4 +1,5 @@
 import {gql} from "@apollo/client";
+import {AfspraakFragment} from "./Afspraak";
 
 export const SignaalFragment = gql`
     fragment Signaal on Signaal {
@@ -7,12 +8,16 @@ export const SignaalFragment = gql`
         type
         actions
         context
+        timeUpdated
         alarm {
             id
+            afspraak {
+                ...Afspraak
+            }
         }
         bankTransactions {
             id
         }
-        timeUpdated
     }
+    ${AfspraakFragment}
 `;

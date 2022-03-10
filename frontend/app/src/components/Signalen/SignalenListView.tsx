@@ -1,29 +1,27 @@
-import {Badge, Stack, Switch, Table, Tbody, Td, Text, Tr} from "@chakra-ui/react";
+import {Badge, Flex, HStack, Stack, Switch, Text} from "@chakra-ui/react";
 import React from "react";
 import {Trans, useTranslation} from "react-i18next";
 import {AppRoutes} from "../../config/routes";
+import {GetSignalenDocument, Signaal, useUpdateSignaalMutation} from "../../generated/graphql";
 import d from "../../utils/dayjs";
 import {currencyFormat2} from "../../utils/things";
 import {useToaster} from "../../utils/useToaster";
-import {Signaal2 as Signaal} from "../Burgers/BurgerDetail/BurgerSignalenView";
 import AuditLogLink from "../Gebeurtenissen/AuditLogLink";
-import {GetSignalenDocument, useUpdateSignaalMutation} from "../../generated/graphql";
 
-
-const SignalenListView: React.FC<{ signalen: Signaal[] }> = ({signalen = []}) => {
+const SignalenListView: React.FC<{signalen: Signaal[]}> = ({signalen = []}) => {
 	const {t} = useTranslation();
 	const toast = useToaster();
 
 	const [updateSignaal] = useUpdateSignaalMutation({
 		refetchQueries: [
-			{query: GetSignalenDocument}
-		]
-	})
+			{query: GetSignalenDocument},
+		],
+	});
 
 	if (signalen.length === 0) {
 		return (
 			<Text>{t("signalen.noResults")}</Text>
-		)
+		);
 	}
 
 	const toggleSignaalActive = (id: string, newActive: boolean) => {
@@ -31,7 +29,7 @@ const SignalenListView: React.FC<{ signalen: Signaal[] }> = ({signalen = []}) =>
 			variables: {
 				id,
 				input: {
-					isActive: newActive
+					isActive: newActive,
 				},
 			},
 		}).then((result) => {
@@ -48,39 +46,33 @@ const SignalenListView: React.FC<{ signalen: Signaal[] }> = ({signalen = []}) =>
 		});
 	};
 
-
 	return (
-
-		<Table size={"sm"} variant={"noLeftPadding"}>
-			<Tbody>
-				{signalen.map((s, i) => (
-					<Tr key={i}>
-						<Td>
-							<Stack spacing={1} width={"100%"}>
-								<Text>
-									<Trans i18nKey={"signalen.contextMessage"} values={{
-										afspraak: (s.alarm?.afspraak?.omschrijving),
-										bedrag: currencyFormat2(true).format(parseFloat(s.context?.bedrag)),
-									}} components={{
-										strong: <strong />,
-										linkAfspraak: <AuditLogLink to={AppRoutes.ViewAfspraak(s.alarm?.afspraak?.id)}>{s.alarm?.afspraak?.omschrijving}</AuditLogLink>,
-									}} />
-								</Text>
-								<Text fontSize={"sm"} color={"gray.500"}>
-									{d(s.timeUpdated).format("LL LT")}
-								</Text>
-							</Stack>
-						</Td>
-						<Td textAlign={"center"}>
-							<Badge colorScheme={s.isActive ? "green" : "gray"}>{s.isActive ? t("enabled") : t("disabled")}</Badge>
-						</Td>
-						<Td textAlign={"center"}>
-							<Switch size={"sm"} isChecked={s.isActive} onChange={() => toggleSignaalActive(s.id!, !s.isActive)} />
-						</Td>
-					</Tr>
-				))}
-			</Tbody>
-		</Table>
+		<Stack>
+			{signalen.map((s) => (
+				<HStack justify={"center"} key={s.id}>
+					<Stack spacing={1} width={"100%"}>
+						<Text>
+							<Trans i18nKey={"signalen.contextMessage"} values={{
+								afspraak: (s.alarm?.afspraak?.omschrijving),
+								bedrag: currencyFormat2(true).format(parseFloat(s.alarm?.afspraak?.bedrag)),
+							}} components={{
+								strong: <strong />,
+								linkAfspraak: <AuditLogLink to={AppRoutes.ViewAfspraak(s.alarm?.afspraak?.id)}>{s.alarm?.afspraak?.omschrijving}</AuditLogLink>,
+							}} />
+						</Text>
+						<Text fontSize={"sm"} color={"gray.500"}>
+							{d(s.timeUpdated).format("LL LT")}
+						</Text>
+					</Stack>
+					<Flex justify={"center"}>
+						<Badge colorScheme={s.isActive ? "green" : "gray"}>{s.isActive ? t("enabled") : t("disabled")}</Badge>
+					</Flex>
+					<Flex justify={"center"}>
+						<Switch size={"sm"} isChecked={s.isActive} onChange={() => toggleSignaalActive(s.id!, !s.isActive)} />
+					</Flex>
+				</HStack>
+			))}
+		</Stack>
 	);
 };
 

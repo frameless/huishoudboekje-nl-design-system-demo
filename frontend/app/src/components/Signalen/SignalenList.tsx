@@ -1,69 +1,106 @@
 import {Checkbox, CheckboxGroup, FormControl, FormLabel, Stack} from "@chakra-ui/react";
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
-import {useGetSignalenQuery} from "../../generated/graphql";
+import Select from "react-select";
+import {Burger, Signaal, useGetSignalenAndBurgersQuery} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
-import {ActiveSwitch, Signaal2} from "../Burgers/BurgerDetail/BurgerSignalenView";
-import DeadEndPage from "../shared/DeadEndPage";
-import {FormLeft, FormRight} from "../shared/Forms";
+import {formatBurgerName, useReactSelectStyles} from "../../utils/things";
+import {ActiveSwitch} from "../Burgers/BurgerDetail/BurgerSignalenView";
 import Page from "../shared/Page";
 import Section from "../shared/Section";
+import SectionContainer from "../shared/SectionContainer";
 import SignalenListView from "./SignalenListView";
 
 const SignalenList = () => {
 	const {t} = useTranslation();
-	const $signalen = useGetSignalenQuery();
-
-	const [filter, setFilter] = useState<ActiveSwitch>({active: true, inactive: false});
+	const $signalen = useGetSignalenAndBurgersQuery();
+	const reactSelectStyles = useReactSelectStyles();
+	const [filterByState, setFilterByState] = useState<ActiveSwitch>({active: true, inactive: false});
+	const [filterByBurgers, setFilterByBurgers] = useState<number[]>([]);
 
 	return (
-		<Queryable query={$signalen}>{data => {
-			const signalen: Signaal2[] = data.signalen || [];
+		<Queryable query={$signalen} children={(data) => {
+			const signalen: Signaal[] = data.signalen ?? [];
+			const burgers: Burger[] = data.burgers ?? [];
 
-			const filteredSignalen: Signaal2[] = [
-				...signalen.filter(a => filter.active && a.isActive),
-				...signalen.filter(a => filter.inactive && !a.isActive),
-			];
+			const burgerSelectOptions = burgers.map(b => ({
+				key: b.id,
+				value: b.id,
+				label: formatBurgerName(b),
+			}));
 
-			if (signalen.length === 0) {
-				return (
-					<Page title={t("signalen.signalen")}>
-						<DeadEndPage message={t("messages.signalen.noResults")} />
-					</Page>
-				);
-			}
+			const filteredSignalen: Signaal[] = signalen
+				.filter(s => { // Filter by burgers
+					if (filterByBurgers.length === 0) {
+						return true;
+					}
+
+					const burgerId = s.alarm?.afspraak?.burger?.id;
+					if (burgerId) {
+						return filterByBurgers.includes(burgerId);
+					}
+
+					return false;
+				})
+				.filter(s => { // Filter by status
+					if (s.isActive && filterByState.active) {
+						return true;
+					}
+					else if (!s.isActive && filterByState.inactive) {
+						return true;
+					}
+
+					return false;
+				});
 
 			return (
 				<Page title={t("signalen.signalen")}>
-					<Section>
-						<Stack direction={["column", "row"]}>
-							<FormLeft title={t("signalen.title")} helperText={t("signalen.helperText")}>
-								{signalen.length > 0 && (
-									<FormControl>
-										<FormLabel>{t("global.actions.filter")}</FormLabel>
-										<CheckboxGroup defaultValue={["active"]} onChange={(val) => {
-											setFilter(() => ({
-												active: val.includes("active"),
-												inactive: val.includes("inactive"),
-											}));
-										}}>
-											<Stack>
-												<Checkbox value={"active"}>{t("signalen.showActive")}</Checkbox>
-												<Checkbox value={"inactive"}>{t("signalen.showInActive")}</Checkbox>
-											</Stack>
-										</CheckboxGroup>
-									</FormControl>
-								)}
-							</FormLeft>
-							<FormRight>
-								<SignalenListView signalen={filteredSignalen} />
-							</FormRight>
-						</Stack>
-					</Section>
+					<SectionContainer>
+						<Section title={t("signalen.title")} helperText={t("signalen.helperText")} left={signalen.length > 0 && (
+							<Stack>
+								<FormControl>
+									<FormLabel>{t("signalen.filterByStatus")}</FormLabel>
+									<CheckboxGroup defaultValue={["active"]} onChange={(val) => {
+										setFilterByState(() => ({
+											active: val.includes("active"),
+											inactive: val.includes("inactive"),
+										}));
+									}}>
+										<Stack>
+											<Checkbox value={"active"}>{t("signalen.showActive")}</Checkbox>
+											<Checkbox value={"inactive"}>{t("signalen.showInActive")}</Checkbox>
+										</Stack>
+									</CheckboxGroup>
+								</FormControl>
+
+								<FormControl>
+									<FormLabel>{t("signalen.filterByBurger")}</FormLabel>
+									<Select
+										id={"rubriek"}
+										isClearable={true}
+										noOptionsMessage={() => t("signalen.selectNoOptionsMessage")}
+										placeholder={t("select.placeholder")}
+										maxMenuHeight={350}
+										options={burgerSelectOptions}
+										isMulti={true}
+										// value={form.rubriekId ? rubriekOptions.find(r => r.value === form.rubriekId) : null}
+										styles={reactSelectStyles.default}
+										onChange={(result) => {
+											if (result) {
+												const burgerIds: number[] = result.map(r => r.value) as number[];
+												setFilterByBurgers(burgerIds);
+											}
+										}}
+									/>
+								</FormControl>
+							</Stack>
+						)}>
+							<SignalenListView signalen={filteredSignalen} />
+						</Section>
+					</SectionContainer>
 				</Page>
 			);
-		}}
-		</Queryable>
+		}} />
 	);
 };
 

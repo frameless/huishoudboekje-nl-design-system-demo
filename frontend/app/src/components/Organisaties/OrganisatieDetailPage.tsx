@@ -10,7 +10,6 @@ import {maxOrganisatieNaamLengthBreakpointValues, truncateText} from "../../util
 import useToaster from "../../utils/useToaster";
 import Alert from "../shared/Alert";
 import BackButton from "../shared/BackButton";
-import DeadEndPage from "../shared/DeadEndPage";
 import MenuIcon from "../shared/MenuIcon";
 import Page from "../shared/Page";
 import AfdelingListItem from "./AfdelingListItem";

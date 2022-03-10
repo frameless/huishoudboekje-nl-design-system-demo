@@ -420,7 +420,7 @@ export type CreateSignaal = {
 export type CreateSignaalInput = {
   actions?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   alarmId?: InputMaybe<Scalars['String']>;
-  banktransactieIds?: Array<InputMaybe<Scalars['Int']>>;
+  banktransactieIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
   context?: InputMaybe<Scalars['String']>;
   isActive?: InputMaybe<Scalars['Boolean']>;
   type?: InputMaybe<Scalars['String']>;
@@ -1396,6 +1396,7 @@ export type Rubriek = {
 export type Signaal = {
   actions?: Maybe<Array<Maybe<Scalars['String']>>>;
   alarm?: Maybe<Alarm>;
+  bankTransactions?: Maybe<Array<Maybe<BankTransaction>>>;
   context?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['String']>;
   isActive?: Maybe<Scalars['Boolean']>;
@@ -1517,7 +1518,7 @@ export type UpdateSignaal = {
 export type UpdateSignaalInput = {
   actions?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   alarmId?: InputMaybe<Scalars['String']>;
-  banktransactieIds?: Array<InputMaybe<Scalars['Int']>>;
+  banktransactieIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
   context?: InputMaybe<Scalars['String']>;
   isActive?: InputMaybe<Scalars['Boolean']>;
   type?: InputMaybe<Scalars['String']>;
@@ -1555,7 +1556,7 @@ export type RekeningFragment = { id?: number, iban?: string, rekeninghouder?: st
 
 export type RubriekFragment = { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } };
 
-export type SignaalFragment = { id?: string, isActive?: boolean, type?: string, actions?: Array<string>, context?: string, timeUpdated?: string, alarm?: { id?: string } };
+export type SignaalFragment = { id?: string, isActive?: boolean, type?: string, actions?: Array<string>, context?: string, timeUpdated?: string, alarm?: { id?: string, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, alarm?: { id?: string, bedrag?: any, bedragMargin?: any, datum?: string, datumMargin?: number, gebruikerEmail?: string, isActive?: boolean, afspraak?: { id?: number }, signaal?: { id?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> } }, bankTransactions?: Array<{ id?: number }> };
 
 export type BankTransactionFragment = { id?: number, informationToAccountOwner?: string, statementLine?: string, bedrag?: any, isCredit?: boolean, tegenRekeningIban?: string, transactieDatum?: any, tegenRekening?: { iban?: string, rekeninghouder?: string } };
 
@@ -1925,7 +1926,7 @@ export type UpdateSignaalMutationVariables = Exact<{
 }>;
 
 
-export type UpdateSignaalMutation = { updateSignaal?: { ok?: boolean, signaal?: { id?: string, isActive?: boolean, type?: string, actions?: Array<string>, context?: string, timeUpdated?: string, alarm?: { id?: string } } } };
+export type UpdateSignaalMutation = { updateSignaal?: { ok?: boolean, signaal?: { id?: string, isActive?: boolean, type?: string, actions?: Array<string>, context?: string, timeUpdated?: string, alarm?: { id?: string, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, alarm?: { id?: string, bedrag?: any, bedragMargin?: any, datum?: string, datumMargin?: number, gebruikerEmail?: string, isActive?: boolean, afspraak?: { id?: number }, signaal?: { id?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> } }, bankTransactions?: Array<{ id?: number }> } } };
 
 export type GetAfdelingQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -2086,10 +2087,15 @@ export type GetRubriekenConfiguratieQueryVariables = Exact<{ [key: string]: neve
 
 export type GetRubriekenConfiguratieQuery = { rubrieken?: Array<{ id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, omschrijving?: string } }>, grootboekrekeningen?: Array<{ id: string, naam?: string, omschrijving?: string }> };
 
+export type GetSignalenAndBurgersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetSignalenAndBurgersQuery = { signalen?: Array<{ id?: string, isActive?: boolean, type?: string, actions?: Array<string>, context?: string, timeUpdated?: string, alarm?: { id?: string, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, alarm?: { id?: string, bedrag?: any, bedragMargin?: any, datum?: string, datumMargin?: number, gebruikerEmail?: string, isActive?: boolean, afspraak?: { id?: number }, signaal?: { id?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> } }, bankTransactions?: Array<{ id?: number }> }>, burgers?: Array<{ id?: number, voorletters?: string, voornamen?: string, achternaam?: string }> };
+
 export type GetSignalenQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetSignalenQuery = { signalen?: Array<{ id?: string, isActive?: boolean, type?: string, actions?: Array<string>, context?: string, timeUpdated?: string, alarm?: { id?: string } }> };
+export type GetSignalenQuery = { signalen?: Array<{ id?: string, isActive?: boolean, type?: string, actions?: Array<string>, context?: string, timeUpdated?: string, alarm?: { id?: string, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, alarm?: { id?: string, bedrag?: any, bedragMargin?: any, datum?: string, datumMargin?: number, gebruikerEmail?: string, isActive?: boolean, afspraak?: { id?: number }, signaal?: { id?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> } }, bankTransactions?: Array<{ id?: number }> }> };
 
 export type GetSimpleBurgersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2423,12 +2429,18 @@ export const SignaalFragmentDoc = gql`
   type
   actions
   context
+  timeUpdated
   alarm {
     id
+    afspraak {
+      ...Afspraak
+    }
   }
-  timeUpdated
+  bankTransactions {
+    id
+  }
 }
-    `;
+    ${AfspraakFragmentDoc}`;
 export const BankTransactionFragmentDoc = gql`
     fragment BankTransaction on BankTransaction {
   id
@@ -5121,6 +5133,47 @@ export function useGetRubriekenConfiguratieLazyQuery(baseOptions?: Apollo.LazyQu
 export type GetRubriekenConfiguratieQueryHookResult = ReturnType<typeof useGetRubriekenConfiguratieQuery>;
 export type GetRubriekenConfiguratieLazyQueryHookResult = ReturnType<typeof useGetRubriekenConfiguratieLazyQuery>;
 export type GetRubriekenConfiguratieQueryResult = Apollo.QueryResult<GetRubriekenConfiguratieQuery, GetRubriekenConfiguratieQueryVariables>;
+export const GetSignalenAndBurgersDocument = gql`
+    query getSignalenAndBurgers {
+  signalen {
+    id
+    ...Signaal
+  }
+  burgers {
+    id
+    voorletters
+    voornamen
+    achternaam
+  }
+}
+    ${SignaalFragmentDoc}`;
+
+/**
+ * __useGetSignalenAndBurgersQuery__
+ *
+ * To run a query within a React component, call `useGetSignalenAndBurgersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetSignalenAndBurgersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetSignalenAndBurgersQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetSignalenAndBurgersQuery(baseOptions?: Apollo.QueryHookOptions<GetSignalenAndBurgersQuery, GetSignalenAndBurgersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetSignalenAndBurgersQuery, GetSignalenAndBurgersQueryVariables>(GetSignalenAndBurgersDocument, options);
+      }
+export function useGetSignalenAndBurgersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetSignalenAndBurgersQuery, GetSignalenAndBurgersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetSignalenAndBurgersQuery, GetSignalenAndBurgersQueryVariables>(GetSignalenAndBurgersDocument, options);
+        }
+export type GetSignalenAndBurgersQueryHookResult = ReturnType<typeof useGetSignalenAndBurgersQuery>;
+export type GetSignalenAndBurgersLazyQueryHookResult = ReturnType<typeof useGetSignalenAndBurgersLazyQuery>;
+export type GetSignalenAndBurgersQueryResult = Apollo.QueryResult<GetSignalenAndBurgersQuery, GetSignalenAndBurgersQueryVariables>;
 export const GetSignalenDocument = gql`
     query getSignalen {
   signalen {
