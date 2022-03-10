@@ -34,6 +34,7 @@
     "@gemeente-denhaag/design-tokens-components": "^0.2.3-alpha.121",
     "@react-keycloak/web": "^3.4.0",
     "@utrecht/components": "^1.0.0-alpha.147",
+    "array-to-sentence": "^2.0.0",
     "dayjs": "^1.10.8",
     "dayjs-recur": "^1.0.0",
     "framer-motion": "^4.1.17",

@@ -10,11 +10,13 @@ const Toekomst: React.FC<{ bsn: number }> = ({bsn}) => {
 
 	return (
 		<Queryable query={$burger} render={data => {
-			const {rekeningen} = data.burger || {};
-			const {afspraken} = data.burger || {};
+			const {rekeningen = [], afspraken = []} = data.burger || {};
 
-			// return (<pre> {JSON.stringify(rekeningen, null, 2)}</pre>)
-			return (<ToekomstList rekeningen={rekeningen} afspraken={afspraken} />)
+			const burgerRekeningenIds: number[] = rekeningen.map(r => r.id);
+			const filteredAfspraken = afspraken.filter(a => burgerRekeningenIds.includes(a.tegenrekening?.id));
+
+			// return (<pre> {JSON.stringify(filteredAfspraken, null, 2)}</pre>)
+			return (<ToekomstList afspraken={filteredAfspraken} />)
 		}} />
 	);
 };

@@ -13,7 +13,7 @@ const App = () => {
 			width: 800,
 			margin: "0 auto",
 		}}>
-			<Huishoudboekje user={user} config={{apiUrl: "https://hhb-823.nlx.reviews/api/burgers"}} />
+			<Huishoudboekje user={user} config={{apiUrl: "https://test.huishoudboekje.demoground.nl/api/burgers"}} />
 		</div>
 	);
 

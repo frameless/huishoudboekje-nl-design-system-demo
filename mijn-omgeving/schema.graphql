@@ -40,7 +40,7 @@ type Banktransactie {
 type Betaalinstructie {
   byDay: [DayOfWeek]
   byMonth: [Int]
-  byMonthDay: [String]
+  byMonthDay: [Int]
   repeatFrequency: String
   exceptDates: [String]
   startDate: String

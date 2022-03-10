@@ -1,9 +1,9 @@
 import React from "react";
-import {Afspraak, Rekening} from "../../generated/graphql";
+import {Afspraak} from "../../generated/graphql";
 import {Stack} from "@chakra-ui/react";
 import ToekomstListItem from "./ToekomstListItem";
 
-const ToekomstList: React.FC<{ rekeningen: Rekening [], afspraken: Afspraak [] }> = ({rekeningen, afspraken}) => {
+const ToekomstList: React.FC<{ afspraken: Afspraak [] }> = ({afspraken}) => {
 
 
 	return (
