@@ -8,7 +8,7 @@ const Betaalinstructie = objectType({
 			type: DayOfWeek,
 		});
 		t.list.int("byMonth");
-		t.list.string("byMonthDay");
+		t.list.int("byMonthDay");
 		t.string("repeatFrequency");
 		t.list.string("exceptDates");
 		t.string("startDate");
