@@ -8,7 +8,7 @@
   },
   "unknown": "Onbekend",
   "toekomst": {
-    "contextMessage": "{{datum}} ontvangt u {{bedrag}} {{omschrijving}} op uw bankrekening {{rekening}}."
+    "contextMessage": "{{datum}} ontvangt u <strong>{{bedrag}}</strong> {{omschrijving}} op uw bankrekening <PrettyIban />."
   },
   "schedule": {
     "unknown": "Onbekend",

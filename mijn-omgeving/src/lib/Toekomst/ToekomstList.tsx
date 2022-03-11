@@ -2,6 +2,7 @@ import React from "react";
 import {Afspraak} from "../../generated/graphql";
 import {Stack} from "@chakra-ui/react";
 import ToekomstListItem from "./ToekomstListItem";
+import d from "dayjs";
 
 const ToekomstList: React.FC<{ afspraken: Afspraak [] }> = ({afspraken}) => {
 	const getNextDate = (afspraak) => {
