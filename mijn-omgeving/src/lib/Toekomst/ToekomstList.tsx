@@ -34,13 +34,15 @@ const ToekomstList: React.FC<{ afspraken: Afspraak [] }> = ({afspraken}) => {
 		return recur ? recur.next(1) : undefined;
 	}
 
+
 	return (
 		<Stack>
 			{afspraken.map((afspraak, i) => {
 				const nextDate = getNextDate(afspraak);
 
 				if (nextDate && d(nextDate).isAfter(d())) {
-					return <ToekomstListItem key={i} datum={d(nextDate).format("L")} bedrag={afspraak.bedrag} omschrijving={afspraak.omschrijving} rekening={afspraak.tegenrekening?.iban} />
+					const format = d(nextDate).year() !== d().year() ? "dddd D MMMM YYYY" : "dddd D MMMM";
+					return <ToekomstListItem key={i} datum={d(nextDate).format(format)} bedrag={afspraak.bedrag} omschrijving={afspraak.omschrijving} rekening={afspraak.tegenrekening?.iban} />
 				}
 			})}
 		</Stack>
