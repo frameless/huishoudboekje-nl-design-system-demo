@@ -15,7 +15,7 @@ const Toekomst: React.FC<{ bsn: number }> = ({bsn}) => {
 			const burgerRekeningenIds: number[] = rekeningen.map(r => r.id);
 			const filteredAfspraken = afspraken.filter(a => burgerRekeningenIds.includes(a.tegenrekening?.id));
 
-			// return (<pre> {JSON.stringify(filteredAfspraken, null, 2)}</pre>)
+			// return (<pre> {JSON.stringify(afspraken, null, 2)}</pre>)
 			return (<ToekomstList afspraken={filteredAfspraken} />)
 		}} />
 	);

@@ -1,8 +1,8 @@
 import {useTranslation} from "react-i18next";
 import {Betaalinstructie, DayOfWeek} from "../generated/graphql";
 import {Schedule} from "../models/models";
-import d from "./dayjs";
 import {humanJoin, Months} from "./things";
+import d from "dayjs";
 
 const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 	const {t} = useTranslation();
@@ -14,6 +14,11 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 			}
 
 			const {byDay, byMonth, byMonthDay, startDate, endDate} = schedule;
+			// const dbyDay = {days: byDay?.map(d => t("schedule." + String(DayOfWeek[d]).toUpperCase()))}
+
+			// console.log(dbyDay)
+			// return
+
 
 			if (byDay && byDay.length > 0) {
 				if (byDay.length === 7) {
