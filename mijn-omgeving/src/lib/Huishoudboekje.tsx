@@ -1,6 +1,6 @@
 import {ApolloProvider} from "@apollo/client";
 import React from "react";
-import createApolloClient from "./apolloClient";
+import createApolloClient from "./services/apolloClient";
 import BanktransactiesList from "./Banktransacties/BanktransactiesList";
 import {useGetBurgerQuery} from "../generated/graphql";
 import Queryable from "./Queryable";

@@ -1,6 +1,6 @@
 import {Box} from "@chakra-ui/react";
 import React from "react";
-import {currencyFormat2} from "../../utils/numberFormat";
+import {currencyFormat2} from "../utils/numberFormat";
 import {Trans} from "react-i18next";
 import PrettyIban from "../PrettyIban";
 
