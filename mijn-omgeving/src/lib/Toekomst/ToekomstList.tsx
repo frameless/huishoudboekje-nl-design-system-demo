@@ -24,8 +24,7 @@ const ToekomstList: React.FC<{ afspraken: Afspraak [] }> = ({afspraken}) => {
 				}
 			}
 
-			const monthsOfYear = d().recur().every(b.byMonthDay).daysOfMonth().every((b?.byMonth || []).map(m => m - 1)).monthsOfYear();
-			recur = monthsOfYear;
+			recur = d().recur().every(b.byMonthDay).daysOfMonth().every((b?.byMonth || []).map(m => m - 1)).monthsOfYear();
 		}
 		if (b?.byDay) { // Wekelijks
 			recur = d().recur().every(b?.byDay).daysOfWeek();
@@ -44,6 +43,8 @@ const ToekomstList: React.FC<{ afspraken: Afspraak [] }> = ({afspraken}) => {
 					const format = d(nextDate).year() !== d().year() ? "dddd D MMMM YYYY" : "dddd D MMMM";
 					return <ToekomstListItem key={i} datum={d(nextDate).format(format)} bedrag={afspraak.bedrag} omschrijving={afspraak.omschrijving} rekening={afspraak.tegenrekening?.iban} />
 				}
+
+				return null;
 			})}
 		</Stack>
 	);
