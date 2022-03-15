@@ -1,5 +1,5 @@
-"""Exposes a URL that specifies the behaviour of this scalar."""
-directive @specifiedBy on SCALAR
+"Exposes a URL that specifies the behaviour of this scalar."
+directive @specifiedBy("The URL that specifies the behaviour of this scalar." url: String!) on SCALAR
 scalar Bedrag
 scalar JSON
 enum DayOfWeek {
@@ -11,12 +11,12 @@ enum DayOfWeek {
   Saturday
   Sunday
 }
-"""GraphQL Query"""
+"GraphQL Query"
 type Query {
   burger(bsn: Int): Burger
 }
 type Afspraak {
-  """Een unique identifier voor een afspraak in het systeem."""
+  "Een unique identifier voor een afspraak in het systeem."
   id: Int
   omschrijving: String
   bedrag: String
@@ -40,17 +40,17 @@ type Banktransactie {
 type Betaalinstructie {
   byDay: [DayOfWeek]
   byMonth: [Int]
-  byMonthDay: [String]
+  byMonthDay: [Int]
   repeatFrequency: String
   exceptDates: [String]
   startDate: String
   endDate: String
 }
-"""Een burger is een deelnemer."""
+"Een burger is een deelnemer."
 type Burger {
-  """Dit is een unique identifier voor een burger in het systeem."""
+  "Dit is een unique identifier voor een burger in het systeem."
   id: Int
-  """Het burgerservicenummer."""
+  "Het burgerservicenummer."
   bsn: String
   voorletters: String
   voornamen: String
@@ -66,9 +66,9 @@ type Burger {
   afspraken: [Afspraak]
   banktransacties: [Banktransactie]
 }
-""""""
+""
 type Journaalpost {
-  """Een unique identifier voor een journaalpost in het systeem."""
+  "Een unique identifier voor een journaalpost in het systeem."
   id: Int
   banktransactie: Banktransactie
   afspraak: Afspraak
@@ -79,12 +79,12 @@ type Organisatie {
   kvknummer: String
   vestigingsnummer: String
 }
-""""""
+""
 type Rekening {
-  """Een unique identifier voor een rekening in het systeem."""
+  "Een unique identifier voor een rekening in het systeem."
   id: Int
-  """Dit is een IBAN."""
+  "Dit is een IBAN."
   iban: String
-  """De naam van de houder van de rekening."""
+  "De naam van de houder van de rekening."
   rekeninghouder: String
 }

@@ -1,19 +1,19 @@
 {
   "overwrite": true,
   "schema": "schema.graphql",
-  "documents": "./src/lib/graphql/**",
+  "documents": "./src/graphql/**",
   "generates": {
-	"./src/lib/generated/graphql.tsx": {
-	  "plugins": [
-		"typescript",
-		"typescript-operations",
-		"typescript-react-apollo"
-	  ]
-	}
+    "./src/generated/graphql.tsx": {
+      "plugins": [
+        "typescript",
+        "typescript-operations",
+        "typescript-react-apollo"
+      ]
+    }
   },
   "config": {
-	"maybeValue": "T",
-	"defaultScalarType": "any",
-	"skipTypename": true
+    "maybeValue": "T",
+    "defaultScalarType": "any",
+    "skipTypename": true
   }
 }

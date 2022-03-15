@@ -5,7 +5,7 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import d from "../utils/dayjs";
 import BanktransactieListItem from "./BanktransactieListItem";
-import {Banktransactie} from "./generated/graphql";
+import {Banktransactie} from "../../generated/graphql";
 import Divider from "@gemeente-denhaag/divider";
 
 const BanktransactiesList: React.FC<{ transacties: Banktransactie[] }> = ({transacties}) => {
