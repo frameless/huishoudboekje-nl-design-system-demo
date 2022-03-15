@@ -231,13 +231,13 @@ const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({
 										<FormLabel>{t("schedule.byDay")}</FormLabel>
 										<CheckboxGroup colorScheme={"primary"} defaultValue={[]} value={form.byDay || []} onChange={(val: string[]) => updateForm("byDay", val)}>
 											<Wrap>
-												<WrapItem><Checkbox value={String(DayOfWeek.Monday)}>Maandag</Checkbox></WrapItem>
-												<WrapItem><Checkbox value={String(DayOfWeek.Tuesday)}>Dinsdag</Checkbox></WrapItem>
-												<WrapItem><Checkbox value={String(DayOfWeek.Wednesday)}>Woensdag</Checkbox></WrapItem>
-												<WrapItem><Checkbox value={String(DayOfWeek.Thursday)}>Donderdag</Checkbox></WrapItem>
-												<WrapItem><Checkbox value={String(DayOfWeek.Friday)}>Vrijdag</Checkbox></WrapItem>
-												<WrapItem><Checkbox value={String(DayOfWeek.Saturday)}>Zaterdag</Checkbox></WrapItem>
-												<WrapItem><Checkbox value={String(DayOfWeek.Sunday)}>Zondag</Checkbox></WrapItem>
+												<WrapItem><Checkbox value={String(DayOfWeek.Monday)} isRequired={false}>Maandag</Checkbox></WrapItem>
+												<WrapItem><Checkbox value={String(DayOfWeek.Tuesday)} isRequired={false}>Dinsdag</Checkbox></WrapItem>
+												<WrapItem><Checkbox value={String(DayOfWeek.Wednesday)} isRequired={false}>Woensdag</Checkbox></WrapItem>
+												<WrapItem><Checkbox value={String(DayOfWeek.Thursday)} isRequired={false}>Donderdag</Checkbox></WrapItem>
+												<WrapItem><Checkbox value={String(DayOfWeek.Friday)} isRequired={false}>Vrijdag</Checkbox></WrapItem>
+												<WrapItem><Checkbox value={String(DayOfWeek.Saturday)} isRequired={false}>Zaterdag</Checkbox></WrapItem>
+												<WrapItem><Checkbox value={String(DayOfWeek.Sunday)} isRequired={false}>Zondag</Checkbox></WrapItem>
 											</Wrap>
 										</CheckboxGroup>
 										<FormErrorMessage>{t("schedule.invalidByDayError")}</FormErrorMessage>
@@ -251,18 +251,18 @@ const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({
 										<FormLabel>{t("schedule.byMonth")}</FormLabel>
 										<CheckboxGroup colorScheme={"primary"} defaultValue={[]} value={(form.byMonth || [])?.map(x => String(x)) || []} onChange={(val: string[]) => updateForm("byMonth", val.map(x => parseInt(x)))}>
 											<Wrap>
-												<WrapItem><Checkbox value={String(1)}>{t("months.jan")}</Checkbox></WrapItem>
-												<WrapItem><Checkbox value={String(2)}>{t("months.feb")}</Checkbox></WrapItem>
-												<WrapItem><Checkbox value={String(3)}>{t("months.mrt")}</Checkbox></WrapItem>
-												<WrapItem><Checkbox value={String(4)}>{t("months.apr")}</Checkbox></WrapItem>
-												<WrapItem><Checkbox value={String(5)}>{t("months.may")}</Checkbox></WrapItem>
-												<WrapItem><Checkbox value={String(6)}>{t("months.jun")}</Checkbox></WrapItem>
-												<WrapItem><Checkbox value={String(7)}>{t("months.jul")}</Checkbox></WrapItem>
-												<WrapItem><Checkbox value={String(8)}>{t("months.aug")}</Checkbox></WrapItem>
-												<WrapItem><Checkbox value={String(9)}>{t("months.sep")}</Checkbox></WrapItem>
-												<WrapItem><Checkbox value={String(10)}>{t("months.oct")}</Checkbox></WrapItem>
-												<WrapItem><Checkbox value={String(11)}>{t("months.nov")}</Checkbox></WrapItem>
-												<WrapItem><Checkbox value={String(12)}>{t("months.dec")}</Checkbox></WrapItem>
+												<WrapItem><Checkbox value={String(1)} isRequired={false}>{t("months.jan")}</Checkbox></WrapItem>
+												<WrapItem><Checkbox value={String(2)} isRequired={false}>{t("months.feb")}</Checkbox></WrapItem>
+												<WrapItem><Checkbox value={String(3)} isRequired={false}>{t("months.mrt")}</Checkbox></WrapItem>
+												<WrapItem><Checkbox value={String(4)} isRequired={false}>{t("months.apr")}</Checkbox></WrapItem>
+												<WrapItem><Checkbox value={String(5)} isRequired={false}>{t("months.may")}</Checkbox></WrapItem>
+												<WrapItem><Checkbox value={String(6)} isRequired={false}>{t("months.jun")}</Checkbox></WrapItem>
+												<WrapItem><Checkbox value={String(7)} isRequired={false}>{t("months.jul")}</Checkbox></WrapItem>
+												<WrapItem><Checkbox value={String(8)} isRequired={false}>{t("months.aug")}</Checkbox></WrapItem>
+												<WrapItem><Checkbox value={String(9)} isRequired={false}>{t("months.sep")}</Checkbox></WrapItem>
+												<WrapItem><Checkbox value={String(10)} isRequired={false}>{t("months.oct")}</Checkbox></WrapItem>
+												<WrapItem><Checkbox value={String(11)} isRequired={false}>{t("months.nov")}</Checkbox></WrapItem>
+												<WrapItem><Checkbox value={String(12)} isRequired={false}>{t("months.dec")}</Checkbox></WrapItem>
 											</Wrap>
 										</CheckboxGroup>
 										<FormErrorMessage>{t("schedule.invalidByMonthError")}</FormErrorMessage>
