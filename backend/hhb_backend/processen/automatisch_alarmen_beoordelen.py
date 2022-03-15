@@ -1,12 +1,13 @@
 import logging
 from tokenize import String
-from backend.hhb_backend.graphql.mutations.alarmen.evaluate_alarm import evaluateOneAlarm
+# from backend.hhb_backend.graphql.mutations.alarmen.evaluate_alarm import evaluateOneAlarm
 
 import hhb_backend.graphql as graphql
 from hhb_backend.graphql.mutations.alarmen.evaluate_alarm import EvaluateAlarm, EvaluateAlarms
 
-# Automatisch ALLE alarmen beoordelen
+
 async def automatisch_alle_alarmen_beoordelen():
+    '''Automatisch ALLE alarmen beoordelen.'''
     logging.info("Automatisch alarmen beoordelen started.")
 
     result = await graphql.schema.execute("""
@@ -30,10 +31,12 @@ mutation EvaluateAlarms {
         logging.warning(f"Automatisch alarmen beoordelen failed: {result.errors}")
         return
 
-    alarmen_ = result.data['eveluateAlarm']['alarmTriggerResult']['alarm']
+    alarmen_ = result.data['evaluateAlarms']['alarmTriggerResult']
     logging.info(f"Automatisch alarmen beoordelen completed with {len(alarmen_)} evaluated alams.")
 
+
 async def automatisch_alarm_beoordelen(id: String):
+    '''Automatisch het alarm met opgegeven id beoordelen.'''
     logging.info("Automatisch een alarm beoordelen started.")
   
     result = await graphql.schema.execute("""

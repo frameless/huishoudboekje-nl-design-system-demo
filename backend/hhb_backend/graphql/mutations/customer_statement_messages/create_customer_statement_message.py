@@ -20,6 +20,7 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import (
 )
 import hhb_backend.graphql.models.journaalpost as journaalpost
 from hhb_backend.processen import automatisch_boeken
+import hhb_backend.processen.automatisch_alarmen_beoordelen as automatisch_beoordelen
 
 IBAN_REGEX = r"[a-zA-Z]{2}[0-9]{2}[a-zA-Z0-9]{4}[0-9]{7}([a-zA-Z0-9]?){0,16}"
 
@@ -133,6 +134,9 @@ class CreateCustomerStatementMessage(graphene.Mutation):
             if journaalpostentemp:
                 journaalposten.extend(journaalpostentemp)
 
+        # Evaluate all alarms
+        await automatisch_beoordelen.automatisch_alle_alarmen_beoordelen()
+        
         return CreateCustomerStatementMessage(
             journaalposten=journaalposten,
             customerStatementMessage=customerStatementMessage,
