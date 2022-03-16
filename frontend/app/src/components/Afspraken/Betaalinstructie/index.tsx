@@ -2,14 +2,7 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {useNavigate, useParams} from "react-router-dom";
 import {AppRoutes} from "../../../config/routes";
-import {
-	Afspraak,
-	GetAfspraakDocument,
-	GetAfsprakenDocument,
-	UpdateAfspraakBetaalinstructieMutationVariables,
-	useGetAfspraakQuery,
-	useUpdateAfspraakBetaalinstructieMutation,
-} from "../../../generated/graphql";
+import {Afspraak, GetAfspraakDocument, GetAfsprakenDocument, UpdateAfspraakBetaalinstructieMutationVariables, useGetAfspraakQuery, useUpdateAfspraakBetaalinstructieMutation,} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import useHandleMutation from "../../../utils/useHandleMutation";
 import BackButton from "../../shared/BackButton";
@@ -18,7 +11,7 @@ import PageNotFound from "../../shared/PageNotFound";
 import AfspraakBetaalinstructieForm from "./AfspraakBetaalinstructieForm";
 
 const BetaalinstructiePage = () => {
-	const {id = ""} = useParams<{id: string}>();
+	const {id = ""} = useParams<{ id: string }>();
 	const {t} = useTranslation();
 	const navigate = useNavigate();
 	const handleMutation = useHandleMutation();
@@ -35,7 +28,7 @@ const BetaalinstructiePage = () => {
 			id: parseInt(id),
 			betaalinstructie: data,
 		},
-	}), t("messages.updateAfspraakSuccess"), () => navigate(AppRoutes.ViewAfspraak(parseInt(id))));
+	}), t("messages.updateBetaalinstructieSuccess"), () => navigate(AppRoutes.ViewAfspraak(parseInt(id))));
 
 	return (
 		<Page title={t("afspraakBetaalinstructie.title")} backButton={<BackButton to={AppRoutes.ViewAfspraak(parseInt(id))} />}>
