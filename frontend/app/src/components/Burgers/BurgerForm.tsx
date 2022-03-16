@@ -13,6 +13,7 @@ import Asterisk from "../shared/Asterisk";
 import Section from "../shared/Section";
 import SectionContainer from "../shared/SectionContainer";
 
+
 // t("messages.burgers.invalidGeboortedatum")
 const validator = zod.object({
 	bsn: zod.string().regex(/^([0-9]{8,9})$/),
@@ -32,10 +33,10 @@ const validator = zod.object({
 });
 
 type BurgerFormProps = {
-	burger?: Burger,
-	onSubmit: Function,
-	isLoading: boolean,
-	isBsnValid?: boolean,
+    burger?: Burger,
+    onSubmit: Function,
+    isLoading: boolean,
+    isBsnValid?: boolean,
 }
 
 const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading, isBsnValid = true}) => {
@@ -99,7 +100,7 @@ const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading, isB
 							<FormControl id={"voorletters"} isInvalid={!isFieldValid("voorletters")} isRequired={true}>
 								<Stack spacing={1} flex={1}>
 									<FormLabel>{t("forms.burgers.fields.voorletters")}</FormLabel>
-									<Input onChange={e => updateForm("voorletters", e.target.value)} value={form.voorletters || ""} />
+									<Input onChange={e => updateForm("voorletters", e.target.value)} value={form.voorletters || ""} onBlur={e => updateForm("voorletters", e.target.value.replaceAll(/[^A-Za-zÀ-ž]/g, "").toUpperCase().split("").join(".") + ".")} />
 									<FormErrorMessage>{t("messages.burgers.invalidVoorletters")}</FormErrorMessage>
 								</Stack>
 							</FormControl>
@@ -155,7 +156,7 @@ const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading, isB
 								<Stack spacing={1} flex={1}>
 									<FormLabel>{t("forms.burgers.fields.postcode")}</FormLabel>
 									<Tooltip label={t("forms.burgers.tooltips.postcode")} aria-label={t("forms.burgers.fields.postcode")} placement={isMobile ? "top" : "left"}>
-										<Input onChange={e => updateForm("postcode", e.target.value)} value={form.postcode || ""} />
+										<Input onChange={e => updateForm("postcode", e.target.value)} value={form.postcode || ""} onBlur={e => updateForm("postcode", e.target.value.replaceAll(/[^A-Za-z0-9]|[\s]/g, "").toUpperCase())} />
 									</Tooltip>
 									<FormErrorMessage>{t("messages.burgers.invalidPostcode")}</FormErrorMessage>
 								</Stack>

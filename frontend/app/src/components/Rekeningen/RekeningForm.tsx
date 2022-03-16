@@ -14,10 +14,10 @@ const validator = zod.object({
 });
 
 const RekeningForm: React.FC<{
-	rekening?: Rekening,
-	onSubmit: Function,
-	onCancel: VoidFunction,
-	isIbanValid?: boolean,
+    rekening?: Rekening,
+    onSubmit: Function,
+    onCancel: VoidFunction,
+    isIbanValid?: boolean,
 }> = ({rekening, onSubmit, onCancel, isIbanValid = true}) => {
 	const {t} = useTranslation();
 	const toast = useToaster();
@@ -61,7 +61,7 @@ const RekeningForm: React.FC<{
 				</FormControl>
 				<FormControl isInvalid={!isFieldValid("iban") || !isIbanValid} id={"iban"} isRequired={true}>
 					<FormLabel>{t("forms.rekeningen.fields.iban")}</FormLabel>
-					<Input onChange={e => updateForm("iban", e.target.value)} value={form.iban || ""} placeholder={"NL00BANK0123456789"} autoFocus={!!(rekening?.rekeninghouder)} />
+					<Input onChange={e => updateForm("iban", e.target.value)} value={form.iban || ""} placeholder={"NL00BANK0123456789"} autoFocus={!!(rekening?.rekeninghouder)} onBlur={e => updateForm("iban", e.target.value.replaceAll(/[\s]/g, "").toUpperCase())} />
 					<FormErrorMessage>{t("errors.iban.generalError")}</FormErrorMessage>
 				</FormControl>
 				<Stack align={"flex-end"}>
