@@ -5,6 +5,7 @@ import {Afspraak} from "../../generated/graphql";
 import ToekomstListItem from "./ToekomstListItem";
 
 const ToekomstList: React.FC<{ afspraken: Afspraak [] }> = ({afspraken}) => {
+
 	const getNextDate = (afspraak) => {
 		let recur;
 		const b = afspraak.betaalinstructie;
@@ -47,7 +48,8 @@ const ToekomstList: React.FC<{ afspraken: Afspraak [] }> = ({afspraken}) => {
 				return null;
 			})}
 		</Stack>
-	);
+	)
+
 };
 
 export default ToekomstList;

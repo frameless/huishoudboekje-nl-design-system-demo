@@ -40,7 +40,7 @@ const BanktransactiesList: React.FC<{ transacties: Banktransactie[] }> = ({trans
 
 	return (<>
 		{transacties.length > 0 ? (
-			<Stack>
+			<Stack pt={4}>
 				{Object.keys(bt).map((transactionDate, i) => {
 					return (
 						<Stack key={i}>

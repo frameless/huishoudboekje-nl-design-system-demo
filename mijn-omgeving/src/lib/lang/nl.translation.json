@@ -6,19 +6,19 @@
   "message": {
     "zeroTransactions": "Er zijn geen transacties gevonden."
   },
+  "title": "Huishoudboekje",
+  "banktransactions": {
+    "title": "Banktransacties"
+  },
+  "card": {
+    "futureContext": "Verwachte transacties",
+    "future": "Toekomst",
+    "transactionsContext": "Overzicht van alle bij- en afschrijvingen.",
+    "transactions": "Banktransacties"
+  },
   "unknown": "Onbekend",
   "toekomst": {
+    "title": "Toekomst",
     "contextMessage": "{{datum}} ontvangt u <strong>{{bedrag}}</strong> {{omschrijving}} op uw bankrekening <PrettyIban />."
-  },
-  "schedule": {
-    "unknown": "Onbekend",
-    "everyDay": "Elke dag",
-    "everyWeek": "Elke week",
-    "onDays": "op {{days}}",
-    "onceOnDate": "Eenmalig, op {{date}}.",
-    "everyMonth": "Elke maand",
-    "everyYear": "Elk jaar",
-    "inMonths": "in {{months}}",
-    "onDates": "op de {{dates}}"
   }
 }

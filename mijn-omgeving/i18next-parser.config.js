@@ -17,7 +17,7 @@ module.exports = {
 	lineEnding: "auto",
 	locales: ["nl"],
 	namespaceSeparator: ":",
-	output: "src/lang/$LOCALE.$NAMESPACE.json",
+	output: "src/lib/lang/$LOCALE.$NAMESPACE.json",
 	sort: false,
 	skipDefaultValues: false,
 	useKeysAsDefaultValue: false,
