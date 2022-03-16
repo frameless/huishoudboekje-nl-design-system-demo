@@ -9,8 +9,9 @@ import Toekomst from "./Toekomst/Toekomst";
 import Main from "./Main";
 import {Link} from "@gemeente-denhaag/link";
 import {ArrowLeftIcon} from "@gemeente-denhaag/icons";
-import {Heading2} from "@gemeente-denhaag/components-react";
+import {Heading2} from "@gemeente-denhaag/typography";
 import {useTranslation} from "react-i18next";
+import DetailBurgerView from "./Burger/DetailBurgerView";
 
 export type HuishoudboekjeUser = {
     bsn: number
@@ -53,9 +54,8 @@ const Huishoudboekje: React.FC<{ user: HuishoudboekjeUser, config: Huishoudboekj
 			<Routes>
 				<Route path={"/"} element={<Main />} />
 				<Route path={"/banktransacties"} element={<HuishoudboekjePage bsn={user.bsn} />} />
-				<Route path={"/toekomst"} element={(
-					<Toekomst bsn={user.bsn} />
-				)} />
+				<Route path={"/toekomst"} element={(<Toekomst bsn={user.bsn} />)} />
+				<Route path={"/gegevens"} element={(<DetailBurgerView bsn={user.bsn} />)} />
 			</Routes>
 		</ApolloProvider>
 	);
