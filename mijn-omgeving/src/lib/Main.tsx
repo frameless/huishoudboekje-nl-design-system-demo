@@ -2,7 +2,7 @@ import React from "react";
 import {Card} from "@gemeente-denhaag/card";
 import {useTranslation} from "react-i18next";
 import "./Main.css";
-import {Heading2} from "@gemeente-denhaag/components-react";
+import {Heading2} from "@gemeente-denhaag/typography";
 
 
 const Main = () => {
@@ -23,6 +23,11 @@ const Main = () => {
 					href={"/banktransacties"}
 					subTitle={t("card.transactionsContext")}
 					title={t("card.transactions")}
+				/>
+				<Card
+					date={new Date()}
+					href={"/gegevens"}
+					title={t("detailBurger.title")}
 				/>
 			</div>
 		</div>

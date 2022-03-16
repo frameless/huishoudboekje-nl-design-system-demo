@@ -4,7 +4,7 @@ import Queryable from "../Queryable";
 import ToekomstList from "./ToekomstList";
 import {Link} from "@gemeente-denhaag/link";
 import {ArrowLeftIcon} from "@gemeente-denhaag/icons";
-import {Heading2} from "@gemeente-denhaag/components-react";
+import {Heading2} from "@gemeente-denhaag/typography";
 import {useTranslation} from "react-i18next";
 
 const Toekomst: React.FC<{ bsn: number }> = ({bsn}) => {
@@ -20,7 +20,6 @@ const Toekomst: React.FC<{ bsn: number }> = ({bsn}) => {
 			const burgerRekeningenIds: number[] = rekeningen.map(r => r.id);
 			const filteredAfspraken = afspraken.filter(a => burgerRekeningenIds.includes(a.tegenrekening?.id));
 
-			// return (<pre> {JSON.stringify(afspraken, null, 2)}</pre>)
 			return (
 				<div>
 					<div>

@@ -1,4 +1,4 @@
-import {Stack} from "@chakra-ui/react";
+import {Stack, Table, Tbody} from "@chakra-ui/react";
 import d from "dayjs";
 import React from "react";
 import {Afspraak} from "../../generated/graphql";
@@ -42,7 +42,13 @@ const ToekomstList: React.FC<{ afspraken: Afspraak [] }> = ({afspraken}) => {
 
 				if (nextDate && d(nextDate).isAfter(d())) {
 					const format = d(nextDate).year() !== d().year() ? "dddd D MMMM YYYY" : "dddd D MMMM";
-					return <ToekomstListItem key={i} datum={d(nextDate).format(format)} bedrag={afspraak.bedrag} omschrijving={afspraak.omschrijving} rekening={afspraak.tegenrekening?.iban} />
+					return (
+						<Table variant={"simple"}>
+							<Tbody>
+								<ToekomstListItem key={i} datum={d(nextDate).format(format)} bedrag={afspraak.bedrag} omschrijving={afspraak.omschrijving} rekening={afspraak.tegenrekening?.iban} />
+							</Tbody>
+						</Table>
+					)
 				}
 
 				return null;

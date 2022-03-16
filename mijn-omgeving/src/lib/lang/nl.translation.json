@@ -7,6 +7,12 @@
     "zeroTransactions": "Er zijn geen transacties gevonden."
   },
   "title": "Huishoudboekje",
+  "detailBurger": {
+    "title": "Mijn gegevens",
+    "rekening": "Rekening",
+    "rekeninghouden": "Rekeninghouder",
+    "iban": "Iban"
+  },
   "banktransactions": {
     "title": "Banktransacties"
   },
