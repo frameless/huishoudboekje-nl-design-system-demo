@@ -1,5 +1,4 @@
 import React from "react";
-import {useTranslation} from "react-i18next";
 import Queryable from "../Queryable";
 import {useGetBurgerQuery} from "../../generated/graphql";
 import "@gemeente-denhaag/design-tokens-components";
@@ -12,7 +11,6 @@ import {Link} from "@gemeente-denhaag/link";
 
 
 const DetailBurgerView: React.FC<{ bsn: number }> = ({bsn}) => {
-	const {t} = useTranslation();
 	const $burger = useGetBurgerQuery({
 		variables: {bsn},
 	});
@@ -23,20 +21,20 @@ const DetailBurgerView: React.FC<{ bsn: number }> = ({bsn}) => {
 
 			return (
 				<div>
-					<Link href={"/"} icon={<ArrowLeftIcon />} iconAlign={"start"}>{t("title")}</Link>
-					<Heading2>{t("detailBurger.title")}</Heading2>
+					<Link href={"/"} icon={<ArrowLeftIcon />} iconAlign={"start"}>Mijn gegevens</Link>
+					<Heading2>Mijn gegevens</Heading2>
 					{rekeningen.map((rekening, i) => {
 						return (
 							<Stack>
-								<Heading4>{t("detailBurger.rekening")}</Heading4>
+								<Heading4>Rekening</Heading4>
 								<Table variant={"simple"} key={i}>
 									<Tbody>
 										<Tr>
-											<Td fontWeight={"bold"}>{t("detailBurger.rekeninghouden")}</Td>
+											<Td fontWeight={"bold"}>Rekeninghouder</Td>
 											<Td>{rekening.rekeninghouder}</Td>
 										</Tr>
 										<Tr>
-											<Td fontWeight={"bold"}>{t("detailBurger.iban")}</Td>
+											<Td fontWeight={"bold"}>Iban</Td>
 											<Td> <PrettyIban iban={rekening.iban} /></Td>
 										</Tr>
 									</Tbody>

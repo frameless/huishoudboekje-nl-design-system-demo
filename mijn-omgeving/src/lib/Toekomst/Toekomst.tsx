@@ -5,10 +5,8 @@ import ToekomstList from "./ToekomstList";
 import {Link} from "@gemeente-denhaag/link";
 import {ArrowLeftIcon} from "@gemeente-denhaag/icons";
 import {Heading2} from "@gemeente-denhaag/typography";
-import {useTranslation} from "react-i18next";
 
 const Toekomst: React.FC<{ bsn: number }> = ({bsn}) => {
-	const {t} = useTranslation();
 	const $burger = useGetBurgerQuery({
 		variables: {bsn},
 	});
@@ -23,8 +21,8 @@ const Toekomst: React.FC<{ bsn: number }> = ({bsn}) => {
 			return (
 				<div>
 					<div>
-						<Link href={"/"} icon={<ArrowLeftIcon />} iconAlign={"start"}>{t("title")}</Link>
-						<Heading2>{t("toekomst.title")}</Heading2>
+						<Link href={"/"} icon={<ArrowLeftIcon />} iconAlign={"start"}>Huishoudboekje</Link>
+						<Heading2>Toekomst</Heading2>
 					</div>
 					<ToekomstList afspraken={filteredAfspraken} />
 				</div>
