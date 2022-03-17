@@ -5,7 +5,7 @@
 type Afspraak {
   bedrag: String
   betaalinstructie: Betaalinstructie
-  credit: String
+  credit: Boolean
 
   """Een unique identifier voor een afspraak in het systeem."""
   id: Int
