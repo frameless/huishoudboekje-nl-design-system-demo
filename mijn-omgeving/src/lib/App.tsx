@@ -7,8 +7,9 @@ import {HuishoudboekjeConfig, HuishoudboekjeUser} from "./models";
 import createApolloClient from "./services/apolloClient";
 import Toekomst from "./components/Toekomst/Toekomst";
 import {Route, Routes} from "./utils/Router";
+import Afspraken from "./components/Afspraken/Afspraken";
 
-const App: React.FC<{user: HuishoudboekjeUser, config: HuishoudboekjeConfig}> = ({user, config}) => {
+const App: React.FC<{ user: HuishoudboekjeUser, config: HuishoudboekjeConfig }> = ({user, config}) => {
 	const {apiUrl} = config;
 	return (
 		<ApolloProvider client={createApolloClient({apiUrl})}>
@@ -17,6 +18,7 @@ const App: React.FC<{user: HuishoudboekjeUser, config: HuishoudboekjeConfig}> = 
 				<Route path={"/banktransacties"} component={<BanktransactiesPage bsn={user.bsn} />} />
 				<Route path={"/toekomst"} component={<Toekomst bsn={user.bsn} />} />
 				<Route path={"/gegevens"} component={<DetailBurgerView bsn={user.bsn} />} />
+				<Route path={"/afspraken"} component={<Afspraken bsn={user.bsn} />} />
 			</Routes>
 		</ApolloProvider>
 	);
