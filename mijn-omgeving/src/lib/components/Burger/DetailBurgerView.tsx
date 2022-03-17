@@ -10,7 +10,7 @@ import PrettyIban from "../PrettyIban";
 import Queryable from "../../utils/Queryable";
 
 
-const DetailBurgerView: React.FC<{bsn: number}> = ({bsn}) => {
+const DetailBurgerView: React.FC<{ bsn: number }> = ({bsn}) => {
 	const $burger = useGetBurgerQuery({
 		variables: {bsn},
 	});
@@ -21,7 +21,7 @@ const DetailBurgerView: React.FC<{bsn: number}> = ({bsn}) => {
 
 			return (
 				<div>
-					<Link href={"/"} icon={<ArrowLeftIcon />} iconAlign={"start"}>Mijn gegevens</Link>
+					<Link href={"/"} icon={<ArrowLeftIcon />} iconAlign={"start"}>Huishoudboekje</Link>
 					<Heading2>Mijn gegevens</Heading2>
 					{rekeningen.map((rekening, i) => {
 						return (

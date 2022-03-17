@@ -7,7 +7,7 @@ import BanktransactiesList from "./BanktransactiesList";
 import Queryable from "../../utils/Queryable";
 import {NavLink} from "../../utils/Router";
 
-const BanktransactiesPage: React.FC<{bsn: number}> = ({bsn}) => {
+const BanktransactiesPage: React.FC<{ bsn: number }> = ({bsn}) => {
 	const $burger = useGetBurgerQuery({
 		variables: {bsn},
 	});
@@ -22,7 +22,7 @@ const BanktransactiesPage: React.FC<{bsn: number}> = ({bsn}) => {
 			return (
 				<div>
 					<div>
-						<NavLink to={"/"}><Link href={"/"} icon={<ArrowLeftIcon />} iconAlign={"start"}>Terug</Link></NavLink>
+						<NavLink to={"/"}><Link href={"/"} icon={<ArrowLeftIcon />} iconAlign={"start"}>Huishoudboekje</Link></NavLink>
 						<Heading2>Banktransacties</Heading2>
 					</div>
 					<BanktransactiesList transacties={transacties} />

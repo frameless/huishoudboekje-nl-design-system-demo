@@ -45,7 +45,7 @@ const Afspraken: React.FC<{ bsn: number }> = ({bsn}) => {
 					</Table>
 
 					<Text fontSize={"xl"} mt={10}>Afschrijvingen</Text>
-					<Table variant={"simple"}>
+					<Table>
 						<Thead>
 							<Tr>
 								<Th color={"gray.400"}>Tegenpartij</Th>
