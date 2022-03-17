@@ -1,5 +1,5 @@
 import React from "react";
-import {currencyFormat2} from "../utils/numberFormat";
+import {currencyFormat2} from "../../utils/numberFormat";
 import PrettyIban from "../PrettyIban";
 import {Td, Text, Tr} from "@chakra-ui/react";
 

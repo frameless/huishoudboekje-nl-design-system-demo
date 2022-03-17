@@ -1,11 +1,11 @@
-import React from "react";
-import Huishoudboekje, {HuishoudboekjeUser} from "./lib/Huishoudboekje";
 import "@gemeente-denhaag/design-tokens-components";
+import React from "react";
+import Huishoudboekje from "./lib/App";
+import {HuishoudboekjeUser} from "./lib/models";
 
 const App = () => {
 	const user: HuishoudboekjeUser = {
 		bsn: 999999990,
-		// bsn: 123,
 	};
 
 	return (

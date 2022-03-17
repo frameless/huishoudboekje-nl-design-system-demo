@@ -1,5 +1,3 @@
-import Huishoudboekje from "./Huishoudboekje";
+import App from "./App";
 
-export {
-	Huishoudboekje,
-};
+export const Huishoudboekje = App;
