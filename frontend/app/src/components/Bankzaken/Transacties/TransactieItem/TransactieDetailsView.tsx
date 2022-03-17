@@ -44,10 +44,10 @@ const TransactieDetailsView: React.FC<StackProps & {transaction: BankTransaction
 					<Box>{bt.tegenRekening ? (
 						<Stack spacing={0}>
 							<Text>{bt.tegenRekening.rekeninghouder}</Text>
-							<Text size={"sm"}><PrettyIban iban={bt.tegenRekening.iban} /></Text>
+							<Text size={"sm"}><PrettyIban iban={bt.tegenRekening.iban} fallback={t("unknownIban")} /></Text>
 						</Stack>
 					) : (
-						<Text size={"sm"}><PrettyIban iban={bt.tegenRekeningIban} /></Text>
+						<Text size={"sm"}><PrettyIban iban={bt.tegenRekeningIban} fallback={t("unknownIban")} /></Text>
 					)}
 					</Box>
 				</Box>

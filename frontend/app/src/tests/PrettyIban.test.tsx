@@ -36,7 +36,7 @@ it("shows 'unknown' when no iban is passed", () => {
 	const unformattedIBAN = undefined;
 
 	act(() => {
-		render(<PrettyIban iban={unformattedIBAN} />, container);
+		render(<PrettyIban iban={unformattedIBAN} fallback={"unknown"} />, container);
 	});
 
 	const html = container!.innerHTML;
