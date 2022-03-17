@@ -9,7 +9,7 @@ const Afspraak = objectType({
 		});
 		t.string("omschrijving");
 		t.string("bedrag");
-		t.string("credit");
+		t.boolean("credit");
 		t.field("betaalinstructie", {
 			type: "Betaalinstructie",
 			resolve: (root: any, args, ctx) => {

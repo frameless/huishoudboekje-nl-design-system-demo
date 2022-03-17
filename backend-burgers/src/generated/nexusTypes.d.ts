@@ -33,7 +33,7 @@ export interface NexusGenScalars {
 export interface NexusGenObjects {
   Afspraak: { // root type
     bedrag?: string | null; // String
-    credit?: string | null; // String
+    credit?: boolean | null; // Boolean
     id?: number | null; // Int
     omschrijving?: string | null; // String
     validFrom?: string | null; // String
@@ -101,7 +101,7 @@ export interface NexusGenFieldTypes {
   Afspraak: { // field return type
     bedrag: string | null; // String
     betaalinstructie: NexusGenRootTypes['Betaalinstructie'] | null; // Betaalinstructie
-    credit: string | null; // String
+    credit: boolean | null; // Boolean
     id: number | null; // Int
     journaalposten: Array<NexusGenRootTypes['Journaalpost'] | null> | null; // [Journaalpost]
     omschrijving: string | null; // String
@@ -172,7 +172,7 @@ export interface NexusGenFieldTypeNames {
   Afspraak: { // field return type name
     bedrag: 'String'
     betaalinstructie: 'Betaalinstructie'
-    credit: 'String'
+    credit: 'Boolean'
     id: 'Int'
     journaalposten: 'Journaalpost'
     omschrijving: 'String'
