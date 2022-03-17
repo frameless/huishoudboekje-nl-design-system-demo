@@ -10,7 +10,6 @@ import Main from "./Main";
 import {Link} from "@gemeente-denhaag/link";
 import {ArrowLeftIcon} from "@gemeente-denhaag/icons";
 import {Heading2} from "@gemeente-denhaag/typography";
-import {useTranslation} from "react-i18next";
 import DetailBurgerView from "./Burger/DetailBurgerView";
 
 export type HuishoudboekjeUser = {
@@ -22,7 +21,6 @@ export type HuishoudboekjeConfig = {
 }
 
 const HuishoudboekjePage: React.FC<{ bsn: number }> = ({bsn}) => {
-	const {t} = useTranslation();
 	const $burger = useGetBurgerQuery({
 		variables: {bsn},
 	});
@@ -37,8 +35,8 @@ const HuishoudboekjePage: React.FC<{ bsn: number }> = ({bsn}) => {
 			return (
 				<div>
 					<div>
-						<Link href={"/"} icon={<ArrowLeftIcon />} iconAlign={"start"}>{t("title")}</Link>
-						<Heading2>{t("banktransactions.title")}</Heading2>
+						<Link href={"/"} icon={<ArrowLeftIcon />} iconAlign={"start"}>Huishoudboekje</Link>
+						<Heading2>Banktransacties</Heading2>
 					</div>
 					<BanktransactiesList transacties={transacties} />
 				</div>
