@@ -487,6 +487,7 @@
     "confirmModalTitle": "Afspraak beëindigen",
     "confirmModalBody": "Vanaf welke datum wordt deze afspraak beëindigd?"
   },
+  "unknownIban": "Onbekende IBAN",
   "zoektermSuggesties": "Suggesties",
   "exports": {
     "period": "Periode",
@@ -657,7 +658,6 @@
   "unknownBurgers": "Onbekende burgers",
   "unknownCsm": "Onbekend bankafschrift",
   "unknownCount": "een onbekend aantal",
-  "unknownIban": "Onbekende IBAN",
   "unknownRekeninghouder": "Onbekende rekeninghouder",
   "unknownRubriek": "Onbekende rubriek",
   "unknownPostadres": "Onbekend postadres",
@@ -704,6 +704,7 @@
     "createConfiguratie": "{{gebruiker}} voegde configuratie <strong>{{configuratieId}}</strong> met waarde <strong>{{configuratieWaarde}}</strong> toe.",
     "updateConfiguratie": "{{gebruiker}} wijzigde configuratie <strong>{{configuratieId}}</strong> naar waarde <strong>{{configuratieWaarde}}</strong>.",
     "deleteConfiguratie": "{{gebruiker}} verwijderde configuratie <strong>{{configuratieId}}</strong>.",
+    "deleteCustomerStatementMessage": "{{gebruiker}} verwijderde <strong>bankafschrift {{csmId}}</strong>.",
     "deleteCustomerStatementMessage": "{{gebruiker}} verwijderde <strong>bankafschrift {{csmId}}</strong>.",
     "createCustomerStatementMessage": "{{gebruiker}} importeerde <strong>{{nCsmTransactions}} transactie(s)</strong> uit bankafschrift <strong>{{customerStatementMessage}}</strong>.",
     "createBurgerRekening": "{{gebruiker}} voegde rekening <strong>{{iban}}</strong> op naam van <strong>{{rekeninghouder}}</strong> toe bij <linkBurger>{{burger}}</linkBurger>.",

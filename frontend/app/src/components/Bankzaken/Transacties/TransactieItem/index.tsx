@@ -36,7 +36,7 @@ const TransactieItem: React.FC<BoxProps & {transactie: BankTransaction}> = ({tra
 						</Text>
 					) : (
 						<Text whiteSpace={"nowrap"}>
-							<PrettyIban iban={bt.tegenRekeningIban} />
+							<PrettyIban iban={bt.tegenRekeningIban} fallback={t("unknownIban")} />
 						</Text>
 					)}
 				</Box>

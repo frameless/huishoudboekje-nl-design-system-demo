@@ -12,12 +12,24 @@ export default {
 				required: true,
 			},
 		},
+		fallback: {
+			type: {
+				name: "string",
+				required: false,
+			},
+		},
 	},
 };
 
-const Template: ComponentStory<typeof PrettyIban> = ({iban}) => <PrettyIban iban={iban} />;
+const Template: ComponentStory<typeof PrettyIban> = ({iban, fallback}) => <PrettyIban iban={iban} fallback={fallback} />;
 
 export const Default = Template.bind({});
 Default.args = {
 	iban: "NL99BANK01234567890",
+};
+
+export const Fallback = Template.bind({});
+Fallback.args = {
+	iban: undefined,
+	fallback: "Onbekende IBAN"
 };

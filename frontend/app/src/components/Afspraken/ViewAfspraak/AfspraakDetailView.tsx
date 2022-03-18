@@ -238,7 +238,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 												aria-label={t("global.actions.view")} icon={<ViewIcon />} />
 										)}
 									</HStack>
-									<Text size={"sm"}><PrettyIban iban={afspraak.tegenRekening.iban} /></Text>
+									<Text size={"sm"}><PrettyIban iban={afspraak.tegenRekening.iban} fallback={t("unknownIban")} /></Text>
 								</DataItem>
 							)}
 						</Stack>
