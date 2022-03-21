@@ -36,16 +36,10 @@ export interface NexusGenObjects {
     credit?: boolean | null; // Boolean
     id?: number | null; // Int
     omschrijving?: string | null; // String
-    validFrom?: string | null; // String
-    validThrough?: string | null; // String
   }
   Banktransactie: { // root type
     bedrag?: NexusGenScalars['Bedrag'] | null; // Bedrag
     id?: number | null; // Int
-    informationToAccountOwner?: string | null; // String
-    isCredit?: boolean | null; // Boolean
-    tegenrekeningIban?: string | null; // String
-    transactiedatum?: string | null; // String
   }
   Betaalinstructie: { // root type
     byDay?: Array<NexusGenEnums['DayOfWeek'] | null> | null; // [DayOfWeek]
@@ -110,11 +104,11 @@ export interface NexusGenFieldTypes {
     validThrough: string | null; // String
   }
   Banktransactie: { // field return type
-    afspraak: NexusGenRootTypes['Afspraak'] | null; // Afspraak
     bedrag: NexusGenScalars['Bedrag'] | null; // Bedrag
     id: number | null; // Int
     informationToAccountOwner: string | null; // String
     isCredit: boolean | null; // Boolean
+    journaalpost: NexusGenRootTypes['Journaalpost'] | null; // Journaalpost
     tegenrekening: NexusGenRootTypes['Rekening'] | null; // Rekening
     tegenrekeningIban: string | null; // String
     transactiedatum: string | null; // String
@@ -157,6 +151,8 @@ export interface NexusGenFieldTypes {
     vestigingsnummer: string | null; // String
   }
   Query: { // field return type
+    banktransactie: NexusGenRootTypes['Banktransactie'] | null; // Banktransactie
+    banktransacties: Array<NexusGenRootTypes['Banktransactie'] | null> | null; // [Banktransactie]
     burger: NexusGenRootTypes['Burger'] | null; // Burger
     burgers: Array<NexusGenRootTypes['Burger'] | null> | null; // [Burger]
     organisaties: Array<NexusGenRootTypes['Organisatie'] | null> | null; // [Organisatie]
@@ -181,11 +177,11 @@ export interface NexusGenFieldTypeNames {
     validThrough: 'String'
   }
   Banktransactie: { // field return type name
-    afspraak: 'Afspraak'
     bedrag: 'Bedrag'
     id: 'Int'
     informationToAccountOwner: 'String'
     isCredit: 'Boolean'
+    journaalpost: 'Journaalpost'
     tegenrekening: 'Rekening'
     tegenrekeningIban: 'String'
     transactiedatum: 'String'
@@ -228,6 +224,8 @@ export interface NexusGenFieldTypeNames {
     vestigingsnummer: 'String'
   }
   Query: { // field return type name
+    banktransactie: 'Banktransactie'
+    banktransacties: 'Banktransactie'
     burger: 'Burger'
     burgers: 'Burger'
     organisaties: 'Organisatie'
@@ -241,6 +239,9 @@ export interface NexusGenFieldTypeNames {
 
 export interface NexusGenArgTypes {
   Query: {
+    banktransactie: { // args
+      id?: number | null; // Int
+    }
     burger: { // args
       bsn?: number | null; // Int
     }

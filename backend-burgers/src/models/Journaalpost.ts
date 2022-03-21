@@ -3,28 +3,28 @@ import DataLoader from "../dataloaders/dataloader";
 
 const Journaalpost = objectType({
 	name: "Journaalpost",
-	description: "", // Todo
 	definition: t => {
-		t.int("id", {
-			description: "Een unique identifier voor een journaalpost in het systeem.",
-		});
+		t.int("id");
 		t.field("banktransactie", {
 			type: "Banktransactie",
-			resolve: (root) => {
-				return null; // Todo getBanktransactiesByJournaalpostId
+			resolve: async (root) => {
+				const transactieId = root["transaction_id"];
+				if (!transactieId) {
+					return null;
+				}
+
+				return await DataLoader.getBanktransactiesById([transactieId]).then(r => r.shift());
 			},
 		});
 		t.field("afspraak", {
 			type: "Afspraak",
 			resolve: (root) => {
-				console.log({root});
-				const afspraakId = undefined; // Todo
-
+				const afspraakId = root["afspraak_id"];
 				if (!afspraakId) {
 					return null;
 				}
 
-				return DataLoader.getAfspraakById(afspraakId);
+				return DataLoader.getAfsprakenById(afspraakId).then(r => r.shift());
 			},
 		});
 	},
