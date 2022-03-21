@@ -15,7 +15,7 @@ import PeriodiekSelector, {Periodiek} from "../../shared/PeriodiekSelector";
 import WeekDaySelector from "../../shared/WeekDaySelector";
 
 const eenmaligValidator = zod.object({
-	datum: zod.date().refine(val => d().endOf("day").isSameOrBefore(val)),
+	datum: zod.date(), //.refine(val => d().endOf("day").isSameOrBefore(val)), // Must be in the future
 	datumMargin: zod.number().min(0),
 });
 
