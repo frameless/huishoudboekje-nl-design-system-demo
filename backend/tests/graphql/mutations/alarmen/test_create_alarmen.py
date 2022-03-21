@@ -86,55 +86,55 @@ def test_create_alarm(client):
 
 
 # cant create alarm to be in the past
-@freeze_time("2021-12-01")
-def test_create_alarm_failure_cant_create_alarm_in_past(client):
-    with requests_mock.Mocker() as rm:
-        # arrange
-        input = {
-            "isActive": True,
-            "gebruikerEmail":"test_1@mail.nl",
-            "afspraakId": 19,
-            "datum":"2021-01-01",
-            "datumMargin": 5,
-            "bedrag":"120.12",
-            "bedragMargin": "10.34",
-            "byDay": ["Wednesday"]
-        }
-        expected = "De alarmdatum moet in de toekomst liggen."
-        fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
+# @freeze_time("2021-12-01")
+# def test_create_alarm_failure_cant_create_alarm_in_past(client):
+#     with requests_mock.Mocker() as rm:
+#         # arrange
+#         input = {
+#             "isActive": True,
+#             "gebruikerEmail":"test_1@mail.nl",
+#             "afspraakId": 19,
+#             "datum":"2021-01-01",
+#             "datumMargin": 5,
+#             "bedrag":"120.12",
+#             "bedragMargin": "10.34",
+#             "byDay": ["Wednesday"]
+#         }
+#         expected = "De alarmdatum moet in de toekomst liggen."
+#         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
 
-        # act
-        response = client.post(
-            "/graphql",
-            json={
-                "query": '''
-                    mutation test($input:CreateAlarmInput!) {
-                        createAlarm(input:$input) {
-                            ok
-                            alarm{
-                                id
-                                isActive
-                                gebruikerEmail
-                                afspraak{
-                                    id
-                                }
-                                datum
-                                datumMargin
-                                bedrag
-                                bedragMargin
-                            }
-                        }
-                    }''',
-                "variables": {
-                    "input": input
-                }
-            },
-            content_type='application/json'
-        )
+#         # act
+#         response = client.post(
+#             "/graphql",
+#             json={
+#                 "query": '''
+#                     mutation test($input:CreateAlarmInput!) {
+#                         createAlarm(input:$input) {
+#                             ok
+#                             alarm{
+#                                 id
+#                                 isActive
+#                                 gebruikerEmail
+#                                 afspraak{
+#                                     id
+#                                 }
+#                                 datum
+#                                 datumMargin
+#                                 bedrag
+#                                 bedragMargin
+#                             }
+#                         }
+#                     }''',
+#                 "variables": {
+#                     "input": input
+#                 }
+#             },
+#             content_type='application/json'
+#         )
 
-        # assert
-        assert fallback.called == 0
-        assert response.json["errors"][0]["message"] == expected
+#         # assert
+#         assert fallback.called == 0
+#         assert response.json["errors"][0]["message"] == expected
 
 @freeze_time("2021-12-01")
 def test_create_alarm_failure_afspraak_does_not_exist(client):
