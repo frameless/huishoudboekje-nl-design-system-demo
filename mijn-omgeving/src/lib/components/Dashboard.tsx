@@ -2,7 +2,7 @@ import {Grid, GridItem} from "@chakra-ui/react";
 import {Card} from "@gemeente-denhaag/card";
 import {Heading2} from "@gemeente-denhaag/typography";
 import React from "react";
-import {NavLink} from "../utils/Router";
+import {NavLink} from "react-router-dom";
 
 const Dashboard = () => {
 	return (
@@ -19,7 +19,7 @@ const Dashboard = () => {
 					</NavLink>
 				</GridItem>
 				<GridItem>
-					<NavLink to={"/banktransacties"}>
+					<NavLink to={"/banktransacties/1"}>
 						<Card
 							date={new Date()}
 							title={"Banktransacties"}
