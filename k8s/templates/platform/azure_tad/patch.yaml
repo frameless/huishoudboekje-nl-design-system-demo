@@ -28,7 +28,113 @@ spec:
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
               name: hhb-database-volume-${NAMESPACE}
-      volumes: 
+      volumes:
         - name: hhb-database-volume-${NAMESPACE}
           persistentVolumeClaim:
             claimName: data-huishoudboekje-postgresql-0
+---
+# Max replicas 1
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hhb-alarmenservice
+spec:
+  maxReplicas: 1
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hhb-backend
+spec:
+  maxReplicas: 1
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hhb-backendburgers
+spec:
+  maxReplicas: 1
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hhb-banktransactieservice
+spec:
+  maxReplicas: 1
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hhb-database
+spec:
+  maxReplicas: 1
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hhb-frontend
+spec:
+  maxReplicas: 1
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hhb-grootboekservice
+spec:
+  maxReplicas: 1
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hhb-huishoudboekjeservice
+spec:
+  maxReplicas: 1
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hhb-keycloak
+spec:
+  maxReplicas: 1
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hhb-logservice
+spec:
+  maxReplicas: 1
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hhb-organisatieservice
+spec:
+  maxReplicas: 1
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hhb-postadressenservice
+spec:
+  maxReplicas: 1
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hhb-signalenservice
+spec:
+  maxReplicas: 1
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hhb-storybook
+spec:
+  maxReplicas: 1
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hhb-unleashservice
+spec:
+  maxReplicas: 1
