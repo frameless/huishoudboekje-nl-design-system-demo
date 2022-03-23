@@ -1,5 +1,5 @@
 import React from "react";
-import {Banktransactie} from "../../../../generated/graphql";
+import {Banktransactie, useGetBurgerQuery} from "../../../../generated/graphql";
 import {Link} from "@gemeente-denhaag/link";
 import {ArrowLeftIcon} from "@gemeente-denhaag/icons";
 import {Box, Center, Stack, Text} from "@chakra-ui/react";
@@ -8,8 +8,14 @@ import d from "../../../utils/dayjs";
 import Divider from "@gemeente-denhaag/divider";
 import PrettyIban from "../../PrettyIban";
 import {currencyFormat} from "../../../utils/numberFormat";
+import Queryable from "../../../utils/Queryable";
+import BanktransactieGeschiedenis from "./BanktransactieGeschiedenis";
 
-const BanktransactieDetailView: React.FC<{ transactie: Banktransactie }> = ({transactie}) => {
+const BanktransactieDetailView: React.FC<{ transactie: Banktransactie, bsn: number }> = ({transactie, bsn}) => {
+	const $burger = useGetBurgerQuery({
+		variables: {bsn},
+	});
+
 	const dateString = (date: Date): string => {
 		const _date = d(date).startOf("day");
 		const today = d().startOf("day");
@@ -29,19 +35,18 @@ const BanktransactieDetailView: React.FC<{ transactie: Banktransactie }> = ({tra
 	return (
 		<div>
 			<NavLink to={"/banktransacties"}><Link href={"/banktransacties"} icon={<ArrowLeftIcon />} iconAlign={"start"}>Terug</Link></NavLink>
-			{/*<Heading2>Banktransactie</Heading2>*/}
 
 			<Stack>
 				<Center>
 					<Box>
-						<Text fontSize={"lg"}>{transactie.tegenrekening?.rekeninghouder || (
+						<Text fontSize={"xl"}>{transactie.tegenrekening?.rekeninghouder || (
 							<PrettyIban iban={transactie.tegenrekeningIban} />
 						)}</Text>
 					</Box>
 				</Center>
 				<Center>
 					<Box>
-						<Text fontSize={"lg"}>{currencyFormat.format(transactie.bedrag)}</Text>
+						<Text fontSize={"xl"}>{currencyFormat.format(transactie.bedrag)}</Text>
 					</Box>
 				</Center>
 				<Box>
@@ -60,6 +65,20 @@ const BanktransactieDetailView: React.FC<{ transactie: Banktransactie }> = ({tra
 					<Divider />
 				</Box>
 			</Stack>
+
+			<Queryable query={$burger} render={data => {
+				const {banktransacties} = data.burger || {};
+
+				const rekeninghouder = transactie.tegenrekening?.rekeninghouder;
+				const filteredRekeninghouders = banktransacties.filter(b => rekeninghouder?.includes(b.tegenrekening?.rekeninghouder))
+
+				return (
+					<div>
+						<BanktransactieGeschiedenis transacties={filteredRekeninghouders} />
+					</div>
+				)
+			}}
+			/>
 		</div>
 	);
 };
