@@ -14,13 +14,14 @@ enum DayOfWeek {
 "GraphQL Query"
 type Query {
   burger(bsn: Int): Burger
+  banktransactie(id: Int): Banktransactie
 }
 type Afspraak {
   "Een unique identifier voor een afspraak in het systeem."
   id: Int
   omschrijving: String
   bedrag: String
-  credit: String
+  credit: Boolean
   betaalinstructie: Betaalinstructie
   validFrom: String
   validThrough: String
@@ -35,7 +36,7 @@ type Banktransactie {
   tegenrekening: Rekening
   transactiedatum: String
   informationToAccountOwner: String
-  afspraak: Afspraak
+  journaalpost: Journaalpost
 }
 type Betaalinstructie {
   byDay: [DayOfWeek]
@@ -66,9 +67,7 @@ type Burger {
   afspraken: [Afspraak]
   banktransacties: [Banktransactie]
 }
-""
 type Journaalpost {
-  "Een unique identifier voor een journaalpost in het systeem."
   id: Int
   banktransactie: Banktransactie
   afspraak: Afspraak

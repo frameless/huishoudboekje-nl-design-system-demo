@@ -2,7 +2,6 @@ import React from "react";
 import {Banktransactie} from "../../../../generated/graphql";
 import {Link} from "@gemeente-denhaag/link";
 import {ArrowLeftIcon} from "@gemeente-denhaag/icons";
-import {Heading2} from "@gemeente-denhaag/typography";
 import {Box, Center, Stack, Text} from "@chakra-ui/react";
 import {NavLink} from "react-router-dom";
 import d from "../../../utils/dayjs";
@@ -29,8 +28,8 @@ const BanktransactieDetailView: React.FC<{ transactie: Banktransactie }> = ({tra
 
 	return (
 		<div>
-			<NavLink to={"/banktransacties"}><Link href={"/banktransacties"} icon={<ArrowLeftIcon />} iconAlign={"start"}>terug</Link></NavLink>
-			<Heading2>Banktransactie</Heading2>
+			<NavLink to={"/banktransacties"}><Link href={"/banktransacties"} icon={<ArrowLeftIcon />} iconAlign={"start"}>Terug</Link></NavLink>
+			{/*<Heading2>Banktransactie</Heading2>*/}
 
 			<Stack>
 				<Center>
@@ -38,6 +37,10 @@ const BanktransactieDetailView: React.FC<{ transactie: Banktransactie }> = ({tra
 						<Text fontSize={"lg"}>{transactie.tegenrekening?.rekeninghouder || (
 							<PrettyIban iban={transactie.tegenrekeningIban} />
 						)}</Text>
+					</Box>
+				</Center>
+				<Center>
+					<Box>
 						<Text fontSize={"lg"}>{currencyFormat.format(transactie.bedrag)}</Text>
 					</Box>
 				</Center>
@@ -46,10 +49,11 @@ const BanktransactieDetailView: React.FC<{ transactie: Banktransactie }> = ({tra
 					<Text>{dateString(d(transactie.transactiedatum, "YYYY-MM-DD").toDate())}</Text>
 					<Divider />
 				</Box>
-				{/*<Box>*/}
-				{/*	<Text color={"gray"} fontSize={"sm"}>{transactie.isCredit ? "Van rekening" : "Naar rekening"}</Text>*/}
-
-				{/*</Box>*/}
+				<Box>
+					<Text color={"gray"} fontSize={"sm"}>{transactie.isCredit ? "Van rekening" : "Naar rekening"}</Text>
+					<PrettyIban iban={transactie.tegenrekeningIban} />
+					<Divider />
+				</Box>
 				<Box>
 					<Text color={"gray"} fontSize={"sm"}>Omschrijving</Text>
 					<Text>{transactie.informationToAccountOwner}</Text>

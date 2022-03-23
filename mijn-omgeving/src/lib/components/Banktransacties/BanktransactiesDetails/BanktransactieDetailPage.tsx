@@ -1,21 +1,20 @@
 import React from "react";
 import Queryable from "../../../utils/Queryable";
-import {Burger, useGetBurgerQuery} from "../../../../generated/graphql";
-import {useParams} from "react-router-dom";
+import {Banktransactie, useGetBanktransactieQuery} from "../../../../generated/graphql";
 import BanktransactieDetailView from "./BanktransactieDetailView";
 import {Text} from "@chakra-ui/react";
+import {useParams} from "react-router-dom";
 
-const BanktransactieDetailPage: React.FC<{ bsn: number }> = ({bsn}) => {
+const BanktransactieDetailPage = () => {
 	const {id = ""} = useParams<{ id: string }>();
 
-	const $burger = useGetBurgerQuery({
-		variables: {bsn},
+	const $transactie = useGetBanktransactieQuery({
+		variables: {id: parseInt(id)}
 	});
 
 	return (
-		<Queryable query={$burger} render={data => {
-			const burger: Burger = data.burger;
-			const transactie = burger.banktransacties?.find(t => t.id === parseInt(id))
+		<Queryable query={$transactie} render={data => {
+			const transactie: Banktransactie = data.banktransactie;
 
 			if (!transactie) {
 				return <Text>Banktransactie niet gevonden.</Text>
