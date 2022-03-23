@@ -3,6 +3,8 @@ import React from "react";
 import {currencyFormat} from "../../utils/numberFormat";
 import {Banktransactie} from "../../../generated/graphql";
 import PrettyIban from "../PrettyIban";
+import {ChevronRightIcon} from "@gemeente-denhaag/icons";
+import {NavLink} from "react-router-dom";
 
 const BanktransactieListItem: React.FC<{ transactie: Banktransactie }> = ({transactie}) => {
 	return (
@@ -13,7 +15,10 @@ const BanktransactieListItem: React.FC<{ transactie: Banktransactie }> = ({trans
 				)}</Text>
 			</Box>
 			<Box>
-				<Text color={transactie.bedrag < 0 ? "currentcolor" : "green.500"}>{currencyFormat.format(transactie.bedrag)}</Text>
+				<HStack>
+					<Text color={transactie.bedrag < 0 ? "currentcolor" : "green.500"}>{currencyFormat.format(transactie.bedrag)}</Text>
+					<NavLink to={`/banktransacties/${transactie.id}`}><ChevronRightIcon /></NavLink>
+				</HStack>
 			</Box>
 		</HStack>
 	);

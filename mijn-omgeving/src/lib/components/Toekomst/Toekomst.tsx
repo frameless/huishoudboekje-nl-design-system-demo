@@ -12,22 +12,22 @@ const Toekomst: React.FC<{ bsn: number }> = ({bsn}) => {
 	});
 
 	return (
-		<Queryable query={$burger} render={data => {
-			const {rekeningen = [], afspraken = []} = data.burger || {};
+		<div>
+			<Link href={"/"} icon={<ArrowLeftIcon />} iconAlign={"start"}>Huishoudboekje</Link>
+			<Heading2>Toekomst</Heading2>
+			<Queryable query={$burger} render={data => {
+				const {rekeningen = [], afspraken = []} = data.burger || {};
 
-			const burgerRekeningenIds: number[] = rekeningen.map(r => r.id);
-			const filteredAfspraken = afspraken.filter(a => burgerRekeningenIds.includes(a.tegenrekening?.id));
+				const burgerRekeningenIds: number[] = rekeningen.map(r => r.id);
+				const filteredAfspraken = afspraken.filter(a => burgerRekeningenIds.includes(a.tegenrekening?.id));
 
-			return (
-				<div>
+				return (
 					<div>
-						<Link href={"/"} icon={<ArrowLeftIcon />} iconAlign={"start"}>Huishoudboekje</Link>
-						<Heading2>Toekomst</Heading2>
+						<ToekomstList afspraken={filteredAfspraken} />
 					</div>
-					<ToekomstList afspraken={filteredAfspraken} />
-				</div>
-			)
-		}} />
+				)
+			}} />
+		</div>
 	);
 };
 

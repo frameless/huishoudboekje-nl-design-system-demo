@@ -16,35 +16,37 @@ const DetailBurgerView: React.FC<{ bsn: number }> = ({bsn}) => {
 	});
 
 	return (
-		<Queryable query={$burger} render={data => {
-			const {rekeningen = []} = data.burger || {};
+		<div>
+			<Link href={"/"} icon={<ArrowLeftIcon />} iconAlign={"start"}>Mijn gegevens</Link>
+			<Heading2>Mijn gegevens</Heading2>
+			<Queryable query={$burger} render={data => {
+				const {rekeningen = []} = data.burger || {};
 
-			return (
-				<div>
-					<Link href={"/"} icon={<ArrowLeftIcon />} iconAlign={"start"}>Huishoudboekje</Link>
-					<Heading2>Mijn gegevens</Heading2>
-					{rekeningen.map((rekening, i) => {
-						return (
-							<Stack key={i}>
-								<Heading4>Rekening</Heading4>
-								<Table variant={"simple"}>
-									<Tbody>
-										<Tr>
-											<Td fontWeight={"bold"}>Rekeninghouder</Td>
-											<Td>{rekening.rekeninghouder}</Td>
-										</Tr>
-										<Tr>
-											<Td fontWeight={"bold"}>Iban</Td>
-											<Td> <PrettyIban iban={rekening.iban} /></Td>
-										</Tr>
-									</Tbody>
-								</Table>
-							</Stack>
-						);
-					})}
-				</div>
-			);
-		}} />
+				return (
+					<div>
+						{rekeningen.map((rekening, i) => {
+							return (
+								<Stack key={i}>
+									<Heading4>Rekening</Heading4>
+									<Table variant={"simple"}>
+										<Tbody>
+											<Tr>
+												<Td fontWeight={"bold"}>Rekeninghouder</Td>
+												<Td>{rekening.rekeninghouder}</Td>
+											</Tr>
+											<Tr>
+												<Td fontWeight={"bold"}>Iban</Td>
+												<Td> <PrettyIban iban={rekening.iban} /></Td>
+											</Tr>
+										</Tbody>
+									</Table>
+								</Stack>
+							);
+						})}
+					</div>
+				);
+			}} />
+		</div>
 	);
 };
 

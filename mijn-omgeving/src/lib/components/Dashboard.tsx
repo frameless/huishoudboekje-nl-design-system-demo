@@ -12,16 +12,14 @@ const Dashboard = () => {
 				<GridItem>
 					<NavLink to={"/toekomst"}>
 						<Card
-							date={new Date()}
 							title={"Toekomst"}
 							subTitle={"Verwachte transacties"}
 						/>
 					</NavLink>
 				</GridItem>
 				<GridItem>
-					<NavLink to={"/banktransacties/1"}>
+					<NavLink to={"/banktransacties"}>
 						<Card
-							date={new Date()}
 							title={"Banktransacties"}
 							subTitle={"Overzicht van alle bij- en afschrijvingen."}
 						/>
@@ -30,7 +28,6 @@ const Dashboard = () => {
 				<GridItem>
 					<NavLink to={"/gegevens"}>
 						<Card
-							date={new Date()}
 							title={"Mijn gegevens"}
 						/>
 					</NavLink>
