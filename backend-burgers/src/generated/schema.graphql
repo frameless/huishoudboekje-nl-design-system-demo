@@ -17,11 +17,11 @@ type Afspraak {
 }
 
 type Banktransactie {
-  afspraak: Afspraak
   bedrag: Bedrag
   id: Int
   informationToAccountOwner: String
   isCredit: Boolean
+  journaalpost: Journaalpost
   tegenrekening: Rekening
   tegenrekeningIban: String
   transactiedatum: String
@@ -74,12 +74,9 @@ enum DayOfWeek {
 
 scalar JSON
 
-""""""
 type Journaalpost {
   afspraak: Afspraak
   banktransactie: Banktransactie
-
-  """Een unique identifier voor een journaalpost in het systeem."""
   id: Int
 }
 
@@ -92,6 +89,8 @@ type Organisatie {
 
 """GraphQL Query"""
 type Query {
+  banktransactie(id: Int): Banktransactie
+  banktransacties: [Banktransactie]
   burger(bsn: Int): Burger
   burgers: [Burger]
   organisaties(ids: [Int]): [Organisatie]

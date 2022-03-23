@@ -30,16 +30,15 @@ const Afspraak = objectType({
 				};
 			},
 		});
-		t.string("validFrom");
-		t.string("validThrough");
-		// t.field("afdeling", {
-		// 	type: "Afdeling",
-		//
-		// });
+		t.string("validFrom", {
+			resolve: root => root["valid_from"]
+		});
+		t.string("validThrough", {
+			resolve: root => root["valid_through"]
+		});
 		t.field("tegenrekening", {
 			type: "Rekening",
 			resolve: (root: any) => {
-				console.log(root);
 				const {tegen_rekening_id} = root;
 
 				if (!tegen_rekening_id) {

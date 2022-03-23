@@ -8,12 +8,16 @@ const Banktransactie = objectType({
 		t.field("bedrag", {
 			type: "Bedrag",
 		});
-		t.boolean("isCredit");
-		t.string("tegenrekeningIban");
+		t.boolean("isCredit", {
+			resolve: (root) => root["is_credit"],
+		});
+		t.string("tegenrekeningIban", {
+			resolve: (root) => root["tegen_rekening"],
+		});
 		t.field("tegenrekening", {
 			type: "Rekening",
 			resolve: (root) => {
-				const iban = root.tegenrekeningIban;
+				const iban = root["tegen_rekening"];
 
 				if (!iban) {
 					return null;
@@ -22,16 +26,22 @@ const Banktransactie = objectType({
 				return DataLoader.getRekeningenByIbans([iban]).then(r => r.shift());
 			},
 		});
-		t.string("transactiedatum");
-		t.string("informationToAccountOwner");
-		t.field("afspraak", {
-			type: "Afspraak",
+		t.string("transactiedatum", {
+			resolve: (root) => root["transactie_datum"],
+		});
+		t.string("informationToAccountOwner", {
+			resolve: (root) => root["information_to_account_owner"],
+		});
+		t.field("journaalpost", {
+			type: "Journaalpost",
 			resolve: async (root) => {
-				const afspraakId = root.afspraak_id;
-				const afspraak = await DataLoader.getAfspraakById(afspraakId);
-				return ({
-					...afspraak,
-				});
+				const id = root.id;
+
+				if (!id) {
+					return null;
+				}
+
+				return await DataLoader.getJournaalpostByTransactieId(id);
 			},
 		});
 	},
