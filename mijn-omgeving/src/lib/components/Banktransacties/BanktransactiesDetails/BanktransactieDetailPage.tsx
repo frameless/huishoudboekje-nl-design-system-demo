@@ -1,6 +1,6 @@
 import React from "react";
 import Queryable from "../../../utils/Queryable";
-import {Banktransactie, useGetBanktransactieQuery, useGetBurgerQuery} from "../../../../generated/graphql";
+import {Banktransactie, useGetBanktransactieQuery} from "../../../../generated/graphql";
 import BanktransactieDetailView from "./BanktransactieDetailView";
 import {Stack, Text} from "@chakra-ui/react";
 import {NavLink, useParams} from "react-router-dom";
@@ -8,10 +8,6 @@ import {Link} from "@gemeente-denhaag/link";
 import {ArrowLeftIcon} from "@gemeente-denhaag/icons";
 
 const BanktransactieDetailPage: React.FC<{ bsn: number }> = ({bsn}) => {
-	const $burger = useGetBurgerQuery({
-		variables: {bsn},
-	});
-
 	const {id = ""} = useParams<{ id: string }>();
 
 	const $transactie = useGetBanktransactieQuery({

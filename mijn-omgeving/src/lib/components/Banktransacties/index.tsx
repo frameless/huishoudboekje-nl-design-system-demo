@@ -5,7 +5,6 @@ import React from "react";
 import {useGetBurgerQuery} from "../../../generated/graphql";
 import BanktransactiesList from "./BanktransactiesList";
 import Queryable from "../../utils/Queryable";
-import {NavLink} from "react-router-dom";
 
 const BanktransactiesPage: React.FC<{ bsn: number }> = ({bsn}) => {
 	const $burger = useGetBurgerQuery({
@@ -14,7 +13,7 @@ const BanktransactiesPage: React.FC<{ bsn: number }> = ({bsn}) => {
 
 	return (
 		<div>
-			<NavLink to={"/"}><Link href={"/"} icon={<ArrowLeftIcon />} iconAlign={"start"}>Huishoudboekje</Link></NavLink>
+			<Link href={"/"} icon={<ArrowLeftIcon />} iconAlign={"start"}>Huishoudboekje</Link>
 			<Heading2>Banktransacties</Heading2>
 
 			<Queryable query={$burger} render={data => {

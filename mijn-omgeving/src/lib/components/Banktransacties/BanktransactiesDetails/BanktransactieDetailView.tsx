@@ -1,14 +1,15 @@
 import React from "react";
 import {Banktransactie, useGetBurgerQuery} from "../../../../generated/graphql";
 import {Link} from "@gemeente-denhaag/link";
-import {ArrowLeftIcon} from "@gemeente-denhaag/icons";
-import {Box, Center, Stack, Text} from "@chakra-ui/react";
+import {ArrowLeftIcon, DownloadIcon} from "@gemeente-denhaag/icons";
+import {Box, Button, Center, HStack, Stack, Text} from "@chakra-ui/react";
 import {NavLink} from "react-router-dom";
 import d from "../../../utils/dayjs";
 import Divider from "@gemeente-denhaag/divider";
 import PrettyIban from "../../PrettyIban";
 import {currencyFormat} from "../../../utils/numberFormat";
 import Queryable from "../../../utils/Queryable";
+import {Heading5} from "@gemeente-denhaag/typography";
 import BanktransactieGeschiedenis from "./BanktransactieGeschiedenis";
 
 const BanktransactieDetailView: React.FC<{ transactie: Banktransactie, bsn: number }> = ({transactie, bsn}) => {
@@ -76,9 +77,20 @@ const BanktransactieDetailView: React.FC<{ transactie: Banktransactie, bsn: numb
 				});
 
 				return (
-					<div>
+					<Stack mt={8}>
+						<Heading5>Transactiegeschiedenis</Heading5>
+						<HStack justify={"space-between"}>
+							<Box>
+								<Text color={"gray"} fontSize={"sm"}>Haal mijn transacties op</Text>
+								<Text>Klik om mijn transacties te zien</Text>
+							</Box>
+							<Box>
+								<DownloadIcon />
+								<Button onClick={() => "hello"}>Button</Button>
+							</Box>
+						</HStack>
 						<BanktransactieGeschiedenis transacties={filteredRekeninghouders} />
-					</div>
+					</Stack>
 				)
 			}}
 			/>

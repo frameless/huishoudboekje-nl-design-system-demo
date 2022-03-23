@@ -4,9 +4,8 @@ import PrettyIban from "../../PrettyIban";
 import {Banktransactie} from "../../../../generated/graphql";
 import Divider from "@gemeente-denhaag/divider";
 import {NavLink} from "react-router-dom";
-import {ChevronRightIcon, DownloadIcon} from "@gemeente-denhaag/icons";
+import {ChevronRightIcon} from "@gemeente-denhaag/icons";
 import {currencyFormat} from "../../../utils/numberFormat";
-import {Heading5} from "@gemeente-denhaag/typography";
 import d from "../../../utils/dayjs";
 
 const BanktransactieGeschiedenis: React.FC<{ transacties: Banktransactie [] }> = ({transacties}) => {
@@ -27,18 +26,7 @@ const BanktransactieGeschiedenis: React.FC<{ transacties: Banktransactie [] }> =
 	};
 
 	return (
-		<Stack mt={8}>
-			<Heading5>Transactiegeschiedenis</Heading5>
-			<HStack justify={"space-between"}>
-				<Box>
-					<Text color={"gray"} fontSize={"sm"}>Haal mijn transacties op</Text>
-					<Text>Klik om mijn transacties te zien</Text>
-				</Box>
-				<Box>
-					<DownloadIcon />
-				</Box>
-			</HStack>
-
+		<Stack>
 			{/*{transacties.length > 0 ? (*/}
 			{transacties.map((transactie, i) => {
 				return (
