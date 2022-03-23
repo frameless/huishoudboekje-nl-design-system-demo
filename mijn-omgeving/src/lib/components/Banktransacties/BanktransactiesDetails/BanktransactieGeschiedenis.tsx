@@ -7,8 +7,25 @@ import {NavLink} from "react-router-dom";
 import {ChevronRightIcon, DownloadIcon} from "@gemeente-denhaag/icons";
 import {currencyFormat} from "../../../utils/numberFormat";
 import {Heading5} from "@gemeente-denhaag/typography";
+import d from "../../../utils/dayjs";
 
 const BanktransactieGeschiedenis: React.FC<{ transacties: Banktransactie [] }> = ({transacties}) => {
+	const dateString = (date: Date): string => {
+		const _date = d(date).startOf("day");
+		const today = d().startOf("day");
+
+		if (_date.isSame(today)) {
+			return "Vandaag";
+		}
+
+		if (_date.isSame(today.subtract(1, "day"))) {
+			return "Gisteren";
+		}
+
+		const format = _date.year() !== d().year() ? "dddd D MMMM YYYY" : "dddd D MMMM";
+		return d(date).format(format);
+	};
+
 	return (
 		<Stack mt={8}>
 			<Heading5>Transactiegeschiedenis</Heading5>
@@ -22,11 +39,13 @@ const BanktransactieGeschiedenis: React.FC<{ transacties: Banktransactie [] }> =
 				</Box>
 			</HStack>
 
+			{/*{transacties.length > 0 ? (*/}
 			{transacties.map((transactie, i) => {
 				return (
 					<Stack>
 						<HStack justify={"space-between"}>
 							<Box key={i}>
+								<Text color={"gray"} fontSize={"sm"}>{dateString(d(transactie.transactiedatum, "YYYY-MM-DD").toDate())}</Text>
 								<Text>{transactie.tegenrekening?.rekeninghouder || (
 									<PrettyIban iban={transactie.tegenrekeningIban} />
 								)}</Text>
@@ -42,6 +61,9 @@ const BanktransactieGeschiedenis: React.FC<{ transacties: Banktransactie [] }> =
 					</Stack>
 				)
 			})}
+			{/*): (*/}
+			{/*	<Text>Er zijn geen transacties gevonden.</Text>*/}
+			{/*)};*/}
 		</Stack>
 	);
 };

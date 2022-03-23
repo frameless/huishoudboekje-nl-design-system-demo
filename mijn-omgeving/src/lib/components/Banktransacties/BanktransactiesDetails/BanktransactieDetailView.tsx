@@ -70,7 +70,10 @@ const BanktransactieDetailView: React.FC<{ transactie: Banktransactie, bsn: numb
 				const {banktransacties} = data.burger || {};
 
 				const rekeninghouder = transactie.tegenrekening?.rekeninghouder;
-				const filteredRekeninghouders = banktransacties.filter(b => rekeninghouder?.includes(b.tegenrekening?.rekeninghouder))
+				const rekeningdatum = transactie.transactiedatum;
+				const filteredRekeninghouders = (banktransacties.filter(b => rekeninghouder?.includes(b.tegenrekening?.rekeninghouder))).filter(b => !rekeningdatum?.includes(b.transactiedatum)).sort((a, b) => {
+					return (a.transactiedatum && b.transactiedatum) && a.transactiedatum < b.transactiedatum ? 1 : -1;
+				});
 
 				return (
 					<div>
