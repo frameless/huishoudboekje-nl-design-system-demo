@@ -1,9 +1,7 @@
-import React from "react";
+import React, {useState} from "react";
 import {Banktransactie, useGetBurgerQuery} from "../../../../generated/graphql";
-import {Link} from "@gemeente-denhaag/link";
-import {ArrowLeftIcon, DownloadIcon} from "@gemeente-denhaag/icons";
-import {Box, Button, Center, HStack, Stack, Text} from "@chakra-ui/react";
-import {NavLink} from "react-router-dom";
+import {ChevronDownIcon, ChevronUpIcon} from "@gemeente-denhaag/icons";
+import {Box, Center, HStack, IconButton, Stack, Text} from "@chakra-ui/react";
 import d from "../../../utils/dayjs";
 import Divider from "@gemeente-denhaag/divider";
 import PrettyIban from "../../PrettyIban";
@@ -11,32 +9,19 @@ import {currencyFormat} from "../../../utils/numberFormat";
 import Queryable from "../../../utils/Queryable";
 import {Heading5} from "@gemeente-denhaag/typography";
 import BanktransactieGeschiedenis from "./BanktransactieGeschiedenis";
+import {dateString} from "../../../utils/dateFormat";
+import BackButton from "../../BackButton";
 
 const BanktransactieDetailView: React.FC<{ transactie: Banktransactie, bsn: number }> = ({transactie, bsn}) => {
 	const $burger = useGetBurgerQuery({
 		variables: {bsn},
 	});
 
-	const dateString = (date: Date): string => {
-		const _date = d(date).startOf("day");
-		const today = d().startOf("day");
-
-		if (_date.isSame(today)) {
-			return "Vandaag";
-		}
-
-		if (_date.isSame(today.subtract(1, "day"))) {
-			return "Gisteren";
-		}
-
-		const format = _date.year() !== d().year() ? "dddd D MMMM YYYY" : "dddd D MMMM";
-		return d(date).format(format);
-	};
+	const [isOpen, setIsOpen] = useState<boolean>(false);
 
 	return (
 		<div>
-			<NavLink to={"/banktransacties"}><Link href={"/banktransacties"} icon={<ArrowLeftIcon />} iconAlign={"start"}>Terug</Link></NavLink>
-
+			<BackButton to={"/banktransacties"} />
 			<Stack>
 				<Center>
 					<Box>
@@ -68,28 +53,28 @@ const BanktransactieDetailView: React.FC<{ transactie: Banktransactie, bsn: numb
 			</Stack>
 
 			<Queryable query={$burger} render={data => {
-				const {banktransacties} = data.burger || {};
+				const banktransacties: Banktransactie[] = data.burger.banktransacties || {};
 
-				const rekeninghouder = transactie.tegenrekening?.rekeninghouder;
-				const rekeningdatum = transactie.transactiedatum;
-				const filteredRekeninghouders = (banktransacties.filter(b => rekeninghouder?.includes(b.tegenrekening?.rekeninghouder))).filter(b => !rekeningdatum?.includes(b.transactiedatum)).sort((a, b) => {
+				const filteredRekeninghouders = (banktransacties.filter(b => transactie.tegenrekeningIban === b.tegenrekeningIban)).filter(b => transactie.id !== b.id).sort((a, b) => {
 					return (a.transactiedatum && b.transactiedatum) && a.transactiedatum < b.transactiedatum ? 1 : -1;
 				});
 
 				return (
 					<Stack mt={8}>
-						<Heading5>Transactiegeschiedenis</Heading5>
 						<HStack justify={"space-between"}>
-							<Box>
-								<Text color={"gray"} fontSize={"sm"}>Haal mijn transacties op</Text>
-								<Text>Klik om mijn transacties te zien</Text>
-							</Box>
-							<Box>
-								<DownloadIcon />
-								<Button onClick={() => "hello"}>Button</Button>
-							</Box>
+							<Heading5>Transactiegeschiedenis</Heading5>
+							{filteredRekeninghouders.length > 0 &&
+                            <IconButton size={"sm"} aria-label={"Toon transacties"} icon={isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />} onClick={() => setIsOpen(!isOpen)} />
+							}
 						</HStack>
-						<BanktransactieGeschiedenis transacties={filteredRekeninghouders} />
+						{filteredRekeninghouders.length > 0 ?
+							(isOpen &&
+                                <BanktransactieGeschiedenis transacties={filteredRekeninghouders} />
+							) : (
+								<Text>Er zijn geen transacties gevonden.</Text>
+							)
+
+						}
 					</Stack>
 				)
 			}}

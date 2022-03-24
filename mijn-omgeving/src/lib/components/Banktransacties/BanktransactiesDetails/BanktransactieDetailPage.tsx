@@ -3,9 +3,8 @@ import Queryable from "../../../utils/Queryable";
 import {Banktransactie, useGetBanktransactieQuery} from "../../../../generated/graphql";
 import BanktransactieDetailView from "./BanktransactieDetailView";
 import {Stack, Text} from "@chakra-ui/react";
-import {NavLink, useParams} from "react-router-dom";
-import {Link} from "@gemeente-denhaag/link";
-import {ArrowLeftIcon} from "@gemeente-denhaag/icons";
+import {useParams} from "react-router-dom";
+import BackButton from "../../BackButton";
 
 const BanktransactieDetailPage: React.FC<{ bsn: number }> = ({bsn}) => {
 	const {id = ""} = useParams<{ id: string }>();
@@ -22,7 +21,7 @@ const BanktransactieDetailPage: React.FC<{ bsn: number }> = ({bsn}) => {
 				if (!transactie) {
 					return (
 						<Stack>
-							<NavLink to={"/banktransacties"}><Link href={"/banktransacties"} icon={<ArrowLeftIcon />} iconAlign={"start"}>Terug</Link></NavLink>
+							<BackButton to={"/banktransacties"} />
 							<Text>Banktransactie niet gevonden.</Text>
 						</Stack>
 					)

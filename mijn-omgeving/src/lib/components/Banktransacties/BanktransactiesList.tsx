@@ -6,6 +6,7 @@ import d from "../../utils/dayjs";
 import BanktransactieListItem from "./BanktransactieListItem";
 import {Banktransactie} from "../../../generated/graphql";
 import Divider from "@gemeente-denhaag/divider";
+import {dateString} from "../../utils/dateFormat";
 
 const BanktransactiesList: React.FC<{ transacties: Banktransactie[] }> = ({transacties}) => {
 	const bt = transacties.reduce((result, t) => {
@@ -18,22 +19,6 @@ const BanktransactiesList: React.FC<{ transacties: Banktransactie[] }> = ({trans
 			],
 		};
 	}, {});
-
-	const dateString = (date: Date): string => {
-		const _date = d(date).startOf("day");
-		const today = d().startOf("day");
-
-		if (_date.isSame(today)) {
-			return "Vandaag";
-		}
-
-		if (_date.isSame(today.subtract(1, "day"))) {
-			return "Gisteren";
-		}
-
-		const format = _date.year() !== d().year() ? "dddd D MMMM YYYY" : "dddd D MMMM";
-		return d(date).format(format);
-	};
 
 	return (<>
 		{transacties.length > 0 ? (

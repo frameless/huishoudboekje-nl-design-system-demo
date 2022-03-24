@@ -1,10 +1,9 @@
-import {ArrowLeftIcon} from "@gemeente-denhaag/icons";
-import {Link} from "@gemeente-denhaag/link";
 import {Heading2} from "@gemeente-denhaag/typography";
 import React from "react";
 import {useGetBurgerQuery} from "../../../generated/graphql";
 import BanktransactiesList from "./BanktransactiesList";
 import Queryable from "../../utils/Queryable";
+import BackButton from "../BackButton";
 
 const BanktransactiesPage: React.FC<{ bsn: number }> = ({bsn}) => {
 	const $burger = useGetBurgerQuery({
@@ -13,7 +12,7 @@ const BanktransactiesPage: React.FC<{ bsn: number }> = ({bsn}) => {
 
 	return (
 		<div>
-			<Link href={"/"} icon={<ArrowLeftIcon />} iconAlign={"start"}>Huishoudboekje</Link>
+			<BackButton label={"Huishoudboekje"} />
 			<Heading2>Banktransacties</Heading2>
 
 			<Queryable query={$burger} render={data => {
