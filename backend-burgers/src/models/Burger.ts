@@ -45,12 +45,36 @@ const Burger = objectType({
 				return DataLoader.getAfsprakenByBurgerId(id);
 			},
 		});
-		t.list.field("banktransacties", {
-			type: "Banktransactie",
+		t.field("banktransactiesPaged", {
+			type: "PagedBanktransactie",
 			args: {
 				limit: intArg(),
 				start: intArg(),
 			},
+			resolve: async (root, args, ctx) => {
+				const {id} = root;
+				const {limit, start} = args;
+
+				if (!id) {
+					return [];
+				}
+
+				const {banktransacties = [], pageInfo} = await DataLoader.getBanktransactiesByBurgerIdPaged(id, {start, limit});
+
+				return {
+					banktransacties: banktransacties.map(t => ({
+						...t,
+						informationToAccountOwner: t.information_to_account_owner,
+						isCredit: t.is_credit,
+						tegenrekeningIban: t.tegen_rekening,
+						transactiedatum: t.transactie_datum,
+					})),
+					pageInfo,
+				};
+			},
+		});
+		t.list.field("banktransacties", {
+			type: "Banktransactie",
 			resolve: async (root, args, ctx) => {
 				const {id} = root;
 
@@ -58,15 +82,7 @@ const Burger = objectType({
 					return [];
 				}
 
-				const {limit, start} = args;
-
-				let transacties: any[] = []; // Todo: types
-				if (limit && start) {
-					transacties = await DataLoader.getBanktransactiesByBurgerIdPaged(id, { start, limit });
-				}
-				else {
-					transacties = await DataLoader.getBanktransactiesByBurgerId(id);
-				}
+				const transacties = await DataLoader.getBanktransactiesByBurgerId(id);
 
 				return transacties.map(t => ({
 					...t,

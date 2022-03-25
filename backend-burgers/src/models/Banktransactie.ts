@@ -47,4 +47,16 @@ const Banktransactie = objectType({
 	},
 });
 
+export const PagedBanktransactie = objectType({
+	name: "PagedBanktransactie",
+	definition: t => {
+		t.list.field("banktransacties", {
+			type: "Banktransactie",
+		});
+		t.field("pageInfo", {
+			type: "PageInfo",
+		});
+	},
+});
+
 export default Banktransactie;

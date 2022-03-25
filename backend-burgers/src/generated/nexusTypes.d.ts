@@ -73,6 +73,15 @@ export interface NexusGenObjects {
     naam?: string | null; // String
     vestigingsnummer?: string | null; // String
   }
+  PageInfo: { // root type
+    count?: number | null; // Int
+    limit?: number | null; // Int
+    start?: number | null; // Int
+  }
+  PagedBanktransactie: { // root type
+    banktransacties?: Array<NexusGenRootTypes['Banktransactie'] | null> | null; // [Banktransactie]
+    pageInfo?: NexusGenRootTypes['PageInfo'] | null; // PageInfo
+  }
   Query: {};
   Rekening: { // root type
     iban?: string | null; // String
@@ -126,6 +135,7 @@ export interface NexusGenFieldTypes {
     achternaam: string | null; // String
     afspraken: Array<NexusGenRootTypes['Afspraak'] | null> | null; // [Afspraak]
     banktransacties: Array<NexusGenRootTypes['Banktransactie'] | null> | null; // [Banktransactie]
+    banktransactiesPaged: NexusGenRootTypes['PagedBanktransactie'] | null; // PagedBanktransactie
     bsn: string | null; // String
     email: string | null; // String
     geboortedatum: string | null; // String
@@ -149,6 +159,15 @@ export interface NexusGenFieldTypes {
     kvknummer: string | null; // String
     naam: string | null; // String
     vestigingsnummer: string | null; // String
+  }
+  PageInfo: { // field return type
+    count: number | null; // Int
+    limit: number | null; // Int
+    start: number | null; // Int
+  }
+  PagedBanktransactie: { // field return type
+    banktransacties: Array<NexusGenRootTypes['Banktransactie'] | null> | null; // [Banktransactie]
+    pageInfo: NexusGenRootTypes['PageInfo'] | null; // PageInfo
   }
   Query: { // field return type
     banktransactie: NexusGenRootTypes['Banktransactie'] | null; // Banktransactie
@@ -199,6 +218,7 @@ export interface NexusGenFieldTypeNames {
     achternaam: 'String'
     afspraken: 'Afspraak'
     banktransacties: 'Banktransactie'
+    banktransactiesPaged: 'PagedBanktransactie'
     bsn: 'String'
     email: 'String'
     geboortedatum: 'String'
@@ -223,6 +243,15 @@ export interface NexusGenFieldTypeNames {
     naam: 'String'
     vestigingsnummer: 'String'
   }
+  PageInfo: { // field return type name
+    count: 'Int'
+    limit: 'Int'
+    start: 'Int'
+  }
+  PagedBanktransactie: { // field return type name
+    banktransacties: 'Banktransactie'
+    pageInfo: 'PageInfo'
+  }
   Query: { // field return type name
     banktransactie: 'Banktransactie'
     banktransacties: 'Banktransactie'
@@ -239,7 +268,7 @@ export interface NexusGenFieldTypeNames {
 
 export interface NexusGenArgTypes {
   Burger: {
-    banktransacties: { // args
+    banktransactiesPaged: { // args
       limit?: number | null; // Int
       start?: number | null; // Int
     }
