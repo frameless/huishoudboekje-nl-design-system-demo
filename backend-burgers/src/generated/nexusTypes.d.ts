@@ -238,6 +238,12 @@ export interface NexusGenFieldTypeNames {
 }
 
 export interface NexusGenArgTypes {
+  Burger: {
+    banktransacties: { // args
+      limit?: number | null; // Int
+      start?: number | null; // Int
+    }
+  }
   Query: {
     banktransactie: { // args
       id?: number | null; // Int

@@ -43,7 +43,7 @@ type Betaalinstructie {
 type Burger {
   achternaam: String
   afspraken: [Afspraak]
-  banktransacties: [Banktransactie]
+  banktransacties(limit: Int, start: Int): [Banktransactie]
 
   """Het burgerservicenummer."""
   bsn: String

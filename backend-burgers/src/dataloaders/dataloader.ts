@@ -68,6 +68,29 @@ const DataLoader = {
 		return await fetch(createServiceUrl("banktransacties", "/banktransactions")).then(r => r.json()).then(r => r.data || []);
 	},
 
+	getBanktransactiesByBurgerIdPaged: async (burgerId: number, options: {start: number, limit: number}) => {
+		const rekeningen = await DataLoader.getRekeningenByBurgerId(burgerId);
+		const rekeningIbans = rekeningen.map(r => r.iban);
+
+		if (rekeningIbans.length === 0) {
+			return [];
+		}
+
+		// Get all journaalposten for one burger, so that we can link to the afspraak
+		const journaalposten = await DataLoader.getJournaalpostenByBurgerId(burgerId);
+
+		const {start, limit} = options;
+		const createUrl = (start, limit, ibans) => `/banktransactions/?start=${start}&limit=${limit}&desc=True&sortingColumn=transactie_datum&filters={"tegen_rekening":+{"IN":+["${ibans.join(`","`)}"]}}`;
+		const banktransacties = await fetch(createServiceUrl("banktransacties", createUrl(start, limit, rekeningIbans))).then(r => r.json()).then(r => r.data || []);
+
+		return banktransacties.map(t => ({
+			...t,
+
+			// Provide afspraak_id, so that we can directly resolve the linked afspraak.
+			afspraak_id: journaalposten.find(j => j.transaction_id === t.id)?.afspraak_id,
+		}));
+	},
+
 	getBanktransactiesByBurgerId: async (id: number) => {
 		// Get all journaalposten for one burger
 		const journaalposten = await DataLoader.getJournaalpostenByBurgerId(id);

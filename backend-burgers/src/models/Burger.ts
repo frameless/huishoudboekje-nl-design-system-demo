@@ -1,4 +1,4 @@
-import {objectType} from "nexus";
+import {intArg, objectType} from "nexus";
 import DataLoader from "../dataloaders/dataloader";
 
 const Burger = objectType({
@@ -47,6 +47,10 @@ const Burger = objectType({
 		});
 		t.list.field("banktransacties", {
 			type: "Banktransactie",
+			args: {
+				limit: intArg(),
+				start: intArg(),
+			},
 			resolve: async (root, args, ctx) => {
 				const {id} = root;
 
@@ -54,14 +58,23 @@ const Burger = objectType({
 					return [];
 				}
 
-				const transacties = await DataLoader.getBanktransactiesByBurgerId(id);
+				const {limit, start} = args;
+
+				let transacties: any[] = []; // Todo: types
+				if (limit && start) {
+					transacties = await DataLoader.getBanktransactiesByBurgerIdPaged(id, { start, limit });
+				}
+				else {
+					transacties = await DataLoader.getBanktransactiesByBurgerId(id);
+				}
+
 				return transacties.map(t => ({
 					...t,
 					informationToAccountOwner: t.information_to_account_owner,
 					isCredit: t.is_credit,
 					tegenrekeningIban: t.tegen_rekening,
-					transactiedatum: t.transactie_datum
-				}))
+					transactiedatum: t.transactie_datum,
+				}));
 			},
 		});
 	},
