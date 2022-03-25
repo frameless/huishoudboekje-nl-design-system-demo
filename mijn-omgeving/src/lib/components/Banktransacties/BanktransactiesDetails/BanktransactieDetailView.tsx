@@ -8,9 +8,9 @@ import PrettyIban from "../../PrettyIban";
 import {currencyFormat} from "../../../utils/numberFormat";
 import Queryable from "../../../utils/Queryable";
 import {Heading5} from "@gemeente-denhaag/typography";
-import BanktransactieGeschiedenis from "./BanktransactieGeschiedenis";
 import {dateString} from "../../../utils/dateFormat";
 import BackButton from "../../BackButton";
+import BanktransactiesList from "../BanktransactiesList";
 
 const BanktransactieDetailView: React.FC<{ transactie: Banktransactie, bsn: number }> = ({transactie, bsn}) => {
 	const $burger = useGetBurgerQuery({
@@ -69,7 +69,7 @@ const BanktransactieDetailView: React.FC<{ transactie: Banktransactie, bsn: numb
 						</HStack>
 						{filteredRekeninghouders.length > 0 ?
 							(isOpen &&
-                                <BanktransactieGeschiedenis transacties={filteredRekeninghouders} />
+                                <BanktransactiesList transacties={filteredRekeninghouders} />
 							) : (
 								<Text>Er zijn geen transacties gevonden.</Text>
 							)
