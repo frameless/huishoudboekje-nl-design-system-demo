@@ -2,6 +2,7 @@ import {ApolloServer} from "apollo-server";
 import {ApolloServerPluginLandingPageGraphQLPlayground} from "apollo-server-core/dist/plugin/landingPage/graphqlPlayground";
 import dotenv from "dotenv";
 import schema from "./src/schema";
+import debugPlugin from "./src/utils/debugPlugin";
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ const server = new ApolloServer({
 	},
 	plugins: [
 		ApolloServerPluginLandingPageGraphQLPlayground(),
+		debugPlugin(),
 	],
 	context: ctx => ({
 		...ctx,
