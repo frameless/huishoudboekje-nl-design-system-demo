@@ -3,15 +3,15 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 
 export enum Periodiek {
-	Eenmalig = "eenmalig",
-	Periodiek = "periodiek",
+    Eenmalig = "eenmalig",
+    Periodiek = "herhalend",
 }
 
 type PeriodiekSelectorProps = {
-	value?: Periodiek,
-	isRequired?: boolean,
-	isInvalid?: boolean,
-	onChange: (value: Periodiek) => void,
+    value?: Periodiek,
+    isRequired?: boolean,
+    isInvalid?: boolean,
+    onChange: (value: Periodiek) => void,
 };
 
 const PeriodiekSelector: React.FC<PeriodiekSelectorProps> = ({value, isRequired = false, isInvalid = false, onChange}) => {
@@ -22,7 +22,8 @@ const PeriodiekSelector: React.FC<PeriodiekSelectorProps> = ({value, isRequired 
 			<FormLabel>{t("periodiekSelector.periodiek")}</FormLabel>
 			<RadioGroup onChange={(e: Periodiek) => {
 				onChange(e);
-			}} value={value}>
+			}} value={value}
+			defaultValue={Periodiek.Periodiek}>
 				<Stack>
 					<Radio value={Periodiek.Eenmalig}>{t("schedule.eenmalig")}</Radio>
 					<Radio value={Periodiek.Periodiek}>{t("schedule.periodiek")}</Radio>

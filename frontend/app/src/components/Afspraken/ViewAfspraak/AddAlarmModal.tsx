@@ -13,6 +13,7 @@ import zod from "../../../utils/zod";
 import MonthSelector from "../../shared/MonthSelector";
 import PeriodiekSelector, {Periodiek} from "../../shared/PeriodiekSelector";
 import WeekDaySelector from "../../shared/WeekDaySelector";
+import Asterisk from "../../shared/Asterisk";
 
 const eenmaligValidator = zod.object({
 	datum: zod.date(), //.refine(val => d().endOf("day").isSameOrBefore(val)), // Must be in the future
@@ -39,9 +40,9 @@ const validator = zod.object({
 });
 
 type AddAlarmModalProps = {
-	afspraak: Afspraak,
-	onSubmit: (data: CreateAlarmInput) => void,
-	onClose: VoidFunction,
+    afspraak: Afspraak,
+    onSubmit: (data: CreateAlarmInput) => void,
+    onClose: VoidFunction,
 };
 
 const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClose}) => {
@@ -161,13 +162,13 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 								</>)}
 
 								{form.repeatType === RepeatType.Month && (<>
+									<MonthSelector value={form.byMonth || []} onChange={(value => updateForm("byMonth", value))} isInvalid={!isFieldValid("byMonth")} />
+
 									<FormControl flex={1} isInvalid={!isFieldValid("byMonthDay")} isRequired>
 										<FormLabel>{t("alarmForm.byMonthDay")}</FormLabel>
 										<Input type={"number"} value={form.byMonthDay || ""} onChange={e => updateForm("byMonthDay", parseInt(e.target.value))} min={0} max={28} />
 										<FormErrorMessage>{t("alarmForm.errors.invalidMonthDayError")}</FormErrorMessage>
 									</FormControl>
-
-									<MonthSelector value={form.byMonth || []} onChange={(value => updateForm("byMonth", value))} isInvalid={!isFieldValid("byMonth")} />
 
 									<FormControl flex={1} isInvalid={!isFieldValid("datumMargin")} isRequired>
 										<FormLabel>{t("alarmForm.datumMargin")}</FormLabel>
@@ -218,10 +219,13 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 						</Stack>
 					</ModalBody>
 					<ModalFooter>
-						<HStack>
-							<Button variant={"ghost"} onClick={onClose}>{t("global.actions.cancel")}</Button>
-							<Button colorScheme={"primary"} onClick={onClickSubmit}>{t("global.actions.save")}</Button>
-						</HStack>
+						<Stack align={"flex-end"}>
+							<HStack>
+								<Button variant={"ghost"} onClick={onClose}>{t("global.actions.cancel")}</Button>
+								<Button colorScheme={"primary"} onClick={onClickSubmit}>{t("global.actions.save")}</Button>
+							</HStack>
+							<Asterisk />
+						</Stack>
 					</ModalFooter>
 				</form>
 			</ModalContent>
