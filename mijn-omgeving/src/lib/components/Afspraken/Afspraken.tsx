@@ -22,7 +22,7 @@ const Afspraken: React.FC<{ bsn: number }> = ({bsn}) => {
 					<Link href={"/"} icon={<ArrowLeftIcon />} iconAlign={"start"}>Huishoudboekje</Link>
 					<Heading2>Afspraken</Heading2>
 
-					<Text fontSize={"xl"} mt={10}>Bijschrijvingen</Text>
+					<Text fontSize={"xl"} mt={10}>Inkomsten</Text>
 					<Table>
 						<Thead>
 							<Tr>
@@ -35,7 +35,8 @@ const Afspraken: React.FC<{ bsn: number }> = ({bsn}) => {
 							return (
 								<Tbody key={i}>
 									<Tr key={i}>
-										<Td>{afspraak.tegenrekening.rekeninghouder}</Td>
+										{/*<pre>{JSON.stringify(afspraak, null, 2)}</pre>*/}
+										<Td>{afspraak.tegenrekening.rekeninghouder} </Td>
 										<Td>{afspraak.omschrijving}</Td>
 										<Td isNumeric>{currencyFormat2(true).format((parseInt(afspraak.bedrag) / 100) * (afspraak.credit ? 1 : -1))}</Td>
 									</Tr>
@@ -44,7 +45,7 @@ const Afspraken: React.FC<{ bsn: number }> = ({bsn}) => {
 						})}
 					</Table>
 
-					<Text fontSize={"xl"} mt={10}>Afschrijvingen</Text>
+					<Text fontSize={"xl"} mt={10}>Uitgaven</Text>
 					<Table>
 						<Thead>
 							<Tr>
