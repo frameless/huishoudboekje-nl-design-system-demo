@@ -35,7 +35,6 @@ const Dashboard = () => {
 				<GridItem>
 					<NavLink to={"/afspraken"}>
 						<Card
-							date={new Date()}
 							title={"Afspraken"}
 							subTitle={"Overzicht van alle afspraken."}
 						/>

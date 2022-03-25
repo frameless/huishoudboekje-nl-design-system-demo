@@ -8,6 +8,7 @@ import Toekomst from "./components/Toekomst/Toekomst";
 import {HuishoudboekjeConfig, HuishoudboekjeUser} from "./models";
 import createApolloClient from "./services/apolloClient";
 import BanktransactieDetailPage from "./components/Banktransacties/BanktransactiesDetails/BanktransactieDetailPage";
+import AfsprakenView from "./components/Afspraken/AfsprakenView";
 
 const App: React.FC<{ user: HuishoudboekjeUser, config: HuishoudboekjeConfig }> = ({user, config}) => {
 	const {apiUrl} = config;
@@ -22,6 +23,7 @@ const App: React.FC<{ user: HuishoudboekjeUser, config: HuishoudboekjeConfig }> 
 					</Route>
 					<Route path={"/toekomst"} element={<Toekomst bsn={user.bsn} />} />
 					<Route path={"/gegevens"} element={<DetailBurgerView bsn={user.bsn} />} />
+					<Route path={"/afspraken"} element={<AfsprakenView bsn={user.bsn} />} />
 				</Routes>
 			</Router>
 		</ApolloProvider>
