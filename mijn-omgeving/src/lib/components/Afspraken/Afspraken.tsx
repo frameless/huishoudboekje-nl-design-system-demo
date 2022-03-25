@@ -35,7 +35,6 @@ const Afspraken: React.FC<{ bsn: number }> = ({bsn}) => {
 							return (
 								<Tbody key={i}>
 									<Tr key={i}>
-										{/*<pre>{JSON.stringify(afspraak, null, 2)}</pre>*/}
 										<Td>{afspraak.tegenrekening.rekeninghouder} </Td>
 										<Td>{afspraak.omschrijving}</Td>
 										<Td isNumeric>{currencyFormat2(true).format((parseInt(afspraak.bedrag) / 100) * (afspraak.credit ? 1 : -1))}</Td>
