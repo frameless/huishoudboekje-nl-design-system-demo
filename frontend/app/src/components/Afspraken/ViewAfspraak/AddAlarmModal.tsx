@@ -157,7 +157,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 
 									<FormControl flex={1} isInvalid={!isFieldValid("datumMargin")} isRequired>
 										<FormLabel>{t("alarmForm.datumMargin")}</FormLabel>
-										<Input type={"number"} value={form.datumMargin || ""} onChange={e => updateForm("datumMargin", parseInt(e.target.value))} min={0} />
+										<Input type={"number"} value={form.datumMargin ?? ""} onChange={e => updateForm("datumMargin", parseInt(e.target.value))} min={0} />
 										<FormErrorMessage>{t("alarmForm.errors.invalidDatumMarginError")}</FormErrorMessage>
 									</FormControl>
 								</>)}
@@ -173,7 +173,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 
 									<FormControl flex={1} isInvalid={!isFieldValid("datumMargin")} isRequired>
 										<FormLabel>{t("alarmForm.datumMargin")}</FormLabel>
-										<Input type={"number"} value={form.datumMargin || ""} onChange={e => setForm(x => ({
+										<Input type={"number"} value={form.datumMargin ?? ""} onChange={e => setForm(x => ({
 											...x,
 											datumMargin: parseInt(e.target.value),
 										}))} min={0} />
