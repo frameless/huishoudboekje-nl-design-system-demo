@@ -1,4 +1,5 @@
 from tokenize import String
+import hhb_backend.graphql as graphql
 from hhb_backend.graphql.models.Alarm import Alarm
 from hhb_backend.graphql.models.signaal import Signaal
 from hhb_backend.graphql.models.afspraak import Afspraak
@@ -13,6 +14,7 @@ from dateutil.rrule import rrule, MONTHLY, YEARLY
 import calendar
 from dateutil.relativedelta import *
 import dateutil.parser
+import logging
 
 class AlarmTriggerResult(graphene.ObjectType):
     alarm = graphene.Field(lambda: Alarm)
@@ -157,6 +159,7 @@ def createAlarm(alarm: Alarm, alarmDate: datetime) -> Alarm:
         "byMonthDay": alarm.get("byMonthDay")
     }
 
+    # @anita TODO this will also result in not having a gebeurtenis for this event of creating a new alarm
     alarm_response = requests.post(f"{settings.ALARMENSERVICE_URL}/alarms/", json=newAlarm, headers={"Content-type": "application/json"})
     if alarm_response.status_code != 201:
         raise GraphQLError(f"Upstream API responded: {alarm_response.json()}")
@@ -285,7 +288,7 @@ def generateNextAlarmInSequence(alarm: Alarm, alarmDate:datetime) -> datetime:
 
     return next_alarm_date
 
-def shouldCreateSignaal(alarm: Alarm, transacties) -> Signaal:
+async def shouldCreateSignaal(alarm: Alarm, transacties) -> Signaal:
     datum_margin = int(alarm.get("datumMargin"))
     str_expect_date = alarm.get("datum")
     expect_date = dateutil.parser.isoparse(str_expect_date).date()
@@ -321,10 +324,34 @@ def shouldCreateSignaal(alarm: Alarm, transacties) -> Signaal:
             "type": "default"
             # "context": None
         }
-        signaal_response = requests.post(f"{settings.SIGNALENSERVICE_URL}/signals/", json=newSignal, headers={"Content-type": "application/json"})
-        if signaal_response.status_code != 201:
-            raise GraphQLError(f"Fout bij het aanmaken van het signaal. {signaal_response.json()}")
-        newSignal = signaal_response.json()["data"]
+
+        # Met een directe post krijg je geen gebeurtenis, een graphql aanroep CreateSignaal zou kunnen, dan zal er wel een gebeurtenis worden aangemaakt.
+        result = await graphql.schema.execute("""
+        mutation CreateSignaal($input: CreateSignaalInput!) {
+            createSignaal(input: $input) {
+                ok
+                signaal {
+                    id
+                    alarm {
+                        id
+                    }
+                    bankTransactions {
+                        id
+                    }
+                    isActive
+                    type
+                    actions
+                    context
+                    timeUpdated
+                }
+
+            }
+        }
+        """, variables={"input": newSignal}, return_promise=True)
+        if result.errors is not None:
+            logging.warning(f"create signaal failed: {result.errors}")
+            return None
+        newSignal = result.data['createSignaal']['signaal']
 
         newSignalId = newSignal.get("id")
         alarm["signaalId"] = newSignalId
