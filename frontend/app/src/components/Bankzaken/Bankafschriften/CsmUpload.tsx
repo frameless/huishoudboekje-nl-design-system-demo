@@ -1,7 +1,7 @@
 import {Box, Input, useDisclosure} from "@chakra-ui/react";
 import React, {useRef} from "react";
 import {useTranslation} from "react-i18next";
-import {useCreateCustomerStatementMessageMutation} from "../../../generated/graphql";
+import {useCreateCustomerStatementMessageMutation, useEvaluateAlarmsMutation} from "../../../generated/graphql";
 import {FileUpload} from "../../../models/models";
 import useUploadFiles from "../../../utils/useUploadFiles";
 import AddButton from "../../shared/AddButton";
@@ -16,13 +16,18 @@ const CsmUpload: React.FC<{refetch: VoidFunction}> = ({refetch}) => {
 			method: "fileUpload",
 		},
 	});
+	const [evaluateAlarms] = useEvaluateAlarmsMutation();
 	const [files, {addFiles}] = useUploadFiles({
 		doUpload: ({file}: FileUpload) => new Promise(resolve => {
 			return createCSM({
 				variables: {file},
 			}).then(() => resolve(true));
 		}),
-		onDone: () => refetch(),
+		onDone: async () => {
+			await evaluateAlarms();
+			refetch();
+			csmUploadModal.onClose();
+		},
 	});
 
 	const onChangeFiles = async (e: React.FormEvent<HTMLInputElement>) => {
@@ -35,7 +40,7 @@ const CsmUpload: React.FC<{refetch: VoidFunction}> = ({refetch}) => {
 	};
 
 	return (<>
-		{files.length > 0 && (
+		{csmUploadModal.isOpen && (
 			<CsmUploadModal uploads={files} />
 		)}
 
