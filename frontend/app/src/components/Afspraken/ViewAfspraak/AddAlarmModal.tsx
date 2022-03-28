@@ -53,6 +53,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 		validator,
 		initialValue: {
 			bedrag: afspraak.bedrag,
+			isPeriodiek: Periodiek.Periodiek,
 		},
 	});
 	const isFieldValid2 = (field: string) => {

@@ -22,8 +22,7 @@ const PeriodiekSelector: React.FC<PeriodiekSelectorProps> = ({value, isRequired 
 			<FormLabel>{t("periodiekSelector.periodiek")}</FormLabel>
 			<RadioGroup onChange={(e: Periodiek) => {
 				onChange(e);
-			}} value={value}
-			defaultValue={Periodiek.Periodiek}>
+			}} value={value}>
 				<Stack>
 					<Radio value={Periodiek.Eenmalig}>{t("schedule.eenmalig")}</Radio>
 					<Radio value={Periodiek.Periodiek}>{t("schedule.periodiek")}</Radio>
