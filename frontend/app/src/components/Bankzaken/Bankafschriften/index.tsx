@@ -38,20 +38,18 @@ const CustomerStatementMessages = () => {
 
 	return (
 		<Page title={t("bankzaken.customerStatementMessages.title")}>
-			<Queryable query={$customerStatementMessages}>{(data) => {
-				/* Sort CSMs so that the newest appears first */
-				const csms: CustomerStatementMessage[] = [...data.customerStatementMessages || []].sort((a, b) => a.uploadDate <= b.uploadDate ? 1 : -1);
+			<Stack spacing={5}>
+				<SectionContainer>
+					<Section
+						title={t("forms.bankzaken.sections.customerStatementMessages.title")}
+						helperText={t("forms.bankzaken.sections.customerStatementMessages.helperText")}
+						right={<CsmUpload refetch={() => $customerStatementMessages.refetch()} />}
+					>
+						<Queryable query={$customerStatementMessages}>{(data) => {
+							/* Sort CSMs so that the newest appears first */
+							const csms: CustomerStatementMessage[] = [...data.customerStatementMessages || []].sort((a, b) => a.uploadDate <= b.uploadDate ? 1 : -1);
 
-				return (
-					<Stack spacing={5}>
-						<SectionContainer>
-							<Section
-								title={t("forms.bankzaken.sections.customerStatementMessages.title")}
-								helperText={t("forms.bankzaken.sections.customerStatementMessages.helperText")}
-								right={(
-									<CsmUpload />
-								)}
-							>
+							return (
 								<Stack direction={["column", "row"]} spacing={5}>
 									{csms.length === 0 ? (
 										<Text>{t("customerStatementMessages.noResults")}</Text>
@@ -76,12 +74,12 @@ const CustomerStatementMessages = () => {
 										</Table>
 									)}
 								</Stack>
-							</Section>
-						</SectionContainer>
-					</Stack>
-				);
-			}}
-			</Queryable>
+							);
+						}}
+						</Queryable>
+					</Section>
+				</SectionContainer>
+			</Stack>
 		</Page>
 	);
 };
