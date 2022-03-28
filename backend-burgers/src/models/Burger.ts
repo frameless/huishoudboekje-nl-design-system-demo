@@ -1,4 +1,4 @@
-import {objectType} from "nexus";
+import {intArg, objectType} from "nexus";
 import DataLoader from "../dataloaders/dataloader";
 
 const Burger = objectType({
@@ -45,6 +45,34 @@ const Burger = objectType({
 				return DataLoader.getAfsprakenByBurgerId(id);
 			},
 		});
+		t.field("banktransactiesPaged", {
+			type: "PagedBanktransactie",
+			args: {
+				limit: intArg(),
+				start: intArg(),
+			},
+			resolve: async (root, args, ctx) => {
+				const {id} = root;
+				const {limit, start} = args;
+
+				if (!id) {
+					return [];
+				}
+
+				const {banktransacties = [], pageInfo} = await DataLoader.getBanktransactiesByBurgerIdPaged(id, {start, limit});
+
+				return {
+					banktransacties: banktransacties.map(t => ({
+						...t,
+						informationToAccountOwner: t.information_to_account_owner,
+						isCredit: t.is_credit,
+						tegenrekeningIban: t.tegen_rekening,
+						transactiedatum: t.transactie_datum,
+					})),
+					pageInfo,
+				};
+			},
+		});
 		t.list.field("banktransacties", {
 			type: "Banktransactie",
 			resolve: async (root, args, ctx) => {
@@ -55,13 +83,14 @@ const Burger = objectType({
 				}
 
 				const transacties = await DataLoader.getBanktransactiesByBurgerId(id);
+
 				return transacties.map(t => ({
 					...t,
 					informationToAccountOwner: t.information_to_account_owner,
 					isCredit: t.is_credit,
 					tegenrekeningIban: t.tegen_rekening,
-					transactiedatum: t.transactie_datum
-				}))
+					transactiedatum: t.transactie_datum,
+				}));
 			},
 		});
 	},

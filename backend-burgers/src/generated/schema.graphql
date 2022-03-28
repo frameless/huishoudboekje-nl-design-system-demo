@@ -44,6 +44,7 @@ type Burger {
   achternaam: String
   afspraken: [Afspraak]
   banktransacties: [Banktransactie]
+  banktransactiesPaged(limit: Int, start: Int): PagedBanktransactie
 
   """Het burgerservicenummer."""
   bsn: String
@@ -85,6 +86,17 @@ type Organisatie {
   kvknummer: String
   naam: String
   vestigingsnummer: String
+}
+
+type PageInfo {
+  count: Int
+  limit: Int
+  start: Int
+}
+
+type PagedBanktransactie {
+  banktransacties: [Banktransactie]
+  pageInfo: PageInfo
 }
 
 """GraphQL Query"""

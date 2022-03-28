@@ -1,17 +1,20 @@
 import Afspraak from "./Afspraak";
-import Banktransactie from "./Banktransactie";
+import Banktransactie, {PagedBanktransactie} from "./Banktransactie";
 import Betaalinstructie from "./Betaalinstructie";
 import Burger from "./Burger";
 import Journaalpost from "./Journaalpost";
 import Organisatie from "./Organisatie";
+import PageInfo from "./PageInfo";
 import Rekening from "./Rekening";
 
 export {
 	Afspraak,
 	Banktransactie,
+	PagedBanktransactie,
 	Betaalinstructie,
 	Burger,
 	Journaalpost,
 	Organisatie,
 	Rekening,
+	PageInfo,
 };
