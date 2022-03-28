@@ -2,7 +2,7 @@ import {Grid, GridItem} from "@chakra-ui/react";
 import {Card} from "@gemeente-denhaag/card";
 import {Heading2} from "@gemeente-denhaag/typography";
 import React from "react";
-import {NavLink} from "../utils/Router";
+import {NavLink} from "react-router-dom";
 
 const Dashboard = () => {
 	return (
@@ -12,7 +12,6 @@ const Dashboard = () => {
 				<GridItem>
 					<NavLink to={"/toekomst"}>
 						<Card
-							date={new Date()}
 							title={"Toekomst"}
 							subTitle={"Verwachte transacties"}
 						/>
@@ -21,7 +20,6 @@ const Dashboard = () => {
 				<GridItem>
 					<NavLink to={"/banktransacties"}>
 						<Card
-							date={new Date()}
 							title={"Banktransacties"}
 							subTitle={"Overzicht van alle bij- en afschrijvingen."}
 						/>
@@ -30,7 +28,6 @@ const Dashboard = () => {
 				<GridItem>
 					<NavLink to={"/gegevens"}>
 						<Card
-							date={new Date()}
 							title={"Mijn gegevens"}
 						/>
 					</NavLink>
@@ -38,7 +35,6 @@ const Dashboard = () => {
 				<GridItem>
 					<NavLink to={"/afspraken"}>
 						<Card
-							date={new Date()}
 							title={"Afspraken"}
 							subTitle={"Overzicht van alle afspraken."}
 						/>
