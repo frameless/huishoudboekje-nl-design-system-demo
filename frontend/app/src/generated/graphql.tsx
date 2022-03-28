@@ -547,6 +547,10 @@ export type EvaluateAlarm = {
   alarmTriggerResult?: Maybe<Array<Maybe<AlarmTriggerResult>>>;
 };
 
+export type EvaluateAlarms = {
+  alarmTriggerResult?: Maybe<Array<Maybe<AlarmTriggerResult>>>;
+};
+
 export type Export = {
   eindDatum?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['Int']>;
@@ -761,6 +765,7 @@ export type RootMutation = {
   deleteRubriek?: Maybe<DeleteRubriek>;
   deleteSignaal?: Maybe<DeleteSignaal>;
   evaluateAlarm?: Maybe<EvaluateAlarm>;
+  evaluateAlarms?: Maybe<EvaluateAlarms>;
   /** Mutatie om niet afgeletterde banktransacties af te letteren. */
   startAutomatischBoeken?: Maybe<StartAutomatischBoeken>;
   updateAfdeling?: Maybe<UpdateAfdeling>;
@@ -1098,6 +1103,11 @@ export type RootMutationUpdateRubriekArgs = {
 export type RootMutationUpdateSignaalArgs = {
   id: Scalars['String'];
   input: UpdateSignaalInput;
+};
+
+/** The root of all mutations  */
+export type RootMutationEvaluateAlarmArgs = {
+  id: Scalars['String'];
 };
 
 /** The root of all queries  */
