@@ -145,7 +145,7 @@ def shouldCreateNextAlarm(alarm: Alarm, alarm_check_date: datetime, activeAlarms
 
     return newAlarm
 
-def createAlarm(alarm: Alarm, alarmDate: datetime) -> Alarm:
+async def createAlarm(alarm: Alarm, alarmDate: datetime) -> Alarm:
     newAlarm = {
         "isActive": True,
         "gebruikerEmail": alarm.get("gebruikerEmail"),
@@ -158,12 +158,36 @@ def createAlarm(alarm: Alarm, alarmDate: datetime) -> Alarm:
         "byMonth": alarm.get("byMonth"),
         "byMonthDay": alarm.get("byMonthDay")
     }
-
-    # @anita TODO this will also result in not having a gebeurtenis for this event of creating a new alarm
-    alarm_response = requests.post(f"{settings.ALARMENSERVICE_URL}/alarms/", json=newAlarm, headers={"Content-type": "application/json"})
-    if alarm_response.status_code != 201:
-        raise GraphQLError(f"Upstream API responded: {alarm_response.json()}")
-    newAlarm = alarm_response.json()["data"]
+    
+    result = await graphql.schema.execute("""
+        mutation CreateAlarm($input: CreateAlarmInput!) {
+            createAlarm(input: $input){
+                ok
+                alarm {
+                id
+                isActive
+                gebruikerEmail
+                afspraak {
+                    id
+                }
+                signaal {
+                    id
+                }
+                datum
+                datumMargin
+                bedrag
+                bedragMargin
+                byDay
+                byMonth
+                byMonthDay
+                }
+            }
+        }
+        """, variables={"input": newAlarm}, return_promise=True)
+    if result.errors is not None:
+        logging.warning(f"create alarm failed: {result.errors}")
+        return None
+    newAlarm = result.data['createAlarm']['alarm']
 
     return newAlarm
 
@@ -325,7 +349,6 @@ async def shouldCreateSignaal(alarm: Alarm, transacties) -> Signaal:
             # "context": None
         }
 
-        # Met een directe post krijg je geen gebeurtenis, een graphql aanroep CreateSignaal zou kunnen, dan zal er wel een gebeurtenis worden aangemaakt.
         result = await graphql.schema.execute("""
         mutation CreateSignaal($input: CreateSignaalInput!) {
             createSignaal(input: $input) {
