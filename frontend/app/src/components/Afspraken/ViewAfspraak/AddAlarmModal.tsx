@@ -10,10 +10,10 @@ import {currencyFormat2, useReactSelectStyles} from "../../../utils/things";
 import useForm from "../../../utils/useForm";
 import useToaster from "../../../utils/useToaster";
 import zod from "../../../utils/zod";
+import Asterisk from "../../shared/Asterisk";
 import MonthSelector from "../../shared/MonthSelector";
 import PeriodiekSelector, {Periodiek} from "../../shared/PeriodiekSelector";
 import WeekDaySelector from "../../shared/WeekDaySelector";
-import Asterisk from "../../shared/Asterisk";
 
 const eenmaligValidator = zod.object({
 	datum: zod.date(), //.refine(val => d().endOf("day").isSameOrBefore(val)), // Must be in the future
@@ -40,9 +40,9 @@ const validator = zod.object({
 });
 
 type AddAlarmModalProps = {
-    afspraak: Afspraak,
-    onSubmit: (data: CreateAlarmInput) => void,
-    onClose: VoidFunction,
+	afspraak: Afspraak,
+	onSubmit: (data: CreateAlarmInput) => void,
+	onClose: VoidFunction,
 };
 
 const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClose}) => {
@@ -76,14 +76,17 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 		toggleSubmitted(true);
 
 		if (isValid()) {
-			const {bedrag, bedragMargin, datum, datumMargin} = form;
+			const {bedrag, bedragMargin, datum, datumMargin, byDay, byMonth, byMonthDay} = form;
 			onSubmit({
 				afspraakId: afspraak.id!,
 				isActive: true,
 				bedrag,
 				bedragMargin,
-				datum: d(datum).format("YYYY-MM-DD"),
+				...form.isPeriodiek === Periodiek.Eenmalig && {datum: d(datum).format("YYYY-MM-DD")},
 				datumMargin,
+				byDay,
+				byMonth,
+				...byMonthDay && {byMonthDay: [byMonthDay]},
 			});
 			return;
 		}
@@ -223,7 +226,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 						<Stack align={"flex-end"}>
 							<HStack>
 								<Button variant={"ghost"} onClick={onClose}>{t("global.actions.cancel")}</Button>
-								<Button colorScheme={"primary"} onClick={onClickSubmit}>{t("global.actions.save")}</Button>
+								<Button type={"submit"} colorScheme={"primary"}>{t("global.actions.save")}</Button>
 							</HStack>
 							<Asterisk />
 						</Stack>
