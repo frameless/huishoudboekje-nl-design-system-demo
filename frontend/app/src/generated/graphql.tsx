@@ -1105,6 +1105,11 @@ export type RootMutationUpdateSignaalArgs = {
   input: UpdateSignaalInput;
 };
 
+/** The root of all mutations  */
+export type RootMutationEvaluateAlarmArgs = {
+  id: Scalars['String'];
+};
+
 /** The root of all queries  */
 export type RootQuery = {
   afdeling?: Maybe<Afdeling>;

@@ -134,9 +134,6 @@ class CreateCustomerStatementMessage(graphene.Mutation):
             if journaalpostentemp:
                 journaalposten.extend(journaalpostentemp)
 
-        # Evaluate all alarms
-        await automatisch_beoordelen.automatisch_alle_alarmen_beoordelen()
-        
         return CreateCustomerStatementMessage(
             journaalposten=journaalposten,
             customerStatementMessage=customerStatementMessage,

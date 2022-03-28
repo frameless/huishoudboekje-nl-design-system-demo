@@ -37,10 +37,10 @@ mutation EvaluateAlarms {
 
 async def automatisch_alarm_beoordelen(id: String):
     '''Automatisch het alarm met opgegeven id beoordelen.'''
-    logging.info("Automatisch een alarm beoordelen started.")
+    logging.info(f"Automatisch een alarm beoordelen started for id: {id}.")
   
     result = await graphql.schema.execute("""
-mutation EvaluateAlarm {
+mutation EvaluateAlarm($id: String!) {
   evaluateAlarm(id: $id) {
     alarmTriggerResult {
       alarm{

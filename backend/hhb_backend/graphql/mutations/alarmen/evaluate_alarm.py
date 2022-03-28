@@ -36,7 +36,7 @@ class EvaluateAlarms(graphene.Mutation):
     async def mutate(_root, _info):
         """ Mutatie voor de evaluatie van een alarm wat kan resulteren in een signaal en/of een nieuw alarm in de reeks. """
         triggered_alarms = evaluateAllAlarms()
-        return EvaluateAlarm(alarmTriggerResult=triggered_alarms)
+        return EvaluateAlarms(alarmTriggerResult=triggered_alarms)
 
 
 class EvaluateAlarm(graphene.Mutation):
