@@ -4,16 +4,17 @@ import {useTranslation} from "react-i18next";
 import {DayOfWeek} from "../../generated/graphql";
 
 type WeekDaySelectorProps = {
-	isInvalid: boolean,
-	value: DayOfWeek[],
-	onChange: (day: DayOfWeek[]) => void,
+    isInvalid: boolean,
+    isRequired?: boolean,
+    value: DayOfWeek[],
+    onChange: (day: DayOfWeek[]) => void,
 };
 
-const WeekDaySelector: React.FC<WeekDaySelectorProps> = ({isInvalid, value, onChange}) => {
+const WeekDaySelector: React.FC<WeekDaySelectorProps> = ({isInvalid = false, isRequired = false, value, onChange}) => {
 	const {t} = useTranslation();
 
 	return (
-		<FormControl flex={1} isInvalid={isInvalid}>
+		<FormControl flex={1} isInvalid={isInvalid} isRequired={isRequired}>
 			<FormLabel>{t("schedule.byDay")}</FormLabel>
 			<CheckboxGroup colorScheme={"primary"} defaultValue={[]} value={value || []} onChange={(val: DayOfWeek[]) => onChange(val)}>
 				<Wrap>

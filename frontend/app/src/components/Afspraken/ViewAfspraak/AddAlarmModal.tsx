@@ -18,6 +18,8 @@ import WeekDaySelector from "../../shared/WeekDaySelector";
 const eenmaligValidator = zod.object({
 	datum: zod.date(), //.refine(val => d().endOf("day").isSameOrBefore(val)), // Must be in the future
 	datumMargin: zod.number().min(0),
+	byMonthDay: zod.number().min(1).max(28),
+	byDay: zod.array(zod.nativeEnum(DayOfWeek)).min(1),
 });
 
 const validator = zod.object({
@@ -40,9 +42,9 @@ const validator = zod.object({
 });
 
 type AddAlarmModalProps = {
-	afspraak: Afspraak,
-	onSubmit: (data: CreateAlarmInput) => void,
-	onClose: VoidFunction,
+    afspraak: Afspraak,
+    onSubmit: (data: CreateAlarmInput) => void,
+    onClose: VoidFunction,
 };
 
 const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClose}) => {
@@ -54,6 +56,8 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 		initialValue: {
 			bedrag: afspraak.bedrag,
 			isPeriodiek: Periodiek.Periodiek,
+			repeatType: RepeatType.Month,
+			byMonth: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
 		},
 	});
 	const isFieldValid2 = (field: string) => {
@@ -61,8 +65,8 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 			return true;
 		}
 
-		const {datum, datumMargin} = form;
-		const parsed = eenmaligValidator.safeParse({datum, datumMargin});
+		const {datum, datumMargin, byMonthDay, byDay} = form;
+		const parsed = eenmaligValidator.safeParse({datum, datumMargin, byMonthDay, byDay});
 		return parsed.success || !parsed.error.issues.find(issue => issue.path?.[0] === field);
 	};
 
@@ -98,7 +102,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 		<Modal isOpen={true} onClose={onClose}>
 			<ModalOverlay />
 			<ModalContent>
-				<form onSubmit={onClickSubmit}>
+				<form onSubmit={onClickSubmit} noValidate>
 					<ModalHeader>{t("addAlarmModal.title")}</ModalHeader>
 					<ModalCloseButton />
 					<ModalBody>
@@ -108,7 +112,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 							<PeriodiekSelector value={form.isPeriodiek} isInvalid={!isFieldValid("isPeriodiek")} onChange={p => {
 								reset();
 								updateForm("isPeriodiek", p);
-							}} />
+							}} isRequired />
 
 							{form.isPeriodiek === Periodiek.Eenmalig && (<>
 								<FormControl flex={1} isInvalid={!isFieldValid("datum") || !isFieldValid2("datum")} isRequired>
@@ -124,7 +128,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 
 								<FormControl flex={1} isInvalid={!isFieldValid("datumMargin") || !isFieldValid2("datumMargin")} isRequired>
 									<FormLabel>{t("alarmForm.datumMargin")}</FormLabel>
-									<Input type={"number"} value={form.datumMargin || ""} onChange={e => setForm(x => ({
+									<Input type={"number"} value={form.datumMargin ?? ""} onChange={e => setForm(x => ({
 										...x,
 										datumMargin: parseInt(e.target.value),
 									}))} min={0} />
@@ -156,9 +160,9 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 								</FormControl>
 
 								{form.repeatType === RepeatType.Week && (<>
-									<WeekDaySelector value={form.byDay || []} onChange={(value => updateForm("byDay", value))} isInvalid={!isFieldValid("byDay")} />
+									<WeekDaySelector value={form.byDay || []} onChange={(value => updateForm("byDay", value))} isInvalid={!isFieldValid("byDay") || !isFieldValid2("byDay")} isRequired={true} />
 
-									<FormControl flex={1} isInvalid={!isFieldValid("datumMargin")} isRequired>
+									<FormControl flex={1} isInvalid={!isFieldValid("datumMargin") || !isFieldValid2("datumMargin")} isRequired>
 										<FormLabel>{t("alarmForm.datumMargin")}</FormLabel>
 										<Input type={"number"} value={form.datumMargin ?? ""} onChange={e => updateForm("datumMargin", parseInt(e.target.value))} min={0} />
 										<FormErrorMessage>{t("alarmForm.errors.invalidDatumMarginError")}</FormErrorMessage>
@@ -166,15 +170,15 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 								</>)}
 
 								{form.repeatType === RepeatType.Month && (<>
-									<MonthSelector value={form.byMonth || []} onChange={(value => updateForm("byMonth", value))} isInvalid={!isFieldValid("byMonth")} />
+									<MonthSelector value={form.byMonth || []} onChange={(value => updateForm("byMonth", value))} isInvalid={!isFieldValid("byMonth")} isRequired={true} />
 
-									<FormControl flex={1} isInvalid={!isFieldValid("byMonthDay")} isRequired>
+									<FormControl flex={1} isInvalid={!isFieldValid("byMonthDay") || !isFieldValid2("byMonthDay")} isRequired>
 										<FormLabel>{t("alarmForm.byMonthDay")}</FormLabel>
 										<Input type={"number"} value={form.byMonthDay || ""} onChange={e => updateForm("byMonthDay", parseInt(e.target.value))} min={0} max={28} />
 										<FormErrorMessage>{t("alarmForm.errors.invalidMonthDayError")}</FormErrorMessage>
 									</FormControl>
 
-									<FormControl flex={1} isInvalid={!isFieldValid("datumMargin")} isRequired>
+									<FormControl flex={1} isInvalid={!isFieldValid("datumMargin") || !isFieldValid2("datumMargin")} isRequired>
 										<FormLabel>{t("alarmForm.datumMargin")}</FormLabel>
 										<Input type={"number"} value={form.datumMargin ?? ""} onChange={e => setForm(x => ({
 											...x,
