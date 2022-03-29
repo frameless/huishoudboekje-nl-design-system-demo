@@ -24,11 +24,12 @@ model Alarm {
 	afspraakId			Int
 	signaalId			String?
 	isActive			Boolean
-	datum				String
 	datumMargin			Int
 	bedrag				Float
 	bedragMargin		Float
 	byDay				DayOfWeek[]
 	byMonth				Int[]
 	byMonthDay			Int[]
+	startDate			String
+	endDate				String?
 }

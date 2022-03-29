@@ -38,7 +38,8 @@ Content-Type: application/json
   "byMonthDay": [3],
   "afspraakId": 1,
   "isActive": true,
-  "datum": "2021-12-18",
+  "startDate": "2021-12-18",
+  "endDate": "2022-12-17",
   "datumMargin": 3,
   "bedrag": 1200.12,
   "bedragMargin": 75.25
@@ -58,7 +59,8 @@ Content-Type: application/json
   "byMonthDay": [3],
   "afspraakId": 1,
   "isActive": true,
-  "datum": "2021-12-18",
+  "startDate": "2021-12-18",
+  "endDate": "2022-12-17",
   "datumMargin": 3,
   "bedrag": 1200.12,
   "bedragMargin": 75.25
@@ -78,7 +80,8 @@ Content-Type: application/json
   "byMonthDay": [3],
   "afspraakId": 1,
   "isActive": true,
-  "datum": "2021-12-18",
+  "startDate": "2021-12-18",
+  "endDate": "2022-12-17",
   "datumMargin": 3,
   "bedrag": 1200.12,
   "bedragMargin": 75.25
