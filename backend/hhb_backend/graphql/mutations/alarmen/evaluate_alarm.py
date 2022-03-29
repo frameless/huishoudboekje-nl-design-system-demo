@@ -154,9 +154,9 @@ async def createAlarm(alarm: Alarm, alarmDate: datetime) -> Alarm:
         "datumMargin": int(alarm.get("datumMargin")),
         "bedrag": alarm.get("bedrag"),
         "bedragMargin": alarm.get("bedragMargin"),
-        "byDay": alarm.get("byDay"),
-        "byMonth": alarm.get("byMonth"),
-        "byMonthDay": alarm.get("byMonthDay")
+        "byDay": alarm.get("byDay", []),
+        "byMonth": alarm.get("byMonth", []),
+        "byMonthDay": alarm.get("byMonthDay", [])
     }
     
     result = await graphql.schema.execute("""

@@ -239,6 +239,8 @@ def test_evaluate_alarm_no_signal(client):
         rm4 = rm.get(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/{transaction_id}", status_code=200, json={"data": banktransactie})
         rm5 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
         rm6 = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={ "ok":True, "data": nextAlarm})
+        rm7 = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}", status_code=200)
+        rm8 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", status_code=200, json={"data": [afspraak]})
 
         # act
         response = client.post(
@@ -267,12 +269,14 @@ def test_evaluate_alarm_no_signal(client):
         print(f">> >> >> response: {response.json} ")
         
         # assert
-        assert rm1.called_once
-        assert rm2.called_once
-        assert rm3.called_once
-        assert rm4.called_once
-        assert rm5.called_once
-        assert rm6.called_once
+        assert rm1.call_count == 1
+        assert rm2.call_count == 2
+        assert rm3.call_count == 1
+        assert rm4.call_count == 1
+        assert rm5.call_count == 2
+        assert rm6.call_count == 1
+        assert rm7.call_count == 1
+        assert rm8.call_count == 1
         assert fallback.called == 0
         assert response.json == expected
 
@@ -300,6 +304,9 @@ def test_evaluate_alarm_signal_date(client):
         rm6 = rm.post(f"{settings.SIGNALENSERVICE_URL}/signals/", status_code=201, json={"data": signaal})
         rm7 = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", status_code=200, json={ "ok":True, "data": nextAlarm})
         rm8 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
+        rm9 = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}", status_code=200)
+        rm10 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", status_code=200, json={"data": [afspraak]})
+
         expected = {'data': {'evaluateAlarms': {'alarmTriggerResult': [{'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9'}, 'nextAlarm': {'id': '33738845-7f23-4c8f-8424-2b560a944884'}, 'signaal': {'id': 'e2b282d9-b31f-451e-9242-11f86c902b35'}}]}}}
 
         # act
@@ -327,14 +334,16 @@ def test_evaluate_alarm_signal_date(client):
         )
 
         # assert
-        assert rm1.called_once
-        assert rm2.called_once
-        assert rm3.called_once
-        assert rm4.called_once
-        assert rm5.called_once
-        assert rm6.called_once
-        assert rm7.called_once
-        assert rm8.called_once
+        assert rm1.call_count == 2
+        assert rm2.call_count == 2
+        assert rm3.call_count == 1
+        assert rm4.call_count == 1
+        assert rm5.call_count == 1
+        assert rm6.call_count == 1
+        assert rm7.call_count == 1
+        assert rm8.call_count == 3
+        assert rm9.call_count == 1
+        assert rm10.call_count == 1
         assert fallback.called == 0
         assert response.json == expected
 
@@ -362,6 +371,9 @@ def test_evaluate_alarm_signal_monetary(client):
         rm6 = rm.post(f"{settings.SIGNALENSERVICE_URL}/signals/", status_code=201, json={"data": signaal})
         rm7 = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", status_code=200, json={ "ok":True, "data": nextAlarm})
         rm8 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
+        rm9 = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}", status_code=200)
+        rm10 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", status_code=200, json={"data": [afspraak]})
+
         expected = {'data': {'evaluateAlarms': {'alarmTriggerResult': [{'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9'}, 'nextAlarm': {'id': '33738845-7f23-4c8f-8424-2b560a944884'}, 'signaal': {'id': 'e2b282d9-b31f-451e-9242-11f86c902b35'}}]}}}
 
         # act
@@ -389,14 +401,16 @@ def test_evaluate_alarm_signal_monetary(client):
         )
 
         # assert
-        assert rm1.called_once
-        assert rm2.called_once
-        assert rm3.called_once
-        assert rm4.called_once
-        assert rm5.called_once
-        assert rm6.called_once
-        assert rm7.called_once
-        assert rm8.called_once
+        assert rm1.call_count == 2
+        assert rm2.call_count == 2
+        assert rm3.call_count == 1
+        assert rm4.call_count == 1
+        assert rm5.call_count == 1
+        assert rm6.call_count == 1
+        assert rm7.call_count == 1
+        assert rm8.call_count == 3
+        assert rm9.call_count == 1
+        assert rm10.call_count == 1
         assert fallback.called == 0
         assert response.json == expected
 
@@ -573,10 +587,11 @@ def test_evaluate_alarm_disabled_because_its_in_the_past(client):
         rm5 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
         rm6 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", status_code=200, json={"data": [afspraak]})
         rm7 = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={ "ok":True, "data": nextAlarm})
+        rm8 = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}", status_code=200)
 
         expected = {'data': {'evaluateAlarms': {'alarmTriggerResult': 
-        [{'alarm': {'isActive': False, 'gebruikerEmail': 'other@mail.nl', 'afspraak': {'id': 19, 'omschrijving': 'this is a test afspraak', 'betaalinstructie': {'byDay': ['Wednesday', 'Friday'], 'byMonth': [], 'byMonthDay': []}}, 'datum': '2021-12-06', 'datumMargin': 1, 'bedrag': '125.00', 'bedragMargin': '10.00'}, 
-        'nextAlarm': {'isActive': True, 'gebruikerEmail': 'other@mail.nl', 'afspraak': {'id': 19, 'omschrijving': 'this is a test afspraak', 'betaalinstructie': {'byDay': ['Wednesday', 'Friday'], 'byMonth': [], 'byMonthDay': []}}, 'datum': '2021-12-08', 'datumMargin': 1, 'bedrag': '125.00', 'bedragMargin': '10.00'}, 
+        [{'alarm': {'isActive': False, 'gebruikerEmail': 'other@mail.nl', 'datum': '2021-12-06', 'datumMargin': 1, 'bedrag': '125.00', 'bedragMargin': '10.00', 'byDay': ['Wednesday', 'Friday']}, 
+        'nextAlarm': {'isActive': True, 'gebruikerEmail': 'other@mail.nl', 'datum': '2021-12-08', 'datumMargin': 1, 'bedrag': '125.00', 'bedragMargin': '10.00', 'byDay': ['Wednesday', 'Friday']}, 
         'signaal': None}]}}}
 
         # act
@@ -590,36 +605,20 @@ def test_evaluate_alarm_disabled_because_its_in_the_past(client):
                                 alarm {
                                     isActive
                                     gebruikerEmail
-                                    afspraak{
-                                        id
-                                        omschrijving
-                                        betaalinstructie{
-                                            byDay
-                                            byMonth
-                                            byMonthDay
-                                        }
-                                    }
                                     datum
                                     datumMargin
                                     bedrag
                                     bedragMargin
+                                    byDay
                                 }
                                 nextAlarm{
                                     isActive
                                     gebruikerEmail
-                                    afspraak{
-                                        id
-                                        omschrijving
-                                        betaalinstructie{
-                                            byDay
-                                            byMonth
-                                            byMonthDay
-                                        }
-                                    }
                                     datum
                                     datumMargin
                                     bedrag
                                     bedragMargin
+                                    byDay
                                 }
                                 signaal{
                                     id
@@ -634,13 +633,14 @@ def test_evaluate_alarm_disabled_because_its_in_the_past(client):
         print(f">> >> >> response {response.json} ")
 
         # assert
-        assert rm1.called_once
-        assert rm2.called_once
-        assert rm3.called_once
-        assert rm4.called_once
-        assert rm5.called_once
-        assert rm6.called_once
-        assert rm7.called_once
+        assert rm1.call_count == 1
+        assert rm2.call_count == 2
+        assert rm3.call_count == 1
+        assert rm4.call_count == 1
+        assert rm5.call_count == 2
+        assert rm6.call_count == 1
+        assert rm7.call_count == 1
+        assert rm8.call_count == 1
         assert fallback.called == 0
         assert response.json == expected
 
@@ -671,10 +671,11 @@ def test_evaluate_alarm_in_the_past(client):
         rm7 = rm.post(f"{settings.SIGNALENSERVICE_URL}/signals/", status_code=201, json={"data": signaal})
         rm8 = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", status_code=200, json={ "ok":True, "data": nextAlarm})
         rm9 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
+        rm10 = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}", status_code=200)
 
         expected = {'data': {'evaluateAlarms': {'alarmTriggerResult': 
-        [{'alarm': {'isActive': False, 'gebruikerEmail': 'other@mail.nl', 'afspraak': {'id': 19, 'omschrijving': 'this is a test afspraak', 'betaalinstructie': {'byDay': ['Wednesday', 'Friday'], 'byMonth': [], 'byMonthDay': []}}, 'datum': '2021-12-06', 'datumMargin': 1, 'bedrag': '125.00', 'bedragMargin': '10.00'}, 
-        'nextAlarm': {'isActive': True, 'gebruikerEmail': 'other@mail.nl', 'afspraak': {'id': 19, 'omschrijving': 'this is a test afspraak', 'betaalinstructie': {'byDay': ['Wednesday', 'Friday'], 'byMonth': [], 'byMonthDay': []}}, 'datum': '2021-12-08', 'datumMargin': 1, 'bedrag': '125.00', 'bedragMargin': '10.00'}, 
+        [{'alarm': {'isActive': False, 'gebruikerEmail': 'other@mail.nl', 'datum': '2021-12-06', 'datumMargin': 1, 'bedrag': '125.00', 'bedragMargin': '10.00', 'byDay': ['Wednesday', 'Friday']}, 
+        'nextAlarm': {'isActive': True, 'gebruikerEmail': 'other@mail.nl', 'datum': '2021-12-08', 'datumMargin': 1, 'bedrag': '125.00', 'bedragMargin': '10.00', 'byDay': ['Wednesday', 'Friday']}, 
         'signaal': {'id': 'e2b282d9-b31f-451e-9242-11f86c902b35'}}]}}}
 
         # act
@@ -688,36 +689,20 @@ def test_evaluate_alarm_in_the_past(client):
                                 alarm {
                                     isActive
                                     gebruikerEmail
-                                    afspraak{
-                                        id
-                                        omschrijving
-                                        betaalinstructie{
-                                            byDay
-                                            byMonth
-                                            byMonthDay
-                                        }
-                                    }
                                     datum
                                     datumMargin
                                     bedrag
                                     bedragMargin
+                                    byDay
                                 }
                                 nextAlarm{
                                     isActive
                                     gebruikerEmail
-                                    afspraak{
-                                        id
-                                        omschrijving
-                                        betaalinstructie{
-                                            byDay
-                                            byMonth
-                                            byMonthDay
-                                        }
-                                    }
                                     datum
                                     datumMargin
                                     bedrag
                                     bedragMargin
+                                    byDay
                                 }
                                 signaal{
                                     id
@@ -732,14 +717,15 @@ def test_evaluate_alarm_in_the_past(client):
         print(f">> >> >> response {response.json} ")
 
         # assert
-        assert rm1.called_once
-        assert rm2.called_once
-        assert rm3.called_once
-        assert rm4.called_once
-        assert rm5.called_once
-        assert rm6.called_once
-        assert rm7.called_once
-        assert rm8.called_once
-        assert rm9.called_once
+        assert rm1.call_count == 2
+        assert rm2.call_count == 2
+        assert rm3.call_count == 1
+        assert rm4.call_count == 1
+        assert rm5.call_count == 1
+        assert rm6.call_count == 1
+        assert rm7.call_count == 1
+        assert rm8.call_count == 1
+        assert rm9.call_count == 3
+        assert rm10.call_count == 1
         assert fallback.called == 0
         assert response.json == expected
