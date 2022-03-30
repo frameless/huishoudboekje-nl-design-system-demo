@@ -200,7 +200,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	};
 
 	return (
-		<Page title={t("afspraakDetailView.title")} backButton={<BackButton to={AppRoutes.Burger(afspraak.burger?.id)} />} menu={(
+		<Page title={t("afspraakDetailView.title")} backButton={<BackButton to={AppRoutes.ViewBurger(String(afspraak.burger?.id))} />} menu={(
 			<AfspraakDetailMenu afspraak={afspraak} />
 		)}>
 			{addAlarmModal.isOpen && <AddAlarmModal afspraak={afspraak} onClose={addAlarmModal.onClose} onSubmit={data => onCreateAlarm(data)} />}
@@ -212,7 +212,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 						{isAfspraakActive(afspraak) ? t("afspraken.willEndOn", {date: validThrough.format("L")}) : t("afspraken.endedOn", {date: validThrough.format("L")})}
 					</AlertTitle>
 					<AlertDescription>
-						<AddButton onClick={() => navigate(AppRoutes.FollowUpAfspraak(afspraak.id))}>
+						<AddButton onClick={() => navigate(AppRoutes.FollowUpAfspraak(String(afspraak.id)))}>
 							{t("afspraken.planFollowup")}
 						</AddButton>
 					</AlertDescription>
@@ -226,7 +226,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 							<DataItem label={t("burger")}>
 								<HStack>
 									<Text>{formatBurgerName(afspraak.burger)}</Text>
-									<IconButton as={NavLink} to={AppRoutes.Burger(afspraak.burger?.id)} variant={"ghost"} size={"sm"} icon={<ViewIcon />} aria-label={t("global.actions.view")} />
+									<IconButton as={NavLink} to={AppRoutes.ViewBurger(String(afspraak.burger?.id))} variant={"ghost"} size={"sm"} icon={<ViewIcon />} aria-label={t("global.actions.view")} />
 								</HStack>
 							</DataItem>
 							{afspraak.tegenRekening && (
@@ -234,7 +234,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 									<HStack>
 										<Text>{afspraak.tegenRekening.rekeninghouder}</Text>
 										{afspraak.afdeling?.organisatie?.id && (
-											<IconButton as={NavLink} to={AppRoutes.Organisatie(afspraak.afdeling.organisatie.id)} variant={"ghost"} size={"sm"}
+											<IconButton as={NavLink} to={AppRoutes.Organisatie(String(afspraak.afdeling.organisatie.id))} variant={"ghost"} size={"sm"}
 												aria-label={t("global.actions.view")} icon={<ViewIcon />} />
 										)}
 									</HStack>
@@ -341,7 +341,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 													</Stack>
 												</Td>
 												<Td>
-													<IconButton as={NavLink} to={AppRoutes.ViewAfspraak(a.id)} variant={"ghost"} size={"sm"} icon={
+													<IconButton as={NavLink} to={AppRoutes.ViewAfspraak(String(a.id))} variant={"ghost"} size={"sm"} icon={
 														<ViewIcon />} aria-label={t("global.actions.view")} title={t("global.actions.view")} />
 												</Td>
 											</Tr>
@@ -376,7 +376,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 								</Stack>
 
 								<Box>
-									<AddButton onClick={() => navigate(AppRoutes.AfspraakBetaalinstructie(afspraak.id))}>
+									<AddButton onClick={() => navigate(AppRoutes.AfspraakBetaalinstructie(String(afspraak.id)))}>
 										{t("global.actions.newBetaalinstructie")}
 									</AddButton>
 								</Box>
@@ -386,7 +386,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 								<Text>{t("afspraakDetailView.noBetaalinstructie")}</Text>
 
 								<Box>
-									<AddButton onClick={() => navigate(AppRoutes.AfspraakBetaalinstructie(afspraak.id))} />
+									<AddButton onClick={() => navigate(AppRoutes.AfspraakBetaalinstructie(String(afspraak.id)))} />
 								</Box>
 							</Stack>
 						)}

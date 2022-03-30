@@ -30,15 +30,15 @@ const AuditLogText: React.FC<TextProps & {g: GebruikersActiviteit}> = ({g, ...pr
 
 	const burgerName = formatBurgerName(burger);
 	const components = {
-		linkBurger: burger?.id ? <AuditLogLink to={AppRoutes.Burger(burger.id)}>{formatBurgerName(burger)}</AuditLogLink> : t("unknownBurger"),
+		linkBurger: burger?.id ? <AuditLogLink to={AppRoutes.ViewBurger(String(burger.id))}>{formatBurgerName(burger)}</AuditLogLink> : t("unknownBurger"),
 		linkHuishouden: (huishouden && huishouden?.id) ?
-			<AuditLogLink to={AppRoutes.Huishouden(huishouden.id)}>{formatHuishoudenName(huishouden)}</AuditLogLink> : t("unknownHuishouden"),
-		linkOrganisatie: organisatie?.id ? <AuditLogLink to={AppRoutes.Organisatie(organisatie.id)}>{organisatie.naam}</AuditLogLink> : t("unknownOrganisatie"),
-		linkAfspraak: afspraak?.id ? <AuditLogLink to={AppRoutes.ViewAfspraak(afspraak.id)} /> : t("unknownAfspraak"),
+			<AuditLogLink to={AppRoutes.Huishouden(String(huishouden.id))}>{formatHuishoudenName(huishouden)}</AuditLogLink> : t("unknownHuishouden"),
+		linkOrganisatie: organisatie?.id ? <AuditLogLink to={AppRoutes.Organisatie(String(organisatie.id))}>{organisatie.naam}</AuditLogLink> : t("unknownOrganisatie"),
+		linkAfspraak: afspraak?.id ? <AuditLogLink to={AppRoutes.ViewAfspraak(String(afspraak.id))} /> : t("unknownAfspraak"),
 		linkAfspraakOrganisatie: afspraak?.afdeling?.organisatie?.id ?
-			<AuditLogLink to={AppRoutes.Organisatie(afspraak?.afdeling?.organisatie?.id)}>{afspraak?.afdeling?.organisatie?.naam}</AuditLogLink> : t("unknownOrganisatie"),
+			<AuditLogLink to={AppRoutes.Organisatie(String(afspraak?.afdeling?.organisatie?.id))}>{afspraak?.afdeling?.organisatie?.naam}</AuditLogLink> : t("unknownOrganisatie"),
 		linkAfdeling: afdeling?.organisatie?.id && afdeling?.naam ?
-			<AuditLogLink to={AppRoutes.Organisatie(afdeling.organisatie.id)}>{afdeling.naam}</AuditLogLink> : t("unknownAfdeling"),
+			<AuditLogLink to={AppRoutes.Organisatie(String(afdeling.organisatie.id))}>{afdeling.naam}</AuditLogLink> : t("unknownAfdeling"),
 		strong: <strong />,
 	};
 

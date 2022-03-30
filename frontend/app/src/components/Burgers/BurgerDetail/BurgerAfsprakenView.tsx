@@ -74,7 +74,7 @@ const BurgerAfsprakenView: React.FC<{burger: Burger}> = ({burger}) => {
 
 				{id && (
 					<Box>
-						<AddButton onClick={() => navigate(AppRoutes.CreateBurgerAfspraak(id))} />
+						<AddButton onClick={() => navigate(AppRoutes.CreateBurgerAfspraak(String(id)))} />
 					</Box>
 				)}
 			</Section>

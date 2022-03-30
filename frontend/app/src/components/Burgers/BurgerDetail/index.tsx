@@ -126,16 +126,16 @@ const BurgerDetailPage = () => {
 				<Page title={formatBurgerName(burger)} backButton={(
 					<Stack direction={["column", "row"]} spacing={[2, 5]}>
 						<BackButton label={t("backToBurgersList")} to={AppRoutes.Burgers()} />
-						<BackButton label={t("global.actions.viewBurgerHuishouden")} to={AppRoutes.Huishouden(burger.huishouden?.id)} />
+						<BackButton label={t("global.actions.viewBurgerHuishouden")} to={AppRoutes.Huishouden(String(burger.huishouden?.id))} />
 					</Stack>
 				)} menu={(
 					<Menu>
 						<IconButton as={MenuButton} icon={<MenuIcon />} variant={"solid"} aria-label={"Open menu"} />
 						<MenuList>
 							<Link href={AppRoutes.BrievenExport(id, "excel")} target={"_blank"}><MenuItem>{t("global.actions.brievenExport")}</MenuItem></Link>
-							<NavLink to={AppRoutes.RapportageBurger([parseInt(id)])}><MenuItem>{t("global.actions.showReports")}</MenuItem></NavLink>
-							<NavLink to={AppRoutes.BurgerPersonalDetails(burger.id)}><MenuItem>{t("global.actions.showPersonalDetails")}</MenuItem></NavLink>
-							<NavLink to={AppRoutes.Huishouden(burger.huishouden?.id)}><MenuItem>{t("global.actions.showHuishouden")}</MenuItem></NavLink>
+							<NavLink to={AppRoutes.RapportageBurger([id])}><MenuItem>{t("global.actions.showReports")}</MenuItem></NavLink>
+							<NavLink to={AppRoutes.ViewBurgerPersonalDetails(String(burger.id))}><MenuItem>{t("global.actions.showPersonalDetails")}</MenuItem></NavLink>
+							<NavLink to={AppRoutes.Huishouden(String(burger.huishouden?.id))}><MenuItem>{t("global.actions.showHuishouden")}</MenuItem></NavLink>
 							<Divider />
 							<MenuItem onClick={() => deleteHuishoudenBurgerAlert.onOpen()}>{t("global.actions.deleteBurgerFromHuishouden")}</MenuItem>
 							<MenuItem onClick={() => deleteAlert.onOpen()}>{t("global.actions.delete")}</MenuItem>

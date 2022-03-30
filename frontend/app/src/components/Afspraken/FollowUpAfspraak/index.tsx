@@ -63,7 +63,7 @@ const FollowUpAfspraak = () => {
 							   toast({
 								   success: t("messages.createAfspraakSuccess"),
 							   });
-							   navigate(AppRoutes.ViewAfspraak(createdAfspraakId));
+							   navigate(AppRoutes.ViewAfspraak(String(createdAfspraakId)));
 						   })
 						   .catch(err => {
 							   toast({
@@ -89,7 +89,7 @@ const FollowUpAfspraak = () => {
 			};
 
 			return (
-				<Page title={t("afspraken.vervolgAfspraak.title")} backButton={<BackButton to={AppRoutes.ViewAfspraak(afspraak.id)} />}>
+				<Page title={t("afspraken.vervolgAfspraak.title")} backButton={<BackButton to={AppRoutes.ViewAfspraak(String(afspraak.id))} />}>
 					{((afspraak.zoektermen && afspraak.zoektermen.length > 0) || afspraak.betaalinstructie) && (
 						<SectionContainer>
 							<List spacing={2}>

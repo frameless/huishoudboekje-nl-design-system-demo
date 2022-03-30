@@ -51,7 +51,7 @@ const EditAfspraak = () => {
 					id: afspraak.id!,
 					input: data,
 				},
-			}), t("messages.updateAfspraakSuccess"), () => navigate(AppRoutes.ViewAfspraak(afspraak.id)));
+			}), t("messages.updateAfspraakSuccess"), () => navigate(AppRoutes.ViewAfspraak(String(afspraak.id))));
 
 			const ctxValue: AfspraakFormContextType = {
 				rubrieken: data.rubrieken || [],
@@ -59,7 +59,7 @@ const EditAfspraak = () => {
 			};
 
 			return (
-				<Page title={t("forms.afspraken.titleEdit")} backButton={<BackButton to={AppRoutes.ViewAfspraak(afspraak.id)} />}>
+				<Page title={t("forms.afspraken.titleEdit")} backButton={<BackButton to={AppRoutes.ViewAfspraak(String(afspraak.id))} />}>
 					<AfspraakFormContext.Provider value={ctxValue}>
 						<AfspraakForm burgerRekeningen={afspraak.burger?.rekeningen || []} values={editAfspraakValues} onChange={updateAfspraak} isLoading={$updateAfspraakMutation.loading} />
 					</AfspraakFormContext.Provider>

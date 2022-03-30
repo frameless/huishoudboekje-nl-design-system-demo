@@ -40,7 +40,7 @@ const BurgerListView: React.FC<BurgerListViewProps> = ({burgers, showAddButton =
 			)}
 			{burgers.map((g, i) => (
 				<GridCard key={i} justifyContent={["flex-start", "center"]} position={"relative"} onClick={() => {
-					navigate(AppRoutes.Burger(g.id));
+					navigate(AppRoutes.ViewBurger(String(g.id)));
 				}}>
 					{signalen.length > 0 && (
 						<Box position={"absolute"} top={1} right={1}>

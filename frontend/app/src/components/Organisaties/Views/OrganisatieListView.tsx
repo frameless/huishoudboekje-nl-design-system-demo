@@ -22,7 +22,7 @@ const OrganisatieListView: React.FC<BoxProps & {organisaties: Organisatie[], sho
 			)}
 			{organisaties.map(o => (
 				<GridCard key={o.id} justifyContent={"center"} onClick={() => {
-					navigate(AppRoutes.Organisatie(o.id));
+					navigate(AppRoutes.Organisatie(String(o.id)));
 				}}>
 					<Stack spacing={1}>
 						<Text fontSize={"md"} overflowX={"hidden"} textOverflow={"ellipsis"} width={"100%"} maxW={["300px", "250px"]} title={o.naam}>

@@ -57,7 +57,7 @@ const EditBurger = () => {
 			toast({
 				success: t("messages.burgers.updateSuccessMessage"),
 			});
-			navigate(AppRoutes.BurgerPersonalDetails(parseInt(id)));
+			navigate(AppRoutes.ViewBurgerPersonalDetails(id));
 		}).catch(handleSaveBurgerErrors(t));
 	};
 
@@ -66,7 +66,7 @@ const EditBurger = () => {
 			const burger = data.burger;
 
 			return (
-				<Page title={formatBurgerName(burger)} backButton={<BackButton to={AppRoutes.Burger(burger?.id)} />}>
+				<Page title={formatBurgerName(burger)} backButton={<BackButton to={AppRoutes.ViewBurger(burger?.id)} />}>
 					<BurgerForm burger={burger} onSubmit={onSubmit} isLoading={$burger.loading || $updateBurger.loading} isBsnValid={isBsnValid} />
 				</Page>
 			);

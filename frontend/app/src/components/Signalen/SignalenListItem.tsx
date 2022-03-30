@@ -56,7 +56,7 @@ const SignalenListItem: React.FC<SignalenListItemProps> = ({signaal}) => {
 						bedrag: currencyFormat2(true).format(parseFloat(signaal.alarm?.afspraak?.bedrag)),
 					}} components={{
 						strong: <strong />,
-						linkAfspraak: <AuditLogLink to={AppRoutes.ViewAfspraak(signaal.alarm?.afspraak?.id)}>{signaal.alarm?.afspraak?.omschrijving}</AuditLogLink>,
+						linkAfspraak: <AuditLogLink to={AppRoutes.ViewAfspraak(String(signaal.alarm?.afspraak?.id))}>{signaal.alarm?.afspraak?.omschrijving}</AuditLogLink>,
 					}} />
 				</Text>
 				<Text fontSize={"sm"} color={"gray.500"}>

@@ -12,7 +12,7 @@ import AfspraakForm from "../AfspraakForm";
 import AfspraakFormContext, {AfspraakFormContextType} from "../EditAfspraak/context";
 
 const CreateAfspraak = () => {
-	const {id} = useParams();
+	const {id = ""} = useParams<{id: string}>();
 	const {t} = useTranslation();
 	const navigate = useNavigate();
 	const handleMutation = useHandleMutation();
@@ -48,7 +48,7 @@ const CreateAfspraak = () => {
 			}
 
 			return (
-				<Page title={t("forms.afspraken.titleCreate")} backButton={<BackButton to={AppRoutes.Burger(parseInt(id!))} />}>
+				<Page title={t("forms.afspraken.titleCreate")} backButton={<BackButton to={AppRoutes.ViewBurger(id)} />}>
 					<AfspraakFormContext.Provider value={ctxValue}>
 						<AfspraakForm burgerRekeningen={burger?.rekeningen || []} onChange={(data) => createAfspraak(data as CreateAfspraakMutationVariables["input"])} />
 					</AfspraakFormContext.Provider>

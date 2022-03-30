@@ -1,3 +1,5 @@
+import {generatePath} from "react-router";
+
 export enum RouteNames {
 	login = "inloggen",
 	huishoudens = "huishoudens",
@@ -17,49 +19,112 @@ export enum RouteNames {
 	export = "export",
 	status = "status",
 	notFound = "404",
+	brievenExport = "brievenexport",
 
 	// Subroutes
+	view = "bekijken",
 	add = "toevoegen",
 	edit = "wijzigen",
 	followUp = "vervolg",
 	betaalinstructie = "betaalinstructie",
 }
 
+const AppRoutesNew = {
+	signalen: `/${RouteNames.signalen}`,
+	huishoudens: `/${RouteNames.huishoudens}`,
+	huishouden: `/${RouteNames.huishoudens}/:id`,
+	burgers: `/${RouteNames.burgers}`,
+	burgersAction: `/${RouteNames.burgers}/:action`,
+	burgerView: `/${RouteNames.burgers}/:id`,
+	burgerAction: `/${RouteNames.burgers}/:id/:action`,
+	burgerSubentityIdAction: `/${RouteNames.burgers}/:id/:entity/:action`,
+	afspraakView: `/${RouteNames.afspraken}/:id`,
+	afspraakAction: `/${RouteNames.afspraken}/:id/:action`,
+	organisaties: `/${RouteNames.organisaties}`,
+	organisatiesAction: `/${RouteNames.organisaties}/:action`,
+	organisatieView: `/${RouteNames.organisaties}/:id`,
+	organisatieAction: `/${RouteNames.organisaties}/:id/:action`,
+	organisatieSubentityIdAction: `/${RouteNames.organisaties}/:id/:entity/:action`,
+	bankzaken: `/${RouteNames.bankzaken}`,
+	transacties: `/${RouteNames.bankzaken}/${RouteNames.transacties}`,
+	bankafschriften: `/${RouteNames.bankzaken}/${RouteNames.bankafschriften}`,
+	betaalinstructies: `/${RouteNames.bankzaken}/${RouteNames.betaalinstructies}`,
+	betaalinstructiesExport: `/${RouteNames.bankzaken}/${RouteNames.betaalinstructies}/${RouteNames.export}`,
+	configuratie: `/${RouteNames.configuratie}`,
+	rapportage: `/${RouteNames.rapportage}`,
+	rapportageBurger: `/${RouteNames.rapportage}?burgerId=:ids`,
+	gebeurtenissen: `/${RouteNames.gebeurtenissen}`,
+	status: `/${RouteNames.status}`,
+	notFound: `/${RouteNames.notFound}`,
+	export: `/api/${RouteNames.export}/:id`,
+	brievenExport: `/api/${RouteNames.brievenExport}/:id/:format`,
+};
+
 export const AppRoutes = {
-	Home: "/",
-	Huishoudens: () => `/${RouteNames.huishoudens}`,
-	Huishouden: (id) => `/${RouteNames.huishoudens}/${id}`,
-
-	Burgers: () => `/${RouteNames.burgers}`,
-	Burger: (id) => `/${RouteNames.burgers}/${id}`,
-	BurgerPersonalDetails: (id) => `/${RouteNames.burgers}/${id}/${RouteNames.personal}`,
-	CreateBurger: () => `/${RouteNames.burgers}/${RouteNames.add}`,
-	EditBurger: (id) => `/${RouteNames.burgers}/${id}/${RouteNames.edit}`,
-	CreateBurgerAfspraak: (burgerId) => `/${RouteNames.burgers}/${burgerId}/${RouteNames.afspraken}/${RouteNames.add}`,
-
-	ViewAfspraak: (id) => `/${RouteNames.afspraken}/${id}`,
-	EditAfspraak: (id) => `/${RouteNames.afspraken}/${id}/${RouteNames.edit}`,
-	FollowUpAfspraak: (id) => `/${RouteNames.afspraken}/${id}/${RouteNames.followUp}`,
-	AfspraakBetaalinstructie: (id) => `/${RouteNames.afspraken}/${id}/${RouteNames.betaalinstructie}`,
-
-	Organisaties: `/${RouteNames.organisaties}`,
-	Organisatie: (id) => `/${RouteNames.organisaties}/${id}`,
-	CreateOrganisatie: `/${RouteNames.organisaties}/${RouteNames.add}`,
-	EditOrganisatie: (id) => `/${RouteNames.organisaties}/${id}/${RouteNames.edit}`,
-	Afdeling: (organisatieId, afdelingId) => `/${RouteNames.organisaties}/${organisatieId}/${RouteNames.afdelingen}/${afdelingId}`,
-
-	Bankzaken: `/${RouteNames.bankzaken}`,
-	Transacties: `/${RouteNames.bankzaken}/${RouteNames.transacties}`,
-	Bankafschriften: `/${RouteNames.bankzaken}/${RouteNames.bankafschriften}`,
-	Betaalinstructies: `/${RouteNames.bankzaken}/${RouteNames.betaalinstructies}/${RouteNames.export}`,
-	Configuratie: `/${RouteNames.configuratie}`,
-	Rapportage: `/${RouteNames.rapportage}`,
-	RapportageBurger: (burgerIds: number[]) => `/${RouteNames.rapportage}?burgerId=${burgerIds.join(",")}`,
-	Gebeurtenissen: `/${RouteNames.gebeurtenissen}`,
-
-	Export: (id) => `/api/export/${id}`,
-	BrievenExport: (burgerId, format: "excel" | "csv") => `/api/brievenexport/${burgerId}/${format}`,
-
-	Status: `/${RouteNames.status}`,
-	NotFound: `/${RouteNames.notFound}`,
+	Home: generatePath("/"),
+	Signalen: generatePath(AppRoutesNew.signalen),
+	Huishoudens: () => generatePath(AppRoutesNew.huishoudens),
+	Huishouden: (id: string) => generatePath(AppRoutesNew.huishouden, {id}),
+	Burgers: () => generatePath(AppRoutesNew.burgers),
+	ViewBurger: (id: string) => generatePath(AppRoutesNew.burgerView, {id}),
+	ViewBurgerPersonalDetails: (id: string) => generatePath(AppRoutesNew.burgerAction, {
+		id,
+		action: RouteNames.personal,
+	}),
+	CreateBurger: () => generatePath(AppRoutesNew.burgersAction, {
+		action: RouteNames.add,
+	}),
+	EditBurger: (id: string) => generatePath(AppRoutesNew.burgerAction, {
+		id,
+		action: RouteNames.edit,
+	}),
+	CreateBurgerAfspraak: (burgerId: string) => generatePath(AppRoutesNew.burgerSubentityIdAction, {
+		id: burgerId,
+		entity: RouteNames.afspraken,
+		action: RouteNames.add,
+	}),
+	ViewAfspraak: (id: string) => generatePath(AppRoutesNew.afspraakView, {id}),
+	EditAfspraak: (id: string) => generatePath(AppRoutesNew.afspraakAction, {
+		id,
+		action: RouteNames.edit,
+	}),
+	FollowUpAfspraak: (id: string) => generatePath(AppRoutesNew.afspraakAction, {
+		id,
+		action: RouteNames.followUp,
+	}),
+	AfspraakBetaalinstructie: (id: string) => generatePath(AppRoutesNew.afspraakAction, {
+		id,
+		action: RouteNames.betaalinstructie,
+	}),
+	Organisaties: generatePath(AppRoutesNew.organisaties),
+	Organisatie: (id: string) => generatePath(AppRoutesNew.organisatieView, {id}),
+	CreateOrganisatie: generatePath(AppRoutesNew.organisatiesAction, {
+		action: RouteNames.add,
+	}),
+	EditOrganisatie: (id: string) => generatePath(AppRoutesNew.organisatieAction, {
+		id,
+		action: RouteNames.edit,
+	}),
+	Afdeling: (organisatieId: string, afdelingId: string) => generatePath(AppRoutesNew.organisatieSubentityIdAction, {
+		id: String(organisatieId),
+		entity: RouteNames.afdelingen,
+		action: String(afdelingId),
+	}),
+	Bankzaken: generatePath(AppRoutesNew.bankzaken),
+	Transacties: generatePath(AppRoutesNew.transacties),
+	Bankafschriften: generatePath(AppRoutesNew.bankafschriften),
+	Betaalinstructies: generatePath(AppRoutesNew.betaalinstructies),
+	Configuratie: generatePath(AppRoutesNew.configuratie),
+	Rapportage: generatePath(AppRoutesNew.rapportage),
+	RapportageBurger: (burgerIds: string[]) => generatePath(AppRoutesNew.rapportageBurger, {
+		ids: burgerIds.join(","),
+	}),
+	Gebeurtenissen: generatePath(AppRoutesNew.gebeurtenissen),
+	Status: generatePath(AppRoutesNew.status),
+	NotFound: generatePath(AppRoutesNew.notFound),
+	Export: (id) => generatePath(AppRoutesNew.export, {id}),
+	BrievenExport: (burgerId: string, format: "excel" | "csv") => generatePath(AppRoutesNew.brievenExport, {
+		id: burgerId,
+		format,
+	}),
 };

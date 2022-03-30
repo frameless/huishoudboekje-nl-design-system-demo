@@ -77,7 +77,7 @@ const BookingDetailsView: React.FC<{transactie: BankTransaction}> = ({transactie
 				</Stack>
 				<Stack direction={"row"} spacing={5}>
 					<Box mb={3}>
-						<Button leftIcon={<ViewIcon />} colorScheme={"primary"} size={"sm"} as={NavLink} to={AppRoutes.ViewAfspraak(journaalpostAfspraak.id)}>{t("global.actions.view")}</Button>
+						<Button leftIcon={<ViewIcon />} colorScheme={"primary"} size={"sm"} as={NavLink} to={AppRoutes.ViewAfspraak((String(journaalpostAfspraak.id)))}>{t("global.actions.view")}</Button>
 					</Box>
 					<Box>
 						<Button leftIcon={<DeleteIcon />} variant={"ghost"} colorScheme={"red"} size={"sm"} onClick={onDelete} isLoading={$deleteJournaalpost.loading}>{t("global.actions.undoAfletteren")}</Button>
