@@ -42,7 +42,7 @@ const BanktransactiesList: React.FC<{ transacties: Banktransactie[] }> = ({trans
 
 		) : (
 			<Text>Er zijn geen transacties gevonden.</Text>
-		)};
+		)}
 	</>);
 };
 

@@ -10,6 +10,9 @@ const BanktransactieListItem: React.FC<{ transactie: Banktransactie }> = ({trans
 	return (
 		<HStack justify={"space-between"}>
 			<Box>
+				{transactie.id}
+			</Box>
+			<Box>
 				<Text>{transactie.tegenrekening?.rekeninghouder || (
 					<PrettyIban iban={transactie.tegenrekeningIban} />
 				)}</Text>
