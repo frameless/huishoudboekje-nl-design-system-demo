@@ -396,33 +396,35 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 
 			<SectionContainer>
 				<Section title={t("afspraakDetailView.alarm.title")} helperText={t("afspraakDetailView.alarm.helperText")}>
-					{afspraak.alarm ? (<>
-						<Stack direction={["column", null, null, "row"]}>
-							<DataItem label={t("bedrag")}>
-								<HStack>
-									<Text>{currencyFormat2().format(afspraak.alarm?.bedrag)}</Text>
-									<Text color={"gray.500"} fontSize={"sm"}>+/- {currencyFormat2().format(afspraak.alarm?.bedragMargin)}</Text>
-								</HStack>
-							</DataItem>
-							<DataItem label={t("global.date")}>
-								<HStack>
-									<Text>{d(afspraak.alarm?.datum, "YYYY-MM-DD").format("L")}</Text>
-									<Text color={"gray.500"} fontSize={"sm"}>+{t("afspraak.alarm.datumMargin", {count: afspraak.alarm?.datumMargin})}</Text>
-								</HStack>
-							</DataItem>
+					{afspraak.alarm ? (
+						<Stack>
+							<Stack direction={["column", null, null, "row"]}>
+								<DataItem label={t("bedrag")}>
+									<HStack>
+										<Text>{currencyFormat2().format(afspraak.alarm?.bedrag)}</Text>
+										<Text color={"gray.500"} fontSize={"sm"}>+/- {currencyFormat2().format(afspraak.alarm?.bedragMargin)}</Text>
+									</HStack>
+								</DataItem>
+								<DataItem label={t("global.date")}>
+									<HStack>
+										<Text>{d(afspraak.alarm?.datum, "YYYY-MM-DD").format("L")}</Text>
+										<Text color={"gray.500"} fontSize={"sm"}>+{t("afspraak.alarm.datumMargin", {count: afspraak.alarm?.datumMargin})}</Text>
+									</HStack>
+								</DataItem>
+							</Stack>
+							<Stack direction={["column", null, null, "row"]}>
+								<DataItem label={t("afspraak.alarm.setByUser")}>
+									<Text>{afspraak.alarm?.gebruikerEmail || t("unknownGebruiker")}</Text>
+								</DataItem>
+								<DataItem label={t("afspraak.alarm.options")}>
+									<HStack>
+										<Switch size={"sm"} isChecked={!!(afspraak.alarm?.isActive)} onChange={() => toggleAlarmActive()} />
+										<DeleteConfirmButton onConfirm={() => onDeleteAlarm()} />
+									</HStack>
+								</DataItem>
+							</Stack>
 						</Stack>
-						<Stack direction={["column", null, null, "row"]}>
-							<DataItem label={t("afspraak.alarm.setByUser")}>
-								<Text>{afspraak.alarm?.gebruikerEmail || t("unknownGebruiker")}</Text>
-							</DataItem>
-							<DataItem label={t("afspraak.alarm.options")}>
-								<HStack>
-									<Switch size={"sm"} isChecked={!!(afspraak.alarm?.isActive)} onChange={() => toggleAlarmActive()} />
-									<DeleteConfirmButton onConfirm={() => onDeleteAlarm()} />
-								</HStack>
-							</DataItem>
-						</Stack>
-					</>) : (
+					) : (
 						<Stack>
 							<Text>{t("afspraakDetailView.noAlarm")}</Text>
 							<Box>
