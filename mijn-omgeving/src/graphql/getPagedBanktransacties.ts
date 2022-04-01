@@ -1,13 +1,20 @@
 import {gql} from "@apollo/client";
-import PagedBanktransactiesFragment from "./fragments/PagedBanktransacties";
+import BanktransactieFragment from "./fragments/Banktransactie";
 
 const getPagedBanktransactiesQuery = gql`
     query getPagedBanktransacties($bsn: Int!, $start: Int!, $limit: Int!) {
         burger(bsn: $bsn){
             banktransactiesPaged (start: $start, limit: $limit){
-                ...PagedBanktransacties
+                banktransacties {
+                    ...Banktransactie
+                }
+                pageInfo {
+                    count
+                    limit
+                    start
+                }
             }
         }
     }
-    ${PagedBanktransactiesFragment}
+    ${BanktransactieFragment}
 `;
