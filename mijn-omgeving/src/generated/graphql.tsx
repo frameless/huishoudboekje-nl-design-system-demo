@@ -56,6 +56,7 @@ export type Burger = {
   achternaam?: Maybe<Scalars['String']>;
   afspraken?: Maybe<Array<Maybe<Afspraak>>>;
   banktransacties?: Maybe<Array<Maybe<Banktransactie>>>;
+  banktransactiesPaged?: Maybe<PagedBanktransactie>;
   /** Het burgerservicenummer. */
   bsn?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
@@ -70,6 +71,13 @@ export type Burger = {
   telefoonnummer?: Maybe<Scalars['String']>;
   voorletters?: Maybe<Scalars['String']>;
   voornamen?: Maybe<Scalars['String']>;
+};
+
+
+/** Een burger is een deelnemer. */
+export type BurgerBanktransactiesPagedArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  start?: InputMaybe<Scalars['Int']>;
 };
 
 export enum DayOfWeek {
@@ -93,6 +101,17 @@ export type Organisatie = {
   kvknummer?: Maybe<Scalars['String']>;
   naam?: Maybe<Scalars['String']>;
   vestigingsnummer?: Maybe<Scalars['String']>;
+};
+
+export type PageInfo = {
+  count?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+  start?: Maybe<Scalars['Int']>;
+};
+
+export type PagedBanktransactie = {
+  banktransacties?: Maybe<Array<Maybe<Banktransactie>>>;
+  pageInfo?: Maybe<PageInfo>;
 };
 
 /** GraphQL Query */
@@ -126,12 +145,23 @@ export type BanktransactieFragment = { id?: number, bedrag?: any, isCredit?: boo
 
 export type BurgerFragment = { id?: number, bsn?: string, voorletters?: string, voornamen?: string, achternaam?: string, banktransacties?: Array<{ id?: number, bedrag?: any, isCredit?: boolean, informationToAccountOwner?: string, tegenrekeningIban?: string, transactiedatum?: string, tegenrekening?: { id?: number, iban?: string, rekeninghouder?: string } }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }>, afspraken?: Array<{ id?: number, bedrag?: string, credit?: boolean, omschrijving?: string, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, startDate?: string, endDate?: string }, tegenrekening?: { id?: number, iban?: string, rekeninghouder?: string } }> };
 
+export type PagedBanktransactiesFragment = { banktransacties?: Array<{ id?: number, bedrag?: any, isCredit?: boolean, informationToAccountOwner?: string, tegenrekeningIban?: string, transactiedatum?: string, tegenrekening?: { id?: number, iban?: string, rekeninghouder?: string } }>, pageInfo?: { start?: number, limit?: number, count?: number } };
+
 export type GetBurgerQueryVariables = Exact<{
   bsn: Scalars['Int'];
 }>;
 
 
 export type GetBurgerQuery = { burger?: { id?: number, bsn?: string, voorletters?: string, voornamen?: string, achternaam?: string, banktransacties?: Array<{ id?: number, bedrag?: any, isCredit?: boolean, informationToAccountOwner?: string, tegenrekeningIban?: string, transactiedatum?: string, tegenrekening?: { id?: number, iban?: string, rekeninghouder?: string } }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }>, afspraken?: Array<{ id?: number, bedrag?: string, credit?: boolean, omschrijving?: string, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, startDate?: string, endDate?: string }, tegenrekening?: { id?: number, iban?: string, rekeninghouder?: string } }> } };
+
+export type GetPagedBanktransactiesQueryVariables = Exact<{
+  bsn: Scalars['Int'];
+  start: Scalars['Int'];
+  limit: Scalars['Int'];
+}>;
+
+
+export type GetPagedBanktransactiesQuery = { burger?: { banktransactiesPaged?: { banktransacties?: Array<{ id?: number, bedrag?: any, isCredit?: boolean, informationToAccountOwner?: string, tegenrekeningIban?: string, transactiedatum?: string, tegenrekening?: { id?: number, iban?: string, rekeninghouder?: string } }>, pageInfo?: { start?: number, limit?: number, count?: number } } } };
 
 export type GetBanktransactieQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -203,6 +233,28 @@ export const BurgerFragmentDoc = gql`
   }
 }
     `;
+export const PagedBanktransactiesFragmentDoc = gql`
+    fragment PagedBanktransacties on PagedBanktransactie {
+  banktransacties {
+    id
+    bedrag
+    isCredit
+    informationToAccountOwner
+    tegenrekening {
+      id
+      iban
+      rekeninghouder
+    }
+    tegenrekeningIban
+    transactiedatum
+  }
+  pageInfo {
+    start
+    limit
+    count
+  }
+}
+    `;
 export const GetBurgerDocument = gql`
     query getBurger($bsn: Int!) {
   burger(bsn: $bsn) {
@@ -238,6 +290,45 @@ export function useGetBurgerLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type GetBurgerQueryHookResult = ReturnType<typeof useGetBurgerQuery>;
 export type GetBurgerLazyQueryHookResult = ReturnType<typeof useGetBurgerLazyQuery>;
 export type GetBurgerQueryResult = Apollo.QueryResult<GetBurgerQuery, GetBurgerQueryVariables>;
+export const GetPagedBanktransactiesDocument = gql`
+    query getPagedBanktransacties($bsn: Int!, $start: Int!, $limit: Int!) {
+  burger(bsn: $bsn) {
+    banktransactiesPaged(start: $start, limit: $limit) {
+      ...PagedBanktransacties
+    }
+  }
+}
+    ${PagedBanktransactiesFragmentDoc}`;
+
+/**
+ * __useGetPagedBanktransactiesQuery__
+ *
+ * To run a query within a React component, call `useGetPagedBanktransactiesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPagedBanktransactiesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPagedBanktransactiesQuery({
+ *   variables: {
+ *      bsn: // value for 'bsn'
+ *      start: // value for 'start'
+ *      limit: // value for 'limit'
+ *   },
+ * });
+ */
+export function useGetPagedBanktransactiesQuery(baseOptions: Apollo.QueryHookOptions<GetPagedBanktransactiesQuery, GetPagedBanktransactiesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetPagedBanktransactiesQuery, GetPagedBanktransactiesQueryVariables>(GetPagedBanktransactiesDocument, options);
+      }
+export function useGetPagedBanktransactiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPagedBanktransactiesQuery, GetPagedBanktransactiesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetPagedBanktransactiesQuery, GetPagedBanktransactiesQueryVariables>(GetPagedBanktransactiesDocument, options);
+        }
+export type GetPagedBanktransactiesQueryHookResult = ReturnType<typeof useGetPagedBanktransactiesQuery>;
+export type GetPagedBanktransactiesLazyQueryHookResult = ReturnType<typeof useGetPagedBanktransactiesLazyQuery>;
+export type GetPagedBanktransactiesQueryResult = Apollo.QueryResult<GetPagedBanktransactiesQuery, GetPagedBanktransactiesQueryVariables>;
 export const GetBanktransactieDocument = gql`
     query getBanktransactie($id: Int!) {
   banktransactie(id: $id) {
