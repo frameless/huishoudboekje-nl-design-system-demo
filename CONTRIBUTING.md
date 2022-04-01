@@ -38,6 +38,9 @@ For example, if you're working on design changes, use `design` as your branch na
 When ready, create a [Merge Request](https://gitlab.com/commonground/huishoudboekje/app-new/-/merge_requests) and ask for a review.
 Please describe your changes in the description, to make reviewing easier. Hint: use the title of the issue that your MR is related to as the title of your MR!
 
+Also, please add a changeset using `npm run add-changeset` so that we can keep track of what's changed in our [changelog](./CHANGELOG.md).
+If you want to read more about how to use changesets in this repository, check out the [documentation](./CONTRIBUTING.md#Changesets)
+
 After approval, if you'd like to merge your branch, always merge **into** `develop`. 
 If you're a few commits behind `develop`, please don't merge `develop` into your branch, pull and rebase onto `develop` instead. 
 This is how we maintain a semi-linear history.
@@ -68,6 +71,29 @@ When you push, Gitlab CI will automatically deploy a new environment or update a
 
 You might have noticed that the `Development` environment doesn't have a URL that it is deployed to. 
 That's right, because it should be running on your own local machine!
+
+# Changesets
+
+We try hard to keep our users up to date about the changes that we make to our software. It is important that we keep track of all of these changes in a changelog.
+To make this an easy process, we use [Changesets](https://github.com/changesets/changesets/tree/main/docs). 
+Please make sure that every Merge Request that you create has a changeset attached:
+
+```shell
+npm run add-changeset
+```
+
+You will be asked for a _bump type_ (patch, minor or major) and to summarize the changes you've made. Once you've added a changeset, a file will be 
+added to the `.changeset` directory. You have to add this file to your commit.
+
+Once we release a new version of the application, we can bundle all of the changesets for that version in a changelog:
+
+```shell
+npm run version-changeset
+```
+
+This will bundle all of the changesets for the new version and prepend it to the [Changelog](./CHANGELOG.md).
+You can then review the version changes to all the packages and make changes to the changelog if you wish.
+Once you are confident that the new changelog is correct, you can commit it to the repository, and a new version will be released.
 
 # License
 
