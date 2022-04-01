@@ -32,7 +32,7 @@ const AfdelingDetailView: React.FC<{afdeling: Afdeling}> = ({afdeling}) => {
 		{addPostadresModal.isOpen && <AddAfdelingPostadresModal afdeling={afdeling} onClose={addPostadresModal.onClose} />}
 		{addRekeningModal.isOpen && <AddAfdelingRekeningModal afdeling={afdeling} onClose={addRekeningModal.onClose} />}
 
-		<Page title={afdeling.naam || t("afdeling")} backButton={<BackButton to={AppRoutes.Organisatie(organisatieId)} />} menu={(
+		<Page title={afdeling.naam || t("afdeling")} backButton={<BackButton to={AppRoutes.Organisatie(String(organisatieId))} />} menu={(
 			<Menu>
 				<IconButton as={MenuButton} icon={<MenuIcon />} variant={"solid"} aria-label={"Open menu"} />
 				<MenuList>

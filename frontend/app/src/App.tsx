@@ -108,48 +108,50 @@ const App = () => {
 					</Stack>
 
 					<Routes>
-						<Route index element={<Navigate to={RouteNames.huishoudens} replace />} />
-						<Route path={RouteNames.huishoudens} element={<Outlet />}>
-							<Route index element={<HuishoudensList />} />
-							<Route path={":id"} element={<HuishoudenDetails />} />
+						<Route path={"/"} element={<Outlet />}>
+							<Route index element={<Navigate to={RouteNames.huishoudens} replace />} />
+							<Route path={RouteNames.huishoudens} element={<Outlet />}>
+								<Route path={":id"} element={<HuishoudenDetails />} />
+								<Route index element={<HuishoudensList />} />
+							</Route>
+							<Route path={RouteNames.burgers} element={<Outlet />}>
+								<Route index element={<BurgerList />} />
+								<Route path={RouteNames.add} element={<CreateBurger />} />
+								<Route path={":id"} element={<BurgerDetailPage />} />
+								<Route path={`:id/${RouteNames.personal}`} element={<BurgerPersonalDetailsPage />} />
+								<Route path={`:id/${RouteNames.edit}`} element={<EditBurger />} />
+								<Route path={`:id/${RouteNames.afspraken}/${RouteNames.add}`} element={<CreateAfspraak />} />
+							</Route>
+							<Route path={RouteNames.afspraken} element={<Outlet />}>
+								<Route path={":id"} element={<ViewAfspraak />} />
+								<Route path={`:id/${RouteNames.edit}`} element={<EditAfspraak />} />
+								<Route path={`:id/${RouteNames.betaalinstructie}`} element={<BetaalinstructiePage />} />
+								<Route path={`:id/${RouteNames.followUp}`} element={<FollowUpAfspraak />} />
+							</Route>
+							<Route path={RouteNames.organisaties} element={<Outlet />}>
+								<Route index element={<OrganisatieList />} />
+								<Route path={RouteNames.add} element={<CreateOrganisatie />} />
+								<Route path={":id"} element={<OrganisatieDetailPage />} />
+								<Route path={`:id/${RouteNames.edit}`} element={<EditOrganisatie />} />
+								<Route path={`:organisatieId/${RouteNames.afdelingen}/:id`} element={<AfdelingDetailPage />} />
+							</Route>
+							<Route path={RouteNames.bankzaken} element={<Outlet />}>
+								<Route index element={<Navigate to={RouteNames.transacties} replace />} />
+								<Route path={RouteNames.transacties} element={<Transactions />} />
+								<Route path={RouteNames.bankafschriften} element={<CustomerStatementMessages />} />
+								<Route path={RouteNames.betaalinstructies} element={<Betaalinstructies />} />
+							</Route>
+							{isSignalenEnabled && (
+								<Route path={RouteNames.signalen} element={<SignalenList />} />
+							)}
+							<Route path={RouteNames.rapportage} element={<Rapportage />} />
+							<Route path={RouteNames.gebeurtenissen} element={<Gebeurtenissen />} />
+							<Route path={RouteNames.configuratie} element={<Configuratie />} />
+							<Route path={RouteNames.status} element={<StatusPage />} />
+							<Route path={RouteNames.notFound} element={<PageNotFound />} />
+							<Route path={"*"} element={<PageNotFound />} />
+							<Route path={"/test"} element={<TestPage />} />
 						</Route>
-						<Route path={RouteNames.burgers} element={<Outlet />}>
-							<Route index element={<BurgerList />} />
-							<Route path={RouteNames.add} element={<CreateBurger />} />
-							<Route path={":id"} element={<BurgerDetailPage />} />
-							<Route path={`:id/${RouteNames.personal}`} element={<BurgerPersonalDetailsPage />} />
-							<Route path={`:id/${RouteNames.edit}`} element={<EditBurger />} />
-							<Route path={`:id/${RouteNames.afspraken}/${RouteNames.add}`} element={<CreateAfspraak />} />
-						</Route>
-						<Route path={RouteNames.afspraken} element={<Outlet />}>
-							<Route path={":id"} element={<ViewAfspraak />} />
-							<Route path={`:id/${RouteNames.edit}`} element={<EditAfspraak />} />
-							<Route path={`:id/${RouteNames.betaalinstructie}`} element={<BetaalinstructiePage />} />
-							<Route path={`:id/${RouteNames.followUp}`} element={<FollowUpAfspraak />} />
-						</Route>
-						<Route path={RouteNames.organisaties} element={<Outlet />}>
-							<Route index element={<OrganisatieList />} />
-							<Route path={RouteNames.add} element={<CreateOrganisatie />} />
-							<Route path={":id"} element={<OrganisatieDetailPage />} />
-							<Route path={`:id/${RouteNames.edit}`} element={<EditOrganisatie />} />
-							<Route path={`:organisatieId/${RouteNames.afdelingen}/:id`} element={<AfdelingDetailPage />} />
-						</Route>
-						<Route path={RouteNames.bankzaken} element={<Outlet />}>
-							<Route index element={<Navigate to={RouteNames.transacties} replace />} />
-							<Route path={RouteNames.transacties} element={<Transactions />} />
-							<Route path={RouteNames.bankafschriften} element={<CustomerStatementMessages />} />
-							<Route path={RouteNames.betaalinstructies} element={<Betaalinstructies />} />
-						</Route>
-						{isSignalenEnabled && (
-							<Route path={RouteNames.signalen} element={<SignalenList />} />
-						)}
-						<Route path={RouteNames.rapportage} element={<Rapportage />} />
-						<Route path={RouteNames.gebeurtenissen} element={<Gebeurtenissen />} />
-						<Route path={RouteNames.configuratie} element={<Configuratie />} />
-						<Route path={RouteNames.status} element={<StatusPage />} />
-						<Route path={RouteNames.notFound} element={<PageNotFound />} />
-						<Route path={"*"} element={<PageNotFound />} />
-						<Route path={"/test"} element={<TestPage />} />
 					</Routes>
 				</Box>
 			</HStack>

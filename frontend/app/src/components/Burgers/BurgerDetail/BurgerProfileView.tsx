@@ -15,7 +15,7 @@ const BurgerProfileView: React.FC<{burger: Burger}> = ({burger}) => {
 	return (
 		<SectionContainer>
 			<Section title={t("forms.burgers.sections.personal.title")} helperText={t("forms.burgers.sections.personal.detailText")} right={(
-				<Button colorScheme={"primary"} variant={"outline"} size={"sm"} as={NavLink} to={AppRoutes.EditBurger(burger.id)}>{t("global.actions.edit")}</Button>
+				<Button colorScheme={"primary"} variant={"outline"} size={"sm"} as={NavLink} to={AppRoutes.EditBurger(String(burger.id))}>{t("global.actions.edit")}</Button>
 			)}>
 				<Stack>
 					<Stack spacing={2} mb={1} direction={["column", "row"]}>

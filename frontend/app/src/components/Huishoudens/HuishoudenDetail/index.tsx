@@ -26,11 +26,11 @@ const HuishoudenDetails = () => {
 				return <PageNotFound />;
 			}
 
-			const burgerIds: number[] = (huishouden.burgers || []).map(b => b.id!);
+			const burgerIds: string[] = (huishouden.burgers || []).map(b => String(b.id));
 
 			return (
 				<Page title={t("huishoudenName", {name: formatHuishoudenName(huishouden)})} backButton={(<BackButton to={AppRoutes.Huishoudens()} />)} right={(
-					<Button size={"sm"} variant={"outline"} colorScheme={"primary"} as={NavLink} to={AppRoutes.RapportageBurger(burgerIds)}>{t("global.actions.showReports")}</Button>
+					<Button size={"sm"} variant={"outline"} colorScheme={"primary"} as={NavLink} to={AppRoutes.RapportageBurger([...burgerIds])}>{t("global.actions.showReports")}</Button>
 				)}>
 					<AddBurgerToHuishoudenModal huishouden={huishouden} onClose={addBurgersModal.onClose} isOpen={addBurgersModal.isOpen} />
 					<HuishoudenBurgersView huishouden={huishouden} onClickAddButton={() => addBurgersModal.onOpen()} />

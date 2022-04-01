@@ -20,7 +20,7 @@ const HuishoudenListItem: React.FC<{ huishouden: Huishouden }> = ({huishouden}) 
 	}, [] as Signaal[]);
 
 	return (
-		<GridCard justify={"flex-start"} position={"relative"} as={NavLink} to={AppRoutes.Huishouden(huishouden.id)}>
+		<GridCard justify={"flex-start"} position={"relative"} as={NavLink} to={AppRoutes.Huishouden(String(huishouden.id))}>
 			{signalen.length > 0 && (
 				<Box position={"absolute"} top={1} right={1}>
 					<Badge fontSize={"sm"} p={1} colorScheme={"secondary"}>

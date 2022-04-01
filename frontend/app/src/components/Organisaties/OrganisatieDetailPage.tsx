@@ -66,7 +66,7 @@ const OrganisatieDetailPage = () => {
 						<Menu>
 							<IconButton as={MenuButton} icon={<MenuIcon />} variant={"solid"} aria-label={"Open menu"} />
 							<MenuList>
-								<MenuItem onClick={() => navigate(AppRoutes.EditOrganisatie(parseInt(id)))}>{t("global.actions.edit")}</MenuItem>
+								<MenuItem onClick={() => navigate(AppRoutes.EditOrganisatie(id))}>{t("global.actions.edit")}</MenuItem>
 								<MenuItem onClick={() => deleteAlert.onOpen()}>{t("global.actions.delete")}</MenuItem>
 							</MenuList>
 						</Menu>

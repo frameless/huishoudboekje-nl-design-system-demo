@@ -45,13 +45,13 @@ const EditOrganisatie = () => {
 			toast({
 				success: t("messages.organisaties.updateSuccessMessage"),
 			});
-			navigate(AppRoutes.Organisatie(parseInt(id)));
+			navigate(AppRoutes.Organisatie(id));
 		}).catch(handleSaveOrganisatieErrors);
 	};
 
 	return (
 		<Queryable query={$organisatie} error={<Navigate to={AppRoutes.NotFound} replace />}>{({organisatie}: {organisatie: Organisatie}) => (
-			<Page backButton={<BackButton to={AppRoutes.Organisatie(parseInt(id))} />} title={truncateText(organisatie.naam || "", maxOrganisatieNaamLength)}>
+			<Page backButton={<BackButton to={AppRoutes.Organisatie(id)} />} title={truncateText(organisatie.naam || "", maxOrganisatieNaamLength)}>
 				<OrganisatieForm onSubmit={onSubmit} isLoading={$updateOrganisatie.loading} organisatie={organisatie} />
 			</Page>
 		)}

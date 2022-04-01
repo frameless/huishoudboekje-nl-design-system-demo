@@ -32,7 +32,7 @@ const AfspraakDetailMenu: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 		],
 		onCompleted: () => {
 			if (afspraak.burger?.id) {
-				navigate(AppRoutes.Burger(afspraak.burger.id));
+				navigate(AppRoutes.ViewBurger(String(afspraak.burger.id)));
 			}
 		},
 	});
@@ -78,7 +78,7 @@ const AfspraakDetailMenu: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 		<Menu>
 			<IconButton as={MenuButton} icon={<MenuIcon />} variant={"solid"} aria-label={"Open menu"} />
 			<MenuList>
-				<NavLink to={AppRoutes.EditAfspraak(afspraak.id)}><MenuItem>{t("global.actions.edit")}</MenuItem></NavLink>
+				<NavLink to={AppRoutes.EditAfspraak(String(afspraak.id))}><MenuItem>{t("global.actions.edit")}</MenuItem></NavLink>
 				<MenuItem onClick={endModal.onOpen}>{t("global.actions.end")}</MenuItem>
 				<MenuItem onClick={deleteAlert.onOpen}>{t("global.actions.delete")}</MenuItem>
 			</MenuList>

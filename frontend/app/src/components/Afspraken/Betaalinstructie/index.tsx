@@ -28,10 +28,10 @@ const BetaalinstructiePage = () => {
 			id: parseInt(id),
 			betaalinstructie: data,
 		},
-	}), t("messages.updateBetaalinstructieSuccess"), () => navigate(AppRoutes.ViewAfspraak(parseInt(id))));
+	}), t("messages.updateBetaalinstructieSuccess"), () => navigate(AppRoutes.ViewAfspraak(id)));
 
 	return (
-		<Page title={t("afspraakBetaalinstructie.title")} backButton={<BackButton to={AppRoutes.ViewAfspraak(parseInt(id))} />}>
+		<Page title={t("afspraakBetaalinstructie.title")} backButton={<BackButton to={AppRoutes.ViewAfspraak(id)} />}>
 			<Queryable query={$afspraak} children={data => {
 				const afspraak: Afspraak = data.afspraak;
 

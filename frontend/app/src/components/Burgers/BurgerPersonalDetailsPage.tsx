@@ -31,7 +31,7 @@ const BurgerPersonalDetailsPage = () => {
 			return (
 				<Page title={formatBurgerName(burger)} backButton={(
 					<Stack direction={["column", "row"]} spacing={[2, 5]}>
-						<BackButton to={AppRoutes.Burger(burger.id)} />
+						<BackButton to={AppRoutes.ViewBurger(String(burger.id))} />
 					</Stack>
 				)}>
 					<BurgerProfileView burger={burger} />

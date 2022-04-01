@@ -26,7 +26,7 @@ const AfspraakTableRow: React.FC<TableRowProps & {afspraak: Afspraak}> = ({afspr
 				</Stack>
 			</Td>
 			<Td>
-				<IconButton as={NavLink} to={AppRoutes.ViewAfspraak(afspraak.id)} variant={"ghost"} size={"sm"} icon={
+				<IconButton as={NavLink} to={AppRoutes.ViewAfspraak(String(afspraak.id))} variant={"ghost"} size={"sm"} icon={
 					<ViewIcon />} aria-label={t("global.actions.view")} title={t("global.actions.view")} />
 			</Td>
 		</Tr>

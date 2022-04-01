@@ -34,7 +34,7 @@ const DeleteAfdelingAlert: React.FC<DeleteAfdelingAlertProps> = ({afdeling, onCl
 			onClose();
 
 			if (afdeling.organisatie?.id) {
-				navigate(AppRoutes.Organisatie(afdeling.organisatie?.id));
+				navigate(AppRoutes.Organisatie(String(afdeling.organisatie.id)));
 			}
 			else {
 				navigate(AppRoutes.Organisaties);
