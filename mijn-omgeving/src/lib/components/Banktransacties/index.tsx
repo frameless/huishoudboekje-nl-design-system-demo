@@ -1,69 +1,52 @@
-import React, {useEffect, useRef, useState} from "react";
-import BackButton from "../BackButton";
+import {Button, Flex, Stack} from "@chakra-ui/react";
 import {Heading2} from "@gemeente-denhaag/typography";
+import React, {useEffect, useRef, useState} from "react";
+import {Banktransactie, useGetPagedBanktransactiesLazyQuery} from "../../../generated/graphql";
+import BackButton from "../BackButton";
 import BanktransactiesList from "./BanktransactiesList";
-import {Burger, useGetPagedBanktransactiesLazyQuery} from "../../../generated/graphql";
-import {Flex, Spinner, Stack} from "@chakra-ui/react";
 
-const BanktransactiesPage: React.FC<{ bsn: number }> = ({bsn}) => {
+const BanktransactiesPage: React.FC<{bsn: number}> = ({bsn}) => {
 	const container = useRef<HTMLDivElement>(null);
-	const [transacties, setTransacties] = useState<Burger[]>([])
+	const [transacties, setTransacties] = useState<Banktransactie[]>([]);
 	const [getTransacties, {loading: isLoading}] = useGetPagedBanktransactiesLazyQuery();
+	const page = useRef<number>(0);
+	const total = useRef<number>(0);
+	const limit = 10;
 
-
-	const onWindowScroll = () => {
-		if (container.current) {
-			const {scrollTop, clientHeight: windowHeight} = document.documentElement;
-			const {offsetTop, clientHeight} = container.current;
-
-			const positionOfBottom: number = offsetTop + clientHeight;
-			const scrollMargin = 20;
-			const shouldFetch: boolean = positionOfBottom < (windowHeight + scrollTop + scrollMargin);
-
-			if (shouldFetch) {
-				loadMore();
-			}
+	const onClickLoadMoreButton = () => {
+		if (!isLoading) {
+			loadMore();
 		}
 	};
 
-	const [page, setPage] = useState<number>(0);
-	const [total, setTotal] = useState<number | undefined>(undefined);
-	const limit = 5;
-
 	const loadMore = () => {
-		if (!isLoading && (total === undefined || transacties.length <= total)) {
+		if (transacties.length <= total.current) {
 			getTransacties({
 				variables: {
 					bsn,
 					limit,
-					start: 1 + (page * limit),
+					start: 1 + (page.current * limit),
 				},
 			}).then((result) => {
 				const transacties = result.data?.burger?.banktransactiesPaged?.banktransacties;
-				const total = result.data?.burger?.banktransactiesPaged?.pageInfo?.count;
+				const _total = result.data?.burger?.banktransactiesPaged?.pageInfo?.count;
 
-				if (total) {
-					setTotal(total);
+				if (_total) {
+					total.current = _total;
 				}
 
 				if (transacties && transacties.length > 0) {
 					setTransacties(t => [...t, ...transacties]);
-					setPage(p => p + 1);
+					page.current += 1;
 				}
 			});
 		}
 	};
 
 	useEffect(() => {
-		window.onscroll = onWindowScroll;
-		onWindowScroll();
-
-		return () => {
-			window.onscroll = null;
-		};
-
-	},);
-
+		loadMore();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	return (
 		<div>
@@ -71,12 +54,14 @@ const BanktransactiesPage: React.FC<{ bsn: number }> = ({bsn}) => {
 			<Heading2>Banktransacties</Heading2>
 			<Stack ref={container}>
 				<BanktransactiesList transacties={transacties} />
-				<Flex align={"center"} justify={"center"}>
-					{isLoading && <Spinner />}
+				<Flex justify={"center"}>
+					{(transacties.length < total.current) && (
+						<Button isLoading={isLoading} onClick={() => onClickLoadMoreButton()}>Meer transacties laden</Button>
+					)}
 				</Flex>
 			</Stack>
 		</div>
-	)
+	);
 
 };
 
