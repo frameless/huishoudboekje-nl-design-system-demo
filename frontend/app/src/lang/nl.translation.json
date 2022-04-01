@@ -131,11 +131,11 @@
       "edit": "Wijzigen",
       "end": "Beëindigen",
       "newBetaalinstructie": "Nieuwe betaalinstructie instellen",
-      "close": "Sluiten",
       "add": "Toevoegen",
       "export": "Exporteren",
       "download": "Downloaden",
       "startBoeken": "Alle transacties afletteren",
+      "close": "Sluiten",
       "undoAfletteren": "Afletteren ongedaan maken",
       "filter": "Filteren",
       "viewBurgerHuishouden": "Bekijk huishouden",
@@ -705,7 +705,6 @@
     "updateConfiguratie": "{{gebruiker}} wijzigde configuratie <strong>{{configuratieId}}</strong> naar waarde <strong>{{configuratieWaarde}}</strong>.",
     "deleteConfiguratie": "{{gebruiker}} verwijderde configuratie <strong>{{configuratieId}}</strong>.",
     "deleteCustomerStatementMessage": "{{gebruiker}} verwijderde <strong>bankafschrift {{csmId}}</strong>.",
-    "deleteCustomerStatementMessage": "{{gebruiker}} verwijderde <strong>bankafschrift {{csmId}}</strong>.",
     "createCustomerStatementMessage": "{{gebruiker}} importeerde <strong>{{nCsmTransactions}} transactie(s)</strong> uit bankafschrift <strong>{{customerStatementMessage}}</strong>.",
     "createBurgerRekening": "{{gebruiker}} voegde rekening <strong>{{iban}}</strong> op naam van <strong>{{rekeninghouder}}</strong> toe bij <linkBurger>{{burger}}</linkBurger>.",
     "deleteBurgerRekening": "{{gebruiker}} verwijderde rekening <strong>{{iban}}</strong> op naam van <strong>{{rekeninghouder}}</strong> bij <linkBurger>{{burger}}</linkBurger>.",
@@ -732,6 +731,10 @@
   "huishoudenName": "Huishouden {{name}}",
   "huishoudens": {
     "title": "Huishoudens"
+  },
+  "zoektermen": {
+    "countMore_one": "... en nog {{count}}",
+    "countMore_other": "... en nog {{count}}"
   },
   "suggestion": "Suggestie",
   "modals": {

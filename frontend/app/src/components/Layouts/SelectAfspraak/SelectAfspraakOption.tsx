@@ -1,5 +1,5 @@
 import {CheckIcon} from "@chakra-ui/icons";
-import {Stack, TableRowProps, Tag, TagLabel, TagLeftIcon, Td, Text, Tr} from "@chakra-ui/react";
+import {Stack, TableRowProps, Tag, TagLabel, TagLeftIcon, Td, Text, Tr, Wrap, WrapItem} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {Afspraak} from "../../../generated/graphql";
@@ -12,6 +12,7 @@ type SelectAfspraakOptionProps = TableRowProps & {
 
 const SelectAfspraakOption: React.FC<SelectAfspraakOptionProps> = ({afspraak, isSuggestion = false, ...props}) => {
 	const {t} = useTranslation();
+	const zoektermen: string[] = afspraak.zoektermen || [];
 
 	return (
 		<Tr _hover={{
@@ -25,7 +26,11 @@ const SelectAfspraakOption: React.FC<SelectAfspraakOptionProps> = ({afspraak, is
 				<Text>{afspraak.omschrijving}</Text>
 			</Td>
 			<Td>
-				<Text>{afspraak.zoektermen?.join(", ")}</Text>
+				<Wrap spacing={1}>
+					{zoektermen.map(z => (
+						<WrapItem title={z}>{z}</WrapItem>
+					))}
+				</Wrap>
 			</Td>
 			<Td>
 				{isSuggestion && (
