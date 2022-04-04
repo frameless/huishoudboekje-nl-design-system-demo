@@ -1,14 +1,14 @@
-import {Button, Flex, Stack} from "@chakra-ui/react";
+import {Button, Flex, Spinner, Stack, Text} from "@chakra-ui/react";
 import {Heading2} from "@gemeente-denhaag/typography";
 import React, {useEffect, useRef, useState} from "react";
 import {Banktransactie, useGetPagedBanktransactiesLazyQuery} from "../../../generated/graphql";
 import BackButton from "../BackButton";
 import BanktransactiesList from "./BanktransactiesList";
 
-const BanktransactiesPage: React.FC<{bsn: number}> = ({bsn}) => {
+const BanktransactiesPage: React.FC<{ bsn: number }> = ({bsn}) => {
 	const container = useRef<HTMLDivElement>(null);
 	const [transacties, setTransacties] = useState<Banktransactie[]>([]);
-	const [getTransacties, {loading: isLoading}] = useGetPagedBanktransactiesLazyQuery();
+	const [getTransacties, {data, loading: isLoading}] = useGetPagedBanktransactiesLazyQuery();
 	const page = useRef<number>(0);
 	const total = useRef<number>(0);
 	const limit = 10;
@@ -48,17 +48,27 @@ const BanktransactiesPage: React.FC<{bsn: number}> = ({bsn}) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
+
 	return (
 		<div>
 			<BackButton label={"Huishoudboekje"} />
 			<Heading2>Banktransacties</Heading2>
+			<Flex justify={"center"}>
+				{isLoading && total.current === 0 && (<Spinner />)}
+			</Flex>
 			<Stack ref={container}>
-				<BanktransactiesList transacties={transacties} />
-				<Flex justify={"center"}>
-					{(transacties.length < total.current) && (
-						<Button isLoading={isLoading} onClick={() => onClickLoadMoreButton()}>Meer transacties laden</Button>
-					)}
-				</Flex>
+				{transacties.length > 0 ? (
+					<>
+						<BanktransactiesList transacties={transacties} />
+						<Flex justify={"center"}>
+							{(transacties.length < total.current) && (
+								<Button isLoading={isLoading} onClick={() => onClickLoadMoreButton()}>Meer transacties laden</Button>
+							)}
+						</Flex>
+					</>
+				) : (
+					data && <Text>Er zijn geen transacties gevonden.</Text>
+				)}
 			</Stack>
 		</div>
 	);

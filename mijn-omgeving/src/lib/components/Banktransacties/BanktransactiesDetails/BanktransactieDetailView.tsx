@@ -15,7 +15,7 @@ const BanktransactieDetailView: React.FC<{ transactie: Banktransactie, bsn: numb
 	const [isOpen, setIsOpen] = useState<boolean>(false);
 	const container = useRef<HTMLDivElement>(null);
 	const [transacties, setTransacties] = useState<Banktransactie[]>([]);
-	const [getTransacties, {loading: isLoading}] = useGetPagedBanktransactiesLazyQuery();
+	const [getTransacties, {data, loading: isLoading}] = useGetPagedBanktransactiesLazyQuery();
 	const page = useRef<number>(0);
 	const total = useRef<number>(0);
 	const limit = 10;
@@ -111,7 +111,7 @@ const BanktransactieDetailView: React.FC<{ transactie: Banktransactie, bsn: numb
                         	</Flex>
                         </Stack>
 					) : (
-						<Text>Er zijn geen transacties gevonden.</Text>
+						data && <Text>Er zijn geen transacties gevonden.</Text>
 					)
 				}
 			</Stack>

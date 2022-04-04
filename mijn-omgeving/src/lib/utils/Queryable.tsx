@@ -1,16 +1,21 @@
 import {LazyQueryResult, QueryResult} from "@apollo/client/react/types/types";
 import React from "react";
+import {Flex, Spinner} from "@chakra-ui/react";
 
-const Loading = () => <div>Loading...</div>;
+const Loading = () => (
+	<Flex justify={"center"}>
+		<Spinner />
+	</Flex>
+);
 
 type QueryableProps = {
-	query: QueryResult | LazyQueryResult<any, any>;
-	loading?: any;
-	error?: any;
-	options?: {
-		hidePreviousResults?: boolean;
-	};
-	render: any;
+    query: QueryResult | LazyQueryResult<any, any>;
+    loading?: any;
+    error?: any;
+    options?: {
+        hidePreviousResults?: boolean;
+    };
+    render: any;
 };
 
 const Queryable: React.FC<QueryableProps> = ({query, loading, error, options, render}) => {
