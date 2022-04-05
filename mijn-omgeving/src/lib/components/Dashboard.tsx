@@ -2,46 +2,44 @@ import {Grid, GridItem} from "@chakra-ui/react";
 import {Card} from "@gemeente-denhaag/card";
 import {Heading2} from "@gemeente-denhaag/typography";
 import React from "react";
-import {NavLink} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 const Dashboard = () => {
+	const navigate = useNavigate();
+
 	return (
-		<div>
+		<>
 			<Heading2>Huishoudboekje</Heading2>
 			<Grid templateColumns={"repeat(2, 1fr)"} gap={10}>
 				<GridItem>
-					<NavLink to={"/toekomst"}>
-						<Card
-							title={"Toekomst"}
-							subTitle={"Verwachte transacties"}
-						/>
-					</NavLink>
+					<Card
+						title={"Toekomst"}
+						subTitle={"Verwachte transacties"}
+						onClick={() => navigate("/toekomst")}
+					/>
 				</GridItem>
 				<GridItem>
-					<NavLink to={"/banktransacties"}>
-						<Card
-							title={"Banktransacties"}
-							subTitle={"Overzicht van alle bij- en afschrijvingen."}
-						/>
-					</NavLink>
+					<Card
+						title={"Banktransacties"}
+						subTitle={"Overzicht van alle bij- en afschrijvingen."}
+						onClick={() => navigate("/banktransacties")}
+					/>
 				</GridItem>
 				<GridItem>
-					<NavLink to={"/gegevens"}>
-						<Card
-							title={"Mijn gegevens"}
-						/>
-					</NavLink>
+					<Card
+						title={"Mijn gegevens"}
+						onClick={() => navigate("/gegevens")}
+					/>
 				</GridItem>
 				<GridItem>
-					<NavLink to={"/afspraken"}>
-						<Card
-							title={"Afspraken"}
-							subTitle={"Overzicht van alle afspraken."}
-						/>
-					</NavLink>
+					<Card
+						title={"Afspraken"}
+						subTitle={"Overzicht van alle afspraken."}
+						onClick={() => navigate("/afspraken")}
+					/>
 				</GridItem>
 			</Grid>
-		</div>
+		</>
 	);
 
 };
