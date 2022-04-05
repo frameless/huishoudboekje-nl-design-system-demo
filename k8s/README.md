@@ -177,6 +177,20 @@ sh k8s/build.sh
 
 You will find the YAML-files with the Kubernetes-configuration in the `dist` directory.
 
+## Building for k8s-cluster pre version 1.12
+
+If you are running an older version of k8s, you need te delete ttlSecondsAfterFinished in the Job (works from version 1.12).
+
+```bash
+sed -i '/ttlSecondsAfterFinished/d' k8s/dist/single_deploy_file.yaml
+```
+
+You need to manualy delete the Job (for new deploy) in k8s-cluster pre version 1.12
+
+```bash
+# delete manual old Job for new deploy
+kubectl delete job $(kubectl get jobs --namespace="[namespace]" | awk '$3 ~ 1' | awk '{print $1}') --namespace="[namespace]"
+```
 
 ## Step 2: Deploying
 Deploying Huishoudboekje manually can be done by running the following commands:
