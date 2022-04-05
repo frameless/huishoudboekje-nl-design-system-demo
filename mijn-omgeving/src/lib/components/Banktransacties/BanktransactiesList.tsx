@@ -8,7 +8,7 @@ import {dateString} from "../../utils/dateFormat";
 import d from "../../utils/dayjs";
 import BanktransactieListItem from "./BanktransactieListItem";
 
-const BanktransactiesList: React.FC<{transacties: Banktransactie[]}> = ({transacties}) => {
+const BanktransactiesList: React.FC<{ transacties: Banktransactie[] }> = ({transacties}) => {
 	const bt = transacties.reduce((result, t) => {
 		const trDateAsString = d(t.transactiedatum).format("YYYY-MM-DD");
 		return {
@@ -19,10 +19,6 @@ const BanktransactiesList: React.FC<{transacties: Banktransactie[]}> = ({transac
 			],
 		};
 	}, {});
-
-	if (transacties.length === 0) {
-		return 	<Text>Er zijn geen transacties gevonden.</Text>;
-	}
 
 	return (
 		<Stack>

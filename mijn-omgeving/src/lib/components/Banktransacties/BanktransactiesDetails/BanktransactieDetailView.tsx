@@ -1,23 +1,64 @@
-import React, {useState} from "react";
-import {Banktransactie, useGetBurgerQuery} from "../../../../generated/graphql";
-import {ChevronDownIcon, ChevronUpIcon} from "@gemeente-denhaag/icons";
-import {Box, Center, HStack, IconButton, Stack, Text} from "@chakra-ui/react";
-import d from "../../../utils/dayjs";
+import {Box, Button, Center, Flex, HStack, IconButton, Stack, Text} from "@chakra-ui/react";
+import {Heading5} from "@gemeente-denhaag/components-react";
 import Divider from "@gemeente-denhaag/divider";
-import PrettyIban from "../../PrettyIban";
-import {currencyFormat} from "../../../utils/numberFormat";
-import Queryable from "../../../utils/Queryable";
-import {Heading5} from "@gemeente-denhaag/typography";
+import {ChevronDownIcon, ChevronUpIcon} from "@gemeente-denhaag/icons";
+import React, {useEffect, useRef, useState} from "react";
+import {Banktransactie, useGetPagedBanktransactiesLazyQuery} from "../../../../generated/graphql";
 import {dateString} from "../../../utils/dateFormat";
+import d from "../../../utils/dayjs";
+import {currencyFormat} from "../../../utils/numberFormat";
 import BackButton from "../../BackButton";
+import PrettyIban from "../../PrettyIban";
 import BanktransactiesList from "../BanktransactiesList";
 
-const BanktransactieDetailView: React.FC<{ transactie: Banktransactie, bsn: number }> = ({transactie, bsn}) => {
-	const $burger = useGetBurgerQuery({
-		variables: {bsn},
+const BanktransactieDetailView: React.FC<{transactie: Banktransactie, bsn: number}> = ({transactie, bsn}) => {
+	const [isOpen, setIsOpen] = useState<boolean>(false);
+	const container = useRef<HTMLDivElement>(null);
+	const [transacties, setTransacties] = useState<Banktransactie[]>([]);
+	const [getTransacties, {data, loading: isLoading}] = useGetPagedBanktransactiesLazyQuery();
+	const page = useRef<number>(0);
+	const total = useRef<number>(0);
+	const limit = 10;
+
+	const onClickLoadMoreButton = () => {
+		if (!isLoading) {
+			loadMore();
+		}
+	};
+
+	const loadMore = () => {
+		if (transacties.length <= total.current) {
+			getTransacties({
+				variables: {
+					bsn,
+					limit,
+					start: 1 + (page.current * limit),
+				},
+			}).then((result) => {
+				const transacties = result.data?.burger?.banktransactiesPaged?.banktransacties;
+				const _total = result.data?.burger?.banktransactiesPaged?.pageInfo?.count;
+
+				if (_total) {
+					total.current = _total;
+				}
+
+				if (transacties && transacties.length > 0) {
+					setTransacties(t => [...t, ...transacties]);
+					page.current += 1;
+				}
+			});
+		}
+	};
+
+	useEffect(() => {
+		loadMore();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
+	const filteredRekeninghouders = (transacties.filter(b => transactie.tegenrekeningIban === b.tegenrekeningIban)).filter(b => transactie.id !== b.id).sort((a, b) => {
+		return (a.transactiedatum && b.transactiedatum) && a.transactiedatum < b.transactiedatum ? 1 : -1;
 	});
 
-	const [isOpen, setIsOpen] = useState<boolean>(false);
 
 	return (
 		<div>
@@ -52,33 +93,28 @@ const BanktransactieDetailView: React.FC<{ transactie: Banktransactie, bsn: numb
 				</Box>
 			</Stack>
 
-			<Queryable query={$burger} render={data => {
-				const banktransacties: Banktransactie[] = data.burger.banktransacties || {};
-
-				const filteredRekeninghouders = (banktransacties.filter(b => transactie.tegenrekeningIban === b.tegenrekeningIban)).filter(b => transactie.id !== b.id).sort((a, b) => {
-					return (a.transactiedatum && b.transactiedatum) && a.transactiedatum < b.transactiedatum ? 1 : -1;
-				});
-
-				return (
-					<Stack mt={8}>
-						<HStack justify={"space-between"}>
-							<Heading5>Transactiegeschiedenis</Heading5>
-							{filteredRekeninghouders.length > 0 &&
-                            <IconButton size={"sm"} aria-label={"Toon transacties"} icon={isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />} onClick={() => setIsOpen(!isOpen)} />
-							}
-						</HStack>
-						{filteredRekeninghouders.length > 0 ?
-							(isOpen &&
-                                <BanktransactiesList transacties={filteredRekeninghouders} />
-							) : (
-								<Text>Er zijn geen transacties gevonden.</Text>
-							)
-
-						}
-					</Stack>
-				)
-			}}
-			/>
+			<Stack mt={8}>
+				<HStack justify={"space-between"}>
+					<Heading5>Transactiegeschiedenis</Heading5>
+					{filteredRekeninghouders.length > 0 &&
+						<IconButton size={"sm"} aria-label={"Toon transacties"} icon={isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />} onClick={() => setIsOpen(!isOpen)} />
+					}
+				</HStack>
+				{filteredRekeninghouders.length > 0 ?
+					(isOpen &&
+						<Stack ref={container}>
+							<BanktransactiesList transacties={filteredRekeninghouders} />
+							<Flex justify={"center"}>
+								{(filteredRekeninghouders.length < total.current) && (
+									<Button isLoading={isLoading} onClick={() => onClickLoadMoreButton()}>Meer transacties laden</Button>
+								)}
+							</Flex>
+						</Stack>
+					) : (
+						data && <Text>Er zijn geen transacties gevonden.</Text>
+					)
+				}
+			</Stack>
 		</div>
 	);
 };
