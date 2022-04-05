@@ -4,9 +4,9 @@
   "description": "The scalable version of Huishoudboekje the software, usable for all Dutch municipalities. Huishoudboekje is developed based on the vision of Common Ground.",
   "private": true,
   "scripts": {
-    "add-changeset": "npx changeset add",
-    "check-changeset": "npx changeset status",
-    "version-changeset": "npx changeset version && npm run postversion",
+    "add-changeset": "changeset add",
+    "check-changeset": "changeset status",
+    "version-changeset": "changeset version && npm run postversion",
     "postversion": "node scripts/postversion.js"
   },
   "repository": {
