@@ -55,7 +55,7 @@ Each platform should have the following files. These can be empty, but the build
 
 The build script needs to know you are targeting Minikube, therefor, we need the following environment variables:
 
-```bash
+```shell
 export USE_PLATFORM="minikube"
 export HHB_HOST="hhb.minikube"
 export NAMESPACE="huishoudboekje"
@@ -81,7 +81,7 @@ export UNLEASH_APPNAME="huishoudboekje-frontend"
 We are using Docker images that are hosted on our own GitLab Image Repository, so please make sure you are on an existing branch.
 Now you can generate the kustomize YAML-files by running the build script.
 
-```bash
+```shell
 sh k8s/build.sh
 ```
 
@@ -91,7 +91,7 @@ You will find the YAML-files with the Kubernetes-configuration in the `dist` dir
 The build script needs to know you are targeting True, therefor, we need the following environment variables.
 In this case, the example is for Gemeente Nijmegen.
 
-```bash
+```shell
 export USE_PLATFORM="true"
 export HHB_HOST="huishoudboekje-accp.nijmegen.nl" # huishoudboekje.nijmegen.nl for production
 export NAMESPACE="huishoudboekje-acc" # huishoudboekje for production
@@ -133,7 +133,7 @@ export HHB_SECRET="changeme"
 We are using Docker images that are hosted on our own GitLab Image Repository, so please make sure you are on an existing branch.
 Now you can generate the kustomize YAML-files by running the build script.
 
-```bash
+```shell
 sh k8s/build.sh
 ```
 
@@ -157,7 +157,7 @@ kubectl config use-context huishoudboekje/openshift.example.com/username
 
 The build script needs to know you are targeting OpenShift, therefor, we need the following environment variables:
 
-```bash
+```shell
 export USE_PLATFORM="ocp"
 export HHB_HOST="openshift.example.com"
 export HHB_APP_HOST="apps.example.com"
@@ -171,15 +171,28 @@ export UNLEASH_APPNAME="huishoudboekje-frontend"
 We are using Docker images that are hosted on our own GitLab Image Repository, so please make sure you are on an existing branch.
 Now you can generate the kustomize YAML-files by running the build script.
 
-```bash
+```shell
 sh k8s/build.sh
 ```
 
 You will find the YAML-files with the Kubernetes-configuration in the `dist` directory.
 
+## Building for a Kubernetes cluster < v1.12
+
+If you are running an older version of Kubernetes, you will need te remove `ttlSecondsAfterFinished` from the Job.
+
+```shell
+sed -i '/ttlSecondsAfterFinished/d' k8s/dist/single_deploy_file.yaml
+```
+
+Manually delete the Job (before you deploy again) in your cluster:
+
+```shell
+kubectl delete job $(kubectl get jobs --namespace="[namespace]" | awk '$3 ~ 1' | awk '{print $1}') --namespace="[namespace]"
+```
 
 ## Step 2: Deploying
-Deploying Huishoudboekje manually can be done by running the following commands:
+Deploying Huishoudboekje can be done by running the following commands:
 
 ```shell
 # Create the namespace if it doesn't exist yet.
@@ -189,4 +202,4 @@ kubectl apply -f k8s/dist/namespace.yaml
 sh k8s/deploy.sh
 ```
 
-You now have Huishoudboekje running on your cluster.
+You should now have Huishoudboekje running on your Kubernetes cluster.

@@ -5,6 +5,7 @@ metadata:
   labels:
     name: hhb-keycloak-init
 spec:
+  ttlSecondsAfterFinished: 100
   template:
     spec:
       volumes:
