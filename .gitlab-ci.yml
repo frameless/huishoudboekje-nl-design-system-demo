@@ -28,8 +28,9 @@ include:
 - "/.gitlab/ci/test.yaml"
 - "/.gitlab/ci/data.yaml"
 - template: Security/SAST.gitlab-ci.yml
-- template: Security/Secret-Detection.gitlab-ci.yml
 - template: Security/Dependency-Scanning.gitlab-ci.yml
+- template: Security/Secret-Detection.gitlab-ci.yml
+
 sast:
   variables:
     SAST_EXCLUDED_ANALYZERS: brakeman, flawfinder, gosec, phpcs-security-audit, pmd-apex,
