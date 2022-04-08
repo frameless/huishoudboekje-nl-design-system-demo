@@ -5,6 +5,7 @@ import {NavLink, useNavigate, useParams} from "react-router-dom";
 import {AppRoutes} from "../../../config/routes";
 import {Burger, GetBurgerDocument, GetBurgersDocument, GetBurgersSearchDocument, GetHuishoudensDocument, useDeleteBurgerMutation, useDeleteHuishoudenBurgerMutation, useGetBurgerQuery} from "../../../generated/graphql";
 import {useStore} from "../../../store";
+import {useFeatureFlag} from "../../../utils/features";
 import Queryable from "../../../utils/Queryable";
 import {formatBurgerName} from "../../../utils/things";
 import useToaster from "../../../utils/useToaster";
@@ -21,6 +22,7 @@ const BurgerDetailPage = () => {
 	const {id = ""} = useParams<{id: string}>();
 	const {t} = useTranslation();
 	const toast = useToaster();
+	const isSignalenEnabled = useFeatureFlag("signalen");
 	const navigate = useNavigate();
 	const deleteAlert = useDisclosure();
 	const deleteHuishoudenBurgerAlert = useDisclosure();
@@ -142,7 +144,7 @@ const BurgerDetailPage = () => {
 						</MenuList>
 					</Menu>
 				)}>
-					<BurgerSignalenView burger={burger} />
+					{isSignalenEnabled && <BurgerSignalenView burger={burger} />}
 					<BurgerAfsprakenView burger={burger} />
 					<BurgerGebeurtenissen burger={burger} />
 				</Page>
