@@ -1,35 +1,30 @@
 import {useCallback, useEffect, useMemo, useState} from "react";
-import {isDev} from "./things";
+
+const AuthRoutes = {
+	check: "/auth/me",
+	login: "/auth/login",
+	logout: "/auth/logout",
+};
 
 const useAuth = () => {
 	const [user, setUser] = useState<{email: string}>();
 	const [error, setError] = useState(false);
 	const [loading, toggleLoading] = useState(true);
 
-	const reset = useCallback(() => {
-		fetch("/api/logout")
-			.then(() => {
-				setUser(undefined);
-			})
-			.catch(err => {
-				console.error(err);
-				setError(true);
-				setUser(undefined);
-			});
-	}, [setError]);
+	const login = useCallback(() => {
+		window.location.href = AuthRoutes.login;
+	}, []);
+
+	const logout = useCallback(() => {
+		window.location.href = AuthRoutes.logout;
+	}, []);
 
 	useEffect(() => {
-		if (isDev) {
-			setUser({email: "developer@sloothuizen.nl"});
-			toggleLoading(false);
-			return;
-		}
-
-		fetch("/api/me")
+		fetch(AuthRoutes.check)
 			.then(result => result.json())
 			.then(result => {
-				if (result.email) {
-					setUser(result);
+				if (result.user) {
+					setUser(result.user);
 				}
 				toggleLoading(false);
 			})
@@ -44,8 +39,8 @@ const useAuth = () => {
 
 
 	return useMemo(() => ({
-		user, error, loading, reset,
-	}), [user, error, loading, reset]);
+		user, error, loading, reset: logout, login,
+	}), [user, error, loading, logout, login]);
 };
 
 export default useAuth;
