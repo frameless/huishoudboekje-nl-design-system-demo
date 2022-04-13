@@ -47,28 +47,11 @@ const server = (prefix: string = "/auth") => {
 			login: false,
 			logout: false,
 			postLogoutRedirect: prefix + "/logout",
+			callback: prefix + "/callback",
 		},
 	}));
 
 	const authRouter = express.Router();
-
-	if (config.debug) {
-		authRouter.get("/", (req, res) => {
-			if (sessionHelper.isAuthenticated(req)) {
-				return res.send(`
-					<h1>Hello ${req.oidc.user?.name}</h1>
-					<a href="${prefix}/logout">Logout</a>
-					<a href="${prefix}/me">Check auth</a>
-				`);
-			}
-
-			return res.send(`
-				<h1>Hello!</h1>
-				<a href="${prefix}/login">Login</a>
-				<a href="${prefix}/me">Check auth</a>
-			`);
-		});
-	}
 
 	authRouter.get("/me", async (req, res) => {
 		let user;
@@ -113,13 +96,14 @@ const server = (prefix: string = "/auth") => {
 	});
 
 	authRouter.get("/login_callback", (req, res) => {
-		console.log(req.oidc.user);
-		console.log(req.cookies["return-to"]);
-		res.status(418).json({user: req.oidc.user, returnTo: req.cookies["return-to"]});
+		console.log("returnTo", req.cookies["return-to"]);
+		return res.redirect(req.cookies["return-to"] || "/");
 	});
 
 	authRouter.get("/logout", (req, res) => {
-		return res.oidc.logout({returnTo: prefix + "/logout_callback"});
+		return res.oidc.logout({
+			returnTo: prefix + "/logout_callback",
+		});
 	});
 
 	authRouter.get("/logout_callback", (req, res) => {
@@ -136,7 +120,7 @@ const server = (prefix: string = "/auth") => {
 				issuer: process.env.JWT_ISSUER,
 				audience: process.env.JWT_AUDIENCE,
 				expiresIn: process.env.JWT_EXPIRES_IN,
-			})
+			});
 		}),
 	};
 };
