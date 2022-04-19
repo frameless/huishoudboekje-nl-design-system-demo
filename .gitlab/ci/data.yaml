@@ -5,6 +5,7 @@
   variables:
     NPM_CACHE_DIR: "${CI_PROJECT_DIR}/.cache/npm"
     CYPRESS_INSTALL_BINARY: "0"
+    HHB_HOST: "hhb-$CI_COMMIT_REF_SLUG.nlx.reviews"
   tags:
     - cg
     - docker
@@ -14,10 +15,10 @@
     - |
       export PROXY_AUTHORIZATION=`npx --yes --quiet --package '@clarketm/jwt-cli' \
         jwt sign \
-        --expiresIn "1 week" \
+        --expiresIn "1 hour" \
         --subject "cypress@${HHB_HOST}" \
-        --issuer "https://$HHB_HOST/auth" \
-        --audience "https://${HHB_HOST}" \
+        --issuer "${HHB_HOST}" \
+        --audience "${HHB_HOST}" \
         --jwtid "$(LC_CTYPE=C tr -dc 'A-F0-9' < /dev/urandom | head -c32)" \
         --noCopy \
         "{}" "${HHB_SECRET:-$SESSION_SECRET}"`
