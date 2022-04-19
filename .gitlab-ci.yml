@@ -43,4 +43,5 @@ sast:
   variables:
     SAST_EXCLUDED_ANALYZERS: brakeman, flawfinder, gosec, phpcs-security-audit, pmd-apex,
       security-code-scan, sobelow
+    SAST_EXCLUDED_PATHS: spec, test, tests, tmp, htmlcov, coverage, docs
   stage: test
