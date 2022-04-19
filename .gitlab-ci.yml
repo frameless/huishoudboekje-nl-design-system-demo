@@ -15,12 +15,15 @@ variables:
   UNLEASH_INSTANCEID: JbZyPux6M7xwejsESy9L
   PYTHON_POSTGRES: python-postgres
   UNLEASH_APPNAME: huishoudboekje-frontend
+
 stages:
 - build
 - ship
 - deploy
+- app-test
 - test
 - data
+
 include:
 - "/.gitlab/ci/build.yaml"
 - "/.gitlab/ci/ship.yaml"
