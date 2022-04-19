@@ -36,12 +36,14 @@ include:
 - template: Security/Secret-Detection.gitlab-ci.yml
 
 dependency_scanning:
+  stage: test
   variables:
     SECURE_LOG_LEVEL: debug
+    DS_EXCLUDED_ANALYZERS: "gemnasium-python"
 
 sast:
+  stage: test
   variables:
     SAST_EXCLUDED_ANALYZERS: brakeman, flawfinder, gosec, phpcs-security-audit, pmd-apex,
-      security-code-scan, sobelow
+      security-code-scan, sobelow, eslint,
     SAST_EXCLUDED_PATHS: spec, test, tests, tmp, htmlcov, coverage, docs
-  stage: test
