@@ -15,12 +15,15 @@ variables:
   UNLEASH_INSTANCEID: JbZyPux6M7xwejsESy9L
   PYTHON_POSTGRES: python-postgres
   UNLEASH_APPNAME: huishoudboekje-frontend
+
 stages:
 - build
 - ship
 - deploy
+- app-test
 - test
 - data
+
 include:
 - "/.gitlab/ci/build.yaml"
 - "/.gitlab/ci/ship.yaml"
@@ -32,8 +35,15 @@ include:
 - template: Security/Dependency-Scanning.gitlab-ci.yml
 - template: Security/Secret-Detection.gitlab-ci.yml
 
+dependency_scanning:
+  stage: test
+  variables:
+    SECURE_LOG_LEVEL: debug
+    DS_EXCLUDED_ANALYZERS: "gemnasium-python"
+
 sast:
+  stage: test
   variables:
     SAST_EXCLUDED_ANALYZERS: brakeman, flawfinder, gosec, phpcs-security-audit, pmd-apex,
-      security-code-scan, sobelow
-  stage: test
+      security-code-scan, sobelow, eslint,
+    SAST_EXCLUDED_PATHS: spec, test, tests, tmp, htmlcov, coverage, docs
