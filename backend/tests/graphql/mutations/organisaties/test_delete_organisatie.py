@@ -39,7 +39,7 @@ def create_mock_adapter() -> Adapter:
 def test_delete_organisatie(client):
     with requests_mock.Mocker() as mock:
         mock._adapter = create_mock_adapter()
-        rm1 = mock.delete(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/test_postadres_id", status_code=204)
+        rm1 = mock.get(f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/?filter_organisaties=1", status_code=200, json={'data': []})
         adapter = mock.delete(f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/1", status_code=204)
 
         response = client.post(
@@ -63,7 +63,32 @@ mutation test($id: Int!) {
 
         assert rm1.called_once
         assert adapter.called_once
-        assert mock._adapter.call_count == 7
+        assert mock._adapter.call_count == 4
+
+def test_delete_organisatie_afdelingen_error(client):
+    with requests_mock.Mocker() as mock:
+        mock._adapter = create_mock_adapter()
+
+        response = client.post(
+            "/graphql",
+            json={
+                "query": '''
+mutation test($id: Int!) {
+  deleteOrganisatie(id: $id) {
+    ok
+  }
+}
+''',
+                "variables": {"id": 1}},
+            content_type='application/json'
+        )
+
+        assert response.json == {"data": {"deleteOrganisatie": None},
+                                 "errors": [{"locations": [{"column": 3, "line": 3}],
+                                             "message": "Organisatie heeft afdelingen - verwijderen is niet mogelijk.",
+                                             "path": ["deleteOrganisatie"]}]}
+
+        assert mock._adapter.call_count == 2
 
 def test_delete_organisatie_error(client):
     with requests_mock.Mocker() as mock:
