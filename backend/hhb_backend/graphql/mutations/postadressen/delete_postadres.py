@@ -42,6 +42,10 @@ class DeletePostadres(graphene.Mutation):
         if not previous:
             raise GraphQLError("postadres not found")
 
+        afspraken = requests.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_postadressen=={id}")
+        if afspraken:
+            raise GraphQLError("Postadres wordt gebruikt in afspraken - verwijderen is niet mogelijk.")
+
         response_ContactCatalogus = requests.delete(
             f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/{id}",
             headers={"Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845"}
