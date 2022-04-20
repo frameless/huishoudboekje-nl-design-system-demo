@@ -1,24 +1,29 @@
 import React from 'react';
-import {Postadres, useUpdatePostadresMutation} from "../../generated/graphql";
-import {Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalOverlay} from "@chakra-ui/react";
+import {Afdeling, GetAfdelingDocument, Postadres, useUpdatePostadresMutation} from "../../generated/graphql";
+import {Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay} from "@chakra-ui/react";
 import {useTranslation} from "react-i18next";
 import PostadresForm from "./PostadresForm";
 import useToaster from "../../utils/useToaster";
 
 type UpdatePostadresModalProps = {
     postadres: Postadres,
-    onClose: VoidFunction
+    afdeling: Afdeling,
+    onClose: VoidFunction,
 };
 
-const UpdatePostadresModal: React.FC<UpdatePostadresModalProps> = (postadres, onClose) => {
+const UpdatePostadresModal: React.FC<UpdatePostadresModalProps> = ({postadres, afdeling, onClose}) => {
     const {t} = useTranslation();
     const toast = useToaster();
-    const [updatePostadres] = useUpdatePostadresMutation();
+    const [updatePostadres] = useUpdatePostadresMutation({
+        refetchQueries: [
+            {query: GetAfdelingDocument, variables: {id: afdeling.id}},
+        ],
+    });
 
     const onSubmit = (data) => {
         updatePostadres({
             variables: {
-                id: postadres.postadres.id,
+                id: postadres.id!,
                 ...data,
             },
         }).then(() => {
@@ -38,13 +43,9 @@ const UpdatePostadresModal: React.FC<UpdatePostadresModalProps> = (postadres, on
             <ModalOverlay />
             <ModalContent>
                 <ModalHeader>{t("modal.updatePostadress.title")}</ModalHeader>
+                <ModalCloseButton />
                 <ModalBody>
-                    <PostadresForm onSubmit={onSubmit} onCancel={onClose} postadres={postadres.postadres} values={{
-                        straatnaam: postadres.postadres.straatnaam,
-                        huisnummer: postadres.postadres.huisnummer,
-                        postcode: postadres.postadres.postcode,
-                        plaatsnaam: postadres.postadres.straatnaam,
-                    }} />
+                    <PostadresForm onChange={onSubmit} onCancel={onClose} postadres={postadres} />
                 </ModalBody>
                 <ModalFooter />
             </ModalContent>

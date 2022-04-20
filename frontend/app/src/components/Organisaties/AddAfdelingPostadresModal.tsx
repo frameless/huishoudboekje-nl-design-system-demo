@@ -16,10 +16,11 @@ const AddAfdelingPostadresModal: React.FC<AddAfdelingPostadresModalProps> = ({af
     const {t} = useTranslation();
     const toast = useToaster();
     const handleSaveAfdelingPostadres = useMutationErrorHandler(SaveAfdelingPostadresErrorHandler);
+
     const [createAfdelingPostadres] = useCreateAfdelingPostadresMutation({
         refetchQueries: [
             {query: GetOrganisatieDocument, variables: {id: afdeling?.organisatie?.id}},
-            {query: GetAfdelingDocument, variables: {id: afdeling?.id}},
+            {query: GetAfdelingDocument, variables: {id: afdeling.id}},
         ],
     });
 
@@ -44,7 +45,7 @@ const AddAfdelingPostadresModal: React.FC<AddAfdelingPostadresModalProps> = ({af
                 <ModalHeader>{t("modals.addPostadres.modalTitle")}</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                    <PostadresForm onSubmit={(data) => onSavePostadres(afdeling.id!, data)} onCancel={() => onClose()} />
+                    <PostadresForm onChange={(data) => onSavePostadres(afdeling.id!, data)} onCancel={() => onClose()} />
                 </ModalBody>
                 <ModalFooter />
             </ModalContent>

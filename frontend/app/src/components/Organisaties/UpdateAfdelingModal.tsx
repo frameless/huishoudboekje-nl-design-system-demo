@@ -11,47 +11,47 @@ type UpdateAfdelingModalProps = {
 };
 
 const UpdateAfdelingModal: React.FC<UpdateAfdelingModalProps> = ({afdeling, onClose}) => {
-	const {t} = useTranslation();
-	const toast = useToaster();
-	const [updateAfdeling] = useUpdateAfdelingMutation({
-		refetchQueries: [
-			{query: GetOrganisatieDocument, variables: {id: afdeling?.organisatie?.id}},
-		],
-	});
+    const {t} = useTranslation();
+    const toast = useToaster();
+    const [updateAfdeling] = useUpdateAfdelingMutation({
+        refetchQueries: [
+            {query: GetOrganisatieDocument, variables: {id: afdeling?.organisatie?.id}},
+        ],
+    });
 
-	const onSubmit = (data) => {
-		updateAfdeling({
-			variables: {
-				id: afdeling.id!,
-				...data,
-			},
-		}).then(() => {
-			toast({
-				success: t("messages.afdelingen.updateSuccess"),
-			});
-			onClose();
-		}).catch(err => {
-			toast({
-				error: err.message,
-			});
-		});
-	};
+    const onSubmit = (data) => {
+        updateAfdeling({
+            variables: {
+                id: afdeling.id!,
+                ...data,
+            },
+        }).then(() => {
+            toast({
+                success: t("messages.afdelingen.updateSuccess"),
+            });
+            onClose();
+        }).catch(err => {
+            toast({
+                error: err.message,
+            });
+        });
+    };
 
-	return (
-		<Modal isOpen={true} onClose={onClose}>
-			<ModalOverlay />
-			<ModalContent>
-				<ModalHeader>{t("modal.updateAfdeling.title")}</ModalHeader>
-				<ModalCloseButton />
-				<ModalBody>
-					<AfdelingForm onChange={onSubmit} onCancel={onClose} organisatie={afdeling.organisatie!} values={{
-						naam: afdeling.naam,
-					}} />
-				</ModalBody>
-				<ModalFooter />
-			</ModalContent>
-		</Modal>
-	);
+    return (
+        <Modal isOpen={true} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent>
+                <ModalHeader>{t("modal.updateAfdeling.title")}</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody>
+                    <AfdelingForm onChange={onSubmit} onCancel={onClose} organisatie={afdeling.organisatie!} values={{
+                        naam: afdeling.naam,
+                    }} />
+                </ModalBody>
+                <ModalFooter />
+            </ModalContent>
+        </Modal>
+    );
 };
 
 export default UpdateAfdelingModal;

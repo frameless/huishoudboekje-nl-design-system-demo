@@ -1,7 +1,7 @@
 import {Button, FormControl, FormErrorMessage, FormLabel, HStack, Input, Stack} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {CreatePostadresInput, Postadres} from "../../generated/graphql";
+import {Postadres} from "../../generated/graphql";
 import {Regex} from "../../utils/things";
 import useForm from "../../utils/useForm";
 import useToaster from "../../utils/useToaster";
@@ -17,23 +17,20 @@ const validator = zod.object({
 
 type PostadresFormProps = {
     postadres?: Postadres,
-    onSubmit: Function,
     onChange: (values) => void,
     onCancel: VoidFunction,
-    values?: Partial<CreatePostadresInput>
 };
 
-const PostadresForm: React.FC<PostadresFormProps> = ({values, onSubmit, onCancel}) => {
+const PostadresForm: React.FC<PostadresFormProps> = ({postadres, onChange, onCancel}) => {
     const {t} = useTranslation();
     const toast = useToaster();
 
-    // const {straatnaam, huisnummer, postcode, plaatsnaam} = postadres || {};
+    const {straatnaam, huisnummer, postcode, plaatsnaam} = postadres || {};
     const [form, {updateForm, toggleSubmitted, isValid, isFieldValid}] = useForm<zod.infer<typeof validator>>({
         validator,
-        // initialValue: {
-        //     straatnaam, huisnummer, postcode, plaatsnaam,
-        // },
-        initialValue: values,
+        initialValue: {
+            straatnaam, huisnummer, postcode, plaatsnaam,
+        },
     });
 
     const onSubmitForm = (e) => {
@@ -41,8 +38,13 @@ const PostadresForm: React.FC<PostadresFormProps> = ({values, onSubmit, onCancel
         toggleSubmitted(true);
 
         if (isValid()) {
-            onSubmit(form);
-            return;
+            onChange({
+                ...form,
+                ...postadres?.id && {
+                    postadresId: postadres.id,
+                }
+            })
+            return
         }
 
         toast.closeAll();
