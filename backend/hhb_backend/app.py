@@ -11,6 +11,7 @@ from hhb_backend.auth import Auth
 from hhb_backend.graphql import settings
 from hhb_backend.processen import brieven_export
 from hhb_backend.reverse_proxy import ReverseProxied
+from hhb_backend.utils.conditional_decorator import conditional_decorator
 
 def create_app(
         config_name=os.getenv("APP_SETTINGS", None)
@@ -21,7 +22,7 @@ def create_app(
     app.config.from_object(config_name)
 
     ANONYMOUS_ROLENAME = 'anonymous'
-    MEDEWERKER_ROLENAME = 'anonymous' if app.config["DEVELOPMENT"] else 'anonymous' # Todo: should be 'medewerker', but then we can't access it without authorization for development purposes.
+    MEDEWERKER_ROLENAME = 'anonymous' if app.config["DEVELOPMENT"] else 'medewerker'
 
     logging.basicConfig(level=app.config["LOG_LEVEL"])
     app.logger = logger = logging.getLogger(__name__)
@@ -49,6 +50,7 @@ def create_app(
 
     @graphql.before_request
     @auth.rbac.allow([MEDEWERKER_ROLENAME], methods=['GET', 'POST'], endpoint="graphql.graphql")
+    @conditional_decorator(auth.oidc.require_login, not app.config["DEVELOPMENT"])
     def auth_graphql():
         pass
 

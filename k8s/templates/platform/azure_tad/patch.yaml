@@ -138,3 +138,16 @@ metadata:
   name: hhb-unleashservice
 spec:
   maxReplicas: 1
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-backend
+spec:
+  template:
+    spec:
+      containers:
+        - name: hhb-backend
+          env:
+            - name: APP_SETTINGS
+              value: hhb_backend.config.DevelopmentConfig
