@@ -44,17 +44,16 @@ class DeleteAfdeling(graphene.Mutation):
         # remove attached postadressen
         postadressen_ids = previous.get("postadressen_ids")
         if postadressen_ids:
-            GraphQLError("Afdeling heeft postadressen - verwijderen is niet mogelijk.")
+            raise GraphQLError("Afdeling heeft postadressen - verwijderen is niet mogelijk.")
 
         # remove attached rekeningen
         rekeningen_ids = previous.get("rekeningen_ids")
-        afdeling_id = previous.get("id")
         if rekeningen_ids: 
-            GraphQLError("Afdeling heeft rekeningen - verwijderen is niet mogelijk.")
+            raise GraphQLError("Afdeling heeft rekeningen - verwijderen is niet mogelijk.")
 
         afspraken = previous.get("afspraken")
         if afspraken:
-            GraphQLError("Afdeling wordt gebruikt in afpraken - verwijderen is niet mogelijk.")
+            raise GraphQLError("Afdeling wordt gebruikt in afpraken - verwijderen is niet mogelijk.")
 
         # remove afdeling itself
         response_organisatie = requests.delete(f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/{id}")
