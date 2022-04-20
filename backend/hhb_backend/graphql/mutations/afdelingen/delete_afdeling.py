@@ -10,10 +10,6 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     gebruikers_activiteit_entities,
     log_gebruikers_activiteit,
 )
-from hhb_backend.graphql.mutations.rekeningen.utils import (
-    disconnect_afdeling_rekening,
-    delete_rekening,
-)
 
 class DeleteAfdeling(graphene.Mutation):
     """Mutatie om een afdeling van een organisatie te verwijderen."""
@@ -41,16 +37,17 @@ class DeleteAfdeling(graphene.Mutation):
         if not previous:
             raise GraphQLError("Afdeling not found")
 
-        # remove attached postadressen
+        # do not remove when attached postadressen are found
         postadressen_ids = previous.get("postadressen_ids")
         if postadressen_ids:
             raise GraphQLError("Afdeling heeft postadressen - verwijderen is niet mogelijk.")
 
-        # remove attached rekeningen
+        # do not remove when attached rekeningen are found
         rekeningen_ids = previous.get("rekeningen_ids")
         if rekeningen_ids: 
             raise GraphQLError("Afdeling heeft rekeningen - verwijderen is niet mogelijk.")
 
+        # do not remove when attached afpraken are found
         afspraken = previous.get("afspraken")
         if afspraken:
             raise GraphQLError("Afdeling wordt gebruikt in afpraken - verwijderen is niet mogelijk.")

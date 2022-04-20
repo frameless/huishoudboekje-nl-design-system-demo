@@ -15,6 +15,27 @@ def get_rekening(rekening_id):
     return rekeningen_response.json()["data"]
 
 
+def get_afdeling(afdeling_id):
+    afdeling_response = requests.get(
+        f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/{afdeling_id}",
+        headers={"Content-type": "application/json"}
+    )
+    if afdeling_response.status_code != 200:
+        raise GraphQLError(f"Upstream API responded: {afdeling_response.json()}")
+    return afdeling_response.json()['data']
+
+
+def update_afdeling(afdeling_id, afdeling_input):
+    update_afdeling_response = requests.post(
+        f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/{afdeling_id}",
+        json=afdeling_input,
+        headers={"Content-type": "application/json"},
+    )
+    if update_afdeling_response.status_code != 200:
+        raise GraphQLError(
+            f"Upstream API responded: {update_afdeling_response.json()}"
+        )
+
 def create_burger_rekening(burger_id, rekening):
     return create_connected_rekening(burger_id, "burgers", rekening)
 
@@ -39,6 +60,24 @@ def create_connected_rekening(object_id, object_type, rekening):
     )
     if rekening_response.status_code != 201:
         raise GraphQLError(f"Upstream API responded: {rekening_response.text}")
+
+    # rekening_id toevoegen aan afdeling
+    if object_type == "afdelingen":
+        previous_afdeling = get_afdeling(object_id)
+
+        if previous_afdeling.get("rekeningen_ids"):
+            rekeningen_ids = list(previous_afdeling["rekeningen_ids"])
+        else:
+            rekeningen_ids = list()
+
+        rekeningen_ids.append(rekening_id)
+
+        afdeling_input = {
+            **previous_afdeling,
+            "rekeningen_ids": rekeningen_ids
+        }
+
+        update_afdeling(object_id, afdeling_input)
 
     return result
 
@@ -84,6 +123,17 @@ def disconnect_afdeling_rekening(afdeling_id: int, rekening_id: int):
     )
     if afdeling_rekening_resp.status_code != 202:
         raise GraphQLError(f"Failure to disconnect afdeling:{afdeling_id} rekening:{rekening_id}")
+
+    # Delete the Id from rekeningen_ids column in afdeling
+    previous_afdeling = requests.get(
+            f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/{afdeling_id}",
+            headers={"Content-type": "application/json"}
+        ).json()['data']
+    previous_afdeling["rekeningen_ids"].remove(rekening_id)
+    previous_afdeling.pop("id")
+
+    # Try update of organisatie service
+    update_afdeling(afdeling_id, previous_afdeling)
 
 def disconnect_burger_rekening(burger_id: int, rekening_id: int):
     # remove rekening reference from burger
