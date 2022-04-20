@@ -66,4 +66,5 @@ class DevelopmentConfig(LocalConfig):
 
 class TestingConfig(LocalConfig):
     SECRET_KEY = "testing-secret"
+    DEVELOPMENT = True
     TESTING = True
