@@ -84,7 +84,6 @@
     "postadressen": {
       "createSuccess": "Postadres toegevoegd.",
       "deleteSuccess": "Postadres verwijderd.",
-      "updateSuccess": "Postadres gewijzigd.",
       "deleteTitle": "Postadres verwijderen",
       "deleteQuestion": "Weet je zeker dat je dit postadres wil verwijderen?"
     },
@@ -107,6 +106,9 @@
       "alreadyExists": "Er bestaat al een organisatie met dit KvK-nummer en vestigingsnummer."
     },
     "deleteAfdelingSuccess": "Afdeling {{name}} succesvol verwijderd.",
+    "postadres": {
+      "updateSucces": "__MISSING-TRANSLATION__"
+    },
     "rekeningen": {
       "createSuccess": "Bankrekening {{iban}} op naam van {{rekeninghouder}} is toegevoegd.",
       "alreadyExistsError": "Dit bankrekeningnummer wordt al gebruikt.",
@@ -762,6 +764,9 @@
   "modal": {
     "updateAfdeling": {
       "title": "Afdeling wijzigen"
+    },
+    "updatePostadress": {
+      "title": "__MISSING-TRANSLATION__"
     }
   },
   "charts": {

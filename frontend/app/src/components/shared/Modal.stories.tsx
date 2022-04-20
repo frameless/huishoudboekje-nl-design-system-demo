@@ -1,49 +1,57 @@
+import Modal from "./Modal";
+
 import {Button, useDisclosure} from "@chakra-ui/react";
 import {ComponentMeta} from "@storybook/react";
 import React from "react";
-import Alert from "./Alert";
 
 export default {
-    title: "Huishoudboekje/Alert",
-    component: Alert,
+    title: "Huishoudboekje/Modal",
+    component: Modal,
     argTypes: {
         title: {
             type: {
                 name: "string",
                 required: true,
             },
-            description: "This is the title of the alert.",
+            description: "This is the title of the modal.",
+        },
+        isOpen: {
+            type: {
+                name: "boolean",
+                required: false,
+            },
+            description: "isOpen is by default on true. If you want isOpen to be false you can change it.",
         },
         children: {
             type: {
                 name: "other",
                 required: true,
             },
-            description: "This is information what is shown in the alert.",
+            description: "This wil contain te information you want to show. This can be text or a form for example.",
         },
         confirmButton: {
             type: {
                 name: "function",
-                required: true,
+                required: false,
             },
             description: "When this button is clicked, the action will be executed.",
         },
         cancelButton: {
             type: {
-                name: "boolean",
+                name: "function",
                 required: false,
             },
-            description: "When this button is clicked, the action will not be executed and the alert will be closed.",
+            description: "When this button is clicked, the action will not be executed and the modal will be closed.",
         },
         onClose: {
             type: {
                 name: "function",
                 required: true,
             },
-            description: "A function that will close the alert.",
+            description: "A function that will close the modal.",
         },
     },
-} as ComponentMeta<typeof Alert>;
+} as ComponentMeta<typeof Modal>;
 
 export const Default = () => {
     const {isOpen, onOpen, onClose} = useDisclosure();
@@ -51,13 +59,13 @@ export const Default = () => {
         <>
             <Button onClick={onOpen}>Open</Button>
             {isOpen && (
-                <Alert
-                    title={"Burger verwijderen uit huishouden"}
+                <Modal
+                    title={"Burger toevoegen"}
                     confirmButton={<Button colorScheme={"red"} ml={3}>Verwijderen</Button>}
                     onClose={onClose}
                 >
-                    Weet je zeker dat je Chris de Burg wil verwijderen uit het huishouden de Jager-de Burg?
-                </Alert>
+                    Hier kan een formulier neergezet worden
+                </Modal>
             )}
         </>
     );
@@ -69,14 +77,32 @@ export const WithoutCancelButton = () => {
         <>
             <Button onClick={onOpen}>Open</Button>
             {isOpen && (
-                <Alert
-                    title={"Burger verwijderen uit huishouden"}
+                <Modal
+                    title={"Burger toevoegen"}
                     confirmButton={<Button colorScheme={"red"} ml={3}>Verwijderen</Button>}
+                    onClose={onClose}
+                    cancelButton={false}
+                >
+                    Hier kan een formulier neergezet worden
+                </Modal>
+            )}
+        </>
+    );
+};
+
+export const WithoutButtons = () => {
+    const {isOpen, onOpen, onClose} = useDisclosure();
+    return (
+        <>
+            <Button onClick={onOpen}>Open</Button>
+            {isOpen && (
+                <Modal
+                    title={"Burger toevoegen"}
                     cancelButton={false}
                     onClose={onClose}
                 >
-                    Weet je zeker dat je Chris de Burg wil verwijderen uit het huishouden de Jager-de Burg?
-                </Alert>
+                    Hier kan een formulier neergezet worden
+                </Modal>
             )}
         </>
     );
