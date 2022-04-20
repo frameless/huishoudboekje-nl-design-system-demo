@@ -151,7 +151,7 @@ log-service-test:
 
 changeset:
   <<: *only-on-branches
-  stage: test
+  stage: app-test
   needs: [ ]
   image:
     name: ${DOCKER_PROXY}node:lts-alpine
