@@ -1,4 +1,3 @@
-import {Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import SaveAfdelingPostadresErrorHandler from "../../errorHandlers/SaveAfdelingPostadresErrorHandler";
@@ -6,6 +5,7 @@ import useMutationErrorHandler from "../../errorHandlers/useMutationErrorHandler
 import {Afdeling, GetAfdelingDocument, GetOrganisatieDocument, useCreateAfdelingPostadresMutation} from "../../generated/graphql";
 import useToaster from "../../utils/useToaster";
 import PostadresForm from "../Postadressen/PostadresForm";
+import Modal from "../shared/Modal";
 
 type AddAfdelingPostadresModalProps = {
     afdeling: Afdeling,
@@ -39,16 +39,13 @@ const AddAfdelingPostadresModal: React.FC<AddAfdelingPostadresModalProps> = ({af
     };
 
     return (
-        <Modal isOpen={true} onClose={() => onClose()}>
-            <ModalOverlay />
-            <ModalContent>
-                <ModalHeader>{t("modals.addPostadres.modalTitle")}</ModalHeader>
-                <ModalCloseButton />
-                <ModalBody>
-                    <PostadresForm onChange={(data) => onSavePostadres(afdeling.id!, data)} onCancel={() => onClose()} />
-                </ModalBody>
-                <ModalFooter />
-            </ModalContent>
+        <Modal
+            title={t("modals.addPostadres.modalTitle")}
+            isOpen={true}
+            onClose={() => onClose()}
+            showCancelButton={false}
+        >
+            <PostadresForm onChange={(data) => onSavePostadres(afdeling.id!, data)} onCancel={() => onClose()} />
         </Modal>
     );
 };

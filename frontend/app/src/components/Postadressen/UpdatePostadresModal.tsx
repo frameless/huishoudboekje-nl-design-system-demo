@@ -1,6 +1,5 @@
 import React from 'react';
 import {Afdeling, GetAfdelingDocument, Postadres, useUpdatePostadresMutation} from "../../generated/graphql";
-// import {Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay} from "@chakra-ui/react";
 import {useTranslation} from "react-i18next";
 import PostadresForm from "./PostadresForm";
 import useToaster from "../../utils/useToaster";
@@ -42,7 +41,8 @@ const UpdatePostadresModal: React.FC<UpdatePostadresModalProps> = ({postadres, a
     return (
         <Modal
             title={t("modal.updatePostadress.title")}
-            cancelButton={false}
+            showCancelButton={false}
+            isOpen={true}
             onClose={onClose}
         >
             <PostadresForm onChange={onSubmit} onCancel={onClose} postadres={postadres} />

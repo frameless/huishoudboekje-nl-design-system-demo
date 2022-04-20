@@ -26,6 +26,7 @@ it("show modal", () => {
                 title={"Burger toevoegen"}
                 confirmButton={<Button colorScheme={"red"} ml={3}>Verwijderen</Button>}
                 onClose={() => void (0)}
+                isOpen={true}
             >
                 Hier kan een formulier neergezet worden
             </Modal>
@@ -43,7 +44,8 @@ it("show modal without cancel button", () => {
                 title={"Burger toevoegen"}
                 confirmButton={<Button colorScheme={"red"} ml={3}>Verwijderen</Button>}
                 onClose={() => void (0)}
-                cancelButton={false}
+                showCancelButton={false}
+                isOpen={true}
             >
                 Hier kan een formulier neergezet worden
             </Modal>

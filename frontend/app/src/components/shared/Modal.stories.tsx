@@ -36,7 +36,7 @@ export default {
             },
             description: "When this button is clicked, the action will be executed.",
         },
-        cancelButton: {
+        showCancelButton: {
             type: {
                 name: "function",
                 required: false,
@@ -50,6 +50,20 @@ export default {
             },
             description: "A function that will close the modal.",
         },
+        showAsterisk: {
+            type: {
+                name: "boolean",
+                required: false,
+            },
+            description: "This will show a asterisk or not.",
+        },
+        size: {
+            type: {
+                name: "string",
+                required: false,
+            },
+            description: "This will show a asterisk or not.",
+        },
     },
 } as ComponentMeta<typeof Modal>;
 
@@ -62,6 +76,7 @@ export const Default = () => {
                 <Modal
                     title={"Burger toevoegen"}
                     confirmButton={<Button colorScheme={"red"} ml={3}>Verwijderen</Button>}
+                    isOpen={isOpen}
                     onClose={onClose}
                 >
                     Hier kan een formulier neergezet worden
@@ -81,7 +96,8 @@ export const WithoutCancelButton = () => {
                     title={"Burger toevoegen"}
                     confirmButton={<Button colorScheme={"red"} ml={3}>Verwijderen</Button>}
                     onClose={onClose}
-                    cancelButton={false}
+                    isOpen={isOpen}
+                    showCancelButton={false}
                 >
                     Hier kan een formulier neergezet worden
                 </Modal>
@@ -98,7 +114,8 @@ export const WithoutButtons = () => {
             {isOpen && (
                 <Modal
                     title={"Burger toevoegen"}
-                    cancelButton={false}
+                    showCancelButton={false}
+                    isOpen={isOpen}
                     onClose={onClose}
                 >
                     Hier kan een formulier neergezet worden
