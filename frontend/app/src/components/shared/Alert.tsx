@@ -1,8 +1,16 @@
 import {AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button} from "@chakra-ui/react";
-import React, {useRef} from "react";
+import React, {ReactElement, useRef} from "react";
 import {useTranslation} from "react-i18next";
 
-const Alert = ({title, children, confirmButton, cancelButton = true, onClose}) => {
+type AlertProps = {
+	title: string,
+	children: React.ReactNode,
+	confirmButton?: ReactElement,
+	cancelButton?: boolean,
+	onClose: () => void,
+};
+
+const Alert: React.FC<AlertProps> = ({title, children, confirmButton, cancelButton = true, onClose}) => {
 	const cancelDeleteRef = useRef(null);
 	const {t} = useTranslation();
 

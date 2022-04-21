@@ -1,58 +1,73 @@
-import {act} from "@testing-library/react";
+import {Button} from "@chakra-ui/react";
+import {act, fireEvent, getByLabelText, getByText, screen} from "@testing-library/react";
 import React from "react";
 import {render, unmountComponentAtNode} from "react-dom";
 import Alert from "../components/shared/Alert";
-import {Button} from "@chakra-ui/react";
 
 jest.mock("react-i18next", () => require("./utils/mock-hooks").reactI18NextMock());
 
 let container: HTMLDivElement | null = null;
 
 beforeEach(() => {
-    container = document.createElement("div");
-    document.body.appendChild(container);
+	container = document.createElement("div");
+	document.body.appendChild(container);
 });
 
 afterEach(() => {
-    unmountComponentAtNode(container!);
-    container!.remove();
-    container = null;
+	unmountComponentAtNode(container!);
+	container!.remove();
+	container = null;
 });
 
-it("show alert with cancel button", () => {
+describe("Alert", () => {
+	it("Shows the Alert", async () => {
+		act(() => {
+			render((
+				<Alert title={"Burger verwijderen uit huishouden"} onClose={() => void(0)}>
+					Weet je zeker dat je Chris de Burg wil verwijderen uit het huishouden de Jager-de Burg?
+				</Alert>
+			), container);
+		});
 
-    act(() => {
-        render(
-            <Alert
-                title={"Burger verwijderen uit huishouden"}
-                confirmButton={<Button colorScheme={"red"} ml={3}>Verwijderen</Button>}
-                cancelButton={true}
-                onClose={() => void (0)}
-            >
-                Weet je zeker dat je Chris de Burg wil verwijderen uit het huishouden de Jager-de Burg?
-            </Alert>
-            , container);
-    });
+		const [alert] = screen.queryAllByRole("alertdialog");
+		expect(alert).toMatchSnapshot();
+	});
 
-    const html = container!.innerHTML;
-    expect(html).not.toBeNull();
-});
+	it("CloseButton and cancelButton are working", async () => {
+		const onClose = jest.fn();
+		const onConfirm = jest.fn();
 
-it("show alert without cancel button", () => {
+		act(() => {
+			render((
+				<Alert
+					title={"Burger verwijderen uit huishouden"}
+					confirmButton={<Button colorScheme={"red"} onClick={onConfirm} ml={3}>Verwijderen</Button>}
+					cancelButton
+					onClose={onClose}
+				>
+					Weet je zeker dat je Chris de Burg wil verwijderen uit het huishouden de Jager-de Burg?
+				</Alert>
+			), container);
+		});
 
-    act(() => {
-        render(
-            <Alert
-                title={"Burger verwijderen uit huishouden"}
-                confirmButton={<Button colorScheme={"red"} ml={3}>Verwijderen</Button>}
-                cancelButton={false}
-                onClose={() => void (0)}
-            >
-                Weet je zeker dat je Chris de Burg wil verwijderen uit het huishouden de Jager-de Burg?
-            </Alert>
-            , container);
-    });
+		const [alert] = screen.queryAllByRole("alertdialog");
+		expect(alert).toMatchSnapshot();
 
-    const html = container!.innerHTML;
-    expect(html).not.toBeNull();
+		const clickEvent = new Event("click", {
+			bubbles: true,
+			cancelable: true,
+		});
+
+		const confirmButton = getByText(alert, "Verwijderen");
+		expect(confirmButton).toBeInTheDocument();
+
+		fireEvent(confirmButton, clickEvent);
+		expect(onConfirm).toHaveBeenCalledTimes(1);
+
+		const closeButton = getByLabelText(alert, "Close");
+		expect(closeButton).toBeInTheDocument();
+
+		fireEvent(closeButton, clickEvent);
+		expect(onClose).toHaveBeenCalledTimes(1);
+	});
 });
