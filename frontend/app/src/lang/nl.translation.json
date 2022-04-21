@@ -65,10 +65,10 @@
     },
     "formInputError": "Er is een fout opgetreden. Controleer de invoer.",
     "configuratie": {
-      "updateSuccess": "Configuratie succesvol opgeslagen.",
       "deleteSuccess": "Configuratie is verwijderd.",
       "createSuccess": "Configuratie succesvol opgeslagen.",
-      "alreadyExists": "Deze configuratie bestaat al."
+      "alreadyExists": "Deze configuratie bestaat al.",
+      "updateSuccess": "Configuratie succesvol opgeslagen."
     },
     "rubrieken": {
       "createSuccess": "Rubriek succesvol toegevoegd.",
@@ -654,7 +654,26 @@
   "configuratie": "Configuratie",
   "configuratieForm": {
     "emptyKeyError": "Vul een waarde in voor de sleutel.",
-    "emptyValueError": "Vul een waarde in."
+    "emptyValueError": "Vul een waarde in.",
+    "emptyNameErroror": "Vul een waarde in voor de naam.",
+    "emptyGrootboekrekeningError": "Vul een grootboekrekening in."
+  },
+  "modal": {
+    "updateParameter": {
+      "title": "Parameter wijzigen"
+    },
+    "updateRubrieken": {
+      "title": "Rubriek wijzigen"
+    },
+    "updateAfdeling": {
+      "title": "Afdeling wijzigen"
+    },
+    "updatePostadress": {
+      "title": "Postadres wijzigen"
+    },
+    "updateAfdelingRekening": {
+      "title": "Rekening wijzigen"
+    }
   },
   "unknownBurger": "Onbekende burger",
   "unknownHuishouden": "Onbekend huishouden",
@@ -761,17 +780,6 @@
       "organizational": {
         "helperText": "De gegevens van de organisatie."
       }
-    }
-  },
-  "modal": {
-    "updateAfdeling": {
-      "title": "Afdeling wijzigen"
-    },
-    "updatePostadress": {
-      "title": "Postadres wijzigen"
-    },
-    "updateAfdelingRekening": {
-      "title": "Rekening wijzigen"
     }
   },
   "charts": {

@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import Modal from "../shared/Modal";
 import {useTranslation} from "react-i18next";
-import {Button, FormControl, FormErrorMessage, FormLabel, Input, Stack} from "@chakra-ui/react";
+import {Button, FormControl, FormErrorMessage, FormLabel, HStack, Input, Stack} from "@chakra-ui/react";
 import zod from "../../utils/zod";
 import {Configuratie, GetConfiguratieDocument, useUpdateConfiguratieMutation} from "../../generated/graphql";
 import useToaster from "../../utils/useToaster";
@@ -16,11 +16,12 @@ const validator = zod.object({
 type UpdateParameterModalProps = {
     onClose: VoidFunction,
     configuratie: Configuratie,
-}
+};
 
 const UpdateParameterModal: React.FC<UpdateParameterModalProps> = ({onClose, configuratie}) => {
     const {t} = useTranslation();
     const toast = useToaster();
+    const cancelDeleteRef = useRef(null);
     const {id, waarde} = configuratie || {};
     const [updateConfiguratie, {loading}] = useUpdateConfiguratieMutation({
         refetchQueries: [
@@ -87,7 +88,10 @@ const UpdateParameterModal: React.FC<UpdateParameterModalProps> = ({onClose, con
                         <Input onChange={e => updateForm("waarde", e.target.value)} value={form.waarde || ""} />
                         <FormErrorMessage>{t("configuratieForm.emptyValueError")}</FormErrorMessage>
                     </FormControl>
-                    <Button type={"submit"} colorScheme={"primary"} isLoading={loading}>{t("global.actions.save")}</Button>
+                    <HStack>
+                        <Button ref={cancelDeleteRef} onClick={onClose}>{t("global.actions.cancel")}</Button>
+                        <Button type={"submit"} colorScheme={"primary"} isLoading={loading}>{t("global.actions.save")}</Button>
+                    </HStack>
                     <Asterisk />
                 </Stack>
             </form>
