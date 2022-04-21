@@ -6,9 +6,12 @@ import d from "../../../utils/dayjs";
 import {sortBankTransactions} from "../../../utils/things";
 import TransactieItem from "./TransactieItem";
 
-type TransactiesListProps = {transacties: BankTransaction[]};
+type TransactiesListProps = {
+	transacties: BankTransaction[],
+	refetch: VoidFunction,
+};
 
-const TransactiesList: React.FC<TransactiesListProps> = ({transacties}) => {
+const TransactiesList: React.FC<TransactiesListProps> = ({transacties, refetch}) => {
 	const {t} = useTranslation();
 	const isMobile = useBreakpointValue([true, null, null, false]);
 
@@ -46,10 +49,10 @@ const TransactiesList: React.FC<TransactiesListProps> = ({transacties}) => {
 						</Box>
 						<Box>
 							{bt[transactionDate].sort(sortBankTransactions).filter(t => t.isCredit).map(t => (
-								<TransactieItem key={t.id} transactie={t} />
+								<TransactieItem key={t.id} transactie={t} refetch={refetch} />
 							))}
 							{bt[transactionDate].sort(sortBankTransactions).filter(t => !t.isCredit).reverse().map(t => (
-								<TransactieItem key={t.id} transactie={t} />
+								<TransactieItem key={t.id} transactie={t} refetch={refetch} />
 							))}
 						</Box>
 					</Stack>

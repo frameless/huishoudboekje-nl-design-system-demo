@@ -8,7 +8,7 @@ import {useReactSelectStyles} from "../../../../utils/things";
 import useToaster from "../../../../utils/useToaster";
 import SelectAfspraakOption from "../../../Layouts/SelectAfspraak/SelectAfspraakOption";
 
-const BookingSection = ({transaction, rubrieken, afspraken}) => {
+const BookingSection = ({transaction, rubrieken, afspraken, refetch}) => {
 	const reactSelectStyles = useReactSelectStyles();
 	const toast = useToaster();
 	const {t} = useTranslation();
@@ -65,6 +65,7 @@ const BookingSection = ({transaction, rubrieken, afspraken}) => {
 				variables: {transactionId, grootboekrekeningId},
 			}).then(() => {
 				toast({success: t("messages.journals.createSuccessMessage")});
+				refetch();
 			}).catch(err => {
 				console.error(err);
 				toast({error: err.message});
@@ -81,6 +82,7 @@ const BookingSection = ({transaction, rubrieken, afspraken}) => {
 				variables: {transactionId, afspraakId},
 			}).then(() => {
 				toast({success: t("messages.journals.createSuccessMessage")});
+				refetch();
 			}).catch(err => {
 				console.error(err);
 				toast({error: err.message});

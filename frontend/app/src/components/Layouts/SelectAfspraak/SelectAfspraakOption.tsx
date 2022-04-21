@@ -28,7 +28,7 @@ const SelectAfspraakOption: React.FC<SelectAfspraakOptionProps> = ({afspraak, is
 			<Td>
 				<Wrap spacing={1}>
 					{zoektermen.map(z => (
-						<WrapItem title={z}>{truncateText(z, 35)}</WrapItem>
+						<WrapItem key={z} title={z}>{truncateText(z, 35)}</WrapItem>
 					))}
 				</Wrap>
 			</Td>

@@ -10,9 +10,10 @@ import TransactieDetailsView from "./TransactieDetailsView";
 type TransactieItemModalProps = {
 	id: NonNullable<BankTransaction["id"]>;
 	onClose: VoidFunction,
+	refetch: VoidFunction,
 };
 
-const TransactieItemModal: React.FC<TransactieItemModalProps> = ({id, onClose}) => {
+const TransactieItemModal: React.FC<TransactieItemModalProps> = ({id, onClose, refetch}) => {
 	const {t} = useTranslation();
 	const $transactie = useGetTransactieQuery({
 		variables: {id},
@@ -35,10 +36,10 @@ const TransactieItemModal: React.FC<TransactieItemModalProps> = ({id, onClose}) 
 								<TransactieDetailsView transaction={transactie} />
 
 								{transactie.journaalpost ? (
-									<BookingDetailsView transactie={transactie} />
+									<BookingDetailsView transactie={transactie} refetch={refetch} />
 								) : (
 									<Queryable query={$transactionItemFormData} children={(data) => (
-										<BookingSection transaction={transactie} rubrieken={data.rubrieken || []} afspraken={data.afspraken || []} />
+										<BookingSection transaction={transactie} rubrieken={data.rubrieken || []} afspraken={data.afspraken || []} refetch={refetch} />
 									)} />
 								)}
 							</Stack>

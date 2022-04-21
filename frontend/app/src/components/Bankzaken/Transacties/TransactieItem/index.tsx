@@ -14,7 +14,7 @@ const hoverStyles = {
 	},
 };
 
-const TransactieItem: React.FC<BoxProps & {transactie: BankTransaction}> = ({transactie: bt, ...props}) => {
+const TransactieItem: React.FC<BoxProps & {transactie: BankTransaction, refetch: VoidFunction}> = ({transactie: bt, refetch, ...props}) => {
 	const {t} = useTranslation();
 	const isMobile = useBreakpointValue([true, null, null, false]);
 	const modal = useDisclosure();
@@ -22,7 +22,7 @@ const TransactieItem: React.FC<BoxProps & {transactie: BankTransaction}> = ({tra
 	return (
 		<Box px={2} mx={-2} {...!isMobile && hoverStyles}>
 			{!isMobile && modal.isOpen && bt.id && (
-				<TransactieItemModal id={bt.id} onClose={() => modal.onClose()} />
+				<TransactieItemModal id={bt.id} onClose={() => modal.onClose()} refetch={refetch} />
 			)}
 
 			<Stack direction={"row"} alignItems={"center"} justifyContent={"center"} {...props} onClick={!isMobile ? modal.onOpen : () => false}>

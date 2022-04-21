@@ -9,7 +9,12 @@ import {useStore} from "../../../../store";
 import {currencyFormat2, formatBurgerName} from "../../../../utils/things";
 import useToaster from "../../../../utils/useToaster";
 
-const BookingDetailsView: React.FC<{transactie: BankTransaction}> = ({transactie}) => {
+type BookingDetailsViewProps = {
+	transactie: BankTransaction
+	refetch: VoidFunction,
+};
+
+const BookingDetailsView: React.FC<BookingDetailsViewProps> = ({transactie, refetch}) => {
 	const {t} = useTranslation();
 	const toast = useToaster();
 	const {store} = useStore();
@@ -31,6 +36,7 @@ const BookingDetailsView: React.FC<{transactie: BankTransaction}> = ({transactie
 				variables: {id},
 			}).then(() => {
 				toast({success: t("messages.journals.createSuccessMessage")});
+				refetch();
 			}).catch(err => {
 				console.error(err);
 				toast({error: err.message});
