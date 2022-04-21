@@ -21,8 +21,8 @@ const TransactieItem: React.FC<BoxProps & {transactie: BankTransaction}> = ({tra
 
 	return (
 		<Box px={2} mx={-2} {...!isMobile && hoverStyles}>
-			{!isMobile && (
-				<TransactieItemModal transactie={bt} disclosure={modal} />
+			{!isMobile && modal.isOpen && bt.id && (
+				<TransactieItemModal id={bt.id} onClose={() => modal.onClose()} />
 			)}
 
 			<Stack direction={"row"} alignItems={"center"} justifyContent={"center"} {...props} onClick={!isMobile ? modal.onOpen : () => false}>

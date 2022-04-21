@@ -2,7 +2,7 @@ import {FormControl, Heading, HStack, Stack, Tab, Table, TabList, TabPanel, TabP
 import React from "react";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
-import {Afspraak, GetTransactiesDocument, Rubriek, useCreateJournaalpostAfspraakMutation, useCreateJournaalpostGrootboekrekeningMutation} from "../../../../generated/graphql";
+import {Afspraak, GetTransactieDocument, GetTransactiesDocument, Rubriek, useCreateJournaalpostAfspraakMutation, useCreateJournaalpostGrootboekrekeningMutation} from "../../../../generated/graphql";
 import {useStore} from "../../../../store";
 import {useReactSelectStyles} from "../../../../utils/things";
 import useToaster from "../../../../utils/useToaster";
@@ -17,12 +17,14 @@ const BookingSection = ({transaction, rubrieken, afspraken}) => {
 
 	const [createJournaalpostAfspraak] = useCreateJournaalpostAfspraakMutation({
 		refetchQueries: [
-			{query: GetTransactiesDocument, variables: store.banktransactieFilters},
+			{query: GetTransactieDocument, variables: {id: transaction.id}},
+			{query: GetTransactiesDocument, variables: store.banktransactieQueryVariables},
 		],
 	});
 	const [createJournaalpostGrootboekrekening] = useCreateJournaalpostGrootboekrekeningMutation({
 		refetchQueries: [
-			{query: GetTransactiesDocument, variables: store.banktransactieFilters},
+			{query: GetTransactieDocument, variables: {id: transaction.id}},
+			{query: GetTransactiesDocument, variables: store.banktransactieQueryVariables},
 		],
 	});
 

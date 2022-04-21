@@ -47,6 +47,8 @@ const Transactions = () => {
 				setTotal(data.bankTransactionsPaged?.pageInfo?.count);
 				goFirst();
 			}
+
+			updateStore("banktransactieQueryVariables", queryVariables);
 		},
 	});
 	const [startAutomatischBoeken] = useStartAutomatischBoekenMutation({

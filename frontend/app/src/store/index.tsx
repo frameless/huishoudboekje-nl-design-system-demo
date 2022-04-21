@@ -1,16 +1,19 @@
 import {createContext, useCallback, useContext, useState} from "react";
 import {defaultBanktransactieFilters} from "../components/Bankzaken/Transacties/defaultBanktransactieFilters";
+import {GetTransactiesQueryVariables} from "../generated/graphql";
 import {BanktransactieFilters} from "../models/models";
 
 type StoreValue = {
 	burgerSearch: string,
 	banktransactieFilters?: BanktransactieFilters,
+	banktransactieQueryVariables?: GetTransactiesQueryVariables,
 	featureFlags: Record<string, boolean>,
 };
 
 const initialState: StoreValue = {
 	burgerSearch: "",
 	banktransactieFilters: defaultBanktransactieFilters,
+	banktransactieQueryVariables: undefined,
 	featureFlags: {},
 };
 
