@@ -18,7 +18,8 @@ const Gebeurtenissen = () => {
 		fetchPolicy: "cache-and-network",
 		variables: {
 			limit: pageSize,
-			offset,
+			// offset,
+			offset: 0,
 		},
 		onCompleted: data => setTotal(data.gebruikersactiviteitenPaged?.pageInfo?.count || 0),
 	});
