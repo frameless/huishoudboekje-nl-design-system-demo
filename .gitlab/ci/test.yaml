@@ -3,7 +3,7 @@
     - branches@commonground/huishoudboekje/app-new
 
 .frontend:
-  stage: app-test
+  stage: test
   needs: [ ]
   image:
     name: ${DOCKER_PROXY}node:lts-alpine
@@ -45,7 +45,7 @@ frontend-test:
 #   variables:
 #      DIRECTORY: <the directory of the application>
 .Service Test:
-  stage: app-test
+  stage: test
   tags:
     - docker
   retry:
@@ -76,7 +76,7 @@ frontend-test:
 
 backend-burgers-test:
   <<: *only-on-branches
-  stage: app-test
+  stage: test
   needs: [ ]
   image:
     name: ${DOCKER_PROXY}node:lts-alpine
@@ -155,7 +155,7 @@ changeset:
     - develop
     - acceptance
     - master
-  stage: app-test
+  stage: test
   needs: [ ]
   image:
     name: ${DOCKER_PROXY}node:lts-alpine
