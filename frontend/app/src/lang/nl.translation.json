@@ -4,7 +4,11 @@
     "clickHereToContinue": "Klik hieronder op inloggen om te beginnen.",
     "genericError": {
       "title": "Fout.",
-      "description": "Er is een onbekende fout opgetreden. Probeer het later nog eens."
+      "description": "Er is een fout opgetreden. Probeer het later nog eens.",
+      "shortDescription": "Er is een fout opgetreden.",
+      "locationLabel": "URL",
+      "errorMessageLabel": "Foutbericht",
+      "rawErrorLabel": "Ruwe foutinformatie"
     },
     "updateBetaalinstructieSuccess": "De betaalinstructie is ingesteld.",
     "createAfspraakSuccess": "De afspraak is opgeslagen.",
@@ -731,10 +735,6 @@
   "huishoudenName": "Huishouden {{name}}",
   "huishoudens": {
     "title": "Huishoudens"
-  },
-  "zoektermen": {
-    "countMore_one": "... en nog {{count}}",
-    "countMore_other": "... en nog {{count}}"
   },
   "suggestion": "Suggestie",
   "modals": {
