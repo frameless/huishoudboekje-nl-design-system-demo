@@ -130,7 +130,7 @@ def test_create_afdeling_full_succes(client):
         e6 = mock.post(f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/1", status_code=200, json={'data': [{'id': 1, "postadressen_ids": [], "rekeningen_ids": []}]})
         e7 = mock.post(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses", status_code=201, json={'address': {'id': "7426aa95-03c0-453d-b9ff-11a5442ab959", 'houseNumber': '52B', 'postalCode': '9999ZZ', 'street': 'teststraat', 'locality': 'testplaats'}})
         e8 = mock.get(f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/1", status_code=200, json={ 'data': { 'id': 1, }}) # 2
-        e9 = mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=200, json={'data': {'id': 1}})
+        e9 = mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/")
         e10 = mock.get(f"{settings.HHB_SERVICES_URL}/rekeningen/?filter_afdelingen=1", status_code=200, json=rekening_result)
         e11 = mock.get(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/?filter_ids=7426aa95-03c0-453d-b9ff-11a5442ab959", status_code=200, json=postadres_result)
 
@@ -179,9 +179,9 @@ def test_create_afdeling_full_succes(client):
         assert e3.called_once
         assert e4.called_once
         assert e5.called_once
-        assert e6.call_count == 2
+        assert e6.call_count == 3
         assert e7.called_once
-        assert e8.called_once
+        assert e8.call_count == 2
         assert e9.called_once
         assert e10.called_once
         assert e11.called_once

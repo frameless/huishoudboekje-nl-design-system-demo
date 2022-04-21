@@ -5,6 +5,20 @@ def test_create_afdeling_rekening(client):
     with requests_mock.Mocker() as rm:
         # arrange
         afdelingId = 1
+        afdeling = {
+            "data" : {
+                "id" : afdelingId,
+                "postadressen_ids": [], 
+                "rekeningen_ids": []
+            }
+        }
+        new_afdeling = {
+            "data" : {
+                "id" : afdelingId,
+                "postadressen_ids": [], 
+                "rekeningen_ids": [1]
+            }
+        }
         newRekening = {
             "iban": "NL19INGB7363245428",
             "rekeninghouder": "Piet Pieterson"
@@ -49,6 +63,8 @@ def test_create_afdeling_rekening(client):
                 }
         )
         rm3 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/")
+        rm4 = rm.get(f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/1", status_code=200, json=afdeling)
+        rm5 = rm.post(f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/1", status_code=200, json=new_afdeling)
         expected = {'data': {'createAfdelingRekening': {'ok': True, 'rekening': {'id': 1}}}}
 
         # act
@@ -62,6 +78,8 @@ def test_create_afdeling_rekening(client):
         assert rm1.called_once
         assert rm2.called_once
         assert rm3.called_once
+        assert rm4.called_once
+        assert rm5.called_once
         assert fallback.call_count == 0
         assert response.json == expected
 
