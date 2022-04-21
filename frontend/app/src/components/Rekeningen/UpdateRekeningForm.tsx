@@ -1,26 +1,26 @@
+import React from 'react';
 import {Button, FormControl, FormErrorMessage, FormLabel, HStack, Input, Stack} from "@chakra-ui/react";
-import React from "react";
-import {useTranslation} from "react-i18next";
-import {Rekening} from "../../generated/graphql";
-import {Regex, sanitizeIBAN} from "../../utils/things";
-import useForm from "../../utils/useForm";
-import useToaster from "../../utils/useToaster";
-import zod from "../../utils/zod";
 import Asterisk from "../shared/Asterisk";
+import {useTranslation} from "react-i18next";
+import useToaster from "../../utils/useToaster";
+import useForm from "../../utils/useForm";
+import zod from "../../utils/zod";
+import {Regex, sanitizeIBAN} from "../../utils/things";
+import {Rekening} from "../../generated/graphql";
 
 const validator = zod.object({
     rekeninghouder: zod.string().nonempty().max(100),
     iban: zod.string().regex(Regex.IbanNL),
 });
 
-type RekeningFormProps = {
+type UpdateRekeningFormProps = {
     rekening?: Rekening,
     onSubmit: Function,
     onCancel: VoidFunction,
     isIbanValid?: boolean,
 }
 
-const RekeningForm: React.FC<RekeningFormProps> = ({rekening, onSubmit, onCancel, isIbanValid = true}) => {
+const UpdateRekeningForm: React.FC<UpdateRekeningFormProps> = ({rekening, onSubmit, onCancel, isIbanValid = true}) => {
     const {t} = useTranslation();
     const toast = useToaster();
     const {iban, rekeninghouder} = rekening || {};
@@ -28,7 +28,6 @@ const RekeningForm: React.FC<RekeningFormProps> = ({rekening, onSubmit, onCancel
         validator,
         initialValue: {
             iban, rekeninghouder,
-
         },
     });
 
@@ -59,13 +58,12 @@ const RekeningForm: React.FC<RekeningFormProps> = ({rekening, onSubmit, onCancel
             <Stack>
                 <FormControl isInvalid={!isFieldValid("rekeninghouder")} id={"rekeninghouder"} isRequired={true}>
                     <FormLabel>{t("forms.rekeningen.fields.accountHolder")}</FormLabel>
-                    <Input onChange={e => updateForm("rekeninghouder", e.target.value)} value={form.rekeninghouder || ""} autoFocus={!(rekening?.rekeninghouder)} />
+                    <Input onChange={e => updateForm("rekeninghouder", e.target.value)} value={form.rekeninghouder || ""} autoFocus={!!(rekening?.rekeninghouder)} />
                     <FormErrorMessage>{t("errors.rekeninghouder.generalError")}</FormErrorMessage>
                 </FormControl>
-                <FormControl isInvalid={!isFieldValid("iban") || !isIbanValid} id={"iban"} isRequired={true}>
+                <FormControl isDisabled={true}>
                     <FormLabel>{t("forms.rekeningen.fields.iban")}</FormLabel>
-                    <Input onChange={e => updateForm("iban", e.target.value)} value={form.iban || ""} placeholder={"NL00BANK0123456789"} autoFocus={!!(rekening?.rekeninghouder)} onBlur={e => updateForm("iban", e.target.value.replaceAll(/[\s]/g, "").toUpperCase())} />
-                    <FormErrorMessage>{t("errors.iban.generalError")}</FormErrorMessage>
+                    <Input value={form.iban || ""} />
                 </FormControl>
                 <Stack align={"flex-end"}>
                     <HStack justify={"flex-end"}>
@@ -79,4 +77,4 @@ const RekeningForm: React.FC<RekeningFormProps> = ({rekening, onSubmit, onCancel
     );
 };
 
-export default RekeningForm;
+export default UpdateRekeningForm;

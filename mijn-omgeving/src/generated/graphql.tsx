@@ -145,8 +145,6 @@ export type BanktransactieFragment = { id?: number, bedrag?: any, isCredit?: boo
 
 export type BurgerFragment = { id?: number, bsn?: string, voorletters?: string, voornamen?: string, achternaam?: string, banktransacties?: Array<{ id?: number, bedrag?: any, isCredit?: boolean, informationToAccountOwner?: string, tegenrekeningIban?: string, transactiedatum?: string, tegenrekening?: { id?: number, iban?: string, rekeninghouder?: string } }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }>, afspraken?: Array<{ id?: number, bedrag?: string, credit?: boolean, omschrijving?: string, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, startDate?: string, endDate?: string }, tegenrekening?: { id?: number, iban?: string, rekeninghouder?: string } }> };
 
-export type PagedBanktransactiesFragment = { banktransacties?: Array<{ id?: number, bedrag?: any, isCredit?: boolean, informationToAccountOwner?: string, tegenrekeningIban?: string, transactiedatum?: string, tegenrekening?: { id?: number, iban?: string, rekeninghouder?: string } }>, pageInfo?: { start?: number, limit?: number, count?: number } };
-
 export type GetBurgerQueryVariables = Exact<{
   bsn: Scalars['Int'];
 }>;
@@ -161,7 +159,7 @@ export type GetPagedBanktransactiesQueryVariables = Exact<{
 }>;
 
 
-export type GetPagedBanktransactiesQuery = { burger?: { banktransactiesPaged?: { banktransacties?: Array<{ id?: number, bedrag?: any, isCredit?: boolean, informationToAccountOwner?: string, tegenrekeningIban?: string, transactiedatum?: string, tegenrekening?: { id?: number, iban?: string, rekeninghouder?: string } }>, pageInfo?: { start?: number, limit?: number, count?: number } } } };
+export type GetPagedBanktransactiesQuery = { burger?: { banktransactiesPaged?: { banktransacties?: Array<{ id?: number, bedrag?: any, isCredit?: boolean, tegenrekeningIban?: string, transactiedatum?: string, informationToAccountOwner?: string, tegenrekening?: { id?: number, iban?: string, rekeninghouder?: string }, journaalpost?: { id?: number } }>, pageInfo?: { count?: number, limit?: number, start?: number } } } };
 
 export type GetBanktransactieQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -233,28 +231,6 @@ export const BurgerFragmentDoc = gql`
   }
 }
     `;
-export const PagedBanktransactiesFragmentDoc = gql`
-    fragment PagedBanktransacties on PagedBanktransactie {
-  banktransacties {
-    id
-    bedrag
-    isCredit
-    informationToAccountOwner
-    tegenrekening {
-      id
-      iban
-      rekeninghouder
-    }
-    tegenrekeningIban
-    transactiedatum
-  }
-  pageInfo {
-    start
-    limit
-    count
-  }
-}
-    `;
 export const GetBurgerDocument = gql`
     query getBurger($bsn: Int!) {
   burger(bsn: $bsn) {
@@ -294,11 +270,18 @@ export const GetPagedBanktransactiesDocument = gql`
     query getPagedBanktransacties($bsn: Int!, $start: Int!, $limit: Int!) {
   burger(bsn: $bsn) {
     banktransactiesPaged(start: $start, limit: $limit) {
-      ...PagedBanktransacties
+      banktransacties {
+        ...Banktransactie
+      }
+      pageInfo {
+        count
+        limit
+        start
+      }
     }
   }
 }
-    ${PagedBanktransactiesFragmentDoc}`;
+    ${BanktransactieFragmentDoc}`;
 
 /**
  * __useGetPagedBanktransactiesQuery__

@@ -107,7 +107,7 @@
     },
     "deleteAfdelingSuccess": "Afdeling {{name}} succesvol verwijderd.",
     "postadres": {
-      "updateSucces": "__MISSING-TRANSLATION__"
+      "updateSucces": "Postadrs gewijzigd."
     },
     "rekeningen": {
       "createSuccess": "Bankrekening {{iban}} op naam van {{rekeninghouder}} is toegevoegd.",
@@ -118,6 +118,9 @@
       "updateSuccess": "Gegevens succesvol gewijzigd.",
       "deleteTitle": "Bankrekening verwijderen.",
       "deleteQuestion": "Weet je zeker dat je bankrekening {{iban}} op naam van {{rekeninghouder}} wil verwijderen? Deze actie kan niet ongedaan worden gemaakt."
+    },
+    "rekening": {
+      "updateSucces": "Rekening gewijzigd."
     },
     "enableSignaalSuccess": "Het signaal is ingeschakeld.",
     "disableSignaalSuccess": "Het alarm is uitgeschakeld.",
@@ -149,7 +152,6 @@
       "showHuishouden": "Bekijk huishouden",
       "deleteBurgerFromHuishouden": "Verwijder burger uit huishouden",
       "clearSearch": "Zoekopdracht wissen",
-      "clickToEdit": "Klik om te wijzigen",
       "back": "Terug",
       "backToHome": "Terug naar de hoofdpagina"
     },
@@ -766,7 +768,10 @@
       "title": "Afdeling wijzigen"
     },
     "updatePostadress": {
-      "title": "__MISSING-TRANSLATION__"
+      "title": "Postadres wijzigen"
+    },
+    "updateAfdelingRekening": {
+      "title": "Rekening wijzigen"
     }
   },
   "charts": {
