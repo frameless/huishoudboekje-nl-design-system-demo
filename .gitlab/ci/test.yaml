@@ -151,6 +151,10 @@ log-service-test:
 
 changeset:
   <<: *only-on-branches
+  except:
+    - develop
+    - acceptance
+    - master
   stage: app-test
   needs: [ ]
   image:
