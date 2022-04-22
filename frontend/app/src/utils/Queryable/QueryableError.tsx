@@ -3,17 +3,19 @@ import {Box, Button, Divider, Heading, HStack, ListItem, Modal, ModalBody, Modal
 import React from "react";
 import {useTranslation} from "react-i18next";
 import DataItem from "../../components/shared/DataItem";
+import useAuth from "../useAuth";
 import {QueryableProps} from "./Queryable";
 import {generateErrorReport} from "./utils";
 
 const QueryableError: React.FC<{error?: Error, query?: QueryableProps["query"]}> = ({error, query}) => {
 	const {t} = useTranslation();
+	const {user} = useAuth();
 	const modal = useDisclosure({
 		defaultIsOpen: true,
 	});
 
 	const onClickDownloadReportButton = (error) => {
-		const errorSummary = generateErrorReport(error, query);
+		const errorSummary = generateErrorReport(error, query, user);
 
 		const element = document.createElement("a");
 		element.setAttribute("href", "data:text/plain;charset=utf-8," + encodeURIComponent(JSON.stringify(errorSummary, null, 2)));
