@@ -2,13 +2,13 @@ import {FormControl, Heading, HStack, Stack, Tab, Table, TabList, TabPanel, TabP
 import React from "react";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
-import {Afspraak, GetTransactiesDocument, Rubriek, useCreateJournaalpostAfspraakMutation, useCreateJournaalpostGrootboekrekeningMutation} from "../../../../generated/graphql";
+import {Afspraak, GetTransactieDocument, GetTransactiesDocument, Rubriek, useCreateJournaalpostAfspraakMutation, useCreateJournaalpostGrootboekrekeningMutation} from "../../../../generated/graphql";
 import {useStore} from "../../../../store";
 import {useReactSelectStyles} from "../../../../utils/things";
 import useToaster from "../../../../utils/useToaster";
 import SelectAfspraakOption from "../../../Layouts/SelectAfspraak/SelectAfspraakOption";
 
-const BookingSection = ({transaction, rubrieken, afspraken}) => {
+const BookingSection = ({transaction, rubrieken, afspraken, refetch}) => {
 	const reactSelectStyles = useReactSelectStyles();
 	const toast = useToaster();
 	const {t} = useTranslation();
@@ -17,12 +17,14 @@ const BookingSection = ({transaction, rubrieken, afspraken}) => {
 
 	const [createJournaalpostAfspraak] = useCreateJournaalpostAfspraakMutation({
 		refetchQueries: [
-			{query: GetTransactiesDocument, variables: store.banktransactieFilters},
+			{query: GetTransactieDocument, variables: {id: transaction.id}},
+			{query: GetTransactiesDocument, variables: store.banktransactieQueryVariables},
 		],
 	});
 	const [createJournaalpostGrootboekrekening] = useCreateJournaalpostGrootboekrekeningMutation({
 		refetchQueries: [
-			{query: GetTransactiesDocument, variables: store.banktransactieFilters},
+			{query: GetTransactieDocument, variables: {id: transaction.id}},
+			{query: GetTransactiesDocument, variables: store.banktransactieQueryVariables},
 		],
 	});
 
@@ -63,6 +65,7 @@ const BookingSection = ({transaction, rubrieken, afspraken}) => {
 				variables: {transactionId, grootboekrekeningId},
 			}).then(() => {
 				toast({success: t("messages.journals.createSuccessMessage")});
+				refetch();
 			}).catch(err => {
 				console.error(err);
 				toast({error: err.message});
@@ -79,6 +82,7 @@ const BookingSection = ({transaction, rubrieken, afspraken}) => {
 				variables: {transactionId, afspraakId},
 			}).then(() => {
 				toast({success: t("messages.journals.createSuccessMessage")});
+				refetch();
 			}).catch(err => {
 				console.error(err);
 				toast({error: err.message});

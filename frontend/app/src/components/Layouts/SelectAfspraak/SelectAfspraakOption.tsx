@@ -3,7 +3,7 @@ import {Stack, TableRowProps, Tag, TagLabel, TagLeftIcon, Td, Text, Tr, Wrap, Wr
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {Afspraak} from "../../../generated/graphql";
-import {currencyFormat2, formatBurgerName} from "../../../utils/things";
+import {currencyFormat2, formatBurgerName, truncateText} from "../../../utils/things";
 
 type SelectAfspraakOptionProps = TableRowProps & {
 	afspraak: Afspraak,
@@ -28,7 +28,7 @@ const SelectAfspraakOption: React.FC<SelectAfspraakOptionProps> = ({afspraak, is
 			<Td>
 				<Wrap spacing={1}>
 					{zoektermen.map(z => (
-						<WrapItem title={z}>{z}</WrapItem>
+						<WrapItem key={z} title={z}>{truncateText(z, 35)}</WrapItem>
 					))}
 				</Wrap>
 			</Td>

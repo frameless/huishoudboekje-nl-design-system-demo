@@ -4,18 +4,24 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {NavLink} from "react-router-dom";
 import {AppRoutes} from "../../../../config/routes";
-import {BankTransaction, GetTransactiesDocument, useDeleteJournaalpostMutation} from "../../../../generated/graphql";
+import {BankTransaction, GetTransactieDocument, GetTransactiesDocument, useDeleteJournaalpostMutation} from "../../../../generated/graphql";
 import {useStore} from "../../../../store";
 import {currencyFormat2, formatBurgerName} from "../../../../utils/things";
 import useToaster from "../../../../utils/useToaster";
 
-const BookingDetailsView: React.FC<{transactie: BankTransaction}> = ({transactie}) => {
+type BookingDetailsViewProps = {
+	transactie: BankTransaction
+	refetch: VoidFunction,
+};
+
+const BookingDetailsView: React.FC<BookingDetailsViewProps> = ({transactie, refetch}) => {
 	const {t} = useTranslation();
 	const toast = useToaster();
 	const {store} = useStore();
 	const [deleteJournaalpost, $deleteJournaalpost] = useDeleteJournaalpostMutation({
 		refetchQueries: [
-			{query: GetTransactiesDocument, variables: store.banktransactieFilters},
+			{query: GetTransactieDocument, variables: {id: transactie.id}},
+			{query: GetTransactiesDocument, variables: store.banktransactieQueryVariables},
 		],
 	});
 
@@ -30,6 +36,7 @@ const BookingDetailsView: React.FC<{transactie: BankTransaction}> = ({transactie
 				variables: {id},
 			}).then(() => {
 				toast({success: t("messages.journals.createSuccessMessage")});
+				refetch();
 			}).catch(err => {
 				console.error(err);
 				toast({error: err.message});

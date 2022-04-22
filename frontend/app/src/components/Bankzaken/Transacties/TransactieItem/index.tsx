@@ -14,15 +14,15 @@ const hoverStyles = {
 	},
 };
 
-const TransactieItem: React.FC<BoxProps & {transactie: BankTransaction}> = ({transactie: bt, ...props}) => {
+const TransactieItem: React.FC<BoxProps & {transactie: BankTransaction, refetch: VoidFunction}> = ({transactie: bt, refetch, ...props}) => {
 	const {t} = useTranslation();
 	const isMobile = useBreakpointValue([true, null, null, false]);
 	const modal = useDisclosure();
 
 	return (
 		<Box px={2} mx={-2} {...!isMobile && hoverStyles}>
-			{!isMobile && (
-				<TransactieItemModal transactie={bt} disclosure={modal} />
+			{!isMobile && modal.isOpen && bt.id && (
+				<TransactieItemModal id={bt.id} onClose={() => modal.onClose()} refetch={refetch} />
 			)}
 
 			<Stack direction={"row"} alignItems={"center"} justifyContent={"center"} {...props} onClick={!isMobile ? modal.onOpen : () => false}>
