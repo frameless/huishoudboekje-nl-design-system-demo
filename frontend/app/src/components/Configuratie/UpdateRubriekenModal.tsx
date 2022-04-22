@@ -26,7 +26,7 @@ const UpdateRubriekenModal: React.FC<UpdateRubriekenModalProps> = ({onClose, rub
     const toast = useToaster();
     const {t} = useTranslation();
     const cancelDeleteRef = useRef(null);
-    const {naam} = rubriek || {};
+    const {naam, grootboekrekening} = rubriek || {};
     const $rubriekenConfiguratie = useGetRubriekenConfiguratieQuery();
     const reactSelectStyles = useReactSelectStyles();
     const selectProps = useSelectProps();
@@ -39,7 +39,7 @@ const UpdateRubriekenModal: React.FC<UpdateRubriekenModalProps> = ({onClose, rub
     const [form, {updateForm, isValid, isFieldValid, reset, toggleSubmitted}] = useForm<zod.infer<typeof validator>>({
         validator,
         initialValue: {
-            naam,
+            naam, grootboekrekening: grootboekrekening?.id,
         }
     });
 
