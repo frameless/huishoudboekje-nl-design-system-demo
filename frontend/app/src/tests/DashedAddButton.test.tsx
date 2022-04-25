@@ -1,4 +1,4 @@
-import {act} from "@testing-library/react";
+import {act, fireEvent, getByText} from "@testing-library/react";
 import React from "react";
 import {render, unmountComponentAtNode} from "react-dom";
 import DashedAddButton from "../components/shared/DashedAddButton";
@@ -18,23 +18,48 @@ afterEach(() => {
     container = null;
 });
 
-it("show dashed button", () => {
-    const children = "Toevoegen";
+describe("Dashed button", () => {
+    it("Show dashed button with label", () => {
+        const label = "Toevoegen";
 
-    act(() => {
-        render(<DashedAddButton>{children}</DashedAddButton>, container);
+        act(() => {
+            render(<DashedAddButton>{label}</DashedAddButton>, container);
+        });
+
+        expect(container!.textContent).toBe(label)
     });
 
-    const html = container!.innerHTML;
-    expect(html).not.toBeNull();
-});
+    it("Show dashed button with default label", () => {
 
-it("show dashed button without children", () => {
+        act(() => {
+            render(<DashedAddButton />, container);
+        });
 
-    act(() => {
-        render(<DashedAddButton />, container);
+        expect(container!.textContent).toBe("global.actions.add")
     });
 
-    const html = container!.innerHTML;
-    expect(html).not.toBeNull();
-});
+    it("Check the onClick", () => {
+        const onClick = jest.fn();
+        const label = "Opslaan";
+
+        act(() => {
+            render(<DashedAddButton onClick={onClick}>{label}</DashedAddButton>, container);
+        });
+
+        expect(container?.textContent).toBe("Opslaan");
+
+        const clickEvent = new Event("click", {
+            bubbles: true,
+            cancelable: true,
+        });
+
+        const element = getByText(container!, "Opslaan");
+
+        fireEvent(element, clickEvent);
+        expect(onClick).toHaveBeenCalledTimes(1);
+
+        fireEvent(element, clickEvent);
+        expect(onClick).toHaveBeenCalledTimes(2);
+
+    })
+})
