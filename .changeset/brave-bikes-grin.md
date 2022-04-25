@@ -2,4 +2,4 @@
 "huishoudboekje": patch
 ---
 
-Postadres niet verwijderbaar als in gebruik bij afspraken.
+Fixed #724: Postadres cannot be removed when it is in use.
