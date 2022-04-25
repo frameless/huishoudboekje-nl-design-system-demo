@@ -1,5 +1,5 @@
 """ Afspraak model as used in GraphQL queries """
-from datetime import date
+from datetime import datetime
 import graphene
 from dateutil.parser import isoparse
 from flask import request
@@ -139,11 +139,11 @@ class Afspraak(graphene.ObjectType):
 
     def resolve_valid_from(root, info):
         if value := root.get("valid_from"):
-            return date.fromisoformat(value)
+            return datetime.fromisoformat(value).date()
 
     def resolve_valid_through(root, info):
         if value := root.get("valid_through"):
-            return date.fromisoformat(value)
+            return datetime.fromisoformat(value).date()
 
     async def resolve_journaalposten(root, info):
         """ Get organisatie when requested """
