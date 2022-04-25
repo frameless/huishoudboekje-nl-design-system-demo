@@ -4,8 +4,15 @@ import healthRouter from "./health";
 import unleashClient from "./unleash";
 
 const isFeatureEnabled = (feature: string, context?: Record<string, any>): boolean => {
-	const isEnabled = unleashClient.isEnabled(feature, context);
-	console.info("Feature flag requested:", {feature, context, isEnabled});
+	const _context = {
+		userId: process.env.UNLEASH_OTAP,
+		...context,
+	};
+	const isEnabled = unleashClient.isEnabled(feature, _context);
+	console.log("Feature flag request:");
+	console.table([
+		{feature, context: _context, result: isEnabled},
+	]);
 
 	return isEnabled;
 };
@@ -18,11 +25,10 @@ apiRouter.get("/version", (req, res) => res.send(pkg.version));
 
 apiRouter.post("/:features", (req, res) => {
 	const features = (req.params.features || "").split(",");
-	const context = req.body || {};
 
 	const result = features.reduce((result, f) => ({
 		...result,
-		[f]: isFeatureEnabled(f, context),
+		[f]: isFeatureEnabled(f),
 	}), {});
 
 	res.json(result);
