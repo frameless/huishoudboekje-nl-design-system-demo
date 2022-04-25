@@ -75,7 +75,8 @@ export KEYCLOAK_CLIENT_ROOT_URL="http://$HHB_HOST/"
 export CI_API_V4_URL="https://gitlab.com/api/v4"
 export CI_PROJECT_ID="20352213"
 export UNLEASH_INSTANCEID="JbZyPux6M7xwejsESy9L"
-export UNLEASH_APPNAME="huishoudboekje-frontend"
+export UNLEASH_APPNAME="huishoudboekje"
+export UNLEASH_OTAP="development"
 ```
 
 We are using Docker images that are hosted on our own GitLab Image Repository, so please make sure you are on an existing branch.
@@ -110,7 +111,9 @@ export OIDC_TOKENINFO_ENDPOINT="https://$HHB_FRONTEND_DNS/auth/realms/hhb/protoc
 export CI_API_V4_URL="https://gitlab.com/api/v4"
 export CI_PROJECT_ID="20352213"
 export UNLEASH_INSTANCEID="JbZyPux6M7xwejsESy9L"
-export UNLEASH_APPNAME="huishoudboekje-frontend"
+export UNLEASH_APPNAME="huishoudboekje"
+export UNLEASH_OTAP="testing"
+
 export CUSTOMER_BUILD="nijmegen"
 
 # It is recommended to change the passwords for the PostgreSQL Databases.
@@ -165,7 +168,8 @@ export HHB_FRONTEND_DNS="hhb-huishoudboekje.$HHB_APP_HOST"
 export CI_API_V4_URL="https://gitlab.com/api/v4"
 export CI_PROJECT_ID="20352213"
 export UNLEASH_INSTANCEID="JbZyPux6M7xwejsESy9L"
-export UNLEASH_APPNAME="huishoudboekje-frontend"
+export UNLEASH_APPNAME="huishoudboekje"
+export UNLEASH_OTAP="production"
 ```
 
 We are using Docker images that are hosted on our own GitLab Image Repository, so please make sure you are on an existing branch.
