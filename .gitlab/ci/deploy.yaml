@@ -32,6 +32,7 @@ deploy-deployment-master:
     HHB_HOST: "demo.huishoudboekje.demoground.nl"
     NAMESPACE: "hhb-demo"
     USE_PLATFORM: "azure_tad" # azure - test acc demo
+    UNLEASH_OTAP: production
   only:
     - master
 
@@ -47,6 +48,7 @@ deploy-deployment-acceptance:
     HHB_HOST: "acc.huishoudboekje.demoground.nl"
     NAMESPACE: "hhb-acc"
     USE_PLATFORM: "azure_tad" # azure - test acc demo
+    UNLEASH_OTAP: acceptance
   only:
     - acceptance
 
@@ -63,6 +65,7 @@ deploy-deployment-test:
     HHB_HOST: "test.huishoudboekje.demoground.nl"
     NAMESPACE: "hhb-test"
     USE_PLATFORM: "azure_tad" # azure - test acc demo
+    UNLEASH_OTAP: test
   only:
     - develop
 
@@ -81,6 +84,7 @@ deploy-deployment-review:
     HHB_HOST: "hhb-$CI_COMMIT_REF_SLUG.nlx.reviews"
     NAMESPACE: "hhb-$CI_COMMIT_REF_SLUG"
     USE_PLATFORM: "azure_review"
+    UNLEASH_OTAP: development
   only:
     - branches@commonground/huishoudboekje/app-new
   except:

@@ -43,6 +43,14 @@ spec:
           env:
             - name: PORT
               value: "8080"
+            - name: UNLEASH_URL
+              value: "https://gitlab.com/api/v4/feature_flags/unleash/20352213"
+            - name: UNLEASH_INSTANCEID
+              value: "JbZyPux6M7xwejsESy9L"
+            - name: UNLEASH_APPNAME
+              value: "huishoudboekje"
+            - name: UNLEASH_OTAP
+              value: "production"
       volumes:
         - name: unleashservice-config-volume
           configMap:

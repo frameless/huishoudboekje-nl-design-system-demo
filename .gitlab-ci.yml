@@ -13,8 +13,9 @@ variables:
   CI_API_V4_URL: https://gitlab.com/api/v4
   CI_PROJECT_ID: 20352213
   UNLEASH_INSTANCEID: JbZyPux6M7xwejsESy9L
+  UNLEASH_APPNAME: huishoudboekje
+  UNLEASH_OTAP: development
   PYTHON_POSTGRES: python-postgres
-  UNLEASH_APPNAME: huishoudboekje-frontend
 
 stages:
 - build
