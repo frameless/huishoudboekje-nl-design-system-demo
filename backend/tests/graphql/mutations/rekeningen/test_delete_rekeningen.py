@@ -92,6 +92,20 @@ def test_delete_afdeling_rekening_succes(client):
         # arrange
         afdelingId = 1
         rekeningId = 1
+        afdeling = {
+            "data" : {
+                "id" : afdelingId,
+                "postadressen_ids": [], 
+                "rekeningen_ids": [rekeningId]
+            }
+        }
+        new_afdeling = {
+            "data" : {
+                "id" : afdelingId,
+                "postadressen_ids": [], 
+                "rekeningen_ids": []
+            }
+        }
         request = {"query":'''
                 mutation test($afdelingId:Int!, $rekeningId:Int!) {
                     deleteAfdelingRekening(afdelingId: $afdelingId, rekeningId: $rekeningId) {
@@ -113,6 +127,8 @@ def test_delete_afdeling_rekening_succes(client):
         rm3 = rm.delete(f"{settings.HHB_SERVICES_URL}/afdelingen/1/rekeningen", status_code=202, json={})
         rm4 = rm.delete(f"{settings.HHB_SERVICES_URL}/rekeningen/1", status_code=204)
         rm5 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/")
+        rm6 = rm.get(f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/1", status_code=200, json=afdeling)
+        rm7 = rm.post(f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/1", status_code=200, json=new_afdeling)
         expected = {'data': {'deleteAfdelingRekening': {'ok': True}}}
 
         # act
@@ -128,6 +144,8 @@ def test_delete_afdeling_rekening_succes(client):
         assert rm3.called_once
         assert rm4.called_once
         assert rm5.called_once
+        assert rm6.called_once
+        assert rm7.called_once
         assert fallback.call_count == 0
         assert response.json == expected
 

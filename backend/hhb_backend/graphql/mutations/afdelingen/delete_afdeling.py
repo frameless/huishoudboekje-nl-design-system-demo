@@ -10,10 +10,6 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     gebruikers_activiteit_entities,
     log_gebruikers_activiteit,
 )
-from hhb_backend.graphql.mutations.rekeningen.utils import (
-    disconnect_afdeling_rekening,
-    delete_rekening,
-)
 
 class DeleteAfdeling(graphene.Mutation):
     """Mutatie om een afdeling van een organisatie te verwijderen."""
@@ -41,24 +37,20 @@ class DeleteAfdeling(graphene.Mutation):
         if not previous:
             raise GraphQLError("Afdeling not found")
 
-        # remove attached postadressen
+        # do not remove when attached postadressen are found
         postadressen_ids = previous.get("postadressen_ids")
         if postadressen_ids:
-            for postadres_id in postadressen_ids:
-                response_ContactCatalogus = requests.delete(
-                    f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/{postadres_id}",
-                    headers={"Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845"}
-                )
-                if response_ContactCatalogus.status_code != 204:
-                    raise GraphQLError(f"Upstream API responded: {response_ContactCatalogus.text}")
+            raise GraphQLError("Afdeling heeft postadressen - verwijderen is niet mogelijk.")
 
-        # remove attached rekeningen
+        # do not remove when attached rekeningen are found
         rekeningen_ids = previous.get("rekeningen_ids")
-        afdeling_id = previous.get("id")
-        if rekeningen_ids and afdeling_id:
-            for rekening_id in rekeningen_ids:
-                disconnect_afdeling_rekening(afdeling_id, rekening_id)
-                delete_rekening(rekening_id)
+        if rekeningen_ids: 
+            raise GraphQLError("Afdeling heeft rekeningen - verwijderen is niet mogelijk.")
+
+        # do not remove when attached afpraken are found
+        afspraken = previous.get("afspraken")
+        if afspraken:
+            raise GraphQLError("Afdeling wordt gebruikt in afpraken - verwijderen is niet mogelijk.")
 
         # remove afdeling itself
         response_organisatie = requests.delete(f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/{id}")
