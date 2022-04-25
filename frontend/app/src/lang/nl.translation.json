@@ -4,7 +4,9 @@
     "clickHereToContinue": "Klik hieronder op inloggen om te beginnen.",
     "genericError": {
       "title": "Fout.",
-      "description": "Er is een onbekende fout opgetreden. Probeer het later nog eens."
+      "description": "Er is een fout opgetreden. Probeer het later nog eens.",
+      "downloadReportInstruction": "Download een foutrappport door te klikken op deze knop:",
+      "downloadReportButtonLabel": "Download foutrapport"
     },
     "updateBetaalinstructieSuccess": "De betaalinstructie is ingesteld.",
     "createAfspraakSuccess": "De afspraak is opgeslagen.",
@@ -732,10 +734,6 @@
   "huishoudens": {
     "title": "Huishoudens"
   },
-  "zoektermen": {
-    "countMore_one": "... en nog {{count}}",
-    "countMore_other": "... en nog {{count}}"
-  },
   "suggestion": "Suggestie",
   "modals": {
     "addPostadres": {
@@ -828,6 +826,16 @@
       "title": "Services",
       "helperText": "Bekijk hier of alle services beschikbaar zijn."
     }
+  },
+  "errorHandlingPage": {
+    "shortDescription": "Er is een fout opgetreden.",
+    "userInstructionTitle": "Wat nu?",
+    "sendReportInstruction": "Stuur het foutrapport naar de applicatiebeheerder.",
+    "technicalInformation": "Technische details",
+    "locationLabel": "URL",
+    "errorMessageLabel": "Foutbericht",
+    "rawErrorLabel": "Ruwe foutinformatie",
+    "description": "Er is een fout opgetreden. Probeer het later nog eens."
   },
   "pagination": {
     "first": "Eerste",
