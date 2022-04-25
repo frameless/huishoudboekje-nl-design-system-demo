@@ -2,4 +2,4 @@
 "huishoudboekje": patch
 ---
 
-Fixed #876: Issue in acceptatieomgeving Huishoudboekje gemeente Meierijstad
+Fixed #876: Parsing dates coming from services with datetime first before returning only the date.
