@@ -20,7 +20,7 @@ afspraak = {
                 ],
                 "except_dates": []
             },
-            'journaalposten': [1, 2]
+            'journaalposten': []
         }
 
 def test_delete_afspraak(client):
@@ -54,6 +54,55 @@ def test_delete_afspraak(client):
         assert rm3.called_once
         assert fallback.called == 0
         assert response.json == expected
+
+def test_delete_afspraak_error_journaalpost(client):
+    afspraak_met_journaalposten = {
+            'id': 1,
+            'rubriek_id': 1,
+            'burger_id': 1,
+            'tegen_rekening_id': 1,
+            'valid_from': "2020-10-01",
+            'valid_through': "2020-10-01",
+            'zoektermen': [
+                "zoekterm1",
+                "zoekterm2"
+            ],
+            'betaalinstructie': {
+                "end_date": "2020-12-31",
+                "start_date": "2020-01-01",
+                "by_month_day": [
+                    1
+                ],
+                "except_dates": []
+            },
+            'journaalposten': [1, 2]
+        }
+    with requests_mock.Mocker() as rm:
+        # arrange
+        expected = "Afspraak is aan een of meerdere journaalposten gekoppeld - verwijderen is niet mogelijk."
+
+        fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
+        rm1 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=1", status_code=200, json={'data': [afspraak_met_journaalposten]})
+
+        # act
+        response = client.post(
+            "/graphql",
+            json={
+                "query": '''
+                    mutation test($id: Int!) {
+                        deleteAfspraak(id: $id) {
+                            ok
+                        }
+                    }
+                    ''',
+                "variables": {"id": 1}},
+            content_type='application/json'
+        )
+
+        # assert
+        assert rm1.called_once
+        assert fallback.called == 0
+        assert response.json["errors"][0].get("message") == expected
 
 
 def test_delete_afspraak_zoekterm(client):

@@ -43,6 +43,11 @@ class DeleteAfspraak(graphene.Mutation):
         """ Delete current afspraak """
         previous = await hhb_dataloader().afspraken_by_id.load(id)
 
+        # Check if afspraak in use by journaalposten
+        journaalposten = previous.get("journaalposten")
+        if journaalposten:
+            raise GraphQLError("Afspraak is aan een of meerdere journaalposten gekoppeld - verwijderen is niet mogelijk.")
+
         response = requests.delete(f"{settings.HHB_SERVICES_URL}/afspraken/{id}")
         if response.status_code != 204:
             raise GraphQLError(f"Upstream API responded: {response.text}")
