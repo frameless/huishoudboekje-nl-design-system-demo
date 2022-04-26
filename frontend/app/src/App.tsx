@@ -42,8 +42,6 @@ import useDataLayer from "./utils/DataLayer/useDataLayer";
 import {useFeatureFlag, useInitializeFeatureFlags} from "./utils/features";
 import useAuth from "./utils/useAuth";
 
-const featureFlags = ["signalen"];
-
 const App = () => {
 	const {t} = useTranslation();
 	const {user, error, loading, reset} = useAuth();
@@ -51,7 +49,7 @@ const App = () => {
 	const theme = useTheme();
 	const dataLayer = useDataLayer(dataLayerOptions);
 	dataLayer.addHook(onPathChanged("PathChanged"));
-	useInitializeFeatureFlags(featureFlags);
+	useInitializeFeatureFlags();
 	const isSignalenEnabled = useFeatureFlag("signalen");
 
 	const onClickLoginButton = () => {

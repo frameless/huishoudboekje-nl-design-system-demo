@@ -2,23 +2,22 @@ import {useEffect} from "react";
 import {useStore} from "../store";
 import useAuth from "./useAuth";
 
-export const useInitializeFeatureFlags = (flags: string[]) => {
+export const useInitializeFeatureFlags = () => {
 	const {user} = useAuth();
 	const {updateStore} = useStore();
 
 	useEffect(() => {
-		fetch(`/api/unleash/${flags.join(",")}`, {
-			method: "POST",
+		fetch("/api/unleash", {
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({userId: user?.email}),
 		})
 			.then(result => result.json())
 			.then(result => {
-				updateStore("featureFlags", result);
+				const featureFlags = result.features.map(f => [f.name, f.enabled]);
+				updateStore("featureFlags", featureFlags);
 			});
-	}, [updateStore, user, flags]);
+	}, [updateStore, user]);
 };
 
 export const useFeatureFlag = (feature: string): boolean => {
