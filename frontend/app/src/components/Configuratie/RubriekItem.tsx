@@ -1,15 +1,14 @@
-import {CheckIcon, CloseIcon, DeleteIcon} from "@chakra-ui/icons";
-import {Editable, EditableInput, EditablePreview, HStack, IconButton, Stack, Td, Text, Tooltip, Tr} from "@chakra-ui/react";
+import {Editable, EditableInput, EditablePreview, HStack, Stack, Td, Text, Tooltip, Tr} from "@chakra-ui/react";
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {GetRubriekenDocument, Rubriek, useDeleteRubriekMutation, useUpdateRubriekMutation} from "../../generated/graphql";
 import useToaster from "../../utils/useToaster";
+import DeleteConfirmButton from "../shared/DeleteConfirmButton";
 
 const RubriekItem: React.FC<{rubriek: Rubriek}> = ({rubriek}) => {
 	const toast = useToaster();
 	const {t} = useTranslation();
 	const [value, setValue] = useState(rubriek.naam);
-	const [deleteConfirm, setDeleteConfirm] = useState(false);
 	const [isSubmitted, setSubmitted] = useState(false);
 	const onChange = (e) => {
 		setValue(e.target.value);
@@ -21,9 +20,6 @@ const RubriekItem: React.FC<{rubriek: Rubriek}> = ({rubriek}) => {
 		],
 	});
 	const [deleteRubriek] = useDeleteRubriekMutation({
-		variables: {
-			id: rubriek.id!,
-		},
 		refetchQueries: [
 			{query: GetRubriekenDocument},
 		],
@@ -54,30 +50,29 @@ const RubriekItem: React.FC<{rubriek: Rubriek}> = ({rubriek}) => {
 		});
 	};
 
-	const onClickDelete = () => {
-		if (deleteConfirm) {
-			onDelete();
-		}
-		else {
-			setDeleteConfirm(true);
-		}
-	};
-
 	const onDelete = () => {
-		deleteRubriek().then(result => {
-			if (result.data?.deleteRubriek?.ok) {
-				setDeleteConfirm(false);
-				toast.closeAll();
-				toast({
-					success: t("messages.rubrieken.deleteSuccess"),
-				});
-			}
+		if (!rubriek?.id) {
+			return;
+		}
+
+		deleteRubriek({
+			variables: {
+				id: rubriek.id,
+			},
+		}).then(() => {
+			toast.closeAll();
+			toast({
+				success: t("messages.rubrieken.deleteSuccess"),
+			});
+		}).catch(err => {
+			toast({
+				error: err.message,
+			});
 		});
 	};
 
 	const onFocus = () => {
 		setSubmitted(false);
-		setDeleteConfirm(false);
 	};
 
 	return (
@@ -98,17 +93,7 @@ const RubriekItem: React.FC<{rubriek: Rubriek}> = ({rubriek}) => {
 			</Td>
 			<Td>
 				<HStack>
-					{deleteConfirm ? (<>
-						<IconButton size={"sm"} variant={"solid"} colorScheme={"red"}
-							icon={<CheckIcon />} aria-label={t("global.actions.delete")}
-							onClick={() => onClickDelete()} />
-						<IconButton size={"sm"} variant={"solid"} colorScheme={"gray"}
-							icon={<CloseIcon />} aria-label={t("global.actions.cancel")}
-							onClick={() => setDeleteConfirm(false)} />
-					</>) : (
-						<IconButton size={"sm"} variant={"ghost"} colorScheme={"gray"} icon={<DeleteIcon />}
-							aria-label={t("global.actions.delete")} onClick={() => setDeleteConfirm(true)} />
-					)}
+					<DeleteConfirmButton onConfirm={() => onDelete()} />
 				</HStack>
 			</Td>
 		</Tr>
