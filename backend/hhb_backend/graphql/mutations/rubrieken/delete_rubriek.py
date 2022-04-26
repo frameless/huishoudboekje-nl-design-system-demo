@@ -1,6 +1,8 @@
 """ GraphQL mutation for deleting a Rubriek """
 import os
 
+from numpy import empty
+
 import graphene
 import requests
 from graphql import GraphQLError
@@ -37,7 +39,7 @@ class DeleteRubriek(graphene.Mutation):
         previous = await hhb_dataloader().rubrieken_by_id.load(id)
 
         # Check if in use by afspraken
-        afspraken = requests.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_rubrieken={id}").json()['data']
+        afspraken = previous.get("afspraken")
         if afspraken:
             raise GraphQLError("Rubriek wordt gebruikt in een of meerdere afspraken - verwijderen is niet mogelijk.")
 
