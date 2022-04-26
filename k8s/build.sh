@@ -96,6 +96,9 @@ export POSTGRESQL_PASSWORD_SIGSVC=${POSTGRESQL_PASSWORD_SIGSVC:-"sigsvc"}
 # Default secret FOR JWTs
 export HHB_SECRET=${SECRET_KEY:-"test"}
 
+# Unleash OTAP stage
+export UNLEASH_OTAP=${UNLEASH_OTAP:-"production"}
+
 # OIDC Settings
 export OIDC_ISSUER=${OIDC_ISSUER:-"https://$HHB_FRONTEND_DNS/auth/realms/hhb"}
 export OIDC_CLIENT_ID=${OIDC_CLIENT_ID:-"hhb"}

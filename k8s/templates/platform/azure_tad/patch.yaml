@@ -151,3 +151,16 @@ spec:
           env:
             - name: APP_SETTINGS
               value: hhb_backend.config.DevelopmentConfig
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-unleashservice
+spec:
+  template:
+    spec:
+      containers:
+        - name: hhb-unleashservice
+          env:
+            - name: UNLEASH_OTAP
+              value: ${UNLEASH_OTAP}

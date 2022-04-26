@@ -32,3 +32,16 @@ spec:
         - name: hhb-database-volume-${NAMESPACE}
           persistentVolumeClaim:
             claimName: hhb-database-volumeclaim
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hhb-unleashservice
+spec:
+  template:
+    spec:
+      containers:
+        - name: hhb-unleashservice
+          env:
+            - name: UNLEASH_OTAP
+              value: ${UNLEASH_OTAP}

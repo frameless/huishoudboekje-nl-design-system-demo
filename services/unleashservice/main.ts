@@ -13,11 +13,15 @@ unleashClient.on("synchronized", () => {
 
 	console.info("Unleash synced.");
 
+	const features = unleashClient.getFeatureToggleDefinitions();
+	console.log("Available features: ");
+	console.table(features.map(f => ({...f, strategies: JSON.stringify(f.strategies)})));
+
 	app.get("/health", healthRouter);
 	app.use("/api/unleash", apiRouter);
 
 	app.listen(port, () => {
-		console.log(`Unleash server running on port ${port}.`);
+		console.log(`Unleash server running on port ${port}. OTAP-setting is ${process.env.UNLEASH_OTAP || "not set"}.`);
 	});
 
 });
