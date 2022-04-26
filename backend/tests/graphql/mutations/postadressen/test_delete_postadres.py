@@ -45,7 +45,7 @@ def test_delete_postadres(client):
         rm2 = rm.delete(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/test_id", status_code=204)
         rm3 = rm.get(f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/?filter_ids=1", status_code=200, json={'data': [{'id': 1, 'postadressen_ids': ['test_id']}]})
         rm4 = rm.post(f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/1", status_code=200, json={'data': [{'id': 1}]})
-        rm5 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_postadressen==test_id", status_code=200, json={'data': []})
+        rm5 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_postadressen=test_id", status_code=200, json={'data': []})
         rm6 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=200)
 
 
@@ -87,7 +87,7 @@ def test_delete_postadres_error_afspraken(client):
         postadres_existing = {"id": "test_id", "houseNumber": "52", "locality": "testplaats1", "street": "teststraat1", "postalCode": "9999AA"}
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
         rm1 = rm.get(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/test_id", status_code=200, json=postadres_existing)
-        rm2 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_postadressen==test_id", status_code=200, json={'data': [{'id': 1}]})
+        rm2 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_postadressen=test_id", status_code=200, json={'data': [{'id': 1}]})
 
 
         # act
