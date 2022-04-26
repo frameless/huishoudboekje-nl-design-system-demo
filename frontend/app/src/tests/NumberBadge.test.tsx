@@ -2,6 +2,7 @@ import {act} from "@testing-library/react";
 import React from "react";
 import {render, unmountComponentAtNode} from "react-dom";
 import NumberBadge from "../components/shared/NumberBadge";
+import pretty from "pretty";
 
 let container: HTMLDivElement | null = null;
 
@@ -16,23 +17,24 @@ afterEach(() => {
     container = null;
 });
 
-it("shows NumberBage count", () => {
+describe("Numberbadge", () => {
 
-    act(() => {
-        render(<NumberBadge count={9} />, container);
+    it("shows NumberBage count", () => {
+
+        act(() => {
+            render(<NumberBadge count={9} />, container);
+        });
+
+        expect(pretty(container?.innerHTML)).toMatchSnapshot();
     });
 
-    const html = container!.innerHTML;
-    expect(html).not.toBeNull();
-});
+    it("shows NumberBage count more than 99", () => {
 
-it("shows NumberBage count more than 99", () => {
+        act(() => {
+            render(<NumberBadge count={9999} />, container);
+        });
 
-    act(() => {
-        render(<NumberBadge count={9999} />, container);
+        expect(pretty(container?.innerHTML)).toMatchSnapshot();
     });
-
-    const html = container!.innerHTML;
-    expect(html).not.toBeNull();
-});
+})
 

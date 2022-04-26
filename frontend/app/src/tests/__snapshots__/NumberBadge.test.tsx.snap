@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Numberbadge shows NumberBage count 1`] = `"<span class=\\"chakra-badge css-ni0re5\\">9</span>"`;
+
+exports[`Numberbadge shows NumberBage count more than 99 1`] = `"<span class=\\"chakra-badge css-ni0re5\\">99+</span>"`;

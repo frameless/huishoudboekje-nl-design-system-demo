@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Page Page with only title 1`] = `
+"<div class=\\"chakra-stack css-137fd6w\\">
+  <div class=\\"chakra-stack css-1oeb4ru\\">
+    <h2 class=\\"chakra-heading css-0\\">Bankafschriften</h2>
+    <div class=\\"chakra-stack css-84zodg\\"></div>
+  </div>
+</div>"
+`;
+
+exports[`Page Page with title & backButton 1`] = `
+"<div class=\\"chakra-stack css-137fd6w\\">
+  <div class=\\"css-0\\"><button type=\\"button\\" class=\\"chakra-button css-5c2176\\">Click</button></div>
+  <div class=\\"chakra-stack css-1oeb4ru\\">
+    <h2 class=\\"chakra-heading css-0\\">Bankafschriften</h2>
+    <div class=\\"chakra-stack css-84zodg\\"></div>
+  </div>
+</div>"
+`;
+
+exports[`Page Page with title & menu 1`] = `Array []`;
