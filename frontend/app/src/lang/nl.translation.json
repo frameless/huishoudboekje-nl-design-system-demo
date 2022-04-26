@@ -107,7 +107,7 @@
     },
     "deleteAfdelingSuccess": "Afdeling {{name}} succesvol verwijderd.",
     "postadres": {
-      "updateSucces": "Postadrs gewijzigd."
+      "updateSucces": "Postadres gewijzigd."
     },
     "rekeningen": {
       "createSuccess": "Bankrekening {{iban}} op naam van {{rekeninghouder}} is toegevoegd.",
@@ -655,7 +655,7 @@
   "configuratieForm": {
     "emptyKeyError": "Vul een waarde in voor de sleutel.",
     "emptyValueError": "Vul een waarde in.",
-    "emptyNameErroror": "Vul een waarde in voor de naam.",
+    "emptyNameErroror": "Vul een naam in.",
     "emptyGrootboekrekeningError": "Vul een grootboekrekening in."
   },
   "modal": {
