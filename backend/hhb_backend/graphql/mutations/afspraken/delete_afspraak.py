@@ -46,7 +46,7 @@ class DeleteAfspraak(graphene.Mutation):
         # Check if afspraak in use by journaalposten
         journaalposten = previous.get("journaalposten")
         if journaalposten:
-            raise GraphQLError(f"Afspraak is aan een of meerdere journaalposten gekoppeld - verwijderen is niet mogelijk.")
+            raise GraphQLError("Afspraak is aan een of meerdere journaalposten gekoppeld - verwijderen is niet mogelijk.")
 
         response = requests.delete(f"{settings.HHB_SERVICES_URL}/afspraken/{id}")
         if response.status_code != 204:
