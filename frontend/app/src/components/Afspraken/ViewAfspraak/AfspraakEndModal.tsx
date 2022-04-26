@@ -15,51 +15,53 @@ type AfspraakEndModalProps = {
 };
 
 const AfspraakEndModal: React.FC<AfspraakEndModalProps> = ({onClose, onSubmit}) => {
-    const {t} = useTranslation();
-    const toast = useToaster();
-    const [date, setDate] = useState<Date>(d().toDate());
+	const {t} = useTranslation();
+	const toast = useToaster();
+	const [date, setDate] = useState<Date>(d().toDate());
 
-    const isValid = (): boolean => {
-        try {
-            const stringDate = d(date).format("YYYY-MM-DD");
-            validator.parse(stringDate);
-            return true;
-        } catch (e) {
-            return false;
-        }
-    };
+	const isValid = (): boolean => {
+		try {
+			const stringDate = d(date).format("YYYY-MM-DD");
+			validator.parse(stringDate);
+			return true;
+		}
+		catch (e) {
+			return false;
+		}
+	};
 
-    const onClickSubmit = () => {
-        try {
-            onSubmit(date);
-        } catch (e) {
-            toast({error: t("errors.invalidDateError")});
-        }
-    };
+	const onClickSubmit = () => {
+		try {
+			onSubmit(date);
+		}
+		catch (e) {
+			toast({error: t("errors.invalidDateError")});
+		}
+	};
 
-    return (
-        <Modal
-            title={t("endAfspraak.confirmModalTitle")}
-            isOpen={true}
-            onClose={onClose}
-            confirmButton={<Button colorScheme={"primary"} onClick={onClickSubmit}>{t("global.actions.end")}</Button>}
-        >
-            <Stack>
-                <Text>{t("endAfspraak.confirmModalBody")}</Text>
+	return (
+		<Modal
+			title={t("endAfspraak.confirmModalTitle")}
+			isOpen={true}
+			onClose={onClose}
+			confirmButton={<Button colorScheme={"primary"} onClick={onClickSubmit}>{t("global.actions.end")}</Button>}
+		>
+			<Stack>
+				<Text>{t("endAfspraak.confirmModalBody")}</Text>
 
-                <FormControl flex={1} isInvalid={!isValid()}>
-                    <FormLabel>{t("schedule.endDate")}</FormLabel>
-                    <DatePicker selected={(date && d(date).isValid()) ? date : null} dateFormat={"dd-MM-yyyy"}
-                                onChange={(value: Date) => {
-                                    if (value) {
-                                        setDate(d(value).startOf("day").toDate());
-                                    }
-                                }} customInput={<Input type={"text"} isInvalid={!isValid()} />} />
-                    <FormErrorMessage>{t("errors.invalidDateError")}</FormErrorMessage>
-                </FormControl>
-            </Stack>
-        </Modal>
-    );
+				<FormControl flex={1} isInvalid={!isValid()}>
+					<FormLabel>{t("schedule.endDate")}</FormLabel>
+					<DatePicker selected={(date && d(date).isValid()) ? date : null} dateFormat={"dd-MM-yyyy"}
+						onChange={(value: Date) => {
+							if (value) {
+								setDate(d(value).startOf("day").toDate());
+							}
+						}} customInput={<Input type={"text"} isInvalid={!isValid()} />} />
+					<FormErrorMessage>{t("errors.invalidDateError")}</FormErrorMessage>
+				</FormControl>
+			</Stack>
+		</Modal>
+	);
 };
 
 export default AfspraakEndModal;

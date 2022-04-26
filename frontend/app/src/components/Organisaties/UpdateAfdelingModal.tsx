@@ -11,43 +11,43 @@ type UpdateAfdelingModalProps = {
 };
 
 const UpdateAfdelingModal: React.FC<UpdateAfdelingModalProps> = ({afdeling, onClose}) => {
-    const {t} = useTranslation();
-    const toast = useToaster();
-    const [updateAfdeling] = useUpdateAfdelingMutation({
-        refetchQueries: [
-            {query: GetOrganisatieDocument, variables: {id: afdeling?.organisatie?.id}},
-        ],
-    });
+	const {t} = useTranslation();
+	const toast = useToaster();
+	const [updateAfdeling] = useUpdateAfdelingMutation({
+		refetchQueries: [
+			{query: GetOrganisatieDocument, variables: {id: afdeling?.organisatie?.id}},
+		],
+	});
 
-    const onSubmit = (data) => {
-        updateAfdeling({
-            variables: {
-                id: afdeling.id!,
-                ...data,
-            },
-        }).then(() => {
-            toast({
-                success: t("messages.afdelingen.updateSuccess"),
-            });
-            onClose();
-        }).catch(err => {
-            toast({
-                error: err.message,
-            });
-        });
-    };
+	const onSubmit = (data) => {
+		updateAfdeling({
+			variables: {
+				id: afdeling.id!,
+				...data,
+			},
+		}).then(() => {
+			toast({
+				success: t("messages.afdelingen.updateSuccess"),
+			});
+			onClose();
+		}).catch(err => {
+			toast({
+				error: err.message,
+			});
+		});
+	};
 
-    return (
-        <Modal
-            title={t("modal.updateAfdeling.title")}
-            isOpen={true}
-            onClose={onClose}
-        >
-            <AfdelingForm onChange={onSubmit} onCancel={onClose} organisatie={afdeling.organisatie!} values={{
-                naam: afdeling.naam,
-            }} />
-        </Modal>
-    );
+	return (
+		<Modal
+			title={t("modal.updateAfdeling.title")}
+			isOpen={true}
+			onClose={onClose}
+		>
+			<AfdelingForm onChange={onSubmit} onCancel={onClose} organisatie={afdeling.organisatie!} values={{
+				naam: afdeling.naam,
+			}} />
+		</Modal>
+	);
 };
 
 export default UpdateAfdelingModal;

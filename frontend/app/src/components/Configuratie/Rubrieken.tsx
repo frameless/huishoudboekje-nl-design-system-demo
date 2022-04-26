@@ -15,117 +15,117 @@ import Asterisk from "../shared/Asterisk";
 import zod from "../../utils/zod";
 
 const validator = zod.object({
-    naam: zod.string().nonempty(),
-    grootboekrekening: zod.string().nonempty(),
+	naam: zod.string().nonempty(),
+	grootboekrekening: zod.string().nonempty(),
 });
 
 const Rubrieken = () => {
-    const toast = useToaster();
-    const {t} = useTranslation();
-    const $rubriekenConfiguratie = useGetRubriekenConfiguratieQuery();
-    const reactSelectStyles = useReactSelectStyles();
-    const selectProps = useSelectProps();
-    const [createRubriek, {loading}] = useCreateRubriekMutation({
-        refetchQueries: [
-            {query: GetRubriekenConfiguratieDocument},
-        ],
-    });
+	const toast = useToaster();
+	const {t} = useTranslation();
+	const $rubriekenConfiguratie = useGetRubriekenConfiguratieQuery();
+	const reactSelectStyles = useReactSelectStyles();
+	const selectProps = useSelectProps();
+	const [createRubriek, {loading}] = useCreateRubriekMutation({
+		refetchQueries: [
+			{query: GetRubriekenConfiguratieDocument},
+		],
+	});
 
-    const [form, {updateForm, isValid, isFieldValid, reset, toggleSubmitted}] = useForm({
-        validator,
-    });
+	const [form, {updateForm, isValid, isFieldValid, reset, toggleSubmitted}] = useForm({
+		validator,
+	});
 
-    const onSubmit = (e) => {
-        e.preventDefault();
-        toggleSubmitted(true);
+	const onSubmit = (e) => {
+		e.preventDefault();
+		toggleSubmitted(true);
 
-        if (!isValid()) {
-            toast({
-                error: t("messages.genericError.description"),
-            });
-            return;
-        }
+		if (!isValid()) {
+			toast({
+				error: t("messages.genericError.description"),
+			});
+			return;
+		}
 
-        createRubriek({
-            variables: {
-                naam: form.naam!,
-                grootboekrekening: form.grootboekrekening,
-            },
-        }).then(() => {
-            reset();
-            toast({
-                success: t("messages.rubrieken.createSuccess"),
-            });
-        })
-            .catch(err => {
-                let message = err.message;
-                if (err.message.includes("already exists")) {
-                    message = t("messages.configuratie.alreadyExists");
-                }
+		createRubriek({
+			variables: {
+				naam: form.naam!,
+				grootboekrekening: form.grootboekrekening,
+			},
+		}).then(() => {
+			reset();
+			toast({
+				success: t("messages.rubrieken.createSuccess"),
+			});
+		})
+			.catch(err => {
+				let message = err.message;
+				if (err.message.includes("already exists")) {
+					message = t("messages.configuratie.alreadyExists");
+				}
 
-                toast({
-                    error: message,
-                });
-            });
-    };
+				toast({
+					error: message,
+				});
+			});
+	};
 
-    return (
-        <Queryable query={$rubriekenConfiguratie} children={data => {
-            const grootboekrekeningen: Grootboekrekening[] = data.grootboekrekeningen || [];
-            const rubrieken: Rubriek[] = data.rubrieken || [];
+	return (
+		<Queryable query={$rubriekenConfiguratie} children={data => {
+			const grootboekrekeningen: Grootboekrekening[] = data.grootboekrekeningen || [];
+			const rubrieken: Rubriek[] = data.rubrieken || [];
 
-            const grootboekrekeningenOptions = selectProps.createSelectOptionsFromGrootboekrekeningen(grootboekrekeningen);
+			const grootboekrekeningenOptions = selectProps.createSelectOptionsFromGrootboekrekeningen(grootboekrekeningen);
 
-            return (
-                <SectionContainer>
-                    <Section title={t("forms.rubrieken.sections.title")} helperText={t("forms.rubrieken.sections.helperText")}>
-                        <Stack spacing={5} divider={<Divider />}>
-                            {rubrieken.length > 0 && (
-                                <Table size={"sm"} variant={"noLeftPadding"}>
-                                    <Thead>
-                                        <Tr>
-                                            <Th>{t("forms.rubrieken.fields.grootboekrekening")}</Th>
-                                            <Th>{t("forms.rubrieken.fields.naam")}</Th>
-                                            <Th w={100} />
-                                        </Tr>
-                                    </Thead>
-                                    <Tbody>
-                                        {rubrieken.map((r) => (
-                                            <RubriekItem rubriek={r} key={r.id} />
-                                        ))}
-                                    </Tbody>
-                                </Table>
-                            )}
+			return (
+				<SectionContainer>
+					<Section title={t("forms.rubrieken.sections.title")} helperText={t("forms.rubrieken.sections.helperText")}>
+						<Stack spacing={5} divider={<Divider />}>
+							{rubrieken.length > 0 && (
+								<Table size={"sm"} variant={"noLeftPadding"}>
+									<Thead>
+										<Tr>
+											<Th>{t("forms.rubrieken.fields.grootboekrekening")}</Th>
+											<Th>{t("forms.rubrieken.fields.naam")}</Th>
+											<Th w={100} />
+										</Tr>
+									</Thead>
+									<Tbody>
+										{rubrieken.map((r) => (
+											<RubriekItem rubriek={r} key={r.id} />
+										))}
+									</Tbody>
+								</Table>
+							)}
 
-                            <form onSubmit={onSubmit} noValidate={true}>
-                                <Stack direction={["column"]} alignItems={"flex-end"}>
-                                    <FormControl isInvalid={!isFieldValid("naam")} isRequired={true}>
-                                        <FormLabel>{t("forms.rubrieken.fields.naam")}</FormLabel>
-                                        <Input onChange={v => updateForm("naam", v.target.value)} value={form.naam || ""} />
-                                        <FormErrorMessage>{t("configuratieForm.emptyNameErroror")}</FormErrorMessage>
-                                    </FormControl>
-                                    <FormControl isInvalid={!isFieldValid("grootboekrekening")} isRequired={true}>
-                                        <FormLabel>{t("forms.rubrieken.fields.grootboekrekening")}</FormLabel>
-                                        <Select
-                                            {...selectProps.defaultProps}
-                                            components={selectProps.components.MultiLine}
-                                            options={grootboekrekeningenOptions}
-                                            styles={reactSelectStyles.default}
-                                            onChange={(result) => updateForm("grootboekrekening", result?.value)}
-                                            value={form.grootboekrekening ? grootboekrekeningenOptions.find(g => g.value === form.grootboekrekening) : null}
-                                        />
-                                        <FormErrorMessage>{t("configuratieForm.emptyGrootboekrekeningError")}</FormErrorMessage>
-                                    </FormControl>
-                                    <Button type={"submit"} colorScheme={"primary"} isLoading={loading}>{t("global.actions.save")}</Button>
-                                    <Asterisk />
-                                </Stack>
-                            </form>
-                        </Stack>
-                    </Section>
-                </SectionContainer>
-            );
-        }} />
-    );
+							<form onSubmit={onSubmit} noValidate={true}>
+								<Stack direction={["column"]} alignItems={"flex-end"}>
+									<FormControl isInvalid={!isFieldValid("naam")} isRequired={true}>
+										<FormLabel>{t("forms.rubrieken.fields.naam")}</FormLabel>
+										<Input onChange={v => updateForm("naam", v.target.value)} value={form.naam || ""} />
+										<FormErrorMessage>{t("configuratieForm.emptyNameErroror")}</FormErrorMessage>
+									</FormControl>
+									<FormControl isInvalid={!isFieldValid("grootboekrekening")} isRequired={true}>
+										<FormLabel>{t("forms.rubrieken.fields.grootboekrekening")}</FormLabel>
+										<Select
+											{...selectProps.defaultProps}
+											components={selectProps.components.MultiLine}
+											options={grootboekrekeningenOptions}
+											styles={reactSelectStyles.default}
+											onChange={(result) => updateForm("grootboekrekening", result?.value)}
+											value={form.grootboekrekening ? grootboekrekeningenOptions.find(g => g.value === form.grootboekrekening) : null}
+										/>
+										<FormErrorMessage>{t("configuratieForm.emptyGrootboekrekeningError")}</FormErrorMessage>
+									</FormControl>
+									<Button type={"submit"} colorScheme={"primary"} isLoading={loading}>{t("global.actions.save")}</Button>
+									<Asterisk />
+								</Stack>
+							</form>
+						</Stack>
+					</Section>
+				</SectionContainer>
+			);
+		}} />
+	);
 };
 
 export default Rubrieken;

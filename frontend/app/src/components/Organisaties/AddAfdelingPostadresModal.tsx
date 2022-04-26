@@ -13,41 +13,41 @@ type AddAfdelingPostadresModalProps = {
 };
 
 const AddAfdelingPostadresModal: React.FC<AddAfdelingPostadresModalProps> = ({afdeling, onClose}) => {
-    const {t} = useTranslation();
-    const toast = useToaster();
-    const handleSaveAfdelingPostadres = useMutationErrorHandler(SaveAfdelingPostadresErrorHandler);
+	const {t} = useTranslation();
+	const toast = useToaster();
+	const handleSaveAfdelingPostadres = useMutationErrorHandler(SaveAfdelingPostadresErrorHandler);
 
-    const [createAfdelingPostadres] = useCreateAfdelingPostadresMutation({
-        refetchQueries: [
-            {query: GetOrganisatieDocument, variables: {id: afdeling?.organisatie?.id}},
-            {query: GetAfdelingDocument, variables: {id: afdeling.id}},
-        ],
-    });
+	const [createAfdelingPostadres] = useCreateAfdelingPostadresMutation({
+		refetchQueries: [
+			{query: GetOrganisatieDocument, variables: {id: afdeling?.organisatie?.id}},
+			{query: GetAfdelingDocument, variables: {id: afdeling.id}},
+		],
+	});
 
-    const onSavePostadres = (afdelingId: number, postadres) => {
-        createAfdelingPostadres({
-            variables: {
-                afdelingId: afdelingId,
-                ...postadres,
-            },
-        }).then(() => {
-            toast({
-                success: t("messages.postadressen.createSuccess"),
-            });
-            onClose();
-        }).catch(handleSaveAfdelingPostadres);
-    };
+	const onSavePostadres = (afdelingId: number, postadres) => {
+		createAfdelingPostadres({
+			variables: {
+				afdelingId: afdelingId,
+				...postadres,
+			},
+		}).then(() => {
+			toast({
+				success: t("messages.postadressen.createSuccess"),
+			});
+			onClose();
+		}).catch(handleSaveAfdelingPostadres);
+	};
 
-    return (
-        <Modal
-            title={t("modals.addPostadres.modalTitle")}
-            isOpen={true}
-            onClose={() => onClose()}
-            showCancelButton={false}
-        >
-            <PostadresForm onChange={(data) => onSavePostadres(afdeling.id!, data)} onCancel={() => onClose()} />
-        </Modal>
-    );
+	return (
+		<Modal
+			title={t("modals.addPostadres.modalTitle")}
+			isOpen={true}
+			onClose={() => onClose()}
+			showCancelButton={false}
+		>
+			<PostadresForm onChange={(data) => onSavePostadres(afdeling.id!, data)} onCancel={() => onClose()} />
+		</Modal>
+	);
 };
 
 export default AddAfdelingPostadresModal;

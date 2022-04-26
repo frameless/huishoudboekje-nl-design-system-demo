@@ -13,37 +13,37 @@ type CreateAfdelingModalProps = {
 };
 
 const CreateAfdelingModal: React.FC<CreateAfdelingModalProps> = ({organisatie, onClose}) => {
-    const {t} = useTranslation();
-    const toast = useToaster();
-    const handleSaveAfdelingErrors = useMutationErrorHandler(SaveAfdelingErrorHandler);
+	const {t} = useTranslation();
+	const toast = useToaster();
+	const handleSaveAfdelingErrors = useMutationErrorHandler(SaveAfdelingErrorHandler);
 
-    const [createAfdeling] = useCreateAfdelingMutation({
-        refetchQueries: [
-            {query: GetOrganisatiesDocument},
-            {query: GetOrganisatieDocument, variables: {id: organisatie.id!}},
-        ],
-    });
+	const [createAfdeling] = useCreateAfdelingMutation({
+		refetchQueries: [
+			{query: GetOrganisatiesDocument},
+			{query: GetOrganisatieDocument, variables: {id: organisatie.id!}},
+		],
+	});
 
-    const onSubmit = (afdelingData: CreateAfdelingMutationVariables) => {
-        createAfdeling({
-            variables: afdelingData,
-        }).then(result => {
-            toast({
-                success: t("messages.afdelingen.createSuccessMessage"),
-            });
-            onClose();
-        }).catch(handleSaveAfdelingErrors);
-    };
+	const onSubmit = (afdelingData: CreateAfdelingMutationVariables) => {
+		createAfdeling({
+			variables: afdelingData,
+		}).then(result => {
+			toast({
+				success: t("messages.afdelingen.createSuccessMessage"),
+			});
+			onClose();
+		}).catch(handleSaveAfdelingErrors);
+	};
 
-    return (
-        <Modal
-            title={t("modals.addAfdeling.title")}
-            isOpen={true}
-            onClose={onClose}
-        >
-            <AfdelingForm onChange={onSubmit} organisatie={organisatie} onCancel={onClose} />
-        </Modal>
-    );
+	return (
+		<Modal
+			title={t("modals.addAfdeling.title")}
+			isOpen={true}
+			onClose={onClose}
+		>
+			<AfdelingForm onChange={onSubmit} organisatie={organisatie} onCancel={onClose} />
+		</Modal>
+	);
 };
 
 export default CreateAfdelingModal;

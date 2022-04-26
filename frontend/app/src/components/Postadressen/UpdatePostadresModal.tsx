@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {Afdeling, GetAfdelingDocument, Postadres, useUpdatePostadresMutation} from "../../generated/graphql";
 import {useTranslation} from "react-i18next";
 import PostadresForm from "./PostadresForm";
@@ -12,42 +12,42 @@ type UpdatePostadresModalProps = {
 };
 
 const UpdatePostadresModal: React.FC<UpdatePostadresModalProps> = ({postadres, afdeling, onClose}) => {
-    const {t} = useTranslation();
-    const toast = useToaster();
-    const [updatePostadres] = useUpdatePostadresMutation({
-        refetchQueries: [
-            {query: GetAfdelingDocument, variables: {id: afdeling.id}},
-        ],
-    });
+	const {t} = useTranslation();
+	const toast = useToaster();
+	const [updatePostadres] = useUpdatePostadresMutation({
+		refetchQueries: [
+			{query: GetAfdelingDocument, variables: {id: afdeling.id}},
+		],
+	});
 
-    const onSubmit = (data) => {
-        updatePostadres({
-            variables: {
-                id: postadres.id!,
-                ...data,
-            },
-        }).then(() => {
-            toast({
-                success: t("messages.postadres.updateSucces"),
-            });
-            onClose();
-        }).catch(err => {
-            toast({
-                error: err.message,
-            });
-        });
-    };
+	const onSubmit = (data) => {
+		updatePostadres({
+			variables: {
+				id: postadres.id!,
+				...data,
+			},
+		}).then(() => {
+			toast({
+				success: t("messages.postadres.updateSucces"),
+			});
+			onClose();
+		}).catch(err => {
+			toast({
+				error: err.message,
+			});
+		});
+	};
 
-    return (
-        <Modal
-            title={t("modal.updatePostadress.title")}
-            showCancelButton={false}
-            isOpen={true}
-            onClose={onClose}
-        >
-            <PostadresForm onChange={onSubmit} onCancel={onClose} postadres={postadres} />
-        </Modal>
-    );
+	return (
+		<Modal
+			title={t("modal.updatePostadress.title")}
+			showCancelButton={false}
+			isOpen={true}
+			onClose={onClose}
+		>
+			<PostadresForm onChange={onSubmit} onCancel={onClose} postadres={postadres} />
+		</Modal>
+	);
 };
 
 export default UpdatePostadresModal;

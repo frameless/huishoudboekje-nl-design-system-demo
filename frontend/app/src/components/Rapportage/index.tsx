@@ -21,144 +21,144 @@ import Saldo from "./Saldo";
 import Modal from "../shared/Modal";
 
 const Rapportage = () => {
-    const {t} = useTranslation();
-    const reactSelectStyles = useReactSelectStyles();
-    const {search: queryParams} = useLocation();
-    const filterModal = useDisclosure();
-    const $data = useGetReportingDataQuery();
+	const {t} = useTranslation();
+	const reactSelectStyles = useReactSelectStyles();
+	const {search: queryParams} = useLocation();
+	const filterModal = useDisclosure();
+	const $data = useGetReportingDataQuery();
 
-    const [dateRange, setDateRange] = useState<Required<DateRange>>({
-        from: d().subtract(1, "year").startOf("month").toDate(),
-        through: d().subtract(1, "month").endOf("month").toDate(),
-    });
+	const [dateRange, setDateRange] = useState<Required<DateRange>>({
+		from: d().subtract(1, "year").startOf("month").toDate(),
+		through: d().subtract(1, "month").endOf("month").toDate(),
+	});
 
-    const [granularity, setGranularity] = useState<Granularity>(Granularity.Monthly);
-    const granularityOptions = {
-        [Granularity.Daily]: t("granularity.daily"),
-        [Granularity.Weekly]: t("granularity.weekly"),
-        [Granularity.Monthly]: t("granularity.monthly"),
-    };
+	const [granularity, setGranularity] = useState<Granularity>(Granularity.Monthly);
+	const granularityOptions = {
+		[Granularity.Daily]: t("granularity.daily"),
+		[Granularity.Weekly]: t("granularity.weekly"),
+		[Granularity.Monthly]: t("granularity.monthly"),
+	};
 
-    const [filterBurgerIds, setFilterBurgerIds] = useState<number[]>(new URLSearchParams(queryParams).get("burgerId")?.split(",").map(p => parseInt(p)) || []);
-    const [filterRubriekIds, setFilterRubriekIds] = useState<number[]>([]);
-    const onSelectBurger = (value) => setFilterBurgerIds(value ? value.map(v => v.value) : []);
-    const onSelectRubriek = (value) => setFilterRubriekIds(value ? value.map(v => v.value) : []);
-    const onChangeGranularity = (value) => setGranularity(value);
+	const [filterBurgerIds, setFilterBurgerIds] = useState<number[]>(new URLSearchParams(queryParams).get("burgerId")?.split(",").map(p => parseInt(p)) || []);
+	const [filterRubriekIds, setFilterRubriekIds] = useState<number[]>([]);
+	const onSelectBurger = (value) => setFilterBurgerIds(value ? value.map(v => v.value) : []);
+	const onSelectRubriek = (value) => setFilterRubriekIds(value ? value.map(v => v.value) : []);
+	const onChangeGranularity = (value) => setGranularity(value);
 
-    return (
-        <RapportageContext.Provider value={{startDate: d(dateRange.from), endDate: d(dateRange.through), granularity}}>
-            <Queryable query={$data} children={data => {
-                const _startDate = d(dateRange.from).startOf("month");
-                const _endDate = d(dateRange.through).endOf("month");
+	return (
+		<RapportageContext.Provider value={{startDate: d(dateRange.from), endDate: d(dateRange.through), granularity}}>
+			<Queryable query={$data} children={data => {
+				const _startDate = d(dateRange.from).startOf("month");
+				const _endDate = d(dateRange.through).endOf("month");
 
-                const transactions: Transaction[] = data.bankTransactions.map(t => new Transaction(t));
-                const burgers: Burger[] = data.burgers;
+				const transactions: Transaction[] = data.bankTransactions.map(t => new Transaction(t));
+				const burgers: Burger[] = data.burgers;
 
-                const filteredTransactions = transactions
-                    .filter(t => filterRubriekIds.length > 0 ? t.hasAnyRubriek(filterRubriekIds) : true)
-                    .filter(t => filterBurgerIds.length > 0 ? t.belongsToAnyBurger(filterBurgerIds) : true)
-                    .filter(t => t.isBetweenDates(_startDate, _endDate));
+				const filteredTransactions = transactions
+					.filter(t => filterRubriekIds.length > 0 ? t.hasAnyRubriek(filterRubriekIds) : true)
+					.filter(t => filterBurgerIds.length > 0 ? t.belongsToAnyBurger(filterBurgerIds) : true)
+					.filter(t => t.isBetweenDates(_startDate, _endDate));
 
-                const selectedBurgers = burgers.filter(b => filterBurgerIds.includes(b.id!));
+				const selectedBurgers = burgers.filter(b => filterBurgerIds.includes(b.id!));
 
-                return (
-                    <Page title={t("reports.title")} right={!$data.loading && (
-                        <Button size={"sm"} variant={"outline"} colorScheme={"primary"} onClick={() => filterModal.onOpen()}>{t("sections.filterOptions.title")}</Button>
-                    )}>
-                        <Modal
-                            title={t("sections.filterOptions.title")}
-                            isOpen={filterModal.isOpen}
-                            onClose={filterModal.onClose}
-                            confirmButton={<Button colorScheme={"primary"} onClick={filterModal.onClose}>{t("global.actions.close")}</Button>}
-                            showAsterisk={false}
-                            showCancelButton={false}
-                        >
-                            <Stack>
-                                <Stack>
-                                    <Stack direction={["column", "row"]} spacing={5} flex={1}>
-                                        <FormControl as={Stack} flex={1} justifyContent={"flex-end"}>
-                                            <FormLabel>{t("global.startDate")}</FormLabel>
-                                            <DatePicker selected={dateRange.from || null}
-                                                        dateFormat={"dd-MM-yyyy"} startDate={dateRange.from} endDate={dateRange.through} isClearable={false} selectsRange={true}
-                                                        onChange={(value: [Date, Date]) => {
-                                                            if (value) {
-                                                                const [from, through] = value;
-                                                                if (from || through) {
-                                                                    setDateRange(() => ({from, through}));
-                                                                }
-                                                            }
-                                                        }} customInput={(<Input />)} />
-                                        </FormControl>
-                                    </Stack>
+				return (
+					<Page title={t("reports.title")} right={!$data.loading && (
+						<Button size={"sm"} variant={"outline"} colorScheme={"primary"} onClick={() => filterModal.onOpen()}>{t("sections.filterOptions.title")}</Button>
+					)}>
+						<Modal
+							title={t("sections.filterOptions.title")}
+							isOpen={filterModal.isOpen}
+							onClose={filterModal.onClose}
+							confirmButton={<Button colorScheme={"primary"} onClick={filterModal.onClose}>{t("global.actions.close")}</Button>}
+							showAsterisk={false}
+							showCancelButton={false}
+						>
+							<Stack>
+								<Stack>
+									<Stack direction={["column", "row"]} spacing={5} flex={1}>
+										<FormControl as={Stack} flex={1} justifyContent={"flex-end"}>
+											<FormLabel>{t("global.startDate")}</FormLabel>
+											<DatePicker selected={dateRange.from || null}
+												dateFormat={"dd-MM-yyyy"} startDate={dateRange.from} endDate={dateRange.through} isClearable={false} selectsRange={true}
+												onChange={(value: [Date, Date]) => {
+													if (value) {
+														const [from, through] = value;
+														if (from || through) {
+															setDateRange(() => ({from, through}));
+														}
+													}
+												}} customInput={(<Input />)} />
+										</FormControl>
+									</Stack>
 
-                                    <Stack direction={"column"} spacing={5} flex={1}>
-                                        <FormControl as={Stack} flex={1}>
-                                            <FormLabel>{t("charts.filterBurgers")}</FormLabel>
-                                            <Queryable query={$data} children={data => {
-                                                const burgers: Burger[] = data.burgers || [];
-                                                const value = burgers.filter(b => filterBurgerIds.includes(b.id!)).map(b => ({
-                                                    key: b.id,
-                                                    value: b.id,
-                                                    label: formatBurgerName(b),
-                                                }));
-                                                return (
-                                                    <Select onChange={onSelectBurger} options={burgers.map(b => ({
-                                                        key: b.id,
-                                                        value: b.id,
-                                                        label: formatBurgerName(b),
-                                                    }))} styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllBurgers")} value={value} />
-                                                );
-                                            }} />
-                                        </FormControl>
-                                        <FormControl as={Stack} flex={1}>
-                                            <FormLabel>{t("charts.filterRubrics")}</FormLabel>
-                                            <Queryable query={$data} children={data => {
-                                                const rubrieken: Rubriek[] = data.rubrieken || [];
-                                                return (
-                                                    <Select onChange={onSelectRubriek} options={rubrieken.map(r => ({
-                                                        key: r.id,
-                                                        value: r.id,
-                                                        label: r.naam,
-                                                    }))} styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllRubrics")} />
-                                                );
-                                            }} />
-                                        </FormControl>
-                                    </Stack>
+									<Stack direction={"column"} spacing={5} flex={1}>
+										<FormControl as={Stack} flex={1}>
+											<FormLabel>{t("charts.filterBurgers")}</FormLabel>
+											<Queryable query={$data} children={data => {
+												const burgers: Burger[] = data.burgers || [];
+												const value = burgers.filter(b => filterBurgerIds.includes(b.id!)).map(b => ({
+													key: b.id,
+													value: b.id,
+													label: formatBurgerName(b),
+												}));
+												return (
+													<Select onChange={onSelectBurger} options={burgers.map(b => ({
+														key: b.id,
+														value: b.id,
+														label: formatBurgerName(b),
+													}))} styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllBurgers")} value={value} />
+												);
+											}} />
+										</FormControl>
+										<FormControl as={Stack} flex={1}>
+											<FormLabel>{t("charts.filterRubrics")}</FormLabel>
+											<Queryable query={$data} children={data => {
+												const rubrieken: Rubriek[] = data.rubrieken || [];
+												return (
+													<Select onChange={onSelectRubriek} options={rubrieken.map(r => ({
+														key: r.id,
+														value: r.id,
+														label: r.naam,
+													}))} styles={reactSelectStyles.default} isMulti isClearable={true} noOptionsMessage={() => t("select.noOptions")} maxMenuHeight={200} placeholder={t("charts.optionAllRubrics")} />
+												);
+											}} />
+										</FormControl>
+									</Stack>
 
-                                    <Stack direction={["column", "row"]} spacing={5} flex={1}>
-                                        <FormControl as={Stack} flex={1}>
-                                            <FormLabel>{t("charts.granularity")}</FormLabel>
-                                            <RadioButtonGroup name={"granularity"} onChange={onChangeGranularity} defaultValue={Granularity.Monthly} value={granularity} options={granularityOptions} />
-                                        </FormControl>
-                                    </Stack>
-                                </Stack>
-                            </Stack>
-                        </Modal>
+									<Stack direction={["column", "row"]} spacing={5} flex={1}>
+										<FormControl as={Stack} flex={1}>
+											<FormLabel>{t("charts.granularity")}</FormLabel>
+											<RadioButtonGroup name={"granularity"} onChange={onChangeGranularity} defaultValue={Granularity.Monthly} value={granularity} options={granularityOptions} />
+										</FormControl>
+									</Stack>
+								</Stack>
+							</Stack>
+						</Modal>
 
-                        <Heading size={"sm"} fontWeight={"normal"}>{selectedBurgers.length > 0 ? humanJoin(selectedBurgers.map(b => formatBurgerName(b))) : t("allBurgers")}</Heading>
-                        <SectionContainer>
-                            <Tabs isLazy variant={"solid"} align={"start"} colorScheme={"primary"}>
-                                <Stack direction={"row"} as={TabList} spacing={2}>
-                                    <Tab>{t("charts.saldo.title")}</Tab>
-                                    <Tab>{t("charts.inkomstenUitgaven.title")}</Tab>
-                                </Stack>
-                                <TabPanels>
-                                    <TabPanel>
-                                        <Saldo transactions={filteredTransactions} />
-                                    </TabPanel>
-                                    <TabPanel>
-                                        <InkomstenUitgaven transactions={filteredTransactions} />
-                                    </TabPanel>
-                                </TabPanels>
-                            </Tabs>
-                        </SectionContainer>
-                        <BalanceTable transactions={filteredTransactions} startDate={d(dateRange.from).format("L")} endDate={d(dateRange.through).format("L")} />
-                    </Page>
-                )
+						<Heading size={"sm"} fontWeight={"normal"}>{selectedBurgers.length > 0 ? humanJoin(selectedBurgers.map(b => formatBurgerName(b))) : t("allBurgers")}</Heading>
+						<SectionContainer>
+							<Tabs isLazy variant={"solid"} align={"start"} colorScheme={"primary"}>
+								<Stack direction={"row"} as={TabList} spacing={2}>
+									<Tab>{t("charts.saldo.title")}</Tab>
+									<Tab>{t("charts.inkomstenUitgaven.title")}</Tab>
+								</Stack>
+								<TabPanels>
+									<TabPanel>
+										<Saldo transactions={filteredTransactions} />
+									</TabPanel>
+									<TabPanel>
+										<InkomstenUitgaven transactions={filteredTransactions} />
+									</TabPanel>
+								</TabPanels>
+							</Tabs>
+						</SectionContainer>
+						<BalanceTable transactions={filteredTransactions} startDate={d(dateRange.from).format("L")} endDate={d(dateRange.through).format("L")} />
+					</Page>
+				)
 
-            }} />
-        </RapportageContext.Provider>
-    );
+			}} />
+		</RapportageContext.Provider>
+	);
 };
 
 export default Rapportage;

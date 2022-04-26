@@ -15,40 +15,40 @@ type TransactieItemModalProps = {
 };
 
 const TransactieItemModal: React.FC<TransactieItemModalProps> = ({id, onClose, refetch}) => {
-    const {t} = useTranslation();
-    const $transactie = useGetTransactieQuery({
-        variables: {id},
-    });
+	const {t} = useTranslation();
+	const $transactie = useGetTransactieQuery({
+		variables: {id},
+	});
 
-    const $transactionItemFormData = useGetTransactionItemFormDataQuery();
+	const $transactionItemFormData = useGetTransactionItemFormDataQuery();
 
-    return (
-        <Modal
-            title={t("forms.bankzaken.sections.journal.title")}
-            isOpen={true}
-            onClose={onClose}
-            size={"4xl"}
-        >
-            <Queryable query={$transactie} children={data => {
-                const transactie = data.bankTransaction;
+	return (
+		<Modal
+			title={t("forms.bankzaken.sections.journal.title")}
+			isOpen={true}
+			onClose={onClose}
+			size={"4xl"}
+		>
+			<Queryable query={$transactie} children={data => {
+				const transactie = data.bankTransaction;
 
-                return (
-                    <Stack spacing={10}>
-                        <TransactieDetailsView transaction={transactie} />
+				return (
+					<Stack spacing={10}>
+						<TransactieDetailsView transaction={transactie} />
 
-                        {transactie.journaalpost ? (
-                            <BookingDetailsView transactie={transactie} refetch={refetch} />
-                        ) : (
-                            <Queryable query={$transactionItemFormData} children={(data) => (
-                                <BookingSection transaction={transactie} rubrieken={data.rubrieken || []} afspraken={data.afspraken || []} refetch={refetch} />
-                            )} />
-                        )}
-                    </Stack>
-                )
+						{transactie.journaalpost ? (
+							<BookingDetailsView transactie={transactie} refetch={refetch} />
+						) : (
+							<Queryable query={$transactionItemFormData} children={(data) => (
+								<BookingSection transaction={transactie} rubrieken={data.rubrieken || []} afspraken={data.afspraken || []} refetch={refetch} />
+							)} />
+						)}
+					</Stack>
+				)
 
-            }} />
-        </Modal>
-    );
+			}} />
+		</Modal>
+	);
 };
 
 export default TransactieItemModal;
