@@ -23,6 +23,11 @@ apiRouter.get("/health", healthRouter);
 
 apiRouter.get("/version", (req, res) => res.send(pkg.version));
 
+apiRouter.get("/", (req, res) => {
+	const features = unleashClient.getFeatureToggleDefinitions();
+	res.json({features: features.map(f => ({name: f.name, enabled: isFeatureEnabled(f.name)}))});
+});
+
 apiRouter.post("/:features", (req, res) => {
 	const features = (req.params.features || "").split(",");
 
