@@ -35,6 +35,18 @@ class DeleteRubriek(graphene.Mutation):
         """ Delete current rubriek """
         id = _kwargs.get("id")
         previous = await hhb_dataloader().rubrieken_by_id.load(id)
+
+        # Check if in use by afspraken
+        afspraken = requests.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_rubrieken={id}").json()['data']
+        if afspraken:
+            raise GraphQLError("Rubriek wordt gebruikt in een of meerdere afspraken - verwijderen is niet mogelijk.")
+
+        # Check if in use by journaalposten
+        grootboekrekening_id = _kwargs.get('grootboekrekening_id')
+        journaalposten = requests.get(f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_grootboekrekeningen={grootboekrekening_id}").json()['data']
+        if journaalposten:
+            raise GraphQLError("Rubriek zit in grootboekrekening die wordt gebruikt in journaalposten - verwijderen is niet mogelijk.")
+
         delete_response = requests.delete(f"{settings.HHB_SERVICES_URL}/rubrieken/{id}")
         if delete_response.status_code != 204:
             raise GraphQLError(f"Upstream API responded: {delete_response.json()}")
