@@ -1,0 +1,64 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Page Page with all options 1`] = `
+"<div class=\\"chakra-stack css-137fd6w\\">
+  <div class=\\"css-0\\"><button type=\\"button\\" class=\\"chakra-button css-5c2176\\">Click</button></div>
+  <div class=\\"chakra-stack css-1oeb4ru\\">
+    <h2 class=\\"chakra-heading css-0\\">Bankafschriften</h2>
+    <div class=\\"chakra-stack css-84zodg\\">
+      <div class=\\"css-0\\">
+        <div role=\\"group\\" class=\\"chakra-button__group css-1ayoy1w\\"><button type=\\"button\\" class=\\"chakra-button css-e844lx\\">Actie</button><button type=\\"button\\" class=\\"chakra-button css-2qv00o\\">Actie</button></div>
+      </div><button class=\\"chakra-menu__menu-button chakra-button css-vd5tr3\\" aria-label=\\"Open menu\\" id=\\"menu-button-3\\" aria-expanded=\\"false\\" aria-haspopup=\\"menu\\" aria-controls=\\"menu-list-3\\" type=\\"button\\"><span class=\\"css-xl71ch\\"><svg viewBox=\\"0 0 24 24\\" focusable=\\"false\\" class=\\"chakra-icon css-onkibi\\" aria-hidden=\\"true\\"><path fill=\\"currentColor\\" d=\\"M10 6a2 2 0 110-4 2 2 0 010 4z M10 12a2 2 0 110-4 2 2 0 010 4z M10 18a2 2 0 110-4 2 2 0 010 4z\\"></path></svg></span></button>
+      <div style=\\"visibility: hidden; position: absolute; min-width: max-content; inset: 0 auto auto 0;\\" class=\\"css-0\\">
+        <div tabindex=\\"-1\\" role=\\"menu\\" id=\\"menu-list-3\\" style=\\"transform-origin: var(--popper-transform-origin); opacity: 0; visibility: hidden; transform: scale(0.8) translateZ(0);\\" aria-orientation=\\"vertical\\" class=\\"chakra-menu__menu-list css-sjt5nk\\"><button type=\\"button\\" id=\\"menu-list-3-menuitem-1\\" role=\\"menuitem\\" tabindex=\\"-1\\" class=\\"chakra-menu__menuitem css-1k756t9\\" data-index=\\"0\\">Alle transacties afletteren</button></div>
+      </div>
+    </div>
+  </div>
+  <div class=\\"chakra-stack css-r7hjxq\\"></div>
+</div>"
+`;
+
+exports[`Page Renders a menu 1`] = `
+"<div class=\\"chakra-stack css-137fd6w\\">
+  <div class=\\"chakra-stack css-1oeb4ru\\">
+    <h2 class=\\"chakra-heading css-0\\">Bankafschriften</h2>
+    <div class=\\"chakra-stack css-84zodg\\"><button class=\\"chakra-menu__menu-button chakra-button css-vd5tr3\\" aria-label=\\"Open menu\\" id=\\"menu-button-6\\" aria-expanded=\\"false\\" aria-haspopup=\\"menu\\" aria-controls=\\"menu-list-6\\" type=\\"button\\"><span class=\\"css-xl71ch\\"><svg viewBox=\\"0 0 24 24\\" focusable=\\"false\\" class=\\"chakra-icon css-onkibi\\" aria-hidden=\\"true\\"><path fill=\\"currentColor\\" d=\\"M10 6a2 2 0 110-4 2 2 0 010 4z M10 12a2 2 0 110-4 2 2 0 010 4z M10 18a2 2 0 110-4 2 2 0 010 4z\\"></path></svg></span></button>
+      <div style=\\"visibility: hidden; position: absolute; min-width: max-content; inset: 0 auto auto 0;\\" class=\\"css-0\\">
+        <div tabindex=\\"-1\\" role=\\"menu\\" id=\\"menu-list-6\\" style=\\"transform-origin: var(--popper-transform-origin); opacity: 0; visibility: hidden; transform: scale(0.8) translateZ(0);\\" aria-orientation=\\"vertical\\" class=\\"chakra-menu__menu-list css-sjt5nk\\"><button type=\\"button\\" id=\\"menu-list-6-menuitem-4\\" role=\\"menuitem\\" tabindex=\\"-1\\" class=\\"chakra-menu__menuitem css-1k756t9\\" data-index=\\"0\\">Alle transacties afletteren</button></div>
+      </div>
+    </div>
+  </div>
+</div>"
+`;
+
+exports[`Page Renders a menu 2`] = `
+"<div class=\\"chakra-stack css-137fd6w\\">
+  <div class=\\"chakra-stack css-1oeb4ru\\">
+    <h2 class=\\"chakra-heading css-0\\">Bankafschriften</h2>
+    <div class=\\"chakra-stack css-84zodg\\"><button class=\\"chakra-menu__menu-button chakra-button css-vd5tr3\\" aria-label=\\"Open menu\\" id=\\"menu-button-6\\" aria-expanded=\\"true\\" aria-haspopup=\\"menu\\" aria-controls=\\"menu-list-6\\" type=\\"button\\" data-active=\\"\\"><span class=\\"css-xl71ch\\"><svg viewBox=\\"0 0 24 24\\" focusable=\\"false\\" class=\\"chakra-icon css-onkibi\\" aria-hidden=\\"true\\"><path fill=\\"currentColor\\" d=\\"M10 6a2 2 0 110-4 2 2 0 010 4z M10 12a2 2 0 110-4 2 2 0 010 4z M10 18a2 2 0 110-4 2 2 0 010 4z\\"></path></svg></span></button>
+      <div style=\\"visibility: visible; position: absolute; min-width: max-content; inset: 0 auto auto 0; left: 0px; top: 0px; margin: 0px; transform: translate(0px, 8px); --popper-transform-origin: top left;\\" class=\\"css-0\\" data-popper-reference-hidden=\\"\\" data-popper-escaped=\\"\\" data-popper-placement=\\"bottom-start\\">
+        <div tabindex=\\"-1\\" role=\\"menu\\" id=\\"menu-list-6\\" style=\\"transform-origin: var(--popper-transform-origin); opacity: 0; visibility: hidden; transform: scale(0.8) translateZ(0);\\" aria-orientation=\\"vertical\\" class=\\"chakra-menu__menu-list css-sjt5nk\\"><button type=\\"button\\" id=\\"menu-list-6-menuitem-4\\" role=\\"menuitem\\" tabindex=\\"-1\\" class=\\"chakra-menu__menuitem css-1k756t9\\" data-index=\\"0\\">Alle transacties afletteren</button></div>
+      </div>
+    </div>
+  </div>
+</div>"
+`;
+
+exports[`Page Renders a title 1`] = `
+"<div class=\\"chakra-stack css-137fd6w\\">
+  <div class=\\"chakra-stack css-1oeb4ru\\">
+    <h2 class=\\"chakra-heading css-0\\">Bankafschriften</h2>
+    <div class=\\"chakra-stack css-84zodg\\"></div>
+  </div>
+</div>"
+`;
+
+exports[`Page Renders with a backbutton 1`] = `
+"<div class=\\"chakra-stack css-137fd6w\\">
+  <div class=\\"css-0\\"><button type=\\"button\\" class=\\"chakra-button css-5c2176\\">Click</button></div>
+  <div class=\\"chakra-stack css-1oeb4ru\\">
+    <h2 class=\\"chakra-heading css-0\\">Bankafschriften</h2>
+    <div class=\\"chakra-stack css-84zodg\\"></div>
+  </div>
+</div>"
+`;
