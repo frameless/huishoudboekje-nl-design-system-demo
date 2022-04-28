@@ -1,6 +1,7 @@
 import {Flex, Stack} from "@chakra-ui/react";
 import React from "react";
 import Logo from "./Logo";
+import VersionTag from "./VersionTag";
 
 const TwoColumns = ({children}) => {
 	return (
@@ -14,7 +15,14 @@ const TwoColumns = ({children}) => {
 					</Flex>
 				</Stack>
 				<Stack bg={"white"} height={["auto", null, null, "100%"]} justifyContent={"center"} width={["100%", null, null, "50%"]} p={5}>
-					{children}
+					<Stack flex={1} justify={"center"}>
+						<Stack>
+							{children}
+						</Stack>
+					</Stack>
+					<Stack align={["center", null, null, "flex-start"]} pt={[10, null, null, 0]}>
+						<VersionTag />
+					</Stack>
 				</Stack>
 			</Stack>
 		</Flex>
