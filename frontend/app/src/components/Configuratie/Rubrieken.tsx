@@ -8,11 +8,11 @@ import {useReactSelectStyles} from "../../utils/things";
 import useForm from "../../utils/useForm";
 import useSelectProps from "../../utils/useSelectProps";
 import useToaster from "../../utils/useToaster";
+import zod from "../../utils/zod";
+import Asterisk from "../shared/Asterisk";
 import Section from "../shared/Section";
 import SectionContainer from "../shared/SectionContainer";
 import RubriekItem from "./RubriekItem";
-import Asterisk from "../shared/Asterisk";
-import zod from "../../utils/zod";
 
 const validator = zod.object({
 	naam: zod.string().nonempty(),
@@ -30,7 +30,6 @@ const Rubrieken = () => {
 			{query: GetRubriekenConfiguratieDocument},
 		],
 	});
-
 	const [form, {updateForm, isValid, isFieldValid, reset, toggleSubmitted}] = useForm({
 		validator,
 	});
@@ -48,7 +47,7 @@ const Rubrieken = () => {
 
 		createRubriek({
 			variables: {
-				naam: form.naam!,
+				naam: form.naam,
 				grootboekrekening: form.grootboekrekening,
 			},
 		}).then(() => {
@@ -56,17 +55,16 @@ const Rubrieken = () => {
 			toast({
 				success: t("messages.rubrieken.createSuccess"),
 			});
-		})
-			.catch(err => {
-				let message = err.message;
-				if (err.message.includes("already exists")) {
-					message = t("messages.configuratie.alreadyExists");
-				}
+		}).catch(err => {
+			let message = err.message;
+			if (err.message.includes("already exists")) {
+				message = t("messages.configuratie.alreadyExists");
+			}
 
-				toast({
-					error: message,
-				});
+			toast({
+				error: message,
 			});
+		});
 	};
 
 	return (

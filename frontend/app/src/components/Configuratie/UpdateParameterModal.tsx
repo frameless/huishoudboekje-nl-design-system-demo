@@ -1,12 +1,12 @@
-import React, {useRef} from "react";
-import Modal from "../shared/Modal";
-import {useTranslation} from "react-i18next";
 import {Button, FormControl, FormErrorMessage, FormLabel, HStack, Input, Stack} from "@chakra-ui/react";
-import zod from "../../utils/zod";
+import React, {useRef} from "react";
+import {useTranslation} from "react-i18next";
 import {Configuratie, GetConfiguratieDocument, useUpdateConfiguratieMutation} from "../../generated/graphql";
-import useToaster from "../../utils/useToaster";
 import useForm from "../../utils/useForm";
+import useToaster from "../../utils/useToaster";
+import zod from "../../utils/zod";
 import Asterisk from "../shared/Asterisk";
+import Modal from "../shared/Modal";
 
 const validator = zod.object({
 	id: zod.string().nonempty(),
@@ -14,8 +14,8 @@ const validator = zod.object({
 });
 
 type UpdateParameterModalProps = {
-    onClose: VoidFunction,
-    configuratie: Configuratie,
+	onClose: VoidFunction,
+	configuratie: Configuratie,
 };
 
 const UpdateParameterModal: React.FC<UpdateParameterModalProps> = ({onClose, configuratie}) => {
@@ -32,7 +32,7 @@ const UpdateParameterModal: React.FC<UpdateParameterModalProps> = ({onClose, con
 		validator,
 		initialValue: {
 			id, waarde,
-		}
+		},
 	});
 
 	const onSubmit = (e) => {
@@ -51,24 +51,22 @@ const UpdateParameterModal: React.FC<UpdateParameterModalProps> = ({onClose, con
 				key: configuratie.id!,
 				value: form.waarde!,
 			},
-		})
-			.then(() => {
-				reset();
-				toast({
-					success: t("messages.configuratie.updateSuccess"),
-				});
-				onClose();
-			})
-			.catch(err => {
-				let message = err.message;
-				if (err.message.includes("already exists")) {
-					message = t("messages.configuratie.alreadyExists");
-				}
-
-				toast({
-					error: message,
-				});
+		}).then(() => {
+			reset();
+			toast({
+				success: t("messages.configuratie.updateSuccess"),
 			});
+			onClose();
+		}).catch(err => {
+			let message = err.message;
+			if (err.message.includes("already exists")) {
+				message = t("messages.configuratie.alreadyExists");
+			}
+
+			toast({
+				error: message,
+			});
+		});
 	};
 
 	return (

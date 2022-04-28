@@ -5,35 +5,44 @@ import {useTranslation} from "react-i18next";
 import {GetRubriekenDocument, Rubriek, useDeleteRubriekMutation} from "../../generated/graphql";
 import useToaster from "../../utils/useToaster";
 import DeleteConfirmButton from "../shared/DeleteConfirmButton";
-import UpdateRubriekenModal from "./UpdateRubriekenModal";
+import UpdateRubriekModal from "./UpdateRubriekModal";
 
 const RubriekItem: React.FC<{rubriek: Rubriek}> = ({rubriek}) => {
 	const toast = useToaster();
 	const {t} = useTranslation();
 	const updateRubriekenModal = useDisclosure();
-
 	const [deleteRubriek] = useDeleteRubriekMutation({
-		variables: {
-			id: rubriek.id!,
-		},
 		refetchQueries: [
 			{query: GetRubriekenDocument},
 		],
 	});
 
 	const onDelete = () => {
-		deleteRubriek().then(result => {
-			if (result.data?.deleteRubriek?.ok) {
+		if (!rubriek.id) {
+			return;
+		}
+
+		deleteRubriek({
+			variables: {
+				id: rubriek.id,
+			},
+		})
+			.then(() => {
 				toast.closeAll();
 				toast({
 					success: t("messages.rubrieken.deleteSuccess"),
 				});
-			}
-		});
+			})
+			.catch(err => {
+				toast.closeAll();
+				toast({
+					error: err.message,
+				});
+			});
 	};
 
 	return (<>
-		{updateRubriekenModal.isOpen && <UpdateRubriekenModal onClose={updateRubriekenModal.onClose} rubriek={rubriek} />}
+		{updateRubriekenModal.isOpen && <UpdateRubriekModal onClose={updateRubriekenModal.onClose} rubriek={rubriek} />}
 
 		<Tr key={rubriek.id}>
 			<Td>

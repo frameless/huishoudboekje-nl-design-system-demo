@@ -70,7 +70,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	});
 
 	const toggleAlarmActive = () => {
-		if(!isSignalenEnabled){
+		if (!isSignalenEnabled) {
 			return;
 		}
 
@@ -98,7 +98,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	};
 
 	const onDeleteAlarm = () => {
-		if(!isSignalenEnabled){
+		if (!isSignalenEnabled) {
 			return;
 		}
 
@@ -159,7 +159,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	};
 
 	const onCreateAlarm = (data) => {
-		if(!isSignalenEnabled){
+		if (!isSignalenEnabled) {
 			return;
 		}
 

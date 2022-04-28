@@ -17,12 +17,12 @@ const validator = zod.object({
 	grootboekrekening: zod.string().nonempty(),
 });
 
-type UpdateRubriekenModalProps = {
+type UpdateRubriekModalProps = {
     onClose: VoidFunction,
     rubriek: Rubriek,
 };
 
-const UpdateRubriekenModal: React.FC<UpdateRubriekenModalProps> = ({onClose, rubriek}) => {
+const UpdateRubriekModal: React.FC<UpdateRubriekModalProps> = ({onClose, rubriek}) => {
 	const toast = useToaster();
 	const {t} = useTranslation();
 	const cancelDeleteRef = useRef(null);
@@ -35,11 +35,11 @@ const UpdateRubriekenModal: React.FC<UpdateRubriekenModalProps> = ({onClose, rub
 			{query: GetRubriekenConfiguratieDocument, variables: {id: rubriek.id}},
 		],
 	});
-
 	const [form, {updateForm, isValid, isFieldValid, reset, toggleSubmitted}] = useForm<zod.infer<typeof validator>>({
 		validator,
 		initialValue: {
-			naam, grootboekrekening: grootboekrekening?.id,
+			naam,
+			grootboekrekening: grootboekrekening?.id,
 		}
 	});
 
@@ -79,7 +79,6 @@ const UpdateRubriekenModal: React.FC<UpdateRubriekenModalProps> = ({onClose, rub
 	};
 
 	return (
-
 		<Queryable query={$rubriekenConfiguratie} children={data => {
 			const grootboekrekeningen: Grootboekrekening[] = data.grootboekrekeningen || [];
 
@@ -123,4 +122,4 @@ const UpdateRubriekenModal: React.FC<UpdateRubriekenModalProps> = ({onClose, rub
 	);
 };
 
-export default UpdateRubriekenModal;
+export default UpdateRubriekModal;
