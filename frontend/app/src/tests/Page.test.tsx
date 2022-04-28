@@ -1,4 +1,4 @@
-import {act, fireEvent, getByText, screen} from "@testing-library/react";
+import {act, fireEvent, getByLabelText, getByText, screen, waitFor} from "@testing-library/react";
 import React from "react";
 import {render, unmountComponentAtNode} from "react-dom";
 import Page from "../components/shared/Page";
@@ -24,7 +24,7 @@ afterEach(() => {
 
 describe("Page", () => {
 
-    it("Page with only title", () => {
+    it("Renders a title", () => {
         act(() => {
             render(
                 <Page
@@ -38,7 +38,7 @@ describe("Page", () => {
         const [pageTitle] = screen.queryAllByRole("heading");
 
         const title = getByText(pageTitle, "Bankafschriften");
-        expect(title).toBeInTheDocument();
+        expect(title).toBeVisible();
     });
 
     it("Page with all options", () => {
@@ -69,12 +69,12 @@ describe("Page", () => {
                 , container);
         });
 
-        // expect(pretty(container?.innerHTML)).toMatchSnapshot();
+        expect(pretty(container?.innerHTML)).toMatchSnapshot();
 
     });
 
 
-    it("Page with title & backButton", () => {
+    it("Renders with a backbutton", () => {
         const onClick = jest.fn();
 
         act(() => {
@@ -104,16 +104,18 @@ describe("Page", () => {
 
     });
 
-    it("Page with title & menu", () => {
+    it("Renders a menu", async () => {
+        const onClick = jest.fn();
+
         act(() => {
             render(
                 <Page
                     title={"Bankafschriften"}
                     menu={(
                         <Menu>
-                            <IconButton as={MenuButton} icon={<MenuIcon />} variant={"solid"} aria-label={"Open menu"} />
+                            <IconButton as={MenuButton} icon={<MenuIcon />} variant={"solid"} aria-label={"Open menu"} onClick={onClick} />
                             <MenuList>
-                                <MenuItem>Alle transacties afletteren</MenuItem>
+                                <MenuItem onClick={onClick}>Alle transacties afletteren</MenuItem>
                             </MenuList>
                         </Menu>
                     )}
@@ -121,35 +123,47 @@ describe("Page", () => {
                 , container);
         });
 
-        // expect(pretty(container?.innerHTML)).toMatchSnapshot();
 
-        const pageMenu = screen.queryAllByRole("menu");
+        expect(pretty(container?.innerHTML)).toMatchSnapshot();
+        expect(onClick).toHaveBeenCalledTimes(0);
 
-        expect(pageMenu).toMatchSnapshot();
+        const iconButton = getByLabelText(container!, "Open menu")
+        expect(iconButton).toBeVisible();
 
+        const clickEvent = new Event("click", {
+            bubbles: true,
+            cancelable: true,
+        });
+
+        fireEvent(iconButton, clickEvent);
+
+        expect(pretty(container?.innerHTML)).toMatchSnapshot();
+        expect(onClick).toHaveBeenCalledTimes(1);
+
+        const menuItem = getByText(container!, "Alle transacties afletteren");
+        await waitFor(() => expect(menuItem).toBeVisible());
+
+        fireEvent(menuItem, clickEvent);
+        expect(onClick).toHaveBeenCalledTimes(2);
+    });
+
+    it("Renders components on the right", () => {
+        act(() => {
+            render(
+                <Page
+                    title={"Bankafschriften"}
+                    right={(
+                        <Button colorScheme={"primary"} variant={"outline"} size={"sm"}>Actie</Button>
+                    )}
+                />
+                , container);
+        });
+
+        
     });
 });
 
 
-//
-// it("Page with title & right", () => {
-//     act(() => {
-//         render(
-//             <Page
-//                 title={"Bankafschriften"}
-//                 right={(
-//                     <ButtonGroup size={"sm"} isAttached variant={"outline"}>
-//                         <Button mr={"-px"} colorScheme={"primary"} variant={"outline"} size={"sm"}>Actie</Button>
-//                         <Button colorScheme={"primary"} variant={"outline"} size={"sm"}>Actie</Button>
-//                     </ButtonGroup>
-//                 )}
-//             />
-//             , container);
-//     });
-//
-//     const html = container!.innerHTML;
-//     expect(html).not.toBeNull();
-// });
 //
 // it("Page with title & children", () => {
 //     act(() => {
