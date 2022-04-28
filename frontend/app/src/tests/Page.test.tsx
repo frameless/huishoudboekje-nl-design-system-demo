@@ -3,7 +3,7 @@ import React from "react";
 import {render, unmountComponentAtNode} from "react-dom";
 import Page from "../components/shared/Page";
 import pretty from "pretty";
-import {Button, ButtonGroup, IconButton, Menu, MenuButton, MenuItem, MenuList} from "@chakra-ui/react";
+import {Button, ButtonGroup, HStack, IconButton, Menu, MenuButton, MenuItem, MenuList, Text} from "@chakra-ui/react";
 import MenuIcon from "../components/shared/MenuIcon";
 import SectionContainer from "../components/shared/SectionContainer";
 
@@ -41,7 +41,7 @@ describe("Page", () => {
         expect(title).toBeVisible();
     });
 
-    it("Page with all options", () => {
+    it("Renders the page component with all options", () => {
         const onClick = jest.fn();
 
         act(() => {
@@ -72,7 +72,6 @@ describe("Page", () => {
         expect(pretty(container?.innerHTML)).toMatchSnapshot();
 
     });
-
 
     it("Renders with a backbutton", () => {
         const onClick = jest.fn();
@@ -127,7 +126,7 @@ describe("Page", () => {
         expect(pretty(container?.innerHTML)).toMatchSnapshot();
         expect(onClick).toHaveBeenCalledTimes(0);
 
-        const iconButton = getByLabelText(container!, "Open menu")
+        const iconButton = getByLabelText(container!, "Open menu");
         expect(iconButton).toBeVisible();
 
         const clickEvent = new Event("click", {
@@ -148,32 +147,56 @@ describe("Page", () => {
     });
 
     it("Renders components on the right", () => {
+        const onClick = jest.fn();
+
         act(() => {
             render(
                 <Page
                     title={"Bankafschriften"}
                     right={(
-                        <Button colorScheme={"primary"} variant={"outline"} size={"sm"}>Actie</Button>
+                        <HStack>
+                            <Text>Tekst zichtbaar</Text>
+                            <Button colorScheme={"primary"} variant={"outline"} size={"sm"} onClick={onClick}>Actie</Button>
+                        </HStack>
                     )}
                 />
                 , container);
         });
 
-        
+        expect(pretty(container?.innerHTML)).toMatchSnapshot();
+        expect(onClick).toHaveBeenCalledTimes(0);
+
+        const text = getByText(container!, "Tekst zichtbaar");
+        expect(text).toBeVisible();
+
+        const button = getByText(container!, "Actie");
+        expect(button).toBeVisible();
+
+        const clickEvent = new Event("click", {
+            bubbles: true,
+            cancelable: true,
+        });
+
+        fireEvent(button, clickEvent);
+
+        expect(pretty(container?.innerHTML)).toMatchSnapshot();
+        expect(onClick).toHaveBeenCalledTimes(1);
+    });
+    
+    it("Renders component with children", () => {
+        act(() => {
+            render(
+                <Page title={"Bankafschriften"}>
+                    <Text>Hier kunnen verschillende componenten komen te staan.</Text>
+                </Page>
+                , container);
+        });
+
+        expect(pretty(container?.innerHTML)).toMatchSnapshot();
+
+        const text = getByText(container!, "Hier kunnen verschillende componenten komen te staan.");
+        expect(text).toBeVisible();
     });
 });
 
 
-//
-// it("Page with title & children", () => {
-//     act(() => {
-//         render(
-//             <Page title={"Bankafschriften"}>
-//                 <SectionContainer />
-//             </Page>
-//             , container);
-//     });
-//
-//     const html = container!.innerHTML;
-//     expect(html).not.toBeNull();
-// });

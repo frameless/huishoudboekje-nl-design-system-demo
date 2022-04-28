@@ -1,4 +1,4 @@
-import {act} from "@testing-library/react";
+import {act, getByText} from "@testing-library/react";
 import React from "react";
 import {render, unmountComponentAtNode} from "react-dom";
 import NumberBadge from "../components/shared/NumberBadge";
@@ -26,6 +26,9 @@ describe("Numberbadge", () => {
         });
 
         expect(pretty(container?.innerHTML)).toMatchSnapshot();
+
+        const count = getByText(container!, "9")
+        expect(count).toBeVisible();
     });
 
     it("shows NumberBage count more than 99", () => {
@@ -35,6 +38,9 @@ describe("Numberbadge", () => {
         });
 
         expect(pretty(container?.innerHTML)).toMatchSnapshot();
+
+        const count = getByText(container!, "99+")
+        expect(count).toBeVisible();
     });
 })
 

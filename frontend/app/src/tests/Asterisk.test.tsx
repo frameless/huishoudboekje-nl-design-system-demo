@@ -1,5 +1,6 @@
-import {act} from "@testing-library/react";
+import {act, getByText} from "@testing-library/react";
 import React from "react";
+import pretty from "pretty";
 import {render, unmountComponentAtNode} from "react-dom";
 import Asterisk from "../components/shared/Asterisk";
 
@@ -8,21 +9,30 @@ jest.mock("react-i18next", () => require("./utils/mock-hooks").reactI18NextMock(
 let container: HTMLDivElement | null = null;
 
 beforeEach(() => {
-	container = document.createElement("div");
-	document.body.appendChild(container);
+    container = document.createElement("div");
+    document.body.appendChild(container);
 });
 
 afterEach(() => {
-	unmountComponentAtNode(container!);
+    unmountComponentAtNode(container!);
     container!.remove();
     container = null;
 });
 
-it("Show asterisk", () => {
-	act(() => {
-		render(<Asterisk />, container);
-	});
+describe("Asterisk", () => {
 
-	const html = container!.innerHTML;
-	expect(html).not.toBeNull();
+    it("Renders asterisk component", () => {
+        act(() => {
+            render(<Asterisk />, container);
+        });
+
+        expect(pretty(container?.innerHTML)).toMatchSnapshot();
+
+        const asterisk = getByText(container!, "*");
+        expect(asterisk).toBeVisible();
+
+        const text = getByText(container!, "forms.asterisk");
+        expect(text).toBeVisible();
+
+    });
 });

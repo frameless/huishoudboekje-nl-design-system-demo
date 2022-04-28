@@ -1,5 +1,6 @@
 import {act, fireEvent, getByText} from "@testing-library/react";
 import React from "react";
+import pretty from "pretty";
 import {render, unmountComponentAtNode} from "react-dom";
 import DashedAddButton from "../components/shared/DashedAddButton";
 
@@ -26,6 +27,7 @@ describe("Dashed button", () => {
             render(<DashedAddButton>{label}</DashedAddButton>, container);
         });
 
+        expect(pretty(container?.innerHTML)).toMatchSnapshot();
         expect(container!.textContent).toBe(label)
     });
 
@@ -35,6 +37,7 @@ describe("Dashed button", () => {
             render(<DashedAddButton />, container);
         });
 
+        expect(pretty(container?.innerHTML)).toMatchSnapshot();
         expect(container!.textContent).toBe("global.actions.add")
     });
 
@@ -46,6 +49,7 @@ describe("Dashed button", () => {
             render(<DashedAddButton onClick={onClick}>{label}</DashedAddButton>, container);
         });
 
+        expect(pretty(container?.innerHTML)).toMatchSnapshot();
         expect(container?.textContent).toBe("Opslaan");
 
         const clickEvent = new Event("click", {
