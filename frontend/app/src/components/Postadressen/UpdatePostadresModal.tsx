@@ -1,9 +1,9 @@
 import React from "react";
-import {Afdeling, GetAfdelingDocument, Postadres, useUpdatePostadresMutation} from "../../generated/graphql";
 import {useTranslation} from "react-i18next";
-import PostadresForm from "./PostadresForm";
+import {Afdeling, GetAfdelingDocument, Postadres, useUpdatePostadresMutation} from "../../generated/graphql";
 import useToaster from "../../utils/useToaster";
 import Modal from "../shared/Modal";
+import PostadresForm from "./PostadresForm";
 
 type UpdatePostadresModalProps = {
     postadres: Postadres,
@@ -39,12 +39,7 @@ const UpdatePostadresModal: React.FC<UpdatePostadresModalProps> = ({postadres, a
 	};
 
 	return (
-		<Modal
-			title={t("modal.updatePostadress.title")}
-			showCancelButton={false}
-			isOpen={true}
-			onClose={onClose}
-		>
+		<Modal title={t("modal.updatePostadress.title")} onClose={onClose}>
 			<PostadresForm onChange={onSubmit} onCancel={onClose} postadres={postadres} />
 		</Modal>
 	);

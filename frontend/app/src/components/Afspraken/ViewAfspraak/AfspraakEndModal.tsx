@@ -1,4 +1,4 @@
-import {Button, FormControl, FormErrorMessage, FormLabel, Input, Stack, Text,} from "@chakra-ui/react";
+import {Button, Flex, FormControl, FormErrorMessage, FormLabel, Input, Stack, Text} from "@chakra-ui/react";
 import React, {useState} from "react";
 import DatePicker from "react-datepicker";
 import {useTranslation} from "react-i18next";
@@ -10,8 +10,8 @@ import Modal from "../../shared/Modal";
 const validator = zod.string().regex(new RegExp(/^\d{4}-\d{2}-\d{2}$/));
 
 type AfspraakEndModalProps = {
-    onClose: VoidFunction,
-    onSubmit: (validThrough: Date) => void
+	onClose: VoidFunction,
+	onSubmit: (validThrough: Date) => void
 };
 
 const AfspraakEndModal: React.FC<AfspraakEndModalProps> = ({onClose, onSubmit}) => {
@@ -31,21 +31,18 @@ const AfspraakEndModal: React.FC<AfspraakEndModalProps> = ({onClose, onSubmit}) 
 	};
 
 	const onClickSubmit = () => {
-		try {
-			onSubmit(date);
+		if (!isValid()) {
+			toast({
+				error: t("errors.invalidDateError"),
+			});
+			return;
 		}
-		catch (e) {
-			toast({error: t("errors.invalidDateError")});
-		}
+
+		onSubmit(date);
 	};
 
 	return (
-		<Modal
-			title={t("endAfspraak.confirmModalTitle")}
-			isOpen={true}
-			onClose={onClose}
-			confirmButton={<Button colorScheme={"primary"} onClick={onClickSubmit}>{t("global.actions.end")}</Button>}
-		>
+		<Modal title={t("endAfspraak.confirmModalTitle")} onClose={onClose}>
 			<Stack>
 				<Text>{t("endAfspraak.confirmModalBody")}</Text>
 
@@ -59,6 +56,10 @@ const AfspraakEndModal: React.FC<AfspraakEndModalProps> = ({onClose, onSubmit}) 
 						}} customInput={<Input type={"text"} isInvalid={!isValid()} />} />
 					<FormErrorMessage>{t("errors.invalidDateError")}</FormErrorMessage>
 				</FormControl>
+
+				<Flex justify={"flex-end"}>
+					<Button colorScheme={"primary"} onClick={onClickSubmit}>{t("global.actions.end")}</Button>
+				</Flex>
 			</Stack>
 		</Modal>
 	);

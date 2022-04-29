@@ -1,18 +1,18 @@
-import {Box, Button, Divider, HStack, Stack, Text, TextProps, useDisclosure} from "@chakra-ui/react";
+import {Box, Divider, HStack, Stack, Text, TextProps, useDisclosure} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {AppRoutes} from "../../config/routes";
 import {Burger, GebruikersActiviteit} from "../../generated/graphql";
 import {formatBurgerName, formatHuishoudenName, humanJoin} from "../../utils/things";
 import DataItem from "../shared/DataItem";
+import Modal from "../shared/Modal";
 import AuditLogLink from "./AuditLogLink";
 import {auditLogTexts} from "./texts";
-import Modal from "../shared/Modal";
 
-const AuditLogText: React.FC<TextProps & { g: GebruikersActiviteit }> = ({g, ...props}) => {
+const AuditLogText: React.FC<TextProps & {g: GebruikersActiviteit}> = ({g, ...props}) => {
 	const {t} = useTranslation();
 	const {action, entities = []} = g;
-	const {isOpen, onClose, onOpen} = useDisclosure();
+	const modal = useDisclosure();
 
 	const gebruiker = g.gebruikerId || t("unknownGebruiker");
 	const burger = entities.find(e => e.entityType === "burger")?.burger;
@@ -78,16 +78,8 @@ const AuditLogText: React.FC<TextProps & { g: GebruikersActiviteit }> = ({g, ...
 	};
 
 	return (<>
-		<Modal
-			title={"Gebeurtenis #" + g.id}
-			isOpen={isOpen}
-			onClose={onClose}
-			confirmButton={<Button colorScheme={"primary"} onClick={onClose}>{t("global.actions.close")}</Button>}
-			size={"2xl"}
-			showAsterisk={false}
-			showCancelButton={false}
-		>
-			<Stack>
+		{modal.isOpen && (
+			<Modal title={"Gebeurtenis #" + g.id} onClose={modal.onClose} size={"2xl"}>
 				<Stack>
 					<DataItem label={"Sjabloon"}>
 						<Text>
@@ -106,10 +98,10 @@ const AuditLogText: React.FC<TextProps & { g: GebruikersActiviteit }> = ({g, ...
 						<Box as={"pre"} p={2} bg={"gray.100"} maxWidth={"100%"} overflowX={"auto"}>{JSON.stringify(values, null, 2)}</Box>
 					</DataItem>
 				</Stack>
-			</Stack>
-		</Modal>
+			</Modal>
+		)}
 
-		<HStack onDoubleClick={() => onOpen()}>
+		<HStack onDoubleClick={() => modal.onOpen()}>
 			{auditLogTextElement ? (
 				<Text {...props}>{auditLogTextElement()}</Text>
 			) : (<>

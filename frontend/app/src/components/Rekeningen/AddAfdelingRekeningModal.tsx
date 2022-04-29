@@ -51,11 +51,7 @@ const AddAfdelingRekeningModal: React.FC<AddAfdelingRekeningModalProps> = ({afde
 	};
 
 	return (
-		<Modal
-			title={t("modals.addRekening.title")}
-			isOpen={true}
-			onClose={() => onClose()}
-		>
+		<Modal title={t("modals.addRekening.title")} onClose={() => onClose()}>
 			<RekeningForm rekening={{rekeninghouder: afdeling.naam}} isIbanValid={isIbanValid} onSubmit={onSaveRekening} onCancel={() => onClose()} />
 		</Modal>
 	);

@@ -3,15 +3,15 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {BankTransaction, useGetTransactieQuery, useGetTransactionItemFormDataQuery} from "../../../../generated/graphql";
 import Queryable from "../../../../utils/Queryable";
-import TransactieDetailsView from "./TransactieDetailsView";
+import Modal from "../../../shared/Modal";
 import BookingDetailsView from "./BookingDetailsView";
 import BookingSection from "./BookingSection";
-import Modal from "../../../shared/Modal";
+import TransactieDetailsView from "./TransactieDetailsView";
 
 type TransactieItemModalProps = {
-    id: NonNullable<BankTransaction["id"]>;
-    onClose: VoidFunction,
-    refetch: VoidFunction,
+	id: NonNullable<BankTransaction["id"]>;
+	onClose: VoidFunction,
+	refetch: VoidFunction,
 };
 
 const TransactieItemModal: React.FC<TransactieItemModalProps> = ({id, onClose, refetch}) => {
@@ -23,12 +23,7 @@ const TransactieItemModal: React.FC<TransactieItemModalProps> = ({id, onClose, r
 	const $transactionItemFormData = useGetTransactionItemFormDataQuery();
 
 	return (
-		<Modal
-			title={t("forms.bankzaken.sections.journal.title")}
-			isOpen={true}
-			onClose={onClose}
-			size={"4xl"}
-		>
+		<Modal title={t("forms.bankzaken.sections.journal.title")} onClose={onClose} size={"4xl"}>
 			<Queryable query={$transactie} children={data => {
 				const transactie = data.bankTransaction;
 
@@ -44,7 +39,7 @@ const TransactieItemModal: React.FC<TransactieItemModalProps> = ({id, onClose, r
 							)} />
 						)}
 					</Stack>
-				)
+				);
 
 			}} />
 		</Modal>

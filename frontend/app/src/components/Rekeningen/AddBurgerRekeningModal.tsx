@@ -1,4 +1,3 @@
-import {UseDisclosureReturn} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import SaveBurgerRekeningErrorHandler from "../../errorHandlers/SaveBurgerRekeningErrorHandler";
@@ -11,10 +10,10 @@ import RekeningForm from "./RekeningForm";
 
 type AddBurgerRekeningModalProps = {
 	burger: Burger,
-	disclosure: UseDisclosureReturn,
+	onClose: VoidFunction,
 };
 
-const AddBurgerRekeningModal: React.FC<AddBurgerRekeningModalProps> = ({burger, disclosure}) => {
+const AddBurgerRekeningModal: React.FC<AddBurgerRekeningModalProps> = ({burger, onClose}) => {
 	const {t} = useTranslation();
 	const toast = useToaster();
 	const handleSaveBurgerRekening = useMutationErrorHandler(SaveBurgerRekeningErrorHandler);
@@ -34,17 +33,13 @@ const AddBurgerRekeningModal: React.FC<AddBurgerRekeningModalProps> = ({burger, 
 			toast({
 				success: t("messages.rekeningen.createSuccess", {...rekening}),
 			});
-			disclosure.onClose();
+			onClose();
 		}).catch(handleSaveBurgerRekening);
 	};
 
 	return (
-		<Modal
-			title={t("modals.addRekening.title")}
-			isOpen={disclosure.isOpen}
-			onClose={() => disclosure.onClose()}
-		>
-			<RekeningForm rekening={{rekeninghouder: formatBurgerName(burger)}} onSubmit={onSaveRekening} onCancel={() => disclosure.onClose()} />
+		<Modal title={t("modals.addRekening.title")} onClose={() => onClose()}>
+			<RekeningForm rekening={{rekeninghouder: formatBurgerName(burger)}} onSubmit={onSaveRekening} onCancel={() => onClose()} />
 		</Modal>
 	);
 };

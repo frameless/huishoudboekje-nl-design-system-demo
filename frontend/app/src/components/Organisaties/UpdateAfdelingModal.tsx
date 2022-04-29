@@ -2,12 +2,12 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {Afdeling, GetOrganisatieDocument, useUpdateAfdelingMutation} from "../../generated/graphql";
 import useToaster from "../../utils/useToaster";
-import AfdelingForm from "./AfdelingForm";
 import Modal from "../shared/Modal";
+import AfdelingForm from "./AfdelingForm";
 
 type UpdateAfdelingModalProps = {
-    afdeling: Afdeling,
-    onClose: VoidFunction
+	afdeling: Afdeling,
+	onClose: VoidFunction
 };
 
 const UpdateAfdelingModal: React.FC<UpdateAfdelingModalProps> = ({afdeling, onClose}) => {
@@ -38,11 +38,7 @@ const UpdateAfdelingModal: React.FC<UpdateAfdelingModalProps> = ({afdeling, onCl
 	};
 
 	return (
-		<Modal
-			title={t("modal.updateAfdeling.title")}
-			isOpen={true}
-			onClose={onClose}
-		>
+		<Modal title={t("modal.updateAfdeling.title")} onClose={onClose}>
 			<AfdelingForm onChange={onSubmit} onCancel={onClose} organisatie={afdeling.organisatie!} values={{
 				naam: afdeling.naam,
 			}} />

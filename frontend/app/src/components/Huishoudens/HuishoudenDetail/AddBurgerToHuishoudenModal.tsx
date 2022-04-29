@@ -1,3 +1,4 @@
+import {Button, Flex, FormControl, FormLabel, Stack} from "@chakra-ui/react";
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
@@ -7,9 +8,8 @@ import {formatBurgerName, humanJoin, useReactSelectStyles} from "../../../utils/
 import useToaster from "../../../utils/useToaster";
 import {MultiLineOption, MultiLineValueContainer} from "../../Layouts/ReactSelect/CustomComponents";
 import Modal from "../../shared/Modal";
-import {Button, FormControl, FormLabel, Stack} from "@chakra-ui/react";
 
-const AddBurgerToHuishoudenModal: React.FC<{ huishouden: Huishouden, isOpen: boolean, onClose: VoidFunction }> = ({huishouden, isOpen, onClose}) => {
+const AddBurgerToHuishoudenModal: React.FC<{huishouden: Huishouden, onClose: VoidFunction}> = ({huishouden, onClose}) => {
 	const {t} = useTranslation();
 	const toast = useToaster();
 	const reactSelectStyles = useReactSelectStyles();
@@ -52,12 +52,7 @@ const AddBurgerToHuishoudenModal: React.FC<{ huishouden: Huishouden, isOpen: boo
 	};
 
 	return (
-		<Modal
-			title={t("forms.huishoudens.addBurger.title")}
-			onClose={onClose}
-			isOpen={isOpen}
-			confirmButton={<Button colorScheme={"primary"} onClick={onClickSave}>{t("global.actions.save")}</Button>}
-		>
+		<Modal title={t("forms.huishoudens.addBurger.title")} onClose={onClose}>
 			<Stack>
 				<FormControl isRequired={true}>
 					<FormLabel>{t("forms.huishoudens.findBurger")}</FormLabel>
@@ -77,6 +72,10 @@ const AddBurgerToHuishoudenModal: React.FC<{ huishouden: Huishouden, isOpen: boo
 						);
 					}} />
 				</FormControl>
+
+				<Flex justify={"flex-end"}>
+					<Button colorScheme={"primary"} onClick={onClickSave}>{t("global.actions.save")}</Button>
+				</Flex>
 			</Stack>
 		</Modal>
 	);

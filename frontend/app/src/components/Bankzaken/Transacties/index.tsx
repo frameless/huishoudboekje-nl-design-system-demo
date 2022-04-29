@@ -1,4 +1,4 @@
-import {Button, ButtonGroup, Checkbox, FormControl, FormLabel, HStack, Input, Stack, Text, useDisclosure} from "@chakra-ui/react";
+import {Button, ButtonGroup, Checkbox, Flex, FormControl, FormLabel, HStack, Input, Stack, Text, useDisclosure} from "@chakra-ui/react";
 import React, {useEffect, useState} from "react";
 import DatePicker from "react-datepicker";
 import {useTranslation} from "react-i18next";
@@ -10,12 +10,12 @@ import Queryable from "../../../utils/Queryable";
 import {createQueryParamsFromFilters, useReactSelectStyles} from "../../../utils/things";
 import useHandleMutation from "../../../utils/useHandleMutation";
 import usePagination from "../../../utils/usePagination";
+import Modal from "../../shared/Modal";
 import Page from "../../shared/Page";
 import Section from "../../shared/Section";
 import SectionContainer from "../../shared/SectionContainer";
 import {defaultBanktransactieFilters} from "./defaultBanktransactieFilters";
 import TransactiesList from "./TransactiesList";
-import Modal from "../../shared/Modal";
 
 const Transactions = () => {
 	const {t} = useTranslation();
@@ -72,71 +72,76 @@ const Transactions = () => {
 		<Page title={t("forms.bankzaken.sections.transactions.title")} right={(
 			<Button size={"sm"} variant={"outline"} colorScheme={"primary"} onClick={onClickStartBoekenButton}>{t("global.actions.startBoeken")}</Button>
 		)}>
-			<Modal
-				title={t("sections.filterOptions.title")}
-				isOpen={filterModal.isOpen}
-				onClose={filterModal.onClose}
-				confirmButton={<Button colorScheme={"primary"} onClick={filterModal.onClose}>{t("global.actions.close")}</Button>}
-				showAsterisk={false}
-			>
-				<Stack>
-					<FormControl>
-						<FormLabel>{t("filters.transactions.type.title")}</FormLabel>
-						<Checkbox isChecked={banktransactieFilters.onlyUnbooked} onChange={e => updateStore("banktransactieFilters", {
-							...banktransactieFilters,
-							onlyUnbooked: e.target.checked,
-						})}>{t("filters.transactions.type.onlyUnbooked")}</Checkbox>
-					</FormControl>
-
-					<FormControl>
-						<FormLabel>{t("filters.transactions.isCredit.title")}</FormLabel>
-						<Select id={"tegenrekening"} isClearable={true} noOptionsMessage={() => t("filters.transactions.isCredit.choose")} maxMenuHeight={350}
-							options={isCreditSelectOptions} value={banktransactieFilters.isCredit ? isCreditSelectOptions.find(o => o.value === banktransactieFilters.isCredit) : null}
-							onChange={(result) => {
-								updateStore("banktransactieFilters", {
+			{filterModal.isOpen && (
+				<Modal title={t("sections.filterOptions.title")} onClose={filterModal.onClose}>
+					<form onSubmit={(e) => {
+						e.preventDefault();
+						filterModal.onClose();
+					}}>
+						<Stack>
+							<FormControl>
+								<FormLabel>{t("filters.transactions.type.title")}</FormLabel>
+								<Checkbox isChecked={banktransactieFilters.onlyUnbooked} onChange={e => updateStore("banktransactieFilters", {
 									...banktransactieFilters,
-									isCredit: result?.value as BanktransactieFilters["isCredit"],
-								});
-							}} styles={reactSelectStyles.default} />
-					</FormControl>
+									onlyUnbooked: e.target.checked,
+								})}>{t("filters.transactions.type.onlyUnbooked")}</Checkbox>
+							</FormControl>
 
-					<HStack>
-						<FormControl as={Stack} flex={1} justifyContent={"flex-end"}>
-							<FormLabel>{t("global.period")}</FormLabel>
-							<DatePicker selected={banktransactieFilters.dateRange?.from || null}
-								dateFormat={"dd-MM-yyyy"} isClearable={true} selectsRange={true}
-								startDate={banktransactieFilters.dateRange?.from} endDate={banktransactieFilters.dateRange?.through}
-								onChange={(value: [Date, Date]) => {
-									if (value) {
-										const [from, through] = value;
-										if (!from && !through) {
-											updateStore("banktransactieFilters", {
-												...banktransactieFilters,
-												dateRange: undefined,
-											});
-										}
-										else {
-											updateStore("banktransactieFilters", {
-												...banktransactieFilters,
-												dateRange: {from, through},
-											});
-										}
-									}
-								}} customInput={(<Input />)} />
-						</FormControl>
-					</HStack>
+							<FormControl>
+								<FormLabel>{t("filters.transactions.isCredit.title")}</FormLabel>
+								<Select id={"tegenrekening"} isClearable={true} noOptionsMessage={() => t("filters.transactions.isCredit.choose")} maxMenuHeight={350}
+									options={isCreditSelectOptions} value={banktransactieFilters.isCredit ? isCreditSelectOptions.find(o => o.value === banktransactieFilters.isCredit) : null}
+									onChange={(result) => {
+										updateStore("banktransactieFilters", {
+											...banktransactieFilters,
+											isCredit: result?.value as BanktransactieFilters["isCredit"],
+										});
+									}} styles={reactSelectStyles.default} />
+							</FormControl>
 
-					<FormControl>
-						<FormLabel>{t("filters.transactions.pageSize")}</FormLabel>
-						<ButtonGroup size={"sm"} isAttached>
-							<Button colorScheme={customPageSize === 25 ? "primary" : "gray"} onClick={() => setCustomPageSize(25)}>25</Button>
-							<Button colorScheme={customPageSize === 50 ? "primary" : "gray"} onClick={() => setCustomPageSize(50)}>50</Button>
-							<Button colorScheme={customPageSize === 100 ? "primary" : "gray"} onClick={() => setCustomPageSize(100)}>100</Button>
-							<Button colorScheme={customPageSize === 250 ? "primary" : "gray"} onClick={() => setCustomPageSize(250)}>250</Button>
-						</ButtonGroup>
-					</FormControl>
-				</Stack>
-			</Modal>
+							<HStack>
+								<FormControl as={Stack} flex={1} justifyContent={"flex-end"}>
+									<FormLabel>{t("global.period")}</FormLabel>
+									<DatePicker selected={banktransactieFilters.dateRange?.from || null}
+										dateFormat={"dd-MM-yyyy"} isClearable={true} selectsRange={true}
+										startDate={banktransactieFilters.dateRange?.from} endDate={banktransactieFilters.dateRange?.through}
+										onChange={(value: [Date, Date]) => {
+											if (value) {
+												const [from, through] = value;
+												if (!from && !through) {
+													updateStore("banktransactieFilters", {
+														...banktransactieFilters,
+														dateRange: undefined,
+													});
+												}
+												else {
+													updateStore("banktransactieFilters", {
+														...banktransactieFilters,
+														dateRange: {from, through},
+													});
+												}
+											}
+										}} customInput={(<Input />)} />
+								</FormControl>
+							</HStack>
+
+							<FormControl>
+								<FormLabel>{t("filters.transactions.pageSize")}</FormLabel>
+								<ButtonGroup size={"sm"} isAttached>
+									<Button colorScheme={customPageSize === 25 ? "primary" : "gray"} onClick={() => setCustomPageSize(25)}>25</Button>
+									<Button colorScheme={customPageSize === 50 ? "primary" : "gray"} onClick={() => setCustomPageSize(50)}>50</Button>
+									<Button colorScheme={customPageSize === 100 ? "primary" : "gray"} onClick={() => setCustomPageSize(100)}>100</Button>
+									<Button colorScheme={customPageSize === 250 ? "primary" : "gray"} onClick={() => setCustomPageSize(250)}>250</Button>
+								</ButtonGroup>
+							</FormControl>
+
+							<Flex justify={"flex-end"}>
+								<Button type={"submit"} colorScheme={"primary"}>{t("global.actions.save")}</Button>
+							</Flex>
+						</Stack>
+					</form>
+				</Modal>
+			)}
 
 			<SectionContainer>
 				<Queryable query={$transactions} children={(data) => {

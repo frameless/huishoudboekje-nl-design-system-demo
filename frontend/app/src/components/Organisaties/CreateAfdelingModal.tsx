@@ -4,12 +4,12 @@ import SaveAfdelingErrorHandler from "../../errorHandlers/SaveAfdelingErrorHandl
 import useMutationErrorHandler from "../../errorHandlers/useMutationErrorHandler";
 import {CreateAfdelingMutationVariables, GetOrganisatieDocument, GetOrganisatiesDocument, Organisatie, useCreateAfdelingMutation} from "../../generated/graphql";
 import useToaster from "../../utils/useToaster";
-import AfdelingForm from "./AfdelingForm";
 import Modal from "../shared/Modal";
+import AfdelingForm from "./AfdelingForm";
 
 type CreateAfdelingModalProps = {
-    organisatie: Organisatie,
-    onClose: VoidFunction
+	organisatie: Organisatie,
+	onClose: VoidFunction
 };
 
 const CreateAfdelingModal: React.FC<CreateAfdelingModalProps> = ({organisatie, onClose}) => {
@@ -36,11 +36,7 @@ const CreateAfdelingModal: React.FC<CreateAfdelingModalProps> = ({organisatie, o
 	};
 
 	return (
-		<Modal
-			title={t("modals.addAfdeling.title")}
-			isOpen={true}
-			onClose={onClose}
-		>
+		<Modal title={t("modals.addAfdeling.title")} onClose={onClose}>
 			<AfdelingForm onChange={onSubmit} organisatie={organisatie} onCancel={onClose} />
 		</Modal>
 	);

@@ -38,12 +38,7 @@ const UpdateAfdelingRekeningModal: React.FC<UpdateAfdelingRekeningModalProps> = 
 	};
 
 	return (
-		<Modal
-			title={t("modal.updateAfdelingRekening.title")}
-			showCancelButton={false}
-			isOpen={true}
-			onClose={onClose}
-		>
+		<Modal title={t("modal.updateAfdelingRekening.title")} onClose={onClose}>
 			<RekeningForm onSubmit={onSubmit} onCancel={onClose} rekening={rekening} />
 		</Modal>
 	);

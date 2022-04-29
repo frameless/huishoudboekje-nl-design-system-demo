@@ -8,8 +8,8 @@ import PostadresForm from "../Postadressen/PostadresForm";
 import Modal from "../shared/Modal";
 
 type AddAfdelingPostadresModalProps = {
-    afdeling: Afdeling,
-    onClose: VoidFunction
+	afdeling: Afdeling,
+	onClose: VoidFunction
 };
 
 const AddAfdelingPostadresModal: React.FC<AddAfdelingPostadresModalProps> = ({afdeling, onClose}) => {
@@ -39,12 +39,7 @@ const AddAfdelingPostadresModal: React.FC<AddAfdelingPostadresModalProps> = ({af
 	};
 
 	return (
-		<Modal
-			title={t("modals.addPostadres.modalTitle")}
-			isOpen={true}
-			onClose={() => onClose()}
-			showCancelButton={false}
-		>
+		<Modal title={t("modals.addPostadres.modalTitle")} onClose={() => onClose()}>
 			<PostadresForm onChange={(data) => onSavePostadres(afdeling.id!, data)} onCancel={() => onClose()} />
 		</Modal>
 	);

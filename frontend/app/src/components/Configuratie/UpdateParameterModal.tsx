@@ -70,11 +70,7 @@ const UpdateParameterModal: React.FC<UpdateParameterModalProps> = ({onClose, con
 	};
 
 	return (
-		<Modal
-			title={t("modal.updateParameter.title")}
-			onClose={onClose}
-			isOpen={true}
-		>
+		<Modal title={t("modal.updateParameter.title")} onClose={onClose}>
 			<form onSubmit={onSubmit} noValidate={true}>
 				<Stack direction={"column"} alignItems={"flex-end"}>
 					<FormControl isDisabled={true}>

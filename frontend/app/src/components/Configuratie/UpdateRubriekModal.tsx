@@ -1,16 +1,16 @@
-import React, {useRef} from "react";
-import {GetRubriekenConfiguratieDocument, Grootboekrekening, Rubriek, useGetRubriekenConfiguratieQuery, useUpdateRubriekMutation} from "../../generated/graphql";
-import Modal from "../shared/Modal";
-import {useTranslation} from "react-i18next";
 import {Button, FormControl, FormErrorMessage, FormLabel, HStack, Input, Stack} from "@chakra-ui/react";
+import React, {useRef} from "react";
+import {useTranslation} from "react-i18next";
 import Select from "react-select";
-import useToaster from "../../utils/useToaster";
-import useForm from "../../utils/useForm";
-import {useReactSelectStyles} from "../../utils/things";
-import useSelectProps from "../../utils/useSelectProps";
+import {GetRubriekenConfiguratieDocument, Grootboekrekening, Rubriek, useGetRubriekenConfiguratieQuery, useUpdateRubriekMutation} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
+import {useReactSelectStyles} from "../../utils/things";
+import useForm from "../../utils/useForm";
+import useSelectProps from "../../utils/useSelectProps";
+import useToaster from "../../utils/useToaster";
 import zod from "../../utils/zod";
 import Asterisk from "../shared/Asterisk";
+import Modal from "../shared/Modal";
 
 const validator = zod.object({
 	naam: zod.string().nonempty(),
@@ -18,8 +18,8 @@ const validator = zod.object({
 });
 
 type UpdateRubriekModalProps = {
-    onClose: VoidFunction,
-    rubriek: Rubriek,
+	onClose: VoidFunction,
+	rubriek: Rubriek,
 };
 
 const UpdateRubriekModal: React.FC<UpdateRubriekModalProps> = ({onClose, rubriek}) => {
@@ -40,7 +40,7 @@ const UpdateRubriekModal: React.FC<UpdateRubriekModalProps> = ({onClose, rubriek
 		initialValue: {
 			naam,
 			grootboekrekening: grootboekrekening?.id,
-		}
+		},
 	});
 
 	const onSubmit = (e) => {
@@ -84,11 +84,7 @@ const UpdateRubriekModal: React.FC<UpdateRubriekModalProps> = ({onClose, rubriek
 
 			const grootboekrekeningenOptions = selectProps.createSelectOptionsFromGrootboekrekeningen(grootboekrekeningen);
 			return (
-				<Modal
-					title={t("modal.updateRubrieken.title")}
-					onClose={onClose}
-					isOpen={true}
-				>
+				<Modal title={t("modal.updateRubrieken.title")} onClose={onClose}>
 					<form onSubmit={onSubmit} noValidate={true}>
 						<Stack direction={["column"]} alignItems={"flex-end"}>
 							<FormControl isInvalid={!isFieldValid("naam")} isRequired={true}>
@@ -116,7 +112,7 @@ const UpdateRubriekModal: React.FC<UpdateRubriekModalProps> = ({onClose, rubriek
 						</Stack>
 					</form>
 				</Modal>
-			)
+			);
 		}} />
 
 	);

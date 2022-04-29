@@ -11,10 +11,10 @@ import useForm from "../../../utils/useForm";
 import useToaster from "../../../utils/useToaster";
 import zod from "../../../utils/zod";
 import Asterisk from "../../shared/Asterisk";
+import Modal from "../../shared/Modal";
 import MonthSelector from "../../shared/MonthSelector";
 import PeriodiekSelector, {Periodiek} from "../../shared/PeriodiekSelector";
 import WeekDaySelector from "../../shared/WeekDaySelector";
-import Modal from "../../shared/Modal";
 
 const eenmaligValidator = zod.object({
 	datum: zod.date(), //.refine(val => d().endOf("day").isSameOrBefore(val)), // Must be in the future
@@ -43,9 +43,9 @@ const validator = zod.object({
 });
 
 type AddAlarmModalProps = {
-    afspraak: Afspraak,
-    onSubmit: (data: CreateAlarmInput) => void,
-    onClose: VoidFunction,
+	afspraak: Afspraak,
+	onSubmit: (data: CreateAlarmInput) => void,
+	onClose: VoidFunction,
 };
 
 const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClose}) => {
@@ -100,11 +100,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 	};
 
 	return (
-		<Modal
-			title={t("addAlarmModal.title")}
-			isOpen={true}
-			onClose={onClose}
-		>
+		<Modal title={t("addAlarmModal.title")} onClose={onClose}>
 			<form onSubmit={onClickSubmit} noValidate>
 				<Stack>
 					<Text>{t("addAlarmModal.helperText")}</Text>
