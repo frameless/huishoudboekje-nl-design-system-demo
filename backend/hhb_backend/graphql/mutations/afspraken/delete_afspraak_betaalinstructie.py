@@ -8,7 +8,6 @@ from graphql import GraphQLError
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models import afspraak
-from hhb_backend.graphql.models.afspraak import Betaalinstructie
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (gebruikers_activiteit_entities, log_gebruikers_activiteit)
 
 
@@ -16,11 +15,10 @@ class DeleteAfspraakBetaalinstructie(graphene.Mutation):
     """Mutatie om een betaalinstructie bij een afspraak te verwijderen."""
     class Arguments:
         afspraak_id = graphene.Int(required=True)
-        betaalinstructie = graphene.Argument(lambda: Betaalinstructie, required=True)
 
-        ok = graphene.Boolean()
-        afspraak = graphene.Field(lambda: afspraak.Afspraak)
-        previous = graphene.Field(lambda: afspraak.Afspraak)
+    ok = graphene.Boolean()
+    afspraak = graphene.Field(lambda: afspraak.Afspraak)
+    previous = graphene.Field(lambda: afspraak.Afspraak)
 
     def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
         return dict(
@@ -37,7 +35,7 @@ class DeleteAfspraakBetaalinstructie(graphene.Mutation):
 
     @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(_root, _info, afspraak_id: int, betaalinstructie: Betaalinstructie):
+    async def mutate(_root, _info, afspraak_id: int):
         """ Update the Afspraak """
 
         ''' Clear the cache since we need to have the most up te date version possible. '''
