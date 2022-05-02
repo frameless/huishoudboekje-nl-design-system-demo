@@ -54,3 +54,10 @@ class JournaalpostView(HHBView):
             self.hhb_query.query = self.hhb_query.query.filter(
                 Journaalpost.transaction_id.in_(filter_transactions.split(","))
             )
+
+    def add_filter_afspraken(self):
+        filter_afspraken = request.args.get('filter_afpraken')
+        if filter_afspraken:
+            self.hhb_query.query = self.hhb_query.query.filter(
+                Journaalpost.afspraak_id.in_(filter_afspraken.split(","))
+            )

@@ -9,9 +9,15 @@ class JournaalpostenByIdLoader(SingleDataLoader):
 
 
 class JournaalpostenByTransactionLoader(SingleDataLoader):
-    """ Load rekeningen list for gebruiker ids """
     """ Load journaalposten using transaction_ids """
     model = "journaalposten"
     service = settings.HHB_SERVICES_URL
     filter_item = "filter_transactions"
     index = "transaction_id"
+
+class JournaalpostenByAfspraakLoader(SingleDataLoader):
+    """ Load jounaalposten using afspraak_ids """
+    model = "journaalposten"
+    service = settings.HHB_SERVICES_URL
+    filter_item = "filter_afspraken"
+    index = "afspraak_id"
