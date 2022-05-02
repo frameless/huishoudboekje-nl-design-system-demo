@@ -14,7 +14,7 @@ export const useInitializeFeatureFlags = () => {
 		})
 			.then(result => result.json())
 			.then(result => {
-				const featureFlags = result.features.map(f => [f.name, f.enabled]);
+				const featureFlags = result.features.reduce((list, f) => ({...list, [f.name]: f.enabled}), {});
 				updateStore("featureFlags", featureFlags);
 			});
 	}, [updateStore, user]);
