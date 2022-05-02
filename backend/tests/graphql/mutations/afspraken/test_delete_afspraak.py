@@ -208,3 +208,51 @@ def test_delete_afspraak_zoekterm_niet_gevonden(client):
         assert rm1.called_once
         assert fallback.called == 0
         assert expected in response.json['errors'][0]['message']
+
+
+def test_delete_afspraak_betaalinstructie(client):
+    with requests_mock.Mocker() as rm:
+        # arrange
+        afspraak_removed_betaalinstructie = {
+            'id': 1,
+            'rubriek_id': 1,
+            'burger_id': 1,
+            'tegen_rekening_id': 1,
+            'valid_from': "2020-10-01",
+            'valid_through': "2020-10-01",
+            'zoektermen': [
+                "zoekterm1",
+                "zoekterm2"
+            ],
+            'betaalinstructie': None,
+            'journaalposten': []
+        }
+        
+        afspraakId = 1
+        expected = {'data': {'deleteAfspraakBetaalinstructie': {'ok': True}}}
+        fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
+        rm1 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=1", status_code=200, json={'data': [afspraak]})
+        rm2 = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/1", status_code=200, json={'data': afspraak_removed_betaalinstructie})
+        rm3 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201, json={"data": {"id": 1}})
+
+        # act
+        response = client.post(
+            "/graphql",
+            json={
+                "query": '''
+                    mutation test($afspraakId: Int!) {
+                        deleteAfspraakBetaalinstructie(afspraakId: $afspraakId) {
+                            ok
+                        }
+                    }
+                    ''',
+                "variables": {"afspraakId": afspraakId}},
+            content_type='application/json'
+        )
+
+        # assert
+        assert rm1.called_once
+        assert rm2.called_once
+        assert rm3.called_once
+        assert fallback.called == 0
+        assert response.json == expected
