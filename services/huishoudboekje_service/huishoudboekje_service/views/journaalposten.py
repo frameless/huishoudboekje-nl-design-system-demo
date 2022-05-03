@@ -50,8 +50,8 @@ class JournaalpostView(HHBView):
 
     def extend_get(self, **kwargs):
         """ Extend the get function with extra filter """
-        self.add_filter_transactions
-        self.add_filter_afspraken
+        self.add_filter_transactions()
+        self.add_filter_afspraken()
 
     def add_filter_transactions(self):
         filter_transactions = request.args.get('filter_transactions')
