@@ -31,6 +31,10 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
+  Afdeling: { // root type
+    id?: number | null; // Int
+    naam?: string | null; // String
+  }
   Afspraak: { // root type
     bedrag?: string | null; // String
     credit?: boolean | null; // Boolean
@@ -101,6 +105,11 @@ export type NexusGenRootTypes = NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars & NexusGenEnums
 
 export interface NexusGenFieldTypes {
+  Afdeling: { // field return type
+    id: number | null; // Int
+    naam: string | null; // String
+    organisatie: NexusGenRootTypes['Organisatie'] | null; // Organisatie
+  }
   Afspraak: { // field return type
     bedrag: string | null; // String
     betaalinstructie: NexusGenRootTypes['Betaalinstructie'] | null; // Betaalinstructie
@@ -177,6 +186,7 @@ export interface NexusGenFieldTypes {
     organisaties: Array<NexusGenRootTypes['Organisatie'] | null> | null; // [Organisatie]
   }
   Rekening: { // field return type
+    afdelingen: Array<NexusGenRootTypes['Afdeling'] | null> | null; // [Afdeling]
     iban: string | null; // String
     id: number | null; // Int
     rekeninghouder: string | null; // String
@@ -184,6 +194,11 @@ export interface NexusGenFieldTypes {
 }
 
 export interface NexusGenFieldTypeNames {
+  Afdeling: { // field return type name
+    id: 'Int'
+    naam: 'String'
+    organisatie: 'Organisatie'
+  }
   Afspraak: { // field return type name
     bedrag: 'String'
     betaalinstructie: 'Betaalinstructie'
@@ -260,6 +275,7 @@ export interface NexusGenFieldTypeNames {
     organisaties: 'Organisatie'
   }
   Rekening: { // field return type name
+    afdelingen: 'Afdeling'
     iban: 'String'
     id: 'Int'
     rekeninghouder: 'String'
