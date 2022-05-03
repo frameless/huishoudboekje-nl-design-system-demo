@@ -5,7 +5,7 @@ import {useTranslation} from "react-i18next";
 import {AiOutlineTag} from "react-icons/ai";
 import {NavLink, useNavigate} from "react-router-dom";
 import {AppRoutes} from "../../../config/routes";
-import {Afspraak, GetAfspraakDocument, GetAfsprakenDocument, useAddAfspraakZoektermMutation, useCreateAlarmMutation, useDeleteAfspraakZoektermMutation, useDeleteAlarmMutation, useUpdateAlarmMutation} from "../../../generated/graphql";
+import {Afspraak, GetAfspraakDocument, GetAfsprakenDocument, useAddAfspraakZoektermMutation, useCreateAlarmMutation, useDeleteAfspraakBetaalinstructieMutation, useDeleteAfspraakZoektermMutation, useDeleteAlarmMutation, useUpdateAlarmMutation} from "../../../generated/graphql";
 import d from "../../../utils/dayjs";
 import {useFeatureFlag} from "../../../utils/features";
 import {currencyFormat2, formatBurgerName, getBurgerHhbId, isAfspraakActive} from "../../../utils/things";
@@ -45,6 +45,12 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 		},
 	});
 	const [deleteAfspraakZoekterm] = useDeleteAfspraakZoektermMutation({
+		refetchQueries: [
+			{query: GetAfsprakenDocument},
+			{query: GetAfspraakDocument, variables: {id: afspraak.id}},
+		],
+	});
+	const [deleteBetaalinstructie] = useDeleteAfspraakBetaalinstructieMutation({
 		refetchQueries: [
 			{query: GetAfsprakenDocument},
 			{query: GetAfspraakDocument, variables: {id: afspraak.id}},
@@ -91,6 +97,19 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 			else {
 				toast({success: t("messages.disableAlarmSuccess")});
 			}
+		}).catch(err => {
+			toast.closeAll();
+			toast({error: err.message});
+		});
+	};
+
+	const onDeleteBetaalinstructie = () => {
+		deleteBetaalinstructie({
+			variables: {
+				id: afspraak.id!,
+			},
+		}).then(() => {
+			toast({success: t("messages.deleteBetaalinstructieSuccess")});
 		}).catch(err => {
 			toast.closeAll();
 			toast({error: err.message});
@@ -373,7 +392,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 					<Section title={t("afspraakDetailView.betaalinstructie.title")} helperText={t("afspraakDetailView.betaalinstructie.helperText")}>
 						{afspraak.betaalinstructie ? (
 							<Stack>
-								<Stack direction={["column", "row"]}>
+								<Stack direction={["column", "row"]} align={"center"}>
 									<DataItem label={t("afspraken.periodiek")}>
 										<Text>{scheduleHelper.toString()}</Text>
 									</DataItem>
@@ -387,13 +406,8 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 											})}</Text>
 										)}
 									</DataItem>
+									<DeleteConfirmButton onConfirm={() => onDeleteBetaalinstructie()} />
 								</Stack>
-
-								<Box>
-									<AddButton onClick={() => navigate(AppRoutes.AfspraakBetaalinstructie(String(afspraak.id)))}>
-										{t("global.actions.newBetaalinstructie")}
-									</AddButton>
-								</Box>
 							</Stack>
 						) : (
 							<Stack>

@@ -22,8 +22,8 @@ stages:
 - ship
 - deploy
 - test
-- data
 - security
+- data
 
 include:
 - "/.gitlab/ci/build.yaml"
