@@ -470,6 +470,13 @@ export type DeleteAfspraak = {
   previous?: Maybe<Afspraak>;
 };
 
+/** Mutatie om een betaalinstructie bij een afspraak te verwijderen. */
+export type DeleteAfspraakBetaalinstructie = {
+  afspraak?: Maybe<Afspraak>;
+  ok?: Maybe<Scalars['Boolean']>;
+  previous?: Maybe<Afspraak>;
+};
+
 /** Mutatie om een zoekterm bij een afspraak te verwijderen. */
 export type DeleteAfspraakZoekterm = {
   afspraak?: Maybe<Afspraak>;
@@ -748,6 +755,8 @@ export type RootMutation = {
   /** Mutatie om een rekening van een afdeling te verwijderen. */
   deleteAfdelingRekening?: Maybe<DeleteAfdelingRekening>;
   deleteAfspraak?: Maybe<DeleteAfspraak>;
+  /** Mutatie om een betaalinstructie bij een afspraak te verwijderen. */
+  deleteAfspraakBetaalinstructie?: Maybe<DeleteAfspraakBetaalinstructie>;
   /** Mutatie om een zoekterm bij een afspraak te verwijderen. */
   deleteAfspraakZoekterm?: Maybe<DeleteAfspraakZoekterm>;
   deleteAlarm?: Maybe<DeleteAlarm>;
@@ -921,6 +930,12 @@ export type RootMutationDeleteAfdelingRekeningArgs = {
 /** The root of all mutations  */
 export type RootMutationDeleteAfspraakArgs = {
   id: Scalars['Int'];
+};
+
+
+/** The root of all mutations  */
+export type RootMutationDeleteAfspraakBetaalinstructieArgs = {
+  afspraakId: Scalars['Int'];
 };
 
 
@@ -1737,6 +1752,13 @@ export type DeleteAfspraakMutationVariables = Exact<{
 
 
 export type DeleteAfspraakMutation = { deleteAfspraak?: { ok?: boolean } };
+
+export type DeleteAfspraakBetaalinstructieMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type DeleteAfspraakBetaalinstructieMutation = { deleteAfspraakBetaalinstructie?: { ok?: boolean } };
 
 export type DeleteAfspraakZoektermMutationVariables = Exact<{
   afspraakId: Scalars['Int'];
@@ -3267,6 +3289,39 @@ export function useDeleteAfspraakMutation(baseOptions?: Apollo.MutationHookOptio
 export type DeleteAfspraakMutationHookResult = ReturnType<typeof useDeleteAfspraakMutation>;
 export type DeleteAfspraakMutationResult = Apollo.MutationResult<DeleteAfspraakMutation>;
 export type DeleteAfspraakMutationOptions = Apollo.BaseMutationOptions<DeleteAfspraakMutation, DeleteAfspraakMutationVariables>;
+export const DeleteAfspraakBetaalinstructieDocument = gql`
+    mutation deleteAfspraakBetaalinstructie($id: Int!) {
+  deleteAfspraakBetaalinstructie(afspraakId: $id) {
+    ok
+  }
+}
+    `;
+export type DeleteAfspraakBetaalinstructieMutationFn = Apollo.MutationFunction<DeleteAfspraakBetaalinstructieMutation, DeleteAfspraakBetaalinstructieMutationVariables>;
+
+/**
+ * __useDeleteAfspraakBetaalinstructieMutation__
+ *
+ * To run a mutation, you first call `useDeleteAfspraakBetaalinstructieMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteAfspraakBetaalinstructieMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteAfspraakBetaalinstructieMutation, { data, loading, error }] = useDeleteAfspraakBetaalinstructieMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteAfspraakBetaalinstructieMutation(baseOptions?: Apollo.MutationHookOptions<DeleteAfspraakBetaalinstructieMutation, DeleteAfspraakBetaalinstructieMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteAfspraakBetaalinstructieMutation, DeleteAfspraakBetaalinstructieMutationVariables>(DeleteAfspraakBetaalinstructieDocument, options);
+      }
+export type DeleteAfspraakBetaalinstructieMutationHookResult = ReturnType<typeof useDeleteAfspraakBetaalinstructieMutation>;
+export type DeleteAfspraakBetaalinstructieMutationResult = Apollo.MutationResult<DeleteAfspraakBetaalinstructieMutation>;
+export type DeleteAfspraakBetaalinstructieMutationOptions = Apollo.BaseMutationOptions<DeleteAfspraakBetaalinstructieMutation, DeleteAfspraakBetaalinstructieMutationVariables>;
 export const DeleteAfspraakZoektermDocument = gql`
     mutation deleteAfspraakZoekterm($afspraakId: Int!, $zoekterm: String!) {
   deleteAfspraakZoekterm(afspraakId: $afspraakId, zoekterm: $zoekterm) {
