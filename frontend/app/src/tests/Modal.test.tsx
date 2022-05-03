@@ -19,7 +19,7 @@ afterEach(() => {
 });
 
 describe("Modal", () => {
-	it("Show the Modal", async () => {
+	it("Shows the Modal", async () => {
 		const onClose = jest.fn();
 
 		act(() => {
@@ -30,7 +30,7 @@ describe("Modal", () => {
 			), container);
 		});
 
-		const [modal] = screen.queryAllByRole("ChakraModal");
+		const [modal] = screen.queryAllByRole("dialog");
 		expect(modal).toMatchSnapshot();
 
 		const clickEvent = new Event("click", {
