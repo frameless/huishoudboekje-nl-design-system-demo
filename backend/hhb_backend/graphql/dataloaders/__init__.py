@@ -19,6 +19,7 @@ from .grootboekrekening_loader import GrootboekrekeningenByIdLoader
 from .journaalpost_loader import (
     JournaalpostenByIdLoader,
     JournaalpostenByTransactionLoader,
+    JournaalpostenByAfspraakLoader,
 )
 from .organisatie_loader import OrganisatieByIdLoader # KvKDetailsLoader,
 from .overschrijving_loader import (OverschrijvingByAfspraakLoader, OverschrijvingByExportLoader,
@@ -71,6 +72,7 @@ class HHBDataLoader:
         self.journaalposten_by_transaction = JournaalpostenByTransactionLoader(
             loop=loop
         )
+        self.journaalposten_by_afspraak = JournaalpostenByAfspraakLoader(loop=loop)
 
         self.configuratie_by_id = ConfiguratieByIdLoader(loop=loop)
 
