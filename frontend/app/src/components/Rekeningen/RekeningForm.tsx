@@ -13,12 +13,14 @@ const validator = zod.object({
 	iban: zod.string().regex(Regex.IbanNL),
 });
 
-const RekeningForm: React.FC<{
-    rekening?: Rekening,
-    onSubmit: Function,
-    onCancel: VoidFunction,
-    isIbanValid?: boolean,
-}> = ({rekening, onSubmit, onCancel, isIbanValid = true}) => {
+type RekeningFormProps = {
+	rekening?: Rekening,
+	onSubmit: Function,
+	onCancel: VoidFunction,
+	isIbanValid?: boolean,
+}
+
+const RekeningForm: React.FC<RekeningFormProps> = ({rekening, onSubmit, onCancel, isIbanValid = true}) => {
 	const {t} = useTranslation();
 	const toast = useToaster();
 	const {iban, rekeninghouder} = rekening || {};
@@ -26,6 +28,7 @@ const RekeningForm: React.FC<{
 		validator,
 		initialValue: {
 			iban, rekeninghouder,
+
 		},
 	});
 
@@ -59,7 +62,7 @@ const RekeningForm: React.FC<{
 					<Input onChange={e => updateForm("rekeninghouder", e.target.value)} value={form.rekeninghouder || ""} autoFocus={!(rekening?.rekeninghouder)} />
 					<FormErrorMessage>{t("errors.rekeninghouder.generalError")}</FormErrorMessage>
 				</FormControl>
-				<FormControl isInvalid={!isFieldValid("iban") || !isIbanValid} id={"iban"} isRequired={true}>
+				<FormControl isInvalid={!isFieldValid("iban") || !isIbanValid} id={"iban"} isRequired={!rekening?.iban} isDisabled={!!rekening?.iban}>
 					<FormLabel>{t("forms.rekeningen.fields.iban")}</FormLabel>
 					<Input onChange={e => updateForm("iban", e.target.value)} value={form.iban || ""} placeholder={"NL00BANK0123456789"} autoFocus={!!(rekening?.rekeninghouder)} onBlur={e => updateForm("iban", e.target.value.replaceAll(/[\s]/g, "").toUpperCase())} />
 					<FormErrorMessage>{t("errors.iban.generalError")}</FormErrorMessage>

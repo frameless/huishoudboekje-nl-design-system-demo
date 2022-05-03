@@ -9,6 +9,7 @@ import zod from "../../utils/zod";
 import Section from "../shared/Section";
 import SectionContainer from "../shared/SectionContainer";
 import ParameterItem from "./ParameterItem";
+import Asterisk from "../shared/Asterisk";
 
 const validator = zod.object({
 	key: zod.string().nonempty(),
@@ -87,19 +88,20 @@ const Parameters = () => {
 								</Table>
 							)}
 
-							<form onSubmit={onSubmit}>
+							<form onSubmit={onSubmit} noValidate={true}>
 								<Stack direction={"column"} alignItems={"flex-end"}>
-									<FormControl isInvalid={!isFieldValid("key")}>
+									<FormControl isInvalid={!isFieldValid("key")} isRequired={true}>
 										<FormLabel>{t("forms.configuratie.fields.id")}</FormLabel>
 										<Input onChange={e => updateForm("key", e.target.value)} value={form.key || ""} />
 										<FormErrorMessage>{t("configuratieForm.emptyKeyError")}</FormErrorMessage>
 									</FormControl>
-									<FormControl isInvalid={!isFieldValid("value")}>
+									<FormControl isInvalid={!isFieldValid("value")} isRequired={true}>
 										<FormLabel>{t("forms.configuratie.fields.waarde")}</FormLabel>
 										<Input onChange={e => updateForm("value", e.target.value)} value={form.value || ""} />
 										<FormErrorMessage>{t("configuratieForm.emptyValueError")}</FormErrorMessage>
 									</FormControl>
 									<Button type={"submit"} colorScheme={"primary"} isLoading={loading}>{t("global.actions.save")}</Button>
+									<Asterisk />
 								</Stack>
 							</form>
 						</Stack>

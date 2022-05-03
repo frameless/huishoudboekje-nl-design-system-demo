@@ -13,7 +13,9 @@ const BurgerRekeningenView: React.FC<{burger: Burger}> = ({burger}) => {
 	const addRekeningModal = useDisclosure();
 
 	return (<>
-		<AddBurgerRekeningModal burger={burger} disclosure={addRekeningModal} />
+		{addRekeningModal.isOpen && (
+			<AddBurgerRekeningModal burger={burger} onClose={() => addRekeningModal.onClose()} />
+		)}
 
 		<SectionContainer>
 			<Section title={t("forms.burgers.sections.rekeningen.title")} helperText={t("forms.burgers.sections.rekeningen.detailText")}>

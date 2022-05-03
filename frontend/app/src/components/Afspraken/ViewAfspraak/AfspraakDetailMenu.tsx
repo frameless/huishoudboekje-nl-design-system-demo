@@ -3,15 +3,7 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {NavLink, useNavigate} from "react-router-dom";
 import {AppRoutes} from "../../../config/routes";
-import {
-	Afspraak,
-	GetAfspraakDocument,
-	GetBurgerDocument,
-	GetBurgersDocument,
-	GetBurgersSearchDocument,
-	useDeleteAfspraakMutation,
-	useEndAfspraakMutation
-} from "../../../generated/graphql";
+import {Afspraak, GetAfspraakDocument, GetBurgerDocument, GetBurgersDocument, GetBurgersSearchDocument, useDeleteAfspraakMutation, useEndAfspraakMutation} from "../../../generated/graphql";
 import {useStore} from "../../../store";
 import d from "../../../utils/dayjs";
 import useToaster from "../../../utils/useToaster";
@@ -19,7 +11,7 @@ import MenuIcon from "../../shared/MenuIcon";
 import AfspraakDeleteAlert from "./AfspraakDeleteAlert";
 import AfspraakEndModal from "./AfspraakEndModal";
 
-const AfspraakDetailMenu: React.FC<{ afspraak: Afspraak }> = ({afspraak}) => {
+const AfspraakDetailMenu: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	const {t} = useTranslation();
 	const navigate = useNavigate();
 	const endModal = useDisclosure();
@@ -49,7 +41,8 @@ const AfspraakDetailMenu: React.FC<{ afspraak: Afspraak }> = ({afspraak}) => {
 		if (!deleteAlert.isOpen) {
 			endModal.onClose();
 			deleteAlert.onOpen();
-		} else if (afspraak.id) {
+		}
+		else if (afspraak.id) {
 			deleteAfspraak({
 				variables: {
 					id: afspraak.id,
@@ -83,11 +76,11 @@ const AfspraakDetailMenu: React.FC<{ afspraak: Afspraak }> = ({afspraak}) => {
 	};
 
 	return (<>
-		{deleteAlert.isOpen && <AfspraakDeleteAlert onConfirm={onClickDelete} onClose={deleteAlert.onClose}/>}
-		{endModal.isOpen && <AfspraakEndModal onSubmit={onSubmitEndAfspraak} onClose={endModal.onClose}/>}
+		{deleteAlert.isOpen && <AfspraakDeleteAlert onConfirm={onClickDelete} onClose={deleteAlert.onClose} />}
+		{endModal.isOpen && <AfspraakEndModal onSubmit={onSubmitEndAfspraak} onClose={endModal.onClose} />}
 
 		<Menu>
-			<IconButton as={MenuButton} icon={<MenuIcon/>} variant={"solid"} aria-label={"Open menu"}/>
+			<IconButton as={MenuButton} icon={<MenuIcon />} variant={"solid"} aria-label={"Open menu"} />
 			<MenuList>
 				<NavLink
 					to={AppRoutes.EditAfspraak(String(afspraak.id))}><MenuItem>{t("global.actions.edit")}</MenuItem></NavLink>

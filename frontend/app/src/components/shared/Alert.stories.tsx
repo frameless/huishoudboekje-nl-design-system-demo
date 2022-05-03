@@ -31,7 +31,7 @@ export default {
 		cancelButton: {
 			type: {
 				name: "boolean",
-				required: true,
+				required: false,
 			},
 			description: "When this button is clicked, the action will not be executed and the alert will be closed.",
 		},
@@ -54,10 +54,9 @@ export const Default = () => {
 				<Alert
 					title={"Burger verwijderen uit huishouden"}
 					confirmButton={<Button colorScheme={"red"} ml={3}>Verwijderen</Button>}
-					cancelButton={true}
 					onClose={onClose}
 				>
-					Weet je zeker dat je Chris de Burg wil verwijderen uit het huishouden de Jager-de Burg?
+                    Weet je zeker dat je Chris de Burg wil verwijderen uit het huishouden de Jager-de Burg?
 				</Alert>
 			)}
 		</>
@@ -76,7 +75,7 @@ export const WithoutCancelButton = () => {
 					cancelButton={false}
 					onClose={onClose}
 				>
-					Weet je zeker dat je Chris de Burg wil verwijderen uit het huishouden de Jager-de Burg?
+                    Weet je zeker dat je Chris de Burg wil verwijderen uit het huishouden de Jager-de Burg?
 				</Alert>
 			)}
 		</>

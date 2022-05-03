@@ -1,26 +1,11 @@
-import {
-	Button,
-	FormControl,
-	FormErrorMessage,
-	FormLabel,
-	HStack,
-	Input,
-	Modal,
-	ModalBody,
-	ModalCloseButton,
-	ModalContent,
-	ModalFooter,
-	ModalHeader,
-	ModalOverlay,
-	Stack,
-	Text,
-} from "@chakra-ui/react";
+import {Button, Flex, FormControl, FormErrorMessage, FormLabel, Input, Stack, Text} from "@chakra-ui/react";
 import React, {useState} from "react";
 import DatePicker from "react-datepicker";
 import {useTranslation} from "react-i18next";
 import d from "../../../utils/dayjs";
 import useToaster from "../../../utils/useToaster";
 import zod from "../../../utils/zod";
+import Modal from "../../shared/Modal";
 
 const validator = zod.string().regex(new RegExp(/^\d{4}-\d{2}-\d{2}$/));
 
@@ -46,43 +31,36 @@ const AfspraakEndModal: React.FC<AfspraakEndModalProps> = ({onClose, onSubmit}) 
 	};
 
 	const onClickSubmit = () => {
-		try {
-			onSubmit(date);
+		if (!isValid()) {
+			toast({
+				error: t("errors.invalidDateError"),
+			});
+			return;
 		}
-		catch (e) {
-			toast({error: t("errors.invalidDateError")});
-		}
+
+		onSubmit(date);
 	};
 
 	return (
-		<Modal isOpen={true} onClose={onClose}>
-			<ModalOverlay />
-			<ModalContent>
-				<ModalHeader>{t("endAfspraak.confirmModalTitle")}</ModalHeader>
-				<ModalCloseButton />
-				<ModalBody>
-					<Stack>
-						<Text>{t("endAfspraak.confirmModalBody")}</Text>
+		<Modal title={t("endAfspraak.confirmModalTitle")} onClose={onClose}>
+			<Stack>
+				<Text>{t("endAfspraak.confirmModalBody")}</Text>
 
-						<FormControl flex={1} isInvalid={!isValid()}>
-							<FormLabel>{t("schedule.endDate")}</FormLabel>
-							<DatePicker selected={(date && d(date).isValid()) ? date : null} dateFormat={"dd-MM-yyyy"}
-								onChange={(value: Date) => {
-									if (value) {
-										setDate(d(value).startOf("day").toDate());
-									}
-								}} customInput={<Input type={"text"} isInvalid={!isValid()} />} />
-							<FormErrorMessage>{t("errors.invalidDateError")}</FormErrorMessage>
-						</FormControl>
-					</Stack>
-				</ModalBody>
-				<ModalFooter>
-					<HStack>
-						<Button variant={"ghost"} onClick={onClose}>{t("global.actions.cancel")}</Button>
-						<Button colorScheme={"primary"} onClick={onClickSubmit}>{t("global.actions.end")}</Button>
-					</HStack>
-				</ModalFooter>
-			</ModalContent>
+				<FormControl flex={1} isInvalid={!isValid()}>
+					<FormLabel>{t("schedule.endDate")}</FormLabel>
+					<DatePicker selected={(date && d(date).isValid()) ? date : null} dateFormat={"dd-MM-yyyy"}
+						onChange={(value: Date) => {
+							if (value) {
+								setDate(d(value).startOf("day").toDate());
+							}
+						}} customInput={<Input type={"text"} isInvalid={!isValid()} />} />
+					<FormErrorMessage>{t("errors.invalidDateError")}</FormErrorMessage>
+				</FormControl>
+
+				<Flex justify={"flex-end"}>
+					<Button colorScheme={"primary"} onClick={onClickSubmit}>{t("global.actions.end")}</Button>
+				</Flex>
+			</Stack>
 		</Modal>
 	);
 };

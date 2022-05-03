@@ -1,4 +1,4 @@
-import {Button, ButtonGroup, Checkbox, FormControl, FormLabel, HStack, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack, Text, useDisclosure} from "@chakra-ui/react";
+import {Button, ButtonGroup, Checkbox, Flex, FormControl, FormLabel, HStack, Input, Stack, Text, useDisclosure} from "@chakra-ui/react";
 import React, {useEffect, useState} from "react";
 import DatePicker from "react-datepicker";
 import {useTranslation} from "react-i18next";
@@ -10,6 +10,7 @@ import Queryable from "../../../utils/Queryable";
 import {createQueryParamsFromFilters, useReactSelectStyles} from "../../../utils/things";
 import useHandleMutation from "../../../utils/useHandleMutation";
 import usePagination from "../../../utils/usePagination";
+import Modal from "../../shared/Modal";
 import Page from "../../shared/Page";
 import Section from "../../shared/Section";
 import SectionContainer from "../../shared/SectionContainer";
@@ -71,12 +72,12 @@ const Transactions = () => {
 		<Page title={t("forms.bankzaken.sections.transactions.title")} right={(
 			<Button size={"sm"} variant={"outline"} colorScheme={"primary"} onClick={onClickStartBoekenButton}>{t("global.actions.startBoeken")}</Button>
 		)}>
-			<Modal isOpen={filterModal.isOpen} onClose={filterModal.onClose}>
-				<ModalOverlay />
-				<ModalContent width={"100%"} maxWidth={500}>
-					<ModalHeader>{t("sections.filterOptions.title")}</ModalHeader>
-					<ModalCloseButton />
-					<ModalBody>
+			{filterModal.isOpen && (
+				<Modal title={t("sections.filterOptions.title")} onClose={filterModal.onClose}>
+					<form onSubmit={(e) => {
+						e.preventDefault();
+						filterModal.onClose();
+					}}>
 						<Stack>
 							<FormControl>
 								<FormLabel>{t("filters.transactions.type.title")}</FormLabel>
@@ -133,14 +134,14 @@ const Transactions = () => {
 									<Button colorScheme={customPageSize === 250 ? "primary" : "gray"} onClick={() => setCustomPageSize(250)}>250</Button>
 								</ButtonGroup>
 							</FormControl>
-						</Stack>
 
-					</ModalBody>
-					<ModalFooter>
-						<Button colorScheme={"primary"} onClick={filterModal.onClose}>{t("global.actions.close")}</Button>
-					</ModalFooter>
-				</ModalContent>
-			</Modal>
+							<Flex justify={"flex-end"}>
+								<Button type={"submit"} colorScheme={"primary"}>{t("global.actions.save")}</Button>
+							</Flex>
+						</Stack>
+					</form>
+				</Modal>
+			)}
 
 			<SectionContainer>
 				<Queryable query={$transactions} children={(data) => {

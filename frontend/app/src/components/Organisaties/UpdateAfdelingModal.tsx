@@ -1,13 +1,13 @@
-import {Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {Afdeling, GetOrganisatieDocument, useUpdateAfdelingMutation} from "../../generated/graphql";
 import useToaster from "../../utils/useToaster";
+import Modal from "../shared/Modal";
 import AfdelingForm from "./AfdelingForm";
 
 type UpdateAfdelingModalProps = {
-    afdeling: Afdeling,
-    onClose: VoidFunction
+	afdeling: Afdeling,
+	onClose: VoidFunction
 };
 
 const UpdateAfdelingModal: React.FC<UpdateAfdelingModalProps> = ({afdeling, onClose}) => {
@@ -38,18 +38,10 @@ const UpdateAfdelingModal: React.FC<UpdateAfdelingModalProps> = ({afdeling, onCl
 	};
 
 	return (
-		<Modal isOpen={true} onClose={onClose}>
-			<ModalOverlay />
-			<ModalContent>
-				<ModalHeader>{t("modal.updateAfdeling.title")}</ModalHeader>
-				<ModalCloseButton />
-				<ModalBody>
-					<AfdelingForm onChange={onSubmit} onCancel={onClose} organisatie={afdeling.organisatie!} values={{
-						naam: afdeling.naam,
-					}} />
-				</ModalBody>
-				<ModalFooter />
-			</ModalContent>
+		<Modal title={t("modal.updateAfdeling.title")} onClose={onClose}>
+			<AfdelingForm onChange={onSubmit} onCancel={onClose} organisatie={afdeling.organisatie!} values={{
+				naam: afdeling.naam,
+			}} />
 		</Modal>
 	);
 };

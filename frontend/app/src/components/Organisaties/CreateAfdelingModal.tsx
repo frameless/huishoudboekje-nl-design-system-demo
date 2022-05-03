@@ -1,15 +1,15 @@
-import {Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import SaveAfdelingErrorHandler from "../../errorHandlers/SaveAfdelingErrorHandler";
 import useMutationErrorHandler from "../../errorHandlers/useMutationErrorHandler";
 import {CreateAfdelingMutationVariables, GetOrganisatieDocument, GetOrganisatiesDocument, Organisatie, useCreateAfdelingMutation} from "../../generated/graphql";
 import useToaster from "../../utils/useToaster";
+import Modal from "../shared/Modal";
 import AfdelingForm from "./AfdelingForm";
 
 type CreateAfdelingModalProps = {
-    organisatie: Organisatie,
-    onClose: VoidFunction
+	organisatie: Organisatie,
+	onClose: VoidFunction
 };
 
 const CreateAfdelingModal: React.FC<CreateAfdelingModalProps> = ({organisatie, onClose}) => {
@@ -36,16 +36,8 @@ const CreateAfdelingModal: React.FC<CreateAfdelingModalProps> = ({organisatie, o
 	};
 
 	return (
-		<Modal isOpen={true} onClose={onClose}>
-			<ModalOverlay />
-			<ModalContent>
-				<ModalHeader>{t("modals.addAfdeling.title")}</ModalHeader>
-				<ModalCloseButton />
-				<ModalBody>
-					<AfdelingForm onChange={onSubmit} organisatie={organisatie} onCancel={onClose} />
-				</ModalBody>
-				<ModalFooter />
-			</ModalContent>
+		<Modal title={t("modals.addAfdeling.title")} onClose={onClose}>
+			<AfdelingForm onChange={onSubmit} organisatie={organisatie} onCancel={onClose} />
 		</Modal>
 	);
 };

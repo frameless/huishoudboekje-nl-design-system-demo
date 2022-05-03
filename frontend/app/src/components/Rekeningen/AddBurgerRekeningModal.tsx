@@ -1,4 +1,3 @@
-import {Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, UseDisclosureReturn} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import SaveBurgerRekeningErrorHandler from "../../errorHandlers/SaveBurgerRekeningErrorHandler";
@@ -6,14 +5,15 @@ import useMutationErrorHandler from "../../errorHandlers/useMutationErrorHandler
 import {Burger, GetBurgerDocument, useCreateBurgerRekeningMutation} from "../../generated/graphql";
 import {formatBurgerName} from "../../utils/things";
 import useToaster from "../../utils/useToaster";
+import Modal from "../shared/Modal";
 import RekeningForm from "./RekeningForm";
 
 type AddBurgerRekeningModalProps = {
 	burger: Burger,
-	disclosure: UseDisclosureReturn,
+	onClose: VoidFunction,
 };
 
-const AddBurgerRekeningModal: React.FC<AddBurgerRekeningModalProps> = ({burger, disclosure}) => {
+const AddBurgerRekeningModal: React.FC<AddBurgerRekeningModalProps> = ({burger, onClose}) => {
 	const {t} = useTranslation();
 	const toast = useToaster();
 	const handleSaveBurgerRekening = useMutationErrorHandler(SaveBurgerRekeningErrorHandler);
@@ -33,21 +33,13 @@ const AddBurgerRekeningModal: React.FC<AddBurgerRekeningModalProps> = ({burger, 
 			toast({
 				success: t("messages.rekeningen.createSuccess", {...rekening}),
 			});
-			disclosure.onClose();
+			onClose();
 		}).catch(handleSaveBurgerRekening);
 	};
 
 	return (
-		<Modal isOpen={disclosure.isOpen} onClose={() => disclosure.onClose()}>
-			<ModalOverlay />
-			<ModalContent>
-				<ModalHeader>{t("modals.addRekening.title")}</ModalHeader>
-				<ModalCloseButton />
-				<ModalBody>
-					<RekeningForm rekening={{rekeninghouder: formatBurgerName(burger)}} onSubmit={onSaveRekening} onCancel={() => disclosure.onClose()} />
-				</ModalBody>
-				<ModalFooter />
-			</ModalContent>
+		<Modal title={t("modals.addRekening.title")} onClose={() => onClose()}>
+			<RekeningForm rekening={{rekeninghouder: formatBurgerName(burger)}} onSubmit={onSaveRekening} onCancel={() => onClose()} />
 		</Modal>
 	);
 };

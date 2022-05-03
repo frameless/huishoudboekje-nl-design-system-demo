@@ -1,4 +1,4 @@
-import {Button, Divider, FormControl, FormLabel, Input, Stack, Table, Tbody, Th, Thead, Tr} from "@chakra-ui/react";
+import {Button, Divider, FormControl, FormErrorMessage, FormLabel, Input, Stack, Table, Tbody, Th, Thead, Tr} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
@@ -8,14 +8,20 @@ import {useReactSelectStyles} from "../../utils/things";
 import useForm from "../../utils/useForm";
 import useSelectProps from "../../utils/useSelectProps";
 import useToaster from "../../utils/useToaster";
+import zod from "../../utils/zod";
+import Asterisk from "../shared/Asterisk";
 import Section from "../shared/Section";
 import SectionContainer from "../shared/SectionContainer";
 import RubriekItem from "./RubriekItem";
 
+const validator = zod.object({
+	naam: zod.string().nonempty(),
+	grootboekrekening: zod.string().nonempty(),
+});
+
 const Rubrieken = () => {
 	const toast = useToaster();
 	const {t} = useTranslation();
-	const [form, {updateForm, reset}] = useForm({});
 	const $rubriekenConfiguratie = useGetRubriekenConfiguratieQuery();
 	const reactSelectStyles = useReactSelectStyles();
 	const selectProps = useSelectProps();
@@ -24,11 +30,15 @@ const Rubrieken = () => {
 			{query: GetRubriekenConfiguratieDocument},
 		],
 	});
+	const [form, {updateForm, isValid, isFieldValid, reset, toggleSubmitted}] = useForm({
+		validator,
+	});
 
 	const onSubmit = (e) => {
 		e.preventDefault();
+		toggleSubmitted(true);
 
-		if (!form.naam || !form.grootboekrekening) {
+		if (!isValid()) {
 			toast({
 				error: t("messages.genericError.description"),
 			});
@@ -36,12 +46,24 @@ const Rubrieken = () => {
 		}
 
 		createRubriek({
-			variables: form,
+			variables: {
+				naam: form.naam,
+				grootboekrekening: form.grootboekrekening,
+			},
 		}).then(() => {
+			reset();
 			toast({
 				success: t("messages.rubrieken.createSuccess"),
 			});
-			reset();
+		}).catch(err => {
+			let message = err.message;
+			if (err.message.includes("already exists")) {
+				message = t("messages.configuratie.alreadyExists");
+			}
+
+			toast({
+				error: message,
+			});
 		});
 	};
 
@@ -73,13 +95,14 @@ const Rubrieken = () => {
 								</Table>
 							)}
 
-							<form onSubmit={onSubmit}>
+							<form onSubmit={onSubmit} noValidate={true}>
 								<Stack direction={["column"]} alignItems={"flex-end"}>
-									<FormControl>
+									<FormControl isInvalid={!isFieldValid("naam")} isRequired={true}>
 										<FormLabel>{t("forms.rubrieken.fields.naam")}</FormLabel>
 										<Input onChange={v => updateForm("naam", v.target.value)} value={form.naam || ""} />
+										<FormErrorMessage>{t("configuratieForm.emptyNameErroror")}</FormErrorMessage>
 									</FormControl>
-									<FormControl>
+									<FormControl isInvalid={!isFieldValid("grootboekrekening")} isRequired={true}>
 										<FormLabel>{t("forms.rubrieken.fields.grootboekrekening")}</FormLabel>
 										<Select
 											{...selectProps.defaultProps}
@@ -89,8 +112,10 @@ const Rubrieken = () => {
 											onChange={(result) => updateForm("grootboekrekening", result?.value)}
 											value={form.grootboekrekening ? grootboekrekeningenOptions.find(g => g.value === form.grootboekrekening) : null}
 										/>
+										<FormErrorMessage>{t("configuratieForm.emptyGrootboekrekeningError")}</FormErrorMessage>
 									</FormControl>
 									<Button type={"submit"} colorScheme={"primary"} isLoading={loading}>{t("global.actions.save")}</Button>
+									<Asterisk />
 								</Stack>
 							</form>
 						</Stack>

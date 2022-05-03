@@ -1,13 +1,12 @@
-import {DeleteIcon} from "@chakra-ui/icons";
-import {Button, Editable, EditableInput, EditablePreview, IconButton, Td, Tooltip, Tr, useDisclosure} from "@chakra-ui/react";
+import {DeleteIcon, EditIcon} from "@chakra-ui/icons";
+import {Button, HStack, IconButton, Td, Text, Tr, useDisclosure} from "@chakra-ui/react";
 import React, {useEffect, useRef} from "react";
 import {Trans, useTranslation} from "react-i18next";
-import {GetRekeningDocument, Rekening, useUpdateRekeningMutation} from "../../generated/graphql";
+import {Rekening} from "../../generated/graphql";
 import {formatIBAN, truncateText} from "../../utils/things";
-import useForm from "../../utils/useForm";
-import useToaster from "../../utils/useToaster";
 import Alert from "../shared/Alert";
 import PrettyIban from "../shared/PrettyIban";
+import UpdateAfdelingRekeningModal from "./UpdateAfdelingRekeningModal";
 
 type RekeningListItemProps = {
 	rekening: Rekening,
@@ -16,20 +15,9 @@ type RekeningListItemProps = {
 
 const RekeningListItem: React.FC<RekeningListItemProps> = ({rekening, onDelete}) => {
 	const {t} = useTranslation();
-	const toast = useToaster();
 	const deleteAlert = useDisclosure();
+	const updateAfdelingRekeningModal = useDisclosure();
 	const editablePreviewRef = useRef<HTMLSpanElement>(null);
-	const [form, {updateForm}] = useForm({
-		initialValue: {
-			rekeninghouder: rekening.rekeninghouder,
-		},
-	});
-
-	const [updateRekening] = useUpdateRekeningMutation({
-		refetchQueries: [
-			{query: GetRekeningDocument, variables: {id: rekening.id!}},
-		],
-	});
 
 	const onConfirmDeleteDialog = () => {
 		if (onDelete) {
@@ -37,25 +25,6 @@ const RekeningListItem: React.FC<RekeningListItemProps> = ({rekening, onDelete})
 		}
 	};
 	const onCloseDeleteDialog = () => deleteAlert.onClose();
-
-	const onSubmit = () => {
-		updateRekening({
-			variables: {
-				id: rekening.id!,
-				iban: rekening.iban,
-				rekeninghouder: form.rekeninghouder,
-			},
-		}).then(() => {
-			toast({
-				success: t("messages.rekeningen.updateSuccess"),
-			});
-		}).catch(err => {
-			console.error(err);
-			toast({
-				error: err.message,
-			});
-		});
-	};
 
 	/* Truncate the length of the text if EditablePreview's value gets too long. */
 	useEffect(() => {
@@ -70,7 +39,7 @@ const RekeningListItem: React.FC<RekeningListItemProps> = ({rekening, onDelete})
 	}
 
 	return (<>
-
+		{updateAfdelingRekeningModal.isOpen && <UpdateAfdelingRekeningModal rekening={rekening} onClose={updateAfdelingRekeningModal.onClose} />}
 		{deleteAlert.isOpen && (
 			<Alert
 				title={t("messages.rekeningen.deleteTitle")}
@@ -93,19 +62,19 @@ const RekeningListItem: React.FC<RekeningListItemProps> = ({rekening, onDelete})
 
 		<Tr>
 			<Td>
-				<Editable defaultValue={(rekening.rekeninghouder || "").length > 0 ? rekening.rekeninghouder : t("unknown")} flex={1} submitOnBlur={true} onSubmit={onSubmit}>
-					<Tooltip label={t("global.actions.clickToEdit")} placement={"right"}>
-						<EditablePreview ref={editablePreviewRef} />
-					</Tooltip>
-					<EditableInput value={form.rekeninghouder || ""} onChange={e => updateForm("rekeninghouder", e.target.value)} name={"rekeningId"} id={"rekeningId"} />
-				</Editable>
+				<Text>{(rekening.rekeninghouder || "").length > 0 ? rekening.rekeninghouder : t("unknown")}</Text>
 			</Td>
 			<Td>
 				<PrettyIban iban={rekening.iban} />
 			</Td>
-			<Td>{onDelete && (
-				<IconButton icon={<DeleteIcon />} size={"xs"} variant={"ghost"} onClick={() => deleteAlert.onOpen()} aria-label={t("global.actions.delete")} />
-			)}</Td>
+			<Td isNumeric>
+				<HStack justify={"flex-end"}>
+					<IconButton size={"sm"} variant={"ghost"} colorScheme={"gray"} icon={<EditIcon />} aria-label={t("global.actions.edit")} onClick={() => updateAfdelingRekeningModal.onOpen()} />
+					{onDelete && (
+						<IconButton icon={<DeleteIcon />} size={"xs"} variant={"ghost"} onClick={() => deleteAlert.onOpen()} aria-label={t("global.actions.delete")} />
+					)}
+				</HStack>
+			</Td>
 		</Tr>
 	</>);
 };

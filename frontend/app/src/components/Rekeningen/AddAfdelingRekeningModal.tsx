@@ -1,8 +1,8 @@
-import {Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay} from "@chakra-ui/react";
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {Afdeling, GetAfdelingDocument, GetOrganisatieDocument, useCreateAfdelingRekeningMutation} from "../../generated/graphql";
 import useToaster from "../../utils/useToaster";
+import Modal from "../shared/Modal";
 import RekeningForm from "./RekeningForm";
 
 type AddAfdelingRekeningModalProps = {
@@ -51,16 +51,8 @@ const AddAfdelingRekeningModal: React.FC<AddAfdelingRekeningModalProps> = ({afde
 	};
 
 	return (
-		<Modal isOpen={true} onClose={() => onClose()}>
-			<ModalOverlay />
-			<ModalContent>
-				<ModalHeader>{t("modals.addRekening.title")}</ModalHeader>
-				<ModalCloseButton />
-				<ModalBody>
-					<RekeningForm rekening={{rekeninghouder: afdeling.naam}} isIbanValid={isIbanValid} onSubmit={onSaveRekening} onCancel={() => onClose()} />
-				</ModalBody>
-				<ModalFooter />
-			</ModalContent>
+		<Modal title={t("modals.addRekening.title")} onClose={() => onClose()}>
+			<RekeningForm rekening={{rekeninghouder: afdeling.naam}} isIbanValid={isIbanValid} onSubmit={onSaveRekening} onCancel={() => onClose()} />
 		</Modal>
 	);
 };

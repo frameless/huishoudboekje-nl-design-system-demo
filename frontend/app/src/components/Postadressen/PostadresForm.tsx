@@ -16,12 +16,12 @@ const validator = zod.object({
 });
 
 type PostadresFormProps = {
-	postadres?: Postadres,
-	onSubmit: Function,
-	onCancel: VoidFunction,
+    postadres?: Postadres,
+    onChange: (values) => void,
+    onCancel: VoidFunction,
 };
 
-const PostadresForm: React.FC<PostadresFormProps> = ({postadres, onSubmit, onCancel}) => {
+const PostadresForm: React.FC<PostadresFormProps> = ({postadres, onChange, onCancel}) => {
 	const {t} = useTranslation();
 	const toast = useToaster();
 
@@ -38,8 +38,13 @@ const PostadresForm: React.FC<PostadresFormProps> = ({postadres, onSubmit, onCan
 		toggleSubmitted(true);
 
 		if (isValid()) {
-			onSubmit(form);
-			return;
+			onChange({
+				...form,
+				...postadres?.id && {
+					postadresId: postadres.id,
+				}
+			})
+			return
 		}
 
 		toast.closeAll();

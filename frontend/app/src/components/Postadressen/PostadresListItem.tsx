@@ -1,45 +1,28 @@
-import {DeleteIcon} from "@chakra-ui/icons";
-import {Button, Editable, EditableInput, EditablePreview, IconButton, Td, Tooltip, Tr, useDisclosure} from "@chakra-ui/react";
+import {DeleteIcon, EditIcon} from "@chakra-ui/icons";
+import {Button, HStack, IconButton, Td, Text, Tr, useDisclosure} from "@chakra-ui/react";
 import React, {useEffect, useRef} from "react";
 import {useTranslation} from "react-i18next";
-import {Postadres, useUpdatePostadresMutation} from "../../generated/graphql";
+import {Afdeling, Postadres} from "../../generated/graphql";
 import {truncateText} from "../../utils/things";
-import useToaster from "../../utils/useToaster";
 import Alert from "../shared/Alert";
+import UpdatePostadresModal from "./UpdatePostadresModal";
 
 type PostadresListItemProps = {
 	postadres: Postadres,
-	onDelete?: VoidFunction
+	onDelete?: VoidFunction,
+	afdeling: Afdeling,
 };
 
-const PostadresListItem: React.FC<PostadresListItemProps> = ({postadres, onDelete}) => {
+const PostadresListItem: React.FC<PostadresListItemProps> = ({postadres, afdeling, onDelete}) => {
 	const {t} = useTranslation();
-	const toast = useToaster();
 	const deleteAlert = useDisclosure();
-	const [updatePostadres] = useUpdatePostadresMutation();
+	const updatePostadresModal = useDisclosure();
 	const editablePreviewRef = useRef<HTMLSpanElement>(null);
 
 	const onConfirmDelete = () => {
 		if (onDelete) {
 			onDelete();
 		}
-	};
-	const onSubmit = (field: keyof Postadres, value: any) => {
-		updatePostadres({
-			variables: {
-				id: postadres.id!,
-				[field]: value,
-			},
-		}).then(() => {
-			toast({
-				success: t("messages.postadressen.updateSuccess"),
-			});
-		}).catch(err => {
-			console.error(err);
-			toast({
-				error: err.message,
-			});
-		});
 	};
 
 	/* Truncate the length of the text if EditablePreview's value gets too long. */
@@ -50,6 +33,7 @@ const PostadresListItem: React.FC<PostadresListItemProps> = ({postadres, onDelet
 	});
 
 	return (<>
+		{updatePostadresModal.isOpen && <UpdatePostadresModal postadres={postadres} onClose={updatePostadresModal.onClose} afdeling={afdeling} />}
 		{deleteAlert.isOpen && (
 			<Alert
 				title={t("messages.postadressen.deleteTitle")}
@@ -67,40 +51,25 @@ const PostadresListItem: React.FC<PostadresListItemProps> = ({postadres, onDelet
 
 		<Tr>
 			<Td>
-				<Editable defaultValue={(postadres.straatnaam || "").length > 0 ? postadres.straatnaam : t("unknown")} flex={1} submitOnBlur={true}
-					onSubmit={value => onSubmit("straatnaam", value)}>
-					<Tooltip label={t("global.actions.clickToEdit")} placement={"right"}>
-						<EditablePreview ref={editablePreviewRef} />
-					</Tooltip>
-					<EditableInput name={"postadresId"} id={"postadresId"} />
-				</Editable>
+				<Text>{(postadres.straatnaam || "").length > 0 ? postadres.straatnaam : t("unknown")}</Text>
 			</Td>
 			<Td>
-				<Editable defaultValue={(postadres.huisnummer || "").length > 0 ? postadres.huisnummer : t("unknown")} flex={1} submitOnBlur={true}
-					onSubmit={value => onSubmit("huisnummer", value)}>
-					<EditablePreview />
-					<EditableInput />
-				</Editable>
+				<Text>{(postadres.huisnummer || "").length > 0 ? postadres.huisnummer : t("unknown")}</Text>
 			</Td>
 			<Td>
-				<Editable defaultValue={(postadres.postcode || "").length > 0 ? postadres.postcode : t("unknown")} flex={1} submitOnBlur={true}
-					onSubmit={value => onSubmit("postcode", value)}>
-					<EditablePreview />
-					<EditableInput />
-				</Editable>
+				<Text>{(postadres.postcode || "").length > 0 ? postadres.postcode : t("unknown")}</Text>
 			</Td>
 			<Td>
-				<Editable defaultValue={(postadres.plaatsnaam || "").length > 0 ? postadres.plaatsnaam : t("unknown")} flex={1} submitOnBlur={true}
-					onSubmit={value => onSubmit("plaatsnaam", value)}>
-					<EditablePreview />
-					<EditableInput />
-				</Editable>
+				<Text>{(postadres.plaatsnaam || "").length > 0 ? postadres.plaatsnaam : t("unknown")}</Text>
 			</Td>
-			<Td>
-				{onDelete && (
-					<IconButton icon={<DeleteIcon />} size={"xs"} variant={"ghost"} onClick={() => deleteAlert.onOpen()}
-						aria-label={t("global.actions.delete")} />
-				)}
+			<Td isNumeric>
+				<HStack justify={"flex-end"}>
+					<IconButton size={"sm"} variant={"ghost"} colorScheme={"gray"} icon={<EditIcon />} aria-label={t("global.actions.edit")} onClick={() => updatePostadresModal.onOpen()} />
+					{onDelete && (
+						<IconButton icon={<DeleteIcon />} size={"xs"} variant={"ghost"} onClick={() => deleteAlert.onOpen()}
+							aria-label={t("global.actions.delete")} />
+					)}
+				</HStack>
 			</Td>
 		</Tr>
 	</>);

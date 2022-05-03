@@ -1,4 +1,4 @@
-import {Button, FormControl, FormLabel, HStack, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack} from "@chakra-ui/react";
+import {Button, Flex, FormControl, FormLabel, Stack} from "@chakra-ui/react";
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
@@ -7,9 +7,9 @@ import Queryable from "../../../utils/Queryable";
 import {formatBurgerName, humanJoin, useReactSelectStyles} from "../../../utils/things";
 import useToaster from "../../../utils/useToaster";
 import {MultiLineOption, MultiLineValueContainer} from "../../Layouts/ReactSelect/CustomComponents";
-import Asterisk from "../../shared/Asterisk";
+import Modal from "../../shared/Modal";
 
-const AddBurgerToHuishoudenModal: React.FC<{huishouden: Huishouden, isOpen: boolean, onClose: VoidFunction}> = ({huishouden, isOpen, onClose}) => {
+const AddBurgerToHuishoudenModal: React.FC<{huishouden: Huishouden, onClose: VoidFunction}> = ({huishouden, onClose}) => {
 	const {t} = useTranslation();
 	const toast = useToaster();
 	const reactSelectStyles = useReactSelectStyles();
@@ -52,43 +52,31 @@ const AddBurgerToHuishoudenModal: React.FC<{huishouden: Huishouden, isOpen: bool
 	};
 
 	return (
-		<Modal isOpen={isOpen} onClose={onClose}>
-			<ModalOverlay />
-			<ModalContent>
-				<ModalHeader>{t("forms.huishoudens.addBurger.title")}</ModalHeader>
-				<ModalCloseButton />
-				<ModalBody>
-					<Stack>
-						<FormControl isRequired={true}>
-							<FormLabel>{t("forms.huishoudens.findBurger")}</FormLabel>
-							<Queryable query={$burgers} children={data => {
-								const burgers: Burger[] = data.burgers || [];
+		<Modal title={t("forms.huishoudens.addBurger.title")} onClose={onClose}>
+			<Stack>
+				<FormControl isRequired={true}>
+					<FormLabel>{t("forms.huishoudens.findBurger")}</FormLabel>
+					<Queryable query={$burgers} children={data => {
+						const burgers: Burger[] = data.burgers || [];
 
-								/* Only show burgers that are not already in this Huishouden yet. */
-								const options = burgers
-									.filter(b => !huishouden.burgers?.map(hb => hb.id).includes(b.id))
-									.map(b => ({key: b.id, value: b.id, label: [formatBurgerName(b), `${b.straatnaam} ${b.huisnummer}, ${b.postcode} ${b.plaatsnaam}`]}));
+						/* Only show burgers that are not already in this Huishouden yet. */
+						const options = burgers
+							.filter(b => !huishouden.burgers?.map(hb => hb.id).includes(b.id))
+							.map(b => ({key: b.id, value: b.id, label: [formatBurgerName(b), `${b.straatnaam} ${b.huisnummer}, ${b.postcode} ${b.plaatsnaam}`]}));
 
-								return (
-									<Select options={options} isClearable styles={reactSelectStyles.default} onChange={selectedOption => {
-										const selectedBurger: Burger = burgers.find(b => selectedOption?.value === b.id) as Burger;
-										setSelectedBurgers([selectedBurger]);
-									}} components={{Option: MultiLineOption, ValueContainer: MultiLineValueContainer}} />
-								);
-							}} />
-						</FormControl>
-					</Stack>
-				</ModalBody>
-				<ModalFooter>
-					<Stack align={"flex-end"}>
-						<HStack justify={"flex-end"}>
-							<Button onClick={onClose}>{t("global.actions.cancel")}</Button>
-							<Button colorScheme={"primary"} onClick={onClickSave}>{t("global.actions.save")}</Button>
-						</HStack>
-						<Asterisk />
-					</Stack>
-				</ModalFooter>
-			</ModalContent>
+						return (
+							<Select options={options} isClearable styles={reactSelectStyles.default} onChange={selectedOption => {
+								const selectedBurger: Burger = burgers.find(b => selectedOption?.value === b.id) as Burger;
+								setSelectedBurgers([selectedBurger]);
+							}} components={{Option: MultiLineOption, ValueContainer: MultiLineValueContainer}} />
+						);
+					}} />
+				</FormControl>
+
+				<Flex justify={"flex-end"}>
+					<Button colorScheme={"primary"} onClick={onClickSave}>{t("global.actions.save")}</Button>
+				</Flex>
+			</Stack>
 		</Modal>
 	);
 };

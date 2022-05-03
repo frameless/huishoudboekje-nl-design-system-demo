@@ -1,60 +1,26 @@
-import {Editable, EditableInput, EditablePreview, FormControlProps, Td, Tr} from "@chakra-ui/react";
-import React, {useState} from "react";
+import {EditIcon} from "@chakra-ui/icons";
+import {FormControlProps, HStack, IconButton, Td, Tr, useDisclosure} from "@chakra-ui/react";
+import React from "react";
 import {useTranslation} from "react-i18next";
-import {Configuratie as IConfiguratie, GetConfiguratieDocument, useDeleteConfiguratieMutation, useUpdateConfiguratieMutation} from "../../generated/graphql";
+import {Configuratie, GetConfiguratieDocument, useDeleteConfiguratieMutation} from "../../generated/graphql";
 import useToaster from "../../utils/useToaster";
 import DeleteConfirmButton from "../shared/DeleteConfirmButton";
+import UpdateParameterModal from "./UpdateParameterModal";
 
-const ParameterItem: React.FC<FormControlProps & {c: IConfiguratie}> = ({c, ...props}) => {
+const ParameterItem: React.FC<FormControlProps & {c: Configuratie}> = ({c, ...props}) => {
 	const toast = useToaster();
 	const {t} = useTranslation();
-	const [value, setValue] = useState(c.waarde);
-	const [isSubmitted, setSubmitted] = useState(false);
-	const onChange = (e) => {
-		setValue(e.target.value);
-	};
-
-	const [updateConfig] = useUpdateConfiguratieMutation({
-		refetchQueries: [
-			{query: GetConfiguratieDocument},
-		],
-	});
+	const updateParameterModal = useDisclosure();
 	const [deleteConfig] = useDeleteConfiguratieMutation({
 		refetchQueries: [
 			{query: GetConfiguratieDocument},
 		],
 	});
 
-	const onSubmit = () => {
-		if (isSubmitted) {
-			return false;
-		}
-
-		updateConfig({
-			variables: {
-				key: String(c.id),
-				value: String(value),
-			},
-		}).then(() => {
-			setSubmitted(true);
-			toast({
-				success: t("messages.configuratie.updateSuccess"),
-			});
-		}).catch(err => {
-			toast({
-				error: err.message,
-			});
-		});
-	};
-
 	const onDelete = () => {
-		if (!c.id) {
-			return;
-		}
-
 		deleteConfig({
 			variables: {
-				key: c.id,
+				key: String(c.id),
 			},
 		}).then(() => {
 			toast.closeAll();
@@ -62,30 +28,29 @@ const ParameterItem: React.FC<FormControlProps & {c: IConfiguratie}> = ({c, ...p
 				success: t("messages.configuratie.deleteSuccess"),
 			});
 		}).catch(err => {
+			toast.closeAll();
 			toast({
 				error: err.message,
 			});
 		});
 	};
 
-	const onFocus = () => {
-		setSubmitted(false);
-	};
+	return (<>
+		{updateParameterModal.isOpen && (
+			<UpdateParameterModal onClose={() => updateParameterModal.onClose()} configuratie={c} />
+		)}
 
-	return (
 		<Tr>
 			<Td>{c.id}</Td>
+			<Td>{c.waarde}</Td>
 			<Td>
-				<Editable defaultValue={c.waarde} flex={1} submitOnBlur={true} onSubmit={onSubmit} onFocus={onFocus}>
-					<EditablePreview />
-					<EditableInput onChange={onChange} name={c.id} id={c.id} />
-				</Editable>
-			</Td>
-			<Td>
-				<DeleteConfirmButton onConfirm={() => onDelete()} />
+				<HStack>
+					<IconButton size={"sm"} variant={"ghost"} colorScheme={"gray"} icon={<EditIcon />} aria-label={t("global.actions.edit")} onClick={() => updateParameterModal.onOpen()} />
+					<DeleteConfirmButton onConfirm={() => onDelete()} />
+				</HStack>
 			</Td>
 		</Tr>
-	);
+	</>);
 };
 
 export default ParameterItem;

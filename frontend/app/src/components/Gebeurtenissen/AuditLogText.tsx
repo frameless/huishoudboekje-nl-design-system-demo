@@ -1,17 +1,18 @@
-import {Box, Button, Divider, HStack, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack, Text, TextProps, useDisclosure} from "@chakra-ui/react";
+import {Box, Divider, HStack, Stack, Text, TextProps, useDisclosure} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {AppRoutes} from "../../config/routes";
 import {Burger, GebruikersActiviteit} from "../../generated/graphql";
 import {formatBurgerName, formatHuishoudenName, humanJoin} from "../../utils/things";
 import DataItem from "../shared/DataItem";
+import Modal from "../shared/Modal";
 import AuditLogLink from "./AuditLogLink";
 import {auditLogTexts} from "./texts";
 
 const AuditLogText: React.FC<TextProps & {g: GebruikersActiviteit}> = ({g, ...props}) => {
 	const {t} = useTranslation();
 	const {action, entities = []} = g;
-	const {isOpen, onClose, onOpen} = useDisclosure();
+	const modal = useDisclosure();
 
 	const gebruiker = g.gebruikerId || t("unknownGebruiker");
 	const burger = entities.find(e => e.entityType === "burger")?.burger;
@@ -77,41 +78,30 @@ const AuditLogText: React.FC<TextProps & {g: GebruikersActiviteit}> = ({g, ...pr
 	};
 
 	return (<>
-		<Modal isOpen={isOpen} onClose={onClose}>
-			<ModalOverlay />
-			<ModalContent maxW={"780px"} w={"100%"}>
-				<ModalCloseButton />
-				<ModalHeader>Gebeurtenis #{g.id}</ModalHeader>
-				<ModalBody>
-					<Stack>
-						<Stack>
-							<DataItem label={"Sjabloon"}>
-								<Text>
-									{auditLogTextElement?.() || t("auditLog.unknown")}
-								</Text>
-							</DataItem>
+		{modal.isOpen && (
+			<Modal title={"Gebeurtenis #" + g.id} onClose={modal.onClose} size={"2xl"}>
+				<Stack>
+					<DataItem label={"Sjabloon"}>
+						<Text>
+							{auditLogTextElement?.() || t("auditLog.unknown")}
+						</Text>
+					</DataItem>
 
-							<Divider />
+					<Divider />
 
-							<DataItem label={"Actie"}>{context.action}</DataItem>
-							<DataItem label={"Gebruiker"}>{context.gebruiker ?? t("unknownUser")}</DataItem>
-							<DataItem label={"Entiteiten"}>
-								<Box as={"pre"} p={2} bg={"gray.100"} maxWidth={"100%"} overflowX={"auto"}>{JSON.stringify(context.entities, null, 2)}</Box>
-							</DataItem>
-							<DataItem label={"Waarden"}>
-								<Box as={"pre"} p={2} bg={"gray.100"} maxWidth={"100%"} overflowX={"auto"}>{JSON.stringify(values, null, 2)}</Box>
-							</DataItem>
-						</Stack>
-					</Stack>
-				</ModalBody>
+					<DataItem label={"Actie"}>{context.action}</DataItem>
+					<DataItem label={"Gebruiker"}>{context.gebruiker ?? t("unknownUser")}</DataItem>
+					<DataItem label={"Entiteiten"}>
+						<Box as={"pre"} p={2} bg={"gray.100"} maxWidth={"100%"} overflowX={"auto"}>{JSON.stringify(context.entities, null, 2)}</Box>
+					</DataItem>
+					<DataItem label={"Waarden"}>
+						<Box as={"pre"} p={2} bg={"gray.100"} maxWidth={"100%"} overflowX={"auto"}>{JSON.stringify(values, null, 2)}</Box>
+					</DataItem>
+				</Stack>
+			</Modal>
+		)}
 
-				<ModalFooter>
-					<Button colorScheme={"primary"} onClick={onClose}>{t("global.actions.close")}</Button>
-				</ModalFooter>
-			</ModalContent>
-		</Modal>
-
-		<HStack onDoubleClick={() => onOpen()}>
+		<HStack onDoubleClick={() => modal.onOpen()}>
 			{auditLogTextElement ? (
 				<Text {...props}>{auditLogTextElement()}</Text>
 			) : (<>

@@ -5,7 +5,7 @@ import {Afdeling, GetOrganisatieDocument, GetOrganisatiesDocument, Postadres, us
 import useToaster from "../../utils/useToaster";
 import PostadresListItem from "./PostadresListItem";
 
-type PostadressenListProps = {postadressen: Postadres[], afdeling?: Afdeling};
+type PostadressenListProps = { postadressen: Postadres[], afdeling: Afdeling };
 const PostadresList: React.FC<TableProps & PostadressenListProps> = ({postadressen, afdeling, ...props}) => {
 	const {t} = useTranslation();
 	const toast = useToaster();
@@ -52,7 +52,7 @@ const PostadresList: React.FC<TableProps & PostadressenListProps> = ({postadress
 				{postadressen.map(p => (
 					<PostadresListItem key={p.id} postadres={p} {...afdeling && {
 						onDelete: () => onDeleteAfdelingPostadres(p.id!, afdeling.id),
-					}} />
+					}} afdeling={afdeling} />
 				))}
 			</Tbody>
 		</Table>

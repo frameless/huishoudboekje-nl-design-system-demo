@@ -6,7 +6,7 @@ import {useStore} from "../../store";
 import useToaster from "../../utils/useToaster";
 import RekeningListItem from "./RekeningListItem";
 
-type RekeningListProps = {rekeningen: Rekening[], burger?: Burger, afdeling?: Afdeling};
+type RekeningListProps = { rekeningen: Rekening[], burger?: Burger, afdeling?: Afdeling };
 const RekeningList: React.FC<TableProps & RekeningListProps> = ({rekeningen, burger, afdeling, ...props}) => {
 	const {t} = useTranslation();
 	const toast = useToaster();

@@ -6,9 +6,9 @@ import {AppRoutes} from "../../../config/routes";
 import {Huishouden, useGetHuishoudenQuery} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
 import {formatHuishoudenName} from "../../../utils/things";
+import BackButton from "../../shared/BackButton";
 import Page from "../../shared/Page";
 import PageNotFound from "../../shared/PageNotFound";
-import BackButton from "../../shared/BackButton";
 import AddBurgerToHuishoudenModal from "./AddBurgerToHuishoudenModal";
 import HuishoudenBurgersView from "./HuishoudenBurgersView";
 
@@ -32,7 +32,9 @@ const HuishoudenDetails = () => {
 				<Page title={t("huishoudenName", {name: formatHuishoudenName(huishouden)})} backButton={(<BackButton to={AppRoutes.Huishoudens()} />)} right={(
 					<Button size={"sm"} variant={"outline"} colorScheme={"primary"} as={NavLink} to={AppRoutes.RapportageBurger([...burgerIds])}>{t("global.actions.showReports")}</Button>
 				)}>
-					<AddBurgerToHuishoudenModal huishouden={huishouden} onClose={addBurgersModal.onClose} isOpen={addBurgersModal.isOpen} />
+					{addBurgersModal.isOpen && (
+						<AddBurgerToHuishoudenModal huishouden={huishouden} onClose={addBurgersModal.onClose} />
+					)}
 					<HuishoudenBurgersView huishouden={huishouden} onClickAddButton={() => addBurgersModal.onOpen()} />
 				</Page>
 			);
