@@ -50,15 +50,11 @@ const DataLoader = {
 
 	getJournaalpostenByAfspraakId: async (afspraakId: number) => {
 		// Todo we need make sure that based on the Burger that is requesting this, we never return any Afspraken that are not linked to other burgers.
-		return await fetch(createServiceUrl("huishoudboekje", `/journaalposten?filter_afspraken[]=${afspraakId}`)).then(r => r.json()).then(r => {
-			return r.data.filter(j => j.afspraak_id === afspraakId).shift()
-		});
+		return await fetch(createServiceUrl("huishoudboekje", `/journaalposten?filter_afspraken=${afspraakId}`)).then(r => r.json()).then(r => r.data || []);
 	},
 
 	getJournaalpostByTransactieId: async (transactieId: number) => {
-		return await fetch(createServiceUrl(`huishoudboekje`, `/journaalposten?filter_transactions[]=${transactieId}`)).then(r => r.json()).then(r => {
-			return r.data.filter(j => j.transaction_id === transactieId).shift();
-		});
+		return await fetch(createServiceUrl(`huishoudboekje`, `/journaalposten?filter_transactions=${transactieId}`)).then(r => r.json()).then(r => r.data || []);
 	},
 
 	// Banktransacties

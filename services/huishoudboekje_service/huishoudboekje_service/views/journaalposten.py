@@ -48,6 +48,11 @@ class JournaalpostView(HHBView):
         "$ref": "#/definitions/one_or_more_journaalposten"
     }
 
+    def extend_get(self, **kwargs):
+        """ Extend the get function with extra filter """
+        self.add_filter_transactions
+        self.add_filter_afspraken
+
     def add_filter_transactions(self):
         filter_transactions = request.args.get('filter_transactions')
         if filter_transactions:
@@ -56,7 +61,7 @@ class JournaalpostView(HHBView):
             )
 
     def add_filter_afspraken(self):
-        filter_afspraken = request.args.get('filter_afpraken')
+        filter_afspraken = request.args.get('filter_afspraken')
         if filter_afspraken:
             self.hhb_query.query = self.hhb_query.query.filter(
                 Journaalpost.afspraak_id.in_(filter_afspraken.split(","))
