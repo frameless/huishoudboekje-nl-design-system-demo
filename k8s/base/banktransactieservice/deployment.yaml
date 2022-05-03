@@ -89,15 +89,22 @@ spec:
             - name: http
               containerPort: 8000
               protocol: TCP
-          livenessProbe:
-            initialDelaySeconds: 60
+          startupProbe:
             httpGet:
               path: /health
               port: http
+            periodSeconds: 10
+            failureThreshold: 60
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 10
           readinessProbe:
             httpGet:
               path: /health
               port: http
+            periodSeconds: 10
           resources:
             limits:
               cpu: "1"
