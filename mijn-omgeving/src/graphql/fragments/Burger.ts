@@ -41,6 +41,12 @@ const BurgerFragment = gql`
                 id
                 iban
                 rekeninghouder
+                afdelingen{
+                    organisatie{
+                        id
+                        naam
+                    }
+                }
             }
         }
     }

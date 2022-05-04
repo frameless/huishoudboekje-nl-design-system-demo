@@ -17,6 +17,12 @@ export type Scalars = {
   JSON: any;
 };
 
+export type Afdeling = {
+  id?: Maybe<Scalars['Int']>;
+  naam?: Maybe<Scalars['String']>;
+  organisatie?: Maybe<Organisatie>;
+};
+
 export type Afspraak = {
   bedrag?: Maybe<Scalars['String']>;
   betaalinstructie?: Maybe<Betaalinstructie>;
@@ -133,6 +139,8 @@ export type QueryBurgerArgs = {
 };
 
 export type Rekening = {
+  /** De afdeling waar deze rekening bij hoort. */
+  afdelingen?: Maybe<Array<Maybe<Afdeling>>>;
   /** Dit is een IBAN. */
   iban?: Maybe<Scalars['String']>;
   /** Een unique identifier voor een rekening in het systeem. */
@@ -143,14 +151,14 @@ export type Rekening = {
 
 export type BanktransactieFragment = { id?: number, bedrag?: any, isCredit?: boolean, tegenrekeningIban?: string, transactiedatum?: string, informationToAccountOwner?: string, tegenrekening?: { id?: number, iban?: string, rekeninghouder?: string }, journaalpost?: { id?: number } };
 
-export type BurgerFragment = { id?: number, bsn?: string, voorletters?: string, voornamen?: string, achternaam?: string, banktransacties?: Array<{ id?: number, bedrag?: any, isCredit?: boolean, informationToAccountOwner?: string, tegenrekeningIban?: string, transactiedatum?: string, tegenrekening?: { id?: number, iban?: string, rekeninghouder?: string } }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }>, afspraken?: Array<{ id?: number, bedrag?: string, credit?: boolean, omschrijving?: string, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, startDate?: string, endDate?: string }, tegenrekening?: { id?: number, iban?: string, rekeninghouder?: string } }> };
+export type BurgerFragment = { id?: number, bsn?: string, voorletters?: string, voornamen?: string, achternaam?: string, banktransacties?: Array<{ id?: number, bedrag?: any, isCredit?: boolean, informationToAccountOwner?: string, tegenrekeningIban?: string, transactiedatum?: string, tegenrekening?: { id?: number, iban?: string, rekeninghouder?: string } }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }>, afspraken?: Array<{ id?: number, bedrag?: string, credit?: boolean, omschrijving?: string, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, startDate?: string, endDate?: string }, tegenrekening?: { id?: number, iban?: string, rekeninghouder?: string, afdelingen?: Array<{ organisatie?: { id?: number, naam?: string } }> } }> };
 
 export type GetBurgerQueryVariables = Exact<{
   bsn: Scalars['Int'];
 }>;
 
 
-export type GetBurgerQuery = { burger?: { id?: number, bsn?: string, voorletters?: string, voornamen?: string, achternaam?: string, banktransacties?: Array<{ id?: number, bedrag?: any, isCredit?: boolean, informationToAccountOwner?: string, tegenrekeningIban?: string, transactiedatum?: string, tegenrekening?: { id?: number, iban?: string, rekeninghouder?: string } }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }>, afspraken?: Array<{ id?: number, bedrag?: string, credit?: boolean, omschrijving?: string, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, startDate?: string, endDate?: string }, tegenrekening?: { id?: number, iban?: string, rekeninghouder?: string } }> } };
+export type GetBurgerQuery = { burger?: { id?: number, bsn?: string, voorletters?: string, voornamen?: string, achternaam?: string, banktransacties?: Array<{ id?: number, bedrag?: any, isCredit?: boolean, informationToAccountOwner?: string, tegenrekeningIban?: string, transactiedatum?: string, tegenrekening?: { id?: number, iban?: string, rekeninghouder?: string } }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }>, afspraken?: Array<{ id?: number, bedrag?: string, credit?: boolean, omschrijving?: string, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, startDate?: string, endDate?: string }, tegenrekening?: { id?: number, iban?: string, rekeninghouder?: string, afdelingen?: Array<{ organisatie?: { id?: number, naam?: string } }> } }> } };
 
 export type GetPagedBanktransactiesQueryVariables = Exact<{
   bsn: Scalars['Int'];
@@ -227,6 +235,12 @@ export const BurgerFragmentDoc = gql`
       id
       iban
       rekeninghouder
+      afdelingen {
+        organisatie {
+          id
+          naam
+        }
+      }
     }
   }
 }
