@@ -364,8 +364,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 				</SectionContainer>
 			</form>
 		</Stack>
-	)
-		;
+	);
 };
 
 export default AfspraakForm;
