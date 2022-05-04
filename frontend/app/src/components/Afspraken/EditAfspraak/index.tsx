@@ -4,24 +4,23 @@ import {useNavigate, useParams} from "react-router-dom";
 import {AppRoutes} from "../../../config/routes";
 import {Afspraak, GetAfspraakDocument, UpdateAfspraakMutationVariables, useGetAfspraakFormDataQuery, useUpdateAfspraakMutation} from "../../../generated/graphql";
 import Queryable from "../../../utils/Queryable";
-import useHandleMutation from "../../../utils/useHandleMutation";
+import useToaster from "../../../utils/useToaster";
+import BackButton from "../../shared/BackButton";
 import Page from "../../shared/Page";
 import PageNotFound from "../../shared/PageNotFound";
-import BackButton from "../../shared/BackButton";
 import AfspraakForm from "../AfspraakForm";
 import AfspraakFormContext, {AfspraakFormContextType} from "./context";
 
 const EditAfspraak = () => {
 	const {id = ""} = useParams<{id: string}>();
 	const {t} = useTranslation();
-	const handleMutation = useHandleMutation();
+	const navigate = useNavigate();
+	const toast = useToaster();
 	const [updateAfspraakMutation, $updateAfspraakMutation] = useUpdateAfspraakMutation({
 		refetchQueries: [
 			{query: GetAfspraakDocument, variables: {id: parseInt(id)}},
 		],
 	});
-	const navigate = useNavigate();
-
 	const $afspraak = useGetAfspraakFormDataQuery({
 		variables: {
 			afspraakId: parseInt(id),
@@ -46,12 +45,24 @@ const EditAfspraak = () => {
 				postadresId: afspraak.postadres?.id,
 			};
 
-			const updateAfspraak = (data: UpdateAfspraakMutationVariables["input"]) => handleMutation(updateAfspraakMutation({
-				variables: {
-					id: afspraak.id!,
-					input: data,
-				},
-			}), t("messages.updateAfspraakSuccess"), () => navigate(AppRoutes.ViewAfspraak(String(afspraak.id))));
+			const onSubmitForm = (data) => {
+				updateAfspraakMutation({
+					variables: {
+						id: afspraak.id!,
+						input: data,
+					},
+				}).then(() => {
+					toast({
+						success: t("messages.updateAfspraakSuccess"),
+					});
+					navigate(AppRoutes.ViewAfspraak(String(afspraak.id)));
+				}).catch(err => {
+					toast.closeAll();
+					toast({
+						error: err.message,
+					});
+				});
+			};
 
 			const ctxValue: AfspraakFormContextType = {
 				rubrieken: data.rubrieken || [],
@@ -61,7 +72,7 @@ const EditAfspraak = () => {
 			return (
 				<Page title={t("forms.afspraken.titleEdit")} backButton={<BackButton to={AppRoutes.ViewAfspraak(String(afspraak.id))} />}>
 					<AfspraakFormContext.Provider value={ctxValue}>
-						<AfspraakForm burgerRekeningen={afspraak.burger?.rekeningen || []} values={editAfspraakValues} onChange={updateAfspraak} isLoading={$updateAfspraakMutation.loading} />
+						<AfspraakForm burgerRekeningen={afspraak.burger?.rekeningen || []} values={editAfspraakValues} onSubmit={onSubmitForm} isLoading={$updateAfspraakMutation.loading} />
 					</AfspraakFormContext.Provider>
 				</Page>
 			);

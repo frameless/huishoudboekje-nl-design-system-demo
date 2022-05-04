@@ -90,4 +90,5 @@ const AfspraakDetailMenu: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 		</Menu>
 	</>);
 };
+
 export default AfspraakDetailMenu;
