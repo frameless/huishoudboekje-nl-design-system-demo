@@ -123,8 +123,12 @@ const DataLoader = {
 	},
 
 	// Afdelingen (Organisatieservice)
-	getAfdelingenByOrganisatieId: async (organisatieId: number): Promise<any> => {
-		throw new Error("Not implemented.");
+	getAfdelingenById: async (ids?: number[]) => {
+		let filters = "";
+		if (ids && ids.length > 0) {
+			filters = `?filter_ids=${ids.join(",")}`;
+		}
+		return await fetch(createServiceUrl("organisaties", `/afdelingen` + filters)).then(r => r.json()).then(r => r.data || []);
 	},
 
 	// Organisatie (Organisatieservice)

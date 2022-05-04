@@ -2,6 +2,12 @@
 ### Do not make changes to this file directly
 
 
+type Afdeling {
+  id: Int
+  naam: String
+  organisatie: Organisatie
+}
+
 type Afspraak {
   bedrag: String
   betaalinstructie: Betaalinstructie
@@ -110,6 +116,9 @@ type Query {
 
 """"""
 type Rekening {
+  """De afdeling waar deze rekening bij hoort."""
+  afdelingen: [Afdeling]
+
   """Dit is een IBAN."""
   iban: String
 

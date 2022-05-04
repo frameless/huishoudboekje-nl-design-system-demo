@@ -1,3 +1,4 @@
+import Afdeling from "./Afdeling";
 import Afspraak from "./Afspraak";
 import Banktransactie, {PagedBanktransactie} from "./Banktransactie";
 import Betaalinstructie from "./Betaalinstructie";
@@ -8,6 +9,7 @@ import PageInfo from "./PageInfo";
 import Rekening from "./Rekening";
 
 export {
+	Afdeling,
 	Afspraak,
 	Banktransactie,
 	PagedBanktransactie,
