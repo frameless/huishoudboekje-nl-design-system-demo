@@ -7,13 +7,13 @@ const Journaalpost = objectType({
 		t.int("id");
 		t.field("banktransactie", {
 			type: "Banktransactie",
-			resolve: async (root) => {
+			resolve: (root) => {
 				const transactieId = root["transaction_id"];
 				if (!transactieId) {
 					return null;
 				}
 
-				return await DataLoader.getBanktransactiesById([transactieId]).then(r => r.shift());
+				return DataLoader.getBanktransactiesById([transactieId]).then(r => r.shift());
 			},
 		});
 		t.field("afspraak", {
