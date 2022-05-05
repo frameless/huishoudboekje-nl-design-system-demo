@@ -53,8 +53,8 @@ const DataLoader = {
 		return await fetch(createServiceUrl("huishoudboekje", `/journaalposten?filter_afspraken=${afspraakId}`)).then(r => r.json()).then(r => r.data || []);
 	},
 
-	getJournaalpostByTransactieId: async (transactieId: number) => {
-		return await fetch(createServiceUrl(`huishoudboekje`, `/journaalposten?filter_transactions=${transactieId}`)).then(r => r.json()).then(r => r.data || []);
+	getJournaalpostenByTransactieId: async (transactieIds: number) => {
+		return await fetch(createServiceUrl(`huishoudboekje`, `/journaalposten?filter_transactions=${transactieIds}`)).then(r => r.json()).then(r => r.data || []);
 	},
 
 	// Banktransacties

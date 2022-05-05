@@ -41,7 +41,7 @@ const Banktransactie = objectType({
 					return null;
 				}
 
-				return await DataLoader.getJournaalpostByTransactieId(id);
+				return await DataLoader.getJournaalpostenByTransactieId(id).then(r => r.shift());
 			},
 		});
 	},
