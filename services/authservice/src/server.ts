@@ -5,12 +5,17 @@ import express from "express";
 import {auth} from "express-openid-connect";
 import SessionHelper from "./SessionHelper";
 
-const sessionHelper = new SessionHelper();
-
 const config = Object.freeze({
 	secret: process.env.SECRET || "testtest",
 	port: process.env.APP_PORT ?? 8080,
 	debug: process.env.NODE_ENV !== "production",
+});
+
+const sessionHelper = new SessionHelper({
+	secret: config.secret,
+	issuer: process.env.JWT_ISSUER,
+	audience: process.env.JWT_AUDIENCE,
+	expiresIn: process.env.JWT_EXPIRES_IN,
 });
 
 const server = (prefix: string = "/auth") => {
@@ -121,8 +126,7 @@ const server = (prefix: string = "/auth") => {
 
 	return {
 		start: () => app.listen(config.port, () => {
-			console.log(`Server is running.`);
-			console.log({config, prefix});
+			console.log("Server is running.");
 		}),
 	};
 };

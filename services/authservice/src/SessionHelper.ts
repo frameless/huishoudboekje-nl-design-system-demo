@@ -1,5 +1,12 @@
 import jwt from "jsonwebtoken";
 
+const defaultConfig: SessionHelperConfig = {
+	secret: "testtest",
+	expiresIn: "30d",
+	audience: "huishoudboekje",
+	issuer: "huishoudboekje",
+};
+
 type SessionHelperConfig = {
 	secret: string,
 	expiresIn: string,
@@ -13,16 +20,16 @@ class SessionHelper {
 	private readonly audience: string;
 	private readonly issuer: string;
 
-	constructor(config: SessionHelperConfig = {
-		secret: "testtest",
-		expiresIn: "30d",
-		audience: "huishoudboekje",
-		issuer: "huishoudboekje",
-	}) {
-		this.secret = config.secret;
-		this.expiresIn = config.expiresIn;
-		this.audience = config.audience;
-		this.issuer = config.issuer;
+	constructor(config: Partial<SessionHelperConfig>) {
+		const _config = {
+			...defaultConfig,
+			...config,
+		};
+
+		this.secret = _config.secret;
+		this.expiresIn = _config.expiresIn;
+		this.audience = _config.audience;
+		this.issuer = _config.issuer;
 	}
 
 	private _getTokenFromRequest(req: any): string {
@@ -36,7 +43,7 @@ class SessionHelper {
 		return jwt.decode(token);
 	}
 
-	getUserFromRequest(req: any): any{
+	getUserFromRequest(req: any): any {
 		const token = this._getTokenFromRequest(req);
 		return this._getUserFromToken(token);
 	}
