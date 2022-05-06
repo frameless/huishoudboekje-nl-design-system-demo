@@ -30,15 +30,20 @@ const server = (prefix: string = "/auth") => {
 	});
 
 	app.use(auth({
+		// OIDC parameters
+		baseURL: process.env.OIDC_BASE_URL,
+		clientID: process.env.OIDC_CLIENT_ID,
+		clientSecret: process.env.OIDC_CLIENT_SECRET,
+		issuerBaseURL: process.env.OIDC_ISSUER_URL,
 		authorizationParams: {
 			response_type: "code",
 		},
+
+		// Auth app settings
 		secret: config.secret,
 		idpLogout: true,
 		authRequired: false,
 		routes: {
-			// callback: prefix + "/callback",
-			// login: prefix + "/login",
 			login: false,
 			logout: false,
 			postLogoutRedirect: prefix + "/logout",
@@ -127,6 +132,11 @@ const server = (prefix: string = "/auth") => {
 	return {
 		start: () => app.listen(config.port, () => {
 			console.log("Server is running.");
+			console.table({
+				issuer: process.env.JWT_ISSUER,
+				audience: process.env.JWT_AUDIENCE,
+				expiresIn: process.env.JWT_EXPIRES_IN,
+			})
 		}),
 	};
 };
