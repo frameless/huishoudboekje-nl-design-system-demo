@@ -36,7 +36,9 @@ frontend-test:
     paths:
       - frontend/app/coverage
     reports:
-      cobertura: frontend/app/coverage/cobertura-coverage.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: 'frontend/app/coverage/cobertura-coverage.xml'
       junit: frontend/app/junit.xml
   when: on_success
 
@@ -70,7 +72,9 @@ frontend-test:
     paths:
       - ${DIRECTORY}/htmlcov
     reports:
-      cobertura: ${DIRECTORY}/coverage.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: ${DIRECTORY}/coverage.xml
       junit: ${DIRECTORY}/report.xml
   when: on_success
 
