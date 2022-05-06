@@ -1,17 +1,54 @@
 import jwt from "jsonwebtoken";
 
+type SessionHelperConfig = {
+	secret: string,
+	expiresIn: string,
+	audience: string,
+	issuer: string,
+}
+
 class SessionHelper {
 	private readonly secret: string;
+	private readonly expiresIn: string;
+	private readonly audience: string;
+	private readonly issuer: string;
 
-	constructor() {
-		this.secret = process.env.SECRET || "test";
+	constructor(config: SessionHelperConfig = {
+		secret: "testtest",
+		expiresIn: "30d",
+		audience: "huishoudboekje",
+		issuer: "huishoudboekje",
+	}) {
+		this.secret = config.secret;
+		this.expiresIn = config.expiresIn;
+		this.audience = config.audience;
+		this.issuer = config.issuer;
+	}
+
+	private _getTokenFromRequest(req: any): string {
+		const cookieToken = req.cookies["app-token"];
+		const bearerToken = req.headers["authorization"]?.replace("Bearer ", "");
+		const token: string = cookieToken || bearerToken;
+		return token;
+	}
+
+	private _getUserFromToken(token: string): any {
+		return jwt.decode(token);
+	}
+
+	getUserFromRequest(req: any): any{
+		const token = this._getTokenFromRequest(req);
+		return this._getUserFromToken(token);
 	}
 
 	isAuthenticated(req: any): boolean {
-		const token = req.cookies["app-token"];
-		const verifiedToken = this.verifyToken(token);
-		console.log({verifiedToken});
-		return verifiedToken;
+		const token = this._getTokenFromRequest(req);
+
+		if (!token) {
+			return false;
+		}
+
+		return this.verifyToken(token);
 	}
 
 	createSession(res, user) {
@@ -24,13 +61,19 @@ class SessionHelper {
 	}
 
 	generateToken(user: any): string {
-		return jwt.sign({user}, this.secret, {expiresIn: "30d"});
+		return jwt.sign({user}, this.secret, {
+			expiresIn: this.expiresIn,
+			audience: this.audience,
+			issuer: this.issuer,
+		});
 	}
 
 	verifyToken(token: string): boolean {
 		try {
-			const verifiedToken = jwt.verify(token, this.secret);
-			console.log({verifiedToken});
+			jwt.verify(token, this.secret, {
+				audience: this.audience,
+				issuer: this.issuer,
+			});
 			return true;
 		}
 		catch (err) {
