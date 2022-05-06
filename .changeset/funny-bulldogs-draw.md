@@ -2,4 +2,4 @@
 "huishoudboekje": patch
 ---
 
-Fixed a CI issue with Cobertura reporting
+Fixed #931: Fixed a CI issue with Cobertura reporting
