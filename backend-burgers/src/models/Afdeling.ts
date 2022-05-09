@@ -10,7 +10,7 @@ const Organisatie = objectType({
 			type: "Organisatie",
 			resolve: root => {
 				const organisatieId = root["organisatie_id"];
-				return DataLoader.getOrganisatiesById(organisatieId).then(r => r.shift());
+				return DataLoader.getOrganisatiesById([organisatieId]).then(r => r.shift());
 			},
 		});
 	},

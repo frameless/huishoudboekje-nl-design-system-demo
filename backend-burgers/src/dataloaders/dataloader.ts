@@ -34,22 +34,14 @@ const DataLoader = {
 	},
 
 	getRekeningenByIds: async (ids: number[] = []) => {
-		// Todo we need make sure that based on the Burger that is requesting this, we never return any Afspraken that are not linked to other burgers.
 		return await fetch(createServiceUrl("huishoudboekje", `/rekeningen/?filter_ids=${ids.join(",")}`)).then(r => r.json()).then(r => r.data);
 	},
 
 	getRekeningenByIbans: async (ibans: string[] = []) => {
-		// Todo we need make sure that based on the Burger that is requesting this, we never return any Afspraken that are not linked to other burgers.
 		return await fetch(createServiceUrl("huishoudboekje", `/rekeningen/?filter_ibans=${ibans.join(",")}`)).then(r => r.json()).then(r => r.data || []);
 	},
 
-	// Journaalposten
-	getJournaalpostenByBurgerId: async (id: number) => {
-		return await fetch(createServiceUrl("huishoudboekje", `/journaalposten?filter_burgers=${id}`)).then(r => r.json()).then(r => r.data || []);
-	},
-
 	getJournaalpostenByAfspraakId: async (afspraakId: number) => {
-		// Todo we need make sure that based on the Burger that is requesting this, we never return any Afspraken that are not linked to other burgers.
 		return await fetch(createServiceUrl("huishoudboekje", `/journaalposten?filter_afspraken=${afspraakId}`)).then(r => r.json()).then(r => r.data || []);
 	},
 
@@ -80,9 +72,6 @@ const DataLoader = {
 		const banktransactieIds = journaalposten.reduce((list, j) => [...list, j.transaction_id], []);
 
 		// get all related banktransacties
-		const transacties = await DataLoader.getBanktransactiesById(banktransactieIds);
-		console.table(transacties.map(t => t.id));
-
 		return await DataLoader.getBanktransactiesById(banktransactieIds);
 	},
 
@@ -111,21 +100,13 @@ const DataLoader = {
 	},
 
 	// Afdelingen (Organisatieservice)
-	getAfdelingenById: async (ids?: number[]) => {
-		let filters = "";
-		if (ids && ids.length > 0) {
-			filters = `?filter_ids=${ids.join(",")}`;
-		}
-		return await fetch(createServiceUrl("organisaties", `/afdelingen` + filters)).then(r => r.json()).then(r => r.data || []);
+	getAfdelingenById: async (ids: number[]) => {
+		return await fetch(createServiceUrl("organisaties", `/afdelingen?filter_ids=${ids.join(",")}`)).then(r => r.json()).then(r => r.data || []);
 	},
 
 	// Organisatie (Organisatieservice)
-	getOrganisatiesById: async (ids?: number[]) => {
-		let filters = "";
-		if (ids && ids.length > 0) {
-			filters = `?filter_ids=${ids.join(",")}`;
-		}
-		return await fetch(createServiceUrl("organisaties", `/organisaties` + filters)).then(r => r.json()).then(r => r.data || []);
+	getOrganisatiesById: async (ids: number[]) => {
+		return await fetch(createServiceUrl("organisaties", `/organisaties?filter_ids=${ids.join(",")}`)).then(r => r.json()).then(r => r.data || []);
 	},
 
 	// Betaalinstructie (Huishoudboekjeservice)
