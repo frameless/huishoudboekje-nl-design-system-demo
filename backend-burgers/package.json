@@ -8,7 +8,7 @@
     "dev": "nodemon",
     "start": "ts-node main.ts",
     "test": "jest",
-    "test:coverage": "npm run test -- --coverage --reporters=default --reporters=jest-junit"
+    "test:coverage": "npm run test -- --coverage"
   },
   "keywords": [],
   "author": {

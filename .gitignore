@@ -14,6 +14,8 @@ yarn-error.log*
 .history
 .idea
 .coverage
+coverage/
+junit.xml
 report.xml
 htmlcov
 coverage.xml

@@ -108,6 +108,9 @@ backend-burgers-test:
     paths:
       - backend-burgers/coverage
     reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: 'backend-burgers/coverage/cobertura-coverage.xml'
       junit: backend-burgers/junit.xml
   when: on_success
 
