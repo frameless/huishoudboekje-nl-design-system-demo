@@ -1,4 +1,4 @@
-import {intArg, list} from "nexus";
+import {intArg, nonNull} from "nexus";
 import DataLoader from "../dataloaders/dataloader";
 import Banktransactie from "../models/Banktransactie";
 import {isDev} from "../utils/things";
@@ -6,7 +6,7 @@ import {isDev} from "../utils/things";
 const banktransactie = (t) => {
 	t.field("banktransactie", {
 		args: {
-			id: intArg(),
+			id: nonNull(intArg()),
 		},
 		type: Banktransactie,
 		resolve: async (root, args) => {
@@ -22,9 +22,7 @@ const banktransactie = (t) => {
 	t.list.field("banktransacties", {
 		type: Banktransactie,
 		resolve: async (root, args) => {
-			const bt = await DataLoader.getAllBanktransacties();
-			console.log(bt);
-			return bt;
+			return await DataLoader.getAllBanktransacties();
 		},
 	});
 };

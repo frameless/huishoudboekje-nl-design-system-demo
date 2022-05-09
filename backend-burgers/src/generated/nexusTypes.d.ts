@@ -285,13 +285,13 @@ export interface NexusGenFieldTypeNames {
 export interface NexusGenArgTypes {
   Burger: {
     banktransactiesPaged: { // args
-      limit?: number | null; // Int
-      start?: number | null; // Int
+      limit: number; // Int!
+      start: number; // Int!
     }
   }
   Query: {
     banktransactie: { // args
-      id?: number | null; // Int
+      id: number; // Int!
     }
     burger: { // args
       bsn?: number | null; // Int

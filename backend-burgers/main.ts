@@ -16,7 +16,7 @@ const server = new ApolloServer({
 	},
 	plugins: [
 		ApolloServerPluginLandingPageGraphQLPlayground(),
-		debugPlugin(),
+		// debugPlugin(),
 	],
 	context: ctx => ({
 		...ctx,
