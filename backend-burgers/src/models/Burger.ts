@@ -1,4 +1,4 @@
-import {intArg, objectType} from "nexus";
+import {intArg, nonNull, objectType} from "nexus";
 import DataLoader from "../dataloaders/dataloader";
 
 const Burger = objectType({
@@ -48,14 +48,14 @@ const Burger = objectType({
 		t.field("banktransactiesPaged", {
 			type: "PagedBanktransactie",
 			args: {
-				limit: intArg(),
-				start: intArg(),
+				limit: nonNull(intArg()),
+				start: nonNull(intArg()),
 			},
 			resolve: async (root, args, ctx) => {
 				const {id} = root;
 				const {limit, start} = args;
 
-				if (!id || !limit || !start) {
+				if (!id) {
 					return {
 						banktransacties: [],
 						pageInfo: null
@@ -63,7 +63,6 @@ const Burger = objectType({
 				}
 
 				const {banktransacties = [], pageInfo} = await DataLoader.getBanktransactiesByBurgerIdPaged(id, {start, limit});
-				console.log("transactiesCount", banktransacties.length);
 
 				return {
 					banktransacties: banktransacties.map(t => ({
@@ -87,7 +86,6 @@ const Burger = objectType({
 				}
 
 				const transacties = await DataLoader.getBanktransactiesByBurgerId(id);
-				console.log("transactiesCount", transacties.length);
 
 				return transacties.map(t => ({
 					...t,
