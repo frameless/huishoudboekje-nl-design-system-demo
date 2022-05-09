@@ -55,11 +55,15 @@ const Burger = objectType({
 				const {id} = root;
 				const {limit, start} = args;
 
-				if (!id) {
-					return [];
+				if (!id || !limit || !start) {
+					return {
+						banktransacties: [],
+						pageInfo: null
+					};
 				}
 
 				const {banktransacties = [], pageInfo} = await DataLoader.getBanktransactiesByBurgerIdPaged(id, {start, limit});
+				console.log("transactiesCount", banktransacties.length);
 
 				return {
 					banktransacties: banktransacties.map(t => ({
@@ -83,6 +87,7 @@ const Burger = objectType({
 				}
 
 				const transacties = await DataLoader.getBanktransactiesByBurgerId(id);
+				console.log("transactiesCount", transacties.length);
 
 				return transacties.map(t => ({
 					...t,

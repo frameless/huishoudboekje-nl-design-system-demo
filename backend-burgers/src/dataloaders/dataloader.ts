@@ -59,67 +59,55 @@ const DataLoader = {
 
 	// Banktransacties
 	getBanktransactiesById: async (ids: number[]) => {
-		return await fetch(createServiceUrl("banktransacties", `/banktransactions?filter_ids=${ids.join(",")}`)).then(r => r.json()).then(r => r.data || []);
+		return await fetch(createServiceUrl("banktransacties", `/banktransactions?filter_ids=${ids.join(",")}&sortingColumn=transactie_datum&desc=desc`)).then(r => r.json()).then(r => r.data || []);
+	},
+
+	getBanktransactiesByIdPaged: async (ids: number[], start: number, limit: number) => {
+		return await fetch(createServiceUrl("banktransacties", `/banktransactions?filter_ids=${ids.join(",")}&start=${start}&limit=${limit}&sortingColumn=transactie_datum&desc=desc`)).then(r => r.json());
 	},
 
 	getAllBanktransacties: async () => {
-		return await fetch(createServiceUrl("banktransacties", "/banktransactions")).then(r => r.json()).then(r => r.data || []);
+		return await fetch(createServiceUrl("banktransacties", "/banktransactions?sortingColumn=transactie_datum&desc=desc")).then(r => r.json()).then(r => r.data || []);
+	},
+
+	getBanktransactiesByBurgerId: async (burgerId: number) => {
+		// get all afspraken by burgerId
+		const afspraken = await DataLoader.getAfsprakenByBurgerId(burgerId);
+		const afpraakIds = afspraken.reduce((list, a) => [...list, a.id], []);
+
+		// get all journaalposten bij afspraak
+		const journaalposten = await DataLoader.getJournaalpostenByAfspraakId(afpraakIds);
+		const banktransactieIds = journaalposten.reduce((list, j) => [...list, j.transaction_id], []);
+
+		// get all related banktransacties
+		const transacties = await DataLoader.getBanktransactiesById(banktransactieIds);
+		console.table(transacties.map(t => t.id));
+
+		return await DataLoader.getBanktransactiesById(banktransactieIds);
 	},
 
 	getBanktransactiesByBurgerIdPaged: async (burgerId: number, options: {start: number, limit: number}) => {
-		const rekeningen = await DataLoader.getRekeningenByBurgerId(burgerId);
-		const rekeningIbans = rekeningen.map(r => r.iban);
+		// get all afspraken by burgerId
+		const afspraken = await DataLoader.getAfsprakenByBurgerId(burgerId);
+		const afpraakIds = afspraken.reduce((list, a) => [...list, a.id], []);
 
-		if (rekeningIbans.length === 0) {
-			return {
-				banktransacties: [],
-				pageInfo: null,
-			};
-		}
-
-		// Get all journaalposten for one burger, so that we can link to the afspraak
-		const journaalposten = await DataLoader.getJournaalpostenByBurgerId(burgerId);
+		// get all journaalposten bij afspraak
+		const journaalposten = await DataLoader.getJournaalpostenByAfspraakId(afpraakIds);
+		const banktransactieIds = journaalposten.reduce((list, j) => [...list, j.transaction_id], []);
 
 		const {start, limit} = options;
-		const createUrl = (start, limit, ibans) => `/banktransactions/?start=${start}&limit=${limit}&desc=True&sortingColumn=transactie_datum&filters={"tegen_rekening":+{"IN":+["${ibans.join(`","`)}"]}}`;
-		const banktransactiesResult = await fetch(createServiceUrl("banktransacties", createUrl(start, limit, rekeningIbans))).then(r => r.json());
-		const banktransacties = (banktransactiesResult.data || []).map(t => ({
-			...t,
+		if (!start || !limit) {
+			throw new Error("Start and limit are required");
+		}
 
-			// Provide afspraak_id, so that we can directly resolve the linked afspraak.
-			afspraak_id: journaalposten.find(j => j.transaction_id === t.id)?.afspraak_id,
-		}));
-
-		const pageInfo = {
-			start: banktransactiesResult.start,
-			limit: banktransactiesResult.limit,
-			count: banktransactiesResult.count,
-		};
-
-		console.log(pageInfo);
+		// get all related banktransacties
+		const result = await DataLoader.getBanktransactiesByIdPaged(banktransactieIds, start, limit);
+		const {count, data: banktransacties} = result;
 
 		return {
 			banktransacties,
-			pageInfo,
+			pageInfo: {start, limit, count},
 		};
-	},
-
-	getBanktransactiesByBurgerId: async (id: number) => {
-		// Get all journaalposten for one burger
-		const journaalposten = await DataLoader.getJournaalpostenByBurgerId(id);
-
-		// Remap journaalposten to transacties
-		const banktransactieIds = journaalposten.map(j => j.transaction_id);
-		// const ibans = journaalposten.map(j => j.tegen_rekening);
-
-		return await DataLoader
-			.getBanktransactiesById(banktransactieIds)
-			.then(transacties => transacties.map(t => ({
-				...t,
-
-				// Provide afspraak_id, so that we can directly resolve the linked afspraak.
-				afspraak_id: journaalposten.find(j => j.transaction_id === t.id)?.afspraak_id,
-			})));
 	},
 
 	// Afdelingen (Organisatieservice)
