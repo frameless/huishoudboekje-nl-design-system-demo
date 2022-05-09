@@ -1,5 +1,5 @@
 """ BankTransaction model as used in GraphQL queries """
-from datetime import date
+from datetime import datetime
 
 import graphene
 from flask import request
@@ -30,7 +30,7 @@ class BankTransaction(graphene.ObjectType):
     def resolve_transactie_datum(root, info):
         value = root.get('transactie_datum')
         if value:
-            return date.fromisoformat(value)
+            return datetime.fromisoformat(value).date()
 
     def resolve_tegen_rekening_iban(root, info):
         tegen_rekening = root.get('tegen_rekening')
