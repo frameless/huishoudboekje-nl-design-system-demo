@@ -5,11 +5,15 @@ module.exports = {
 	transform: {
 		"\\.(ts|js)$": ["ts-jest"],
 	},
+	collectCoverageFrom: [
+		"src/**/*.{ts,js}",
+	],
 	reporters: [
 		"default",
 		"jest-junit",
 	],
 	"coverageReporters": [
+		"text",
 		"cobertura",
 	],
 };
