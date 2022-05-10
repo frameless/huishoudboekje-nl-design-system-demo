@@ -26,7 +26,7 @@ const AfsprakenView: React.FC<{ bsn: number }> = ({bsn}) => {
                         <Table>
                             <Thead>
                                 <Tr>
-                                    <Th color={"gray.400"}>Organisatie</Th>
+                                    <Th color={"gray.400"}>Tegenpartij</Th>
                                     <Th color={"gray.400"}>Omschrijving</Th>
                                     <Th color={"gray.400"} isNumeric>Bedrag</Th>
                                 </Tr>
@@ -48,7 +48,7 @@ const AfsprakenView: React.FC<{ bsn: number }> = ({bsn}) => {
                         <Table>
                             <Thead>
                                 <Tr>
-                                    <Th color={"gray.400"}>Organisatie</Th>
+                                    <Th color={"gray.400"}>Tegenpartij</Th>
                                     <Th color={"gray.400"}>Omschrijving</Th>
                                     <Th color={"gray.400"} isNumeric>Bedrag</Th>
                                 </Tr>

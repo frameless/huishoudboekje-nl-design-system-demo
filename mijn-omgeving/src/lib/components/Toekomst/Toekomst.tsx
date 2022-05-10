@@ -19,7 +19,7 @@ const Toekomst: React.FC<{ bsn: number }> = ({bsn}) => {
                 const {rekeningen = [], afspraken = []} = data.burger || {};
 
                 const burgerRekeningenIds: number[] = rekeningen.map(r => r.id);
-                const filteredAfspraken = afspraken.filter(a => burgerRekeningenIds.includes(a.tegenrekening?.id)).sort((a, b) => b.by);
+                const filteredAfspraken = afspraken.filter(a => burgerRekeningenIds.includes(a.tegenrekening?.id));
 
                 return (
                     <>
