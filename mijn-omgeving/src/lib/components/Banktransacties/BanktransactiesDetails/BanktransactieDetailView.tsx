@@ -18,7 +18,7 @@ const BanktransactieDetailView: React.FC<{transactie: Banktransactie, bsn: numbe
 	const [getTransacties, {data, loading: isLoading}] = useGetPagedBanktransactiesLazyQuery();
 	const page = useRef<number>(0);
 	const total = useRef<number>(0);
-	const limit = 10;
+	const limit = 50;
 
 	const onClickLoadMoreButton = () => {
 		if (!isLoading) {
