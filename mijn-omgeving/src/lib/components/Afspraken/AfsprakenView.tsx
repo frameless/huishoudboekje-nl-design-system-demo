@@ -26,7 +26,7 @@ const AfsprakenView: React.FC<{ bsn: number }> = ({bsn}) => {
                         <Table>
                             <Thead>
                                 <Tr>
-                                    <Th color={"gray.400"}>Tegenpartij</Th>
+                                    <Th color={"gray.400"}>Organisatie</Th>
                                     <Th color={"gray.400"}>Omschrijving</Th>
                                     <Th color={"gray.400"} isNumeric>Bedrag</Th>
                                 </Tr>
@@ -35,9 +35,6 @@ const AfsprakenView: React.FC<{ bsn: number }> = ({bsn}) => {
                                 return (
                                     <Tbody key={i}>
                                         <Tr key={i}>
-                                            {/*<Td>*/}
-                                            {/*    <pre>{JSON.stringify(afspraak.tegenrekening?.afdelingen?.[0].organisatie?.naam, null, 2)}</pre>*/}
-                                            {/*</Td>*/}
                                             <Td>{afspraak.tegenrekening?.afdelingen?.[0]?.organisatie?.naam || afspraak.tegenrekening?.rekeninghouder} </Td>
                                             <Td>{afspraak.omschrijving}</Td>
                                             <Td isNumeric>{afspraak.bedrag && currencyFormat2(true).format((parseInt(afspraak.bedrag) / 100) * (afspraak.credit ? 1 : -1))}</Td>
@@ -51,7 +48,7 @@ const AfsprakenView: React.FC<{ bsn: number }> = ({bsn}) => {
                         <Table>
                             <Thead>
                                 <Tr>
-                                    <Th color={"gray.400"}>Tegenpartij</Th>
+                                    <Th color={"gray.400"}>Organisatie</Th>
                                     <Th color={"gray.400"}>Omschrijving</Th>
                                     <Th color={"gray.400"} isNumeric>Bedrag</Th>
                                 </Tr>
@@ -60,9 +57,6 @@ const AfsprakenView: React.FC<{ bsn: number }> = ({bsn}) => {
                                 return (
                                     <Tbody key={i}>
                                         <Tr key={i}>
-                                            {/*<Td>*/}
-                                            {/*    <pre>{JSON.stringify(afspraak.tegenrekening?.afdelingen?.[0], null, 2)}</pre>*/}
-                                            {/*</Td>*/}
                                             <Td>{afspraak.tegenrekening?.afdelingen?.[0]?.organisatie?.naam || afspraak.tegenrekening?.rekeninghouder} </Td>
                                             <Td>{afspraak.omschrijving}</Td>
                                             <Td isNumeric>{afspraak.bedrag && currencyFormat2(true).format((parseInt(afspraak.bedrag) / 100) * (afspraak.credit ? 1 : -1))}</Td>
