@@ -1,7 +1,7 @@
-import React from "react";
 import {Box} from "@chakra-ui/react";
-import {Link} from "@gemeente-denhaag/link";
 import {ArrowLeftIcon} from "@gemeente-denhaag/icons";
+import {Link} from "@gemeente-denhaag/link";
+import React from "react";
 import {useNavigate} from "react-router-dom";
 
 const BackButton: React.FC<{ to?: string, label?: string }> = ({to, label}) => {

@@ -2,4 +2,4 @@
 "huishoudboekje": patch
 ---
 
-In the appointment field is now the organization or account holder visible
+Fixed #927: Now showing the name of the organization instead of the account holder.
