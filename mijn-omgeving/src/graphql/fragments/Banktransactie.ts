@@ -15,6 +15,9 @@ const BanktransactieFragment = gql`
         }
         journaalpost {
             id
+            afspraak {
+                id
+            }
         }
     }
 `;
