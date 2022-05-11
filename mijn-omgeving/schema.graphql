@@ -14,7 +14,15 @@ scalar JSON
 "GraphQL Query"
 type Query {
   burger(bsn: Int): Burger
-  banktransactie(id: Int): Banktransactie
+  burgers: [Burger]
+  organisaties(ids: [Int]): [Organisatie]
+  banktransactie(id: Int!): Banktransactie
+  banktransacties: [Banktransactie]
+}
+type Afdeling {
+  id: Int
+  naam: String
+  organisatie: Organisatie
 }
 type Afdeling {
   id: Int
@@ -74,7 +82,8 @@ type Burger {
   plaatsnaam: String
   rekeningen: [Rekening]
   afspraken: [Afspraak]
-  banktransactiesPaged(limit: Int, start: Int): PagedBanktransactie
+  afspraak(id: Int!): Afspraak
+  banktransactiesPaged(limit: Int!, start: Int!): PagedBanktransactie
   banktransacties: [Banktransactie]
 }
 type Journaalpost {

@@ -60,6 +60,7 @@ export type Betaalinstructie = {
 /** Een burger is een deelnemer. */
 export type Burger = {
   achternaam?: Maybe<Scalars['String']>;
+  afspraak?: Maybe<Afspraak>;
   afspraken?: Maybe<Array<Maybe<Afspraak>>>;
   banktransacties?: Maybe<Array<Maybe<Banktransactie>>>;
   banktransactiesPaged?: Maybe<PagedBanktransactie>;
@@ -81,9 +82,15 @@ export type Burger = {
 
 
 /** Een burger is een deelnemer. */
+export type BurgerAfspraakArgs = {
+  id: Scalars['Int'];
+};
+
+
+/** Een burger is een deelnemer. */
 export type BurgerBanktransactiesPagedArgs = {
-  limit?: InputMaybe<Scalars['Int']>;
-  start?: InputMaybe<Scalars['Int']>;
+  limit: Scalars['Int'];
+  start: Scalars['Int'];
 };
 
 export enum DayOfWeek {
@@ -123,19 +130,28 @@ export type PagedBanktransactie = {
 /** GraphQL Query */
 export type Query = {
   banktransactie?: Maybe<Banktransactie>;
+  banktransacties?: Maybe<Array<Maybe<Banktransactie>>>;
   burger?: Maybe<Burger>;
+  burgers?: Maybe<Array<Maybe<Burger>>>;
+  organisaties?: Maybe<Array<Maybe<Organisatie>>>;
 };
 
 
 /** GraphQL Query */
 export type QueryBanktransactieArgs = {
-  id?: InputMaybe<Scalars['Int']>;
+  id: Scalars['Int'];
 };
 
 
 /** GraphQL Query */
 export type QueryBurgerArgs = {
   bsn?: InputMaybe<Scalars['Int']>;
+};
+
+
+/** GraphQL Query */
+export type QueryOrganisatiesArgs = {
+  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
 };
 
 export type Rekening = {
@@ -175,6 +191,14 @@ export type GetBanktransactieQueryVariables = Exact<{
 
 
 export type GetBanktransactieQuery = { banktransactie?: { id?: number, bedrag?: any, isCredit?: boolean, tegenrekeningIban?: string, transactiedatum?: string, informationToAccountOwner?: string, tegenrekening?: { id?: number, iban?: string, rekeninghouder?: string }, journaalpost?: { id?: number } } };
+
+export type GetBanktransactiesForAfspraakQueryVariables = Exact<{
+  bsn: Scalars['Int'];
+  afspraakId: Scalars['Int'];
+}>;
+
+
+export type GetBanktransactiesForAfspraakQuery = { burger?: { afspraak?: { journaalposten?: Array<{ banktransactie?: { id?: number, bedrag?: any, isCredit?: boolean, tegenrekeningIban?: string, transactiedatum?: string, informationToAccountOwner?: string, tegenrekening?: { id?: number, iban?: string, rekeninghouder?: string }, journaalpost?: { id?: number } } }> } } };
 
 export const BanktransactieFragmentDoc = gql`
     fragment Banktransactie on Banktransactie {
@@ -361,3 +385,45 @@ export function useGetBanktransactieLazyQuery(baseOptions?: Apollo.LazyQueryHook
 export type GetBanktransactieQueryHookResult = ReturnType<typeof useGetBanktransactieQuery>;
 export type GetBanktransactieLazyQueryHookResult = ReturnType<typeof useGetBanktransactieLazyQuery>;
 export type GetBanktransactieQueryResult = Apollo.QueryResult<GetBanktransactieQuery, GetBanktransactieQueryVariables>;
+export const GetBanktransactiesForAfspraakDocument = gql`
+    query getBanktransactiesForAfspraak($bsn: Int!, $afspraakId: Int!) {
+  burger(bsn: $bsn) {
+    afspraak(id: $afspraakId) {
+      journaalposten {
+        banktransactie {
+          ...Banktransactie
+        }
+      }
+    }
+  }
+}
+    ${BanktransactieFragmentDoc}`;
+
+/**
+ * __useGetBanktransactiesForAfspraakQuery__
+ *
+ * To run a query within a React component, call `useGetBanktransactiesForAfspraakQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBanktransactiesForAfspraakQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetBanktransactiesForAfspraakQuery({
+ *   variables: {
+ *      bsn: // value for 'bsn'
+ *      afspraakId: // value for 'afspraakId'
+ *   },
+ * });
+ */
+export function useGetBanktransactiesForAfspraakQuery(baseOptions: Apollo.QueryHookOptions<GetBanktransactiesForAfspraakQuery, GetBanktransactiesForAfspraakQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetBanktransactiesForAfspraakQuery, GetBanktransactiesForAfspraakQueryVariables>(GetBanktransactiesForAfspraakDocument, options);
+      }
+export function useGetBanktransactiesForAfspraakLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBanktransactiesForAfspraakQuery, GetBanktransactiesForAfspraakQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetBanktransactiesForAfspraakQuery, GetBanktransactiesForAfspraakQueryVariables>(GetBanktransactiesForAfspraakDocument, options);
+        }
+export type GetBanktransactiesForAfspraakQueryHookResult = ReturnType<typeof useGetBanktransactiesForAfspraakQuery>;
+export type GetBanktransactiesForAfspraakLazyQueryHookResult = ReturnType<typeof useGetBanktransactiesForAfspraakLazyQuery>;
+export type GetBanktransactiesForAfspraakQueryResult = Apollo.QueryResult<GetBanktransactiesForAfspraakQuery, GetBanktransactiesForAfspraakQueryVariables>;

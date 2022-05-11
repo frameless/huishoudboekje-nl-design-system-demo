@@ -9,3 +9,18 @@ const getBanktransactieQuery = gql`
     }
     ${BanktransactieFragment}
 `;
+
+const getBanktransactiesForAfspraakQuery = gql`
+    query getBanktransactiesForAfspraak($bsn: Int!, $afspraakId: Int!){
+        burger(bsn: $bsn){
+            afspraak(id: $afspraakId){
+                journaalposten {
+                    banktransactie {
+                        ...Banktransactie
+                    }
+                }
+            }
+        }
+    }
+    ${BanktransactieFragment}
+`;
