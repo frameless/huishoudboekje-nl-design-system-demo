@@ -45,6 +45,21 @@ const Burger = objectType({
 				return DataLoader.getAfsprakenByBurgerId(id);
 			},
 		});
+		t.field("afspraak", {
+			type: "Afspraak",
+			args: {
+				id: nonNull(intArg()),
+			},
+			resolve: (root, args, ctx) => {
+				const {id} = args;
+
+				if (!id) {
+					return null;
+				}
+
+				return DataLoader.getAfsprakenById(id).then(afspraken => afspraken.shift());
+			},
+		});
 		t.field("banktransactiesPaged", {
 			type: "PagedBanktransactie",
 			args: {
@@ -58,7 +73,7 @@ const Burger = objectType({
 				if (!id) {
 					return {
 						banktransacties: [],
-						pageInfo: null
+						pageInfo: null,
 					};
 				}
 

@@ -142,6 +142,7 @@ export interface NexusGenFieldTypes {
   }
   Burger: { // field return type
     achternaam: string | null; // String
+    afspraak: NexusGenRootTypes['Afspraak'] | null; // Afspraak
     afspraken: Array<NexusGenRootTypes['Afspraak'] | null> | null; // [Afspraak]
     banktransacties: Array<NexusGenRootTypes['Banktransactie'] | null> | null; // [Banktransactie]
     banktransactiesPaged: NexusGenRootTypes['PagedBanktransactie'] | null; // PagedBanktransactie
@@ -231,6 +232,7 @@ export interface NexusGenFieldTypeNames {
   }
   Burger: { // field return type name
     achternaam: 'String'
+    afspraak: 'Afspraak'
     afspraken: 'Afspraak'
     banktransacties: 'Banktransactie'
     banktransactiesPaged: 'PagedBanktransactie'
@@ -284,6 +286,9 @@ export interface NexusGenFieldTypeNames {
 
 export interface NexusGenArgTypes {
   Burger: {
+    afspraak: { // args
+      id: number; // Int!
+    }
     banktransactiesPaged: { // args
       limit: number; // Int!
       start: number; // Int!
