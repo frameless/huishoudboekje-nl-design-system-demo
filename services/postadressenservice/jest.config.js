@@ -4,4 +4,16 @@ module.exports = {
 	testEnvironment: "node",
 	clearMocks: true,
 	setupFilesAfterEnv: ["<rootDir>/mockedClient.ts"],
+	collectCoverageFrom: [
+		"src/**/*.{ts,js}",
+		"prisma/**/*.{ts,js}",
+	],
+	reporters: [
+		"default",
+		"jest-junit",
+	],
+	coverageReporters: [
+		"text",
+		"cobertura",
+	],
 };
