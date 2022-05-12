@@ -7,6 +7,7 @@
     "dev": "nodemon -r dotenv/config",
     "db:push": "npx prisma db push",
     "db:migrate": "npx prisma migrate dev",
+    "test": "jest -i",
     "prestart": "npx prisma generate",
     "start": "ts-node -r dotenv/config main.ts"
   },
@@ -34,7 +35,8 @@
     "@types/jest": "^27.5.0",
     "eslint": "^7.32.0",
     "jest": "^28.1.0",
-    "jest-mock-extended": "^2.0.6"
+    "jest-mock-extended": "^2.0.6",
+    "ts-jest": "^28.0.2"
   },
   "keywords": [],
   "license": "SEE LICENSE IN LICENSE.md"

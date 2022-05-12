@@ -1,5 +1,5 @@
 // @no-log
-GET http://localhost:8080/v1/addresses/e7fb948f-b589-4dfe-9c05-d51f11a88e64
+GET http://localhost:8080/v1/addresses/2fc9baf4-f85b-4643-b525-bb901ab825dc
 Accept: application/json
 Content-Type: application/json
 
@@ -20,7 +20,7 @@ Content-Type: application/json
 ###
 
 // @no-log
-GET http://localhost:8080/v1/addresses?filter_ids=119be6cf-d7db-4d06-9604-175226fe2b85,567634fd-bb4e-4c97-a0ec-26f072d711d9,dezeisnietgevonden
+GET http://localhost:8080/v1/addresses?filter_ids=2fc9baf4-f85b-4643-b525-bb901ab825dc,test
 Accept: application/json
 Content-Type: application/json
 
@@ -32,10 +32,10 @@ Accept: application/json
 Content-Type: application/json
 
 {
-"street": "Teststraat",
-"houseNumber": "123A",
-"postalCode": "9999ZZ",
-"locality": "Sloothuizerveenhuizen"
+  "street": "Teststraat",
+  "houseNumber": "123A",
+  "postalCode": "9999ZZ",
+  "locality": "Sloothuizen"
 }
 
 ###
@@ -46,10 +46,10 @@ Accept: application/json
 Content-Type: application/json
 
 {
-"street": "Teststraat 3",
-"houseNumber": "321B",
-"postalCode": "1234AB",
-"locality": "Sloothuizerveen"
+  "street": "Kerkstraat",
+  "houseNumber": "321B",
+  "postalCode": "1234AB",
+  "locality": "Sloothuizerveen"
 }
 
 ###
@@ -60,10 +60,10 @@ Accept: application/json
 Content-Type: application/json
 
 {
-"street": "Teststraat 2",
-"houseNumber": "321B",
-"postalCode": "1234AB",
-"locality": "Sloothuizerveen"
+  "street": "Kerkstraat",
+  "houseNumber": "321B",
+  "postalCode": "1234AB",
+  "locality": "Sloothuizerveen"
 }
 
 ###
