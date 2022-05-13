@@ -9,7 +9,7 @@ const isFeatureEnabled = (feature: string, context?: Record<string, any>): boole
 		...context,
 	};
 	const isEnabled = unleashClient.isEnabled(feature, _context);
-	console.log("Feature flag request:");
+	console.info("Feature flag request:");
 	console.table([
 		{feature, context: _context, result: isEnabled},
 	]);
