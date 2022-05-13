@@ -1,6 +1,5 @@
 ARG DOCKER_PROXY=''
 
-# Set up production environment using nginx
 FROM ${DOCKER_PROXY}bitnami/node:18
 
 WORKDIR /app
