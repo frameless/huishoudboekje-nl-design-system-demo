@@ -9,13 +9,8 @@ const validator = zod.object({
 });
 
 const createAddress = async (data: zod.infer<typeof validator>) => {
-	try {
-		validator.parse(data);
-		return await prisma.address.create({data});
-	}
-	catch (err) {
-		throw err;
-	}
+	validator.parse(data);
+	return await prisma.address.create({data});
 };
 
 export default createAddress;

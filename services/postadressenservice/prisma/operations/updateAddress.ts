@@ -17,14 +17,12 @@ const updateAddress = async (data: UpdateAddressArgs) => {
 	try {
 		validator.parse(data);
 
-		const updatedAddress = await prisma.address.update({
+		return await prisma.address.update({
 			data,
 			where: {
 				id: data.id,
 			},
 		});
-
-		return updatedAddress;
 	}
 	catch (err) {
 		if (err instanceof Prisma.PrismaClientKnownRequestError) {
