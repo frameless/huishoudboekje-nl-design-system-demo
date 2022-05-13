@@ -4,8 +4,7 @@ import React from "react";
 import {Afspraak} from "../../../generated/graphql";
 import ToekomstListItem from "./ToekomstListItem";
 
-const ToekomstList: React.FC<{ afspraken: Afspraak [] }> = ({afspraken}) => {
-
+const ToekomstList: React.FC<{afspraken: Afspraak []}> = ({afspraken}) => {
 	const getNextDate = (afspraak) => {
 		let recur;
 		const b = afspraak.betaalinstructie;
@@ -32,30 +31,28 @@ const ToekomstList: React.FC<{ afspraken: Afspraak [] }> = ({afspraken}) => {
 		}
 
 		return recur ? recur.next(1) : undefined;
-	}
-
+	};
 
 	return (
 		<Stack>
-			{afspraken.map((afspraak, i) => {
-				const nextDate = getNextDate(afspraak);
+			<Table variant={"simple"}>
+				<Tbody>
+					{afspraken.map((afspraak, i) => {
+						const nextDate = getNextDate(afspraak);
 
-				if (nextDate && d(nextDate).isAfter(d())) {
-					const format = d(nextDate).year() !== d().year() ? "dddd D MMMM YYYY" : "dddd D MMMM";
-					return (
-						<Table variant={"simple"} key={i}>
-							<Tbody>
-								<ToekomstListItem datum={d(nextDate).format(format)} bedrag={afspraak.bedrag} omschrijving={afspraak.omschrijving} rekening={afspraak.tegenrekening?.iban} />
-							</Tbody>
-						</Table>
-					)
-				}
+						if (nextDate && d(nextDate).isAfter(d())) {
+							const format = d(nextDate).year() !== d().year() ? "dddd D MMMM YYYY" : "dddd D MMMM";
+							return (
+								<ToekomstListItem key={i} datum={d(nextDate).format(format)} bedrag={afspraak.bedrag} omschrijving={afspraak.omschrijving} rekening={afspraak.tegenrekening?.iban} />
+							);
+						}
 
-				return null;
-			})}
+						return null;
+					})}
+				</Tbody>
+			</Table>
 		</Stack>
-	)
-
+	);
 };
 
 export default ToekomstList;

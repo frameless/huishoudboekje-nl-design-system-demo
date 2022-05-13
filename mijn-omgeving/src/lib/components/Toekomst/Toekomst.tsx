@@ -1,11 +1,12 @@
+import {Text} from "@chakra-ui/react";
+import {Heading2} from "@gemeente-denhaag/typography";
 import React from "react";
 import {useGetBurgerQuery} from "../../../generated/graphql";
 import Queryable from "../../utils/Queryable";
-import ToekomstList from "./ToekomstList";
-import {Heading2} from "@gemeente-denhaag/typography";
 import BackButton from "../BackButton";
+import ToekomstList from "./ToekomstList";
 
-const Toekomst: React.FC<{ bsn: number }> = ({bsn}) => {
+const Toekomst: React.FC<{bsn: number}> = ({bsn}) => {
 	const $burger = useGetBurgerQuery({
 		variables: {bsn},
 	});
@@ -20,11 +21,11 @@ const Toekomst: React.FC<{ bsn: number }> = ({bsn}) => {
 				const burgerRekeningenIds: number[] = rekeningen.map(r => r.id);
 				const filteredAfspraken = afspraken.filter(a => burgerRekeningenIds.includes(a.tegenrekening?.id));
 
-				return (
-					<div>
-						<ToekomstList afspraken={filteredAfspraken} />
-					</div>
-				)
+				return filteredAfspraken.length > 0 ? (
+					<ToekomstList afspraken={filteredAfspraken} />
+				) : (
+					<Text>Er zijn geen verwachte transacties gevonden.</Text>
+				);
 			}} />
 		</div>
 	);

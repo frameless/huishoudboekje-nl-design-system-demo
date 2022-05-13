@@ -48,6 +48,7 @@ type Betaalinstructie {
 """Een burger is een deelnemer."""
 type Burger {
   achternaam: String
+  afspraak(id: Int!): Afspraak
   afspraken: [Afspraak]
   banktransacties: [Banktransactie]
   banktransactiesPaged(limit: Int!, start: Int!): PagedBanktransactie

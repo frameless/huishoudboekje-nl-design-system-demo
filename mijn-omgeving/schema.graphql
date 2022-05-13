@@ -1,7 +1,5 @@
-"Exposes a URL that specifies the behaviour of this scalar."
-directive @specifiedBy("The URL that specifies the behaviour of this scalar." url: String!) on SCALAR
-scalar Bedrag
-scalar JSON
+"Exposes a URL that specifies the behavior of this scalar."
+directive @specifiedBy("The URL that specifies the behavior of this scalar." url: String!) on SCALAR
 enum DayOfWeek {
   Monday
   Tuesday
@@ -11,10 +9,17 @@ enum DayOfWeek {
   Saturday
   Sunday
 }
+scalar Bedrag
+scalar JSON
 "GraphQL Query"
 type Query {
   burger(bsn: Int): Burger
-  banktransactie(id: Int): Banktransactie
+  banktransactie(id: Int!): Banktransactie
+}
+type Afdeling {
+  id: Int
+  naam: String
+  organisatie: Organisatie
 }
 type Afspraak {
   "Een unique identifier voor een afspraak in het systeem."
@@ -69,7 +74,8 @@ type Burger {
   plaatsnaam: String
   rekeningen: [Rekening]
   afspraken: [Afspraak]
-  banktransactiesPaged(limit: Int, start: Int): PagedBanktransactie
+  afspraak(id: Int!): Afspraak
+  banktransactiesPaged(limit: Int!, start: Int!): PagedBanktransactie
   banktransacties: [Banktransactie]
 }
 type Journaalpost {
@@ -91,6 +97,8 @@ type Rekening {
   iban: String
   "De naam van de houder van de rekening."
   rekeninghouder: String
+  "De afdeling waar deze rekening bij hoort."
+  afdelingen: [Afdeling]
 }
 type PageInfo {
   start: Int

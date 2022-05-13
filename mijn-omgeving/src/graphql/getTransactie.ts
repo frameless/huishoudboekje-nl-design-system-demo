@@ -9,3 +9,4 @@ const getBanktransactieQuery = gql`
     }
     ${BanktransactieFragment}
 `;
+
