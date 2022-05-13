@@ -49,7 +49,9 @@ export const errorHandler = (err, req, res, next) => {
 		return next(err);
 	}
 
-	console.error("[ERROR]", err);
+	if (process.env.NODE_ENV !== "test") {
+		console.error("[ERROR]", err);
+	}
 
 	const {
 		message = "An unknown error occurred.",

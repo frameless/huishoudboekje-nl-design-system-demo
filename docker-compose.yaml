@@ -111,6 +111,7 @@ services:
       PGDATA: /data/postgres
     ports:
       - 5432:5432
+    command: ["postgres", "-c", "log_statement=all"]
     restart: unless-stopped
 
   # Database preparations

@@ -1,10 +1,11 @@
-import {PrismaClient} from "@prisma/client";
 import express from "express";
 import pkg from "../package.json";
-import {NotFoundError} from "./errorHandlers";
+import createAddress from "../prisma/operations/createAddress";
+import deleteAddress from "../prisma/operations/deleteAddress";
+import getManyAddresses from "../prisma/operations/getManyAddresses";
+import getOneAddress from "../prisma/operations/getOneAddress";
+import updateAddress from "../prisma/operations/updateAddress";
 import healthRouter from "./health";
-
-const db = new PrismaClient();
 
 const app = express.Router();
 
@@ -12,102 +13,82 @@ app.get("/health", healthRouter);
 
 app.get("/version", (req, res) => res.send(pkg.version));
 
-app.get("/", async (req, res) => {
-	const filterIds: string = req.query.filter_ids as string || "";
+// Get all addresses
+app.get("/", async (req, res, next) => {
+	try {
+		const qFilterIds: string = req.query.filter_ids as string;
 
-	// Split by , and filter out empty strings.
-	const ids = filterIds.trim().split(",").filter(s => s);
+		let ids: string[] = [];
+		if (qFilterIds) {
+			ids = qFilterIds.trim().split(",").filter(s => s);
+		}
 
-	const data = await db.address.findMany({
-		where: {
-			...ids.length > 0 ? {
-				id: {
-					in: ids,
-				},
-			} : {},
-		},
-	});
-	return res.json(data);
+		// Split by , and filter out empty strings.
+		const addresses = await getManyAddresses(ids);
+		return res.json(addresses);
+	}
+	catch (err) {
+		next(err);
+	}
 });
 
-app.post("/", (req, res, next) => {
-	const data = req.body;
+// Get an address by id
+app.get("/:id", async (req, res, next) => {
+	try {
+		const {id} = req.params;
 
-	// Create the address
-	db.address.create({
-		data,
-	}).then(result => {
+		const data = await getOneAddress(id);
+		return res.json(data);
+	}
+	catch (err) {
+		next(err);
+	}
+});
+
+// Create a new address
+app.post("/", async (req, res, next) => {
+	try {
+		const data = req.body;
+		const address = await createAddress(data);
+
 		return res.status(201).json({
 			ok: true,
-			address: result,
+			address,
 		});
-	}).catch(err => {
-		next(err);
-	});
-});
-
-app.get("/:id", async (req, res, next) => {
-	const {id} = req.params;
-	const data = await db.address.findFirst({
-		where: {id},
-	});
-
-	if (!data) {
-		return next(new NotFoundError());
 	}
-
-	return res.json(data);
-});
-
-app.put("/:id", (req, res, next) => {
-	const {id} = req.params;
-	const data = req.body;
-
-	// Find the address
-	db.address.findFirst({
-		where: {id},
-	}).then(result => {
-		if (!result) {
-			throw new NotFoundError();
-		}
-
-		// Update entity
-		return db.address.update({
-			where: {id},
-			data,
-		});
-	}).then(result => {
-		return res.status(200).json(result);
-	}).catch(err => {
+	catch (err) {
 		next(err);
-	});
+	}
 });
 
-app.delete("/:id", (req, res, next) => {
-	const {id} = req.params;
+// Update an address by id
+app.put("/:id", async (req, res, next) => {
+	try {
+		const {id} = req.params;
+		const data = req.body;
 
-	console.log({id});
-
-	// Find the address
-	db.address.findFirst({
-		where: {id},
-	}).then(result => {
-		console.log({result});
-
-		if (!result) {
-			throw new NotFoundError();
-		}
-
-		// Delete entity
-		return db.address.delete({
-			where: {id},
+		const address = await updateAddress({
+			id,
+			...data,
 		});
-	}).then(result => {
-		console.log({result});
+		return res.status(200).json(address);
+	}
+	catch (err) {
+		next(err);
+	}
+});
+
+// Delete an address by id
+app.delete("/:id", async (req, res, next) => {
+	try {
+		const {id} = req.params;
+
+		await deleteAddress(id);
 		return res.status(204).end();
-	}).catch(err => {
-		throw err;
-	});
+	}
+	catch (err) {
+		next(err);
+	}
 });
 
 
