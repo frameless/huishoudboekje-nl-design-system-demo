@@ -313,6 +313,6 @@ services:
     depends_on:
       - db
 
-#  signalenservice-test:
-#    <<: *x-signalenservice
-#    <<: *x-js-tests
+  signalenservice-test:
+    <<: *x-signalenservice
+    <<: *x-js-tests
