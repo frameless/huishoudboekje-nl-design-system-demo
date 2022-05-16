@@ -23,7 +23,29 @@ def test_saldo_burger(client):
         )
         print(response.json)
         assert response.json == {'data': {'saldo' :{'bedrag': "123.00"}}}
-    
+
+def test_saldo_burger_no_transactions(client):
+    with requests_mock.Mocker() as rm:
+        rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_burgers=1", json={"data": [{'id': 1, 'burger_id':1}]})
+        rm.get(f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_afspraken=1", json={'data': []})
+        rm.get(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/saldo/1,2", json={'data': {'bedrag': 0}})
+        rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/")
+        response = client.post(
+            "/graphql",
+            json={
+                "query": '''
+                query test($burgerIds:[Int]) {
+                    saldo(burgerIds:$burgerIds){
+                        bedrag
+                    }
+                }
+                ''',
+                "variables":{"burgerIds":[1]}
+            },
+            content_type='application/json'
+        )
+        print(response.json)
+        assert response.json == {'data': {'saldo' :{'bedrag': "0.00"}}}
 
 
 def test_saldo_totaal(client):
