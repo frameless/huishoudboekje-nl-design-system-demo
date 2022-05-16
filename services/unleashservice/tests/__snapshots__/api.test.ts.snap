@@ -1,0 +1,50 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Unleash Given the feature flags don't exist should return false for a single feature 1`] = `
+Object {
+  "non-existent-feature": false,
+}
+`;
+
+exports[`Unleash Given the feature flags don't exist should return false for multiple features 1`] = `
+Object {
+  "feature1": false,
+  "feature2": false,
+  "feature3": false,
+}
+`;
+
+exports[`Unleash Given the feature flags exist should return an empty list for no passed flags 1`] = `Object {}`;
+
+exports[`Unleash Given the feature flags exist should return true or false for a single feature 1`] = `
+Object {
+  "feature1": true,
+}
+`;
+
+exports[`Unleash Given the feature flags exist should return true or false for multiple features 1`] = `
+Object {
+  "feature1": true,
+  "feature2": false,
+  "feature3": true,
+}
+`;
+
+exports[`Unleash should return the entire list of features 1`] = `
+Object {
+  "features": Array [
+    Object {
+      "enabled": true,
+      "name": "feature1",
+    },
+    Object {
+      "enabled": false,
+      "name": "feature2",
+    },
+    Object {
+      "enabled": true,
+      "name": "feature3",
+    },
+  ],
+}
+`;

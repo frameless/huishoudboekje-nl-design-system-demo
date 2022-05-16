@@ -1,6 +1,6 @@
 import {Prisma} from "@prisma/client";
 import supertest from "supertest";
-import {prismaMock} from "../mockedClient";
+import {prismaMock} from "../.jest/mockClient";
 import getOneAddress from "../prisma/operations/getOneAddress";
 import app from "../src/app";
 import addresses from "./fixtures/addresses";
