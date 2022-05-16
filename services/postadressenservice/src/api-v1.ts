@@ -71,7 +71,7 @@ app.put("/:id", async (req, res, next) => {
 			id,
 			...data,
 		});
-		return res.status(200).json(address);
+		return res.json(address);
 	}
 	catch (err) {
 		next(err);
@@ -90,6 +90,5 @@ app.delete("/:id", async (req, res, next) => {
 		next(err);
 	}
 });
-
 
 export default app;

@@ -1,5 +1,5 @@
 // @no-log
-GET http://localhost:8080/v1/alarms/e7fb948f-b589-4dfe-9c05-d51f11a88e64
+GET http://localhost:8080/v1/alarms/71d65065-2eb9-4f44-8f16-44d1e5a4d6f8
 Accept: application/json
 Content-Type: application/json
 
@@ -20,7 +20,7 @@ Content-Type: application/json
 ###
 
 // @no-log
-GET http://localhost:8080/v1/alarms?filter_ids=119be6cf-d7db-4d06-9604-175226fe2b85,567634fd-bb4e-4c97-a0ec-26f072d711d9,dezeisnietgevonden
+GET http://localhost:8080/v1/alarms?filter_ids=71d65065-2eb9-4f44-8f16-44d1e5a4d6f8,567634fd-bb4e-4c97-a0ec-26f072d711d9,dezeisnietgevonden
 Accept: application/json
 Content-Type: application/json
 
@@ -47,7 +47,7 @@ Content-Type: application/json
 ###
 
 // @no-log
-PUT http://localhost:8080/v1/alarms/e7fb948f-b589-4dfe-9c05-d51f11a88e64
+PUT http://localhost:8080/v1/alarms/71d65065-2eb9-4f44-8f16-44d1e5a4d6f8
 Accept: application/json
 Content-Type: application/json
 
@@ -94,7 +94,7 @@ Content-Type: application/json
 ###
 
 // @no-log
-DELETE http://localhost:8080/v1/alarms/e7fb948f-b589-4dfe-9c05-d51f11a88e64
+DELETE http://localhost:8080/v1/alarms/71d65065-2eb9-4f44-8f16-44d1e5a4d6f8
 Accept: application/json
 Content-Type: application/json
 

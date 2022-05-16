@@ -1,0 +1,6 @@
+[
+  {"id": "d9c00acb-8d04-4cf0-9be4-061f33b3357d", "gebruikerEmail": "iemand@sloothuizen.nl", "afspraakId": 1, "signaalId": null, "isActive": true, "datum": "2021-12-18", "datumMargin": 7, "bedrag": 955, "bedragMargin": 75, "byDay": [], "byMonth": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], "byMonthDay": [3]},
+  {"id": "5d65d8e9-1f4a-4cb9-a89c-0f952ac5f2ff", "gebruikerEmail": "ander@sloothuizen.nl", "afspraakId": 2, "signaalId": null, "isActive": true, "datum": "2021-12-18", "datumMargin": 14, "bedrag": 299.99, "bedragMargin": 15.90, "byDay": [], "byMonth": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], "byMonthDay": [25]},
+  {"id": "1a8ac60f-081f-4bbb-baca-6b6d399ce8db", "gebruikerEmail": "zus@sloothuizen.nl", "afspraakId": 44, "signaalId": null, "isActive": true, "datum": "2021-12-18", "datumMargin": 1, "bedrag": 32.05, "bedragMargin": 12.00, "byDay": ["Monday"], "byMonth": [], "byMonthDay": []},
+  {"id": "738247bc-e6b8-41ee-a09e-a6778822598d", "gebruikerEmail": "zo@sloothuizen.nl", "afspraakId": 3, "signaalId": null, "isActive": true, "datum": "2021-12-18", "datumMargin": 3, "bedrag": 1200.12, "bedragMargin": 75.00, "byDay": [], "byMonth": [1, 4, 7, 10], "byMonthDay": [10]}
+]
