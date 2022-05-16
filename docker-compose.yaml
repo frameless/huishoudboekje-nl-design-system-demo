@@ -23,7 +23,7 @@ x-huishoudboekjeservice: &x-huishoudboekjeservice
     - ./services/huishoudboekje_service:/app
     - ./services/core_service/core_service:/app/core_service
   environment:
-    HHB_DATABASE_URL: "postgresql://hhb:hhb@db/huishoudboekjeservice"
+    DATABASE_URL: "postgresql://hhb:hhb@db/huishoudboekjeservice"
 
 x-organisatieservice: &x-organisatieservice
   build:
@@ -33,7 +33,7 @@ x-organisatieservice: &x-organisatieservice
     - ./services/organisatie_service:/app
     - ./services/core_service/core_service:/app/core_service
   environment:
-    ORGANISATIE_DATABASE_URL: "postgresql://hhb:hhb@db/organisatieservice"
+    DATABASE_URL: "postgresql://hhb:hhb@db/organisatieservice"
 
 x-grootboekservice: &x-grootboekservice
   build:
@@ -43,7 +43,7 @@ x-grootboekservice: &x-grootboekservice
     - ./services/grootboek_service:/app
     - ./services/core_service/core_service:/app/core_service
   environment:
-    GROOTBOEK_DATABASE_URL: "postgresql://hhb:hhb@db/grootboekservice"
+    DATABASE_URL: "postgresql://hhb:hhb@db/grootboekservice"
 
 x-banktransactieservice: &x-banktransactieservice
   build:
@@ -53,7 +53,7 @@ x-banktransactieservice: &x-banktransactieservice
     - ./services/bank_transactie_service:/app
     - ./services/core_service/core_service:/app/core_service
   environment:
-    GROOTBOEK_DATABASE_URL: "postgresql://hhb:hhb@db/banktransactieservice"
+    DATABASE_URL: "postgresql://hhb:hhb@db/banktransactieservice"
 
 x-logservice: &x-logservice
   build:
@@ -63,7 +63,7 @@ x-logservice: &x-logservice
     - ./services/log_service:/app
     - ./services/core_service/core_service:/app/core_service
   environment:
-    GROOTBOEK_DATABASE_URL: "postgresql://hhb:hhb@db/logservice"
+    DATABASE_URL: "postgresql://hhb:hhb@db/logservice"
 
 x-postadressenservice: &x-postadressenservice
   build:
@@ -92,13 +92,21 @@ x-signalenservice: &x-signalenservice
   environment:
     DATABASE_URL: "postgresql://hhb:hhb@db/signalenservice"
 
-x-tests: &x-tests
+x-py-tests: &x-py-tests
   profiles:
     - tests
   entrypoint:
     - /bin/sh
     - -c
     - pytest tests
+
+x-js-tests: &x-js-tests
+  profiles:
+    - tests
+  entrypoint:
+    - /bin/sh
+    - -c
+    - npm test
 
 services:
   # Database
@@ -174,13 +182,15 @@ services:
 
   backend-test:
     <<: *x-backend
-    <<: *x-tests
+    <<: *x-py-tests
 
   backend-burgers:
     <<: *x-backend-burgers
     container_name: backend-burgers
     environment:
       HUISHOUDBOEKJESERVICE_URL: "http://huishoudboekjeservice:8000"
+      ORGANISATIESERVICE_URL: "http://organisatieserviceservice:8000"
+      BANKTRANSACTIESERVICE_URL: "http://banktransactieserviceservice:8000"
     ports:
       - 5001:8080
 
@@ -197,7 +207,7 @@ services:
     <<: *x-huishoudboekjeservice
     container_name: huishoudboekjeservice
     environment:
-      HHB_DATABASE_URL: "postgresql://hhb:hhb@db/huishoudboekjeservice"
+      DATABASE_URL: "postgresql://hhb:hhb@db/huishoudboekjeservice"
     ports:
       - 8001:8000
     depends_on:
@@ -205,13 +215,13 @@ services:
 
   huishoudboekjeservice-test:
     <<: *x-huishoudboekjeservice
-    <<: *x-tests
+    <<: *x-py-tests
 
   organisatieservice:
     <<: *x-organisatieservice
     container_name: organisatieservice
     environment:
-      ORGANISATIE_DATABASE_URL: "postgresql://hhb:hhb@db/organisatieservice"
+      DATABASE_URL: "postgresql://hhb:hhb@db/organisatieservice"
     ports:
       - 8002:8000
     depends_on:
@@ -219,13 +229,13 @@ services:
 
   organisatieservice-test:
     <<: *x-organisatieservice
-    <<: *x-tests
+    <<: *x-py-tests
 
   banktransactieservice:
     <<: *x-banktransactieservice
     container_name: banktransactieservice
     environment:
-      TRANSACTIE_DATABASE_URL: "postgresql://hhb:hhb@db/banktransactieservice"
+      DATABASE_URL: "postgresql://hhb:hhb@db/banktransactieservice"
     ports:
       - 8003:8000
     depends_on:
@@ -233,13 +243,13 @@ services:
 
   banktransactieservice-test:
     <<: *x-banktransactieservice
-    <<: *x-tests
+    <<: *x-py-tests
 
   grootboekservice:
     <<: *x-grootboekservice
     container_name: grootboekservice
     environment:
-      GROOTBOEK_DATABASE_URL: "postgresql://hhb:hhb@db/grootboekservice"
+      DATABASE_URL: "postgresql://hhb:hhb@db/grootboekservice"
     ports:
       - 8004:8000
     depends_on:
@@ -247,13 +257,13 @@ services:
 
   grootboekservice-test:
     <<: *x-organisatieservice
-    <<: *x-tests
+    <<: *x-py-tests
 
   logservice:
     <<: *x-logservice
     container_name: logservice
     environment:
-      LOG_DATABASE_URL: "postgresql://hhb:hhb@db/logservice"
+      DATABASE_URL: "postgresql://hhb:hhb@db/logservice"
     ports:
       - 8005:8000
     depends_on:
@@ -261,7 +271,7 @@ services:
 
   logservice-test:
     <<: *x-logservice
-    <<: *x-tests
+    <<: *x-py-tests
 
   # Trail of history: port 8006 used to be in use by the contactcatalogus, but we deprecated this service in favor of the postadressenservice.
 
@@ -275,6 +285,10 @@ services:
     depends_on:
       - db
 
+  postadressenservice-test:
+    <<: *x-postadressenservice
+    <<: *x-js-tests
+
   alarmenservice:
     <<: *x-alarmenservice
     container_name: alarmenservice
@@ -285,6 +299,10 @@ services:
     depends_on:
       - db
 
+  alarmenservice-test:
+    <<: *x-alarmenservice
+    <<: *x-js-tests
+
   signalenservice:
     <<: *x-signalenservice
     container_name: signalenservice
@@ -294,3 +312,7 @@ services:
       - 8009:8080
     depends_on:
       - db
+
+#  signalenservice-test:
+#    <<: *x-signalenservice
+#    <<: *x-js-tests
