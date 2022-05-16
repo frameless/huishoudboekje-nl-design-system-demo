@@ -80,8 +80,8 @@ describe("Alarm CRUD (operations)", () => {
 		});
 
 		it("should create the Alarm", async () => {
-			const {id, signaalId, ...alarm} = toAlarm(alarms[0]);
-			prismaMock.alarm.create.mockResolvedValue({...alarm, id, signaalId});
+			const {id, ...alarm} = toAlarm(alarms[0]);
+			prismaMock.alarm.create.mockResolvedValue({...alarm, id});
 
 			const result = await api.post("/v1/alarms").send(alarm);
 			expect(result.statusCode).toBe(201);

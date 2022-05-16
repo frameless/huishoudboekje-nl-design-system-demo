@@ -2,17 +2,7 @@
 
 exports[`Alarm CRUD (operations) Given an unknown error occurs on the server should return a 500 when trying to create the Alarm 1`] = `
 Object {
-  "message": "[
-  {
-    \\"code\\": \\"invalid_type\\",
-    \\"expected\\": \\"string\\",
-    \\"received\\": \\"null\\",
-    \\"path\\": [
-      \\"signaalId\\"
-    ],
-    \\"message\\": \\"Expected string, received null\\"
-  }
-]",
+  "message": "Server did a boo boo",
   "ok": false,
 }
 `;
@@ -46,7 +36,6 @@ Object {
     "gebruikerEmail": "iemand@sloothuizen.nl",
     "id": "d9c00acb-8d04-4cf0-9be4-061f33b3357d",
     "isActive": true,
-    "signaalId": null,
   },
   "ok": true,
 }
@@ -81,7 +70,6 @@ Array [
     "gebruikerEmail": "iemand@sloothuizen.nl",
     "id": "d9c00acb-8d04-4cf0-9be4-061f33b3357d",
     "isActive": true,
-    "signaalId": null,
   },
   Object {
     "afspraakId": 2,
@@ -110,7 +98,6 @@ Array [
     "gebruikerEmail": "ander@sloothuizen.nl",
     "id": "5d65d8e9-1f4a-4cb9-a89c-0f952ac5f2ff",
     "isActive": true,
-    "signaalId": null,
   },
   Object {
     "afspraakId": 44,
@@ -126,7 +113,6 @@ Array [
     "gebruikerEmail": "zus@sloothuizen.nl",
     "id": "1a8ac60f-081f-4bbb-baca-6b6d399ce8db",
     "isActive": true,
-    "signaalId": null,
   },
   Object {
     "afspraakId": 3,
@@ -147,7 +133,6 @@ Array [
     "gebruikerEmail": "zo@sloothuizen.nl",
     "id": "738247bc-e6b8-41ee-a09e-a6778822598d",
     "isActive": true,
-    "signaalId": null,
   },
 ]
 `;
@@ -180,7 +165,6 @@ Object {
   "gebruikerEmail": "iemand@sloothuizen.nl",
   "id": "d9c00acb-8d04-4cf0-9be4-061f33b3357d",
   "isActive": true,
-  "signaalId": null,
 }
 `;
 
