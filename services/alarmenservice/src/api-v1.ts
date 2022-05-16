@@ -1,108 +1,93 @@
-import {PrismaClient} from "@prisma/client";
 import express from "express";
 import pkg from "../package.json";
-import {NotFoundError} from "./errorHandlers";
+import createAlarm from "../prisma/operations/createAlarm";
+import deleteAlarm from "../prisma/operations/deleteAlarm";
+import getManyAlarms from "../prisma/operations/getManyAlarms";
+import getOneAlarm from "../prisma/operations/getOneAlarm";
+import updateAlarm from "../prisma/operations/updateAlarm";
 import healthRouter from "./health";
-
-const db = new PrismaClient();
 
 const app = express.Router();
 
 app.get("/health", healthRouter);
 app.get("/version", (req, res) => res.send(pkg.version));
 
-app.get("/", async (request, response) => {
-	const filterIds: string = request.query.filter_ids as string || "";
+// Get all alarms
+app.get("/", async (req, res, next) => {
+	try {
+		const qFilterIds: string = req.query.filter_ids as string;
 
-	// Split by , and filter out empty strings.
-	const ids = filterIds.trim().split(",").filter(s => s);
+		let ids: string[] = [];
+		if (qFilterIds) {
+			ids = qFilterIds.trim().split(",").filter(s => s);
+		}
 
-	const data = await db.alarm.findMany({
-		where: {
-			...ids.length > 0 ? {
-				id: {
-					in: ids,
-				},
-			} : {},
-		},
-	});
-
-	return response.status(200).json({data});
-});
-
-app.post("/", (request, response, next) => {
-	const data = request.body;
-
-	db.alarm.create({
-		data,
-	}).then(result => {
-		return response.status(201).json({
-			ok: true,
-			data: result,
-		});
-	}).catch(err => {
-		next(err);
-	});
-});
-
-app.get("/:id", async (request, response, next) => {
-	const {id} = request.params;
-	const data = await db.alarm.findFirst({
-		where: {id},
-	});
-
-	if (!data) {
-		return next(new NotFoundError());
+		// Split by , and filter out empty strings.
+		const data = await getManyAlarms(ids);
+		return res.json(data);
 	}
-
-	return response.json(data);
+	catch (err) {
+		next(err);
+	}
 });
 
-app.put("/:id", (request, response, next) => {
-	const {id} = request.params;
+// Get one alarm by id
+app.get("/:id", async (req, res, next) => {
+	try {
+		const {id} = req.params;
 
-	const data = request.body;
+		const data = await getOneAlarm(id);
+		return res.json(data);
+	}
+	catch (err) {
+		next(err);
+	}
+});
 
-	db.alarm.findFirst({
-		where: {id},
-	}).then(result => {
-		if (!result) {
-			throw new NotFoundError();
-		}
+// Create a new alarm
+app.post("/", async (req, res, next) => {
+	try {
+		const data = req.body;
+		const alarm = await createAlarm(data);
 
-		return db.alarm.update({
-			where: {id},
-			data,
-		});
-	}).then(result => {
-		return response.status(200).json({
+		return res.status(201).json({
 			ok: true,
-			data: result,
+			alarm,
 		});
-	}).catch(err => {
+	}
+	catch (err) {
 		next(err);
-	});
+	}
 });
 
-app.delete("/:id", (request, response, next) => {
-	const {id} = request.params;
+// Update an alarm by id
+app.put("/:id", async (req, res, next) => {
+	try {
+		const {id} = req.params;
+		const data = req.body;
 
-	db.alarm.findFirst({
-		where: {id},
-	}).then(result => {
-		if (!result) {
-			throw new NotFoundError();
-		}
-
-		return db.alarm.delete({
-			where: {id},
+		const alarm = await updateAlarm({
+			id,
+			...data,
 		});
-	}).then(() => {
-		return response.status(204).end();
-	}).catch(err => {
+		return res.json(alarm);
+	}
+	catch (err) {
 		next(err);
-	});
+	}
 });
 
+// Delete an alarm by id
+app.delete("/:id", async (req, res, next) => {
+	try {
+		const {id} = req.params;
+
+		await deleteAlarm(id);
+		return res.status(204).end();
+	}
+	catch (err) {
+		next(err);
+	}
+});
 
 export default app;
