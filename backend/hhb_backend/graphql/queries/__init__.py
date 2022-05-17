@@ -19,6 +19,7 @@ from .gebruiker import GebruikerQuery
 from .huishoudens import HuishoudenQuery, HuishoudensQuery, HuishoudensPagedQuery
 from .afdelingen import AfdelingQuery, AfdelingenQuery
 from .postadressen import PostadressenQuery, PostadresQuery
+from .saldo import SaldoQuery
 
 
 class RootQuery(graphene.ObjectType):
@@ -64,6 +65,8 @@ class RootQuery(graphene.ObjectType):
 
     signaal = SignaalQuery.return_type
     signalen = SignalenQuery.return_type
+
+    saldo = SaldoQuery.return_type
 
     async def resolve_burger(root, info, **kwargs):
         return await BurgerQuery.resolver(root, info, **kwargs)
@@ -181,6 +184,9 @@ class RootQuery(graphene.ObjectType):
 
     async def resolve_signalen(root, info, **kwargs):
         return await SignalenQuery.resolver(root, info, **kwargs)
+
+    async def resolve_saldo(root, info, **kwargs):
+        return await SaldoQuery.resolver(root, info, **kwargs)
         
     @staticmethod
     async def resolve_gebruiker(root, info, **kwargs):

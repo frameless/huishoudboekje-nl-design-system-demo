@@ -1,5 +1,5 @@
 from hhb_backend.graphql import settings
-from hhb_backend.graphql.dataloaders.base_loader import SingleDataLoader
+from hhb_backend.graphql.dataloaders.base_loader import SingleDataLoader, ListDataLoader
 
 
 class JournaalpostenByIdLoader(SingleDataLoader):
@@ -15,7 +15,7 @@ class JournaalpostenByTransactionLoader(SingleDataLoader):
     filter_item = "filter_transactions"
     index = "transaction_id"
 
-class JournaalpostenByAfspraakLoader(SingleDataLoader):
+class JournaalpostenByAfspraakLoader(ListDataLoader):
     """ Load jounaalposten using afspraak_ids """
     model = "journaalposten"
     service = settings.HHB_SERVICES_URL
