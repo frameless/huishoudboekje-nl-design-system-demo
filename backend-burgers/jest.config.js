@@ -2,9 +2,7 @@
 module.exports = {
 	preset: "ts-jest",
 	testEnvironment: "node",
-	transform: {
-		"\\.(ts|js)$": ["ts-jest"],
-	},
+	clearMocks: true,
 	collectCoverageFrom: [
 		"src/**/*.{ts,js}",
 	],
@@ -12,7 +10,7 @@ module.exports = {
 		"default",
 		"jest-junit",
 	],
-	"coverageReporters": [
+	coverageReporters: [
 		"text",
 		"cobertura",
 	],

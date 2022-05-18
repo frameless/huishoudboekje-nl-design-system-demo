@@ -1,5 +1,5 @@
 import {intArg, nonNull, objectType} from "nexus";
-import DataLoader from "../dataloaders/dataloader";
+import {Context} from "../context";
 
 const Burger = objectType({
 	name: "Burger",
@@ -23,26 +23,24 @@ const Burger = objectType({
 		t.string("plaatsnaam");
 		t.list.field("rekeningen", {
 			type: "Rekening",
-			resolve: (root, args, ctx) => {
-				const {id} = root;
-
-				if (!id) {
+			resolve: async (root, _, ctx: Context) => {
+				if (!root.id) {
 					return [];
 				}
 
-				return DataLoader.getRekeningenByBurgerId(id);
+				return await ctx.dataSources.huishoudboekjeservice.getRekeningenByBurgerId(root.id);
 			},
 		});
 		t.list.field("afspraken", {
 			type: "Afspraak",
-			resolve: (root, args, ctx) => {
+			resolve: async (root, _, ctx: Context) => {
 				const {id} = root;
 
 				if (!id) {
 					return [];
 				}
 
-				return DataLoader.getAfsprakenByBurgerId(id);
+				return await ctx.dataSources.huishoudboekjeservice.getAfsprakenByBurgerIds([id]);
 			},
 		});
 		t.field("afspraak", {
@@ -50,14 +48,12 @@ const Burger = objectType({
 			args: {
 				id: nonNull(intArg()),
 			},
-			resolve: (root, args, ctx) => {
-				const {id} = args;
-
-				if (!id) {
+			resolve: async (root, args, ctx: Context) => {
+				if (!args.id) {
 					return null;
 				}
 
-				return DataLoader.getAfsprakenById(id).then(afspraken => afspraken.shift());
+				return await ctx.dataSources.huishoudboekjeservice.getAfspraakById(args.id);
 			},
 		});
 		t.field("banktransactiesPaged", {
@@ -66,42 +62,50 @@ const Burger = objectType({
 				limit: nonNull(intArg()),
 				start: nonNull(intArg()),
 			},
-			resolve: async (root, args, ctx) => {
-				const {id} = root;
-				const {limit, start} = args;
-
-				if (!id) {
-					return {
-						banktransacties: [],
-						pageInfo: null,
-					};
+			resolve: async (root, args, ctx: Context) => {
+				if (!root.id) {
+					return [];
 				}
 
-				const {banktransacties = [], pageInfo} = await DataLoader.getBanktransactiesByBurgerIdPaged(id, {start, limit});
+				const afspraken = await ctx.dataSources.huishoudboekjeservice.getAfsprakenByBurgerIds([root.id]);
+				const afspraakIds = afspraken.reduce((list, a) => [...list, a.id], []);
+
+				const journaalposten = await ctx.dataSources.huishoudboekjeservice.getJournaalpostenByAfspraakId(afspraakIds);
+				const banktransactieIds = journaalposten.reduce((list, j) => [...list, j.transaction_id], []);
+
+				const result = await ctx.dataSources.banktransactieservice.getBanktransactiesByIdsPaged(banktransactieIds, args.start, args.limit);
+				const banktransacties = result.data.map(t => ({
+					...t,
+					informationToAccountOwner: t.information_to_account_owner,
+					isCredit: t.is_credit,
+					tegenrekeningIban: t.tegen_rekening,
+					transactiedatum: t.transactie_datum,
+				}));
 
 				return {
-					banktransacties: banktransacties.map(t => ({
-						...t,
-						informationToAccountOwner: t.information_to_account_owner,
-						isCredit: t.is_credit,
-						tegenrekeningIban: t.tegen_rekening,
-						transactiedatum: t.transactie_datum,
-					})),
-					pageInfo,
+					banktransacties,
+					pageInfo: {
+						count: result.count,
+						limit: result.limit,
+						start: result.start,
+					},
 				};
 			},
 		});
 		t.list.field("banktransacties", {
 			type: "Banktransactie",
-			resolve: async (root, args, ctx) => {
-				const {id} = root;
-
-				if (!id) {
+			resolve: async (root, _, ctx: Context) => {
+				if (!root.id) {
 					return [];
 				}
 
-				const transacties = await DataLoader.getBanktransactiesByBurgerId(id);
+				const afspraken = await ctx.dataSources.huishoudboekjeservice.getAfsprakenByBurgerIds([root.id]);
+				const afspraakIds = afspraken.reduce((list, a) => [...list, a.id], []);
 
+				const journaalposten = await ctx.dataSources.huishoudboekjeservice.getJournaalpostenByAfspraakId(afspraakIds);
+				const banktransactieIds = journaalposten.reduce((list, j) => [...list, j.transaction_id], []);
+
+				const transacties = await ctx.dataSources.banktransactieservice.getBanktransactiesByIds(banktransactieIds);
 				return transacties.map(t => ({
 					...t,
 					informationToAccountOwner: t.information_to_account_owner,

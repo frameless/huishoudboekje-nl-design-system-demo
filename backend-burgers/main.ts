@@ -1,28 +1,8 @@
-import {ApolloServer} from "apollo-server";
-import {ApolloServerPluginLandingPageGraphQLPlayground} from "apollo-server-core/dist/plugin/landingPage/graphqlPlayground";
-import dotenv from "dotenv";
-import schema from "./src/schema";
-import debugPlugin from "./src/utils/debugPlugin";
-
-dotenv.config();
+import server from "./src/server";
+import {config} from "dotenv";
+config();
 
 const PORT = process.env.APP_PORT || 8080;
-
-const server = new ApolloServer({
-	schema,
-	debug: true,
-	cors: {
-		credentials: true,
-	},
-	plugins: [
-		ApolloServerPluginLandingPageGraphQLPlayground(),
-		// debugPlugin(),
-	],
-	context: ctx => ({
-		...ctx,
-		services: {},
-	}),
-});
 
 const main = () => {
 	server.listen({
