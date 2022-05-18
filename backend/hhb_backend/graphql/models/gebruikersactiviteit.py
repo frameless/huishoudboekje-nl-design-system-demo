@@ -19,6 +19,8 @@ from hhb_backend.graphql.models.pageinfo import PageInfo
 import hhb_backend.graphql.models.huishouden as huishouden
 import hhb_backend.graphql.models.afdeling as afdeling
 import hhb_backend.graphql.models.postadres as postadres
+import hhb_backend.graphql.models.Alarm as alarm
+import hhb_backend.graphql.models.signaal as signaal
 
 class GebruikersActiviteitMeta(graphene.ObjectType):
     userAgent = graphene.String()
@@ -45,6 +47,8 @@ class GebruikersActiviteitSnapshot(graphene.ObjectType):
     postadres = graphene.Field(lambda: postadres.Postadres)
     rubriek = graphene.Field(lambda: rubriek.Rubriek)
     transaction = graphene.Field(lambda: bank_transaction.BankTransaction)
+    alarm = graphene.Field(lambda: alarm.Alarm)
+    signaal = graphene.Field(lambda: signaal.Signaal)
 
     @classmethod
     def _resolve_snapshot(cls, root, entity_type: str, Model):
