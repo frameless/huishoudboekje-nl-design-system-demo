@@ -19,7 +19,9 @@ alarm = {
     "datumMargin": 1,
     "bedrag": "12500",
     "bedragMargin":"1000",
-    "byDay": ["Wednesday", "Friday"]
+    "byDay": ["Wednesday", "Friday"],
+    "byMonth": [],
+    "byMonthDay": []
 }
 nextAlarm = {
     "id": "33738845-7f23-4c8f-8424-2b560a944884",
@@ -30,7 +32,9 @@ nextAlarm = {
     "datumMargin": 1,
     "bedrag": "12500",
     "bedragMargin":"1000",
-    "byDay": ["Wednesday", "Friday"]
+    "byDay": ["Wednesday", "Friday"],
+    "byMonth": [],
+    "byMonthDay": []
 }
 afspraak = {
     "id": afspraak_id,
@@ -237,10 +241,9 @@ def test_evaluate_alarm_no_signal(client):
         rm2 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}", status_code=200, json={"data":afspraak})
         rm3 = rm.get(f"{settings.HHB_SERVICES_URL}/journaalposten/{journaalpost_id}", status_code=200, json={"data": journaalpost})
         rm4 = rm.get(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/{transaction_id}", status_code=200, json={"data": banktransactie})
-        rm5 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
-        rm6 = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={ "ok":True, "data": nextAlarm})
-        rm7 = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}", status_code=200)
-        rm8 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", status_code=200, json={"data": [afspraak]})
+        rm5 = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={ "ok":True, "data": nextAlarm})
+        rm6 = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}", status_code=200)
+        rm7 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
 
         # act
         response = client.post(
@@ -273,10 +276,9 @@ def test_evaluate_alarm_no_signal(client):
         assert rm2.call_count == 2
         assert rm3.call_count == 1
         assert rm4.call_count == 1
-        assert rm5.call_count == 2
+        assert rm5.call_count == 1
         assert rm6.call_count == 1
-        assert rm7.call_count == 1
-        assert rm8.call_count == 1
+        assert rm7.call_count == 2
         assert fallback.called == 0
         assert response.json == expected
 
@@ -305,7 +307,6 @@ def test_evaluate_alarm_signal_date(client):
         rm7 = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", status_code=200, json={ "ok":True, "data": nextAlarm})
         rm8 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
         rm9 = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}", status_code=200)
-        rm10 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", status_code=200, json={"data": [afspraak]})
 
         expected = {'data': {'evaluateAlarms': {'alarmTriggerResult': [{'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9'}, 'nextAlarm': {'id': '33738845-7f23-4c8f-8424-2b560a944884'}, 'signaal': {'id': 'e2b282d9-b31f-451e-9242-11f86c902b35'}}]}}}
 
@@ -334,7 +335,7 @@ def test_evaluate_alarm_signal_date(client):
         )
 
         # assert
-        assert rm1.call_count == 2
+        assert rm1.call_count == 1
         assert rm2.call_count == 2
         assert rm3.call_count == 1
         assert rm4.call_count == 1
@@ -343,7 +344,6 @@ def test_evaluate_alarm_signal_date(client):
         assert rm7.call_count == 1
         assert rm8.call_count == 3
         assert rm9.call_count == 1
-        assert rm10.call_count == 1
         assert fallback.called == 0
         assert response.json == expected
 
@@ -372,7 +372,6 @@ def test_evaluate_alarm_signal_monetary(client):
         rm7 = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", status_code=200, json={ "ok":True, "data": nextAlarm})
         rm8 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
         rm9 = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}", status_code=200)
-        rm10 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", status_code=200, json={"data": [afspraak]})
 
         expected = {'data': {'evaluateAlarms': {'alarmTriggerResult': [{'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9'}, 'nextAlarm': {'id': '33738845-7f23-4c8f-8424-2b560a944884'}, 'signaal': {'id': 'e2b282d9-b31f-451e-9242-11f86c902b35'}}]}}}
 
@@ -401,7 +400,7 @@ def test_evaluate_alarm_signal_monetary(client):
         )
 
         # assert
-        assert rm1.call_count == 2
+        assert rm1.call_count == 1
         assert rm2.call_count == 2
         assert rm3.call_count == 1
         assert rm4.call_count == 1
@@ -410,7 +409,6 @@ def test_evaluate_alarm_signal_monetary(client):
         assert rm7.call_count == 1
         assert rm8.call_count == 3
         assert rm9.call_count == 1
-        assert rm10.call_count == 1
         assert fallback.called == 0
         assert response.json == expected
 
@@ -585,9 +583,8 @@ def test_evaluate_alarm_disabled_because_its_in_the_past(client):
         rm3 = rm.get(f"{settings.HHB_SERVICES_URL}/journaalposten/{journaalpost_id}", status_code=200, json={"data": journaalpost})
         rm4 = rm.get(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/{transaction_id}", status_code=200, json={"data": banktransactie})
         rm5 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
-        rm6 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", status_code=200, json={"data": [afspraak]})
-        rm7 = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={ "ok":True, "data": nextAlarm})
-        rm8 = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}", status_code=200)
+        rm6 = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={ "ok":True, "data": nextAlarm})
+        rm7 = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}", status_code=200)
 
         expected = {'data': {'evaluateAlarms': {'alarmTriggerResult': 
         [{'alarm': {'isActive': False, 'gebruikerEmail': 'other@mail.nl', 'datum': '2021-12-06', 'datumMargin': 1, 'bedrag': '125.00', 'bedragMargin': '10.00', 'byDay': ['Wednesday', 'Friday']}, 
@@ -640,7 +637,6 @@ def test_evaluate_alarm_disabled_because_its_in_the_past(client):
         assert rm5.call_count == 2
         assert rm6.call_count == 1
         assert rm7.call_count == 1
-        assert rm8.call_count == 1
         assert fallback.called == 0
         assert response.json == expected
 
@@ -666,12 +662,11 @@ def test_evaluate_alarm_in_the_past(client):
         rm2 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}", status_code=200, json={"data":afspraak})
         rm3 = rm.get(f"{settings.HHB_SERVICES_URL}/journaalposten/{journaalpost_id}", status_code=200, json={"data": journaalpost})
         rm4 = rm.get(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/{transaction_id}", status_code=200, json={"data": banktransactie})
-        rm5 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", status_code=200, json={"data": [afspraak]})
-        rm6 = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={ "ok":True, "data": nextAlarm})
-        rm7 = rm.post(f"{settings.SIGNALENSERVICE_URL}/signals/", status_code=201, json={"data": signaal})
-        rm8 = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", status_code=200, json={ "ok":True, "data": nextAlarm})
-        rm9 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
-        rm10 = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}", status_code=200)
+        rm5 = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={ "ok":True, "data": nextAlarm})
+        rm6 = rm.post(f"{settings.SIGNALENSERVICE_URL}/signals/", status_code=201, json={"data": signaal})
+        rm7 = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", status_code=200, json={ "ok":True, "data": nextAlarm})
+        rm8 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
+        rm9 = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}", status_code=200)
 
         expected = {'data': {'evaluateAlarms': {'alarmTriggerResult': 
         [{'alarm': {'isActive': False, 'gebruikerEmail': 'other@mail.nl', 'datum': '2021-12-06', 'datumMargin': 1, 'bedrag': '125.00', 'bedragMargin': '10.00', 'byDay': ['Wednesday', 'Friday']}, 
@@ -717,15 +712,14 @@ def test_evaluate_alarm_in_the_past(client):
         print(f">> >> >> response {response.json} ")
 
         # assert
-        assert rm1.call_count == 2
+        assert rm1.call_count == 1
         assert rm2.call_count == 2
         assert rm3.call_count == 1
         assert rm4.call_count == 1
         assert rm5.call_count == 1
         assert rm6.call_count == 1
         assert rm7.call_count == 1
-        assert rm8.call_count == 1
-        assert rm9.call_count == 3
-        assert rm10.call_count == 1
+        assert rm8.call_count == 3
+        assert rm9.call_count == 1
         assert fallback.called == 0
         assert response.json == expected
