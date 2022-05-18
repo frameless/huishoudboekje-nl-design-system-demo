@@ -92,7 +92,7 @@ class AlarmHelper:
         if response.status_code != 204:
             raise GraphQLError(f"Upstream API responded: {response.json()}")
 
-        return AlarmHelper(alarm=previous, previous=dict(), ok=True)  # for better logging of the gebruikersactiviteit, the previous alarm is stored in alarm and not previous.
+        return AlarmHelper(alarm=dict(), previous=previous, ok=True)
 
 
     @log_gebruikers_activiteit

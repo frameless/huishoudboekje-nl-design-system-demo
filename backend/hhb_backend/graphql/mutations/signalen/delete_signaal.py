@@ -14,6 +14,6 @@ class DeleteSignaal(graphene.Mutation):
     @staticmethod
     async def mutate(_root, _info, id):
         """ Mutatie voor het verwijderen van een bestaand signaal """
-        previous = await SignaalHelper.delete(_root, _info, id)
+        result = await SignaalHelper.delete(_root, _info, id)
 
-        return DeleteSignaal(ok=True, previous=previous.signaal)
+        return DeleteSignaal(ok=True, previous=result.previous)
