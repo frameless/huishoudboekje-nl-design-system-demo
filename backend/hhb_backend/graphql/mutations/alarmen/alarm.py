@@ -53,25 +53,19 @@ class AlarmHelper:
             after=dict(alarm=self.alarm),
         )
 
-    
-    def get_alarm(self):
-        return self.alarm
-
-    def get_previous(self):
-        return self.previous
-
     @log_gebruikers_activiteit
-    async def create(_root, info, input: CreateAlarmInput):
+    async def create(_root, _info, input: CreateAlarmInput):
         # alarm_date = parser.parse(input.datum).date()
         # utc_now = date.today()
         # if alarm_date < utc_now:
         #     raise GraphQLError(f"De alarmdatum moet in de toekomst liggen.")
 
-        if ((input.byMonth is not None and input.byMonthDay is None) or (input.byMonth is None and input.byMonthDay is not None)) or (
-            (len(input.byMonth) >= 1 and len(input.byMonthDay) <= 0) or (len(input.byMonth) <= 0 and len(input.byMonthDay) >= 1)):
+        if ((input["byMonth"] is not None and input["byMonthDay"] is None) or (input["byMonth"] is None and input["byMonthDay"] is not None)) or (
+            (len(input["byMonth"]) >= 1 and len(input["byMonthDay"]) <= 0) or (len(input["byMonth"]) <= 0 and len(input["byMonthDay"]) >= 1)):
             raise GraphQLError(f"Vul zowel byMonth als byMonthDay in, of geen van beide.")
 
-        afspraak_response = requests.get(f"{settings.HHB_SERVICES_URL}/afspraken/{input.afspraakId}", headers={"Content-type": "application/json"})
+        afspraakId = input["afspraakId"]
+        afspraak_response = requests.get(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraakId}", headers={"Content-type": "application/json"})
         if afspraak_response.status_code != 200:
             raise GraphQLError(f"Afspraak bestaat niet.")
         afspraak = afspraak_response.json()["data"]
@@ -82,7 +76,7 @@ class AlarmHelper:
         response_alarm = create_alarm_response.json()["data"]
 
         afspraak.update({"alarm_id": response_alarm.get("id")})
-        update_afspraak_response = requests.post(f"{settings.HHB_SERVICES_URL}/afspraken/{input.afspraakId}", json=afspraak, headers={"Content-type": "application/json"})
+        update_afspraak_response = requests.post(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraakId}", json=afspraak, headers={"Content-type": "application/json"})
         if update_afspraak_response.status_code != 200:
             raise GraphQLError(f"Updaten van afspraak met het nieuwe alarm is niet gelukt. Error message: {update_afspraak_response.json}")
 
@@ -98,7 +92,7 @@ class AlarmHelper:
         if response.status_code != 204:
             raise GraphQLError(f"Upstream API responded: {response.json()}")
 
-        return AlarmHelper(alarm=dict(), previous=previous, ok=True)
+        return AlarmHelper(alarm=previous, previous=dict(), ok=True)  # for better logging of the gebruikersactiviteit, the previous alarm is stored in alarm and not previous.
 
 
     @log_gebruikers_activiteit

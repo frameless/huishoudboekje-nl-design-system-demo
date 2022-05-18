@@ -15,4 +15,4 @@ class CreateAlarm(graphene.Mutation):
         """ Mutatie voor het aanmaken van een nieuw Alarm """
         response_alarm = await AlarmHelper.create(_root, _info, input)
         
-        return CreateAlarm(alarm=response_alarm.get_alarm(), ok=True)
+        return CreateAlarm(alarm=response_alarm.alarm, ok=True)

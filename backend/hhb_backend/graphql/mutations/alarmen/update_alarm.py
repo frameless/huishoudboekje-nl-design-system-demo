@@ -19,4 +19,4 @@ class UpdateAlarm(graphene.Mutation):
         """ Mutatie voor het wijzigen van een bestaand Alarm """
         response_alarm = await AlarmHelper.update(_root, _info, id, input)
 
-        return UpdateAlarm(alarm=response_alarm.get_alarm(), previous=response_alarm.get_previous(), ok=True)
+        return UpdateAlarm(alarm=response_alarm.alarm, previous=response_alarm.previous, ok=True)

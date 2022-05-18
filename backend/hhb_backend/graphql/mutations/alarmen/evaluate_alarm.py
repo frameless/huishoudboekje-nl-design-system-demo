@@ -1,5 +1,6 @@
 from tokenize import String
-from hhb_backend.graphql.mutations.alarmen.alarm import AlarmHelper
+from hhb_backend.graphql.mutations.signalen.signalen import SignaalHelper
+from hhb_backend.graphql.mutations.alarmen.alarm import AlarmHelper, CreateAlarmInput
 import hhb_backend.graphql as graphql
 from hhb_backend.graphql.models.Alarm import Alarm
 from hhb_backend.graphql.models.signaal import Signaal
@@ -163,10 +164,10 @@ async def createAlarm(_root, _info, alarm: Alarm, alarmDate: datetime) -> Alarm:
     }
     
     result = await AlarmHelper.create(_root, _info, newAlarm)
-    if result.errors is not None:
-        logging.warning(f"create alarm failed: {result.errors}")
+    if not result.ok:
+        logging.warning("create alarm failed")
         return None
-    newAlarm = result.get_alarm()
+    newAlarm = result.alarm
 
     return newAlarm
 
@@ -329,32 +330,11 @@ async def shouldCreateSignaal(_root, _info, alarm: Alarm, transacties) -> Signaa
         }
 
         # _root, _info, gebruiken
-        result = await graphql.schema.execute("""
-        mutation CreateSignaal($input: CreateSignaalInput!) {
-            createSignaal(input: $input) {
-                ok
-                signaal {
-                    id
-                    alarm {
-                        id
-                    }
-                    bankTransactions {
-                        id
-                    }
-                    isActive
-                    type
-                    actions
-                    context
-                    timeUpdated
-                }
-
-            }
-        }
-        """, variables={"input": newSignal}, return_promise=True)
-        if result.errors is not None:
-            logging.warning(f"create signaal failed: {result.errors}")
+        result = await SignaalHelper.create(_root, _info, newSignal)
+        if not result.ok:
+            logging.warning("create signaal failed")
             return None
-        newSignal = result.data['createSignaal']['signaal']
+        newSignal = result.signaal
 
         newSignalId = newSignal.get("id")
         alarm["signaalId"] = newSignalId

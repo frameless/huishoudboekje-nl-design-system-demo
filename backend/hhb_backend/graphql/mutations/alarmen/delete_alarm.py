@@ -15,4 +15,4 @@ class DeleteAlarm(graphene.Mutation):
         """ Mutatie voor het verwijderen van een bestaand Alarm """
         previous = await AlarmHelper.delete(_root, _info, id)
 
-        return DeleteAlarm(ok=True, previous=previous.get_previous())
+        return DeleteAlarm(ok=True, previous=previous.alarm)
