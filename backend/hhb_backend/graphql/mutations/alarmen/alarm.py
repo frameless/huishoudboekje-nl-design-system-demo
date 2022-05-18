@@ -43,18 +43,26 @@ class AlarmHelper:
         self.previous = previous
         self.ok = ok
 
-    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
-        return dict(
-            action=info.field_name,
+    def gebruikers_activiteit(self, _root, _info, *_args, **_kwargs):
+        data = dict(
+            action=_info.field_name,
             entities=gebruikers_activiteit_entities(
                 entity_type="alarm", result=self, key="alarm"
             ),
             before=dict(alarm=self.previous),
             after=dict(alarm=self.alarm),
         )
+        i = _info.field_name.find("-")
+        _info.field_name = _info.field_name[:i].strip()
+        return data
 
     @log_gebruikers_activiteit
     async def create(_root, _info, input: CreateAlarmInput):
+        name = _info.field_name
+        if "evaluate" in name:
+                name += " - createAlarm"
+                _info.field_name = name
+
         # alarm_date = parser.parse(input.datum).date()
         # utc_now = date.today()
         # if alarm_date < utc_now:
@@ -84,6 +92,11 @@ class AlarmHelper:
 
     @log_gebruikers_activiteit
     async def delete(_root, _info, id):
+        name = _info.field_name
+        if "evaluate" in name:
+                name += " - deleteAlarm"
+                _info.field_name = name
+
         previous = await request.dataloader.alarmen_by_id.load(id)
         if not previous:
             raise GraphQLError(f"Alarm with id {id} not found")
@@ -97,6 +110,11 @@ class AlarmHelper:
 
     @log_gebruikers_activiteit
     async def update(_root, _info, id: str, input: UpdateAlarmInput):
+        name = _info.field_name
+        if "evaluate" in name:
+                name += " - updateAlarm"
+                _info.field_name = name
+
         if input.datum:
             alarm_date = parser.parse(input.datum).date()
             utc_now = date.today()

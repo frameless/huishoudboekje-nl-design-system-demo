@@ -30,18 +30,25 @@ class SignaalHelper:
         self.previous = previous
         self.ok = ok
 
-    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
-        return dict(
-            action=info.field_name,
+    def gebruikers_activiteit(self, _root, _info, *_args, **_kwargs):
+        data = dict(
+            action=_info.field_name,
             entities=gebruikers_activiteit_entities(
                 entity_type="signaal", result=self, key="signaal"
             ),
             before=dict(signaal=self.previous),
             after=dict(signaal=self.signaal),
         )
+        i = _info.field_name.find("-")
+        _info.field_name = _info.field_name[:i].strip()
+        return data
 
     @log_gebruikers_activiteit
     async def create(_root, _info, input: CreateSignaalInput):
+        name = _info.field_name
+        if "Signaal" not in name:
+                name += " - createSignaal"
+                _info.field_name = name
         create_signaal_response = requests.post(f"{settings.SIGNALENSERVICE_URL}/signals/", json=input, headers={"Content-type": "application/json"})
         if create_signaal_response.status_code != 201:
             raise GraphQLError(f"Aanmaken van het signaal is niet gelukt.")
@@ -51,6 +58,10 @@ class SignaalHelper:
 
     @log_gebruikers_activiteit
     async def delete(_root, _info, id):
+        name = _info.field_name
+        if "Signaal" not in name:
+                name += " - deleteSignaal"
+                _info.field_name = name
         previous = await request.dataloader.signalen_by_id.load(id)
         if not previous:
             raise GraphQLError(f"Signaal with id {id} not found")
@@ -63,6 +74,11 @@ class SignaalHelper:
 
     @log_gebruikers_activiteit
     async def update(_root, _info, id: str, input: UpdateSignaalInput):
+        name = _info.field_name
+        if "Signaal" not in name:
+                name += " - updateSignaal"
+                _info.field_name = name
+
         previous_response = requests.get(f"{settings.SIGNALENSERVICE_URL}/signals/{id}", headers={"Content-type": "application/json"})
         if previous_response.status_code != 200:
             raise GraphQLError(f"Signaal bestaat niet.")
