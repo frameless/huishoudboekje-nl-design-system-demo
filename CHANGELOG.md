@@ -1,6 +1,13 @@
 # Huishoudboekje Changelog
+## Upcoming release
+
+### New features
+
+- Alarmen en signalen
 
 ## 1.1.0
+
+Een probleem met een datumveld in een database is opgelost.
 
 ### Minor Changes
 
@@ -31,12 +38,6 @@
 - 9e99f5e3: Fixed #879: Fixed an issue where feature flags would always evaluate to false even when enabled.
 - 91c0146b: Increased resources for backend-burger container.
 - fd9797be: Added test coverage reports for backend-burgers in GitLab CI.
-
-## Upcoming release
-
-### New features
-
-- Alarmen en signalen
 
 ## 1.0.0
 
