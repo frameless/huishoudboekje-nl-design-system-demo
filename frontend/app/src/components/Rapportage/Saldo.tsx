@@ -16,7 +16,7 @@ const Saldo: React.FC<BoxProps & {transactions: BankTransaction[]}> = ({transact
 
 	const columns = [t("interval.month", {count: 2}), t("charts.saldo.title")];
 	const chartTemplate = prepareChartData(startDate, endDate, granularity, columns.length - 1);
-	const chartData = (chartTemplate: any[], aggregation) => {
+	const generateChartData = (chartTemplate: any[], aggregation) => {
 		let saldo = 0;
 		return chartTemplate.map(chartItem => {
 			const [period] = chartItem;
@@ -30,9 +30,10 @@ const Saldo: React.FC<BoxProps & {transactions: BankTransaction[]}> = ({transact
 		});
 	};
 
+	const chartData = generateChartData(chartTemplate, aggregation);
 	const data = [
 		columns,
-		...chartData(chartTemplate, aggregation),
+		...chartData.length > 0 ? chartData : [[0, 0]],
 	];
 
 	return (

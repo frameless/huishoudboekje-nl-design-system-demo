@@ -131,12 +131,12 @@ export const getOrganisatieForTransaction = (t: BankTransaction): Organisatie | 
 
 export const prepareChartData = (startDate: d.Dayjs, endDate: d.Dayjs, granularity: Granularity, columns: number = 1): any[] => {
 	if (!startDate.isValid()) {
-		console.error("Invalid startDate", startDate);
+		// console.error("Invalid startDate", startDate);
 		return [];
 	}
 
 	if (!endDate.isValid()) {
-		console.error("Invalid endDate", endDate);
+		// console.error("Invalid endDate", endDate);
 		return [];
 	}
 

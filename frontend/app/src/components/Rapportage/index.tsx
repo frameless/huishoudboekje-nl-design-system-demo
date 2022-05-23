@@ -73,7 +73,13 @@ const Rapportage = () => {
 											<FormControl as={Stack} flex={1} justifyContent={"flex-end"}>
 												<FormLabel>{t("global.startDate")}</FormLabel>
 												<DatePicker selected={dateRange.from || null}
-													dateFormat={"dd-MM-yyyy"} startDate={dateRange.from} endDate={dateRange.through} isClearable={false} selectsRange={true}
+													dateFormat={"dd-MM-yyyy"}
+													startDate={dateRange.from}
+													endDate={dateRange.through}
+													isClearable={false}
+													selectsRange={true}
+													showYearDropdown
+													dropdownMode={"select"}
 													onChange={(value: [Date, Date]) => {
 														if (value) {
 															const [from, through] = value;
@@ -81,7 +87,9 @@ const Rapportage = () => {
 																setDateRange(() => ({from, through}));
 															}
 														}
-													}} customInput={(<Input />)} />
+													}}
+													customInput={(<Input />)}
+												/>
 											</FormControl>
 										</Stack>
 

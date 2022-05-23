@@ -26,8 +26,8 @@ const BalanceTable: React.FC<BalanceTableProps> = ({transactions, startDate, end
 					<Stack spacing={4}>
 						<Text>
 							<Trans i18nKey={"reports.period"} components={{strong: <strong />}} values={{
-								from: d(startDate, "L").startOf("day").format("L"),
-								through: d(endDate, "L").endOf("day").format("L"),
+								from: startDate && d(startDate, "L").startOf("day").format("L"),
+								through: endDate && d(endDate, "L").endOf("day").format("L"),
 							}} />
 						</Text>
 
