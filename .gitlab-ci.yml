@@ -16,7 +16,6 @@ variables:
   UNLEASH_APPNAME: huishoudboekje
   UNLEASH_OTAP: development
   PYTHON_POSTGRES: python-postgres
-  DOCKER_DRIVER: overlay2
 
 stages:
 - build
