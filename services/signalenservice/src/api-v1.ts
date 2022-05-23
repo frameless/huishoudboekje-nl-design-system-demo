@@ -1,115 +1,93 @@
-import {PrismaClient} from "@prisma/client";
 import express from "express";
 import pkg from "../package.json";
-import {NotFoundError} from "./errorHandlers";
+import createSignal from "../prisma/operations/createSignal";
+import deleteSignal from "../prisma/operations/deleteSignal";
+import getManySignals from "../prisma/operations/getManySignals";
+import getOneSignal from "../prisma/operations/getOneSignal";
+import updateSignal from "../prisma/operations/updateSignal";
 import healthRouter from "./health";
-
-const db = new PrismaClient();
 
 const app = express.Router();
 
 app.get("/health", healthRouter);
 app.get("/version", (req, res) => res.send(pkg.version));
 
-app.get("/", async (request, response) => {
-	const filterIds: string = request.query.filter_ids as string || "";
+// Get all signals
+app.get("/", async (req, res, next) => {
+	try {
+		const qFilterIds: string = req.query.filter_ids as string;
 
-	// Split by , and filter out empty strings.
-	const ids = filterIds.trim().split(",").filter(s => s);
+		let ids: string[] = [];
+		if (qFilterIds) {
+			ids = qFilterIds.trim().split(",").filter(s => s);
+		}
 
-	const data = await db.signal.findMany({
-		where: {
-			...ids.length > 0 ? {
-				id: {
-					in: ids,
-				},
-			} : {},
-		},
-	});
-
-	return response.status(200).json({data});
-});
-
-app.get("/:id", async (request, response, next) => {
-	const {id} = request.params;
-	const data = await db.signal.findFirst({
-		where: {id},
-	});
-
-	if (!data) {
-		return next(new NotFoundError());
+		// Split by , and filter out empty strings.
+		const data = await getManySignals(ids);
+		return res.json(data);
 	}
-
-	return response.json(data);
+	catch (err) {
+		next(err);
+	}
 });
 
-app.post("/", (request, response, next) => {
-	const data = request.body;
-	const {alarmId, banktransactieIds, isActive, type, context, actions} = data;
+// Get one signal by id
+app.get("/:id", async (req, res, next) => {
+	try {
+		const {id} = req.params;
 
-	db.signal.create({
-		data: {
-			alarmId,
-			banktransactieIds,
-			isActive,
-			type,
-			context,
-			actions,
-		},
-	}).then(result => {
-		return response.status(201).json({
+		const data = await getOneSignal(id);
+		return res.json(data);
+	}
+	catch (err) {
+		next(err);
+	}
+});
+
+// Create a new signal
+app.post("/", async (req, res, next) => {
+	try {
+		const data = req.body;
+		const signal = await createSignal(data);
+
+		return res.status(201).json({
 			ok: true,
-			data: result,
+			signal,
 		});
-	}).catch(err => {
+	}
+	catch (err) {
 		next(err);
-	});
+	}
 });
 
-app.put("/:id", (request, response, next) => {
-	const {id} = request.params;
-	const data = request.body;
+// Update an signal by id
+app.put("/:id", async (req, res, next) => {
+	try {
+		const {id} = req.params;
+		const data = req.body;
 
-	db.signal.findFirst({
-		where: {id},
-	}).then(result => {
-		if (!result) {
-			throw new NotFoundError();
-		}
-
-		return db.signal.update({
-			where: {id},
-			data,
+		const signal = await updateSignal({
+			id,
+			...data,
 		});
-	}).then(result => {
-		return response.status(200).json({
-			ok: true,
-			data: result,
-		});
-	}).catch(err => {
+		return res.json(signal);
+	}
+	catch (err) {
 		next(err);
-	});
+	}
 });
 
-app.delete("/:id", (request, response, next) => {
-	const {id} = request.params;
+// Delete an signal by id
+app.delete("/:id", async (req, res, next) => {
+	try {
+		const {id} = req.params;
 
-	db.signal.findFirst({
-		where: {id},
-	}).then(result => {
-		if (!result) {
-			throw new NotFoundError();
-		}
-
-		return db.signal.delete({
-			where: {id},
-		});
-	}).then(() => {
-		return response.status(204).end();
-	}).catch(err => {
+		await deleteSignal(id);
+		return res.status(204).end();
+	}
+	catch (err) {
 		next(err);
-	});
+	}
 });
-
 
 export default app;
