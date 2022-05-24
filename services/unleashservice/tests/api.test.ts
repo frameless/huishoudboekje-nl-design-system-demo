@@ -3,7 +3,7 @@ import {FeatureInterface} from "unleash-client/lib/feature";
 import {unleashMock} from "../.jest/mockUnleashClient";
 import app from "../src/app";
 
-const api = supertest(app);
+const api = supertest(app());
 
 const featureFlags: FeatureInterface[] = [
 	{name: "feature1", description: "Some description1", enabled: true, stale: false, impressionData: false, strategies: [], variants: []},
