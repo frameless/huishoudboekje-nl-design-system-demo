@@ -8,6 +8,8 @@
 
 ## 1.1.1
 
+Een probleem met het starten van de service Unleash is opgelost.
+
 ### Patch Changes
 
 - a4857085: Fixed #937: Added unit tests for signalenservice.
