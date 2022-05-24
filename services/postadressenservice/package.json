@@ -18,7 +18,7 @@
     "url": "https://gitlab.com/koenbrouwer"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=16 <18"
   },
   "dependencies": {
     "@prisma/client": "^3.14.0",
