@@ -1,9 +1,18 @@
 # Huishoudboekje Changelog
+
 ## Upcoming release
 
 ### New features
 
 - Alarmen en signalen
+
+## 1.1.1
+
+### Patch Changes
+
+- a4857085: Fixed #937: Added unit tests for signalenservice.
+- f7a7f18a: Fixed #945: Added year selector to date picker in Rapportage.
+- 09ce7007: Fixed #951: Fixed a bug in the Unleashservice which caused it to crash during startup.
 
 ## 1.1.0
 
