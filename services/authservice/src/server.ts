@@ -9,13 +9,17 @@ const config = Object.freeze({
 	secret: process.env.SECRET || "testtest",
 	port: process.env.APP_PORT ?? 8080,
 	debug: process.env.NODE_ENV !== "production",
+
+	issuer: process.env.JWT_ISSUER || "huishoudboekje",
+	audience: process.env.JWT_AUDIENCE || "huishoudboekje",
+	expiresIn: process.env.JWT_EXPIRES_IN || "14d",
 });
 
 const sessionHelper = new SessionHelper({
 	secret: config.secret,
-	issuer: process.env.JWT_ISSUER,
-	audience: process.env.JWT_AUDIENCE,
-	expiresIn: process.env.JWT_EXPIRES_IN,
+	issuer: config.issuer,
+	audience: config.audience,
+	expiresIn: config.expiresIn,
 });
 
 const server = (prefix: string = "/auth") => {
