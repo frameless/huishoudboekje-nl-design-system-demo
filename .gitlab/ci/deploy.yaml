@@ -100,6 +100,7 @@ deploy-deployment-review:
     NAMESPACE: "hhb-$CI_COMMIT_REF_SLUG"
     USE_PLATFORM: "azure_review"
     UNLEASH_OTAP: development
+    USE_KEYCLOAK: 0
   before_script:
     - kubectl config use-context commonground/huishoudboekje/app-new:hhb-review
   only:
