@@ -100,13 +100,13 @@ export HHB_SECRET=${SECRET_KEY:-"test"}
 export UNLEASH_OTAP=${UNLEASH_OTAP:-"production"}
 
 # OIDC Settings
-export OIDC_ISSUER=${OIDC_ISSUER:-"https://$HHB_FRONTEND_DNS/auth/realms/hhb"}
-export OIDC_CLIENT_ID=${OIDC_CLIENT_ID:-"hhb"}
+export OIDC_ISSUER=${OIDC_ISSUER:-"https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje"}
+export OIDC_CLIENT_ID=${OIDC_CLIENT_ID:-"huishoudboekje-medewerkers"}
 export OIDC_CLIENT_SECRET=${OIDC_CLIENT_SECRET:-"fc36d31f-f720-4914-a750-b83c7b0dd61c"}
-export OIDC_AUTHORIZATION_ENDPOINT=${OIDC_AUTHORIZATION_ENDPOINT:-"https://$HHB_FRONTEND_DNS/auth/realms/hhb/protocol/openid-connect/auth"}
-export OIDC_TOKEN_ENDPOINT=${OIDC_TOKEN_ENDPOINT:-"https://$HHB_FRONTEND_DNS/auth/realms/hhb/protocol/openid-connect/token"}
-export OIDC_TOKENINFO_ENDPOINT=${OIDC_TOKENINFO_ENDPOINT:-"https://$HHB_FRONTEND_DNS/auth/realms/hhb/protocol/openid-connect/token/introspect"}
-export OIDC_USERINFO_ENDPOINT=${OIDC_USERINFO_ENDPOINT:-"https://$HHB_FRONTEND_DNS/auth/realms/hhb/protocol/openid-connect/userinfo"}
+export OIDC_AUTHORIZATION_ENDPOINT=${OIDC_AUTHORIZATION_ENDPOINT:-"https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje/protocol/openid-connect/auth"}
+export OIDC_TOKEN_ENDPOINT=${OIDC_TOKEN_ENDPOINT:-"https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje/protocol/openid-connect/token"}
+export OIDC_TOKENINFO_ENDPOINT=${OIDC_TOKENINFO_ENDPOINT:-"https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje/protocol/openid-connect/token/introspect"}
+export OIDC_USERINFO_ENDPOINT=${OIDC_USERINFO_ENDPOINT:-"https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje/protocol/openid-connect/userinfo"}
 
 # Keycloak Settings
 export KEYCLOAK_DB_DATABASE=${KEYCLOAK_DB_DATABASE:-"keycloak"}
@@ -115,7 +115,7 @@ export KEYCLOAK_DB_SCHEMA=${KEYCLOAK_DB_SCHEMA:-"public"}
 export KEYCLOAK_DB_PASSWORD=${KEYCLOAK_DB_PASSWORD:-"keyclk"}
 export KEYCLOAK_AUTH_USERNAME=${KEYCLOAK_AUTH_USERNAME:-"admin"}
 export KEYCLOAK_AUTH_PASSWORD=${KEYCLOAK_AUTH_PASSWORD:-"CcEyf8Zut9kHyFRp_B9k@Fx3F_d6W4Ut"}
-export KEYCLOAK_AUTH_KEYCLOAK_URL=${KEYCLOAK_AUTH_KEYCLOAK_URL:-"https://$HHB_FRONTEND_DNS/auth/"}
+export KEYCLOAK_AUTH_KEYCLOAK_URL=${KEYCLOAK_AUTH_KEYCLOAK_URL:-"https://$HHB_FRONTEND_DNS/auth"}
 export KEYCLOAK_CLIENT_ROOT_URL=${KEYCLOAK_CLIENT_ROOT_URL:-"https://$HHB_FRONTEND_DNS/"}
 export KEYCLOAK_CLIENT_SECRET=${KEYCLOAK_CLIENT_SECRET:-"fc36d31f-f720-4914-a750-b83c7b0dd61c"}
 # --------------------------------------------------- "username,e@ma.il,Firstname,Lastname,password" separated by :
