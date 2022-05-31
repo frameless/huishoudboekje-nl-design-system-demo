@@ -1,4 +1,4 @@
-# Todo: frontend in docker-compose is super slow, doesn't work yet.
+# The frontend is not included because it's really, really slow when running in dev mode in Docker, please run it natively on your machine.
 version: "3.7"
 
 x-backend: &x-backend
@@ -157,6 +157,25 @@ services:
       - ./sampleData:/app
     profiles:
       - sampledata
+
+  authservice:
+    build:
+      dockerfile: ./dev.Dockerfile
+      context: ./services/authservice
+    container_name: authservice
+    volumes:
+      - ./services/authservice:/app
+    environment:
+      NODE_ENV: development
+      OIDC_ISSUER_URL: https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje/
+      OIDC_CLIENT_ID: huishoudboekje-medewerkers
+      OIDC_CLIENT_SECRET: fc36d31f-f720-4914-a750-b83c7b0dd61c
+      OIDC_BASE_URL: http://localhost:3000
+      JWT_ISSUER: huishoudboekje_localhost
+      JWT_AUDIENCE: huishoudboekje_localhost
+      JWT_EXPIRES_IN: 30d
+    ports:
+      - 4000:8080
 
   backend:
     <<: *x-backend
