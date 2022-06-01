@@ -1,7 +1,3 @@
-variables:
-  REALM_NAME: huishoudboekje
-  KEYCLOAK_BASE_URL: https://keycloak.huishoudboekje.demoground.nl
-
 .retry: &retry
   retry:
     max: 2
@@ -13,20 +9,25 @@ variables:
     - cg
     - docker
 
+.authorize-keycloak: &authorize-keycloak
+  stage: deploy
+  image: node:alpine
+  tags:
+    - cg
+    - docker
+  before_script:
+    - cd ./scripts/keycloak-tools
+    - npm ci
+
 # Deploy template for all environments
 .deploy: &deploy
   <<: *deployer
   <<: *retry
   stage: deploy
   script:
-    - echo "Deploying application..."
     - sh ./k8s/build.sh
     - kubectl apply -f k8s/dist/namespace.yaml
     - sh ./k8s/deploy.sh
-    - echo "Adding redirect_uri to Keycloak..."
-    - cd ./scripts/keycloak-tools
-    - npm ci
-    - npm run start -- request-uri add --uri=https://${HHB_HOST} --client-id=huishoudboekje-medewerkers
     - echo -e Deployment is done! Go check out the running app at https://${HHB_HOST}
 
 deploy-deployment-master:
@@ -101,6 +102,45 @@ deploy-deployment-review:
     - develop
     - acceptance
 
+authorize-keycloak-review:
+  <<: *authorize-keycloak
+  environment:
+    name: review/$CI_COMMIT_REF_SLUG
+    on_stop: unauthorize-keycloak-review
+  variables:
+    REALM_NAME: huishoudboekje
+    KEYCLOAK_BASE_URL: https://keycloak.huishoudboekje.demoground.nl
+    HHB_HOST: "hhb-$CI_COMMIT_REF_SLUG.nlx.reviews"
+  script:
+    - echo "Adding application to Keycloak..."
+    - npm run start -- request-uri add --uri="https://${HHB_HOST}/*" --client-id=huishoudboekje-medewerkers
+  only:
+    - branches@commonground/huishoudboekje/app-new
+  except:
+    - master
+    - develop
+    - acceptance
+
+unauthorize-keycloak-review:
+  <<: *authorize-keycloak
+  environment:
+    name: review/$CI_COMMIT_REF_SLUG
+    action: stop
+  variables:
+    REALM_NAME: huishoudboekje
+    KEYCLOAK_BASE_URL: https://keycloak.huishoudboekje.demoground.nl
+    HHB_HOST: "hhb-$CI_COMMIT_REF_SLUG.nlx.reviews"
+  script:
+    - echo "Removing application from Keycloak..."
+    - npm run start -- request-uri remove --uri="https://${HHB_HOST}/*" --client-id=huishoudboekje-medewerkers
+  when: manual
+  only:
+    - branches@commonground/huishoudboekje/app-new
+  except:
+    - master
+    - develop
+    - acceptance
+
 ## Destroy app (only review cluster)
 destroy-review:
   <<: *deployer
@@ -108,11 +148,6 @@ destroy-review:
   needs:
     - deploy-deployment-review
   script:
-    - echo "Removing redirect_uri from Keycloak...
-    - cd ./scripts/keycloak-tools
-    - npm ci
-    - npm run start -- request-uri remove --uri=https://${HHB_HOST} --client-id=huishoudboekje-medewerkers
-    - echo "Removing namespace..."
     - kubectl delete namespace ${NAMESPACE}
   environment:
     name: review/$CI_COMMIT_REF_SLUG
