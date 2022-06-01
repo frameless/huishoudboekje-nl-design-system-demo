@@ -1,3 +1,7 @@
+variables:
+  REALM_NAME: huishoudboekje
+  KEYCLOAK_BASE_URL: https://keycloak.huishoudboekje.demoground.nl
+
 .retry: &retry
   retry:
     max: 2
@@ -15,9 +19,14 @@
   <<: *retry
   stage: deploy
   script:
+    - echo "Deploying application..."
     - sh ./k8s/build.sh
     - kubectl apply -f k8s/dist/namespace.yaml
     - sh ./k8s/deploy.sh
+    - echo "Adding redirect_uri to Keycloak..."
+    - cd ./scripts/keycloak-tools
+    - npm ci
+    - npm run start -- request-uri add --uri=https://${HHB_HOST} --client-id=huishoudboekje-medewerkers
     - echo -e Deployment is done! Go check out the running app at https://${HHB_HOST}
 
 deploy-deployment-master:
@@ -99,6 +108,11 @@ destroy-review:
   needs:
     - deploy-deployment-review
   script:
+    - echo "Removing redirect_uri from Keycloak...
+    - cd ./scripts/keycloak-tools
+    - npm ci
+    - npm run start -- request-uri remove --uri=https://${HHB_HOST} --client-id=huishoudboekje-medewerkers
+    - echo "Removing namespace..."
     - kubectl delete namespace ${NAMESPACE}
   environment:
     name: review/$CI_COMMIT_REF_SLUG
@@ -106,6 +120,7 @@ destroy-review:
   variables:
     GIT_STRATEGY: none # the runner won’t try to check out the code after the branch is deleted.
     NAMESPACE: "hhb-$CI_COMMIT_REF_SLUG"
+    HHB_HOST: "hhb-$CI_COMMIT_REF_SLUG.nlx.reviews"
   when: manual
   only:
     - branches@commonground/huishoudboekje/app-new
