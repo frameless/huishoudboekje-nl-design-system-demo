@@ -54,19 +54,6 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hhb-keycloak
-spec:
-  template:
-    spec:
-      initContainers:
-        - name: init1-wait-for-db
-          ${DOLLAR}patch: delete
-        - name: init2-prepare-db
-          ${DOLLAR}patch: delete
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
   name: hhb-logservice
 spec:
   template:
