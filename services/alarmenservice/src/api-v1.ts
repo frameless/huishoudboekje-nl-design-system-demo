@@ -23,8 +23,12 @@ app.get("/", async (req, res, next) => {
 		}
 
 		// Split by , and filter out empty strings.
-		const data = await getManyAlarms(ids);
-		return res.json(data);
+		const alarms = await getManyAlarms(ids);
+
+		return res.json({
+			ok: true,
+			data: alarms,
+		});
 	}
 	catch (err) {
 		next(err);
@@ -36,8 +40,11 @@ app.get("/:id", async (req, res, next) => {
 	try {
 		const {id} = req.params;
 
-		const data = await getOneAlarm(id);
-		return res.json(data);
+		const alarm = await getOneAlarm(id);
+		return res.json({
+			ok: true,
+			data: alarm,
+		});
 	}
 	catch (err) {
 		next(err);
@@ -52,7 +59,7 @@ app.post("/", async (req, res, next) => {
 
 		return res.status(201).json({
 			ok: true,
-			alarm,
+			data: alarm,
 		});
 	}
 	catch (err) {
@@ -70,7 +77,10 @@ app.put("/:id", async (req, res, next) => {
 			id,
 			...data,
 		});
-		return res.json(alarm);
+		return res.json({
+			ok: true,
+			data: alarm,
+		});
 	}
 	catch (err) {
 		next(err);
