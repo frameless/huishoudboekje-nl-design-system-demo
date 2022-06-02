@@ -69,7 +69,7 @@ class CreatePostadres(graphene.Mutation):
         if contactCatalogus_response.status_code != 201:
             raise GraphQLError(f"Upstream API responded: {contactCatalogus_response.json()}")
 
-        result = contactCatalogus_response.json()['address']
+        result = contactCatalogus_response.json()['data']
 
         if previous_afdeling["postadressen_ids"]:
             postadressen_ids = list(previous_afdeling["postadressen_ids"])

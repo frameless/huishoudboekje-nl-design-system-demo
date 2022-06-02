@@ -20,7 +20,7 @@ def create_afdeling_postadres(input, afdeling_id):
     if contactCatalogus_response.status_code != 201:
         raise GraphQLError(f"Upstream API responded: {contactCatalogus_response.json()}")
 
-    result = contactCatalogus_response.json()['address']
+    result = contactCatalogus_response.json()['data']
 
     previous_afdeling = requests.get(
         f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/{afdeling_id}",

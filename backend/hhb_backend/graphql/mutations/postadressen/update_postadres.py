@@ -61,6 +61,6 @@ class UpdatePostadres(graphene.Mutation):
                 f"Upstream API responded: {contactCatalogus_response.text}"
             )
 
-        postadres = contactCatalogus_response.json()
+        postadres = contactCatalogus_response.json()['data']
 
         return UpdatePostadres(postadres=postadres, previous=previous, ok=True)
