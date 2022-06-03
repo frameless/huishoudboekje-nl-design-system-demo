@@ -10,7 +10,7 @@ def test_update_alarm(client):
             "gebruikerEmail":"other@mail.nl",
             "isActive": False,
             "afspraakId": 20,
-            "datum":"2021-12-02",
+            "startDate":"2021-12-02",
             "datumMargin": 1,
             "bedrag": "12.34",
             "bedragMargin":"56.78",
@@ -22,7 +22,7 @@ def test_update_alarm(client):
             "gebruikerEmail": "test@mail.nl",
             "afspraakId": 19,
             "isActive": True,
-            "datum": "2021-12-07",
+            "startDate": "2021-12-07",
             "datumMargin": 5,
             "bedrag": "180012",
             "bedragMargin": "1000",
@@ -36,7 +36,7 @@ def test_update_alarm(client):
             "gebruikerEmail": "other@mail.nl",
             "afspraakId": 20,
             "isActive": False,
-            "datum":"2021-12-02",
+            "startDate":"2021-12-02",
             "datumMargin": 1,
             "bedrag": "1234",
             "bedragMargin":"5678",
@@ -48,7 +48,7 @@ def test_update_alarm(client):
         rm2 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", status_code=200, json={"data": alarm1})
         rm3 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
         rm4 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=19,20", status_code=200, json={"data": [afspraak]})
-        expected = {'data': {'updateAlarm': {'ok': True, 'previous': {'id': 'bd6222e7-bfab-46bc-b0bc-2b30b76228d4', 'isActive': True, 'gebruikerEmail': 'test@mail.nl', 'afspraak': None, 'datum': '2021-12-07', 'datumMargin': 5, 'bedrag': '1800.12', 'bedragMargin': '10.00', 'byDay': ['Wednesday'], 'byMonth': [], 'byMonthDay': []}, 'alarm': {'id': 'bd6222e7-bfab-46bc-b0bc-2b30b76228d4', 'isActive': False, 'gebruikerEmail': 'other@mail.nl', 'afspraak': {'id': 20}, 'datum': '2021-12-02', 'datumMargin': 1, 'bedrag': '12.34', 'bedragMargin': '56.78', 'byDay': ['Thursday'], 'byMonth': [], 'byMonthDay': []}}}}
+        expected = {'data': {'updateAlarm': {'ok': True, 'previous': {'id': 'bd6222e7-bfab-46bc-b0bc-2b30b76228d4', 'isActive': True, 'gebruikerEmail': 'test@mail.nl', 'afspraak': None, 'startDate': '2021-12-07', 'datumMargin': 5, 'bedrag': '1800.12', 'bedragMargin': '10.00', 'byDay': ['Wednesday'], 'byMonth': [], 'byMonthDay': []}, 'alarm': {'id': 'bd6222e7-bfab-46bc-b0bc-2b30b76228d4', 'isActive': False, 'gebruikerEmail': 'other@mail.nl', 'afspraak': {'id': 20}, 'startDate': '2021-12-02', 'datumMargin': 1, 'bedrag': '12.34', 'bedragMargin': '56.78', 'byDay': ['Thursday'], 'byMonth': [], 'byMonthDay': []}}}}
 
         # act
         response = client.post(
@@ -65,7 +65,7 @@ def test_update_alarm(client):
                                 afspraak{
                                     id
                                 }
-                                datum
+                                startDate
                                 datumMargin
                                 bedrag
                                 bedragMargin
@@ -80,7 +80,7 @@ def test_update_alarm(client):
                                 afspraak{
                                     id
                                 }
-                                datum
+                                startDate
                                 datumMargin
                                 bedrag
                                 bedragMargin
@@ -115,14 +115,14 @@ def test_update_alarm_failure_cant_set_alarm_in_past(client):
             "gebruikerEmail":"other@mail.nl",
             "isActive": False,
             "afspraakId": 20,
-            "datum":"2021-01-01",
+            "startDate":"2021-01-01",
             "datumMargin": 1,
             "bedrag": "12.34",
             "bedragMargin":"56.78",
             "byDay": ["Thursday"]
         }
         alarm_id = "bd6222e7-bfab-46bc-b0bc-2b30b76228d4"
-        expected = "Alarm datum is in het verleden." 
+        expected = "Alarm start datum is in het verleden." 
 
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
 
@@ -141,7 +141,7 @@ def test_update_alarm_failure_cant_set_alarm_in_past(client):
                                 afspraak{
                                     id
                                 }
-                                datum
+                                startDate
                                 datumMargin
                                 bedrag
                                 bedragMargin
@@ -156,7 +156,7 @@ def test_update_alarm_failure_cant_set_alarm_in_past(client):
                                 afspraak{
                                     id
                                 }
-                                datum
+                                startDate
                                 datumMargin
                                 bedrag
                                 bedragMargin
@@ -187,7 +187,7 @@ def test_update_alarm_failure_cant_set_alarm_to_non_existing_afspraak(client):
             "gebruikerEmail":"other@mail.nl",
             "isActive": False,
             "afspraakId": 20,
-            "datum":"2021-12-02",
+            "startDate":"2021-12-02",
             "datumMargin": 1,
             "bedrag": "12.34",
             "bedragMargin":"56.78",
@@ -200,7 +200,7 @@ def test_update_alarm_failure_cant_set_alarm_to_non_existing_afspraak(client):
             "gebruikerEmail": "test@mail.nl",
             "afspraakId": 19,
             "isActive": True,
-            "datum": "2021-12-07",
+            "startDate": "2021-12-07",
             "datumMargin": 5,
             "bedrag": "180012",
             "bedragMargin": "1000",
@@ -226,7 +226,7 @@ def test_update_alarm_failure_cant_set_alarm_to_non_existing_afspraak(client):
                                 afspraak{
                                     id
                                 }
-                                datum
+                                startDate
                                 datumMargin
                                 bedrag
                                 bedragMargin
@@ -241,7 +241,7 @@ def test_update_alarm_failure_cant_set_alarm_to_non_existing_afspraak(client):
                                 afspraak{
                                     id
                                 }
-                                datum
+                                startDate
                                 datumMargin
                                 bedrag
                                 bedragMargin

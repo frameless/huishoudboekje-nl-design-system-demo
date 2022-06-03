@@ -15,7 +15,7 @@ alarm = {
     "isActive": True,
     "gebruikerEmail":"other@mail.nl",
     "afspraakId": 19,
-    "datum":"2021-12-06",
+    "startDate":"2021-12-06",
     "datumMargin": 1,
     "bedrag": "12500",
     "bedragMargin":"1000",
@@ -28,7 +28,7 @@ nextAlarm = {
     "isActive": True,
     "gebruikerEmail":"other@mail.nl",
     "afspraakId": 19,
-    "datum":"2021-12-08",
+    "startDate":"2021-12-08",
     "datumMargin": 1,
     "bedrag": "12500",
     "bedragMargin":"1000",
@@ -109,12 +109,12 @@ def test_generateNextAlarmDate_monthly(expected: datetime, alarm, alarmDate: dat
 @freeze_time("2021-12-01")
 @pytest.mark.parametrize(
     ["expected", "alarm"], [
-    (False, { "isActive": True, "datum":"2021-12-01", "datumMargin":0 }),
-    (False, { "isActive": True, "datum":"2021-12-01", "datumMargin":1  }),
-    (True, { "isActive": True, "datum":"2021-11-30", "datumMargin":0 }),
-    (False, { "isActive": True, "datum":"2021-11-30", "datumMargin":1  }),
-    (False, { "isActive": True, "datum":"2021-12-02", "datumMargin":1  }),
-    (True, { "isActive": True, "datum":"2021-11-25", "datumMargin":1 })
+    (False, { "isActive": True, "startDate":"2021-12-01", "datumMargin":0 }),
+    (False, { "isActive": True, "startDate":"2021-12-01", "datumMargin":1  }),
+    (True, { "isActive": True, "startDate":"2021-11-30", "datumMargin":0 }),
+    (False, { "isActive": True, "startDate":"2021-11-30", "datumMargin":1  }),
+    (False, { "isActive": True, "startDate":"2021-12-02", "datumMargin":1  }),
+    (True, { "isActive": True, "startDate":"2021-11-25", "datumMargin":1 })
 ])
 def test_shouldCheckAlarm(expected: bool, alarm):
     actual = EvaluateAlarm.shouldCheckAlarm(alarm)
@@ -129,7 +129,7 @@ def test_evaluate_alarm_illigal_betaalinstructie_combination(client):
             "isActive": True,
             "gebruikerEmail":"other@mail.nl",
             "afspraakId": 19,
-            "datum":"2021-12-06",
+            "startDate":"2021-12-06",
             "datumMargin": 1,
             "bedrag": "12500",
             "bedragMargin":"1000",
@@ -190,7 +190,7 @@ def test_evaluate_alarm_inactive(client):
             "isActive":False,
             "gebruikerEmail":"other@mail.nl",
             "afspraakId": 19,
-            "datum":"2021-12-06",
+            "startDate":"2021-12-06",
             "datumMargin": 1,
             "bedrag": "12500",
             "bedragMargin":"1000",
@@ -501,7 +501,7 @@ def test_evaluate_alarm_next_alarm_in_sequence_already_exists(client):
             "isActive": True,
             "gebruikerEmail":"other@mail.nl",
             "afspraakId": 19,
-            "datum":"2021-12-06",
+            "startDate":"2021-12-06",
             "datumMargin": 1,
             "bedrag": "12500",
             "bedragMargin":"1000",
@@ -512,7 +512,7 @@ def test_evaluate_alarm_next_alarm_in_sequence_already_exists(client):
             "isActive": True,
             "gebruikerEmail":"other@mail.nl",
             "afspraakId": 19,
-            "datum":"2021-12-10",
+            "startDate":"2021-12-10",
             "datumMargin": 1,
             "bedrag": "12500",
             "bedragMargin":"1000",
@@ -587,8 +587,8 @@ def test_evaluate_alarm_disabled_because_its_in_the_past(client):
         rm7 = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}", status_code=200)
 
         expected = {'data': {'evaluateAlarms': {'alarmTriggerResult': 
-        [{'alarm': {'isActive': False, 'gebruikerEmail': 'other@mail.nl', 'datum': '2021-12-06', 'datumMargin': 1, 'bedrag': '125.00', 'bedragMargin': '10.00', 'byDay': ['Wednesday', 'Friday']}, 
-        'nextAlarm': {'isActive': True, 'gebruikerEmail': 'other@mail.nl', 'datum': '2021-12-08', 'datumMargin': 1, 'bedrag': '125.00', 'bedragMargin': '10.00', 'byDay': ['Wednesday', 'Friday']}, 
+        [{'alarm': {'isActive': False, 'gebruikerEmail': 'other@mail.nl', 'startDate': '2021-12-06', 'datumMargin': 1, 'bedrag': '125.00', 'bedragMargin': '10.00', 'byDay': ['Wednesday', 'Friday']}, 
+        'nextAlarm': {'isActive': True, 'gebruikerEmail': 'other@mail.nl', 'startDate': '2021-12-08', 'datumMargin': 1, 'bedrag': '125.00', 'bedragMargin': '10.00', 'byDay': ['Wednesday', 'Friday']}, 
         'signaal': None}]}}}
 
         # act
@@ -602,7 +602,7 @@ def test_evaluate_alarm_disabled_because_its_in_the_past(client):
                                 alarm {
                                     isActive
                                     gebruikerEmail
-                                    datum
+                                    startDate
                                     datumMargin
                                     bedrag
                                     bedragMargin
@@ -611,7 +611,7 @@ def test_evaluate_alarm_disabled_because_its_in_the_past(client):
                                 nextAlarm{
                                     isActive
                                     gebruikerEmail
-                                    datum
+                                    startDate
                                     datumMargin
                                     bedrag
                                     bedragMargin
@@ -669,8 +669,8 @@ def test_evaluate_alarm_in_the_past(client):
         rm9 = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}", status_code=200)
 
         expected = {'data': {'evaluateAlarms': {'alarmTriggerResult': 
-        [{'alarm': {'isActive': False, 'gebruikerEmail': 'other@mail.nl', 'datum': '2021-12-06', 'datumMargin': 1, 'bedrag': '125.00', 'bedragMargin': '10.00', 'byDay': ['Wednesday', 'Friday']}, 
-        'nextAlarm': {'isActive': True, 'gebruikerEmail': 'other@mail.nl', 'datum': '2021-12-08', 'datumMargin': 1, 'bedrag': '125.00', 'bedragMargin': '10.00', 'byDay': ['Wednesday', 'Friday']}, 
+        [{'alarm': {'isActive': False, 'gebruikerEmail': 'other@mail.nl', 'startDate': '2021-12-06', 'datumMargin': 1, 'bedrag': '125.00', 'bedragMargin': '10.00', 'byDay': ['Wednesday', 'Friday']}, 
+        'nextAlarm': {'isActive': True, 'gebruikerEmail': 'other@mail.nl', 'startDate': '2021-12-08', 'datumMargin': 1, 'bedrag': '125.00', 'bedragMargin': '10.00', 'byDay': ['Wednesday', 'Friday']}, 
         'signaal': {'id': 'e2b282d9-b31f-451e-9242-11f86c902b35'}}]}}}
 
         # act
@@ -684,7 +684,7 @@ def test_evaluate_alarm_in_the_past(client):
                                 alarm {
                                     isActive
                                     gebruikerEmail
-                                    datum
+                                    startDate
                                     datumMargin
                                     bedrag
                                     bedragMargin
@@ -693,7 +693,7 @@ def test_evaluate_alarm_in_the_past(client):
                                 nextAlarm{
                                     isActive
                                     gebruikerEmail
-                                    datum
+                                    startDate
                                     datumMargin
                                     bedrag
                                     bedragMargin

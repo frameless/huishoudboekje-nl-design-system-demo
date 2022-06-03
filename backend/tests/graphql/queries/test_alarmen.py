@@ -5,14 +5,14 @@ from hhb_backend.graphql import settings
 def test_get_alarmen(client):
     with requests_mock.Mocker() as rm:
         # arrange
-        expected = {'data': {'alarmen': [{'id': '00943958-8b93-4617-aa43-669a9016aad9', 'isActive': False, 'gebruikerEmail': 'other@mail.nl', 'afspraak': {'id': 20}, 'datum': '2021-02-02', 'datumMargin': 1, 'bedrag': '12.34', 'bedragMargin': '56.78'}]}}
+        expected = {'data': {'alarmen': [{'id': '00943958-8b93-4617-aa43-669a9016aad9', 'isActive': False, 'gebruikerEmail': 'other@mail.nl', 'afspraak': {'id': 20}, 'startDate': '2021-02-02', 'datumMargin': 1, 'bedrag': '12.34', 'bedragMargin': '56.78'}]}}
         afspraak_id = 20
         alarm1 = {
             "id": "00943958-8b93-4617-aa43-669a9016aad9",
             "gebruikerEmail": "other@mail.nl",
             "afspraakId": afspraak_id,
             "isActive": False,
-            "datum": "2021-02-02",
+            "startDate": "2021-02-02",
             "datumMargin": 1,
             "bedrag": 1234,
             "bedragMargin": 5678
@@ -39,7 +39,7 @@ def test_get_alarmen(client):
                         afspraak{
                             id
                         }
-                        datum
+                        startDate
                         datumMargin
                         bedrag
                         bedragMargin
@@ -63,7 +63,7 @@ def test_get_alarmen(client):
 def test_get_alarm_by_id(client):
     with requests_mock.Mocker() as rm:
         # arrange
-        expected = {'data': {'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9', 'isActive': False, 'gebruikerEmail': 'other@mail.nl', 'afspraak': {'id': 20}, 'datum': '2021-02-02', 'datumMargin': 1, 'bedrag': '12.34', 'bedragMargin': '56.78'}}}
+        expected = {'data': {'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9', 'isActive': False, 'gebruikerEmail': 'other@mail.nl', 'afspraak': {'id': 20}, 'startDate': '2021-02-02', 'datumMargin': 1, 'bedrag': '12.34', 'bedragMargin': '56.78'}}}
         alarm_id = "00943958-8b93-4617-aa43-669a9016aad9"
         afspraak_id = 20
         alarm1 = {
@@ -71,7 +71,7 @@ def test_get_alarm_by_id(client):
             "gebruikerEmail": "other@mail.nl",
             "afspraakId": 20,
             "isActive": False,
-            "datum": "2021-02-02",
+            "startDate": "2021-02-02",
             "datumMargin": 1,
             "bedrag": 1234,
             "bedragMargin": 5678
@@ -98,7 +98,7 @@ def test_get_alarm_by_id(client):
                         afspraak{
                             id
                         }
-                        datum
+                        startDate
                         datumMargin
                         bedrag
                         bedragMargin
