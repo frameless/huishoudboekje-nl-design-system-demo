@@ -6,6 +6,15 @@
 
 - Alarmen en signalen
 
+## 1.1.2
+
+Een update van afhankelijkheden is teruggedraaid.
+
+### Patch Changes
+
+- 98ff514f: Fixed #943: Added unit tests for backend-burgers.
+- 9141a7a8: Fixed #954: An unknown issue with OpenShift causes all services that use NodeJS 18 to not work. We're still looking into it, but for now we've downgraded all of them to NodeJS 16.
+
 ## 1.1.1
 
 Een probleem met het starten van de service Unleash is opgelost.
