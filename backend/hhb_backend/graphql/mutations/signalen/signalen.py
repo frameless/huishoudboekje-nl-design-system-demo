@@ -82,7 +82,7 @@ class SignaalHelper:
         previous_response = requests.get(f"{settings.SIGNALENSERVICE_URL}/signals/{id}", headers={"Content-type": "application/json"})
         if previous_response.status_code != 200:
             raise GraphQLError(f"Signaal bestaat niet.")
-        previous = previous_response.json()
+        previous = previous_response.json()["data"]
 
         response = requests.put(f"{settings.SIGNALENSERVICE_URL}/signals/{id}", json=input, headers={"Content-type": "application/json"})
         if response.status_code != 200:

@@ -125,8 +125,7 @@ class AlarmHelper:
         previous_response = requests.get(f"{settings.ALARMENSERVICE_URL}/alarms/{id}", headers={"Content-type": "application/json"}) 
         if previous_response.status_code != 200:
             raise GraphQLError(f"Alarm bestaat niet.")
-
-        previous = previous_response.json()
+        previous = previous_response.json()["data"]
 
         if input.afspraakId:
             afspraak_response = requests.get(f"{settings.HHB_SERVICES_URL}/afspraken/{input.afspraakId}", headers={"Content-type": "application/json"})

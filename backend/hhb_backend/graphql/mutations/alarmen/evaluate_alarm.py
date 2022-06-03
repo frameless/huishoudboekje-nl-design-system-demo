@@ -80,9 +80,15 @@ def evaluateOneAlarm(_root, _info, id: String) -> list:
     activeAlarms = getActiveAlarms()
     alarm = getAlarm(id)
 
+    if alarm is None:
+        return []
+        
     alarm_status: bool = alarm.get("isActive")
     if alarm_status == True:
         evaluated_alarm = evaluateAlarm(_root, _info, alarm, activeAlarms)
+
+    if evaluated_alarm is None:
+        return []
 
     return [evaluated_alarm]
 
@@ -201,10 +207,11 @@ def getAlarm(id: String) -> Alarm:
     alarm_response = requests.get(f"{settings.ALARMENSERVICE_URL}/alarms/{id}", headers={"Content-type": "application/json"})
     if alarm_response.status_code != 200:
         raise GraphQLError(f"Upstream API responded on getAlarm({id}): {alarm_response.json()}")
-    alarm = alarm_response.json()
+    alarm = alarm_response.json()["data"]
 
-    if alarm.get("isActive"):
-        return alarm
+    if alarm is not None:
+        if alarm.get("isActive"):
+            return alarm
 
     return None
 

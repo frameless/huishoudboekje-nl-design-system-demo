@@ -18,4 +18,4 @@ class UpdateSignaal(graphene.Mutation):
         """ Mutatie voor het wijzigen van een bestaand Signaal """
         response = await SignaalHelper.update(_root, _info, id, input)
 
-        return UpdateSignaal(signaal=response.get_signaal(), previous=response.previous, ok=True)
+        return UpdateSignaal(signaal=response.signaal, previous=response.previous, ok=True)
