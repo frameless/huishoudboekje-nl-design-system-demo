@@ -1,5 +1,5 @@
 import {objectType} from "nexus";
-import DataLoader from "../dataloaders/dataloader";
+import {Context} from "../context";
 
 const Journaalpost = objectType({
 	name: "Journaalpost",
@@ -7,24 +7,25 @@ const Journaalpost = objectType({
 		t.int("id");
 		t.field("banktransactie", {
 			type: "Banktransactie",
-			resolve: (root) => {
+			resolve: async (root, _, ctx: Context) => {
 				const transactieId = root["transaction_id"];
+
 				if (!transactieId) {
 					return null;
 				}
 
-				return DataLoader.getBanktransactiesById([transactieId]).then(r => r.shift());
+				return await ctx.dataSources.banktransactieservice.getBanktransactieById(transactieId);
 			},
 		});
 		t.field("afspraak", {
 			type: "Afspraak",
-			resolve: (root) => {
+			resolve: async (root, _, ctx: Context) => {
 				const afspraakId = root["afspraak_id"];
 				if (!afspraakId) {
 					return null;
 				}
 
-				return DataLoader.getAfsprakenById(afspraakId).then(r => r.shift());
+				return await ctx.dataSources.huishoudboekjeservice.getAfspraakById(afspraakId);
 			},
 		});
 	},

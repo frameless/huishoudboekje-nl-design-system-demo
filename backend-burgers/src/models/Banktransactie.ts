@@ -1,5 +1,5 @@
 import {objectType} from "nexus";
-import DataLoader from "../dataloaders/dataloader";
+import {Context} from "../context";
 
 const Banktransactie = objectType({
 	name: "Banktransactie",
@@ -16,14 +16,15 @@ const Banktransactie = objectType({
 		});
 		t.field("tegenrekening", {
 			type: "Rekening",
-			resolve: (root) => {
+			resolve: async (root, _, ctx: Context) => {
 				const iban = root["tegen_rekening"];
 
 				if (!iban) {
 					return null;
 				}
 
-				return DataLoader.getRekeningenByIbans([iban]).then(r => r.shift());
+				const rekeningen = await ctx.dataSources.huishoudboekjeservice.getRekeningenByIbans([iban]);
+				return rekeningen.shift();
 			},
 		});
 		t.string("transactiedatum", {
@@ -34,14 +35,13 @@ const Banktransactie = objectType({
 		});
 		t.field("journaalpost", {
 			type: "Journaalpost",
-			resolve: async (root) => {
-				const id = root.id;
-
-				if (!id) {
+			resolve: async (root, _, ctx: Context) => {
+				if (!root.id) {
 					return null;
 				}
 
-				return await DataLoader.getJournaalpostenByTransactieId(id).then(r => r.shift());
+				const journaalposten = await ctx.dataSources.huishoudboekjeservice.getJournaalpostenByTransactieIds([root.id]);
+				return journaalposten.shift();
 			},
 		});
 	},

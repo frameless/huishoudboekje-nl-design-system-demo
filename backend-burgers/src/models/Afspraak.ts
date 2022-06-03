@@ -1,5 +1,5 @@
 import {objectType} from "nexus";
-import DataLoader from "../dataloaders/dataloader";
+import {Context} from "../context";
 
 const Afspraak = objectType({
 	name: "Afspraak",
@@ -12,7 +12,7 @@ const Afspraak = objectType({
 		t.boolean("credit");
 		t.field("betaalinstructie", {
 			type: "Betaalinstructie",
-			resolve: (root: any, args, ctx) => {
+			resolve: (root: any) => {
 				const betaalinstructie = root.betaalinstructie;
 
 				if (!betaalinstructie) {
@@ -31,35 +31,37 @@ const Afspraak = objectType({
 			},
 		});
 		t.string("validFrom", {
-			resolve: root => root["valid_from"]
+			resolve: root => root["valid_from"],
 		});
 		t.string("validThrough", {
-			resolve: root => root["valid_through"]
+			resolve: root => root["valid_through"],
 		});
 		t.field("tegenrekening", {
 			type: "Rekening",
-			resolve: (root: any) => {
-				const {tegen_rekening_id} = root;
+			resolve: async (root, _, ctx: Context) => {
+				const rekeningId = root["tegen_rekening_id"];
 
-				if (!tegen_rekening_id) {
+				if (!rekeningId) {
 					return null;
 				}
 
-				return DataLoader
-					.getRekeningenByIds([tegen_rekening_id])
-					.then(r => r.shift());
+				return await ctx
+					.dataSources.huishoudboekjeservice
+					.getRekeningById(rekeningId);
 			},
 		});
 		t.list.field("journaalposten", {
 			type: "Journaalpost",
-			resolve: async (root, args, ctx) => {
+			resolve: async (root, _, ctx: Context) => {
 				const {id} = root;
 
 				if (!id) {
 					return [];
 				}
 
-				return await DataLoader.getJournaalpostenByAfspraakId(id);
+				return await ctx
+					.dataSources.huishoudboekjeservice
+					.getJournaalpostenByAfspraakId(id);
 			},
 		});
 	},

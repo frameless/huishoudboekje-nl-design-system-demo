@@ -1,19 +1,14 @@
-import util from "util";
-
 const debugPlugin = () => ({
-	async requestDidStart() {
-		return {
-			async executionDidStart() {
-				return {
-					willResolveField({info}) {
-						return (error, result) => {
-							console.log(`Resolved ${info.parentType.name}.${info.fieldName} with`, result ? util.inspect(result, false, null, true) : error);
-						};
-					},
-				};
-			},
-		};
-	},
+	requestDidStart: async (requestContext) => ({
+		executionDidStart: async (args) => {
+			if (args.source.includes("IntrospectionQuery")) {
+				return;
+			}
+
+			console.log("[DEBUG]", "Running document:");
+			console.log(args.source);
+		},
+	}),
 });
 
 export default debugPlugin;

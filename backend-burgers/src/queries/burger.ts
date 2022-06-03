@@ -1,5 +1,5 @@
-import {intArg, list} from "nexus";
-import DataLoader from "../dataloaders/dataloader";
+import {intArg} from "nexus";
+import {Context} from "../context";
 import Burger from "../models/Burger";
 import {isDev} from "../utils/things";
 
@@ -9,8 +9,9 @@ const burger = (t) => {
 			bsn: intArg(),
 		},
 		type: Burger,
-		resolve: async (root, args) => {
-			return DataLoader.getBurgersByBsn(args.bsn).then(r => r.shift());
+		resolve: async (_, args, ctx: Context) => {
+			const burgers = await ctx.dataSources.huishoudboekjeservice.getBurgersByBsns([args.bsn]);
+			return burgers.shift();
 		},
 	});
 
@@ -22,20 +23,11 @@ const burger = (t) => {
 
 	t.list.field("burgers", {
 		type: "Burger",
-		resolve: (root, args) => {
-			return DataLoader.getAllBurgers();
+		resolve: (_, __, ctx: Context) => {
+			return ctx.dataSources.huishoudboekjeservice.getAllBurgers();
 		},
 	});
 
-	t.list.field("organisaties", {
-		type: "Organisatie",
-		args: {
-			ids: list(intArg()),
-		},
-		resolve: (root, args) => {
-			return DataLoader.getOrganisatiesById(args.ids);
-		},
-	});
 };
 
 export default burger;

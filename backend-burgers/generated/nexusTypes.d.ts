@@ -4,7 +4,7 @@
  */
 
 
-
+import type { Context } from "./../src/context"
 
 
 
@@ -181,10 +181,8 @@ export interface NexusGenFieldTypes {
   }
   Query: { // field return type
     banktransactie: NexusGenRootTypes['Banktransactie'] | null; // Banktransactie
-    banktransacties: Array<NexusGenRootTypes['Banktransactie'] | null> | null; // [Banktransactie]
     burger: NexusGenRootTypes['Burger'] | null; // Burger
     burgers: Array<NexusGenRootTypes['Burger'] | null> | null; // [Burger]
-    organisaties: Array<NexusGenRootTypes['Organisatie'] | null> | null; // [Organisatie]
   }
   Rekening: { // field return type
     afdelingen: Array<NexusGenRootTypes['Afdeling'] | null> | null; // [Afdeling]
@@ -271,10 +269,8 @@ export interface NexusGenFieldTypeNames {
   }
   Query: { // field return type name
     banktransactie: 'Banktransactie'
-    banktransacties: 'Banktransactie'
     burger: 'Burger'
     burgers: 'Burger'
-    organisaties: 'Organisatie'
   }
   Rekening: { // field return type name
     afdelingen: 'Afdeling'
@@ -300,9 +296,6 @@ export interface NexusGenArgTypes {
     }
     burger: { // args
       bsn?: number | null; // Int
-    }
-    organisaties: { // args
-      ids?: Array<number | null> | null; // [Int]
     }
   }
 }
@@ -338,7 +331,7 @@ export type NexusGenFeaturesConfig = {
 }
 
 export interface NexusGenTypes {
-  context: any;
+  context: Context;
   inputTypes: NexusGenInputs;
   rootTypes: NexusGenRootTypes;
   inputTypeShapes: NexusGenInputs & NexusGenEnums & NexusGenScalars;

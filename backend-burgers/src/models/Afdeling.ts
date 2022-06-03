@@ -1,5 +1,5 @@
 import {objectType} from "nexus";
-import DataLoader from "../dataloaders/dataloader";
+import {Context} from "../context";
 
 const Organisatie = objectType({
 	name: "Afdeling",
@@ -8,9 +8,12 @@ const Organisatie = objectType({
 		t.string("naam");
 		t.field("organisatie", {
 			type: "Organisatie",
-			resolve: root => {
+			resolve: async (root, args, ctx: Context) => {
 				const organisatieId = root["organisatie_id"];
-				return DataLoader.getOrganisatiesById([organisatieId]).then(r => r.shift());
+
+				return await ctx
+					.dataSources.organisatieservice
+					.getOrganisatieById(organisatieId);
 			},
 		});
 	},

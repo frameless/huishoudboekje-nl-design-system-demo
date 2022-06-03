@@ -1,5 +1,5 @@
 import {objectType} from "nexus";
-import DataLoader from "../dataloaders/dataloader";
+import {Context} from "../context";
 
 const Rekening = objectType({
 	name: "Rekening",
@@ -16,15 +16,15 @@ const Rekening = objectType({
 		});
 		t.list.field("afdelingen", {
 			type: "Afdeling",
-			description: "De afdeling waar deze rekening bij hoort.",
-			resolve: root => {
+			description: "De afdelingen waar deze rekening bij hoort.",
+			resolve: (root, _, ctx: Context) => {
 				const afdelingIds = root["afdelingen"] || [];
 
-				if(!afdelingIds || afdelingIds.length === 0) {
+				if (!afdelingIds || afdelingIds.length === 0) {
 					return [];
 				}
 
-				return DataLoader.getAfdelingenById(afdelingIds);
+				return ctx.dataSources.organisatieservice.getAfdelingenById(afdelingIds);
 			},
 		});
 	},
