@@ -34,18 +34,18 @@ def create_mock_adapter() -> Adapter:
     return adapter
 
 
-def test_update_organisatie_success(client):
+def test_update_postadres_success(client):
     with requests_mock.Mocker() as rm:
         # arrange
         expected = {"data": {"updatePostadres": {"ok": True, "postadres": {"id": "test_id"}}}}
         postadres_input = {"id": "test_id", "huisnummer": "52B", "plaatsnaam": "testplaats", "straatnaam": "teststraat", "postcode": "9999ZZ"}
         
-        postadres ={"id": "test_id", "houseNumber": "52", "locality": "testplaats1", "street": "teststraat1", "postalCode": "9999AA"}
-        postadres_updated={"id": "test_id", "houseNumber": "52B", "locality": "testplaats", "street": "teststraat", "postalCode": "9999ZZ"}
+        postadres = {"id": "test_id", "houseNumber": "52", "locality": "testplaats1", "street": "teststraat1", "postalCode": "9999AA"}
+        postadres_updated= {"id": "test_id", "houseNumber": "52B", "locality": "testplaats", "street": "teststraat", "postalCode": "9999ZZ"}
 
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        rm1 = rm.get(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/test_id", status_code=200, json=postadres)
-        rm2 = rm.put(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/test_id", status_code=200, json=postadres_updated)
+        rm1 = rm.get(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/test_id", status_code=200, json={"data": postadres})
+        rm2 = rm.put(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/test_id", status_code=200, json={"data": postadres_updated})
         rm3 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=200)
 
 

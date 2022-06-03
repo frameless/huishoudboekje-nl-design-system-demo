@@ -14,7 +14,7 @@ def test_create_postadres_succes(client):
         }
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
         rm1 = rm.get(f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/?filter_ids=1", status_code=200, json={'data': [{'id': 1, 'postadressen_ids': []}]})
-        rm2 = rm.post(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses", status_code=201, json={"address" : postadres_new})
+        rm2 = rm.post(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses", status_code=201, json={"data" : postadres_new})
         rm3 = rm.post(f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/1", status_code=200, json={'data': {'id': 1, 'postadressen_ids': ["38760fc9-2fa4-46fd-8bfe-9d8967011a5e"]}})
         rm4 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=200)
 
@@ -39,7 +39,7 @@ def test_create_postadres_succes(client):
                     'afdelingId': 1}}},
             content_type='application/json'
         )
-
+        print(f">> >> >> response {response.json} ")
 
         # assert
         assert rm1.called_once
