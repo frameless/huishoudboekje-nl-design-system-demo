@@ -9,7 +9,7 @@ Object {
 
 exports[`Alarm CRUD (operations) Given the Alarm does not exist should create the Alarm 1`] = `
 Object {
-  "alarm": Object {
+  "data": Object {
     "afspraakId": 1,
     "bedrag": 955,
     "bedragMargin": 75,
@@ -42,8 +42,107 @@ Object {
 `;
 
 exports[`Alarm CRUD (operations) Given the Alarm exists should return all Alarms 1`] = `
-Array [
-  Object {
+Object {
+  "data": Array [
+    Object {
+      "afspraakId": 1,
+      "bedrag": 955,
+      "bedragMargin": 75,
+      "byDay": Array [],
+      "byMonth": Array [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+      ],
+      "byMonthDay": Array [
+        3,
+      ],
+      "datum": "2021-12-18",
+      "datumMargin": 7,
+      "gebruikerEmail": "iemand@sloothuizen.nl",
+      "id": "d9c00acb-8d04-4cf0-9be4-061f33b3357d",
+      "isActive": true,
+    },
+    Object {
+      "afspraakId": 2,
+      "bedrag": 299.99,
+      "bedragMargin": 15.9,
+      "byDay": Array [],
+      "byMonth": Array [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+      ],
+      "byMonthDay": Array [
+        25,
+      ],
+      "datum": "2021-12-18",
+      "datumMargin": 14,
+      "gebruikerEmail": "ander@sloothuizen.nl",
+      "id": "5d65d8e9-1f4a-4cb9-a89c-0f952ac5f2ff",
+      "isActive": true,
+    },
+    Object {
+      "afspraakId": 44,
+      "bedrag": 32.05,
+      "bedragMargin": 12,
+      "byDay": Array [
+        "Monday",
+      ],
+      "byMonth": Array [],
+      "byMonthDay": Array [],
+      "datum": "2021-12-18",
+      "datumMargin": 1,
+      "gebruikerEmail": "zus@sloothuizen.nl",
+      "id": "1a8ac60f-081f-4bbb-baca-6b6d399ce8db",
+      "isActive": true,
+    },
+    Object {
+      "afspraakId": 3,
+      "bedrag": 1200.12,
+      "bedragMargin": 75,
+      "byDay": Array [],
+      "byMonth": Array [
+        1,
+        4,
+        7,
+        10,
+      ],
+      "byMonthDay": Array [
+        10,
+      ],
+      "datum": "2021-12-18",
+      "datumMargin": 3,
+      "gebruikerEmail": "zo@sloothuizen.nl",
+      "id": "738247bc-e6b8-41ee-a09e-a6778822598d",
+      "isActive": true,
+    },
+  ],
+  "ok": true,
+}
+`;
+
+exports[`Alarm CRUD (operations) Given the Alarm exists should return the Alarm 1`] = `
+Object {
+  "data": Object {
     "afspraakId": 1,
     "bedrag": 955,
     "bedragMargin": 75,
@@ -71,118 +170,28 @@ Array [
     "id": "d9c00acb-8d04-4cf0-9be4-061f33b3357d",
     "isActive": true,
   },
-  Object {
-    "afspraakId": 2,
-    "bedrag": 299.99,
-    "bedragMargin": 15.9,
-    "byDay": Array [],
-    "byMonth": Array [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-    ],
-    "byMonthDay": Array [
-      25,
-    ],
-    "datum": "2021-12-18",
-    "datumMargin": 14,
-    "gebruikerEmail": "ander@sloothuizen.nl",
-    "id": "5d65d8e9-1f4a-4cb9-a89c-0f952ac5f2ff",
-    "isActive": true,
-  },
-  Object {
-    "afspraakId": 44,
-    "bedrag": 32.05,
-    "bedragMargin": 12,
-    "byDay": Array [
-      "Monday",
-    ],
-    "byMonth": Array [],
-    "byMonthDay": Array [],
-    "datum": "2021-12-18",
-    "datumMargin": 1,
-    "gebruikerEmail": "zus@sloothuizen.nl",
-    "id": "1a8ac60f-081f-4bbb-baca-6b6d399ce8db",
-    "isActive": true,
-  },
-  Object {
-    "afspraakId": 3,
-    "bedrag": 1200.12,
-    "bedragMargin": 75,
-    "byDay": Array [],
-    "byMonth": Array [
-      1,
-      4,
-      7,
-      10,
-    ],
-    "byMonthDay": Array [
-      10,
-    ],
-    "datum": "2021-12-18",
-    "datumMargin": 3,
-    "gebruikerEmail": "zo@sloothuizen.nl",
-    "id": "738247bc-e6b8-41ee-a09e-a6778822598d",
-    "isActive": true,
-  },
-]
-`;
-
-exports[`Alarm CRUD (operations) Given the Alarm exists should return the Alarm 1`] = `
-Object {
-  "afspraakId": 1,
-  "bedrag": 955,
-  "bedragMargin": 75,
-  "byDay": Array [],
-  "byMonth": Array [
-    1,
-    2,
-    3,
-    4,
-    5,
-    6,
-    7,
-    8,
-    9,
-    10,
-    11,
-    12,
-  ],
-  "byMonthDay": Array [
-    3,
-  ],
-  "datum": "2021-12-18",
-  "datumMargin": 7,
-  "gebruikerEmail": "iemand@sloothuizen.nl",
-  "id": "d9c00acb-8d04-4cf0-9be4-061f33b3357d",
-  "isActive": true,
+  "ok": true,
 }
 `;
 
 exports[`Alarm CRUD (operations) Given the Alarm exists should update the Alarm 1`] = `
 Object {
-  "afspraakId": 999,
-  "bedrag": 999,
-  "bedragMargin": 99,
-  "byDay": Array [
-    "Wednesday",
-  ],
-  "byMonth": Array [],
-  "byMonthDay": Array [],
-  "datum": "2033-12-31",
-  "datumMargin": 10,
-  "gebruikerEmail": "koen@sloothuizen.nl",
-  "id": "d9c00acb-8d04-4cf0-9be4-061f33b3357d",
-  "isActive": false,
-  "signaalId": "71d65065-2eb9-4f44-8f16-44d1e5a4d6f7",
+  "data": Object {
+    "afspraakId": 999,
+    "bedrag": 999,
+    "bedragMargin": 99,
+    "byDay": Array [
+      "Wednesday",
+    ],
+    "byMonth": Array [],
+    "byMonthDay": Array [],
+    "datum": "2033-12-31",
+    "datumMargin": 10,
+    "gebruikerEmail": "koen@sloothuizen.nl",
+    "id": "d9c00acb-8d04-4cf0-9be4-061f33b3357d",
+    "isActive": false,
+    "signaalId": "71d65065-2eb9-4f44-8f16-44d1e5a4d6f7",
+  },
+  "ok": true,
 }
 `;

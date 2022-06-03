@@ -57,7 +57,7 @@ def create_brieven_export(burger_id):
     afspraak_postadressen_response = get_postadres(afspraken)
 
     if afspraak_postadressen_response.status_code == 200:
-        afspraak_postadressen = afspraak_postadressen_response.json()
+        afspraak_postadressen = afspraak_postadressen_response.json()['data']
         for afspraak in afspraken:
             postadres_id = afspraak.get("postadres_id")
             for postadres in afspraak_postadressen:
@@ -70,7 +70,7 @@ def create_brieven_export(burger_id):
         postadressen_response = get_postadressen(afdelingen)
         if postadressen_response.status_code != 200:
             return jsonify(message=postadressen_response.reason), postadressen_response.status_code
-        postadressen = postadressen_response.json()
+        postadressen = postadressen_response.json()['data']
 
 
         organisatie_reponse = get_organisaties(afdelingen)

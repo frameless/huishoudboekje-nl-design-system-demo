@@ -1,4 +1,7 @@
 from tokenize import String
+from hhb_backend.graphql.mutations.signalen.signalen import SignaalHelper
+from hhb_backend.graphql.mutations.alarmen.alarm import AlarmHelper, CreateAlarmInput
+import hhb_backend.graphql as graphql
 from hhb_backend.graphql.models.Alarm import Alarm
 from hhb_backend.graphql.models.signaal import Signaal
 from hhb_backend.graphql.models.afspraak import Afspraak
@@ -13,6 +16,8 @@ from dateutil.rrule import rrule, MONTHLY, YEARLY
 import calendar
 from dateutil.relativedelta import *
 import dateutil.parser
+import logging
+
 
 class AlarmTriggerResult(graphene.ObjectType):
     alarm = graphene.Field(lambda: Alarm)
@@ -35,13 +40,13 @@ class EvaluateAlarms(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(_root, _info):
         """ Mutatie voor de evaluatie van een alarm wat kan resulteren in een signaal en/of een nieuw alarm in de reeks. """
-        triggered_alarms = evaluateAllAlarms()
+        triggered_alarms = evaluateAllAlarms(_root, _info)
         return EvaluateAlarms(alarmTriggerResult=triggered_alarms)
 
 
 class EvaluateAlarm(graphene.Mutation):
     class Arguments:
-        id = graphene.String(required=True)  #graphene.String(required=True) ?? would it be required? I guess not...
+        id = graphene.String(required=True) 
     
     alarmTriggerResult = graphene.List(lambda: AlarmTriggerResult)
 
@@ -58,30 +63,36 @@ class EvaluateAlarm(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(_root, _info, id):
         """ Mutatie voor de evaluatie van een alarm wat kan resulteren in een signaal en/of een nieuw alarm in de reeks. """
-        evaluated_alarm = evaluateOneAlarm(id)
+        evaluated_alarm = evaluateOneAlarm(_root, _info, id)
         return EvaluateAlarm(alarmTriggerResult=evaluated_alarm)
 
 
-def evaluateAllAlarms() -> list:
+def evaluateAllAlarms(_root, _info, ) -> list:
     triggered_alarms = []
     activeAlarms = getActiveAlarms()
     for alarm in activeAlarms:
-        triggered_alarms.append(evaluateAlarm(alarm, activeAlarms))
+        triggered_alarms.append(evaluateAlarm(_root, _info, alarm, activeAlarms))
 
     return triggered_alarms
 
-def evaluateOneAlarm(id: String) -> list:
+def evaluateOneAlarm(_root, _info, id: String) -> list:
     evaluated_alarm = None
     activeAlarms = getActiveAlarms()
     alarm = getAlarm(id)
 
+    if alarm is None:
+        return []
+        
     alarm_status: bool = alarm.get("isActive")
     if alarm_status == True:
-        evaluated_alarm = evaluateAlarm(alarm, activeAlarms)
+        evaluated_alarm = evaluateAlarm(_root, _info, alarm, activeAlarms)
+
+    if evaluated_alarm is None:
+        return []
 
     return [evaluated_alarm]
 
-def evaluateAlarm(alarm: Alarm, activeAlarms: list):
+def evaluateAlarm(_root, _info, alarm: Alarm, activeAlarms: list):
     triggered_alarms = []
     # get data from afspraak and transactions (by journaalpost reference)
     afspraak = getAfspraakById(alarm.get('afspraakId'))
@@ -95,8 +106,8 @@ def evaluateAlarm(alarm: Alarm, activeAlarms: list):
     newAlarm = None
     createdSignaal = None
     if shouldCheckAlarm(alarm):
-        newAlarm = shouldCreateNextAlarm(alarm, alarm_check_date, activeAlarms)
-        createdSignaal = shouldCreateSignaal(alarm, transacties)
+        newAlarm = shouldCreateNextAlarm(_root, _info, alarm, alarm_check_date, activeAlarms)
+        createdSignaal = shouldCreateSignaal(_root, _info, alarm, transacties)
     
     return {
         "alarm": alarm,
@@ -126,7 +137,7 @@ def doesNextAlarmExist(nextAlarmDate: date, alarm: Alarm, alarms: list) -> bool:
     
     return False
 
-def shouldCreateNextAlarm(alarm: Alarm, alarm_check_date: datetime, activeAlarms: list) -> Alarm:
+def shouldCreateNextAlarm(_root, _info, alarm: Alarm, alarm_check_date: datetime, activeAlarms: list) -> Alarm:
     newAlarm = None
     
     # only generate next alarm if byDay, byMonth, and/or byMonthDay is present
@@ -139,11 +150,12 @@ def shouldCreateNextAlarm(alarm: Alarm, alarm_check_date: datetime, activeAlarms
         if nextAlarmAlreadyExists == True:
             nextAlarmDate = None
         elif nextAlarmAlreadyExists == False:
-            newAlarm = createAlarm(alarm, nextAlarmDate)
+            newAlarm = createAlarm(_root, _info, alarm, nextAlarmDate)
 
     return newAlarm
 
-def createAlarm(alarm: Alarm, alarmDate: datetime) -> Alarm:
+
+async def createAlarm(_root, _info, alarm: Alarm, alarmDate: datetime) -> Alarm:
     newAlarm = {
         "isActive": True,
         "gebruikerEmail": alarm.get("gebruikerEmail"),
@@ -152,15 +164,16 @@ def createAlarm(alarm: Alarm, alarmDate: datetime) -> Alarm:
         "datumMargin": int(alarm.get("datumMargin")),
         "bedrag": alarm.get("bedrag"),
         "bedragMargin": alarm.get("bedragMargin"),
-        "byDay": alarm.get("byDay"),
-        "byMonth": alarm.get("byMonth"),
-        "byMonthDay": alarm.get("byMonthDay")
+        "byDay": alarm.get("byDay", []),
+        "byMonth": alarm.get("byMonth", []),
+        "byMonthDay": alarm.get("byMonthDay", [])
     }
-
-    alarm_response = requests.post(f"{settings.ALARMENSERVICE_URL}/alarms/", json=newAlarm, headers={"Content-type": "application/json"})
-    if alarm_response.status_code != 201:
-        raise GraphQLError(f"Upstream API responded: {alarm_response.json()}")
-    newAlarm = alarm_response.json()["data"]
+    
+    result = await AlarmHelper.create(_root, _info, newAlarm)
+    if not result.ok:
+        logging.warning("create alarm failed")
+        return None
+    newAlarm = result.alarm
 
     return newAlarm
 
@@ -194,10 +207,11 @@ def getAlarm(id: String) -> Alarm:
     alarm_response = requests.get(f"{settings.ALARMENSERVICE_URL}/alarms/{id}", headers={"Content-type": "application/json"})
     if alarm_response.status_code != 200:
         raise GraphQLError(f"Upstream API responded on getAlarm({id}): {alarm_response.json()}")
-    alarm = alarm_response.json()
+    alarm = alarm_response.json()["data"]
 
-    if alarm.get("isActive"):
-        return alarm
+    if alarm is not None:
+        if alarm.get("isActive"):
+            return alarm
 
     return None
 
@@ -285,7 +299,7 @@ def generateNextAlarmInSequence(alarm: Alarm, alarmDate:datetime) -> datetime:
 
     return next_alarm_date
 
-def shouldCreateSignaal(alarm: Alarm, transacties) -> Signaal:
+async def shouldCreateSignaal(_root, _info, alarm: Alarm, transacties) -> Signaal:
     datum_margin = int(alarm.get("datumMargin"))
     str_expect_date = alarm.get("datum")
     expect_date = dateutil.parser.isoparse(str_expect_date).date()
@@ -321,10 +335,13 @@ def shouldCreateSignaal(alarm: Alarm, transacties) -> Signaal:
             "type": "default"
             # "context": None
         }
-        signaal_response = requests.post(f"{settings.SIGNALENSERVICE_URL}/signals/", json=newSignal, headers={"Content-type": "application/json"})
-        if signaal_response.status_code != 201:
-            raise GraphQLError(f"Fout bij het aanmaken van het signaal. {signaal_response.json()}")
-        newSignal = signaal_response.json()["data"]
+
+        # _root, _info, gebruiken
+        result = await SignaalHelper.create(_root, _info, newSignal)
+        if not result.ok:
+            logging.warning("create signaal failed")
+            return None
+        newSignal = result.signaal
 
         newSignalId = newSignal.get("id")
         alarm["signaalId"] = newSignalId

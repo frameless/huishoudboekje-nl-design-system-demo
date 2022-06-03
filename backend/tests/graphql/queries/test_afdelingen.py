@@ -16,7 +16,7 @@ def test_afdeling(client):
         rm3 = rm.get(f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/?filter_ids=1",
                json={'data': [{'id': 1}]})
         rm4 = rm.get(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/?filter_ids=test_id",
-               json=[{
+               json={'data': [{
                         "@id": "/addresses/test_id",
                         "@type": "Address",
                         "id": "test_id",
@@ -32,7 +32,7 @@ def test_afdeling(client):
                         "postOfficeBoxNumber": None,
                         "dateCreated": "2021-11-09T12:01:05+00:00",
                         "dateModified": "2021-11-09T12:01:05+00:00"
-                    }])
+                    }]})
         rm5 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/")
 
         # act
@@ -78,7 +78,7 @@ def test_afdelingen(client):
             f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/?filter_ids=1",
             json={'data': [{'id': 1}]})
         rm4 = rm.get(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/?filter_ids=test_id",
-               json=[{
+               json={'data': [{
                         "@id": "/addresses/test_id",
                         "@type": "Address",
                         "id": "test_id",
@@ -94,7 +94,7 @@ def test_afdelingen(client):
                         "postOfficeBoxNumber": None,
                         "dateCreated": "2021-11-09T12:01:05+00:00",
                         "dateModified": "2021-11-09T12:01:05+00:00"
-                    }])
+                    }]})
         rm5 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/")
 
         # act

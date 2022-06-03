@@ -9,7 +9,7 @@ Object {
 
 exports[`Address CRUD (operations) Given the address does not exist should create the address 1`] = `
 Object {
-  "address": Object {
+  "data": Object {
     "houseNumber": "1",
     "id": "3fc9baf4-f85b-4643-b525-bb901ab825dc",
     "locality": "Sloothuizen",
@@ -22,8 +22,48 @@ Object {
 `;
 
 exports[`Address CRUD (operations) Given the address exists should return all addresses 1`] = `
-Array [
-  Object {
+Object {
+  "data": Array [
+    Object {
+      "houseNumber": "1",
+      "id": "3fc9baf4-f85b-4643-b525-bb901ab825dc",
+      "locality": "Sloothuizen",
+      "postalCode": "9999ZZ",
+      "street": "Foostreet",
+      "timeCreated": "2022-05-10T12:00:00.000Z",
+    },
+    Object {
+      "houseNumber": "1",
+      "id": "14769fb4-46be-4a87-84d1-da49833ca786",
+      "locality": "Sloothuizen",
+      "postalCode": "9999ZZ",
+      "street": "Foostreet",
+      "timeCreated": "2022-05-10T12:00:00.000Z",
+    },
+    Object {
+      "houseNumber": "1",
+      "id": "7c8a52e5-0ed4-4909-a042-6273c537e4af",
+      "locality": "Sloothuizen",
+      "postalCode": "9999ZZ",
+      "street": "Foostreet",
+      "timeCreated": "2022-05-10T12:00:00.000Z",
+    },
+    Object {
+      "houseNumber": "1",
+      "id": "da3a73e8-826c-426a-9aff-4f64d01d88c4",
+      "locality": "Sloothuizen",
+      "postalCode": "9999ZZ",
+      "street": "Foostreet",
+      "timeCreated": "2022-05-10T12:00:00.000Z",
+    },
+  ],
+  "ok": true,
+}
+`;
+
+exports[`Address CRUD (operations) Given the address exists should return the address 1`] = `
+Object {
+  "data": Object {
     "houseNumber": "1",
     "id": "3fc9baf4-f85b-4643-b525-bb901ab825dc",
     "locality": "Sloothuizen",
@@ -31,95 +71,76 @@ Array [
     "street": "Foostreet",
     "timeCreated": "2022-05-10T12:00:00.000Z",
   },
-  Object {
-    "houseNumber": "1",
-    "id": "14769fb4-46be-4a87-84d1-da49833ca786",
-    "locality": "Sloothuizen",
-    "postalCode": "9999ZZ",
-    "street": "Foostreet",
-    "timeCreated": "2022-05-10T12:00:00.000Z",
-  },
-  Object {
-    "houseNumber": "1",
-    "id": "7c8a52e5-0ed4-4909-a042-6273c537e4af",
-    "locality": "Sloothuizen",
-    "postalCode": "9999ZZ",
-    "street": "Foostreet",
-    "timeCreated": "2022-05-10T12:00:00.000Z",
-  },
-  Object {
-    "houseNumber": "1",
-    "id": "da3a73e8-826c-426a-9aff-4f64d01d88c4",
-    "locality": "Sloothuizen",
-    "postalCode": "9999ZZ",
-    "street": "Foostreet",
-    "timeCreated": "2022-05-10T12:00:00.000Z",
-  },
-]
-`;
-
-exports[`Address CRUD (operations) Given the address exists should return the address 1`] = `
-Object {
-  "houseNumber": "1",
-  "id": "3fc9baf4-f85b-4643-b525-bb901ab825dc",
-  "locality": "Sloothuizen",
-  "postalCode": "9999ZZ",
-  "street": "Foostreet",
-  "timeCreated": "2022-05-10T12:00:00.000Z",
+  "ok": true,
 }
 `;
 
 exports[`Address CRUD (operations) Given the address exists should update the Address 1`] = `
 Object {
-  "houseNumber": "99",
-  "id": "3fc9baf4-f85b-4643-b525-bb901ab825dc",
-  "locality": "Utrecht",
-  "postalCode": "4444RR",
-  "street": "Bazstreet",
-  "timeCreated": "2022-05-10T12:00:00.000Z",
+  "data": Object {
+    "houseNumber": "99",
+    "id": "3fc9baf4-f85b-4643-b525-bb901ab825dc",
+    "locality": "Utrecht",
+    "postalCode": "4444RR",
+    "street": "Bazstreet",
+    "timeCreated": "2022-05-10T12:00:00.000Z",
+  },
+  "ok": true,
 }
 `;
 
 exports[`Address CRUD (operations) Given the address exists should update the house number 1`] = `
 Object {
-  "houseNumber": "123AB",
-  "id": "3fc9baf4-f85b-4643-b525-bb901ab825dc",
-  "locality": "Sloothuizen",
-  "postalCode": "9999ZZ",
-  "street": "Foostreet",
-  "timeCreated": "2022-05-10T12:00:00.000Z",
+  "data": Object {
+    "houseNumber": "123AB",
+    "id": "3fc9baf4-f85b-4643-b525-bb901ab825dc",
+    "locality": "Sloothuizen",
+    "postalCode": "9999ZZ",
+    "street": "Foostreet",
+    "timeCreated": "2022-05-10T12:00:00.000Z",
+  },
+  "ok": true,
 }
 `;
 
 exports[`Address CRUD (operations) Given the address exists should update the locality 1`] = `
 Object {
-  "houseNumber": "1",
-  "id": "3fc9baf4-f85b-4643-b525-bb901ab825dc",
-  "locality": "Diemen",
-  "postalCode": "9999ZZ",
-  "street": "Foostreet",
-  "timeCreated": "2022-05-10T12:00:00.000Z",
+  "data": Object {
+    "houseNumber": "1",
+    "id": "3fc9baf4-f85b-4643-b525-bb901ab825dc",
+    "locality": "Diemen",
+    "postalCode": "9999ZZ",
+    "street": "Foostreet",
+    "timeCreated": "2022-05-10T12:00:00.000Z",
+  },
+  "ok": true,
 }
 `;
 
 exports[`Address CRUD (operations) Given the address exists should update the postalcode 1`] = `
 Object {
-  "houseNumber": "1",
-  "id": "3fc9baf4-f85b-4643-b525-bb901ab825dc",
-  "locality": "Sloothuizen",
-  "postalCode": "1111AA",
-  "street": "Foostreet",
-  "timeCreated": "2022-05-10T12:00:00.000Z",
+  "data": Object {
+    "houseNumber": "1",
+    "id": "3fc9baf4-f85b-4643-b525-bb901ab825dc",
+    "locality": "Sloothuizen",
+    "postalCode": "1111AA",
+    "street": "Foostreet",
+    "timeCreated": "2022-05-10T12:00:00.000Z",
+  },
+  "ok": true,
 }
 `;
 
 exports[`Address CRUD (operations) Given the address exists should update the street 1`] = `
 Object {
-  "houseNumber": "1",
-  "id": "3fc9baf4-f85b-4643-b525-bb901ab825dc",
-  "locality": "Sloothuizen",
-  "postalCode": "9999ZZ",
-  "street": "Barstreet",
-  "timeCreated": "2022-05-10T12:00:00.000Z",
+  "data": Object {
+    "houseNumber": "1",
+    "id": "3fc9baf4-f85b-4643-b525-bb901ab825dc",
+    "locality": "Sloothuizen",
+    "postalCode": "9999ZZ",
+    "street": "Barstreet",
+    "timeCreated": "2022-05-10T12:00:00.000Z",
+  },
+  "ok": true,
 }
 `;

@@ -37,14 +37,11 @@ class SingleDataLoader(DataLoader):
             if response.status_code != 201:
                 raise GraphQLError(f"Upstream API responded: {response.text}")
 
-        if self.service == settings.POSTADRESSEN_SERVICE_URL:
-            result = response.json()
-        else:
-            result = response.json()["data"]
+        result = response.json()["data"]
 
-            # Prime the cache with the complete result set to prevent unnecessary extra calls
-            for item in result:
-                self.prime(item[self.index], item)
+        # Prime the cache with the complete result set to prevent unnecessary extra calls
+        for item in result:
+            self.prime(item[self.index], item)
 
         return result
 
@@ -85,12 +82,9 @@ class SingleDataLoader(DataLoader):
             except:
                 if response.status_code != 200:
                     raise GraphQLError(f"Upstream API responded: {response.text}")
-            if self.service == settings.POSTADRESSEN_SERVICE_URL:
-                for item in response.json():
-                    objects[item[self.index]] = item
-            else:
-                for item in response.json()["data"]:
-                    objects[item[self.index]] = item
+            
+            for item in response.json()["data"]:
+                objects[item[self.index]] = item
         return [objects.get(key, None) for key in keys]
 
     async def auth_load_many(self, keys):

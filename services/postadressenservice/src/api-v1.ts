@@ -25,7 +25,10 @@ app.get("/", async (req, res, next) => {
 
 		// Split by , and filter out empty strings.
 		const addresses = await getManyAddresses(ids);
-		return res.json(addresses);
+		return res.json({
+			ok: true,
+			data: addresses,
+		});
 	}
 	catch (err) {
 		next(err);
@@ -37,8 +40,11 @@ app.get("/:id", async (req, res, next) => {
 	try {
 		const {id} = req.params;
 
-		const data = await getOneAddress(id);
-		return res.json(data);
+		const address = await getOneAddress(id);
+		return res.json({
+			ok: true,
+			data: address
+		});
 	}
 	catch (err) {
 		next(err);
@@ -53,7 +59,7 @@ app.post("/", async (req, res, next) => {
 
 		return res.status(201).json({
 			ok: true,
-			address,
+			data: address,
 		});
 	}
 	catch (err) {
@@ -71,7 +77,10 @@ app.put("/:id", async (req, res, next) => {
 			id,
 			...data,
 		});
-		return res.json(address);
+		return res.json({
+			ok: true,
+			data: address
+		});
 	}
 	catch (err) {
 		next(err);

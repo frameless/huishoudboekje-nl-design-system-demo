@@ -31,7 +31,7 @@ class Afdeling(graphene.ObjectType):
         response = requests.get(url, headers={"accept": "application/json", "Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845"})
 
         iterable = []
-        for post in response.json():
+        for post in response.json()['data']:
             iterable.append(post)
         return iterable
 

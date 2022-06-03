@@ -9,8 +9,7 @@ Object {
 
 exports[`Signal CRUD (operations) Given the Signal does not exist should create the Signal 1`] = `
 Object {
-  "ok": true,
-  "signal": Object {
+  "data": Object {
     "actions": Array [],
     "alarmId": "d9c00acb-8d04-4cf0-9be4-061f33b3357d",
     "banktransactieIds": Array [],
@@ -23,12 +22,75 @@ Object {
     "timeUpdated": "2022-05-16T13:00:00.000Z",
     "type": "default",
   },
+  "ok": true,
 }
 `;
 
 exports[`Signal CRUD (operations) Given the Signal exists should return all Signals 1`] = `
-Array [
-  Object {
+Object {
+  "data": Array [
+    Object {
+      "actions": Array [],
+      "alarmId": "d9c00acb-8d04-4cf0-9be4-061f33b3357d",
+      "banktransactieIds": Array [],
+      "context": Object {
+        "is": true,
+        "something": "else",
+      },
+      "id": "02c49b0b-def0-46b2-ae03-9b90430adb94",
+      "isActive": true,
+      "timeUpdated": "2022-05-16T13:00:00.000Z",
+      "type": "default",
+    },
+    Object {
+      "actions": Array [],
+      "alarmId": "5d65d8e9-1f4a-4cb9-a89c-0f952ac5f2ff",
+      "banktransactieIds": Array [],
+      "context": Object {
+        "is": false,
+        "something": "else",
+      },
+      "id": "bef7c096-40b6-4158-b0a5-5b6b813080be",
+      "isActive": true,
+      "timeUpdated": "2022-05-16T13:00:00.000Z",
+      "type": "default",
+    },
+    Object {
+      "actions": Array [],
+      "alarmId": "1a8ac60f-081f-4bbb-baca-6b6d399ce8db",
+      "banktransactieIds": Array [],
+      "context": Object {
+        "isAdmin": true,
+        "user": Object {
+          "name": "Koen Brouwer",
+        },
+      },
+      "id": "09c1af54-1054-4a6c-aecd-875fab4ce889",
+      "isActive": true,
+      "timeUpdated": "2022-05-16T13:00:00.000Z",
+      "type": "default",
+    },
+    Object {
+      "actions": Array [],
+      "alarmId": "738247bc-e6b8-41ee-a09e-a6778822598d",
+      "banktransactieIds": Array [],
+      "context": Object {
+        "is": true,
+        "something": "else",
+      },
+      "id": "cd605096-7336-4eb6-b1a7-bc6e1d57e492",
+      "isActive": true,
+      "timeUpdated": "2022-05-16T13:00:00.000Z",
+      "type": "default",
+    },
+  ],
+  "ok": true,
+}
+`;
+
+exports[`Signal CRUD (operations) Given the Signal exists should return the Signal 1`] = `
+Object {
+  "data": Object {
     "actions": Array [],
     "alarmId": "d9c00acb-8d04-4cf0-9be4-061f33b3357d",
     "banktransactieIds": Array [],
@@ -41,78 +103,25 @@ Array [
     "timeUpdated": "2022-05-16T13:00:00.000Z",
     "type": "default",
   },
-  Object {
-    "actions": Array [],
-    "alarmId": "5d65d8e9-1f4a-4cb9-a89c-0f952ac5f2ff",
-    "banktransactieIds": Array [],
-    "context": Object {
-      "is": false,
-      "something": "else",
-    },
-    "id": "bef7c096-40b6-4158-b0a5-5b6b813080be",
-    "isActive": true,
-    "timeUpdated": "2022-05-16T13:00:00.000Z",
-    "type": "default",
-  },
-  Object {
-    "actions": Array [],
-    "alarmId": "1a8ac60f-081f-4bbb-baca-6b6d399ce8db",
-    "banktransactieIds": Array [],
-    "context": Object {
-      "isAdmin": true,
-      "user": Object {
-        "name": "Koen Brouwer",
-      },
-    },
-    "id": "09c1af54-1054-4a6c-aecd-875fab4ce889",
-    "isActive": true,
-    "timeUpdated": "2022-05-16T13:00:00.000Z",
-    "type": "default",
-  },
-  Object {
-    "actions": Array [],
-    "alarmId": "738247bc-e6b8-41ee-a09e-a6778822598d",
-    "banktransactieIds": Array [],
-    "context": Object {
-      "is": true,
-      "something": "else",
-    },
-    "id": "cd605096-7336-4eb6-b1a7-bc6e1d57e492",
-    "isActive": true,
-    "timeUpdated": "2022-05-16T13:00:00.000Z",
-    "type": "default",
-  },
-]
-`;
-
-exports[`Signal CRUD (operations) Given the Signal exists should return the Signal 1`] = `
-Object {
-  "actions": Array [],
-  "alarmId": "d9c00acb-8d04-4cf0-9be4-061f33b3357d",
-  "banktransactieIds": Array [],
-  "context": Object {
-    "is": true,
-    "something": "else",
-  },
-  "id": "02c49b0b-def0-46b2-ae03-9b90430adb94",
-  "isActive": true,
-  "timeUpdated": "2022-05-16T13:00:00.000Z",
-  "type": "default",
+  "ok": true,
 }
 `;
 
 exports[`Signal CRUD (operations) Given the Signal exists should update the Signal 1`] = `
 Object {
-  "actions": Array [],
-  "alarmId": "d9c00acb-8d04-4cf0-9be4-061f33b3357d",
-  "banktransactieIds": Array [],
-  "context": Object {
-    "is": true,
-    "something": "else",
+  "data": Object {
+    "actions": Array [],
+    "alarmId": "d9c00acb-8d04-4cf0-9be4-061f33b3357d",
+    "banktransactieIds": Array [],
+    "context": Object {
+      "is": true,
+      "something": "else",
+    },
+    "id": "02c49b0b-def0-46b2-ae03-9b90430adb94",
+    "isActive": true,
+    "timeUpdated": "2022-05-16T13:00:00.000Z",
+    "type": "default",
   },
-  "id": "02c49b0b-def0-46b2-ae03-9b90430adb94",
-  "isActive": true,
-  "timeUpdated": "2022-05-16T13:00:00.000Z",
-  "type": "default",
+  "ok": true,
 }
 `;

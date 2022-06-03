@@ -41,7 +41,7 @@ Content-Type: application/json
 ###
 
 // @no-log
-PUT http://localhost:8080/v1/addresses/e7fb948f-b589-4dfe-9c05-d51f11a88e64
+PUT http://localhost:8080/v1/addresses/a156278e-62cd-498a-9425-52bfc721bd04
 Accept: application/json
 Content-Type: application/json
 
