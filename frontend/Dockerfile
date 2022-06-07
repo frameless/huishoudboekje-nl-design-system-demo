@@ -8,7 +8,7 @@ ENV CYPRESS_INSTALL_BINARY=0
 WORKDIR /app
 
 COPY ./app/package*.json ./app/version.js ./
-RUN npm ci --unsafe-perm
+RUN npm ci --unsafe-perm --legacy-peer-deps
 
 COPY ./app /app
 VOLUME /app/public/theme

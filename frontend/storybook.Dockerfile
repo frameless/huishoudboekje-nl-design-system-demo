@@ -3,7 +3,7 @@ FROM ${DOCKER_PROXY}node:lts-alpine as builder
 ENV CYPRESS_INSTALL_BINARY=0
 WORKDIR /app
 COPY ./app/package*.json ./app/version.js ./
-RUN npm ci
+RUN npm ci --legacy-peer-deps
 COPY ./app .
 RUN npm run build-storybook
 
