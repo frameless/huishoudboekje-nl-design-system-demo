@@ -47,7 +47,7 @@ describe("Alarm CRUD (operations)", () => {
 				byMonth: [],
 				byMonthDay: [],
 				startDate: "2033-12-31",
-				endDate: null,
+				endDate: "",
 				datumMargin: 10,
 				isActive: false,
 				signaalId: "71d65065-2eb9-4f44-8f16-44d1e5a4d6f7",
