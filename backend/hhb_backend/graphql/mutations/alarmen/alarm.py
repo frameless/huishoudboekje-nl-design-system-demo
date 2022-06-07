@@ -16,7 +16,7 @@ class CreateAlarmInput(graphene.InputObjectType):
     gebruikerEmail = graphene.String()
     afspraakId = graphene.Int()
     startDate = graphene.String()
-    endDate = graphene.String()
+    endDate = graphene.String(default_value="")
     datumMargin = graphene.Int()
     bedrag = graphene.Field(Bedrag)
     bedragMargin = graphene.Field(Bedrag)
