@@ -6,7 +6,8 @@ const validator = zod.object({
 	gebruikerEmail: zod.string(),
 	afspraakId: zod.number(),
 	signaalId: zod.string().optional(),
-	datum: zod.string(),
+	startDate: zod.string(),
+	endDate: zod.string().optional(),
 	datumMargin: zod.number(),
 	bedrag: zod.number(),
 	bedragMargin: zod.number(),
@@ -19,14 +20,15 @@ const validator = zod.object({
 const createAlarm = async (data: zod.infer<typeof validator>) => {
 	const validatedData = validator.parse(data);
 
-	const {gebruikerEmail, afspraakId, signaalId, datum, datumMargin, bedrag, bedragMargin, byDay, byMonth, byMonthDay, isActive} = validatedData;
+	const {gebruikerEmail, afspraakId, signaalId, startDate, endDate, datumMargin, bedrag, bedragMargin, byDay, byMonth, byMonthDay, isActive} = validatedData;
 
 	return await prisma.alarm.create({
 		data: {
 			gebruikerEmail,
 			afspraakId,
 			signaalId,
-			datum,
+			startDate,
+			endDate,
 			datumMargin,
 			bedrag,
 			bedragMargin,
