@@ -100,26 +100,13 @@ export HHB_SECRET=${SECRET_KEY:-"test"}
 export UNLEASH_OTAP=${UNLEASH_OTAP:-"production"}
 
 # OIDC Settings
-export OIDC_ISSUER=${OIDC_ISSUER:-"https://$HHB_FRONTEND_DNS/auth/realms/hhb"}
-export OIDC_CLIENT_ID=${OIDC_CLIENT_ID:-"hhb"}
+export OIDC_ISSUER=${OIDC_ISSUER:-"https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje"}
+export OIDC_CLIENT_ID=${OIDC_CLIENT_ID:-"huishoudboekje-medewerkers"}
 export OIDC_CLIENT_SECRET=${OIDC_CLIENT_SECRET:-"fc36d31f-f720-4914-a750-b83c7b0dd61c"}
-export OIDC_AUTHORIZATION_ENDPOINT=${OIDC_AUTHORIZATION_ENDPOINT:-"https://$HHB_FRONTEND_DNS/auth/realms/hhb/protocol/openid-connect/auth"}
-export OIDC_TOKEN_ENDPOINT=${OIDC_TOKEN_ENDPOINT:-"https://$HHB_FRONTEND_DNS/auth/realms/hhb/protocol/openid-connect/token"}
-export OIDC_TOKENINFO_ENDPOINT=${OIDC_TOKENINFO_ENDPOINT:-"https://$HHB_FRONTEND_DNS/auth/realms/hhb/protocol/openid-connect/token/introspect"}
-export OIDC_USERINFO_ENDPOINT=${OIDC_USERINFO_ENDPOINT:-"https://$HHB_FRONTEND_DNS/auth/realms/hhb/protocol/openid-connect/userinfo"}
-
-# Keycloak Settings
-export KEYCLOAK_DB_DATABASE=${KEYCLOAK_DB_DATABASE:-"keycloak"}
-export KEYCLOAK_DB_USER=${KEYCLOAK_DB_USER:-"keyclk"}
-export KEYCLOAK_DB_SCHEMA=${KEYCLOAK_DB_SCHEMA:-"public"}
-export KEYCLOAK_DB_PASSWORD=${KEYCLOAK_DB_PASSWORD:-"keyclk"}
-export KEYCLOAK_AUTH_USERNAME=${KEYCLOAK_AUTH_USERNAME:-"admin"}
-export KEYCLOAK_AUTH_PASSWORD=${KEYCLOAK_AUTH_PASSWORD:-"CcEyf8Zut9kHyFRp_B9k@Fx3F_d6W4Ut"}
-export KEYCLOAK_AUTH_KEYCLOAK_URL=${KEYCLOAK_AUTH_KEYCLOAK_URL:-"https://$HHB_FRONTEND_DNS/auth/"}
-export KEYCLOAK_CLIENT_ROOT_URL=${KEYCLOAK_CLIENT_ROOT_URL:-"https://$HHB_FRONTEND_DNS/"}
-export KEYCLOAK_CLIENT_SECRET=${KEYCLOAK_CLIENT_SECRET:-"fc36d31f-f720-4914-a750-b83c7b0dd61c"}
-# --------------------------------------------------- "username,e@ma.il,Firstname,Lastname,password" separated by :
-export KEYCLOAK_CLIENT_USERS=${KEYCLOAK_CLIENT_USERS:-"anitavanhengel,anita.van.hengel@topicus.nl,Anita,vanHengel,demo:dirkverbeek,dirk.verbeek@topicus.nl,Dirk,Verbeek,demo:koenbrouwer,koen@openweb.nl,Koen,Brouwer,demo:baukehuijbers,bauke.huijbers@vng.nl,Bauke,Huijbers,demo:henkpoortvliet,henk.poortvliet@sloothuizen.nl,Henk,Poortvliet,demo:huishoudboekje010,huishoudboekje010@rotterdam.nl,Gemeente,Rotterdam,demo:huishoudboekje030,huishoudboekje@utrecht.nl,Gemeente,Utrecht,demo:chantalledenhertog,chantalle.den.hertog@topicus.nl,Chantalle,denHertog,demo"}
+export OIDC_AUTHORIZATION_ENDPOINT=${OIDC_AUTHORIZATION_ENDPOINT:-"https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje/protocol/openid-connect/auth"}
+export OIDC_TOKEN_ENDPOINT=${OIDC_TOKEN_ENDPOINT:-"https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje/protocol/openid-connect/token"}
+export OIDC_TOKENINFO_ENDPOINT=${OIDC_TOKENINFO_ENDPOINT:-"https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje/protocol/openid-connect/token/introspect"}
+export OIDC_USERINFO_ENDPOINT=${OIDC_USERINFO_ENDPOINT:-"https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje/protocol/openid-connect/userinfo"}
 
 # Create a temporary directory to put the dist files in.
 export DEPLOYMENT_DIST_DIR="dist"
@@ -140,7 +127,6 @@ echo NAMESPACE = $NAMESPACE
 echo HHB_HOST = $HHB_HOST
 echo HHB_APP_HOST = $HHB_APP_HOST # App host can be diffrent (ocp)
 echo DEPLOYMENT_DIST_DIR = $DEPLOYMENT_DIST_DIR
-echo USE_KEYCLOAK = $USE_KEYCLOAK
 
 # Create directory to store the dist files for the deployment in
 mkdir -p k8s/$DEPLOYMENT_DIST_DIR
@@ -176,20 +162,6 @@ then
   echo '- create_no_databases_patch.yaml' >> kustomization.yaml
 fi
 
-if [ $USE_KEYCLOAK == "true" ]
-then
-  echo "Generate patch use_sso_patch.yaml with envsubst"
-  envsubst < ../templates/use_sso_keycloak_patch.yaml > use_sso_patch.yaml
-  echo "add patchesStrategicMerge to kustomization.yaml use_sso_patch.yaml"
-  echo '- use_sso_patch.yaml' >> kustomization.yaml
-  echo "Generate patch use_sso_add.yaml with envsubst"
-  envsubst < ../templates/platform/${USE_PLATFORM}/use_sso_keycloak_add.yaml > use_sso_add.yaml
-  echo "add resource ../base/keycloak"
-  kustomize edit add resource ../base/keycloak
-  echo "add resource use_sso_add.yaml"
-  kustomize edit add resource use_sso_add.yaml
-fi
-
 echo "Generate env_patch.yaml / ${USE_PLATFORM}_patch.yaml and ${USE_PLATFORM}_add.yaml"
 envsubst < ../templates/env_patch.yaml > env_patch.yaml
 envsubst < ../templates/platform/${USE_PLATFORM}/patch.yaml > platform_patch.yaml
@@ -201,13 +173,6 @@ then
   envsubst < ../templates/secrets.yaml > secrets.yaml
   echo "add resource secrets.yaml"
   kustomize edit add resource secrets.yaml
-  if [ $USE_KEYCLOAK == "true" ]
-  then
-    echo "Generate patch use_sso_secrets.yaml with envsubst"
-    envsubst < ../templates/use_sso_keycloak_secrets.yaml > use_sso_secrets.yaml
-    echo "add resource use_sso_secrets.yaml"
-    kustomize edit add resource use_sso_secrets.yaml
-  fi
 fi
 
 echo "add resource ../customer/$CUSTOMER_BUILD"

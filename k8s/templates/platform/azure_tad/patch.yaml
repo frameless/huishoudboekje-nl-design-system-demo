@@ -93,13 +93,6 @@ spec:
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: hhb-keycloak
-spec:
-  maxReplicas: 1
----
-apiVersion: autoscaling/v1
-kind: HorizontalPodAutoscaler
-metadata:
   name: hhb-logservice
 spec:
   maxReplicas: 1
