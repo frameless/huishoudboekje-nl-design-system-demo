@@ -15,7 +15,8 @@ class CreateAlarmInput(graphene.InputObjectType):
     isActive = graphene.Boolean()
     gebruikerEmail = graphene.String()
     afspraakId = graphene.Int()
-    datum = graphene.String()
+    startDate = graphene.String()
+    endDate = graphene.String(default_value="")
     datumMargin = graphene.Int()
     bedrag = graphene.Field(Bedrag)
     bedragMargin = graphene.Field(Bedrag)
@@ -27,7 +28,8 @@ class UpdateAlarmInput(graphene.InputObjectType):
     isActive = graphene.Boolean()
     gebruikerEmail = graphene.String()
     afspraakId = graphene.Int()
-    datum = graphene.String()
+    startDate = graphene.String()
+    endDate = graphene.String()
     datumMargin = graphene.Int()
     bedrag = graphene.Field(Bedrag)
     bedragMargin = graphene.Field(Bedrag)
@@ -63,7 +65,7 @@ class AlarmHelper:
                 name += " - createAlarm"
                 _info.field_name = name
 
-        # alarm_date = parser.parse(input.datum).date()
+        # alarm_date = parser.parse(input.startDate).date()
         # utc_now = date.today()
         # if alarm_date < utc_now:
         #     raise GraphQLError(f"De alarmdatum moet in de toekomst liggen.")
@@ -115,11 +117,13 @@ class AlarmHelper:
                 name += " - updateAlarm"
                 _info.field_name = name
 
-        if input.datum:
-            alarm_date = parser.parse(input.datum).date()
-            utc_now = date.today()
-            if alarm_date < utc_now:
-                raise GraphQLError(f"Alarm datum is in het verleden.")
+        if input.get("startDate"):
+            if date_in_past(input.startDate):
+                raise GraphQLError(f"Alarm start datum is in het verleden.")
+
+        if input.get("endDate"):
+            if date_in_past(input.endDate):
+                raise GraphQLError(f"Alarm eind datum is in het verleden.")
 
         # previous = request.dataloader.alarmen_by_id.load(id) # stalls and waits forever if alarm does not exist
         previous_response = requests.get(f"{settings.ALARMENSERVICE_URL}/alarms/{id}", headers={"Content-type": "application/json"}) 
@@ -138,3 +142,11 @@ class AlarmHelper:
         response_alarm = response.json()['data']
 
         return AlarmHelper(alarm=response_alarm, previous=previous, ok=True)
+
+
+def date_in_past(date_input):
+    date = parser.parse(date_input).date()
+    utc_now = date.today()
+    if date < utc_now:
+        return True
+    return False

@@ -99,7 +99,7 @@ def evaluateAlarm(_root, _info, alarm: Alarm, activeAlarms: list):
     journaalIds = afspraak.get("journaalposten", [])
     transacties = getBanktransactiesByJournaalIds(journaalIds)
 
-    alarm_check_date = dateutil.parser.isoparse(alarm.get("datum")).date() + timedelta(days=(alarm.get("datumMargin") + 1))
+    alarm_check_date = dateutil.parser.isoparse(alarm.get("startDate")).date() + timedelta(days=(alarm.get("datumMargin") + 1))
     alarm = disableAlarm(alarm_check_date, alarm)
     
     # check if there are transaction within the alarm specified margins
@@ -124,7 +124,7 @@ def disableAlarm(alarmCheckDate: date, alarm: Alarm) -> Alarm:
 def doesNextAlarmExist(nextAlarmDate: date, alarm: Alarm, alarms: list) -> bool:
     afspraakId = alarm.get('afspraakId')
     for check in alarms:
-        str_alarm_date = check.get("datum")
+        str_alarm_date = check.get("startDate")
         checkAfspraakId = check.get("afspraakId")
         checkId = check.get("id")
         alarmId = alarm.get("id")
@@ -145,6 +145,13 @@ def shouldCreateNextAlarm(_root, _info, alarm: Alarm, alarm_check_date: datetime
         # generate next alarm in the sequence
         nextAlarmDate = generateNextAlarmInSequence(alarm, alarm_check_date) 
 
+        # check if the end date is past or not
+        end_date = alarm.get("endDate")
+        if end_date is not None:
+            if nextAlarmDate > dateutil.parser.isoparse(end_date).date():
+                nextAlarmDate = None
+                return newAlarm
+
         # add new alarm in sequence if it does not exist yet
         nextAlarmAlreadyExists = doesNextAlarmExist(nextAlarmDate, alarm, activeAlarms)
         if nextAlarmAlreadyExists == True:
@@ -160,7 +167,8 @@ async def createAlarm(_root, _info, alarm: Alarm, alarmDate: datetime) -> Alarm:
         "isActive": True,
         "gebruikerEmail": alarm.get("gebruikerEmail"),
         "afspraakId": int(alarm.get("afspraakId")),
-        "datum": alarmDate.isoformat(),
+        "startDate": alarmDate.isoformat(),
+        "endDate": alarm.get("endDate"),
         "datumMargin": int(alarm.get("datumMargin")),
         "bedrag": alarm.get("bedrag"),
         "bedragMargin": alarm.get("bedragMargin"),
@@ -179,7 +187,7 @@ async def createAlarm(_root, _info, alarm: Alarm, alarmDate: datetime) -> Alarm:
 
 def shouldCheckAlarm(alarm: Alarm) -> bool:
     # is the alarm set in the past, or the future
-    str_alarm_date = alarm.get("datum")
+    str_alarm_date = alarm.get("startDate")
     alarm_date = dateutil.parser.isoparse(str_alarm_date).date()
     date_margin = int(alarm.get("datumMargin"))                       
     day_after_expected_window = alarm_date + timedelta(days=(date_margin + 1))   # plus one to make sure the alarm is checked after the expected date range.
@@ -301,7 +309,7 @@ def generateNextAlarmInSequence(alarm: Alarm, alarmDate:datetime) -> datetime:
 
 async def shouldCreateSignaal(_root, _info, alarm: Alarm, transacties) -> Signaal:
     datum_margin = int(alarm.get("datumMargin"))
-    str_expect_date = alarm.get("datum")
+    str_expect_date = alarm.get("startDate")
     expect_date = dateutil.parser.isoparse(str_expect_date).date()
     left_date_window = expect_date - timedelta(days=datum_margin)
     right_date_window = expect_date + timedelta(days=datum_margin)

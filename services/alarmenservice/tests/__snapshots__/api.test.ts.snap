@@ -31,11 +31,11 @@ Object {
     "byMonthDay": Array [
       3,
     ],
-    "datum": "2021-12-18",
     "datumMargin": 7,
     "gebruikerEmail": "iemand@sloothuizen.nl",
     "id": "d9c00acb-8d04-4cf0-9be4-061f33b3357d",
     "isActive": true,
+    "startDate": "2021-12-18",
   },
   "ok": true,
 }
@@ -66,11 +66,11 @@ Object {
       "byMonthDay": Array [
         3,
       ],
-      "datum": "2021-12-18",
       "datumMargin": 7,
       "gebruikerEmail": "iemand@sloothuizen.nl",
       "id": "d9c00acb-8d04-4cf0-9be4-061f33b3357d",
       "isActive": true,
+      "startDate": "2021-12-18",
     },
     Object {
       "afspraakId": 2,
@@ -94,11 +94,11 @@ Object {
       "byMonthDay": Array [
         25,
       ],
-      "datum": "2021-12-18",
       "datumMargin": 14,
       "gebruikerEmail": "ander@sloothuizen.nl",
       "id": "5d65d8e9-1f4a-4cb9-a89c-0f952ac5f2ff",
       "isActive": true,
+      "startDate": "2021-12-18",
     },
     Object {
       "afspraakId": 44,
@@ -109,11 +109,11 @@ Object {
       ],
       "byMonth": Array [],
       "byMonthDay": Array [],
-      "datum": "2021-12-18",
       "datumMargin": 1,
       "gebruikerEmail": "zus@sloothuizen.nl",
       "id": "1a8ac60f-081f-4bbb-baca-6b6d399ce8db",
       "isActive": true,
+      "startDate": "2021-12-18",
     },
     Object {
       "afspraakId": 3,
@@ -129,11 +129,11 @@ Object {
       "byMonthDay": Array [
         10,
       ],
-      "datum": "2021-12-18",
       "datumMargin": 3,
       "gebruikerEmail": "zo@sloothuizen.nl",
       "id": "738247bc-e6b8-41ee-a09e-a6778822598d",
       "isActive": true,
+      "startDate": "2021-12-18",
     },
   ],
   "ok": true,
@@ -164,11 +164,11 @@ Object {
     "byMonthDay": Array [
       3,
     ],
-    "datum": "2021-12-18",
     "datumMargin": 7,
     "gebruikerEmail": "iemand@sloothuizen.nl",
     "id": "d9c00acb-8d04-4cf0-9be4-061f33b3357d",
     "isActive": true,
+    "startDate": "2021-12-18",
   },
   "ok": true,
 }
@@ -185,12 +185,13 @@ Object {
     ],
     "byMonth": Array [],
     "byMonthDay": Array [],
-    "datum": "2033-12-31",
     "datumMargin": 10,
+    "endDate": "",
     "gebruikerEmail": "koen@sloothuizen.nl",
     "id": "d9c00acb-8d04-4cf0-9be4-061f33b3357d",
     "isActive": false,
     "signaalId": "71d65065-2eb9-4f44-8f16-44d1e5a4d6f7",
+    "startDate": "2033-12-31",
   },
   "ok": true,
 }
