@@ -11,13 +11,10 @@
 
 .authorize-keycloak: &authorize-keycloak
   stage: deploy
-  image: node:alpine
+  image: registry.gitlab.com/commonground/huishoudboekje/keycloak/keycloak-tools:latest
   tags:
     - cg
     - docker
-  before_script:
-    - cd ./scripts/keycloak-tools
-    - npm ci
 
 # Deploy template for all environments
 .deploy: &deploy
@@ -108,10 +105,12 @@ authorize-keycloak-review:
     name: review/$CI_COMMIT_REF_SLUG
     on_stop: unauthorize-keycloak-review
   variables:
+    GIT_STRATEGY: none # the runner won’t try to check out the code after the branch is deleted.
     REALM_NAME: huishoudboekje
     KEYCLOAK_BASE_URL: https://keycloak.huishoudboekje.demoground.nl
     HHB_HOST: "hhb-$CI_COMMIT_REF_SLUG.nlx.reviews"
   script:
+    - cd /app
     - echo "Adding application to Keycloak..."
     - npm run start -- request-uri add --uri="https://${HHB_HOST}/*" --client-id=huishoudboekje-medewerkers
   only:
@@ -127,10 +126,12 @@ unauthorize-keycloak-review:
     name: review/$CI_COMMIT_REF_SLUG
     action: stop
   variables:
+    GIT_STRATEGY: none # the runner won’t try to check out the code after the branch is deleted.
     REALM_NAME: huishoudboekje
     KEYCLOAK_BASE_URL: https://keycloak.huishoudboekje.demoground.nl
     HHB_HOST: "hhb-$CI_COMMIT_REF_SLUG.nlx.reviews"
   script:
+    - cd /app
     - echo "Removing application from Keycloak..."
     - npm run start -- request-uri remove --uri="https://${HHB_HOST}/*" --client-id=huishoudboekje-medewerkers
   when: manual
