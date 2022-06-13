@@ -11,7 +11,6 @@ class Alarm(graphene.ObjectType):
 
     id = graphene.String()
     isActive = graphene.Boolean()
-    gebruikerEmail = graphene.String()
     afspraak = graphene.Field(lambda: afspraak.Afspraak)
     signaal = graphene.Field(lambda: signaal.Signaal)
     startDate = graphene.String()

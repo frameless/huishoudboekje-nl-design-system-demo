@@ -5,11 +5,10 @@ from hhb_backend.graphql import settings
 def test_get_alarmen(client):
     with requests_mock.Mocker() as rm:
         # arrange
-        expected = {'data': {'alarmen': [{'id': '00943958-8b93-4617-aa43-669a9016aad9', 'isActive': False, 'gebruikerEmail': 'other@mail.nl', 'afspraak': {'id': 20}, 'startDate': '2021-02-02', 'datumMargin': 1, 'bedrag': '12.34', 'bedragMargin': '56.78'}]}}
+        expected = {'data': {'alarmen': [{'id': '00943958-8b93-4617-aa43-669a9016aad9', 'isActive': False, 'afspraak': {'id': 20}, 'startDate': '2021-02-02', 'datumMargin': 1, 'bedrag': '12.34', 'bedragMargin': '56.78'}]}}
         afspraak_id = 20
         alarm1 = {
             "id": "00943958-8b93-4617-aa43-669a9016aad9",
-            "gebruikerEmail": "other@mail.nl",
             "afspraakId": afspraak_id,
             "isActive": False,
             "startDate": "2021-02-02",
@@ -35,7 +34,6 @@ def test_get_alarmen(client):
                     alarmen {
                         id
                         isActive
-                        gebruikerEmail
                         afspraak{
                             id
                         }
@@ -63,12 +61,11 @@ def test_get_alarmen(client):
 def test_get_alarm_by_id(client):
     with requests_mock.Mocker() as rm:
         # arrange
-        expected = {'data': {'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9', 'isActive': False, 'gebruikerEmail': 'other@mail.nl', 'afspraak': {'id': 20}, 'startDate': '2021-02-02', 'datumMargin': 1, 'bedrag': '12.34', 'bedragMargin': '56.78'}}}
+        expected = {'data': {'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9', 'isActive': False, 'afspraak': {'id': 20}, 'startDate': '2021-02-02', 'datumMargin': 1, 'bedrag': '12.34', 'bedragMargin': '56.78'}}}
         alarm_id = "00943958-8b93-4617-aa43-669a9016aad9"
         afspraak_id = 20
         alarm1 = {
             "id": alarm_id,
-            "gebruikerEmail": "other@mail.nl",
             "afspraakId": 20,
             "isActive": False,
             "startDate": "2021-02-02",
@@ -94,7 +91,6 @@ def test_get_alarm_by_id(client):
                     alarm(id:$id) {
                         id
                         isActive
-                        gebruikerEmail
                         afspraak{
                             id
                         }

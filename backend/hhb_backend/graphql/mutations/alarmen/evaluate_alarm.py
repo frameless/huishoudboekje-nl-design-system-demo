@@ -165,7 +165,6 @@ def shouldCreateNextAlarm(_root, _info, alarm: Alarm, alarm_check_date: datetime
 async def createAlarm(_root, _info, alarm: Alarm, alarmDate: datetime) -> Alarm:
     newAlarm = {
         "isActive": True,
-        "gebruikerEmail": alarm.get("gebruikerEmail"),
         "afspraakId": int(alarm.get("afspraakId")),
         "startDate": alarmDate.isoformat(),
         "endDate": alarm.get("endDate"),

@@ -13,7 +13,6 @@ from hhb_backend.graphql.scalars.bedrag import Bedrag
 
 class CreateAlarmInput(graphene.InputObjectType):
     isActive = graphene.Boolean()
-    gebruikerEmail = graphene.String()
     afspraakId = graphene.Int()
     startDate = graphene.String()
     endDate = graphene.String(default_value="")
@@ -26,7 +25,6 @@ class CreateAlarmInput(graphene.InputObjectType):
 
 class UpdateAlarmInput(graphene.InputObjectType):
     isActive = graphene.Boolean()
-    gebruikerEmail = graphene.String()
     afspraakId = graphene.Int()
     startDate = graphene.String()
     endDate = graphene.String()
