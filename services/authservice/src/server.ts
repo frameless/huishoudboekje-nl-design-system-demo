@@ -115,7 +115,13 @@ const server = (prefix: string = "/auth") => {
 		return res.redirect("/");
 	});
 
+	// Use the auth router on /auth
 	app.use(prefix, authRouter);
+
+	// Endpoint for testing the health of this service
+	app.get("/health", (req, res, next) => {
+		res.status(200).send("alive");
+	});
 
 	return {
 		start: () => app.listen(config.port, () => {

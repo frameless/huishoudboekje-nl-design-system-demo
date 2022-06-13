@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: hhb-authservice
+  labels:
+    name: hhb-authservice
+spec:
+  type: ClusterIP
+  selector:
+    name: hhb-authservice
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: http

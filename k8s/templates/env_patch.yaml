@@ -152,19 +152,6 @@ metadata:
 spec:
   replicas: ${DEFAULT_REPLICAS}
 ---
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: hhb-backend
-spec:
-  template:
-    spec:
-      containers:
-        - name: hhb-backend # (1)
-          env:
-            - name: AUTH_AUDIENCE
-              value: ${AUTH_AUDIENCE}
----
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -201,3 +188,16 @@ data:
   POSTGRESQL_USERNAME_PADSVC: ${POSTGRESQL_USERNAME_PADSVC}
   POSTGRESQL_USERNAME_ALMSVC: ${POSTGRESQL_USERNAME_ALMSVC}
   POSTGRESQL_USERNAME_SIGSVC: ${POSTGRESQL_USERNAME_SIGSVC}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: authservice-config
+data:
+  OIDC_ISSUER_URL: ${OIDC_ISSUER_URL}
+  OIDC_CLIENT_ID: ${OIDC_CLIENT_ID}
+  OIDC_CLIENT_SECRET: ${OIDC_CLIENT_SECRET}
+  OIDC_BASE_URL: ${OIDC_BASE_URL}
+  JWT_ISSUER: ${JWT_ISSUER}
+  JWT_AUDIENCE: ${JWT_AUDIENCE}
+  JWT_EXPIRES_IN: ${JWT_EXPIRES_IN}

@@ -17,4 +17,5 @@ resources:
   - ../../base/postadressenservice
   - ../../base/alarmenservice
   - ../../base/signalenservice
+  - ../../base/authservice
   - ../../base/storybook    # Only for Sloothuizen
