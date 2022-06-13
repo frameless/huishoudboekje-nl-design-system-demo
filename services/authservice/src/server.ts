@@ -119,7 +119,7 @@ const server = (prefix: string = "/auth") => {
 
 	return {
 		start: () => app.listen(config.port, () => {
-			console.log("Server is running.");
+			console.log(`Server is running on port ${config.port}.`);
 			console.table({
 				issuer: process.env.JWT_ISSUER,
 				audience: process.env.JWT_AUDIENCE,
