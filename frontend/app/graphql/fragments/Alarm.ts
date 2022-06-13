@@ -3,12 +3,16 @@ import {gql} from "@apollo/client";
 export const AlarmFragment = gql`
     fragment Alarm on Alarm {
         id
+        isActive
+        gebruikerEmail
         bedrag
         bedragMargin
-        datum
+        startDate
+        endDate
         datumMargin
-        gebruikerEmail
-        isActive
+        byDay
+        byMonth
+        byMonthDay
         afspraak {
             id
         }

@@ -16,7 +16,7 @@ const SignalenListView: React.FC<{signalen: Signaal[]}> = ({signalen = []}) => {
 	return (
 		<Stack>
 			{signalen.map((s) => (
-				<SignalenListItem signaal={s} />
+				<SignalenListItem key={s.id} signaal={s} />
 			))}
 		</Stack>
 	);

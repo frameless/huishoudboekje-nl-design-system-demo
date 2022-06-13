@@ -45,7 +45,7 @@ const SignalenListItem: React.FC<SignalenListItemProps> = ({signaal}) => {
 	};
 
 	return (
-		<HStack justify={"center"} key={signaal.id}>
+		<HStack justify={"center"}>
 			<Stack spacing={1} width={"100%"}>
 				<Text {...!signaal.isActive && {
 					color: "gray.500",

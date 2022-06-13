@@ -155,6 +155,7 @@
     },
     "formError": "Er is een fout opgetreden. Controleer de invoer en probeer het nog eens.",
     "date": "Datum",
+    "dateUntil": "t/m",
     "time": "Tijd",
     "period": "Periode",
     "startDate": "Startdatum"
