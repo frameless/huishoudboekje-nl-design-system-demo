@@ -498,6 +498,10 @@
     "period": "Periode",
     "dateCreated": "Aanmaakdatum"
   },
+  "periodiekSelector": {
+    "periodiek": "Periodiek",
+    "invalidPeriodiekError": "Kies een periodiek."
+  },
   "bedrag": "Bedrag",
   "afspraak": {
     "alarm": {
@@ -818,10 +822,6 @@
     "period": "Periode",
     "month_one": "maand",
     "month_other": "maanden"
-  },
-  "periodiekSelector": {
-    "periodiek": "Periodiek",
-    "invalidPeriodiekError": "Kies een periodiek."
   },
   "version": "Versie {{version}}",
   "sidebar": {
