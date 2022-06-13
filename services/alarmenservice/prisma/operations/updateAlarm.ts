@@ -5,7 +5,6 @@ import {NotFoundError} from "../../src/errorHandlers";
 
 const validator = zod.object({
 	id: zod.string().nonempty(),
-	gebruikerEmail: zod.string().optional(),
 	afspraakId: zod.number().optional(),
 	signaalId: zod.string().optional(),
 	isActive: zod.boolean().optional(),

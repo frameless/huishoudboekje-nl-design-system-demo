@@ -51,7 +51,6 @@ describe("Alarm CRUD (operations)", () => {
 				datumMargin: 10,
 				isActive: false,
 				signaalId: "71d65065-2eb9-4f44-8f16-44d1e5a4d6f7",
-				gebruikerEmail: "koen@sloothuizen.nl",
 			};
 
 			prismaMock.alarm.update.mockResolvedValue({

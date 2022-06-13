@@ -7,7 +7,6 @@ def test_update_alarm(client):
     with requests_mock.Mocker() as rm:
         # arrange
         input = {
-            "gebruikerEmail":"other@mail.nl",
             "isActive": False,
             "afspraakId": 20,
             "startDate":"2021-12-02",
@@ -19,7 +18,6 @@ def test_update_alarm(client):
         alarm_id = "bd6222e7-bfab-46bc-b0bc-2b30b76228d4"
         alarm1 = {
             "id": alarm_id,
-            "gebruikerEmail": "test@mail.nl",
             "afspraakId": 19,
             "isActive": True,
             "startDate": "2021-12-07",
@@ -33,7 +31,6 @@ def test_update_alarm(client):
         }
         updated_alarm = {
             "id": alarm_id,
-            "gebruikerEmail": "other@mail.nl",
             "afspraakId": 20,
             "isActive": False,
             "startDate":"2021-12-02",
@@ -48,7 +45,7 @@ def test_update_alarm(client):
         rm2 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", status_code=200, json={"data": alarm1})
         rm3 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
         rm4 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=19,20", status_code=200, json={"data": [afspraak]})
-        expected = {'data': {'updateAlarm': {'ok': True, 'previous': {'id': 'bd6222e7-bfab-46bc-b0bc-2b30b76228d4', 'isActive': True, 'gebruikerEmail': 'test@mail.nl', 'afspraak': None, 'startDate': '2021-12-07', 'datumMargin': 5, 'bedrag': '1800.12', 'bedragMargin': '10.00', 'byDay': ['Wednesday'], 'byMonth': [], 'byMonthDay': []}, 'alarm': {'id': 'bd6222e7-bfab-46bc-b0bc-2b30b76228d4', 'isActive': False, 'gebruikerEmail': 'other@mail.nl', 'afspraak': {'id': 20}, 'startDate': '2021-12-02', 'datumMargin': 1, 'bedrag': '12.34', 'bedragMargin': '56.78', 'byDay': ['Thursday'], 'byMonth': [], 'byMonthDay': []}}}}
+        expected = {'data': {'updateAlarm': {'ok': True, 'previous': {'id': 'bd6222e7-bfab-46bc-b0bc-2b30b76228d4', 'isActive': True, 'afspraak': None, 'startDate': '2021-12-07', 'datumMargin': 5, 'bedrag': '1800.12', 'bedragMargin': '10.00', 'byDay': ['Wednesday'], 'byMonth': [], 'byMonthDay': []}, 'alarm': {'id': 'bd6222e7-bfab-46bc-b0bc-2b30b76228d4', 'isActive': False, 'afspraak': {'id': 20}, 'startDate': '2021-12-02', 'datumMargin': 1, 'bedrag': '12.34', 'bedragMargin': '56.78', 'byDay': ['Thursday'], 'byMonth': [], 'byMonthDay': []}}}}
 
         # act
         response = client.post(
@@ -61,7 +58,6 @@ def test_update_alarm(client):
                             previous{
                                 id
                                 isActive
-                                gebruikerEmail
                                 afspraak{
                                     id
                                 }
@@ -76,7 +72,6 @@ def test_update_alarm(client):
                             alarm {
                                 id
                                 isActive
-                                gebruikerEmail
                                 afspraak{
                                     id
                                 }
@@ -112,7 +107,6 @@ def test_update_alarm_failure_cant_set_alarm_in_past(client):
     with requests_mock.Mocker() as rm:
         # arrange
         input = {
-            "gebruikerEmail":"other@mail.nl",
             "isActive": False,
             "afspraakId": 20,
             "startDate":"2021-01-01",
@@ -137,7 +131,6 @@ def test_update_alarm_failure_cant_set_alarm_in_past(client):
                             previous{
                                 id
                                 isActive
-                                gebruikerEmail
                                 afspraak{
                                     id
                                 }
@@ -152,7 +145,6 @@ def test_update_alarm_failure_cant_set_alarm_in_past(client):
                             alarm {
                                 id
                                 isActive
-                                gebruikerEmail
                                 afspraak{
                                     id
                                 }
@@ -184,7 +176,6 @@ def test_update_alarm_failure_cant_set_alarm_to_non_existing_afspraak(client):
     with requests_mock.Mocker() as rm:
         # arrange
         input = {
-            "gebruikerEmail":"other@mail.nl",
             "isActive": False,
             "afspraakId": 20,
             "startDate":"2021-12-02",
@@ -197,7 +188,6 @@ def test_update_alarm_failure_cant_set_alarm_to_non_existing_afspraak(client):
         alarm_id = "bd6222e7-bfab-46bc-b0bc-2b30b76228d4"
         alarm1 = {
             "id": alarm_id,
-            "gebruikerEmail": "test@mail.nl",
             "afspraakId": 19,
             "isActive": True,
             "startDate": "2021-12-07",
@@ -222,7 +212,6 @@ def test_update_alarm_failure_cant_set_alarm_to_non_existing_afspraak(client):
                             previous{
                                 id
                                 isActive
-                                gebruikerEmail
                                 afspraak{
                                     id
                                 }
@@ -237,7 +226,6 @@ def test_update_alarm_failure_cant_set_alarm_to_non_existing_afspraak(client):
                             alarm {
                                 id
                                 isActive
-                                gebruikerEmail
                                 afspraak{
                                     id
                                 }

@@ -8,7 +8,6 @@ def test_create_alarm(client):
         # arrange
         input = {
             "isActive":True,
-            "gebruikerEmail":"test_1@mail.nl",
             "afspraakId": 19,
             "startDate":"2021-12-02",
             "datumMargin": 5,
@@ -19,7 +18,6 @@ def test_create_alarm(client):
         afspraak_id = 19
         alarm = {
             "id": "bd6222e7-bfab-46bc-b0bc-2b30b76228d4",
-            "gebruikerEmail": "test@mail.nl",
             "afspraakId": 19,
             "isActive": True,
             "startDate": "2021-12-02",
@@ -41,7 +39,7 @@ def test_create_alarm(client):
         rm2 = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/19", status_code=200)
         rm3 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
         rm4 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=19", status_code=200, json={"data": [afspraak]})
-        expected = {'data': {'createAlarm': {'ok': True, 'alarm': {'id': 'bd6222e7-bfab-46bc-b0bc-2b30b76228d4', 'isActive': True, 'gebruikerEmail': 'test@mail.nl', 'afspraak': {'id': 19}, 'startDate': '2021-12-02', 'datumMargin': 5, 'bedrag': '120.12', 'bedragMargin': '10.34', 'byDay': ['Wednesday'], 'byMonth': [], 'byMonthDay': []}}}}
+        expected = {'data': {'createAlarm': {'ok': True, 'alarm': {'id': 'bd6222e7-bfab-46bc-b0bc-2b30b76228d4', 'isActive': True, 'afspraak': {'id': 19}, 'startDate': '2021-12-02', 'datumMargin': 5, 'bedrag': '120.12', 'bedragMargin': '10.34', 'byDay': ['Wednesday'], 'byMonth': [], 'byMonthDay': []}}}}
 
         # act
         response = client.post(
@@ -54,7 +52,6 @@ def test_create_alarm(client):
                             alarm{
                                 id
                                 isActive
-                                gebruikerEmail
                                 afspraak{
                                     id
                                 }
@@ -92,7 +89,6 @@ def test_create_alarm(client):
 #         # arrange
 #         input = {
 #             "isActive": True,
-#             "gebruikerEmail":"test_1@mail.nl",
 #             "afspraakId": 19,
 #             "datum":"2021-01-01",
 #             "datumMargin": 5,
@@ -114,7 +110,6 @@ def test_create_alarm(client):
 #                             alarm{
 #                                 id
 #                                 isActive
-#                                 gebruikerEmail
 #                                 afspraak{
 #                                     id
 #                                 }
@@ -142,7 +137,6 @@ def test_create_alarm_failure_afspraak_does_not_exist(client):
         # arrange
         input = {
             "isActive": True,
-            "gebruikerEmail":"test_1@mail.nl",
             "afspraakId": 19,
             "startDate":"2021-12-02",
             "datumMargin": 5,
@@ -165,7 +159,6 @@ def test_create_alarm_failure_afspraak_does_not_exist(client):
                             alarm{
                                 id
                                 isActive
-                                gebruikerEmail
                                 afspraak{
                                     id
                                 }
@@ -196,7 +189,6 @@ def test_create_alarm_failure_only_byMonth_defined(client):
         # arrange
         input = {
             "isActive": True,
-            "gebruikerEmail":"test_1@mail.nl",
             "afspraakId": 19,
             "startDate":"2021-12-01",
             "datumMargin": 5,
@@ -218,7 +210,6 @@ def test_create_alarm_failure_only_byMonth_defined(client):
                             alarm{
                                 id
                                 isActive
-                                gebruikerEmail
                                 afspraak{
                                     id
                                 }
@@ -248,7 +239,6 @@ def test_create_alarm_failure_only_byMonth_defined(client):
         # arrange
         input = {
             "isActive": True,
-            "gebruikerEmail":"test_1@mail.nl",
             "afspraakId": 19,
             "startDate":"2021-12-01",
             "datumMargin": 5,
@@ -270,7 +260,6 @@ def test_create_alarm_failure_only_byMonth_defined(client):
                             alarm{
                                 id
                                 isActive
-                                gebruikerEmail
                                 afspraak{
                                     id
                                 }

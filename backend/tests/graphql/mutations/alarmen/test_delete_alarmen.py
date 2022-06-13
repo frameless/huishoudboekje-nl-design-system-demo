@@ -8,7 +8,6 @@ def test_delete_alarm(client):
         alarm_id = "00943958-8b93-4617-aa43-669a9016aad9"
         alarm1 = {
             "id": alarm_id,
-            "gebruikerEmail": "other@mail.nl",
             "afspraakId": 20,
             "status": "Inactive",
             "datum": "2021-02-02",

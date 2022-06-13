@@ -20,7 +20,6 @@ enum DayOfWeek {
 
 model Alarm {
 	id 					String		@id @default(uuid())
-	gebruikerEmail		String
 	afspraakId			Int
 	signaalId			String?
 	isActive			Boolean

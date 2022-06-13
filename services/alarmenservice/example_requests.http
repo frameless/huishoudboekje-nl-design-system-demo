@@ -32,7 +32,6 @@ Accept: application/json
 Content-Type: application/json
 
 {
-  "gebruikerEmail": "iemand@sloothuizen.nl",
   "byDay": ["Monday", "Tuesday"],
   "byMonth": [1, 2, 3, 4, 11, 12],
   "byMonthDay": [3],
@@ -53,7 +52,6 @@ Accept: application/json
 Content-Type: application/json
 
 {
-  "gebruikerEmail": "iemand@sloothuizen.nl",
   "byDay": ["Monday", "Tuesday"],
   "byMonth": [1, 2, 3, 4, 11, 12],
   "byMonthDay": [3],
@@ -74,7 +72,6 @@ Accept: application/json
 Content-Type: application/json
 
 {
-  "gebruikerEmail": "iemand@sloothuizen.nl",
   "byDay": ["Monday", "Tuesday"],
   "byMonth": [1, 2, 3, 4, 11, 12],
   "byMonthDay": [3],
