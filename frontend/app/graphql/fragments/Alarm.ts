@@ -4,7 +4,6 @@ export const AlarmFragment = gql`
     fragment Alarm on Alarm {
         id
         isActive
-        gebruikerEmail
         bedrag
         bedragMargin
         startDate

@@ -187,7 +187,6 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 			variables: {
 				input: {
 					...data,
-					gebruikerEmail: "",
 				},
 			},
 		}).then(result => {
@@ -427,17 +426,9 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 				<Section title={t("afspraakDetailView.alarm.title")} helperText={t("afspraakDetailView.alarm.helperText")}>
 					{afspraak.alarm ? (
 						<Stack>
-							<Stack direction={["column", null, null, "row"]}>
+							<Stack direction={["column", "row"]}>
 								<DataItem label={t("periodiekSelector.periodiek")}>
 									<Text>{alarmSchedule.toString()}</Text>
-								</DataItem>
-							</Stack>
-							<Stack direction={["column", null, null, "row"]}>
-								<DataItem label={t("bedrag")}>
-									<HStack>
-										<Text>{currencyFormat2().format(afspraak.alarm?.bedrag)}</Text>
-										<Text color={"gray.500"} fontSize={"sm"}>+/- {currencyFormat2().format(afspraak.alarm?.bedragMargin)}</Text>
-									</HStack>
 								</DataItem>
 								{afspraak.alarm?.endDate ? (
 									<DataItem label={t("global.period")}>
@@ -458,8 +449,11 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 								)}
 							</Stack>
 							<Stack direction={["column", null, null, "row"]}>
-								<DataItem label={t("afspraak.alarm.setByUser")}>
-									<Text>{afspraak.alarm?.gebruikerEmail || t("unknownGebruiker")}</Text>
+								<DataItem label={t("bedrag")}>
+									<HStack>
+										<Text>{currencyFormat2().format(afspraak.alarm?.bedrag)}</Text>
+										<Text color={"gray.500"} fontSize={"sm"}>+/- {currencyFormat2().format(afspraak.alarm?.bedragMargin)}</Text>
+									</HStack>
 								</DataItem>
 								<DataItem label={t("afspraak.alarm.options")}>
 									<HStack>
