@@ -17,7 +17,7 @@ import PeriodiekSelector, {Periodiek} from "../../shared/PeriodiekSelector";
 import WeekDaySelector from "../../shared/WeekDaySelector";
 
 const eenmaligValidator = zod.object({
-	datum: zod.date(), //.refine(val => d().endOf("day").isSameOrBefore(val)), // Must be in the future
+	startDate: zod.date(), //.refine(val => d().endOf("day").isSameOrBefore(val)), // Must be in the future
 	datumMargin: zod.number().min(0),
 	byMonthDay: zod.number().min(1).max(28),
 	byDay: zod.array(zod.nativeEnum(DayOfWeek)).min(1),
@@ -28,7 +28,8 @@ const validator = zod.object({
 	repeatType: zod.nativeEnum(RepeatType).optional(),
 	bedrag: zod.number().min(0),
 	bedragMargin: zod.number().min(0),
-	datum: zod.date().optional(),
+	startDate: zod.date().optional(),
+	endDate: zod.date().optional(),
 	datumMargin: zod.number().min(0).optional(),
 	byDay: zod.array(zod.nativeEnum(DayOfWeek)).min(1).optional(),
 	byMonth: zod.array(zod.number().min(1).max(12)).min(1).max(12).optional(),
@@ -66,8 +67,8 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 			return true;
 		}
 
-		const {datum, datumMargin, byMonthDay, byDay} = form;
-		const parsed = eenmaligValidator.safeParse({datum, datumMargin, byMonthDay, byDay});
+		const {startDate, endDate, datumMargin, byMonthDay, byDay} = form;
+		const parsed = eenmaligValidator.safeParse({startDate, endDate, datumMargin, byMonthDay, byDay});
 		return parsed.success || !parsed.error.issues.find(issue => issue.path?.[0] === field);
 	};
 
@@ -81,13 +82,19 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 		toggleSubmitted(true);
 
 		if (isValid()) {
-			const {bedrag, bedragMargin, datum, datumMargin, byDay, byMonth, byMonthDay} = form;
+			const {bedrag, bedragMargin, startDate, endDate, datumMargin, byDay, byMonth, byMonthDay} = form;
 			onSubmit({
 				afspraakId: afspraak.id!,
 				isActive: true,
 				bedrag,
 				bedragMargin,
-				...form.isPeriodiek === Periodiek.Eenmalig && {datum: d(datum).format("YYYY-MM-DD")},
+				...form.isPeriodiek === Periodiek.Eenmalig ? {
+					startDate: d(startDate).format("YYYY-MM-DD"),
+					endDate: d(startDate).format("YYYY-MM-DD"),
+				} : {
+					startDate: d(startDate).format("YYYY-MM-DD"),
+					endDate: d(endDate).format("YYYY-MM-DD"),
+				},
 				datumMargin,
 				byDay,
 				byMonth,
@@ -112,12 +119,12 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 						}} isRequired />
 
 						{form.isPeriodiek === Periodiek.Eenmalig && (<>
-							<FormControl flex={1} isInvalid={!isFieldValid("datum") || !isFieldValid2("datum")} isRequired>
+							<FormControl flex={1} isInvalid={!isFieldValid("startDate") || !isFieldValid2("startDate")} isRequired>
 								<FormLabel>{t("alarmForm.date")}</FormLabel>
-								<DatePicker selected={form.datum} dateFormat={"dd-MM-yyyy"}
+								<DatePicker selected={form.startDate} dateFormat={"dd-MM-yyyy"}
 									onChange={(value: Date) => {
 										if (value) {
-											updateForm("datum", d(value).startOf("day").toDate());
+											updateForm("startDate", d(value).startOf("day").toDate());
 										}
 									}} customInput={<Input type={"text"} />} />
 								<FormErrorMessage>{t("alarmForm.errors.invalidDateError")}</FormErrorMessage>
