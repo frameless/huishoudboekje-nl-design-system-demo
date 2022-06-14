@@ -1,4 +1,4 @@
-FROM bitnami/python:3.8
+FROM python:3.8
 
 # install the dependencies only for fast rebuilds
 COPY ./log_service /app
