@@ -71,7 +71,7 @@ spec:
                   name: hhb-database-secrets
                   key: ALARMENSERVICE_DATABASE_URL
           command: [ "npm" ]
-          args: [ "run", "db:push" ]
+          args: [ "run", "db:deploy" ]
       containers:
         - name: hhb-alarmenservice
           image: alarmenservice

@@ -72,7 +72,7 @@ spec:
                   name: hhb-database-secrets
                   key: POSTADRESSEN_DATABASE_URL
           command: [ "npm" ]
-          args: [ "run", "db:push" ]
+          args: [ "run", "db:deploy" ]
       containers:
         - name: hhb-postadressenservice
           image: postadressenservice
