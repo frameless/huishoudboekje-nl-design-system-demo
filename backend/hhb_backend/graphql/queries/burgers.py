@@ -64,18 +64,21 @@ class BurgersQuery:
                 if search in str(rekening['iban']).lower() or \
                         search in str(rekening['rekeninghouder']).lower():
                     for burger_id in rekening["burgers"]:
-                        burger_ids.add(burger_id)
+                        if burger_id:
+                            burger_ids.add(burger_id)
                     for afspraak_id in rekening["afspraken"]:
                         afspraken_ids.add(afspraak_id)
 
             afspraken = request.dataloader.afspraken_by_id.get_all_and_cache(filters=kwargs.get("filters", None))
             for afspraak in afspraken:
                 if search in str(afspraak['zoektermen']).lower():
-                    burger_ids.add(afspraak["burger_id"])
+                    if afspraak["burger_id"]:
+                        burger_ids.add(afspraak["burger_id"])
 
             afspraken = await request.dataloader.afspraken_by_id.load_many(list(afspraken_ids))
             for afspraak in afspraken:
-                burger_ids.add(afspraak["burger_id"])
+                if afspraak["burger_id"]:
+                    burger_ids.add(afspraak["burger_id"])
 
             return await request.dataloader.burgers_by_id.load_many(list(burger_ids))
 
