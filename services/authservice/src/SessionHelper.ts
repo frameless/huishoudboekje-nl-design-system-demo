@@ -35,8 +35,7 @@ class SessionHelper {
 	private _getTokenFromRequest(req: any): string {
 		const cookieToken = req.cookies["app-token"];
 		const bearerToken = req.headers["authorization"]?.replace("Bearer ", "");
-		const token: string = cookieToken || bearerToken;
-		return token;
+		return cookieToken || bearerToken;
 	}
 
 	private _getUserFromToken(token: string): any {
@@ -68,7 +67,23 @@ class SessionHelper {
 	}
 
 	generateToken(user: any): string {
-		return jwt.sign({user}, this.secret, {
+		const {
+			preferred_username,
+			name,
+			email,
+			family_name,
+			given_name,
+		} = user;
+
+		const jwtContent = {
+			name,
+			email,
+			family_name,
+			given_name,
+			preferred_username,
+		};
+
+		return jwt.sign(jwtContent, this.secret, {
 			expiresIn: this.expiresIn,
 			audience: this.audience,
 			issuer: this.issuer,
