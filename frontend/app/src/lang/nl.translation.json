@@ -155,6 +155,7 @@
     },
     "formError": "Er is een fout opgetreden. Controleer de invoer en probeer het nog eens.",
     "date": "Datum",
+    "dateUntil": "t/m",
     "time": "Tijd",
     "period": "Periode",
     "startDate": "Startdatum"
@@ -497,6 +498,10 @@
     "period": "Periode",
     "dateCreated": "Aanmaakdatum"
   },
+  "periodiekSelector": {
+    "periodiek": "Periodiek",
+    "invalidPeriodiekError": "Kies een periodiek."
+  },
   "bedrag": "Bedrag",
   "afspraak": {
     "alarm": {
@@ -817,10 +822,6 @@
     "period": "Periode",
     "month_one": "maand",
     "month_other": "maanden"
-  },
-  "periodiekSelector": {
-    "periodiek": "Periodiek",
-    "invalidPeriodiekError": "Kies een periodiek."
   },
   "version": "Versie {{version}}",
   "sidebar": {
