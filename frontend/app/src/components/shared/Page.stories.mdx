@@ -33,10 +33,19 @@ import MenuIcon from "../shared/MenuIcon";
 		},
 		description: "This will show whatever you put in here on the top right of the page.",
 	},
+	children: {
+		type: {
+			name: "ReactNode",
+			required: false,
+		},
+		description: "Everything that goes into the Page."
+	}
 }} />
 
-export const Template = ({title, backButton, menu, right}) => (
-	<Page title={title} backButton={backButton} menu={menu} right={right} />
+export const Template = ({title, backButton, menu, right, children}) => (
+	<Page title={title} backButton={backButton} menu={menu} right={right}>
+		{children}
+	</Page>
 );
 
 # Page
