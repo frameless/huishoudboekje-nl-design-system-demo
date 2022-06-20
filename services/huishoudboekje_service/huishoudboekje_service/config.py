@@ -25,10 +25,12 @@ class StagingConfig(Config):
 class DevelopmentConfig(Config):
     DEVELOPMENT = True
     DEBUG = True
+    LOG_LEVEL = os.getenv("LOG_LEVEL", "DEBUG")
 
 
 class TestingConfig(Config):
     DEBUG = False
+    LOG_LEVEL = os.getenv("LOG_LEVEL", "DEBUG")
     TESTING = True
     CSRF_ENABLED = False
     SECRET_KEY = "testing-secret"

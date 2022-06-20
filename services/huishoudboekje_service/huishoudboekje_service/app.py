@@ -26,7 +26,10 @@ def create_app(config_name=os.getenv('APP_SETTINGS', 'huishoudboekje_service.con
     app = Flask(__name__)
     app.config.from_object(config_name)
 
-    logging.basicConfig(level=app.config["LOG_LEVEL"])
+    logging.basicConfig(
+        format='%(asctime)s %(levelname)-8s %(message)s',
+        level=app.config["LOG_LEVEL"],
+        datefmt='%Y-%m-%d %H:%M:%S')
     logging.info(f"Starting {__name__} with {config_name}")
 
     db.init_app(app)

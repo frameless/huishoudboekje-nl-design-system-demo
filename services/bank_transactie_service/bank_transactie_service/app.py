@@ -19,8 +19,9 @@ def create_app(config_name=os.getenv('APP_SETTINGS', 'bank_transactie_service.co
 
     db.init_app(app)
     logging.basicConfig(
+        format='%(asctime)s %(levelname)-8s %(message)s',
         level=app.config["LOG_LEVEL"],
-    )
+        datefmt='%Y-%m-%d %H:%M:%S')
     if "DEVELOPMENT" in app.config and app.config["DEVELOPMENT"]:
         logging.config.dictConfig(
             {
