@@ -24,7 +24,10 @@ def create_app(
     ANONYMOUS_ROLENAME = 'anonymous'
     MEDEWERKER_ROLENAME = 'anonymous' if app.config["DEVELOPMENT"] else 'medewerker'
 
-    logging.basicConfig(level=app.config["LOG_LEVEL"])
+    logging.basicConfig(
+        format='%(asctime)s %(levelname)-8s %(message)s',
+        level=app.config["LOG_LEVEL"],
+        datefmt='%Y-%m-%d %H:%M:%S')
     app.logger = logger = logging.getLogger(__name__)
     logger.info(f"Starting {__name__} with {config_name}")
 
