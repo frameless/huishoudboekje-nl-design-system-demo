@@ -142,14 +142,6 @@ def create_app(
 
     app.auth = auth
 
-    logging.getLogger("flask_oidc").setLevel("DEBUG")
-    logging.getLogger("hhb_backend").setLevel("DEBUG")
-    logging.getLogger("hhb_backend.auth").setLevel("DEBUG")
-
-    loggers = [logging.getLogger()] + [logging.getLogger(name) for name in logging.root.manager.loggerDict]
-
-    logger.debug(f"loggers: {', '.join([f'{l.name}:{logging.getLevelName(l.level)}' for l in loggers])}")
-
     return app
 
 
