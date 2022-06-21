@@ -37,12 +37,12 @@ def create_app(
     auth = Auth(app, anonymous_rolename=ANONYMOUS_ROLENAME, default_rolename=MEDEWERKER_ROLENAME)
 
     @app.route("/health")
-    @auth.rbac.allow([ANONYMOUS_ROLENAME], ['GET'])
+    # @auth.rbac.allow([ANONYMOUS_ROLENAME], ['GET'])
     def health():
         return make_response(("ok", {"Content-Type": "text/plain"}))
 
     @app.route("/version")
-    @auth.rbac.allow([ANONYMOUS_ROLENAME], ['GET'])
+    # @auth.rbac.allow([ANONYMOUS_ROLENAME], ['GET'])
     def version_file():
         try:
             return send_file("version.json")
@@ -52,20 +52,20 @@ def create_app(
     graphql = graphql_blueprint.create_blueprint(loop=loop)
 
     @graphql.before_request
-    @auth.rbac.allow([MEDEWERKER_ROLENAME], methods=['GET', 'POST'], endpoint="graphql.graphql")
-    @conditional_decorator(auth.oidc.require_login, not app.config["DEVELOPMENT"])
+    # @auth.rbac.allow([MEDEWERKER_ROLENAME], methods=['GET', 'POST'], endpoint="graphql.graphql")
+    # @conditional_decorator(auth.oidc.require_login, not app.config["DEVELOPMENT"])
     def auth_graphql():
         pass
 
     app.register_blueprint(graphql, url_prefix="/graphql")
 
     @app.route('/graphql/help')
-    @auth.rbac.allow([ANONYMOUS_ROLENAME], methods=['GET'])
+    # @auth.rbac.allow([ANONYMOUS_ROLENAME], methods=['GET'])
     def voyager():
         return render_template('voyager.html')
 
     @app.route("/export/<export_id>")
-    @auth.rbac.allow([MEDEWERKER_ROLENAME], methods=['GET'])
+    # @auth.rbac.allow([MEDEWERKER_ROLENAME], methods=['GET'])
     def export_overschrijvingen(export_id):
         """ Send xml overschijvingen file to client """
         # Get export object
@@ -91,7 +91,7 @@ def create_app(
         return response
 
     @app.route("/brievenexport/<burger_id>/<type>")
-    @auth.rbac.allow([MEDEWERKER_ROLENAME], methods=['GET'])
+    # @auth.rbac.allow([MEDEWERKER_ROLENAME], methods=['GET'])
     def export_afspraken(burger_id, type="excel"):
         """ Send csv with afspraken data to medewerker """
         data, csv_filename_or_errorcode, excel_data, excel_filename = brieven_export.create_brieven_export(burger_id)
@@ -116,7 +116,7 @@ def create_app(
         return output
 
     @app.route("/services_health")
-    @auth.rbac.allow([ANONYMOUS_ROLENAME], methods=['GET'])
+    # @auth.rbac.allow([ANONYMOUS_ROLENAME], methods=['GET'])
     def services_health():
         service_dict = {}
         service_dict["huishoudboekje-service"] = do_health_call_service(settings.HHB_SERVICES_URL)
