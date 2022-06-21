@@ -24,7 +24,10 @@ def create_app(
     ANONYMOUS_ROLENAME = 'anonymous'
     MEDEWERKER_ROLENAME = 'anonymous' if app.config["DEVELOPMENT"] else 'medewerker'
 
-    logging.basicConfig(level=app.config["LOG_LEVEL"])
+    logging.basicConfig(
+        format='%(asctime)s %(levelname)-8s %(message)s',
+        level=app.config["LOG_LEVEL"],
+        datefmt='%Y-%m-%d %H:%M:%S')
     app.logger = logger = logging.getLogger(__name__)
     logger.info(f"Starting {__name__} with {config_name}")
 
@@ -138,14 +141,6 @@ def create_app(
         return "down"
 
     app.auth = auth
-
-    logging.getLogger("flask_oidc").setLevel("DEBUG")
-    logging.getLogger("hhb_backend").setLevel("DEBUG")
-    logging.getLogger("hhb_backend.auth").setLevel("DEBUG")
-
-    loggers = [logging.getLogger()] + [logging.getLogger(name) for name in logging.root.manager.loggerDict]
-
-    logger.debug(f"loggers: {', '.join([f'{l.name}:{logging.getLevelName(l.level)}' for l in loggers])}")
 
     return app
 
