@@ -11,7 +11,9 @@
 
 .authorize-keycloak: &authorize-keycloak
   stage: deploy
-  image: registry.gitlab.com/commonground/huishoudboekje/keycloak/keycloak-tools:latest
+  image: registry.gitlab.com/commonground/huishoudboekje/keycloak-tools/keycloak-tools:1.0.0
+  before_script:
+    - cd /app
   tags:
     - cg
     - docker
@@ -118,7 +120,6 @@ authorize-keycloak-review:
     KEYCLOAK_BASE_URL: https://keycloak.huishoudboekje.demoground.nl
     HHB_HOST: "hhb-$CI_COMMIT_REF_SLUG.nlx.reviews"
   script:
-    - cd /app
     - echo "Adding application to Keycloak..."
     - npm run start -- redirect-uri add --uri="https://${HHB_HOST}/*" --client-id=huishoudboekje-medewerkers
   only:
@@ -139,7 +140,6 @@ unauthorize-keycloak-review:
     KEYCLOAK_BASE_URL: https://keycloak.huishoudboekje.demoground.nl
     HHB_HOST: "hhb-$CI_COMMIT_REF_SLUG.nlx.reviews"
   script:
-    - cd /app
     - echo "Removing application from Keycloak..."
     - npm run start -- redirect-uri remove --uri="https://${HHB_HOST}/*" --client-id=huishoudboekje-medewerkers
   when: manual
