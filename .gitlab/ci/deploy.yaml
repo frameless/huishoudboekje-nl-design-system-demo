@@ -38,8 +38,10 @@ deploy-deployment-master:
     DEFAULT_REPLICAS: 1
     HHB_HOST: "demo.huishoudboekje.demoground.nl"
     NAMESPACE: "hhb-demo"
-    USE_PLATFORM: "azure_tad" # azure - test acc demo
+    USE_PLATFORM: "azure_tad" # azure_review_acc cluster
     UNLEASH_OTAP: production
+  before_script:
+    - kubectl config use-context commonground/huishoudboekje/app-new:hhb-prod
   only:
     - master
 
@@ -56,6 +58,8 @@ deploy-deployment-acceptance:
     NAMESPACE: "hhb-acc"
     USE_PLATFORM: "azure_tad" # azure - test acc demo
     UNLEASH_OTAP: acceptance
+  before_script:
+    - kubectl config use-context commonground/huishoudboekje/app-new:hhb-prod
   only:
     - acceptance
 
@@ -73,6 +77,8 @@ deploy-deployment-test:
     NAMESPACE: "hhb-test"
     USE_PLATFORM: "azure_tad" # azure - test acc demo
     UNLEASH_OTAP: test
+  before_script:
+    - kubectl config use-context commonground/huishoudboekje/app-new:hhb-prod
   only:
     - develop
 
