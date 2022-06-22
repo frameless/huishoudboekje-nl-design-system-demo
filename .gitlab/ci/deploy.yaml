@@ -114,13 +114,13 @@ authorize-keycloak-review:
     on_stop: unauthorize-keycloak-review
   variables:
     GIT_STRATEGY: none # the runner won’t try to check out the code after the branch is deleted.
-    REALM_NAME: huishoudboekje
+    KEYCLOAK_REALM_NAME: huishoudboekje
     KEYCLOAK_BASE_URL: https://keycloak.huishoudboekje.demoground.nl
     HHB_HOST: "hhb-$CI_COMMIT_REF_SLUG.nlx.reviews"
   script:
     - cd /app
     - echo "Adding application to Keycloak..."
-    - npm run start -- request-uri add --uri="https://${HHB_HOST}/*" --client-id=huishoudboekje-medewerkers
+    - npm run start -- redirect-uri add --uri="https://${HHB_HOST}/*" --client-id=huishoudboekje-medewerkers
   only:
     - branches@commonground/huishoudboekje/app-new
   except:
@@ -135,13 +135,13 @@ unauthorize-keycloak-review:
     action: stop
   variables:
     GIT_STRATEGY: none # the runner won’t try to check out the code after the branch is deleted.
-    REALM_NAME: huishoudboekje
+    KEYCLOAK_REALM_NAME: huishoudboekje
     KEYCLOAK_BASE_URL: https://keycloak.huishoudboekje.demoground.nl
     HHB_HOST: "hhb-$CI_COMMIT_REF_SLUG.nlx.reviews"
   script:
     - cd /app
     - echo "Removing application from Keycloak..."
-    - npm run start -- request-uri remove --uri="https://${HHB_HOST}/*" --client-id=huishoudboekje-medewerkers
+    - npm run start -- redirect-uri remove --uri="https://${HHB_HOST}/*" --client-id=huishoudboekje-medewerkers
   when: manual
   only:
     - branches@commonground/huishoudboekje/app-new
