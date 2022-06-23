@@ -34,7 +34,7 @@ def create_app(
     if app.config["PREFIX"]:
         app.wsgi_app = ReverseProxied(app.wsgi_app, script_name=app.config["PREFIX"])
 
-    auth = Auth(app, anonymous_rolename=ANONYMOUS_ROLENAME, default_rolename=MEDEWERKER_ROLENAME)
+#     auth = Auth(app, anonymous_rolename=ANONYMOUS_ROLENAME, default_rolename=MEDEWERKER_ROLENAME)
 
     @app.route("/health")
     # @auth.rbac.allow([ANONYMOUS_ROLENAME], ['GET'])
@@ -140,10 +140,8 @@ def create_app(
 
         return "down"
 
-    app.auth = auth
-
     return app
 
 
 if __name__ == "__main__":
-    create_app().run(debug=True)
+    create_app().run()
