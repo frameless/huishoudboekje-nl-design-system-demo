@@ -60,11 +60,6 @@ spec:
             - configMapRef:
                 name: postgres-config
           env:
-            - name: HHB_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: hhb-client-secrets
-                  key: SECRET_KEY
             - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:

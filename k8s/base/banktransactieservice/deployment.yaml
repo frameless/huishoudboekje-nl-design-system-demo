@@ -66,11 +66,6 @@ spec:
                 secretKeyRef:
                   name: hhb-database-secrets
                   key: TRANSACTIE_DATABASE_URL
-            - name: HHB_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: hhb-client-secrets
-                  key: SECRET_KEY
             - name: POSTGRESQL_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -113,11 +108,6 @@ spec:
               cpu: 100m
               memory: 128Mi
           env:
-            - name: HHB_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: hhb-client-secrets
-                  key: SECRET_KEY
             - name: TRANSACTIE_DATABASE_URL
               valueFrom:
                 secretKeyRef:
