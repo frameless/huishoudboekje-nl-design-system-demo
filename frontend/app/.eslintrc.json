@@ -44,7 +44,6 @@
 	"quotes": ["warn", "double"],
 	"no-mixed-spaces-and-tabs": ["warn", "smart-tabs"],
 	"no-trailing-spaces": ["warn"],
-	"eol-last": ["warn", "never"],
 	"no-empty": ["warn"],
 	"no-console": [
 	  "warn",
