@@ -64,7 +64,7 @@ class AlarmHelper:
                 _info.field_name = name
 
         # alarm_date = parser.parse(input.startDate).date()
-        utc_now = date.today()
+        # utc_now = date.today()
         # if alarm_date < utc_now:
         #     raise GraphQLError(f"De alarmdatum moet in de toekomst liggen.")
 
