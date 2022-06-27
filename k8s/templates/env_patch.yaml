@@ -14,6 +14,39 @@ metadata:
   name: hhb-backend
 spec:
   replicas: ${DEFAULT_REPLICAS}
+  template:
+    spec:
+      containers:
+        - name: hhb-backend
+          env:
+            - name: AUTH_AUDIENCE
+              ${DOLLAR}patch: delete
+            - name: JWT_SECRET
+              ${DOLLAR}patch: delete
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    name: hhb-backend
+  name: hhb-backend
+spec:
+  replicas: ${DEFAULT_REPLICAS}
+  template:
+    spec:
+      containers:
+        - name: hhb-backend
+          env:
+            - name: AUTH_AUDIENCE
+              valueFrom:
+                configMapKeyRef:
+                  name: authservice-config
+                  key: JWT_AUDIENCE
+            - name: JWT_SECRET
+              valueFrom:
+                configMapKeyRef:
+                  name: authservice-config
+                  key: JWT_SECRET
 ---
 apiVersion: apps/v1
 kind: Deployment
