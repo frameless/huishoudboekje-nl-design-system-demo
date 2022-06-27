@@ -48,6 +48,10 @@ spec:
           env:
             - name: APP_SETTINGS
               value: "hhb_backend.config.ProductionConfig"
+            - name: AUTH_AUDIENCE
+              value: "change this in a patch"
+            - name: JWT_SECRET
+              value: "change this in a patch"
             - name: PREFIX
               value: "/api"
             - name: HHB_SERVICE_URL

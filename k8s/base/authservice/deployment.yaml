@@ -48,7 +48,7 @@ spec:
           envFrom:
             - configMapRef:
                 name: authservice-config
-          env:
+#          env:
 #            - name: OIDC_ISSUER_URL
 #              value: "comes from authservice-config configMap"
 #            - name: OIDC_CLIENT_ID
@@ -57,9 +57,11 @@ spec:
 #              value: "comes from authservice-config configMap"
 #            - name: OIDC_BASE_URL
 #              value: "comes from authservice-config configMap"
-            - name: JWT_ISSUER
-              value: huishoudboekje
-            - name: JWT_AUDIENCE
-              value: huishoudboekje
-            - name: JWT_EXPIRES_IN
-              value: 30d
+#            - name: JWT_ISSUER
+#              value: "comes from authservice-config configMap"
+#            - name: JWT_AUDIENCE
+#              value: "comes from authservice-config configMap"
+#            - name: JWT_SECRET
+#              value: "comes from authservice-config configMap"
+#            - name: JWT_EXPIRES_IN
+#              value: "comes from authservice-config configMap"

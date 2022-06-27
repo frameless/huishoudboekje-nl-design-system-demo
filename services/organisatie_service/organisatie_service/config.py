@@ -6,7 +6,7 @@ class Config(object):
     LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
     TESTING = False
     CSRF_ENABLED = True
-    SECRET_KEY = os.getenv('HHB_SECRET', None)
+    SECRET_KEY = os.getenv('JWT_SECRET', None)
     SQLALCHEMY_DATABASE_URI = os.getenv('ORGANISATIE_DATABASE_URL', os.getenv('DATABASE_URL', None))
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 

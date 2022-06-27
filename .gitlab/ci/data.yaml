@@ -21,7 +21,7 @@
         --audience "${HHB_HOST}" \
         --jwtid "$(LC_CTYPE=C tr -dc 'A-F0-9' < /dev/urandom | head -c32)" \
         --noCopy \
-        "{}" "${HHB_SECRET:-$SESSION_SECRET}"`
+        "{}" "${JWT_SECRET:-$SESSION_SECRET}"`
     - echo JWT $PROXY_AUTHORIZATION
     - export GRAPHQL_API_URL=https://${HHB_HOST}/api/graphql
     - echo API_URL ${GRAPHQL_API_URL}
@@ -35,7 +35,7 @@ load-data-review:
     name: review/$CI_COMMIT_REF_SLUG
   variables:
     HHB_HOST: "hhb-$CI_COMMIT_REF_SLUG.nlx.reviews"
-    HHB_SECRET: test
+    JWT_SECRET: test
   needs:
     - deploy-deployment-review
   only:

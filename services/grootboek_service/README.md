@@ -16,7 +16,7 @@ This service contains the functionality needed to access data from grootboeken.
     export FLASK_APP="grootboek_service.app"
     export FLASK_RUN_PORT="8003"
     export FLASK_ENV="development"
-    export HHB_SECRET="local-secret"
+    export JWT_SECRET="local-secret"
     export GROOTBOEK_DATABASE_URL="postgresql://grootboekservice:grootboekservice@localhost/grootboekservice"
     export APP_SETTINGS="grootboek_service.config.DevelopmentConfig"
     ```
@@ -63,7 +63,7 @@ This service contains the functionality needed to access data from grootboeken.
     set FLASK_APP=grootboek_service.app
     set FLASK_RUN_PORT=8003
     set FLASK_ENV="development"
-    set HHB_SECRET="local-secret"
+    set JWT_SECRET="local-secret"
     set GROOTBOEK_DATABASE_URL=postgresql://grootboekservice:grootboekservice@localhost/grootboekservice
     set APP_SETTINGS=grootboek_service.config.DevelopmentConfig
     ```

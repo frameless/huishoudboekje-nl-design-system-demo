@@ -16,7 +16,7 @@ This service contains the functionality needed to access data from the applicati
     export FLASK_APP="log_service.app"
     export FLASK_RUN_PORT="8004"
     export FLASK_ENV="development"
-    export HHB_SECRET="local-secret"
+    export JWT_SECRET="local-secret"
     export LOG_DATABASE_URL="postgresql://logservice:logservice@localhost/logservice"
     export APP_SETTINGS="log_service.config.DevelopmentConfig"
     ```
@@ -63,7 +63,7 @@ This service contains the functionality needed to access data from the applicati
     set FLASK_APP=log_service.app
     set FLASK_RUN_PORT=8004
     set FLASK_ENV=development
-    set HHB_SECRET="local-secret"
+    set JWT_SECRET="local-secret"
     set LOG_DATABASE_URL=postgresql://logservice:logservice@localhost/logservice
     set APP_SETTINGS=log_service.config.DevelopmentConfig
     ```

@@ -87,9 +87,6 @@ export POSTGRESQL_PASSWORD_SIGSVC=${POSTGRESQL_PASSWORD_SIGSVC:-"sigsvc"}
 # Unleash OTAP stage
 export UNLEASH_OTAP=${UNLEASH_OTAP:-"production"}
 
-# Default secret FOR JWTs
-export HHB_SECRET=${SECRET_KEY:-"test"}
-
 # OIDC Settings
 export OIDC_ISSUER_URL=${OIDC_ISSUER_URL:-"https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje"}
 export OIDC_CLIENT_ID=${OIDC_CLIENT_ID:-"huishoudboekje-medewerkers"}
@@ -98,6 +95,7 @@ export OIDC_BASE_URL=${OIDC_BASE_URL:-$HHB_APP_HOST}
 export JWT_ISSUER=${JWT_ISSUER:-$HHB_APP_HOST}
 export JWT_AUDIENCE=${JWT_AUDIENCE:-$HHB_APP_HOST}
 export JWT_EXPIRES_IN=${JWT_EXPIRES_IN:-"30d"}
+export JWT_SECRET=${JWT_SECRET:-"this should come from a secret envvar"}
 
 # Create a temporary directory to put the dist files in.
 export DEPLOYMENT_DIST_DIR="dist"
