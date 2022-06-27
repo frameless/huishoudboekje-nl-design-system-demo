@@ -9,13 +9,14 @@ A little Node.js REST API that handles user authentication with an OpenID Connec
 Example `.env`:
 
 ```dotenv
-OIDC_ISSUER_URL=http://your-microsoft-identity-provider.com/auth/realms
+OIDC_ISSUER_URL=https://your-identity-provider.example.com/auth
 OIDC_CLIENT_ID=huishoudboekje-medewerkers
 OIDC_CLIENT_SECRET=fc36d31f-f720-4914-a750-b83c7b0dd61c
-OIDC_BASE_URL=http://localhost:3000
-JWT_ISSUER=huishoudboekje_localhost
-JWT_AUDIENCE=huishoudboekje_localhost
+OIDC_BASE_URL=https://your-app.example.com
+JWT_ISSUER=your-app-issuer
+JWT_AUDIENCE=your-app-audience
 JWT_EXPIRES_IN=30d
+JWT_SECRET=long-random-string
 ```
 
 # Usage
