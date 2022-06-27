@@ -78,6 +78,15 @@ class AlarmHelper:
             raise GraphQLError(f"Afspraak bestaat niet.")
         afspraak = afspraak_response.json()["data"]
 
+        # check if afspraak is valid
+        if afspraak.get("burger_id") is None:
+            raise GraphQLError("De afspraak is niet gekoppeld aan een burger.")
+        if afspraak.get("valid_through"):
+            end_date_afspraak = parser.parse(afspraak.get("valid_through")).date()
+            start_date_alarm = parser.parse(input.startDate).date()
+            if end_date_afspraak < start_date_alarm:
+                raise GraphQLError("De afspraak is niet actief na de start datum.")
+
         create_alarm_response = requests.post(f"{settings.ALARMENSERVICE_URL}/alarms/", json=input, headers={"Content-type": "application/json"})
         if create_alarm_response.status_code != 201:
             raise GraphQLError(f"Aanmaken van het alarm is niet gelukt.")
