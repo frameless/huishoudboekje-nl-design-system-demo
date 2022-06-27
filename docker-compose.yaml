@@ -172,7 +172,7 @@ services:
       OIDC_CLIENT_SECRET: fc36d31f-f720-4914-a750-b83c7b0dd61c
       OIDC_BASE_URL: http://localhost:3000
       JWT_ISSUER: huishoudboekje_localhost
-      JWT_AUDIENCE: huishoudboekje_localhost
+      JWT_AUDIENCE: huishoudboekje-medewerkers
       JWT_EXPIRES_IN: 30d
     ports:
       - 4000:8080
@@ -182,10 +182,8 @@ services:
     container_name: backend
     environment:
       APP_SETTINGS: hhb_backend.config.DevelopmentConfig
-      #     AUTH_AUDIENCE: None
-      #     AUTH_TOKEN_SECRET: test
+      AUTH_AUDIENCE: huishoudboekje-medewerkers
       OIDC_CLIENT_SECRETS: /app/etc/client_secrets.json
-      #     OIDC_CLOCK_SKEW: "600"
       PREFIX: /api
       HHB_SERVICE_URL: "http://huishoudboekjeservice:8000"
       ORGANISATIE_SERVICE_URL: "http://organisatieservice:8000"
@@ -195,7 +193,6 @@ services:
       POSTADRESSENSERVICE_URL: "http://postadressenservice:8080"
       ALARMENSERVICE_URL: "http://alarmenservice:8080"
       SIGNALENSERVICE_URL: "http://signalenservice:8080"
-      SECRET_KEY: koen
     ports:
       - 5000:8000
 

@@ -1,25 +1,33 @@
-import itsdangerous
-import jwt
 import logging
 import re
-import secrets
-import uuid
-from datetime import timedelta
-from flask import Flask, g, make_response, redirect, request, session
-from hhb_backend.auth.models import User
-from isodate import parse_duration
-from itsdangerous import TimedJSONWebSignatureSerializer
-from jwt import InvalidTokenError
 from time import time
+
+import itsdangerous
+import jwt
+from flask import Flask, g, make_response, request
+from hhb_backend.auth.models import User
+from jwt import InvalidTokenError
 
 
 class Auth():
-    def __init__(self, app: Flask, anonymous_rolename: str = 'anonymous', default_rolename='user'):
+    def __init__(self, app: Flask):
         self.logger = logger = logging.getLogger(__name__)
-        self.audience = app.config.get("AUTH_AUDIENCE", None) or "huishoudboekje-medewerkers"
-        self.secret = app.config.get("JWT_SECRET", None) or "test"
+        self.audience = app.config.get("AUTH_AUDIENCE", None)
+        self.secret = app.config.get("JWT_SECRET", None)
 
         self.logger.debug(f"JWT_SECRET {self.secret}, AUTH_AUDIENCE {self.audience}")
+
+        if self.audience is None:
+            self.logger.error("Missing environment variables AUTH_AUDIENCE.")
+            # Todo: crash the app
+            raise RuntimeError()
+
+        if self.secret is None:
+            self.logger.error("Missing environment variables JWT_SECRET.")
+            # Todo: crash the app
+            raise RuntimeError()
+
+        self.logger.debug(f"3")
 
         app.before_request(self._init_auth)
 
@@ -82,8 +90,8 @@ class Auth():
             try:
                 # Try to decode and verify the token
                 claims = jwt.decode(token, self.secret, algorithms=['HS256'], audience=self.audience)
-                email = claim.get('email', None)
-                name = claim.get('name', None)
+                email = claims.get('email', None)
+                name = claims.get('name', None)
                 if email and name:
                     user = User(email=email, name=name)
                     self.logger.debug(f"_user_loader: token user: {user}")
