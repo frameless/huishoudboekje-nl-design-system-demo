@@ -28,6 +28,7 @@ def test_create_alarm(client):
         }
         afspraak = {
             "id": afspraak_id,
+            "burger_id": 1,
             "credit": False,
             "bedrag": 76532,
             "valid_from": "2021-01-01",
@@ -278,5 +279,123 @@ def test_create_alarm_failure_only_byMonth_defined(client):
         )
 
         # assert
+        assert fallback.called == 0
+        assert response.json["errors"][0]["message"] == expected
+
+@freeze_time("2021-12-01")
+def test_create_alarm_failure_afspraak_does_not_have_burger(client):
+    with requests_mock.Mocker() as rm:
+        # arrange
+        input = {
+            "isActive": True,
+            "afspraakId": 19,
+            "startDate":"2021-12-02",
+            "datumMargin": 5,
+            "bedrag":"120.12",
+            "bedragMargin": "10.34",
+            "byDay": ["Wednesday"]
+        }
+        afspraak = {
+            "id": 19,
+            "burger_id": None,
+            "credit": False,
+            "bedrag": 76532,
+            "valid_from": "2021-01-01",
+            "alarm_id": "bd6222e7-bfab-46bc-b0bc-2b30b76228d4"
+        }
+        expected = "De afspraak is niet gekoppeld aan een burger."
+        fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
+        rm0 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/19", status_code=200, json={"data": afspraak})
+
+        # act
+        response = client.post(
+            "/graphql",
+            json={
+                "query": '''
+                    mutation test($input:CreateAlarmInput!) {
+                        createAlarm(input:$input) {
+                            ok
+                            alarm{
+                                id
+                                isActive
+                                afspraak{
+                                    id
+                                }
+                                startDate
+                                datumMargin
+                                bedrag
+                                bedragMargin
+                            }
+                        }
+                    }''',
+                "variables": {
+                    "input": input
+                }
+            },
+            content_type='application/json'
+        )
+
+        # assert
+        assert rm0.called_once
+        assert fallback.called == 0
+        assert response.json["errors"][0]["message"] == expected
+
+        
+@freeze_time("2021-12-01")
+def test_create_alarm_failure_afspraak_ended(client):
+    with requests_mock.Mocker() as rm:
+        # arrange
+        input = {
+            "isActive": True,
+            "afspraakId": 19,
+            "startDate":"2021-12-02",
+            "datumMargin": 5,
+            "bedrag":"120.12",
+            "bedragMargin": "10.34",
+            "byDay": ["Wednesday"]
+        }
+        afspraak = {
+            "id": 19,
+            "burger_id": 1,
+            "credit": False,
+            "bedrag": 76532,
+            "valid_from": "2021-01-01",
+            "valid_through": "2021-10-01",
+            "alarm_id": "bd6222e7-bfab-46bc-b0bc-2b30b76228d4"
+        }
+        expected = "De afspraak is niet actief na de start datum."
+        fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
+        rm0 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/19", status_code=200, json={"data": afspraak})
+
+        # act
+        response = client.post(
+            "/graphql",
+            json={
+                "query": '''
+                    mutation test($input:CreateAlarmInput!) {
+                        createAlarm(input:$input) {
+                            ok
+                            alarm{
+                                id
+                                isActive
+                                afspraak{
+                                    id
+                                }
+                                startDate
+                                datumMargin
+                                bedrag
+                                bedragMargin
+                            }
+                        }
+                    }''',
+                "variables": {
+                    "input": input
+                }
+            },
+            content_type='application/json'
+        )
+
+        # assert
+        assert rm0.called_once
         assert fallback.called == 0
         assert response.json["errors"][0]["message"] == expected
