@@ -21,7 +21,7 @@
         --audience "${HHB_HOST}" \
         --jwtid "$(LC_CTYPE=C tr -dc 'A-F0-9' < /dev/urandom | head -c32)" \
         --noCopy \
-        "{}" "${JWT_SECRET:-$SESSION_SECRET}"`
+        "{ \"name\": \"sampledata\", \"email\": \"sampledata@${HHB_HOST}\" }" "${JWT_SECRET:-$SESSION_SECRET}"`
     - echo JWT $PROXY_AUTHORIZATION
     - export GRAPHQL_API_URL=https://${HHB_HOST}/api/graphql
     - echo API_URL ${GRAPHQL_API_URL}
