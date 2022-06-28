@@ -8,7 +8,7 @@ app = create_app()
 from core_service.database import db
 
 app.config.from_object(
-    os.getenv("APP_SETTINGS", "bank_transactie_service.config.DevelopmentConfig")
+    "bank_transactie_service.config.Config"
 )
 
 migrate = Migrate(app, db)

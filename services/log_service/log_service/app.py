@@ -12,7 +12,7 @@ db = database.db
 
 
 def create_app(
-    config_name=os.getenv("APP_SETTINGS", "log_service.config.DevelopmentConfig")
+    config_name="log_service.config.Config"
 ):
     app = Flask(__name__)
     app.config.from_object(config_name)
@@ -23,14 +23,13 @@ def create_app(
         format='%(asctime)s %(levelname)-8s %(message)s',
         level=app.config["LOG_LEVEL"],
         datefmt='%Y-%m-%d %H:%M:%S')
-    if "DEVELOPMENT" in app.config and app.config["DEVELOPMENT"]:
-        logging.config.dictConfig(
-            {
-                "version": 1,
-                "incremental": True,
-                "loggers": {"sqlalchemy.engine": {"level": "DEBUG"}},
-            }
-        )
+    logging.config.dictConfig(
+        {
+            "version": 1,
+            "incremental": True,
+            "loggers": {"sqlalchemy.engine": {"level": app.config["LOG_LEVEL"]}},
+        }
+    )
     logging.info(f"Starting {__name__} with {config_name}")
 
     @app.route("/health")

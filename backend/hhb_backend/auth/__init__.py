@@ -14,16 +14,18 @@ class Auth():
         self.logger = logger = logging.getLogger(__name__)
         self.audience = app.config.get("JWT_AUDIENCE", None)
         self.secret = app.config.get("JWT_SECRET", None)
+        self.require_auth = app.config.get("REQUIRE_AUTH", None)
 
         self.logger.debug(f"JWT_SECRET {self.secret}, JWT_AUDIENCE {self.audience}")
 
-        if self.audience is None:
-            self.logger.error("Missing environment variable JWT_AUDIENCE.")
-            abort(500) 
+        if self.require_auth:
+            if self.audience is None:
+                self.logger.error("Missing environment variable JWT_AUDIENCE.")
+                abort(500) 
 
-        if self.secret is None:
-            self.logger.error("Missing environment variable JWT_SECRET.")
-            abort(500)
+            if self.secret is None:
+                self.logger.error("Missing environment variable JWT_SECRET.")
+                abort(500)
 
         @app.errorhandler(itsdangerous.exc.BadSignature)
         def handle_bad_signature(_e):
@@ -41,11 +43,12 @@ class Auth():
         self.logger.debug(f"current user: {self.current_user}")
 
     def require_login(self, func):
-        def wrapper():
-            self._init_auth()
-            if self.current_user == None:
-                return self._not_logged_in()
-            func()
+        def wrapper(*args, **kwargs):
+            if self.require_auth:
+                self._init_auth()
+                if self.current_user == None:
+                    return self._not_logged_in()
+            return func(*args, **kwargs)
         wrapper.__name__ = func.__name__
         return wrapper        
 
@@ -55,7 +58,9 @@ class Auth():
 
     @current_user.setter
     def current_user(self, user):
+        self.logger.debug(f"User saved in g: {user}")
         g.current_user = user
+        self.logger.debug(f"User in g: {g.current_user}")
 
     @property
     def _exp(self) -> dict:

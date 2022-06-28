@@ -6,7 +6,7 @@ from testing.postgresql import Postgresql
 
 from log_service.app import create_app
 from log_service.app import db as _db
-from log_service.config import TestingConfig
+from log_service.config import Config
 from tests.factories import GebruikersActiviteitFactory
 
 
@@ -24,7 +24,7 @@ def app(request):
     Returns session-wide application.
     """
     with Postgresql() as postgresql:
-        app = create_app(TestingConfig)
+        app = create_app(Config)
         app.config['SQLALCHEMY_DATABASE_URI'] = postgresql.url()
         yield app
 

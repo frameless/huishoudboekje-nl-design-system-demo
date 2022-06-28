@@ -14,8 +14,7 @@ from hhb_backend.reverse_proxy import ReverseProxied
 
 
 def create_app(
-        config_name=os.getenv("APP_SETTINGS", None)
-                    or "hhb_backend.config.DevelopmentConfig",
+        config_name="hhb_backend.config.Config",
         loop=None
 ):
     app = Flask(__name__)

@@ -18,7 +18,6 @@ This service contains the functionality needed to access data from banktransacti
     export FLASK_ENV="development"
     export JWT_SECRET="local-secret"
     export TRANSACTIE_DATABASE_URL="postgresql://transactieservice:transactieservice@localhost/transactieservice"
-    export APP_SETTINGS="bank_transactie_service.config.DevelopmentConfig"
     ```
 
 - Setup your database (make sure you have a PostgreSQL database up and running. See [root README](../../README.md) on how to do this)
@@ -65,7 +64,6 @@ This service contains the functionality needed to access data from banktransacti
     set FLASK_ENV="development"
     set JWT_SECRET="local-secret"
     set TRANSACTIE_DATABASE_URL=postgresql://transactieservice:transactieservice@localhost/transactieservice
-    set APP_SETTINGS=bank_transactie_service.config.DevelopmentConfig
     ```
 
 - Activate the virtual environment

@@ -5,7 +5,7 @@ from sqlalchemy.orm.session import close_all_sessions
 from testing.postgresql import Postgresql
 
 from tests.basket_service.app import create_app, db as _db
-from tests.basket_service.config import TestingConfig
+from tests.basket_service.config import Config
 from tests.factories.basket_factory import BasketFactory
 from tests.factories.fruit_factory import FruitFactory
 
@@ -24,7 +24,7 @@ def app(request):
     Returns session-wide application.
     """
     with Postgresql() as postgresql:
-        app = create_app(TestingConfig)
+        app = create_app(Config)
         app.config['SQLALCHEMY_DATABASE_URI'] = postgresql.url()
         yield app
 

@@ -23,7 +23,6 @@ ENV FLASK_RUN_PORT="8000"
 ENV FLASK_ENV="development"
 ENV JWT_SECRET="local-secret"
 ENV LOG_DATABASE_URL="postgresql://hhb:hhb@host.docker.internal/logservice"
-ENV APP_SETTINGS="log_service.config.DevelopmentConfig"
 
 EXPOSE 8000
 

@@ -18,7 +18,6 @@ This service contains the functionality needed to access data from grootboeken.
     export FLASK_ENV="development"
     export JWT_SECRET="local-secret"
     export GROOTBOEK_DATABASE_URL="postgresql://grootboekservice:grootboekservice@localhost/grootboekservice"
-    export APP_SETTINGS="grootboek_service.config.DevelopmentConfig"
     ```
 
 - Setup your database (make sure you have a PostgreSQL database up and running. See [root README](../../README.md) on how to do this)
@@ -65,7 +64,6 @@ This service contains the functionality needed to access data from grootboeken.
     set FLASK_ENV="development"
     set JWT_SECRET="local-secret"
     set GROOTBOEK_DATABASE_URL=postgresql://grootboekservice:grootboekservice@localhost/grootboekservice
-    set APP_SETTINGS=grootboek_service.config.DevelopmentConfig
     ```
 
 - Activate the virtual environment

@@ -9,8 +9,8 @@ spec:
       containers:
         - name: hhb-backend
           env:
-            - name: APP_SETTINGS
-              value: "hhb_backend.config.LocalConfig" # OIDC_ID_TOKEN_COOKIE_SECURE = False
+#            - name: APP_SETTINGS
+#              value: "hhb_backend.config.LocalConfig" # OIDC_ID_TOKEN_COOKIE_SECURE = False
             - name: JWT_AUDIENCE
               value: http://${HHB_APP_HOST} # http not https
 ---
@@ -38,9 +38,9 @@ spec:
     spec:
       containers:
         - name: hhb-backend
-          env:
-            - name: APP_SETTINGS
-              value: hhb_backend.config.DevelopmentConfig
+#          env:
+#            - name: APP_SETTINGS
+#              value: hhb_backend.config.DevelopmentConfig
 ---
 apiVersion: apps/v1
 kind: Deployment

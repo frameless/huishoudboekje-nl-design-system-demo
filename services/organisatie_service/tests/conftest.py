@@ -7,7 +7,7 @@ from sqlalchemy import event
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import close_all_sessions
 from testing.postgresql import Postgresql
-from organisatie_service.config import TestingConfig
+from organisatie_service.config import Config
 
 # TODO importing from ./factories seems broken, i gave up
 from models.afdeling import Afdeling
@@ -86,7 +86,7 @@ def app(request):
     Returns session-wide application.
     """
     with Postgresql() as postgresql:
-        app = create_app(TestingConfig)
+        app = create_app(Config)
         app.config['SQLALCHEMY_DATABASE_URI'] = postgresql.url()
         yield app
 

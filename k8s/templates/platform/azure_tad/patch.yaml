@@ -141,9 +141,9 @@ spec:
     spec:
       containers:
         - name: hhb-backend
-          env:
-            - name: APP_SETTINGS
-              value: hhb_backend.config.DevelopmentConfig
+#          env:
+#            - name: APP_SETTINGS
+#              value: hhb_backend.config.DevelopmentConfig
 ---
 apiVersion: apps/v1
 kind: Deployment

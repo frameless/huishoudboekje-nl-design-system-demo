@@ -11,7 +11,7 @@ from tests.basket_service.views.fruit_view import FruitView
 db = database.db
 
 
-def create_app(config_name=os.getenv('APP_SETTINGS', 'tests.basket_service.config.TestingConfig')):
+def create_app(config_name='tests.basket_service.config.Config'):
     app = Flask(__name__)
     app.config.from_object(config_name)
 

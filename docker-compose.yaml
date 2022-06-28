@@ -99,6 +99,9 @@ x-py-tests: &x-py-tests
     - /bin/sh
     - -c
     - pytest tests
+  environment:
+    JWT_AUDIENCE: pytest
+    JWT_SECRET: pytestsecret
 
 x-js-tests: &x-js-tests
   profiles:
@@ -167,6 +170,7 @@ services:
       - ./services/authservice:/app
     environment:
       NODE_ENV: development
+      LOG_LEVEL: DEBUG
       OIDC_ISSUER_URL: https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje/
       OIDC_CLIENT_ID: huishoudboekje-medewerkers
       OIDC_CLIENT_SECRET: fc36d31f-f720-4914-a750-b83c7b0dd61c
@@ -182,8 +186,8 @@ services:
     <<: *x-backend
     container_name: backend
     environment:
-      APP_SETTINGS: hhb_backend.config.DevelopmentConfig
       PREFIX: /api
+      LOG_LEVEL: DEBUG
       JWT_AUDIENCE: huishoudboekje-medewerkers
       JWT_SECRET: testtest
       HHB_SERVICE_URL: "http://huishoudboekjeservice:8000"
@@ -225,6 +229,7 @@ services:
     container_name: huishoudboekjeservice
     environment:
       DATABASE_URL: "postgresql://hhb:hhb@db/huishoudboekjeservice"
+      LOG_LEVEL: DEBUG
     ports:
       - 8001:8000
     depends_on:
@@ -239,6 +244,7 @@ services:
     container_name: organisatieservice
     environment:
       DATABASE_URL: "postgresql://hhb:hhb@db/organisatieservice"
+      LOG_LEVEL: DEBUG
     ports:
       - 8002:8000
     depends_on:
@@ -253,6 +259,7 @@ services:
     container_name: banktransactieservice
     environment:
       DATABASE_URL: "postgresql://hhb:hhb@db/banktransactieservice"
+      LOG_LEVEL: DEBUG
     ports:
       - 8003:8000
     depends_on:
@@ -267,6 +274,7 @@ services:
     container_name: grootboekservice
     environment:
       DATABASE_URL: "postgresql://hhb:hhb@db/grootboekservice"
+      LOG_LEVEL: DEBUG
     ports:
       - 8004:8000
     depends_on:
@@ -281,6 +289,7 @@ services:
     container_name: logservice
     environment:
       DATABASE_URL: "postgresql://hhb:hhb@db/logservice"
+      LOG_LEVEL: DEBUG
     ports:
       - 8005:8000
     depends_on:
@@ -297,6 +306,7 @@ services:
     container_name: postadressenservice
     environment:
       DATABASE_URL: "postgresql://hhb:hhb@db/postadressenservice?connect_timeout=300"
+      LOG_LEVEL: DEBUG
     ports:
       - 8007:8080
     depends_on:
@@ -311,6 +321,7 @@ services:
     container_name: alarmenservice
     environment:
       DATABASE_URL: "postgresql://hhb:hhb@db/alarmenservice?connect_timeout=300"
+      LOG_LEVEL: DEBUG
     ports:
       - 8008:8080
     depends_on:
@@ -325,6 +336,7 @@ services:
     container_name: signalenservice
     environment:
       DATABASE_URL: "postgresql://hhb:hhb@db/signalenservice?connect_timeout=300"
+      LOG_LEVEL: DEBUG
     ports:
       - 8009:8080
     depends_on:

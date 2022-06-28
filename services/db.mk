@@ -8,12 +8,12 @@ createdb:
 
 .PHONY: preparedb
 preparedb: createdb
-	APP_SETTINGS=$(CONFIG_MODULE).config.DevelopmentConfig \
+	APP_SETTINGS=$(CONFIG_MODULE).config.Config \
 	python manage.py db upgrade
 
 .PHONY: lint-alembic
 lint-alembic:
-	export APP_SETTINGS=$(CONFIG_MODULE).config.DevelopmentConfig
+	export APP_SETTINGS=$(CONFIG_MODULE).config.Config
 	#(if (shell python manage.py db heads | awk 'NR>1'), \
 #		(error 'Multiple alembic revision heads detected, see https://alembic.sqlalchemy.org/en/latest/branches.html'), \
 #	)
