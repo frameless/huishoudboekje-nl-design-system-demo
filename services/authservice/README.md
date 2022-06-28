@@ -11,7 +11,7 @@ Example `.env`:
 ```dotenv
 OIDC_ISSUER_URL=https://your-identity-provider.example.com/auth
 OIDC_CLIENT_ID=huishoudboekje-medewerkers
-OIDC_CLIENT_SECRET=fc36d31f-f720-4914-a750-b83c7b0dd61c
+OIDC_CLIENT_SECRET=your-idp-client-secret
 OIDC_BASE_URL=https://your-app.example.com
 JWT_ISSUER=your-app-issuer
 JWT_AUDIENCE=your-app-audience

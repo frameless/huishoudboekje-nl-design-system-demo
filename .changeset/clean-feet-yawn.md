@@ -1,27 +1,58 @@
 ---
-"huishoudboekje": major
+"huishoudboekje": minor
 ---
 
-Extracted authorization to a separate service that is compatible with OpenID Connect
+Fixed #950: Moved configuration for client secrets to environment variables
+Fixed #975: Extracted authorization to a separate service that is compatible with OpenID Connect
 
 ## Migration guide
 
-### Authservice 
+### Authservice
 
-A new application called `authservice` has been added to the deployment. Please see k8s/authservice for the Kubernetes specification. 
+A new application called `authservice` has been added to the deployment. Please see k8s/authservice for the Kubernetes specification.
 The following environment variables should be added to your deployment for the `authservice`:
 
 ```shell
-OIDC_ISSUER_URL="{your issuer url}"
-OIDC_CLIENT_ID="{your client id}"
-OIDC_CLIENT_SECRET="{your client secret}"
-OIDC_BASE_URL="{the url on which the application is running}"
-JWT_ISSUER="{the issuer of the JWT. Eg. huishoudboekje}"
-JWT_AUDIENCE="{the issuer of the JWT. Eg. huishoudboekje}"
-JWT_EXPIRES_IN="{the issuer of the JWT. Eg. 30d}"
+OIDC_ISSUER_URL=https://your-identity-provider.example.com/auth
+OIDC_CLIENT_ID=huishoudboekje-medewerkers
+OIDC_CLIENT_SECRET=your-idp-client-secret
+OIDC_BASE_URL=https://your-app.example.com
+JWT_ISSUER=your-app-issuer
+JWT_EXPIRES_IN=30d
+JWT_AUDIENCE=your-app-audience # <-- This value must be the same for authservice and backend.
+JWT_SECRET=long-random-string # <-- This value must be the same for authservice and backend.
 ```
 
 ### Backend
 
-The environment variables `AUTH_AUDIENCE`, `OIDC_ISSUER`, `OIDC_AUTHORIZATION_ENDPOINT`, `OIDC_TOKEN_ENDPOINT`, `OIDC_TOKENINFO_ENDPOINT` and `OIDC_USERINFO_ENDPOINT`
-for the `backend` application have become obsolete and should be removed from your deployment.
+The following environment variables should be added to your deployment for the `backend`:
+
+```shell
+JWT_SECRET=long-random-string # <-- This value must be the same for authservice and backend.
+JWT_AUDIENCE=your-app-audience # <-- This value must be the same for authservice and backend.
+```
+
+The following environment variables have become obsolete and should be removed from this deployment:
+
+```shell
+OIDC_ISSUER
+OIDC_AUTHORIZATION_ENDPOINT
+OIDC_TOKEN_ENDPOINT
+OIDC_TOKENINFO_ENDPOINT
+OIDC_USERINFO_ENDPOINT
+OIDC_CLOCK_SKEW
+OIDC_CLIENT_SECRETS
+AUTH_AUDIENCE
+HHB_SECRET
+SECRET_KEY
+```
+
+## Services
+
+The following environment variables have become obsolete and should be removed from the deployments of the alarmenservice, banktransactieservice, 
+grootboekservice, huishoudboekjeservice, logservice, organisatieservice, postadressenservice and the signalenservice:
+
+```shell
+HHB_SECRET
+SECRET_KEY
+```
