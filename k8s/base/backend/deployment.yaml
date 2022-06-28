@@ -48,7 +48,7 @@ spec:
           env:
             - name: APP_SETTINGS
               value: "hhb_backend.config.ProductionConfig"
-            - name: AUTH_AUDIENCE
+            - name: JWT_AUDIENCE
               value: "change this in a patch"
             - name: JWT_SECRET
               value: "change this in a patch"

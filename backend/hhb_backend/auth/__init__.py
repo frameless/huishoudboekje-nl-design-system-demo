@@ -12,13 +12,13 @@ from jwt import InvalidTokenError
 class Auth():
     def __init__(self, app: Flask):
         self.logger = logger = logging.getLogger(__name__)
-        self.audience = app.config.get("AUTH_AUDIENCE", None)
+        self.audience = app.config.get("JWT_AUDIENCE", None)
         self.secret = app.config.get("JWT_SECRET", None)
 
-        self.logger.debug(f"JWT_SECRET {self.secret}, AUTH_AUDIENCE {self.audience}")
+        self.logger.debug(f"JWT_SECRET {self.secret}, JWT_AUDIENCE {self.audience}")
 
         if self.audience is None:
-            self.logger.error("Missing environment variables AUTH_AUDIENCE.")
+            self.logger.error("Missing environment variables JWT_AUDIENCE.")
             # Todo: crash the app
             raise RuntimeError()
 

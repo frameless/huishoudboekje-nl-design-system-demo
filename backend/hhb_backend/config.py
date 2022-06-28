@@ -9,7 +9,7 @@ def strip_quotes(s):
 
 
 class Config(object):
-    AUTH_AUDIENCE = os.getenv("AUTH_AUDIENCE", None)
+    JWT_AUDIENCE = os.getenv("JWT_AUDIENCE", None)
     JWT_SECRET = os.getenv("JWT_SECRET", None)
     CSRF_ENABLED = True
     DEBUG = False

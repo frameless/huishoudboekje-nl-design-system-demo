@@ -184,7 +184,7 @@ services:
     environment:
       APP_SETTINGS: hhb_backend.config.DevelopmentConfig
       PREFIX: /api
-      AUTH_AUDIENCE: huishoudboekje-medewerkers
+      JWT_AUDIENCE: huishoudboekje-medewerkers
       JWT_SECRET: testtest
       HHB_SERVICE_URL: "http://huishoudboekjeservice:8000"
       ORGANISATIE_SERVICE_URL: "http://organisatieservice:8000"

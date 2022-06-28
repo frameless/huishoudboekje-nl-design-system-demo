@@ -19,7 +19,7 @@ spec:
       containers:
         - name: hhb-backend
           env:
-            - name: AUTH_AUDIENCE
+            - name: JWT_AUDIENCE
               ${DOLLAR}patch: delete
             - name: JWT_SECRET
               ${DOLLAR}patch: delete
@@ -37,7 +37,7 @@ spec:
       containers:
         - name: hhb-backend
           env:
-            - name: AUTH_AUDIENCE
+            - name: JWT_AUDIENCE
               valueFrom:
                 configMapKeyRef:
                   name: authservice-config
