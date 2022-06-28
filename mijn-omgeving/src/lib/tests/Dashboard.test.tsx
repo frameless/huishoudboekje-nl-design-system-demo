@@ -4,8 +4,6 @@ import {render, unmountComponentAtNode} from "react-dom";
 import '@testing-library/jest-dom';
 import Dashboard from "../components/Dashboard";
 
-jest.mock("react-router-dom", () => require("./utils/mock-hooks").reactRouterDomMock());
-
 let container: HTMLDivElement | null = null;
 
 const mockedUsedNavigate = jest.fn();
@@ -49,7 +47,7 @@ describe("Dashboard", () => {
             render(<Dashboard />, container);
         });
 
-        const card = getAllByLabelText(container!, "ArrowRightIcon")[1] as HTMLAnchorElement;
+        const card = getAllByLabelText(container!, "ArrowRightIcon")[0] as HTMLAnchorElement;
         expect(card).toBeVisible();
 
         const spy = jest.spyOn(card, "click");
