@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from http.client import HTTPException
 import io
 import logging
 import os
@@ -30,7 +31,10 @@ def create_app(
     if app.config["PREFIX"]:
         app.wsgi_app = ReverseProxied(app.wsgi_app, script_name=app.config["PREFIX"])
 
-    auth = Auth(app)
+    try:
+        auth = Auth(app)
+    except HTTPException as err:
+        logger.error(err)
 
     @app.route("/health")
     def health():
@@ -46,19 +50,19 @@ def create_app(
     graphql = graphql_blueprint.create_blueprint(loop=loop)
 
     @graphql.before_request
-    # @auth.requireLogin()
+    @auth.require_login  
     def auth_graphql():
         pass
 
     app.register_blueprint(graphql, url_prefix="/graphql")
 
     @app.route('/graphql/help')
-    # @auth.requireLogin()
+    @auth.require_login
     def voyager():
         return render_template('voyager.html')
 
     @app.route("/export/<export_id>")
-    # @auth.requireLogin()
+    @auth.require_login
     def export_overschrijvingen(export_id):
         """ Send xml overschijvingen file to client """
         # Get export object
@@ -84,7 +88,7 @@ def create_app(
         return response
 
     @app.route("/brievenexport/<burger_id>/<type>")
-    # @auth.requireLogin()
+    @auth.require_login
     def export_afspraken(burger_id, type="excel"):
         """ Send csv with afspraken data to medewerker """
         data, csv_filename_or_errorcode, excel_data, excel_filename = brieven_export.create_brieven_export(burger_id)
@@ -108,32 +112,7 @@ def create_app(
 
         return output
 
-    @app.route("/services_health")
-    def services_health():
-        service_dict = {}
-        service_dict["huishoudboekje-service"] = do_health_call_service(settings.HHB_SERVICES_URL)
-        service_dict["organisatie-service"] = do_health_call_service(settings.ORGANISATIE_SERVICES_URL)
-        service_dict["log-service"] = do_health_call_service(settings.LOG_SERVICE_URL)
-        service_dict["grootboek-service"] = do_health_call_service(settings.GROOTBOEK_SERVICE_URL)
-        service_dict["transactie-service"] = do_health_call_service(settings.TRANSACTIE_SERVICES_URL)
-
-        return jsonify(service_dict)
-
-    def do_health_call_service(service_url):
-        try:
-            response = requests.get(
-                f"{service_url}/health",
-                headers={"Content-type": "application/json"},
-            )
-            if response.ok:
-                return "up"
-        except:
-            pass
-
-        return "down"
-
     return app
-
 
 if __name__ == "__main__":
     create_app().run()

@@ -4,7 +4,7 @@ from time import time
 
 import itsdangerous
 import jwt
-from flask import Flask, g, make_response, request
+from flask import Flask, abort, g, make_response, request
 from hhb_backend.auth.models import User
 from jwt import InvalidTokenError
 
@@ -18,18 +18,12 @@ class Auth():
         self.logger.debug(f"JWT_SECRET {self.secret}, JWT_AUDIENCE {self.audience}")
 
         if self.audience is None:
-            self.logger.error("Missing environment variables JWT_AUDIENCE.")
-            # Todo: crash the app
-            raise RuntimeError()
+            self.logger.error("Missing environment variable JWT_AUDIENCE.")
+            abort(500) 
 
         if self.secret is None:
-            self.logger.error("Missing environment variables JWT_SECRET.")
-            # Todo: crash the app
-            raise RuntimeError()
-
-        self.logger.debug(f"3")
-
-        app.before_request(self._init_auth)
+            self.logger.error("Missing environment variable JWT_SECRET.")
+            abort(500)
 
         @app.errorhandler(itsdangerous.exc.BadSignature)
         def handle_bad_signature(_e):
@@ -44,8 +38,16 @@ class Auth():
     def _init_auth(self):
         self.logger.debug("init_auth")
         self.current_user = self._user_loader()
-        if self.current_user == None:
-            return self._not_logged_in()
+        self.logger.debug(f"current user: {self.current_user}")
+
+    def require_login(self, func):
+        def wrapper():
+            self._init_auth()
+            if self.current_user == None:
+                return self._not_logged_in()
+            func()
+        wrapper.__name__ = func.__name__
+        return wrapper        
 
     @property
     def current_user(self):
@@ -83,10 +85,9 @@ class Auth():
     def _user_loader(self):
         token = self._token_loader()
 
-        unverifiedToken = jwt.decode(token, options={"verify_signature": False})
-        self.logger.debug(f"""_user_loader: Token: {token}, claims: {unverifiedToken}""")
-
         if token is not None:
+            unverifiedToken = jwt.decode(token, options={"verify_signature": False})
+            self.logger.debug(f"""_user_loader: Token: {token}, claims: {unverifiedToken}""")
             try:
                 # Try to decode and verify the token
                 claims = jwt.decode(token, self.secret, algorithms=['HS256'], audience=self.audience)
