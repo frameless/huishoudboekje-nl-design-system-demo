@@ -188,6 +188,7 @@ services:
     environment:
       PREFIX: /api
       LOG_LEVEL: DEBUG
+      REQUIRE_AUTH: 0
       JWT_AUDIENCE: huishoudboekje-medewerkers
       JWT_SECRET: testtest
       HHB_SERVICE_URL: "http://huishoudboekjeservice:8000"
