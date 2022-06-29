@@ -47,13 +47,17 @@ describe("Dashboard", () => {
             render(<Dashboard />, container);
         });
 
-        const card = getAllByLabelText(container!, "ArrowRightIcon")[0] as HTMLAnchorElement;
-        expect(card).toBeVisible();
+        const cards = getAllByLabelText(container!, "ArrowRightIcon");
 
-        const spy = jest.spyOn(card, "click");
-        card.click();
+        cards.forEach(card => {
+            expect(card).toBeVisible();
 
-        expect(spy).toHaveBeenCalledTimes(1);
+            const spy = jest.spyOn(card, "click");
+            card.click();
+
+            expect(spy).toHaveBeenCalledTimes(1);
+        })
+        
     });
 
 });

@@ -3,4 +3,7 @@ export const reactRouterDomMock = () => ({
     useNavigate: (str) => {
         // Don't do anything
     },
+    NavLink: jest.fn().mockImplementation(({children}) => {
+        return <div>{children}</div>;
+    }),
 });
