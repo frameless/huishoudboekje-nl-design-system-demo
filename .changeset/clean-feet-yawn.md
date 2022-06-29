@@ -7,6 +7,8 @@ Fixed #975: Extracted authorization to a separate service that is compatible wit
 
 ## Migration guide
 
+**⚠️ The redirect URI for OpenID Connect has been changed to `/auth/callback`. Please update the client settings in your Identity Provider.** 
+
 ### Authservice
 
 A new application called `authservice` has been added to the deployment. Please see k8s/authservice for the Kubernetes specification.
