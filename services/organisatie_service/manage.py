@@ -7,7 +7,7 @@ app = create_app()
 from core_service.database import db
 
 
-app.config.from_object('hhb_backend.config.Config')
+app.config.from_object('organisatie_service.config.Config')
 
 migrate = Migrate(app, db)
 manager = Manager(app)

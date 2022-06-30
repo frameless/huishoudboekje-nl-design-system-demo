@@ -2,19 +2,14 @@ import inspect
 import logging
 import types
 from dataclasses import dataclass, field
-from functools import wraps
-
-from attr import has
-
-from dataclasses_json import dataclass_json, LetterCase, config
-
 from datetime import datetime
+from functools import wraps
 from typing import List
 
 import requests
+from dataclasses_json import dataclass_json, LetterCase, config
 from dateutil import tz
 from flask import request, g
-
 from hhb_backend.graphql import settings
 from hhb_backend.version import load_version
 
