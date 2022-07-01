@@ -22,7 +22,7 @@ from core_service import database
 db = database.db
 
 
-def create_app(config_name=os.getenv('APP_SETTINGS', 'huishoudboekje_service.config.DevelopmentConfig')):
+def create_app(config_name='huishoudboekje_service.config.Config'):
     app = Flask(__name__)
     app.config.from_object(config_name)
 

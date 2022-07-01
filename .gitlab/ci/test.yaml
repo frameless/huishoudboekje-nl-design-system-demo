@@ -263,6 +263,8 @@ backend-test:
   extends: .Service Test
   variables:
     DIRECTORY: backend
+    JWT_SECRET: pytest
+    JWT_AUDIENCE: pytestsecret
 
 core-service-test:
   <<: *only-on-branches

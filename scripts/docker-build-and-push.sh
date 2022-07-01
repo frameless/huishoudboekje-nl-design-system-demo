@@ -13,6 +13,7 @@ docker build -t $CI_REGISTRY_IMAGE/unleashservice:$IMAGE_TAG         --build-arg
 docker build -t $CI_REGISTRY_IMAGE/postadressenservice:$IMAGE_TAG    --build-arg "DOCKER_PROXY=$DOCKER_PROXY"   ./services/postadressenservice
 docker build -t $CI_REGISTRY_IMAGE/alarmenservice:$IMAGE_TAG         --build-arg "DOCKER_PROXY=$DOCKER_PROXY"   ./services/alarmenservice
 docker build -t $CI_REGISTRY_IMAGE/signalenservice:$IMAGE_TAG        --build-arg "DOCKER_PROXY=$DOCKER_PROXY"   ./services/signalenservice
+docker build -t $CI_REGISTRY_IMAGE/authservice:$IMAGE_TAG            --build-arg "DOCKER_PROXY=$DOCKER_PROXY"   ./services/authservice
 docker build -t $CI_REGISTRY_IMAGE/banktransactieservice:$IMAGE_TAG  --build-arg "DOCKER_PROXY=$DOCKER_PROXY"   --file=./services/bank_transactie_service/Dockerfile  services
 docker build -t $CI_REGISTRY_IMAGE/grootboekservice:$IMAGE_TAG       --build-arg "DOCKER_PROXY=$DOCKER_PROXY"   --file=./services/grootboek_service/Dockerfile        services
 docker build -t $CI_REGISTRY_IMAGE/huishoudboekjeservice:$IMAGE_TAG  --build-arg "DOCKER_PROXY=$DOCKER_PROXY"   --file=./services/huishoudboekje_service/Dockerfile   services
@@ -28,6 +29,7 @@ docker push $CI_REGISTRY_IMAGE/unleashservice:$IMAGE_TAG
 docker push $CI_REGISTRY_IMAGE/postadressenservice:$IMAGE_TAG
 docker push $CI_REGISTRY_IMAGE/alarmenservice:$IMAGE_TAG
 docker push $CI_REGISTRY_IMAGE/signalenservice:$IMAGE_TAG
+docker push $CI_REGISTRY_IMAGE/authservice:$IMAGE_TAG
 docker push $CI_REGISTRY_IMAGE/banktransactieservice:$IMAGE_TAG
 docker push $CI_REGISTRY_IMAGE/grootboekservice:$IMAGE_TAG
 docker push $CI_REGISTRY_IMAGE/huishoudboekjeservice:$IMAGE_TAG

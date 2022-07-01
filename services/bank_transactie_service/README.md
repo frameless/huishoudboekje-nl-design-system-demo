@@ -16,9 +16,8 @@ This service contains the functionality needed to access data from banktransacti
     export FLASK_APP="bank_transactie_service.app"
     export FLASK_RUN_PORT="8002"
     export FLASK_ENV="development"
-    export HHB_SECRET="local-secret"
+    export JWT_SECRET="local-secret"
     export TRANSACTIE_DATABASE_URL="postgresql://transactieservice:transactieservice@localhost/transactieservice"
-    export APP_SETTINGS="bank_transactie_service.config.DevelopmentConfig"
     ```
 
 - Setup your database (make sure you have a PostgreSQL database up and running. See [root README](../../README.md) on how to do this)
@@ -63,9 +62,8 @@ This service contains the functionality needed to access data from banktransacti
     set FLASK_APP=bank_transactie_service.app
     set FLASK_RUN_PORT=8002
     set FLASK_ENV="development"
-    set HHB_SECRET="local-secret"
+    set JWT_SECRET="local-secret"
     set TRANSACTIE_DATABASE_URL=postgresql://transactieservice:transactieservice@localhost/transactieservice
-    set APP_SETTINGS=bank_transactie_service.config.DevelopmentConfig
     ```
 
 - Activate the virtual environment

@@ -4,7 +4,7 @@ COVERAGE_HTML := htmlcov
 COVERAGE_XML := coverage.xml
 TESTS := tests
 
-export HHB_SECRET ?= makeSecret
+export JWT_SECRET ?= makeSecret
 ifdef DB_URL_NAME
 export $(DB_URL_NAME) ?= postgresql://$(DB_NAME):$(DB_NAME)@localhost/$(DB_NAME)
 endif

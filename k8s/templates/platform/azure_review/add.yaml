@@ -13,7 +13,6 @@ spec:
     - ReadWriteOnce
   hostPath:
     path: "/mnt/data"
-
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
@@ -141,5 +140,28 @@ spec:
             backend:
               service:
                 name: hhb-backendburgers
+                port:
+                  number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hhb-authservice-ingress
+  labels:
+    name: hhb-authservice-ingress
+spec:
+  tls:
+    - hosts:
+        - ${HHB_HOST}
+      secretName: medewerker-frontend-ingress-tls
+  rules:
+    - host: ${HHB_HOST}
+      http:
+        paths:
+          - path: /auth
+            pathType: Prefix
+            backend:
+              service:
+                name: hhb-authservice
                 port:
                   number: 80

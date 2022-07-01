@@ -1,7 +1,6 @@
-import {Box, Button, Heading, HStack, IconButton, Spinner, Stack, Text, useTheme, VStack} from "@chakra-ui/react";
+import {Box, Button, Heading, HStack, IconButton, Menu, MenuButton, MenuItem, MenuList, Spinner, Stack, Text, useTheme, VStack} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {FaLock} from "react-icons/fa";
 import {Navigate, Outlet, Route, Routes, useLocation} from "react-router-dom";
 import BetaalinstructiePage from "./components/Afspraken/Betaalinstructie";
 import CreateAfspraak from "./components/Afspraken/CreateAfspraak";
@@ -26,6 +25,7 @@ import EditOrganisatie from "./components/Organisaties/EditOrganisatie";
 import OrganisatieDetailPage from "./components/Organisaties/OrganisatieDetailPage";
 import OrganisatieList from "./components/Organisaties/OrganisatieList";
 import Rapportage from "./components/Rapportage";
+import MenuIcon from "./components/shared/MenuIcon";
 import PageNotFound from "./components/shared/PageNotFound";
 import TwoColumns from "./components/shared/TwoColumns";
 import UserStatus from "./components/shared/UserStatus";
@@ -44,18 +44,18 @@ import useAuth from "./utils/useAuth";
 
 const App = () => {
 	const {t} = useTranslation();
-	const {user, error, loading, reset} = useAuth();
-	const location = useLocation();
+	const {user, error, loading, reset, login} = useAuth();
 	const theme = useTheme();
+	const location = useLocation();
 	const dataLayer = useDataLayer(dataLayerOptions);
 	dataLayer.addHook(onPathChanged("PathChanged"));
 	useInitializeFeatureFlags();
 	const isSignalenEnabled = useFeatureFlag("signalen");
 
 	const onClickLoginButton = () => {
-		/* Save the current user's page so that we can quickly navigate back after login. */
+		/* Todo: save the current user's page so that we can quickly navigate back after login. */
 		localStorage.setItem("hhb-referer", location.pathname);
-		window.location.href = "/api/login";
+		login();
 	};
 
 	if (error) {
@@ -79,13 +79,13 @@ const App = () => {
 			</TwoColumns>
 		);
 	}
-
-	if (user) {
+	else {
 		/* Check if the user already visited a specific URL, and navigate there. */
 		const referer = localStorage.getItem("hhb-referer");
-		if (referer) {
+		if (referer && location.pathname !== referer) {
 			localStorage.removeItem("hhb-referer");
-			return (<Navigate to={referer} />);
+			window.location.href = referer;
+			return null;
 		}
 	}
 
@@ -100,8 +100,12 @@ const App = () => {
 					<Stack spacing={5} direction={"row"} justifyContent={"flex-end"} alignItems={"center"} pb={5}>
 						<HStack spacing={5} alignItems={"center"}>
 							<UserStatus name={user.email} />
-							<IconButton size={"14px"} icon={
-								<FaLock />} color={"gray.400"} _hover={{color: "primary.700"}} aria-label={t("global.actions.logout")} mr={3} onClick={reset} />
+							<Menu>
+								<IconButton as={MenuButton} icon={<MenuIcon />} variant={"solid"} size={"sm"} aria-label={"Open menu"} />
+								<MenuList>
+									<MenuItem onClick={() => reset()}>{t("global.actions.logout")}</MenuItem>
+								</MenuList>
+							</Menu>
 						</HStack>
 					</Stack>
 

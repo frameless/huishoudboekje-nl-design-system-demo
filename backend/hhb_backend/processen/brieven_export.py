@@ -139,8 +139,8 @@ def create_brieven_export(burger_id):
             "ip": ",".join(request.access_route) if request else None,
             "applicationVersion": load_version().version,  # Read version.json
         },
-        "gebruiker_id": g.oidc_id_token["email"]
-        if g and g.oidc_id_token is not None
+        "gebruiker_id": g.current_user.name
+        if g and "current_user" in g and g.current_user is not None
         else None,
         **(gebruikers_activiteit),
     }

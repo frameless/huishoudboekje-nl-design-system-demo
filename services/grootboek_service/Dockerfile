@@ -31,8 +31,7 @@ ENV GUNICORN_PORT="8000" \
     PYTHONDONTWRITEBYTECODE="1" \
     PYTHONUNBUFFERED="1" \
     PATH="/app/.local/bin:${PATH}" \
-    APP_NAME="wsgi:app" \
-    APP_SETTINGS="grootboek_service.config.ProductionConfig"
+    APP_NAME="wsgi:app"
 
 # Runtime envrionment
 CMD ["bash", "-c", "exec gunicorn \

@@ -129,8 +129,8 @@ export POSTGRESQL_PASSWORD_SIGSVC="changeme"
 
 export KEYCLOAK_DB_PASSWORD="changeme"
 
-# allways change secret FOR JWT
-export HHB_SECRET="changeme"
+# always change secret FOR JWT
+export JWT_SECRET="changeme"
 ```
 
 We are using Docker images that are hosted on our own GitLab Image Repository, so please make sure you are on an existing branch.

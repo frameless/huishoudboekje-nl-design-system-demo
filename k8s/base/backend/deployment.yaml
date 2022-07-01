@@ -46,19 +46,10 @@ spec:
               cpu: 100m
               memory: 256Mi
           env:
-            - name: APP_SETTINGS
-              value: "hhb_backend.config.ProductionConfig"
-            - name: AUTH_AUDIENCE
-              value: "must be changed with env_patch.yaml"
-            - name: AUTH_TOKEN_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: hhb-client-secrets
-                  key: SECRET_KEY
-            - name: OIDC_CLIENT_SECRETS
-              value: /opt/etc/oidc/client_secrets.json
-            - name: OIDC_CLOCK_SKEW
-              value: "600"
+            - name: JWT_AUDIENCE
+              value: "change this in a patch"
+            - name: JWT_SECRET
+              value: "change this in a patch"
             - name: PREFIX
               value: "/api"
             - name: HHB_SERVICE_URL
@@ -77,18 +68,3 @@ spec:
               value: "http://hhb-alarmenservice"
             - name: SIGNALENSERVICE_URL
               value: "http://hhb-signalenservice"
-            - name: SECRET_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: hhb-client-secrets
-                  key: SECRET_KEY
-          volumeMounts:
-            - name: oidc-volume
-              mountPath: /opt/etc/oidc
-      volumes:
-        - name: oidc-volume
-          secret:
-            secretName: hhb-client-secrets
-            items:
-              - key: client_secrets.json
-                path: client_secrets.json

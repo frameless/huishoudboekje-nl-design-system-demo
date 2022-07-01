@@ -42,6 +42,11 @@ deploy-deployment-master:
     NAMESPACE: "hhb-demo"
     USE_PLATFORM: "azure_tad" # azure_review_acc cluster
     UNLEASH_OTAP: production
+    OIDC_BASE_URL: "https://demo.huishoudboekje.demoground.nl"
+    OIDC_ISSUER_URL: https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje/
+    OIDC_CLIENT_ID: huishoudboekje-medewerkers
+    JWT_AUDIENCE: demo.huishoudboekje.demoground.nl
+    JWT_SECRET: demodemo
   before_script:
     - kubectl config use-context commonground/huishoudboekje/app-new:hhb-prod
   only:
@@ -60,6 +65,11 @@ deploy-deployment-acceptance:
     NAMESPACE: "hhb-acc"
     USE_PLATFORM: "azure_tad" # azure - test acc demo
     UNLEASH_OTAP: acceptance
+    OIDC_BASE_URL: "https://acc.huishoudboekje.demoground.nl"
+    OIDC_ISSUER_URL: https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje/
+    OIDC_CLIENT_ID: huishoudboekje-medewerkers
+    JWT_AUDIENCE: acc.huishoudboekje.demoground.nl
+    JWT_SECRET: accaccacc
   before_script:
     - kubectl config use-context commonground/huishoudboekje/app-new:hhb-prod
   only:
@@ -79,6 +89,11 @@ deploy-deployment-test:
     NAMESPACE: "hhb-test"
     USE_PLATFORM: "azure_tad" # azure - test acc demo
     UNLEASH_OTAP: test
+    OIDC_BASE_URL: "https://test.huishoudboekje.demoground.nl"
+    OIDC_ISSUER_URL: https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje/
+    OIDC_CLIENT_ID: huishoudboekje-medewerkers
+    JWT_AUDIENCE: test.huishoudboekje.demoground.nl
+    JWT_SECRET: testtest
   before_script:
     - kubectl config use-context commonground/huishoudboekje/app-new:hhb-prod
   only:
@@ -100,6 +115,12 @@ deploy-deployment-review:
     NAMESPACE: "hhb-$CI_COMMIT_REF_SLUG"
     USE_PLATFORM: "azure_review"
     UNLEASH_OTAP: development
+    USE_KEYCLOAK: 0
+    OIDC_BASE_URL: "https://hhb-$CI_COMMIT_REF_SLUG.nlx.reviews"
+    OIDC_ISSUER_URL: https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje/
+    OIDC_CLIENT_ID: huishoudboekje-medewerkers
+    JWT_AUDIENCE: hhb-$CI_COMMIT_REF_SLUG.nlx.reviews
+    JWT_SECRET: hhb-$CI_COMMIT_REF_SLUG
   before_script:
     - kubectl config use-context commonground/huishoudboekje/app-new:hhb-review
   only:

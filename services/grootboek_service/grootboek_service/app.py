@@ -9,7 +9,7 @@ db = database.db
 from models import *
 
 
-def create_app(config_name=os.getenv('APP_SETTINGS', 'grootboek_service.config.DevelopmentConfig')):
+def create_app(config_name='grootboek_service.config.Config'):
     app = Flask(__name__)
     app.config.from_object(config_name)
 

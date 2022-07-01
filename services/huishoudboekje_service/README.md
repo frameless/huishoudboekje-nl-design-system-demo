@@ -16,9 +16,8 @@ This service contains the functionality needed to access data that belongs to th
     export FLASK_APP="huishoudboekje_service.app"
     export FLASK_RUN_PORT="8000"
     export FLASK_ENV="development"
-    export HHB_SECRET="local-secret"
+    export JWT_SECRET="local-secret"
     export HHB_DATABASE_URL="postgresql://huishoudboekjeservice:huishoudboekjeservice@localhost/huishoudboekjeservice"
-    export APP_SETTINGS="huishoudboekje_service.config.DevelopmentConfig"
     ```
 
 - Setup your database (make sure you have a PostgreSQL database up and running. See [root README](../../README.md) on how to do this)
@@ -62,9 +61,8 @@ This service contains the functionality needed to access data that belongs to th
     set FLASK_APP=huishoudboekje_service.app
     set FLASK_RUN_PORT=8000
     set FLASK_ENV="development"
-    set HHB_SECRET="local-secret"
+    set JWT_SECRET="local-secret"
     set HHB_DATABASE_URL=postgresql://huishoudboekjeservice:huishoudboekjeservice@localhost/huishoudboekjeservice
-    set APP_SETTINGS=huishoudboekje_service.config.DevelopmentConfig
     ```
 
 - Activate the virtual environment

@@ -6,7 +6,7 @@ from testing.postgresql import Postgresql
 
 from huishoudboekje_service.app import create_app
 from huishoudboekje_service.app import db as _db
-from huishoudboekje_service.config import TestingConfig
+from huishoudboekje_service.config import Config
 from .factories import *
 
 @pytest.yield_fixture(scope="session")
@@ -23,7 +23,7 @@ def app(request):
     Returns session-wide application.
     """
     with Postgresql() as postgresql:
-        app = create_app(TestingConfig)
+        app = create_app(Config)
         app.config['SQLALCHEMY_DATABASE_URI'] = postgresql.url()
         yield app
 

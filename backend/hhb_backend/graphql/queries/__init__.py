@@ -15,7 +15,6 @@ from .rubrieken import RubriekQuery, RubriekenQuery
 from .configuraties import ConfiguratieQuery, ConfiguratiesQuery
 from .gebruikersactiviteiten import GebruikersActiviteitQuery, GebruikersActiviteitenQuery, \
     GebruikersActiviteitenPagedQuery
-from .gebruiker import GebruikerQuery
 from .huishoudens import HuishoudenQuery, HuishoudensQuery, HuishoudensPagedQuery
 from .afdelingen import AfdelingQuery, AfdelingenQuery
 from .postadressen import PostadressenQuery, PostadresQuery
@@ -51,7 +50,6 @@ class RootQuery(graphene.ObjectType):
     gebruikersactiviteit = GebruikersActiviteitQuery.return_type
     gebruikersactiviteiten = GebruikersActiviteitenQuery.return_type
     gebruikersactiviteiten_paged = GebruikersActiviteitenPagedQuery.return_type
-    gebruiker = GebruikerQuery.return_type
     huishouden = HuishoudenQuery.return_type
     huishoudens = HuishoudensQuery.return_type
     huishoudens_paged = HuishoudensPagedQuery.return_type
@@ -187,7 +185,3 @@ class RootQuery(graphene.ObjectType):
 
     async def resolve_saldo(root, info, **kwargs):
         return await SaldoQuery.resolver(root, info, **kwargs)
-        
-    @staticmethod
-    async def resolve_gebruiker(root, info, **kwargs):
-        return GebruikerQuery.resolver(root, info, **kwargs)

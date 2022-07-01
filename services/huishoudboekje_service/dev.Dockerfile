@@ -19,9 +19,8 @@ USER app
 ENV FLASK_APP="huishoudboekje_service.app"
 ENV FLASK_RUN_PORT="8000"
 ENV FLASK_ENV="development"
-ENV HHB_SECRET="local-secret"
+ENV JWT_SECRET="local-secret"
 ENV HHB_DATABASE_URL="postgresql://hhb:hhb@host.docker.internal/huishoudboekjeservice"
-ENV APP_SETTINGS="huishoudboekje_service.config.DevelopmentConfig"
 
 EXPOSE 8000
 

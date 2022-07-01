@@ -2,17 +2,14 @@ import inspect
 import logging
 import types
 from dataclasses import dataclass, field
-from functools import wraps
-
-from dataclasses_json import dataclass_json, LetterCase, config
-
 from datetime import datetime
+from functools import wraps
 from typing import List
 
 import requests
+from dataclasses_json import dataclass_json, LetterCase, config
 from dateutil import tz
 from flask import request, g
-
 from hhb_backend.graphql import settings
 from hhb_backend.version import load_version
 
@@ -78,11 +75,13 @@ def log_gebruikers_activiteit(view_func):
 
     @wraps(view_func)
     async def decorated(*args, **kwargs):
+        logging.debug("in gebruikersactiviteit decorator")
         result = await view_func(*args, **kwargs)
         try:
-            if gebruikers_activiteit := extract_gebruikers_activiteit(
-                result, *args, **kwargs
-            ):
+            gebruikers_activiteit = extract_gebruikers_activiteit(
+                result, *args, **kwargs)
+            logging.debug(f"gebruikersactiviteit: {gebruikers_activiteit}" )
+            if gebruikers_activiteit:
                 json = {
                     "timestamp": datetime.now(tz=tz.tzlocal())
                     .replace(microsecond=0)
@@ -92,8 +91,8 @@ def log_gebruikers_activiteit(view_func):
                         "ip": ",".join(request.access_route) if request else None,
                         "applicationVersion": load_version().version,  # Read version.json
                     },
-                    "gebruiker_id": g.oidc_id_token["email"]
-                    if g and g.oidc_id_token is not None
+                    "gebruiker_id": g.current_user.name
+                    if g and "current_user" in g and g.current_user is not None
                     else None,
                     **(gebruikers_activiteit),
                 }

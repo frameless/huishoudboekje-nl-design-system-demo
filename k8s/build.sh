@@ -23,9 +23,6 @@ export PULL_REPO_IMAGE=${PULL_REPO_IMAGE:-registry.gitlab.com/commonground/huish
 # Platform to use. Options are minikube, azure_review, azure_tad, true or ocp.
 export USE_PLATFORM=${USE_PLATFORM:-"true"}
 
-# If using Keycloak is not necessary, because for example a customer has its own OIDC IDP, set this to false and Keycloak won't be deployed.
-export USE_KEYCLOAK=${USE_KEYCLOAK:-"true"}
-
 # Number of pods that should be running. Default is just 1, change if you wish to scale up by default.
 export DEFAULT_REPLICAS=${DEFAULT_REPLICAS:-"1"}
 
@@ -44,12 +41,6 @@ export HHB_FRONTEND_ENDPOINT=${HHB_FRONTEND_ENDPOINT:-"https://$HHB_FRONTEND_DNS
 
 # Endpoint that the backends will be running on. (Defaults to Whatever is set in $HHB_FRONTEND_ENDPOINT, don't change if you don't know what this does.)
 export HHB_API_ENDPOINT=${HHB_API_ENDPOINT:-"$HHB_FRONTEND_ENDPOINT/api"}
-
-# Audience that is used for JWTs.
-export AUTH_AUDIENCE=${AUTH_AUDIENCE:-$HHB_HOST}
-
-# Secret that is used for JWTs.
-export HHB_SECRET=${SECRET_KEY:-"test"}
 
 # Use external database
 export POSTGRESQL_USE_EXTERNAL=${POSTGRESQL_USE_EXTERNAL:-"false"}
@@ -93,20 +84,18 @@ export POSTGRESQL_PASSWORD_PADSVC=${POSTGRESQL_PASSWORD_PADSVC:-"padsvc"}
 export POSTGRESQL_PASSWORD_ALMSVC=${POSTGRESQL_PASSWORD_ALMSVC:-"almsvc"}
 export POSTGRESQL_PASSWORD_SIGSVC=${POSTGRESQL_PASSWORD_SIGSVC:-"sigsvc"}
 
-# Default secret FOR JWTs
-export HHB_SECRET=${SECRET_KEY:-"test"}
-
 # Unleash OTAP stage
 export UNLEASH_OTAP=${UNLEASH_OTAP:-"production"}
 
 # OIDC Settings
-export OIDC_ISSUER=${OIDC_ISSUER:-"https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje"}
+export OIDC_ISSUER_URL=${OIDC_ISSUER_URL:-"https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje"}
 export OIDC_CLIENT_ID=${OIDC_CLIENT_ID:-"huishoudboekje-medewerkers"}
-export OIDC_CLIENT_SECRET=${OIDC_CLIENT_SECRET:-"fc36d31f-f720-4914-a750-b83c7b0dd61c"}
-export OIDC_AUTHORIZATION_ENDPOINT=${OIDC_AUTHORIZATION_ENDPOINT:-"https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje/protocol/openid-connect/auth"}
-export OIDC_TOKEN_ENDPOINT=${OIDC_TOKEN_ENDPOINT:-"https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje/protocol/openid-connect/token"}
-export OIDC_TOKENINFO_ENDPOINT=${OIDC_TOKENINFO_ENDPOINT:-"https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje/protocol/openid-connect/token/introspect"}
-export OIDC_USERINFO_ENDPOINT=${OIDC_USERINFO_ENDPOINT:-"https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje/protocol/openid-connect/userinfo"}
+export OIDC_CLIENT_SECRET=${OIDC_CLIENT_SECRET:-"this should come from a secret envvar"}
+export OIDC_BASE_URL=${OIDC_BASE_URL:-$HHB_APP_HOST}
+export JWT_ISSUER=${JWT_ISSUER:-$HHB_APP_HOST}
+export JWT_AUDIENCE=${JWT_AUDIENCE:-$HHB_APP_HOST}
+export JWT_EXPIRES_IN=${JWT_EXPIRES_IN:-"30d"}
+export JWT_SECRET=${JWT_SECRET:-"this should come from a secret envvar"}
 
 # Create a temporary directory to put the dist files in.
 export DEPLOYMENT_DIST_DIR="dist"
@@ -125,7 +114,7 @@ echo COMMIT_SHA = $COMMIT_SHA
 echo IMAGE_TAG = $IMAGE_TAG
 echo NAMESPACE = $NAMESPACE
 echo HHB_HOST = $HHB_HOST
-echo HHB_APP_HOST = $HHB_APP_HOST # App host can be diffrent (ocp)
+echo HHB_APP_HOST = $HHB_APP_HOST # App host can be different (ocp)
 echo DEPLOYMENT_DIST_DIR = $DEPLOYMENT_DIST_DIR
 
 # Create directory to store the dist files for the deployment in
@@ -192,6 +181,7 @@ kustomize edit set image unleashservice=${PULL_REPO_IMAGE}/unleashservice:${IMAG
 kustomize edit set image postadressenservice=${PULL_REPO_IMAGE}/postadressenservice:${IMAGE_TAG}
 kustomize edit set image alarmenservice=${PULL_REPO_IMAGE}/alarmenservice:${IMAGE_TAG}
 kustomize edit set image signalenservice=${PULL_REPO_IMAGE}/signalenservice:${IMAGE_TAG}
+kustomize edit set image authservice=${PULL_REPO_IMAGE}/authservice:${IMAGE_TAG}
 kustomize edit set image storybook=${PULL_REPO_IMAGE}/storybook:${IMAGE_TAG}
 cd ../../
 
