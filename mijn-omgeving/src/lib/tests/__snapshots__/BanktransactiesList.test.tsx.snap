@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Banktransacties List should render two transactions 1`] = `
+exports[`Banktransacties List should render transactions 1`] = `
 <div
   class="chakra-stack css-n21gh5"
 >

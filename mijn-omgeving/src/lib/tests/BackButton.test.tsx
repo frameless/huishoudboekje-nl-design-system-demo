@@ -8,79 +8,71 @@ import BackButton from "../components/BackButton";
 let container: HTMLDivElement | null = null;
 
 const mockedUsedNavigate = jest.fn();
-jest.mock('react-router-dom', () => ({
-    ...jest.requireActual('react-router-dom') as any,
-    useNavigate: () => mockedUsedNavigate,
+jest.mock("react-router-dom", () => ({
+	...jest.requireActual("react-router-dom") as any,
+	useNavigate: () => mockedUsedNavigate,
 }));
 
 beforeEach(() => {
-    container = document.createElement("div");
-    document.body.appendChild(container);
+	container = document.createElement("div");
+	document.body.appendChild(container);
 });
 
 afterEach(() => {
-    unmountComponentAtNode(container!);
-    container!.remove();
-    container = null;
+	unmountComponentAtNode(container!);
+	container!.remove();
+	container = null;
 });
 
 describe("Back Button", () => {
 
-    it('should show the button without extras', function () {
-        act(() => {
-            render(<BackButton />, container);
-        });
+	it("should show the button without extras", () => {
+		act(() => {
+			render(<BackButton />, container);
+		});
 
-        expect(container!.textContent).toBe("Terug")
-    });
+		expect(container!.textContent).toBe("Terug");
+	});
 
-    it('should show the button without custom label', function () {
-        act(() => {
-            render(<BackButton label={"Huishoudboekje"} />, container);
-        });
+	it("should show the button without custom label", () => {
+		act(() => {
+			render(<BackButton label={"Huishoudboekje"} />, container);
+		});
 
-        expect(container!.textContent).toBe("Huishoudboekje")
-    });
+		expect(container!.textContent).toBe("Huishoudboekje");
+	});
 
-    it('should trigger an onClick event and different navigation than default', function () {
+	it("should trigger an onClick event and different navigation than default", () => {
+		act(() => {
+			render(<BackButton to={"/huishoudboekje"} />, container);
+		});
 
+		const clickEvent = new Event("click", {
+			bubbles: true,
+			cancelable: true,
+		});
 
-        act(() => {
-            render(<BackButton to={"/huishoudboekje"} />, container);
-        });
+		const element = getByText(container!, "Terug");
 
-        const clickEvent = new Event("click", {
-            bubbles: true,
-            cancelable: true,
-        });
+		fireEvent(element, clickEvent);
+		expect(mockedUsedNavigate).toHaveBeenCalledTimes(1);
+		expect(mockedUsedNavigate).toHaveBeenCalledWith("/huishoudboekje");
+	});
 
-        const element = getByText(container!, "Terug");
+	it("should trigger an onClick event and default navigation", () => {
+		act(() => {
+			render(<BackButton />, container);
+		});
 
-        fireEvent(element, clickEvent);
-        expect(mockedUsedNavigate).toHaveBeenCalledTimes(1);
-        expect(mockedUsedNavigate).toHaveBeenCalledWith("/huishoudboekje");
+		const clickEvent = new Event("click", {
+			bubbles: true,
+			cancelable: true,
+		});
 
+		const element = getByText(container!, "Terug");
 
-    });
-
-    it('should trigger an onClick event and default navigation', function () {
-
-
-        act(() => {
-            render(<BackButton />, container);
-        });
-
-        const clickEvent = new Event("click", {
-            bubbles: true,
-            cancelable: true,
-        });
-
-        const element = getByText(container!, "Terug");
-
-        fireEvent(element, clickEvent);
-        expect(mockedUsedNavigate).toHaveBeenCalledTimes(1);
-        expect(mockedUsedNavigate).toHaveBeenCalledWith("/");
-
-
-    });
-})
+		fireEvent(element, clickEvent);
+		expect(mockedUsedNavigate).toHaveBeenCalledTimes(1);
+		expect(mockedUsedNavigate).toHaveBeenCalledWith("/");
+	});
+});
