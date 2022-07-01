@@ -5,13 +5,13 @@ import React from "react";
 import {useNavigate} from "react-router-dom";
 
 const BackButton: React.FC<{ to?: string, label?: string }> = ({to, label}) => {
-    const navigate = useNavigate();
+	const navigate = useNavigate();
 
-    return (
-        <Box onClick={() => navigate(to ? to : "/")} mb={3}>
-            <Link icon={<ArrowLeftIcon />} iconAlign={"start"}>{label ? label : "Terug"}</Link>
-        </Box>
-    );
+	return (
+		<Box onClick={() => navigate(to ? to : "/")} mb={3}>
+			<Link icon={<ArrowLeftIcon />} iconAlign={"start"}>{label ? label : "Terug"}</Link>
+		</Box>
+	);
 };
 
 export default BackButton;
