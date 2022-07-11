@@ -92,8 +92,8 @@ class AlarmHelper:
             raise GraphQLError(f"Aanmaken van het alarm is niet gelukt.")
         response_alarm = create_alarm_response.json()["data"]
 
-        afspraak.update({"alarm_id": response_alarm.get("id")})
-        update_afspraak_response = requests.post(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraakId}", json=afspraak, headers={"Content-type": "application/json"})
+        update_afspraak = ({"alarm_id": response_alarm.get("id")})
+        update_afspraak_response = requests.post(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraakId}", json=update_afspraak, headers={"Content-type": "application/json"})
         if update_afspraak_response.status_code != 200:
             raise GraphQLError(f"Updaten van afspraak met het nieuwe alarm is niet gelukt. Error message: {update_afspraak_response.json}")
 

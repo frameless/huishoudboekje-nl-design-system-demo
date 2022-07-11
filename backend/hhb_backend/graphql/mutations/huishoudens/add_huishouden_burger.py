@@ -24,7 +24,7 @@ class AddHuishoudenBurger(graphene.Mutation):
     ok = graphene.Boolean()
     huishouden = graphene.Field(lambda: huishouden.Huishouden)
     previous = graphene.Field(lambda: huishouden.Huishouden)
-    burgerIds = graphene.Field(lambda: burger.Burger)
+    burgerIds = graphene.Field(lambda: burger.Burger) # Todo depricated
 
     def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
         return dict(
