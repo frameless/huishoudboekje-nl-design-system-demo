@@ -28,6 +28,7 @@ const AuditLogText: React.FC<TextProps & {g: GebruikersActiviteit}> = ({g, ...pr
 	const rubriek = entities.find(e => e.entityType === "rubriek")?.rubriek;
 	const afdeling = entities.find(e => e.entityType === "afdeling")?.afdeling;
 	const postadres = entities.find(e => e.entityType === "postadres")?.postadres;
+	const betaalinstructieExport = entities.find(e => e.entityType === "export")?.export;
 
 	const burgerName = formatBurgerName(burger);
 	const components = {
@@ -64,6 +65,7 @@ const AuditLogText: React.FC<TextProps & {g: GebruikersActiviteit}> = ({g, ...pr
 		rubriek: rubriek?.naam || t("unknownRubriek"),
 		afdeling: afdeling?.naam || t("unknownAfdeling"),
 		postadres: postadres?.id || t("unknownPostadres"),
+		exportFilename: betaalinstructieExport?.naam || t("unknown")
 	};
 
 	const auditLogTextElement = auditLogTexts(values, components, action);

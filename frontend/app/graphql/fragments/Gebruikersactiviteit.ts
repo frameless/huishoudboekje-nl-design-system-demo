@@ -65,6 +65,10 @@ export const GebruikersactiviteitFragment = gql`
             postadres {
                 id
             }
+            export {
+                id
+                naam
+            }
         }
         #       snapshotBefore{
         #           burger{id}
