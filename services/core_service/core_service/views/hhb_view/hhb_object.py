@@ -54,6 +54,7 @@ class HHBObject():
                     setattr(hhb_object, key, value)
         else:
             for key, value in request.json.items():
+                logging.info(f"key: {key}, value: {value}, hhb_object: {self.hhb_object}")
                 setattr(self.hhb_object, key, value)
 
     def commit_changes(self):
