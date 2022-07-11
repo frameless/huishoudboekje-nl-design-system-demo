@@ -47,6 +47,7 @@ class HHBObject():
 
     def update_using_request_data(self):
         """ Add data to object based on request input """
+        logging.info(f"{__name__}.update_using_request_data() , request.json.type: {type(request.json)} , request.json: {request.json}")
         if type(request.json) == list:
             for item, hhb_object in zip(request.json, self.hhb_object):
                 for key, value in item.items():
