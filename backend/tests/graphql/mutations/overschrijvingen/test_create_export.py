@@ -81,6 +81,8 @@ def create_mock_adapter() -> Adapter:
             return MockResponse({'data': {'id': 'derdengeldenrekening_iban', 'waarde': 'NL36ABNA5632579034'}}, 200)
         elif request.path == "/configuratie/derdengeldenrekening_bic":
             return MockResponse({'data': {'id': 'derdengeldenrekening_bic', 'waarde': 'ABNANL2A'}}, 200)
+        elif request.path == "/gebruikersactiviteiten/": #post
+          return MockResponse({'data': {'id': 1}}, 201)
 
     adapter.add_matcher(test_matcher)
     return adapter
@@ -107,5 +109,5 @@ def test_create_export_success(client):
                               'eindDatum': '2020-12-31'}},
             content_type='application/json'
         )
-        assert mock._adapter.call_count == 8
+        assert mock._adapter.call_count == 9
         assert response.json["data"]["createExportOverschrijvingen"]["ok"] is True

@@ -14,7 +14,7 @@ class Auth():
         self.logger = logger = logging.getLogger(__name__)
         self.audience = app.config.get("JWT_AUDIENCE", None)
         self.secret = app.config.get("JWT_SECRET", None)
-        self.require_auth = app.config.get("REQUIRE_AUTH", None)
+        self.require_auth = app.config.get("REQUIRE_AUTH", True)
 
         self.logger.debug(f"JWT_SECRET {self.secret}, JWT_AUDIENCE {self.audience}")
 
@@ -44,7 +44,7 @@ class Auth():
 
     def require_login(self, func):
         def wrapper(*args, **kwargs):
-            if self.require_auth:
+            if self.require_auth != "0":
                 self._init_auth()
                 if self.current_user == None:
                     return self._not_logged_in()

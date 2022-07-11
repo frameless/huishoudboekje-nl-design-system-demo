@@ -14,6 +14,10 @@ from hhb_backend.processen.overschrijvingen_planner import (
     PlannedOverschijvingenInput,
     get_planned_overschrijvingen,
 )
+from hhb_backend.graphql.utils.gebruikersactiviteiten import (
+    gebruikers_activiteit_entities, 
+    log_gebruikers_activiteit
+    )
 import hashlib
 
 
@@ -49,6 +53,16 @@ class CreateExportOverschrijvingen(graphene.Mutation):
     ok = graphene.Boolean()
     export = graphene.Field(lambda: Export)
 
+    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
+        return dict(
+            action=info.field_name,
+            entities=gebruikers_activiteit_entities(
+                entity_type="export", result=self, key="export"
+            ),
+            after=dict(export=self.export)
+        )
+
+    @log_gebruikers_activiteit
     async def mutate(root, info, **kwargs):
         """ Create the export file based on start and end date """
         start_datum_str = kwargs.pop("startDatum")
