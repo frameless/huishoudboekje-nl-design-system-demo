@@ -24,7 +24,6 @@ class AddHuishoudenBurger(graphene.Mutation):
     ok = graphene.Boolean()
     huishouden = graphene.Field(lambda: huishouden.Huishouden)
     previous = graphene.Field(lambda: huishouden.Huishouden)
-    burgerIds = graphene.Field(lambda: burger.Burger) # Todo depricated
 
     def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
         return dict(
@@ -64,5 +63,4 @@ class AddHuishoudenBurger(graphene.Mutation):
             ok=True,
             huishouden=loaded_huishouden,
             previous=previous,
-            burgerIds=burger_ids,
         )
