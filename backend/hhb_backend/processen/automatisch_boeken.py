@@ -2,6 +2,7 @@ import re
 import logging
 from collections import Counter
 from datetime import date
+from typing import List
 
 import hhb_backend.graphql as graphql
 import hhb_backend.graphql.dataloaders as dataloaders
@@ -76,7 +77,7 @@ async def transactie_suggesties(transactie_ids):
         transactie_ids = [transactie_ids]
 
     # fetch transactions
-    transactions: [bank_transaction.BankTransaction] = (
+    transactions: List[bank_transaction.BankTransaction] = (
         await dataloaders.hhb_dataloader().bank_transactions_by_id.load_many(
             transactie_ids
         )
@@ -93,7 +94,7 @@ async def transactie_suggesties(transactie_ids):
     rekening_ids = [r["id"] if r is not None else -1 for r in rekeningen]
 
     # and afspraken for tegen_rekening.ibans of those transactions
-    afspraken: [afspraak.Afspraak] = (
+    afspraken: List[afspraak.Afspraak] = (
         await dataloaders.hhb_dataloader().afspraken_by_rekening.load_many(
             rekening_ids
         )
