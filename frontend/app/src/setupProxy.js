@@ -13,7 +13,6 @@ module.exports = (app) => {
 				Authorization: `Bearer ${process.env.AUTH_TOKEN}`,
 			},
 		},
-		logLevel: "debug",
 	}));
 
 	// Mimic the authservice replying with a valid user.

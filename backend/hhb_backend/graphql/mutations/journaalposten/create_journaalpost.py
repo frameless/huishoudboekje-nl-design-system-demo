@@ -2,6 +2,7 @@
 
 import graphene
 import requests
+from typing import List
 from graphql import GraphQLError
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
@@ -29,83 +30,6 @@ class CreateJournaalpostGrootboekrekeningInput(graphene.InputObjectType):
 
 
 class CreateJournaalpostAfspraak(graphene.Mutation):
-    """Mutatie om een banktransactie af te letteren op een afspraak."""
-
-    class Arguments:
-        input = graphene.Argument(CreateJournaalpostAfspraakInput)
-
-    ok = graphene.Boolean()
-    journaalpost = graphene.Field(lambda: Journaalpost)
-
-    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
-        return dict(
-            action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="journaalpost", result=self, key="journaalpost"
-            )
-                     + gebruikers_activiteit_entities(
-                entity_type="burger",
-                result=self.journaalpost["afspraak"],
-                key="burger_id",
-            )
-                     + gebruikers_activiteit_entities(
-                entity_type="afspraak", result=self.journaalpost, key="afspraak"
-            )
-                     + gebruikers_activiteit_entities(
-                entity_type="transaction", result=self.journaalpost, key="transaction"
-            ),
-            after=dict(journaalpost=self.journaalpost),
-        )
-
-    @staticmethod
-    @log_gebruikers_activiteit
-    async def mutate(_root, _info, input: CreateJournaalpostAfspraakInput):
-        """ Create the new Journaalpost """
-        # Validate that the references exist
-
-        transaction_id = input.get("transaction_id")
-
-        transaction: BankTransaction = (
-            await hhb_dataloader().bank_transactions_by_id.load(
-                transaction_id
-            )
-        )
-        if not transaction:
-            raise GraphQLError("transaction not found")
-
-        previous = await hhb_dataloader().journaalposten_by_transaction.load(
-            transaction_id
-        )
-        if previous:
-            raise GraphQLError(f"journaalpost already exists for transaction")
-
-        afspraak: Afspraak = await hhb_dataloader().afspraken_by_id.load(
-            input.get("afspraak_id")
-        )
-        if not afspraak:
-            raise GraphQLError("afspraak not found")
-
-        rubriek = await hhb_dataloader().rubrieken_by_id.load(afspraak["rubriek_id"])
-        input["grootboekrekening_id"] = rubriek["grootboekrekening_id"]
-
-        response = requests.post(
-            f"{settings.HHB_SERVICES_URL}/journaalposten/",
-            json=input
-        )
-        if not response.ok:
-            raise GraphQLError(f"Upstream API responded: {response.text}")
-
-        update_transaction_service_is_geboekt(transaction, is_geboekt=True)
-
-        journaalpost = response.json()["data"]
-        journaalpost["afspraak"] = afspraak
-
-        return CreateJournaalpostAfspraak(journaalpost=journaalpost, ok=True)
-
-
-@deprecated("Gebruik createJournaalpostAfspraak")
-class CreateJournaalpostPerAfspraak(graphene.Mutation):
-    """deprecated"""
     class Arguments:
         input = graphene.List(CreateJournaalpostAfspraakInput, required=True)
 
@@ -125,7 +49,7 @@ class CreateJournaalpostPerAfspraak(graphene.Mutation):
 
     @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(_root, _info, input: [CreateJournaalpostAfspraakInput]):
+    async def mutate(_root, _info, input: List[CreateJournaalpostAfspraakInput]):
         """ Create the new Journaalpost """
         # Validate that the references exist
         if len(input) == 0:
@@ -133,7 +57,7 @@ class CreateJournaalpostPerAfspraak(graphene.Mutation):
 
         transaction_ids = [j["transaction_id"] for j in input]
 
-        transactions: [BankTransaction] = (
+        transactions: List[BankTransaction] = (
             await hhb_dataloader().bank_transactions_by_id.load_many(
                 transaction_ids
             )
@@ -149,7 +73,7 @@ class CreateJournaalpostPerAfspraak(graphene.Mutation):
             if transaction is not None:
                 raise GraphQLError(f"(some) journaalposten already exist")
 
-        afspraken: [Afspraak] = await hhb_dataloader().afspraken_by_id.load_many(
+        afspraken: List[Afspraak] = await hhb_dataloader().afspraken_by_id.load_many(
             [j["afspraak_id"] for j in input]
         )
 
@@ -176,7 +100,7 @@ class CreateJournaalpostPerAfspraak(graphene.Mutation):
 
         update_transaction_service_is_geboekt(transactions, is_geboekt=True)
 
-        return CreateJournaalpostPerAfspraak(journaalposten=journaalposten, ok=True)
+        return CreateJournaalpostAfspraak(journaalposten=journaalposten, ok=True)
 
 
 

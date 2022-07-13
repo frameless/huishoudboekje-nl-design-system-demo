@@ -248,10 +248,10 @@ def test_create_journaalpost_afspraak(client):
             "/graphql",
             json={
                 "query": """
-mutation test($input:CreateJournaalpostAfspraakInput!) {
+mutation test($input:[CreateJournaalpostAfspraakInput!]!) {
   createJournaalpostAfspraak(input:$input) {
     ok
-    journaalpost {
+    journaalposten {
       id
       afspraak { id }
       transaction { id }
@@ -259,7 +259,7 @@ mutation test($input:CreateJournaalpostAfspraakInput!) {
     }
   }
 }""",
-                "variables": {"input": {"transactionId": 31, "afspraakId": 11, "isAutomatischGeboekt": False}},
+                "variables": {"input": [{"transactionId": 31, "afspraakId": 11, "isAutomatischGeboekt": False},]},
             },
             content_type="application/json",
         )
@@ -268,12 +268,12 @@ mutation test($input:CreateJournaalpostAfspraakInput!) {
             "data": {
                 "createJournaalpostAfspraak": {
                     "ok": True,
-                    "journaalpost": {
+                    "journaalposten": [{
                         "id": 23,
                         "afspraak": {"id": 11},
                         "transaction": {"id": 31},
                         "isAutomatischGeboekt": False
-                    },
+                    },]
                 }
             }
         }
@@ -292,10 +292,10 @@ def test_create_journaalpost_afspraak_journaalpost_exists(client):
             "/graphql",
             json={
                 "query": """
-mutation test($input:CreateJournaalpostAfspraakInput!) {
+mutation test($input:[CreateJournaalpostAfspraakInput!]!) {
   createJournaalpostAfspraak(input:$input) {
     ok
-    journaalpost {
+    journaalposten {
       id
       afspraak { id }
       transaction { id }
@@ -303,7 +303,7 @@ mutation test($input:CreateJournaalpostAfspraakInput!) {
     }
   }
 }""",
-                "variables": {"input": {"transactionId": 33, "afspraakId": 12, "isAutomatischGeboekt": False}},
+                "variables": {"input": [{"transactionId": 33, "afspraakId": 12, "isAutomatischGeboekt": False},]},
             },
             content_type="application/json",
         )
@@ -317,7 +317,7 @@ mutation test($input:CreateJournaalpostAfspraakInput!) {
             "errors": [
                 {
                     "locations": [{"column": 3, "line": 3}],
-                    "message": "journaalpost already exists for transaction",
+                    "message": "(some) journaalposten already exist",
                     "path": ["createJournaalpostAfspraak"],
                 }
             ],
@@ -333,7 +333,7 @@ def test_create_journaalpost_per_afspraak(client):
             json={
                 "query": """
 mutation test($input: [CreateJournaalpostAfspraakInput!]!) {
-  createJournaalpostPerAfspraak(input: $input) {
+  createJournaalpostAfspraak(input: $input) {
     ok
     journaalposten {
       id
@@ -357,7 +357,7 @@ mutation test($input: [CreateJournaalpostAfspraakInput!]!) {
         assert adapters["rubrieken"].called_once
         assert response.json == {
             "data": {
-                "createJournaalpostPerAfspraak": {
+                "createJournaalpostAfspraak": {
                     "ok": True,
                     "journaalposten": [
                         {

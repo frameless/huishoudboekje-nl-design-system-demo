@@ -2,6 +2,7 @@ import re
 import logging
 from collections import Counter
 from datetime import date
+from typing import List
 
 import hhb_backend.graphql as graphql
 import hhb_backend.graphql.dataloaders as dataloaders
@@ -38,7 +39,7 @@ async def automatisch_boeken(customer_statement_message_id: int = None):
 
     result = await graphql.schema.execute("""
 mutation AutomatischBoeken($input: [CreateJournaalpostAfspraakInput!]!) {
-  createJournaalpostPerAfspraak(input: $input) {
+  createJournaalpostAfspraak(input: $input) {
     ok
     journaalposten {
       id
@@ -57,7 +58,7 @@ mutation AutomatischBoeken($input: [CreateJournaalpostAfspraakInput!]!) {
         logging.warning(f"create journaalposten failed: {result.errors}")
         return None
 
-    journaalposten_ = result.data['createJournaalpostPerAfspraak']['journaalposten']
+    journaalposten_ = result.data['createJournaalpostAfspraak']['journaalposten']
     logging.info(f"automatisch boeken completed with {len(journaalposten_)}")
     return journaalposten_
 
@@ -76,7 +77,7 @@ async def transactie_suggesties(transactie_ids):
         transactie_ids = [transactie_ids]
 
     # fetch transactions
-    transactions: [bank_transaction.BankTransaction] = (
+    transactions: List[bank_transaction.BankTransaction] = (
         await dataloaders.hhb_dataloader().bank_transactions_by_id.load_many(
             transactie_ids
         )
@@ -93,7 +94,7 @@ async def transactie_suggesties(transactie_ids):
     rekening_ids = [r["id"] if r is not None else -1 for r in rekeningen]
 
     # and afspraken for tegen_rekening.ibans of those transactions
-    afspraken: [afspraak.Afspraak] = (
+    afspraken: List[afspraak.Afspraak] = (
         await dataloaders.hhb_dataloader().afspraken_by_rekening.load_many(
             rekening_ids
         )
