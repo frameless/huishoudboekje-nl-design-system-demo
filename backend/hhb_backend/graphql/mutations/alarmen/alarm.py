@@ -1,4 +1,3 @@
-
 import graphene
 import requests
 from flask import request
@@ -10,7 +9,7 @@ from hhb_backend.graphql import settings
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (log_gebruikers_activiteit, gebruikers_activiteit_entities)
 from hhb_backend.graphql.scalars.day_of_week import DayOfWeek
 from hhb_backend.graphql.scalars.bedrag import Bedrag
-from backend.hhb_backend.graphql.utils.dates import valid_afspraak
+from hhb_backend.graphql.utils.dates import valid_afspraak, to_date
 
 class CreateAlarmInput(graphene.InputObjectType):
     isActive = graphene.Boolean()
@@ -82,7 +81,7 @@ class AlarmHelper:
         # check if afspraak is valid
         if afspraak.get("burger_id") is None:
             raise GraphQLError("De afspraak is niet gekoppeld aan een burger.")
-        start_date_alarm = parser.parse(input.startDate).date()
+        start_date_alarm = to_date(input["startDate"])
         if not valid_afspraak(afspraak, start_date_alarm):
             raise GraphQLError("De afspraak is niet actief.")
 
@@ -151,7 +150,7 @@ class AlarmHelper:
 
 
 def date_in_past(date_input):
-    date = parser.parse(date_input).date()
+    date = to_date(date_input)
     utc_now = date.today()
     if date < utc_now:
         return True

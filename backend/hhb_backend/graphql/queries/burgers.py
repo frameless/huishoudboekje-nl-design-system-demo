@@ -1,7 +1,7 @@
 """ GraphQL Burgers query """
 import graphene
 from flask import request
-from backend.hhb_backend.graphql.utils.dates import valid_afspraak
+from hhb_backend.graphql.utils.dates import valid_afspraak
 
 import hhb_backend.graphql.models.burger as burger
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (

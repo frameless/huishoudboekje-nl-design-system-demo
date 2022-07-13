@@ -363,7 +363,7 @@ def test_create_alarm_failure_afspraak_ended(client):
             "valid_through": "2021-10-01",
             "alarm_id": "bd6222e7-bfab-46bc-b0bc-2b30b76228d4"
         }
-        expected = "De afspraak is niet actief na de start datum."
+        expected = "De afspraak is niet actief."
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
         rm0 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/19", status_code=200, json={"data": afspraak})
 
