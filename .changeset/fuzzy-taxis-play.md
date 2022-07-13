@@ -2,4 +2,4 @@
 "huishoudboekje": patch
 ---
 
-Fixes #803: make custumer statement message available in logging
+Fixed #803: Fixed an issue where Customer Statement Message were marked as unknown in audit logs.
