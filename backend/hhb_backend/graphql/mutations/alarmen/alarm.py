@@ -10,6 +10,7 @@ from hhb_backend.graphql import settings
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (log_gebruikers_activiteit, gebruikers_activiteit_entities)
 from hhb_backend.graphql.scalars.day_of_week import DayOfWeek
 from hhb_backend.graphql.scalars.bedrag import Bedrag
+from backend.hhb_backend.graphql.utils.dates import valid_afspraak
 
 class CreateAlarmInput(graphene.InputObjectType):
     isActive = graphene.Boolean()
@@ -81,11 +82,9 @@ class AlarmHelper:
         # check if afspraak is valid
         if afspraak.get("burger_id") is None:
             raise GraphQLError("De afspraak is niet gekoppeld aan een burger.")
-        if afspraak.get("valid_through"):
-            end_date_afspraak = parser.parse(afspraak.get("valid_through")).date()
-            start_date_alarm = parser.parse(input.startDate).date()
-            if end_date_afspraak < start_date_alarm:
-                raise GraphQLError("De afspraak is niet actief na de start datum.")
+        start_date_alarm = parser.parse(input.startDate).date()
+        if not valid_afspraak(afspraak, start_date_alarm):
+            raise GraphQLError("De afspraak is niet actief.")
 
         create_alarm_response = requests.post(f"{settings.ALARMENSERVICE_URL}/alarms/", json=input, headers={"Content-type": "application/json"})
         if create_alarm_response.status_code != 201:

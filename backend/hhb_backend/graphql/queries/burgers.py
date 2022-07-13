@@ -1,8 +1,7 @@
 """ GraphQL Burgers query """
 import graphene
 from flask import request
-from dateutil import parser
-from datetime import date
+from backend.hhb_backend.graphql.utils.dates import valid_afspraak
 
 import hhb_backend.graphql.models.burger as burger
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
@@ -85,14 +84,6 @@ class BurgersQuery:
             return await request.dataloader.burgers_by_id.load_many(list(burger_ids))
 
         return request.dataloader.burgers_by_id.get_all_and_cache(filters=kwargs.get("filters", None))
-
-def valid_afspraak(afspraak):
-    if afspraak.get("valid_through"):
-        afspraak_valid_through = parser.parse(afspraak.get("valid_through")).date()
-        today = date.today()
-        if afspraak_valid_through < today:
-            return False
-    return True
 
 
 class BurgersPagedQuery:
