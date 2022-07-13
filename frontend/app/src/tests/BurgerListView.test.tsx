@@ -1,55 +1,26 @@
-import {act, screen} from "@testing-library/react";
+import * as mediaQueryHooks from "@chakra-ui/media-query";
+import {render, screen} from "@testing-library/react";
 import React from "react";
-import {render, unmountComponentAtNode} from "react-dom";
 import BurgerListView from "../components/Burgers/BurgerListView";
 import {Burger} from "../generated/graphql";
 import {formatBurgerName} from "../utils/things";
 
 jest.mock("react-i18next", () => require("./utils/mock-hooks").reactI18NextMock());
 jest.mock("react-router-dom", () => require("./utils/mock-hooks").reactRouterDomMock());
-
-let container: HTMLDivElement | null = null;
-
-beforeAll(() => {
-	window.matchMedia = (query) => ({
-		matches: false,
-		media: query,
-		onchange: null,
-		addListener: jest.fn(),
-		removeListener: jest.fn(),
-		addEventListener: jest.fn(),
-		removeEventListener: jest.fn(),
-		dispatchEvent: jest.fn(),
-	});
-});
-
-beforeEach(() => {
-	container = document.createElement("div");
-	document.body.appendChild(container);
-});
-
-afterEach(() => {
-	unmountComponentAtNode(container!);
-	container!.remove();
-	container = null;
-});
+jest.spyOn(mediaQueryHooks, "useBreakpointValue").mockImplementation(() => false);
 
 it("renders an empty list", () => {
-	act(() => {
-		render(<BurgerListView burgers={[]} />, container);
-	});
+	const {container} = render(<BurgerListView burgers={[]} />);
 
-	const element = container!.querySelector("div");
+	const element = container.querySelector("div");
 	expect(element).not.toBe(null);
 	expect(element!.children.length).toEqual(0);
 });
 
 it("renders an empty list with addButton", () => {
-	act(() => {
-		render(<BurgerListView burgers={[]} showAddButton={true} />, container);
-	});
+	const {container} = render(<BurgerListView burgers={[]} showAddButton={true} />);
 
-	const element = container!.querySelector("div");
+	const element = container.querySelector("div");
 	expect(element).not.toBe(null);
 	expect(element!.children.length).toEqual(1);
 	expect(element!.innerHTML).toContain("actions.add");
@@ -83,9 +54,7 @@ it("renders a list of two burgers", () => {
 		},
 	];
 
-	act(() => {
-		render(<BurgerListView burgers={burgers} showAddButton={true} />, container);
-	});
+	render(<BurgerListView burgers={burgers} showAddButton={true} />);
 
 	const button = screen.queryByRole("button");
 	expect(button).not.toBeNull();

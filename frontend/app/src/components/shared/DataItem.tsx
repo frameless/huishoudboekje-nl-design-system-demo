@@ -1,8 +1,9 @@
 import {FormLabel, Stack, Text} from "@chakra-ui/react";
-import React from "react";
+import React, {ReactNode} from "react";
 
 type DataItemProps = {
-	label: string
+	label: string,
+	children: ReactNode
 };
 
 const DataItem: React.FC<DataItemProps> = ({label, children}) => {

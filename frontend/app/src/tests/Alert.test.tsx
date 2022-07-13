@@ -1,33 +1,17 @@
 import {Button} from "@chakra-ui/react";
-import {act, fireEvent, getByLabelText, getByText, screen} from "@testing-library/react";
+import {fireEvent, getByLabelText, getByText, render, screen} from "@testing-library/react";
 import React from "react";
-import {render, unmountComponentAtNode} from "react-dom";
 import Alert from "../components/shared/Alert";
 
 jest.mock("react-i18next", () => require("./utils/mock-hooks").reactI18NextMock());
 
-let container: HTMLDivElement | null = null;
-
-beforeEach(() => {
-	container = document.createElement("div");
-	document.body.appendChild(container);
-});
-
-afterEach(() => {
-	unmountComponentAtNode(container!);
-	container!.remove();
-	container = null;
-});
-
 describe("Alert", () => {
 	it("Shows the Alert", async () => {
-		act(() => {
-			render((
-				<Alert title={"Burger verwijderen uit huishouden"} onClose={() => void(0)}>
-					Weet je zeker dat je Chris de Burg wil verwijderen uit het huishouden de Jager-de Burg?
-				</Alert>
-			), container);
-		});
+		render((
+			<Alert title={"Burger verwijderen uit huishouden"} onClose={() => void (0)}>
+				Weet je zeker dat je Chris de Burg wil verwijderen uit het huishouden de Jager-de Burg?
+			</Alert>
+		));
 
 		const [alert] = screen.queryAllByRole("alertdialog");
 		expect(alert).toMatchSnapshot();
@@ -37,18 +21,16 @@ describe("Alert", () => {
 		const onClose = jest.fn();
 		const onConfirm = jest.fn();
 
-		act(() => {
-			render((
-				<Alert
-					title={"Burger verwijderen uit huishouden"}
-					confirmButton={<Button colorScheme={"red"} onClick={onConfirm} ml={3}>Verwijderen</Button>}
-					cancelButton
-					onClose={onClose}
-				>
-					Weet je zeker dat je Chris de Burg wil verwijderen uit het huishouden de Jager-de Burg?
-				</Alert>
-			), container);
-		});
+		render((
+			<Alert
+				title={"Burger verwijderen uit huishouden"}
+				confirmButton={<Button colorScheme={"red"} onClick={onConfirm} ml={3}>Verwijderen</Button>}
+				cancelButton
+				onClose={onClose}
+			>
+				Weet je zeker dat je Chris de Burg wil verwijderen uit het huishouden de Jager-de Burg?
+			</Alert>
+		));
 
 		const [alert] = screen.queryAllByRole("alertdialog");
 		expect(alert).toMatchSnapshot();

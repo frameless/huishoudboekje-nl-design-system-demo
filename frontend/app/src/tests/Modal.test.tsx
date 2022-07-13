@@ -1,34 +1,18 @@
-import {act, fireEvent, screen} from "@testing-library/react";
+import {fireEvent, render, screen} from "@testing-library/react";
 import React from "react";
-import {render, unmountComponentAtNode} from "react-dom";
 import Modal from "../components/shared/Modal";
 
 jest.mock("react-i18next", () => require("./utils/mock-hooks").reactI18NextMock());
-
-let container: HTMLDivElement | null = null;
-
-beforeEach(() => {
-	container = document.createElement("div");
-	document.body.appendChild(container);
-});
-
-afterEach(() => {
-	unmountComponentAtNode(container!);
-	container!.remove();
-	container = null;
-});
 
 describe("Modal", () => {
 	it("Shows the Modal", async () => {
 		const onClose = jest.fn();
 
-		act(() => {
-			render((
-				<Modal title={"Burger toevoegen"} onClose={onClose}>
-					Hier kan een formulier staan
-				</Modal>
-			), container);
-		});
+		render((
+			<Modal title={"Burger toevoegen"} onClose={onClose}>
+				Hier kan een formulier staan
+			</Modal>
+		));
 
 		const [modal] = screen.queryAllByRole("dialog");
 		expect(modal).toMatchSnapshot();

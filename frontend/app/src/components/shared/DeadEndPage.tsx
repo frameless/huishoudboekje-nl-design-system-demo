@@ -1,10 +1,11 @@
 import {As, Box, Stack, Text} from "@chakra-ui/react";
-import React from "react";
+import React, {ReactNode} from "react";
 import EmptyIllustration from "../Illustrations/EmptyIllustration";
 
 type DeadEndPageProps = {
 	illustration?: As,
-	message?: string
+	message?: string,
+	children: ReactNode,
 };
 
 const DeadEndPage: React.FC<DeadEndPageProps> = ({illustration = EmptyIllustration, message, children}) => {

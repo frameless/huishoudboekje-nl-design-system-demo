@@ -1,11 +1,12 @@
 import {Box, Heading, HStack, Stack} from "@chakra-ui/react";
-import React from "react";
+import React, {ReactNode} from "react";
 
 type PageProps = {
 	title: string,
 	backButton?: JSX.Element,
 	menu?: JSX.Element | null | false,
-	right?: JSX.Element | null | false
+	right?: JSX.Element | null | false,
+	children?: ReactNode
 };
 
 const Page: React.FC<PageProps> = ({title, backButton, menu, right, children}) => {
