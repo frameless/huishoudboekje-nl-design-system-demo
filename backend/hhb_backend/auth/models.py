@@ -6,3 +6,6 @@ class User():
 
     def __str__(self):
         return f"User(email={self.email},name={self.name})"
+
+    def to_json(self):
+        return { "email": self.email, "name": self.name }

@@ -33,7 +33,6 @@ import Sidebar from "./components/Sidebar";
 import SidebarContainer from "./components/Sidebar/SidebarContainer";
 import SignalenList from "./components/Signalen/SignalenList";
 import StatusErrorPage from "./components/Status/StatusErrorPage";
-import StatusPage from "./components/Status/StatusPage";
 import {dataLayerOptions} from "./config/dataLayer";
 import {RouteNames} from "./config/routes";
 import TestPage from "./TestPage";
@@ -99,7 +98,7 @@ const App = () => {
 				<Box height={"100%"} minHeight={"100vh"} width={"100%"} p={5}>
 					<Stack spacing={5} direction={"row"} justifyContent={"flex-end"} alignItems={"center"} pb={5}>
 						<HStack spacing={5} alignItems={"center"}>
-							<UserStatus name={user.email} />
+							<UserStatus name={user.name} role={user.email} />
 							<Menu>
 								<IconButton as={MenuButton} icon={<MenuIcon />} variant={"solid"} size={"sm"} aria-label={"Open menu"} />
 								<MenuList>
@@ -149,7 +148,6 @@ const App = () => {
 							<Route path={RouteNames.rapportage} element={<Rapportage />} />
 							<Route path={RouteNames.gebeurtenissen} element={<Gebeurtenissen />} />
 							<Route path={RouteNames.configuratie} element={<Configuratie />} />
-							<Route path={RouteNames.status} element={<StatusPage />} />
 							<Route path={RouteNames.notFound} element={<PageNotFound />} />
 							<Route path={"*"} element={<PageNotFound />} />
 							<Route path={"/test"} element={<TestPage />} />

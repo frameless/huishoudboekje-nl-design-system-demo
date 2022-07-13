@@ -1,12 +1,11 @@
-import logging
-import re
-from time import time
-
 import itsdangerous
 import jwt
+import logging
+import re
 from flask import Flask, abort, g, make_response, request
 from hhb_backend.auth.models import User
 from jwt import InvalidTokenError
+from time import time
 
 
 class Auth():
@@ -21,7 +20,7 @@ class Auth():
         if self.require_auth:
             if self.audience is None:
                 self.logger.error("Missing environment variable JWT_AUDIENCE.")
-                abort(500) 
+                abort(500)
 
             if self.secret is None:
                 self.logger.error("Missing environment variable JWT_SECRET.")
@@ -49,8 +48,9 @@ class Auth():
                 if self.current_user == None:
                     return self._not_logged_in()
             return func(*args, **kwargs)
+
         wrapper.__name__ = func.__name__
-        return wrapper        
+        return wrapper
 
     @property
     def current_user(self):

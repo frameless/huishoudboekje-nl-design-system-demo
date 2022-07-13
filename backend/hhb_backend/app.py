@@ -39,13 +39,6 @@ def create_app(
     def health():
         return make_response(("ok", {"Content-Type": "text/plain"}))
 
-    @app.route("/version")
-    def version_file():
-        try:
-            return send_file("version.json")
-        except:
-            return jsonify(component="backend", tag="dev", version="0.20.0")
-
     graphql = graphql_blueprint.create_blueprint(loop=loop)
 
     @graphql.before_request
