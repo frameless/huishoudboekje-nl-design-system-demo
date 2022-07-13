@@ -352,9 +352,8 @@ export type CreateHuishoudenInput = {
   burgerIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
 };
 
-/** Mutatie om een banktransactie af te letteren op een afspraak. */
 export type CreateJournaalpostAfspraak = {
-  journaalpost?: Maybe<Journaalpost>;
+  journaalposten?: Maybe<Array<Maybe<Journaalpost>>>;
   ok?: Maybe<Scalars['Boolean']>;
 };
 
@@ -374,12 +373,6 @@ export type CreateJournaalpostGrootboekrekeningInput = {
   grootboekrekeningId: Scalars['String'];
   isAutomatischGeboekt: Scalars['Boolean'];
   transactionId: Scalars['Int'];
-};
-
-/** deprecated */
-export type CreateJournaalpostPerAfspraak = {
-  journaalposten?: Maybe<Array<Maybe<Journaalpost>>>;
-  ok?: Maybe<Scalars['Boolean']>;
 };
 
 export type CreateOrganisatie = {
@@ -737,12 +730,9 @@ export type RootMutation = {
   /** Mutatie om een betaalinstructie te genereren. */
   createExportOverschrijvingen?: Maybe<CreateExportOverschrijvingen>;
   createHuishouden?: Maybe<CreateHuishouden>;
-  /** Mutatie om een banktransactie af te letteren op een afspraak. */
   createJournaalpostAfspraak?: Maybe<CreateJournaalpostAfspraak>;
   /** Mutatie om een banktransactie af te letteren op een grootboekrekening. */
   createJournaalpostGrootboekrekening?: Maybe<CreateJournaalpostGrootboekrekening>;
-  /** deprecated */
-  createJournaalpostPerAfspraak?: Maybe<CreateJournaalpostPerAfspraak>;
   createOrganisatie?: Maybe<CreateOrganisatie>;
   createPostadres?: Maybe<CreatePostadres>;
   createRubriek?: Maybe<CreateRubriek>;
@@ -870,19 +860,13 @@ export type RootMutationCreateHuishoudenArgs = {
 
 /** The root of all mutations  */
 export type RootMutationCreateJournaalpostAfspraakArgs = {
-  input?: InputMaybe<CreateJournaalpostAfspraakInput>;
+  input: Array<InputMaybe<CreateJournaalpostAfspraakInput>>;
 };
 
 
 /** The root of all mutations  */
 export type RootMutationCreateJournaalpostGrootboekrekeningArgs = {
   input?: InputMaybe<CreateJournaalpostGrootboekrekeningInput>;
-};
-
-
-/** The root of all mutations  */
-export type RootMutationCreateJournaalpostPerAfspraakArgs = {
-  input: Array<InputMaybe<CreateJournaalpostAfspraakInput>>;
 };
 
 
@@ -1683,7 +1667,7 @@ export type CreateJournaalpostAfspraakMutationVariables = Exact<{
 }>;
 
 
-export type CreateJournaalpostAfspraakMutation = { createJournaalpostAfspraak?: { ok?: boolean, journaalpost?: { id?: number } } };
+export type CreateJournaalpostAfspraakMutation = { createJournaalpostAfspraak?: { ok?: boolean, journaalposten?: Array<{ id?: number }> } };
 
 export type CreateJournaalpostGrootboekrekeningMutationVariables = Exact<{
   transactionId: Scalars['Int'];
@@ -2922,10 +2906,10 @@ export type CreateHuishoudenMutationOptions = Apollo.BaseMutationOptions<CreateH
 export const CreateJournaalpostAfspraakDocument = gql`
     mutation createJournaalpostAfspraak($transactionId: Int!, $afspraakId: Int!, $isAutomatischGeboekt: Boolean = false) {
   createJournaalpostAfspraak(
-    input: {transactionId: $transactionId, afspraakId: $afspraakId, isAutomatischGeboekt: $isAutomatischGeboekt}
+    input: [{transactionId: $transactionId, afspraakId: $afspraakId, isAutomatischGeboekt: $isAutomatischGeboekt}]
   ) {
     ok
-    journaalpost {
+    journaalposten {
       id
     }
   }
