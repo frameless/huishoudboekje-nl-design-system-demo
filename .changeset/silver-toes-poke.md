@@ -2,4 +2,4 @@
 "huishoudboekje": patch
 ---
 
-Fixes #960: Check if afspraak is valid before searching zoekterm.
+Fixed #960: We now only check for duplicate Zoektermen between Afspraken that are active.
