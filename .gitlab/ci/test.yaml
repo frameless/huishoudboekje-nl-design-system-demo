@@ -54,7 +54,7 @@ frontend-test:
     max: 2
     when: script_failure
   image:
-    name: $CI_REGISTRY_IMAGE/$PYTHON_POSTGRES:$IMAGE_TAG
+    name: registry.gitlab.com/commonground/huishoudboekje/python-postgres/python-postgres:latest
   variables:
     PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
   cache:

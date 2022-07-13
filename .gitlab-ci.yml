@@ -15,7 +15,6 @@ variables:
   UNLEASH_INSTANCEID: JbZyPux6M7xwejsESy9L
   UNLEASH_APPNAME: huishoudboekje
   UNLEASH_OTAP: development
-  PYTHON_POSTGRES: python-postgres
 
 stages:
 - build
