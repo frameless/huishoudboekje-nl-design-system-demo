@@ -93,8 +93,7 @@ const server = (prefix: string = "/auth") => {
 	});
 
 	authRouter.get("/login_callback", (req, res) => {
-		console.log("returnTo", req.cookies["return-to"]);
-		return res.redirect(req.cookies["return-to"] || "/");
+		return res.redirect("/");
 	});
 
 	authRouter.get("/logout", (req, res) => {

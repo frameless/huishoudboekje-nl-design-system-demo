@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/sh
 
 # Default tenant
 TENANT='sloothuizen'

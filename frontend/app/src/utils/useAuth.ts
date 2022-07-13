@@ -7,7 +7,7 @@ const AuthRoutes = {
 };
 
 const useAuth = () => {
-	const [user, setUser] = useState<{email: string}>();
+	const [user, setUser] = useState<{email: string, name: string}>();
 	const [error, setError] = useState(false);
 	const [loading, toggleLoading] = useState(true);
 
