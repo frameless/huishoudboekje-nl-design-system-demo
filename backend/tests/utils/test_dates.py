@@ -1,8 +1,8 @@
-from datetime import date
+from datetime import date, timedelta
 
 import pytest
 
-from hhb_backend.graphql.utils.dates import afspraken_intersect
+from hhb_backend.graphql.utils.dates import afspraken_intersect, valid_afspraak
 
 
 @pytest.mark.parametrize(
@@ -47,3 +47,32 @@ def test_afspraken_intersect(valid_from1, valid_through1, valid_from2, valid_thr
         valid_through2=valid_through2,
     )
     assert result == expected
+
+afspraak = {
+    "id": 1,
+    "omschrijving": "this is a test afspraak",
+    "valid_from": "2021-01-01",
+    "aantal_betalingen": None,
+    "afdeling_id": None,
+    "bedrag": 120,
+    "betaalinstructie": {
+        "by_day": ["Wednesday", "Friday"],
+        "start_date": "2019-01-01"
+    },
+    "burger_id": 2,
+    "credit": False,
+    }
+
+def test_valid_afspraak_valid():
+    assert valid_afspraak(afspraak)
+
+def test_valid_afspraak_not_valid():
+    afspraak.update({"valid_through": "2022-01-01"})
+
+    assert valid_afspraak(afspraak) == False
+
+def test_valid_afspraak_future_start_date():
+    tomorrow = date.today() + timedelta(days=1)
+    afspraak["valid_from"] = tomorrow.strftime("%Y-%m-%d")
+    afspraak["valid_through"] = None
+    assert valid_afspraak(afspraak) == False

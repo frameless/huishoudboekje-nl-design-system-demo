@@ -37,6 +37,7 @@ nextAlarm = {
 afspraak = {
     "id": afspraak_id,
     "omschrijving": "this is a test afspraak",
+    "valid_from": "2021-01-01",
     "aantal_betalingen": None,
     "afdeling_id": None,
     "bedrag": 120,
