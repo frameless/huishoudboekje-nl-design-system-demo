@@ -29,7 +29,7 @@ class CreateJournaalpostGrootboekrekeningInput(graphene.InputObjectType):
     is_automatisch_geboekt = graphene.Boolean(required=True)
 
 
-class CreateJournaalpostPerAfspraak(graphene.Mutation):
+class CreateJournaalpostAfspraak(graphene.Mutation):
     class Arguments:
         input = graphene.List(CreateJournaalpostAfspraakInput, required=True)
 
@@ -100,7 +100,7 @@ class CreateJournaalpostPerAfspraak(graphene.Mutation):
 
         update_transaction_service_is_geboekt(transactions, is_geboekt=True)
 
-        return CreateJournaalpostPerAfspraak(journaalposten=journaalposten, ok=True)
+        return CreateJournaalpostAfspraak(journaalposten=journaalposten, ok=True)
 
 
 

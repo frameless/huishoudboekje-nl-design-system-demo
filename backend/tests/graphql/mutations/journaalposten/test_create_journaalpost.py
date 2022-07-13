@@ -249,7 +249,7 @@ def test_create_journaalpost_afspraak(client):
             json={
                 "query": """
 mutation test($input:[CreateJournaalpostAfspraakInput!]!) {
-  createJournaalpostPerAfspraak(input:$input) {
+  createJournaalpostAfspraak(input:$input) {
     ok
     journaalposten {
       id
@@ -266,7 +266,7 @@ mutation test($input:[CreateJournaalpostAfspraakInput!]!) {
         assert adapters["rubrieken"].called_once
         assert response.json == {
             "data": {
-                "createJournaalpostPerAfspraak": {
+                "createJournaalpostAfspraak": {
                     "ok": True,
                     "journaalposten": [{
                         "id": 23,
@@ -293,7 +293,7 @@ def test_create_journaalpost_afspraak_journaalpost_exists(client):
             json={
                 "query": """
 mutation test($input:[CreateJournaalpostAfspraakInput!]!) {
-  createJournaalpostPerAfspraak(input:$input) {
+  createJournaalpostAfspraak(input:$input) {
     ok
     journaalposten {
       id
@@ -313,12 +313,12 @@ mutation test($input:[CreateJournaalpostAfspraakInput!]!) {
         assert adapters["afspraken"].call_count == 0
         assert adapters["transacties"].called_once
         assert response.json == {
-            "data": {"createJournaalpostPerAfspraak": None},
+            "data": {"createJournaalpostAfspraak": None},
             "errors": [
                 {
                     "locations": [{"column": 3, "line": 3}],
                     "message": "(some) journaalposten already exist",
-                    "path": ["createJournaalpostPerAfspraak"],
+                    "path": ["createJournaalpostAfspraak"],
                 }
             ],
         }
@@ -333,7 +333,7 @@ def test_create_journaalpost_per_afspraak(client):
             json={
                 "query": """
 mutation test($input: [CreateJournaalpostAfspraakInput!]!) {
-  createJournaalpostPerAfspraak(input: $input) {
+  createJournaalpostAfspraak(input: $input) {
     ok
     journaalposten {
       id
@@ -357,7 +357,7 @@ mutation test($input: [CreateJournaalpostAfspraakInput!]!) {
         assert adapters["rubrieken"].called_once
         assert response.json == {
             "data": {
-                "createJournaalpostPerAfspraak": {
+                "createJournaalpostAfspraak": {
                     "ok": True,
                     "journaalposten": [
                         {

@@ -39,7 +39,7 @@ async def automatisch_boeken(customer_statement_message_id: int = None):
 
     result = await graphql.schema.execute("""
 mutation AutomatischBoeken($input: [CreateJournaalpostAfspraakInput!]!) {
-  createJournaalpostPerAfspraak(input: $input) {
+  createJournaalpostAfspraak(input: $input) {
     ok
     journaalposten {
       id
@@ -58,7 +58,7 @@ mutation AutomatischBoeken($input: [CreateJournaalpostAfspraakInput!]!) {
         logging.warning(f"create journaalposten failed: {result.errors}")
         return None
 
-    journaalposten_ = result.data['createJournaalpostPerAfspraak']['journaalposten']
+    journaalposten_ = result.data['createJournaalpostAfspraak']['journaalposten']
     logging.info(f"automatisch boeken completed with {len(journaalposten_)}")
     return journaalposten_
 
