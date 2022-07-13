@@ -37,9 +37,9 @@ class CreateCustomerStatementMessage(graphene.Mutation):
         return dict(
             action=info.field_name,
             entities=gebruikers_activiteit_entities(
-                entity_type="customerStatementMessages",
+                entity_type="customerStatementMessage",
                 result=self,
-                key="customerStatementMessages",
+                key="customerStatementMessage",
             )
             + gebruikers_activiteit_entities(
                 entity_type="transaction",
