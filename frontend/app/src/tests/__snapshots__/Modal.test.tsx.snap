@@ -2,18 +2,18 @@
 
 exports[`Modal Shows the Modal 1`] = `
 <section
-  aria-describedby="chakra-modal--body-1"
-  aria-labelledby="chakra-modal--header-1"
+  aria-describedby="chakra-modal--body-:r0:"
+  aria-labelledby="chakra-modal--header-:r0:"
   aria-modal="true"
   class="chakra-modal__content css-6yiygt"
-  id="chakra-modal-1"
+  id="chakra-modal-:r0:"
   role="dialog"
   style="opacity: 0; transform: scale(0.95) translateZ(0);"
   tabindex="-1"
 >
   <header
     class="chakra-modal__header css-72fd9l"
-    id="chakra-modal--header-1"
+    id="chakra-modal--header-:r0:"
   >
     Burger toevoegen
   </header>
@@ -36,7 +36,7 @@ exports[`Modal Shows the Modal 1`] = `
   </button>
   <div
     class="chakra-modal__body css-0"
-    id="chakra-modal--body-1"
+    id="chakra-modal--body-:r0:"
   >
     Hier kan een formulier staan
   </div>

@@ -2,18 +2,18 @@
 
 exports[`Alert CloseButton and cancelButton are working 1`] = `
 <section
-  aria-describedby="chakra-modal--body-2"
-  aria-labelledby="chakra-modal--header-2"
+  aria-describedby="chakra-modal--body-:r1:"
+  aria-labelledby="chakra-modal--header-:r1:"
   aria-modal="true"
   class="chakra-modal__content css-6yiygt"
-  id="chakra-modal-2"
+  id="chakra-modal-:r1:"
   role="alertdialog"
   style="opacity: 0; transform: scale(0.95) translateZ(0);"
   tabindex="-1"
 >
   <header
     class="chakra-modal__header css-1jynom4"
-    id="chakra-modal--header-2"
+    id="chakra-modal--header-:r1:"
   >
     Burger verwijderen uit huishouden
   </header>
@@ -36,7 +36,7 @@ exports[`Alert CloseButton and cancelButton are working 1`] = `
   </button>
   <div
     class="chakra-modal__body css-0"
-    id="chakra-modal--body-2"
+    id="chakra-modal--body-:r1:"
   >
     Weet je zeker dat je Chris de Burg wil verwijderen uit het huishouden de Jager-de Burg?
   </div>
@@ -44,13 +44,13 @@ exports[`Alert CloseButton and cancelButton are working 1`] = `
     class="chakra-modal__footer css-192qrng"
   >
     <button
-      class="chakra-button css-5c2176"
+      class="chakra-button css-4xx2wk"
       type="button"
     >
       global.actions.cancel
     </button>
     <button
-      class="chakra-button css-dmrtgy"
+      class="chakra-button css-1i56vmk"
       type="button"
     >
       Verwijderen
@@ -61,18 +61,18 @@ exports[`Alert CloseButton and cancelButton are working 1`] = `
 
 exports[`Alert Shows the Alert 1`] = `
 <section
-  aria-describedby="chakra-modal--body-1"
-  aria-labelledby="chakra-modal--header-1"
+  aria-describedby="chakra-modal--body-:r0:"
+  aria-labelledby="chakra-modal--header-:r0:"
   aria-modal="true"
   class="chakra-modal__content css-6yiygt"
-  id="chakra-modal-1"
+  id="chakra-modal-:r0:"
   role="alertdialog"
   style="opacity: 0; transform: scale(0.95) translateZ(0);"
   tabindex="-1"
 >
   <header
     class="chakra-modal__header css-1jynom4"
-    id="chakra-modal--header-1"
+    id="chakra-modal--header-:r0:"
   >
     Burger verwijderen uit huishouden
   </header>
@@ -95,7 +95,7 @@ exports[`Alert Shows the Alert 1`] = `
   </button>
   <div
     class="chakra-modal__body css-0"
-    id="chakra-modal--body-1"
+    id="chakra-modal--body-:r0:"
   >
     Weet je zeker dat je Chris de Burg wil verwijderen uit het huishouden de Jager-de Burg?
   </div>
@@ -103,7 +103,7 @@ exports[`Alert Shows the Alert 1`] = `
     class="chakra-modal__footer css-192qrng"
   >
     <button
-      class="chakra-button css-5c2176"
+      class="chakra-button css-4xx2wk"
       type="button"
     >
       global.actions.cancel
