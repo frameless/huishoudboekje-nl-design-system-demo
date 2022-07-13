@@ -8,7 +8,7 @@ import hhb_backend.graphql as graphql
 import hhb_backend.graphql.dataloaders as dataloaders
 import hhb_backend.graphql.models.bank_transaction as bank_transaction
 import hhb_backend.graphql.models.afspraak as afspraak
-from hhb_backend.graphql.utils.dates import afspraken_intersect, to_date
+from hhb_backend.graphql.utils.dates import afspraken_intersect, to_date, valid_afspraak
 
 
 async def automatisch_boeken(customer_statement_message_id: int = None):
@@ -62,16 +62,6 @@ mutation AutomatischBoeken($input: [CreateJournaalpostAfspraakInput!]!) {
     logging.info(f"automatisch boeken completed with {len(journaalposten_)}")
     return journaalposten_
 
-
-def valid_afspraak(afspraak, transactie_datum):
-    if "valid_through" in afspraak and afspraak["valid_through"]:
-        afspraak_valid_through = date.fromisoformat(afspraak["valid_through"])
-        transaction_date = date.fromisoformat(transactie_datum)
-        if transaction_date > afspraak_valid_through:
-            return False
-    return True
-
-
 async def transactie_suggesties(transactie_ids):
     if type(transactie_ids) != list:
         transactie_ids = [transactie_ids]
@@ -106,7 +96,7 @@ async def transactie_suggesties(transactie_ids):
     for transaction, suggesties in zip(transactions, afspraken):
         transactie_ids_with_afspraken[transaction["id"]] = [afspraak for afspraak in suggesties if
                                                             match_zoekterm(afspraak,
-                                                                           transaction["information_to_account_owner"]) and valid_afspraak(afspraak, transaction["transactie_datum"])]
+                                                                           transaction["information_to_account_owner"]) and valid_afspraak(afspraak, to_date(transaction["transactie_datum"]))]
 
     return transactie_ids_with_afspraken
 

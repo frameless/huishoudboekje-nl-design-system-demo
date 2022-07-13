@@ -257,7 +257,63 @@ def test_burgers_search_single_iban(client):
         assert fallback.call_count == 0
         assert response.json == expected
 
-def test_burgers_search_single_afspraak_zoekterm(client):
+def test_find_one_burger_after_zoekterm_search_single_afspraak(client):
+    with requests_mock.Mocker() as rm:
+        # arrange
+        request = '{"query": "{ burgers(search:zoekterm1){id,bsn,voornamen,achternaam} }"}'
+        expected = {'data': {'burgers': [
+            {'achternaam': 'pieterson',
+            'bsn': 285278939,
+            'id': 1,
+            'voornamen': 'piet pieter'}
+        ]}}
+
+        fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
+        rm1 = rm.get(f"{settings.HHB_SERVICES_URL}/burgers/", status_code=200, json=mock_burger_data)
+        rm2 = rm.get(f"{settings.HHB_SERVICES_URL}/rekeningen/", status_code=200, json=mock_empty)
+        rm3 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/", status_code=200, json=mock_afspraken_data)
+        rm4 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=200)
+
+        # act
+        response = client.post("/graphql", data=request, content_type='application/json')
+
+        # assert
+        assert rm1.called_once
+        assert rm2.called_once
+        assert rm3.called_once
+        assert rm4.called_once
+        assert fallback.call_count == 0
+        assert response.json == expected
+
+def test_find_one_burger_after_zoekterm_search_with_one_invalid_afspraak(client):
+    mock_afspraken_data = {
+        "data": [
+            {
+                "id": 100,
+                "burger_id": 1,
+                "omschrijving": "",
+                "valid_from": "",
+                "valid_through": "",
+                "bedrag": "12.34",
+                "credit": True,
+                "zoektermen": [
+                    "zoekterm1", "zoekterm2"
+                ]
+            },
+            {
+                "id": 101,
+                "burger_id": 2,
+                "omschrijving": "",
+                "valid_from": "",
+                "valid_through": "2022-07-04",
+                "bedrag": "12.34",
+                "credit": True,
+                "zoektermen": [
+                    "zoekterm1", "zoekterm2"
+                ]
+            }
+        ]
+    }
     with requests_mock.Mocker() as rm:
         # arrange
         request = '{"query": "{ burgers(search:zoekterm1){id,bsn,voornamen,achternaam} }"}'

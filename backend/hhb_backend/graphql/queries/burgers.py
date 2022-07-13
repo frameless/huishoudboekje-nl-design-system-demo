@@ -1,6 +1,7 @@
 """ GraphQL Burgers query """
 import graphene
 from flask import request
+from hhb_backend.graphql.utils.dates import valid_afspraak
 
 import hhb_backend.graphql.models.burger as burger
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
@@ -71,13 +72,13 @@ class BurgersQuery:
 
             afspraken = request.dataloader.afspraken_by_id.get_all_and_cache(filters=kwargs.get("filters", None))
             for afspraak in afspraken:
-                if search in str(afspraak['zoektermen']).lower():
+                if valid_afspraak(afspraak) and search in str(afspraak['zoektermen']).lower():
                     if afspraak["burger_id"]:
                         burger_ids.add(afspraak["burger_id"])
 
             afspraken = await request.dataloader.afspraken_by_id.load_many(list(afspraken_ids))
             for afspraak in afspraken:
-                if afspraak["burger_id"]:
+                if valid_afspraak(afspraak) and afspraak["burger_id"]:
                     burger_ids.add(afspraak["burger_id"])
 
             return await request.dataloader.burgers_by_id.load_many(list(burger_ids))
