@@ -56,7 +56,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 	const [form, {setForm, updateForm, toggleSubmitted, isSubmitted, isFieldValid, isValid, reset}] = useForm<zod.infer<typeof validator>>({
 		validator,
 		initialValue: {
-			bedrag: afspraak.bedrag,
+			bedrag: parseFloat(afspraak.bedrag),
 			isPeriodiek: Periodiek.Periodiek,
 			repeatType: RepeatType.Month,
 			byMonth: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
