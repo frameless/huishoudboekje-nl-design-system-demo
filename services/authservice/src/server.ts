@@ -51,12 +51,12 @@ const server = (prefix: string = "/auth") => {
 	const authRouter = express.Router();
 
 	authRouter.get("/me", async (req, res) => {
-		let user;
+		let tokenContent;
 
 		// Check with the OIDC provider if the user is authenticated.
 		if (req.oidc.isAuthenticated()) {
-			console.log("OIDC provider says it's ok.");
-			user = req.oidc.user;
+			tokenContent = req.oidc.user;
+			console.log("OIDC provider found an authenticated user:", tokenContent);
 		}
 		else {
 			console.log("OIDC provider didn't recognize user.");
@@ -66,13 +66,15 @@ const server = (prefix: string = "/auth") => {
 				// If so, use the user's data from the token.
 				console.log("Token is valid.");
 
-				user = sessionHelper.getUserFromRequest(req);
+				tokenContent = sessionHelper.getUserFromRequest(req);
 			}
 		}
 
-		// If a user was found, create a session and allow the user in.
-		if (user) {
+		// If a token was found, fetch the user info from it, create a session and allow the user in.
+		if (tokenContent) {
+			const user = await req.oidc.fetchUserInfo();
 			console.log("User found:", user);
+
 			sessionHelper.createSession(res, user);
 			return res.json({
 				ok: true,
@@ -81,7 +83,7 @@ const server = (prefix: string = "/auth") => {
 		}
 
 		// If no user was found, deny access.
-		console.log("No user found.", user);
+		console.log("No user found.", tokenContent);
 		sessionHelper.destroySession(res);
 		return res.status(401).json({ok: false, message: "Unauthorized"});
 	});
