@@ -4,6 +4,14 @@ const jwt = require("jsonwebtoken");
 module.exports = (app) => {
 	const apiTarget = process.env.PROXY || "https://test.huishoudboekje.demoground.nl";
 
+	app.use("/api/unleash", (req, res) => {
+		res.json({
+			features: [
+				{name: "signalen", enabled: true},
+			],
+		});
+	});
+
 	app.use("/api", createProxyMiddleware({
 		target: apiTarget,
 		changeOrigin: true,
