@@ -422,57 +422,59 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 				</SectionContainer>
 			)}
 
-			<SectionContainer>
-				<Section title={t("afspraakDetailView.alarm.title")} helperText={t("afspraakDetailView.alarm.helperText")}>
-					{afspraak.alarm ? (
-						<Stack>
-							<Stack direction={["column", "row"]}>
-								<DataItem label={t("periodiekSelector.periodiek")}>
-									<Text>{alarmSchedule.toString()}</Text>
-								</DataItem>
-								{afspraak.alarm?.endDate ? (
-									<DataItem label={t("global.period")}>
+			{isSignalenEnabled && (
+				<SectionContainer>
+					<Section title={t("afspraakDetailView.alarm.title")} helperText={t("afspraakDetailView.alarm.helperText")}>
+						{afspraak.alarm ? (
+							<Stack>
+								<Stack direction={["column", "row"]}>
+									<DataItem label={t("periodiekSelector.periodiek")}>
+										<Text>{alarmSchedule.toString()}</Text>
+									</DataItem>
+									{afspraak.alarm?.endDate ? (
+										<DataItem label={t("global.period")}>
+											<HStack>
+												<Text>{t("schedule.fromThrough", {
+													from: d(afspraak.alarm?.startDate, "YYYY-MM-DD").format("L"),
+													through: d(afspraak.alarm?.endDate, "YYYY-MM-DD").format("L"),
+												})}</Text>
+											</HStack>
+										</DataItem>
+									) : (
+										<DataItem label={t("global.date")}>
+											<HStack>
+												<Text>{d(afspraak.alarm?.startDate, "YYYY-MM-DD").format("L")}</Text>
+												<Text color={"gray.500"} fontSize={"sm"}>+{t("afspraak.alarm.datumMargin", {count: afspraak.alarm?.datumMargin})}</Text>
+											</HStack>
+										</DataItem>
+									)}
+								</Stack>
+								<Stack direction={["column", null, null, "row"]}>
+									<DataItem label={t("bedrag")}>
 										<HStack>
-											<Text>{t("schedule.fromThrough", {
-												from: d(afspraak.alarm?.startDate, "YYYY-MM-DD").format("L"),
-												through: d(afspraak.alarm?.endDate, "YYYY-MM-DD").format("L"),
-											})}</Text>
+											<Text>{currencyFormat2().format(afspraak.alarm?.bedrag)}</Text>
+											<Text color={"gray.500"} fontSize={"sm"}>+/- {currencyFormat2().format(afspraak.alarm?.bedragMargin)}</Text>
 										</HStack>
 									</DataItem>
-								) : (
-									<DataItem label={t("global.date")}>
+									<DataItem label={t("afspraak.alarm.options")}>
 										<HStack>
-											<Text>{d(afspraak.alarm?.startDate, "YYYY-MM-DD").format("L")}</Text>
-											<Text color={"gray.500"} fontSize={"sm"}>+{t("afspraak.alarm.datumMargin", {count: afspraak.alarm?.datumMargin})}</Text>
+											<Switch size={"sm"} isChecked={!!(afspraak.alarm?.isActive)} onChange={() => toggleAlarmActive()} />
+											<DeleteConfirmButton onConfirm={() => onDeleteAlarm()} />
 										</HStack>
 									</DataItem>
-								)}
+								</Stack>
 							</Stack>
-							<Stack direction={["column", null, null, "row"]}>
-								<DataItem label={t("bedrag")}>
-									<HStack>
-										<Text>{currencyFormat2().format(afspraak.alarm?.bedrag)}</Text>
-										<Text color={"gray.500"} fontSize={"sm"}>+/- {currencyFormat2().format(afspraak.alarm?.bedragMargin)}</Text>
-									</HStack>
-								</DataItem>
-								<DataItem label={t("afspraak.alarm.options")}>
-									<HStack>
-										<Switch size={"sm"} isChecked={!!(afspraak.alarm?.isActive)} onChange={() => toggleAlarmActive()} />
-										<DeleteConfirmButton onConfirm={() => onDeleteAlarm()} />
-									</HStack>
-								</DataItem>
+						) : (
+							<Stack>
+								<Text>{t("afspraakDetailView.noAlarm")}</Text>
+								<Box>
+									<AddButton onClick={() => addAlarmModal.onOpen()} />
+								</Box>
 							</Stack>
-						</Stack>
-					) : (
-						<Stack>
-							<Text>{t("afspraakDetailView.noAlarm")}</Text>
-							<Box>
-								<AddButton onClick={() => addAlarmModal.onOpen()} />
-							</Box>
-						</Stack>
-					)}
-				</Section>
-			</SectionContainer>
+						)}
+					</Section>
+				</SectionContainer>
+			)}
 		</Page>
 	);
 };
