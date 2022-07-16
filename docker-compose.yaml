@@ -215,6 +215,8 @@ services:
       BANKTRANSACTIESERVICE_URL: "http://banktransactieserviceservice:8000"
     ports:
       - 5001:8080
+    profiles:
+      - burgers
 
   backend-burgers-test:
     <<: *x-backend-burgers
