@@ -142,7 +142,7 @@ authorize-keycloak-review:
     HHB_HOST: "hhb-$CI_COMMIT_REF_SLUG.nlx.reviews"
   script:
     - echo "Adding application to Keycloak..."
-    - npm run start -- redirect-uri add --uri="https://${HHB_HOST}/*" --client-id=huishoudboekje-medewerkers
+    - npm run start -- redirect-uri add --uri="https://${HHB_HOST}/auth/callback" --client-id=huishoudboekje-medewerkers
   only:
     - branches@commonground/huishoudboekje/app-new
   except:
@@ -162,7 +162,7 @@ unauthorize-keycloak-review:
     HHB_HOST: "hhb-$CI_COMMIT_REF_SLUG.nlx.reviews"
   script:
     - echo "Removing application from Keycloak..."
-    - npm run start -- redirect-uri remove --uri="https://${HHB_HOST}/*" --client-id=huishoudboekje-medewerkers
+    - npm run start -- redirect-uri remove --uri="https://${HHB_HOST}/auth/callback" --client-id=huishoudboekje-medewerkers
   when: manual
   only:
     - branches@commonground/huishoudboekje/app-new
