@@ -27,7 +27,6 @@ const server = (prefix: string = "/auth") => {
 	});
 
 	app.use(auth({
-		// OIDC parameters
 		baseURL: process.env.OIDC_BASE_URL,
 		clientID: process.env.OIDC_CLIENT_ID,
 		clientSecret: process.env.OIDC_CLIENT_SECRET,
@@ -35,78 +34,59 @@ const server = (prefix: string = "/auth") => {
 		authorizationParams: {
 			response_type: "code",
 		},
-
-		// Auth app settings
 		secret: config.secret,
 		idpLogout: true,
 		authRequired: false,
 		routes: {
-			login: false,
-			logout: false,
-			postLogoutRedirect: prefix + "/logout",
+			login: prefix + "/login",
+			logout: prefix + "/logout",
+			postLogoutRedirect: prefix + "/callback",
 			callback: prefix + "/callback",
 		},
+		enableTelemetry: false,
 	}));
 
 	const authRouter = express.Router();
 
+	authRouter.get("/", (req, res) => {
+		res.send(`
+			<a href="${prefix}/me">Me</a><br>
+			<a href="${prefix}/login">Login</a><br>
+			<a href="${prefix}/logout">Logout</a><br>
+		`);
+	});
+
 	authRouter.get("/me", async (req, res) => {
-		let tokenContent;
+		try {
+			// Check with the OIDC provider if the user is authenticated.
+			if (req.oidc.isAuthenticated()) {
+				const tokenContent = req.oidc.user;
+				console.log("OIDC provider found an authenticated user:", tokenContent);
 
-		// Check with the OIDC provider if the user is authenticated.
-		if (req.oidc.isAuthenticated()) {
-			tokenContent = req.oidc.user;
-			console.log("OIDC provider found an authenticated user:", tokenContent);
-		}
-		else {
-			console.log("OIDC provider didn't recognize user.");
+				// Check if the token is expired, if so, try to refresh.
+				const isExpired = req.oidc.accessToken?.isExpired();
+				if (isExpired) {
+					await req.oidc.accessToken?.refresh();
+				}
 
-			// If not, see if the client has provided a valid token.
-			if (sessionHelper.isAuthenticated(req)) {
-				// If so, use the user's data from the token.
-				console.log("Token is valid.");
+				const user = await req.oidc.fetchUserInfo();
+				console.log("User found:", user);
 
-				tokenContent = sessionHelper.getUserFromRequest(req);
+				sessionHelper.createSession(res, user);
+				return res.json({
+					ok: true,
+					user,
+				});
 			}
 		}
-
-		// If a token was found, fetch the user info from it, create a session and allow the user in.
-		if (tokenContent) {
-			const user = await req.oidc.fetchUserInfo();
-			console.log("User found:", user);
-
-			sessionHelper.createSession(res, user);
-			return res.json({
-				ok: true,
-				user,
-			});
+		catch (err) {
+			console.log("OIDC provider didn't recognize user.", err);
 		}
 
 		// If no user was found, deny access.
-		console.log("No user found.", tokenContent);
+		console.log("No user found.");
 		sessionHelper.destroySession(res);
 		return res.status(401).json({ok: false, message: "Unauthorized"});
-	});
-
-	authRouter.get("/login", (req, res) => {
-		return res.oidc.login({
-			returnTo: prefix + "/login_callback",
-		});
-	});
-
-	authRouter.get("/login_callback", (req, res) => {
-		return res.redirect("/");
-	});
-
-	authRouter.get("/logout", (req, res) => {
-		return res.oidc.logout({
-			returnTo: prefix + "/logout_callback",
-		});
-	});
-
-	authRouter.get("/logout_callback", (req, res) => {
-		sessionHelper.destroySession(res);
-		return res.redirect("/");
 	});
 
 	// Use the auth router on /auth
