@@ -51,12 +51,6 @@ const App = () => {
 	useInitializeFeatureFlags();
 	const isSignalenEnabled = useFeatureFlag("signalen");
 
-	const onClickLoginButton = () => {
-		/* Todo: save the current user's page so that we can quickly navigate back after login. */
-		localStorage.setItem("hhb-referer", location.pathname);
-		login();
-	};
-
 	if (error) {
 		return (
 			<StatusErrorPage />
@@ -72,7 +66,7 @@ const App = () => {
 					<Stack spacing={5} maxWidth={300} alignSelf={["center", null, null, "flex-start"]}>
 						<Heading size={"sm"}>{t("messages.welcome", {tenantName: theme["tenantName"]})}</Heading>
 						<Text fontSize={"sm"}>{t("messages.clickHereToContinue")}</Text>
-						<Button colorScheme={"primary"} type={"submit"} onClick={onClickLoginButton}>{t("global.actions.login")}</Button>
+						<Button colorScheme={"primary"} type={"submit"} onClick={() => login()}>{t("global.actions.login")}</Button>
 					</Stack>
 				)}
 			</TwoColumns>
