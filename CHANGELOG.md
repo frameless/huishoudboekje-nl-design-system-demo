@@ -1,10 +1,138 @@
 # Huishoudboekje Changelog
 
-## Upcoming release
+## 1.2.0
 
-### New features
+Een probleem waarbij sommige gebruikers niet konden inloggen is opgelost.
 
-- Alarmen en signalen
+### Minor Changes
+
+- ec866338: Fixed #950: Moved configuration for client secrets to environment variables 
+- ec866338: Fixed #975: Extracted authorization to a separate service that is compatible with OpenID Connect
+
+  ## Migration guide
+
+  **⚠️ The redirect URI for OpenID Connect has been changed to `/auth/callback`. Please update the client settings in your Identity Provider.**
+
+  ### Authservice
+
+  A new application called `authservice` has been added to the deployment. Please see k8s/authservice for the Kubernetes specification.
+  The following environment variables should be added to your deployment for the `authservice`:
+
+  ```shell
+  OIDC_ISSUER_URL=https://your-identity-provider.example.com/auth
+  OIDC_CLIENT_ID=huishoudboekje-medewerkers
+  OIDC_CLIENT_SECRET=your-idp-client-secret
+  OIDC_BASE_URL=https://your-app.example.com
+  JWT_ISSUER=your-app-issuer
+  JWT_EXPIRES_IN=30d
+  JWT_AUDIENCE=your-app-audience # <-- This value must be the same for authservice and backend.
+  JWT_SECRET=long-random-string # <-- This value must be the same for authservice and backend.
+  ```
+
+  ### Backend
+
+  The following environment variables should be added to your deployment for the `backend`:
+
+  ```shell
+  JWT_SECRET=long-random-string # <-- This value must be the same for authservice and backend.
+  JWT_AUDIENCE=your-app-audience # <-- This value must be the same for authservice and backend.
+  ```
+
+  The following environment variables have become obsolete and should be removed from this deployment:
+
+  ```shell
+  APP_SETTINGS
+  OIDC_ISSUER
+  OIDC_AUTHORIZATION_ENDPOINT
+  OIDC_TOKEN_ENDPOINT
+  OIDC_TOKENINFO_ENDPOINT
+  OIDC_USERINFO_ENDPOINT
+  OIDC_CLOCK_SKEW
+  OIDC_CLIENT_SECRETS
+  AUTH_AUDIENCE
+  HHB_SECRET
+  SECRET_KEY
+  ```
+
+  ## Services
+
+  The following environment variables have become obsolete and should be removed from the deployments of the alarmenservice, banktransactieservice,
+  grootboekservice, huishoudboekjeservice, logservice, organisatieservice, postadressenservice and the signalenservice:
+
+  ```shell
+  APP_SETTINGS
+  HHB_SECRET
+  SECRET_KEY
+  ```
+
+- 6f4b4512: Updated the command for migrating the database schema.
+
+  ## Migration guide
+
+  Please make the following changes to your deployment scripts:
+
+  ### Postadressenservice
+
+  Change `npm run db:push` to `npm run db:deploy`.
+
+  ### Alarmenservice
+
+  Change `npm run db:push` to `npm run db:deploy`.
+
+  ### Signalenservice
+
+  Change `npm run db:push` to `npm run db:deploy`.
+
+- 3b9eb21c: Fixed #955: We've removed the bundled Keycloak from the repository, as we're using a separately deployed Keycloak for our own testing purposes.
+  This change should not affect your current deployment configuration if you were already not using the bundled Keycloak as the authentication provider.
+
+  ## Migration guide
+
+  The following environment variables have become obsolete and should be removed from your deployment configuration:
+
+  ```shell
+  USE_KEYCLOAK
+  KEYCLOAK_DB_DATABASE
+  KEYCLOAK_DB_USER
+  KEYCLOAK_DB_SCHEMA
+  KEYCLOAK_DB_PASSWORD
+  KEYCLOAK_AUTH_USERNAME
+  KEYCLOAK_AUTH_PASSWORD
+  KEYCLOAK_AUTH_KEYCLOAK_URL
+  KEYCLOAK_CLIENT_ROOT_URL
+  KEYCLOAK_CLIENT_SECRET
+  KEYCLOAK_CLIENT_USERS
+  ```
+
+### Patch Changes
+
+- 82b743fb: Fixed an issue where Node dependencies didn't quite match.
+- df1a9108: Fixed #976: We've added audit logging when a Betaalinstructie is exported.
+- f7be1625: Fixed #988: Moved CI-tool python-postgres out of the repository.
+- f45696a4: Fixed #878: Add a timestamp to log lines.
+- c2b952e7: Fixed #781: Deleted gebruikerEmail from Alarm.
+- 41706043: Fixed #803: Fixed an issue where Customer Statement Message were marked as unknown in audit logs.
+- 1c6555f4: Fixed #986: Removed burgersIds from output in AddHuishoudenBurger mutation.
+- 06200d55: Fixed #990: Changed the `/auth/logout_callback` endpoint to `/auth/callback`, so that only one redirect URI needs to be setup in the Identity Provider.
+- ac286e84: Fixed #987: Don't repeat yourself! Merged CreateJournaalpostAfspraak and CreateJournaalpostPerAfspraak mutations.
+- 93cee7a3: Fixed #782: Refactoring for better audit logs.
+- a13ce296: Fixed #962: Empty search term gives back all existing burgers, also when burgers have been deleted.
+- 32c66cfb: Fixed #989: Fixed an issue where in specific cases the IDP's token wouldn't provide enough information about the user and couldn't log in to Huishoudboekje.
+- e588f82f: Fixed #966: Updated to React 18.
+- 21709358: Fixed #960: We now only check for duplicate Zoektermen between Afspraken that are active.
+- 77da8ecd: Fixed #984: We now update an afspraak with just the new values and not the entire afspraak.
+- 84583ae0: Fixed #953: Inserted padding between form and submit button in AddAlarmModal.
+- 514c1a23: Fixed #856: It is now possible to define a start date and end date for an Alarm to make it valid for a length of a period.
+- 6348af98: Removed complexity from configuration and made logging easier configurable.
+
+  ## Migration guide
+
+  We've made log levels configurable for every application. With no additional configuration, `LOG_LEVEL` is set to `info`. No debug messages will be logged.
+  If you wish to have more verbose logging you can set an environment variable `LOG_LEVEL` to `debug` for all of the services and backend:
+
+  ```shell
+  LOG_LEVEL=debug
+  ```
 
 ## 1.1.2
 
