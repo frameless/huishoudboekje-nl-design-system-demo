@@ -16,5 +16,6 @@ model Signal {
 	type				String
 	actions				String[]
 	context				Json?
+	bedragDifference	String?
 	timeUpdated			DateTime	@updatedAt
 }
