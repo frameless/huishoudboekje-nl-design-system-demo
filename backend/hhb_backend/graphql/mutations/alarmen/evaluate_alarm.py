@@ -349,7 +349,7 @@ async def shouldCreateSignaal(_root, _info, alarm: Alarm, transacties) -> Signaa
             "banktransactieIds": monetary_deviated_transaction_ids,
             "isActive": True,
             "type": "default",
-            "context": difference
+            "bedragDifference": difference
         }
 
         result = await SignaalHelper.create(_root, _info, newSignal)
