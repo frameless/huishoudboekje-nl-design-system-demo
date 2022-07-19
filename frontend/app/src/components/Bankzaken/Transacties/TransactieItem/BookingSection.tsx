@@ -2,7 +2,7 @@ import {FormControl, Heading, HStack, Stack, Tab, Table, TabList, TabPanel, TabP
 import React from "react";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
-import {Afspraak, GetTransactieDocument, GetTransactiesDocument, Rubriek, useCreateJournaalpostAfspraakMutation, useCreateJournaalpostGrootboekrekeningMutation} from "../../../../generated/graphql";
+import {Afspraak, GetTransactieDocument, GetTransactiesDocument, Rubriek, useCreateJournaalpostAfspraakMutation, useCreateJournaalpostGrootboekrekeningMutation, useEvaluateAlarmMutation} from "../../../../generated/graphql";
 import {useStore} from "../../../../store";
 import {useReactSelectStyles} from "../../../../utils/things";
 import useToaster from "../../../../utils/useToaster";
@@ -15,11 +15,18 @@ const BookingSection = ({transaction, rubrieken, afspraken, refetch}) => {
 	const {store} = useStore();
 	const suggesties: Afspraak[] = transaction.suggesties || [];
 
+	const [evaluateAlarm] = useEvaluateAlarmMutation();
 	const [createJournaalpostAfspraak] = useCreateJournaalpostAfspraakMutation({
 		refetchQueries: [
 			{query: GetTransactieDocument, variables: {id: transaction.id}},
 			{query: GetTransactiesDocument, variables: store.banktransactieQueryVariables},
 		],
+		onCompleted: (result) => {
+			const afsprakenAlarmIds = result.createJournaalpostAfspraak?.journaalposten?.map(j => j.afspraak?.alarm?.id) || [];
+			afsprakenAlarmIds.forEach(id => {
+				evaluateAlarm({variables: {id: id!}});
+			});
+		},
 	});
 	const [createJournaalpostGrootboekrekening] = useCreateJournaalpostGrootboekrekeningMutation({
 		refetchQueries: [

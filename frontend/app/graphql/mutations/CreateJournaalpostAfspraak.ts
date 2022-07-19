@@ -10,6 +10,12 @@ export const CreateJournaalpostAfspraakMutation = gql`
             ok
             journaalposten {
                 id
+                afspraak {
+                    id
+                    alarm {
+                        id
+                    }
+                }
             }
         }
     }
