@@ -13,6 +13,7 @@ Object {
     "actions": Array [],
     "alarmId": "d9c00acb-8d04-4cf0-9be4-061f33b3357d",
     "banktransactieIds": Array [],
+    "bedragDifference": "100",
     "context": Object {
       "is": true,
       "something": "else",
@@ -33,6 +34,7 @@ Object {
       "actions": Array [],
       "alarmId": "d9c00acb-8d04-4cf0-9be4-061f33b3357d",
       "banktransactieIds": Array [],
+      "bedragDifference": "100",
       "context": Object {
         "is": true,
         "something": "else",
@@ -46,6 +48,7 @@ Object {
       "actions": Array [],
       "alarmId": "5d65d8e9-1f4a-4cb9-a89c-0f952ac5f2ff",
       "banktransactieIds": Array [],
+      "bedragDifference": null,
       "context": Object {
         "is": false,
         "something": "else",
@@ -59,6 +62,7 @@ Object {
       "actions": Array [],
       "alarmId": "1a8ac60f-081f-4bbb-baca-6b6d399ce8db",
       "banktransactieIds": Array [],
+      "bedragDifference": null,
       "context": Object {
         "isAdmin": true,
         "user": Object {
@@ -74,6 +78,7 @@ Object {
       "actions": Array [],
       "alarmId": "738247bc-e6b8-41ee-a09e-a6778822598d",
       "banktransactieIds": Array [],
+      "bedragDifference": null,
       "context": Object {
         "is": true,
         "something": "else",
@@ -94,6 +99,7 @@ Object {
     "actions": Array [],
     "alarmId": "d9c00acb-8d04-4cf0-9be4-061f33b3357d",
     "banktransactieIds": Array [],
+    "bedragDifference": "100",
     "context": Object {
       "is": true,
       "something": "else",
@@ -113,6 +119,7 @@ Object {
     "actions": Array [],
     "alarmId": "d9c00acb-8d04-4cf0-9be4-061f33b3357d",
     "banktransactieIds": Array [],
+    "bedragDifference": "300",
     "context": Object {
       "is": true,
       "something": "else",

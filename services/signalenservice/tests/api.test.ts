@@ -46,6 +46,7 @@ describe("Signal CRUD (operations)", () => {
 					is: true,
 					something: "else",
 				},
+				bedragDifference: "300",
 				timeUpdated: new Date("2022-09-01T23:00:00"),
 			};
 			const timeUpdated = signals[0].timeUpdated;
