@@ -46,7 +46,6 @@ export type AddAfspraakZoekterm = {
 
 /** Mutatie om een burger aan een huishouden toe te voegen. */
 export type AddHuishoudenBurger = {
-  burgerIds?: Maybe<Burger>;
   huishouden?: Maybe<Huishouden>;
   ok?: Maybe<Scalars['Boolean']>;
   previous?: Maybe<Huishouden>;
@@ -1667,7 +1666,7 @@ export type CreateJournaalpostAfspraakMutationVariables = Exact<{
 }>;
 
 
-export type CreateJournaalpostAfspraakMutation = { createJournaalpostAfspraak?: { ok?: boolean, journaalposten?: Array<{ id?: number }> } };
+export type CreateJournaalpostAfspraakMutation = { createJournaalpostAfspraak?: { ok?: boolean, journaalposten?: Array<{ id?: number, afspraak?: { id?: number, alarm?: { id?: string } } }> } };
 
 export type CreateJournaalpostGrootboekrekeningMutationVariables = Exact<{
   transactionId: Scalars['Int'];
@@ -1830,6 +1829,13 @@ export type EndAfspraakMutationVariables = Exact<{
 
 
 export type EndAfspraakMutation = { updateAfspraak?: { ok?: boolean, afspraak?: { id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, alarm?: { id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, afspraak?: { id?: number }, signaal?: { id?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> } } };
+
+export type EvaluateAlarmMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type EvaluateAlarmMutation = { evaluateAlarm?: { alarmTriggerResult?: Array<{ alarm?: { id?: string } }> } };
 
 export type EvaluateAlarmsMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -2911,6 +2917,12 @@ export const CreateJournaalpostAfspraakDocument = gql`
     ok
     journaalposten {
       id
+      afspraak {
+        id
+        alarm {
+          id
+        }
+      }
     }
   }
 }
@@ -3694,6 +3706,43 @@ export function useEndAfspraakMutation(baseOptions?: Apollo.MutationHookOptions<
 export type EndAfspraakMutationHookResult = ReturnType<typeof useEndAfspraakMutation>;
 export type EndAfspraakMutationResult = Apollo.MutationResult<EndAfspraakMutation>;
 export type EndAfspraakMutationOptions = Apollo.BaseMutationOptions<EndAfspraakMutation, EndAfspraakMutationVariables>;
+export const EvaluateAlarmDocument = gql`
+    mutation evaluateAlarm($id: String!) {
+  evaluateAlarm(id: $id) {
+    alarmTriggerResult {
+      alarm {
+        id
+      }
+    }
+  }
+}
+    `;
+export type EvaluateAlarmMutationFn = Apollo.MutationFunction<EvaluateAlarmMutation, EvaluateAlarmMutationVariables>;
+
+/**
+ * __useEvaluateAlarmMutation__
+ *
+ * To run a mutation, you first call `useEvaluateAlarmMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEvaluateAlarmMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [evaluateAlarmMutation, { data, loading, error }] = useEvaluateAlarmMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useEvaluateAlarmMutation(baseOptions?: Apollo.MutationHookOptions<EvaluateAlarmMutation, EvaluateAlarmMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EvaluateAlarmMutation, EvaluateAlarmMutationVariables>(EvaluateAlarmDocument, options);
+      }
+export type EvaluateAlarmMutationHookResult = ReturnType<typeof useEvaluateAlarmMutation>;
+export type EvaluateAlarmMutationResult = Apollo.MutationResult<EvaluateAlarmMutation>;
+export type EvaluateAlarmMutationOptions = Apollo.BaseMutationOptions<EvaluateAlarmMutation, EvaluateAlarmMutationVariables>;
 export const EvaluateAlarmsDocument = gql`
     mutation evaluateAlarms {
   evaluateAlarms {
