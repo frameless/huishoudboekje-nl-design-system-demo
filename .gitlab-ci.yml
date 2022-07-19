@@ -1,11 +1,10 @@
-# Some clarification on terminology:
-# BE = Backend (The API)
-# FE = Frontend (The UI)
-# (BE|FE)-(D|T|A|P)
-#
-# We use a DTAP setup (Develop, Test, Acceptance, Production)
-# where FE-D runs locally but talks BE-T. FE-T, FE-A and FE-P are talking to to BE-T, BE-A and BE-P respectively.
-# Hence we only need a pipeline for T, A and P, not for D.
+stages:
+- build
+- ship
+- deploy
+- test
+- security
+- data
 
 variables:
   IMAGE_TAG: "$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA"
@@ -15,14 +14,6 @@ variables:
   UNLEASH_INSTANCEID: JbZyPux6M7xwejsESy9L
   UNLEASH_APPNAME: huishoudboekje
   UNLEASH_OTAP: development
-
-stages:
-- build
-- ship
-- deploy
-- test
-- security
-- data
 
 include:
 - "/.gitlab/ci/build.yaml"

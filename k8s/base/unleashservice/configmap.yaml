@@ -1,9 +1,0 @@
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: hhb-unleashservice-config
-  labels:
-    name: hhb-unleashservice-config
-data:
-  .env.production: "must be changed with env_patch.yaml"

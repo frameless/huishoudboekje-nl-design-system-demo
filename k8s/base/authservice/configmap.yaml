@@ -3,11 +3,11 @@ kind: ConfigMap
 metadata:
   name: authservice-config
 data:
-  OIDC_ISSUER_URL: "must be changed with env_patch.yaml"
-  OIDC_CLIENT_ID: "must be changed with env_patch.yaml"
-  OIDC_CLIENT_SECRET: "must be changed with env_patch.yaml"
-  OIDC_BASE_URL: "must be changed with env_patch.yaml"
-  JWT_SECRET: "must be changed with env_patch.yaml"
-  JWT_ISSUER: "must be changed with env_patch.yaml"
-  JWT_AUDIENCE: "must be changed with env_patch.yaml"
-  JWT_EXPIRES_IN: "must be changed with env_patch.yaml"
+  OIDC_ISSUER_URL: ${OIDC_ISSUER_URL}
+  OIDC_CLIENT_ID: ${OIDC_CLIENT_ID}
+  OIDC_CLIENT_SECRET: ${OIDC_CLIENT_SECRET}
+  OIDC_BASE_URL: ${OIDC_BASE_URL}
+  JWT_ISSUER: ${JWT_ISSUER}
+  JWT_AUDIENCE: ${JWT_AUDIENCE}
+  JWT_EXPIRES_IN: ${JWT_EXPIRES_IN}
+  JWT_SECRET: ${JWT_SECRET}

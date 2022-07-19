@@ -1,4 +1,3 @@
----
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
@@ -9,5 +8,5 @@ spec:
     kind: Deployment
     name: hhb-database
   minReplicas: 1
-  maxReplicas: 4
+  maxReplicas: 1
   targetCPUUtilizationPercentage: 80

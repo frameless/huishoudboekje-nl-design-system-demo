@@ -47,9 +47,9 @@ spec:
               memory: 256Mi
           env:
             - name: JWT_AUDIENCE
-              value: "change this in a patch"
+              value: ${JWT_AUDIENCE}
             - name: JWT_SECRET
-              value: "change this in a patch"
+              value: ${JWT_SECRET}
             - name: PREFIX
               value: "/api"
             - name: HHB_SERVICE_URL
