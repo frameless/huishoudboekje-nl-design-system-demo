@@ -337,13 +337,12 @@ async def shouldCreateSignaal(_root, _info, alarm: Alarm, transacties) -> Signaa
 
     diff = bedrag - expected_alarm_bedrag
     if left_monetary_window <= diff <= right_monetary_window:
-        monetary_deviated_transaction_ids = None
+        monetary_deviated_transaction_ids = []
         difference = Bedrag.serialize(0)
     else:
         difference = Bedrag.serialize(diff)
 
-    # som van transacties nemen en vergelijken met verwacht, indien niet gelijk verschil opslaan in bedrag en alle transactionids. 
-    if len(transaction_in_scope) <= 0: 
+    if len(transaction_in_scope) <= 0 or len(monetary_deviated_transaction_ids) > 0: 
         alarm_id = alarm.get("id")
         newSignal = {
             "alarmId": alarm_id,
