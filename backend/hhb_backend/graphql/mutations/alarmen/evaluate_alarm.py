@@ -1,7 +1,6 @@
 from tokenize import String
 from hhb_backend.graphql.mutations.signalen.signalen import SignaalHelper
-from hhb_backend.graphql.mutations.alarmen.alarm import AlarmHelper, CreateAlarmInput
-import hhb_backend.graphql as graphql
+from hhb_backend.graphql.mutations.alarmen.alarm import AlarmHelper
 from hhb_backend.graphql.models.Alarm import Alarm
 from hhb_backend.graphql.models.signaal import Signaal
 from hhb_backend.graphql.models.afspraak import Afspraak
@@ -314,36 +313,46 @@ async def shouldCreateSignaal(_root, _info, alarm: Alarm, transacties) -> Signaa
     right_date_window = expect_date + timedelta(days=datum_margin)
 
     # Evaluate Alarm
+    expected_alarm_bedrag = int(alarm.get("bedrag"))
+    monetary_margin = int(alarm.get("bedragMargin"))
+    left_monetary_window = expected_alarm_bedrag - monetary_margin
+    right_monetary_window = expected_alarm_bedrag + monetary_margin
     transaction_in_scope = []
     monetary_deviated_transaction_ids = []
+    bedrag = 0
+    difference = Bedrag.serialize(-expected_alarm_bedrag)
     for transaction in transacties:
         str_transactie_datum=transaction.get("transactie_datum")
         transaction_date = dateutil.parser.isoparse(str_transactie_datum).date()
-        monetary_margin = int(alarm.get("bedragMargin"))
-        expected_alarm_bedrag = int(alarm.get("bedrag"))
         actual_transaction_bedrag = Bedrag.parse_value(transaction.get("bedrag"))
 
         if left_date_window <= transaction_date <= right_date_window:
-            left_monetary_window = expected_alarm_bedrag - monetary_margin
-            right_monetary_window = expected_alarm_bedrag + monetary_margin
             if left_monetary_window <= actual_transaction_bedrag <= right_monetary_window:
                 transaction_in_scope.append(transaction)
             else:
                 id = transaction.get("id")
                 if id:
                     monetary_deviated_transaction_ids.append(id)
+                    bedrag += actual_transaction_bedrag
 
+    diff = bedrag - expected_alarm_bedrag
+    if left_monetary_window <= diff <= right_monetary_window:
+        monetary_deviated_transaction_ids = None
+        difference = Bedrag.serialize(0)
+    else:
+        difference = Bedrag.serialize(diff)
+
+    # som van transacties nemen en vergelijken met verwacht, indien niet gelijk verschil opslaan in bedrag en alle transactionids. 
     if len(transaction_in_scope) <= 0: 
         alarm_id = alarm.get("id")
         newSignal = {
             "alarmId": alarm_id,
             "banktransactieIds": monetary_deviated_transaction_ids,
             "isActive": True,
-            "type": "default"
-            # "context": None
+            "type": "default",
+            "context": difference
         }
 
-        # _root, _info, gebruiken
         result = await SignaalHelper.create(_root, _info, newSignal)
         if not result.ok:
             logging.warning("create signaal failed")
