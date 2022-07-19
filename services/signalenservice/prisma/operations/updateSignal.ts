@@ -9,6 +9,7 @@ const validator = zod.object({
 	alarmId: zod.string().nonempty().optional(),
 	banktransactieIds: zod.number().array().optional(),
 	context: zod.any().optional(),
+	bedragDifference: zod.string().optional(),
 	isActive: zod.boolean().optional(),
 	type: zod.string().optional(),
 });
