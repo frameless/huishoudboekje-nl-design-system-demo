@@ -5,3 +5,4 @@ resources:
   - service.yaml
   - horizontalpodautoscaler.yaml
   - configmap.yaml
+  - ingress.yaml

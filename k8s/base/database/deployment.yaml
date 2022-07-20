@@ -1,4 +1,3 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -43,4 +42,4 @@ spec:
       volumes:
         - name: hhb-database-volume
           persistentVolumeClaim:
-            claimName: hhb-database-volumeclaim
+            claimName: hhb-database-pvc

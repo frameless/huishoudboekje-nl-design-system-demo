@@ -56,8 +56,4 @@ spec:
             - name: UNLEASH_APPNAME
               value: "huishoudboekje"
             - name: UNLEASH_OTAP
-              value: "production"
-      volumes:
-        - name: unleashservice-config-volume
-          configMap:
-            name: hhb-unleashservice-config
+              value: ${UNLEASH_OTAP}

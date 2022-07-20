@@ -24,7 +24,7 @@ A series of YAML-files will be created in the [distribution directory](./dist).
 ### [Base](./base)
 All components within Huishoudboekje have their own directory in [base](./base) with YAML-files that contain all the shared configurations for that component.
 
-### [Customer](./customer)
+### [Customer](./overlay)
 Huishoudboekje currently includes themes for Gemeente Sloothuizen (for demonstration purposes) and for Gemeente Nijmegen.
 This is where a custom theme can be installed.
 
@@ -57,20 +57,20 @@ The build script needs to know you are targeting Minikube, therefor, we need the
 
 ```shell
 export USE_PLATFORM="minikube"
-export HHB_HOST="hhb.minikube"
+export APP_HOST="hhb.minikube"
 export NAMESPACE="huishoudboekje"
 
 # We don't use SSL locally, so we use http.
-export HHB_FRONTEND_ENDPOINT="http://${HHB_HOST}"
-export OIDC_ISSUER="http://$HHB_HOST/auth/realms/hhb"
-export OIDC_AUTHORIZATION_ENDPOINT="http://$HHB_HOST/auth/realms/hhb/protocol/openid-connect/auth"
+export HHB_FRONTEND_ENDPOINT="http://${APP_HOST}"
+export OIDC_ISSUER="http://$APP_HOST/auth/realms/hhb"
+export OIDC_AUTHORIZATION_ENDPOINT="http://$APP_HOST/auth/realms/hhb/protocol/openid-connect/auth"
 # intern url hhb.minibuke (hhb.minibuke does not exist in cluster), (http) is posible only for minikube see: k8s/templates/platform/minikube/patch.yaml
 export OIDC_TOKEN_ENDPOINT="http://hhb-keycloak/auth/realms/hhb/protocol/openid-connect/token" 
 export OIDC_TOKENINFO_ENDPOINT="http://hhb-keycloak/auth/realms/hhb/protocol/openid-connect/token/introspect"
 export OIDC_USERINFO_ENDPOINT="http://hhb-keycloak/auth/realms/hhb/protocol/openid-connect/userinfo"
 
-export KEYCLOAK_AUTH_KEYCLOAK_URL="http://$HHB_HOST/auth/"
-export KEYCLOAK_CLIENT_ROOT_URL="http://$HHB_HOST/"
+export KEYCLOAK_AUTH_KEYCLOAK_URL="http://$APP_HOST/auth/"
+export KEYCLOAK_CLIENT_ROOT_URL="http://$APP_HOST/"
 
 export CI_API_V4_URL="https://gitlab.com/api/v4"
 export CI_PROJECT_ID="20352213"
@@ -94,7 +94,7 @@ In this case, the example is for Gemeente Nijmegen.
 
 ```shell
 export USE_PLATFORM="true"
-export HHB_HOST="huishoudboekje-accp.nijmegen.nl" # huishoudboekje.nijmegen.nl for production
+export APP_HOST="huishoudboekje-accp.nijmegen.nl" # huishoudboekje.nijmegen.nl for production
 export NAMESPACE="huishoudboekje-acc" # huishoudboekje for production
 export CERT_MANAGER_ISSUER="letsencrypt-prod"
 
@@ -162,7 +162,7 @@ The build script needs to know you are targeting OpenShift, therefor, we need th
 
 ```shell
 export USE_PLATFORM="ocp"
-export HHB_HOST="openshift.example.com"
+export APP_HOST="openshift.example.com"
 export HHB_APP_HOST="apps.example.com"
 export HHB_FRONTEND_DNS="hhb-huishoudboekje.$HHB_APP_HOST"
 export CI_API_V4_URL="https://gitlab.com/api/v4"

@@ -27,7 +27,7 @@
     - sh ./k8s/build.sh
     - kubectl apply -f k8s/dist/namespace.yaml
     - sh ./k8s/deploy.sh
-    - echo -e Deployment is done! Go check out the running app at https://${HHB_HOST}
+    - echo -e Deployment is done! Go check out the running app at https://${APP_HOST}
 
 deploy-deployment-master:
   <<: *deploy
@@ -37,14 +37,14 @@ deploy-deployment-master:
     name: demo
     url: https://demo.huishoudboekje.demoground.nl/
   variables:
-    DEFAULT_REPLICAS: 1
-    HHB_HOST: "demo.huishoudboekje.demoground.nl"
+    APP_HOST: "demo.huishoudboekje.demoground.nl"
     NAMESPACE: "hhb-demo"
-    USE_PLATFORM: "azure_tad" # azure_review_acc cluster
+    USE_PLATFORM: "azure_tad" # azure_common_prod cluster
     UNLEASH_OTAP: production
     OIDC_BASE_URL: "https://demo.huishoudboekje.demoground.nl"
     OIDC_ISSUER_URL: https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje/
     OIDC_CLIENT_ID: huishoudboekje-medewerkers
+    JWT_ISSUER: demo.huishoudboekje.demoground.nl
     JWT_AUDIENCE: demo.huishoudboekje.demoground.nl
     JWT_SECRET: demodemo
   before_script:
@@ -60,14 +60,14 @@ deploy-deployment-acceptance:
     name: acc
     url: https://acc.huishoudboekje.demoground.nl/
   variables:
-    DEFAULT_REPLICAS: 1
-    HHB_HOST: "acc.huishoudboekje.demoground.nl"
+    APP_HOST: "acc.huishoudboekje.demoground.nl"
     NAMESPACE: "hhb-acc"
-    USE_PLATFORM: "azure_tad" # azure - test acc demo
+    USE_PLATFORM: "azure_tad" # azure_review_acc cluster
     UNLEASH_OTAP: acceptance
     OIDC_BASE_URL: "https://acc.huishoudboekje.demoground.nl"
     OIDC_ISSUER_URL: https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje/
     OIDC_CLIENT_ID: huishoudboekje-medewerkers
+    JWT_ISSUER: acc.huishoudboekje.demoground.nl
     JWT_AUDIENCE: acc.huishoudboekje.demoground.nl
     JWT_SECRET: accaccacc
   before_script:
@@ -84,14 +84,14 @@ deploy-deployment-test:
     name: test
     url: https://test.huishoudboekje.demoground.nl/
   variables:
-    DEFAULT_REPLICAS: 1
-    HHB_HOST: "test.huishoudboekje.demoground.nl"
+    APP_HOST: "test.huishoudboekje.demoground.nl"
     NAMESPACE: "hhb-test"
-    USE_PLATFORM: "azure_tad" # azure - test acc demo
+    USE_PLATFORM: "azure_tad" # azure_review_acc cluster
     UNLEASH_OTAP: test
     OIDC_BASE_URL: "https://test.huishoudboekje.demoground.nl"
     OIDC_ISSUER_URL: https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje/
     OIDC_CLIENT_ID: huishoudboekje-medewerkers
+    JWT_ISSUER: test.huishoudboekje.demoground.nl
     JWT_AUDIENCE: test.huishoudboekje.demoground.nl
     JWT_SECRET: testtest
   before_script:
@@ -111,14 +111,15 @@ deploy-deployment-review:
     on_stop: destroy-review
     auto_stop_in: 7 days
   variables:
-    HHB_HOST: "hhb-$CI_COMMIT_REF_SLUG.nlx.reviews"
+    APP_HOST: "hhb-$CI_COMMIT_REF_SLUG.nlx.reviews"
     NAMESPACE: "hhb-$CI_COMMIT_REF_SLUG"
-    USE_PLATFORM: "azure_review"
+    USE_PLATFORM: "azure_review" # azure_review_acc cluster
     UNLEASH_OTAP: development
     USE_KEYCLOAK: 0
     OIDC_BASE_URL: "https://hhb-$CI_COMMIT_REF_SLUG.nlx.reviews"
     OIDC_ISSUER_URL: https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje/
     OIDC_CLIENT_ID: huishoudboekje-medewerkers
+    JWT_ISSUER: hhb-$CI_COMMIT_REF_SLUG.nlx.reviews
     JWT_AUDIENCE: hhb-$CI_COMMIT_REF_SLUG.nlx.reviews
     JWT_SECRET: koen-hhb-$CI_COMMIT_REF_SLUG
   before_script:
@@ -139,10 +140,10 @@ authorize-keycloak-review:
     GIT_STRATEGY: none # the runner won’t try to check out the code after the branch is deleted.
     KEYCLOAK_REALM_NAME: huishoudboekje
     KEYCLOAK_BASE_URL: https://keycloak.huishoudboekje.demoground.nl
-    HHB_HOST: "hhb-$CI_COMMIT_REF_SLUG.nlx.reviews"
+    APP_HOST: "hhb-$CI_COMMIT_REF_SLUG.nlx.reviews"
   script:
     - echo "Adding application to Keycloak..."
-    - npm run start -- redirect-uri add --uri="https://${HHB_HOST}/auth/callback" --client-id=huishoudboekje-medewerkers
+    - npm run start -- redirect-uri add --uri="https://${APP_HOST}/auth/callback" --client-id=huishoudboekje-medewerkers
   only:
     - branches@commonground/huishoudboekje/app-new
   except:
@@ -159,10 +160,10 @@ unauthorize-keycloak-review:
     GIT_STRATEGY: none # the runner won’t try to check out the code after the branch is deleted.
     KEYCLOAK_REALM_NAME: huishoudboekje
     KEYCLOAK_BASE_URL: https://keycloak.huishoudboekje.demoground.nl
-    HHB_HOST: "hhb-$CI_COMMIT_REF_SLUG.nlx.reviews"
+    APP_HOST: "hhb-$CI_COMMIT_REF_SLUG.nlx.reviews"
   script:
     - echo "Removing application from Keycloak..."
-    - npm run start -- redirect-uri remove --uri="https://${HHB_HOST}/auth/callback" --client-id=huishoudboekje-medewerkers
+    - npm run start -- redirect-uri remove --uri="https://${APP_HOST}/auth/callback" --client-id=huishoudboekje-medewerkers
   when: manual
   only:
     - branches@commonground/huishoudboekje/app-new
@@ -183,7 +184,7 @@ destroy-review:
   variables:
     GIT_STRATEGY: none # the runner won’t try to check out the code after the branch is deleted.
     NAMESPACE: "hhb-$CI_COMMIT_REF_SLUG"
-    HHB_HOST: "hhb-$CI_COMMIT_REF_SLUG.nlx.reviews"
+    APP_HOST: "hhb-$CI_COMMIT_REF_SLUG.nlx.reviews"
   before_script:
     - kubectl config use-context commonground/huishoudboekje/app-new:hhb-review
   script:

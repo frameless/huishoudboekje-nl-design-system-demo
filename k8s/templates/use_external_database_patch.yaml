@@ -1,6 +1,0 @@
-# delete database deployment and all the database init-scripts
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: hhb-database
-${DOLLAR}patch: delete
