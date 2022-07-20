@@ -346,7 +346,7 @@ async def shouldCreateSignaal(_root, _info, alarm: Alarm, transacties) -> Signaa
     if left_monetary_window <= bedrag <= right_monetary_window:
         monetary_deviated_transaction_ids = []
 
-    if len(monetary_deviated_transaction_ids) > 0: 
+    if len(transaction_in_scope) <= 0 or len(monetary_deviated_transaction_ids) > 0: 
         alarm_id = alarm.get("id")
         newSignal = {
             "alarmId": alarm_id,
@@ -356,9 +356,9 @@ async def shouldCreateSignaal(_root, _info, alarm: Alarm, transacties) -> Signaa
             "bedragDifference": difference
         }
 
-        newSignal = createSignaal(_root, _info, newSignal)
+        newSignal = await createSignaal(_root, _info, newSignal)
         newSignalId = newSignal.get("id")
-        updateAlarm(alarm_id, newSignalId)
+        updateAlarm(alarm, alarm_id, newSignalId)
 
         return newSignal
     else:
@@ -373,7 +373,7 @@ async def createSignaal(_root, _info, newSignal) -> Signaal:
 
     return newSignal
 
-def updateAlarm(alarm_id, newSignalId):
+def updateAlarm(alarm, alarm_id, newSignalId):
     alarm["signaalId"] = newSignalId
     alarm_response = requests.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", json=alarm, headers={"Content-type": "application/json"})
     if alarm_response.status_code != 200:
