@@ -306,25 +306,30 @@ def generateNextAlarmInSequence(alarm: Alarm, alarmDate:datetime) -> datetime:
     return next_alarm_date
 
 async def shouldCreateSignaal(_root, _info, alarm: Alarm, transacties) -> Signaal:
+    # expected dates
     datum_margin = int(alarm.get("datumMargin"))
     str_expect_date = alarm.get("startDate")
     expect_date = dateutil.parser.isoparse(str_expect_date).date()
     left_date_window = expect_date - timedelta(days=datum_margin)
     right_date_window = expect_date + timedelta(days=datum_margin)
 
-    # Evaluate Alarm
+    # expected amounts
     expected_alarm_bedrag = int(alarm.get("bedrag"))
     monetary_margin = int(alarm.get("bedragMargin"))
     left_monetary_window = expected_alarm_bedrag - monetary_margin
     right_monetary_window = expected_alarm_bedrag + monetary_margin
+
+    # initialize
     transaction_in_scope = []
     monetary_deviated_transaction_ids = []
     bedrag = 0
     difference = Bedrag.serialize(-expected_alarm_bedrag)
+    
+    # check transactions 
     for transaction in transacties:
         str_transactie_datum=transaction.get("transactie_datum")
         transaction_date = dateutil.parser.isoparse(str_transactie_datum).date()
-        actual_transaction_bedrag = Bedrag.parse_value(transaction.get("bedrag"))
+        actual_transaction_bedrag = int(transaction.get("bedrag"))
 
         if left_date_window <= transaction_date <= right_date_window:
             if left_monetary_window <= actual_transaction_bedrag <= right_monetary_window:
@@ -336,13 +341,12 @@ async def shouldCreateSignaal(_root, _info, alarm: Alarm, transacties) -> Signaa
                     bedrag += actual_transaction_bedrag
 
     diff = bedrag - expected_alarm_bedrag
-    if left_monetary_window <= diff <= right_monetary_window:
-        monetary_deviated_transaction_ids = []
-        difference = Bedrag.serialize(0)
-    else:
-        difference = Bedrag.serialize(diff)
+    difference = Bedrag.serialize(diff)
 
-    if len(transaction_in_scope) <= 0 or len(monetary_deviated_transaction_ids) > 0: 
+    if left_monetary_window <= bedrag <= right_monetary_window:
+        monetary_deviated_transaction_ids = []
+
+    if len(monetary_deviated_transaction_ids) > 0: 
         alarm_id = alarm.get("id")
         newSignal = {
             "alarmId": alarm_id,
@@ -352,22 +356,30 @@ async def shouldCreateSignaal(_root, _info, alarm: Alarm, transacties) -> Signaa
             "bedragDifference": difference
         }
 
-        result = await SignaalHelper.create(_root, _info, newSignal)
-        if not result.ok:
-            logging.warning("create signaal failed")
-            return None
-        newSignal = result.signaal
-
+        newSignal = createSignaal(_root, _info, newSignal)
         newSignalId = newSignal.get("id")
-        alarm["signaalId"] = newSignalId
-        alarm_response = requests.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", json=alarm, headers={"Content-type": "application/json"})
-        if alarm_response.status_code != 200:
-            raise GraphQLError(f"Fout bij het update van het alarm met het signaal. {alarm_response.json()}")
-        alarm = alarm_response.json()["data"]
+        updateAlarm(alarm_id, newSignalId)
 
         return newSignal
     else:
         return None
+
+async def createSignaal(_root, _info, newSignal) -> Signaal:
+    result = await SignaalHelper.create(_root, _info, newSignal)
+    if not result.ok:
+        logging.warning("Create signaal failed")
+        return None
+    newSignal = result.signaal
+
+    return newSignal
+
+def updateAlarm(alarm_id, newSignalId):
+    alarm["signaalId"] = newSignalId
+    alarm_response = requests.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", json=alarm, headers={"Content-type": "application/json"})
+    if alarm_response.status_code != 200:
+        raise GraphQLError(f"Fout bij het update van het alarm met het signaal. {alarm_response.json()}")
+    alarm = alarm_response.json()["data"]
+
 
 class WeekdayHelper:
 
