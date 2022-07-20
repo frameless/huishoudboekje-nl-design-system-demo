@@ -91,8 +91,7 @@ def evaluateOneAlarm(_root, _info, id: String) -> list:
 
     return [evaluated_alarm]
 
-def evaluateAlarm(_root, _info, alarm: Alarm, activeAlarms: list):
-    triggered_alarms = []
+async def evaluateAlarm(_root, _info, alarm: Alarm, activeAlarms: list):
     # get data from afspraak and transactions (by journaalpost reference)
     afspraak = getAfspraakById(alarm.get('afspraakId'))
     journaalIds = afspraak.get("journaalposten", [])
@@ -105,8 +104,8 @@ def evaluateAlarm(_root, _info, alarm: Alarm, activeAlarms: list):
     newAlarm = None
     createdSignaal = None
     if shouldCheckAlarm(alarm):
-        newAlarm = shouldCreateNextAlarm(_root, _info, alarm, alarm_check_date, activeAlarms)
-        createdSignaal = shouldCreateSignaal(_root, _info, alarm, transacties)
+        newAlarm = await shouldCreateNextAlarm(_root, _info, alarm, alarm_check_date, activeAlarms)
+        createdSignaal = await shouldCreateSignaal(_root, _info, alarm, transacties)
     
     return {
         "alarm": alarm,
@@ -136,7 +135,7 @@ def doesNextAlarmExist(nextAlarmDate: date, alarm: Alarm, alarms: list) -> bool:
     
     return False
 
-def shouldCreateNextAlarm(_root, _info, alarm: Alarm, alarm_check_date: datetime, activeAlarms: list) -> Alarm:
+async def shouldCreateNextAlarm(_root, _info, alarm: Alarm, alarm_check_date: datetime, activeAlarms: list) -> Alarm:
     newAlarm = None
     
     # only generate next alarm if byDay, byMonth, and/or byMonthDay is present
@@ -156,7 +155,7 @@ def shouldCreateNextAlarm(_root, _info, alarm: Alarm, alarm_check_date: datetime
         if nextAlarmAlreadyExists == True:
             nextAlarmDate = None
         elif nextAlarmAlreadyExists == False:
-            newAlarm = createAlarm(_root, _info, alarm, nextAlarmDate)
+            newAlarm = await createAlarm(_root, _info, alarm, nextAlarmDate)
 
     return newAlarm
 
