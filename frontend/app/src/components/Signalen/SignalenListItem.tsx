@@ -51,13 +51,24 @@ const SignalenListItem: React.FC<SignalenListItemProps> = ({signaal}) => {
 					color: "gray.500",
 					textDecoration: "line-through",
 				}}>
-					<Trans i18nKey={"signalen.contextMessage"} values={{
-						afspraak: (signaal.alarm?.afspraak?.omschrijving),
-						bedrag: currencyFormat2(true).format(parseFloat(signaal.alarm?.afspraak?.bedrag)),
-					}} components={{
-						strong: <strong />,
-						linkAfspraak: <AuditLogLink to={AppRoutes.ViewAfspraak(String(signaal.alarm?.afspraak?.id))}>{signaal.alarm?.afspraak?.omschrijving}</AuditLogLink>,
-					}} />
+					{signaal.bedragDifference ? (
+						<Trans i18nKey={"signalen.bedragDifferenceMessage"} values={{
+							afspraak: (signaal.alarm?.afspraak?.omschrijving),
+							bedrag: currencyFormat2(true).format(parseFloat(signaal.bedragDifference)),
+							transactieBedrag: currencyFormat2(true).format(parseFloat(signaal.bankTransactions?.[0].bedrag)),
+						}} components={{
+							strong: <strong />,
+							linkAfspraak: <AuditLogLink to={AppRoutes.ViewAfspraak(String(signaal.alarm?.afspraak?.id))}>{signaal.alarm?.afspraak?.omschrijving}</AuditLogLink>,
+						}} />
+					) : (
+						<Trans i18nKey={"signalen.contextMessage"} values={{
+							afspraak: (signaal.alarm?.afspraak?.omschrijving),
+							context: JSON.stringify(signaal.context, null, 2),
+						}} components={{
+							strong: <strong />,
+							linkAfspraak: <AuditLogLink to={AppRoutes.ViewAfspraak(String(signaal.alarm?.afspraak?.id))}>{signaal.alarm?.afspraak?.omschrijving}</AuditLogLink>,
+						}} />
+					)}
 				</Text>
 				<Text fontSize={"sm"} color={"gray.500"}>
 					{d(signaal.timeUpdated).format("LL LT")}

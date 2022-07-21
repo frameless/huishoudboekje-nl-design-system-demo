@@ -6,6 +6,7 @@ const validator = zod.object({
 	alarmId: zod.string().nonempty(),
 	banktransactieIds: zod.number().array().optional(),
 	context: zod.any().optional(),
+	bedragDifference: zod.string().optional(),
 	isActive: zod.boolean(),
 	type: zod.string(),
 });
@@ -18,9 +19,10 @@ const createSignal = async (data: zod.infer<typeof validator>) => {
 			alarmId: data.alarmId,
 			banktransactieIds: data.banktransactieIds,
 			context: data.context,
+			bedragDifference: data.bedragDifference,
 			isActive: data.isActive,
 			type: data.type,
-		}
+		},
 	});
 };
 

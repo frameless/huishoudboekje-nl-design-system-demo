@@ -7,7 +7,7 @@ export const SignaalFragment = gql`
         isActive
         type
         actions
-        context
+        bedragDifference
         timeUpdated
         alarm {
             id
@@ -17,6 +17,8 @@ export const SignaalFragment = gql`
         }
         bankTransactions {
             id
+            bedrag
+            isCredit
         }
     }
     ${AfspraakFragment}

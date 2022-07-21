@@ -13,6 +13,7 @@ class Signaal(graphene.ObjectType):
     type = graphene.String()
     actions = graphene.List(graphene.String, default_value=[])
     context = graphene.String()
+    bedragDifference = graphene.String()
     timeUpdated = graphene.String()
 
     async def resolve_alarm(root, info):

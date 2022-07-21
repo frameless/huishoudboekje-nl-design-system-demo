@@ -1,7 +1,6 @@
 from tokenize import String
 from hhb_backend.graphql.mutations.signalen.signalen import SignaalHelper
-from hhb_backend.graphql.mutations.alarmen.alarm import AlarmHelper, CreateAlarmInput
-import hhb_backend.graphql as graphql
+from hhb_backend.graphql.mutations.alarmen.alarm import AlarmHelper
 from hhb_backend.graphql.models.Alarm import Alarm
 from hhb_backend.graphql.models.signaal import Signaal
 from hhb_backend.graphql.models.afspraak import Afspraak
@@ -40,7 +39,7 @@ class EvaluateAlarms(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(_root, _info):
         """ Mutatie voor de evaluatie van een alarm wat kan resulteren in een signaal en/of een nieuw alarm in de reeks. """
-        triggered_alarms = evaluateAllAlarms(_root, _info)
+        triggered_alarms = await evaluateAllAlarms(_root, _info)
         return EvaluateAlarms(alarmTriggerResult=triggered_alarms)
 
 
@@ -63,19 +62,19 @@ class EvaluateAlarm(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(_root, _info, id):
         """ Mutatie voor de evaluatie van een alarm wat kan resulteren in een signaal en/of een nieuw alarm in de reeks. """
-        evaluated_alarm = evaluateOneAlarm(_root, _info, id)
+        evaluated_alarm = await evaluateOneAlarm(_root, _info, id)
         return EvaluateAlarm(alarmTriggerResult=evaluated_alarm)
 
 
-def evaluateAllAlarms(_root, _info, ) -> list:
+async def evaluateAllAlarms(_root, _info, ) -> list:
     triggered_alarms = []
     activeAlarms = getActiveAlarms()
     for alarm in activeAlarms:
-        triggered_alarms.append(evaluateAlarm(_root, _info, alarm, activeAlarms))
+        triggered_alarms.append(await evaluateAlarm(_root, _info, alarm, activeAlarms))
 
     return triggered_alarms
 
-def evaluateOneAlarm(_root, _info, id: String) -> list:
+async def evaluateOneAlarm(_root, _info, id: String) -> list:
     evaluated_alarm = None
     activeAlarms = getActiveAlarms()
     alarm = getAlarm(id)
@@ -85,15 +84,14 @@ def evaluateOneAlarm(_root, _info, id: String) -> list:
         
     alarm_status: bool = alarm.get("isActive")
     if alarm_status == True:
-        evaluated_alarm = evaluateAlarm(_root, _info, alarm, activeAlarms)
+        evaluated_alarm = await evaluateAlarm(_root, _info, alarm, activeAlarms)
 
     if evaluated_alarm is None:
         return []
 
     return [evaluated_alarm]
 
-def evaluateAlarm(_root, _info, alarm: Alarm, activeAlarms: list):
-    triggered_alarms = []
+async def evaluateAlarm(_root, _info, alarm: Alarm, activeAlarms: list):
     # get data from afspraak and transactions (by journaalpost reference)
     afspraak = getAfspraakById(alarm.get('afspraakId'))
     journaalIds = afspraak.get("journaalposten", [])
@@ -106,8 +104,8 @@ def evaluateAlarm(_root, _info, alarm: Alarm, activeAlarms: list):
     newAlarm = None
     createdSignaal = None
     if shouldCheckAlarm(alarm):
-        newAlarm = shouldCreateNextAlarm(_root, _info, alarm, alarm_check_date, activeAlarms)
-        createdSignaal = shouldCreateSignaal(_root, _info, alarm, transacties)
+        newAlarm = await shouldCreateNextAlarm(_root, _info, alarm, alarm_check_date, activeAlarms)
+        createdSignaal = await shouldCreateSignaal(_root, _info, alarm, transacties)
     
     return {
         "alarm": alarm,
@@ -137,7 +135,7 @@ def doesNextAlarmExist(nextAlarmDate: date, alarm: Alarm, alarms: list) -> bool:
     
     return False
 
-def shouldCreateNextAlarm(_root, _info, alarm: Alarm, alarm_check_date: datetime, activeAlarms: list) -> Alarm:
+async def shouldCreateNextAlarm(_root, _info, alarm: Alarm, alarm_check_date: datetime, activeAlarms: list) -> Alarm:
     newAlarm = None
     
     # only generate next alarm if byDay, byMonth, and/or byMonthDay is present
@@ -157,7 +155,7 @@ def shouldCreateNextAlarm(_root, _info, alarm: Alarm, alarm_check_date: datetime
         if nextAlarmAlreadyExists == True:
             nextAlarmDate = None
         elif nextAlarmAlreadyExists == False:
-            newAlarm = createAlarm(_root, _info, alarm, nextAlarmDate)
+            newAlarm = await createAlarm(_root, _info, alarm, nextAlarmDate)
 
     return newAlarm
 
@@ -307,59 +305,80 @@ def generateNextAlarmInSequence(alarm: Alarm, alarmDate:datetime) -> datetime:
     return next_alarm_date
 
 async def shouldCreateSignaal(_root, _info, alarm: Alarm, transacties) -> Signaal:
+    # expected dates
     datum_margin = int(alarm.get("datumMargin"))
     str_expect_date = alarm.get("startDate")
     expect_date = dateutil.parser.isoparse(str_expect_date).date()
     left_date_window = expect_date - timedelta(days=datum_margin)
     right_date_window = expect_date + timedelta(days=datum_margin)
 
-    # Evaluate Alarm
+    # expected amounts
+    expected_alarm_bedrag = int(alarm.get("bedrag"))
+    monetary_margin = int(alarm.get("bedragMargin"))
+    left_monetary_window = expected_alarm_bedrag - monetary_margin
+    right_monetary_window = expected_alarm_bedrag + monetary_margin
+
+    # initialize
     transaction_in_scope = []
     monetary_deviated_transaction_ids = []
+    bedrag = 0
+    difference = Bedrag.serialize(-expected_alarm_bedrag)
+    
+    # check transactions 
     for transaction in transacties:
         str_transactie_datum=transaction.get("transactie_datum")
         transaction_date = dateutil.parser.isoparse(str_transactie_datum).date()
-        monetary_margin = int(alarm.get("bedragMargin"))
-        expected_alarm_bedrag = int(alarm.get("bedrag"))
-        actual_transaction_bedrag = Bedrag.parse_value(transaction.get("bedrag"))
+        actual_transaction_bedrag = int(transaction.get("bedrag"))
 
         if left_date_window <= transaction_date <= right_date_window:
-            left_monetary_window = expected_alarm_bedrag - monetary_margin
-            right_monetary_window = expected_alarm_bedrag + monetary_margin
             if left_monetary_window <= actual_transaction_bedrag <= right_monetary_window:
                 transaction_in_scope.append(transaction)
             else:
                 id = transaction.get("id")
                 if id:
                     monetary_deviated_transaction_ids.append(id)
+                    bedrag += actual_transaction_bedrag
 
-    if len(transaction_in_scope) <= 0: 
+    diff = bedrag - expected_alarm_bedrag
+    difference = Bedrag.serialize(diff)
+
+    if left_monetary_window <= bedrag <= right_monetary_window:
+        monetary_deviated_transaction_ids = []
+
+    if len(transaction_in_scope) <= 0 or len(monetary_deviated_transaction_ids) > 0: 
         alarm_id = alarm.get("id")
         newSignal = {
             "alarmId": alarm_id,
             "banktransactieIds": monetary_deviated_transaction_ids,
             "isActive": True,
-            "type": "default"
-            # "context": None
+            "type": "default",
+            "bedragDifference": difference
         }
 
-        # _root, _info, gebruiken
-        result = await SignaalHelper.create(_root, _info, newSignal)
-        if not result.ok:
-            logging.warning("create signaal failed")
-            return None
-        newSignal = result.signaal
-
+        newSignal = await createSignaal(_root, _info, newSignal)
         newSignalId = newSignal.get("id")
-        alarm["signaalId"] = newSignalId
-        alarm_response = requests.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", json=alarm, headers={"Content-type": "application/json"})
-        if alarm_response.status_code != 200:
-            raise GraphQLError(f"Fout bij het update van het alarm met het signaal. {alarm_response.json()}")
-        alarm = alarm_response.json()["data"]
+        updateAlarm(alarm, alarm_id, newSignalId)
 
         return newSignal
     else:
         return None
+
+async def createSignaal(_root, _info, newSignal) -> Signaal:
+    result = await SignaalHelper.create(_root, _info, newSignal)
+    if not result.ok:
+        logging.warning("Create signaal failed")
+        return None
+    newSignal = result.signaal
+
+    return newSignal
+
+def updateAlarm(alarm, alarm_id, newSignalId):
+    alarm["signaalId"] = newSignalId
+    alarm_response = requests.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", json=alarm, headers={"Content-type": "application/json"})
+    if alarm_response.status_code != 200:
+        raise GraphQLError(f"Fout bij het update van het alarm met het signaal. {alarm_response.json()}")
+    alarm = alarm_response.json()["data"]
+
 
 class WeekdayHelper:
 

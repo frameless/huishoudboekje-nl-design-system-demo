@@ -16,8 +16,8 @@ alarm = {
     "afspraakId": 19,
     "startDate":"2021-12-06",
     "datumMargin": 1,
-    "bedrag": "12500",
-    "bedragMargin":"1000",
+    "bedrag": 12500,
+    "bedragMargin":1000,
     "byDay": ["Wednesday", "Friday"],
     "byMonth": [],
     "byMonthDay": []
@@ -28,8 +28,8 @@ nextAlarm = {
     "afspraakId": 19,
     "startDate":"2021-12-08",
     "datumMargin": 1,
-    "bedrag": "12500",
-    "bedragMargin":"1000",
+    "bedrag": 12500,
+    "bedragMargin":1000,
     "byDay": ["Wednesday", "Friday"],
     "byMonth": [],
     "byMonthDay": []
@@ -40,7 +40,7 @@ afspraak = {
     "valid_from": "2021-01-01",
     "aantal_betalingen": None,
     "afdeling_id": None,
-    "bedrag": 120,
+    "bedrag": 12000,
     "betaalinstructie": {
         "by_day": ["Wednesday", "Friday"],
         "start_date": "2019-01-01"
@@ -58,7 +58,7 @@ journaalpost = {
 }
 banktransactie = {
     "id": banktransactie_id,
-    "bedrag": 120,
+    "bedrag": 12000,
     "customer_statement_message_id": 15,
     "information_to_account_owner": "NL83ABNA1927261899               Leefgeld ZOEKTERMPERSONA2 januari 2019",
     "is_credit": False,
@@ -129,8 +129,8 @@ def test_evaluate_alarm_illigal_betaalinstructie_combination(client):
             "afspraakId": 19,
             "startDate":"2021-12-06",
             "datumMargin": 1,
-            "bedrag": "12500",
-            "bedragMargin":"1000",
+            "bedrag": 12500,
+            "bedragMargin":1000,
             "byDay": ["Wednesday", "Friday"],
             "byMonth": [1],
             "byMonthDay": [1],
@@ -189,8 +189,8 @@ def test_evaluate_alarm_inactive(client):
             "afspraakId": 19,
             "startDate":"2021-12-06",
             "datumMargin": 1,
-            "bedrag": "12500",
-            "bedragMargin":"1000",
+            "bedrag": 12500,
+            "bedragMargin":1000,
             "byDay": ["Wednesday", "Friday"]
         }
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
@@ -285,7 +285,7 @@ def test_evaluate_alarm_signal_date(client):
         # arrange
         banktransactie = {
             "id": banktransactie_id,
-            "bedrag": 150,
+            "bedrag": 15000,
             "customer_statement_message_id": 15,
             "information_to_account_owner": "NL83ABNA1927261899               Leefgeld ZOEKTERMPERSONA2 januari 2019",
             "is_credit": False,
@@ -350,7 +350,7 @@ def test_evaluate_alarm_signal_monetary(client):
         # arrange
         banktransactie = {
             "id": banktransactie_id,
-            "bedrag": 150,
+            "bedrag": 15000,
             "customer_statement_message_id": 15,
             "information_to_account_owner": "NL83ABNA1927261899               Leefgeld ZOEKTERMPERSONA2 januari 2019",
             "is_credit": False,
@@ -416,7 +416,7 @@ def test_evaluate_alarm_signal_monetary(client):
 #         # arrange
 #         banktransactie = {
 #             "id": banktransactie_id,
-#             "bedrag": 150,
+#             "bedrag": 15000,
 #             "customer_statement_message_id": 15,
 #             "information_to_account_owner": "NL83ABNA1927261899               Leefgeld ZOEKTERMPERSONA2 januari 2019",
 #             "is_credit": False,
@@ -499,8 +499,8 @@ def test_evaluate_alarm_next_alarm_in_sequence_already_exists(client):
             "afspraakId": 19,
             "startDate":"2021-12-06",
             "datumMargin": 1,
-            "bedrag": "12500",
-            "bedragMargin":"1000",
+            "bedrag": 12500,
+            "bedragMargin":1000,
             "byDay": ["Wednesday", "Friday"]
         }
         next_alarm = {
@@ -509,13 +509,13 @@ def test_evaluate_alarm_next_alarm_in_sequence_already_exists(client):
             "afspraakId": 19,
             "startDate":"2021-12-10",
             "datumMargin": 1,
-            "bedrag": "12500",
-            "bedragMargin":"1000",
+            "bedrag": 12500,
+            "bedragMargin":1000,
             "byDay": ["Wednesday", "Friday"]
         }
         banktransactie = {
             "id": banktransactie_id,
-            "bedrag": 120,
+            "bedrag": 12000,
             "customer_statement_message_id": 15,
             "information_to_account_owner": "NL83ABNA1927261899               Leefgeld ZOEKTERMPERSONA2 januari 2019",
             "is_credit": False,
@@ -641,7 +641,7 @@ def test_evaluate_alarm_in_the_past(client):
         # arrange
         banktransactie = {
             "id": banktransactie_id,
-            "bedrag": 120,
+            "bedrag": 12000,
             "customer_statement_message_id": 15,
             "information_to_account_owner": "NL83ABNA1927261899               Leefgeld ZOEKTERMPERSONA2 januari 2019",
             "is_credit": False,
