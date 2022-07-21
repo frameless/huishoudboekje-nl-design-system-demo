@@ -39,7 +39,7 @@ class EvaluateAlarms(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(_root, _info):
         """ Mutatie voor de evaluatie van een alarm wat kan resulteren in een signaal en/of een nieuw alarm in de reeks. """
-        triggered_alarms = evaluateAllAlarms(_root, _info)
+        triggered_alarms = await evaluateAllAlarms(_root, _info)
         return EvaluateAlarms(alarmTriggerResult=triggered_alarms)
 
 
@@ -62,19 +62,19 @@ class EvaluateAlarm(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(_root, _info, id):
         """ Mutatie voor de evaluatie van een alarm wat kan resulteren in een signaal en/of een nieuw alarm in de reeks. """
-        evaluated_alarm = evaluateOneAlarm(_root, _info, id)
+        evaluated_alarm = await evaluateOneAlarm(_root, _info, id)
         return EvaluateAlarm(alarmTriggerResult=evaluated_alarm)
 
 
-def evaluateAllAlarms(_root, _info, ) -> list:
+async def evaluateAllAlarms(_root, _info, ) -> list:
     triggered_alarms = []
     activeAlarms = getActiveAlarms()
     for alarm in activeAlarms:
-        triggered_alarms.append(evaluateAlarm(_root, _info, alarm, activeAlarms))
+        triggered_alarms.append(await evaluateAlarm(_root, _info, alarm, activeAlarms))
 
     return triggered_alarms
 
-def evaluateOneAlarm(_root, _info, id: String) -> list:
+async def evaluateOneAlarm(_root, _info, id: String) -> list:
     evaluated_alarm = None
     activeAlarms = getActiveAlarms()
     alarm = getAlarm(id)
@@ -84,7 +84,7 @@ def evaluateOneAlarm(_root, _info, id: String) -> list:
         
     alarm_status: bool = alarm.get("isActive")
     if alarm_status == True:
-        evaluated_alarm = evaluateAlarm(_root, _info, alarm, activeAlarms)
+        evaluated_alarm = await evaluateAlarm(_root, _info, alarm, activeAlarms)
 
     if evaluated_alarm is None:
         return []
