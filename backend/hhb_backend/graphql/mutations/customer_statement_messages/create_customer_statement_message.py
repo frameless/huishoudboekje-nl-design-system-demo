@@ -54,12 +54,12 @@ class CreateCustomerStatementMessage(graphene.Mutation):
         content = file.stream.read()
 
         if not content:
-            raise GraphQLError("No content", 204)
+            raise GraphQLError("No content")
         else:
             try:
                 raw = content.decode("utf-8")
-            except:
-                raise GraphQLError("File format not allowed.", 405)
+            except ValueError as e:
+                raise GraphQLError(f"File format not allowed. {e}")
 
         if file.filename.lower().endswith('.xml'):
             csm_files = parser.CamtParser().parse(content)
