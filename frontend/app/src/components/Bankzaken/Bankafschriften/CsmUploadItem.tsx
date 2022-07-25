@@ -11,7 +11,7 @@ const CsmUploadItem = ({upload}) => {
 			<Stack>
 				<Text>{truncateText(upload.file.name, 60)}</Text>
 				{upload.error?.message && (
-					<Text color={"red.500"}>{truncateText(upload.error.message, 60)}</Text>
+					<Text color={"red.500"}>{upload.error.message}</Text>
 				)}
 			</Stack>
 			{upload.state === UploadState.DONE && !upload.error && (

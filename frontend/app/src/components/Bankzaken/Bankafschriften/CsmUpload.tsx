@@ -18,15 +18,18 @@ const CsmUpload: React.FC<{refetch: VoidFunction}> = ({refetch}) => {
 	});
 	const [evaluateAlarms] = useEvaluateAlarmsMutation();
 	const [files, {addFiles}] = useUploadFiles({
-		doUpload: ({file}: FileUpload) => new Promise(resolve => {
-			return createCSM({
-				variables: {file},
-			}).then(() => resolve(true));
+		doUpload: ({file}: FileUpload) => new Promise((resolve, reject) => {
+			return createCSM({variables: {file}})
+				.then(() => resolve(true))
+				.catch(err => reject(err));
 		}),
 		onDone: async () => {
 			await evaluateAlarms();
 			refetch();
-			csmUploadModal.onClose();
+			// Only close the upload modal when there were no errors
+			if (!files.find(f => f.error)) {
+				csmUploadModal.onClose();
+			}
 		},
 	});
 
@@ -41,7 +44,7 @@ const CsmUpload: React.FC<{refetch: VoidFunction}> = ({refetch}) => {
 
 	return (<>
 		{csmUploadModal.isOpen && (
-			<CsmUploadModal uploads={files} />
+			<CsmUploadModal uploads={files} onClose={() => csmUploadModal.onClose()} />
 		)}
 
 		<Box>

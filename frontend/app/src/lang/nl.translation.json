@@ -125,7 +125,10 @@
     "enableSignaalSuccess": "Het signaal is ingeschakeld.",
     "disableSignaalSuccess": "Het alarm is uitgeschakeld.",
     "backendError": "Er is een systeemfout opgetreden. Neem contact op met de applicatiebeheerder voor ondersteuning.",
-    "genericToastErrorTitle": "Er is een fout opgetreden."
+    "genericToastErrorTitle": "Er is een fout opgetreden.",
+    "upload": {
+      "formatError": "Dit bestandsformaat wordt niet ondersteund."
+    }
   },
   "global": {
     "actions": {
