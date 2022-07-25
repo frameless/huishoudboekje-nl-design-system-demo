@@ -16,6 +16,7 @@ RABO_CAMT_CSM_FILE = os.path.join(os.path.dirname(__file__), "CAMT_RABO.xml")
 ING_CAMT_CSM_FILE = os.path.join(os.path.dirname(__file__), "CAMT_ING.xml")
 INCORRECT_CAMT_FILE = os.path.join(os.path.dirname(__file__), "incorrect.xml")
 ANONIEM_CSM_FILE = os.path.join(os.path.dirname(__file__), "Anoniem.xml")
+INCORRECT_FILE_FORMAT = os.path.join(os.path.dirname(__file__), "GameOver.jpg")
 
 class MockResponse:
     history = None
@@ -318,6 +319,11 @@ def test_create_camt_with_incorrect_file(client):
         assert response.json["errors"] is not None
         assert response.status_code == 200
 
+def test_create_with_incorrect_file_format(client):
+    with open(INCORRECT_FILE_FORMAT, "rb") as testfile:
+        response = do_csm_post(client, testfile)
+        assert response.json["errors"][0]['message'] == "File format not allowed."
+        assert response.status_code == 200
 
 def create_mock_adapter(mocker: MockerFixture) -> Adapter:
     adapter = requests_mock.Adapter()
