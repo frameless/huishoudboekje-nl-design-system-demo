@@ -1,7 +1,6 @@
-FROM node:16
-ENV CYPRESS_INSTALL_BINARY=0
+FROM node:18
 WORKDIR /app
-COPY ./sampleData/package*.json ./
-RUN npm install
-COPY ./sampleData ./
+COPY ./package*.json /app/
+RUN npm i
+COPY . /app
 CMD ["npm", "run", "start"]

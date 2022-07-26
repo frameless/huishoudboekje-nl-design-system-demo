@@ -8,12 +8,12 @@ export type ApolloRequesterOptions<V, R> =
 
 const validDocDefOps = ["mutation", "query", "subscription"];
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export function getSdkApollo<C>(client: ApolloClient<C>) {
 	const requester: Requester = async <R, V>(
 		doc: DocumentNode,
 		variables: V,
 		options?: ApolloRequesterOptions<V, R>,
+		// @ts-ignore
 	): Promise<R> => {
 		// Valid document should contain *single* query or mutation unless it's has a fragment
 		if (

@@ -151,8 +151,8 @@ services:
 
   sampledata:
     build:
-      dockerfile: ./sampleData/dev.Dockerfile
-      context: .
+      dockerfile: ./dev.Dockerfile
+      context: ./sampleData
     container_name: sampledata
     environment:
       GRAPHQL_API_URL: http://backend:8000/graphql
