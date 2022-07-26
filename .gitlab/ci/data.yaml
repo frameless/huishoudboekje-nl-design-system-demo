@@ -1,7 +1,7 @@
 .load-sample-data: &load-sample-data
   stage: data
   image:
-    name: ${DOCKER_PROXY}node:lts-alpine
+    name: ${DOCKER_PROXY}node:18-alpine
   variables:
     NPM_CACHE_DIR: "${CI_PROJECT_DIR}/.cache/npm"
     CYPRESS_INSTALL_BINARY: "0"
