@@ -20,7 +20,6 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import (
 )
 import hhb_backend.graphql.models.journaalpost as journaalpost
 from hhb_backend.processen import automatisch_boeken
-import hhb_backend.processen.automatisch_alarmen_beoordelen as automatisch_beoordelen
 
 IBAN_REGEX = r"[a-zA-Z]{2}[0-9]{2}[a-zA-Z0-9]{4}[0-9]{7}([a-zA-Z0-9]?){0,16}"
 
@@ -54,6 +53,14 @@ class CreateCustomerStatementMessage(graphene.Mutation):
     async def mutate(_root, _info, file):
         content = file.stream.read()
 
+        if not content:
+            raise GraphQLError("No content")
+        else:
+            try:
+                raw = content.decode("utf-8")
+            except:
+                raise GraphQLError("File format not allowed.")
+
         if file.filename.lower().endswith('.xml'):
             csm_files = parser.CamtParser().parse(content)
         else:
@@ -67,7 +74,7 @@ class CreateCustomerStatementMessage(graphene.Mutation):
             # Fill the csm model
             csmServiceModel = {
                 "upload_date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                "raw_data": content.decode("utf-8"),
+                "raw_data": raw,
                 "filename": file.filename
             }
 
