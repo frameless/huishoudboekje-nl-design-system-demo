@@ -100,7 +100,8 @@ def create_app(
             output.headers["Content-Disposition"] = f"attachment; filename={csv_filename}"
             output.headers["Content-type"] = "text/csv"
         else:
-            return data, 404
+            output = make_response(data)
+            output.headers["Content-type"] = "text/plain"
 
         return output
 
