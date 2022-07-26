@@ -101,7 +101,7 @@ def create_app(
             output.headers["Content-type"] = "text/csv"
         else:
             output = make_response(data)
-            output.header["Content-type"] = "text/plain"
+            output.headers["Content-type"] = "text/plain"
 
         return output
 
