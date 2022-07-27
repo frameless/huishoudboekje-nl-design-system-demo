@@ -39,7 +39,6 @@ class DeletePostadres(graphene.Mutation):
         previous = await hhb_dataloader().postadressen_by_id.load(id)
         if not previous:
             raise GraphQLError("postadres not found")
-        previous = previous["data"]
 
         afspraken = requests.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_postadressen={id}").json()['data']
         if afspraken:

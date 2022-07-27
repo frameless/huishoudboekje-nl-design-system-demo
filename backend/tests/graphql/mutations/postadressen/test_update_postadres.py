@@ -44,7 +44,7 @@ def test_update_postadres_success(client):
         postadres_updated= {"id": "test_id", "houseNumber": "52B", "locality": "testplaats", "street": "teststraat", "postalCode": "9999ZZ"}
 
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        rm1 = rm.get(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/test_id", status_code=200, json={"data": postadres})
+        rm1 = rm.get(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/?filter_ids=test_id", status_code=200, json={"data": [postadres]})
         rm2 = rm.put(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/test_id", status_code=200, json={"data": postadres_updated})
         rm3 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=200)
 

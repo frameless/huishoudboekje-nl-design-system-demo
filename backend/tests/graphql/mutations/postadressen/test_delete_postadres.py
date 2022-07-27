@@ -24,7 +24,7 @@ def create_mock_adapter() -> Adapter:
     def test_matcher(request):
         if request.path == "/afdelingen/" and request.query == "filter_ids=1":
             return MockResponse({'data': [{'id': 1, 'postadressen_ids': ['test_id']}]}, 200)
-        elif request.path == "/addresses/test_id":
+        elif request.path == "/addresses/?filter_ids=test_id":
             return MockResponse({'id': 'test_id'}, 200)
         elif request.path == "/afdelingen/1":
             return MockResponse({'data': {'id': 1}}, 200)
@@ -41,11 +41,11 @@ def test_delete_postadres(client):
         expected = {"data": { "deletePostadres": { "ok": True,}}}
         postadres_existing = {"id": "test_id", "houseNumber": "52", "locality": "testplaats1", "street": "teststraat1", "postalCode": "9999AA"}
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        rm1 = rm.get(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/test_id", status_code=200, json={"data": postadres_existing})
-        rm2 = rm.delete(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/test_id", status_code=204)
-        rm3 = rm.get(f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/?filter_ids=1", status_code=200, json={'data': [{'id': 1, 'postadressen_ids': ['test_id']}]})
-        rm4 = rm.post(f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/1", status_code=200, json={'data': [{'id': 1}]})
-        rm5 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_postadressen=test_id", status_code=200, json={'data': []})
+        rm1 = rm.get(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/?filter_ids=test_id", status_code=200, json={"data": [postadres_existing]})
+        rm2 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_postadressen=test_id", status_code=200, json={'data': []})
+        rm3 = rm.delete(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/test_id", status_code=204)
+        rm4 = rm.get(f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/?filter_ids=1", status_code=200, json={'data': [{'id': 1, 'postadressen_ids': ['test_id']}]})
+        rm5 = rm.post(f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/1", status_code=200, json={'data': [{'id': 1}]})
         rm6 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=200)
 
 
@@ -56,7 +56,7 @@ def test_delete_postadres(client):
                 "query": '''
                     mutation test($id: String!,
                                     $afdeling_id: Int!) {
-                                    deletePostadres(id: $id, afdelingId: $afdeling_id) {
+                                    deletePostadres(id: $id afdelingId: $afdeling_id) {
                                     ok
                                 }
                             }
@@ -86,7 +86,7 @@ def test_delete_postadres_error_afspraken(client):
                                              "path": ["deletePostadres"]}]}
         postadres_existing = {"id": "test_id", "houseNumber": "52", "locality": "testplaats1", "street": "teststraat1", "postalCode": "9999AA"}
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        rm1 = rm.get(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/test_id", status_code=200, json={"data": postadres_existing})
+        rm1 = rm.get(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/?filter_ids=test_id", status_code=200, json={"data": [postadres_existing]})
         rm2 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_postadressen=test_id", status_code=200, json={'data': [{'id': 1}]})
 
 
@@ -116,7 +116,7 @@ def test_delete_postadres_error_afspraken(client):
 
 def test_delete_postadres_error(client):
     with requests_mock.Mocker() as mock:
-        adapter = mock.get(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/test_id", status_code=404, text="Not found")
+        adapter = mock.get(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/?filter_ids=test_id", status_code=404, text="Not found")
 
         response = client.post(
             "/graphql",

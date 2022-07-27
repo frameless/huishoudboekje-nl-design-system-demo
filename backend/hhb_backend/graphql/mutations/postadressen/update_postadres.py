@@ -41,7 +41,6 @@ class UpdatePostadres(graphene.Mutation):
         if not previous:
             raise GraphQLError("Postadres not found")
 
-        previous = previous["data"]
         contactCatalogus_input = {
             "street": kwargs.get("straatnaam", previous['street']),
             "houseNumber": kwargs.get("huisnummer", previous['houseNumber']),
