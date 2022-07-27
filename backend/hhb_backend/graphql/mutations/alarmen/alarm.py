@@ -11,8 +11,8 @@ from hhb_backend.graphql import settings
 from hhb_backend.graphql.scalars.bedrag import Bedrag
 from hhb_backend.graphql.scalars.day_of_week import DayOfWeek
 from hhb_backend.graphql.utils.dates import valid_afspraak, to_date
+from hhb_backend.utils.upstream_error_handler import UpstreamError
 from hhb_backend.graphql.utils.gebruikersactiviteiten import log_gebruikers_activiteit, gebruikers_activiteit_entities
-
 
 class CreateAlarmInput(graphene.InputObjectType):
     isActive = graphene.Boolean()
@@ -85,10 +85,9 @@ class AlarmHelper:
             info.field_name = name
 
         afspraakId = input["afspraakId"]
-        afspraak_response = requests.get(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraakId}", headers={"Content-type": "application/json"})
-        if afspraak_response.status_code != 200:
-            raise GraphQLError("Afspraak bestaat niet.")
-        afspraak = afspraak_response.json()["data"]
+        afspraak = await request.dataloader.afspraken_by_id.load(afspraakId)
+        if not afspraak:
+            raise GraphQLError(f"Afspraak bestaat niet.")
 
         # check if afspraak is valid
         if afspraak.get("burger_id") is None:
@@ -100,13 +99,13 @@ class AlarmHelper:
 
         create_alarm_response = requests.post(f"{settings.ALARMENSERVICE_URL}/alarms/", json=input, headers={"Content-type": "application/json"})
         if create_alarm_response.status_code != 201:
-            raise GraphQLError("Aanmaken van het alarm is niet gelukt.")
+            raise UpstreamError(create_alarm_response, "Aanmaken van het alarm is niet gelukt.")
         response_alarm = create_alarm_response.json()["data"]
 
         update_afspraak = ({"alarm_id": response_alarm.get("id")})
         update_afspraak_response = requests.post(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraakId}", json=update_afspraak, headers={"Content-type": "application/json"})
         if update_afspraak_response.status_code != 200:
-            raise GraphQLError(f"Updaten van afspraak met het nieuwe alarm is niet gelukt. Error message: {update_afspraak_response.json}")
+            raise UpstreamError(update_afspraak_response, "Updaten van afspraak met het nieuwe alarm is niet gelukt.")
 
         return AlarmHelper(alarm=response_alarm, previous=dict(), ok=True)
 
@@ -123,7 +122,7 @@ class AlarmHelper:
 
         response = requests.delete(f"{settings.ALARMENSERVICE_URL}/alarms/{id}")
         if response.status_code != 204:
-            raise GraphQLError(f"Upstream API responded: {response.json()}")
+            raise UpstreamError(response, "Deleting alarm failed.")
 
         return AlarmHelper(alarm=dict(), previous=previous, ok=True)
 
@@ -135,31 +134,30 @@ class AlarmHelper:
                 name += " - updateAlarm"
                 _info.field_name = name
 
-        if input.get("startDate"):
-            if date_in_past(input.startDate):
-                raise GraphQLError(f"Alarm start datum is in het verleden.")
+        # TODO eventually turn this back on, for testing purposes it is off
+        # if input.get("startDate"):
+        #     if date_in_past(input.startDate):
+        #         raise GraphQLError("Alarm start datum is in het verleden.")
 
         if input.get("endDate"):
             if date_in_past(input.endDate):
-                raise GraphQLError(f"Alarm eind datum is in het verleden.")
+                raise GraphQLError("Alarm eind datum is in het verleden.")
 
-        # previous = request.dataloader.alarmen_by_id.load(id) # stalls and waits forever if alarm does not exist
-        previous_response = requests.get(f"{settings.ALARMENSERVICE_URL}/alarms/{id}", headers={"Content-type": "application/json"}) 
-        if previous_response.status_code != 200:
-            raise GraphQLError(f"Alarm bestaat niet.")
-        previous = previous_response.json()["data"]
+        previous_response = await request.dataloader.alarmen_by_id.load(id) 
+        if not previous_response:
+            raise GraphQLError("Alarm bestaat niet.")
 
         if input.afspraakId:
-            afspraak_response = requests.get(f"{settings.HHB_SERVICES_URL}/afspraken/{input.afspraakId}", headers={"Content-type": "application/json"})
-            if afspraak_response.status_code != 200:
-                raise GraphQLError(f"Afspraak bestaat niet.")
+            afspraak_response = await request.dataloader.afspraken_by_id.load(input.afspraakId)
+            if not afspraak_response:
+                raise GraphQLError("Afspraak bestaat niet.")
 
         response = requests.put(f"{settings.ALARMENSERVICE_URL}/alarms/{id}", json=input, headers={"Content-type": "application/json"}) 
         if response.status_code != 200:
-            raise GraphQLError(f"Upstream API responded: {response.json()}")
+            raise UpstreamError(response, "Updating alarm failed.")
         response_alarm = response.json()['data']
 
-        return AlarmHelper(alarm=response_alarm, previous=previous, ok=True)
+        return AlarmHelper(alarm=response_alarm, previous=previous_response, ok=True)
 
 
 def date_in_past(date_input):
