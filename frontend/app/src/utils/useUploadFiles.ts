@@ -1,4 +1,5 @@
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
+import {useTranslation} from "react-i18next";
 import {FileUpload, UploadState} from "../models/models";
 
 type DoUploadFunction = (file: FileUpload) => Promise<boolean>;
@@ -14,6 +15,7 @@ type UseUploadFiles = [
 ];
 
 const useUploadFiles: (options: UseUploadFilesOptions) => UseUploadFiles = ({doUpload, onDone}): UseUploadFiles => {
+	const {t} = useTranslation();
 	const [queue, setQueue] = useState<FileUpload[]>([]);
 	const addFiles = (files: FileList) => {
 		const filesArray = Array.from(files);
@@ -25,12 +27,16 @@ const useUploadFiles: (options: UseUploadFilesOptions) => UseUploadFiles = ({doU
 		setQueue(f => [...f, ...newFiles]);
 	};
 
+	const getNextFromQueue = useCallback(() => {
+		return queue.find(f => f.state === UploadState.QUEUED);
+	}, [queue]);
 
 	useEffect(() => {
 		let uploadInterval: any = null;
 		uploadInterval = setInterval(() => {
+			const nextFile = getNextFromQueue();
 			// If there are no files to upload
-			if (queue.length === 0) {
+			if (!nextFile || queue.length === 0) {
 				clearInterval(uploadInterval);
 				return;
 			}
@@ -38,13 +44,6 @@ const useUploadFiles: (options: UseUploadFilesOptions) => UseUploadFiles = ({doU
 			// If there is already a file busy uploading
 			if (queue.find(f => f.state === UploadState.LOADING)) {
 				return false;
-			}
-
-			const nextFile = queue.find(f => f.state === UploadState.QUEUED);
-			if (!nextFile) {
-				clearInterval(uploadInterval);
-				onDone();
-				return;
 			}
 
 			setQueue(q => {
@@ -67,13 +66,31 @@ const useUploadFiles: (options: UseUploadFilesOptions) => UseUploadFiles = ({doU
 						return f;
 					});
 				});
+			}).catch(err => {
+				setQueue(q => {
+					return q.map(f => {
+						if (f.file.name === nextFile.file.name) {
+							f.state = UploadState.DONE;
+							f.error = err;
+							if (err.message.includes("format")) {
+								f.error = {...err, message: t("messages.upload.formatError")};
+							}
+						}
+						return f;
+					});
+				});
+			}).finally(() => {
+				const nextFile = getNextFromQueue();
+				if (!nextFile) {
+					onDone();
+				}
 			});
 		}, 500);
 
 		return () => {
 			clearInterval(uploadInterval);
 		};
-	}, [doUpload, onDone, queue]);
+	}, [doUpload, onDone, queue, t, getNextFromQueue]);
 
 	return [
 		queue,
