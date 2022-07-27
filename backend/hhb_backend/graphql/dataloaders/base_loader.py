@@ -1,8 +1,9 @@
 import json
 from typing import Dict, Union
+
 import requests
-from graphql import GraphQLError
 from aiodataloader import DataLoader
+from graphql import GraphQLError
 from hhb_backend.graphql import settings
 
 # Possible formats:
@@ -87,40 +88,6 @@ class SingleDataLoader(DataLoader):
                 objects[item[self.index]] = item
         return [objects.get(key, None) for key in keys]
 
-    async def auth_load_many(self, keys):
-        if keys is None:
-            return
-        objects = {}
-        for i in keys:
-            url = f"""{self.service}/{self.model}/{f"{i}"}"""
-            response = requests.get(url, headers={
-                        "Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845"})
-            try:
-                if not response.ok:
-                    raise GraphQLError(f"Upstream API responded: {response.text}")
-            except:
-                if response.status_code != 200:
-                    raise GraphQLError(f"Upstream API responded: {response.text}")
-
-            result = response.json()
-            objects[i] = result
-
-        return [objects.get(key, None) for key in keys]
-
-
-    async def auth_load(self, key):
-        url = f"""{self.service}/{self.model}/{key}"""
-        response = requests.get(url, headers={"Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845"})
-        try:
-            if not response.ok:
-                raise GraphQLError(f"Upstream API responded: {response.text}")
-        except:
-            if response.status_code != 200:
-                raise GraphQLError(f"Upstream API responded: {response.text}")
-
-        result = response.json()
-
-        return result
 
 class ListDataLoader(DataLoader):
     """ Dataloader for when the result is a list of objects """
