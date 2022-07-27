@@ -1,12 +1,12 @@
 """ GraphQL Postadressen query """
 import graphene
-from flask import request
-
 import hhb_backend.graphql.models.postadres as postadres
+from flask import request
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     gebruikers_activiteit_entities,
     log_gebruikers_activiteit,
 )
+
 
 class PostadresQuery:
     return_type = graphene.Field(postadres.Postadres, id=graphene.String(required=True))
@@ -21,7 +21,7 @@ class PostadresQuery:
     @classmethod
     @log_gebruikers_activiteit
     async def resolver(cls, _root, _info, id):
-        return await request.dataloader.postadressen_by_id.auth_load(id)
+        return await request.dataloader.postadressen_by_id.load(id)
 
 
 class PostadressenQuery:
@@ -40,5 +40,5 @@ class PostadressenQuery:
     @log_gebruikers_activiteit
     async def resolver(cls, _root, _info, ids=None):
         if ids:
-            return await request.dataloader.postadressen_by_id.auth_load_many(ids)
+            return await request.dataloader.postadressen_by_id.load_many(ids)
         return request.dataloader.postadressen_by_id.get_all_and_cache()

@@ -1,8 +1,6 @@
 """ GraphQL mutation for updating a Postadres """
-import os
 import graphene
 import requests
-import json
 from graphql import GraphQLError
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
@@ -39,11 +37,10 @@ class UpdatePostadres(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(_root, _info, id, **kwargs):
         """ Update the current Postadres """
-        previous = await hhb_dataloader().postadressen_by_id.auth_load(id)
+        previous = await hhb_dataloader().postadressen_by_id.load(id)
         if not previous:
             raise GraphQLError("Postadres not found")
 
-        previous = previous["data"]
         contactCatalogus_input = {
             "street": kwargs.get("straatnaam", previous['street']),
             "houseNumber": kwargs.get("huisnummer", previous['houseNumber']),

@@ -3,13 +3,13 @@ from hhb_backend.graphql import settings
 
 def test_postadres(client):
     with requests_mock.Mocker() as rm:
-        rm.get(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/test_id",
-               json={'id': "test_id",
+        rm.get(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/?filter_ids=test_id",
+               json={'data': [{'id': "test_id",
                    'street': 'teststraat',
                    'houseNumber': '52B',
                    'postalCode': '9999ZZ',
                    'locality': 'testplaats'
-                     })
+                    }]})
         response = client.post(
             "/graphql",
             json={

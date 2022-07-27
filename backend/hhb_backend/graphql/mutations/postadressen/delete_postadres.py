@@ -1,12 +1,10 @@
-import json
 import graphene
 import requests
 from graphql import GraphQLError
-
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
-from hhb_backend.graphql.models.postadres import Postadres
 from hhb_backend.graphql.models.afdeling import Afdeling
+from hhb_backend.graphql.models.postadres import Postadres
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     gebruikers_activiteit_entities,
     log_gebruikers_activiteit,
@@ -38,10 +36,9 @@ class DeletePostadres(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(root, _info, id, afdeling_id):
         """ Delete current postadres """
-        previous = await hhb_dataloader().postadressen_by_id.auth_load(id)
+        previous = await hhb_dataloader().postadressen_by_id.load(id)
         if not previous:
             raise GraphQLError("postadres not found")
-        previous = previous["data"]
 
         afspraken = requests.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_postadressen={id}").json()['data']
         if afspraken:
