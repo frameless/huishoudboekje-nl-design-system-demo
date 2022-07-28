@@ -37,7 +37,7 @@ spec:
                   name: hhb-database-secrets
                   key: POSTGRESQL_PASSWORD
           volumeMounts:
-            - mountPath: /var/lib/postgresql/data
+            - mountPath: /bitnami/postgresql
               name: hhb-database-volume
       volumes:
         - name: hhb-database-volume
