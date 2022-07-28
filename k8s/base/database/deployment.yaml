@@ -14,6 +14,14 @@ spec:
       labels:
         name: hhb-database
     spec:
+      initContainers:
+        - name: init-chown-bitnami-postgresql
+          image: busybox
+          volumeMounts:
+            - name: hhb-database-volume
+              mountPath: /bitnami/postgresql
+          command: ["chown"]
+          args: ["-R", "1001:1001" , "/bitnami/postgresql"]
       containers:
         - name: hhb-database
           image: bitnami/postgresql:13
@@ -37,7 +45,7 @@ spec:
                   name: hhb-database-secrets
                   key: POSTGRESQL_PASSWORD
           volumeMounts:
-            - mountPath: /var/lib/postgresql/data
+            - mountPath: /bitnami/postgresql
               name: hhb-database-volume
       volumes:
         - name: hhb-database-volume
