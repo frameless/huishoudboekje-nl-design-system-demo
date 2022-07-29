@@ -3,9 +3,10 @@ import React from "react";
 import DatePicker from "react-datepicker";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
-import {Afspraak, CreateAlarmInput, DayOfWeek} from "../../../generated/graphql";
+import {Afspraak, CreateAlarmInput, DayOfWeek, useGetConfiguratieQuery} from "../../../generated/graphql";
 import {RepeatType} from "../../../models/models";
 import d from "../../../utils/dayjs";
+import Queryable from "../../../utils/Queryable";
 import {currencyFormat2, useReactSelectStyles} from "../../../utils/things";
 import useForm from "../../../utils/useForm";
 import useToaster from "../../../utils/useToaster";
@@ -62,6 +63,25 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 			byMonth: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
 		},
 	});
+	const $configuratie = useGetConfiguratieQuery({
+		onCompleted: data => {
+			const configuraties: Record<string, string> = (data.configuraties || []).reduce((result, c) => {
+				return ({
+					...result,
+					[c.id!]: c.waarde,
+				});
+			}, {});
+
+			const bedragMargin = parseInt(configuraties.alarm_afwijking_bedrag);
+			const datumMargin = parseInt(configuraties.alarm_afwijking_datum);
+
+			setForm(prevForm => ({
+				...prevForm,
+				...!isNaN(bedragMargin) && {bedragMargin},
+				...!isNaN(datumMargin) && {datumMargin},
+			}));
+		},
+	});
 	const isFieldValid2 = (field: string) => {
 		if (!isSubmitted) {
 			return true;
@@ -112,74 +132,26 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 				<Stack>
 					<Stack>
 						<Text>{t("addAlarmModal.helperText")}</Text>
+					</Stack>
 
-						<PeriodiekSelector value={form.isPeriodiek} isInvalid={!isFieldValid("isPeriodiek")} onChange={p => {
-							reset();
-							updateForm("isPeriodiek", p);
-						}} isRequired />
+					<Queryable query={$configuratie} children={() => (
+						<Stack>
 
-						{form.isPeriodiek === Periodiek.Eenmalig && (<>
-							<FormControl flex={1} isInvalid={!isFieldValid("startDate") || !isFieldValid2("startDate")} isRequired>
-								<FormLabel>{t("alarmForm.date")}</FormLabel>
-								<DatePicker selected={form.startDate} dateFormat={"dd-MM-yyyy"}
-									onChange={(value: Date) => {
-										if (value) {
-											updateForm("startDate", d(value).startOf("day").toDate());
-										}
-									}} customInput={<Input type={"text"} />} />
-								<FormErrorMessage>{t("alarmForm.errors.invalidDateError")}</FormErrorMessage>
-							</FormControl>
+							<PeriodiekSelector value={form.isPeriodiek} isInvalid={!isFieldValid("isPeriodiek")} onChange={p => {
+								reset();
+								updateForm("isPeriodiek", p);
+							}} isRequired />
 
-							<FormControl flex={1} isInvalid={!isFieldValid("datumMargin") || !isFieldValid2("datumMargin")} isRequired>
-								<FormLabel>{t("alarmForm.datumMargin")}</FormLabel>
-								<Input type={"number"} value={form.datumMargin ?? ""} onChange={e => setForm(x => ({
-									...x,
-									datumMargin: parseInt(e.target.value),
-								}))} min={0} />
-								<FormErrorMessage>{t("alarmForm.errors.invalidDatumMarginError")}</FormErrorMessage>
-							</FormControl>
-						</>)}
-
-						{form.isPeriodiek === Periodiek.Periodiek && (<>
-							<FormControl flex={1} isInvalid={!isFieldValid("repeatType")} isRequired>
-								<FormLabel>{t("schedule.repeatType")}</FormLabel>
-								<Box flex={1}>
-									<Select
-										value={repeatTypeOptions.find(r => r.value === form.repeatType)}
-										isClearable={false}
-										noOptionsMessage={() => t("schedule.repeatTypeChoose")}
-										maxMenuHeight={200}
-										options={repeatTypeOptions}
-										placeholder={t("select.placeholder")}
-										styles={!isFieldValid("repeatType") ? reactSelectStyles.error : reactSelectStyles.default}
-										onChange={(val) => {
-											updateForm("repeatType", val?.value);
-											updateForm("byDay", undefined);
-											const allMonths = Array.from({length: 12}).map((x, i) => i + 1);
-											updateForm("byMonth", val?.value === RepeatType.Month ? allMonths : undefined);
-										}}
-									/>
-								</Box>
-								<FormErrorMessage>{t("schedule.invalidPeriodiekError")}</FormErrorMessage>
-							</FormControl>
-
-							{form.repeatType === RepeatType.Week && (<>
-								<WeekDaySelector value={form.byDay || []} onChange={(value => updateForm("byDay", value))} isInvalid={!isFieldValid("byDay") || !isFieldValid2("byDay")} isRequired={true} />
-
-								<FormControl flex={1} isInvalid={!isFieldValid("datumMargin") || !isFieldValid2("datumMargin")} isRequired>
-									<FormLabel>{t("alarmForm.datumMargin")}</FormLabel>
-									<Input type={"number"} value={form.datumMargin ?? ""} onChange={e => updateForm("datumMargin", parseInt(e.target.value))} min={0} />
-									<FormErrorMessage>{t("alarmForm.errors.invalidDatumMarginError")}</FormErrorMessage>
-								</FormControl>
-							</>)}
-
-							{form.repeatType === RepeatType.Month && (<>
-								<MonthSelector value={form.byMonth || []} onChange={(value => updateForm("byMonth", value))} isInvalid={!isFieldValid("byMonth")} isRequired={true} />
-
-								<FormControl flex={1} isInvalid={!isFieldValid("byMonthDay") || !isFieldValid2("byMonthDay")} isRequired>
-									<FormLabel>{t("alarmForm.byMonthDay")}</FormLabel>
-									<Input type={"number"} value={form.byMonthDay || ""} onChange={e => updateForm("byMonthDay", parseInt(e.target.value))} min={0} max={28} />
-									<FormErrorMessage>{t("alarmForm.errors.invalidMonthDayError")}</FormErrorMessage>
+							{form.isPeriodiek === Periodiek.Eenmalig && (<>
+								<FormControl flex={1} isInvalid={!isFieldValid("startDate") || !isFieldValid2("startDate")} isRequired>
+									<FormLabel>{t("alarmForm.date")}</FormLabel>
+									<DatePicker selected={form.startDate} dateFormat={"dd-MM-yyyy"}
+										onChange={(value: Date) => {
+											if (value) {
+												updateForm("startDate", d(value).startOf("day").toDate());
+											}
+										}} customInput={<Input type={"text"} />} />
+									<FormErrorMessage>{t("alarmForm.errors.invalidDateError")}</FormErrorMessage>
 								</FormControl>
 
 								<FormControl flex={1} isInvalid={!isFieldValid("datumMargin") || !isFieldValid2("datumMargin")} isRequired>
@@ -191,51 +163,104 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 									<FormErrorMessage>{t("alarmForm.errors.invalidDatumMarginError")}</FormErrorMessage>
 								</FormControl>
 							</>)}
-						</>)}
 
-						{form.isPeriodiek !== undefined && (<>
-							<FormControl flex={1} isInvalid={!isFieldValid("bedrag")} isRequired>
-								<FormLabel>{t("alarmForm.bedrag")}</FormLabel>
-								<InputGroup>
-									<InputLeftElement zIndex={0}>&euro;</InputLeftElement>
-									<Input
-										type={"number"}
-										pattern={"^[^.]*$"}
-										defaultValue={form.bedrag ? currencyFormat2(false).format(form.bedrag) : ""}
-										min={0}
-										step={.01}
-										onChange={e => updateForm("bedrag", parseFloat(e.target.value))}
-									/>
-								</InputGroup>
-								<FormErrorMessage>{t("alarmForm.errors.invalidBedragError")}</FormErrorMessage>
-							</FormControl>
+							{form.isPeriodiek === Periodiek.Periodiek && (<>
+								<FormControl flex={1} isInvalid={!isFieldValid("repeatType")} isRequired>
+									<FormLabel>{t("schedule.repeatType")}</FormLabel>
+									<Box flex={1}>
+										<Select
+											value={repeatTypeOptions.find(r => r.value === form.repeatType)}
+											isClearable={false}
+											noOptionsMessage={() => t("schedule.repeatTypeChoose")}
+											maxMenuHeight={200}
+											options={repeatTypeOptions}
+											placeholder={t("select.placeholder")}
+											styles={!isFieldValid("repeatType") ? reactSelectStyles.error : reactSelectStyles.default}
+											onChange={(val) => {
+												updateForm("repeatType", val?.value);
+												updateForm("byDay", undefined);
+												const allMonths = Array.from({length: 12}).map((x, i) => i + 1);
+												updateForm("byMonth", val?.value === RepeatType.Month ? allMonths : undefined);
+											}}
+										/>
+									</Box>
+									<FormErrorMessage>{t("schedule.invalidPeriodiekError")}</FormErrorMessage>
+								</FormControl>
 
-							<FormControl flex={1} isInvalid={!isFieldValid("bedragMargin")} isRequired>
-								<FormLabel>{t("alarmForm.bedragMargin")}</FormLabel>
-								<InputGroup>
-									<InputLeftElement zIndex={0}>&euro;</InputLeftElement>
-									<Input
-										type={"number"}
-										pattern={"^[^.]*$"}
-										defaultValue={form.bedragMargin ? currencyFormat2(false).format(form.bedragMargin) : ""}
-										min={0}
-										step={.01}
-										onChange={e => updateForm("bedragMargin", parseFloat(e.target.value))}
-									/>
-								</InputGroup>
-								<FormErrorMessage>{t("alarmForm.errors.invalidBedragMarginError")}</FormErrorMessage>
-							</FormControl>
+								{form.repeatType === RepeatType.Week && (<>
+									<WeekDaySelector value={form.byDay || []} onChange={(value => updateForm("byDay", value))} isInvalid={!isFieldValid("byDay") || !isFieldValid2("byDay")} isRequired={true} />
 
-						</>)}
-					</Stack>
+									<FormControl flex={1} isInvalid={!isFieldValid("datumMargin") || !isFieldValid2("datumMargin")} isRequired>
+										<FormLabel>{t("alarmForm.datumMargin")}</FormLabel>
+										<Input type={"number"} value={form.datumMargin ?? ""} onChange={e => updateForm("datumMargin", parseInt(e.target.value))} min={0} />
+										<FormErrorMessage>{t("alarmForm.errors.invalidDatumMarginError")}</FormErrorMessage>
+									</FormControl>
+								</>)}
 
-					<Stack align={"flex-end"}>
-						<HStack>
-							<Button variant={"ghost"} onClick={onClose}>{t("global.actions.cancel")}</Button>
-							<Button type={"submit"} colorScheme={"primary"}>{t("global.actions.save")}</Button>
-						</HStack>
-						<Asterisk />
-					</Stack>
+								{form.repeatType === RepeatType.Month && (<>
+									<MonthSelector value={form.byMonth || []} onChange={(value => updateForm("byMonth", value))} isInvalid={!isFieldValid("byMonth")} isRequired={true} />
+
+									<FormControl flex={1} isInvalid={!isFieldValid("byMonthDay") || !isFieldValid2("byMonthDay")} isRequired>
+										<FormLabel>{t("alarmForm.byMonthDay")}</FormLabel>
+										<Input type={"number"} value={form.byMonthDay || ""} onChange={e => updateForm("byMonthDay", parseInt(e.target.value))} min={0} max={28} />
+										<FormErrorMessage>{t("alarmForm.errors.invalidMonthDayError")}</FormErrorMessage>
+									</FormControl>
+
+									<FormControl flex={1} isInvalid={!isFieldValid("datumMargin") || !isFieldValid2("datumMargin")} isRequired>
+										<FormLabel>{t("alarmForm.datumMargin")}</FormLabel>
+										<Input type={"number"} value={form.datumMargin ?? ""} onChange={e => setForm(x => ({
+											...x,
+											datumMargin: parseInt(e.target.value),
+										}))} min={0} />
+										<FormErrorMessage>{t("alarmForm.errors.invalidDatumMarginError")}</FormErrorMessage>
+									</FormControl>
+								</>)}
+							</>)}
+
+							{form.isPeriodiek !== undefined && (<>
+								<FormControl flex={1} isInvalid={!isFieldValid("bedrag")} isRequired>
+									<FormLabel>{t("alarmForm.bedrag")}</FormLabel>
+									<InputGroup>
+										<InputLeftElement zIndex={0}>&euro;</InputLeftElement>
+										<Input
+											type={"number"}
+											pattern={"^[^.]*$"}
+											defaultValue={form.bedrag ? currencyFormat2(false).format(form.bedrag) : ""}
+											min={0}
+											step={.01}
+											onChange={e => updateForm("bedrag", parseFloat(e.target.value))}
+										/>
+									</InputGroup>
+									<FormErrorMessage>{t("alarmForm.errors.invalidBedragError")}</FormErrorMessage>
+								</FormControl>
+
+								<FormControl flex={1} isInvalid={!isFieldValid("bedragMargin")} isRequired>
+									<FormLabel>{t("alarmForm.bedragMargin")}</FormLabel>
+									<InputGroup>
+										<InputLeftElement zIndex={0}>&euro;</InputLeftElement>
+										<Input
+											type={"number"}
+											pattern={"^[^.]*$"}
+											defaultValue={form.bedragMargin ? currencyFormat2(false).format(form.bedragMargin) : ""}
+											min={0}
+											step={.01}
+											onChange={e => updateForm("bedragMargin", parseFloat(e.target.value))}
+										/>
+									</InputGroup>
+									<FormErrorMessage>{t("alarmForm.errors.invalidBedragMarginError")}</FormErrorMessage>
+								</FormControl>
+
+							</>)}
+
+							<Stack align={"flex-end"}>
+								<HStack>
+									<Button variant={"ghost"} onClick={onClose}>{t("global.actions.cancel")}</Button>
+									<Button type={"submit"} colorScheme={"primary"}>{t("global.actions.save")}</Button>
+								</HStack>
+								<Asterisk />
+							</Stack>
+						</Stack>
+					)} />
 				</Stack>
 			</form>
 		</Modal>
