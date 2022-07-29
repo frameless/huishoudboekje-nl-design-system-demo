@@ -20,7 +20,7 @@ ENV FLASK_APP="grootboek_service.app"
 ENV FLASK_RUN_PORT="8000"
 ENV FLASK_ENV="development"
 ENV JWT_SECRET="local-secret"
-ENV GROOTBOEK_DATABASE_URL="postgresql://hhb:hhb@host.docker.internal/grootboekservice"
+ENV DATABASE_URL="postgresql://hhb:hhb@host.docker.internal/grootboekservice"
 
 EXPOSE 8000
 

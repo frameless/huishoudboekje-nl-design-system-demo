@@ -61,11 +61,11 @@ spec:
             - configMapRef:
                 name: postgres-config
           env:
-            - name: TRANSACTIE_DATABASE_URL
+            - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:
                   name: hhb-database-secrets
-                  key: TRANSACTIE_DATABASE_URL
+                  key: TRANSACTIESERVICE_DATABASE_URL
             - name: POSTGRESQL_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -108,8 +108,8 @@ spec:
               cpu: 100m
               memory: 128Mi
           env:
-            - name: TRANSACTIE_DATABASE_URL
+            - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:
                   name: hhb-database-secrets
-                  key: TRANSACTIE_DATABASE_URL
+                  key: TRANSACTIESERVICE_DATABASE_URL

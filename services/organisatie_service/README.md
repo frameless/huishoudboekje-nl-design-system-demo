@@ -17,7 +17,7 @@ This service contains the functionality needed to access data that belongs to th
     export FLASK_RUN_PORT="8001"
     export FLASK_ENV="development"
     export JWT_SECRET="local-secret"
-    export ORGANISATIE_DATABASE_URL="postgresql://organisatieservice:organisatieservice@localhost/organisatieservice"
+    export DATABASE_URL="postgresql://organisatieservice:organisatieservice@localhost/organisatieservice"
     ```
 
 - Setup your database (make sure you have a PostgreSQL database up and running. See [root README](../../README.md) on how to do this)
@@ -62,7 +62,7 @@ This service contains the functionality needed to access data that belongs to th
     set FLASK_RUN_PORT=8001
     set FLASK_ENV="development"
     set JWT_SECRET="local-secret"
-    set ORGANISATIE_DATABASE_URL=postgresql://organisatieservice:organisatieservice@localhost/organisatieservice
+    set DATABASE_URL=postgresql://organisatieservice:organisatieservice@localhost/organisatieservice
     ```
 
 - Activate the virtual environment

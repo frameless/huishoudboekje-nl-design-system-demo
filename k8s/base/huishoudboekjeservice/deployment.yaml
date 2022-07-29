@@ -61,11 +61,11 @@ spec:
             - configMapRef:
                 name: postgres-config
           env:
-            - name: HHB_DATABASE_URL
+            - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:
                   name: hhb-database-secrets
-                  key: HHB_DATABASE_URL
+                  key: HUISHOUDBOEKJESERVICE_DATABASE_URL
           command: ["python"]
           args: ["manage.py", "db", "upgrade"]
       containers:
@@ -103,8 +103,8 @@ spec:
               cpu: 100m
               memory: 128Mi
           env:
-            - name: HHB_DATABASE_URL
+            - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:
                   name: hhb-database-secrets
-                  key: HHB_DATABASE_URL
+                  key: HUISHOUDBOEKJESERVICE_DATABASE_URL

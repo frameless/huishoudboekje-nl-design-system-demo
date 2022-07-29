@@ -65,7 +65,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: hhb-database-secrets
-                  key: POSTADRESSEN_DATABASE_URL
+                  key: POSTADRESSENSERVICE_DATABASE_URL
           command: [ "npm" ]
           args: [ "run", "db:deploy" ]
       containers:
@@ -104,4 +104,4 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: hhb-database-secrets
-                  key: POSTADRESSEN_DATABASE_URL
+                  key: POSTADRESSENSERVICE_DATABASE_URL

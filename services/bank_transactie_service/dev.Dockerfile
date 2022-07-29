@@ -20,7 +20,7 @@ ENV FLASK_APP="bank_transactie_service.app"
 ENV FLASK_RUN_PORT="8000"
 ENV FLASK_ENV="development"
 ENV JWT_SECRET="local-secret"
-ENV TRANSACTIE_DATABASE_URL="postgresql://hhb:hhb@host.docker.internal/banktransactieservice"
+ENV DATABASE_URL="postgresql://hhb:hhb@host.docker.internal/banktransactieservice"
 
 EXPOSE 8000
 
