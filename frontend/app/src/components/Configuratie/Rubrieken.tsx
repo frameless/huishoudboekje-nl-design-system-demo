@@ -68,15 +68,15 @@ const Rubrieken = () => {
 	};
 
 	return (
-		<Queryable query={$rubriekenConfiguratie} children={data => {
-			const grootboekrekeningen: Grootboekrekening[] = data.grootboekrekeningen || [];
-			const rubrieken: Rubriek[] = data.rubrieken || [];
+		<SectionContainer>
+			<Section title={t("forms.rubrieken.sections.title")} helperText={t("forms.rubrieken.sections.helperText")}>
+				<Queryable query={$rubriekenConfiguratie} children={data => {
+					const grootboekrekeningen: Grootboekrekening[] = data.grootboekrekeningen || [];
+					const rubrieken: Rubriek[] = data.rubrieken || [];
 
-			const grootboekrekeningenOptions = selectProps.createSelectOptionsFromGrootboekrekeningen(grootboekrekeningen);
+					const grootboekrekeningenOptions = selectProps.createSelectOptionsFromGrootboekrekeningen(grootboekrekeningen);
 
-			return (
-				<SectionContainer>
-					<Section title={t("forms.rubrieken.sections.title")} helperText={t("forms.rubrieken.sections.helperText")}>
+					return (
 						<Stack spacing={5} divider={<Divider />}>
 							{rubrieken.length > 0 && (
 								<Table size={"sm"} variant={"noLeftPadding"}>
@@ -119,10 +119,10 @@ const Rubrieken = () => {
 								</Stack>
 							</form>
 						</Stack>
-					</Section>
-				</SectionContainer>
-			);
-		}} />
+					);
+				}} />
+			</Section>
+		</SectionContainer>
 	);
 };
 
