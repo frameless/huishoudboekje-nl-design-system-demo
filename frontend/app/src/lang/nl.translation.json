@@ -842,8 +842,8 @@
   "enabled": "Ingeschakeld",
   "disabled": "Uitgeschakeld",
   "authErrors": {
-	"authServiceNotFound": "De autorisatieservice is niet gevonden.",
-	"authServiceServerError": "Er is een fout opgetreden in de autorisatieservice."
+	"authServiceNotFound": "De autorisatieservice is niet bereikbaar.",
+	"authServiceServerError": "De autorisatieservice gaf een onverwacht antwoord."
   },
   "errorHandlingPage": {
 	"shortDescription": "Er is een fout opgetreden.",
