@@ -1,4 +1,4 @@
-DB_URL_NAME := GROOTBOEK_DATABASE_URL
+DB_URL_NAME := DATABASE_URL
 DB_NAME := grootboekservice
 CONFIG_MODULE := grootboek_service
 MODULES := $(CONFIG_MODULE) models

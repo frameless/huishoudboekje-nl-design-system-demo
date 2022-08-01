@@ -22,7 +22,7 @@ ENV FLASK_APP="organisatie_service.app"
 ENV FLASK_RUN_PORT="8000"
 ENV FLASK_ENV="development"
 ENV JWT_SECRET="local-secret"
-ENV ORGANISATIE_DATABASE_URL="postgresql://hhb:hhb@host.docker.internal/organisatieservice"
+ENV DATABASE_URL="postgresql://hhb:hhb@host.docker.internal/organisatieservice"
 
 EXPOSE 8000
 
