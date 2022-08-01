@@ -5,6 +5,7 @@ import requests
 from aiodataloader import DataLoader
 from graphql import GraphQLError
 from hhb_backend.graphql import settings
+from hhb_backend.graphql.utils.upstream_error_handler import UpstreamError
 
 # Possible formats:
 #   {"<column_name>": <str|int|bool>}
@@ -133,9 +134,7 @@ def sendGetRequest(url, service, params=None, headers=None):
     except requests.exceptions.ConnectionError:
         raise GraphQLError(f"Connection error occurred on {service}")
 
-    if not response.ok:
-        raise GraphQLError(f"Response not ok: {response.json}")
     if response.status_code != 200:
-        raise GraphQLError(f"Request not succeeded: {response.json}")
+        raise UpstreamError(response, f"Request to {url} not succeeded.")
 
     return response

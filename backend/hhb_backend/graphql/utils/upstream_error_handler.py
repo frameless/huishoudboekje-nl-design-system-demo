@@ -8,12 +8,13 @@ class UpstreamError(GraphQLError):
         GraphQLError.__init__(self, errorMessage)
 
     def __makePrettyMessage(self, customMessage: str, response: Response):
-        errorMessage = f"No error message found. {response.json}"
-        respMessage = json.loads(response.content.decode('utf-8'))["message"]
+        respMessage = response.json() 
         if respMessage:
-            errorInfo = json.loads(respMessage)[0]
-            path = errorInfo['path'][-1] 
-            message = errorInfo['message']
-            errorMessage = f"{customMessage} {response.status_code}, {path}: {message}"
+            errorInfo = json.loads(respMessage['message'])[0]
+            path = ".".join(errorInfo["path"])
+            message = errorInfo["message"]
+            errorMessage = f"{customMessage} [{response.status_code}] {path}: {message}"
+        else:
+            errorMessage = f"No json error message found. {response.text}"
 
         return errorMessage
