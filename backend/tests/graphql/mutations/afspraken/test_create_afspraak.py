@@ -157,10 +157,10 @@ def test_create_afspraak_validation(client, field: str, error_message_contains: 
       
 @pytest.mark.parametrize([
   "post_status", "post_message", "error_message_contains"], [
-    (400, 'Bad request', 'Upstream API responded: Bad request',),
-    (400, 'Bad request', 'Upstream API responded: Bad request',),
-    (409, 'Database error', 'Upstream API responded: Database error',),
-    (400, 'Bad request', 'Upstream API responded: Bad request',),
+    (400, 'Bad request', 'Upstream API responded: [400] Bad request',),
+    (400, 'Bad request', 'Upstream API responded: [400] Bad request',),
+    (409, 'Database error', 'Upstream API responded: [409] Database error',),
+    (400, 'Bad request', 'Upstream API responded: [400] Bad request',),
 ])
 def test_create_afspraak_validation(client, post_status: int, post_message: str, error_message_contains: str):
     with requests_mock.mock() as mock:

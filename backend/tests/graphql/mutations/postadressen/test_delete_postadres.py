@@ -135,6 +135,6 @@ def test_delete_postadres_error(client):
         )
         assert response.json == {"data": {"deletePostadres": None},
                                  "errors": [{"locations": [{"column": 11, "line": 4}],
-                                             "message": "Upstream API responded: Not found",
+                                             "message": "Opgevraagde addresses bestaan niet.",
                                              "path": ["deletePostadres"]}]}
         assert adapter.called_once

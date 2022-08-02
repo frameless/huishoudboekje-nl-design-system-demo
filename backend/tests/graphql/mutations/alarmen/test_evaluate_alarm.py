@@ -239,6 +239,7 @@ def test_evaluate_alarm_no_signal(client):
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
         rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=200, json={'data': [alarm]})
         rm2 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}", status_code=200, json={"data":afspraak})
+        rm2a = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", status_code=200, json={"data":[afspraak]})
         rm3 = rm.get(f"{settings.HHB_SERVICES_URL}/journaalposten/{journaalpost_id}", status_code=200, json={"data": journaalpost})
         rm4 = rm.get(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/{transaction_id}", status_code=200, json={"data": banktransactie})
         rm5 = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={ "ok":True, "data": nextAlarm})
@@ -273,7 +274,8 @@ def test_evaluate_alarm_no_signal(client):
         
         # assert
         assert rm1.call_count == 1
-        assert rm2.call_count == 2
+        assert rm2.call_count == 1
+        assert rm2a.call_count == 1
         assert rm3.call_count == 1
         assert rm4.call_count == 1
         assert rm5.call_count == 1
@@ -300,6 +302,7 @@ def test_evaluate_alarm_signal_date(client):
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
         rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=200, json={'data': [alarm]})
         rm2 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}", status_code=200, json={"data":afspraak})
+        rm2a = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", status_code=200, json={"data":[afspraak]})
         rm3 = rm.get(f"{settings.HHB_SERVICES_URL}/journaalposten/{journaalpost_id}", status_code=200, json={"data": journaalpost})
         rm4 = rm.get(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/{transaction_id}", status_code=200, json={"data": banktransactie})
         rm5 = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={ "ok":True, "data": nextAlarm})
@@ -336,7 +339,8 @@ def test_evaluate_alarm_signal_date(client):
 
         # assert
         assert rm1.call_count == 1
-        assert rm2.call_count == 2
+        assert rm2.call_count == 1
+        assert rm2a.call_count == 1
         assert rm3.call_count == 1
         assert rm4.call_count == 1
         assert rm5.call_count == 1
@@ -365,6 +369,7 @@ def test_evaluate_alarm_signal_monetary(client):
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
         rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=200, json={'data': [alarm]})
         rm2 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}", status_code=200, json={"data":afspraak})
+        rm2a = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", status_code=200, json={"data":[afspraak]})
         rm3 = rm.get(f"{settings.HHB_SERVICES_URL}/journaalposten/{journaalpost_id}", status_code=200, json={"data": journaalpost})
         rm4 = rm.get(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/{transaction_id}", status_code=200, json={"data": banktransactie})
         rm5 = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={ "ok":True, "data": nextAlarm})
@@ -401,7 +406,8 @@ def test_evaluate_alarm_signal_monetary(client):
 
         # assert
         assert rm1.call_count == 1
-        assert rm2.call_count == 2
+        assert rm2.call_count == 1
+        assert rm2a.call_count == 1
         assert rm3.call_count == 1
         assert rm4.call_count == 1
         assert rm5.call_count == 1
@@ -578,6 +584,7 @@ def test_evaluate_alarm_disabled_because_its_in_the_past(client):
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
         rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=200, json={'data': [alarm]})
         rm2 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}", status_code=200, json={"data":afspraak})
+        rm2a = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", status_code=200, json={"data":[afspraak]})
         rm3 = rm.get(f"{settings.HHB_SERVICES_URL}/journaalposten/{journaalpost_id}", status_code=200, json={"data": journaalpost})
         rm4 = rm.get(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/{transaction_id}", status_code=200, json={"data": banktransactie})
         rm5 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
@@ -627,7 +634,8 @@ def test_evaluate_alarm_disabled_because_its_in_the_past(client):
 
         # assert
         assert rm1.call_count == 1
-        assert rm2.call_count == 2
+        assert rm2.call_count == 1
+        assert rm2a.call_count == 1
         assert rm3.call_count == 1
         assert rm4.call_count == 1
         assert rm5.call_count == 2
@@ -656,6 +664,7 @@ def test_evaluate_alarm_in_the_past(client):
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
         rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=200, json={'data': [alarm]})
         rm2 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}", status_code=200, json={"data":afspraak})
+        rm2a = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", status_code=200, json={"data": [afspraak]})
         rm3 = rm.get(f"{settings.HHB_SERVICES_URL}/journaalposten/{journaalpost_id}", status_code=200, json={"data": journaalpost})
         rm4 = rm.get(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/{transaction_id}", status_code=200, json={"data": banktransactie})
         rm5 = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={ "ok":True, "data": nextAlarm})
@@ -707,7 +716,8 @@ def test_evaluate_alarm_in_the_past(client):
 
         # assert
         assert rm1.call_count == 1
-        assert rm2.call_count == 2
+        assert rm2.call_count == 1
+        assert rm2a.call_count == 1
         assert rm3.call_count == 1
         assert rm4.call_count == 1
         assert rm5.call_count == 1

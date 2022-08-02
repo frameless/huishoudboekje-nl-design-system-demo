@@ -158,7 +158,7 @@ def test_delete_afdeling_error(client):
         # assert
         assert afdeling_get.called_once
         assert fallback.called == 0
-        assert response.json == {'data': {'deleteAfdeling': None}, 'errors': [{'locations': [{'column': 21, 'line': 3}], 'message': 'Upstream API responded: Not found', 'path': ['deleteAfdeling']}]}
+        assert response.json == {'data': {'deleteAfdeling': None}, 'errors': [{'locations': [{'column': 21, 'line': 3}], 'message': 'Opgevraagde afdelingen bestaan niet.', 'path': ['deleteAfdeling']}]}
 
 def test_delete_afdeling_without_postadres(client):
     with requests_mock.Mocker() as mock:

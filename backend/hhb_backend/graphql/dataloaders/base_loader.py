@@ -32,7 +32,8 @@ class SingleDataLoader(DataLoader):
 
         response = sendGetRequest(url=f"{self.service}/{self.model}/",
                                     params=params,
-                                    service=self.service)
+                                    service=self.service,
+                                    model=self.model)
         result = response.json()["data"]
 
         # Prime the cache with the complete result set to prevent unnecessary extra calls
@@ -53,7 +54,8 @@ class SingleDataLoader(DataLoader):
 
         response = sendGetRequest(url=f"{self.service}/{self.model}/", 
                                     params=params, 
-                                    service=self.service)
+                                    service=self.service,
+                                    model=self.model)
         result = response.json()["data"]
 
         # Prime the cache with the complete result set to prevent unnecessary extra calls
@@ -71,7 +73,7 @@ class SingleDataLoader(DataLoader):
         objects = {}
         for i in range(0, len(keys), self.batch_size):
             url = self.url_for(keys[i:i + self.batch_size])
-            response = sendGetRequest(url=url, service=self.service)
+            response = sendGetRequest(url=url, service=self.service, model=self.model)
             for item in response.json()["data"]:
                 objects[item[self.index]] = item
         return [objects.get(key, None) for key in keys]
@@ -87,7 +89,7 @@ class ListDataLoader(DataLoader):
 
     async def batch_load_fn(self, keys):
         url = f"{self.service}/{self.model}/?{self.filter_item}={','.join([str(k) for k in keys])}"
-        response = sendGetRequest(url=url, service=self.service)
+        response = sendGetRequest(url=url, service=self.service, model=self.model)
 
         objects = {}
         for item in response.json()["data"]:
@@ -114,7 +116,8 @@ class ListDataLoader(DataLoader):
         }
         response = sendGetRequest(url=f"{self.service}/{self.model}/", 
                                     params=params, 
-                                    service=self.service)
+                                    service=self.service,
+                                    model=self.model)
         result = response.json()["data"]
 
         # Prime the cache with the complete result set to prevent unnecessary extra calls
@@ -128,13 +131,15 @@ class ListDataLoader(DataLoader):
 
         return return_obj
 
-def sendGetRequest(url, service, params=None, headers=None):
+def sendGetRequest(url, service, model, params=None, headers=None):
     try:
         response = requests.get(url, params=params, headers=headers)
     except requests.exceptions.ConnectionError:
-        raise GraphQLError(f"Connection error occurred on {service}")
+        raise GraphQLError(f"Connectie error heeft plaatsgevonden op {service}")
 
     if response.status_code != 200:
-        raise UpstreamError(response, f"Request to {url} not succeeded.")
+        if response.status_code == 404:
+            raise GraphQLError(f"Opgevraagde {model} bestaan niet.")
+        raise UpstreamError(response, f"Request to {url} not succeeded. Upstream API responded: [{response.status_code}] {response.text}")
 
     return response

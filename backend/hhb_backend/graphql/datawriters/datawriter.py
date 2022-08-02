@@ -3,6 +3,7 @@ import requests
 from graphql import GraphQLError
 
 from hhb_backend.graphql import settings
+from hhb_backend.graphql.utils.upstream_error_handler import UpstreamError
 
 class DataWriter:
     model = None
@@ -17,9 +18,14 @@ class DataWriter:
         except requests.exceptions.ConnectionError:
             raise GraphQLError(f"Connection error occurred on {self.service}")
 
-        if not response.ok:
-            raise GraphQLError(f"Response not ok: {response.json}")
         if response.status_code != 201:
-            raise GraphQLError(f"Post to {self.model} not succeeded: {response.json}")
+            raise UpstreamError(response, f"Post to {self.model} not succeeded. [{response.status_code}] {response.text}")
 
         return response.json()["data"]
+
+    # TODO
+    # def put(self, input):
+    #     return response.json()["data"]
+
+    # TODO
+    # def delete(self, input)
