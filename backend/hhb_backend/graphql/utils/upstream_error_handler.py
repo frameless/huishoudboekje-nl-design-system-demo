@@ -9,23 +9,18 @@ class UpstreamError(GraphQLError):
 
     def __makePrettyMessage(self, customMessage: str, response: Response):
         try:
-            resp = json.loads(response.content.decode('utf-8')) # response.json() can also be used, but sometimes it is a dict which can be transformed into json and the header does not always specify it is json and then the json content will not be returned either.
+            resp = response.json()
         except json.decoder.JSONDecodeError:
             return f"{customMessage} Upstream API responded: [{response.status_code}] {response.text}"
         
+        errorMessage = f"No error message found. [{response.status_code}] {response.text}"
         if resp:
+            respMessage = ""
             if resp.get("errors"):
-                errorMessage = ",".join(resp["errors"])
+                respMessage = ",".join(resp["errors"])
             elif resp.get("message"):
                 respMessage = resp["message"]
-                errorInfo = json.loads(respMessage['message'])[0]
-                path = ".".join(errorInfo["path"])
-                message = errorInfo["message"]
-                errorMessage = f"{customMessage} [{response.status_code}] {path}: {message}"
-            else:
-                return f"No json error message found. [{response.status_code}] {response.text}"
             
-        else:
-            errorMessage = f"No json error message. [{response.status_code}] {response.text}"
+            errorMessage = f"{customMessage} [{response.status_code}] {respMessage}"
 
         return errorMessage
