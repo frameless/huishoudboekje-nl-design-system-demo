@@ -53,7 +53,7 @@ const App = () => {
 
 	if (error) {
 		return (
-			<StatusErrorPage />
+			<StatusErrorPage error={error} />
 		);
 	}
 
