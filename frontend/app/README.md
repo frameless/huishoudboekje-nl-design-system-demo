@@ -25,8 +25,10 @@ The frontend component requires the latest version of Node.js.
 - `npm run theme {yourThemeName}` will install `../theme/{yourThemeName}` into `public/theme`. 
   Installing a theme is optional, the Sloothuizen-theme will be used by default.
 
-## Environment  
-Please note that for ESLint to work, you will need to put the following lines in your `.env` file:
+## Environment
+To get started quickly, you can copy `.env.sample` to `.env` and everything should be working out of the box.
+
+The following additional configuration options are available to put in your `.env` file:
 
 ```bash
 EXTEND_ESLINT=true
@@ -34,14 +36,14 @@ EXTEND_ESLINT=true
 # If you want your frontend app to talk to your local backend, set the URL to it here.
 PROXY=http://localhost:5000
 
+# -= OPTIONAL BELOW =-
+
 # If you want your app to talk to a backend on another host (for example a review branch or your local running backend), set this host (and port) here.
 PROXY=https://hhb-518.nlx.reviews
 
-# Authorization through OIDC is not required when you use a local backend in dev mode. For other backends we use a JsonWebToken to authorize directly against the proxy.
+# Authorization through OpenID Connect is not required when you use a local backend in dev mode. For other backends we use a JsonWebToken to authorize directly against the proxy.
 # You can obtain your token by logging into the remote application and find your token in the app-token cookie.
 AUTH_TOKEN={YOUR_JWT_HERE}
-
-# -= OPTIONAL BELOW =-
 
 # This prevents your browser window from opening after starting the app.
 BROWSER=none 
