@@ -63,7 +63,7 @@ mutation test($id: Int!) {
 
 def test_delete_burger_error(client):
     with requests_mock.Mocker() as mock:
-        adapter = mock.get(f"{settings.HHB_SERVICES_URL}/burgers/?filter_ids=1", status_code=404, text="Not found")
+        adapter = mock.get(f"{settings.HHB_SERVICES_URL}/burgers/?filter_ids=1", status_code=200, json={"data": []})
 
         response = client.post(
             "/graphql",
@@ -80,6 +80,6 @@ mutation test($id: Int!) {
         )
         assert response.json == {"data": {"deleteBurger": None},
                                  "errors": [{"locations": [{"column": 3, "line": 3}],
-                                             "message": "Opgevraagde burgers bestaan niet.",
+                                             "message": "Burger with id 1 not found",
                                              "path": ["deleteBurger"]}]}
         assert adapter.called_once

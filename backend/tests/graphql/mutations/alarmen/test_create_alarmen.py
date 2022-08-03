@@ -146,9 +146,9 @@ def test_create_alarm_failure_afspraak_does_not_exist(client):
             "bedragMargin": "10.34",
             "byDay": ["Wednesday"]
         }
-        expected = "Opgevraagde afspraken bestaan niet."
+        expected = "Afspraak bestaat niet."
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        rm0 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=19", status_code=404)
+        rm0 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=19", status_code=200, json={"data": []})
 
         # act
         response = client.post(

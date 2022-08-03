@@ -36,6 +36,8 @@ class DeleteHuishouden(graphene.Mutation):
         """ Delete current huishouden """
 
         previous = await request.dataloader.huishoudens_by_id.load(id)
+        if not previous:
+            raise GraphQLError("Huishouden bestaat niet.")
 
         response = requests.delete(f"{settings.HHB_SERVICES_URL}/huishoudens/{id}")
         if response.status_code != 204:

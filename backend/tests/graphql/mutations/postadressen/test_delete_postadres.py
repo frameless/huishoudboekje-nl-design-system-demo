@@ -116,7 +116,7 @@ def test_delete_postadres_error_afspraken(client):
 
 def test_delete_postadres_error(client):
     with requests_mock.Mocker() as mock:
-        adapter = mock.get(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/?filter_ids=test_id", status_code=404, text="Not found")
+        adapter = mock.get(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/?filter_ids=test_id", status_code=200, json={"data": []})
 
         response = client.post(
             "/graphql",
@@ -135,6 +135,6 @@ def test_delete_postadres_error(client):
         )
         assert response.json == {"data": {"deletePostadres": None},
                                  "errors": [{"locations": [{"column": 11, "line": 4}],
-                                             "message": "Opgevraagde addresses bestaan niet.",
+                                             "message": "postadres not found",
                                              "path": ["deletePostadres"]}]}
         assert adapter.called_once

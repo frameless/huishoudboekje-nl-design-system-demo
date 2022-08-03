@@ -185,7 +185,7 @@ def test_update_alarm_failure_cant_set_alarm_to_non_existing_afspraak(client):
             "bedragMargin":"56.78",
             "byDay": ["Thursday"]
         }
-        expected = "Opgevraagde afspraken bestaan niet."
+        expected = "Afspraak bestaat niet."
         alarm_id = "bd6222e7-bfab-46bc-b0bc-2b30b76228d4"
         alarm1 = {
             "id": alarm_id,
@@ -199,7 +199,7 @@ def test_update_alarm_failure_cant_set_alarm_to_non_existing_afspraak(client):
         }
 
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        rm0 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=20", status_code=404)
+        rm0 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=20", status_code=200, json={"data": []})
         rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?filter_ids={alarm_id}", status_code=200, json={"data": [alarm1]})
 
         # act
