@@ -138,8 +138,6 @@ def sendGetRequest(url, service, model, params=None, headers=None):
         raise GraphQLError(f"Connectie error heeft plaatsgevonden op {service}")
 
     if response.status_code != 200:
-        # if response.status_code == 404:
-        #     raise GraphQLError(f"Opgevraagde {model} bestaan niet.")
         raise UpstreamError(response, f"Request to {url} not succeeded.")
 
     return response
