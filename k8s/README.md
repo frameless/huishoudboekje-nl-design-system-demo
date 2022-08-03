@@ -1,3 +1,5 @@
+> ### ⚠️ Warning: this README is outdated and needs updating.
+
 # Kubernetes Deploy Configuration
 This readme describes how to deploy Huishoudboekje as an application on a Kubernetes cluster.
 

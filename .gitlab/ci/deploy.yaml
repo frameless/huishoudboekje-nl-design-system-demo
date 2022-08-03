@@ -39,7 +39,7 @@ deploy-deployment-master:
   variables:
     APP_HOST: "demo.huishoudboekje.demoground.nl"
     NAMESPACE: "hhb-demo"
-    USE_PLATFORM: "azure_tad" # azure_common_prod cluster
+    USE_LETSENCRYPT: 1
     UNLEASH_OTAP: production
     OIDC_BASE_URL: "https://demo.huishoudboekje.demoground.nl"
     OIDC_ISSUER_URL: https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje/
@@ -62,7 +62,7 @@ deploy-deployment-acceptance:
   variables:
     APP_HOST: "acc.huishoudboekje.demoground.nl"
     NAMESPACE: "hhb-acc"
-    USE_PLATFORM: "azure_tad" # azure_review_acc cluster
+    USE_LETSENCRYPT: 1
     UNLEASH_OTAP: acceptance
     OIDC_BASE_URL: "https://acc.huishoudboekje.demoground.nl"
     OIDC_ISSUER_URL: https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje/
@@ -86,7 +86,7 @@ deploy-deployment-test:
   variables:
     APP_HOST: "test.huishoudboekje.demoground.nl"
     NAMESPACE: "hhb-test"
-    USE_PLATFORM: "azure_tad" # azure_review_acc cluster
+    USE_LETSENCRYPT: 1
     UNLEASH_OTAP: test
     OIDC_BASE_URL: "https://test.huishoudboekje.demoground.nl"
     OIDC_ISSUER_URL: https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje/
@@ -113,9 +113,8 @@ deploy-deployment-review:
   variables:
     APP_HOST: "hhb-$CI_COMMIT_REF_SLUG.nlx.reviews"
     NAMESPACE: "hhb-$CI_COMMIT_REF_SLUG"
-    USE_PLATFORM: "azure_review" # azure_review_acc cluster
+    USE_LETSENCRYPT: 0
     UNLEASH_OTAP: development
-    USE_KEYCLOAK: 0
     OIDC_BASE_URL: "https://hhb-$CI_COMMIT_REF_SLUG.nlx.reviews"
     OIDC_ISSUER_URL: https://keycloak.huishoudboekje.demoground.nl/realms/huishoudboekje/
     OIDC_CLIENT_ID: huishoudboekje-medewerkers

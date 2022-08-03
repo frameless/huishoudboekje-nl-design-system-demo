@@ -4,13 +4,7 @@ metadata:
   name: hhb-storybook-ingress
   labels:
     name: hhb-storybook-ingress
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
-  tls:
-    - hosts:
-        - sb-${APP_HOST}
-      secretName: medewerker-frontend-ingress-tls
   rules:
     - host: sb-${APP_HOST}
       http:
