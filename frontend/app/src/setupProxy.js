@@ -1,5 +1,20 @@
 const {createProxyMiddleware} = require("http-proxy-middleware");
 const jwt = require("jsonwebtoken");
+const util = require("util");
+const exec = util.promisify(require("child_process").exec);
+
+const getGitUser = async () => {
+	let [name, email] = [process.env.AUTH_NAME, process.env.AUTH_EMAIL];
+
+	if (!name) {
+		name = await exec("git config user.name").then(t => t.stdout.split("\n")[0]);
+	}
+	if (!email) {
+		email = await exec("git config user.email").then(t => t.stdout.split("\n")[0]);
+	}
+
+	return {name, email};
+};
 
 module.exports = (app) => {
 	const apiTarget = process.env.PROXY || "https://test.huishoudboekje.demoground.nl";
@@ -24,20 +39,29 @@ module.exports = (app) => {
 	}));
 
 	// Mimic the authservice replying with a valid user.
-	app.use("/auth/me", (req, res) => {
-		if (!process.env.AUTH_TOKEN) {
-			return res.status(401).json({
-				ok: false,
-				message: "Unauthorized",
-			});
+	app.use("/auth/me", async (req, res) => {
+		let user = undefined;
+
+		// If we're talking to a backend that is running on localhost, use the local user.
+		if (process.env.PROXY.includes("localhost")) {
+			user = await getGitUser();
+		}
+		// If we're talking to a remote backend, use the user from the token.
+		else if (process.env.AUTH_TOKEN) {
+			// No need to verify the token, if there's a user in there, we're fine.
+			const {name, email} = jwt.decode(process.env.AUTH_TOKEN);
+			user = {name, email};
+		}
+		else{
+			user = {
+				name: "Developer",
+				email: "developer@sloothuizen.nl"
+			}
 		}
 
-		// No need to verify the token, if there's a user in there, we're fine.
-		const {name, email} = jwt.decode(process.env.AUTH_TOKEN);
-
-		res.status(200).json({
+		return res.status(200).json({
 			ok: true,
-			user: {name, email},
+			user,
 		});
 	});
 
