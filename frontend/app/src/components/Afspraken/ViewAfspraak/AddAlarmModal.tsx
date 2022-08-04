@@ -7,7 +7,7 @@ import {Afspraak, CreateAlarmInput, DayOfWeek, useGetConfiguratieQuery} from "..
 import {RepeatType} from "../../../models/models";
 import d from "../../../utils/dayjs";
 import Queryable from "../../../utils/Queryable";
-import {currencyFormat2, useReactSelectStyles} from "../../../utils/things";
+import {useReactSelectStyles} from "../../../utils/things";
 import useForm from "../../../utils/useForm";
 import useToaster from "../../../utils/useToaster";
 import zod from "../../../utils/zod";
