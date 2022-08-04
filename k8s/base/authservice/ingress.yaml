@@ -4,13 +4,7 @@ metadata:
   name: hhb-authservice-ingress
   labels:
     name: hhb-authservice-ingress
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
-  tls:
-    - hosts:
-        - ${APP_HOST}
-      secretName: medewerker-frontend-ingress-tls
   rules:
     - host: ${APP_HOST}
       http:

@@ -76,6 +76,9 @@ export JWT_AUDIENCE=${JWT_AUDIENCE:-$HHB_APP_HOST}
 export JWT_EXPIRES_IN=${JWT_EXPIRES_IN:-"30d"}
 export JWT_SECRET=${JWT_SECRET:-"this should come from a secret envvar"}
 
+# if this is 1, we use the Let's Encrypt annotation in Ingresses
+export USE_LETSENCRYPT=${USE_LETSENCRYPT:-0}
+
 # Create a temporary directory to put the dist files in.
 export DEPLOYMENT_DIST_DIR="dist"
 
@@ -101,7 +104,15 @@ cat << EOF > kustomization.yaml
 # generated yaml file
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+
+patchesStrategicMerge:
 EOF
+
+if [ $USE_LETSENCRYPT == 1 ]; then
+  echo "Adding patches that adds the letsencrypt annotation and TLS configuration..."
+  cp ../overlay/patches/use-letsencrypt/ingress-patches.yaml patch_letsencrypt.yaml
+  echo "- patch_letsencrypt.yaml" >> kustomization.yaml
+fi
 
 echo "Generate secrets.yaml and add as resource"
 envsubst < ../templates/secrets.yaml > secrets.yaml
@@ -125,8 +136,8 @@ kustomize edit set image alarmenservice=${IMAGE_REGISTRY}/alarmenservice:${IMAGE
 kustomize edit set image signalenservice=${IMAGE_REGISTRY}/signalenservice:${IMAGE_TAG}
 kustomize edit set image authservice=${IMAGE_REGISTRY}/authservice:${IMAGE_TAG}
 kustomize edit set image storybook=${IMAGE_REGISTRY}/storybook:${IMAGE_TAG}
-cd ../../
 
+cd ../../
 echo "Building Kustomize..."
 kustomize build k8s/$DEPLOYMENT_DIST_DIR > k8s/$DEPLOYMENT_DIST_DIR/single_deploy_file_.yaml
 
