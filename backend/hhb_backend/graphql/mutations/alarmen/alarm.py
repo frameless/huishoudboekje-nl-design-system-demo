@@ -122,7 +122,7 @@ class AlarmHelper:
 
         response = requests.delete(f"{settings.ALARMENSERVICE_URL}/alarms/{id}")
         if response.status_code != 204:
-            raise UpstreamError(response, "Deleting alarm failed.")
+            raise UpstreamError(response, "Could not delete the alarm.")
 
         return AlarmHelper(alarm=dict(), previous=previous, ok=True)
 
