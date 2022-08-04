@@ -6,10 +6,10 @@ import Queryable from "../../utils/Queryable";
 import useForm from "../../utils/useForm";
 import useToaster from "../../utils/useToaster";
 import zod from "../../utils/zod";
+import Asterisk from "../shared/Asterisk";
 import Section from "../shared/Section";
 import SectionContainer from "../shared/SectionContainer";
 import ParameterItem from "./ParameterItem";
-import Asterisk from "../shared/Asterisk";
 
 const validator = zod.object({
 	key: zod.string().nonempty(),
@@ -65,11 +65,11 @@ const Parameters = () => {
 	};
 
 	return (
-		<Queryable query={$configuraties} children={data => {
-			const configuraties = data.configuraties as IConfiguratie[];
-			return (
-				<SectionContainer>
-					<Section title={t("forms.configuratie.sections.title")} helperText={t("forms.configuratie.sections.helperText")}>
+		<SectionContainer>
+			<Section title={t("forms.configuratie.sections.title")} helperText={t("forms.configuratie.sections.helperText")}>
+				<Queryable query={$configuraties} children={data => {
+					const configuraties = data.configuraties as IConfiguratie[];
+					return (
 						<Stack spacing={5} divider={<Divider />}>
 							{configuraties.length > 0 && (
 								<Table size={"sm"} variant={"noLeftPadding"}>
@@ -105,10 +105,10 @@ const Parameters = () => {
 								</Stack>
 							</form>
 						</Stack>
-					</Section>
-				</SectionContainer>
-			);
-		}} />
+					);
+				}} />
+			</Section>
+		</SectionContainer>
 	);
 };
 
