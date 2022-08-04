@@ -2,4 +2,4 @@
 "huishoudboekje": patch
 ---
 
-Fixes #371: Set-up for better error handling.
+Fixed #371: Improved error handling.
