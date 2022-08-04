@@ -14,14 +14,13 @@
 #  hostPath:
 #    path: "/mnt/data"
 #---
-kind: PersistentVolumeClaim
 apiVersion: v1
+kind: PersistentVolumeClaim
 metadata:
   name: hhb-database-pvc
   labels:
     name: hhb-database-pvc
 spec:
-  storageClassName: default
   accessModes:
     - ReadWriteOnce
   resources:

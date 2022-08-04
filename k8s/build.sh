@@ -76,7 +76,7 @@ export JWT_AUDIENCE=${JWT_AUDIENCE:-$HHB_APP_HOST}
 export JWT_EXPIRES_IN=${JWT_EXPIRES_IN:-"30d"}
 export JWT_SECRET=${JWT_SECRET:-"this should come from a secret envvar"}
 
-# if this is 1, we use the Let's Encrypt annotation in Ingresses
+# If this is 1, we use the Let's Encrypt annotation in Ingresses
 export USE_LETSENCRYPT=${USE_LETSENCRYPT:-0}
 
 # Create a temporary directory to put the dist files in.
