@@ -138,7 +138,7 @@ def test_delete_afdeling_error(client):
     with requests_mock.Mocker() as mock:
         # arrange
         fallback = mock.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        afdeling_get = mock.get(f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/?filter_ids=1", status_code=404, text="Not found")
+        afdeling_get = mock.get(f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/?filter_ids=1", status_code=200, json={"data": []})
 
         # act
         response = client.post(
@@ -158,7 +158,7 @@ def test_delete_afdeling_error(client):
         # assert
         assert afdeling_get.called_once
         assert fallback.called == 0
-        assert response.json == {'data': {'deleteAfdeling': None}, 'errors': [{'locations': [{'column': 21, 'line': 3}], 'message': 'Upstream API responded: Not found', 'path': ['deleteAfdeling']}]}
+        assert response.json == {'data': {'deleteAfdeling': None}, 'errors': [{'locations': [{'column': 21, 'line': 3}], 'message': "Afdeling not found", 'path': ['deleteAfdeling']}]}
 
 def test_delete_afdeling_without_postadres(client):
     with requests_mock.Mocker() as mock:

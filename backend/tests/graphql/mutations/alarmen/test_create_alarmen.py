@@ -39,19 +39,11 @@ def test_create_alarm(client):
             "alarm_id": "bd6222e7-bfab-46bc-b0bc-2b30b76228d4"
         }
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        rm0 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/19", status_code=200, json={"data": afspraak})
-        rm1 = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={"ok": True, "data": alarm})
+        rm0 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=19", status_code=200, json={"data": [afspraak]})
+        rm1 = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={ "ok":True, "data": alarm})
         rm2 = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/19", status_code=200)
         rm3 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
-        rm4 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=19", status_code=200, json={"data": [afspraak]})
-        expected = {'data': {'createAlarm': {
-            'ok': True,
-            'alarm': {
-                'id': 'bd6222e7-bfab-46bc-b0bc-2b30b76228d4', 'isActive': True, 'afspraak': {'id': 19},
-                'startDate': '2021-12-02', 'datumMargin': 5, 'bedrag': '120.12', 'bedragMargin': '10.34',
-                'byDay': ['Wednesday'], 'byMonth': [], 'byMonthDay': []
-            }
-        }}}
+        expected = {'data': {'createAlarm': {'ok': True, 'alarm': {'id': 'bd6222e7-bfab-46bc-b0bc-2b30b76228d4', 'isActive': True, 'afspraak': {'id': 19}, 'startDate': '2021-12-02', 'datumMargin': 5, 'bedrag': '120.12', 'bedragMargin': '10.34', 'byDay': ['Wednesday'], 'byMonth': [], 'byMonthDay': []}}}}
 
         # act
         response = client.post(
@@ -89,7 +81,6 @@ def test_create_alarm(client):
         assert rm1.called_once
         assert rm2.called_once
         assert rm3.called_once
-        assert rm4.called_once
         assert fallback.called == 0
         assert response.json == expected
 
@@ -157,7 +148,7 @@ def test_create_alarm_failure_afspraak_does_not_exist(client):
         }
         expected = "Afspraak bestaat niet."
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        rm0 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/19", status_code=404)
+        rm0 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=19", status_code=200, json={"data": []})
 
         # act
         response = client.post(
@@ -312,7 +303,7 @@ def test_create_alarm_failure_afspraak_does_not_have_burger(client):
         }
         expected = "De afspraak is niet gekoppeld aan een burger."
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        rm0 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/19", status_code=200, json={"data": afspraak})
+        rm0 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=19", status_code=200, json={"data": [afspraak]})
 
         # act
         response = client.post(
@@ -371,7 +362,7 @@ def test_create_alarm_failure_afspraak_ended(client):
         }
         expected = "De afspraak is niet actief."
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        rm0 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/19", status_code=200, json={"data": afspraak})
+        rm0 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=19", status_code=200, json={"data": [afspraak]})
 
         # act
         response = client.post(

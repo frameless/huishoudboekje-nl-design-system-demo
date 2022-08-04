@@ -131,3 +131,8 @@ class HHBView(MethodView):
         self.hhb_object.delete()
         self.hhb_object.commit_changes()
         return {}, 204
+
+    # TODO put implementeren
+    # def put(self, **kwargs): 
+    #     """ PUT /<view_path>/(<int:object_id>) """
+    #     return {"data": self.hhb_object.json}, 200
