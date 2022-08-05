@@ -16,7 +16,6 @@ dependency_scanning:
   needs: [ ]
   variables:
     SECURE_LOG_LEVEL: debug
-    DS_EXCLUDED_ANALYZERS: "gemnasium-python"
 
 secret_detection:
   stage: security
