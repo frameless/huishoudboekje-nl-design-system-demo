@@ -28,7 +28,7 @@ class Afdeling(graphene.ObjectType):
             return []
         querystring = f"?filter_ids={','.join([str(k) for k in ids])}" if ids else ''
         url = f"""{settings.POSTADRESSEN_SERVICE_URL}/addresses/{querystring}"""
-        response = requests.get(url)
+        response = requests.get(url, headers={"Accept": "application/json"})
 
         iterable = []
         for post in response.json()['data']:

@@ -51,7 +51,8 @@ class UpdatePostadres(graphene.Mutation):
         # Try update of contactCatalogus service
         contactCatalogus_response = requests.put(
             f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/{id}",
-            json=contactCatalogus_input
+            json=contactCatalogus_input, 
+            headers={"Accept": "application/json"}
         )
         if contactCatalogus_response.status_code != 200:
             raise GraphQLError(

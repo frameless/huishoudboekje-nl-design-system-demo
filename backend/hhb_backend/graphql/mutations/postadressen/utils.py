@@ -14,7 +14,7 @@ def create_afdeling_postadres(input, afdeling_id):
 
     contactCatalogus_response = requests.post(
         f"{settings.POSTADRESSEN_SERVICE_URL}/addresses",
-        data=json.dumps(contactCatalogus_input)
+        json=json.dumps(contactCatalogus_input)
     )
     if contactCatalogus_response.status_code != 201:
         raise GraphQLError(f"Upstream API responded: {contactCatalogus_response.json()}")
