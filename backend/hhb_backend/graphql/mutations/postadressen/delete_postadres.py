@@ -45,8 +45,7 @@ class DeletePostadres(graphene.Mutation):
             raise GraphQLError("Postadres wordt gebruikt in een of meerdere afspraken - verwijderen is niet mogelijk.")
 
         response_ContactCatalogus = requests.delete(
-            f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/{id}",
-            headers={"Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845"}
+            f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/{id}"
         )
         if response_ContactCatalogus.status_code != 204:
             raise GraphQLError(f"Upstream API responded: {response_ContactCatalogus.text}")

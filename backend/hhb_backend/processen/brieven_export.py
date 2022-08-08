@@ -185,9 +185,7 @@ def get_postadressen(afdelingen):
                 ids.append(postadres_id)
 
     ids = ','.join(str(x) for x in ids)
-    return requests.get(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/?filter_ids={ids}",
-        headers={"Content-type": "application/json", "Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845"},
-    )
+    return requests.get(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/?filter_ids={ids}")
 
 def get_postadres(afspraken):
     ids= []
@@ -197,9 +195,7 @@ def get_postadres(afspraken):
             ids.append(postadres_id)
 
     ids = ','.join(str(x) for x in ids)
-    return requests.get(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/?filter_ids={ids}",
-        headers={"Content-type": "application/json", "Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845"},
-    )
+    return requests.get(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/?filter_ids={ids}")
 
 def get_organisaties(afdelingen):
     organisatie_ids = list(
