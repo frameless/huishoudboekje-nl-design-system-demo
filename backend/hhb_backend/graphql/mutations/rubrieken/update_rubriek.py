@@ -1,9 +1,11 @@
 """ GraphQL mutation for updating a Rubriek """
 
 import json
+
 import graphene
-from graphql import GraphQLError
 import requests
+from graphql import GraphQLError
+
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.rubriek import Rubriek
@@ -39,13 +41,11 @@ class UpdateRubriek(graphene.Mutation):
         """ Update a Rubriek """
         rubriek_id = kwargs.pop("id")
 
-        previous = await hhb_dataloader().rubrieken_by_id.load(rubriek_id)
+        previous = hhb_dataloader().rubrieken_by_id.load(rubriek_id)
         if (
             kwargs["grootboekrekening_id"]
             and len(
-                requests.get(
-                    f"{settings.GROOTBOEK_SERVICE_URL}/grootboekrekeningen/?filter_ids={kwargs['grootboekrekening_id']}"
-                ).json()["data"]
+                hhb_dataloader().grootboekrekeningen_by_id.load(kwargs['grootboekrekening_id'])
             )
             == 0
         ):

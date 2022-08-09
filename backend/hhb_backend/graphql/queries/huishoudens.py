@@ -1,8 +1,8 @@
 import graphene
-from flask import request
 from graphql import GraphQLError
 
 import hhb_backend.graphql.models.huishouden as huishouden
+from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.filters.burgers import BurgerFilter
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     gebruikers_activiteit_entities,
@@ -23,7 +23,7 @@ class HuishoudenQuery:
     @classmethod
     @log_gebruikers_activiteit
     async def resolver(cls, _root, _info, id):
-        return await request.dataloader.huishoudens_by_id.load(id)
+        return hhb_dataloader().huishoudens_by_id.load(id)
 
 
 class HuishoudensQuery:
@@ -44,10 +44,8 @@ class HuishoudensQuery:
     @log_gebruikers_activiteit
     async def resolver(cls, _root, _info, ids=None, **kwargs):
         if ids:
-            return await request.dataloader.huishoudens_by_id.load_many(ids)
-        return request.dataloader.huishoudens_by_id.get_all_and_cache(
-            filters=kwargs.get("filters", None)
-        )
+            return hhb_dataloader().huishoudens_by_id.load_many(ids)
+        return hhb_dataloader().huishoudens_by_id.load_all(filters=kwargs.get("filters", None))
 
 
 class HuishoudensPagedQuery:
@@ -72,11 +70,11 @@ class HuishoudensPagedQuery:
     @log_gebruikers_activiteit
     async def resolver(cls, _root, _info, **kwargs):
         if "start" in kwargs and "limit" in kwargs:
-            return request.dataloader.huishoudens_by_id.get_all_paged(
+            return hhb_dataloader().huishoudens_by_id.get_all_paged(
                 start=kwargs["start"],
                 limit=kwargs["limit"],
                 desc=True,
-                sortingColumn="id",
+                sorting_column="id",
                 filters=kwargs.get("filters")
             )
         else:

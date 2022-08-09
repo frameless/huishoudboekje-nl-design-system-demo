@@ -1,8 +1,11 @@
 """ Organisatie model as used in GraphQL queries """
+
 import graphene
-from flask import request
 from graphql import GraphQLError
+
 import hhb_backend.graphql.models.afdeling as afdeling
+from hhb_backend.graphql.dataloaders import hhb_dataloader
+
 
 class Organisatie(graphene.ObjectType):
     id = graphene.Int()
@@ -11,11 +14,11 @@ class Organisatie(graphene.ObjectType):
     vestigingsnummer = graphene.String()
     afdelingen = graphene.List(lambda: afdeling.Afdeling)
 
-    async def resolve_afdelingen(root, info):
-        return await request.dataloader.afdelingen_by_organisatie.load(root.get('id')) or []
+    async def resolve_afdelingen(root, _info):
+        return hhb_dataloader().afdelingen_by_organisatie.load(root.get('id')) or []
 
     def check_kvk_vestigingsnummer(self, kvknummer, vestigingsnummer, id=None):
-        organisaties = request.dataloader.organisaties_by_id.get_all_and_cache()
+        organisaties = hhb_dataloader().organisaties_by_id.load_all()
         if kvknummer and not vestigingsnummer:
             for organisatie in organisaties:
                 if id == organisatie.get('id'):

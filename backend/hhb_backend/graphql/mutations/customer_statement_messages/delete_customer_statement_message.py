@@ -1,9 +1,9 @@
 """ GraphQL mutation for deleting a Organisatie """
-import os
 import graphene
 import requests
 from graphql import GraphQLError
-from hhb_backend.graphql import settings, dataloaders
+
+from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.customer_statement_message import (
     CustomerStatementMessage,
@@ -35,11 +35,11 @@ class DeleteCustomerStatementMessage(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(_root, _info, id):
         """ Delete current Customer Statement Message """
-        previous = await hhb_dataloader().csms_by_id.load(id)
+        previous = hhb_dataloader().csms_by_id.load(id)
 
         transaction_ids = previous["bank_transactions"]
 
-        journaalposten = await hhb_dataloader().journaalposten_by_transaction.load_many(
+        journaalposten = hhb_dataloader().journaalposten_by_transaction.load_many(
             transaction_ids
         )
 

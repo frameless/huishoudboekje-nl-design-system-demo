@@ -4,23 +4,25 @@ from datetime import datetime
 import graphene
 from flask import request
 
+import hhb_backend.graphql.models.Alarm as alarm
+import hhb_backend.graphql.models.afdeling as afdeling
 import hhb_backend.graphql.models.afspraak as afspraak
 import hhb_backend.graphql.models.bank_transaction as bank_transaction
+import hhb_backend.graphql.models.burger as burger
 import hhb_backend.graphql.models.configuratie as configuratie
 import hhb_backend.graphql.models.customer_statement_message as customer_statement_message
 import hhb_backend.graphql.models.export as export
-import hhb_backend.graphql.models.burger as burger
 import hhb_backend.graphql.models.grootboekrekening as grootboekrekening
+import hhb_backend.graphql.models.huishouden as huishouden
 import hhb_backend.graphql.models.journaalpost as journaalpost
 import hhb_backend.graphql.models.organisatie as organisatie
+import hhb_backend.graphql.models.postadres as postadres
 import hhb_backend.graphql.models.rekening as rekening
 import hhb_backend.graphql.models.rubriek as rubriek
-from hhb_backend.graphql.models.pageinfo import PageInfo
-import hhb_backend.graphql.models.huishouden as huishouden
-import hhb_backend.graphql.models.afdeling as afdeling
-import hhb_backend.graphql.models.postadres as postadres
-import hhb_backend.graphql.models.Alarm as alarm
 import hhb_backend.graphql.models.signaal as signaal
+from hhb_backend.graphql.dataloaders import hhb_dataloader
+from hhb_backend.graphql.models.pageinfo import PageInfo
+
 
 class GebruikersActiviteitMeta(graphene.ObjectType):
     userAgent = graphene.String()
@@ -139,8 +141,9 @@ class GebruikersActiviteitEntity(graphene.ObjectType):
 
     @classmethod
     async def _resolve_entity(cls, root, entity_type: str, dataloader_name: str):
+        # todo ??
         if root.get("entityType") == entity_type:
-            return await request.dataloader[dataloader_name].load(root.get("entityId"))
+            return request.dataloader[dataloader_name].load(root.get("entityId"))
     @classmethod
     async def resolve_afdeling(cls, root, _info):
         return await cls._resolve_entity(
@@ -174,7 +177,7 @@ class GebruikersActiviteitEntity(graphene.ObjectType):
     @classmethod
     async def resolve_customer_statement_message(cls, root, _info):
         if root.get("entityType") == "customerStatementMessage":
-            return await request.dataloader["csms_by_id"].load(root.get("entityId"))
+            return hhb_dataloader().csms_by_id.load(root.get("entityId"))
         return await cls._resolve_entity(
             root, entity_type="customer_statement_message", dataloader_name="csms_by_id"
         )
@@ -250,7 +253,7 @@ class GebruikersActiviteit(graphene.ObjectType):
     # async def resolve_gebruiker(root, info):
     #     # TODO medewerker?
     #     if root.get('gebruiker_id'):
-    #         return await request.dataloader.gebruikers_by_id.load(root.get('gebruiker_id'))
+    #         return hhb_dataloader().gebruikers_by_id.load(root.get('gebruiker_id'))
 
 
 class GebruikersActiviteitenPaged(graphene.ObjectType):

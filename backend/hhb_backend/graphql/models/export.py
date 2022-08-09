@@ -2,9 +2,9 @@
 from datetime import datetime
 
 import graphene
-from flask import request
 
 import hhb_backend.graphql.models.overschrijving as overschrijving
+from hhb_backend.graphql.dataloaders import hhb_dataloader
 
 
 class Export(graphene.ObjectType):
@@ -25,4 +25,4 @@ class Export(graphene.ObjectType):
     async def resolve_overschrijvingen(root, info):
         """ Get overschrijvingen when requested """
         if root.get('overschrijvingen'):
-            return await request.dataloader.overschrijvingen_by_id.load_many(root.get('overschrijvingen')) or []
+            return hhb_dataloader().overschrijvingen_by_id.load_many(root.get('overschrijvingen')) or []

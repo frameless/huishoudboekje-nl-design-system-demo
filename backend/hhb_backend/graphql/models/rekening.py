@@ -1,9 +1,11 @@
 """ Rekening model as used in GraphQL queries """
 import graphene
-from flask import request
-import hhb_backend.graphql.models.burger as burger
+
 import hhb_backend.graphql.models.afdeling as afdeling
 import hhb_backend.graphql.models.afspraak as afspraak
+import hhb_backend.graphql.models.burger as burger
+from hhb_backend.graphql.dataloaders import hhb_dataloader
+
 
 class Rekening(graphene.ObjectType):
     id = graphene.Int()
@@ -13,17 +15,17 @@ class Rekening(graphene.ObjectType):
     afdelingen = graphene.List(lambda: afdeling.Afdeling)
     afspraken = graphene.List(lambda: afspraak.Afspraak)
 
-    async def resolve_burgers(root, info):
+    async def resolve_burgers(self, info):
         """ Get burgers when requested """
-        if root.get('burgers'):
-            return await request.dataloader.burgers_by_id.load_many(root.get('burgers')) or []
+        if self.get('burgers'):
+            return hhb_dataloader().burger_by_id.load_many(self.get('burgers')) or []
 
-    async def resolve_afdelingen(root, info):
+    async def resolve_afdelingen(self, info):
         """ Get afdelingen when requested """
-        if root.get('afdelingen'):
-            return await request.dataloader.afdelingen_by_id.load_many(root.get('afdelingen')) or []
+        if self.get('afdelingen'):
+            return hhb_dataloader().afdeling_by_id.load_many(self.get('afdelingen')) or []
     
-    async def resolve_afspraken(root, info):
+    async def resolve_afspraken(self, info):
         """ Get afspraken when requested """
-        if root.get('afspraken'):
-            return await request.dataloader.afspraken_by_id.load_many(root.get('afspraken')) or []
+        if self.get('afspraken'):
+            return hhb_dataloader().afspraak_by_id.load_many(self.get('afspraken')) or []

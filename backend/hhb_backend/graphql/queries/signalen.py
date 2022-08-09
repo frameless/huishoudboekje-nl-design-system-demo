@@ -1,8 +1,10 @@
 """ GraphQL Signalen query """
 import graphene
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (gebruikers_activiteit_entities, log_gebruikers_activiteit)
+
+from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.signaal import Signaal
-from flask import request
+from hhb_backend.graphql.utils.gebruikersactiviteiten import (gebruikers_activiteit_entities, log_gebruikers_activiteit)
+
 
 class SignaalQuery:
     return_type = graphene.Field(Signaal, id=graphene.String(required=True))
@@ -17,9 +19,7 @@ class SignaalQuery:
     @classmethod
     @log_gebruikers_activiteit
     async def resolver(cls, _root, _info, id):
-
-        signaal = await request.dataloader.signalen_by_id.load(id)
-        return signaal
+        return hhb_dataloader().signalen_by_id.load(id)
 
 
 class SignalenQuery:
@@ -36,8 +36,5 @@ class SignalenQuery:
     @log_gebruikers_activiteit
     async def resolver(cls, _root, _info, ids=None):
         if ids:
-            signaal = await request.dataloader.signalen_by_id.load_many(ids)
-            return signaal
-
-        signaal = request.dataloader.signalen_by_id.get_all_and_cache()
-        return signaal
+            return hhb_dataloader().signalen_by_id.load_many(ids)
+        return hhb_dataloader().signalen_by_id.load_all()

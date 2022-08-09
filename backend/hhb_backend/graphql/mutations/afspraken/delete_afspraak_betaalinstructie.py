@@ -38,9 +38,7 @@ class DeleteAfspraakBetaalinstructie(graphene.Mutation):
     async def mutate(_root, _info, afspraak_id: int):
         """ Update the Afspraak """
 
-        ''' Clear the cache since we need to have the most up te date version possible. '''
-        hhb_dataloader().afspraken_by_id.clear(afspraak_id)
-        previous = await hhb_dataloader().afspraken_by_id.load(afspraak_id)
+        previous = hhb_dataloader().afspraak_by_id.load(afspraak_id)
 
         if previous is None:
             raise GraphQLError("Afspraak not found")

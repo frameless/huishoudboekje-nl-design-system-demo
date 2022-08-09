@@ -1,29 +1,24 @@
-from hhb_backend.graphql.dataloaders.base_loader import SingleDataLoader, ListDataLoader
+from hhb_backend.graphql.dataloaders.base_loader import DataLoader
 
 
-class RekeningenByIdLoader(SingleDataLoader):
+class RekeningByIdLoader(DataLoader):
     """ Load rekeningen using ids """
     model = "rekeningen"
 
 
-class RekeningenByBurgerLoader(ListDataLoader):
+class RekeningenByBurgerLoader(DataLoader):
     """ Load rekeningen list for burger ids """
     model = "rekeningen"
     filter_item = "filter_burgers"
-    index = "burgers"
-    is_list = True
 
 
-class RekeningenByAfdelingLoader(ListDataLoader):
+class RekeningenByAfdelingLoader(DataLoader):
     """ Load rekeningen list for afdelingen ids """
     model = "rekeningen"
     filter_item = "filter_afdelingen"
-    index = "afdelingen"
-    is_list = True
 
 
-class RekeningenByIbanLoader(SingleDataLoader):
+class RekeningenByIbanLoader(DataLoader):
     """ Load rekeningen list for ibans """
     model = "rekeningen"
     filter_item = "filter_ibans"
-    index = "iban"

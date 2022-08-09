@@ -1,11 +1,9 @@
 """ GraphQL mutation for deleting a Organisatie """
-import os
 
 import graphene
 import requests
 from graphql import GraphQLError
 
-from hhb_backend.graphql.mutations.afdelingen.utils import delete_afdeling_util
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.organisatie import Organisatie
@@ -33,13 +31,13 @@ class DeleteOrganisatie(graphene.Mutation):
         )
 
     @log_gebruikers_activiteit
-    async def mutate(root, _info, id):
+    async def mutate(self, _info, id):
         """ Delete current organisatie """
-        previous = await hhb_dataloader().organisaties_by_id.load(id)
+        previous = hhb_dataloader().organisaties_by_id.load(id)
         if not previous:
             raise GraphQLError("Organisatie not found")
 
-        afdelingen = await hhb_dataloader().afdelingen_by_organisatie.load(id)
+        afdelingen = hhb_dataloader().afdelingen_by_organisatie.load(id)
         if afdelingen:
             raise GraphQLError("Organisatie heeft afdelingen - verwijderen is niet mogelijk.")
 

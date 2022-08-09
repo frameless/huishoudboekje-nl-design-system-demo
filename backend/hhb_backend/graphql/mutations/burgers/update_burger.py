@@ -3,10 +3,10 @@ import json
 
 import graphene
 import requests
-from flask import request
 from graphql import GraphQLError
 
 from hhb_backend.graphql import settings
+from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.burger import Burger
 from hhb_backend.graphql.mutations.huishoudens import huishouden_input as huishouden_input
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
@@ -53,7 +53,7 @@ class UpdateBurger(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(_root, _info, id, **kwargs):
         """ Update the current Gebruiker/Burger """
-        previous = await request.dataloader.burgers_by_id.load(id)
+        previous = hhb_dataloader().burger_by_id.load(id)
 
         response = requests.post(
             f"{settings.HHB_SERVICES_URL}/burgers/{id}",
@@ -62,8 +62,6 @@ class UpdateBurger(graphene.Mutation):
         )
         if response.status_code != 200:
             raise GraphQLError(f"Upstream API responded: {response.json()}")
-
-        request.dataloader.burgers_by_id.clear(id)
 
         burger = response.json()["data"]
 

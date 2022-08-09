@@ -1,16 +1,13 @@
 import graphene
 import pydash
 import requests
-from dateutil.parser import isoparse
 from graphql import GraphQLError
 
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models import afspraak
-from hhb_backend.graphql.models.afspraak import Betaalinstructie
 from hhb_backend.graphql.scalars.day_of_week import DayOfWeek
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (gebruikers_activiteit_entities, log_gebruikers_activiteit)
-from hhb_backend.graphql.utils.interval import convert_betaalinstructie_interval
 
 
 class BetaalinstructieInput(graphene.InputObjectType):
@@ -57,9 +54,7 @@ class UpdateAfspraakBetaalinstructie(graphene.Mutation):
     async def mutate(_root, _info, afspraak_id: int, betaalinstructie: BetaalinstructieInput):
         """ Update the Afspraak """
 
-        ''' Clear the cache since we need to have the most up te date version possible. '''
-        hhb_dataloader().afspraken_by_id.clear(afspraak_id)
-        previous = await hhb_dataloader().afspraken_by_id.load(afspraak_id)
+        previous = hhb_dataloader().afspraak_by_id.load(afspraak_id)
 
         if previous is None:
             raise GraphQLError("afspraak not found")

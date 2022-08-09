@@ -1,8 +1,8 @@
 """ GraphQL Exports query """
 import graphene
-from flask import request
 from graphql import GraphQLError
 
+from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.export import Export
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     gebruikers_activiteit_entities,
@@ -25,7 +25,7 @@ class ExportQuery:
     @classmethod
     @log_gebruikers_activiteit
     async def resolver(cls, _root, _info, id):
-        return await request.dataloader.exports_by_id.load(id)
+        return hhb_dataloader().export_by_id.load(id)
 
 
 class ExportsQuery:
@@ -48,16 +48,12 @@ class ExportsQuery:
 
     @classmethod
     @log_gebruikers_activiteit
-    async def resolver(
-        cls, _root, _info, ids=None, start_datum=None, eind_datum=None, **kwargs
-    ):
+    async def resolver(cls, _root, _info, ids=None, start_datum=None, eind_datum=None):
         if ids:
-            return await request.dataloader.exports_by_id.load_many(ids)
+            return hhb_dataloader().export_by_id.load_many(ids)
         if start_datum or eind_datum:
             if not (start_datum and eind_datum):
                 raise GraphQLError("start_datum must be combined with eind_datum")
         if not (start_datum and eind_datum):
-            return request.dataloader.exports_by_id.get_all_and_cache()
-        return request.dataloader.exports_by_id.get_by_timestamps(
-            start_datum, eind_datum
-        )
+            return hhb_dataloader().export_by_id.load_all()
+        return hhb_dataloader().export_by_id.get_by_timestamps(start_datum, eind_datum)

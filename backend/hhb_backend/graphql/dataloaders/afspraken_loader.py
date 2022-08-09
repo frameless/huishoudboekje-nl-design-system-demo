@@ -1,26 +1,30 @@
-from hhb_backend.graphql.dataloaders.base_loader import SingleDataLoader, ListDataLoader
-from hhb_backend.graphql import settings
+from hhb_backend.graphql.dataloaders.base_loader import DataLoader
 
-class AfsprakenByIdLoader(SingleDataLoader):
-    """ Load afspraken using ids """
+
+class AfspraakByIdLoader(DataLoader):
+    """ Load afspraken using id """
     model = "afspraken"
 
-class AfsprakenByAfdelingLoader(ListDataLoader):
+
+class AfspraakByPostadresLoader(DataLoader):
+    """ Load afspraken using postadres """
+    model = "afspraken"
+    filter_item = "filter_postadressen"
+
+
+class AfsprakenByAfdelingLoader(DataLoader):
     """ Load afspraken using afdeling ids """
     model = "afspraken"
-    service = settings.HHB_SERVICES_URL
     filter_item = "filter_afdelingen"
-    index = "afdeling_id"
 
-class AfsprakenByBurgerLoader(ListDataLoader):
+
+class AfsprakenByBurgerLoader(DataLoader):
     """ Load afspraken using burger ids """
     model = "afspraken"
     filter_item = "filter_burgers"
-    index = "burger_id"
 
 
-class AfsprakenByRekeningLoader(ListDataLoader):
+class AfsprakenByRekeningLoader(DataLoader):
     """ Load afspraken using rekeningen """
     model = "afspraken"
     filter_item = "filter_rekening"
-    index = "tegen_rekening_id"

@@ -1,17 +1,17 @@
 """ GraphQL GebruikersActiviteiten query """
 import graphene
-from flask import request
 from graphql import GraphQLError
 
 import hhb_backend.graphql.models.gebruikersactiviteit as gebruikersactiviteit
+from hhb_backend.graphql.dataloaders import hhb_dataloader
 
 
 class GebruikersActiviteitQuery:
     return_type = graphene.Field(gebruikersactiviteit.GebruikersActiviteit, id=graphene.Int(required=True))
 
     @staticmethod
-    async def resolver(root, info, **kwargs):
-        return await request.dataloader.gebruikersactiviteiten_by_id.load(kwargs["id"])
+    async def resolver(_root, _info, **kwargs):
+        return hhb_dataloader().gebruikersactiviteiten_by_id.load(kwargs["id"])
 
 
 class GebruikersActiviteitenQuery:
@@ -24,7 +24,7 @@ class GebruikersActiviteitenQuery:
     )
 
     @staticmethod
-    async def resolver(root, info, **kwargs):
+    async def resolver(_root, _info, **kwargs):
         if (
                 not kwargs["ids"]
                 and not kwargs["burgerIds"]
@@ -32,19 +32,19 @@ class GebruikersActiviteitenQuery:
                 and not kwargs["huishoudenIds"]
         ):
             gebruikersactiviteiten = (
-                request.dataloader.gebruikersactiviteiten_by_id.get_all_and_cache()
+                hhb_dataloader().gebruikersactiviteiten_by_id.load_all()
             )
         else:
             gebruikersactiviteiten = []
             if kwargs["burgerIds"]:
                 gebruikersactiviteiten = (
-                    request.dataloader.gebruikersactiviteiten_by_burgers.get_by_ids(
+                    hhb_dataloader().gebruikersactiviteiten_by_burger.load_many(
                         kwargs["burgerIds"]
                     )
                 )
             if kwargs["afsprakenIds"]:
                 afspraken_list = (
-                    request.dataloader.gebruikersactiviteiten_by_afspraken.get_by_ids(
+                    hhb_dataloader().gebruikersactiviteiten_by_afspraken.load(
                         kwargs["afsprakenIds"]
                     )
                 )
@@ -53,7 +53,7 @@ class GebruikersActiviteitenQuery:
                 )
             if kwargs["ids"]:
                 ids_list = (
-                    await request.dataloader.gebruikersactiviteiten_by_id.load_many(
+                    hhb_dataloader().gebruikersactiviteiten_by_id.load_many(
                         kwargs["ids"]
                     )
                 )
@@ -62,7 +62,7 @@ class GebruikersActiviteitenQuery:
                 )
             if kwargs["huishoudenIds"]:
                 afspraken_list = (
-                    request.dataloader.gebruikersactiviteiten_by_huishouden.get_by_ids(
+                    hhb_dataloader().gebruikersactiviteiten_by_huishouden.load(
                         kwargs["huishoudenIds"]
                     )
                 )
@@ -84,23 +84,30 @@ class GebruikersActiviteitenPagedQuery:
     )
 
     @staticmethod
-    async def resolver(root, info, **kwargs):
+    async def resolver(_root, _info, **kwargs):
         if "start" in kwargs and "limit" in kwargs:
             if not kwargs["burgerIds"] and not kwargs["afsprakenIds"] and not kwargs["huishoudenIds"]:
-                return request.dataloader.gebruikersactiviteiten_by_id.get_all_paged \
-                    (start=kwargs["start"], limit=kwargs["limit"], desc=True, sortingColumn="timestamp")
+                return hhb_dataloader().gebruikersactiviteiten_by_id.get_all_paged(
+                    start=kwargs["start"], limit=kwargs["limit"], desc=True, sorting_column="timestamp"
+                )
             else:
                 if kwargs["burgerIds"] and kwargs["afsprakenIds"] and kwargs["huishoudenIds"]:
                     raise GraphQLError(f"Only burgerIds, afsprakenIds or huishoudenIds is supported. ")
                 if kwargs["burgerIds"]:
-                    return request.dataloader.gebruikersactiviteiten_by_burgers.get_by_ids_paged(
-                            kwargs["burgerIds"], start=kwargs["start"], limit=kwargs["limit"], desc=True, sortingColumn="timestamp")
+                    return hhb_dataloader().gebruikersactiviteiten_by_burgers.get_by_item_paged(
+                        ids=kwargs["burgerIds"], start=kwargs["start"], limit=kwargs["limit"],
+                        desc=True, sorting_column="timestamp"
+                    )
                 if kwargs["afsprakenIds"]:
-                    return request.dataloader.gebruikersactiviteiten_by_afspraken.get_by_ids_paged(
-                            kwargs["afsprakenIds"], start=kwargs["start"], limit=kwargs["limit"], desc=True, sortingColumn="timestamp")
+                    return hhb_dataloader().gebruikersactiviteiten_by_afspraken.get_by_item_paged(
+                        ids=kwargs["afsprakenIds"], start=kwargs["start"], limit=kwargs["limit"],
+                        desc=True, sorting_column="timestamp"
+                    )
                 if kwargs["huishoudenIds"]:
-                    return request.dataloader.gebruikersactiviteiten_by_huishouden.get_by_ids_paged(
-                            kwargs["huishoudenIds"], start=kwargs["start"], limit=kwargs["limit"], desc=True, sortingColumn="timestamp")
+                    return hhb_dataloader().gebruikersactiviteiten_by_huishouden.get_by_item_paged(
+                        ids=kwargs["huishoudenIds"], start=kwargs["start"], limit=kwargs["limit"],
+                        desc=True, sorting_column="timestamp"
+                    )
         else:
             raise GraphQLError(f"Query needs params 'start', 'limit'. ")
 

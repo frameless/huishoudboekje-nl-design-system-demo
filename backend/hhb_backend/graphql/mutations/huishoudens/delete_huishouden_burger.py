@@ -6,13 +6,13 @@ from graphql import GraphQLError
 
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
+from hhb_backend.graphql.models import burger
 from hhb_backend.graphql.models import huishouden
 from hhb_backend.graphql.mutations.huishoudens.utils import create_new_huishouden
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     gebruikers_activiteit_entities,
     log_gebruikers_activiteit,
 )
-from hhb_backend.graphql.models import burger
 
 
 class DeleteHuishoudenBurger(graphene.Mutation):
@@ -44,9 +44,7 @@ class DeleteHuishoudenBurger(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(_root, _info, huishouden_id: int, burger_ids: List[int]):
         """Move given burgers to new huishoudens"""
-        """ Clear the cache since we need to have the most up te date version possible. """
-        hhb_dataloader().huishoudens_by_id.clear(huishouden_id)
-        previous = await hhb_dataloader().huishoudens_by_id.load(huishouden_id)
+        previous = hhb_dataloader().huishoudens_by_id.load(huishouden_id)
 
         if previous is None:
             raise GraphQLError("Huishouden not found")

@@ -1,25 +1,25 @@
-import re
 import logging
+import re
 from collections import Counter
-from datetime import date
 from typing import List
 
 import hhb_backend.graphql as graphql
-import hhb_backend.graphql.dataloaders as dataloaders
-import hhb_backend.graphql.models.bank_transaction as bank_transaction
 import hhb_backend.graphql.models.afspraak as afspraak
+import hhb_backend.graphql.models.bank_transaction as bank_transaction
+from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.utils.dates import afspraken_intersect, to_date, valid_afspraak
 
 
 async def automatisch_boeken(customer_statement_message_id: int = None):
     logging.info(f"automatisch_boeken: customer_statement_message_id={customer_statement_message_id}")
     if customer_statement_message_id is not None:
-        transactions = [t
-                        for t in (await dataloaders.hhb_dataloader().bank_transactions_by_csm.load(
-                customer_statement_message_id))
-                        if t["is_geboekt"] is False]
+        transactions = [
+            t
+            for t in hhb_dataloader().bank_transactions_by_csm.load(customer_statement_message_id)
+            if t["is_geboekt"] is False
+        ]
     else:
-        transactions = await dataloaders.hhb_dataloader().bank_transactions_by_is_geboekt.load(False)
+        transactions = hhb_dataloader().bank_transactions_by_is_geboekt.load(False)
 
     transaction_ids = [t["id"] for t in transactions]
 
@@ -68,16 +68,14 @@ async def transactie_suggesties(transactie_ids):
 
     # fetch transactions
     transactions: List[bank_transaction.BankTransaction] = (
-        await dataloaders.hhb_dataloader().bank_transactions_by_id.load_many(
-            transactie_ids
-        )
+        hhb_dataloader().bank_transaction_by_id.load_many(transactie_ids)
     )
     if transactions == [None] * len(transactions):
         return {key: [] for key in transactie_ids}
 
     # Rekeningen ophalen adhv iban
     rekening_ibans = [t["tegen_rekening"] for t in transactions if t["tegen_rekening"]]
-    rekeningen = await dataloaders.hhb_dataloader().rekeningen_by_iban.load_many(rekening_ibans)
+    rekeningen = hhb_dataloader().rekeningen_by_iban.load_many(rekening_ibans)
     if rekeningen == [None] * len(rekeningen):
         return {key: [] for key in transactie_ids}
 
@@ -85,9 +83,7 @@ async def transactie_suggesties(transactie_ids):
 
     # and afspraken for tegen_rekening.ibans of those transactions
     afspraken: List[afspraak.Afspraak] = (
-        await dataloaders.hhb_dataloader().afspraken_by_rekening.load_many(
-            rekening_ids
-        )
+        hhb_dataloader().afspraken_by_rekening.load_many(rekening_ids)
     )
     if afspraken == [None] * len(afspraken):
         return {key: [] for key in transactie_ids}
@@ -114,8 +110,7 @@ async def find_matching_afspraken_by_afspraak(main_afspraak):
     if not main_afspraak["zoektermen"]:
         return matching_afspraken
 
-    afspraken = await dataloaders.hhb_dataloader().afspraken_by_rekening.load(
-        main_afspraak["tegen_rekening_id"])
+    afspraken = hhb_dataloader().afspraken_by_rekening.load(main_afspraak["tegen_rekening_id"])
 
     zoektermen_main = ' '.join(main_afspraak["zoektermen"])
     main_afspraak_valid_from = to_date(main_afspraak["valid_from"])

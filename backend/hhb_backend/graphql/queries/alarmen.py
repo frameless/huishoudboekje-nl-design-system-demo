@@ -1,8 +1,10 @@
 """ GraphQL Alarmen query """
 import graphene
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (gebruikers_activiteit_entities, log_gebruikers_activiteit)
+
+from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.Alarm import Alarm
-from flask import request
+from hhb_backend.graphql.utils.gebruikersactiviteiten import (gebruikers_activiteit_entities, log_gebruikers_activiteit)
+
 
 class AlarmQuery:
     return_type = graphene.Field(Alarm, id=graphene.String(required=True))
@@ -17,9 +19,7 @@ class AlarmQuery:
     @classmethod
     @log_gebruikers_activiteit
     async def resolver(cls, _root, _info, id):
-
-        alarm = await request.dataloader.alarmen_by_id.load(id)
-        return alarm
+        return hhb_dataloader().alarm_by_id.load(id)
 
 
 class AlarmenQuery:
@@ -36,8 +36,5 @@ class AlarmenQuery:
     @log_gebruikers_activiteit
     async def resolver(cls, _root, _info, ids=None):
         if ids:
-            alarm = await request.dataloader.alarmen_by_id.load_many(ids)
-            return alarm
-
-        alarm = request.dataloader.alarmen_by_id.get_all_and_cache()
-        return alarm
+            return hhb_dataloader().alarm_by_id.load_many(ids)
+        return hhb_dataloader().alarmen.load_all()

@@ -1,7 +1,8 @@
 import graphene
 import requests
-from graphql import GraphQLError
 from deprecated import deprecated
+from graphql import GraphQLError
+
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.journaalpost import Journaalpost
@@ -45,7 +46,7 @@ class UpdateJournaalpostGrootboekrekening(graphene.Mutation):
     async def mutate(_root, _info, input, **_kwargs):
         """ Create the new Journaalpost """
 
-        previous: Journaalpost = await hhb_dataloader().journaalposten_by_id.load(
+        previous: Journaalpost = hhb_dataloader().journaalpost_by_id.load(
             input.get("id")
         )
 
@@ -56,7 +57,7 @@ class UpdateJournaalpostGrootboekrekening(graphene.Mutation):
         if previous.afspraak:
             raise GraphQLError("journaalpost already connected to an afspraak")
 
-        grootboekrekening = await hhb_dataloader().grootboekrekeningen_by_id.load(
+        grootboekrekening = hhb_dataloader().grootboekrekeningen_by_id.load(
             input.get("grootboekrekening_id")
         )
         if not grootboekrekening:

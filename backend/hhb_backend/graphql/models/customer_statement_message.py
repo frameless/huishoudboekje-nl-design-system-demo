@@ -31,6 +31,6 @@ class CustomerStatementMessage(graphene.ObjectType):
         """ Get bank_transactions when requested """
         if transactions := root.get("bank_transactions"):
             return (
-                await hhb_dataloader().bank_transactions_by_id.load_many(transactions)
+                hhb_dataloader().bank_transaction_by_id.load_many(transactions)
                 or []
             )

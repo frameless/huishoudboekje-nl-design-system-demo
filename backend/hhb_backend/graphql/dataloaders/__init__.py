@@ -1,74 +1,80 @@
 # TODO unify naming, filenames are singular, loader names are plural
+from asyncio import AbstractEventLoop
+
 from flask import request
 
-from .signaal_loader import SignaalByIdLoader
-
-from .alarm_loader import AlarmByIdLoader
-
-from .afspraken_loader import AfsprakenByBurgerLoader, AfsprakenByIdLoader, AfsprakenByRekeningLoader, AfsprakenByAfdelingLoader
+from .afdeling_loader import AfdelingenByIdLoader, AfdelingenByOrganisatieLoader
+from .afspraken_loader import AfsprakenByBurgerLoader, AfspraakByIdLoader, AfsprakenByRekeningLoader, \
+    AfsprakenByAfdelingLoader, AfspraakByPostadresLoader
+from .alarm_loader import AlarmByIdLoader, AlarmenLoader
 from .bank_transactions_loader import (BankTransactionByCsmLoader, BankTransactionByIdLoader,
                                        BankTransactionByIsGeboektLoader)
+from .burger_loader import BurgersByHuishoudenLoader, BurgerByIdLoader
 from .configuratie_loader import ConfiguratieByIdLoader
 from .csm_loader import CSMsByIdLoader
-from .exports_loader import ExportsByIdLoader
-from .burger_loader import BurgersByHuishoudenLoader, BurgersByIdLoader
+from .exports_loader import ExportByIdLoader
 from .gebruikersactiviteit_loader import (GebruikersActiviteitenByAfsprakenLoader,
-                                          GebruikersActiviteitenByBurgersLoader, GebruikersActiviteitenByIdLoader,
-                                          GebruikersActiviteitenByHuishoudenLoader)
+                                          GebruikersactiviteitenByBurgersLoader, GebruikersactiviteitenByIdLoader,
+                                          GebruikersActiviteitenByHuishoudenLoader,
+                                          GebruikersactiviteitenByBurgerLoader)
 from .grootboekrekening_loader import GrootboekrekeningenByIdLoader
+from .huishouden_loader import HuishoudensByIdLoader
 from .journaalpost_loader import (
-    JournaalpostenByIdLoader,
+    JournaalpostByIdLoader,
     JournaalpostenByTransactionLoader,
     JournaalpostenByAfspraakLoader,
 )
-from .organisatie_loader import OrganisatieByIdLoader # KvKDetailsLoader,
-from .overschrijving_loader import (OverschrijvingByAfspraakLoader, OverschrijvingByExportLoader,
-                                    OverschrijvingByIdLoader)
-from .rekeningen_loader import (RekeningenByBurgerLoader, RekeningenByIbanLoader, RekeningenByIdLoader,
+from .organisatie_loader import OrganisatieByIdLoader
+from .overschrijving_loader import (OverschrijvingByAfspraakLoader, OverschrijvingByIdLoader)
+from .postadressen_loader import PostadressenByIdLoader
+from .rekeningen_loader import (RekeningenByBurgerLoader, RekeningenByIbanLoader, RekeningByIdLoader,
                                 RekeningenByAfdelingLoader)
 from .rubrieken_loader import RubriekByGrootboekrekeningLoader, RubriekByIdLoader
-from .huishouden_loader import HuishoudensByIdLoader
-from .afdeling_loader import AfdelingenByIdLoader, AfdelingenByOrganisatieLoader
-from .postadressen_loader import PostadressenByIdLoader, PostadressenByAfdelingLoader, PostadressenByIdsLoader
+from .signaal_loader import SignaalByIdLoader
 
 
 class HHBDataLoader:
     """ Main Dataloader class for HHB """
 
-    def __init__(self, loop):
+    def __init__(self, loop: AbstractEventLoop):
         # Burgers
-        self.burgers_by_id = BurgersByIdLoader(loop=loop)
+        self.burger_by_id = BurgerByIdLoader(loop=loop)
         self.burgers_by_huishouden = BurgersByHuishoudenLoader(loop=loop)
 
         # Organisaties
         self.organisaties_by_id = OrganisatieByIdLoader(loop=loop)
+
         # Afspraken
-        self.afspraken_by_id = AfsprakenByIdLoader(loop=loop)
+        self.afspraak_by_id = AfspraakByIdLoader(loop=loop)
         self.afspraken_by_burger = AfsprakenByBurgerLoader(loop=loop)
         self.afspraken_by_rekening = AfsprakenByRekeningLoader(loop=loop)
         self.afspraken_by_afdeling = AfsprakenByAfdelingLoader(loop=loop)
+        self.afspraak_by_postadres = AfspraakByPostadresLoader(loop=loop)
+
+        # Rubrieken
         self.rubrieken_by_id = RubriekByIdLoader(loop=loop)
         self.rubrieken_by_grootboekrekening = RubriekByGrootboekrekeningLoader(
             loop=loop
         )
+
+        # Overschrijvingen
         self.overschrijvingen_by_id = OverschrijvingByIdLoader(loop=loop)
         self.overschrijvingen_by_afspraak = OverschrijvingByAfspraakLoader(loop=loop)
-        self.overschrijvingen_by_export = OverschrijvingByExportLoader(loop=loop)
 
         # Rekeningen
-        self.rekeningen_by_id = RekeningenByIdLoader(loop=loop)
+        self.rekening_by_id = RekeningByIdLoader(loop=loop)
         self.rekeningen_by_burger = RekeningenByBurgerLoader(loop=loop)
         self.rekeningen_by_afdeling = RekeningenByAfdelingLoader(loop=loop)
         self.rekeningen_by_iban = RekeningenByIbanLoader(loop=loop)
 
         # Transaction Service
         self.csms_by_id = CSMsByIdLoader(loop=loop)
-        self.bank_transactions_by_id = BankTransactionByIdLoader(loop=loop)
+        self.bank_transaction_by_id = BankTransactionByIdLoader(loop=loop)
         self.bank_transactions_by_csm = BankTransactionByCsmLoader(loop=loop)
         self.bank_transactions_by_is_geboekt = BankTransactionByIsGeboektLoader(loop=loop)
 
         self.grootboekrekeningen_by_id = GrootboekrekeningenByIdLoader(loop=loop)
-        self.journaalposten_by_id = JournaalpostenByIdLoader(loop=loop)
+        self.journaalpost_by_id = JournaalpostByIdLoader(loop=loop)
         self.journaalposten_by_transaction = JournaalpostenByTransactionLoader(
             loop=loop
         )
@@ -77,11 +83,12 @@ class HHBDataLoader:
         self.configuratie_by_id = ConfiguratieByIdLoader(loop=loop)
 
         # Exports
-        self.exports_by_id = ExportsByIdLoader(loop=loop)
+        self.export_by_id = ExportByIdLoader(loop=loop)
 
-        self.gebruikersactiviteiten_by_id = GebruikersActiviteitenByIdLoader(loop=loop)
+        self.gebruikersactiviteiten_by_id = GebruikersactiviteitenByIdLoader(loop=loop)
+        self.gebruikersactiviteiten_by_burger = (GebruikersactiviteitenByBurgerLoader(loop=loop))
         self.gebruikersactiviteiten_by_burgers = (
-            GebruikersActiviteitenByBurgersLoader(loop=loop)
+            GebruikersactiviteitenByBurgersLoader(loop=loop)
         )
         self.gebruikersactiviteiten_by_afspraken = (
             GebruikersActiviteitenByAfsprakenLoader(loop=loop)
@@ -94,16 +101,15 @@ class HHBDataLoader:
         self.huishoudens_by_id = HuishoudensByIdLoader(loop=loop)
 
         # Afdelingen
-        self.afdelingen_by_id = AfdelingenByIdLoader(loop=loop)
+        self.afdeling_by_id = AfdelingenByIdLoader(loop=loop)
         self.afdelingen_by_organisatie = AfdelingenByOrganisatieLoader(loop=loop)
 
         # Postadressen
-        self.postadressen_by_id = PostadressenByIdLoader(loop=loop)
-        self.postadressen_by_afdeling = PostadressenByAfdelingLoader(loop=loop)
-        self.postadressen_by_ids = PostadressenByIdsLoader(loop=loop)
+        self.postadres_by_id = PostadressenByIdLoader(loop=loop)
 
         # Alarmen
-        self.alarmen_by_id = AlarmByIdLoader(loop=loop)
+        self.alarmen = AlarmenLoader(loop=loop)
+        self.alarm_by_id = AlarmByIdLoader(loop=loop)
 
         # Signalen
         self.signalen_by_id = SignaalByIdLoader(loop=loop)

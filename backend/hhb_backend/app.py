@@ -1,13 +1,10 @@
 #!/usr/bin/env python
-from http.client import HTTPException
 import io
 import logging
 
 import hhb_backend.graphql.blueprint as graphql_blueprint
-import requests
-from flask import Flask, jsonify, make_response, render_template, send_file
 from hhb_backend.auth import Auth
-from hhb_backend.graphql import settings
+from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.processen import brieven_export
 from hhb_backend.reverse_proxy import ReverseProxied
 
@@ -57,17 +54,11 @@ def create_app(
     def export_overschrijvingen(export_id):
         """ Send xml overschijvingen file to client """
         # Get export object
-        export_response = requests.get(
-            f"{settings.HHB_SERVICES_URL}/export/{export_id}",
-            headers={"Content-type": "application/json"},
-        )
-        if export_response.status_code != 200:
-            return jsonify(message=export_response.json()), export_response.status_code
-        export_object = export_response.json()["data"]
+        export = hhb_dataloader().export_by_id.load(export_id)
 
         # Create xml
-        xml_data = export_object["xmldata"]
-        xml_filename = f"{export_object['naam']}.xml"
+        xml_data = export["xmldata"]
+        xml_filename = f"{export['naam']}.xml"
 
         export_file = io.BytesIO(xml_data.encode("utf-8"))
         response = make_response(

@@ -7,12 +7,15 @@ from dateutil.rrule import rrule, MONTHLY, YEARLY
 from flask import request
 from graphql import GraphQLError
 
+from hhb_backend.graphql.utils.dates import valid_afspraak, to_date
 from hhb_backend.graphql import settings
+from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.scalars.bedrag import Bedrag
 from hhb_backend.graphql.scalars.day_of_week import DayOfWeek
 from hhb_backend.graphql.utils.dates import valid_afspraak, to_date
-from hhb_backend.utils.upstream_error_handler import UpstreamError
 from hhb_backend.graphql.utils.gebruikersactiviteiten import log_gebruikers_activiteit, gebruikers_activiteit_entities
+from hhb_backend.graphql.utils.upstream_error_handler import UpstreamError
+
 
 class CreateAlarmInput(graphene.InputObjectType):
     isActive = graphene.Boolean()
@@ -84,8 +87,18 @@ class AlarmHelper:
             name += " - createAlarm"
             info.field_name = name
 
-        afspraakId = input["afspraakId"]
-        afspraak = await request.dataloader.afspraken_by_id.load(afspraakId)
+        # TODO eventually turn this back on, for testing purposes it is off
+        # alarm_date = parser.parse(input.startDate).date()
+        # utc_now = date.today()
+        # if alarm_date < utc_now:
+        #     raise GraphQLError(f"De alarmdatum moet in de toekomst liggen.")
+
+        if ((input["byMonth"] is not None and input["byMonthDay"] is None) or (input["byMonth"] is None and input["byMonthDay"] is not None)) or (
+            (len(input["byMonth"]) >= 1 and len(input["byMonthDay"]) <= 0) or (len(input["byMonth"]) <= 0 and len(input["byMonthDay"]) >= 1)):
+            raise GraphQLError(f"Vul zowel byMonth als byMonthDay in, of geen van beide.")
+
+        afspraak_id = input["afspraakId"]
+        afspraak = hhb_dataloader().afspraak_by_id.load(afspraak_id)
         if not afspraak:
             raise GraphQLError(f"Afspraak bestaat niet.")
 
@@ -103,20 +116,20 @@ class AlarmHelper:
         response_alarm = create_alarm_response.json()["data"]
 
         update_afspraak = ({"alarm_id": response_alarm.get("id")})
-        update_afspraak_response = requests.post(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraakId}", json=update_afspraak, headers={"Content-type": "application/json"})
+        update_afspraak_response = requests.post(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}", json=update_afspraak, headers={"Content-type": "application/json"})
         if update_afspraak_response.status_code != 200:
             raise UpstreamError(update_afspraak_response, "Updaten van afspraak met het nieuwe alarm is niet gelukt.")
 
         return AlarmHelper(alarm=response_alarm, previous=dict(), ok=True)
 
     @log_gebruikers_activiteit
-    async def delete(_root, _info, id):
-        name = _info.field_name
+    async def delete(self, info, id):
+        name = info.field_name
         if "evaluate" in name:
-                name += " - deleteAlarm"
-                _info.field_name = name
+            name += " - deleteAlarm"
+            info.field_name = name
 
-        previous = await request.dataloader.alarmen_by_id.load(id)
+        previous = hhb_dataloader().alarm_by_id.load(id)
         if not previous:
             raise GraphQLError(f"Alarm with id {id} not found")
 
@@ -128,11 +141,11 @@ class AlarmHelper:
 
 
     @log_gebruikers_activiteit
-    async def update(_root, _info, id: str, input: UpdateAlarmInput):
-        name = _info.field_name
+    async def update(self, info, id: str, input: UpdateAlarmInput):
+        name = info.field_name
         if "evaluate" in name:
-                name += " - updateAlarm"
-                _info.field_name = name
+            name += " - updateAlarm"
+            info.field_name = name
 
         # TODO eventually turn this back on, for testing purposes it is off
         # if input.get("startDate"):
@@ -143,12 +156,12 @@ class AlarmHelper:
             if date_in_past(input.endDate):
                 raise GraphQLError("Alarm eind datum is in het verleden.")
 
-        previous_response = await request.dataloader.alarmen_by_id.load(id) 
+        previous_response = hhb_dataloader().alarm_by_id.load(id)
         if not previous_response:
             raise GraphQLError("Alarm bestaat niet.")
 
         if input.afspraakId:
-            afspraak_response = await request.dataloader.afspraken_by_id.load(input.afspraakId)
+            afspraak_response = hhb_dataloader().afspraak_by_id.load(input.afspraakId)
             if not afspraak_response:
                 raise GraphQLError("Afspraak bestaat niet.")
 

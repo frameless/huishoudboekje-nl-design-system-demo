@@ -1,13 +1,12 @@
 """ GraphQL mutation for updating an existing Rekening """
-import json
 
 import graphene
 import requests
 from graphql import GraphQLError
-from hhb_backend.graphql import settings
 
 import hhb_backend.graphql.models.rekening as rekening
 import hhb_backend.graphql.mutations.rekeningen.rekening_input as rekening_input
+from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     gebruikers_activiteit_entities,
@@ -46,7 +45,7 @@ class UpdateRekening(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(_root, _info, id, rekening):
         """ Create the new Rekening """
-        previous = await hhb_dataloader().rekeningen_by_id.load(id)
+        previous = hhb_dataloader().rekening_by_id.load(id)
 
         if previous is None:
             raise GraphQLError(f"Rekening does not exist")

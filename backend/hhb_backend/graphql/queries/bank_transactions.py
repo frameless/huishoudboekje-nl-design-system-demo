@@ -1,9 +1,9 @@
 """ GraphQL Gebruikers query """
 import graphene
-from flask import request
 from graphql import GraphQLError
 
 import hhb_backend.graphql.models.bank_transaction as bank_transaction
+from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.filters.bank_transactions import BankTransactionFilter
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     gebruikers_activiteit_entities,
@@ -26,7 +26,7 @@ class BankTransactionQuery:
     @classmethod
     @log_gebruikers_activiteit
     async def resolver(cls, _root, _info, id):
-        return await request.dataloader.bank_transactions_by_id.load(id)
+        return hhb_dataloader().bank_transaction_by_id.load(id)
 
 
 class BankTransactionsQuery:
@@ -48,10 +48,9 @@ class BankTransactionsQuery:
     @classmethod
     @log_gebruikers_activiteit
     async def resolver(cls, _root, _info, **kwargs):
-        bank_transactions = request.dataloader.bank_transactions_by_id.get_all_and_cache(
-            filters=kwargs.get("filters", None)
+        return hhb_dataloader().bank_transaction_by_id.load_many(
+            None, filters=kwargs.get("filters", None)
         )
-        return bank_transactions
 
 
 class BankTransactionsPagedQuery:
@@ -76,11 +75,11 @@ class BankTransactionsPagedQuery:
     @log_gebruikers_activiteit
     async def resolver(cls, _root, _info, **kwargs):
         if "start" in kwargs and "limit" in kwargs:
-            return request.dataloader.bank_transactions_by_id.get_all_paged(
+            return hhb_dataloader().bank_transaction_by_id.get_all_paged(
                 start=kwargs["start"],
                 limit=kwargs["limit"],
                 desc=True,
-                sortingColumn="transactie_datum",
+                sorting_column="transactie_datum",
                 filters=kwargs.get("filters")
             )
         else:

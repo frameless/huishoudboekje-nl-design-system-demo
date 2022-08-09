@@ -1,24 +1,25 @@
+import hashlib
 import json
 from datetime import datetime
-from dateutil import tz
 from urllib.parse import urlencode
 
 import graphene
 import requests
+from dateutil import tz
 from graphql import GraphQLError
 
 from hhb_backend.graphql import settings
+from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.export import Export
+from hhb_backend.graphql.utils.gebruikersactiviteiten import (
+    gebruikers_activiteit_entities,
+    log_gebruikers_activiteit
+)
 from hhb_backend.processen.create_sepa_export import create_export_string
 from hhb_backend.processen.overschrijvingen_planner import (
     PlannedOverschijvingenInput,
     get_planned_overschrijvingen,
 )
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    gebruikers_activiteit_entities, 
-    log_gebruikers_activiteit
-    )
-import hashlib
 
 
 def create_json_payload_overschrijving(future_overschrijving, export_id) -> dict:
@@ -31,16 +32,7 @@ def create_json_payload_overschrijving(future_overschrijving, export_id) -> dict
 
 
 def get_config_value(config_id) -> str:
-    config_response = requests.get(
-        f"{settings.HHB_SERVICES_URL}/configuratie/{config_id}",
-        headers={"Content-type": "application/json"},
-    )
-    if config_response.status_code != 200:
-        if config_response.status_code == 404:
-            raise GraphQLError(f"'{config_id}' is niet gevonden.")
-        else:
-            raise GraphQLError(f"Upstream API responded: {config_response.json()}")
-    return config_response.json()["data"]["waarde"]
+    return hhb_dataloader().configuratie_by_id.load(config_id)["waarde"]
 
 
 class CreateExportOverschrijvingen(graphene.Mutation):

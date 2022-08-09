@@ -1,9 +1,11 @@
 """ GraphQL mutation for creating a new Journaalpost """
 
+from typing import List
+
 import graphene
 import requests
-from typing import List
 from graphql import GraphQLError
+
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.afspraak import Afspraak
@@ -15,7 +17,7 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     gebruikers_activiteit_entities,
     log_gebruikers_activiteit,
 )
-from deprecated import deprecated
+
 
 class CreateJournaalpostAfspraakInput(graphene.InputObjectType):
     transaction_id = graphene.Int(required=True)
@@ -58,7 +60,7 @@ class CreateJournaalpostAfspraak(graphene.Mutation):
         transaction_ids = [j["transaction_id"] for j in input]
 
         transactions: List[BankTransaction] = (
-            await hhb_dataloader().bank_transactions_by_id.load_many(
+            hhb_dataloader().bank_transaction_by_id.load_many(
                 transaction_ids
             )
         )
@@ -66,14 +68,14 @@ class CreateJournaalpostAfspraak(graphene.Mutation):
             if transaction is None:
                 raise GraphQLError("(some) transactions not found ")
 
-        previous = await hhb_dataloader().journaalposten_by_transaction.load_many(
+        previous = hhb_dataloader().journaalposten_by_transaction.load_many(
             transaction_ids
         )
         for transaction in previous:
             if transaction is not None:
                 raise GraphQLError(f"(some) journaalposten already exist")
 
-        afspraken: List[Afspraak] = await hhb_dataloader().afspraken_by_id.load_many(
+        afspraken: List[Afspraak] = hhb_dataloader().afspraak_by_id.load_many(
             [j["afspraak_id"] for j in input]
         )
 
@@ -81,7 +83,7 @@ class CreateJournaalpostAfspraak(graphene.Mutation):
             if afspraak is None:
                 raise GraphQLError("(some) afspraken not found ")
 
-        rubrieken = await hhb_dataloader().rubrieken_by_id.load_many(
+        rubrieken = hhb_dataloader().rubrieken_by_id.load_many(
             [a["rubriek_id"] for a in afspraken]
         )
         json = [
@@ -137,20 +139,20 @@ class CreateJournaalpostGrootboekrekening(graphene.Mutation):
         # Validate that the references exist
         transaction_id = input.get("transaction_id")
         transaction: BankTransaction = (
-            await hhb_dataloader().bank_transactions_by_id.load(transaction_id)
+            hhb_dataloader().bank_transaction_by_id.load(transaction_id)
         )
         if not transaction:
             raise GraphQLError("transaction not found")
 
         grootboekrekening: Grootboekrekening = (
-            await hhb_dataloader().grootboekrekeningen_by_id.load(
+            hhb_dataloader().grootboekrekeningen_by_id.load(
                 input.get("grootboekrekening_id")
             )
         )
         if not grootboekrekening:
             raise GraphQLError("grootboekrekening not found")
 
-        previous = await hhb_dataloader().journaalposten_by_transaction.load(transaction_id)
+        previous = hhb_dataloader().journaalposten_by_transaction.load(transaction_id)
         if previous:
             raise GraphQLError(f"Journaalpost already exists for Transaction")
 

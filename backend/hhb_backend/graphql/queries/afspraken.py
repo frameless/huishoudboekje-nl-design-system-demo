@@ -1,8 +1,8 @@
 """ GraphQL Afspraken query """
 import graphene
-from flask import request
 
 import hhb_backend.graphql.models.afspraak as afspraak
+from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     gebruikers_activiteit_entities,
     log_gebruikers_activiteit,
@@ -25,7 +25,7 @@ class AfspraakQuery:
     @classmethod
     @log_gebruikers_activiteit
     async def resolver(cls, _root, _info, id):
-        return await request.dataloader.afspraken_by_id.load(id)
+        return hhb_dataloader().afspraak_by_id.load(id)
 
 
 class AfsprakenQuery:
@@ -44,5 +44,5 @@ class AfsprakenQuery:
     @log_gebruikers_activiteit
     async def resolver(cls, _root, _info, ids=None):
         if ids:
-            return await request.dataloader.afspraken_by_id.load_many(ids)
-        return request.dataloader.afspraken_by_id.get_all_and_cache()
+            return hhb_dataloader().afspraak_by_id.load_many(ids)
+        return hhb_dataloader().afspraak_by_id.load_all()

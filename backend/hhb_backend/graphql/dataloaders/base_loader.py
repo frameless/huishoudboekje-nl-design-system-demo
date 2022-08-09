@@ -1,9 +1,10 @@
 import json
-from typing import Dict, Union
+from typing import Dict, Union, TypedDict
 
 import requests
-from aiodataloader import DataLoader
 from graphql import GraphQLError
+from typing_extensions import Unpack, NotRequired
+
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.utils.upstream_error_handler import UpstreamError
 
@@ -14,121 +15,122 @@ from hhb_backend.graphql.utils.upstream_error_handler import UpstreamError
 Filters = Dict[str, Union['Filters', str, int, bool]]
 
 
-class SingleDataLoader(DataLoader):
+class DataLoaderOptions(TypedDict):
+    model: NotRequired[str]
+    filter_item: NotRequired[str]
+    filters: NotRequired[Filters]
+    params: NotRequired[dict[str, any]]
+    batch_size: NotRequired[int]
+
+
+class DataLoader:
     """ Dataloader for when the result is a single object """
     model = None
     service = settings.HHB_SERVICES_URL
     filter_item = "filter_ids"
-    index = "id"
     batch_size = 1000
+    params = {}
 
-    def url_for(self, keys=None):
-        return f"""{self.service}/{self.model}/{f"?{self.filter_item}={','.join([str(k) for k in keys])}" if keys else ''}"""
+    def __init__(self, loop):
+        self.loop = loop
 
-    def get_all_and_cache(self, filters: Filters = None):
-        params = {
-            'filters': json.dumps(filters) if filters else None
-        }
+    def load(self, key: str | int | bool, **kwargs: Unpack[DataLoaderOptions]) -> dict:
+        _add_default_options(self, **kwargs)
+        return _base_data_load_with_options(self.service, key=key, **kwargs)
 
-        response = sendGetRequest(url=f"{self.service}/{self.model}/",
-                                    params=params,
-                                    service=self.service)
-        result = response.json()["data"]
+    def load_many(self, keys: list, **kwargs: Unpack[DataLoaderOptions]) -> list[dict]:
+        _add_default_options(self, **kwargs)
+        return _base_data_load_with_options(self.service, keys=keys, **kwargs)
 
-        # Prime the cache with the complete result set to prevent unnecessary extra calls
-        for item in result:
-            self.prime(item[self.index], item)
+    def load_all(self, **kwargs: Unpack[DataLoaderOptions]) -> list[dict]:
+        return _base_data_load_with_options(self.service, **kwargs)
 
-        return result
+    def get_by_item_paged(self, key: str | None = None, keys: list[str] | None = None,
+                          start: int = 1, limit: int = 20, desc: bool = False,
+                          sorting_column: str = "id", **kwargs: Unpack[DataLoaderOptions]):
+        _add_default_options(self, **kwargs)
+        return _get_paged(
+            self.service, key=key, keys=keys, start=start, limit=limit, desc=desc,
+            sorting_column=sorting_column, **kwargs
+        )
 
     def get_all_paged(self, start: int = 1, limit: int = 20, desc: bool = False,
-                      sortingColumn: str = "id", filters: Filters = None):
-        params = {
-            'start': start,
-            'limit': limit,
-            'desc': desc,
-            'sortingColumn': sortingColumn,
-            'filters': json.dumps(filters) if filters else None
+                      sorting_column: str = "id", filters: Filters = None):
+        return _get_paged(
+            self.service, start=start, limit=limit, desc=desc, sorting_column=sorting_column, filters=filters
+        )
+
+
+def _get_options(**kwargs: Unpack[DataLoaderOptions]) -> (str, str, Filters, dict[str, any], bool):
+    params = kwargs.get("params")
+    if params:
+        params = dict(params)  # we edit the dict in the request, so don't make permanent changes
+
+    return kwargs.get("model"), kwargs.get("filter_item"), kwargs.get("filters", {}), params, kwargs.get("batch_size")
+
+
+def _add_default_options(loader, **kwargs: Unpack[DataLoaderOptions]):
+    kwargs.setdefault("model", loader.model)
+    kwargs.setdefault("filter_item", loader.filter_item)
+    kwargs.setdefault("params", loader.params)
+    kwargs.setdefault("batch_size", loader.batch_size)
+
+
+def _get_paged(service: str, key: str | None = None, keys: list[str] | None = None,
+               start: int = 1, limit: int = 20, desc: bool = False,
+               sorting_column: str = "id", **kwargs: Unpack[DataLoaderOptions]):
+    params = {
+        'start': start,
+        'limit': limit,
+        'desc': desc,
+        'sortingColumn': sorting_column
+    }
+
+    # adds the filter_item and filters for us
+    response = _base_load_with_options(
+        service, params=params, key=key, keys=keys, **kwargs
+    )
+
+    return {
+        kwargs["model"]: response["data"],
+        "page_info": {
+            "count": response["count"],
+            "start": response["start"],
+            "limit": response["limit"]
         }
-
-        response = sendGetRequest(url=f"{self.service}/{self.model}/", 
-                                    params=params, 
-                                    service=self.service)
-        result = response.json()["data"]
-
-        # Prime the cache with the complete result set to prevent unnecessary extra calls
-        for item in result:
-            self.prime(item[self.index], item)
-
-        page_info = {"count": response.json()["count"], "start": response.json()["start"],
-                     "limit": response.json()["limit"]}
-
-        return_obj = {self.model: result, "page_info": page_info}
-
-        return return_obj
-
-    async def batch_load_fn(self, keys):
-        objects = {}
-        for i in range(0, len(keys), self.batch_size):
-            url = self.url_for(keys[i:i + self.batch_size])
-            response = sendGetRequest(url=url, service=self.service)
-            for item in response.json()["data"]:
-                objects[item[self.index]] = item
-        return [objects.get(key, None) for key in keys]
+    }
 
 
-class ListDataLoader(DataLoader):
-    """ Dataloader for when the result is a list of objects """
-    model = None
-    service = settings.HHB_SERVICES_URL
-    filter_item = None
-    index = None
-    is_list = False  # elements in the result list are lists as well (1-n vs n-n)
+def _base_data_load_with_options(service: str, key=None, keys: list | None = None, **kwargs: Unpack[DataLoaderOptions]):
+    model, filter_item, filters, params, batch_size = _get_options(**kwargs)
 
-    async def batch_load_fn(self, keys):
-        url = f"{self.service}/{self.model}/?{self.filter_item}={','.join([str(k) for k in keys])}"
-        response = sendGetRequest(url=url, service=self.service)
+    if keys is not None and len(keys) > batch_size:
+        result = []
+        for i in range(0, len(keys), batch_size):
+            part = _base_load_with_options(service, keys=keys[i::i + batch_size]).json()
+            result.extend(part["data"])
+        return result
 
-        objects = {}
-        for item in response.json()["data"]:
-            if self.is_list:
-                for index in item[self.index]:
-                    if index not in objects:
-                        objects[index] = list()
-                    objects[index].append(item)
-            else:
-                if item[self.index] not in objects:
-                    objects[item[self.index]] = list()
-                objects[item[self.index]].append(item)
-        return [objects.get(key, []) for key in keys]
+    return _base_load_with_options(service, key=key, keys=keys, **kwargs).json()["data"]
 
-    def get_all_paged(self, keys, start: int = 1, limit: int = 20, desc: bool = False,
-                      sortingColumn: str = "id", filters: Filters = None):
-        params = {
-            f'{self.filter_item}': ','.join([str(k) for k in keys]),
-            'start': start,
-            'limit': limit,
-            'desc': desc,
-            'sortingColumn': sortingColumn,
-            'filters': json.dumps(filters) if filters else None
-        }
-        response = sendGetRequest(url=f"{self.service}/{self.model}/", 
-                                    params=params, 
-                                    service=self.service)
-        result = response.json()["data"]
 
-        # Prime the cache with the complete result set to prevent unnecessary extra calls
-        for item in result:
-            self.prime(item[self.index], item)
+def _base_load_with_options(service: str, key=None, keys: list | None = None, **kwargs: Unpack[DataLoaderOptions]):
+    model, filter_item, filters, params, batch_size = _get_options(**kwargs)
 
-        page_info = {"count": response.json()["count"], "start": response.json()["start"],
-                     "limit": response.json()["limit"]}
+    url = f"{service}/{model}"
 
-        return_obj = {self.model: result, "page_info": page_info}
+    if filter_item:
+        params[filter_item] = key if key is not None else ','.join([str(k) for k in keys])
+    elif key is not None:
+        url += str(key)
 
-        return return_obj
+    if filters:
+        params["filters"] = json.dumps(filters)
 
-def sendGetRequest(url, service, params=None, headers=None):
+    return _send_get_request(url, service, params=params).json()
+
+
+def _send_get_request(url, service, params=None, headers=None):
     try:
         response = requests.get(url, params=params, headers=headers)
     except requests.exceptions.ConnectionError:

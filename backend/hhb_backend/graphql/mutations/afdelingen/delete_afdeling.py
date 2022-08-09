@@ -11,6 +11,7 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     log_gebruikers_activiteit,
 )
 
+
 class DeleteAfdeling(graphene.Mutation):
     """Mutatie om een afdeling van een organisatie te verwijderen."""
 
@@ -33,7 +34,7 @@ class DeleteAfdeling(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(root, _info, id):
         """ Delete current afdeling """
-        previous = await hhb_dataloader().afdelingen_by_id.load(id)
+        previous = hhb_dataloader().afdeling_by_id.load(id)
         if not previous:
             raise GraphQLError("Afdeling not found")
 

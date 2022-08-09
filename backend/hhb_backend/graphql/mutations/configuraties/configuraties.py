@@ -66,7 +66,7 @@ class UpdateConfiguratie(graphene.Mutation):
     @staticmethod
     @log_gebruikers_activiteit
     async def mutate(_root, _info, input, **_kwargs):
-        previous = await hhb_dataloader().configuratie_by_id.load(input.id)
+        previous = hhb_dataloader().configuratie_by_id.load(input.id)
 
         response = requests.post(
             f"{settings.HHB_SERVICES_URL}/configuratie/{input.id}",
@@ -99,7 +99,7 @@ class DeleteConfiguratie(graphene.Mutation):
     @staticmethod
     @log_gebruikers_activiteit
     async def mutate(_root, _info, id):
-        previous = await hhb_dataloader().configuratie_by_id.load(id)
+        previous = hhb_dataloader().configuratie_by_id.load(id)
 
         response = requests.delete(f"{settings.HHB_SERVICES_URL}/configuratie/{id}")
         if not response.ok:

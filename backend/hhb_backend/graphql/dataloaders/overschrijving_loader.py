@@ -1,20 +1,12 @@
-from hhb_backend.graphql.dataloaders.base_loader import SingleDataLoader, ListDataLoader
+from hhb_backend.graphql.dataloaders.base_loader import DataLoader
 
 
-class OverschrijvingByIdLoader(SingleDataLoader):
+class OverschrijvingByIdLoader(DataLoader):
     """ Load overschrijvingen using ids """
     model = "overschrijvingen"
 
 
-class OverschrijvingByAfspraakLoader(ListDataLoader):
+class OverschrijvingByAfspraakLoader(DataLoader):
     """ Load overschrijvingen using afspraak id """
     model = "overschrijvingen"
     filter_item = "filter_afspraken"
-    index = "afspraak_id"
-
-
-class OverschrijvingByExportLoader(ListDataLoader):
-    """ Load overschrijvingen using export id """
-    model = "overschrijvingen"
-    filter_item = "filter_exports"
-    index = "export_id"

@@ -13,15 +13,23 @@ app.get("/health", healthRouter);
 // Get all alarms
 app.get("/", async (req, res, next) => {
 	try {
+		let filters: Record<string, any> = {}
+
+		const qIsActive = req.query.is_active as string
+
+
+		if (qIsActive) {
+			filters.isActive = "true" === qIsActive.toLowerCase()
+		}
+
 		const qFilterIds: string = req.query.filter_ids as string;
 
-		let ids: string[] = [];
 		if (qFilterIds) {
-			ids = qFilterIds.trim().split(",").filter(s => s);
+			filters.ids = qFilterIds.trim().split(",").filter(s => s);
 		}
 
 		// Split by , and filter out empty strings.
-		const alarms = await getManyAlarms(ids);
+		const alarms = await getManyAlarms(filters);
 
 		return res.json({
 			ok: true,
