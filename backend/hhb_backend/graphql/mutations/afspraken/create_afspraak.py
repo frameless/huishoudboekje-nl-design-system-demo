@@ -92,7 +92,7 @@ class CreateAfspraak(graphene.Mutation):
         postadres_id = input.get("postadres_id")
         if postadres_id is not None:
             url = f"""{settings.POSTADRESSEN_SERVICE_URL}/addresses/{postadres_id}"""
-            response = requests.get(url, headers={"Accept": "application/json", "Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845"})
+            response = requests.get(url, headers={"Accept": "application/json"})
             if response.status_code != 200:
                 raise GraphQLError("postadres not found")
 

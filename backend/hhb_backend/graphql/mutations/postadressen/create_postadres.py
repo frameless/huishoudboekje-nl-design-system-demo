@@ -63,8 +63,8 @@ class CreatePostadres(graphene.Mutation):
 
         contactCatalogus_response = requests.post(
             f"{settings.POSTADRESSEN_SERVICE_URL}/addresses",
-            json=contactCatalogus_input,
-            headers={"Accept": "application/json", "Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845"},
+            json=contactCatalogus_input, 
+            headers={"Accept": "application/json"}
         )
         if contactCatalogus_response.status_code != 201:
             raise GraphQLError(f"Upstream API responded: {contactCatalogus_response.json()}")
