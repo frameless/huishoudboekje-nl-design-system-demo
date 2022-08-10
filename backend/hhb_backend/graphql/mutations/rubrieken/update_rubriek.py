@@ -41,7 +41,7 @@ class UpdateRubriek(graphene.Mutation):
         """ Update a Rubriek """
         rubriek_id = kwargs.pop("id")
 
-        previous = hhb_dataloader().rubrieken_by_id.load(rubriek_id)
+        previous = hhb_dataloader().rubriek_by_id.load(rubriek_id)
         if (
             kwargs["grootboekrekening_id"]
             and len(

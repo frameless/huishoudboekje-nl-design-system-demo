@@ -3,6 +3,7 @@ import io
 import logging
 from _csv import QUOTE_MINIMAL
 from datetime import datetime
+from typing import List
 
 import pandas as pd
 import requests
@@ -153,14 +154,14 @@ def get_postadressen_by_afdelingen(afdelingen):
     return hhb_dataloader().postadres_by_id.load_many(list(set(ids)))
 
 
-def get_postadres_by_afspraken(afspraken: list[dict]):
+def get_postadres_by_afspraken(afspraken: List[dict]):
     return hhb_dataloader().postadres_by_id.load_many(list(set(
         [afspraak["postadres_id"] for afspraak in afspraken if afspraak.get("postadres_id")]
     )))
 
 
 def get_organisaties(afdelingen):
-    return hhb_dataloader().organisaties_by_id.load_many(list(set([
+    return hhb_dataloader().organisatie_by_id.load_many(list(set([
         afdeling_result["organisatie_id"]
         for afdeling_result in afdelingen
         if afdeling_result["organisatie_id"]

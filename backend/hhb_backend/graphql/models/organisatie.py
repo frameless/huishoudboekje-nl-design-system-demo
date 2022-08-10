@@ -18,7 +18,7 @@ class Organisatie(graphene.ObjectType):
         return hhb_dataloader().afdelingen_by_organisatie.load(root.get('id')) or []
 
     def check_kvk_vestigingsnummer(self, kvknummer, vestigingsnummer, id=None):
-        organisaties = hhb_dataloader().organisaties_by_id.load_all()
+        organisaties = hhb_dataloader().organisatie_by_id.load_all()
         if kvknummer and not vestigingsnummer:
             for organisatie in organisaties:
                 if id == organisatie.get('id'):

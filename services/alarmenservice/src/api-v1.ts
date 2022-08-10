@@ -25,7 +25,7 @@ app.get("/", async (req, res, next) => {
 		const qFilterIds: string = req.query.filter_ids as string;
 
 		if (qFilterIds) {
-			filters.ids = qFilterIds.trim().split(",").filter(s => s);
+			filters.id = qFilterIds.trim().split(",").filter(s => s);
 		}
 
 		// Split by , and filter out empty strings.

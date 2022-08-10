@@ -100,7 +100,7 @@ class Afspraak(graphene.ObjectType):
     async def resolve_rubriek(root, info):
         """ Get rubriek when requested """
         if root.get("rubriek_id"):
-            return hhb_dataloader().rubrieken_by_id.load(root.get("rubriek_id"))
+            return hhb_dataloader().rubriek_by_id.load(root.get("rubriek_id"))
 
     async def resolve_burger(root, info):
         """ Get burger when requested """

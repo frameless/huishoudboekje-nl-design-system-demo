@@ -5,7 +5,7 @@ from flask import request
 
 from .afdeling_loader import AfdelingenByIdLoader, AfdelingenByOrganisatieLoader
 from .afspraken_loader import AfsprakenByBurgerLoader, AfspraakByIdLoader, AfsprakenByRekeningLoader, \
-    AfsprakenByAfdelingLoader, AfspraakByPostadresLoader
+    AfsprakenByAfdelingLoader, AfsprakenByPostadresLoader
 from .alarm_loader import AlarmByIdLoader, AlarmenLoader
 from .bank_transactions_loader import (BankTransactionByCsmLoader, BankTransactionByIdLoader,
                                        BankTransactionByIsGeboektLoader)
@@ -18,7 +18,7 @@ from .gebruikersactiviteit_loader import (GebruikersActiviteitenByAfsprakenLoade
                                           GebruikersActiviteitenByHuishoudenLoader,
                                           GebruikersactiviteitenByBurgerLoader)
 from .grootboekrekening_loader import GrootboekrekeningenByIdLoader
-from .huishouden_loader import HuishoudensByIdLoader
+from .huishouden_loader import HuishoudenByIdLoader
 from .journaalpost_loader import (
     JournaalpostByIdLoader,
     JournaalpostenByTransactionLoader,
@@ -42,17 +42,17 @@ class HHBDataLoader:
         self.burgers_by_huishouden = BurgersByHuishoudenLoader(loop=loop)
 
         # Organisaties
-        self.organisaties_by_id = OrganisatieByIdLoader(loop=loop)
+        self.organisatie_by_id = OrganisatieByIdLoader(loop=loop)
 
         # Afspraken
         self.afspraak_by_id = AfspraakByIdLoader(loop=loop)
         self.afspraken_by_burger = AfsprakenByBurgerLoader(loop=loop)
         self.afspraken_by_rekening = AfsprakenByRekeningLoader(loop=loop)
         self.afspraken_by_afdeling = AfsprakenByAfdelingLoader(loop=loop)
-        self.afspraak_by_postadres = AfspraakByPostadresLoader(loop=loop)
+        self.afspraken_by_postadres = AfsprakenByPostadresLoader(loop=loop)
 
         # Rubrieken
-        self.rubrieken_by_id = RubriekByIdLoader(loop=loop)
+        self.rubriek_by_id = RubriekByIdLoader(loop=loop)
         self.rubrieken_by_grootboekrekening = RubriekByGrootboekrekeningLoader(
             loop=loop
         )
@@ -98,7 +98,7 @@ class HHBDataLoader:
         )
 
         # Huishoudens
-        self.huishoudens_by_id = HuishoudensByIdLoader(loop=loop)
+        self.huishouden_by_id = HuishoudenByIdLoader(loop=loop)
 
         # Afdelingen
         self.afdeling_by_id = AfdelingenByIdLoader(loop=loop)

@@ -83,7 +83,7 @@ class CreateJournaalpostAfspraak(graphene.Mutation):
             if afspraak is None:
                 raise GraphQLError("(some) afspraken not found ")
 
-        rubrieken = hhb_dataloader().rubrieken_by_id.load_many(
+        rubrieken = hhb_dataloader().rubriek_by_id.load_many(
             [a["rubriek_id"] for a in afspraken]
         )
         json = [

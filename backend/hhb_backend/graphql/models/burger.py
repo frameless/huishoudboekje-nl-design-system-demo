@@ -45,7 +45,7 @@ class Burger(graphene.ObjectType):
         return hhb_dataloader().gebruikersactiviteiten_by_burger.load(root.get('id')) or []
 
     async def resolve_huishouden(root, info):
-        return hhb_dataloader().huishoudens_by_id.load(root.get('huishouden_id'))
+        return hhb_dataloader().huishouden_by_id.load(root.get('huishouden_id'))
 
     def bsn_length(self, bsn):
         if len(str(bsn)) != 9 and len(str(bsn)) != 8 :

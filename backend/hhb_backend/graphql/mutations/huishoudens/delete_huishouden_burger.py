@@ -44,7 +44,7 @@ class DeleteHuishoudenBurger(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(_root, _info, huishouden_id: int, burger_ids: List[int]):
         """Move given burgers to new huishoudens"""
-        previous = hhb_dataloader().huishoudens_by_id.load(huishouden_id)
+        previous = hhb_dataloader().huishouden_by_id.load(huishouden_id)
 
         if previous is None:
             raise GraphQLError("Huishouden not found")

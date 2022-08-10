@@ -1,7 +1,7 @@
 import logging
 from datetime import *
 from tokenize import String
-from typing import Optional
+from typing import List, Optional
 
 import dateutil.parser
 import graphene
@@ -92,7 +92,8 @@ async def evaluate_one_alarm(root, info, id: String) -> list:
 
     return [evaluated_alarm]
 
-async def evaluate_alarm(root, info, alarm: dict, active_alarms: list[dict]):
+
+async def evaluate_alarm(root, info, alarm: dict, active_alarms: List[dict]):
     # get data from afspraak and transactions (by journaalpost reference)
     afspraak = get_afspraak_by_id(alarm.get('afspraakId'))
     journaal_ids = afspraak.get("journaalposten", [])
@@ -186,20 +187,23 @@ def shouldCheckAlarm(alarm: Alarm) -> bool:
     # if now or in the past, it should be checked
     return day_after_expected_window <= utc_now_date
 
-def get_active_alarms() -> list[dict]:
+
+def get_active_alarms() -> List[dict]:
     return hhb_dataloader().alarmen.load_active()
 
-def get_alarm(id: String) -> dict | None:
+
+def get_alarm(id: String) -> Optional[dict]:
     alarm = hhb_dataloader().alarm_by_id.load(id)
     if alarm is not None and alarm.get("isActive"):
         return alarm
-
     return None
+
 
 def get_afspraak_by_id(afspraakId: int) -> dict:
     return hhb_dataloader().afspraak_by_id.load(afspraakId)
 
-async def get_banktransactions_by_journaal_ids(journaal_ids) -> list[dict]:
+
+async def get_banktransactions_by_journaal_ids(journaal_ids) -> List[dict]:
     journaalposts = []
     transactions = []
     for journaalpost_id in journaal_ids:
@@ -214,7 +218,7 @@ async def get_banktransactions_by_journaal_ids(journaal_ids) -> list[dict]:
     return transactions
 
 
-async def shouldCreateSignaal(_root, _info, alarm: Alarm, transacties) -> Signaal:
+def should_create_signaal(root, info, alarm: dict, transacties) -> Optional[Signaal]:
     # expected dates
     datum_margin = int(alarm.get("datumMargin"))
     str_expect_date = alarm.get("startDate")

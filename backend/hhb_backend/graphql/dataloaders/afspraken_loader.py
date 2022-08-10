@@ -6,7 +6,7 @@ class AfspraakByIdLoader(DataLoader):
     model = "afspraken"
 
 
-class AfspraakByPostadresLoader(DataLoader):
+class AfsprakenByPostadresLoader(DataLoader):
     """ Load afspraken using postadres """
     model = "afspraken"
     filter_item = "filter_postadressen"

@@ -35,7 +35,7 @@ class DeleteHuishouden(graphene.Mutation):
     async def mutate(_root, _info, id):
         """ Delete current huishouden """
 
-        previous = hhb_dataloader().huishoudens_by_id.load(id)
+        previous = hhb_dataloader().huishouden_by_id.load(id)
         if not previous:
             raise GraphQLError("Huishouden bestaat niet.")
 

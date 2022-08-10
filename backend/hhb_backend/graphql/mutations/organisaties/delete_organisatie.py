@@ -33,7 +33,7 @@ class DeleteOrganisatie(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(self, _info, id):
         """ Delete current organisatie """
-        previous = hhb_dataloader().organisaties_by_id.load(id)
+        previous = hhb_dataloader().organisatie_by_id.load(id)
         if not previous:
             raise GraphQLError("Organisatie not found")
 

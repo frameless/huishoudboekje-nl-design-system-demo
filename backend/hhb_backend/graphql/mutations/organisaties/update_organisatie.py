@@ -38,7 +38,7 @@ class UpdateOrganisatie(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(_root, _info, id, **kwargs):
         """ Update the current Organisatie """
-        previous = hhb_dataloader().organisaties_by_id.load(id)
+        previous = hhb_dataloader().organisatie_by_id.load(id)
         if not previous:
             raise GraphQLError("Organisatie not found")
 

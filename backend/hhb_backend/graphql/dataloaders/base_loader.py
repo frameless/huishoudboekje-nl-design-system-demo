@@ -1,5 +1,7 @@
+import copy
 import json
-from typing import Dict, Union, TypedDict
+import logging
+from typing import Dict, Union, TypedDict, List
 
 import requests
 from graphql import GraphQLError
@@ -8,18 +10,20 @@ from typing_extensions import Unpack, NotRequired
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.utils.upstream_error_handler import UpstreamError
 
+Key = Union[str, int, bool]
+
 # Possible formats:
 #   {"<column_name>": <str|int|bool>}
 #   {"<column_name>": {"<Operator>": <str|int|bool>}}
 #   {"<AND|OR>": {...}
-Filters = Dict[str, Union['Filters', str, int, bool]]
+Filters = Dict[str, Union['Filters', Key]]
 
 
 class DataLoaderOptions(TypedDict):
     model: NotRequired[str]
     filter_item: NotRequired[str]
     filters: NotRequired[Filters]
-    params: NotRequired[dict[str, any]]
+    params: NotRequired[Dict[str, any]]
     batch_size: NotRequired[int]
 
 
@@ -27,59 +31,74 @@ class DataLoader:
     """ Dataloader for when the result is a single object """
     model = None
     service = settings.HHB_SERVICES_URL
-    filter_item = "filter_ids"
+    filter_item = None # will fall back to 'filter_ids'
     batch_size = 1000
     params = {}
 
     def __init__(self, loop):
         self.loop = loop
 
-    def load(self, key: str | int | bool, **kwargs: Unpack[DataLoaderOptions]) -> dict:
-        _add_default_options(self, **kwargs)
-        return _base_data_load_with_options(self.service, key=key, **kwargs)
+    def load(self, key: Key, **kwargs: Unpack[DataLoaderOptions]) -> dict:
+        options = _add_default_options(self, kwargs)
+        return _base_data_load_with_options(self.service, options, key=key)
 
-    def load_many(self, keys: list, **kwargs: Unpack[DataLoaderOptions]) -> list[dict]:
-        _add_default_options(self, **kwargs)
-        return _base_data_load_with_options(self.service, keys=keys, **kwargs)
+    def load_many(self, keys: List[Key], **kwargs: Unpack[DataLoaderOptions]) -> List[dict]:
+        options = _add_default_options(self, kwargs)
+        return _base_data_load_with_options(self.service, options, keys=keys)
 
-    def load_all(self, **kwargs: Unpack[DataLoaderOptions]) -> list[dict]:
-        return _base_data_load_with_options(self.service, **kwargs)
+    def load_all(self, **kwargs: Unpack[DataLoaderOptions]) -> List[dict]:
+        options = _add_default_options(self, kwargs)
+        return _base_data_load_with_options(self.service, options)
 
-    def get_by_item_paged(self, key: str | None = None, keys: list[str] | None = None,
+    def get_by_item_paged(self, key: Key = None, keys: List[Key] = None,
                           start: int = 1, limit: int = 20, desc: bool = False,
                           sorting_column: str = "id", **kwargs: Unpack[DataLoaderOptions]):
-        _add_default_options(self, **kwargs)
+        options = _add_default_options(self, kwargs)
         return _get_paged(
-            self.service, key=key, keys=keys, start=start, limit=limit, desc=desc,
-            sorting_column=sorting_column, **kwargs
+            self.service, options, key=key, keys=keys, start=start, limit=limit, desc=desc,
+            sorting_column=sorting_column
         )
 
     def get_all_paged(self, start: int = 1, limit: int = 20, desc: bool = False,
                       sorting_column: str = "id", filters: Filters = None):
-        return _get_paged(
-            self.service, start=start, limit=limit, desc=desc, sorting_column=sorting_column, filters=filters
+        # todo test uncommented code
+        return self.get_by_item_paged(
+            start=start, limit=limit, desc=desc, sorting_column=sorting_column, filters=filters
         )
+        # return _get_paged(
+        #     self.service, start=start, limit=limit, desc=desc, sorting_column=sorting_column, filters=filters
+        # )
+
+    def __getitem__(self, item):
+        return getattr(self, item)
 
 
-def _get_options(**kwargs: Unpack[DataLoaderOptions]) -> (str, str, Filters, dict[str, any], bool):
-    params = kwargs.get("params")
-    if params:
-        params = dict(params)  # we edit the dict in the request, so don't make permanent changes
-
-    return kwargs.get("model"), kwargs.get("filter_item"), kwargs.get("filters", {}), params, kwargs.get("batch_size")
+def _get_options(options: Unpack[DataLoaderOptions]) -> (str, str, Filters, Dict[str, any], bool):
+    options = copy.deepcopy(options)
+    return options.get("model"), options.get("filter_item"), options.get("filters", {}), \
+           options.get("params"), options.get("batch_size")
 
 
-def _add_default_options(loader, **kwargs: Unpack[DataLoaderOptions]):
-    kwargs.setdefault("model", loader.model)
-    kwargs.setdefault("filter_item", loader.filter_item)
-    kwargs.setdefault("params", loader.params)
-    kwargs.setdefault("batch_size", loader.batch_size)
+def _add_default_options(loader, options: Unpack[DataLoaderOptions]):
+    # be aware that this function doesn't make a copy of the data its adding.
+    # it's not a problem because as of writing this _get_options is used and that makes a deep copy of the options.
+    _add_default_option(options, "model", loader)
+    _add_default_option(options, "filter_item", loader)
+    _add_default_option(options, "params", loader)
+    _add_default_option(options, "batch_size", loader)
+    return options
 
 
-def _get_paged(service: str, key: str | None = None, keys: list[str] | None = None,
+def _add_default_option(options: dict, option, loader: DataLoader):
+    if options.get(option) is None:
+        options[option] = loader[option]
+
+
+def _get_paged(service: str, options: Unpack[DataLoaderOptions],
+               key: Key = None, keys: List[Key] = None,
                start: int = 1, limit: int = 20, desc: bool = False,
-               sorting_column: str = "id", **kwargs: Unpack[DataLoaderOptions]):
-    params = {
+               sorting_column: str = "id"):
+    options["params"] = {
         'start': start,
         'limit': limit,
         'desc': desc,
@@ -87,12 +106,10 @@ def _get_paged(service: str, key: str | None = None, keys: list[str] | None = No
     }
 
     # adds the filter_item and filters for us
-    response = _base_load_with_options(
-        service, params=params, key=key, keys=keys, **kwargs
-    )
+    response, _ = _base_load_with_options(service, options, key=key, keys=keys)
 
     return {
-        kwargs["model"]: response["data"],
+        options["model"]: response["data"],
         "page_info": {
             "count": response["count"],
             "start": response["start"],
@@ -101,33 +118,55 @@ def _get_paged(service: str, key: str | None = None, keys: list[str] | None = No
     }
 
 
-def _base_data_load_with_options(service: str, key=None, keys: list | None = None, **kwargs: Unpack[DataLoaderOptions]):
-    model, filter_item, filters, params, batch_size = _get_options(**kwargs)
+def _base_data_load_with_options(service: str, options: Unpack[DataLoaderOptions], key=None, keys: List[Key] = None):
+    if keys is not None:
+        model, filter_item, filters, params, batch_size = _get_options(options)
+        if len(keys) > batch_size:
+            result = []
+            for i in range(0, len(keys), batch_size):
+                part, _ = _base_load_with_options(service, options, keys=keys[i::i + batch_size])
+                result.extend(part["data"])
+            return result
 
-    if keys is not None and len(keys) > batch_size:
-        result = []
-        for i in range(0, len(keys), batch_size):
-            part = _base_load_with_options(service, keys=keys[i::i + batch_size]).json()
-            result.extend(part["data"])
-        return result
+    response, is_single = _base_load_with_options(service, options, key=key, keys=keys)
+    data = response["data"]
+    if is_single:
+        if len(data) > 0:
+            data = data[0]
+        else:
+            raise UpstreamError(
+                response,
+                f"Failed to find {options['model']} with id(s): {key if key is not None else keys}"
+            )
+    logging.info(f"response: {data}")
+    return data
 
-    return _base_load_with_options(service, key=key, keys=keys, **kwargs).json()["data"]
 
+def _base_load_with_options(service: str, options: Unpack[DataLoaderOptions], key=None, keys: List[Key] = None):
+    logging.info(options)
+    logging.info(locals())
+    model, filter_item, filters, params, batch_size = _get_options(options)
 
-def _base_load_with_options(service: str, key=None, keys: list | None = None, **kwargs: Unpack[DataLoaderOptions]):
-    model, filter_item, filters, params, batch_size = _get_options(**kwargs)
+    url = f"{service}/{model}/"
 
-    url = f"{service}/{model}"
+    # when single we need to retrieve the one object out of the array
+    is_single = False
 
-    if filter_item:
-        params[filter_item] = key if key is not None else ','.join([str(k) for k in keys])
-    elif key is not None:
-        url += str(key)
+    # we can't set a default value for filter_item because otherwise we
+    if key is not None:
+        if not filter_item:
+            is_single = True
+            filter_item = "filter_ids"
+        params[filter_item] = key
+    elif keys is not None:
+        if not filter_item:
+            filter_item = "filter_ids"
+        params[filter_item] = ','.join([str(k) for k in keys])
 
     if filters:
         params["filters"] = json.dumps(filters)
 
-    return _send_get_request(url, service, params=params).json()
+    return _send_get_request(url, service, params=params).json(), is_single
 
 
 def _send_get_request(url, service, params=None, headers=None):

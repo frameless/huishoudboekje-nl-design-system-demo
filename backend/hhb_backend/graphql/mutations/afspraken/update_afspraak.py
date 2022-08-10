@@ -72,7 +72,7 @@ class UpdateAfspraak(graphene.Mutation):
         # check rubriek_id - optional
         rubriek_id = input.get("rubriek_id")
         if rubriek_id:
-            rubriek: Rubriek = hhb_dataloader().rubrieken_by_id.load(rubriek_id)
+            rubriek: Rubriek = hhb_dataloader().rubriek_by_id.load(rubriek_id)
             if not rubriek:
                 raise GraphQLError("rubriek not found")
 

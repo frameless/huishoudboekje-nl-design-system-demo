@@ -8,8 +8,7 @@ class BankTransactionByIdLoader(DataLoader):
     service = settings.TRANSACTIE_SERVICES_URL
 
     def saldo_many(self, bank_transaction_ids):
-        # endpoint = /banktransactions/saldo/<ids>
-        # todo check if load_many can add that without making recessions for other endpoints
+        # not so fancy but /banktransactions/saldo/<ids> appears to be the only endpoint of its kind
         return self.load(','.join([str(s) for s in bank_transaction_ids]), model=f"{self.model}/saldo")
 
 

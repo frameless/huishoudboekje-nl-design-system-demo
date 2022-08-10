@@ -147,25 +147,25 @@ class GebruikersActiviteitEntity(graphene.ObjectType):
     @classmethod
     async def resolve_afdeling(cls, root, _info):
         return await cls._resolve_entity(
-            root, entity_type="afdeling", dataloader_name="afdelingen_by_id"
+            root, entity_type="afdeling", dataloader_name="afdeling_by_id"
         )
     
     @classmethod
     async def resolve_postadres(cls, root, _info):
         return await cls._resolve_entity(
-            root, entity_type="postadres", dataloader_name="postadressen_by_id"
+            root, entity_type="postadres", dataloader_name="postadres_by_id"
         )
 
     @classmethod
     async def resolve_afspraak(cls, root, _info):
         return await cls._resolve_entity(
-            root, entity_type="afspraak", dataloader_name="afspraken_by_id"
+            root, entity_type="afspraak", dataloader_name="afspraak_by_id"
         )
 
     @classmethod
     async def resolve_burger(cls, root, _info):
         return await cls._resolve_entity(
-            root, entity_type="burger", dataloader_name="burgers_by_id"
+            root, entity_type="burger", dataloader_name="burger_by_id"
         )
 
     @classmethod
@@ -185,7 +185,7 @@ class GebruikersActiviteitEntity(graphene.ObjectType):
     @classmethod
     async def resolve_export(cls, root, _info):
         return await cls._resolve_entity(
-            root, entity_type="export", dataloader_name="exports_by_id"
+            root, entity_type="export", dataloader_name="export_by_id"
         )
 
     @classmethod
@@ -199,37 +199,37 @@ class GebruikersActiviteitEntity(graphene.ObjectType):
     @classmethod
     async def resolve_journaalpost(cls, root, _info):
         return await cls._resolve_entity(
-            root, entity_type="journaalpost", dataloader_name="journaalposten_by_id"
+            root, entity_type="journaalpost", dataloader_name="journaalpost_by_id"
         )
 
     @classmethod
     async def resolve_organisatie(cls, root, _info):
         return await cls._resolve_entity(
-            root, entity_type="organisatie", dataloader_name="organisaties_by_id"
+            root, entity_type="organisatie", dataloader_name="organisatie_by_id"
         )
 
     @classmethod
     async def resolve_rekening(cls, root, _info):
         return await cls._resolve_entity(
-            root, entity_type="rekening", dataloader_name="rekeningen_by_id"
+            root, entity_type="rekening", dataloader_name="rekening_by_id"
         )
 
     @classmethod
     async def resolve_rubriek(cls, root, _info):
         return await cls._resolve_entity(
-            root, entity_type="rubriek", dataloader_name="rubrieken_by_id"
+            root, entity_type="rubriek", dataloader_name="rubriek_by_id"
         )
 
     @classmethod
     async def resolve_transactie(cls, root, _info):
         return await cls._resolve_entity(
-            root, entity_type="transactie", dataloader_name="bank_transactions_by_id"
+            root, entity_type="transactie", dataloader_name="bank_transaction_by_id"
         )
 
     @classmethod
     async def resolve_huishouden(cls, root, _info):
         return await cls._resolve_entity(
-            root, entity_type="huishouden", dataloader_name="huishoudens_by_id"
+            root, entity_type="huishouden", dataloader_name="huishouden_by_id"
         )
 
 

@@ -10,6 +10,5 @@ class SignaalByIdLoader(DataLoader):
     """ Laden van Signalen op basis van ids """
     model = "signals"
     service = settings.SIGNALENSERVICE_URL
-    filter_item = "filter_ids"
     batch_size = 1000
 

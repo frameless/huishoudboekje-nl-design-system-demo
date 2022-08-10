@@ -67,26 +67,26 @@ class CreateAfspraak(graphene.Mutation):
 
         # check burger_id
         burger_id = input.get("burger_id")
-        burger: Burger = (hhb_dataloader().burger_by_id.load(burger_id))
+        burger: Burger = hhb_dataloader().burger_by_id.load(burger_id)
         if not burger:
             raise GraphQLError("burger not found")
 
         # Check tegen_rekening_id
         rekening_id = input.get("tegen_rekening_id")
-        rekening: Rekening = (hhb_dataloader().rekening_by_id.load(rekening_id))
+        rekening: Rekening = hhb_dataloader().rekening_by_id.load(rekening_id)
         if not rekening:
             raise GraphQLError("rekening not found")
 
         # check rubriek_id
         rubriek_id = input.get("rubriek_id")
-        rubriek: Rubriek = (hhb_dataloader().rubrieken_by_id.load(rubriek_id))
+        rubriek: Rubriek = hhb_dataloader().rubriek_by_id.load(rubriek_id)
         if not rubriek:
             raise GraphQLError("rubriek not found")
 
         # check afdeling_id - optional
         afdeling_id = input.get("afdeling_id")
         if afdeling_id is not None:
-            afdeling: Afdeling = (hhb_dataloader().afdeling_by_id.load(afdeling_id))
+            afdeling: Afdeling = hhb_dataloader().afdeling_by_id.load(afdeling_id)
             if not afdeling:
                 raise GraphQLError("afdeling not found")
 
