@@ -18,7 +18,8 @@ class RekeningenByAfdelingLoader(DataLoader):
     filter_item = "filter_afdelingen"
 
 
-class RekeningenByIbanLoader(DataLoader):
+class RekeningByIbanLoader(DataLoader):
     """ Load rekeningen list for ibans """
     model = "rekeningen"
     filter_item = "filter_ibans"
+    is_single = True

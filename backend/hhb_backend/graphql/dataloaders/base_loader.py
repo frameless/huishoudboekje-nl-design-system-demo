@@ -25,21 +25,26 @@ class DataLoaderOptions(TypedDict):
     filters: NotRequired[Filters]
     params: NotRequired[Dict[str, any]]
     batch_size: NotRequired[int]
+    is_single: NotRequired[bool]
 
 
 class DataLoader:
     """ Dataloader for when the result is a single object """
     model = None
     service = settings.HHB_SERVICES_URL
-    filter_item = None # will fall back to 'filter_ids'
+    filter_item = None  # will fall back to 'filter_ids'
     batch_size = 1000
     params = {}
+    is_single = None  # will fall back to False or 'filter_item is None' when using the load (single)
 
     def __init__(self, loop):
         self.loop = loop
 
     def load(self, key: Key, **kwargs: Unpack[DataLoaderOptions]) -> dict:
         options = _add_default_options(self, kwargs)
+        if options["filter_item"] is None:
+            options["is_single"] = True
+
         return _base_data_load_with_options(self.service, options, key=key)
 
     def load_many(self, keys: List[Key], **kwargs: Unpack[DataLoaderOptions]) -> List[dict]:
@@ -73,10 +78,10 @@ class DataLoader:
         return getattr(self, item)
 
 
-def _get_options(options: Unpack[DataLoaderOptions]) -> (str, str, Filters, Dict[str, any], bool):
+def _get_options(options: Unpack[DataLoaderOptions]) -> (str, str, Filters, Dict[str, any], int, bool):
     options = copy.deepcopy(options)
     return options.get("model"), options.get("filter_item"), options.get("filters", {}), \
-           options.get("params"), options.get("batch_size")
+           options.get("params"), options.get("batch_size"), options.get("is_single")
 
 
 def _add_default_options(loader, options: Unpack[DataLoaderOptions]):
@@ -86,6 +91,7 @@ def _add_default_options(loader, options: Unpack[DataLoaderOptions]):
     _add_default_option(options, "filter_item", loader)
     _add_default_option(options, "params", loader)
     _add_default_option(options, "batch_size", loader)
+    _add_default_option(options, "is_single", loader)
     return options
 
 
@@ -119,8 +125,9 @@ def _get_paged(service: str, options: Unpack[DataLoaderOptions],
 
 
 def _base_data_load_with_options(service: str, options: Unpack[DataLoaderOptions], key=None, keys: List[Key] = None):
+    _, _, _, _, batch_size, is_single = _get_options(options)
+
     if keys is not None:
-        model, filter_item, filters, params, batch_size = _get_options(options)
         if len(keys) > batch_size:
             result = []
             for i in range(0, len(keys), batch_size):
@@ -128,45 +135,36 @@ def _base_data_load_with_options(service: str, options: Unpack[DataLoaderOptions
                 result.extend(part["data"])
             return result
 
-    response, is_single = _base_load_with_options(service, options, key=key, keys=keys)
-    data = response["data"]
+    data = _base_load_with_options(service, options, key=key, keys=keys)["data"]
     if is_single:
-        if len(data) > 0:
-            data = data[0]
-        else:
-            raise UpstreamError(
-                response,
-                f"Failed to find {options['model']} with id(s): {key if key is not None else keys}"
-            )
+        data = data[0] if len(data) > 0 else None
     logging.info(f"response: {data}")
     return data
 
 
-def _base_load_with_options(service: str, options: Unpack[DataLoaderOptions], key=None, keys: List[Key] = None):
+def _base_load_with_options(service: str, options: Unpack[DataLoaderOptions], key=None, keys: List[Key] = None) -> dict:
     logging.info(options)
     logging.info(locals())
-    model, filter_item, filters, params, batch_size = _get_options(options)
+    model, filter_item, filters, params, _, _ = _get_options(options)
 
     url = f"{service}/{model}/"
 
-    # when single we need to retrieve the one object out of the array
-    is_single = False
+    # we can't set a default value for filter_item because otherwise we can't do the single check in load (single)
+    if not filter_item:
+        filter_item = "filter_ids"
 
-    # we can't set a default value for filter_item because otherwise we
     if key is not None:
-        if not filter_item:
-            is_single = True
-            filter_item = "filter_ids"
         params[filter_item] = key
     elif keys is not None:
-        if not filter_item:
-            filter_item = "filter_ids"
         params[filter_item] = ','.join([str(k) for k in keys])
 
     if filters:
         params["filters"] = json.dumps(filters)
 
-    return _send_get_request(url, service, params=params).json(), is_single
+    logging.info(f"requesting: get, {url}, {params}")
+    response = _send_get_request(url, service, params=params).json()
+    logging.info(f"response: {response}")
+    return response
 
 
 def _send_get_request(url, service, params=None, headers=None):

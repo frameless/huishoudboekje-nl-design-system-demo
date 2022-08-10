@@ -10,6 +10,7 @@ import requests
 from dataclasses_json import dataclass_json, LetterCase, config
 from dateutil import tz
 from flask import request, g
+
 from hhb_backend.graphql import settings
 from hhb_backend.version import load_version
 
@@ -76,7 +77,12 @@ def log_gebruikers_activiteit(view_func):
     @wraps(view_func)
     async def decorated(*args, **kwargs):
         logging.debug("in gebruikersactiviteit decorator")
-        result = await view_func(*args, **kwargs)
+
+        result = \
+            (await view_func(*args, **kwargs)) \
+            if inspect.iscoroutinefunction(view_func)\
+            else view_func(*args, **kwargs)
+
         try:
             gebruikers_activiteit = extract_gebruikers_activiteit(
                 result, *args, **kwargs)

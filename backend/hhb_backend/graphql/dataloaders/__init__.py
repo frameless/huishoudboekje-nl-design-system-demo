@@ -27,7 +27,7 @@ from .journaalpost_loader import (
 from .organisatie_loader import OrganisatieByIdLoader
 from .overschrijving_loader import (OverschrijvingByAfspraakLoader, OverschrijvingByIdLoader)
 from .postadressen_loader import PostadressenByIdLoader
-from .rekeningen_loader import (RekeningenByBurgerLoader, RekeningenByIbanLoader, RekeningByIdLoader,
+from .rekeningen_loader import (RekeningenByBurgerLoader, RekeningByIbanLoader, RekeningByIdLoader,
                                 RekeningenByAfdelingLoader)
 from .rubrieken_loader import RubriekByGrootboekrekeningLoader, RubriekByIdLoader
 from .signaal_loader import SignaalByIdLoader
@@ -65,7 +65,7 @@ class HHBDataLoader:
         self.rekening_by_id = RekeningByIdLoader(loop=loop)
         self.rekeningen_by_burger = RekeningenByBurgerLoader(loop=loop)
         self.rekeningen_by_afdeling = RekeningenByAfdelingLoader(loop=loop)
-        self.rekeningen_by_iban = RekeningenByIbanLoader(loop=loop)
+        self.rekeningen_by_iban = RekeningByIbanLoader(loop=loop)
 
         # Transaction Service
         self.csms_by_id = CSMsByIdLoader(loop=loop)
