@@ -1,4 +1,3 @@
-import * as mediaQueryHooks from "@chakra-ui/media-query";
 import {render, screen} from "@testing-library/react";
 import React from "react";
 import BurgerListView from "../components/Burgers/BurgerListView";
@@ -7,7 +6,12 @@ import {formatBurgerName} from "../utils/things";
 
 jest.mock("react-i18next", () => require("./utils/mock-hooks").reactI18NextMock());
 jest.mock("react-router-dom", () => require("./utils/mock-hooks").reactRouterDomMock());
-jest.spyOn(mediaQueryHooks, "useBreakpointValue").mockImplementation(() => false);
+jest.mock("@chakra-ui/media-query", () => ({
+	...jest.requireActual("@chakra-ui/media-query"),
+	useBreakpointValue: () => {
+		return false;
+	},
+}));
 
 it("renders an empty list", () => {
 	const {container} = render(<BurgerListView burgers={[]} />);
