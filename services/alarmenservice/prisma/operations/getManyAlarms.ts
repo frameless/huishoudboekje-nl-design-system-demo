@@ -1,26 +1,21 @@
 import {Alarm} from "@prisma/client";
 import prisma from "../../src/client";
 
-const getManyAlarms = async (filters: Record<string, any>): Promise<Alarm[] | unknown> => {
-    let filter = Object.keys(filters).reduce((mapping, key) => {
-            let value = filters[key]
+type Filters = {
+	ids?: string[],
+	isActive?: boolean
+};
 
-            if (value instanceof Array) {
-                if (value.length > 0) {
-                    mapping[key] = {
-                        in: value
-                    }
-                }
-            } else {
-                mapping[key] = value
-            }
+const getManyAlarms = async (filters: Filters): Promise<Alarm[] | unknown> => {
+	return await prisma.alarm.findMany({
+		where: {
+			// Filter by ids
+			...filters.ids && {id: {in: filters.ids}},
 
-            return mapping
-        }, {})
-
-    return await prisma.alarm.findMany({
-        where: filter
-    });
+			// Filter by isActive
+			...filters.isActive !== undefined && {isActive: filters.isActive},
+		},
+	});
 };
 
 export default getManyAlarms;
