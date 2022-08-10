@@ -1,10 +1,15 @@
 #!/usr/bin/env python
+import asyncio
 import io
 import logging
+import nest_asyncio
+from flask import Flask, make_response, render_template, send_file, request
+from http.client import HTTPException
 
 import hhb_backend.graphql.blueprint as graphql_blueprint
+from graphql import GraphQLError
 from hhb_backend.auth import Auth
-from hhb_backend.graphql.dataloaders import hhb_dataloader
+from hhb_backend.graphql.dataloaders import hhb_dataloader, HHBDataLoader
 from hhb_backend.processen import brieven_export
 from hhb_backend.reverse_proxy import ReverseProxied
 
@@ -26,10 +31,20 @@ def create_app(
     if app.config["PREFIX"]:
         app.wsgi_app = ReverseProxied(app.wsgi_app, script_name=app.config["PREFIX"])
 
+    if not loop:
+        loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    nest_asyncio.apply()
+
     try:
         auth = Auth(app)
     except HTTPException as err:
         logger.error(err)
+
+    @app.before_request
+    def add_dataloaders():
+        """ Initialize dataloader per request """
+        request.dataloader = HHBDataLoader(loop=loop)
 
     @app.route("/health")
     def health():
@@ -38,7 +53,7 @@ def create_app(
     graphql = graphql_blueprint.create_blueprint(loop=loop)
 
     @graphql.before_request
-    @auth.require_login  
+    @auth.require_login
     def auth_graphql():
         pass
 
@@ -55,6 +70,8 @@ def create_app(
         """ Send xml overschijvingen file to client """
         # Get export object
         export = hhb_dataloader().export_by_id.load(export_id)
+        if not export:
+            raise GraphQLError("Export niet gevonden")
 
         # Create xml
         xml_data = export["xmldata"]
@@ -62,7 +79,7 @@ def create_app(
 
         export_file = io.BytesIO(xml_data.encode("utf-8"))
         response = make_response(
-            send_file(export_file, download_name=xml_filename)# attachment_filename=xml_filename)
+            send_file(export_file, download_name=xml_filename)  # attachment_filename=xml_filename)
         )
         response.headers[
             "Content-Disposition"
@@ -96,6 +113,7 @@ def create_app(
         return output
 
     return app
+
 
 if __name__ == "__main__":
     create_app().run()

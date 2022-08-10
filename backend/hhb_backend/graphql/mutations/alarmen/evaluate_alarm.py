@@ -218,7 +218,7 @@ async def get_banktransactions_by_journaal_ids(journaal_ids) -> List[dict]:
     return transactions
 
 
-def should_create_signaal(root, info, alarm: dict, transacties) -> Optional[Signaal]:
+async def should_create_signaal(root, info, alarm: dict, transacties) -> Optional[Signaal]:
     # expected dates
     datum_margin = int(alarm.get("datumMargin"))
     str_expect_date = alarm.get("startDate")
@@ -268,7 +268,7 @@ def should_create_signaal(root, info, alarm: dict, transacties) -> Optional[Sign
             "bedragDifference": difference
         }
 
-        new_signal = create_signaal(root, info, new_signal)
+        new_signal = await create_signaal(root, info, new_signal)
         new_signal_id = new_signal.get("id")
         updateAlarm(alarm, alarm_id, new_signal_id)
 
@@ -277,8 +277,8 @@ def should_create_signaal(root, info, alarm: dict, transacties) -> Optional[Sign
         return None
 
 
-def create_signaal(root, info, new_signal) -> Signaal:
-    return SignaalHelper.create(root, info, new_signal).signaal
+async def create_signaal(root, info, new_signal) -> Signaal:
+    return (await SignaalHelper.create(root, info, new_signal)).signaal
 
 
 def updateAlarm(alarm, alarm_id, newSignalId):

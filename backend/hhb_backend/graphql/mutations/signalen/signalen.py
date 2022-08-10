@@ -46,7 +46,7 @@ class SignaalHelper:
         return data
 
     @log_gebruikers_activiteit
-    def create(self, info, input: CreateSignaalInput):
+    async def create(self, info, input: CreateSignaalInput):
         name = info.field_name
         if "Signaal" not in name:
             name += " - createSignaal"
@@ -60,7 +60,7 @@ class SignaalHelper:
         return SignaalHelper(response_signaal, dict())
 
     @log_gebruikers_activiteit
-    def delete(self, info, id):
+    async def delete(self, info, id):
         name = info.field_name
         if "Signaal" not in name:
             name += " - deleteSignaal"
@@ -77,7 +77,7 @@ class SignaalHelper:
         return SignaalHelper(dict(), previous)
 
     @log_gebruikers_activiteit
-    def update(self, info, id: str, input: UpdateSignaalInput):
+    async def update(self, info, id: str, input: UpdateSignaalInput):
         name = info.field_name
         if "Signaal" not in name:
             name += " - updateSignaal"
