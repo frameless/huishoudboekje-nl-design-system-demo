@@ -441,7 +441,7 @@
 	"everyDay": "Elke dag",
 	"everyWeek": "Elke week",
 	"onDays": "op {{days}}",
-	"onceOnDate": "Eenmalig, op {{date}}.",
+	"onceOnDate": "Eenmalig, op {{date}}",
 	"everyMonth": "Elke maand",
 	"everyYear": "Elk jaar",
 	"inMonths": "in {{months}}",

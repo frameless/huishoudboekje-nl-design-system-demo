@@ -429,22 +429,20 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 							<Stack>
 								<Stack direction={["column", "row"]}>
 									<DataItem label={t("periodiekSelector.periodiek")}>
-										<Text>{alarmSchedule.toString()}</Text>
+										<HStack>
+											<Text>{alarmSchedule.toString()}</Text>
+											{afspraak.alarm?.datumMargin && (
+												<Text color={"gray.500"} fontSize={"sm"}>+{t("afspraak.alarm.datumMargin", {count: afspraak.alarm?.datumMargin})}</Text>
+											)}
+										</HStack>
 									</DataItem>
-									{afspraak.alarm?.endDate ? (
+									{afspraak.alarm?.endDate && (afspraak.alarm?.startDate !== afspraak.alarm?.endDate) && (
 										<DataItem label={t("global.period")}>
 											<HStack>
 												<Text>{t("schedule.fromThrough", {
 													from: d(afspraak.alarm?.startDate, "YYYY-MM-DD").format("L"),
 													through: d(afspraak.alarm?.endDate, "YYYY-MM-DD").format("L"),
 												})}</Text>
-											</HStack>
-										</DataItem>
-									) : (
-										<DataItem label={t("global.date")}>
-											<HStack>
-												<Text>{d(afspraak.alarm?.startDate, "YYYY-MM-DD").format("L")}</Text>
-												<Text color={"gray.500"} fontSize={"sm"}>+{t("afspraak.alarm.datumMargin", {count: afspraak.alarm?.datumMargin})}</Text>
 											</HStack>
 										</DataItem>
 									)}
