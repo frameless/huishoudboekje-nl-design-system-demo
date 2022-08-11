@@ -141,11 +141,9 @@ cd ../../
 echo "Building Kustomize..."
 kustomize build k8s/$DEPLOYMENT_DIST_DIR > k8s/$DEPLOYMENT_DIST_DIR/single_deploy_file_.yaml
 
-echo "Applying envvars and create namespace.yaml"
-envsubst < k8s/namespace.yaml > k8s/$DEPLOYMENT_DIST_DIR/namespace.yaml
+echo "Applying envvars."
 envsubst < k8s/$DEPLOYMENT_DIST_DIR/single_deploy_file_.yaml > k8s/$DEPLOYMENT_DIST_DIR/single_deploy_file.yaml
 rm -rf k8s/$DEPLOYMENT_DIST_DIR/single_deploy_file_.yaml
 
 echo "You will find your files in $DEPLOYMENT_DIST_DIR."
-echo "Create a namespace if it doesn't exist yet 'kubectl apply -f k8s/$DEPLOYMENT_DIST_DIR/namespace.yaml'"
 echo "To deploy, run 'sh k8s/deploy.sh'"
