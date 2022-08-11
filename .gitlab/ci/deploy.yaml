@@ -25,7 +25,6 @@
   stage: deploy
   script:
     - sh ./k8s/build.sh
-    - kubectl apply -f k8s/dist/namespace.yaml
     - sh ./k8s/deploy.sh
     - echo -e Deployment is done! Go check out the running app at https://${APP_HOST}
 
@@ -123,6 +122,7 @@ deploy-deployment-review:
     JWT_SECRET: koen-hhb-$CI_COMMIT_REF_SLUG
   before_script:
     - kubectl config use-context commonground/huishoudboekje/app-new:hhb-review
+    - kubectl create ns $NAMESPACE || true
   only:
     - branches@commonground/huishoudboekje/app-new
   except:
