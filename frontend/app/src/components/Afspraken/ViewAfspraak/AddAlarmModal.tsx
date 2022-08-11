@@ -21,7 +21,7 @@ const eenmaligValidator = zod.object({
 	startDate: zod.date(), //.refine(val => d().endOf("day").isSameOrBefore(val)), // Must be in the future
 	datumMargin: zod.number().min(0),
 	byMonthDay: zod.number().min(1).max(28),
-	byDay: zod.array(zod.nativeEnum(DayOfWeek)).min(1),
+	byMonth: zod.array(zod.number().min(1).max(12)).min(1).max(12),
 });
 
 const validator = zod.object({
@@ -30,7 +30,7 @@ const validator = zod.object({
 	bedrag: zod.number().min(0),
 	bedragMargin: zod.number().min(0),
 	startDate: zod.date().optional(),
-	endDate: zod.date().optional(),
+	// endDate: zod.date().optional(),
 	datumMargin: zod.number().min(0).optional(),
 	byDay: zod.array(zod.nativeEnum(DayOfWeek)).min(1).optional(),
 	byMonth: zod.array(zod.number().min(1).max(12)).min(1).max(12).optional(),
@@ -87,8 +87,8 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 			return true;
 		}
 
-		const {startDate, endDate, datumMargin, byMonthDay, byDay} = form;
-		const parsed = eenmaligValidator.safeParse({startDate, endDate, datumMargin, byMonthDay, byDay});
+		const {startDate, datumMargin, byMonthDay, byDay} = form;
+		const parsed = eenmaligValidator.safeParse({startDate, datumMargin, byMonthDay, byDay});
 		return parsed.success || !parsed.error.issues.find(issue => issue.path?.[0] === field);
 	};
 
@@ -102,7 +102,7 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 		toggleSubmitted(true);
 
 		if (isValid()) {
-			const {bedrag, bedragMargin, startDate, endDate, datumMargin, byDay, byMonth, byMonthDay} = form;
+			const {bedrag, bedragMargin, startDate, datumMargin, byDay, byMonth, byMonthDay} = form;
 			onSubmit({
 				afspraakId: afspraak.id!,
 				isActive: true,
@@ -113,7 +113,6 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 					endDate: d(startDate).format("YYYY-MM-DD"),
 				} : {
 					startDate: d(startDate).format("YYYY-MM-DD"),
-					endDate: d(endDate).format("YYYY-MM-DD"),
 				},
 				datumMargin,
 				byDay,
@@ -148,7 +147,10 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 									<DatePicker selected={form.startDate} dateFormat={"dd-MM-yyyy"}
 										onChange={(value: Date) => {
 											if (value) {
-												updateForm("startDate", d(value).startOf("day").toDate());
+												const startDate = d(value).startOf("day");
+												updateForm("startDate", startDate.toDate());
+												updateForm("byMonth", [startDate.month() + 1]);
+												updateForm("byMonthDay", startDate.date());
 											}
 										}} customInput={<Input type={"text"} />} />
 									<FormErrorMessage>{t("alarmForm.errors.invalidDateError")}</FormErrorMessage>
