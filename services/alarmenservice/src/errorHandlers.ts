@@ -1,9 +1,11 @@
+import {PrismaClientInitializationError} from "@prisma/client/runtime";
 import {ZodError} from "zod";
 
 enum ErrorCodes {
 	NotFound = "NotFound",
 	AlreadyExists = "AlreadyExists",
-	ValidationError = "ValidationError"
+	ValidationError = "ValidationError",
+	DatabaseConnectionError = "DatabaseConnectionError",
 }
 
 export class HttpError {
@@ -33,6 +35,11 @@ export class ValidationError extends HttpError {
 
 }
 
+export class DatabaseConnectionError extends HttpError {
+	message = "Could not connect to the database";
+	errorCode = ErrorCodes.DatabaseConnectionError;
+}
+
 export class UnknownError extends HttpError {
 	message = "An unknown error occurred.";
 	status = 500;
@@ -51,6 +58,13 @@ export const errorHandler = (err, req, res, next) => {
 
 	if (process.env.NODE_ENV !== "test") {
 		console.error("[ERROR]", err);
+	}
+
+	if (err instanceof PrismaClientInitializationError) {
+		return res.status(500).json({
+			ok: false,
+			message: "Could not connect to the database",
+		});
 	}
 
 	const {
