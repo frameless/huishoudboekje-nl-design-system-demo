@@ -3,7 +3,7 @@ import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router-dom";
 import {AppRoutes} from "../../config/routes";
 import {CreateBurgerInput, GetBurgersDocument, GetBurgersSearchDocument, GetHuishoudensDocument, useCreateBurgerMutation} from "../../generated/graphql";
-import {useStore} from "../../store";
+import useStore from "../../store";
 import useToaster from "../../utils/useToaster";
 import BackButton from "../shared/BackButton";
 import Page from "../shared/Page";
@@ -34,12 +34,12 @@ const CreateBurger = () => {
 			error: message,
 		});
 	};
-	const {store} = useStore();
+	const burgerSearch = useStore(store => store.burgerSearch);
 	const [createBurger, $createBurger] = useCreateBurgerMutation({
 		refetchQueries: [
 			{query: GetHuishoudensDocument},
 			{query: GetBurgersDocument},
-			{query: GetBurgersSearchDocument, variables: {search: store.burgerSearch}},
+			{query: GetBurgersSearchDocument, variables: {search: burgerSearch}},
 		],
 	});
 

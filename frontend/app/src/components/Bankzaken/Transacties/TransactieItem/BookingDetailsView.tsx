@@ -5,7 +5,7 @@ import {useTranslation} from "react-i18next";
 import {NavLink} from "react-router-dom";
 import {AppRoutes} from "../../../../config/routes";
 import {BankTransaction, GetTransactieDocument, GetTransactiesDocument, useDeleteJournaalpostMutation} from "../../../../generated/graphql";
-import {useStore} from "../../../../store";
+import useStore from "../../../../store";
 import {currencyFormat2, formatBurgerName} from "../../../../utils/things";
 import useToaster from "../../../../utils/useToaster";
 
@@ -17,11 +17,11 @@ type BookingDetailsViewProps = {
 const BookingDetailsView: React.FC<BookingDetailsViewProps> = ({transactie, refetch}) => {
 	const {t} = useTranslation();
 	const toast = useToaster();
-	const {store} = useStore();
+	const banktransactieQueryVariables = useStore(store => store.banktransactieQueryVariables);
 	const [deleteJournaalpost, $deleteJournaalpost] = useDeleteJournaalpostMutation({
 		refetchQueries: [
 			{query: GetTransactieDocument, variables: {id: transactie.id}},
-			{query: GetTransactiesDocument, variables: store.banktransactieQueryVariables},
+			{query: GetTransactiesDocument, variables: banktransactieQueryVariables},
 		],
 	});
 

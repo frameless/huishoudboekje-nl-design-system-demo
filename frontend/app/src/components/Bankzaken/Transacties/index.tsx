@@ -5,7 +5,7 @@ import {useTranslation} from "react-i18next";
 import Select from "react-select";
 import {GetTransactiesDocument, useGetTransactiesQuery, useStartAutomatischBoekenMutation} from "../../../generated/graphql";
 import {BanktransactieFilters} from "../../../models/models";
-import {useStore} from "../../../store";
+import useStore from "../../../store";
 import Queryable from "../../../utils/Queryable";
 import {createQueryParamsFromFilters, useReactSelectStyles} from "../../../utils/things";
 import useHandleMutation from "../../../utils/useHandleMutation";
@@ -24,15 +24,17 @@ const Transactions = () => {
 	const {offset, total, setTotal, goFirst, PaginationButtons} = usePagination({pageSize: customPageSize});
 	const handleMutation = useHandleMutation();
 	const filterModal = useDisclosure();
-	const {store, updateStore} = useStore();
-	const banktransactieFilters: BanktransactieFilters = store.banktransactieFilters || defaultBanktransactieFilters;
+
+	const banktransactieFilters = useStore(store => store.banktransactieFilters) || defaultBanktransactieFilters;
+	const setBanktransactieFilters = useStore(store => store.setBanktransactieFilters);
+	const setBanktransactieQueryVariables = useStore(store => store.setBanktransactieQueryVariables);
 
 	useEffect(() => {
 		// If no filters are set at all, reset to default filters.
 		if (Object.keys(banktransactieFilters).length === 0) {
-			updateStore("banktransactieFilters", defaultBanktransactieFilters);
+			setBanktransactieFilters(defaultBanktransactieFilters);
 		}
-	}, [updateStore, banktransactieFilters]);
+	}, [setBanktransactieFilters, banktransactieFilters]);
 
 	const queryVariables = {
 		offset,
@@ -49,7 +51,7 @@ const Transactions = () => {
 				goFirst();
 			}
 
-			updateStore("banktransactieQueryVariables", queryVariables);
+			setBanktransactieQueryVariables(queryVariables);
 		},
 	});
 	const [startAutomatischBoeken] = useStartAutomatischBoekenMutation({
@@ -81,7 +83,7 @@ const Transactions = () => {
 						<Stack>
 							<FormControl>
 								<FormLabel>{t("filters.transactions.type.title")}</FormLabel>
-								<Checkbox isChecked={banktransactieFilters.onlyUnbooked} onChange={e => updateStore("banktransactieFilters", {
+								<Checkbox isChecked={banktransactieFilters.onlyUnbooked} onChange={e => setBanktransactieFilters({
 									...banktransactieFilters,
 									onlyUnbooked: e.target.checked,
 								})}>{t("filters.transactions.type.onlyUnbooked")}</Checkbox>
@@ -92,7 +94,7 @@ const Transactions = () => {
 								<Select id={"tegenrekening"} isClearable={true} noOptionsMessage={() => t("filters.transactions.isCredit.choose")} maxMenuHeight={350}
 									options={isCreditSelectOptions} value={banktransactieFilters.isCredit ? isCreditSelectOptions.find(o => o.value === banktransactieFilters.isCredit) : null}
 									onChange={(result) => {
-										updateStore("banktransactieFilters", {
+										setBanktransactieFilters({
 											...banktransactieFilters,
 											isCredit: result?.value as BanktransactieFilters["isCredit"],
 										});
@@ -109,13 +111,13 @@ const Transactions = () => {
 											if (value) {
 												const [from, through] = value;
 												if (!from && !through) {
-													updateStore("banktransactieFilters", {
+													setBanktransactieFilters({
 														...banktransactieFilters,
 														dateRange: undefined,
 													});
 												}
 												else {
-													updateStore("banktransactieFilters", {
+													setBanktransactieFilters({
 														...banktransactieFilters,
 														dateRange: {from, through},
 													});
