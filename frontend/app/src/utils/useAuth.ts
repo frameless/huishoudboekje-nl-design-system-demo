@@ -1,4 +1,5 @@
-import {useCallback, useEffect, useMemo, useState} from "react";
+import {useQuery} from "@tanstack/react-query";
+import {useCallback, useMemo} from "react";
 import {useTranslation} from "react-i18next";
 
 const AuthRoutes = {
@@ -8,9 +9,12 @@ const AuthRoutes = {
 };
 
 const useAuth = () => {
-	const [user, setUser] = useState<{email: string, name: string}>();
-	const [error, setError] = useState<Error | undefined>();
-	const [loading, toggleLoading] = useState(true);
+	const handleAuthResponse = useHandleAuthResponse();
+	const {isLoading, data: user, error} = useQuery<any, Error>(["getUser"], () => {
+		return fetch(AuthRoutes.check)
+			.then(handleAuthResponse)
+			.then(result => result.user);
+	});
 
 	const login = useCallback(() => {
 		window.location.href = AuthRoutes.login;
@@ -20,29 +24,13 @@ const useAuth = () => {
 		window.location.href = AuthRoutes.logout;
 	}, []);
 
-	const handleAuthResponse = useHandleAuthResponse();
-
-	useEffect(() => {
-		fetch(AuthRoutes.check)
-			.then(handleAuthResponse)
-			.then(result => {
-				if (result.user) {
-					setUser(result.user);
-				}
-				toggleLoading(false);
-			})
-			.catch(err => {
-				setUser(undefined);
-				toggleLoading(false);
-				setError(err);
-			});
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
-
-
 	return useMemo(() => ({
-		user, error, loading, reset: logout, login,
-	}), [user, error, loading, logout, login]);
+		user,
+		error,
+		loading: isLoading,
+		reset: logout,
+		login,
+	}), [user, error, isLoading, logout, login]);
 };
 
 const useHandleAuthResponse = () => {
