@@ -1,7 +1,7 @@
 import logging
 
 from flask import abort, make_response, request
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import IntegrityError, OperationalError
 from sqlalchemy.orm.exc import NoResultFound
 
 from core_service.database import db
@@ -61,6 +61,9 @@ class HHBObject():
         """ Try to commit database changes """
         try:
             db.session.commit()
+        except OperationalError as error:
+            logging.exception(error)
+            abort(make_response({"errors": ["Could not connect to the database"]}))
         except IntegrityError as error:
             logging.warning(repr(error))
             abort(make_response({"errors": [str(error.orig).strip().split("DETAIL:  ")[1]]}, 409))

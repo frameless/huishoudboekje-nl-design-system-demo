@@ -1,8 +1,11 @@
+import logging
+
+from models.huishouden import Huishouden
 from sqlalchemy import Column, Date, event, ForeignKey, Integer, Sequence, String
+from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import relationship, Session
 
 from core_service.database import db
-from models.huishouden import Huishouden
 
 
 class Burger(db.Model):
@@ -50,9 +53,13 @@ https://stackoverflow.com/questions/51419186/delete-parent-object-when-all-child
 
 # TODO: these events are fairly rigorous and could possibly be improved.
 def delete_orphaned_huishoudens(session):
-    huishouden_ids = session.query(Burger.huishouden_id).all()
-    huishouden_ids = {id for (id,) in huishouden_ids}
-    session.query(Huishouden).filter(Huishouden.id.not_in(huishouden_ids)).delete()
+    # don't let the request that updates/deletes a burger fail if the orphans can't be removed
+    try:
+        huishouden_ids = session.query(Burger.huishouden_id).all()
+        huishouden_ids = {id for (id,) in huishouden_ids}
+        session.query(Huishouden).filter(Huishouden.id.not_in(huishouden_ids)).delete()
+    except OperationalError as error:
+        logging.exception(error)
 
 
 @event.listens_for(Burger, "after_update")
