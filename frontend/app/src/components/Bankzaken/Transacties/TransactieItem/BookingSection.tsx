@@ -3,7 +3,7 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
 import {Afspraak, GetTransactieDocument, GetTransactiesDocument, Rubriek, useCreateJournaalpostAfspraakMutation, useCreateJournaalpostGrootboekrekeningMutation, useEvaluateAlarmMutation} from "../../../../generated/graphql";
-import {useStore} from "../../../../store";
+import useStore from "../../../../store";
 import {useReactSelectStyles} from "../../../../utils/things";
 import useToaster from "../../../../utils/useToaster";
 import SelectAfspraakOption from "../../../Layouts/SelectAfspraak/SelectAfspraakOption";
@@ -12,14 +12,14 @@ const BookingSection = ({transaction, rubrieken, afspraken, refetch}) => {
 	const reactSelectStyles = useReactSelectStyles();
 	const toast = useToaster();
 	const {t} = useTranslation();
-	const {store} = useStore();
+	const banktransactieQueryVariables = useStore(store => store.banktransactieQueryVariables);
 	const suggesties: Afspraak[] = transaction.suggesties || [];
 
 	const [evaluateAlarm] = useEvaluateAlarmMutation();
 	const [createJournaalpostAfspraak] = useCreateJournaalpostAfspraakMutation({
 		refetchQueries: [
 			{query: GetTransactieDocument, variables: {id: transaction.id}},
-			{query: GetTransactiesDocument, variables: store.banktransactieQueryVariables},
+			{query: GetTransactiesDocument, variables: banktransactieQueryVariables},
 		],
 		onCompleted: (result) => {
 			const afsprakenAlarmIds = result.createJournaalpostAfspraak?.journaalposten?.map(j => j.afspraak?.alarm?.id) || [];
@@ -31,7 +31,7 @@ const BookingSection = ({transaction, rubrieken, afspraken, refetch}) => {
 	const [createJournaalpostGrootboekrekening] = useCreateJournaalpostGrootboekrekeningMutation({
 		refetchQueries: [
 			{query: GetTransactieDocument, variables: {id: transaction.id}},
-			{query: GetTransactiesDocument, variables: store.banktransactieQueryVariables},
+			{query: GetTransactiesDocument, variables: banktransactieQueryVariables},
 		],
 	});
 

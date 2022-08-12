@@ -3,7 +3,7 @@ import {useTranslation} from "react-i18next";
 import {Navigate, useNavigate, useParams} from "react-router-dom";
 import {AppRoutes} from "../../config/routes";
 import {GetBurgerDocument, GetBurgersDocument, GetBurgersSearchDocument, UpdateBurgerMutationVariables, useGetBurgerQuery, useUpdateBurgerMutation} from "../../generated/graphql";
-import {useStore} from "../../store";
+import useStore from "../../store";
 import Queryable from "../../utils/Queryable";
 import {formatBurgerName} from "../../utils/things";
 import useToaster from "../../utils/useToaster";
@@ -36,14 +36,14 @@ const EditBurger = () => {
 			error: message,
 		});
 	};
-	const {store} = useStore();
+	const burgerSearch = useStore(store => store.burgerSearch);
 	const [isBsnValid, setBsnValid] = useState(true);
 
 	const [updateBurger, $updateBurger] = useUpdateBurgerMutation({
 		refetchQueries: [
 			{query: GetBurgerDocument, variables: {id: parseInt(id)}},
 			{query: GetBurgersDocument},
-			{query: GetBurgersSearchDocument, variables: {search: store.burgerSearch}},
+			{query: GetBurgersSearchDocument, variables: {search: burgerSearch}},
 		],
 	});
 	const $burger = useGetBurgerQuery({

@@ -12,7 +12,6 @@ import "./config/i18n";
 import theme from "./config/theme";
 import "./global.scss";
 import apolloClient from "./services/graphql-client";
-import StoreProvider from "./store";
 
 dayjs.locale("nl-nl");
 registerLocale("nl", nl);
@@ -26,9 +25,7 @@ root.render(
 		<Router>
 			<ApolloProvider client={apolloClient}>
 				<ChakraProvider theme={theme}>
-					<StoreProvider>
-						<App />
-					</StoreProvider>
+					<App />
 				</ChakraProvider>
 			</ApolloProvider>
 		</Router>

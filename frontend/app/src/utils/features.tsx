@@ -1,10 +1,10 @@
 import {useEffect} from "react";
-import {useStore} from "../store";
+import useStore from "../store";
 import useAuth from "./useAuth";
 
 export const useInitializeFeatureFlags = () => {
 	const {user} = useAuth();
-	const {updateStore} = useStore();
+	const setFeatureFlags = useStore(store => store.setFeatureFlags);
 
 	useEffect(() => {
 		fetch("/api/unleash", {
@@ -15,13 +15,12 @@ export const useInitializeFeatureFlags = () => {
 			.then(result => result.json())
 			.then(result => {
 				const featureFlags = result.features.reduce((list, f) => ({...list, [f.name]: f.enabled}), {});
-				updateStore("featureFlags", featureFlags);
+				setFeatureFlags(featureFlags);
 			});
-	}, [updateStore, user]);
+	}, [setFeatureFlags, user]);
 };
 
 export const useFeatureFlag = (feature: string): boolean => {
-	const {store} = useStore();
-	const ff = store.featureFlags;
-	return ff[feature] || false;
+	const featureFlags = useStore(store => store.featureFlags);
+	return featureFlags[feature] || false;
 };

@@ -4,7 +4,7 @@ import {useTranslation} from "react-i18next";
 import {NavLink, useNavigate} from "react-router-dom";
 import {AppRoutes} from "../../../config/routes";
 import {Afspraak, GetAfspraakDocument, GetBurgerDocument, GetBurgersDocument, GetBurgersSearchDocument, useDeleteAfspraakMutation, useEndAfspraakMutation} from "../../../generated/graphql";
-import {useStore} from "../../../store";
+import useStore from "../../../store";
 import d from "../../../utils/dayjs";
 import useToaster from "../../../utils/useToaster";
 import MenuIcon from "../../shared/MenuIcon";
@@ -16,7 +16,7 @@ const AfspraakDetailMenu: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	const navigate = useNavigate();
 	const endModal = useDisclosure();
 	const toast = useToaster();
-	const {store} = useStore();
+	const burgerSearch = useStore(store => store.burgerSearch);
 	const deleteAlert = useDisclosure();
 
 	const [endAfspraakMutation] = useEndAfspraakMutation({
@@ -28,7 +28,7 @@ const AfspraakDetailMenu: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 		refetchQueries: [
 			{query: GetBurgersDocument},
 			{query: GetBurgerDocument, variables: {id: afspraak.burger?.id}},
-			{query: GetBurgersSearchDocument, variables: {search: store.burgerSearch}},
+			{query: GetBurgersSearchDocument, variables: {search: burgerSearch}},
 		],
 		onCompleted: () => {
 			if (afspraak.burger?.id) {

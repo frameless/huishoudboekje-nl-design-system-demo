@@ -4,7 +4,7 @@ import {useTranslation} from "react-i18next";
 import {NavLink, useNavigate, useParams} from "react-router-dom";
 import {AppRoutes} from "../../../config/routes";
 import {Burger, GetBurgerDocument, GetBurgersDocument, GetBurgersSearchDocument, GetHuishoudensDocument, useDeleteBurgerMutation, useDeleteHuishoudenBurgerMutation, useGetBurgerQuery} from "../../../generated/graphql";
-import {useStore} from "../../../store";
+import useStore from "../../../store";
 import {useFeatureFlag} from "../../../utils/features";
 import Queryable from "../../../utils/Queryable";
 import {formatBurgerName} from "../../../utils/things";
@@ -26,7 +26,7 @@ const BurgerDetailPage = () => {
 	const navigate = useNavigate();
 	const deleteAlert = useDisclosure();
 	const deleteHuishoudenBurgerAlert = useDisclosure();
-	const {store} = useStore();
+	const burgerSearch = useStore(store => store.burgerSearch);
 	const $burger = useGetBurgerQuery({
 		variables: {
 			id: parseInt(id),
@@ -34,7 +34,7 @@ const BurgerDetailPage = () => {
 	});
 	const [deleteHuishoudenBurger, $deleteHuishoudenBurger] = useDeleteHuishoudenBurgerMutation({
 		refetchQueries: [
-			{query: GetBurgersSearchDocument, variables: {search: store.burgerSearch}},
+			{query: GetBurgersSearchDocument, variables: {search: burgerSearch}},
 			{query: GetBurgersDocument},
 			{query: GetBurgerDocument, variables: {id: parseInt(id)}},
 			{query: GetHuishoudensDocument},
@@ -45,7 +45,7 @@ const BurgerDetailPage = () => {
 			id: parseInt(id),
 		},
 		refetchQueries: [
-			{query: GetBurgersSearchDocument, variables: {search: store.burgerSearch}},
+			{query: GetBurgersSearchDocument, variables: {search: burgerSearch}},
 			{query: GetBurgersDocument},
 			{query: GetHuishoudensDocument},
 		],

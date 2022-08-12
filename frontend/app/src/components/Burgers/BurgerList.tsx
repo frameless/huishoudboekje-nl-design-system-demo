@@ -5,7 +5,7 @@ import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router-dom";
 import {AppRoutes} from "../../config/routes";
 import {Burger, useGetBurgersSearchQuery} from "../../generated/graphql";
-import {useStore} from "../../store";
+import useStore from "../../store";
 import Queryable from "../../utils/Queryable";
 import AddButton from "../shared/AddButton";
 import DeadEndPage from "../shared/DeadEndPage";
@@ -15,21 +15,23 @@ import BurgerListView from "./BurgerListView";
 const BurgerList = () => {
 	const {t} = useTranslation();
 	const navigate = useNavigate();
-	const {store, updateStore} = useStore();
+	const burgerSearch = useStore(store => store.burgerSearch);
+	const setBurgerSearch = useStore(store => store.setBurgerSearch);
+
 	const searchRef = useRef<HTMLInputElement>(null);
 	const $burgers = useGetBurgersSearchQuery({
 		context: {debounceKey: "burgerSearch"},
 		variables: {
-			search: store.burgerSearch,
+			search: burgerSearch,
 		},
 	});
 
 	const onChangeSearch = (e) => {
-		updateStore("burgerSearch", e.target.value);
+		setBurgerSearch(e.target.value);
 	};
 
 	const onClickResetSearch = () => {
-		updateStore("burgerSearch", "");
+		setBurgerSearch("");
 		searchRef.current!.focus();
 	};
 
@@ -39,8 +41,8 @@ const BurgerList = () => {
 				<InputLeftElement>
 					<SearchIcon color={"gray.300"} />
 				</InputLeftElement>
-				<Input type={"text"} onChange={onChangeSearch} bg={"white"} placeholder={t("forms.search.fields.search")} ref={searchRef} value={store.burgerSearch || ""} />
-				{store.burgerSearch.length > 0 && (
+				<Input type={"text"} onChange={onChangeSearch} bg={"white"} placeholder={t("forms.search.fields.search")} ref={searchRef} value={burgerSearch || ""} />
+				{burgerSearch.length > 0 && (
 					<InputRightElement zIndex={0}>
 						<IconButton onClick={onClickResetSearch} size={"xs"} variant={"link"} icon={<CloseIcon />} aria-label={t("global.actions.cancel")} color={"gray.300"} />
 					</InputRightElement>
@@ -51,7 +53,7 @@ const BurgerList = () => {
 				const burgers: Burger[] = data?.burgers || [];
 
 				if (burgers.length === 0) {
-					return store.burgerSearch.length > 0 ? (
+					return burgerSearch.length > 0 ? (
 						<DeadEndPage message={t("messages.burgers.noSearchResults")}>
 							<Button size={"sm"} colorScheme={"primary"} onClick={onClickResetSearch}>{t("global.actions.clearSearch")}</Button>
 						</DeadEndPage>
@@ -63,7 +65,7 @@ const BurgerList = () => {
 				}
 
 				return (
-					<BurgerListView burgers={burgers} showAddButton={store.burgerSearch.length === 0} />
+					<BurgerListView burgers={burgers} showAddButton={burgerSearch.length === 0} />
 				);
 			}} />
 		</Page>
