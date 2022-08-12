@@ -1,5 +1,6 @@
 import {ApolloProvider} from "@apollo/client";
 import {ChakraProvider} from "@chakra-ui/react";
+import {QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import nl from "date-fns/locale/nl";
 import dayjs from "dayjs";
 import React from "react";
@@ -19,14 +20,17 @@ setDefaultLocale("nl");
 
 const container = document.getElementById("root");
 const root = createRoot(container!);
+const queryClient = new QueryClient();
 
 root.render(
 	<React.StrictMode>
 		<Router>
 			<ApolloProvider client={apolloClient}>
-				<ChakraProvider theme={theme}>
-					<App />
-				</ChakraProvider>
+				<QueryClientProvider client={queryClient}>
+					<ChakraProvider theme={theme}>
+						<App />
+					</ChakraProvider>
+				</QueryClientProvider>
 			</ApolloProvider>
 		</Router>
 	</React.StrictMode>,

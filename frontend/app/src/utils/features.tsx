@@ -1,23 +1,32 @@
+import {useQuery} from "@tanstack/react-query";
 import {useEffect} from "react";
 import useStore from "../store";
-import useAuth from "./useAuth";
+
+type Feature = {
+	name: string
+	enabled: boolean
+};
+
+type FetchResult = {
+	features: Feature[]
+}
 
 export const useInitializeFeatureFlags = () => {
-	const {user} = useAuth();
 	const setFeatureFlags = useStore(store => store.setFeatureFlags);
-
-	useEffect(() => {
-		fetch("/api/unleash", {
+	const {isLoading, data, error} = useQuery<FetchResult, Error>(["getFeatureFlags"], () => {
+		return fetch("/api/unleash", {
 			headers: {
 				"Content-Type": "application/json",
 			},
-		})
-			.then(result => result.json())
-			.then(result => {
-				const featureFlags = result.features.reduce((list, f) => ({...list, [f.name]: f.enabled}), {});
-				setFeatureFlags(featureFlags);
-			});
-	}, [setFeatureFlags, user]);
+		}).then(result => result.json());
+	});
+
+	useEffect(() => {
+		if (!isLoading && !error && data) {
+			const featureFlags = data.features.reduce((list, f) => ({...list, [f.name]: f.enabled}), {});
+			setFeatureFlags(featureFlags);
+		}
+	}, [setFeatureFlags, data, error, isLoading]);
 };
 
 export const useFeatureFlag = (feature: string): boolean => {
