@@ -2,20 +2,13 @@ import {Box, Button, FormControl, FormErrorMessage, FormLabel, Input, Stack, Too
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {Organisatie} from "../../generated/graphql";
-import {Regex} from "../../utils/things";
 import useForm from "../../utils/useForm";
 import useToaster from "../../utils/useToaster";
 import zod from "../../utils/zod";
+import useOrganisatieValidator from "../../validators/useOrganisatieValidator";
 import Asterisk from "../shared/Asterisk";
 import Section from "../shared/Section";
 import SectionContainer from "../shared/SectionContainer";
-
-const validator = zod.object({
-	kvknummer: zod.string().regex(Regex.KvkNummer),
-	vestigingsnummer: zod.string().regex(Regex.Vestigingsnummer),
-	naam: zod.string().nonempty().max(100),
-});
-
 
 type OrganisatieFormProps = {
 	organisatie?: Organisatie,
@@ -24,11 +17,12 @@ type OrganisatieFormProps = {
 };
 
 const OrganisatieForm: React.FC<OrganisatieFormProps> = ({organisatie, onSubmit, isLoading = false}) => {
+	const validator = useOrganisatieValidator();
 	const {t} = useTranslation();
 	const toast = useToaster();
 	const isMobile = useBreakpointValue(([true, null, null, false]));
 	const {kvknummer, vestigingsnummer, naam} = organisatie || {};
-	const [form, {updateForm, toggleSubmitted, isValid, isFieldValid}] = useForm<zod.infer<typeof validator>>({
+	const [form, {updateForm, toggleSubmitted, isFieldValid}] = useForm<zod.infer<typeof validator>>({
 		validator,
 		initialValue: {
 			naam,
@@ -41,18 +35,19 @@ const OrganisatieForm: React.FC<OrganisatieFormProps> = ({organisatie, onSubmit,
 		e.preventDefault();
 		toggleSubmitted(true);
 
-		if (isValid()) {
+		try {
+			const data = validator.parse(form);
 			onSubmit({
 				...organisatie?.id && {id: organisatie.id},
-				...form,
+				...data,
 			});
-			return;
 		}
-
-		toast.closeAll();
-		toast({
-			error: t("messages.formInputError"),
-		});
+		catch (err) {
+			toast.closeAll();
+			toast({
+				error: t("messages.formInputError"),
+			});
+		}
 	};
 
 	return (

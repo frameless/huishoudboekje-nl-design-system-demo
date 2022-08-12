@@ -1,9 +1,9 @@
 import {gql} from "@apollo/client";
 
 export const CreateConfiguratieMutation = gql`
-    mutation createConfiguratie($key: String!, $value: String!) {
+    mutation createConfiguratie($id: String!, $waarde: String!) {
         createConfiguratie(input: {
-            id: $key, waarde: $value
+            id: $id, waarde: $waarde
         }){
             ok
             configuratie{

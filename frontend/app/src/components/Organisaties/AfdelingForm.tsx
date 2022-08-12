@@ -5,11 +5,8 @@ import {CreateAfdelingInput, Organisatie} from "../../generated/graphql";
 import useForm from "../../utils/useForm";
 import useToaster from "../../utils/useToaster";
 import zod from "../../utils/zod";
+import useAfdelingValidator from "../../validators/useAfdelingValidator";
 import Asterisk from "../shared/Asterisk";
-
-const validator = zod.object({
-	naam: zod.string().nonempty(),
-});
 
 type AfdelingFormProps = {
 	organisatie: Organisatie,
@@ -19,9 +16,10 @@ type AfdelingFormProps = {
 };
 
 const AfdelingForm: React.FC<AfdelingFormProps> = ({values, organisatie, onChange, onCancel}) => {
+	const validator = useAfdelingValidator();
 	const toast = useToaster();
 	const {t} = useTranslation();
-	const [form, {updateForm, toggleSubmitted, isFieldValid, isValid}] = useForm<zod.infer<typeof validator>>({
+	const [form, {updateForm, toggleSubmitted, isFieldValid}] = useForm<zod.infer<typeof validator>>({
 		validator,
 		initialValue: values,
 	});
@@ -30,19 +28,20 @@ const AfdelingForm: React.FC<AfdelingFormProps> = ({values, organisatie, onChang
 		e.preventDefault();
 		toggleSubmitted(true);
 
-		if (isValid()) {
+		try {
+			const data = validator.parse(form);
 			onChange({
-				...form,
+				...data,
 				organisatieId: organisatie.id,
 			});
-			return;
 		}
-
-		toast({error: t("global.formError"), title: t("messages.genericError.title")});
+		catch (err) {
+			toast({error: t("global.formError"), title: t("messages.genericError.title")});
+		}
 	};
 
 	return (
-		<form onSubmit={onSubmit}>
+		<form onSubmit={onSubmit} noValidate={true}>
 			<Stack spacing={5}>
 				<Stack>
 					<FormControl flex={1} isInvalid={!isFieldValid("naam")} isRequired={true}>

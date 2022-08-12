@@ -4,10 +4,8 @@ import DatePicker from "react-datepicker";
 import {useTranslation} from "react-i18next";
 import d from "../../../utils/dayjs";
 import useToaster from "../../../utils/useToaster";
-import zod from "../../../utils/zod";
+import useDateValidator from "../../../validators/useDateValidator";
 import Modal from "../../shared/Modal";
-
-const validator = zod.string().regex(new RegExp(/^\d{4}-\d{2}-\d{2}$/));
 
 type AfspraakEndModalProps = {
 	onClose: VoidFunction,
@@ -15,6 +13,7 @@ type AfspraakEndModalProps = {
 };
 
 const AfspraakEndModal: React.FC<AfspraakEndModalProps> = ({onClose, onSubmit}) => {
+	const validator = useDateValidator();
 	const {t} = useTranslation();
 	const toast = useToaster();
 	const [date, setDate] = useState<Date>(d().toDate());

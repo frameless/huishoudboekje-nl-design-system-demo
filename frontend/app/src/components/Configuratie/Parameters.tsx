@@ -6,17 +6,14 @@ import Queryable from "../../utils/Queryable";
 import useForm from "../../utils/useForm";
 import useToaster from "../../utils/useToaster";
 import zod from "../../utils/zod";
+import useConfiguratieValidator from "../../validators/useConfiguratieValidator";
 import Asterisk from "../shared/Asterisk";
 import Section from "../shared/Section";
 import SectionContainer from "../shared/SectionContainer";
 import ParameterItem from "./ParameterItem";
 
-const validator = zod.object({
-	key: zod.string().nonempty(),
-	value: zod.string().nonempty(),
-});
-
 const Parameters = () => {
+	const validator = useConfiguratieValidator();
 	const {t} = useTranslation();
 	const $configuraties = useGetConfiguratieQuery();
 	const [createConfiguratie, {loading}] = useCreateConfiguratieMutation({
@@ -25,7 +22,7 @@ const Parameters = () => {
 		],
 	});
 	const toast = useToaster();
-	const [form, {updateForm, isValid, isFieldValid, reset, toggleSubmitted}] = useForm({
+	const [form, {updateForm, isFieldValid, reset, toggleSubmitted}] = useForm<zod.infer<typeof validator>>({
 		validator,
 	});
 
@@ -33,26 +30,16 @@ const Parameters = () => {
 		e.preventDefault();
 		toggleSubmitted(true);
 
-		if (!isValid()) {
-			toast({
-				error: t("messages.genericError.description"),
-			});
-			return;
-		}
-
-		createConfiguratie({
-			variables: {
-				key: form.key!,
-				value: form.value!,
-			},
-		})
-			.then(() => {
+		try {
+			const data = validator.parse(form);
+			createConfiguratie({
+				variables: data,
+			}).then(() => {
 				reset();
 				toast({
 					success: t("messages.configuratie.createSuccess"),
 				});
-			})
-			.catch(err => {
+			}).catch(err => {
 				let message = err.message;
 				if (err.message.includes("already exists")) {
 					message = t("messages.configuratie.alreadyExists");
@@ -62,6 +49,12 @@ const Parameters = () => {
 					error: message,
 				});
 			});
+		}
+		catch (err) {
+			toast({
+				error: t("messages.genericError.description"),
+			});
+		}
 	};
 
 	return (
@@ -90,15 +83,15 @@ const Parameters = () => {
 
 							<form onSubmit={onSubmit} noValidate={true}>
 								<Stack direction={"column"} alignItems={"flex-end"}>
-									<FormControl isInvalid={!isFieldValid("key")} isRequired={true}>
+									<FormControl isInvalid={!isFieldValid("id")} isRequired={true}>
 										<FormLabel>{t("forms.configuratie.fields.id")}</FormLabel>
-										<Input onChange={e => updateForm("key", e.target.value)} value={form.key || ""} />
-										<FormErrorMessage>{t("configuratieForm.emptyKeyError")}</FormErrorMessage>
+										<Input onChange={e => updateForm("id", e.target.value)} value={form.id || ""} />
+										<FormErrorMessage>{t("configuratieForm.emptyIdError")}</FormErrorMessage>
 									</FormControl>
-									<FormControl isInvalid={!isFieldValid("value")} isRequired={true}>
+									<FormControl isInvalid={!isFieldValid("waarde")} isRequired={true}>
 										<FormLabel>{t("forms.configuratie.fields.waarde")}</FormLabel>
-										<Input onChange={e => updateForm("value", e.target.value)} value={form.value || ""} />
-										<FormErrorMessage>{t("configuratieForm.emptyValueError")}</FormErrorMessage>
+										<Input onChange={e => updateForm("waarde", e.target.value)} value={form.waarde || ""} />
+										<FormErrorMessage>{t("configuratieForm.emptyWaardeError")}</FormErrorMessage>
 									</FormControl>
 									<Button type={"submit"} colorScheme={"primary"} isLoading={loading}>{t("global.actions.save")}</Button>
 									<Asterisk />

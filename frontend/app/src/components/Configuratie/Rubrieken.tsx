@@ -9,17 +9,14 @@ import useForm from "../../utils/useForm";
 import useSelectProps from "../../utils/useSelectProps";
 import useToaster from "../../utils/useToaster";
 import zod from "../../utils/zod";
+import useRubriekValidator from "../../validators/useRubriekValidator";
 import Asterisk from "../shared/Asterisk";
 import Section from "../shared/Section";
 import SectionContainer from "../shared/SectionContainer";
 import RubriekItem from "./RubriekItem";
 
-const validator = zod.object({
-	naam: zod.string().nonempty(),
-	grootboekrekening: zod.string().nonempty(),
-});
-
 const Rubrieken = () => {
+	const validator = useRubriekValidator();
 	const toast = useToaster();
 	const {t} = useTranslation();
 	const $rubriekenConfiguratie = useGetRubriekenConfiguratieQuery();
@@ -30,7 +27,7 @@ const Rubrieken = () => {
 			{query: GetRubriekenConfiguratieDocument},
 		],
 	});
-	const [form, {updateForm, isValid, isFieldValid, reset, toggleSubmitted}] = useForm({
+	const [form, {updateForm, isFieldValid, reset, toggleSubmitted}] = useForm<zod.infer<typeof validator>>({
 		validator,
 	});
 
@@ -38,33 +35,34 @@ const Rubrieken = () => {
 		e.preventDefault();
 		toggleSubmitted(true);
 
-		if (!isValid()) {
+		try {
+			const data = validator.parse(form);
+			createRubriek({
+				variables: {
+					naam: data.naam,
+					grootboekrekening: data.grootboekrekening,
+				},
+			}).then(() => {
+				reset();
+				toast({
+					success: t("messages.rubrieken.createSuccess"),
+				});
+			}).catch(err => {
+				let message = err.message;
+				if (err.message.includes("already exists")) {
+					message = t("messages.configuratie.alreadyExists");
+				}
+
+				toast({
+					error: message,
+				});
+			});
+		}
+		catch (err) {
 			toast({
 				error: t("messages.genericError.description"),
 			});
-			return;
 		}
-
-		createRubriek({
-			variables: {
-				naam: form.naam,
-				grootboekrekening: form.grootboekrekening,
-			},
-		}).then(() => {
-			reset();
-			toast({
-				success: t("messages.rubrieken.createSuccess"),
-			});
-		}).catch(err => {
-			let message = err.message;
-			if (err.message.includes("already exists")) {
-				message = t("messages.configuratie.alreadyExists");
-			}
-
-			toast({
-				error: message,
-			});
-		});
 	};
 
 	return (

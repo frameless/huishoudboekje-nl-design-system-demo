@@ -21,17 +21,17 @@ import AfspraakFormContext from "./EditAfspraak/context";
 const validator2 = zod.object({
 	organisatieId: zod.number().nonnegative(),
 	afdelingId: zod.number().nonnegative(),
-	postadresId: zod.string().nonempty(),
+	postadresId: zod.string().min(1),
 });
 
 const validator = zod.object({
 	type: zod.enum(["burger", "organisatie"]),
 	bedrag: zod.number().min(0),
 	rubriekId: zod.number().nonnegative(),
-	omschrijving: zod.string().nonempty(),
+	omschrijving: zod.string().min(1),
 	organisatieId: zod.number().nonnegative().optional(),
 	afdelingId: zod.number().nonnegative().optional(),
-	postadresId: zod.string().nonempty().optional(),
+	postadresId: zod.string().min(1).optional(),
 	tegenRekeningId: zod.number().nonnegative(),
 	credit: zod.boolean(),
 }).superRefine((data, ctx) => {

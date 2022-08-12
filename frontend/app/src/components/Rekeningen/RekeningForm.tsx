@@ -2,16 +2,12 @@ import {Button, FormControl, FormErrorMessage, FormLabel, HStack, Input, Stack} 
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {Rekening} from "../../generated/graphql";
-import {Regex, sanitizeIBAN} from "../../utils/things";
+import {sanitizeIBAN} from "../../utils/things";
 import useForm from "../../utils/useForm";
 import useToaster from "../../utils/useToaster";
 import zod from "../../utils/zod";
+import useRekeningValidator from "../../validators/useRekeningValidator";
 import Asterisk from "../shared/Asterisk";
-
-const validator = zod.object({
-	rekeninghouder: zod.string().nonempty().max(100),
-	iban: zod.string().regex(Regex.IbanNL),
-});
 
 type RekeningFormProps = {
 	rekening?: Rekening,
@@ -21,14 +17,14 @@ type RekeningFormProps = {
 }
 
 const RekeningForm: React.FC<RekeningFormProps> = ({rekening, onSubmit, onCancel, isIbanValid = true}) => {
+	const validator = useRekeningValidator();
 	const {t} = useTranslation();
 	const toast = useToaster();
 	const {iban, rekeninghouder} = rekening || {};
-	const [form, {updateForm, toggleSubmitted, isValid, isFieldValid}] = useForm<zod.infer<typeof validator>>({
+	const [form, {updateForm, toggleSubmitted, isFieldValid}] = useForm<zod.infer<typeof validator>>({
 		validator,
 		initialValue: {
 			iban, rekeninghouder,
-
 		},
 	});
 
@@ -36,22 +32,25 @@ const RekeningForm: React.FC<RekeningFormProps> = ({rekening, onSubmit, onCancel
 		e.preventDefault();
 		toggleSubmitted(true);
 
-		if (isValid()) {
-			const ibanNoSpaces = form.iban?.trim().replaceAll(" ", "");
+		try {
+			const data = validator.parse(form);
+
+			const ibanNoSpaces = data.iban?.trim().replaceAll(" ", "");
 			updateForm("iban", ibanNoSpaces);
 
 			onSubmit({
 				...(rekening || {}),
-				rekeninghouder: form.rekeninghouder,
-				iban: form.iban ? sanitizeIBAN(form.iban) : undefined,
+				rekeninghouder: data.rekeninghouder,
+				iban: data.iban ? sanitizeIBAN(data.iban) : undefined,
 			});
 			return;
 		}
-
-		toast.closeAll();
-		toast({
-			error: t("messages.formInputError"),
-		});
+		catch (err) {
+			toast.closeAll();
+			toast({
+				error: t("messages.formInputError"),
+			});
+		}
 	};
 
 	return (

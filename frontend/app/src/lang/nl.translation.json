@@ -45,11 +45,11 @@
 	  "deleteQuestion": "Weet je zeker dat je de gegevens van {{name}} definitief wil verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
 	  "deleteFromHuishoudenTitle": "Burger uit huishouden verwijderen",
 	  "deleteFromHuishoudenQuestion": "Weet je zeker dat je {{name}} uit het huishouden wil verwijderen? {{name}} vormt dan een nieuw huishouden.",
-	  "invalidGeboortedatum": "Vul een geldige datum in. Een datum in de toekomst is niet geldig. Voorbeeld: 01-01-1970.",
 	  "invalidBsn": "Vul een geldig BSN in. Een BSN is 8 of 9 cijfers lang en moet voldoen aan de elfproef.",
 	  "invalidVoorletters": "Vul minimaal één voorletter in. Voorletters zijn gescheiden met een punt. Voorbeeld: K.B.",
 	  "invalidVoornamen": "Vul een voornaam in.",
 	  "invalidAchternaam": "Vul een achternaam in.",
+	  "invalidGeboortedatum": "Vul een geldige datum in. Een datum in de toekomst is niet geldig. Voorbeeld: 01-01-1970.",
 	  "invalidStraatnaam": "Vul een straatnaam in.",
 	  "invalidHuisnummer": "Vul een huisnummer in.",
 	  "invalidPostcode": "Vul een geldige postcode in. Voorbeeld: 1234AB.",
@@ -158,8 +158,8 @@
 	},
 	"formError": "Er is een fout opgetreden. Controleer de invoer en probeer het nog eens.",
 	"period": "Periode",
-	"date": "Datum",
 	"time": "Tijd",
+	"date": "Datum",
 	"startDate": "Startdatum"
   },
   "forms": {
@@ -657,8 +657,8 @@
   },
   "configuratie": "Configuratie",
   "configuratieForm": {
-	"emptyKeyError": "Vul een waarde in voor de sleutel.",
-	"emptyValueError": "Vul een waarde in.",
+	"emptyIdError": "Vul een waarde in voor de sleutel.",
+	"emptyWaardeError": "Vul een waarde in.",
 	"emptyNameErroror": "Vul een naam in.",
 	"emptyGrootboekrekeningError": "Vul een grootboekrekening in."
   },
@@ -841,10 +841,6 @@
   },
   "enabled": "Ingeschakeld",
   "disabled": "Uitgeschakeld",
-  "authErrors": {
-	"authServiceNotFound": "De autorisatieservice is niet bereikbaar.",
-	"authServiceServerError": "De autorisatieservice gaf een onverwacht antwoord."
-  },
   "errorHandlingPage": {
 	"shortDescription": "Er is een fout opgetreden.",
 	"userInstructionTitle": "Wat nu?",
@@ -854,6 +850,10 @@
 	"errorMessageLabel": "Foutbericht",
 	"rawErrorLabel": "Ruwe foutinformatie",
 	"description": "Er is een fout opgetreden. Probeer het later nog eens."
+  },
+  "authErrors": {
+	"authServiceNotFound": "De autorisatieservice is niet bereikbaar.",
+	"authServiceServerError": "De autorisatieservice gaf een onverwacht antwoord."
   },
   "pagination": {
 	"first": "Eerste",

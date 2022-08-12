@@ -5,13 +5,9 @@ import {Configuratie, GetConfiguratieDocument, useUpdateConfiguratieMutation} fr
 import useForm from "../../utils/useForm";
 import useToaster from "../../utils/useToaster";
 import zod from "../../utils/zod";
+import useConfiguratieValidator from "../../validators/useConfiguratieValidator";
 import Asterisk from "../shared/Asterisk";
 import Modal from "../shared/Modal";
-
-const validator = zod.object({
-	id: zod.string().nonempty(),
-	waarde: zod.string().nonempty(),
-});
 
 type UpdateParameterModalProps = {
 	onClose: VoidFunction,
@@ -19,54 +15,55 @@ type UpdateParameterModalProps = {
 };
 
 const UpdateParameterModal: React.FC<UpdateParameterModalProps> = ({onClose, configuratie}) => {
+	const validator = useConfiguratieValidator();
 	const {t} = useTranslation();
 	const toast = useToaster();
 	const cancelDeleteRef = useRef(null);
 	const {id, waarde} = configuratie || {};
 	const [updateConfiguratie, {loading}] = useUpdateConfiguratieMutation({
 		refetchQueries: [
-			{query: GetConfiguratieDocument, variables: {id: configuratie.id}},
+			{query: GetConfiguratieDocument, variables: {id}},
 		],
 	});
-	const [form, {updateForm, isValid, isFieldValid, reset, toggleSubmitted}] = useForm<zod.infer<typeof validator>>({
+	const [form, {updateForm, isFieldValid, reset, toggleSubmitted}] = useForm<zod.infer<typeof validator>>({
 		validator,
-		initialValue: {
-			id, waarde,
-		},
+		initialValue: {id, waarde},
 	});
 
 	const onSubmit = (e) => {
 		e.preventDefault();
 		toggleSubmitted(true);
 
-		if (!isValid()) {
+		try {
+			const data = validator.parse(form);
+
+			updateConfiguratie({
+				variables: {
+					id: id!,
+					waarde: data.waarde!,
+				},
+			}).then(() => {
+				reset();
+				toast({
+					success: t("messages.configuratie.updateSuccess"),
+				});
+				onClose();
+			}).catch(err => {
+				let message = err.message;
+				if (err.message.includes("already exists")) {
+					message = t("messages.configuratie.alreadyExists");
+				}
+
+				toast({
+					error: message,
+				});
+			});
+		}
+		catch (err) {
 			toast({
 				error: t("messages.genericError.description"),
 			});
-			return;
 		}
-
-		updateConfiguratie({
-			variables: {
-				key: configuratie.id!,
-				value: form.waarde!,
-			},
-		}).then(() => {
-			reset();
-			toast({
-				success: t("messages.configuratie.updateSuccess"),
-			});
-			onClose();
-		}).catch(err => {
-			let message = err.message;
-			if (err.message.includes("already exists")) {
-				message = t("messages.configuratie.alreadyExists");
-			}
-
-			toast({
-				error: message,
-			});
-		});
 	};
 
 	return (
@@ -77,10 +74,10 @@ const UpdateParameterModal: React.FC<UpdateParameterModalProps> = ({onClose, con
 						<FormLabel>{t("forms.configuratie.fields.id")}</FormLabel>
 						<Input value={form.id || ""} />
 					</FormControl>
-					<FormControl isInvalid={!isFieldValid("value")} isRequired={true}>
+					<FormControl isInvalid={!isFieldValid("waarde")} isRequired={true}>
 						<FormLabel>{t("forms.configuratie.fields.waarde")}</FormLabel>
 						<Input onChange={e => updateForm("waarde", e.target.value)} value={form.waarde || ""} />
-						<FormErrorMessage>{t("configuratieForm.emptyValueError")}</FormErrorMessage>
+						<FormErrorMessage>{t("configuratieForm.emptyWaardeError")}</FormErrorMessage>
 					</FormControl>
 					<HStack>
 						<Button ref={cancelDeleteRef} onClick={onClose}>{t("global.actions.cancel")}</Button>
