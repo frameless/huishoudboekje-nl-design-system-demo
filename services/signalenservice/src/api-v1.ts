@@ -1,5 +1,4 @@
 import express from "express";
-import pkg from "../package.json";
 import createSignal from "../prisma/operations/createSignal";
 import deleteSignal from "../prisma/operations/deleteSignal";
 import getManySignals from "../prisma/operations/getManySignals";
@@ -10,7 +9,6 @@ import healthRouter from "./health";
 const app = express.Router();
 
 app.get("/health", healthRouter);
-app.get("/version", (req, res) => res.send(pkg.version));
 
 // Get all signals
 app.get("/", async (req, res, next) => {
@@ -26,7 +24,7 @@ app.get("/", async (req, res, next) => {
 		const signals = await getManySignals(ids);
 		return res.json({
 			ok: true,
-			data: signals
+			data: signals,
 		});
 	}
 	catch (err) {
@@ -42,7 +40,7 @@ app.get("/:id", async (req, res, next) => {
 		const signal = await getOneSignal(id);
 		return res.json({
 			ok: true,
-			data: signal
+			data: signal,
 		});
 	}
 	catch (err) {
@@ -78,7 +76,7 @@ app.put("/:id", async (req, res, next) => {
 		});
 		return res.json({
 			ok: true,
-			data: signal
+			data: signal,
 		});
 	}
 	catch (err) {

@@ -1,5 +1,4 @@
 import express from "express";
-import pkg from "../package.json";
 import createAddress from "../prisma/operations/createAddress";
 import deleteAddress from "../prisma/operations/deleteAddress";
 import getManyAddresses from "../prisma/operations/getManyAddresses";
@@ -10,8 +9,6 @@ import healthRouter from "./health";
 const app = express.Router();
 
 app.get("/health", healthRouter);
-
-app.get("/version", (req, res) => res.send(pkg.version));
 
 // Get all addresses
 app.get("/", async (req, res, next) => {
@@ -43,7 +40,7 @@ app.get("/:id", async (req, res, next) => {
 		const address = await getOneAddress(id);
 		return res.json({
 			ok: true,
-			data: address
+			data: address,
 		});
 	}
 	catch (err) {
@@ -79,7 +76,7 @@ app.put("/:id", async (req, res, next) => {
 		});
 		return res.json({
 			ok: true,
-			data: address
+			data: address,
 		});
 	}
 	catch (err) {

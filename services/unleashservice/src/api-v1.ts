@@ -1,5 +1,4 @@
 import express from "express";
-import pkg from "../package.json";
 import healthRouter from "./health";
 import unleashClient from "./unleash";
 
@@ -20,8 +19,6 @@ const isFeatureEnabled = (feature: string, context?: Record<string, any>): boole
 const apiRouter = express.Router();
 
 apiRouter.get("/health", healthRouter);
-
-apiRouter.get("/version", (req, res) => res.send(pkg.version));
 
 apiRouter.get("/", (req, res) => {
 	const features = unleashClient.getFeatureToggleDefinitions();

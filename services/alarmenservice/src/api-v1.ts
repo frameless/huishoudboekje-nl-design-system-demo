@@ -1,5 +1,4 @@
 import express from "express";
-import pkg from "../package.json";
 import createAlarm from "../prisma/operations/createAlarm";
 import deleteAlarm from "../prisma/operations/deleteAlarm";
 import getManyAlarms from "../prisma/operations/getManyAlarms";
@@ -10,7 +9,6 @@ import healthRouter from "./health";
 const app = express.Router();
 
 app.get("/health", healthRouter);
-app.get("/version", (req, res) => res.send(pkg.version));
 
 // Get all alarms
 app.get("/", async (req, res, next) => {
