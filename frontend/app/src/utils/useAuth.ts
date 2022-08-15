@@ -13,7 +13,7 @@ const useAuth = () => {
 	const {isLoading, data: user, error} = useQuery<any, Error>(["getUser"], () => {
 		return fetch(AuthRoutes.check)
 			.then(handleAuthResponse)
-			.then(result => result.user);
+			.then(result => result.user ?? null);
 	});
 
 	const login = useCallback(() => {
