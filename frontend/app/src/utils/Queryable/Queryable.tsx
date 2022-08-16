@@ -10,7 +10,7 @@ export type QueryableProps = {
 	options?: {
 		hidePreviousResults?: boolean
 	},
-	children
+	children: (data) => any
 };
 
 const Queryable: React.FC<QueryableProps> = ({query, loading, error, options = {}, children}) => {
