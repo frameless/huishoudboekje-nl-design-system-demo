@@ -1,9 +1,10 @@
 import {gql} from "@apollo/client";
 
 export const UpdateConfiguratieMutation = gql`
-    mutation updateConfiguratie($key: String!, $value: String!) {
+    mutation updateConfiguratie($id: String!, $waarde: String!) {
         updateConfiguratie(input: {
-            id: $key, waarde: $value
+            id: $id,
+            waarde: $waarde
         }){
             ok
             configuratie{

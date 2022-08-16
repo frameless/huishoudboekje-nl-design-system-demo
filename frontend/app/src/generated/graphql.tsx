@@ -1631,8 +1631,8 @@ export type CreateBurgerRekeningMutationVariables = Exact<{
 export type CreateBurgerRekeningMutation = { createBurgerRekening?: { ok?: boolean, rekening?: { id?: number, iban?: string, rekeninghouder?: string } } };
 
 export type CreateConfiguratieMutationVariables = Exact<{
-  key: Scalars['String'];
-  value: Scalars['String'];
+  id: Scalars['String'];
+  waarde: Scalars['String'];
 }>;
 
 
@@ -1900,8 +1900,8 @@ export type UpdateBurgerMutationVariables = Exact<{
 export type UpdateBurgerMutation = { updateBurger?: { ok?: boolean, burger?: { id?: number, bsn?: number, email?: string, telefoonnummer?: string, voorletters?: string, voornamen?: string, achternaam?: string, geboortedatum?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }>, afspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, alarm?: { id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, afspraak?: { id?: number }, signaal?: { id?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }>, huishouden?: { id?: number, burgers?: Array<{ id?: number }> } } } };
 
 export type UpdateConfiguratieMutationVariables = Exact<{
-  key: Scalars['String'];
-  value: Scalars['String'];
+  id: Scalars['String'];
+  waarde: Scalars['String'];
 }>;
 
 
@@ -2766,8 +2766,8 @@ export type CreateBurgerRekeningMutationHookResult = ReturnType<typeof useCreate
 export type CreateBurgerRekeningMutationResult = Apollo.MutationResult<CreateBurgerRekeningMutation>;
 export type CreateBurgerRekeningMutationOptions = Apollo.BaseMutationOptions<CreateBurgerRekeningMutation, CreateBurgerRekeningMutationVariables>;
 export const CreateConfiguratieDocument = gql`
-    mutation createConfiguratie($key: String!, $value: String!) {
-  createConfiguratie(input: {id: $key, waarde: $value}) {
+    mutation createConfiguratie($id: String!, $waarde: String!) {
+  createConfiguratie(input: {id: $id, waarde: $waarde}) {
     ok
     configuratie {
       id
@@ -2791,8 +2791,8 @@ export type CreateConfiguratieMutationFn = Apollo.MutationFunction<CreateConfigu
  * @example
  * const [createConfiguratieMutation, { data, loading, error }] = useCreateConfiguratieMutation({
  *   variables: {
- *      key: // value for 'key'
- *      value: // value for 'value'
+ *      id: // value for 'id'
+ *      waarde: // value for 'waarde'
  *   },
  * });
  */
@@ -4027,8 +4027,8 @@ export type UpdateBurgerMutationHookResult = ReturnType<typeof useUpdateBurgerMu
 export type UpdateBurgerMutationResult = Apollo.MutationResult<UpdateBurgerMutation>;
 export type UpdateBurgerMutationOptions = Apollo.BaseMutationOptions<UpdateBurgerMutation, UpdateBurgerMutationVariables>;
 export const UpdateConfiguratieDocument = gql`
-    mutation updateConfiguratie($key: String!, $value: String!) {
-  updateConfiguratie(input: {id: $key, waarde: $value}) {
+    mutation updateConfiguratie($id: String!, $waarde: String!) {
+  updateConfiguratie(input: {id: $id, waarde: $waarde}) {
     ok
     configuratie {
       id
@@ -4052,8 +4052,8 @@ export type UpdateConfiguratieMutationFn = Apollo.MutationFunction<UpdateConfigu
  * @example
  * const [updateConfiguratieMutation, { data, loading, error }] = useUpdateConfiguratieMutation({
  *   variables: {
- *      key: // value for 'key'
- *      value: // value for 'value'
+ *      id: // value for 'id'
+ *      waarde: // value for 'waarde'
  *   },
  * });
  */

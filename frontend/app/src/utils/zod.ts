@@ -7,7 +7,4 @@ import {z as zod} from "zod";
  */
 export const containsZodErrorCode = (error: zod.ZodError, errorCodes: zod.ZodIssueCode[]) => error.errors.map(e => e.code).some(e => [...errorCodes].includes(e as any));
 
-// Validators
-export const zoektermValidator = zod.string().nonempty().min(1);
-
 export default zod;

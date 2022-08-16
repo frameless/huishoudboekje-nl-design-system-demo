@@ -3,7 +3,7 @@ import React from "react";
 import DatePicker from "react-datepicker";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
-import {Afspraak, CreateAlarmInput, DayOfWeek, useGetConfiguratieQuery} from "../../../generated/graphql";
+import {Afspraak, CreateAlarmInput, useGetConfiguratieQuery} from "../../../generated/graphql";
 import {RepeatType} from "../../../models/models";
 import d from "../../../utils/dayjs";
 import Queryable from "../../../utils/Queryable";
@@ -11,38 +11,12 @@ import {useReactSelectStyles} from "../../../utils/things";
 import useForm from "../../../utils/useForm";
 import useToaster from "../../../utils/useToaster";
 import zod from "../../../utils/zod";
+import useAlarmValidator, {useEenmaligAlarmValidator} from "../../../validators/useAlarmValidator";
 import Asterisk from "../../shared/Asterisk";
 import Modal from "../../shared/Modal";
 import MonthSelector from "../../shared/MonthSelector";
 import PeriodiekSelector, {Periodiek} from "../../shared/PeriodiekSelector";
 import WeekDaySelector from "../../shared/WeekDaySelector";
-
-const eenmaligValidator = zod.object({
-	startDate: zod.date(), //.refine(val => d().endOf("day").isSameOrBefore(val)), // Must be in the future
-	datumMargin: zod.number().min(0),
-	byMonthDay: zod.number().min(1).max(28),
-	byMonth: zod.array(zod.number().min(1).max(12)).min(1).max(12),
-});
-
-const validator = zod.object({
-	isPeriodiek: zod.nativeEnum(Periodiek),
-	repeatType: zod.nativeEnum(RepeatType).optional(),
-	bedrag: zod.number().min(0),
-	bedragMargin: zod.number().min(0),
-	startDate: zod.date().optional(),
-	// endDate: zod.date().optional(),
-	datumMargin: zod.number().min(0).optional(),
-	byDay: zod.array(zod.nativeEnum(DayOfWeek)).min(1).optional(),
-	byMonth: zod.array(zod.number().min(1).max(12)).min(1).max(12).optional(),
-	byMonthDay: zod.number().min(1).max(28).optional(),
-}).superRefine((data, ctx) => {
-	if (data.isPeriodiek === Periodiek.Eenmalig) {
-		const parsed = eenmaligValidator.safeParse(data);
-		if (!parsed.success) {
-			parsed.error.issues.map(ctx.addIssue);
-		}
-	}
-});
 
 type AddAlarmModalProps = {
 	afspraak: Afspraak,
@@ -51,10 +25,12 @@ type AddAlarmModalProps = {
 };
 
 const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClose}) => {
+	const validator = useAlarmValidator();
+	const eenmaligValidator = useEenmaligAlarmValidator();
 	const {t} = useTranslation();
 	const toast = useToaster();
 	const reactSelectStyles = useReactSelectStyles();
-	const [form, {setForm, updateForm, toggleSubmitted, isSubmitted, isFieldValid, isValid, reset}] = useForm<zod.infer<typeof validator>>({
+	const [form, {setForm, updateForm, toggleSubmitted, isSubmitted, isFieldValid, reset}] = useForm<zod.infer<typeof validator>>({
 		validator,
 		initialValue: {
 			bedrag: parseFloat(afspraak.bedrag),
@@ -101,14 +77,15 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 		e.preventDefault();
 		toggleSubmitted(true);
 
-		if (isValid()) {
-			const {bedrag, bedragMargin, startDate, datumMargin, byDay, byMonth, byMonthDay} = form;
+		try {
+			const data = validator.parse(form);
+			const {bedrag, bedragMargin, startDate, datumMargin, byDay, byMonth, byMonthDay} = data;
 			onSubmit({
 				afspraakId: afspraak.id!,
 				isActive: true,
 				bedrag,
 				bedragMargin,
-				...form.isPeriodiek === Periodiek.Eenmalig ? {
+				...data.isPeriodiek === Periodiek.Eenmalig ? {
 					startDate: d(startDate).format("YYYY-MM-DD"),
 					endDate: d(startDate).format("YYYY-MM-DD"),
 				} : {
@@ -119,10 +96,10 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 				byMonth,
 				...byMonthDay && {byMonthDay: [byMonthDay]},
 			});
-			return;
 		}
-
-		toast({error: t("global.formError"), title: t("messages.genericError.title")});
+		catch (err) {
+			toast({error: t("global.formError"), title: t("messages.genericError.title")});
+		}
 	};
 
 	return (

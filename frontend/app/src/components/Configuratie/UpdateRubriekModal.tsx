@@ -9,13 +9,9 @@ import useForm from "../../utils/useForm";
 import useSelectProps from "../../utils/useSelectProps";
 import useToaster from "../../utils/useToaster";
 import zod from "../../utils/zod";
+import useRubriekValidator from "../../validators/useRubriekValidator";
 import Asterisk from "../shared/Asterisk";
 import Modal from "../shared/Modal";
-
-const validator = zod.object({
-	naam: zod.string().nonempty(),
-	grootboekrekening: zod.string().nonempty(),
-});
 
 type UpdateRubriekModalProps = {
 	onClose: VoidFunction,
@@ -23,6 +19,7 @@ type UpdateRubriekModalProps = {
 };
 
 const UpdateRubriekModal: React.FC<UpdateRubriekModalProps> = ({onClose, rubriek}) => {
+	const validator = useRubriekValidator();
 	const toast = useToaster();
 	const {t} = useTranslation();
 	const cancelDeleteRef = useRef(null);
@@ -35,7 +32,7 @@ const UpdateRubriekModal: React.FC<UpdateRubriekModalProps> = ({onClose, rubriek
 			{query: GetRubriekenConfiguratieDocument, variables: {id: rubriek.id}},
 		],
 	});
-	const [form, {updateForm, isValid, isFieldValid, reset, toggleSubmitted}] = useForm<zod.infer<typeof validator>>({
+	const [form, {updateForm, isFieldValid, reset, toggleSubmitted}] = useForm<zod.infer<typeof validator>>({
 		validator,
 		initialValue: {
 			naam,
@@ -47,35 +44,37 @@ const UpdateRubriekModal: React.FC<UpdateRubriekModalProps> = ({onClose, rubriek
 		e.preventDefault();
 		toggleSubmitted(true);
 
-		if (!isValid()) {
+		try {
+			const data = validator.parse(form);
+
+			updateRubriek({
+				variables: {
+					id: rubriek.id!,
+					naam: data.naam!,
+					grootboekrekeningId: data.grootboekrekening!,
+				},
+			}).then(() => {
+				reset();
+				toast({
+					success: t("messages.rubrieken.updateSuccess"),
+				});
+				onClose();
+			}).catch(err => {
+				let message = err.message;
+				if (err.message.includes("already exists")) {
+					message = t("messages.configuratie.alreadyExists");
+				}
+
+				toast({
+					error: message,
+				});
+			});
+		}
+		catch (err) {
 			toast({
 				error: t("messages.genericError.description"),
 			});
-			return;
 		}
-
-		updateRubriek({
-			variables: {
-				id: rubriek.id!,
-				naam: form.naam!,
-				grootboekrekeningId: form.grootboekrekening!,
-			},
-		}).then(() => {
-			reset();
-			toast({
-				success: t("messages.rubrieken.updateSuccess"),
-			});
-			onClose();
-		}).catch(err => {
-			let message = err.message;
-			if (err.message.includes("already exists")) {
-				message = t("messages.configuratie.alreadyExists");
-			}
-
-			toast({
-				error: message,
-			});
-		});
 	};
 
 	return (

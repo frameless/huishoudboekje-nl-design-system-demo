@@ -11,7 +11,8 @@ import {useFeatureFlag} from "../../../utils/features";
 import {currencyFormat2, formatBurgerName, getBurgerHhbId, isAfspraakActive} from "../../../utils/things";
 import useScheduleHelper from "../../../utils/useScheduleHelper";
 import useToaster from "../../../utils/useToaster";
-import zod, {containsZodErrorCode, zoektermValidator} from "../../../utils/zod";
+import zod, {containsZodErrorCode} from "../../../utils/zod";
+import useZoektermValidator from "../../../validators/useZoektermValidator";
 import AddButton from "../../shared/AddButton";
 import BackButton from "../../shared/BackButton";
 import DataItem from "../../shared/DataItem";
@@ -25,6 +26,7 @@ import AddAlarmModal from "./AddAlarmModal";
 import AfspraakDetailMenu from "./AfspraakDetailMenu";
 
 const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
+	const validator = useZoektermValidator();
 	const isMobile = useBreakpointValue([true, null, null, false]);
 	const {t} = useTranslation();
 	const toast = useToaster();
@@ -152,7 +154,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 		setZoektermTouched(true);
 
 		try {
-			const validatedZoekterm = zoektermValidator.parse(zoekterm || "");
+			const validatedZoekterm = validator.parse(zoekterm || "");
 			const result = await addAfspraakZoekterm({
 				variables: {afspraakId: afspraak.id!, zoekterm: validatedZoekterm},
 			});
@@ -309,7 +311,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 					<Stack>
 						{isAfspraakActive(afspraak) ? (
 							<form onSubmit={onAddAfspraakZoekterm}>
-								<FormControl isInvalid={!zoektermValidator.safeParse(zoekterm).success && zoektermTouched}>
+								<FormControl isInvalid={!validator.safeParse(zoekterm).success && zoektermTouched}>
 									<Stack>
 										<FormLabel>{t("afspraken.zoektermen")}</FormLabel>
 										{zoektermSuggesties.length > 0 && (
