@@ -127,11 +127,11 @@ class CamtParser():
         if party_type_node and party_type_node[0].text != "CRDT":
             party_type = "Cdtr"
         party_node = node.xpath(
-            "./ns:RltdPties/ns:%s" % party_type, namespaces={"ns": ns}
+            f"./ns:RltdPties/ns:{party_type}", namespaces={"ns": ns}
         )
         if party_node:
             name_node = node.xpath(
-                "./ns:RltdPties/ns:%s/ns:Nm" % party_type, namespaces={"ns": ns}
+                f"./ns:RltdPties/ns:{party_type}/ns:Nm", namespaces={"ns": ns}
             )
             if name_node:
                 self.add_value_from_node(
@@ -147,7 +147,7 @@ class CamtParser():
                 )
         # Get remote_account from iban or from domestic account:
         account_node = node.xpath(
-            "./ns:RltdPties/ns:%sAcct/ns:Id" % party_type, namespaces={"ns": ns}
+            f"./ns:RltdPties/ns:{party_type}Acct/ns:Id", namespaces={"ns": ns}
         )
         if account_node:
             iban_node = account_node[0].xpath("./ns:IBAN", namespaces={"ns": ns})
@@ -240,7 +240,7 @@ class CamtParser():
         for node_name in ["OPBD", "PRCD", "CLBD", "ITBD", "CLAV", "FWAV"]:
         # -
             code_expr = (
-                './ns:Bal/ns:Tp/ns:CdOrPrtry/ns:Cd[text()="%s"]/../../..' % node_name
+                f'./ns:Bal/ns:Tp/ns:CdOrPrtry/ns:Cd[text()="{node_name}"]/../../..'
             )
             balance_node = node.xpath(code_expr, namespaces={"ns": ns})
             if balance_node:
@@ -382,7 +382,7 @@ class CamtParser():
     def parse(self, data):
         """Parse a camt.052 or camt.053 or camt.054 file."""
         try:
-            root = etree.fromstring(data, parser=etree.XMLParser(recover=True))
+            root = etree.fromstring(data, parser=etree.XMLParser(recover=True, resolve_entities=True))
         except etree.XMLSyntaxError:
             try:
                 # ABNAmro is known to mix up encodings
