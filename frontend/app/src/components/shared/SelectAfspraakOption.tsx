@@ -2,8 +2,8 @@ import {CheckIcon} from "@chakra-ui/icons";
 import {Stack, TableRowProps, Tag, TagLabel, TagLeftIcon, Td, Text, Tr, Wrap, WrapItem} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {Afspraak} from "../../../generated/graphql";
-import {currencyFormat2, formatBurgerName, truncateText} from "../../../utils/things";
+import {Afspraak} from "../../generated/graphql";
+import {currencyFormat2, formatBurgerName, truncateText} from "../../utils/things";
 
 type SelectAfspraakOptionProps = TableRowProps & {
 	afspraak: Afspraak,

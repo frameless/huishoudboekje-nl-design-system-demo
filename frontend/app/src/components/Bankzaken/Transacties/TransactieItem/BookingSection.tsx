@@ -6,7 +6,7 @@ import {Afspraak, GetTransactieDocument, GetTransactiesDocument, Rubriek, useCre
 import useStore from "../../../../store";
 import {useReactSelectStyles} from "../../../../utils/things";
 import useToaster from "../../../../utils/useToaster";
-import SelectAfspraakOption from "../../../Layouts/SelectAfspraak/SelectAfspraakOption";
+import SelectAfspraakOption from "../../../shared/SelectAfspraakOption";
 
 const BookingSection = ({transaction, rubrieken, afspraken, refetch}) => {
 	const reactSelectStyles = useReactSelectStyles();
