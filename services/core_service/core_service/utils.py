@@ -22,25 +22,20 @@ def row2dict(result):
     return new_result
 
 
-def one(query):
-    try:
-        return query.one()
-    except OperationalError as err:
-        logging.exception(err)
-        abort(make_response({"errors": ["Could not connect to the database"]}, 500))
+def handle_operational_error(error: OperationalError):
+    logging.exception(error)
+    abort(make_response({"errors": ["Could not connect to the database"]}, 500))
 
 
 def one_or_none(query):
     try:
         return query.one_or_none()
-    except OperationalError as err:
-        logging.exception(err)
-        abort(make_response({"errors": ["Could not connect to the database"]}, 500))
+    except OperationalError as error:
+        handle_operational_error(error)
 
 
 def get_all(query):
     try:
         return query.all()
-    except OperationalError as err:
-        logging.exception(err)
-        abort(make_response({"errors": ["Could not connect to the database"]}, 500))
+    except OperationalError as error:
+        handle_operational_error(error)

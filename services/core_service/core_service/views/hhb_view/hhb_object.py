@@ -5,10 +5,10 @@ from sqlalchemy.exc import IntegrityError, OperationalError
 from sqlalchemy.orm.exc import NoResultFound
 
 from core_service.database import db
-from core_service.utils import row2dict
+from core_service.utils import row2dict, handle_operational_error
 
 
-class HHBObject():
+class HHBObject:
     hhb_model = None
     hhb_object = None
 
@@ -62,8 +62,7 @@ class HHBObject():
         try:
             db.session.commit()
         except OperationalError as error:
-            logging.exception(error)
-            abort(make_response({"errors": ["Could not connect to the database"]}))
+            handle_operational_error(error)
         except IntegrityError as error:
             logging.warning(repr(error))
             abort(make_response({"errors": [str(error.orig).strip().split("DETAIL:  ")[1]]}, 409))
