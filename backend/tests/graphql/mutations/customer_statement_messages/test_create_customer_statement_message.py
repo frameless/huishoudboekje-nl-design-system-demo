@@ -17,6 +17,7 @@ ING_CAMT_CSM_FILE = os.path.join(os.path.dirname(__file__), "CAMT_ING.xml")
 INCORRECT_CAMT_FILE = os.path.join(os.path.dirname(__file__), "incorrect.xml")
 ANONIEM_CSM_FILE = os.path.join(os.path.dirname(__file__), "Anoniem.xml")
 INCORRECT_FILE_FORMAT = os.path.join(os.path.dirname(__file__), "GameOver.jpg")
+DANGEROUS_CAMT_CSM_FILE = os.path.join(os.path.dirname(__file__), "CAMT_DANGEROUS.xml")
 
 class MockResponse:
     history = None
@@ -324,6 +325,53 @@ def test_create_with_incorrect_file_format(client):
         response = do_csm_post(client, testfile)
         assert response.json["errors"][0]['message'] == "File format not allowed."
         assert response.status_code == 200
+
+def test_vulnerability_XXE_attack():
+    '''
+    This test is a demonstration on what the resolve_entities parameter in the etree.XMLParser does. 
+    By setting it to False it does not resolve entities and helps protect agains XXE attacks. 
+    '''
+    from lxml import etree
+
+    file = open(DANGEROUS_CAMT_CSM_FILE, "rb")
+    data = file.read()
+    root = etree.fromstring(data, parser=etree.XMLParser(recover=True, resolve_entities=True))
+    ns = root.tag[1 : root.tag.index("}")]
+    value = root.xpath("./ns:BkToCstmrStmt/ns:Stmt/ns:Ntry/ns:AddtlNtryInf", namespaces={"ns": ns})
+
+    print(value[0].text)    
+    assert(value[0].text == "11.11.111.111 Naam Adres 7 2960 Dorp")
+    print(value[1].text)
+    assert(value[1].text == "THIS COULD BE YOUR PLAIN TEXT PASSWORD THAT WAS SAVED IN A TXT FILE")
+    print(value[2].text)
+    assert(value[2].text == "THIS COULD BE ANYTHING RANDOM")
+
+    root = etree.fromstring(data, parser=etree.XMLParser(recover=True, resolve_entities=False))
+    ns = root.tag[1 : root.tag.index("}")]
+    value = root.xpath("./ns:BkToCstmrStmt/ns:Stmt/ns:Ntry/ns:AddtlNtryInf", namespaces={"ns": ns})
+
+    print(value[0].text)    
+    assert(value[0].text == "11.11.111.111 Naam Adres 7 2960 Dorp")
+    print(value[1].text)
+    assert(value[1].text == None)
+    print(value[2].text)
+    assert(value[2].text == None)
+
+def test_create_csm_with_dangerous_camt_file(client, mocker: MockerFixture):
+    '''
+    The file contains Entities that should not be resolved to protect against XXE attacks. 
+    If the Entities are resolved this test will fail.
+    '''
+    adapter = create_mock_adapter(mocker)
+
+    with open(DANGEROUS_CAMT_CSM_FILE, "rb") as testfile:
+        with requests_mock.Mocker() as m:
+            m._adapter = adapter
+            m.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json={"data": {"id": 1}})
+            response = do_csm_post(client, testfile)
+
+            assert(adapter.request_history == [])
+            assert(response.json['errors'][0]['message'] == 'sequence item 0: expected str instance, NoneType found')
 
 def create_mock_adapter(mocker: MockerFixture) -> Adapter:
     adapter = requests_mock.Adapter()
