@@ -1,13 +1,15 @@
 import re
+from urllib.parse import unquote
 
+import requests
 import requests_mock
+
 from hhb_backend.graphql import settings
+from tests.utils.mock_utils import get_by_filter
 
 mock_afspraken = {
-    "data": [
-        {"id": 11, "rubriek_id": 1, "credit": True},
-        {"id": 12, "rubriek_id": 2, "credit": False},
-    ]
+    11: {"id": 11, "rubriek_id": 1, "credit": True},
+    12: {"id": 12, "rubriek_id": 2, "credit": False}
 }
 mock_rubrieken = {
     "data": [
@@ -17,18 +19,14 @@ mock_rubrieken = {
     ]
 }
 mock_grootboekrekeningen = {
-    "data": [
-        {"id": "m1", "naam": "inkomsten", "children": ["m12"], "debet": False},
-        {"id": "m12", "naam": "salaris", "parent_id": "m1", "debet": False},
-        {"id": "m2", "naam": "uitgaven", "debet": True},
-    ]
+    "m1": {"id": "m1", "naam": "inkomsten", "children": ["m12"], "debet": False},
+    "m12": {"id": "m12", "naam": "salaris", "parent_id": "m1", "debet": False},
+    "m2": {"id": "m2", "naam": "uitgaven", "debet": True}
 }
 mock_bank_transactions = {
-    "data": [
-        {"id": 31, "is_credit": True},
-        {"id": 32, "is_credit": False},
-        {"id": 33, "is_credit": False},
-    ]
+    31: {"id": 31, "is_credit": True},
+    32: {"id": 32, "is_credit": False},
+    33: {"id": 33, "is_credit": False}
 }
 
 journaalposten = []
@@ -53,9 +51,26 @@ def create_journaalpost_service(request, context):
     return {"data": data}
 
 
-def get_journaalposten(request, context):
+def get_journaalposten(request, _context):
     global journaalposten
-    return {"data": journaalposten}
+    ids = unquote(request.url.split("=", 1)[1]).split(",")
+    posten = []
+    for post in journaalposten:
+        if str(post["transaction_id"]) in ids:
+            posten.append(post)
+    return {"data": posten}
+
+
+def get_afspraken(req, _ctx):
+    return get_by_filter(req, mock_afspraken)
+
+
+def get_transactions(req: requests.PreparedRequest, _ctx):
+    return get_by_filter(req, mock_bank_transactions)
+
+
+def get_grootboekrekeningen(req: requests.PreparedRequest, _ctx):
+    return get_by_filter(req, mock_grootboekrekeningen)
 
 
 def setup_services(mock):
@@ -70,26 +85,27 @@ def setup_services(mock):
         json=echo_json_data,
     )
     afspraken_adapter = mock.get(
-        f"{settings.HHB_SERVICES_URL}/afspraken/", json=mock_afspraken
+        re.compile(f"{settings.HHB_SERVICES_URL}/afspraken/\\?filter_ids=.*"),
+        json=get_afspraken
     )
     rubrieken_get = mock.get(
         f"{settings.HHB_SERVICES_URL}/rubrieken/",
         json=mock_rubrieken,
     )
     grootboekrekeningen_adapter = mock.get(
-        f"{settings.GROOTBOEK_SERVICE_URL}/grootboekrekeningen/",
-        json=mock_grootboekrekeningen,
+        re.compile(f"{settings.GROOTBOEK_SERVICE_URL}/grootboekrekeningen/\\?filter_ids=.*"),
+        json=get_grootboekrekeningen,
     )
     journaalposten_get_adapter = mock.get(
-        f"{settings.HHB_SERVICES_URL}/journaalposten/",
+        re.compile(f"{settings.HHB_SERVICES_URL}/journaalposten/\\?filter_transactions=.*"),
         json=get_journaalposten,
     )
     joornaalposten_adapter = mock.post(
         re.compile(f"{settings.HHB_SERVICES_URL}/journaalposten/.*"), json=create_journaalpost_service
     )
     bank_transactions_adapter = mock.get(
-        f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/",
-        json=mock_bank_transactions,
+        re.compile(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/\\?filter_ids=.*"),
+        json=get_transactions
     )
     mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json={"data": {"id": 1}})
     return {
@@ -147,17 +163,17 @@ mutation test($input:CreateJournaalpostGrootboekrekeningInput!) {
                 }
             }
         }
-        assert adapters["grootboekrekeningen"].called_once
+        assert adapters["grootboekrekeningen"].call_count == 2
         assert adapters["journaalposten"].called_once
         assert adapters["journaalposten_get"].called_once
-        assert adapters["transacties"].called_once
+        assert adapters["transacties"].call_count == 2
         assert adapters["transacties_update"].called_once
         assert not adapters["afspraken"].called
 
 
 def test_create_journaalpost_grootboekrekening_unknown_transaction(client):
     with requests_mock.Mocker() as mock:
-        adapters = setup_services(mock)
+        setup_services(mock)
 
         response = client.post(
             "/graphql",
@@ -277,9 +293,9 @@ mutation test($input:[CreateJournaalpostAfspraakInput!]!) {
                 }
             }
         }
-        assert adapters["afspraken"].called_once
+        assert adapters["afspraken"].call_count == 2
         assert adapters["journaalposten"].called_once
-        assert adapters["transacties"].called_once
+        assert adapters["transacties"].call_count == 2
         assert adapters["transacties_update"].called_once
         # assert adapters["grootboekrekeningen"].called
 
@@ -375,8 +391,8 @@ mutation test($input: [CreateJournaalpostAfspraakInput!]!) {
                 }
             }
         }
-        assert adapters["afspraken"].called_once
+        assert adapters["afspraken"].call_count == 3
         assert adapters["journaalposten"].called_once
-        assert adapters["transacties"].called_once
+        assert adapters["transacties"].call_count == 3
         assert adapters["transacties_update"].call_count == 2
         # assert adapters["grootboekrekeningen"].called

@@ -25,7 +25,9 @@ class DataLoaderOptions(TypedDict):
     filters: NotRequired[Filters]
     params: NotRequired[Dict[str, any]]
     batch_size: NotRequired[int]
-    is_single: NotRequired[bool]
+    return_first: NotRequired[bool]
+    no_filter: NotRequired[bool]
+    return_indexed: NotRequired[str]
 
 
 class DataLoader:
@@ -35,53 +37,61 @@ class DataLoader:
     filter_item = None  # will fall back to 'filter_ids'
     batch_size = 1000
     params = {}
-    is_single = None  # will fall back to False or 'filter_item is None' when using the load (single)
+    return_first = None  # will fall back to 'filter_item is None' when using the load (single)
+    no_filter = False
 
     def __init__(self, loop):
         self.loop = loop
 
+    # todo rename load to load_one and load_many
+
     def load(self, key: Key, **kwargs: Unpack[DataLoaderOptions]) -> dict:
         options = _add_default_options(self, kwargs)
-        if options["filter_item"] is None:
-            options["is_single"] = True
+        if options["return_first"] is None:
+            options["return_first"] = options["filter_item"] is None and not options["no_filter"]
 
         return _base_data_load_with_options(self.service, options, key=key)
 
     def load_many(self, keys: List[Key], **kwargs: Unpack[DataLoaderOptions]) -> List[dict]:
         options = _add_default_options(self, kwargs)
+        options["return_first"] = False
+        keys = _remove_duplicated_keys(keys)
+
         return _base_data_load_with_options(self.service, options, keys=keys)
 
     def load_all(self, **kwargs: Unpack[DataLoaderOptions]) -> List[dict]:
         options = _add_default_options(self, kwargs)
+        options["return_first"] = False
         return _base_data_load_with_options(self.service, options)
 
-    def get_by_item_paged(self, key: Key = None, keys: List[Key] = None,
-                          start: int = 1, limit: int = 20, desc: bool = False,
-                          sorting_column: str = "id", **kwargs: Unpack[DataLoaderOptions]):
+    def load_paged(self, key: Key = None, keys: List[Key] = None,
+                   start: int = 1, limit: int = 20, desc: bool = False,
+                   sorting_column: str = "id", **kwargs: Unpack[DataLoaderOptions]):
+        """
+        Load items paged. When either key or keys is specified the results will be limited to that key/those keys.
+        """
         options = _add_default_options(self, kwargs)
-        return _get_paged(
+        return _load_paged(
             self.service, options, key=key, keys=keys, start=start, limit=limit, desc=desc,
             sorting_column=sorting_column
         )
-
-    def get_all_paged(self, start: int = 1, limit: int = 20, desc: bool = False,
-                      sorting_column: str = "id", filters: Filters = None):
-        # todo test uncommented code
-        return self.get_by_item_paged(
-            start=start, limit=limit, desc=desc, sorting_column=sorting_column, filters=filters
-        )
-        # return _get_paged(
-        #     self.service, start=start, limit=limit, desc=desc, sorting_column=sorting_column, filters=filters
-        # )
 
     def __getitem__(self, item):
         return getattr(self, item)
 
 
-def _get_options(options: Unpack[DataLoaderOptions]) -> (str, str, Filters, Dict[str, any], int, bool):
+def _remove_duplicated_keys(keys: List[Key]) -> List[Key]:
+    deduplicated = []
+    for key in keys:
+        if key not in deduplicated:
+            deduplicated.append(key)
+    return deduplicated
+
+
+def _get_options(options: Unpack[DataLoaderOptions]) -> (str, str, Filters, Dict[str, any], int, bool, bool, str):
     options = copy.deepcopy(options)
-    return options.get("model"), options.get("filter_item"), options.get("filters", {}), \
-           options.get("params"), options.get("batch_size"), options.get("is_single")
+    return options.get("model"), options.get("filter_item"), options.get("filters", {}), options.get("no_filter"), \
+        options.get("params"), options.get("batch_size"), options.get("return_first"), options.get("return_indexed")
 
 
 def _add_default_options(loader, options: Unpack[DataLoaderOptions]):
@@ -89,9 +99,10 @@ def _add_default_options(loader, options: Unpack[DataLoaderOptions]):
     # it's not a problem because as of writing this _get_options is used and that makes a deep copy of the options.
     _add_default_option(options, "model", loader)
     _add_default_option(options, "filter_item", loader)
+    _add_default_option(options, "no_filter", loader)
     _add_default_option(options, "params", loader)
     _add_default_option(options, "batch_size", loader)
-    _add_default_option(options, "is_single", loader)
+    _add_default_option(options, "return_first", loader)
     return options
 
 
@@ -100,10 +111,10 @@ def _add_default_option(options: dict, option, loader: DataLoader):
         options[option] = loader[option]
 
 
-def _get_paged(service: str, options: Unpack[DataLoaderOptions],
-               key: Key = None, keys: List[Key] = None,
-               start: int = 1, limit: int = 20, desc: bool = False,
-               sorting_column: str = "id"):
+def _load_paged(service: str, options: Unpack[DataLoaderOptions],
+                key: Key = None, keys: List[Key] = None,
+                start: int = 1, limit: int = 20, desc: bool = False,
+                sorting_column: str = "id"):
     options["params"] = {
         'start': start,
         'limit': limit,
@@ -112,7 +123,7 @@ def _get_paged(service: str, options: Unpack[DataLoaderOptions],
     }
 
     # adds the filter_item and filters for us
-    response, _ = _base_load_with_options(service, options, key=key, keys=keys)
+    response = _base_load_with_options(service, options, key=key, keys=keys)
 
     return {
         options["model"]: response["data"],
@@ -125,7 +136,7 @@ def _get_paged(service: str, options: Unpack[DataLoaderOptions],
 
 
 def _base_data_load_with_options(service: str, options: Unpack[DataLoaderOptions], key=None, keys: List[Key] = None):
-    _, _, _, _, batch_size, is_single = _get_options(options)
+    _, _, _, _, _, batch_size, return_first, return_indexed = _get_options(options)
 
     if keys is not None:
         if len(keys) > batch_size:
@@ -136,8 +147,13 @@ def _base_data_load_with_options(service: str, options: Unpack[DataLoaderOptions
             return result
 
     data = _base_load_with_options(service, options, key=key, keys=keys)["data"]
-    if is_single:
+    if return_first:
         data = data[0] if len(data) > 0 else None
+    elif return_indexed is not None:
+        indexed = {}
+        for item in data:
+            indexed.setdefault(item[return_indexed], item)
+        data = indexed
     logging.info(f"response: {data}")
     return data
 
@@ -145,18 +161,20 @@ def _base_data_load_with_options(service: str, options: Unpack[DataLoaderOptions
 def _base_load_with_options(service: str, options: Unpack[DataLoaderOptions], key=None, keys: List[Key] = None) -> dict:
     logging.info(options)
     logging.info(locals())
-    model, filter_item, filters, params, _, _ = _get_options(options)
+    model, filter_item, filters, no_filter, params, _, _, _ = _get_options(options)
 
     url = f"{service}/{model}/"
+    key_data = ','.join([str(k) for k in keys]) if keys is not None else key
 
-    # we can't set a default value for filter_item because otherwise we can't do the single check in load (single)
-    if not filter_item:
-        filter_item = "filter_ids"
-
-    if key is not None:
-        params[filter_item] = key
-    elif keys is not None:
-        params[filter_item] = ','.join([str(k) for k in keys])
+    if key_data is not None:
+        if not no_filter:
+            # we can't set a default value for filter_item because
+            # otherwise we can't do the single check in load (single)
+            if filter_item is None:
+                filter_item = "filter_ids"
+            params[filter_item] = key_data
+        else:
+            url += str(key_data)
 
     if filters:
         params["filters"] = json.dumps(filters)
@@ -174,6 +192,6 @@ def _send_get_request(url, service, params=None, headers=None):
         raise GraphQLError(f"Connectie error heeft plaatsgevonden op {service}")
 
     if response.status_code != 200:
-        raise UpstreamError(response, f"Request to {url} not succeeded.")
+        raise UpstreamError(response, f"Request to {url} {params} not succeeded.")
 
     return response

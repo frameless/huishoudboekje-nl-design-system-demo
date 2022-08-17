@@ -90,7 +90,7 @@ def create_rekening(rekening):
 
 def get_rekening_by_iban(iban):
     # todo check if it still works. there used to be an array check (and returned first element of it)
-    return hhb_dataloader().rekeningen_by_iban.load(iban)
+    return hhb_dataloader().rekening_by_iban.load(iban)
 
 
 def disconnect_afdeling_rekening(afdeling_id: int, rekening_id: int):

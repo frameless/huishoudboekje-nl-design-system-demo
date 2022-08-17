@@ -22,4 +22,4 @@ class RekeningByIbanLoader(DataLoader):
     """ Load rekeningen list for ibans """
     model = "rekeningen"
     filter_item = "filter_ibans"
-    is_single = True
+    return_first = True

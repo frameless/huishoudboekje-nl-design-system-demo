@@ -15,20 +15,20 @@ class Grootboekrekening(graphene.ObjectType):
     children = graphene.List(lambda: Grootboekrekening)
     rubriek = graphene.Field(lambda: Rubriek)
 
-    async def resolve_parent(root, info):
+    async def resolve_parent(self, _info):
         """ Get parent when requested """
-        if root.get('parent_id'):
-            parent = hhb_dataloader().grootboekrekeningen_by_id.load(root.get('parent_id'))
+        if self.get('parent_id'):
+            parent = hhb_dataloader().grootboekrekeningen_by_id.load(self.get('parent_id'))
             return parent or None
 
-    async def resolve_children(root, info):
+    async def resolve_children(self, _info):
         """ Get children when requested """
-        if root.get('children'):
-            children_ = hhb_dataloader().grootboekrekeningen_by_id.load_many(root.get('children'))
+        if self.get('children'):
+            children_ = hhb_dataloader().grootboekrekeningen_by_id.load_many(self.get('children'))
             return children_ or []
 
-    async def resolve_rubriek(root, info):
-        return hhb_dataloader().rubrieken_by_grootboekrekening.load(root.get('id'))
+    async def resolve_rubriek(self, _info):
+        return hhb_dataloader().rubriek_by_grootboekrekening.load(self.get('id'))
 
-    def resolve_credit(root, info):
-        return not root.get('debet')
+    def resolve_credit(self, _info):
+        return not self.get('debet')

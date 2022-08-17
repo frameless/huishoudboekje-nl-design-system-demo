@@ -40,7 +40,7 @@ class BankTransaction(graphene.ObjectType):
     async def resolve_tegen_rekening(root, info):
         tegen_rekening = root.get('tegen_rekening')
         if tegen_rekening:
-            return hhb_dataloader().rekeningen_by_iban.load(tegen_rekening)
+            return hhb_dataloader().rekening_by_iban.load(tegen_rekening)
 
     async def resolve_journaalpost(root, info):
         return hhb_dataloader().journaalposten_by_transaction.load(root.get('id'))

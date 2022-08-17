@@ -203,7 +203,7 @@ def get_afspraak_by_id(afspraakId: int) -> dict:
     return hhb_dataloader().afspraak_by_id.load(afspraakId)
 
 
-async def get_banktransactions_by_journaal_ids(journaal_ids) -> List[dict]:
+def get_banktransactions_by_journaal_ids(journaal_ids) -> List[dict]:
     journaalposts = []
     transactions = []
     for journaalpost_id in journaal_ids:

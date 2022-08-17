@@ -11,3 +11,4 @@ class RubriekByGrootboekrekeningLoader(DataLoader):
     model = "rubrieken"
     filter_item = "filter_grootboekrekeningen"
     batch_size = 250
+    return_first = True

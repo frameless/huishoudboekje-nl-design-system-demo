@@ -71,16 +71,15 @@ class BurgersQuery:
 
             afspraken = hhb_dataloader().afspraak_by_id.load_all(filters=kwargs.get("filters", None))
             for afspraak in afspraken:
-                if valid_afspraak(afspraak) and search in str(afspraak['zoektermen']).lower():
-                    if afspraak["burger_id"]:
+                if valid_afspraak(afspraak) and afspraak["burger_id"]:
+                    if afspraak["id"] in afspraken_ids or search in str(afspraak['zoektermen']).lower():
                         burger_ids.add(afspraak["burger_id"])
 
-            afspraken = hhb_dataloader().afspraak_by_id.load_many(list(afspraken_ids))
-            for afspraak in afspraken:
-                if valid_afspraak(afspraak) and afspraak["burger_id"]:
-                    burger_ids.add(afspraak["burger_id"])
-
-            return hhb_dataloader().burger_by_id.load_many(list(burger_ids))
+            result = []
+            for burger in burgers:
+                if burger["id"] in burger_ids:
+                    result.append(burger)
+            return result
 
         return hhb_dataloader().burger_by_id.load_all(filters=kwargs.get("filters", None))
 
@@ -103,5 +102,5 @@ class BurgersPagedQuery:
     @log_gebruikers_activiteit
     async def resolver(cls, _root, _info, **kwargs):
         if "start" in kwargs and "limit" in kwargs:
-            return hhb_dataloader().burger_by_id.get_all_paged(start=kwargs["start"], limit=kwargs["limit"])
+            return hhb_dataloader().burger_by_id.load_paged(start=kwargs["start"], limit=kwargs["limit"])
         return hhb_dataloader().burger_by_id.load_all()

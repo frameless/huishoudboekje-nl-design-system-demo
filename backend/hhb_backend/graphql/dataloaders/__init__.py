@@ -53,7 +53,7 @@ class HHBDataLoader:
 
         # Rubrieken
         self.rubriek_by_id = RubriekByIdLoader(loop=loop)
-        self.rubrieken_by_grootboekrekening = RubriekByGrootboekrekeningLoader(
+        self.rubriek_by_grootboekrekening = RubriekByGrootboekrekeningLoader(
             loop=loop
         )
 
@@ -65,7 +65,7 @@ class HHBDataLoader:
         self.rekening_by_id = RekeningByIdLoader(loop=loop)
         self.rekeningen_by_burger = RekeningenByBurgerLoader(loop=loop)
         self.rekeningen_by_afdeling = RekeningenByAfdelingLoader(loop=loop)
-        self.rekeningen_by_iban = RekeningByIbanLoader(loop=loop)
+        self.rekening_by_iban = RekeningByIbanLoader(loop=loop)
 
         # Transaction Service
         self.csms_by_id = CSMsByIdLoader(loop=loop)

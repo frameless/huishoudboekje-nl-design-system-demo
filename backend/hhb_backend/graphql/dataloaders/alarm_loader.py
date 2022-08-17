@@ -16,5 +16,5 @@ class AlarmenLoader(DataLoader):
 
 class AlarmByIdLoader(DataLoader):
     """ Laden van Alarmen op basis van ids """
-    model = "alarms"
     service = settings.ALARMENSERVICE_URL
+    model = "alarms"

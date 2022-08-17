@@ -75,7 +75,7 @@ class BankTransactionsPagedQuery:
     @log_gebruikers_activiteit
     async def resolver(cls, _root, _info, **kwargs):
         if "start" in kwargs and "limit" in kwargs:
-            return hhb_dataloader().bank_transaction_by_id.get_all_paged(
+            return hhb_dataloader().bank_transaction_by_id.load_paged(
                 start=kwargs["start"],
                 limit=kwargs["limit"],
                 desc=True,

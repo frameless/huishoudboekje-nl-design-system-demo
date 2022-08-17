@@ -41,7 +41,7 @@ class DeletePostadres(graphene.Mutation):
         if not previous:
             raise GraphQLError("postadres not found")
 
-        afspraken = hhb_dataloader().afspraken_by_postadres(id)
+        afspraken = hhb_dataloader().afspraken_by_postadres.load(id)
         if afspraken:
             raise GraphQLError("Postadres wordt gebruikt in een of meerdere afspraken - verwijderen is niet mogelijk.")
 

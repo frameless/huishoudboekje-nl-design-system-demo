@@ -6,7 +6,8 @@ from hhb_backend.graphql.dataloaders import hhb_dataloader
 async def saldo_berekenen(burger_ids):
     """ Get saldo for burger_ids together """
     transaction_ids = []
-    if len(burger_ids) > 0:
+
+    if burger_ids:
         for burger_id in burger_ids:
             afspraken = hhb_dataloader().afspraken_by_burger.load(burger_id)
             if afspraken:
@@ -16,12 +17,10 @@ async def saldo_berekenen(burger_ids):
                         for post in journaalposten_afspraak:
                             id = post.get('transaction_id')
                             transaction_ids.append(id)
-                    else: 
+                    else:
                         logging.info("Geen journaalposten_by_afspraak.")
-            else: 
-                logging.info("Geen afspraken.")
             
-        if len(transaction_ids) == 0:
+        if not transaction_ids:
             return {"bedrag": 0}
 
     return hhb_dataloader().bank_transaction_by_id.saldo_many(transaction_ids)

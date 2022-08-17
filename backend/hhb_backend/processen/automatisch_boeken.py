@@ -28,7 +28,8 @@ async def automatisch_boeken(customer_statement_message_id: int = None):
     automatische_transacties = [
         {"transactionId": transactie_id, "afspraakId": afspraken[0]["id"], "isAutomatischGeboekt": True}
         for transactie_id, afspraken in suggesties.items()
-        if len(afspraken) == 1 and afspraken[0]["zoektermen"]]
+        if len(afspraken) == 1 and afspraken[0]["zoektermen"]
+    ]
 
     stats = Counter(len(s) for s in suggesties.values())
     logging.info(
@@ -62,47 +63,53 @@ mutation AutomatischBoeken($input: [CreateJournaalpostAfspraakInput!]!) {
     logging.info(f"automatisch boeken completed with {len(journaalposten_)}")
     return journaalposten_
 
+
 async def transactie_suggesties(transactie_ids):
     if type(transactie_ids) != list:
         transactie_ids = [transactie_ids]
 
     # fetch transactions
-    transactions: List[bank_transaction.BankTransaction] = (
+    transactions: List[bank_transaction.BankTransaction] = \
         hhb_dataloader().bank_transaction_by_id.load_many(transactie_ids)
-    )
-    if transactions == [None] * len(transactions):
+    if not transactions:
         return {key: [] for key in transactie_ids}
 
     # Rekeningen ophalen adhv iban
     rekening_ibans = [t["tegen_rekening"] for t in transactions if t["tegen_rekening"]]
-    rekeningen = hhb_dataloader().rekeningen_by_iban.load_many(rekening_ibans)
-    if rekeningen == [None] * len(rekeningen):
+    rekeningen = hhb_dataloader().rekening_by_iban.load_many(rekening_ibans)
+    if not rekeningen:
         return {key: [] for key in transactie_ids}
+
+    iban_to_rekening_id = {}
+    for rekening in rekeningen:
+        iban_to_rekening_id[rekening["iban"]] = rekening["id"]
 
     rekening_ids = [r["id"] if r is not None else -1 for r in rekeningen]
 
-    # and afspraken for tegen_rekening.ibans of those transactions
-    afspraken: List[afspraak.Afspraak] = (
-        hhb_dataloader().afspraken_by_rekening.load_many(rekening_ids)
-    )
-    if afspraken == [None] * len(afspraken):
+    afspraken: List[afspraak.Afspraak] = hhb_dataloader().afspraken_by_rekening.load_many(rekening_ids)
+    if not afspraken:
         return {key: [] for key in transactie_ids}
 
     transactie_ids_with_afspraken = {}
-    for transaction, suggesties in zip(transactions, afspraken):
-        transactie_ids_with_afspraken[transaction["id"]] = [afspraak for afspraak in suggesties if
-                                                            match_zoekterm(afspraak,
-                                                                           transaction["information_to_account_owner"]) and valid_afspraak(afspraak, to_date(transaction["transactie_datum"]))]
+    for transaction in transactions:
+        rekening_id: int = iban_to_rekening_id[transaction["tegen_rekening"]]
+
+        transactie_ids_with_afspraken[transaction["id"]] = [
+            afspraak
+            for afspraak in afspraken
+            if afspraak["tegen_rekening_id"] == rekening_id
+            and match_zoekterm(afspraak, transaction["information_to_account_owner"])
+            and valid_afspraak(afspraak, to_date(transaction["transactie_datum"]))
+        ]
 
     return transactie_ids_with_afspraken
 
 
 def match_zoekterm(afspraak, target_text):
-    if afspraak["zoektermen"] and all(
-            [re.search(zoekterm, target_text, re.IGNORECASE) for zoekterm in afspraak["zoektermen"]]):
-        return True
-
-    return False
+    return afspraak["zoektermen"] and all([
+        re.search(zoekterm, target_text, re.IGNORECASE)
+        for zoekterm in afspraak["zoektermen"]
+    ])
 
 
 async def find_matching_afspraken_by_afspraak(main_afspraak):
