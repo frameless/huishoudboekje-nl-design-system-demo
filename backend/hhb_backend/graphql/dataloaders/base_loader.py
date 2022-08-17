@@ -26,7 +26,6 @@ class DataLoaderOptions(TypedDict):
     params: NotRequired[Dict[str, any]]
     batch_size: NotRequired[int]
     return_first: NotRequired[bool]
-    no_filter: NotRequired[bool]
     return_indexed: NotRequired[str]
 
 
@@ -38,17 +37,11 @@ class DataLoader:
     batch_size = 1000
     params = {}
     return_first = None  # will fall back to 'filter_item is None' when using the load (single)
-    no_filter = False
-
-    def __init__(self, loop):
-        self.loop = loop
-
-    # todo rename load to load_one and load_many
 
     def load(self, key: Key, **kwargs: Unpack[DataLoaderOptions]) -> dict:
         options = _add_default_options(self, kwargs)
         if options["return_first"] is None:
-            options["return_first"] = options["filter_item"] is None and not options["no_filter"]
+            options["return_first"] = options["filter_item"] is None
 
         return _base_data_load_with_options(self.service, options, key=key)
 
@@ -90,8 +83,8 @@ def _remove_duplicated_keys(keys: List[Key]) -> List[Key]:
 
 def _get_options(options: Unpack[DataLoaderOptions]) -> (str, str, Filters, Dict[str, any], int, bool, bool, str):
     options = copy.deepcopy(options)
-    return options.get("model"), options.get("filter_item"), options.get("filters", {}), options.get("no_filter"), \
-        options.get("params"), options.get("batch_size"), options.get("return_first"), options.get("return_indexed")
+    return options.get("model"), options.get("filter_item"), options.get("filters", {}), options.get("params"),\
+           options.get("batch_size"), options.get("return_first"), options.get("return_indexed")
 
 
 def _add_default_options(loader, options: Unpack[DataLoaderOptions]):
@@ -99,7 +92,6 @@ def _add_default_options(loader, options: Unpack[DataLoaderOptions]):
     # it's not a problem because as of writing this _get_options is used and that makes a deep copy of the options.
     _add_default_option(options, "model", loader)
     _add_default_option(options, "filter_item", loader)
-    _add_default_option(options, "no_filter", loader)
     _add_default_option(options, "params", loader)
     _add_default_option(options, "batch_size", loader)
     _add_default_option(options, "return_first", loader)
@@ -136,7 +128,7 @@ def _load_paged(service: str, options: Unpack[DataLoaderOptions],
 
 
 def _base_data_load_with_options(service: str, options: Unpack[DataLoaderOptions], key=None, keys: List[Key] = None):
-    _, _, _, _, _, batch_size, return_first, return_indexed = _get_options(options)
+    _, _, _, _, batch_size, return_first, return_indexed = _get_options(options)
 
     if keys is not None:
         if len(keys) > batch_size:
@@ -161,20 +153,17 @@ def _base_data_load_with_options(service: str, options: Unpack[DataLoaderOptions
 def _base_load_with_options(service: str, options: Unpack[DataLoaderOptions], key=None, keys: List[Key] = None) -> dict:
     logging.info(options)
     logging.info(locals())
-    model, filter_item, filters, no_filter, params, _, _, _ = _get_options(options)
+    model, filter_item, filters, params, _, _, _ = _get_options(options)
 
     url = f"{service}/{model}/"
     key_data = ','.join([str(k) for k in keys]) if keys is not None else key
 
     if key_data is not None:
-        if not no_filter:
-            # we can't set a default value for filter_item because
-            # otherwise we can't do the single check in load (single)
-            if filter_item is None:
-                filter_item = "filter_ids"
-            params[filter_item] = key_data
-        else:
-            url += str(key_data)
+        # we can't set a default value for filter_item because
+        # otherwise we can't do the single check in load (single)
+        if filter_item is None:
+            filter_item = "filter_ids"
+        params[filter_item] = key_data
 
     if filters:
         params["filters"] = json.dumps(filters)

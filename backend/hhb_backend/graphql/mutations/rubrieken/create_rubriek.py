@@ -38,7 +38,7 @@ class CreateRubriek(graphene.Mutation):
         """ Create the new Rubriek """
         if (
             kwargs["grootboekrekening_id"]
-            and hhb_dataloader().grootboekrekeningen_by_id.load(kwargs['grootboekrekening_id']) is None
+            and hhb_dataloader().grootboekrekening_by_id.load(kwargs['grootboekrekening_id']) is None
         ):
             raise GraphQLError(
                 f"Grootboekrekening id [{kwargs['grootboekrekening_id']}] not found."

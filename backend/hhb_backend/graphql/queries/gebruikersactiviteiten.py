@@ -11,7 +11,7 @@ class GebruikersActiviteitQuery:
 
     @staticmethod
     async def resolver(_root, _info, **kwargs):
-        return hhb_dataloader().gebruikersactiviteiten_by_id.load(kwargs["id"])
+        return hhb_dataloader().gebruikersactiviteit_by_id.load(kwargs["id"])
 
 
 class GebruikersActiviteitenQuery:
@@ -31,9 +31,7 @@ class GebruikersActiviteitenQuery:
                 and not kwargs["afsprakenIds"]
                 and not kwargs["huishoudenIds"]
         ):
-            gebruikersactiviteiten = (
-                hhb_dataloader().gebruikersactiviteiten_by_id.load_all()
-            )
+            gebruikersactiviteiten = hhb_dataloader().gebruikersactiviteit_by_id.load_all()
         else:
             gebruikersactiviteiten = []
             if kwargs["burgerIds"]:
@@ -52,23 +50,15 @@ class GebruikersActiviteitenQuery:
                     x for x in afspraken_list if x not in gebruikersactiviteiten
                 )
             if kwargs["ids"]:
-                ids_list = (
-                    hhb_dataloader().gebruikersactiviteiten_by_id.load_many(
-                        kwargs["ids"]
-                    )
-                )
-                gebruikersactiviteiten.extend(
-                    x for x in ids_list if x not in gebruikersactiviteiten
-                )
+                ids_list = hhb_dataloader().gebruikersactiviteit_by_id.load_many(kwargs["ids"])
+                gebruikersactiviteiten.extend(x for x in ids_list if x not in gebruikersactiviteiten)
             if kwargs["huishoudenIds"]:
                 afspraken_list = (
                     hhb_dataloader().gebruikersactiviteiten_by_huishouden.load(
                         kwargs["huishoudenIds"]
                     )
                 )
-                gebruikersactiviteiten.extend(
-                    x for x in afspraken_list if x not in gebruikersactiviteiten
-                )
+                gebruikersactiviteiten.extend(x for x in afspraken_list if x not in gebruikersactiviteiten)
 
         return gebruikersactiviteiten
 
@@ -87,7 +77,7 @@ class GebruikersActiviteitenPagedQuery:
     async def resolver(_root, _info, **kwargs):
         if "start" in kwargs and "limit" in kwargs:
             if not kwargs["burgerIds"] and not kwargs["afsprakenIds"] and not kwargs["huishoudenIds"]:
-                return hhb_dataloader().gebruikersactiviteiten_by_id.load_paged(
+                return hhb_dataloader().gebruikersactiviteit_by_id.load_paged(
                     start=kwargs["start"], limit=kwargs["limit"], desc=True, sorting_column="timestamp"
                 )
             else:

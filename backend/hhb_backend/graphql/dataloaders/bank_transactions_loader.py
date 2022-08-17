@@ -8,7 +8,7 @@ class BankTransactionByIdLoader(DataLoader):
     model = "banktransactions"
 
     def saldo_many(self, bank_transaction_ids):
-        return self.load_many(bank_transaction_ids, no_filter=True, model=f"{self.model}/saldo")
+        return self.load_many(bank_transaction_ids, model=f"{self.model}/saldo")
 
 
 class BankTransactionByCsmLoader(DataLoader):

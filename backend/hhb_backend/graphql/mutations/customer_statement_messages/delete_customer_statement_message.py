@@ -39,10 +39,7 @@ class DeleteCustomerStatementMessage(graphene.Mutation):
 
         transaction_ids = previous["bank_transactions"]
 
-        journaalposten = hhb_dataloader().journaalposten_by_transaction.load_many(
-            transaction_ids
-        )
-
+        journaalposten = hhb_dataloader().journaalpost_by_transaction.load_many(transaction_ids)
         for journaalpost in journaalposten:
             if journaalpost is not None:
                 response = requests.delete(f"{settings.HHB_SERVICES_URL}/journaalposten/{journaalpost['id']}")

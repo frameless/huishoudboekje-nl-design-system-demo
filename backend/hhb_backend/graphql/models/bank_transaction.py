@@ -43,7 +43,7 @@ class BankTransaction(graphene.ObjectType):
             return hhb_dataloader().rekening_by_iban.load(tegen_rekening)
 
     async def resolve_journaalpost(root, info):
-        return hhb_dataloader().journaalposten_by_transaction.load(root.get('id'))
+        return hhb_dataloader().journaalpost_by_transaction.load(root.get('id'))
 
     async def resolve_customer_statement_message(root, info):
         """ Get customer_statement_message when requested """

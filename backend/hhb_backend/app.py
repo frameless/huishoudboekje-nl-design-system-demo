@@ -44,7 +44,7 @@ def create_app(
     @app.before_request
     def add_dataloaders():
         """ Initialize dataloader per request """
-        request.dataloader = HHBDataLoader(loop=loop)
+        request.dataloader = HHBDataLoader()
 
     @app.route("/health")
     def health():

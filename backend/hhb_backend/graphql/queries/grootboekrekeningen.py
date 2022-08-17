@@ -24,7 +24,7 @@ class GrootboekrekeningQuery:
     @classmethod
     @log_gebruikers_activiteit
     async def resolver(cls, _root, _info, id):
-        return hhb_dataloader().grootboekrekeningen_by_id.load(id)
+        return hhb_dataloader().grootboekrekening_by_id.load(id)
 
 
 class GrootboekrekeningenQuery:
@@ -45,5 +45,5 @@ class GrootboekrekeningenQuery:
     @log_gebruikers_activiteit
     async def resolver(cls, _root, _info, ids=None):
         if ids:
-            return hhb_dataloader().grootboekrekeningen_by_id.load_many(ids)
-        return hhb_dataloader().grootboekrekeningen_by_id.load_all()
+            return hhb_dataloader().grootboekrekening_by_id.load_many(ids)
+        return hhb_dataloader().grootboekrekening_by_id.load_all()

@@ -25,4 +25,4 @@ class Export(graphene.ObjectType):
     async def resolve_overschrijvingen(root, info):
         """ Get overschrijvingen when requested """
         if root.get('overschrijvingen'):
-            return hhb_dataloader().overschrijvingen_by_id.load_many(root.get('overschrijvingen')) or []
+            return hhb_dataloader().overschrijving_by_id.load_many(root.get('overschrijvingen')) or []

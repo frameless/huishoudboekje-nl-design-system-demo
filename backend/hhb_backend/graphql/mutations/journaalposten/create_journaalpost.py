@@ -63,7 +63,7 @@ class CreateJournaalpostAfspraak(graphene.Mutation):
         if len(transactions) != len(transaction_ids):
             raise GraphQLError("(some) transactions not found ")
 
-        previous = hhb_dataloader().journaalposten_by_transaction.load_many(transaction_ids)
+        previous = hhb_dataloader().journaalpost_by_transaction.load_many(transaction_ids)
         if previous:
             raise GraphQLError(f"(some) journaalposten already exist")
 
@@ -139,14 +139,14 @@ class CreateJournaalpostGrootboekrekening(graphene.Mutation):
             raise GraphQLError("transaction not found")
 
         grootboekrekening: Grootboekrekening = (
-            hhb_dataloader().grootboekrekeningen_by_id.load(
+            hhb_dataloader().grootboekrekening_by_id.load(
                 input.get("grootboekrekening_id")
             )
         )
         if not grootboekrekening:
             raise GraphQLError("grootboekrekening not found")
 
-        previous = hhb_dataloader().journaalposten_by_transaction.load(transaction_id)
+        previous = hhb_dataloader().journaalpost_by_transaction.load(transaction_id)
         if previous:
             raise GraphQLError(f"Journaalpost already exists for Transaction")
 

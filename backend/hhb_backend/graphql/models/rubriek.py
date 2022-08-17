@@ -13,4 +13,4 @@ class Rubriek(graphene.ObjectType):
     async def resolve_grootboekrekening(self, _info):
         """ Get gebruikers when requested """
         if self.get('grootboekrekening_id'):
-            return hhb_dataloader().grootboekrekeningen_by_id.load(self.get('grootboekrekening_id')) or []
+            return hhb_dataloader().grootboekrekening_by_id.load(self.get('grootboekrekening_id')) or []

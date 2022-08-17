@@ -6,7 +6,7 @@ class OverschrijvingByIdLoader(DataLoader):
     model = "overschrijvingen"
 
 
-class OverschrijvingByAfspraakLoader(DataLoader):
+class OverschrijvingenByAfspraakLoader(DataLoader):
     """ Load overschrijvingen using afspraak id """
     model = "overschrijvingen"
     filter_item = "filter_afspraken"

@@ -66,7 +66,7 @@ class SignaalHelper:
             name += " - deleteSignaal"
             info.field_name = name
 
-        previous = hhb_dataloader().signalen_by_id.load(id)
+        previous = hhb_dataloader().signaal_by_id.load(id)
         if not previous:
             raise GraphQLError(f"Signaal with id {id} not found")
 
@@ -83,7 +83,7 @@ class SignaalHelper:
             name += " - updateSignaal"
             info.field_name = name
 
-        previous = hhb_dataloader().signalen_by_id.load(id)
+        previous = hhb_dataloader().signaal_by_id.load(id)
 
         response = requests.put(f"{settings.SIGNALENSERVICE_URL}/signals/{id}", json=input, headers={"Content-type": "application/json"})
         if response.status_code != 200:

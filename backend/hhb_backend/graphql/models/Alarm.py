@@ -29,4 +29,4 @@ class Alarm(graphene.ObjectType):
 
     async def resolve_signaal(self, _info):
         if self.get("signaalId"):
-            return hhb_dataloader().signalen_by_id.load(self.get("signaalId"))
+            return hhb_dataloader().signaal_by_id.load(self.get("signaalId"))
