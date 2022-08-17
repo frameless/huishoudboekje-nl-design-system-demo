@@ -290,7 +290,7 @@ class CamtParser():
     def parse(self, data):
         """Parse a camt.052 or camt.053 or camt.054 file."""
         try:
-            root = etree.fromstring(data, parser=etree.XMLParser(recover=True, resolve_entities=True))
+            root = etree.fromstring(data, parser=etree.XMLParser(recover=True, resolve_entities=False)) # resolve_entities=False is needed to not be vulnerable to XXE attacks
         except etree.XMLSyntaxError:
             try:
                 # ABNAmro is known to mix up encodings
