@@ -1,6 +1,6 @@
 import {As, Box, Stack, Text} from "@chakra-ui/react";
 import React, {ReactNode} from "react";
-import EmptyIllustration from "../Illustrations/EmptyIllustration";
+import EmptyIllustration from "./Illustrations/EmptyIllustration";
 
 type DeadEndPageProps = {
 	illustration?: As,

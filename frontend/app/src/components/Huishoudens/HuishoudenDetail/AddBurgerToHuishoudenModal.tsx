@@ -6,7 +6,7 @@ import {Burger, GetHuishoudenDocument, GetHuishoudensDocument, Huishouden, useAd
 import Queryable from "../../../utils/Queryable";
 import {formatBurgerName, humanJoin, useReactSelectStyles} from "../../../utils/things";
 import useToaster from "../../../utils/useToaster";
-import {MultiLineOption, MultiLineValueContainer} from "../../Layouts/ReactSelect/CustomComponents";
+import {MultiLineOption, MultiLineValueContainer} from "../../shared/CustomComponents";
 import Modal from "../../shared/Modal";
 
 const AddBurgerToHuishoudenModal: React.FC<{huishouden: Huishouden, onClose: VoidFunction}> = ({huishouden, onClose}) => {

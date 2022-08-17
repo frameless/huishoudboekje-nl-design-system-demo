@@ -61,25 +61,23 @@ const Parameters = () => {
 		<SectionContainer>
 			<Section title={t("forms.configuratie.sections.title")} helperText={t("forms.configuratie.sections.helperText")}>
 				<Queryable query={$configuraties} children={data => {
-					const configuraties = data.configuraties as IConfiguratie[];
-					return (
+					const configuraties: IConfiguratie[] = data.configuraties;
+					return configuraties.length > 0 && (
 						<Stack spacing={5} divider={<Divider />}>
-							{configuraties.length > 0 && (
-								<Table size={"sm"} variant={"noLeftPadding"}>
-									<Thead>
-										<Tr>
-											<Th>{t("forms.configuratie.fields.id")}</Th>
-											<Th>{t("forms.configuratie.fields.waarde")}</Th>
-											<Th w={100} />
-										</Tr>
-									</Thead>
-									<Tbody>
-										{configuraties.map(c => (
-											<ParameterItem c={c} key={c.id} />
-										))}
-									</Tbody>
-								</Table>
-							)}
+							<Table size={"sm"} variant={"noLeftPadding"}>
+								<Thead>
+									<Tr>
+										<Th>{t("forms.configuratie.fields.id")}</Th>
+										<Th>{t("forms.configuratie.fields.waarde")}</Th>
+										<Th w={100} />
+									</Tr>
+								</Thead>
+								<Tbody>
+									{configuraties.map(c => (
+										<ParameterItem c={c} key={c.id} />
+									))}
+								</Tbody>
+							</Table>
 
 							<form onSubmit={onSubmit} noValidate={true}>
 								<Stack direction={"column"} alignItems={"flex-end"}>

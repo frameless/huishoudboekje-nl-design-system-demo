@@ -1,5 +1,5 @@
 import {useTranslation} from "react-i18next";
-import {MultiLineOption, MultiLineValueContainer, ReverseMultiLineOption, ReverseMultiLineValueContainer} from "../components/Layouts/ReactSelect/CustomComponents";
+import {MultiLineOption, MultiLineValueContainer, ReverseMultiLineOption, ReverseMultiLineValueContainer} from "../components/shared/CustomComponents";
 import {Afdeling, Grootboekrekening, Organisatie, Postadres, Rekening, Rubriek} from "../generated/graphql";
 import {formatIBAN} from "./things";
 
