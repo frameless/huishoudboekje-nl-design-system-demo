@@ -756,7 +756,8 @@
 	"deletePostadres": "{{gebruiker}} verwijderde een postadres bij <linkAfdeling>{{afdeling}}</linkAfdeling>.",
 	"createAfdeling": "{{gebruiker}} voegde afdeling <linkAfdeling>{{afdeling}}</linkAfdeling> toe aan <linkOrganisatie>{{organisatie}}</linkOrganisatie>.",
 	"updateAfdeling": "{{gebruiker}} wijzigde afdeling <linkAfdeling>{{afdeling}}</linkAfdeling>.",
-	"deleteAfdeling": "{{gebruiker}} verwijderde een afdeling."
+	"deleteAfdeling": "{{gebruiker}} verwijderde een afdeling.",
+	"updateSignaal": "{{gebruiker}} wijzigde een signaal."
   },
   "unknownUser": "Onbekende gebruiker",
   "unknownOs": "Onbekend besturingssysteem",
@@ -765,7 +766,6 @@
   "huishoudens": {
 	"title": "Huishoudens"
   },
-  "suggestion": "Suggestie",
   "modals": {
 	"addPostadres": {
 	  "modalTitle": "Postadres toevoegen"
@@ -826,6 +826,7 @@
 	"month_one": "maand",
 	"month_other": "maanden"
   },
+  "suggestion": "Suggestie",
   "version": "Versie {{version}}",
   "sidebar": {
 	"signalen": "Signalen",
