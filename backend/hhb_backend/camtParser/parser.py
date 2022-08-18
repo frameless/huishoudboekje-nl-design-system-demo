@@ -5,24 +5,12 @@
 
 ### This parser is an altered version of the parser on
 ### https://github.com/OCA/bank-statement-import/blob/14.0/account_statement_import_camt/models/parser.py
-'''The parts that weren't needed are commented out and when something was added
-    it is clearly stated that it was added by way of a comment.'''
+
 
 import re
-
 from lxml import etree
-
-# Removed -
-# from odoo import models
-# -
-
-# Added -
 from datetime import datetime
-# -
 
-# Removed -
-# class CamtParser(models.AbstractModel):
-# -
 
 class CamtParser():
     _name = "account.statement.import.camt.parser"
@@ -71,23 +59,6 @@ class CamtParser():
     def parse_transaction_details(self, ns, node, transaction):
         """Parse TxDtls node."""
         # message
-        # Removed -
-        # # message
-        # self.add_value_from_node(
-        #     ns,
-        #     node,
-        #     [
-        #         "./ns:RmtInf/ns:Ustrd|./ns:RtrInf/ns:AddtlInf",
-        #         "./ns:AddtlNtryInf",
-        #         "./ns:Refs/ns:InstrId",
-        #     ],
-        #     transaction,
-        #     "payment_ref",
-        #     join_str="\n",
-        # )
-        # -
-
-        # Added -
         self.add_value_from_node(
             ns,
             node,
@@ -100,7 +71,6 @@ class CamtParser():
             "payment_ref",
             join_str="\n",
         )
-        # -
 
         # name
         self.add_value_from_node(
@@ -127,11 +97,11 @@ class CamtParser():
         if party_type_node and party_type_node[0].text != "CRDT":
             party_type = "Cdtr"
         party_node = node.xpath(
-            "./ns:RltdPties/ns:%s" % party_type, namespaces={"ns": ns}
+            f"./ns:RltdPties/ns:{party_type}", namespaces={"ns": ns}
         )
         if party_node:
             name_node = node.xpath(
-                "./ns:RltdPties/ns:%s/ns:Nm" % party_type, namespaces={"ns": ns}
+                f"./ns:RltdPties/ns:{party_type}/ns:Nm", namespaces={"ns": ns}
             )
             if name_node:
                 self.add_value_from_node(
@@ -147,7 +117,7 @@ class CamtParser():
                 )
         # Get remote_account from iban or from domestic account:
         account_node = node.xpath(
-            "./ns:RltdPties/ns:%sAcct/ns:Id" % party_type, namespaces={"ns": ns}
+            f"./ns:RltdPties/ns:{party_type}Acct/ns:Id", namespaces={"ns": ns}
         )
         if account_node:
             iban_node = account_node[0].xpath("./ns:IBAN", namespaces={"ns": ns})
@@ -166,13 +136,7 @@ class CamtParser():
         """Parse an Ntry node and yield transactions"""
         transaction = {"payment_ref": "/", "amount": 0}  # fallback defaults
 
-        # Removed -
-        #self.add_value_from_node(ns, node, "./ns:ValDt/ns:Dt", transaction, "date")
-        # -
-
-        # Added -
         self.add_value_from_node(ns, node, "./ns:ValDt/ns:Dt", transaction, "date")
-        # -
 
         amount = self.parse_amount(ns, node)
         if amount != 0.0:
@@ -181,11 +145,9 @@ class CamtParser():
             ns, node, "./ns:AddtlNtryInf", transaction, "narration"
         )
 
-        # Added -
         self.add_value_from_node(
             ns, node, "./BkTxCd/Prtry/Cd", transaction, "id"
         )
-        # -
 
         self.add_value_from_node(
             ns,
@@ -227,20 +189,12 @@ class CamtParser():
         start_balance_node = None
         end_balance_node = None
 
-        # Added -
         avail_balance_node = None
         forward_balance_node = None
-        # -
 
-        # Removed -
-        # for node_name in ["OPBD", "PRCD", "CLBD", "ITBD"]:
-        # -
-
-        # Added -
         for node_name in ["OPBD", "PRCD", "CLBD", "ITBD", "CLAV", "FWAV"]:
-        # -
             code_expr = (
-                './ns:Bal/ns:Tp/ns:CdOrPrtry/ns:Cd[text()="%s"]/../../..' % node_name
+                f'./ns:Bal/ns:Tp/ns:CdOrPrtry/ns:Cd[text()="{node_name}"]/../../..'
             )
             balance_node = node.xpath(code_expr, namespaces={"ns": ns})
             if balance_node:
@@ -249,12 +203,10 @@ class CamtParser():
                 elif node_name == "CLBD":
                     end_balance_node = balance_node[0]
 
-                # Added -
                 elif node_name == "CLAV":
                     avail_balance_node = balance_node[0]
                 elif node_name == "FWAV":
                     forward_balance_node = balance_node[0]
-                # -
 
                 else:
                     if not start_balance_node:
@@ -262,19 +214,10 @@ class CamtParser():
                     if not end_balance_node:
                         end_balance_node = balance_node[-1]
 
-            # Added -
             if forward_balance_node is None:
                 forward_balance_node = end_balance_node
             if avail_balance_node is None:
                 avail_balance_node = end_balance_node
-            # -
-
-        # Removed -
-        # return (
-        #     self.parse_amount(ns, start_balance_node),
-        #     self.parse_amount(ns, end_balance_node),
-        # )
-
 
         return (
             Balance(self.parse_amount(ns, start_balance_node)),
@@ -286,17 +229,7 @@ class CamtParser():
     def parse_statement(self, ns, node):
         """Parse a single Stmt node."""
         result = {}
-        # Removed -
-        # self.add_value_from_node(
-        #     ns,
-        #     node,
-        #     ["./ns:Acct/ns:Id/ns:IBAN", "./ns:Acct/ns:Id/ns:Othr/ns:Id"],
-        #     result,
-        #     "account_number",
-        # )
-        # -
 
-        # Added -
         self.add_value_from_node(
             ns,
             node,
@@ -304,56 +237,31 @@ class CamtParser():
             result,
             "account_identification",
         )
-        # -
 
-        # Removed -
-        # self.add_value_from_node(ns, node, "./ns:Id", result, "name")
-        # -
-
-        # Added -
         self.add_value_from_node(ns, node, "./ns:Id", result, "transaction_reference")
         self.add_value_from_node(ns, node, './ElctrncSeqNb', result, "sequence_number")
-        # -
 
         self.add_value_from_node(
             ns, node, ["./ns:Acct/ns:Ccy", "./ns:Bal/ns:Amt/@Ccy"], result, "currency"
         )
 
-        # removed -
-        # result["balance_start"], result["balance_end_real"] = self.get_balance_amounts(
-        #     ns, node
-        # )
-        # -
-
-        # Added -
         result["final_opening_balance"], result["available_balance"], result["final_closing_balance"], result["forward_available_balance"] = \
             self.get_balance_amounts(ns, node)
-        # -
 
         entry_nodes = node.xpath("./ns:Ntry", namespaces={"ns": ns})
         transactions = []
         for entry_node in entry_nodes:
             transactions.extend(self.parse_entry(ns, entry_node))
 
-        # Removed -
-        # result["transactions"] = transactions
-        # -
-
-        # Added -
         transObject = []
         for trans in transactions:
             transObject.append(Transaction(trans))
-        # -
 
         result["date"] = None
         if transactions:
             result["date"] = sorted(
                 transactions, key=lambda x: x["date"], reverse=True
             )[0]["date"]
-
-        # removed -
-        # return result
-        # -
 
         return Statement(result, transObject)
 
@@ -382,7 +290,7 @@ class CamtParser():
     def parse(self, data):
         """Parse a camt.052 or camt.053 or camt.054 file."""
         try:
-            root = etree.fromstring(data, parser=etree.XMLParser(recover=True))
+            root = etree.fromstring(data, parser=etree.XMLParser(recover=True, resolve_entities=False)) # resolve_entities=False is needed to not be vulnerable to XXE attacks
         except etree.XMLSyntaxError:
             try:
                 # ABNAmro is known to mix up encodings
@@ -394,30 +302,13 @@ class CamtParser():
         ns = root.tag[1 : root.tag.index("}")]
         self.check_version(ns, root)
         statements = []
-        currency = None
-        account_number = None
         for node in root[0][1:]:
             statement = self.parse_statement(ns, node)
-            # Removed -
-            # if len(statement["transactions"]):
-                # if "currency" in statement
-                #   currency = statement.pop("currency")
-                # Removed -
-                # if "account_number" in statement:
-                #     account_number = statement.pop("account_number")
-                # statements.append(statement)
-            # -
 
             statements.append(statement)
-        # Removed -
-        # return currency, account_number, statements
-        # -
 
-        # Added -
         return statements
-        # -
 
-### classes below have been added to better fit the parser to our code.
 
 class Statement():
     def __init__(self, result, trans):
@@ -452,8 +343,6 @@ class Transaction:
             transaction["status"] = 'C'
         transaction["amount"] = Amount(transaction.pop("amount"))
         transaction["date"] = datetime.strptime(transaction["date"], "%Y-%m-%d")
-
-
 
         if not transaction.get("id", False):
             transaction["id"] = ""
