@@ -1,12 +1,14 @@
 
+import logging
+
+from flask.views import MethodView
 from sqlalchemy import func
 from sqlalchemy.exc import SQLAlchemyError
-from flask.views import MethodView
 
-from models.bank_transaction import BankTransaction
 from core_service.database import db
+from core_service.utils import get_all
+from models.bank_transaction import BankTransaction
 
-import logging
 
 class SaldoView(MethodView):
 
@@ -23,5 +25,5 @@ class SaldoView(MethodView):
         except SQLAlchemyError as excep:
             logging.exception(excep)
 
-        s = {"data": { "bedrag": saldo.all()[0][0] }}
+        s = {"data": {"bedrag": get_all(saldo)[0][0]}}
         return s

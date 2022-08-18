@@ -7,8 +7,8 @@ from sqlalchemy import sql
 from sqlalchemy.orm import joinedload
 from sqlalchemy.sql.expression import ColumnElement
 
-from core_service.utils import row2dict
 from core_service.consts import AndOrOperator, ComparisonOperator, ListAppearanceOperator, RangeOperator
+from core_service.utils import row2dict, get_all, one_or_none
 
 
 class HHBQuery():
@@ -171,14 +171,14 @@ class HHBQuery():
 
     def get_result_single(self, row_id):
         """ Get a single result from the current query """
-        row = self.query.filter(self.hhb_model.id == row_id).one_or_none()
+        row = one_or_none(self.query.filter(self.hhb_model.id == row_id))
         if not row:
             return {"errors": [f"{self.hhb_model.__name__} not found."]}, 404
         return {"data": self.post_process_data(row)}, 200
 
     def get_result_multiple(self, start=None, limit=None):
         """ Get multiple results from the current query """
-        results = self.query.all()
+        results = get_all(self.query)
 
         if start is not None and limit is not None:
             start = int(start)
