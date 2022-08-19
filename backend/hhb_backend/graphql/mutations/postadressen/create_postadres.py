@@ -47,7 +47,7 @@ class CreatePostadres(graphene.Mutation):
         input = kwargs.pop("input")
 
         ## check if afdeling exists
-        previous_afdeling = hhb_dataloader().afdeling_by_id.load(input.get('afdeling_id'))
+        previous_afdeling = hhb_dataloader().afdelingen.load_one(input.get('afdeling_id'))
         if not previous_afdeling:
             raise GraphQLError("Afdeling not found")
 

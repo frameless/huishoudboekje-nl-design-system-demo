@@ -15,11 +15,11 @@ async def automatisch_boeken(customer_statement_message_id: int = None):
     if customer_statement_message_id is not None:
         transactions = [
             t
-            for t in hhb_dataloader().bank_transactions_by_csm.load(customer_statement_message_id)
+            for t in hhb_dataloader().bank_transactions.by_csm(customer_statement_message_id)
             if t["is_geboekt"] is False
         ]
     else:
-        transactions = hhb_dataloader().bank_transactions_by_is_geboekt.load(False)
+        transactions = hhb_dataloader().bank_transactions.by_is_geboekt(False)
 
     transaction_ids = [t["id"] for t in transactions]
 
@@ -70,13 +70,13 @@ async def transactie_suggesties(transactie_ids):
 
     # fetch transactions
     transactions: List[bank_transaction.BankTransaction] = \
-        hhb_dataloader().bank_transaction_by_id.load_many(transactie_ids)
+        hhb_dataloader().bank_transactions.load(transactie_ids)
     if not transactions:
         return {key: [] for key in transactie_ids}
 
     # Rekeningen ophalen adhv iban
     rekening_ibans = [t["tegen_rekening"] for t in transactions if t["tegen_rekening"]]
-    rekeningen = hhb_dataloader().rekening_by_iban.load_many(rekening_ibans)
+    rekeningen = hhb_dataloader().rekeningen.by_ibans(rekening_ibans)
     if not rekeningen:
         return {key: [] for key in transactie_ids}
 
@@ -86,7 +86,7 @@ async def transactie_suggesties(transactie_ids):
 
     rekening_ids = [r["id"] if r is not None else -1 for r in rekeningen]
 
-    afspraken: List[afspraak.Afspraak] = hhb_dataloader().afspraken_by_rekening.load_many(rekening_ids)
+    afspraken: List[afspraak.Afspraak] = hhb_dataloader().afspraken.by_rekeningen(rekening_ids)
     if not afspraken:
         return {key: [] for key in transactie_ids}
 
@@ -117,7 +117,7 @@ async def find_matching_afspraken_by_afspraak(main_afspraak):
     if not main_afspraak["zoektermen"]:
         return matching_afspraken
 
-    afspraken = hhb_dataloader().afspraken_by_rekening.load(main_afspraak["tegen_rekening_id"])
+    afspraken = hhb_dataloader().afspraken.by_rekening(main_afspraak["tegen_rekening_id"])
 
     zoektermen_main = ' '.join(main_afspraak["zoektermen"])
     main_afspraak_valid_from = to_date(main_afspraak["valid_from"])

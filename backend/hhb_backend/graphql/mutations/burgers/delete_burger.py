@@ -36,11 +36,11 @@ class DeleteBurger(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(_root, info, id):
         """Delete current burger"""
-        existing_burger = hhb_dataloader().burger_by_id.load(id)
+        existing_burger = hhb_dataloader().burgers.load_one(id)
         if not existing_burger:
             raise GraphQLError(f"Burger with id {id} not found")
 
-        afspraken = hhb_dataloader().afspraken_by_burger.load(id)
+        afspraken = hhb_dataloader().afspraken.by_burger(id)
         input = {'valid_through': datetime.now().strftime("%Y-%m-%d")}
         for afspraak in afspraken:
             response = requests.post(

@@ -10,7 +10,7 @@ from hhb_backend.graphql.dataloaders import hhb_dataloader
 
 
 def get_afdeling(afdeling_id):
-    return hhb_dataloader().afdeling_by_id.load(afdeling_id)
+    return hhb_dataloader().afdelingen.load_one(afdeling_id)
 
 
 def update_afdeling(afdeling_id, afdeling_input):
@@ -89,8 +89,7 @@ def create_rekening(rekening):
 
 
 def get_rekening_by_iban(iban):
-    # todo check if it still works. there used to be an array check (and returned first element of it)
-    return hhb_dataloader().rekening_by_iban.load(iban)
+    return hhb_dataloader().rekeningen.by_iban(iban)
 
 
 def disconnect_afdeling_rekening(afdeling_id: int, rekening_id: int):
@@ -104,7 +103,7 @@ def disconnect_afdeling_rekening(afdeling_id: int, rekening_id: int):
         raise GraphQLError(f"Failure to disconnect afdeling:{afdeling_id} rekening:{rekening_id}")
 
     # Delete the Id from rekeningen_ids column in afdeling
-    previous_afdeling = hhb_dataloader().afdeling_by_id.load(afdeling_id)
+    previous_afdeling = hhb_dataloader().afdelingen.load_one(afdeling_id)
     previous_afdeling["rekeningen_ids"].remove(rekening_id)
     previous_afdeling.pop("id")
 
@@ -130,7 +129,7 @@ def delete_rekening(rekening_id: int):
     
 
 def rekening_used_check(rekening_id):
-    rekening = hhb_dataloader().rekening_by_id.load(rekening_id)
+    rekening = hhb_dataloader().rekeningen.load_one(rekening_id)
     used = {}
     afspraken = rekening.get("afspraken")
     if afspraken:

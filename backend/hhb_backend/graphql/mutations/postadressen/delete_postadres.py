@@ -37,11 +37,11 @@ class DeletePostadres(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(self, _info, id, afdeling_id):
         """ Delete current postadres """
-        previous = hhb_dataloader().postadres_by_id.load(id)
+        previous = hhb_dataloader().postadressen.load_one(id)
         if not previous:
             raise GraphQLError("postadres not found")
 
-        afspraken = hhb_dataloader().afspraken_by_postadres.load(id)
+        afspraken = hhb_dataloader().afspraken.by_postadres(id)
         if afspraken:
             raise GraphQLError("Postadres wordt gebruikt in een of meerdere afspraken - verwijderen is niet mogelijk.")
 
@@ -53,7 +53,7 @@ class DeletePostadres(graphene.Mutation):
 
 
         # Delete the Id from postadressen_ids column in afdeling
-        afdeling = hhb_dataloader().afdeling_by_id.load(afdeling_id)
+        afdeling = hhb_dataloader().afdelingen.load_one(afdeling_id)
         afdeling["postadressen_ids"].remove(id)
         afdeling.pop("id")
 

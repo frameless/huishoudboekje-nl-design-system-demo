@@ -39,7 +39,7 @@ class DeleteAfdelingRekening(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(_root, _info, rekening_id, afdeling_id):
         """ Delete rekening associations with an afdeling """
-        previous = hhb_dataloader().rekening_by_id.load(rekening_id)
+        previous = hhb_dataloader().rekeningen.load_one(rekening_id)
         if not previous:
             raise GraphQLError("Rekening bestaat niet")
 

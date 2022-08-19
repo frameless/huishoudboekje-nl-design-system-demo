@@ -1,7 +1,7 @@
 import copy
 import json
 import logging
-from typing import Dict, Union, TypedDict, List
+from typing import Dict, Union, TypedDict, List, Optional
 
 import requests
 from graphql import GraphQLError
@@ -19,6 +19,23 @@ Key = Union[str, int, bool]
 Filters = Dict[str, Union['Filters', Key]]
 
 
+# M = TypeVar('M')
+# Generic[M]
+# todo would have to add a new class for each model, as the model doesn't
+# class _DictWrapper(dict):
+#     def __getattr__(self, name):
+#         return self.get(name)
+#
+#     def __setattr__(self, name, value):
+#         self[name] = value
+#
+#     def __delattr__(self, name):
+#         if name in self:
+#             del self[name]
+#         else:
+#             raise AttributeError("No such attribute: " + name)
+
+
 class DataLoaderOptions(TypedDict):
     model: NotRequired[str]
     filter_item: NotRequired[str]
@@ -31,24 +48,34 @@ class DataLoaderOptions(TypedDict):
 
 class DataLoader:
     """ Dataloader for when the result is a single object """
-    model = None
     service = settings.HHB_SERVICES_URL
+    model = None
     filter_item = None  # will fall back to 'filter_ids'
     batch_size = 1000
     params = {}
-    return_first = None  # will fall back to 'filter_item is None' when using the load (single)
 
-    def load(self, key: Key, **kwargs: Unpack[DataLoaderOptions]) -> dict:
+    # req | res | name
+    #  1     1    load_one
+    #  1     *    load
+    #  *     1    load + return_first
+    #  *     *    load
+
+    def load_one(self, key: Key, **kwargs: Unpack[DataLoaderOptions]) -> Optional[dict]:
+        """ Loads one to one data """
         options = _add_default_options(self, kwargs)
-        if options["return_first"] is None:
-            options["return_first"] = options["filter_item"] is None
-
+        options["return_first"] = True
         return _base_data_load_with_options(self.service, options, key=key)
 
-    def load_many(self, keys: List[Key], **kwargs: Unpack[DataLoaderOptions]) -> List[dict]:
+    def load(self, keys: Union[List[Key], Key], **kwargs: Unpack[DataLoaderOptions]) -> List[dict]:
+        """
+         Loads one to many, many to many and many to one
+         (when used in combination with the return_first option) data
+         """
+        # remove duplicated keys and make sure that keys is always a list (for one to many)
+        keys = _remove_duplicated_keys(keys) if type(keys) == list else [keys]
+
         options = _add_default_options(self, kwargs)
         options["return_first"] = False
-        keys = _remove_duplicated_keys(keys)
 
         return _base_data_load_with_options(self.service, options, keys=keys)
 
@@ -94,7 +121,6 @@ def _add_default_options(loader, options: Unpack[DataLoaderOptions]):
     _add_default_option(options, "filter_item", loader)
     _add_default_option(options, "params", loader)
     _add_default_option(options, "batch_size", loader)
-    _add_default_option(options, "return_first", loader)
     return options
 
 
@@ -139,6 +165,7 @@ def _base_data_load_with_options(service: str, options: Unpack[DataLoaderOptions
             return result
 
     data = _base_load_with_options(service, options, key=key, keys=keys)["data"]
+
     if return_first:
         data = data[0] if len(data) > 0 else None
     elif return_indexed is not None:
@@ -146,6 +173,7 @@ def _base_data_load_with_options(service: str, options: Unpack[DataLoaderOptions
         for item in data:
             indexed.setdefault(item[return_indexed], item)
         data = indexed
+
     logging.info(f"response: {data}")
     return data
 

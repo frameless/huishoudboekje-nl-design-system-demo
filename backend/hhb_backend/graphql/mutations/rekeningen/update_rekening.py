@@ -45,7 +45,7 @@ class UpdateRekening(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(_root, _info, id, rekening):
         """ Create the new Rekening """
-        previous = hhb_dataloader().rekening_by_id.load(id)
+        previous = hhb_dataloader().rekeningen.load_one(id)
 
         if previous is None:
             raise GraphQLError(f"Rekening does not exist")

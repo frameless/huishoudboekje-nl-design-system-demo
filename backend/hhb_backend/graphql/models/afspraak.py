@@ -4,8 +4,8 @@ from datetime import datetime
 import graphene
 from dateutil.parser import isoparse
 
-import hhb_backend.graphql.models.Alarm as alarm
 import hhb_backend.graphql.models.afdeling as afdeling
+import hhb_backend.graphql.models.alarm as alarm
 import hhb_backend.graphql.models.burger as burger
 import hhb_backend.graphql.models.journaalpost as journaalpost
 import hhb_backend.graphql.models.overschrijving as overschrijving
@@ -84,10 +84,7 @@ class Afspraak(graphene.ObjectType):
             planner_input, **kwargs
         )
         known_overschrijvingen = {}
-        overschrijvingen = (
-                hhb_dataloader().overschrijvingen_by_afspraak.load(root.get("id"))
-                or []
-        )
+        overschrijvingen = hhb_dataloader().overschrijvingen.by_afspraak(root.get("id")) or []
         for o in overschrijvingen:
             known_overschrijvingen[o["datum"]] = o
         for datum, o in known_overschrijvingen.items():
@@ -100,42 +97,40 @@ class Afspraak(graphene.ObjectType):
     async def resolve_rubriek(root, info):
         """ Get rubriek when requested """
         if root.get("rubriek_id"):
-            return hhb_dataloader().rubriek_by_id.load(root.get("rubriek_id"))
+            return hhb_dataloader().rubrieken.load_one(root.get("rubriek_id"))
 
     async def resolve_burger(root, info):
         """ Get burger when requested """
         if root.get("burger_id"):
-            return hhb_dataloader().burger_by_id.load(root.get("burger_id"))
+            return hhb_dataloader().burgers.load_one(root.get("burger_id"))
 
     async def resolve_rekening(root, info):
         """ Get rekening when requested """
         if root.get("rekening_id"):
-            return hhb_dataloader().rekening_by_id.load(
-                root.get("rekening_id")
-            )
+            return hhb_dataloader().rekeningen.load_one(root.get("rekening_id"))
 
     async def resolve_postadres(root, info):
         """ Get postadres when requested """
         postadres_id = root.get("postadres_id", None)
         if postadres_id:
-            postadres = hhb_dataloader().postadres_by_id.load(postadres_id)
+            postadres = hhb_dataloader().postadressen.load_one(postadres_id)
             return postadres
 
     async def resolve_alarm(self, _info):
         """ Get alarm when requested """
         alarm_id = self.get("alarm_id")
         if alarm_id:
-            return hhb_dataloader().alarm_by_id.load(alarm_id)
+            return hhb_dataloader().alarms.load_one(alarm_id)
 
     async def resolve_afdeling(root, info):
         """ Get afdeling when requested """
         if root.get("afdeling_id"):
-            return hhb_dataloader().afdeling_by_id.load(root.get("afdeling_id"))
+            return hhb_dataloader().afdelingen.load_one(root.get("afdeling_id"))
 
     async def resolve_tegen_rekening(root, info):
         """ Get tegen_rekening when requested """
         if root.get("tegen_rekening_id"):
-            return hhb_dataloader().rekening_by_id.load(root.get("tegen_rekening_id"))
+            return hhb_dataloader().rekeningen.load_one(root.get("tegen_rekening_id"))
 
     def resolve_valid_from(root, info):
         if value := root.get("valid_from"):
@@ -148,12 +143,7 @@ class Afspraak(graphene.ObjectType):
     async def resolve_journaalposten(self, _info):
         """ Get organisatie when requested """
         if self.get("journaalposten"):
-            return (
-                    hhb_dataloader().journaalpost_by_id.load_many(
-                        self.get("journaalposten")
-                    )
-                    or []
-            )
+            return hhb_dataloader().journaalposten.load(self.get("journaalposten")) or []
 
     async def resolve_matching_afspraken(root, info):
         return await find_matching_afspraken_by_afspraak(root)

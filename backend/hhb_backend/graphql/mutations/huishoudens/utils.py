@@ -10,7 +10,7 @@ from hhb_backend.graphql.dataloaders import hhb_dataloader
 
 async def create_huishouden_if_not_exists(huishouden: Dict) -> Dict:
     if "id" in huishouden:
-        existing_huishoudens = hhb_dataloader().huishouden_by_id.load(huishouden["id"]),
+        existing_huishoudens = hhb_dataloader().huishoudens.load_one(huishouden["id"]),
         # dataloader will always return a tuple with at least one value,
         # regardless of whether object is found or not (value is None otherwise)
         existing_huishouden = existing_huishoudens[0]

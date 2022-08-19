@@ -24,7 +24,7 @@ class JournaalpostQuery:
     @classmethod
     @log_gebruikers_activiteit
     async def resolver(cls, _root, _info, id):
-        return hhb_dataloader().journaalpost_by_id.load(id)
+        return hhb_dataloader().journaalposten.load_one(id)
 
 
 class JournaalpostenQuery:
@@ -45,5 +45,5 @@ class JournaalpostenQuery:
     @log_gebruikers_activiteit
     async def resolver(cls, _root, _info, ids=None):
         if ids:
-            return hhb_dataloader().journaalpost_by_id.load_many(ids)
-        return hhb_dataloader().journaalpost_by_id.load_all()
+            return hhb_dataloader().journaalposten.load(ids)
+        return hhb_dataloader().journaalposten.load_all()

@@ -32,7 +32,7 @@ def create_json_payload_overschrijving(future_overschrijving, export_id) -> dict
 
 
 def get_config_value(config_id) -> str:
-    return hhb_dataloader().configuratie_by_id.load(config_id)["waarde"]
+    return hhb_dataloader().configuraties.load_one(config_id)["waarde"]
 
 
 class CreateExportOverschrijvingen(graphene.Mutation):

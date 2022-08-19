@@ -17,17 +17,17 @@ class Afdeling(graphene.ObjectType):
 
     async def resolve_rekeningen(self, _info):
         """ Get rekeningen when requested """
-        return hhb_dataloader().rekeningen_by_afdeling.load(self.get('id')) or []
+        return hhb_dataloader().rekeningen.by_afdeling(self.get('id')) or []
 
     async def resolve_organisatie(self, _info):
-        return hhb_dataloader().organisatie_by_id.load(self.get('organisatie_id'))
+        return hhb_dataloader().organisaties.load_one(self.get('organisatie_id'))
 
     async def resolve_postadressen(self, _info):
         ids = self.get('postadressen_ids')
         if not ids:
             return []
 
-        return hhb_dataloader().postadres_by_id.load_many(ids)
+        return hhb_dataloader().postadressen.load(ids)
 
     async def resolve_afspraken(self, _info):
-        return hhb_dataloader().afspraken_by_afdeling.load(self.get('id')) or []
+        return hhb_dataloader().afspraken.by_afdeling(self.get('id')) or []

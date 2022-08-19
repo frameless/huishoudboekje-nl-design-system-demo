@@ -54,7 +54,7 @@ class UpdateAfspraakBetaalinstructie(graphene.Mutation):
     async def mutate(_root, _info, afspraak_id: int, betaalinstructie: BetaalinstructieInput):
         """ Update the Afspraak """
 
-        previous = hhb_dataloader().afspraak_by_id.load(afspraak_id)
+        previous = hhb_dataloader().afspraken.load_one(afspraak_id)
 
         if previous is None:
             raise GraphQLError("afspraak not found")

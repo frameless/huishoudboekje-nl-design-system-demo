@@ -1,5 +1,3 @@
-import json
-
 import requests
 from graphql import GraphQLError
 
@@ -24,7 +22,7 @@ def create_afdeling_postadres(input, afdeling_id):
 
     result = contactCatalogus_response.json()['data']
 
-    previous_afdeling = hhb_dataloader().afdeling_by_id.load(afdeling_id)
+    previous_afdeling = hhb_dataloader().afdelingen.load_one(afdeling_id)
 
     postadressen_ids = list(
         previous_afdeling["post_adressen_ids"]

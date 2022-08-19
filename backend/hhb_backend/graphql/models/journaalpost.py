@@ -18,14 +18,14 @@ class Journaalpost(graphene.ObjectType):
     async def resolve_transaction(root, info):
         """ Get transaction when requested """
         if root.get('transaction_id'):
-            return hhb_dataloader().bank_transaction_by_id.load(root.get('transaction_id'))
+            return hhb_dataloader().bank_transactions.load_one(root.get('transaction_id'))
 
     async def resolve_grootboekrekening(root, info):
         """ Get grootboekrekening when requested """
         if root.get('grootboekrekening_id'):
-            return hhb_dataloader().grootboekrekening_by_id.load(root.get('grootboekrekening_id'))
+            return hhb_dataloader().grootboekrekeningen.load_one(root.get('grootboekrekening_id'))
 
     async def resolve_afspraak(root, info):
         """ Get afspraak when requested """
         if root.get('afspraak_id'):
-            return hhb_dataloader().afspraak_by_id.load(root.get('afspraak_id'))
+            return hhb_dataloader().afspraken.load_one(root.get('afspraak_id'))

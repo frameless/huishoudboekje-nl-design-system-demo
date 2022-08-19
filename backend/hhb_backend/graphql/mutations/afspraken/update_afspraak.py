@@ -6,8 +6,8 @@ from graphql import GraphQLError
 
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
-from hhb_backend.graphql.models import Alarm
 from hhb_backend.graphql.models.afspraak import Afspraak
+from hhb_backend.graphql.models.alarm import Alarm
 from hhb_backend.graphql.scalars.bedrag import Bedrag
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (gebruikers_activiteit_entities, log_gebruikers_activiteit)
 
@@ -58,42 +58,42 @@ class UpdateAfspraak(graphene.Mutation):
         # check burger_id - optional
         burger_id = input.get("burger_id")
         if burger_id:
-            burger: Burger = hhb_dataloader().burger_by_id.load(burger_id)
+            burger: Burger = hhb_dataloader().burgers.load_one(burger_id)
             if not burger:
                 raise GraphQLError("burger not found")
 
         # Check tegen_rekening_id - optional
         rekening_id = input.get("tegen_rekening_id")
         if rekening_id:
-            rekening: Rekening = hhb_dataloader().rekening_by_id.load(rekening_id)
+            rekening: Rekening = hhb_dataloader().rekeningen.load_one(rekening_id)
             if not rekening:
                 raise GraphQLError("rekening not found")
 
         # check rubriek_id - optional
         rubriek_id = input.get("rubriek_id")
         if rubriek_id:
-            rubriek: Rubriek = hhb_dataloader().rubriek_by_id.load(rubriek_id)
+            rubriek: Rubriek = hhb_dataloader().rubrieken.load_one(rubriek_id)
             if not rubriek:
                 raise GraphQLError("rubriek not found")
 
         # check afdeling_id - optional
         afdeling_id = input.get("afdeling_id")
         if afdeling_id is not None:
-            afdeling: Afdeling = hhb_dataloader().afdeling_by_id.load(afdeling_id)
+            afdeling: Afdeling = hhb_dataloader().afdelingen.load_one(afdeling_id)
             if not afdeling:
                 raise GraphQLError("afdeling not found")
 
         # Check postadres_id - optional
         postadres_id = input.get("postadres_id")
         if postadres_id is not None:
-            postadres: Postadres = hhb_dataloader().postadres_by_id.load(postadres_id)
+            postadres: Postadres = hhb_dataloader().postadressen.load_one(postadres_id)
             if not postadres:
                 raise GraphQLError("postadres not found")
 
         # check alarm_id - optional
         alarm_id = input.get("alarm_id")
         if alarm_id is not None:
-            alarm: Alarm = hhb_dataloader().alarm_by_id.load(alarm_id)
+            alarm: Alarm = hhb_dataloader().alarms.load_one(alarm_id)
             if not alarm:
                 raise GraphQLError("alarm not found")
 
@@ -102,6 +102,6 @@ class UpdateAfspraak(graphene.Mutation):
         if not response.ok:
             raise GraphQLError(f"Upstream API responded: {response.text}")
         afspraak = response.json()["data"]
-        previous = hhb_dataloader().afspraak_by_id.load(id)
+        previous = hhb_dataloader().afspraken.load_one(id)
 
         return UpdateAfspraak(afspraak=afspraak, previous=previous, ok=True)

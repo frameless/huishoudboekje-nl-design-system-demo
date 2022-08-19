@@ -18,17 +18,15 @@ class Grootboekrekening(graphene.ObjectType):
     async def resolve_parent(self, _info):
         """ Get parent when requested """
         if self.get('parent_id'):
-            parent = hhb_dataloader().grootboekrekening_by_id.load(self.get('parent_id'))
-            return parent or None
+            return hhb_dataloader().grootboekrekeningen.load_one(self.get('parent_id'))
 
     async def resolve_children(self, _info):
         """ Get children when requested """
         if self.get('children'):
-            children_ = hhb_dataloader().grootboekrekening_by_id.load_many(self.get('children'))
-            return children_ or []
+            return hhb_dataloader().grootboekrekeningen.load(self.get('children')) or []
 
     async def resolve_rubriek(self, _info):
-        return hhb_dataloader().rubriek_by_grootboekrekening.load(self.get('id'))
+        return hhb_dataloader().rubrieken.by_grootboekrekening(self.get('id'))
 
     def resolve_credit(self, _info):
         return not self.get('debet')

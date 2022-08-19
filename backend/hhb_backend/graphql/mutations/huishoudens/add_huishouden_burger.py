@@ -38,7 +38,7 @@ class AddHuishoudenBurger(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(_root, _info, huishouden_id: int, burger_ids: List[int]):
         """Add burgers to given huishouden"""
-        previous = hhb_dataloader().huishouden_by_id.load(huishouden_id)
+        previous = hhb_dataloader().huishoudens.load_one(huishouden_id)
 
         if previous is None:
             raise GraphQLError("Huishouden not found")
@@ -53,7 +53,7 @@ class AddHuishoudenBurger(graphene.Mutation):
             if not response.ok:
                 raise GraphQLError(f"Upstream API responded: {response.text}")
 
-        loaded_huishouden = hhb_dataloader().huishouden_by_id.load(huishouden_id)
+        loaded_huishouden = hhb_dataloader().huishoudens.load_one(huishouden_id)
         return AddHuishoudenBurger(
             ok=True,
             huishouden=loaded_huishouden,

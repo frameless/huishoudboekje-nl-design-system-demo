@@ -25,8 +25,8 @@ class Alarm(graphene.ObjectType):
     byMonthDay = graphene.List(graphene.Int, default_value=[])
 
     async def resolve_afspraak(self, _info):
-        return hhb_dataloader().afspraak_by_id.load(self.get("afspraakId"))
+        return hhb_dataloader().afspraken.load_one(self.get("afspraakId"))
 
     async def resolve_signaal(self, _info):
         if self.get("signaalId"):
-            return hhb_dataloader().signaal_by_id.load(self.get("signaalId"))
+            return hhb_dataloader().signalen.load_one(self.get("signaalId"))

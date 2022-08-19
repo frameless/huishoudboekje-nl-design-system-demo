@@ -24,7 +24,7 @@ class AfdelingQuery:
     @classmethod
     @log_gebruikers_activiteit
     async def resolver(cls, _root, _info, id):
-        return hhb_dataloader().afdeling_by_id.load(id)
+        return hhb_dataloader().afdelingen.load_one(id)
 
 
 class AfdelingenQuery:
@@ -45,5 +45,5 @@ class AfdelingenQuery:
     @log_gebruikers_activiteit
     async def resolver(cls, _root, _info, ids=None):
         if ids:
-            return hhb_dataloader().afdeling_by_id.load_many(ids)
-        return hhb_dataloader().afdeling_by_id.load_all()
+            return hhb_dataloader().afdelingen.load(ids)
+        return hhb_dataloader().afdelingen.load_all()

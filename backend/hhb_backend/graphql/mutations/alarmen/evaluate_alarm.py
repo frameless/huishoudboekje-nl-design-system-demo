@@ -10,8 +10,7 @@ from graphql import GraphQLError
 
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
-from hhb_backend.graphql.models.Alarm import Alarm
-from hhb_backend.graphql.models.afspraak import Afspraak
+from hhb_backend.graphql.models.alarm import Alarm
 from hhb_backend.graphql.models.bank_transaction import Bedrag
 from hhb_backend.graphql.models.signaal import Signaal
 from hhb_backend.graphql.mutations.alarmen.alarm import AlarmHelper, generate_alarm_date
@@ -189,31 +188,28 @@ def shouldCheckAlarm(alarm: Alarm) -> bool:
 
 
 def get_active_alarms() -> List[dict]:
-    return hhb_dataloader().alarmen.load_active()
+    return hhb_dataloader().alarms.load_active()
 
 
 def get_alarm(id: String) -> Optional[dict]:
-    alarm = hhb_dataloader().alarm_by_id.load(id)
-    if alarm is not None and alarm.get("isActive"):
-        return alarm
-    return None
+    # todo add isActive filter in service
+    alarm = hhb_dataloader().alarms.load_one(id)
+    return alarm if alarm and alarm.get("isActive") else None
 
 
-def get_afspraak_by_id(afspraakId: int) -> dict:
-    return hhb_dataloader().afspraak_by_id.load(afspraakId)
+def get_afspraak_by_id(afspraak_id: int) -> dict:
+    return hhb_dataloader().afspraken.load_one(afspraak_id)
 
 
 def get_banktransactions_by_journaal_ids(journaal_ids) -> List[dict]:
     journaalposts = []
     transactions = []
     for journaalpost_id in journaal_ids:
-        journaalpost = hhb_dataloader().journaalpost_by_id.load(journaalpost_id)
+        journaalpost = hhb_dataloader().journaalposten.load_one(journaalpost_id)
         journaalposts.append(journaalpost)
 
         bank_transaction_id = journaalpost.get("transaction_id")
-        transactions.append(
-            hhb_dataloader().bank_transaction_by_id.load(bank_transaction_id)
-        )
+        transactions.append(hhb_dataloader().bank_transactions.load_one(bank_transaction_id))
 
     return transactions
 

@@ -25,7 +25,7 @@ class ExportQuery:
     @classmethod
     @log_gebruikers_activiteit
     async def resolver(cls, _root, _info, id):
-        return hhb_dataloader().export_by_id.load(id)
+        return hhb_dataloader().exports.load_one(id)
 
 
 class ExportsQuery:
@@ -50,10 +50,10 @@ class ExportsQuery:
     @log_gebruikers_activiteit
     async def resolver(cls, _root, _info, ids=None, start_datum=None, eind_datum=None):
         if ids:
-            return hhb_dataloader().export_by_id.load_many(ids)
+            return hhb_dataloader().exports.load(ids)
         if start_datum or eind_datum:
             if not (start_datum and eind_datum):
                 raise GraphQLError("start_datum must be combined with eind_datum")
         if not (start_datum and eind_datum):
-            return hhb_dataloader().export_by_id.load_all()
-        return hhb_dataloader().export_by_id.get_by_timestamps(start_datum, eind_datum)
+            return hhb_dataloader().exports.load_all()
+        return hhb_dataloader().exports.in_date_range(start_datum, eind_datum)

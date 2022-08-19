@@ -46,8 +46,8 @@ def dict_keys_subset_builder(match_keys: list):
 
 
 def create_brieven_export(burger_id):
-    burger = hhb_dataloader().burger_by_id.load(burger_id)
-    afspraken = hhb_dataloader().afspraken_by_burger.load(burger_id)
+    burger = hhb_dataloader().burgers.load_one(burger_id)
+    afspraken = hhb_dataloader().afspraken.by_burger(burger_id)
 
     # todo postaddres is optional. make sure it works
     postadressen = get_postadres_by_afspraken(afspraken)
@@ -139,9 +139,11 @@ def create_brieven_export(burger_id):
 
 
 def get_afdeling_by_afspraken(afspraken):
-    return hhb_dataloader().afdeling_by_id.load_many(list(set(
-        [afspraak["afdeling_id"] for afspraak in afspraken if afspraak["afdeling_id"]])
-    ))
+    return hhb_dataloader().afdelingen.load([
+        afspraak["afdeling_id"]
+        for afspraak in afspraken
+        if afspraak["afdeling_id"]
+    ])
 
 
 def get_postadressen_by_afdelingen(afdelingen):
@@ -151,21 +153,23 @@ def get_postadressen_by_afdelingen(afdelingen):
         if postadres_ids:
             ids.extend(postadres_ids)
 
-    return hhb_dataloader().postadres_by_id.load_many(list(set(ids)))
+    return hhb_dataloader().postadressen.load(ids)
 
 
 def get_postadres_by_afspraken(afspraken: List[dict]):
-    return hhb_dataloader().postadres_by_id.load_many(list(set(
-        [afspraak["postadres_id"] for afspraak in afspraken if afspraak.get("postadres_id")]
-    )))
+    return hhb_dataloader().postadressen.load([
+        afspraak["postadres_id"]
+        for afspraak in afspraken
+        if afspraak.get("postadres_id")
+    ])
 
 
 def get_organisaties(afdelingen):
-    return hhb_dataloader().organisatie_by_id.load_many(list(set([
+    return hhb_dataloader().organisaties.load([
         afdeling_result["organisatie_id"]
         for afdeling_result in afdelingen
         if afdeling_result["organisatie_id"]
-    ])))
+    ])
 
 
 def create_row(afdeling, afspraak, burger, current_date_str):

@@ -25,7 +25,7 @@ class AfspraakQuery:
     @classmethod
     @log_gebruikers_activiteit
     async def resolver(cls, _root, _info, id):
-        return hhb_dataloader().afspraak_by_id.load(id)
+        return hhb_dataloader().afspraken.load_one(id)
 
 
 class AfsprakenQuery:
@@ -44,5 +44,5 @@ class AfsprakenQuery:
     @log_gebruikers_activiteit
     async def resolver(cls, _root, _info, ids=None):
         if ids:
-            return hhb_dataloader().afspraak_by_id.load_many(ids)
-        return hhb_dataloader().afspraak_by_id.load_all()
+            return hhb_dataloader().afspraken.load(ids)
+        return hhb_dataloader().afspraken.load_all()

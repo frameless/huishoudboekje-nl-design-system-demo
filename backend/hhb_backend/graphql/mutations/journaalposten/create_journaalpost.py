@@ -59,15 +59,15 @@ class CreateJournaalpostAfspraak(graphene.Mutation):
 
         transaction_ids = [j["transaction_id"] for j in input]
 
-        transactions: List[BankTransaction] = hhb_dataloader().bank_transaction_by_id.load_many(transaction_ids)
+        transactions: List[BankTransaction] = hhb_dataloader().bank_transactions.load(transaction_ids)
         if len(transactions) != len(transaction_ids):
             raise GraphQLError("(some) transactions not found ")
 
-        previous = hhb_dataloader().journaalpost_by_transaction.load_many(transaction_ids)
+        previous = hhb_dataloader().journaalposten.by_transactions(transaction_ids)
         if previous:
             raise GraphQLError(f"(some) journaalposten already exist")
 
-        afspraken: Dict[int, Afspraak] = hhb_dataloader().afspraak_by_id.load_many(
+        afspraken: Dict[int, Afspraak] = hhb_dataloader().afspraken.load(
             [j["afspraak_id"] for j in input],
             return_indexed="id"
         )
@@ -75,7 +75,7 @@ class CreateJournaalpostAfspraak(graphene.Mutation):
         if len(afspraken) != len(input):
             raise GraphQLError("(some) afspraken not found ")
 
-        rubrieken = hhb_dataloader().rubriek_by_id.load_many(
+        rubrieken = hhb_dataloader().rubrieken.load(
             [a["rubriek_id"] for a in afspraken.values()],
             return_indexed="id"
         )
@@ -134,19 +134,17 @@ class CreateJournaalpostGrootboekrekening(graphene.Mutation):
         """ Create the new Journaalpost """
         # Validate that the references exist
         transaction_id = input.get("transaction_id")
-        transaction: BankTransaction = hhb_dataloader().bank_transaction_by_id.load(transaction_id)
+        transaction: BankTransaction = hhb_dataloader().bank_transactions.load_one(transaction_id)
         if not transaction:
             raise GraphQLError("transaction not found")
 
         grootboekrekening: Grootboekrekening = (
-            hhb_dataloader().grootboekrekening_by_id.load(
-                input.get("grootboekrekening_id")
-            )
+            hhb_dataloader().grootboekrekeningen.load_one(input.get("grootboekrekening_id"))
         )
         if not grootboekrekening:
             raise GraphQLError("grootboekrekening not found")
 
-        previous = hhb_dataloader().journaalpost_by_transaction.load(transaction_id)
+        previous = hhb_dataloader().journaalposten.by_transaction(transaction_id)
         if previous:
             raise GraphQLError(f"Journaalpost already exists for Transaction")
 

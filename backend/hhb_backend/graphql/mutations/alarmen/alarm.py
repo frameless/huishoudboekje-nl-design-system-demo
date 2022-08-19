@@ -98,7 +98,7 @@ class AlarmHelper:
             raise GraphQLError(f"Vul zowel byMonth als byMonthDay in, of geen van beide.")
 
         afspraak_id = input["afspraakId"]
-        afspraak = hhb_dataloader().afspraak_by_id.load(afspraak_id)
+        afspraak = hhb_dataloader().afspraken.load_one(afspraak_id)
         if not afspraak:
             raise GraphQLError(f"Afspraak bestaat niet.")
 
@@ -129,7 +129,7 @@ class AlarmHelper:
             name += " - deleteAlarm"
             info.field_name = name
 
-        previous = hhb_dataloader().alarm_by_id.load(id)
+        previous = hhb_dataloader().alarms.load_one(id)
         if not previous:
             raise GraphQLError(f"Alarm with id {id} not found")
 
@@ -156,12 +156,12 @@ class AlarmHelper:
             if date_in_past(input.endDate):
                 raise GraphQLError("Alarm eind datum is in het verleden.")
 
-        previous_response = hhb_dataloader().alarm_by_id.load(id)
+        previous_response = hhb_dataloader().alarms.load_one(id)
         if not previous_response:
             raise GraphQLError("Alarm bestaat niet.")
 
         if input.afspraakId:
-            afspraak_response = hhb_dataloader().afspraak_by_id.load(input.afspraakId)
+            afspraak_response = hhb_dataloader().afspraken.load_one(input.afspraakId)
             if not afspraak_response:
                 raise GraphQLError("Afspraak bestaat niet.")
 

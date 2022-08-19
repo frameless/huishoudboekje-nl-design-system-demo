@@ -53,7 +53,7 @@ class UpdateBurger(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(_root, _info, id, **kwargs):
         """ Update the current Gebruiker/Burger """
-        previous = hhb_dataloader().burger_by_id.load(id)
+        previous = hhb_dataloader().burgers.load_one(id)
 
         response = requests.post(
             f"{settings.HHB_SERVICES_URL}/burgers/{id}",

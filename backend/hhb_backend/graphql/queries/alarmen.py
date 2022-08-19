@@ -2,7 +2,7 @@
 import graphene
 
 from hhb_backend.graphql.dataloaders import hhb_dataloader
-from hhb_backend.graphql.models.Alarm import Alarm
+from hhb_backend.graphql.models.alarm import Alarm
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (gebruikers_activiteit_entities, log_gebruikers_activiteit)
 
 
@@ -19,7 +19,7 @@ class AlarmQuery:
     @classmethod
     @log_gebruikers_activiteit
     async def resolver(cls, _root, _info, id):
-        return hhb_dataloader().alarm_by_id.load(id)
+        return hhb_dataloader().alarms.load_one(id)
 
 
 class AlarmenQuery:
@@ -36,5 +36,5 @@ class AlarmenQuery:
     @log_gebruikers_activiteit
     async def resolver(cls, _root, _info, ids=None):
         if ids:
-            return hhb_dataloader().alarm_by_id.load_many(ids)
-        return hhb_dataloader().alarmen.load_all()
+            return hhb_dataloader().alarms.load(ids)
+        return hhb_dataloader().alarms.load_all()

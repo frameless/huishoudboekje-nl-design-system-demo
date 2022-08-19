@@ -24,7 +24,7 @@ class BurgerQuery:
     @classmethod
     @log_gebruikers_activiteit
     async def resolver(cls, _root, _info, id, *_args, **_kwargs):
-        return hhb_dataloader().burger_by_id.load(id)
+        return hhb_dataloader().burgers.load_one(id)
 
 
 class BurgersQuery:
@@ -45,21 +45,21 @@ class BurgersQuery:
     @log_gebruikers_activiteit
     async def resolver(cls, _root, _info, **kwargs):
         if kwargs["ids"]:
-            return hhb_dataloader().burger_by_id.load_many(kwargs["ids"])
+            return hhb_dataloader().burgers.load(kwargs["ids"])
 
         if "search" in kwargs:
             burger_ids = set()
             afspraken_ids = set()
             search = str(kwargs["search"]).lower()
 
-            burgers = hhb_dataloader().burger_by_id.load_all(filters=kwargs.get("filters", None))
+            burgers = hhb_dataloader().burgers.load_all(filters=kwargs.get("filters", None))
             for burger in burgers:
                 if search in str(burger['achternaam']).lower() or\
                         search in str(burger['voornamen']).lower() or\
                         search in str(burger['bsn']).lower():
                     burger_ids.add(burger["id"])
 
-            rekeningen = hhb_dataloader().rekening_by_id.load_all(filters=kwargs.get("filters", None))
+            rekeningen = hhb_dataloader().rekeningen.load_all(filters=kwargs.get("filters", None))
             for rekening in rekeningen:
                 if search in str(rekening['iban']).lower() or \
                         search in str(rekening['rekeninghouder']).lower():
@@ -69,7 +69,7 @@ class BurgersQuery:
                     for afspraak_id in rekening["afspraken"]:
                         afspraken_ids.add(afspraak_id)
 
-            afspraken = hhb_dataloader().afspraak_by_id.load_all(filters=kwargs.get("filters", None))
+            afspraken = hhb_dataloader().afspraken.load_all(filters=kwargs.get("filters", None))
             for afspraak in afspraken:
                 if valid_afspraak(afspraak) and afspraak["burger_id"]:
                     if afspraak["id"] in afspraken_ids or search in str(afspraak['zoektermen']).lower():
@@ -81,7 +81,7 @@ class BurgersQuery:
                     result.append(burger)
             return result
 
-        return hhb_dataloader().burger_by_id.load_all(filters=kwargs.get("filters", None))
+        return hhb_dataloader().burgers.load_all(filters=kwargs.get("filters", None))
 
 
 class BurgersPagedQuery:
@@ -102,5 +102,5 @@ class BurgersPagedQuery:
     @log_gebruikers_activiteit
     async def resolver(cls, _root, _info, **kwargs):
         if "start" in kwargs and "limit" in kwargs:
-            return hhb_dataloader().burger_by_id.load_paged(start=kwargs["start"], limit=kwargs["limit"])
-        return hhb_dataloader().burger_by_id.load_all()
+            return hhb_dataloader().burgers.load_paged(start=kwargs["start"], limit=kwargs["limit"])
+        return hhb_dataloader().burgers.load_all()

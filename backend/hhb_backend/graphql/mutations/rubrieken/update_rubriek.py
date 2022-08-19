@@ -41,10 +41,10 @@ class UpdateRubriek(graphene.Mutation):
         """ Update a Rubriek """
         rubriek_id = kwargs.pop("id")
 
-        previous = hhb_dataloader().rubriek_by_id.load(rubriek_id)
+        previous = hhb_dataloader().rubrieken.load_one(rubriek_id)
         if (
             kwargs["grootboekrekening_id"]
-            and hhb_dataloader().grootboekrekening_by_id.load(kwargs['grootboekrekening_id']) is None
+            and hhb_dataloader().grootboekrekeningen.load_one(kwargs['grootboekrekening_id']) is None
         ):
             raise GraphQLError(
                 f"Grootboekrekening id [{kwargs['grootboekrekening_id']}] not found."

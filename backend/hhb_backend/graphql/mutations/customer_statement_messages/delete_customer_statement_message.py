@@ -35,11 +35,11 @@ class DeleteCustomerStatementMessage(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(_root, _info, id):
         """ Delete current Customer Statement Message """
-        previous = hhb_dataloader().csms_by_id.load(id)
+        previous = hhb_dataloader().csms.load_one(id)
 
         transaction_ids = previous["bank_transactions"]
 
-        journaalposten = hhb_dataloader().journaalpost_by_transaction.load_many(transaction_ids)
+        journaalposten = hhb_dataloader().journaalposten.by_transactions(transaction_ids)
         for journaalpost in journaalposten:
             if journaalpost is not None:
                 response = requests.delete(f"{settings.HHB_SERVICES_URL}/journaalposten/{journaalpost['id']}")

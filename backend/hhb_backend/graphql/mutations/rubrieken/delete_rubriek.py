@@ -34,7 +34,7 @@ class DeleteRubriek(graphene.Mutation):
     async def mutate(_root, _info, **_kwargs):
         """ Delete current rubriek """
         id = _kwargs.get("id")
-        previous = hhb_dataloader().rubriek_by_id.load(id)
+        previous = hhb_dataloader().rubrieken.load_one(id)
 
         # Check if in use by afspraken
         afspraken = previous.get("afspraken")
@@ -44,7 +44,7 @@ class DeleteRubriek(graphene.Mutation):
         # Check if in use by journaalposten
         grootboekrekening_id = previous.get("grootboekrekening_id")
         if grootboekrekening_id:
-            journaalposten = hhb_dataloader().journaalpost_by_id.by_grootboekrekening(grootboekrekening_id)
+            journaalposten = hhb_dataloader().journaalposten.by_grootboekrekening(grootboekrekening_id)
             if journaalposten:
                 raise GraphQLError("Rubriek zit in grootboekrekening die wordt gebruikt in journaalposten - verwijderen is niet mogelijk.")
 

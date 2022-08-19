@@ -40,7 +40,7 @@ class DeleteAfspraak(graphene.Mutation):
     @log_gebruikers_activiteit
     def mutate(_root, _info, id):
         """ Delete current afspraak """
-        previous = hhb_dataloader().afspraak_by_id.load(id)
+        previous = hhb_dataloader().afspraken.load_one(id)
         if not previous:
             raise GraphQLError("Afspraak bestaat niet")
 

@@ -52,7 +52,7 @@ class CreateAfdeling(graphene.Mutation):
             "organisatie_id": input["organisatie_id"],
         }
 
-        previous = hhb_dataloader().organisatie_by_id.load(input['organisatie_id'])
+        previous = hhb_dataloader().organisaties.load_one(input['organisatie_id'])
         if not previous:
             raise GraphQLError("Organisatie not found")
 

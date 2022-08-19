@@ -1,12 +1,10 @@
+from typing import List
+
 from hhb_backend.graphql.dataloaders.base_loader import DataLoader
 
 
-class OverschrijvingByIdLoader(DataLoader):
-    """ Load overschrijvingen using ids """
+class OverschrijvingLoader(DataLoader):
     model = "overschrijvingen"
 
-
-class OverschrijvingenByAfspraakLoader(DataLoader):
-    """ Load overschrijvingen using afspraak id """
-    model = "overschrijvingen"
-    filter_item = "filter_afspraken"
+    def by_afspraak(self, afspraak_id: int) -> List[dict]:
+        return self.load(afspraak_id, filter_item="filter_afspraken")

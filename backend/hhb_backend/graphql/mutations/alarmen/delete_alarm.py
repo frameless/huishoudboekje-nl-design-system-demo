@@ -1,7 +1,9 @@
 """ GraphQl Mutatie voor het verwijderen van een Alarm """
 import graphene
-from hhb_backend.graphql.models.Alarm import Alarm
+
+from hhb_backend.graphql.models.alarm import Alarm
 from hhb_backend.graphql.mutations.alarmen.alarm import AlarmHelper
+
 
 class DeleteAlarm(graphene.Mutation):
     class Arguments:

@@ -17,12 +17,12 @@ class Export(graphene.ObjectType):
     xmldata = graphene.String()
     overschrijvingen = graphene.List(lambda: overschrijving.Overschrijving)
 
-    def resolve_timestamp(root, info):
-        value = root.get('timestamp')
+    def resolve_timestamp(self, _info):
+        value = self.get('timestamp')
         if value:
             return datetime.fromisoformat(value)
 
-    async def resolve_overschrijvingen(root, info):
+    async def resolve_overschrijvingen(self, _info):
         """ Get overschrijvingen when requested """
-        if root.get('overschrijvingen'):
-            return hhb_dataloader().overschrijving_by_id.load_many(root.get('overschrijvingen')) or []
+        if self.get('overschrijvingen'):
+            return hhb_dataloader().overschrijvingen.load(self.get('overschrijvingen')) or []

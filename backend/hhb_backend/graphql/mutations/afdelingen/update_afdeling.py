@@ -40,7 +40,7 @@ class UpdateAfdeling(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(_root, _info, id, **kwargs):
         """ Update the current Afdeling """
-        previous = hhb_dataloader().afdeling_by_id.load(id)
+        previous = hhb_dataloader().afdelingen.load_one(id)
         if not previous:
             raise GraphQLError("Afdeling not found")
 

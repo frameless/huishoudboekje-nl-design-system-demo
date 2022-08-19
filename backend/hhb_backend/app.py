@@ -69,7 +69,7 @@ def create_app(
     def export_overschrijvingen(export_id):
         """ Send xml overschijvingen file to client """
         # Get export object
-        export = hhb_dataloader().export_by_id.load(export_id)
+        export = hhb_dataloader().exports.load_one(export_id)
         if not export:
             raise GraphQLError("Export niet gevonden")
 

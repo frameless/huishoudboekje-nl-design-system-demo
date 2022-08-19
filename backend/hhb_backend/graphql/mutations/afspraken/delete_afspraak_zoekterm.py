@@ -41,7 +41,7 @@ class DeleteAfspraakZoekterm(graphene.Mutation):
     async def mutate(_root, _info, afspraak_id: int, zoekterm):
         """ Delete zoekterm to afspraak """
 
-        previous = hhb_dataloader().afspraak_by_id.load(afspraak_id)
+        previous = hhb_dataloader().afspraken.load_one(afspraak_id)
 
         if previous is None:
             raise GraphQLError("Afspraak not found")

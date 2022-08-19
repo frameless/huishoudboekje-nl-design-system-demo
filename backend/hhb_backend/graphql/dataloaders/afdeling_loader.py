@@ -1,15 +1,12 @@
+from typing import List
+
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders.base_loader import DataLoader
 
 
-class AfdelingByIdLoader(DataLoader):
-    """ Load Afdelingen using ids """
-    model = "afdelingen"
+class AfdelingLoader(DataLoader):
     service = settings.ORGANISATIE_SERVICES_URL
-
-
-class AfdelingenByOrganisatieLoader(DataLoader):
-    """ Load Afdelingen using ids """
     model = "afdelingen"
-    service = settings.ORGANISATIE_SERVICES_URL
-    filter_item = "filter_organisaties"
+
+    def by_organisatie(self, organisatie_id: int) -> List[dict]:
+        return self.load(organisatie_id, filter_item="filter_organisaties")
