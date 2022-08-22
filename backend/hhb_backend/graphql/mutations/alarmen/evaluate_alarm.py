@@ -1,4 +1,3 @@
-import calendar
 import logging
 from datetime import *
 from tokenize import String
@@ -7,7 +6,6 @@ from typing import Optional
 import dateutil.parser
 import graphene
 import requests
-from dateutil.rrule import rrule, MONTHLY, YEARLY
 from graphql import GraphQLError
 
 from hhb_backend.graphql import settings
@@ -15,7 +13,7 @@ from hhb_backend.graphql.models.Alarm import Alarm
 from hhb_backend.graphql.models.afspraak import Afspraak
 from hhb_backend.graphql.models.bank_transaction import Bedrag
 from hhb_backend.graphql.models.signaal import Signaal
-from hhb_backend.graphql.mutations.alarmen.alarm import AlarmHelper
+from hhb_backend.graphql.mutations.alarmen.alarm import AlarmHelper, generate_alarm_date
 from hhb_backend.graphql.mutations.signalen.signalen import SignaalHelper
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (log_gebruikers_activiteit, gebruikers_activiteit_entities)
 
@@ -47,8 +45,8 @@ class EvaluateAlarms(graphene.Mutation):
 
 class EvaluateAlarm(graphene.Mutation):
     class Arguments:
-        id = graphene.String(required=True) 
-    
+        id = graphene.String(required=True)
+
     alarmTriggerResult = graphene.List(lambda: AlarmTriggerResult)
 
     def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
@@ -83,7 +81,7 @@ async def evaluateOneAlarm(_root, _info, id: String) -> list:
 
     if alarm is None:
         return []
-        
+
     alarm_status: bool = alarm.get("isActive")
     if alarm_status == True:
         evaluated_alarm = await evaluateAlarm(_root, _info, alarm, activeAlarms)
@@ -101,23 +99,23 @@ async def evaluateAlarm(_root, _info, alarm: Alarm, activeAlarms: list):
 
     alarm_check_date = dateutil.parser.isoparse(alarm.get("startDate")).date() + timedelta(days=(alarm.get("datumMargin") + 1))
     alarm = disableAlarm(alarm_check_date, alarm)
-    
+
     # check if there are transaction within the alarm specified margins
-    newAlarm = None
+    new_alarm = None
     createdSignaal = None
     if shouldCheckAlarm(alarm):
-        newAlarm = await should_create_next_alarm(_root, _info, alarm, alarm_check_date, activeAlarms)
+        new_alarm = await should_create_next_alarm(_root, _info, alarm, alarm_check_date, activeAlarms)
         createdSignaal = await shouldCreateSignaal(_root, _info, alarm, transacties)
-    
+
     return {
         "alarm": alarm,
-        "nextAlarm": newAlarm,
+        "nextAlarm": new_alarm,
         "signaal": createdSignaal
     }
 
 def disableAlarm(alarmCheckDate: date, alarm: Alarm) -> Alarm:
     utc_now_date = (datetime.now(timezone.utc)).date()
-    if alarmCheckDate < utc_now_date:
+    if alarmCheckDate <= utc_now_date:
         alarm["isActive"] = False
     return alarm
 
@@ -134,16 +132,15 @@ def doesNextAlarmExist(nextAlarmDate: date, alarm: Alarm, alarms: list) -> bool:
             continue
         elif checkAfspraakId == afspraakId and nextAlarmDate == alarm_check_date:
             return True
-    
+
     return False
 
 
-async def should_create_next_alarm(root, info, alarm, alarm_check_date: datetime,
-                                   active_alarms: list) -> Optional[Alarm]:
+async def should_create_next_alarm(root, info, alarm, alarm_check_date: date, active_alarms: list) -> Optional[Alarm]:
     # only generate next alarm if byDay, byMonth, and/or byMonthDay is present
     if len(alarm.get("byDay", [])) >= 1 or len(alarm.get("byMonth", [])) >= 1 or len(alarm.get("byMonthDay", [])) >= 1:
         # generate next alarm in the sequence
-        next_alarm_date = generateNextAlarmInSequence(alarm, alarm_check_date)
+        next_alarm_date = generate_alarm_date(alarm, alarm_check_date)
 
         # check if the end date is past or not
         end_date = alarm.get("endDate")
@@ -153,16 +150,16 @@ async def should_create_next_alarm(root, info, alarm, alarm_check_date: datetime
         # add new alarm in sequence if it does not exist yet
         next_alarm_already_exists = doesNextAlarmExist(next_alarm_date, alarm, active_alarms)
         if not next_alarm_already_exists:
-            return await createAlarm(root, info, alarm, next_alarm_date)
+            return await create_alarm(root, info, alarm, next_alarm_date)
 
     return None
 
 
-async def createAlarm(_root, _info, alarm: Alarm, alarmDate: datetime) -> Alarm:
-    newAlarm = {
+async def create_alarm(root, info, alarm: Alarm, alarm_date: date) -> Optional[Alarm]:
+    result = await AlarmHelper.create_alarm(root, info, {
         "isActive": True,
         "afspraakId": int(alarm.get("afspraakId")),
-        "startDate": alarmDate.isoformat(),
+        "startDate": alarm_date.isoformat(),
         "endDate": alarm.get("endDate"),
         "datumMargin": int(alarm.get("datumMargin")),
         "bedrag": alarm.get("bedrag"),
@@ -170,24 +167,22 @@ async def createAlarm(_root, _info, alarm: Alarm, alarmDate: datetime) -> Alarm:
         "byDay": alarm.get("byDay", []),
         "byMonth": alarm.get("byMonth", []),
         "byMonthDay": alarm.get("byMonthDay", [])
-    }
-    
-    result = await AlarmHelper.create(_root, _info, newAlarm)
+    })
+
     if not result.ok:
         logging.warning("create alarm failed")
         return None
-    newAlarm = result.alarm
+    return result.alarm
 
-    return newAlarm
 
 def shouldCheckAlarm(alarm: Alarm) -> bool:
     # is the alarm set in the past, or the future
     str_alarm_date = alarm.get("startDate")
     alarm_date = dateutil.parser.isoparse(str_alarm_date).date()
-    date_margin = int(alarm.get("datumMargin"))                       
+    date_margin = int(alarm.get("datumMargin"))
     day_after_expected_window = alarm_date + timedelta(days=(date_margin + 1))   # plus one to make sure the alarm is checked after the expected date range.
     utc_now_date = (datetime.now(timezone.utc)).date()
-    
+
     # if now or in the past, it should be checked
     return day_after_expected_window <= utc_now_date
 
@@ -275,32 +270,6 @@ def getBanktransactiesByJournaalIds(journaalIds) -> list:
     #     }
     # ]
 
-# get ByDay, ByMonth and ByMonthDay from alarm
-def generateNextAlarmInSequence(alarm: Alarm, alarmDate:datetime) -> datetime:
-    # Create next Alarm in the sequence based on byDay, byMonth, byMonthDay cycle
-    byDay = alarm.get("byDay", [])
-    byMonth = alarm.get("byMonth", [])
-    byMonthDay = alarm.get("byMonthDay", [])
-
-    # add one day so it doesnt return the same day
-    tommorrow_utc = (datetime.now(timezone.utc) + timedelta(days=1)).date()
-    future = max(alarmDate + timedelta(days=1), tommorrow_utc)
-    # https://dateutil.readthedocs.io/en/latest/examples.html#rrule-examples
-    # isWeekly1 = (byDay is not None and byMonth is None and byMonthDay is None)
-    isWeekly = (len(byDay) >= 1 and len(byMonth) <= 0 and len(byMonthDay) <=0)
-    # isMontly1 = (byMonth is not None and byMonthDay is not None and byDay is None)
-    isMontly = (len(byDay) <= 0 and len(byMonth) >= 1 and len(byMonthDay) >= 1)
-    if isWeekly:   # weekly
-        weekday_indexes = WeekdayHelper.weekday_names_to_indexes(byDay)
-        next_alarm_dates = list(rrule(MONTHLY, dtstart=future, count=1, byweekday=weekday_indexes))
-    elif isMontly:    # maandelijk/jaarlijks
-        next_alarm_dates = list(rrule(YEARLY, dtstart=future, count=1, bymonth=byMonth, bymonthday=byMonthDay))
-    else:
-        raise GraphQLError(f"Niet ondersteunde combinatie van alarm herhaal instructies. isWeekly:{isWeekly} isMonthly:{isMontly} byDay:{byDay} byMonth:{byMonth} byMonthDay:{byMonthDay}")
-
-    next_alarm_date: date = next_alarm_dates[0].date()
-
-    return next_alarm_date
 
 async def shouldCreateSignaal(_root, _info, alarm: Alarm, transacties) -> Signaal:
     # expected dates
@@ -320,8 +289,7 @@ async def shouldCreateSignaal(_root, _info, alarm: Alarm, transacties) -> Signaa
     transaction_in_scope = []
     monetary_deviated_transaction_ids = []
     bedrag = 0
-    difference = Bedrag.serialize(-expected_alarm_bedrag)
-    
+
     # check transactions 
     for transaction in transacties:
         str_transactie_datum=transaction.get("transactie_datum")
@@ -343,7 +311,7 @@ async def shouldCreateSignaal(_root, _info, alarm: Alarm, transacties) -> Signaa
     if left_monetary_window <= bedrag <= right_monetary_window:
         monetary_deviated_transaction_ids = []
 
-    if len(transaction_in_scope) <= 0 or len(monetary_deviated_transaction_ids) > 0: 
+    if len(transaction_in_scope) <= 0 or len(monetary_deviated_transaction_ids) > 0:
         alarm_id = alarm.get("id")
         newSignal = {
             "alarmId": alarm_id,
@@ -375,23 +343,3 @@ def updateAlarm(alarm, alarm_id, newSignalId):
     alarm_response = requests.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", json=alarm, headers={"Content-type": "application/json"})
     if alarm_response.status_code != 200:
         raise GraphQLError(f"Fout bij het update van het alarm met het signaal. {alarm_response.json()}")
-    alarm = alarm_response.json()["data"]
-
-
-class WeekdayHelper:
-
-    @staticmethod
-    def weekday_names_to_indexes(weekday_names) -> list:
-        indexes = []
-        for weekday_name in weekday_names:
-            index = WeekdayHelper.weekday_name_to_index(weekday_name)
-            indexes.append(index)
-        return indexes
-
-    @staticmethod
-    def weekday_name_to_index(weekday_name: str) -> int:
-        weekday_collection = list(calendar.day_name)
-        for index, weekday in enumerate(weekday_collection):
-            if weekday == weekday_name:
-                return index
-        return 0 # monday

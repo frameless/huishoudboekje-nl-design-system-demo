@@ -1,4 +1,16 @@
-import {Box, Button, FormControl, FormErrorMessage, FormLabel, HStack, Input, InputGroup, InputLeftElement, Stack, Text} from "@chakra-ui/react";
+import {
+	Box,
+	Button,
+	FormControl,
+	FormErrorMessage,
+	FormLabel,
+	HStack,
+	Input,
+	InputGroup,
+	InputLeftElement,
+	Stack,
+	Text
+} from "@chakra-ui/react";
 import React from "react";
 import DatePicker from "react-datepicker";
 import {useTranslation} from "react-i18next";
@@ -85,11 +97,9 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 				isActive: true,
 				bedrag,
 				bedragMargin,
-				...data.isPeriodiek === Periodiek.Eenmalig ? {
+				...data.isPeriodiek === Periodiek.Eenmalig && {
 					startDate: d(startDate).format("YYYY-MM-DD"),
 					endDate: d(startDate).format("YYYY-MM-DD"),
-				} : {
-					startDate: d(startDate).format("YYYY-MM-DD"),
 				},
 				datumMargin,
 				byDay,
