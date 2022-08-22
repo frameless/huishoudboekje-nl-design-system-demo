@@ -75,6 +75,8 @@ export const auditLogTexts = (values, components, action) => {
 		createAfdeling: () => <Trans i18nKey={"auditLog.createAfdeling"} values={values} components={components} />,
 		updateAfdeling: () => <Trans i18nKey={"auditLog.updateAfdeling"} values={values} components={components} />,
 		deleteAfdeling: () => <Trans i18nKey={"auditLog.deleteAfdeling"} values={values} components={components} />,
+		createAlarm: () => <Trans i18nKey={"auditLog.createAlarm"} values={values} components={components} />,
+		deleteAlarm: () => <Trans i18nKey={"auditLog.deleteAlarm"} values={values} components={components} />,
 		updateSignaal: () => <Trans i18nKey={"auditLog.updateSignaal"} values={values} components={components} />,
 	};
 

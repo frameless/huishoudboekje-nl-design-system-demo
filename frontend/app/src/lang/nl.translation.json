@@ -757,6 +757,8 @@
 	"createAfdeling": "{{gebruiker}} voegde afdeling <linkAfdeling>{{afdeling}}</linkAfdeling> toe aan <linkOrganisatie>{{organisatie}}</linkOrganisatie>.",
 	"updateAfdeling": "{{gebruiker}} wijzigde afdeling <linkAfdeling>{{afdeling}}</linkAfdeling>.",
 	"deleteAfdeling": "{{gebruiker}} verwijderde een afdeling.",
+	"createAlarm": "{{gebruiker}} voegde een alarm toe bij een <linkAfspraak>afspraak</linkAfspraak> met <linkBurger>{{burger}}</linkBurger>.",
+	"deleteAlarm": "{{gebruiker}} verwijderde het alarm bij een <linkAfspraak>afspraak</linkAfspraak> met <linkBurger>{{burger}}</linkBurger>.",
 	"updateSignaal": "{{gebruiker}} wijzigde een signaal."
   },
   "unknownUser": "Onbekende gebruiker",
