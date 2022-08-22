@@ -48,7 +48,7 @@ class BankTransactionsQuery:
     @classmethod
     @log_gebruikers_activiteit
     async def resolver(cls, _root, _info, **kwargs):
-        return hhb_dataloader().bank_transactions.load(None, filters=kwargs.get("filters", None))
+        return hhb_dataloader().bank_transactions.load_all(filters=kwargs.get("filters", None))
 
 
 class BankTransactionsPagedQuery:
