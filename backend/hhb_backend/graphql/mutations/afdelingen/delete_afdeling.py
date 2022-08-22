@@ -39,12 +39,12 @@ class DeleteAfdeling(graphene.Mutation):
             raise GraphQLError("Afdeling not found")
 
         # do not remove when attached postadressen are found
-        postadressen_ids = previous.get("postadressen_ids")
+        postadressen_ids = previous.postadressen_ids
         if postadressen_ids:
             raise GraphQLError("Afdeling heeft postadressen - verwijderen is niet mogelijk.")
 
         # do not remove when attached rekeningen are found
-        rekeningen_ids = previous.get("rekeningen_ids")
+        rekeningen_ids = previous.rekeningen_ids
         if rekeningen_ids: 
             raise GraphQLError("Afdeling heeft rekeningen - verwijderen is niet mogelijk.")
 

@@ -1,13 +1,14 @@
 import copy
 import json
 import logging
-from typing import Dict, Union, TypedDict, List, Optional
+from typing import Dict, Union, TypedDict, List, Optional, TypeVar, Generic
 
 import requests
 from graphql import GraphQLError
 from typing_extensions import Unpack, NotRequired
 
 from hhb_backend.graphql.utils.upstream_error_handler import UpstreamError
+from hhb_backend.service.model.base_model import BaseModel
 
 Key = Union[str, int, bool]
 
@@ -16,6 +17,8 @@ Key = Union[str, int, bool]
 #   {"<column_name>": {"<Operator>": <str|int|bool>}}
 #   {"<AND|OR>": {...}
 Filters = Dict[str, Union['Filters', Key]]
+
+M = TypeVar('M')
 
 
 class DataLoaderOptions(TypedDict):
@@ -28,20 +31,20 @@ class DataLoaderOptions(TypedDict):
     return_indexed: NotRequired[str]
 
 
-class DataLoader:
+class DataLoader(Generic[M]):
     service = None
     model = None
     filter_item = None  # will fall back to 'filter_ids'
     batch_size = 1000
     params = {}
 
-    def load_one(self, key: Key, **kwargs: Unpack[DataLoaderOptions]) -> Optional[dict]:
+    def load_one(self, key: Key, **kwargs: Unpack[DataLoaderOptions]) -> Optional[M]:
         """ Loads one to one data """
         options = _add_default_options(self, kwargs)
         options["return_first"] = True
         return _base_data_load_with_options(self.service, options, key=key)
 
-    def load(self, keys: Union[List[Key], Key], **kwargs: Unpack[DataLoaderOptions]) -> List[dict]:
+    def load(self, keys: Union[List[Key], Key], **kwargs: Unpack[DataLoaderOptions]) -> List[M]:
         """
          Loads one to many, many to many and many to one
          (when used in combination with the return_first option) data
@@ -51,7 +54,7 @@ class DataLoader:
         options = _add_default_options(self, kwargs)
         return _base_data_load_with_options(self.service, options, keys=keys)
 
-    def load_all(self, **kwargs: Unpack[DataLoaderOptions]) -> List[dict]:
+    def load_all(self, **kwargs: Unpack[DataLoaderOptions]) -> List[M]:
         """ Load all items """
         options = _add_default_options(self, kwargs)
         return _base_data_load_with_options(self.service, options)
@@ -133,17 +136,18 @@ def _base_data_load_with_options(service: str, options: Unpack[DataLoaderOptions
             result = []
             for i in range(0, len(keys), batch_size):
                 part, _ = _base_load_with_options(service, options, keys=keys[i::i + batch_size])
-                result.extend(part["data"])
+                for entry in part["data"]:
+                    result.append(BaseModel(entry))
             return result
 
     data = _base_load_with_options(service, options, key=key, keys=keys)["data"]
 
     if return_first:
-        data = data[0] if len(data) > 0 else None
+        data = BaseModel(data[0]) if len(data) > 0 else None
     elif return_indexed is not None:
         indexed = {}
         for item in data:
-            indexed.setdefault(item[return_indexed], item)
+            indexed.setdefault(item[return_indexed], BaseModel(item))
         data = indexed
 
     logging.info(f"response: {data}")
