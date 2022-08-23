@@ -20,3 +20,9 @@ class AfspraakLoader(DataLoader):
 
     def by_rekeningen(self, rekening_ids: List[int]) -> List[dict]:
         return self.load(rekening_ids, filter_item="filter_rekening")
+
+    def in_date_range(self, valid_from: str, valid_through: str) -> List[dict]:
+        return self.load_all(params={
+            'valid_from': valid_from,
+            'valid_through': valid_through
+        })

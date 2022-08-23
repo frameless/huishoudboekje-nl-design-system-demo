@@ -19,23 +19,6 @@ Key = Union[str, int, bool]
 Filters = Dict[str, Union['Filters', Key]]
 
 
-# M = TypeVar('M')
-# Generic[M]
-# todo would have to add a new class for each model, as the model doesn't
-# class _DictWrapper(dict):
-#     def __getattr__(self, name):
-#         return self.get(name)
-#
-#     def __setattr__(self, name, value):
-#         self[name] = value
-#
-#     def __delattr__(self, name):
-#         if name in self:
-#             del self[name]
-#         else:
-#             raise AttributeError("No such attribute: " + name)
-
-
 class DataLoaderOptions(TypedDict):
     model: NotRequired[str]
     filter_item: NotRequired[str]

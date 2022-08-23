@@ -1,7 +1,6 @@
 import hashlib
 import json
 from datetime import datetime
-from urllib.parse import urlencode
 
 import graphene
 import requests
@@ -55,7 +54,7 @@ class CreateExportOverschrijvingen(graphene.Mutation):
         )
 
     @log_gebruikers_activiteit
-    async def mutate(root, info, **kwargs):
+    async def mutate(self, info, **kwargs):
         """ Create the export file based on start and end date """
         start_datum_str = kwargs.pop("startDatum")
         eind_datum_str = kwargs.pop("eindDatum")
@@ -63,27 +62,12 @@ class CreateExportOverschrijvingen(graphene.Mutation):
         eind_datum = datetime.strptime(eind_datum_str, "%Y-%m-%d").date()
 
         # Get all afspraken with the start and end date.
-        afspraken_response = requests.get(
-            f'{settings.HHB_SERVICES_URL}/afspraken/?{urlencode({"valid_from": start_datum_str, "valid_through": eind_datum_str})}',
-            headers={"Content-type": "application/json"},
-        )
-        if not afspraken_response.ok:
-            raise GraphQLError(f"Upstream API responded: {afspraken_response.text}")
-
-        afspraken = afspraken_response.json()["data"]
-        afspraken = list(
-            filter(lambda o: o["betaalinstructie"], afspraken)
-        )
+        afspraken = hhb_dataloader().afspraken.in_date_range(start_datum_str, eind_datum_str)
+        afspraken = list(filter(lambda o: o["betaalinstructie"], afspraken))
         afspraken_ids = [afspraak_result["id"] for afspraak_result in afspraken]
 
         # Get all previous overschrijvingen from afspraken
-        overschrijvingen_response = requests.get(
-            f"{settings.HHB_SERVICES_URL}/overschrijvingen/?filter_afspraken={','.join(str(x) for x in afspraken_ids)}",
-            headers={"Content-type": "application/json"},
-        )
-        if overschrijvingen_response.status_code != 200:
-            raise GraphQLError(f"Upstream API responded: {afspraken_response.text}")
-        overschrijvingen = overschrijvingen_response.json()["data"]
+        overschrijvingen = hhb_dataloader().overschrijvingen.by_afspraken(afspraken_ids)
 
         # Haal alle toekomstige overschrijvingen op. Met in achtneming van start en eind datum.
         future_overschrijvingen = []
@@ -121,13 +105,8 @@ class CreateExportOverschrijvingen(graphene.Mutation):
         tegen_rekeningen_ids = list(
             set([afspraak_result["tegen_rekening_id"] for afspraak_result in afspraken])
         )
-        rekeningen_response = requests.get(
-            f"{settings.HHB_SERVICES_URL}/rekeningen/?filter_ids={','.join(str(x) for x in tegen_rekeningen_ids)}",
-            headers={"Content-type": "application/json"},
-        )
-        if rekeningen_response.status_code != 200:
-            raise GraphQLError(f"Upstream API responded: {rekeningen_response.text}")
-        tegen_rekeningen = rekeningen_response.json()["data"]
+
+        tegen_rekeningen = hhb_dataloader().rekeningen.load(tegen_rekeningen_ids)
         if not tegen_rekeningen:
             raise GraphQLError(f"Geen rekeningen gevonden.")
 
