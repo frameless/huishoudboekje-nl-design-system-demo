@@ -45,7 +45,6 @@ export const auditLogTexts = (values, components, action) => {
 		updateOrganisatie: () => <Trans i18nKey={"auditLog.updateOrganisatie"} values={values} components={components} />,
 		deleteOrganisatie: () => <Trans i18nKey={"auditLog.deleteOrganisatie"} values={values} components={components} />,
 		createJournaalpostAfspraak: () => <Trans i18nKey={"auditLog.createJournaalpostAfspraak"} values={values} components={components} />,
-		createJournaalpostPerAfspraak: () => <Trans i18nKey={"auditLog.createJournaalpostAfspraak"} values={values} components={components} />,
 		createJournaalpostGrootboekrekening: () => <Trans i18nKey={"auditLog.createJournaalpostGrootboekrekening"} values={values} components={components} />,
 		updateJournaalpostGrootboekrekening: () => <Trans i18nKey={"auditLog.updateJournaalpostGrootboekrekening"} values={values} components={components} />,
 		deleteJournaalpost: () => <Trans i18nKey={"auditLog.deleteJournaalpost"} values={values} components={components} />,
@@ -76,6 +75,9 @@ export const auditLogTexts = (values, components, action) => {
 		createAfdeling: () => <Trans i18nKey={"auditLog.createAfdeling"} values={values} components={components} />,
 		updateAfdeling: () => <Trans i18nKey={"auditLog.updateAfdeling"} values={values} components={components} />,
 		deleteAfdeling: () => <Trans i18nKey={"auditLog.deleteAfdeling"} values={values} components={components} />,
+		createAlarm: () => <Trans i18nKey={"auditLog.createAlarm"} values={values} components={components} />,
+		deleteAlarm: () => <Trans i18nKey={"auditLog.deleteAlarm"} values={values} components={components} />,
+		updateSignaal: () => <Trans i18nKey={"auditLog.updateSignaal"} values={values} components={components} />,
 	};
 
 	return texts[action];

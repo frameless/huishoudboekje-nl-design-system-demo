@@ -27,16 +27,17 @@
 	  "successMessage": "Transacties worden nu afgeletterd. Dit kan even duren."
 	},
 	"customerStatementMessages": {
-	  "deleteSuccess": "Het bankafschrift is succesvol verwijderd."
+	  "deleteSuccess": "Het bankafschrift is verwijderd."
 	},
 	"exports": {
-	  "createSuccessMessage": "Exportbestand succesvol aangemaakt."
+	  "createSuccessMessage": "Exportbestand aangemaakt."
 	},
 	"transactions": {
 	  "noResults": "Er zijn geen banktransacties gevonden. Let op: er kunnen filteropties actief zijn waardoor er geen resultaten worden weergegeven."
 	},
 	"journals": {
-	  "createSuccessMessage": "Transactie succesvol afgeletterd."
+	  "deleteSuccessMessage": "De aflettering van de transactie is ongedaan gemaakt.",
+	  "createSuccessMessage": "De transactie is afgeletterd."
 	},
 	"burgers": {
 	  "deleteFromHuishoudenConfirmMessage": "{{name}} is uit het huishouden verwijderd.",
@@ -61,18 +62,18 @@
 	  "alreadyExists": "Er bestaat al een burger met dit burgerservicenummer.",
 	  "bsnLengthError": "Het burgerservicenummer moet bestaan uit 8 of 9 cijfers.",
 	  "bsnElfProefError": "Dit geen geldig burgerservicenummer. Controleer de ingevulde gegevens en probeer het opnieuw.",
-	  "createSuccessMessage": "Nieuwe burger succesvol opgeslagen.",
-	  "updateSuccessMessage": "Gegevens succesvol gewijzigd."
+	  "createSuccessMessage": "Nieuwe burger opgeslagen.",
+	  "updateSuccessMessage": "Gegevens gewijzigd."
 	},
 	"formInputError": "Er is een fout opgetreden. Controleer de invoer.",
 	"configuratie": {
 	  "deleteSuccess": "Configuratie is verwijderd.",
-	  "createSuccess": "Configuratie succesvol opgeslagen.",
+	  "createSuccess": "Configuratie opgeslagen.",
 	  "alreadyExists": "Deze configuratie bestaat al.",
-	  "updateSuccess": "Configuratie succesvol opgeslagen."
+	  "updateSuccess": "Configuratie opgeslagen."
 	},
 	"rubrieken": {
-	  "createSuccess": "Rubriek succesvol toegevoegd.",
+	  "createSuccess": "Rubriek toegevoegd.",
 	  "deleteSuccess": "Rubriek is verwijderd.",
 	  "updateSuccess": "Rubriek is gewijzigd."
 	},
@@ -89,13 +90,13 @@
 	  "deleteQuestion": "Weet je zeker dat je dit postadres wil verwijderen?"
 	},
 	"afdelingen": {
-	  "createSuccessMessage": "Nieuwe afdeling succesvol opgeslagen.",
+	  "createSuccessMessage": "Nieuwe afdeling opgeslagen.",
 	  "updateSuccess": "Afdeling gewijzigd.",
 	  "alreadyExistsError": "Deze afdeling bestaat al."
 	},
 	"organisaties": {
-	  "createSuccessMessage": "Nieuwe organisatie succesvol opgeslagen.",
-	  "updateSuccessMessage": "Organisatie succesvol gewijzigd.",
+	  "createSuccessMessage": "Nieuwe organisatie opgeslagen.",
+	  "updateSuccessMessage": "Organisatie gewijzigd.",
 	  "deleteConfirmMessage": "Organisatie is verwijderd.",
 	  "deleteTitle": "Organisatie verwijderen",
 	  "deleteQuestion": "Weet je zeker dat je de gegevens van {{name}} definitief wil verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
@@ -106,7 +107,7 @@
 	  "noSearchResults": "Geen organisaties gevonden. Gebruik een andere zoekterm.",
 	  "alreadyExists": "Er bestaat al een organisatie met dit KvK-nummer en vestigingsnummer."
 	},
-	"deleteAfdelingSuccess": "Afdeling {{name}} succesvol verwijderd.",
+	"deleteAfdelingSuccess": "Afdeling {{name}} verwijderd.",
 	"postadres": {
 	  "updateSucces": "Postadres gewijzigd."
 	},
@@ -755,7 +756,10 @@
 	"deletePostadres": "{{gebruiker}} verwijderde een postadres bij <linkAfdeling>{{afdeling}}</linkAfdeling>.",
 	"createAfdeling": "{{gebruiker}} voegde afdeling <linkAfdeling>{{afdeling}}</linkAfdeling> toe aan <linkOrganisatie>{{organisatie}}</linkOrganisatie>.",
 	"updateAfdeling": "{{gebruiker}} wijzigde afdeling <linkAfdeling>{{afdeling}}</linkAfdeling>.",
-	"deleteAfdeling": "{{gebruiker}} verwijderde een afdeling."
+	"deleteAfdeling": "{{gebruiker}} verwijderde een afdeling.",
+	"createAlarm": "{{gebruiker}} voegde een alarm toe bij een <linkAfspraak>afspraak</linkAfspraak> met <linkBurger>{{burger}}</linkBurger>.",
+	"deleteAlarm": "{{gebruiker}} verwijderde het alarm bij een <linkAfspraak>afspraak</linkAfspraak> met <linkBurger>{{burger}}</linkBurger>.",
+	"updateSignaal": "{{gebruiker}} wijzigde een signaal."
   },
   "unknownUser": "Onbekende gebruiker",
   "unknownOs": "Onbekend besturingssysteem",
@@ -764,7 +768,6 @@
   "huishoudens": {
 	"title": "Huishoudens"
   },
-  "suggestion": "Suggestie",
   "modals": {
 	"addPostadres": {
 	  "modalTitle": "Postadres toevoegen"
@@ -825,6 +828,7 @@
 	"month_one": "maand",
 	"month_other": "maanden"
   },
+  "suggestion": "Suggestie",
   "version": "Versie {{version}}",
   "sidebar": {
 	"signalen": "Signalen",

@@ -35,7 +35,7 @@ const BookingDetailsView: React.FC<BookingDetailsViewProps> = ({transactie, refe
 			deleteJournaalpost({
 				variables: {id},
 			}).then(() => {
-				toast({success: t("messages.journals.createSuccessMessage")});
+				toast({success: t("messages.journals.deleteSuccessMessage")});
 				refetch();
 			}).catch(err => {
 				console.error(err);
