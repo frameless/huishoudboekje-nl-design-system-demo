@@ -1,21 +1,23 @@
+import calendar
+import logging
+from datetime import *
 from tokenize import String
-from hhb_backend.graphql.mutations.signalen.signalen import SignaalHelper
-from hhb_backend.graphql.mutations.alarmen.alarm import AlarmHelper
+from typing import Optional
+
+import dateutil.parser
+import graphene
+import requests
+from dateutil.rrule import rrule, MONTHLY, YEARLY
+from graphql import GraphQLError
+
+from hhb_backend.graphql import settings
 from hhb_backend.graphql.models.Alarm import Alarm
-from hhb_backend.graphql.models.signaal import Signaal
 from hhb_backend.graphql.models.afspraak import Afspraak
 from hhb_backend.graphql.models.bank_transaction import Bedrag
-import graphene
+from hhb_backend.graphql.models.signaal import Signaal
+from hhb_backend.graphql.mutations.alarmen.alarm import AlarmHelper
+from hhb_backend.graphql.mutations.signalen.signalen import SignaalHelper
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (log_gebruikers_activiteit, gebruikers_activiteit_entities)
-import requests
-from graphql import GraphQLError
-from hhb_backend.graphql import settings
-from datetime import *
-from dateutil.rrule import rrule, MONTHLY, YEARLY
-import calendar
-from dateutil.relativedelta import *
-import dateutil.parser
-import logging
 
 
 class AlarmTriggerResult(graphene.ObjectType):
@@ -104,7 +106,7 @@ async def evaluateAlarm(_root, _info, alarm: Alarm, activeAlarms: list):
     newAlarm = None
     createdSignaal = None
     if shouldCheckAlarm(alarm):
-        newAlarm = await shouldCreateNextAlarm(_root, _info, alarm, alarm_check_date, activeAlarms)
+        newAlarm = await should_create_next_alarm(_root, _info, alarm, alarm_check_date, activeAlarms)
         createdSignaal = await shouldCreateSignaal(_root, _info, alarm, transacties)
     
     return {
@@ -135,29 +137,25 @@ def doesNextAlarmExist(nextAlarmDate: date, alarm: Alarm, alarms: list) -> bool:
     
     return False
 
-async def shouldCreateNextAlarm(_root, _info, alarm: Alarm, alarm_check_date: datetime, activeAlarms: list) -> Alarm:
-    newAlarm = None
-    
+
+async def should_create_next_alarm(root, info, alarm, alarm_check_date: datetime,
+                                   active_alarms: list) -> Optional[Alarm]:
     # only generate next alarm if byDay, byMonth, and/or byMonthDay is present
-    if (len(alarm.get("byDay", [])) >= 1 or len(alarm.get("byMonth", [])) >= 1 or len(alarm.get("byMonthDay", [])) >= 1): 
+    if len(alarm.get("byDay", [])) >= 1 or len(alarm.get("byMonth", [])) >= 1 or len(alarm.get("byMonthDay", [])) >= 1:
         # generate next alarm in the sequence
-        nextAlarmDate = generateNextAlarmInSequence(alarm, alarm_check_date) 
+        next_alarm_date = generateNextAlarmInSequence(alarm, alarm_check_date)
 
         # check if the end date is past or not
         end_date = alarm.get("endDate")
-        if end_date is not None:
-            if nextAlarmDate > dateutil.parser.isoparse(end_date).date():
-                nextAlarmDate = None
-                return newAlarm
+        if end_date and next_alarm_date > dateutil.parser.isoparse(end_date).date():
+            return None
 
         # add new alarm in sequence if it does not exist yet
-        nextAlarmAlreadyExists = doesNextAlarmExist(nextAlarmDate, alarm, activeAlarms)
-        if nextAlarmAlreadyExists == True:
-            nextAlarmDate = None
-        elif nextAlarmAlreadyExists == False:
-            newAlarm = await createAlarm(_root, _info, alarm, nextAlarmDate)
+        next_alarm_already_exists = doesNextAlarmExist(next_alarm_date, alarm, active_alarms)
+        if not next_alarm_already_exists:
+            return await createAlarm(root, info, alarm, next_alarm_date)
 
-    return newAlarm
+    return None
 
 
 async def createAlarm(_root, _info, alarm: Alarm, alarmDate: datetime) -> Alarm:
