@@ -1,19 +1,19 @@
 .load-sample-data: &load-sample-data
   stage: data
-  image:
-    name: ${DOCKER_PROXY}node:18-alpine
+  image: registry.gitlab.com/commonground/huishoudboekje/data-importer/data-importer:latest
   variables:
-    NPM_CACHE_DIR: "${CI_PROJECT_DIR}/.cache/npm"
     CYPRESS_INSTALL_BINARY: "0"
-    APP_HOST: "hhb-$CI_COMMIT_REF_SLUG.nlx.reviews"
+    APP_HOST: hhb-$CI_COMMIT_REF_SLUG.nlx.reviews
   tags:
     - cg
     - docker
   when: manual
-  script:
+  before_script:
+    - cd /app
+    - export GRAPHQL_API_URL=https://${APP_HOST}/api/graphql
     - echo "Generating API key..."
     - |
-      export PROXY_AUTHORIZATION=`npx --yes --quiet --package '@clarketm/jwt-cli' \
+      export AUTH_TOKEN=`npx --yes --quiet --package '@clarketm/jwt-cli' \
         jwt sign \
         --expiresIn "1 hour" \
         --subject "sampledata@${APP_HOST}" \
@@ -22,12 +22,12 @@
         --jwtid "$(LC_CTYPE=C tr -dc 'A-F0-9' < /dev/urandom | head -c32)" \
         --noCopy \
         "{ \"name\": \"sampledata\", \"email\": \"sampledata@${APP_HOST}\" }" "${JWT_SECRET:-$SESSION_SECRET}"`
-    - echo JWT $PROXY_AUTHORIZATION
-    - export GRAPHQL_API_URL=https://${APP_HOST}/api/graphql
-    - echo API_URL ${GRAPHQL_API_URL}
-    - cd ./sampleData
-    - npm ci
-    - npm start
+    - echo "Linking data..."
+    - export DATA_PATH=/builds/$CI_PROJECT_PATH/sampleData
+    - rm -rf /app/data
+    - cp -r $DATA_PATH /app/data
+  script:
+    - npm run start
 
 load-data-review:
   <<: *load-sample-data
