@@ -150,14 +150,12 @@ services:
       - db
 
   sampledata:
-    build:
-      dockerfile: ./dev.Dockerfile
-      context: ./sampleData
+    image: registry.gitlab.com/commonground/huishoudboekje/data-importer/data-importer:latest
     container_name: sampledata
     environment:
       GRAPHQL_API_URL: http://backend:8000/graphql
     volumes:
-      - ./sampleData:/app
+      - ./sampleData:/app/data
     profiles:
       - sampledata
 
