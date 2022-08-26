@@ -67,14 +67,14 @@ class AlarmHelper:
         # if alarm_date < utc_now:
         #     raise GraphQLError(f"De alarmdatum moet in de toekomst liggen.")
 
+        if (input.byMonth or input.byMonthDay) and not (input.byMonth and input.byMonthDay):
+            raise GraphQLError("Vul zowel byMonth als byMonthDay in, of geen van beide.")
+
         if not input.endDate:
             if input.startDate:
                 raise GraphQLError("Het is niet mogelijk om een startDate mee te geven voor een herhalend alarm")
             # can't use attributes to set data
             input["startDate"] = generate_alarm_date(input).isoformat()
-
-        if (input.byMonth or input.byMonthDay) and not (input.byMonth and input.byMonthDay):
-            raise GraphQLError("Vul zowel byMonth als byMonthDay in, of geen van beide.")
 
         return AlarmHelper._create_alarm(info, input)
 
