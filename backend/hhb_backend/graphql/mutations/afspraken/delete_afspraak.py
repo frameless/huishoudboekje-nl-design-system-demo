@@ -42,7 +42,7 @@ class DeleteAfspraak(graphene.Mutation):
         """ Delete current afspraak """
         previous = hhb_dataloader().afspraken.load_one(id)
         if not previous:
-            raise GraphQLError("Afspraak bestaat niet")
+            raise GraphQLError("Afspraak not found")
 
         # Check if afspraak in use by journaalposten
         journaalposten = previous.get("journaalposten")

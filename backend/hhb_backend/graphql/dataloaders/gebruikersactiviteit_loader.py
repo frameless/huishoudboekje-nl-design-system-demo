@@ -2,12 +2,12 @@ from typing import List
 
 from typing_extensions import Unpack
 
-from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders.base_loader import DataLoader, DataLoaderOptions
+from hhb_backend.graphql.settings import LOG_SERVICE_URL
 
 
 class GebruikersactiviteitLoader(DataLoader):
-    service = settings.LOG_SERVICE_URL
+    service = LOG_SERVICE_URL
     model = "gebruikersactiviteiten"
 
     def by_burger(self, burger_id: int) -> List[dict]:

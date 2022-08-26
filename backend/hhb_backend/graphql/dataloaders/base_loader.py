@@ -7,7 +7,6 @@ import requests
 from graphql import GraphQLError
 from typing_extensions import Unpack, NotRequired
 
-from hhb_backend.graphql import settings
 from hhb_backend.graphql.utils.upstream_error_handler import UpstreamError
 
 Key = Union[str, int, bool]
@@ -30,18 +29,11 @@ class DataLoaderOptions(TypedDict):
 
 
 class DataLoader:
-    """ Dataloader for when the result is a single object """
-    service = settings.HHB_SERVICES_URL
+    service = None
     model = None
     filter_item = None  # will fall back to 'filter_ids'
     batch_size = 1000
     params = {}
-
-    # req | res | name
-    #  1     1    load_one
-    #  1     *    load
-    #  *     1    load + return_first
-    #  *     *    load
 
     def load_one(self, key: Key, **kwargs: Unpack[DataLoaderOptions]) -> Optional[dict]:
         """ Loads one to one data """
@@ -56,15 +48,12 @@ class DataLoader:
          """
         # remove duplicated keys and make sure that keys is always a list (for one to many)
         keys = _remove_duplicated_keys(keys) if type(keys) == list else [keys]
-
         options = _add_default_options(self, kwargs)
-        options["return_first"] = False
-
         return _base_data_load_with_options(self.service, options, keys=keys)
 
     def load_all(self, **kwargs: Unpack[DataLoaderOptions]) -> List[dict]:
+        """ Load all items """
         options = _add_default_options(self, kwargs)
-        options["return_first"] = False
         return _base_data_load_with_options(self.service, options)
 
     def load_paged(self, key: Key = None, keys: List[Key] = None,
@@ -192,6 +181,6 @@ def _send_get_request(url, service, params=None, headers=None):
         raise GraphQLError(f"Connectie error heeft plaatsgevonden op {service}")
 
     if response.status_code != 200:
-        raise UpstreamError(response, f"Request to {url} {params} not succeeded.")
+        raise UpstreamError(response, f"Request to {url} {params} failed.")
 
     return response

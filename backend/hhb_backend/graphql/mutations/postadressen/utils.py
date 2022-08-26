@@ -25,7 +25,7 @@ def create_afdeling_postadres(input, afdeling_id):
     previous_afdeling = hhb_dataloader().afdelingen.load_one(afdeling_id)
 
     postadressen_ids = list(
-        previous_afdeling["post_adressen_ids"]
+        previous_afdeling["postadressen_ids"]
         if previous_afdeling.get("postadressen_ids")
         else []
     )

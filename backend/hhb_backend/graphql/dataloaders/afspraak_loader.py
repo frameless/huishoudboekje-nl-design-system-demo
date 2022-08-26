@@ -1,9 +1,11 @@
 from typing import List
 
 from hhb_backend.graphql.dataloaders.base_loader import DataLoader
+from hhb_backend.graphql.settings import HHB_SERVICES_URL
 
 
 class AfspraakLoader(DataLoader):
+    service = HHB_SERVICES_URL
     model = "afspraken"
 
     def by_postadres(self, postadres_id: str) -> List[dict]:
