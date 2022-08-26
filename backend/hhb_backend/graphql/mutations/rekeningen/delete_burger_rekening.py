@@ -41,21 +41,18 @@ class DeleteBurgerRekening(graphene.Mutation):
             raise GraphQLError("Rekening bestaat niet")
 
         # check uses, if used in afspraak - stop
-        usedBy = rekening_used_check(id)
-        afdeling_rekeningen = usedBy.get("afdelingen", [])
-        burger_rekeningen = usedBy.get("burgers", [])
-        afspraak_rekeningen = usedBy.get("afspraken", [])
-        if len(afspraak_rekeningen) == 1:
+        afdelingen, afspraken, burgers = rekening_used_check(id)
+        if afspraken:
             raise GraphQLError(f"Rekening wordt gebruikt in een afspraak - verwijderen is niet mogelijk.")
             
         # if used by burger, disconnect
-        if len(burger_rekeningen) >= 1 and burger_id in burger_rekeningen:
+        if burgers and burger_id in burgers:
             disconnect_burger_rekening(burger_id, id)
-        elif burger_id not in burger_rekeningen:
+        elif burger_id not in burgers:
             raise GraphQLError(f"Opgegeven burger beschikt niet over de opgegeven rekening.")
 
         # if not used - remove completely
-        if len(burger_rekeningen) == 1 and len(afdeling_rekeningen) <= 0 and len(afspraak_rekeningen) <= 0:
+        if len(burgers) == 1 and not afdelingen and not afspraken:
             delete_rekening(id)
 
         return DeleteBurgerRekening(ok=True, previous=previous)

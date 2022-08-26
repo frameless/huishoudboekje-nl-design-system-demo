@@ -19,15 +19,16 @@ from hhb_backend.processen.overschrijvingen_planner import (
     PlannedOverschijvingenInput,
     get_planned_overschrijvingen,
 )
+from hhb_backend.service.model.overschrijving import Overschrijving
 
 
 def create_json_payload_overschrijving(future_overschrijving, export_id) -> dict:
-    return {
-        "afspraak_id": future_overschrijving["afspraak_id"],
-        "export_id": export_id,
-        "bedrag": future_overschrijving["bedrag"],
-        "datum": future_overschrijving["datum"].strftime("%Y-%m-%d"),
-    }
+    return Overschrijving(
+        afspraak_id=future_overschrijving["afspraak_id"],
+        export_id=export_id,
+        bedrag=future_overschrijving["bedrag"],
+        datum=future_overschrijving["datum"].strftime("%Y-%m-%d")
+    )
 
 
 def get_config_value(config_id) -> str:
@@ -63,8 +64,8 @@ class CreateExportOverschrijvingen(graphene.Mutation):
 
         # Get all afspraken with the start and end date.
         afspraken = hhb_dataloader().afspraken.in_date_range(start_datum_str, eind_datum_str)
-        afspraken = list(filter(lambda o: o["betaalinstructie"], afspraken))
-        afspraken_ids = [afspraak_result["id"] for afspraak_result in afspraken]
+        afspraken = list(filter(lambda o: o.betaalinstructie, afspraken))
+        afspraken_ids = [afspraak_result.id for afspraak_result in afspraken]
 
         # Get all previous overschrijvingen from afspraken
         overschrijvingen = hhb_dataloader().overschrijvingen.by_afspraken(afspraken_ids)
@@ -73,9 +74,9 @@ class CreateExportOverschrijvingen(graphene.Mutation):
         future_overschrijvingen = []
         for afspraak in afspraken:
             planner_input = PlannedOverschijvingenInput(
-                afspraak["betaalinstructie"],
-                afspraak["bedrag"],
-                afspraak["id"],
+                afspraak.betaalinstructie,
+                afspraak.bedrag,
+                afspraak.id,
             )
             future_overschrijvingen += list(
                 get_planned_overschrijvingen(
@@ -88,9 +89,9 @@ class CreateExportOverschrijvingen(graphene.Mutation):
             future_overschrijvingen = list(
                 filter(
                     lambda o: not (
-                        o["afspraak_id"] == overschrijving["afspraak_id"]
+                        o["afspraak_id"] == overschrijving.afspraak_id
                         and o["datum"]
-                        == datetime.strptime(overschrijving["datum"], "%Y-%m-%d").date()
+                        == datetime.strptime(overschrijving.datum, "%Y-%m-%d").date()
                     ),
                     future_overschrijvingen,
                 )
@@ -103,7 +104,7 @@ class CreateExportOverschrijvingen(graphene.Mutation):
 
         # Get all tegen_rekeningen based on the afspraken
         tegen_rekeningen_ids = list(
-            set([afspraak_result["tegen_rekening_id"] for afspraak_result in afspraken])
+            set([afspraak_result.tegen_rekening_id for afspraak_result in afspraken])
         )
 
         tegen_rekeningen = hhb_dataloader().rekeningen.load(tegen_rekeningen_ids)
@@ -111,20 +112,18 @@ class CreateExportOverschrijvingen(graphene.Mutation):
             raise GraphQLError(f"Geen rekeningen gevonden.")
 
         config_values = {
-            "derdengeldenrekening_rekeninghouder": get_config_value(
-                "derdengeldenrekening_rekeninghouder"
-            ),
+            "derdengeldenrekening_rekeninghouder": get_config_value("derdengeldenrekening_rekeninghouder"),
             "derdengeldenrekening_iban": get_config_value("derdengeldenrekening_iban"),
             "derdengeldenrekening_bic": get_config_value("derdengeldenrekening_bic"),
         }
 
         today = datetime.now(tz=tz.tzlocal()).replace(microsecond=0)
         xml_string = create_export_string(
-                        future_overschrijvingen,
-                        afspraken,
-                        tegen_rekeningen,
-                        config_values,
-                    ).decode()
+            future_overschrijvingen,
+            afspraken,
+            tegen_rekeningen,
+            config_values
+        ).decode()
         export_response = requests.post(
             f"{settings.HHB_SERVICES_URL}/export/",
             data=json.dumps(

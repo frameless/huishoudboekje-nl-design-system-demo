@@ -48,11 +48,6 @@ class DeleteAfdeling(graphene.Mutation):
         if rekeningen_ids: 
             raise GraphQLError("Afdeling heeft rekeningen - verwijderen is niet mogelijk.")
 
-        # do not remove when attached afpraken are found
-        afspraken = previous.get("afspraken")
-        if afspraken:
-            raise GraphQLError("Afdeling wordt gebruikt in afpraken - verwijderen is niet mogelijk.")
-
         # remove afdeling itself
         response_organisatie = requests.delete(f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/{id}")
         if response_organisatie.status_code != 204:

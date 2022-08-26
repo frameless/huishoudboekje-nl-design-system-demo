@@ -44,7 +44,7 @@ class UpdateAfdeling(graphene.Mutation):
         if not previous:
             raise GraphQLError("Afdeling not found")
 
-        hhb_service_data = {"organisatie_id": previous["organisatie_id"]}
+        hhb_service_data = {"organisatie_id": previous.organisatie_id}
         if "organisatie_id" in kwargs:
             hhb_service_data["organisatie_id"] = kwargs["organisatie_id"]
 

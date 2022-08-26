@@ -17,33 +17,29 @@ class Organisatie(graphene.ObjectType):
     async def resolve_afdelingen(root, _info):
         return hhb_dataloader().afdelingen.by_organisatie(root.get('id')) or []
 
-    def check_kvk_vestigingsnummer(self, kvknummer, vestigingsnummer, id=None):
+    @staticmethod
+    def check_kvk_vestigingsnummer(kvknummer, vestigingsnummer, id=None):
         organisaties = hhb_dataloader().organisaties.load_all()
         if kvknummer and not vestigingsnummer:
             for organisatie in organisaties:
-                if id == organisatie.get('id'):
-                    current = organisatie
-                    vestigingsnummer = current['vestigingsnummer']
+                if id == organisatie.id:
+                    vestigingsnummer = organisatie.vestigingsnummer
         elif vestigingsnummer and not kvknummer:
             for organisatie in organisaties:
-                if id == organisatie.get('id'):
-                    current = organisatie
-                    kvknummer = current['kvknummer']
+                if id == organisatie.id:
+                    kvknummer = organisatie.kvknummer
 
         for organisatie in organisaties:
-            if id == organisatie['id']:
+            if id == organisatie.id:
                 continue
-            if str(kvknummer) == str(organisatie['kvknummer']):
-                if str(vestigingsnummer) == str(organisatie['vestigingsnummer']):
+            if str(kvknummer) == str(organisatie.kvknummer):
+                if str(vestigingsnummer) == str(organisatie.vestigingsnummer):
                     raise GraphQLError("Combination kvk-nummer and vestigingsnummer is not unique.")
 
-    def unique_kvk_vestigingsnummer(self, kvknummer, vestigingsnummer, id=None):
-        if vestigingsnummer and not id:
-            self.check_kvk_vestigingsnummer(kvknummer, vestigingsnummer, 1)
-        elif id:
-            if vestigingsnummer and kvknummer:
-                self.check_kvk_vestigingsnummer(kvknummer, vestigingsnummer, id)
-            elif vestigingsnummer:
-                self.check_kvk_vestigingsnummer(kvknummer, vestigingsnummer, id)
-            elif kvknummer:
-                self.check_kvk_vestigingsnummer(kvknummer, vestigingsnummer, id)
+    @staticmethod
+    def unique_kvk_vestigingsnummer(kvknummer, vestigingsnummer, id=None):
+        if id is None:
+            id = 1
+
+        if vestigingsnummer or kvknummer:
+            Organisatie.check_kvk_vestigingsnummer(kvknummer, vestigingsnummer, id)

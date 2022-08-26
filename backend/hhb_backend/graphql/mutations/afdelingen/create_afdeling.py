@@ -23,6 +23,7 @@ class CreateAfdelingInput(graphene.InputObjectType):
     rekeningen = graphene.List(lambda: rekening_input.RekeningInput)
     postadressen = graphene.List(lambda: create_postadres.CreatePostadresInput)
 
+
 class CreateAfdeling(graphene.Mutation):
     """Mutatie om een afdeling aan een organisatie toe te voegen."""
 
@@ -49,10 +50,10 @@ class CreateAfdeling(graphene.Mutation):
         postadressen = input.pop("postadressen", None)
 
         hhb_service_data = {
-            "organisatie_id": input["organisatie_id"],
+            "organisatie_id": input.organisatie_id,
         }
 
-        previous = hhb_dataloader().organisaties.load_one(input['organisatie_id'])
+        previous = hhb_dataloader().organisaties.load_one(input.organisatie_id)
         if not previous:
             raise GraphQLError("Organisatie not found")
 
@@ -80,7 +81,7 @@ class CreateAfdeling(graphene.Mutation):
             rekening_ids = []
             for rekening in rekeningen:
                 created_rekening = create_afdeling_rekening(afdeling_id, rekening)
-                rekening_ids.append(created_rekening.get("id"))
+                rekening_ids.append(created_rekening.id)
             # update afdeling with rekening
             update_response = requests.post(
                 f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/{afdeling_id}",

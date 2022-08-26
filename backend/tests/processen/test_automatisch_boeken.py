@@ -6,6 +6,7 @@ from pytest_mock import MockerFixture
 
 from hhb_backend.graphql import settings
 from hhb_backend.processen.automatisch_boeken import automatisch_boeken
+from hhb_backend.service.model.afspraak import Afspraak
 from tests.utils.mock_utils import get_by_filter
 
 
@@ -111,7 +112,7 @@ async def test_automatisch_boeken_no_csm_success_single(test_request_context, mo
         )
         mocker.patch(
             'hhb_backend.processen.automatisch_boeken.transactie_suggesties',
-            return_value={1: [{"id": 11, "zoektermen": "test"}]}
+            return_value={1: [Afspraak(id=11, zoektermen="test")]}
         )
 
         transactions_by_id = mock.get(
@@ -176,7 +177,10 @@ async def test_automatisch_boeken_no_csm_success_multiple(test_request_context, 
         )
         mocker.patch(
             'hhb_backend.processen.automatisch_boeken.transactie_suggesties',
-            return_value={1: [{"id": 11, "zoektermen": "test"}], 2: [{"id": 12, "zoektermen": "test"}]}
+            return_value={
+                1: [Afspraak(id=11, zoektermen="test")],
+                2: [Afspraak(id=12, zoektermen="test")]
+            }
         )
 
         transactions_by_id = mock.get(
@@ -244,7 +248,7 @@ async def test_automatisch_boeken_csm_success_multiple(test_request_context, moc
         )
         mocker.patch(
             'hhb_backend.processen.automatisch_boeken.transactie_suggesties',
-            return_value={1: [{"id": 11, "zoektermen": "test", "valid_through": '2020-12-31'}]}
+            return_value={1: [Afspraak(id=11, zoektermen="test", valid_through='2020-12-31')]}
         )
 
         transactions_by_id = mock.get(
@@ -304,7 +308,7 @@ async def test_automatisch_boeken_no_csm_failure_journaalpost_exists(test_reques
         )
         mocker.patch(
             'hhb_backend.processen.automatisch_boeken.transactie_suggesties',
-            return_value={1: [{"id": 11, "zoektermen": "test"}]}
+            return_value={1: [Afspraak(id=11, zoektermen="test")]}
         )
 
         transactions_by_id = mock.get(
@@ -377,14 +381,12 @@ async def test_automatisch_boeken_no_csm_multiple_suggesties(test_request_contex
         mocker.patch(
             'hhb_backend.processen.automatisch_boeken.transactie_suggesties',
             return_value={
-                1: [{"id": 11, "zoektermen": "test"}],
-                2: [
-                    {"id": 12, "zoektermen": "test"},
-                ],
+                1: [Afspraak(id=11, zoektermen="test")],
+                2: [Afspraak(id=12, zoektermen="test")],
                 # This transaction will not be booked
                 3: [
-                    {"id": 13, "zoektermen": "test"},
-                    {"id": 23, "zoektermen": "test"},
+                    Afspraak(id=13, zoektermen="test"),
+                    Afspraak(id=23, zoektermen="test"),
                 ],
             })
 

@@ -21,8 +21,8 @@ def test_create_afdeling_minimal_succes(client):
     with requests_mock.Mocker() as mock:
         # arrange
         afdeling_result = {
-            "data" : {
-                "id" : 1,
+            "data": {
+                "id": 1,
                 "postadressen_ids": [], 
                 "rekeningen_ids": []
             }
@@ -89,8 +89,8 @@ def test_create_afdeling_full_succes(client):
         }
 
         afdeling_result = {
-            "data" : {
-                "id" : 1,
+            "data": {
+                "id": 1,
                 "naam": "testAfdeling",
                 "postadressen_ids": [], 
                 "rekeningen_ids": []
@@ -98,7 +98,7 @@ def test_create_afdeling_full_succes(client):
         }
 
         rekening_result = {
-            "data" : [{
+            "data": [{
                 "id": 1,
                 "iban": "GB33BUKB20201555555555",
                 "rekeninghouder": "testrekeninghouder",
@@ -153,7 +153,10 @@ def test_create_afdeling_full_succes(client):
                 'id': "7426aa95-03c0-453d-b9ff-11a5442ab959", 'houseNumber': '52B', 'postalCode': '9999ZZ',
                 'street': 'teststraat', 'locality': 'testplaats'
             }})
-        e8 = mock.get(f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/?filter_ids=1", json={'data': [{'id': 1}]})
+        e8 = mock.get(
+            f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/?filter_ids=1",
+            json={'data': [{'id': 1, 'postadressen_ids': [], 'rekeningen_ids': []}]}
+        )
         e9 = mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/")
         e10 = mock.get(f"{settings.HHB_SERVICES_URL}/rekeningen/?filter_afdelingen=1", json=rekening_result)
         e11 = mock.get(
@@ -222,8 +225,8 @@ def test_create_afdeling_foutieve_rekening_succes(client):
     with requests_mock.Mocker() as mock:
         # arrange
         afdeling_result = {
-            "data" : {
-                "id" : 1,
+            "data": {
+                "id": 1,
                 "naam": "testAfdeling",
                 "postadressen_ids": [], 
                 "rekeningen_ids": []

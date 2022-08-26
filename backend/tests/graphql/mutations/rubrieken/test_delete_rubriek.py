@@ -1,10 +1,13 @@
 import requests_mock
+
 from hhb_backend.graphql import settings
+from hhb_backend.service.model.rubriek import Rubriek
+
 
 def test_delete_rubrieken(client):
     with requests_mock.Mocker() as rm:
         # arrange
-        request = {"query":'''
+        request = {"query": '''
                 mutation test($id:Int!) {
                     deleteRubriek(id: $id) {
                         ok
@@ -13,7 +16,10 @@ def test_delete_rubrieken(client):
             "variables": {"id": 11}}
         expected = {'data': {'deleteRubriek': {'ok': True}}}
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        rm1 = rm.get(f"{settings.HHB_SERVICES_URL}/rubrieken/?filter_ids=11", status_code=200, json={"data":[{"id": 11}]})
+        rm1 = rm.get(
+            f"{settings.HHB_SERVICES_URL}/rubrieken/?filter_ids=11",
+            json={"data": [Rubriek(id=11, afspraken=[])]}
+        )
         rm2 = rm.delete(f"{settings.HHB_SERVICES_URL}/rubrieken/11", status_code=204)
         rm3 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/")
 
@@ -41,7 +47,10 @@ def test_delete_rubrieken_error_afspraak(client):
             "variables": {"id": 11}}
         expected = "Rubriek wordt gebruikt in een of meerdere afspraken - verwijderen is niet mogelijk."
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        rm1 = rm.get(f"{settings.HHB_SERVICES_URL}/rubrieken/?filter_ids=11", status_code=200, json={"data":[{"id": 11, "afspraken": [{"id": 1}]}]})
+        rm1 = rm.get(
+            f"{settings.HHB_SERVICES_URL}/rubrieken/?filter_ids=11",
+            json={"data": [{"id": 11, "afspraken": [{"id": 1}]}]}
+        )
 
 
         # act
@@ -65,8 +74,14 @@ def test_delete_rubrieken_error_journaalpost(client):
             "variables": {"id": 11}}
         expected = "Rubriek zit in grootboekrekening die wordt gebruikt in journaalposten - verwijderen is niet mogelijk."
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        rm1 = rm.get(f"{settings.HHB_SERVICES_URL}/rubrieken/?filter_ids=11", status_code=200, json={"data":[{"id": 11, "grootboekrekening_id": 1}]})
-        rm2 = rm.get(f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_grootboekrekeningen=1", status_code=200, json={"data": [{"id": 1}]})
+        rm1 = rm.get(
+            f"{settings.HHB_SERVICES_URL}/rubrieken/?filter_ids=11",
+            json={"data": [{"id": 11, "grootboekrekening_id": 1, "afspraken": []}]}
+        )
+        rm2 = rm.get(
+            f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_grootboekrekeningen=1",
+            json={"data": [{"id": 1}]}
+        )
 
 
         # act

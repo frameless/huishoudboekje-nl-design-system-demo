@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 
 import pytest
 import requests_mock
@@ -7,36 +7,37 @@ from freezegun import freeze_time
 import hhb_backend.graphql.mutations.alarmen.evaluate_alarm as EvaluateAlarm
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.mutations.alarmen.alarm import generate_alarm_date
+from hhb_backend.service.model.alarm import Alarm
 
 alarm_id = "00943958-8b93-4617-aa43-669a9016aad9"
 afspraak_id = 19
 journaalpost_id = 1
 transaction_id = 10
 banktransactie_id = 100
-alarm = {
-    "id": alarm_id,
-    "isActive": True,
-    "afspraakId": 19,
-    "startDate":"2021-12-06",
-    "datumMargin": 1,
-    "bedrag": 12500,
-    "bedragMargin":1000,
-    "byDay": ["Wednesday", "Friday"],
-    "byMonth": [],
-    "byMonthDay": []
-}
-nextAlarm = {
-    "id": "33738845-7f23-4c8f-8424-2b560a944884",
-    "isActive": True,
-    "afspraakId": 19,
-    "startDate":"2021-12-08",
-    "datumMargin": 1,
-    "bedrag": 12500,
-    "bedragMargin":1000,
-    "byDay": ["Wednesday", "Friday"],
-    "byMonth": [],
-    "byMonthDay": []
-}
+alarm = Alarm(
+    id=alarm_id,
+    isActive=True,
+    afspraakId=19,
+    startDate="2021-12-06",
+    datumMargin=1,
+    bedrag=12500,
+    bedragMargin=1000,
+    byDay=["Wednesday", "Friday"],
+    byMonth=[],
+    byMonthDay=[]
+)
+nextAlarm = Alarm(
+    id="33738845-7f23-4c8f-8424-2b560a944884",
+    isActive=True,
+    afspraakId=19,
+    startDate="2021-12-08",
+    datumMargin=1,
+    bedrag=12500,
+    bedragMargin=1000,
+    byDay=["Wednesday", "Friday"],
+    byMonth=[],
+    byMonthDay=[]
+)
 afspraak = {
     "id": afspraak_id,
     "omschrijving": "this is a test afspraak",
@@ -114,16 +115,18 @@ def test_generateNextAlarmDate_monthly(expected: datetime, alarm, alarmDate: dat
 
 @freeze_time("2021-12-01")
 @pytest.mark.parametrize(
-    ["expected", "alarm"], [
-    (False, { "isActive": True, "startDate":"2021-12-01", "datumMargin":0 }),
-    (False, { "isActive": True, "startDate":"2021-12-01", "datumMargin":1  }),
-    (True, { "isActive": True, "startDate":"2021-11-30", "datumMargin":0 }),
-    (False, { "isActive": True, "startDate":"2021-11-30", "datumMargin":1  }),
-    (False, { "isActive": True, "startDate":"2021-12-02", "datumMargin":1  }),
-    (True, { "isActive": True, "startDate":"2021-11-25", "datumMargin":1 })
-])
-def test_shouldCheckAlarm(expected: bool, alarm):
-    actual = EvaluateAlarm.shouldCheckAlarm(alarm)
+    ["expected", "alarm"],
+    [
+        (False, Alarm(isActive=True, startDate="2021-12-01", datumMargin=0)),
+        (False, Alarm(isActive=True, startDate="2021-12-01", datumMargin=1)),
+        (True, Alarm(isActive=True, startDate="2021-11-30", datumMargin=0)),
+        (False, Alarm(isActive=True, startDate="2021-11-30", datumMargin=1)),
+        (False, Alarm(isActive=True, startDate="2021-12-02", datumMargin=1)),
+        (True, Alarm(isActive=True, startDate="2021-11-25", datumMargin=1))
+    ]
+)
+def test_should_check_alarm(expected: bool, alarm: Alarm):
+    actual = EvaluateAlarm.should_check_alarm(alarm)
     assert actual == expected
 
 
@@ -535,26 +538,30 @@ def test_evaluate_alarm_signal_monetary(client):
 def test_evaluate_alarm_next_alarm_in_sequence_already_exists(client):
     with requests_mock.Mocker() as rm:
         # arrange
-        alarm = {
-            "id": alarm_id,
-            "isActive": True,
-            "afspraakId": 19,
-            "startDate":"2021-12-06",
-            "datumMargin": 1,
-            "bedrag": 12500,
-            "bedragMargin":1000,
-            "byDay": ["Wednesday", "Friday"]
-        }
-        next_alarm = {
-            "id": "10943958-8b93-4617-aa43-669a9016aad9",
-            "isActive": True,
-            "afspraakId": 19,
-            "startDate":"2021-12-10",
-            "datumMargin": 1,
-            "bedrag": 12500,
-            "bedragMargin":1000,
-            "byDay": ["Wednesday", "Friday"]
-        }
+        alarm = Alarm(
+            id=alarm_id,
+            isActive=True,
+            afspraakId=19,
+            startDate="2021-12-06",
+            datumMargin=1,
+            bedrag=12500,
+            bedragMargin=1000,
+            byDay=["Wednesday", "Friday"],
+            byMonth=[],
+            byMonthDay=[]
+        )
+        next_alarm = Alarm(
+            id="10943958-8b93-4617-aa43-669a9016aad9",
+            isActive=True,
+            afspraakId=19,
+            startDate="2021-12-10",
+            datumMargin=1,
+            bedrag=12500,
+            bedragMargin=1000,
+            byDay=["Wednesday", "Friday"],
+            byMonth=[],
+            byMonthDay=[]
+        )
         banktransactie = {
             "id": banktransactie_id,
             "bedrag": 12000,

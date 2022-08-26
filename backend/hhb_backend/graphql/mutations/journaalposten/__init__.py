@@ -1,29 +1,29 @@
 import logging
+from typing import List, Union
 
 import requests
 
 from hhb_backend.graphql import settings
+from hhb_backend.service.model.bank_transaction import BankTransaction
 
 
-def update_transaction_service_is_geboekt(transactions, is_geboekt: bool):
-    if type(transactions) == list:
-        for t in transactions:
-            data = {**t, "is_geboekt": is_geboekt}
-            transaction_ids = str(t["id"])
-            process_transaction(transaction_ids, data)
-    else:
-        data = {**transactions, "is_geboekt": is_geboekt}
-        transaction_ids = str(transactions["id"])
-        process_transaction(transaction_ids, data)
+def update_transaction_service_is_geboekt(transactions: Union[List[BankTransaction], BankTransaction],
+                                          is_geboekt: bool):
+    if type(transactions) is not list:
+        transactions = [transactions]
+
+    for transaction in transactions:
+        transaction.is_geboekt = is_geboekt
+        process_transaction(transaction)
 
 
-def process_transaction(transaction_ids, data):
+def process_transaction(transaction: BankTransaction):
     transaction_response = requests.post(
-        f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/{transaction_ids}",
-        json=data
+        f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/{transaction.id}",
+        json=transaction
     )
     if not transaction_response.ok:
         logging.warning(
-            f"Failed to save is_geboekt on transaction(s) {transaction_ids}: {transaction_response.text}")
+            f"Failed to save is_geboekt on transaction {transaction.id}: {transaction_response.text}")
 
 

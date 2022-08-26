@@ -1,13 +1,12 @@
 import logging
 import re
 from collections import Counter
-from typing import List
+from typing import List, Union, Dict
 
 import hhb_backend.graphql as graphql
-import hhb_backend.graphql.models.afspraak as afspraak
-import hhb_backend.graphql.models.bank_transaction as bank_transaction
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.utils.dates import afspraken_intersect, to_date, valid_afspraak
+from hhb_backend.service.model.afspraak import Afspraak
 
 
 async def automatisch_boeken(customer_statement_message_id: int = None):
@@ -16,26 +15,24 @@ async def automatisch_boeken(customer_statement_message_id: int = None):
         transactions = [
             t
             for t in hhb_dataloader().bank_transactions.by_csm(customer_statement_message_id)
-            if t["is_geboekt"] is False
+            if not t.is_geboekt
         ]
     else:
         transactions = hhb_dataloader().bank_transactions.by_is_geboekt(False)
 
-    transaction_ids = [t["id"] for t in transactions]
-
-    suggesties = await transactie_suggesties(transaction_ids)
+    suggesties = await transactie_suggesties([t.id for t in transactions])
 
     automatische_transacties = [
-        {"transactionId": transactie_id, "afspraakId": afspraken[0]["id"], "isAutomatischGeboekt": True}
+        {"transactionId": transactie_id, "afspraakId": afspraken[0].id, "isAutomatischGeboekt": True}
         for transactie_id, afspraken in suggesties.items()
-        if len(afspraken) == 1 and afspraken[0]["zoektermen"]
+        if len(afspraken) == 1 and afspraken[0].zoektermen
     ]
 
     stats = Counter(len(s) for s in suggesties.values())
     logging.info(
         f"automatisch_boeken: {', '.join([f'{transactions_count} transactions with {suggestion_count} suggestions' for suggestion_count, transactions_count in stats.items() if suggestion_count != 1])} were not processed.")
 
-    if len(automatische_transacties) == 0:
+    if not automatische_transacties:
         return None
 
     result = await graphql.schema.execute("""
@@ -64,74 +61,73 @@ mutation AutomatischBoeken($input: [CreateJournaalpostAfspraakInput!]!) {
     return journaalposten_
 
 
-async def transactie_suggesties(transactie_ids):
+async def transactie_suggesties(transactie_ids: Union[List[int], int]) -> Dict[int, List[Afspraak]]:
     if type(transactie_ids) != list:
         transactie_ids = [transactie_ids]
 
     # fetch transactions
-    transactions: List[bank_transaction.BankTransaction] = \
-        hhb_dataloader().bank_transactions.load(transactie_ids)
+    transactions = hhb_dataloader().bank_transactions.load(transactie_ids)
     if not transactions:
         return {key: [] for key in transactie_ids}
 
     # Rekeningen ophalen adhv iban
-    rekening_ibans = [t["tegen_rekening"] for t in transactions if t["tegen_rekening"]]
+    rekening_ibans = [t.tegen_rekening for t in transactions]
     rekeningen = hhb_dataloader().rekeningen.by_ibans(rekening_ibans)
     if not rekeningen:
         return {key: [] for key in transactie_ids}
 
     iban_to_rekening_id = {}
     for rekening in rekeningen:
-        iban_to_rekening_id[rekening["iban"]] = rekening["id"]
+        iban_to_rekening_id[rekening.iban] = rekening.id
 
-    rekening_ids = [r["id"] if r is not None else -1 for r in rekeningen]
+    rekening_ids = [r.id if r is not None else -1 for r in rekeningen]
 
-    afspraken: List[afspraak.Afspraak] = hhb_dataloader().afspraken.by_rekeningen(rekening_ids)
+    afspraken = hhb_dataloader().afspraken.by_rekeningen(rekening_ids)
     if not afspraken:
         return {key: [] for key in transactie_ids}
 
     transactie_ids_with_afspraken = {}
     for transaction in transactions:
-        rekening_id: int = iban_to_rekening_id[transaction["tegen_rekening"]]
+        rekening_id: int = iban_to_rekening_id[transaction.tegen_rekening]
 
-        transactie_ids_with_afspraken[transaction["id"]] = [
+        transactie_ids_with_afspraken[transaction.id] = [
             afspraak
             for afspraak in afspraken
-            if afspraak["tegen_rekening_id"] == rekening_id
-            and match_zoekterm(afspraak, transaction["information_to_account_owner"])
-            and valid_afspraak(afspraak, to_date(transaction["transactie_datum"]))
+            if afspraak.tegen_rekening_id == rekening_id
+            and match_zoekterm(afspraak, transaction.information_to_account_owner)
+            and valid_afspraak(afspraak, to_date(transaction.transactie_datum))
         ]
 
     return transactie_ids_with_afspraken
 
 
-def match_zoekterm(afspraak, target_text):
-    return afspraak["zoektermen"] and all([
+def match_zoekterm(afspraak: Afspraak, target_text: str):
+    return afspraak.zoektermen and all([
         re.search(zoekterm, target_text, re.IGNORECASE)
-        for zoekterm in afspraak["zoektermen"]
+        for zoekterm in afspraak.zoektermen
     ])
 
 
-async def find_matching_afspraken_by_afspraak(main_afspraak):
+async def find_matching_afspraken_by_afspraak(main_afspraak: Afspraak):
     matching_afspraken = list()
-    if not main_afspraak["zoektermen"]:
+    if not main_afspraak.zoektermen:
         return matching_afspraken
 
-    afspraken = hhb_dataloader().afspraken.by_rekening(main_afspraak["tegen_rekening_id"])
+    afspraken = hhb_dataloader().afspraken.by_rekening(main_afspraak.tegen_rekening_id)
 
-    zoektermen_main = ' '.join(main_afspraak["zoektermen"])
-    main_afspraak_valid_from = to_date(main_afspraak["valid_from"])
-    main_afspraak_valid_through = to_date(main_afspraak["valid_through"])
+    zoektermen_main = ' '.join(main_afspraak.zoektermen)
+    main_afspraak_valid_from = to_date(main_afspraak.valid_from)
+    main_afspraak_valid_through = to_date(main_afspraak.valid_through)
 
     for afspraak in afspraken:
-        if afspraak["zoektermen"]:
-            zoektermen_afspraak = ' '.join(afspraak["zoektermen"])
+        if afspraak.zoektermen:
+            zoektermen_afspraak = ' '.join(afspraak.zoektermen)
 
-            not_main_afspraak = (afspraak["id"] != main_afspraak["id"])
+            not_main_afspraak = (afspraak.id != main_afspraak.id)
             matching_zoekterm = match_zoekterm(afspraak, zoektermen_main) or match_zoekterm(main_afspraak, zoektermen_afspraak)
 
-            afspraak_valid_from = to_date(afspraak["valid_from"])
-            afspraak_valid_through = to_date(afspraak["valid_through"])
+            afspraak_valid_from = to_date(afspraak.valid_from)
+            afspraak_valid_through = to_date(afspraak.valid_through)
             afspraken_overlap = afspraken_intersect(
                 valid_from1=main_afspraak_valid_from,
                 valid_from2=afspraak_valid_from,

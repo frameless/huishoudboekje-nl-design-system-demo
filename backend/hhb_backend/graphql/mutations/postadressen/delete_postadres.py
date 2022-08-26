@@ -45,17 +45,17 @@ class DeletePostadres(graphene.Mutation):
         if afspraken:
             raise GraphQLError("Postadres wordt gebruikt in een of meerdere afspraken - verwijderen is niet mogelijk.")
 
-        response_ContactCatalogus = requests.delete(
+        postadres_response = requests.delete(
             f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/{id}"
         )
-        if response_ContactCatalogus.status_code != 204:
-            raise GraphQLError(f"Upstream API responded: {response_ContactCatalogus.text}")
+        if postadres_response.status_code != 204:
+            raise GraphQLError(f"Upstream API responded: {postadres_response.text}")
 
 
         # Delete the Id from postadressen_ids column in afdeling
         afdeling = hhb_dataloader().afdelingen.load_one(afdeling_id)
-        afdeling["postadressen_ids"].remove(id)
-        afdeling.pop("id")
+        afdeling.postadressen_ids.remove(id)
+        del afdeling.id
 
         # Try update of organisatie service
         org_service_response = requests.post(

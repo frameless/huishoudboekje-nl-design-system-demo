@@ -29,6 +29,7 @@ class CreateAlarmInput(graphene.InputObjectType):
     byMonth = graphene.List(graphene.Int, default_value=[])
     byMonthDay = graphene.List(graphene.Int, default_value=[])
 
+
 class UpdateAlarmInput(graphene.InputObjectType):
     isActive = graphene.Boolean()
     afspraakId = graphene.Int()
@@ -103,7 +104,7 @@ class AlarmHelper:
             raise GraphQLError(f"Afspraak bestaat niet.")
 
         # check if afspraak is valid
-        if afspraak.get("burger_id") is None:
+        if afspraak.burger_id is None:
             raise GraphQLError("De afspraak is niet gekoppeld aan een burger.")
 
         start_date_alarm = to_date(input["startDate"])

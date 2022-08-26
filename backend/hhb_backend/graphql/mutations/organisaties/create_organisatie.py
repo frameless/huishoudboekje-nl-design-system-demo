@@ -1,11 +1,8 @@
 """ GraphQL mutation for creating a new Organisatie """
-import json
 import graphene
-import requests
-from graphql import GraphQLError
-from hhb_backend.graphql.models.organisatie import Organisatie
-from hhb_backend.graphql.datawriters import hhb_datawriter
 
+from hhb_backend.graphql.datawriters import hhb_datawriter
+from hhb_backend.graphql.models.organisatie import Organisatie
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     gebruikers_activiteit_entities,
     log_gebruikers_activiteit,
@@ -40,7 +37,7 @@ class CreateOrganisatie(graphene.Mutation):
         """ Create the new Organisatie """
         input = kwargs.pop("input")
 
-        Organisatie().unique_kvk_vestigingsnummer(input.get("kvknummer"), input.get("vestigingsnummer"))
+        Organisatie.unique_kvk_vestigingsnummer(input.kvknummer, input.get("vestigingsnummer"))
         result = hhb_datawriter().organisaties.post(input)
 
         return CreateOrganisatie(organisatie=result, ok=True)

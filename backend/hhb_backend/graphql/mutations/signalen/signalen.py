@@ -6,6 +6,7 @@ from graphql import GraphQLError
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (log_gebruikers_activiteit, gebruikers_activiteit_entities)
+from hhb_backend.service.model.signaal import Signaal
 
 
 class CreateSignaalInput(graphene.InputObjectType):
@@ -28,7 +29,7 @@ class UpdateSignaalInput(graphene.InputObjectType):
 
 class SignaalHelper:
     def __init__(self, signaal, previous, ok=True) -> None:
-        self.signaal = signaal
+        self.signaal = Signaal(signaal)
         self.previous = previous
         self.ok = ok
 

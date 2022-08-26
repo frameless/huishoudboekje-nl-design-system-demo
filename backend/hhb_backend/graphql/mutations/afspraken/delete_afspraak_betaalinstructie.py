@@ -1,7 +1,6 @@
 """ GraphQL mutation for deleting an Afspraak Betaalinstructie """
 
 import graphene
-import pydash
 import requests
 from graphql import GraphQLError
 
@@ -46,7 +45,8 @@ class DeleteAfspraakBetaalinstructie(graphene.Mutation):
         # These arrays contains ids for their entities and not the instances, the hhb_service does not understand that,
         # Since removing them from the payload makes the service ignore them for updating purposes it is safe to remove
         # them here.
-        previous = pydash.omit(previous, 'journaalposten', 'overschrijvingen')
+        del previous.journaalposten
+        del previous.overschrijvingen
 
         input = {
             "betaalinstructie": None

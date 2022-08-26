@@ -141,9 +141,9 @@ def create_brieven_export(burger_id):
 
 def get_afdeling_by_afspraken(afspraken):
     return hhb_dataloader().afdelingen.load([
-        afspraak["afdeling_id"]
+        afspraak.afdeling_id
         for afspraak in afspraken
-        if afspraak["afdeling_id"]
+        if afspraak.afdeling_id
     ])
 
 

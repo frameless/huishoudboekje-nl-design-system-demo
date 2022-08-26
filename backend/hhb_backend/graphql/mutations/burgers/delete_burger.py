@@ -44,7 +44,7 @@ class DeleteBurger(graphene.Mutation):
         input = {'valid_through': datetime.now().strftime("%Y-%m-%d")}
         for afspraak in afspraken:
             response = requests.post(
-                f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak['id']}",
+                f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak.id}",
                 json=input,
             )
             try:

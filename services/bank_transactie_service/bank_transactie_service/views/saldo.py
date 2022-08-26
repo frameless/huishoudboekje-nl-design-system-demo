@@ -31,4 +31,4 @@ class SaldoView(MethodView):
         except SQLAlchemyError as excep:
             logging.exception(excep)
 
-        return {"data": {"bedrag": saldo}}
+        return {"data": [{"bedrag": saldo}]}
