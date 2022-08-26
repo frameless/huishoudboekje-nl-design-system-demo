@@ -18,7 +18,7 @@ class CreateAlarmInput(graphene.InputObjectType):
     isActive = graphene.Boolean()
     afspraakId = graphene.Int()
     startDate = graphene.String()
-    endDate = graphene.String()
+    endDate = graphene.String(default_value="")
     datumMargin = graphene.Int()
     bedrag = graphene.Field(Bedrag)
     bedragMargin = graphene.Field(Bedrag)
@@ -67,13 +67,11 @@ class AlarmHelper:
         # if alarm_date < utc_now:
         #     raise GraphQLError(f"De alarmdatum moet in de toekomst liggen.")
 
-        if "endDate" in input:
+        if not input.endDate:
             if input.startDate:
                 raise GraphQLError("Het is niet mogelijk om een startDate mee te geven voor een herhalend alarm")
             # can't use attributes to set data
             input["startDate"] = generate_alarm_date(input).isoformat()
-        else:
-            input["endDate"] = ""
 
         if (input.byMonth or input.byMonthDay) and not (input.byMonth and input.byMonthDay):
             raise GraphQLError("Vul zowel byMonth als byMonthDay in, of geen van beide.")
