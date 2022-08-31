@@ -156,7 +156,7 @@ async def should_create_next_alarm(root, info, alarm, alarm_check_date: date, ac
 
 
 async def create_alarm(root, info, alarm: Alarm, alarm_date: date) -> Optional[Alarm]:
-    result = await AlarmHelper.create_alarm(root, info, {
+    result = await AlarmHelper.create(root, info, {
         "isActive": True,
         "afspraakId": int(alarm.get("afspraakId")),
         "startDate": alarm_date.isoformat(),

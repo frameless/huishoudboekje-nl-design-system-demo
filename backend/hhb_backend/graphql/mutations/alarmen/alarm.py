@@ -78,10 +78,6 @@ class AlarmHelper:
 
         return AlarmHelper._create_alarm(info, input)
 
-    @log_gebruikers_activiteit
-    async def create_alarm(_root, info, input):
-        return AlarmHelper._create_alarm(info, input)
-
     @staticmethod
     def _create_alarm(info, input):
         name = info.field_name
