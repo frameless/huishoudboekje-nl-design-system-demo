@@ -343,3 +343,4 @@ def updateAlarm(alarm, alarm_id, newSignalId):
     alarm_response = requests.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", json=alarm, headers={"Content-type": "application/json"})
     if alarm_response.status_code != 200:
         raise GraphQLError(f"Fout bij het update van het alarm met het signaal. {alarm_response.json()}")
+    alarm = alarm_response.json()["data"]
