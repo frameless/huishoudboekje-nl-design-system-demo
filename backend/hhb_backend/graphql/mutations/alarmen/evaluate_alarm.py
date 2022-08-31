@@ -115,7 +115,7 @@ async def evaluateAlarm(_root, _info, alarm: Alarm, activeAlarms: list):
 
 def disableAlarm(alarmCheckDate: date, alarm: Alarm) -> Alarm:
     utc_now_date = (datetime.now(timezone.utc)).date()
-    if alarmCheckDate <= utc_now_date:
+    if alarmCheckDate < utc_now_date:
         alarm["isActive"] = False
     return alarm
 
