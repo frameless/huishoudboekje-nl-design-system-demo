@@ -1,9 +1,12 @@
 from datetime import datetime
-import requests_mock
-from hhb_backend.graphql import settings
-from freezegun import freeze_time
-import hhb_backend.graphql.mutations.alarmen.evaluate_alarm as EvaluateAlarm
+
 import pytest
+import requests_mock
+from freezegun import freeze_time
+
+import hhb_backend.graphql.mutations.alarmen.evaluate_alarm as EvaluateAlarm
+from hhb_backend.graphql import settings
+from hhb_backend.graphql.mutations.alarmen.alarm import generate_alarm_date
 
 alarm_id = "00943958-8b93-4617-aa43-669a9016aad9"
 afspraak_id = 19
@@ -88,7 +91,7 @@ signaal = {
     (datetime(2021,12, 5), {"byDay": ["Sunday"]}, (datetime(2021,12, 1))),
 ])
 def test_generateNextAlarmDate_weekly(expected: datetime, alarm, alarmDate):
-    next_alarm_date = EvaluateAlarm.generateNextAlarmInSequence(alarm, alarmDate)
+    next_alarm_date = generate_alarm_date(alarm, alarmDate)
     assert next_alarm_date == expected.date()
 
 @freeze_time("2021-12-01")
@@ -102,7 +105,7 @@ def test_generateNextAlarmDate_weekly(expected: datetime, alarm, alarmDate):
     (datetime(2021,12, 2), {"byMonth": [12], "byMonthDay": [1,2,3,4,5]}, (datetime(2021,12, 1))),
 ])
 def test_generateNextAlarmDate_monthly(expected: datetime, alarm, alarmDate: datetime):
-    next_alarm_date = EvaluateAlarm.generateNextAlarmInSequence(alarm, alarmDate)
+    next_alarm_date = generate_alarm_date(alarm, alarmDate)
     assert next_alarm_date == expected.date()
 
 @freeze_time("2021-12-01")

@@ -63,8 +63,8 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 			return true;
 		}
 
-		const {startDate, datumMargin, byMonthDay, byDay} = form;
-		const parsed = eenmaligValidator.safeParse({startDate, datumMargin, byMonthDay, byDay});
+		const {date, datumMargin, byMonthDay, byDay} = form;
+		const parsed = eenmaligValidator.safeParse({date, datumMargin, byMonthDay, byDay});
 		return parsed.success || !parsed.error.issues.find(issue => issue.path?.[0] === field);
 	};
 
@@ -79,17 +79,15 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 
 		try {
 			const data = validator.parse(form);
-			const {bedrag, bedragMargin, startDate, datumMargin, byDay, byMonth, byMonthDay} = data;
+			const {bedrag, bedragMargin, date, datumMargin, byDay, byMonth, byMonthDay} = data;
 			onSubmit({
 				afspraakId: afspraak.id!,
 				isActive: true,
 				bedrag,
 				bedragMargin,
-				...data.isPeriodiek === Periodiek.Eenmalig ? {
-					startDate: d(startDate).format("YYYY-MM-DD"),
-					endDate: d(startDate).format("YYYY-MM-DD"),
-				} : {
-					startDate: d(startDate).format("YYYY-MM-DD"),
+				...data.isPeriodiek === Periodiek.Eenmalig && {
+					startDate: d(date).format("YYYY-MM-DD"),
+					endDate: d(date).format("YYYY-MM-DD"),
 				},
 				datumMargin,
 				byDay,
@@ -119,15 +117,15 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 							}} isRequired />
 
 							{form.isPeriodiek === Periodiek.Eenmalig && (<>
-								<FormControl flex={1} isInvalid={!isFieldValid("startDate") || !isFieldValid2("startDate")} isRequired>
+								<FormControl flex={1} isInvalid={!isFieldValid("date") || !isFieldValid2("date")} isRequired>
 									<FormLabel>{t("alarmForm.date")}</FormLabel>
-									<DatePicker selected={form.startDate} dateFormat={"dd-MM-yyyy"}
+									<DatePicker selected={form.date} dateFormat={"dd-MM-yyyy"}
 										onChange={(value: Date) => {
 											if (value) {
-												const startDate = d(value).startOf("day");
-												updateForm("startDate", startDate.toDate());
-												updateForm("byMonth", [startDate.month() + 1]);
-												updateForm("byMonthDay", startDate.date());
+												const date = d(value).startOf("day");
+												updateForm("date", date.toDate());
+												updateForm("byMonth", [date.month() + 1]);
+												updateForm("byMonthDay", date.date());
 											}
 										}} customInput={<Input type={"text"} />} />
 									<FormErrorMessage>{t("alarmForm.errors.invalidDateError")}</FormErrorMessage>

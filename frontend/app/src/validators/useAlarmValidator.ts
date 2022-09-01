@@ -9,8 +9,7 @@ const useAlarmValidator = () => {
 		repeatType: zod.nativeEnum(RepeatType).optional(),
 		bedrag: zod.number().min(0),
 		bedragMargin: zod.number().min(0),
-		startDate: zod.date().optional(),
-		// endDate: zod.date().optional(),
+		date: zod.date().optional(),
 		datumMargin: zod.number().min(0).optional(),
 		byDay: zod.array(zod.nativeEnum(DayOfWeek)).min(1).optional(),
 		byMonth: zod.array(zod.number().min(1).max(12)).min(1).max(12).optional(),
@@ -26,7 +25,7 @@ const useAlarmValidator = () => {
 };
 
 const eenmaligValidator = zod.object({
-	startDate: zod.date(), //.refine(val => d().endOf("day").isSameOrBefore(val)), // Must be in the future
+	date: zod.date(), //.refine(val => d().endOf("day").isSameOrBefore(val)), // Must be in the future
 	datumMargin: zod.number().min(0),
 	byMonthDay: zod.number().min(1).max(28),
 	byMonth: zod.array(zod.number().min(1).max(12)).min(1).max(12),
