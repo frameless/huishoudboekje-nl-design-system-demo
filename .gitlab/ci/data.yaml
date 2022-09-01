@@ -27,7 +27,7 @@
     - rm -rf /app/data
     - cp -r $DATA_PATH /app/data
   script:
-    - npm run start
+    - importer import
 
 load-data-review:
   <<: *load-sample-data
