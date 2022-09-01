@@ -1,12 +1,54 @@
 # Huishoudboekje Changelog
 
+## 1.2.1
+
+In deze release zijn kwetsbaarheden opgelost, optimalisaties en kleine wijzigingen aan de UI toegepast.
+
+### Patch Changes
+
+- 5a099abb: Fixed #1019: Fixed vulnerability to XXE attacks.
+- 82da159a: All Node services are now running on Node.js 18
+- b5245f5d: Fixed #853: Als er een alarm is ingesteld voor een afspraak die is afgeletterd met een banktransactie, dan wordt dit alarm op dat moment afgetrapt.
+- bffb945e: We've moved loading spinners to the smallest possible elements, so that UI that doesn't require to be waited for will be visible from the start.
+- dd1bf7a0: Fixed #1020: Updated dependencies, fixing several CVEs.
+- 593e702a: Fixed #991: Added the difference in expected and actual value of afspraak and transaction in the signal.
+- 61c63047: Fixed #998: Errors that occur when uploading files are now properly handled and an error message will be visible below the filename.
+- 8acf22a2: Fixed #1045: Moved the sampledata tool outside the repository.
+- 9a782300: Fixed #630: Aligned the names of the environment variable for the database url to `DATABASE_URL` for all services.
+
+  ## Migration guide
+
+  Every service now uses the same `DATABASE_URL` environment variable for its connection to a database.
+
+  Change the following environment variables in the following deployments:
+
+  - Change the name `HHB_DATABASE_URL` to `DATABASE_URL` in the deployment for the Huishoudboekjeservice.
+  - Change the name `GROOTBOEK_DATABASE_URL` to `DATABASE_URL` in the deployment for the Grootboekservice.
+  - Change the name `TRANASCTIE_DATABASE_URL` to `DATABASE_URL` in the deployment for the Banktransactieservice.
+  - Change the name `LOG_DATABASE_URL` to `DATABASE_URL` in the deployment for the Logservice.
+  - Change the name `ORGANISATIE_DATABASE_URL` to `DATABASE_URL` in the deployment for the Organisatieservice.
+
+- b0615c62: Fixed #1034: Toast message after un-matching a transaction is now correct.
+- b0615c62: Fixed #1035: Added audit log template for updating a signal.
+- c2110ae7: Fixed #742: All services now use a pre ping to determine if the connection with the database is still up. If not, a new connection will be made.
+- 55652696: Fixed #786: It is now possible to set a default value for the margin in days for date and for the margin in euros for bedrag when creating an alarm.
+- 2befd6a7: Fixed #982: Removed version endpoints from services and backend as they are currently not used.
+- d0f435f6: Fixed #995: A user-friendly error message will now be shown when there is a problem with the authservice.
+- df7061e4: Fixed 980: Error handling when not accepted file format is uploaded.
+- f1d21297: We're now using a standardized library for state mangement, which improves performance.
+- f3861b56: Fixed #1000: Getting one postadres by its ID now properly returns it.
+- fc7c7424: Fixed #630: Return data as plain text and not as error.
+- 1a2ea880: Fixed #1039: Fixed an issue where the end date of an alarm was not saved correctly.
+- 38f6fe61: Fixed #1021: Fixed an issue where creating an alarm resulted in an error.
+- 041bb40c: Fixed #1040: Fixed an issue where the start date of an alarm was not saved correctly.
+
 ## 1.2.0
 
 Een probleem waarbij sommige gebruikers niet konden inloggen is opgelost.
 
 ### Minor Changes
 
-- ec866338: Fixed #950: Moved configuration for client secrets to environment variables 
+- ec866338: Fixed #950: Moved configuration for client secrets to environment variables
 - ec866338: Fixed #975: Extracted authorization to a separate service that is compatible with OpenID Connect
 
   ## Migration guide
