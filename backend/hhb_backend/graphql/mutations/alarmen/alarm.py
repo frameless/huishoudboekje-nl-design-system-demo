@@ -60,18 +60,17 @@ class AlarmHelper:
         return data
 
     @log_gebruikers_activiteit
-    async def create(_root, info, input: CreateAlarmInput):
-
+    async def create(_root, info, input):
         # alarm_date = parser.parse(input.startDate).date()
         # utc_now = date.today()
         # if alarm_date < utc_now:
         #     raise GraphQLError(f"De alarmdatum moet in de toekomst liggen.")
 
-        if (input.byMonth or input.byMonthDay) and not (input.byMonth and input.byMonthDay):
+        if (input["byMonth"] or input["byMonthDay"]) and not (input["byMonth"] and input["byMonthDay"]):
             raise GraphQLError("Vul zowel byMonth als byMonthDay in, of geen van beide.")
 
-        if not input.endDate:
-            if input.startDate:
+        if not input["endDate"]:
+            if input.get("startDate"):
                 raise GraphQLError("Het is niet mogelijk om een startDate mee te geven voor een herhalend alarm")
             # can't use attributes to set data
             input["startDate"] = generate_alarm_date(input).isoformat()

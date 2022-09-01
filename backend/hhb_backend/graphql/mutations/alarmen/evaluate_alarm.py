@@ -159,7 +159,6 @@ async def create_alarm(root, info, alarm: Alarm, alarm_date: date) -> Optional[A
     result = await AlarmHelper.create(root, info, {
         "isActive": True,
         "afspraakId": int(alarm.get("afspraakId")),
-        "startDate": alarm_date.isoformat(),
         "endDate": alarm.get("endDate"),
         "datumMargin": int(alarm.get("datumMargin")),
         "bedrag": alarm.get("bedrag"),
