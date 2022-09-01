@@ -9,6 +9,7 @@
     - docker
   when: manual
   before_script:
+    - set -e
     - cd /app
     - export GRAPHQL_API_URL=https://${APP_HOST}/api/graphql
     - echo "Generating API key..."
@@ -23,9 +24,8 @@
         --noCopy \
         "{ \"name\": \"sampledata\", \"email\": \"sampledata@${APP_HOST}\" }" "${JWT_SECRET:-$SESSION_SECRET}"`
     - echo "Linking data..."
-    - export DATA_PATH=/builds/$CI_PROJECT_PATH/sampleData
     - rm -rf /app/data
-    - cp -r $DATA_PATH /app/data
+    - cp -r /builds/$CI_PROJECT_PATH/sampleData /app/data
   script:
     - importer import
 
