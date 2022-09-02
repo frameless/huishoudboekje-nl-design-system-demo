@@ -2,7 +2,7 @@
 
 ## 1.2.1
 
-In deze release zijn kwetsbaarheden opgelost, optimalisaties en kleine wijzigingen aan de UI toegepast.
+In deze release zijn kwetsbaarheden opgelost en verbeteringen aan de user interface gedaan.
 
 ### Patch Changes
 
