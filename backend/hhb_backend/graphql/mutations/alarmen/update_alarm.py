@@ -1,7 +1,8 @@
 """ GraphQl Mutatie voor het aanpassen van een Alarm """
 import graphene
+
+from hhb_backend.graphql.models.alarm import Alarm
 from hhb_backend.graphql.mutations.alarmen.alarm import AlarmHelper, UpdateAlarmInput
-from hhb_backend.graphql.models.Alarm import Alarm
 
 
 class UpdateAlarm(graphene.Mutation):

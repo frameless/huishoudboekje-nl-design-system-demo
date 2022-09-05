@@ -1,7 +1,8 @@
-import pytest
 import requests_mock
 from freezegun import freeze_time
+
 from hhb_backend.graphql import settings
+
 
 # @pytest.mark.only
 def test_afspraken(client):
@@ -83,7 +84,7 @@ def test_afspraak_empty_interval(client):
 @freeze_time("2020-01-01")
 def test_afspraak_overschrijvingen_planner_normal(client):
     with requests_mock.Mocker() as rm:
-        rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/", json = {'data': [{
+        rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/", json={'data': [{
             'id': 1,
             'betaalinstructie': {
     "end_date": "2020-10-31",

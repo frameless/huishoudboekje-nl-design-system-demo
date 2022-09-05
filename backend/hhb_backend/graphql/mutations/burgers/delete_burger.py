@@ -1,17 +1,18 @@
 """ GraphQL mutation for deleting a Burger """
 
+from datetime import datetime
+
 import graphene
 import requests
-from flask import request
 from graphql import GraphQLError
 
 from hhb_backend.graphql import settings
+from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.burger import Burger
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     gebruikers_activiteit_entities,
     log_gebruikers_activiteit,
 )
-from datetime import datetime
 
 
 class DeleteBurger(graphene.Mutation):
@@ -35,11 +36,11 @@ class DeleteBurger(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(_root, info, id):
         """Delete current burger"""
-        existing_burger = await request.dataloader.burgers_by_id.load(id)
+        existing_burger = hhb_dataloader().burgers.load_one(id)
         if not existing_burger:
             raise GraphQLError(f"Burger with id {id} not found")
 
-        afspraken = await request.dataloader.afspraken_by_burger.load(id)
+        afspraken = hhb_dataloader().afspraken.by_burger(id)
         input = {'valid_through': datetime.now().strftime("%Y-%m-%d")}
         for afspraak in afspraken:
             response = requests.post(
@@ -56,7 +57,5 @@ class DeleteBurger(graphene.Mutation):
         response = requests.delete(f"{settings.HHB_SERVICES_URL}/burgers/{id}")
         if response.status_code != 204:
             raise GraphQLError(f"Upstream API responded: {response.json()}")
-
-        request.dataloader.burgers_by_id.clear(id)
 
         return DeleteBurger(ok=True, previous=existing_burger)

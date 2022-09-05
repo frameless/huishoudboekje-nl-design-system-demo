@@ -1,12 +1,13 @@
 
 import logging
 
+from flask import request
 from flask.views import MethodView
 from sqlalchemy import func
 from sqlalchemy.exc import SQLAlchemyError
 
 from core_service.database import db
-from core_service.utils import get_all
+from core_service.utils import one_or_none
 from models.bank_transaction import BankTransaction
 
 
@@ -15,15 +16,19 @@ class SaldoView(MethodView):
     def get(self, **kwargs):
         """ Get Saldo """
         logging.info("In SaldoView")
-        transaction_ids = kwargs.get("object_id", None)
+        transaction_ids = request.args.get("filter_ids") or kwargs.get("object_id")
         saldo = 0
-        try:  
+
+        try:
+            query =\
+                db.session.query(func.sum(BankTransaction.bedrag).label("saldo")).filter(BankTransaction.is_geboekt)
             if transaction_ids:
-                saldo = db.session.query(func.sum(BankTransaction.bedrag).label("saldo")).filter(BankTransaction.id.in_(transaction_ids.split(","))).filter(BankTransaction.is_geboekt==True)
-            else:
-                saldo = db.session.query(func.sum(BankTransaction.bedrag).label("saldo")).filter(BankTransaction.is_geboekt==True)
+                query = query.filter(BankTransaction.id.in_(transaction_ids.split(",")))
+
+            result = one_or_none(query)
+            if result is not None:
+                saldo = result[0] or saldo
         except SQLAlchemyError as excep:
             logging.exception(excep)
 
-        s = {"data": {"bedrag": get_all(saldo)[0][0]}}
-        return s
+        return {"data": {"bedrag": saldo}}

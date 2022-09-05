@@ -2,6 +2,7 @@
 import graphene
 import requests
 from graphql import GraphQLError
+
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.postadres import Postadres
@@ -37,7 +38,7 @@ class UpdatePostadres(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(_root, _info, id, **kwargs):
         """ Update the current Postadres """
-        previous = await hhb_dataloader().postadressen_by_id.load(id)
+        previous = hhb_dataloader().postadressen.load_one(id)
         if not previous:
             raise GraphQLError("Postadres not found")
 

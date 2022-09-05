@@ -1,16 +1,17 @@
 """ GraphQL mutation for creating a new Postadres """
-import json
 import graphene
 import requests
 from graphql import GraphQLError
+
 from hhb_backend.graphql import settings
-from hhb_backend.graphql.models.postadres import Postadres
-from hhb_backend.graphql.models.afdeling import Afdeling
 from hhb_backend.graphql.dataloaders import hhb_dataloader
+from hhb_backend.graphql.models.afdeling import Afdeling
+from hhb_backend.graphql.models.postadres import Postadres
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     gebruikers_activiteit_entities,
     log_gebruikers_activiteit,
 )
+
 
 class CreatePostadresInput(graphene.InputObjectType):
     # hhb_service elements (required)
@@ -46,7 +47,7 @@ class CreatePostadres(graphene.Mutation):
         input = kwargs.pop("input")
 
         ## check if afdeling exists
-        previous_afdeling = await hhb_dataloader().afdelingen_by_id.load(input.get('afdeling_id'))
+        previous_afdeling = hhb_dataloader().afdelingen.load_one(input.get('afdeling_id'))
         if not previous_afdeling:
             raise GraphQLError("Afdeling not found")
 

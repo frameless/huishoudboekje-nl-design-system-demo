@@ -1,14 +1,16 @@
 """ Rubriek model as used in GraphQL queries """
 import graphene
-from flask import request
+
 import hhb_backend.graphql.models.grootboekrekening as grootboekrekening
+from hhb_backend.graphql.dataloaders import hhb_dataloader
+
 
 class Rubriek(graphene.ObjectType):
     id = graphene.Int()
     naam = graphene.String()
     grootboekrekening = graphene.Field(lambda: grootboekrekening.Grootboekrekening)
 
-    async def resolve_grootboekrekening(root, info):
+    async def resolve_grootboekrekening(self, _info):
         """ Get gebruikers when requested """
-        if root.get('grootboekrekening_id'):
-            return await request.dataloader.grootboekrekeningen_by_id.load(root.get('grootboekrekening_id')) or []
+        if self.get('grootboekrekening_id'):
+            return hhb_dataloader().grootboekrekeningen.load_one(self.get('grootboekrekening_id')) or []

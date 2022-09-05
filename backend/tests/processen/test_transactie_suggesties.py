@@ -102,8 +102,8 @@ async def test_transactie_suggesties_multiple_matches(test_request_context):
             f"{settings.HHB_SERVICES_URL}/rekeningen/?filter_ibans=NL04RABO5082680188,NL29ABNA5179205913", json={
                 'data': [{'afspraken': [4], 'gebruikers': [], 'iban': 'NL04RABO5082680188', 'id': 2, 'organisaties': [],
                           'rekeninghouder': 'Hema'},
-                         {'afspraken': [3], 'gebruikers': [], 'iban': 'NL29ABNA5179205913', 'id': 3, 'organisaties': [],
-                          'rekeninghouder': 'Shell'}]})
+                         {'afspraken': [3, 5], 'gebruikers': [], 'iban': 'NL29ABNA5179205913', 'id': 3,
+                          'organisaties': [], 'rekeninghouder': 'Shell'}]})
 
         get_afspraken = mock.get(
             f"{settings.HHB_SERVICES_URL}/afspraken/?filter_rekening=2,3", json={

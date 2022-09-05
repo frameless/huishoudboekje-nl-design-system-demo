@@ -26,61 +26,73 @@ def create_mock_adapter() -> Adapter:
     def test_matcher(request):
         if request.path == "/afspraken/" and request.query == "valid_from=2020-10-10&valid_through=2020-12-31":
             return MockResponse({'data': [
-                {'aantal_betalingen': 12, 'bedrag': 120000,
-                 'omschrijving': 'Leefgeld Hulleman', 'credit': True, 'valid_through': '2020-12-31', 'gebruiker_id': 1,
-                 'id': 1, 'betaalinstructie': {
-    "end_date": "2020-12-31",
-    "start_date": "2020-01-01",
-    "by_month_day": [
-        1
-    ],
-    "except_dates": []
-}, 'journaalposten': [], 'zoektermen': None, 'organisatie_id': None,
-                 'overschrijvingen': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], 'rubriek_id': None,
-                 'valid_from': '2020-01-01', 'tegen_rekening_id': 14}]}, 200)
+                {
+                    'aantal_betalingen': 12,
+                    'bedrag': 120000,
+                    'omschrijving': 'Leefgeld Hulleman',
+                    'credit': True,
+                    'valid_through': '2020-12-31',
+                    'gebruiker_id': 1,
+                    'id': 1,
+                    'betaalinstructie': {
+                        "end_date": "2020-12-31",
+                        "start_date": "2020-01-01",
+                        "by_month_day": [1],
+                        "except_dates": []
+                    },
+                    'journaalposten': [],
+                    'zoektermen': None,
+                    'organisatie_id': None,
+                    'overschrijvingen': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+                    'rubriek_id': None,
+                    'valid_from': '2020-01-01',
+                    'tegen_rekening_id': 14
+                }
+            ]}, 200)
         elif request.path == "/overschrijvingen/" and request.query == "filter_afspraken=1":
             return MockResponse({'data': [
-                {'afspraak_id': 1, 'bank_transaction_id': None, 'bedrag': 10000, 'datum': '2020-01-01',
-                 'export_id': None, 'id': 1},
-                {'afspraak_id': 1, 'bank_transaction_id': None, 'bedrag': 10000, 'datum': '2020-02-01',
-                 'export_id': None, 'id': 2},
-                {'afspraak_id': 1, 'bank_transaction_id': None, 'bedrag': 10000, 'datum': '2020-03-01',
-                 'export_id': None, 'id': 3},
-                {'afspraak_id': 1, 'bank_transaction_id': None, 'bedrag': 10000, 'datum': '2020-04-01',
-                 'export_id': None, 'id': 4},
-                {'afspraak_id': 1, 'bank_transaction_id': None, 'bedrag': 10000, 'datum': '2020-05-01',
-                 'export_id': None, 'id': 5},
-                {'afspraak_id': 1, 'bank_transaction_id': None, 'bedrag': 10000, 'datum': '2020-06-01',
-                 'export_id': None, 'id': 6},
-                {'afspraak_id': 1, 'bank_transaction_id': None, 'bedrag': 10000, 'datum': '2020-07-01',
-                 'export_id': None, 'id': 7},
-                {'afspraak_id': 1, 'bank_transaction_id': None, 'bedrag': 10000, 'datum': '2020-08-01',
-                 'export_id': None, 'id': 8},
-                {'afspraak_id': 1, 'bank_transaction_id': None, 'bedrag': 10000, 'datum': '2020-09-01',
-                 'export_id': None, 'id': 9},
-                {'afspraak_id': 1, 'bank_transaction_id': None, 'bedrag': 10000, 'datum': '2020-10-01',
-                 'export_id': None, 'id': 10},
-                {'afspraak_id': 1, 'bank_transaction_id': None, 'bedrag': 10000, 'datum': '2020-11-01',
-                 'export_id': None, 'id': 11}]}, 200)
+                {
+                    'afspraak_id': 1,
+                    'bank_transaction_id': None,
+                    'bedrag': 10000,
+                    'datum': f'2020-{str(i).zfill(2)}-01',
+                    'export_id': None,
+                    'id': i
+                }
+                for i in range(1, 12)
+            ]}, 200)
         elif request.path == "/overschrijvingen/":
-            return MockResponse({'data': {'afspraak_id': 1, 'bank_transaction_id': None, 'bedrag': 10000,
-                                          'datum': '2020-12-01', 'export_id': 1, 'id': 23}}, 201)
+            return MockResponse({'data': {
+                'afspraak_id': 1,
+                'bank_transaction_id': None,
+                'bedrag': 10000,
+                'datum': '2020-12-01',
+                'export_id': 1,
+                'id': 23
+            }}, 201)
         elif request.path == "/export/":
-            return MockResponse({'data': {'id': 1, 'naam': '2020-12-16_13-04-27-SEPA-EXPORT',
-                                          'timestamp': '2020-12-16T13:04:27+01:00',
-                                          'xmldata': '<?xml version="1.0" encoding="UTF-8"?><Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.001.001.03" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><CstmrCdtTrfInitn><GrpHdr><MsgId>20210112044131-94064e82eecf</MsgId><CreDtTm>2021-01-12T16:41:31</CreDtTm><NbOfTxs>1</NbOfTxs><CtrlSum>100.00</CtrlSum><InitgPty><Nm>Huishoudboekje Gemeente Sloothuizen</Nm></InitgPty></GrpHdr><PmtInf><PmtInfId>HuishoudboekjeGemeente-c9756fa217ca</PmtInfId><PmtMtd>TRF</PmtMtd><BtchBookg>false</BtchBookg><NbOfTxs>1</NbOfTxs><CtrlSum>100.00</CtrlSum><PmtTpInf><SvcLvl><Cd>SEPA</Cd></SvcLvl></PmtTpInf><ReqdExctnDt>2020-12-01</ReqdExctnDt><Dbtr><Nm>Huishoudboekje Gemeente Sloothuizen</Nm></Dbtr><DbtrAcct><Id><IBAN>NL36ABNA5632579034</IBAN></Id></DbtrAcct><DbtrAgt><FinInstnId><BIC>ABNANL2A</BIC></FinInstnId></DbtrAgt><ChrgBr>SLEV</ChrgBr><CdtTrfTxInf><PmtId><EndToEndId>NOTPROVIDED</EndToEndId></PmtId><Amt><InstdAmt Ccy="EUR">100.00</InstdAmt></Amt><CdtrAgt><FinInstnId /></CdtrAgt><Cdtr><Nm>S. Hulleman</Nm></Cdtr><CdtrAcct><Id><IBAN>GB33BUKB20201555556655</IBAN></Id></CdtrAcct><RmtInf><Ustrd>Leefgeld Hulleman</Ustrd></RmtInf></CdtTrfTxInf></PmtInf></CstmrCdtTrfInitn></Document>'}},
-                                201)
+            return MockResponse({'data': {
+                'id': 1,
+                'naam': '2020-12-16_13-04-27-SEPA-EXPORT',
+                'timestamp': '2020-12-16T13:04:27+01:00',
+                'xmldata': '<?xml version="1.0" encoding="UTF-8"?><Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.001.001.03" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><CstmrCdtTrfInitn><GrpHdr><MsgId>20210112044131-94064e82eecf</MsgId><CreDtTm>2021-01-12T16:41:31</CreDtTm><NbOfTxs>1</NbOfTxs><CtrlSum>100.00</CtrlSum><InitgPty><Nm>Huishoudboekje Gemeente Sloothuizen</Nm></InitgPty></GrpHdr><PmtInf><PmtInfId>HuishoudboekjeGemeente-c9756fa217ca</PmtInfId><PmtMtd>TRF</PmtMtd><BtchBookg>false</BtchBookg><NbOfTxs>1</NbOfTxs><CtrlSum>100.00</CtrlSum><PmtTpInf><SvcLvl><Cd>SEPA</Cd></SvcLvl></PmtTpInf><ReqdExctnDt>2020-12-01</ReqdExctnDt><Dbtr><Nm>Huishoudboekje Gemeente Sloothuizen</Nm></Dbtr><DbtrAcct><Id><IBAN>NL36ABNA5632579034</IBAN></Id></DbtrAcct><DbtrAgt><FinInstnId><BIC>ABNANL2A</BIC></FinInstnId></DbtrAgt><ChrgBr>SLEV</ChrgBr><CdtTrfTxInf><PmtId><EndToEndId>NOTPROVIDED</EndToEndId></PmtId><Amt><InstdAmt Ccy="EUR">100.00</InstdAmt></Amt><CdtrAgt><FinInstnId /></CdtrAgt><Cdtr><Nm>S. Hulleman</Nm></Cdtr><CdtrAcct><Id><IBAN>GB33BUKB20201555556655</IBAN></Id></CdtrAcct><RmtInf><Ustrd>Leefgeld Hulleman</Ustrd></RmtInf></CdtTrfTxInf></PmtInf></CstmrCdtTrfInitn></Document>'
+            }}, 201)
         elif request.path == "/rekeningen/" and request.query == "filter_ids=14":
-            return MockResponse({'data': [
-                {'afspraken': [1], 'gebruikers': [], 'iban': 'GB33BUKB20201555556655', 'id': 14, 'organisaties': [1],
-                 'rekeninghouder': 'S. Hulleman'}]}, 200)
-        elif request.path == '/configuratie/derdengeldenrekening_rekeninghouder':
+            return MockResponse({'data': [{
+                'afspraken': [1],
+                'gebruikers': [],
+                'iban': 'GB33BUKB20201555556655',
+                'id': 14,
+                'organisaties': [1],
+                'rekeninghouder': 'S. Hulleman'
+            }]}, 200)
+        elif request.path == '/configuratie/' and request.query == 'filter_ids=derdengeldenrekening_rekeninghouder':
             return MockResponse(
-                {'data': {'id': 'derdengeldenrekening_rekeninghouder', 'waarde': 'Gemeente Sloothuizen'}}, 200)
-        elif request.path == "/configuratie/derdengeldenrekening_iban":
-            return MockResponse({'data': {'id': 'derdengeldenrekening_iban', 'waarde': 'NL36ABNA5632579034'}}, 200)
-        elif request.path == "/configuratie/derdengeldenrekening_bic":
-            return MockResponse({'data': {'id': 'derdengeldenrekening_bic', 'waarde': 'ABNANL2A'}}, 200)
+                {'data': [{'id': 'derdengeldenrekening_rekeninghouder', 'waarde': 'Gemeente Sloothuizen'}]}, 200)
+        elif request.path == "/configuratie/" and request.query == "filter_ids=derdengeldenrekening_iban":
+            return MockResponse({'data': [{'id': 'derdengeldenrekening_iban', 'waarde': 'NL36ABNA5632579034'}]}, 200)
+        elif request.path == "/configuratie/" and request.query == "filter_ids=derdengeldenrekening_bic":
+            return MockResponse({'data': [{'id': 'derdengeldenrekening_bic', 'waarde': 'ABNANL2A'}]}, 200)
         elif request.path == "/gebruikersactiviteiten/": #post
           return MockResponse({'data': {'id': 1}}, 201)
 

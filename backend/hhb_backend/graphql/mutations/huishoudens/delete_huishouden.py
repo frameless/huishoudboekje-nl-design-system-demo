@@ -2,10 +2,10 @@
 
 import graphene
 import requests
-from flask import request
 from graphql import GraphQLError
 
 from hhb_backend.graphql import settings
+from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.huishouden import Huishouden
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     log_gebruikers_activiteit,
@@ -32,17 +32,15 @@ class DeleteHuishouden(graphene.Mutation):
 
     @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(_root, info, id):
+    async def mutate(_root, _info, id):
         """ Delete current huishouden """
 
-        previous = await request.dataloader.huishoudens_by_id.load(id)
+        previous = hhb_dataloader().huishoudens.load_one(id)
         if not previous:
             raise GraphQLError("Huishouden bestaat niet.")
 
         response = requests.delete(f"{settings.HHB_SERVICES_URL}/huishoudens/{id}")
         if response.status_code != 204:
             raise GraphQLError(f"Upstream API responded: {response.json()}")
-
-        request.dataloader.huishoudens_by_id.clear(id)
 
         return DeleteHuishouden(ok=True, previous=previous)

@@ -1,15 +1,11 @@
 """ GraphQL mutation for deleting a Rekening from a Burger """
-import json
 
 import graphene
-import requests
 from graphql import GraphQLError
 
-from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
-from hhb_backend.graphql.models import burger, rekening
+from hhb_backend.graphql.models import rekening
 from hhb_backend.graphql.mutations.rekeningen.utils import (
-    cleanup_rekening_when_orphaned,
     rekening_used_check,
     delete_rekening,
     disconnect_burger_rekening
@@ -40,7 +36,7 @@ class DeleteBurgerRekening(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(_root, _info, id, burger_id):
         """ Delete rekening associations with either burger or organisation """
-        previous = await hhb_dataloader().rekeningen_by_id.load(id)
+        previous = hhb_dataloader().rekeningen.load_one(id)
         if not previous:
             raise GraphQLError("Rekening bestaat niet")
 

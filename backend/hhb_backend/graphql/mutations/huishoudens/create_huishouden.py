@@ -49,7 +49,7 @@ class CreateHuishouden(graphene.Mutation):
         huishouden = response.json()["data"]
 
         for burger_id in input.burger_ids:
-            burger = await hhb_dataloader().burgers_by_id.load(burger_id)
+            burger = hhb_dataloader().burgers.load_one(burger_id)
             if not burger:
                 raise GraphQLError(
                     f"Upstream API responded: burger with id {burger_id} does not exist"

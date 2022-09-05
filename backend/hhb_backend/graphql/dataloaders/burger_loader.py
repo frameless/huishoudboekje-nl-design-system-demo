@@ -1,17 +1,12 @@
-from hhb_backend.graphql import settings
-from hhb_backend.graphql.dataloaders.base_loader import SingleDataLoader, ListDataLoader
+from typing import List
+
+from hhb_backend.graphql.dataloaders.base_loader import DataLoader
+from hhb_backend.graphql.settings import HHB_SERVICES_URL
 
 
-class BurgersByIdLoader(SingleDataLoader):
-    """Load burgers using ids"""
-
+class BurgerLoader(DataLoader):
+    service = HHB_SERVICES_URL
     model = "burgers"
-    service = settings.HHB_SERVICES_URL
 
-
-class BurgersByHuishoudenLoader(ListDataLoader):
-    """Load burgers using huishouden"""
-
-    model = "burgers"
-    filter_item = "filter_huishoudens"
-    index = "huishouden_id"
+    def by_huishouden(self, huishouden_id: int) -> List[dict]:
+        return self.load(huishouden_id, filter_item="filter_huishoudens")

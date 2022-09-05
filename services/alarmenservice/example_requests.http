@@ -27,6 +27,13 @@ Content-Type: application/json
 ###
 
 // @no-log
+GET http://localhost:8080/v1/alarms?filter_active=true
+Accept: application/json
+Content-Type: application/json
+
+###
+
+// @no-log
 POST http://localhost:8080/v1/alarms
 Accept: application/json
 Content-Type: application/json

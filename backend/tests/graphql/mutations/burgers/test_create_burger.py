@@ -1,4 +1,3 @@
-import pytest
 import requests_mock
 from requests_mock import Adapter
 
@@ -242,6 +241,6 @@ def test_create_burger_with_huishouden_id_success(client):
             content_type='application/json'
         )
 
-        assert mock._adapter.call_count == 6
+        assert mock._adapter.call_count == 7
         assert response.json["data"]["createBurger"]["ok"] is True
 

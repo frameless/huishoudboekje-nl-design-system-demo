@@ -1,8 +1,9 @@
-import json
-
 import requests
 from graphql import GraphQLError
+
 from hhb_backend.graphql import settings
+from hhb_backend.graphql.dataloaders import hhb_dataloader
+
 
 def create_afdeling_postadres(input, afdeling_id):
     contactCatalogus_input = {
@@ -21,15 +22,13 @@ def create_afdeling_postadres(input, afdeling_id):
 
     result = contactCatalogus_response.json()['data']
 
-    previous_afdeling = requests.get(
-        f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/{afdeling_id}",
-        headers={"Content-type": "application/json"}
-    ).json()['data']
+    previous_afdeling = hhb_dataloader().afdelingen.load_one(afdeling_id)
 
-    if previous_afdeling.get("postadressen_ids"):
-        postadressen_ids = list(previous_afdeling["postadressen_ids"])
-    else:
-        postadressen_ids = list()
+    postadressen_ids = list(
+        previous_afdeling["postadressen_ids"]
+        if previous_afdeling.get("postadressen_ids")
+        else []
+    )
 
     postadressen_ids.append(result['id'])
 
@@ -47,12 +46,11 @@ def create_afdeling_postadres(input, afdeling_id):
         raise GraphQLError(
             f"Upstream API responded: {update_afdeling_response.json()}"
         )
-    result2 = {}
 
-    result2["id"] = result.pop("id")
-    result2["huisnummer"] = result.pop("houseNumber")
-    result2["postcode"] = result.pop("postalCode")
-    result2["straatnaam"] = result.pop("street")
-    result2["plaatsnaam"] = result.pop("locality")
-
-    return result2
+    return {
+        "id": result.pop("id"),
+        "huisnummer": result.pop("houseNumber"),
+        "postcode": result.pop("postalCode"),
+        "straatnaam": result.pop("street"),
+        "plaatsnaam": result.pop("locality")
+    }

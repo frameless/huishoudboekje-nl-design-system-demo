@@ -11,6 +11,7 @@ from hhb_backend.graphql.models import afspraak
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (gebruikers_activiteit_entities, log_gebruikers_activiteit)
 from hhb_backend.processen.automatisch_boeken import find_matching_afspraken_by_afspraak
 
+
 class AddAfspraakZoekterm(graphene.Mutation):
     """Mutatie om een zoekterm aan een afspraak toe te voegen."""
     class Arguments:
@@ -40,9 +41,7 @@ class AddAfspraakZoekterm(graphene.Mutation):
     async def mutate(_root, _info, afspraak_id: int, zoekterm):
         """ Add zoekterm to afspraak """
 
-        ''' Clear the cache since we need to have the most up te date version possible. '''
-        hhb_dataloader().afspraken_by_id.clear(afspraak_id)
-        previous = await hhb_dataloader().afspraken_by_id.load(afspraak_id)
+        previous = hhb_dataloader().afspraken.load_one(afspraak_id)
 
         if previous is None:
             raise GraphQLError("Afspraak not found")

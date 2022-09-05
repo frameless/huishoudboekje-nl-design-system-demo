@@ -1,13 +1,13 @@
 import graphene
-from flask import request
+
 import hhb_backend.graphql.models.afspraak as afspraak
 import hhb_backend.graphql.models.organisatie as organisatie
-import hhb_backend.graphql.models.rekening as rekening
 import hhb_backend.graphql.models.postadres as postadres
-from hhb_backend.graphql import settings
-import requests
+import hhb_backend.graphql.models.rekening as rekening
+from hhb_backend.graphql.dataloaders import hhb_dataloader
 
-class Afdeling(graphene.ObjectType): 
+
+class Afdeling(graphene.ObjectType):
     id = graphene.Int()
     naam = graphene.String()
     organisatie = graphene.Field(lambda: organisatie.Organisatie)
@@ -15,26 +15,19 @@ class Afdeling(graphene.ObjectType):
     postadressen = graphene.List(lambda: postadres.Postadres)
     afspraken = graphene.List(lambda: afspraak.Afspraak)
 
-    async def resolve_rekeningen(root, info):
+    async def resolve_rekeningen(self, _info):
         """ Get rekeningen when requested """
-        return await request.dataloader.rekeningen_by_afdeling.load(root.get('id')) or []
+        return hhb_dataloader().rekeningen.by_afdeling(self.get('id')) or []
 
-    async def resolve_organisatie(root, info):
-        return await request.dataloader.organisaties_by_id.load(root.get('organisatie_id'))
+    async def resolve_organisatie(self, _info):
+        return hhb_dataloader().organisaties.load_one(self.get('organisatie_id'))
 
-    async def resolve_postadressen(root, info):
-        ids = root.get('postadressen_ids')
+    async def resolve_postadressen(self, _info):
+        ids = self.get('postadressen_ids')
         if not ids:
             return []
-        querystring = f"?filter_ids={','.join([str(k) for k in ids])}" if ids else ''
-        url = f"""{settings.POSTADRESSEN_SERVICE_URL}/addresses/{querystring}"""
-        response = requests.get(url, headers={"Accept": "application/json"})
 
-        iterable = []
-        for post in response.json()['data']:
-            iterable.append(post)
-        return iterable
+        return hhb_dataloader().postadressen.load(ids)
 
-    async def resolve_afspraken(root, info):
-        afdeling_id = root.get('id')
-        return await request.dataloader.afspraken_by_afdeling.load(afdeling_id) or []
+    async def resolve_afspraken(self, _info):
+        return hhb_dataloader().afspraken.by_afdeling(self.get('id')) or []

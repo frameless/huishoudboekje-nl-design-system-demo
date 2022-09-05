@@ -1,20 +1,15 @@
-from hhb_backend.graphql.dataloaders.base_loader import SingleDataLoader, ListDataLoader
+from typing import List
+
+from hhb_backend.graphql.dataloaders.base_loader import DataLoader
+from hhb_backend.graphql.settings import HHB_SERVICES_URL
 
 
-class OverschrijvingByIdLoader(SingleDataLoader):
-    """ Load overschrijvingen using ids """
+class OverschrijvingLoader(DataLoader):
+    service = HHB_SERVICES_URL
     model = "overschrijvingen"
 
+    def by_afspraak(self, afspraak_id: int) -> List[dict]:
+        return self.load(afspraak_id, filter_item="filter_afspraken")
 
-class OverschrijvingByAfspraakLoader(ListDataLoader):
-    """ Load overschrijvingen using afspraak id """
-    model = "overschrijvingen"
-    filter_item = "filter_afspraken"
-    index = "afspraak_id"
-
-
-class OverschrijvingByExportLoader(ListDataLoader):
-    """ Load overschrijvingen using export id """
-    model = "overschrijvingen"
-    filter_item = "filter_exports"
-    index = "export_id"
+    def by_afspraken(self, afspraak_id: List[int]) -> List[dict]:
+        return self.load(afspraak_id, filter_item="filter_afspraken")

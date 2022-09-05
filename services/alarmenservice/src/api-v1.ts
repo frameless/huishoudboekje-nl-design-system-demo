@@ -14,14 +14,17 @@ app.get("/health", healthRouter);
 app.get("/", async (req, res, next) => {
 	try {
 		const qFilterIds: string = req.query.filter_ids as string;
+		const qFilterActive: string = req.query.filter_active as string;
 
-		let ids: string[] = [];
-		if (qFilterIds) {
-			ids = qFilterIds.trim().split(",").filter(s => s);
-		}
+		const filters = {
+			// Filter by ids (?filter_ids=1,2,3)
+			...qFilterIds && {ids: qFilterIds.split(",").filter(s => s)},
 
-		// Split by , and filter out empty strings.
-		const alarms = await getManyAlarms(ids);
+			// Filter by active (?filter_active=true|false)
+			...qFilterActive && {isActive: qFilterActive === "true"},
+		};
+
+		const alarms = await getManyAlarms(filters);
 
 		return res.json({
 			ok: true,

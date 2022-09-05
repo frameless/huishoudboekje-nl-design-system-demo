@@ -1,22 +1,20 @@
 """ GraphQL mutation for creating a new Afdeling """
-import json
 import graphene
 import requests
 from graphql import GraphQLError
-from hhb_backend.graphql import settings
-from hhb_backend.graphql.models.afdeling import Afdeling
 
-from hhb_backend.graphql.dataloaders import hhb_dataloader
-
-import hhb_backend.graphql.mutations.rekeningen.rekening_input as rekening_input
-from hhb_backend.graphql.mutations.rekeningen.utils import create_afdeling_rekening
 import hhb_backend.graphql.mutations.postadressen.create_postadres as create_postadres
+import hhb_backend.graphql.mutations.rekeningen.rekening_input as rekening_input
+from hhb_backend.graphql import settings
+from hhb_backend.graphql.dataloaders import hhb_dataloader
+from hhb_backend.graphql.models.afdeling import Afdeling
 from hhb_backend.graphql.mutations.postadressen.utils import create_afdeling_postadres
-
+from hhb_backend.graphql.mutations.rekeningen.utils import create_afdeling_rekening
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     gebruikers_activiteit_entities,
     log_gebruikers_activiteit,
 )
+
 
 class CreateAfdelingInput(graphene.InputObjectType):
     # hhb_service elements (required)
@@ -54,7 +52,7 @@ class CreateAfdeling(graphene.Mutation):
             "organisatie_id": input["organisatie_id"],
         }
 
-        previous = await hhb_dataloader().organisaties_by_id.load(input['organisatie_id'])
+        previous = hhb_dataloader().organisaties.load_one(input['organisatie_id'])
         if not previous:
             raise GraphQLError("Organisatie not found")
 

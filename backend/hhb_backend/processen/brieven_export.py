@@ -1,19 +1,18 @@
 import csv
 import io
+import logging
+import pandas as pd
+import requests
 from _csv import QUOTE_MINIMAL
 from datetime import datetime
-
-import requests
-from flask import jsonify
-
-from hhb_backend.graphql import settings
-import logging
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (
-    gebruikers_activiteit_entities)
 from dateutil import tz
 from flask import request, g
+from typing import List
+
+from hhb_backend.graphql import settings
+from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.version import load_version
-import pandas as pd
+
 
 class HHBCsvDialect(csv.Dialect):
     delimiter = "|"
@@ -37,6 +36,7 @@ brieven_fields = [
     "status.afspraak"
 ]
 
+
 def dict_keys_subset_builder(match_keys: list):
     """only include items with a matching key"""
     return lambda actual_dict: dict(
@@ -45,52 +45,35 @@ def dict_keys_subset_builder(match_keys: list):
 
 
 def create_brieven_export(burger_id):
-    burger_response = get_burger_response(burger_id)
-    if burger_response.status_code != 200:
-        return jsonify(message=burger_response.reason), burger_response.status_code
-    burger = burger_response.json()["data"]
+    burger = hhb_dataloader().burgers.load_one(burger_id)
+    afspraken = hhb_dataloader().afspraken.by_burger(burger_id)
 
-    afspraken_response = get_afspraken_response(burger_id)
-    if afspraken_response.status_code != 200:
-        return jsonify(message=afspraken_response.reason), afspraken_response.status_code
-    afspraken = afspraken_response.json()["data"]
-    afspraak_postadressen_response = get_postadres(afspraken)
+    # Find a postadres for every afspraak
+    postadressen = get_postadres_by_afspraken(afspraken)
 
-    if afspraak_postadressen_response.status_code == 200:
-        afspraak_postadressen = afspraak_postadressen_response.json()['data']
+    if postadressen:
         for afspraak in afspraken:
             postadres_id = afspraak.get("postadres_id")
-            for postadres in afspraak_postadressen:
+            for postadres in postadressen:
                 if postadres.get("id") == postadres_id:
                     afspraak["postadres"] = postadres
-    
-    afdelingen_response = get_afdelingen(afspraken)
-    if afdelingen_response.status_code == 200:
-        afdelingen = afdelingen_response.json()["data"]
-        postadressen_response = get_postadressen(afdelingen)
-        if postadressen_response.status_code != 200:
-            return jsonify(message=postadressen_response.reason), postadressen_response.status_code
-        postadressen = postadressen_response.json()['data']
 
+    # Find an afdeling for every organisatie and find a postadres for every afdeling
+    afdelingen = get_afdeling_by_afspraken(afspraken)
+    postadressen = get_postadressen_by_afdelingen(afdelingen)
+    organisaties = get_organisaties(afdelingen)
 
-        organisatie_reponse = get_organisaties(afdelingen)
-        if organisatie_reponse.status_code != 200:
-            return jsonify(message=organisatie_reponse.reason), organisatie_reponse.status_code
-        organisaties = organisatie_reponse.json()["data"]
-
-        for afdeling in afdelingen:
-            organisatie_id = afdeling.get("organisatie_id", {})
-            for organisatie in organisaties:
-                if organisatie["id"] == organisatie_id:
-                    afdeling["organisatie"] = organisatie
-            for postadres in postadressen:
-                single_postadres_id = postadres.get("id")
-                afdeling_postadres_ids = afdeling.get('postadressen_ids')
-                afdeling["postadressen"] = []
-                if single_postadres_id in afdeling_postadres_ids:
-                    afdeling["postadressen"].append(postadres)
-
-
+    for afdeling in afdelingen:
+        organisatie_id = afdeling.get("organisatie_id", {})
+        for organisatie in organisaties:
+            if organisatie["id"] == organisatie_id:
+                afdeling["organisatie"] = organisatie
+        for postadres in postadressen:
+            single_postadres_id = postadres.get("id")
+            afdeling_postadres_ids = afdeling.get('postadressen_ids')
+            afdeling["postadressen"] = []
+            if single_postadres_id in afdeling_postadres_ids:
+                afdeling["postadressen"].append(postadres)
 
     current_date_str = datetime.now().strftime("%Y-%m-%d")
 
@@ -155,59 +138,40 @@ def create_brieven_export(burger_id):
 
     return iowriter.getvalue(), csv_filename, data_excel, xlsx_filename
 
-def get_burger_response(burger_id):
-    return requests.get(
-        f"{settings.HHB_SERVICES_URL}/burgers/{burger_id}",
-        headers={"Content-type": "application/json"},
-    )
 
-def get_afspraken_response(burger_id):
-    return requests.get(
-        f"{settings.HHB_SERVICES_URL}/afspraken/?filter_burgers={burger_id}",
-        headers={"Content-type": "application/json"},
-    )
+def get_afdeling_by_afspraken(afspraken):
+    return hhb_dataloader().afdelingen.load([
+        afspraak["afdeling_id"]
+        for afspraak in afspraken
+        if afspraak["afdeling_id"]
+    ])
 
-def get_afdelingen(afspraken):
-    afdeling_ids = list(
-        set([afspraak["afdeling_id"] for afspraak in afspraken if
-             afspraak["afdeling_id"]])
-    )
-    return requests.get(f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/?filter_ids={','.join(str(x) for x in afdeling_ids)}",
-        headers={"Content-type": "application/json"},
-    )
 
-def get_postadressen(afdelingen):
-    ids= []
+def get_postadressen_by_afdelingen(afdelingen):
+    ids = []
     for afdeling in afdelingen:
         postadres_ids = afdeling.get("postadressen_ids")
         if postadres_ids:
-            for postadres_id in postadres_ids:
-                ids.append(postadres_id)
+            ids.extend(postadres_ids)
 
-    ids = ','.join(str(x) for x in ids)
-    return requests.get(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/?filter_ids={ids}",
-        headers={"Content-type": "application/json"})
+    return hhb_dataloader().postadressen.load(ids)
 
-def get_postadres(afspraken):
-    ids= []
-    for afspraak in afspraken:
-        postadres_id = afspraak.get("postadres_id", None)
-        if postadres_id:
-            ids.append(postadres_id)
 
-    ids = ','.join(str(x) for x in ids)
-    return requests.get(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/?filter_ids={ids}",
-        headers={"Content-type": "application/json"})
+def get_postadres_by_afspraken(afspraken: List[dict]):
+    return hhb_dataloader().postadressen.load([
+        afspraak["postadres_id"]
+        for afspraak in afspraken
+        if afspraak.get("postadres_id")
+    ])
+
 
 def get_organisaties(afdelingen):
-    organisatie_ids = list(
-        set([afdeling_result["organisatie_id"] for afdeling_result in afdelingen if
-             afdeling_result["organisatie_id"]])
-    )
-    return requests.get(
-        f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/?filter_ids={','.join(str(x) for x in organisatie_ids)}",
-        headers={"Content-type": "application/json"},
-    )
+    return hhb_dataloader().organisaties.load([
+        afdeling_result["organisatie_id"]
+        for afdeling_result in afdelingen
+        if afdeling_result["organisatie_id"]
+    ])
+
 
 def create_row(afdeling, afspraak, burger, current_date_str):
     organisatie = afdeling.get("organisatie", {})
@@ -216,11 +180,12 @@ def create_row(afdeling, afspraak, burger, current_date_str):
     postcode = adres.get("postalCode", {})
     plaats = adres.get("locality", {})
     straat = adres.get("street", {})
-    huisnummer = adres.get("houseNumber",{})
+    huisnummer = adres.get("houseNumber", {})
 
-    row = {}
-    row["organisatie.naam"] = organisatie["naam"] if "naam" in organisatie else ""
-    row["organisatie.postadres.adresregel1"] = ""
+    row = {
+        "organisatie.naam": organisatie["naam"] if "naam" in organisatie else "",
+        "organisatie.postadres.adresregel1": ""
+    }
     if straat and huisnummer:
         row[
             "organisatie.postadres.adresregel1"] = f"{straat} {huisnummer}"

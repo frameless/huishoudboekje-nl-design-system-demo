@@ -32,8 +32,40 @@ describe("Alarm CRUD (operations)", () => {
 		it("should return all Alarms", async () => {
 			prismaMock.alarm.findMany.mockResolvedValue(alarms as ResolvedValue<unknown>);
 
-			const ids: string[] = alarms.map(a => a.id);
+			const result = await api.get("/v1/alarms");
+			expect(result.statusCode).toBe(200);
+			expect(result.body).toMatchSnapshot();
+		});
+
+		it("should return all Alarms filtered by ids", async () => {
+			const subset = alarms.slice(0, 2);
+
+			// Take the first two
+			const ids: string[] = subset.map(a => a.id);
+
+			prismaMock.alarm.findMany.mockResolvedValue(subset as ResolvedValue<unknown>);
+
 			const result = await api.get("/v1/alarms/?filter_ids=" + ids.join(","));
+			expect(result.statusCode).toBe(200);
+			expect(result.body).toMatchSnapshot();
+
+			expect(result.body.data.length).toBe(ids.length);
+		});
+
+		it("should return only active Alarms", async () => {
+			prismaMock.alarm.findMany.mockResolvedValue(alarms.filter(a => a.isActive) as ResolvedValue<unknown>);
+
+			// Take the first two
+			const result = await api.get("/v1/alarms/?filter_active=true");
+			expect(result.statusCode).toBe(200);
+			expect(result.body).toMatchSnapshot();
+		});
+
+		it("should return only inactive Alarms", async () => {
+			prismaMock.alarm.findMany.mockResolvedValue(alarms.filter(a => !a.isActive) as ResolvedValue<unknown>);
+
+			// Take the first two
+			const result = await api.get("/v1/alarms/?filter_active=false");
 			expect(result.statusCode).toBe(200);
 			expect(result.body).toMatchSnapshot();
 		});
@@ -88,22 +120,22 @@ describe("Alarm CRUD (operations)", () => {
 			expect(result.body).toMatchSnapshot();
 		});
 
-			it("should return 404 Not Found when trying to updateAlarm", async () => {
-				const newStreet = "Barstreet";
-				prismaMock.alarm.update.mockRejectedValue(new Prisma.PrismaClientKnownRequestError("Not found", "P2025", "Client"));
+		it("should return 404 Not Found when trying to updateAlarm", async () => {
+			const newStreet = "Barstreet";
+			prismaMock.alarm.update.mockRejectedValue(new Prisma.PrismaClientKnownRequestError("Not found", "P2025", "Client"));
 
-				const result = await api.put("/v1/alarms/" + alarms[0].id).send({
-					id: alarms[0].id,
-					street: newStreet,
-				});
-				expect(result.statusCode).toEqual(404);
+			const result = await api.put("/v1/alarms/" + alarms[0].id).send({
+				id: alarms[0].id,
+				street: newStreet,
 			});
+			expect(result.statusCode).toEqual(404);
+		});
 
-			it("should delete the Alarm", async () => {
-				prismaMock.alarm.delete.mockRejectedValue(new Prisma.PrismaClientKnownRequestError("Not found", "P2025", "Client"));
-				const result = await api.delete("/v1/alarms/" + alarms[0].id);
-				expect(result.statusCode).toEqual(204);
-			});
+		it("should delete the Alarm", async () => {
+			prismaMock.alarm.delete.mockRejectedValue(new Prisma.PrismaClientKnownRequestError("Not found", "P2025", "Client"));
+			const result = await api.delete("/v1/alarms/" + alarms[0].id);
+			expect(result.statusCode).toEqual(204);
+		});
 	});
 
 	describe("Given an unknown error occurs on the server", () => {

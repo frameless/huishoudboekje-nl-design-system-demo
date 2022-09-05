@@ -1,6 +1,7 @@
-from hhb_backend.graphql.dataloaders.base_loader import SingleDataLoader
+from hhb_backend.graphql.dataloaders.base_loader import DataLoader
+from hhb_backend.graphql.settings import HHB_SERVICES_URL
 
 
-class ConfiguratieByIdLoader(SingleDataLoader):
-    """ Load config using ids """
+class ConfiguratieLoader(DataLoader):
+    service = HHB_SERVICES_URL
     model = "configuratie"
