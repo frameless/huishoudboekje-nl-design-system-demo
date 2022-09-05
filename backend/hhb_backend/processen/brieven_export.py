@@ -1,14 +1,13 @@
 import csv
 import io
 import logging
-from _csv import QUOTE_MINIMAL
-from datetime import datetime
-from typing import List
-
 import pandas as pd
 import requests
+from _csv import QUOTE_MINIMAL
+from datetime import datetime
 from dateutil import tz
 from flask import request, g
+from typing import List
 
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
@@ -49,15 +48,17 @@ def create_brieven_export(burger_id):
     burger = hhb_dataloader().burgers.load_one(burger_id)
     afspraken = hhb_dataloader().afspraken.by_burger(burger_id)
 
-    # todo postaddres is optional. make sure it works
+    # Find a postadres for every afspraak
     postadressen = get_postadres_by_afspraken(afspraken)
-    for afspraak in afspraken:
-        postadres_id = afspraak.get("postadres_id")
-        for postadres in postadressen:
-            if postadres.get("id") == postadres_id:
-                afspraak["postadres"] = postadres
 
-    # todo afdeling is optional. make sure it works
+    if postadressen:
+        for afspraak in afspraken:
+            postadres_id = afspraak.get("postadres_id")
+            for postadres in postadressen:
+                if postadres.get("id") == postadres_id:
+                    afspraak["postadres"] = postadres
+
+    # Find an afdeling for every organisatie and find a postadres for every afdeling
     afdelingen = get_afdeling_by_afspraken(afspraken)
     postadressen = get_postadressen_by_afdelingen(afdelingen)
     organisaties = get_organisaties(afdelingen)
@@ -179,7 +180,7 @@ def create_row(afdeling, afspraak, burger, current_date_str):
     postcode = adres.get("postalCode", {})
     plaats = adres.get("locality", {})
     straat = adres.get("street", {})
-    huisnummer = adres.get("houseNumber",{})
+    huisnummer = adres.get("houseNumber", {})
 
     row = {
         "organisatie.naam": organisatie["naam"] if "naam" in organisatie else "",
