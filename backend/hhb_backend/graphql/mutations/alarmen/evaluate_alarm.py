@@ -105,7 +105,7 @@ async def evaluate_alarm(root, info, alarm: dict, active_alarms: List[dict]):
     next_alarm = None
     created_signaal = None
     if shouldCheckAlarm(alarm):
-        new_alarm = await should_create_next_alarm(_root, _info, alarm, alarm_check_date, activeAlarms)
+        next_alarm = await should_create_next_alarm(root, info, alarm, alarm_check_date, active_alarms)
         created_signaal = should_create_signaal(root, info, alarm, transactions)
     
     return {
