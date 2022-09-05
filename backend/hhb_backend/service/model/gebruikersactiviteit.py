@@ -1,5 +1,6 @@
 from typing import Optional, List
 
+from hhb_backend.service.model.alarm import Alarm
 from hhb_backend.service.model.afdeling import Afdeling
 from hhb_backend.service.model.afspraak import Afspraak
 from hhb_backend.service.model.bank_transaction import BankTransaction
@@ -14,6 +15,7 @@ from hhb_backend.service.model.journaalpost import Journaalpost
 from hhb_backend.service.model.organisatie import Organisatie
 from hhb_backend.service.model.rekening import Rekening
 from hhb_backend.service.model.rubriek import Rubriek
+from hhb_backend.service.model.signaal import Signaal
 
 
 class GebruikersactiviteitMeta:
@@ -23,6 +25,7 @@ class GebruikersactiviteitMeta:
 
 
 class GebruikersactiviteitSnapshot(BaseModel):
+    alarm: Optional[Alarm]
     afdeling: Optional[Afdeling]
     afspraak: Optional[Afspraak]
     burger: Optional[Burger]
@@ -36,6 +39,7 @@ class GebruikersactiviteitSnapshot(BaseModel):
     rubriek: Optional[Rubriek]
     transaction: Optional[BankTransaction]
     huishouden: Optional[Huishouden]
+    signaal: Optional[Signaal]
 
 
 class GebruikersactiviteitEntity:
@@ -49,6 +53,6 @@ class Gebruikersactiviteit(BaseModel):
     gebruiker_id: Optional[str]
     action: str
     entities: List[GebruikersactiviteitEntity]
-    snapshot_before: Optional[GebruikersactiviteitSnapshot]  # none when action was create
-    snapshot_after: Optional[GebruikersactiviteitSnapshot]  # none when action was delete
+    snapshot_before: Optional[GebruikersactiviteitSnapshot]
+    snapshot_after: Optional[GebruikersactiviteitSnapshot]
     meta: GebruikersactiviteitMeta

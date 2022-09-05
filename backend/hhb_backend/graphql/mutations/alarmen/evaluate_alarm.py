@@ -1,3 +1,4 @@
+import calendar
 import logging
 from datetime import *
 from tokenize import String
@@ -6,16 +7,16 @@ from typing import List, Optional
 import dateutil.parser
 import graphene
 import requests
+from dateutil.rrule import rrule, MONTHLY, YEARLY
 from graphql import GraphQLError
 
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models import alarm, signaal
 from hhb_backend.graphql.models.bank_transaction import Bedrag
-from hhb_backend.graphql.models.signaal import Signaal
 from hhb_backend.graphql.mutations.alarmen.alarm import AlarmHelper, generate_alarm_date
 from hhb_backend.graphql.mutations.signalen.signalen import SignaalHelper
-from hhb_backend.graphql.utils.gebruikersactiviteiten import (log_gebruikers_activiteit, gebruikers_activiteit_entities)
+from hhb_backend.graphql.utils.gebruikersactiviteiten import log_gebruikers_activiteit, gebruikers_activiteit_entities
 from hhb_backend.service.model.afspraak import Afspraak
 from hhb_backend.service.model.alarm import Alarm
 from hhb_backend.service.model.bank_transaction import BankTransaction
@@ -149,14 +150,14 @@ async def should_create_next_alarm(_root, _info, alarm: Alarm, alarm_check_date:
 
         # check if the end date is past or not
         end_date = alarm.endDate
-        if end_date is not None:
+        if end_date:
             if next_alarm_date > dateutil.parser.isoparse(end_date).date():
                 return None
 
         # add new alarm in sequence if it does not exist yet
         next_alarm_already_exists = does_next_alarm_exist(next_alarm_date, alarm, active_alarms)
         if not next_alarm_already_exists:
-            return await create_alarm(root, info, alarm, next_alarm_date)
+            return await create_alarm(_root, _info, alarm, next_alarm_date)
 
     return None
 
@@ -206,17 +207,12 @@ def get_afspraak_by_id(afspraak_id: int) -> Optional[Afspraak]:
     return hhb_dataloader().afspraken.load_one(afspraak_id)
 
 
-def get_banktransactions_by_journaal_ids(journaal_ids) -> List[dict]:
-    journaalposts = []
-    transactions = []
-    for journaalpost_id in journaal_ids:
-        journaalpost = hhb_dataloader().journaalposten.load_one(journaalpost_id)
-        journaalposts.append(journaalpost)
-
-        bank_transaction_id = journaalpost.get("transaction_id")
-        transactions.append(hhb_dataloader().bank_transactions.load_one(bank_transaction_id))
-
-    return transactions
+def get_banktransactions_by_journaal_ids(journaal_ids) -> List[BankTransaction]:
+    journaalposts = hhb_dataloader().journaalposten.load(journaal_ids)
+    return [
+        hhb_dataloader().bank_transactions.load_one(journaalpost.transaction_id)
+        for journaalpost in journaalposts
+    ]
 
 
 async def should_create_signaal(root, info, alarm: Alarm, transacties: List[BankTransaction]) -> Optional[Signaal]:
@@ -283,7 +279,7 @@ def update_alarm(alarm: Alarm, alarm_id, new_signal_id):
     alarm.signaalId = new_signal_id
     alarm_response = requests.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", json=alarm, headers={"Content-type": "application/json"})
     if alarm_response.status_code != 200:
-        raise GraphQLError(f"Fout bij het update van het alarm met het signaal. {alarm_response.json()}")
+        raise GraphQLError(f"Fout bij het updaten van het alarm met het signaal. {alarm_response.json()}")
     return alarm_response.json()["data"]
 
 

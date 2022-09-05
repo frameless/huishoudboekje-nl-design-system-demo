@@ -15,4 +15,3 @@ class Burger(BaseModel):
     postcode: str
     plaatsnaam: str
     huishouden_id: int
-    iban: str  # appears to be unused
