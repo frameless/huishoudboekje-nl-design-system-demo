@@ -9,7 +9,7 @@ class ExportLoader(DataLoader):
     service = HHB_SERVICES_URL
     model = "export"
 
-    def in_date_range(self, start_datum: date, eind_datum: date) -> List[dict]:
+    def in_date_range(self, start_datum: str, eind_datum: str) -> List[dict]:
         return self.load_all(params={
             'start_datum': start_datum,
             'eind_datum': eind_datum
