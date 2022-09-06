@@ -19,9 +19,7 @@ def test_burgers_detail_patch_success(client, burger_factory):
 
 def test_burgers_detail_patch_invalid_json(client, burger_factory):
     """ Test a succesfull POST on burgers_detail """
-    burger = burger_factory.createBurger()
-    edited_burger = row2dict(burger)
-    edited_burger["geboortedatum"] = "02-05-2010"
+    edited_burger = {"geboortedatum": "02-05-2010"}
 
     response = client.post('/burgers/1',
                            data=json.dumps(edited_burger), content_type='application/json')
