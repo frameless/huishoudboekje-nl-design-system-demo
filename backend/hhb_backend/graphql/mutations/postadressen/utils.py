@@ -3,33 +3,29 @@ from graphql import GraphQLError
 
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
+from hhb_backend.service.model.postadres import Postadres
 
 
 def create_afdeling_postadres(input, afdeling_id):
-    contactCatalogus_input = {
-        "street": input.get("straatnaam"),
-        "houseNumber": input.get("huisnummer"),
-        "postalCode": input.get("postcode"),
-        "locality": input.get("plaatsnaam")
-    }
-
-    contactCatalogus_response = requests.post(
-        f"{settings.POSTADRESSEN_SERVICE_URL}/addresses",
-        json=contactCatalogus_input
+    postadres_input = Postadres(
+        street=input.get("straatnaam"),
+        houseNumber=input.get("huisnummer"),
+        postalCode=input.get("postcode"),
+        locality=input.get("plaatsnaam")
     )
-    if contactCatalogus_response.status_code != 201:
-        raise GraphQLError(f"Upstream API responded: {contactCatalogus_response.json()}")
 
-    result = contactCatalogus_response.json()['data']
+    postadres_response = requests.post(
+        f"{settings.POSTADRESSEN_SERVICE_URL}/addresses",
+        json=postadres_input
+    )
+    if postadres_response.status_code != 201:
+        raise GraphQLError(f"Upstream API responded: {postadres_response.json()}")
+
+    result = postadres_response.json()['data']
 
     previous_afdeling = hhb_dataloader().afdelingen.load_one(afdeling_id)
 
-    postadressen_ids = list(
-        previous_afdeling["postadressen_ids"]
-        if previous_afdeling.get("postadressen_ids")
-        else []
-    )
-
+    postadressen_ids = previous_afdeling.postadressen_ids
     postadressen_ids.append(result['id'])
 
     afdeling_input = {

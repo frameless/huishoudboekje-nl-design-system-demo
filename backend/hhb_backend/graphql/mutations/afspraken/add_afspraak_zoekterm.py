@@ -1,7 +1,6 @@
 """ GraphQL mutation for adding an Afspraak zoekterm """
 
 import graphene
-import pydash
 import requests
 from graphql import GraphQLError
 
@@ -10,6 +9,7 @@ from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models import afspraak
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (gebruikers_activiteit_entities, log_gebruikers_activiteit)
 from hhb_backend.processen.automatisch_boeken import find_matching_afspraken_by_afspraak
+from hhb_backend.service.model.afspraak import Afspraak
 
 
 class AddAfspraakZoekterm(graphene.Mutation):
@@ -42,20 +42,16 @@ class AddAfspraakZoekterm(graphene.Mutation):
         """ Add zoekterm to afspraak """
 
         previous = hhb_dataloader().afspraken.load_one(afspraak_id)
-
         if previous is None:
             raise GraphQLError("Afspraak not found")
 
         # These arrays contains ids for their entities and not the instances, the hhb_service does not understand that,
         # Since removing them from the payload makes the service ignore them for updating purposes it is safe to remove
         # them here.
-        previous = pydash.omit(previous, 'journaalposten', 'overschrijvingen')
+        del previous.journaalposten
+        del previous.overschrijvingen
 
-        if previous["zoektermen"]:
-            zoektermen = list(previous["zoektermen"])
-        else:
-            zoektermen = list()
-
+        zoektermen = previous.zoektermen
         if zoekterm.lower() in (zk.lower() for zk in zoektermen):
             raise GraphQLError("Zoekterm already in zoektermen")
 
@@ -73,7 +69,7 @@ class AddAfspraakZoekterm(graphene.Mutation):
         if not response.ok:
             raise GraphQLError(f"Upstream API responded: {response.text}")
 
-        afspraak = response.json()["data"]
+        afspraak = Afspraak(response.json()["data"])
 
         matching_afspraken = await find_matching_afspraken_by_afspraak(afspraak)
 

@@ -46,10 +46,7 @@ class UpdateJournaalpostGrootboekrekening(graphene.Mutation):
     async def mutate(_root, _info, input, **_kwargs):
         """ Create the new Journaalpost """
 
-        previous: Journaalpost = hhb_dataloader().journaalposten.load_one(
-            input.get("id")
-        )
-
+        previous = hhb_dataloader().journaalposten.load_one(input.id)
         # Validate that the references exist
         if not previous:
             raise GraphQLError(f"journaalpost not found")
@@ -57,17 +54,17 @@ class UpdateJournaalpostGrootboekrekening(graphene.Mutation):
         if previous.afspraak:
             raise GraphQLError("journaalpost already connected to an afspraak")
 
-        grootboekrekening = hhb_dataloader().grootboekrekeningen.load_one(input.get("grootboekrekening_id"))
+        grootboekrekening = hhb_dataloader().grootboekrekeningen.load_one(input.grootboekrekening_id)
         if not grootboekrekening:
             raise GraphQLError("grootboekrekening not found")
 
-        if not (grootboekrekening["credit"] == previous.transaction["is_credit"]):
+        if grootboekrekening.credit is not previous.transaction.is_credit:
             raise GraphQLError(
                 f"credit in grootboekrekening and transaction do not match"
             )
 
         response = requests.post(
-            f"{settings.HHB_SERVICES_URL}/journaalposten/{input.get('id')}",
+            f"{settings.HHB_SERVICES_URL}/journaalposten/{input.id}",
             json=input,
         )
         if not response.ok:

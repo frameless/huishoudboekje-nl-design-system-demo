@@ -47,11 +47,13 @@ class Burger(graphene.ObjectType):
     async def resolve_huishouden(self, _info):
         return hhb_dataloader().huishoudens.load_one(self.get('huishouden_id'))
 
-    def bsn_length(self, bsn):
+    @staticmethod
+    def bsn_length(bsn):
         if len(str(bsn)) != 9 and len(str(bsn)) != 8 :
             raise GraphQLError("BSN is not valid: BSN should consist of 8 or 9 digits.")
 
-    def bsn_elf_proef(self, bsn):
+    @staticmethod
+    def bsn_elf_proef(bsn):
         total_sum = 0
         length = int(len(str(bsn)))
         for digit in str(bsn):

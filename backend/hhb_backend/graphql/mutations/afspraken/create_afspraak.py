@@ -10,10 +10,7 @@ from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.afdeling import Afdeling
 from hhb_backend.graphql.models.afspraak import Afspraak
 from hhb_backend.graphql.models.alarm import Alarm
-from hhb_backend.graphql.models.burger import Burger
 from hhb_backend.graphql.models.postadres import Postadres
-from hhb_backend.graphql.models.rekening import Rekening
-from hhb_backend.graphql.models.rubriek import Rubriek
 from hhb_backend.graphql.scalars.bedrag import Bedrag
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     log_gebruikers_activiteit,
@@ -66,20 +63,17 @@ class CreateAfspraak(graphene.Mutation):
             input["valid_from"] = str(datetime.now().date())
 
         # check burger_id
-        burger_id = input.get("burger_id")
-        burger: Burger = hhb_dataloader().burgers.load_one(burger_id)
+        burger = hhb_dataloader().burgers.load_one(input.burger_id)
         if not burger:
             raise GraphQLError("burger not found")
 
         # Check tegen_rekening_id
-        rekening_id = input.get("tegen_rekening_id")
-        rekening: Rekening = hhb_dataloader().rekeningen.load_one(rekening_id)
+        rekening = hhb_dataloader().rekeningen.load_one(input.tegen_rekening_id)
         if not rekening:
             raise GraphQLError("rekening not found")
 
         # check rubriek_id
-        rubriek_id = input.get("rubriek_id")
-        rubriek: Rubriek = hhb_dataloader().rubrieken.load_one(rubriek_id)
+        rubriek = hhb_dataloader().rubrieken.load_one(input.rubriek_id)
         if not rubriek:
             raise GraphQLError("rubriek not found")
 

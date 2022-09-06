@@ -42,8 +42,9 @@ class UpdateOrganisatie(graphene.Mutation):
         if not previous:
             raise GraphQLError("Organisatie not found")
 
-        Organisatie().unique_kvk_vestigingsnummer(kwargs.get("kvknummer"), kwargs.get("vestigingsnummer"), id)
+        Organisatie.unique_kvk_vestigingsnummer(kwargs.get("kvknummer"), kwargs.get("vestigingsnummer"), id)
 
+        organisatie = previous
         # Try update of organisatie service
         if kwargs:
             org_service_response = requests.post(
@@ -56,6 +57,5 @@ class UpdateOrganisatie(graphene.Mutation):
                 )
 
             organisatie = org_service_response.json()["data"]
-        else:
-            organisatie=previous
+
         return UpdateOrganisatie(organisatie=organisatie, previous=previous, ok=True)

@@ -58,35 +58,35 @@ class UpdateAfspraak(graphene.Mutation):
         # check burger_id - optional
         burger_id = input.get("burger_id")
         if burger_id:
-            burger: Burger = hhb_dataloader().burgers.load_one(burger_id)
+            burger = hhb_dataloader().burgers.load_one(burger_id)
             if not burger:
                 raise GraphQLError("burger not found")
 
         # Check tegen_rekening_id - optional
         rekening_id = input.get("tegen_rekening_id")
         if rekening_id:
-            rekening: Rekening = hhb_dataloader().rekeningen.load_one(rekening_id)
+            rekening = hhb_dataloader().rekeningen.load_one(rekening_id)
             if not rekening:
                 raise GraphQLError("rekening not found")
 
         # check rubriek_id - optional
         rubriek_id = input.get("rubriek_id")
         if rubriek_id:
-            rubriek: Rubriek = hhb_dataloader().rubrieken.load_one(rubriek_id)
+            rubriek = hhb_dataloader().rubrieken.load_one(rubriek_id)
             if not rubriek:
                 raise GraphQLError("rubriek not found")
 
         # check afdeling_id - optional
         afdeling_id = input.get("afdeling_id")
         if afdeling_id is not None:
-            afdeling: Afdeling = hhb_dataloader().afdelingen.load_one(afdeling_id)
+            afdeling = hhb_dataloader().afdelingen.load_one(afdeling_id)
             if not afdeling:
                 raise GraphQLError("afdeling not found")
 
         # Check postadres_id - optional
         postadres_id = input.get("postadres_id")
         if postadres_id is not None:
-            postadres: Postadres = hhb_dataloader().postadressen.load_one(postadres_id)
+            postadres = hhb_dataloader().postadressen.load_one(postadres_id)
             if not postadres:
                 raise GraphQLError("postadres not found")
 
@@ -98,9 +98,10 @@ class UpdateAfspraak(graphene.Mutation):
                 raise GraphQLError("alarm not found")
 
         # final update call
-        response = requests.post(f"{settings.HHB_SERVICES_URL}/afspraken/{id}", json=input,)
+        response = requests.post(f"{settings.HHB_SERVICES_URL}/afspraken/{id}", json=input)
         if not response.ok:
             raise GraphQLError(f"Upstream API responded: {response.text}")
+
         afspraak = response.json()["data"]
         previous = hhb_dataloader().afspraken.load_one(id)
 

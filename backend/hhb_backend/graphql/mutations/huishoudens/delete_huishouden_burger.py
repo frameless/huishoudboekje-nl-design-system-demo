@@ -56,7 +56,7 @@ class DeleteHuishoudenBurger(graphene.Mutation):
             new_huishouden = create_new_huishouden()
 
             # assign burger to new huishouden
-            params = {"huishouden_id": new_huishouden["id"]}
+            params = {"huishouden_id": new_huishouden.id}
             response = requests.post(
                 f"{settings.HHB_SERVICES_URL}/burgers/{burger_id}",
                 json=params,

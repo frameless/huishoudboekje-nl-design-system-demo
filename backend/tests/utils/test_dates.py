@@ -3,6 +3,7 @@ from datetime import date, timedelta
 import pytest
 
 from hhb_backend.graphql.utils.dates import afspraken_intersect, valid_afspraak
+from hhb_backend.service.model.afspraak import Afspraak
 
 
 @pytest.mark.parametrize(
@@ -63,16 +64,18 @@ afspraak = {
     "credit": False,
     }
 
+
 def test_valid_afspraak_valid():
-    assert valid_afspraak(afspraak)
+    assert valid_afspraak(Afspraak(afspraak))
+
 
 def test_valid_afspraak_not_valid():
     afspraak.update({"valid_through": "2022-01-01"})
+    assert not valid_afspraak(Afspraak(afspraak))
 
-    assert valid_afspraak(afspraak) == False
 
 def test_valid_afspraak_future_start_date():
     tomorrow = date.today() + timedelta(days=1)
     afspraak["valid_from"] = tomorrow.strftime("%Y-%m-%d")
     afspraak["valid_through"] = None
-    assert valid_afspraak(afspraak) == False
+    assert not valid_afspraak(Afspraak(afspraak))

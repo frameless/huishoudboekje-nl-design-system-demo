@@ -5,17 +5,17 @@ import graphene
 import requests
 from graphql import GraphQLError
 
-from hhb_backend.graphql.models.burger import Burger
-
-import hhb_backend.graphql.mutations.rekeningen.rekening_input as rekening_input
 import hhb_backend.graphql.mutations.huishoudens.huishouden_input as huishouden_input
+import hhb_backend.graphql.mutations.rekeningen.rekening_input as rekening_input
 from hhb_backend.graphql import settings
-from hhb_backend.graphql.mutations.rekeningen.utils import create_burger_rekening
+from hhb_backend.graphql.models.burger import Burger
 from hhb_backend.graphql.mutations.huishoudens.utils import create_huishouden_if_not_exists
+from hhb_backend.graphql.mutations.rekeningen.utils import create_burger_rekening
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     gebruikers_activiteit_entities,
     log_gebruikers_activiteit,
 )
+from hhb_backend.service.model import burger
 
 
 class CreateBurgerInput(graphene.InputObjectType):
@@ -58,13 +58,13 @@ class CreateBurger(graphene.Mutation):
     async def mutate(_root, _info, input):
         """ Create the new Gebruiker/Burger """
 
-        Burger().bsn_length(input.get('bsn'))
-        Burger().bsn_elf_proef(input.get('bsn'))
+        Burger.bsn_length(input.get('bsn'))
+        Burger.bsn_elf_proef(input.get('bsn'))
 
         rekeningen = input.pop("rekeningen", None)
 
         huishouden = await create_huishouden_if_not_exists(huishouden=input.pop("huishouden", {}))
-        input["huishouden_id"] = huishouden["id"]
+        input["huishouden_id"] = huishouden.id
 
         response = requests.post(
             f"{settings.HHB_SERVICES_URL}/burgers/",
@@ -74,12 +74,12 @@ class CreateBurger(graphene.Mutation):
         if response.status_code != 201:
             raise GraphQLError(f"Upstream API responded: {response.json()}")
 
-        burger = response.json()["data"]
+        created_burger = burger.Burger(response.json()["data"])
 
         if rekeningen:
-            burger["rekeningen"] = [
-                create_burger_rekening(burger["id"], rekening)
+            created_burger.rekeningen = [
+                create_burger_rekening(created_burger.id, rekening)
                 for rekening in rekeningen
             ]
 
-        return CreateBurger(ok=True, burger=burger)
+        return CreateBurger(ok=True, burger=created_burger)

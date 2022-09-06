@@ -37,12 +37,12 @@ class DeleteRubriek(graphene.Mutation):
         previous = hhb_dataloader().rubrieken.load_one(id)
 
         # Check if in use by afspraken
-        afspraken = previous.get("afspraken")
+        afspraken = previous.afspraken
         if afspraken:
             raise GraphQLError("Rubriek wordt gebruikt in een of meerdere afspraken - verwijderen is niet mogelijk.")
 
         # Check if in use by journaalposten
-        grootboekrekening_id = previous.get("grootboekrekening_id")
+        grootboekrekening_id = previous.grootboekrekening_id
         if grootboekrekening_id:
             journaalposten = hhb_dataloader().journaalposten.by_grootboekrekening(grootboekrekening_id)
             if journaalposten:

@@ -36,10 +36,7 @@ def create_afdeling_rekening(afdeling_id, rekening):
 def create_connected_rekening(object_id, object_type, rekening):
     existing_rekening = get_rekening_by_iban(rekening["iban"])
 
-    if existing_rekening:
-        result = existing_rekening
-    else:
-        result = create_rekening(rekening)
+    result = existing_rekening if existing_rekening else create_rekening(rekening)
 
     rekening_id = result["id"]
     rekening_response = requests.post(
@@ -54,11 +51,7 @@ def create_connected_rekening(object_id, object_type, rekening):
     if object_type == "afdelingen":
         previous_afdeling = get_afdeling(object_id)
 
-        if previous_afdeling.get("rekeningen_ids"):
-            rekeningen_ids = list(previous_afdeling["rekeningen_ids"])
-        else:
-            rekeningen_ids = list()
-
+        rekeningen_ids = previous_afdeling.rekeningen_ids
         rekeningen_ids.append(rekening_id)
 
         afdeling_input = {
@@ -104,7 +97,7 @@ def disconnect_afdeling_rekening(afdeling_id: int, rekening_id: int):
 
     # Delete the Id from rekeningen_ids column in afdeling
     previous_afdeling = hhb_dataloader().afdelingen.load_one(afdeling_id)
-    previous_afdeling["rekeningen_ids"].remove(rekening_id)
+    previous_afdeling.rekeningen_ids.remove(rekening_id)
     previous_afdeling.pop("id")
 
     # Try update of organisatie service
@@ -128,17 +121,6 @@ def delete_rekening(rekening_id: int):
         raise GraphQLError(f"Failure to delete rekening:{rekening_id}")
     
 
-def rekening_used_check(rekening_id):
+def rekening_used_check(rekening_id) -> (list, list, list):
     rekening = hhb_dataloader().rekeningen.load_one(rekening_id)
-    used = {}
-    afspraken = rekening.get("afspraken")
-    if afspraken:
-        used.update({"afspraken": afspraken})
-    burgers = rekening.get("burgers")
-    if burgers:
-        used.update({"burgers": burgers})
-    afdelingen = rekening.get("afdelingen")
-    if afdelingen:
-        used.update({"afdelingen": afdelingen})
-
-    return used
+    return rekening.afdelingen or [], rekening.afspraken or [], rekening.burgers or []

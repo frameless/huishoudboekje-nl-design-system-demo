@@ -1,5 +1,4 @@
 import graphene
-import pydash
 import requests
 from graphql import GraphQLError
 
@@ -62,9 +61,10 @@ class UpdateAfspraakBetaalinstructie(graphene.Mutation):
         # These arrays contains ids for their entities and not the instances, the hhb_service does not understand that,
         # Since removing them from the payload makes the service ignore them for updating purposes it is safe to remove
         # them here.
-        previous = pydash.omit(previous, 'journaalposten', 'overschrijvingen')
+        del previous.journaalposten
+        del previous.overschrijvingen
 
-        if previous.get("credit") == True:
+        if previous.credit:
             raise GraphQLError("Betaalinstructie is alleen mogelijk bij uitgaven")
         if (betaalinstructie.by_day and betaalinstructie.by_month_day) or (not betaalinstructie.by_day and not betaalinstructie.by_month_day):
             raise GraphQLError("Betaalinstructie: 'by_day' of 'by_month_day' moet zijn ingevuld.")

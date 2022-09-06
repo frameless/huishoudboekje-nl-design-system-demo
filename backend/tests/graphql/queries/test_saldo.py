@@ -15,7 +15,7 @@ def test_saldo_burger(client):
         )
         rm.get(
             f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/saldo/?filter_ids=1,2",
-            json={'data': {'bedrag': 12300}}
+            json={'data': [{'bedrag': 12300}]}
         )
         rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/")
         response = client.post(
@@ -60,7 +60,7 @@ def test_saldo_burger_no_transactions(client):
 
 def test_saldo_totaal(client):
     with requests_mock.Mocker() as rm:
-        rm.get(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/saldo/", json={'data': {'bedrag': 45600}})
+        rm.get(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/saldo/", json={'data': [{'bedrag': 45600}]})
         rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/")
         response = client.post(
             "/graphql",

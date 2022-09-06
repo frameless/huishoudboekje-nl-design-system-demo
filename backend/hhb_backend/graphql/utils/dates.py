@@ -1,12 +1,14 @@
 from datetime import date, datetime
 
-import hhb_backend.graphql.models.afspraak as afspraak
+from hhb_backend.service.model.afspraak import Afspraak
+
 
 def to_date(date_str: str = None) -> date:
     """Convenient function for deriving a datetime.date from a string with format Y-m-d"""
     return datetime.strptime(date_str, "%Y-%m-%d").date() if date_str else None
 
-def valid_afspraak(afspraak, check_date = date.today()):
+
+def valid_afspraak(afspraak: Afspraak, check_date=date.today()):
     """Check if an afspraak is valid on a specified date.
 
     - If the valid_from date is in the future from today, the afspraak is not valid.
@@ -25,21 +27,20 @@ def valid_afspraak(afspraak, check_date = date.today()):
     bool
         If the afspraak is valid or not on the check_date
     """
-    
-    afspraak_valid_from = afspraak.get("valid_from")
-    if afspraak_valid_from:
-        valid_from = to_date(afspraak_valid_from)
+
+    if afspraak.valid_from:
+        valid_from = to_date(afspraak.valid_from)
         today = date.today()
         if valid_from > today:
             return False
 
-    afspraak_valid_through = afspraak.get("valid_through")
-    if afspraak_valid_through:
-        valid_through = to_date(afspraak_valid_through)
+    if afspraak.valid_through:
+        valid_through = to_date(afspraak.valid_through)
         if valid_through < check_date:
             return False
             
     return True
+
 
 def afspraken_intersect(
     valid_from1: date, valid_from2: date, valid_through1: date = None, valid_through2: date = None

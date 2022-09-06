@@ -53,7 +53,7 @@ class UpdateRekening(graphene.Mutation):
         for k in ["iban", "rekeninghouder"]:
             rekening.setdefault(k, previous[k])
 
-        if previous["iban"] != rekening["iban"]:
+        if previous.iban != rekening["iban"]:
             raise GraphQLError(f"Rekening has different iban")
 
         response = requests.post(

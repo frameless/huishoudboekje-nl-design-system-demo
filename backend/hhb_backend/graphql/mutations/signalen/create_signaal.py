@@ -16,6 +16,6 @@ class CreateSignaal(graphene.Mutation):
     @staticmethod
     async def mutate(root, info, input: CreateSignaalInput):
         """ Mutatie voor het aanmaken van een nieuw Signaal """
-        response_signaal = SignaalHelper.create(root, info, input)
+        response_signaal = await SignaalHelper.create(root, info, input)
 
         return CreateSignaal(signaal=response_signaal.signaal, ok=True)
