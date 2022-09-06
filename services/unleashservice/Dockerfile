@@ -1,6 +1,6 @@
 ARG DOCKER_PROXY=''
 
-FROM ${DOCKER_PROXY}bitnami/node:16
+FROM ${DOCKER_PROXY}bitnami/node:18
 
 WORKDIR /app
 

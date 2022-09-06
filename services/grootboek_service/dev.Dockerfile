@@ -1,6 +1,5 @@
-FROM python:3.8
+FROM python:3.10.7
 
-# install the dependencies only for fast rebuilds
 COPY ./grootboek_service /app
 COPY ./core_service/core_service /app/core_service
 
