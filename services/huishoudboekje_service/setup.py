@@ -15,7 +15,7 @@ setup(
         "Flask-SQLAlchemy>=2.5.1,<3",
         "Flask-Migrate>=2.7.0,<3",
         "Flask-Script>=2.0.6,<3",
-        "Flask-Inputs>=0.3.0,<1",
+        "Flask-Inputs @ git+https://github.com/rez4mt/flask-inputs@patch-1#egg=flask_inputs", #>=0.3.0,<1",
         "jsonschema>=4.12.1,<5",
         'gunicorn>=20.0.4,<21',
         'schwifty>=2020.11.0',
