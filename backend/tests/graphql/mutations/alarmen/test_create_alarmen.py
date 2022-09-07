@@ -12,7 +12,6 @@ def test_create_alarm(client):
         input = {
             "isActive": True,
             "afspraakId": afspraak_id,
-            "startDate": "2021-12-02",
             "datumMargin": 5,
             "bedrag": "120.12",
             "bedragMargin": "10.34",

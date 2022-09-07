@@ -281,22 +281,3 @@ def update_alarm(alarm: Alarm, alarm_id, new_signal_id):
     if alarm_response.status_code != 200:
         raise GraphQLError(f"Fout bij het updaten van het alarm met het signaal. {alarm_response.json()}")
     return alarm_response.json()["data"]
-
-
-class WeekdayHelper:
-
-    @staticmethod
-    def weekday_names_to_indexes(weekday_names) -> list:
-        indexes = []
-        for weekday_name in weekday_names:
-            index = WeekdayHelper.weekday_name_to_index(weekday_name)
-            indexes.append(index)
-        return indexes
-
-    @staticmethod
-    def weekday_name_to_index(weekday_name: str) -> int:
-        weekday_collection = list(calendar.day_name)
-        for index, weekday in enumerate(weekday_collection):
-            if weekday == weekday_name:
-                return index
-        return 0 # monday

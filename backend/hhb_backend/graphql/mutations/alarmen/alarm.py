@@ -4,7 +4,6 @@ from datetime import date, datetime, timezone, timedelta
 import graphene
 import requests
 from dateutil.rrule import rrule, MONTHLY, YEARLY
-from flask import request
 from graphql import GraphQLError
 
 from hhb_backend.graphql.utils.dates import valid_afspraak, to_date
@@ -65,6 +64,12 @@ class AlarmHelper:
 
     @log_gebruikers_activiteit
     async def create(_root, info, input):
+        name = info.field_name
+        if "evaluate" in name:
+            name += " - createAlarm"
+            info.field_name = name
+
+        # TODO eventually turn this back on, for testing purposes it is off
         # alarm_date = parser.parse(input.startDate).date()
         # utc_now = date.today()
         # if alarm_date < utc_now:
@@ -79,32 +84,13 @@ class AlarmHelper:
             # can't use attributes to set data
             input["startDate"] = generate_alarm_date(input).isoformat()
 
-        return AlarmHelper._create_alarm(info, input)
-
-    @staticmethod
-    def _create_alarm(info, input):
-        name = info.field_name
-        if "evaluate" in name:
-            name += " - createAlarm"
-            info.field_name = name
-
-        # TODO eventually turn this back on, for testing purposes it is off
-        # alarm_date = parser.parse(input.startDate).date()
-        # utc_now = date.today()
-        # if alarm_date < utc_now:
-        #     raise GraphQLError(f"De alarmdatum moet in de toekomst liggen.")
-
-        if ((input["byMonth"] is not None and input["byMonthDay"] is None) or (input["byMonth"] is None and input["byMonthDay"] is not None)) or (
-            (len(input["byMonth"]) >= 1 and len(input["byMonthDay"]) <= 0) or (len(input["byMonth"]) <= 0 and len(input["byMonthDay"]) >= 1)):
-            raise GraphQLError(f"Vul zowel byMonth als byMonthDay in, of geen van beide.")
-
         afspraak_id = input["afspraakId"]
         afspraak = hhb_dataloader().afspraken.load_one(afspraak_id)
         if not afspraak:
             raise GraphQLError(f"Afspraak bestaat niet.")
 
         # check if afspraak is valid
-        if afspraak.burger_id is None:
+        if afspraak["burger_id"] is None:
             raise GraphQLError("De afspraak is niet gekoppeld aan een burger.")
 
         start_date_alarm = to_date(input["startDate"])
