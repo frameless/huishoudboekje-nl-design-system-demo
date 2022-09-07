@@ -15,10 +15,11 @@ setup(
         "Flask-SQLAlchemy>=2.4.4,<3",
         "Flask-Migrate>=2.5.3,<3",
         "Flask-Script>=2.0.6,<3",
-        "Flask-Inputs>=0.3.0,<1",
         "jsonschema>=3.2.0,<4",
         'gunicorn>=20.0.4,<21',
         'Werkzeug>=1.0.1,<2',
-        'MarkupSafe==2.0.1'
+        'MarkupSafe==2.0.1',
+        'future==0.16.0',
+        'WTForms==2.0.2'
     ],
 )

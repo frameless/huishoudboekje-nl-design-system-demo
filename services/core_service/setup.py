@@ -14,9 +14,10 @@ setup(
         "SQLAlchemy>=1.4.40,<2",
         "psycopg2-binary>=2.8.6,<3",
         "Flask-SQLAlchemy>=2.5.1,<3",
-        "Flask-Inputs>=0.3.0,<1",
         "jsonschema>=4.12.1,<5",
         'Werkzeug>=1.0.1,<2',
-        'MarkupSafe==2.0.1'
-    ],
+        'MarkupSafe==2.0.1',
+        'future==0.16.0',
+        'WTForms==2.0.2'
+    ]
 )
