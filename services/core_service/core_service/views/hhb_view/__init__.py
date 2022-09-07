@@ -2,11 +2,11 @@ import re
 
 from flask.views import MethodView
 from flask import request, abort, make_response
-from flask_inputs import Inputs
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
-from flask_inputs.validators import JsonSchema
 from core_service.utils import row2dict
+from core_service.inputs.inputs import Inputs
+from core_service.inputs.validators import JsonSchema
 from core_service.database import db
 from core_service.views.hhb_view.hhb_object import HHBObject
 from core_service.views.hhb_view.hhb_query import HHBQuery

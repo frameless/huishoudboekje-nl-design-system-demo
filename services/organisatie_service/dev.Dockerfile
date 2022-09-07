@@ -1,11 +1,8 @@
-FROM python:3.8
+FROM python:3.10.7
 
-# install the dependencies only for fast rebuilds
 COPY ./organisatie_service /app
 COPY ./core_service/core_service /app/core_service
 
-# VOLUME /app
-# VOLUME /app/core_service
 WORKDIR /app
 
 RUN apt-get update && \
