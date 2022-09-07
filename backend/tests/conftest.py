@@ -6,7 +6,6 @@ import uuid
 import pytest
 import jwt
 from flask import testing
-from itsdangerous import TimedJSONWebSignatureSerializer
 from werkzeug.datastructures import Headers
 
 from hhb_backend.app import create_app
