@@ -1,4 +1,4 @@
-FROM python:3.10.7
+FROM python:3.10.7-slim
 
 # install the dependencies only for fast rebuilds
 COPY ./bank_transactie_service /app
@@ -18,7 +18,7 @@ USER app
 
 ENV FLASK_APP="bank_transactie_service.app"
 ENV FLASK_RUN_PORT="8000"
-ENV FLASK_ENV="development"
+ENV FLASK_DEBUG="1"
 ENV JWT_SECRET="local-secret"
 ENV DATABASE_URL="postgresql://hhb:hhb@host.docker.internal/banktransactieservice"
 

@@ -1,4 +1,4 @@
-FROM python:3.10.7
+FROM python:3.10.7-slim
 
 # install the dependencies only for fast rebuilds
 COPY ./backend /app
