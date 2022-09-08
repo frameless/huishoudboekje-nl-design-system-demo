@@ -2,6 +2,7 @@
 import logging
 import os
 from flask import Flask, Response
+from flask_migrate import Migrate
 
 from huishoudboekje_service.views import (
     BurgerView,
@@ -33,6 +34,7 @@ def create_app(config_name='huishoudboekje_service.config.Config'):
     logging.info(f"Starting {__name__} with {config_name}")
 
     db.init_app(app)
+    migrate = Migrate(app, db)
 
     @app.route('/health')
     def health():
