@@ -18,18 +18,6 @@ DATABASE_URL="{your_postgres_connection_string}"
 
 Once the service is running, a REST API will be available on `http://localhost:8080`.
 
-### Example HTTP request
+### Example HTTP requests
 
-Below is an example of how to create a new entry. More examples [here](./example_requests.http).
-
-```http request
-POST http://localhost:8080/v1/alarmen
-Accept: application/json
-Content-Type: application/json
-
-{
- 
-}
-```
-
-
+Please see [example_requests.http](./example_requests.http) for all possible requests.
