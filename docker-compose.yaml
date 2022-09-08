@@ -1,5 +1,4 @@
-# The frontend is not included because it's really, really slow when running in dev mode in Docker, please run it natively on your machine.
-version: "3.7"
+version: "3.8"
 
 x-backend: &x-backend
   build:
