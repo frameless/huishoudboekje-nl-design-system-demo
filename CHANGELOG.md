@@ -117,13 +117,44 @@ Een probleem waarbij sommige gebruikers niet konden inloggen is opgelost.
 
   Change `npm run db:push` to `npm run db:deploy`.
 
+  Also, run the following command inside the container to perform some updates to the database. This should not cause any data loss.
+
+  ```shell
+  npx prisma migrate resolve --applied 20211206090356_initial
+  ```
+
   ### Alarmenservice
 
   Change `npm run db:push` to `npm run db:deploy`.
 
+  Also, run the following commands to perform some updates to the database. These commands should not cause any data loss.
+
+  ```shell
+  npx prisma migrate resolve --applied 20211201095236_replace_datetime_with_string_type
+  npx prisma migrate resolve --applied 20211202103158_add_afspraak_id
+  npx prisma migrate resolve --applied 20211206090910_simplify_alarm_schema
+  npx prisma migrate resolve --applied 20211206101225_bedrag_is_int_not_string
+  npx prisma migrate resolve --applied 20211210113917_status_to_boolean
+  npx prisma migrate resolve --applied 20211215125312_added_optional_signaal_field_to_alarm
+  npx prisma migrate resolve --applied 20211216092700_added_by_day_by_month_by_month_day
+  npx prisma migrate resolve --applied 20211216093009_removed_signaal_id
+  npx prisma migrate resolve --applied 20211216093237_save_bedrag_as_float
+  npx prisma migrate resolve --applied 20211216103358_add_by_day_by_month_by_month_day_and_readd_signalid
+  ```
+
   ### Signalenservice
 
   Change `npm run db:push` to `npm run db:deploy`.
+
+  Also, run the following commands to perform some updates to the database. These commands should not cause any data loss.
+
+  ```shell
+  npx prisma migrate resolve --applied 20211213120212_added_model_signal
+  npx prisma migrate resolve --applied 20211213120752_time_created_is_now_by_default
+  npx prisma migrate resolve --applied 20211213121354_context_is_optional
+  npx prisma migrate resolve --applied 20220221163146_removed_time_created_added_time_updated
+  ```
+
 
 - 3b9eb21c: Fixed #955: We've removed the bundled Keycloak from the repository, as we're using a separately deployed Keycloak for our own testing purposes.
   This change should not affect your current deployment configuration if you were already not using the bundled Keycloak as the authentication provider.
