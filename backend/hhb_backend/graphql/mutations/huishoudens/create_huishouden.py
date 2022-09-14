@@ -57,9 +57,6 @@ class CreateHuishouden(graphene.Mutation):
                 )
             burger.huishouden_id = created_huishouden.id
 
-            # TODO: remove this check as it should not be necessary
-            burger.iban = burger.iban or ""
-
             await update_existing_burger(burger=burger)
 
         return CreateHuishouden(huishouden=created_huishouden, ok=True)

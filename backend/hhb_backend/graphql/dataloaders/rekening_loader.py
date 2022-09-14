@@ -15,8 +15,8 @@ class RekeningLoader(DataLoader[Rekening]):
     def by_afdeling(self, afdeling_id: int) -> List[Rekening]:
         return self.load(afdeling_id, filter_item="filter_afdelingen")
 
-    def by_iban(self, iban: str) -> dict:
+    def by_iban(self, iban: str) -> Rekening:
         return self.load_one(iban, filter_item="filter_ibans")
 
-    def by_ibans(self, iban: List[str]) -> List[dict]:
+    def by_ibans(self, iban: List[str]) -> List[Rekening]:
         return self.load(iban, filter_item="filter_ibans")

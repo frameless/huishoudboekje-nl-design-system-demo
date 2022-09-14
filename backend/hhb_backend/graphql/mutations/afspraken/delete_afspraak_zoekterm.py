@@ -6,9 +6,8 @@ from graphql import GraphQLError
 
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
-from hhb_backend.graphql.models import afspraak
+from hhb_backend.graphql.models.afspraak import find_matching_afspraken_by_afspraak, Afspraak as GrapheneAfspraak
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (gebruikers_activiteit_entities, log_gebruikers_activiteit)
-from hhb_backend.processen.automatisch_boeken import find_matching_afspraken_by_afspraak
 from hhb_backend.service.model.afspraak import Afspraak
 
 
@@ -19,9 +18,9 @@ class DeleteAfspraakZoekterm(graphene.Mutation):
         zoekterm = graphene.String(required=True)
 
     ok = graphene.Boolean()
-    afspraak = graphene.Field(lambda: afspraak.Afspraak)
-    previous = graphene.Field(lambda: afspraak.Afspraak)
-    matching_afspraken = graphene.List(lambda: afspraak.Afspraak)
+    afspraak = graphene.Field(lambda: GrapheneAfspraak)
+    previous = graphene.Field(lambda: GrapheneAfspraak)
+    matching_afspraken = graphene.List(lambda: GrapheneAfspraak)
 
     def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
         return dict(

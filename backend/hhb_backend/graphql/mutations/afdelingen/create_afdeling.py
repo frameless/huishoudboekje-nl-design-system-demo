@@ -14,6 +14,7 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     gebruikers_activiteit_entities,
     log_gebruikers_activiteit,
 )
+from hhb_backend.service.model.rekening import Rekening
 
 
 class CreateAfdelingInput(graphene.InputObjectType):
@@ -81,7 +82,7 @@ class CreateAfdeling(graphene.Mutation):
             rekening_ids = []
             for rekening in rekeningen:
                 created_rekening = create_afdeling_rekening(afdeling_id, rekening)
-                rekening_ids.append(created_rekening.id)
+                rekening_ids.append(created_rekening.get("id"))
             # update afdeling with rekening
             update_response = requests.post(
                 f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/{afdeling_id}",

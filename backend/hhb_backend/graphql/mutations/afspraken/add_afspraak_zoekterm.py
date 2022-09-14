@@ -6,9 +6,8 @@ from graphql import GraphQLError
 
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
-from hhb_backend.graphql.models import afspraak
+from hhb_backend.graphql.models.afspraak import find_matching_afspraken_by_afspraak, Afspraak as GrapheneAfspraak
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (gebruikers_activiteit_entities, log_gebruikers_activiteit)
-from hhb_backend.processen.automatisch_boeken import find_matching_afspraken_by_afspraak
 from hhb_backend.service.model.afspraak import Afspraak
 
 
@@ -19,9 +18,9 @@ class AddAfspraakZoekterm(graphene.Mutation):
         zoekterm = graphene.String(required=True)
 
     ok = graphene.Boolean()
-    afspraak = graphene.Field(lambda: afspraak.Afspraak)
-    previous = graphene.Field(lambda: afspraak.Afspraak)
-    matching_afspraken = graphene.List(lambda: afspraak.Afspraak)
+    afspraak = graphene.Field(lambda: GrapheneAfspraak)
+    previous = graphene.Field(lambda: GrapheneAfspraak)
+    matching_afspraken = graphene.List(lambda: GrapheneAfspraak)
 
     def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
         return dict(
@@ -41,7 +40,7 @@ class AddAfspraakZoekterm(graphene.Mutation):
     async def mutate(_root, _info, afspraak_id: int, zoekterm):
         """ Add zoekterm to afspraak """
 
-        previous = hhb_dataloader().afspraken.load_one(afspraak_id)
+        previous: Afspraak = hhb_dataloader().afspraken.load_one(afspraak_id)
         if previous is None:
             raise GraphQLError("Afspraak not found")
 
@@ -53,7 +52,7 @@ class AddAfspraakZoekterm(graphene.Mutation):
 
         zoektermen = previous.zoektermen
         if zoekterm.lower() in (zk.lower() for zk in zoektermen):
-            raise GraphQLError("Zoekterm already in zoektermen")
+            raise GraphQLError("Zoekterm already exists")
 
         zoektermen.append(zoekterm)
 

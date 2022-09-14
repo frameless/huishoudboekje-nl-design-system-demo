@@ -28,7 +28,6 @@ class Burger(db.Model):
     telefoonnummer = Column(String)
     email = Column(String)
     geboortedatum = Column(Date)
-    iban = Column(String)
 
     huishouden_id = Column(Integer, ForeignKey("huishoudens.id"), nullable=False)
 
