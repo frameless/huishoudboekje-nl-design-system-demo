@@ -14,7 +14,6 @@ setup(
         "psycopg2-binary>=2.9.3,<3",
         "Flask-SQLAlchemy>=2.5.1,<3",
         "Flask-Migrate>=3.1.0,<4",
-        "Flask-Script>=2.0.6,<3",
         "jsonschema>=4.15.0,<5",
         'gunicorn>=20.1.0,<21',
         "Werkzeug>=2.2.2,<3",

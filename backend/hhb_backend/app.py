@@ -2,7 +2,6 @@
 from http.client import HTTPException
 import io
 import logging
-import os
 
 import hhb_backend.graphql.blueprint as graphql_blueprint
 import requests

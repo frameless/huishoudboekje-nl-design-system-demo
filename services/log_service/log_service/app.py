@@ -1,9 +1,9 @@
 """ Main app for log_service """
 import logging
 import logging.config
-import os
 
 from flask import Flask, Response
+from flask_migrate import Migrate
 
 from core_service import database
 from log_service.views.gebruikersactiviteit import GebruikersActiviteitView
@@ -18,6 +18,7 @@ def create_app(
     app.config.from_object(config_name)
 
     db.init_app(app)
+    Migrate(app, db)
 
     logging.basicConfig(
         format='%(asctime)s %(levelname)-8s %(message)s',
