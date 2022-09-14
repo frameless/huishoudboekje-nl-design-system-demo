@@ -16,7 +16,7 @@ RUN useradd --home-dir /app --create-home --shell /bin/bash app
 USER app
 
 ENV FLASK_APP="hhb_backend.app"
-ENV FLASK_ENV="development"
+ENV FLASK_DEBUG="1"
 ENV FLASK_RUN_PORT="8000"
 ENV PREFIX="/api"
 ENV HHB_SERVICE_URL="http://huishoudboekjeservice:8000"
