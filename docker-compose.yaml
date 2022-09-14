@@ -130,19 +130,9 @@ services:
     image: postgres:13-alpine
     command:
       - /bin/sh
-      - -c
-      - >-
-        export PGPASSWORD=postgres &&
-        psql -h db -U postgres -c "CREATE USER hhb WITH PASSWORD 'hhb'" || true &&
-        psql -h db -U postgres -c "ALTER USER hhb WITH SUPERUSER" || true &&
-        psql -h db -U postgres -c "CREATE DATABASE huishoudboekjeservice" || true &&
-        psql -h db -U postgres -c "CREATE DATABASE organisatieservice" || true &&
-        psql -h db -U postgres -c "CREATE DATABASE banktransactieservice" || true &&
-        psql -h db -U postgres -c "CREATE DATABASE grootboekservice" || true &&
-        psql -h db -U postgres -c "CREATE DATABASE logservice" || true &&
-        psql -h db -U postgres -c "CREATE DATABASE postadressenservice" || true &&
-        psql -h db -U postgres -c "CREATE DATABASE alarmenservice" || true &&
-        psql -h db -U postgres -c "CREATE DATABASE signalenservice" || true
+      - /tmp/scripts/db-init.sh
+    volumes:
+      - ./scripts:/tmp/scripts:ro
     profiles:
       - db
     depends_on:
@@ -155,6 +145,7 @@ services:
       GRAPHQL_API_URL: http://backend:8000/graphql
     volumes:
       - ./sampleData:/app/data
+    command: ["importer", "import"]
     profiles:
       - sampledata
 
