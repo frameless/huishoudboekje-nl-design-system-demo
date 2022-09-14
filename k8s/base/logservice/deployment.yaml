@@ -66,8 +66,8 @@ spec:
                 secretKeyRef:
                   name: hhb-database-secrets
                   key: LOGSERVICE_DATABASE_URL
-          command: ["python"]
-          args: ["manage.py", "db", "upgrade"]
+          command: ["flask"]
+          args: ["db", "upgrade"]
       containers:
         - name: hhb-logservice
           image: logservice

@@ -15,7 +15,7 @@ This service contains the functionality needed to access data that belongs to th
     export PATH=/Applications/Postgres.app/Contents/Versions/13/bin:$PATH
     export FLASK_APP="huishoudboekje_service.app"
     export FLASK_RUN_PORT="8000"
-    export FLASK_ENV="development"
+    export FLASK_DEBUG="1"
     export JWT_SECRET="local-secret"
     export DATABASE_URL="postgresql://huishoudboekjeservice:huishoudboekjeservice@localhost/huishoudboekjeservice"
     ```
@@ -60,7 +60,7 @@ This service contains the functionality needed to access data that belongs to th
     set PATH=/Applications/Postgres.app/Contents/Versions/13/bin;%PATH%
     set FLASK_APP=huishoudboekje_service.app
     set FLASK_RUN_PORT=8000
-    set FLASK_ENV="development"
+    set FLASK_DEBUG="1"
     set JWT_SECRET="local-secret"
     set DATABASE_URL=postgresql://huishoudboekjeservice:huishoudboekjeservice@localhost/huishoudboekjeservice
     ```

@@ -71,8 +71,8 @@ spec:
                 secretKeyRef:
                   name: hhb-database-secrets
                   key: POSTGRESQL_PASSWORD
-          command: ["python"]
-          args: ["manage.py", "db", "upgrade"]
+          command: ["flask"]
+          args: ["db", "upgrade"]
       containers:
         - name: hhb-banktransactieservice
           image: banktransactieservice

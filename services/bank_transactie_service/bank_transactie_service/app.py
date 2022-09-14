@@ -1,9 +1,9 @@
 """ Main app for bank_transactie_service """
 import logging
 import logging.config
-import os
 
 from flask import Flask, Response
+from flask_migrate import Migrate
 
 from bank_transactie_service.views.bank_transaction import BankTransactionView
 from bank_transactie_service.views.saldo import SaldoView
@@ -18,6 +18,8 @@ def create_app(config_name='bank_transactie_service.config.Config'):
     app.config.from_object(config_name)
 
     db.init_app(app)
+    Migrate(app, db)
+
     logging.basicConfig(
         format='%(asctime)s %(levelname)-8s %(message)s',
         level=app.config["LOG_LEVEL"],

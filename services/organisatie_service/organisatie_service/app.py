@@ -1,11 +1,14 @@
 """ Main app for organisatie_service """
-import os
 import logging
+
 from flask import Flask, Response
+from flask_migrate import Migrate
+
 from organisatie_service.views.organisaties import OrganisatieView
 from organisatie_service.views.afdelingen import AfdelingView
 from core_service import database
 from organisatie_service import config
+
 db = database.db
 from models import *
 
@@ -20,6 +23,7 @@ def create_app(config_name='organisatie_service.config.Config'):
     logging.info(f"Starting {__name__} with {config_name}")
     
     db.init_app(app)
+    Migrate(app, db)
 
     @app.route('/health')
     def health():

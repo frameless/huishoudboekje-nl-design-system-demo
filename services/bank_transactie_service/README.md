@@ -15,7 +15,7 @@ This service contains the functionality needed to access data from banktransacti
     export PATH=/Applications/Postgres.app/Contents/Versions/13/bin:$PATH
     export FLASK_APP="bank_transactie_service.app"
     export FLASK_RUN_PORT="8002"
-    export FLASK_ENV="development"
+    export FLASK_DEBUG="1"
     export JWT_SECRET="local-secret"
     export DATABASE_URL="postgresql://transactieservice:transactieservice@localhost/transactieservice"
     ```
@@ -61,7 +61,7 @@ This service contains the functionality needed to access data from banktransacti
     set PATH=/Applications/Postgres.app/Contents/Versions/13/bin;%PATH%
     set FLASK_APP=bank_transactie_service.app
     set FLASK_RUN_PORT=8002
-    set FLASK_ENV="development"
+    set FLASK_DEBUG="1"
     set JWT_SECRET="local-secret"
     set DATABASE_URL=postgresql://transactieservice:transactieservice@localhost/transactieservice
     ```

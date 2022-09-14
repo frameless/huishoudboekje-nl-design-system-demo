@@ -2,7 +2,6 @@
 from http.client import HTTPException
 import io
 import logging
-import os
 
 import hhb_backend.graphql.blueprint as graphql_blueprint
 import requests
@@ -72,7 +71,7 @@ def create_app(
 
         export_file = io.BytesIO(xml_data.encode("utf-8"))
         response = make_response(
-            send_file(export_file, attachment_filename=xml_filename)
+            send_file(export_file, download_name=xml_filename)# attachment_filename=xml_filename)
         )
         response.headers[
             "Content-Disposition"

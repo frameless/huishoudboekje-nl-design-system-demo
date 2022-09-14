@@ -15,7 +15,7 @@ This service contains the functionality needed to access data from grootboeken.
     export PATH=/Applications/Postgres.app/Contents/Versions/13/bin:$PATH
     export FLASK_APP="grootboek_service.app"
     export FLASK_RUN_PORT="8003"
-    export FLASK_ENV="development"
+    export FLASK_DEBUG="1"
     export JWT_SECRET="local-secret"
     export DATABASE_URL="postgresql://grootboekservice:grootboekservice@localhost/grootboekservice"
     ```
@@ -61,7 +61,7 @@ This service contains the functionality needed to access data from grootboeken.
     set PATH=/Applications/Postgres.app/Contents/Versions/13/bin;%PATH%
     set FLASK_APP=grootboek_service.app
     set FLASK_RUN_PORT=8003
-    set FLASK_ENV="development"
+    set FLASK_DEBUG="1"
     set JWT_SECRET="local-secret"
     set DATABASE_URL=postgresql://grootboekservice:grootboekservice@localhost/grootboekservice
     ```

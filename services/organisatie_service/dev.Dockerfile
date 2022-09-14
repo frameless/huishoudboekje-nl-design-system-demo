@@ -1,4 +1,4 @@
-FROM python:3.10.7
+FROM python:3.10.7-slim
 
 COPY ./organisatie_service /app
 COPY ./core_service/core_service /app/core_service
@@ -17,7 +17,7 @@ USER app
 
 ENV FLASK_APP="organisatie_service.app"
 ENV FLASK_RUN_PORT="8000"
-ENV FLASK_ENV="development"
+ENV FLASK_DEBUG="1"
 ENV JWT_SECRET="local-secret"
 ENV DATABASE_URL="postgresql://hhb:hhb@host.docker.internal/organisatieservice"
 

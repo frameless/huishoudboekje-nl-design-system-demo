@@ -1,7 +1,7 @@
 """ Main app for grootboek_service """
-import os
 import logging
 from flask import Flask, Response
+from flask_migrate import Migrate
 from core_service import database
 from grootboek_service.views.grootboekrekeningen import GrootboekrekeningenView
 
@@ -20,6 +20,7 @@ def create_app(config_name='grootboek_service.config.Config'):
     logging.info(f"Starting {__name__} with {config_name}")
     
     db.init_app(app)
+    Migrate(app, db)
 
     @app.route('/health')
     def health():
