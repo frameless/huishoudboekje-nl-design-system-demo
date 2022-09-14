@@ -1,6 +1,7 @@
 # Service Components
 
-Huishoudboekje uses independent service components, packages as Docker containers.
+All services are located in the `services` directory. Each service is defined in its own directory, and can be run independently.
+Each service has a `README.md` file that describes the service and how to run it.
 
 - [Banktransactieservice](bank_transactie_service/)*
 - [Grootboekservice](grootboek_service/)*
@@ -10,7 +11,8 @@ Huishoudboekje uses independent service components, packages as Docker container
 - [Unleashservice](unleashservice/)
 - [Postadressenservice](postadressenservice/)
 - [Alarmenservice](alarmenservice/)
+- [Signalenservice](signalanservice/)
 
-Services above marked with an asterisk (*) are all dependent on the core service through symbolic links because they share various logic.
+Services marked with an asterisk (*) all share various logic and therefor have a dependency on the core service through symbolic links.
 
 - [Coreservice](core_service/)
