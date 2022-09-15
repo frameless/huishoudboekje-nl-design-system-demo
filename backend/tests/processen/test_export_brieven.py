@@ -34,8 +34,8 @@ def test_create_export_brieven(client):
 
         postadres_ids_1 = 'ce2e9ac9-9759-48c5-85fa-7dacc9913e37'
         afspraak_postadres = {'data': [
-            {'id': '378d8f82-ffac-42e0-af82-7041014389a4', 'name': None, 'bagnummeraanduiding': None, 'street': 'test straat 2', 'houseNumber': 'test huisnummer 2', 'houseNumberSuffix': None, 'postalCode': 'test postcode 2', 'region': None, 'locality': 'test plaats 2', 'country': None, 'postOfficeBoxNumber': None, 'dateCreated': '2021-10-25T08:15:54+00:00', 'dateModified': '2021-10-25T08:15:54+00:00'}, 
-            {'id': 'ce2e9ac9-9759-48c5-85fa-7dacc9913e37', 'name': None, 'bagnummeraanduiding': None, 'street': 'test straat 1.1', 'houseNumber': 'test huisnummer 1.1', 'houseNumberSuffix': None, 'postalCode': 'code 1.1', 'region': None, 'locality': 'test plaats 1.1', 'country': None, 'postOfficeBoxNumber': None, 'dateCreated': '2021-10-25T08:11:29+00:00', 'dateModified': '2021-10-25T08:35:01+00:00'}]}
+            {'id': '378d8f82-ffac-42e0-af82-7041014389a4', 'street': 'test straat 2', 'houseNumber': 'test huisnummer 2', 'postalCode': 'test postcode 2', 'locality': 'test plaats 2', 'timeCreated': '2021-10-25T08:15:54+00:00'}, 
+            {'id': 'ce2e9ac9-9759-48c5-85fa-7dacc9913e37', 'street': 'test straat 1.1', 'houseNumber': 'test huisnummer 1.1', 'postalCode': 'code 1.1', 'locality': 'test plaats 1.1', 'timeCreated': '2021-10-25T08:11:29+00:00'}]}
         postadres_endpoint_1 = mock.get(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/?filter_ids={postadres_ids_1}", json=afspraak_postadres)
 
         afdeling_id = 12
@@ -43,8 +43,9 @@ def test_create_export_brieven(client):
         afdeling_endpoint = mock.get(f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/?filter_ids={afdeling_id}", json=afdelingen)
 
         postadres_ids_2 = 'ce2e9ac9-9759-48c5-85fa-7dacc9913e37,378d8f82-ffac-42e0-af82-7041014389a4'
-        afdeling_postadres = {'data': [{'id': '378d8f82-ffac-42e0-af82-7041014389a4', 'name': None, 'bagnummeraanduiding': None, 'street': 'test straat 2', 'houseNumber': 'test huisnummer 2', 'houseNumberSuffix': None, 'postalCode': 'test postcode 2', 'region': None, 'locality': 'test plaats 2', 'country': None, 'postOfficeBoxNumber': None, 'dateCreated': '2021-10-25T08:15:54+00:00', 'dateModified': '2021-10-25T08:15:54+00:00'}, 
-        {'id': 'ce2e9ac9-9759-48c5-85fa-7dacc9913e37', 'name': None, 'bagnummeraanduiding': None, 'street': 'test straat 1.1', 'houseNumber': 'test huisnummer 1.1', 'houseNumberSuffix': None, 'postalCode': 'code 1.1', 'region': None, 'locality': 'test plaats 1.1', 'country': None, 'postOfficeBoxNumber': None, 'dateCreated': '2021-10-25T08:11:29+00:00', 'dateModified': '2021-10-25T08:35:01+00:00'}]}
+        afdeling_postadres = {'data': [
+            {'id': '378d8f82-ffac-42e0-af82-7041014389a4', 'street': 'test straat 2', 'houseNumber': 'test huisnummer 2', 'postalCode': 'test postcode 2', 'locality': 'test plaats 2', 'timeCreated': '2021-10-25T08:15:54+00:00'}, 
+            {'id': 'ce2e9ac9-9759-48c5-85fa-7dacc9913e37', 'street': 'test straat 1.1', 'houseNumber': 'test huisnummer 1.1', 'postalCode': 'code 1.1', 'locality': 'test plaats 1.1', 'timeCreated': '2021-10-25T08:11:29+00:00'}]}
         postadres_endpoint_2 = mock.get(f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/?filter_ids={postadres_ids_2}", json=afdeling_postadres)
 
         organisatie_id = 6
@@ -54,7 +55,7 @@ def test_create_export_brieven(client):
         gebruikers_activiteit = mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=200)
 
         # act
-        response_csv, filename_csv, data_excel, filename_excel = brieven_export.create_brieven_export(burger_id) # hierin faalt de test
+        response_csv, filename_csv, data_excel, filename_excel = brieven_export.create_brieven_export(burger_id)
         current_date_str = datetime.now().strftime("%Y-%m-%d")
 
         # assert
@@ -67,7 +68,8 @@ def test_create_export_brieven(client):
         assert gebruikers_activiteit.called_once
 
         assert response_csv == f'organisatie.naam|organisatie.postadres.adresregel1|organisatie.postadres.postcode|organisatie.postadres.plaats|afspraak.id|nu.datum|burger.naam|burger.postadres.adresregel1|burger.postadres.postcode|burger.postadres.plaats|betaalrichting|status.afspraak\ntest organisatie 1|test straat 1.1 test huisnummer 1.1|code 1.1|test plaats 1.1|stuff, things, test#1, com bi na ti|{current_date_str}|John Do|burger test straat 15a|1234AB|burger test plaats|credit|2021-12-01\n'
-
+        assert filename_csv == f"{current_date_str}_{burger['data']['voornamen']}_{burger['data']['achternaam']}.csv"
+        assert filename_excel == f"{current_date_str}_{burger['data']['voornamen']}_{burger['data']['achternaam']}.xlsx"
         assert fallback.call_count == 0
 
 
