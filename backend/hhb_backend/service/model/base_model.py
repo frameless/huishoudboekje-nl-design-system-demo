@@ -1,4 +1,4 @@
-from typing import get_origin, Generic, TypeVar, overload
+from typing import get_origin, Generic, TypeVar, overload, _GenericAlias
 
 from typing_extensions import Unpack
 
@@ -32,7 +32,7 @@ class BaseModel(dict, Generic[T]):
                     f"Unable to find required attribute '{name}' in [{','.join(self.keys())}]."
                     f" Model: {self.__class__}"
                 )
-            if real_type.__origin__ == list: return []
+            if type(real_type) == _GenericAlias and real_type.__origin__ == list: return []
             return None
 
         # also convert subtypes
