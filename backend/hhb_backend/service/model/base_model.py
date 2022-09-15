@@ -1,10 +1,9 @@
-from typing import get_origin, Generic, TypeVar, overload, List
+from typing import get_origin, Generic, TypeVar, overload
 
 from typing_extensions import Unpack
 
 from hhb_backend.utils.type_cache import get_type_hint, get_model_type
 
-import logging
 
 T = TypeVar('T', bound="BaseModel")
 
@@ -33,8 +32,7 @@ class BaseModel(dict, Generic[T]):
                     f"Unable to find required attribute '{name}' in [{','.join(self.keys())}]."
                     f" Model: {self.__class__}"
                 )
-            logging.debug(f"realtype: {real_type}")
-            if str(real_type).lower().__contains__("list"): return []
+            if real_type.__origin__ == list: return []
             return None
 
         # also convert subtypes
