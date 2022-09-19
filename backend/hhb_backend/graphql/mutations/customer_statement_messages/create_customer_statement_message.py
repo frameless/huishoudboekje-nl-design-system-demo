@@ -160,7 +160,7 @@ def process_transactions(csm_id, transactions):
     result = []
     for t in transactions:
         transaction_model = BankTransaction(
-            customer_statement_message=csm_id,
+            customer_statement_message_id=csm_id,
             information_to_account_owner=t.data["transaction_details"],
             statement_line=(
                 t.data["date"].strftime("%y%m%d")
