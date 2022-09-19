@@ -40,8 +40,8 @@ def test_rekeningen_get_filter_ids(client, rekening_factory):
     assert response.status_code == 200
     assert response.json["data"] == []
     response = client.get('/rekeningen/?filter_ids=pietje')
-    assert response.status_code == 400
-    assert response.json["errors"] == ["Input for filter_ids is not correct, 'pietje' is not a number."]
+    assert response.status_code == 200
+    assert response.json["data"] == []
 
 
 def test_rekeningen_get_filter_ibans(client, rekening_factory):
