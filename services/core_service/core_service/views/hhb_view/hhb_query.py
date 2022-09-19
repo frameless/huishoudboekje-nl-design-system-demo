@@ -58,11 +58,8 @@ class HHBQuery():
         else:
             try:
                 ids = [int(id) for id in filter_ids]
-            except ValueError as err:
-                abort(make_response(
-                    {"errors": [
-                        f"""Input for filter_ids is not correct, '{re.findall("'([^']*)'", str(err))[0]}' is not a number."""
-                    ]}, 400))
+            except ValueError:
+                ids = []
 
         self.query = self.query.filter(self.hhb_model.id.in_(ids))
 
