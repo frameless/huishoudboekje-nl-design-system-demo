@@ -5,7 +5,7 @@ import {useTranslation} from "react-i18next";
 import {AiOutlineTag} from "react-icons/ai";
 import {NavLink, useNavigate} from "react-router-dom";
 import {AppRoutes} from "../../../config/routes";
-import {Afspraak, GetAfspraakDocument, GetAfsprakenDocument, useAddAfspraakZoektermMutation, useCreateAlarmMutation, useDeleteAfspraakBetaalinstructieMutation, useDeleteAfspraakZoektermMutation, useDeleteAlarmMutation, useUpdateAlarmMutation} from "../../../generated/graphql";
+import {Afspraak, GetAfspraakDocument, useAddAfspraakZoektermMutation, useCreateAlarmMutation, useDeleteAfspraakBetaalinstructieMutation, useDeleteAfspraakZoektermMutation, useDeleteAlarmMutation, useUpdateAlarmMutation} from "../../../generated/graphql";
 import d from "../../../utils/dayjs";
 import {useFeatureFlag} from "../../../utils/features";
 import {currencyFormat2, formatBurgerName, getBurgerHhbId, isAfspraakActive} from "../../../utils/things";
@@ -39,7 +39,6 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	const alarmSchedule = useScheduleHelper(afspraak.alarm);
 	const [addAfspraakZoekterm] = useAddAfspraakZoektermMutation({
 		refetchQueries: [
-			{query: GetAfsprakenDocument},
 			{query: GetAfspraakDocument, variables: {id: afspraak.id}},
 		],
 		onCompleted: () => {
@@ -49,31 +48,26 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	});
 	const [deleteAfspraakZoekterm] = useDeleteAfspraakZoektermMutation({
 		refetchQueries: [
-			{query: GetAfsprakenDocument},
 			{query: GetAfspraakDocument, variables: {id: afspraak.id}},
 		],
 	});
 	const [deleteBetaalinstructie] = useDeleteAfspraakBetaalinstructieMutation({
 		refetchQueries: [
-			{query: GetAfsprakenDocument},
 			{query: GetAfspraakDocument, variables: {id: afspraak.id}},
 		],
 	});
 	const [createAlarm] = useCreateAlarmMutation({
 		refetchQueries: [
-			{query: GetAfsprakenDocument},
 			{query: GetAfspraakDocument, variables: {id: afspraak.id}},
 		],
 	});
 	const [updateAlarm] = useUpdateAlarmMutation({
 		refetchQueries: [
-			{query: GetAfsprakenDocument},
 			{query: GetAfspraakDocument, variables: {id: afspraak.id}},
 		],
 	});
 	const [deleteAlarm] = useDeleteAlarmMutation({
 		refetchQueries: [
-			{query: GetAfsprakenDocument},
 			{query: GetAfspraakDocument, variables: {id: afspraak.id}},
 		],
 	});
