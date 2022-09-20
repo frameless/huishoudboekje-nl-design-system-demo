@@ -1,4 +1,3 @@
-import calendar
 import logging
 from datetime import *
 from tokenize import String
@@ -7,7 +6,6 @@ from typing import List, Optional
 import dateutil.parser
 import graphene
 import requests
-from dateutil.rrule import rrule, MONTHLY, YEARLY
 from graphql import GraphQLError
 
 from hhb_backend.graphql import settings
@@ -246,7 +244,7 @@ async def should_create_signaal(root, info, alarm: Alarm, transacties: List[Bank
                 monetary_deviated_transaction_ids.append(transaction.id)
                 bedrag += transaction.bedrag
 
-    diff = bedrag - expected_alarm_bedrag
+    diff = -1 * (abs(bedrag) - abs(expected_alarm_bedrag))
     difference = Bedrag.serialize(diff)
 
     if left_monetary_window <= bedrag <= right_monetary_window:
