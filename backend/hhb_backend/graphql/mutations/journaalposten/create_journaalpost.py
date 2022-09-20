@@ -1,5 +1,6 @@
 """ GraphQL mutation for creating a new Journaalpost """
 
+import logging
 from typing import List, Dict
 
 import graphene
@@ -71,9 +72,10 @@ class CreateJournaalpostAfspraak(graphene.Mutation):
             return_indexed="id"
         )
 
-        for afspraak in afspraken.values():
-            if afspraak is None:
-                raise GraphQLError("(some) afspraken not found ")
+        logging.debug(f"input: {input}, afspraken: {afspraken}")
+        input_afspraak_ids = set([j.afspraak_id for j in input])
+        if len(afspraken) != len(input_afspraak_ids):
+            raise GraphQLError("(some) afspraken not found ")
 
         rubrieken = hhb_dataloader().rubrieken.load(
             [a.rubriek_id for a in afspraken.values()],
