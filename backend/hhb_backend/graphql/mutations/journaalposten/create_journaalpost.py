@@ -71,8 +71,9 @@ class CreateJournaalpostAfspraak(graphene.Mutation):
             return_indexed="id"
         )
 
-        if len(afspraken) != len(input):
-            raise GraphQLError("(some) afspraken not found ")
+        for afspraak in afspraken.values():
+            if afspraak is None:
+                raise GraphQLError("(some) afspraken not found ")
 
         rubrieken = hhb_dataloader().rubrieken.load(
             [a.rubriek_id for a in afspraken.values()],
