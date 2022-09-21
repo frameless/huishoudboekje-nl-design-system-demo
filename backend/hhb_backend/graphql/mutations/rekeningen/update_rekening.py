@@ -48,7 +48,7 @@ class UpdateRekening(graphene.Mutation):
         previous = hhb_dataloader().rekeningen.load_one(id)
 
         if previous is None:
-            raise GraphQLError(f"Rekening does not exist")
+            raise GraphQLError(f"Rekening not found")
 
         for k in ["iban", "rekeninghouder"]:
             rekening.setdefault(k, previous[k])

@@ -43,7 +43,7 @@ class DeletePostadres(graphene.Mutation):
 
         afspraken = hhb_dataloader().afspraken.by_postadres(id)
         if afspraken:
-            raise GraphQLError("Postadres wordt gebruikt in een of meerdere afspraken - verwijderen is niet mogelijk.")
+            raise GraphQLError("Postadres is used in one or multiple afspraken - deletion is not possible.")
 
         postadres_response = requests.delete(
             f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/{id}"

@@ -39,7 +39,7 @@ class DeleteOrganisatie(graphene.Mutation):
 
         afdelingen = hhb_dataloader().afdelingen.by_organisatie(id)
         if afdelingen:
-            raise GraphQLError("Organisatie heeft afdelingen - verwijderen is niet mogelijk.")
+            raise GraphQLError("Organisatie has afdelingen - deletion is not possible.")
 
         response_organisatie = requests.delete(
             f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/{id}"

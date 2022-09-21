@@ -38,18 +38,18 @@ class DeleteBurgerRekening(graphene.Mutation):
         """ Delete rekening associations with either burger or organisation """
         previous = hhb_dataloader().rekeningen.load_one(id)
         if not previous:
-            raise GraphQLError("Rekening bestaat niet")
+            raise GraphQLError("Rekening not found")
 
         # check uses, if used in afspraak - stop
         afdelingen, afspraken, burgers = rekening_used_check(id)
         if afspraken:
-            raise GraphQLError(f"Rekening wordt gebruikt in een afspraak - verwijderen is niet mogelijk.")
+            raise GraphQLError(f"Rekening is used in an afspraak - deletion is not possible.")
             
         # if used by burger, disconnect
         if burgers and burger_id in burgers:
             disconnect_burger_rekening(burger_id, id)
         elif burger_id not in burgers:
-            raise GraphQLError(f"Opgegeven burger beschikt niet over de opgegeven rekening.")
+            raise GraphQLError(f"Specified burger does not have the specified rekening.")
 
         # if not used - remove completely
         if len(burgers) == 1 and not afdelingen and not afspraken:

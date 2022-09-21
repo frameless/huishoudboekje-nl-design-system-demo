@@ -53,7 +53,7 @@ class CreateHuishouden(graphene.Mutation):
             burger = hhb_dataloader().burgers.load_one(burger_id)
             if not burger:
                 raise GraphQLError(
-                    f"Upstream API responded: burger with id {burger_id} does not exist"
+                    f"Burger with id {burger_id} not found"
                 )
             burger.huishouden_id = created_huishouden.id
 

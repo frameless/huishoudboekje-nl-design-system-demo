@@ -191,7 +191,7 @@ def _send_get_request(url, service, params=None, headers=None):
     try:
         response = requests.get(url, params=params, headers=headers)
     except requests.exceptions.ConnectionError:
-        raise GraphQLError(f"Connectie error heeft plaatsgevonden op {service}")
+        raise GraphQLError(f"Connection error occurred on {service}")
 
     if response.status_code != 200:
         raise UpstreamError(response, f"Request to {url} {params} failed.")

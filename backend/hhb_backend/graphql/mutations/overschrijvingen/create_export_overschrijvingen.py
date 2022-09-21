@@ -99,7 +99,7 @@ class CreateExportOverschrijvingen(graphene.Mutation):
 
         if not future_overschrijvingen:
             raise GraphQLError(
-                f"Geen overschrijvingen in periode, geen export bestand aangemaakt."
+                f"No overschrijvingen in period, so no export file is made."
             )
 
         # Get all tegen_rekeningen based on the afspraken
@@ -109,7 +109,7 @@ class CreateExportOverschrijvingen(graphene.Mutation):
 
         tegen_rekeningen = hhb_dataloader().rekeningen.load(tegen_rekeningen_ids)
         if not tegen_rekeningen:
-            raise GraphQLError(f"Geen rekeningen gevonden.")
+            raise GraphQLError(f"Rekeningen not found.")
 
         config_values = {
             "derdengeldenrekening_rekeninghouder": get_config_value("derdengeldenrekening_rekeninghouder"),
