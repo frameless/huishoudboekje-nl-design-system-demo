@@ -52,4 +52,4 @@ class DeleteAfspraak(graphene.Mutation):
         if response.status_code != 204:
             raise GraphQLError(f"Upstream API responded: {response.text}")
 
-        return DeleteAfspraak(ok=True, previous=previous)
+        return DeleteAfspraak(ok=True, previous=dict(previous))
