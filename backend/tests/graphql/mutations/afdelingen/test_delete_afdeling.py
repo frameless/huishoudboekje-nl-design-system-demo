@@ -68,7 +68,7 @@ def test_delete_afdeling_postadres_error(client):
         assert response.json == {
             'data': {'deleteAfdeling': None}, 
             'errors': [{'locations': [{'column': 25, 'line': 3}], 
-            'message': 'Afdeling heeft postadressen - verwijderen is niet mogelijk.', 
+            'message': 'Afdeling has postadressen - deletion is not possible.', 
             'path': ['deleteAfdeling']}]
         }
 
@@ -100,7 +100,7 @@ def test_delete_afdeling_rekeningen_error(client):
         assert response.json == {
             'data': {'deleteAfdeling': None}, 
             'errors': [{'locations': [{'column': 25, 'line': 3}], 
-            'message': 'Afdeling heeft rekeningen - verwijderen is niet mogelijk.', 
+            'message': 'Afdeling has rekeningen - deletion is not possible.', 
             'path': ['deleteAfdeling']}]
         }
 

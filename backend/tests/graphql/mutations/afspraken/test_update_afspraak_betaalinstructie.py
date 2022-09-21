@@ -156,7 +156,7 @@ def test_update_afspraak(client):
 def test_update_afspraak_does_not_exist(client):
     with requests_mock.Mocker() as rm:
         # arrange
-        expected = "afspraak not found"
+        expected = "Afspraak not found"
         afspraak_id = 1
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
         rm1 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=1", json={"data": []})
@@ -186,7 +186,7 @@ def test_update_afspraak_does_not_exist(client):
 def test_update_afspraak_is_credit(client):
     with requests_mock.Mocker() as rm:
         # arrange
-        expected = "Betaalinstructie is alleen mogelijk bij uitgaven"
+        expected = "Betaalinstructie is only possible for expenses."
         afspraak_id = 1
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
         rm1 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=1", json={"data": [afspraak_inkomsten]})
@@ -215,7 +215,7 @@ def test_update_afspraak_is_credit(client):
 def test_update_afspraak_invalid_betaalinstructie(client):
     with requests_mock.Mocker() as rm:
         # arrange
-        expected = "Betaalinstructie: 'by_day' of 'by_month_day' moet zijn ingevuld"
+        expected = "Betaalinstructie: 'by_day' or 'by_month_day' has to be filled in."
         # invalid because you provide either byMonth + byMonthDay or byDay - not both
         betaal_instructie_input = Betaalinstructie(
             startDate="2020-11-01",
@@ -252,7 +252,7 @@ def test_update_afspraak_invalid_betaalinstructie(client):
 def test_update_afspraak_invalid_date_range(client):
     with requests_mock.Mocker() as rm:
         # arrange
-        expected = "Begindatum moet voor einddatum liggen"
+        expected = "StartDate has to be before endDate."
         betaal_instructie_input = Betaalinstructie(
             startDate="2022-11-01",
             endDate="2020-11-01",

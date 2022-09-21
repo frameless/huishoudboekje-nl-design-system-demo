@@ -97,7 +97,7 @@ def test_create_alarm(client):
 #             "bedragMargin": "10.34",
 #             "byDay": ["Wednesday"]
 #         }
-#         expected = "De alarmdatum moet in de toekomst liggen."
+#         expected = "The alarm date has to be in the future."
 #         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
 
 #         # act
@@ -145,7 +145,7 @@ def test_create_alarm_failure_afspraak_does_not_exist(client):
             "bedragMargin": "10.34",
             "byDay": ["Wednesday"]
         }
-        expected = "Afspraak bestaat niet."
+        expected = "Afspraak not found."
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
         rm0 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=19", json={"data": []})
 
@@ -196,7 +196,7 @@ def test_create_alarm_failure_only_byMonth_defined(client):
             "bedragMargin": "10.34",
             "byMonth": [1]
         }
-        expected = "Vul zowel byMonth als byMonthDay in, of geen van beide."
+        expected = "Fill in both byMonth and byMonthDay, or neither."
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
 
         # act
@@ -245,7 +245,7 @@ def test_create_alarm_failure_only_byMonth_defined(client):
             "bedragMargin": "10.34",
             "byMonthDay": [1]
         }
-        expected = "Vul zowel byMonth als byMonthDay in, of geen van beide."
+        expected = "Fill in both byMonth and byMonthDay, or neither."
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
 
         # act
@@ -301,7 +301,7 @@ def test_create_alarm_failure_afspraak_does_not_have_burger(client):
             "valid_from": "2021-01-01",
             "alarm_id": "bd6222e7-bfab-46bc-b0bc-2b30b76228d4"
         }
-        expected = "De afspraak is niet gekoppeld aan een burger."
+        expected = "The afspraak is not linked to a burger."
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
         rm0 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=19", json={"data": [afspraak]})
 
@@ -360,7 +360,7 @@ def test_create_alarm_failure_afspraak_ended(client):
             "valid_through": "2021-10-01",
             "alarm_id": "bd6222e7-bfab-46bc-b0bc-2b30b76228d4"
         }
-        expected = "De afspraak is niet actief."
+        expected = "The afspraak is not active."
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
         rm0 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=19", json={"data": [afspraak]})
 

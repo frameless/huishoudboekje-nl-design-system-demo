@@ -1,9 +1,6 @@
-import re
-
-import pytest
 import requests_mock
-from hhb_backend.graphql import settings
 from requests_mock import Adapter
+from hhb_backend.graphql import settings
 
 class MockResponse():
     history = None
@@ -82,7 +79,7 @@ def test_delete_postadres_error_afspraken(client):
         # arrange
         expected = {"data": {"deletePostadres": None},
                                  "errors": [{"locations": [{"column": 37, "line": 4}],
-                                             "message": "Postadres wordt gebruikt in een of meerdere afspraken - verwijderen is niet mogelijk.",
+                                             "message": "Postadres is used in one or multiple afspraken - deletion is not possible.",
                                              "path": ["deletePostadres"]}]}
         postadres_existing = {"id": "test_id", "houseNumber": "52", "locality": "testplaats1", "street": "teststraat1", "postalCode": "9999AA"}
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)

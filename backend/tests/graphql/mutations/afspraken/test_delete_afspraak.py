@@ -83,7 +83,7 @@ def test_delete_afspraak_error_journaalpost(client):
         }
     with requests_mock.Mocker() as rm:
         # arrange
-        expected = "Afspraak is aan een of meerdere journaalposten gekoppeld - verwijderen is niet mogelijk."
+        expected = "Afspraak is linked to one or multiple journaalposten - deletion is not possible."
 
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
         rm1 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=1", status_code=200, json={'data': [afspraak_met_journaalposten]})
