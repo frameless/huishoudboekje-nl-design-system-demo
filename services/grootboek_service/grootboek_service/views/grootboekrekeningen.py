@@ -1,5 +1,4 @@
 """ MethodView for /grootboeken/ path """
-from flask import request, abort, make_response
 from models import Grootboekrekening
 from core_service.views.hhb_view import HHBView
 
