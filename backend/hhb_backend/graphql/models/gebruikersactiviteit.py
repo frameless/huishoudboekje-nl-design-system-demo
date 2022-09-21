@@ -118,6 +118,14 @@ class GebruikersActiviteitSnapshot(graphene.ObjectType):
     def resolve_huishouden(cls, root, _info):
         return cls._resolve_snapshot(root, "huishouden", huishouden.Huishouden)
 
+    @classmethod
+    def resolve_alarm(cls, root, _info):
+        return cls._resolve_snapshot(root, "alarm", alarm.Alarm)
+
+    @classmethod
+    def resolve_signaal(cls, root, _info):
+        return cls._resolve_snapshot(root, "signaal", signaal.Signaal)
+
 
 class GebruikersActiviteitEntity(graphene.ObjectType):
     """Dit model beschrijft de wijzingen die een gebruiker heeft gedaan."""
@@ -138,6 +146,8 @@ class GebruikersActiviteitEntity(graphene.ObjectType):
     rubriek = graphene.Field(lambda: rubriek.Rubriek)
     transaction = graphene.Field(lambda: bank_transaction.BankTransaction)
     huishouden = graphene.Field(lambda: huishouden.Huishouden)
+    alarm = graphene.Field(lambda: alarm.Alarm)
+    signaal = graphene.Field(lambda: signaal.Signaal)
 
     @classmethod
     async def _resolve_entity(cls, root, entity_type: str, dataloader_name: str):
@@ -230,6 +240,18 @@ class GebruikersActiviteitEntity(graphene.ObjectType):
     async def resolve_huishouden(cls, root, _info):
         return await cls._resolve_entity(
             root, entity_type="huishouden", dataloader_name="huishoudens"
+        )
+
+    @classmethod
+    async def resolve_alarm(cls, root, _info):
+        return await cls._resolve_entity(
+            root, entity_type="alarm", dataloader_name="alarms"
+        )
+
+    @classmethod
+    async def resolve_signaal(cls, root, _info):
+        return await cls._resolve_entity(
+            root, entity_type="signaal", dataloader_name="signals"
         )
 
 
