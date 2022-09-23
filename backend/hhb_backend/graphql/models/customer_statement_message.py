@@ -22,15 +22,12 @@ class CustomerStatementMessage(graphene.ObjectType):
     forward_available_balance = graphene.Int()
     bank_transactions = graphene.List(lambda: bank_transaction_model.BankTransaction)
 
-    def resolve_upload_date(root, info):
-        value = root.get("upload_date")
+    def resolve_upload_date(self, _info):
+        value = self.get("upload_date")
         if value:
             return datetime.fromisoformat(value)
 
-    async def resolve_bank_transactions(root, info):
+    async def resolve_bank_transactions(self, _info):
         """ Get bank_transactions when requested """
-        if transactions := root.get("bank_transactions"):
-            return (
-                await hhb_dataloader().bank_transactions_by_id.load_many(transactions)
-                or []
-            )
+        if transactions := self.get("bank_transactions"):
+            return hhb_dataloader().bank_transactions.load(transactions) or []

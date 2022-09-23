@@ -6,6 +6,8 @@ from pytest_mock import MockerFixture
 
 from hhb_backend.graphql import settings
 from hhb_backend.processen.automatisch_boeken import automatisch_boeken
+from hhb_backend.service.model.afspraak import Afspraak
+from tests.utils.mock_utils import get_by_filter
 
 
 def post_echo(request, _context):
@@ -33,6 +35,25 @@ def post_echo_single(start_id):
     return echo
 
 
+mock_transactions = {
+    1: {"id": 1, "is_geboekt": False},
+    2: {"id": 2, "is_geboekt": False},
+}
+
+mock_afspraken = {
+    11: {"id": 11, "rubriek_id": 21, "burger_id": 41, "zoektermen": "test"},
+    12: {"id": 12, "rubriek_id": 21, "burger_id": 42, "zoektermen": "test"},
+}
+
+
+def get_transactions(request, _context):
+    return get_by_filter(request, mock_transactions)
+
+
+def get_afspraken(request, _context):
+    return get_by_filter(request, mock_afspraken)
+
+
 @pytest.mark.asyncio
 async def test_automatisch_boeken_no_csm_no_transactions(test_request_context, mocker: MockerFixture):
     with requests_mock.Mocker() as mock:
@@ -41,7 +62,8 @@ async def test_automatisch_boeken_no_csm_no_transactions(test_request_context, m
 
         transactions_is_geboekt = mock.get(
             f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_is_geboekt=false",
-            json={"data": []})
+            json={"data": []}
+        )
 
         mocker.patch('hhb_backend.processen.automatisch_boeken.transactie_suggesties', return_value={})
 
@@ -63,7 +85,8 @@ async def test_automatisch_boeken_no_csm_no_suggestions(test_request_context, mo
 
         transactions_is_geboekt = mock.get(
             f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_is_geboekt=false",
-            json={"data": [{"id": 1, "is_geboekt": False}]})
+            json={"data": [{"id": 1, "is_geboekt": False}]}
+        )
         mocker.patch('hhb_backend.processen.automatisch_boeken.transactie_suggesties', return_value={1: []})
 
         result = await automatisch_boeken()
@@ -85,21 +108,29 @@ async def test_automatisch_boeken_no_csm_success_single(test_request_context, mo
 
         transactions_is_geboekt = mock.get(
             f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_is_geboekt=false",
-            json={"data": [{"id": 1, "is_geboekt": False}]})
-        mocker.patch('hhb_backend.processen.automatisch_boeken.transactie_suggesties',
-                     return_value={1: [{"id": 11, "zoektermen": "test"}]})
+            json={"data": [{"id": 1, "is_geboekt": False}]}
+        )
+        mocker.patch(
+            'hhb_backend.processen.automatisch_boeken.transactie_suggesties',
+            return_value={1: [Afspraak(id=11, zoektermen="test")]}
+        )
 
         transactions_by_id = mock.get(
             f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids=1",
-            json={"data": [{"id": 1, "is_geboekt": False}]})
-        journaalposten_by_transaction = mock.get(f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_transactions=1",
-                                                 json={"data": []})
+            json={"data": [{"id": 1, "is_geboekt": False}]}
+        )
+        journaalposten_by_transaction = mock.get(
+            f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_transactions=1",
+            json={"data": []}
+        )
         afspraken_by_id = mock.get(
             f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=11",
-            json={"data": [{"id": 11, "rubriek_id": 21, "burger_id": 41, "zoektermen": "test"}]})
+            json={"data": [{"id": 11, "rubriek_id": 21, "burger_id": 41, "zoektermen": "test"}]}
+        )
         rubrieken_by_id = mock.get(
             f"{settings.HHB_SERVICES_URL}/rubrieken/?filter_ids=21",
-            json={"data": [{"id": 21, "grootboekrekening_id": "test"}]})
+            json={"data": [{"id": 21, "grootboekrekening_id": "test"}]}
+        )
 
         def journaalposten_post_echo(request, _):
             jp_id = 30
@@ -109,21 +140,23 @@ async def test_automatisch_boeken_no_csm_success_single(test_request_context, mo
         log_post = mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json={"data": {"id": 1}})
         transactions_post = mock.post(
             f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/1",
-            json=post_echo)
+            json=post_echo
+        )
 
         result = await automatisch_boeken()
 
         assert result == [{'afspraak': {'id': 11}, 'id': 31, 'isAutomatischGeboekt': True, 'transaction': {'id': 1}}]
         assert journaalposten_post.called_once
         assert journaalposten_post.last_request.json() == [
-            {"afspraak_id": 11, "grootboekrekening_id": "test", "is_automatisch_geboekt": True, "transaction_id": 1}]
+            {"afspraak_id": 11, "grootboekrekening_id": "test", "is_automatisch_geboekt": True, "transaction_id": 1}
+        ]
         assert transactions_post.called_once
         assert transactions_post.last_request.json() == {"id": 1, "is_geboekt": True}
 
         assert transactions_is_geboekt.called_once
-        assert transactions_by_id.called_once
+        assert transactions_by_id.call_count == 2
         assert journaalposten_by_transaction.called_once
-        assert afspraken_by_id.called_once
+        assert afspraken_by_id.call_count == 2
         assert rubrieken_by_id.called_once
 
         assert log_post.called_once
@@ -140,29 +173,32 @@ async def test_automatisch_boeken_no_csm_success_multiple(test_request_context, 
 
         transactions_is_geboekt = mock.get(
             f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_is_geboekt=false",
-            json={"data": [{"id": 1, "is_geboekt": False},
-                           {"id": 2, "is_geboekt": False},
-                           ]})
-        mocker.patch('hhb_backend.processen.automatisch_boeken.transactie_suggesties',
-                     return_value={1: [{"id": 11, "zoektermen": "test"}],
-                                   2: [{"id": 12, "zoektermen": "test"}],
-                                   })
+            json={"data": [{"id": 1, "is_geboekt": False}, {"id": 2, "is_geboekt": False}]}
+        )
+        mocker.patch(
+            'hhb_backend.processen.automatisch_boeken.transactie_suggesties',
+            return_value={
+                1: [Afspraak(id=11, zoektermen="test")],
+                2: [Afspraak(id=12, zoektermen="test")]
+            }
+        )
 
         transactions_by_id = mock.get(
-            re.compile(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/\?filter_ids=1,2"),
-            json={"data": [{"id": 1, "is_geboekt": False},
-                           {"id": 2, "is_geboekt": False},
-                           ]})
-        journaalposten_by_transaction = mock.get(f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_transactions=1,2",
-                                                 json={"data": []})
+            re.compile(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/\\?filter_ids=.*"),
+            json=get_transactions
+        )
+        journaalposten_by_transaction = mock.get(
+            f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_transactions=1,2",
+            json={"data": []}
+        )
         afspraken_by_id = mock.get(
-            f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=11,12",
-            json={"data": [{"id": 11, "rubriek_id": 21, "burger_id": 41, "zoektermen": "test"},
-                           {"id": 12, "rubriek_id": 21, "burger_id": 42, "zoektermen": "test"},
-                           ]})
+            re.compile(f"{settings.HHB_SERVICES_URL}/afspraken/\\?filter_ids=.*"),
+            json=get_afspraken
+        )
         rubrieken_by_id = mock.get(
             f"{settings.HHB_SERVICES_URL}/rubrieken/?filter_ids=21",
-            json={"data": [{"id": 21, "grootboekrekening_id": "test"}]})
+            json={"data": [{"id": 21, "grootboekrekening_id": "test"}]}
+        )
 
         journaalposten_post = mock.post(f"{settings.HHB_SERVICES_URL}/journaalposten/", json=post_echo_multi(30))
         log_post = mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json=post_echo_single(50))
@@ -171,9 +207,10 @@ async def test_automatisch_boeken_no_csm_success_multiple(test_request_context, 
 
         result = await automatisch_boeken()
 
-        assert result == [{'afspraak': {'id': 11}, 'id': 31, 'isAutomatischGeboekt': True, 'transaction': {'id': 1}},
-                          {'afspraak': {'id': 12}, 'id': 32, 'isAutomatischGeboekt': True, 'transaction': {'id': 2}},
-                          ]
+        assert result == [
+            {'afspraak': {'id': 11}, 'id': 31, 'isAutomatischGeboekt': True, 'transaction': {'id': 1}},
+            {'afspraak': {'id': 12}, 'id': 32, 'isAutomatischGeboekt': True, 'transaction': {'id': 2}},
+        ]
         assert journaalposten_post.called_once
         assert journaalposten_post.last_request.json() == [
             {"afspraak_id": 11, "grootboekrekening_id": "test", "is_automatisch_geboekt": True, "transaction_id": 1},
@@ -185,9 +222,9 @@ async def test_automatisch_boeken_no_csm_success_multiple(test_request_context, 
         assert transactions_post2.last_request.json() == {"id": 2, "is_geboekt": True}
 
         assert transactions_is_geboekt.called_once
-        assert transactions_by_id.called_once
+        assert transactions_by_id.call_count == 3
         assert journaalposten_by_transaction.called_once
-        assert afspraken_by_id.called_once
+        assert afspraken_by_id.call_count == 3
         assert rubrieken_by_id.called_once
 
         assert log_post.called_once
@@ -204,26 +241,34 @@ async def test_automatisch_boeken_csm_success_multiple(test_request_context, moc
 
         bank_transactions_by_csm = mock.get(
             f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_csms=1",
-            json={"data": [{"id": 1, "customer_statement_message_id": 1, "is_geboekt": False, "transactie_datum": '2020-10-10'},
-                           {"id": 2, "customer_statement_message_id": 1, "is_geboekt": True, "transactie_datum": '2020-10-10'},
-                           ]})
-        mocker.patch('hhb_backend.processen.automatisch_boeken.transactie_suggesties',
-                     return_value={1: [{"id": 11, "zoektermen": "test", "valid_through": '2020-12-31'}],
-                                   })
+            json={"data": [
+                {"id": 1, "customer_statement_message_id": 1, "is_geboekt": False, "transactie_datum": '2020-10-10'},
+                {"id": 2, "customer_statement_message_id": 1, "is_geboekt": True, "transactie_datum": '2020-10-10'},
+            ]}
+        )
+        mocker.patch(
+            'hhb_backend.processen.automatisch_boeken.transactie_suggesties',
+            return_value={1: [Afspraak(id=11, zoektermen="test", valid_through='2020-12-31')]}
+        )
 
         transactions_by_id = mock.get(
-            re.compile(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/\?filter_ids=1"),
-            json={"data": [{"id": 1, "is_geboekt": False},
-                           ]})
-        journaalposten_by_transaction = mock.get(f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_transactions=1",
-                                                 json={"data": []})
+            f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids=1",
+            json={"data": [{"id": 1, "is_geboekt": False}]}
+        )
+        journaalposten_by_transaction = mock.get(
+            f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_transactions=1",
+            json={"data": []}
+        )
         afspraken_by_id = mock.get(
             f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=11",
-            json={"data": [{"id": 11, "rubriek_id": 21, "burger_id": 41, "zoektermen": "test", "valid_through": '2020-12-31'},
-                           ]})
+            json={"data": [
+                {"id": 11, "rubriek_id": 21, "burger_id": 41, "zoektermen": "test", "valid_through": '2020-12-31'},
+            ]}
+        )
         rubrieken_by_id = mock.get(
             f"{settings.HHB_SERVICES_URL}/rubrieken/?filter_ids=21",
-            json={"data": [{"id": 21, "grootboekrekening_id": "test"}]})
+            json={"data": [{"id": 21, "grootboekrekening_id": "test"}]}
+        )
 
         journaalposten_post = mock.post(f"{settings.HHB_SERVICES_URL}/journaalposten/", json=post_echo_multi(30))
         log_post = mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json=post_echo_single(50))
@@ -231,8 +276,7 @@ async def test_automatisch_boeken_csm_success_multiple(test_request_context, moc
 
         result = await automatisch_boeken(1)
 
-        assert result == [{'afspraak': {'id': 11}, 'id': 31, 'isAutomatischGeboekt': True, 'transaction': {'id': 1}},
-                          ]
+        assert result == [{'afspraak': {'id': 11}, 'id': 31, 'isAutomatischGeboekt': True, 'transaction': {'id': 1}}]
         assert journaalposten_post.called_once
         assert journaalposten_post.last_request.json() == [
             {"afspraak_id": 11, "grootboekrekening_id": "test", "is_automatisch_geboekt": True, "transaction_id": 1},
@@ -241,17 +285,15 @@ async def test_automatisch_boeken_csm_success_multiple(test_request_context, moc
         assert transactions_post.last_request.json() == {"id": 1, "is_geboekt": True}
 
         assert bank_transactions_by_csm.called_once
-        assert transactions_by_id.called_once
+        assert transactions_by_id.call_count == 2
         assert journaalposten_by_transaction.called_once
-        assert afspraken_by_id.called_once
+        assert afspraken_by_id.call_count == 2
         assert rubrieken_by_id.called_once
 
         assert log_post.called_once
         # No leftover calls
         assert not post_any.called
         assert not get_any.called
-
-
 
 
 @pytest.mark.asyncio
@@ -262,39 +304,51 @@ async def test_automatisch_boeken_no_csm_failure_journaalpost_exists(test_reques
 
         transactions_is_geboekt = mock.get(
             f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_is_geboekt=false",
-            json={"data": [{"id": 1, "is_geboekt": False}]})
-        mocker.patch('hhb_backend.processen.automatisch_boeken.transactie_suggesties',
-                     return_value={1: [{"id": 11, "zoektermen": "test"}]})
+            json={"data": [{"id": 1, "is_geboekt": False}]}
+        )
+        mocker.patch(
+            'hhb_backend.processen.automatisch_boeken.transactie_suggesties',
+            return_value={1: [Afspraak(id=11, zoektermen="test")]}
+        )
 
         transactions_by_id = mock.get(
             f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids=1",
-            json={"data": [{"id": 1, "is_geboekt": False}]})
-        journaalposten_by_transaction = mock.get(f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_transactions=1",
-                                                 json={"data": []})
+            json={"data": [{"id": 1, "is_geboekt": False}]}
+        )
+        journaalposten_by_transaction = mock.get(
+            f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_transactions=1",
+            json={"data": []}
+        )
         afspraken_by_id = mock.get(
             f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=11",
-            json={"data": [{"id": 11, "rubriek_id": 21, "burger_id": 41, "zoektermen": "test"}]})
+            json={"data": [{"id": 11, "rubriek_id": 21, "burger_id": 41, "zoektermen": "test"}]}
+        )
         rubrieken_by_id = mock.get(
             f"{settings.HHB_SERVICES_URL}/rubrieken/?filter_ids=21",
-            json={"data": [{"id": 21, "grootboekrekening_id": "test"}]})
+            json={"data": [{"id": 21, "grootboekrekening_id": "test"}]}
+        )
 
         def journaalposten_post_echo(request, _):
             jp_id = 30
             return {"data": [{**jp, "id": (jp_id := jp_id + 1)} for jp in request.json()]}
 
-        journaalposten_post = mock.post(f"{settings.HHB_SERVICES_URL}/journaalposten/", status_code=409,
-                                        text="journaalpost")
+        journaalposten_post = mock.post(
+            f"{settings.HHB_SERVICES_URL}/journaalposten/", status_code=409,
+            text="journaalpost"
+        )
         log_post = mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json={"data": {"id": 1}})
         transactions_post = mock.post(
             f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/1",
-            json=post_echo)
+            json=post_echo
+        )
 
         result = await automatisch_boeken()
 
         assert result == None
         assert journaalposten_post.called_once
         assert journaalposten_post.last_request.json() == [
-            {"afspraak_id": 11, "grootboekrekening_id": "test", "is_automatisch_geboekt": True, "transaction_id": 1}]
+            {"afspraak_id": 11, "grootboekrekening_id": "test", "is_automatisch_geboekt": True, "transaction_id": 1}
+        ]
         assert not transactions_post.called
 
         assert transactions_is_geboekt.called_once
@@ -318,37 +372,40 @@ async def test_automatisch_boeken_no_csm_multiple_suggesties(test_request_contex
 
         transactions_is_geboekt = mock.get(
             f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_is_geboekt=false",
-            json={"data": [{"id": 1, "is_geboekt": False},
-                           {"id": 2, "is_geboekt": False},
-                           {"id": 3, "is_geboekt": False},
-                           ]})
-        mocker.patch('hhb_backend.processen.automatisch_boeken.transactie_suggesties',
-                     return_value={1: [{"id": 11, "zoektermen": "test"}],
-                                   2: [
-                                       {"id": 12, "zoektermen": "test"},
-                                   ],
-                                   # This transaction will not be booked
-                                   3: [
-                                       {"id": 13, "zoektermen": "test"},
-                                       {"id": 23, "zoektermen": "test"},
-                                   ],
-                                   })
+            json={"data": [
+                {"id": 1, "is_geboekt": False},
+                {"id": 2, "is_geboekt": False},
+                {"id": 3, "is_geboekt": False},
+            ]}
+        )
+        mocker.patch(
+            'hhb_backend.processen.automatisch_boeken.transactie_suggesties',
+            return_value={
+                1: [Afspraak(id=11, zoektermen="test")],
+                2: [Afspraak(id=12, zoektermen="test")],
+                # This transaction will not be booked
+                3: [
+                    Afspraak(id=13, zoektermen="test"),
+                    Afspraak(id=23, zoektermen="test"),
+                ],
+            })
 
         transactions_by_id = mock.get(
-            re.compile(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/\?filter_ids=1,2"),
-            json={"data": [{"id": 1, "is_geboekt": False},
-                           {"id": 2, "is_geboekt": False},
-                           ]})
-        journaalposten_by_transaction = mock.get(f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_transactions=1,2",
-                                                 json={"data": []})
+            re.compile(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/\\?filter_ids=.*"),
+            json=get_transactions
+        )
+        journaalposten_by_transaction = mock.get(
+            f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_transactions=1,2",
+            json={"data": []}
+        )
         afspraken_by_id = mock.get(
-            f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=11,12",
-            json={"data": [{"id": 11, "rubriek_id": 21, "burger_id": 41, "zoektermen": "test"},
-                           {"id": 12, "rubriek_id": 21, "burger_id": 42, "zoektermen": "test"}
-                           ]})
+            re.compile(f"{settings.HHB_SERVICES_URL}/afspraken/\\?filter_ids=.*"),
+            json=get_afspraken
+        )
         rubrieken_by_id = mock.get(
             f"{settings.HHB_SERVICES_URL}/rubrieken/?filter_ids=21",
-            json={"data": [{"id": 21, "grootboekrekening_id": "test"}]})
+            json={"data": [{"id": 21, "grootboekrekening_id": "test"}]}
+        )
 
         journaalposten_post = mock.post(f"{settings.HHB_SERVICES_URL}/journaalposten/", json=post_echo_multi(30))
         log_post = mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json=post_echo_single(50))
@@ -357,9 +414,10 @@ async def test_automatisch_boeken_no_csm_multiple_suggesties(test_request_contex
 
         result = await automatisch_boeken()
 
-        assert result == [{'afspraak': {'id': 11}, 'id': 31, 'isAutomatischGeboekt': True, 'transaction': {'id': 1}},
-                          {'afspraak': {'id': 12}, 'id': 32, 'isAutomatischGeboekt': True, 'transaction': {'id': 2}},
-                          ]
+        assert result == [
+            {'afspraak': {'id': 11}, 'id': 31, 'isAutomatischGeboekt': True, 'transaction': {'id': 1}},
+            {'afspraak': {'id': 12}, 'id': 32, 'isAutomatischGeboekt': True, 'transaction': {'id': 2}},
+        ]
         assert journaalposten_post.called_once
         assert journaalposten_post.last_request.json() == [
             {"afspraak_id": 11, "grootboekrekening_id": "test", "is_automatisch_geboekt": True, "transaction_id": 1},
@@ -371,9 +429,9 @@ async def test_automatisch_boeken_no_csm_multiple_suggesties(test_request_contex
         assert transactions_post2.last_request.json() == {"id": 2, "is_geboekt": True}
 
         assert transactions_is_geboekt.called_once
-        assert transactions_by_id.called_once
+        assert transactions_by_id.call_count == 3
         assert journaalposten_by_transaction.called_once
-        assert afspraken_by_id.called_once
+        assert afspraken_by_id.call_count == 3
         assert rubrieken_by_id.called_once
 
         assert log_post.called_once

@@ -14,6 +14,7 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     gebruikers_activiteit_entities,
     log_gebruikers_activiteit,
 )
+from hhb_backend.service.model import huishouden
 
 
 class CreateHuishoudenInput(graphene.InputObjectType):
@@ -46,19 +47,16 @@ class CreateHuishouden(graphene.Mutation):
         )
         if response.status_code != 201:
             raise GraphQLError(f"Upstream API responded: {response.text}")
-        huishouden = response.json()["data"]
+        created_huishouden = huishouden.Huishouden(response.json()["data"])
 
         for burger_id in input.burger_ids:
-            burger = await hhb_dataloader().burgers_by_id.load(burger_id)
+            burger = hhb_dataloader().burgers.load_one(burger_id)
             if not burger:
                 raise GraphQLError(
                     f"Upstream API responded: burger with id {burger_id} does not exist"
                 )
-            burger["huishouden_id"] = huishouden["id"]
-
-            # TODO: remove this check as it should not be necessary
-            burger["iban"] = burger["iban"] if burger["iban"] else ""
+            burger.huishouden_id = created_huishouden.id
 
             await update_existing_burger(burger=burger)
 
-        return CreateHuishouden(huishouden=huishouden, ok=True)
+        return CreateHuishouden(huishouden=created_huishouden, ok=True)

@@ -43,13 +43,12 @@ To setup the backend applications, there are a few different ways you can set up
 ## Setup development with Docker Compose
 
 - Please make sure you have `docker-compose` installed.
-- Run `docker-compose up -d db` to start the database.
-- Run `docker-compose run db-init` to create databases and users for all various services.
-- Run `docker-compose up` to launch all the services and the backend. This might take a few moments as the services might execute some migrations on the database.
+- Run `docker-compose run db-init` to start up the database and create databases and users for all various services.
+- Run `docker-compose up` to launch all the services and the backend. This might take a few moments as the services execute some migrations on the database before starting.
 - It's best to run the frontend-application natively on your system because of performace issues with running a development setup in Docker. For instructions see [frontend/app/README.md](./frontend/app/README.md)
 - Run `docker-compose --profile tests up` to run all tests.
 - Run `docker-compose huishoudboekjeservice-test up` to run only tests for the huishoudboekjeservice. You can put any service here.
-- Run `docker-compose up sampledata` to insert a small dataset into your system. Make sure you have all your services, a database and the backend running.
+- Run `docker-compose run sampledata` to insert a default dataset into your system. Make sure you have all your services, a database and the backend running.
 
 ### Manual local setup (MacOS and Unix)
 

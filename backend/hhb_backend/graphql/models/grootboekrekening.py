@@ -1,7 +1,9 @@
 """ Grootboekrekening model as used in GraphQL queries """
 import graphene
-from flask import request
+
+from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.rubriek import Rubriek
+
 
 class Grootboekrekening(graphene.ObjectType):
     id = graphene.String(required=True)
@@ -13,20 +15,18 @@ class Grootboekrekening(graphene.ObjectType):
     children = graphene.List(lambda: Grootboekrekening)
     rubriek = graphene.Field(lambda: Rubriek)
 
-    async def resolve_parent(root, info):
+    async def resolve_parent(self, _info):
         """ Get parent when requested """
-        if root.get('parent_id'):
-            parent = await request.dataloader.grootboekrekeningen_by_id.load(root.get('parent_id'))
-            return parent or None
+        if self.get('parent_id'):
+            return hhb_dataloader().grootboekrekeningen.load_one(self.get('parent_id'))
 
-    async def resolve_children(root, info):
+    async def resolve_children(self, _info):
         """ Get children when requested """
-        if root.get('children'):
-            children_ = await request.dataloader.grootboekrekeningen_by_id.load_many(root.get('children'))
-            return children_ or []
+        if self.get('children'):
+            return hhb_dataloader().grootboekrekeningen.load(self.get('children')) or []
 
-    async def resolve_rubriek(root, info):
-        return await request.dataloader.rubrieken_by_grootboekrekening.load(root.get('id'))
+    async def resolve_rubriek(self, _info):
+        return hhb_dataloader().rubrieken.by_grootboekrekening(self.get('id'))
 
-    def resolve_credit(root, info):
-        return not root.get('debet')
+    def resolve_credit(self, _info):
+        return not self.get('debet')

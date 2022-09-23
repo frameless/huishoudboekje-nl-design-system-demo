@@ -11,7 +11,6 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     gebruikers_activiteit_entities,
     log_gebruikers_activiteit,
 )
-from hhb_backend.graphql.models import burger
 
 
 class AddHuishoudenBurger(graphene.Mutation):
@@ -39,9 +38,7 @@ class AddHuishoudenBurger(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(_root, _info, huishouden_id: int, burger_ids: List[int]):
         """Add burgers to given huishouden"""
-        """ Clear the cache since we need to have the most up te date version possible. """
-        hhb_dataloader().huishoudens_by_id.clear(huishouden_id)
-        previous = await hhb_dataloader().huishoudens_by_id.load(huishouden_id)
+        previous = hhb_dataloader().huishoudens.load_one(huishouden_id)
 
         if previous is None:
             raise GraphQLError("Huishouden not found")
@@ -56,7 +53,7 @@ class AddHuishoudenBurger(graphene.Mutation):
             if not response.ok:
                 raise GraphQLError(f"Upstream API responded: {response.text}")
 
-        loaded_huishouden = await hhb_dataloader().huishoudens_by_id.load(huishouden_id)
+        loaded_huishouden = hhb_dataloader().huishoudens.load_one(huishouden_id)
         return AddHuishoudenBurger(
             ok=True,
             huishouden=loaded_huishouden,

@@ -1,4 +1,3 @@
-import json
 from typing import Dict
 
 import requests
@@ -14,15 +13,3 @@ async def update_existing_burger(burger: Dict):
     if resp.status_code != 200:
         raise GraphQLError(f"Upstream API responded: {resp.text}")
     return resp.json()["data"]
-
-
-async def get_burgers_by_huishouden_id(huishouden_id: int):
-    params = {"filters": json.dumps({"huishouden_id": huishouden_id})}
-    burgers_resp = requests.get(
-        f"{settings.HHB_SERVICES_URL}/burgers/",
-        params=params,
-        headers={"Content-type": "application/json"},
-    )
-    if burgers_resp.status_code != 200:
-        raise GraphQLError(f"Upstream API responded: {burgers_resp.text}")
-    return burgers_resp.json()["data"]

@@ -6,14 +6,14 @@ from graphql import GraphQLError
 
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
+from hhb_backend.service.model.huishouden import Huishouden
 
 
-async def create_huishouden_if_not_exists(huishouden: Dict) -> Dict:
+async def create_huishouden_if_not_exists(huishouden: Dict) -> Huishouden:
     if "id" in huishouden:
-        existing_huishoudens = await hhb_dataloader().huishoudens_by_id.load(huishouden["id"]),
+        existing_huishouden = hhb_dataloader().huishoudens.load_one(huishouden["id"])
         # dataloader will always return a tuple with at least one value,
         # regardless of whether object is found or not (value is None otherwise)
-        existing_huishouden = existing_huishoudens[0]
         if existing_huishouden:
             return existing_huishouden
         else:
@@ -21,7 +21,7 @@ async def create_huishouden_if_not_exists(huishouden: Dict) -> Dict:
     return create_new_huishouden(huishouden=huishouden)
 
 
-def create_new_huishouden(huishouden: Dict = None):
+def create_new_huishouden(huishouden: Dict = None) -> Huishouden:
     params = huishouden or {}
     resp = requests.post(
         f"{settings.HHB_SERVICES_URL}/huishoudens/",
@@ -30,5 +30,5 @@ def create_new_huishouden(huishouden: Dict = None):
     )
     if resp.status_code != 201:
         raise GraphQLError(f"Upstream API responded: {resp.text}")
-    return resp.json()["data"]
+    return Huishouden(resp.json()["data"])
 

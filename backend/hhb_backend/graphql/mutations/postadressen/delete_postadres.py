@@ -1,6 +1,7 @@
 import graphene
 import requests
 from graphql import GraphQLError
+
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.afdeling import Afdeling
@@ -34,28 +35,27 @@ class DeletePostadres(graphene.Mutation):
         )
 
     @log_gebruikers_activiteit
-    async def mutate(root, _info, id, afdeling_id):
+    async def mutate(self, _info, id, afdeling_id):
         """ Delete current postadres """
-        previous = await hhb_dataloader().postadressen_by_id.load(id)
+        previous = hhb_dataloader().postadressen.load_one(id)
         if not previous:
             raise GraphQLError("postadres not found")
 
-        afspraken = requests.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_postadressen={id}").json()['data']
+        afspraken = hhb_dataloader().afspraken.by_postadres(id)
         if afspraken:
             raise GraphQLError("Postadres wordt gebruikt in een of meerdere afspraken - verwijderen is niet mogelijk.")
 
-        response_ContactCatalogus = requests.delete(
-            f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/{id}",
-            headers={"Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845"}
+        postadres_response = requests.delete(
+            f"{settings.POSTADRESSEN_SERVICE_URL}/addresses/{id}"
         )
-        if response_ContactCatalogus.status_code != 204:
-            raise GraphQLError(f"Upstream API responded: {response_ContactCatalogus.text}")
+        if postadres_response.status_code != 204:
+            raise GraphQLError(f"Upstream API responded: {postadres_response.text}")
 
 
         # Delete the Id from postadressen_ids column in afdeling
-        afdeling = await hhb_dataloader().afdelingen_by_id.load(afdeling_id)
-        afdeling["postadressen_ids"].remove(id)
-        afdeling.pop("id")
+        afdeling = hhb_dataloader().afdelingen.load_one(afdeling_id)
+        afdeling.postadressen_ids.remove(id)
+        del afdeling.id
 
         # Try update of organisatie service
         org_service_response = requests.post(

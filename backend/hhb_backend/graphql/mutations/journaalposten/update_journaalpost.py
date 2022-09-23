@@ -1,7 +1,8 @@
 import graphene
 import requests
-from graphql import GraphQLError
 from deprecated import deprecated
+from graphql import GraphQLError
+
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.journaalpost import Journaalpost
@@ -45,10 +46,7 @@ class UpdateJournaalpostGrootboekrekening(graphene.Mutation):
     async def mutate(_root, _info, input, **_kwargs):
         """ Create the new Journaalpost """
 
-        previous: Journaalpost = await hhb_dataloader().journaalposten_by_id.load(
-            input.get("id")
-        )
-
+        previous = hhb_dataloader().journaalposten.load_one(input.id)
         # Validate that the references exist
         if not previous:
             raise GraphQLError(f"journaalpost not found")
@@ -56,19 +54,17 @@ class UpdateJournaalpostGrootboekrekening(graphene.Mutation):
         if previous.afspraak:
             raise GraphQLError("journaalpost already connected to an afspraak")
 
-        grootboekrekening = await hhb_dataloader().grootboekrekeningen_by_id.load(
-            input.get("grootboekrekening_id")
-        )
+        grootboekrekening = hhb_dataloader().grootboekrekeningen.load_one(input.grootboekrekening_id)
         if not grootboekrekening:
             raise GraphQLError("grootboekrekening not found")
 
-        if not (grootboekrekening["credit"] == previous.transaction["is_credit"]):
+        if grootboekrekening.credit is not previous.transaction.is_credit:
             raise GraphQLError(
                 f"credit in grootboekrekening and transaction do not match"
             )
 
         response = requests.post(
-            f"{settings.HHB_SERVICES_URL}/journaalposten/{input.get('id')}",
+            f"{settings.HHB_SERVICES_URL}/journaalposten/{input.id}",
             json=input,
         )
         if not response.ok:

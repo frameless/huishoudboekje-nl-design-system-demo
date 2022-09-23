@@ -19,9 +19,6 @@ class BurgerView(HHBView):
                 "type": "string",
                 "pattern": "^(?:[0-9]{4}-[0-9]{2}-[0-9]{2}|)$"
             },
-            "iban": {
-                "type": "string",
-            },
             "voornamen": {
                 "type": "string",
             },

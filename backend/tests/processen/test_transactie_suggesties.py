@@ -102,8 +102,8 @@ async def test_transactie_suggesties_multiple_matches(test_request_context):
             f"{settings.HHB_SERVICES_URL}/rekeningen/?filter_ibans=NL04RABO5082680188,NL29ABNA5179205913", json={
                 'data': [{'afspraken': [4], 'gebruikers': [], 'iban': 'NL04RABO5082680188', 'id': 2, 'organisaties': [],
                           'rekeninghouder': 'Hema'},
-                         {'afspraken': [3], 'gebruikers': [], 'iban': 'NL29ABNA5179205913', 'id': 3, 'organisaties': [],
-                          'rekeninghouder': 'Shell'}]})
+                         {'afspraken': [3, 5], 'gebruikers': [], 'iban': 'NL29ABNA5179205913', 'id': 3,
+                          'organisaties': [], 'rekeninghouder': 'Shell'}]})
 
         get_afspraken = mock.get(
             f"{settings.HHB_SERVICES_URL}/afspraken/?filter_rekening=2,3", json={
@@ -323,13 +323,15 @@ async def test_transactie_suggesties_multiple_zoektermen(test_request_context):
             f"{settings.HHB_SERVICES_URL}/afspraken/?filter_rekening=2", json={
                 'data': [
                     {'id': 4, 'zoektermen': ['15814016000676480', 'Janssen'],
-                     'tegen_rekening_id': 2, "valid_through": '2020-12-31'},
+                     'tegen_rekening_id': 2, "valid_through": '2020-12-31', "valid_from": "2020-11-30"},
                 ]})
 
         result = await transactie_suggesties([7])
 
-        assert result == {7: [{'id': 4, 'tegen_rekening_id': 2,
-                               'zoektermen': ['15814016000676480', 'Janssen'], "valid_through": '2020-12-31'}]}
+        assert result == {7: [{
+            'id': 4, 'tegen_rekening_id': 2, 'zoektermen': ['15814016000676480', 'Janssen'],
+            "valid_through": '2020-12-31', "valid_from": "2020-11-30"
+        }]}
         assert get_transactions.called_once
         assert get_rekeningen.called_once
         assert get_afspraken.called_once

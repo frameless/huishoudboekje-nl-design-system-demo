@@ -1,7 +1,8 @@
-from hhb_backend.graphql import settings
-from hhb_backend.graphql.dataloaders.base_loader import SingleDataLoader
+from hhb_backend.graphql.dataloaders.base_loader import DataLoader
+from hhb_backend.graphql.settings import ORGANISATIE_SERVICES_URL
+from hhb_backend.service.model.organisatie import Organisatie
 
-class OrganisatieByIdLoader(SingleDataLoader):
-    """ Load organisaties using ids """
+
+class OrganisatieLoader(DataLoader[Organisatie]):
+    service = ORGANISATIE_SERVICES_URL
     model = "organisaties"
-    service = settings.ORGANISATIE_SERVICES_URL

@@ -1,7 +1,7 @@
 """ GraphQL Rekeningen query """
 import graphene
-from flask import request
 
+from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.rekening import Rekening
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     gebruikers_activiteit_entities,
@@ -22,7 +22,7 @@ class RekeningQuery:
     @classmethod
     @log_gebruikers_activiteit
     async def resolver(cls, _root, _info, id):
-        return await request.dataloader.rekeningen_by_id.load(id)
+        return hhb_dataloader().rekeningen.load_one(id)
 
 
 class RekeningenQuery:
@@ -41,5 +41,5 @@ class RekeningenQuery:
     @log_gebruikers_activiteit
     async def resolver(cls, _root, _info, ids=None):
         if ids:
-            return await request.dataloader.rekeningen_by_id.load_many(ids)
-        return request.dataloader.rekeningen_by_id.get_all_and_cache()
+            return hhb_dataloader().rekeningen.load(ids)
+        return hhb_dataloader().rekeningen.load_all()

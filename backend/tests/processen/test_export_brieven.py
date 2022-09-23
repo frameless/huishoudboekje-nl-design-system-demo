@@ -26,8 +26,8 @@ def test_create_export_brieven(client):
         burger_id = 2
         fallback = mock.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
         
-        burger = {'data': {'achternaam': 'Do', 'bsn': 156807233, 'email': None, 'geboortedatum': None, 'huishouden_id': 2, 'huisnummer': '15a', 'id': 2, 'plaatsnaam': 'burger test plaats', 'postcode': '1234AB', 'straatnaam': 'burger test straat', 'telefoonnummer': None, 'voorletters': 'J', 'voornamen': 'John'}}
-        burger_endpoint = mock.get(f"{settings.HHB_SERVICES_URL}/burgers/{burger_id}", json=burger)
+        burger = {'data': [{'achternaam': 'Do', 'bsn': 156807233, 'email': None, 'geboortedatum': None, 'huishouden_id': 2, 'huisnummer': '15a', 'id': 2, 'plaatsnaam': 'burger test plaats', 'postcode': '1234AB', 'straatnaam': 'burger test straat', 'telefoonnummer': None, 'voorletters': 'J', 'voornamen': 'John'}]}
+        burger_endpoint = mock.get(f"{settings.HHB_SERVICES_URL}/burgers/?filter_ids={burger_id}", json=burger)
 
         afspraken = {'data': [{'aantal_betalingen': None, 'afdeling_id': 12, 'bedrag': 1234, 'betaalinstructie': None, 'burger_id': 2, 'credit': True, 'id': 12, 'journaalposten': [], 'omschrijving': 'export test afspraak', 'overschrijvingen': [], 'postadres_id': 'ce2e9ac9-9759-48c5-85fa-7dacc9913e37', 'rubriek_id': 2, 'tegen_rekening_id': 1, 'valid_from': '2000-01-31', 'valid_through': '2021-12-01', 'zoektermen': ['stuff, things, test#1, com bi na ti']}]}
         afspraak_endpoint = mock.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_burgers={burger_id}", json=afspraken)
@@ -68,8 +68,8 @@ def test_create_export_brieven(client):
         assert gebruikers_activiteit.called_once
 
         assert response_csv == f'organisatie.naam|organisatie.postadres.adresregel1|organisatie.postadres.postcode|organisatie.postadres.plaats|afspraak.id|nu.datum|burger.naam|burger.postadres.adresregel1|burger.postadres.postcode|burger.postadres.plaats|betaalrichting|status.afspraak\ntest organisatie 1|test straat 1.1 test huisnummer 1.1|code 1.1|test plaats 1.1|stuff, things, test#1, com bi na ti|{current_date_str}|John Do|burger test straat 15a|1234AB|burger test plaats|credit|2021-12-01\n'
-        assert filename_csv == f"{current_date_str}_{burger['data']['voornamen']}_{burger['data']['achternaam']}.csv"
-        assert filename_excel == f"{current_date_str}_{burger['data']['voornamen']}_{burger['data']['achternaam']}.xlsx"
+        assert filename_csv == f"{current_date_str}_{burger['data'][0]['voornamen']}_{burger['data'][0]['achternaam']}.csv"
+        assert filename_excel == f"{current_date_str}_{burger['data'][0]['voornamen']}_{burger['data'][0]['achternaam']}.xlsx"
         assert fallback.call_count == 0
 
 

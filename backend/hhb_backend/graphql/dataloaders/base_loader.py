@@ -1,148 +1,199 @@
+import copy
 import json
-from typing import Dict, Union
+import logging
+from typing import Dict, Union, TypedDict, List, Optional, TypeVar, Generic
 
 import requests
-from aiodataloader import DataLoader
 from graphql import GraphQLError
-from hhb_backend.graphql import settings
+from typing_extensions import Unpack, NotRequired
+
+from hhb_backend.graphql.utils.upstream_error_handler import UpstreamError
+from hhb_backend.utils.type_cache import get_model_type
+
+Key = Union[str, int, bool]
 
 # Possible formats:
 #   {"<column_name>": <str|int|bool>}
 #   {"<column_name>": {"<Operator>": <str|int|bool>}}
 #   {"<AND|OR>": {...}
-Filters = Dict[str, Union['Filters', str, int, bool]]
+Filters = Dict[str, Union['Filters', Key]]
+
+M = TypeVar('M')
 
 
-class SingleDataLoader(DataLoader):
-    """ Dataloader for when the result is a single object """
+class DataLoaderOptions(TypedDict):
+    model: NotRequired[str]
+    filter_item: NotRequired[str]
+    filters: NotRequired[Filters]
+    params: NotRequired[Dict[str, any]]
+    batch_size: NotRequired[int]
+    return_first: NotRequired[bool]
+    return_indexed: NotRequired[str]
+    model_type: NotRequired[type]
+
+
+# if caching will ever be added to the dataloaders, make sure to return copies of the data.
+class DataLoader(Generic[M]):
+    service = None
     model = None
-    service = settings.HHB_SERVICES_URL
-    filter_item = "filter_ids"
-    index = "id"
+    filter_item = None  # will fall back to 'filter_ids'
     batch_size = 1000
+    params = {}
 
-    def url_for(self, keys=None):
-        return f"""{self.service}/{self.model}/{f"?{self.filter_item}={','.join([str(k) for k in keys])}" if keys else ''}"""
+    def __init__(self):
+        # gets the model type from the generic
+        self.model_type = get_model_type(self)
 
-    def get_all_and_cache(self, filters: Filters = None):
-        params = {
-            'filters': json.dumps(filters) if filters else None
+    def load_one(self, key: Key, **kwargs: Unpack[DataLoaderOptions]) -> Optional[M]:
+        """ Loads one to one data """
+        options = _add_default_options(self, kwargs)
+        options["return_first"] = True
+        return _base_data_load_with_options(self.service, options, key=key)
+
+    def load(self, keys: Union[List[Key], Key], **kwargs: Unpack[DataLoaderOptions]) -> List[M]:
+        """
+         Loads one to many, many to many and many to one
+         (when used in combination with the return_first option) data
+         """
+        # remove duplicated keys and make sure that keys is always a list (for one to many)
+        keys = _remove_duplicated_keys(keys) if type(keys) == list else [keys]
+        options = _add_default_options(self, kwargs)
+        return _base_data_load_with_options(self.service, options, keys=keys)
+
+    def load_all(self, **kwargs: Unpack[DataLoaderOptions]) -> List[M]:
+        """ Load all items """
+        options = _add_default_options(self, kwargs)
+        return _base_data_load_with_options(self.service, options)
+
+    def load_paged(self, key: Key = None, keys: List[Key] = None,
+                   start: int = 1, limit: int = 20, desc: bool = False,
+                   sorting_column: str = "id", **kwargs: Unpack[DataLoaderOptions]):
+        """
+        Load items paged. When either key or keys is specified the results will be limited to that key/those keys.
+        """
+        options = _add_default_options(self, kwargs)
+        return _load_paged(
+            self.service, options, key=key, keys=keys, start=start, limit=limit, desc=desc,
+            sorting_column=sorting_column
+        )
+
+    def __getitem__(self, item):
+        return getattr(self, item)
+
+
+def _remove_duplicated_keys(keys: List[Key]) -> List[Key]:
+    deduplicated = []
+    for key in keys:
+        if key not in deduplicated:
+            deduplicated.append(key)
+    return deduplicated
+
+
+def _get_options(options: Unpack[DataLoaderOptions]) -> (str, str, Filters, Dict[str, any], int, bool, bool, str, type):
+    options = copy.deepcopy(options)
+    return options.get("model"), options.get("filter_item"), options.get("filters", {}), options.get("params"),\
+        options.get("batch_size"), options.get("return_first"), options.get("return_indexed"), options.get("model_type")
+
+
+def _add_default_options(loader, options: Unpack[DataLoaderOptions]):
+    # be aware that this function doesn't make a copy of the data its adding.
+    # it's not a problem because as of writing this _get_options is used and that makes a deep copy of the options.
+    _add_default_option(options, "model", loader)
+    _add_default_option(options, "filter_item", loader)
+    _add_default_option(options, "params", loader)
+    _add_default_option(options, "batch_size", loader)
+    _add_default_option(options, "model_type", loader)
+    return options
+
+
+def _add_default_option(options: dict, option, loader: DataLoader):
+    if options.get(option) is None:
+        options[option] = loader[option]
+
+
+def _load_paged(service: str, options: Unpack[DataLoaderOptions],
+                key: Key = None, keys: List[Key] = None,
+                start: int = 1, limit: int = 20, desc: bool = False,
+                sorting_column: str = "id"):
+    options["params"] = {
+        'start': start,
+        'limit': limit,
+        'desc': desc,
+        'sortingColumn': sorting_column
+    }
+
+    # adds the filter_item and filters for us
+    response = _base_load_with_options(service, options, key=key, keys=keys)
+
+    return {
+        options["model"]: response["data"],
+        "page_info": {
+            "count": response["count"],
+            "start": response["start"],
+            "limit": response["limit"]
         }
-        response = requests.get(url=f"{self.service}/{self.model}/",
-                                    params=params)
-
-        try:
-            if not response.ok:
-                raise GraphQLError(f"Upstream API responded: {response.text}")
-        except:
-            if response.status_code != 201:
-                raise GraphQLError(f"Upstream API responded: {response.text}")
-
-        result = response.json()["data"]
-
-        # Prime the cache with the complete result set to prevent unnecessary extra calls
-        for item in result:
-            self.prime(item[self.index], item)
-
-        return result
-
-    def get_all_paged(self, start: int = 1, limit: int = 20, desc: bool = False,
-                      sortingColumn: str = "id", filters: Filters = None):
-        params = {
-            'start': start,
-            'limit': limit,
-            'desc': desc,
-            'sortingColumn': sortingColumn,
-            'filters': json.dumps(filters) if filters else None
-        }
-        response = requests.get(url=f"{self.service}/{self.model}/", params=params)
-
-        if not response.ok:
-            raise GraphQLError(f"Upstream API responded: {response.text}")
-        result = response.json()["data"]
-
-        # Prime the cache with the complete result set to prevent unnecessary extra calls
-        for item in result:
-            self.prime(item[self.index], item)
-
-        page_info = {"count": response.json()["count"], "start": response.json()["start"],
-                     "limit": response.json()["limit"]}
-
-        return_obj = {self.model: result, "page_info": page_info}
-
-        return return_obj
-
-    async def batch_load_fn(self, keys):
-        objects = {}
-        for i in range(0, len(keys), self.batch_size):
-            url = self.url_for(keys[i:i + self.batch_size])
-            response = requests.get(url)
-            try:
-                if not response.ok:
-                    raise GraphQLError(f"Upstream API responded: {response.text}")
-            except:
-                if response.status_code != 200:
-                    raise GraphQLError(f"Upstream API responded: {response.text}")
-            
-            for item in response.json()["data"]:
-                objects[item[self.index]] = item
-        return [objects.get(key, None) for key in keys]
+    }
 
 
-class ListDataLoader(DataLoader):
-    """ Dataloader for when the result is a list of objects """
-    model = None
-    service = settings.HHB_SERVICES_URL
-    filter_item = None
-    index = None
-    is_list = False  # elements in the result list are lists as well (1-n vs n-n)
+def _base_data_load_with_options(service: str, options: Unpack[DataLoaderOptions], key=None, keys: List[Key] = None):
+    _, _, _, _, batch_size, return_first, return_indexed, model_type = _get_options(options)
 
-    async def batch_load_fn(self, keys):
+    if keys is not None:
+        if len(keys) > batch_size:
+            result = []
+            for i in range(0, len(keys), batch_size):
+                part, _ = _base_load_with_options(service, options, keys=keys[i::i + batch_size])
+                for entry in part["data"]:
+                    result.append(model_type(entry))
+            return result
 
-        url = f"{self.service}/{self.model}/?{self.filter_item}={','.join([str(k) for k in keys])}"
-        response = requests.get(url)
-        try:
-            if not response.ok:
-                raise GraphQLError(f"Upstream API responded: {response.text}")
-        except:
-            if response.status_code != 200:
-                raise GraphQLError(f"Upstream API responded: {response.text}")
-        objects = {}
-        for item in response.json()["data"]:
-            if self.is_list:
-                for index in item[self.index]:
-                    if index not in objects:
-                        objects[index] = list()
-                    objects[index].append(item)
-            else:
-                if item[self.index] not in objects:
-                    objects[item[self.index]] = list()
-                objects[item[self.index]].append(item)
-        return [objects.get(key, []) for key in keys]
+    data = _base_load_with_options(service, options, key=key, keys=keys)["data"]
 
-    def get_all_paged(self, keys, start: int = 1, limit: int = 20, desc: bool = False,
-                      sortingColumn: str = "id", filters: Filters = None):
-        params = {
-            f'{self.filter_item}': ','.join([str(k) for k in keys]),
-            'start': start,
-            'limit': limit,
-            'desc': desc,
-            'sortingColumn': sortingColumn,
-            'filters': json.dumps(filters) if filters else None
-        }
-        response = requests.get(url=f"{self.service}/{self.model}/", params=params)
+    if return_first:
+        data = model_type(data[0]) if len(data) > 0 else None
+    elif return_indexed is not None:
+        indexed = {}
+        for item in data:
+            indexed.setdefault(item[return_indexed], model_type(item))
+        data = indexed
+    else:
+        data = [model_type(item) for item in data]
 
-        if not response.ok:
-            raise GraphQLError(f"Upstream API responded: {response.text}")
-        result = response.json()["data"]
+    logging.info(f"response: {data}")
+    return data
 
-        # Prime the cache with the complete result set to prevent unnecessary extra calls
-        for item in result:
-            self.prime(item[self.index], item)
 
-        page_info = {"count": response.json()["count"], "start": response.json()["start"],
-                     "limit": response.json()["limit"]}
+def _base_load_with_options(service: str, options: Unpack[DataLoaderOptions], key=None, keys: List[Key] = None) -> dict:
+    logging.info(options)
+    logging.info(locals())
+    model, filter_item, filters, params, _, _, _, _ = _get_options(options)
 
-        return_obj = {self.model: result, "page_info": page_info}
+    url = f"{service}/{model}/"
+    key_data = ','.join([str(k) for k in keys]) if keys is not None else key
 
-        return return_obj
+    if key_data is not None:
+        # we can't set a default value for filter_item because
+        # otherwise we can't do the single check in load (single)
+        if filter_item is None:
+            filter_item = "filter_ids"
+        params[filter_item] = key_data
+
+    if filters:
+        params["filters"] = json.dumps(filters)
+
+    logging.info(f"requesting: get, {url}, {params}")
+    response = _send_get_request(url, service, params=params).json()
+    logging.info(f"response: {response}")
+    return response
+
+
+def _send_get_request(url, service, params=None, headers=None):
+    try:
+        response = requests.get(url, params=params, headers=headers)
+    except requests.exceptions.ConnectionError:
+        raise GraphQLError(f"Connectie error heeft plaatsgevonden op {service}")
+
+    if response.status_code != 200:
+        raise UpstreamError(response, f"Request to {url} {params} failed.")
+
+    return response

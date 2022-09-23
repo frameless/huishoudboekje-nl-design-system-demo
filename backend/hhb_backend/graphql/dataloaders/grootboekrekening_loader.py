@@ -1,8 +1,8 @@
-from hhb_backend.graphql import settings
-from hhb_backend.graphql.dataloaders.base_loader import SingleDataLoader
+from hhb_backend.graphql.dataloaders.base_loader import DataLoader
+from hhb_backend.graphql.settings import GROOTBOEK_SERVICE_URL
+from hhb_backend.service.model.grootboekrekening import Grootboekrekening
 
 
-class GrootboekrekeningenByIdLoader(SingleDataLoader):
-    """ Load grootboekrekeningen using ids """
+class GrootboekrekeningLoader(DataLoader[Grootboekrekening]):
+    service = GROOTBOEK_SERVICE_URL
     model = "grootboekrekeningen"
-    service = settings.GROOTBOEK_SERVICE_URL

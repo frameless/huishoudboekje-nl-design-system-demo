@@ -1,9 +1,7 @@
 import logging
 from tokenize import String
-# from backend.hhb_backend.graphql.mutations.alarmen.evaluate_alarm import evaluateOneAlarm
 
 import hhb_backend.graphql as graphql
-from hhb_backend.graphql.mutations.alarmen.evaluate_alarm import EvaluateAlarm, EvaluateAlarms
 
 
 async def automatisch_alle_alarmen_beoordelen():

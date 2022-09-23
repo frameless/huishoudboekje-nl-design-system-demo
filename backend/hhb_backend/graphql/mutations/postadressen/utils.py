@@ -1,37 +1,31 @@
-import json
-
 import requests
 from graphql import GraphQLError
+
 from hhb_backend.graphql import settings
+from hhb_backend.graphql.dataloaders import hhb_dataloader
+from hhb_backend.service.model.postadres import Postadres
+
 
 def create_afdeling_postadres(input, afdeling_id):
-    contactCatalogus_input = {
-        "street": input.get("straatnaam"),
-        "houseNumber": input.get("huisnummer"),
-        "postalCode": input.get("postcode"),
-        "locality": input.get("plaatsnaam")
-    }
-
-    contactCatalogus_response = requests.post(
-        f"{settings.POSTADRESSEN_SERVICE_URL}/addresses",
-        data=json.dumps(contactCatalogus_input),
-        headers={"Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845", "Content-type": "application/json"}
+    postadres_input = Postadres(
+        street=input.get("straatnaam"),
+        houseNumber=input.get("huisnummer"),
+        postalCode=input.get("postcode"),
+        locality=input.get("plaatsnaam")
     )
-    if contactCatalogus_response.status_code != 201:
-        raise GraphQLError(f"Upstream API responded: {contactCatalogus_response.json()}")
 
-    result = contactCatalogus_response.json()['data']
+    postadres_response = requests.post(
+        f"{settings.POSTADRESSEN_SERVICE_URL}/addresses",
+        json=postadres_input
+    )
+    if postadres_response.status_code != 201:
+        raise GraphQLError(f"Upstream API responded: {postadres_response.json()}")
 
-    previous_afdeling = requests.get(
-        f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/{afdeling_id}",
-        headers={"Content-type": "application/json"}
-    ).json()['data']
+    result = postadres_response.json()['data']
 
-    if previous_afdeling.get("postadressen_ids"):
-        postadressen_ids = list(previous_afdeling["postadressen_ids"])
-    else:
-        postadressen_ids = list()
+    previous_afdeling = hhb_dataloader().afdelingen.load_one(afdeling_id)
 
+    postadressen_ids = previous_afdeling.postadressen_ids
     postadressen_ids.append(result['id'])
 
     afdeling_input = {
@@ -48,12 +42,11 @@ def create_afdeling_postadres(input, afdeling_id):
         raise GraphQLError(
             f"Upstream API responded: {update_afdeling_response.json()}"
         )
-    result2 = {}
 
-    result2["id"] = result.pop("id")
-    result2["huisnummer"] = result.pop("houseNumber")
-    result2["postcode"] = result.pop("postalCode")
-    result2["straatnaam"] = result.pop("street")
-    result2["plaatsnaam"] = result.pop("locality")
-
-    return result2
+    return {
+        "id": result.pop("id"),
+        "huisnummer": result.pop("houseNumber"),
+        "postcode": result.pop("postalCode"),
+        "straatnaam": result.pop("street"),
+        "plaatsnaam": result.pop("locality")
+    }

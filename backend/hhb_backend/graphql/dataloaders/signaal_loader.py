@@ -1,14 +1,9 @@
-from hhb_backend.graphql import settings
-from hhb_backend.graphql.dataloaders.base_loader import SingleDataLoader
-from typing import Dict, Union
+from hhb_backend.graphql.dataloaders.base_loader import DataLoader
+from hhb_backend.graphql.settings import SIGNALENSERVICE_URL
+from hhb_backend.service.model.signaal import Signaal
 
-Filters = Dict[str, Union['Filters', str, int, bool]]
 
-class SignaalByIdLoader(SingleDataLoader):
-    """ Laden van Signalen op basis van ids """
+class SignaalLoader(DataLoader[Signaal]):
+    service = SIGNALENSERVICE_URL
     model = "signals"
-    service = settings.SIGNALENSERVICE_URL
-    filter_item = "filter_ids"
-    index = "id"
     batch_size = 1000
-

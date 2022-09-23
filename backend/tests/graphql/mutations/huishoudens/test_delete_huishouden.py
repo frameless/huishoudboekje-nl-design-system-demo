@@ -41,7 +41,7 @@ def test_delete_huishouden(client):
 
 def test_delete_huishouden_error(client):
     with requests_mock.Mocker() as mock:
-        adapter = mock.get(f"{settings.HHB_SERVICES_URL}/huishoudens/?filter_ids=1", status_code=404, text="Not found")
+        adapter = mock.get(f"{settings.HHB_SERVICES_URL}/huishoudens/?filter_ids=1", status_code=200, json={"data": []})
 
         response = client.post(
             "/graphql",
@@ -58,7 +58,7 @@ def test_delete_huishouden_error(client):
         )
         assert response.json == {"data": {"deleteHuishouden": None},
                                  "errors": [{"locations": [{"column": 27, "line": 3}],
-                                             "message": "Upstream API responded: Not found",
+                                             "message": "Huishouden bestaat niet.",
                                              "path": ["deleteHuishouden"]}]}
         assert adapter.called_once
 

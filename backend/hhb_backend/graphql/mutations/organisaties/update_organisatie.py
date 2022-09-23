@@ -1,9 +1,8 @@
 """ GraphQL mutation for updating a Organisatie """
-import os
 import graphene
 import requests
-import json
 from graphql import GraphQLError
+
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.organisatie import Organisatie
@@ -39,12 +38,13 @@ class UpdateOrganisatie(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(_root, _info, id, **kwargs):
         """ Update the current Organisatie """
-        previous = await hhb_dataloader().organisaties_by_id.load(id)
+        previous = hhb_dataloader().organisaties.load_one(id)
         if not previous:
             raise GraphQLError("Organisatie not found")
 
-        Organisatie().unique_kvk_vestigingsnummer(kwargs.get("kvknummer"), kwargs.get("vestigingsnummer"), id)
+        Organisatie.unique_kvk_vestigingsnummer(kwargs.get("kvknummer"), kwargs.get("vestigingsnummer"), id)
 
+        organisatie = previous
         # Try update of organisatie service
         if kwargs:
             org_service_response = requests.post(
@@ -57,6 +57,5 @@ class UpdateOrganisatie(graphene.Mutation):
                 )
 
             organisatie = org_service_response.json()["data"]
-        else:
-            organisatie=previous
+
         return UpdateOrganisatie(organisatie=organisatie, previous=previous, ok=True)

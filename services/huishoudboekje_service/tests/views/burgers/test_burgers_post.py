@@ -20,7 +20,6 @@ def test_burgers_post_success(app, huishouden_factory):
                                      'email': 'a@b.c',
                                      'geboortedatum': '2020-01-01',
                                      'huisnummer': None,
-                                     'iban': None,
                                      'id': 1,
                                      'postcode': None,
                                      'straatnaam': None,

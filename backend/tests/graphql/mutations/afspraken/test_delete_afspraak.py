@@ -1,27 +1,30 @@
 import requests_mock
+
 from hhb_backend.graphql import settings
 
 afspraak = {
-            'id': 1,
-            'rubriek_id': 1,
-            'burger_id': 1,
-            'tegen_rekening_id': 1,
-            'valid_from': "2020-10-01",
-            'valid_through': "2020-10-01",
-            'zoektermen': [
-                "zoekterm1",
-                "zoekterm2"
-            ],
-            'betaalinstructie': {
-                "end_date": "2020-12-31",
-                "start_date": "2020-01-01",
-                "by_month_day": [
-                    1
-                ],
-                "except_dates": []
-            },
-            'journaalposten': []
-        }
+    'id': 1,
+    'rubriek_id': 1,
+    'burger_id': 1,
+    'tegen_rekening_id': 1,
+    'valid_from': "2020-10-01",
+    'valid_through': "2020-10-01",
+    'zoektermen': [
+        "zoekterm1",
+        "zoekterm2"
+    ],
+    'betaalinstructie': {
+        "end_date": "2020-12-31",
+        "start_date": "2020-01-01",
+        "by_month_day": [
+            1
+        ],
+        "except_dates": []
+    },
+    'journaalposten': [],
+    'overschrijvingen': []
+}
+
 
 def test_delete_afspraak(client):
     with requests_mock.Mocker() as rm:
@@ -54,6 +57,7 @@ def test_delete_afspraak(client):
         assert rm3.called_once
         assert fallback.called == 0
         assert response.json == expected
+
 
 def test_delete_afspraak_error_journaalpost(client):
     afspraak_met_journaalposten = {
@@ -126,16 +130,20 @@ def test_delete_afspraak_zoekterm(client):
                 ],
                 "except_dates": []
             },
-            'journaalposten': [1, 2]
+            'journaalposten': [1, 2],
+            'overschrijvingen': []
         }
         
-        afspraakId = 1
+        afspraak_id = 1
         zoekterm = "zoekterm1"
         expected = {'data': {'deleteAfspraakZoekterm': {'ok': True}}}
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        rm1 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=1", status_code=200, json={'data': [afspraak]})
-        rm2 = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/1", status_code=200, json={'data': afspraak_removed_zoekterm})
-        rm3 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_rekening=1", status_code=200, json={'data': [afspraak_removed_zoekterm]})
+        rm1 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=1", json={'data': [afspraak]})
+        rm2 = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/1", json={'data': afspraak_removed_zoekterm})
+        rm3 = rm.get(
+            f"{settings.HHB_SERVICES_URL}/afspraken/?filter_rekening=1",
+            json={'data': [afspraak_removed_zoekterm]}
+        )
         rm4 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201, json={"data": {"id": 1}})
 
         # act
@@ -149,7 +157,7 @@ def test_delete_afspraak_zoekterm(client):
                         }
                     }
                     ''',
-                "variables": {"afspraakId": afspraakId, "zoekterm": zoekterm}},
+                "variables": {"afspraakId": afspraak_id, "zoekterm": zoekterm}},
             content_type='application/json'
         )
 
@@ -160,6 +168,7 @@ def test_delete_afspraak_zoekterm(client):
         assert rm4.called_once
         assert fallback.called == 0
         assert response.json == expected
+
 
 def test_delete_afspraak_zoekterm_niet_gevonden(client):
     with requests_mock.Mocker() as rm:
@@ -180,14 +189,15 @@ def test_delete_afspraak_zoekterm_niet_gevonden(client):
                 ],
                 "except_dates": []
             },
-            'journaalposten': [1, 2]
+            'journaalposten': [1, 2],
+            'overschrijvingen': []
         }
         
-        afspraakId = 1
+        afspraak_id = 1
         zoekterm = "zoekterm1"
         expected = 'Zoekterm not found in zoektermen of afspraak.'
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        rm1 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=1", status_code=200, json={'data': [afspraak_removed_zoekterm]})
+        rm1 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=1", json={'data': [afspraak_removed_zoekterm]})
 
         # act
         response = client.post(
@@ -200,7 +210,7 @@ def test_delete_afspraak_zoekterm_niet_gevonden(client):
                         }
                     }
                     ''',
-                "variables": {"afspraakId": afspraakId, "zoekterm": zoekterm}},
+                "variables": {"afspraakId": afspraak_id, "zoekterm": zoekterm}},
             content_type='application/json'
         )
 
@@ -225,14 +235,15 @@ def test_delete_afspraak_betaalinstructie(client):
                 "zoekterm2"
             ],
             'betaalinstructie': None,
-            'journaalposten': []
+            'journaalposten': [],
+            'overschrijvingen': []
         }
         
-        afspraakId = 1
+        afspraak_id = 1
         expected = {'data': {'deleteAfspraakBetaalinstructie': {'ok': True}}}
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        rm1 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=1", status_code=200, json={'data': [afspraak]})
-        rm2 = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/1", status_code=200, json={'data': afspraak_removed_betaalinstructie})
+        rm1 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=1", json={'data': [afspraak]})
+        rm2 = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/1", json={'data': afspraak_removed_betaalinstructie})
         rm3 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201, json={"data": {"id": 1}})
 
         # act
@@ -246,7 +257,7 @@ def test_delete_afspraak_betaalinstructie(client):
                         }
                     }
                     ''',
-                "variables": {"afspraakId": afspraakId}},
+                "variables": {"afspraakId": afspraak_id}},
             content_type='application/json'
         )
 

@@ -92,7 +92,7 @@ mutation test($id: Int!) {
 
 def test_delete_organisatie_error(client):
     with requests_mock.Mocker() as mock:
-        adapter = mock.get(f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/?filter_ids=1", status_code=404, text="Not found")
+        adapter = mock.get(f"{settings.ORGANISATIE_SERVICES_URL}/organisaties/?filter_ids=1", status_code=200, json={"data": []})
 
         response = client.post(
             "/graphql",
@@ -109,6 +109,6 @@ mutation test($id: Int!) {
         )
         assert response.json == {"data": {"deleteOrganisatie": None},
                                  "errors": [{"locations": [{"column": 3, "line": 3}],
-                                             "message": "Upstream API responded: Not found",
+                                             "message": "Organisatie not found",
                                              "path": ["deleteOrganisatie"]}]}
         assert adapter.called_once

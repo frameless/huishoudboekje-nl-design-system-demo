@@ -67,8 +67,8 @@ def test_afspraak_filter_ids(client, afspraak_factory):
 
 def test_afspraak_filter_invalid_id(client):
     response = client.get(f'/afspraken/?filter_ids=NaN')
-    assert response.status_code == 400
-    assert response.json["errors"][0] == "Input for filter_ids is not correct, 'NaN' is not a number."
+    assert response.status_code == 200
+    assert response.json["data"] == []
 
 
 def test_afspraak_get_filter_burgers(client, afspraak_factory, burger_factory):

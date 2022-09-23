@@ -1,14 +1,19 @@
 import {Alarm} from "@prisma/client";
 import prisma from "../../src/client";
 
-const getManyAlarms = async (ids: string[] = []): Promise<Alarm[] | unknown> => {
+type Filters = {
+	ids?: string[],
+	isActive?: boolean
+};
+
+const getManyAlarms = async (filters: Filters): Promise<Alarm[] | unknown> => {
 	return await prisma.alarm.findMany({
 		where: {
-			...ids.length > 0 && {
-				id: {
-					in: ids,
-				},
-			},
+			// Filter by ids
+			...filters.ids && {id: {in: filters.ids}},
+
+			// Filter by isActive
+			...filters.isActive !== undefined && {isActive: filters.isActive},
 		},
 	});
 };

@@ -1,9 +1,11 @@
 """ MethodView for /burgers/<burger_id>/rekeningen path """
 from flask import request, abort, make_response
 from sqlalchemy.orm.exc import FlushError
-from core_service.utils import row2dict
+
+from core_service.utils import row2dict, one_or_none
 from core_service.views.hhb_view import HHBView
-from models import RekeningBurger, Burger, Rekening
+from models import RekeningBurger, Burger
+
 
 class RekeningBurgerView(HHBView):
     """ Methods for /burgers/<burger_id>/rekeningen path """
@@ -53,9 +55,9 @@ class RekeningBurgerView(HHBView):
         self.hhb_object.get_or_404(object_id)
         burger_id = self.hhb_object.hhb_object.id
         rekening_id = request.json["rekening_id"]
-        rekening_burger_relation = RekeningBurger.query.filter(
+        rekening_burger_relation = one_or_none(RekeningBurger.query.filter(
                 RekeningBurger.burger_id == burger_id
-            ).filter(RekeningBurger.rekening_id == rekening_id).one_or_none()
+            ).filter(RekeningBurger.rekening_id == rekening_id))
         if not rekening_burger_relation:
             abort(make_response({"errors": [f"Rekening / Burger relation not found."]}, 404))
         self.db.session.delete(rekening_burger_relation)

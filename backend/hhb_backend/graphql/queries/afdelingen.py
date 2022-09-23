@@ -1,7 +1,7 @@
 """ GraphQL Gebruikers query """
 import graphene
-from flask import request
 
+from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.afdeling import Afdeling
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     gebruikers_activiteit_entities,
@@ -24,7 +24,7 @@ class AfdelingQuery:
     @classmethod
     @log_gebruikers_activiteit
     async def resolver(cls, _root, _info, id):
-        return await request.dataloader.afdelingen_by_id.load(id)
+        return hhb_dataloader().afdelingen.load_one(id)
 
 
 class AfdelingenQuery:
@@ -45,5 +45,5 @@ class AfdelingenQuery:
     @log_gebruikers_activiteit
     async def resolver(cls, _root, _info, ids=None):
         if ids:
-            return await request.dataloader.afdelingen_by_id.load_many(ids)
-        return request.dataloader.afdelingen_by_id.get_all_and_cache()
+            return hhb_dataloader().afdelingen.load(ids)
+        return hhb_dataloader().afdelingen.load_all()

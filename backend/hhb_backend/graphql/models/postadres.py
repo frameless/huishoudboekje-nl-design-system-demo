@@ -1,5 +1,7 @@
 """ Postadres model as used in GraphQL queries """
+
 import graphene
+
 
 class Postadres(graphene.ObjectType):
     id = graphene.String()
@@ -8,14 +10,14 @@ class Postadres(graphene.ObjectType):
     postcode = graphene.String()
     plaatsnaam = graphene.String()
 
-    def resolve_huisnummer(root, info):
-        return root.get("houseNumber")
+    def resolve_huisnummer(self, _info):
+        return self.get("houseNumber")
 
-    def resolve_postcode(root, info):
-        return root.get("postalCode")
+    def resolve_postcode(self, _info):
+        return self.get("postalCode")
 
-    def resolve_straatnaam(root, info):
-        return root.get("street")
+    def resolve_straatnaam(self, _info):
+        return self.get("street")
 
-    def resolve_plaatsnaam(root, info):
-        return root.get("locality")
+    def resolve_plaatsnaam(self, _info):
+        return self.get("locality")

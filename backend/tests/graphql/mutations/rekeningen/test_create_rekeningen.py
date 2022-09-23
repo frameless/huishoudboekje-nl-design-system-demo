@@ -1,29 +1,34 @@
 import requests_mock
+
 from hhb_backend.graphql import settings
+
 
 def test_create_afdeling_rekening(client):
     with requests_mock.Mocker() as rm:
         # arrange
-        afdelingId = 1
+        afdeling_id = 1
         afdeling = {
-            "data" : {
-                "id" : afdelingId,
-                "postadressen_ids": [], 
-                "rekeningen_ids": []
-            }
+            "data" : [
+                {
+                    "id" : afdeling_id,
+                    "postadressen_ids": [],
+                    "rekeningen_ids": []
+                }
+            ]
         }
         new_afdeling = {
             "data" : {
-                "id" : afdelingId,
+                "id" : afdeling_id,
                 "postadressen_ids": [], 
                 "rekeningen_ids": [1]
             }
         }
-        newRekening = {
+        new_rekening = {
             "iban": "NL19INGB7363245428",
             "rekeninghouder": "Piet Pieterson"
         }
-        request = {"query":'''
+        request = {
+            "query": '''
                 mutation test($afdelingId:Int!, $rekening:RekeningInput!) {
                     createAfdelingRekening(afdelingId: $afdelingId, rekening: $rekening) {
                         ok
@@ -32,9 +37,8 @@ def test_create_afdeling_rekening(client):
                         }
                     }
                 }''',
-            "variables": {"afdelingId": afdelingId, "rekening": newRekening}}
-
-
+            "variables": {"afdelingId": afdeling_id, "rekening": new_rekening}
+        }
         rekening = {
             "data": [
                 {
@@ -48,11 +52,10 @@ def test_create_afdeling_rekening(client):
             ]
         } 
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        rm1 = rm.get(f"{settings.HHB_SERVICES_URL}/rekeningen/?filter_ibans=NL19INGB7363245428"
-                ,status_code=200
-                ,json=rekening)
+        rm1 = rm.get(f"{settings.HHB_SERVICES_URL}/rekeningen/?filter_ibans=NL19INGB7363245428", json=rekening)
 
-        rm2 = rm.post(f"{settings.HHB_SERVICES_URL}/afdelingen/1/rekeningen/", status_code=201,
+        rm2 = rm.post(
+            f"{settings.HHB_SERVICES_URL}/afdelingen/1/rekeningen/", status_code=201,
             json={
                     "afdelingen": [1],
                     "afspraken": [],
@@ -63,8 +66,8 @@ def test_create_afdeling_rekening(client):
                 }
         )
         rm3 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/")
-        rm4 = rm.get(f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/1", status_code=200, json=afdeling)
-        rm5 = rm.post(f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/1", status_code=200, json=new_afdeling)
+        rm4 = rm.get(f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/?filter_ids=1", json=afdeling)
+        rm5 = rm.post(f"{settings.ORGANISATIE_SERVICES_URL}/afdelingen/1", json=new_afdeling)
         expected = {'data': {'createAfdelingRekening': {'ok': True, 'rekening': {'id': 1}}}}
 
         # act
@@ -87,12 +90,13 @@ def test_create_afdeling_rekening(client):
 def test_create_burger_rekening(client):
     with requests_mock.Mocker() as rm:
         # arrange
-        burgerId = 1
-        newRekening = {
+        burger_id = 1
+        new_rekening = {
             "iban": "NL19INGB7363245428",
             "rekeninghouder": "Piet Pieterson"
         }
-        request = {"query":'''
+        request = {
+            "query": '''
                 mutation test($burgerId:Int!, $rekening:RekeningInput!) {
                     createBurgerRekening(burgerId: $burgerId, rekening: $rekening) {
                         ok
@@ -101,9 +105,8 @@ def test_create_burger_rekening(client):
                         }
                     }
                 }''',
-            "variables": {"burgerId": burgerId, "rekening": newRekening}}
-
-
+            "variables": {"burgerId": burger_id, "rekening": new_rekening}
+        }
         rekening = {
             "data": [
                 {
@@ -117,11 +120,10 @@ def test_create_burger_rekening(client):
             ]
         } 
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        rm1 = rm.get(f"{settings.HHB_SERVICES_URL}/rekeningen/?filter_ibans=NL19INGB7363245428"
-                ,status_code=200
-                ,json=rekening)
+        rm1 = rm.get(f"{settings.HHB_SERVICES_URL}/rekeningen/?filter_ibans=NL19INGB7363245428", json=rekening)
 
-        rm2 = rm.post(f"{settings.HHB_SERVICES_URL}/burgers/1/rekeningen/", status_code=201,
+        rm2 = rm.post(
+            f"{settings.HHB_SERVICES_URL}/burgers/1/rekeningen/", status_code=201,
             json={
                     "afdelingen": [],
                     "afspraken": [],

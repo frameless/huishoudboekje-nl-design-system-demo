@@ -66,5 +66,5 @@ def test_journaalpost_filter_ids(client, journaalpost_factory):
 
 def test_journaalpost_filter_invalid_id(client):
     response = client.get(f'/journaalposten/?filter_ids=NaN')
-    assert response.status_code == 400
-    assert response.json["errors"][0] == "Input for filter_ids is not correct, 'NaN' is not a number."
+    assert response.status_code == 200
+    assert response.json["data"] == []

@@ -1,6 +1,7 @@
 import requests_mock
+
 from hhb_backend.graphql import settings
-from hhb_backend.graphql.scalars.day_of_week import DayOfWeek
+from hhb_backend.service.model.afspraak import Afspraak, Betaalinstructie
 
 afspraak = {
     "id": 1,
@@ -11,33 +12,65 @@ afspraak = {
     "valid_through": None,
     # leave out complex references
     "betaalinstructie": {
-        "by_day": [ 
+        "by_day": [
             "Monday",
             "Wednesday",
-            "Friday"], 
+            "Friday"
+        ],
         "by_month": [],
         "by_month_day": [],
         "repeat_frequency": None,
         "except_dates": None,
         "start_date": "2020-01-01",
         "end_date": "2022-01-01",
-    }
+    },
+    "journaalposten": [],
+    "overschrijvingen": []
 }
 
-afspraak_inkomsten = {
-    "id": 1,
-    "omschrijving": "huur",
-    "bedrag": "650.00",
-    "credit": True,
-    "valid_from": "2021-11-12",
-    "valid_through": None,
+afspraak_inkomsten = Afspraak(
+    id=1,
+    omschrijving="huur",
+    bedrag="650.00",
+    credit=True,
+    valid_from="2021-11-12",
+    valid_through=None,
+    journaalposten=[],
+    overschrijvingen=[]
     # leave out complex references
-}
+)
+
+betaal_instructie_input = Betaalinstructie(
+    startDate="2020-11-01",
+    endDate="2022-11-01",
+    byMonth=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    byMonthDay=[3],
+    byDay=[]
+)
 
 def test_update_afspraak(client):
     with requests_mock.Mocker() as rm:
         # arrange
-        expected = {'data': {'updateAfspraakBetaalinstructie': {'ok': True, 'afspraak': {'id': 1, 'omschrijving': 'huur', 'bedrag': '6.50', 'credit': False, 'validFrom': '2021-11-12', 'validThrough': None, 'betaalinstructie': {'byDay': [], 'byMonth': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 'byMonthDay': [], 'repeatFrequency': None, 'exceptDates': [], 'startDate': '2020-11-01', 'endDate': '2022-11-01'}}, 'previous': {'id': 1, 'omschrijving': 'huur', 'bedrag': '6.50', 'credit': False, 'validFrom': '2021-11-12', 'validThrough': None, 'betaalinstructie': {'byDay': ['Monday', 'Wednesday', 'Friday'], 'byMonth': [], 'byMonthDay': [], 'repeatFrequency': None, 'exceptDates': None, 'startDate': '2020-01-01', 'endDate': '2022-01-01'}}}}}
+        expected = {'data': {'updateAfspraakBetaalinstructie': {
+            'ok': True,
+            'afspraak': {
+                'id': 1, 'omschrijving': 'huur', 'bedrag': '6.50', 'credit': False,
+                'validFrom': '2021-11-12', 'validThrough': None,
+                'betaalinstructie': {
+                    'byDay': [], 'byMonth': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 'byMonthDay': [],
+                    'repeatFrequency': None, 'exceptDates': [], 'startDate': '2020-11-01', 'endDate': '2022-11-01'
+                }
+            },
+            'previous': {
+                'id': 1, 'omschrijving': 'huur', 'bedrag': '6.50', 'credit': False,
+                'validFrom': '2021-11-12', 'validThrough': None,
+                'betaalinstructie': {
+                    'byDay': ['Monday', 'Wednesday', 'Friday'], 'byMonth': [], 'byMonthDay': [],
+                    'repeatFrequency': None, 'exceptDates': None, 'startDate': '2020-01-01', 'endDate': '2022-01-01'
+                }
+            }
+        }}}
+
         updated_afspraak = {
             "id": 1,
             "omschrijving": "huur",
@@ -46,8 +79,8 @@ def test_update_afspraak(client):
             "valid_from": "2021-11-12",
             "valid_through": None,
             "betaalinstructie": {
-                "by_day": [], 
-                "by_month": [1,2,3,4,5,6,7,8,9,10,11,12], 
+                "by_day": [],
+                "by_month": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
                 "by_monthDay": [3],
                 "repeat_frequency": None,
                 "except_dates": [],
@@ -55,17 +88,11 @@ def test_update_afspraak(client):
                 "end_date": "2022-11-01"
             }
         }
-        afspraakId = 1
-        betaalInstructieInput = {
-            "startDate":"2020-11-01",
-            "endDate":"2022-11-01",
-            "byMonth": [1,2,3,4,5,6,7,8,9,10,11,12],
-            "byMonthDay": [3],
-            "byDay": [],
-        }
+        afspraak_id = 1
+
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        rm1 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=1", status_code=200, json={ "data": [afspraak]})
-        rm2 = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/1", status_code=200, json={ "data": updated_afspraak})
+        rm1 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=1", json={"data": [afspraak]})
+        rm2 = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/1", status_code=200, json={"data": updated_afspraak})
         rm3 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201, json={"data": {"id": 1}})
 
 
@@ -114,7 +141,7 @@ def test_update_afspraak(client):
                         }
                     }
                     ''',
-                "variables": {"afspraakId": afspraakId, "input": betaalInstructieInput}},
+                "variables": {"afspraakId": afspraak_id, "input": betaal_instructie_input}},
             content_type='application/json'
         )
 
@@ -130,16 +157,9 @@ def test_update_afspraak_does_not_exist(client):
     with requests_mock.Mocker() as rm:
         # arrange
         expected = "afspraak not found"
-        betaalInstructieInput = {
-            "startDate":"2020-11-01",
-            "endDate":"2022-11-01",
-            "byMonth": [1,2,3,4,5,6,7,8,9,10,11,12],
-            "byMonthDay": [3],
-            "byDay": [],
-        }
-        afspraakId = 1
+        afspraak_id = 1
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        rm1 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=1", status_code=200, json={ "data": []})
+        rm1 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=1", json={"data": []})
 
 
         # act
@@ -153,7 +173,7 @@ def test_update_afspraak_does_not_exist(client):
                         }
                     }
                     ''',
-                "variables": {"afspraakId": afspraakId, "input": betaalInstructieInput}},
+                "variables": {"afspraakId": afspraak_id, "input": betaal_instructie_input}},
             content_type='application/json')
 
 
@@ -167,16 +187,9 @@ def test_update_afspraak_is_credit(client):
     with requests_mock.Mocker() as rm:
         # arrange
         expected = "Betaalinstructie is alleen mogelijk bij uitgaven"
-        betaalInstructieInput = {
-            "startDate":"2020-11-01",
-            "endDate":"2022-11-01",
-            "byMonth": [1,2,3,4,5,6,7,8,9,10,11,12],
-            "byMonthDay": [3],
-            "byDay": [],
-        }
-        afspraakId = 1
+        afspraak_id = 1
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        rm1 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=1", status_code=200, json={ "data": [afspraak_inkomsten]})
+        rm1 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=1", json={"data": [afspraak_inkomsten]})
 
 
         # act
@@ -190,7 +203,7 @@ def test_update_afspraak_is_credit(client):
                         }
                     }
                     ''',
-                "variables": {"afspraakId": afspraakId, "input": betaalInstructieInput}},
+                "variables": {"afspraakId": afspraak_id, "input": betaal_instructie_input}},
             content_type='application/json')
 
 
@@ -204,19 +217,16 @@ def test_update_afspraak_invalid_betaalinstructie(client):
         # arrange
         expected = "Betaalinstructie: 'by_day' of 'by_month_day' moet zijn ingevuld"
         # invalid because you provide either byMonth + byMonthDay or byDay - not both
-        betaalInstructieInput = {
-            "startDate":"2020-11-01",
-            "endDate":"2022-11-01",
-            "byMonth": [1,2,3,4,5,6,7,8,9,10,11,12],
-            "byMonthDay": [3],
-            "byDay": [ 
-                "Monday",
-                "Wednesday",
-                "Friday"], 
-        }
-        afspraakId = 1
+        betaal_instructie_input = Betaalinstructie(
+            startDate="2020-11-01",
+            endDate="2022-11-01",
+            byMonth=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+            byMonthDay=[3],
+            byDay=["Monday", "Wednesday", "Friday"]
+        )
+        afspraak_id = 1
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        rm1 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=1", status_code=200, json={ "data": [afspraak]})
+        rm1 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=1", json={"data": [afspraak]})
 
 
         # act
@@ -230,7 +240,7 @@ def test_update_afspraak_invalid_betaalinstructie(client):
                         }
                     }
                     ''',
-                "variables": {"afspraakId": afspraakId, "input": betaalInstructieInput}},
+                "variables": {"afspraakId": afspraak_id, "input": betaal_instructie_input}},
             content_type='application/json')
 
 
@@ -243,16 +253,16 @@ def test_update_afspraak_invalid_date_range(client):
     with requests_mock.Mocker() as rm:
         # arrange
         expected = "Begindatum moet voor einddatum liggen"
-        betaalInstructieInput = {
-            "startDate":"2022-11-01",
-            "endDate":"2020-11-01",
-            "byMonth": [1,2,3,4,5,6,7,8,9,10,11,12],
-            "byMonthDay": [3],
-            "byDay": [], 
-        }
-        afspraakId = 1
+        betaal_instructie_input = Betaalinstructie(
+            startDate="2022-11-01",
+            endDate="2020-11-01",
+            byMonth=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+            byMonthDay=[3],
+            byDay=[]
+        )
+        afspraak_id = 1
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        rm1 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=1", status_code=200, json={ "data": [afspraak]})
+        rm1 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=1", json={"data": [afspraak]})
 
 
         # act
@@ -266,7 +276,7 @@ def test_update_afspraak_invalid_date_range(client):
                         }
                     }
                     ''',
-                "variables": {"afspraakId": afspraakId, "input": betaalInstructieInput}},
+                "variables": {"afspraakId": afspraak_id, "input": betaal_instructie_input}},
             content_type='application/json')
 
 

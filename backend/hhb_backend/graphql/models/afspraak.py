@@ -1,25 +1,27 @@
 """ Afspraak model as used in GraphQL queries """
 from datetime import datetime
+
 import graphene
 from dateutil.parser import isoparse
-from flask import request
 
-import hhb_backend.graphql.models.burger as burger
-import hhb_backend.graphql.models.afspraak as afspraak
 import hhb_backend.graphql.models.afdeling as afdeling
-import hhb_backend.graphql.models.postadres as postadres
-import hhb_backend.graphql.models.Alarm as alarm
+import hhb_backend.graphql.models.alarm as alarm
+import hhb_backend.graphql.models.burger as burger
 import hhb_backend.graphql.models.journaalpost as journaalpost
 import hhb_backend.graphql.models.overschrijving as overschrijving
+import hhb_backend.graphql.models.postadres as postadres
 import hhb_backend.graphql.models.rekening as rekening
 import hhb_backend.graphql.models.rubriek as rubriek
+from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.scalars.bedrag import Bedrag
 from hhb_backend.graphql.scalars.day_of_week import DayOfWeek
-from hhb_backend.processen.automatisch_boeken import find_matching_afspraken_by_afspraak
+from hhb_backend.processen.automatisch_boeken import match_zoekterm
 from hhb_backend.processen.overschrijvingen_planner import (
     PlannedOverschijvingenInput,
     get_planned_overschrijvingen,
 )
+from hhb_backend.graphql.utils.dates import afspraken_intersect, to_date
+
 
 class Interval(graphene.ObjectType):
     jaren = graphene.Int()
@@ -83,10 +85,7 @@ class Afspraak(graphene.ObjectType):
             planner_input, **kwargs
         )
         known_overschrijvingen = {}
-        overschrijvingen = (
-                await request.dataloader.overschrijvingen_by_afspraak.load(root.get("id"))
-                or []
-        )
+        overschrijvingen = hhb_dataloader().overschrijvingen.by_afspraak(root.get("id")) or []
         for o in overschrijvingen:
             known_overschrijvingen[o["datum"]] = o
         for datum, o in known_overschrijvingen.items():
@@ -99,43 +98,40 @@ class Afspraak(graphene.ObjectType):
     async def resolve_rubriek(root, info):
         """ Get rubriek when requested """
         if root.get("rubriek_id"):
-            return await request.dataloader.rubrieken_by_id.load(root.get("rubriek_id"))
+            return hhb_dataloader().rubrieken.load_one(root.get("rubriek_id"))
 
     async def resolve_burger(root, info):
         """ Get burger when requested """
         if root.get("burger_id"):
-            return await request.dataloader.burgers_by_id.load(root.get("burger_id"))
+            return hhb_dataloader().burgers.load_one(root.get("burger_id"))
 
     async def resolve_rekening(root, info):
         """ Get rekening when requested """
         if root.get("rekening_id"):
-            return await request.dataloader.rekeningen_by_id.load(
-                root.get("rekening_id")
-            )
+            return hhb_dataloader().rekeningen.load_one(root.get("rekening_id"))
 
     async def resolve_postadres(root, info):
         """ Get postadres when requested """
         postadres_id = root.get("postadres_id", None)
         if postadres_id:
-            postadres = await request.dataloader.postadressen_by_id.load(postadres_id)
+            postadres = hhb_dataloader().postadressen.load_one(postadres_id)
             return postadres
 
-    async def resolve_alarm(root, info):
+    async def resolve_alarm(self, _info):
         """ Get alarm when requested """
-        alarm_id = root.get("alarm_id")
+        alarm_id = self.get("alarm_id")
         if alarm_id:
-            alarm = await request.dataloader.alarmen_by_id.load(alarm_id)
-            return alarm
+            return hhb_dataloader().alarms.load_one(alarm_id)
 
     async def resolve_afdeling(root, info):
         """ Get afdeling when requested """
         if root.get("afdeling_id"):
-            return await request.dataloader.afdelingen_by_id.load(root.get("afdeling_id"))
+            return hhb_dataloader().afdelingen.load_one(root.get("afdeling_id"))
 
     async def resolve_tegen_rekening(root, info):
         """ Get tegen_rekening when requested """
         if root.get("tegen_rekening_id"):
-            return await request.dataloader.rekeningen_by_id.load(root.get("tegen_rekening_id"))
+            return hhb_dataloader().rekeningen.load_one(root.get("tegen_rekening_id"))
 
     def resolve_valid_from(root, info):
         if value := root.get("valid_from"):
@@ -145,15 +141,42 @@ class Afspraak(graphene.ObjectType):
         if value := root.get("valid_through"):
             return datetime.fromisoformat(value).date()
 
-    async def resolve_journaalposten(root, info):
+    async def resolve_journaalposten(self, _info):
         """ Get organisatie when requested """
-        if root.get("journaalposten"):
-            return (
-                    await request.dataloader.journaalposten_by_id.load_many(
-                        root.get("journaalposten")
-                    )
-                    or []
+        if self.get("journaalposten"):
+            return hhb_dataloader().journaalposten.load(self.get("journaalposten")) or []
+
+    async def resolve_matching_afspraken(self, info):
+        return await find_matching_afspraken_by_afspraak(self)
+
+async def find_matching_afspraken_by_afspraak(main_afspraak: Afspraak):
+    matching_afspraken = list()
+    if not main_afspraak.get("zoektermen"):
+        return matching_afspraken
+
+    afspraken = hhb_dataloader().afspraken.by_rekening(main_afspraak.get("tegen_rekening_id"))
+
+    zoektermen_main = ' '.join(main_afspraak.get("zoektermen"))
+    main_afspraak_valid_from = to_date(main_afspraak.get("valid_from"))
+    main_afspraak_valid_through = to_date(main_afspraak.get("valid_through"))
+
+    for afspraak in afspraken:
+        if afspraak.zoektermen:
+            zoektermen_afspraak = ' '.join(afspraak.zoektermen)
+
+            not_main_afspraak = (afspraak.id != main_afspraak.get("id"))
+            matching_zoekterm = match_zoekterm(afspraak, zoektermen_main) or match_zoekterm(main_afspraak, zoektermen_afspraak)
+
+            afspraak_valid_from = to_date(afspraak.valid_from)
+            afspraak_valid_through = to_date(afspraak.valid_through)
+            afspraken_overlap = afspraken_intersect(
+                valid_from1=main_afspraak_valid_from,
+                valid_from2=afspraak_valid_from,
+                valid_through1=main_afspraak_valid_through,
+                valid_through2=afspraak_valid_through
             )
 
-    async def resolve_matching_afspraken(root, info):
-        return await find_matching_afspraken_by_afspraak(root)
+            if not_main_afspraak and matching_zoekterm and afspraken_overlap:
+                matching_afspraken.append(afspraak)
+
+    return matching_afspraken

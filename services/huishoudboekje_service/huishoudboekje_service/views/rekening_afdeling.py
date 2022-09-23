@@ -1,9 +1,11 @@
 """ MethodView for /organisaties/<organisatie_id>/rekeningen path """
 from flask import request, abort, make_response
 from sqlalchemy.orm.exc import FlushError
-from core_service.utils import row2dict
+
+from core_service.utils import row2dict, one_or_none
 from core_service.views.hhb_view import HHBView
-from models import RekeningAfdeling, Afdeling, Rekening
+from models import RekeningAfdeling, Afdeling
+
 
 class RekeningAfdelingView(HHBView):
     """ Methods for /afdelingen/<afdeling_id>/rekeningen path """
@@ -56,9 +58,9 @@ class RekeningAfdelingView(HHBView):
         self.hhb_object.get_or_404(object_id)
         afdeling_id = self.hhb_object.hhb_object.id
         rekening_id = request.json["rekening_id"]
-        rekening_afdeling_relation = RekeningAfdeling.query.filter(
+        rekening_afdeling_relation = one_or_none(RekeningAfdeling.query.filter(
                 RekeningAfdeling.afdeling_id == afdeling_id
-            ).filter(RekeningAfdeling.rekening_id == rekening_id).one_or_none()
+            ).filter(RekeningAfdeling.rekening_id == rekening_id))
         if not rekening_afdeling_relation:
             abort(make_response({"errors": [f"Rekening / Afdeling relation not found."]}, 404))
         self.db.session.delete(rekening_afdeling_relation)

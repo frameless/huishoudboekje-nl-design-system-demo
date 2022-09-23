@@ -1,13 +1,13 @@
 """ Burger model as used in GraphQL queries """
 import graphene
-from flask import request
+from graphql import GraphQLError
 
 import hhb_backend.graphql.models.afspraak as afspraak
-import hhb_backend.graphql.models.rekening as rekening
 import hhb_backend.graphql.models.gebruikersactiviteit as gebruikersactiviteit
 import hhb_backend.graphql.models.huishouden as huishouden
+import hhb_backend.graphql.models.rekening as rekening
+from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.pageinfo import PageInfo
-from graphql import GraphQLError
 
 
 class Burger(graphene.ObjectType):
@@ -28,30 +28,32 @@ class Burger(graphene.ObjectType):
     huishouden = graphene.Field(lambda: huishouden.Huishouden)
     gebruikersactiviteiten = graphene.List(lambda: gebruikersactiviteit.GebruikersActiviteit)
 
-    def resolve_iban(root, info):
-        rekeningen = Burger.resolve_rekeningen(root, info)
+    def resolve_iban(self, info):
+        rekeningen = Burger.resolve_rekeningen(self, info)
         if rekeningen:
             return rekeningen[0].get('iban')
         return None
 
-    async def resolve_rekeningen(root, info):
+    async def resolve_rekeningen(self, _info):
         """ Get rekeningen when requested """
-        return await request.dataloader.rekeningen_by_burger.load(root.get('id')) or []
+        return hhb_dataloader().rekeningen.by_burger(self.get('id')) or []
 
-    async def resolve_afspraken(root, info):
-        return await request.dataloader.afspraken_by_burger.load(root.get('id')) or []
+    async def resolve_afspraken(self, _info):
+        return hhb_dataloader().afspraken.by_burger(self.get('id')) or []
 
-    async def resolve_gebruikersactiviteiten(root, info):
-        return request.dataloader.gebruikersactiviteiten_by_burgers.get_by_id(root.get('id')) or []
+    async def resolve_gebruikersactiviteiten(self, _info):
+        return hhb_dataloader().gebruikersactiviteiten.by_burger(self.get('id')) or []
 
-    async def resolve_huishouden(root, info):
-        return await request.dataloader.huishoudens_by_id.load(root.get('huishouden_id'))
+    async def resolve_huishouden(self, _info):
+        return hhb_dataloader().huishoudens.load_one(self.get('huishouden_id'))
 
-    def bsn_length(self, bsn):
+    @staticmethod
+    def bsn_length(bsn):
         if len(str(bsn)) != 9 and len(str(bsn)) != 8 :
             raise GraphQLError("BSN is not valid: BSN should consist of 8 or 9 digits.")
 
-    def bsn_elf_proef(self, bsn):
+    @staticmethod
+    def bsn_elf_proef(bsn):
         total_sum = 0
         length = int(len(str(bsn)))
         for digit in str(bsn):

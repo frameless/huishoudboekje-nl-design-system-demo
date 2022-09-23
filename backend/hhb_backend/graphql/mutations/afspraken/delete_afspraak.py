@@ -2,7 +2,6 @@
 
 import graphene
 import requests
-from flask import request
 from graphql import GraphQLError
 
 from hhb_backend.graphql import settings
@@ -39,13 +38,14 @@ class DeleteAfspraak(graphene.Mutation):
 
     @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(_root, _info, id):
+    def mutate(_root, _info, id):
         """ Delete current afspraak """
-        previous = await hhb_dataloader().afspraken_by_id.load(id)
+        previous = hhb_dataloader().afspraken.load_one(id)
+        if not previous:
+            raise GraphQLError("Afspraak not found")
 
         # Check if afspraak in use by journaalposten
-        journaalposten = previous.get("journaalposten")
-        if journaalposten:
+        if previous.journaalposten:
             raise GraphQLError("Afspraak is aan een of meerdere journaalposten gekoppeld - verwijderen is niet mogelijk.")
 
         response = requests.delete(f"{settings.HHB_SERVICES_URL}/afspraken/{id}")

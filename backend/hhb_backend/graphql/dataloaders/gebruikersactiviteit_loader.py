@@ -1,93 +1,33 @@
-import requests
-from graphql import GraphQLError
+from typing import List
 
-from hhb_backend.graphql import settings
-from hhb_backend.graphql.dataloaders.base_loader import SingleDataLoader
+from typing_extensions import Unpack
+
+from hhb_backend.graphql.dataloaders.base_loader import DataLoader, DataLoaderOptions
+from hhb_backend.graphql.settings import LOG_SERVICE_URL
+from hhb_backend.service.model.gebruikersactiviteit import Gebruikersactiviteit
 
 
-class GebruikersActiviteitenByIdLoader(SingleDataLoader):
-    """ Load gebruikersactiviteiten using ids """
+class GebruikersactiviteitLoader(DataLoader[Gebruikersactiviteit]):
+    service = LOG_SERVICE_URL
     model = "gebruikersactiviteiten"
-    service = settings.LOG_SERVICE_URL
 
+    def by_burger(self, burger_id: int) -> List[Gebruikersactiviteit]:
+        return self.load(burger_id, filter_item="filter_burgers")
 
-class GebruikersActiviteitenByBurgersLoader(SingleDataLoader):
-    model = "gebruikersactiviteiten"
-    service = settings.LOG_SERVICE_URL
-    filter_item = "filter_burgers"
+    def by_burgers(self, burger_ids: List[int]) -> List[Gebruikersactiviteit]:
+        return self.load(burger_ids, filter_item="filter_burgers")
 
-    def get_by_id(self, id):
-        url = f"{self.service}/{self.model}/?{self.filter_item}={id}"
-        response = requests.get(url)
-        if not response.ok:
-            raise GraphQLError(f"Upstream API responded: {response.text}")
+    def by_burgers_paged(self, keys: List[int] = None, **kwargs: Unpack[DataLoaderOptions]) -> dict:
+        return self.load_paged(keys, filter_item="filter_burgers", **kwargs)
 
-        return response.json()["data"]
+    def by_afspraak(self, afspraak_id: int) -> List[Gebruikersactiviteit]:
+        return self.load(afspraak_id, filter_item="filter_afspraken")
 
-    def get_by_ids(self, ids):
-        url = f"{self.service}/{self.model}/?{self.filter_item}={','.join([str(k) for k in ids])}"
-        response = requests.get(url)
-        if not response.ok:
-            raise GraphQLError(f"Upstream API responded: {response.text}")
+    def by_afspraken_paged(self, keys: List[int] = None, **kwargs: Unpack[DataLoaderOptions]) -> dict:
+        return self.load_paged(keys=keys, filter_item="filter_afspraken", **kwargs)
 
-        return response.json()["data"]
+    def by_huishouden(self, huishouden_id: int) -> List[Gebruikersactiviteit]:
+        return self.load(huishouden_id, filter_item="filter_huishouden")
 
-    def get_by_ids_paged(self, ids, start=1, limit=20, desc=False, sortingColumn="id"):
-        url = f"{self.service}/{self.model}/?{self.filter_item}={','.join([str(k) for k in ids])}&start={start}&limit={limit}&desc={desc}&sortingColumn={sortingColumn}"
-        response = requests.get(url)
-        if not response.ok:
-            raise GraphQLError(f"Upstream API responded: {response.text}")
-
-        page_info = {"count": response.json()["count"], "start": response.json()["start"],
-                      "limit": response.json()["limit"]}
-
-        return {self.model: response.json()["data"], "page_info": page_info}
-
-
-class GebruikersActiviteitenByAfsprakenLoader(SingleDataLoader):
-    model = "gebruikersactiviteiten"
-    service = settings.LOG_SERVICE_URL
-    filter_item = "filter_afspraken"
-
-    def get_by_ids(self, ids):
-        url = f"{self.service}/{self.model}/?{self.filter_item}={','.join([str(k) for k in ids])}"
-        response = requests.get(url)
-        if not response.ok:
-            raise GraphQLError(f"Upstream API responded: {response.text}")
-
-        return response.json()["data"]
-
-    def get_by_ids_paged(self, ids, start=1, limit=20, desc=False, sortingColumn="id"):
-        url = f"{self.service}/{self.model}/?{self.filter_item}={','.join([str(k) for k in ids])}&start={start}&limit={limit}&desc={desc}&sortingColumn={sortingColumn}"
-        response = requests.get(url)
-        if not response.ok:
-            raise GraphQLError(f"Upstream API responded: {response.text}")
-
-        page_info = {"count": response.json()["count"], "start": response.json()["start"],
-                      "limit": response.json()["limit"]}
-
-        return {self.model: response.json()["data"], "page_info": page_info}
-
-class GebruikersActiviteitenByHuishoudenLoader(SingleDataLoader):
-    model = "gebruikersactiviteiten"
-    service = settings.LOG_SERVICE_URL
-    filter_item = "filter_huishouden"
-
-    def get_by_ids(self, ids):
-        url = f"{self.service}/{self.model}/?{self.filter_item}={','.join([str(k) for k in ids])}"
-        response = requests.get(url)
-        if not response.ok:
-            raise GraphQLError(f"Upstream API responded: {response.text}")
-
-        return response.json()["data"]
-
-    def get_by_ids_paged(self, ids, start=1, limit=20, desc=False, sortingColumn="id"):
-        url = f"{self.service}/{self.model}/?{self.filter_item}={','.join([str(k) for k in ids])}&start={start}&limit={limit}&desc={desc}&sortingColumn={sortingColumn}"
-        response = requests.get(url)
-        if not response.ok:
-            raise GraphQLError(f"Upstream API responded: {response.text}")
-
-        page_info = {"count": response.json()["count"], "start": response.json()["start"],
-                      "limit": response.json()["limit"]}
-
-        return {self.model: response.json()["data"], "page_info": page_info}
+    def by_huishouden_paged(self, keys: List[int] = None, **kwargs: Unpack[DataLoaderOptions]) -> dict:
+        return self.load_paged(keys=keys, filter_item="filter_huishouden", **kwargs)

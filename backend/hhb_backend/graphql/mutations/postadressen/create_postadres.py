@@ -1,16 +1,17 @@
 """ GraphQL mutation for creating a new Postadres """
-import json
 import graphene
 import requests
 from graphql import GraphQLError
+
 from hhb_backend.graphql import settings
-from hhb_backend.graphql.models.postadres import Postadres
-from hhb_backend.graphql.models.afdeling import Afdeling
 from hhb_backend.graphql.dataloaders import hhb_dataloader
+from hhb_backend.graphql.models.afdeling import Afdeling
+from hhb_backend.graphql.models.postadres import Postadres
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     gebruikers_activiteit_entities,
     log_gebruikers_activiteit,
 )
+
 
 class CreatePostadresInput(graphene.InputObjectType):
     # hhb_service elements (required)
@@ -19,6 +20,7 @@ class CreatePostadresInput(graphene.InputObjectType):
     postcode = graphene.String(required=True)
     plaatsnaam = graphene.String(required=True)
     afdeling_id = graphene.Int()
+
 
 class CreatePostadres(graphene.Mutation):
     class Arguments:
@@ -46,36 +48,28 @@ class CreatePostadres(graphene.Mutation):
         input = kwargs.pop("input")
 
         ## check if afdeling exists
-        previous_afdeling = await hhb_dataloader().afdelingen_by_id.load(input.get('afdeling_id'))
+        previous_afdeling = hhb_dataloader().afdelingen.load_one(input.get('afdeling_id'))
         if not previous_afdeling:
             raise GraphQLError("Afdeling not found")
 
-        street = input.get("straatnaam")
-        houseNumber = input.get("huisnummer")
-        postalCode = input.get("postcode")
-        locality = input.get("plaatsnaam")
-        contactCatalogus_input = {
-            "street": street,
-            "houseNumber": houseNumber,
-            "postalCode": postalCode,
-            "locality": locality
+        postadres_input = {
+            "street": input.straatnaam,
+            "houseNumber": input.huisnummer,
+            "postalCode": input.postcode,
+            "locality": input.plaatsnaam
         }
 
-        contactCatalogus_response = requests.post(
+        postadres_response = requests.post(
             f"{settings.POSTADRESSEN_SERVICE_URL}/addresses",
-            json=contactCatalogus_input,
-            headers={"Accept": "application/json", "Authorization": "45c1a4b6-59d3-4a6e-86bf-88a872f35845"},
+            json=postadres_input,
+            headers={"Accept": "application/json"}
         )
-        if contactCatalogus_response.status_code != 201:
-            raise GraphQLError(f"Upstream API responded: {contactCatalogus_response.json()}")
+        if postadres_response.status_code != 201:
+            raise GraphQLError(f"Upstream API responded: {postadres_response.json()}")
 
-        result = contactCatalogus_response.json()['data']
+        result = postadres_response.json()['data']
 
-        if previous_afdeling["postadressen_ids"]:
-            postadressen_ids = list(previous_afdeling["postadressen_ids"])
-        else:
-            postadressen_ids = list()
-
+        postadressen_ids = list(previous_afdeling.postadressen_ids)
         postadressen_ids.append(result['id'])
 
         afdeling_input = {
