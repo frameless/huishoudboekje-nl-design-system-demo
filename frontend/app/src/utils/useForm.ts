@@ -1,11 +1,11 @@
 import {Dispatch, SetStateAction, useState} from "react";
 import {ZodSchema} from "zod";
 
-export type FormData = Record<string, any>;
+export type FormData = Record<string, unknown>;
 
 export type UseFormResult<T extends FormData> = [T | Partial<T>, {
 	setForm: Dispatch<SetStateAction<T | Partial<T>>>,
-	updateForm: (field: keyof T, value: any, callback?: (data) => T) => void,
+	updateForm: (field: keyof T, value: unknown, callback?: (data) => T) => void,
 	reset: VoidFunction,
 	isSubmitted: boolean,
 	toggleSubmitted: Dispatch<SetStateAction<boolean>>,
@@ -41,7 +41,7 @@ const useForm = <T extends FormData>({initialValue = {}, validator}: UseFormPara
 		return validator.safeParse(form).success;
 	};
 
-	const updateForm = (field: keyof T, value: T, callback?: (data) => T) => {
+	const updateForm = (field: keyof T, value: unknown, callback?: (data) => T) => {
 		setForm(prevData => {
 			let newData = {
 				...prevData,

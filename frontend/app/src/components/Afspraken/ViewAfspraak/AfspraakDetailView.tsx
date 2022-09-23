@@ -1,11 +1,48 @@
 import {ViewIcon, WarningTwoIcon} from "@chakra-ui/icons";
-import {Alert, AlertDescription, AlertIcon, AlertTitle, Box, Button, FormControl, FormLabel, HStack, IconButton, Input, InputGroup, InputLeftElement, InputRightElement, Stack, Switch, Table, Tbody, Td, Text, Th, Thead, Tr, useBreakpointValue, useDisclosure, Wrap, WrapItem} from "@chakra-ui/react";
+import {
+	Alert,
+	AlertDescription,
+	AlertIcon,
+	AlertTitle,
+	Box,
+	Button,
+	FormControl,
+	FormLabel,
+	HStack,
+	IconButton,
+	Input,
+	InputGroup,
+	InputLeftElement,
+	InputRightElement,
+	Stack,
+	Switch,
+	Table,
+	Tbody,
+	Td,
+	Text,
+	Th,
+	Thead,
+	Tr,
+	useBreakpointValue,
+	useDisclosure,
+	Wrap,
+	WrapItem,
+} from "@chakra-ui/react";
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {AiOutlineTag} from "react-icons/ai";
 import {NavLink, useNavigate} from "react-router-dom";
 import {AppRoutes} from "../../../config/routes";
-import {Afspraak, GetAfspraakDocument, useAddAfspraakZoektermMutation, useCreateAlarmMutation, useDeleteAfspraakBetaalinstructieMutation, useDeleteAfspraakZoektermMutation, useDeleteAlarmMutation, useUpdateAlarmMutation} from "../../../generated/graphql";
+import {
+	Afspraak,
+	GetAfspraakDocument,
+	useAddAfspraakZoektermMutation,
+	useCreateAlarmMutation,
+	useDeleteAfspraakBetaalinstructieMutation,
+	useDeleteAfspraakZoektermMutation,
+	useDeleteAlarmMutation,
+	useUpdateAlarmMutation,
+} from "../../../generated/graphql";
 import d from "../../../utils/dayjs";
 import {useFeatureFlag} from "../../../utils/features";
 import {currencyFormat2, formatBurgerName, getBurgerHhbId, isAfspraakActive} from "../../../utils/things";
@@ -77,11 +114,15 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 			return;
 		}
 
+		if (!afspraak || !afspraak.alarm?.id) {
+			return;
+		}
+
 		const isActive = !afspraak.alarm?.isActive;
 
 		updateAlarm({
 			variables: {
-				id: afspraak.alarm?.id!,
+				id: afspraak.alarm.id,
 				input: {
 					isActive,
 				},
@@ -101,9 +142,13 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	};
 
 	const onDeleteBetaalinstructie = () => {
+		if (!afspraak?.id) {
+			return;
+		}
+
 		deleteBetaalinstructie({
 			variables: {
-				id: afspraak.id!,
+				id: afspraak.id,
 			},
 		}).then(() => {
 			toast({success: t("messages.deleteBetaalinstructieSuccess")});
@@ -118,9 +163,13 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 			return;
 		}
 
+		if (!afspraak?.alarm?.id) {
+			return;
+		}
+
 		deleteAlarm({
 			variables: {
-				id: afspraak.alarm?.id!,
+				id: afspraak.alarm.id,
 			},
 		}).then(() => {
 			toast({success: t("messages.deleteAlarmSuccess")});
@@ -131,9 +180,13 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	};
 
 	const onDeleteAfspraakZoekterm = (zoekterm: string) => {
+		if (!afspraak?.id) {
+			return;
+		}
+
 		deleteAfspraakZoekterm({
 			variables: {
-				afspraakId: afspraak.id!,
+				afspraakId: afspraak.id,
 				zoekterm,
 			},
 		}).then(result => {
@@ -144,13 +197,17 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 	};
 
 	const onAddAfspraakZoekterm = async (e) => {
+		if (!afspraak?.id) {
+			return;
+		}
+
 		e.preventDefault();
 		setZoektermTouched(true);
 
 		try {
 			const validatedZoekterm = validator.parse(zoekterm || "");
 			const result = await addAfspraakZoekterm({
-				variables: {afspraakId: afspraak.id!, zoekterm: validatedZoekterm},
+				variables: {afspraakId: afspraak.id, zoekterm: validatedZoekterm},
 			});
 
 			if (result.data?.addAfspraakZoekterm?.ok) {
@@ -200,7 +257,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 		});
 	};
 
-	const bedrag = afspraak.credit ? parseFloat(afspraak.bedrag) : (parseFloat(afspraak.bedrag) * -1);
+	const bedrag = afspraak.credit ? parseFloat(afspraak.bedrag) : parseFloat(afspraak.bedrag) * -1;
 	const zoektermen = afspraak.zoektermen || [];
 	const matchingAfspraken = afspraak.matchingAfspraken || [];
 	const validThrough = d(afspraak.validThrough, "YYYY-MM-DD");
@@ -356,7 +413,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 								</Thead>
 								<Tbody>
 									{matchingAfspraken.map((a, i) => {
-										const bedrag = a.credit ? parseFloat(a.bedrag) : (parseFloat(a.bedrag) * -1);
+										const bedrag = a.credit ? parseFloat(a.bedrag) : parseFloat(a.bedrag) * -1;
 
 										return (
 											<Tr key={i}>
@@ -432,7 +489,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 											)}
 										</HStack>
 									</DataItem>
-									{afspraak.alarm?.endDate && (afspraak.alarm?.startDate !== afspraak.alarm?.endDate) && (
+									{afspraak.alarm?.endDate && afspraak.alarm?.startDate !== afspraak.alarm?.endDate && (
 										<DataItem label={t("global.period")}>
 											<HStack>
 												<Text>{t("schedule.fromThrough", {
@@ -452,7 +509,7 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 									</DataItem>
 									<DataItem label={t("afspraak.alarm.options")}>
 										<HStack>
-											<Switch size={"sm"} isChecked={!!(afspraak.alarm?.isActive)} onChange={() => toggleAlarmActive()} />
+											<Switch size={"sm"} isChecked={!!afspraak.alarm?.isActive} onChange={() => toggleAlarmActive()} />
 											<DeleteConfirmButton onConfirm={() => onDeleteAlarm()} />
 										</HStack>
 									</DataItem>

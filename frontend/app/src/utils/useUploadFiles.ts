@@ -32,8 +32,7 @@ const useUploadFiles: (options: UseUploadFilesOptions) => UseUploadFiles = ({doU
 	}, [queue]);
 
 	useEffect(() => {
-		let uploadInterval: any = null;
-		uploadInterval = setInterval(() => {
+		const uploadInterval = setInterval(() => {
 			const nextFile = getNextFromQueue();
 			// If there are no files to upload
 			if (!nextFile || queue.length === 0) {
@@ -43,7 +42,7 @@ const useUploadFiles: (options: UseUploadFilesOptions) => UseUploadFiles = ({doU
 
 			// If there is already a file busy uploading
 			if (queue.find(f => f.state === UploadState.LOADING)) {
-				return false;
+				return;
 			}
 
 			setQueue(q => {
@@ -57,7 +56,7 @@ const useUploadFiles: (options: UseUploadFilesOptions) => UseUploadFiles = ({doU
 
 			const uploadJob: Promise<boolean> = doUpload(nextFile);
 
-			uploadJob.then(u => {
+			uploadJob.then(() => {
 				setQueue(q => {
 					return q.map(f => {
 						if (f.file.name === nextFile.file.name) {

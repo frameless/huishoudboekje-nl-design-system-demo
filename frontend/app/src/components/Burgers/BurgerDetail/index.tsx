@@ -3,7 +3,16 @@ import React from "react";
 import {useTranslation} from "react-i18next";
 import {NavLink, useNavigate, useParams} from "react-router-dom";
 import {AppRoutes} from "../../../config/routes";
-import {Burger, GetBurgerDocument, GetBurgersDocument, GetBurgersSearchDocument, GetHuishoudensDocument, useDeleteBurgerMutation, useDeleteHuishoudenBurgerMutation, useGetBurgerQuery} from "../../../generated/graphql";
+import {
+	Burger,
+	GetBurgerDocument,
+	GetBurgersDocument,
+	GetBurgersSearchDocument,
+	GetHuishoudensDocument,
+	useDeleteBurgerMutation,
+	useDeleteHuishoudenBurgerMutation,
+	useGetBurgerQuery,
+} from "../../../generated/graphql";
 import useStore from "../../../store";
 import {useFeatureFlag} from "../../../utils/features";
 import Queryable from "../../../utils/Queryable";
@@ -60,9 +69,13 @@ const BurgerDetailPage = () => {
 			}
 
 			const onConfirmDeleteHuishoudenBurger = () => {
+				if (!burger?.huishouden?.id) {
+					return;
+				}
+
 				deleteHuishoudenBurger({
 					variables: {
-						huishoudenId: burger.huishouden?.id!,
+						huishoudenId: burger.huishouden.id,
 						burgerIds: [parseInt(id)],
 					},
 				}).then(() => {

@@ -1,5 +1,5 @@
 import {AddIcon} from "@chakra-ui/icons";
-import {Box, BoxProps, Button, Divider, Stack} from "@chakra-ui/react";
+import {Box, Button, Divider, Stack} from "@chakra-ui/react";
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {Afdeling, GetOrganisatieDocument, GetOrganisatiesDocument, useCreateAfdelingRekeningMutation} from "../../../generated/graphql";
@@ -7,7 +7,7 @@ import RekeningForm from "../../Rekeningen/RekeningForm";
 import RekeningList from "../../Rekeningen/RekeningList";
 import {FormLeft, FormRight} from "../../shared/Forms";
 
-const AfdelingRekeningenView: React.FC<BoxProps & {afdeling: Afdeling}> = ({afdeling, ...props}) => {
+const AfdelingRekeningenView: React.FC<{afdeling: Afdeling}> = ({afdeling}) => {
 	const {t} = useTranslation();
 	const [showForm, toggleForm] = useState(false);
 	const [createAfdelingRekening] = useCreateAfdelingRekeningMutation({
@@ -16,9 +16,10 @@ const AfdelingRekeningenView: React.FC<BoxProps & {afdeling: Afdeling}> = ({afde
 			{query: GetOrganisatieDocument, variables: {id: afdeling.organisatie?.id}},
 		],
 	});
-	const onSaveRekening = (rekening, resetForm) => {
+
+	const onSaveRekening = (rekening) => {
 		if (!afdeling.id) {
-			return null;
+			return;
 		}
 
 		createAfdelingRekening({
@@ -27,7 +28,6 @@ const AfdelingRekeningenView: React.FC<BoxProps & {afdeling: Afdeling}> = ({afde
 				rekening,
 			},
 		}).then(() => {
-			resetForm();
 			toggleForm(false);
 		});
 	};

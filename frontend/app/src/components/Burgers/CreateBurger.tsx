@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router-dom";
 import {AppRoutes} from "../../config/routes";
-import {CreateBurgerInput, GetBurgersDocument, GetBurgersSearchDocument, GetHuishoudensDocument, useCreateBurgerMutation} from "../../generated/graphql";
+import {CreateBurgerMutationVariables, GetBurgersDocument, GetBurgersSearchDocument, GetHuishoudensDocument, useCreateBurgerMutation} from "../../generated/graphql";
 import useStore from "../../store";
 import useToaster from "../../utils/useToaster";
 import BackButton from "../shared/BackButton";
@@ -43,10 +43,12 @@ const CreateBurger = () => {
 		],
 	});
 
-	const onSubmit = (burgerData: CreateBurgerInput) => {
+	const onSubmit = (burgerData: CreateBurgerMutationVariables["input"]) => {
 		createBurger({
 			variables: {
-				input: burgerData,
+				input: {
+					...burgerData
+				},
 			},
 		}).then(result => {
 			toast({

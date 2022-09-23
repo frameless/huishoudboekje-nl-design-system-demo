@@ -3,7 +3,7 @@ import useToaster from "./useToaster";
 const useHandleMutation = () => {
 	const toast = useToaster();
 
-	return (mutation: Promise<any>, successMessage: string, onReady?: (data) => void) => {
+	return (mutation: Promise<unknown>, successMessage: string, onReady?: (data) => void) => {
 		mutation?.then((data) => {
 			toast({
 				success: successMessage,

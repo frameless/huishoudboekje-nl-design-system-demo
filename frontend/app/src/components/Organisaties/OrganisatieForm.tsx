@@ -1,7 +1,7 @@
 import {Box, Button, FormControl, FormErrorMessage, FormLabel, Input, Stack, Tooltip, useBreakpointValue} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {Organisatie} from "../../generated/graphql";
+import {CreateOrganisatieMutationVariables, Organisatie} from "../../generated/graphql";
 import useForm from "../../utils/useForm";
 import useToaster from "../../utils/useToaster";
 import zod from "../../utils/zod";
@@ -12,7 +12,7 @@ import SectionContainer from "../shared/SectionContainer";
 
 type OrganisatieFormProps = {
 	organisatie?: Organisatie,
-	onSubmit: Function,
+	onSubmit: (organisatie: CreateOrganisatieMutationVariables) => void,
 	isLoading: boolean,
 };
 
@@ -20,7 +20,7 @@ const OrganisatieForm: React.FC<OrganisatieFormProps> = ({organisatie, onSubmit,
 	const validator = useOrganisatieValidator();
 	const {t} = useTranslation();
 	const toast = useToaster();
-	const isMobile = useBreakpointValue(([true, null, null, false]));
+	const isMobile = useBreakpointValue([true, null, null, false]);
 	const {kvknummer, vestigingsnummer, naam} = organisatie || {};
 	const [form, {updateForm, toggleSubmitted, isFieldValid}] = useForm<zod.infer<typeof validator>>({
 		validator,
@@ -37,10 +37,7 @@ const OrganisatieForm: React.FC<OrganisatieFormProps> = ({organisatie, onSubmit,
 
 		try {
 			const data = validator.parse(form);
-			onSubmit({
-				...organisatie?.id && {id: organisatie.id},
-				...data,
-			});
+			onSubmit(data);
 		}
 		catch (err) {
 			toast.closeAll();

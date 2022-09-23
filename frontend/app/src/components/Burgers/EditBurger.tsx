@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {Navigate, useNavigate, useParams} from "react-router-dom";
 import {AppRoutes} from "../../config/routes";
-import {GetBurgerDocument, GetBurgersDocument, GetBurgersSearchDocument, UpdateBurgerMutationVariables, useGetBurgerQuery, useUpdateBurgerMutation} from "../../generated/graphql";
+import {CreateBurgerMutationVariables, GetBurgerDocument, GetBurgersDocument, GetBurgersSearchDocument, useGetBurgerQuery, useUpdateBurgerMutation} from "../../generated/graphql";
 import useStore from "../../store";
 import Queryable from "../../utils/Queryable";
 import {formatBurgerName} from "../../utils/things";
@@ -50,9 +50,12 @@ const EditBurger = () => {
 		variables: {id: parseInt(id)},
 	});
 
-	const onSubmit = (burgerData: UpdateBurgerMutationVariables) => {
+	const onSubmit = (burgerData: CreateBurgerMutationVariables["input"]) => {
 		updateBurger({
-			variables: burgerData,
+			variables: {
+				...burgerData,
+				id: parseInt(id),
+			},
 		}).then(() => {
 			toast({
 				success: t("messages.burgers.updateSuccessMessage"),

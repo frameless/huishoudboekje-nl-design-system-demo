@@ -2,7 +2,6 @@ import {BankTransaction, CustomerStatementMessage, Journaalpost, Rekening, Rubri
 import d from "../utils/dayjs";
 
 export default class Transaction {
-
 	id: number;
 	customerStatementMessage: CustomerStatementMessage;
 	statementLine: string;
@@ -51,6 +50,8 @@ export default class Transaction {
 		if (this.isBooked()) {
 			return this.journaalpost.afspraak?.rubriek || this.journaalpost.grootboekrekening?.rubriek;
 		}
+
+		return undefined;
 	};
 
 	hasAnyRubriek = (rubriekIds: number[] = []): boolean => {

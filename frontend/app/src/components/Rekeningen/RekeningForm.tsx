@@ -11,7 +11,7 @@ import Asterisk from "../shared/Asterisk";
 
 type RekeningFormProps = {
 	rekening?: Rekening,
-	onSubmit: Function,
+	onSubmit: (rekening: Rekening) => void,
 	onCancel: VoidFunction,
 	isIbanValid?: boolean,
 }
@@ -39,7 +39,7 @@ const RekeningForm: React.FC<RekeningFormProps> = ({rekening, onSubmit, onCancel
 			updateForm("iban", ibanNoSpaces);
 
 			onSubmit({
-				...(rekening || {}),
+				...rekening || {},
 				rekeninghouder: data.rekeninghouder,
 				iban: data.iban ? sanitizeIBAN(data.iban) : undefined,
 			});

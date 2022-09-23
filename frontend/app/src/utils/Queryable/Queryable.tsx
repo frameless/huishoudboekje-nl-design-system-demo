@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {LazyQueryResult, QueryResult} from "@apollo/client/react/types/types";
 import React from "react";
 import Loading from "./Loading";
@@ -10,10 +11,10 @@ export type QueryableProps = {
 	options?: {
 		hidePreviousResults?: boolean
 	},
-	children: (data) => any
+	children: (data) => JSX.Element | null
 };
 
-const Queryable: React.FC<QueryableProps> = ({query, loading, error, options = {}, children}) => {
+const Queryable: React.FC<QueryableProps> = ({query, loading = true, error = true, options = {}, children}) => {
 	const {data: _data, loading: _loading, error: _error, previousData} = query;
 
 	if (_loading) {
@@ -21,11 +22,19 @@ const Queryable: React.FC<QueryableProps> = ({query, loading, error, options = {
 			return children(previousData);
 		}
 
-		return loading !== false ? (loading || <Loading />) : null;
+		if (loading === false) {
+			return null;
+		}
+
+		return loading === true ? <Loading /> : loading;
 	}
 
-	if (_error) {
-		return error !== false ? (error || <QueryableError error={_error} query={query} />) : null;
+	if(_error){
+		if(error === false){
+			return null;
+		}
+
+		return error === true ? <QueryableError error={_error} query={query} /> : error;
 	}
 
 	return children(_data);

@@ -7,7 +7,7 @@ import {humanJoin, Months} from "./things";
 const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 	const {t} = useTranslation();
 
-	return ({
+	return {
 		toString: (): string => {
 			if (!schedule) {
 				return t("schedule.unknown");
@@ -36,7 +36,7 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 						return t("unknown");
 					}
 
-					if (periodLength <= (3600 * 24 * 365)) {
+					if (periodLength <= 3600 * 24 * 365) {
 						str.push(t("schedule.onceOnDate", {date: onceDate.format("L")}));
 					}
 				}
@@ -69,7 +69,7 @@ const useScheduleHelper = (schedule?: Schedule | Betaalinstructie) => {
 			// Todo: this happens when there is a startDate and endDate, but no byMonth, byMonthDay, or byDay
 			return JSON.stringify(schedule, null, 2);
 		},
-	});
+	};
 };
 
 export default useScheduleHelper;

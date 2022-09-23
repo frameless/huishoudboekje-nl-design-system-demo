@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+// Todo: re-enable this eslint rule and fix the warnings (23-09-2022)
 import {useTranslation} from "react-i18next";
 import {MultiLineOption, MultiLineValueContainer, ReverseMultiLineOption, ReverseMultiLineValueContainer} from "../components/shared/CustomComponents";
 import {Afdeling, Grootboekrekening, Organisatie, Postadres, Rekening, Rubriek} from "../generated/graphql";
@@ -5,13 +7,13 @@ import {formatIBAN} from "./things";
 
 export type SelectOption = {
 	key: number | string,
-	value: any,
+	value: unknown,
 	label: string | string[],
-	context?: any
+	context?: unknown
 }
 
 const sortByField = (fieldName: string) => {
-	return (a, b) => (a[fieldName] && b[fieldName]) && a[fieldName] < b[fieldName] ? -1 : 1;
+	return (a, b) => a[fieldName] && b[fieldName] && a[fieldName] < b[fieldName] ? -1 : 1;
 };
 
 const createSelectOptionsFromRubrieken = (rubrieken: Rubriek[] = []): SelectOption[] => {
@@ -25,7 +27,7 @@ const createSelectOptionsFromRubrieken = (rubrieken: Rubriek[] = []): SelectOpti
 const createSelectOptionsFromRekeningen = (rekeningen: Rekening[] = []): SelectOption[] => {
 	return rekeningen.map(r => ({
 		key: r.id!,
-		value: r.id,
+		value: r.id!,
 		label: [formatIBAN(r.iban), r.rekeninghouder || ""],
 	})).sort(sortByField("label"));
 };

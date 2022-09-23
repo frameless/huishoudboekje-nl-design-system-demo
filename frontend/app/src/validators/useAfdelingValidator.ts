@@ -3,7 +3,8 @@ import {trimString} from "./utils";
 
 const useAfdelingValidator = () => {
 	return zod.object({
-		naam: zod.preprocess(trimString, zod.string().min(1)),
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		naam: zod.preprocess<any>(trimString, zod.string().min(1)),
 	});
 };
 

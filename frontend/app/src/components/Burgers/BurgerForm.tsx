@@ -2,7 +2,7 @@ import {Box, Button, FormControl, FormErrorMessage, FormLabel, Input, Stack, Too
 import React from "react";
 import DatePicker from "react-datepicker";
 import {useTranslation} from "react-i18next";
-import {Burger} from "../../generated/graphql";
+import {Burger, CreateBurgerMutationVariables} from "../../generated/graphql";
 import d from "../../utils/dayjs";
 import useForm from "../../utils/useForm";
 import useToaster from "../../utils/useToaster";
@@ -14,7 +14,7 @@ import SectionContainer from "../shared/SectionContainer";
 
 type BurgerFormProps = {
 	burger?: Burger,
-	onSubmit: Function,
+	onSubmit: (data: CreateBurgerMutationVariables["input"]) => void,
 	isLoading: boolean,
 	isBsnValid?: boolean,
 }
@@ -49,12 +49,12 @@ const BurgerForm: React.FC<BurgerFormProps> = ({burger, onSubmit, isLoading, isB
 
 		try {
 			const data = validator.parse(form);
-			onSubmit(({
+			onSubmit({
 				...data,
 				...burger?.id && {id: burger?.id},
 				bsn: Number(data.bsn),
 				geboortedatum: d(data.geboortedatum, "L").format("YYYY-MM-DD"),
-			}));
+			});
 		}
 		catch (err) {
 			toast.closeAll();

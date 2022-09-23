@@ -35,16 +35,20 @@ const FollowUpAfspraak = () => {
 		<Queryable query={$afspraak} children={(data) => {
 			const afspraak: Afspraak = data.afspraak;
 
-			if (!afspraak) {
+			if (!afspraak.burger?.id) {
 				return <PageNotFound />;
 			}
 
 			const createFollowupAfspraak = async (input: Omit<CreateAfspraakMutationVariables["input"], "burgerId">) => {
+				if (!afspraak.burger?.id) {
+					return;
+				}
+
 				// Create afspraak first
 				const data = await createAfspraak({
 					variables: {
 						input: {
-							burgerId: afspraak.burger?.id!,
+							burgerId: afspraak.burger.id,
 							validFrom: d(afspraak.validThrough, "YYYY-MM-DD").add(1, "day").format("YYYY-MM-DD"),
 							...input,
 						},

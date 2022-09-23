@@ -17,7 +17,11 @@ import DeleteAfdelingAlert from "./DeleteAfdelingAlert";
 import UpdateAfdelingModal from "./UpdateAfdelingModal";
 
 const AfdelingDetailView: React.FC<{afdeling: Afdeling}> = ({afdeling}) => {
-	const organisatieId: number = afdeling.organisatie?.id!;
+	if (!afdeling?.organisatie?.id) {
+		return null;
+	}
+
+	const organisatieId: number = afdeling.organisatie.id;
 	const {t} = useTranslation();
 	const updateAfdelingModal = useDisclosure();
 	const deleteAfdelingAlert = useDisclosure();

@@ -2,6 +2,7 @@
 import {useToken} from "@chakra-ui/react";
 import arrayToSentence from "array-to-sentence";
 import currency from "currency.js";
+import {ManipulateType} from "dayjs";
 import {friendlyFormatIBAN} from "ibantools";
 import {createContext} from "react";
 import {defaultBanktransactieFilters} from "../components/Bankzaken/Transacties/defaultBanktransactieFilters";
@@ -37,8 +38,13 @@ export const Months = ["jan", "feb", "mrt", "apr", "may", "jun", "jul", "aug", "
 
 export const isDev = process.env.NODE_ENV === "development";
 
-export const DrawerContext = createContext<{onClose: () => void}>({
+type DrawerContextProps = {
+	onClose: () => void
+};
+
+export const DrawerContext = createContext<DrawerContextProps>({
 	onClose: () => {
+		return;
 	},
 });
 
@@ -129,7 +135,7 @@ export const humanJoin = (x) => arrayToSentence(x, {
 export const getRubriekForTransaction = (t: BankTransaction): Rubriek | undefined => t.journaalpost?.grootboekrekening?.rubriek || t.journaalpost?.afspraak?.rubriek;
 export const getOrganisatieForTransaction = (t: BankTransaction): Organisatie | undefined => t.journaalpost?.afspraak?.afdeling?.organisatie;
 
-export const prepareChartData = (startDate: d.Dayjs, endDate: d.Dayjs, granularity: Granularity, columns: number = 1): any[] => {
+export const prepareChartData = (startDate: d.Dayjs, endDate: d.Dayjs, granularity: Granularity, columns = 1) => {
 	if (!startDate.isValid()) {
 		// console.error("Invalid startDate", startDate);
 		return [];
@@ -141,12 +147,12 @@ export const prepareChartData = (startDate: d.Dayjs, endDate: d.Dayjs, granulari
 	}
 
 	const nPeriods = {
-		[Granularity.Monthly]: (Math.abs(endDate.endOf("month").diff(startDate.startOf("month"), "month")) + 1),
-		[Granularity.Weekly]: (Math.abs(endDate.endOf("month").diff(startDate.startOf("month"), "week")) + 1),
-		[Granularity.Daily]: (Math.abs(endDate.endOf("month").diff(startDate.startOf("month"), "day")) + 1),
+		[Granularity.Monthly]: Math.abs(endDate.endOf("month").diff(startDate.startOf("month"), "month")) + 1,
+		[Granularity.Weekly]: Math.abs(endDate.endOf("month").diff(startDate.startOf("month"), "week")) + 1,
+		[Granularity.Daily]: Math.abs(endDate.endOf("month").diff(startDate.startOf("month"), "day")) + 1,
 	}[granularity];
 
-	const timeUnits: Record<Granularity, any> = {
+	const timeUnits: Record<Granularity, ManipulateType> = {
 		[Granularity.Monthly]: "month",
 		[Granularity.Weekly]: "week",
 		[Granularity.Daily]: "day",
@@ -176,7 +182,7 @@ export const isAfspraakActive = (afspraak: Afspraak) => {
 
 	if (validThrough) {
 		const _validThrough = d(validThrough, "YYYY-MM-DD").endOf("day");
-		return (d().endOf("day").isSameOrBefore(_validThrough));
+		return d().endOf("day").isSameOrBefore(_validThrough);
 	}
 
 	// If there's no validThrough, assume this Afspraak is active.
