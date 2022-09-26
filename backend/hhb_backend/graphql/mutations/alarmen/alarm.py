@@ -77,7 +77,7 @@ class AlarmHelper:
             raise GraphQLError(f"Afspraak not found.")
 
         # check if afspraak is valid
-        if afspraak.burger_id is None:
+        if afspraak["burger_id"] is None:   # TODO here I would like to use afspraak.burger_id instead, but if it not exist that gives a problem since burger_id is not optional...
             raise GraphQLError("The afspraak is not linked to a burger.")
 
         start_date_alarm = to_date(input["startDate"])
