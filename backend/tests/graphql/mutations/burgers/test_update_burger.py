@@ -1,9 +1,7 @@
 import requests_mock
-from requests_mock import Adapter
 from pydash import objects
 
 from hhb_backend.graphql import settings
-from graphql import GraphQLError
 
 
 def test_update_burger_success(client):

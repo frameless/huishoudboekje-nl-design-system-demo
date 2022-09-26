@@ -71,7 +71,7 @@ def create_app(
         # Get export object
         export = hhb_dataloader().exports.load_one(export_id)
         if not export:
-            raise GraphQLError("Export niet gevonden")
+            raise GraphQLError("Export not found")
 
         # Create xml
         xml_data = export["xmldata"]

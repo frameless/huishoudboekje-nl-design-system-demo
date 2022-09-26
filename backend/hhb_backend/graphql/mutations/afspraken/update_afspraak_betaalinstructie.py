@@ -56,7 +56,7 @@ class UpdateAfspraakBetaalinstructie(graphene.Mutation):
         previous = hhb_dataloader().afspraken.load_one(afspraak_id)
 
         if previous is None:
-            raise GraphQLError("afspraak not found")
+            raise GraphQLError("Afspraak not found")
 
         # These arrays contains ids for their entities and not the instances, the hhb_service does not understand that,
         # Since removing them from the payload makes the service ignore them for updating purposes it is safe to remove
@@ -65,11 +65,11 @@ class UpdateAfspraakBetaalinstructie(graphene.Mutation):
         del previous.overschrijvingen
 
         if previous.credit:
-            raise GraphQLError("Betaalinstructie is alleen mogelijk bij uitgaven")
+            raise GraphQLError("Betaalinstructie is only possible for expenses.")
         if (betaalinstructie.by_day and betaalinstructie.by_month_day) or (not betaalinstructie.by_day and not betaalinstructie.by_month_day):
-            raise GraphQLError("Betaalinstructie: 'by_day' of 'by_month_day' moet zijn ingevuld.")
+            raise GraphQLError("Betaalinstructie: 'by_day' or 'by_month_day' is required.")
         if betaalinstructie.end_date and betaalinstructie.end_date < betaalinstructie.start_date:
-            raise GraphQLError("Begindatum moet voor einddatum liggen.")
+            raise GraphQLError("StartDate has to be before endDate.")
 
         input = {
             "betaalinstructie": betaalinstructie

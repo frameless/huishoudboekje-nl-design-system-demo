@@ -1,4 +1,4 @@
-from datetime import datetime, date
+from datetime import datetime
 
 import pytest
 import requests_mock
@@ -146,7 +146,7 @@ def test_evaluate_alarm_illigal_betaalinstructie_combination(client):
             "byMonth": [1],
             "byMonthDay": [1],
         }
-        expected = "Niet ondersteunde combinatie van alarm herhaal instructies. isWeekly:False isMonthly:False byDay:['Wednesday', 'Friday'] byMonth:[1] byMonthDay:[1]"
+        expected = "This combination of intructions is not supported. isWeekly:False isMonthly:False byDay:['Wednesday', 'Friday'] byMonth:[1] byMonthDay:[1]"
 
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
         rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=200, json={'data': [alarm]})

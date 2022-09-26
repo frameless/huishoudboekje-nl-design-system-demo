@@ -1,9 +1,6 @@
-import re
-
-import pytest
 import requests_mock
-from hhb_backend.graphql import settings
 from requests_mock import Adapter
+from hhb_backend.graphql import settings
 
 class MockResponse():
     history = None
@@ -85,7 +82,7 @@ mutation test($id: Int!) {
 
         assert response.json == {"data": {"deleteOrganisatie": None},
                                  "errors": [{"locations": [{"column": 3, "line": 3}],
-                                             "message": "Organisatie heeft afdelingen - verwijderen is niet mogelijk.",
+                                             "message": "Organisatie has afdelingen - deletion is not possible.",
                                              "path": ["deleteOrganisatie"]}]}
 
         assert mock._adapter.call_count == 2

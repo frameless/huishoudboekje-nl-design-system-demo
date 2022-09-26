@@ -45,7 +45,7 @@ def test_delete_rubrieken_error_afspraak(client):
                     }
                 }''',
             "variables": {"id": 11}}
-        expected = "Rubriek wordt gebruikt in een of meerdere afspraken - verwijderen is niet mogelijk."
+        expected = "Rubriek is used in one or multiple afspraken - deletion is not possible."
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
         rm1 = rm.get(
             f"{settings.HHB_SERVICES_URL}/rubrieken/?filter_ids=11",
@@ -72,7 +72,7 @@ def test_delete_rubrieken_error_journaalpost(client):
                     }
                 }''',
             "variables": {"id": 11}}
-        expected = "Rubriek zit in grootboekrekening die wordt gebruikt in journaalposten - verwijderen is niet mogelijk."
+        expected = "Rubriek is part of grootboekrekening that is used by journaalposten - deletion is not possible."
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
         rm1 = rm.get(
             f"{settings.HHB_SERVICES_URL}/rubrieken/?filter_ids=11",

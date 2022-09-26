@@ -1,5 +1,5 @@
 """ MethodView for /organisaties/<organisatie_id>/ path """
-from flask import request, make_response, abort
+from flask import request
 from models import Rubriek
 from core_service.views.hhb_view import HHBView
 

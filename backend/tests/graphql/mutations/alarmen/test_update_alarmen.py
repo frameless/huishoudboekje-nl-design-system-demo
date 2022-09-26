@@ -131,7 +131,7 @@ def test_update_alarm(client):
 #             "byDay": ["Thursday"]
 #         }
 #         alarm_id = "bd6222e7-bfab-46bc-b0bc-2b30b76228d4"
-#         expected = "Alarm start datum is in het verleden." 
+#         expected = "Alarm start date has to be in the future." 
 
 #         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
 
@@ -200,7 +200,7 @@ def test_update_alarm_failure_cant_set_alarm_to_non_existing_afspraak(client):
             "bedragMargin":"56.78",
             "byDay": ["Thursday"]
         }
-        expected = "Afspraak bestaat niet."
+        expected = "Afspraak not found."
         alarm_id = "bd6222e7-bfab-46bc-b0bc-2b30b76228d4"
         alarm1 = {
             "id": alarm_id,

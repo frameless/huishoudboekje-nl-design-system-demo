@@ -37,7 +37,7 @@ class DeleteHuishouden(graphene.Mutation):
 
         previous = hhb_dataloader().huishoudens.load_one(id)
         if not previous:
-            raise GraphQLError("Huishouden bestaat niet.")
+            raise GraphQLError("Huishouden not found.")
 
         response = requests.delete(f"{settings.HHB_SERVICES_URL}/huishoudens/{id}")
         if response.status_code != 204:

@@ -183,7 +183,7 @@ def test_delete_burger_rekening_cant_delete_used_by_afspraak(client):
         }
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
         rm1 = rm.get(f"{settings.HHB_SERVICES_URL}/rekeningen/?filter_ids=1", json={"data": [pre_delete_rekening]})
-        expected = "Rekening wordt gebruikt in een afspraak - verwijderen is niet mogelijk."
+        expected = "Rekening is used in an afspraak - deletion is not possible."
 
         # act
         response = client.post(

@@ -276,5 +276,5 @@ def test_create_afdeling_foutieve_rekening_succes(client):
         assert e3.called_once
         # rekeningen
         assert e4.called_once
-        assert response.json['errors'][0]['message'] == "Foutieve IBAN: 33bukb20201555555555"
+        assert response.json['errors'][0]['message'] == "Invalid IBAN: 33bukb20201555555555"
 

@@ -58,7 +58,7 @@ def test_delete_huishouden_error(client):
         )
         assert response.json == {"data": {"deleteHuishouden": None},
                                  "errors": [{"locations": [{"column": 27, "line": 3}],
-                                             "message": "Huishouden bestaat niet.",
+                                             "message": "Huishouden not found.",
                                              "path": ["deleteHuishouden"]}]}
         assert adapter.called_once
 

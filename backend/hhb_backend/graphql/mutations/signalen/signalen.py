@@ -55,7 +55,7 @@ class SignaalHelper:
 
         create_signaal_response = requests.post(f"{settings.SIGNALENSERVICE_URL}/signals/", json=input, headers={"Content-type": "application/json"})
         if create_signaal_response.status_code != 201:
-            raise GraphQLError(f"Aanmaken van het signaal is niet gelukt.")
+            raise GraphQLError(f"Failed to create signaal.")
 
         response_signaal = create_signaal_response.json()["data"]
         return SignaalHelper(response_signaal, dict())

@@ -1,6 +1,4 @@
 """ MethodView for /configuratie/<naam>/ path """
-from flask import abort, make_response
-
 from models import Configuratie
 from core_service.views.hhb_view import HHBView
 
