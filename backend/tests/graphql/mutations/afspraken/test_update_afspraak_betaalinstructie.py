@@ -215,7 +215,7 @@ def test_update_afspraak_is_credit(client):
 def test_update_afspraak_invalid_betaalinstructie(client):
     with requests_mock.Mocker() as rm:
         # arrange
-        expected = "Betaalinstructie: 'by_day' or 'by_month_day' has to be filled in."
+        expected = "Betaalinstructie: 'by_day' or 'by_month_day' is required."
         # invalid because you provide either byMonth + byMonthDay or byDay - not both
         betaal_instructie_input = Betaalinstructie(
             startDate="2020-11-01",

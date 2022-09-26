@@ -196,7 +196,7 @@ def test_create_alarm_failure_only_byMonth_defined(client):
             "bedragMargin": "10.34",
             "byMonth": [1]
         }
-        expected = "Fill in both byMonth and byMonthDay, or neither."
+        expected = "Either both byMonth and byMonthDay are required, or neither."
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
 
         # act
@@ -231,7 +231,7 @@ def test_create_alarm_failure_only_byMonth_defined(client):
         assert fallback.called == 0
         assert response.json["errors"][0]["message"] == expected
 
-        
+
 # cant create alarm with only byMonthDay
 @freeze_time("2021-12-01")
 def test_create_alarm_failure_only_byMonth_defined(client):
@@ -245,7 +245,7 @@ def test_create_alarm_failure_only_byMonth_defined(client):
             "bedragMargin": "10.34",
             "byMonthDay": [1]
         }
-        expected = "Fill in both byMonth and byMonthDay, or neither."
+        expected = "Either both byMonth and byMonthDay are required, or neither."
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
 
         # act
@@ -338,7 +338,7 @@ def test_create_alarm_failure_afspraak_does_not_have_burger(client):
         assert fallback.called == 0
         assert response.json["errors"][0]["message"] == expected
 
-        
+
 @freeze_time("2021-12-01")
 def test_create_alarm_failure_afspraak_ended(client):
     with requests_mock.Mocker() as rm:

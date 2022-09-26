@@ -76,7 +76,7 @@ class AlarmHelper:
         #     raise GraphQLError(f"The alarm date has to be in the future.")
 
         if (input["byMonth"] or input["byMonthDay"]) and not (input["byMonth"] and input["byMonthDay"]):
-            raise GraphQLError("Fill in both byMonth and byMonthDay, or neither.")
+            raise GraphQLError("Either both byMonth and byMonthDay are required, or neither.")
 
         if not input["endDate"]:
             if input.get("startDate"):
@@ -105,7 +105,7 @@ class AlarmHelper:
         update_afspraak = ({"alarm_id": response_alarm.get("id")})
         update_afspraak_response = requests.post(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}", json=update_afspraak, headers={"Content-type": "application/json"})
         if update_afspraak_response.status_code != 200:
-            raise UpstreamError(update_afspraak_response, "Updating afspraak with new alarm has failed.")
+            raise UpstreamError(update_afspraak_response, "Failed to update afspraak with new alarm.")
 
         return AlarmHelper(alarm=response_alarm, previous=dict(), ok=True)
 
@@ -141,7 +141,7 @@ class AlarmHelper:
 
         if input.get("endDate"):
             if date_in_past(input.endDate):
-                raise GraphQLError("Alarm eind date has to be in the future.")
+                raise GraphQLError("Alarm end date has to be in the future.")
 
         previous_response = hhb_dataloader().alarms.load_one(id)
         if not previous_response:

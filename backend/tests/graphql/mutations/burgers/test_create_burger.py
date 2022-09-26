@@ -179,7 +179,7 @@ def test_create_burger_with_new_rekening_invalid_success(client):
         )
 
         assert mock._adapter.call_count == 3
-        assert response.json['errors'][0]['message'] == "Wrong IBAN: 33BUKB20201555555555"
+        assert response.json['errors'][0]['message'] == "Invalid IBAN: 33BUKB20201555555555"
 
 
 def create_mock_huishouden_id_success_adapter() -> Adapter:

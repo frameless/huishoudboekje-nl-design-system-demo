@@ -69,7 +69,7 @@ def create_rekening(rekening):
         iban = IBAN(rekening.iban)
         rekening.iban = iban.compact
     except SchwiftyException:
-        raise GraphQLError(f"Wrong IBAN: {rekening.iban}")
+        raise GraphQLError(f"Invalid IBAN: {rekening.iban}")
 
     rekening_response = requests.post(
         f"{settings.HHB_SERVICES_URL}/rekeningen/",

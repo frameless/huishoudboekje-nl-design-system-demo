@@ -67,7 +67,7 @@ class UpdateAfspraakBetaalinstructie(graphene.Mutation):
         if previous.credit:
             raise GraphQLError("Betaalinstructie is only possible for expenses.")
         if (betaalinstructie.by_day and betaalinstructie.by_month_day) or (not betaalinstructie.by_day and not betaalinstructie.by_month_day):
-            raise GraphQLError("Betaalinstructie: 'by_day' or 'by_month_day' has to be filled in.")
+            raise GraphQLError("Betaalinstructie: 'by_day' or 'by_month_day' is required.")
         if betaalinstructie.end_date and betaalinstructie.end_date < betaalinstructie.start_date:
             raise GraphQLError("StartDate has to be before endDate.")
 

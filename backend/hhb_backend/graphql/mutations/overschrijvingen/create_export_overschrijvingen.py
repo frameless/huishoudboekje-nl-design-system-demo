@@ -99,7 +99,7 @@ class CreateExportOverschrijvingen(graphene.Mutation):
 
         if not future_overschrijvingen:
             raise GraphQLError(
-                f"No overschrijvingen in period, so no export file is made."
+                f"Failed to created export. No overschrijvingen found in period."
             )
 
         # Get all tegen_rekeningen based on the afspraken
