@@ -12,6 +12,7 @@ module.exports = {
 		"storybook-react-i18next",
 	],
 	stories: ["../src/**/*.stories.@(js|jsx|ts|tsx|mdx)"],
+	staticDirs: ["../public"],
 	webpackFinal: async config => {
 		// the emotion aliases ensure that only one context is loaded, without it the `useTheme` hook breaks in storybook
 		config.resolve.alias = {
