@@ -52,11 +52,11 @@ module.exports = (app) => {
 			const {name, email} = jwt.decode(process.env.AUTH_TOKEN);
 			user = {name, email};
 		}
-		else{
+		else {
 			user = {
 				name: "Developer",
-				email: "developer@sloothuizen.nl"
-			}
+				email: "developer@sloothuizen.nl",
+			};
 		}
 
 		return res.status(200).json({

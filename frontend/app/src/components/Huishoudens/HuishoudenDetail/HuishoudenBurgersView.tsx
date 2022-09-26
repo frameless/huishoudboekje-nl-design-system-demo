@@ -7,7 +7,7 @@ import {formatBurgerName} from "../../../utils/things";
 import DashedAddButton from "../../shared/DashedAddButton";
 import GridCard from "../../shared/GridCard";
 
-const HuishoudenBurgerItem: React.FC<{huishouden: Huishouden, burger: Burger}> = ({huishouden, burger}) => {
+const HuishoudenBurgerItem: React.FC<{burger: Burger}> = ({burger}) => {
 	const signalen = (burger.afspraken || [])
 		.map(a => a.alarm)
 		.map(a => a?.signaal)
@@ -44,7 +44,7 @@ const HuishoudenBurgersView: React.FC<{huishouden: Huishouden, onClickAddButton?
 				</Box>
 			)}
 			{burgers.map((b, i) => {
-				return <HuishoudenBurgerItem key={i} huishouden={huishouden} burger={b} />;
+				return <HuishoudenBurgerItem key={i} burger={b} />;
 			})}
 		</Grid>
 	);

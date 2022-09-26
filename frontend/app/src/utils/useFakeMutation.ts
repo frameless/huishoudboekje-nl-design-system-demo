@@ -1,4 +1,4 @@
-const useFakeMutation = (success = false) => (args: any) => new Promise((resolve, reject) => {
+const useFakeMutation = (success = false) => (args) => new Promise((resolve, reject) => {
 	console.info("Executing fake mutation", {args});
 
 	setTimeout(() => {

@@ -148,6 +148,7 @@ const Transactions = () => {
 			<SectionContainer>
 				<Queryable query={$transactions} children={(data) => {
 					const transacties = data?.bankTransactionsPaged?.banktransactions || [];
+					/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
 					const filtersActive = Object.values(queryVariables.filters).filter(q => ![null, undefined].includes(q as any)).length > 0;
 
 					return (

@@ -18,8 +18,8 @@ export const Section: React.FC<SectionProps> = ({
 	children,
 	...props
 }) => {
-	const hasLeft = (title || helperText || left);
-	const hasTopbar = (right || menu);
+	const hasLeft = title || helperText || left;
+	const hasTopbar = right || menu;
 	const isMobile = useBreakpointValue([true, true, false]);
 
 	const TopBar = ({menu, right}) => (
@@ -31,7 +31,7 @@ export const Section: React.FC<SectionProps> = ({
 
 	return (
 		<Stack direction={["column", "column", "row"]} spacing={[2, 2, 4]} {...props}>
-			{(isMobile && hasTopbar) && (
+			{isMobile && hasTopbar && (
 				<Box mb={2}>
 					<TopBar menu={menu} right={right} />
 				</Box>
@@ -48,7 +48,7 @@ export const Section: React.FC<SectionProps> = ({
 				</Stack>
 			)}
 			<Stack flex={[1, 3, 3]} spacing={[2, 2, 4]} divider={<Divider />}>
-				{(!isMobile && hasTopbar) && (
+				{!isMobile && hasTopbar && (
 					<TopBar menu={menu} right={right} />
 				)}
 				<Box>

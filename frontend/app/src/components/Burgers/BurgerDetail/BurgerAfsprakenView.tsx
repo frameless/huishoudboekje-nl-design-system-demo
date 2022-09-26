@@ -65,7 +65,7 @@ const BurgerAfsprakenView: React.FC<{burger: Burger}> = ({burger}) => {
 									</Td>
 								</Tr>
 							)}
-							{sortedAfspraken.length > 0 && sortedAfspraken.map((a, i) => (
+							{sortedAfspraken.length > 0 && sortedAfspraken.map((a) => (
 								<AfspraakTableRow key={a.id} data-id={a.id} afspraak={a} py={2} />
 							))}
 						</Tbody>

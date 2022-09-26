@@ -55,7 +55,7 @@ export const createAggregation = (tr: BankTransaction[], granularity = Granulari
 		[Type.Uitgaven]: [],
 	};
 
-	const tableDataPrepare = _data.reduce((result: any, tr: RichTransaction) => {
+	const tableDataPrepare = _data.reduce((result, tr: RichTransaction) => {
 		result[tr.isCredit ? Type.Inkomsten : Type.Uitgaven].push(tr);
 		return result;
 	}, splitupFormat);

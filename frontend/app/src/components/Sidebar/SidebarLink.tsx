@@ -10,8 +10,8 @@ const SidebarLink: React.FC<ButtonProps & { icon?, to: string, exactMatch?: bool
 	const drawerContext = useContext(DrawerContext);
 	const theme = useTheme();
 
-	const linkColor = isActive ? theme.colors["white"] : theme.colors.gray[500];
-	const iconColor = isActive ? theme.colors["white"] : theme.colors.gray[400];
+	const linkColor = isActive ? theme.colors.white : theme.colors.gray[500];
+	const iconColor = isActive ? theme.colors.white : theme.colors.gray[400];
 
 	const LinkIcon: React.FC<BoxProps> = (props) => (
 		<IconContext.Provider value={{style: {color: iconColor}}}>

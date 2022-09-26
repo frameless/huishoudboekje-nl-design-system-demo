@@ -1,5 +1,5 @@
 export type DataLayerEvent = {
 	event: string,
-	payload?: any
+	payload?: unknown
 };
 export type EventArray = DataLayerEvent[];

@@ -35,7 +35,7 @@ const AuditLogText: React.FC<TextProps & {g: GebruikersActiviteit}> = ({g, ...pr
 	const burgerName = formatBurgerName(burger);
 	const components = {
 		linkBurger: burger?.id ? <AuditLogLink to={AppRoutes.ViewBurger(String(burger.id))}>{formatBurgerName(burger)}</AuditLogLink> : t("unknownBurger"),
-		linkHuishouden: (huishouden && huishouden?.id) ?
+		linkHuishouden: huishouden?.id ?
 			<AuditLogLink to={AppRoutes.Huishouden(String(huishouden.id))}>{formatHuishoudenName(huishouden)}</AuditLogLink> : t("unknownHuishouden"),
 		linkOrganisatie: organisatie?.id ? <AuditLogLink to={AppRoutes.Organisatie(String(organisatie.id))}>{organisatie.naam}</AuditLogLink> : t("unknownOrganisatie"),
 		linkAfspraak: afspraak?.id ? <AuditLogLink to={AppRoutes.ViewAfspraak(String(afspraak.id))} /> : t("unknownAfspraak"),
@@ -50,7 +50,7 @@ const AuditLogText: React.FC<TextProps & {g: GebruikersActiviteit}> = ({g, ...pr
 		gebruiker,
 		burger: burgerName,
 		// Todo: Find a solution for humanJoining an array of AuditLogLinks (10-08-2021)
-		listBurgers: (burgers && burgers.length > 0) ? humanJoin(burgers.map(b => formatBurgerName(b))) : t("unknownBurgers"),
+		listBurgers: burgers?.length > 0 ? humanJoin(burgers.map(b => formatBurgerName(b))) : t("unknownBurgers"),
 		huishouden: huishouden && formatHuishoudenName(huishouden),
 		organisatie: organisatie?.naam || t("unknownOrganisatie"),
 		isAfspraakWithBurger: !afspraak?.afdeling?.organisatie?.naam,
@@ -76,10 +76,10 @@ const AuditLogText: React.FC<TextProps & {g: GebruikersActiviteit}> = ({g, ...pr
 	const context = {
 		action,
 		gebruiker: g.gebruikerId,
-		entities: entities.reduce<string[]>((result, e) => ([
+		entities: entities.reduce<string[]>((result, e) => [
 			...result,
 			`${e.entityType} (${e.entityId})`,
-		]), []),
+		], []),
 	};
 
 	return (<>

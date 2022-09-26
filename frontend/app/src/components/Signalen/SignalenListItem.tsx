@@ -53,7 +53,7 @@ const SignalenListItem: React.FC<SignalenListItemProps> = ({signaal}) => {
 				}}>
 					{signaal.bedragDifference ? (
 						<Trans i18nKey={"signalen.bedragDifferenceMessage"} values={{
-							afspraak: (signaal.alarm?.afspraak?.omschrijving),
+							afspraak: signaal.alarm?.afspraak?.omschrijving,
 							bedrag: currencyFormat2(true).format(parseFloat(signaal.bedragDifference)),
 							transactieBedrag: currencyFormat2(true).format(parseFloat(signaal.bankTransactions?.[0].bedrag)),
 						}} components={{
@@ -62,7 +62,7 @@ const SignalenListItem: React.FC<SignalenListItemProps> = ({signaal}) => {
 						}} />
 					) : (
 						<Trans i18nKey={"signalen.contextMessage"} values={{
-							afspraak: (signaal.alarm?.afspraak?.omschrijving),
+							afspraak: signaal.alarm?.afspraak?.omschrijving,
 							context: JSON.stringify(signaal.context, null, 2),
 						}} components={{
 							strong: <strong />,
