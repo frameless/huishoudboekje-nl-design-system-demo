@@ -2,6 +2,11 @@ import {useQuery} from "@tanstack/react-query";
 import {useCallback, useMemo} from "react";
 import {useTranslation} from "react-i18next";
 
+type User = {
+	name: string,
+	email: string,
+}
+
 const AuthRoutes = {
 	check: "/auth/me",
 	login: "/auth/login",
@@ -10,7 +15,7 @@ const AuthRoutes = {
 
 const useAuth = () => {
 	const handleAuthResponse = useHandleAuthResponse();
-	const {isLoading, data: user, error} = useQuery<any, Error>(["getUser"], () => {
+	const {isLoading, data: user, error} = useQuery<User, Error>(["getUser"], () => {
 		return fetch(AuthRoutes.check)
 			.then(handleAuthResponse)
 			.then(result => result.user ?? null);

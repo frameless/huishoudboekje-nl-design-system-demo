@@ -1,5 +1,5 @@
 import {EditIcon} from "@chakra-ui/icons";
-import {FormControlProps, HStack, IconButton, Td, Tr, useDisclosure} from "@chakra-ui/react";
+import {HStack, IconButton, Td, Tr, useDisclosure} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {Configuratie, GetConfiguratieDocument, useDeleteConfiguratieMutation} from "../../generated/graphql";
@@ -7,7 +7,7 @@ import useToaster from "../../utils/useToaster";
 import DeleteConfirmButton from "../shared/DeleteConfirmButton";
 import UpdateParameterModal from "./UpdateParameterModal";
 
-const ParameterItem: React.FC<FormControlProps & {c: Configuratie}> = ({c, ...props}) => {
+const ParameterItem: React.FC<{c: Configuratie}> = ({c}) => {
 	const toast = useToaster();
 	const {t} = useTranslation();
 	const updateParameterModal = useDisclosure();

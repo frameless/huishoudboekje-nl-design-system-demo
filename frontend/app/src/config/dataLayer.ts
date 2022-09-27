@@ -1,5 +1,6 @@
 import {UseDataLayerOptions} from "../utils/DataLayer/useDataLayer";
 
 export const dataLayerOptions: UseDataLayerOptions = {
-	eventArray: window["_mtm"] || [],
+	// @ts-ignore
+	eventArray: window._mtm || [],
 };

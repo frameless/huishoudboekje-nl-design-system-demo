@@ -1,10 +1,8 @@
 import {MutationErrorHandlerFactory} from "./useMutationErrorHandler";
 
-const SaveAfdelingPostadresErrorHandler: MutationErrorHandlerFactory = ({t, toast}) => (err) => {
-	let errorMessage = err.message;
-
+const SaveAfdelingPostadresErrorHandler: MutationErrorHandlerFactory = ({toast}) => (err) => {
 	toast({
-		error: errorMessage,
+		error: err.message,
 	});
 };
 

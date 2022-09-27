@@ -1,7 +1,7 @@
 import d from "../dayjs";
 import {QueryableProps} from "./Queryable";
 
-export const generateErrorReport = (error: Error, query?: QueryableProps["query"], user?: any) => {
+export const generateErrorReport = (error: Error, query?: QueryableProps["query"], user?: unknown) => {
 	return {
 		graphqlQuery: {
 			variables: query?.variables ?? null,

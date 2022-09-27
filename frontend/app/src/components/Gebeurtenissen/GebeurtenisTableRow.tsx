@@ -13,8 +13,11 @@ const GebeurtenisTableRow: React.FC<{gebeurtenis: GebruikersActiviteit}> = ({geb
 	const browser = new UAParser(g.meta?.userAgent).getBrowser();
 	const os = new UAParser(g.meta?.userAgent).getOS();
 
-	const osLabel = (os.name && os.version) ? `${os.name} ${os.version}` : t("unknownOs");
-	const browserLabel = (browser.name && browser.version) ? `${browser.name} ${browser.version}` : t("unknownBrowser");
+	const osNameAndVersion = os.name && os.version;
+	const browserNameAndVersion = browser.name && browser.version;
+
+	const osLabel = osNameAndVersion ? `${os.name} ${os.version}` : t("unknownOs");
+	const browserLabel = browserNameAndVersion ? `${browser.name} ${browser.version}` : t("unknownBrowser");
 
 	return (
 		<Tr alignItems={"center"} key={g.id}>

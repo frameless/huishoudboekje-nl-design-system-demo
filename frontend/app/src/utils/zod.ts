@@ -5,6 +5,6 @@ import {z as zod} from "zod";
  * @param error
  * @param errorCodes
  */
-export const containsZodErrorCode = (error: zod.ZodError, errorCodes: zod.ZodIssueCode[]) => error.errors.map(e => e.code).some(e => [...errorCodes].includes(e as any));
+export const containsZodErrorCode = (error: zod.ZodError, errorCodes: zod.ZodIssueCode[]) => error.errors.map(e => e.code).some(e => errorCodes.includes(e));
 
 export default zod;

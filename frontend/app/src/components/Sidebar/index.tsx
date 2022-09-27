@@ -20,7 +20,7 @@ const Sidebar = () => {
 	const {t} = useTranslation();
 	const isSignalenEnabled = useFeatureFlag("signalen");
 	const $signalen = useGetSignalenQuery({
-		pollInterval: (300 * 1000), // Every 5 minutes
+		pollInterval: 300 * 1000, // Every 5 minutes
 		skip: !isSignalenEnabled, // Do not execute when signalen featureflag is off.
 	});
 

@@ -39,7 +39,7 @@ const AddBurgerToHuishoudenModal: React.FC<{huishouden: Huishouden, onClose: Voi
 				huishoudenId: huishouden.id!,
 				burgerIds: selectedBurgers.map(b => b.id as number),
 			},
-		}).then(result => {
+		}).then(() => {
 			toast({
 				success: t("messages.huishoudenBurger.addSuccess", {names: humanJoin(selectedBurgers.map(b => formatBurgerName(b))), count: selectedBurgers.length}),
 			});

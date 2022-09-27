@@ -17,7 +17,7 @@ const InkomstenUitgaven: React.FC<BoxProps & {transactions: BankTransaction[]}> 
 
 	const columns = [t("interval.period"), t("charts.inkomstenUitgaven.income"), t("charts.inkomstenUitgaven.expenses")];
 	const chartTemplate = prepareChartData(startDate, endDate, granularity, columns.length - 1);
-	const chartData = (chartTemplate: any[], aggregation) => chartTemplate.map(chartItem => {
+	const chartData = (chartTemplate, aggregation) => chartTemplate.map(chartItem => {
 		const [period, tIncome, tExpenses] = chartItem;
 		const {income = 0, expenses = 0} = aggregation[period] || {};
 

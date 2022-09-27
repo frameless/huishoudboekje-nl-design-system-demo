@@ -64,7 +64,7 @@ const App = () => {
 					<Spinner size={"xl"} />
 				) : (
 					<Stack spacing={5} maxWidth={300} alignSelf={["center", null, null, "flex-start"]}>
-						<Heading size={"sm"}>{t("messages.welcome", {tenantName: theme["tenantName"]})}</Heading>
+						<Heading size={"sm"}>{t("messages.welcome", {tenantName: theme.tenantName})}</Heading>
 						<Text fontSize={"sm"}>{t("messages.clickHereToContinue")}</Text>
 						<Button colorScheme={"primary"} type={"submit"} onClick={() => login()}>{t("global.actions.login")}</Button>
 					</Stack>

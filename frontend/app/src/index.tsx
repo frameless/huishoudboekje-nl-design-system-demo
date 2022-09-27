@@ -1,6 +1,6 @@
 import {ApolloProvider} from "@apollo/client";
 import {ChakraProvider} from "@chakra-ui/react";
-import {QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import nl from "date-fns/locale/nl";
 import dayjs from "dayjs";
 import React from "react";
@@ -19,6 +19,7 @@ registerLocale("nl", nl);
 setDefaultLocale("nl");
 
 const container = document.getElementById("root");
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const root = createRoot(container!);
 const queryClient = new QueryClient();
 

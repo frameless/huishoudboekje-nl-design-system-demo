@@ -11,12 +11,15 @@ Tooltip.defaultProps = {
 	placement: "top",
 };
 
-if (!window["branding"]) {
+// @ts-ignore
+const branding = window.branding ?? {};
+
+if (!branding) {
 	document.querySelector("body")!.textContent = "Error: No tenant theme installed.";
 	throw new Error("Couldn't find tenant theme.");
 }
 
-const {colors, tenantName} = window["branding"];
+const {colors, tenantName} = branding;
 
 const theme = extendTheme({
 	colors,

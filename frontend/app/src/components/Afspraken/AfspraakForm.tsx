@@ -128,9 +128,11 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 		toggleSubmitted(true);
 
 		if (isValid()) {
-			const {type, organisatieId, ...rest} = form;
+			delete form.type;
+			delete form.organisatieId;
+
 			onSubmit({
-				...rest,
+				...form,
 				afdelingId: form.afdelingId || null, // Explicitly pass to make it null.
 				postadresId: form.postadresId || null, // Explicitly pass to make it null.
 			});
@@ -145,8 +147,6 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 	};
 
 	const tryAutofillFields = (afdeling?: Afdeling) => {
-		// Todo: add logic to also autofill burger's rekening when there's only one. (17-02-2022)
-
 		if (!afdeling) {
 			return;
 		}
@@ -205,7 +205,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 											id={"organisatie"}
 											options={organisatieOptions}
 											value={selectedOrganisatie ? organisatieOptions.find(o => o.value === selectedOrganisatie.id) : null}
-											styles={(isFieldValid("organisatieId") && isFieldValid2("organisatieId")) ? reactSelectStyles.default : reactSelectStyles.error}
+											styles={isFieldValid("organisatieId") && isFieldValid2("organisatieId") ? reactSelectStyles.default : reactSelectStyles.error}
 											onChange={result => {
 												const organisatieId = result?.value;
 												const organisatie = organisaties.find(o => o.id === organisatieId);
@@ -238,7 +238,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 											noOptionsMessage={() => t("forms.afspraken.select.noAfdelingenOptionsMessage")}
 											options={afdelingOptions}
 											value={form.afdelingId ? afdelingOptions.find(o => o.value === form.afdelingId) : null}
-											styles={(isFieldValid("afdelingId") && isFieldValid2("afdelingId")) ? reactSelectStyles.default : reactSelectStyles.error}
+											styles={isFieldValid("afdelingId") && isFieldValid2("afdelingId") ? reactSelectStyles.default : reactSelectStyles.error}
 											onChange={result => {
 												const findAfdeling = afdelingen.find(o => o.id === result?.value);
 												updateForm("afdelingId", findAfdeling?.id);
@@ -258,7 +258,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 											noOptionsMessage={() => t("forms.afspraken.select.noPostadressenOptionsMessage")}
 											options={postadresOptions}
 											value={form.postadresId ? postadresOptions.find(o => o.value === form.postadresId) : null}
-											styles={(isFieldValid("postadresId") && isFieldValid2("postadresId")) ? reactSelectStyles.default : reactSelectStyles.error}
+											styles={isFieldValid("postadresId") && isFieldValid2("postadresId") ? reactSelectStyles.default : reactSelectStyles.error}
 											onChange={(result) => {
 												const findPostadres = postadressen.find(o => o.id === result?.value);
 												updateForm("postadresId", findPostadres?.id);
@@ -315,7 +315,7 @@ const AfspraakForm: React.FC<AfspraakFormProps> = ({values, burgerRekeningen, on
 									<RadioGroup colorScheme={"primary"} onChange={e => {
 										updateForm("credit", e === "inkomsten");
 										updateForm("rubriekId", undefined);
-									}} value={form.credit !== undefined ? (form.credit ? "inkomsten" : "uitgaven") : undefined}>
+									}} value={form.credit !== undefined ? form.credit ? "inkomsten" : "uitgaven" : undefined}>
 										<Stack>
 											<Radio value={"inkomsten"}>{t("afspraken.inkomsten")}</Radio>
 											<Radio value={"uitgaven"}>{t("afspraken.uitgaven")}</Radio>

@@ -6,7 +6,7 @@ import {Organisatie} from "../../../generated/graphql";
 import DashedAddButton from "../../shared/DashedAddButton";
 import GridCard from "../../shared/GridCard";
 
-const OrganisatieListView: React.FC<BoxProps & {organisaties: Organisatie[], showAddButton?: boolean}> = ({organisaties, showAddButton = false, ...props}) => {
+const OrganisatieListView: React.FC<BoxProps & {organisaties: Organisatie[], showAddButton?: boolean}> = ({organisaties, showAddButton = false}) => {
 	const navigate = useNavigate();
 
 	return (

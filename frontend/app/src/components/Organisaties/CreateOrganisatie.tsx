@@ -6,8 +6,8 @@ import SaveOrganisatieErrorHandler from "../../errorHandlers/SaveOrganisatieErro
 import useMutationErrorHandler from "../../errorHandlers/useMutationErrorHandler";
 import {CreateOrganisatieMutationVariables, GetOrganisatiesDocument, useCreateOrganisatieMutation} from "../../generated/graphql";
 import useToaster from "../../utils/useToaster";
-import Page from "../shared/Page";
 import BackButton from "../shared/BackButton";
+import Page from "../shared/Page";
 import OrganisatieForm from "./OrganisatieForm";
 
 const CreateOrganisatie = () => {
@@ -22,9 +22,11 @@ const CreateOrganisatie = () => {
 		],
 	});
 
-	const onSubmit = (organisatieData: CreateOrganisatieMutationVariables) => {
+	const onSubmit = (data: CreateOrganisatieMutationVariables) => {
 		createOrganisatie({
-			variables: organisatieData,
+			variables: {
+				...data
+			},
 		}).then(result => {
 			toast({
 				success: t("messages.organisaties.createSuccessMessage"),

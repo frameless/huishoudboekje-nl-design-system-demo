@@ -55,14 +55,14 @@ export const createAggregation = (tr: BankTransaction[], granularity = Granulari
 		[Type.Uitgaven]: [],
 	};
 
-	const tableDataPrepare = _data.reduce((result: any, tr: RichTransaction) => {
+	const tableDataPrepare = _data.reduce((result, tr: RichTransaction) => {
 		result[tr.isCredit ? Type.Inkomsten : Type.Uitgaven].push(tr);
 		return result;
 	}, splitupFormat);
 
 	/* For table */
 	const reduceByOrganisatie = (result, tr: RichTransaction) => {
-		let beneficiary = tr.organisatie?.naam || (tr.journaalpost?.afspraak?.burger ? formatBurgerName(tr.journaalpost?.afspraak?.burger) : undefined);
+		const beneficiary = tr.organisatie?.naam || (tr.journaalpost?.afspraak?.burger ? formatBurgerName(tr.journaalpost?.afspraak?.burger) : undefined);
 		const index = beneficiary || "Niet afgeletterd"; // Todo: i18n / translate
 		result[index] = result[index] || 0;
 		result[index] += parseFloat(tr.bedrag);

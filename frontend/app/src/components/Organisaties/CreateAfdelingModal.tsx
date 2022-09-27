@@ -27,7 +27,7 @@ const CreateAfdelingModal: React.FC<CreateAfdelingModalProps> = ({organisatie, o
 	const onSubmit = (afdelingData: CreateAfdelingMutationVariables) => {
 		createAfdeling({
 			variables: afdelingData,
-		}).then(result => {
+		}).then(() => {
 			toast({
 				success: t("messages.afdelingen.createSuccessMessage"),
 			});

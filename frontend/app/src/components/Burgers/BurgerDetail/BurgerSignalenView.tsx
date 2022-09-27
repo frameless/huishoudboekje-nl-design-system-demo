@@ -11,16 +11,12 @@ export type ActiveSwitch = {
 	inactive: boolean,
 }
 
-export type Signaal2 = Omit<Signaal, "context"> & {
-	context: any
-}
-
 const BurgerSignalenView: React.FC<{burger: Burger}> = ({burger}) => {
 	const {t} = useTranslation();
 	const [filter, setFilter] = useState<ActiveSwitch>({active: true, inactive: false});
 
-	const signalen: Signaal2[] = (burger.afspraken || []).filter(afspraak => afspraak.alarm?.signaal) as Signaal2[];
-	const filteredSignalen: Signaal2[] = [
+	const signalen: Signaal[] = (burger.afspraken || []).filter(afspraak => afspraak.alarm?.signaal) as Signaal[];
+	const filteredSignalen: Signaal[] = [
 		...signalen.filter(a => filter.active && a.isActive),
 		...signalen.filter(a => filter.inactive && !a.isActive),
 	];

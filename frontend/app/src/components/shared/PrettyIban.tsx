@@ -7,9 +7,8 @@ type PrettyIbanProps = {
 };
 
 const PrettyIban: React.FC<PrettyIbanProps> = ({iban, fallback = "Unknown IBAN"}) => {
-	return React.createElement("span", null, (
-		iban ? friendlyFormatIBAN(iban) : fallback
-	));
+	const formatted = iban ? friendlyFormatIBAN(iban) : fallback;
+	return React.createElement("span", null, formatted);
 };
 
 export default PrettyIban;

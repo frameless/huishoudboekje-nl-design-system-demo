@@ -5,19 +5,12 @@ import {Navigate, useNavigate, useParams} from "react-router-dom";
 import {AppRoutes} from "../../config/routes";
 import SaveOrganisatieErrorHandler from "../../errorHandlers/SaveOrganisatieErrorHandler";
 import useMutationErrorHandler from "../../errorHandlers/useMutationErrorHandler";
-import {
-	GetOrganisatieDocument,
-	GetOrganisatiesDocument,
-	Organisatie,
-	UpdateOrganisatieMutationVariables,
-	useGetOrganisatieQuery,
-	useUpdateOrganisatieMutation,
-} from "../../generated/graphql";
+import {GetOrganisatieDocument, GetOrganisatiesDocument, Organisatie, UpdateOrganisatieMutationVariables, useGetOrganisatieQuery, useUpdateOrganisatieMutation} from "../../generated/graphql";
 import Queryable from "../../utils/Queryable";
 import {maxOrganisatieNaamLengthBreakpointValues, truncateText} from "../../utils/things";
 import useToaster from "../../utils/useToaster";
-import Page from "../shared/Page";
 import BackButton from "../shared/BackButton";
+import Page from "../shared/Page";
 import OrganisatieForm from "./OrganisatieForm";
 
 const EditOrganisatie = () => {
@@ -38,9 +31,12 @@ const EditOrganisatie = () => {
 		],
 	});
 
-	const onSubmit = (data: UpdateOrganisatieMutationVariables) => {
+	const onSubmit = (data: Omit<UpdateOrganisatieMutationVariables, "id">) => {
 		updateOrganisatie({
-			variables: data,
+			variables: {
+				...data,
+				id: parseInt(id),
+			},
 		}).then(() => {
 			toast({
 				success: t("messages.organisaties.updateSuccessMessage"),
