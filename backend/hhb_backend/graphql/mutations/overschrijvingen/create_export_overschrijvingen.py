@@ -14,6 +14,7 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     gebruikers_activiteit_entities,
     log_gebruikers_activiteit
 )
+from hhb_backend.graphql.utils.dates import to_date
 from hhb_backend.processen.create_sepa_export import create_export_string
 from hhb_backend.processen.overschrijvingen_planner import (
     PlannedOverschijvingenInput,
@@ -59,8 +60,8 @@ class CreateExportOverschrijvingen(graphene.Mutation):
         """ Create the export file based on start and end date """
         start_datum_str = kwargs.pop("startDatum")
         eind_datum_str = kwargs.pop("eindDatum")
-        start_datum = datetime.strptime(start_datum_str, "%Y-%m-%d").date()
-        eind_datum = datetime.strptime(eind_datum_str, "%Y-%m-%d").date()
+        start_datum = to_date(start_datum_str)
+        eind_datum = to_date(eind_datum_str)
 
         # Get all afspraken with the start and end date.
         afspraken = hhb_dataloader().afspraken.in_date_range(start_datum_str, eind_datum_str)
