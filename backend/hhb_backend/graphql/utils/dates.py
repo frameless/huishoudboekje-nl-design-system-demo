@@ -4,8 +4,8 @@ from hhb_backend.service.model.afspraak import Afspraak
 
 
 def to_date(date_str: str = None) -> date:
-    """Convenient function for deriving a datetime.date from a string with format Y-m-d"""
-    return datetime.strptime(date_str, "%Y-%m-%d").date() if date_str else None
+    """Convenient function for deriving a datetime.date from a string with iso format"""
+    return datetime.fromisoformat(date_str).date() if date_str else None
 
 
 def valid_afspraak(afspraak: Afspraak, check_date=date.today()):

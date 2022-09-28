@@ -1,7 +1,6 @@
 import requests_mock
 
 from hhb_backend.graphql import settings
-from tests import post_echo
 
 
 def get_json_payload(zoekterm):
@@ -49,7 +48,12 @@ def test_add_afspraak_zoekterm_success_1(client):
                 }
             ]}
         )
-        afspraken_post = mock.post(f"{settings.HHB_SERVICES_URL}/afspraken/1", json=post_echo)
+
+        afspraak = {"data": {
+            "id": 1, "zoektermen": ["Albert Heijn", "salaris"], "tegen_rekening_id": 14,
+            "valid_from": "2020-01-01", "valid_through": None, "journaalposten": [], "overschrijvingen": []        
+        }}
+        afspraken_post = mock.post(f"{settings.HHB_SERVICES_URL}/afspraken/1", json=afspraak)
 
         response = client.post(
             "/graphql",
@@ -93,7 +97,12 @@ def test_add_afspraak_zoekterm_conflict_1(client):
                 }
             ]}
         )
-        afspraken_post = mock.post(f"{settings.HHB_SERVICES_URL}/afspraken/1", json=post_echo)
+
+        afspraak = {"data": {
+            "id": 1, "zoektermen": ["Albert Heijn", "loonbetaling"], "tegen_rekening_id": 14,
+            "valid_from": "2020-01-01", "valid_through": None, "journaalposten": [], "overschrijvingen": []        
+        }}
+        afspraken_post = mock.post(f"{settings.HHB_SERVICES_URL}/afspraken/1", json=afspraak)
 
         response = client.post(
             "/graphql",
@@ -138,7 +147,12 @@ def test_add_afspraak_zoekterm_conflict_2(client):
                 }
             ]}
         )
-        afspraken_post = mock.post(f"{settings.HHB_SERVICES_URL}/afspraken/1", json=post_echo)
+
+        afspraak = {"data": {
+            "id": 1, "zoektermen": ["Albert Heijn", "loon", "betaling"], "tegen_rekening_id": 14,
+            "valid_from": "2020-01-01", "valid_through": None, "journaalposten": [], "overschrijvingen": []        
+        }}
+        afspraken_post = mock.post(f"{settings.HHB_SERVICES_URL}/afspraken/1", json=afspraak)
 
         response = client.post(
             "/graphql",
@@ -183,7 +197,12 @@ def test_add_afspraak_zoekterm_success_2(client):
                 }
             ]}
         )
-        afspraken_post = mock.post(f"{settings.HHB_SERVICES_URL}/afspraken/1", json=post_echo)
+
+        afspraak = {"data": {
+            "id": 1, "zoektermen": ["Albert Heijn", "loon ", "betaling"], "tegen_rekening_id": 14,
+            "valid_from": "2020-01-01", "valid_through": None, "journaalposten": [], "overschrijvingen": []        
+        }}
+        afspraken_post = mock.post(f"{settings.HHB_SERVICES_URL}/afspraken/1", json=afspraak)
 
         response = client.post(
             "/graphql",
@@ -205,44 +224,49 @@ def test_add_afspraak_zoekterm_success_2(client):
 
 def test_add_afspraak_zoekterm_conflict_3(client):
     with requests_mock.Mocker() as mock:
+        afspraak1 = {
+            "id": 1, "zoektermen": ["Albert Heijn", "loon "], "tegen_rekening_id": 14,
+            "valid_from": "2020-01-01", "valid_through": None, "journaalposten": [], "overschrijvingen": []        
+        }
+        afspraak2 = {
+            "id": 2, "zoektermen": ["Albert Heijn", "loon betaling"], "tegen_rekening_id": 14,
+            "valid_from": "2020-01-01", "valid_through": None, "journaalposten": [], "overschrijvingen": []
+        }
         get_any = mock.get(requests_mock.ANY, status_code=404)
         post_any = mock.post(requests_mock.ANY, status_code=404)
-        log_post = mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json={"data": {"id": 1}})
+        log_post = mock.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/")
         afspraken_get = mock.get(
             f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids=1",
-            json={"data": [{
-                "id": 1, "zoektermen": ["Albert Heijn", "loon "], "tegen_rekening_id": 14,
-                "valid_from": "2020-01-01", "valid_through": None, "journaalposten": [], "overschrijvingen": []
-            }]}
+            json={"data": [afspraak1]}
         )
         afspraken_get_rekening = mock.get(
             f"{settings.HHB_SERVICES_URL}/afspraken/?filter_rekening=14",
             json={"data": [
-                {
-                    "id": 1, "zoektermen": ["Albert Heijn", "loon "], "tegen_rekening_id": 14,
-                    "valid_from": "2020-01-01", "valid_through": None, "journaalposten": [], "overschrijvingen": []
-                },
-                {
-                    "id": 2, "zoektermen": ["Albert Heijn", "loon betaling"], "tegen_rekening_id": 14,
-                    "valid_from": "2020-01-01", "valid_through": None, "journaalposten": [], "overschrijvingen": []
-                }
+                afspraak1,
+                afspraak2
             ]}
         )
-        afspraken_post = mock.post(f"{settings.HHB_SERVICES_URL}/afspraken/1", json=post_echo)
+        afspraak1a = {"data": {
+            "id": 1, "zoektermen": ["Albert Heijn", "loon ", "betaling"], "tegen_rekening_id": 14,
+            "valid_from": "2020-01-01", "valid_through": None, "journaalposten": [], "overschrijvingen": []        
+        }}
+        afspraken_post = mock.post(f"{settings.HHB_SERVICES_URL}/afspraken/1", json=afspraak1a)
 
         response = client.post(
             "/graphql",
             json=get_json_payload("betaling"),
         )
-        assert response.json == {'data': {'addAfspraakZoekterm': {
-            'afspraak': {'id': 1, 'zoektermen': ['Albert Heijn', 'loon ', 'betaling']},
-            'matchingAfspraken': [{'id': 2, 'zoektermen': ['Albert Heijn', 'loon betaling']}]
-        }}}
+        
         assert afspraken_get.called_once
         assert afspraken_post.called
-        assert log_post.called_once
-        assert afspraken_get_rekening.called_once
+        assert afspraken_get_rekening.call_count == 1
+        assert log_post.call_count == 1
 
         # No leftover calls
         assert not post_any.called
         assert not get_any.called
+
+        assert response.json == {'data': {'addAfspraakZoekterm': {
+            'afspraak': {'id': 1, 'zoektermen': ['Albert Heijn', 'loon ', 'betaling']},
+            'matchingAfspraken': [{'id': 2, 'zoektermen': ['Albert Heijn', 'loon betaling']}]
+        }}}

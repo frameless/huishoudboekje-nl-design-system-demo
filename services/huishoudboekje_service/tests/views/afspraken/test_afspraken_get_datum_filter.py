@@ -16,29 +16,29 @@ def dict_keys_subset_builder(match_keys: list):
 
 @pytest.mark.parametrize("valid_from, valid_through, afspraken, expected", [
     ("2021-01-01", "2021-02-01", [
-        dict(omschrijving="precies pas", valid_from="2021-01-01", valid_through="2021-02-01"),
-        dict(omschrijving="eromheen", valid_from="2020-01-01", valid_through="2021-12-31"),
+        dict(omschrijving="precies pas", valid_from="2021-01-01T00:00:00", valid_through="2021-02-01T00:00:00"),
+        dict(omschrijving="eromheen", valid_from="2020-01-01T00:00:00", valid_through="2021-12-31T00:00:00"),
     ], [
-         dict(omschrijving="precies pas", valid_from="2021-01-01", valid_through="2021-02-01"),
-         dict(omschrijving="eromheen", valid_from="2020-01-01", valid_through='2021-12-31'),
+         dict(omschrijving="precies pas", valid_from="2021-01-01T00:00:00", valid_through="2021-02-01T00:00:00"),
+         dict(omschrijving="eromheen", valid_from="2020-01-01T00:00:00", valid_through='2021-12-31T00:00:00'),
      ]),
 
     ("2021-01-01", "2021-02-01", [
-        dict(omschrijving="te vroeg", valid_from="2020-01-01", valid_through="2020-12-31"),
-        dict(omschrijving="te vroeg", valid_from="2020-01-01", valid_through="2021-01-01"),
+        dict(omschrijving="te vroeg", valid_from="2020-01-01T00:00:00", valid_through="2020-12-31T00:00:00"),
+        dict(omschrijving="te vroeg", valid_from="2020-01-01T00:00:00", valid_through="2021-01-01T00:00:00"),
     ], []),
 
     ("2021-01-01", "2021-02-01", [
-        dict(omschrijving="te laat", valid_from="2021-02-02", valid_through="2021-12-31"),
-        dict(omschrijving="te laat, open", valid_from="2021-02-02", valid_through=None),
+        dict(omschrijving="te laat", valid_from="2021-02-02T00:00:00", valid_through="2021-12-31T00:00:00"),
+        dict(omschrijving="te laat, open", valid_from="2021-02-02T00:00:00", valid_through=None),
     ], []),
 
     ("2021-01-01", "2021-02-01", [
-        dict(omschrijving="start voor begin, open", valid_from="2020-12-31", valid_through=None),
-        dict(omschrijving="start na begin, open", valid_from="2021-01-02", valid_through=None),
+        dict(omschrijving="start voor begin, open", valid_from="2020-12-31T00:00:00", valid_through=None),
+        dict(omschrijving="start na begin, open", valid_from="2021-01-02T00:00:00", valid_through=None),
     ], [
-         dict(omschrijving="start voor begin, open", valid_from="2020-12-31", valid_through=None),
-         dict(omschrijving="start na begin, open", valid_from="2021-01-02", valid_through=None),
+         dict(omschrijving="start voor begin, open", valid_from="2020-12-31T00:00:00", valid_through=None),
+         dict(omschrijving="start na begin, open", valid_from="2021-01-02T00:00:00", valid_through=None),
      ]),
 ])
 def test_afspraken_get_datum_filter(app, afspraak_factory, caplog, valid_from, valid_through, afspraken, expected):

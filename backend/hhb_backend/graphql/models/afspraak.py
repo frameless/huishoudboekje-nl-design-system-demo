@@ -135,11 +135,11 @@ class Afspraak(graphene.ObjectType):
 
     def resolve_valid_from(root, info):
         if value := root.get("valid_from"):
-            return datetime.fromisoformat(value).date()
+            return to_date(value)
 
     def resolve_valid_through(root, info):
         if value := root.get("valid_through"):
-            return datetime.fromisoformat(value).date()
+            return to_date(value)
 
     async def resolve_journaalposten(self, _info):
         """ Get organisatie when requested """

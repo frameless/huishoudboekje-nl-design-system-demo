@@ -57,7 +57,6 @@ class AddAfspraakZoekterm(graphene.Mutation):
         zoektermen.append(zoekterm)
 
         input = {
-            **previous,
             "zoektermen": zoektermen
         }
 

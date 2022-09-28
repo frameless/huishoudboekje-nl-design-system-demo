@@ -9,8 +9,8 @@ def test_afspraken_post_new_afspraak_minimum(client, session):
     assert session.query(Afspraak).count() == 0
     afspraak_dict_min = {
         "omschrijving": "Nieuwe afspraak",
-        "valid_from": date(2020, 10, 1).isoformat(),
-        "valid_through": date(2020, 10, 1).isoformat(),
+        "valid_from": "2020-10-01",
+        "valid_through": "2020-10-01",
         "aantal_betalingen": 5,
         "betaalinstructie": {
             "byDay": [1,2],
@@ -31,6 +31,7 @@ def test_afspraken_post_new_afspraak_minimum(client, session):
         data=json.dumps(afspraak_dict_min),
         content_type='application/json'
     )
+    
     assert response.status_code == 201
     afspraak_dict_min["id"] = 1
     afspraak_dict_min["burger_id"] = None
@@ -39,6 +40,8 @@ def test_afspraken_post_new_afspraak_minimum(client, session):
     afspraak_dict_min["postadres_id"] = None
     afspraak_dict_min["alarm_id"] = None
     afspraak_dict_min["rubriek_id"] = None
+    afspraak_dict_min["valid_from"] = "2020-10-01T00:00:00"
+    afspraak_dict_min["valid_through"] = "2020-10-01T00:00:00"
     assert response.json["data"] == afspraak_dict_min
     assert session.query(Afspraak).count() == 1
 
@@ -78,17 +81,18 @@ def test_afspraken_post_new_afspraak_full(client, session,
             "byMonthDay": [],
             "byMonthWeek": [],
             "exceptDates": ["2021-02-02", "2021-03-03"],
-            "startDatum": "2021-01-01",
-            "eindDatum": "2021-12-31",
-
+            "startDatum": "2021-01-01T00:00:00",
+            "eindDatum": "2021-12-31T00:00:00",
         },
-        
     }
+
     response = client.post(
         '/afspraken/',
         data=json.dumps(afspraak_dict_full),
         content_type='application/json'
     )
+
+
     assert response.status_code == 201
     afspraak_dict_full["id"] = 1
     afspraak_dict_full["burger_id"] = 1
@@ -97,6 +101,8 @@ def test_afspraken_post_new_afspraak_full(client, session,
     afspraak_dict_full["afdeling_id"] = None
     afspraak_dict_full["postadres_id"] = "38d25c77-8cd5-4bbe-9a73-633ec7847794"
     afspraak_dict_full["alarm_id"] = "38d25c77-8cd5-4bbe-9a73-633ec7847795"
+    afspraak_dict_full["valid_from"] = "2020-10-01T00:00:00"
+    afspraak_dict_full["valid_through"] = "2022-10-01T00:00:00"
     assert response.json["data"] == afspraak_dict_full
     assert session.query(Afspraak).count() == 1
 
