@@ -18,7 +18,7 @@ def test_burgers_post_success(app, huishouden_factory):
     assert response.status_code == 201
     assert response.json["data"] == {'achternaam': None,
                                      'email': 'a@b.c',
-                                     'geboortedatum': '2020-01-01',
+                                     'geboortedatum': '2020-01-01T00:00:00',
                                      'huisnummer': None,
                                      'id': 1,
                                      'postcode': None,
