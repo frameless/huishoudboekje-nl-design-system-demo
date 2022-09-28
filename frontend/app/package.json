@@ -30,8 +30,8 @@
     "pregen-types": "npm run get-schema",
     "gen-types": "graphql-codegen --config graphql-codegen.yaml",
     "i18n-migrate": "i18next 'src/**/*.{ts,tsx}' [-oc]",
-    "storybook": "start-storybook -p 6006 -s public",
-    "build-storybook": "build-storybook -s public"
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "dependencies": {
     "@apollo/client": "^3.6.9",
