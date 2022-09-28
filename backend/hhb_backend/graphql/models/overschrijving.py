@@ -5,6 +5,7 @@ import hhb_backend.graphql.models.bank_transaction as bank_transaction
 import hhb_backend.graphql.models.export as export
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.scalars.bedrag import Bedrag
+from hhb_backend.graphql.utils.dates import to_date
 
 
 class OverschrijvingStatus(graphene.Enum):
@@ -16,7 +17,7 @@ class OverschrijvingStatus(graphene.Enum):
 class Overschrijving(graphene.ObjectType):
     id = graphene.Int()
     bedrag = graphene.Field(Bedrag)
-    datum = graphene.String()
+    datum = graphene.Date()
     status = graphene.Field(OverschrijvingStatus)
     afspraak = graphene.Field(lambda: afspraak.Afspraak)
     export = graphene.Field(lambda: export.Export)
@@ -42,3 +43,7 @@ class Overschrijving(graphene.ObjectType):
         """ Get afspraken when requested """
         if self.get('afspraken'):
             return hhb_dataloader().afspraken.load(self.get('afspraken')) or []
+
+    async def resolve_datum(self, info):
+        if value := self.get('datum'):
+            return to_date(value)

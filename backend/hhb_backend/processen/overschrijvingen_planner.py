@@ -2,7 +2,7 @@ import datetime
 import time
 from datetime import date
 
-from dateutil.parser import isoparse
+from hhb_backend.graphql.utils.dates import to_date
 
 
 class PlannedOverschijvingenInput():
@@ -17,14 +17,14 @@ class PlannedOverschijvingenInput():
 
 
 def get_planned_overschrijvingen(input: PlannedOverschijvingenInput, start_datum: date = None, eind_datum: date = None):
-    betaalinstructie_startdate = isoparse(input.betaalinstructie["start_date"]).date()
+    betaalinstructie_startdate = to_date(input.betaalinstructie["start_date"])
     if not eind_datum:
         eind_datum = datetime.datetime.now().date()
     if not start_datum or start_datum < betaalinstructie_startdate:
         start_datum = betaalinstructie_startdate
 
     if "end_date" in input.betaalinstructie and input.betaalinstructie["end_date"]:
-        betaalinstructie_enddate = isoparse(input.betaalinstructie["end_date"]).date()
+        betaalinstructie_enddate = to_date(input.betaalinstructie["end_date"])
         if eind_datum > betaalinstructie_enddate:
             eind_datum = betaalinstructie_enddate
 
