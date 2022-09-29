@@ -1,4 +1,4 @@
-import {Badge, Box, FormLabel, Heading, Stack, StackProps, Text} from "@chakra-ui/react";
+import {Badge, Box, FormLabel, Stack, StackProps, Text} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {BankTransaction} from "../../../../generated/graphql";
@@ -11,8 +11,6 @@ const TransactieDetailsView: React.FC<StackProps & {transaction: BankTransaction
 
 	return (
 		<Stack spacing={5} justifyContent={"space-between"} {...props}>
-			<Heading size={"sm"}>{t("transaction")} #{bt.id}</Heading>
-
 			<Stack direction={"row"} spacing={5}>
 				<Box flex={1}>
 					<FormLabel>{t("global.date")}</FormLabel>

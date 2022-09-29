@@ -11,10 +11,9 @@ import useToaster from "../../../../utils/useToaster";
 
 type BookingDetailsViewProps = {
 	transactie: BankTransaction
-	refetch: VoidFunction,
 };
 
-const BookingDetailsView: React.FC<BookingDetailsViewProps> = ({transactie, refetch}) => {
+const BookingDetailsView: React.FC<BookingDetailsViewProps> = ({transactie}) => {
 	const {t} = useTranslation();
 	const toast = useToaster();
 	const banktransactieQueryVariables = useStore(store => store.banktransactieQueryVariables);
@@ -36,7 +35,6 @@ const BookingDetailsView: React.FC<BookingDetailsViewProps> = ({transactie, refe
 				variables: {id},
 			}).then(() => {
 				toast({success: t("messages.journals.deleteSuccessMessage")});
-				refetch();
 			}).catch(err => {
 				console.error(err);
 				toast({error: err.message});
@@ -48,10 +46,6 @@ const BookingDetailsView: React.FC<BookingDetailsViewProps> = ({transactie, refe
 	if (journaalpostAfspraak) {
 		return (
 			<Stack spacing={5} justify={"space-between"} mb={3}>
-				<Stack justify={"flex-start"}>
-					<Heading size={"sm"}>{t("words.afspraak")}</Heading>
-				</Stack>
-
 				<Stack direction={"row"} spacing={5}>
 					<Box flex={1}>
 						<FormLabel>{t("burger")}</FormLabel>
@@ -84,7 +78,7 @@ const BookingDetailsView: React.FC<BookingDetailsViewProps> = ({transactie, refe
 				</Stack>
 				<Stack direction={"row"} spacing={5}>
 					<Box mb={3}>
-						<Button leftIcon={<ViewIcon />} colorScheme={"primary"} size={"sm"} as={NavLink} to={AppRoutes.ViewAfspraak((String(journaalpostAfspraak.id)))}>{t("global.actions.view")}</Button>
+						<Button leftIcon={<ViewIcon />} colorScheme={"primary"} size={"sm"} as={NavLink} to={AppRoutes.ViewAfspraak(String(journaalpostAfspraak.id))}>{t("global.actions.view")}</Button>
 					</Box>
 					<Box>
 						<Button leftIcon={<DeleteIcon />} variant={"ghost"} colorScheme={"red"} size={"sm"} onClick={onDelete} isLoading={$deleteJournaalpost.loading}>{t("global.actions.undoAfletteren")}</Button>

@@ -164,7 +164,7 @@ const Transactions = () => {
 						)}>
 							{transacties.length > 0 ? (
 								<Stack>
-									<TransactiesList transacties={transacties} refetch={$transactions.refetch} />
+									<TransactiesList transacties={transacties} />
 									<HStack justify={"center"}>
 										<PaginationButtons />
 									</HStack>

@@ -16,7 +16,7 @@ const CsmUploadModal: React.FC<CsmUploadModalProps> = ({uploads, onClose}) => {
 	return (
 		<Modal title={t("uploadCsmModal.title")} size={"2xl"} onClose={() => {
 			if (uploads.filter(u => u.state !== UploadState.DONE).length > 0) {
-				return void (0);
+				return;
 			}
 			onClose();
 		}}>

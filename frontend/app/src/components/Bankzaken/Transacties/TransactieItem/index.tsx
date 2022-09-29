@@ -1,11 +1,12 @@
 import {WarningIcon} from "@chakra-ui/icons";
-import {Box, BoxProps, Flex, Stack, Tag, TagLabel, TagLeftIcon, Text, Tooltip, useBreakpointValue, useDisclosure} from "@chakra-ui/react";
+import {Box, BoxProps, Flex, Stack, Tag, TagLabel, TagLeftIcon, Text, Tooltip, useBreakpointValue} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
+import {useNavigate} from "react-router-dom";
+import {AppRoutes} from "../../../../config/routes";
 import {BankTransaction} from "../../../../generated/graphql";
 import {currencyFormat2, formatIBAN} from "../../../../utils/things";
 import PrettyIban from "../../../shared/PrettyIban";
-import TransactieItemModal from "./TransactieItemModal";
 
 const hoverStyles = {
 	_hover: {
@@ -14,18 +15,20 @@ const hoverStyles = {
 	},
 };
 
-const TransactieItem: React.FC<BoxProps & {transactie: BankTransaction, refetch: VoidFunction}> = ({transactie: bt, refetch, ...props}) => {
+type TransactieItemProps = BoxProps & {
+	transactie: BankTransaction
+};
+
+const TransactieItem: React.FC<TransactieItemProps> = ({transactie: bt, ...props}) => {
 	const {t} = useTranslation();
 	const isMobile = useBreakpointValue([true, null, null, false]);
-	const modal = useDisclosure();
+	const navigate = useNavigate();
 
 	return (
 		<Box px={2} mx={-2} {...!isMobile && hoverStyles}>
-			{!isMobile && modal.isOpen && bt.id && (
-				<TransactieItemModal id={bt.id} onClose={() => modal.onClose()} refetch={refetch} />
-			)}
-
-			<Stack direction={"row"} alignItems={"center"} justifyContent={"center"} {...props} onClick={!isMobile ? modal.onOpen : () => false}>
+			<Stack direction={"row"} alignItems={"center"} justifyContent={"center"} {...props} onClick={() => {
+				navigate(AppRoutes.ViewTransactie(String(bt.id)));
+			}}>
 
 				<Box flex={2}>
 					{bt.tegenRekening ? (
