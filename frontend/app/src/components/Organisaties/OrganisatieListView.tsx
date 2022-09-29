@@ -1,10 +1,10 @@
 import {Box, BoxProps, Grid, Stack, Text} from "@chakra-ui/react";
 import React from "react";
 import {useNavigate} from "react-router-dom";
-import {AppRoutes} from "../../../config/routes";
-import {Organisatie} from "../../../generated/graphql";
-import DashedAddButton from "../../shared/DashedAddButton";
-import GridCard from "../../shared/GridCard";
+import {AppRoutes} from "../../config/routes";
+import {Organisatie} from "../../generated/graphql";
+import DashedAddButton from "../shared/DashedAddButton";
+import GridCard from "../shared/GridCard";
 
 const OrganisatieListView: React.FC<BoxProps & {organisaties: Organisatie[], showAddButton?: boolean}> = ({organisaties, showAddButton = false}) => {
 	const navigate = useNavigate();

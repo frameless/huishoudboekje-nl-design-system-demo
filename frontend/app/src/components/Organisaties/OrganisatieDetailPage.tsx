@@ -14,7 +14,7 @@ import MenuIcon from "../shared/MenuIcon";
 import Page from "../shared/Page";
 import AfdelingListItem from "./AfdelingListItem";
 import CreateAfdelingModal from "./CreateAfdelingModal";
-import OrganisatieDetailView from "./Views/OrganisatieDetailView";
+import OrganisatieDetailView from "./OrganisatieDetailView";
 
 const OrganisatieDetailPage = () => {
 	const {t} = useTranslation();

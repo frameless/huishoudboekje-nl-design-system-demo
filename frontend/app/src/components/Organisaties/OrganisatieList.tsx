@@ -10,7 +10,7 @@ import {searchFields} from "../../utils/things";
 import DeadEndPage from "../shared/DeadEndPage";
 import Page from "../shared/Page";
 import AddButton from "../shared/AddButton";
-import OrganisatieListView from "./Views/OrganisatieListView";
+import OrganisatieListView from "./OrganisatieListView";
 
 const OrganisatieList = () => {
 	const {t} = useTranslation();

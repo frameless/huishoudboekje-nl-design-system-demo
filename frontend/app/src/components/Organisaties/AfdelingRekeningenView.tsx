@@ -2,10 +2,10 @@ import {AddIcon} from "@chakra-ui/icons";
 import {Box, Button, Divider, Stack} from "@chakra-ui/react";
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
-import {Afdeling, GetOrganisatieDocument, GetOrganisatiesDocument, useCreateAfdelingRekeningMutation} from "../../../generated/graphql";
-import RekeningForm from "../../Rekeningen/RekeningForm";
-import RekeningList from "../../Rekeningen/RekeningList";
-import {FormLeft, FormRight} from "../../shared/Forms";
+import {Afdeling, GetOrganisatieDocument, GetOrganisatiesDocument, useCreateAfdelingRekeningMutation} from "../../generated/graphql";
+import RekeningForm from "../Rekeningen/RekeningForm";
+import RekeningList from "../Rekeningen/RekeningList";
+import {FormLeft, FormRight} from "../shared/Forms";
 
 const AfdelingRekeningenView: React.FC<{afdeling: Afdeling}> = ({afdeling}) => {
 	const {t} = useTranslation();

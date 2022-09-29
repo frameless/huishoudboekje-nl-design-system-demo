@@ -4,7 +4,6 @@ import {useTranslation} from "react-i18next";
 import {BsFillHouseDoorFill} from "react-icons/bs";
 import {FaRegBuilding} from "react-icons/fa";
 import {FiActivity, FiBell} from "react-icons/fi";
-import {GrGraphQl} from "react-icons/gr";
 import {MdCreditCard} from "react-icons/md";
 import {RiBarChartFill} from "react-icons/ri";
 import {TiCog} from "react-icons/ti";
@@ -12,7 +11,6 @@ import {RouteNames} from "../../config/routes";
 import {Signaal, useGetSignalenQuery} from "../../generated/graphql";
 import {useFeatureFlag} from "../../utils/features";
 import Queryable from "../../utils/Queryable";
-import {isDev} from "../../utils/things";
 import NumberBadge from "../shared/NumberBadge";
 import SidebarLink from "./SidebarLink";
 
@@ -66,12 +64,6 @@ const Sidebar = () => {
 				<SidebarLink to={RouteNames.gebeurtenissen} icon={FiActivity}>{t("sidebar.gebeurtenissen")}</SidebarLink>
 				<SidebarLink to={RouteNames.configuratie} icon={TiCog}>{t("sidebar.configuratie")}</SidebarLink>
 			</Stack>
-
-			{isDev && (
-				<Stack spacing={5}>
-					<SidebarLink to={"/api/graphql"} target={"_blank"} icon={GrGraphQl}>GraphiQL</SidebarLink>
-				</Stack>
-			)}
 		</Stack>
 	);
 };

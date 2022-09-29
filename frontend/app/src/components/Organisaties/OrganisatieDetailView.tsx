@@ -1,9 +1,9 @@
 import {BoxProps, FormLabel, Stack, Text} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {Organisatie} from "../../../generated/graphql";
-import Section from "../../shared/Section";
-import SectionContainer from "../../shared/SectionContainer";
+import {Organisatie} from "../../generated/graphql";
+import Section from "../shared/Section";
+import SectionContainer from "../shared/SectionContainer";
 
 const OrganisatieDetailView: React.FC<BoxProps & { organisatie: Organisatie }> = ({organisatie}) => {
 	const {t} = useTranslation();

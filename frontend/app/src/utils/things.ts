@@ -37,8 +37,6 @@ export const Regex = {
 
 export const Months = ["jan", "feb", "mrt", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
 
-export const isDev = process.env.NODE_ENV === "development";
-
 type DrawerContextProps = {
 	onClose: () => void
 };
