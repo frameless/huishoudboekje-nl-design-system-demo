@@ -648,8 +648,9 @@
     "filterByStatus": "Filter op status",
     "filterByBurger": "Filter op burger",
     "selectNoOptionsMessage": "Geen opties",
-    "bedragDifferenceMessage": "Er is een afwijking van <strong>{{bedrag}}</strong> gesignaleerd bij afspraak <linkAfspraak>{{afspraak}}</linkAfspraak> met een transactie van <strong>{{transactieBedrag}}</strong>.",
-    "contextMessage": "Er is een afwijking gesignaleerd bij afspraak <linkAfspraak>{{afspraak}}</linkAfspraak>. Context: {{context}}.",
+    "bedragDifferenceMessage": "Er is een afwijking van <strong>{{bedragDifference}}</strong> gevonden bij <linkAfspraak>{{afspraakOmschrijving}}</linkAfspraak> van <linkBurger>{{burgerNaam}}</linkBurger> met een transactie van <linkTransactie>{{transactieBedrag}}</linkTransactie>.",
+    "noTransactionMessage": "Er is een afwijking van <strong>{{bedragDifference}}</strong> gevonden bij <linkAfspraak>{{afspraakOmschrijving}}</linkAfspraak> van <linkBurger>{{burgerNaam}}</linkBurger>. Er is geen transactie gevonden.",
+    "genericSignaal": "Onbekend signaal",
     "noResults": "Er zijn geen signalen gevonden."
   },
   "backToBurgersList": "Terug naar alle burgers",
