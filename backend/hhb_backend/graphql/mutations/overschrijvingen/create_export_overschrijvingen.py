@@ -17,7 +17,7 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import (
 from hhb_backend.graphql.utils.dates import to_date
 from hhb_backend.processen.create_sepa_export import create_export_string
 from hhb_backend.processen.overschrijvingen_planner import (
-    PlannedOverschijvingenInput,
+    PlannedOverschrijvingenInput,
     get_planned_overschrijvingen,
 )
 from hhb_backend.service.model.overschrijving import Overschrijving
@@ -28,7 +28,7 @@ def create_json_payload_overschrijving(future_overschrijving, export_id) -> dict
         afspraak_id=future_overschrijving["afspraak_id"],
         export_id=export_id,
         bedrag=future_overschrijving["bedrag"],
-        datum=future_overschrijving["datum"].strftime("%Y-%m-%d")
+        datum=future_overschrijving["datum"]
     )
 
 
@@ -74,7 +74,7 @@ class CreateExportOverschrijvingen(graphene.Mutation):
         # Haal alle toekomstige overschrijvingen op. Met in achtneming van start en eind datum.
         future_overschrijvingen = []
         for afspraak in afspraken:
-            planner_input = PlannedOverschijvingenInput(
+            planner_input = PlannedOverschrijvingenInput(
                 afspraak.betaalinstructie,
                 afspraak.bedrag,
                 afspraak.id,
@@ -92,7 +92,7 @@ class CreateExportOverschrijvingen(graphene.Mutation):
                     lambda o: not (
                         o["afspraak_id"] == overschrijving.afspraak_id
                         and o["datum"]
-                        == datetime.strptime(overschrijving.datum, "%Y-%m-%d").date()
+                        == to_date(overschrijving.datum)
                     ),
                     future_overschrijvingen,
                 )
