@@ -32,6 +32,7 @@ export const Regex = {
 	Date: /^(\d{1,2})-(\d{1,2})-(\d{4})$/,
 	KvkNummer: /^([0-9]{8})$/,
 	Vestigingsnummer: /^([0-9]{12})$/,
+	HexColor: /^#[0-9A-Fa-f]{3,6}$/,
 };
 
 export const Months = ["jan", "feb", "mrt", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
