@@ -3,7 +3,7 @@ import React from "react";
 import DatePicker from "react-datepicker";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
-import {Afspraak, Betaalinstructie, BetaalinstructieInput, DayOfWeek} from "../../../generated/graphql";
+import {Afspraak, BetaalinstructieInput, DayOfWeek} from "../../../generated/graphql";
 import {RepeatType} from "../../../models/models";
 import d from "../../../utils/dayjs";
 import {useReactSelectStyles} from "../../../utils/things";
@@ -72,11 +72,10 @@ const validator = zod.object({
 
 type AfspraakBetaalinstructieProps = {
 	afspraak: Afspraak,
-	values?: Betaalinstructie,
 	onChange: (data: BetaalinstructieInput) => void,
 }
 
-const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({afspraak, values, onChange}) => {
+const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({afspraak, onChange}) => {
 	const {id} = afspraak;
 	const {t} = useTranslation();
 	const reactSelectStyles = useReactSelectStyles();
@@ -216,7 +215,7 @@ const AfspraakBetaalinstructieForm: React.FC<AfspraakBetaalinstructieProps> = ({
 													...data,
 													byDay: undefined,
 													byMonth: val?.value === RepeatType.Month ? allMonths : undefined,
-													byMonthDay: (data.byMonthDay && form.repeatType === RepeatType.Week) ? data.byMonthDay : undefined,
+													byMonthDay: data.byMonthDay && form.repeatType === RepeatType.Week ? data.byMonthDay : undefined,
 												}));
 											}}
 										/>

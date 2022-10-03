@@ -9,6 +9,14 @@ import PrettyIban from "../../../shared/PrettyIban";
 const TransactieDetailsView: React.FC<StackProps & {transaction: BankTransaction}> = ({transaction: bt, ...props}) => {
 	const {t} = useTranslation();
 
+	const getIsBookedAndHow = () => {
+		if (bt.journaalpost) {
+			return bt.journaalpost.isAutomatischGeboekt ? "automatisch" : "handmatig";
+		}
+
+		return false;
+	};
+
 	return (
 		<Stack spacing={5} justifyContent={"space-between"} {...props}>
 			<Stack direction={"row"} spacing={5}>
@@ -20,15 +28,17 @@ const TransactieDetailsView: React.FC<StackProps & {transaction: BankTransaction
 				</Box>
 				<Box flex={1}>
 					<FormLabel>{t("form.common.fields.status")}</FormLabel>
-					{bt.journaalpost ? (bt.journaalpost.isAutomatischGeboekt ? (
+					{getIsBookedAndHow() == "automatisch" && (
 						<Box>
 							<Badge colorScheme={"green"}>{t("forms.afspraken.fields.automatischGeboekt")}</Badge>
 						</Box>
-					) : (
+					)}
+					{getIsBookedAndHow() === "handmatig" && (
 						<Box>
 							<Badge colorScheme={"green"}>{t("forms.afspraken.fields.handmatigGeboekt")}</Badge>
 						</Box>
-					)) : (
+					)}
+					{!getIsBookedAndHow() && (
 						<Box>
 							<Badge colorScheme={"red"}>{t("forms.afspraken.fields.ongeboekt")}</Badge>
 						</Box>

@@ -94,7 +94,7 @@ const FollowUpAfspraak = () => {
 
 			return (
 				<Page title={t("afspraken.vervolgAfspraak.title")} backButton={<BackButton to={AppRoutes.ViewAfspraak(String(afspraak.id))} />}>
-					{((afspraak.zoektermen && afspraak.zoektermen.length > 0) || afspraak.betaalinstructie) && (
+					{((afspraak.zoektermen || []).length > 0 || afspraak.betaalinstructie) && (
 						<SectionContainer>
 							<List spacing={2}>
 								{afspraak.zoektermen && afspraak.zoektermen.length > 0 && (

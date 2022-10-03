@@ -11,7 +11,7 @@ const AfspraakTableRow: React.FC<TableRowProps & {afspraak: Afspraak}> = ({afspr
 	const {t} = useTranslation();
 	const isMobile = useBreakpointValue([true, null, null, false]);
 
-	const bedrag = afspraak.credit ? parseFloat(afspraak.bedrag) : (parseFloat(afspraak.bedrag) * -1);
+	const bedrag = afspraak.credit ? parseFloat(afspraak.bedrag) : parseFloat(afspraak.bedrag) * -1;
 	const isActive = isAfspraakActive(afspraak);
 
 	return (
@@ -22,7 +22,7 @@ const AfspraakTableRow: React.FC<TableRowProps & {afspraak: Afspraak}> = ({afspr
 			</Td>)}
 			<Td>
 				<Stack spacing={1} flex={1} align={"flex-end"} justify={"center"}>
-					<Box textAlign={"right"} color={!isActive ? "gray.400" : (bedrag < 0 ? "red.500" : undefined)}>{currencyFormat2().format(bedrag)}</Box>
+					<Box textAlign={"right"} color={!isActive ? "gray.400" : bedrag < 0 ? "red.500" : undefined}>{currencyFormat2().format(bedrag)}</Box>
 				</Stack>
 			</Td>
 			<Td>

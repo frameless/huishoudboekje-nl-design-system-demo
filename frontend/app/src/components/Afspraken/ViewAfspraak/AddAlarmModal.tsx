@@ -42,10 +42,10 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 	const $configuratie = useGetConfiguratieQuery({
 		onCompleted: data => {
 			const configuraties: Record<string, string> = (data.configuraties || []).reduce((result, c) => {
-				return ({
+				return {
 					...result,
 					[c.id!]: c.waarde,
-				});
+				};
 			}, {});
 
 			const bedragMargin = parseInt(configuraties.alarm_afwijking_bedrag);

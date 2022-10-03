@@ -45,8 +45,6 @@ const SignalenListItem: React.FC<SignalenListItemProps> = ({signaal}) => {
 	};
 
 	const createSignaalMessage = (signaal: Signaal) => {
-		const {bankTransactions, bedragDifference} = signaal;
-
 		let TransComponent: typeof Trans;
 		let values = {};
 		let components = {};

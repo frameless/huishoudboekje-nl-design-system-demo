@@ -1,5 +1,5 @@
 import {DeleteIcon, ViewIcon} from "@chakra-ui/icons";
-import {Box, Button, FormLabel, Heading, Stack, Text} from "@chakra-ui/react";
+import {Box, Button, FormLabel, Stack, Text} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {NavLink} from "react-router-dom";
