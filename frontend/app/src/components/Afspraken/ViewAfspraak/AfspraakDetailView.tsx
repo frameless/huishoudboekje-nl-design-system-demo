@@ -485,7 +485,9 @@ const AfspraakDetailView: React.FC<{afspraak: Afspraak}> = ({afspraak}) => {
 										<HStack>
 											<Text>{alarmSchedule.toString()}</Text>
 											{afspraak.alarm?.datumMargin && (
-												<Text color={"gray.500"} fontSize={"sm"}>+{t("afspraak.alarm.datumMargin", {count: afspraak.alarm?.datumMargin})}</Text>
+												<Text color={"gray.500"} fontSize={"sm"}>+
+													{t("afspraak.alarm.datumMargin", {count: afspraak.alarm?.datumMargin})}
+												</Text>
 											)}
 										</HStack>
 									</DataItem>

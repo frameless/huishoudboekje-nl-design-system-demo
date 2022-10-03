@@ -32,12 +32,12 @@
     "exports": {
       "createSuccessMessage": "Exportbestand aangemaakt."
     },
-    "transactions": {
-      "noResults": "Er zijn geen banktransacties gevonden. Let op: er kunnen filteropties actief zijn waardoor er geen resultaten worden weergegeven."
-    },
     "journals": {
       "deleteSuccessMessage": "De aflettering van de transactie is ongedaan gemaakt.",
       "createSuccessMessage": "De transactie is afgeletterd."
+    },
+    "transactions": {
+      "noResults": "Er zijn geen banktransacties gevonden. Let op: er kunnen filteropties actief zijn waardoor er geen resultaten worden weergegeven."
     },
     "burgers": {
       "deleteFromHuishoudenConfirmMessage": "{{name}} is uit het huishouden verwijderd.",
@@ -144,8 +144,8 @@
       "add": "Toevoegen",
       "export": "Exporteren",
       "download": "Downloaden",
-      "startBoeken": "Alle transacties afletteren",
       "undoAfletteren": "Afletteren ongedaan maken",
+      "startBoeken": "Alle transacties afletteren",
       "filter": "Filteren",
       "viewBurgerHuishouden": "Bekijk huishouden",
       "brievenExport": "Exporteer gegevens voor brieven",
@@ -504,9 +504,9 @@
   },
   "afspraak": {
     "alarm": {
-      "datumMargin_one": "__MISSING-TRANSLATION__",
-      "datumMargin_other": "__MISSING-TRANSLATION__",
-      "options": "__MISSING-TRANSLATION__"
+      "datumMargin_one": "1 dag",
+      "datumMargin_other": "{{count}} dagen",
+      "options": "Opties"
     }
   },
   "bedrag": "Bedrag",
@@ -556,6 +556,11 @@
   "checksum": {
     "sha265": "Controlegetal (SHA-256)"
   },
+  "omschrijving": "Omschrijving",
+  "rubriek": "Rubriek",
+  "bookingSection": {
+    "noResults": "Er zijn geen afspraken gevonden. Voeg een afspraak toe, of kies een rubriek om deze transactie op af te letteren."
+  },
   "filters": {
     "transactions": {
       "isCredit": {
@@ -583,16 +588,6 @@
     "helperText": "Dit is een lijst van alle banktransacties in het Huishoudboekje."
   },
   "transaction": "Transactie",
-  "omschrijving": "Omschrijving",
-  "rubriek": "Rubriek",
-  "transactieAfletteren": {
-    "title": "Afletteren",
-    "helperText": "Kies een afspraak om deze transactie op af te letteren."
-  },
-  "bookingSection": {
-    "noResults": "Er zijn geen afspraken gevonden. Voeg een afspraak toe, of kies een rubriek om deze transactie op af te letteren."
-  },
-  "unbooked": "Niet afgeletterd",
   "form": {
     "common": {
       "fields": {
@@ -605,6 +600,7 @@
     "amount": "Bedrag",
     "description": "Omschrijving"
   },
+  "unbooked": "Niet afgeletterd",
   "pages": {
     "transactieDetails": {
       "transactie": {
