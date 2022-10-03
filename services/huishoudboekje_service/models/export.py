@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Sequence, TIMESTAMP, Text, Date
+from sqlalchemy import Column, Integer, String, Sequence, TIMESTAMP, Text, DateTime
 from sqlalchemy.orm import relationship
 
 from core_service.database import db
@@ -9,10 +9,10 @@ class Export(db.Model):
 
     id = Column(Integer, Sequence('export_id_seq'), primary_key=True)
     naam = Column(String, nullable=False, unique=True, index=True)
-    timestamp = Column(TIMESTAMP(timezone=True), nullable=False, index=True)
+    timestamp = Column(TIMESTAMP(timezone=True), nullable=False, index=True) # TODO deze ook vervangen door DateTime? Is de timezone nodig? 
     xmldata = Column(Text)
-    start_datum = Column(Date)
-    eind_datum = Column(Date)
+    start_datum = Column(DateTime)
+    eind_datum = Column(DateTime)
     sha256 = Column(String)
 
     overschrijvingen = relationship("Overschrijving", back_populates="export")

@@ -85,7 +85,10 @@ def test_exports_post_new_export(client, session):
     response = client.post('/export/', json=export_dict)
     assert response.status_code == 201
 
-    export_dict["id"] = 1
+    export_dict["id"] = 1 
+    export_dict["start_datum"] = '2021-01-01T00:00:00'
+    export_dict["eind_datum"] = '2021-02-01T00:00:00'
+
     assert response.json["data"] == export_dict
     assert session.query(Export).count() == 1
 
