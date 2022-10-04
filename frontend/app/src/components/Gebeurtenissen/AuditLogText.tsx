@@ -39,6 +39,7 @@ const AuditLogText: React.FC<TextProps & {g: GebruikersActiviteit}> = ({g, ...pr
 			<AuditLogLink to={AppRoutes.Huishouden(String(huishouden.id))}>{formatHuishoudenName(huishouden)}</AuditLogLink> : t("unknownHuishouden"),
 		linkOrganisatie: organisatie?.id ? <AuditLogLink to={AppRoutes.Organisatie(String(organisatie.id))}>{organisatie.naam}</AuditLogLink> : t("unknownOrganisatie"),
 		linkAfspraak: afspraak?.id ? <AuditLogLink to={AppRoutes.ViewAfspraak(String(afspraak.id))} /> : t("unknownAfspraak"),
+		linkAfspraakBurger: afspraak?.burger?.id ? <AuditLogLink to={AppRoutes.ViewBurger(String(afspraak.burger.id))}>{formatBurgerName(afspraak.burger)}</AuditLogLink> : t("unknownBurger"),
 		linkAfspraakOrganisatie: afspraak?.afdeling?.organisatie?.id ?
 			<AuditLogLink to={AppRoutes.Organisatie(String(afspraak?.afdeling?.organisatie?.id))}>{afspraak?.afdeling?.organisatie?.naam}</AuditLogLink> : t("unknownOrganisatie"),
 		linkAfdeling: afdeling?.organisatie?.id && afdeling?.naam ?
@@ -49,6 +50,7 @@ const AuditLogText: React.FC<TextProps & {g: GebruikersActiviteit}> = ({g, ...pr
 	const values = {
 		gebruiker,
 		burger: burgerName,
+		afspraakBurger: formatBurgerName(afspraak?.burger),
 		// Todo: Find a solution for humanJoining an array of AuditLogLinks (10-08-2021)
 		listBurgers: burgers?.length > 0 ? humanJoin(burgers.map(b => formatBurgerName(b))) : t("unknownBurgers"),
 		huishouden: huishouden && formatHuishoudenName(huishouden),
