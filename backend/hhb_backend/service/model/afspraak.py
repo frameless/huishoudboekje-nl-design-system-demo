@@ -23,7 +23,7 @@ class Afspraak(BaseModel):
     valid_through: Optional[str]
     rubriek_id: int
     zoektermen: Optional[List[str]]
-    burger_id: int  # TODO does this need to be optional since we check if it exists when creating an alarm?
+    burger_id: int
     afdeling_id: Optional[int]
     postadres_id: Optional[int]
     alarm_id: Optional[int]
