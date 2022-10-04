@@ -8,6 +8,7 @@ import hhb_backend.graphql.models.huishouden as huishouden
 import hhb_backend.graphql.models.rekening as rekening
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.pageinfo import PageInfo
+from hhb_backend.graphql.utils.dates import to_date
 
 
 class Burger(graphene.ObjectType):
@@ -16,7 +17,7 @@ class Burger(graphene.ObjectType):
     voorletters = graphene.String()
     voornamen = graphene.String()
     achternaam = graphene.String()
-    geboortedatum = graphene.String()
+    geboortedatum = graphene.Date()
     telefoonnummer = graphene.String()
     email = graphene.String()
     straatnaam = graphene.String()
@@ -46,6 +47,10 @@ class Burger(graphene.ObjectType):
 
     async def resolve_huishouden(self, _info):
         return hhb_dataloader().huishoudens.load_one(self.get('huishouden_id'))
+
+    async def resolve_geboortedatum(self, _info):
+        if value := self.get('geboortedatum'):
+            return to_date(value)
 
     @staticmethod
     def bsn_length(bsn):

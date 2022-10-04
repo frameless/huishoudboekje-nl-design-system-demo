@@ -1,5 +1,5 @@
 from core_service.database import db
-from sqlalchemy import Column, Integer, Sequence, ForeignKey, Date
+from sqlalchemy import Column, Integer, Sequence, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 
 
@@ -11,6 +11,6 @@ class Overschrijving(db.Model):
     afspraken = relationship("Afspraak", back_populates="overschrijvingen")
     export_id = Column(Integer, ForeignKey('export.id', name='overschrijvingen_export_id_fkey'))
     export = relationship("Export", back_populates="overschrijvingen")
-    datum = Column(Date)
+    datum = Column(DateTime)
     bedrag = Column(Integer)
     bank_transaction_id = Column(Integer)

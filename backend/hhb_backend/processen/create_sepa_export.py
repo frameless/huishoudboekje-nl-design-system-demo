@@ -1,6 +1,7 @@
 from sepaxml import SepaTransfer
 import uuid
 
+from hhb_backend.graphql.utils.dates import to_date
 
 def create_export_string(overschrijvingen, afspraken, tegen_rekeningen, config_values):
     config = {
@@ -20,7 +21,7 @@ def create_export_string(overschrijvingen, afspraken, tegen_rekeningen, config_v
             "IBAN": tegen_rekening["iban"],
             # "BIC": "BANKNL2A", # TODO nodig??
             "amount": overschrijving['bedrag'],
-            "execution_date": overschrijving['datum'],
+            "execution_date": to_date(overschrijving['datum']),
             "description": afspraak['omschrijving'],
             "endtoend_id": str(uuid.uuid1()).replace("-", ""),  # optional
         }

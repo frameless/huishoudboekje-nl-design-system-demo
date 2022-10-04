@@ -56,6 +56,10 @@ class UpdateBurger(graphene.Mutation):
         """ Update the current Gebruiker/Burger """
         previous = hhb_dataloader().burgers.load_one(id)
 
+        bsn = kwargs.get("bsn")
+        Burger.bsn_length(bsn)
+        Burger.bsn_elf_proef(bsn)
+
         response = requests.post(
             f"{settings.HHB_SERVICES_URL}/burgers/{id}",
             data=json.dumps(kwargs),
@@ -65,8 +69,5 @@ class UpdateBurger(graphene.Mutation):
             raise GraphQLError(f"Upstream API responded: {response.json()}")
 
         updated_burger = burger.Burger(response.json()["data"])
-
-        Burger.bsn_length(updated_burger.bsn)
-        Burger.bsn_elf_proef(updated_burger.bsn)
 
         return UpdateBurger(ok=True, burger=updated_burger, previous=previous)

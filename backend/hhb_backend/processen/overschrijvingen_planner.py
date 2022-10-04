@@ -2,10 +2,10 @@ import datetime
 import time
 from datetime import date
 
-from dateutil.parser import isoparse
+from hhb_backend.graphql.utils.dates import to_date
 
 
-class PlannedOverschijvingenInput():
+class PlannedOverschrijvingenInput():
     betaalinstructie = None
     bedrag = None
     afspraak_id = None
@@ -16,22 +16,22 @@ class PlannedOverschijvingenInput():
         self.afspraak_id = afspraak_id
 
 
-def get_planned_overschrijvingen(input: PlannedOverschijvingenInput, start_datum: date = None, eind_datum: date = None):
-    betaalinstructie_startdate = isoparse(input.betaalinstructie["start_date"]).date()
+def get_planned_overschrijvingen(input: PlannedOverschrijvingenInput, start_datum: date = None, eind_datum: date = None):
+    betaalinstructie_startdate = to_date(input.betaalinstructie["start_date"])
     if not eind_datum:
         eind_datum = datetime.datetime.now().date()
     if not start_datum or start_datum < betaalinstructie_startdate:
         start_datum = betaalinstructie_startdate
 
     if "end_date" in input.betaalinstructie and input.betaalinstructie["end_date"]:
-        betaalinstructie_enddate = isoparse(input.betaalinstructie["end_date"]).date()
+        betaalinstructie_enddate = to_date(input.betaalinstructie["end_date"])
         if eind_datum > betaalinstructie_enddate:
             eind_datum = betaalinstructie_enddate
 
     return get_doorlopende_afspraak_overschrijvingen(input, start_datum, eind_datum)
 
 
-def get_doorlopende_afspraak_overschrijvingen(input: PlannedOverschijvingenInput, start_datum: date,
+def get_doorlopende_afspraak_overschrijvingen(input: PlannedOverschrijvingenInput, start_datum: date,
                                               eind_datum: date = None):
     payments = {}
     # Might be the case
@@ -77,12 +77,12 @@ def next_weekday(d, weekday):
     return d + datetime.timedelta(days_ahead)
 
 
-def make_overschrijving_dict(bedrag, date, afspraak_id):
+def make_overschrijving_dict(bedrag, date: date, afspraak_id):
     return {
         "id": None,
         "afspraak_id": afspraak_id,
         "bedrag": bedrag,
-        "datum": date,
+        "datum": date.isoformat(),
         "bank_transaction_id": None,
         "export_id": None
     }

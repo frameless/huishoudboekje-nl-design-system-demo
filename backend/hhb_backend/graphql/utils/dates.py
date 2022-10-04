@@ -3,9 +3,17 @@ from datetime import date, datetime
 from hhb_backend.service.model.afspraak import Afspraak
 
 
-def to_date(date_str: str = None) -> date:
+def to_date(date_str: str | date | datetime = None) -> date:
     """Convenient function for deriving a datetime.date from a string with iso format"""
-    return datetime.fromisoformat(date_str).date() if date_str else None
+    type_ = type(date_str)    
+    if type_ == str:
+        return datetime.fromisoformat(date_str).date()
+    elif type_ == date:
+        return date_str
+    elif type_ == datetime:
+        return date_str.date()
+    else:
+        return None
 
 
 def valid_afspraak(afspraak: Afspraak, check_date=date.today()):

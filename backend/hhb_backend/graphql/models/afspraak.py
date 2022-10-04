@@ -1,8 +1,5 @@
 """ Afspraak model as used in GraphQL queries """
-from datetime import datetime
-
 import graphene
-from dateutil.parser import isoparse
 
 import hhb_backend.graphql.models.afdeling as afdeling
 import hhb_backend.graphql.models.alarm as alarm
@@ -17,7 +14,7 @@ from hhb_backend.graphql.scalars.bedrag import Bedrag
 from hhb_backend.graphql.scalars.day_of_week import DayOfWeek
 from hhb_backend.processen.automatisch_boeken import match_zoekterm
 from hhb_backend.processen.overschrijvingen_planner import (
-    PlannedOverschijvingenInput,
+    PlannedOverschrijvingenInput,
     get_planned_overschrijvingen,
 )
 from hhb_backend.graphql.utils.dates import afspraken_intersect, to_date
@@ -76,7 +73,7 @@ class Afspraak(graphene.ObjectType):
             return []
 
         betaalinstructie = root.get("betaalinstructie")
-        planner_input = PlannedOverschijvingenInput(
+        planner_input = PlannedOverschrijvingenInput(
             betaalinstructie,
             root.get("bedrag"),
             root.get("id"),
@@ -89,7 +86,7 @@ class Afspraak(graphene.ObjectType):
         for o in overschrijvingen:
             known_overschrijvingen[o["datum"]] = o
         for datum, o in known_overschrijvingen.items():
-            o["datum"] = isoparse(o["datum"]).date()
+            o["datum"] = to_date(o["datum"])
         for o_date in expected_overschrijvingen:
             if o_date in known_overschrijvingen:
                 expected_overschrijvingen[o_date] = known_overschrijvingen[o_date]

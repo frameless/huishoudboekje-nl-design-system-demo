@@ -55,8 +55,8 @@ class CreateHuishouden(graphene.Mutation):
                 raise GraphQLError(
                     f"Burger with id {burger_id} not found"
                 )
-            burger.huishouden_id = created_huishouden.id
+            update_burger = {'id': burger_id, 'huishouden_id': created_huishouden.id}
 
-            await update_existing_burger(burger=burger)
+            await update_existing_burger(burger=update_burger)
 
         return CreateHuishouden(huishouden=created_huishouden, ok=True)

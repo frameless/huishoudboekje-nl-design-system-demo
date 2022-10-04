@@ -1,7 +1,7 @@
 import logging
 
 from models.huishouden import Huishouden
-from sqlalchemy import Column, Date, event, ForeignKey, Integer, Sequence, String
+from sqlalchemy import Column, DateTime, event, ForeignKey, Integer, Sequence, String
 from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import relationship, Session
 
@@ -27,7 +27,7 @@ class Burger(db.Model):
     # Gebruiker fields
     telefoonnummer = Column(String)
     email = Column(String)
-    geboortedatum = Column(Date)
+    geboortedatum = Column(DateTime)
 
     huishouden_id = Column(Integer, ForeignKey("huishoudens.id"), nullable=False)
 
