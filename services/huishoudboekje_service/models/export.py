@@ -9,7 +9,7 @@ class Export(db.Model):
 
     id = Column(Integer, Sequence('export_id_seq'), primary_key=True)
     naam = Column(String, nullable=False, unique=True, index=True)
-    timestamp = Column(TIMESTAMP(timezone=True), nullable=False, index=True) # TODO deze ook vervangen door DateTime? Is de timezone nodig? 
+    timestamp = Column(TIMESTAMP(timezone=True), nullable=False, index=True)
     xmldata = Column(Text)
     start_datum = Column(DateTime)
     eind_datum = Column(DateTime)
