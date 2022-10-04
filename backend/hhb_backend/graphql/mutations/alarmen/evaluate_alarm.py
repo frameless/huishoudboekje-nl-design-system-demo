@@ -29,6 +29,9 @@ class AlarmTriggerResult(graphene.ObjectType):
 
 
 class EvaluateAlarms(graphene.Mutation):
+    class Arguments:
+        ids = graphene.List(graphene.String, default_value=[])
+
     alarmTriggerResult = graphene.List(lambda: AlarmTriggerResult)
 
     def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
@@ -42,9 +45,9 @@ class EvaluateAlarms(graphene.Mutation):
 
     @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(_root, _info):
+    async def mutate(_root, _info, ids):
         """ Mutatie voor de evaluatie van een alarm wat kan resulteren in een signaal en/of een nieuw alarm in de reeks. """
-        triggered_alarms = await evaluate_all_alarms(_root, _info)
+        triggered_alarms = await evaluate_alarms(_root, _info, ids)
         return EvaluateAlarms(alarmTriggerResult=triggered_alarms)
 
 
@@ -71,18 +74,22 @@ class EvaluateAlarm(graphene.Mutation):
         return EvaluateAlarm(alarmTriggerResult=evaluated_alarm)
 
 
-async def evaluate_all_alarms(root, info) -> list:
+async def evaluate_alarms(root, info, ids: list[String]) -> list:
     triggered_alarms = []
     active_alarms = get_active_alarms()
-    for alarm in active_alarms:
-        triggered_alarms.append(await evaluate_alarm(root, info, alarm, active_alarms))
+    if ids:
+        alarmen = hhb_dataloader().alarms.load(ids)
+        for alarm in alarmen:
+            triggered_alarms.append(await evaluate_alarm(root, info, alarm, active_alarms))
+    else: 
+        for alarm in active_alarms:
+            triggered_alarms.append(await evaluate_alarm(root, info, alarm, active_alarms))
 
     return triggered_alarms
 
-
 async def evaluate_one_alarm(root, info, id: String) -> list:
     evaluated_alarm = None
-    active_alarms = get_active_alarms()  # todo moeten alle alarmen opgehaald worden?
+    active_alarms = get_active_alarms()
     alarm = get_alarm(id)
 
     if alarm is None:
