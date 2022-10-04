@@ -1,4 +1,3 @@
-from re import A
 import requests_mock
 from hhb_backend.graphql import settings
 
