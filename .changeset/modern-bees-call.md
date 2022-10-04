@@ -2,4 +2,4 @@
 "huishoudboekje": patch
 ---
 
-Fixes #1043: Gebruikersactiviteiten entities for alarms and signals.
+Fixed #1043: It is now possible to click through to a burger and afspraak on audit logs for alarms.
