@@ -2,4 +2,4 @@
 "huishoudboekje": patch
 ---
 
-Fixes #1067: Date to DateTime in huishoudboekjeservice
+Fixed #1067: Added support for timestamp without timezone fields in Postgres.
