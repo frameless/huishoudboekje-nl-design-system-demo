@@ -29,7 +29,8 @@ def test_update_alarm(client):
             "byDay": ["Wednesday"]
         }
         afspraak = {
-            "id": 20
+            "id": 20, 
+            "burger_id": 1
         }
         updated_alarm = {
             "id": alarm_id,

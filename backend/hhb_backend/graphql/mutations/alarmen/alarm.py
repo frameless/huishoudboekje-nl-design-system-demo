@@ -12,7 +12,6 @@ from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.scalars.bedrag import Bedrag
 from hhb_backend.graphql.scalars.day_of_week import DayOfWeek
 from hhb_backend.graphql.utils.dates import valid_afspraak, to_date
-from hhb_backend.graphql.utils.gebruikersactiviteiten import log_gebruikers_activiteit, gebruikers_activiteit_entities
 from hhb_backend.graphql.utils.upstream_error_handler import UpstreamError
 
 
@@ -44,25 +43,12 @@ class UpdateAlarmInput(graphene.InputObjectType):
 
 class AlarmHelper:
 
-    def __init__(self, alarm, previous, ok) -> None:
+    def __init__(self, alarm, previous, ok, burger_id) -> None:
         self.alarm = alarm
         self.previous = previous
         self.ok = ok
+        self.burger_id = burger_id
 
-    def gebruikers_activiteit(self, _root, _info, *_args, **_kwargs):
-        data = dict(
-            action=_info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="alarm", result=self, key="alarm"
-            ),
-            before=dict(alarm=self.previous),
-            after=dict(alarm=self.alarm),
-        )
-        i = _info.field_name.find("-")
-        _info.field_name = _info.field_name[:i].strip()
-        return data
-
-    @log_gebruikers_activiteit
     async def create(_root, info, input):
         name = info.field_name
         if "evaluate" in name:
@@ -89,10 +75,6 @@ class AlarmHelper:
         if not afspraak:
             raise GraphQLError(f"Afspraak not found.")
 
-        # check if afspraak is valid
-        if afspraak["burger_id"] is None:
-            raise GraphQLError("The afspraak is not linked to a burger.")
-
         start_date_alarm = to_date(input["startDate"])
         if not valid_afspraak(afspraak, start_date_alarm):
             raise GraphQLError("The afspraak is not active.")
@@ -107,9 +89,8 @@ class AlarmHelper:
         if update_afspraak_response.status_code != 200:
             raise UpstreamError(update_afspraak_response, "Failed to update afspraak with new alarm.")
 
-        return AlarmHelper(alarm=response_alarm, previous=dict(), ok=True)
+        return AlarmHelper(alarm=response_alarm, previous=dict(), ok=True, burger_id=afspraak.burger_id)
 
-    @log_gebruikers_activiteit
     async def delete(self, info, id):
         name = info.field_name
         if "evaluate" in name:
@@ -119,15 +100,20 @@ class AlarmHelper:
         previous = hhb_dataloader().alarms.load_one(id)
         if not previous:
             raise GraphQLError(f"Alarm with id {id} not found")
+        
+        afspraak_id = previous.afspraakId
+        afspraak = hhb_dataloader().afspraken.load_one(afspraak_id)
+        burger_id = ""
+        if afspraak:
+            if afspraak.burger_id:
+                burger_id = afspraak.burger_id
 
         response = requests.delete(f"{settings.ALARMENSERVICE_URL}/alarms/{id}")
         if response.status_code != 204:
             raise UpstreamError(response, "Could not delete the alarm.")
 
-        return AlarmHelper(alarm=dict(), previous=previous, ok=True)
+        return AlarmHelper(alarm=dict(), previous=previous, ok=True, burger_id=burger_id)
 
-
-    @log_gebruikers_activiteit
     async def update(self, info, id: str, input: UpdateAlarmInput):
         name = info.field_name
         if "evaluate" in name:
@@ -151,13 +137,15 @@ class AlarmHelper:
             afspraak_response = hhb_dataloader().afspraken.load_one(input.afspraakId)
             if not afspraak_response:
                 raise GraphQLError("Afspraak not found.")
+        elif previous_response.afspraakId:
+            afspraak_response = hhb_dataloader().afspraken.load_one(previous_response.afspraakId)
 
         response = requests.put(f"{settings.ALARMENSERVICE_URL}/alarms/{id}", json=input, headers={"Content-type": "application/json"}) 
         if response.status_code != 200:
             raise UpstreamError(response, "Updating alarm failed.")
         response_alarm = response.json()['data']
 
-        return AlarmHelper(alarm=response_alarm, previous=previous_response, ok=True)
+        return AlarmHelper(alarm=response_alarm, previous=previous_response, ok=True, burger_id=afspraak_response.burger_id)
 
 
 def date_in_past(date_input):

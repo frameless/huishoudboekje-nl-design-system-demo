@@ -12,7 +12,8 @@ from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models import alarm, signaal
 from hhb_backend.graphql.models.bank_transaction import Bedrag
-from hhb_backend.graphql.mutations.alarmen.alarm import AlarmHelper, generate_alarm_date
+from hhb_backend.graphql.mutations.alarmen.alarm import generate_alarm_date
+from hhb_backend.graphql.mutations.alarmen.create_alarm import CreateAlarm
 from hhb_backend.graphql.mutations.signalen.signalen import SignaalHelper
 from hhb_backend.graphql.utils.gebruikersactiviteiten import log_gebruikers_activiteit, gebruikers_activiteit_entities
 from hhb_backend.service.model.afspraak import Afspraak
@@ -161,7 +162,7 @@ async def should_create_next_alarm(_root, _info, alarm: Alarm, alarm_check_date:
 
 
 async def create_alarm(root, info, alarm: Alarm, alarm_date: date) -> Optional[Alarm]:
-    result = await AlarmHelper.create(root, info, {
+    result = await CreateAlarm.mutate(root, info, {
         "isActive": True,
         "afspraakId": int(alarm.get("afspraakId")),
         "endDate": alarm.get("endDate"),

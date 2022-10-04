@@ -30,6 +30,12 @@ export const GebruikersactiviteitFragment = gql`
             }
             afspraak {
                 ...Afspraak
+							burger {
+								id
+								voorletters
+								voornamen
+								achternaam
+							}
             }
             rekening {
                 id

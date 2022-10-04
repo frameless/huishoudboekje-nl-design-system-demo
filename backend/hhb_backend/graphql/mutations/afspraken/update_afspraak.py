@@ -44,7 +44,7 @@ class UpdateAfspraak(graphene.Mutation):
                 entity_type="burger", result=self.afspraak, key="burger_id"
             )
             + gebruikers_activiteit_entities(
-                entity_type="afdeling", result=self.afspraak, key="afdeling"
+                entity_type="afdeling", result=self.afspraak, key="afdeling_id"
             ),
             before=dict(afspraak=self.previous),
             after=dict(afspraak=self.afspraak),
