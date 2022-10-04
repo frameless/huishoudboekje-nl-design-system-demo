@@ -60,7 +60,7 @@ def test_create_huishouden_with_burger_ids_success(client):
             json={"data": [{"achternaam": "de Jager",
                             "bsn": 999111222,
                             "email": "fien.de.jager@sloothuizen.nl",
-                            "geboortedatum": "1987-06-18",
+                            "geboortedatum": "1987-06-18T00:00:00",
                             "huishouden_id": 1,
                             "huisnummer": "14",
                             "iban": "",
