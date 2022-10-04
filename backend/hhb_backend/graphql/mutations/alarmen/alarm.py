@@ -12,7 +12,6 @@ from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.scalars.bedrag import Bedrag
 from hhb_backend.graphql.scalars.day_of_week import DayOfWeek
 from hhb_backend.graphql.utils.dates import valid_afspraak, to_date
-from hhb_backend.graphql.utils.gebruikersactiviteiten import log_gebruikers_activiteit, gebruikers_activiteit_entities
 from hhb_backend.graphql.utils.upstream_error_handler import UpstreamError
 
 
