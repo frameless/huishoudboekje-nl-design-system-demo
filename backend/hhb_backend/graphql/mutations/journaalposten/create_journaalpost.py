@@ -98,11 +98,13 @@ class CreateJournaalpostAfspraak(graphene.Mutation):
         for post in journaalposten:
             afspraak = afspraken[journaalpost.Journaalpost(post).afspraak_id]
             post["afspraak"] = afspraak
-            alarm_ids.append(afspraak.alarm_id)
-
-        await evaluate_alarms(_root, _info, alarm_ids)
+            if afspraak.alarm_id:
+                alarm_ids.append(afspraak.alarm_id)
 
         update_transaction_service_is_geboekt(transactions, is_geboekt=True)
+        
+        if alarm_ids:
+            await evaluate_alarms(_root, _info, alarm_ids)
 
         return CreateJournaalpostAfspraak(journaalposten=journaalposten, ok=True)
 
