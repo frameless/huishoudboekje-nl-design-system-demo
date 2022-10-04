@@ -385,7 +385,6 @@ def create_mock_adapter(mocker: MockerFixture) -> Adapter:
             return MockResponse({"data": {"id": 1}}, 201)
 
     mocker.patch('hhb_backend.processen.automatisch_boeken.automatisch_boeken', return_value=[])
-    mocker.patch('hhb_backend.processen.automatisch_alarmen_beoordelen.automatisch_alle_alarmen_beoordelen', return_value=[])
     adapter.add_matcher(test_matcher)
     return adapter
 
