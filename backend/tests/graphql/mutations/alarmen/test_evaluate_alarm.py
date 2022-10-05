@@ -12,7 +12,6 @@ from hhb_backend.service.model.alarm import Alarm
 alarm_id = "00943958-8b93-4617-aa43-669a9016aad9"
 afspraak_id = 19
 journaalpost_id = 1
-transaction_id = 10
 banktransactie_id = 100
 alarm = Alarm(
     id=alarm_id,
@@ -20,7 +19,19 @@ alarm = Alarm(
     afspraakId=19,
     startDate="2021-12-06",
     datumMargin=1,
-    bedrag=12500,
+    bedrag=12000,
+    bedragMargin=1000,
+    byDay=["Wednesday", "Friday"],
+    byMonth=[],
+    byMonthDay=[]
+)
+alarm_inactive = Alarm(
+    id=alarm_id,
+    isActive=False,
+    afspraakId=19,
+    startDate="2021-12-06",
+    datumMargin=1,
+    bedrag=12000,
     bedragMargin=1000,
     byDay=["Wednesday", "Friday"],
     byMonth=[],
@@ -32,7 +43,7 @@ nextAlarm = Alarm(
     afspraakId=19,
     startDate="2021-12-08",
     datumMargin=1,
-    bedrag=12500,
+    bedrag=12000,
     bedragMargin=1000,
     byDay=["Wednesday", "Friday"],
     byMonth=[],
@@ -58,7 +69,7 @@ journaalpost = {
     "grootboekrekening_id": "BEivKapProPok",
     "id": journaalpost_id,
     "is_automatisch_geboekt": True,
-    "transaction_id": transaction_id
+    "transaction_id": banktransactie_id
 }
 banktransactie = {
     "id": banktransactie_id,
@@ -159,9 +170,10 @@ def test_evaluate_alarm_illigal_betaalinstructie_combination(client):
             json={"data": [journaalpost]}
         )
         rm4 = rm.get(
-            f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids={transaction_id}",
+            f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids={banktransactie_id}",
             json={"data": [banktransactie]}
         )
+        rm5 = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", json={"ok": True, "data": alarm_inactive})
 
         # act
         response = client.post(
@@ -196,6 +208,7 @@ def test_evaluate_alarm_illigal_betaalinstructie_combination(client):
         assert rm2.called_once
         assert rm3.called_once
         assert rm4.called_once
+        assert rm5.call_count == 1
         assert fallback.called == 0
         assert response.json.get("errors")[0].get("message") == expected
 
@@ -253,12 +266,13 @@ def test_evaluate_alarm_no_signal(client):
             json={"data": [journaalpost]}
         )
         rm4 = rm.get(
-            f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids={transaction_id}",
+            f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids={banktransactie_id}",
             json={"data": [banktransactie]}
         )
         rm5 = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={"ok": True, "data": nextAlarm})
         rm6 = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}")
-        rm7 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
+        rm7 = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", json={"ok": True, "data": alarm_inactive})
+        rm8 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
 
         # act
         response = client.post(
@@ -293,7 +307,8 @@ def test_evaluate_alarm_no_signal(client):
         assert rm4.call_count == 1
         assert rm5.call_count == 1
         assert rm6.call_count == 1
-        assert rm7.call_count == 2
+        assert rm7.call_count == 1
+        assert rm8.call_count == 2
         assert fallback.called == 0
         assert response.json == expected
 
@@ -321,12 +336,12 @@ def test_evaluate_alarm_signal_date(client):
             json={"data": [journaalpost]}
         )
         rm4 = rm.get(
-            f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids={transaction_id}",
+            f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids={banktransactie_id}",
             json={"data": [banktransactie]}
         )
         rm5 = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={"ok": True, "data": nextAlarm})
         rm6 = rm.post(f"{settings.SIGNALENSERVICE_URL}/signals/", status_code=201, json={"data": signaal})
-        rm7 = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", json={"ok": True, "data": nextAlarm})
+        rm7 = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", json={"ok": True, "data": alarm_inactive})
         rm8 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
         rm9 = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}")
 
@@ -361,7 +376,7 @@ def test_evaluate_alarm_signal_date(client):
         assert rm4.call_count == 1
         assert rm5.call_count == 1
         assert rm6.call_count == 1
-        assert rm7.call_count == 1
+        assert rm7.call_count == 2
         assert rm8.call_count == 3
         assert rm9.call_count == 1
         assert fallback.called == 0
@@ -399,12 +414,12 @@ def test_evaluate_alarm_signal_monetary(client):
             json={"data": [journaalpost]}
         )
         rm4 = rm.get(
-            f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids={transaction_id}",
+            f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids={banktransactie_id}",
             json={"data": [banktransactie]}
         )
         rm5 = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={"ok": True, "data": nextAlarm})
         rm6 = rm.post(f"{settings.SIGNALENSERVICE_URL}/signals/", status_code=201, json={"data": signaal})
-        rm7 = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", json={"ok": True, "data": nextAlarm})
+        rm7 = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", json={"ok": True, "data": alarm_inactive})
         rm8 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
         rm9 = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}")
 
@@ -439,7 +454,7 @@ def test_evaluate_alarm_signal_monetary(client):
         assert rm4.call_count == 1
         assert rm5.call_count == 1
         assert rm6.call_count == 1
-        assert rm7.call_count == 1
+        assert rm7.call_count == 2
         assert rm8.call_count == 3
         assert rm9.call_count == 1
         assert fallback.called == 0
@@ -453,85 +468,204 @@ def test_evaluate_alarm_signal_monetary(client):
             }
         }}
 
-# Tried making a test to retrieve the bank transactions in the created signal, but it is not working...
-# @freeze_time("2021-12-08")
-# def test_evaluate_alarm_signal_monetary_multiple_transactions(client):
-#     with requests_mock.Mocker() as rm:
-#         # arrange
-#         banktransactie = {
-#             "id": banktransactie_id,
-#             "bedrag": 15000,
-#             "customer_statement_message_id": 15,
-#             "information_to_account_owner": "NL83ABNA1927261899               Leefgeld ZOEKTERMPERSONA2 januari 2019",
-#             "is_credit": False,
-#             "is_geboekt": True,
-#             "statement_line": "190101D-1195.20NMSC028",
-#             "tegen_rekening": "NL83ABNA1927261899",
-#             "transactie_datum": "2021-12-05"
-#         }
-#         signaal = {
-#             "id": "e2b282d9-b31f-451e-9242-11f86c902b35",
-#             "alarmId": alarm_id,
-#             "banktransactieIds": [banktransactie_id],
-#             "isActive": True,
-#             "type": "default",
-#             "actions": [],
-#             "context": None,
-#             "timeCreated": "2021-12-13T13:20:40.784Z"
-#         }
-#         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-#         rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?is_active=True", status_code=200, json={'data': [alarm]})
-#         rm2 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", status_code=200, json={"data":[afspraak]})
-#         rm3 = rm.get(f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_ids={journaalpost_id}", status_code=200, json={"data": [journaalpost]})
-#         rm4 = rm.get(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids={transaction_id}", status_code=200, json={"data": [banktransactie]})
-#         rm5 = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={ "ok":True, "data": nextAlarm})
-#         rm6 = rm.post(f"{settings.SIGNALENSERVICE_URL}/signals/", status_code=201, json={"data": signaal})
-#         rm7 = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", status_code=200, json={ "ok":True, "data": nextAlarm})
-#         rm8 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
-#         expected = {'data': {'evaluateAlarm': {'alarmTriggerResult': [{'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9'}, 'nextAlarm': {'id': '33738845-7f23-4c8f-8424-2b560a944884'}, 
-#         'signaal': {'id': 'e2b282d9-b31f-451e-9242-11f86c902b35', 'bankTransactions': [{'id': "10"}]}}]}}}
+# @TODO testen toevoegen met alarm ids.
 
-#         # act
-#         response = client.post(
-#             "/graphql",
-#             json={
-#                 "query": '''
-#                     mutation test {
-#                         evaluateAlarm {
-#                             alarmTriggerResult {
-#                                 alarm {
-#                                     id
-#                                 }
-#                                 nextAlarm{
-#                                     id
-#                                 }
-#                                 signaal{
-#                                     id
-#                                     bankTransactions {
-#                                         id
-#                                     }
-#                                 }
-#                             }
-#                         }
-#                     }''',
-#             },
-#             content_type='application/json'
-#         )
+@freeze_time("2021-12-08")
+def test_evaluate_alarm_signal_monetary_one_transaction(client):
+    with requests_mock.Mocker() as rm:
+        # arrange
+        banktransactie1 = {
+            "id": banktransactie_id,
+            "bedrag": 15000,
+            "customer_statement_message_id": 15,
+            "information_to_account_owner": "NL83ABNA1927261899               Leefgeld ZOEKTERMPERSONA2 januari 2019",
+            "is_credit": False,
+            "is_geboekt": True,
+            "statement_line": "190101D-1195.20NMSC028",
+            "tegen_rekening": "NL83ABNA1927261899",
+            "transactie_datum": "2021-12-05"
+        }
+        signaal = {
+            "id": "e2b282d9-b31f-451e-9242-11f86c902b35",
+            "alarmId": alarm_id,
+            "banktransactieIds": [banktransactie_id],
+            "isActive": True,
+            "type": "default",
+            "actions": [],
+            "context": None,
+            "timeCreated": "2021-12-13T13:20:40.784Z"
+        }
+        newafspraak = afspraak
+        newafspraak["alarm_id"] = alarm_id
+        fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
+        rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?is_active=True", status_code=200, json={'data': [alarm]})
+        rm1a = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?filter_ids={alarm_id}", status_code=200, json={'data': [alarm]})
+        rm2 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", status_code=200, json={"data":[afspraak]})
+        rm3 = rm.get(f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_ids={journaalpost_id}", status_code=200, json={"data": [journaalpost]})
+        rm4 = rm.get(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids={banktransactie_id}", status_code=200, json={"data": [banktransactie1]})
+        rm5 = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={ "ok":True, "data": nextAlarm})
+        rm6 = rm.post(f"{settings.SIGNALENSERVICE_URL}/signals/", status_code=201, json={"data": signaal})
+        rm7 = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", status_code=200, json={ "ok":True, "data": alarm_inactive})
+        rm2a = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}", status_code=200, json={"data":[newafspraak]})
+        rm8 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
+        expected = {'data': {'evaluateAlarm': {'alarmTriggerResult': [{'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9'}, 'nextAlarm': {'id': '33738845-7f23-4c8f-8424-2b560a944884'}, 
+        'signaal': {'id': 'e2b282d9-b31f-451e-9242-11f86c902b35', 'bankTransactions': [{'id': 100}]}}]}}}
 
-#         print(f">> >> >> response {response.json} ")
+        # act
+        response = client.post(
+            "/graphql",
+            json={
+                "query": '''
+                    mutation test($id:String!) {
+                        evaluateAlarm(id:$id) {
+                            alarmTriggerResult {
+                                alarm {
+                                    id
+                                }
+                                nextAlarm{
+                                    id
+                                }
+                                signaal{
+                                    id
+                                    bankTransactions {
+                                        id
+                                    }
+                                }
+                            }
+                        }
+                    }''', "variables": {"id": alarm_id}
+            },
+            content_type='application/json'
+        )
 
-#         # assert
-#         assert rm1.called_once
-#         assert rm2.called_once
-#         assert rm3.called_once
-#         assert rm4.called_once
-#         assert rm5.called_once
-#         assert rm6.called_once
-#         assert rm7.called_once
-#         assert rm8.called_once
-#         assert fallback.called == 0
-#         assert response.json == expected
+        print(f">> >> >> response {response.json} ")
 
+        # assert
+        assert rm1.called_once
+        assert rm1a.called_once
+        assert rm2.call_count == 2
+        assert rm2a.called_once
+        assert rm3.called_once
+        assert rm4.call_count == 2
+        assert rm5.called_once
+        assert rm6.called_once
+        assert rm7.call_count == 2
+        assert rm8.call_count == 3
+        assert fallback.called == 0
+        assert response.json == expected
+
+
+@freeze_time("2021-12-08")
+def test_evaluate_alarm_no_signal_multiple_transactions(client):
+    with requests_mock.Mocker() as rm:
+        # arrange
+        banktransactie1 = {
+            "id": banktransactie_id,
+            "bedrag": 3000,
+            "customer_statement_message_id": 15,
+            "information_to_account_owner": "NL83ABNA1927261899               Leefgeld ZOEKTERMPERSONA2 januari 2019",
+            "is_credit": False,
+            "is_geboekt": True,
+            "statement_line": "190101D-1195.20NMSC028",
+            "tegen_rekening": "NL83ABNA1927261899",
+            "transactie_datum": "2021-12-05"
+        }
+        banktransactie2 = {
+            "id": banktransactie_id+1,
+            "bedrag": 9000,
+            "customer_statement_message_id": 15,
+            "information_to_account_owner": "NL83ABNA1927261899               Leefgeld ZOEKTERMPERSONA2 januari 2019",
+            "is_credit": False,
+            "is_geboekt": True,
+            "statement_line": "190101D-1195.20NMSC028",
+            "tegen_rekening": "NL83ABNA1927261899",
+            "transactie_datum": "2021-12-05"
+        }
+        journaalpost1 = {
+            "afspraak_id": afspraak_id,
+            "grootboekrekening_id": "BEivKapProPok",
+            "id": journaalpost_id,
+            "is_automatisch_geboekt": True,
+            "transaction_id": banktransactie_id
+        }
+        journaalpost2 = {
+            "afspraak_id": afspraak_id,
+            "grootboekrekening_id": "BEivKapProPok",
+            "id": journaalpost_id+1,
+            "is_automatisch_geboekt": True,
+            "transaction_id": banktransactie_id+1
+        }
+        afspraak = {
+            "id": afspraak_id,
+            "omschrijving": "this is a test afspraak",
+            "valid_from": "2021-01-01",
+            "aantal_betalingen": None,
+            "afdeling_id": None,
+            "bedrag": 12000,
+            "betaalinstructie": {
+                "by_day": ["Wednesday", "Friday"],
+                "start_date": "2019-01-01"
+            },
+            "burger_id": 2,
+            "credit": False,
+            "journaalposten": [journaalpost_id, journaalpost_id+1],
+            "alarm_id": alarm_id
+        }
+
+        fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
+        rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?is_active=True", status_code=200, json={'data': [alarm]})
+        rm1a = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?filter_ids={alarm_id}", status_code=200, json={'data': [alarm]})
+        rm2 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", status_code=200, json={"data":[afspraak]})
+        rm3 = rm.get(f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_ids={journaalpost_id},{journaalpost_id+1}", status_code=200, json={"data": [journaalpost1, journaalpost2]})
+        rm4 = rm.get(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids={banktransactie_id},{banktransactie_id+1}", status_code=200, json={"data": [banktransactie1, banktransactie2]})
+        rm5 = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={ "ok":True, "data": nextAlarm})
+        rm7 = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", status_code=200, json={ "ok":True, "data": alarm_inactive})
+        rm8 = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}", status_code=200, json={"data":[afspraak]})
+        rm9 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
+        expected = {'data': {'evaluateAlarm': {'alarmTriggerResult': [{'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9'}, 'nextAlarm': {'id': '33738845-7f23-4c8f-8424-2b560a944884'}, 
+        'signaal': None }]}}}
+
+        # act
+        response = client.post(
+            "/graphql",
+            json={
+                "query": '''
+                    mutation test($id:String!) {
+                        evaluateAlarm(id:$id) {
+                            alarmTriggerResult {
+                                alarm {
+                                    id
+                                }
+                                nextAlarm{
+                                    id
+                                }
+                                signaal{
+                                    id
+                                    bankTransactions {
+                                        id
+                                    }
+                                }
+                            }
+                        }
+                    }''', "variables": {"id": alarm_id}
+            },
+            content_type='application/json'
+        )
+
+        print(f">> >> >> response {response.json} ")
+
+        # assert
+        assert rm1.called_once
+        assert rm1a.called_once
+        assert rm2.call_count == 2
+        assert rm3.called_once
+        assert rm4.call_count == 1
+        assert rm5.called_once
+        assert rm7.call_count == 1
+        assert rm8.called_once
+        assert rm9.call_count == 2
+        assert fallback.called == 0
+        assert response.json == expected
 
 # Tests if alarm next in sequence already exists and that an alarm in the future does not create a next in sequence alarm yet.
 @freeze_time("2021-12-08")
@@ -562,6 +696,18 @@ def test_evaluate_alarm_next_alarm_in_sequence_already_exists(client):
             byMonth=[],
             byMonthDay=[]
         )
+        alarm_inactive = Alarm(
+            id=alarm_id,
+            isActive=False,
+            afspraakId=19,
+            startDate="2021-12-06",
+            datumMargin=1,
+            bedrag=12500,
+            bedragMargin=1000,
+            byDay=["Wednesday", "Friday"],
+            byMonth=[],
+            byMonthDay=[]
+        )
         banktransactie = {
             "id": banktransactie_id,
             "bedrag": 12000,
@@ -584,10 +730,11 @@ def test_evaluate_alarm_next_alarm_in_sequence_already_exists(client):
             json={"data": [journaalpost]}
         )
         rm4 = rm.get(
-            f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids={transaction_id}",
+            f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids={banktransactie_id}",
             json={"data": [banktransactie]}
         )
-        rm5 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
+        rm5 = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", status_code=200, json={ "ok":True, "data": alarm_inactive})
+        rm6 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
 
         # act
         response = client.post(
@@ -621,6 +768,7 @@ def test_evaluate_alarm_next_alarm_in_sequence_already_exists(client):
         assert rm3.call_count == 2
         assert rm4.call_count == 2
         assert rm5.call_count == 1
+        assert rm6.call_count == 1
         assert fallback.call_count == 0
         assert response.json == {'data': {
             'evaluateAlarms': {
@@ -653,12 +801,13 @@ def test_evaluate_alarm_disabled_because_its_in_the_past(client):
             json={"data": [journaalpost]}
         )
         rm4 = rm.get(
-            f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids={transaction_id}",
+            f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids={banktransactie_id}",
             json={"data": [banktransactie]}
         )
-        rm5 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
-        rm6 = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={"ok": True, "data": nextAlarm})
+        rm5 = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={"ok": True, "data": nextAlarm})
+        rm6 = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", status_code=200, json={"ok": True, "data": alarm_inactive})
         rm7 = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}")
+        rm8 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
 
         # act
         response = client.post(
@@ -701,19 +850,20 @@ def test_evaluate_alarm_disabled_because_its_in_the_past(client):
         assert rm2.call_count == 2
         assert rm3.call_count == 1
         assert rm4.call_count == 1
-        assert rm5.call_count == 2
+        assert rm5.call_count == 1
         assert rm6.call_count == 1
         assert rm7.call_count == 1
+        assert rm8.call_count == 2
         assert fallback.called == 0
         assert response.json == {'data': {
             'evaluateAlarms': {
                 'alarmTriggerResult': [{
                     'alarm': {
                         'isActive': False, 'startDate': '2021-12-06', 'datumMargin': 1,
-                        'bedrag': '125.00', 'bedragMargin': '10.00', 'byDay': ['Wednesday', 'Friday']
+                        'bedrag': '120.00', 'bedragMargin': '10.00', 'byDay': ['Wednesday', 'Friday']
                     },
                     'nextAlarm': {
-                        'isActive': True, 'startDate': '2021-12-08', 'datumMargin': 1, 'bedrag': '125.00',
+                        'isActive': True, 'startDate': '2021-12-08', 'datumMargin': 1, 'bedrag': '120.00',
                         'bedragMargin': '10.00', 'byDay': ['Wednesday', 'Friday']
                     },
                     'signaal': None
@@ -746,7 +896,7 @@ def test_evaluate_alarm_in_the_past(client):
             json={"data": [journaalpost]}
         )
         rm4 = rm.get(
-            f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids={transaction_id}",
+            f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids={banktransactie_id}",
             json={"data": [banktransactie]}
         )
         rm5 = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={"ok": True, "data": nextAlarm})
@@ -798,7 +948,7 @@ def test_evaluate_alarm_in_the_past(client):
         assert rm4.call_count == 1
         assert rm5.call_count == 1
         assert rm6.call_count == 1
-        assert rm7.call_count == 1
+        assert rm7.call_count == 2
         assert rm8.call_count == 3
         assert rm9.call_count == 1
         assert fallback.called == 0
@@ -806,11 +956,11 @@ def test_evaluate_alarm_in_the_past(client):
             'evaluateAlarms': {
                 'alarmTriggerResult': [{
                     'alarm': {
-                        'isActive': False, 'startDate': '2021-12-06', 'datumMargin': 1, 'bedrag': '125.00',
+                        'isActive': False, 'startDate': '2021-12-06', 'datumMargin': 1, 'bedrag': '120.00',
                         'bedragMargin': '10.00', 'byDay': ['Wednesday', 'Friday']
                     },
                     'nextAlarm': {
-                        'isActive': True, 'startDate': '2021-12-08', 'datumMargin': 1, 'bedrag': '125.00',
+                        'isActive': True, 'startDate': '2021-12-08', 'datumMargin': 1, 'bedrag': '120.00',
                         'bedragMargin': '10.00', 'byDay': ['Wednesday', 'Friday']
                     },
                     'signaal': {'id': 'e2b282d9-b31f-451e-9242-11f86c902b35'}

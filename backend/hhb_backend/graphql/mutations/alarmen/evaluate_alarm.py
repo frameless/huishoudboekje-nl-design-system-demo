@@ -16,6 +16,7 @@ from hhb_backend.graphql.mutations.alarmen.alarm import generate_alarm_date
 from hhb_backend.graphql.mutations.alarmen.create_alarm import CreateAlarm
 from hhb_backend.graphql.mutations.signalen.signalen import SignaalHelper
 from hhb_backend.graphql.utils.gebruikersactiviteiten import log_gebruikers_activiteit, gebruikers_activiteit_entities
+from hhb_backend.graphql.utils.dates import to_date
 from hhb_backend.service.model.afspraak import Afspraak
 from hhb_backend.service.model.alarm import Alarm
 from hhb_backend.service.model.bank_transaction import BankTransaction
@@ -111,7 +112,7 @@ async def evaluate_alarm(root, info, alarm: Alarm, active_alarms: List[Alarm]):
     journaal_ids = afspraak.journaalposten
     transactions = get_banktransactions_by_journaal_ids(journaal_ids)
 
-    alarm_check_date = dateutil.parser.isoparse(alarm.startDate).date() + timedelta(days=(alarm.get("datumMargin") + 1))
+    alarm_check_date = to_date(alarm.startDate) + timedelta(days=(alarm.get("datumMargin") + 1))
     alarm = disable_alarm(alarm_check_date, alarm)
 
     # check if there are transaction within the alarm specified margins
@@ -129,15 +130,16 @@ async def evaluate_alarm(root, info, alarm: Alarm, active_alarms: List[Alarm]):
 
 
 def disable_alarm(alarm_check_date: date, alarm: Alarm) -> Alarm:
-    if alarm_check_date < datetime.now(timezone.utc).date():
+    if alarm_check_date <= datetime.now(timezone.utc).date():
         alarm.isActive = False
+        update_alarm(alarm)
     return alarm
 
 
 def does_next_alarm_exist(next_alarm_date: date, alarm: Alarm, alarms: List[Alarm]) -> bool:
     for check in alarms:
         str_alarm_date = check.startDate
-        alarm_check_date = dateutil.parser.isoparse(str_alarm_date).date()
+        alarm_check_date = to_date(str_alarm_date)
 
         if alarm.id == check.id:
             continue
@@ -157,7 +159,7 @@ async def should_create_next_alarm(_root, _info, alarm: Alarm, alarm_check_date:
         # check if the end date is past or not
         end_date = alarm.endDate
         if end_date:
-            if next_alarm_date > dateutil.parser.isoparse(end_date).date():
+            if next_alarm_date > to_date(end_date):
                 return None
 
         # add new alarm in sequence if it does not exist yet
@@ -215,17 +217,15 @@ def get_afspraak_by_id(afspraak_id: int) -> Optional[Afspraak]:
 
 def get_banktransactions_by_journaal_ids(journaal_ids) -> List[BankTransaction]:
     journaalposts = hhb_dataloader().journaalposten.load(journaal_ids)
-    return [
-        hhb_dataloader().bank_transactions.load_one(journaalpost.transaction_id)
-        for journaalpost in journaalposts
-    ]
+    transaction_ids = [journaalpost.transaction_id for journaalpost in journaalposts]
+    return hhb_dataloader().bank_transactions.load(transaction_ids)
 
 
 async def should_create_signaal(root, info, alarm: Alarm, transacties: List[BankTransaction]) -> Optional[Signaal]:
     # expected dates
     datum_margin = int(alarm.datumMargin)
     str_expect_date = alarm.startDate
-    expect_date = dateutil.parser.isoparse(str_expect_date).date()
+    expect_date = to_date(str_expect_date)
     left_date_window = expect_date - timedelta(days=datum_margin)
     right_date_window = expect_date + timedelta(days=datum_margin)
 
@@ -238,19 +238,22 @@ async def should_create_signaal(root, info, alarm: Alarm, transacties: List[Bank
     # initialize
     transaction_in_scope = []
     monetary_deviated_transaction_ids = []
+    transactions_out_of_scope = 0
     bedrag = 0
 
     # check transactions
     for transaction in transacties:
         str_transactie_datum = transaction.transactie_datum
-        transaction_date = dateutil.parser.isoparse(str_transactie_datum).date()
+        transaction_date = to_date(str_transactie_datum)
 
         if left_date_window <= transaction_date <= right_date_window:
             if left_monetary_window <= transaction.bedrag <= right_monetary_window:
                 transaction_in_scope.append(transaction)
-            elif transaction.id:
+            else:
                 monetary_deviated_transaction_ids.append(transaction.id)
                 bedrag += transaction.bedrag
+        else:
+            transactions_out_of_scope += 1
 
     diff = -1 * (abs(bedrag) - abs(expected_alarm_bedrag))
     difference = Bedrag.serialize(diff)
@@ -258,7 +261,8 @@ async def should_create_signaal(root, info, alarm: Alarm, transacties: List[Bank
     if left_monetary_window <= bedrag <= right_monetary_window:
         monetary_deviated_transaction_ids = []
 
-    if len(transaction_in_scope) <= 0 or len(monetary_deviated_transaction_ids) > 0:
+    if transactions_out_of_scope > 0 or len(monetary_deviated_transaction_ids) > 0:
+        print(f">>> diff: {diff}, margin: {monetary_margin}, in scope: {len(transaction_in_scope)}, monetary_deviated: {len(monetary_deviated_transaction_ids)}")
         alarm_id = alarm.id
         new_signal = {
             "alarmId": alarm_id,
@@ -270,7 +274,7 @@ async def should_create_signaal(root, info, alarm: Alarm, transacties: List[Bank
 
         new_signal = await create_signaal(root, info, new_signal)
         new_signal_id = new_signal.id
-        update_alarm(alarm, alarm_id, new_signal_id)
+        update_alarm(alarm, new_signal_id)
 
         return new_signal
     else:
@@ -281,9 +285,11 @@ async def create_signaal(root, info, new_signal) -> Signaal:
     return (await SignaalHelper.create(root, info, new_signal)).signaal
 
 
-def update_alarm(alarm: Alarm, alarm_id, new_signal_id):
-    alarm.signaalId = new_signal_id
+def update_alarm(alarm: Alarm, new_signal_id = None):
+    if new_signal_id: 
+        alarm.signaalId = new_signal_id
+    alarm_id = alarm.id
     alarm_response = requests.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", json=alarm, headers={"Content-type": "application/json"})
     if alarm_response.status_code != 200:
-        raise GraphQLError(f"Failed to update alarm with signaal. {alarm_response.json()}")
+        raise GraphQLError(f"Failed to update alarm. {alarm_response.json()}")
     return alarm_response.json()["data"]
