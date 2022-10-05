@@ -108,6 +108,7 @@ async def evaluate_one_alarm(root, info, id: String) -> list:
 
 
 async def evaluate_alarm(root, info, alarm: Alarm, active_alarms: List[Alarm]):
+    logging.debug(f"Evaluating alarm {alarm}")
     # get data from afspraak and transactions (by journaalpost reference)
     afspraak = get_afspraak_by_id(alarm.afspraakId)
     journaal_ids = afspraak.journaalposten

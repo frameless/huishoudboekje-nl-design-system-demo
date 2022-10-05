@@ -12,7 +12,7 @@ from hhb_backend.auth import Auth
 from hhb_backend.graphql.dataloaders import hhb_dataloader, HHBDataLoader
 from hhb_backend.processen import brieven_export
 from hhb_backend.reverse_proxy import ReverseProxied
-
+from hhb_backend.commands.alarms import alarms_cli
 
 def create_app(
         config_name="hhb_backend.config.Config",
@@ -111,6 +111,8 @@ def create_app(
             output.headers["Content-type"] = "text/plain"
 
         return output
+
+    app.register_blueprint(alarms_cli)
 
     return app
 
