@@ -14,7 +14,6 @@ from hhb_backend.graphql.scalars.day_of_week import DayOfWeek
 from hhb_backend.graphql.utils.dates import valid_afspraak, to_date
 from hhb_backend.graphql.utils.upstream_error_handler import UpstreamError
 
-
 class CreateAlarmInput(graphene.InputObjectType):
     isActive = graphene.Boolean()
     afspraakId = graphene.Int()
@@ -49,12 +48,8 @@ class AlarmHelper:
         self.ok = ok
         self.burger_id = burger_id
 
-    async def create(_root, info, input):
-        name = info.field_name
-        if "evaluate" in name:
-            name += " - createAlarm"
-            info.field_name = name
-
+    @staticmethod
+    async def create(input):
         # TODO eventually turn this back on, for testing purposes it is off
         # alarm_date = parser.parse(input.startDate).date()
         # utc_now = date.today()
@@ -91,16 +86,12 @@ class AlarmHelper:
 
         return AlarmHelper(alarm=response_alarm, previous=dict(), ok=True, burger_id=afspraak.burger_id)
 
-    async def delete(self, info, id):
-        name = info.field_name
-        if "evaluate" in name:
-            name += " - deleteAlarm"
-            info.field_name = name
-
+    @staticmethod
+    async def delete(id):
         previous = hhb_dataloader().alarms.load_one(id)
         if not previous:
             raise GraphQLError(f"Alarm with id {id} not found")
-        
+
         afspraak_id = previous.afspraakId
         afspraak = hhb_dataloader().afspraken.load_one(afspraak_id)
         burger_id = ""
@@ -114,12 +105,8 @@ class AlarmHelper:
 
         return AlarmHelper(alarm=dict(), previous=previous, ok=True, burger_id=burger_id)
 
-    async def update(self, info, id: str, input: UpdateAlarmInput):
-        name = info.field_name
-        if "evaluate" in name:
-            name += " - updateAlarm"
-            info.field_name = name
-
+    @staticmethod
+    async def update(id: str, input: UpdateAlarmInput):
         # TODO eventually turn this back on, for testing purposes it is off
         # if input.get("startDate"):
         #     if date_in_past(input.startDate):
@@ -140,7 +127,7 @@ class AlarmHelper:
         elif previous_response.afspraakId:
             afspraak_response = hhb_dataloader().afspraken.load_one(previous_response.afspraakId)
 
-        response = requests.put(f"{settings.ALARMENSERVICE_URL}/alarms/{id}", json=input, headers={"Content-type": "application/json"}) 
+        response = requests.put(f"{settings.ALARMENSERVICE_URL}/alarms/{id}", json=input, headers={"Content-type": "application/json"})
         if response.status_code != 200:
             raise UpstreamError(response, "Updating alarm failed.")
         response_alarm = response.json()['data']

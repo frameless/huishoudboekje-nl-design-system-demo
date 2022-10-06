@@ -24,7 +24,7 @@ class UpdateAlarm(graphene.Mutation):
             ) + gebruikers_activiteit_entities(
                 entity_type="afspraak", result=self.alarm, key="afspraakId"
             ) + gebruikers_activiteit_entities(
-                entity_type="burger", result=self, key="burger_id" 
+                entity_type="burger", result=self, key="burger_id"
             ),
             before=dict(alarm=self.previous),
             after=dict(alarm=self.alarm),
@@ -38,6 +38,6 @@ class UpdateAlarm(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(_root, _info, id: str, input: UpdateAlarmInput):
         """ Mutatie voor het wijzigen van een bestaand Alarm """
-        response_alarm = await AlarmHelper.update(_root, _info, id, input)
+        response_alarm = await AlarmHelper.update(id, input)
 
         return UpdateAlarm(alarm=response_alarm.alarm, previous=response_alarm.previous, ok=True, burger_id=response_alarm.burger_id)

@@ -21,7 +21,7 @@ class CreateAlarm(graphene.Mutation):
             ) + gebruikers_activiteit_entities(
                 entity_type="afspraak", result=self.alarm, key="afspraakId"
             ) + gebruikers_activiteit_entities(
-                entity_type="burger", result=self, key="burger_id" 
+                entity_type="burger", result=self, key="burger_id"
             ),
             after=dict(alarm=self.alarm),
         )
@@ -33,6 +33,6 @@ class CreateAlarm(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(_root, _info, input: CreateAlarmInput):
         """ Mutatie voor het aanmaken van een nieuw Alarm """
-        response_alarm = await AlarmHelper.create(_root, _info, input)
-        
+        response_alarm = await AlarmHelper.create(input)
+
         return CreateAlarm(alarm=response_alarm.alarm, burger_id=response_alarm.burger_id, ok=True)
