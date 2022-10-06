@@ -12,7 +12,7 @@ from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models import alarm, signaal
 from hhb_backend.graphql.models.bank_transaction import Bedrag
 from hhb_backend.graphql.mutations.alarmen.alarm import generate_alarm_date
-from hhb_backend.graphql.mutations.alarmen.create_alarm import CreateAlarm
+from hhb_backend.graphql.mutations.alarmen.create_alarm import CreateAlarm, AlarmHelper
 from hhb_backend.graphql.mutations.signalen.signalen import SignaalHelper
 from hhb_backend.graphql.utils.dates import to_date
 from hhb_backend.graphql.utils.gebruikersactiviteiten import log_gebruikers_activiteit, gebruikers_activiteit_entities
@@ -75,7 +75,7 @@ class EvaluateAlarm(graphene.Mutation):
         return EvaluateAlarm(alarmTriggerResult=evaluated_alarm)
 
 
-async def evaluate_alarms(ids: list[String]) -> list:
+async def evaluate_alarms(ids: list[String] = []) -> list:
     triggered_alarms = []
     active_alarms = get_active_alarms()
     if ids:
@@ -307,4 +307,5 @@ def get_bedrag_difference(alarm: Alarm, transacties: List[BankTransaction]):
 
     if left_monetary_window <= bedrag <= right_monetary_window:
         monetary_deviated_transaction_ids = []
-    
+
+    return difference, transaction_ids_out_of_scope, monetary_deviated_transaction_ids
