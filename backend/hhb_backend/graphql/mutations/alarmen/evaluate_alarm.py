@@ -1,12 +1,11 @@
-import logging
-from datetime import *
-from tokenize import String
-from typing import List, Optional
-
 import dateutil.parser
 import graphene
+import logging
 import requests
+from datetime import *
 from graphql import GraphQLError
+from tokenize import String
+from typing import List, Optional
 
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
@@ -15,8 +14,9 @@ from hhb_backend.graphql.models.bank_transaction import Bedrag
 from hhb_backend.graphql.mutations.alarmen.alarm import generate_alarm_date
 from hhb_backend.graphql.mutations.alarmen.create_alarm import CreateAlarm
 from hhb_backend.graphql.mutations.signalen.signalen import SignaalHelper
-from hhb_backend.graphql.utils.gebruikersactiviteiten import log_gebruikers_activiteit, gebruikers_activiteit_entities
 from hhb_backend.graphql.utils.dates import to_date
+from hhb_backend.graphql.utils.gebruikersactiviteiten import log_gebruikers_activiteit, gebruikers_activiteit_entities
+from hhb_backend.graphql.utils.upstream_error_handler import UpstreamError
 from hhb_backend.service.model.afspraak import Afspraak
 from hhb_backend.service.model.alarm import Alarm
 from hhb_backend.service.model.bank_transaction import BankTransaction
@@ -48,7 +48,7 @@ class EvaluateAlarms(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(_root, _info, ids):
         """ Mutatie voor de evaluatie van een alarm wat kan resulteren in een signaal en/of een nieuw alarm in de reeks. """
-        triggered_alarms = await evaluate_alarms(_root, _info, ids)
+        triggered_alarms = await evaluate_alarms(ids)
         return EvaluateAlarms(alarmTriggerResult=triggered_alarms)
 
 
@@ -71,25 +71,26 @@ class EvaluateAlarm(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(root, info, id):
         """ Mutatie voor de evaluatie van een alarm wat kan resulteren in een signaal en/of een nieuw alarm in de reeks. """
-        evaluated_alarm = await evaluate_one_alarm(root, info, id)
+        evaluated_alarm = await evaluate_one_alarm(id)
         return EvaluateAlarm(alarmTriggerResult=evaluated_alarm)
 
 
-async def evaluate_alarms(root, info, ids: list[String]) -> list:
+async def evaluate_alarms(ids: list[String]) -> list:
     triggered_alarms = []
     active_alarms = get_active_alarms()
     if ids:
         alarmen = hhb_dataloader().alarms.load(ids)
         for alarm in alarmen:
             if alarm.isActive:
-                triggered_alarms.append(await evaluate_alarm(root, info, alarm, active_alarms))
+                triggered_alarms.append(await evaluate_alarm(alarm, active_alarms))
     else: 
         for alarm in active_alarms:
-            triggered_alarms.append(await evaluate_alarm(root, info, alarm, active_alarms))
+            triggered_alarms.append(await evaluate_alarm(alarm, active_alarms))
 
     return triggered_alarms
 
-async def evaluate_one_alarm(root, info, id: String) -> list:
+
+async def evaluate_one_alarm(id: String) -> list:
     evaluated_alarm = None
     active_alarms = get_active_alarms()
     alarm = get_alarm(id)
@@ -99,7 +100,7 @@ async def evaluate_one_alarm(root, info, id: String) -> list:
 
     alarm_status: bool = alarm.isActive
     if alarm_status:
-        evaluated_alarm = await evaluate_alarm(root, info, alarm, active_alarms)
+        evaluated_alarm = await evaluate_alarm(alarm, active_alarms)
 
     if evaluated_alarm is None:
         return []
@@ -107,7 +108,7 @@ async def evaluate_one_alarm(root, info, id: String) -> list:
     return [evaluated_alarm]
 
 
-async def evaluate_alarm(root, info, alarm: Alarm, active_alarms: List[Alarm]):
+async def evaluate_alarm(alarm: Alarm, active_alarms: List[Alarm]):
     logging.debug(f"Evaluating alarm {alarm}")
     # get data from afspraak and transactions (by journaalpost reference)
     afspraak = get_afspraak_by_id(alarm.afspraakId)
@@ -121,8 +122,8 @@ async def evaluate_alarm(root, info, alarm: Alarm, active_alarms: List[Alarm]):
     next_alarm = None
     created_signaal = None
     if should_check_alarm(alarm):
-        next_alarm = await should_create_next_alarm(root, info, alarm, alarm_check_date, active_alarms)
-        created_signaal = await should_create_signaal(root, info, alarm, transactions)
+        next_alarm = await should_create_next_alarm(alarm, alarm_check_date, active_alarms)
+        created_signaal = await should_create_signaal(alarm, transactions)
 
     return {
         "alarm": alarm,
@@ -150,8 +151,7 @@ def does_next_alarm_exist(next_alarm_date: date, alarm: Alarm, alarms: List[Alar
     return False
 
 
-async def should_create_next_alarm(_root, _info, alarm: Alarm, alarm_check_date: date,
-                                   active_alarms: List[Alarm]) -> Optional[Alarm]:
+async def should_create_next_alarm(alarm: Alarm, alarm_check_date: date, active_alarms: List[Alarm]) -> Optional[Alarm]:
     # only generate next alarm if byDay, byMonth, and/or byMonthDay is present
     if alarm.byDay or alarm.byMonth or alarm.byMonthDay:
         # generate next alarm in the sequence
@@ -166,13 +166,13 @@ async def should_create_next_alarm(_root, _info, alarm: Alarm, alarm_check_date:
         # add new alarm in sequence if it does not exist yet
         next_alarm_already_exists = does_next_alarm_exist(next_alarm_date, alarm, active_alarms)
         if not next_alarm_already_exists:
-            return await create_alarm(_root, _info, alarm, next_alarm_date)
+            return await create_alarm(alarm)
 
     return None
 
 
-async def create_alarm(root, info, alarm: Alarm, alarm_date: date) -> Optional[Alarm]:
-    result = await CreateAlarm.mutate(root, info, {
+async def create_alarm(alarm: Alarm) -> Optional[Alarm]:
+    result = await AlarmHelper.create({
         "isActive": True,
         "afspraakId": int(alarm.get("afspraakId")),
         "endDate": alarm.get("endDate"),
@@ -195,7 +195,8 @@ def should_check_alarm(alarm: Alarm) -> bool:
     str_alarm_date = alarm.startDate
     alarm_date = dateutil.parser.isoparse(str_alarm_date).date()
     date_margin = int(alarm.datumMargin)
-    day_after_expected_window = alarm_date + timedelta(days=(date_margin + 1))   # plus one to make sure the alarm is checked after the expected date range.
+    day_after_expected_window = alarm_date + timedelta(
+        days=(date_margin + 1))  # plus one to make sure the alarm is checked after the expected date range.
     utc_now_date = (datetime.now(timezone.utc)).date()
 
     # if now or in the past, it should be checked
@@ -307,4 +308,3 @@ def get_bedrag_difference(alarm: Alarm, transacties: List[BankTransaction]):
     if left_monetary_window <= bedrag <= right_monetary_window:
         monetary_deviated_transaction_ids = []
     
-    return difference, transaction_ids_out_of_scope, monetary_deviated_transaction_ids

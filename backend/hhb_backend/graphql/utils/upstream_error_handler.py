@@ -3,24 +3,25 @@ from flask import Response
 from graphql import GraphQLError
 
 class UpstreamError(GraphQLError):
-    def __init__(self, response: Response, customMessage: str):
-        errorMessage = self.__makePrettyMessage(customMessage, response)
-        GraphQLError.__init__(self, errorMessage)
+    def __init__(self, response: Response, custom_message: str):
+        error_message = self._make_pretty_message(custom_message, response)
+        GraphQLError.__init__(self, error_message)
 
-    def __makePrettyMessage(self, customMessage: str, response: Response):
+    @staticmethod
+    def _make_pretty_message(custom_message: str, response: Response):
         try:
-            resp = response.json()
+            response_json = response.json()
         except json.decoder.JSONDecodeError:
-            return f"{customMessage} Upstream API responded: [{response.status_code}] {response.text}"
-        
-        errorMessage = f"No error message found. [{response.status_code}] {response.text}"
-        if resp:
-            respMessage = ""
-            if resp.get("errors"):
-                respMessage = ",".join(resp["errors"])
-            elif resp.get("message"):
-                respMessage = resp["message"]
-            
-            errorMessage = f"{customMessage} [{response.status_code}] {respMessage}"
+            return f"{custom_message} Upstream API responded: [{response.status_code}] {response.text}"
 
-        return errorMessage
+        error_message = f"No error message found. [{response.status_code}] {response.text}"
+        if response_json:
+            response_message = ""
+            if response_json.get("errors"):
+                response_message = ",".join(response_json["errors"])
+            elif response_json.get("message"):
+                response_message = response_json["message"]
+
+            error_message = f"{custom_message} [{response.status_code}] {response_message}"
+
+        return error_message

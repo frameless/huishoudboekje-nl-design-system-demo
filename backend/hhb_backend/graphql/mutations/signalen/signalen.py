@@ -47,12 +47,8 @@ class SignaalHelper:
         return data
 
     @log_gebruikers_activiteit
-    async def create(self, info, input: CreateSignaalInput):
-        name = info.field_name
-        if "Signaal" not in name:
-            name += " - createSignaal"
-            info.field_name = name
-
+    @staticmethod
+    async def create(input: CreateSignaalInput):
         create_signaal_response = requests.post(f"{settings.SIGNALENSERVICE_URL}/signals/", json=input, headers={"Content-type": "application/json"})
         if create_signaal_response.status_code != 201:
             raise GraphQLError(f"Failed to create signaal.")
@@ -61,12 +57,8 @@ class SignaalHelper:
         return SignaalHelper(response_signaal, dict())
 
     @log_gebruikers_activiteit
-    async def delete(self, info, id):
-        name = info.field_name
-        if "Signaal" not in name:
-            name += " - deleteSignaal"
-            info.field_name = name
-
+    @staticmethod
+    async def delete(id):
         previous = hhb_dataloader().signalen.load_one(id)
         if not previous:
             raise GraphQLError(f"Signaal with id {id} not found")
@@ -78,12 +70,8 @@ class SignaalHelper:
         return SignaalHelper(dict(), previous)
 
     @log_gebruikers_activiteit
-    async def update(self, info, id: str, input: UpdateSignaalInput):
-        name = info.field_name
-        if "Signaal" not in name:
-            name += " - updateSignaal"
-            info.field_name = name
-
+    @staticmethod
+    async def update(id: str, input: UpdateSignaalInput):
         previous = hhb_dataloader().signalen.load_one(id)
 
         response = requests.put(f"{settings.SIGNALENSERVICE_URL}/signals/{id}", json=input, headers={"Content-type": "application/json"})
