@@ -30,6 +30,7 @@ const CreateAfspraak = () => {
 				input: {
 					burgerId: parseInt(id!),
 					...values,
+					bedrag: String(values.bedrag),
 				},
 			},
 		}).then(result => {
