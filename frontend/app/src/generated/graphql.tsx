@@ -2031,14 +2031,14 @@ export type GetBurgerGebeurtenissenQuery = { gebruikersactiviteitenPaged?: { geb
 export type GetBurgersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetBurgersQuery = { burgers?: Array<{ id?: number, bsn?: number, email?: string, telefoonnummer?: string, voorletters?: string, voornamen?: string, achternaam?: string, geboortedatum?: any, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }>, afspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, alarm?: { id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, afspraak?: { id?: number }, signaal?: { id?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }>, huishouden?: { id?: number, burgers?: Array<{ id?: number }> } }> };
+export type GetBurgersQuery = { burgers?: Array<{ id?: number, voornamen?: string, achternaam?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }> };
 
 export type GetBurgersSearchQueryVariables = Exact<{
   search?: InputMaybe<Scalars['DynamicType']>;
 }>;
 
 
-export type GetBurgersSearchQuery = { burgers?: Array<{ id?: number, bsn?: number, email?: string, telefoonnummer?: string, voorletters?: string, voornamen?: string, achternaam?: string, geboortedatum?: any, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }>, afspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, alarm?: { id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, afspraak?: { id?: number }, signaal?: { id?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }>, huishouden?: { id?: number, burgers?: Array<{ id?: number }> } }> };
+export type GetBurgersSearchQuery = { burgers?: Array<{ id?: number, voornamen?: string, achternaam?: string }> };
 
 export type GetConfiguratieQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2080,7 +2080,7 @@ export type GetHuishoudenQuery = { huishouden?: { id?: number, burgers?: Array<{
 export type GetHuishoudensQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetHuishoudensQuery = { huishoudens?: Array<{ id?: number, burgers?: Array<{ id?: number, bsn?: number, email?: string, telefoonnummer?: string, voorletters?: string, voornamen?: string, achternaam?: string, geboortedatum?: any, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }>, afspraken?: Array<{ id?: number, omschrijving?: string, bedrag?: any, credit?: boolean, zoektermen?: Array<string>, validFrom?: any, validThrough?: any, betaalinstructie?: { byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, exceptDates?: Array<string>, repeatFrequency?: string, startDate?: string, endDate?: string }, burger?: { id?: number, bsn?: number, voornamen?: string, voorletters?: string, achternaam?: string, plaatsnaam?: string, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, alarm?: { id?: string, isActive?: boolean, bedrag?: any, bedragMargin?: any, startDate?: string, endDate?: string, datumMargin?: number, byDay?: Array<DayOfWeek>, byMonth?: Array<number>, byMonthDay?: Array<number>, afspraak?: { id?: number }, signaal?: { id?: string } }, afdeling?: { id?: number, naam?: string, organisatie?: { id?: number, kvknummer?: string, vestigingsnummer?: string, naam?: string }, postadressen?: Array<{ id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }>, rekeningen?: Array<{ id?: number, iban?: string, rekeninghouder?: string }> }, postadres?: { id?: string, straatnaam?: string, huisnummer?: string, postcode?: string, plaatsnaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string }, rubriek?: { id?: number, naam?: string, grootboekrekening?: { id: string, naam?: string, credit?: boolean, omschrijving?: string, referentie?: string, rubriek?: { id?: number, naam?: string } } }, matchingAfspraken?: Array<{ id?: number, credit?: boolean, zoektermen?: Array<string>, bedrag?: any, omschrijving?: string, burger?: { voorletters?: string, voornamen?: string, achternaam?: string }, tegenRekening?: { id?: number, iban?: string, rekeninghouder?: string } }> }>, huishouden?: { id?: number, burgers?: Array<{ id?: number }> } }> }> };
+export type GetHuishoudensQuery = { huishoudens?: Array<{ id?: number, burgers?: Array<{ id?: number, voorletters?: string, voornamen?: string, achternaam?: string }> }> };
 
 export type GetOrganisatieQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -4646,10 +4646,16 @@ export type GetBurgerGebeurtenissenQueryResult = Apollo.QueryResult<GetBurgerGeb
 export const GetBurgersDocument = gql`
     query getBurgers {
   burgers {
-    ...Burger
+    id
+    voornamen
+    achternaam
+    straatnaam
+    huisnummer
+    postcode
+    plaatsnaam
   }
 }
-    ${BurgerFragmentDoc}`;
+    `;
 
 /**
  * __useGetBurgersQuery__
@@ -4680,10 +4686,12 @@ export type GetBurgersQueryResult = Apollo.QueryResult<GetBurgersQuery, GetBurge
 export const GetBurgersSearchDocument = gql`
     query getBurgersSearch($search: DynamicType) {
   burgers(search: $search) {
-    ...Burger
+    id
+    voornamen
+    achternaam
   }
 }
-    ${BurgerFragmentDoc}`;
+    `;
 
 /**
  * __useGetBurgersSearchQuery__
@@ -4944,10 +4952,16 @@ export type GetHuishoudenQueryResult = Apollo.QueryResult<GetHuishoudenQuery, Ge
 export const GetHuishoudensDocument = gql`
     query getHuishoudens {
   huishoudens {
-    ...Huishouden
+    id
+    burgers {
+      id
+      voorletters
+      voornamen
+      achternaam
+    }
   }
 }
-    ${HuishoudenFragmentDoc}`;
+    `;
 
 /**
  * __useGetHuishoudensQuery__
