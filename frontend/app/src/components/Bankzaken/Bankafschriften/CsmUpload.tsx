@@ -3,12 +3,14 @@ import React, {useRef} from "react";
 import {useTranslation} from "react-i18next";
 import {useCreateCustomerStatementMessageMutation, useEvaluateAlarmsMutation} from "../../../generated/graphql";
 import {FileUpload} from "../../../models/models";
+import {useFeatureFlag} from "../../../utils/features";
 import useUploadFiles from "../../../utils/useUploadFiles";
 import AddButton from "../../shared/AddButton";
 import CsmUploadModal from "./CsmUploadModal";
 
 const CsmUpload: React.FC<{refetch: VoidFunction}> = ({refetch}) => {
 	const {t} = useTranslation();
+	const isSignalenEnabled = useFeatureFlag("signalen");
 	const csmUploadModal = useDisclosure();
 	const fileUploadInput = useRef<HTMLInputElement>(null);
 	const [createCSM] = useCreateCustomerStatementMessageMutation({
@@ -24,7 +26,9 @@ const CsmUpload: React.FC<{refetch: VoidFunction}> = ({refetch}) => {
 				.catch(err => reject(err));
 		}),
 		onDone: async () => {
-			await evaluateAlarms();
+			if (isSignalenEnabled) {
+				await evaluateAlarms();
+			}
 			refetch();
 			// Only close the upload modal when there were no errors
 			if (!files.find(f => f.error)) {
