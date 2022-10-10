@@ -130,7 +130,7 @@ async def evaluate_alarm(root, info, alarm: Alarm, active_alarms: List[Alarm]):
 
 
 def disable_alarm(alarm_check_date: date, alarm: Alarm) -> Alarm:
-    if alarm_check_date <= datetime.now(timezone.utc).date():
+    if alarm_check_date <= date.today():
         alarm.isActive = False
         update_alarm(alarm)
     return alarm
