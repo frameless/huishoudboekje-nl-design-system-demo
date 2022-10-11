@@ -36,7 +36,7 @@ const EditAfspraak = () => {
 			}
 
 			const editAfspraakValues: UpdateAfspraakMutationVariables["input"] = {
-				bedrag: parseFloat(afspraak.bedrag),
+				bedrag: afspraak.bedrag,
 				credit: afspraak.credit,
 				rubriekId: afspraak.rubriek?.id,
 				omschrijving: afspraak.omschrijving,
@@ -46,10 +46,15 @@ const EditAfspraak = () => {
 			};
 
 			const onSubmitForm = (data) => {
+				const input = {
+					...data,
+					bedrag: String(data.bedrag),
+				};
+
 				updateAfspraakMutation({
 					variables: {
 						id: afspraak.id!,
-						input: data,
+						input,
 					},
 				}).then(() => {
 					toast({

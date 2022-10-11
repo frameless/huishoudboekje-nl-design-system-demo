@@ -83,8 +83,8 @@ const AddAlarmModal: React.FC<AddAlarmModalProps> = ({afspraak, onSubmit, onClos
 			onSubmit({
 				afspraakId: afspraak.id!,
 				isActive: true,
-				bedrag,
-				bedragMargin,
+				bedrag: String(bedrag),
+				bedragMargin: String(bedragMargin),
 				...data.isPeriodiek === Periodiek.Eenmalig && {
 					startDate: d(date).format("YYYY-MM-DD"),
 					endDate: d(date).format("YYYY-MM-DD"),
