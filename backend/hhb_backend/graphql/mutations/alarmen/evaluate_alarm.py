@@ -215,6 +215,8 @@ def get_afspraak_by_id(afspraak_id: int) -> Optional[Afspraak]:
 
 
 def get_banktransactions_by_journaal_ids(journaal_ids) -> List[BankTransaction]:
+    if not journaal_ids: 
+        return []
     journaalposts = hhb_dataloader().journaalposten.load(journaal_ids)
     transaction_ids = [journaalpost.transaction_id for journaalpost in journaalposts]
     return hhb_dataloader().bank_transactions.load(transaction_ids)
@@ -222,7 +224,6 @@ def get_banktransactions_by_journaal_ids(journaal_ids) -> List[BankTransaction]:
 
 async def should_create_signaal(root, info, alarm: Alarm, transacties: List[BankTransaction]) -> Optional[Signaal]:
     difference, transaction_ids_out_of_scope, monetary_deviated_transaction_ids = get_bedrag_difference(alarm, transacties)
-
     if len(transaction_ids_out_of_scope) > 0 or len(monetary_deviated_transaction_ids) > 0 or len(transacties) == 0:
         alarm_id = alarm.id
         new_signal = {
@@ -292,13 +293,10 @@ def get_bedrag_difference(alarm: Alarm, transacties: List[BankTransaction]):
                 transactions_in_scope.append(transaction)
             else:
                 monetary_deviated_transaction_ids.append(transaction.id)
-                bedrag += transaction.bedrag
         else:
             transaction_ids_out_of_scope.append(transaction.id)
-
-    if len(transactions_in_scope) > 0 and len(transaction_ids_out_of_scope) == 0 and len(monetary_deviated_transaction_ids) == 0: 
-        for t in transactions_in_scope: 
-            bedrag += t.bedrag
+        
+        bedrag += transaction.bedrag
 
     diff = -1 * (abs(bedrag) - abs(expected_alarm_bedrag))
 

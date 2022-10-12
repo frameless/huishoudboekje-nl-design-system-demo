@@ -3,6 +3,7 @@ from datetime import datetime
 import pytest
 import requests_mock
 from freezegun import freeze_time
+from tests import post_echo_with_str_id
 
 import hhb_backend.graphql.mutations.alarmen.evaluate_alarm as EvaluateAlarm
 from hhb_backend.graphql import settings
@@ -176,22 +177,22 @@ def test_should_check_alarm(expected: bool, alarm: Alarm):
         Alarm(startDate="2022-01-01", datumMargin=1, bedrag=10000, bedragMargin=1000),
         [BankTransaction(id=1, transactie_datum="2022-01-01", bedrag=3000),
         BankTransaction(id=2, transactie_datum="2022-01-01", bedrag=5000)]),
-        # within date window, one transaction within and one outside monetary window, this one is a little weird (a signal will be created for the second transaction)
-        ('70.00', [], [2], 
+        # within date window, one transaction within and one outside monetary window (afterwards a signal will be created for the second transaction)
+        ('-30.00', [], [2], 
         Alarm(startDate="2022-01-01", datumMargin=1, bedrag=10000, bedragMargin=1000),
         [BankTransaction(id=1, transactie_datum="2022-01-01", bedrag=10000),
         BankTransaction(id=2, transactie_datum="2022-01-01", bedrag=3000)]),
-        # within date window, two transaction within monetary window, this one is a little weird (no signal will be created)
+        # within date window, two transaction within monetary window (this one is a little weird, afterwards no signal will be created)
         ('-100.00', [], [], 
         Alarm(startDate="2022-01-01", datumMargin=1, bedrag=10000, bedragMargin=1000),
         [BankTransaction(id=1, transactie_datum="2022-01-01", bedrag=10000),
         BankTransaction(id=2, transactie_datum="2022-01-01", bedrag=10000)]),
-        # outside date window, one transaction
-        ('100.00', [1], [], 
+        # outside date window on date of evaluation, one transaction with right amount
+        ('0.00', [1], [], 
         Alarm(startDate="2022-01-01", datumMargin=1, bedrag=10000, bedragMargin=1000), 
         [BankTransaction(id=1, transactie_datum="2022-01-03", bedrag=10000)]),
-        # outside date window, one transaction
-        ('100.00', [1], [], 
+        # outside date window before the window, one transaction with right amount
+        ('0.00', [1], [], 
         Alarm(startDate="2022-01-03", datumMargin=1, bedrag=10000, bedragMargin=1000), 
         [BankTransaction(id=1, transactie_datum="2022-01-01", bedrag=10000)]),
         # outside date window, no transactions 
@@ -564,12 +565,168 @@ def test_evaluate_multiple_alarms(client):
         }}
 
 
-# TODO make test that checks for signal if no transactions are found, a signal should be created.
-# test_evaluate_alarm_without_banktransactions_gives_signal()
+# Test that checks for a signal if no transactions are found, a signal should be created.
+def test_evaluate_alarm_without_banktransactions_gives_signal(client):
+    with requests_mock.Mocker() as rm:
+        # arrange
+        afspraak1 = {
+            "id": afspraak_id,
+            "omschrijving": "this is a test afspraak",
+            "valid_from": "2021-01-01",
+            "aantal_betalingen": None,
+            "afdeling_id": None,
+            "bedrag": 12000,
+            "betaalinstructie": {
+                "by_day": ["Wednesday", "Friday"],
+                "start_date": "2019-01-01"
+            },
+            "burger_id": 2,
+            "credit": False,
+            "journaalposten": None
+        }
+        fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
+        rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?is_active=True", json={'data': [alarm]})
+        rm2 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", json={"data":[afspraak1]})
+        rm4 = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={"ok": True, "data": nextAlarm})
+        rm5 = rm.post(f"{settings.SIGNALENSERVICE_URL}/signals/", status_code=201, json=post_echo_with_str_id(signaal["id"]))
+        rm6 = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", json={"ok": True, "data": alarm_inactive})
+        rm7 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
+        rm8 = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}")
 
-# TODO make test that has a transaction outside the date window, so either before the window or on the day of evaluation.
-# test_evaluate_alarm_transaction_outside_date_window_gives_signal_with_transaction()
+        # act
+        response = client.post(
+            "/graphql",
+            json={
+                "query": '''
+                    mutation test {
+                        evaluateAlarms {
+                            alarmTriggerResult {
+                                alarm {
+                                    id
+                                }
+                                nextAlarm{
+                                    id
+                                }
+                                signaal{
+                                    id
+                                    bankTransactions {
+                                        id
+                                    }
+                                    bedragDifference
+                                }
+                            }
+                        }
+                    }''',
+            },
+            content_type='application/json'
+        )
 
+        print(f">>> response: {response.json}")
+
+        # assert
+        assert rm1.call_count == 1
+        assert rm2.call_count == 2
+        assert rm4.call_count == 1
+        assert rm5.call_count == 1
+        assert rm6.call_count == 2
+        assert rm7.call_count == 3
+        assert rm8.call_count == 1
+        assert fallback.called == 0
+        assert response.json == {'data': {
+            'evaluateAlarms': {
+                'alarmTriggerResult': [{
+                    'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9'},
+                    'nextAlarm': {'id': '33738845-7f23-4c8f-8424-2b560a944884'},
+                    'signaal': {'id': 'e2b282d9-b31f-451e-9242-11f86c902b35', 'bankTransactions': None, 'bedragDifference':"120.00"}
+                }]
+            }
+        }}
+
+# Test that has a transaction outside the date window which should create a signal with this transaction in it.
+@freeze_time("2021-12-08")
+def test_evaluate_alarm_transaction_outside_date_window_gives_signal_with_transaction(client):
+    with requests_mock.Mocker() as rm:
+        # arrange
+        banktransactie = {
+            "id": banktransactie_id,
+            "bedrag": 12000,
+            "customer_statement_message_id": 15,
+            "information_to_account_owner": "NL83ABNA1927261899               Leefgeld ZOEKTERMPERSONA2 januari 2019",
+            "is_credit": False,
+            "is_geboekt": True,
+            "statement_line": "190101D-1195.20NMSC028",
+            "tegen_rekening": "NL83ABNA1927261899",
+            "transactie_datum": "2021-12-04"
+        }
+        fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
+        rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?is_active=True", json={'data': [alarm]})
+        rm2 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", json={"data":[afspraak]})
+        rm3 = rm.get(
+            f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_ids={journaalpost_id}",
+            json={"data": [journaalpost]}
+        )
+        rm4 = rm.get(
+            f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids={banktransactie_id}",
+            json={"data": [banktransactie]}
+        )
+        rm5 = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={"ok": True, "data": nextAlarm})
+        rm6 = rm.post(f"{settings.SIGNALENSERVICE_URL}/signals/", status_code=201, json=post_echo_with_str_id(signaal["id"]))
+        rm7 = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", json={"ok": True, "data": alarm_inactive})
+        rm8 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
+        rm9 = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}")
+
+        # act
+        response = client.post(
+            "/graphql",
+            json={
+                "query": '''
+                    mutation test {
+                        evaluateAlarms {
+                            alarmTriggerResult {
+                                alarm {
+                                    id
+                                }
+                                nextAlarm{
+                                    id
+                                }
+                                signaal{
+                                    id
+                                    bankTransactions {
+                                        id
+                                    }
+                                    bedragDifference
+                                }
+                            }
+                        }
+                    }''',
+            },
+            content_type='application/json'
+        )
+
+        print(f">>> response: {response.json}")
+
+        # assert
+        assert rm1.call_count == 1
+        assert rm2.call_count == 2
+        assert rm3.call_count == 1
+        assert rm4.call_count == 2
+        assert rm5.call_count == 1
+        assert rm6.call_count == 1
+        assert rm7.call_count == 2
+        assert rm8.call_count == 3
+        assert rm9.call_count == 1
+        assert fallback.called == 0
+        assert response.json == {'data': {
+            'evaluateAlarms': {
+                'alarmTriggerResult': [{
+                    'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9'},
+                    'nextAlarm': {'id': '33738845-7f23-4c8f-8424-2b560a944884'},
+                    'signaal': {'id': 'e2b282d9-b31f-451e-9242-11f86c902b35', 'bankTransactions': [{'id': banktransactie_id}], 'bedragDifference': '0.00'}
+                }]
+            }
+        }}
+
+# TODO test aanpassen met bankTransactions en bedragDifference in signaal (gebruik post_echo_with_str_id)
 @freeze_time("2021-12-08")
 def test_evaluate_alarm_signal_monetary(client):
     with requests_mock.Mocker() as rm:
