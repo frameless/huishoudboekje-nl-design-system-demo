@@ -131,8 +131,7 @@ async def evaluate_alarm(root, info, alarm: Alarm, active_alarms: List[Alarm]):
 
 def disable_alarm(alarm_check_date: date, alarm: Alarm) -> Alarm:
     if alarm_check_date <= date.today():
-        alarm.isActive = False
-        update_alarm(alarm)
+        update_alarm_activity(alarm, False)
     return alarm
 
 
@@ -222,6 +221,48 @@ def get_banktransactions_by_journaal_ids(journaal_ids) -> List[BankTransaction]:
 
 
 async def should_create_signaal(root, info, alarm: Alarm, transacties: List[BankTransaction]) -> Optional[Signaal]:
+    difference, transaction_ids_out_of_scope, monetary_deviated_transaction_ids = get_bedrag_difference(alarm, transacties)
+
+    if len(transaction_ids_out_of_scope) > 0 or len(monetary_deviated_transaction_ids) > 0 or len(transacties) == 0:
+        alarm_id = alarm.id
+        new_signal = {
+            "alarmId": alarm_id,
+            "banktransactieIds": monetary_deviated_transaction_ids + transaction_ids_out_of_scope,
+            "isActive": True,
+            "type": "default",
+            "bedragDifference": difference
+        }
+
+        new_signal = await create_signaal(root, info, new_signal)
+        new_signal_id = new_signal.id
+        update_alarm_signal_id(alarm, new_signal_id)
+
+        return new_signal
+    else:
+        return None
+
+
+async def create_signaal(root, info, new_signal) -> Signaal:
+    return (await SignaalHelper.create(root, info, new_signal)).signaal
+
+def update_alarm_signal_id(alarm: Alarm, new_signal_id):
+    alarm_id = alarm.id
+    alarm.signaalId = new_signal_id
+    alarm_update = {"signaalId": new_signal_id}
+    update_alarm(alarm_id, alarm_update)
+
+def update_alarm_activity(alarm: Alarm, is_active: bool):
+    alarm_id = alarm.id
+    alarm.isActive = is_active
+    alarm_update = {"isActive": is_active}
+    update_alarm(alarm_id, alarm_update)
+
+def update_alarm(alarm_id: str, alarm_update: dict):
+    alarm_response = requests.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", json=alarm_update, headers={"Content-type": "application/json"})
+    if alarm_response.status_code != 200:
+        raise GraphQLError(f"Failed to update alarm. {alarm_response.json()}")
+
+def get_bedrag_difference(alarm: Alarm, transacties: List[BankTransaction]):
     # expected dates
     datum_margin = int(alarm.datumMargin)
     str_expect_date = alarm.startDate
@@ -236,9 +277,9 @@ async def should_create_signaal(root, info, alarm: Alarm, transacties: List[Bank
     right_monetary_window = expected_alarm_bedrag + monetary_margin
 
     # initialize
-    transaction_in_scope = []
+    transactions_in_scope = []
     monetary_deviated_transaction_ids = []
-    transactions_out_of_scope = 0
+    transaction_ids_out_of_scope = []
     bedrag = 0
 
     # check transactions
@@ -248,48 +289,22 @@ async def should_create_signaal(root, info, alarm: Alarm, transacties: List[Bank
 
         if left_date_window <= transaction_date <= right_date_window:
             if left_monetary_window <= transaction.bedrag <= right_monetary_window:
-                transaction_in_scope.append(transaction)
+                transactions_in_scope.append(transaction)
             else:
                 monetary_deviated_transaction_ids.append(transaction.id)
                 bedrag += transaction.bedrag
         else:
-            transactions_out_of_scope += 1
+            transaction_ids_out_of_scope.append(transaction.id)
+
+    if len(transactions_in_scope) > 0 and len(transaction_ids_out_of_scope) == 0 and len(monetary_deviated_transaction_ids) == 0: 
+        for t in transactions_in_scope: 
+            bedrag += t.bedrag
 
     diff = -1 * (abs(bedrag) - abs(expected_alarm_bedrag))
+
     difference = Bedrag.serialize(diff)
 
     if left_monetary_window <= bedrag <= right_monetary_window:
         monetary_deviated_transaction_ids = []
-
-    if transactions_out_of_scope > 0 or len(monetary_deviated_transaction_ids) > 0:
-        print(f">>> diff: {diff}, margin: {monetary_margin}, in scope: {len(transaction_in_scope)}, monetary_deviated: {len(monetary_deviated_transaction_ids)}")
-        alarm_id = alarm.id
-        new_signal = {
-            "alarmId": alarm_id,
-            "banktransactieIds": monetary_deviated_transaction_ids,
-            "isActive": True,
-            "type": "default",
-            "bedragDifference": difference
-        }
-
-        new_signal = await create_signaal(root, info, new_signal)
-        new_signal_id = new_signal.id
-        update_alarm(alarm, new_signal_id)
-
-        return new_signal
-    else:
-        return None
-
-
-async def create_signaal(root, info, new_signal) -> Signaal:
-    return (await SignaalHelper.create(root, info, new_signal)).signaal
-
-
-def update_alarm(alarm: Alarm, new_signal_id = None):
-    if new_signal_id: 
-        alarm.signaalId = new_signal_id
-    alarm_id = alarm.id
-    alarm_response = requests.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", json=alarm, headers={"Content-type": "application/json"})
-    if alarm_response.status_code != 200:
-        raise GraphQLError(f"Failed to update alarm. {alarm_response.json()}")
-    return alarm_response.json()["data"]
+    
+    return difference, transaction_ids_out_of_scope, monetary_deviated_transaction_ids

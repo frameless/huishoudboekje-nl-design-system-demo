@@ -8,6 +8,7 @@ import hhb_backend.graphql.mutations.alarmen.evaluate_alarm as EvaluateAlarm
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.mutations.alarmen.alarm import generate_alarm_date
 from hhb_backend.service.model.alarm import Alarm
+from hhb_backend.service.model.bank_transaction import BankTransaction
 
 alarm_id = "00943958-8b93-4617-aa43-669a9016aad9"
 afspraak_id = 19
@@ -139,6 +140,71 @@ def test_generateNextAlarmDate_monthly(expected: datetime, alarm, alarmDate: dat
 def test_should_check_alarm(expected: bool, alarm: Alarm):
     actual = EvaluateAlarm.should_check_alarm(alarm)
     assert actual == expected
+
+
+@pytest.mark.parametrize(
+    ["expected_difference", "tooc", "deviated_ids", "alarm", "transacties"], # tooc = transactions_out_of_scope
+    [
+        # nominal case
+        ('0.00', [], [], 
+        Alarm(startDate="2022-01-01", datumMargin=1, bedrag=10000, bedragMargin=1000), 
+        [BankTransaction(id=1, transactie_datum="2022-01-01", bedrag=10000)]),
+        # within date window, within monetary window
+        ('10.00', [], [], 
+        Alarm(startDate="2022-01-01", datumMargin=1, bedrag=10000, bedragMargin=1000), 
+        [BankTransaction(id=1, transactie_datum="2022-01-01", bedrag=9000)]),
+        # within date window, outside monetary window
+        ('20.00', [], [1], 
+        Alarm(startDate="2022-01-01", datumMargin=1, bedrag=10000, bedragMargin=1000),
+        [BankTransaction(id=1, transactie_datum="2022-01-01", bedrag=8000)]),
+        # within date window, outside monetary window
+        ('-20.00', [], [1], 
+        Alarm(startDate="2022-01-01", datumMargin=1, bedrag=10000, bedragMargin=1000),
+        [BankTransaction(id=1, transactie_datum="2022-01-01", bedrag=12000)]),
+        # within date window, multiple transactions that are together the right amount
+        ('0.00', [], [], 
+        Alarm(startDate="2022-01-01", datumMargin=1, bedrag=10000, bedragMargin=1000),
+        [BankTransaction(id=1, transactie_datum="2022-01-01", bedrag=3000),
+        BankTransaction(id=2, transactie_datum="2022-01-01", bedrag=7000)]),
+        # within date window, multiple transactions that are together within monetary window
+        ('10.00', [], [], 
+        Alarm(startDate="2022-01-01", datumMargin=1, bedrag=10000, bedragMargin=1000),
+        [BankTransaction(id=1, transactie_datum="2022-01-01", bedrag=3000),
+        BankTransaction(id=2, transactie_datum="2022-01-01", bedrag=6000)]),
+        # within date window, multiple transactions that are together outdside monetary window
+        ('20.00', [], [1,2], 
+        Alarm(startDate="2022-01-01", datumMargin=1, bedrag=10000, bedragMargin=1000),
+        [BankTransaction(id=1, transactie_datum="2022-01-01", bedrag=3000),
+        BankTransaction(id=2, transactie_datum="2022-01-01", bedrag=5000)]),
+        # within date window, one transaction within and one outside monetary window, this one is a little weird (a signal will be created for the second transaction)
+        ('70.00', [], [2], 
+        Alarm(startDate="2022-01-01", datumMargin=1, bedrag=10000, bedragMargin=1000),
+        [BankTransaction(id=1, transactie_datum="2022-01-01", bedrag=10000),
+        BankTransaction(id=2, transactie_datum="2022-01-01", bedrag=3000)]),
+        # within date window, two transaction within monetary window, this one is a little weird (no signal will be created)
+        ('-100.00', [], [], 
+        Alarm(startDate="2022-01-01", datumMargin=1, bedrag=10000, bedragMargin=1000),
+        [BankTransaction(id=1, transactie_datum="2022-01-01", bedrag=10000),
+        BankTransaction(id=2, transactie_datum="2022-01-01", bedrag=10000)]),
+        # outside date window, one transaction
+        ('100.00', [1], [], 
+        Alarm(startDate="2022-01-01", datumMargin=1, bedrag=10000, bedragMargin=1000), 
+        [BankTransaction(id=1, transactie_datum="2022-01-03", bedrag=10000)]),
+        # outside date window, one transaction
+        ('100.00', [1], [], 
+        Alarm(startDate="2022-01-03", datumMargin=1, bedrag=10000, bedragMargin=1000), 
+        [BankTransaction(id=1, transactie_datum="2022-01-01", bedrag=10000)]),
+        # outside date window, no transactions 
+        ('100.00', [], [], 
+        Alarm(startDate="2022-01-01", datumMargin=1, bedrag=10000, bedragMargin=1000), 
+        []),
+    ]
+)
+def test_bedrag_difference(expected_difference, tooc, deviated_ids, alarm: Alarm, transacties: list[BankTransaction]):
+    difference, transactions_out_of_scope, monetary_deviated_transaction_ids = EvaluateAlarm.get_bedrag_difference(alarm, transacties)
+    assert expected_difference == difference
+    assert tooc == transactions_out_of_scope
+    assert deviated_ids == monetary_deviated_transaction_ids
 
 
 @freeze_time("2021-12-08")
@@ -497,6 +563,12 @@ def test_evaluate_multiple_alarms(client):
             }
         }}
 
+
+# TODO make test that checks for signal if no transactions are found, a signal should be created.
+# test_evaluate_alarm_without_banktransactions_gives_signal()
+
+# TODO make test that has a transaction outside the date window, so either before the window or on the day of evaluation.
+# test_evaluate_alarm_transaction_outside_date_window_gives_signal_with_transaction()
 
 @freeze_time("2021-12-08")
 def test_evaluate_alarm_signal_monetary(client):
