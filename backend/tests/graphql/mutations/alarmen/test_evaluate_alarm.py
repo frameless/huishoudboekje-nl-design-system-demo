@@ -726,7 +726,6 @@ def test_evaluate_alarm_transaction_outside_date_window_gives_signal_with_transa
             }
         }}
 
-# TODO test aanpassen met bankTransactions en bedragDifference in signaal (gebruik post_echo_with_str_id)
 @freeze_time("2021-12-08")
 def test_evaluate_alarm_signal_monetary(client):
     with requests_mock.Mocker() as rm:
