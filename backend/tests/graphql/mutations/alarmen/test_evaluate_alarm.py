@@ -754,7 +754,7 @@ def test_evaluate_alarm_signal_monetary(client):
             json={"data": [banktransactie]}
         )
         rm5 = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={"ok": True, "data": nextAlarm})
-        rm6 = rm.post(f"{settings.SIGNALENSERVICE_URL}/signals/", status_code=201, json={"data": signaal})
+        rm6 = rm.post(f"{settings.SIGNALENSERVICE_URL}/signals/", status_code=201, json=post_echo_with_str_id(signaal["id"]))
         rm7 = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", json={"ok": True, "data": alarm_inactive})
         rm8 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
         rm9 = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}")
@@ -775,6 +775,10 @@ def test_evaluate_alarm_signal_monetary(client):
                                 }
                                 signaal{
                                     id
+                                    bankTransactions {
+                                        id
+                                    }
+                                    bedragDifference
                                 }
                             }
                         }
@@ -787,7 +791,7 @@ def test_evaluate_alarm_signal_monetary(client):
         assert rm1.call_count == 1
         assert rm2.call_count == 2
         assert rm3.call_count == 1
-        assert rm4.call_count == 1
+        assert rm4.call_count == 2
         assert rm5.call_count == 1
         assert rm6.call_count == 1
         assert rm7.call_count == 2
@@ -799,7 +803,7 @@ def test_evaluate_alarm_signal_monetary(client):
                 'alarmTriggerResult': [{
                     'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9'},
                     'nextAlarm': {'id': '33738845-7f23-4c8f-8424-2b560a944884'},
-                    'signaal': {'id': 'e2b282d9-b31f-451e-9242-11f86c902b35'}
+                    'signaal': {'id': 'e2b282d9-b31f-451e-9242-11f86c902b35', 'bankTransactions': [{'id': banktransactie_id}], 'bedragDifference': '-30.00'}
                 }]
             }
         }}
