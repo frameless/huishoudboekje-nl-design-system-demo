@@ -637,7 +637,10 @@ def test_evaluate_alarm_without_banktransactions_gives_signal(client):
                 'alarmTriggerResult': [{
                     'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9'},
                     'nextAlarm': {'id': '33738845-7f23-4c8f-8424-2b560a944884'},
-                    'signaal': {'id': 'e2b282d9-b31f-451e-9242-11f86c902b35', 'bankTransactions': None, 'bedragDifference':"120.00"}
+                    'signaal': {
+                        'id': 'e2b282d9-b31f-451e-9242-11f86c902b35', 
+                        'bankTransactions': None, 
+                        'bedragDifference':"120.00"}
                 }]
             }
         }}
@@ -721,7 +724,10 @@ def test_evaluate_alarm_transaction_outside_date_window_gives_signal_with_transa
                 'alarmTriggerResult': [{
                     'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9'},
                     'nextAlarm': {'id': '33738845-7f23-4c8f-8424-2b560a944884'},
-                    'signaal': {'id': 'e2b282d9-b31f-451e-9242-11f86c902b35', 'bankTransactions': [{'id': banktransactie_id}], 'bedragDifference': '0.00'}
+                    'signaal': {
+                        'id': 'e2b282d9-b31f-451e-9242-11f86c902b35', 
+                        'bankTransactions': [{'id': banktransactie_id}], 
+                        'bedragDifference': '0.00'}
                 }]
             }
         }}
@@ -802,7 +808,10 @@ def test_evaluate_alarm_signal_monetary(client):
                 'alarmTriggerResult': [{
                     'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9'},
                     'nextAlarm': {'id': '33738845-7f23-4c8f-8424-2b560a944884'},
-                    'signaal': {'id': 'e2b282d9-b31f-451e-9242-11f86c902b35', 'bankTransactions': [{'id': banktransactie_id}], 'bedragDifference': '-30.00'}
+                    'signaal': {
+                        'id': 'e2b282d9-b31f-451e-9242-11f86c902b35', 
+                        'bankTransactions': [{'id': banktransactie_id}], 
+                        'bedragDifference': '-30.00'}
                 }]
             }
         }}
@@ -823,16 +832,6 @@ def test_evaluate_alarm_signal_monetary_one_transaction(client):
             "tegen_rekening": "NL83ABNA1927261899",
             "transactie_datum": "2021-12-05"
         }
-        signaal = {
-            "id": "e2b282d9-b31f-451e-9242-11f86c902b35",
-            "alarmId": alarm_id,
-            "banktransactieIds": [banktransactie_id],
-            "isActive": True,
-            "type": "default",
-            "actions": [],
-            "context": None,
-            "timeCreated": "2021-12-13T13:20:40.784Z"
-        }
         newafspraak = afspraak
         newafspraak["alarm_id"] = alarm_id
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
@@ -842,12 +841,23 @@ def test_evaluate_alarm_signal_monetary_one_transaction(client):
         rm3 = rm.get(f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_ids={journaalpost_id}", status_code=200, json={"data": [journaalpost]})
         rm4 = rm.get(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids={banktransactie_id}", status_code=200, json={"data": [banktransactie1]})
         rm5 = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={ "ok":True, "data": nextAlarm})
-        rm6 = rm.post(f"{settings.SIGNALENSERVICE_URL}/signals/", status_code=201, json={"data": signaal})
+        rm6 = rm.post(f"{settings.SIGNALENSERVICE_URL}/signals/", status_code=201, json=post_echo_with_str_id(signaal["id"]))
         rm7 = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", status_code=200, json={ "ok":True, "data": alarm_inactive})
         rm2a = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}", status_code=200, json={"data":[newafspraak]})
         rm8 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
-        expected = {'data': {'evaluateAlarm': {'alarmTriggerResult': [{'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9'}, 'nextAlarm': {'id': '33738845-7f23-4c8f-8424-2b560a944884'}, 
-        'signaal': {'id': 'e2b282d9-b31f-451e-9242-11f86c902b35', 'bankTransactions': [{'id': 100}]}}]}}}
+        expected = {'data': {
+            'evaluateAlarm': {
+                'alarmTriggerResult': [{
+                    'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9'}, 
+                    'nextAlarm': {'id': '33738845-7f23-4c8f-8424-2b560a944884'}, 
+                    'signaal': {
+                        'id': 'e2b282d9-b31f-451e-9242-11f86c902b35', 
+                        'bankTransactions': [{'id': 100}], 
+                        'bedragDifference': '-30.00'
+                    }
+                }]
+            }
+        }}
 
         # act
         response = client.post(
@@ -868,6 +878,7 @@ def test_evaluate_alarm_signal_monetary_one_transaction(client):
                                     bankTransactions {
                                         id
                                     }
+                                    bedragDifference
                                 }
                             }
                         }
