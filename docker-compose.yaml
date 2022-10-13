@@ -179,6 +179,8 @@ services:
       JWT_SECRET: testtest
     ports:
       - 4000:8080
+    profiles:
+      - authservice
 
   backend:
     <<: *x-backend
