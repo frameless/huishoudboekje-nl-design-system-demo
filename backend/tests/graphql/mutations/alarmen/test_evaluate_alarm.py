@@ -582,7 +582,7 @@ def test_evaluate_alarm_without_banktransactions_gives_signal(client):
             },
             "burger_id": 2,
             "credit": False,
-            "journaalposten": None
+            "journaalposten": []
         }
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
         rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?is_active=True", json={'data': [alarm]})

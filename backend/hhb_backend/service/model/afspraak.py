@@ -31,5 +31,5 @@ class Afspraak(BaseModel):
     betaalinstructie: Optional[Betaalinstructie]
     aantal_betalingen: Optional[int]  # unused
     # exposed relations
-    journaalposten: Optional[List[int]]
-    overschrijvingen: Optional[List[int]]
+    journaalposten: List[int]
+    overschrijvingen: List[int]
