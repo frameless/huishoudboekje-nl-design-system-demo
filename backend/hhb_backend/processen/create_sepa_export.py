@@ -11,7 +11,7 @@ def create_export_string(overschrijvingen, afspraken, tegen_rekeningen, config_v
         "batch": False,
         "currency": "EUR",  # ISO 4217
     }
-    sepa = SepaTransfer(config, clean=True)
+    sepa = SepaTransfer(config, schema="pain.001.001.03", clean=True)
 
     for overschrijving in overschrijvingen:
         afspraak = next(filter(lambda x: x['id'] == overschrijving['afspraak_id'], afspraken), None)
