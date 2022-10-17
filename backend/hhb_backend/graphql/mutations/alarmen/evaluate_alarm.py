@@ -247,7 +247,7 @@ async def should_create_signaal(alarm: Alarm, transacties: List[BankTransaction]
 
 
 async def create_signaal(new_signal) -> Signaal:
-    return (await SignaalHelper.create(new_signal)).signaal
+    return (SignaalHelper.create(new_signal)).signaal
 
 def update_alarm_signal_id(alarm: Alarm, new_signal_id):
     alarm_id = alarm.id

@@ -1,4 +1,3 @@
-
 import graphene
 import requests
 from graphql import GraphQLError
@@ -33,32 +32,18 @@ class SignaalHelper:
         self.previous = previous
         self.ok = ok
 
-    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
-        data = dict(
-            action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="signaal", result=self, key="signaal"
-            ),
-            before=dict(signaal=self.previous),
-            after=dict(signaal=self.signaal),
-        )
-        i = info.field_name.find("-")
-        info.field_name = info.field_name[:i].strip()
-        return data
-
-    @log_gebruikers_activiteit
     @staticmethod
-    async def create(input: CreateSignaalInput):
-        create_signaal_response = requests.post(f"{settings.SIGNALENSERVICE_URL}/signals/", json=input, headers={"Content-type": "application/json"})
+    def create(input: CreateSignaalInput):
+        create_signaal_response = requests.post(f"{settings.SIGNALENSERVICE_URL}/signals/", json=input,
+                                                headers={"Content-type": "application/json"})
         if create_signaal_response.status_code != 201:
             raise GraphQLError(f"Failed to create signaal.")
 
         response_signaal = create_signaal_response.json()["data"]
         return SignaalHelper(response_signaal, dict())
 
-    @log_gebruikers_activiteit
     @staticmethod
-    async def delete(id):
+    def delete(id):
         previous = hhb_dataloader().signalen.load_one(id)
         if not previous:
             raise GraphQLError(f"Signaal with id {id} not found")
@@ -69,12 +54,15 @@ class SignaalHelper:
 
         return SignaalHelper(dict(), previous)
 
-    @log_gebruikers_activiteit
     @staticmethod
-    async def update(id: str, input: UpdateSignaalInput):
+    def update(id: str, input: UpdateSignaalInput):
         previous = hhb_dataloader().signalen.load_one(id)
+        print("previous: ", previous)
+        print("id: ", id)
+        print("input: ", input)
 
-        response = requests.put(f"{settings.SIGNALENSERVICE_URL}/signals/{id}", json=input, headers={"Content-type": "application/json"})
+        response = requests.put(f"{settings.SIGNALENSERVICE_URL}/signals/{id}", json=input,
+                                headers={"Content-type": "application/json"})
         if response.status_code != 200:
             raise GraphQLError(f"Upstream API responded: {response.json()}")
         response_signaal = response.json()['data']

@@ -46,7 +46,7 @@ def test_delete_signaal_failure(client):
     with requests_mock.Mocker() as rm:
         signaal_id = "e2b282d9-b31f-451e-9242-11f86c902b35"
         expected = f"Signaal with id {signaal_id} not found"
-        
+
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
         rm0 = rm.get(f"{settings.SIGNALENSERVICE_URL}/signals/?filter_ids={signaal_id}", status_code=200, json={'data': []})
 
