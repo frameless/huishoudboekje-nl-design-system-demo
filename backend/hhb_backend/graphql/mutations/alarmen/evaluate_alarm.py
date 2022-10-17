@@ -22,7 +22,6 @@ from hhb_backend.service.model.alarm import Alarm
 from hhb_backend.service.model.bank_transaction import BankTransaction
 from hhb_backend.service.model.signaal import Signaal
 
-
 class AlarmTriggerResult(graphene.ObjectType):
     alarm = graphene.Field(lambda: alarm.Alarm)
     nextAlarm = graphene.Field(lambda: alarm.Alarm)
@@ -69,13 +68,14 @@ class EvaluateAlarm(graphene.Mutation):
 
     @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(root, info, id):
+    async def mutate(_root, _info, id):
         """ Mutatie voor de evaluatie van een alarm wat kan resulteren in een signaal en/of een nieuw alarm in de reeks. """
         evaluated_alarm = await evaluate_one_alarm(id)
         return EvaluateAlarm(alarmTriggerResult=evaluated_alarm)
 
 
 async def evaluate_alarms(ids: list[String] = []) -> list:
+    logging.info(f"Evaluating alarms")
     triggered_alarms = []
     active_alarms = get_active_alarms()
     if ids:
@@ -93,14 +93,14 @@ async def evaluate_alarms(ids: list[String] = []) -> list:
 async def evaluate_one_alarm(id: String) -> list:
     evaluated_alarm = None
     active_alarms = get_active_alarms()
-    alarm = get_alarm(id)
+    alarm_ = get_alarm(id)
 
-    if alarm is None:
+    if alarm_ is None:
         return []
 
-    alarm_status: bool = alarm.isActive
+    alarm_status: bool = alarm_.isActive
     if alarm_status:
-        evaluated_alarm = await evaluate_alarm(alarm, active_alarms)
+        evaluated_alarm = await evaluate_alarm(alarm_, active_alarms)
 
     if evaluated_alarm is None:
         return []
@@ -108,25 +108,25 @@ async def evaluate_one_alarm(id: String) -> list:
     return [evaluated_alarm]
 
 
-async def evaluate_alarm(alarm: Alarm, active_alarms: List[Alarm]):
-    logging.debug(f"Evaluating alarm {alarm}")
+async def evaluate_alarm(alarm_: Alarm, active_alarms: List[Alarm]):
+    logging.debug(f"Evaluating alarm {alarm_}")
     # get data from afspraak and transactions (by journaalpost reference)
-    afspraak = get_afspraak_by_id(alarm.afspraakId)
+    afspraak = get_afspraak_by_id(alarm_.afspraakId)
     journaal_ids = afspraak.journaalposten
     transactions = get_banktransactions_by_journaal_ids(journaal_ids)
 
-    alarm_check_date = to_date(alarm.startDate) + timedelta(days=(alarm.get("datumMargin") + 1))
-    alarm = disable_alarm(alarm_check_date, alarm)
+    alarm_check_date = to_date(alarm_.startDate) + timedelta(days=(alarm_.get("datumMargin") + 1))
+    alarm_ = disable_alarm(alarm_check_date, alarm_)
 
     # check if there are transaction within the alarm specified margins
     next_alarm = None
     created_signaal = None
-    if should_check_alarm(alarm):
-        next_alarm = await should_create_next_alarm(alarm, alarm_check_date, active_alarms)
-        created_signaal = await should_create_signaal(alarm, transactions)
+    if should_check_alarm(alarm_):
+        next_alarm = await should_create_next_alarm(alarm_, alarm_check_date, active_alarms)
+        created_signaal = await should_create_signaal(alarm_, transactions)
 
     return {
-        "alarm": alarm,
+        "alarm": alarm_,
         "nextAlarm": next_alarm,
         "signaal": created_signaal
     }
@@ -218,14 +218,14 @@ def get_afspraak_by_id(afspraak_id: int) -> Optional[Afspraak]:
 
 
 def get_banktransactions_by_journaal_ids(journaal_ids) -> List[BankTransaction]:
-    if not journaal_ids: 
+    if not journaal_ids:
         return []
     journaalposts = hhb_dataloader().journaalposten.load(journaal_ids)
     transaction_ids = [journaalpost.transaction_id for journaalpost in journaalposts]
     return hhb_dataloader().bank_transactions.load(transaction_ids)
 
 
-async def should_create_signaal(root, info, alarm: Alarm, transacties: List[BankTransaction]) -> Optional[Signaal]:
+async def should_create_signaal(alarm: Alarm, transacties: List[BankTransaction]) -> Optional[Signaal]:
     difference, transaction_ids_out_of_scope, monetary_deviated_transaction_ids = get_bedrag_difference(alarm, transacties)
     if len(transaction_ids_out_of_scope) > 0 or len(monetary_deviated_transaction_ids) > 0 or len(transacties) == 0:
         alarm_id = alarm.id
@@ -237,7 +237,7 @@ async def should_create_signaal(root, info, alarm: Alarm, transacties: List[Bank
             "bedragDifference": difference
         }
 
-        new_signal = await create_signaal(root, info, new_signal)
+        new_signal = await create_signaal(new_signal)
         new_signal_id = new_signal.id
         update_alarm_signal_id(alarm, new_signal_id)
 
@@ -246,8 +246,8 @@ async def should_create_signaal(root, info, alarm: Alarm, transacties: List[Bank
         return None
 
 
-async def create_signaal(root, info, new_signal) -> Signaal:
-    return (await SignaalHelper.create(root, info, new_signal)).signaal
+async def create_signaal(new_signal) -> Signaal:
+    return (await SignaalHelper.create(new_signal)).signaal
 
 def update_alarm_signal_id(alarm: Alarm, new_signal_id):
     alarm_id = alarm.id
@@ -298,7 +298,7 @@ def get_bedrag_difference(alarm: Alarm, transacties: List[BankTransaction]):
                 monetary_deviated_transaction_ids.append(transaction.id)
         else:
             transaction_ids_out_of_scope.append(transaction.id)
-        
+
         bedrag += transaction.bedrag
 
     diff = -1 * (abs(bedrag) - abs(expected_alarm_bedrag))
