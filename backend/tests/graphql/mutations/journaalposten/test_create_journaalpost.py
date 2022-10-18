@@ -15,7 +15,6 @@ mock_afspraken = {
     11: {"id": 11, "rubriek_id": 1, "credit": True},
     12: {"id": 12, "rubriek_id": 2, "credit": False},
     13: {"id": 13, "rubriek_id": 1, "credit": True, "burger_id": 1, "alarm_id": alarm1_id, "journaalposten": [23], "valid_from":"2021-01-01"},
-    14: {"id": 14, "rubriek_id": 2, "credit": False, "burger_id": 1, "alarm_id": alarm2_id, "journaalposten": [23], "valid_from":"2021-01-01"}
 }
 mock_rubrieken = {
     "data": [
@@ -44,17 +43,6 @@ mock_alarmen = {alarm1_id:
     "bedrag": 8000,
     "bedragMargin": 1000,
     "byDay": ["Wednesday", "Friday"],
-    "byMonth": [],
-    "byMonthDay": []
-    },
-    alarm2_id: {"id": alarm2_id, 
-    "isActive": True, 
-    "afspraakId": 14,
-    "startDate": "2021-12-07",
-    "datumMargin": 1,
-    "bedrag": 8000,
-    "bedragMargin": 1000,
-    "byDay": [],
     "byMonth": [],
     "byMonthDay": []
     },
@@ -181,7 +169,7 @@ def setup_services(mock):
     )
     active_alarmen_adapter = mock.get(
         re.compile(f"{settings.ALARMENSERVICE_URL}/alarms/\\?is_active=True"),
-        json={"data": [mock_alarmen[alarm1_id], mock_alarmen[alarm2_id]]}
+        json={"data": [mock_alarmen[alarm1_id]]}
     )
     alarmen_post_adapter = mock.post(
         re.compile(f"{settings.ALARMENSERVICE_URL}/alarms/"),
@@ -662,6 +650,3 @@ def test_create_journaalpost_automatically_evaluate_alarms_signal_created(client
                 }
             }
         }
-
-# afspraak met alarm_id, new alarm, signaal
-
