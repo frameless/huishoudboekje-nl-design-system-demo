@@ -1,37 +1,34 @@
-import {FormControl, Heading, HStack, Stack, Tab, Table, TabList, TabPanel, TabPanels, Tabs, Tbody, Text, Th, Thead, Tr} from "@chakra-ui/react";
+import {FormControl, HStack, Stack, Tab, Table, TabList, TabPanel, TabPanels, Tabs, Tbody, Text, Th, Thead, Tr} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import Select from "react-select";
-import {Afspraak, GetTransactieDocument, GetTransactiesDocument, Rubriek, useCreateJournaalpostAfspraakMutation, useCreateJournaalpostGrootboekrekeningMutation, useEvaluateAlarmMutation} from "../../../../generated/graphql";
-import useStore from "../../../../store";
-import {useReactSelectStyles} from "../../../../utils/things";
-import useToaster from "../../../../utils/useToaster";
-import SelectAfspraakOption from "../../../shared/SelectAfspraakOption";
+import {Afspraak, GetTransactieDocument, Rubriek, useCreateJournaalpostAfspraakMutation, useCreateJournaalpostGrootboekrekeningMutation} from "../../../generated/graphql";
+import {useReactSelectStyles} from "../../../utils/things";
+import useToaster from "../../../utils/useToaster";
+import SelectAfspraakOption from "../../shared/SelectAfspraakOption";
 
-const BookingSection = ({transaction, rubrieken, afspraken, refetch}) => {
+const BookingSection = ({transaction, rubrieken, afspraken}) => {
 	const reactSelectStyles = useReactSelectStyles();
 	const toast = useToaster();
 	const {t} = useTranslation();
-	const banktransactieQueryVariables = useStore(store => store.banktransactieQueryVariables);
 	const suggesties: Afspraak[] = transaction.suggesties || [];
 
-	const [evaluateAlarm] = useEvaluateAlarmMutation();
+	// const [evaluateAlarm] = useEvaluateAlarmMutation();
 	const [createJournaalpostAfspraak] = useCreateJournaalpostAfspraakMutation({
 		refetchQueries: [
 			{query: GetTransactieDocument, variables: {id: transaction.id}},
-			{query: GetTransactiesDocument, variables: banktransactieQueryVariables},
 		],
-		onCompleted: (result) => {
-			const afsprakenAlarmIds = result.createJournaalpostAfspraak?.journaalposten?.map(j => j.afspraak?.alarm?.id) || [];
-			afsprakenAlarmIds.forEach(id => {
-				evaluateAlarm({variables: {id: id!}});
-			});
-		},
+		// Todo move this to the backend, which should be way more performant. (30-09-2022)
+		// onCompleted: (result) => {
+		// 	const afsprakenAlarmIds = result.createJournaalpostAfspraak?.journaalposten?.map(j => j.afspraak?.alarm?.id) || [];
+		// 	afsprakenAlarmIds.forEach(id => {
+		// 		evaluateAlarm({variables: {id: id!}});
+		// 	});
+		// },
 	});
 	const [createJournaalpostGrootboekrekening] = useCreateJournaalpostGrootboekrekeningMutation({
 		refetchQueries: [
 			{query: GetTransactieDocument, variables: {id: transaction.id}},
-			{query: GetTransactiesDocument, variables: banktransactieQueryVariables},
 		],
 	});
 
@@ -53,7 +50,7 @@ const BookingSection = ({transaction, rubrieken, afspraken, refetch}) => {
 			return a.tegenRekening?.iban?.replaceAll(" ", "") === tegenRekening.replaceAll(" ", "");
 		}),
 		rubrieken: rubrieken.filter(r => r.grootboekrekening && r.grootboekrekening.id).sort((a: Rubriek, b: Rubriek) => {
-			return (a.naam && b.naam) && a.naam < b.naam ? -1 : 1;
+			return a.naam && b.naam && a.naam < b.naam ? -1 : 1;
 		}).map((r: Rubriek) => ({
 			key: r.id,
 			label: r.naam,
@@ -72,7 +69,6 @@ const BookingSection = ({transaction, rubrieken, afspraken, refetch}) => {
 				variables: {transactionId, grootboekrekeningId},
 			}).then(() => {
 				toast({success: t("messages.journals.createSuccessMessage")});
-				refetch();
 			}).catch(err => {
 				console.error(err);
 				toast({error: err.message});
@@ -89,7 +85,6 @@ const BookingSection = ({transaction, rubrieken, afspraken, refetch}) => {
 				variables: {transactionId, afspraakId},
 			}).then(() => {
 				toast({success: t("messages.journals.createSuccessMessage")});
-				refetch();
 			}).catch(err => {
 				console.error(err);
 				toast({error: err.message});
@@ -101,11 +96,6 @@ const BookingSection = ({transaction, rubrieken, afspraken, refetch}) => {
 		<Stack>
 			<Tabs align={"end"}>
 				<HStack justify={"space-between"} align={"bottom"}>
-					<Stack spacing={0} alignItems={"flex-start"}>
-						<Heading size={"sm"}>{t("transactieAfletteren.title")}</Heading>
-						<Text size={"xs"}>{t("transactieAfletteren.helperText")}</Text>
-					</Stack>
-
 					<TabList>
 						<Tab>Afspraak</Tab>
 						<Tab>Rubriek</Tab>

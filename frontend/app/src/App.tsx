@@ -10,6 +10,7 @@ import ViewAfspraak from "./components/Afspraken/ViewAfspraak";
 import CustomerStatementMessages from "./components/Bankzaken/Bankafschriften";
 import Betaalinstructies from "./components/Bankzaken/Betaalinstructies";
 import Transactions from "./components/Bankzaken/Transacties";
+import TransactieDetailPage from "./components/Bankzaken/Transacties/TransactieDetailPage";
 import BurgerDetailPage from "./components/Burgers/BurgerDetail";
 import BurgerList from "./components/Burgers/BurgerList";
 import BurgerPersonalDetailsPage from "./components/Burgers/BurgerPersonalDetailsPage";
@@ -35,7 +36,6 @@ import SignalenList from "./components/Signalen/SignalenList";
 import StatusErrorPage from "./components/Status/StatusErrorPage";
 import {dataLayerOptions} from "./config/dataLayer";
 import {RouteNames} from "./config/routes";
-import TestPage from "./TestPage";
 import onPathChanged from "./utils/DataLayer/hooks/onPathChanged";
 import useDataLayer from "./utils/DataLayer/useDataLayer";
 import {useFeatureFlag, useInitializeFeatureFlags} from "./utils/features";
@@ -132,7 +132,10 @@ const App = () => {
 							</Route>
 							<Route path={RouteNames.bankzaken} element={<Outlet />}>
 								<Route index element={<Navigate to={RouteNames.transacties} replace />} />
-								<Route path={RouteNames.transacties} element={<Transactions />} />
+								<Route path={RouteNames.transacties} element={<Outlet />}>
+									<Route index element={<Transactions />} />
+									<Route path={":id"} element={<TransactieDetailPage />} />
+								</Route>
 								<Route path={RouteNames.bankafschriften} element={<CustomerStatementMessages />} />
 								<Route path={RouteNames.betaalinstructies} element={<Betaalinstructies />} />
 							</Route>
@@ -144,7 +147,6 @@ const App = () => {
 							<Route path={RouteNames.configuratie} element={<Configuratie />} />
 							<Route path={RouteNames.notFound} element={<PageNotFound />} />
 							<Route path={"*"} element={<PageNotFound />} />
-							<Route path={"/test"} element={<TestPage />} />
 						</Route>
 					</Routes>
 				</Box>

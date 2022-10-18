@@ -69,7 +69,9 @@ const Betaalinstructies = () => {
 					<Stack spacing={5}>
 						<Queryable query={$exports} children={(data) => {
 							const exports: Export[] = [...data.exports || []].sort((a: Export, b: Export) => {
-								return (a.timestamp && b.timestamp) ? (a.timestamp >= b.timestamp ? -1 : 1) : -1;
+								const timestampsExist = a.timestamp && b.timestamp;
+								const sortDescending = a.timestamp >= b.timestamp ? -1 : 1;
+								return timestampsExist ? sortDescending : -1;
 							});
 
 							return (

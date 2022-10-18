@@ -8,20 +8,19 @@ import TransactieItem from "./TransactieItem";
 
 type TransactiesListProps = {
 	transacties: BankTransaction[],
-	refetch: VoidFunction,
 };
 
-const TransactiesList: React.FC<TransactiesListProps> = ({transacties, refetch}) => {
+const TransactiesList: React.FC<TransactiesListProps> = ({transacties}) => {
 	const {t} = useTranslation();
 	const isMobile = useBreakpointValue([true, null, null, false]);
 
 	/* Group transacties by date */
 	const bt = transacties.reduce((result, t) => {
-		const trDateAsString = d(new Date(t.transactieDatum)).format("L");
+		const trDateAsString = d(t.transactieDatum).format("L");
 		return {
 			...result,
 			[trDateAsString]: [
-				...(result[trDateAsString] || []),
+				...result[trDateAsString] || [],
 				t,
 			],
 		};
@@ -41,26 +40,23 @@ const TransactiesList: React.FC<TransactiesListProps> = ({transacties, refetch})
 				</Box>
 			</Stack>
 
-			{Object.keys(bt).map((transactionDate, i) => {
-				return (
-					<Stack key={i} spacing={1}>
-						<Box>
-							<FormLabel>{transactionDate}</FormLabel>
-						</Box>
-						<Box>
-							{bt[transactionDate].sort(sortBankTransactions).filter(t => t.isCredit).map(t => (
-								<TransactieItem key={t.id} transactie={t} refetch={refetch} />
-							))}
-							{bt[transactionDate].sort(sortBankTransactions).filter(t => !t.isCredit).reverse().map(t => (
-								<TransactieItem key={t.id} transactie={t} refetch={refetch} />
-							))}
-						</Box>
-					</Stack>
-				);
-			})}
+			{Object.keys(bt).map((transactionDate, i) => (
+				<Stack key={i} spacing={1}>
+					<Box>
+						<FormLabel>{transactionDate}</FormLabel>
+					</Box>
+					<Box>
+						{bt[transactionDate].sort(sortBankTransactions).filter(t => t.isCredit).map(t => (
+							<TransactieItem key={t.id} transactie={t} />
+						))}
+						{bt[transactionDate].sort(sortBankTransactions).filter(t => !t.isCredit).reverse().map(t => (
+							<TransactieItem key={t.id} transactie={t} />
+						))}
+					</Box>
+				</Stack>
+			))}
 		</Stack>
 	);
-}
-;
+};
 
 export default TransactiesList;

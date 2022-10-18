@@ -4,7 +4,7 @@ import {Trans, useTranslation} from "react-i18next";
 import {AppRoutes} from "../../config/routes";
 import {GetSignalenDocument, Signaal, useUpdateSignaalMutation} from "../../generated/graphql";
 import d from "../../utils/dayjs";
-import {currencyFormat2} from "../../utils/things";
+import {currencyFormat2, formatBurgerName} from "../../utils/things";
 import useToaster from "../../utils/useToaster";
 import AuditLogLink from "../Gebeurtenissen/AuditLogLink";
 
@@ -44,6 +44,50 @@ const SignalenListItem: React.FC<SignalenListItemProps> = ({signaal}) => {
 		});
 	};
 
+	const createSignaalMessage = (signaal: Signaal) => {
+		let TransComponent: typeof Trans;
+		let values = {};
+		let components = {};
+
+		if (signaal.bedragDifference && signaal.alarm?.afspraak?.omschrijving && signaal.bankTransactions?.[0]) {
+			TransComponent = ({values, components}) => <Trans i18nKey={"signalen.bedragDifferenceMessage"} values={values} components={components} />;
+			values = {
+				afspraakOmschrijving: signaal.alarm?.afspraak?.omschrijving,
+				bedragDifference: currencyFormat2(true).format(parseFloat(signaal.bedragDifference)),
+				transactieBedrag: currencyFormat2(true).format(parseFloat(signaal.bankTransactions?.[0]?.bedrag)),
+				burgerNaam: formatBurgerName(signaal.alarm?.afspraak?.burger),
+			};
+			components = {
+				strong: <strong />,
+				linkAfspraak: <AuditLogLink to={AppRoutes.ViewAfspraak(String(signaal.alarm?.afspraak?.id))}>{signaal.alarm?.afspraak?.omschrijving}</AuditLogLink>,
+				linkTransactie: <AuditLogLink to={AppRoutes.ViewTransactie(String(signaal.bankTransactions?.[0]?.id))}>{t("transaction")}</AuditLogLink>,
+				linkBurger: <AuditLogLink to={AppRoutes.ViewBurger(String(signaal.alarm?.afspraak?.burger?.id))}>{t("burger")}</AuditLogLink>,
+			};
+		}
+		else if (signaal.bedragDifference && (!signaal.bankTransactions || signaal.bankTransactions?.length === 0)) {
+			TransComponent = ({values, components}) => <Trans i18nKey={"signalen.noTransactionMessage"} values={values} components={components} />;
+			values = {
+				afspraakOmschrijving: signaal.alarm?.afspraak?.omschrijving,
+				bedragDifference: currencyFormat2(true).format(parseFloat(signaal.bedragDifference)),
+				burgerNaam: formatBurgerName(signaal.alarm?.afspraak?.burger),
+			};
+			components = {
+				strong: <strong />,
+				linkAfspraak: <AuditLogLink to={AppRoutes.ViewAfspraak(String(signaal.alarm?.afspraak?.id))}>{signaal.alarm?.afspraak?.omschrijving}</AuditLogLink>,
+				linkBurger: <AuditLogLink to={AppRoutes.ViewBurger(String(signaal.alarm?.afspraak?.burger?.id))}>{t("burger")}</AuditLogLink>,
+			};
+		}
+		else {
+			TransComponent = () => (
+				<Trans i18nKey={"signalen.genericSignaal"} />
+			);
+		}
+
+		return (
+			<TransComponent values={values} components={components} />
+		);
+	};
+
 	return (
 		<HStack justify={"center"}>
 			<Stack spacing={1} width={"100%"}>
@@ -51,24 +95,7 @@ const SignalenListItem: React.FC<SignalenListItemProps> = ({signaal}) => {
 					color: "gray.500",
 					textDecoration: "line-through",
 				}}>
-					{signaal.bedragDifference ? (
-						<Trans i18nKey={"signalen.bedragDifferenceMessage"} values={{
-							afspraak: signaal.alarm?.afspraak?.omschrijving,
-							bedrag: currencyFormat2(true).format(parseFloat(signaal.bedragDifference)),
-							transactieBedrag: currencyFormat2(true).format(parseFloat(signaal.bankTransactions?.[0].bedrag)),
-						}} components={{
-							strong: <strong />,
-							linkAfspraak: <AuditLogLink to={AppRoutes.ViewAfspraak(String(signaal.alarm?.afspraak?.id))}>{signaal.alarm?.afspraak?.omschrijving}</AuditLogLink>,
-						}} />
-					) : (
-						<Trans i18nKey={"signalen.contextMessage"} values={{
-							afspraak: signaal.alarm?.afspraak?.omschrijving,
-							context: JSON.stringify(signaal.context, null, 2),
-						}} components={{
-							strong: <strong />,
-							linkAfspraak: <AuditLogLink to={AppRoutes.ViewAfspraak(String(signaal.alarm?.afspraak?.id))}>{signaal.alarm?.afspraak?.omschrijving}</AuditLogLink>,
-						}} />
-					)}
+					{createSignaalMessage(signaal)}
 				</Text>
 				<Text fontSize={"sm"} color={"gray.500"}>
 					{d(signaal.timeUpdated).format("LL LT")}

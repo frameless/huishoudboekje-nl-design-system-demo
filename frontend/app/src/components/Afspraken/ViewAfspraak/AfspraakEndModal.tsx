@@ -47,7 +47,7 @@ const AfspraakEndModal: React.FC<AfspraakEndModalProps> = ({onClose, onSubmit}) 
 
 				<FormControl flex={1} isInvalid={!isValid()}>
 					<FormLabel>{t("schedule.endDate")}</FormLabel>
-					<DatePicker selected={(date && d(date).isValid()) ? date : null} dateFormat={"dd-MM-yyyy"}
+					<DatePicker selected={date && d(date).isValid() ? date : null} dateFormat={"dd-MM-yyyy"}
 						onChange={(value: Date) => {
 							if (value) {
 								setDate(d(value).startOf("day").toDate());

@@ -1,18 +1,24 @@
-import {Badge, Box, FormLabel, Heading, Stack, StackProps, Text} from "@chakra-ui/react";
+import {Badge, Box, FormLabel, Stack, StackProps, Text} from "@chakra-ui/react";
 import React from "react";
 import {useTranslation} from "react-i18next";
-import {BankTransaction} from "../../../../generated/graphql";
-import d from "../../../../utils/dayjs";
-import {currencyFormat2} from "../../../../utils/things";
-import PrettyIban from "../../../shared/PrettyIban";
+import {BankTransaction} from "../../../generated/graphql";
+import d from "../../../utils/dayjs";
+import {currencyFormat2} from "../../../utils/things";
+import PrettyIban from "../../shared/PrettyIban";
 
 const TransactieDetailsView: React.FC<StackProps & {transaction: BankTransaction}> = ({transaction: bt, ...props}) => {
 	const {t} = useTranslation();
 
+	const getIsBookedAndHow = () => {
+		if (bt.journaalpost) {
+			return bt.journaalpost.isAutomatischGeboekt ? "automatisch" : "handmatig";
+		}
+
+		return false;
+	};
+
 	return (
 		<Stack spacing={5} justifyContent={"space-between"} {...props}>
-			<Heading size={"sm"}>{t("transaction")} #{bt.id}</Heading>
-
 			<Stack direction={"row"} spacing={5}>
 				<Box flex={1}>
 					<FormLabel>{t("global.date")}</FormLabel>
@@ -22,15 +28,17 @@ const TransactieDetailsView: React.FC<StackProps & {transaction: BankTransaction
 				</Box>
 				<Box flex={1}>
 					<FormLabel>{t("form.common.fields.status")}</FormLabel>
-					{bt.journaalpost ? (bt.journaalpost.isAutomatischGeboekt ? (
+					{getIsBookedAndHow() == "automatisch" && (
 						<Box>
 							<Badge colorScheme={"green"}>{t("forms.afspraken.fields.automatischGeboekt")}</Badge>
 						</Box>
-					) : (
+					)}
+					{getIsBookedAndHow() === "handmatig" && (
 						<Box>
 							<Badge colorScheme={"green"}>{t("forms.afspraken.fields.handmatigGeboekt")}</Badge>
 						</Box>
-					)) : (
+					)}
+					{!getIsBookedAndHow() && (
 						<Box>
 							<Badge colorScheme={"red"}>{t("forms.afspraken.fields.ongeboekt")}</Badge>
 						</Box>
