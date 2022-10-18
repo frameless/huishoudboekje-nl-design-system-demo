@@ -14,8 +14,8 @@ signaal_id = "e2b282d9-b31f-451e-9242-11f86c902b35"
 mock_afspraken = {
     11: {"id": 11, "rubriek_id": 1, "credit": True},
     12: {"id": 12, "rubriek_id": 2, "credit": False},
-    13: {"id": 13, "rubriek_id": 1, "credit": True, "burger_id": 1, "alarm_id": alarm1_id, "journaalposten": [], "valid_from":"2021-01-01"},
-    14: {"id": 14, "rubriek_id": 2, "credit": False, "burger_id": 1, "alarm_id": alarm2_id, "journaalposten": [], "valid_from":"2021-01-01"}
+    13: {"id": 13, "rubriek_id": 1, "credit": True, "burger_id": 1, "alarm_id": alarm1_id, "journaalposten": [23], "valid_from":"2021-01-01"}, # TODO add journaalposten!!!
+    14: {"id": 14, "rubriek_id": 2, "credit": False, "burger_id": 1, "alarm_id": alarm2_id, "journaalposten": [23], "valid_from":"2021-01-01"}
 }
 mock_rubrieken = {
     "data": [
@@ -30,16 +30,16 @@ mock_grootboekrekeningen = {
     "m2": {"id": "m2", "naam": "uitgaven", "debet": True}
 }
 mock_bank_transactions = {
-    31: {"id": 31, "is_credit": True},
-    32: {"id": 32, "is_credit": False},
-    33: {"id": 33, "is_credit": False}
+    31: {"id": 31, "is_credit": True, "bedrag": 8000, "transactie_datum": "2021-12-07"},
+    32: {"id": 32, "is_credit": False, "bedrag": 8000, "transactie_datum": "2021-12-07"},
+    33: {"id": 33, "is_credit": False, "bedrag": 8000, "transactie_datum": "2021-12-07"}
 }
 mock_alarmen = {alarm1_id:
     {"id": alarm1_id, 
     "isActive": True, 
     "afspraakId": 13,
     "startDate": "2021-12-07",
-    "datumMargin": 0,
+    "datumMargin": 1,
     "bedrag": 8000,
     "bedragMargin": 1000,
     "byDay": ["Wednesday", "Friday"],
@@ -50,7 +50,7 @@ mock_alarmen = {alarm1_id:
     "isActive": True, 
     "afspraakId": 14,
     "startDate": "2021-12-07",
-    "datumMargin": 0,
+    "datumMargin": 1,
     "bedrag": 8000,
     "bedragMargin": 1000,
     "byDay": [],
@@ -61,7 +61,7 @@ mock_alarmen = {alarm1_id:
     "is_active": True, 
     "afspraak_id": 13,
     "startDate": "2021-12-07",
-    "datumMargin": 0,
+    "datumMargin": 1,
     "bedrag": 8000,
     "bedragMargin": 1000,
     "byDay": ["Wednesday", "Friday"],
@@ -105,9 +105,15 @@ def get_journaalposten(request, _context):
     global journaalposten
     ids = unquote(request.url.split("=", 1)[1]).split(",")
     posten = []
-    for post in journaalposten:
-        if str(post["transaction_id"]) in ids:
-            posten.append(post)
+    if request.url.__contains__("transaction"):
+        for post in journaalposten:
+            if str(post["transaction_id"]) in ids:
+                posten.append(post)
+    else:
+        for post in journaalposten:
+            print(f"get journaalposten post id: {post}, ids: {ids}")
+            if str(post["id"]) in ids:
+                posten.append(post)
     return {"data": posten}
 
 
@@ -160,6 +166,10 @@ def setup_services(mock):
     joornaalposten_adapter = mock.post(
         re.compile(f"{settings.HHB_SERVICES_URL}/journaalposten/.*"), json=create_journaalpost_service
     )
+    journaalposten_get_ids_adapter = mock.get(
+        re.compile(f"{settings.HHB_SERVICES_URL}/journaalposten/\\?filter_ids=.*"),
+        json=get_journaalposten,
+    )
     bank_transactions_adapter = mock.get(
         re.compile(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/\\?filter_ids=.*"),
         json=get_transactions
@@ -196,6 +206,7 @@ def setup_services(mock):
         "rubrieken": rubrieken_get,
         "journaalposten": joornaalposten_adapter,
         "journaalposten_get": journaalposten_get_adapter,
+        "journaalposten_get_ids": journaalposten_get_ids_adapter,
         "alarmen_get": alarmen_get_adapter,
         "active_alarmen_get": active_alarmen_adapter,
         "alarmen_post": alarmen_post_adapter,
@@ -216,18 +227,18 @@ def test_create_journaalpost_grootboekrekening(client):
             "/graphql",
             json={
                 "query": """
-mutation test($input:CreateJournaalpostGrootboekrekeningInput!) {
-  createJournaalpostGrootboekrekening(input:$input) {
-    ok
-    journaalpost {
-      id
-      grootboekrekening { id }
-      transaction { id }
-      afspraak { id }
-      isAutomatischGeboekt
-    }
-  }
-}""",
+                    mutation test($input:CreateJournaalpostGrootboekrekeningInput!) {
+                    createJournaalpostGrootboekrekening(input:$input) {
+                        ok
+                        journaalpost {
+                        id
+                        grootboekrekening { id }
+                        transaction { id }
+                        afspraak { id }
+                        isAutomatischGeboekt
+                        }
+                    }
+                }""",
                 "variables": {
                     "input": {"transactionId": 31, "grootboekrekeningId": "m12", "isAutomatischGeboekt": False}
                 },
@@ -248,40 +259,65 @@ mutation test($input:CreateJournaalpostGrootboekrekeningInput!) {
                 }
             }
         }
-        assert adapters["grootboekrekeningen"].call_count == 2
-        assert adapters["journaalposten"].called_once
-        assert adapters["journaalposten_get"].called_once
+
+        assert adapters["afspraken"].call_count == 0
+        assert adapters["afspraken_post"].call_count == 0 
         assert adapters["transacties"].call_count == 2
-        assert adapters["transacties_update"].called_once
-        assert not adapters["afspraken"].called
+        assert adapters["transacties_update"].call_count == 1
+        assert adapters["grootboekrekeningen"].call_count == 2
+        assert adapters["rubrieken"].call_count == 0
+        assert adapters["journaalposten"].call_count == 1
+        assert adapters["journaalposten_get"].call_count == 1
+        assert adapters["journaalposten_get_ids"].call_count == 0
+        assert adapters["alarmen_get"].call_count == 0
+        assert adapters["active_alarmen_get"].call_count == 0
+        assert adapters["alarmen_post"].call_count == 0
+        assert adapters["alarmen_update"].call_count == 0
+        assert adapters["signalen_post"].call_count == 0
 
 
 def test_create_journaalpost_grootboekrekening_unknown_transaction(client):
     with requests_mock.Mocker() as mock:
-        setup_services(mock)
+        adapters = setup_services(mock)
 
         response = client.post(
             "/graphql",
             json={
                 "query": """
-mutation test($input:CreateJournaalpostGrootboekrekeningInput!) {
-  createJournaalpostGrootboekrekening(input:$input) {
-    ok
-    journaalpost {
-      id
-      grootboekrekening { id }
-      transaction { id }
-      afspraak { id }
-      isAutomatischGeboekt
-    }
-  }
-}""",
+                    mutation test($input:CreateJournaalpostGrootboekrekeningInput!) {
+                    createJournaalpostGrootboekrekening(input:$input) {
+                        ok
+                        journaalpost {
+                        id
+                        grootboekrekening { id }
+                        transaction { id }
+                        afspraak { id }
+                        isAutomatischGeboekt
+                        }
+                    }
+                }""",
                 "variables": {
                     "input": {"transactionId": 7777, "grootboekrekeningId": "m12", "isAutomatischGeboekt": False}
                 },
             },
             content_type="application/json",
         )
+
+        assert adapters["afspraken"].call_count == 0
+        assert adapters["afspraken_post"].call_count == 0 
+        assert adapters["transacties"].call_count == 1
+        assert adapters["transacties_update"].call_count == 0
+        assert adapters["grootboekrekeningen"].call_count == 0
+        assert adapters["rubrieken"].call_count == 0
+        assert adapters["journaalposten"].call_count == 0
+        assert adapters["journaalposten_get"].call_count == 0
+        assert adapters["journaalposten_get_ids"].call_count == 0
+        assert adapters["alarmen_get"].call_count == 0
+        assert adapters["active_alarmen_get"].call_count == 0
+        assert adapters["alarmen_post"].call_count == 0
+        assert adapters["alarmen_update"].call_count == 0
+        assert adapters["signalen_post"].call_count == 0
+
         assert response.json == {
             "data": {"createJournaalpostGrootboekrekening": None},
             "errors": [
@@ -327,8 +363,22 @@ def test_create_journaalpost_grootboekrekening_duplicate_not_allowed(client):
             },
             content_type="application/json",
         )
-        assert adapters["journaalposten_get"].called_once
-        assert not adapters["journaalposten"].called
+
+        assert adapters["afspraken"].call_count == 0
+        assert adapters["afspraken_post"].call_count == 0 
+        assert adapters["transacties"].call_count == 1
+        assert adapters["transacties_update"].call_count == 0
+        assert adapters["grootboekrekeningen"].call_count == 1
+        assert adapters["rubrieken"].call_count == 0
+        assert adapters["journaalposten"].call_count == 0
+        assert adapters["journaalposten_get"].call_count == 1
+        assert adapters["journaalposten_get_ids"].call_count == 0
+        assert adapters["alarmen_get"].call_count == 0
+        assert adapters["active_alarmen_get"].call_count == 0
+        assert adapters["alarmen_post"].call_count == 0
+        assert adapters["alarmen_update"].call_count == 0
+        assert adapters["signalen_post"].call_count == 0
+
         assert response.json == {
             "data": {"createJournaalpostGrootboekrekening": None},
             "errors": [
@@ -349,40 +399,50 @@ def test_create_journaalpost_afspraak(client):
             "/graphql",
             json={
                 "query": """
-mutation test($input:[CreateJournaalpostAfspraakInput!]!) {
-  createJournaalpostAfspraak(input:$input) {
-    ok
-    journaalposten {
-      id
-      afspraak { id }
-      transaction { id }
-      isAutomatischGeboekt
-    }
-  }
-}""",
+                    mutation test($input:[CreateJournaalpostAfspraakInput!]!) {
+                    createJournaalpostAfspraak(input:$input) {
+                        ok
+                        journaalposten {
+                        id
+                        afspraak { id }
+                        transaction { id }
+                        isAutomatischGeboekt
+                        }
+                    }
+                }""",
                 "variables": {"input": [{"transactionId": 31, "afspraakId": 11, "isAutomatischGeboekt": False},]},
             },
             content_type="application/json",
         )
-        assert adapters["rubrieken"].called_once
-        assert response.json == {
-            "data": {
-                "createJournaalpostAfspraak": {
-                    "ok": True,
-                    "journaalposten": [{
-                        "id": 23,
-                        "afspraak": {"id": 11},
-                        "transaction": {"id": 31},
-                        "isAutomatischGeboekt": False
-                    },]
-                }
-            }
-        }
-        assert adapters["afspraken"].call_count == 2
-        assert adapters["journaalposten"].called_once
-        assert adapters["transacties"].call_count == 2
-        assert adapters["transacties_update"].called_once
 
+        assert adapters["afspraken"].call_count == 2
+        assert adapters["afspraken_post"].call_count == 0 
+        assert adapters["transacties"].call_count == 2
+        assert adapters["transacties_update"].call_count == 1
+        assert adapters["grootboekrekeningen"].call_count == 0
+        assert adapters["rubrieken"].call_count == 1
+        assert adapters["journaalposten"].call_count == 1
+        assert adapters["journaalposten_get"].call_count == 1
+        assert adapters["journaalposten_get_ids"].call_count == 0
+        assert adapters["alarmen_get"].call_count == 0
+        assert adapters["active_alarmen_get"].call_count == 0
+        assert adapters["alarmen_post"].call_count == 0
+        assert adapters["alarmen_update"].call_count == 0
+        assert adapters["signalen_post"].call_count == 0
+
+        assert response.json == {
+                    "data": {
+                        "createJournaalpostAfspraak": {
+                            "ok": True,
+                            "journaalposten": [{
+                                "id": 23,
+                                "afspraak": {"id": 11},
+                                "transaction": {"id": 31},
+                                "isAutomatischGeboekt": False
+                            },]
+                        }
+                    }
+                }
 
 def test_create_journaalpost_afspraak_journaalpost_exists(client):
     with requests_mock.Mocker() as mock:
@@ -392,31 +452,42 @@ def test_create_journaalpost_afspraak_journaalpost_exists(client):
             "/graphql",
             json={
                 "query": """
-mutation test($input:[CreateJournaalpostAfspraakInput!]!) {
-  createJournaalpostAfspraak(input:$input) {
-    ok
-    journaalposten {
-      id
-      afspraak { id }
-      transaction { id }
-      isAutomatischGeboekt
-    }
-  }
-}""",
+                    mutation test($input:[CreateJournaalpostAfspraakInput!]!) {
+                        createJournaalpostAfspraak(input:$input) {
+                            ok
+                            journaalposten {
+                            id
+                            afspraak { id }
+                            transaction { id }
+                            isAutomatischGeboekt
+                            }
+                        }
+                    }""",
                 "variables": {"input": [{"transactionId": 33, "afspraakId": 12, "isAutomatischGeboekt": False},]},
             },
             content_type="application/json",
         )
-        assert adapters["rubrieken"].call_count == 0
-        assert adapters["journaalposten_get"].called_once
-        assert adapters["journaalposten"].call_count == 0
+
         assert adapters["afspraken"].call_count == 0
-        assert adapters["transacties"].called_once
+        assert adapters["afspraken_post"].call_count == 0 
+        assert adapters["transacties"].call_count == 1
+        assert adapters["transacties_update"].call_count == 0
+        assert adapters["grootboekrekeningen"].call_count == 0
+        assert adapters["rubrieken"].call_count == 0
+        assert adapters["journaalposten"].call_count == 0
+        assert adapters["journaalposten_get"].call_count == 1
+        assert adapters["journaalposten_get_ids"].call_count == 0
+        assert adapters["alarmen_get"].call_count == 0
+        assert adapters["active_alarmen_get"].call_count == 0
+        assert adapters["alarmen_post"].call_count == 0
+        assert adapters["alarmen_update"].call_count == 0
+        assert adapters["signalen_post"].call_count == 0
+
         assert response.json == {
             "data": {"createJournaalpostAfspraak": None},
             "errors": [
                 {
-                    "locations": [{"column": 3, "line": 3}],
+                    "locations": [{"column": 25, "line": 3}],
                     "message": "(some) journaalposten already exist",
                     "path": ["createJournaalpostAfspraak"],
                 }
@@ -432,34 +503,42 @@ def test_create_journaalpost_per_afspraak(client):
             "/graphql",
             json={
                 "query": """
-mutation test($input: [CreateJournaalpostAfspraakInput!]!) {
-  createJournaalpostAfspraak(input: $input) {
-    ok
-    journaalposten {
-      id
-      afspraak {
-        id
-      }
-      transaction {
-        id
-      }
-      isAutomatischGeboekt
-    }
-  }
-}
-""",
+                    mutation test($input: [CreateJournaalpostAfspraakInput!]!) {
+                        createJournaalpostAfspraak(input: $input) {
+                            ok
+                            journaalposten {
+                            id
+                            afspraak {
+                                id
+                            }
+                            transaction {
+                                id
+                            }
+                            isAutomatischGeboekt
+                            }
+                        }
+                    }""",
                 "variables": {"input": [
                     {"transactionId": 31, "afspraakId": 11, "isAutomatischGeboekt": True},
                     {"transactionId": 32, "afspraakId": 12, "isAutomatischGeboekt": True},
                 ]},
             },
         )
-        
-        assert adapters["rubrieken"].call_count == 1
+
         assert adapters["afspraken"].call_count == 3
-        assert adapters["journaalposten"].called_once
+        assert adapters["afspraken_post"].call_count == 0 
         assert adapters["transacties"].call_count == 3
         assert adapters["transacties_update"].call_count == 2
+        assert adapters["grootboekrekeningen"].call_count == 0
+        assert adapters["rubrieken"].call_count == 1
+        assert adapters["journaalposten"].call_count == 1
+        assert adapters["journaalposten_get"].call_count == 1
+        assert adapters["journaalposten_get_ids"].call_count == 0
+        assert adapters["alarmen_get"].call_count == 0
+        assert adapters["active_alarmen_get"].call_count == 0
+        assert adapters["alarmen_post"].call_count == 0
+        assert adapters["alarmen_update"].call_count == 0
+        assert adapters["signalen_post"].call_count == 0
 
         assert response.json == {
             "data": {
@@ -483,7 +562,6 @@ mutation test($input: [CreateJournaalpostAfspraakInput!]!) {
         }
 
 
-# TODO add test for afspraak with alarm_id. 
 # create a journaalpost and it should automatically evaluate the alarms of the afspraken in the journaalposten, next alarm created, no signaal created.
 def test_create_journaalpost_automatically_evaluate_alarms_no_signal_created(client):
     with requests_mock.Mocker() as mock:
@@ -509,15 +587,20 @@ def test_create_journaalpost_automatically_evaluate_alarms_no_signal_created(cli
             content_type="application/json",
         )
         
-        assert adapters["rubrieken"].called_once
         assert adapters["afspraken"].call_count == 4
-        assert adapters["afspraken_post"].call_count == 1
-        assert adapters["journaalposten"].called_once
-        assert adapters["transacties"].call_count == 2
-        assert adapters["transacties_update"].called_once
+        assert adapters["afspraken_post"].call_count == 1 
+        assert adapters["transacties"].call_count == 3
+        assert adapters["transacties_update"].call_count == 1
+        assert adapters["grootboekrekeningen"].call_count == 0
+        assert adapters["rubrieken"].call_count == 1
+        assert adapters["journaalposten"].call_count == 1
+        assert adapters["journaalposten_get"].call_count == 1
+        assert adapters["journaalposten_get_ids"].call_count == 1
+        assert adapters["alarmen_get"].call_count == 1
         assert adapters["active_alarmen_get"].call_count == 1
         assert adapters["alarmen_post"].call_count == 1
-        assert adapters["alarmen_update"].call_count == 2
+        assert adapters["alarmen_update"].call_count == 1
+        assert adapters["signalen_post"].call_count == 0
 
         assert response.json == {
             "data": {
@@ -534,6 +617,59 @@ def test_create_journaalpost_automatically_evaluate_alarms_no_signal_created(cli
         }
 
 
-# afspraak met alarm_id, signaal
+# create journaalposten and automatally evaluate alarms, next alarm created, signal created. 
+# def test_create_journaalpost_automatically_evaluate_alarms_signal_created(client):
+#     with requests_mock.Mocker() as mock:
+#         adapters = setup_services(mock)
+
+#         response = client.post(
+#             "/graphql",
+#             json={
+#                 "query": """
+#                     mutation test($input:[CreateJournaalpostAfspraakInput!]!) {
+#                     createJournaalpostAfspraak(input:$input) {
+#                         ok
+#                         journaalposten {
+#                         id
+#                         afspraak { id }
+#                         transaction { id }
+#                         isAutomatischGeboekt
+#                         }
+#                     }
+#                 }""",
+#                 "variables": {"input": [{"transactionId": 31, "afspraakId": 13, "isAutomatischGeboekt": True},]},
+#             },
+#             content_type="application/json",
+#         )
+        
+        # assert adapters["afspraken"].call_count == 4
+        # assert adapters["afspraken_post"].call_count == 1 
+        # assert adapters["transacties"].call_count == 2
+        # assert adapters["transacties_update"].call_count == 1
+        # assert adapters["grootboekrekeningen"].call_count == 0
+        # assert adapters["rubrieken"].call_count == 1
+        # assert adapters["journaalposten"].call_count == 1
+        # assert adapters["journaalposten_get"].call_count == 1
+        # assert adapters["alarmen_get"].call_count == 0
+        # assert adapters["active_alarmen_get"].call_count == 1
+        # assert adapters["alarmen_post"].call_count == 1
+        # assert adapters["alarmen_update"].call_count == 2
+        # assert adapters["signalen_post"].call_count == 1
+
+
+#         assert response.json == {
+#             "data": {
+#                 "createJournaalpostAfspraak": {
+#                     "ok": True,
+#                     "journaalposten": [{
+#                         "id": 23,
+#                         "afspraak": {"id": 13},
+#                         "transaction": {"id": 31},
+#                         "isAutomatischGeboekt": True
+#                     },]
+#                 }
+#             }
+#         }
+
 # afspraak met alarm_id, new alarm, signaal
 
