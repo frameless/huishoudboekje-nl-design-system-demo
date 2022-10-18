@@ -580,15 +580,6 @@ def test_evaluate_multiple_alarms_one_inactive(client):
             byMonth=[],
             byMonthDay=[]
         )
-        signaal1 = {
-            "id": "e2b282d9-b31f-451e-9242-11f86c902b35",
-            "alarmId": alarm1.id,
-            "isActive": True,
-            "type": "default",
-            "actions": [],
-            "context": None,
-            "timeCreated": "2021-12-13T13:20:40.784Z"
-        }
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
         rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?is_active=True", json={'data': [alarm, nextAlarm]})
         rm2 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?filter_ids={alarm_id},{alarm1.id}", json={'data': [alarm, alarm1]})
