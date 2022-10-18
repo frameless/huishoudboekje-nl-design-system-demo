@@ -564,6 +564,91 @@ def test_evaluate_multiple_alarms(client):
             }
         }}
 
+@freeze_time("2021-12-08")
+def test_evaluate_multiple_alarms_one_inactive(client):
+    with requests_mock.Mocker() as rm:
+        # arrange
+        alarm1 = Alarm(
+            id="9b205557-4c6a-468e-94f8-ed4bad90bd3f",
+            isActive=False,
+            afspraakId=19,
+            startDate="2021-12-07",
+            datumMargin=0,
+            bedrag=8000,
+            bedragMargin=1000,
+            byDay=["Wednesday", "Friday"],
+            byMonth=[],
+            byMonthDay=[]
+        )
+        signaal1 = {
+            "id": "e2b282d9-b31f-451e-9242-11f86c902b35",
+            "alarmId": alarm1.id,
+            "isActive": True,
+            "type": "default",
+            "actions": [],
+            "context": None,
+            "timeCreated": "2021-12-13T13:20:40.784Z"
+        }
+        fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
+        rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?is_active=True", json={'data': [alarm, nextAlarm]})
+        rm2 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?filter_ids={alarm_id},{alarm1.id}", json={'data': [alarm, alarm1]})
+        rm3 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", json={"data":[afspraak]})
+        rm4 = rm.get(
+            f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_ids={journaalpost_id}",
+            json={"data": [journaalpost]}
+        )
+        rm5 = rm.get(
+            f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids={banktransactie_id}",
+            json={"data": [banktransactie]}
+        )
+        rm6 = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", json={"ok": True, "data": alarm_inactive})
+        rm7 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
+
+        # act
+        response = client.post(
+            "/graphql",
+            json={
+                "query": '''
+                    mutation test($ids: [String]) {
+                        evaluateAlarms(ids: $ids) {
+                            alarmTriggerResult {
+                                alarm {
+                                    id
+                                }
+                                nextAlarm{
+                                    id
+                                }
+                                signaal{
+                                    id
+                                }
+                            }
+                        }
+                    }''', "variables": {"ids": [alarm_id, alarm1.id]}
+            },
+            content_type='application/json'
+        )
+
+        print(f">>> response: {response.json}")
+
+        # assert
+        assert rm1.call_count == 1
+        assert rm2.call_count == 1
+        assert rm3.call_count == 1  # one call per active alarm
+        assert rm4.call_count == 1  # one call per active alarm
+        assert rm5.call_count == 1  # one call per active alarm
+        assert rm6.call_count == 1
+        assert rm7.call_count == 1  # evaluate alarms
+        assert fallback.called == 0
+        assert response.json == {'data': {
+            'evaluateAlarms': {
+                'alarmTriggerResult': [{
+                    'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9'},
+                    'nextAlarm': None,
+                    'signaal': None
+                }]
+            }
+        }}
+
 
 # Test that checks for a signal if no transactions are found, a signal should be created.
 def test_evaluate_alarm_without_banktransactions_gives_signal(client):

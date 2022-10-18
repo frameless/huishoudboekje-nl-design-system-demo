@@ -81,7 +81,8 @@ async def evaluate_alarms(root, info, ids: list[String]) -> list:
     if ids:
         alarmen = hhb_dataloader().alarms.load(ids)
         for alarm in alarmen:
-            triggered_alarms.append(await evaluate_alarm(root, info, alarm, active_alarms))
+            if alarm.isActive:
+                triggered_alarms.append(await evaluate_alarm(root, info, alarm, active_alarms))
     else: 
         for alarm in active_alarms:
             triggered_alarms.append(await evaluate_alarm(root, info, alarm, active_alarms))
