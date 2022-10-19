@@ -1,5 +1,11 @@
 # Huishoudboekje Changelog
 
+## 1.2.3
+
+### Patch Changes
+
+- 1dcf3231: Fixed #1095: Explicity create SEPA exports in PAIN.001.001.03 schema
+
 ## 1.2.2
 
 In deze release is een fout opgelost die ervoor zorgde dat het uploaden van een bankafschrift niet goed werkte.
