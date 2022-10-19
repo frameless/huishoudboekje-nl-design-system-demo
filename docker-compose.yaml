@@ -97,7 +97,7 @@ x-py-tests: &x-py-tests
   entrypoint:
     - /bin/sh
     - -c
-    - pytest tests
+    - pytest tests --disable-pytest-warnings
   environment:
     JWT_AUDIENCE: pytest
     JWT_SECRET: pytestsecret
