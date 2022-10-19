@@ -226,12 +226,12 @@ def get_banktransactions_by_journaal_ids(journaal_ids) -> List[BankTransaction]:
 
 
 async def should_create_signaal(alarm: Alarm, transacties: List[BankTransaction]) -> Optional[Signaal]:
-    difference, transaction_ids_out_of_scope, monetary_deviated_transaction_ids = get_bedrag_difference(alarm, transacties)
-    if len(transaction_ids_out_of_scope) > 0 or len(monetary_deviated_transaction_ids) > 0 or len(transacties) == 0:
+    createSignal, difference, monetary_deviated_transaction_ids = get_bedrag_difference(alarm, transacties)
+    if createSignal:
         alarm_id = alarm.id
         new_signal = {
             "alarmId": alarm_id,
-            "banktransactieIds": monetary_deviated_transaction_ids + transaction_ids_out_of_scope,
+            "banktransactieIds": monetary_deviated_transaction_ids,
             "isActive": True,
             "type": "default",
             "bedragDifference": difference
@@ -285,6 +285,7 @@ def get_bedrag_difference(alarm: Alarm, transacties: List[BankTransaction]):
     monetary_deviated_transaction_ids = []
     transaction_ids_out_of_scope = []
     bedrag = 0
+    createSignal = False
 
     # check transactions
     for transaction in transacties:
@@ -292,6 +293,7 @@ def get_bedrag_difference(alarm: Alarm, transacties: List[BankTransaction]):
         transaction_date = to_date(str_transactie_datum)
 
         if left_date_window <= transaction_date <= right_date_window:
+            bedrag += transaction.bedrag
             if left_monetary_window <= transaction.bedrag <= right_monetary_window:
                 transactions_in_scope.append(transaction)
             else:
@@ -299,13 +301,13 @@ def get_bedrag_difference(alarm: Alarm, transacties: List[BankTransaction]):
         else:
             transaction_ids_out_of_scope.append(transaction.id)
 
-        bedrag += transaction.bedrag
-
     diff = -1 * (abs(bedrag) - abs(expected_alarm_bedrag))
 
     difference = Bedrag.serialize(diff)
 
-    if left_monetary_window <= bedrag <= right_monetary_window:
+    if abs(diff) <= monetary_margin:
         monetary_deviated_transaction_ids = []
-
-    return difference, transaction_ids_out_of_scope, monetary_deviated_transaction_ids
+    else:
+        createSignal = True
+        
+    return createSignal, difference, monetary_deviated_transaction_ids
