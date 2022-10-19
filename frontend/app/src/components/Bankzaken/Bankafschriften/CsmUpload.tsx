@@ -1,16 +1,14 @@
 import {Box, Input, useDisclosure} from "@chakra-ui/react";
 import React, {useRef} from "react";
 import {useTranslation} from "react-i18next";
-import {useCreateCustomerStatementMessageMutation, useEvaluateAlarmsMutation} from "../../../generated/graphql";
+import {useCreateCustomerStatementMessageMutation} from "../../../generated/graphql";
 import {FileUpload} from "../../../models/models";
-import {useFeatureFlag} from "../../../utils/features";
 import useUploadFiles from "../../../utils/useUploadFiles";
 import AddButton from "../../shared/AddButton";
 import CsmUploadModal from "./CsmUploadModal";
 
 const CsmUpload: React.FC<{refetch: VoidFunction}> = ({refetch}) => {
 	const {t} = useTranslation();
-	const isSignalenEnabled = useFeatureFlag("signalen");
 	const csmUploadModal = useDisclosure();
 	const fileUploadInput = useRef<HTMLInputElement>(null);
 	const [createCSM] = useCreateCustomerStatementMessageMutation({
@@ -18,7 +16,6 @@ const CsmUpload: React.FC<{refetch: VoidFunction}> = ({refetch}) => {
 			method: "fileUpload",
 		},
 	});
-	const [evaluateAlarms] = useEvaluateAlarmsMutation();
 	const [files, {addFiles}] = useUploadFiles({
 		doUpload: ({file}: FileUpload) => new Promise((resolve, reject) => {
 			return createCSM({variables: {file}})
