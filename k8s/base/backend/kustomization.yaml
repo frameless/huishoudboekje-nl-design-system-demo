@@ -5,3 +5,4 @@ resources:
   - service.yaml
   - horizontalpodautoscaler.yaml
   - ingress.yaml
+  - cronjob.yaml
