@@ -26,9 +26,6 @@ const CsmUpload: React.FC<{refetch: VoidFunction}> = ({refetch}) => {
 				.catch(err => reject(err));
 		}),
 		onDone: async () => {
-			if (isSignalenEnabled) {
-				await evaluateAlarms();
-			}
 			refetch();
 			// Only close the upload modal when there were no errors
 			if (!files.find(f => f.error)) {
