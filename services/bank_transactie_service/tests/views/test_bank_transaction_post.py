@@ -26,7 +26,7 @@ def test_banktransaction_post_new_csm(client, dbsession, csm_factory):
     assert response.json["data"]["customer_statement_message_id"] == bank_transaction_dict["customer_statement_message_id"]
     assert response.json["data"]["statement_line"] == bank_transaction_dict["statement_line"]
     assert response.json["data"]["information_to_account_owner"] == bank_transaction_dict["information_to_account_owner"]
-    assert response.json["data"]["transactie_datum"] == "2020-01-01"
+    assert response.json["data"]["transactie_datum"] == "2020-01-01T00:00:00"
     assert response.json["data"]["tegen_rekening"] == bank_transaction_dict["tegen_rekening"]
     assert response.json["data"]["is_credit"] is True
     assert response.json["data"]["bedrag"] == bank_transaction_dict["bedrag"]

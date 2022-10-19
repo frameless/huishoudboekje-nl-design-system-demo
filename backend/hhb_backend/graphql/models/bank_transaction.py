@@ -1,6 +1,4 @@
 """ BankTransaction model as used in GraphQL queries """
-from datetime import datetime
-
 import graphene
 
 import hhb_backend.graphql.models.afspraak as afspraak
@@ -10,6 +8,7 @@ import hhb_backend.graphql.models.rekening as rekening
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.pageinfo import PageInfo
 from hhb_backend.graphql.scalars.bedrag import Bedrag
+from hhb_backend.graphql.utils.dates import to_date
 from hhb_backend.processen import automatisch_boeken
 
 
@@ -30,7 +29,7 @@ class BankTransaction(graphene.ObjectType):
     def resolve_transactie_datum(root, info):
         value = root.get('transactie_datum')
         if value:
-            return datetime.fromisoformat(value).date()
+            return to_date(value)
 
     def resolve_tegen_rekening_iban(root, info):
         tegen_rekening = root.get('tegen_rekening')

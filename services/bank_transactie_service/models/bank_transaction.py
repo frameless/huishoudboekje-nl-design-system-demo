@@ -1,5 +1,5 @@
 from core_service.database import db
-from sqlalchemy import Column, Index, Integer, String, Sequence, ForeignKey, Date, Boolean
+from sqlalchemy import Column, Integer, String, Sequence, ForeignKey, DateTime, Boolean
 from sqlalchemy.orm import relationship
 
 
@@ -17,7 +17,7 @@ class BankTransaction(db.Model):
     statement_line = Column(String)  # 61
     information_to_account_owner = Column(String)  # 86
 
-    transactie_datum = Column(Date)
+    transactie_datum = Column(DateTime)
     tegen_rekening = Column(String)
     is_credit = Column(Boolean)
     bedrag = Column(Integer)
