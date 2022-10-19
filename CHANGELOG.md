@@ -1,5 +1,20 @@
 # Huishoudboekje Changelog
 
+## 1.2.3
+
+### Patch Changes
+
+- 1dcf3231: Fixed #1095: Explicity create SEPA exports in PAIN.001.001.03 schema
+
+## 1.2.2
+
+In deze release is een fout opgelost die ervoor zorgde dat het uploaden van een bankafschrift niet goed werkte.
+
+### Patch Changes
+
+- 8fe5249c: Fixed #1084: Fixed a bug where the value of a field "bedrag" would change in some situations.
+- 53959905: Fixed #1089: Put unreleased functionalities behind feature flag.
+
 ## 1.2.1
 
 In deze release zijn kwetsbaarheden opgelost en verbeteringen aan de user interface gedaan.
