@@ -17,7 +17,7 @@ class Auth():
 
         self.logger.debug(f"JWT_SECRET {self.secret}, JWT_AUDIENCE {self.audience}")
 
-        if self.require_auth:
+        if self.require_auth != "0":
             if self.audience is None:
                 self.logger.error("Missing environment variable JWT_AUDIENCE.")
                 abort(500)
