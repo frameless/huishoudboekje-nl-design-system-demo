@@ -5,4 +5,4 @@ WORKDIR /app
 COPY ./package*.json /app/
 COPY . /app
 EXPOSE 8080
-CMD ["/bin/sh", "start.sh"]
+CMD ["npm", "run", "dev"]

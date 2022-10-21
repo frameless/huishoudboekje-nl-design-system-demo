@@ -91,6 +91,13 @@ x-signalenservice: &x-signalenservice
   environment:
     DATABASE_URL: "postgresql://hhb:hhb@db/signalenservice"
 
+x-unleashservice: &x-unleashservice
+  build:
+    context: ./services/unleashservice
+    dockerfile: ./dev.Dockerfile
+  volumes:
+    - ./services/unleashservice:/app
+
 x-py-tests: &x-py-tests
   profiles:
     - tests
@@ -199,6 +206,7 @@ services:
       POSTADRESSENSERVICE_URL: "http://postadressenservice:8080"
       ALARMENSERVICE_URL: "http://alarmenservice:8080"
       SIGNALENSERVICE_URL: "http://signalenservice:8080"
+      UNLEASHSERVICE_URL: "http://unleashservice:8080/api/unleash"
     ports:
       - 5000:8000
 
@@ -348,3 +356,12 @@ services:
   signalenservice-test:
     <<: *x-signalenservice
     <<: *x-js-tests
+
+  unleashservice:
+    <<: *x-unleashservice
+    container_name: unleashservice
+    environment:
+      LOG_LEVEL: DEBUG
+    ports:
+      - 8010:8080
+
