@@ -169,7 +169,7 @@ Een probleem waarbij sommige gebruikers niet konden inloggen is opgelost.
   npx prisma migrate resolve --applied 20211213121354_context_is_optional
   npx prisma migrate resolve --applied 20220221163146_removed_time_created_added_time_updated
   ```
-  
+
   Please read this Wiki article for more information: https://gitlab.com/commonground/huishoudboekje/app-new/-/wikis/Handleidingen/Probleemoplossing/Update-naar-1.2.0
 
 - 3b9eb21c: Fixed #955: We've removed the bundled Keycloak from the repository, as we're using a separately deployed Keycloak for our own testing purposes.

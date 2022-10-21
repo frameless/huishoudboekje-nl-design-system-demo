@@ -38,6 +38,6 @@ export const WithButton = Template.bind({});
 WithButton.args = {
 	message: "Voeg burgers toe door te klikken op de knop Toevoegen.",
 	children: (
-		<AddButton onClick={() => void (0)} />
+		<AddButton onClick={() => console.info("Click!")} />
 	),
 };

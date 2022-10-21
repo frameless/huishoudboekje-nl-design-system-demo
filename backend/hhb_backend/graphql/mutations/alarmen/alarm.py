@@ -160,9 +160,9 @@ def generate_alarm_date(alarm, alarm_date: date = None) -> date:
     by_month = alarm.get("byMonth", [])
     by_month_day = alarm.get("byMonthDay", [])
 
-    # the next alarm date shouldn't be before tomorrow
-    tomorrow_utc = (datetime.now(timezone.utc) + timedelta(days=1)).date()
-    future = max(alarm_date + timedelta(days=1), tomorrow_utc) if alarm_date else tomorrow_utc
+    # the next alarm date from today
+    today = date.today()
+    future = max(alarm_date, today) if alarm_date else today
 
     # https://dateutil.readthedocs.io/en/latest/examples.html#rrule-examples
     is_weekly = by_day and not by_month and not by_month_day

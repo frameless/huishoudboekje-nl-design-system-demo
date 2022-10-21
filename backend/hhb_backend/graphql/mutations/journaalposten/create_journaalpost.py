@@ -11,6 +11,7 @@ from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.afspraak import Afspraak
 from hhb_backend.graphql.models.journaalpost import Journaalpost
 from hhb_backend.graphql.mutations.journaalposten import update_transaction_service_is_geboekt
+from hhb_backend.graphql.mutations.alarmen.evaluate_alarm import evaluate_alarms
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     gebruikers_activiteit_entities,
     log_gebruikers_activiteit,
@@ -92,11 +93,18 @@ class CreateJournaalpostAfspraak(graphene.Mutation):
         if not response.ok:
             raise GraphQLError(f"Upstream API responded: {response.text}")
 
+        alarm_ids = []
         journaalposten = response.json()["data"]
         for post in journaalposten:
-            post["afspraak"] = afspraken[journaalpost.Journaalpost(post).afspraak_id]
+            afspraak = afspraken[journaalpost.Journaalpost(post).afspraak_id]
+            post["afspraak"] = afspraak
+            if afspraak.alarm_id:
+                alarm_ids.append(afspraak.alarm_id)
 
         update_transaction_service_is_geboekt(transactions, is_geboekt=True)
+        
+        if alarm_ids:
+            await evaluate_alarms(_root, _info, alarm_ids)
 
         return CreateJournaalpostAfspraak(journaalposten=journaalposten, ok=True)
 
