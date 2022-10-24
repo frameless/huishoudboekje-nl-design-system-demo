@@ -24,10 +24,6 @@ const CsmUpload: React.FC<{refetch: VoidFunction}> = ({refetch}) => {
 		}),
 		onDone: async () => {
 			refetch();
-			// Only close the upload modal when there were no errors
-			if (!files.find(f => f.error)) {
-				csmUploadModal.onClose();
-			}
 		},
 	});
 
