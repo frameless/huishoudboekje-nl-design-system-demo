@@ -25,7 +25,7 @@ apiRouter.get("/", (req, res) => {
 	res.json({features: features.map(f => ({name: f.name, enabled: isFeatureEnabled(f.name)}))});
 });
 
-apiRouter.post("/:features", (req, res) => {
+apiRouter.get("/:features", (req, res) => {
 	const features = (req.params.features || "").split(",");
 
 	const result = features.reduce((result, f) => ({
