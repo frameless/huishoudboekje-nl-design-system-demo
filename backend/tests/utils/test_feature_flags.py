@@ -16,7 +16,7 @@ def test_feature_flags():
         }
 
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        req = rm.post(re.compile(f"{settings.UNLEASHSERVICE_URL}/.*"), json=result)
+        req = rm.get(re.compile(f"{settings.UNLEASHSERVICE_URL}/.*"), json=result)
 
         # Initialize the Unleash client
         unleash = Unleash()

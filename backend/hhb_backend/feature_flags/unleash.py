@@ -29,7 +29,7 @@ class Unleash:
         """Fetch one or more specific feature flags from the Unleashservice"""
         names = ','.join([name for name in names])
         url = f"{UNLEASHSERVICE_URL}/{names}"
-        data = self._send_request("POST", url)
+        data = self._send_request("GET", url)
 
         feature_flags = {}
 
