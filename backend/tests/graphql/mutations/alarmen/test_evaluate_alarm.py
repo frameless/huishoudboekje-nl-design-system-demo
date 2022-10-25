@@ -721,7 +721,7 @@ def test_evaluate_alarm_without_banktransactions_gives_signal(client):
             }
         }}
 
-# Test that has a transaction outside the date window which should create a signal with this transaction in it. # TODO right now there will be no transactions
+# Test that has a transaction outside the date window which should create a signal without this transaction in it. 
 @freeze_time("2021-12-08")
 def test_evaluate_alarm_transaction_outside_date_window_gives_signal_without_transaction(client):
     with requests_mock.Mocker() as rm:
