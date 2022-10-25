@@ -168,7 +168,7 @@ def setup_services(mock):
         json=get_alarmen
     )
     active_alarmen_adapter = mock.get(
-        re.compile(f"{settings.ALARMENSERVICE_URL}/alarms/\\?is_active=True"),
+        re.compile(f"{settings.ALARMENSERVICE_URL}/alarms/\\?filter_active=true"),
         json={"data": [mock_alarmen[alarm1_id]]}
     )
     alarmen_post_adapter = mock.post(
