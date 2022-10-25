@@ -267,6 +267,8 @@ def update_alarm(alarm_id: str, alarm_update: dict):
         raise GraphQLError(f"Failed to update alarm. {alarm_response.json()}")
 
 def get_bedrag_difference(alarm: Alarm, transacties: List[BankTransaction]):
+    """ Determines the amount difference between the transactions and the expected amount in the alarm. 
+    Returns if a signal needs to be created, the difference, and the monetary deviating transaction ids. """
     # expected dates
     datum_margin = int(alarm.datumMargin)
     str_expect_date = alarm.startDate
@@ -281,9 +283,8 @@ def get_bedrag_difference(alarm: Alarm, transacties: List[BankTransaction]):
     right_monetary_window = expected_alarm_bedrag + monetary_margin
 
     # initialize
-    transactions_in_scope = []
     monetary_deviated_transaction_ids = []
-    transaction_ids_out_of_scope = []
+    transaction_ids_out_of_scope = []       # not used at the moment, but see reference GitLab issue #1099 https://gitlab.com/commonground/huishoudboekje/app-new/-/issues/1099
     bedrag = 0
     createSignal = False
 
@@ -294,18 +295,16 @@ def get_bedrag_difference(alarm: Alarm, transacties: List[BankTransaction]):
 
         if left_date_window <= transaction_date <= right_date_window:
             bedrag += transaction.bedrag
-            if left_monetary_window <= transaction.bedrag <= right_monetary_window:
-                transactions_in_scope.append(transaction)
-            else:
+            if left_monetary_window > transaction.bedrag or transaction.bedrag > right_monetary_window:
                 monetary_deviated_transaction_ids.append(transaction.id)
         else:
             transaction_ids_out_of_scope.append(transaction.id)
 
-    diff = -1 * (abs(bedrag) - abs(expected_alarm_bedrag))
+    diff = abs(bedrag - expected_alarm_bedrag)
 
     difference = Bedrag.serialize(diff)
 
-    if abs(diff) <= monetary_margin:
+    if diff <= monetary_margin:
         monetary_deviated_transaction_ids = []
     else:
         createSignal = True
