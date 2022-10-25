@@ -271,10 +271,10 @@ def test_evaluate_alarm_illigal_betaalinstructie_combination(client):
         for call in rm.request_history:
             print(f">> >> >> >> fallback: {call.method} {call.url} ")
 
-        assert rm1.called_once
-        assert rm2.called_once
-        assert rm3.called_once
-        assert rm4.called_once
+        assert rm1.call_count == 1
+        assert rm2.call_count == 1
+        assert rm3.call_count == 1
+        assert rm4.call_count == 1
         assert rm5.call_count == 1
         assert fallback.called == 0
         assert response.json.get("errors")[0].get("message") == expected
@@ -314,8 +314,8 @@ def test_evaluate_alarm_inactive(client):
         )
 
         # assert
-        assert rm1.called_once
-        assert rm2.called_once
+        assert rm1.call_count == 1
+        assert rm2.call_count == 1
         assert fallback.called == 0
         assert response.json == expected
 
@@ -967,14 +967,14 @@ def test_evaluate_alarm_signal_monetary_one_transaction(client):
         print(f">> >> >> response {response.json} ")
 
         # assert
-        assert rm1.called_once
-        assert rm1a.called_once
+        assert rm1.call_count == 1
+        assert rm1a.call_count == 1
         assert rm2.call_count == 2
-        assert rm2a.called_once
-        assert rm3.called_once
+        assert rm2a.call_count == 1
+        assert rm3.call_count == 1
         assert rm4.call_count == 2
-        assert rm5.called_once
-        assert rm6.called_once
+        assert rm5.call_count == 1
+        assert rm6.call_count == 1
         assert rm7.call_count == 2
         assert rm8.call_count == 1
         assert fallback.called == 0
@@ -1081,14 +1081,14 @@ def test_evaluate_alarm_no_signal_multiple_transactions(client):
         print(f">> >> >> response {response.json} ")
 
         # assert
-        assert rm1.called_once
-        assert rm1a.called_once
+        assert rm1.call_count == 1
+        assert rm1a.call_count == 1
         assert rm2.call_count == 2
-        assert rm3.called_once
+        assert rm3.call_count == 1
         assert rm4.call_count == 1
-        assert rm5.called_once
+        assert rm5.call_count == 1
         assert rm7.call_count == 1
-        assert rm8.called_once
+        assert rm8.call_count == 1
         assert rm9.call_count == 1
         assert fallback.called == 0
         assert response.json == expected
