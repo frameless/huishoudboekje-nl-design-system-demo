@@ -7,6 +7,7 @@ from graphql import GraphQLError
 from tokenize import String
 from typing import List, Optional
 
+from hhb_backend.feature_flags import Unleash
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models import alarm, signaal
@@ -21,6 +22,7 @@ from hhb_backend.service.model.afspraak import Afspraak
 from hhb_backend.service.model.alarm import Alarm
 from hhb_backend.service.model.bank_transaction import BankTransaction
 from hhb_backend.service.model.signaal import Signaal
+
 
 class AlarmTriggerResult(graphene.ObjectType):
     alarm = graphene.Field(lambda: alarm.Alarm)
@@ -47,6 +49,9 @@ class EvaluateAlarms(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(_root, _info, ids):
         """ Mutatie voor de evaluatie van een alarm wat kan resulteren in een signaal en/of een nieuw alarm in de reeks. """
+        if Unleash().is_enabled("signalen"):
+            raise GraphQLError("Feature signalen is disabled")
+
         triggered_alarms = await evaluate_alarms(ids)
         return EvaluateAlarms(alarmTriggerResult=triggered_alarms)
 
@@ -83,7 +88,7 @@ async def evaluate_alarms(ids: list[String] = []) -> list:
         for alarm in alarmen:
             if alarm.isActive:
                 triggered_alarms.append(await evaluate_alarm(alarm, active_alarms))
-    else: 
+    else:
         for alarm in active_alarms:
             triggered_alarms.append(await evaluate_alarm(alarm, active_alarms))
 
@@ -249,11 +254,13 @@ async def should_create_signaal(alarm: Alarm, transacties: List[BankTransaction]
 async def create_signaal(new_signal) -> Signaal:
     return (SignaalHelper.create(new_signal)).signaal
 
+
 def update_alarm_signal_id(alarm: Alarm, new_signal_id):
     alarm_id = alarm.id
     alarm.signaalId = new_signal_id
     alarm_update = {"signaalId": new_signal_id}
     update_alarm(alarm_id, alarm_update)
+
 
 def update_alarm_activity(alarm: Alarm, is_active: bool):
     alarm_id = alarm.id
@@ -261,13 +268,16 @@ def update_alarm_activity(alarm: Alarm, is_active: bool):
     alarm_update = {"isActive": is_active}
     update_alarm(alarm_id, alarm_update)
 
+
 def update_alarm(alarm_id: str, alarm_update: dict):
-    alarm_response = requests.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", json=alarm_update, headers={"Content-type": "application/json"})
+    alarm_response = requests.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", json=alarm_update,
+                                  headers={"Content-type": "application/json"})
     if alarm_response.status_code != 200:
         raise GraphQLError(f"Failed to update alarm. {alarm_response.json()}")
 
+
 def get_bedrag_difference(alarm: Alarm, transacties: List[BankTransaction]):
-    """ Determines the amount difference between the transactions and the expected amount in the alarm. 
+    """ Determines the amount difference between the transactions and the expected amount in the alarm.
     Returns if a signal needs to be created, the difference, and the monetary deviating transaction ids. """
     # expected dates
     datum_margin = int(alarm.datumMargin)
@@ -284,7 +294,7 @@ def get_bedrag_difference(alarm: Alarm, transacties: List[BankTransaction]):
 
     # initialize
     monetary_deviated_transaction_ids = []
-    transaction_ids_out_of_scope = []       # not used at the moment, but see reference GitLab issue #1099 https://gitlab.com/commonground/huishoudboekje/app-new/-/issues/1099
+    transaction_ids_out_of_scope = []  # not used at the moment, but see reference GitLab issue #1099 https://gitlab.com/commonground/huishoudboekje/app-new/-/issues/1099
     bedrag = 0
     createSignal = False
 
@@ -308,5 +318,5 @@ def get_bedrag_difference(alarm: Alarm, transacties: List[BankTransaction]):
         monetary_deviated_transaction_ids = []
     else:
         createSignal = True
-        
+
     return createSignal, difference, monetary_deviated_transaction_ids
