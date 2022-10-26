@@ -45,12 +45,6 @@ class DeleteAfspraakZoekterm(graphene.Mutation):
         if previous is None:
             raise GraphQLError("Afspraak not found")
 
-        # These arrays contains ids for their entities and not the instances, the hhb_service does not understand that,
-        # Since removing them from the payload makes the service ignore them for updating purposes it is safe to remove
-        # them here.
-        del previous.journaalposten
-        del previous.overschrijvingen
-
         zoektermen = previous.zoektermen
         if zoekterm.lower() in (zk.lower() for zk in zoektermen):
             zoektermen.remove(zoekterm)
@@ -58,7 +52,6 @@ class DeleteAfspraakZoekterm(graphene.Mutation):
             raise GraphQLError("Zoekterm not found in zoektermen of afspraak.")
 
         input = {
-            **previous,
             "zoektermen": zoektermen
         }
 
