@@ -2,4 +2,4 @@
 "huishoudboekje": patch
 ---
 
-Fixes #1104: Zoekterm verwijderen bij Afspraak
+Fixed #1104: Fixed a problem where removing a zoekterm did not work as expected.
