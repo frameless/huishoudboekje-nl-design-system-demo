@@ -572,9 +572,9 @@ def test_create_journaalpost_automatically_evaluate_alarms_no_signal_created(cli
             },
             content_type="application/json",
         )
-
-        assert adapters["afspraken"].call_count == 4
-        assert adapters["afspraken_post"].call_count == 1
+        
+        assert adapters["afspraken"].call_count == 3
+        assert adapters["afspraken_post"].call_count == 1 
         assert adapters["transacties"].call_count == 3
         assert adapters["transacties_update"].call_count == 1
         assert adapters["grootboekrekeningen"].call_count == 0
@@ -628,9 +628,9 @@ def test_create_journaalpost_automatically_evaluate_alarms_signal_created(client
             },
             content_type="application/json",
         )
-
-        assert adapters["afspraken"].call_count == 4
-        assert adapters["afspraken_post"].call_count == 1
+        
+        assert adapters["afspraken"].call_count == 3
+        assert adapters["afspraken_post"].call_count == 1 
         assert adapters["transacties"].call_count == 3
         assert adapters["transacties_update"].call_count == 1
         assert adapters["grootboekrekeningen"].call_count == 0
