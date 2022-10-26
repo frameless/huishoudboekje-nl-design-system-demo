@@ -49,7 +49,7 @@ class EvaluateAlarms(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(_root, _info, ids):
         """ Mutatie voor de evaluatie van een alarm wat kan resulteren in een signaal en/of een nieuw alarm in de reeks. """
-        if Unleash().is_enabled("signalen"):
+        if not Unleash().is_enabled("signalen"):
             raise GraphQLError("Feature signalen is disabled")
 
         triggered_alarms = await evaluate_alarms(ids)
@@ -75,6 +75,9 @@ class EvaluateAlarm(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(_root, _info, id):
         """ Mutatie voor de evaluatie van een alarm wat kan resulteren in een signaal en/of een nieuw alarm in de reeks. """
+        if not Unleash().is_enabled("signalen"):
+            raise GraphQLError("Feature signalen is disabled")
+
         evaluated_alarm = await evaluate_one_alarm(id)
         return EvaluateAlarm(alarmTriggerResult=evaluated_alarm)
 

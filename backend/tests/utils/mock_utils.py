@@ -1,6 +1,16 @@
 from urllib.parse import unquote
 
 
+# Mock feature flags by name and status
+def mock_feature_flag(flag_name: str, flag_enabled: bool):
+    def is_enabled(self, name):
+        if name == flag_name:
+            return flag_enabled
+        return False
+
+    return is_enabled
+
+
 def get_by_filter(request, items):
     return _get_by_filter_or(request, items, False)
 
