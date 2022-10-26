@@ -48,8 +48,4 @@ class HHBDataLoader:
 
 
 def hhb_dataloader() -> HHBDataLoader:
-    # Todo: do we need the dataloader to be on the request?
-    if request:
-        return request.dataloader
-    else:
-        return HHBDataLoader()
+    return HHBDataLoader()
