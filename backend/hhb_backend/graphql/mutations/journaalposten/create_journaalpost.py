@@ -106,11 +106,11 @@ class CreateJournaalpostAfspraak(graphene.Mutation):
 
         # Feature flag: signalen
         if Unleash().is_enabled("signalen"):
-            logging.debug("create_journaalpost mutation: Evaluating alarms...")
+            logging.info("create_journaalpost mutation: Evaluating alarms...")
             if alarm_ids:
                 await evaluate_alarms(alarm_ids)
         else:
-            logging.debug("create_journaalpost mutation: Skipping alarm evaluation.")
+            logging.info("create_journaalpost mutation: Skipping alarm evaluation.")
 
         return CreateJournaalpostAfspraak(journaalposten=journaalposten, ok=True)
 
