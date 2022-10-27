@@ -37,7 +37,7 @@ describe("Unleash", () => {
 
 			const featureFlagName = featureFlags[0].name;
 
-			const result = await api.post("/api/unleash/" + featureFlagName);
+			const result = await api.get("/api/unleash/" + featureFlagName);
 			expect(result.status).toBe(200);
 			expect(unleashMock.isEnabled).toHaveBeenCalledTimes(1);
 			expect(result.body).toMatchSnapshot();
@@ -47,17 +47,17 @@ describe("Unleash", () => {
 		it("should return true or false for multiple features", async () => {
 			mockFeatures(featureFlags);
 
-			const result = await api.post("/api/unleash/" + featureFlags.map(f => f.name).join(","));
+			const result = await api.get("/api/unleash/" + featureFlags.map(f => f.name).join(","));
 			expect(unleashMock.isEnabled).toHaveBeenCalledTimes(featureFlags.length);
 			expect(result.body).toMatchSnapshot();
 			expect(result.status).toBe(200);
 		});
 
-		it("should return an empty list for no passed flags", async () => {
+		it("should return all the available flags when no flags are passed", async () => {
 			mockFeatures(featureFlags);
 
-			const result = await api.post("/api/unleash/");
-			expect(unleashMock.isEnabled).toHaveBeenCalledTimes(0);
+			const result = await api.get("/api/unleash/");
+			expect(unleashMock.isEnabled).toHaveBeenCalledTimes(3);
 			expect(result.body).toMatchSnapshot();
 		});
 	});
@@ -68,7 +68,7 @@ describe("Unleash", () => {
 
 			const featureFlagName = "non-existent-feature";
 
-			const result = await api.post("/api/unleash/" + featureFlagName);
+			const result = await api.get("/api/unleash/" + featureFlagName);
 			expect(result.status).toBe(200);
 			expect(unleashMock.isEnabled).toHaveBeenCalledTimes(1);
 			expect(result.body).toMatchSnapshot();
@@ -78,7 +78,7 @@ describe("Unleash", () => {
 		it("should return false for multiple features", async () => {
 			mockFeatures([]);
 
-			const result = await api.post("/api/unleash/" + featureFlags.map(f => f.name).join(","));
+			const result = await api.get("/api/unleash/" + featureFlags.map(f => f.name).join(","));
 			expect(unleashMock.isEnabled).toHaveBeenCalledTimes(featureFlags.length);
 			expect(result.status).toBe(200);
 			expect(result.body).toMatchSnapshot();

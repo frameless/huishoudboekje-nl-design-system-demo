@@ -68,3 +68,5 @@ spec:
               value: "http://hhb-alarmenservice"
             - name: SIGNALENSERVICE_URL
               value: "http://hhb-signalenservice"
+            - name: UNLEASHSERVICE_URL
+              value: "http://hhb-unleashservice/api/unleash"
