@@ -35,6 +35,6 @@ class DeleteAlarm(graphene.Mutation):
     @log_gebruikers_activiteit
     async def mutate(_root, _info, id):
         """ Mutatie voor het verwijderen van een bestaand Alarm """
-        result = await AlarmHelper.delete(_root, _info, id)
+        result = await AlarmHelper.delete(id)
 
         return DeleteAlarm(ok=True, previous=result.previous, burger_id=result.burger_id)

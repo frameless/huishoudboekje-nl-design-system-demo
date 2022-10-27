@@ -1,5 +1,5 @@
-
 import graphene
+import logging
 import requests
 from graphql import GraphQLError
 
@@ -33,39 +33,23 @@ class SignaalHelper:
         self.previous = previous
         self.ok = ok
 
-    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
-        data = dict(
-            action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="signaal", result=self, key="signaal"
-            ),
-            before=dict(signaal=self.previous),
-            after=dict(signaal=self.signaal),
-        )
-        i = info.field_name.find("-")
-        info.field_name = info.field_name[:i].strip()
-        return data
+    @staticmethod
+    def create(input: CreateSignaalInput):
+        logging.info(f"SignaalHelper.create: creating signaal... Input: {input}")
 
-    @log_gebruikers_activiteit
-    async def create(self, info, input: CreateSignaalInput):
-        name = info.field_name
-        if "Signaal" not in name:
-            name += " - createSignaal"
-            info.field_name = name
-
-        create_signaal_response = requests.post(f"{settings.SIGNALENSERVICE_URL}/signals/", json=input, headers={"Content-type": "application/json"})
+        create_signaal_response = requests.post(f"{settings.SIGNALENSERVICE_URL}/signals/", json=input,
+                                                headers={"Content-type": "application/json"})
         if create_signaal_response.status_code != 201:
             raise GraphQLError(f"Failed to create signaal.")
 
         response_signaal = create_signaal_response.json()["data"]
+
+        logging.info(f"SignaalHelper.create: created signaal. Response: {response_signaal}")
         return SignaalHelper(response_signaal, dict())
 
-    @log_gebruikers_activiteit
-    async def delete(self, info, id):
-        name = info.field_name
-        if "Signaal" not in name:
-            name += " - deleteSignaal"
-            info.field_name = name
+    @staticmethod
+    def delete(id):
+        logging.info(f"SignaalHelper.delete: deleting signaal... Id: {id}")
 
         previous = hhb_dataloader().signalen.load_one(id)
         if not previous:
@@ -75,20 +59,19 @@ class SignaalHelper:
         if response.status_code != 204:
             raise GraphQLError(f"Upstream API responded: {response.json()}")
 
+        logging.info(f"SignaalHelper.delete: deleted signaal. Id: {id}")
         return SignaalHelper(dict(), previous)
 
-    @log_gebruikers_activiteit
-    async def update(self, info, id: str, input: UpdateSignaalInput):
-        name = info.field_name
-        if "Signaal" not in name:
-            name += " - updateSignaal"
-            info.field_name = name
-
+    @staticmethod
+    def update(id: str, input: UpdateSignaalInput):
+        logging.info(f"SignaalHelper.update: updating signaal... id {id}, input: {input}")
         previous = hhb_dataloader().signalen.load_one(id)
 
-        response = requests.put(f"{settings.SIGNALENSERVICE_URL}/signals/{id}", json=input, headers={"Content-type": "application/json"})
+        response = requests.put(f"{settings.SIGNALENSERVICE_URL}/signals/{id}", json=input,
+                                headers={"Content-type": "application/json"})
         if response.status_code != 200:
             raise GraphQLError(f"Upstream API responded: {response.json()}")
         response_signaal = response.json()['data']
 
+        logging.info(f"SignaalHelper.update: updated signaal. Id {id}, input: {input}.")
         return SignaalHelper(response_signaal, previous)

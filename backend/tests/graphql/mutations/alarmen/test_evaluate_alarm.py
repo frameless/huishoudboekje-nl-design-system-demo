@@ -144,67 +144,67 @@ def test_should_check_alarm(expected: bool, alarm: Alarm):
 
 
 @pytest.mark.parametrize(
-    ["expected_difference", "tooc", "deviated_ids", "alarm", "transacties"], # tooc = transactions_out_of_scope
+    ["expected_createSignal", "expected_difference", "deviated_ids", "alarm", "transacties"],
     [
-        # nominal case
-        ('0.00', [], [], 
+        # 0. nominal case
+        (False, '0.00', [], 
         Alarm(startDate="2022-01-01", datumMargin=1, bedrag=10000, bedragMargin=1000), 
         [BankTransaction(id=1, transactie_datum="2022-01-01", bedrag=10000)]),
-        # within date window, within monetary window
-        ('10.00', [], [], 
+        # 1. within date window, within monetary window, no signal
+        (False, '10.00', [], 
         Alarm(startDate="2022-01-01", datumMargin=1, bedrag=10000, bedragMargin=1000), 
         [BankTransaction(id=1, transactie_datum="2022-01-01", bedrag=9000)]),
-        # within date window, outside monetary window
-        ('20.00', [], [1], 
+        # 2. within date window, outside monetary window, signal with transaction
+        (True, '20.00', [1], 
         Alarm(startDate="2022-01-01", datumMargin=1, bedrag=10000, bedragMargin=1000),
         [BankTransaction(id=1, transactie_datum="2022-01-01", bedrag=8000)]),
-        # within date window, outside monetary window
-        ('-20.00', [], [1], 
+        # 3. within date window, outside monetary window, signal with transaction
+        (True, '20.00', [1], 
         Alarm(startDate="2022-01-01", datumMargin=1, bedrag=10000, bedragMargin=1000),
         [BankTransaction(id=1, transactie_datum="2022-01-01", bedrag=12000)]),
-        # within date window, multiple transactions that are together the right amount
-        ('0.00', [], [], 
+        # 4. within date window, multiple transactions that are together the right amount, no signal
+        (False, '0.00', [], 
         Alarm(startDate="2022-01-01", datumMargin=1, bedrag=10000, bedragMargin=1000),
         [BankTransaction(id=1, transactie_datum="2022-01-01", bedrag=3000),
         BankTransaction(id=2, transactie_datum="2022-01-01", bedrag=7000)]),
-        # within date window, multiple transactions that are together within monetary window
-        ('10.00', [], [], 
+        # 5. within date window, multiple transactions that are together within monetary window, no signal
+        (False, '10.00', [], 
         Alarm(startDate="2022-01-01", datumMargin=1, bedrag=10000, bedragMargin=1000),
         [BankTransaction(id=1, transactie_datum="2022-01-01", bedrag=3000),
         BankTransaction(id=2, transactie_datum="2022-01-01", bedrag=6000)]),
-        # within date window, multiple transactions that are together outdside monetary window
-        ('20.00', [], [1,2], 
+        # 6. within date window, multiple transactions that are together outdside monetary window, signal with transactions
+        (True, '20.00', [1,2], 
         Alarm(startDate="2022-01-01", datumMargin=1, bedrag=10000, bedragMargin=1000),
         [BankTransaction(id=1, transactie_datum="2022-01-01", bedrag=3000),
         BankTransaction(id=2, transactie_datum="2022-01-01", bedrag=5000)]),
-        # within date window, one transaction within and one outside monetary window (afterwards a signal will be created for the second transaction)
-        ('-30.00', [], [2], 
+        # 7. within date window, one transaction within and one outside monetary window, signal with the second transaction
+        (True, '30.00', [2], 
         Alarm(startDate="2022-01-01", datumMargin=1, bedrag=10000, bedragMargin=1000),
         [BankTransaction(id=1, transactie_datum="2022-01-01", bedrag=10000),
         BankTransaction(id=2, transactie_datum="2022-01-01", bedrag=3000)]),
-        # within date window, two transaction within monetary window (this one is a little weird, afterwards no signal will be created)
-        ('-100.00', [], [], 
+        # 8. within date window, two transaction within monetary window, signal without transactions!
+        (True, '100.00', [], 
         Alarm(startDate="2022-01-01", datumMargin=1, bedrag=10000, bedragMargin=1000),
         [BankTransaction(id=1, transactie_datum="2022-01-01", bedrag=10000),
         BankTransaction(id=2, transactie_datum="2022-01-01", bedrag=10000)]),
-        # outside date window on date of evaluation, one transaction with right amount
-        ('0.00', [1], [], 
+        # 9. outside date window on date of evaluation, one transaction with right amount, signal without transaction!
+        (True, '100.00', [], 
         Alarm(startDate="2022-01-01", datumMargin=1, bedrag=10000, bedragMargin=1000), 
         [BankTransaction(id=1, transactie_datum="2022-01-03", bedrag=10000)]),
-        # outside date window before the window, one transaction with right amount
-        ('0.00', [1], [], 
+        # 10. outside date window before the window, one transaction with right amount, signal without transaction!
+        (True, '100.00', [], 
         Alarm(startDate="2022-01-03", datumMargin=1, bedrag=10000, bedragMargin=1000), 
         [BankTransaction(id=1, transactie_datum="2022-01-01", bedrag=10000)]),
-        # outside date window, no transactions 
-        ('100.00', [], [], 
+        # 11. outside date window, no transactions 
+        (True, '100.00', [], 
         Alarm(startDate="2022-01-01", datumMargin=1, bedrag=10000, bedragMargin=1000), 
         []),
     ]
 )
-def test_bedrag_difference(expected_difference, tooc, deviated_ids, alarm: Alarm, transacties: list[BankTransaction]):
-    difference, transactions_out_of_scope, monetary_deviated_transaction_ids = EvaluateAlarm.get_bedrag_difference(alarm, transacties)
+def test_bedrag_difference(expected_createSignal, expected_difference, deviated_ids, alarm: Alarm, transacties: list[BankTransaction]):
+    createSignal, difference, monetary_deviated_transaction_ids = EvaluateAlarm.get_bedrag_difference(alarm, transacties)
+    assert expected_createSignal == createSignal
     assert expected_difference == difference
-    assert tooc == transactions_out_of_scope
     assert deviated_ids == monetary_deviated_transaction_ids
 
 
@@ -271,10 +271,10 @@ def test_evaluate_alarm_illigal_betaalinstructie_combination(client):
         for call in rm.request_history:
             print(f">> >> >> >> fallback: {call.method} {call.url} ")
 
-        assert rm1.called_once
-        assert rm2.called_once
-        assert rm3.called_once
-        assert rm4.called_once
+        assert rm1.call_count == 1
+        assert rm2.call_count == 1
+        assert rm3.call_count == 1
+        assert rm4.call_count == 1
         assert rm5.call_count == 1
         assert fallback.called == 0
         assert response.json.get("errors")[0].get("message") == expected
@@ -285,7 +285,7 @@ def test_evaluate_alarm_inactive(client):
     with requests_mock.Mocker() as rm:
         # arrange
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?is_active=True", json={'data': []})
+        rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?filter_active=true", json={'data': []})
         rm2 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
         expected = {'data': {'evaluateAlarms': {'alarmTriggerResult': []}}}
 
@@ -314,8 +314,8 @@ def test_evaluate_alarm_inactive(client):
         )
 
         # assert
-        assert rm1.called_once
-        assert rm2.called_once
+        assert rm1.call_count == 1
+        assert rm2.call_count == 1
         assert fallback.called == 0
         assert response.json == expected
 
@@ -326,7 +326,7 @@ def test_evaluate_alarm_no_signal(client):
         # arrange
         expected = {'data': {'evaluateAlarms': {'alarmTriggerResult': [{'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9'}, 'nextAlarm': {'id': '33738845-7f23-4c8f-8424-2b560a944884'}, 'signaal': None}]}}}
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?is_active=True", json={'data': [alarm]})
+        rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?filter_active=true", json={'data': [alarm]})
         rm2 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", json={"data": [afspraak]})
         rm3 = rm.get(
             f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_ids={journaalpost_id}",
@@ -375,7 +375,7 @@ def test_evaluate_alarm_no_signal(client):
         assert rm5.call_count == 1
         assert rm6.call_count == 1
         assert rm7.call_count == 1
-        assert rm8.call_count == 2
+        assert rm8.call_count == 1
         assert fallback.called == 0
         assert response.json == expected
 
@@ -396,7 +396,7 @@ def test_evaluate_alarm_signal_date(client):
             "transactie_datum": "2021-11-11"
         }
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?is_active=True", json={'data': [alarm]})
+        rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?filter_active=true", json={'data': [alarm]})
         rm2 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", json={"data":[afspraak]})
         rm3 = rm.get(
             f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_ids={journaalpost_id}",
@@ -444,7 +444,7 @@ def test_evaluate_alarm_signal_date(client):
         assert rm5.call_count == 1
         assert rm6.call_count == 1
         assert rm7.call_count == 2
-        assert rm8.call_count == 3
+        assert rm8.call_count == 1
         assert rm9.call_count == 1
         assert fallback.called == 0
         assert response.json == {'data': {
@@ -496,7 +496,7 @@ def test_evaluate_multiple_alarms(client):
             "timeCreated": "2021-12-13T13:20:40.784Z"
         }
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?is_active=True", json={'data': [alarm, alarm1, nextAlarm]})
+        rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?filter_active=true", json={'data': [alarm, alarm1, nextAlarm]})
         rm2 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?filter_ids={alarm_id},{alarm1.id}", json={'data': [alarm, alarm1]})
         rm3 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", json={"data":[afspraak]})
         rm4 = rm.get(
@@ -547,7 +547,7 @@ def test_evaluate_multiple_alarms(client):
         assert rm6.call_count == 1
         assert rm7.call_count == 1
         assert rm8.call_count == 2  # update to inactive, update with signal
-        assert rm9.call_count == 2  # evaluate alarms, create signal
+        assert rm9.call_count == 1  # evaluate alarms
         assert fallback.called == 0
         assert response.json == {'data': {
             'evaluateAlarms': {
@@ -581,7 +581,7 @@ def test_evaluate_multiple_alarms_one_inactive(client):
             byMonthDay=[]
         )
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?is_active=True", json={'data': [alarm, nextAlarm]})
+        rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?filter_active=true", json={'data': [alarm, nextAlarm]})
         rm2 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?filter_ids={alarm_id},{alarm1.id}", json={'data': [alarm, alarm1]})
         rm3 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", json={"data":[afspraak]})
         rm4 = rm.get(
@@ -661,7 +661,7 @@ def test_evaluate_alarm_without_banktransactions_gives_signal(client):
             "journaalposten": []
         }
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?is_active=True", json={'data': [alarm]})
+        rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?filter_active=true", json={'data': [alarm]})
         rm2 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", json={"data":[afspraak1]})
         rm4 = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={"ok": True, "data": nextAlarm})
         rm5 = rm.post(f"{settings.SIGNALENSERVICE_URL}/signals/", status_code=201, json=post_echo_with_str_id(signaal["id"]))
@@ -705,7 +705,7 @@ def test_evaluate_alarm_without_banktransactions_gives_signal(client):
         assert rm4.call_count == 1
         assert rm5.call_count == 1
         assert rm6.call_count == 2
-        assert rm7.call_count == 3
+        assert rm7.call_count == 1
         assert rm8.call_count == 1
         assert fallback.called == 0
         assert response.json == {'data': {
@@ -721,9 +721,9 @@ def test_evaluate_alarm_without_banktransactions_gives_signal(client):
             }
         }}
 
-# Test that has a transaction outside the date window which should create a signal with this transaction in it.
+# Test that has a transaction outside the date window which should create a signal without this transaction in it. 
 @freeze_time("2021-12-08")
-def test_evaluate_alarm_transaction_outside_date_window_gives_signal_with_transaction(client):
+def test_evaluate_alarm_transaction_outside_date_window_gives_signal_without_transaction(client):
     with requests_mock.Mocker() as rm:
         # arrange
         banktransactie = {
@@ -738,7 +738,7 @@ def test_evaluate_alarm_transaction_outside_date_window_gives_signal_with_transa
             "transactie_datum": "2021-12-04"
         }
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?is_active=True", json={'data': [alarm]})
+        rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?filter_active=true", json={'data': [alarm]})
         rm2 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", json={"data":[afspraak]})
         rm3 = rm.get(
             f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_ids={journaalpost_id}",
@@ -788,11 +788,11 @@ def test_evaluate_alarm_transaction_outside_date_window_gives_signal_with_transa
         assert rm1.call_count == 1
         assert rm2.call_count == 2
         assert rm3.call_count == 1
-        assert rm4.call_count == 2
+        assert rm4.call_count == 1
         assert rm5.call_count == 1
         assert rm6.call_count == 1
         assert rm7.call_count == 2
-        assert rm8.call_count == 3
+        assert rm8.call_count == 1
         assert rm9.call_count == 1
         assert fallback.called == 0
         assert response.json == {'data': {
@@ -802,8 +802,9 @@ def test_evaluate_alarm_transaction_outside_date_window_gives_signal_with_transa
                     'nextAlarm': {'id': '33738845-7f23-4c8f-8424-2b560a944884'},
                     'signaal': {
                         'id': 'e2b282d9-b31f-451e-9242-11f86c902b35', 
-                        'bankTransactions': [{'id': banktransactie_id}], 
-                        'bedragDifference': '0.00'}
+                        'bankTransactions': None, 
+                        'bedragDifference': '120.00'
+                    }
                 }]
             }
         }}
@@ -824,7 +825,7 @@ def test_evaluate_alarm_signal_monetary(client):
             "transactie_datum": "2021-12-05"
         }
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?is_active=True", json={'data': [alarm]})
+        rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?filter_active=true", json={'data': [alarm]})
         rm2 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", json={"data":[afspraak]})
         rm3 = rm.get(
             f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_ids={journaalpost_id}",
@@ -876,7 +877,7 @@ def test_evaluate_alarm_signal_monetary(client):
         assert rm5.call_count == 1
         assert rm6.call_count == 1
         assert rm7.call_count == 2
-        assert rm8.call_count == 3
+        assert rm8.call_count == 1
         assert rm9.call_count == 1
         assert fallback.called == 0
         assert response.json == {'data': {
@@ -887,7 +888,7 @@ def test_evaluate_alarm_signal_monetary(client):
                     'signaal': {
                         'id': 'e2b282d9-b31f-451e-9242-11f86c902b35', 
                         'bankTransactions': [{'id': banktransactie_id}], 
-                        'bedragDifference': '-30.00'}
+                        'bedragDifference': '30.00'}
                 }]
             }
         }}
@@ -911,7 +912,7 @@ def test_evaluate_alarm_signal_monetary_one_transaction(client):
         newafspraak = afspraak
         newafspraak["alarm_id"] = alarm_id
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?is_active=True", status_code=200, json={'data': [alarm]})
+        rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?filter_active=true", status_code=200, json={'data': [alarm]})
         rm1a = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?filter_ids={alarm_id}", status_code=200, json={'data': [alarm]})
         rm2 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", status_code=200, json={"data":[afspraak]})
         rm3 = rm.get(f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_ids={journaalpost_id}", status_code=200, json={"data": [journaalpost]})
@@ -929,7 +930,7 @@ def test_evaluate_alarm_signal_monetary_one_transaction(client):
                     'signaal': {
                         'id': 'e2b282d9-b31f-451e-9242-11f86c902b35', 
                         'bankTransactions': [{'id': 100}], 
-                        'bedragDifference': '-30.00'
+                        'bedragDifference': '30.00'
                     }
                 }]
             }
@@ -966,16 +967,16 @@ def test_evaluate_alarm_signal_monetary_one_transaction(client):
         print(f">> >> >> response {response.json} ")
 
         # assert
-        assert rm1.called_once
-        assert rm1a.called_once
+        assert rm1.call_count == 1
+        assert rm1a.call_count == 1
         assert rm2.call_count == 2
-        assert rm2a.called_once
-        assert rm3.called_once
+        assert rm2a.call_count == 1
+        assert rm3.call_count == 1
         assert rm4.call_count == 2
-        assert rm5.called_once
-        assert rm6.called_once
+        assert rm5.call_count == 1
+        assert rm6.call_count == 1
         assert rm7.call_count == 2
-        assert rm8.call_count == 3
+        assert rm8.call_count == 1
         assert fallback.called == 0
         assert response.json == expected
 
@@ -1038,7 +1039,7 @@ def test_evaluate_alarm_no_signal_multiple_transactions(client):
         }
 
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?is_active=True", status_code=200, json={'data': [alarm]})
+        rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?filter_active=true", status_code=200, json={'data': [alarm]})
         rm1a = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?filter_ids={alarm_id}", status_code=200, json={'data': [alarm]})
         rm2 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", status_code=200, json={"data":[afspraak]})
         rm3 = rm.get(f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_ids={journaalpost_id},{journaalpost_id+1}", status_code=200, json={"data": [journaalpost1, journaalpost2]})
@@ -1080,15 +1081,15 @@ def test_evaluate_alarm_no_signal_multiple_transactions(client):
         print(f">> >> >> response {response.json} ")
 
         # assert
-        assert rm1.called_once
-        assert rm1a.called_once
+        assert rm1.call_count == 1
+        assert rm1a.call_count == 1
         assert rm2.call_count == 2
-        assert rm3.called_once
+        assert rm3.call_count == 1
         assert rm4.call_count == 1
-        assert rm5.called_once
+        assert rm5.call_count == 1
         assert rm7.call_count == 1
-        assert rm8.called_once
-        assert rm9.call_count == 2
+        assert rm8.call_count == 1
+        assert rm9.call_count == 1
         assert fallback.called == 0
         assert response.json == expected
 
@@ -1146,7 +1147,7 @@ def test_evaluate_alarm_next_alarm_in_sequence_already_exists(client):
         }
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
         rm1 = rm.get(
-            f"{settings.ALARMENSERVICE_URL}/alarms/?is_active=True", status_code=200,
+            f"{settings.ALARMENSERVICE_URL}/alarms/?filter_active=true", status_code=200,
             json={'data': [alarm, next_alarm]}
         )
         rm2 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", json={"data":[afspraak]})
@@ -1219,7 +1220,7 @@ def test_evaluate_alarm_disabled_because_its_in_the_past(client):
     with requests_mock.Mocker() as rm:
         # arrange
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?is_active=True", json={'data': [alarm]})
+        rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?filter_active=true", json={'data': [alarm]})
         rm2 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", json={"data":[afspraak]})
         rm3 = rm.get(
             f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_ids={journaalpost_id}",
@@ -1278,7 +1279,7 @@ def test_evaluate_alarm_disabled_because_its_in_the_past(client):
         assert rm5.call_count == 1
         assert rm6.call_count == 1
         assert rm7.call_count == 1
-        assert rm8.call_count == 2
+        assert rm8.call_count == 1
         assert fallback.called == 0
         assert response.json == {'data': {
             'evaluateAlarms': {
@@ -1314,7 +1315,7 @@ def test_evaluate_alarm_in_the_past(client):
             "transactie_datum": "2021-12-01"
         }
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?is_active=True", json={'data': [alarm]})
+        rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?filter_active=true", json={'data': [alarm]})
         rm2 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", json={"data": [afspraak]})
         rm3 = rm.get(
             f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_ids={journaalpost_id}",
@@ -1374,7 +1375,7 @@ def test_evaluate_alarm_in_the_past(client):
         assert rm5.call_count == 1
         assert rm6.call_count == 1
         assert rm7.call_count == 2
-        assert rm8.call_count == 3
+        assert rm8.call_count == 1
         assert rm9.call_count == 1
         assert fallback.called == 0
         assert response.json == {'data': {

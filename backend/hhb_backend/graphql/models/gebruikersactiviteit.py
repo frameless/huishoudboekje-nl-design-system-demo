@@ -1,7 +1,6 @@
 """ GebruikersActiviteit model as used in GraphQL queries """
-from datetime import datetime
-
 import graphene
+from datetime import datetime
 from flask import request
 
 import hhb_backend.graphql.models.afdeling as afdeling
@@ -65,7 +64,6 @@ class GebruikersActiviteitSnapshot(graphene.ObjectType):
                     value.pop(bad_key)
                     continue
 
-                
     @classmethod
     def resolve_afdeling(cls, root, _info):
         return cls._resolve_snapshot(root, "afdeling", afdeling.Afdeling)
@@ -88,7 +86,8 @@ class GebruikersActiviteitSnapshot(graphene.ObjectType):
 
     @classmethod
     def resolve_customer_statement_message(cls, root, _info):
-        return cls._resolve_snapshot(root, "customer_statement_message", customer_statement_message.CustomerStatementMessage)
+        return cls._resolve_snapshot(root, "customer_statement_message",
+                                     customer_statement_message.CustomerStatementMessage)
 
     @classmethod
     def resolve_export(cls, root, _info):
@@ -151,15 +150,15 @@ class GebruikersActiviteitEntity(graphene.ObjectType):
 
     @classmethod
     async def _resolve_entity(cls, root, entity_type: str, dataloader_name: str):
-        # todo ??
         if root.get("entityType") == entity_type:
-            return request.dataloader[dataloader_name].load_one(root.get("entityId"))
+            return hhb_dataloader()[dataloader_name].load_one(root.get("entityId"))
+
     @classmethod
     async def resolve_afdeling(cls, root, _info):
         return await cls._resolve_entity(
             root, entity_type="afdeling", dataloader_name="afdelingen"
         )
-    
+
     @classmethod
     async def resolve_postadres(cls, root, _info):
         return await cls._resolve_entity(
@@ -271,11 +270,6 @@ class GebruikersActiviteit(graphene.ObjectType):
         value = root.get("timestamp")
         if value:
             return datetime.fromisoformat(value)
-
-    # async def resolve_gebruiker(root, info):
-    #     # TODO medewerker?
-    #     if root.get('gebruiker_id'):
-    #         return hhb_dataloader().gebruikers.load_one(root.get('gebruiker_id'))
 
 
 class GebruikersActiviteitenPaged(graphene.ObjectType):

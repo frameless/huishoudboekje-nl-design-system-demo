@@ -48,4 +48,4 @@ class HHBDataLoader:
 
 
 def hhb_dataloader() -> HHBDataLoader:
-    return request.dataloader
+    return HHBDataLoader()

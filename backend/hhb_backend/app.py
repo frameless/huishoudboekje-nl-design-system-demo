@@ -9,14 +9,15 @@ from http.client import HTTPException
 import hhb_backend.graphql.blueprint as graphql_blueprint
 from graphql import GraphQLError
 from hhb_backend.auth import Auth
+from hhb_backend.commands.alarms import alarms_cli
 from hhb_backend.graphql.dataloaders import hhb_dataloader, HHBDataLoader
 from hhb_backend.processen import brieven_export
 from hhb_backend.reverse_proxy import ReverseProxied
 
 
 def create_app(
-        config_name="hhb_backend.config.Config",
-        loop=None
+    config_name="hhb_backend.config.Config",
+    loop=None
 ):
     app = Flask(__name__)
     app.config.from_object(config_name)
@@ -40,11 +41,6 @@ def create_app(
         auth = Auth(app)
     except HTTPException as err:
         logger.error(err)
-
-    @app.before_request
-    def add_dataloaders():
-        """ Initialize dataloader per request """
-        request.dataloader = HHBDataLoader()
 
     @app.route("/health")
     def health():
@@ -111,6 +107,8 @@ def create_app(
             output.headers["Content-type"] = "text/plain"
 
         return output
+
+    app.register_blueprint(alarms_cli)
 
     return app
 

@@ -10,4 +10,5 @@ class AlarmLoader(DataLoader[Alarm]):
     model = "alarms"
 
     def load_active(self, active: bool = True) -> List[Alarm]:
-        return self.load(active, filter_item="is_active")
+        return self.load("true" if active else "false", filter_item="filter_active")
+
