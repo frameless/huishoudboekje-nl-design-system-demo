@@ -1,13 +1,12 @@
-import re
-
 import pytest
+import re
 import requests_mock
 from pytest_mock import MockerFixture
 
 from hhb_backend.graphql import settings
 from hhb_backend.processen.automatisch_boeken import automatisch_boeken
 from hhb_backend.service.model.afspraak import Afspraak
-from tests.utils.mock_utils import get_by_filter
+from tests.utils.mock_utils import get_by_filter, mock_feature_flag
 
 
 def post_echo(request, _context):
@@ -114,6 +113,10 @@ async def test_automatisch_boeken_no_csm_success_single(test_request_context, mo
             'hhb_backend.processen.automatisch_boeken.transactie_suggesties',
             return_value={1: [Afspraak(id=11, zoektermen="test")]}
         )
+        mocker.patch(
+            'hhb_backend.feature_flags.Unleash.is_enabled',
+            mock_feature_flag("signalen", True)
+        )
 
         transactions_by_id = mock.get(
             f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids=1",
@@ -182,6 +185,10 @@ async def test_automatisch_boeken_no_csm_success_multiple(test_request_context, 
                 2: [Afspraak(id=12, zoektermen="test")]
             }
         )
+        mocker.patch(
+            'hhb_backend.feature_flags.Unleash.is_enabled',
+            mock_feature_flag("signalen", True)
+        )
 
         transactions_by_id = mock.get(
             re.compile(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/\\?filter_ids=.*"),
@@ -249,6 +256,10 @@ async def test_automatisch_boeken_csm_success_multiple(test_request_context, moc
         mocker.patch(
             'hhb_backend.processen.automatisch_boeken.transactie_suggesties',
             return_value={1: [Afspraak(id=11, zoektermen="test", valid_through='2020-12-31')]}
+        )
+        mocker.patch(
+            'hhb_backend.feature_flags.Unleash.is_enabled',
+            mock_feature_flag("signalen", True)
         )
 
         transactions_by_id = mock.get(
@@ -389,6 +400,10 @@ async def test_automatisch_boeken_no_csm_multiple_suggesties(test_request_contex
                     Afspraak(id=23, zoektermen="test"),
                 ],
             })
+        mocker.patch(
+            'hhb_backend.feature_flags.Unleash.is_enabled',
+            mock_feature_flag("signalen", True)
+        )
 
         transactions_by_id = mock.get(
             re.compile(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/\\?filter_ids=.*"),

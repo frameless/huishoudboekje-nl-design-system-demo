@@ -1,17 +1,18 @@
 """ GraphQL mutation for creating a new Journaalpost """
 
-from typing import List, Dict
-
 import graphene
+import logging
 import requests
 from graphql import GraphQLError
+from typing import List, Dict
 
+from hhb_backend.feature_flags import Unleash
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.afspraak import Afspraak
 from hhb_backend.graphql.models.journaalpost import Journaalpost
-from hhb_backend.graphql.mutations.journaalposten import update_transaction_service_is_geboekt
 from hhb_backend.graphql.mutations.alarmen.evaluate_alarm import evaluate_alarms
+from hhb_backend.graphql.mutations.journaalposten import update_transaction_service_is_geboekt
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
     gebruikers_activiteit_entities,
     log_gebruikers_activiteit,
@@ -103,11 +104,15 @@ class CreateJournaalpostAfspraak(graphene.Mutation):
 
         update_transaction_service_is_geboekt(transactions, is_geboekt=True)
 
-        if alarm_ids:
-            await evaluate_alarms(alarm_ids)
+        # Feature flag: signalen
+        if Unleash().is_enabled("signalen"):
+            logging.info("create_journaalpost mutation: Evaluating alarms...")
+            if alarm_ids:
+                await evaluate_alarms(alarm_ids)
+        else:
+            logging.info("create_journaalpost mutation: Skipping alarm evaluation.")
 
         return CreateJournaalpostAfspraak(journaalposten=journaalposten, ok=True)
-
 
 
 class CreateJournaalpostGrootboekrekening(graphene.Mutation):

@@ -101,7 +101,7 @@ x-unleashservice: &x-unleashservice
 x-py-tests: &x-py-tests
   profiles:
     - tests
-  entrypoint:
+  command:
     - /bin/sh
     - -c
     - pytest tests --disable-pytest-warnings
