@@ -114,7 +114,7 @@ async def evaluate_one_alarm(id: String) -> list:
     return [evaluated_alarm]
 
 
-async def _evaluate_alarm(alarm_: Alarm, active_alarms: list[Alarm], journaalposten):
+async def _evaluate_alarm(alarm_: Alarm, active_alarms: list[Alarm], journaalposten: list[dict]):
     logging.debug(f"Evaluating alarm {alarm_}")
     # get data from afspraak and transactions (by journaalpost reference)
     journaalposten_alarm = [journaalpost for journaalpost in journaalposten if journaalpost["afspraak_id"] == alarm_.afspraakId]
@@ -198,14 +198,14 @@ async def create_alarm(alarm: Alarm) -> Optional[Alarm]:
 def should_check_alarm(alarm: Alarm) -> bool:
     # is the alarm set in the past, or the future
     str_alarm_date = alarm.startDate
-    alarm_date = dateutil.parser.isoparse(str_alarm_date).date()
+    alarm_date = to_date(str_alarm_date)
     date_margin = int(alarm.datumMargin)
     day_after_expected_window = alarm_date + timedelta(
         days=(date_margin + 1))  # plus one to make sure the alarm is checked after the expected date range.
-    utc_now_date = (datetime.now(timezone.utc)).date()
+    today = date.today()
 
     # if now or in the past, it should be checked
-    return day_after_expected_window <= utc_now_date
+    return day_after_expected_window <= today
 
 
 def get_active_alarms() -> list[Alarm]:
