@@ -210,6 +210,31 @@ def test_bedrag_difference(expected_createSignal, expected_difference, deviated_
     assert deviated_ids == monetary_deviated_transaction_ids
 
 
+# get_banktransactions_by_journaalposten()
+def test_get_banktransactions_by_journaalposten():
+    """This tests if the right banktransactions from the provided journaalposten are retrieved."""
+    with requests_mock.Mocker() as rm:
+        rm1 = rm.get(
+            f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids={banktransactie_id}",
+            json={"data": [banktransactie]}
+        )
+        transactions = EvaluateAlarm.get_banktransactions_by_journaalposten([journaalpost])
+        assert rm1.call_count == 1
+        assert transactions == [banktransactie]
+
+def test_get_banktransactions_by_journaalposten_no_journaalposten():
+    """This tests if an empty array is returned if no journaalposten are provided."""
+    transactions = EvaluateAlarm.get_banktransactions_by_journaalposten([])
+    assert transactions == []
+
+    
+# disable_alarm() 
+# should_check_alarm()
+# does_next_alarm_exist() (word aangeroepen in should_create_next_alarm())
+# should_create_next_alarm()
+# should_create_signaal()
+
+
 @freeze_time("2021-12-08")
 def test_evaluate_alarm_illegal_betaalinstructie_combination(client, mocker):
     """This tests the evaluation of an alarm that has an invalid combination of byDay, byMonth and byMonthDay."""
