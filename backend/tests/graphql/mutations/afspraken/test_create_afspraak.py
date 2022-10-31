@@ -95,28 +95,28 @@ def test_create_afspraak_success(client):
             }''',
                 "variables": {
                     "input": {
-                      "omschrijving": "test afspraak",
-                      "burgerId": 1,
-                      "credit": 0,
-                      "afdelingId": 1,
-                      "postadresId" : "76d67e32-a29c-476c-b3be-cd2cbf2ee437",
-                      "tegenRekeningId": 1,
-                      "rubriekId": 1,
-                      "bedrag": "0.00",
-                      "validFrom": '2021-01-01'
+                        "omschrijving": "test afspraak",
+                        "burgerId": 1,
+                        "credit": 0,
+                        "afdelingId": 1,
+                        "postadresId": "76d67e32-a29c-476c-b3be-cd2cbf2ee437",
+                        "tegenRekeningId": 1,
+                        "rubriekId": 1,
+                        "bedrag": "0.00",
+                        "validFrom": '2021-01-01',
+                        "zoektermen": ["test1", "test2"]
                     }
-                  }},
+                }},
         )
 
-
         # assert
-        assert rm1.called_once
-        assert rm2.called_once
-        assert rm3.called_once
-        assert rm4.called_once
-        assert rm5.called_once
-        assert rm6.called_once
-        assert rm7.called_once
+        assert rm1.call_count == 1
+        assert rm2.call_count == 1
+        assert rm3.call_count == 1
+        assert rm4.call_count == 1
+        assert rm5.call_count == 1
+        assert rm6.call_count == 1
+        assert rm7.call_count == 1
         assert fallback.called == 0
         assert response.json["data"]["createAfspraak"]["ok"] is True
 
@@ -221,7 +221,7 @@ def test_create_afspraak_validation(client, post_status: int, post_message: str,
         # rekeningen
         # postaddressen
         # assert not log_post.called
-        # assert afspraken_post.called_once
+        # assert afspraken_post.call_count == 1
         assert not post_any.called
         assert not get_any.called
 
