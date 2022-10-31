@@ -1,8 +1,7 @@
 """ GraphQL mutation for creating a new Afspraak """
-from datetime import datetime
-
 import graphene
 import requests
+from datetime import datetime
 from graphql import GraphQLError
 
 from hhb_backend.graphql import settings
@@ -30,6 +29,7 @@ class CreateAfspraakInput(graphene.InputObjectType):
     alarm_id = graphene.String()
     valid_from = graphene.String()
     valid_through = graphene.String()
+    zoektermen = graphene.List(graphene.String)
 
 
 class CreateAfspraak(graphene.Mutation):
