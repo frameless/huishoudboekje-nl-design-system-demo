@@ -244,30 +244,21 @@ def test_disable_alarm():
 @freeze_time("2021-12-06")
 def test_disable_alarm_not_disabled():
     """This tests that when an alarm should not be disabled yet, it stays active."""
-    with requests_mock.Mocker() as rm:
-        fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        alarm_response: Alarm = EvaluateAlarm.disable_alarm(date(2021, 12, 8), alarm)
-        assert fallback.call_count == 0
-        assert alarm_response.isActive == True
+    alarm_response: Alarm = EvaluateAlarm.disable_alarm(date(2021, 12, 8), alarm)
+    assert alarm_response.isActive == True
 
 
 @freeze_time("2021-12-08")
 def test_should_check_alarm_true():
     """This tests if the alarm should be evaluated, here it should."""
-    with requests_mock.Mocker() as rm:
-        fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        need_check = EvaluateAlarm.should_check_alarm(alarm)
-        assert fallback.call_count == 0
-        assert need_check == True
+    need_check = EvaluateAlarm.should_check_alarm(alarm)
+    assert need_check == True
 
 @freeze_time("2021-12-06")
 def test_should_check_alarm_false():
     """This tests if the alarm should be evaluated, here it should not."""
-    with requests_mock.Mocker() as rm:
-        fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        need_check = EvaluateAlarm.should_check_alarm(alarm)
-        assert fallback.call_count == 0
-        assert need_check == False
+    need_check = EvaluateAlarm.should_check_alarm(alarm)
+    assert need_check == False
 
 
 # does_next_alarm_exist() (word aangeroepen in should_create_next_alarm())
