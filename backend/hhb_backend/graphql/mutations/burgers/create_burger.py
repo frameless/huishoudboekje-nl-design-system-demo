@@ -55,7 +55,7 @@ class CreateBurger(graphene.Mutation):
 
     @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(_root, _info, input):
+    def mutate(_root, _info, input):
         """ Create the new Gebruiker/Burger """
 
         graphene_burger.Burger.bsn_length(input.get('bsn'))
@@ -63,7 +63,7 @@ class CreateBurger(graphene.Mutation):
 
         rekeningen = input.pop("rekeningen", None)
 
-        huishouden = await create_huishouden_if_not_exists(huishouden=input.pop("huishouden", {}))
+        huishouden = create_huishouden_if_not_exists(huishouden=input.pop("huishouden", {}))
         input["huishouden_id"] = huishouden.id
 
         response = requests.post(

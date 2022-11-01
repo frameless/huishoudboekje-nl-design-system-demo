@@ -31,7 +31,7 @@ class DeleteRubriek(graphene.Mutation):
 
     @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(_root, _info, **_kwargs):
+    def mutate(_root, _info, **_kwargs):
         """ Delete current rubriek """
         id = _kwargs.get("id")
         previous = hhb_dataloader().rubrieken.load_one(id)

@@ -25,7 +25,7 @@ class BankTransactionQuery:
 
     @classmethod
     @log_gebruikers_activiteit
-    async def resolver(cls, _root, _info, id):
+    def resolver(cls, _root, _info, id):
         return hhb_dataloader().bank_transactions.load_one(id)
 
 
@@ -47,7 +47,7 @@ class BankTransactionsQuery:
 
     @classmethod
     @log_gebruikers_activiteit
-    async def resolver(cls, _root, _info, **kwargs):
+    def resolver(cls, _root, _info, **kwargs):
         return hhb_dataloader().bank_transactions.load_all(filters=kwargs.get("filters", None))
 
 
@@ -71,7 +71,7 @@ class BankTransactionsPagedQuery:
 
     @classmethod
     @log_gebruikers_activiteit
-    async def resolver(cls, _root, _info, **kwargs):
+    def resolver(cls, _root, _info, **kwargs):
         if "start" in kwargs and "limit" in kwargs:
             return hhb_dataloader().bank_transactions.load_paged(
                 start=kwargs["start"],

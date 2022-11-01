@@ -48,7 +48,7 @@ class DeleteJournaalpost(graphene.Mutation):
 
     @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(_root, _info, id):
+    def mutate(_root, _info, id):
         previous = hhb_dataloader().journaalposten.load_one(id)
         if previous and previous.afspraak_id:
             previous.afspraak = hhb_dataloader().afspraken.load_one(previous.afspraak_id)

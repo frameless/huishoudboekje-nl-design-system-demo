@@ -34,7 +34,7 @@ class CreateRubriek(graphene.Mutation):
 
     @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(_root, _info, **kwargs):
+    def mutate(_root, _info, **kwargs):
         """ Create the new Rubriek """
         if (
             kwargs["grootboekrekening_id"]

@@ -1,4 +1,5 @@
 """ GraphQL GebruikersActiviteiten query """
+import logging
 import graphene
 from graphql import GraphQLError
 
@@ -10,21 +11,21 @@ class GebruikersActiviteitQuery:
     return_type = graphene.Field(gebruikersactiviteit.GebruikersActiviteit, id=graphene.Int(required=True))
 
     @staticmethod
-    async def resolver(_root, _info, **kwargs):
+    def resolver(_root, _info, **kwargs):
         return hhb_dataloader().gebruikersactiviteiten.load_one(kwargs["id"])
 
 
 class GebruikersActiviteitenQuery:
     return_type = graphene.List(
         gebruikersactiviteit.GebruikersActiviteit,
-        ids=graphene.List(graphene.Int, default_value=[]),
-        burgerIds=graphene.List(graphene.Int, default_value=[]),
-        afsprakenIds=graphene.List(graphene.Int, default_value=[]),
-        huishoudenIds=graphene.List(graphene.Int, default_value=[]),
+        ids=graphene.List(graphene.Int),
+        burgerIds=graphene.List(graphene.Int),
+        afsprakenIds=graphene.List(graphene.Int),
+        huishoudenIds=graphene.List(graphene.Int),
     )
 
     @staticmethod
-    async def resolver(_root, _info, **kwargs):
+    def resolver(_root, _info, **kwargs):
         if (
                 not kwargs["ids"]
                 and not kwargs["burgerIds"]
@@ -48,6 +49,7 @@ class GebruikersActiviteitenQuery:
                     if afspraak not in gebruikersactiviteiten
                 )
             if kwargs["ids"]:
+                logging.debug(f"GebruikersactiviteitenIds: {kwargs['ids']}")
                 ids_list = hhb_dataloader().gebruikersactiviteiten.load(kwargs["ids"])
                 gebruikersactiviteiten.extend(x for x in ids_list if x not in gebruikersactiviteiten)
             if kwargs["huishoudenIds"]:
@@ -62,13 +64,13 @@ class GebruikersActiviteitenPagedQuery:
         gebruikersactiviteit.GebruikersActiviteitenPaged,
         start=graphene.Int(),
         limit=graphene.Int(),
-        burgerIds=graphene.List(graphene.Int, default_value=[]),
-        afsprakenIds=graphene.List(graphene.Int, default_value=[]),
-        huishoudenIds=graphene.List(graphene.Int, default_value=[]),
+        burgerIds=graphene.List(graphene.Int),
+        afsprakenIds=graphene.List(graphene.Int),
+        huishoudenIds=graphene.List(graphene.Int),
     )
 
     @staticmethod
-    async def resolver(_root, _info, **kwargs):
+    def resolver(_root, _info, **kwargs):
         if "start" in kwargs and "limit" in kwargs:
             if not kwargs["burgerIds"] and not kwargs["afsprakenIds"] and not kwargs["huishoudenIds"]:
                 return hhb_dataloader().gebruikersactiviteiten.load_paged(

@@ -29,7 +29,7 @@ class UpdateSignaal(graphene.Mutation):
 
     @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(root, info, id: str, input: UpdateSignaalInput):
+    def mutate(root, info, id: str, input: UpdateSignaalInput):
         """ Mutatie voor het wijzigen van een bestaand Signaal """
         response = SignaalHelper.update(id, input)
 

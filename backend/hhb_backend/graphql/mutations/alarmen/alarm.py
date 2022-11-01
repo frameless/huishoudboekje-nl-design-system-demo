@@ -23,9 +23,9 @@ class CreateAlarmInput(graphene.InputObjectType):
     datumMargin = graphene.Int()
     bedrag = graphene.Field(Bedrag)
     bedragMargin = graphene.Field(Bedrag)
-    byDay = graphene.List(DayOfWeek, default_value=[])
-    byMonth = graphene.List(graphene.Int, default_value=[])
-    byMonthDay = graphene.List(graphene.Int, default_value=[])
+    byDay = graphene.List(DayOfWeek)
+    byMonth = graphene.List(graphene.Int)
+    byMonthDay = graphene.List(graphene.Int)
 
 
 class UpdateAlarmInput(graphene.InputObjectType):

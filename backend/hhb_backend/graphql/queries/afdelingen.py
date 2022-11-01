@@ -23,13 +23,13 @@ class AfdelingQuery:
 
     @classmethod
     @log_gebruikers_activiteit
-    async def resolver(cls, _root, _info, id):
+    def resolver(cls, _root, _info, id):
         return hhb_dataloader().afdelingen.load_one(id)
 
 
 class AfdelingenQuery:
     return_type = graphene.List(
-        Afdeling, ids=graphene.List(graphene.Int, default_value=[])
+        Afdeling, ids=graphene.List(graphene.Int)
     )
 
     @classmethod
@@ -43,7 +43,7 @@ class AfdelingenQuery:
 
     @classmethod
     @log_gebruikers_activiteit
-    async def resolver(cls, _root, _info, ids=None):
+    def resolver(cls, _root, _info, ids=None):
         if ids:
             return hhb_dataloader().afdelingen.load(ids)
         return hhb_dataloader().afdelingen.load_all()

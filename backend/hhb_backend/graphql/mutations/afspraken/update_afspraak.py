@@ -54,7 +54,7 @@ class UpdateAfspraak(graphene.Mutation):
 
     @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(_root, _info, id: int, input: UpdateAfspraakInput):
+    def mutate(_root, _info, id: int, input: UpdateAfspraakInput):
         """ Update the Afspraak """
 
         previous = hhb_dataloader().afspraken.load_one(id)

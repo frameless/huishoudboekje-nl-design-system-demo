@@ -9,7 +9,7 @@ from hhb_backend.processen.saldo_berekenen import saldo_berekenen
 
 
 class SaldoQuery:
-    return_type = graphene.Field(Saldo, burger_ids=graphene.List(graphene.Int, default_value=[]))
+    return_type = graphene.Field(Saldo, burger_ids=graphene.List(graphene.Int))
 
     @classmethod
     def gebruikers_activiteit(cls, _root, info, burger_ids, *_args, **_kwargs):
@@ -22,5 +22,5 @@ class SaldoQuery:
 
     @classmethod
     @log_gebruikers_activiteit
-    async def resolver(cls, _root, _info, burger_ids):
-        return await saldo_berekenen(burger_ids)
+    def resolver(cls, _root, _info, burger_ids):
+        return saldo_berekenen(burger_ids)

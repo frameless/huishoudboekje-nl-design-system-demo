@@ -34,7 +34,7 @@ class DeleteBurger(graphene.Mutation):
 
     @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(_root, info, id):
+    def mutate(_root, info, id):
         """Delete current burger"""
         existing_burger = hhb_dataloader().burgers.load_one(id)
         if not existing_burger:

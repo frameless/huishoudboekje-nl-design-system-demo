@@ -23,13 +23,13 @@ class JournaalpostQuery:
 
     @classmethod
     @log_gebruikers_activiteit
-    async def resolver(cls, _root, _info, id):
+    def resolver(cls, _root, _info, id):
         return hhb_dataloader().journaalposten.load_one(id)
 
 
 class JournaalpostenQuery:
     return_type = graphene.List(
-        Journaalpost, ids=graphene.List(graphene.Int, default_value=[])
+        Journaalpost, ids=graphene.List(graphene.Int)
     )
 
     @classmethod
@@ -43,7 +43,7 @@ class JournaalpostenQuery:
 
     @classmethod
     @log_gebruikers_activiteit
-    async def resolver(cls, _root, _info, ids=None):
+    def resolver(cls, _root, _info, ids=None):
         if ids:
             return hhb_dataloader().journaalposten.load(ids)
         return hhb_dataloader().journaalposten.load_all()

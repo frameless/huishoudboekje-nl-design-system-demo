@@ -35,20 +35,20 @@ class Burger(graphene.ObjectType):
             return rekeningen[0].get('iban')
         return None
 
-    async def resolve_rekeningen(self, _info):
+    def resolve_rekeningen(self, _info):
         """ Get rekeningen when requested """
         return hhb_dataloader().rekeningen.by_burger(self.get('id')) or []
 
-    async def resolve_afspraken(self, _info):
+    def resolve_afspraken(self, _info):
         return hhb_dataloader().afspraken.by_burger(self.get('id')) or []
 
-    async def resolve_gebruikersactiviteiten(self, _info):
+    def resolve_gebruikersactiviteiten(self, _info):
         return hhb_dataloader().gebruikersactiviteiten.by_burger(self.get('id')) or []
 
-    async def resolve_huishouden(self, _info):
+    def resolve_huishouden(self, _info):
         return hhb_dataloader().huishoudens.load_one(self.get('huishouden_id'))
 
-    async def resolve_geboortedatum(self, _info):
+    def resolve_geboortedatum(self, _info):
         if value := self.get('geboortedatum'):
             return to_date(value)
 

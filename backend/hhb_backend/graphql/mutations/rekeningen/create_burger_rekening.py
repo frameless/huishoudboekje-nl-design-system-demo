@@ -36,7 +36,7 @@ class CreateBurgerRekening(graphene.Mutation):
 
     @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(_root, _info, burger_id, rekening):
+    def mutate(_root, _info, burger_id, rekening):
         """ Create the new Rekening """
         result = create_burger_rekening(burger_id, rekening)
         return CreateBurgerRekening(rekening=result, ok=True)

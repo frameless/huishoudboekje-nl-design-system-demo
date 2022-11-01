@@ -36,7 +36,7 @@ class AddHuishoudenBurger(graphene.Mutation):
 
     @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(_root, _info, huishouden_id: int, burger_ids: List[int]):
+    def mutate(_root, _info, huishouden_id: int, burger_ids: List[int]):
         """Add burgers to given huishouden"""
         previous = hhb_dataloader().huishoudens.load_one(huishouden_id)
 

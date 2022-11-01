@@ -18,12 +18,12 @@ class AlarmQuery:
 
     @classmethod
     @log_gebruikers_activiteit
-    async def resolver(cls, _root, _info, id):
+    def resolver(cls, _root, _info, id):
         return hhb_dataloader().alarms.load_one(id)
 
 
 class AlarmenQuery:
-    return_type = graphene.List(Alarm, ids=graphene.List(graphene.String, default_value=[]))
+    return_type = graphene.List(Alarm, ids=graphene.List(graphene.String))
 
     @classmethod
     def gebruikers_activiteit(cls, _root, info, ids, *_args, **_kwargs):
@@ -34,7 +34,7 @@ class AlarmenQuery:
 
     @classmethod
     @log_gebruikers_activiteit
-    async def resolver(cls, _root, _info, ids=None):
+    def resolver(cls, _root, _info, ids=None):
         if ids:
             return hhb_dataloader().alarms.load(ids)
         return hhb_dataloader().alarms.load_all()

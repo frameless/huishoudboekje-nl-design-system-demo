@@ -33,7 +33,7 @@ class DeleteCustomerStatementMessage(graphene.Mutation):
 
     @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(_root, _info, id):
+    def mutate(_root, _info, id):
         """ Delete current Customer Statement Message """
         previous = hhb_dataloader().csms.load_one(id)
 

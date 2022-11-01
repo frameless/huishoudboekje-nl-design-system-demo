@@ -24,7 +24,7 @@ class ExportQuery:
 
     @classmethod
     @log_gebruikers_activiteit
-    async def resolver(cls, _root, _info, id):
+    def resolver(cls, _root, _info, id):
         return hhb_dataloader().exports.load_one(id)
 
 
@@ -48,7 +48,7 @@ class ExportsQuery:
 
     @classmethod
     @log_gebruikers_activiteit
-    async def resolver(cls, _root, _info, ids=None, start_datum=None, eind_datum=None):
+    def resolver(cls, _root, _info, ids=None, start_datum=None, eind_datum=None):
         if ids:
             return hhb_dataloader().exports.load(ids)
         if start_datum or eind_datum:

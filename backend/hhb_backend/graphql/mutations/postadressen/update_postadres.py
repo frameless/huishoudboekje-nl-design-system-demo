@@ -36,7 +36,7 @@ class UpdatePostadres(graphene.Mutation):
 
     @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(_root, _info, id, **kwargs):
+    def mutate(_root, _info, id, **kwargs):
         """ Update the current Postadres """
         previous = hhb_dataloader().postadressen.load_one(id)
         if not previous:

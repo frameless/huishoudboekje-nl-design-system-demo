@@ -24,13 +24,13 @@ class AfspraakQuery:
 
     @classmethod
     @log_gebruikers_activiteit
-    async def resolver(cls, _root, _info, id):
+    def resolver(cls, _root, _info, id):
         return hhb_dataloader().afspraken.load_one(id)
 
 
 class AfsprakenQuery:
     return_type = graphene.List(
-        afspraak.Afspraak, ids=graphene.List(graphene.Int, default_value=[])
+        afspraak.Afspraak, ids=graphene.List(graphene.Int)
     )
 
     @classmethod
@@ -42,7 +42,7 @@ class AfsprakenQuery:
 
     @classmethod
     @log_gebruikers_activiteit
-    async def resolver(cls, _root, _info, ids=None):
+    def resolver(cls, _root, _info, ids=None):
         if ids:
             return hhb_dataloader().afspraken.load(ids)
         return hhb_dataloader().afspraken.load_all()

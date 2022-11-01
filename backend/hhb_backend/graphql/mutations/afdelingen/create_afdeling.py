@@ -44,7 +44,7 @@ class CreateAfdeling(graphene.Mutation):
         )
 
     @log_gebruikers_activiteit
-    async def mutate(root, _info, **kwargs):
+    def mutate(root, _info, **kwargs):
         """ Create the new Afdeling """
         input = kwargs.pop("input")
         rekeningen = input.pop("rekeningen", None)

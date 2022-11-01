@@ -17,11 +17,11 @@ def command():
     loop.close()
 
 
-async def evaluate():
+def evaluate():
     """Evaluates all current active alarms"""
     if Unleash().is_enabled("signalen"):
         logging.info("Evaluating all alarms...")
-        await evaluate_alarms()
+        evaluate_alarms()
         logging.info("Done!")
     else:
         logging.info("Skipping evaluation of alarms: feature flag 'signalen' is disabled.")

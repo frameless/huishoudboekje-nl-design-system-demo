@@ -46,7 +46,7 @@ def create_app(
     def health():
         return make_response(("ok", {"Content-Type": "text/plain"}))
 
-    graphql = graphql_blueprint.create_blueprint(loop=loop)
+    graphql = graphql_blueprint.create_blueprint()
 
     @graphql.before_request
     @auth.require_login

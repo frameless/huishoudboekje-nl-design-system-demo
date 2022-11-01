@@ -28,7 +28,7 @@ class AlarmTriggerResult(graphene.ObjectType):
 
 class EvaluateAlarms(graphene.Mutation):
     class Arguments:
-        ids = graphene.List(graphene.String, default_value=[])
+        ids = graphene.List(graphene.String)
 
     alarmTriggerResult = graphene.List(lambda: AlarmTriggerResult)
 

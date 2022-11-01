@@ -23,19 +23,19 @@ class BurgerQuery:
 
     @classmethod
     @log_gebruikers_activiteit
-    async def resolver(cls, _root, _info, id, *_args, **_kwargs):
+    def resolver(cls, _root, _info, id, *_args, **_kwargs):
         return hhb_dataloader().burgers.load_one(id)
 
 
 class BurgersQuery:
     return_type = graphene.List(
         burger.Burger,
-        ids=graphene.List(graphene.Int, default_value=[]),
+        ids=graphene.List(graphene.Int),
         search=DynamicType()
     )
 
     @classmethod
-    def gebruikers_activiteit(cls, _root, info, ids, *_args, **_kwargs):
+    def gebruikers_activiteit(cls, _root, info, ids=None, *_args, **_kwargs):
         return dict(
             action=info.field_name,
             entities=gebruikers_activiteit_entities(entity_type="burger", result=ids),
@@ -43,8 +43,8 @@ class BurgersQuery:
 
     @classmethod
     @log_gebruikers_activiteit
-    async def resolver(cls, _root, _info, **kwargs):
-        if kwargs["ids"]:
+    def resolver(cls, _root, _info, **kwargs):
+        if "ids" in kwargs:
             return hhb_dataloader().burgers.load(kwargs["ids"])
 
         if "search" in kwargs:
@@ -100,7 +100,7 @@ class BurgersPagedQuery:
 
     @classmethod
     @log_gebruikers_activiteit
-    async def resolver(cls, _root, _info, **kwargs):
+    def resolver(cls, _root, _info, **kwargs):
         if "start" in kwargs and "limit" in kwargs:
             return hhb_dataloader().burgers.load_paged(start=kwargs["start"], limit=kwargs["limit"])
         return hhb_dataloader().burgers.load_all()

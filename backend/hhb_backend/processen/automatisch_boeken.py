@@ -10,7 +10,7 @@ from hhb_backend.service.model.bank_transaction import BankTransaction
 from hhb_backend.graphql.mutations.journaalposten.create_journaalpost import create_journaalposten
 
 
-async def automatisch_boeken(customer_statement_message_id: int = None):
+def automatisch_boeken(customer_statement_message_id: int = None):
     logging.info(f"automatisch_boeken: customer_statement_message_id={customer_statement_message_id}")
     if customer_statement_message_id is not None:
         transactions = [
@@ -21,7 +21,7 @@ async def automatisch_boeken(customer_statement_message_id: int = None):
     else:
         transactions = hhb_dataloader().bank_transactions.by_is_geboekt(False)
 
-    suggesties = await transactie_suggesties(transactions=transactions)
+    suggesties = transactie_suggesties(transactions=transactions)
     _afspraken = {}
     _automatische_transacties = []
     _matching_transaction_ids = []
@@ -57,7 +57,7 @@ async def automatisch_boeken(customer_statement_message_id: int = None):
     return journaalposten_
 
 
-async def transactie_suggesties(transactie_ids: List[int] = None, transactions: List[BankTransaction] = None) -> Dict[int, List[Afspraak]]:
+def transactie_suggesties(transactie_ids: List[int] = None, transactions: List[BankTransaction] = None) -> Dict[int, List[Afspraak]]:
     if transactie_ids:
         if type(transactie_ids) != list:
             transactie_ids = [transactie_ids]

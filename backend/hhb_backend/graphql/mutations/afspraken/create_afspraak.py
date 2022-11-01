@@ -60,7 +60,7 @@ class CreateAfspraak(graphene.Mutation):
 
     @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(_root, _info, input: CreateAfspraakInput):
+    def mutate(_root, _info, input: CreateAfspraakInput):
         """ Create the new Afspraak """
 
         if "valid_from" not in input:

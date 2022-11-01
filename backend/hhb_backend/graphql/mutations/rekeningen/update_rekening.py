@@ -43,7 +43,7 @@ class UpdateRekening(graphene.Mutation):
 
     @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(_root, _info, id, rekening):
+    def mutate(_root, _info, id, rekening):
         """ Create the new Rekening """
         previous = hhb_dataloader().rekeningen.load_one(id)
 

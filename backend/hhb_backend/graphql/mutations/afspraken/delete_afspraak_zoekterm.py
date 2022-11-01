@@ -38,7 +38,7 @@ class DeleteAfspraakZoekterm(graphene.Mutation):
 
     @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(_root, _info, afspraak_id: int, zoekterm):
+    def mutate(_root, _info, afspraak_id: int, zoekterm):
         """ Delete zoekterm to afspraak """
 
         previous = hhb_dataloader().afspraken.load_one(afspraak_id)
@@ -65,6 +65,6 @@ class DeleteAfspraakZoekterm(graphene.Mutation):
 
         afspraak = Afspraak(response.json()["data"])
 
-        matching_afspraken = await find_matching_afspraken_by_afspraak(afspraak)
+        matching_afspraken = find_matching_afspraken_by_afspraak(afspraak)
 
         return DeleteAfspraakZoekterm(afspraak=afspraak, previous=previous, matching_afspraken=matching_afspraken, ok=True)

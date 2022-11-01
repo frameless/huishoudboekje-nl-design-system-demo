@@ -75,15 +75,13 @@ def log_gebruikers_activiteit(view_func):
     the LOG_SERVICE"""
 
     @wraps(view_func)
-    async def decorated(*args, **kwargs):
+    def decorated(*args, **kwargs):
         logging.debug("in gebruikersactiviteit decorator")
 
-        result = \
-            (await view_func(*args, **kwargs)) \
-            if inspect.iscoroutinefunction(view_func)\
-            else view_func(*args, **kwargs)
-
         try:
+            result = view_func(*args, **kwargs)
+            logging.debug(f"Result in gebruikersactiviteit {result}")
+
             gebruikers_activiteit = extract_gebruikers_activiteit(
                 result, *args, **kwargs)
             logging.debug(f"gebruikersactiviteit: {gebruikers_activiteit}" )
@@ -110,7 +108,8 @@ def log_gebruikers_activiteit(view_func):
                     f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/",
                     json=json,
                 )
-        except:
+        except Exception as e:
+            logging.error(f"Something went wrong in getting result: {e}")
             logging.exception(f"Failed to log gebruikers_activiteit")
 
         return result

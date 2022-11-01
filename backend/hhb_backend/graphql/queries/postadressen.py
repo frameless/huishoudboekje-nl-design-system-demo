@@ -21,13 +21,13 @@ class PostadresQuery:
 
     @classmethod
     @log_gebruikers_activiteit
-    async def resolver(cls, _root, _info, id):
+    def resolver(cls, _root, _info, id):
         return hhb_dataloader().postadressen.load_one(id)
 
 
 class PostadressenQuery:
     return_type = graphene.List(
-        postadres.Postadres, ids=graphene.List(graphene.String, default_value=[])
+        postadres.Postadres, ids=graphene.List(graphene.String)
     )
 
     @classmethod
@@ -39,7 +39,7 @@ class PostadressenQuery:
 
     @classmethod
     @log_gebruikers_activiteit
-    async def resolver(cls, _root, _info, ids=None):
+    def resolver(cls, _root, _info, ids=None):
         if ids:
             return hhb_dataloader().postadressen.load(ids)
         return hhb_dataloader().postadressen.load_all()

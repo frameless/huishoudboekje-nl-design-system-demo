@@ -20,7 +20,7 @@ class StartAutomatischBoeken(graphene.Mutation):
 
     @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(_root, _info, **kwargs):
-        journaalposten = await automatisch_boeken.automatisch_boeken()
+    def mutate(_root, _info, **kwargs):
+        journaalposten = automatisch_boeken.automatisch_boeken()
 
         return StartAutomatischBoeken(ok=True, journaalposten=journaalposten)

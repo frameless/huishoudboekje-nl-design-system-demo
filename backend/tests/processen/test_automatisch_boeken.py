@@ -53,8 +53,7 @@ def get_afspraken(request, _context):
     return get_by_filter(request, mock_afspraken)
 
 
-@pytest.mark.asyncio
-async def test_automatisch_boeken_no_csm_no_transactions(mocker: MockerFixture):
+def test_automatisch_boeken_no_csm_no_transactions(mocker: MockerFixture):
     with requests_mock.Mocker() as mock:
         get_any = mock.get(requests_mock.ANY, json={"data": []})
         post_any = mock.post(requests_mock.ANY, json=post_echo)
@@ -66,7 +65,7 @@ async def test_automatisch_boeken_no_csm_no_transactions(mocker: MockerFixture):
 
         mocker.patch('hhb_backend.processen.automatisch_boeken.transactie_suggesties', return_value={})
 
-        result = await automatisch_boeken()
+        result = automatisch_boeken()
 
         assert result is None
         assert transactions_is_geboekt.call_count == 1
@@ -76,8 +75,7 @@ async def test_automatisch_boeken_no_csm_no_transactions(mocker: MockerFixture):
         assert not get_any.called
 
 
-@pytest.mark.asyncio
-async def test_automatisch_boeken_no_csm_no_suggestions(mocker: MockerFixture):
+def test_automatisch_boeken_no_csm_no_suggestions(mocker: MockerFixture):
     with requests_mock.Mocker() as mock:
         get_any = mock.get(requests_mock.ANY, json={"data": []})
         post_any = mock.post(requests_mock.ANY, json=post_echo)
@@ -88,7 +86,7 @@ async def test_automatisch_boeken_no_csm_no_suggestions(mocker: MockerFixture):
         )
         mocker.patch('hhb_backend.processen.automatisch_boeken.transactie_suggesties', return_value={1: []})
 
-        result = await automatisch_boeken()
+        result = automatisch_boeken()
 
         assert result is None
 
@@ -99,8 +97,7 @@ async def test_automatisch_boeken_no_csm_no_suggestions(mocker: MockerFixture):
         assert not get_any.called
 
 
-@pytest.mark.asyncio
-async def test_automatisch_boeken_no_csm_success_single(mocker: MockerFixture):
+def test_automatisch_boeken_no_csm_success_single(mocker: MockerFixture):
     with requests_mock.Mocker() as mock:
         get_any = mock.get(requests_mock.ANY, status_code=404)
         post_any = mock.post(requests_mock.ANY, status_code=404)
@@ -135,7 +132,7 @@ async def test_automatisch_boeken_no_csm_success_single(mocker: MockerFixture):
             json=post_echo
         )
 
-        result = await automatisch_boeken()
+        result = automatisch_boeken()
 
         # check if everything is mocked
         assert not post_any.called
@@ -155,8 +152,7 @@ async def test_automatisch_boeken_no_csm_success_single(mocker: MockerFixture):
         assert journaalpost_by_transaction.call_count == 1
 
 
-@pytest.mark.asyncio
-async def test_automatisch_boeken_no_csm_success_multiple(mocker: MockerFixture):
+def test_automatisch_boeken_no_csm_success_multiple(mocker: MockerFixture):
     with requests_mock.Mocker() as mock:
         get_any = mock.get(requests_mock.ANY, status_code=404)
         post_any = mock.post(requests_mock.ANY, status_code=404)
@@ -187,7 +183,7 @@ async def test_automatisch_boeken_no_csm_success_multiple(mocker: MockerFixture)
         journaalposten_post = mock.post(f"{settings.HHB_SERVICES_URL}/journaalposten/", json=post_echo_multi(30))
         transactions_post = mock.post(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/1,2", json=post_echo)
 
-        result = await automatisch_boeken()
+        result = automatisch_boeken()
 
         # Check if everything are mocked
         assert not post_any.called
@@ -210,8 +206,7 @@ async def test_automatisch_boeken_no_csm_success_multiple(mocker: MockerFixture)
         assert journaalpost_by_transaction.call_count == 1
 
 
-@pytest.mark.asyncio
-async def test_automatisch_boeken_csm_success_multiple(mocker: MockerFixture):
+def test_automatisch_boeken_csm_success_multiple(mocker: MockerFixture):
     with requests_mock.Mocker() as mock:
         get_any = mock.get(requests_mock.ANY, status_code=404)
         post_any = mock.post(requests_mock.ANY, status_code=404)
@@ -242,7 +237,7 @@ async def test_automatisch_boeken_csm_success_multiple(mocker: MockerFixture):
         journaalposten_post = mock.post(f"{settings.HHB_SERVICES_URL}/journaalposten/", json=post_echo_multi(30))
         transactions_post = mock.post(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/1", json=post_echo)
 
-        result = await automatisch_boeken(1)
+        result = automatisch_boeken(1)
 
         # check if everything is mocked
         assert not post_any.called
@@ -262,8 +257,7 @@ async def test_automatisch_boeken_csm_success_multiple(mocker: MockerFixture):
         assert journaalpost_by_transaction.call_count == 1
 
 
-@pytest.mark.asyncio
-async def test_automatisch_boeken_no_csm_failure_journaalpost_exists(mocker: MockerFixture):
+def test_automatisch_boeken_no_csm_failure_journaalpost_exists(mocker: MockerFixture):
     with requests_mock.Mocker() as mock:
         get_any = mock.get(requests_mock.ANY, status_code=404)
         post_any = mock.post(requests_mock.ANY, status_code=404)
@@ -302,7 +296,7 @@ async def test_automatisch_boeken_no_csm_failure_journaalpost_exists(mocker: Moc
             json=post_echo
         )
 
-        result = await automatisch_boeken()
+        result = automatisch_boeken()
 
         # Check if everything is mocked
         assert not post_any.called
@@ -318,8 +312,7 @@ async def test_automatisch_boeken_no_csm_failure_journaalpost_exists(mocker: Moc
         assert journaalpost_by_transaction.call_count == 1
 
 
-@pytest.mark.asyncio
-async def test_automatisch_boeken_no_csm_multiple_suggesties(mocker: MockerFixture):
+def test_automatisch_boeken_no_csm_multiple_suggesties(mocker: MockerFixture):
     with requests_mock.Mocker() as mock:
         get_any = mock.get(requests_mock.ANY, status_code=404)
         post_any = mock.post(requests_mock.ANY, status_code=404)
@@ -357,7 +350,7 @@ async def test_automatisch_boeken_no_csm_multiple_suggesties(mocker: MockerFixtu
         journaalposten_post = mock.post(f"{settings.HHB_SERVICES_URL}/journaalposten/", json=post_echo_multi(30))
         transactions_post = mock.post(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/1,2", json=post_echo)
 
-        result = await automatisch_boeken()
+        result = automatisch_boeken()
         
         # check if everything is mocked
         assert post_any.call_count == 0

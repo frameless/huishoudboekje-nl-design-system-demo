@@ -1,19 +1,17 @@
 from flask import Blueprint
-from graphene_file_upload.flask import FileUploadGraphQLView
-from graphql.execution.executors.asyncio import AsyncioExecutor
+from graphql_server.flask import GraphQLView
 
 from hhb_backend.graphql import schema
 
 
-def create_blueprint(loop=None):
+def create_blueprint():
     bp = Blueprint('graphql', __name__)
 
-    view = FileUploadGraphQLView.as_view(
+    view = GraphQLView.as_view(
         'graphql',
-        schema=schema,
+        schema=schema.graphql_schema,
         graphiql=True,
-        batch=True,
-        executor=AsyncioExecutor(loop=loop))
+        batch=True)
 
     bp.add_url_rule('/', view_func=view, strict_slashes=False)
 

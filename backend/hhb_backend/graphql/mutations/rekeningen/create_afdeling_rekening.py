@@ -34,7 +34,7 @@ class CreateAfdelingRekening(graphene.Mutation):
 
     @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(_root, _info, afdeling_id, rekening, **_kwargs):
+    def mutate(_root, _info, afdeling_id, rekening, **_kwargs):
         """ Create the new Rekening """
         result = create_afdeling_rekening(afdeling_id, rekening)
         return CreateAfdelingRekening(rekening=result, ok=True)

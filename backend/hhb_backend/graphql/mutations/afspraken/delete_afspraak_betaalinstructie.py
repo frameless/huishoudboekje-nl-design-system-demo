@@ -34,7 +34,7 @@ class DeleteAfspraakBetaalinstructie(graphene.Mutation):
 
     @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(_root, _info, afspraak_id: int):
+    def mutate(_root, _info, afspraak_id: int):
         """ Update the Afspraak """
 
         previous = hhb_dataloader().afspraken.load_one(afspraak_id)

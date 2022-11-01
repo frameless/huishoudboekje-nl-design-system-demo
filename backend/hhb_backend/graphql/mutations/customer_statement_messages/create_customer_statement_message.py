@@ -6,7 +6,7 @@ from datetime import datetime
 import graphene
 import mt940
 import requests
-from graphene_file_upload.scalars import Upload
+# from graphene_file_upload.scalars import Upload
 from graphql import GraphQLError
 
 import hhb_backend.graphql.models.journaalpost as journaalpost
@@ -27,8 +27,8 @@ IBAN_REGEX = r"[a-zA-Z]{2}[0-9]{2}[a-zA-Z0-9]{4}[0-9]{7}([a-zA-Z0-9]?){0,16}"
 
 
 class CreateCustomerStatementMessage(graphene.Mutation):
-    class Arguments:
-        file = Upload(required=True)
+    # class Arguments:
+        # file = Upload(required=True)
 
     ok = graphene.Boolean()
     customerStatementMessage = graphene. List(lambda: CustomerStatementMessage)
@@ -52,7 +52,7 @@ class CreateCustomerStatementMessage(graphene.Mutation):
 
     @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(_root, _info, file):
+    def mutate(_root, _info, file):
         content = file.stream.read()
 
         if not content:
@@ -131,7 +131,7 @@ class CreateCustomerStatementMessage(graphene.Mutation):
             csm.append(created_csm)
 
             # Try, if possible, to match banktransaction
-            journaalpostentemp = await automatisch_boeken.automatisch_boeken(created_csm.id)
+            journaalpostentemp = automatisch_boeken.automatisch_boeken(created_csm.id)
             if journaalpostentemp:
                 journaalposten.extend(journaalpostentemp)
 

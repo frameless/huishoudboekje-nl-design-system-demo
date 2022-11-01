@@ -14,7 +14,7 @@ class Organisatie(graphene.ObjectType):
     vestigingsnummer = graphene.String()
     afdelingen = graphene.List(lambda: afdeling.Afdeling)
 
-    async def resolve_afdelingen(root, _info):
+    def resolve_afdelingen(root, _info):
         return hhb_dataloader().afdelingen.by_organisatie(root.get('id')) or []
 
     @staticmethod

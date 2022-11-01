@@ -56,7 +56,7 @@ class CreateExportOverschrijvingen(graphene.Mutation):
         )
 
     @log_gebruikers_activiteit
-    async def mutate(self, info, **kwargs):
+    def mutate(self, info, **kwargs):
         """ Create the export file based on start and end date """
         start_datum_str = kwargs.pop("startDatum")
         eind_datum_str = kwargs.pop("eindDatum")

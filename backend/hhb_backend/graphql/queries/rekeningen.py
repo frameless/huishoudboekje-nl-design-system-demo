@@ -21,13 +21,13 @@ class RekeningQuery:
 
     @classmethod
     @log_gebruikers_activiteit
-    async def resolver(cls, _root, _info, id):
+    def resolver(cls, _root, _info, id):
         return hhb_dataloader().rekeningen.load_one(id)
 
 
 class RekeningenQuery:
     return_type = graphene.List(
-        Rekening, ids=graphene.List(graphene.Int, default_value=[])
+        Rekening, ids=graphene.List(graphene.Int)
     )
 
     @classmethod
@@ -39,7 +39,7 @@ class RekeningenQuery:
 
     @classmethod
     @log_gebruikers_activiteit
-    async def resolver(cls, _root, _info, ids=None):
+    def resolver(cls, _root, _info, ids=None):
         if ids:
             return hhb_dataloader().rekeningen.load(ids)
         return hhb_dataloader().rekeningen.load_all()

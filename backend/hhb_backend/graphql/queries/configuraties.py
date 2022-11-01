@@ -12,7 +12,7 @@ class ConfiguratieQuery:
     return_type = graphene.Field(Configuratie, id=graphene.String(required=True))
 
     @classmethod
-    def gebruikers_activiteit(cls, _root, info, id, *_args, **_kwargs):
+    def gebruikers_activiteit(cls, _root, info, id=None, *_args, **_kwargs):
         return dict(
             action=info.field_name,
             entities=gebruikers_activiteit_entities(
@@ -22,17 +22,17 @@ class ConfiguratieQuery:
 
     @classmethod
     @log_gebruikers_activiteit
-    async def resolver(cls, _root, _info, id):
+    def resolver(cls, _root, _info, id):
         return hhb_dataloader().configuraties.load_one(id)
 
 
 class ConfiguratiesQuery:
     return_type = graphene.List(
-        Configuratie, ids=graphene.List(graphene.String, default_value=[])
+        Configuratie, ids=graphene.List(graphene.String)
     )
 
     @classmethod
-    def gebruikers_activiteit(cls, _root, info, ids, *_args, **_kwargs):
+    def gebruikers_activiteit(cls, _root, info, ids=None, *_args, **_kwargs):
         return dict(
             action=info.field_name,
             entities=gebruikers_activiteit_entities(
@@ -42,7 +42,7 @@ class ConfiguratiesQuery:
 
     @classmethod
     @log_gebruikers_activiteit
-    async def resolver(cls, _root, _info, ids=None):
+    def resolver(cls, _root, _info, ids=None):
         if ids:
             return hhb_dataloader().configuraties.load(ids)
         return hhb_dataloader().configuraties.load_all()

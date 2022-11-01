@@ -14,7 +14,7 @@ class CreateSignaalInput(graphene.InputObjectType):
     banktransactieIds = graphene.List(graphene.Int)
     isActive = graphene.Boolean()
     type = graphene.String()
-    actions = graphene.List(graphene.String, default_value=[])
+    actions = graphene.List(graphene.String)
     context = graphene.String()
 
 
@@ -23,7 +23,7 @@ class UpdateSignaalInput(graphene.InputObjectType):
     banktransactieIds = graphene.List(graphene.Int)
     isActive = graphene.Boolean()
     type = graphene.String()
-    actions = graphene.List(graphene.String, default_value=[])
+    actions = graphene.List(graphene.String)
     context = graphene.String()
 
 

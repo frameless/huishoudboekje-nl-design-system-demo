@@ -27,7 +27,7 @@ class CustomerStatementMessage(graphene.ObjectType):
         if value:
             return datetime.fromisoformat(value)
 
-    async def resolve_bank_transactions(self, _info):
+    def resolve_bank_transactions(self, _info):
         """ Get bank_transactions when requested """
         if transactions := self.get("bank_transactions"):
             return hhb_dataloader().bank_transactions.load(transactions) or []

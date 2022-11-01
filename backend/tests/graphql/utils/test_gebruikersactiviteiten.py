@@ -34,7 +34,7 @@ class TestEntityResponse(graphene.Mutation):
 
     @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(_root, _info):
+    def mutate(_root, _info):
         return TestEntityResponse(
             entity=dict(id=1, attribute="new"), previous=dict(id=1, attribute="old")
         )
@@ -50,7 +50,7 @@ class TestEntityQuery:
 
     @classmethod
     @log_gebruikers_activiteit
-    async def resolve(cls, _root, _info, id):
+    def resolve(cls, _root, _info, id):
         return {"id": id}
 
 
@@ -64,7 +64,7 @@ class TestEntitiesQuery:
 
     @classmethod
     @log_gebruikers_activiteit
-    async def resolve(cls, _root, _info, ids=None):
+    def resolve(cls, _root, _info, ids=None):
         return [{"id": id} for id in (ids if ids else [1, 2, 3])]
 
 
@@ -290,7 +290,7 @@ def test_gebruikersactiviteiten(client):
 
         # assert
         assert fallback.call_count == 0
-        assert log_service.called_once
+        assert log_service.call_count == 1
         assert response.status_code == 200
         assert response.json == {
         "data": {
@@ -417,7 +417,7 @@ def test_extract_gebruikers_activiteit_classmethod():
 
 
 @pytest.mark.asyncio
-async def test_log_gebruikers_activiteit_mutation():
+def test_log_gebruikers_activiteit_mutation():
     with requests_mock.Mocker() as mock:
         log_request = mock.post(
             f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/",
@@ -425,7 +425,7 @@ async def test_log_gebruikers_activiteit_mutation():
             status_code=201,
         )
 
-        await TestEntityResponse.mutate(None, MockResolveInfo(field_name="Test"))
+        TestEntityResponse.mutate(None, MockResolveInfo(field_name="Test"))
 
         assert log_request.call_count == 1
 
@@ -436,7 +436,7 @@ class MockResolveInfo:
 
 
 @pytest.mark.asyncio
-async def test_log_gebruikers_activiteit_query():
+def test_log_gebruikers_activiteit_query():
     with requests_mock.Mocker() as mock:
         log_request = mock.post(
             f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/",
@@ -445,13 +445,13 @@ async def test_log_gebruikers_activiteit_query():
         )
 
         # TODO properly mock flask.request and flask.g
-        await TestEntityQuery.resolve(None, MockResolveInfo(field_name="entity"), 1)
+        TestEntityQuery.resolve(None, MockResolveInfo(field_name="entity"), 1)
 
         assert log_request.call_count == 1
 
 
 @pytest.mark.asyncio
-async def test_log_gebruikers_activiteit_query_list():
+def test_log_gebruikers_activiteit_query_list():
     with requests_mock.Mocker() as mock:
         log_request = mock.post(
             f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/",
@@ -460,13 +460,13 @@ async def test_log_gebruikers_activiteit_query_list():
         )
 
         # TODO properly mock flask.request and flask.g
-        await TestEntitiesQuery.resolve(None, MockResolveInfo(field_name="entity"))
+        TestEntitiesQuery.resolve(None, MockResolveInfo(field_name="entity"))
 
         assert log_request.call_count == 1
 
 
 @pytest.mark.asyncio
-async def test_log_gebruikers_activiteit_query_list_ids():
+def test_log_gebruikers_activiteit_query_list_ids():
     with requests_mock.Mocker() as mock:
         log_request = mock.post(
             f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/",
@@ -475,7 +475,7 @@ async def test_log_gebruikers_activiteit_query_list_ids():
         )
 
         # TODO properly mock flask.request and flask.g
-        await TestEntitiesQuery.resolve(
+        TestEntitiesQuery.resolve(
             None, MockResolveInfo(field_name="entity"), ids=[2, 3]
         )
 

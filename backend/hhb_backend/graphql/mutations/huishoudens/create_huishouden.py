@@ -18,7 +18,7 @@ from hhb_backend.service.model import huishouden
 
 
 class CreateHuishoudenInput(graphene.InputObjectType):
-    burger_ids = graphene.List(graphene.Int, required=False, default_value=[])
+    burger_ids = graphene.List(graphene.Int, required=False)
 
 
 class CreateHuishouden(graphene.Mutation):
@@ -39,7 +39,7 @@ class CreateHuishouden(graphene.Mutation):
 
     @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(_root, _info, input: CreateHuishoudenInput):
+    def mutate(_root, _info, input: CreateHuishoudenInput):
         """Create the new Huishouden"""
 
         response = requests.post(
@@ -57,6 +57,6 @@ class CreateHuishouden(graphene.Mutation):
                 )
             update_burger = {'id': burger_id, 'huishouden_id': created_huishouden.id}
 
-            await update_existing_burger(burger=update_burger)
+            update_existing_burger(burger=update_burger)
 
         return CreateHuishouden(huishouden=created_huishouden, ok=True)

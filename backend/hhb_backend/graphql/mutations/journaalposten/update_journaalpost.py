@@ -43,7 +43,7 @@ class UpdateJournaalpostGrootboekrekening(graphene.Mutation):
 
     @staticmethod
     @log_gebruikers_activiteit
-    async def mutate(_root, _info, input, **_kwargs):
+    def mutate(_root, _info, input, **_kwargs):
         """ Create the new Journaalpost """
 
         previous = hhb_dataloader().journaalposten.load_one(input.id)

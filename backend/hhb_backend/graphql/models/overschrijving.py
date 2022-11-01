@@ -24,11 +24,11 @@ class Overschrijving(graphene.ObjectType):
     bankTransaction = graphene.Field(lambda: bank_transaction.BankTransaction)
     afspraken = graphene.List(lambda: afspraak.Afspraak)
 
-    async def resolve_afspraak(self, info):
+    def resolve_afspraak(self, info):
         if self.get('afspraak_id'):
             return hhb_dataloader().afspraken.load_one(self.get('afspraak_id'))
 
-    async def resolve_export(self, info):
+    def resolve_export(self, info):
         if self.get('export_id'):
             return hhb_dataloader().exports.load_one(self.get('export_id'))
 
@@ -39,11 +39,11 @@ class Overschrijving(graphene.ObjectType):
             return OverschrijvingStatus.IN_BEHANDELING
         return OverschrijvingStatus.VERWACHTING
 
-    async def resolve_afspraken(self, info):
+    def resolve_afspraken(self, info):
         """ Get afspraken when requested """
         if self.get('afspraken'):
             return hhb_dataloader().afspraken.load(self.get('afspraken')) or []
 
-    async def resolve_datum(self, info):
+    def resolve_datum(self, info):
         if value := self.get('datum'):
             return to_date(value)

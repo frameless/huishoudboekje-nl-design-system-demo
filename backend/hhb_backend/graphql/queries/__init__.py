@@ -66,122 +66,122 @@ class RootQuery(graphene.ObjectType):
 
     saldo = SaldoQuery.return_type
 
-    async def resolve_burger(root, info, **kwargs):
-        return await BurgerQuery.resolver(root, info, **kwargs)
+    def resolve_burger(root, info, **kwargs):
+        return BurgerQuery.resolver(root, info, **kwargs)
 
-    async def resolve_burgers(root, info, **kwargs):
-        return await BurgersQuery.resolver(root, info, **kwargs)
+    def resolve_burgers(root, info, **kwargs):
+        return BurgersQuery.resolver(root, info, **kwargs)
 
-    async def resolve_burgers_paged(root, info, **kwargs):
-        return await BurgersPagedQuery.resolver(root, info, **kwargs)
+    def resolve_burgers_paged(root, info, **kwargs):
+        return BurgersPagedQuery.resolver(root, info, **kwargs)
 
-    async def resolve_organisatie(root, info, **kwargs):
-        return await OrganisatieQuery.resolver(root, info, **kwargs)
+    def resolve_organisatie(root, info, **kwargs):
+        return OrganisatieQuery.resolver(root, info, **kwargs)
 
-    async def resolve_organisaties(root, info, **kwargs):
-        return await OrganisatiesQuery.resolver(root, info, **kwargs)
+    def resolve_organisaties(root, info, **kwargs):
+        return OrganisatiesQuery.resolver(root, info, **kwargs)
 
-    async def resolve_afspraak(root, info, **kwargs):
-        return await AfspraakQuery.resolver(root, info, **kwargs)
+    def resolve_afspraak(root, info, **kwargs):
+        return AfspraakQuery.resolver(root, info, **kwargs)
 
-    async def resolve_afspraken(root, info, **kwargs):
-        return await AfsprakenQuery.resolver(root, info, **kwargs)
+    def resolve_afspraken(root, info, **kwargs):
+        return AfsprakenQuery.resolver(root, info, **kwargs)
 
-    async def resolve_rekening(root, info, **kwargs):
-        return await RekeningQuery.resolver(root, info, **kwargs)
+    def resolve_rekening(root, info, **kwargs):
+        return RekeningQuery.resolver(root, info, **kwargs)
 
-    async def resolve_rekeningen(root, info, **kwargs):
-        return await RekeningenQuery.resolver(root, info, **kwargs)
+    def resolve_rekeningen(root, info, **kwargs):
+        return RekeningenQuery.resolver(root, info, **kwargs)
 
-    async def resolve_customer_statement_message(root, info, **kwargs):
-        return await CustomerStatementMessageQuery.resolver(root, info, **kwargs)
+    def resolve_customer_statement_message(root, info, **kwargs):
+        return CustomerStatementMessageQuery.resolver(root, info, **kwargs)
 
-    async def resolve_customer_statement_messages(root, info, **kwargs):
-        return await CustomerStatementMessagesQuery.resolver(root, info, **kwargs)
+    def resolve_customer_statement_messages(root, info, **kwargs):
+        return CustomerStatementMessagesQuery.resolver(root, info, **kwargs)
 
-    async def resolve_bank_transaction(root, info, **kwargs):
-        return await BankTransactionQuery.resolver(root, info, **kwargs)
+    def resolve_bank_transaction(root, info, **kwargs):
+        return BankTransactionQuery.resolver(root, info, **kwargs)
 
-    async def resolve_bank_transactions(root, info, **kwargs):
-        return await BankTransactionsQuery.resolver(root, info, **kwargs)
+    def resolve_bank_transactions(root, info, **kwargs):
+        return BankTransactionsQuery.resolver(root, info, **kwargs)
 
-    async def resolve_bank_transactions_paged(root, info, **kwargs):
-        return await BankTransactionsPagedQuery.resolver(root, info, **kwargs)
+    def resolve_bank_transactions_paged(root, info, **kwargs):
+        return BankTransactionsPagedQuery.resolver(root, info, **kwargs)
 
-    async def resolve_grootboekrekening(root, info, **kwargs):
-        return await GrootboekrekeningQuery.resolver(root, info, **kwargs)
+    def resolve_grootboekrekening(root, info, **kwargs):
+        return GrootboekrekeningQuery.resolver(root, info, **kwargs)
 
-    async def resolve_grootboekrekeningen(root, info, **kwargs):
-        return await GrootboekrekeningenQuery.resolver(root, info, **kwargs)
+    def resolve_grootboekrekeningen(root, info, **kwargs):
+        return GrootboekrekeningenQuery.resolver(root, info, **kwargs)
 
-    async def resolve_journaalpost(root, info, **kwargs):
-        return await JournaalpostQuery.resolver(root, info, **kwargs)
+    def resolve_journaalpost(root, info, **kwargs):
+        return JournaalpostQuery.resolver(root, info, **kwargs)
 
-    async def resolve_journaalposten(root, info, **kwargs):
-        return await JournaalpostenQuery.resolver(root, info, **kwargs)
+    def resolve_journaalposten(root, info, **kwargs):
+        return JournaalpostenQuery.resolver(root, info, **kwargs)
 
-    async def resolve_rubriek(root, info, **kwargs):
-        return await RubriekQuery.resolver(root, info, **kwargs)
+    def resolve_rubriek(root, info, **kwargs):
+        return RubriekQuery.resolver(root, info, **kwargs)
 
-    async def resolve_rubrieken(root, info, **kwargs):
-        return await RubriekenQuery.resolver(root, info, **kwargs)
+    def resolve_rubrieken(root, info, **kwargs):
+        return RubriekenQuery.resolver(root, info, **kwargs)
 
-    async def resolve_configuratie(root, info, **kwargs):
-        return await ConfiguratieQuery.resolver(root, info, **kwargs)
+    def resolve_configuratie(root, info, **kwargs):
+        return ConfiguratieQuery.resolver(root, info, **kwargs)
 
-    async def resolve_configuraties(root, info, **kwargs):
-        return await ConfiguratiesQuery.resolver(root, info, **kwargs)
+    def resolve_configuraties(root, info, **kwargs):
+        return ConfiguratiesQuery.resolver(root, info, **kwargs)
 
-    async def resolve_planned_overschrijvingen(root, info, **kwargs):
-        return await PlannedOverschijvingenQuery.resolver(root, info, **kwargs)
+    def resolve_planned_overschrijvingen(root, info, **kwargs):
+        return PlannedOverschijvingenQuery.resolver(root, info, **kwargs)
 
-    async def resolve_export(root, info, **kwargs):
-        return await ExportQuery.resolver(root, info, **kwargs)
+    def resolve_export(root, info, **kwargs):
+        return ExportQuery.resolver(root, info, **kwargs)
 
-    async def resolve_exports(root, info, **kwargs):
-        return await ExportsQuery.resolver(root, info, **kwargs)
+    def resolve_exports(root, info, **kwargs):
+        return ExportsQuery.resolver(root, info, **kwargs)
 
-    async def resolve_gebruikersactiviteit(root, info, **kwargs):
-        return await GebruikersActiviteitQuery.resolver(root, info, **kwargs)
+    def resolve_gebruikersactiviteit(root, info, **kwargs):
+        return GebruikersActiviteitQuery.resolver(root, info, **kwargs)
 
-    async def resolve_gebruikersactiviteiten(root, info, **kwargs):
-        return await GebruikersActiviteitenQuery.resolver(root, info, **kwargs)
+    def resolve_gebruikersactiviteiten(root, info, **kwargs):
+        return GebruikersActiviteitenQuery.resolver(root, info, **kwargs)
 
-    async def resolve_gebruikersactiviteiten_paged(root, info, **kwargs):
-        return await GebruikersActiviteitenPagedQuery.resolver(root, info, **kwargs)
+    def resolve_gebruikersactiviteiten_paged(root, info, **kwargs):
+        return GebruikersActiviteitenPagedQuery.resolver(root, info, **kwargs)
 
-    async def resolve_huishouden(root, info, **kwargs):
-        return await HuishoudenQuery.resolver(root, info, **kwargs)
+    def resolve_huishouden(root, info, **kwargs):
+        return HuishoudenQuery.resolver(root, info, **kwargs)
 
-    async def resolve_huishoudens(root, info, **kwargs):
-        return await HuishoudensQuery.resolver(root, info, **kwargs)
+    def resolve_huishoudens(root, info, **kwargs):
+        return HuishoudensQuery.resolver(root, info, **kwargs)
 
-    async def resolve_huishoudens_paged(root, info, **kwargs):
-        return await HuishoudensPagedQuery.resolver(root, info, **kwargs)
+    def resolve_huishoudens_paged(root, info, **kwargs):
+        return HuishoudensPagedQuery.resolver(root, info, **kwargs)
 
-    async def resolve_afdeling(root, info, **kwargs):
-        return await AfdelingQuery.resolver(root, info, **kwargs)
+    def resolve_afdeling(root, info, **kwargs):
+        return AfdelingQuery.resolver(root, info, **kwargs)
 
-    async def resolve_afdelingen(root, info, **kwargs):
-        return await AfdelingenQuery.resolver(root, info, **kwargs)
+    def resolve_afdelingen(root, info, **kwargs):
+        return AfdelingenQuery.resolver(root, info, **kwargs)
 
-    async def resolve_postadres(root, info, **kwargs):
-        return await PostadresQuery.resolver(root, info, **kwargs)
+    def resolve_postadres(root, info, **kwargs):
+        return PostadresQuery.resolver(root, info, **kwargs)
 
-    async def resolve_postadressen(root, info, **kwargs):
-        return await PostadressenQuery.resolver(root, info, **kwargs)
+    def resolve_postadressen(root, info, **kwargs):
+        return PostadressenQuery.resolver(root, info, **kwargs)
 
-    async def resolve_alarm(root, info, **kwargs):
-        return await AlarmQuery.resolver(root, info, **kwargs)
+    def resolve_alarm(root, info, **kwargs):
+        return AlarmQuery.resolver(root, info, **kwargs)
 
-    async def resolve_alarmen(root, info, **kwargs):
-        return await AlarmenQuery.resolver(root, info, **kwargs)
+    def resolve_alarmen(root, info, **kwargs):
+        return AlarmenQuery.resolver(root, info, **kwargs)
 
-    async def resolve_signaal(root, info, **kwargs):
-        return await SignaalQuery.resolver(root, info, **kwargs)
+    def resolve_signaal(root, info, **kwargs):
+        return SignaalQuery.resolver(root, info, **kwargs)
 
-    async def resolve_signalen(root, info, **kwargs):
-        return await SignalenQuery.resolver(root, info, **kwargs)
+    def resolve_signalen(root, info, **kwargs):
+        return SignalenQuery.resolver(root, info, **kwargs)
 
-    async def resolve_saldo(root, info, **kwargs):
-        return await SaldoQuery.resolver(root, info, **kwargs)
+    def resolve_saldo(root, info, **kwargs):
+        return SaldoQuery.resolver(root, info, **kwargs)

@@ -33,7 +33,7 @@ class CreateOrganisatie(graphene.Mutation):
         )
 
     @log_gebruikers_activiteit
-    async def mutate(root, _info, **kwargs):
+    def mutate(root, _info, **kwargs):
         """ Create the new Organisatie """
         input = kwargs.pop("input")
 

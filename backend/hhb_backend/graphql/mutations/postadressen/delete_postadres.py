@@ -35,7 +35,7 @@ class DeletePostadres(graphene.Mutation):
         )
 
     @log_gebruikers_activiteit
-    async def mutate(self, _info, id, afdeling_id):
+    def mutate(self, _info, id, afdeling_id):
         """ Delete current postadres """
         previous = hhb_dataloader().postadressen.load_one(id)
         if not previous:

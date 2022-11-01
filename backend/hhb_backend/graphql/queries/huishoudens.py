@@ -22,14 +22,14 @@ class HuishoudenQuery:
 
     @classmethod
     @log_gebruikers_activiteit
-    async def resolver(cls, _root, _info, id):
+    def resolver(cls, _root, _info, id):
         return hhb_dataloader().huishoudens.load_one(id)
 
 
 class HuishoudensQuery:
     return_type = graphene.List(
         huishouden.Huishouden,
-        ids=graphene.List(graphene.Int, default_value=[]),
+        ids=graphene.List(graphene.Int),
         filters=BurgerFilter(),
     )
 
@@ -42,7 +42,7 @@ class HuishoudensQuery:
 
     @classmethod
     @log_gebruikers_activiteit
-    async def resolver(cls, _root, _info, ids=None, **kwargs):
+    def resolver(cls, _root, _info, ids=None, **kwargs):
         if ids:
             return hhb_dataloader().huishoudens.load(ids)
         return hhb_dataloader().huishoudens.load_all(filters=kwargs.get("filters", None))
@@ -68,7 +68,7 @@ class HuishoudensPagedQuery:
 
     @classmethod
     @log_gebruikers_activiteit
-    async def resolver(cls, _root, _info, **kwargs):
+    def resolver(cls, _root, _info, **kwargs):
         if "start" in kwargs and "limit" in kwargs:
             return hhb_dataloader().huishoudens.load_paged(
                 start=kwargs["start"],
