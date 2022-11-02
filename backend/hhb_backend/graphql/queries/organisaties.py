@@ -14,10 +14,13 @@ class OrganisatieQuery:
     return_type = graphene.Field(Organisatie, id=graphene.Int(required=True))
 
     @classmethod
-    def resolver(cls, _root, _info, id):
-        AuditLogging().create(action="create_foo", entities=[
-            {"name": _info.name, "id": id},
-        ])
+    def resolver(cls, root, info, id):
+        AuditLogging().create(
+            action=info.field_name,
+            entities=gebruikers_activiteit_entities(
+                entity_type="organisatie", result=id
+            )
+        )
         return hhb_dataloader().organisaties.load_one(id)
 
 
@@ -28,11 +31,12 @@ class OrganisatiesQuery:
 
     @classmethod
     def resolver(cls, root, info, ids=None):
-        result = None
         entities = None
 
         if ids:
-            entities = [id for id in ids]
+            entities = gebruikers_activiteit_entities(
+                entity_type="organisatie", result=ids
+            )
             result = hhb_dataloader().organisaties.load(ids)
         else:
             result = hhb_dataloader().organisaties.load_all()
