@@ -34,16 +34,6 @@ class CreateAfdeling(graphene.Mutation):
     ok = graphene.Boolean()
     afdeling = graphene.Field(lambda: graphene_afdeling.Afdeling)
 
-    def gebruikers_activiteit(self, _root, info, *_args, **_kwargs):
-        return dict(
-            action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="afdeling", result=self, key="afdeling"
-            ),
-            after=dict(afdeling=self.afdeling),
-        )
-
-    @log_gebruikers_activiteit
     def mutate(root, _info, **kwargs):
         """ Create the new Afdeling """
         input = kwargs.pop("input")
@@ -98,5 +88,7 @@ class CreateAfdeling(graphene.Mutation):
                 create_afdeling_postadres(postadres, afdeling_id)["id"]
                 for postadres in postadressen
             ]
+
+        AuditLogging.create(action=info.field_name, entities=result["organisaties"])
 
         return CreateAfdeling(afdeling=result, ok=True)

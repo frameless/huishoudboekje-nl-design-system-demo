@@ -1,6 +1,7 @@
 """ GraphQL Gebruikers query """
 import graphene
 
+from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.models.organisatie import Organisatie
 from hhb_backend.graphql.utils.gebruikersactiviteiten import (
@@ -13,17 +14,10 @@ class OrganisatieQuery:
     return_type = graphene.Field(Organisatie, id=graphene.Int(required=True))
 
     @classmethod
-    def gebruikers_activiteit(cls, _root, info, id, *_args, **_kwargs):
-        return dict(
-            action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="organisatie", result=id
-            ),
-        )
-
-    @classmethod
-    @log_gebruikers_activiteit
     def resolver(cls, _root, _info, id):
+        AuditLogging().create(action="create_foo", entities=[
+            {"name": _info.name, "id": id},
+        ])
         return hhb_dataloader().organisaties.load_one(id)
 
 
@@ -33,17 +27,16 @@ class OrganisatiesQuery:
     )
 
     @classmethod
-    def gebruikers_activiteit(cls, _root, info, ids, *_args, **_kwargs):
-        return dict(
-            action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="organisatie", result=ids
-            ),
-        )
+    def resolver(cls, root, info, ids=None):
+        result = None
+        entities = None
 
-    @classmethod
-    @log_gebruikers_activiteit
-    def resolver(cls, _root, _info, ids=None):
         if ids:
-            return hhb_dataloader().organisaties.load(ids)
-        return hhb_dataloader().organisaties.load_all()
+            entities = [id for id in ids]
+            result = hhb_dataloader().organisaties.load(ids)
+        else:
+            result = hhb_dataloader().organisaties.load_all()
+
+        AuditLogging().create(action=info.field_name, entities=entities)
+
+        return result
