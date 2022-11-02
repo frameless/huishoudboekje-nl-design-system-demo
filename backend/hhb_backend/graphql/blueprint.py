@@ -1,5 +1,5 @@
 from flask import Blueprint
-from graphql_server.flask import GraphQLView
+from hhb_backend.graphql.graphene_file_upload import FileUploadGraphQLView
 
 from hhb_backend.graphql import schema
 
@@ -7,7 +7,7 @@ from hhb_backend.graphql import schema
 def create_blueprint():
     bp = Blueprint('graphql', __name__)
 
-    view = GraphQLView.as_view(
+    view = FileUploadGraphQLView.as_view(
         'graphql',
         schema=schema.graphql_schema,
         graphiql=True,

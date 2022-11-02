@@ -6,10 +6,10 @@ from datetime import datetime
 import graphene
 import mt940
 import requests
-# from graphene_file_upload.scalars import Upload
 from graphql import GraphQLError
 
 import hhb_backend.graphql.models.journaalpost as journaalpost
+from hhb_backend.graphql.graphene_file_upload.scalars import Upload
 from hhb_backend.camtParser import parser
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.models.customer_statement_message import (
@@ -27,8 +27,8 @@ IBAN_REGEX = r"[a-zA-Z]{2}[0-9]{2}[a-zA-Z0-9]{4}[0-9]{7}([a-zA-Z0-9]?){0,16}"
 
 
 class CreateCustomerStatementMessage(graphene.Mutation):
-    # class Arguments:
-        # file = Upload(required=True)
+    class Arguments:
+        file = Upload(required=True)
 
     ok = graphene.Boolean()
     customerStatementMessage = graphene. List(lambda: CustomerStatementMessage)

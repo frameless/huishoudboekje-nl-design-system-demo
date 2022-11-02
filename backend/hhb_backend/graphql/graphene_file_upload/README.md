@@ -1,0 +1,4 @@
+The graphene_file_upload comes from https://github.com/lmcgartland/graphene-file-upload/tree/master/graphene_file_upload
+The files are adjusted for graphene v3 and only the flask parts are used. 
+
+The above mentioned repository has at the moment of writing a pull-request open for changes need to be compatible with graphene v3, but it's not merged yet. As soon as this is merged, this folder could be discarded and the graphene-file-upload repository above can by used by including it in the setup.py, like this 'graphene-file-upload>=1.3.0,<2', but with the appropriate versions, and changing the existing imports. 
