@@ -1,9 +1,9 @@
 """Apply multipart request spec to flask"""
 from flask import request
-from graphql_server.flask import GraphQLView
 from graphql_server import load_json_body
+from graphql_server.flask import GraphQLView
 
-from utils import place_files_in_operations
+from .utils import place_files_in_operations
 
 
 class FileUploadGraphQLView(GraphQLView):
