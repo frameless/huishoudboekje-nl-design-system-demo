@@ -14,29 +14,23 @@ class AfdelingQuery:
     return_type = graphene.Field(Afdeling, id=graphene.Int(required=True))
 
     @classmethod
-    def resolver(cls, root, info, id):
+    def resolver(cls, _, info, id):
         AuditLogging.create(
             action=info.field_name,
-            entities=gebruikers_activiteit_entities(
-                entity_type="afdeling", result=id
-            )
+            entities=gebruikers_activiteit_entities(entity_type="afdeling", result=id)
         )
         return hhb_dataloader().afdelingen.load_one(id)
 
 
 class AfdelingenQuery:
-    return_type = graphene.List(
-        Afdeling, ids=graphene.List(graphene.Int)
-    )
+    return_type = graphene.List(Afdeling, ids=graphene.List(graphene.Int))
 
     @classmethod
-    def resolver(cls, root, info, ids=None):
+    def resolver(cls, _, info, ids=None):
         entities = None
 
         if ids:
-            entities = gebruikers_activiteit_entities(
-                entity_type="afdeling", result=ids
-            )
+            entities = gebruikers_activiteit_entities(entity_type="afdeling", result=ids)
             result = hhb_dataloader().afdelingen.load(ids)
         else:
             result = hhb_dataloader().afdelingen.load_all()

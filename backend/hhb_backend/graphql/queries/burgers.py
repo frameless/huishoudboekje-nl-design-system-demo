@@ -2,6 +2,7 @@
 import graphene
 
 import hhb_backend.graphql.models.burger as burger
+from hhb_backend.audit_logging import AuditLogging
 from hhb_backend.graphql.dataloaders import hhb_dataloader
 from hhb_backend.graphql.scalars.dynamic_types import DynamicType
 from hhb_backend.graphql.utils.dates import valid_afspraak
@@ -15,15 +16,11 @@ class BurgerQuery:
     return_type = graphene.Field(burger.Burger, id=graphene.Int(required=True))
 
     @classmethod
-    def gebruikers_activiteit(cls, _root, info, id, *_args, **_kwargs):
-        return dict(
+    def resolver(cls, _root, _info, id, *_args, **_kwargs):
+        AuditLogging.create(
             action=info.field_name,
             entities=gebruikers_activiteit_entities(entity_type="burger", result=id),
         )
-
-    @classmethod
-    @log_gebruikers_activiteit
-    def resolver(cls, _root, _info, id, *_args, **_kwargs):
         return hhb_dataloader().burgers.load_one(id)
 
 
@@ -54,15 +51,15 @@ class BurgersQuery:
 
             burgers = hhb_dataloader().burgers.load_all(filters=kwargs.get("filters", None))
             for burger in burgers:
-                if search in str(burger['achternaam']).lower() or\
-                        search in str(burger['voornamen']).lower() or\
-                        search in str(burger['bsn']).lower():
+                if search in str(burger['achternaam']).lower() or \
+                    search in str(burger['voornamen']).lower() or \
+                    search in str(burger['bsn']).lower():
                     burger_ids.add(burger["id"])
 
             rekeningen = hhb_dataloader().rekeningen.load_all(filters=kwargs.get("filters", None))
             for rekening in rekeningen:
                 if search in str(rekening['iban']).lower() or \
-                        search in str(rekening['rekeninghouder']).lower():
+                    search in str(rekening['rekeninghouder']).lower():
                     for burger_id in rekening["burgers"]:
                         if burger_id:
                             burger_ids.add(burger_id)

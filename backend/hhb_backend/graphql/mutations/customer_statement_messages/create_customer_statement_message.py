@@ -1,15 +1,13 @@
 """ GraphQL mutation for creating a new CustomerStatementMessage """
-import json
-import re
-from datetime import datetime
-
 import graphene
+import json
 import mt940
+import re
 import requests
+from datetime import datetime
 from graphql import GraphQLError
 
 import hhb_backend.graphql.models.journaalpost as journaalpost
-from hhb_backend.graphql.graphene_file_upload.scalars import Upload
 from hhb_backend.camtParser import parser
 from hhb_backend.graphql import settings
 from hhb_backend.graphql.models.customer_statement_message import (
@@ -22,6 +20,7 @@ from hhb_backend.graphql.utils.gebruikersactiviteiten import (
 from hhb_backend.processen import automatisch_boeken
 from hhb_backend.service.model import customer_statement_message
 from hhb_backend.service.model.bank_transaction import BankTransaction
+from lib.graphene_file_upload.scalars import Upload
 
 IBAN_REGEX = r"[a-zA-Z]{2}[0-9]{2}[a-zA-Z0-9]{4}[0-9]{7}([a-zA-Z0-9]?){0,16}"
 
