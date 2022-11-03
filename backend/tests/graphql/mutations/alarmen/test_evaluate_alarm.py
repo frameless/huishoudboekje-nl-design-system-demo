@@ -261,8 +261,33 @@ def test_should_check_alarm_false():
     assert need_check == False
 
 
-# does_next_alarm_exist() (word aangeroepen in should_create_next_alarm())
-# should_create_next_alarm()
+@freeze_time("2021-12-08")
+async def test_should_create_next_alarm_success():
+    """This tests if the next alarm is created."""
+    alarm_result = await EvaluateAlarm.should_create_next_alarm(alarm, date(2021, 12, 8), [alarm])
+    assert alarm_result == nextAlarm
+
+@freeze_time("2021-12-08")
+async def test_should_create_next_alarm_already_exists():
+    """This tests if the next alarm already exists, no new alarm is created."""
+    alarm_result = await EvaluateAlarm.should_create_next_alarm(alarm, date(2021, 12, 8), [alarm, nextAlarm])
+    assert alarm_result == None
+
+@freeze_time("2021-12-06")
+async def test_should_create_next_alarm_still_active():
+    """This tests if the next alarm is not created, because the current one is still active."""
+    alarm_result = await EvaluateAlarm.should_create_next_alarm(alarm, date(2021, 12, 8), [alarm])
+    assert alarm_result == None
+
+@freeze_time("2021-12-08")
+async def test_should_create_next_alarm_end_date():
+    """This tests if the next alarm is not created, since the current one has and end date before the next date."""
+    alarm.endDate = "2021-12-08"
+    alarm_result = await EvaluateAlarm.should_create_next_alarm(alarm, date(2021, 12, 8), [alarm])
+    alarm.endDate = None
+    assert alarm_result == None
+
+
 # should_create_signaal()
 
 
