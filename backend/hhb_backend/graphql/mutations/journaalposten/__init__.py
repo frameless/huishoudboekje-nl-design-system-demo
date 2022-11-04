@@ -1,14 +1,15 @@
 import logging
-from typing import List, Union
-
 import requests
+from typing import List, Union
 
 from hhb_backend.graphql import settings
 from hhb_backend.service.model.bank_transaction import BankTransaction
 
 
-def update_transaction_service_is_geboekt(transactions: Union[List[BankTransaction], BankTransaction],
-                                          is_geboekt: bool):
+def update_transaction_service_is_geboekt(
+    transactions: Union[List[BankTransaction], BankTransaction],
+    is_geboekt: bool
+):
     if type(transactions) is not list:
         transactions = [transactions]
 
@@ -32,8 +33,7 @@ def update_transactions_geboekt(transactions: List[BankTransaction], _transactio
         f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/{ids}",
         json=transactions
     )
+
     if not transaction_response.ok:
         logging.warning(
             f"Failed to save is_geboekt on transactions {_transaction_ids}: {transaction_response.text}")
-
-
