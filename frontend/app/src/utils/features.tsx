@@ -1,5 +1,4 @@
 import {useQuery} from "@tanstack/react-query";
-import {useEffect} from "react";
 import useStore from "../store";
 
 type Feature = {
@@ -13,20 +12,30 @@ type FetchResult = {
 
 export const useInitializeFeatureFlags = () => {
 	const setFeatureFlags = useStore(store => store.setFeatureFlags);
-	const {isLoading, data, error} = useQuery<FetchResult, Error>(["getFeatureFlags"], () => {
+
+	useQuery<FetchResult, Error>(["getFeatureFlags"], () => {
 		return fetch("/api/unleash", {
 			headers: {
 				"Content-Type": "application/json",
 			},
-		}).then(result => result.json());
-	});
+		}).then(result => {
+			if (result.status !== 200) {
+				throw new Error("Unleashservice not available. Some features may be unavailable.");
+			}
 
-	useEffect(() => {
-		if (!isLoading && !error && data) {
-			const featureFlags = data.features.reduce((list, f) => ({...list, [f.name]: f.enabled}), {});
+			return result.json();
+		}).then(data => {
+			const featureFlags = data.features.reduce((list, f) => ({
+				...list, [f.name]: f.enabled,
+			}), {});
+
 			setFeatureFlags(featureFlags);
-		}
-	}, [setFeatureFlags, data, error, isLoading]);
+
+			return data;
+		}).catch(err => {
+			console.warn(err.message);
+		});
+	});
 };
 
 export const useFeatureFlag = (feature: string): boolean => {
