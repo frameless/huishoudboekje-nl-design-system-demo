@@ -137,6 +137,9 @@ module.exports = {
 		"no-redeclare": ["off"],
 		"@typescript-eslint/no-redeclare": ["off"],
 		"react/no-children-prop": ["warn", {allowFunctions: true}],
+		"react/no-unstable-nested-components": ["warn", {
+			allowAsProps: true,
+		}],
 		// Other ideas for rules to add:
 		// "complexity": ["warn", {
 		// 	max: 20,
