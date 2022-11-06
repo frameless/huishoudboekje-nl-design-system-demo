@@ -4,14 +4,12 @@ FROM ${DOCKER_PROXY}bitnami/python:3.10.7
 
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get -y install tzdata
-ENV TZ Europe/Amsterdam
+ENV TZ=Europe/Amsterdam
 
 WORKDIR /app
-
-COPY setup.py /app
-
 RUN mkdir -p hhb_backend/
-RUN python3 setup.py install
+COPY setup.py /app
+RUN pip install .
 COPY . /app
 
 # Set gunicorn settings
