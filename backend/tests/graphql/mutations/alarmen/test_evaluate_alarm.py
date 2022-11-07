@@ -2,6 +2,7 @@ import pytest
 import requests_mock
 from datetime import date, datetime
 from freezegun import freeze_time
+from graphql import GraphQLError
 
 import hhb_backend.graphql.mutations.alarmen.evaluate_alarm as EvaluateAlarm
 from hhb_backend.graphql import settings
@@ -127,6 +128,18 @@ def test_generateNextAlarmDate_monthly(expected: datetime, alarm, alarmDate: dat
     next_alarm_date = generate_alarm_date(alarm, alarmDate)
     assert next_alarm_date == expected.date()
 
+def test_generateNextAlarmDate_illegal_combination():
+    """This tests that an illegal combination of byDay, byMonth, and byMonthDay 
+       is caught and a GraphQLError is thrown with the right message."""
+    illegal_alarm = {"byDay": ["Monday"], "byMonth": [1], "byMonthDay": [1]}
+    alarm_date = date(2021, 12, 1)
+    try:
+        generate_alarm_date(illegal_alarm, alarm_date)
+    except GraphQLError as e:
+        print(e)
+        assert e.message == f"This combination of intructions is not supported. isWeekly:False isMonthly:False byDay:['Monday'] byMonth:[1] byMonthDay:[1]"
+
+
 
 @freeze_time("2021-12-01")
 @pytest.mark.parametrize(
@@ -244,7 +257,7 @@ def test_disable_alarm():
         alarm.isActive = True
 
 @freeze_time("2021-12-06")
-def test_disable_alarm_not_disabled():
+def test_disable_alarm_not_disabled_when_alarm_check_date_in_future():
     """This tests that when an alarm should not be disabled yet, it stays active."""
     alarm_response: Alarm = EvaluateAlarm.disable_alarm(date(2021, 12, 8), alarm)
     assert alarm_response.isActive == True
@@ -252,20 +265,20 @@ def test_disable_alarm_not_disabled():
 
 @freeze_time("2021-12-08")
 def test_should_check_alarm_true():
-    """This tests if the alarm should be evaluated, here it should."""
+    """This tests if the alarm should be evaluated, here it should, since the check date is today."""
     need_check = EvaluateAlarm.should_check_alarm(alarm)
     assert need_check == True
 
 @freeze_time("2021-12-06")
 def test_should_check_alarm_false():
-    """This tests if the alarm should be evaluated, here it should not."""
+    """This tests if the alarm should be evaluated, here it should not, since the check date is in the future."""
     need_check = EvaluateAlarm.should_check_alarm(alarm)
     assert need_check == False
 
 
 @freeze_time("2021-12-08")
 def test_should_create_next_alarm_success(mocker):
-    """This tests if the next alarm is created."""
+    """This tests if the next alarm is created successfully."""
     with requests_mock.Mocker() as rm:
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
         get_afspraak = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", json={"data": [afspraak]})
@@ -276,6 +289,7 @@ def test_should_create_next_alarm_success(mocker):
         mocker.patch('hhb_backend.feature_flags.Unleash.is_enabled', mock_feature_flag("signalen", True))
 
         alarm_result = EvaluateAlarm.should_create_next_alarm(alarm, date(2021, 12, 8), [alarm])
+
         assert fallback.call_count == 0
         assert get_afspraak.call_count == 1
         assert post_afspraak.call_count == 1
@@ -284,13 +298,13 @@ def test_should_create_next_alarm_success(mocker):
 
 @freeze_time("2021-12-08")
 def test_should_create_next_alarm_no_alarm_because_already_exists():
-    """This tests if the next alarm already exists, no new alarm is created."""
+    """This tests when the next alarm already exists, no new alarm is created."""
     alarm_result = EvaluateAlarm.should_create_next_alarm(alarm, date(2021, 12, 8), [alarm, nextAlarm])
     assert alarm_result == None
 
 @freeze_time("2021-12-08")
 def test_should_create_next_alarm_no_alarm_end_date_before_next_alarm():
-    """This tests that the next alarm is not created, since the current one has and end date before the next date."""
+    """This tests that the next alarm is not created, since the current one has an end date before the next alarm date."""
     with requests_mock.Mocker() as rm:
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
         get_afspraak = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", json={"data": [afspraak]})
@@ -305,7 +319,7 @@ def test_should_create_next_alarm_no_alarm_end_date_before_next_alarm():
 
 
 @freeze_time("2021-12-06")
-def test_should_create_signaal_no_signal():
+def test_should_create_signaal_no_signal_everything_is_alright():
     """This tests if no signal is created with a banktransaction 
        on the date of the alarm with the right amount."""
     signaal = EvaluateAlarm.should_create_signaal(alarm, [banktransactie])
@@ -324,9 +338,6 @@ def test_should_create_signaal_monetary_signal(mocker):
         mocker.patch('hhb_backend.feature_flags.Unleash.is_enabled', mock_feature_flag("signalen", True))
 
         signaal = EvaluateAlarm.should_create_signaal(alarm, [banktransactie])
-        
-        # restore banktransactie
-        banktransactie.bedrag = 12000
 
         assert fallback.call_count == 0
         assert post_signal.call_count == 1
@@ -338,11 +349,12 @@ def test_should_create_signaal_monetary_signal(mocker):
         assert signaal.bedragDifference == "40.00"
         assert alarm.signaalId == signaal.id
 
-        #restore alarm
+        # restore banktransactie and alarm
+        banktransactie.bedrag = 12000
         alarm.signaalId = None
 
 def test_should_create_signaal_no_banktransactie(mocker):
-    """This tests if a signal is created without a banktransaction."""
+    """This tests if a signal is created when there is no banktransaction."""
     with requests_mock.Mocker() as rm:
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
         post_signal = rm.post(f"{settings.SIGNALENSERVICE_URL}/signals/", json=post_echo_with_str_id(signal_id), status_code=201)
@@ -365,76 +377,6 @@ def test_should_create_signaal_no_banktransactie(mocker):
 
         #restore alarm
         alarm.signaalId = None
-
-# @freeze_time("2021-12-08")
-# def test_evaluate_alarm_illegal_betaalinstructie_combination(client, mocker):
-#     """This tests the evaluation of an alarm that has an invalid combination of byDay, byMonth and byMonthDay."""
-#     with requests_mock.Mocker() as rm:
-#         # arrange
-#         alarm = {
-#             "id": alarm_id,
-#             "isActive": True,
-#             "afspraakId": 19,
-#             "startDate": "2021-12-06",
-#             "datumMargin": 1,
-#             "bedrag": 12500,
-#             "bedragMargin": 1000,
-#             "byDay": ["Wednesday", "Friday"],
-#             "byMonth": [1],
-#             "byMonthDay": [1],
-#         }
-#         expected = "This combination of intructions is not supported. isWeekly:False isMonthly:False byDay:['Wednesday', 'Friday'] byMonth:[1] byMonthDay:[1]"
-
-#         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-#         rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=200, json={'data': [alarm]})
-#         rm2 = rm.get(
-#             f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}",
-#             json={"data": [afspraak]}
-#         )
-#         rm3 = rm.get(
-#             f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_ids={journaalpost_id}",
-#             json={"data": [journaalpost]}
-#         )
-#         rm4 = rm.get(
-#             f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids={banktransactie_id}",
-#             json={"data": [banktransactie]}
-#         )
-#         rm5 = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", json={"ok": True, "data": alarm_inactive})
-
-#         # Mock feature flag "signalen" to be enabled
-#         mocker.patch('hhb_backend.feature_flags.Unleash.is_enabled', mock_feature_flag("signalen", True))
-
-#         # act
-#         response = client.post(
-#             "/graphql",
-#             json={
-#                 "query": '''
-#                     mutation test {
-#                         evaluateAlarms {
-#                             alarmTriggerResult {
-#                                 alarm {
-#                                     id
-#                                 }
-#                                 nextAlarm{
-#                                     id
-#                                 }
-#                                 signaal{
-#                                     id
-#                                 }
-#                             }
-#                         }
-#                     }''',
-#             },
-#             content_type='application/json'
-#         )
-
-#         assert rm1.call_count == 1
-#         assert rm2.call_count == 1
-#         assert rm3.call_count == 1
-#         assert rm4.call_count == 1
-#         assert rm5.call_count == 1
-#         assert fallback.call_count == 0
-#         assert response.json.get("errors")[0].get("message") == expected
 
 
 # @freeze_time("2021-12-08")
@@ -824,91 +766,6 @@ def test_should_create_signaal_no_banktransactie(mocker):
 #         }}
 
 
-# def test_evaluate_alarm_without_banktransactions_gives_signal(client, mocker):
-#     """This tests if no transactions are found, a signal gets created."""
-#     with requests_mock.Mocker() as rm:
-#         # arrange
-#         afspraak1 = {
-#             "id": afspraak_id,
-#             "omschrijving": "this is a test afspraak",
-#             "valid_from": "2021-01-01",
-#             "aantal_betalingen": None,
-#             "afdeling_id": None,
-#             "bedrag": 12000,
-#             "betaalinstructie": {
-#                 "by_day": ["Wednesday", "Friday"],
-#                 "start_date": "2019-01-01"
-#             },
-#             "burger_id": 2,
-#             "credit": False,
-#             "journaalposten": []
-#         }
-#         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-#         rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?filter_active=true", json={'data': [alarm]})
-#         rm2 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", json={"data": [afspraak1]})
-#         rm4 = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={"ok": True, "data": nextAlarm})
-#         rm5 = rm.post(f"{settings.SIGNALENSERVICE_URL}/signals/", status_code=201,
-#                       json=post_echo_with_str_id(signaal["id"]))
-#         rm6 = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", json={"ok": True, "data": alarm_inactive})
-#         rm7 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
-#         rm8 = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}")
-
-#         # Mock feature flag "signalen" to be enabled
-#         mocker.patch('hhb_backend.feature_flags.Unleash.is_enabled', mock_feature_flag("signalen", True))
-
-#         # act
-#         response = client.post(
-#             "/graphql",
-#             json={
-#                 "query": '''
-#                     mutation test {
-#                         evaluateAlarms {
-#                             alarmTriggerResult {
-#                                 alarm {
-#                                     id
-#                                 }
-#                                 nextAlarm{
-#                                     id
-#                                 }
-#                                 signaal{
-#                                     id
-#                                     bankTransactions {
-#                                         id
-#                                     }
-#                                     bedragDifference
-#                                 }
-#                             }
-#                         }
-#                     }''',
-#             },
-#             content_type='application/json'
-#         )
-
-#         print(f">>> response: {response.json}")
-
-#         # assert
-#         assert rm1.call_count == 1
-#         assert rm2.call_count == 2
-#         assert rm4.call_count == 1
-#         assert rm5.call_count == 1
-#         assert rm6.call_count == 2
-#         assert rm7.call_count == 1
-#         assert rm8.call_count == 1
-#         assert fallback.call_count == 0
-#         assert response.json == {'data': {
-#             'evaluateAlarms': {
-#                 'alarmTriggerResult': [{
-#                     'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9'},
-#                     'nextAlarm': {'id': '33738845-7f23-4c8f-8424-2b560a944884'},
-#                     'signaal': {
-#                         'id': 'e2b282d9-b31f-451e-9242-11f86c902b35',
-#                         'bankTransactions': None,
-#                         'bedragDifference': "120.00"}
-#                 }]
-#             }
-#         }}
-
-
 # @freeze_time("2021-12-08")
 # def test_evaluate_alarm_transaction_outside_date_window_gives_signal_without_transaction(client, mocker):
 #     """This tests if when a transaction outside the date window was found, creates a signal without this transaction in it."""
@@ -998,447 +855,6 @@ def test_should_create_signaal_no_banktransactie(mocker):
 #                         'bedragDifference': '120.00'
 #                     }
 #                 }]
-#             }
-#         }}
-
-
-# @freeze_time("2021-12-08")
-# def test_evaluate_alarm_signal_monetary(client, mocker):
-#     """Todo: what does this test do?"""
-#     with requests_mock.Mocker() as rm:
-#         # arrange
-#         banktransactie = {
-#             "id": banktransactie_id,
-#             "bedrag": 15000,
-#             "customer_statement_message_id": 15,
-#             "information_to_account_owner": "NL83ABNA1927261899               Leefgeld ZOEKTERMPERSONA2 januari 2019",
-#             "is_credit": False,
-#             "is_geboekt": True,
-#             "statement_line": "190101D-1195.20NMSC028",
-#             "tegen_rekening": "NL83ABNA1927261899",
-#             "transactie_datum": "2021-12-05"
-#         }
-#         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-#         rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?filter_active=true", json={'data': [alarm]})
-#         rm2 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", json={"data": [afspraak]})
-#         rm3 = rm.get(
-#             f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_ids={journaalpost_id}",
-#             json={"data": [journaalpost]}
-#         )
-#         rm4 = rm.get(
-#             f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids={banktransactie_id}",
-#             json={"data": [banktransactie]}
-#         )
-#         rm5 = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={"ok": True, "data": nextAlarm})
-#         rm6 = rm.post(f"{settings.SIGNALENSERVICE_URL}/signals/", status_code=201,
-#                       json=post_echo_with_str_id(signaal["id"]))
-#         rm7 = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", json={"ok": True, "data": alarm_inactive})
-#         rm8 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
-#         rm9 = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}")
-
-#         # Mock feature flag "signalen" to be enabled
-#         mocker.patch('hhb_backend.feature_flags.Unleash.is_enabled', mock_feature_flag("signalen", True))
-
-#         # act
-#         response = client.post(
-#             "/graphql",
-#             json={
-#                 "query": '''
-#                     mutation test {
-#                         evaluateAlarms {
-#                             alarmTriggerResult {
-#                                 alarm {
-#                                     id
-#                                 }
-#                                 nextAlarm{
-#                                     id
-#                                 }
-#                                 signaal{
-#                                     id
-#                                     bankTransactions {
-#                                         id
-#                                     }
-#                                     bedragDifference
-#                                 }
-#                             }
-#                         }
-#                     }''',
-#             },
-#             content_type='application/json'
-#         )
-
-#         # assert
-#         assert rm1.call_count == 1
-#         assert rm2.call_count == 2
-#         assert rm3.call_count == 1
-#         assert rm4.call_count == 2
-#         assert rm5.call_count == 1
-#         assert rm6.call_count == 1
-#         assert rm7.call_count == 2
-#         assert rm8.call_count == 1
-#         assert rm9.call_count == 1
-#         assert fallback.call_count == 0
-#         assert response.json == {'data': {
-#             'evaluateAlarms': {
-#                 'alarmTriggerResult': [{
-#                     'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9'},
-#                     'nextAlarm': {'id': '33738845-7f23-4c8f-8424-2b560a944884'},
-#                     'signaal': {
-#                         'id': 'e2b282d9-b31f-451e-9242-11f86c902b35',
-#                         'bankTransactions': [{'id': banktransactie_id}],
-#                         'bedragDifference': '30.00'}
-#                 }]
-#             }
-#         }}
-
-
-# @freeze_time("2021-12-08")
-# def test_evaluate_alarm_signal_monetary_one_transaction(client, mocker):
-#     """Todo: what does this test do?"""
-#     with requests_mock.Mocker() as rm:
-#         # arrange
-#         banktransactie1 = {
-#             "id": banktransactie_id,
-#             "bedrag": 15000,
-#             "customer_statement_message_id": 15,
-#             "information_to_account_owner": "NL83ABNA1927261899               Leefgeld ZOEKTERMPERSONA2 januari 2019",
-#             "is_credit": False,
-#             "is_geboekt": True,
-#             "statement_line": "190101D-1195.20NMSC028",
-#             "tegen_rekening": "NL83ABNA1927261899",
-#             "transactie_datum": "2021-12-05"
-#         }
-#         newafspraak = afspraak
-#         newafspraak["alarm_id"] = alarm_id
-#         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-#         rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?filter_active=true", status_code=200,
-#                      json={'data': [alarm]})
-#         rm1a = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?filter_ids={alarm_id}", status_code=200,
-#                       json={'data': [alarm]})
-#         rm2 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", status_code=200,
-#                      json={"data": [afspraak]})
-#         rm3 = rm.get(f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_ids={journaalpost_id}", status_code=200,
-#                      json={"data": [journaalpost]})
-#         rm4 = rm.get(f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids={banktransactie_id}",
-#                      status_code=200, json={"data": [banktransactie1]})
-#         rm5 = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={"ok": True, "data": nextAlarm})
-#         rm6 = rm.post(f"{settings.SIGNALENSERVICE_URL}/signals/", status_code=201,
-#                       json=post_echo_with_str_id(signaal["id"]))
-#         rm7 = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", status_code=200,
-#                      json={"ok": True, "data": alarm_inactive})
-#         rm2a = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}", status_code=200,
-#                        json={"data": [newafspraak]})
-#         rm8 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
-#         expected = {'data': {
-#             'evaluateAlarm': {
-#                 'alarmTriggerResult': [{
-#                     'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9'},
-#                     'nextAlarm': {'id': '33738845-7f23-4c8f-8424-2b560a944884'},
-#                     'signaal': {
-#                         'id': 'e2b282d9-b31f-451e-9242-11f86c902b35',
-#                         'bankTransactions': [{'id': 100}],
-#                         'bedragDifference': '30.00'
-#                     }
-#                 }]
-#             }
-#         }}
-
-#         # Mock feature flag "signalen" to be enabled
-#         mocker.patch('hhb_backend.feature_flags.Unleash.is_enabled', mock_feature_flag("signalen", True))
-
-#         # act
-#         response = client.post(
-#             "/graphql",
-#             json={
-#                 "query": '''
-#                     mutation test($id:String!) {
-#                         evaluateAlarm(id:$id) {
-#                             alarmTriggerResult {
-#                                 alarm {
-#                                     id
-#                                 }
-#                                 nextAlarm{
-#                                     id
-#                                 }
-#                                 signaal{
-#                                     id
-#                                     bankTransactions {
-#                                         id
-#                                     }
-#                                     bedragDifference
-#                                 }
-#                             }
-#                         }
-#                     }''', "variables": {"id": alarm_id}
-#             },
-#             content_type='application/json'
-#         )
-
-#         print(f">> >> >> response {response.json} ")
-
-#         # assert
-#         assert rm1.call_count == 1
-#         assert rm1a.call_count == 1
-#         assert rm2.call_count == 2
-#         assert rm2a.call_count == 1
-#         assert rm3.call_count == 1
-#         assert rm4.call_count == 2
-#         assert rm5.call_count == 1
-#         assert rm6.call_count == 1
-#         assert rm7.call_count == 2
-#         assert rm8.call_count == 1
-#         assert fallback.call_count == 0
-#         assert response.json == expected
-
-
-# @freeze_time("2021-12-08")
-# def test_evaluate_alarm_no_signal_multiple_transactions(client, mocker):
-#     """Todo: what does this test do?"""
-#     with requests_mock.Mocker() as rm:
-#         # arrange
-#         banktransactie1 = {
-#             "id": banktransactie_id,
-#             "bedrag": 3000,
-#             "customer_statement_message_id": 15,
-#             "information_to_account_owner": "NL83ABNA1927261899               Leefgeld ZOEKTERMPERSONA2 januari 2019",
-#             "is_credit": False,
-#             "is_geboekt": True,
-#             "statement_line": "190101D-1195.20NMSC028",
-#             "tegen_rekening": "NL83ABNA1927261899",
-#             "transactie_datum": "2021-12-05"
-#         }
-#         banktransactie2 = {
-#             "id": banktransactie_id + 1,
-#             "bedrag": 9000,
-#             "customer_statement_message_id": 15,
-#             "information_to_account_owner": "NL83ABNA1927261899               Leefgeld ZOEKTERMPERSONA2 januari 2019",
-#             "is_credit": False,
-#             "is_geboekt": True,
-#             "statement_line": "190101D-1195.20NMSC028",
-#             "tegen_rekening": "NL83ABNA1927261899",
-#             "transactie_datum": "2021-12-05"
-#         }
-#         journaalpost1 = {
-#             "afspraak_id": afspraak_id,
-#             "grootboekrekening_id": "BEivKapProPok",
-#             "id": journaalpost_id,
-#             "is_automatisch_geboekt": True,
-#             "transaction_id": banktransactie_id
-#         }
-#         journaalpost2 = {
-#             "afspraak_id": afspraak_id,
-#             "grootboekrekening_id": "BEivKapProPok",
-#             "id": journaalpost_id + 1,
-#             "is_automatisch_geboekt": True,
-#             "transaction_id": banktransactie_id + 1
-#         }
-#         afspraak = {
-#             "id": afspraak_id,
-#             "omschrijving": "this is a test afspraak",
-#             "valid_from": "2021-01-01",
-#             "aantal_betalingen": None,
-#             "afdeling_id": None,
-#             "bedrag": 12000,
-#             "betaalinstructie": {
-#                 "by_day": ["Wednesday", "Friday"],
-#                 "start_date": "2019-01-01"
-#             },
-#             "burger_id": 2,
-#             "credit": False,
-#             "journaalposten": [journaalpost_id, journaalpost_id + 1],
-#             "alarm_id": alarm_id
-#         }
-
-#         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-#         rm1 = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?filter_active=true", status_code=200,
-#                      json={'data': [alarm]})
-#         rm1a = rm.get(f"{settings.ALARMENSERVICE_URL}/alarms/?filter_ids={alarm_id}", status_code=200,
-#                       json={'data': [alarm]})
-#         rm2 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", status_code=200,
-#                      json={"data": [afspraak]})
-#         rm3 = rm.get(f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_ids={journaalpost_id},{journaalpost_id + 1}",
-#                      status_code=200, json={"data": [journaalpost1, journaalpost2]})
-#         rm4 = rm.get(
-#             f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids={banktransactie_id},{banktransactie_id + 1}",
-#             status_code=200, json={"data": [banktransactie1, banktransactie2]})
-#         rm5 = rm.post(f"{settings.ALARMENSERVICE_URL}/alarms/", status_code=201, json={"ok": True, "data": nextAlarm})
-#         rm7 = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", status_code=200,
-#                      json={"ok": True, "data": alarm_inactive})
-#         rm8 = rm.post(f"{settings.HHB_SERVICES_URL}/afspraken/{afspraak_id}", status_code=200,
-#                       json={"data": [afspraak]})
-#         rm9 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
-#         expected = {'data': {'evaluateAlarm': {'alarmTriggerResult': [
-#             {'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9'},
-#              'nextAlarm': {'id': '33738845-7f23-4c8f-8424-2b560a944884'},
-#              'signaal': None}]}}}
-
-#         # Mock feature flag "signalen" to be enabled
-#         mocker.patch('hhb_backend.feature_flags.Unleash.is_enabled', mock_feature_flag("signalen", True))
-
-#         # act
-#         response = client.post(
-#             "/graphql",
-#             json={
-#                 "query": '''
-#                     mutation test($id:String!) {
-#                         evaluateAlarm(id:$id) {
-#                             alarmTriggerResult {
-#                                 alarm {
-#                                     id
-#                                 }
-#                                 nextAlarm{
-#                                     id
-#                                 }
-#                                 signaal{
-#                                     id
-#                                     bankTransactions {
-#                                         id
-#                                     }
-#                                 }
-#                             }
-#                         }
-#                     }''', "variables": {"id": alarm_id}
-#             },
-#             content_type='application/json'
-#         )
-
-#         print(f">> >> >> response {response.json} ")
-
-#         # assert
-#         assert rm1.call_count == 1
-#         assert rm1a.call_count == 1
-#         assert rm2.call_count == 2
-#         assert rm3.call_count == 1
-#         assert rm4.call_count == 1
-#         assert rm5.call_count == 1
-#         assert rm7.call_count == 1
-#         assert rm8.call_count == 1
-#         assert rm9.call_count == 1
-#         assert fallback.call_count == 0
-#         assert response.json == expected
-
-
-# @freeze_time("2021-12-08")
-# def test_evaluate_alarm_next_alarm_in_sequence_already_exists(client, mocker):
-#     """This tests if alarm next in sequence already exists and that an alarm in the future does not create a next in sequence alarm yet."""
-#     with requests_mock.Mocker() as rm:
-#         # arrange
-#         alarm = Alarm(
-#             id=alarm_id,
-#             isActive=True,
-#             afspraakId=19,
-#             startDate="2021-12-06",
-#             datumMargin=1,
-#             bedrag=12500,
-#             bedragMargin=1000,
-#             byDay=["Wednesday", "Friday"],
-#             byMonth=[],
-#             byMonthDay=[]
-#         )
-#         next_alarm = Alarm(
-#             id="10943958-8b93-4617-aa43-669a9016aad9",
-#             isActive=True,
-#             afspraakId=19,
-#             startDate="2021-12-08",
-#             datumMargin=1,
-#             bedrag=12500,
-#             bedragMargin=1000,
-#             byDay=["Wednesday", "Friday"],
-#             byMonth=[],
-#             byMonthDay=[]
-#         )
-#         alarm_inactive = Alarm(
-#             id=alarm_id,
-#             isActive=False,
-#             afspraakId=19,
-#             startDate="2021-12-06",
-#             datumMargin=1,
-#             bedrag=12500,
-#             bedragMargin=1000,
-#             byDay=["Wednesday", "Friday"],
-#             byMonth=[],
-#             byMonthDay=[]
-#         )
-#         banktransactie = {
-#             "id": banktransactie_id,
-#             "bedrag": 12000,
-#             "customer_statement_message_id": 15,
-#             "information_to_account_owner": "NL83ABNA1927261899               Leefgeld ZOEKTERMPERSONA2 januari 2019",
-#             "is_credit": False,
-#             "is_geboekt": True,
-#             "statement_line": "190101D-1195.20NMSC028",
-#             "tegen_rekening": "NL83ABNA1927261899",
-#             "transactie_datum": "2021-12-05"
-#         }
-#         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-#         rm1 = rm.get(
-#             f"{settings.ALARMENSERVICE_URL}/alarms/?filter_active=true", status_code=200,
-#             json={'data': [alarm, next_alarm]}
-#         )
-#         rm2 = rm.get(f"{settings.HHB_SERVICES_URL}/afspraken/?filter_ids={afspraak_id}", json={"data": [afspraak]})
-#         rm3 = rm.get(
-#             f"{settings.HHB_SERVICES_URL}/journaalposten/?filter_ids={journaalpost_id}",
-#             json={"data": [journaalpost]}
-#         )
-#         rm4 = rm.get(
-#             f"{settings.TRANSACTIE_SERVICES_URL}/banktransactions/?filter_ids={banktransactie_id}",
-#             json={"data": [banktransactie]}
-#         )
-#         rm5 = rm.put(f"{settings.ALARMENSERVICE_URL}/alarms/{alarm_id}", status_code=200,
-#                      json={"ok": True, "data": alarm_inactive})
-#         rm6 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", status_code=201)
-
-#         # Mock feature flag "signalen" to be enabled
-#         mocker.patch('hhb_backend.feature_flags.Unleash.is_enabled', mock_feature_flag("signalen", True))
-
-#         # act
-#         response = client.post(
-#             "/graphql",
-#             json={
-#                 "query": '''
-#                     mutation test {
-#                         evaluateAlarms {
-#                             alarmTriggerResult {
-#                                 alarm {
-#                                     id
-#                                 }
-#                                 nextAlarm{
-#                                     id
-#                                 }
-#                                 signaal{
-#                                     id
-#                                 }
-#                             }
-#                         }
-#                     }''',
-#             },
-#             content_type='application/json'
-#         )
-
-#         print(f">> >> >> response: {response.json} ")
-
-#         # assert
-#         assert rm1.call_count == 1
-#         assert rm2.call_count == 2
-#         assert rm3.call_count == 2
-#         assert rm4.call_count == 2
-#         assert rm5.call_count == 1
-#         assert rm6.call_count == 1
-#         assert fallback.call_count == 0
-#         assert response.json == {'data': {
-#             'evaluateAlarms': {
-#                 'alarmTriggerResult': [
-#                     {
-#                         'alarm': {'id': '00943958-8b93-4617-aa43-669a9016aad9'},
-#                         'nextAlarm': None,
-#                         'signaal': None
-#                     },
-#                     {
-#                         'alarm': {'id': '10943958-8b93-4617-aa43-669a9016aad9'},
-#                         'nextAlarm': None,
-#                         'signaal': None
-#                     }
-#                 ]
 #             }
 #         }}
 
