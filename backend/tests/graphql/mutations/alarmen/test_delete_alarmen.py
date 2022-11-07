@@ -45,9 +45,9 @@ def test_delete_alarm(client):
 
 
         # assert
-        assert rm1.called_once
-        assert rm2.called_once
-        assert rm3.called_once
-        assert rm4.called_once
+        assert rm1.call_count == 1
+        assert rm2.call_count == 1
+        assert rm3.call_count == 1
+        assert rm4.call_count == 1
         assert fallback.called == 0
         assert response.json == expected

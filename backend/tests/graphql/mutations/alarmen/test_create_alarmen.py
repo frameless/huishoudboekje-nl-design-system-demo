@@ -76,9 +76,9 @@ def test_create_alarm(client):
 
         # assert
         assert rm0.call_count == 2  # once in create and once in resolve
-        assert rm1.called_once
-        assert rm2.called_once
-        assert rm3.called_once
+        assert rm1.call_count == 1
+        assert rm2.call_count == 1
+        assert rm3.call_count == 1
         assert fallback.called == 0
         assert response.json == expected
 
@@ -178,7 +178,7 @@ def test_create_alarm_failure_afspraak_does_not_exist(client):
         )
 
         # assert
-        assert rm0.called_once
+        assert rm0.call_count == 1
         assert fallback.called == 0
         assert response.json["errors"][0]["message"] == expected
 
@@ -335,6 +335,6 @@ def test_create_alarm_failure_afspraak_ended(client):
         )
 
         # assert
-        assert rm0.called_once
+        assert rm0.call_count == 1
         assert fallback.called == 0
         assert response.json["errors"][0]["message"] == expected

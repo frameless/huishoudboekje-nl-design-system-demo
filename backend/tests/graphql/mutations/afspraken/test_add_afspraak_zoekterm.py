@@ -51,7 +51,7 @@ def test_add_afspraak_zoekterm_success_1(client):
 
         afspraak = {"data": {
             "id": 1, "zoektermen": ["Albert Heijn", "salaris"], "tegen_rekening_id": 14,
-            "valid_from": "2020-01-01", "valid_through": None, "journaalposten": [], "overschrijvingen": []        
+            "valid_from": "2020-01-01", "valid_through": None, "journaalposten": [], "overschrijvingen": []
         }}
         afspraken_post = mock.post(f"{settings.HHB_SERVICES_URL}/afspraken/1", json=afspraak)
 
@@ -62,10 +62,10 @@ def test_add_afspraak_zoekterm_success_1(client):
         assert response.json == {'data': {'addAfspraakZoekterm': {
             'afspraak': {'id': 1, 'zoektermen': ['Albert Heijn', 'salaris']}, 'matchingAfspraken': []
         }}}
-        assert afspraken_get.called_once
+        assert afspraken_get.call_count == 1
         assert afspraken_post.called
-        assert log_post.called_once
-        assert afspraken_get_rekening.called_once
+        assert log_post.call_count == 1
+        assert afspraken_get_rekening.call_count == 1
 
         # No leftover calls
         assert not post_any.called
@@ -100,7 +100,7 @@ def test_add_afspraak_zoekterm_conflict_1(client):
 
         afspraak = {"data": {
             "id": 1, "zoektermen": ["Albert Heijn", "loonbetaling"], "tegen_rekening_id": 14,
-            "valid_from": "2020-01-01", "valid_through": None, "journaalposten": [], "overschrijvingen": []        
+            "valid_from": "2020-01-01", "valid_through": None, "journaalposten": [], "overschrijvingen": []
         }}
         afspraken_post = mock.post(f"{settings.HHB_SERVICES_URL}/afspraken/1", json=afspraak)
 
@@ -112,10 +112,10 @@ def test_add_afspraak_zoekterm_conflict_1(client):
             'afspraak': {'id': 1, 'zoektermen': ['Albert Heijn', 'loonbetaling']},
             'matchingAfspraken': [{'id': 2, 'zoektermen': ['Albert Heijn', 'loon']}]
         }}}
-        assert afspraken_get.called_once
+        assert afspraken_get.call_count == 1
         assert afspraken_post.called
-        assert log_post.called_once
-        assert afspraken_get_rekening.called_once
+        assert log_post.call_count == 1
+        assert afspraken_get_rekening.call_count == 1
 
         # No leftover calls
         assert not post_any.called
@@ -150,7 +150,7 @@ def test_add_afspraak_zoekterm_conflict_2(client):
 
         afspraak = {"data": {
             "id": 1, "zoektermen": ["Albert Heijn", "loon", "betaling"], "tegen_rekening_id": 14,
-            "valid_from": "2020-01-01", "valid_through": None, "journaalposten": [], "overschrijvingen": []        
+            "valid_from": "2020-01-01", "valid_through": None, "journaalposten": [], "overschrijvingen": []
         }}
         afspraken_post = mock.post(f"{settings.HHB_SERVICES_URL}/afspraken/1", json=afspraak)
 
@@ -162,10 +162,10 @@ def test_add_afspraak_zoekterm_conflict_2(client):
             'afspraak': {'id': 1, 'zoektermen': ['Albert Heijn', 'loon', 'betaling']},
             'matchingAfspraken': [{'id': 2, 'zoektermen': ['Albert Heijn', 'loonbetaling']}]
         }}}
-        assert afspraken_get.called_once
+        assert afspraken_get.call_count == 1
         assert afspraken_post.called
-        assert log_post.called_once
-        assert afspraken_get_rekening.called_once
+        assert log_post.call_count == 1
+        assert afspraken_get_rekening.call_count == 1
 
         # No leftover calls
         assert not post_any.called
@@ -200,7 +200,7 @@ def test_add_afspraak_zoekterm_success_2(client):
 
         afspraak = {"data": {
             "id": 1, "zoektermen": ["Albert Heijn", "loon ", "betaling"], "tegen_rekening_id": 14,
-            "valid_from": "2020-01-01", "valid_through": None, "journaalposten": [], "overschrijvingen": []        
+            "valid_from": "2020-01-01", "valid_through": None, "journaalposten": [], "overschrijvingen": []
         }}
         afspraken_post = mock.post(f"{settings.HHB_SERVICES_URL}/afspraken/1", json=afspraak)
 
@@ -212,10 +212,10 @@ def test_add_afspraak_zoekterm_success_2(client):
             'afspraak': {'id': 1, 'zoektermen': ['Albert Heijn', 'loon ', 'betaling']},
             'matchingAfspraken': []
         }}}
-        assert afspraken_get.called_once
+        assert afspraken_get.call_count == 1
         assert afspraken_post.called
-        assert log_post.called_once
-        assert afspraken_get_rekening.called_once
+        assert log_post.call_count == 1
+        assert afspraken_get_rekening.call_count == 1
 
         # No leftover calls
         assert not post_any.called
@@ -226,7 +226,7 @@ def test_add_afspraak_zoekterm_conflict_3(client):
     with requests_mock.Mocker() as mock:
         afspraak1 = {
             "id": 1, "zoektermen": ["Albert Heijn", "loon "], "tegen_rekening_id": 14,
-            "valid_from": "2020-01-01", "valid_through": None, "journaalposten": [], "overschrijvingen": []        
+            "valid_from": "2020-01-01", "valid_through": None, "journaalposten": [], "overschrijvingen": []
         }
         afspraak2 = {
             "id": 2, "zoektermen": ["Albert Heijn", "loon betaling"], "tegen_rekening_id": 14,
@@ -248,7 +248,7 @@ def test_add_afspraak_zoekterm_conflict_3(client):
         )
         afspraak1a = {"data": {
             "id": 1, "zoektermen": ["Albert Heijn", "loon ", "betaling"], "tegen_rekening_id": 14,
-            "valid_from": "2020-01-01", "valid_through": None, "journaalposten": [], "overschrijvingen": []        
+            "valid_from": "2020-01-01", "valid_through": None, "journaalposten": [], "overschrijvingen": []
         }}
         afspraken_post = mock.post(f"{settings.HHB_SERVICES_URL}/afspraken/1", json=afspraak1a)
 
@@ -256,8 +256,8 @@ def test_add_afspraak_zoekterm_conflict_3(client):
             "/graphql",
             json=get_json_payload("betaling"),
         )
-        
-        assert afspraken_get.called_once
+
+        assert afspraken_get.call_count == 1
         assert afspraken_post.called
         assert afspraken_get_rekening.call_count == 1
         assert log_post.call_count == 1

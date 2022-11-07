@@ -31,7 +31,7 @@ mutation test($id: String!) {
             },
             content_type="application/json",
         )
-        assert mock_get_configuratie.called_once
+        assert mock_get_configuratie.call_count == 1
         assert response.json == {
             "data": {
                 "deleteConfiguratie": {
@@ -39,7 +39,7 @@ mutation test($id: String!) {
                 }
             }
         }
-        assert adapter.called_once
+        assert adapter.call_count == 1
 
 
 def test_delete_configuratie_error(client):
@@ -79,5 +79,5 @@ mutation test($id: String!) {
                 }
             ],
         }
-        assert mock_get_configuratie.called_once
-        assert adapter.called_once
+        assert mock_get_configuratie.call_count == 1
+        assert adapter.call_count == 1

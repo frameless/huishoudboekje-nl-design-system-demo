@@ -4,7 +4,7 @@ from hhb_backend.graphql import settings
 def test_gebruikersactiviteiten(client):
     with requests_mock.Mocker() as mock:
         # arrange
-        request = { 
+        request = {
             "query": '''
                 query test  {
                     gebruikersactiviteiten{
@@ -40,7 +40,7 @@ def test_gebruikersactiviteiten(client):
         response = client.post("/graphql", json=request, content_type='application/json')
 
         # assert
-        assert mock1.called_once
+        assert mock1.call_count == 1
         assert fallback.call_count == 0
         assert response.json ==  expected
 
@@ -48,7 +48,7 @@ def test_gebruikersactiviteiten(client):
 def test_gebruikersactiviteiten_byId(client):
     with requests_mock.Mocker() as mock:
         # arrange
-        request = { 
+        request = {
             "query": '''
                 query test($id:Int!) {
                     gebruikersactiviteit(id: $id){
@@ -80,6 +80,6 @@ def test_gebruikersactiviteiten_byId(client):
         response = client.post("/graphql", json=request, content_type='application/json')
 
         # assert
-        assert mock1.called_once
+        assert mock1.call_count == 1
         assert fallback.call_count == 0
         assert response.json ==  expected

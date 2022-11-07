@@ -42,10 +42,10 @@ def test_create_huishouden_success(client):
         assert response.json == {
             "data": {"createHuishouden": {"ok": True, "huishouden": {"id": 1}}}
         }
-        assert huishoudens_post.called_once
+        assert huishoudens_post.call_count == 1
 
         # No leftover calls
-        assert log_post.called_once
+        assert log_post.call_count == 1
         assert not post_any.called
         assert not get_any.called
 
@@ -103,10 +103,10 @@ def test_create_huishouden_with_burger_ids_success(client):
 
         assert objects.get(response.json, "errors") == None
         assert response.json["data"]["createHuishouden"]["ok"] is True
-        assert huishoudens_post.called_once
+        assert huishoudens_post.call_count == 1
 
         # No leftover calls
-        assert log_post.called_once
-        assert get_adapter.called_once
-        assert post_adapter.called_once
+        assert log_post.call_count == 1
+        assert get_adapter.call_count == 1
+        assert post_adapter.call_count == 1
 

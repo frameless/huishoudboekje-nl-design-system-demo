@@ -66,9 +66,9 @@ def test_transactie_suggesties_matches(test_request_context):
 
         result = transactie_suggesties([7, 8, 9])
 
-        assert get_transactions.called_once
-        assert get_rekeningen.called_once
-        assert get_afspraken.called_once
+        assert get_transactions.call_count == 1
+        assert get_rekeningen.call_count == 1
+        assert get_afspraken.call_count == 1
         assert result[7][0]["id"] == 4
         assert len(result[7]) == 1
         assert result[8][0]["id"] == 3
@@ -130,9 +130,9 @@ def test_transactie_suggesties_multiple_matches(test_request_context):
 
         result = transactie_suggesties([7, 8])
 
-        assert get_transactions.called_once
-        assert get_rekeningen.called_once
-        assert get_afspraken.called_once
+        assert get_transactions.call_count == 1
+        assert get_rekeningen.call_count == 1
+        assert get_afspraken.call_count == 1
         assert result[7][0]["id"] == 4
         assert len(result[7]) == 1
         assert result[8][0]["id"] == 3
@@ -185,9 +185,9 @@ def test_transactie_suggesties_no_matches(test_request_context):
 
         result = transactie_suggesties([7, 8])
 
-        assert get_transactions.called_once
-        assert get_rekeningen.called_once
-        assert get_afspraken.called_once
+        assert get_transactions.call_count == 1
+        assert get_rekeningen.call_count == 1
+        assert get_afspraken.call_count == 1
         assert result == {7: [], 8: []}
 
         # No leftover calls
@@ -225,9 +225,9 @@ def test_transactie_suggesties_no_afspraken(test_request_context):
 
         result = transactie_suggesties([7, 8])
 
-        assert get_transactions.called_once
-        assert get_rekeningen.called_once
-        assert get_afspraken.called_once
+        assert get_transactions.call_count == 1
+        assert get_rekeningen.call_count == 1
+        assert get_afspraken.call_count == 1
         assert result == {7: [], 8: []}
 
         # No leftover calls
@@ -262,8 +262,8 @@ def test_transactie_suggesties_no_rekeningen(test_request_context):
 
         result = transactie_suggesties([7, 8])
 
-        assert get_transactions.called_once
-        assert get_rekeningen.called_once
+        assert get_transactions.call_count == 1
+        assert get_rekeningen.call_count == 1
         assert not get_afspraken.called
         assert result == {7: [], 8: []}
 
@@ -291,8 +291,8 @@ def test_transactie_suggesties_no_transactions(test_request_context):
 
         result = transactie_suggesties([7, 8])
 
-        assert get_transactions.called_once
-        assert not get_rekeningen.called_once
+        assert get_transactions.call_count == 1
+        assert not get_rekeningen.call_count == 1
         assert not get_afspraken.called
         assert result == {7: [], 8: []}
 
@@ -332,9 +332,9 @@ def test_transactie_suggesties_multiple_zoektermen(test_request_context):
             'id': 4, 'tegen_rekening_id': 2, 'zoektermen': ['15814016000676480', 'Janssen'],
             "valid_through": '2020-12-31', "valid_from": "2020-11-30"
         }]}
-        assert get_transactions.called_once
-        assert get_rekeningen.called_once
-        assert get_afspraken.called_once
+        assert get_transactions.call_count == 1
+        assert get_rekeningen.call_count == 1
+        assert get_afspraken.call_count == 1
 
         # No leftover calls
         assert not post_any.called
@@ -369,9 +369,9 @@ def test_transactie_suggesties_multiple_zoektermen_too_specific(test_request_con
         result = transactie_suggesties([7])
 
         assert result == {7: []}
-        assert get_transactions.called_once
-        assert get_rekeningen.called_once
-        assert get_afspraken.called_once
+        assert get_transactions.call_count == 1
+        assert get_rekeningen.call_count == 1
+        assert get_afspraken.call_count == 1
 
         # No leftover calls
         assert not post_any.called

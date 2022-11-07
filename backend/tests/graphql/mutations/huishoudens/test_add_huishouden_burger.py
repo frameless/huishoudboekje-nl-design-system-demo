@@ -68,7 +68,7 @@ def test_add_huishouden_burger(client):
         rm2 = rm.post(f"{settings.HHB_SERVICES_URL}/burgers/2")
         rm3 = rm.post(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/", json={'data': {'id': 1}})
         rm4 = rm.get(f"{settings.HHB_SERVICES_URL}/burgers/?filter_huishoudens=1", json={"data": [burger_1, burger_2]})
-        
+
 
         # act
         response = client.post("/graphql", json=request, content_type='application/json')
@@ -76,9 +76,9 @@ def test_add_huishouden_burger(client):
 
         # assert
         assert rm1.call_count == 2
-        assert rm2.called_once
-        assert rm3.called_once
-        assert rm4.called_once
+        assert rm2.call_count == 1
+        assert rm3.call_count == 1
+        assert rm4.call_count == 1
         assert fallback.called == 0
         assert response.json == {
             'data': {'addHuishoudenBurger': {'huishouden': {'burgers': [{'id': 1}, {'id': 2}], 'id': 1}, 'ok': True}}

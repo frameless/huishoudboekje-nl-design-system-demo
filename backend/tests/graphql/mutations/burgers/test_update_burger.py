@@ -26,7 +26,7 @@ def test_update_burger_success(client):
             "/graphql",
             json={
                 "query": '''
-        mutation updateBurger($id: Int!, 
+        mutation updateBurger($id: Int!,
         $bsn: Int,
         $voorletters: String,
         $voornamen: String,
@@ -38,7 +38,7 @@ def test_update_burger_success(client):
         $plaatsnaam: String,
         $telefoonnummer: String,
         $email: String) {
-          updateBurger(id: $id, bsn: $bsn, email:$email, geboortedatum: $geboortedatum, telefoonnummer: $telefoonnummer, 
+          updateBurger(id: $id, bsn: $bsn, email:$email, geboortedatum: $geboortedatum, telefoonnummer: $telefoonnummer,
           achternaam: $achternaam, huisnummer: $huisnummer, postcode: $postcode, straatnaam: $straatnaam, voorletters: $voorletters, voornamen: $voornamen, plaatsnaam: $plaatsnaam) {
             ok
             burger {
@@ -60,8 +60,8 @@ def test_update_burger_success(client):
                               'plaatsnaam': "Dorp"}},
         )
 
-        assert get_adapter.called_once
-        assert post_adapter.called_once
-        assert log_adapter.called_once
+        assert get_adapter.call_count == 1
+        assert post_adapter.call_count == 1
+        assert log_adapter.call_count == 1
         assert objects.get(response.json, 'errors') == None
         assert response.json == {"data": {"updateBurger": {"ok": True, "burger": {"id": 1}}}}

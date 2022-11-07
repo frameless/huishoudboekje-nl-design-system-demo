@@ -57,7 +57,7 @@ mutation test($id: Int!) {
                 "ok": True,
             }
         }}
-        assert adapter.called_once
+        assert adapter.call_count == 1
         assert mock._adapter.call_count == 5
 
 
@@ -82,4 +82,4 @@ mutation test($id: Int!) {
                                  "errors": [{"locations": [{"column": 3, "line": 3}],
                                              "message": "Burger with id 1 not found",
                                              "path": ["deleteBurger"]}]}
-        assert adapter.called_once
+        assert adapter.call_count == 1

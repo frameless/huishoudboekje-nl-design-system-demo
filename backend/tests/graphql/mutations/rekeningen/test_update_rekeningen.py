@@ -23,11 +23,11 @@ def test_update_afdeling_rekening(client):
                         }
                     }
                 }''',
-            "variables": 
+            "variables":
             	{
-                    "rekeningId": rekeningId, 
+                    "rekeningId": rekeningId,
                     "rekening": updateRekening
-                }  
+                }
             }
 
         existingRekening={
@@ -74,14 +74,14 @@ def test_update_afdeling_rekening(client):
 
         # act
         response = client.post(
-            "/graphql", 
+            "/graphql",
             json=request,
             content_type='application/json'
         )
 
         # assert
-        assert rm1.called_once
-        assert rm2.called_once
-        assert rm3.called_once
+        assert rm1.call_count == 1
+        assert rm2.call_count == 1
+        assert rm3.call_count == 1
         assert fallback.call_count == 0
         assert response.json == expected

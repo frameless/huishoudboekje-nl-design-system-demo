@@ -176,7 +176,7 @@ def test_update_afspraak_does_not_exist(client):
             content_type='application/json')
 
         # assert
-        assert rm1.called_once
+        assert rm1.call_count == 1
         assert fallback.called == 0
         assert expected in response.json['errors'][0]['message']
 
@@ -204,7 +204,7 @@ def test_update_afspraak_is_credit(client):
             content_type='application/json')
 
         # assert
-        assert rm1.called_once
+        assert rm1.call_count == 1
         assert fallback.called == 0
         assert expected in response.json['errors'][0]['message']
 
@@ -240,7 +240,7 @@ def test_update_afspraak_invalid_betaalinstructie(client):
             content_type='application/json')
 
         # assert
-        assert rm1.called_once
+        assert rm1.call_count == 1
         assert fallback.called == 0
         assert expected in response.json['errors'][0]['message']
 
@@ -275,6 +275,6 @@ def test_update_afspraak_invalid_date_range(client):
             content_type='application/json')
 
         # assert
-        assert rm1.called_once
+        assert rm1.call_count == 1
         assert fallback.called == 0
         assert expected in response.json['errors'][0]['message']

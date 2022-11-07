@@ -51,17 +51,17 @@ def test_journaalposten(client):
         response = client.post(
             "/graphql",
             json={"query": '''query test {
-            journaalposten { 
-                id 
-                grootboekrekening { 
-                    id 
+            journaalposten {
+                id
+                grootboekrekening {
+                    id
                 }
-                transaction { 
+                transaction {
                     id
-                } 
-                afspraak { 
+                }
+                afspraak {
                     id
-                } 
+                }
             }}'''},
             content_type='application/json'
         )
@@ -71,9 +71,9 @@ def test_journaalposten(client):
             {"id": 23, "grootboekrekening": {"id": "m12"}, "transaction": {"id": 31}, "afspraak": None},
         ]}}
         assert grootboekrekeningen_adapter.call_count == 3
-        assert journaalposten_adapter.called_once
-        assert bank_transactions_adapter.called_once
-        assert afspraken_adapter.called_once
+        assert journaalposten_adapter.call_count == 1
+        assert bank_transactions_adapter.call_count == 1
+        assert afspraken_adapter.call_count == 1
 
 
 def test_journaalpost(client):
@@ -92,24 +92,24 @@ def test_journaalpost(client):
         response = client.post(
             "/graphql",
             json={"query": '''query test($id:Int!) {
-            journaalpost(id: $id) { 
-                id 
-                grootboekrekening { 
-                    id 
+            journaalpost(id: $id) {
+                id
+                grootboekrekening {
+                    id
                 }
-                transaction { 
+                transaction {
                     id
-                } 
-                afspraak { 
+                }
+                afspraak {
                     id
-                } 
+                }
             }}''', "variables": {"id": 21}},
             content_type='application/json'
         )
         assert response.json == {"data": {
             "journaalpost": {"id": 21, "grootboekrekening": {"id": "m1"}, "afspraak": None, "transaction": None},
         }}
-        assert grootboekrekeningen_adapter.called_once
-        assert joornaalposten_adapter.called_once
+        assert grootboekrekeningen_adapter.call_count == 1
+        assert joornaalposten_adapter.call_count == 1
         assert not bank_transactions_adapter.called
         assert not afspraken_adapter.called

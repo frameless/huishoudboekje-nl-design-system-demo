@@ -115,7 +115,7 @@ def test_burgers_success(client):
             content_type='application/json'
         )
 
-        assert adapter.called_once
+        assert adapter.call_count == 1
         assert response.json == {'data': {'burgers': [{'email': 'a@b.c'}]}}
 
 
@@ -134,7 +134,7 @@ def test_burgers_paged_success(client):
             content_type='application/json'
         )
 
-        assert adapter.called_once
+        assert adapter.call_count == 1
         assert response.json == {
             'data': {'burgersPaged': {'burgers': [{'email': 'a@b.c'}, {'email': 'test@test.com'}],
             'pageInfo': {'count': 12, 'limit': 2, 'start': 1}}}
@@ -206,10 +206,10 @@ def test_burgers_search_single_voornaam(client):
         response = client.post("/graphql", data=request, content_type='application/json')
 
         # assert
-        assert rm1.called_once
-        assert rm2.called_once
-        assert rm3.called_once
-        assert rm4.called_once
+        assert rm1.call_count == 1
+        assert rm2.call_count == 1
+        assert rm3.call_count == 1
+        assert rm4.call_count == 1
         assert fallback.call_count == 0
         assert response.json == expected
 
@@ -224,7 +224,7 @@ def test_burgers_search_single_achternaam(client):
             'id': 2,
             'voornamen': 'kees'}
         ]}}
-        
+
         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
         rm1 = rm.get(
             re.compile(f"{settings.HHB_SERVICES_URL}/burgers/.*"),
@@ -244,10 +244,10 @@ def test_burgers_search_single_achternaam(client):
         response = client.post("/graphql", data=request, content_type='application/json')
 
         # assert
-        assert rm1.called_once
-        assert rm2.called_once
-        assert rm3.called_once
-        assert rm4.called_once
+        assert rm1.call_count == 1
+        assert rm2.call_count == 1
+        assert rm3.call_count == 1
+        assert rm4.call_count == 1
         assert fallback.call_count == 0
         assert response.json == expected
 
@@ -282,10 +282,10 @@ def test_burgers_search_single_bsn(client):
         response = client.post("/graphql", data=request, content_type='application/json')
 
         # assert
-        assert rm1.called_once
-        assert rm2.called_once
-        assert rm3.called_once
-        assert rm4.called_once
+        assert rm1.call_count == 1
+        assert rm2.call_count == 1
+        assert rm3.call_count == 1
+        assert rm4.call_count == 1
         assert fallback.call_count == 0
         assert response.json == expected
 
@@ -320,10 +320,10 @@ def test_burgers_search_single_iban(client):
         response = client.post("/graphql", data=request, content_type='application/json')
 
         # assert
-        assert rm1.called_once
-        assert rm2.called_once
-        assert rm3.called_once
-        assert rm4.called_once
+        assert rm1.call_count == 1
+        assert rm2.call_count == 1
+        assert rm3.call_count == 1
+        assert rm4.call_count == 1
         assert fallback.call_count == 0
         assert response.json == expected
 
@@ -358,10 +358,10 @@ def test_find_one_burger_after_zoekterm_search_single_afspraak(client):
         response = client.post("/graphql", data=request, content_type='application/json')
 
         # assert
-        assert rm1.called_once
-        assert rm2.called_once
-        assert rm3.called_once
-        assert rm4.called_once
+        assert rm1.call_count == 1
+        assert rm2.call_count == 1
+        assert rm3.call_count == 1
+        assert rm4.call_count == 1
         assert fallback.call_count == 0
         assert response.json == expected
 
@@ -396,9 +396,9 @@ def test_find_one_burger_after_zoekterm_search_with_one_invalid_afspraak(client)
         response = client.post("/graphql", data=request, content_type='application/json')
 
         # assert
-        assert rm1.called_once
-        assert rm2.called_once
-        assert rm3.called_once
-        assert rm4.called_once
+        assert rm1.call_count == 1
+        assert rm2.call_count == 1
+        assert rm3.call_count == 1
+        assert rm4.call_count == 1
         assert fallback.call_count == 0
         assert response.json == expected

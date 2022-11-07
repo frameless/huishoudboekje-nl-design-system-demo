@@ -73,71 +73,71 @@ def test_GebruikersActiviteitenPaged(client):
         # arrange
         activiteiten = {
             "count": 10,
-            "limit": 2, 
-            "next": "?start=3&limit=2", 
-            "previous": "", 
+            "limit": 2,
+            "next": "?start=3&limit=2",
+            "previous": "",
             "start": 1,
             "data": [
                 {
-                "action": "updateAfdeling", 
+                "action": "updateAfdeling",
                 "entities": [
                     {
-                    "entityId": 13, 
+                    "entityId": 13,
                     "entityType": "afdeling"
                     }
-                ], 
-                "gebruiker_id": None, 
-                "id": 197, 
+                ],
+                "gebruiker_id": None,
+                "id": 197,
                 "meta": {
-                    "applicationVersion": "0.3.0", 
-                    "ip": "172.20.0.1", 
+                    "applicationVersion": "0.3.0",
+                    "ip": "172.20.0.1",
                     "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36"
-                }, 
+                },
                 "snapshot_after": {
                     "afdeling": {
-                    "id": 13, 
-                    "naam": "test afdeling 2", 
-                    "organisatie_id": 6, 
+                    "id": 13,
+                    "naam": "test afdeling 2",
+                    "organisatie_id": 6,
                     "postadressen_ids": None
                     }
-                }, 
+                },
                 "snapshot_before": {
                     "postadres": {
-                    "id": 13, 
-                    "naam": "test afdeling", 
-                    "organisatie_id": 6, 
+                    "id": 13,
+                    "naam": "test afdeling",
+                    "organisatie_id": 6,
                     "postadressen_ids": None
                     }
-                }, 
+                },
                 "timestamp": "2021-10-25T08:37:30+00:00"
-                }, 
+                },
                 {
-                "action": "createAfdeling", 
+                "action": "createAfdeling",
                 "entities": [
                     {
-                    "entityId": 13, 
+                    "entityId": 13,
                     "entityType": "afdeling"
                     }
-                ], 
-                "gebruiker_id": None, 
-                "id": 196, 
+                ],
+                "gebruiker_id": None,
+                "id": 196,
                 "meta": {
-                    "applicationVersion": "0.3.0", 
-                    "ip": "172.20.0.1", 
+                    "applicationVersion": "0.3.0",
+                    "ip": "172.20.0.1",
                     "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36"
-                }, 
+                },
                 "snapshot_after": {
                     "afdeling": {
-                    "id": 13, 
-                    "naam": "test afdeling", 
-                    "organisatie_id": 6, 
+                    "id": 13,
+                    "naam": "test afdeling",
+                    "organisatie_id": 6,
                     "postadressen_ids": None
                     }
-                }, 
-                "snapshot_before": None, 
+                },
+                "snapshot_before": None,
                 "timestamp": "2021-10-25T08:36:39+00:00"
                 }
-            ], 
+            ],
         }
 
         fallback = mock.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
@@ -165,14 +165,14 @@ def test_GebruikersActiviteitenPaged(client):
                 }''',
         }
         response = client.post(
-            "/graphql", 
-            json=request, 
+            "/graphql",
+            json=request,
             content_type='application/json'
         )
-        
+
         # assert
         assert fallback.call_count == 0
-        assert log_service.called_once
+        assert log_service.call_count == 1
         assert response.status_code == 200
         assert response.json == {
         "data": {
@@ -204,69 +204,69 @@ def test_gebruikersactiviteiten(client):
         activiteiten = {
             "data": [
                 {
-                "action": "createAfdeling", 
+                "action": "createAfdeling",
                 "entities": [
                     {
-                    "entityId": 13, 
+                    "entityId": 13,
                     "entityType": "afdeling"
                     }
-                ], 
-                "gebruiker_id": None, 
-                "id": 196, 
+                ],
+                "gebruiker_id": None,
+                "id": 196,
                 "meta": {
-                    "applicationVersion": "0.3.0", 
-                    "ip": "172.20.0.1", 
+                    "applicationVersion": "0.3.0",
+                    "ip": "172.20.0.1",
                     "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36"
-                }, 
+                },
                 "snapshot_after": {
                     "afdeling": {
-                    "id": 13, 
-                    "naam": "test afdeling", 
-                    "organisatie_id": 6, 
+                    "id": 13,
+                    "naam": "test afdeling",
+                    "organisatie_id": 6,
                     "postadressen_ids": None
                     }
-                }, 
-                "snapshot_before": None, 
+                },
+                "snapshot_before": None,
                 "timestamp": "2021-10-25T08:36:39+00:00"
-                }, 
+                },
                 {
-                "action": "updateAfdeling", 
+                "action": "updateAfdeling",
                 "entities": [
                     {
-                    "entityId": 13, 
+                    "entityId": 13,
                     "entityType": "afdeling"
                     }
-                ], 
-                "gebruiker_id": None, 
-                "id": 197, 
+                ],
+                "gebruiker_id": None,
+                "id": 197,
                 "meta": {
-                    "applicationVersion": "0.3.0", 
-                    "ip": "172.20.0.1", 
+                    "applicationVersion": "0.3.0",
+                    "ip": "172.20.0.1",
                     "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36"
-                }, 
+                },
                 "snapshot_after": {
                     "afdeling": {
-                    "id": 13, 
-                    "naam": "test afdeling 2", 
-                    "organisatie_id": 6, 
+                    "id": 13,
+                    "naam": "test afdeling 2",
+                    "organisatie_id": 6,
                     "postadressen_ids": None
                     }
-                }, 
+                },
                 "snapshot_before": {
                     "postadres": {
-                    "id": 13, 
-                    "naam": "test afdeling", 
-                    "organisatie_id": 6, 
+                    "id": 13,
+                    "naam": "test afdeling",
+                    "organisatie_id": 6,
                     "postadressen_ids": None
                     }
-                }, 
+                },
                 "timestamp": "2021-10-25T08:37:30+00:00"
                 }
             ]
         }
 
         fallback = mock.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
-        
+
         log_service = mock.get(f"{settings.LOG_SERVICE_URL}/gebruikersactiviteiten/",
             json=activiteiten
         )
@@ -283,8 +283,8 @@ def test_gebruikersactiviteiten(client):
                 }''',
         }
         response = client.post(
-            "/graphql", 
-            json=request, 
+            "/graphql",
+            json=request,
             content_type='application/json'
         )
 
@@ -308,7 +308,7 @@ def test_gebruikersactiviteiten(client):
             ]
         }}
 
-        
+
 
 def test_gebruikers_activiteit_entities_mutation():
     result = TestEntityResponse(entity=dict(id=1, attribute="test"))

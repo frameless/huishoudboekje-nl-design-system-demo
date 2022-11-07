@@ -47,10 +47,10 @@ mutation test($id: Int!) {
                 }
             }
         }
-        assert adapter.called_once
-        assert get_transaction.called_once
-        assert get_journaalpost.called_once
-        assert post_transaction.called_once
+        assert adapter.call_count == 1
+        assert get_transaction.call_count == 1
+        assert get_journaalpost.call_count == 1
+        assert post_transaction.call_count == 1
 
 
 def test_delete_journaalpost_error(client):
@@ -90,4 +90,4 @@ mutation test($id: Int!) {
                 }
             ],
         }
-        assert adapter.called_once
+        assert adapter.call_count == 1

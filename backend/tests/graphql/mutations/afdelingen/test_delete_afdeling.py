@@ -29,10 +29,10 @@ def test_delete_afdeling(client):
         )
 
         # assert
-        assert afdeling_get.called_once
-        assert afdeling_org_del.called_once
-        assert afdeling_hhb_del.called_once
-        assert gebruikers_activiteit.called_once
+        assert afdeling_get.call_count == 1
+        assert afdeling_org_del.call_count == 1
+        assert afdeling_hhb_del.call_count == 1
+        assert gebruikers_activiteit.call_count == 1
         assert fallback.called == 0
         assert response.json == {"data": {
                 "deleteAfdeling": {
@@ -63,12 +63,12 @@ def test_delete_afdeling_postadres_error(client):
         )
 
         # assert
-        assert afdeling_get.called_once
+        assert afdeling_get.call_count == 1
         assert fallback.called == 0
         assert response.json == {
-            'data': {'deleteAfdeling': None}, 
-            'errors': [{'locations': [{'column': 25, 'line': 3}], 
-            'message': 'Afdeling has postadressen - deletion is not possible.', 
+            'data': {'deleteAfdeling': None},
+            'errors': [{'locations': [{'column': 25, 'line': 3}],
+            'message': 'Afdeling has postadressen - deletion is not possible.',
             'path': ['deleteAfdeling']}]
         }
 
@@ -95,12 +95,12 @@ def test_delete_afdeling_rekeningen_error(client):
         )
 
         # assert
-        assert afdeling_get.called_once
+        assert afdeling_get.call_count == 1
         assert fallback.called == 0
         assert response.json == {
-            'data': {'deleteAfdeling': None}, 
-            'errors': [{'locations': [{'column': 25, 'line': 3}], 
-            'message': 'Afdeling has rekeningen - deletion is not possible.', 
+            'data': {'deleteAfdeling': None},
+            'errors': [{'locations': [{'column': 25, 'line': 3}],
+            'message': 'Afdeling has rekeningen - deletion is not possible.',
             'path': ['deleteAfdeling']}]
         }
 
@@ -124,9 +124,9 @@ def test_delete_afdeling_error(client):
                 "variables": {"id": 1}},
             content_type='application/json'
         )
-        
+
         # assert
-        assert afdeling_get.called_once
+        assert afdeling_get.call_count == 1
         assert fallback.called == 0
         assert response.json == {
             'data': {'deleteAfdeling': None},
@@ -172,10 +172,10 @@ def test_delete_afdeling_without_postadres(client):
         )
 
         # assert
-        assert afdeling_get.called_once
-        assert afdeling_org_del.called_once
-        assert afdeling_hhb_del.called_once
-        assert gebruikers_activiteit.called_once
+        assert afdeling_get.call_count == 1
+        assert afdeling_org_del.call_count == 1
+        assert afdeling_hhb_del.call_count == 1
+        assert gebruikers_activiteit.call_count == 1
         assert fallback.called == 0
         assert response.json == {"data": {
             "deleteAfdeling": {

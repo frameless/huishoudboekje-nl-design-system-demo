@@ -3,7 +3,7 @@ from hhb_backend.graphql import settings
 
 def test_create_organisatie_succes(client):
     with requests_mock.Mocker() as mock:
-        # arrange 
+        # arrange
         organisatie_new = {'kvknummer': '123456789', 'vestigingsnummer': '1', 'naam': 'testOrganisatie'}
         request = {
                 "query": '''
@@ -58,6 +58,6 @@ def test_create_organisatie_unique_fail(client):
 
 
         # assert
-        assert organisaties.called_once
+        assert organisaties.call_count == 1
         assert fallback.call_count == 0
         assert response.json["errors"][0]["message"] == "Combination kvk-nummer and vestigingsnummer is not unique."

@@ -50,8 +50,8 @@ def test_update_organisatie_success(client):
 
         # assert
         assert rm1.call_count == 2
-        assert rm2.called_once
-        assert rm3.called_once
+        assert rm2.call_count == 1
+        assert rm3.call_count == 1
         assert fallback.call_count == 0
         assert response.json == expected
 
@@ -89,8 +89,8 @@ def test_update_organisatie_success_limited(client):
 
         # assert
         assert rm1.call_count == 2
-        assert rm2.called_once
-        assert rm3.called_once
+        assert rm2.call_count == 1
+        assert rm3.call_count == 1
         assert fallback.call_count == 0
         assert response.json == expected
 
@@ -127,8 +127,8 @@ def test_update_organisatie_success_limited(client):
 
         # assert
         assert rm1.call_count == 2
-        assert rm2.called_once
-        assert rm3.called_once
+        assert rm2.call_count == 1
+        assert rm3.call_count == 1
         assert fallback.call_count == 0
         assert response.json == expected
 
@@ -162,8 +162,8 @@ def test_update_organisatie_success_no_update(client):
 
 
         # assert
-        assert rm1.called_once
-        assert rm2.called_once
+        assert rm1.call_count == 1
+        assert rm2.call_count == 1
         assert fallback.call_count == 0
         assert response.json == expected
 

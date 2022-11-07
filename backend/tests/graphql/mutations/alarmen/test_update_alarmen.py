@@ -29,7 +29,7 @@ def test_update_alarm(client):
             "byDay": ["Wednesday"]
         }
         afspraak = {
-            "id": 20, 
+            "id": 20,
             "burger_id": 1
         }
         updated_alarm = {
@@ -96,10 +96,10 @@ def test_update_alarm(client):
         )
 
         # assert
-        assert rm0.called_once
-        assert rm1.called_once
-        assert rm2.called_once
-        assert rm3.called_once
+        assert rm0.call_count == 1
+        assert rm1.call_count == 1
+        assert rm2.call_count == 1
+        assert rm3.call_count == 1
         assert rm4.call_count == 2
         assert fallback.called == 0
         assert response.json == {'data': {'updateAlarm': {
@@ -132,7 +132,7 @@ def test_update_alarm(client):
 #             "byDay": ["Thursday"]
 #         }
 #         alarm_id = "bd6222e7-bfab-46bc-b0bc-2b30b76228d4"
-#         expected = "Alarm start date has to be in the future." 
+#         expected = "Alarm start date has to be in the future."
 
 #         fallback = rm.register_uri(requests_mock.ANY, requests_mock.ANY, status_code=404)
 
@@ -265,7 +265,7 @@ def test_update_alarm_failure_cant_set_alarm_to_non_existing_afspraak(client):
         )
 
         # assert
-        assert rm0.called_once
-        assert rm1.called_once
+        assert rm0.call_count == 1
+        assert rm1.call_count == 1
         assert fallback.called == 0
         assert response.json["errors"][0]["message"] == expected
