@@ -79,7 +79,7 @@ def test_add_huishouden_burger(client):
         assert rm2.call_count == 1
         assert rm3.call_count == 1
         assert rm4.call_count == 1
-        assert fallback.called == 0
+        assert fallback.call_count == 0
         assert response.json == {
             'data': {'addHuishoudenBurger': {'huishouden': {'burgers': [{'id': 1}, {'id': 2}], 'id': 1}, 'ok': True}}
         }

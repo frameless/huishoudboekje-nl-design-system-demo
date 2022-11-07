@@ -33,7 +33,7 @@ def test_delete_afdeling(client):
         assert afdeling_org_del.call_count == 1
         assert afdeling_hhb_del.call_count == 1
         assert gebruikers_activiteit.call_count == 1
-        assert fallback.called == 0
+        assert fallback.call_count == 0
         assert response.json == {"data": {
                 "deleteAfdeling": {
                     "ok": True,
@@ -64,7 +64,7 @@ def test_delete_afdeling_postadres_error(client):
 
         # assert
         assert afdeling_get.call_count == 1
-        assert fallback.called == 0
+        assert fallback.call_count == 0
         assert response.json == {
             'data': {'deleteAfdeling': None},
             'errors': [{'locations': [{'column': 25, 'line': 3}],
@@ -96,7 +96,7 @@ def test_delete_afdeling_rekeningen_error(client):
 
         # assert
         assert afdeling_get.call_count == 1
-        assert fallback.called == 0
+        assert fallback.call_count == 0
         assert response.json == {
             'data': {'deleteAfdeling': None},
             'errors': [{'locations': [{'column': 25, 'line': 3}],
@@ -127,7 +127,7 @@ def test_delete_afdeling_error(client):
 
         # assert
         assert afdeling_get.call_count == 1
-        assert fallback.called == 0
+        assert fallback.call_count == 0
         assert response.json == {
             'data': {'deleteAfdeling': None},
             'errors': [{
@@ -176,7 +176,7 @@ def test_delete_afdeling_without_postadres(client):
         assert afdeling_org_del.call_count == 1
         assert afdeling_hhb_del.call_count == 1
         assert gebruikers_activiteit.call_count == 1
-        assert fallback.called == 0
+        assert fallback.call_count == 0
         assert response.json == {"data": {
             "deleteAfdeling": {
                  "ok": True,

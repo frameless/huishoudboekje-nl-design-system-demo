@@ -71,5 +71,5 @@ def test_update_afspraak(client):
         assert rm1.call_count == 1
         assert rm2.call_count == 1
         assert rm3.call_count == 1
-        assert fallback.called == 0
+        assert fallback.call_count == 0
         assert response.json == expected

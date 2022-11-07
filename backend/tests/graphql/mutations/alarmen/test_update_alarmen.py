@@ -101,7 +101,7 @@ def test_update_alarm(client):
         assert rm2.call_count == 1
         assert rm3.call_count == 1
         assert rm4.call_count == 2
-        assert fallback.called == 0
+        assert fallback.call_count == 0
         assert response.json == {'data': {'updateAlarm': {
             'ok': True,
             'previous': {
@@ -184,7 +184,7 @@ def test_update_alarm(client):
 
 
 #         # assert
-#         assert fallback.called == 0
+#         assert fallback.call_count == 0
 #         assert response.json["errors"][0]["message"] == expected
 
 
@@ -267,5 +267,5 @@ def test_update_alarm_failure_cant_set_alarm_to_non_existing_afspraak(client):
         # assert
         assert rm0.call_count == 1
         assert rm1.call_count == 1
-        assert fallback.called == 0
+        assert fallback.call_count == 0
         assert response.json["errors"][0]["message"] == expected

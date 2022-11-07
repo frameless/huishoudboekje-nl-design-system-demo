@@ -79,7 +79,7 @@ def test_create_alarm(client):
         assert rm1.call_count == 1
         assert rm2.call_count == 1
         assert rm3.call_count == 1
-        assert fallback.called == 0
+        assert fallback.call_count == 0
         assert response.json == expected
 
 
@@ -129,7 +129,7 @@ def test_create_alarm(client):
 #         )
 
 #         # assert
-#         assert fallback.called == 0
+#         assert fallback.call_count == 0
 #         assert response.json["errors"][0]["message"] == expected
 
 
@@ -179,7 +179,7 @@ def test_create_alarm_failure_afspraak_does_not_exist(client):
 
         # assert
         assert rm0.call_count == 1
-        assert fallback.called == 0
+        assert fallback.call_count == 0
         assert response.json["errors"][0]["message"] == expected
 
 
@@ -228,7 +228,7 @@ def test_create_alarm_failure_only_byMonth_defined(client):
         )
 
         # assert
-        assert fallback.called == 0
+        assert fallback.call_count == 0
         assert response.json["errors"][0]["message"] == expected
 
 
@@ -277,7 +277,7 @@ def test_create_alarm_failure_only_byMonth_defined(client):
         )
 
         # assert
-        assert fallback.called == 0
+        assert fallback.call_count == 0
         assert response.json["errors"][0]["message"] == expected
 
 
@@ -336,5 +336,5 @@ def test_create_alarm_failure_afspraak_ended(client):
 
         # assert
         assert rm0.call_count == 1
-        assert fallback.called == 0
+        assert fallback.call_count == 0
         assert response.json["errors"][0]["message"] == expected

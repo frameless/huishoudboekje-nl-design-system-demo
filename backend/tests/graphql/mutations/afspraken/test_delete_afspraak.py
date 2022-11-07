@@ -55,7 +55,7 @@ def test_delete_afspraak(client):
         assert rm1.call_count == 1
         assert rm2.call_count == 1
         assert rm3.call_count == 1
-        assert fallback.called == 0
+        assert fallback.call_count == 0
         assert response.json == expected
 
 
@@ -105,7 +105,7 @@ def test_delete_afspraak_error_journaalpost(client):
 
         # assert
         assert rm1.call_count == 1
-        assert fallback.called == 0
+        assert fallback.call_count == 0
         assert response.json["errors"][0].get("message") == expected
 
 
@@ -166,7 +166,7 @@ def test_delete_afspraak_zoekterm(client):
         assert rm2.call_count == 1
         assert rm3.call_count == 1
         assert rm4.call_count == 1
-        assert fallback.called == 0
+        assert fallback.call_count == 0
         assert response.json == expected
 
 
@@ -216,7 +216,7 @@ def test_delete_afspraak_zoekterm_niet_gevonden(client):
 
         # assert
         assert rm1.call_count == 1
-        assert fallback.called == 0
+        assert fallback.call_count == 0
         assert expected in response.json['errors'][0]['message']
 
 
@@ -265,5 +265,5 @@ def test_delete_afspraak_betaalinstructie(client):
         assert rm1.call_count == 1
         assert rm2.call_count == 1
         assert rm3.call_count == 1
-        assert fallback.called == 0
+        assert fallback.call_count == 0
         assert response.json == expected

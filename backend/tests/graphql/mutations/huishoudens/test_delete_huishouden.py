@@ -122,5 +122,5 @@ def test_delete_huishouden_burger(client):
         assert rm3.call_count == 1
         assert rm4.call_count == 1
         assert rm5.call_count == 1
-        assert fallback.called == 0
+        assert fallback.call_count == 0
         assert response.json == expected
