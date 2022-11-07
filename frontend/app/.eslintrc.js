@@ -54,8 +54,8 @@ module.exports = {
 
 		// We allow the existence of only a getter and not a setter, and vice versa
 		"accessor-pairs": ["off", {
-			"getWithoutSet": false,
-			"setWithoutGet": false,
+			getWithoutSet: false,
+			setWithoutGet: false,
 		}],
 
 		// Default rules
@@ -64,8 +64,8 @@ module.exports = {
 		"@typescript-eslint/no-use-before-define": ["off"],
 		"import/no-anonymous-default-export": ["off"],
 		"react/prop-types": ["off"],
-		"react/jsx-no-useless-fragment": ["error", {"allowExpressions": true}],
-		"react/jsx-curly-brace-presence": ["warn", {"props": "always", "children": "never"}],
+		"react/jsx-no-useless-fragment": ["error", {allowExpressions: true}],
+		"react/jsx-curly-brace-presence": ["warn", {props: "always", children: "never"}],
 		// "react/jsx-max-props-per-line": ["warn", {"maximum": 1, "when": "multiline"}],
 		// "react/jsx-first-prop-new-line": ["warn", "multiline-multiprop"],
 		// "react/jsx-closing-bracket-location": ["warn", "line-aligned"],
@@ -75,16 +75,16 @@ module.exports = {
 			{
 				"forbid": [
 					{
-						"element": "div",
-						"message": "use <Box> or <Stack> from ChakraUI instead",
+						element: "div",
+						message: "use <Box> or <Stack> from ChakraUI instead",
 					},
 					{
-						"element": "input",
-						"message": "use <Input> from ChakraUI instead",
+						element: "input",
+						message: "use <Input> from ChakraUI instead",
 					},
 					{
-						"element": "button",
-						"message": "use <Button> from ChakraUI instead",
+						element: "button",
+						message: "use <Button> from ChakraUI instead",
 					},
 				],
 			},
@@ -93,7 +93,7 @@ module.exports = {
 			"warn",
 			"tab",
 			{
-				"SwitchCase": 2,
+				SwitchCase: 2,
 			},
 		],
 		"brace-style": ["warn", "stroustrup"],
@@ -105,7 +105,7 @@ module.exports = {
 		"no-console": [
 			"warn",
 			{
-				"allow": [
+				allow: [
 					"error",
 					"info",
 					"warn",
@@ -115,29 +115,31 @@ module.exports = {
 		"react/self-closing-comp": [
 			"warn",
 			{
-				"component": true,
-				"html": false,
+				component: true,
+				html: false,
 			},
 		],
 		"react/no-multi-comp": [
 			"warn",
 			{
-				"ignoreStateless": true,
+				ignoreStateless: true,
 			},
 		],
 		"react/function-component-definition": [
 			"warn",
 			{
-				"namedComponents": "arrow-function",
-				"unnamedComponents": "arrow-function",
+				namedComponents: "arrow-function",
+				unnamedComponents: "arrow-function",
 			},
 		],
 		"react/no-unknown-property": ["warn"],
-		"no-constant-condition": ["warn", {"checkLoops": false}],
+		"no-constant-condition": ["warn", {checkLoops: false}],
 		"no-redeclare": ["off"],
 		"@typescript-eslint/no-redeclare": ["off"],
-		"react/no-children-prop": ["warn", {"allowFunctions": true}],
-
+		"react/no-children-prop": ["warn", {allowFunctions: true}],
+		"react/no-unstable-nested-components": ["warn", {
+			allowAsProps: true,
+		}],
 		// Other ideas for rules to add:
 		// "complexity": ["warn", {
 		// 	max: 20,

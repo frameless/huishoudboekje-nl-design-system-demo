@@ -45,12 +45,11 @@ const SignalenListItem: React.FC<SignalenListItemProps> = ({signaal}) => {
 	};
 
 	const createSignaalMessage = (signaal: Signaal) => {
-		let TransComponent: typeof Trans;
+		let TransComponent: JSX.Element;
 		let values = {};
 		let components = {};
 
 		if (signaal.bedragDifference && signaal.alarm?.afspraak?.omschrijving && signaal.bankTransactions?.[0]) {
-			TransComponent = ({values, components}) => <Trans i18nKey={"signalen.bedragDifferenceMessage"} values={values} components={components} />;
 			values = {
 				afspraakOmschrijving: signaal.alarm?.afspraak?.omschrijving,
 				bedragDifference: currencyFormat2(true).format(parseFloat(signaal.bedragDifference)),
@@ -63,9 +62,9 @@ const SignalenListItem: React.FC<SignalenListItemProps> = ({signaal}) => {
 				linkTransactie: <AuditLogLink to={AppRoutes.ViewTransactie(String(signaal.bankTransactions?.[0]?.id))}>{t("transaction")}</AuditLogLink>,
 				linkBurger: <AuditLogLink to={AppRoutes.ViewBurger(String(signaal.alarm?.afspraak?.burger?.id))}>{t("burger")}</AuditLogLink>,
 			};
+			TransComponent = <Trans i18nKey={"signalen.bedragDifferenceMessage"} values={values} components={components} />;
 		}
 		else if (signaal.bedragDifference && (!signaal.bankTransactions || signaal.bankTransactions?.length === 0)) {
-			TransComponent = ({values, components}) => <Trans i18nKey={"signalen.noTransactionMessage"} values={values} components={components} />;
 			values = {
 				afspraakOmschrijving: signaal.alarm?.afspraak?.omschrijving,
 				bedragDifference: currencyFormat2(true).format(parseFloat(signaal.bedragDifference)),
@@ -76,16 +75,13 @@ const SignalenListItem: React.FC<SignalenListItemProps> = ({signaal}) => {
 				linkAfspraak: <AuditLogLink to={AppRoutes.ViewAfspraak(String(signaal.alarm?.afspraak?.id))}>{signaal.alarm?.afspraak?.omschrijving}</AuditLogLink>,
 				linkBurger: <AuditLogLink to={AppRoutes.ViewBurger(String(signaal.alarm?.afspraak?.burger?.id))}>{t("burger")}</AuditLogLink>,
 			};
+			TransComponent = <Trans i18nKey={"signalen.noTransactionMessage"} values={values} components={components} />;
 		}
 		else {
-			TransComponent = () => (
-				<Trans i18nKey={"signalen.genericSignaal"} />
-			);
+			TransComponent = <Trans i18nKey={"signalen.genericSignaal"} />;
 		}
 
-		return (
-			<TransComponent values={values} components={components} />
-		);
+		return TransComponent;
 	};
 
 	return (
